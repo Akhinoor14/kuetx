@@ -1,6 +1,16 @@
 import { useState } from 'react';
-import { Plus, Trash2, ChevronDown, ChevronUp } from 'lucide-react';
+import { Plus, Trash2, ChevronDown, ChevronUp, Copy } from 'lucide-react';
 import { store, uid, getAllCourses, getDeptSyllabus, getProfile } from '../store/store';
+
+// Helper: Get today's schedule courses
+const getTodaySchedule = (courses) => {
+  const today = new Date().toLocaleDateString('en-US', { weekday: 'long' });
+  const schedule = store.get('schedule') || [];
+  return schedule.filter(item => item.day === today).map(item => {
+    const course = courses.find(c => c.id === item.courseId);
+    return { ...item, courseObj: course };
+  });
+};
 
 export default function Diary() {
   const profile = getProfile();
@@ -15,10 +25,34 @@ export default function Diary() {
   });
 
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
+  
+  // Get today's schedule
+  const todaySchedule = getTodaySchedule(courses);
+  const selectedCourse = courses.find(c => c.id === form.courseId);
+  
+  // Calculate syllabus progress for diary
+  const getSyllabusProgress = (courseId) => {
+    if (!courseId) return null;
+    const course = courses.find(c => c.id === courseId);
+    if (!course) return null;
+    const syllabusTopics = deptSyllabus?.courses?.[course.code]?.topics || [];
+    const trackedTopics = store.get('syllabusProgress')?.[courseId] || [];
+    const completed = trackedTopics.filter(t => t.endDate).length;
+    return {
+      total: syllabusTopics.length,
+      completed: completed,
+      percentage: syllabusTopics.length ? Math.round((completed / syllabusTopics.length) * 100) : 0
+    };
+  };
 
   const add = () => {
+    // Just save diary entry without auto-updating syllabus
+    // Syllabus is fixed - user manually tracks progress there
     const updated = [{ ...form, id: uid(), source: form.courseId ? 'course' : 'general' }, ...entries];
-    setEntries(updated); store.set('diary', updated); setAdding(false);
+    setEntries(updated); 
+    store.set('diary', updated); 
+    setAdding(false);
+    setForm({ date: new Date().toISOString().split('T')[0], courseId: '', topics: '', notes: '', selfRating: 4, missed: false });
   };
 
   const del = (id) => { const u = entries.filter(e => e.id !== id); setEntries(u); store.set('diary', u); };
@@ -32,7 +66,6 @@ export default function Diary() {
   });
 
   const getCourse = (id) => courses.find(c => c.id === id);
-  const selectedCourse = getCourse(form.courseId);
   const suggestedTopics = selectedCourse ? (deptSyllabus?.courses?.[selectedCourse.code]?.topics || []) : [];
 
   return (
@@ -56,10 +89,42 @@ export default function Diary() {
               <label>Course</label>
               <select value={form.courseId} onChange={e => set('courseId', e.target.value)}>
                 <option value="">Select course</option>
-                {courses.map(c => <option key={c.id} value={c.id}>{c.code} — {c.name}</option>)}
+                {form.date === new Date().toISOString().split('T')[0] && todaySchedule.length > 0 && (
+                  <>
+                    <optgroup label="Today's Schedule">
+                      {todaySchedule.map(item => (
+                        <option key={item.courseId} value={item.courseId}>
+                          {item.slot} — {item.courseObj?.code} ({item.displayName || item.courseObj?.name || 'Unknown'})
+                        </option>
+                      ))}
+                    </optgroup>
+                    <optgroup label="Other Courses">
+                      {courses.map(c => (
+                        <option key={c.id} value={c.id}>{c.code} — {c.name}</option>
+                      ))}
+                    </optgroup>
+                  </>
+                ) || (
+                  <>{courses.map(c => <option key={c.id} value={c.id}>{c.code} — {c.name}</option>)}</>
+                )}
               </select>
             </div>
           </div>
+
+          {/* Syllabus Progress for Selected Course */}
+          {selectedCourse && getSyllabusProgress(form.courseId) && (
+            <div className="card" style={{ marginBottom: 10, backgroundColor: 'var(--card)' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
+                <span style={{ fontSize: 12, fontWeight: 600 }}>Syllabus Progress</span>
+                <span style={{ fontSize: 11, color: 'var(--muted)' }}>{getSyllabusProgress(form.courseId).completed}/{getSyllabusProgress(form.courseId).total}</span>
+              </div>
+              <div className="progress-bar" style={{ marginBottom: 6 }}>
+                <div className="progress-fill" style={{ width: `${getSyllabusProgress(form.courseId).percentage}%`, backgroundColor: '#28a745' }} />
+              </div>
+              <span style={{ fontSize: 11, color: 'var(--muted)' }}>{getSyllabusProgress(form.courseId).percentage}% covered</span>
+            </div>
+          )}
+
           {suggestedTopics.length > 0 && (
             <div className="card" style={{ marginBottom: 10 }}>
               <div style={{ fontSize: 12, fontWeight: 600, marginBottom: 6 }}>Suggested topics</div>

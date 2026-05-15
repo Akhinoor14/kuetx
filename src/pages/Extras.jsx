@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Plus, Trash2, Check } from 'lucide-react';
+import { Plus, Trash2, Check, Clock3 } from 'lucide-react';
 import { store, uid, getAllCourses, getDeptSyllabus, getProfile } from '../store/store';
 
 // ── Tours ────────────────────────────────────────────────────────────────────
@@ -221,6 +221,9 @@ export function Syllabus() {
   const deptSyllabus = getDeptSyllabus(profile.dept);
   const [syllabus, setSyllabus] = useState(() => store.get('syllabusProgress') || {});
   const [selCourse, setSelCourse] = useState(courses[0]?.id || '');
+  const [activeTab, setActiveTab] = useState('courses'); // 'courses' or 'optional'
+  const [editingId, setEditingId] = useState(null); // For editing start/end dates
+  const [editForm, setEditForm] = useState({ startDate: '', endDate: '' });
 
   useEffect(() => {
     if (!selCourse && courses[0]?.id) setSelCourse(courses[0].id);
@@ -231,15 +234,44 @@ export function Syllabus() {
   const topics = syllabus[selCourse] || [];
   const suggested = selectedCourse ? (deptSyllabus?.courses?.[selectedCourse.code]?.topics || []) : [];
 
+  // Helper: Get status color based on start/end dates
+  const getTopicStatus = (topic) => {
+    if (!topic.startDate) return 'notStarted'; // Gray - not started
+    if (!topic.endDate) return 'inProgress'; // Light - in progress
+    return 'complete'; // Full - completed
+  };
+
+  const getStatusColor = (status) => {
+    const colors = {
+      notStarted: '#999', 
+      inProgress: '#ffc107',   // Light yellow
+      complete: '#28a745'      // Full green
+    };
+    return colors[status] || '#999';
+  };
+
   const addTopic = (text) => {
     if (!text.trim() || !selCourse) return;
-    const updated = { ...syllabus, [selCourse]: [...topics, { id: uid(), text, done: false }] };
+    const today = new Date().toISOString().split('T')[0];
+    const updated = { ...syllabus, [selCourse]: [...topics, { id: uid(), text, startDate: today, endDate: null, done: false, source: 'syllabus' }] };
     setSyllabus(updated); store.set('syllabusProgress', updated);
   };
 
-  const toggleTopic = (id) => {
-    const updated = { ...syllabus, [selCourse]: topics.map(t => t.id === id ? { ...t, done: !t.done } : t) };
+  const updateTopicDates = (id, startDate, endDate) => {
+    const updated = { ...syllabus, [selCourse]: topics.map(t => 
+      t.id === id ? { ...t, startDate: startDate || null, endDate: endDate || null, done: !!endDate } : t
+    ) };
     setSyllabus(updated); store.set('syllabusProgress', updated);
+    setEditingId(null);
+  };
+
+  const toggleTopic = (id) => {
+    const topic = topics.find(t => t.id === id);
+    if (!topic) return;
+    // When toggling complete, set endDate to today if not already set
+    const today = new Date().toISOString().split('T')[0];
+    const endDate = !topic.endDate ? today : null;
+    updateTopicDates(id, topic.startDate || today, endDate);
   };
 
   const delTopic = (id) => {
@@ -248,7 +280,21 @@ export function Syllabus() {
   };
 
   const [newTopic, setNewTopic] = useState('');
-  const done = topics.filter(t => t.done).length;
+  const done = topics.filter(t => t.endDate).length;
+
+  // Group courses by term
+  const coursesByTerm = {};
+  const optionalCourses = [];
+  courses.forEach(c => {
+    if (c.isOptional) optionalCourses.push(c);
+    else {
+      const term = c.termKey;
+      if (!coursesByTerm[term]) coursesByTerm[term] = [];
+      coursesByTerm[term].push(c);
+    }
+  });
+
+  const orderedTerms = ['Y1T1', 'Y1T2', 'Y2T1', 'Y2T2', 'Y3T1', 'Y3T2', 'Y4T1', 'Y4T2'].filter(t => coursesByTerm[t]);
 
   return (
     <div className="page-enter page-container">
@@ -257,12 +303,52 @@ export function Syllabus() {
         <p style={{ fontSize: 12, color: 'var(--muted)' }}>Track topic coverage per course</p>
       </div>
 
-      <div style={{ marginBottom: 14 }}>
-        <label>Select Course</label>
-        <select value={selCourse} onChange={e => setSelCourse(e.target.value)}>
-          {courses.map(c => <option key={c.id} value={c.id}>{c.code} — {c.name}</option>)}
-        </select>
+      {/* Term Tabs */}
+      <div style={{ display: 'flex', gap: 8, marginBottom: 14, flexWrap: 'wrap', borderBottom: '1px solid var(--border)', paddingBottom: 8 }}>
+        <button className={`btn ${activeTab === 'courses' ? 'btn-primary' : 'btn-ghost'} btn-sm`} onClick={() => setActiveTab('courses')}>
+          Regular Courses ({courses.filter(c => !c.isOptional).length})
+        </button>
+        {optionalCourses.length > 0 && (
+          <button className={`btn ${activeTab === 'optional' ? 'btn-primary' : 'btn-ghost'} btn-sm`} onClick={() => setActiveTab('optional')}>
+            Optional Courses ({optionalCourses.length})
+          </button>
+        )}
       </div>
+
+      {activeTab === 'courses' && (
+        <>
+          {/* Term Subtabs */}
+          <div style={{ display: 'flex', gap: 6, marginBottom: 12, overflowX: 'auto', paddingBottom: 4 }}>
+            {orderedTerms.map(term => (
+              <button key={term} className="btn btn-ghost btn-sm" style={{ fontSize: 12, whiteSpace: 'nowrap' }} 
+                onClick={() => { const firstInTerm = coursesByTerm[term]?.[0]?.id; if (firstInTerm) setSelCourse(firstInTerm); }}>
+                {term}
+              </button>
+            ))}
+          </div>
+
+          <div style={{ marginBottom: 14 }}>
+            <label>Select Course</label>
+            <select value={selCourse} onChange={e => setSelCourse(e.target.value)}>
+              {orderedTerms.map(term => (
+                <optgroup key={term} label={term}>
+                  {coursesByTerm[term].map(c => <option key={c.id} value={c.id}>{c.code} — {c.name}</option>)}
+                </optgroup>
+              ))}
+            </select>
+          </div>
+        </>
+      )}
+
+      {activeTab === 'optional' && (
+        <div style={{ marginBottom: 14 }}>
+          <label>Select Optional Course</label>
+          <select value={selCourse} onChange={e => setSelCourse(e.target.value)}>
+            <option value="">— Choose a course —</option>
+            {optionalCourses.map(c => <option key={c.id} value={c.id}>{c.code} — {c.name}</option>)}
+          </select>
+        </div>
+      )}
 
       {selCourse && (
         <>
@@ -271,8 +357,9 @@ export function Syllabus() {
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
                 <span style={{ fontSize: 13, fontWeight: 600 }}>Suggested Topics</span>
                 <button className="btn btn-ghost btn-sm" onClick={() => {
+                  const today = new Date().toISOString().split('T')[0];
                   const existing = new Set(topics.map(t => t.text));
-                  const added = suggested.filter(t => !existing.has(t)).map(text => ({ id: uid(), text, done: false }));
+                  const added = suggested.filter(t => !existing.has(t)).map(text => ({ id: uid(), text, startDate: today, endDate: null, done: false, source: 'syllabus' }));
                   if (!added.length) return;
                   const updated = { ...syllabus, [selCourse]: [...topics, ...added] };
                   setSyllabus(updated); store.set('syllabusProgress', updated);
@@ -304,19 +391,54 @@ export function Syllabus() {
             <button className="btn btn-primary" style={{ flexShrink: 0 }} onClick={() => { addTopic(newTopic); setNewTopic(''); }}><Plus size={13} /></button>
           </div>
 
-          {topics.map(t => (
-            <div key={t.id} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '7px 0', borderBottom: '1px solid var(--border)' }}>
-              <button onClick={() => toggleTopic(t.id)} style={{
-                width: 18, height: 18, borderRadius: 4, border: `2px solid ${t.done ? 'var(--accent)' : 'var(--border)'}`,
-                background: t.done ? 'var(--accent)' : 'transparent', cursor: 'pointer',
-                display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
-              }}>
-                {t.done && <Check size={11} color="var(--accentFg)" />}
-              </button>
-              <span style={{ flex: 1, fontSize: 13, textDecoration: t.done ? 'line-through' : 'none', color: t.done ? 'var(--muted)' : 'var(--text)' }}>{t.text}</span>
-              <button onClick={() => delTopic(t.id)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--muted)' }}><Trash2 size={11} /></button>
-            </div>
-          ))}
+          {topics.map(t => {
+            const status = getTopicStatus(t);
+            const statusColor = getStatusColor(status);
+            const isEditing = editingId === t.id;
+            return (
+              <div key={t.id} style={{ display: 'flex', flexDirection: 'column', gap: 6, padding: '10px 0', borderBottom: '1px solid var(--border)' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                  <button onClick={() => toggleTopic(t.id)} style={{
+                    width: 20, height: 20, borderRadius: 4, border: `2px solid ${statusColor}`,
+                    background: status === 'complete' ? statusColor : (status === 'inProgress' ? statusColor + '40' : 'transparent'),
+                    cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+                  }}>
+                    {status === 'complete' && <Check size={12} color="white" />}
+                    {status === 'inProgress' && <Clock3 size={10} color={statusColor} />}
+                  </button>
+                  <span style={{ flex: 1, fontSize: 13, color: 'var(--text)' }}>{t.text}</span>
+                  <span style={{ fontSize: 10, color: 'var(--muted)' }}>
+                    {status === 'notStarted' && '◯ Not started'}
+                    {status === 'inProgress' && '◯ In progress'}
+                    {status === 'complete' && '✓ Done'}
+                  </span>
+                  <button onClick={() => { setEditingId(isEditing ? null : t.id); if (!isEditing) { setEditForm({ startDate: t.startDate || '', endDate: t.endDate || '' }); } }} 
+                    style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--muted)', padding: '4px 8px' }}>
+                    {isEditing ? 'Cancel' : 'Edit'}
+                  </button>
+                  <button onClick={() => delTopic(t.id)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--muted)', padding: '4px 8px' }}><Trash2 size={11} /></button>
+                </div>
+                {isEditing && (
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 8, marginLeft: 30, padding: '8px', backgroundColor: 'var(--card)', borderRadius: 4 }}>
+                    <div style={{ display: 'flex', alignItems: 'flex-end', gap: 4 }}>
+                      <div style={{ flex: 1 }}>
+                        <label style={{ fontSize: 11, color: 'var(--muted)' }}>Start Date</label>
+                        <input type="date" value={editForm.startDate} onChange={e => setEditForm({...editForm, startDate: e.target.value})} style={{ width: '100%', fontSize: 12 }} />
+                      </div>
+                      <button onClick={() => updateTopicDates(t.id, editForm.startDate, editForm.endDate)} className="btn btn-primary btn-sm" style={{ flexShrink: 0 }}>OK</button>
+                    </div>
+                    <div>
+                      <label style={{ fontSize: 11, color: 'var(--muted)' }}>End Date (optional)</label>
+                      <input type="date" value={editForm.endDate} onChange={e => setEditForm({...editForm, endDate: e.target.value})} style={{ width: '100%', fontSize: 12 }} />
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'flex-end' }}>
+                      {t.startDate && <span style={{ fontSize: 10, color: 'var(--muted)' }}>Started: {t.startDate}</span>}
+                    </div>
+                  </div>
+                )}
+              </div>
+            );
+          })}
 
           {courses.length === 0 && <p style={{ color: 'var(--muted)', fontSize: 13 }}>Select department and term in Profile to load courses.</p>}
           {topics.length === 0 && <p style={{ color: 'var(--muted)', fontSize: 13, marginTop: 10 }}>No topics yet — add from syllabus above.</p>}

@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { Plus, Settings2, Clock3, PencilLine, Copy } from 'lucide-react';
-import { store, uid, getAllCourses, getProfile } from '../store/store';
+import { store, uid, getAllCourses, getProfile, getCurrentTermKey } from '../store/store';
 
 const DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday'];
 const DAY_INDEX = { Sunday: 0, Monday: 1, Tuesday: 2, Wednesday: 3, Thursday: 4 };
@@ -11,16 +11,18 @@ const TIME_MODELS = {
     name: '50 Minute Model',
     note: '8:00 start, lunch gap, lab slots supported',
     slots: [
-      '8:00-8:50',
-      '8:50-9:40',
-      '9:40-10:30',
-      '10:40-11:30',
-      '11:30-12:20',
-      '12:20-1:10',
-      '2:30-5:00',
-      '2:30-3:20',
-      '3:20-4:10',
-      '4:10-5:00',
+      '8:00 AM-8:50 AM',
+      '8:50 AM-9:40 AM',
+      '9:40 AM-10:30 AM',
+      '10:30 AM-10:40 AM break',
+      '10:40 AM-11:30 AM',
+      '11:30 AM-12:20 PM',
+      '12:20 PM-1:10 PM',
+      '1:10 PM-2:30 PM break',
+      '2:30 PM-3:20 PM',
+      '3:20 PM-4:10 PM',
+      '4:10 PM-5:00 PM',
+      '2:30 PM-5:00 PM',
     ],
   },
   '40min': {
@@ -28,30 +30,33 @@ const TIME_MODELS = {
     name: '40 Minute Model',
     note: '9:00 start, shorter class cycle, lab slots supported',
     slots: [
-      '9:00-9:40',
-      '9:40-10:20',
-      '10:20-11:00',
-      '11:00-11:40',
-      '11:40-12:20',
-      '12:20-1:00',
-      '2:00-2:40',
-      '2:40-3:20',
-      '3:20-4:00',
-      '2:00-5:00',
+      '9:00 AM-9:40 AM',
+      '9:40 AM-10:20 AM',
+      '10:20 AM-11:00 AM',
+      '11:00 AM-11:40 AM',
+      '11:40 AM-12:20 PM',
+      '12:20 PM-1:00 PM',
+      '1:00 PM-2:00 PM break',
+      '2:00 PM-2:40 PM',
+      '2:40 PM-3:20 PM',
+      '3:20 PM-4:00 PM',
+      '2:00 PM-5:00 PM',
     ],
   },
 };
 
 const DEFAULT_CUSTOM = [
-  '8:00-8:50',
-  '8:50-9:40',
-  '9:40-10:30',
-  '10:40-11:30',
-  '11:30-12:20',
-  '12:20-1:10',
-  '2:30-3:20',
-  '3:20-4:10',
-  '4:10-5:00',
+  '8:00 AM-8:50 AM',
+  '8:50 AM-9:40 AM',
+  '9:40 AM-10:30 AM',
+  '10:30 AM-10:40 AM break',
+  '10:40 AM-11:30 AM',
+  '11:30 AM-12:20 PM',
+  '12:20 PM-1:10 PM',
+  '1:10 PM-2:30 PM break',
+  '2:30 PM-3:20 PM',
+  '3:20 PM-4:10 PM',
+  '4:10 PM-5:00 PM',
 ];
 
 const DEFAULT_SETTINGS = {
@@ -97,7 +102,8 @@ const normalizeSettings = (raw) => ({
 const normalizeSlotKey = (value) => String(value || '').trim();
 
 const parseTimeToMinutes = (value) => {
-  const match = String(value || '').trim().match(/^(\d{1,2}):(\d{2})\s*(AM|PM)?$/i);
+  let cleanValue = String(value || '').trim().replace(/\s+break\s*$/i, '').trim();
+  const match = cleanValue.match(/^(\d{1,2}):(\d{2})\s*(AM|PM)?$/i);
   if (!match) return null;
   let hours = Number(match[1]);
   const minutes = Number(match[2]);
@@ -110,8 +116,20 @@ const parseTimeToMinutes = (value) => {
 const parseSlotRange = (slot) => {
   const match = String(slot || '').match(/^(.+?)\s*-\s*(.+)$/);
   if (!match) return null;
-  const start = parseTimeToMinutes(match[1]);
-  const end = parseTimeToMinutes(match[2]);
+  
+  let startStr = match[1].trim();
+  let endStr = match[2].trim();
+  
+  // Extract AM/PM from end time if present
+  const endMeridiem = endStr.match(/\s*(AM|PM)$/i)?.[1];
+  
+  // If end has AM/PM but start doesn't, apply the same meridiem to start
+  if (endMeridiem && !startStr.match(/\s*(AM|PM)$/i)) {
+    startStr = `${startStr} ${endMeridiem}`;
+  }
+  
+  const start = parseTimeToMinutes(startStr);
+  const end = parseTimeToMinutes(endStr);
   if (start === null || end === null || end <= start) return null;
   return { start, end };
 };
@@ -190,6 +208,17 @@ const getRoutineLabel = (course, item) => {
 export default function Schedule() {
   const profile = getProfile();
   const courses = useMemo(() => getAllCourses(profile), [profile.dept, profile.currentTermKey]);
+  
+  // Filter courses to show only current term courses
+  const currentTermKey = getCurrentTermKey(profile);
+  const currentTermCourses = useMemo(() => {
+    if (!currentTermKey) return courses;
+    // Extract year and term from key (e.g., 'Y1T1' => year=1, term=1)
+    const match = currentTermKey.match(/Y(\d)T(\d)/);
+    if (!match) return courses;
+    const [, year, term] = match.map(Number);
+    return courses.filter(c => c.year === year && c.term === term);
+  }, [courses, currentTermKey]);
   const [schedule, setSchedule] = useState(() => normalizeScheduleEntries(store.get('schedule') || []));
   const [settings, setSettings] = useState(() => normalizeSettings(store.get('scheduleSettings')));
   const [adding, setAdding] = useState(false);
@@ -351,6 +380,8 @@ export default function Schedule() {
   const today = DAYS[todayIndex] || 'Sunday';
   const todayClasses = schedule.filter(s => s.day === today);
   const selectedClasses = schedule.filter(s => s.day === selectedDay);
+  const selectedDayTitle = selectedDay === today ? `Today · ${selectedDay}` : selectedDay;
+  const selectedFormatLabel = MESSAGE_FORMATS.find(format => format.id === settings.messageFormat)?.label || 'Plain';
   const selectedScheduleText = buildDailyText(selectedDay, selectedClasses, getCourse, settings.messageFormat);
 
   const copySelectedSchedule = async () => {
@@ -376,6 +407,7 @@ export default function Schedule() {
   };
 
   const currentSettingsText = slotList.join('\n');
+  const showSettingsPanel = editingSettings;
 
   return (
     <div className="page-enter page-container" style={{ maxWidth: 1180, margin: '0 auto', paddingBottom: 24 }}>
@@ -401,116 +433,92 @@ export default function Schedule() {
         </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1.1fr 0.9fr', gap: 14, marginBottom: 14 }}>
-        <div className="card" style={{ padding: 16 }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, alignItems: 'center', flexWrap: 'wrap', marginBottom: 12 }}>
-            <div>
-              <div style={{ fontWeight: 700, fontSize: 14, marginBottom: 2 }}>Routine Settings</div>
-              <div style={{ fontSize: 12, color: 'var(--muted)' }}>{activeTemplate.name} · {activeTemplate.note}</div>
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 14, marginBottom: 14 }}>
+        {showSettingsPanel && (
+          <div className="card" style={{ padding: 12 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, alignItems: 'center', flexWrap: 'wrap', marginBottom: 8 }}>
+              <div>
+                <div style={{ fontWeight: 700, fontSize: 14, marginBottom: 1 }}>Routine Settings</div>
+                <div style={{ fontSize: 11, color: 'var(--muted)' }}>{activeTemplate.name} · {activeTemplate.note}</div>
+              </div>
+              <span className="tag tag-gray">{settings.modelId === 'custom' ? 'Custom' : activeTemplate.id}</span>
             </div>
-            <span className="tag tag-gray">{settings.modelId === 'custom' ? 'Custom' : activeTemplate.id}</span>
-          </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 10, marginBottom: 10 }}>
-            {Object.values(TIME_MODELS).map(model => (
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 8, marginBottom: 8 }}>
+              {Object.values(TIME_MODELS).map(model => (
+                <button
+                  key={model.id}
+                  onClick={() => persistSettings({ ...settings, modelId: model.id })}
+                  className="btn"
+                  style={{
+                    justifyContent: 'flex-start',
+                    border: settings.modelId === model.id ? '1px solid var(--accent)' : '1px solid var(--border)',
+                    background: settings.modelId === model.id ? 'rgba(59,130,246,0.08)' : 'var(--card)',
+                    padding: '10px 12px',
+                  }}
+                >
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 2 }}>
+                    <span style={{ fontWeight: 700, display: 'flex', alignItems: 'center', gap: 6 }}>
+                      <Clock3 size={13} /> {model.name}
+                    </span>
+                    <span style={{ fontSize: 11, color: 'var(--muted)' }}>{model.note}</span>
+                  </div>
+                </button>
+              ))}
               <button
-                key={model.id}
-                onClick={() => persistSettings({ ...settings, modelId: model.id })}
+                onClick={() => persistSettings({ ...settings, modelId: 'custom' })}
                 className="btn"
                 style={{
                   justifyContent: 'flex-start',
-                  border: settings.modelId === model.id ? '1px solid var(--accent)' : '1px solid var(--border)',
-                  background: settings.modelId === model.id ? 'rgba(59,130,246,0.08)' : 'var(--card)',
+                  border: settings.modelId === 'custom' ? '1px solid var(--accent)' : '1px solid var(--border)',
+                  background: settings.modelId === 'custom' ? 'rgba(59,130,246,0.08)' : 'var(--card)',
                   padding: '10px 12px',
                 }}
               >
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 2 }}>
                   <span style={{ fontWeight: 700, display: 'flex', alignItems: 'center', gap: 6 }}>
-                    <Clock3 size={13} /> {model.name}
+                    <PencilLine size={13} /> Custom model
                   </span>
-                  <span style={{ fontSize: 11, color: 'var(--muted)' }}>{model.note}</span>
+                  <span style={{ fontSize: 11, color: 'var(--muted)' }}>Paste one slot per line</span>
                 </div>
               </button>
-            ))}
-            <button
-              onClick={() => persistSettings({ ...settings, modelId: 'custom' })}
-              className="btn"
-              style={{
-                justifyContent: 'flex-start',
-                border: settings.modelId === 'custom' ? '1px solid var(--accent)' : '1px solid var(--border)',
-                background: settings.modelId === 'custom' ? 'rgba(59,130,246,0.08)' : 'var(--card)',
-                padding: '10px 12px',
-              }}
-            >
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 2 }}>
-                <span style={{ fontWeight: 700, display: 'flex', alignItems: 'center', gap: 6 }}>
-                  <PencilLine size={13} /> Custom model
-                </span>
-                <span style={{ fontSize: 11, color: 'var(--muted)' }}>Paste one slot per line</span>
+            </div>
+
+            <div style={{ marginBottom: 8 }}>
+              <label style={{ fontSize: 12, fontWeight: 600 }}>Copy format</label>
+              <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+                {MESSAGE_FORMATS.map(format => (
+                  <button
+                    key={format.id}
+                    onClick={() => persistSettings({ ...settings, messageFormat: format.id })}
+                    className="btn"
+                    style={{
+                      padding: '8px 12px',
+                      border: settings.messageFormat === format.id ? '1px solid var(--accent)' : '1px solid var(--border)',
+                      background: settings.messageFormat === format.id ? 'rgba(59,130,246,0.08)' : 'var(--card)',
+                    }}
+                  >
+                    {format.label}
+                  </button>
+                ))}
               </div>
-            </button>
-          </div>
-
-          <div style={{ marginBottom: 12 }}>
-            <label>Copy format</label>
-            <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-              {MESSAGE_FORMATS.map(format => (
-                <button
-                  key={format.id}
-                  onClick={() => persistSettings({ ...settings, messageFormat: format.id })}
-                  className="btn"
-                  style={{
-                    padding: '8px 12px',
-                    border: settings.messageFormat === format.id ? '1px solid var(--accent)' : '1px solid var(--border)',
-                    background: settings.messageFormat === format.id ? 'rgba(59,130,246,0.08)' : 'var(--card)',
-                  }}
-                >
-                  {format.label}
-                </button>
-              ))}
             </div>
-          </div>
 
-          {settings.modelId === 'custom' && (
-            <div>
-              <label>Custom slots</label>
-              <textarea
-                rows={6}
-                value={currentSettingsText}
-                onChange={e => editCustomSlots(e.target.value)}
-                placeholder={DEFAULT_CUSTOM.join('\n')}
-                style={{ width: '100%', resize: 'vertical', fontFamily: 'inherit' }}
-              />
-            </div>
-          )}
-        </div>
+            {settings.modelId === 'custom' && (
+              <div>
+                <label>Custom slots</label>
+                <textarea
+                  rows={6}
+                  value={currentSettingsText}
+                  onChange={e => editCustomSlots(e.target.value)}
+                  placeholder={DEFAULT_CUSTOM.join('\n')}
+                  style={{ width: '100%', resize: 'vertical', fontFamily: 'inherit' }}
+                />
+              </div>
+            )}
+          </div>
+        )}
 
-        <div className="card" style={{ padding: 16, display: 'flex', flexDirection: 'column', gap: 12 }}>
-          <div>
-            <div style={{ fontWeight: 700, fontSize: 14, marginBottom: 2 }}>Routine Share</div>
-            <div style={{ fontSize: 12, color: 'var(--muted)' }}>Copy text in the selected format or share/import the full routine JSON.</div>
-          </div>
-          <button className="btn btn-ghost" onClick={copySelectedSchedule} style={{ justifyContent: 'center' }}>
-            <Copy size={13} /> Copy {selectedFormatLabel}
-          </button>
-          <div style={{ display: 'grid', gap: 8 }}>
-            <button className="btn btn-ghost" onClick={exportRoutine} style={{ justifyContent: 'center' }}>Export routine</button>
-            <label className="btn btn-ghost" style={{ cursor: 'pointer', justifyContent: 'center' }}>
-              Import routine
-              <input
-                type="file"
-                accept="application/json"
-                style={{ display: 'none' }}
-                onChange={e => {
-                  const file = e.target.files?.[0];
-                  importRoutine(file);
-                  e.target.value = '';
-                }}
-              />
-            </label>
-          </div>
-          {importMessage && <div style={{ fontSize: 12, color: 'var(--muted)' }}>{importMessage}</div>}
-        </div>
       </div>
 
       <div className="card" style={{ marginBottom: 14, padding: 16 }}>
@@ -519,7 +527,36 @@ export default function Schedule() {
             <div style={{ fontWeight: 700, fontSize: 14 }}>Day Preview</div>
             <div style={{ fontSize: 12, color: 'var(--muted)' }}>Select a day to see only that day’s routine.</div>
           </div>
-          <span className="tag tag-green">{selectedDayTitle}</span>
+          <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap', justifyContent: 'flex-end' }}>
+            <span className="tag tag-green">{selectedDayTitle}</span>
+            <button
+              className="btn"
+              onClick={copySelectedSchedule}
+              style={{
+                justifyContent: 'center',
+                gap: 8,
+                padding: '9px 14px',
+                borderRadius: 999,
+                border: selectedFormatLabel === 'WhatsApp' ? '1px solid rgba(37,211,102,0.35)' : '1px solid rgba(59,130,246,0.24)',
+                background: selectedFormatLabel === 'WhatsApp'
+                  ? 'linear-gradient(180deg, rgba(37,211,102,0.16), rgba(37,211,102,0.10))'
+                  : 'linear-gradient(180deg, rgba(59,130,246,0.12), rgba(59,130,246,0.06))',
+                boxShadow: selectedFormatLabel === 'WhatsApp'
+                  ? '0 10px 24px rgba(37,211,102,0.12)'
+                  : '0 10px 24px rgba(59,130,246,0.08)',
+                color: 'var(--text)',
+                fontWeight: 700,
+              }}
+            >
+              <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 22, height: 22, borderRadius: 999, background: selectedFormatLabel === 'WhatsApp' ? 'rgba(37,211,102,0.18)' : 'rgba(59,130,246,0.14)' }}>
+                <Copy size={12} />
+              </span>
+              <span style={{ display: 'inline-flex', flexDirection: 'column', alignItems: 'flex-start', lineHeight: 1.05 }}>
+                <span style={{ fontSize: 12 }}>Copy {selectedFormatLabel}</span>
+                <span style={{ fontSize: 10, color: 'var(--muted)', fontWeight: 600 }}>selected format</span>
+              </span>
+            </button>
+          </div>
         </div>
         <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 12 }}>
           {DAYS.map(day => (
@@ -545,11 +582,17 @@ export default function Schedule() {
             <div style={{ display: 'grid', gap: 8 }}>
               {selectedClasses.slice().sort((a, b) => a.slot.localeCompare(b.slot)).map(item => {
                 const course = getCourse(item.courseId);
+                const courseCode = course?.code || 'Unknown';
+                const courseName = course?.name || 'Course';
+                const teacherName = item.teacherName || 'Teacher not set';
+                const timeRange = item.slot;
                 return (
-                  <div key={item.id} style={{ display: 'flex', gap: 12, alignItems: 'center', padding: '10px 12px', borderRadius: 10, border: '1px solid var(--border)', background: 'var(--card)' }}>
-                    <div style={{ minWidth: 88, fontWeight: 700, fontSize: 12, color: 'var(--text)' }}>{item.slot}</div>
-                    <div style={{ flex: 1, minWidth: 0 }}>
-                      <div style={{ fontWeight: 600, fontSize: 13 }}>{getRoutineLabel(course, item)}</div>
+                  <div key={item.id} style={{ display: 'grid', gridTemplateColumns: '100px 1fr', gap: 12, alignItems: 'flex-start', padding: '10px 12px', borderRadius: 10, border: '1px solid var(--border)', background: 'var(--card)' }}>
+                    <div style={{ fontWeight: 700, fontSize: 12, color: 'var(--accent)', lineHeight: 1.3 }}>{timeRange}</div>
+                    <div style={{ minWidth: 0 }}>
+                      <div style={{ fontWeight: 700, fontSize: 13, color: 'var(--text)', marginBottom: 3 }}>{courseCode}</div>
+                      <div style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 4, lineHeight: 1.3 }}>{courseName}</div>
+                      <div style={{ fontSize: 11, color: 'var(--text)', opacity: 0.8 }}>→ {teacherName}</div>
                     </div>
                   </div>
                 );
@@ -591,7 +634,7 @@ export default function Schedule() {
               <label>Course</label>
               <select value={form.courseId} onChange={e => set('courseId', e.target.value)}>
                 <option value="">Select course</option>
-                {courses.map(c => <option key={c.id} value={c.id}>{c.code} — {c.name}</option>)}
+                {currentTermCourses.map(c => <option key={c.id} value={c.id}>{c.code} — {c.name}</option>)}
               </select>
             </div>
             <div style={{ gridColumn: 'span 3' }}>
@@ -629,23 +672,23 @@ export default function Schedule() {
       <div className="card" style={{ padding: 16 }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', alignItems: 'center', marginBottom: 12 }}>
           <div>
-            <div style={{ fontWeight: 700, fontSize: 14 }}>Timetable Grid</div>
-            <div style={{ fontSize: 12, color: 'var(--muted)' }}>Double-click any entry to edit. The grid stays compact and readable.</div>
+            <div style={{ fontWeight: 700, fontSize: 15 }}>Timetable Grid</div>
+            <div style={{ fontSize: 13, color: 'var(--muted)' }}>Double-click any entry to edit. The grid stays compact and readable.</div>
           </div>
           <div style={{ fontSize: 12, color: 'var(--muted)' }}>{schedule.length} saved slot{schedule.length === 1 ? '' : 's'}</div>
         </div>
         <div style={{ overflowX: 'auto', border: '1px solid var(--border)', borderRadius: 14, background: 'var(--card)' }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 11 }}>
+          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
             <thead style={{ position: 'sticky', top: 0, zIndex: 2 }}>
               <tr>
-                <th style={{ padding: '10px 12px', borderBottom: '1px solid var(--border)', background: 'var(--surface)', minWidth: 92, textAlign: 'left' }}>Time</th>
+                <th style={{ padding: '12px 12px', borderBottom: '1px solid var(--border)', background: 'var(--surface)', minWidth: 110, textAlign: 'left' }}>Time</th>
                 {DAYS.map(d => (
-                  <th key={d} style={{ padding: 0, borderBottom: '1px solid var(--border)', background: 'var(--surface)', minWidth: 128 }}>
+                  <th key={d} style={{ padding: 0, borderBottom: '1px solid var(--border)', background: 'var(--surface)', minWidth: 160 }}>
                     <button
                       onClick={() => setSelectedDay(d)}
                       style={{
                         width: '100%',
-                        padding: '10px 12px',
+                        padding: '12px 12px',
                         border: 'none',
                         background: 'transparent',
                         cursor: 'pointer',
@@ -660,21 +703,23 @@ export default function Schedule() {
               </tr>
             </thead>
             <tbody>
-              {getSlotCatalog(schedule, slotList).map(p => (
+              {getSlotCatalog(schedule, slotList).map(p => {
+                const isBreak = String(p).toLowerCase().includes('break');
+                return (
                 <tr key={p}>
-                  <td style={{ padding: '10px 12px', borderBottom: '1px solid var(--border)', borderRight: '1px solid var(--border)', fontWeight: 600, color: 'var(--muted)', fontFamily: 'JetBrains Mono, monospace', whiteSpace: 'nowrap', background: 'var(--bg)' }}>{slotPreview(p)}</td>
+                  <td style={{ padding: '12px 12px', borderBottom: '1px solid var(--border)', borderRight: '1px solid var(--border)', fontWeight: 700, fontSize: 13, color: isBreak ? 'var(--muted)' : 'var(--muted)', fontFamily: 'JetBrains Mono, monospace', whiteSpace: 'nowrap', background: isBreak ? 'rgba(239,68,68,0.08)' : 'var(--bg)' }}>{slotPreview(p)}</td>
                   {DAYS.map(d => (
-                    <td key={d} style={{ padding: '6px', borderBottom: '1px solid var(--border)', borderRight: '1px solid var(--border)', verticalAlign: 'top', minHeight: 44, background: d === selectedDay ? 'rgba(59,130,246,0.035)' : 'transparent' }}>
+                    <td key={d} style={{ padding: '6px', borderBottom: '1px solid var(--border)', borderRight: '1px solid var(--border)', verticalAlign: 'top', minHeight: 54, background: isBreak ? 'rgba(239,68,68,0.08)' : d === selectedDay ? 'rgba(59,130,246,0.035)' : 'transparent' }}>
                       {(grid[d]?.[p] || []).map(s => {
                         const c = getCourse(s.courseId);
                         return (
                           <div key={s.id} onDoubleClick={() => startEdit(s)} title="Double-click to edit" style={{
-                            padding: '6px 8px', borderRadius: 10, fontSize: 10, marginBottom: 2,
+                            padding: '8px 9px', borderRadius: 11, fontSize: 12, lineHeight: 1.35, marginBottom: 4,
                             background: 'linear-gradient(180deg, rgba(59,130,246,0.12), rgba(59,130,246,0.08))',
                             border: '1px solid rgba(59,130,246,0.18)', color: 'var(--text)', position: 'relative', cursor: 'pointer',
                           }}>
-                            <div style={{ fontWeight: 700, fontSize: 11, lineHeight: 1.25 }}>{s.displayName || c?.name || c?.code || '?'}</div>
-                            <div style={{ opacity: 0.85, fontSize: 10, marginTop: 2 }}>{s.teacherName || 'Teacher not set'}</div>
+                            <div style={{ fontWeight: 700, fontSize: 12, lineHeight: 1.35, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{s.displayName || c?.name || c?.code || '?'}</div>
+                            <div style={{ opacity: 0.88, fontSize: 11, marginTop: 3, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{s.teacherName || 'Teacher not set'}</div>
                             <button onClick={() => startEdit(s)} style={{
                               position: 'absolute', top: 2, right: 16, background: 'none', border: 'none',
                               color: 'inherit', cursor: 'pointer', opacity: 0.55, padding: 0, lineHeight: 1,
@@ -689,10 +734,50 @@ export default function Schedule() {
                     </td>
                   ))}
                 </tr>
-              ))}
+                );
+              })}
             </tbody>
           </table>
         </div>
+      </div>
+      <div className="card" style={{ marginTop: 14, padding: 16, display: 'flex', flexDirection: 'column', gap: 12 }}>
+        <div>
+          <div style={{ fontWeight: 700, fontSize: 14, marginBottom: 2 }}>Routine Share</div>
+          <div style={{ fontSize: 12, color: 'var(--muted)' }}>Copy text in the selected format or share/import the full routine JSON.</div>
+        </div>
+        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
+          <button
+            className="btn btn-ghost"
+            onClick={copySelectedSchedule}
+            style={{
+              justifyContent: 'center',
+              minWidth: 160,
+              padding: '10px 14px',
+              borderRadius: 999,
+              border: selectedFormatLabel === 'WhatsApp' ? '1px solid rgba(37,211,102,0.35)' : '1px solid var(--border)',
+              background: selectedFormatLabel === 'WhatsApp' ? 'linear-gradient(180deg, rgba(37,211,102,0.16), rgba(37,211,102,0.10))' : 'var(--card)',
+              color: 'var(--text)',
+              fontWeight: 700,
+            }}
+          >
+            <Copy size={13} /> Copy {selectedFormatLabel}
+          </button>
+          <button className="btn btn-ghost" onClick={exportRoutine} style={{ justifyContent: 'center', minWidth: 140, padding: '10px 14px' }}>Export routine</button>
+          <label className="btn btn-ghost" style={{ cursor: 'pointer', justifyContent: 'center', minWidth: 140, padding: '10px 14px' }}>
+            Import routine
+            <input
+              type="file"
+              accept="application/json"
+              style={{ display: 'none' }}
+              onChange={e => {
+                const file = e.target.files?.[0];
+                importRoutine(file);
+                e.target.value = '';
+              }}
+            />
+          </label>
+        </div>
+        {importMessage && <div style={{ fontSize: 12, color: 'var(--muted)' }}>{importMessage}</div>}
       </div>
     </div>
   );
