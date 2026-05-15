@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { store, GRADE_SCALE, getGradeFromPct, getAttendanceMarks, cgpaToPercent, addWorkingDays } from '../store/store';
+import { store, GRADE_SCALE, getGradeFromPct, getAttendanceMarks, cgpaToPercent, addWorkingDays, getAllCourses, getProfile } from '../store/store';
 
 // ─── Legacy CGPA + Max Achievable Calculator ───────────────────────────────
 function LegacyCGPACalc() {
@@ -204,7 +204,8 @@ function FinalNeededCalc() {
 
 // ─── CGPA Target Planner ───────────────────────────────────────────────────
 function WhatIfCalc() {
-  const courses = store.get('courses') || [];
+  const profile = getProfile();
+  const courses = getAllCourses(profile);
   const [whatIfGrades, setWhatIfGrades] = useState({});
   const marks = store.get('marks') || {};
   const att = store.get('attendance') || {};

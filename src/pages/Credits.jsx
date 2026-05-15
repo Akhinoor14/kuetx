@@ -1,9 +1,9 @@
 import { useMemo } from 'react';
-import { store, computeCourseGrade, computeCGPA, getYearClass, MIN_CREDITS_FIRST_4_TERMS, MIN_CREDITS_FIRST_6_TERMS, MAX_BACKLOG_CREDITS_PER_YEAR, MAX_IMPROVEMENT_CREDITS, MAX_TERMS, MIN_CGPA_GRADUATION } from '../store/store';
+import { store, computeCourseGrade, computeCGPA, getYearClass, MIN_CREDITS_FIRST_4_TERMS, MIN_CREDITS_FIRST_6_TERMS, MAX_BACKLOG_CREDITS_PER_YEAR, MAX_IMPROVEMENT_CREDITS, MAX_TERMS, MIN_CGPA_GRADUATION, getAllCourses, getProfile } from '../store/store';
 
 export default function Credits() {
-  const profile = store.get('profile') || {};
-  const courses = store.get('courses') || [];
+  const profile = getProfile();
+  const courses = getAllCourses(profile);
   const required = profile.totalCreditsRequired || 160;
 
   const { earnedCredits, byTerm, warnings, backlogCredits } = useMemo(() => {

@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import { Plus, Trash2, ChevronDown, ChevronUp } from 'lucide-react';
-import { store, uid } from '../store/store';
+import { store, uid, getAllCourses, getDeptSyllabus, getProfile } from '../store/store';
 
 export default function Diary() {
-  const courses = store.get('courses') || [];
+  const profile = getProfile();
+  const courses = getAllCourses(profile);
+  const deptSyllabus = getDeptSyllabus(profile.dept);
   const [entries, setEntries] = useState(() => store.get('diary') || []);
   const [adding, setAdding] = useState(false);
   const [expanded, setExpanded] = useState({});
@@ -15,7 +17,7 @@ export default function Diary() {
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
 
   const add = () => {
-    const updated = [{ ...form, id: uid() }, ...entries];
+    const updated = [{ ...form, id: uid(), source: form.courseId ? 'course' : 'general' }, ...entries];
     setEntries(updated); store.set('diary', updated); setAdding(false);
   };
 
@@ -30,6 +32,8 @@ export default function Diary() {
   });
 
   const getCourse = (id) => courses.find(c => c.id === id);
+  const selectedCourse = getCourse(form.courseId);
+  const suggestedTopics = selectedCourse ? (deptSyllabus?.courses?.[selectedCourse.code]?.topics || []) : [];
 
   return (
     <div className="page-enter page-container">
@@ -56,6 +60,21 @@ export default function Diary() {
               </select>
             </div>
           </div>
+          {suggestedTopics.length > 0 && (
+            <div className="card" style={{ marginBottom: 10 }}>
+              <div style={{ fontSize: 12, fontWeight: 600, marginBottom: 6 }}>Suggested topics</div>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+                {suggestedTopics.slice(0, 8).map(t => (
+                  <button key={t} className="btn btn-ghost btn-sm" onClick={() => set('topics', form.topics ? `${form.topics}, ${t}` : t)}>
+                    + {t}
+                  </button>
+                ))}
+                {suggestedTopics.length > 8 && (
+                  <span style={{ fontSize: 11, color: 'var(--muted)' }}>+ {suggestedTopics.length - 8} more</span>
+                )}
+              </div>
+            </div>
+          )}
           <div style={{ marginBottom: 10 }}>
             <label>Topics Covered</label>
             <textarea value={form.topics} onChange={e => set('topics', e.target.value)} rows={2} placeholder="Linked lists, doubly linked lists..." />

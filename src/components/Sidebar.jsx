@@ -1,12 +1,10 @@
 import { Link, useLocation } from 'react-router-dom';
 import * as Icons from 'lucide-react';
 import { NAV } from '../nav';
-import { Wordmark } from './Logo';
-import { store } from '../store/store';
+import { Logo, Wordmark } from './Logo';
 
-export function Sidebar({ open, onClose }) {
+export function Sidebar({ open, onClose, compact = false, onToggleCompact }) {
   const location = useLocation();
-  const profile = store.get('profile') || {};
 
   return (
     <>
@@ -18,34 +16,69 @@ export function Sidebar({ open, onClose }) {
         />
       )}
 
-      <aside className={`sidebar ${open ? 'open' : ''}`}>
+      <aside className={`sidebar ${open ? 'open' : ''} ${compact ? 'compact' : ''}`}>
         {/* Logo */}
-        <div style={{ padding: '18px 16px 14px', borderBottom: '1px solid var(--border)' }}>
-          <Wordmark height={28} />
-          <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 4 }}>Student Life OS for KUET</div>
-        </div>
+        <div style={{ padding: compact ? '16px 10px 12px' : '18px 16px 14px', borderBottom: '1px solid var(--border)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: compact ? 'center' : 'space-between', gap: 8 }}>
+            {compact ? (
+              <button
+                onClick={onToggleCompact}
+                className="hidden md:flex"
+                style={{
+                  border: 'none',
+                  background: 'transparent',
+                  cursor: 'pointer',
+                  padding: 0,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+                title="Expand sidebar"
+              >
+                <Logo size={40} />
+              </button>
+            ) : (
+              <Wordmark height={32} />
+            )}
 
-        {/* Student chip */}
-        {profile.name && (
-          <div style={{ padding: '10px 14px', borderBottom: '1px solid var(--border)', display: 'flex', alignItems: 'center', gap: 10 }}>
-            <div style={{ width: 34, height: 34, borderRadius: '50%', background: 'var(--accent)', color: 'var(--accentFg)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 800, fontSize: 14, flexShrink: 0 }}>
-              {profile.name.charAt(0).toUpperCase()}
-            </div>
-            <div style={{ minWidth: 0 }}>
-              <div style={{ fontWeight: 700, fontSize: 13, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{profile.name.split(' ')[0]}</div>
-              <div style={{ fontSize: 11, color: 'var(--muted)' }}>{profile.dept} · {profile.session}</div>
-            </div>
-            {profile.isCR && <span className="tag tag-green" style={{ fontSize: 10, flexShrink: 0 }}>CR</span>}
+            {!compact && (
+              <button
+                onClick={onToggleCompact}
+                className="hidden md:flex"
+                style={{
+                  width: 28,
+                  height: 28,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  borderRadius: 8,
+                  border: '1px solid var(--border)',
+                  background: 'transparent',
+                  cursor: 'pointer',
+                  color: 'var(--muted)',
+                }}
+                title="Compact sidebar"
+              >
+                <Icons.PanelLeftClose size={14} />
+              </button>
+            )}
           </div>
-        )}
+          {!compact && <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 4 }}>Student Life OS for KUET</div>}
+        </div>
 
         {/* Nav groups */}
         <nav style={{ flex: 1, overflowY: 'auto', padding: '8px 10px 16px' }}>
-          {NAV.map(section => (
+          {NAV.map((section, sectionIndex) => (
             <div key={section.group}>
-              <div style={{ fontSize: 10, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.09em', padding: '16px 6px 6px' }}>
-                {section.group}
-              </div>
+              {compact && sectionIndex > 0 && (
+                <div
+                  style={{ height: 1, background: 'var(--border)', margin: '10px 12px', opacity: 0.55 }}
+                  aria-hidden="true"
+                />
+              )}
+              {!compact && (
+                <div style={{ fontSize: 10, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.09em', padding: '16px 6px 6px' }}>
+                  {section.group}
+                </div>
+              )}
               {section.items.map(item => {
                 const Icon = Icons[item.icon] || Icons.Circle;
                 const active = location.pathname === item.path ||
@@ -56,9 +89,11 @@ export function Sidebar({ open, onClose }) {
                     to={item.path}
                     onClick={onClose}
                     className={`nav-item ${active ? 'active' : ''}`}
+                    title={item.label}
+                    style={compact ? { justifyContent: 'center', padding: '9px 0' } : undefined}
                   >
                     <Icon size={16} strokeWidth={active ? 2.5 : 1.8} style={{ flexShrink: 0 }} />
-                    {item.label}
+                    {!compact && item.label}
                   </Link>
                 );
               })}
@@ -68,7 +103,7 @@ export function Sidebar({ open, onClose }) {
 
         {/* Bottom */}
         <div style={{ padding: '10px 14px', borderTop: '1px solid var(--border)', fontSize: 11, color: 'var(--muted)', textAlign: 'center' }}>
-          KUETx v1.0 · All data stored locally
+          {compact ? 'v1.0' : 'KUETx v1.0 · All data stored locally'}
         </div>
       </aside>
     </>

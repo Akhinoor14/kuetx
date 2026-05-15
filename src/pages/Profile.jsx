@@ -1,11 +1,16 @@
 import { useState } from 'react';
-import { store, DEPARTMENTS, DEFAULT_PROFILE } from '../store/store';
+import { store, DEPARTMENTS, DEFAULT_PROFILE, getProfile, getTermLabelFromKey, TERM_KEYS } from '../store/store';
 
 export default function Profile() {
-  const [form, setForm] = useState(() => store.get('profile') || DEFAULT_PROFILE);
+  const [form, setForm] = useState(() => getProfile() || DEFAULT_PROFILE);
   const [saved, setSaved] = useState(false);
 
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
+
+  const setTerm = (termKey) => {
+    const label = termKey ? getTermLabelFromKey(termKey) : '';
+    setForm(f => ({ ...f, currentTermKey: termKey, currentTerm: label }));
+  };
 
   const save = () => {
     store.set('profile', form);
@@ -39,7 +44,8 @@ export default function Profile() {
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
           <div>
             <label>Department</label>
-            <select value={form.dept || 'CSE'} onChange={e => set('dept', e.target.value)}>
+            <select value={form.dept || ''} onChange={e => set('dept', e.target.value)}>
+              <option value="">Select department</option>
               {DEPARTMENTS.map(d => <option key={d.code} value={d.code}>{d.code} — {d.name}</option>)}
             </select>
           </div>
@@ -49,10 +55,19 @@ export default function Profile() {
           </div>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 12 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12 }}>
           <div>
             <label>Batch</label>
             <input value={form.batch || ''} onChange={e => set('batch', e.target.value)} placeholder="23" />
+          </div>
+          <div>
+            <label>Current Term</label>
+            <select value={form.currentTermKey || ''} onChange={e => setTerm(e.target.value)}>
+              <option value="">Select term</option>
+              {TERM_KEYS.map(k => (
+                <option key={k} value={k}>{getTermLabelFromKey(k)}</option>
+              ))}
+            </select>
           </div>
           <div>
             <label>Year Started</label>
@@ -67,7 +82,16 @@ export default function Profile() {
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
           <div>
             <label>Hall Name</label>
-            <input value={form.hallName || ''} onChange={e => set('hallName', e.target.value)} placeholder="Khanjahan Ali Hall" />
+            <select value={form.hallName || ''} onChange={e => set('hallName', e.target.value)}>
+              <option value="">Select hall</option>
+              <option>Fazlul Haque Hall</option>
+              <option>Lalan Shah Hall</option>
+              <option>Khan Jahan Ali Hall</option>
+              <option>Dr. M.A Rashid Hall</option>
+              <option>Rokeya Hall (Female)</option>
+              <option>Amar Ekushey Hall</option>
+              <option>Shaheed Smriti Hall</option>
+            </select>
           </div>
           <div>
             <label>Room No.</label>

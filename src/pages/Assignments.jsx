@@ -1,9 +1,10 @@
 import { useState } from 'react';
 import { Plus, Trash2, Check } from 'lucide-react';
-import { store, uid } from '../store/store';
+import { store, uid, getAllCourses, getProfile } from '../store/store';
 
 export default function Assignments() {
-  const courses = store.get('courses') || [];
+  const profile = getProfile();
+  const courses = getAllCourses(profile);
   const [items, setItems] = useState(() => store.get('assignments') || []);
   const [adding, setAdding] = useState(false);
   const [filter, setFilter] = useState('all');

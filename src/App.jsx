@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { ThemeProvider } from './hooks/useTheme';
 import { Sidebar } from './components/Sidebar';
@@ -31,11 +31,29 @@ import { Tours, Social, Projects, Syllabus, TimeTracker, Tuition, Food, Reports 
 
 function Layout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarCompact, setSidebarCompact] = useState(() => {
+    try {
+      return localStorage.getItem('kuetx_sidebar_compact') === 'true';
+    } catch {
+      return false;
+    }
+  });
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('kuetx_sidebar_compact', sidebarCompact ? 'true' : 'false');
+    } catch {}
+  }, [sidebarCompact]);
 
   return (
     <div style={{ display: 'flex', minHeight: '100vh' }}>
-      <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-      <div className="main-content">
+      <Sidebar
+        open={sidebarOpen}
+        compact={sidebarCompact}
+        onToggleCompact={() => setSidebarCompact(v => !v)}
+        onClose={() => setSidebarOpen(false)}
+      />
+      <div className={`main-content ${sidebarCompact ? 'compact' : ''}`}>
         <Navbar onMenuClick={() => setSidebarOpen(o => !o)} />
         <div style={{ flex: 1 }}>
           <Routes>

@@ -1,10 +1,12 @@
 import { useState, useMemo } from 'react';
 import { Plus, Trash2 } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
-import { store, uid } from '../store/store';
+import { store, uid, getAllCourses, getDeptSyllabus, getProfile } from '../store/store';
 
 export default function SelfStudy() {
-  const courses = store.get('courses') || [];
+  const profile = getProfile();
+  const courses = getAllCourses(profile);
+  const deptSyllabus = getDeptSyllabus(profile.dept);
   const [sessions, setSessions] = useState(() => store.get('selfstudy') || []);
   const [adding, setAdding] = useState(false);
   const [form, setForm] = useState({
@@ -16,7 +18,7 @@ export default function SelfStudy() {
 
   const add = () => {
     if (!form.topic || !form.hours) return;
-    const u = [{ ...form, hours: +form.hours, id: uid() }, ...sessions];
+    const u = [{ ...form, hours: +form.hours, id: uid(), source: form.courseId ? 'course' : 'custom' }, ...sessions];
     setSessions(u); store.set('selfstudy', u); setAdding(false);
     setForm({ date: new Date().toISOString().split('T')[0], courseId: '', topic: '', hours: '', notes: '', productive: true });
   };
@@ -24,6 +26,8 @@ export default function SelfStudy() {
   const del = (id) => { const u = sessions.filter(s => s.id !== id); setSessions(u); store.set('selfstudy', u); };
 
   const getCourse = (id) => courses.find(c => c.id === id);
+  const selectedCourse = getCourse(form.courseId);
+  const suggestedTopics = selectedCourse ? (deptSyllabus?.courses?.[selectedCourse.code]?.topics || []) : [];
 
   // Last 7 days chart
   const chartData = useMemo(() => {
@@ -97,6 +101,21 @@ export default function SelfStudy() {
             </div>
             <div><label>Hours</label><input type="number" value={form.hours} onChange={e => set('hours', e.target.value)} placeholder="1.5" min={0.25} step={0.25} /></div>
           </div>
+          {suggestedTopics.length > 0 && (
+            <div className="card" style={{ marginBottom: 10 }}>
+              <div style={{ fontSize: 12, fontWeight: 600, marginBottom: 6 }}>Suggested topics</div>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+                {suggestedTopics.slice(0, 8).map(t => (
+                  <button key={t} className="btn btn-ghost btn-sm" onClick={() => set('topic', t)}>
+                    {t}
+                  </button>
+                ))}
+                {suggestedTopics.length > 8 && (
+                  <span style={{ fontSize: 11, color: 'var(--muted)' }}>+ {suggestedTopics.length - 8} more</span>
+                )}
+              </div>
+            </div>
+          )}
           <div style={{ marginBottom: 10 }}><label>Topic / What you studied</label><input value={form.topic} onChange={e => set('topic', e.target.value)} placeholder="Binary Search Trees — Chapter 5" /></div>
           <div style={{ marginBottom: 10 }}><label>Notes</label><textarea value={form.notes} onChange={e => set('notes', e.target.value)} rows={2} placeholder="Key learnings..." /></div>
           <div style={{ display: 'flex', gap: 8 }}>

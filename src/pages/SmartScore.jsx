@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { store, computeCourseGrade, computeEffectiveAttendance } from '../store/store';
+import { store, computeCourseGrade, computeEffectiveAttendance, getAllCourses, getProfile } from '../store/store';
 
 const PARAMS = [
   { key: 'cgpa',       label: 'Academic CGPA',       weight: 25, icon: '🎓', hint: 'Based on all your course marks' },
@@ -14,7 +14,8 @@ const PARAMS = [
 ];
 
 export default function SmartScore() {
-  const courses     = store.get('courses') || [];
+  const profile     = getProfile();
+  const courses     = getAllCourses(profile);
   const namaz       = store.get('namaz') || {};
   const assignments = store.get('assignments') || [];
   const selfeval    = store.get('selfeval') || {};

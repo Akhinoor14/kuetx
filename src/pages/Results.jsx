@@ -1,9 +1,10 @@
 import { useMemo } from 'react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
-import { store, GRADE_SCALE, cgpaToPercent, computeCourseGrade, computeCGPA, computeTermGPAs } from '../store/store';
+import { store, GRADE_SCALE, cgpaToPercent, computeCourseGrade, computeCGPA, computeTermGPAs, getAllCourses, getProfile } from '../store/store';
 
 export default function Results() {
-  const courses = store.get('courses') || [];
+  const profile = getProfile();
+  const courses = getAllCourses(profile);
 
   const { courseResults, terms, cgpa } = useMemo(() => {
     const courseResults = courses.map(c => {

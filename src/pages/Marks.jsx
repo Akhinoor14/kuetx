@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { ChevronDown, ChevronUp, Info } from 'lucide-react';
-import { store, getGradeFromPct, getAttendanceMarks, computeEffectiveAttendance, GRADE_SCALE } from '../store/store';
+import { store, getGradeFromPct, getAttendanceMarks, computeEffectiveAttendance, GRADE_SCALE, getAllCourses, getProfile } from '../store/store';
 
 // ── Tooltip / info helper ──────────────────────────────────────────────────
 function Tip({ text }) {
@@ -253,7 +253,8 @@ function SessionalCard({ course, marks, onChange }) {
 
 // ── Main Marks Page ───────────────────────────────────────────────────────
 export default function Marks() {
-  const allCourses = store.get('courses') || [];
+  const profile = getProfile();
+  const allCourses = getAllCourses(profile);
   const [marks, setMarks] = useState(() => store.get('marks') || {});
   const [activeTab, setActiveTab] = useState('theory');
 

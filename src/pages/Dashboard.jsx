@@ -1,8 +1,8 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import { TrendingUp, Award, AlertTriangle, BookOpen, CalendarCheck, Clock, Wallet, Star } from 'lucide-react';
-import { store, cgpaToPercent, computeCGPA, computeTermGPAs, computeEffectiveAttendance, MIN_ATTENDANCE_PERCENT, SCHOLARSHIP_ATTENDANCE_PCT } from '../store/store';
+import { store, cgpaToPercent, computeCGPA, computeTermGPAs, computeEffectiveAttendance, MIN_ATTENDANCE_PERCENT, SCHOLARSHIP_ATTENDANCE_PCT, computeCourseGrade, deriveAcademicMetaFromCourses, syncProfileAcademicMeta, getAllCourses, getProfile, getTermLabelFromKey } from '../store/store';
 
 function StatCard({ label, value, sub, color, icon: Icon, to }) {
   const inner = (
@@ -21,8 +21,8 @@ function StatCard({ label, value, sub, color, icon: Icon, to }) {
 }
 
 export default function Dashboard() {
-  const profile  = store.get('profile') || {};
-  const courses  = store.get('courses') || [];
+  const profile  = getProfile();
+  const courses  = getAllCourses(profile);
 
   const { cgpa, earnedCredits, termGPAs, alerts } = useMemo(() => {
     const { cgpa, earnedCredits } = computeCGPA(courses);
@@ -55,6 +55,25 @@ export default function Dashboard() {
   }, [courses]);
 
   const totalRequired = profile.totalCreditsRequired || 160;
+  // aggregate earned credits per term (Y1T1 .. Y4T2)
+  const byTerm = {};
+  courses.forEach(c => {
+    const k = `Y${c.year}T${c.term}`;
+    if (!byTerm[k]) byTerm[k] = { key: k, earned: 0 };
+    const { grade, point, isX } = computeCourseGrade(c);
+    if (!isX && grade !== 'F' && grade !== 'W' && point >= 2.0 && c.credits) {
+      byTerm[k].earned += c.credits;
+    }
+  });
+
+  const { batch: derivedBatch, currentTerm: derivedTermLabel } = deriveAcademicMetaFromCourses(courses, profile);
+
+  const currentTermLabel = getTermLabelFromKey(profile.currentTermKey) || derivedTermLabel || profile.currentTerm || '';
+  const inferredBatch = profile.batch || derivedBatch;
+
+  useEffect(() => {
+    syncProfileAcademicMeta({ profile, courses });
+  }, [profile, courses]);
   const creditPct = Math.min(100, Math.round((earnedCredits / totalRequired) * 100));
   const cgpaStr = cgpa !== null ? cgpa.toFixed(2) : null;
   const cgpaColor = cgpaStr ? (parseFloat(cgpaStr) >= 3.75 ? 'var(--success)' : parseFloat(cgpaStr) < 2.20 ? 'var(--danger)' : 'var(--text)') : 'var(--muted)';
@@ -69,25 +88,43 @@ export default function Dashboard() {
 
   const greeting = (() => {
     const h = new Date().getHours();
-    if (h < 5)  return 'ভালো রাত';
-    if (h < 12) return 'সুপ্রভাত';
-    if (h < 17) return 'শুভ দুপুর';
-    if (h < 20) return 'শুভ বিকেল';
-    return 'শুভ সন্ধ্যা';
+    if (h < 5) return 'Good night';
+    if (h < 12) return 'Good morning';
+    if (h < 17) return 'Good afternoon';
+    if (h < 20) return 'Good evening';
+    return 'Good night';
   })();
 
   return (
     <div className="page-enter page-container">
       {/* Welcome */}
-      <div style={{ marginBottom: 18 }}>
-        <h1 style={{ fontSize: 20, fontWeight: 800, letterSpacing: '-0.03em' }}>
-          {profile.name ? `${greeting}, ${profile.name.split(' ')[0]} 👋` : 'Welcome to KUETx 👋'}
-        </h1>
-        <p style={{ fontSize: 13, color: 'var(--muted)', marginTop: 2 }}>
-          {profile.dept && profile.session ? `${profile.dept} · Session ${profile.session} · ` : ''}
-          {new Date().toLocaleDateString('en-BD', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
-        </p>
-      </div>
+      {(profile.name || profile.dept || inferredBatch || currentTermLabel) && (
+        <div className="card" style={{ marginBottom: 18, padding: '14px 16px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 12, flexWrap: 'wrap' }}>
+          <div style={{ minWidth: 220, flex: 1 }}>
+            {profile.name && (
+              <div style={{ marginBottom: 10 }}>
+                <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--muted)', marginBottom: 2 }}>
+                  {greeting}
+                </div>
+                <h1 style={{ fontSize: 24, fontWeight: 800, letterSpacing: '-0.02em', lineHeight: 1.15 }}>
+                  {`${profile.name} 👋`}
+                </h1>
+              </div>
+            )}
+
+            <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center', marginTop: profile.name ? 2 : 0 }}>
+              {profile.dept && <span className="tag tag-gray">{profile.dept}</span>}
+              {inferredBatch && <span className="tag tag-blue">2K{inferredBatch}</span>}
+              {currentTermLabel && <span className="tag tag-green">{currentTermLabel}</span>}
+              {profile.isCR && <span className="tag tag-yellow">CR</span>}
+            </div>
+          </div>
+
+          <div style={{ padding: '8px 10px', borderRadius: 10, border: '1px solid var(--border)', background: 'var(--bg)', fontSize: 12, color: 'var(--muted)', whiteSpace: 'nowrap' }}>
+            {new Date().toLocaleDateString('en-BD', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
+          </div>
+        </div>
+      )}
 
       {/* Setup prompt */}
       {!profile.name && (
@@ -141,13 +178,17 @@ export default function Dashboard() {
         <div className="progress-bar" style={{ height: 8 }}>
           <div className="progress-fill" style={{ width: `${creditPct}%` }} />
         </div>
-        {/* Year markers */}
-        <div style={{ position: 'relative', marginTop: 4, height: 14 }}>
-          {[{ label: '2nd Year', at: 30 }, { label: '3rd Year', at: 60 }, { label: '4th Year', at: 90 }].map(m => (
-            <div key={m.label} style={{ position: 'absolute', left: `${(m.at / totalRequired) * 100}%`, fontSize: 9, color: 'var(--muted)', transform: 'translateX(-50%)', textAlign: 'center' }}>
-              {m.label}<br/>({m.at}cr)
-            </div>
-          ))}
+        {/* Term markers (8 terms across 4 years) */}
+        <div style={{ position: 'relative', marginTop: 4, height: 20 }}>
+          {['Y1T1','Y1T2','Y2T1','Y2T2','Y3T1','Y3T2','Y4T1','Y4T2'].map((k, i, arr) => {
+            const left = (i / (arr.length - 1)) * 100;
+            const earned = byTerm[k]?.earned || 0;
+            return (
+              <div key={k} style={{ position: 'absolute', left: `${left}%`, fontSize: 9, color: 'var(--muted)', transform: 'translateX(-50%)', textAlign: 'center' }}>
+                {k.replace('Y', 'Y').replace('T', '·T')}<br/>({earned}cr)
+              </div>
+            );
+          })}
         </div>
       </div>
 

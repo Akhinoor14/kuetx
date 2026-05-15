@@ -1,77 +1,571 @@
-import { useState } from 'react';
-import { Plus, Trash2 } from 'lucide-react';
-import { store, uid } from '../store/store';
+import { useMemo, useState } from 'react';
+import { Plus, Settings2, Clock3, PencilLine, Copy } from 'lucide-react';
+import { store, uid, getAllCourses, getProfile } from '../store/store';
 
-const DAYS = ['Saturday', 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday'];
-const PERIODS = ['8:00', '9:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00'];
+const DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday'];
+const DAY_INDEX = { Sunday: 0, Monday: 1, Tuesday: 2, Wednesday: 3, Thursday: 4 };
+
+const TIME_MODELS = {
+  '50min': {
+    id: '50min',
+    name: '50 Minute Model',
+    note: '8:00 start, lunch gap, lab slots supported',
+    slots: [
+      '8:00-8:50',
+      '8:50-9:40',
+      '9:40-10:30',
+      '10:40-11:30',
+      '11:30-12:20',
+      '12:20-1:10',
+      '2:30-5:00',
+      '2:30-3:20',
+      '3:20-4:10',
+      '4:10-5:00',
+    ],
+  },
+  '40min': {
+    id: '40min',
+    name: '40 Minute Model',
+    note: '9:00 start, shorter class cycle, lab slots supported',
+    slots: [
+      '9:00-9:40',
+      '9:40-10:20',
+      '10:20-11:00',
+      '11:00-11:40',
+      '11:40-12:20',
+      '12:20-1:00',
+      '2:00-2:40',
+      '2:40-3:20',
+      '3:20-4:00',
+      '2:00-5:00',
+    ],
+  },
+};
+
+const DEFAULT_CUSTOM = [
+  '8:00-8:50',
+  '8:50-9:40',
+  '9:40-10:30',
+  '10:40-11:30',
+  '11:30-12:20',
+  '12:20-1:10',
+  '2:30-3:20',
+  '3:20-4:10',
+  '4:10-5:00',
+];
+
+const DEFAULT_SETTINGS = {
+  modelId: '50min',
+  customSlots: DEFAULT_CUSTOM,
+  customLabel: '',
+  messageFormat: 'plain',
+};
+
+const MESSAGE_FORMATS = [
+  { id: 'plain', label: 'Plain', sample: 'Schedule for Sunday' },
+  { id: 'whatsapp', label: 'WhatsApp', sample: '*Schedule for Sunday*' },
+  { id: 'telegram', label: 'Telegram', sample: 'Schedule for Sunday' },
+];
+
+const normalizeTeacherName = (value) => {
+  const clean = String(value || '').trim().replace(/\s+/g, ' ');
+  if (!clean) return '';
+  return /\bsir\.?$/i.test(clean) ? clean.replace(/\.$/, '') : `${clean} Sir`;
+};
+
+const normalizeScheduleEntries = (entries) => {
+  const seen = new Set();
+  return (entries || []).map(item => ({
+    ...item,
+    teacherName: normalizeTeacherName(item.teacherName),
+    displayName: String(item.displayName || '').trim(),
+  })).filter(item => {
+    const key = [item.day, item.slot, item.courseId, item.teacherName || '', item.type || '', item.room || '', item.note || ''].join('|');
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+};
+
+const normalizeSettings = (raw) => ({
+  ...DEFAULT_SETTINGS,
+  ...(raw || {}),
+  customSlots: Array.isArray(raw?.customSlots) && raw.customSlots.length ? raw.customSlots : DEFAULT_CUSTOM,
+  messageFormat: MESSAGE_FORMATS.some(f => f.id === raw?.messageFormat) ? raw.messageFormat : DEFAULT_SETTINGS.messageFormat,
+});
+
+const normalizeSlotKey = (value) => String(value || '').trim();
+
+const parseTimeToMinutes = (value) => {
+  const match = String(value || '').trim().match(/^(\d{1,2}):(\d{2})\s*(AM|PM)?$/i);
+  if (!match) return null;
+  let hours = Number(match[1]);
+  const minutes = Number(match[2]);
+  const meridiem = match[3]?.toUpperCase();
+  if (meridiem === 'PM' && hours !== 12) hours += 12;
+  if (meridiem === 'AM' && hours === 12) hours = 0;
+  return hours * 60 + minutes;
+};
+
+const parseSlotRange = (slot) => {
+  const match = String(slot || '').match(/^(.+?)\s*-\s*(.+)$/);
+  if (!match) return null;
+  const start = parseTimeToMinutes(match[1]);
+  const end = parseTimeToMinutes(match[2]);
+  if (start === null || end === null || end <= start) return null;
+  return { start, end };
+};
+
+const slotSortValue = (slot) => {
+  const range = parseSlotRange(slot);
+  return range ? range.start * 1000 + range.end : Number.MAX_SAFE_INTEGER;
+};
+
+const getSlotCatalog = (schedule, baseSlots) => {
+  const unique = new Map();
+  [...(baseSlots || []), ...((schedule || []).map(item => item.slot))].forEach(slot => {
+    const key = normalizeSlotKey(slot);
+    if (key) unique.set(key, key);
+  });
+  return [...unique.values()].sort((a, b) => slotSortValue(a) - slotSortValue(b) || a.localeCompare(b));
+};
+
+const isSlotOverlap = (a, b) => {
+  const rangeA = parseSlotRange(a);
+  const rangeB = parseSlotRange(b);
+  if (!rangeA || !rangeB) return normalizeSlotKey(a) === normalizeSlotKey(b);
+  return rangeA.start < rangeB.end && rangeB.start < rangeA.end;
+};
+
+const formatDayShort = (day) => day.slice(0, 3);
+
+const getTomorrowDay = () => {
+  const todayIndex = new Date().getDay();
+  for (let step = 1; step <= 7; step++) {
+    const idx = (todayIndex + step) % 7;
+    const day = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][idx];
+    if (DAYS.includes(day)) return day;
+  }
+  return 'Sunday';
+};
+
+const buildDailyText = (day, classes, getCourse, messageFormat = 'plain') => {
+  const lines = [];
+  if (messageFormat === 'whatsapp') {
+    lines.push(`*Schedule for ${day}*`);
+  } else if (messageFormat === 'telegram') {
+    lines.push(`Schedule for ${day}`);
+  } else {
+    lines.push(`Schedule for ${day}`);
+  }
+  if (!classes.length) {
+    lines.push('No classes added yet.');
+    return lines.join('\n');
+  }
+  classes
+    .slice()
+    .sort((a, b) => a.slot.localeCompare(b.slot))
+    .forEach(item => {
+      const course = getCourse(item.courseId);
+      const visibleLabel = item.displayName || course?.name || course?.code || 'Unknown Course';
+      const teacherLabel = item.teacherName || 'Teacher not set';
+      if (messageFormat === 'whatsapp') {
+        lines.push(`• *${item.slot}* · ${visibleLabel} · ${teacherLabel}`);
+      } else if (messageFormat === 'telegram') {
+        lines.push(`• ${item.slot} · ${visibleLabel} · ${teacherLabel}`);
+      } else {
+        lines.push(`${item.slot} · ${visibleLabel} · ${teacherLabel}`);
+      }
+    });
+  return lines.join('\n');
+};
+
+const getRoutineLabel = (course, item) => {
+  if (item.displayName) return item.displayName;
+  const courseLabel = course?.name || course?.code || 'Unknown Course';
+  const teacherLabel = item.teacherName || 'Teacher not set';
+  return `${courseLabel} · ${teacherLabel}`;
+};
 
 export default function Schedule() {
-  const courses = store.get('courses') || [];
-  const [schedule, setSchedule] = useState(() => store.get('schedule') || []);
+  const profile = getProfile();
+  const courses = useMemo(() => getAllCourses(profile), [profile.dept, profile.currentTermKey]);
+  const [schedule, setSchedule] = useState(() => normalizeScheduleEntries(store.get('schedule') || []));
+  const [settings, setSettings] = useState(() => normalizeSettings(store.get('scheduleSettings')));
   const [adding, setAdding] = useState(false);
-  const [form, setForm] = useState({ day: 'Saturday', period: '8:00', courseId: '', room: '', type: 'Theory' });
+  const [editingId, setEditingId] = useState(null);
+  const [editingSettings, setEditingSettings] = useState(false);
+  const [importMessage, setImportMessage] = useState('');
+  const [selectedDay, setSelectedDay] = useState(() => getTomorrowDay());
+  const [form, setForm] = useState({
+    day: 'Sunday',
+    slot: TIME_MODELS['50min'].slots[0],
+    courseId: '',
+    displayName: '',
+    room: '',
+    teacherName: '',
+    type: 'Theory',
+    note: '',
+  });
+
+  const activeTemplate = TIME_MODELS[settings.modelId] || TIME_MODELS['50min'];
+  const slotList = settings.modelId === 'custom' ? settings.customSlots : activeTemplate.slots;
 
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
 
+  const autoDisplayName = (courseId, teacherName) => {
+    const course = getCourse(courseId);
+    const base = course ? `${course.code} — ${course.name}` : '';
+    const teacher = normalizeTeacherName(teacherName) ? ` · ${normalizeTeacherName(teacherName)}` : '';
+    return `${base}${teacher}`.trim();
+  };
+
+  const persistSettings = (next) => {
+    const normalized = normalizeSettings(next);
+    setSettings(normalized);
+    store.set('scheduleSettings', normalized);
+  };
+
+  const resetForm = () => setForm({
+    day: 'Sunday',
+    slot: TIME_MODELS['50min'].slots[0],
+    courseId: '',
+    displayName: '',
+    room: '',
+    teacherName: '',
+    type: 'Theory',
+    note: '',
+  });
+
+  const startEdit = (item) => {
+    setEditingId(item.id);
+    setAdding(true);
+    setForm({
+      day: item.day || 'Sunday',
+      slot: item.slot || TIME_MODELS['50min'].slots[0],
+      courseId: item.courseId || '',
+      displayName: item.displayName || '',
+      room: item.room || '',
+      teacherName: item.teacherName || '',
+      type: item.type || 'Theory',
+      note: item.note || '',
+    });
+  };
+
+  const cancelEdit = () => {
+    setAdding(false);
+    setEditingId(null);
+    resetForm();
+  };
+
   const add = () => {
-    if (!form.courseId) return;
-    const updated = [...schedule, { ...form, id: uid() }];
-    setSchedule(updated); store.set('schedule', updated); setAdding(false);
+    if (!form.courseId || !form.slot) return;
+    const nextSlot = normalizeSlotKey(form.slot);
+    const teacherName = normalizeTeacherName(form.teacherName);
+    const nextEntry = { ...form, teacherName, displayName: form.displayName || autoDisplayName(form.courseId, teacherName), slot: nextSlot, id: uid() };
+    const hasExactDuplicate = schedule.some(item =>
+      item.id !== editingId &&
+      item.day === nextEntry.day &&
+      normalizeSlotKey(item.slot) === nextSlot &&
+      item.courseId === nextEntry.courseId &&
+      (item.teacherName || '') === (nextEntry.teacherName || '') &&
+      (item.type || '') === (nextEntry.type || '') &&
+      (item.room || '') === (nextEntry.room || '')
+    );
+    if (hasExactDuplicate) {
+      alert('This class is already saved in the same day and time.');
+      return;
+    }
+
+    const hasOverlap = schedule.some(item => item.id !== editingId && item.day === nextEntry.day && isSlotOverlap(item.slot, nextSlot));
+    if (hasOverlap) {
+      alert('That time overlaps with an existing class on the same day.');
+      return;
+    }
+
+    const updated = editingId
+      ? normalizeScheduleEntries(schedule.map(item => item.id === editingId ? { ...nextEntry, id: editingId } : item))
+      : normalizeScheduleEntries([...schedule, nextEntry]);
+    setSchedule(updated);
+    store.set('schedule', updated);
+    cancelEdit();
   };
 
   const remove = (id) => {
-    const updated = schedule.filter(s => s.id !== id);
-    setSchedule(updated); store.set('schedule', updated);
+    const updated = normalizeScheduleEntries(schedule.filter(s => s.id !== id));
+    setSchedule(updated);
+    store.set('schedule', updated);
+    if (editingId === id) cancelEdit();
+  };
+
+  const exportRoutine = () => {
+    const payload = {
+      version: 1,
+      exportedAt: new Date().toISOString(),
+      schedule: normalizeScheduleEntries(schedule),
+      scheduleSettings: settings,
+    };
+    const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `kuetx-routine-${new Date().toISOString().slice(0, 10)}.json`;
+    link.click();
+    URL.revokeObjectURL(url);
+    setImportMessage('Routine exported successfully.');
+  };
+
+  const importRoutine = async (file) => {
+    if (!file) return;
+    try {
+      const text = await file.text();
+      const payload = JSON.parse(text);
+      const nextSchedule = normalizeScheduleEntries(Array.isArray(payload.schedule) ? payload.schedule : []);
+      const nextSettings = normalizeSettings(payload.scheduleSettings || {});
+      setSchedule(nextSchedule);
+      setSettings(nextSettings);
+      store.set('schedule', nextSchedule);
+      store.set('scheduleSettings', nextSettings);
+      setImportMessage(`Imported ${nextSchedule.length} class${nextSchedule.length === 1 ? '' : 'es'}.`);
+    } catch {
+      setImportMessage('Import failed. Please use a valid routine JSON file.');
+    }
   };
 
   const getCourse = (id) => courses.find(c => c.id === id);
 
-  // Build grid
-  const grid = {};
-  DAYS.forEach(d => { grid[d] = {}; PERIODS.forEach(p => { grid[d][p] = []; }); });
-  schedule.forEach(s => {
-    if (grid[s.day]?.[s.period]) grid[s.day][s.period].push(s);
-  });
+  const grid = useMemo(() => {
+    const next = {};
+    DAYS.forEach(d => {
+      next[d] = {};
+      getSlotCatalog(schedule, slotList).forEach(slot => { next[d][slot] = []; });
+    });
+    schedule.forEach(s => {
+      const key = normalizeSlotKey(s.slot);
+      if (next[s.day]?.[key]) next[s.day][key].push(s);
+    });
+    return next;
+  }, [schedule, slotList]);
 
-  const today = DAYS[new Date().getDay() === 0 ? 6 : new Date().getDay() - 1] || 'Saturday';
+  const todayIndex = new Date().getDay();
+  const today = DAYS[todayIndex] || 'Sunday';
   const todayClasses = schedule.filter(s => s.day === today);
+  const selectedClasses = schedule.filter(s => s.day === selectedDay);
+  const selectedScheduleText = buildDailyText(selectedDay, selectedClasses, getCourse, settings.messageFormat);
+
+  const copySelectedSchedule = async () => {
+    try {
+      await navigator.clipboard.writeText(selectedScheduleText);
+    } catch {
+      // no-op
+    }
+  };
+
+  const slotPreview = (slot) => {
+    const match = String(slot).match(/^(.+)-(.+)$/);
+    if (!match) return slot;
+    return `${match[1]} → ${match[2]}`;
+  };
+
+  const editCustomSlots = (text) => {
+    const slots = text
+      .split('\n')
+      .map(line => line.trim())
+      .filter(Boolean);
+    persistSettings({ ...settings, modelId: 'custom', customSlots: slots.length ? slots : DEFAULT_CUSTOM });
+  };
+
+  const currentSettingsText = slotList.join('\n');
 
   return (
-    <div className="page-enter page-container">
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-        <div>
-          <h1 style={{ fontSize: 18, fontWeight: 700 }}>Class Schedule</h1>
-          <p style={{ fontSize: 12, color: 'var(--muted)' }}>Weekly routine with today's classes</p>
-        </div>
-        <button className="btn btn-primary" onClick={() => setAdding(true)}>
-          <Plus size={13} /> Add Class
-        </button>
-      </div>
-
-      {/* Today */}
-      {todayClasses.length > 0 && (
-        <div className="card" style={{ marginBottom: 16 }}>
-          <div style={{ fontWeight: 600, fontSize: 13, marginBottom: 8 }}>📅 Today ({today})</div>
-          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-            {todayClasses.sort((a, b) => a.period.localeCompare(b.period)).map(s => {
-              const c = getCourse(s.courseId);
-              return (
-                <div key={s.id} style={{ padding: '6px 12px', borderRadius: 8, background: 'var(--bg)', border: '1px solid var(--border)', fontSize: 12 }}>
-                  <div style={{ fontWeight: 600 }}>{s.period}</div>
-                  <div>{c?.code} — {c?.name}</div>
-                  {s.room && <div style={{ color: 'var(--muted)' }}>Room: {s.room}</div>}
-                </div>
-              );
-            })}
+    <div className="page-enter page-container" style={{ maxWidth: 1180, margin: '0 auto', paddingBottom: 24 }}>
+      <div className="card" style={{ marginBottom: 14, padding: '18px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 16, flexWrap: 'wrap' }}>
+          <div style={{ minWidth: 240, flex: 1 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap', marginBottom: 6 }}>
+              <h1 style={{ fontSize: 22, fontWeight: 800, letterSpacing: '-0.03em', margin: 0 }}>Class Schedule</h1>
+              <span className="tag tag-blue">5-day week</span>
+            </div>
+            <p style={{ fontSize: 13, color: 'var(--muted)', margin: 0, maxWidth: 620 }}>
+              Minimal routine builder for Sun–Thu classes. Keep the display clean, choose the share format, then copy or import/export the full routine when needed.
+            </p>
+          </div>
+          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', justifyContent: 'flex-end' }}>
+            <button className="btn btn-ghost" onClick={() => setEditingSettings(v => !v)}>
+              <Settings2 size={13} /> Settings
+            </button>
+            <button className="btn btn-primary" onClick={() => { setEditingId(null); resetForm(); setAdding(true); }}>
+              <Plus size={13} /> Add Class
+            </button>
           </div>
         </div>
-      )}
+      </div>
 
-      {/* Add form */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1.1fr 0.9fr', gap: 14, marginBottom: 14 }}>
+        <div className="card" style={{ padding: 16 }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, alignItems: 'center', flexWrap: 'wrap', marginBottom: 12 }}>
+            <div>
+              <div style={{ fontWeight: 700, fontSize: 14, marginBottom: 2 }}>Routine Settings</div>
+              <div style={{ fontSize: 12, color: 'var(--muted)' }}>{activeTemplate.name} · {activeTemplate.note}</div>
+            </div>
+            <span className="tag tag-gray">{settings.modelId === 'custom' ? 'Custom' : activeTemplate.id}</span>
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 10, marginBottom: 10 }}>
+            {Object.values(TIME_MODELS).map(model => (
+              <button
+                key={model.id}
+                onClick={() => persistSettings({ ...settings, modelId: model.id })}
+                className="btn"
+                style={{
+                  justifyContent: 'flex-start',
+                  border: settings.modelId === model.id ? '1px solid var(--accent)' : '1px solid var(--border)',
+                  background: settings.modelId === model.id ? 'rgba(59,130,246,0.08)' : 'var(--card)',
+                  padding: '10px 12px',
+                }}
+              >
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 2 }}>
+                  <span style={{ fontWeight: 700, display: 'flex', alignItems: 'center', gap: 6 }}>
+                    <Clock3 size={13} /> {model.name}
+                  </span>
+                  <span style={{ fontSize: 11, color: 'var(--muted)' }}>{model.note}</span>
+                </div>
+              </button>
+            ))}
+            <button
+              onClick={() => persistSettings({ ...settings, modelId: 'custom' })}
+              className="btn"
+              style={{
+                justifyContent: 'flex-start',
+                border: settings.modelId === 'custom' ? '1px solid var(--accent)' : '1px solid var(--border)',
+                background: settings.modelId === 'custom' ? 'rgba(59,130,246,0.08)' : 'var(--card)',
+                padding: '10px 12px',
+              }}
+            >
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 2 }}>
+                <span style={{ fontWeight: 700, display: 'flex', alignItems: 'center', gap: 6 }}>
+                  <PencilLine size={13} /> Custom model
+                </span>
+                <span style={{ fontSize: 11, color: 'var(--muted)' }}>Paste one slot per line</span>
+              </div>
+            </button>
+          </div>
+
+          <div style={{ marginBottom: 12 }}>
+            <label>Copy format</label>
+            <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+              {MESSAGE_FORMATS.map(format => (
+                <button
+                  key={format.id}
+                  onClick={() => persistSettings({ ...settings, messageFormat: format.id })}
+                  className="btn"
+                  style={{
+                    padding: '8px 12px',
+                    border: settings.messageFormat === format.id ? '1px solid var(--accent)' : '1px solid var(--border)',
+                    background: settings.messageFormat === format.id ? 'rgba(59,130,246,0.08)' : 'var(--card)',
+                  }}
+                >
+                  {format.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {settings.modelId === 'custom' && (
+            <div>
+              <label>Custom slots</label>
+              <textarea
+                rows={6}
+                value={currentSettingsText}
+                onChange={e => editCustomSlots(e.target.value)}
+                placeholder={DEFAULT_CUSTOM.join('\n')}
+                style={{ width: '100%', resize: 'vertical', fontFamily: 'inherit' }}
+              />
+            </div>
+          )}
+        </div>
+
+        <div className="card" style={{ padding: 16, display: 'flex', flexDirection: 'column', gap: 12 }}>
+          <div>
+            <div style={{ fontWeight: 700, fontSize: 14, marginBottom: 2 }}>Routine Share</div>
+            <div style={{ fontSize: 12, color: 'var(--muted)' }}>Copy text in the selected format or share/import the full routine JSON.</div>
+          </div>
+          <button className="btn btn-ghost" onClick={copySelectedSchedule} style={{ justifyContent: 'center' }}>
+            <Copy size={13} /> Copy {selectedFormatLabel}
+          </button>
+          <div style={{ display: 'grid', gap: 8 }}>
+            <button className="btn btn-ghost" onClick={exportRoutine} style={{ justifyContent: 'center' }}>Export routine</button>
+            <label className="btn btn-ghost" style={{ cursor: 'pointer', justifyContent: 'center' }}>
+              Import routine
+              <input
+                type="file"
+                accept="application/json"
+                style={{ display: 'none' }}
+                onChange={e => {
+                  const file = e.target.files?.[0];
+                  importRoutine(file);
+                  e.target.value = '';
+                }}
+              />
+            </label>
+          </div>
+          {importMessage && <div style={{ fontSize: 12, color: 'var(--muted)' }}>{importMessage}</div>}
+        </div>
+      </div>
+
+      <div className="card" style={{ marginBottom: 14, padding: 16 }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, alignItems: 'center', flexWrap: 'wrap', marginBottom: 10 }}>
+          <div>
+            <div style={{ fontWeight: 700, fontSize: 14 }}>Day Preview</div>
+            <div style={{ fontSize: 12, color: 'var(--muted)' }}>Select a day to see only that day’s routine.</div>
+          </div>
+          <span className="tag tag-green">{selectedDayTitle}</span>
+        </div>
+        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 12 }}>
+          {DAYS.map(day => (
+            <button
+              key={day}
+              onClick={() => setSelectedDay(day)}
+              className="btn"
+              style={{
+                padding: '8px 12px',
+                border: selectedDay === day ? '1px solid var(--accent)' : '1px solid var(--border)',
+                background: selectedDay === day ? 'rgba(59,130,246,0.08)' : 'var(--card)',
+              }}
+            >
+              {day}
+            </button>
+          ))}
+        </div>
+        <div style={{ padding: 12, border: '1px solid var(--border)', borderRadius: 12, background: 'var(--bg)' }}>
+          <div style={{ fontWeight: 700, fontSize: 13, marginBottom: 8 }}>{selectedDayTitle} routine</div>
+          {selectedClasses.length === 0 ? (
+            <div style={{ fontSize: 12, color: 'var(--muted)' }}>No classes added yet.</div>
+          ) : (
+            <div style={{ display: 'grid', gap: 8 }}>
+              {selectedClasses.slice().sort((a, b) => a.slot.localeCompare(b.slot)).map(item => {
+                const course = getCourse(item.courseId);
+                return (
+                  <div key={item.id} style={{ display: 'flex', gap: 12, alignItems: 'center', padding: '10px 12px', borderRadius: 10, border: '1px solid var(--border)', background: 'var(--card)' }}>
+                    <div style={{ minWidth: 88, fontWeight: 700, fontSize: 12, color: 'var(--text)' }}>{item.slot}</div>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div style={{ fontWeight: 600, fontSize: 13 }}>{getRoutineLabel(course, item)}</div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </div>
+      </div>
+
       {adding && (
-        <div className="card" style={{ marginBottom: 16, borderColor: 'var(--accent)' }}>
-          <div style={{ fontWeight: 600, fontSize: 13, marginBottom: 12 }}>Add Class Slot</div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 10, marginBottom: 10 }}>
+        <div className="card" style={{ marginBottom: 14, borderColor: 'var(--accent)', padding: 16 }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 10, marginBottom: 12 }}>
+            <div style={{ fontWeight: 600, fontSize: 13 }}>{editingId ? 'Edit Class Slot' : 'Add Class Slot'}</div>
+            {editingId && <span className="tag tag-blue">Editing</span>}
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, minmax(0, 1fr))', gap: 10, marginBottom: 10 }}>
             <div>
               <label>Day</label>
               <select value={form.day} onChange={e => set('day', e.target.value)}>
@@ -80,72 +574,125 @@ export default function Schedule() {
             </div>
             <div>
               <label>Time</label>
-              <select value={form.period} onChange={e => set('period', e.target.value)}>
-                {PERIODS.map(p => <option key={p}>{p}</option>)}
+              <select value={form.slot} onChange={e => set('slot', e.target.value)}>
+                {slotList.map(p => <option key={p} value={p}>{slotPreview(p)}</option>)}
               </select>
             </div>
             <div>
+              <label>Type</label>
+              <select value={form.type} onChange={e => set('type', e.target.value)}>
+                <option value="Theory">Theory</option>
+                <option value="Sessional">Lab / Sessional</option>
+                <option value="Project">Project</option>
+                <option value="Tutorial">Tutorial / Section</option>
+              </select>
+            </div>
+            <div style={{ gridColumn: 'span 2' }}>
               <label>Course</label>
               <select value={form.courseId} onChange={e => set('courseId', e.target.value)}>
                 <option value="">Select course</option>
                 {courses.map(c => <option key={c.id} value={c.id}>{c.code} — {c.name}</option>)}
               </select>
             </div>
+            <div style={{ gridColumn: 'span 3' }}>
+              <label>Show as</label>
+              <input
+                value={form.displayName}
+                onChange={e => set('displayName', e.target.value)}
+                placeholder={autoDisplayName(form.courseId, form.teacherName) || 'CSE 2201 — Data Structures · Imran Sir'}
+              />
+            </div>
+            <div>
+              <label>Teacher</label>
+              <input value={form.teacherName} onChange={e => {
+                const teacherName = normalizeTeacherName(e.target.value);
+                set('teacherName', teacherName);
+                if (!form.displayName) set('displayName', autoDisplayName(form.courseId, teacherName));
+              }} placeholder="Imran Sir" />
+            </div>
             <div>
               <label>Room</label>
               <input value={form.room} onChange={e => set('room', e.target.value)} placeholder="Room 301" />
             </div>
+            <div style={{ gridColumn: 'span 3' }}>
+              <label>Note</label>
+              <input value={form.note} onChange={e => set('note', e.target.value)} placeholder="Optional note, teacher, batch, etc." />
+            </div>
           </div>
           <div style={{ display: 'flex', gap: 8 }}>
-            <button className="btn btn-primary" onClick={add}>Add</button>
-            <button className="btn btn-ghost" onClick={() => setAdding(false)}>Cancel</button>
+            <button className="btn btn-primary" onClick={add}>{editingId ? 'Save Changes' : 'Add'}</button>
+            <button className="btn btn-ghost" onClick={cancelEdit}>Cancel</button>
           </div>
         </div>
       )}
 
-      {/* Timetable grid */}
-      <div style={{ overflowX: 'auto' }}>
-        <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 11 }}>
-          <thead>
-            <tr>
-              <th style={{ padding: '8px 10px', border: '1px solid var(--border)', background: 'var(--surface)', minWidth: 60 }}>Time</th>
-              {DAYS.map(d => (
-                <th key={d} style={{
-                  padding: '8px 10px', border: '1px solid var(--border)', background: 'var(--surface)',
-                  fontWeight: d === today ? 700 : 500, color: d === today ? 'var(--accent)' : 'var(--text)',
-                  minWidth: 100
-                }}>{d.slice(0, 3)}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {PERIODS.map(p => (
-              <tr key={p}>
-                <td style={{ padding: '6px 10px', border: '1px solid var(--border)', fontWeight: 500, color: 'var(--muted)', fontFamily: 'JetBrains Mono, monospace' }}>{p}</td>
+      <div className="card" style={{ padding: 16 }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', alignItems: 'center', marginBottom: 12 }}>
+          <div>
+            <div style={{ fontWeight: 700, fontSize: 14 }}>Timetable Grid</div>
+            <div style={{ fontSize: 12, color: 'var(--muted)' }}>Double-click any entry to edit. The grid stays compact and readable.</div>
+          </div>
+          <div style={{ fontSize: 12, color: 'var(--muted)' }}>{schedule.length} saved slot{schedule.length === 1 ? '' : 's'}</div>
+        </div>
+        <div style={{ overflowX: 'auto', border: '1px solid var(--border)', borderRadius: 14, background: 'var(--card)' }}>
+          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 11 }}>
+            <thead style={{ position: 'sticky', top: 0, zIndex: 2 }}>
+              <tr>
+                <th style={{ padding: '10px 12px', borderBottom: '1px solid var(--border)', background: 'var(--surface)', minWidth: 92, textAlign: 'left' }}>Time</th>
                 {DAYS.map(d => (
-                  <td key={d} style={{ padding: '4px 6px', border: '1px solid var(--border)', verticalAlign: 'top', minHeight: 36 }}>
-                    {(grid[d]?.[p] || []).map(s => {
-                      const c = getCourse(s.courseId);
-                      return (
-                        <div key={s.id} style={{
-                          padding: '3px 6px', borderRadius: 4, fontSize: 10, marginBottom: 2,
-                          background: 'var(--accent)', color: 'var(--accentFg)', position: 'relative',
-                        }}>
-                          <div style={{ fontWeight: 600 }}>{c?.code || '?'}</div>
-                          {s.room && <div style={{ opacity: 0.85 }}>{s.room}</div>}
-                          <button onClick={() => remove(s.id)} style={{
-                            position: 'absolute', top: 2, right: 2, background: 'none', border: 'none',
-                            color: 'inherit', cursor: 'pointer', opacity: 0.7, padding: 0, lineHeight: 1,
-                          }}>×</button>
-                        </div>
-                      );
-                    })}
-                  </td>
+                  <th key={d} style={{ padding: 0, borderBottom: '1px solid var(--border)', background: 'var(--surface)', minWidth: 128 }}>
+                    <button
+                      onClick={() => setSelectedDay(d)}
+                      style={{
+                        width: '100%',
+                        padding: '10px 12px',
+                        border: 'none',
+                        background: 'transparent',
+                        cursor: 'pointer',
+                        fontWeight: d === selectedDay || d === today ? 700 : 500,
+                        color: d === selectedDay || d === today ? 'var(--accent)' : 'var(--text)',
+                      }}
+                    >
+                      {formatDayShort(d)}
+                    </button>
+                  </th>
                 ))}
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {getSlotCatalog(schedule, slotList).map(p => (
+                <tr key={p}>
+                  <td style={{ padding: '10px 12px', borderBottom: '1px solid var(--border)', borderRight: '1px solid var(--border)', fontWeight: 600, color: 'var(--muted)', fontFamily: 'JetBrains Mono, monospace', whiteSpace: 'nowrap', background: 'var(--bg)' }}>{slotPreview(p)}</td>
+                  {DAYS.map(d => (
+                    <td key={d} style={{ padding: '6px', borderBottom: '1px solid var(--border)', borderRight: '1px solid var(--border)', verticalAlign: 'top', minHeight: 44, background: d === selectedDay ? 'rgba(59,130,246,0.035)' : 'transparent' }}>
+                      {(grid[d]?.[p] || []).map(s => {
+                        const c = getCourse(s.courseId);
+                        return (
+                          <div key={s.id} onDoubleClick={() => startEdit(s)} title="Double-click to edit" style={{
+                            padding: '6px 8px', borderRadius: 10, fontSize: 10, marginBottom: 2,
+                            background: 'linear-gradient(180deg, rgba(59,130,246,0.12), rgba(59,130,246,0.08))',
+                            border: '1px solid rgba(59,130,246,0.18)', color: 'var(--text)', position: 'relative', cursor: 'pointer',
+                          }}>
+                            <div style={{ fontWeight: 700, fontSize: 11, lineHeight: 1.25 }}>{s.displayName || c?.name || c?.code || '?'}</div>
+                            <div style={{ opacity: 0.85, fontSize: 10, marginTop: 2 }}>{s.teacherName || 'Teacher not set'}</div>
+                            <button onClick={() => startEdit(s)} style={{
+                              position: 'absolute', top: 2, right: 16, background: 'none', border: 'none',
+                              color: 'inherit', cursor: 'pointer', opacity: 0.55, padding: 0, lineHeight: 1,
+                            }}>✎</button>
+                            <button onClick={() => remove(s.id)} style={{
+                              position: 'absolute', top: 2, right: 2, background: 'none', border: 'none',
+                              color: 'inherit', cursor: 'pointer', opacity: 0.55, padding: 0, lineHeight: 1,
+                            }}>×</button>
+                          </div>
+                        );
+                      })}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );

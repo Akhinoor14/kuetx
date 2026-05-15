@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { store, getAttendanceMarks, MIN_ATTENDANCE_PERCENT, SCHOLARSHIP_ATTENDANCE_PCT } from '../store/store';
+import { store, getAttendanceMarks, MIN_ATTENDANCE_PERCENT, SCHOLARSHIP_ATTENDANCE_PCT, getAllCourses, getProfile } from '../store/store';
 
 const todayStr = () => new Date().toISOString().split('T')[0];
 const addDays = (d, n) => { const dt = new Date(d + 'T00:00:00'); dt.setDate(dt.getDate() + n); return dt.toISOString().split('T')[0]; };
@@ -26,13 +26,46 @@ function attColor(pct) {
   return 'var(--success)';
 }
 
+function getScheduleMeta(schedule, courseId) {
+  const items = (schedule || []).filter(s => s.courseId === courseId);
+  if (!items.length) return { label: '', teacher: '', times: '' };
+
+  const first = items[0];
+  const label = first.displayName || '';
+  const teacher = first.teacherName || '';
+  const times = [...new Set(items.map(s => `${s.day?.slice(0, 3)} ${s.slot}`))].join(' · ');
+  return { label, teacher, times };
+}
+
+function getScheduleCoursesForDate(schedule, date) {
+  const dayName = new Date(date + 'T00:00:00').toLocaleDateString('en-US', { weekday: 'long' });
+  const byCourse = new Map();
+
+  (schedule || [])
+    .filter(item => item.day === dayName)
+    .forEach(item => {
+      if (!byCourse.has(item.courseId)) byCourse.set(item.courseId, []);
+      byCourse.get(item.courseId).push(item);
+    });
+
+  return [...byCourse.entries()].map(([courseId, items]) => ({
+    courseId,
+    items: items.slice().sort((a, b) => a.slot.localeCompare(b.slot)),
+  }));
+}
+
 // ── Daily Log ─────────────────────────────────────────────────────────────
-function DailyLog({ courses, logs, setLogs }) {
+function DailyLog({ courses, logs, setLogs, schedule }) {
   const [date, setDate] = useState(todayStr());
   const dayLog = logs[date] || {};
   const isToday = date === todayStr();
   const dayName = new Date(date + 'T00:00:00').getDay();
   const isFriday = dayName === 5;
+  const scheduledCourses = getScheduleCoursesForDate(schedule, date);
+  const scheduledCourseIds = scheduledCourses.map(item => item.courseId);
+  const visibleCourses = scheduledCourseIds.length
+    ? courses.filter(course => scheduledCourseIds.includes(course.id))
+    : [];
 
   const mark = (courseId, val) => {
     const cur = dayLog[courseId];
@@ -44,7 +77,7 @@ function DailyLog({ courses, logs, setLogs }) {
     store.set('attLogs', updated);
   };
 
-  const markedCount = courses.filter(c => dayLog[c.id]).length;
+  const markedCount = visibleCourses.filter(c => dayLog[c.id]).length;
 
   return (
     <div>
@@ -66,7 +99,7 @@ function DailyLog({ courses, logs, setLogs }) {
 
       <div style={{ marginBottom: 14, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div style={{ fontSize: 14, fontWeight: 600 }}>{fmtDate(date)}</div>
-        <div style={{ fontSize: 13, color: 'var(--muted)' }}>{markedCount}/{courses.length} marked</div>
+        <div style={{ fontSize: 13, color: 'var(--muted)' }}>{markedCount}/{visibleCourses.length || 0} marked</div>
       </div>
 
       {isFriday && (
@@ -79,9 +112,18 @@ function DailyLog({ courses, logs, setLogs }) {
         <div className="empty-state"><div className="icon">📚</div><p>Add courses first.</p></div>
       )}
 
+      {courses.length > 0 && scheduledCourses.length === 0 && (
+        <div className="empty-state">
+          <div className="icon">🗓</div>
+          <p>No class today.</p>
+        </div>
+      )}
+
       <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-        {courses.map(c => {
+        {visibleCourses.map(c => {
           const status = dayLog[c.id];
+          const meta = getScheduleMeta(schedule, c.id);
+          const todayItems = scheduledCourses.find(item => item.courseId === c.id)?.items || [];
           return (
             <div key={c.id} className="card" style={{
               padding: '14px 18px',
@@ -91,6 +133,18 @@ function DailyLog({ courses, logs, setLogs }) {
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div style={{ fontWeight: 700, fontSize: 15 }}>{c.code}</div>
                 <div style={{ fontSize: 13, color: 'var(--muted)' }}>{c.name}</div>
+                {todayItems.length > 0 && (
+                  <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 3 }}>
+                    {todayItems.map(item => item.displayName || `${c.code} — ${c.name}`).join(' · ')}
+                  </div>
+                )}
+                {(meta.label || meta.teacher || meta.times) && (
+                  <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 4 }}>
+                    {meta.label && <div>{meta.label}</div>}
+                    {meta.teacher && <div>{meta.teacher}</div>}
+                    {meta.times && <div>{meta.times}</div>}
+                  </div>
+                )}
               </div>
               <div style={{ display: 'flex', gap: 8 }}>
                 {[
@@ -124,7 +178,7 @@ function DailyLog({ courses, logs, setLogs }) {
 }
 
 // ── Summary ───────────────────────────────────────────────────────────────
-function Summary({ courses, logs, manual, setManual }) {
+function Summary({ courses, logs, manual, setManual, schedule }) {
   const updateManual = (id, field, val) => {
     const updated = { ...manual, [id]: { ...(manual[id]||{}), [field]: Math.max(0, +val||0) } };
     setManual(updated);
@@ -139,6 +193,7 @@ function Summary({ courses, logs, manual, setManual }) {
         const attMarks = pct !== null ? getAttendanceMarks(pct) : null;
         const need75   = held ? Math.max(0, Math.ceil(held * 0.75) - attended) : null;
         const canMiss  = held && pct >= 60 ? Math.max(0, attended - Math.ceil(held * 0.60)) : null;
+        const meta = getScheduleMeta(schedule, c.id);
 
         return (
           <div key={c.id} className="card" style={{ padding: 18 }}>
@@ -149,6 +204,13 @@ function Summary({ courses, logs, manual, setManual }) {
                 <div style={{ fontSize: 13, color: 'var(--muted)' }}>Y{c.year} T{c.term} · {c.credits}cr
                   {source === 'log' && <span style={{ color: 'var(--accent)', marginLeft: 8 }}>● from daily log</span>}
                 </div>
+                {(meta.label || meta.teacher || meta.times) && (
+                  <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 5 }}>
+                    {meta.label && <div>{meta.label}</div>}
+                    {meta.teacher && <div>{meta.teacher}</div>}
+                    {meta.times && <div>{meta.times}</div>}
+                  </div>
+                )}
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                 {attMarks !== null && (
@@ -219,19 +281,52 @@ function Summary({ courses, logs, manual, setManual }) {
 
 // ── Main ───────────────────────────────────────────────────────────────────
 export default function Attendance() {
-  const courses = (store.get('courses') || []).filter(c => c.status === 'active' || c.status === 'backlog');
+  const profile = getProfile();
+  const courses = getAllCourses(profile).filter(c => c.status === 'active' || c.status === 'backlog');
   const [logs,   setLogs]   = useState(() => store.get('attLogs')   || {});
   const [manual, setManual] = useState(() => store.get('attendance') || {});
   const [tab, setTab] = useState('daily');
+  const schedule = useMemo(() => store.get('schedule') || [], []);
+
+  const todayDayName = new Date().toLocaleDateString('en-US', { weekday: 'long' });
+  const todaySchedule = schedule.filter(s => s.day === todayDayName && courses.some(c => c.id === s.courseId));
 
   return (
     <div className="page-enter page-container">
       <div style={{ marginBottom: 20 }}>
         <h1>Attendance</h1>
         <p className="text-muted" style={{ marginTop: 4 }}>
-          Mark daily classes or enter totals manually — past dates always editable
+          Mark only the classes scheduled for that date — past dates always editable
         </p>
       </div>
+
+      {todaySchedule.length > 0 && (
+        <div className="card" style={{ marginBottom: 16 }}>
+          <div style={{ fontWeight: 700, fontSize: 13, marginBottom: 8 }}>Today from Schedule</div>
+          <div style={{ display: 'grid', gap: 8 }}>
+            {todaySchedule.slice().sort((a, b) => a.slot.localeCompare(b.slot)).map(item => {
+              const course = courses.find(c => c.id === item.courseId);
+              return (
+                <div key={item.id} style={{ display: 'flex', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', padding: '10px 12px', border: '1px solid var(--border)', borderRadius: 8, background: 'var(--bg)' }}>
+                  <div>
+                    <div style={{ fontWeight: 700 }}>{item.slot}</div>
+                    <div style={{ fontSize: 12, color: 'var(--muted)' }}>{item.displayName || `${course?.code} — ${course?.name}`}</div>
+                  </div>
+                  <div style={{ fontSize: 12, color: 'var(--muted)', textAlign: 'right' }}>
+                    {item.teacherName && <div>{item.teacherName}</div>}
+                    {item.room && <div>Room {item.room}</div>}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+      {todaySchedule.length === 0 && (
+        <div className="card" style={{ marginBottom: 16, color: 'var(--muted)', fontSize: 13 }}>
+          No class today.
+        </div>
+      )}
 
       <div className="tabs">
         {[['daily','📅 Daily Log'], ['summary','📊 Summary & Stats']].map(([id,label]) => (
@@ -240,8 +335,8 @@ export default function Attendance() {
       </div>
 
       {tab === 'daily'
-        ? <DailyLog courses={courses} logs={logs} setLogs={setLogs} />
-        : <Summary  courses={courses} logs={logs} manual={manual} setManual={setManual} />
+        ? <DailyLog courses={courses} logs={logs} setLogs={setLogs} schedule={schedule} />
+        : <Summary  courses={courses} logs={logs} manual={manual} setManual={setManual} schedule={schedule} />
       }
 
       {/* Slab reference */}

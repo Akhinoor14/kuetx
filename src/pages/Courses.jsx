@@ -1,16 +1,15 @@
-import { useState } from 'react';
-import { Plus, Trash2, Edit2, X, Check } from 'lucide-react';
-import { store, uid, COURSE_TYPES, COURSE_STATUSES } from '../store/store';
+import { useMemo, useState } from 'react';
+import { Plus, Trash2, X, Check } from 'lucide-react';
+import { COURSE_STATUSES, COURSE_TYPES, getAllCourses, getCustomCourses, getDeptOptionalCourses, getProfile, getTermLabelFromKey, setCourseOverride, setCustomCourses, setOptionalSelection, uid } from '../store/store';
 
-const YEARS = [1,2,3,4];
-const TERMS = [1,2];
+const YEARS = [1, 2, 3, 4];
 
 const STATUS_COLORS = {
   active: 'tag-green', completed: 'tag-blue',
   backlog: 'tag-red', withdrawal: 'tag-yellow', incomplete: 'tag-gray'
 };
 
-function CourseForm({ initial, onSave, onCancel }) {
+function CustomCourseForm({ initial, onSave, onCancel }) {
   const blank = { code:'', name:'', type:'Theory', credits:3, year:1, term:1, status:'active', isCore:true, notes:'' };
   const [f, setF] = useState(initial || blank);
   const set = (k,v) => setF(p=>({...p,[k]:v}));
@@ -18,7 +17,7 @@ function CourseForm({ initial, onSave, onCancel }) {
   return (
     <div className="card mb-3" style={{ borderColor: 'var(--accent)', borderWidth: 2 }}>
       <div style={{ fontWeight: 700, fontSize: 16, marginBottom: 16 }}>
-        {initial?.id ? 'Edit Course' : '+ Add New Course'}
+        {initial?.id ? 'Edit Custom Course' : '+ Add Custom Course'}
       </div>
 
       <div className="form-row form-row-2">
@@ -55,13 +54,13 @@ function CourseForm({ initial, onSave, onCancel }) {
         <div>
           <label>Year</label>
           <select value={f.year} onChange={e=>set('year',+e.target.value)}>
-            {YEARS.map(y=><option key={y} value={y}>Year {y}</option>)}
+            {YEARS.map(y=><option key={y} value={y}>Year {y}</option>) }
           </select>
         </div>
         <div>
           <label>Term</label>
           <select value={f.term} onChange={e=>set('term',+e.target.value)}>
-            {TERMS.map(t=><option key={t} value={t}>Term {t}</option>)}
+            {[1,2].map(t=><option key={t} value={t}>Term {t}</option>)}
           </select>
         </div>
       </div>
@@ -72,8 +71,8 @@ function CourseForm({ initial, onSave, onCancel }) {
       </div>
 
       <div style={{ display:'flex', alignItems:'center', gap:8, marginBottom:16 }}>
-        <input type="checkbox" id="isCore" checked={!!f.isCore} onChange={e=>set('isCore',e.target.checked)} style={{width:'auto'}}/>
-        <label htmlFor="isCore" style={{marginBottom:0,cursor:'pointer',fontSize:14,color:'var(--text)',textTransform:'none',letterSpacing:0,fontWeight:500}}>
+        <input type="checkbox" id="custom-isCore" checked={!!f.isCore} onChange={e=>set('isCore',e.target.checked)} style={{width:'auto'}}/>
+        <label htmlFor="custom-isCore" style={{marginBottom:0,cursor:'pointer',fontSize:14,color:'var(--text)',textTransform:'none',letterSpacing:0,fontWeight:500}}>
           Core course (must pass for degree)
         </label>
       </div>
@@ -87,55 +86,74 @@ function CourseForm({ initial, onSave, onCancel }) {
 }
 
 export default function Courses() {
-  const [courses, setCourses] = useState(()=>store.get('courses')||[]);
-  const [adding, setAdding] = useState(false);
-  const [editing, setEditing] = useState(null);
   const [filterYear, setFilterYear] = useState('all');
+  const [addingCustom, setAddingCustom] = useState(false);
+  const [editingCustom, setEditingCustom] = useState(null);
+  const [version, setVersion] = useState(0);
+  const profile = getProfile();
 
-  const save = (cs) => { store.set('courses', cs); setCourses(cs); };
+  const courses = useMemo(() => getAllCourses(profile), [profile.dept, profile.currentTermKey, version]);
+  const customCourses = useMemo(() => getCustomCourses(), [version]);
+  const optionalCatalog = getDeptOptionalCourses(profile.dept);
 
-  const addCourse = (f) => {
-    save([...courses, {...f, id:uid()}]);
-    setAdding(false);
-  };
-  const editCourse = (f) => {
-    save(courses.map(c=>c.id===f.id?f:c));
-    setEditing(null);
-  };
-  const del = (id) => {
-    if (!confirm('Delete this course?')) return;
-    save(courses.filter(c=>c.id!==id));
+  const saveCustom = (list) => {
+    setCustomCourses(list);
+    setVersion(v => v + 1);
   };
 
-  // Group by year+term
-  const filtered = filterYear === 'all' ? courses : courses.filter(c=>c.year===+filterYear);
+  const addCustomCourse = (f) => {
+    saveCustom([{ ...f, id: uid(), source: 'custom' }, ...customCourses]);
+    setAddingCustom(false);
+  };
+
+  const editCustomCourse = (f) => {
+    saveCustom(customCourses.map(c => c.id === f.id ? f : c));
+    setEditingCustom(null);
+  };
+
+  const delCustom = (id) => {
+    if (!confirm('Delete this custom course?')) return;
+    saveCustom(customCourses.filter(c => c.id !== id));
+  };
+
+  const updateOverride = (courseId, patch) => {
+    setCourseOverride(courseId, patch);
+    setVersion(v => v + 1);
+  };
+
+  const updateOptional = (course, code) => {
+    setOptionalSelection({ deptCode: course.deptCode, termKey: `Y${course.year}T${course.term}`, slotIndex: course.optionalSlotIndex, code });
+    setVersion(v => v + 1);
+  };
+
+  const filtered = filterYear === 'all' ? courses : courses.filter(c => c.year === +filterYear);
   const groups = {};
   filtered.forEach(c => {
     const k = `Y${c.year}T${c.term}`;
-    if (!groups[k]) groups[k] = { label:`Year ${c.year} · Term ${c.term}`, key:k, items:[] };
+    if (!groups[k]) groups[k] = { label: getTermLabelFromKey(k), key: k, items: [] };
     groups[k].items.push(c);
   });
-  const sortedGroups = Object.values(groups).sort((a,b)=>a.key.localeCompare(b.key));
+  const sortedGroups = Object.values(groups).sort((a, b) => a.key.localeCompare(b.key));
 
   return (
     <div className="page-enter page-container">
       <div className="flex-between mb-4">
         <div>
           <h1>Courses</h1>
-          <p className="text-muted" style={{marginTop:4}}>{courses.length} courses added</p>
+          <p className="text-muted" style={{marginTop:4}}>{courses.length} courses loaded</p>
         </div>
-        {!adding && <button className="btn btn-primary" onClick={()=>{setAdding(true);setEditing(null);}}>
-          <Plus size={16}/> Add Course
-        </button>}
+        {!addingCustom && (
+          <button className="btn btn-primary" onClick={() => { setAddingCustom(true); setEditingCustom(null); }}>
+            <Plus size={16}/> Add Custom Course
+          </button>
+        )}
       </div>
 
-      {/* Add form */}
-      {adding && <CourseForm onSave={addCourse} onCancel={()=>setAdding(false)} />}
+      {addingCustom && <CustomCourseForm onSave={addCustomCourse} onCancel={() => setAddingCustom(false)} />}
 
-      {/* Filter */}
       {courses.length > 0 && (
         <div style={{ display:'flex', gap:6, marginBottom:18, flexWrap:'wrap' }}>
-          {['all',...YEARS.map(String)].map(y=>(
+          {['all', ...YEARS.map(String)].map(y => (
             <button key={y} onClick={()=>setFilterYear(y)} style={{
               padding:'6px 14px', borderRadius:8, border:'1.5px solid', cursor:'pointer',
               fontWeight:filterYear===y?700:400, fontSize:13, fontFamily:'Sora,sans-serif',
@@ -147,26 +165,59 @@ export default function Courses() {
         </div>
       )}
 
-      {/* Empty state */}
-      {courses.length === 0 && !adding && (
-        <div className="empty-state">
-          <div className="icon">📚</div>
-          <p style={{marginBottom:16}}>No courses yet. Add your courses to get started.</p>
-          <button className="btn btn-primary" onClick={()=>setAdding(true)}><Plus size={16}/> Add First Course</button>
-        </div>
-      )}
-
-      {/* Groups */}
-      {sortedGroups.map(g=>(
-        <div key={g.key} style={{marginBottom:20}}>
+      {sortedGroups.map(g => (
+        <div key={g.key} style={{ marginBottom: 20 }}>
           <div style={{fontSize:11,fontWeight:700,color:'var(--muted)',textTransform:'uppercase',letterSpacing:'0.08em',marginBottom:10}}>
             {g.label}
           </div>
           <div style={{display:'flex',flexDirection:'column',gap:6}}>
-            {g.items.map(c=>(
+            {g.items.map(c => (
+              <div key={c.id} className="card" style={{display:'flex',alignItems:'center',gap:12,padding:'12px 16px'}}>
+                <div style={{flex:1,minWidth:0}}>
+                  <div style={{display:'flex',alignItems:'center',gap:8,flexWrap:'wrap'}}>
+                    <span className="mono fw-700" style={{fontSize:14}}>{c.code}</span>
+                    <span style={{fontSize:14}}>{c.name}</span>
+                  </div>
+                  <div style={{display:'flex',gap:6,flexWrap:'wrap',marginTop:5}}>
+                    <span className={`tag ${STATUS_COLORS[c.status]||'tag-gray'}`}>{c.status}</span>
+                    <span className="tag tag-gray">{c.type}</span>
+                    <span className="tag tag-gray">{c.credits} cr</span>
+                    {c.isCore && <span className="tag tag-blue">Core</span>}
+                    {c.isOptional && <span className="tag tag-yellow">Optional Slot</span>}
+                  </div>
+                  {c.notes && <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 6 }}>{c.notes}</div>}
+                </div>
+
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 6, minWidth: 150 }}>
+                  {c.isOptional && (
+                    <select value={c.optionalCode || ''} onChange={e => updateOptional(c, e.target.value)}>
+                      <option value="">Select optional course</option>
+                      {optionalCatalog.map(opt => (
+                        <option key={opt.code} value={opt.code}>{opt.code} — {opt.title}</option>
+                      ))}
+                    </select>
+                  )}
+                  <select value={c.status} onChange={e => updateOverride(c.id, { status: e.target.value })}>
+                    {COURSE_STATUSES.map(s => <option key={s.id} value={s.id}>{s.label}</option>)}
+                  </select>
+                  <input value={c.notes || ''} onChange={e => updateOverride(c.id, { notes: e.target.value })} placeholder="Notes / pre-reqs" />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+
+      {customCourses.length > 0 && (
+        <div style={{ marginTop: 24 }}>
+          <div style={{fontSize:11,fontWeight:700,color:'var(--muted)',textTransform:'uppercase',letterSpacing:'0.08em',marginBottom:10}}>
+            Custom Courses
+          </div>
+          <div style={{display:'flex',flexDirection:'column',gap:6}}>
+            {customCourses.map(c => (
               <div key={c.id}>
-                {editing===c.id
-                  ? <CourseForm initial={c} onSave={editCourse} onCancel={()=>setEditing(null)} />
+                {editingCustom === c.id
+                  ? <CustomCourseForm initial={c} onSave={editCustomCourse} onCancel={() => setEditingCustom(null)} />
                   : (
                     <div className="card" style={{display:'flex',alignItems:'center',gap:12,padding:'12px 16px'}}>
                       <div style={{flex:1,minWidth:0}}>
@@ -179,13 +230,12 @@ export default function Courses() {
                           <span className="tag tag-gray">{c.type}</span>
                           <span className="tag tag-gray">{c.credits} cr</span>
                           {c.isCore && <span className="tag tag-blue">Core</span>}
-                          {c.notes && <span style={{fontSize:12,color:'var(--muted)'}}>{c.notes}</span>}
                         </div>
                       </div>
-                      <button className="btn btn-ghost btn-sm" onClick={()=>setEditing(c.id)} title="Edit">
-                        <Edit2 size={14}/>
+                      <button className="btn btn-ghost btn-sm" onClick={()=>setEditingCustom(c.id)} title="Edit">
+                        ✎
                       </button>
-                      <button className="btn btn-ghost btn-sm" onClick={()=>del(c.id)} title="Delete">
+                      <button className="btn btn-ghost btn-sm" onClick={()=>delCustom(c.id)} title="Delete">
                         <Trash2 size={14} color="var(--danger)"/>
                       </button>
                     </div>
@@ -195,7 +245,14 @@ export default function Courses() {
             ))}
           </div>
         </div>
-      ))}
+      )}
+
+      {courses.length === 0 && !addingCustom && (
+        <div className="empty-state">
+          <div className="icon">📚</div>
+          <p style={{marginBottom:16}}>Select department and term in Profile to load courses.</p>
+        </div>
+      )}
     </div>
   );
 }

@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Plus, Trash2, Check } from 'lucide-react';
-import { store, uid } from '../store/store';
+import { store, uid, getAllCourses, getDeptSyllabus, getProfile } from '../store/store';
 
 // ── Tours ────────────────────────────────────────────────────────────────────
 export function Tours() {
@@ -216,26 +216,35 @@ export function Projects() {
 
 // ── Syllabus ──────────────────────────────────────────────────────────────────
 export function Syllabus() {
-  const courses = store.get('courses') || [];
-  const [syllabus, setSyllabus] = useState(() => store.get('syllabus') || {});
+  const profile = getProfile();
+  const courses = getAllCourses(profile);
+  const deptSyllabus = getDeptSyllabus(profile.dept);
+  const [syllabus, setSyllabus] = useState(() => store.get('syllabusProgress') || {});
   const [selCourse, setSelCourse] = useState(courses[0]?.id || '');
 
+  useEffect(() => {
+    if (!selCourse && courses[0]?.id) setSelCourse(courses[0].id);
+    if (selCourse && !courses.find(c => c.id === selCourse)) setSelCourse(courses[0]?.id || '');
+  }, [courses, selCourse]);
+
+  const selectedCourse = courses.find(c => c.id === selCourse);
   const topics = syllabus[selCourse] || [];
+  const suggested = selectedCourse ? (deptSyllabus?.courses?.[selectedCourse.code]?.topics || []) : [];
 
   const addTopic = (text) => {
     if (!text.trim() || !selCourse) return;
     const updated = { ...syllabus, [selCourse]: [...topics, { id: uid(), text, done: false }] };
-    setSyllabus(updated); store.set('syllabus', updated);
+    setSyllabus(updated); store.set('syllabusProgress', updated);
   };
 
   const toggleTopic = (id) => {
     const updated = { ...syllabus, [selCourse]: topics.map(t => t.id === id ? { ...t, done: !t.done } : t) };
-    setSyllabus(updated); store.set('syllabus', updated);
+    setSyllabus(updated); store.set('syllabusProgress', updated);
   };
 
   const delTopic = (id) => {
     const updated = { ...syllabus, [selCourse]: topics.filter(t => t.id !== id) };
-    setSyllabus(updated); store.set('syllabus', updated);
+    setSyllabus(updated); store.set('syllabusProgress', updated);
   };
 
   const [newTopic, setNewTopic] = useState('');
@@ -257,6 +266,25 @@ export function Syllabus() {
 
       {selCourse && (
         <>
+          {suggested.length > 0 && (
+            <div className="card" style={{ marginBottom: 12 }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+                <span style={{ fontSize: 13, fontWeight: 600 }}>Suggested Topics</span>
+                <button className="btn btn-ghost btn-sm" onClick={() => {
+                  const existing = new Set(topics.map(t => t.text));
+                  const added = suggested.filter(t => !existing.has(t)).map(text => ({ id: uid(), text, done: false }));
+                  if (!added.length) return;
+                  const updated = { ...syllabus, [selCourse]: [...topics, ...added] };
+                  setSyllabus(updated); store.set('syllabusProgress', updated);
+                }}>Add All</button>
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 6, fontSize: 12, color: 'var(--muted)' }}>
+                {suggested.slice(0, 6).map((t, i) => <div key={i}>• {t}</div>)}
+                {suggested.length > 6 && <div>+ {suggested.length - 6} more topics</div>}
+              </div>
+            </div>
+          )}
+
           {topics.length > 0 && (
             <div className="card" style={{ marginBottom: 12 }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
@@ -290,8 +318,13 @@ export function Syllabus() {
             </div>
           ))}
 
-          {courses.length === 0 && <p style={{ color: 'var(--muted)', fontSize: 13 }}>Add courses first.</p>}
+          {courses.length === 0 && <p style={{ color: 'var(--muted)', fontSize: 13 }}>Select department and term in Profile to load courses.</p>}
           {topics.length === 0 && <p style={{ color: 'var(--muted)', fontSize: 13, marginTop: 10 }}>No topics yet — add from syllabus above.</p>}
+          {deptSyllabus?.sourceFile && (
+            <div style={{ marginTop: 12, fontSize: 12, color: 'var(--muted)' }}>
+              Full syllabus source: {deptSyllabus.sourceFile}
+            </div>
+          )}
         </>
       )}
     </div>
@@ -526,7 +559,8 @@ export function Food() {
 
 // ── Reports ───────────────────────────────────────────────────────────────────
 export function Reports() {
-  const courses  = store.get('courses') || [];
+  const profile = getProfile();
+  const courses  = getAllCourses(profile);
   const expenses = store.get('expenses') || [];
   const namaz   = store.get('namaz') || {};
   const selfeval = store.get('selfeval') || {};

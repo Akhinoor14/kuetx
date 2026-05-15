@@ -2,6 +2,8 @@
 // Aligned with KUET Academic Ordinance (Effective 2nd Term, Session 2011-12)
 // Approved: 18th & 19th Academic Council meetings (2012)
 
+import { CURRICULUM } from '../data/curriculum';
+
 const PREFIX = 'kuetx_';
 
 export const store = {
@@ -77,6 +79,9 @@ export const DEPARTMENTS = [
   { code: 'MTE',  name: 'Mechatronics Engineering',                   seats: 30  },
 ];
 export const DEPT_CODES = DEPARTMENTS.map(d => d.code);
+
+// ─── Curriculum Term Helpers ─────────────────────────────────────────────
+export const TERM_KEYS = ['Y1T1', 'Y1T2', 'Y2T1', 'Y2T2', 'Y3T1', 'Y3T2', 'Y4T1', 'Y4T2'];
 
 // ─── KUET Grading Scale (Art. 13.1) ───────────────────────────────────────
 export const GRADE_SCALE = [
@@ -287,9 +292,209 @@ export const computeTermGPAs = (courses) => {
     .map(t => ({ term: t.key, label: t.label, gpa: t.cr ? +(t.pts / t.cr).toFixed(2) : 0 }));
 };
 
+const toOrdinal = (n) => `${n}${n === 1 ? 'st' : n === 2 ? 'nd' : n === 3 ? 'rd' : 'th'}`;
+
+export const getTermLabelFromKey = (termKey) => {
+  if (!termKey) return '';
+  const match = String(termKey).match(/Y(\d+)T(\d+)/);
+  if (!match) return '';
+  const year = Number(match[1]);
+  const term = Number(match[2]);
+  return `${toOrdinal(year)} Year · ${toOrdinal(term)} Term`;
+};
+
+export const getTermKeyFromLabel = (label) => {
+  if (!label) return '';
+  const match = String(label).match(/(\d)\w*\s*Year\s*·\s*(\d)\w*\s*Term/i);
+  if (!match) return '';
+  return `Y${Number(match[1])}T${Number(match[2])}`;
+};
+
+export const getTermIndex = (termKey) => TERM_KEYS.indexOf(termKey);
+
+const parseTermKey = (termKey) => {
+  const match = String(termKey || '').match(/Y(\d+)T(\d+)/);
+  if (!match) return { year: null, term: null };
+  return { year: Number(match[1]), term: Number(match[2]) };
+};
+
+export const getProfile = () => {
+  const raw = store.get('profile') || {};
+  const currentTermKey = raw.currentTermKey || getTermKeyFromLabel(raw.currentTerm) || '';
+  return { ...DEFAULT_PROFILE, ...raw, currentTermKey };
+};
+
+export const getCurrentTermKey = (profile = {}) => {
+  return profile.currentTermKey || getTermKeyFromLabel(profile.currentTerm) || '';
+};
+
+// ─── Curriculum Selectors ───────────────────────────────────────────────
+const getDeptCurriculum = (deptCode) => CURRICULUM?.departments?.[deptCode] || null;
+
+export const getDeptTerms = (deptCode) => getDeptCurriculum(deptCode)?.terms || {};
+
+export const getDeptOptionalCourses = (deptCode) => getDeptCurriculum(deptCode)?.optional || [];
+
+export const getDeptSyllabus = (deptCode) => getDeptCurriculum(deptCode)?.syllabus || null;
+
+export const buildCourseId = (deptCode, termKey, code) => `${deptCode}:${termKey}:${code}`;
+
+export const getCustomCourses = () => {
+  const custom = store.get('customCourses');
+  if (Array.isArray(custom)) return custom;
+  const legacy = store.get('courses') || [];
+  if (legacy.length) {
+    const migrated = legacy.map(c => ({ ...c, source: c.source || 'custom' }));
+    store.set('customCourses', migrated);
+    return migrated;
+  }
+  return [];
+};
+
+export const setCustomCourses = (courses) => {
+  store.set('customCourses', courses || []);
+};
+
+const getCourseOverrides = () => store.get('courseOverrides') || {};
+
+export const setCourseOverride = (courseId, patch) => {
+  const overrides = getCourseOverrides();
+  const next = { ...overrides, [courseId]: { ...(overrides[courseId] || {}), ...(patch || {}) } };
+  store.set('courseOverrides', next);
+  return next;
+};
+
+const getOptionalSelections = () => store.get('optionalSelections') || {};
+
+export const setOptionalSelection = ({ deptCode, termKey, slotIndex, code }) => {
+  const current = getOptionalSelections();
+  const dept = current[deptCode] || {};
+  const term = dept[termKey] || [];
+  const nextTerm = term.slice();
+  nextTerm[slotIndex] = code || '';
+  const next = { ...current, [deptCode]: { ...dept, [termKey]: nextTerm } };
+  store.set('optionalSelections', next);
+  return next;
+};
+
+const resolveOptionalCourse = (deptCode, selectedCode) => {
+  if (!selectedCode) return null;
+  return getDeptOptionalCourses(deptCode).find(c => c.code === selectedCode) || null;
+};
+
+const buildCourseRecord = ({ deptCode, termKey, base, status, optionalSlotIndex }) => {
+  const { year, term } = parseTermKey(termKey);
+  const overrides = getCourseOverrides();
+  const courseId = base.isOptional
+    ? `${deptCode}:${termKey}:OPT${(optionalSlotIndex || 0) + 1}`
+    : buildCourseId(deptCode, termKey, base.code);
+  const optionalSelections = getOptionalSelections();
+  const selectedOptionalCode = optionalSlotIndex !== null
+    ? optionalSelections?.[deptCode]?.[termKey]?.[optionalSlotIndex]
+    : '';
+  const optionalCourse = base.isOptional ? resolveOptionalCourse(deptCode, selectedOptionalCode) : null;
+  const resolvedCode = optionalCourse?.code || base.code;
+  const resolvedTitle = optionalCourse?.title || base.title;
+  const resolvedCredits = optionalCourse?.credits ?? base.credits;
+  const record = {
+    id: courseId,
+    source: 'curriculum',
+    deptCode,
+    year,
+    term,
+    status,
+    isCore: true,
+    notes: '',
+    contactHours: base.contactHours || '',
+    type: base.type,
+    credits: resolvedCredits,
+    code: resolvedCode,
+    name: resolvedTitle,
+    isOptional: !!base.isOptional,
+    optionalSlotIndex,
+    optionalCode: optionalCourse?.code || '',
+    baseCode: base.code,
+  };
+  const override = overrides[record.id];
+  return override ? { ...record, ...override } : record;
+};
+
+export const syncCurriculumCourses = (profile) => {
+  const current = profile || getProfile();
+  if (!current?.dept) return getCustomCourses();
+  const termKey = getCurrentTermKey(current) || TERM_KEYS[0];
+  const currentIndex = Math.max(0, getTermIndex(termKey));
+  const deptTerms = getDeptTerms(current.dept);
+
+  const curriculumCourses = TERM_KEYS
+    .filter((key, index) => index <= currentIndex && Array.isArray(deptTerms[key]))
+    .flatMap((key, index) => {
+      const baseCourses = deptTerms[key] || [];
+      let optionalSlot = 0;
+      return baseCourses.map(base => {
+        const status = index === currentIndex ? 'active' : 'completed';
+        const slotIndex = base.isOptional ? optionalSlot++ : null;
+        return buildCourseRecord({ deptCode: current.dept, termKey: key, base, status, optionalSlotIndex: slotIndex });
+      });
+    });
+
+  return [...curriculumCourses, ...getCustomCourses()];
+};
+
+export const getAllCourses = (profile) => syncCurriculumCourses(profile);
+
+export const deriveAcademicMetaFromCourses = (courses, profile = {}) => {
+  const list = Array.isArray(courses) ? courses : [];
+
+  const latestActiveKey = list
+    .filter(c => c?.status === 'active' && c?.year && c?.term)
+    .map(c => `Y${c.year}T${c.term}`)
+    .sort()
+    .at(-1);
+
+  const latestAnyKey = list
+    .filter(c => c?.year && c?.term)
+    .map(c => `Y${c.year}T${c.term}`)
+    .sort()
+    .at(-1);
+
+  const latestTermKey = latestActiveKey || latestAnyKey || '';
+  const currentTerm = getTermLabelFromKey(latestTermKey);
+  const batch = profile?.batch || (profile?.session ? String(profile.session).slice(2, 4) : '');
+
+  return { batch, currentTerm, latestTermKey };
+};
+
+export const syncProfileAcademicMeta = ({ profile, courses }) => {
+  const current = profile || store.get('profile') || {};
+  const list = courses || store.get('courses') || [];
+  const { batch, currentTerm } = deriveAcademicMetaFromCourses(list, current);
+
+  const next = { ...current };
+  let changed = false;
+
+  if (!next.batch && batch) {
+    next.batch = batch;
+    changed = true;
+  }
+  // Only auto-fill currentTerm when the user hasn't set a manual value.
+  // Profile uses empty string for "Auto (from courses)"; do not overwrite a manual selection.
+  const profileHasManualTerm = !!current.currentTermKey || !!current.currentTerm;
+  if (currentTerm && !profileHasManualTerm) {
+    const termKey = getTermKeyFromLabel(currentTerm);
+    if (termKey && next.currentTermKey !== termKey) {
+      next.currentTermKey = termKey;
+      changed = true;
+    }
+  }
+
+  if (changed) store.set('profile', next);
+  return next;
+};
+
 // Default profile
 export const DEFAULT_PROFILE = {
-  name: '', studentId: '', dept: 'CSE', session: '2023-24', batch: '23',
+  name: '', studentId: '', dept: '', session: '', batch: '', currentTerm: '', currentTermKey: '',
   totalCreditsRequired: MIN_CREDITS_GRADUATION, yearStarted: new Date().getFullYear(),
   isCR: false, hallName: '', roomNo: '', advisorName: '', advisorContact: '',
 };

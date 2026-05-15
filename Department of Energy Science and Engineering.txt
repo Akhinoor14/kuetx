@@ -1,0 +1,1789 @@
+Department of Energy Science and Engineering 
+Khulna University of Engineering & Technology 
+ 
+Summary of Undergraduate Courses 
+ 
+FIRST YEAR FIRST TERM 
+ 
+Sl. 
+No. 
+Course No. Course Title Theory Sessional Total 
+Credit Contact 
+Hours 
+Credit Contact 
+Hours 
+Credit 
+01 Ch 1113 Chemistry I 3 3.00 - - 3.00 
+02 Ch 1114 Sessional on Ch 1113 - - 3/2 0.75 0.75 
+03 Hum 1113 Sociology and Behavioral Science 3 3.00 - - 3.00 
+04 Math 1113 Differential and Integral Calculus 3 3.00 - - 3.00 
+05 Ph 1113 Physics  4 4.00 - - 4.00 
+06 Ph 1114 Sessional on Ph 1113 - - 3/2 0.75 0.75 
+07 MES 1114 Workshop Practice - - 3/2 0.75 0.75 
+08 ESE 1100 Engineering Drawing I - - 3 1.50 1.50 
+09 ESE 1101 Fundamentals of  Energy Resources 3 3.00 - - 3.00 
+10 ESE 1102 Sessional on ESE 1101 - - 3/2 0.75 0.75 
+No. of Theory Courses: 5     Total Contact hours: T16 + S9.0= 25.0hrs 
+No. of Sessional Courses: 5    Total Credit:20.50 
+ 
+FIRST YEAR SECOND TERM 
+ 
+Sl. 
+No. 
+Course No. Course Title Theory Sessional Total 
+Credit Contact 
+Hours 
+Credit Contact 
+Hours 
+Credit 
+01 Ch 1213 Chemistry II 3 3.00 - - 3.00 
+02 EE 1213 Electrical Circuits and Electronics 4 4.00 - - 4.00 
+03 EE 1214 Sessional on EE 1213 - - 3/2 0.75 0.75 
+04 Hum 1213 Technical English 3 3.00 - - 3.00 
+05 Hum 1214 Sessional on Hum 1213 - - 3/2 0.75 0.75 
+06 Math 1213 Differential Equation and Co
+ordinate Geometry 
+3 3.00 - - 3.00 
+07 ESE 1205 Thermodynamics for Energy 
+Engineering 
+4 4.00 - - 4.00 
+08 ESE 1206 Sessional on ESE 1205 - - 3/2 0.75 0.75 
+09 ESE 1200 Engineering Drawing II - - 3 1.50 1.50 
+No. of Theory Courses: 5     Total Contact hours: T17 + S7.5 = 24.5 hrs 
+No. of Sessional Courses: 4    Total Credit:20.75 
+ 
+ 
+ 
+ 
+ 
+2 | Page 
+ 
+SECOND YEAR FIRST TERM 
+ 
+Sl. 
+No. 
+Course No. Course Title Theory Sessional Total 
+Credit Contact 
+Hours 
+Credit Contact 
+Hours 
+Credit 
+01 CSE 2113 Computer Programming 3 3.00 - - 3.00 
+02 CSE 2114 Sessional on CSE 2113 - - 3 1.50 1.50 
+03 EE 2113 Electrical Machines 3 3.00 - - 3.00 
+04 EE 2114 Sessional on EE 2113 - - 3/2 0.75 0.75 
+05 Math 2113 Linear Algebra and Vector Analysis 4 4.00 - - 4.00 
+06 ME 2113 Statics and Solid Mechanics 3 3.00 - - 3.00 
+07 ME 2114 Sessional on ME 2113 - - 3/2 0.75 0.75 
+08 ME 2115 Fluid Mechanics 3 3.00 - - 3.00 
+09 ME 2116 Sessional on ME 2115 - - 3/2 0.75 0.75 
+No. of Theory Courses: 5     Total Contact hours: T16 + S7.5 = 23.5 
+No. of Sessional Courses: 4    Total Credit:19.75 
+ 
+SECOND YEAR SECOND TERM 
+ 
+Sl. 
+No. 
+Course No. Course Title Theory Sessional Total 
+Credit Contact 
+Hours 
+Credit Contact 
+Hours 
+Credit 
+01 EE 2213 Power Electronics 4 4.00 - - 4.00 
+02 EE 2214 Sessional on EE 2213 - - 3/2 0.75 0.75 
+03 Hum 2213 Economics and Accounting 3 3.00 - - 3.00 
+04 Math 2213 Complex Variables and Fourier 
+Analysis 
+3 3.00 - - 3.00 
+05 ME 2213 Dynamics and Kinematics of 
+Machineries  
+3 3.00 - - 3.00 
+06 ME 2214 Sessional on ME 2213 - - 3/2 0.75 0.75 
+07 ESE 2209 Bio and Wind Energy Engineering 3 3.00 -  3.00 
+08 ESE 2210 Sessional on ESE 2209 - - 3/2 0.75 0.75 
+09 ESE 2230 Energy Engineering Simulation I - - 3/2 0.75 0.75 
+No. of Theory Courses: 5     Total Contact hours: T16 + S6.0 = 22.0 hrs 
+No. of Sessional Courses: 4    Total Credit: 19.00 
+ 
+THIRD YEAR FIRST TERM 
+ 
+Sl. 
+No. 
+Course No. Course Title Theory Sessional Total 
+Credit Contact 
+Hours 
+Credit Contact 
+Hours 
+Credit 
+01 Math 3113 Statistics and Numerical Methods 3 3.00 - - 3.00 
+02 Math 3114 Sessional on Math 3113 - - 3 1.50 1.50 
+03 EE 3113 Power System Engineering 3 3.00 - - 3.00 
+04 EE 3114 Sessional on EE 3113 - - 3/2 0.75 0.75 
+05 ESE 3105 Heat and Mass Transfer 4 4.00 - - 4.00 
+06 ESE 3106 Sessional on ESE 3105 - - 3/2 0.75 0.75 
+07 ESE 3107 Solar Thermal Engineering 3 3.00 - - 3.00 
+08 ESE 3108 Sessional on ESE 3107 - - 3/2 0.75 0.75 
+09 ESE 3123 Thermo-Fluid Devices 3 3.00 - - 3.00 
+10 ESE 3124 Sessional on ESE 3124 - - 3/2 0.75 0.75 
+No. of Theory Courses: 5     Total Contact hours: T16 + S9.0 = 25.0 hrs 
+No. of Sessional Courses: 5    Total Credit: 20.50 
+ 
+ 
+ 
+3 | Page 
+ 
+THIRD YEAR SECOND TERM* 
+ 
+Sl. 
+No. 
+Course 
+No. 
+Course Title Theory Sessional Total 
+Credit Contact 
+Hours 
+Credit Contact 
+Hours 
+Credit 
+01 ESE 3200 Seminar on Special Topics - - 3/2 0.75 0.75 
+02 ESE 3202 Energy Innovation Lab - - 3/2 0.75 0.75 
+03 ESE 3203 Petroleum and Natural Gas 
+Processing 
+3 3.00 - - 3.00 
+04 ESE 3204 Sessional on ESE 3203 - - 3/2 0.75 0.75 
+05 ESE 3207 Solar Photovoltaic Systems 3 3.00 - - 3.00 
+06 ESE 3208 Sessional on ESE 3107 - - 3/2 0.75 0.75 
+07 ESE 3211 Coal Power Generation 4 4.00 - - 4.00 
+08 ESE 3217 Instrumentation and Control 3 3.00 - - 3.00 
+09 ESE 3218 Sessional on ESE 3217 - - 3/2 0.75 0.75 
+10 ESE 3221 Energy Storage Systems 3 3.00 - - 3.00 
+11 ESE 3222 Sessional on ESE 3221 - - 3/2 0.75 0.75 
+12 ESE 3250 Industrial Attachment - - - - 0.00 
+No. of Theory Courses: 5     Total Contact hours: T16 + S9.0 = 25.0 hrs 
+No. of Sessional Courses: 6    Total Credit: 20.50 
+ 
+FOURTH YEAR FIRST TERM  
+ 
+Sl. 
+No. 
+Course No. Course Title Theory Sessional Total 
+Credit Contact 
+Hours 
+Credit Contact 
+Hours 
+Credit 
+01 ESE 4000 Project & Thesis - - 3 1.50 1.50 
+02 ESE 4105 Fuel Combustion and IC Engines 3 3.00 - - 3.00 
+03 ESE 4106 Sessional on ESE 4105 - - 3/2 0.75 0.75 
+04 ESE 4115 Power Plant Engineering 3 3.00 - - 3.00 
+05 ESE 4116 Sessional on ESE 4115 - - 3/2 0.75 0.75 
+06 ESE 4125 Safety and Environmental Aspects 
+of Energy Projects 
+3 3.00 - - 3.00 
+07 ESE 4126 Sessional on ESE 4125 - - 3/2 0.75 0.75 
+08 ESE 4130 Energy Engineering Simulation II - - 3/2 0.75 0.75 
+09 ESE 40-- Optional I 3 3.00 - - 3.00 
+10 ESE 40-- Optional II 3 3.00 - - 3.00 
+No. of Theory Courses: 5     Total Contact hours: T15 + S9 = 24 hrs 
+No. of Sessional Courses: 4    Total Credit: 19.50 
+ 
+ 
+FOURTH YEAR SECOND TERM  
+ 
+Sl. 
+No. 
+Course No. Course Title Theory Sessional Total 
+Credit Contact 
+Hours 
+Credit Contact 
+Hours 
+Credit 
+01 ESE 4000 Project & Thesis - - 6 3.00 3.00 
+04 ESE 4213 Nuclear Power Engineering 3 3.00 - - 3.00 
+ ESE 4214 Sessional on ESE 4213 - - 3/2 0.75 0.75 
+05 ESE 4219 Energy Audit and Management 3 3.00 - - 3.00 
+06 ESE 4220 Sessional on ESE 4219 - - 3/2 0.75 0.75 
+07 ESE 40-- Optional III 3 3.00 - - 3.00 
+08 ESE 40-- Optional IV 3 3.00 - - 3.00 
+ ESE 40-- Optional V 3 3.00 - - 3.00 
+No. of Theory Courses: 5     Total Contact hours: T15 + S9 = 24 hrs 
+No. of Sessional Courses: 3    Total Credit: 19.50 
+ 
+4 | Page 
+ 
+List of Optional Courses:  
+Sl. No. Course No. Course Name Contact Hour Credit 
+1 ESE 4001 Modern Fuel Technology 3 3.0 
+2 ESE 4003 Hydrogen and Fuel Cells 3 3.0 
+3 ESE 4005 Hybrid and Electric Vehicles 3 3.0 
+4 ESE 4007 Smart Grid Technology 3 3.0 
+5 ESE 4011 Materials for Energy Engineering Applications 3 3.0 
+6 ESE 4013 Energy in Built Environment 3 3.0 
+7 ESE 4015 Energy System Design and Optimization 3 3.0 
+8 ESE 4017 Energy Efficiency Assessment 3 3.0 
+9 ESE 4021 Process Equipment Design 3 3.0 
+10 ESE 4023 Computational Fluid Dynamics 3 3.0 
+11 ESE 4025 HVAC&R System Design 3 3.0 
+12 ESE 4027 Energy and Process Integration 3 3.0 
+13 ESE 4029 Piping Systems Design 3 3.0 
+14 ESE 4031 Power Plant Instrumentation and Control 3 3.0 
+15 ESE 4033 Nuclear Thermal Hydraulics 3 3.0 
+16 ESE 4035 Industrial Hazard and Safety Management 3 3.0 
+17 ESE 4041 Fundamentals of Mechatronics 3 3.0 
+18 ESE 4043 Electro-Mechanical Energy Conversion 3 3.0 
+19 ESE 4045 Engineering System Dynamics and Simulation 3 3.0 
+20 ESE 4051 Fundamentals of Cryogenic Engineering 3 3.0 
+21 ESE 4061 Computational Engineering and Data Science 3 3.0 
+22 ESE 4071 Natural Gas Processing Technology 3 3.0 
+23 ESE 4073 Natural Gas Transmission and Distribution 3 3.0 
+24 ESE 4075 Energy Project Development and Evaluation 3 3.0 
+25 ESE 4077 Energy Modeling and Project Management 3 3.0 
+26 ESE 4081 Introduction to Petroleum Engineering 3 3.0 
+27 ESE 4083 Petroleum Refining Technology 3 3.0 
+28 ESE 4085 Mineral Energy Resources 3 3.0 
+29 ESE 4091 Safety and Reliability Analysis   3 3.0 
+30 ESE 4093 Atmosphere, Ocean and Climate Dynamics 3 3.0 
+ 
+Approval: 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+1. Detailed outline of first year first term was approved in the 54th meeting of the academic council. 
+2. Detailed outline of first year second term was approved in the 55th meeting of the academic council. 
+3. Detailed outline of 2nd year first and second term was approved in the 57th meeting of the academic council. 
+4. Course structure was approved in the 57th meeting of the academic council. 
+5. Detailed outline of 3rd year first and second first term was approved in the 61st meeting of the academic 
+council. 
+6. Course titles of ESE 4105, ESE 4013 were modified in the 66th meeting of the academic council 
+7. Three optional courses (ESE 4017, ESE 4075 and ESE 4077) were approved in the in the 61st meeting of the 
+academic council. 
+8. Detailed outline of 4rd year first and second first term was approved in the 61st meeting of the academic 
+council. 
+Detailed Outline of Undergraduate Courses 
+FIRST YEAR FIRST TERM 
+Ch 1113 
+Credit: 3.0  
+Chemistry I  
+Contact hour: 3 hrs/week 
+Chemical Equilibrium: Law of mass action, equilibrium constant, magnitude of equilibrium constant and the 
+direction of reaction, factors affecting equilibrium constant, Le Chatelier’s principle. Numerical values of equilibrium 
+constant. 
+Electro-Chemistry: Electrolytes; Nernst theory of electrode potential, type of electrodes and electrode potentials, 
+EMF measurement, polarization and over potentials; Origin of EMF, free energy and EMF, electrical double layer, 
+factor affecting electrode reaction and current, Modes of mass transfer, Lithium and lithium ion battery, Transport 
+number; pH value and its determination; Electrode potentials, electroplating and galvanizing; Fuel cell, Voltammetry. 
+Nuclear Chemistry: Nuclear binding energy, Radioactivity and nuclear reactions, patterns of nuclear stability; 
+Nuclear transmutations, nuclear model, energy changes in nuclear reactions; Nuclear fission, nuclear fusion; Nuclear 
+reactor, nuclear force, methods of separation of isotopes, applications of isotopes. 
+Chemistry of polymer: Basic concepts of polymer and polymerization, co-polymerization, ionic polymerization, 
+living polymer and their structures; Concepts of plastics, rubbers and fibers; glass transition temperature, average 
+molecular weight and molecular weight distribution; Properties of macromolecules, conducting polymer, optical 
+fiber. 
+Industrial chemistry: Solid, liquid and gaseous fuels; Coal and its constituents, calorific value of coal and other 
+fuels, refining and distillation of crude oil, motor and aviation fuels, thermal and catalytic cracking, petroleum and 
+petrochemicals, natural gas and its composition, purification and utilization, LPG gas,.  
+Environmental chemistry: Environment and its characteristics, Heavy metal contamination, Chemistry of toxic 
+metal and non-metal pollutants, Quality of natural water, classes of polluted water, DO, BOD, COD, hydrocarbons, 
+ozone and ozone layer depletion, environmental effects of the oxides of carbon, nitrogen and sulfur.  
+Ch 1114    
+Credit: 0.75        
+Hum 1113   
+Credit: 3.0        
+Sociology 
+Sessional on Ch 1113 
+Contact hour: 3/2 hrs/week 
+Sociology and Behavioral Science 
+Contact hour: 3 hrs/week 
+Introduction: Definition, origin and development of Sociology and its perspectives; Impact of Sociology on 
+engineering. 
+Fundamental concepts: Society, Group, Socialization and Personality development, Family, Marriage, Social 
+structure, Social stratifications; Community and Association; Mob property. 
+Culture: Culture and civilization, culture and biology, Cultural diffusion, cultural lag, elements of culture.  
+Industrialization and Urbanization: Industrial revolution and its impact, Urbanization and its consequences, urban 
+ecology, urban social problems; Industrialization in Bangladesh. 
+Social and Environmental Issues: Pre-industrial and industrial society; Deviance and social control, Population and 
+environment; Social change and its agents; Poverty, Beggary, Crime, Immoral income and Juvenile delinquency. 
+Ethics: Meaning of ethics, professional ethics and codes, its positive and negative faces, psychological basis of 
+ethics. 
+Behavioral Science 
+5 | P a g e 
+Organizational Behavior and Health: Training and development in organizations; training needs analysis; models 
+of training evaluation; Employee relations; psychological contract at work; motivation theories: models and 
+applications; job satisfaction and performance; quality of working life; counseling and age at work; impact of 
+unemployment. 
+Assessing People for Work: Organization design; organization structure and performance; organization development 
+and change; psychological basis of resistance to change; culture and climate in organizations; leadership styles and 
+models; work groups and team effectiveness at work; team building models and validation evidence; inter-group 
+cooperation and conflict in organizations;  business strategy at work; organizations and their environments. 
+Math 1113   
+Credit: 3.0         
+Differential Calculus 
+Differential and Integral Calculus 
+Contact hour: 3 hrs/week 
+Basics: Function and its representations; its domain and range; graph of common function families: power function, 
+exponential and logarithmic function, sine and cosine function; Basic concepts of limit, continuity of a function with 
+emphasis on piecewise defined functions from geometric and algebraic point of view; Derivative of function from 
+geometric, algebraic and physical point of view, Review of differentiation techniques: power function, exponential 
+and logarithmic functions, trigonometric and inverse trigonometric functions, differentiation of products and 
+quotients and chain rule of differentiation; Differential calculus of hyperbolic and inverse hyperbolic functions. 
+Application and Existence theorems: Implicit differentiation; Related Rates problems; Differentials, linear 
+approximation (tangent line approximation), and error propagation; Maxima, minima, and optimization problems; 
+Rolle’s Theorem, Mean Value Theorem, Corollaries of Mean Value Theorem, Taylor’s Theorem, approximation of 
+functions using Taylor’s polynomials, and Maclaurin Series.   
+Partial Differentiation and Curvature: Functions of two or more variables, level curves, and contour plots; Partial 
+differentiation and its geometrical, analytic, and physical interpretation; Chain rule of partial differentiation, equation 
+of tangent plane, and total differential; Curvature, radius of curvature, and center of curvature. 
+Integral Calculus 
+Basics: Review of indefinite integration rules for power, exponential, logarithmic, trigonometric, inverse 
+trigonometric, hyperbolic and inverse hyperbolic functions; Definite integrals, its properties; Riemann Sum and its 
+interpretation in definite integrals; Fundamental theorems of calculus; Mean value theorem for integrals and average 
+value of a continues function. 
+Techniques of Integration: Integration by substitution; Integration by parts; Integration of rational function by 
+partial fractions; Integration by trigonometric substitutions; Integration by successive reduction; Differentiation under 
+the sign of integration, Integration under the sign of integration; Gamma and beta functions. 
+Application of Integration: Area between two curves; Volume by Slicing (disks and washer technique), volume by 
+revolution about 𝑥 and 𝑦 asis, volume by cylindrical shells; Length of a plane curve; Area of a surface of revolution. 
+Ph 1113     
+Credit: 4.0    
+Physics 
+Contact hour: 4 hrs/week 
+Wave and Oscillations: Wave and composition of simple harmonic motion, average value of kinetic and potential 
+energies of a harmonic oscillation, superposition of simple harmonic motions; Types of wave: progressive and 
+stationary wave, energy distribution due to progressive and stationary wave, interference of sound wave. 
+Damped and Forced Harmonic Oscillator: Damped oscillatory system, damped harmonic oscillation, the LCR 
+circuit, forced vibration, quality factor of forced oscillator, sharpness of resonance, phase of driven oscillator, power 
+absorption. 
+Particle Properties of Waves: Photoelectric effect, Quantum theory of light, Compton Effect. 
+Wave Properties of Particles: De Broglie hypothesis, nature of De Broglie waves, phase velocity and group 
+velocity. 
+6 | P a g e 
+Atomic Structure: Bohr’s atom model, Nature of electron orbits, Orbital energy, origin of spectral lines, different 
+series of spectral lines of Hydrogen, Orbital energy level diagram of hydrogen atom, Correspondence principle, 
+Vector atom model, Orbital states, space quantization, span quantization, Magnetic moment of orbital electron, 
+Quantization of magnetic moment, Electron shell. 
+Solid State Physics: Structure of crystals, Classification of solids, Einstein’s model of the lattice, specific heat of the 
+solids, Debye’s model of the lattice heat capacity. Debye’s approximation of high temperature and low temperature; 
+Outstanding properties of metals, Thermal conductivity, Momentum space, Fermi-Dirac distribution, Quantum theory 
+of Free electron, escape of electron from a metal, Importance of Hall effect, Hall Voltage, and Hall coefficient, 
+Mobility, Hall angle and drift velocity, velocity of electron according to Band theory. 
+Nuclear Physics: Introduction, nuclear constituents, nuclear properties, binding energy, packing fraction, nuclear 
+force, fission and fusion process. 
+Radioactivity: Introduction to radioactivity, Laws of radioactive disintegration, half-life, Mean life, Laws of 
+successive disintegration, Detection of radioactivity, Practical application of radioactivity, Biological effects of 
+radiation, Safety measures in radioactivity. 
+Ph 1114     
+Credit: 0.75    
+Experiments based on the theory of Ph 1113. 
+MES 1114    
+Credit: 0.75        
+Sessional on Ph 1113 
+Contact hour: 3/2 hrs/week 
+Workshop Practices 
+Contact hour: 3/2 hrs/week 
+Acquaintance with tools and equipment used in machine shop; Practice of different operations on Lathe, Shaper, 
+Drilling and Grinding machines. 
+Acquaintance with tools and machines used in welding shop, practices on Arc and Gas welding. 
+ESE 1100    
+Credit: 1.50        
+Engineering Drawing I 
+Contact hour: 3 hrs/week 
+Fundamental principles and applications of Orthogonal projection; Oblique projection; Isometric projection; 
+Auxiliary projection; Orthographic and auxiliary projection from pictorial views; pictorial projection from 
+orthographic views, Development of objects. 
+Fundamentals of building drawings, plan, elevation and sectional drawing. 
+Reference Book: 
+1. Mechanical Drawing by T. E. French, C. L. Svensen, J. D. Helsel and B. Urbanick, 10th Edition. 
+2. Eng. Drawing and Graphic Technology by T. E. French, C. J. Vierck and R. J. Foster, 14th Edition. 
+ESE 1101   
+Credit: 3.0    
+Energy Sources and potential 
+Fundamentals of Energy Resources 
+Contact hour: 3 hrs/week   
+Earth energy cycle; Sources of energy for domestic, transportation, agriculture and industrial sector; History of 
+energy usages, forms of energy, present consumption; Types of resources: conventional, non-conventional, 
+commercial, non-renewable and renewable; Current status of conventional and non-conventional sources, World and 
+Bangladesh scenario;  
+Non-renewable Energy Sources 
+Definition and types; Coal:   Formation of coal, potential, classification, exploration and uses; Oil: Formation, 
+characteristics; potential, basic properties and grading; Natural Gas: Formation, potential and uses; Oil shale and tar 
+7 | P a g e 
+sands; Nuclear Resources: Types, potential and uses; Comparison of various conventional energy sources, their 
+prospects and limitations.  
+Renewable Energy Sources 
+Definition; Solar Energy: formation, solar irradiance, solar constant, extraterrestrial and terrestrial radiation, 
+applications, solar thermal conversion, solar heating and cooling; Solar photovoltaic: Basic operation, semi
+conductor devices, electrical characteristics; Biomass Energy: Definitions,  resource potential, characteristics, 
+biochemical and thermo-chemical conversion, charcoal production, biogas, ethanol fermentation, producer gas; 
+Hydro Power: Resources, potential, applications, hydro electricity; Wind Energy: Formation, potential and uses; 
+Types of wind turbines; Other Energy Sources: Geothermal Energy; Thermal Energy Conversion (OTEC), Wave 
+Energy, Tidal Energy. 
+ESE 1102          
+Credit: 0.75    
+Sessional on ESE 1101 
+Contact hour: 3/2 hrs/week 
+Sessional based on the theory of ESE 1101. 
+FIRST YEAR SECOND TERM 
+Ch 1213     
+Credit: 3.0        
+Chemistry II 
+Contact hour: 3 hrs/week 
+Chemical Kinetics: Order and molecularity of reaction, rate equations, for zero, first, second and third order reaction. 
+Theories of reaction rates. reaction in solutions, kinetic model for non-elementary reactions.  
+Photochemistry: Photon, law of photo chemistry, absorption law and mechanism of photochemical reaction, 
+fluorescence, phosphorescence and chemiluminescence. 
+Organic chemistry:  Hybridization of orbitals, electrophiles, nucleophiles and free radicles, isomerism, geometrical 
+and optical isomers, polymerization, introduction to biochemical engineering and concept of biological catalysis, 
+nature of microorganisms, their requirements and classification, industrially important microorganisms. Kinetics of 
+enzyme catalyzed reactions. Batch fermentation: yield coefficients for biomass and product formation, rates of 
+reaction, growth, limiting substrate concentrations. 
+Corrosion: Introduction to corrosion, chemical corrosion, electrochemical corrosion of metals, corrosion rates, types 
+of corrosion with properties and phenomenon, Factor affecting corrosion, corrosion in contact to soil, prevention of 
+corrosion. 
+Adsorption and Catalysis: Adsorption, types of adsorption, Adsorption isotherms; Fruendlich, Langmuir, and BET 
+isotherms, Catalysis. 
+Spectroscopy: Basic concept of Spectroscopy, Electronic, vibrational and rotational spectroscopy. 
+EE 1213    
+Credit: 4.00         
+Electrical Circuits and Electronics 
+Contact hour: 4 hrs/week 
+Electrical Circuits 
+Introduction:  Voltage, current, power, energy, independent and dependent sources, resistance. Basic laws: Ohm’s 
+law, Kirchhoff’s current and voltage laws, Joule’s law. Simple resistive  circuits:  Series  and  parallel  circuits,  
+voltage  and  current  division,  Wye-Delta transformation.  
+Techniques of circuit analysis: Nodal and mesh analysis. Network theorems: Source  transformation,  Thevenin’s 
+and  superposition  theorems  with  applications  in  circuits  having  independent  and  dependent  sources, Maximum 
+power transfer.  
+Energy storage elements:  Inductors and capacitors, series & parallel combination of inductors and capacitors.  
+8 | P a g e 
+Alternating Current circuits: Instantaneous, average and R.M.S values, complex impedance and phasor algebra. Real, 
+reactive and apparent power, power factor. Series and parallel RL, RC and RLC circuits. Series and parallel 
+resonance, energy analysis at resonance. 
+Electronics 
+Semiconductors: Intrinsic Semiconductors: Crystal and energy band diagram, conduction in semiconductors, 
+Electron and hole concentration. Extrinsic semiconductors: n-type doping, p-type doping, and compensation doping. 
+Drift and diffusion current, Mobility and Conductivity. The potential barrier; work function; contact potential. 
+Semiconductor diode characteristics: Qualitative and Quantitative theory of the p-n junction as a diode; Ideal pn 
+junction, pn junction band diagram, current components in p-n diode; Volt-ampere characteristics; Reverse 
+breakdown; Avalanche and Zener breakdown; Zener diode, Special-Purpose Diodes: Schottky diode, Current 
+regulator diode. 
+Introduction  to  Logic  and  Digital  Circuits:  Logic  operations,  Basic  gates; OR,  AND,  NOT,  NAND,  NOR,  
+X-OR;  Flip-Flops;  Shift  registers;  Counter; Binary and BCD code, Comparators. 
+EE 1214     
+Credit: 0.75        
+Experiments based on the theory of EE 1213. 
+Hum 1213    
+Sessional on EE 1213 
+Contact hour: 3/2 hrs/week 
+Technical English 
+Credit: 3.00    
+Contact hour: 3 hrs/week 
+Vocabulary and Structure: Better reading skills, better writing skills, better speaking skills, word formation; roots, 
+prefixes, suffixes, phrases and idioms; synonyms and antonyms; simple structures, complex and compound structure; 
+Clauses, Identification and analysis of clauses, Notional language, Grammatical problems. 
+Comprehension and Composition: Paragraph writing technique, formal and informal report writing, commercial 
+correspondence; Memo, Letter; Application writing; Tender writing; Free composition writing; Précis writing; Term 
+paper and Thesis/project report writing technique. 
+Hum 1214    
+Practical learning based on Hum 1213. 
+Math 1213   
+Sessional on Hum 1213 
+Credit: 0.75    
+Contact hour: 3/2 hrs/week 
+Differential Equation and Co-ordinate Geometry 
+Credit: 3.00    
+Contact hour: 3 hrs/week 
+Differential Equations 
+First-order ODEs: Introduction, Definition of differential equation, Classification based on type, order and linearity; 
+General solution, initial and boundary value problem; Solution methods for Fist-order differential equations: 
+Separable differential equations, Linear  differential equations; Solution using integrating factors; Exact differential 
+equations; Homogeneous differential equations; Modeling using first-order equations: Electric circuits, Newton’s law 
+of cooling, Radioactive decay.      
+Second-order ODEs: Solutions of linear homogeneous equations with constant coefficients; Solution of linear non
+homogeneous equations by various methods (general method, method of variation of parameters, and short method); 
+Modeling using second-order equations: Free oscillation, Forced oscillations, RLC-circuits. 
+Laplace Analysis: Definition and existence condition of Laplace transform. Properties of Laplace transform; 
+Transform of elementary functions; Inverse Laplace transform and its properties; Convolution; Solution of ordinary 
+and Laplace transform. 
+Co-ordinate Geometry 
+Two-dimensional geometry: Review of Cartesian and Polar co-ordinate systems, Transformation of co-ordinates: 
+translation and rotation; General Equation of second degree; Identification of conics with their properties. 
+Vector geometry: Study of Cartesian, Cylindrical polar and Spherical polar coordinate systems, their mutual 
+conversion; Review of vector algebra, dot product, cross product; Distance between two points; Equation of line in 
+three-dimensions using vectors, symmetrical form of a straight line, equation of plane using vectors; Angle between 
+9 | P a g e 
+line and plane, shortest distance between two lines, perpendicular distance of a point from a plane, angle between two 
+planes.  
+Reference Books:  
+1. Advanced Engineering Mathematics by Erwin Kreyszig 
+2. Advanced Modern Engineering Mathematics – by Glyn James 
+3.Thomas’ Calculus – by George B. Thomas, Maurice D. Weir, Joel Hass, and Frank R. Giordano 
+ESE 1205   
+Thermodynamics for Energy Engineering 
+Credit: 4.0    
+Contact hour: 4 hrs/week 
+Introduction and Basics: Macroscopic and microscopic viewpoints of thermodynamics; Definition of 
+thermodynamic terms; Thermodynamic system; Heat and work and their path dependence; Pure substance and phase, 
+property and phase diagrams, p-V-T surface; Ideal gas, its equation of state, law of corresponding states. 
+Laws of thermodynamics: Zeroth law; First law and its mathematical forms, its application in closed and open 
+system for different processes; Second law and its mathematical forms, heat engine and Carnot’s principles, Clausius 
+inequality, application of second law in closed and open systems. 
+Exergy Analysis: Definition and basic concepts of exergy, specific exergy; Exergy analysis of closed systems; 
+Exergy analysis of open systems; Exergetic (second law) efficiency. 
+Thermodynamic Relations: Virial, Van Der Waals, Redlich-Kwong (RK), and Soave-Redlich-Kwong (SRK) 
+equation of state; Exact differentials and their properties, Maxwell relations; Volume expansivety, isothermal 
+compressibility, isentropic compressibility, velocity of sound, Joule-Thomson coefficient. 
+Thermodynamic Cycles Analysis: Carnot cycle; Rankine cycle, improving performance by superheat and reheat; 
+Regenerative cycle; Air-standard Otto, Diesel cycle, Dual cycle, and Brayton cycle; Vapor compressional 
+refrigeration cycle; Absorption refrigeration cycle.  
+Mixture of Gases and Vapors: Mixture of ideal gases, gravimetric and volumetric analysis; Dalton’s law of partial 
+pressure, volume and enthalpy of gaseous mixture; Isentropic process with gaseous mixtures; Adiabatic saturation 
+process; Psychrometry: dry and wet bulb temperatures, specific humidity, relative humidity, dew point temperature, 
+degree of saturation; Psychometric chart and its uses. 
+Reference Books: 
+1. Fundamentals of Engineering Thermodynamics – by Michael J. Moran, Howard N. Shapiro, Daisie D. Boettner, 
+and Margaret B. Bailey  
+2. Thermodynamics an Engineering Approach – by Yunus A. Cengel and Michael A. Boles 
+3. Thermodynamics – by Gregory Nellis and Sanford Klein 
+4. Basic and Applied Thermodynamics – by P.K. Nag 
+ESE 1206    
+Sessional on ESE 1205 
+Credit: 0.75    
+Experiments based on the theory of ESE 1205. 
+ESE 1200    
+Engineering Drawing II 
+Credit: 1.50    
+Contact hours: 3/2 hrs/week 
+Contact hour: 3 hrs/week 
+Working Drawing of machine elements with sectional views, Sub-assembly and assembly drawing; Pipes and pipe 
+fittings; Electrical circuit diagrams. These will be implemented using CAD Software. 
+10 | P a g e 
+SECOND YEAR FIRST TERM 
+EE 2113    
+Electrical Machines 
+Credit: 3.0     
+Contact hour: 3 hrs/week 
+Magnetic circuits: Flux, permeability and reluctance, magnetic field strength, magnetic potential, flux density, 
+magnetization curve. Laws of magnetic circuits: Ohm’s law and Ampere’s circuital law.  
+DC Generators: EMF equation, Principle of DC generators, description of different parts of DC generators, 
+classification, Different types of winding, Armature reaction, losses and efficiency, parallel operation of DC 
+generators.  
+DC Motor:  Principle of operation, classification, losses and efficiency, Starting, Separately excited DC motor, 
+Permanent magnet DC motor, speed control of DC motor.  
+Transformer:  Constructional features and principles of operation, equivalent   circuit, losses and efficiency. Three 
+phase transformer: Construction and operation, 3-phase connection of transformers. Short circuit test and open circuit 
+test. 
+Induction Motor: Rotating magnetic field, general principles, construction, equivalent circuits, squirrel cage and slip 
+ring motors, torque developed, applications of single phase induction motor. 
+Alternators:  Construction, theory of operation, armature  windings,  voltage  regulation, armature  reaction  and  
+reactance,  control  of  excitation, losses  and  efficiency,  synchronizing  and  load  sharing, parallel operation, low 
+power single-phase alternator. 
+EE 2114    
+Sessional on EE 2113 
+Credit: 0.75    
+Experiments based on the theory of EE 2113. 
+Math 2113   
+Contact hour: 3/2 hrs/week 
+Linear Algebra and Vector Analysis 
+Credit: 4.0     
+Contact hour: 4 hrs/week 
+Linear Algebra 
+Basics: System of linear equations; matrix equation, vector equation; Gaussian elimination; row reduction and 
+echelon forms; Matrices (rectangular, square, row, column, diagonal, triangular, symmetric, skew-symmetric) and 
+Matrix Operations (equality, arithmetic product, transpose, trace); Determinants by cofactor expansion; Inverse of a 
+matrix and inverse using adjoins.  
+Vectors and Vector Spaces: Representation of vectors: tuple, column matrix, row matrix; Definition of vector space 
+and its axioms; Subspaces; Linear dependency and independency, Basis and dimension of a vector space, Row space, 
+column space and nullspace; Rank and nullity; Euclidian 𝑛-space and its properties, Euclidian inner product and 
+norm, Cauchy-Schwarz inequality in ℝ𝑛; Linear transformations and it’s properties; Application of Linear 
+transformation in reflection, projection, rotation, dilation and contraction. 
+Eigenvalues and Eigenvectors: Definition of eigenvalue and eigenvectors; Characteristic equation and characteristic 
+polynomial, Evaluation of eigenvectors and bases for eigenspace; Diagonalization; Orthogonal diagonalization.   
+Vector Analysis  
+Vector-valued functions: Definition of vector-valued functions, their geometrical representation-space curves; 
+Differentiation rules for vector-valued functions; Integration rules for vector-valued functions. Space curve analysis: 
+unit tangent vector, unit normal vector, unit binormal vector. 
+Gradient, Divergence, Curl: Definition, graphical representation of functions with two and three variables, level 
+curves, level surface, contour curves, contour surfaces; Definition of scalar field with examples; Review of partial 
+differentiation; Directional derivative and its geometrical interpretation, Gradient of a function of several variables, 
+Geometrical interpretation of gradient and gradient field; Equation of tangent plane, Vector fields: Definition and 
+examples, Partial derivatives of vector fields, Divergence and curl of vector fields. 
+11 | P a g e 
+Vector Integration: Line integrals, surface integrals, volume integrals, double integration and triple integration; 
+Jacobean of the transformation; Stokes’ theorem, Greens’ theorem, divergence theorem of Gauss and problems 
+related to them. 
+Reference Books: 
+1. Elementary Linear Algebra by Howard Anton, Chris Rorres.  
+2. Linear Algebra and Its Applications by David C. Lay  
+3. Vector Analysis – by Murray R. Spiegel, Seymour Lipschutz, and Dennis Spellman   
+4. Thomas’ Calculus – by George B. Thomas, Maurice D. Weir, Joel Hass, and Frank R. Giordano 
+ME 2113    
+Statics and Solid Mechanics  
+Credit: 3.0    
+Contact hour: 3 hrs/week 
+Statics: 
+Introduction: Fundamental concepts and principle of transmissibility; Resolution of force into components; 
+Resultant of concurrent force systems; Free body diagram, Equilibrium of a particle. 
+Equilibrium of rigid bodies: Non-concurrent force system, Moment of a force, equilibrium of non-concurrent and 
+parallel force systems; Moment of a couple; equivalent couple; force couple systems; reduction of forces system to 
+force couple system; Analysis of structure:  Trusses. 
+Center of gravity: Centroid of area and volume, Pappus-Guldinus theorem.  
+Moment of inertia: Inertia of area and mass; radius of gyration; parallel axes theorem; product of inertia. 
+Law of friction: Equilibrium under frictional resistance, sliding friction; Wedges, belt frictions.  
+Solid Mechanics: 
+Stress and Strain: Introduction; Analysis of internal forces; Tensile, compressive, bearing and shearing stresses; 
+Stresses in thin-walled pressure cylinder; Stress-strain diagram; Axial and biaxial deformations; Thermal stresses. 
+Statically Determinate Beams: Different types of loading and supports; Shear force and bending moment diagrams; 
+Stresses in beams, flexure formula, economic sections, shearing stresses in beams, general shear formula; variation of 
+shearing stresses in beams; Deflection of beams, double integration. 
+Torsion: Introduction; Torsion formula; Angle of twist; Shaft couplings and helical springs; Analysis and design of 
+circular shaft. 
+Columns: Introduction; Critical load, slenderness ratio and classification of columns; Euler’s formula. 
+Reference. Books: 
+1. Vector Mechanics for Engineers: Statics – by Ferdinand P. Beer & E. Russell Johnston, Jr. 
+2. Mechanics of Materials – by R.C. Hibbeler  
+3. Strength of Materials – by Andew Pytel and Ferdinad L. Singer 
+ME 2114    
+Sessional on ME 2113 
+Credit: 0.75    
+Experiments based on the theory of ME 2113. 
+ME 2115    
+Fluid Mechanics  
+Credit: 3.0    
+Contact hour: 3/2 hrs/week 
+Contact hour: 3 hrs/week 
+Introduction and Basics: Definition of a fluid and fluid mechanics, fluid as a continuum, Fundamental concepts: 
+Stress and rate of strain, Viscosity and Newton’s law of viscosity, No-slip and no-temperature jump condition, scalar 
+and vector fields; Important Fluid properties; Fluid forces: body and surface forces, their mathematical representation. 
+Fluid Statics: Condition for fluid statics, pressure at a point, basic equation for pressure field, pressure variation in 
+fluid at rest; Manometers: U-tube, inclined-tube, Bourdon pressure gage; Buoyancy. 
+Fluid Dynamics and Bernoulli Equation: Lagrangian and Eulerian view of fluid flow, Velocity field, Acceleration 
+field, Material derivative; Classification of fluid motion; Concept of streamlines and streamtubes, Pathlines, 
+12 | P a g e 
+Streaklines, and timelines; Deformation of fluid elements, Vorticity, and Rotationality; Continuity equation, Euler 
+equation; Navier-Stokes equation; Bernoulli’s equation: derivation, application along and across streamlines, its 
+limitations; Static, dynamic, and stagnation pressures; Energy grade line and Hydraulic grade line. 
+Control Volume Analysis: Reynolds transport theorem: derivation and interpretation; Concept of systems and 
+control volumes, Derivational and application of integral forms of conservation laws for mass, energy, linear 
+momentum, and angular momentum.  
+External Viscous Flow: General characteristics of flow past an object and concept of boundary-layer, boundary
+layer thicknesses; Momentum integral equation boundary-layer analysis: flow with zero pressure gradient, flow with 
+pressure gradient; Concept drag and drag coefficient, friction drag, pressure drag, streamlining; Concept of 
+circulation, lift, and lift coefficient.  
+Reference Books: 
+1. Fluid Mechanics by Yunus A. Cengel and John M. Cimbala. 3rd Edition   
+2. Fundamentals of Fluid Mechanics by Bruce R. Munson, Donald F. Young, Theodore H. Okiisi, and Wade W. 
+Huebsch, 6th Edition  
+3. Introduction to Fluid Mechanics by Robert W. Fox, Philip J. Pritchard, and Alan T. McDonald. 8th Edition 
+ME 2116    
+Sessional on ME 2115 
+Credit: 0.75    
+Experiments based on the theory of ME 2115. 
+CSE 2113    
+Computer Programming  
+Credit: 3.0    
+Contact hour: 3/2 hrs/week 
+Contact hour: 3 hrs/week 
+*Out of two only one programming language will be adopted based on department’s decision during a particular term   
+Programming with C 
+Introduction:  Programming languages, compilers, and pseudo-compilers.  
+Programming paradigm: Structured, object oriented programming, structure of C++ programming. 
+Data Types and Operator: Declaring variables of different data types and doing different types of operations on them, facing 
+problems when internal result of calculation crosses the boundary of a data type.  
+Data Input/Output: Variation and formats of getting input and giving output.  
+Debugging: Program debugging and testing.  
+Control Statements: Implementation of all types of control statement structures such as if, else-if, nested else-if, switch, 
+goto, while, do-while, for, etc. 
+Arrays: single and multi- dimensional arrays and their applications: matrix manipulation, sorting of data; String:  finding 
+vowel and consonant from a given string, detecting palindrome, counting words of a string, reversing each words of a sentence, 
+using different functions of string.h library.   
+Functions: Doing some previous problems using function, passing arguments by value and by reference.   
+Recursion: Find Greatest Common Divisor, Fibonacci, Factorial, and Tower of Hanoi.   
+Program Structure: Use static and global variable.  
+Pointers:  Dynamic memory allocation, arrays of pointers, passing pointers to a function; 
+Structures and Unions: Data processing using structures and union, linked lists;  
+File: Opening, closing, creating and processing data files.  Introduction to low-level programming 
+Or 
+Programming with Octave 
+Introduction: Programming languages, compilers vs. pseudo-compilers, octave as programming language. 
+Octave environment: named variables, numbers and formatting, number representation and accuracy, loading and saving 
+data, repeating previous commands, getting help, cancelling a command, semicolons and hiding answers. 
+Arrays and vectors: building vectors, colon notation, displaying large vectors and matrices, vector creation functions, 
+extracting elements from a vector, vector math. 
+Plotting graphs: single graph, multiple graphs, multiple figures, manual scaling, saving and printing figures. 
+13 | P a g e 
+Script files: creating and editing a script, running and debugging scripts, remembering previous scripts. 
+Control statements: if...else selection, switch selection, for loops, while loops, accuracy and precision. 
+Functions: creating and using functions. 
+Matrices and vectors: matrix multiplication, the transpose operator, matrix creation functions, building composite matrices, 
+matrices as tables, extracting bits of matrices. 
+Solving Ax = b: Solution when A is invertible, Gaussian elimination and LU factorization, Matrix division and the slash 
+operator, Singular matrices and rank, Ill-conditioning, Over-determined systems: Least squares, Triangulation. 
+Eigenvectors and the Singular Value Decomposition: The eig function, The Singular Value Decomposition; Approximating 
+matrices: Changing rank, the SVD function, Economy SVD. 
+Complex numbers: Plotting complex numbers, finding roots of polynomials. 
+CSE 2114    
+Sessional on CSE 2113 
+Credit: 1.50    
+Experiments based on the theory of CSE 2113. 
+Contact hour: 3 hrs/week 
+SECOND YEAR SECOND TERM 
+EE 2213    
+Power Electronics  
+Credit: 4.0    
+Contact hour: 4 hrs/week 
+Transistor: Transistor and its current components, BJT characteristics and different regions of operation, different 
+transistor configurations, transistor as a switch and amplifier, transistor biasing, DC and AC load lines, thermal 
+stabilization. 
+FET: Introduction, Construction and characteristics, MOSFET: depletion type and enhancement type, biasing. 
+Semiconductor power devices: SCRs, TRIACS, power MOSFET and IGBT, DIAC.  
+AC to DC controlled converter:  Single phase and three phase half wave, full wave and semi-converter, phase 
+control, characteristics, harmonics, power factor control and converter triggering circuits. 
+AC to AC controlled converter: On-off and phase control, single phase and three phase power controllers and 
+cycloconverter. 
+DC to DC converter: Chopper, characteristics and operation of step up and step down choppers, switching converter 
+and power regulators. 
+Inverter: Three phase and single phase voltage source and current source inverters, modulation techniques, voltage, 
+frequency and harmonic control, PWM inverters, resonant converter, space vector modulation in three phase 
+inverters. 
+EE 2214    
+Sessional on EE 2213 
+Credit: 0.75    
+Experiments based on the theory of EE 2213. 
+Hum2213           
+Economics and Accounting  
+Credit: 3.0    
+Contact hour: 3/2 hrs/week 
+Contact hour: 3 hrs/week 
+Economics 
+Micro Economics: Definition and principle of economics; Basic economic ideas and resources allocation in different 
+economic systems; Production possibility curves; Elasticity of demand and supply analysis; Price system and micro 
+economy; Price determination, cost of production and market behavior analysis; Government microeconomic 
+intervention; production, production function, types of productivity; Internal and external economics and 
+diseconomies. 
+14 | P a g e 
+Macro Economics: National income analysis, savings and investment; inflation and monetary policy; Fiscal policy 
+and trade policy with reference to Bangladesh; NPV, IRR, payback period, cost benefit ratio and their application. 
+Energy Project Appraisal: Causes and analysis; Social and environmental cost and benefit analysis of energy 
+projects and their impact analysis. 
+Accounting 
+Introduction:  Meaning and Importance of Accounting. 
+Accounting Equations: Some relevant accounting principles; 
+Accounting Cycle: Journal–Ledger, Trial balance, Final Financial Accounts (Income statement and balance sheet), 
+Considering adjustment of entries. 
+Depreciation: Methods of depreciation, straight line and reducing balance method. 
+Costing: Concept and classification of costs; Labor, overhead and job costing; Marginal costing; Operating costing; 
+Salaries and wages. 
+Math 2213   
+Complex Variables and Fourier Analysis 
+Credit: 3.0    
+Contact hours: 3 hrs/week 
+Complex Analysis: Functions; limits; continuity; complex differentiation, analytic function, Cauchy Riemann 
+equation, harmonic function, orthogonal family of curves; Singular points, Complex integration, Cauchy’s theorem, 
+Cauchy’s integral formula. 
+Bessel’s Function: Bessel’s differential equation; Bessel’s function of first kind, its properties and recurrence 
+relations. 
+Fourier Analysis: Euler Fourier series representation of function, Condition for existence of Fourier Series, Fourier 
+series of different periods, Fourier series for even and odd functions, half range Fourier Series, complex form of 
+Fourier series, Parseval’s theorem 
+Partial Differential Equations: Formation and classification of PDEs; Solution of one dimensional heat equations; 
+Solution of Laplace’s equation in 2-dimensional Cartesian and polar coordinates with their application in heat 
+distribution. 
+Reference Books: 
+1. Advanced Modern Engineering Mathematics – by Glyn James 
+2.  
+Advanced Engineering Mathematics – by Erwin Kreyszig  
+ME 2213   
+Dynamics and Kinematics of Machineries   
+Credit: 3.00    
+Contact hour: 3 hrs/week 
+Kinematics of particles: Motion of particle, rectilinear and curvilinear motion; motion of several particles, 
+rectangular components of velocity and acceleration; Motion relative to frame in translation; tangential, normal, 
+radial and transverse components. 
+Kinetics of particles: Newton’s second law of motion, linear and angular momentum, radial and transverse 
+components of motion. 
+Kinematics of rigid bodies: Translation; rotation about a fixed axis; general plane motion, motion about a fixed 
+point and general motion; Absolute velocity and acceleration, relative velocity and acceleration; Principle of work 
+and energy and its application; Power and efficiency; Potential energy, conservative forces; Conservation of energy 
+and its application; Principle of impulse and momentum; Direct and oblique central impact. 
+Kinetics of rigid bodies: Plane motion of rigid bodies; Equation of motion, angular momentum and D’Alembert 
+principle, constrained plane motion; Work of forces acting on a rigid body, Kinetic energy of rigid body in plane 
+motion; Principle of work and energy for the plane motion, principle of impulse and momentum for plane motion; 
+Concentric impact. 
+Mechanics of Machinery: Inertia and kinetic energy of rotation and reciprocating parts; Turning moment diagram, 
+fluctuation of energy and speed; Fly wheel; Balancing of stationary, rotating and reciprocating masses, balancing of 
+15 | P a g e 
+In-line engines and V-engines; Law of gearing forms of tooth and types of gear; Gear trains and their arrangements; 
+Types of governors and their control. 
+ME 2214    
+Sessional on ME 2213 
+Credit: 0.75    
+Experiments based on the theory of ME 2213. 
+ESE 2209   
+Contact hour: 3/2 hrs/week 
+Bio and Wind Energy Engineering  
+Credit: 3.0    
+Contact hour: 3 hrs/week 
+Bio-energy 
+Introduction: Concept of biomass and bio-fuel, its characteristics, heating value and composition, bio-energy, 
+photosynthetic efficiency, potential of biomass sources, advantages and disadvantages, energy plantations; Types of 
+sources. 
+Bio-chemical Conversion: Need of conversion and types; anaerobic digestion – BOD, COD, digester design, biogas 
+production and its feedstock, microbial and biochemical aspects, operating parameters for biogas production, types of 
+digesters, digesters for rural application, high rate digesters for industrial waste; Ethanol production by fermentation 
+cane molasses and other sources, dry fermentation. 
+Thermo-chemical Conversion: Pyrolysis: fixed and fluidized bed pyrolysis, reactor design, carbonization, 
+densification, briquetting, preparation of feedstock, torrified product, bio-coal; Gasification and its types; 
+Incineration. 
+Modern uses of Biomass: Processing for oils and fats, bio-diesel technology, transesterification, Gasohol as a 
+substitute for petrol, chemical composition of bio-diesel; Cogeneration systems. 
+Wind Energy 
+Assessing Wind Resources: Basics of wind generation, air density as function of elevation and humidity; Study of 
+Wind profiles - simple log profile, the power law, roughness length, roughness change model, displacement height, 
+wind shear, Weibull distribution of wind speed; Basic terms and definitions related to wind measurement, wind speed 
+measuring instruments and their principle.       
+Wind Energy Conversion Systems: Classification of wind turbines and their comparison; Horizontal axis wind 
+turbine - major components and angles; Aerodynamic behavior of turbine blades - airfoil terminology, lift, drag, tip 
+speed ratio, flow over airfoil; Vertical axis turbines; Turbine design, One-dimensional momentum theory and Bitz 
+limit, power coefficient, thrust coefficient, overall efficiency, overall power output.  
+Wind energy project and Environment: Major phases of a wind farm project, activities and cost associated with 
+each phase; Impact of WEC projects on environment.   
+ESE 2210    
+Sessional on ESE 2209 
+Credit: 0.75    
+Experiments based on the theory of ESE 2209. 
+ESE 2230        
+Contact hour: 3/2 hrs/week 
+Energy Engineering Simulation I 
+Credit: 0.75    
+Contact hour: 3/2 hrs/week 
+Solution of Energy Science and Engineering problems using standard simulation software. 
+16 | P a g e 
+THIRD YEAR FIRST TERM 
+Math 3113   
+Statistics and Numerical Methods  
+Credit: 3.00    
+Contact hour: 3hrs/week 
+Statistics: 
+Basic Statistics: Review of data, Events, Variables; Population and Samples; Grouped data, Ungrouped data, 
+Frequency distribution: Relative and cumulative; Average, Median, Mode, Standard deviation, Moment, Skewness, 
+Peakedness and Coefficient of variation of grouped data. 
+Basic Probability: Brief overview of sets, Venn diagrams and set operations, Axioms of probability, Probability 
+rules, Conditional probability and Independent events, Bayes formula. Statistical distributions and their uses: 
+Introduction to probability density functions and their physical significance, Geometric, Binomial, Poisson, Normal, 
+Uniform, Exponential distributions. 
+Numerical Methods: 
+Roots and Optimization: Bisection and Newton-Raphson method; Use of root finding functions in Octave – fzero, 
+roots, poly, polyval; Basics of optimization and golden-search technique; Use of root optimization functions in 
+Octave – fminbnd, fminsearch.   
+Solution of Linear Equation: Gaussian elimination and pivoting, LU decomposition; Diagonal dominance and 
+condition number of a matrix, Gauss-Seidel and Jacobi method; Use of Octave functions for solution of linear 
+systems.   
+Curve Fitting and Interpolation: Linear and polynomial regression; Newton’s formulae for forward and backward 
+interpolation, Lagrange’s interpolation method; Use of curve-fitting functions in Octave – interp, polyfit, 
+spline. 
+Numerical Calculus: Forward, backward and central difference formula for first and second order derivative; 
+Trapezoidal rule, Simpson’s rule for integration; Euler, Heun, and Runge-Kutta methods solving initial –value 
+problems, basics of boundary vale problem and shooting method. Use Octave functions – quad, ode45, ode15s, and 
+bvp4c; Application of numerical calculus to problems from fluid mechanics, heat transfer, and control engineering. 
+Reference Books –  
+1. Applied Statistics and Probability for Engineers, 6th Ed. – Douglas C. Montgomery and George C. 
+2. Applied Numerical Methods with MATLAB for Engineers and Scientists, 3rd Ed. – by Steven C. Chapra.    
+3. Numerical Methods for Engineers and Scientists, 3rd Ed. – Amos Gilat, Vish Subramaniam. 
+Math 3114    
+Sessional on Math 3113 
+Credit: 1.50    
+Contact hour: 3 hrs/week 
+Computer applications on the problems based on the theory of Math 3113. 
+EE 3113    
+Power System Engineering  
+Credit: 3.0    
+Contact hour: 3 hrs/week 
+Introduction to Power System: Basics of Power System Engineering, Electrical supply system, AC and DC power 
+supply schemes. 
+Transmission lines: Flux linkages, inductance due to external flux, and inductance of single-phase two-wire line. 
+Electric field, capacitance of two wire line, effect of earth, representation of lines: short, medium and long 
+transmission lines, T and π representation. Sag and stress analysis, effect of wind and ice loading, supports at 
+different elevation, conditions of erection, effects of temperature changes, corona & corona power loss. 
+Insulators for overhead lines: Types of insulators, potential distribution in a string of insulators, string efficiency, 
+methods of equalizing potential distribution. 
+17 | P a g e 
+Load flow and fault analysis: P.U. method of performance calculation, P.U. impedance of three winding 
+transformers, and Power flow in simple systems, voltage and frequency controls. Symmetrical three phase faults on 
+synchronous machine, Unsymmetrical Faults: Single line to ground fault, line to line fault, double line to ground 
+fault. 
+Circuit breakers and fuse: Circuit breakers’ types, ratings, constructions, and selections. Arc extinction, recovery 
+voltage. Constructions, characteristics, and applications of commercially available fuses. Types, construction, 
+operating principle of over current relays. Lightning arrestors, surge absorbers, ground wire, generators grounding. 
+Introduction to Smart grid:  Definition, key functions of smart grid, smart grid’s control elements and their 
+operations, smart grid’s communications and cyber security. 
+Reference Books: 
+1. Mehta. Principles of Power System- V.K.Mehta and Rohit Mehta  
+2. Elements of Power System Analysis, 4th Ed-William D. Stevenson 
+3. Electrical Power Systems- C.L. Wadhwa 
+EE 3114    
+Sessional on EE 3113 
+Credit: 0.75    
+Experiments based on the theory of EE 3113. 
+ESE 3105    
+Contact hour: 3/2 hrs/week 
+Heat Transfer and Mass Transfer 
+Credit: 4.00    
+Contact hour: 4hrs/week 
+Introduction: Basic modes of heat transfer; Thermal properties of materials. 
+Conduction: Law of conduction, Heat conduction equations in one, two and three dimensions; Solution of steady 
+heat flow with and without heat generation, Consideration of variable thermal conductivity; Composite walls; Heat 
+transfer augmentation, fins of uniform cross-sections, critical thickness of insulation; Unsteady heat conduction, Use 
+of Heisler’s chart. 
+Convection: Review of hydrodynamic equations for boundary layer theory, Analysis of thermal boundary layer by 
+control volume method; Laminar heat transfer over flat plate; Fully developed flow heat transfer through smooth 
+pipes, Cases of constant heat flux and constant wall temperature boundary conditions; Applications of dimensionless 
+numbers; Correlation of heat transfer in turbulent flow; Use of hydraulic diameter. Correlations for free and forced 
+convection heat transfer over horizontal and vertical plates, cylinders, spheres and inclined pipes; Horizontal and 
+vertical tube bundles in cross flow. 
+Heat transfer with change of phase: Condensation. Drop-wise and film-wise condensation, their effect on heat 
+transfer rate; Effect of film turbulence; Nusselt equations, condensation number; Melting and solidification; Boiling: 
+Types of boiling; Processes of bubble growth and bubble dynamics; Pool and film boiling; boiling curve, boiling with 
+vapor production, critical heat flux; Forced convection boiling in horizontal and vertical tubes; Heat transfer rate in 
+different boiling phenomena. 
+Mass Transfer: Introduction, Fick’s law of diffusion; Binary diffusion. Mass transfer coefficient; Basics of 
+absorption, distillation and adsorption. 
+Reference Books: 
+1. Fundamentals of Heat and Mass Transfer, 7th Ed. – Frank P. Incropera, David P. DeWitt et al. 
+2. Heat and Mass Transfer, Fundamentals & Application, 5th Ed. – Yunus A. Cengel and Afshin J. Ghajar 
+3. Heat Transfer – Gregory Nellis and Sanford Klein 
+4. Heat Transfer – NecatiOzisik 
+ESE 3106    
+Credit: 0.75     
+Sessional on ESE 3105 
+Experiments based on the theory of ESE 3105. 
+Contact hour: 3/2 hrs/week 
+18 | P a g e 
+ESE 3107    
+Solar Thermal Engineering 
+Credit: 3.00    
+Contact hour: 3 hrs/week 
+Introduction: Review of sun-earth geometry, variation of extraterrestrial radiation, beam and diffuse radiation, 
+direction of beam radiation, 𝑅𝑏 factor, total radiation on horizontal and inclined surfaces, variation of radiation, 
+monthly average values, estimation of daily average daily total radiation, KT method, hourly radiation from daily 
+data. 
+Heat Transfer Concepts: Theory of thermal radiation, Radiation properties, Planck’s law, Wien’s displacement law, 
+Stefan-Boltzmann equation; Concept of black body and gray body; Spectral dependence of radiation properties; 
+Kirchhoff’s law; Shape factor; Radiation exchange between surfaces, Re-radiating surfaces; Radiation shields. 
+Flat Plate Collectors: Introduction, construction methodology and classification; Critical radiation level; Mean fluid 
+temperature; Overall heat loss coefficient; Energy balance equation of FPC; Effective transmittance-absorptance 
+product; Testing of collector, collector efficiency factor; Heat removal factor and flow factor; Heat capacity factor in 
+FPC; Optimum inclination of FPC. Evacuated tube cover collector, Evacuated-tubular collector, thermal efficiency, 
+evacuated tube with heat pipe. 
+Concentrating Collectors: Introduction, characteristic parameters; Concentration ratio, optical efficiency; 
+Classification of concentrators; Tracking of concentrators, tracking methods; Thermal analysis; Materials for 
+concentrators. 
+Application: Solar water heating, heat collection in storage tank, effect of heat load; Solar air heating, room heating, 
+crop heating; Solar distillation, working principle and thermal efficiency; Solar cooling; Solar thermal power 
+generation schemes; Central receiver power plants; Dish Stirling systems; Solar ponds, Thermal analysis of solar 
+power plants. 
+Reference Books: 
+1. Solar Engineering of Thermal Process - J. A. Duffie, W. A. Beckman, John Wiley & Sons Inc 
+2. Solar Energy: Fundamentals, Design, Modeling and Applications –G. N. Tiwari, Narosa Publishing House 
+3. Solar Energy Engineering,2nd Edition -Soteris A. Kalogirou, Academic Press 
+ESE 3108    
+Sessional on ESE 3107 
+Credit: 0.75    
+Experiments based on the theory of ESE 3107. 
+ESE 3123    
+Thermo-fluid Devices 
+Credit: 3.00    
+Contact hour: 3/2 hrs/week 
+Contact hours: 3 hrs/week 
+Pipe flow: Buckingham 𝜋 theorem; Hydraulic diameter, flow regimes based on Reynolds number; Laminar flow in 
+pipes, entrance region and velocity profile, fully developed flow and average velocity, pressure drop and head loss; 
+Turbulent velocity profile in pipes, use of Moody Chart and Colebrook equation; Major and minor losses; Flow rate 
+and velocity measurement – pitot tube, obstruction flow meters, rotameter, turbine flow meters. 
+Compressible flow: Distinction between compressible and incompressible flow, One-dimensional isentropic 
+compressible flow; Variation of flow velocity with area, flow through converging-diverging nozzle and chocking; 
+Shock wave. 
+Pump Compressor and Blowers: Classification of turbomachinery; Water horsepower, brake horsepower, 
+efficiency for pumps; Pump performance curve, pump sizing for piping systems; Cavitation and NPSH; Pump 
+Scaling laws, pump specific speed, affinity laws; Fans, blowers and compressors, compressor intercooling. 
+Heat Exchangers: Classification of heat exchangers, Overall heat transfer coefficient, fouling factor; Analysis using 
+LMTD and NTU method, Design of double-pipe heat exchangers, shell-and-tube heat exchangers and TEMA 
+standards; Plate heat exchangers.  
+Reference Books: 
+1. Fluid Mechanics Fundamentals and Applications, 3rd ED. – Yunus A. Cengel, John M. Cimbala. 
+2. Fox and McDonald’s Introduction to Fluid Mechanics, 8th ED. – Philip J. Pritchard, John C. Leylegian.      
+3. Fundamentals of Heat and Mass Transfer, 7th ED. – Frank P. Incropera, David P. DeWitt et al. 
+4. Process Heat Transfer Principle, Application and Rules of Thumb, 2nd ED – Robert W. Serth, Thomas G. Lestine. 
+19 | P a g e 
+5. Heat Transfer in Process Engineering – Eduardo Cao. 
+ESE 3124    
+Sessional on ESE 3123 
+Credit: 0.75    
+Contact hour: 3/2 hrs/week 
+Experiments based on the theory of ESE 3123 and design problems related ESE 3123. 
+THIRD YEAR SECOND TERM 
+ESE 3200    
+Seminar on Special Topics 
+Credit: 0.75    
+Contact hour: 3/2 hrs/week 
+The department will arrange special lectures on recent research and technology in the field of energy engineering by 
+the expert from inside or outside of the university for the students. Students are required to perform case studies on 
+topics pertaining to energy science and engineering. At the end of the semester, each student will hand in a report and 
+give presentation of his or her study.  
+ESE 3202    
+Energy Innovation Lab 
+Credit: 0.75    
+Contact hour: 3/2 hrs/week 
+The student will fabricate a model of a system using their innovative idea under guidance of a faculty. At the end of 
+the semester, each student will hand in a report and give presentation of his or her project for evaluation. 
+ESE 3203   
+Petroleum and Natural Gas Processing 
+Credit: 3.00    
+Contact hour: 3 hrs/week 
+Petroleum: Composition of Petroleum; thermal properties of petroleum, important product properties and test 
+methods; Dehydration of Crude Oil, Desalting of Crude Oil, Crude Oil Stabilization and Sweetening, distillation of 
+petroleum, ADU, VDU, blending of gasoline; fraction-impurities, treatment of gasoline, treatment of kerosene, wax 
+and purification; Cracking, catalytic cracking, catalytic reforming, naphtha cracking, cooking, hydrogen processes, 
+and alkylation processes isomerization processes. 
+Natural Gas: Origin of natural gas, Properties of natural gas, overview of the natural gas industries in Bangladesh. 
+Gas and Liquid Separation: Separation Equipment, Types of separators, Separation principles, Factors affecting 
+separation, Separator design, Low temperature separation, Two-phase Gas-Oil Separation, Three-Phase Oil-Water
+Gas. 
+Dehydration Processes: Dehydration of natural gas, Gas hydrates, Hydrate inhibition, Absorption dehydration, 
+Adsorption dehydration. 
+Desulfurization Processes: Sweetening of natural gas, Sour gas treating, Sulfur removal processes, Solid bed 
+sweetening processes, Physical absorption and chemical absorption process. 
+Gas Flow Measurements and Control: Fundamentals of gas flow through conduits, orifice meter, Flow control and 
+pressure regulating instruments. 
+LNG and LPG: Basics, Properties, Composition, Liquefaction technologies, Production processes, LNG carrier, 
+LPG cylinders/tanks/vessels, Storage and handling, LPG cylinder sizing, Fire hazards, Safety legislation, Commercial 
+and industrial uses. 
+Lube oil:  Lube Oil Base Stocks, Lube oil processing, Propane de-asphalting, solvent extraction, De-waxing, 
+Specifications of lube oil, Lube Additives. 
+Reference Books: 
+1.Modern Petroleum Refining Processes,5th Ed.- B. K. BhaskaraRao 
+2. Gas Production Engineering- Sanjay Kumar, Gulf Publishing Company 
+3. Petroleum Refining Technology- Ram Prasad , Khanna Publishers 
+4. Petroleum Refinery Engineering -Nelson, W. L. 
+20 | P a g e 
+5. Gas Conditioning and Processing- John M. Campbell  
+ESE 3204    
+Sessional on ESE 3203 
+Credit: 0.75    
+Experiments based on the theory of ESE 3203. 
+ESE 3207    
+Contact hour: 3/2 hrs/week 
+Solar Photovoltaic System  
+Credit: 3.00    
+Contact hour: 3hrs/week 
+Introduction: PV physics, band structure and Fermi level in semiconductors, pn-junctions, diode models, photon 
+interactions with semiconductors. 
+PV Cell Fundamentals: Working principle, Computing PV cell power, equivalent circuit models, short- and open
+circuit properties, fill factor, and parasitic resistances. PV cell external and internal quantum efficiency, and 
+computing the spectral response. Theoretical cell efficiency, multi-junction devices, the Shockley-Queisser limit. 
+Antireflection coatings, cell passivation, and cell optical properties. 
+PV Technology: PV cell architecture and fabrication steps, characterization techniques crystalline Si substrates, thin 
+film deposition, amorphous Si, CIGS, and CdTe thin-film cells. 
+PV Systems: Introduction to PV systems, Location and orientation issues, factor affecting performance, PV cells 
+wired in series and parallel, shaded and faulty cell effects, Components of PV systems, system integration- online and 
+offline, inverters, design criteria, calculation, economics and ecology of PV system, load analysis, life cycle analysis 
+and cost estimation. 
+Reference Books:  
+1., Solar Photovoltaic System Applications: A Guidebook for Off-Grid Electrification -Mohanty, Parimita, Muneer, 
+Tariq, Kolhe. Mohan L. 
+2.. Solar Photovoltaic Technology And Systems - Chetan Singh Solanki 
+3. Photovoltaic Systems Engineering - Roger A. Messenger 
+ESE 3208    
+Sessional on ESE 3207 
+Credit: 0.75    
+Experiments based on the theory of ESE 3207. 
+ESE 3211    
+Coal Power Generation 
+Credit: 4.00    
+Contact hour: 3/2 hrs/week 
+Contact hour: 4 hrs/week 
+Introduction: Types of Coal and their Characteristics; Geology of coal; evaluation of coal for different uses; 
+proximate and ultimate analysis of coal; Overview of coal power in Bangladesh and world; Role of coal in the overall 
+energy situation.  
+Coal and Ash Handling: Necessity of coal handling system, Out-plant handling, Coal preparation, Coal Transfer, 
+Coal storage, In-plant handling, Coal feeding arrangements; Bottom ash, Fly ash, Ash handling systems; Fundamental 
+Concept of Control and Monitoring of Ash handling Plant; Dust collection and its disposal, Types of dust collectors 
+and their working principle. 
+Coal Combustion: Coal burning furnaces, Firing Methods, Types of stokers and their working principle, 
+Combustion Mechanism, Kinetics of Combustion Reactions, Combustion equipments for Burning of coal, Pulverized 
+coal, Various pulverizing mills, screening, mechanical and thermal dewatering, Pulverized coal firing systems, 
+Pulverized coal burners. 
+Clean Coal Technology: Introduction to clean coal technologies, Pre-Combustion Coal Cleaning and Capture of 
+CO2, Post-Combustion Capture of CO2, Carbon Capture and Oxyfuel Combustion, CO2 Compression, Transportation 
+and Sequestration. Combustion Strategies to Reduce NOX Production, Capture of SO2 and NOX, Combined SO2 and 
+NOX Removal, Mercury Removal, International Regulations of Coal-Fired Emissions, Advanced Pulverized Coal
+Fired Power Plants, Integrated Gasification Combined Cycle Systems. 
+Steam Generators: Introduction to Power Station Steam Generators, Boiler classification, general design 
+considerations, boiler specifications, working principle of Fire tube and water tube boilers, high pressure and 
+supercritical boilers, positive circulation boilers, fluidized bed boiler, waste heat recovery boiler, major boiler 
+mountings and accessories, boiler efficiency.  
+21 | P a g e 
+Steam turbines: Types, Impulse and reaction turbine, convergent and divergent nozzles, Stage efficiency, Degree of 
+reaction. Performance of steam turbines. Compounding of turbines, optimum velocity ratio, reheat factor and 
+condition line, loses in steam turbine, Steam turbine governing,  
+Reference Books:  
+1. P. Breeze. 2015. Coal-Fired Generation, 1st Edition. Academic Press, USA. 
+2.P. Jayarama Reddy. 2013. Clean Coal Technologies for Power Generation. 1st edition, CRC Press. 
+3.B. Miller and B. Miller. 2010. Clean Coal Engineering Technology , 1st Edition, Butterworth-Heinemann 
+4. Thermal Engineering – P.L. Ballaney 
+5. Steam Turbine - Kearton 
+ESE 3217   
+Instrumentation and Control  
+Credit: 3.00    
+Contact hour: 3 hrs/week 
+Instrumentation: Functional elements of a measurement system; Sensors for temperature, flow, velocity, linear 
+distance, level, pressure, force, pH measurement; Control valve sizing and selection; Control signal transmission and 
+related industry standards; Study of piping instrument diagram (P&ID); Basic components of Data acquisition 
+system, Error analysis and calibrations. 
+Dynamic Modeling: Review of conservation and constitutive laws of energy systems and dynamic modeling; 
+Linearization ODEs, Review of Laplace Transform, evaluate transfer function and input-output model; Analysis of 
+first and second order systems – graphical and optimization fit, State-space modelling.  
+Controller Design: Basics of feedback control; P, PI, and PID controller design, tuning, and troubleshooting; 
+Frequency response analysis and control system design, Stability analysis; Basics of cascade control; fuzzy logic, 
+control structure. 
+Automation: Introduction of PLC, PLC Hardware, Definitions of Allen-Bradley conditional inputs and outputs, I/O 
+configuration, Programming Terminals and Peripherals, Application of PLC in Automation, Automation system 
+components, Industrial communications, Continuous control, overview of SCADA and DCS systems; 
+Microcontroller basics, classification, basic Architecture, memory, registers, I/O ports. 
+Reference Books -  
+1. Process Dynamics and Control, 4th Ed. – Dale.E. Seborg, Thomas F. Edgar et al. 
+2. Process Control, 2nd Ed. – Thomas E. Marlin 
+3. Schaum's Outline of Feedback and Control Systems, 2nd Ed. - Allen J. Stubberud Ivan J. Williams Joseph J. 
+DiStefano  
+4.Programmable Logic Controllers: Principles and Applications, 5th Ed.-John W. Webb, Ronald A. Reis 
+5.Programming and Customizing the AVR Microcontroller-Gadre, McGraw-Hill 
+ESE 3218    
+Sessional on ESE 3217 
+Credit: 0.75    
+Experiments based on the theory of ESE 3217. 
+ESE 3221   
+Credit: 3.0        
+Energy Storage Systems 
+Contact hour: 3/2 hrs/week 
+Contact hour: 3 hrs/week 
+Introduction: Need of energy storage; Different modes of Energy Storage; Comparative Ratings and Properties: 
+System Ratings, Energy density, Power density and specific power. 
+Mechanical Energy Storage: Pumped hydro storage, Elastic energy storage, Energy storage in Advanced Flywheels, 
+Compressed air energy storage 
+Thermal Energy Storage: Sensible heat storage system, Latent heat storage system, Solar energy storage systems. 
+Electrochemical Energy Storage: Structure, working principle, Classification of Batteries; Batteries with aqueous 
+electrolyte: Lead-acid, Alkaline, Nickel-iron, Nickel-cadmium, Ni-MH; Batteries with nonaqueous electrolyte: 
+Lithium-metal, Lithium-metal polymer, Lithium-ion, Lithium-iron phosphate, Lithium-ion polymer, Large size 
+Batteries: Sodium-sulfur (NaS) Battery, Vanadium Redox flow battery; Modeling of batteries; Battery Management 
+System; Aging of electrochemical batteries;  
+22 | P a g e 
+Electro-magnetic Energy Storage Superconducting Magnet Energy Storage (SMES) systems, Sizing of SMES; 
+Capacitor and Batteries: Comparison and application; Super capacitor: Electrochemical Double Layer Capacitor 
+(EDLC), principle of working, structure performance and application. 
+Advanced Energy Storage Systems: Fuel cell: Principle of working, Basic thermodynamics and electrochemical 
+principles, Classification, Electrolytes, Fuel types, Fuel cell electrodes; Applications for power and transportation. 
+Hydrogen System: Its merit as a fuel; Production: from fossil fuels, electrolysis, thermal decomposition, 
+photochemical, photocatalytic, hybrid; Storage: Metal hydrides, Metallic alloy hydrides, Sea as the source of 
+Deuterium. 
+System Arrangement and application: Storage as grid component, storage with PV systems, Hybrid Power plant, 
+Fast charging stations, Advanced System Architecture, Uninterruptible power supply (UPS). 
+Reference Books:  
+1. Energy Storage: Fundamentals, materials and applications - Robert A. Huggins 
+2. Energy Storage: Systems and components - Alfed Rufer 
+3. Energy Storage: Technologies and application - Ahmed Faheem Zobaa 
+ESE 3222    
+Sessional on ESE 3221 
+Credit: 0.75    
+Experiments based on the theory of ESE 3221. 
+ME 3250    
+Industrial Attachment 
+Credit: 0.0     
+Contact hours: 3/2 hrs/week 
+The student will participate in attachments (for one to two weeks) in relevant industries to get hands on working 
+experiences. Time of the industrial attachment will be decided by the department. Student will submit a report after 
+completion of their industrial attachment. 
+FOURTH YEAR FIRST TERM 
+ESE 4000    
+Project & Thesis I 
+Credit: 1.5     
+Contact hour: 3 hrs/week 
+Theoretical and experimental investigation of various topics in Energy Science and Engineering. The topic should 
+provide an opportunity for the student to develop initiative, creative ability and engineering judgment. Individual or 
+group study (preferable not more than two in a group) will be required. Department will assign a supervisor for each 
+student. At the end of the Term, the student is expected to complete the preliminary literature survey and select the 
+topic for study. Each student/group has to present a seminar on the progress of their work. A brief report needs to be 
+submitted during the presentation of the work. 
+ESE 4105   
+Fuel Combustion and IC Engines 
+Credit: 3.0     
+Contact hour: 3 hrs/week 
+Fuels and its Characteristics: Properties of fuels, determination, proximate and ultimate analysis; calorific value: 
+HCV, LCV and their determination; conventional fuels, alternative fuels, API rating of fuels, octane number and 
+cetane number. 
+Combustion: Complete and incomplete combustion; combustion stoichiometry: mass basis and volume basis; 
+equivalence ratio and mixture strength, lean and rich combustion; thermochemical calculations: enthalpy of 
+formation, adiabatic flame temperature; types of flame: laminar and turbulent flame, premixed and diffusion flame, 
+factors influencing flame velocity; combustion processes: surface or flameless combustion. 
+23 | P a g e 
+Introduction of IC Engine: Basic components and terminology of IC engines, classification of IC engines and their 
+application; working principles of four stroke and two stroke engines - petrol/diesel engine; engine kinematics and 
+performance parameters; autoignition and abnormal combustion, fundamentals of knocking/detonation in SI engines 
+and CI engines, factors influencing knock/detonation, control of knock/detonation; basics of homogeneous charge 
+compression ignition (HCCI) engines, direct injection spark ignition (DISI) engines.  
+Engine Systems and Emission: Lubrication system in IC engine, crankcase ventilation; types of cooling systems – 
+liquid and air cooling; intake and exhaust processes, mixture formation processes for SI engines, carburetor, stages of 
+combustion in SI engine and CI engine; fuel injection systems in CI engine, types of nozzles, spray formation; 
+Boosting of engines: supercharging and turbocharging, limitations of supercharging and turbocharging; types of 
+pollution due to IC engines, sources of HC, CO and NOx, SOx emissions, emissions measurement and control. 
+Reference Books: 
+1. Fuels and combustion- Sharma.S.P. Cahandramohan., (1999), Tata McGraw-Hill 
+2. Internal combustion engine fundamentals, 2nd Edition  by John B. Heywood 
+3. Internal combustion Engines - Applied Thermosciences⸺ by Colin R. Ferguson and Allan T. Kirkpatrick 
+4. Introduction to internal Combustion Engines  by Richard Stone  
+ESE 4106   
+Sessional on ESE 4105 
+Credit: 0.75     
+Sessional based on the theory of ESE 4105. 
+ESE 4115   
+Power Plant Engineering 
+Credit: 3.0     
+Contact hour: 3/2 hrs/week 
+Contact hour: 3 hrs/week 
+Introduction: Features, types, components, general layouts, criteria for comparison and selection of power plant; 
+Energy sources and their availability; overview of power sector in Bangladesh, present status and future trends. 
+Power Plant Economics: Load curves, load factor, diversity factor, load management, number and size of generating 
+unit, effect of load on power plant design, load forecasting, performance and operating characteristics of power 
+plants, economic scheduling principle; cost of electrical energy, peak load pricing, tariff. 
+Hydro Power Plants: Essential feature of hydroelectric power plant; present situation of hydro power generation; 
+site selection, plant layout and various components, power plant safety reservoir, dams & tunnels etc.; hydrology: 
+precipitation, run-off, hydrograph, flow duration curve, mass curve; pumped storage power plant; design, 
+construction and operation of different components of hydro plant like dam, spillways, canals, penstocks, surge tank, 
+draft tubes; types and selection of turbines, governing of turbine; construction and working principles of various types 
+of valves and pumps and hydraulic system.  
+Steam Power Plants: Fields of use, site selection, general layout, operation and performance, binary vapor cycle 
+power plant. 
+Diesel Power Plants: Fields of use, layout, working principle of diesel engine, fuel handling and storage, diesel 
+engine power plant auxiliaries, starting and stopping, performance of diesel engines, heat balance. 
+Gas Turbine Power Plants: Fields of use, components, layout; thermodynamic analysis of gas turbine cycles, cycle 
+improvements, intercoolers, reheaters, regenerators; operation and performance of gas turbine power plants; 
+combined cycle power plant with simple thermodynamic analysis. 
+Power Plant Accessories: Water treatment plant, cooling tower, draught systems, chimney and foundation design.  
+Reference Books: 
+1. Power Plant Engineering  by Black and Veatch. CBS Pub and Distributors, New Delhi, 1998. 
+24 | P a g e 
+2. A Text Book of Power Plant Engineering  by R. K. Rajput. Laxmi Publications (P) Ltd, 2005. 
+3.  Power Plant Engineering  by P.K. Nag. Tata Mcgraw Hill Publishing Co Ltd, New Delhi, 2nd Edition,  2001. 
+4. Power Plant Engineering by  E L Wakil, McGraw-hill Book Co, N.Y., 2001. 
+5. Power Generation, operation and control by A.J. Wood, B.F. Wollenberg., John Wiley, New York,1984. 
+ESE 4116   
+Sessional on ESE 4115 
+Credit: 0.75     
+Sessional based on the theory of ESE 4115. 
+ESE 4125  
+Contact hour: 3/2 hrs/week 
+Safety and Environmental Aspects of Energy Projects 
+Credit: 3.0     
+Contact hour: 3 hrs/week 
+Safety Management: Basic about hazard, risk, accident, safety and safety management; sustainable development and 
+triple bottom line theory; evolution of hazards, hazards classification and detail of different types of hazards; hazard 
+analysis (HAZAN), hazard matrix and hazard/safety management; fault tree and event tree analysis, FMEM, hazard 
+operability (HAZOP), Emergency Preparedness Plan (EPP), safety audit, accident  investigation  and  reporting; 
+characteristics of petroleum fuels, explosive mixture and their limits; fire, explosion and BLEVE incidences and their 
+management; electrical hazard management; uses of personnel protective equipments, practice for following different 
+work permits; duties and responsibilities of safety officer/engineer and safety committee; hazard or safety ratings of 
+industries-Accident Frequency Rate (AFR), Accident Severity Rate (ASR) and Fatal Accident Rate (FAR). 
+Occupational Health and Hazards in Petroleum and Chemical Industries: Occupational health and diseases, 
+Threshold Limit Values (TLVs); toxicity and chemical hazard in process and petroleum Industries; Material Safety 
+Data Sheet (MSDS) and its uses; safety signs for transportation of chemicals and petroleum products. 
+Environmental Issues and Pollution control: Pollution and their types; environmental impact by thermal power 
+plants and petroleum industries; remedial measures of pollution; concept of green house, SMOG, acid rain, 
+sustainable development; environmental regulations, concept of Initial Environmental Examination(IEE), 
+Environmental Impact Assessment (EIA), Environmental Management plan (EMP) and ISO-14001 - 14002, 
+industrial categories on the basis of Bangladesh environmental regulation (DOE). 
+Reference Books: 
+1. Industrial Safety and management by Engr. Mohammad HafizurRhaman 
+2. Loss Prevention in the Process Industries, 3rd edition by M.S. Mannan 
+3. Guidelines for Hazard Evaluation Procedures - With Worked Examples, CCPS (2nd Edition) 
+4. Energy Management and Control Systems by M.C. Macedo Jr. (John Wiley and Sons) 
+5.  
+6.  
+Environmental Impact Analysis Handbook by J.G.Rau, D.C.Wood (McGraw Hill). 
+Energy & Environment by  J.M. Fowler, (McGrawHill) 
+ESE 4126   
+Sessional on ESE 4125 
+Credit: 0.75     
+Sessional based on the theory of ESE 4125. 
+Contact hour: 3/2 hrs/week 
+25 | P a g e 
+ESE 4130   
+Energy Engineering Simulation II  
+Credit: 0.75     
+Contact hour: 3/2 hrs/week 
+Solution of Energy Science and Engineering problems using standard simulation software.  
+ESE 40--    
+ESE 40--    
+ESE 4000    
+Optional I  
+Credit: 3.0     
+Credit: 3.0     
+Optional II 
+Contact hour: 3 hrs/week 
+Contact hour: 3 hrs/week 
+FOURTH YEAR SECOND TERM 
+Project & Thesis II 
+Credit: 3.0     
+Contact hour: 6 hrs/week 
+Students will continue their research work from previous Term. Students should consult closely with their supervisor 
+throughout the completion of the research work. Normally, students will submit drafts of individual chapters to the 
+supervisor as they are completed. The department will declare specific deadline for thesis submission and oral 
+presentation. Students will submit their thesis through their supervisor. They will also present their thesis in an oral 
+examination along with a complete demonstration of the project and thesis.  
+ESE 4213   
+Nuclear Power Engineering 
+Credit: 3.0     
+Contact hour: 3 hrs/week 
+Introduction to Nuclear Physics : Principles of nuclear energy, nuclear masses and mass defect, binding energy, 
+nuclear reactions, energy from fission and fusion, chain reaction, cross sections and concepts of nuclear criticality, 
+radioactive decay, half-life. 
+Nuclear Reactors: Progression of nuclear reactor, components of nuclear reactor; fuel, moderator, coolant, heat 
+transfer techniques in nuclear reactors; classification of nuclear reactors, boiling water reactor, pressurized water 
+reactor, pressurized heavy water reactor, gas cooled reactor, high temperature gas cooled reactor, pebble bed reactor, 
+fast breeder reactor, liquid metal fast breeder reactor; reactor control devices, control rods and their driving 
+mechanisms, control rod materials, radiation protection. 
+Nuclear Power Plant Design: Layout of nuclear power plants; containment buildings, primary containment vessels; 
+Structure of reactor core, mechanical stress in various structures; description and analysis of power plant systems and 
+components. 
+Nuclear Safety: Radiation safety and environmental aspects of nuclear power generation, safety control, pollution 
+control, abatement, international convention on safety aspects; quantities and units of use in radiological protection, 
+biological effect of ionizing radiation, dosimetry of ionizing radiation; International systems of radiological 
+protection, radiation hazards prevention, personal monitoring, radiation shielding. 
+Fuel Cycle and Waste Management: Nuclear fuels and fuel cycles, different types of nuclear fuel cycles,uranium 
+mining and milling, fuel enrichment, fuel fabrication; types of nuclear wastes, waste conditioning: recycling, 
+reprocessing, intermediate storage, partitioning & transmutation, final disposal. 
+Reference Books:  
+1. Nuclear Power Plant Engineering by J.H. Rust, 1979.  
+2. Introduction to Nuclear Engineering,  4th Ed. by J.R. Lamarsh and A.J. Baratta. Prentice Hall, 2017.  
+26 | P a g e 
+3. Nuclear Engineering Theory and Technology of Commercial Nuclear Power. 2nd Ed. by Knief, R.A. 2008. 
+American Nuclear Society. USA.  
+4. Fundamentals of Nuclear Reactor Physics by Lewis, E.E. 2008. 1st Ed. Academic Press. USA.  
+5. Nuclear Energy: An introduction to the concepts, systems and applications of nuclear processes by Murray, R.L. 
+2009. 6th Ed. Elsevier Inc.  
+ESE 4214   
+Sessional on ESE 4213 
+Credit: 0.75     
+Sessional based on the theory of ESE 4213. 
+ESE 4219   
+Contact hour: 3/2 hrs/week 
+Energy Audit and Management 
+Credit: 3.0     
+Contact hour: 3 hrs/week 
+Introduction: Concept of energy management programme; basic components of an energy audit; types of energy 
+audit, industrial, commercial and residential audit planning; understanding of energy costs, bench marking, energy 
+performance index, understanding of energy used pattern; system efficiencies, input energy requirements 
+optimization; energy conservation act and its features; duties and responsibilities of energy managers and auditors; 
+energy audit instruments/ tools.  
+Material and Energy Balance: Basic principles; Sankey diagrams; material balances for different processes; energy 
+balances, methods for preparing process flow chart, material and energy balance procedures.  
+Energy Action Planning: Energy management systems, Management commitment and energy conservation policy, 
+energy performance assessment, estimation of energy savings potential.  
+Monitoring and Targeting: Elements and techniques of monitoring & targeting, data and information-analysis; 
+energy consumption, production, cumulative sum of differences (CUSUM), case studies.  
+Thermal Energy Management: Energy conservation in thermal energy systems; waste heat recovery; thermal 
+insulation; energy conservation in buildings, green building concepts; case studies.  
+Electrical Energy Management: Reactive power management; energy conservation in electrical systems, cases 
+studies.  
+Financial and Project Management: Analysis of payback period; NPV; IRR; sensitivity analysis; analysis of energy 
+performance contracts; project definition, scope, design, financing and planning techniques; cost benefit analysis, 
+case studies.  
+Global Environmental Concerns: UNFCC, Protocols, COP, CDM, PCF, SDGs, delta plan.   
+Reference Books:  
+1. Fundamentals of Energy Management and Energy Audit, Model 1, Paper 1, Published by SREDA, 2019. 
+2. General Aspects of Energy Management and Energy Audit, Publisher: Bureau of Energy Efficiency India, 2015. 
+ESE 4220   
+Sessional on ESE 4219 
+Credit: 0.75     
+Sessional based on the theory of ESE 4219. 
+Contact hour: 3/2 hrs/week 
+27 | P a g e 
+ESE 40--    
+Optional III 
+Credit: 3.0     
+ESE 40--    
+ESE 40--    
+ESE 4003   
+Credit: 3.0     
+Credit: 3.0     
+Optional IV 
+Optional V 
+OPTIONAL COURSES 
+Hydrogen and Fuel Cells  
+Credit: 3.0     
+Contact hour: 3 hrs/week 
+Contact hour: 3 hrs/week 
+Contact hour: 3 hrs/week 
+Contact hour: 3 hrs/week 
+Hydrogen Production Technologies: Review of hydrogen energy; production of hydrogen: chemical production of 
+hydrogen, steam reforming, water electrolysis, gasification and woody biomass conversion, biological hydrogen 
+production, photo dissociation, direct thermal or catalytic splitting of water; purification (removal of CO and CO2), 
+desulphurization;electrolytic hydrogen production, electrolyser configurations. 
+Hydrogen Storage, Transportation and Application: Hydrogen storage options, compressed gas storage, liquid 
+hydrogen, hydride, chemical storage, solid state storage; hydrogen transmission systems, hydrogen fueling systems 
+and infrastructure.; applications of hydrogen, hydrogen as a fuel for IC engine, hydrogen policy and environmental 
+impacts of hydrogen, hydrogen safety. 
+Fuel Cell: Review of fuel cell; thermodynamics and kinetics of fuel cell process, heat released, reasons for losses in 
+voltage, electrode kinetics, porous electrodes, characteristics, fabrication of electrodes, assembly of fuel cells, testing, 
+classification of fuel cells based on nature of electrolyte, operating temperature; performance evaluation of fuel cell,  
+comparison on battery Vs fuel cell. 
+Characteristics and Status of Various Types of Fuel Cells: Alkaline Fuel Cells (AFC), Phosphoric Acid Fuel Cells 
+(PAFC), Polymer Electrolyte Membrane Fuel Cells (PEMFC), Direct Methanol Fuel Cells (DMFC), Molten 
+Carbonate Fuel Cells (MCFC), Solid Oxide Fuel Cells (SOFC), Regenerative Fuel Cells (RFC), use of alternative 
+fuel in fuel cells, specific characteristics, advantages and applications. 
+Fuel Cell Power Plants and Applications: Fuel cell plants and sub systems, efficiency of systems, performance; 
+emissions, heat balance, environmental benefits; heat rate of various fuel cell plants, natural gas and coal-based fuel 
+cell power plant concepts, cogeneration and CHP, fuel cell hybrids, fuel cell systems for portable, automotive, 
+stationary applications, future challenges. 
+Reference Books: 
+1. Hydrogen and Fuel Cells: A Comprehensive Guide by Rebecca L. and Busby, 2005, Penn Well Corporation, 
+Oklahoma. 
+2. Hydrogen and Fuel Cells: Emerging Technologies and Applications by Bent Sorensen, 2011, Academic Press, 
+2nd ed. 
+3. Fuel Cells Principles and Applications by B.Viswanathan and Aulice Scibioh, 2006, Universities Press, 
+Hyderabad. 
+4. Fuel Cell Systems Explained by  J. Larminie & A. Dicks, 2003, Wiley 
+5. Fuel Cells: From Fundamentals and Applications by  S. Srinivasan, 2006, Springer. 
+28 | P a g e 
+ESE 4005   
+Hybrid and Electric Vehicles  
+Credit: 3.0     
+Contact hour: 3 hrs/week 
+Introduction: History of hybrid and electric vehicles (HEVs), reasons for HEV development, types; HEV 
+configurations, social and environmental importance of hybrid and electric vehicles, advantages; challenges and key 
+technology of HEVs – concept of hybridization of the Automobile-Plug-in HEVs, commercially available HEVs. 
+Hybrid Electric Drive-trains: Basic concept of hybrid traction, various hybrid and electric drive-train topologies: 
+series hybrid electric drive trains, parallel hybrid electric drive trains; traction motor characteristics, transmission 
+configuration, components: gears, differential, clutch, brakes; power flow control, energy consumption concept of 
+hybrid electric drive trains, fuel efficiency analysis, impact of modern drive-trains on energy supplies. 
+Electric Propulsion Unit: Introduction to electric components used in hybrid and electric vehicles, configuration and 
+control of DC Motor drives, configuration and control of Induction Motor drives, configuration and control of 
+Permanent Magnet Motor drives, configuration and control of Switch Reluctance Motor drives, drive system 
+efficiency. 
+Power Electronics and Power Flow: Rectifiers, Buck convertor, Boost converter, Voltage source inverter, Current 
+source inverter, DC-AC convertor; Power flow: mechanical power generation, storage and transmission to wheels; 
+electric power generation, storage and conversion to mechanical power; hydraulic power generation, storage and 
+conversion to mechanical power. 
+Energy Storage: Energy storage requirements in HEVs, battery storage, fuel cell storage, super capacitor storage, 
+flywheel storage, hybridization of different energy storage devices. 
+Sizing the Drive System: Matching the electric machine and the internal combustion engine (ICE), sizing the 
+propulsion motor, sizing the power electronics, selecting the energy storage technology. 
+Energy Management Strategies: Energy management strategies used in hybrid and electric vehicles, classification 
+of different energy management strategies, comparison of different energy management strategies, implementation 
+issues of energy management strategies. 
+References Books: 
+1. Iqbal Hussein, Electric and Hybrid Vehicles: Design Fundamentals, Second Edition, CRC Press, 2011. 
+2. Modern Electric, Hybrid Electric and Fuel Cell Vehicles: Fundamentals, Theory and Design by MehrdadEhsani, 
+YimiGao, Sebastian E. Gay, Ali Emadi, 2010, CRC Press. 
+3. Electric Vehicle Technology Explained by  James Larminie, John Lowry, 2003, Wiley. 
+4. Hybrid electric Vehicles Principles and applications With practical perspectives by Chris Mi, Dearborn, M. Abul 
+Masrur, David Wenzhong Gao, 2011, Wiley. 
+ESE 4007   
+Smart Grid Technology  
+Credit: 3.0     
+Contact hour: 3 hrs/week 
+Introduction: Definition, applications, overview of the technologies required for the Smart Grid, micro grid and 
+smart grid comparison; sustainable energy options for the smart grid, economics and market operations of smart grid. 
+Smart Grid Communications and Measurement Technology: Two-way digital communications paradigm, 
+communications infrastructure, network architectures; IP-based systems, monitoring; PMU, smart meters, 
+measurement technologies; sensor networks, fault detection and self-healing systems, GIS and GPS tools, multi-agent 
+systems (MAS) technology. 
+Performance Analysis Tools for Smart Grid Design: Introduction and challenges to load flow in smart grid, 
+weaknesses of the present load flow methods; load flow state of the art: classical, extended formulations and 
+algorithms; congestion management effect, load flow for smart grid design, DSOPF application to the smart grid, 
+Static Security Assessment (SSA) and contingencies; contingencies, contingency studies. 
+29 | P a g e 
+Stability Analysis Tools for Smart Grid: Introduction to stability, strengths and weaknesses of existing voltage 
+stability analysis tools, voltage stability assessment, voltage stability assessment techniques. 
+Computational Tools for Smart Grid Design: Introduction to computational tools, decision support tools, 
+optimization techniques, classical optimization method, heuristic optimization, evolutionary computational 
+techniques, adaptive dynamic programming techniques, Pareto methods, hybridizing optimization techniques, 
+computational challenges. 
+Interoperability, Standards, and Cyber Security: Introduction, interoperability, cyber security challenges; load 
+altering attacks, false data injection attacks, defense mechanisms, privacy challenges, research areas for smart grid 
+development. 
+Reference book: 
+1. Smart Grid: Technology and Applications  by Janaka B. Ekanayake, Nick Jenkins KithsiriLiyanage 
+2. Smart Grid Technology (A Cloud Computing and Data Management Approac) by SudipMisra, SamareshBera. 
+3. Smart Grid Systems: Modeling and Control by N. Ramesh Babu. 
+4. Communication and Networking in Smart Grids by Yang Xiao. 
+ESE 4011  
+Materials for Energy Engineering Applications 
+Credit: 3.0     
+Contact hour: 3 hrs/week 
+Materials for Solar Cell:  Inorganic materials for solar cell:  Si , GaAs and other III-V compounds, PERL Si solar 
+cell materials; crystalline, multicrystalline, amorphous, and microcrystalline solar cells. 
+Organic/flexible solar cells-various types, organic tandem; Dye-sensitized cells, polymer composites for solar cells; 
+modern high efficiency solar cell materials, Perovskite solar cell (PSC) materials. 
+Materials for Fuel Cell: Review of fuel cell, anode-cathode materials, proton conducting ceramic fuel cell, PEM fuel 
+cell, Acid/alkaline fuel cells. 
+Electrolyte Materials for Energy Application: Organic and inorganic electrolyte, polymers electrolytes, ionic 
+liquid based polymer electrolyte, solid oxide electrolytic materials, polymer membranes materials,  
+Advanced Materials for Energy Storage: Capacitor, ultra‐capacitor; application of Graphene, Carbon Nano‐Tubes 
+(CNT), fabrication of CNTs, CNTs for hydrogen storage, CNT‐polymer composites, MOF materials for Hydrogen 
+fuel storage.  
+Fabrication Technologies and Processes: Sputtering, physical vapor deposition, chemical vapor deposition (CVD); 
+diffusion, oxidation, photolithography. 
+Materials Characterization: X‐ray diffraction (XRD), Scanning electron microscopy (SEM), Raman spectroscopy, 
+Atomic force microscopy (AFM), Transmission electron microscopy (TEM). 
+References Books 
+1.Advanced Semiconductor Fundamentals by Robert F. P., 2002, 2nd Edition, Pearson 
+2.Energy Materials by Duncan W. B., Dermot O., and Richard I. W., 2011, 1st Edition, Wiley 
+3.Fundamentals of Solar Cells: PV Solar Energy Conversion by Fahrenbruch A. L. and Bube R. H., 1983, Academic 
+Press  
+4.Solar Cells: Materials, Manufacture and Operation Tom M. and Luis C., 2005, 1st Edition, Elsevier Science 
+5.Organic Photovoltaics: Materials, Device Physics, and Manufacturing Technologies by  Christoph B. Ullrich S. 
+and Vladimir D., 2014, 2nd Edition, Wiley‐VCH  
+6.Nanostructured and Advanced Materials for Fuel Cells by  San P. J. and Pei K. S., 2013, 1st Edition, CRC Press 
+7.Handbook of Battery Materials by  Daniel C. and Besenhard J. O., 2011, 1st Edition Wiley‐VCH 
+30 | P a g e 
+ESE 4013   
+Energy in Built Environment 
+Credit: 3.0     
+Contact hour: 3 hrs/week 
+Introduction: Indoor activities and environmental control, internal and external factors on energy use, characteristics 
+of energy use and its management, macro aspect of energy use in dwellings; Thermal comfort, ventilation and air 
+quality, air-conditioning requirement, visual perception, illumination requirement, auditory requirement. 
+Influence of Climate and Solar Radiation: The sun-earth relationship, climate, wind, solar radiation and 
+temperature; sun shading and solar radiation on surfaces, energy impact on the shape and orientation of buildings; 
+lighting: characteristics and estimation, methods of day-lighting, architectural considerations for day-lighting. 
+Thermal Performance of Buildings: Steady and unsteady heat transfer through wall and glazed window, standards 
+for thermal performance of building envelope; evaluation of the overall thermal transfer: thermal gain and net heat 
+gain, enduse energy requirements; status of energy use in buildings, estimation of energy use in a building. 
+Energy and Environment Management in Building: Energy audit and energy targeting; technological options for 
+energy management; Natural and forced ventilation–indoor environment and air quality; airflow and air pressure on 
+buildings, flow due to stack effect. 
+Technologies for Low Energy Buildings: Passive building architecture: radiative cooling, solar cooling techniques, 
+solar desiccant dehumidification for ventilation; natural and active cooling with adaptive comfort, evaporative 
+cooling; zero energy building concept. 
+Reference book: 
+1. Heating and Cooling of Buildings: Design for Efficiency by  J. Krieder and A. Rabl (2000), McGraw-Hill. 
+2. Mechanical and Electrical Equipment for Buildings by  S. M. Guinnes and Reynolds (1989), Wiley. 
+3. Energy Design for Architects by  A Shaw (1991),  AEE Energy Books. 
+ESE 4015   
+Energy System Design and Optimization 
+Credit: 3.0     
+Contact hour: 3 hrs/week 
+Introduction: Overview of various technologies and conventional methods of energy conversion, power cycles, 
+designing a workable system, workable and optimum systems, steps in arriving at a workable system, creativity in 
+concept selection, equation fitting, mathematical modeling, polynomial representation, functions of two variables, 
+exponential forms, best fit method of least squares. 
+Modeling and System Simulation: Modeling of thermal equipment, counter flow heat exchanger, evaporators and 
+condensers, heat exchanger effectiveness, effectiveness of a counter flow heat exchanger – NTU, pressure drop and 
+pumping power; system simulation, classes of simulation, information flow diagrams, sequential and simultaneous 
+calculations, successive substitution. 
+Optimizing: Optimization, mathematical representation of optimization problems, optimization procedure, setting up 
+the mathematical statement of the optimization problem, Lagrange multipliers, Lagrange multiplier equations; 
+unconstrained optimization, constrained optimization; sensitivity coefficients, search methods, single variable, 
+Exhaustive-Dichotomous and Fibonacci, multivariable unconstrained, lattice-univariable and steepest ascent. 
+Dynamic, Linear and Geometric Programming: Dynamic programming, characteristic of the dynamic 
+programming solution, apparently constrained problem, application of dynamic programming to energy system 
+problems, geometric programming, one independent variable unconstrained, multivariable optimization, constrained 
+optimization with zero degree of difficulty, linear programming, simplex method, Big-M method, application of LP to 
+thermal systems. 
+Reference book: 
+1. Systems Modeling and Analysis by  I.J. Nagrath and M. Gopal (1984), Tata McGraw-Hill. 
+31 | P a g e 
+2. Design of Thermal Systems by  W.F. Stoecker (1989), 3rd Edition, McGraw-Hill. 
+3. Analysis and Design of Thermal Systems by  B.K. Hodge and Robert P. Taylor (1990), Prentice-Hall Inc. 
+4. Globally Optimal Design by D.J. Wide (1984), Wiley Interscience 
+ESE 4017   
+Energy Efficiency Assessment  
+Credit: 3.0     
+Contact hour: 3 hrs/week 
+Assessment for Thermal System: Boiler and steam system: Thermal efficiency and its determination by direct and 
+indirect method, blow-down, boiler water treatment, external water treatment, feed water preheating, combustion air 
+preheating, excess air control, energy saving opportunities in boiler, waste heat recovery; steam distribution system, 
+steam traps and energy conservation opportunities.  
+Assessment for Mechanical System: Fans and blowers: Difference between fans, blowers and compressors, types of 
+fan: centrifugal, arial flow, fan laws, fan design and selection criteria’s, flow control strategies, fan performance, 
+assessment, energy saving opportunities in fans. 
+Pumps and Pumping System: Types of pumps, pump curves, factors affecting pump performance, coupling, flow 
+control strategies, energy conservation opportunities in pumping system. 
+Refrigeration System: Performance assessment of a refrigeration system, COP, factor affecting performance, energy 
+savings opportunities in refrigeration systems; cooling towers, flow control strategies, energy saving options in 
+cooling towers. 
+Assessment for Electrical system: Motors: Energy efficient motors, factors affecting efficiency, loss distribution, 
+constructional details, characteristics – variable speed, variable duty cycle systems, RMS hp- voltage variation
+voltage unbalance- over motoring- motor energy audit. 
+Diesel Generator System: Fundamentals; types, capacity selection; performance assessment; energy conservation 
+opportunities.  
+Reference Books:  
+1. Energy Efficiency in Thermal Systems, Model 2, Published by SREDA, 2019. 
+2. Energy Efficiency in Electrical Systems, Model 3, Published by SREDA, 2019. 
+3. Energy performance assessment for Equipment and Utility Systems, Model 4, Published by SREDA, 2019 
+ESE 4025   
+HVAC&R System Design  
+Credit: 3.0     
+Contact hour: 3 hrs/week 
+Introduction and Types of Cooling Systems: Review of basic concepts and definitions of refrigeration system, 
+refrigeration cycles, properties and classifications of commonly used refrigerants, vapor compression cycle, analysis 
+of Vapor compression refrigeration cycle, multi pressure systems of refrigeration, working principle of thermally 
+driven cooling machines, vapor absorption refrigeration, single, double and triple effect absorption chiller, adsorption 
+chiller; air cycle refrigeration; desiccant evaporative cooling; ejector cycle. 
+Air-conditioning: Indoor and outdoor air conditions, comfort air conditions and comfort zone indoor air quality, 
+review of psychrometry; Central air conditioning system: essential components of central air conditioning plant: 
+water chiller and water heater, air handling unit, fan control unit, chilled water and hot water recirculating system, 
+return air supply system, fresh air supply system and air mixture chamber; supply fan, air dust cleaning and bacteria 
+removal, air supply and air return terminals, diffusers, dampers, grillers and registers; introduction to variable 
+refrigerant flow (VRF) technology.  
+Air-conditioning System Design: CFM rating and tons of air conditioning of central air conditioning plant, cooling 
+and heating loads; calculation procedures, duct sizing and piping design; pumps and fans selection, air ventilation; 
+calculation of fresh air supply of multi-story buildings, air handling units for treatment of fresh and return, forced 
+convection based air ventilator design. 
+32 | P a g e 
+Cooling Towers: Types of cooling towers, performance of cooling tower, hydronic terminal units.  
+Alternative Cooling Techniques: Thermo-electric, magnetocaloric, electrocaloric; thermo-accoustics, solar-assisted 
+cooling systems. 
+Reference books:  
+1. Refrigeration and Air Conditioning by  Arora, C. P., (2007),, Tata McGraw-Hill Publishing Company Ltd. 
+2. Refrigeration and Air conditioning by  WF Stocker and J W Jones, (1999), McGraw Hill Book Company. 
+3. ASHRAE, Handbook - Fundamentals, SI Edition by Circle, T. and N.E. Atlanta. (1997), American Society of 
+Heating, Refrigerating and Air-Conditioning Engineers. USA.  
+4.  Refrigeration and Air conditioning by Manohar Prasad, (1998), Wiley Eastern Ltd. 
+5. Refrigeration and Air-Conditioning by  S. C. Arora and Dumkundwar, (1996), Dhanpathrai Publishers. 
+ESE 4031   
+Power Plant Instrumentation and Control 
+Credit: 3.0     
+Contact hour: 3 hrs/week 
+Instrumentation: Review of flow, level, pressure, temperature measurement and instrument, control valves; general 
+concepts and objectives, instrumentation of complex systems, different types of power plants and role of 
+instrumentation in controlling and monitoring the power production, optimization and adaptation, thermal power 
+plant instrumentation, controlling and monitoring of boilers, turbines and generators, transformers, condensers and 
+power plant auxiliaries.  
+Introduction to Power Plant Control: Overview of power plant control loops, complex control schemes, PID 
+controller, multivariable control; fundamental concept on integrated control system for power plant application, 
+identification of analog and binary drives of power plant. 
+Various Types of Control Technics: Furnace draft and temperature control, combustion control, drum and feed 
+water level control, boiler water level and pressure control, emergencies and actions, alarm and annunciation, safety, 
+interlock and supervisory schemes, salient features of instrumentation of hydro-electric, nuclear and nonconventional 
+power plants, monitoring generation and load flow, plant efficiency, excitation control and temperature profile, DCS, 
+fire detection and protection system, plant communication system; study of P&I diagram and presentation of 
+instrumentation on P&ID. 
+Control of Renewable Energy Systems: Fundamental control of photovoltaic, wind, battery and fuel cell systems.  
+Reference Books: 
+1. Power Plant Instrumentation and Control Handbook: A Guide to Thermal Power Plants by  Swapan Basu, 
+Ajay Debnath. Machine Learning, by Tom Mitchell, 2014. 
+2. Thermal Power Plant Control and Instrumentation: The control of boilers and HRSGs by David Lindsley, 
+John Grist, Don Parker, The Institution of Engineering and Technology: 2018 
+3. Power Electronics for Renewable and Distributed Energy Systems by  Sudipta Chakraborty, Marcelo G. 
+Simões, William E. Kramer; Springer 
+4. Modeling, Identification and Control Methods in Renewable Energy Systems by  Nabil Derbel • Quanmin 
+Zhu; Springer 
+ESE 4075  
+Energy Project Development and Evaluation 
+Credit: 3.0     
+Contact hour: 3 hrs/week 
+Energy Project Preparation and Development: Features of energy projects, project cycle, context of energy 
+projects, project identification, project proposal preparation, pre-feasibility and feasibility studies, budgeting, project 
+approval and implementation.  
+33 | P a g e 
+Cost Concepts and Financial Calculations: Cost concepts, time value of money, interest formulas and equivalence, 
+inflation, methods of project evaluation, deprecation.  
+Economic Evaluation of Energy Projects: Alternatives methods of project evaluation, Traditional methods and new 
+developments, valuation of costs and benefits, Uncertainty and risk analysis of projects, Sensitivity and break even 
+analysis. 
+Financial Evaluation of Projects: Sources of funds, project financing, elements of financial costs, financial structure 
+and project feasibility, revenue streams, effects of assumptions and pricing, sensitivity analysis.  
+Environmental Issues in Energy Projects: Evaluation of environmental impacts, methods of economic evaluation 
+of environmental impacts, energy sector and environmental policies, case studies. 
+Reference books 
+1. Financing Energy Projects in Emerging Economies by  H. Razavi (1996),, PennWell Books, Tulsa, Oklahoma. 
+2. Project Evaluation: Techniques and Practices for Developing Countries by H.K. Sang (1995),  Avebury, 
+England. Reference Books 
+3. Contemporary Engineering Economics, Third Edition by  C.S. Park (2002), Prentice-Hall, NJ.  
+4. Benefit-Cost Analysis: In Theory and Practice by  R. Zebre and D. Dively (1994), Harper Collins. 
+ESE 4077  
+Energy Modeling and Project Management 
+Credit: 3.0     
+Contact hour: 3 hrs/week 
+Introduction: Basic concept of econometrics and statistical analysis; The 2-variable regression model; The multiple 
+regression model; Tests of regression coefficients and regression equation; Econometric techniques used for energy 
+analysis and forecasting with case studies; Operation of computer package.  
+Input-Output Analysis: Basic concept of Input-output analysis; concept of energy multiplier and implication of 
+energy multiplier for analysis of regional and national energy policy; Energy and environmental Input - Output 
+analyses using I-O model. 
+Energy Modeling: Interdependence of energy-economy-environment; Modeling concept, and application, 
+Methodology of energy demand analysis; Methodology for energy forecasting; Sectoral energy demand forecasting; 
+Interfuel substitution models; SIMA model, and I-O model for energy policy analysis; Simulation and forecasting of 
+future energy demand; Energy Economics and Policies: National and Sectoral energy planning; Integrated resource 
+planning; Energy pricing. 
+Project Evaluation & Management: Financial analysis: Project cash flows, time value of money, life cycle 
+approach and analysis, conception, definition, planning, feasibility and analysis; Project appraisal criteria; Risk 
+analysis; Project planning matrix; Aims oriented project planning; Social cost benefit analysis. Network analysis for 
+project management; Time estimation; Critical path determination; PERT, CPM and CERT; Fuzzy logic analysis; 
+Stochastic based formulations; Project evaluation techniques; Funds planning; Project material management, 
+evaluation and analysis; Implementation and monitoring; Performance indices; Case studies. 
+Reference books 
+1. Energy Policy Analysis and Modeling, M. Munasinghe and P. Meier Cambridge University Press, 1993.  
+2. The Economics of Energy Demand: A Survey of Applications, W.A Donnelly New York, 1987.  
+3. Econometrics Models and Economic Forecasts, S. Pindyck and Daniel L Rubinfeld, 3rd edition McGraw Hill, 
+New York 1991.  
+4. Sectoral Energy Demand Studies: Application of the END-USE Approach to Asian Countries, UN-ESCAP, 
+New York 1991. 
+5. Guide Book on Energy – Environment Planning in Developing Countries – Methodological Guide on 
+Economic Sustainability and Environmental Betterment Through Energy Savings and Fuel Switching in 
+Developing Countries, UN-ESCAP, New York 1996.  
+6. Forecasting Methods and Applications, S.Makridakis, Wiley 1983 
+34 | P a g e 
+ESE 4085   
+Mineral Energy Resources  
+Credit: 3.0     
+Contact hour: 3 hrs/week 
+Introduction: An overview of hydrocarbon reserves in Bangladesh; Historical over view of discovery and 
+exploitation of petroleum and its products; Petroleum formation; Physical and chemical properties of petroleum; 
+Introduction to petroleum and mining geology and its classification; Petroleum system; Source of petroleum; 
+Mineralogy and Petrology: Origin of minerals and definition of rocks and minerals; Physical and chemical 
+properties of rocks and minerals; classification of rocks; Mode of occurrence, Distribution, Genesis, Evaluation and 
+exploration for metallic and industrial mineral deposits; Geological resources (hydrocarbon and mineral resources) 
+and their geological environment. 
+Environmental Geology: Petroleum industry, petroleum exploration, drilling, production, reservoir performance, oil 
+and gas transportation, utilization of oil and natural gas.  Introduction to mining industry; economics and structure of 
+the mining industry; terminology of mining engineering; explorations; mining operations; mineral processing; 
+mineral purchasing; metallurgy; roles and responsibility of energy engineers to mining industry; problems and 
+environmental impacts in mining industry. 
+Exploration Methods: Subsurface geological cross sections and maps; Seismology and seismic survey; Gravity and 
+magnetic surveying; and petroleum deposits. Methods of coal, NG, Crude oil exploration; Open and pit mining. 
+Reference Books: 
+1.      
+2.      
+3.      
+4.      
+5.      
+Petroleum formation and occurrence by B.P. Tissot, D.H.Welte, 2nd  edition, Springer. 
+Elements of mining by  Lewis, R.S., and Clark G.B. 
+Energy resources of Bangladesh by  Imam, B., 2012, UGC Pub., Dhaka, Bangladesh.2nd  edition. 
+Introduction to Petroleum Exploration and Engineering by  Andrew Plamer, 2016. 
+Introduction to Mineralogy and Petrology by  S. K. Haldar & Josip Tišljar, 2014. 1st Edition, Elsevier. 
+ESE 4093   
+Credit: 3.0      
+Atmosphere, Ocean and Climate Dynamics 
+Contact hour: 3 hrs/week 
+Atmosphere: Earth System: Components of the Earth System; Hydrological Cycle; Carbon Cycle; Characteristics of 
+the atmosphere: chemical composition, physical properties of air; Global energy balance: Atmospheric absorption 
+spectrum, greenhouse effect; Vertical structure of atmosphere; convection in the atmosphere; meridional structure of 
+atmosphere. 
+Ocean: Ocean and its circulation: Physical characteristics, observed mean circulation, inferences from geostrophic 
+and hydrostatic balance, ocean eddies; Wind-driven circulation: wind stress and Ekman layer, baroclinic instability; 
+thermohaline circulation. 
+Climate Dynamics: Equitorial current system; Regional circulation system: Jet stream; Subtropical High; Equitorial 
+Trough; Monsoons; Interannual variability of the atmospheric Ocean System: El Nino and the southern oscillation; 
+Time scales of climate variability. 
+Reference Books: 
+1. Atmosphere, Ocean and Climate Dynamics by John Marshall and R. Alan Plumb 
+2. Climate Dynamics of the Tropics by Stefan Hastenarth, Springer Science Publication 
+Atmospheric Science -An Introductory Survey by John M.Wallace • Peter V.Hobbs 
+35 | P a g e
