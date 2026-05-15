@@ -290,31 +290,55 @@ export default function Schedule() {
   const add = () => {
     if (!form.courseId || !form.slot) return;
     const nextSlot = normalizeSlotKey(form.slot);
-    const teacherName = normalizeTeacherName(form.teacherName);
-    const nextEntry = { ...form, teacherName, displayName: form.displayName || autoDisplayName(form.courseId, teacherName), slot: nextSlot, id: uid() };
-    const hasExactDuplicate = schedule.some(item =>
-      item.id !== editingId &&
-      item.day === nextEntry.day &&
-      normalizeSlotKey(item.slot) === nextSlot &&
-      item.courseId === nextEntry.courseId &&
-      (item.teacherName || '') === (nextEntry.teacherName || '') &&
-      (item.type || '') === (nextEntry.type || '') &&
-      (item.room || '') === (nextEntry.room || '')
-    );
-    if (hasExactDuplicate) {
-      alert('This class is already saved in the same day and time.');
-      return;
+    
+    // Support multiple teachers (comma or semicolon separated)
+    // e.g., "Dr. Smith, Dr. Jones" or "Dr. Smith; Dr. Jones"
+    const teacherInputs = form.teacherName
+      .split(/[,;]/)
+      .map(t => t.trim())
+      .filter(t => t.length > 0)
+      .map(t => normalizeTeacherName(t));
+    
+    // If no teachers specified, create one entry without teacher
+    const teachers = teacherInputs.length > 0 ? teacherInputs : [''];
+    
+    // Create entries for each teacher
+    const newEntries = teachers.map(teacherName => ({
+      ...form,
+      teacherName,
+      displayName: form.displayName || autoDisplayName(form.courseId, teacherName),
+      slot: nextSlot,
+      id: uid()
+    }));
+
+    // Check for duplicates and overlaps for each new entry
+    for (const nextEntry of newEntries) {
+      const hasExactDuplicate = schedule.some(item =>
+        item.id !== editingId &&
+        item.day === nextEntry.day &&
+        normalizeSlotKey(item.slot) === nextSlot &&
+        item.courseId === nextEntry.courseId &&
+        (item.teacherName || '') === (nextEntry.teacherName || '') &&
+        (item.type || '') === (nextEntry.type || '') &&
+        (item.room || '') === (nextEntry.room || '')
+      );
+      if (hasExactDuplicate) {
+        alert(`This class is already saved for ${nextEntry.teacherName || 'this teacher'} in the same day and time.`);
+        return;
+      }
+
+      const hasOverlap = schedule.some(item => item.id !== editingId && item.day === nextEntry.day && isSlotOverlap(item.slot, nextSlot));
+      if (hasOverlap) {
+        alert('That time overlaps with an existing class on the same day.');
+        return;
+      }
     }
 
-    const hasOverlap = schedule.some(item => item.id !== editingId && item.day === nextEntry.day && isSlotOverlap(item.slot, nextSlot));
-    if (hasOverlap) {
-      alert('That time overlaps with an existing class on the same day.');
-      return;
-    }
-
+    // If editing, replace the single entry; if adding, append all new entries
     const updated = editingId
-      ? normalizeScheduleEntries(schedule.map(item => item.id === editingId ? { ...nextEntry, id: editingId } : item))
-      : normalizeScheduleEntries([...schedule, nextEntry]);
+      ? normalizeScheduleEntries(schedule.map(item => item.id === editingId ? { ...newEntries[0], id: editingId } : item))
+      : normalizeScheduleEntries([...schedule, ...newEntries]);
+    
     setSchedule(updated);
     store.set('schedule', updated);
     cancelEdit();
@@ -393,10 +417,13 @@ export default function Schedule() {
   };
 
   const slotPreview = (slot) => {
-    const match = String(slot).match(/^(.+)-(.+)$/);
-    if (!match) return slot;
+    const cleanSlot = String(slot).replace(/\s+break\s*$/i, '').trim();
+    const match = cleanSlot.match(/^(.+)-(.+)$/);
+    if (!match) return cleanSlot;
     return `${match[1]} → ${match[2]}`;
   };
+
+  const isBreakSlot = (slot) => String(slot).toLowerCase().includes('break');
 
   const editCustomSlots = (text) => {
     const slots = text
@@ -608,6 +635,9 @@ export default function Schedule() {
             <div style={{ fontWeight: 600, fontSize: 13 }}>{editingId ? 'Edit Class Slot' : 'Add Class Slot'}</div>
             {editingId && <span className="tag tag-blue">Editing</span>}
           </div>
+          <div style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 10, padding: '8px 12px', background: 'rgba(59,130,246,0.05)', borderRadius: 6, borderLeft: '3px solid var(--accent)' }}>
+            💡 <strong>Multi-teacher courses:</strong> Enter multiple teacher names separated by comma or semicolon (e.g., "Dr. Smith, Dr. Jones") to add entries for all teachers at once.
+          </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, minmax(0, 1fr))', gap: 10, marginBottom: 10 }}>
             <div>
               <label>Day</label>
@@ -646,12 +676,17 @@ export default function Schedule() {
               />
             </div>
             <div>
-              <label>Teacher</label>
+              <label>Teacher(s)</label>
               <input value={form.teacherName} onChange={e => {
-                const teacherName = normalizeTeacherName(e.target.value);
-                set('teacherName', teacherName);
-                if (!form.displayName) set('displayName', autoDisplayName(form.courseId, teacherName));
-              }} placeholder="Imran Sir" />
+                const input = e.target.value;
+                set('teacherName', input);
+                // Auto-update display name if only one teacher
+                if (!form.displayName && !input.includes(',') && !input.includes(';')) {
+                  const teacherName = normalizeTeacherName(input);
+                  set('displayName', autoDisplayName(form.courseId, teacherName));
+                }
+              }} placeholder="Dr. Smith or Dr. Smith, Dr. Jones" />
+              <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 3 }}>Comma or semicolon separated for multiple</div>
             </div>
             <div>
               <label>Room</label>
@@ -704,12 +739,12 @@ export default function Schedule() {
             </thead>
             <tbody>
               {getSlotCatalog(schedule, slotList).map(p => {
-                const isBreak = String(p).toLowerCase().includes('break');
+                const breakSlot = isBreakSlot(p);
                 return (
                 <tr key={p}>
-                  <td style={{ padding: '12px 12px', borderBottom: '1px solid var(--border)', borderRight: '1px solid var(--border)', fontWeight: 700, fontSize: 13, color: isBreak ? 'var(--muted)' : 'var(--muted)', fontFamily: 'JetBrains Mono, monospace', whiteSpace: 'nowrap', background: isBreak ? 'rgba(239,68,68,0.08)' : 'var(--bg)' }}>{slotPreview(p)}</td>
+                  <td style={{ padding: '12px 12px', borderBottom: '1px solid var(--border)', borderRight: '1px solid var(--border)', fontWeight: 700, fontSize: 13, color: 'var(--muted)', fontFamily: 'JetBrains Mono, monospace', whiteSpace: 'nowrap', background: breakSlot ? 'rgba(239,68,68,0.08)' : 'var(--bg)' }}>{slotPreview(p)}</td>
                   {DAYS.map(d => (
-                    <td key={d} style={{ padding: '6px', borderBottom: '1px solid var(--border)', borderRight: '1px solid var(--border)', verticalAlign: 'top', minHeight: 54, background: isBreak ? 'rgba(239,68,68,0.08)' : d === selectedDay ? 'rgba(59,130,246,0.035)' : 'transparent' }}>
+                    <td key={d} style={{ padding: '6px', borderBottom: '1px solid var(--border)', borderRight: '1px solid var(--border)', verticalAlign: 'top', minHeight: 54, background: breakSlot ? 'rgba(239,68,68,0.08)' : d === selectedDay ? 'rgba(59,130,246,0.035)' : 'transparent' }}>
                       {(grid[d]?.[p] || []).map(s => {
                         const c = getCourse(s.courseId);
                         return (

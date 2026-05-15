@@ -90,6 +90,7 @@ export default function Courses() {
   const [addingCustom, setAddingCustom] = useState(false);
   const [editingCustom, setEditingCustom] = useState(null);
   const [version, setVersion] = useState(0);
+  const [expandedTerms, setExpandedTerms] = useState({});
   const profile = getProfile();
 
   const courses = useMemo(() => getAllCourses(profile), [profile.dept, profile.currentTermKey, version]);
@@ -124,6 +125,10 @@ export default function Courses() {
   const updateOptional = (course, code) => {
     setOptionalSelection({ deptCode: course.deptCode, termKey: `Y${course.year}T${course.term}`, slotIndex: course.optionalSlotIndex, code });
     setVersion(v => v + 1);
+  };
+
+  const toggleTerm = (key) => {
+    setExpandedTerms(p => ({ ...p, [key]: !p[key] }));
   };
 
   const filtered = filterYear === 'all' ? courses : courses.filter(c => c.year === +filterYear);
@@ -167,22 +172,44 @@ export default function Courses() {
 
       {sortedGroups.map(g => (
         <div key={g.key} style={{ marginBottom: 20 }}>
-          <div style={{fontSize:11,fontWeight:700,color:'var(--muted)',textTransform:'uppercase',letterSpacing:'0.08em',marginBottom:10}}>
-            {g.label}
-          </div>
-          <div style={{display:'flex',flexDirection:'column',gap:6}}>
-            {g.items.map(c => (
-              <div key={c.id} className="card" style={{display:'flex',alignItems:'center',gap:12,padding:'12px 16px'}}>
-                <div style={{flex:1,minWidth:0}}>
-                  <div style={{display:'flex',alignItems:'center',gap:8,flexWrap:'wrap'}}>
-                    <span className="mono fw-700" style={{fontSize:14}}>{c.code}</span>
-                    <span style={{fontSize:14}}>{c.name}</span>
-                  </div>
-                  <div style={{display:'flex',gap:6,flexWrap:'wrap',marginTop:5}}>
-                    <span className={`tag ${STATUS_COLORS[c.status]||'tag-gray'}`}>{c.status}</span>
-                    <span className="tag tag-gray">{c.type}</span>
-                    <span className="tag tag-gray">{c.credits} cr</span>
-                    {c.isCore && <span className="tag tag-blue">Core</span>}
+          <button 
+            onClick={() => toggleTerm(g.key)}
+            style={{
+              width: '100%',
+              textAlign: 'left',
+              padding: '10px 12px',
+              borderRadius: 8,
+              border: '1px solid var(--border)',
+              background: expandedTerms[g.key] ? 'rgba(59,130,246,0.08)' : 'transparent',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 8,
+              marginBottom: expandedTerms[g.key] ? 12 : 10,
+              transition: 'all 200ms ease'
+            }}
+          >
+            <span style={{ fontSize: 11, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.08em', flex: 1 }}>
+              {g.label}
+            </span>
+            <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--muted)', minWidth: 24, textAlign: 'right' }}>
+              {expandedTerms[g.key] ? '▼' : '▶'}
+            </span>
+          </button>
+          {expandedTerms[g.key] && (
+            <div style={{display:'flex',flexDirection:'column',gap:6}}>
+              {g.items.map(c => (
+                <div key={c.id} className="card" style={{display:'flex',alignItems:'center',gap:12,padding:'12px 16px'}}>
+                  <div style={{flex:1,minWidth:0}}>
+                    <div style={{display:'flex',alignItems:'center',gap:8,flexWrap:'wrap'}}>
+                      <span className="mono fw-700" style={{fontSize:14}}>{c.code}</span>
+                      <span style={{fontSize:14}}>{c.name}</span>
+                    </div>
+                    <div style={{display:'flex',gap:6,flexWrap:'wrap',marginTop:5}}>
+                      <span className={`tag ${STATUS_COLORS[c.status]||'tag-gray'}`}>{c.status}</span>
+                      <span className="tag tag-gray">{c.type}</span>
+                      <span className="tag tag-gray">{c.credits} cr</span>
+                      {c.isCore && <span className="tag tag-blue">Core</span>}
                     {c.isOptional && <span className="tag tag-yellow">Optional Slot</span>}
                   </div>
                   {c.notes && <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 6 }}>{c.notes}</div>}
@@ -203,8 +230,9 @@ export default function Courses() {
                   <input value={c.notes || ''} onChange={e => updateOverride(c.id, { notes: e.target.value })} placeholder="Notes / pre-reqs" />
                 </div>
               </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
       ))}
 
