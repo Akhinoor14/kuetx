@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import { TrendingUp, Award, AlertTriangle, BookOpen, CalendarCheck, Clock, Wallet, Star } from 'lucide-react';
-import { store, cgpaToPercent, computeCGPA, computeTermGPAs, computeEffectiveAttendance, MIN_ATTENDANCE_PERCENT, SCHOLARSHIP_ATTENDANCE_PERCENT } from '../store/store';
+import { store, cgpaToPercent, computeCGPA, computeTermGPAs, computeEffectiveAttendance, MIN_ATTENDANCE_PERCENT, SCHOLARSHIP_ATTENDANCE_PCT } from '../store/store';
 
 function StatCard({ label, value, sub, color, icon: Icon, to }) {
   const inner = (
@@ -37,7 +37,7 @@ export default function Dashboard() {
       if (!held) return;
       const pct = Math.round((attended / held) * 100);
       if (pct < MIN_ATTENDANCE_PERCENT) alerts.push({ type: 'critical', msg: `${c.code}: ${pct}% attendance — Course may be CANCELLED`, link: '/attendance' });
-      else if (pct < SCHOLARSHIP_ATTENDANCE_PERCENT) alerts.push({ type: 'warning', msg: `${c.code}: ${pct}% — No scholarship eligibility`, link: '/attendance' });
+      else if (pct < SCHOLARSHIP_ATTENDANCE_PCT) alerts.push({ type: 'warning', msg: `${c.code}: ${pct}% — No scholarship eligibility`, link: '/attendance' });
     });
 
     if (cgpa !== null && cgpa < 2.20) alerts.push({ type: 'critical', msg: `CGPA ${cgpa.toFixed(2)} < 2.20 — Probation risk!`, link: '/results' });
