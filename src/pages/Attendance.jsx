@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { store, getAttendanceMarks, MIN_ATTENDANCE_PERCENT, SCHOLARSHIP_ATTENDANCE_PCT, getAllCourses, getProfile } from '../store/store';
+import { store, getAttendanceMarks, MIN_ATTENDANCE_PERCENT, SCHOLARSHIP_ATTENDANCE_PCT, getAllCourses, getProfile, getRoutinePreviewDate, isRoutineHoliday } from '../store/store';
 
 const todayStr = () => new Date().toISOString().split('T')[0];
 const addDays = (d, n) => { 
@@ -21,6 +21,24 @@ function getTeachersForCourseOnDate(schedule, courseId, date) {
   const items = (schedule || []).filter(s => s.courseId === courseId && s.day === dayName);
   const teachers = [...new Set(items.map(s => s.teacherName).filter(Boolean))];
   return teachers;
+}
+
+function getTeachersForCourse(schedule, courseId) {
+  const teachers = [...new Set((schedule || [])
+    .filter(s => s.courseId === courseId)
+    .map(s => s.teacherName)
+    .filter(Boolean))];
+  return teachers;
+}
+
+function getDisplayCourseName(course) {
+  const raw = course?.name || '';
+  const cleaned = raw
+    .replace(/^\s*[A-Z]{2,6}\s*\d{3,4}\s*[-—:]\s*/i, '')
+    .replace(/\b[A-Z]{2,6}\s*\d{3,4}\b/g, '')
+    .replace(/\s{2,}/g, ' ')
+    .trim();
+  return cleaned || raw;
 }
 
 // Compute attendance from daily logs for a specific (course, teacher) pair
@@ -74,13 +92,25 @@ function getScheduleCoursesForDate(schedule, date) {
 }
 
 // ── Daily Log ─────────────────────────────────────────────────────────────
-function DailyLog({ courses, logs, setLogs, schedule }) {
+function DailyLog({ courses, logs, setLogs, schedule, scheduleSettings, combinedMode }) {
   const [date, setDate] = useState(todayStr());
   const [showGiveAttendance, setShowGiveAttendance] = useState(false);
   const dayLog = logs[date] || {};
   const isToday = date === todayStr();
   const dayName = new Date(date + 'T00:00:00').getDay();
   const isFriday = dayName === 5;
+  const isHolidayDate = isRoutineHoliday(date, scheduleSettings?.holidayDates || []);
+  const isTodayHoliday = isToday && isHolidayDate;
+
+  function holidayLabel(d) {
+    const labels = scheduleSettings?.holidayLabels || {};
+    const types = scheduleSettings?.holidayTypes || {};
+    if (labels[d]) return labels[d];
+    if (types[d] === 'eid') return "Eid Mubarak";
+    const dow = new Date(d + 'T00:00:00').getDay();
+    if (dow === 5) return "Jumu'ah Mubarak";
+    return 'Happy Holiday';
+  }
   const scheduledCourses = getScheduleCoursesForDate(schedule, date);
   const scheduledCourseIds = scheduledCourses.map(item => item.courseId);
   const visibleCourses = scheduledCourseIds.length
@@ -103,13 +133,17 @@ function DailyLog({ courses, logs, setLogs, schedule }) {
   }, []);
 
   const goToPrevClass = () => {
-    // Find next past date from current date (excluding Fri-Sat)
+    // Jump to the previous eligible date, skipping Friday/Saturday.
+    if (allPastDates.length === 0) return;
+
     const idx = allPastDates.indexOf(date);
-    if (idx >= 0 && idx < allPastDates.length - 1) {
-      setDate(allPastDates[idx + 1]);
-    } else if (idx === -1 && date < todayStr()) {
-      // Current date is in past but not in list (might be Fri-Sat), go to first available past date
+    if (idx === -1) {
       setDate(allPastDates[0]);
+      return;
+    }
+
+    if (idx < allPastDates.length - 1) {
+      setDate(allPastDates[idx + 1]);
     }
   };
 
@@ -127,26 +161,59 @@ function DailyLog({ courses, logs, setLogs, schedule }) {
 
   const markedTeachers = useMemo(() => {
     let total = 0, marked = 0;
-    let coursesToCount = visibleCourses.length > 0 ? visibleCourses : courses;
+    let coursesToCount = (visibleCourses.length > 0 ? visibleCourses : courses).filter(c => !isAutoFull(c.type));
     if (showGiveAttendance && scheduledCourses.length === 0) {
       coursesToCount = courses.filter(c => !isAutoFull(c.type));
     }
+    if (isTodayHoliday) return { marked: 0, total: 0 };
     coursesToCount.forEach(c => {
-      const teachers = getTeachersForCourseOnDate(schedule, c.id, date);
+      const teachers = getTeachersForCourse(schedule, c.id);
       const displayTeachers = teachers.length > 0 ? teachers : [''];
-      if (!isAutoFull(c.type)) {
-        displayTeachers.forEach(t => {
-          total++;
-          const key = `${c.id}_${t || ''}`;
-          if (dayLog[key]) marked++;
-        });
-      } else {
+      displayTeachers.forEach(t => {
         total++;
-        marked++;
-      }
+        const key = `${c.id}_${t || ''}`;
+        if (dayLog[key]) marked++;
+      });
     });
     return { marked, total };
-  }, [visibleCourses, dayLog, date, schedule, courses, showGiveAttendance, scheduledCourses.length]);
+  }, [visibleCourses, dayLog, date, schedule, courses, showGiveAttendance, scheduledCourses.length, isTodayHoliday]);
+
+  const cardsToShow = useMemo(() => {
+    let coursesToShow = (visibleCourses.length > 0 ? visibleCourses : courses).filter(c => !isAutoFull(c.type));
+    if (showGiveAttendance && scheduledCourses.length === 0) {
+      coursesToShow = courses.filter(c => !isAutoFull(c.type));
+    }
+    if (isTodayHoliday) return [];
+
+    const cards = [];
+    coursesToShow.forEach(course => {
+      const teachers = getTeachersForCourse(schedule, course.id);
+      const displayTeachers = teachers.length > 0 ? teachers : [''];
+      displayTeachers.forEach(teacher => {
+        const key = `${course.id}_${teacher || ''}`;
+        const status = dayLog[key];
+        cards.push({ course, teacher, key, status });
+      });
+    });
+
+    return cards.sort((a, b) => {
+      const aDone = Boolean(a.status);
+      const bDone = Boolean(b.status);
+      if (aDone !== bDone) return aDone ? 1 : -1;
+      const byCourse = (a.course.name || '').localeCompare(b.course.name || '');
+      if (byCourse !== 0) return byCourse;
+      return (a.teacher || '').localeCompare(b.teacher || '');
+    });
+  }, [visibleCourses, courses, schedule, dayLog, showGiveAttendance, scheduledCourses.length, isTodayHoliday]);
+
+  if (combinedMode) {
+    return (
+      <div className="card" style={{ marginBottom: 16, padding: 14 }}>
+        <div style={{ fontWeight: 700, fontSize: 15 }}>Daily Log disabled</div>
+        <div style={{ color: 'var(--muted)', marginTop: 6 }}>Combined Input is ON — use Summary to enter attendance.</div>
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -194,7 +261,7 @@ function DailyLog({ courses, logs, setLogs, schedule }) {
         )}
       </div>
 
-      {isFriday && (
+      {isFriday && !isTodayHoliday && (
         <div className="alert-warning mb-3" style={{ fontSize: 13 }}>
           🕌 Friday — Jumu'ah day. Remember to check which classes are held.
         </div>
@@ -204,7 +271,13 @@ function DailyLog({ courses, logs, setLogs, schedule }) {
         <div className="empty-state"><div className="icon">📚</div><p>Add courses first.</p></div>
       )}
 
-      {courses.length > 0 && scheduledCourses.length === 0 && (
+      {isTodayHoliday && (
+        <div className="card" style={{ marginBottom: 16, padding: '14px 16px', fontSize: 16, fontWeight: 700, textAlign: 'center' }}>
+          🎉 {holidayLabel(date)}
+        </div>
+      )}
+
+      {courses.length > 0 && scheduledCourses.length === 0 && !isTodayHoliday && (
         <div style={{ marginBottom: 16, padding: '12px', backgroundColor: 'rgba(251, 191, 36, 0.08)', borderRadius: 8, fontSize: 13, color: 'var(--muted)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <span>📅 No scheduled classes today, but you can mark attendance manually.</span>
           <button onClick={() => setShowGiveAttendance(!showGiveAttendance)} style={{
@@ -217,28 +290,21 @@ function DailyLog({ courses, logs, setLogs, schedule }) {
       )}
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-        {((() => {
-          let coursesToShow = visibleCourses.length > 0 ? visibleCourses : courses;
-          // If showing manual attendance and no scheduled classes, show only theory courses
-          if (showGiveAttendance && scheduledCourses.length === 0) {
-            coursesToShow = courses.filter(c => !isAutoFull(c.type));
-          }
-          return coursesToShow;
-        })()).map(c => {
-          const todayItems = scheduledCourses.find(item => item.courseId === c.id)?.items || [];
-          const teachers = getTeachersForCourseOnDate(schedule, c.id, date);
-          // If no teachers scheduled, still allow marking with empty teacher (for manual entry)
-          const displayTeachers = teachers.length > 0 ? teachers : [''];
-          const isAuto = isAutoFull(c.type);
+        {cardsToShow.map(card => {
+          const todayItems = scheduledCourses.find(item => item.courseId === card.course.id)?.items || [];
+          const teacherLabel = card.teacher || (card.auto ? 'Auto' : 'Unassigned');
 
           return (
-            <div key={c.id} className="card" style={{
+            <div key={card.key || card.course.id} className="card" style={{
               padding: '14px 18px',
               borderLeft: `4px solid var(--border)`,
             }}>
               <div style={{ marginBottom: 12 }}>
-                <div style={{ fontWeight: 700, fontSize: 15 }}>{c.code} — {c.name}</div>
-                <div style={{ fontSize: 13, color: 'var(--muted)' }}>{c.type || 'Theory'}</div>
+                <div style={{ fontWeight: 700, fontSize: 15 }}>{getDisplayCourseName(card.course)}</div>
+                <div style={{ fontSize: 13, color: 'var(--muted)' }}>{teacherLabel}</div>
+                {card.course.type && (
+                  <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 2 }}>{card.course.type}</div>
+                )}
                 {todayItems.length > 0 && (
                   <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 3 }}>
                     {todayItems.map(item => `${item.slot}${item.displayName ? ` — ${item.displayName}` : ''}`).join(' · ')}
@@ -246,54 +312,29 @@ function DailyLog({ courses, logs, setLogs, schedule }) {
                 )}
               </div>
 
-              {isAuto ? (
-                <div style={{
-                  padding: '10px 14px',
-                  background: 'rgba(34,197,94,0.08)',
-                  border: '1px solid rgba(34,197,94,0.3)',
-                  borderRadius: 8,
-                  fontSize: 13,
-                  color: 'var(--success)',
-                  fontWeight: 600,
-                }}>
-                  ✓ {c.type} — 100% Attendance (Auto)
-                </div>
-              ) : (
-                <div style={{ display: 'grid', gridTemplateColumns: `repeat(${Math.min(displayTeachers.length, 2)}, 1fr)`, gap: 10 }}>
-                  {displayTeachers.map(teacher => {
-                    const key = `${c.id}_${teacher || ''}`;
-                    const status = dayLog[key];
+              {
+                <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+                  {[
+                    { val: 'present', label: '✓ Present', on: '#dcfce7', off: 'var(--inputBg)', textOn: '#166534', textOff: 'var(--muted)', border: '#86efac' },
+                    { val: 'absent',  label: '✗ Absent',  on: '#fee2e2', off: 'var(--inputBg)', textOn: '#991b1b', textOff: 'var(--muted)', border: '#fca5a5' },
+                    { val: 'holiday', label: '⛔ No Class', on: '#fef9c3', off: 'var(--inputBg)', textOn: '#854d0e', textOff: 'var(--muted)', border: '#fde68a' },
+                  ].map(opt => {
+                    const active = card.status === opt.val;
                     return (
-                      <div key={teacher || 'unknown'} style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-                        <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--muted)' }}>
-                          {teacher ? teacher : (todayItems.length === 0 ? '📝 Attendance' : 'Unassigned')}
-                        </div>
-                        <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
-                          {[
-                            { val: 'present', label: '✓ Present', on: '#dcfce7', off: 'var(--inputBg)', textOn: '#166534', textOff: 'var(--muted)', border: '#86efac' },
-                            { val: 'absent',  label: '✗ Absent',  on: '#fee2e2', off: 'var(--inputBg)', textOn: '#991b1b', textOff: 'var(--muted)', border: '#fca5a5' },
-                            { val: 'holiday', label: '⛔ No Class', on: '#fef9c3', off: 'var(--inputBg)', textOn: '#854d0e', textOff: 'var(--muted)', border: '#fde68a' },
-                          ].map(opt => {
-                            const active = status === opt.val;
-                            return (
-                              <button key={opt.val} onClick={() => mark(c.id, teacher, opt.val)} style={{
-                                padding: '6px 12px', borderRadius: 6, cursor: 'pointer', fontWeight: 700,
-                                fontSize: 12, fontFamily: 'Sora, sans-serif',
-                                background: active ? opt.on : opt.off,
-                                color: active ? opt.textOn : opt.textOff,
-                                border: `2px solid ${active ? opt.border : 'var(--border)'}`,
-                                transition: 'all 0.15s',
-                                flex: 1,
-                                minWidth: 0,
-                              }}>{opt.label}</button>
-                            );
-                          })}
-                        </div>
-                      </div>
+                      <button key={opt.val} onClick={() => mark(card.course.id, card.teacher, opt.val)} style={{
+                        padding: '6px 12px', borderRadius: 6, cursor: 'pointer', fontWeight: 700,
+                        fontSize: 12, fontFamily: 'Sora, sans-serif',
+                        background: active ? opt.on : opt.off,
+                        color: active ? opt.textOn : opt.textOff,
+                        border: `2px solid ${active ? opt.border : 'var(--border)'}`,
+                        transition: 'all 0.15s',
+                        flex: 1,
+                        minWidth: 0,
+                      }}>{opt.label}</button>
                     );
                   })}
                 </div>
-              )}
+              }
             </div>
           );
         })}
@@ -307,144 +348,154 @@ function DailyLog({ courses, logs, setLogs, schedule }) {
 }
 
 // ── Summary ───────────────────────────────────────────────────────────────
-function Summary({ courses, logs, schedule }) {
+function Summary({ courses, logs, schedule, combinedMode, combinedData, toggleCombinedMode, updateCombined }) {
+
+  const theoryCourses = (courses || []).filter(c => !isAutoFull(c.type));
+
+  const courseCards = theoryCourses.map(c => {
+    const teachers = getTeachersForCourse(schedule, c.id);
+    const displayTeachers = teachers.length > 0 ? teachers : [''];
+
+    const stats = {};
+    displayTeachers.forEach(teacher => {
+      if (combinedMode) {
+        const key = `${c.id}_${teacher || ''}`;
+        const held = Number(combinedData[key]?.held || 0);
+        const attended = Number(combinedData[key]?.attended || 0);
+        const pct = held > 0 ? Math.round((attended / held) * 100) : null;
+        stats[teacher || ''] = { held, attended, percentage: pct, source: 'combined' };
+      } else {
+        stats[teacher || ''] = getEffective(c.id, teacher, logs, c.type);
+      }
+    });
+
+    let totalHeld = 0, totalAttended = 0;
+    Object.values(stats).forEach(s => {
+      totalHeld += s.held;
+      totalAttended += s.attended;
+    });
+
+    const pct = totalHeld > 0 ? Math.round((totalAttended / totalHeld) * 100) : null;
+    const attMarks = pct !== null ? getAttendanceMarks(pct) : null;
+    const need75 = totalHeld ? Math.max(0, Math.ceil(totalHeld * 0.75) - totalAttended) : null;
+    const canMiss = totalHeld && pct >= 60 ? Math.max(0, totalAttended - Math.ceil(totalHeld * 0.60)) : null;
+    const completed = displayTeachers.every(teacher => {
+      const s = stats[teacher || ''];
+      return s.held > 0 || s.attended > 0;
+    });
+
+    return { course: c, stats, displayTeachers, totalHeld, totalAttended, pct, attMarks, need75, canMiss, completed };
+  }).sort((a, b) => {
+    if (a.completed !== b.completed) return a.completed ? 1 : -1;
+    return (a.course.name || '').localeCompare(b.course.name || '');
+  });
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-      {courses.map(c => {
-        const isAuto = isAutoFull(c.type);
+      <div className="card" style={{ padding: 14, display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
+        <div style={{ fontSize: 13, color: 'var(--muted)' }}>
+          Sessional/Lab cards are hidden here (always 100% auto). Use this page for theory attendance only.
+        </div>
+        <button className="btn btn-ghost" onClick={toggleCombinedMode}>
+          {combinedMode ? 'Combined Input: ON' : 'Combined Input: OFF'}
+        </button>
+      </div>
 
-        // If session/lab, show 100%
-        if (isAuto) {
-          return (
-            <div key={c.id} className="card" style={{ padding: 18 }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 14, flexWrap: 'wrap', gap: 10 }}>
-                <div>
-                  <div style={{ fontWeight: 700, fontSize: 15 }}>{c.code} — {c.name}</div>
-                  <div style={{ fontSize: 13, color: 'var(--muted)' }}>Y{c.year} T{c.term} · {c.credits}cr · {c.type}</div>
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                  <div style={{ textAlign: 'center' }}>
-                    <div style={{ fontSize: 11, color: 'var(--muted)' }}>Marks</div>
-                    <div style={{ fontSize: 20, fontWeight: 800, color: 'var(--success)' }}>10/10</div>
-                  </div>
-                  <div style={{ textAlign: 'center' }}>
-                    <div style={{ fontSize: 11, color: 'var(--muted)' }}>Attendance</div>
-                    <div style={{ fontSize: 28, fontWeight: 900, color: 'var(--success)', letterSpacing: '-0.03em' }}>100%</div>
-                  </div>
-                </div>
-              </div>
-              <div className="alert-success" style={{ padding: '8px 12px', fontSize: 13 }}>
-                ✓ {c.type} — 100% Attendance (Automatic)
+      {courseCards.map(({ course: c, stats, displayTeachers, totalHeld, totalAttended, pct, attMarks, need75, canMiss }) => (
+        <div key={c.id} className="card" style={{ padding: 18 }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 14, flexWrap: 'wrap', gap: 10 }}>
+            <div>
+              <div style={{ fontWeight: 700, fontSize: 15 }}>{c.code} — {c.name}</div>
+              <div style={{ fontSize: 13, color: 'var(--muted)' }}>Y{c.year} T{c.term} · {c.credits}cr
+                {totalHeld > 0 && <span style={{ color: 'var(--accent)', marginLeft: 8 }}>● {combinedMode ? 'from combined input' : 'from daily log'}</span>}
               </div>
             </div>
-          );
-        }
-
-        // Theory: calculate per-teacher attendance
-        const teachers = useMemo(() => {
-          const set = new Set();
-          (schedule || []).forEach(item => {
-            if (item.courseId === c.id && item.teacherName) set.add(item.teacherName);
-          });
-          return [...set];
-        }, [c.id, schedule]);
-
-        const stats = {};
-        teachers.forEach(teacher => {
-          stats[teacher] = getEffective(c.id, teacher, logs, c.type);
-        });
-
-        // Aggregate: total held, total attended across all teachers
-        let totalHeld = 0, totalAttended = 0;
-        Object.values(stats).forEach(s => {
-          totalHeld += s.held;
-          totalAttended += s.attended;
-        });
-
-        const pct = totalHeld > 0 ? Math.round((totalAttended / totalHeld) * 100) : null;
-        const attMarks = pct !== null ? getAttendanceMarks(pct) : null;
-        const need75 = totalHeld ? Math.max(0, Math.ceil(totalHeld * 0.75) - totalAttended) : null;
-        const canMiss = totalHeld && pct >= 60 ? Math.max(0, totalAttended - Math.ceil(totalHeld * 0.60)) : null;
-
-        return (
-          <div key={c.id} className="card" style={{ padding: 18 }}>
-            {/* Header */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 14, flexWrap: 'wrap', gap: 10 }}>
-              <div>
-                <div style={{ fontWeight: 700, fontSize: 15 }}>{c.code} — {c.name}</div>
-                <div style={{ fontSize: 13, color: 'var(--muted)' }}>Y{c.year} T{c.term} · {c.credits}cr
-                  {totalHeld > 0 && <span style={{ color: 'var(--accent)', marginLeft: 8 }}>● from daily log</span>}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+              {attMarks !== null && (
+                <div style={{ textAlign: 'center' }}>
+                  <div style={{ fontSize: 11, color: 'var(--muted)' }}>Marks</div>
+                  <div style={{ fontSize: 20, fontWeight: 800, color: 'var(--accent)' }}>{attMarks}/10</div>
                 </div>
-              </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                {attMarks !== null && (
-                  <div style={{ textAlign: 'center' }}>
-                    <div style={{ fontSize: 11, color: 'var(--muted)' }}>Marks</div>
-                    <div style={{ fontSize: 20, fontWeight: 800, color: 'var(--accent)' }}>{attMarks}/10</div>
-                  </div>
-                )}
-                {pct !== null && (
-                  <div style={{ textAlign: 'center' }}>
-                    <div style={{ fontSize: 11, color: 'var(--muted)' }}>Attendance</div>
-                    <div style={{ fontSize: 28, fontWeight: 900, color: attColor(pct), letterSpacing: '-0.03em' }}>{pct}%</div>
-                  </div>
-                )}
-              </div>
+              )}
+              {pct !== null && (
+                <div style={{ textAlign: 'center' }}>
+                  <div style={{ fontSize: 11, color: 'var(--muted)' }}>Attendance</div>
+                  <div style={{ fontSize: 28, fontWeight: 900, color: attColor(pct), letterSpacing: '-0.03em' }}>{pct}%</div>
+                </div>
+              )}
             </div>
-
-            {/* Teachers breakdown */}
-            {teachers.length > 0 && (
-              <div style={{ marginBottom: 12, paddingBottom: 12, borderBottom: '1px solid var(--border)' }}>
-                <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--muted)', marginBottom: 8 }}>Per Teacher:</div>
-                <div style={{ display: 'grid', gridTemplateColumns: `repeat(${Math.min(teachers.length, 2)}, 1fr)`, gap: 8 }}>
-                  {teachers.map(teacher => {
-                    const s = stats[teacher];
-                    const tp = s.held > 0 ? Math.round((s.attended / s.held) * 100) : 0;
-                    return (
-                      <div key={teacher} style={{ padding: '8px', background: 'var(--inputBg)', borderRadius: 6, fontSize: 12 }}>
-                        <div style={{ fontWeight: 700, marginBottom: 4 }}>{teacher}</div>
-                        <div style={{ color: 'var(--muted)' }}>{s.attended}/{s.held} ({tp}%)</div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            )}
-
-            {/* Progress bar */}
-            {pct !== null && (
-              <div style={{ marginBottom: 10 }}>
-                <div className="progress-bar" style={{ height: 10 }}>
-                  <div className="progress-fill" style={{ width: `${Math.min(100, pct)}%`, background: attColor(pct) }} />
-                </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 4, fontSize: 11, color: 'var(--muted)' }}>
-                  <span>{totalAttended}/{totalHeld} classes</span>
-                  {pct < 75 && need75 > 0 && <span style={{ color: 'var(--warning)' }}>Need {need75} more for 75%</span>}
-                  {pct >= 75 && canMiss !== null && <span style={{ color: 'var(--success)' }}>Can miss {canMiss} more (stay ≥60%)</span>}
-                </div>
-              </div>
-            )}
-
-            {/* Status badge */}
-            {pct !== null && (
-              <div>
-                {pct < MIN_ATTENDANCE_PERCENT
-                  ? <div className="alert-critical" style={{ padding: '8px 12px', fontSize: 13 }}>🔴 Below 60% — Course will be CANCELLED (Art. 11.3)</div>
-                  : pct < SCHOLARSHIP_ATTENDANCE_PCT
-                  ? <div className="alert-warning" style={{ padding: '8px 12px', fontSize: 13 }}>⚠ Below 75% — Not eligible for scholarship (Art. 14.2)</div>
-                  : <div className="alert-success" style={{ padding: '8px 12px', fontSize: 13 }}>✓ Good attendance</div>
-                }
-              </div>
-            )}
-
-            {totalHeld === 0 && (
-              <div style={{ fontSize: 12, color: 'var(--muted)', textAlign: 'center', padding: '12px' }}>
-                No daily log entries yet. Start marking attendance in the Daily Log tab.
-              </div>
-            )}
           </div>
-        );
-      })}
+
+          <div style={{ marginBottom: 12, paddingBottom: 12, borderBottom: '1px solid var(--border)' }}>
+            <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--muted)', marginBottom: 8 }}>Per Teacher:</div>
+            <div style={{ display: 'grid', gridTemplateColumns: `repeat(${Math.min(displayTeachers.length, 2)}, 1fr)`, gap: 8 }}>
+              {displayTeachers.map(teacher => {
+                const s = stats[teacher || ''];
+                const tp = s.held > 0 ? Math.round((s.attended / s.held) * 100) : 0;
+                return (
+                  <div key={teacher || 'unknown'} style={{ padding: '8px', background: 'var(--inputBg)', borderRadius: 6, fontSize: 12 }}>
+                    <div style={{ fontWeight: 700, marginBottom: 6 }}>{teacher || 'Unassigned'}</div>
+                    {combinedMode ? (
+                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 6 }}>
+                        <input
+                          type="number"
+                          min="0"
+                          value={s.held}
+                          onChange={e => updateCombined(c.id, teacher, 'held', e.target.value)}
+                          placeholder="Held"
+                        />
+                        <input
+                          type="number"
+                          min="0"
+                          max={s.held}
+                          value={s.attended}
+                          onChange={e => updateCombined(c.id, teacher, 'attended', e.target.value)}
+                          placeholder="Attended"
+                        />
+                      </div>
+                    ) : (
+                      <div style={{ color: 'var(--muted)' }}>{s.attended}/{s.held} ({tp}%)</div>
+                    )}
+                    {combinedMode && <div style={{ color: 'var(--muted)', marginTop: 4 }}>{s.attended}/{s.held} ({tp}%)</div>}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {pct !== null && (
+            <div style={{ marginBottom: 10 }}>
+              <div className="progress-bar" style={{ height: 10 }}>
+                <div className="progress-fill" style={{ width: `${Math.min(100, pct)}%`, background: attColor(pct) }} />
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 4, fontSize: 11, color: 'var(--muted)' }}>
+                <span>{totalAttended}/{totalHeld} classes</span>
+                {pct < 75 && need75 > 0 && <span style={{ color: 'var(--warning)' }}>Need {need75} more for 75%</span>}
+                {pct >= 75 && canMiss !== null && <span style={{ color: 'var(--success)' }}>Can miss {canMiss} more (stay ≥60%)</span>}
+              </div>
+            </div>
+          )}
+
+          {pct !== null && (
+            <div>
+              {pct < MIN_ATTENDANCE_PERCENT
+                ? <div className="alert-critical" style={{ padding: '8px 12px', fontSize: 13 }}>🔴 Below 60% — Course will be CANCELLED (Art. 11.3)</div>
+                : pct < SCHOLARSHIP_ATTENDANCE_PCT
+                ? <div className="alert-warning" style={{ padding: '8px 12px', fontSize: 13 }}>⚠ Below 75% — Not eligible for scholarship (Art. 14.2)</div>
+                : <div className="alert-success" style={{ padding: '8px 12px', fontSize: 13 }}>✓ Good attendance</div>
+              }
+            </div>
+          )}
+
+          {totalHeld === 0 && (
+            <div style={{ fontSize: 12, color: 'var(--muted)', textAlign: 'center', padding: '12px' }}>
+              {combinedMode
+                ? 'No combined input yet. Fill held/attended for each teacher above.'
+                : 'No daily log entries yet. Start marking attendance in the Daily Log tab.'}
+            </div>
+          )}
+        </div>
+      ))}
     </div>
   );
 }
@@ -456,9 +507,49 @@ export default function Attendance() {
   const [logs, setLogs] = useState(() => store.get('attLogs') || {});
   const [tab, setTab] = useState('daily');
   const schedule = useMemo(() => store.get('schedule') || [], []);
+  const scheduleSettings = useMemo(() => store.get('scheduleSettings') || {}, []);
+  const todayDate = todayStr();
+  const todayDayName = new Date(`${todayDate}T00:00:00`).toLocaleDateString('en-US', { weekday: 'long' });
+  const isTodayHoliday = isRoutineHoliday(todayDate, scheduleSettings.holidayDates || []);
 
-  const todayDayName = new Date().toLocaleDateString('en-US', { weekday: 'long' });
-  const todaySchedule = schedule.filter(s => s.day === todayDayName && courses.some(c => c.id === s.courseId));
+  const [combinedMode, setCombinedMode] = useState(() => store.get('attCombinedMode') || false);
+  const [combinedData, setCombinedData] = useState(() => store.get('attCombinedData') || {});
+
+  const toggleCombinedMode = () => {
+    const next = !combinedMode;
+    setCombinedMode(next);
+    store.set('attCombinedMode', next);
+  };
+
+  const updateCombined = (courseId, teacher, field, value) => {
+    const key = `${courseId}_${teacher || ''}`;
+    const safe = Math.max(0, Number(value) || 0);
+    const next = {
+      ...combinedData,
+      [key]: {
+        held: Number(combinedData[key]?.held || 0),
+        attended: Number(combinedData[key]?.attended || 0),
+        [field]: safe,
+      },
+    };
+    if (next[key].attended > next[key].held) next[key].attended = next[key].held;
+    setCombinedData(next);
+    store.set('attCombinedData', next);
+  };
+
+  const previewDate = getRoutinePreviewDate(scheduleSettings.holidayDates || []);
+  const previewDay = new Date(`${previewDate}T00:00:00`).toLocaleDateString('en-US', { weekday: 'long' });
+  const todaySchedule = schedule.filter(s => s.day === previewDay && courses.some(c => c.id === s.courseId));
+
+  function holidayLabelMain(d) {
+    const labels = scheduleSettings?.holidayLabels || {};
+    const types = scheduleSettings?.holidayTypes || {};
+    if (labels[d]) return labels[d];
+    if (types[d] === 'eid') return 'Eid Mubarak';
+    const dow = new Date(d + 'T00:00:00').getDay();
+    if (dow === 5) return "Jumu'ah Mubarak";
+    return 'Happy Holiday';
+  }
 
   return (
     <div className="page-enter page-container">
@@ -471,7 +562,8 @@ export default function Attendance() {
 
       {todaySchedule.length > 0 && (
         <div className="card" style={{ marginBottom: 16 }}>
-          <div style={{ fontWeight: 700, fontSize: 13, marginBottom: 8 }}>Today from Schedule</div>
+          <div style={{ fontWeight: 700, fontSize: 13, marginBottom: 8 }}>Routine Preview</div>
+          <div style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 10 }}>Today · {new Date().toLocaleDateString('en-US', { weekday: 'long' })} · Effective · {previewDay}</div>
           <div style={{ display: 'grid', gap: 8 }}>
             {todaySchedule.slice().sort((a, b) => a.slot.localeCompare(b.slot)).map(item => {
               const course = courses.find(c => c.id === item.courseId);
@@ -493,7 +585,13 @@ export default function Attendance() {
       )}
       {todaySchedule.length === 0 && (
         <div className="card" style={{ marginBottom: 16, color: 'var(--muted)', fontSize: 13 }}>
-          No class today.
+          {isTodayHoliday ? (
+            <div style={{ padding: '10px 12px', borderRadius: 8, textAlign: 'center', fontWeight: 700 }}>
+              🎉 {holidayLabelMain(todayDate)}
+            </div>
+          ) : (
+            'No class today.'
+          )}
         </div>
       )}
 
@@ -504,8 +602,8 @@ export default function Attendance() {
       </div>
 
       {tab === 'daily'
-        ? <DailyLog courses={courses} logs={logs} setLogs={setLogs} schedule={schedule} />
-        : <Summary courses={courses} logs={logs} schedule={schedule} />
+        ? <DailyLog courses={courses} logs={logs} setLogs={setLogs} schedule={schedule} scheduleSettings={scheduleSettings} combinedMode={combinedMode} />
+        : <Summary courses={courses} logs={logs} schedule={schedule} combinedMode={combinedMode} combinedData={combinedData} toggleCombinedMode={toggleCombinedMode} updateCombined={updateCombined} />
       }
 
       {/* Slab reference */}

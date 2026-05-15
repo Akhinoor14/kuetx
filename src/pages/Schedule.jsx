@@ -1,6 +1,6 @@
-import { useMemo, useState } from 'react';
-import { Plus, Settings2, Clock3, PencilLine, Copy } from 'lucide-react';
-import { store, uid, getAllCourses, getProfile, getCurrentTermKey } from '../store/store';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { Plus, Settings2, Clock3, PencilLine, Copy, CalendarDays, X } from 'lucide-react';
+import { store, uid, getAllCourses, getProfile, getCurrentTermKey, getRoutinePreviewDate, isRoutineHoliday } from '../store/store';
 
 const DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday'];
 const DAY_INDEX = { Sunday: 0, Monday: 1, Tuesday: 2, Wednesday: 3, Thursday: 4 };
@@ -97,9 +97,12 @@ const normalizeSettings = (raw) => ({
   ...(raw || {}),
   customSlots: Array.isArray(raw?.customSlots) && raw.customSlots.length ? raw.customSlots : DEFAULT_CUSTOM,
   messageFormat: MESSAGE_FORMATS.some(f => f.id === raw?.messageFormat) ? raw.messageFormat : DEFAULT_SETTINGS.messageFormat,
+  holidayDates: Array.isArray(raw?.holidayDates) ? [...new Set(raw.holidayDates)].filter(Boolean).sort() : [],
 });
 
 const normalizeSlotKey = (value) => String(value || '').trim();
+
+const dateToDayName = (dateStr) => new Date(`${dateStr}T00:00:00`).toLocaleDateString('en-US', { weekday: 'long' });
 
 const parseTimeToMinutes = (value) => {
   let cleanValue = String(value || '').trim().replace(/\s+break\s*$/i, '').trim();
@@ -225,7 +228,11 @@ export default function Schedule() {
   const [editingId, setEditingId] = useState(null);
   const [editingSettings, setEditingSettings] = useState(false);
   const [importMessage, setImportMessage] = useState('');
-  const [selectedDay, setSelectedDay] = useState(() => getTomorrowDay());
+  const [selectedDay, setSelectedDay] = useState(() => dateToDayName(getRoutinePreviewDate((store.get('scheduleSettings')?.holidayDates) || [])));
+  const [holidaySetupOpen, setHolidaySetupOpen] = useState(false);
+  const [holidayDate, setHolidayDate] = useState('');
+  const [nowTick, setNowTick] = useState(() => Date.now());
+  const autoPreviewDayRef = useRef(getTomorrowDay());
   const [form, setForm] = useState({
     day: 'Sunday',
     slot: TIME_MODELS['50min'].slots[0],
@@ -239,6 +246,27 @@ export default function Schedule() {
 
   const activeTemplate = TIME_MODELS[settings.modelId] || TIME_MODELS['50min'];
   const slotList = settings.modelId === 'custom' ? settings.customSlots : activeTemplate.slots;
+  const holidayDates = settings.holidayDates || [];
+
+  useEffect(() => {
+    const timer = setInterval(() => setNowTick(Date.now()), 60000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const autoPreviewDate = useMemo(
+    () => getRoutinePreviewDate(holidayDates, new Date(nowTick)),
+    [holidayDates, nowTick]
+  );
+  const autoPreviewDay = useMemo(
+    () => dateToDayName(autoPreviewDate),
+    [autoPreviewDate]
+  );
+
+  useEffect(() => {
+    const previousAutoPreviewDay = autoPreviewDayRef.current;
+    autoPreviewDayRef.current = autoPreviewDay;
+    setSelectedDay(current => (current === previousAutoPreviewDay ? autoPreviewDay : current));
+  }, [autoPreviewDay]);
 
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
 
@@ -404,9 +432,28 @@ export default function Schedule() {
   const today = DAYS[todayIndex] || 'Sunday';
   const todayClasses = schedule.filter(s => s.day === today);
   const selectedClasses = schedule.filter(s => s.day === selectedDay);
-  const selectedDayTitle = selectedDay === today ? `Today · ${selectedDay}` : selectedDay;
+  const currentCalendarDay = dateToDayName(new Date().toISOString().split('T')[0]);
   const selectedFormatLabel = MESSAGE_FORMATS.find(format => format.id === settings.messageFormat)?.label || 'Plain';
   const selectedScheduleText = buildDailyText(selectedDay, selectedClasses, getCourse, settings.messageFormat);
+
+  const saveHolidayDates = (nextDates) => {
+    persistSettings({ ...settings, holidayDates: [...new Set(nextDates)].sort() });
+  };
+
+  const addHolidayDate = () => {
+    if (!holidayDate) return;
+    if (isRoutineHoliday(holidayDate, holidayDates)) {
+      saveHolidayDates([...holidayDates, holidayDate]);
+      setHolidayDate('');
+      return;
+    }
+    saveHolidayDates([...holidayDates, holidayDate]);
+    setHolidayDate('');
+  };
+
+  const removeHolidayDate = (value) => {
+    saveHolidayDates(holidayDates.filter(date => date !== value));
+  };
 
   const copySelectedSchedule = async () => {
     try {
@@ -452,6 +499,9 @@ export default function Schedule() {
           <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', justifyContent: 'flex-end' }}>
             <button className="btn btn-ghost" onClick={() => setEditingSettings(v => !v)}>
               <Settings2 size={13} /> Settings
+            </button>
+            <button className="btn btn-ghost" onClick={() => setHolidaySetupOpen(v => !v)}>
+              <CalendarDays size={13} /> Holiday Setup
             </button>
             <button className="btn btn-primary" onClick={() => { setEditingId(null); resetForm(); setAdding(true); }}>
               <Plus size={13} /> Add Class
@@ -543,6 +593,46 @@ export default function Schedule() {
                 />
               </div>
             )}
+
+            <div style={{ marginTop: 10, padding: 12, border: '1px solid var(--border)', borderRadius: 10, background: 'var(--bg)' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', gap: 10, alignItems: 'center', flexWrap: 'wrap', marginBottom: 8 }}>
+                <div>
+                  <div style={{ fontSize: 13, fontWeight: 700 }}>Holiday Calendar</div>
+                  <div style={{ fontSize: 11, color: 'var(--muted)' }}>Friday and Saturday are always holidays. Add extra dates below.</div>
+                </div>
+                <button className="btn btn-ghost" onClick={() => setHolidaySetupOpen(v => !v)}>
+                  {holidaySetupOpen ? 'Hide Calendar' : 'Open Calendar'}
+                </button>
+              </div>
+
+              {holidaySetupOpen && (
+                <div style={{ display: 'grid', gap: 10 }}>
+                  <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                    <input
+                      type="date"
+                      value={holidayDate}
+                      onChange={e => setHolidayDate(e.target.value)}
+                      style={{ minWidth: 170 }}
+                    />
+                    <button className="btn btn-primary" onClick={addHolidayDate} disabled={!holidayDate}>
+                      <CalendarDays size={13} /> Add Holiday
+                    </button>
+                  </div>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+                    {holidayDates.length === 0 ? (
+                      <div style={{ fontSize: 12, color: 'var(--muted)' }}>No extra holidays added yet.</div>
+                    ) : holidayDates.map(date => (
+                      <span key={date} className="tag tag-gray" style={{ display: 'inline-flex', gap: 6, alignItems: 'center' }}>
+                        {date}
+                        <button onClick={() => removeHolidayDate(date)} style={{ border: 'none', background: 'transparent', cursor: 'pointer', color: 'inherit', padding: 0 }}>
+                          <X size={12} />
+                        </button>
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         )}
 
@@ -555,7 +645,9 @@ export default function Schedule() {
             <div style={{ fontSize: 12, color: 'var(--muted)' }}>Select a day to see only that day’s routine.</div>
           </div>
           <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap', justifyContent: 'flex-end' }}>
-            <span className="tag tag-green">{selectedDayTitle}</span>
+            <span className="tag tag-blue">Today · {currentCalendarDay}</span>
+            <span className="tag tag-green">Selected · {selectedDay}</span>
+            <span className="tag tag-gray">Auto · {autoPreviewDay}</span>
             <button
               className="btn"
               onClick={copySelectedSchedule}
@@ -602,7 +694,7 @@ export default function Schedule() {
           ))}
         </div>
         <div style={{ padding: 12, border: '1px solid var(--border)', borderRadius: 12, background: 'var(--bg)' }}>
-          <div style={{ fontWeight: 700, fontSize: 13, marginBottom: 8 }}>{selectedDayTitle} routine</div>
+          <div style={{ fontWeight: 700, fontSize: 13, marginBottom: 8 }}>{selectedDay} routine</div>
           {selectedClasses.length === 0 ? (
             <div style={{ fontSize: 12, color: 'var(--muted)' }}>No classes added yet.</div>
           ) : (

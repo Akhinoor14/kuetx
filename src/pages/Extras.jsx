@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Plus, Trash2, Check, Clock3 } from 'lucide-react';
-import { store, uid, getAllCourses, getDeptSyllabus, getProfile } from '../store/store';
+import { store, uid, getAllCourses, getDeptSyllabus, getProfile, getTermLabelFromKey } from '../store/store';
 
 // ── Tours ────────────────────────────────────────────────────────────────────
 export function Tours() {
@@ -217,237 +217,385 @@ export function Projects() {
 // ── Syllabus ──────────────────────────────────────────────────────────────────
 export function Syllabus() {
   const profile = getProfile();
-  const courses = getAllCourses(profile);
+  const currentTermKey = profile.currentTermKey || '';
+  const termMatch = currentTermKey.match(/Y(\d)T(\d)/);
+  const termYear = termMatch ? Number(termMatch[1]) : null;
+  const termNo = termMatch ? Number(termMatch[2]) : null;
+  
+  // If profile not set, show message
+  if (!profile.dept || !currentTermKey || termYear === null || termNo === null) {
+    return (
+      <div className="page-enter page-container">
+        <div style={{ marginBottom: 24 }}>
+          <h1 style={{ fontSize: 24, fontWeight: 700, marginBottom: 4 }}>📚 Syllabus</h1>
+          <p style={{ fontSize: 13, color: 'var(--muted)' }}>Course syllabus and topics</p>
+        </div>
+        <div className="card" style={{ textAlign: 'center', padding: 40 }}>
+          <div style={{ fontSize: 40, marginBottom: 12 }}>⚙️</div>
+          <p style={{ fontSize: 14, fontWeight: 600, marginBottom: 8 }}>Profile Incomplete</p>
+          <p style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 16 }}>
+            Please set your department and term in Profile first.
+          </p>
+          <a href="/profile" className="btn btn-primary" style={{ display: 'inline-block' }}>
+            Go to Profile
+          </a>
+        </div>
+      </div>
+    );
+  }
+
+  const allCourses = getAllCourses(profile);
   const deptSyllabus = getDeptSyllabus(profile.dept);
-  const [syllabus, setSyllabus] = useState(() => store.get('syllabusProgress') || {});
-  const [selCourse, setSelCourse] = useState(courses[0]?.id || '');
-  const [activeTab, setActiveTab] = useState('courses'); // 'courses' or 'optional'
-  const [editingId, setEditingId] = useState(null); // For editing start/end dates
-  const [editForm, setEditForm] = useState({ startDate: '', endDate: '' });
 
-  useEffect(() => {
-    if (!selCourse && courses[0]?.id) setSelCourse(courses[0].id);
-    if (selCourse && !courses.find(c => c.id === selCourse)) setSelCourse(courses[0]?.id || '');
-  }, [courses, selCourse]);
+  // Filter to only current term
+  const courses = allCourses.filter(c => c.year === termYear && c.term === termNo);
 
-  const selectedCourse = courses.find(c => c.id === selCourse);
-  const topics = syllabus[selCourse] || [];
-  const suggested = selectedCourse ? (deptSyllabus?.courses?.[selectedCourse.code]?.topics || []) : [];
+  const [expandedTopics, setExpandedTopics] = useState({});
+  const [openCourses, setOpenCourses] = useState({});
+  const [compactMode, setCompactMode] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selfStudyData, setSelfStudyData] = useState(() => store.get('selfstudy_academic') || []);
+  
+  const syllabusCourseMap = deptSyllabus?.courses || {};
+  
+  const diaryData = store.get('diary') || store.get('diary_entries') || [];
 
-  // Helper: Get status color based on start/end dates
-  const getTopicStatus = (topic) => {
-    if (!topic.startDate) return 'notStarted'; // Gray - not started
-    if (!topic.endDate) return 'inProgress'; // Light - in progress
-    return 'complete'; // Full - completed
+  // Helper to get course data
+  const getCourseData = (courseCode) => {
+    const courseObj = courses.find(c => c.code === courseCode);
+    const sylData = syllabusCourseMap[courseCode] || {};
+    return { course: courseObj, sylData };
   };
 
-  const getStatusColor = (status) => {
-    const colors = {
-      notStarted: '#999', 
-      inProgress: '#ffc107',   // Light yellow
-      complete: '#28a745'      // Full green
-    };
-    return colors[status] || '#999';
+  const toggleTopic = (courseCode, topicIndex) => {
+    const key = `${courseCode}-${topicIndex}`;
+    setExpandedTopics(prev => ({ ...prev, [key]: !prev[key] }));
   };
 
-  const addTopic = (text) => {
-    if (!text.trim() || !selCourse) return;
+  const toggleCourse = (courseId) => {
+    setOpenCourses(prev => ({ ...prev, [courseId]: !prev[courseId] }));
+  };
+
+  const getTopicStudyInfo = (courseId, topic) => {
+    return selfStudyData.filter(s => s.courseId === courseId && s.topic === topic);
+  };
+
+  const normalizeText = (text) => String(text || '').toLowerCase().replace(/\s+/g, ' ').trim();
+
+  const topicCoveredInDiary = (topic, diaryEntries) => {
+    const t = normalizeText(topic);
+    return diaryEntries.some(entry => {
+      const covered = normalizeText(entry.topics || entry.topic || '');
+      return covered && (covered.includes(t) || t.includes(covered));
+    });
+  };
+
+  const markTopicDone = (courseId, topic) => {
     const today = new Date().toISOString().split('T')[0];
-    const updated = { ...syllabus, [selCourse]: [...topics, { id: uid(), text, startDate: today, endDate: null, done: false, source: 'syllabus' }] };
-    setSyllabus(updated); store.set('syllabusProgress', updated);
-  };
+    const openIndex = selfStudyData.findIndex(s => s.courseId === courseId && s.topic === topic && !s.endDate);
+    let next = [];
 
-  const updateTopicDates = (id, startDate, endDate) => {
-    const updated = { ...syllabus, [selCourse]: topics.map(t => 
-      t.id === id ? { ...t, startDate: startDate || null, endDate: endDate || null, done: !!endDate } : t
-    ) };
-    setSyllabus(updated); store.set('syllabusProgress', updated);
-    setEditingId(null);
-  };
-
-  const toggleTopic = (id) => {
-    const topic = topics.find(t => t.id === id);
-    if (!topic) return;
-    // When toggling complete, set endDate to today if not already set
-    const today = new Date().toISOString().split('T')[0];
-    const endDate = !topic.endDate ? today : null;
-    updateTopicDates(id, topic.startDate || today, endDate);
-  };
-
-  const delTopic = (id) => {
-    const updated = { ...syllabus, [selCourse]: topics.filter(t => t.id !== id) };
-    setSyllabus(updated); store.set('syllabusProgress', updated);
-  };
-
-  const [newTopic, setNewTopic] = useState('');
-  const done = topics.filter(t => t.endDate).length;
-
-  // Group courses by term
-  const coursesByTerm = {};
-  const optionalCourses = [];
-  courses.forEach(c => {
-    if (c.isOptional) optionalCourses.push(c);
-    else {
-      const term = c.termKey;
-      if (!coursesByTerm[term]) coursesByTerm[term] = [];
-      coursesByTerm[term].push(c);
+    if (openIndex >= 0) {
+      next = selfStudyData.map((s, i) => {
+        if (i !== openIndex) return s;
+        return { ...s, startDate: s.startDate || today, endDate: today, done: true };
+      });
+    } else {
+      next = [{
+        id: uid(),
+        courseId,
+        topic,
+        date: today,
+        startDate: today,
+        endDate: today,
+        hours: null,
+        source: 'syllabus',
+        done: true,
+      }, ...selfStudyData];
     }
-  });
 
-  const orderedTerms = ['Y1T1', 'Y1T2', 'Y2T1', 'Y2T2', 'Y3T1', 'Y3T2', 'Y4T1', 'Y4T2'].filter(t => coursesByTerm[t]);
+    setSelfStudyData(next);
+    store.set('selfstudy_academic', next);
+  };
+
+  const goToStudy = (courseId, topic) => {
+    store.set('syllabusStudyPrefill', { courseId, topic });
+    window.location.href = '/self-study';
+  };
+
 
   return (
     <div className="page-enter page-container">
-      <div style={{ marginBottom: 16 }}>
-        <h1 style={{ fontSize: 18, fontWeight: 700 }}>Syllabus Tracker</h1>
-        <p style={{ fontSize: 12, color: 'var(--muted)' }}>Track topic coverage per course</p>
-      </div>
-
-      {/* Term Tabs */}
-      <div style={{ display: 'flex', gap: 8, marginBottom: 14, flexWrap: 'wrap', borderBottom: '1px solid var(--border)', paddingBottom: 8 }}>
-        <button className={`btn ${activeTab === 'courses' ? 'btn-primary' : 'btn-ghost'} btn-sm`} onClick={() => setActiveTab('courses')}>
-          Regular Courses ({courses.filter(c => !c.isOptional).length})
-        </button>
-        {optionalCourses.length > 0 && (
-          <button className={`btn ${activeTab === 'optional' ? 'btn-primary' : 'btn-ghost'} btn-sm`} onClick={() => setActiveTab('optional')}>
-            Optional Courses ({optionalCourses.length})
-          </button>
-        )}
-      </div>
-
-      {activeTab === 'courses' && (
-        <>
-          {/* Term Subtabs */}
-          <div style={{ display: 'flex', gap: 6, marginBottom: 12, overflowX: 'auto', paddingBottom: 4 }}>
-            {orderedTerms.map(term => (
-              <button key={term} className="btn btn-ghost btn-sm" style={{ fontSize: 12, whiteSpace: 'nowrap' }} 
-                onClick={() => { const firstInTerm = coursesByTerm[term]?.[0]?.id; if (firstInTerm) setSelCourse(firstInTerm); }}>
-                {term}
-              </button>
-            ))}
+      {/* Header */}
+      <div style={{ marginBottom: 24 }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 12, flexWrap: 'wrap' }}>
+          <div>
+            <h1 style={{ fontSize: 24, fontWeight: 700, marginBottom: 4 }}>📚 {getTermLabelFromKey(currentTermKey)} Syllabus</h1>
+            <p style={{ fontSize: 13, color: 'var(--muted)' }}>
+              {courses.length} courses • {courses.reduce((sum, c) => sum + (c.credit || 0), 0).toFixed(1)} credits
+            </p>
           </div>
-
-          <div style={{ marginBottom: 14 }}>
-            <label>Select Course</label>
-            <select value={selCourse} onChange={e => setSelCourse(e.target.value)}>
-              {orderedTerms.map(term => (
-                <optgroup key={term} label={term}>
-                  {coursesByTerm[term].map(c => <option key={c.id} value={c.id}>{c.code} — {c.name}</option>)}
-                </optgroup>
-              ))}
-            </select>
+          <div style={{ display: 'flex', gap: 8 }}>
+            <button className={`btn btn-sm ${compactMode ? 'btn-primary' : 'btn-ghost'}`} onClick={() => setCompactMode(true)}>Compact</button>
+            <button className={`btn btn-sm ${!compactMode ? 'btn-primary' : 'btn-ghost'}`} onClick={() => setCompactMode(false)}>Expanded</button>
           </div>
-        </>
-      )}
-
-      {activeTab === 'optional' && (
-        <div style={{ marginBottom: 14 }}>
-          <label>Select Optional Course</label>
-          <select value={selCourse} onChange={e => setSelCourse(e.target.value)}>
-            <option value="">— Choose a course —</option>
-            {optionalCourses.map(c => <option key={c.id} value={c.id}>{c.code} — {c.name}</option>)}
-          </select>
         </div>
-      )}
+      </div>
 
-      {selCourse && (
-        <>
-          {suggested.length > 0 && (
-            <div className="card" style={{ marginBottom: 12 }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
-                <span style={{ fontSize: 13, fontWeight: 600 }}>Suggested Topics</span>
-                <button className="btn btn-ghost btn-sm" onClick={() => {
-                  const today = new Date().toISOString().split('T')[0];
-                  const existing = new Set(topics.map(t => t.text));
-                  const added = suggested.filter(t => !existing.has(t)).map(text => ({ id: uid(), text, startDate: today, endDate: null, done: false, source: 'syllabus' }));
-                  if (!added.length) return;
-                  const updated = { ...syllabus, [selCourse]: [...topics, ...added] };
-                  setSyllabus(updated); store.set('syllabusProgress', updated);
-                }}>Add All</button>
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 6, fontSize: 12, color: 'var(--muted)' }}>
-                {suggested.slice(0, 6).map((t, i) => <div key={i}>• {t}</div>)}
-                {suggested.length > 6 && <div>+ {suggested.length - 6} more topics</div>}
-              </div>
-            </div>
-          )}
+      {/* Search & Filter */}
+      <div style={{ marginBottom: 16 }}>
+        <input 
+          type="text" 
+          placeholder="🔍 Search courses or topics..." 
+          value={searchQuery}
+          onChange={e => setSearchQuery(e.target.value)}
+          style={{ width: '100%' }}
+        />
+      </div>
 
-          {topics.length > 0 && (
-            <div className="card" style={{ marginBottom: 12 }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
-                <span style={{ fontSize: 13, fontWeight: 600 }}>Progress</span>
-                <span style={{ fontSize: 12, color: 'var(--muted)' }}>{done}/{topics.length} topics</span>
-              </div>
-              <div className="progress-bar">
-                <div className="progress-fill" style={{ width: `${topics.length ? (done / topics.length) * 100 : 0}%` }} />
-              </div>
-            </div>
-          )}
+      {/* Courses Grid */}
+      <div style={{ display: 'grid', gridTemplateColumns: courses.length === 1 ? '1fr' : 'repeat(auto-fit, minmax(380px, 1fr))', gap: 16, marginBottom: 20 }}>
+        {courses
+          .filter(c => {
+            const q = searchQuery.toLowerCase();
+            if (c.name.toLowerCase().includes(q) || c.code.toLowerCase().includes(q)) return true;
+            const topics = syllabusCourseMap[c.code]?.topics || [];
+            return topics.some(t => t.toLowerCase().includes(q));
+          })
+          .map(course => {
+            const { sylData } = getCourseData(course.code);
+            const topics = sylData.topics || [];
+            const references = sylData.references || [];
+            const courseStudy = selfStudyData.filter(s => s.courseId === course.id);
+            const courseDiary = diaryData.filter(d => d.courseId === course.id);
+            
+            const completedCount = courseStudy.filter(s => s.endDate).length;
+            const progressPercent = topics.length > 0 ? Math.round((completedCount / topics.length) * 100) : 0;
+            const diaryCoveredCount = topics.filter(t => topicCoveredInDiary(t, courseDiary)).length;
 
-          <div style={{ display: 'flex', gap: 6, marginBottom: 12 }}>
-            <input value={newTopic} onChange={e => setNewTopic(e.target.value)}
-              onKeyDown={e => { if (e.key === 'Enter') { addTopic(newTopic); setNewTopic(''); } }}
-              placeholder="Add topic... (press Enter)" />
-            <button className="btn btn-primary" style={{ flexShrink: 0 }} onClick={() => { addTopic(newTopic); setNewTopic(''); }}><Plus size={13} /></button>
-          </div>
-
-          {topics.map(t => {
-            const status = getTopicStatus(t);
-            const statusColor = getStatusColor(status);
-            const isEditing = editingId === t.id;
             return (
-              <div key={t.id} style={{ display: 'flex', flexDirection: 'column', gap: 6, padding: '10px 0', borderBottom: '1px solid var(--border)' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                  <button onClick={() => toggleTopic(t.id)} style={{
-                    width: 20, height: 20, borderRadius: 4, border: `2px solid ${statusColor}`,
-                    background: status === 'complete' ? statusColor : (status === 'inProgress' ? statusColor + '40' : 'transparent'),
-                    cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
-                  }}>
-                    {status === 'complete' && <Check size={12} color="white" />}
-                    {status === 'inProgress' && <Clock3 size={10} color={statusColor} />}
-                  </button>
-                  <span style={{ flex: 1, fontSize: 13, color: 'var(--text)' }}>{t.text}</span>
-                  <span style={{ fontSize: 10, color: 'var(--muted)' }}>
-                    {status === 'notStarted' && '◯ Not started'}
-                    {status === 'inProgress' && '◯ In progress'}
-                    {status === 'complete' && '✓ Done'}
-                  </span>
-                  <button onClick={() => { setEditingId(isEditing ? null : t.id); if (!isEditing) { setEditForm({ startDate: t.startDate || '', endDate: t.endDate || '' }); } }} 
-                    style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--muted)', padding: '4px 8px' }}>
-                    {isEditing ? 'Cancel' : 'Edit'}
-                  </button>
-                  <button onClick={() => delTopic(t.id)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--muted)', padding: '4px 8px' }}><Trash2 size={11} /></button>
-                </div>
-                {isEditing && (
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 8, marginLeft: 30, padding: '8px', backgroundColor: 'var(--card)', borderRadius: 4 }}>
-                    <div style={{ display: 'flex', alignItems: 'flex-end', gap: 4 }}>
-                      <div style={{ flex: 1 }}>
-                        <label style={{ fontSize: 11, color: 'var(--muted)' }}>Start Date</label>
-                        <input type="date" value={editForm.startDate} onChange={e => setEditForm({...editForm, startDate: e.target.value})} style={{ width: '100%', fontSize: 12 }} />
-                      </div>
-                      <button onClick={() => updateTopicDates(t.id, editForm.startDate, editForm.endDate)} className="btn btn-primary btn-sm" style={{ flexShrink: 0 }}>OK</button>
-                    </div>
+              <div key={course.id} className="card" style={{ 
+                padding: 0, 
+                overflow: 'hidden',
+                borderTop: '4px solid #8b5cf6',
+                background: 'var(--card)',
+                display: 'flex',
+                flexDirection: 'column'
+              }}>
+                {/* Course Header */}
+                <div style={{ 
+                  padding: '14px',
+                  background: 'rgba(139,92,246,0.08)',
+                  borderBottom: '1px solid var(--border)'
+                }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 6 }}>
                     <div>
-                      <label style={{ fontSize: 11, color: 'var(--muted)' }}>End Date (optional)</label>
-                      <input type="date" value={editForm.endDate} onChange={e => setEditForm({...editForm, endDate: e.target.value})} style={{ width: '100%', fontSize: 12 }} />
+                      <div style={{ fontSize: 13, fontWeight: 700, color: '#8b5cf6', letterSpacing: '0.05em' }}>
+                        {course.code}
+                      </div>
+                      <div style={{ fontSize: 14, fontWeight: 600, marginTop: 2 }}>
+                        {course.name}
+                      </div>
                     </div>
-                    <div style={{ display: 'flex', alignItems: 'flex-end' }}>
-                      {t.startDate && <span style={{ fontSize: 10, color: 'var(--muted)' }}>Started: {t.startDate}</span>}
+                    <div style={{ 
+                      fontSize: 11, 
+                      fontWeight: 600, 
+                      padding: '4px 8px', 
+                      background: '#8b5cf6',
+                      color: 'white',
+                      borderRadius: 4
+                    }}>
+                      {course.credit} cr
                     </div>
+                  </div>
+                  <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 6 }}>
+                    ⏱ {course.contactHour || 'N/A'} • {topics.length} topics
+                  </div>
+                </div>
+
+                {/* Progress Bar */}
+                {topics.length > 0 && (
+                  <div style={{ padding: '10px 14px', background: 'rgba(16,185,129,0.04)', borderBottom: '1px solid var(--border)' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
+                      <div style={{ fontSize: 11, fontWeight: 600, color: 'var(--muted)' }}>
+                        Progress: {completedCount}/{topics.length}
+                      </div>
+                      <div style={{ fontSize: 11, fontWeight: 700, color: '#10b981' }}>
+                        {progressPercent}%
+                      </div>
+                    </div>
+                    <div style={{ height: 4, background: 'var(--border)', borderRadius: 2, overflow: 'hidden' }}>
+                      <div style={{ 
+                        height: '100%', 
+                        width: `${progressPercent}%`,
+                        background: '#10b981',
+                        transition: 'width 0.3s'
+                      }} />
+                    </div>
+                  </div>
+                )}
+
+                {/* Comparison Summary */}
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 6, padding: '10px 14px', borderBottom: '1px solid var(--border)' }}>
+                  <div className="card" style={{ margin: 0, padding: '8px', textAlign: 'center', border: '1px solid rgba(139,92,246,0.2)' }}>
+                    <div style={{ fontSize: 10, color: 'var(--muted)' }}>Official</div>
+                    <div style={{ fontSize: 13, fontWeight: 700, color: '#8b5cf6' }}>{topics.length}</div>
+                  </div>
+                  <div className="card" style={{ margin: 0, padding: '8px', textAlign: 'center', border: '1px solid rgba(59,130,246,0.2)' }}>
+                    <div style={{ fontSize: 10, color: 'var(--muted)' }}>Self Study</div>
+                    <div style={{ fontSize: 13, fontWeight: 700, color: '#3b82f6' }}>{courseStudy.length}</div>
+                  </div>
+                  <div className="card" style={{ margin: 0, padding: '8px', textAlign: 'center', border: '1px solid rgba(16,185,129,0.2)' }}>
+                    <div style={{ fontSize: 10, color: 'var(--muted)' }}>Diary Covered</div>
+                    <div style={{ fontSize: 13, fontWeight: 700, color: '#10b981' }}>{diaryCoveredCount}</div>
+                  </div>
+                </div>
+
+                {/* References */}
+                {references.length > 0 && (
+                  <div style={{ padding: '10px 14px', background: 'rgba(59,130,246,0.04)', borderBottom: '1px solid var(--border)' }}>
+                    <div style={{ fontSize: 11, fontWeight: 600, color: '#3b82f6', marginBottom: 6 }}>
+                      📖 References
+                    </div>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+                      {references.slice(0, 3).map((ref, i) => (
+                        <div key={i} style={{ fontSize: 11, color: 'var(--text)', lineHeight: 1.4 }}>
+                          • {ref}
+                        </div>
+                      ))}
+                      {references.length > 3 && (
+                        <div style={{ fontSize: 10, color: 'var(--muted)', fontStyle: 'italic' }}>
+                          +{references.length - 3} more
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {/* Topics Accordion */}
+                {topics.length > 0 ? (
+                  <div style={{ flex: 1, overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+                    <div style={{ padding: '10px 14px', borderBottom: '1px solid var(--border)', fontSize: 11, fontWeight: 600, color: 'var(--muted)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <span>Topics ({topics.length})</span>
+                      {compactMode && (
+                        <button className="btn btn-ghost btn-sm" style={{ fontSize: 10 }} onClick={() => toggleCourse(course.id)}>
+                          {openCourses[course.id] ? 'Hide' : 'Show'} Topics
+                        </button>
+                      )}
+                    </div>
+                    {compactMode && !openCourses[course.id] ? (
+                      <div style={{ padding: '10px 14px', fontSize: 11, color: 'var(--muted)' }}>
+                        {topics.slice(0, 3).map((t, i) => (
+                          <div key={i} style={{ marginBottom: 4 }}>• {t.substring(0, 80)}{t.length > 80 ? '...' : ''}</div>
+                        ))}
+                        {topics.length > 3 && (
+                          <div style={{ fontSize: 10, color: 'var(--muted)', fontStyle: 'italic' }}>+{topics.length - 3} more topics</div>
+                        )}
+                      </div>
+                    ) : (
+                      <div style={{ flex: 1, overflowY: 'auto', maxHeight: compactMode ? '320px' : '400px' }}>
+                        {topics.map((topic, idx) => {
+                          const topicKey = `${course.code}-${idx}`;
+                          const isExpanded = expandedTopics[topicKey];
+                          const topicStudy = getTopicStudyInfo(course.id, topic);
+                          const isCompleted = topicStudy.some(s => s.endDate);
+
+                          return (
+                            <div key={idx} style={{ borderBottom: idx < topics.length - 1 ? '1px solid var(--border)' : 'none' }}>
+                              <button
+                                onClick={() => toggleTopic(course.code, idx)}
+                                style={{
+                                  width: '100%',
+                                  padding: '10px 14px',
+                                  background: isCompleted ? 'rgba(16,185,129,0.08)' : 'transparent',
+                                  border: 'none',
+                                  cursor: 'pointer',
+                                  textAlign: 'left',
+                                  display: 'flex',
+                                  alignItems: 'flex-start',
+                                  gap: 8,
+                                  transition: 'background 0.2s'
+                                }}
+                                onMouseEnter={e => !isExpanded && (e.currentTarget.style.background = 'rgba(139,92,246,0.06)')}
+                                onMouseLeave={e => {
+                                  e.currentTarget.style.background = isCompleted ? 'rgba(16,185,129,0.08)' : 'transparent';
+                                }}
+                              >
+                                <div style={{ marginTop: 2, fontSize: 11, color: isCompleted ? '#10b981' : '#8b5cf6', fontWeight: 700 }}>
+                                  {isExpanded ? '▼' : '▶'}
+                                </div>
+                                {isCompleted && <div style={{ fontSize: 12, color: '#10b981' }}>✓</div>}
+                                <div style={{ flex: 1 }}>
+                                  <div style={{ fontSize: 12, fontWeight: 500, lineHeight: 1.4, color: 'var(--text)' }}>
+                                    {topic.substring(0, 100)}{topic.length > 100 ? '...' : ''}
+                                  </div>
+                                  {topicStudy.length > 0 && (
+                                    <div style={{ fontSize: 10, color: '#3b82f6', marginTop: 3 }}>
+                                      {topicStudy.length} session(s)
+                                    </div>
+                                  )}
+                                </div>
+                              </button>
+
+                              {isExpanded && (
+                                <div style={{ 
+                                  padding: '10px 14px', 
+                                  background: 'var(--card)',
+                                  borderTop: '1px solid var(--border)',
+                                  fontSize: 12,
+                                  color: 'var(--text)',
+                                  lineHeight: 1.6
+                                }}>
+                                  <div style={{ marginBottom: 8 }}>
+                                    {topic}
+                                  </div>
+                                  {topicStudy.length > 0 && (
+                                    <div style={{ fontSize: 11, color: 'var(--muted)', paddingTop: 8, borderTop: '1px solid var(--border)' }}>
+                                      <div style={{ fontWeight: 600, marginBottom: 4 }}>Studied:</div>
+                                      {topicStudy.map((s, j) => (
+                                        <div key={j} style={{ marginBottom: 2 }}>
+                                          📚 {s.date}{s.hours ? ` (${s.hours}h)` : ''}
+                                        </div>
+                                      ))}
+                                    </div>
+                                  )}
+                                  <div style={{ fontSize: 11, color: 'var(--muted)' }}>
+                                    Track progress from Self Study.
+                                  </div>
+                                </div>
+                              )}
+                            </div>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <div style={{ padding: '20px 14px', textAlign: 'center', color: 'var(--muted)', fontSize: 11 }}>
+                    ⚠️ No syllabus data available
                   </div>
                 )}
               </div>
             );
-          })}
+          })
+        }
+      </div>
 
-          {courses.length === 0 && <p style={{ color: 'var(--muted)', fontSize: 13 }}>Select department and term in Profile to load courses.</p>}
-          {topics.length === 0 && <p style={{ color: 'var(--muted)', fontSize: 13, marginTop: 10 }}>No topics yet — add from syllabus above.</p>}
-          {deptSyllabus?.sourceFile && (
-            <div style={{ marginTop: 12, fontSize: 12, color: 'var(--muted)' }}>
-              Full syllabus source: {deptSyllabus.sourceFile}
-            </div>
-          )}
-        </>
+      {/* Empty State */}
+      {courses.length === 0 && (
+        <div className="card" style={{ textAlign: 'center', padding: 40 }}>
+          <div style={{ fontSize: 40, marginBottom: 12 }}>📚</div>
+          <p>No courses in {getTermLabelFromKey(currentTermKey)}. Check your Profile settings.</p>
+        </div>
+      )}
+
+      {courses.length > 0 && courses.filter(c => 
+        c.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+        c.code.toLowerCase().includes(searchQuery.toLowerCase())
+      ).length === 0 && (
+        <div className="card" style={{ textAlign: 'center', padding: 30, color: 'var(--muted)' }}>
+          No courses match "{searchQuery}"
+        </div>
       )}
     </div>
   );

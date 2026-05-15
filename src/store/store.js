@@ -181,6 +181,34 @@ export const addWorkingDays = (startDate, days) => {
   return date;
 };
 
+const localDateKey = (date) => {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+};
+
+export const isRoutineHoliday = (dateStr, holidayDates = []) => {
+  const dayOfWeek = new Date(`${dateStr}T00:00:00`).getDay();
+  return dayOfWeek === 5 || dayOfWeek === 6 || holidayDates.includes(dateStr);
+};
+
+export const getNextRoutineDate = (startDateStr, holidayDates = []) => {
+  const date = new Date(`${startDateStr}T00:00:00`);
+  for (let i = 0; i < 400; i++) {
+    const key = localDateKey(date);
+    if (!isRoutineHoliday(key, holidayDates)) return key;
+    date.setDate(date.getDate() + 1);
+  }
+  return startDateStr;
+};
+
+export const getRoutinePreviewDate = (holidayDates = [], now = new Date()) => {
+  const base = new Date(now);
+  if (base.getHours() >= 17) base.setDate(base.getDate() + 1);
+  return getNextRoutineDate(localDateKey(base), holidayDates);
+};
+
 // ─── UNIFIED COMPUTATION FUNCTIONS ────────────────────────────────────────
 // These are the single source of truth used by ALL pages.
 // Reading from both 'attLogs' (daily) and 'attendance' (manual).

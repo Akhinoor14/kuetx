@@ -1,68 +1,74 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { Plus, Trash2, Clock3, Check } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
-import { store, uid, getAllCourses, getDeptSyllabus, getProfile } from '../store/store';
+import { store, uid, getAllCourses, getDeptSyllabus, getProfile, getTermLabelFromKey } from '../store/store';
 
 export default function SelfStudy() {
   const profile = getProfile();
   const courses = getAllCourses(profile);
   const deptSyllabus = getDeptSyllabus(profile.dept);
-  
-  // Two separate storage systems
+  const currentTermKey = profile.currentTermKey || '';
+  const currentTermCourses = courses.filter(c => `Y${c.year}T${c.term}` === currentTermKey);
+
   const [academicSessions, setAcademicSessions] = useState(() => store.get('selfstudy_academic') || []);
   const [extraReading, setExtraReading] = useState(() => store.get('selfstudy_extra') || []);
-  
-  const [activeTab, setActiveTab] = useState('academic'); // 'academic' or 'extra'
+  const [activeTab, setActiveTab] = useState('academic');
   const [adding, setAdding] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [editForm, setEditForm] = useState({ startDate: '', endDate: '' });
-  
-  // Forms for each tab
+  const [searchQuery, setSearchQuery] = useState('');
+  const [courseFilter, setCourseFilter] = useState('all');
+  const [statusFilter, setStatusFilter] = useState('all');
+  const [compactView, setCompactView] = useState(false);
+  const [openCourses, setOpenCourses] = useState({});
+  const [showHistory, setShowHistory] = useState(false);
+
   const [academicForm, setAcademicForm] = useState({
     date: new Date().toISOString().split('T')[0],
-    courseId: '', topic: '', hours: ''
+    courseId: '',
+    topic: '',
+    hours: ''
   });
-  
+
   const [extraForm, setExtraForm] = useState({
     category: 'book',
     title: '',
-    progress: 0,
     startDate: new Date().toISOString().split('T')[0],
-    notes: ''
+    endDate: '',
+    notes: '',
+    attachment: ''
   });
 
-  // Academic Tab Handlers
-  const addAcademic = () => {
-    if (!academicForm.topic || !academicForm.courseId) return;
-    const today = new Date().toISOString().split('T')[0];
-    const u = [{
-      ...academicForm,
-      id: uid(),
-      startDate: today,
-      endDate: null,
-      hours: academicForm.hours ? +academicForm.hours : null,
-      source: 'academic'
-    }, ...academicSessions];
-    setAcademicSessions(u);
-    store.set('selfstudy_academic', u);
-    setAdding(false);
-    setAcademicForm({
-      date: new Date().toISOString().split('T')[0],
-      courseId: '', topic: '', hours: ''
-    });
+  useEffect(() => {
+    const prefill = store.get('syllabusStudyPrefill');
+    if (!prefill?.courseId) return;
+
+    setActiveTab('academic');
+    setAcademicForm(prev => ({
+      ...prev,
+      courseId: prefill.courseId,
+      topic: prefill.topic || prev.topic,
+    }));
+    store.remove('syllabusStudyPrefill');
+  }, []);
+
+  const toggleCourse = (courseId) => {
+    setOpenCourses(prev => ({ ...prev, [courseId]: !prev[courseId] }));
   };
 
   const updateAcademicDates = (id, startDate, endDate) => {
-    const u = academicSessions.map(s =>
-      s.id === id ? { ...s, startDate: startDate || null, endDate: endDate || null, done: !!endDate } : s
-    );
-    setAcademicSessions(u);
-    store.set('selfstudy_academic', u);
+    const updated = academicSessions.map(session => (
+      session.id === id
+        ? { ...session, startDate: startDate || null, endDate: endDate || null, done: !!endDate }
+        : session
+    ));
+    setAcademicSessions(updated);
+    store.set('selfstudy_academic', updated);
     setEditingId(null);
   };
 
   const toggleAcademicComplete = (id) => {
-    const session = academicSessions.find(s => s.id === id);
+    const session = academicSessions.find(item => item.id === id);
     if (!session) return;
     const today = new Date().toISOString().split('T')[0];
     const endDate = !session.endDate ? today : null;
@@ -70,50 +76,115 @@ export default function SelfStudy() {
   };
 
   const delAcademic = (id) => {
-    const u = academicSessions.filter(s => s.id !== id);
-    setAcademicSessions(u);
-    store.set('selfstudy_academic', u);
+    const updated = academicSessions.filter(session => session.id !== id);
+    setAcademicSessions(updated);
+    store.set('selfstudy_academic', updated);
   };
 
-  // Extra Reading Handlers
   const addExtra = () => {
     if (!extraForm.title) return;
-    const u = [{
+    const updated = [{
       ...extraForm,
-      progress: +extraForm.progress || 0,
       id: uid(),
-      done: false
+      done: !!extraForm.endDate
     }, ...extraReading];
-    setExtraReading(u);
-    store.set('selfstudy_extra', u);
+    setExtraReading(updated);
+    store.set('selfstudy_extra', updated);
     setAdding(false);
     setExtraForm({
       category: 'book',
       title: '',
-      progress: 0,
       startDate: new Date().toISOString().split('T')[0],
-      notes: ''
+      endDate: '',
+      notes: '',
+      attachment: ''
     });
   };
 
-  const updateExtraProgress = (id, progress) => {
-    const u = extraReading.map(e =>
-      e.id === id ? { ...e, progress: +progress, done: progress >= 100, endDate: progress >= 100 ? new Date().toISOString().split('T')[0] : null } : e
-    );
-    setExtraReading(u);
-    store.set('selfstudy_extra', u);
+  const toggleExtraDone = (id) => {
+    const today = new Date().toISOString().split('T')[0];
+    const updated = extraReading.map(item => (
+      item.id === id ? { ...item, endDate: item.endDate ? '' : today, done: !item.endDate } : item
+    ));
+    setExtraReading(updated);
+    store.set('selfstudy_extra', updated);
   };
 
   const delExtra = (id) => {
-    const u = extraReading.filter(e => e.id !== id);
-    setExtraReading(u);
-    store.set('selfstudy_extra', u);
+    const updated = extraReading.filter(item => item.id !== id);
+    setExtraReading(updated);
+    store.set('selfstudy_extra', updated);
   };
 
-  // Helper functions
-  const getCourse = (id) => courses.find(c => c.id === id);
-  const selectedCourse = getCourse(academicForm.courseId);
-  const suggestedTopics = selectedCourse ? (deptSyllabus?.courses?.[selectedCourse.code]?.topics || []) : [];
+  const getCourse = (id) => courses.find(course => course.id === id);
+
+  const getTopicEntries = (courseId, topic) => {
+    return academicSessions.filter(session => session.courseId === courseId && session.topic === topic);
+  };
+
+  const getLatestEntry = (entries) => {
+    if (!entries.length) return null;
+    return entries
+      .slice()
+      .sort((a, b) => String(b.endDate || b.startDate || b.date || '').localeCompare(String(a.endDate || a.startDate || a.date || '')))[0];
+  };
+
+  const getDurationDays = (startDate, endDate) => {
+    if (!startDate || !endDate) return null;
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    const diff = Math.ceil((end - start) / 86400000) + 1;
+    return Math.max(1, diff);
+  };
+
+  const startTopic = (courseId, topic) => {
+    const today = new Date().toISOString().split('T')[0];
+    const inProgress = academicSessions.find(session => session.courseId === courseId && session.topic === topic && !session.endDate);
+    if (inProgress) return;
+
+    const updated = [{
+      id: uid(),
+      courseId,
+      topic,
+      date: today,
+      startDate: today,
+      endDate: null,
+      hours: null,
+      source: 'academic'
+    }, ...academicSessions];
+    setAcademicSessions(updated);
+    store.set('selfstudy_academic', updated);
+  };
+
+  const endTopic = (courseId, topic) => {
+    const today = new Date().toISOString().split('T')[0];
+    let updatedOne = false;
+    const updated = academicSessions.map(session => {
+      if (updatedOne) return session;
+      if (session.courseId === courseId && session.topic === topic && !session.endDate) {
+        updatedOne = true;
+        return { ...session, startDate: session.startDate || today, endDate: today, done: true };
+      }
+      return session;
+    });
+
+    if (!updatedOne) {
+      updated.unshift({
+        id: uid(),
+        courseId,
+        topic,
+        date: today,
+        startDate: today,
+        endDate: today,
+        hours: null,
+        source: 'academic',
+        done: true
+      });
+    }
+
+    setAcademicSessions(updated);
+    store.set('selfstudy_academic', updated);
+  };
 
   const getAcademicStatus = (session) => {
     if (!session.startDate) return 'notStarted';
@@ -130,221 +201,489 @@ export default function SelfStudy() {
     return colors[status] || '#999';
   };
 
-  // Stats
-  const totalHours = academicSessions.reduce((s, x) => s + (x.hours || 0), 0);
-  const last7Hours = academicSessions.filter(s => {
-    const d = new Date(s.date);
+  const currentTermLabel = getTermLabelFromKey(currentTermKey);
+
+  const currentTermCourseStats = useMemo(() => {
+    return currentTermCourses
+      .map(course => {
+        const topics = deptSyllabus?.courses?.[course.code]?.topics || [];
+        const topicRows = topics.map((topic, index) => {
+          const entries = getTopicEntries(course.id, topic);
+          const latest = getLatestEntry(entries);
+          const status = latest?.endDate ? 'done' : latest?.startDate ? 'running' : 'idle';
+          const durationDays = latest?.endDate ? getDurationDays(latest.startDate, latest.endDate) : null;
+          const runningDays = latest?.startDate && !latest?.endDate
+            ? Math.max(1, Math.ceil((new Date() - new Date(latest.startDate)) / 86400000))
+            : null;
+
+          return {
+            id: `${course.id}:${index}`,
+            topic,
+            entries,
+            latest,
+            status,
+            durationDays,
+            runningDays,
+          };
+        });
+
+        const coveredTopics = topicRows.filter(item => item.status !== 'idle').length;
+        const completedTopics = topicRows.filter(item => item.status === 'done').length;
+        const runningTopics = topicRows.filter(item => item.status === 'running').length;
+
+        return {
+          ...course,
+          topics: topicRows,
+          totalTopics: topicRows.length,
+          coveredTopics,
+          completedTopics,
+          runningTopics,
+          progress: topicRows.length ? Math.round((coveredTopics / topicRows.length) * 100) : 0,
+        };
+      })
+      .filter(course => course.totalTopics > 0);
+  }, [currentTermCourses, deptSyllabus, academicSessions]);
+
+  const totalOfficialTopics = currentTermCourseStats.reduce((sum, course) => sum + course.totalTopics, 0);
+  const coveredTopics = currentTermCourseStats.reduce((sum, course) => sum + course.coveredTopics, 0);
+  const completedTopics = currentTermCourseStats.reduce((sum, course) => sum + course.completedTopics, 0);
+  const runningTopics = currentTermCourseStats.reduce((sum, course) => sum + course.runningTopics, 0);
+
+  const last7Hours = academicSessions.filter(session => {
+    const d = new Date(session.date);
     return (new Date() - d) < 7 * 86400000;
-  }).reduce((s, x) => s + (x.hours || 0), 0);
+  }).reduce((sum, session) => sum + (session.hours || 0), 0);
+
+  const visibleCurrentTermCourseStats = useMemo(() => {
+    const q = searchQuery.trim().toLowerCase();
+
+    return currentTermCourseStats
+      .filter(course => courseFilter === 'all' || course.id === courseFilter)
+      .map(course => {
+        const courseText = `${course.code} ${course.name}`.toLowerCase();
+        const visibleTopics = course.topics.filter(item => {
+          const matchesStatus = statusFilter === 'all' || item.status === statusFilter;
+          const matchesQuery = !q || courseText.includes(q) || item.topic.toLowerCase().includes(q);
+          return matchesStatus && matchesQuery;
+        });
+
+        if (!visibleTopics.length) return null;
+
+        return {
+          ...course,
+          visibleTopics,
+        };
+      })
+      .filter(Boolean);
+  }, [currentTermCourseStats, courseFilter, searchQuery, statusFilter]);
+
+  const filteredAcademicSessions = academicSessions.filter(session => {
+    const matchesCourse = courseFilter === 'all' || session.courseId === courseFilter;
+    const status = getAcademicStatus(session);
+    const matchesStatus = statusFilter === 'all' || status === statusFilter;
+    const q = searchQuery.toLowerCase();
+    const course = getCourse(session.courseId);
+    const courseText = `${course?.code || ''} ${course?.name || ''}`.toLowerCase();
+    const matchesQuery = !q || (session.topic || '').toLowerCase().includes(q) || courseText.includes(q);
+    return matchesCourse && matchesStatus && matchesQuery;
+  });
 
   const byDate = {};
-  academicSessions.forEach(s => {
-    if (!byDate[s.date]) byDate[s.date] = [];
-    byDate[s.date].push(s);
+  filteredAcademicSessions.forEach(session => {
+    if (!byDate[session.date]) byDate[session.date] = [];
+    byDate[session.date].push(session);
   });
+
+  const weeklyData = Array.from({ length: 7 }).map((_, i) => {
+    const d = new Date();
+    d.setDate(d.getDate() - (6 - i));
+    const key = d.toISOString().split('T')[0];
+    const total = academicSessions
+      .filter(session => session.date === key)
+      .reduce((sum, session) => sum + (session.hours || 0), 0);
+    return { date: d.toLocaleDateString('en-BD', { weekday: 'short' }), hours: Number(total.toFixed(2)) };
+  });
+
+  const activeSummary = activeTab === 'academic'
+    ? [
+        { label: 'Current term courses', value: currentTermCourseStats.length, note: currentTermLabel || 'Current term' },
+        { label: 'Topics covered', value: totalOfficialTopics ? `${coveredTopics}/${totalOfficialTopics}` : '0/0', note: `${completedTopics} completed` },
+        { label: 'In progress', value: runningTopics, note: 'topics running now' },
+        { label: 'Last 7 days', value: `${last7Hours.toFixed(1)}h`, note: 'study time logged' },
+      ]
+    : [
+        { label: 'Deep Focus items', value: extraReading.length, note: 'books, courses, papers' },
+        { label: 'Finished', value: extraReading.filter(item => item.done).length, note: 'marked complete' },
+        { label: 'Open', value: extraReading.filter(item => !item.done).length, note: 'still active' },
+        { label: 'Attachments', value: extraReading.filter(item => item.attachment).length, note: 'linked resources' },
+      ];
+
+  const courseBars = currentTermCourseStats
+    .slice()
+    .sort((a, b) => b.progress - a.progress || a.code.localeCompare(b.code));
 
   return (
     <div className="page-enter page-container">
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12, gap: 12 }}>
         <div>
-          <h1 style={{ fontSize: 18, fontWeight: 700 }}>Self Study</h1>
-          <p style={{ fontSize: 12, color: 'var(--muted)' }}>{totalHours.toFixed(1)} hours logged</p>
+          <h1 style={{ fontSize: 18, fontWeight: 800, marginBottom: 2 }}>Self Study</h1>
+          <p style={{ fontSize: 12, color: 'var(--muted)' }}>Track what you learn, topic by topic</p>
         </div>
-        <button className="btn btn-primary" onClick={() => setAdding(true)}><Plus size={13} /> Add</button>
-      </div>
-
-      {/* Tabs */}
-      <div style={{ display: 'flex', gap: 8, marginBottom: 14, borderBottom: '1px solid var(--border)', paddingBottom: 8 }}>
-        <button className={`btn ${activeTab === 'academic' ? 'btn-primary' : 'btn-ghost'} btn-sm`} onClick={() => setActiveTab('academic')}>
-          📚 Academic ({academicSessions.length})
-        </button>
-        <button className={`btn ${activeTab === 'extra' ? 'btn-primary' : 'btn-ghost'} btn-sm`} onClick={() => setActiveTab('extra')}>
-          📖 Extra Reading ({extraReading.length})
-        </button>
-      </div>
-
-      {/* Stats */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 10, marginBottom: 14 }}>
-        <div className="card" style={{ textAlign: 'center' }}>
-          <div style={{ fontSize: 11, color: 'var(--muted)' }}>Last 7 Days</div>
-          <div style={{ fontSize: 22, fontWeight: 800 }}>{last7Hours.toFixed(1)}h</div>
-        </div>
-        <div className="card" style={{ textAlign: 'center' }}>
-          <div style={{ fontSize: 11, color: 'var(--muted)' }}>Total Sessions</div>
-          <div style={{ fontSize: 22, fontWeight: 800 }}>{academicSessions.length}</div>
-        </div>
-        <div className="card" style={{ textAlign: 'center' }}>
-          <div style={{ fontSize: 11, color: 'var(--muted)' }}>Extra Reading</div>
-          <div style={{ fontSize: 22, fontWeight: 800 }}>{extraReading.filter(e => e.done).length}/{extraReading.length}</div>
+        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', justifyContent: 'flex-end' }}>
+          <button className={`btn ${activeTab === 'academic' ? 'btn-primary' : 'btn-ghost'} btn-sm`} onClick={() => setActiveTab('academic')}>
+            Academic ({currentTermCourseStats.length})
+          </button>
+          <button className={`btn ${activeTab === 'extra' ? 'btn-primary' : 'btn-ghost'} btn-sm`} onClick={() => setActiveTab('extra')}>
+            ⚡ Deep Focus ({extraReading.length})
+          </button>
         </div>
       </div>
 
-      {/* ACADEMIC TOPICS TAB */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(170px, 1fr))', gap: 10, marginBottom: 14 }}>
+        {activeSummary.map(card => (
+          <div key={card.label} className="card" style={{ padding: 12, background: 'linear-gradient(180deg, rgba(139,92,246,0.08), transparent)' }}>
+            <div style={{ fontSize: 11, color: 'var(--muted)', marginBottom: 6 }}>{card.label}</div>
+            <div style={{ fontSize: 22, fontWeight: 800, lineHeight: 1.1 }}>{card.value}</div>
+            <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 4 }}>{card.note}</div>
+          </div>
+        ))}
+      </div>
+
       {activeTab === 'academic' && (
-        <>
-          {adding && (
-            <div className="card" style={{ marginBottom: 14, borderColor: 'var(--accent)' }}>
-              <div style={{ fontWeight: 600, fontSize: 13, marginBottom: 12 }}>Log Study Session</div>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 10, marginBottom: 10 }}>
-                <div><label>Date</label><input type="date" value={academicForm.date} onChange={e => setAcademicForm({...academicForm, date: e.target.value})} /></div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: 12 }}>
+          <div style={{ display: 'grid', gap: 12, minWidth: 0 }}>
+            <div className="card" style={{ padding: 12 }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 12, marginBottom: 10 }}>
+                <div>
+                  <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 2 }}>Filters</div>
+                  <div style={{ fontSize: 11, color: 'var(--muted)' }}>{currentTermLabel || 'Current term'} syllabus only</div>
+                </div>
+                <button className={`btn btn-sm ${compactView ? 'btn-primary' : 'btn-ghost'}`} onClick={() => setCompactView(v => !v)}>
+                  {compactView ? 'Dense' : 'Spacious'}
+                </button>
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1.3fr) 1fr 1fr', gap: 10 }}>
+                <div>
+                  <label>Search</label>
+                  <input value={searchQuery} onChange={e => setSearchQuery(e.target.value)} placeholder="Topic, code, or course" />
+                </div>
                 <div>
                   <label>Course</label>
-                  <select value={academicForm.courseId} onChange={e => setAcademicForm({...academicForm, courseId: e.target.value})}>
-                    <option value="">Select course</option>
-                    {courses.map(c => <option key={c.id} value={c.id}>{c.code} — {c.name}</option>)}
+                  <select value={courseFilter} onChange={e => setCourseFilter(e.target.value)}>
+                    <option value="all">All courses</option>
+                    {currentTermCourseStats.map(course => <option key={course.id} value={course.id}>{course.code} — {course.name}</option>)}
                   </select>
                 </div>
-                <div><label>Hours (optional)</label><input type="number" value={academicForm.hours} onChange={e => setAcademicForm({...academicForm, hours: e.target.value})} placeholder="1.5" min={0.25} step={0.25} /></div>
-              </div>
-              
-              {suggestedTopics.length > 0 && (
-                <div className="card" style={{ marginBottom: 10 }}>
-                  <div style={{ fontSize: 12, fontWeight: 600, marginBottom: 6 }}>Suggested topics</div>
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
-                    {suggestedTopics.slice(0, 8).map(t => (
-                      <button key={t} className="btn btn-ghost btn-sm" onClick={() => setAcademicForm({...academicForm, topic: t})}>
-                        {t}
-                      </button>
-                    ))}
-                  </div>
+                <div>
+                  <label>Status</label>
+                  <select value={statusFilter} onChange={e => setStatusFilter(e.target.value)}>
+                    <option value="all">All</option>
+                    <option value="notStarted">Not Started</option>
+                    <option value="inProgress">In Progress</option>
+                    <option value="complete">Complete</option>
+                  </select>
                 </div>
-              )}
-              
-              <div style={{ marginBottom: 10 }}><label>Topic</label><input value={academicForm.topic} onChange={e => setAcademicForm({...academicForm, topic: e.target.value})} placeholder="Binary Search Trees" /></div>
-              <div style={{ display: 'flex', gap: 8 }}>
-                <button className="btn btn-primary" onClick={addAcademic}>Save</button>
-                <button className="btn btn-ghost" onClick={() => setAdding(false)}>Cancel</button>
               </div>
             </div>
-          )}
 
-          {Object.keys(byDate).sort((a, b) => b.localeCompare(a)).map(date => (
-            <div key={date} style={{ marginBottom: 12 }}>
-              <div className="section-title">{new Date(date).toLocaleDateString('en-BD', { weekday: 'short', day: 'numeric', month: 'short' })}</div>
-              {byDate[date].map(s => {
-                const c = getCourse(s.courseId);
-                const status = getAcademicStatus(s);
-                const statusColor = getStatusColor(status);
-                const isEditing = editingId === s.id;
+            <div style={{ display: 'grid', gridTemplateColumns: `repeat(auto-fit, minmax(${compactView ? '250px' : '300px'}, 1fr))`, gap: 12 }}>
+              {visibleCurrentTermCourseStats.map(course => {
+                const progressWidth = course.totalTopics ? Math.max(8, course.progress) : 0;
+
                 return (
-                  <div key={s.id} style={{ display: 'flex', flexDirection: 'column', gap: 6, padding: '10px 0', borderBottom: '1px solid var(--border)' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                      <button onClick={() => toggleAcademicComplete(s.id)} style={{
-                        width: 20, height: 20, borderRadius: 4, border: `2px solid ${statusColor}`,
-                        background: status === 'complete' ? statusColor : (status === 'inProgress' ? statusColor + '40' : 'transparent'),
-                        cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
-                      }}>
-                        {status === 'complete' && <Check size={12} color="white" />}
-                        {status === 'inProgress' && <Clock3 size={10} color={statusColor} />}
-                      </button>
-                      <div style={{ flex: 1 }}>
-                        <div style={{ fontSize: 13, fontWeight: 500 }}>{s.topic}</div>
-                        <div style={{ fontSize: 11, color: 'var(--muted)' }}>{c?.code}{s.hours ? ` · ${s.hours}h` : ''}</div>
+                  <div key={course.id} className="card" style={{ padding: 0, overflow: 'hidden' }}>
+                    <div style={{ padding: '12px 12px 10px', background: 'linear-gradient(135deg, rgba(139,92,246,0.12), rgba(16,185,129,0.06))', borderBottom: '1px solid var(--border)' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', gap: 10, alignItems: 'flex-start' }}>
+                        <div>
+                          <div style={{ fontSize: 12, fontWeight: 800, color: '#8b5cf6' }}>{course.code}</div>
+                          <div style={{ fontSize: 13, fontWeight: 700, lineHeight: 1.3 }}>{course.name}</div>
+                        </div>
+                        <button className="btn btn-ghost btn-sm" style={{ fontSize: 10 }} onClick={() => toggleCourse(course.id)}>
+                          {openCourses[course.id] === false ? 'Show' : 'Hide'}
+                        </button>
                       </div>
-                      <button onClick={() => { setEditingId(isEditing ? null : s.id); if (!isEditing) { setEditForm({ startDate: s.startDate || '', endDate: s.endDate || '' }); } }} 
-                        style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--muted)', padding: '4px 8px', fontSize: 12 }}>
-                        {isEditing ? 'X' : 'Edit'}
-                      </button>
-                      <button onClick={() => delAcademic(s.id)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--danger)', padding: '4px 8px' }}><Trash2 size={11} /></button>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', gap: 8, marginTop: 8, fontSize: 11, color: 'var(--muted)' }}>
+                        <span>{course.coveredTopics}/{course.totalTopics} topics</span>
+                        <span>{course.completedTopics} done</span>
+                      </div>
+                      <div style={{ marginTop: 8, height: 6, borderRadius: 999, background: 'rgba(148,163,184,0.18)', overflow: 'hidden' }}>
+                        <div style={{ width: `${progressWidth}%`, height: '100%', borderRadius: 999, background: 'linear-gradient(90deg, #8b5cf6, #10b981)' }} />
+                      </div>
                     </div>
-                    {isEditing && (
-                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginLeft: 30, padding: '8px', backgroundColor: 'var(--card)', borderRadius: 4 }}>
-                        <div>
-                          <label style={{ fontSize: 11, color: 'var(--muted)' }}>Start</label>
-                          <input type="date" value={editForm.startDate} onChange={e => setEditForm({...editForm, startDate: e.target.value})} style={{ width: '100%', fontSize: 12 }} />
-                        </div>
-                        <div>
-                          <label style={{ fontSize: 11, color: 'var(--muted)' }}>End (optional)</label>
-                          <input type="date" value={editForm.endDate} onChange={e => setEditForm({...editForm, endDate: e.target.value})} style={{ width: '100%', fontSize: 12 }} />
-                        </div>
-                        <button onClick={() => updateAcademicDates(s.id, editForm.startDate, editForm.endDate)} className="btn btn-primary btn-sm">Save</button>
+
+                    {openCourses[course.id] !== false && (
+                      <div style={{ maxHeight: compactView ? 300 : 360, overflowY: 'auto' }}>
+                        {course.visibleTopics.map((topicRow, idx) => (
+                          <div key={topicRow.id} style={{ padding: compactView ? '8px 12px' : '10px 12px', borderBottom: idx < course.visibleTopics.length - 1 ? '1px solid var(--border)' : 'none' }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', gap: 8, alignItems: 'flex-start' }}>
+                              <div style={{ flex: 1, minWidth: 0 }}>
+                                <div style={{ fontSize: 12, fontWeight: 600, lineHeight: 1.35 }}>{topicRow.topic}</div>
+                                {!compactView && topicRow.latest?.startDate && (
+                                  <div style={{ fontSize: 10, color: 'var(--muted)', marginTop: 4 }}>
+                                    Start: {topicRow.latest.startDate}{topicRow.latest.endDate ? ` • End: ${topicRow.latest.endDate}` : ''}
+                                  </div>
+                                )}
+                                {!compactView && topicRow.durationDays && (
+                                  <div style={{ fontSize: 10, color: '#10b981', marginTop: 2 }}>Finished in {topicRow.durationDays} days</div>
+                                )}
+                                {!compactView && topicRow.runningDays && (
+                                  <div style={{ fontSize: 10, color: '#f59e0b', marginTop: 2 }}>Running {topicRow.runningDays} days</div>
+                                )}
+                                <div style={{ marginTop: compactView ? 2 : 6, fontSize: 10, color: topicRow.status === 'done' ? '#10b981' : topicRow.status === 'running' ? '#f59e0b' : 'var(--muted)' }}>
+                                  {topicRow.status === 'done' ? 'Completed' : topicRow.status === 'running' ? 'In progress' : 'Not started'}
+                                </div>
+                              </div>
+                              <div style={{ display: 'flex', gap: 6, flexShrink: 0, alignItems: 'center' }}>
+                                <button className="btn btn-ghost btn-sm" style={{ fontSize: 10 }} onClick={() => startTopic(course.id, topicRow.topic)}>
+                                  Start
+                                </button>
+                                <button className="btn btn-primary btn-sm" style={{ fontSize: 10 }} onClick={() => endTopic(course.id, topicRow.topic)}>
+                                  End
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
                       </div>
                     )}
                   </div>
                 );
               })}
             </div>
-          ))}
 
-          {academicSessions.length === 0 && !adding && (
-            <div className="card" style={{ textAlign: 'center', color: 'var(--muted)', padding: 40 }}>
-              <p>No academic study sessions yet. Log topics you've studied.</p>
+            {visibleCurrentTermCourseStats.length === 0 && (
+              <div className="card" style={{ textAlign: 'center', color: 'var(--muted)', padding: 40 }}>
+                <p>No current-term topics match your filters.</p>
+              </div>
+            )}
+
+            <div className="card" style={{ padding: 12 }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12 }}>
+                <div>
+                  <div style={{ fontSize: 12, fontWeight: 700 }}>History</div>
+                  <div style={{ fontSize: 11, color: 'var(--muted)' }}>All saved academic entries</div>
+                </div>
+                <button className="btn btn-ghost btn-sm" style={{ fontSize: 10 }} onClick={() => setShowHistory(v => !v)}>
+                  {showHistory ? 'Hide' : 'Show'}
+                </button>
+              </div>
+              {showHistory && (
+                <div style={{ marginTop: 10 }}>
+                  {Object.keys(byDate).sort((a, b) => b.localeCompare(a)).map(date => (
+                    <div key={date} style={{ marginBottom: 12 }}>
+                      <div className="section-title">{new Date(date).toLocaleDateString('en-BD', { weekday: 'short', day: 'numeric', month: 'short' })}</div>
+                      {byDate[date].map(session => {
+                        const course = getCourse(session.courseId);
+                        const status = getAcademicStatus(session);
+                        const statusColor = getStatusColor(status);
+                        const isEditing = editingId === session.id;
+
+                        return (
+                          <div key={session.id} style={{ display: 'flex', flexDirection: 'column', gap: 6, padding: '10px 0', borderBottom: '1px solid var(--border)' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                              <button onClick={() => toggleAcademicComplete(session.id)} style={{
+                                width: 20,
+                                height: 20,
+                                borderRadius: 4,
+                                border: `2px solid ${statusColor}`,
+                                background: status === 'complete' ? statusColor : (status === 'inProgress' ? `${statusColor}40` : 'transparent'),
+                                cursor: 'pointer',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                flexShrink: 0,
+                              }}>
+                                {status === 'complete' && <Check size={12} color="white" />}
+                                {status === 'inProgress' && <Clock3 size={10} color={statusColor} />}
+                              </button>
+                              <div style={{ flex: 1 }}>
+                                <div style={{ fontSize: 13, fontWeight: 600 }}>{session.topic}</div>
+                                <div style={{ fontSize: 11, color: 'var(--muted)' }}>{course?.code}{session.hours ? ` · ${session.hours}h` : ''}</div>
+                              </div>
+                              <button
+                                onClick={() => {
+                                  setEditingId(isEditing ? null : session.id);
+                                  if (!isEditing) {
+                                    setEditForm({ startDate: session.startDate || '', endDate: session.endDate || '' });
+                                  }
+                                }}
+                                style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--muted)', padding: '4px 8px', fontSize: 12 }}
+                              >
+                                {isEditing ? 'X' : 'Edit'}
+                              </button>
+                              <button onClick={() => delAcademic(session.id)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--danger)', padding: '4px 8px' }}>
+                                <Trash2 size={11} />
+                              </button>
+                            </div>
+                            {isEditing && !compactView && (
+                              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginLeft: 30, padding: '8px', backgroundColor: 'var(--card)', borderRadius: 4 }}>
+                                <div>
+                                  <label style={{ fontSize: 11, color: 'var(--muted)' }}>Start</label>
+                                  <input type="date" value={editForm.startDate} onChange={e => setEditForm({ ...editForm, startDate: e.target.value })} style={{ width: '100%', fontSize: 12 }} />
+                                </div>
+                                <div>
+                                  <label style={{ fontSize: 11, color: 'var(--muted)' }}>End (optional)</label>
+                                  <input type="date" value={editForm.endDate} onChange={e => setEditForm({ ...editForm, endDate: e.target.value })} style={{ width: '100%', fontSize: 12 }} />
+                                </div>
+                                <button onClick={() => updateAcademicDates(session.id, editForm.startDate, editForm.endDate)} className="btn btn-primary btn-sm">Save</button>
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  ))}
+
+                  {filteredAcademicSessions.length === 0 && !adding && (
+                    <div className="card" style={{ textAlign: 'center', color: 'var(--muted)', padding: 28 }}>
+                      <p>No academic study sessions match your filters.</p>
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
-          )}
-        </>
+          </div>
+
+          <div style={{ display: 'grid', gap: 12, alignContent: 'start', minWidth: 0 }}>
+            <div className="card" style={{ padding: 12 }}>
+              <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 10 }}>Current term overview</div>
+              <div style={{ display: 'grid', gap: 8 }}>
+                {courseBars.map(course => (
+                  <div key={course.id} style={{ padding: '8px 0', borderBottom: '1px solid var(--border)' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', gap: 8, alignItems: 'center', marginBottom: 6 }}>
+                      <div>
+                        <div style={{ fontSize: 11, fontWeight: 700 }}>{course.code}</div>
+                        <div style={{ fontSize: 11, color: 'var(--muted)' }}>{course.name}</div>
+                      </div>
+                      <div style={{ fontSize: 11, color: 'var(--muted)' }}>{course.coveredTopics}/{course.totalTopics}</div>
+                    </div>
+                    <div style={{ height: 6, borderRadius: 999, background: 'rgba(148,163,184,0.18)', overflow: 'hidden' }}>
+                      <div style={{ width: `${course.progress}%`, height: '100%', borderRadius: 999, background: 'linear-gradient(90deg, #8b5cf6, #10b981)' }} />
+                    </div>
+                  </div>
+                ))}
+                {courseBars.length === 0 && (
+                  <div style={{ fontSize: 12, color: 'var(--muted)' }}>No current-term syllabus topics found for this department.</div>
+                )}
+              </div>
+            </div>
+
+            <div className="card" style={{ padding: 12 }}>
+              <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 8 }}>Weekly Progress (Hours)</div>
+              <ResponsiveContainer width="100%" height={180}>
+                <BarChart data={weeklyData}>
+                  <XAxis dataKey="date" tick={{ fontSize: 10, fill: 'var(--muted)' }} />
+                  <YAxis tick={{ fontSize: 10, fill: 'var(--muted)' }} />
+                  <Tooltip contentStyle={{ fontSize: 11, background: 'var(--card)', border: '1px solid var(--border)', borderRadius: 6 }} />
+                  <Bar dataKey="hours" fill="var(--accent)" radius={[4, 4, 0, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+
+            <div className="card" style={{ padding: 12 }}>
+              <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 8 }}>How this works</div>
+              <div style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.6 }}>
+                <div>Start opens a topic as active.</div>
+                <div>End closes it and records the total days.</div>
+                <div>Filters apply to the current-term syllabus map, not just the history.</div>
+              </div>
+            </div>
+          </div>
+        </div>
       )}
 
-      {/* EXTRA READING TAB */}
       {activeTab === 'extra' && (
-        <>
-          {adding && (
-            <div className="card" style={{ marginBottom: 14, borderColor: 'var(--accent)' }}>
-              <div style={{ fontWeight: 600, fontSize: 13, marginBottom: 12 }}>Add Reading Target</div>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 10 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: 12 }}>
+          <div style={{ display: 'grid', gap: 12 }}>
+            <div className="card" style={{ padding: 12 }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, alignItems: 'flex-start' }}>
                 <div>
-                  <label>Category</label>
-                  <select value={extraForm.category} onChange={e => setExtraForm({...extraForm, category: e.target.value})}>
-                    <option value="book">📕 Book</option>
-                    <option value="course">🎓 Online Course</option>
-                    <option value="tutorial">🎬 Tutorial</option>
-                    <option value="paper">📄 Research Paper</option>
-                    <option value="other">📌 Other</option>
-                  </select>
+                  <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 2 }}>⚡ Deep Focus</div>
+                  <div style={{ fontSize: 11, color: 'var(--muted)' }}>Books, courses, tutorials, papers, and anything outside the syllabus</div>
                 </div>
-                <div><label>Start Date</label><input type="date" value={extraForm.startDate} onChange={e => setExtraForm({...extraForm, startDate: e.target.value})} /></div>
-              </div>
-              <div style={{ marginBottom: 10 }}><label>Title / Target</label><input value={extraForm.title} onChange={e => setExtraForm({...extraForm, title: e.target.value})} placeholder="e.g., 'Read Data Structures by XYZ'" /></div>
-              <div style={{ marginBottom: 10 }}><label>Notes</label><textarea value={extraForm.notes} onChange={e => setExtraForm({...extraForm, notes: e.target.value})} rows={2} placeholder="Chapters, specific topics..." /></div>
-              <div style={{ display: 'flex', gap: 8 }}>
-                <button className="btn btn-primary" onClick={addExtra}>Add Target</button>
-                <button className="btn btn-ghost" onClick={() => setAdding(false)}>Cancel</button>
+                <button className="btn btn-primary btn-sm" onClick={() => setAdding(true)}><Plus size={13} /> Add</button>
               </div>
             </div>
-          )}
 
-          {extraReading.map(e => (
-            <div key={e.id} className="card" style={{ marginBottom: 10 }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 10 }}>
-                <div style={{ flex: 1 }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 6 }}>
-                    <span style={{ fontSize: 13, fontWeight: 600 }}>
-                      {e.category === 'book' && '📕'}
-                      {e.category === 'course' && '🎓'}
-                      {e.category === 'tutorial' && '🎬'}
-                      {e.category === 'paper' && '📄'}
-                      {e.category === 'other' && '📌'}
-                      {' '}{e.title}
-                    </span>
-                    {e.done && <span className="tag tag-green" style={{ fontSize: 10 }}>✓ Done</span>}
+            {adding && (
+              <div className="card" style={{ borderColor: 'var(--accent)', padding: 12 }}>
+                <div style={{ fontWeight: 700, fontSize: 13, marginBottom: 12 }}>Add Deep Focus Item</div>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(170px, 1fr))', gap: 10, marginBottom: 10 }}>
+                  <div>
+                    <label>Type</label>
+                    <select value={extraForm.category} onChange={e => setExtraForm({ ...extraForm, category: e.target.value })}>
+                      <option value="book">📕 Book</option>
+                      <option value="course">🎓 Course</option>
+                      <option value="tutorial">🎬 Tutorial</option>
+                      <option value="paper">📄 Research Paper</option>
+                      <option value="other">📌 Other</option>
+                    </select>
                   </div>
-                  {e.notes && <div style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 6 }}>{e.notes}</div>}
-                  <div style={{ marginBottom: 6 }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4, fontSize: 11 }}>
-                      <span>Progress</span>
-                      <span>{e.progress}%</span>
-                    </div>
-                    <div className="progress-bar">
-                      <div className="progress-fill" style={{ width: `${e.progress}%`, backgroundColor: e.progress >= 100 ? '#28a745' : '#ffc107' }} />
-                    </div>
-                  </div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 10, color: 'var(--muted)' }}>
-                    Started: {e.startDate} {e.endDate && `· Completed: ${e.endDate}`}
-                  </div>
+                  <div><label>Start Date</label><input type="date" value={extraForm.startDate} onChange={e => setExtraForm({ ...extraForm, startDate: e.target.value })} /></div>
+                  <div><label>End Date</label><input type="date" value={extraForm.endDate} onChange={e => setExtraForm({ ...extraForm, endDate: e.target.value })} /></div>
                 </div>
-                <div style={{ display: 'flex', gap: 4 }}>
-                  <input type="range" min="0" max="100" value={e.progress} onChange={ev => updateExtraProgress(e.id, ev.target.value)} style={{ width: 60 }} />
-                  <button onClick={() => delExtra(e.id)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--danger)' }}><Trash2 size={12} /></button>
+                <div style={{ marginBottom: 10 }}><label>Title</label><input value={extraForm.title} onChange={e => setExtraForm({ ...extraForm, title: e.target.value })} placeholder="e.g., Atomic Habits" /></div>
+                <div style={{ marginBottom: 10 }}><label>Attachment / Link</label><input value={extraForm.attachment} onChange={e => setExtraForm({ ...extraForm, attachment: e.target.value })} placeholder="Drive link or file name" /></div>
+                <div style={{ marginBottom: 10 }}><label>Notes</label><textarea value={extraForm.notes} onChange={e => setExtraForm({ ...extraForm, notes: e.target.value })} rows={2} placeholder="Chapters, key goals..." /></div>
+                <div style={{ display: 'flex', gap: 8 }}>
+                  <button className="btn btn-primary" onClick={addExtra}>Save</button>
+                  <button className="btn btn-ghost" onClick={() => setAdding(false)}>Cancel</button>
                 </div>
               </div>
-            </div>
-          ))}
+            )}
 
-          {extraReading.length === 0 && !adding && (
-            <div className="card" style={{ textAlign: 'center', color: 'var(--muted)', padding: 40 }}>
-              <p>No reading targets. Add books, courses, or tutorials you want to explore.</p>
+            {extraReading.length > 0 && (
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 10 }}>
+                {extraReading.map(item => (
+                  <div key={item.id} className="card" style={{ padding: 12 }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 10 }}>
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 6, flexWrap: 'wrap' }}>
+                          <span style={{ fontSize: 13, fontWeight: 700 }}>
+                            {item.category === 'book' && '📕'}
+                            {item.category === 'course' && '🎓'}
+                            {item.category === 'tutorial' && '🎬'}
+                            {item.category === 'paper' && '📄'}
+                            {item.category === 'other' && '📌'}
+                            {' '}{item.title}
+                          </span>
+                          {item.endDate && <span className="tag tag-green" style={{ fontSize: 10 }}>✓ Done</span>}
+                        </div>
+                        <div style={{ fontSize: 11, color: 'var(--muted)', marginBottom: 6 }}>Start: {item.startDate || '—'}{item.endDate ? ` · End: ${item.endDate}` : ''}</div>
+                        {item.attachment && <div style={{ fontSize: 11, color: 'var(--muted)', marginBottom: 6 }}>📎 {item.attachment}</div>}
+                        {item.notes && <div style={{ fontSize: 12, color: 'var(--muted)' }}>{item.notes}</div>}
+                      </div>
+                      <div style={{ display: 'flex', gap: 4, flexShrink: 0 }}>
+                        <button className="btn btn-ghost btn-sm" style={{ fontSize: 10 }} onClick={() => toggleExtraDone(item.id)}>
+                          {item.endDate ? 'Reopen' : 'End'}
+                        </button>
+                        <button onClick={() => delExtra(item.id)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--danger)' }}><Trash2 size={12} /></button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {extraReading.length === 0 && !adding && (
+              <div className="card" style={{ textAlign: 'center', color: 'var(--muted)', padding: 40 }}>
+                <p>No Deep Focus items yet. Add books, courses, tutorials, or papers here.</p>
+              </div>
+            )}
+          </div>
+
+          <div style={{ display: 'grid', gap: 12, alignContent: 'start' }}>
+            <div className="card" style={{ padding: 12 }}>
+              <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 8 }}>Deep Focus summary</div>
+              <div style={{ display: 'grid', gap: 8 }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12 }}><span>Total items</span><strong>{extraReading.length}</strong></div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12 }}><span>Finished</span><strong>{extraReading.filter(item => item.done).length}</strong></div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12 }}><span>Open</span><strong>{extraReading.filter(item => !item.done).length}</strong></div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12 }}><span>With link</span><strong>{extraReading.filter(item => item.attachment).length}</strong></div>
+              </div>
             </div>
-          )}
-        </>
+          </div>
+        </div>
       )}
     </div>
   );

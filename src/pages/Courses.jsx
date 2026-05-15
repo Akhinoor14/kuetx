@@ -1,6 +1,7 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { Plus, Trash2, X, Check } from 'lucide-react';
-import { COURSE_STATUSES, COURSE_TYPES, getAllCourses, getCustomCourses, getDeptOptionalCourses, getProfile, getTermLabelFromKey, setCourseOverride, setCustomCourses, setOptionalSelection, uid } from '../store/store';
+import { useNavigate } from 'react-router-dom';
+import { COURSE_STATUSES, COURSE_TYPES, getAllCourses, getCustomCourses, getDeptOptionalCourses, getProfile, getTermLabelFromKey, setCourseOverride, setCustomCourses, setOptionalSelection, uid, store } from '../store/store';
 
 const YEARS = [1, 2, 3, 4];
 
@@ -86,12 +87,17 @@ function CustomCourseForm({ initial, onSave, onCancel }) {
 }
 
 export default function Courses() {
+  const navigate = useNavigate();
+  const profile = getProfile();
   const [filterYear, setFilterYear] = useState('all');
   const [addingCustom, setAddingCustom] = useState(false);
   const [editingCustom, setEditingCustom] = useState(null);
   const [version, setVersion] = useState(0);
-  const [expandedTerms, setExpandedTerms] = useState({});
-  const profile = getProfile();
+  const [expandedTerms, setExpandedTerms] = useState(() => {
+    // Auto-expand current term on initial load
+    const currentTermKey = profile?.currentTermKey || '';
+    return currentTermKey ? { [currentTermKey]: true } : {};
+  });
 
   const courses = useMemo(() => getAllCourses(profile), [profile.dept, profile.currentTermKey, version]);
   const customCourses = useMemo(() => getCustomCourses(), [version]);
@@ -129,6 +135,12 @@ export default function Courses() {
 
   const toggleTerm = (key) => {
     setExpandedTerms(p => ({ ...p, [key]: !p[key] }));
+  };
+
+  const viewCourseSyllabus = (courseId) => {
+    // Store the selected course ID so Syllabus component can pre-select it
+    store.set('selectedSyllabusCourseid', courseId);
+    navigate('/syllabus');
   };
 
   const filtered = filterYear === 'all' ? courses : courses.filter(c => c.year === +filterYear);
@@ -199,7 +211,7 @@ export default function Courses() {
           {expandedTerms[g.key] && (
             <div style={{display:'flex',flexDirection:'column',gap:6}}>
               {g.items.map(c => (
-                <div key={c.id} className="card" style={{display:'flex',alignItems:'center',gap:12,padding:'12px 16px'}}>
+                <div key={c.id} className="card" style={{display:'flex',alignItems:'center',gap:12,padding:'12px 16px',cursor:'pointer',transition:'all 200ms ease'}} onClick={() => viewCourseSyllabus(c.id)} onMouseEnter={e => e.currentTarget.style.borderColor = 'var(--accent)'} onMouseLeave={e => e.currentTarget.style.borderColor = ''}>
                   <div style={{flex:1,minWidth:0}}>
                     <div style={{display:'flex',alignItems:'center',gap:8,flexWrap:'wrap'}}>
                       <span className="mono fw-700" style={{fontSize:14}}>{c.code}</span>
