@@ -273,6 +273,62 @@ export default function SelfStudy() {
     return (new Date() - d) < 7 * 86400000;
   }).reduce((sum, session) => sum + (session.hours || 0), 0);
 
+  // Today's quick stats
+  const today = new Date().toISOString().split('T')[0];
+  const todayHours = academicSessions.filter(s => s.date === today).reduce((sum, s) => sum + (s.hours || 0), 0);
+  const todayTopicsTouched = new Set(academicSessions.filter(s => s.date === today).map(s => `${s.courseId}:${s.topic}`)).size;
+
+  // Weekly heatmap data
+  const weeklyHeatmap = useMemo(() => {
+    const days = Array.from({length: 7}, (_, i) => {
+      const d = new Date();
+      d.setDate(d.getDate() - (6 - i));
+      return d.toISOString().split('T')[0];
+    });
+    return days.map(day => ({
+      day,
+      label: new Date(day).toLocaleDateString('en-BD', {weekday: 'short'}),
+      hours: academicSessions.filter(s => s.date === day).reduce((sum, s) => sum + (s.hours || 0), 0)
+    }));
+  }, [academicSessions]);
+
+  // Due soon: topics in progress 3+ days
+  const dueSoon = useMemo(() => {
+    const allTopics = [];
+    currentTermCourseStats.forEach(course => {
+      course.topics.forEach(topic => {
+        if (topic.status === 'running' && topic.runningDays >= 3) {
+          allTopics.push({
+            courseCode: course.code,
+            courseName: course.name,
+            topic: topic.topic,
+            daysRunning: topic.runningDays,
+            startDate: topic.latest?.startDate,
+          });
+        }
+      });
+    });
+    return allTopics.sort((a, b) => b.daysRunning - a.daysRunning);
+  }, [currentTermCourseStats]);
+
+  // Quick topic toggle
+  const quickToggleTopic = (courseId, topic) => {
+    const entries = getTopicEntries(courseId, topic);
+    if (!entries.length) {
+      // No entry yet, start it
+      startTopic(courseId, topic);
+    } else {
+      const latest = getLatestEntry(entries);
+      if (latest?.endDate) {
+        // Already done, so start again
+        startTopic(courseId, topic);
+      } else {
+        // In progress, so end it
+        endTopic(courseId, topic);
+      }
+    }
+  };
+
   const visibleCurrentTermCourseStats = useMemo(() => {
     const q = searchQuery.trim().toLowerCase();
 
