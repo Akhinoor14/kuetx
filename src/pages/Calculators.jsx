@@ -1,23 +1,36 @@
-import { useState, useMemo } from 'react';
-import { store, GRADE_SCALE, getGradeFromPct, getAttendanceMarks, cgpaToPercent, addWorkingDays, getAllCourses, getProfile } from '../store/store';
+import { useEffect, useMemo, useState } from 'react';
+import { store, GRADE_SCALE, cgpaToPercent, addWorkingDays, getAllCourses, getLegacyTermResults, getProfile, setLegacyTermResults } from '../store/store';
+
+const TERM_KEYS = ['Y1T1', 'Y1T2', 'Y2T1', 'Y2T2', 'Y3T1', 'Y3T2', 'Y4T1', 'Y4T2'];
 
 // ─── Legacy CGPA + Max Achievable Calculator ───────────────────────────────
 function LegacyCGPACalc() {
-  const TOTAL_TERMS = 8;
-  const [terms, setTerms] = useState(() =>
-    Array.from({ length: TOTAL_TERMS }, (_, i) => ({
-      id: i + 1,
-      label: `Year ${Math.floor(i / 2) + 1} · Term ${(i % 2) + 1}`,
-      gpa: '',
-      credits: '',
-      done: false,
-    }))
-  );
+  const [terms, setTerms] = useState(() => {
+    const imported = getLegacyTermResults();
+    return TERM_KEYS.map((key, i) => {
+      const row = imported.find(r => r.termKey === key) || {};
+      return {
+        id: i + 1,
+        key,
+        label: `Year ${Math.floor(i / 2) + 1} · Term ${(i % 2) + 1}`,
+        gpa: row.gpa ?? '',
+        credits: row.credits ?? '',
+        done: Number.isFinite(+row.gpa) && Number.isFinite(+row.credits),
+      };
+    });
+  });
   const [targetCGPA, setTargetCGPA] = useState('3.50');
 
   const updateTerm = (idx, field, val) => {
     setTerms(prev => prev.map((t, i) => i === idx ? { ...t, [field]: val } : t));
   };
+
+  useEffect(() => {
+    const payload = terms
+      .filter(t => t.done && Number.isFinite(+t.gpa) && Number.isFinite(+t.credits) && +t.credits > 0)
+      .map(t => ({ termKey: t.key, gpa: +t.gpa, credits: +t.credits }));
+    setLegacyTermResults(payload);
+  }, [terms]);
 
   const { cgpa, earnedCr, totalCr, maxAchievable, neededGPAs } = useMemo(() => {
     const doneCr = terms.filter(t => t.done && t.credits && t.gpa)
@@ -149,32 +162,78 @@ function LegacyCGPACalc() {
 
 // ─── What do I need in Final? ──────────────────────────────────────────────
 function FinalNeededCalc() {
-  const [ctTotal, setCtTotal] = useState('');
-  const [ctMax, setCtMax] = useState('20');
+  const [ct1, setCt1] = useState('0');
+  const [ct2, setCt2] = useState('0');
+  const [bonus1, setBonus1] = useState('0');
+  const [bonus2, setBonus2] = useState('0');
+  const [assign1, setAssign1] = useState('0');
+  const [assign2, setAssign2] = useState('0');
   const [attPct, setAttPct] = useState('80');
   const [targetGrade, setTargetGrade] = useState('B+');
 
   const target = GRADE_SCALE.find(g => g.grade === targetGrade)?.minPct || 65;
-  const attMarks = getAttendanceMarks(+attPct);
-  const ctNorm = ctMax > 0 ? ((+ctTotal) / (+ctMax)) * 20 : 0;
-  const needed = (target - attMarks - ctNorm) / 0.70;
+  const clamp = (value, min, max) => Math.min(max, Math.max(min, Number.isFinite(+value) ? +value : 0));
+
+  const ctEff1 = clamp(clamp(ct1, 0, 30) + clamp(bonus1, 0, 30), 0, 30);
+  const ctEff2 = clamp(clamp(ct2, 0, 30) + clamp(bonus2, 0, 30), 0, 30);
+  const assignment1 = clamp(assign1, 0, 15);
+  const assignment2 = clamp(assign2, 0, 15);
+
+  const attendanceBasePerTeacher = (getAttendanceMarks(clamp(attPct, 0, 100)) / 10) * 15;
+  const att1 = Math.min(attendanceBasePerTeacher, Math.max(0, 15 - assignment1));
+  const att2 = Math.min(attendanceBasePerTeacher, Math.max(0, 15 - assignment2));
+
+  const continuousTotal = ctEff1 + ctEff2 + assignment1 + assignment2 + att1 + att2;
+  const targetTotal = (target / 100) * 300;
+  const neededHall = targetTotal - continuousTotal;
+  const neededPerTeacherAvg = neededHall / 2;
 
   return (
     <div>
       <div style={{ fontSize: 14, fontWeight: 700, marginBottom: 4 }}>📝 Final-এ কত লাগবে?</div>
-      <p style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 14 }}>CT + attendance দাও, target grade-এর জন্য Final-এ কত পেতে হবে বের হবে।</p>
+      <p style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 14 }}>
+        Theory course মোট 300: Hall 210 + Continuous 90। Target grade পেতে hall exam-এ minimum কত লাগবে দেখাবে।
+      </p>
+
+      <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--muted)', marginBottom: 8 }}>Teacher-wise Continuous Input</div>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10, marginBottom: 10 }}>
+        <div>
+          <label>CT Teacher 1 (/30)</label>
+          <input type="number" value={ct1} onChange={e => setCt1(e.target.value)} min={0} max={30} />
+          <input type="range" min={0} max={30} value={ct1} onChange={e => setCt1(e.target.value)} />
+        </div>
+        <div>
+          <label>Bonus Teacher 1 (+)</label>
+          <input type="number" value={bonus1} onChange={e => setBonus1(e.target.value)} min={0} max={30} />
+          <input type="range" min={0} max={30} value={bonus1} onChange={e => setBonus1(e.target.value)} />
+        </div>
+        <div>
+          <label>Assignment Teacher 1 (/15)</label>
+          <input type="number" value={assign1} onChange={e => setAssign1(e.target.value)} min={0} max={15} />
+          <input type="range" min={0} max={15} value={assign1} onChange={e => setAssign1(e.target.value)} />
+        </div>
+        <div>
+          <label>CT Teacher 2 (/30)</label>
+          <input type="number" value={ct2} onChange={e => setCt2(e.target.value)} min={0} max={30} />
+          <input type="range" min={0} max={30} value={ct2} onChange={e => setCt2(e.target.value)} />
+        </div>
+        <div>
+          <label>Bonus Teacher 2 (+)</label>
+          <input type="number" value={bonus2} onChange={e => setBonus2(e.target.value)} min={0} max={30} />
+          <input type="range" min={0} max={30} value={bonus2} onChange={e => setBonus2(e.target.value)} />
+        </div>
+        <div>
+          <label>Assignment Teacher 2 (/15)</label>
+          <input type="number" value={assign2} onChange={e => setAssign2(e.target.value)} min={0} max={15} />
+          <input type="range" min={0} max={15} value={assign2} onChange={e => setAssign2(e.target.value)} />
+        </div>
+      </div>
+
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 10 }}>
-        <div>
-          <label>CT Total (obtained)</label>
-          <input type="number" value={ctTotal} onChange={e => setCtTotal(e.target.value)} placeholder="e.g. 14" />
-        </div>
-        <div>
-          <label>CT Max Marks</label>
-          <input type="number" value={ctMax} onChange={e => setCtMax(e.target.value)} placeholder="20" />
-        </div>
         <div>
           <label>Attendance %</label>
           <input type="number" value={attPct} onChange={e => setAttPct(e.target.value)} placeholder="80" min={0} max={100} />
+          <input type="range" min={0} max={100} value={attPct} onChange={e => setAttPct(e.target.value)} />
         </div>
         <div>
           <label>Target Grade</label>
@@ -185,16 +244,37 @@ function FinalNeededCalc() {
           </select>
         </div>
       </div>
-      <div className="card" style={{ background: 'var(--bg)', borderColor: needed > 100 ? 'var(--danger)' : 'var(--accent)' }}>
-        <div style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 4 }}>Attendance Marks: {attMarks}/10 · CT contribution: {ctNorm.toFixed(1)}/20</div>
-        {needed > 100 ? (
-          <div style={{ color: 'var(--danger)', fontWeight: 700, fontSize: 18 }}>❌ {targetGrade} আর সম্ভব না — প্রয়োজন {needed.toFixed(1)}/100</div>
-        ) : needed < 0 ? (
+
+      <div className="calc-grid" style={{ marginBottom: 10 }}>
+        <div className="calc-stat">
+          <div className="text-xs text-muted">Continuous</div>
+          <div className="stat-num" style={{ fontSize: 28 }}>{continuousTotal.toFixed(1)}<span style={{ fontSize: 14, color: 'var(--muted)' }}>/90</span></div>
+        </div>
+        <div className="calc-stat">
+          <div className="text-xs text-muted">Target Total ({targetGrade})</div>
+          <div className="stat-num" style={{ fontSize: 28 }}>{targetTotal.toFixed(1)}<span style={{ fontSize: 14, color: 'var(--muted)' }}>/300</span></div>
+        </div>
+      </div>
+
+      <div className="card" style={{ background: 'var(--bg)', borderColor: neededHall > 210 ? 'var(--danger)' : 'var(--accent)' }}>
+        <div style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 6 }}>
+          Continuous: {continuousTotal.toFixed(1)}/90
+          {' · '}
+          Target total for {targetGrade}: {targetTotal.toFixed(1)}/300
+        </div>
+        {neededHall > 210 ? (
+          <div style={{ color: 'var(--danger)', fontWeight: 700, fontSize: 18 }}>
+            ❌ {targetGrade} আর সম্ভব না — Hall exam-এ {neededHall.toFixed(1)}/210 লাগবে
+          </div>
+        ) : neededHall <= 0 ? (
           <div style={{ color: 'var(--success)', fontWeight: 700, fontSize: 18 }}>✅ Already secured {targetGrade}!</div>
         ) : (
           <div>
-            <span style={{ fontSize: 12, color: 'var(--muted)' }}>Final exam-এ লাগবে: </span>
-            <span style={{ fontSize: 26, fontWeight: 800, color: 'var(--accent)' }}>{needed.toFixed(1)}/100</span>
+            <span style={{ fontSize: 12, color: 'var(--muted)' }}>Hall exam-এ minimum লাগবে: </span>
+            <span style={{ fontSize: 26, fontWeight: 800, color: 'var(--accent)' }}>{neededHall.toFixed(1)}/210</span>
+            <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 4 }}>
+              Average per teacher (if equal split): {neededPerTeacherAvg.toFixed(1)}/105
+            </div>
           </div>
         )}
       </div>
@@ -292,30 +372,18 @@ const CALC_TABS = [
 ];
 
 export default function Calculators() {
-  const [tab, setTab] = useState('legacy');
-  const Comp = CALC_TABS.find(t => t.id === tab)?.comp || LegacyCGPACalc;
-
   return (
     <div className="page-enter page-container">
-      <div style={{ marginBottom: 16 }}>
+      <div className="hero-banner" style={{ marginBottom: 16 }}>
         <h1 style={{ fontSize: 18, fontWeight: 700 }}>Smart Calculators</h1>
-        <p style={{ fontSize: 12, color: 'var(--muted)' }}>KUET-specific academic calculators</p>
-      </div>
-
-      <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap', marginBottom: 20, borderBottom: '1px solid var(--border)', paddingBottom: 0 }}>
-        {CALC_TABS.map(t => (
-          <button key={t.id} onClick={() => setTab(t.id)} style={{
-            padding: '8px 14px', border: 'none', background: 'none', cursor: 'pointer',
-            fontSize: 12, fontWeight: tab === t.id ? 700 : 400,
-            color: tab === t.id ? 'var(--accent)' : 'var(--muted)',
-            borderBottom: tab === t.id ? '2px solid var(--accent)' : '2px solid transparent',
-            marginBottom: -1, fontFamily: 'Sora, sans-serif',
-          }}>{t.label}</button>
-        ))}
+        <p style={{ fontSize: 12, color: 'var(--muted)' }}>Moved into Term Planner</p>
       </div>
 
       <div className="card">
-        <Comp />
+        <div style={{ fontWeight: 700, marginBottom: 8 }}>Calculators moved</div>
+        <p className="text-muted text-sm">
+          Final-needed and term planning tools are now inside the Term Planner page for a simpler 2-page flow.
+        </p>
       </div>
     </div>
   );

@@ -14,7 +14,7 @@ export const NAV = [
     items: [
       { id: 'courses',    label: 'Courses',        icon: 'BookOpen',     path: '/courses' },
       { id: 'attendance', label: 'Attendance',     icon: 'CalendarCheck',path: '/attendance' },
-      { id: 'marks',      label: 'Marks & CT',     icon: 'ClipboardList',path: '/marks' },
+      { id: 'marks',      label: 'Term Planner',   icon: 'ClipboardList',path: '/marks' },
       { id: 'results',    label: 'Results & GPA',  icon: 'TrendingUp',   path: '/results' },
       { id: 'credits',    label: 'Credits',        icon: 'Award',        path: '/credits' },
       { id: 'schedule',   label: 'Class Schedule', icon: 'Clock',        path: '/schedule' },
@@ -53,7 +53,6 @@ export const NAV = [
   {
     group: 'Tools',
     items: [
-      { id: 'calculator', label: 'Calculators', icon: 'Calculator',  path: '/calculators' },
       { id: 'warnings',   label: 'Alerts',      icon: 'Bell',        path: '/alerts' },
       { id: 'reports',    label: 'Reports',     icon: 'BarChart2',   path: '/reports' },
       { id: 'notes',      label: 'Notes',       icon: 'FileText',    path: '/notes' },

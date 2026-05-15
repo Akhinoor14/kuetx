@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { ThemeProvider } from './hooks/useTheme';
 import { Sidebar } from './components/Sidebar';
 import { Navbar } from './components/Navbar';
@@ -80,7 +80,7 @@ function Layout() {
             <Route path="/projects" element={<Projects />} />
             <Route path="/tours" element={<Tours />} />
             <Route path="/social" element={<Social />} />
-            <Route path="/calculators" element={<Calculators />} />
+            <Route path="/calculators" element={<Navigate to="/marks" replace />} />
             <Route path="/alerts" element={<Alerts />} />
             <Route path="/smart-score" element={<SmartScore />} />
             <Route path="/reports" element={<Reports />} />

@@ -9,6 +9,11 @@ export default function SelfStudy() {
   const deptSyllabus = getDeptSyllabus(profile.dept);
   const currentTermKey = profile.currentTermKey || '';
   const currentTermCourses = courses.filter(c => `Y${c.year}T${c.term}` === currentTermKey);
+  const isSessionalCourse = (course) => {
+    const name = String(course?.name || '').toLowerCase();
+    return course?.type === 'Sessional' || name.includes('sessional');
+  };
+  const currentTermAcademicCourses = currentTermCourses.filter(course => !isSessionalCourse(course));
 
   const [academicSessions, setAcademicSessions] = useState(() => store.get('selfstudy_academic') || []);
   const [extraReading, setExtraReading] = useState(() => store.get('selfstudy_extra') || []);
@@ -21,7 +26,11 @@ export default function SelfStudy() {
   const [courseFilter, setCourseFilter] = useState('all');
   const [statusFilter, setStatusFilter] = useState('all');
   const [compactView, setCompactView] = useState(false);
-  const [openCourses, setOpenCourses] = useState({});
+  const [openCourses, setOpenCourses] = useState(() => {
+    const initial = {};
+    currentTermAcademicCourses.forEach(c => { initial[c.id] = false; });
+    return initial;
+  });
   const [showHistory, setShowHistory] = useState(false);
 
   const [academicForm, setAcademicForm] = useState({
@@ -223,7 +232,7 @@ export default function SelfStudy() {
   const currentTermLabel = getTermLabelFromKey(currentTermKey);
 
   const currentTermCourseStats = useMemo(() => {
-    return currentTermCourses
+    return currentTermAcademicCourses
       .map(course => {
         const topics = deptSyllabus?.courses?.[course.code]?.topics || [];
         const topicRows = topics.map((topic, index) => {
@@ -261,7 +270,7 @@ export default function SelfStudy() {
         };
       })
       .filter(course => course.totalTopics > 0);
-  }, [currentTermCourses, deptSyllabus, academicSessions]);
+  }, [currentTermAcademicCourses, deptSyllabus, academicSessions]);
 
   const totalOfficialTopics = currentTermCourseStats.reduce((sum, course) => sum + course.totalTopics, 0);
   const coveredTopics = currentTermCourseStats.reduce((sum, course) => sum + course.coveredTopics, 0);
@@ -271,11 +280,11 @@ export default function SelfStudy() {
   const last7Hours = academicSessions.filter(session => {
     const d = new Date(session.date);
     return (new Date() - d) < 7 * 86400000;
-  }).reduce((sum, session) => sum + (session.hours || 0), 0);
+  }).reduce((sum, session) => sum + (Number(session.hours) || 0), 0);
 
   // Today's quick stats
   const today = new Date().toISOString().split('T')[0];
-  const todayHours = academicSessions.filter(s => s.date === today).reduce((sum, s) => sum + (s.hours || 0), 0);
+  const todayHours = academicSessions.filter(s => s.date === today).reduce((sum, s) => sum + (Number(s.hours) || 0), 0);
   const todayTopicsTouched = new Set(academicSessions.filter(s => s.date === today).map(s => `${s.courseId}:${s.topic}`)).size;
 
   // Weekly heatmap data
@@ -320,8 +329,8 @@ export default function SelfStudy() {
     } else {
       const latest = getLatestEntry(entries);
       if (latest?.endDate) {
-        // Already done, so start again
-        startTopic(courseId, topic);
+        // Already done, so undo completion
+        updateAcademicDates(latest.id, latest.startDate || today, null);
       } else {
         // In progress, so end it
         endTopic(courseId, topic);
@@ -337,7 +346,13 @@ export default function SelfStudy() {
       .map(course => {
         const courseText = `${course.code} ${course.name}`.toLowerCase();
         const visibleTopics = course.topics.filter(item => {
-          const matchesStatus = statusFilter === 'all' || item.status === statusFilter;
+          const matchesStatus = (() => {
+            if (statusFilter === 'all') return true;
+            if (statusFilter === 'notStarted') return item.status === 'idle';
+            if (statusFilter === 'inProgress') return item.status === 'running';
+            if (statusFilter === 'complete') return item.status === 'done';
+            return item.status === statusFilter;
+          })();
           const matchesQuery = !q || courseText.includes(q) || item.topic.toLowerCase().includes(q);
           return matchesStatus && matchesQuery;
         });
@@ -397,6 +412,8 @@ export default function SelfStudy() {
     .slice()
     .sort((a, b) => b.progress - a.progress || a.code.localeCompare(b.code));
 
+  const weeklyMaxHours = Math.max(1, ...weeklyHeatmap.map(day => day.hours || 0));
+
   return (
     <div className="page-enter page-container">
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12, gap: 12 }}>
@@ -416,6 +433,20 @@ export default function SelfStudy() {
 
       {activeTab === 'academic' && (
         <div style={{ marginBottom: 16 }}>
+          <div className="card" style={{ padding: 12, marginBottom: 12, background: 'linear-gradient(135deg, rgba(14,165,233,0.12), rgba(16,185,129,0.06))' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
+              <div>
+                <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 4 }}>Today</div>
+                <div style={{ fontSize: 14, fontWeight: 700 }}>
+                  {todayHours.toFixed(1)}h logged - {todayTopicsTouched} topics touched
+                </div>
+                <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 4 }}>Tap a topic name to toggle done/undone.</div>
+              </div>
+              <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+                <span style={{ fontSize: 12, color: 'var(--muted)' }}>Quick Topic Toggle ⚡</span>
+              </div>
+            </div>
+          </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: 12, marginBottom: 12 }}>
             {activeSummary.map((card, idx) => {
               const icons = ['📚', '✅', '⏱️', '⏰'];
@@ -552,46 +583,55 @@ export default function SelfStudy() {
               )}
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: `repeat(auto-fit, minmax(${compactView ? '250px' : '300px'}, 1fr))`, gap: 12 }}>
+            <style>{`
+              @keyframes slideDown {
+                from { opacity: 0; max-height: 0; } to { opacity: 1; max-height: 1000px; }
+              }
+              @keyframes slideUp {
+                from { opacity: 1; max-height: 1000px; } to { opacity: 0; max-height: 0; }
+              }
+              .course-topics-expand { animation: slideDown 0.3s ease-out; }
+              .course-topics-collapse { animation: slideUp 0.3s ease-in; }
+            `}</style>
+            <div style={{ display: 'grid', gridTemplateColumns: `repeat(auto-fit, minmax(${compactView ? '280px' : '340px'}, 1fr))`, gap: 14 }}>
               {visibleCurrentTermCourseStats.map(course => {
                 const progressWidth = course.totalTopics ? Math.max(8, course.progress) : 0;
                 const completionPercent = course.totalTopics ? Math.round((course.completedTopics / course.totalTopics) * 100) : 0;
+                const isOpen = openCourses[course.id];
 
                 return (
-                  <div key={course.id} className="card" style={{ padding: 0, overflow: 'hidden', borderLeft: `4px solid ${progressWidth > 50 ? '#8b5cf6' : '#10b981'}` }}>
-                    <div style={{ padding: '12px 12px 10px', background: 'linear-gradient(135deg, rgba(139,92,246,0.12), rgba(16,185,129,0.06))', borderBottom: '1px solid var(--border)' }}>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', gap: 10, alignItems: 'flex-start', marginBottom: 6 }}>
+                  <div key={course.id} className="card" style={{ padding: 0, overflow: 'hidden', borderLeft: `4px solid ${progressWidth > 50 ? '#8b5cf6' : '#10b981'}`, display: 'flex', flexDirection: 'column' }}>
+                    <div style={{ padding: '16px 14px 12px', background: 'linear-gradient(135deg, rgba(139,92,246,0.12), rgba(16,185,129,0.06))', borderBottom: '1px solid var(--border)', cursor: 'pointer', transition: 'all 0.2s ease' }} onClick={() => toggleCourse(course.id)}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, alignItems: 'flex-start', marginBottom: 8 }}>
                         <div style={{ flex: 1 }}>
-                          <div style={{ fontSize: 11, fontWeight: 700, color: '#8b5cf6', marginBottom: 2 }}>{course.code}</div>
-                          <div style={{ fontSize: 13, fontWeight: 700, lineHeight: 1.3 }}>{course.name}</div>
+                          <div style={{ fontSize: 11, fontWeight: 700, color: '#8b5cf6', marginBottom: 3, textTransform: 'uppercase', letterSpacing: 0.5 }}>{course.code}</div>
+                          <div style={{ fontSize: 14, fontWeight: 700, lineHeight: 1.35 }}>{course.name}</div>
                         </div>
-                        <div style={{ display: 'flex', gap: 4, alignItems: 'center', flexShrink: 0 }}>
-                          <span style={{ fontSize: 12, fontWeight: 800, color: completionPercent === 100 ? '#10b981' : '#f59e0b', background: completionPercent === 100 ? 'rgba(16,185,129,0.1)' : 'rgba(249,115,22,0.1)', padding: '2px 8px', borderRadius: 4 }}>{completionPercent}%</span>
-                          <button className="btn btn-ghost btn-sm" style={{ fontSize: 10, padding: '4px 6px' }} onClick={() => toggleCourse(course.id)}>
-                            {openCourses[course.id] === false ? '▼' : '▲'}
-                          </button>
+                        <div style={{ display: 'flex', gap: 6, alignItems: 'center', flexShrink: 0 }}>
+                          <span style={{ fontSize: 12, fontWeight: 800, color: completionPercent === 100 ? '#10b981' : '#f59e0b', background: completionPercent === 100 ? 'rgba(16,185,129,0.1)' : 'rgba(249,115,22,0.1)', padding: '3px 10px', borderRadius: 6 }}>{completionPercent}%</span>
+                          <div style={{ fontSize: 18, transition: 'transform 0.3s ease', transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)' }}>▼</div>
                         </div>
                       </div>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', gap: 8, marginBottom: 8, fontSize: 10, color: 'var(--muted)' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', gap: 10, marginBottom: 10, fontSize: 11, color: 'var(--muted)', flexWrap: 'wrap' }}>
                         <span>📚 {course.coveredTopics}/{course.totalTopics}</span>
                         <span>✅ {course.completedTopics} done</span>
                         {course.runningTopics > 0 && <span>⏱️ {course.runningTopics} active</span>}
                       </div>
-                      <div style={{ marginTop: 0, height: 6, borderRadius: 999, background: 'rgba(148,163,184,0.18)', overflow: 'hidden' }}>
-                        <div style={{ width: `${progressWidth}%`, height: '100%', borderRadius: 999, background: 'linear-gradient(90deg, #8b5cf6, #10b981)' }} />
+                      <div style={{ marginTop: 0, height: 7, borderRadius: 999, background: 'rgba(148,163,184,0.18)', overflow: 'hidden' }}>
+                        <div style={{ width: `${progressWidth}%`, height: '100%', borderRadius: 999, background: 'linear-gradient(90deg, #8b5cf6, #10b981)', transition: 'width 0.4s ease' }} />
                       </div>
                     </div>
 
-                    {openCourses[course.id] !== false && (
-                      <div style={{ maxHeight: compactView ? 300 : 360, overflowY: 'auto' }}>
+                    {isOpen && (
+                      <div style={{ maxHeight: compactView ? 320 : 420, overflowY: 'auto', animation: 'slideDown 0.3s ease-out', flex: 1 }}>
                         {course.visibleTopics.length === 0 ? (
                           <div style={{ padding: '20px 12px', textAlign: 'center', fontSize: 12, color: 'var(--muted)' }}>No topics match filters</div>
                         ) : (
                           course.visibleTopics.map((topicRow, idx) => (
-                            <div key={topicRow.id} style={{ padding: compactView ? '8px 12px' : '10px 12px', borderBottom: idx < course.visibleTopics.length - 1 ? '1px solid var(--border)' : 'none' }}>
+                            <div key={topicRow.id} style={{ padding: compactView ? '10px 14px' : '12px 14px', borderBottom: idx < course.visibleTopics.length - 1 ? '1px solid var(--border)' : 'none', transition: 'all 0.2s ease' }}>
                               <div style={{ display: 'flex', justifyContent: 'space-between', gap: 8, alignItems: 'flex-start' }}>
                                 <div style={{ flex: 1, minWidth: 0 }}>
-                                  <div style={{ fontSize: 12, fontWeight: 600, lineHeight: 1.35 }}>{topicRow.topic}</div>
+                                  <div onClick={() => quickToggleTopic(course.id, topicRow.topic)} style={{ fontSize: 12, fontWeight: 600, lineHeight: 1.35, cursor: 'pointer' }}>{topicRow.topic}</div>
                                   {!compactView && topicRow.latest?.startDate && (
                                     <div style={{ fontSize: 10, color: 'var(--muted)', marginTop: 4 }}>
                                       Start: {topicRow.latest.startDate}{topicRow.latest.endDate ? ` • End: ${topicRow.latest.endDate}` : ''}
@@ -720,6 +760,39 @@ export default function SelfStudy() {
           </div>
 
           <div style={{ display: 'grid', gap: 12, alignContent: 'start', minWidth: 0 }}>
+            <div className="card" style={{ padding: 12 }}>
+              <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 8 }}>Weekly Mini-Calendar</div>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: 6 }}>
+                {weeklyHeatmap.map(day => {
+                  const intensity = Math.min(1, (day.hours || 0) / weeklyMaxHours);
+                  const background = `rgba(16, 185, 129, ${0.15 + intensity * 0.75})`;
+                  return (
+                    <div key={day.day} title={`${day.label}: ${Number(day.hours || 0).toFixed(1)}h`} style={{ padding: '8px 0', textAlign: 'center', borderRadius: 8, background, color: intensity > 0.6 ? '#052e1b' : '#064e3b', fontSize: 11, fontWeight: 700 }}>
+                      {day.label}
+                    </div>
+                  );
+                })}
+              </div>
+              <div style={{ fontSize: 10, color: 'var(--muted)', marginTop: 8 }}>Brighter = more hours logged</div>
+            </div>
+
+            <div className="card" style={{ padding: 12 }}>
+              <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 8 }}>Due Soon</div>
+              {dueSoon.length === 0 ? (
+                <div style={{ fontSize: 12, color: 'var(--muted)' }}>No in-progress topics older than 3 days.</div>
+              ) : (
+                <div style={{ display: 'grid', gap: 8 }}>
+                  {dueSoon.slice(0, 5).map(item => (
+                    <div key={`${item.courseCode}:${item.topic}`} style={{ paddingBottom: 8, borderBottom: '1px solid var(--border)' }}>
+                      <div style={{ fontSize: 11, fontWeight: 700 }}>{item.courseCode}</div>
+                      <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 2 }}>{item.topic}</div>
+                      <div style={{ fontSize: 10, color: '#f59e0b', marginTop: 4 }}>Running {item.daysRunning} days</div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
             <div className="card" style={{ padding: 12 }}>
               <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 10 }}>Current term overview</div>
               <div style={{ display: 'grid', gap: 8 }}>

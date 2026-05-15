@@ -99,6 +99,24 @@ export const GRADE_SCALE = [
 // Special grades (Art. 13.1): X=continuous assessment, W=withdrawal, S/U=non-credit
 export const SPECIAL_GRADES = ['X', 'W', 'S', 'U'];
 
+const clamp = (value, min, max) => Math.min(max, Math.max(min, Number.isFinite(+value) ? +value : 0));
+
+export const getGradePointByGrade = (grade) => {
+  const item = GRADE_SCALE.find(g => g.grade === grade);
+  return item ? item.point : 0;
+};
+
+export const getLegacyTermResults = () => {
+  const raw = store.get('legacyTermResults');
+  return Array.isArray(raw) ? raw : [];
+};
+
+export const setLegacyTermResults = (rows) => {
+  const list = Array.isArray(rows) ? rows : [];
+  store.set('legacyTermResults', list);
+  return list;
+};
+
 export const getGradeFromPct = (pct) => {
   if (pct === null || pct === undefined || isNaN(pct)) return GRADE_SCALE[GRADE_SCALE.length - 1];
   for (const g of GRADE_SCALE) { if (pct >= g.minPct) return g; }
@@ -240,6 +258,20 @@ export const computeCourseGrade = (course) => {
   const marks = store.get('marks') || {};
   const m = marks[course.id] || {};
 
+  const publishedGrade = String(m.publishedGrade || '').trim().toUpperCase();
+  if (publishedGrade) {
+    let point = getGradePointByGrade(publishedGrade);
+    if (course.status === 'backlog' && point > BACKLOG_MAX_POINT) {
+      point = BACKLOG_MAX_POINT;
+    }
+    return {
+      grade: publishedGrade,
+      point,
+      total: Number.isFinite(+m.publishedTotal) ? +(+m.publishedTotal).toFixed(1) : null,
+      isPublished: true,
+    };
+  }
+
   if (course.type === 'NonCredit') {
     return { grade: m.suGrade || 'U', point: 0, total: 0, isNonCredit: true };
   }
@@ -249,22 +281,75 @@ export const computeCourseGrade = (course) => {
   let total = 0;
 
   if (course.type === 'Theory') {
-    // New flexible structure: user sets finalMax, ctTotalMax, partMax
-    const finalMax   = +(m.finalMax   || 70);
-    const ctTotalMax = +(m.ctTotalMax || 20);
-    const partMax    = +(m.partMax    || 10);
-    const rawMax     = finalMax + ctTotalMax + partMax;
-    const finalObt   = +(m.final   || 0);
-    const ctObt      = +(m.ctTotal || 0);
-    let   partObt;
-    if (m.useAutoAtt && attPct !== null) {
-      partObt = (attMarks / 10) * partMax; // scale att marks to partMax
+    const hasKuet300Fields = (
+      m.hallTeacher1 !== undefined || m.hallTeacher2 !== undefined ||
+      m.ctTeacher1 !== undefined || m.ctTeacher2 !== undefined ||
+      m.assignment1 !== undefined || m.assignment2 !== undefined ||
+      m.ctBonus1 !== undefined || m.ctBonus2 !== undefined
+    );
+
+    if (m.theoryMode === 'kuet300' || hasKuet300Fields) {
+      const hallTeacher1 = clamp(m.hallTeacher1, 0, 105);
+      const hallTeacher2 = clamp(m.hallTeacher2, 0, 105);
+
+      const ctTeacher1 = clamp(m.ctTeacher1, 0, 30);
+      const ctTeacher2 = clamp(m.ctTeacher2, 0, 30);
+      const ctBonus1 = clamp(m.ctBonus1, 0, 30);
+      const ctBonus2 = clamp(m.ctBonus2, 0, 30);
+
+      const ctEffective1 = clamp(ctTeacher1 + ctBonus1, 0, 30);
+      const ctEffective2 = clamp(ctTeacher2 + ctBonus2, 0, 30);
+
+      const assignment1 = clamp(m.assignment1, 0, 15);
+      const assignment2 = clamp(m.assignment2, 0, 15);
+
+      const attendancePerTeacher = attPct !== null ? (attMarks / 10) * 15 : 0;
+      const attendanceCap1 = Math.max(0, 15 - assignment1);
+      const attendanceCap2 = Math.max(0, 15 - assignment2);
+
+      const attendanceFromAuto1 = Math.min(attendancePerTeacher, attendanceCap1);
+      const attendanceFromAuto2 = Math.min(attendancePerTeacher, attendanceCap2);
+
+      const attendance1 = m.useAutoAtt === false
+        ? clamp(m.attTeacher1, 0, attendanceCap1)
+        : attendanceFromAuto1;
+      const attendance2 = m.useAutoAtt === false
+        ? clamp(m.attTeacher2, 0, attendanceCap2)
+        : attendanceFromAuto2;
+
+      const teacherContinuous1 = ctEffective1 + assignment1 + attendance1;
+      const teacherContinuous2 = ctEffective2 + assignment2 + attendance2;
+
+      const rawTotal = hallTeacher1 + hallTeacher2 + teacherContinuous1 + teacherContinuous2;
+      const cappedTotal = clamp(rawTotal, 0, 300);
+      total = (cappedTotal / 300) * 100;
     } else {
-      partObt = +(m.part || 0);
+      // Backward-compatible flexible structure
+      const finalMax   = +(m.finalMax   || 70);
+      const ctTotalMax = +(m.ctTotalMax || 20);
+      const partMax    = +(m.partMax    || 10);
+      const rawMax     = finalMax + ctTotalMax + partMax;
+      const finalObt   = +(m.final   || 0);
+      const ctObt      = +(m.ctTotal || 0);
+      let partObt;
+      if (m.useAutoAtt && attPct !== null) {
+        partObt = (attMarks / 10) * partMax;
+      } else {
+        partObt = +(m.part || 0);
+      }
+      const rawTotal = finalObt + ctObt + partObt;
+      total = rawMax > 0 ? (rawTotal / rawMax) * 100 : 0;
     }
-    const rawTotal = finalObt + ctObt + partObt;
-    total = rawMax > 0 ? (rawTotal / rawMax) * 100 : 0;
   } else if (course.type === 'Sessional') {
+    const resultGrade = String(m.resultGrade || '').trim().toUpperCase();
+    if (resultGrade) {
+      return {
+        grade: resultGrade,
+        point: getGradePointByGrade(resultGrade),
+        total: null,
+        isPublished: true,
+      };
+    }
     const sessAtt = attPct !== null ? attMarks : +(m.manualAtt || 0);
     total = sessAtt + (m.quiz||0) + (m.centralViva||0) + (m.performance||0);
   } else if (course.type === 'Project') {
@@ -298,6 +383,16 @@ export const computeCGPA = (courses) => {
       earnedCredits += c.credits;
     }
   });
+
+  getLegacyTermResults().forEach(row => {
+    const gpa = +row?.gpa;
+    const credits = +row?.credits;
+    if (!Number.isFinite(gpa) || !Number.isFinite(credits) || credits <= 0) return;
+    pts += gpa * credits;
+    cr += credits;
+    if (gpa >= 2.0) earnedCredits += credits;
+  });
+
   return { cgpa: cr ? pts / cr : null, earnedCredits };
 };
 
@@ -315,6 +410,17 @@ export const computeTermGPAs = (courses) => {
       terms[key].cr  += c.credits;
     }
   });
+
+  getLegacyTermResults().forEach(row => {
+    const key = row?.termKey || row?.key;
+    const gpa = +row?.gpa;
+    const credits = +row?.credits;
+    if (!key || !Number.isFinite(gpa) || !Number.isFinite(credits) || credits <= 0) return;
+    if (!terms[key]) terms[key] = { label: getTermLabelFromKey(key) || key, pts: 0, cr: 0, key };
+    terms[key].pts += gpa * credits;
+    terms[key].cr += credits;
+  });
+
   return Object.values(terms)
     .sort((a, b) => a.key.localeCompare(b.key))
     .map(t => ({ term: t.key, label: t.label, gpa: t.cr ? +(t.pts / t.cr).toFixed(2) : 0 }));
