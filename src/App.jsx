@@ -1,0 +1,87 @@
+import { useState } from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { ThemeProvider } from './hooks/useTheme';
+import { Sidebar } from './components/Sidebar';
+import { Navbar } from './components/Navbar';
+import { Footer } from './components/Footer';
+
+// Pages
+import Dashboard from './pages/Dashboard';
+import Profile from './pages/Profile';
+import Courses from './pages/Courses';
+import Attendance from './pages/Attendance';
+import Marks from './pages/Marks';
+import Results from './pages/Results';
+import Credits from './pages/Credits';
+import Schedule from './pages/Schedule';
+import Teachers from './pages/Teachers';
+import Diary from './pages/Diary';
+import Assignments from './pages/Assignments';
+import SelfStudy from './pages/SelfStudy';
+import Namaz from './pages/Namaz';
+import SelfEval from './pages/SelfEval';
+import Money from './pages/Money';
+import Calculators from './pages/Calculators';
+import Alerts from './pages/Alerts';
+import SmartScore from './pages/SmartScore';
+import Settings from './pages/Settings';
+import { Notes } from './pages/Notes';
+import Clubs from './pages/Clubs';
+import { Tours, Social, Projects, Syllabus, TimeTracker, Tuition, Food, Reports } from './pages/Extras';
+
+function Layout() {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  return (
+    <div style={{ display: 'flex', minHeight: '100vh' }}>
+      <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <div className="main-content">
+        <Navbar onMenuClick={() => setSidebarOpen(o => !o)} />
+        <div style={{ flex: 1 }}>
+          <Routes>
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/courses" element={<Courses />} />
+            <Route path="/attendance" element={<Attendance />} />
+            <Route path="/marks" element={<Marks />} />
+            <Route path="/results" element={<Results />} />
+            <Route path="/credits" element={<Credits />} />
+            <Route path="/schedule" element={<Schedule />} />
+            <Route path="/teachers" element={<Teachers />} />
+            <Route path="/syllabus" element={<Syllabus />} />
+            <Route path="/diary" element={<Diary />} />
+            <Route path="/assignments" element={<Assignments />} />
+            <Route path="/self-study" element={<SelfStudy />} />
+            <Route path="/time" element={<TimeTracker />} />
+            <Route path="/namaz" element={<Namaz />} />
+            <Route path="/self-eval" element={<SelfEval />} />
+            <Route path="/money" element={<Money />} />
+            <Route path="/tuition" element={<Tuition />} />
+            <Route path="/food" element={<Food />} />
+            <Route path="/clubs" element={<Clubs />} />
+            <Route path="/projects" element={<Projects />} />
+            <Route path="/tours" element={<Tours />} />
+            <Route path="/social" element={<Social />} />
+            <Route path="/calculators" element={<Calculators />} />
+            <Route path="/alerts" element={<Alerts />} />
+            <Route path="/smart-score" element={<SmartScore />} />
+            <Route path="/reports" element={<Reports />} />
+            <Route path="/notes" element={<Notes />} />
+            <Route path="/settings" element={<Settings />} />
+          </Routes>
+        </div>
+        <Footer />
+      </div>
+    </div>
+  );
+}
+
+export default function App() {
+  return (
+    <ThemeProvider>
+      <BrowserRouter>
+        <Layout />
+      </BrowserRouter>
+    </ThemeProvider>
+  );
+}

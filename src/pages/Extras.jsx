@@ -1,0 +1,590 @@
+import { useState } from 'react';
+import { Plus, Trash2, Check } from 'lucide-react';
+import { store, uid } from '../store/store';
+
+// ── Tours ────────────────────────────────────────────────────────────────────
+export function Tours() {
+  const [tours, setTours] = useState(() => store.get('tours') || []);
+  const [form, setForm] = useState({ name: '', date: '', companions: '', budget: '', spent: '', notes: '', type: 'with_friends' });
+  const [adding, setAdding] = useState(false);
+  const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
+
+  const save = () => {
+    const u = [{ ...form, id: uid() }, ...tours];
+    setTours(u); store.set('tours', u); setAdding(false);
+    setForm({ name: '', date: '', companions: '', budget: '', spent: '', notes: '', type: 'with_friends' });
+  };
+
+  return (
+    <div className="page-enter" style={{ padding: 20, maxWidth: 680 }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+        <div>
+          <h1 style={{ fontSize: 18, fontWeight: 700 }}>Tours</h1>
+          <p style={{ fontSize: 12, color: 'var(--muted)' }}>Plan, track and remember your trips</p>
+        </div>
+        <button className="btn btn-primary" onClick={() => setAdding(true)}><Plus size={13} /> Add Tour</button>
+      </div>
+
+      {adding && (
+        <div className="card" style={{ marginBottom: 14, borderColor: 'var(--accent)' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr', gap: 10, marginBottom: 10 }}>
+            <div><label>Tour / Destination</label><input value={form.name} onChange={e => set('name', e.target.value)} placeholder="Cox's Bazar trip" /></div>
+            <div><label>Date</label><input type="date" value={form.date} onChange={e => set('date', e.target.value)} /></div>
+            <div>
+              <label>Type</label>
+              <select value={form.type} onChange={e => set('type', e.target.value)}>
+                <option value="solo">Solo</option>
+                <option value="with_friends">With Friends</option>
+                <option value="family">Family</option>
+                <option value="department">Dept. Tour</option>
+              </select>
+            </div>
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 10, marginBottom: 10 }}>
+            <div><label>Companions</label><input value={form.companions} onChange={e => set('companions', e.target.value)} placeholder="Rahim, Karim..." /></div>
+            <div><label>Budget (৳)</label><input type="number" value={form.budget} onChange={e => set('budget', e.target.value)} /></div>
+            <div><label>Actual Spent (৳)</label><input type="number" value={form.spent} onChange={e => set('spent', e.target.value)} /></div>
+          </div>
+          <div style={{ marginBottom: 10 }}><label>Notes / Memories</label><textarea value={form.notes} onChange={e => set('notes', e.target.value)} rows={2} placeholder="Highlights, tips for next time..." /></div>
+          <div style={{ display: 'flex', gap: 8 }}>
+            <button className="btn btn-primary" onClick={save}>Save</button>
+            <button className="btn btn-ghost" onClick={() => setAdding(false)}>Cancel</button>
+          </div>
+        </div>
+      )}
+
+      {tours.length === 0 && !adding && (
+        <div className="card" style={{ textAlign: 'center', color: 'var(--muted)', padding: 40 }}>
+          <p>Log your tours and track travel expenses here.</p>
+        </div>
+      )}
+
+      {tours.map(t => (
+        <div key={t.id} className="card" style={{ marginBottom: 8 }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <div>
+              <div style={{ fontWeight: 700, fontSize: 14 }}>{t.name}</div>
+              <div style={{ fontSize: 12, color: 'var(--muted)' }}>{t.date} · {t.type?.replace('_', ' ')}</div>
+              {t.companions && <div style={{ fontSize: 12, marginTop: 4 }}>👥 {t.companions}</div>}
+              {t.notes && <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 4 }}>{t.notes}</div>}
+            </div>
+            <div style={{ textAlign: 'right' }}>
+              {t.spent && <div style={{ fontWeight: 700, color: 'var(--danger)' }}>৳{(+t.spent).toLocaleString()}</div>}
+              {t.budget && <div style={{ fontSize: 11, color: 'var(--muted)' }}>Budget: ৳{(+t.budget).toLocaleString()}</div>}
+              <button className="btn btn-ghost" style={{ padding: '4px 8px', marginTop: 6 }} onClick={() => {
+                const u = tours.filter(x => x.id !== t.id); setTours(u); store.set('tours', u);
+              }}><Trash2 size={11} color="var(--danger)" /></button>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// ── Social Time ───────────────────────────────────────────────────────────────
+export function Social() {
+  const [logs, setLogs] = useState(() => store.get('social') || []);
+  const [form, setForm] = useState({ date: new Date().toISOString().split('T')[0], activity: '', persons: '', hours: '' });
+  const [adding, setAdding] = useState(false);
+  const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
+
+  const save = () => {
+    const u = [{ ...form, hours: +form.hours, id: uid() }, ...logs];
+    setLogs(u); store.set('social', u); setAdding(false);
+    setForm({ date: new Date().toISOString().split('T')[0], activity: '', persons: '', hours: '' });
+  };
+
+  const total7 = logs.filter(l => {
+    const d = new Date(l.date);
+    return (new Date() - d) < 7 * 86400000;
+  }).reduce((s, l) => s + (l.hours || 0), 0);
+
+  return (
+    <div className="page-enter" style={{ padding: 20, maxWidth: 600 }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+        <div>
+          <h1 style={{ fontSize: 18, fontWeight: 700 }}>Social Time</h1>
+          <p style={{ fontSize: 12, color: 'var(--muted)' }}>Track time spent with friends — last 7 days: {total7.toFixed(1)}h</p>
+        </div>
+        <button className="btn btn-primary" onClick={() => setAdding(true)}><Plus size={13} /> Log</button>
+      </div>
+
+      {adding && (
+        <div className="card" style={{ marginBottom: 14, borderColor: 'var(--accent)' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 10, marginBottom: 10 }}>
+            <div><label>Date</label><input type="date" value={form.date} onChange={e => set('date', e.target.value)} /></div>
+            <div><label>Activity</label><input value={form.activity} onChange={e => set('activity', e.target.value)} placeholder="Adda, gaming, walk..." /></div>
+            <div><label>Hours</label><input type="number" value={form.hours} onChange={e => set('hours', e.target.value)} placeholder="1.5" min={0} step={0.5} /></div>
+          </div>
+          <div style={{ marginBottom: 10 }}><label>With whom</label><input value={form.persons} onChange={e => set('persons', e.target.value)} placeholder="Rahim, Karim..." /></div>
+          <div style={{ display: 'flex', gap: 8 }}>
+            <button className="btn btn-primary" onClick={save}>Save</button>
+            <button className="btn btn-ghost" onClick={() => setAdding(false)}>Cancel</button>
+          </div>
+        </div>
+      )}
+
+      {logs.slice(0, 15).map(l => (
+        <div key={l.id} className="card" style={{ marginBottom: 6, display: 'flex', alignItems: 'center', gap: 10 }}>
+          <div style={{ flex: 1 }}>
+            <div style={{ fontSize: 13, fontWeight: 500 }}>{l.activity}</div>
+            <div style={{ fontSize: 11, color: 'var(--muted)' }}>{l.date}{l.persons ? ` · with ${l.persons}` : ''}</div>
+          </div>
+          <span className="tag tag-gray">{l.hours}h</span>
+          <button className="btn btn-ghost" style={{ padding: '4px 8px' }} onClick={() => {
+            const u = logs.filter(x => x.id !== l.id); setLogs(u); store.set('social', u);
+          }}><Trash2 size={11} color="var(--danger)" /></button>
+        </div>
+      ))}
+
+      {logs.length === 0 && !adding && (
+        <div className="card" style={{ textAlign: 'center', color: 'var(--muted)', padding: 40 }}>
+          <p>Track how much time you spend socializing.</p>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ── Projects ─────────────────────────────────────────────────────────────────
+export function Projects() {
+  const [projects, setProjects] = useState(() => store.get('projects') || []);
+  const [form, setForm] = useState({ name: '', type: 'Academic', status: 'active', desc: '', deadline: '' });
+  const [adding, setAdding] = useState(false);
+  const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
+
+  const save = () => {
+    const u = [{ ...form, id: uid() }, ...projects];
+    setProjects(u); store.set('projects', u); setAdding(false);
+    setForm({ name: '', type: 'Academic', status: 'active', desc: '', deadline: '' });
+  };
+
+  const TYPES = ['Academic', 'Personal', 'Club', 'Freelance', 'Research', 'Other'];
+  const statusColor = { active: 'tag-green', done: 'tag-blue', paused: 'tag-yellow' };
+
+  return (
+    <div className="page-enter" style={{ padding: 20, maxWidth: 680 }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+        <h1 style={{ fontSize: 18, fontWeight: 700 }}>Projects</h1>
+        <button className="btn btn-primary" onClick={() => setAdding(true)}><Plus size={13} /> Add Project</button>
+      </div>
+
+      {adding && (
+        <div className="card" style={{ marginBottom: 14, borderColor: 'var(--accent)' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr', gap: 10, marginBottom: 10 }}>
+            <div><label>Project Name</label><input value={form.name} onChange={e => set('name', e.target.value)} placeholder="Smart Campus App" /></div>
+            <div><label>Type</label><select value={form.type} onChange={e => set('type', e.target.value)}>{TYPES.map(t => <option key={t}>{t}</option>)}</select></div>
+            <div><label>Status</label><select value={form.status} onChange={e => set('status', e.target.value)}><option value="active">Active</option><option value="done">Done</option><option value="paused">Paused</option></select></div>
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 10 }}>
+            <div><label>Deadline</label><input type="date" value={form.deadline} onChange={e => set('deadline', e.target.value)} /></div>
+          </div>
+          <div style={{ marginBottom: 10 }}><label>Description</label><textarea value={form.desc} onChange={e => set('desc', e.target.value)} rows={2} /></div>
+          <div style={{ display: 'flex', gap: 8 }}>
+            <button className="btn btn-primary" onClick={save}>Save</button>
+            <button className="btn btn-ghost" onClick={() => setAdding(false)}>Cancel</button>
+          </div>
+        </div>
+      )}
+
+      {projects.length === 0 && !adding && (
+        <div className="card" style={{ textAlign: 'center', color: 'var(--muted)', padding: 40 }}>
+          <p>Track your academic and personal projects here.</p>
+        </div>
+      )}
+
+      {projects.map(p => (
+        <div key={p.id} className="card" style={{ marginBottom: 8, display: 'flex', alignItems: 'flex-start', gap: 10 }}>
+          <div style={{ flex: 1 }}>
+            <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
+              <span style={{ fontWeight: 700, fontSize: 14 }}>{p.name}</span>
+              <span className={`tag ${statusColor[p.status] || 'tag-gray'}`}>{p.status}</span>
+              <span className="tag tag-gray">{p.type}</span>
+            </div>
+            {p.desc && <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 4 }}>{p.desc}</div>}
+            {p.deadline && <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 4 }}>Deadline: {p.deadline}</div>}
+          </div>
+          <button className="btn btn-ghost" style={{ padding: '4px 8px' }} onClick={() => {
+            const u = projects.filter(x => x.id !== p.id); setProjects(u); store.set('projects', u);
+          }}><Trash2 size={11} color="var(--danger)" /></button>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// ── Syllabus ──────────────────────────────────────────────────────────────────
+export function Syllabus() {
+  const courses = store.get('courses') || [];
+  const [syllabus, setSyllabus] = useState(() => store.get('syllabus') || {});
+  const [selCourse, setSelCourse] = useState(courses[0]?.id || '');
+
+  const topics = syllabus[selCourse] || [];
+
+  const addTopic = (text) => {
+    if (!text.trim() || !selCourse) return;
+    const updated = { ...syllabus, [selCourse]: [...topics, { id: uid(), text, done: false }] };
+    setSyllabus(updated); store.set('syllabus', updated);
+  };
+
+  const toggleTopic = (id) => {
+    const updated = { ...syllabus, [selCourse]: topics.map(t => t.id === id ? { ...t, done: !t.done } : t) };
+    setSyllabus(updated); store.set('syllabus', updated);
+  };
+
+  const delTopic = (id) => {
+    const updated = { ...syllabus, [selCourse]: topics.filter(t => t.id !== id) };
+    setSyllabus(updated); store.set('syllabus', updated);
+  };
+
+  const [newTopic, setNewTopic] = useState('');
+  const done = topics.filter(t => t.done).length;
+
+  return (
+    <div className="page-enter" style={{ padding: 20, maxWidth: 640 }}>
+      <div style={{ marginBottom: 16 }}>
+        <h1 style={{ fontSize: 18, fontWeight: 700 }}>Syllabus Tracker</h1>
+        <p style={{ fontSize: 12, color: 'var(--muted)' }}>Track topic coverage per course</p>
+      </div>
+
+      <div style={{ marginBottom: 14 }}>
+        <label>Select Course</label>
+        <select value={selCourse} onChange={e => setSelCourse(e.target.value)}>
+          {courses.map(c => <option key={c.id} value={c.id}>{c.code} — {c.name}</option>)}
+        </select>
+      </div>
+
+      {selCourse && (
+        <>
+          {topics.length > 0 && (
+            <div className="card" style={{ marginBottom: 12 }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
+                <span style={{ fontSize: 13, fontWeight: 600 }}>Progress</span>
+                <span style={{ fontSize: 12, color: 'var(--muted)' }}>{done}/{topics.length} topics</span>
+              </div>
+              <div className="progress-bar">
+                <div className="progress-fill" style={{ width: `${topics.length ? (done / topics.length) * 100 : 0}%` }} />
+              </div>
+            </div>
+          )}
+
+          <div style={{ display: 'flex', gap: 6, marginBottom: 12 }}>
+            <input value={newTopic} onChange={e => setNewTopic(e.target.value)}
+              onKeyDown={e => { if (e.key === 'Enter') { addTopic(newTopic); setNewTopic(''); } }}
+              placeholder="Add topic... (press Enter)" />
+            <button className="btn btn-primary" style={{ flexShrink: 0 }} onClick={() => { addTopic(newTopic); setNewTopic(''); }}><Plus size={13} /></button>
+          </div>
+
+          {topics.map(t => (
+            <div key={t.id} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '7px 0', borderBottom: '1px solid var(--border)' }}>
+              <button onClick={() => toggleTopic(t.id)} style={{
+                width: 18, height: 18, borderRadius: 4, border: `2px solid ${t.done ? 'var(--accent)' : 'var(--border)'}`,
+                background: t.done ? 'var(--accent)' : 'transparent', cursor: 'pointer',
+                display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+              }}>
+                {t.done && <Check size={11} color="var(--accentFg)" />}
+              </button>
+              <span style={{ flex: 1, fontSize: 13, textDecoration: t.done ? 'line-through' : 'none', color: t.done ? 'var(--muted)' : 'var(--text)' }}>{t.text}</span>
+              <button onClick={() => delTopic(t.id)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--muted)' }}><Trash2 size={11} /></button>
+            </div>
+          ))}
+
+          {courses.length === 0 && <p style={{ color: 'var(--muted)', fontSize: 13 }}>Add courses first.</p>}
+          {topics.length === 0 && <p style={{ color: 'var(--muted)', fontSize: 13, marginTop: 10 }}>No topics yet — add from syllabus above.</p>}
+        </>
+      )}
+    </div>
+  );
+}
+
+// ── Time Tracker ──────────────────────────────────────────────────────────────
+export function TimeTracker() {
+  const [logs, setLogs] = useState(() => store.get('timelogs') || []);
+  const [form, setForm] = useState({ date: new Date().toISOString().split('T')[0], category: 'Study', hours: '', note: '' });
+  const [adding, setAdding] = useState(false);
+  const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
+
+  const CATS = ['Study', 'Class', 'Self Study', 'Facebook/YouTube', 'Gaming', 'Sleep', 'Exercise', 'Tuition', 'Travel', 'Adda', 'Other'];
+
+  const save = () => {
+    const u = [{ ...form, hours: +form.hours, id: uid() }, ...logs];
+    setLogs(u); store.set('timelogs', u); setAdding(false);
+  };
+
+  // Today stats
+  const today = new Date().toISOString().split('T')[0];
+  const todayLogs = logs.filter(l => l.date === today);
+  const productive = todayLogs.filter(l => ['Study', 'Class', 'Self Study', 'Exercise'].includes(l.category)).reduce((s, l) => s + l.hours, 0);
+  const waste = todayLogs.filter(l => ['Facebook/YouTube', 'Gaming'].includes(l.category)).reduce((s, l) => s + l.hours, 0);
+
+  return (
+    <div className="page-enter" style={{ padding: 20, maxWidth: 640 }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+        <div>
+          <h1 style={{ fontSize: 18, fontWeight: 700 }}>Time Tracker</h1>
+          <p style={{ fontSize: 12, color: 'var(--muted)' }}>Today: {productive}h productive · {waste}h scrolled away</p>
+        </div>
+        <button className="btn btn-primary" onClick={() => setAdding(true)}><Plus size={13} /> Log Time</button>
+      </div>
+
+      {adding && (
+        <div className="card" style={{ marginBottom: 14, borderColor: 'var(--accent)' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 10, marginBottom: 10 }}>
+            <div><label>Date</label><input type="date" value={form.date} onChange={e => set('date', e.target.value)} /></div>
+            <div><label>Category</label><select value={form.category} onChange={e => set('category', e.target.value)}>{CATS.map(c => <option key={c}>{c}</option>)}</select></div>
+            <div><label>Hours</label><input type="number" value={form.hours} onChange={e => set('hours', e.target.value)} placeholder="1.5" min={0} step={0.25} /></div>
+          </div>
+          <div style={{ marginBottom: 10 }}><label>Note</label><input value={form.note} onChange={e => set('note', e.target.value)} placeholder="Optional detail" /></div>
+          <div style={{ display: 'flex', gap: 8 }}>
+            <button className="btn btn-primary" onClick={save}>Save</button>
+            <button className="btn btn-ghost" onClick={() => setAdding(false)}>Cancel</button>
+          </div>
+        </div>
+      )}
+
+      {todayLogs.length > 0 && (
+        <div className="card" style={{ marginBottom: 14 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 10 }}>Today's Breakdown</div>
+          {todayLogs.map(l => (
+            <div key={l.id} style={{ display: 'flex', justifyContent: 'space-between', padding: '5px 0', borderBottom: '1px solid var(--border)', fontSize: 12 }}>
+              <span style={{ color: ['Facebook/YouTube','Gaming'].includes(l.category) ? 'var(--danger)' : ['Study','Class','Self Study','Exercise'].includes(l.category) ? 'var(--success)' : 'var(--text)' }}>{l.category}</span>
+              <span style={{ fontWeight: 600 }}>{l.hours}h</span>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {logs.length === 0 && !adding && (
+        <div className="card" style={{ textAlign: 'center', color: 'var(--muted)', padding: 40 }}>
+          <p>Start logging your time to see where your day goes.</p>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ── Tuition Tracker ───────────────────────────────────────────────────────────
+export function Tuition() {
+  const [sessions, setSessions] = useState(() => store.get('tuition') || []);
+  const [form, setForm] = useState({ studentName: '', subject: '', date: new Date().toISOString().split('T')[0], hours: '', travelTime: '', travelCost: '', fee: '' });
+  const [adding, setAdding] = useState(false);
+  const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
+
+  const save = () => {
+    const u = [{ ...form, hours: +form.hours, travelTime: +form.travelTime, travelCost: +form.travelCost, fee: +form.fee, id: uid() }, ...sessions];
+    setSessions(u); store.set('tuition', u); setAdding(false);
+  };
+
+  const totalFee = sessions.reduce((s, t) => s + (t.fee || 0), 0);
+  const totalTravel = sessions.reduce((s, t) => s + (t.travelCost || 0), 0);
+  const net = totalFee - totalTravel;
+
+  return (
+    <div className="page-enter" style={{ padding: 20, maxWidth: 680 }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+        <div>
+          <h1 style={{ fontSize: 18, fontWeight: 700 }}>Tuition Tracker</h1>
+          <p style={{ fontSize: 12, color: 'var(--muted)' }}>Net income: ৳{net.toLocaleString()} (fee ৳{totalFee.toLocaleString()} - travel ৳{totalTravel.toLocaleString()})</p>
+        </div>
+        <button className="btn btn-primary" onClick={() => setAdding(true)}><Plus size={13} /> Log Session</button>
+      </div>
+
+      {adding && (
+        <div className="card" style={{ marginBottom: 14, borderColor: 'var(--accent)' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 10, marginBottom: 10 }}>
+            <div><label>Student Name</label><input value={form.studentName} onChange={e => set('studentName', e.target.value)} placeholder="Rahim" /></div>
+            <div><label>Subject</label><input value={form.subject} onChange={e => set('subject', e.target.value)} placeholder="Math" /></div>
+            <div><label>Date</label><input type="date" value={form.date} onChange={e => set('date', e.target.value)} /></div>
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 10, marginBottom: 10 }}>
+            <div><label>Hours</label><input type="number" value={form.hours} onChange={e => set('hours', e.target.value)} placeholder="1.5" min={0} step={0.5} /></div>
+            <div><label>Travel Time (min)</label><input type="number" value={form.travelTime} onChange={e => set('travelTime', e.target.value)} placeholder="30" /></div>
+            <div><label>Travel Cost (৳)</label><input type="number" value={form.travelCost} onChange={e => set('travelCost', e.target.value)} placeholder="40" /></div>
+            <div><label>Fee Received (৳)</label><input type="number" value={form.fee} onChange={e => set('fee', e.target.value)} placeholder="500" /></div>
+          </div>
+          <div style={{ display: 'flex', gap: 8 }}>
+            <button className="btn btn-primary" onClick={save}>Save</button>
+            <button className="btn btn-ghost" onClick={() => setAdding(false)}>Cancel</button>
+          </div>
+        </div>
+      )}
+
+      {sessions.slice(0, 20).map(s => (
+        <div key={s.id} className="card" style={{ marginBottom: 6, display: 'flex', alignItems: 'center', gap: 10 }}>
+          <div style={{ flex: 1 }}>
+            <div style={{ fontWeight: 600, fontSize: 13 }}>{s.studentName} — {s.subject}</div>
+            <div style={{ fontSize: 11, color: 'var(--muted)' }}>{s.date} · {s.hours}h · Travel: {s.travelTime}min / ৳{s.travelCost}</div>
+          </div>
+          <div style={{ textAlign: 'right' }}>
+            <div style={{ fontWeight: 700, color: 'var(--success)' }}>+৳{s.fee}</div>
+            <div style={{ fontSize: 11, color: 'var(--muted)' }}>Net: ৳{(s.fee - s.travelCost).toLocaleString()}</div>
+          </div>
+          <button className="btn btn-ghost" style={{ padding: '4px 8px' }} onClick={() => {
+            const u = sessions.filter(x => x.id !== s.id); setSessions(u); store.set('tuition', u);
+          }}><Trash2 size={11} color="var(--danger)" /></button>
+        </div>
+      ))}
+
+      {sessions.length === 0 && !adding && (
+        <div className="card" style={{ textAlign: 'center', color: 'var(--muted)', padding: 40 }}>
+          <p>Track your private tuition sessions and earnings here.</p>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ── Food & Health ─────────────────────────────────────────────────────────────
+export function Food() {
+  const profile = store.get('profile') || {};
+  const [bmi, setBmi] = useState({ weight: '', height: '' });
+  const [logs, setLogs] = useState(() => store.get('foodlogs') || []);
+  const [form, setForm] = useState({ date: new Date().toISOString().split('T')[0], meal: 'Lunch', item: '', calories: '' });
+  const [adding, setAdding] = useState(false);
+  const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
+  const setBMI = (k, v) => setBmi(b => ({ ...b, [k]: v }));
+
+  const bmiVal = bmi.weight && bmi.height ? (bmi.weight / ((bmi.height / 100) ** 2)).toFixed(1) : null;
+  const bmiLabel = !bmiVal ? '' : bmiVal < 18.5 ? 'Underweight' : bmiVal < 25 ? 'Normal' : bmiVal < 30 ? 'Overweight' : 'Obese';
+  const suggestedCal = bmi.weight ? Math.round(bmi.weight * 33) : 2200; // rough TDEE
+
+  const save = () => {
+    const u = [{ ...form, calories: +form.calories, id: uid() }, ...logs];
+    setLogs(u); store.set('foodlogs', u); setAdding(false);
+  };
+
+  const today = new Date().toISOString().split('T')[0];
+  const todayCal = logs.filter(l => l.date === today).reduce((s, l) => s + (l.calories || 0), 0);
+
+  return (
+    <div className="page-enter" style={{ padding: 20, maxWidth: 640 }}>
+      <div style={{ marginBottom: 16 }}>
+        <h1 style={{ fontSize: 18, fontWeight: 700 }}>Food & Health</h1>
+        <p style={{ fontSize: 12, color: 'var(--muted)' }}>BMI, calorie tracker, daily nutrition — Bangladesh perspective</p>
+      </div>
+
+      <div className="card" style={{ marginBottom: 14 }}>
+        <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 10 }}>BMI Calculator</div>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 10 }}>
+          <div><label>Weight (kg)</label><input type="number" value={bmi.weight} onChange={e => setBMI('weight', e.target.value)} placeholder="65" /></div>
+          <div><label>Height (cm)</label><input type="number" value={bmi.height} onChange={e => setBMI('height', e.target.value)} placeholder="170" /></div>
+          <div>
+            <label>BMI</label>
+            <div style={{ padding: '7px 11px', background: 'var(--bg)', border: '1px solid var(--border)', borderRadius: 7, fontWeight: 700, fontSize: 15, color: bmiVal && +bmiVal >= 18.5 && +bmiVal < 25 ? 'var(--success)' : bmiVal ? 'var(--warning)' : 'var(--muted)' }}>
+              {bmiVal || '—'} <span style={{ fontSize: 11, fontWeight: 400 }}>{bmiLabel}</span>
+            </div>
+          </div>
+        </div>
+        {bmiVal && <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 8 }}>Suggested daily calories: ~{suggestedCal} kcal</div>}
+      </div>
+
+      <div className="card" style={{ marginBottom: 14 }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
+          <div>
+            <div style={{ fontSize: 13, fontWeight: 600 }}>Today's Calories</div>
+            <div style={{ fontSize: 11, color: 'var(--muted)' }}>Target: ~{suggestedCal} kcal</div>
+          </div>
+          <div style={{ fontSize: 22, fontWeight: 800, color: todayCal > suggestedCal ? 'var(--danger)' : 'var(--success)' }}>{todayCal} kcal</div>
+        </div>
+        <div className="progress-bar">
+          <div className="progress-fill" style={{ width: `${Math.min(100, (todayCal / suggestedCal) * 100)}%`, background: todayCal > suggestedCal ? 'var(--danger)' : 'var(--accent)' }} />
+        </div>
+        <button className="btn btn-primary" style={{ marginTop: 10, width: '100%' }} onClick={() => setAdding(!adding)}>
+          <Plus size={13} /> Log Meal
+        </button>
+      </div>
+
+      {adding && (
+        <div className="card" style={{ marginBottom: 14, borderColor: 'var(--accent)' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 2fr 1fr', gap: 10, marginBottom: 10 }}>
+            <div><label>Date</label><input type="date" value={form.date} onChange={e => set('date', e.target.value)} /></div>
+            <div><label>Meal</label><select value={form.meal} onChange={e => set('meal', e.target.value)}>{['Breakfast','Lunch','Dinner','Snack'].map(m => <option key={m}>{m}</option>)}</select></div>
+            <div><label>Food Item</label><input value={form.item} onChange={e => set('item', e.target.value)} placeholder="Bhat, Dal, Chicken..." /></div>
+            <div><label>Calories (kcal)</label><input type="number" value={form.calories} onChange={e => set('calories', e.target.value)} placeholder="400" /></div>
+          </div>
+          <div style={{ display: 'flex', gap: 8 }}>
+            <button className="btn btn-primary" onClick={save}>Save</button>
+            <button className="btn btn-ghost" onClick={() => setAdding(false)}>Cancel</button>
+          </div>
+        </div>
+      )}
+
+      {logs.filter(l => l.date === today).map(l => (
+        <div key={l.id} className="card" style={{ marginBottom: 5, display: 'flex', alignItems: 'center', gap: 10 }}>
+          <span className="tag tag-gray">{l.meal}</span>
+          <span style={{ flex: 1, fontSize: 13 }}>{l.item}</span>
+          <span style={{ fontWeight: 600, fontSize: 13 }}>{l.calories} kcal</span>
+          <button className="btn btn-ghost" style={{ padding: '4px 8px' }} onClick={() => {
+            const u = logs.filter(x => x.id !== l.id); setLogs(u); store.set('foodlogs', u);
+          }}><Trash2 size={11} color="var(--danger)" /></button>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// ── Reports ───────────────────────────────────────────────────────────────────
+export function Reports() {
+  const courses  = store.get('courses') || [];
+  const expenses = store.get('expenses') || [];
+  const namaz   = store.get('namaz') || {};
+  const selfeval = store.get('selfeval') || {};
+  const diary   = store.get('diary') || [];
+
+  const exportReport = (period) => {
+    const now = new Date();
+    const lines = [
+      `KUETx ${period} Report — ${now.toLocaleDateString('en-BD')}`,
+      '='.repeat(50),
+      '',
+      `Courses: ${courses.length}`,
+      `Diary Entries: ${diary.length}`,
+      `Expenses logged: ${expenses.length}`,
+      '',
+      'Generated by KUETx — KUET Student Life OS',
+    ];
+    const blob = new Blob([lines.join('\n')], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = `kuetx-${period.toLowerCase()}-report-${now.toISOString().split('T')[0]}.txt`;
+    a.click(); URL.revokeObjectURL(url);
+  };
+
+  return (
+    <div className="page-enter" style={{ padding: 20, maxWidth: 640 }}>
+      <div style={{ marginBottom: 20 }}>
+        <h1 style={{ fontSize: 18, fontWeight: 700 }}>Reports</h1>
+        <p style={{ fontSize: 12, color: 'var(--muted)' }}>Export summaries of your academic life</p>
+      </div>
+
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 10 }}>
+        {['Daily', 'Weekly', 'Monthly', 'Semester'].map(p => (
+          <div key={p} className="card" style={{ textAlign: 'center', padding: 24 }}>
+            <div style={{ fontSize: 14, fontWeight: 700, marginBottom: 4 }}>{p} Report</div>
+            <div style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 12 }}>Summary of activities, marks, attendance</div>
+            <button className="btn btn-primary" style={{ width: '100%' }} onClick={() => exportReport(p)}>
+              Download {p}
+            </button>
+          </div>
+        ))}
+      </div>
+
+      <div className="card" style={{ marginTop: 14 }}>
+        <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 8 }}>Data Overview</div>
+        {[
+          ['Courses', courses.length],
+          ['Expenses recorded', expenses.length],
+          ['Diary entries', diary.length],
+          ['Days with Namaz data', Object.keys(namaz).length],
+          ['Self-eval days', Object.keys(selfeval).length],
+        ].map(([k, v]) => (
+          <div key={k} style={{ display: 'flex', justifyContent: 'space-between', padding: '5px 0', borderBottom: '1px solid var(--border)', fontSize: 12 }}>
+            <span style={{ color: 'var(--muted)' }}>{k}</span>
+            <span style={{ fontWeight: 600 }}>{v}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
