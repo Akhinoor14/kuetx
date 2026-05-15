@@ -14,6 +14,7 @@ export default function SelfStudy() {
   const [extraReading, setExtraReading] = useState(() => store.get('selfstudy_extra') || []);
   const [activeTab, setActiveTab] = useState('academic');
   const [adding, setAdding] = useState(false);
+  const [addingAcademic, setAddingAcademic] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [editForm, setEditForm] = useState({ startDate: '', endDate: '' });
   const [searchQuery, setSearchQuery] = useState('');
@@ -79,6 +80,24 @@ export default function SelfStudy() {
     const updated = academicSessions.filter(session => session.id !== id);
     setAcademicSessions(updated);
     store.set('selfstudy_academic', updated);
+  };
+
+  const addAcademic = () => {
+    if (!academicForm.date || !academicForm.courseId || !academicForm.topic || !academicForm.hours) return;
+    const updated = [{
+      id: uid(),
+      ...academicForm,
+      hours: Number(academicForm.hours) || 0,
+    }, ...academicSessions];
+    setAcademicSessions(updated);
+    store.set('selfstudy_academic', updated);
+    setAddingAcademic(false);
+    setAcademicForm({
+      date: new Date().toISOString().split('T')[0],
+      courseId: '',
+      topic: '',
+      hours: ''
+    });
   };
 
   const addExtra = () => {
@@ -339,8 +358,60 @@ export default function SelfStudy() {
         </div>
       </div>
 
+      {activeTab === 'academic' && (
+        <div style={{ marginBottom: 16 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: 12, marginBottom: 12 }}>
+            {activeSummary.map((card, idx) => {
+              const icons = ['📚', '✅', '⏱️', '⏰'];
+              const colors = ['rgba(139,92,246,0.12)', 'rgba(34,197,94,0.12)', 'rgba(249,115,22,0.12)', 'rgba(14,165,233,0.12)'];
+              return (
+                <div key={card.label} className="card" style={{ padding: 12, background: `linear-gradient(135deg, ${colors[idx]}, transparent)`, position: 'relative', overflow: 'hidden' }}>
+                  <div style={{ fontSize: 20, marginBottom: 6 }}>{icons[idx]}</div>
+                  <div style={{ fontSize: 22, fontWeight: 800, lineHeight: 1.1, marginBottom: 2 }}>{card.value}</div>
+                  <div style={{ fontSize: 10, color: 'var(--muted)', fontWeight: 500 }}>{card.label}</div>
+                  <div style={{ fontSize: 10, color: 'var(--muted)', marginTop: 4 }}>{card.note}</div>
+                </div>
+              );
+            })}
+          </div>
+          
+          {totalOfficialTopics > 0 && (
+            <div className="card" style={{ padding: 12, background: 'linear-gradient(135deg, rgba(139,92,246,0.08), rgba(34,197,94,0.08))' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
+                <div style={{ fontSize: 12, fontWeight: 700 }}>Overall Progress</div>
+                <div style={{ fontSize: 13, fontWeight: 800, color: '#8b5cf6' }}>{Math.round((coveredTopics / totalOfficialTopics) * 100)}%</div>
+              </div>
+              <div style={{ marginBottom: 8 }}>
+                <div style={{ height: 8, borderRadius: 999, background: 'rgba(148,163,184,0.2)', overflow: 'hidden', marginBottom: 6 }}>
+                  <div style={{ width: `${(coveredTopics / totalOfficialTopics) * 100}%`, height: '100%', borderRadius: 999, background: 'linear-gradient(90deg, #8b5cf6, #10b981)' }} />
+                </div>
+                <div style={{ display: 'flex', gap: 12, fontSize: 11, color: 'var(--muted)' }}>
+                  <span>📚 {totalOfficialTopics} topics total</span>
+                  <span>⏱️ {coveredTopics} touched</span>
+                  <span>✅ {completedTopics} done</span>
+                </div>
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8, marginTop: 10, paddingTop: 10, borderTop: '1px solid var(--border)' }}>
+                <div style={{ textAlign: 'center' }}>
+                  <div style={{ fontSize: 16, fontWeight: 800, color: '#10b981' }}>{completedTopics}</div>
+                  <div style={{ fontSize: 10, color: 'var(--muted)', marginTop: 2 }}>Completed</div>
+                </div>
+                <div style={{ textAlign: 'center' }}>
+                  <div style={{ fontSize: 16, fontWeight: 800, color: '#f59e0b' }}>{runningTopics}</div>
+                  <div style={{ fontSize: 10, color: 'var(--muted)', marginTop: 2 }}>In Progress</div>
+                </div>
+                <div style={{ textAlign: 'center' }}>
+                  <div style={{ fontSize: 16, fontWeight: 800, color: 'var(--muted)' }}>{totalOfficialTopics - coveredTopics}</div>
+                  <div style={{ fontSize: 10, color: 'var(--muted)', marginTop: 2 }}>Not Started</div>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(170px, 1fr))', gap: 10, marginBottom: 14 }}>
-        {activeSummary.map(card => (
+        {activeTab === 'extra' && activeSummary.map(card => (
           <div key={card.label} className="card" style={{ padding: 12, background: 'linear-gradient(180deg, rgba(139,92,246,0.08), transparent)' }}>
             <div style={{ fontSize: 11, color: 'var(--muted)', marginBottom: 6 }}>{card.label}</div>
             <div style={{ fontSize: 22, fontWeight: 800, lineHeight: 1.1 }}>{card.value}</div>
@@ -386,64 +457,112 @@ export default function SelfStudy() {
               </div>
             </div>
 
+            <div className="card" style={{ padding: 12, borderColor: 'var(--accent)', background: addingAcademic ? 'linear-gradient(135deg, rgba(139,92,246,0.08), transparent)' : 'transparent' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12, marginBottom: addingAcademic ? 12 : 0 }}>
+                <div>
+                  <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 2 }}>📝 Log Study</div>
+                  <div style={{ fontSize: 11, color: 'var(--muted)' }}>Manual entry for any study session</div>
+                </div>
+                <button className={`btn btn-sm ${addingAcademic ? 'btn-primary' : 'btn-ghost'}`} onClick={() => setAddingAcademic(v => !v)}>
+                  {addingAcademic ? 'Cancel' : '+ Add'}
+                </button>
+              </div>
+
+              {addingAcademic && (
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                  <div>
+                    <label>Date</label>
+                    <input type="date" value={academicForm.date} onChange={e => setAcademicForm({ ...academicForm, date: e.target.value })} />
+                  </div>
+                  <div>
+                    <label>Hours</label>
+                    <input type="number" step="0.5" value={academicForm.hours} onChange={e => setAcademicForm({ ...academicForm, hours: e.target.value })} placeholder="e.g., 2.5" />
+                  </div>
+                  <div>
+                    <label>Course</label>
+                    <select value={academicForm.courseId} onChange={e => setAcademicForm({ ...academicForm, courseId: e.target.value })}>
+                      <option value="">Select course</option>
+                      {currentTermCourseStats.map(course => <option key={course.id} value={course.id}>{course.code}</option>)}
+                    </select>
+                  </div>
+                  <div>
+                    <label>Topic / Activity</label>
+                    <input value={academicForm.topic} onChange={e => setAcademicForm({ ...academicForm, topic: e.target.value })} placeholder="e.g., Chapter 3 review" />
+                  </div>
+                  <div style={{ gridColumn: '1 / -1' }}>
+                    <button className="btn btn-primary" onClick={addAcademic} style={{ width: '100%' }}>Save Entry</button>
+                  </div>
+                </div>
+              )}
+            </div>
+
             <div style={{ display: 'grid', gridTemplateColumns: `repeat(auto-fit, minmax(${compactView ? '250px' : '300px'}, 1fr))`, gap: 12 }}>
               {visibleCurrentTermCourseStats.map(course => {
                 const progressWidth = course.totalTopics ? Math.max(8, course.progress) : 0;
+                const completionPercent = course.totalTopics ? Math.round((course.completedTopics / course.totalTopics) * 100) : 0;
 
                 return (
-                  <div key={course.id} className="card" style={{ padding: 0, overflow: 'hidden' }}>
+                  <div key={course.id} className="card" style={{ padding: 0, overflow: 'hidden', borderLeft: `4px solid ${progressWidth > 50 ? '#8b5cf6' : '#10b981'}` }}>
                     <div style={{ padding: '12px 12px 10px', background: 'linear-gradient(135deg, rgba(139,92,246,0.12), rgba(16,185,129,0.06))', borderBottom: '1px solid var(--border)' }}>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', gap: 10, alignItems: 'flex-start' }}>
-                        <div>
-                          <div style={{ fontSize: 12, fontWeight: 800, color: '#8b5cf6' }}>{course.code}</div>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', gap: 10, alignItems: 'flex-start', marginBottom: 6 }}>
+                        <div style={{ flex: 1 }}>
+                          <div style={{ fontSize: 11, fontWeight: 700, color: '#8b5cf6', marginBottom: 2 }}>{course.code}</div>
                           <div style={{ fontSize: 13, fontWeight: 700, lineHeight: 1.3 }}>{course.name}</div>
                         </div>
-                        <button className="btn btn-ghost btn-sm" style={{ fontSize: 10 }} onClick={() => toggleCourse(course.id)}>
-                          {openCourses[course.id] === false ? 'Show' : 'Hide'}
-                        </button>
+                        <div style={{ display: 'flex', gap: 4, alignItems: 'center', flexShrink: 0 }}>
+                          <span style={{ fontSize: 12, fontWeight: 800, color: completionPercent === 100 ? '#10b981' : '#f59e0b', background: completionPercent === 100 ? 'rgba(16,185,129,0.1)' : 'rgba(249,115,22,0.1)', padding: '2px 8px', borderRadius: 4 }}>{completionPercent}%</span>
+                          <button className="btn btn-ghost btn-sm" style={{ fontSize: 10, padding: '4px 6px' }} onClick={() => toggleCourse(course.id)}>
+                            {openCourses[course.id] === false ? '▼' : '▲'}
+                          </button>
+                        </div>
                       </div>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', gap: 8, marginTop: 8, fontSize: 11, color: 'var(--muted)' }}>
-                        <span>{course.coveredTopics}/{course.totalTopics} topics</span>
-                        <span>{course.completedTopics} done</span>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', gap: 8, marginBottom: 8, fontSize: 10, color: 'var(--muted)' }}>
+                        <span>📚 {course.coveredTopics}/{course.totalTopics}</span>
+                        <span>✅ {course.completedTopics} done</span>
+                        {course.runningTopics > 0 && <span>⏱️ {course.runningTopics} active</span>}
                       </div>
-                      <div style={{ marginTop: 8, height: 6, borderRadius: 999, background: 'rgba(148,163,184,0.18)', overflow: 'hidden' }}>
+                      <div style={{ marginTop: 0, height: 6, borderRadius: 999, background: 'rgba(148,163,184,0.18)', overflow: 'hidden' }}>
                         <div style={{ width: `${progressWidth}%`, height: '100%', borderRadius: 999, background: 'linear-gradient(90deg, #8b5cf6, #10b981)' }} />
                       </div>
                     </div>
 
                     {openCourses[course.id] !== false && (
                       <div style={{ maxHeight: compactView ? 300 : 360, overflowY: 'auto' }}>
-                        {course.visibleTopics.map((topicRow, idx) => (
-                          <div key={topicRow.id} style={{ padding: compactView ? '8px 12px' : '10px 12px', borderBottom: idx < course.visibleTopics.length - 1 ? '1px solid var(--border)' : 'none' }}>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', gap: 8, alignItems: 'flex-start' }}>
-                              <div style={{ flex: 1, minWidth: 0 }}>
-                                <div style={{ fontSize: 12, fontWeight: 600, lineHeight: 1.35 }}>{topicRow.topic}</div>
-                                {!compactView && topicRow.latest?.startDate && (
-                                  <div style={{ fontSize: 10, color: 'var(--muted)', marginTop: 4 }}>
-                                    Start: {topicRow.latest.startDate}{topicRow.latest.endDate ? ` • End: ${topicRow.latest.endDate}` : ''}
+                        {course.visibleTopics.length === 0 ? (
+                          <div style={{ padding: '20px 12px', textAlign: 'center', fontSize: 12, color: 'var(--muted)' }}>No topics match filters</div>
+                        ) : (
+                          course.visibleTopics.map((topicRow, idx) => (
+                            <div key={topicRow.id} style={{ padding: compactView ? '8px 12px' : '10px 12px', borderBottom: idx < course.visibleTopics.length - 1 ? '1px solid var(--border)' : 'none' }}>
+                              <div style={{ display: 'flex', justifyContent: 'space-between', gap: 8, alignItems: 'flex-start' }}>
+                                <div style={{ flex: 1, minWidth: 0 }}>
+                                  <div style={{ fontSize: 12, fontWeight: 600, lineHeight: 1.35 }}>{topicRow.topic}</div>
+                                  {!compactView && topicRow.latest?.startDate && (
+                                    <div style={{ fontSize: 10, color: 'var(--muted)', marginTop: 4 }}>
+                                      Start: {topicRow.latest.startDate}{topicRow.latest.endDate ? ` • End: ${topicRow.latest.endDate}` : ''}
+                                    </div>
+                                  )}
+                                  {!compactView && topicRow.durationDays && (
+                                    <div style={{ fontSize: 10, color: '#10b981', marginTop: 2 }}>Finished in {topicRow.durationDays} days</div>
+                                  )}
+                                  {!compactView && topicRow.runningDays && (
+                                    <div style={{ fontSize: 10, color: '#f59e0b', marginTop: 2 }}>Running {topicRow.runningDays} days</div>
+                                  )}
+                                  <div style={{ marginTop: compactView ? 2 : 6, fontSize: 10, fontWeight: 500, color: topicRow.status === 'done' ? '#10b981' : topicRow.status === 'running' ? '#f59e0b' : 'var(--muted)' }}>
+                                    {topicRow.status === 'done' ? '✅ Completed' : topicRow.status === 'running' ? '⏱️ In progress' : '⚪ Not started'}
                                   </div>
-                                )}
-                                {!compactView && topicRow.durationDays && (
-                                  <div style={{ fontSize: 10, color: '#10b981', marginTop: 2 }}>Finished in {topicRow.durationDays} days</div>
-                                )}
-                                {!compactView && topicRow.runningDays && (
-                                  <div style={{ fontSize: 10, color: '#f59e0b', marginTop: 2 }}>Running {topicRow.runningDays} days</div>
-                                )}
-                                <div style={{ marginTop: compactView ? 2 : 6, fontSize: 10, color: topicRow.status === 'done' ? '#10b981' : topicRow.status === 'running' ? '#f59e0b' : 'var(--muted)' }}>
-                                  {topicRow.status === 'done' ? 'Completed' : topicRow.status === 'running' ? 'In progress' : 'Not started'}
+                                </div>
+                                <div style={{ display: 'flex', gap: 6, flexShrink: 0, alignItems: 'center' }}>
+                                  <button className="btn btn-ghost btn-sm" style={{ fontSize: 10 }} onClick={() => startTopic(course.id, topicRow.topic)}>
+                                    Start
+                                  </button>
+                                  <button className="btn btn-primary btn-sm" style={{ fontSize: 10 }} onClick={() => endTopic(course.id, topicRow.topic)}>
+                                    End
+                                  </button>
                                 </div>
                               </div>
-                              <div style={{ display: 'flex', gap: 6, flexShrink: 0, alignItems: 'center' }}>
-                                <button className="btn btn-ghost btn-sm" style={{ fontSize: 10 }} onClick={() => startTopic(course.id, topicRow.topic)}>
-                                  Start
-                                </button>
-                                <button className="btn btn-primary btn-sm" style={{ fontSize: 10 }} onClick={() => endTopic(course.id, topicRow.topic)}>
-                                  End
-                                </button>
-                              </div>
                             </div>
-                          </div>
-                        ))}
+                          ))
+                        )}
                       </div>
                     )}
                   </div>
