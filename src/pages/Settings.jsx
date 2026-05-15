@@ -104,7 +104,7 @@ export default function Settings() {
     : 'Never';
 
   return (
-    <div className="page-enter" style={{ padding: 20, maxWidth: 580 }}>
+    <div className="page-enter page-container">
       <h1 style={{ fontSize: 18, fontWeight: 700, marginBottom: 4 }}>Settings</h1>
       <p style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 20 }}>Theme, data storage, backup and restore</p>
 

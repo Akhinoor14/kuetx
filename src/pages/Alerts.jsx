@@ -95,7 +95,7 @@ export default function Alerts() {
   );
 
   return (
-    <div className="page-enter" style={{ padding: 20, maxWidth: 700 }}>
+    <div className="page-enter page-container">
       <div style={{ marginBottom: 20 }}>
         <h1 style={{ fontSize: 18, fontWeight: 700 }}>Alerts & Suggestions</h1>
         <p style={{ fontSize: 12, color: 'var(--muted)' }}>

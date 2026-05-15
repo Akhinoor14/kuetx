@@ -41,7 +41,7 @@ export default function SelfEval() {
   const ratingLabel = ['', 'খুব খারাপ', 'খারাপ', 'ঠিক আছে', 'ভালো', 'অসাধারণ'][rec.rating || 3];
 
   return (
-    <div className="page-enter" style={{ padding: 20, maxWidth: 680 }}>
+    <div className="page-enter page-container">
       <div style={{ marginBottom: 16 }}>
         <h1 style={{ fontSize: 18, fontWeight: 700 }}>Self Evaluation</h1>
         <p style={{ fontSize: 12, color: 'var(--muted)' }}>Daily accountability — good deeds, bad habits, self rating</p>

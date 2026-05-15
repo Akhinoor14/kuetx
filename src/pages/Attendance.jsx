@@ -225,7 +225,7 @@ export default function Attendance() {
   const [tab, setTab] = useState('daily');
 
   return (
-    <div className="page-enter" style={{ padding: 20, maxWidth: 820 }}>
+    <div className="page-enter page-container">
       <div style={{ marginBottom: 20 }}>
         <h1>Attendance</h1>
         <p className="text-muted" style={{ marginTop: 4 }}>

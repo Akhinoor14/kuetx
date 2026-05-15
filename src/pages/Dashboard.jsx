@@ -77,7 +77,7 @@ export default function Dashboard() {
   })();
 
   return (
-    <div className="page-enter" style={{ padding: 20, maxWidth: 860, margin: '0 auto' }}>
+    <div className="page-enter page-container">
       {/* Welcome */}
       <div style={{ marginBottom: 18 }}>
         <h1 style={{ fontSize: 20, fontWeight: 800, letterSpacing: '-0.03em' }}>

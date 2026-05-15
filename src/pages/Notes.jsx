@@ -36,7 +36,7 @@ export function Notes() {
   const sorted = [...notes].sort((a, b) => (b.pinned ? 1 : 0) - (a.pinned ? 1 : 0));
 
   return (
-    <div className="page-enter" style={{ padding: 20, maxWidth: 700 }}>
+    <div className="page-enter page-container">
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
         <h1 style={{ fontSize: 18, fontWeight: 700 }}>Notes</h1>
         <button className="btn btn-primary" onClick={() => { setAdding(true); setEditing(null); }}><Plus size={13} /> New Note</button>

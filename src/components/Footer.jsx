@@ -19,7 +19,7 @@ export function Footer() {
     <footer style={{ marginTop: '2rem', borderTop: '1px solid var(--border)', background: 'var(--surface)', position: 'relative' }}>
       <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 2, background: 'linear-gradient(90deg, transparent, var(--accent), transparent)', opacity: 0.7 }} />
 
-      <div style={{ maxWidth: 900, margin: '0 auto', padding: '1.2rem 1.5rem 1rem', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '0.75rem' }}>
+      <div style={{ width: '100%', margin: 0, padding: '1.2rem 1.5rem 1rem', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '0.75rem', boxSizing: 'border-box' }}>
 
         {/* Brand */}
         <div style={{ border: '1px solid var(--accent)', borderRadius: 10, padding: '0.9rem 1rem', background: 'var(--card)', boxShadow: '0 4px 14px rgba(0,0,0,0.06)' }}>
@@ -77,7 +77,7 @@ export function Footer() {
       </div>
 
       {/* Bottom bar */}
-      <div style={{ maxWidth: 900, margin: '0 auto', padding: '0.65rem 1.5rem 1rem', borderTop: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.5rem', fontSize: 11, color: 'var(--muted)' }}>
+      <div style={{ width: '100%', margin: 0, padding: '0.65rem 1.5rem 1rem', borderTop: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.5rem', fontSize: 11, color: 'var(--muted)', boxSizing: 'border-box' }}>
         <span>© KUETx · Built by Md Akhinoor Islam for KUET students</span>
         <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
           <a href="https://a3kmstudio.vercel.app" target="_blank" rel="noopener" style={{ color: 'var(--accent)', textDecoration: 'none' }}>A3KM Studio</a>

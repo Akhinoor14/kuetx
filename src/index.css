@@ -44,7 +44,7 @@ body {
 /* ── Layout ──────────────────────────────────────────────────────────────── */
 .sidebar {
   width: 230px;
-  min-height: 100vh;
+  height: 100vh;
   background: var(--surface);
   border-right: 1px solid var(--border);
   display: flex;
@@ -54,6 +54,7 @@ body {
   z-index: 40;
   transition: transform 0.25s ease;
   overflow-y: auto;
+  overscroll-behavior: contain;
 }
 .sidebar-collapsed { transform: translateX(-230px); }
 .main-content {
@@ -61,11 +62,14 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  width: calc(100% - 230px);
+  flex: 1 1 auto;
+  min-width: 0;
 }
 @media (max-width: 768px) {
   .sidebar { transform: translateX(-230px); }
   .sidebar.open { transform: translateX(0); box-shadow: 4px 0 20px rgba(0,0,0,0.15); }
-  .main-content { margin-left: 0; }
+  .main-content { margin-left: 0; width: 100%; }
 }
 
 /* ── Card ────────────────────────────────────────────────────────────────── */
@@ -189,6 +193,15 @@ h3 { font-size: 15px; font-weight: 600; }
 @keyframes pageIn {
   from { opacity: 0; transform: translateY(8px); }
   to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Page container: used by pages to take full available width */
+.page-container {
+  padding: 20px;
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  box-sizing: border-box;
 }
 
 /* ── Divider ─────────────────────────────────────────────────────────────── */

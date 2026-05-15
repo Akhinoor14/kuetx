@@ -46,7 +46,7 @@ export default function Money() {
   }, [expenses]);
 
   return (
-    <div className="page-enter" style={{ padding: 20, maxWidth: 700 }}>
+    <div className="page-enter page-container">
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
         <div>
           <h1 style={{ fontSize: 18, fontWeight: 700 }}>Money Tracker</h1>

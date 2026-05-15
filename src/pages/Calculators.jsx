@@ -295,7 +295,7 @@ export default function Calculators() {
   const Comp = CALC_TABS.find(t => t.id === tab)?.comp || LegacyCGPACalc;
 
   return (
-    <div className="page-enter" style={{ padding: 20, maxWidth: 740 }}>
+    <div className="page-enter page-container">
       <div style={{ marginBottom: 16 }}>
         <h1 style={{ fontSize: 18, fontWeight: 700 }}>Smart Calculators</h1>
         <p style={{ fontSize: 12, color: 'var(--muted)' }}>KUET-specific academic calculators</p>

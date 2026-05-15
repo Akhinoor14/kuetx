@@ -118,7 +118,7 @@ export default function Courses() {
   const sortedGroups = Object.values(groups).sort((a,b)=>a.key.localeCompare(b.key));
 
   return (
-    <div className="page-enter" style={{ padding:20, maxWidth:820 }}>
+    <div className="page-enter page-container">
       <div className="flex-between mb-4">
         <div>
           <h1>Courses</h1>

@@ -26,7 +26,7 @@ export default function Teachers() {
   const del = (id) => { if (confirm('Delete?')) { const u = teachers.filter(t => t.id !== id); setTeachers(u); store.set('teachers', u); } };
 
   return (
-    <div className="page-enter" style={{ padding: 20, maxWidth: 800 }}>
+    <div className="page-enter page-container">
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
         <div>
           <h1 style={{ fontSize: 18, fontWeight: 700 }}>Teachers</h1>

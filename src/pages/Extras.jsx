@@ -16,7 +16,7 @@ export function Tours() {
   };
 
   return (
-    <div className="page-enter" style={{ padding: 20, maxWidth: 680 }}>
+    <div className="page-enter page-container">
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
         <div>
           <h1 style={{ fontSize: 18, fontWeight: 700 }}>Tours</h1>
@@ -101,7 +101,7 @@ export function Social() {
   }).reduce((s, l) => s + (l.hours || 0), 0);
 
   return (
-    <div className="page-enter" style={{ padding: 20, maxWidth: 600 }}>
+    <div className="page-enter page-container">
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
         <div>
           <h1 style={{ fontSize: 18, fontWeight: 700 }}>Social Time</h1>
@@ -164,7 +164,7 @@ export function Projects() {
   const statusColor = { active: 'tag-green', done: 'tag-blue', paused: 'tag-yellow' };
 
   return (
-    <div className="page-enter" style={{ padding: 20, maxWidth: 680 }}>
+    <div className="page-enter page-container">
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
         <h1 style={{ fontSize: 18, fontWeight: 700 }}>Projects</h1>
         <button className="btn btn-primary" onClick={() => setAdding(true)}><Plus size={13} /> Add Project</button>
@@ -242,7 +242,7 @@ export function Syllabus() {
   const done = topics.filter(t => t.done).length;
 
   return (
-    <div className="page-enter" style={{ padding: 20, maxWidth: 640 }}>
+    <div className="page-enter page-container">
       <div style={{ marginBottom: 16 }}>
         <h1 style={{ fontSize: 18, fontWeight: 700 }}>Syllabus Tracker</h1>
         <p style={{ fontSize: 12, color: 'var(--muted)' }}>Track topic coverage per course</p>
@@ -319,7 +319,7 @@ export function TimeTracker() {
   const waste = todayLogs.filter(l => ['Facebook/YouTube', 'Gaming'].includes(l.category)).reduce((s, l) => s + l.hours, 0);
 
   return (
-    <div className="page-enter" style={{ padding: 20, maxWidth: 640 }}>
+    <div className="page-enter page-container">
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
         <div>
           <h1 style={{ fontSize: 18, fontWeight: 700 }}>Time Tracker</h1>
@@ -381,7 +381,7 @@ export function Tuition() {
   const net = totalFee - totalTravel;
 
   return (
-    <div className="page-enter" style={{ padding: 20, maxWidth: 680 }}>
+    <div className="page-enter page-container">
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
         <div>
           <h1 style={{ fontSize: 18, fontWeight: 700 }}>Tuition Tracker</h1>
@@ -458,7 +458,7 @@ export function Food() {
   const todayCal = logs.filter(l => l.date === today).reduce((s, l) => s + (l.calories || 0), 0);
 
   return (
-    <div className="page-enter" style={{ padding: 20, maxWidth: 640 }}>
+    <div className="page-enter page-container">
       <div style={{ marginBottom: 16 }}>
         <h1 style={{ fontSize: 18, fontWeight: 700 }}>Food & Health</h1>
         <p style={{ fontSize: 12, color: 'var(--muted)' }}>BMI, calorie tracker, daily nutrition — Bangladesh perspective</p>
@@ -552,7 +552,7 @@ export function Reports() {
   };
 
   return (
-    <div className="page-enter" style={{ padding: 20, maxWidth: 640 }}>
+    <div className="page-enter page-container">
       <div style={{ marginBottom: 20 }}>
         <h1 style={{ fontSize: 18, fontWeight: 700 }}>Reports</h1>
         <p style={{ fontSize: 12, color: 'var(--muted)' }}>Export summaries of your academic life</p>

@@ -40,7 +40,7 @@ export default function Results() {
   };
 
   return (
-    <div className="page-enter" style={{ padding: 20, maxWidth: 820 }}>
+    <div className="page-enter page-container">
       <div style={{ marginBottom: 16 }}>
         <h1 style={{ fontSize: 18, fontWeight: 700 }}>Results & GPA</h1>
         <p style={{ fontSize: 12, color: 'var(--muted)' }}>Auto-calculated from your marks and attendance</p>

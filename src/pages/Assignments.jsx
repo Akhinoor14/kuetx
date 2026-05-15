@@ -33,7 +33,7 @@ export default function Assignments() {
   const priorityColor = { high: 'tag-red', medium: 'tag-yellow', low: 'tag-gray' };
 
   return (
-    <div className="page-enter" style={{ padding: 20, maxWidth: 700 }}>
+    <div className="page-enter page-container">
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
         <div>
           <h1 style={{ fontSize: 18, fontWeight: 700 }}>Assignments</h1>

@@ -270,7 +270,7 @@ export default function Marks() {
   const nonCredit  = active.filter(c => c.type === 'NonCredit');
 
   return (
-    <div className="page-enter" style={{ padding: 20, maxWidth: 820 }}>
+    <div className="page-enter page-container">
       <div className="flex-between mb-4">
         <div>
           <h1>Marks & CT</h1>

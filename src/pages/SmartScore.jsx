@@ -97,7 +97,7 @@ export default function SmartScore() {
   const totalLabel = total === null ? '—' : total >= 85 ? 'Excellent 🌟' : total >= 70 ? 'Good 👍' : total >= 50 ? 'Average' : 'Needs Work';
 
   return (
-    <div className="page-enter" style={{ padding: 20, maxWidth: 680 }}>
+    <div className="page-enter page-container">
       <div style={{ marginBottom: 20 }}>
         <h1 style={{ fontSize: 18, fontWeight: 700 }}>Smart Score</h1>
         <p style={{ fontSize: 12, color: 'var(--muted)' }}>Holistic student life score — auto-calculated from all your data</p>

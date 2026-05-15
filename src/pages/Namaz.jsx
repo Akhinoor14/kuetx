@@ -40,7 +40,7 @@ export default function Namaz() {
   }).reverse();
 
   return (
-    <div className="page-enter" style={{ padding: 20, maxWidth: 600 }}>
+    <div className="page-enter page-container">
       <div style={{ marginBottom: 16 }}>
         <h1 style={{ fontSize: 18, fontWeight: 700 }}>Namaz Tracker</h1>
         <p style={{ fontSize: 12, color: 'var(--muted)' }}>Daily salah with masjid/home tracking</p>
