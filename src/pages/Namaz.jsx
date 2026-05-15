@@ -70,7 +70,7 @@ export default function Namaz() {
                 <button
                   onClick={() => toggle(selectedDate, prayer, 'masjid')}
                   style={{
-                    padding: '5px 12px', borderRadius: 6, fontSize: 12, fontWeight: 500, cursor: 'pointer', border: 'none',
+                    padding: '5px 12px', borderRadius: 6, fontSize: 12, fontWeight: 500, cursor: 'pointer',
                     background: r.masjid ? 'var(--accent)' : 'var(--bg)',
                     color: r.masjid ? 'var(--accentFg)' : 'var(--muted)',
                     border: `1px solid ${r.masjid ? 'var(--accent)' : 'var(--border)'}`,
