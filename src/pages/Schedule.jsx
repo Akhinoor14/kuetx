@@ -251,6 +251,15 @@ export default function Schedule() {
   
   // Track double-click/double-tap
   const lastClickRef = useRef({});
+
+  const openHolidaySetup = () => {
+    setHolidaySetupOpen(true);
+  };
+
+  const closeHolidaySetup = () => {
+    setHolidaySetupOpen(false);
+    setHolidayDate('');
+  };
   
   const openQuickAdd = (day, slot) => {
     setQuickFormEditingId(null);
@@ -728,7 +737,7 @@ export default function Schedule() {
             <button className="btn btn-ghost" onClick={() => setEditingSettings(v => !v)}>
               <Settings2 size={13} /> Settings
             </button>
-            <button className="btn btn-ghost" onClick={() => setHolidaySetupOpen(v => !v)}>
+            <button className="btn btn-ghost" onClick={openHolidaySetup}>
               <CalendarDays size={13} /> Holiday Setup
             </button>
             <button className="btn btn-primary" onClick={() => { setEditingId(null); resetForm(); setAdding(true); }}>
@@ -823,43 +832,15 @@ export default function Schedule() {
             )}
 
             <div style={{ marginTop: 10, padding: 12, border: '1px solid var(--border)', borderRadius: 10, background: 'var(--bg)' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', gap: 10, alignItems: 'center', flexWrap: 'wrap', marginBottom: 8 }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', gap: 10, alignItems: 'center', flexWrap: 'wrap' }}>
                 <div>
                   <div style={{ fontSize: 13, fontWeight: 700 }}>Holiday Calendar</div>
-                  <div style={{ fontSize: 11, color: 'var(--muted)' }}>Friday and Saturday are always holidays. Add extra dates below.</div>
+                  <div style={{ fontSize: 11, color: 'var(--muted)' }}>Friday and Saturday are always holidays. Open the popup to add extra dates.</div>
                 </div>
-                <button className="btn btn-ghost" onClick={() => setHolidaySetupOpen(v => !v)}>
-                  {holidaySetupOpen ? 'Hide Calendar' : 'Open Calendar'}
+                <button className="btn btn-ghost" onClick={openHolidaySetup}>
+                  Open Calendar
                 </button>
               </div>
-
-              {holidaySetupOpen && (
-                <div style={{ display: 'grid', gap: 10 }}>
-                  <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-                    <input
-                      type="date"
-                      value={holidayDate}
-                      onChange={e => setHolidayDate(e.target.value)}
-                      style={{ minWidth: 170 }}
-                    />
-                    <button className="btn btn-primary" onClick={addHolidayDate} disabled={!holidayDate}>
-                      <CalendarDays size={13} /> Add Holiday
-                    </button>
-                  </div>
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
-                    {holidayDates.length === 0 ? (
-                      <div style={{ fontSize: 12, color: 'var(--muted)' }}>No extra holidays added yet.</div>
-                    ) : holidayDates.map(date => (
-                      <span key={date} className="tag tag-gray" style={{ display: 'inline-flex', gap: 6, alignItems: 'center' }}>
-                        {date}
-                        <button onClick={() => removeHolidayDate(date)} style={{ border: 'none', background: 'transparent', cursor: 'pointer', color: 'inherit', padding: 0 }}>
-                          <X size={12} />
-                        </button>
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              )}
             </div>
           </div>
         )}
@@ -1093,6 +1074,62 @@ export default function Schedule() {
           </div>
         </div>
       )}
+
+      {holidaySetupOpen && (
+        <div
+          style={{
+            position: 'fixed',
+            inset: 0,
+            background: 'rgba(0,0,0,0.5)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 1200,
+            padding: 12,
+          }}
+          onClick={closeHolidaySetup}
+        >
+          <div
+            className="card"
+            style={{ width: 560, maxWidth: '100%', padding: 16, background: 'var(--bg)' }}
+            onClick={e => e.stopPropagation()}
+          >
+            <div style={{ display: 'flex', justifyContent: 'space-between', gap: 10, alignItems: 'center', marginBottom: 12 }}>
+              <div>
+                <div style={{ fontWeight: 700, fontSize: 14 }}>Holiday Calendar</div>
+                <div style={{ fontSize: 12, color: 'var(--muted)' }}>Friday and Saturday are always holidays. Add extra dates below.</div>
+              </div>
+              <button className="btn btn-ghost" onClick={closeHolidaySetup}>Close</button>
+            </div>
+            <div style={{ display: 'grid', gap: 10 }}>
+              <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                <input
+                  type="date"
+                  value={holidayDate}
+                  onChange={e => setHolidayDate(e.target.value)}
+                  style={{ minWidth: 170 }}
+                />
+                <button className="btn btn-primary" onClick={addHolidayDate} disabled={!holidayDate}>
+                  <CalendarDays size={13} /> Add Holiday
+                </button>
+              </div>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+                {holidayDates.length === 0 ? (
+                  <div style={{ fontSize: 12, color: 'var(--muted)' }}>No extra holidays added yet.</div>
+                ) : holidayDates.map(date => (
+                  <span key={date} className="tag tag-gray" style={{ display: 'inline-flex', gap: 6, alignItems: 'center' }}>
+                    {date}
+                    <button onClick={() => removeHolidayDate(date)} style={{ border: 'none', background: 'transparent', cursor: 'pointer', color: 'inherit', padding: 0 }}>
+                      <X size={12} />
+                    </button>
+                  </span>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="card" style={{ marginTop: 14, padding: 16, display: 'flex', flexDirection: 'column', gap: 12 }}>
         <div>
           <div style={{ fontWeight: 700, fontSize: 14, marginBottom: 2 }}>Routine Share</div>
@@ -1140,10 +1177,7 @@ export default function Schedule() {
             <div style={{ fontSize: 12, color: 'var(--muted)' }}>Approximate timeline with manual override and holiday sync. Use Edit to adjust exam dates.</div>
           </div>
           <div style={{ display: 'flex', gap: 8 }}>
-            <button className="btn btn-ghost" onClick={() => {
-              // open holiday setup
-              setHolidaySetupOpen(v => !v);
-            }}>
+            <button className="btn btn-ghost" onClick={openHolidaySetup}>
               <CalendarDays size={13} /> Add Holiday
             </button>
             <button className="btn btn-primary" onClick={() => {

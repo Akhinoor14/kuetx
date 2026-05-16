@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Plus, Trash2 } from 'lucide-react';
 import { store, uid } from '../store/store';
 
@@ -12,14 +12,28 @@ export default function SelfEval() {
   const [newBad, setNewBad] = useState('');
   const [newGood, setNewGood] = useState('');
   const [rating, setRating] = useState(() => (store.get('selfeval') || {})[today]?.rating || 3);
+  const [saveStatus, setSaveStatus] = useState('Saved');
+  const [showSavedToast, setShowSavedToast] = useState(false);
+  const [saveTick, setSaveTick] = useState(0);
 
   const getRec = (d) => records[d] || { bad: [], good: [], rating: 3, note: '' };
   const rec = getRec(selDate);
 
   const update = (field, val) => {
     const updated = { ...records, [selDate]: { ...getRec(selDate), [field]: val } };
-    setRecords(updated); store.set('selfeval', updated);
+    setRecords(updated);
+    store.set('selfeval', updated);
+    setSaveStatus('Saving...');
+    setSaveTick(Date.now());
   };
+
+  useEffect(() => {
+    if (!saveTick) return;
+    setSaveStatus('Saved');
+    setShowSavedToast(true);
+    const timer = setTimeout(() => setShowSavedToast(false), 1800);
+    return () => clearTimeout(timer);
+  }, [saveTick]);
 
   const addBad = (txt) => {
     if (!txt.trim()) return;
@@ -42,6 +56,11 @@ export default function SelfEval() {
 
   return (
     <div className="page-enter page-container">
+      {showSavedToast && (
+        <div style={{ position: 'fixed', top: 18, right: 18, zIndex: 1200, background: 'linear-gradient(180deg, rgba(16,185,129,0.16), rgba(16,185,129,0.10))', border: '1px solid rgba(16,185,129,0.25)', color: 'var(--text)', borderRadius: 999, padding: '10px 14px', boxShadow: '0 16px 40px rgba(0,0,0,0.12)', fontSize: 12, fontWeight: 700 }}>
+          ✓ Self Evaluation {saveStatus}
+        </div>
+      )}
       <div style={{ marginBottom: 16 }}>
         <h1 style={{ fontSize: 18, fontWeight: 700 }}>Self Evaluation</h1>
         <p style={{ fontSize: 12, color: 'var(--muted)' }}>Daily accountability — good deeds, bad habits, self rating</p>
@@ -50,6 +69,7 @@ export default function SelfEval() {
       <div style={{ display: 'flex', gap: 8, marginBottom: 16, alignItems: 'center' }}>
         <input type="date" value={selDate} onChange={e => setSelDate(e.target.value)} style={{ width: 'auto' }} />
         <button className="btn btn-ghost" onClick={() => setSelDate(today)}>Today</button>
+        <span className="tag tag-green" style={{ fontSize: 11 }}>{saveStatus}</span>
       </div>
 
       {/* Self Rating */}
@@ -70,6 +90,10 @@ export default function SelfEval() {
         <div style={{ marginTop: 8 }}>
           <label>Note for today</label>
           <input value={rec.note || ''} onChange={e => update('note', e.target.value)} placeholder="আজকের কোনো ভাবনা বা সংকল্প..." />
+        </div>
+        <div style={{ marginTop: 10, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, flexWrap: 'wrap' }}>
+          <div style={{ fontSize: 11, color: 'var(--muted)' }}>Auto-saves on every change, so SmartScore updates immediately.</div>
+          <button className="btn btn-primary" onClick={() => { setSaveStatus('Saving...'); setSaveTick(Date.now()); }}>Save now</button>
         </div>
       </div>
 

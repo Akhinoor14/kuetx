@@ -1,12 +1,21 @@
 import { useMemo, useState } from 'react';
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, ReferenceLine, LabelList } from 'recharts';
 import { Sparkles, Target, TrendingUp, ArrowRight } from 'lucide-react';
-import { store, GRADE_SCALE, cgpaToPercent, computeCourseGrade, computeCGPA, getAllCourses, getLegacyTermResults, getProfile, setLegacyTermResults, TERM_KEYS, getTermCreditsFromCurriculum } from '../store/store';
+import { store, GRADE_SCALE, cgpaToPercent, computeCourseGrade, getAllCourses, getLegacyTermResults, getProfile, setLegacyTermResults, TERM_KEYS, getTermCreditsFromCurriculum, getCurrentTermKey, getTermTimeline, recordAudit } from '../store/store';
 import Collapsible from '../components/Collapsible';
 
 export default function Results() {
   const profile = getProfile();
   const courses = getAllCourses(profile);
+  const currentTermKey = getCurrentTermKey(profile);
+  const currentTermTimeline = useMemo(
+    () => (currentTermKey ? getTermTimeline(profile?.termStartDate, profile?.dept, currentTermKey) : null),
+    [currentTermKey, profile?.termStartDate, profile?.dept]
+  );
+  const currentTermIsOngoing = !!(
+    (currentTermTimeline && new Date() <= currentTermTimeline.classEndDate) ||
+    (currentTermKey && courses.some(c => `Y${c.year}T${c.term}` === currentTermKey && (c.status === 'active' || c.status === 'backlog')))
+  );
   const [marks, setMarks] = useState(() => store.get('marks') || {});
   const [legacyTerms, setLegacyTerms] = useState(() => getLegacyTermResults());
   const [legacyResolutions, setLegacyResolutions] = useState(() => store.get('legacyTermResolution') || {});
@@ -21,6 +30,7 @@ export default function Results() {
     const next = { ...marks, [courseId]: { ...(marks[courseId] || {}), [field]: value } };
     setMarks(next);
     store.set('marks', next);
+    try { recordAudit({ action: 'marks_update', courseId, field, before: marks[courseId] || null, after: (next[courseId] || {})[field] }); } catch {}
   };
 
   const updateLegacyRow = (index, field, value) => {
@@ -105,30 +115,48 @@ export default function Results() {
 
   const { courseResults, terms, cgpa } = useMemo(() => {
     const courseResults = courses.map(c => {
-      const { grade, point, total, isX } = computeCourseGrade(c);
+      const computed = computeCourseGrade(c);
       const m = marks[c.id] || {};
       const hasPublishedResult = !!String(m.publishedGrade || m.resultGrade || '').trim();
       const hasAnyEntry = Object.values(m).some(v => v !== '' && v !== null && v !== undefined);
-      const isRunningCourse = c.status === 'active' || c.status === 'backlog';
-      const displayStatus = hasPublishedResult ? 'completed' : (isRunningCourse ? 'running' : 'completed');
+      const termKey = `Y${c.year}T${c.term}`;
+      const isCurrentTerm = termKey === currentTermKey;
+      const isOngoingCurrentTerm = isCurrentTerm && currentTermIsOngoing;
 
-      // Do not show synthetic F before result upload.
-      if (!hasPublishedResult && !hasAnyEntry) {
-        return { ...c, grade: '—', gradePoint: null, total: null, isX: false, displayStatus };
+      if (hasPublishedResult) {
+        return { ...c, grade: computed.grade, gradePoint: computed.point, total: computed.total, isX: computed.isX, displayStatus: 'completed', resultState: 'published', resultNote: '' };
       }
 
-      return { ...c, grade, gradePoint: point, total, isX, displayStatus };
+      if (isOngoingCurrentTerm) {
+        return { ...c, grade: 'ONGOING', gradePoint: null, total: null, isX: false, displayStatus: 'ongoing', resultState: 'ongoing', resultNote: 'No result' };
+      }
+
+      return {
+        ...c,
+        grade: hasAnyEntry ? computed.grade : '—',
+        gradePoint: hasAnyEntry ? computed.point : null,
+        total: hasAnyEntry ? computed.total : null,
+        isX: computed.isX,
+        displayStatus: 'pending',
+        resultState: 'pending',
+        resultNote: 'Not result yet',
+      };
     });
 
     // Group courses by term and compute course-only pts/cr
     const courseTermMap = {};
     courseResults.forEach(c => {
       const k = `Y${c.year}T${c.term}`;
-      if (!courseTermMap[k]) courseTermMap[k] = { label: `Year ${c.year} · Term ${c.term}`, key: k, courses: [], pts: 0, cr: 0 };
+      if (!courseTermMap[k]) courseTermMap[k] = { label: `Year ${c.year} · Term ${c.term}`, key: k, courses: [], pts: 0, cr: 0, publishedCount: 0, pendingCount: 0, ongoingCount: 0 };
       courseTermMap[k].courses.push(c);
-      if (!c.isX && c.grade !== 'F' && c.grade !== 'W' && c.gradePoint >= 2.0 && c.credits) {
+      if (c.resultState === 'published' && !c.isX && c.grade !== 'F' && c.grade !== 'W' && c.gradePoint >= 2.0 && c.credits) {
         courseTermMap[k].pts += c.gradePoint * c.credits;
         courseTermMap[k].cr  += c.credits;
+        courseTermMap[k].publishedCount += 1;
+      } else if (c.resultState === 'ongoing') {
+        courseTermMap[k].ongoingCount += 1;
+      } else {
+        courseTermMap[k].pendingCount += 1;
       }
     });
 
@@ -148,10 +176,11 @@ export default function Results() {
     keys.forEach(k => {
       const coursePart = courseTermMap[k] || { label: `Year ${k.slice(1,2)} · Term ${k.slice(3)}`, key: k, courses: [], pts: 0, cr: 0 };
       const legacyPart = legacyMap[k] || null;
+      const resolution = store.get('legacyTermResolution') || {};
 
-      // combined by default
-      let pts = coursePart.pts + (legacyPart ? legacyPart.pts : 0);
-      let cr = coursePart.cr + (legacyPart ? legacyPart.credits : 0);
+      // combined by default, but only official/published course results count
+      let officialPts = coursePart.pts + (legacyPart ? legacyPart.pts : 0);
+      let officialCr = coursePart.cr + (legacyPart ? legacyPart.credits : 0);
 
       // detect conflict when both exist
       let conflict = null;
@@ -165,35 +194,61 @@ export default function Results() {
       }
 
       // apply resolution if user selected one
-      const resolution = store.get('legacyTermResolution') || {};
       if (resolution[k] === 'use_legacy') {
-        pts = legacyPart ? legacyPart.pts : pts;
-        cr = legacyPart ? legacyPart.credits : cr;
+        officialPts = legacyPart ? legacyPart.pts : officialPts;
+        officialCr = legacyPart ? legacyPart.credits : officialCr;
       } else if (resolution[k] === 'use_courses') {
-        pts = coursePart.pts;
-        cr = coursePart.cr;
+        officialPts = coursePart.pts;
+        officialCr = coursePart.cr;
       }
 
       const courseOnlyGpa = coursePart.cr ? (coursePart.pts / coursePart.cr).toFixed(2) : '—';
       const hasLegacy = !!legacyPart;
+      const hasOfficialResults = officialCr > 0;
       const displayGpa = resolution[k] === 'use_courses'
         ? courseOnlyGpa
         : hasLegacy
           ? legacyPart.gpa.toFixed(2)
-          : courseOnlyGpa;
+          : (hasOfficialResults ? courseOnlyGpa : '—');
       // Use curriculum credits for the term, not just user's entered courses
       const deptCode = profile?.dept;
       const curriculumTermCredits = deptCode ? getTermCreditsFromCurriculum(deptCode, k) : 0;
       const termTotalCredits = coursePart.courses.reduce((s, c) => s + (c.credits || 0), 0) || curriculumTermCredits;
 
-      termList.push({ label: coursePart.label || `Legacy ${k}`, key: k, courses: coursePart.courses, pts: coursePart.pts, cr: coursePart.cr, gpa: courseOnlyGpa, displayGpa, totalCredits: termTotalCredits, legacyGpa: legacyPart?.gpa || null, legacyCredits: legacyPart?.credits || null, conflict, resolution: (store.get('legacyTermResolution') || {})[k] || null });
+      termList.push({
+        label: coursePart.label || `Legacy ${k}`,
+        key: k,
+        courses: coursePart.courses,
+        pts: coursePart.pts,
+        cr: coursePart.cr,
+        gpa: courseOnlyGpa,
+        displayGpa,
+        totalCredits: termTotalCredits,
+        legacyGpa: legacyPart?.gpa || null,
+        legacyCredits: legacyPart?.credits || null,
+        conflict: hasOfficialResults ? conflict : null,
+        resolution: resolution[k] || null,
+        officialPts,
+        officialCr,
+        publishedCount: coursePart.publishedCount,
+        pendingCount: coursePart.pendingCount,
+        ongoingCount: coursePart.ongoingCount,
+        hasOfficialResults,
+      });
     });
 
     const terms = termList.sort((a,b) => a.key.localeCompare(b.key));
 
-    const { cgpa } = computeCGPA(courses);
+    const officialTotals = terms.reduce((acc, term) => {
+      if (term.officialCr > 0 && Number.isFinite(term.officialPts)) {
+        acc.pts += term.officialPts;
+        acc.cr += term.officialCr;
+      }
+      return acc;
+    }, { pts: 0, cr: 0 });
+    const cgpa = officialTotals.cr ? +(officialTotals.pts / officialTotals.cr).toFixed(2) : null;
     return { courseResults, terms, cgpa };
-  }, [courses, marks, legacyTerms, legacyResolutions]);
+  }, [courses, marks, legacyTerms, legacyResolutions, currentTermKey, currentTermIsOngoing]);
 
   const maxCgpa = calcMaxCGPA();
   const chartData = terms.map(t => ({
@@ -232,7 +287,7 @@ export default function Results() {
   };
 
   const gradeColor = (g) => {
-    if (!g || g === '—') return 'var(--muted)';
+    if (!g || g === '—' || g === 'ONGOING') return 'var(--muted)';
     if (g === 'F' || g === 'W') return 'var(--danger)';
     if (g === 'X') return 'var(--warning)';
     if (['A+','A','A-'].includes(g)) return 'var(--success)';
@@ -413,8 +468,13 @@ export default function Results() {
         const isGpa = Number.isFinite(gpaNum);
         const gpaColor = isGpa ? (gpaNum >= 3.75 ? '#10b981' : gpaNum >= 3.0 ? '#3b82f6' : gpaNum >= 2.0 ? '#f59e0b' : '#ef4444') : '#9ca3af';
         const courseCount = term.courses.length;
-        const completedCount = term.courses.filter(c => c.displayStatus === 'completed').length;
-        const completionPct = courseCount ? Math.round((completedCount / courseCount) * 100) : 0;
+        const officialCount = term.courses.filter(c => c.displayStatus === 'completed').length;
+        const pendingCount = term.courses.filter(c => c.displayStatus === 'pending').length;
+        const ongoingCount = term.courses.filter(c => c.displayStatus === 'ongoing').length;
+        const completionPct = courseCount ? Math.round((officialCount / courseCount) * 100) : 0;
+        const isCurrentTerm = term.key === currentTermKey;
+        const termIsOngoing = isCurrentTerm && currentTermIsOngoing;
+        const hasOfficialResults = term.hasOfficialResults;
 
         return (
         <Collapsible
@@ -472,9 +532,9 @@ export default function Results() {
             </div>
             {/* Completion */}
             <div style={{ flex: 1, minWidth: 120 }}>
-              <div style={{ fontSize: 10, color: 'var(--muted)', marginBottom: 4, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.03em' }}>Courses Completed</div>
+              <div style={{ fontSize: 10, color: 'var(--muted)', marginBottom: 4, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.03em' }}>Results Published</div>
               <div style={{ fontSize: 18, fontWeight: 700 }}>
-                <span style={{ color: gpaColor }}>{completedCount}</span>
+                <span style={{ color: gpaColor }}>{officialCount}</span>
                 <span style={{ color: 'var(--muted)', fontWeight: 400, marginLeft: 6 }}>/ {courseCount}</span>
               </div>
             </div>
@@ -492,6 +552,16 @@ export default function Results() {
                   <button className="btn btn-sm" onClick={() => setTermResolution(term.key, 'use_legacy')}>Use Imported</button>
                   <button className="btn btn-ghost btn-sm" onClick={() => setTermResolution(term.key, 'use_courses')}>Use Course Data</button>
                   <button className="btn btn-ghost btn-sm" onClick={() => setTermResolution(term.key, null)}>Keep Both</button>
+                </div>
+              </div>
+            )}
+            {!term.conflict && !hasOfficialResults && (pendingCount > 0 || ongoingCount > 0) && (
+              <div style={{ minWidth: 260, display: 'flex', flexDirection: 'column', gap: 6, padding: '10px 12px', borderRadius: 10, background: termIsOngoing ? 'rgba(59,130,246,0.08)' : 'rgba(245,158,11,0.08)', border: termIsOngoing ? '1px solid rgba(59,130,246,0.18)' : '1px solid rgba(245,158,11,0.18)' }}>
+                <div style={{ fontSize: 12, fontWeight: 700, color: termIsOngoing ? '#1d4ed8' : '#b45309' }}>
+                  {termIsOngoing ? 'Ongoing term' : 'Result not published yet'}
+                </div>
+                <div style={{ fontSize: 12, color: 'var(--muted)' }}>
+                  {termIsOngoing ? 'No result is counted for the current semester yet.' : 'Provisional grade is shown until the result is published.'}
                 </div>
               </div>
             )}
@@ -516,12 +586,19 @@ export default function Results() {
                     <td style={{ padding: '10px 12px', fontSize: 11 }}><span className="tag tag-gray" style={{ fontSize: 10 }}>{c.type}</span></td>
                     <td style={{ padding: '10px 12px', fontWeight: 600 }}>{c.credits}</td>
                     <td style={{ padding: '10px 12px' }}>
-                      <span className={`tag ${c.displayStatus === 'completed' ? 'tag-blue' : 'tag-green'}`} style={{ fontSize: 10 }}>
-                        {c.displayStatus === 'completed' ? 'Completed' : 'Running'}
+                      <span className={`tag ${c.displayStatus === 'completed' ? 'tag-blue' : c.displayStatus === 'ongoing' ? 'tag-green' : 'tag-yellow'}`} style={{ fontSize: 10 }}>
+                        {c.displayStatus === 'completed' ? 'Completed' : c.displayStatus === 'ongoing' ? 'Ongoing' : 'Not result yet'}
                       </span>
                     </td>
                     <td style={{ padding: '10px 12px', fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--muted)' }}>{c.isX ? 'X' : (c.total ?? '—')}</td>
-                    <td style={{ padding: '10px 12px', fontWeight: 700, color: gradeColor(c.grade), fontSize: 13 }}>{c.grade}</td>
+                    <td style={{ padding: '10px 12px', fontWeight: 700, color: gradeColor(c.grade), fontSize: 13 }}>
+                      <div>{c.grade}</div>
+                      {c.displayStatus !== 'completed' && (
+                        <div style={{ fontSize: 10, fontWeight: 600, color: 'var(--muted)', marginTop: 2 }}>
+                          {c.resultNote}
+                        </div>
+                      )}
+                    </td>
                     <td style={{ padding: '10px 12px', fontFamily: 'var(--font-mono)', fontWeight: 600, fontSize: 11 }}>{Number.isFinite(+c.gradePoint) ? (+c.gradePoint).toFixed(2) : '—'}</td>
                     <td style={{ padding: '10px 12px', minWidth: 170 }}>
                       {String(c.id).startsWith('legacy-') ? (

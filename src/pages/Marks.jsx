@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { store, getGradeFromPct, getAttendanceMarks, computeEffectiveAttendance, GRADE_SCALE, getAllCourses, getProfile } from '../store/store';
+import { store, getGradeFromPct, getAttendanceMarks, computeEffectiveAttendance, GRADE_SCALE, getAllCourses, getProfile, recordAudit } from '../store/store';
 import Collapsible from '../components/Collapsible';
 
 // ── Helper: Calculate required hall marks for a target grade ──────────────
@@ -236,6 +236,9 @@ export default function Marks() {
     const updated = { ...marks, [id]: { ...(marks[id] || {}), [field]: value } };
     setMarks(updated);
     store.set('marks', updated);
+    try {
+      recordAudit({ action: 'marks_update', courseId: id, field, before: marks[id] || null, after: (updated[id] || {})[field] });
+    } catch {}
   };
 
   const active = allCourses.filter(c => c.status === 'active' || c.status === 'backlog');

@@ -411,6 +411,22 @@ export const computeCGPA = (courses) => {
   return { cgpa: cr ? pts / cr : null, earnedCredits };
 };
 
+// Return CGPA computed only from published grades and coverage info
+export const getPublishedCGPA = (courses) => {
+  let pts = 0, cr = 0, publishedCredits = 0, totalCredits = 0;
+  courses.forEach(c => {
+    if (c.type === 'NonCredit') return;
+    totalCredits += c.credits || 0;
+    const g = computeCourseGrade(c);
+    if (g && g.isPublished && c.credits && Number.isFinite(g.point)) {
+      pts += g.point * c.credits;
+      cr += c.credits;
+      publishedCredits += c.credits;
+    }
+  });
+  return { cgpa: cr ? pts / cr : null, publishedCredits, totalCredits };
+};
+
 // Compute GPA per term
 export const computeTermGPAs = (courses) => {
   const terms = {};
@@ -853,4 +869,44 @@ export const DEFAULT_PROFILE = {
   totalCreditsRequired: MIN_CREDITS_GRADUATION, yearStarted: new Date().getFullYear(),
   isCR: false, hallName: '', roomNo: '', advisorName: '', advisorContact: '',
   termStartDate: null, // ISO date string: YYYY-MM-DD
+};
+
+// ---------------- Audit & Snapshot helpers ----------------
+export const recordAudit = (entry) => {
+  try {
+    const list = store.get('auditLog') || [];
+    const next = [...list, { ts: new Date().toISOString(), ...entry }];
+    store.set('auditLog', next);
+    return next;
+  } catch (e) { return null; }
+};
+
+export const getAuditLog = () => store.get('auditLog') || [];
+
+// compute SHA-256 hex of JSON-stable string of data
+export const computeHash = async (obj) => {
+  try {
+    const s = JSON.stringify(obj, Object.keys(obj).sort());
+    const enc = new TextEncoder().encode(s);
+    const digest = await crypto.subtle.digest('SHA-256', enc);
+    const arr = Array.from(new Uint8Array(digest));
+    return arr.map(b => b.toString(16).padStart(2, '0')).join('');
+  } catch {
+    return null;
+  }
+};
+
+export const saveSmartSnapshot = async (name, payload) => {
+  const snaps = store.get('smartscoreSnapshots') || [];
+  const hash = await computeHash(payload);
+  const snap = { name: name || 'snapshot', ts: new Date().toISOString(), hash, payloadMeta: { keys: Object.keys(payload) } };
+  const next = [...snaps, snap];
+  store.set('smartscoreSnapshots', next);
+  recordAudit({ action: 'save_snapshot', name: snap.name, ts: snap.ts, hash });
+  return snap;
+};
+
+export const getLatestSmartSnapshot = () => {
+  const snaps = store.get('smartscoreSnapshots') || [];
+  return snaps.length ? snaps[snaps.length - 1] : null;
 };
