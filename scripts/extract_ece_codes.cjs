@@ -1,0 +1,24 @@
+const fs = require('fs');
+const path = require('path');
+const jsonPath = path.join(__dirname, '..', 'ECEcuriculumn.json');
+const raw = fs.readFileSync(jsonPath, 'utf8');
+const d = JSON.parse(raw);
+const termCourses = Object.values(d.terms || {}).flatMap(t => Object.keys(t.courses || {}));
+const text = JSON.stringify(d);
+const re = /"([A-Z]{1,4} [0-9]{4})"/g;
+const codes = [];
+let m;
+while ((m = re.exec(text))) codes.push(m[1]);
+const unique = new Set([...termCourses, ...codes]);
+console.log('terms in JSON:', Object.keys(d.terms || {}).length);
+console.log('termCourses count:', termCourses.length);
+console.log('unique referenced codes:', unique.size);
+
+const eceCodes = [...unique].filter(c => c.startsWith('ECE ')).sort();
+const inTerms = new Set(termCourses.filter(c => c.startsWith('ECE ')));
+const missing = eceCodes.filter(c => !inTerms.has(c));
+console.log('unique ECE codes referenced:', eceCodes.length);
+console.log('ECE codes in term tables:', inTerms.size);
+console.log('ECE codes missing from term tables:', missing.length);
+if (missing.length) console.log('Missing ECE codes:', missing.join(', '));
+else console.log('No missing ECE codes.');

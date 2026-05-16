@@ -1,0 +1,2015 @@
+{
+  "department": "ECE",
+  "sourceType": "raw_text",
+  "terms": {
+    "Y1T1": {
+      "termKey": "Y1T1",
+      "title": "First Year First Term",
+      "courses": {
+        "ECE 1109": {
+          "title": "Introduction to Electronics and Communication Engineering",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Introduction to Electronics: Evolution of Electronics Devices and Integrated Circuit, Application of Electronics in different areas.",
+            "Basic Electronic Devices and Circuits: Semiconductor Devices: Concept of Active and Passive Devices, Intrinsic and Extrinsic Semiconductors, Conductivity of Semiconductors and its Temperature Dependence, Construction and working Principle, Characteristics of p-n Junction Diode, BJT, and FET, Zener Diode, Tunnel Diode, Varactor Diode, Photo Diode, PIN Diode, Half Wave and Full Wave Rectification, Ripple Factor, Smoothing Filter and Voltage Regulators.",
+            "Vacuum Tubes: Introduction to vacuum tube diodes, triodes, tetrodes, pentodes and Gas Tubes.",
+            "Digital Electronics: Review of Number System and Conversion, Binary Arithmetic, Basic and Universal Gates, Boolean Algebra.",
+            "Introduction to Communication Systems: Various Frequency Bands used for Communication, International and National Regulatory Organizations, Block Diagram of Analog and Digital Communication, Need of Modulation, Communication Modes, Various Transmission Mediums, Bandwidth, Types of Bandwidth, Bandwidth Requirements for analog and digital communications, Impairments and Sources of Noises, Comparison of Analog and Digital Communication Systems, Familiarization with Various Communication Technologies, Use of Electronics Devices (Microphone, Speaker, Amplifier, Filter, etc.) in Communication systems."
+          ],
+          "sessionalNote": null,
+          "references": [
+            "Robert L. Boylestad and Louis Nashelsky, \"Electronic Devices and Circuit Theory\", Pearson Education.",
+            "Jacob Millman, Christos C. Halkias, \"Electronic Devices and Circuits\", McGraw-Hill.",
+            "Simon Haykin, An Introduction to Analog & Digital Communication Systems.",
+            "B. P. Lathi, Modern Digital and Analog Communication Systems."
+          ]
+        },
+        "ECE 1110": {
+          "title": "Introduction to Electronics and Communication Engineering Laboratory",
+          "credit": 1.5,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Introduction of various electronic components, equipment’s and measuring instruments, Ohm’s law, KVL and KCL, RC Circuit Analysis, Volt-Ampere Characteristics, Half Wave Rectification, Full Wave Rectification, Filtering Circuits, Voltage Stabilization Circuits, BJT Characteristics and Switching, JFET characteristics, Basic Logic Gates, Integrated Circuits"
+          ],
+          "sessionalNote": null,
+          "references": [
+            "Robert L. Boylestad and Louis Nashelsky, \"Electronic Devices and Circuit Theory\", Pearson Education.",
+            "VK Mehta and Rohit Mehta. \"Principle of Electronics\", S. Chand and Company."
+          ]
+        },
+        "EEE 1109": {
+          "title": "Basic Electrical Engineering",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "DC Circuits: Fundamental Concept: Linear Parameters, Resistance, Inductance, Capacitance and their Properties. Solution of Electrical Networks: Branch Current analysis, Loop and Nodal Analysis, Thevenin’s, Norton’s, Superposition, Millman’s and Reciprocity Theorems, Wye-Delta transformation, Condition for Maximum Power Transfer.",
+            "Magnetic Circuits: Introduction to Magnetic Circuits, Solution of Magnetic Circuits, Hysteresis & Eddy Current losses.",
+            "Source Concept: Sources of EMF, Dependent and Independent Sources, Primary and Secondary Cells.",
+            "AC Circuits: Introduction to Alternating Current Circuits: Sinusoidal voltage & current, frequency, phase difference, Energy Stored in Capacitor & Inductor, Average and RMS Values, Complex Impedance and Phasor Algebra, Power relations in AC Circuits, Series and Parallel Resonance.",
+            "Poly-phase Circuits: Analysis of Balanced & Unbalanced Polyphase Circuits.",
+            "Coupled Circuits: Analysis of Conductively Coupled and Magnetically Coupled Circuits."
+          ],
+          "sessionalNote": null,
+          "references": [
+            "A. Sudhakar and Shyammohan S. Palli, \"Circuits and Networks: Analysis and Synthesis\" McGraw Hill.",
+            "Charles K. Alexander and Matthew N. O. Sadiku, \"Fundamentals of Electric Circuits,\" McGraw Hill.",
+            "Russell M. Kerchner and George F. Corcoran, \"Alternating-Current Circuits,\" Wiley.",
+            "Lecture slides and notes available during class lectures."
+          ]
+        },
+        "EEE 1110": {
+          "title": "Basic Electrical Engineering Laboratory",
+          "credit": 1.5,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Various electrical components and instruments familiarization, KVL and KCL verification, Superposition Theorem, Reciprocity Theorem, Parameters study of RL and RLC AC series circuits, balanced 3-phase circuit, Power measurement through two wattmeters method, two lamp method for voltage phase sequence determination, Tube light connection, House wiring and estimation."
+          ],
+          "sessionalNote": null,
+          "references": [
+            "Lab Manual",
+            "Robert Boylestad – Introductory Circuit Analysis",
+            "S. L. Uppal and G. C. Garg – Electrical Wiring Estimating and Costing"
+          ]
+        },
+        "Ph 1109": {
+          "title": "Physics",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Waves and Oscillations: Oscillations: Simple harmonic motion, Combination of S.H.M. and Lissajous Figures, Free, Damped and Forced Oscillations; Resonance, Vibrations of Membranes and Columns.",
+            "Waves: Traveling Waves, Principle of Superposition, Wave Velocity, Group Velocity and Phase Velocity, Power and intensity in a wave, Standing Waves, Traveling Longitudinal Waves, Standing longitudinal Waves, Beats; Sound waves: Audible, Infrasonic and Ultrasonic, Vibrating Systems and Sources of Sound; Doppler Effect; Acoustics: Reverberation, Noise Insulation and Reduction, Compound Absorption, Sound Distribution, Room Acoustics, Recording.",
+            "Nuclear Physics: Nucleus, Properties of Nucleus, Binding Energy; Radioactivity: Radioactive Decay, Half Life, Mean Life, Law of Successive Disintegration, Radioactive Equilibrium, Application of Radioactivity. Nuclear Reactions: Nuclear Fission and Fusion, Chain Reaction, Nuclear Reactors.",
+            "Optics: Theories of Light:Huygen’s Principle and Construction. Interference of Light: Young’s Double Slit Experiment, Bi-prism, Interference by Multiple Reflection, Newton’s Rings. Diffraction of Light: Fresnel and Fraunhofer Diffraction, Diffraction by Single Slit, Diffraction of Double slit, Diffraction Gratings. Polarization: Production and Analysis of Polarized Light, Optics of Crystals.",
+            "Modern Physics: Quantum Theory: Photoelectric Effect, Quantum Theory of Light, Compton Effect, De-Broglie Wave, Uncertainty Principle and its Application; Atom Model: Bohr’s Theory of one Electron Atom, Correspondence Principle, Vector Atom Model."
+          ],
+          "sessionalNote": null,
+          "references": [
+            "Waves and Oscillations by Brijlal.",
+            "Atomic and Nuclear Physics by N. Subrahmanyam & Brijlal.",
+            "Concept of Modern Physics by Arthur Beiser.",
+            "A textbook of Optics by N. Subrahmanyam & Brij Lal.",
+            "Fundamentals of Physics, Seventh Edition by Halliday/Resnick/Walker.",
+            "Physics for Engineers-I: by Dr. Gias Uddin Ahmed."
+          ]
+        },
+        "Ph 1110": {
+          "title": "Physics Laboratory",
+          "credit": 1.5,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Wheatstone Bridge principle, Series and parallel connection of resistance, The principle of a potentiometer, Carey Foster Bridge principle, Refraction through a prism, Interference of light and Newton’s rings, Diffraction of light, plane diffraction grating and resolving the polarimeter, Newton’s law of cooling, Lee’s and Chorlton’s method for thermal conductivity meas"
+          ],
+          "sessionalNote": null,
+          "references": [
+            "Physics for Engineers Part I & II by Professor Giassuddin Ahmed",
+            "Modern Physics by B. L. Theraza",
+            "Waves and Oscillation by Brijlal",
+            "Optics by Brijlal",
+            "Physics Sessional by Dr. M. M. Alam and Dr. S. S. Sikder",
+            "Practical Physics by Professor Giassuddin Ahmed"
+          ]
+        },
+        "Math 1109": {
+          "title": "Differential and Integral Calculus",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Differential Calculus: Limit, Continuity and Differentiability, Differentiation of Explicit & Implicit Functions and Parametric Equations, Significance of Derivatives & Differentials, Successive Differentiation of Various Types of Functions, Leibnitz’s theorem, Rolle’s theorem, Mean Value Theorems, Taylor’s Theorem in Finite and Infinite Form of Remainder, Expansion of Functions by Differentiation, Partial Differentiation, Euler’s Theorem, Tangent, Normal, Sub Tangent and Subnormal in Cartesian and Polar Coordinates, Determination of Maximum and Minimum Values of Functions and Points of Inflection with Applications, Evaluation of Indeterminate Forms by L’Hospitals Rule, Curvature; Center of Curvature and Chord of Curvature, Asymptotes.",
+            "Integral Calculus: Definitions of Integration, Integration by Method of Substitution, Integration by Parts, Standard Integrals, Integration by Method of Successive Reduction. Definite Integrals, its Properties and Uses in Summing Series, Walis’s Formula, Improper Integrals, Beta and Gamma Function. Area Under a Plane Curve in Cartesian and Polar Co-ordinates, Length of Curves in Cartesian and Polar Co-ordinates, Volume of Solids of Revolution, Area of Surface of Revolution"
+          ],
+          "sessionalNote": null,
+          "references": [
+            "Calculus with Analytical Geometry by Howard Anton",
+            "Thomas' Calculus by Thomas",
+            "Integral Calculus by A.K. Hazra",
+            "Differential and Integral Calculus byDas & Mukherjee."
+          ]
+        },
+        "Hum 1109": {
+          "title": "Technical English",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Technical and Scientific Vocabulary, Use of Phonetics, Parts of Speech, Uses of Prefixes and Suffixes, Uses of Who, Whom, What, How, Whether, Where, Either/Neither, Or/Nor, Too/So etc. Phrases and Idioms, Correction of Error, Structure of Sentences, Clauses, Transformation of Sentences.",
+            "Translation: English to Bengali & Bengali to English.",
+            "Précis Writing, Comprehension, Paragraph Writing on Scientific and Other Themes, Official Correspondence,Technical Report Writing, Research Paper Writing, Tender Notice, Free Composition."
+          ],
+          "sessionalNote": null,
+          "references": []
+        }
+      },
+      "optionalCourses": [],
+      "termNotes": []
+    },
+    "Y1T2": {
+      "termKey": "Y1T2",
+      "title": "First Year Second Term",
+      "courses": {
+        "ECE 1205": {
+          "title": "Science of Engineering Materials",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Crystal: Atoms and aggregate of atoms, Classifications of Solids, Formation of Crystals, Crystals Defects.",
+            "Thermal Properties of Solids: Specific Heat of Solids, Classical Theory, Einstein’s Theory of Specific Heat, Debye’s Model of Lattice Heat Capacity.",
+            "Conducting materials: Outstanding properties of metals, Drude Model, Temperature dependence on resistivity, Matthiessen’s rule, Wiedemann-Franz(orenz law, Hall effect, quantum theory of free electrons, Fermi-Dirac distributions, Collision theory, Schrodinger’s wave equation, tunneling effect, Carrier transport theory.",
+            "Semiconductor Materials: Crystal structure of Semiconductors, Density of states, Effective mass, Band Theory, Bloch theorem, Kronig-Penny model, Energy band, Conduction in semiconductor, Donor and Acceptor impurities, Drift diffusion and other carrier theories, Continuity equations, Qualitative and quantitative theory of P-N junction Contact phenomena, Contact of two metals, Metal semiconductor junction, Surface phenomenon of metal, Metal potential barrier, work function, escape of electron from metal, different types electron emission.",
+            "Dielectric: Properties of insulator, Dipole Moment and Polarization, Polar and Nonpolar Dielectrics, Langevin’s Theory of Polarization, Clausius-Mossotti Relation, Lorentz(orenz equation, Ferroelectricity and Piezoelectricity.",
+            "Magnetic Properties of Materials: Magnetic Dipole Moment and magnetization vector, Magnetizing field, Magnetic Materials Classification, Domain Wall Motion and Magnetization Curve, Coercive Force, Magneto crystalline Anisotropy, Soft and Hard Magnetic Materials, Polycrystalline and Permanent Magnetic Materials.",
+            "Optical Properties: Light Interaction with Solids, Atomic and Electronic Interactions, Absorptions, Emission, Luminescence, Materials Aspects of Photo Cell, Solar Cell and LASER.",
+            "Superconductivity: Zero resistance and Meissner effect, Type I and Type II superconductors and critical current density."
+          ],
+          "sessionalNote": null,
+          "references": [
+            "S. O. Kasap, \"Principles of Electronic Materials and Devices,\" McGraw-Hill Education.",
+            "Jacob Millman, Christos C Halkias, Satyabrata Jit, \"Electronic Devices and Cricuits\"",
+            "Donald A Neamen, \"Semiconductor Devices and Physics Basic Principles\""
+          ]
+        },
+        "ECE 1209": {
+          "title": "Analog Electronics-I",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Transistor: Biasing and Stabilization of BJT Amplifiers, Load Line analysis, Applications of BJT and FET as amplifiers and switches, rParameters, Analysis for Low, Medium and High Frequencies, Different Transistor Amplifier Circuits and their Cascading, Effects on I/O Impedance, Darlington Pair, Emitter Follower, Design and analysis of single/multistage amplifiers.",
+            "Untuned Power Amplifiers: Analysis of Class A, Push-pull Class B, Class C, D, E and AB Amplifiers, Differential amplifiers, Neutralization, Transistor Amplifier with Complementary Symmetry.FET biasing, Small Signal analysis of JFET and MOSFET, Stabilization of Q Point, CS, CD, CG Configurations, Frequency Response, CMOS.",
+            "Linear Wave Shaping: Diode Wave Shaping Techniques, Clipping and Clamping circuits, Comparator Circuits, Switching Circuits, Pulse transformers, Pulse transmission, Pulse generation.",
+            "Display Technology: CRT, Plasma, LCD, LED, QLED, and OLED."
+          ],
+          "sessionalNote": null,
+          "references": [
+            "Robert L. Boylestad, Louis Nashelsky, \"Electronic Devices and Circuit Theory - 9th edition,\" Pearson College Div.",
+            "Millman & Halkais, \"Electronic Devices and Circuits,\" McGraw Hill.",
+            "V. K. Metha, Rohit Metha, \"Principles of Electronics,\" S. Chand & Co Ltd."
+          ]
+        },
+        "ECE 1210": {
+          "title": "Analog Electronics-I Laboratory",
+          "credit": 1.5,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Common emitter circuit, common collector circuit, RC coupling, direct coupling, darlington pair amplifier, push-pull power amplifier, complementary push-pull power amplifier using BJT, JFET voltage amplifier and MOSFET voltage amplifier."
+          ],
+          "sessionalNote": null,
+          "references": [
+            "Robert L. Boylestad, Louis Nashelsky, \"Electronic Devices and Circuit Theory -10th edition,\" Pearson College Div.",
+            "V. K. Metha, Rohit Metha, \"Principles of Electronics,\" S. Chand & Co Ltd."
+          ]
+        },
+        "CSE 1209": {
+          "title": "Computer Fundamentals and Programming",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Computer Fundamentals: Types and Generation of Computers, Computer Architecture: Basic Organization and Functional Units, Review of Information system used in Computers, Hardware Components; Classification of computer memory.",
+            "Software and Its Applications: Types of Software and Concept of Operating Systems, System software, Algorithms and Flow Charts.",
+            "Programming in C: Programming concepts; Structured programming language: data types, variables, and operators, type of expressions; Functions and program structures: function basics, parameter passing conventions, recursion; Arrays, String and Pointers; User defined data type: structures, unions, enumeration; File handling, Debugging and Running Programs, Introduction to graphics routines"
+          ],
+          "sessionalNote": null,
+          "references": [
+            "E. Balagurusamy, \"Programming in ANSI C,\" Mc Graw Hill Education.",
+            "Herbert Schildt, \"C: The Complete Reference,\" McGraw Hill Education.",
+            "Herbert Schildt, \"Teach Yourself C,\" McGraw-Hill Education.",
+            "Sisir Kumar Jena, \"C Programming: Learn to Code,\" Chapman and Hall/CRC.",
+            "Yashavant Kanetkar, \"Let Us C,\" BPB Publications."
+          ]
+        },
+        "CSE 1210": {
+          "title": "Computer Fundamentals & Programming Laboratory",
+          "credit": 1.5,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Programming in C: Programming concepts; Structured programming language: data types, variables, and operators, type of expressions; Functions and program structures: function basics, parameter passing conventions, recursion; Arrays, String and Pointers; User defined data type: structures, unions, enumeration; File handling, Debugging and Running Programs."
+          ],
+          "sessionalNote": null,
+          "references": [
+            "E. Balagurusamy, \"Programming in ANSI C,\" Mc Graw Hill Education.",
+            "Herbert Schildt, \"C: The Complete Reference,\" McGraw Hill Education.",
+            "Herbert Schildt, \"Teach Yourself C,\" McGraw-Hill Education."
+          ]
+        },
+        "Ch 1209": {
+          "title": "Chemistry",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Inorganic Chemistry: Coordination Chemistry: Different Theories of Coordination Compounds and their Limitations, Geometry, Electronic Spectra, Isomerism of Coordination Compounds, Chelate compounds. Chemical bonding: Valence Bond Theory, Molecular Orbital Theory, Metallic Bonding, Hydrogen Bonding, Theory of Resonance.",
+            "Physical Chemistry: Electrochemistry: Electrolytic Conductance, Migration of Ions, Kohlrauch’s law, Ionic Mobilities, Abnormal Ion Conductance, Transport Number, Reversible Electrodes, Electrode potential, Cell emf, Electrochemical cell, Corrosion. Spectroscopy: Quantization of Energy, Regions of Spectrum, Representation of Spectra, Basic Elements of Practical Spectroscopy, Infrared Spectroscopy, Raman Spectroscopy, Electronic Spectroscopy. Photochemistry: Photochemical Reactions, Laws of Photochemistry, Quantum Yield, Photosensitized Reaction.",
+            "Organic Chemistry: Reaction Mechanism: Free radical Reaction, Nucleophilic and Electrophilic Substitution and Addition, Chemistry of Polymerization; Addition, Free Radical, Anionic and Cationic. Condensation Polymerization.",
+            "Environmental Chemistry: Concept and Scope of Environmental Science, Lithosphere, Hydrosphere, Biosphere and Atmosphere, Composition of Atmosphere, Chemical and Photochemical Reactions in the Atmosphere, Greenhouse Effect/Global Warming, Industrial Hazards, Air and Water Pollutions, Sources and different types of Pollutants, Toxicity of Pollutants"
+          ],
+          "sessionalNote": null,
+          "references": [
+            "\"General chemistry\" by Ebbing",
+            "\"Inorganic chemistry\" by S. Z. Haider",
+            "\"Physical chemistry\" by Mohummad Yousuf Ali Mollah."
+          ]
+        },
+        "Ch 1210": {
+          "title": "Chemistry Laboratory",
+          "credit": 0.75,
+          "contactHour": "1.5 hrs/week",
+          "topics": [
+            "Acid base titration, Indicator, Equivalence point, Cu determination, Iodometric titration, Iodimetric titration, Conductance, Strong acid, Strong base, Weak acid, Conductometric titration, pH, pH metric titration, Rate of the reaction, Order, molecularity, Pseudo-order reaction"
+          ],
+          "sessionalNote": null,
+          "references": [
+            "\"Fundamentals of Analytical Chemistry\" by Skoog",
+            "\"VOGEL’s Textbook of Quantitative Chemical Analysis\" by J Mendham"
+          ]
+        },
+        "Math 1209": {
+          "title": "Coordinate Geometry and Differential Equations",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Coordinate Geometry: Coordinate Geometry of Two Dimensions: Transformation of co-ordinates, General Equation of Second Degree. Co-ordinate Geometry of Three Dimensions: Systems of Co-ordinates, Distance of two Points, Section Formula, Projection, Direction Cosines, Plane, Straight Line. Sphere, Cone and Central conicoid.",
+            "Ordinary Differential Equations: Degree and Order of Ordinary Differential Equations, Formation of Differential Equations, Solutions of First Order and First Degree Differential Equations by Various Methods, Solutions of General Linear Equations of Second and Higher Orders with Constant and Variable Coefficients, Solution of Higher Order Differential Equations without dependent or independent variables, Solution of Differential Equations by the Method Based on the Factorization of the Operators.",
+            "Partial Differential Equation(PDE): Formation of PDE and Solution of PDE with the method of separation of variables."
+          ],
+          "sessionalNote": null,
+          "references": [
+            "Differential Equations by Shepley L. Ross",
+            "Differential Equations by Frank Ayres JR",
+            "Differential Equations by Dr. B.D. Sharma",
+            "Analytical Geometry of the Conic Sections by J. M. Kar",
+            "Co-ordinate Geometry (Ⅱ & Ⅲ dimensions) by Rahman & Bhattacharjee",
+            "Co-ordinate Geometry of Ⅲ Dimensions by Robert J. T. Bell",
+            "Co-ordinate Solid Geometry of Ⅲ Dimensions by Bhudev Sharma"
+          ]
+        },
+        "Hum 1210": {
+          "title": "Technical English Laboratory",
+          "credit": 0.75,
+          "contactHour": "1.5 hrs/week",
+          "topics": [
+            "English language teaching and learning: Speaking, Listening and Writing. Preparation to learn standard English: IELTS, TOFEL"
+          ],
+          "sessionalNote": null,
+          "references": [
+            "Cambridge English for Engineering by Mark Ibbotson",
+            "Technical Writing: A Practical Guide for Engineers and Scientists by Philip A. Laplante"
+          ]
+        }
+      },
+      "optionalCourses": [],
+      "termNotes": []
+    },
+    "Y2T1": {
+      "termKey": "Y2T1",
+      "title": "Second Year First Term",
+      "courses": {
+        "CSE 2100": {
+          "title": "Object Oriented Programming Laboratory",
+          "credit": 0.75,
+          "contactHour": "1.5 hrs/week",
+          "topics": [
+            "Introduction to Object Oriented Programming using C++",
+            "Write a program illustrating class declarations, definition, and accessing class members.",
+            "Program to illustrate default constructor, parameterized constructor, copy constructors, destructor and encapsulation.",
+            "Write C++ programs that illustrate how the forms of inheritance are supported and abstraction.",
+            "Program to demonstrate Polymorphism.",
+            "Open – ended lab"
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "ECE 2101": {
+          "title": "Analog Electronics-II",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Tuned Amplifiers: Resonant Circuit, Quality factor and Bandwidth of an Amplifier, Tuned Potential Amplifiers, Single Tuned, Double Tuned and Cascade Amplifier analysis.",
+            "Feedback Amplifiers: The Feedback concept, General characteristics of Negative Feedback amplifier, Forms of Feedback: Voltage series Feedback, Current series Feedback, Current shunt Feedback, Voltage shunt Feedback.",
+            "Oscillators: Condition of Self Oscillations. Study of Different Types of Oscillators. Design of Oscillators. Frequency Stability, Negative Resistance in Oscillators.",
+            "Operational Amplifier (Op-Amps): Introduction to Op-Amps, Op-Amp characteristics, AC, AD, CMRR, Slew Rate, Offset Voltage and Other Parameters, Differentiator, Integrator, Comparator  Circuits, Schmitt trigger, Linear Applications of OP-Amps,   Active filter , Nonlinear applications of OP-Amp, Comparator, Astable & Monostable modes of Amplifier, Other ICs, IC 555 with applications, Phase Looked Loop (PLL), Analog Computer and its Application in Differential Equation Solution, Practical Op-Amp ICs."
+          ],
+          "sessionalNote": null,
+          "references": [
+            "Ramakant A. Gayakward, \"Op-Amps and Linear Integrator Circuits,\" Pearson.",
+            "Millman & Halkais, \"Integrated Electronics,\" McGraw Hill.",
+            "Albert Malvino, \"Electronic Principle -7th edition,\" MC Graw Hill India.",
+            "Robert L. Boylestad, Louis Nashelsky, \"Electronic Devices and Circuit Theory -9th edition,\" Pearson College Div.",
+            "Adel S Sedra and Keneth Carles Smith, \"Microelectronics Circuits,\" Oxford University Press.",
+            "V. K. Metha, Rohit Metha, \"Principles of Electronics,\" S. Chand & Co Ltd."
+          ]
+        },
+        "ECE 2102": {
+          "title": "Analog Electronics-II Laboratory",
+          "credit": 0.75,
+          "contactHour": "1.5 hrs/week",
+          "topics": [
+            "Feedback amplifier, Op-Amp characteristics, adder, differentiator, integrator and comparator circuits",
+            "Schmitt trigger circuit",
+            "active filters",
+            "astable and monostable multivibrators",
+            "IC 555 applications",
+            "Experimental Demonstration and Measurement of Frequency Response of IC OP-AMP Inverting Amplifier",
+            "Experimental demonstration of IC OP-AMP summing amplifier",
+            "Experimental Demonstration of IC OP-AMP Voltage Comparator and Zero Crossing Detector & Window Comparator Circuit",
+            "Experimental Demonstration of the transistor Astable Multivibrator Circuit",
+            "Experimental Demonstration of the 555 Astable Multivibrator Circuit",
+            "Open – ended lab"
+          ],
+          "sessionalNote": null,
+          "references": [
+            "Ramakant A. Gayakward, \"Op-Amps and Linear Integrator Circuits,\" Pearson.",
+            "Millman & Halkais, \"Integrated Electronics,\" McGraw Hill.",
+            "Albert Malvino, \"Electronic Principle -7th edition,\" MC Graw Hill India.",
+            "Robert L. Boylestad, Louis Nashelsky, \"Electronic Devices and Circuit Theory -9th edition,\" Pearson College Div.",
+            "Adel S Sedra and Keneth Carles Smith, \"Microelectronics Circuits,\" Oxford University Press.",
+            "V. K. Metha, Rohit Metha, \"Principles of Electronics,\" S. Chand & Co Ltd."
+          ]
+        },
+        "ECE 2103": {
+          "title": "Digital Electronics and Logic Circuits",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Number Systems : Representation of Numbers in different bases. Addition, Subtraction in different bases; Base Complement: Subtraction using Complements; Binary Multiplication and Division.",
+            "Binary Codes : Different Code Systems. Boolean Algebra: Various Gates. Sum of products and Product of Sums; Maxterm, Minterm, Standard and Canonical form and other Logical Operations.",
+            "Simplification of Boolean functions: Karnaugh map method; Tabular method of simplification; Implementation of Logic Circuits using various Gates: NOR, NAND, AND, OR, INVERT Implementation.",
+            "Diode Logic Gates, Transistor Switches, Transistor Gates, MOS Gates, Logic Families: TTL, ECL, IIL and CMOS logic with operation details.",
+            "Combinational Logic Circuits: Design Procedure; Adder, Subtractor, Code Converters, Parity bit Checker etc. Analysis of Combinational Circuits and its Truth Table. Encoder, Decoder, Multiplexer, De-multiplexer, ROM and PLA.",
+            "Sequential Circuits: Introduction to Sequential Circuits. Analysis and Synthesis of Synchronous Sequential Circuits. Flip-Flops: SR, JK, Master Slave, T & D type Flip Flops and their Truth Tables.",
+            "Counters: Classifications, Synchronous and Asynchronous Counter Design and Analysis, Ring Counter, Johnson Counter, Counter with Parallel Load.",
+            "Registers: Classifications, Shift Register, Transfer Registers, Circular Registers and their Applications. Registers with Parallel Load.",
+            "Memory Units: Various Devices.",
+            "Multivibrators: Bistable, Monostable and Astable.",
+            "Converters: Digital to Analog (D/A) & Analog to Digital (A/D) Converters and their Applications."
+          ],
+          "sessionalNote": null,
+          "references": [
+            "M. Morris Mano, \"Digital Logic and Computer Design,\" Prentice Hall of India.",
+            "R. P. Jain, \"Modern Digital Electronics,\" McGraw-Hill.",
+            "Samuel C. Lee, \"Digital Circuits and Logic Design\" Prentice Hall of India",
+            "David Harris, \"Digital Design and Computer Architecture\" Morgan Kaufmann, 2nd edition"
+          ]
+        },
+        "ECE 2104": {
+          "title": "Digital Electronics and Logic Circuits Laboratory",
+          "credit": 1.5,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Verifications of Logic Gates, Universal gates, Design of Combinational logic circuits: Adder, Subtractor, Code converters.",
+            "Flip-flops: SR, JK, T and D type, Design of Sequential circuits: Synchronous and Asynchronous counter, Shift register, design of seven segment display and project works."
+          ],
+          "sessionalNote": null,
+          "references": [
+            "M. Morris Mano, \"Digital Logic and Computer Design,\" Prentice Hall of India.",
+            "R. P. Jain, \"Modern Digital Electronics,\" McGraw-Hill.",
+            "Samuel C. Lee, \"Digital Circuits and Logic Design\" Prentice Hall of India",
+            "David Harris, \"Digital Design and Computer Architecture\" Morgan Kaufmann, 2nd edition"
+          ]
+        },
+        "ECE 2105": {
+          "title": "Electromagnetic Fields and Waves",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [],
+          "sessionalNote": null,
+          "references": []
+        },
+        "ECE 2107": {
+          "title": "Signals and Systems",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [],
+          "sessionalNote": null,
+          "references": []
+        },
+        "ECE 2108": {
+          "title": "Signal and Systems Laboratory",
+          "credit": 0.75,
+          "contactHour": "1.5 hrs/week",
+          "topics": [],
+          "sessionalNote": null,
+          "references": []
+        },
+        "ME 2110": {
+          "title": "Engineering Drawing",
+          "credit": 0.75,
+          "contactHour": "1.5 hrs/week",
+          "topics": [],
+          "sessionalNote": null,
+          "references": []
+        },
+        "Math 2109": {
+          "title": "Vector, Matrix and Transform",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [],
+          "sessionalNote": null,
+          "references": []
+        }
+      },
+      "optionalCourses": [],
+      "termNotes": []
+    },
+    "Y2T2": {
+      "termKey": "Y2T2",
+      "title": "Second Year Second Term",
+      "courses": {
+        "ECE 2200": {
+          "title": "Electronic Circuits Design Laboratory",
+          "credit": 0.75,
+          "contactHour": "1.5 hrs/week",
+          "topics": [],
+          "sessionalNote": null,
+          "references": []
+        },
+        "ECE 2201": {
+          "title": "Analog Communications",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Necessity and Types of Modulation, Transmitters, Transmission Channels and Receivers.",
+            "Amplitude Modulation (AM), Time Domain Expression and Modulation Index.",
+            "Frequency Domain (Spectral) Representations, and Transmission Bandwidth for AM, AM for a Single Tone Message.",
+            "Pharos Diagram of an AM signal, Illustration of the Carrier and Side Band Components.",
+            "Square Law Modulators, Balanced Modulators, Ring Modulators, Single Side Band Modulation (SSB).",
+            "Generation of SSB Using a Side Band Filter, Indirect Generation of SSB. Vestigial Side Band Modulation (VSB).",
+            "Demodulation of AM Signals, Square Laws and Envelops Detectors.",
+            "Super Heterodyne Receiver for Standard AM Radio, Synchronous Demodulation of AM, DSB and SSB Using Synchronous Detection.",
+            "Instantaneous Frequency and Phase, Time Domain Representations for FM and PM, Phasor Diagram for FM and PM.",
+            "FM and PM Signals for a Single Tone Message, Modulation Index and Phasor Diagrams, Spectral representation of FM and PM for Single Tone Message.",
+            "Transmission Bandwidth for FM, Carson's rule, Narrow band and Wide Band FM and PM Signals.",
+            "Generation of FM using Armstrong Method, Commercial FM Requirements.",
+            "Demodulation of FM and PM Signals, Limiter Discriminator, Commercial and Stereo FM Radio.",
+            "Representation of Random Signals and Noise in Communication System, Shot Noise, White Noise.",
+            "Thermal Noise, PSDF of White Signals, Input and Output Relationship for Random Signals and Noise Passed Through a Linear Time Invariant System.",
+            "Band Limited White Noise, ARC Filtering of White Noise.",
+            "Noise Performance of Analog Communication Systems: Signal-to-Noise ratio in Linear Modulation, Synchronous of DSB, Signal-to-Noise ratio of AM, Signal-to-Noise ratio SSB and FM.",
+            "Effect of Noise in Envelope and Square Law Detection of AM, Threshold Effect in Nonlinear Detectors.",
+            "Frequency Division Multiplexing (FDM) Systems: FDM in telephony, Frequency Division Multiple Access (FDMA) systems.",
+            "Filters and Oscillators requirement in FDM.",
+            "TV Broadcasting: Introduction to TV System, Color and Monochrome TV, Principles of AM and FM Transmitter, Positive and Negative Modulation, Bandwidth, TV Receiver."
+          ],
+          "sessionalNote": null,
+          "references": [
+            "Simon Haykin, An Introduction to Analog & Digital Communication Systems.",
+            "B. P. Lathi, Modern Digital and Analog Communication Systems.",
+            "G. K. Mithal, Radio Engineering.",
+            "R R Gulati, \"Monochrome and Colour Television\", New Age International Publishers."
+          ]
+        },
+        "ECE 2202": {
+          "title": "Analog Communications Laboratory",
+          "credit": 1.5,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Amplitude Modulation and Demodulation",
+            "Frequency Modulation and Demodulation",
+            "Double Side Band Suppress Carrier (DSB-SC) Modulation and Demodulation",
+            "Single Side Band (SSB) Modulation and Demodulation",
+            "Time Division Multiplexing (TDM)",
+            "Frequency Division Multiplexing (FDM)",
+            "Modeling and Simulation of Analog Communication Systems using MATLAB",
+            "Familiarization with different modulation and demodulation techniques in analog communication systems.",
+            "Experimental demonstration of amplitude modulation and demodulation technique.",
+            "Experimental demonstration of frequency modulation and demodulation technique.",
+            "Experimental demonstration of DSB-SC modulation and demodulation technique.",
+            "Experimental demonstration of SSC modulation and demodulation technique.",
+            "Experimental demonstration of time division multiplexing and demultiplexing technique.",
+            "Experimental demonstration of frequency division multiplexing and demultiplexing technique.",
+            "Experimental demonstration vestigial sideband modullation technique.",
+            "Individual or group project on a modulation and demodulation scheme by using modern tools",
+            "Individual or group project on a multiplexing and demultiplexing technique by using modern tools",
+            "Open-ended lab"
+          ],
+          "sessionalNote": null,
+          "references": [
+            "Simon Haykin, An Introduction to Analog & Digital Communication Systems.",
+            "B. P. Lathi, Modern Digital and Analog Communication Systems.",
+            "G. K. Mithal, Radio Engineering."
+          ]
+        },
+        "ECE 2207": {
+          "title": "Microprocessors and Microcomputers",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Introduction: Microprocessors, microcomputer, and microcontroller, Different types of Microprocessors and their Applications.",
+            "Intel 8086 Microprocessor: Architecture, Instruction Format, Instruction Sets, Op-code, Processor Status and Flag Registers, Addressing Modes, Branching and Looping, Interrupt structures, I/O Operation. Machine and Assembly Language Program Writing, Debugging and Execution, Subroutine and Reentrant Programs.",
+            "ARM Architecture Family (Cortex-M3): Introduction, Architecture, Assembly, Memory, Peripherals, Bus, Interrupts, Timers.",
+            "Interfacing and DMA: I/O Interfacing, DMA data transfer, DMA controller, Peripherals and their Interfacing, Programming Peripherals: 8255, 8253.",
+            "Coprocessors: Overview, architecture, and applications of different coprocessors such as Numeric Data Coprocessor: Intel 8087, 80287, 80387, Graphics,Coprocessor: Intel 82786.",
+            "Processors: Overview of Intel 80186, 80286, 80386, 80486 and Pentium Processors, Transputer. Pentium Processor: I, II, III, IV. Parallel processors.",
+            "Assembler and Loaders: General Design Procedures, Table Processing, Macro Language and Macro-Processor, Design of Absolute Loader and Direct Link Loader, Linkers, Translators.",
+            "Microcomputer Design: Architecture, Instruction set, Programming, Fetch Cycle, Execution Cycle.",
+            "Embedded system: Basic units of embedded system, RISC and CISC processors architecture, AVR architecture, Embedded C system."
+          ],
+          "sessionalNote": null,
+          "references": [
+            "Douglas V. Hall, \"Microprocessors and Interfacing: Programming and Hardware,\" Glencoe.",
+            "Badri Ram, \"Advance Microprocessors and Interfacing,\" Mc Graw Hill.",
+            "Barry B. Brey, \"The INTEL Microprocessors: 8086/8088, 80186/80188, 80286, 80386, 80486, Pentium, Pentium Pro Processor, Pentium II, Pentium III, Pentium 4, and Core2 with 64-bit Extensions; Architecture, Programming and Interfacing,\" Pearson Education."
+          ]
+        },
+        "ECE 2208": {
+          "title": "Microprocessors and Microcomputers Laboratory",
+          "credit": 0.75,
+          "contactHour": "1.5 hrs/week",
+          "topics": [
+            "Introduction of various instruction sets of 8085 and 8086 microprocessors, addition, subtraction, multiplication and division of two numbers using 8085 microprocessors; Multiplication, division, transfer of block of data, sorting of ‘n’ numbers using 8086 microprocessors, embedded C system.",
+            "Introduction of commonly used instruction sets of 8085 and 8086 microprocessors.",
+            "Study on addition and subtraction of two 8 bit and 16-bit numbers using 8085 microprocessor.",
+            "Study on multiplication and division of two 8-bit numbers using 8085 microprocessor.",
+            "Study on multiplication and division of two 8-bit and 16-bit numbers using 8086 microprocessor.",
+            "Transferring a block of data from one memory location to another memory location using 8086 microprocessor.",
+            "Open-Ended lab"
+          ],
+          "sessionalNote": null,
+          "references": [
+            "Douglas V. Hall, \"Microprocessors and Interfacing: Programming and Hardware,\" Glencoe.",
+            "Badri Ram, \"Advance Microprocessors and Interfacing,\" Mc Graw Hill.",
+            "Ramesh Gaonkar \"Microprocessor Architecture, Programming and Applications with the 8085.\" Penram International Publishing."
+          ]
+        },
+        "EEE 2209": {
+          "title": "Electrical Drives and Instrumentation",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Construction and Operating Principle of DC Generator; Parallel operation; Application of DC Generator.",
+            "Introduction to three phase circuits and alternators; Introduction to transformer and its operating principles; Principles of operation of DC, synchronous, induction, universal, and stepper motors; Principles of various methods for speed controlling of different types of motors.",
+            "Introduction to Measurement system and Instrumentation, Functional Description, Input/Output Configuration. Instrumentation Error; Classification of Error.",
+            "Transducers: Terminology, Types, Principles and Applications of Resistive, Photovoltaic, piezoelectric, thermoelectric, variable reactance and opto-electronic transducers; Noise reduction in instrumentation.",
+            "Instrumentation amplifiers: Differential, logarithmic, and chopper amplifiers.",
+            "Electronic Measuring Instruments: Oscilloscope, Frequency and voltage measurements using digital techniques; DMM, VTVM, Q meters; Recorders and display devices, spectrum and logic analyzers.",
+            "Computer based Instrumentation: PC-based Data Acquisition, filtering by moving average, Data Conditioning, Statistical methods in measurements."
+          ],
+          "sessionalNote": null,
+          "references": [
+            "B. L. Thereja, A. K. Thereja, \"A Textbook of Electrical Technology\", Vol. II",
+            "A K.Sawhney, \"A course on Electrical and Electronic Measurements and Instrumentation\"",
+            "Robert B. Northrop, \"Introduction to Instrumentation and Measurements\", 3rd Edition",
+            "Roman Malaric, \"Instrumentation and Measurement\""
+          ]
+        },
+        "EEE 2210": {
+          "title": "Electrical Drives & Instrumentation Laboratory",
+          "credit": 0.75,
+          "contactHour": "1.5 hrs/week",
+          "topics": [
+            "DC Generator terminal voltage test, loading characteristics, dc motor speed control, induction motor speed control, transformer open and short circuit test, induction motor blocked and open circuit test, synchronization of alternator, phase and frequency measurement, thermocouple transducer, resistance measurement, op amp low pass and high pass filter.",
+            "Determination of open-circuit characteristics of DC generator",
+            "Speed control of separately- excited DC shunt motor by varying field current keeping the armature current constant",
+            "No load test and Load test of an Induction motor",
+            "Measurement of medium resistance using Ammeter-Voltmeter",
+            "Thermocouple using semiconductor transducer",
+            "Open-Ended lab"
+          ],
+          "sessionalNote": null,
+          "references": [
+            "B. L. Thereja, A. K. Thereja, \"A Textbook of Electrical Technology\", Vol. II",
+            "A K.Sawhney, \"A course on Electrical and Electronic Measurements and Instrumentation\"",
+            "Robert B. Northrop, \"Introduction to Instrumentation and Measurements\", 3rd Edition",
+            "Roman Malaric, \"Instrumentation and Measurement\""
+          ]
+        },
+        "CSE 2209": {
+          "title": "Data Structures and Algorithm",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Introduction: Data types: primitive and non-primitive, Data structure: linear and nonlinear, Abstract data type.",
+            "Array: Representation of arrays, Applications of arrays, Sparse  matrix and its representation.",
+            "Stack: Basic Concept of Stack, Operations on stacks, Applications of stacks, Polish expression, Reverse polish expression, Conversion from infix to postfix/prefix expression, Evaluation of postfix/prefix expressions, Recursion, Tower of Hanoi.",
+            "Queue: Basic concept of queue, Representation of queue, Circular queue, Priority queue, Array representation of priority queue, Double ended queue, Applications of Queue.",
+            "Linked List: Array implementation of linked list, Types of linked list: Singly linked list, Doubly linked list, Circular linked list, Basic operations in linked list: Node creation, Node insertion and deletion from beginning, end and specified position.",
+            "Tree: Definitions and concepts, Representation of binary tree, Binary Search Tree(BST), Insertion, Deletion, Traversals, Search in BST, AVL trees, m-way search trees, Heap, B-Tree.",
+            "Graphs: Definition and representation of graphs, Graph traversal, BFS, DFS, Shortest path algorithms, Topological sorting.",
+            "Sorting: Bubble, Selection, Insertion, Merge, Quick, Heap, Radix sort.",
+            "Searching and Hashing: Search Algorithms: Linear search and binary search. Hashing: Hash function and hash tables, Collision resolution techniques, Storage management."
+          ],
+          "sessionalNote": null,
+          "references": [
+            "Lipschutz & Pai, \"Data Structures\", Schaum’s Series.",
+            "Michael T. Goodrich and Roberto Tamassia,\"Data Structures and Algorithms in C++\", Wiley.",
+            "Allen Weiss, \"Data Structures and Algorithms Analysis in Java\", Pearson Education."
+          ]
+        },
+        "CSE 2210": {
+          "title": "Data Structures and Algorithm Laboratory",
+          "credit": 1.5,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Internal data representation, Abstract data types. Elementary data structures:  arrays, lists, stacks, queues, trees, graphs, heaps, B-trees. Algorithms: Recursion, sorting, searching, hashing, storage management.",
+            "Introduction of Data types: primitive and non-primitive, Data structure: linear and nonlinear, Abstract data type.",
+            "Representation of arrays, Applications of arrays, Sparse matrix and its representation.",
+            "Basic concept of queue, Circular queue, Priority queue, Array representation of priority queue, Double ended queue, Applications of queue.",
+            "Basic concept of stack, operations on stacks, Applications of stacks, Recursion, Tower of Hanoi.",
+            "Polish expression, Reverse polish expression, conversion from infix to postfix/prefix expression, Evaluation of postfix/prefix expressions.",
+            "Implementation and basic operations of linked list.",
+            "Representation of binary tree, Binary Search Tree (BST), Insertion, Deletion, Traversals, Search in BST.",
+            "Representation of graphs, graph traversal, BFS, DFS, Shortest path algorithms, Topological sorting.",
+            "Sorting algorithms (multiple sessions)",
+            "Searching: Linear searching, Binary searching.",
+            "Open-ended lab"
+          ],
+          "sessionalNote": null,
+          "references": [
+            "“Schaum’s Outlines Data Structure” by Seymour Lipschutz.",
+            "“Introduction to Algorithms” by Thomas H. Cormen, Charles E. Leiserson, Ronald L. Rivest, and Clifford Stein"
+          ]
+        },
+        "Math 2209": {
+          "title": "Complex Variables, Statistics and Special Functions",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Complex Variable: Functions of a Complex Variable, Limits, continuity and differentiability, Complex Differentiation and Cauchy-Riemann Equations, Infinite Series, Convergence and uniform Convergence, Line Integral of a Complex Function, Cauchy’s Theorem, Cauchy’s Integral Formulas, Liouville’s Theorem, Taylor’s and Laurent’s Theorem, Singular Points.",
+            "Statistics: Frequency Distribution and its Graphical Representation. Measures of Central Tendency, Measure of Dispersion. Elementary of Probability Theory, Characteristics of Distribution, Probability Distribution and Expectations, Discontinuous Probability Distribution: Binomial, Poisson and Negative Binomial; Continuous Probability Distributions: Normal and Exponential.",
+            "Special Functions: Solutions of Bessel’s and Legender’s differential Equations, Bessel’s function, Legendere Polynomial and their properties."
+          ],
+          "sessionalNote": null,
+          "references": [
+            "Murray R. Spiegel, \"Schaum's Outline of Complex Variables.\"",
+            "Duffy Dean, \"Advanced Engineering Mathematics.\"",
+            "Peter V. O'Neil, \"Advanced Engineering Mathematics.\""
+          ]
+        }
+      },
+      "optionalCourses": [],
+      "termNotes": []
+    },
+    "Y3T1": {
+      "termKey": "Y3T1",
+      "title": "Third Year First Term",
+      "courses": {
+        "CSE 3100": {
+          "title": "Internet Programming Laboratory",
+          "credit": 1.5,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Internet communication protocols, HTML basics, CSS and JavaScript basics, basic PHP, MVC, Header, Session, Cookie, Client-side validation, Web service, API, XML, JSON.",
+            "Environment Setup, Internet Communication Protocols, HTML Basics",
+            "CSS and JavaScript Basics",
+            "Project Presentation (Front-end)",
+            "Basic PHP and C# (ASP.NET)",
+            "PHP and ASP.NET Environment Setup, IDE, Server Setup, PHP/ASP.NET Basics",
+            "MVC Design Pattern",
+            "Header, Session, Cookie, Client-side Validation",
+            "Database Connections and Queries",
+            "Web Service, API",
+            "XML, JSON",
+            "Web Deployment"
+          ],
+          "sessionalNote": null,
+          "references": [
+            "Chris Aquino & Todd Gandee, \"Front-End Web Development: The Big Nerd Ranch Guide\".",
+            "https://www.w3schools.com/",
+            "https://www.tutorialspoint.com/",
+            "https://laravel.com/",
+            "https://learn.microsoft.com/aspnet/core/",
+            "Lecture slides and notes available during class lecture."
+          ]
+        },
+        "ECE 3101": {
+          "title": "Industrial Electronics",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Introduction to Thyristor Family: SCR, DIAC, TRIAC, IGBT, GTO, UJT, UJT Relaxation Oscillator, Programmable UJT (PUT); PUT Relaxation Oscillator, Schottkey diode, Silicon Unilateral Switch (SUS), Silicon Bilateral Switch (SBS), Asymmetrical AC trigger devices.",
+            "Phase Control Converters: Single Phase and Three Phase Converters, Semi and Full Converters, DC to DC Converters, Step-up & Step-down Choppers, Thyristor Chopper Circuits.",
+            "DC Motor Control: DC Motor Braking and Plugging Circuit, Emergency Stop, Balance Bridge (reversing) Drive for PM or Shunt Motors, Phase Control Circuit for Series DC Motor, DC-DC Chopper Control.",
+            "Solid State Motor Speed Controllers: Single Transistor Speed Control, OP-AMP and Darlington Power Amplifier Speed Control, OP-AMP and MOSFET Power Amplifier Control for PM/Shunt Motors.",
+            "Speed Control of PM/Shunt motors: Electronic Speed Control using Armature Voltage Control Method.",
+            "Stepper Motor Control: Stepper Motor Drive Circuit using Transistors and Darlington Transistors and MOSFETs.",
+            "AC Motor Control: Speed Control, Variable Frequency Converter, Block Diagram, Simplified Single Phase Cycloconverter, Control Rectification, TRIAC Control, Single Phase Inverter, And Three Phase Six Step Inverter.",
+            "Controlled Rectification, Electronic Timers, Switched Mode Power Supplies. Voltage Multipliers, Magnetic Amplifiers, Induction Heating, Dielectric Heating.",
+            "SCR Speed Control Circuits for PM/shunt Motors: Simple SCR Circuit; SCR plus UJT Circuit Variation of Pulse Width Modulation (PWM) Speed Control Circuit.",
+            "Speed Control of Series/Universal Motors: Series/Universal Motor Control Circuit using SCR (half wave control); TRIAC and DIAC (full wave control); TRIAC Control with Hysteresis compensation."
+          ],
+          "sessionalNote": null,
+          "references": [
+            "Muhammad H. Rashid, \"Power Electronics Circuits, Devices, and Applications -3nd edition\" Pearson.",
+            "G. K. Mithal, Dr. Maneesha Gupta, \"Industrial and Power Electronics -19th edition\" Khanna Publisher",
+            "V. K. Metha, Rohit Metha, \"Principles of Electronics\" S. Chand & Co Ltd"
+          ]
+        },
+        "ECE 3102": {
+          "title": "Industrial Electronics Laboratory",
+          "credit": 0.75,
+          "contactHour": "1.5 hrs/week",
+          "topics": [
+            "In-circuit operational test of SCR, SCR gate characteristics, SCR DC and AC power control, UJT waveform generation, UJT-SCR time delay circuit, TRIAC-DIAC AC power control.",
+            "Familiarization and in-circuit operational test of SCR.",
+            "Experimental demonstration of SCR DC power control.",
+            "Experimental demonstration of SCR AC power control.",
+            "Experimental demonstration of waveform generator and time delay circuit using UJT.",
+            "Demonstration the operation of a basic TRIAC-DIAC phase control circuit.",
+            "Project presentation based on power semiconductor devices."
+          ],
+          "sessionalNote": null,
+          "references": [
+            "Muhammad H. Rashid, \"Power Electronics Circuits, Devices, and Applications -3nd edition\" Pearson.",
+            "G. K. Mithal, Dr. Maneesha Gupta, \"Industrial and Power Electronics -19th edition\" Khanna Publisher",
+            "V. K. Metha, Rohit Metha, \"Principles of Electronics\" S. Chand & Co Ltd"
+          ]
+        },
+        "ECE 3103": {
+          "title": "Digital Communications",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Introduction to Digital Communication Systems: Digital Communication Sources, Transmitters, Transmission Channels and Receivers, Distortion, Noise and Interference, Nyquist Sampling Theory, Difficulties in Sampling Process, Aliasing Effect, Reconstruction of Sampled Signals, Sampling of Band Pass Signal.",
+            "Pulse Modulation and Digital Signaling: Pulse Amplitude Modulation (PAM), Pulse Time Modulation (PTM), Generation of PTM Signals and Reconstruction Methods. Pulse Code Modulation (PCM), Quantization Noise in PCM, Companding, Differential PCM, Log PCM, Delta Modulation (DM), Adaptive DM.",
+            "Multiplexing: Time Division Multiplexing (TDM), Synchronous TDM, Statistical TDM, TDM Hierarchy, T1 and E1 PCM System, Synchronization.",
+            "Line Codes and Spectra: Different Types of Line Codes and Spectra, Eye Pattern, Regenerative Repeater.",
+            "Digital Modulation Techniques: Band Pass (Modulated) Digital Data Systems, ASK, PSK, DPSK, and FSK. M-array Data Communication Systems, QAM, QPSK, MSK, GMSK, OFDM. Application of Modem, Introduction to Spread Spectrum System, FH-SS and DS-SS System.",
+            "Optimum Receiver Design: Detection-Error probability (BER) for Binary Communications, Optimum Threshold Detection, Matched Filter, Coherent and Non-coherent Detection. Performance in Noisy Channel, BER for Various Modulations and Line Codes, Optimum Receiver."
+          ],
+          "sessionalNote": null,
+          "references": [
+            "B. P. Lathi, \"Modern Digital and Analog Communication Systems\"",
+            "L. W. Couch, \"Digital and Analog Communication Systems\"",
+            "Wayne Tomasi, \"Advanced Electronic Communications Systems\"",
+            "Grahame Smillie, \"Analogue and Digital Communication Techniques\""
+          ]
+        },
+        "ECE 3104": {
+          "title": "Digital Communications Laboratory",
+          "credit": 1.5,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Channel properties and band limitation, sampling theorem, ASK, FSK, PSK, PCM, DPCM, DM, ADM, QPSK, QAM, 8-PSK, 16-QAM, DSSS techniques. Implementation of different modulation and demodulation techniques in MATLAB, LabVIEW or NS2 by individual or group project.",
+            "Effect of band limitation on digital data transmission.",
+            "Sampling and reconstruction process.",
+            "Pulse code modulation and demodulation technique.",
+            "ASK, FSK and PSK modulation and demodulation techniques.",
+            "QPSK modulation and demodulation.",
+            "Quadrature amplitude modulation technique.",
+            "Delta and Adaptive delta modulation techniques.",
+            "Study of direct sequence spread spectrum system using advance communication trainer module.",
+            "Simulation and performance analysis of fundamental digital communication systems using MATLAB.",
+            "Individual or group project on a given band-pass modulation schemes by using modern tools.",
+            "Individual or group project on base-band modulation (A/D and D/A conversion) techniques by using modern tools."
+          ],
+          "sessionalNote": null,
+          "references": [
+            "Mathuranathan Viswanathan, \"Simulation of Digital Communications Systems Using MATLAB\"",
+            "A. A. Giordano and A. H. Levesque, \"Modeling of Digital Communication Systems using Simulink\"",
+            "M. C. Jeruchim, P. Balaban and K. Sam Shanmugan, \"Simulation of Communication Systems\"",
+            "Nasser Kehtarnavaz and Namjin Kim, \"Digital Signal Processing System-Level Design Using LabVIEW\""
+          ]
+        },
+        "ECE 3105": {
+          "title": "Microwave Engineering and Radar",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Transmission lines: Microwave Transmission Lines, Transmission Line Analogy, Impedance Matching Techniques, Smith Chart and Its Applications.",
+            "Wave Guides: Waves Propagation in Guided Media; Propagation through Parallel-Plate Wave Guides, Rectangular and Circular Wave Guides, Dominant and degenerate modes, Field patterns, Cavity Resonators.",
+            "Microwave Tubes: Microwave systems, Classification of microwave tubes, Klystron amplifier, Reentrant cavities, Velocity Modulation, Space Charge wave, Multicavity Klystron Amplifier, Reflex Klystron Oscillator. Magnetron, Travelling Wave Tube (TWT) Amplifier, Backward Wave Oscillator (BWO), Waveguide Components.",
+            "Applications: Microwave Communications System, Industrial applications of Microwaves, Microwave Heating, Microwave Radiation Hazards.",
+            "RADAR: Introduction to Radar, Radar Equation CZ, False Alarm, Miss Detection, Radar Cross Section, Probability Detection, Integration of Radar Pulses, Doppler Effect Doppler and MTI Radar, CW radar and all its block diagram, Limitations and advantages of CW Radar, FM Radar, Delay Line Canceler, Blind Speed, Flicker Effect, Tracking Radar and its classifications, Angle Tracking System, Amplitude Comparison Monopulse Radar (Single and Teo Coordinate), Conical Scan and Sequential Lobing, Limitations of tracking Radar, HF Over the Horizon (OTH) Radar. Air Surveillance Radar. Radar Receivers."
+          ],
+          "sessionalNote": null,
+          "references": [
+            "A K Das and S K Das, \"Microwave Engineering,\" Tata McGraw-Hill",
+            "Samuel Y. Liao, \"Microwave Devices and Circuits\" Pearson Prentice Hall",
+            "George Kennedy, Bernard Davis \"Electronic Communication Systems,\" Tata McGraw Hill Education Private Limited",
+            "K D Prasad \"Antenna and Wave Propagation,\" Satya Prakashan.",
+            "Merril I. Skolnik \"Introduction to Radar System\" 3rd Edition",
+            "Fundamentals of Radar Technology (Applied Technology Institute) – Instructor Robert Hill"
+          ]
+        },
+        "ECE 3106": {
+          "title": "Microwave Engineering and Radar Laboratory",
+          "credit": 0.75,
+          "contactHour": "1.5 hrs/week",
+          "topics": [
+            "Microwave Training kit, Microwave components, Waveguide, Transmission line Training kit. Target detection using Radar.",
+            "To Study of the Components of Microwave Training Kits.",
+            "To study of Transmission Line Kit.",
+            "To obtain the knowledge on the theory and the operation of the Gunn oscillator as a source of microwave frequencies.",
+            "To measure the Electrical properties of transmission line using Transmission line Training kit.",
+            "To learn the basic theory and the operation of the PIN diode modulator and crystal detector.",
+            "To measure the VSWR of transmission line using Transmission line Training kit.",
+            "To learn how to measure SWR using slotted or slotted line or SWR indicator.",
+            "To learn the Smith Chart and its application in determining unknown impedances.",
+            "Industrial tour for observing the Navigation and Air Surveillance Radar. (e.g. Bangladesh Navy, Bangladesh Air Force)",
+            "Open ended lab"
+          ],
+          "sessionalNote": null,
+          "references": [
+            "Laboratory Manual of Microwave Kit.",
+            "A K Das and S K Das, \"Microwave Engineering,\" Tata McGraw-Hill",
+            "Samuel Y. Liao, \"Microwave Devices and Circuits\" Pearson Prentice Hall",
+            "George Kennedy, Bernard Davis \"Electronic Communication Systems,\" Tata McGraw Hill Education Private Limited",
+            "Merril I. Skolnik \"Introduction to Radar System\" 3rd Edition"
+          ]
+        },
+        "ECE 3109": {
+          "title": "Numerical Analysis",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Numbers and Errors: Significant Figures, Absolute and Relative error, Rounding Error in Functional Evaluation, Propagation of Error in Arithmetic Process.",
+            "Single Non-linear Equation: Picard Iteration, Newton Raphson Method of Convergence.",
+            "Interpolation: Difference Tables, Newton Forward and Backward Interpolation Formulae with Error, Divided Difference and Central Difference Formulae, Lagranges Interpolation Formula, Numerical Differentiation.",
+            "Numerical Integration by Trapezoidal Rule; Simpson’s Rule, Rhomberg Rule with Error.",
+            "Curve fitting by Least Squares Method, Cubic Spline, Chebyshev Polynomials, Min-max Properties.",
+            "Differential Equations: Modified Euler Method, Runge–Kutta Method, Predictor Corrector Method.",
+            "Linear Algebraic Systems, Direct and Iterative Methods, Matrix Inversion.",
+            "Solution of Partial Differential Equation: Introduction to Partial Differential Equation, Geometric Interpretation, Definition of Elliptic, Parabolic and Hyperbolic Partial Differential Equation.",
+            "Matrix Methods:  Introduction and Concept of Eigen Value and Eigen Vector. Solution of Homogeneous Linear System, Estimation of Eigen values."
+          ],
+          "sessionalNote": null,
+          "references": [
+            "E. Balagurusamy, Numerical Methods, Tata McGraw Hill Pub. Co. Ltd, New Delhi.",
+            "Steven C. Chapra, Raymond P. Canale, Numerical Methods for Engineers, McGraw-Hill Education, New York."
+          ]
+        },
+        "ECE 3110": {
+          "title": "Numerical Analysis Laboratory",
+          "credit": 0.75,
+          "contactHour": "1.5 hrs/week",
+          "topics": [
+            "Implementation of numerical methods for root finding of nonlinear equations, solution of linear systems, interpolation and regression analysis, differentiation and integration, solution of ordinary and partial differential equations using programing and modern software tools targeting their applications of engineering problems.",
+            "Non-linear equation solution using bisection, false position, newton-raphson, secant and fixed point method.",
+            "Linear equation solution with non-iterative Gauss Elimination, gauss pivot elimination, gauss Jordan method",
+            "Linear equation solution with iterative jacobi, gauss-seidal, successive-over-relaxation method",
+            "Curve fitting using linear, lagrange and newton interpolation method.",
+            "Numerical Integration using trapezoidal, composite trapezoidal, simpson 1/3, simpson 3/8, Romberg integration method.",
+            "Ordinary differential equation solution using eular, heuns, runge-katta, polygon, milne simpson method."
+          ],
+          "sessionalNote": null,
+          "references": [
+            "E. Balagurusamy, \"Numerical Methods\", Tata McGraw Hill Pub. Co. Ltd, New Delhi.",
+            "Steven C. Chapra, Raymond P. Canale, \"Numerical Methods for Engineers\", McGraw-Hill Education, New York."
+          ]
+        },
+        "Hum 3109": {
+          "title": "Economics and Accounting",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Economics: Definition of Economics, Scope and Methods, Concept of Demand, Supply and Their Elasticity’s. Equilibrium Analysis; Partial and General, Consumer Behavior; Marginal Utility, Indifference Curve, Consumer’s Surplus, Producer Behavior, Iso-quant and Iso-Cost Line, Factors of Production function, Production Possibility Curve, Fixed Cost and Variable Cost, Short Run and Long Run Cost, Total, Average and Marginal Cost, Laws of Returns, Internal & External Economics and dis-economics, Market and Market forms, Perfect and Imperfect Competition, Price, Output Determinations, Introductory ideas on GNP, GDPPerceptual Income, Interest, Rent, Saving, Investment, Inflation, Project Approval, NPV, IRR & their Application to Cost Benefit Analysis. Economics of Bangladesh, Five Year Plans.",
+            "Basics of accounting: Meaning and importance of accounting; users of accounting information; Accounting equation; accounting principles; doLrble-entry system; Generally Accepted Accounting Principle (CAAP); accounting cycle; relationsliip of accounting with engineering education",
+            "The recording process: Journal; ledger; cash book; trial balance; preparation offinancial statements: adj usting entries.",
+            "Costing: Concept of cost; classification of costs; statement of cost; material costing; payroll accounts."
+          ],
+          "sessionalNote": null,
+          "references": [
+            "Roy J. Ruffin and Paul R. Gregory, \"Principles of Economics, -7th edition\" Addison Wesley.",
+            "Paul Samuelson and William Nordhaus, \"Economics-20th edition\" McGraw-Hill Publisher Company.",
+            "N. Gregory Mankiw, \"Principles of Macroeconomics-8th edition\" Cengage Learning, ISBN 978-1305971509.",
+            "Kieso, D. E., Kimmel, P. D., & Weygandt, J. J. (2015). Accounting principles. United States: Wiley Custom Learning Solutions."
+          ]
+        }
+      },
+      "optionalCourses": [],
+      "termNotes": []
+    },
+    "Y3T2": {
+      "termKey": "Y3T2",
+      "title": "Third Year Second Term",
+      "courses": {
+        "ECE 3200": {
+          "title": "Electronics Project Design/Development",
+          "credit": 1.5,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Study of state of the art progress on both hardware and software-based electronic circuits, enhance innovation and management skills. Improve writing and communication capabilities. Develop ability to investigate modern engineering problems, design modern electronic devices, data analysis."
+          ],
+          "sessionalNote": "Project-based course spanning one term.",
+          "references": []
+        },
+        "ECE 3201": {
+          "title": "Information Theory",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Introduction to the quantitative theory of information, properties of information, information rate, Shannon’s theory, transmission of information at the rate above capacity, probability distributions, random variables, probability mass function, cumulative distribution function, probability density function, outage probability, applications of information theory for reliable and efficient communication systems.",
+            "Source coding theorem, discrete source and channel, information content of discrete sources, convexity and concavity, Jensen's inequality, information  inequality, data processing theorem, Fanos's inequality, different types of convergence, asymptotic equipartition property (AEP), entropy, joint  entropy, conditional  entropy, relative  entropy, chain  rule  for entropy, differential entropy, properties  of  differential  entropy, maximize  the  differential entropy, mutual  information, properties of mutual  information, chain  rule  for  mutual  information, applications of entropy and mutual  information for communications system. Data compression, Kraft inequality, optimal codes, prefixes codes, Huffman codes, Shannon-Fano-Elias codes, Slepian-Wolf.",
+            "Channel coding, channel coding theorem, strong coding theorem, block codes, space–time block code, convolutional code, turbo codes, low density parity check codes, BCH code, CRC code, Hadamard code, Hamming code, Raptor code, Reed–Solomon code, Walsh–Hadamard code, Fountain codes, Alamouti codes, joint source and channel coding, random coding bound.",
+            "Channel capacity, binary symmetric channel, binary erasure channels, time-varying channels, outage channel capacity, maximizing capacity, Blahut-Arimoto, Gaussian channel, parallel Gaussian channels, colored Gaussian noises, waveform channel, capacity of discrete and continuous noisy channel, Gaussian and Rayleigh channels with feedback, multiple access channels, broadcast channels, wide-band channels, finite state Markov channels."
+          ],
+          "sessionalNote": null,
+          "references": [
+            "Thomas M. Cover, Joy A. Thomas, \"Elements of Information Theory\", Wiley-Interscience.",
+            "B.P. Lathi, \"Modern Digital and Analog Communication Systems\", Oxford University Press.",
+            "R. P. Singh and S. D. Sapre, \"Communication Systems: Analog & Digital\", Tata McGraw Hill India."
+          ]
+        },
+        "ECE 3203": {
+          "title": "Digital Signal Processing",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "IIIR Filter Design: Properties of IIR filters, Impulse invariant and bilinear transformation methods, Butterworth, elliptic, Chebyshev low-pass filters. Low-pass design methods for prototypes. Conversion to high-pass, band-pass, band-stop filters. Finite word length effects: Quantization, round off errors and overflow errors.",
+            "Filter Structures: Direct form I, Direct form II, PSOS and CSOS forms, Lattice structures.",
+            "FIR filter Design: Properties of FIR filters, FIR filter design by Fourier approximation, Window methods, Frequency sampling method, Remez exchange algorithm.",
+            "Power Spectrum Estimation: Use of DFT in spectrum estimation, spectrogram, Parametric methods: AR, MA and ARMA methods. Lapunov exponent. Non-parametric methods: Peridogram (Bartlett method, Welch method, Blackman-Tukey method,), Correlogram, Eigenvector methods.",
+            "Time-Frequency Domain Analysis: Short time Fourier transform (STFT), Continuous and discrete wavelet transform (WT), wavelet multi-resolution analysis.",
+            "Multirate Digital Signal Processing: Concepts, design of practical sampling rate converters, decimators, interpolators, polypphase decompositon of mltirate DSP.",
+            "Statistical Signal Processing: Review of random variables and random signal processing, Adaptive FIR filters: the MMSE, LMS, and RLS algorithms, Wiener and Kalman filtering."
+          ],
+          "sessionalNote": null,
+          "references": [
+            "S Salivahanan, A Vallavaraj, C Gnanapriya, \"Digital Signal Processing,\" Mc Graw Hill Education.",
+            "Dimitris G. Manolakis, Vinay K. Ingle, \"Advanced Digital Signal Processing,\" Cambridge University Press.",
+            "Emmanuel C. Ifeachor & Barrie W. Jervis, \"Digital Signal Processing: A Practical Approach,\".",
+            "John G. Proakis, Dimitris G. Manolakis, \"Digital Signal Processing Principles Algorithms and Applications,\".",
+            "Vinay K. Ingle, John G. Proakis, \"Digital Signal Processing Using MATLAB,\"."
+          ]
+        },
+        "ECE 3204": {
+          "title": "Digital Signal Processing Laboratory",
+          "credit": 0.75,
+          "contactHour": "1.5 hrs/week",
+          "topics": [
+            "IIR and FIR filter design with structure,  DFT, Implementation of DIF and TIF ,  algorithm, STFT, Wavelet analysis, Power spectrum estimation technique, Finite Word length Effect in FIR and IIR digital filters, Block diagram of filters suing simulink",
+            "Design & Implementation of IIR filter design techniques,structures",
+            "Design & Implementation of Discrete Fourier Transform and FFT algorithms for digital filter",
+            "Design and evaluation of the FIR filter design techniques",
+            "Evaluation and applications of power spectrum estimation methods",
+            "Analyze and applications of STFT and wavelet signal processing",
+            "Digital signal processing using Simulink"
+          ],
+          "sessionalNote": null,
+          "references": [
+            "S. Salivahanan, A Valavaraj, G Gannapriya. \"Digital Signal Processing’.",
+            "John G. Proakis, Dimitris G. Manolakis, \"Digital Signal Processing-Principles, Algorithms, and Application\".",
+            "Signals and Systems by Rao, K. Deergha."
+          ]
+        },
+        "ECE 3205": {
+          "title": "Optical Fiber Communications",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Light Propagation through Optical Fiber: Overview of Optical Fiber Communication, Ray Propagation in Optical Fibers, Optical Fiber Types. Modes in Optical Fibers and their Intensity Patterns, LP Modes, Dispersion Relations and Mode Cutoff. Fiber materials and Fabrication Techniques. Fiber Losses and Dispersion. Non-linear effects: SPM, XPM, FWM.",
+            "Optical Sources and Detectors: Sources: Semiconductor LEDs and Lasers, Spectral Width, Efficiency, Modulation Characteristics, Materials and Fabrication. Detectors: Semiconductor Photodiodes, PIN diodes, APDs, Noise characteristics, Receiver systems and their SNR Analysis.",
+            "Fiber Optic Links: Source to Fiber Coupling, Lensing Schemes, Fiber to fiber Coupling and Splicing Techniques, Misalignment, Fiber Optic Couplers. Power Budget and Rise-Time Budget Analysis. Line Coding Formats.",
+            "System Measurements: Fiber Attenuation and Dispersion measurement, OTDR, LED and photodiode Characteristics. Eye Pattern Technique.",
+            "Optical Networks: Fiber Optic Data Buses and LANs. Protocol and Architecture. Wavelength Division Multiplexing (WDM). SONET/SDH. FTTH."
+          ],
+          "sessionalNote": null,
+          "references": [
+            "John M. Senior, \"Optical Fiber Communications Principles and Practice,\" Pearson Education Limited.",
+            "Gerd Keiser, \"Optical Fiber Communications,\" McGraw Hill.",
+            "Ajay Ghatak and K. Thyagarajan, \"Introduction to Fiber Optics,\" Cambridge University Press."
+          ]
+        },
+        "ECE 3206": {
+          "title": "Optical Fiber Communications Laboratory",
+          "credit": 0.75,
+          "contactHour": "1.5 hrs/week",
+          "topics": [
+            "Analog and digital transmission through optical fiber. Signal degradation and losses in optical fiber. Optical sources, detector and fiber optic link. Measurement of performance of optical fiber link using OTDR and power meter. Optical fiber network for triple play service of PON system by using router with SFP, WDM, EDFA, splicer and splitter.",
+            "Transmission of an analog dc signal through fiber optic link and Measurement of analog transmission bandwidth.",
+            "Experimental observation and determination the parameter of pulse transmitter and receiver and measurement of digital bandwidth.",
+            "Measurement of different kind of losses in fiber.",
+            "Determination of I-V characteristics of fiber optic LED and photo detector response.",
+            "Investigation on the transmission of sound and audio frequency over optical fiber link."
+          ],
+          "sessionalNote": null,
+          "references": [
+            "\"Optical Fiber Communications: Principles and Practice\", John Senior",
+            "\"Fiber-optic communication systems\",  Govind P. Agrawal",
+            "\"Optical Fiber Communications\", Gerd Keiser"
+          ]
+        },
+        "ECE 3207": {
+          "title": "Antenna Engineering",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Fundamental of Antennas: Radiation Mechanism, Radiation Patterns, Lobes, Power Density and Intensity, Directive Gain and Directivity, Power Gain, Bandwidths, Radiation Efficiency, Input Impedance, Effective Aperture and Antenna Temperature. Vector Potential Functions, Electric and Magnetic Fields for Electric and Magnetic Current Sources, Solution of Vector Potential Wave Equation, Duality, Reciprocity and Reaction Theorems.",
+            "Linear Wire and Loop Antennas: Infinitesimal, Small, Finite Length and Half-wave Length Dipoles, Determination of Radiation Fields, Radiation Patterns, Radiation Resistance, Directivity and Input Impedance of Dipoles, Mutual Impedance between Linear Elements near Infinite Planes Conductors and Ground Effects.   Circular, Square, Triangular, Rectangular, Rhombic and Ferrite Loop Antennas. Cylindrical Dipole, Folded Dipole.",
+            "Antenna Arrays: Antenna array, Controls in antenna array, Linear and uniform linear array, Broadside, End Fire, Collinear, and Parasitic arrays, Array of two point sources with  amplitude and phase analysis,  Pattern multiplication, Radiation pattern of 4- & 8- isotropic elements fed in phase and spaced λ/2 apart, Array of n-isotropic sources of equal amplitude and spacing, Broadside Case (direction of pattern maxima, direction of pattern minima, beam width of major lobe), Tapering of arrays, Binomial arrays, Dolph-Tchebyscheff arrays, Super-directive arrays, Array factor of planer array, Array factor of circular array.",
+            "Travelling Wave and Broadband Antennas: Long wire antenna, V antenna, Direction conversion of V antenna, Rhombic antenna. Helical antenna, Yagi-Uda antenna. Frequency Independent Antennas and Antenna Miniaturization: Condition for frequency independence, Frequency independent log periodic antennas, Design of dipole array log periodic antenna, Fundamental limits of electrically small antennas.",
+            "Aperture Antennas: Huygens principle, Rectangular aperture, Circular aperture, Design consideration for rectangular and circular aperture, Babinet’s principle.",
+            "Microstrip Antennas: Basic characteristics, Feeding method, Transmission line model of rectangular patch (Fringing effects, Effective length, Resonant frequency, Effective width, Design method, Conductance, Resonant input resistance).",
+            "Horn, Reflector and Lens Antennas: Sectoral horn and its directivity measurement, Pyramidal horn and its design procedure, Conical horn, Parabolic reflector, Cassegrain reflector, Lens Antenna, Nonmetallic dielectric lens antenna, E-plane metal plate lens antenna.",
+            "Broadband Dipoles and Matching Techniques: Cylindrical dipole antenna, Folded dipole antenna, Sleeve dipole antenna, Matching techniques, Balun transformers."
+          ],
+          "sessionalNote": null,
+          "references": [
+            "Balanis, \"Antenna Theory Analysis and Design\"",
+            "K D Prasad, \"Antenna and Wave Propagation\""
+          ]
+        },
+        "ECE 3208": {
+          "title": "Antenna Engineering Laboratory",
+          "credit": 0.75,
+          "contactHour": "1.5 hrs/week",
+          "topics": [
+            "Experimental functionalities of different types of antenna training kits. Demonstration of performance properties of different antennas; Dipole, Yagi-Uda and Microstrip Patch antenna. Simulation of antenna using electromagnetic simulation tools.",
+            "Demonstrate the characteristics of Dipole Antenna",
+            "Demonstrate the characteristics of Yagi-Uda Antenna",
+            "Demonstrate the characteristics of Microstrip Patch Antenna",
+            "Design an Antenna using electromagnetic simulation tools (Project Work)"
+          ],
+          "sessionalNote": null,
+          "references": [
+            "Laboratory Manual of Antenna Training Kit.",
+            "Balanis, \"Antenna Theory Analysis and Design\"",
+            "K D Prasad, \"Antenna and Wave Propagation\""
+          ]
+        },
+        "ECE 3210": {
+          "title": "Modeling and Simulation Laboratory",
+          "credit": 0.75,
+          "contactHour": "1.5 hrs/week",
+          "topics": [
+            "Simulation System, Appropriate tools, Introduction to Arena Emulator with Arena Basics, Simulation of Queuing System: Three steps of simulation, calling population, system state, flow diagrams, and bar chart, Probability Distribution, and the types of Probability distributions, Discrete Probability Distributions, Binomial Probability Distributions and how the distribution tables are generated, Poisson distribution, and Normal Distribution, Simulation of a Telephone System, based on completeness, block and business of the system resources and each call processing description with diagram.",
+            "Introduction to Simulation System, Appropriate tools, advantages and disadvantages of simulation, Introduction to Arena Emulator with Arena Basics.",
+            "Components of a system, Discrete and continuous system, Model of a system, Types of models",
+            "Simulation of Queuing System: Three steps of simulation, calling population, system state, flow diagrams, and bar chart.",
+            "Probability Distribution, and the types of Probability distributions, Discrete Probability Distributions, Binomial Probability Distributions and how the distribution tables are generated, Poisson distribution, and Normal Distribution",
+            "Simulation of a Telephone System, based on completeness, block and business of the system resources and each call processing description with diagram.",
+            "Open ended lab"
+          ],
+          "sessionalNote": null,
+          "references": [
+            "V.P. Singh, System Modelling and Simulation New Age International, New Delhi.",
+            "Averill M. Law, Simulation Modeling and Analysis, y McGraw-Hill Education, New York."
+          ]
+        }
+      },
+      "optionalCourses": [
+        {
+          "courseCode": "CSE 3209",
+          "title": "Database System",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Database System Concepts: Data Models, Schemas and Instances, DBMS Architectures and Data Independence, Database Languages & Interfaces, Database system environment, Classification of Database Management Systems; Relational Model: Entity types, Entity Sets, Attributes & Keys, Relationships & types, Roles & Structural Constraints, ER Diagrams, naming Conventions & Design Issues, Subclass, Superclass & Inheritance, Specialization & Generalization, Constraints and Characteristics of Specialization & Generalization, ER Diagrams, Relational Database Design using ER to Relational Mapping; Relational Algebra: Basic Relational Algebra Operations, Additional relational Operations; SQL, QBE, Query Processing and Optimization, Triggers & Cursors. Relational Constraints, Functional Dependencies: Relational constraints and Relational Database Schema, Update Operations & Dealing with constraint violations, Informal Design Guidelines for Relational Schemas, Functional Dependencies; Normalization: Normal Form based on Primary Keys, General Definitions of Second and Third Normal Form, Boyce-Codd Normal form, Multivalued Dependencies and Fourth Normal Form, Inclusion Dependencies; Database Indexing and Index Structures: Types of Single Level Ordered Index, Multilevel Indexes, Dynamic Multilevel Indexes, Dynamic Multilevel indexes using B-Trees and B+ Trees, Indexes on Multiple Keys. Transaction Processing and Management: Introduction to Transaction Processing, Transaction & System Concepts, Properties of transaction, Schedules & recoverability, Serializability of Schedules; Concurrency Control Techniques: 2PL Serializability, and Recoverability, Lock Management, Lock Conversions, Dealing with Deadlocks, Specialized Locking Techniques, Concurrency Control without Locking; Database Security and Authorization: Introduction to Database Security, Access Control, Discretionary Access Control, Mandatory Access Control, Security for Internet Applications;"
+          ],
+          "sessionalNote": "Optional I Theory",
+          "references": [
+            "Silberschatz, Korth and Sudarshan, \"Database System Concept\"  by Mc Graw Hill.",
+            "Elmasri Navrate, Fundamentals of database systems, Addison-Wesley."
+          ]
+        },
+        {
+          "courseCode": "CSE 3210",
+          "title": "Database System Laboratory",
+          "credit": 0.75,
+          "contactHour": "1.5 hrs/week",
+          "topics": [
+            "Creating Entity Relationship Model, Assign keys into entities, Insert values into entities/tables; Relational Constraints, Functional Dependencies; Database Indexing and Index structures: Types of Single level order Index, Multilevel Indexes, PL/SQL: PL/SQL procedure and analyzing their properties, PL/SQL functions and analyzing their properties, Transaction Processing and Management, Concurrency Control Techniques: Lock management, Lock conversions, Dealing with deadlocks, Specialized lock techniques.",
+            "Design & Implementation of Database Systems, Entity, Objects, Entity Relationship Model, Assigning keys to entities",
+            "Design & Implementation of SQL insert statements and inserting data into tables",
+            "Design & Implementation of various constraints, functional dependencies and normalizing a relation",
+            "Design & Implementation of different types of single-level order indexes",
+            "Design, Writing and Executing PL/SQL procedures",
+            "Design and Implementation of Transaction Processing and Management, Concurrency Control Techniques"
+          ],
+          "sessionalNote": "Optional I Lab",
+          "references": [
+            "Silberschatz, Korth and Sudarshan, \"Database System Concept\"  by Mc Graw Hill.",
+            "Elmasri Navrate, Fundamentals of database systems, Addison-Wesley."
+          ]
+        },
+        {
+          "courseCode": "CSE 3219",
+          "title": "Computer Peripherals and Interfacing",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Hardware and Software interfacing in Microcomputer System Design, I/O Design and Total System Design, Multi-processor Configurations; Microprocessor Based System Design: Hardware design, Building, Debugging, Testing and Linking program modules, Programming EPROM; Traps and Interrupts, address space partitioning, AD and DA converters and some related chips. Interfacing ICs of I/O devices.",
+            "I/O ports, Programmable Peripheral Interface, DMA Data Transfer, DMA Controller, Interrupt Controller, Communication Interface, Interval Timer, etc.; IEEE 488 and other buses, Interfacing with microcomputer; Interfacing I/O devices - floppy disk, hard disk, tape, CDROM and other optical memory, keyboard, mouse, monitor, plotter, scanner, etc.; Microprocessor in Scientific Instruments and Other Applications: Display, Protective relays, Measurements of Electrical quantities, Temperature monitoring system, water level indicator, motor speed controller, Traffic light controller, etc.; Microcontroller: Concept of microcontroller and its application. Top-down view of microcontroller.",
+            "Point Operations, Histogram Modeling, Spatial Operations, Transform Operations, Image Filtering and Restoration, De blurring Color Image Processing. Application in Character Recognition, Biomedical Imaging, Remote Sensing, Digital TV and Multimedia"
+          ],
+          "sessionalNote": "Optional I Theory",
+          "references": [
+            "B. Govinda Rajalu, \"Hardware Trouble Shooting and Maintenance\", Tata McGraw Hill 1991",
+            "Robert, S Lai, \"The waite group writing MS DOS Device, Drives\"."
+          ]
+        },
+        {
+          "courseCode": "CSE 3220",
+          "title": "Computer Peripherals and Interfacing Laboratory",
+          "credit": 0.75,
+          "contactHour": "1.5 hrs/week",
+          "topics": [
+            "Peripherals devices: Peripheral devices communication with PC, Designing an 8-bit control bus to control LED and other equipment (implementable in breadboard); Microcontroller 1 (Arduino): Sending high/low signal in Arduino board, Blinking LED, Designing a traffic control system; Microcontroller 2 (Arduino): Use of sonar sensor, Designing collision avoidance system using sonar sensor; Microcontroller 3 (Arduino): Controlling a display device, Displaying characters on a 2 x 16 display device, Using water sensor, Using moisture sensor.",
+            "Design an 8-bit control bus to control LED and other equipment.",
+            "Send high/low signal in Arduino board and Blink LED.",
+            "Design a traffic control system.",
+            "Design collision avoidance system using sonar sensor.",
+            "Control a display device.",
+            "Open – ended lab"
+          ],
+          "sessionalNote": "Optional I Lab",
+          "references": [
+            "B. Govinda Rajalu, \"Hardware Trouble Shooting and Maintenance\", Tata McGraw Hill 1991",
+            "Robert, S Lai, \"The waite group writing MS DOS Device, Drives\"."
+          ]
+        },
+        {
+          "courseCode": "CSE 3239",
+          "title": "Mobile Computing",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Overview of Mobility and Wireless Fundamentals: Wireless technologies: cellular, WiMax, WiFi, Bluetooth, 802.15.4, ad hoc networks, Basic network properties: capacity and connectivity, Wireless protocols CSMA/CA, 802.11, MobileIP, Mobility models.",
+            "Mobile Device Architectures: ARM and Thumb instruction set architectures, processors: XScale, ARM11, i.MX, bus and memory architectures, I/O architectures, SOC designs.",
+            "Energy Modeling and Management: Battery models, Energy Models and Relative Energy Consumption of Components, Voltage and Frequency Scaling. Sleep and Wakeup Algorithms, Cooperative Energy Conservation.",
+            "Mobile Software: Principles of Disconnected Operation: Caching, Hoarding, etc., Software Adaptation and OS Support, Resource Sharing, Development Environments: Introduction to Objective-C, Model-View-Controller Model; Delegate Pattern; iPhone, Android, & Blackberry SDKs.",
+            "Application Environments: Limited Resource Computing; Memory Management; Low Power Computing; Fault Tolerance and Persistence; Security Issues.",
+            "Mobile Ad-Hoc Networks: Ad-Hoc Basic Concepts, Characteristics, Applications-Design Issues, Routing.",
+            "Energy Efficient Computing: Energy-efficiency basics, SPEED: processor, SLEEP: full-system, Power Management, Green ICT Standard, Sustainability of ICT Products.",
+            "User Experience: Small Screen Problem, Unified Look and Feel Paradigm, iPhone Human Interface Guidelines, Blackberry User Interface Guidelines; Common User Interface Guidelines; Future of Mobile Computing: Upcoming Technologies; Convergence of Media and Communication Devices."
+          ],
+          "sessionalNote": "Optional I Theory",
+          "references": [
+            "Fundamentals Of Mobile Computing",
+            "https://docs.swift.org/swift-book/documentation/the-swift-programming-language/guidedtour/"
+          ]
+        },
+        {
+          "courseCode": "CSE 3240",
+          "title": "Mobile Computing Laboratory",
+          "credit": 0.75,
+          "contactHour": "1.5 hrs/week",
+          "topics": [
+            "Introduction to Swift, Basic syntax, Object-oriented programming. Data structure, Algorithms design and analysis, iOS applications, User interface design and User Experience (UI/UX), Database integration, Basic SQL command, Introduction to SQLite, Basic API and JSON parsing, Introduction to basic API, JSON format.",
+            "Introduction to Swift language",
+            "Xcode storyboards  and interface builder",
+            "Development of Simple IOS application interface using Swift",
+            "Implementation of database collection and operation of database.",
+            "Jason parsing using Swift",
+            "Final project show and presentation"
+          ],
+          "sessionalNote": "Optional I Lab",
+          "references": [
+            "Fundamentals Of Mobile Computing",
+            "https://docs.swift.org/swift-book/documentation/the-swift-programming-language/guidedtour/",
+            "Tools: Swift, Xcode, MacBook"
+          ]
+        }
+      ],
+      "termNotes": []
+    },
+    "Y4T1": {
+      "termKey": "Y4T1",
+      "title": "Fourth Year First Term",
+      "courses": {
+        "ECE 4000": {
+          "title": "Capstone Project/Thesis",
+          "credit": 1.5,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Study of Problem or Design and Analysis of Circuits and Systems in the Fields of Electronics and Communication Engineering (Continued to the 4th Year 2nd Semester)."
+          ],
+          "sessionalNote": "Capstone project spanning two terms (Y4T1 and Y4T2).",
+          "references": []
+        },
+        "ECE 4101": {
+          "title": "VLSI Design and Nanotechnology",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Introduction to VLSI design: Moore’s Law, VLSI Design hierarchy, Different VLSI Design approaches.",
+            "MOSFET Logic: Review of MOSFETs: I-V Characteristics of MOS Transistor, NMOS, CMOS, Pass-Transistor Logic, Transmission Gates, Bi-CMOS Logic Circuits, Special CMOS Logics, MOS realization of logic gates and circuits.",
+            "Circuit Characterization and Performance Estimation: Switching characteristic (propagation delay and parasitic capacitance estimation), static and dynamic power dissipation estimation.",
+            "VLSI Circuit Design Processes: Design rules, stick diagrams, mask layout, Structured design approach, Subsystem Design: Data-path Operations, Addition, Multiplication, Counters, Memory Elements. Scaling of MOS Transistor Dimensions, CMOS Testing principle, Chip level Test Techniques, VLSI system design using CAD tools and hardware descriptive languages like VHDL, Verilog etc.",
+            "Programmable logic Device based Design: Introduction, Architecture, Design Flow of Xilinx; Programmable logic structures: ROM, PLA, PAL, GAL PLD, CPLD, Cell-based, FPGA, and ASIC, Implementation of DSP Algorithms.",
+            "VLSI Technology: Overview of Si-based IC Fabrication Technology: Wafer preparation, Oxidation, Diffusion, Ion implantation, Deposition, Metallization, Etching and Lithography. nMOS fabrication, n-well and p-well process .",
+            "Overview of Ultrafast Systems-GaAs Technology, Nanotechnology in VLSI Design and Nanoelectronics; Various aspects of Quantum Dots, Nanowires, Carbon Nanotubes, Graphene; Fabrication techniques for nanostructures."
+          ],
+          "sessionalNote": null,
+          "references": [
+            "Basic VLSI Design by Douglas A. Pucknell, Kamran Eshraghian.",
+            "Design of VLSI Systems: A Practical Introduction by Linda E. M. Brackenbury"
+          ]
+        },
+        "ECE 4102": {
+          "title": "VLSI Design & Nanotechnology Laboratory",
+          "credit": 0.75,
+          "contactHour": "1.5 hrs/week",
+          "topics": [
+            "Design, simulate, verification, and analysis of digital systems (gates, Boolean function, shifter counter, arithmetic-logic units, memory etc) with gate/switch logic, mask layouts, hardware descriptive languages, FPGA using modern tools.",
+            "Mask layout design and analysis based on CMOS using modern tools",
+            "Design and Analysis of Transfer Characteristics of Different Gates Using Modern Tools",
+            "Design and implementation of pseduo NMOS, dynamic and static NMOS, C2MOS logic circuit, BiCOMS circuit using modern tools",
+            "Design and implementation of PLD circuits using Verilog",
+            "Design and implementation of FPGA based circuits using Verilog/modern tools"
+          ],
+          "sessionalNote": null,
+          "references": [
+            "Lab Manual",
+            "Basic VLSI Design by Douglas A. Pucknell, Kamran Eshraghian.",
+            "Design of VLSI Systems: A Practical Introduction by Linda E. M. Brackenbury",
+            "CMOS VLSI Design by Neil H. E. Weste and Money Haris"
+          ]
+        },
+        "ECE 4103": {
+          "title": "Wireless Communications",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "History and Evolution of Mobile Radio Communications: 1G, 2G, 3G, 4G, 5G, LTE & Forthcoming 6G Cellular Mobile Systems, Limitations of Conventional Mobile Radio Systems, Overview of WiMAX, WiFi, Bluetooth.",
+            "Radio Paging: Introduction, Paging Receiver Types, On Site Paging, Transmitter Specifications, Wide Area Paging, Transmission Specifications, Paging Receivers Architecture.",
+            "The Cellular Concept: Frequency Reuse, System Capacity, Co channel Interference, Adjacent Channel Interference, Cell Splitting, Sectoring, and Microcell Zone Concept.",
+            "Cellular Radio Systems: Basic Elements of Cellular Radio Systems/Network, GSM Transmission Process (Segmentation, Speech Coding, Channel Coding, Interleaving, Burst Formatting), Cell Selections, Physical & Logical Channels, Principles of CDMA Transmitter & Receiver.",
+            "Radio Wave Propagation: Radio wave propagation through ionosphere, ground wave propagation, Propagation Mechanisms, Free Space Propagation Model, Ground Reflection Model, Knife- edge Diffraction Model, Outdoor & Indoor Propagation Models.",
+            "Multipath Propagation and Fading: Factors Influencing Fading, Time Dispersion Parameters, Coherence Bandwidth, Doppler Spread, Coherence Time, Flat Fading, Frequency Selective Fading, Slow Fading, Fast Fading, Rayleigh Fading Distribution, Ricean Fading Distribution.",
+            "Equalization, Diversity, and Channel Coding: Fundamentals of Equalization, Linear Equalizers, Nonlinear Equalizers, Decision Feedback Equalizers, Maximum Likelihood Sequence Estimation (MLSE) Equalizers, Diversity Techniques, Space Diversity, Frequency Diversity, Time Diversity, Rake Receiver, Fundamentals of Channel Coding, Block Codes, Reed-Solomon Coding, Convolution Codes.",
+            "Handoff and Dropped Calls: Initiation of a Handoff, Two Handoff Level Algorithm, Hard Handoff (Network Controlled Handoff, Mobile Controlled Handoff, Mobile Assisted Handoff), Soft Handoff, Calculation of Dropped Call Rate."
+          ],
+          "sessionalNote": null,
+          "references": [
+            "Garg & Wilkes (GW), \"Wireless and Personal Communications,\"",
+            "W C Y Lee \"Mobile Cellular Telecommunications,\"",
+            "Yoshihiko Akaiwa (YA) \"Introduction to Digital Mobile Communication\"",
+            "Jochen Schiller (JS) \"Mobile Communications\"",
+            "T S Rappaport \"Wireless Communications\" Pearson."
+          ]
+        },
+        "ECE 4104": {
+          "title": "Wireless Communications Laboratory",
+          "credit": 0.75,
+          "contactHour": "1.5 hrs/week",
+          "topics": [
+            "Mobile communication; cellular system, BTS, BSC, MSC, GMSC, WiMAX. Short distance wireless communications; Bluetooth, WiFi, Zigbee, RFID. Signal transmission and reception through wireless channel.",
+            "Demonstrate the data transmission using Zigbee system.",
+            "Demonstrate the data transmission using RFID system.",
+            "Observation of working principle of Bluetooth.",
+            "Observation of working principle of Wi-Fi.",
+            "Investigate the data transmission principle in WiMAX.",
+            "Performance test in the laboratory.",
+            "Final quiz test."
+          ],
+          "sessionalNote": null,
+          "references": [
+            "Garg & Wilkes (GW), \"Wireless and Personal Communications,\"",
+            "W C Y Lee \"Mobile Cellular Telecommunications,\"",
+            "Yoshihiko Akaiwa (YA) \"Introduction to Digital Mobile Communication\"",
+            "Jochen Schiller (JS) \"Mobile Communications\"",
+            "T S Rappaport \"Wireless Communications\" Pearson."
+          ]
+        },
+        "ECE 4105": {
+          "title": "Engineers and Society",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Introduction: Overview and analysis of the economic, political and social structure of Bangladesh in relation to engineering activities. Economic and industrial development issues, Impact of ICT, The role and obligation of an engineer towards society.",
+            "Professional involvement: Profession and Professionalism, The role of professional bodies. Accreditation (MQA, EAC), Workplace issues and legislation. Human rights, employee rights, professional rights, Duties to profession, employers and public, Professional obligations and duties: Confidentiality, Moral responsibility, Accountability, Copyright, Equality.",
+            "Ethics in Practice: The application of ethical theories and awareness to the engineering profession. Responsibility to Society. Offering and acceptance of illegal advantages, Preservation of confidential information, Avoid conflicts of interest. Laws, Regulations and Codes of Ethics.",
+            "Health and safety: Engineers’ responsibility for securing the health, safety and welfare of persons at work, Legal and regulatory obligations for public safety, workplace safety and protection of the environment. High power and Electromagnetic radiation Hazards and Safety.",
+            "Environmental Control: Engineers’ responsibility for the environment, Environmental impact assessments, Primary Components of Sustainability, Overview of methods, products, and technologies to reduce, reuse, and recycle industrial wastes, E-waste, Carbon emission, International agreements.",
+            "Engineers and Research: R & D, Government and private research grant, Copyright, Innovations, Intellectual property etc.",
+            "Engineering practice in Bangladesh: SDG, MDG, Overview of electronics, communication and IT industries in Bangladesh, Engineers Acts, Quality assurance practice, ICT policy, Civil laws, ICT Act, Digital Security ACT etc.",
+            "Engineering in a Global Environment: Global issues and international operation, Cultural considerations and issues, Challenges of globalization and the new economy, Contribution of engineers in the new economy.",
+            "Contemporary Industrial Issues; Case Studies."
+          ],
+          "sessionalNote": null,
+          "references": [
+            "“Engineering Ethics: Concepts and Cases” by Charles E. Harris, Michael S. Pritchard & Michael J. Rabins.",
+            "“Engineers and Their Profession” by John Dustin Kemper.",
+            "“Engineering and Society Challenges of Professional Practice” by Johnson, F. Stephen, Gostelow, J.P. and King, W. Joseph.",
+            "“Technology and Society Abridge to the 21st Century” by Hjorth, Linda; Eichler, Barbara, Ahmed."
+          ]
+        },
+        "ECE 4107": {
+          "title": "Machine Learning",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Introduction: Features of Machine Learning & Perception: Learning from data, Overfitting, Regularization, Cross-validation.",
+            "Supervised Learning: Artificial Neural Networks: Back Propagation, Perceptrons and Multilayer Perceptrons, Radial Basis Function NN; Basic Concept of Deep Learning and Deep Neural Networks; Self-organizing Networks, Nearest Neighbor, Support Vector Machines, Decision Trees.",
+            "Unsupervised and Semi-Supervised Learning: Learning from unclassified data, Clustering (K-means, GMMS), Factor Analysis (PCA, LDA)",
+            "Statistical Models: Bayesian Networks, Logistic Regression, Hidden Markov Models.",
+            "Reinforcement Learning: Aspects and Relation with other Machine Techniques, Reinforcement Learning Algorithms such as Q-learning and SARSA, Formulating Basic Reinforcement Learning Problem.",
+            "Applications of Machine Learning: Achieving High bitrates, Low latencies in Wireless Communications, Traffic Classification and Prediction in Resource Allocation, Industrial Automation, Face and Fingerprint Recognition, Computer Aided Medical Diagnosis."
+          ],
+          "sessionalNote": null,
+          "references": [
+            "Laurene V. Fausett, \"Fundamentals of Neural Networks: Architectures, Algorithms and Applications,\" Pearson Education Limited.",
+            "Richard S. Sutton and Andrew G. Barto, \"Reinforcement Learning: An Introduction,\" MIT Press."
+          ]
+        },
+        "ECE 4108": {
+          "title": "Machine Learning Laboratory",
+          "credit": 0.75,
+          "contactHour": "1.5 hrs/week",
+          "topics": [
+            "Classification :KNN, Artificial Neural Network (ANN), Convolution Neural Network (CNN)  Decision Tree, Backpropagation Algorithm, Naïve Bayesian classifier, Bayesian Network,   Random forest &  Boosting  ensemble method ,",
+            "Regression: linear regression, logistic regression model.",
+            "Clustering: Principle component analysis (PCA), Linear discriminant analysis (LDA) method, hidden Markov model (HMM), reinforcement learning (Q-learning), k-Means Algorithm, k-Nearest Neighbour (KNN) Algorithm",
+            "Write a python program extract the data from database and demonstrate various data  visualization techniques.",
+            "Build KNN, ANN, CNN  Decision Tree, Naïve Bayes Classification model using python program.",
+            "Implement Random forest &  Boosting  ensemble method on a given dataset using python program.",
+            "Write a python program to implement Fuzzy Clustering, K-Means clustering, DBSCAN, BIRCH Algorithm.",
+            "Implement linear regression, logistic regression model using python.",
+            "Implement dimensionality reduction using principle component analysis (PCA), Linear discriminant analysis (LDA) method  using python program."
+          ],
+          "sessionalNote": null,
+          "references": [
+            "Laurene V. Fausett, \"Fundamentals of Neural Networks: Architectures, Algorithms and Applications,\" Pearson Education Limited.",
+            "Richard S. Sutton and Andrew G. Barto, \"Reinforcement Learning: An Introduction,\" MIT Press."
+          ]
+        },
+        "ECE 4150": {
+          "title": "Technical Writing and Presentation",
+          "credit": 0.75,
+          "contactHour": "1.5 hrs/week",
+          "topics": [
+            "Effective use of office tools in technical report writing, data interpretation and analysis, and presentation of the experimental results; structure of the laboratory report; oral presentation of experimental results in stipulated time; plagiarism and bibliographic references."
+          ],
+          "sessionalNote": null,
+          "references": []
+        }
+      },
+      "optionalCourses": [
+        {
+          "courseCode": "ECE 4139",
+          "title": "TV Engineering",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "TV Systems, TV Standards, Picture Tubes, Theory and Methods of Scanning, Interlace Scanning, Bandwidth.",
+            "Monochrome TV: Monochrome TV Transmitter Block Diagram, Principles of AM and FM Transmitter, Positive and Negative Modulation, Monochrome TV Receiver Block Diagram; Video Detector, Video Section, Contrast Control Methods, Video Amplifier Transistor Circuits, Sync Separation Circuit , Transistor VHF Tuner , Video IF Section, Practical Video IF Circuit, Low B+ Supply, Discrete circuit realization. Monochrome TV Picture Tube and Signal generation,",
+            "Color TV: Different Types Color Picture Tubes, Color TV Receiver Block Diagram, Color Reproduction Circuits and Color Matrix, Color Killer Circuit, ICs used in Color TV Receivers, Remote Control Circuits, Digital TV, Color Camera Systems and Picture Tubes.",
+            "HDTV: Introduction, Principle, Standards and Applications, Design of TV Studio, TV Booster, Digital TV and Multimedia applications, Satellite Broadcasting Home TV System, Cable TV System, IPTV",
+            "Principles and operation of LCD, LED, Plasma TV."
+          ],
+          "sessionalNote": "Optional II Theory",
+          "references": [
+            "Bernard Grob, \"Basic Television and Video Systems,\".",
+            "R R Gulati, \"Monochrome and Colour Television,\" Second Edition, New Age International Publishers."
+          ]
+        },
+        {
+          "courseCode": "ECE 4140",
+          "title": "TV Engineering Laboratory",
+          "credit": 0.75,
+          "contactHour": "1.5 hrs/week",
+          "topics": [
+            "Various stages of monochrome and color TV receivers, Composite video and sweep waveform in monochrome and color TV receivers, construction of monochrome and color picture tubes and vidicon camera tube, Faults and trace circuits in monochrome and color TV receivers, Installation of satellite dish antenna LNB frequency, Comparison of CRT and LCD TVs, Measuring different voltage levels in monochrome and color TV receivers, Principles of LED and LCD TV Technologies.",
+            "Familiarization with specification, operation and use of TV set equipment.",
+            "Familiarization with different wave forms and controls.",
+            "Study of composite video signal.",
+            "Familiarization with specification, operation and use of TV camera tubes.",
+            "Open ended Lab.",
+            "Test TV antenna and booster."
+          ],
+          "sessionalNote": "Optional II Lab",
+          "references": [
+            "Bernard Grob, Charles Herndon, \"Basic Television and Video Systems,\" McGraw-Hill Science/Engineering/Math.",
+            "R. R. Gulati, \"Monochrome and Colour Television,\" New Age International Publishers."
+          ]
+        },
+        {
+          "courseCode": "ECE 4129",
+          "title": "Digital Image Processing",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Digital Image Fundamentals: Image sources, Characteristics, Image representation, Hardware and Software requirements, Image Sensing and Acquisition, Image Sampling and Quantization, Some basic relationships like Neighbors, Connectivity, Distance measures between Pixels.",
+            "Image Transform: 2D DFT, 2D DCT, Sine transform, Geometric transform, Hadamard, Slant and KL transform",
+            "Image Enhancement: Basic Gray-level transformation, Clahe Histogram Equalization Histogram processing, Basic spatial filtering, Frequency domain filtering, Image Smoothing and Sharpening.",
+            "Image Compression: Data Redundancy, Image compression models, Error-free compression, Variable length coding, Bit plane coding, Run length coding, Lossy and Lossless predictive coding, Wavelet based compression Image compression standards- JPEG, MPEG.",
+            "Image Segmentation: Detection of discontinuous, Edge linking and boundary detection, Thresholding, Hough Transform, Region–based segmentation, Morphological Watersheds, Erosion and Dilation."
+          ],
+          "sessionalNote": "Optional II Theory",
+          "references": [
+            "Rafael C. Gonzalez and Richard E. Woods, \"Digital Image Processing\" Pearson Education.",
+            "Lecture slides and notes available during class lectures."
+          ]
+        },
+        {
+          "courseCode": "ECE 4130",
+          "title": "Digital Image Processing Laboratory",
+          "credit": 0.75,
+          "contactHour": "1.5 hrs/week",
+          "topics": [
+            "Display of grayscale and color images, Histogram equalization, Image smoothing filter, Image sharpening filter, Noise removal, DFT, DCT and DWT of images, Image convolution, Edge detection using different operators, Morphological operation: erosion and dilation, Segmentation using Watershed transform.",
+            "Exploration of Grayscale and Color Image Display Techniques Using Software.",
+            "Investigation into Histogram Equalization for Contrast Enhancement in Images.",
+            "Evaluation of Various Techniques for Removing Noise from Digital Images.",
+            "Application of Frequency Domain Analysis: DFT, DCT, and DWT.",
+            "Utilizing Edge Detection Algorithms and Morphological Operations for Image Enhancement.",
+            "Open – ended lab"
+          ],
+          "sessionalNote": "Optional II Lab",
+          "references": [
+            "Rafael C. Gonzalez and Richard E. Woods, \"Digital Image Processing\" Pearson Education.",
+            "Lecture slides and notes available during class lectures."
+          ]
+        },
+        {
+          "courseCode": "ECE 4117",
+          "title": "Internet of Things",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Introduction: Introduction to IoT, IoT devices, IoT devices Vs Computers, Elements of an IoT ecosystem, Typical IoT applications, Trends, implications, and societal benefits of IoT, Risks, privacy, and security",
+            "Embedded Systems for IoT: Generic embedded systems structure, Components of embedded systems, Sensing devices, sensor modules, nodes and systems, actuators, Basic equipment.",
+            "Hardware and Software: Integrated Circuits, Microcontrollers, Microcontroller components, Compilation and interpretation, Python Vs C/C++, Operating systems, Arduino Programming, Introduction to Raspberry Pi, Programming with Raspberry Pi.",
+            "Connectivity and Networks: Wireless technologies for the IoT, Edge connectivity and protocols, Wireless Sensor Networks, Interoperability in IoT.",
+            "Analytics and Applications: Signal processing, real-time and local analytics, Big Data handling for the IoTs and role of Cloud Computing, Introduction to Cloud computing: Definition and evolution, Enabling Technologies, Service and Deployment Models, Cloud Infrastructure, Virtualization (CPU, Memory, I/O), Software Defined Networks (SDN), Software Defined Storage (SDS), Introduction to Storage Systems, Cloud Storage Concepts, Distributed File Systems, Cloud Databases."
+          ],
+          "sessionalNote": "Optional II Theory",
+          "references": [
+            "Raj Kamal, \"Internet of Things: Architecture and Design Principles\", 1st Edition, McGraw Hill Education, 2017.",
+            "David Hanes, G. Salgueiro, P. Grossetete, R. Barron, J. Henry. \"IoT Fundamentals: Networking Technologies, Protocols, and Use Cases\", Cisco Press, 2017."
+          ]
+        },
+        {
+          "courseCode": "ECE 4118",
+          "title": "Internet of Things Laboratory",
+          "credit": 0.75,
+          "contactHour": "1.5 hrs/week",
+          "topics": [
+            "IoT architecture and protocols, enabling technologies, design methodology, programming with Arduino and Raspberry Pi, interfacing sensors (temperature, humidity, gas etc) and peripherals (dc motors, LCD, actuators etc.), HTTP, MQTT, REST protocols, GUI design and data acquisition with Python, Connecting to the cloud using Things Space, Azure etc.",
+            "Introduction to IoT, Arduino programming platform, Raspberry Pi, Arduino, ESP32 and ESP8266",
+            "Interfacing different sensors and peripherals with ESP32 and ESP8266 and interaction with GPIOs and controlling motors (servo and stepper motors)",
+            "Sending and receiving SMS, Call, HTTP read, post with GSM modules with ESP32",
+            "Study on Raspberry Pi OS, configuration and connectivity of Raspberry Pi with basic peripherals and sensors",
+            "Sensor data logging (HTTP post) in cloud server",
+            "Open ended lab"
+          ],
+          "sessionalNote": "Optional II Lab",
+          "references": [
+            "Arshdeep Bagha and Vijay Madisetti – Internet of Things – A Hands on Approach.",
+            "R. Singh, A. Gehlot, L. R. Gupta, B. Singh and M. Swain – Internet of Things with Raspbery Pi and Arduino.",
+            "John C. Shovic – Raspbery Pi IoT Projects."
+          ]
+        }
+      ],
+      "termNotes": [
+        "ECE 4100 Industrial Attachment (non-credit) is required."
+      ]
+    },
+    "Y4T2": {
+      "termKey": "Y4T2",
+      "title": "Fourth Year Second Term",
+      "courses": {
+        "ECE 4000": {
+          "title": "Capstone Project/Thesis",
+          "credit": 3.0,
+          "contactHour": "6 hrs/week",
+          "topics": [
+            "Continuation of Capstone Project/Thesis from Y4T1."
+          ],
+          "sessionalNote": "Capstone project spanning two terms.",
+          "references": []
+        },
+        "ECE 4203": {
+          "title": "Satellite and Telecommunication Engineering",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Satellite: Introduction to Satellite Communication: Overview of Satellite System Engineering. Spacecraft, Introduction to Spacecraft Subsystem. (AOCS), Telemetry, Tracking and command (TT&C). Spacecraft Antennas, Basic Antenna Types and Relationships Spacecraft, Antennas in Practice, Frequency Reuse Equipment Reliability and Space Qualification, Reliability redundancy. Multiple Access Earth station Technology: Earth Station Design, Earth Station Design for Low System Noise Temperature, Satellite Television Broadcasting Networks, VSAT technology.",
+            "Telecommunication: Introduction: Evolution of Telecommunications, Simple Telephone Communications, Basics of Switching System. Telephone Switching: Crossbar Switching, Touch Tone Dial Telephone, Electronic Space Division Switching, 2-stage and 3-stage networks. Time Division switching (TDSS, TDTS, TMSS and TMTS) Telephone Networks: Subscriber Loop Systems, Switching Hierarchy and Routing, Transmission Plan, Transmission Systems, Numbering and Charging Plans, Signaling Techniques, In-channel and Common Channel Signaling, SS7 Signaling, ADSL and broadband technology. Traffic Engineering: Network Traffic Load and Parameters, Grade of Service, Blocking Probability, Birth-death processes, Lost Call and Queueing Systems. International Telecommunication Policy, National regulations and managements."
+          ],
+          "sessionalNote": null,
+          "references": [
+            "Dennis Roddy \"Satellite Communications\"",
+            "Thiagarajan Viswanathan, \"Telecommunication Switching Systems and Networks\", Prentice Hall of India.",
+            "J. E. Flood, \"Telecommunication Switching, Traffic and Networks\", Pearson Education Ltd."
+          ]
+        },
+        "ECE 4204": {
+          "title": "Satellite and Telecommunication Engineering Laboratory",
+          "credit": 0.75,
+          "contactHour": "1.5 hrs/week",
+          "topics": [
+            "Satellite: Direct Communication Link Setup between uplink transmitter and downlink receiver using Tone signal, Active Link and Link Failure Operation, Audio Video satellite link, Voice communication through satellite, Different combinations of uplink and downlink frequencies observation, C/N ratio measurements. Telecommunication: Mobile and Base Station: Power Part, Audio Frequency Part (condenser mike, compressor, pre-emphasis, de-emphasis, expander and amplitude limiter), and Radio Frequency Part. Telephony system: Pulse Dialing, Tone Dialing, DTMF, Speech Circuit, incoming and outgoing call observations.",
+            "Study on the power part of mobile station and base station and pulse dialing and tone dialing",
+            "Study of speech circuit using IC and its interface to the line",
+            "Study on audio frequency part of the base station and mobile station",
+            "Study on theoretical and experimental familiarization with PLL oscillator circuit and its operation principle.",
+            "To setup an audio video satellite link between transmitter and receiver and communicate voice signal through Satellite link and measure and analyze the S/N ratio and C/N ratio.",
+            "Study of Satellite azimuth & Elevation using sky plot window and to measure the Geographical location with GMT/IST using Navigation window using GPS Trainer."
+          ],
+          "sessionalNote": null,
+          "references": [
+            "Laboratory Manual of Respective Experimental Kits.",
+            "Dennis Roddy \"Satellite Communications\"",
+            "Thiagarajan Viswanathan, \"Telecommunication Switching Systems and Networks\", Prentice Hall of India.",
+            "J. E. Flood, \"Telecommunication Switching, Traffic and Networks\", Pearson Education Ltd."
+          ]
+        },
+        "ECE 4205": {
+          "title": "Computer Networks",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Fundamentals of Computer Networks: Internet, Network Edge and Core, Delay and Loss in Packet-Switched Networks, Protocol Layers, Physical Media.",
+            "Application Layer: Protocols, HTTP, FTP, SMTP, DNS, P2P, Socket Programming with TCP and UDP.",
+            "Transport Layer: UDP, TCP, Principles of Reliable Data Transfer, Principles of Flow Control: stop-and-wait, sliding window techniques, and Congestion Control.",
+            "Network Layer: Forwarding and Routing, IPv4, IPv6, Subnetting, VLSM, ICMP, Routing Algorithms, RIP, OSPF, and BGP.",
+            "Data Link Layer and LAN: Error detection and Correction, CRC, Multiple Access Protocols, MAC, ARP, DHCP, Ethernet, Fast Ethernet, CSMA/CD, Switches and Hubs, PPP, ATM and MPLS.",
+            "Security: Cryptography, Symmetric and Public key Cryptography, DES, AES, RSA, Authentication, Integrity, Attacks and Countermeasures, Key Distribution and Certification, Firewalls, IPsec, SSL and TLS, IEEE 802.11 security.",
+            "Introduction to Network Simulation Tools (Cisco Packet Tracer and Wireshark)."
+          ],
+          "sessionalNote": null,
+          "references": [
+            "James F. Kurose and Keith W. Ross, \"Computer Networking: A Top-Down Approach,\"  Pearson Education Inc.",
+            "Andrew S. Tanenbaum, David Wetherall, \"`Computer Networks,\" Pearson Education Inc."
+          ]
+        },
+        "ECE 4206": {
+          "title": "Computer Networks Laboratory",
+          "credit": 1.5,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "LAN cabling: Straight through, Crossover and Rollover.",
+            "Design and analysis of a practical Network: IP addressing, Ping Test, Trace Route, DNS system, nslookup to find DNS record, Telnet webserver for HTTP request and response messages analysis, Netstat, Wireshark Experiments.",
+            "Packet Tracer Simulation: Introduction to Cisco Packet Tracer Simulation Tool, Network Topology Creation, Basic Switch and Router configuration, Host and Interface IP addressing, Telnet and Console accessing, HTTP and DNS service simulation, DHCP service, Wireless connection, Static Routing and dynamic routing such as RIP, OSPF, IGRP and BGP etc, VLAN configuration, Port Security, Firewalls (ACL), NAT",
+            "Experiment on Cabling to create practical LAN.",
+            "Experiment on analysis of a practical network using Ping Test, Trace Route, DNS system, nslookup and Netstat.",
+            "Experiment on Telnet to a webserver for analyzing HTTP request and response messages and different types of packet analysis using Wireshark.",
+            "Introduction to Cisco Packet Tracer simulation tool and network topology creation.",
+            "Basic Switch and Router configuration using Packet Tracer.",
+            "Experiment on IP addressing, HTTP, DNS service, DHCP service and VLAN using Packet Tracer.",
+            "Experiment on implementing static and dynamic routing protocol using Packet Tracer."
+          ],
+          "sessionalNote": null,
+          "references": [
+            "James F. Kurose and Keith W. Ross, \"Computer Networking: A Top-Down Approach,\" Pearson Education Inc.",
+            "Andrew S. Tanenbaum, David Wetherall, \"`Computer Networks,\" Pearson Education Inc."
+          ]
+        },
+        "Hum 4209": {
+          "title": "Project Management and Entrepreneurship",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Project management basics: Definition, Types and characteristics of projects, Triple constraints of project management, Project methodologies, Parts of a standard project, Projects vs programs vs portfolios, Project stakeholders.",
+            "Project conceptualizing and initiating: Developing success criteria, Cost benefit analysis: NPV. IRR, ARR, PB period, and PI; Developing the project charter.",
+            "Project planning: The work breakdown structure, Specification, Technique for accurate estimates, Methods to calculate start and finish dates of tasks, Network diagrams, Critical path method, Resource planning, Creating a project milestone schedule, Performance indictor, Project management tools, Gantt charts, Identifying and quantifying project risks, SWOT analysis, Financial management, Budget, Case studies.",
+            "Project execution and control: Creating a high-performing Project team, Team training, Techniques for effective communication and status reporting. Earned value management (EVM), Project scope management and developing a change control plan, Monitoring, Evaluation and managing risks and issues, managing stakeholder expectations.",
+            "Project closing: Scope verification. Transferring deliverables to the customer. Suitability of project and issues, Post-project review or evaluation.",
+            "Introduction to Entrepreneurship: Role of entrepreneur in Bangladesh and around the globe; benefits and drawbacks of entrepreneurship; entrepreneurial failure; qualities of entrepreneur, critical success factors entrepreneurship: intrapreneurship",
+            "Business Idea and Feasibility: Business environment; Creativity; innovation and entrepreneurship; mental locks that limits individuals creativity; creative process, protection of intellectual properties involving patents, trademarks and copyrights.",
+            "Forms of Business Ownership: Insights of three major forms of ownership: the sole proprietorship, the partnership, and the corporation; Franchising: trade name; major trends shaping franchising; Joint venture: Formation; agreement; operational aspects.",
+            "Small and Medium Enterprise (SME): Concept; potentials and challenges of SMEs in Bangladesh; SME financing; financing challenges.",
+            "Building the Business Plan: Planning process; developing business plan; writing business plan.",
+            "Foundations of New Venture Financing: Understanding capital requirements; identifying the sources of finance; angel investing and venture capital."
+          ],
+          "sessionalNote": null,
+          "references": [
+            "Koontz, H., & Weihrich, H. (2015). Fundamentals of management: Essential concepts and applications, 14e. India: Pearson Education.",
+            "Kotler, P., Keller, K. L., Ang, S. H., Tan, C. T., & Leong, S. M. (2018). Marketing management: an Asian perspective. 14e. London: Pearson.",
+            "\"Entrepreneurship: Theory, Process, and Practice\" by Donald F. Kuratko and Jeffrey S. Hornsby",
+            "\"The Art of Startup Fundraising: Pitching Investors, Negotiating the Deal, and Everything Else Entrepreneurs Need to Know\" by Alejandro"
+          ]
+        }
+      },
+      "optionalCourses": [
+        {
+          "courseCode": "ECE 4209",
+          "title": "Opto-Electronics Integrated Circuits",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Fundamentals of opto-electronic devices: Theory and Industry Practices, Photodetectors, Quantum Efficiency, Gain, Bandwidth, Noise, Light Emitting Diodes and Lasers, Homojunction, Heterojunction, BH, Quantum well Structure Lasers, Wavelength, Power, Linewidth, Linearity, Temperature sensitivity.",
+            "Optical Modulators:Bandwidth, Speed, Extinction Ratio, Switching Voltage.",
+            "Opto-electronic Integrated Circuits: Integration Techniques; Monolithic, Hybrid Integration, Integrated Receivers, Integrated Transmitters, Integrated Guided Wave Devices, Photonic Crystal Integrated Circuits.",
+            "Opto-electronic System Packaging: Packaging Considerations; Optical Alignment, Power Dissipation Loss, RF port, Operation Sensitivity, Optical Transponders—System Monitoring, Functions, Silicon Optical Bench, Optical and RF Connectors.",
+            "Opto-electronic Interconnections: Wavelength-division-multiplexing (WDM) Optical Fiber Interconnect Systems, CWDM, DWDM; Parallel Rack-to-rack Optical Interconnect, Backplane (for Board-to-board), On Board High-speed Digital Interconnections (Chip-to-chip).",
+            "Opto-electronic Systems: Optoelectronic Communications Systems; Imaging Systems, Digital Video Cameras;LCD, LED and Plasma Display; Image Intensifiers, Multi-wavelength Imagers Displays, Liquid Crystal Displays, Optical MEM Array Displays, Optical Storage Systems; 3D Hologram."
+          ],
+          "sessionalNote": "Optional III Theory",
+          "references": [
+            "Jianjun Gao, \"Optoelectronic Integrated Circuit Design and Device Modeling\".",
+            "Horst Zimmermann, \"Silicon Optoelectronic Integrated Circuits\"."
+          ]
+        },
+        {
+          "courseCode": "ECE 4229",
+          "title": "Electronic Packaging and Materials",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Introduction to Electronic Packaging: Semiconductors and microelectronic devices; Wafer level packaging; Integrated circuits packaging and assembly; Sealing and encapsulation; Board assembly; Packaging and electronic products; Introduction to thermal and mechanical reliability.",
+            "Packaging Materials and Processes: The role of materials in electronic packaging; packaging materials and properties; Material processes; Future trends: Packaging reliability; Thermal and Mechanical reliability.",
+            "Failure models and Mechanisms: Reliability qualifications; failure analysis; Experimental methods and tools for reliability analysis."
+          ],
+          "sessionalNote": "Optional III Theory",
+          "references": [
+            "M. Pecht, R. Agarwal \"Electronic Packaging Materials and Their Properties\".",
+            "Glenn R. Blackwell \"The Electronic Packaging Handbook\"."
+          ]
+        },
+        {
+          "courseCode": "ECE 4259",
+          "title": "Wireless Sensor Networks",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Introduction: Features, Design Challenges, Network Architecture, Applications, Sensor Deployment Mechanism, Topologies and Characteristics.",
+            "Network and Component Technologies: Sensors, Coverage, Physical Layer, Sensor Platforms, Reliable Data Transport, Radio Energy Consumption Model, Power Management, Synchronization, Localization.",
+            "Data Transmission and Routing: Data Processing and Aggregation, Data Storage, Node Discovery Algorithms, Wireless Sensor Network, Routing, Proactive and Reactive Routing.",
+            "Protocols: Frame Structure, Network Clustering Protocols, Medium Access Control Protocols, Multi-Hop Communication Protocols, Congestion Control and Rate Control Protocols, Protocol Overheads.",
+            "Dependability Issues: Collisions, Collision Avoidance Mechanism, Hidden Node and Exposed Node Problems, Data Congestions, Throughput, Security Challenges.",
+            "Wireless Mesh Networks: Introduction, Comparison Between Mesh and Ad-Hoc Networks, Challenges in Wireless Mesh Network, Radio Usage Policies, Flat Mesh Network, Hierarchical Mesh Network, Hybrid Mesh Network, Multi-Radio Mesh Network, Multichannel Mesh Network, Routing of Mesh Network, Quality of Service, Fault Diagnosis.",
+            "Wireless Personal Area Networks: Radio Standard and Overview of Wireless Personal Area Network, Bluetooth, IEEE 802.15.4, Zigbee, CSMA and its Problems for WiLANs, Registration, MAC Layer Solutions, Applications and Services.",
+            "Ad Hoc Networks: Introduction, Network Architecture, Single-Node Architecture, Wireless Link Model, Mobility Model, Routing, Zone Routing Protocol, Temporary Ordered Routing Algorithm, Topology Control.",
+            "Body Area Networks, Robotic Sensor Networks, Multimedia Sensor Networks."
+          ],
+          "sessionalNote": "Optional III Theory",
+          "references": [
+            "KazemSohraby, Daniel Minoli, & TaiebZnati, \"Wireless Sensor Networks-Technology, Protocols, and Applications\", John Wiley, 2007.",
+            "Holger Karl & Andreas Willig, \"Protocols and Architectures for Wireless Sensor Networks\", John Wiley, 2005.",
+            "Feng Zhao & Leonidas J.Guibas, \"Wireless Sensor Networks-An Information Processing Approach\", Elsevier, 2007",
+            "Edgar H. Callaway Jr. and Edgar H. Callaway, \"Wireless Sensor Networks: Architectures and Protocols\"."
+          ]
+        },
+        {
+          "courseCode": "ECE 4237",
+          "title": "Power Supply System in Telecommunications",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "General and Introduction: Primary power sources; Mains supply and stand by power Supply Systems, Central and Decentralized power supply; UPS systems; Hybrid power supply systems; Requirements for telecommunication systems: Level of voltage, Tolerance, Purity, Degree of radio interference, Power distribution systems and voltage drops, Availability of the power supply.",
+            "DC Power Supply System: Rectifier mode; Battery mode; Standby parallel mode; Changeover mode; Combined mode; Assignment of operating modes to communication systems; Power-board; Monitoring and control.",
+            "AC Power Supply System: Mains mode; AC changeover mode; Uninterruptable ac changeover mode; Uninterruptable standby power supply systems; Public Mains: Type of voltages, Tolerances and Supply frequency, Distortion factor, Measures for reducing retroactive effects, Power failures; Static UPS Systems; Diesel Generating sets.",
+            "Energy Storage: Batteries and Cells; Requirements: Charging and Discharging, rated voltage, Capacity, Efficiency and charging factor, Temperature performance; Comparison of various batteries; Battery system design factors and Installation; Battery system maintenance.",
+            "Switching Mode Power Supply: Control systems in power supply devices; Various types of controlled rectifiers; Survey diagram and Functioning principles of various standard rectifier module; Power supply controller.",
+            "Transmission System Power Supplies: Power supply for radio link apparatus, satellite ground stations, and submarine cable landing stations; Mains-independent power supply systems.",
+            "Grounding and Potential Equalization: Functional and protective grounding; Selection and Design of grounds and grounding systems; Measurement of grounding resistance; Overvoltage sources and interference in telecommunication systems; Protection against overvoltage and interference; Design of the distribution network for EWSD systems; Lightning protection for EWSD systems and telecommunication towers.",
+            "Protective Measures for Prevention of Accidents: Protection by disconnection or indication for TN, TT and IT supply systems; Protection without disconnection or indication: Protective insulation, protective separation; Safety instructions."
+          ],
+          "sessionalNote": "Optional III Theory",
+          "references": [
+            "H. Gumhalter \"Power Supply in Telecommunications\".",
+            "Dorin O. Neacsu \"Telecom Power Systems\""
+          ]
+        },
+        {
+          "courseCode": "ECE 4221",
+          "title": "Semiconductor Devices Theory",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Electronic band structure, dispersion relation, tight binding model. Lattice vibration: Simple harmonic model, phonon dispersion relation, acoustic and optical phonons. Scattering theory: Fermi-golden rule, scattering rates of different processes, scattering mechanisms in different semiconductors, mobility. Different carrier transport models: Drift-diffusion theory, Boltzman transport equations, ballistic transport, Landauer- Buttiker approach, quantum mechanical model. MOS devices: Band diagram and electrostatics of single gate, double gate, SOI and Fin FET. Carrier transport, I-V and C-V characteristics. Hetero-junction devices: Band alignment, band offset, Anderson’s rule, single and double sided hetero-junctions, quantum wells and quantization effects, lattice mismatch and strain and common hetero-structure material systems. Hetero junction field effect transistor: Structure and principle, band structure, carrier transport and I-V characteristics. Hetero-Junction diode: Band bending, carrier transport and I-V characteristics. Hetero-structure bipolar transistor (HBT): Band bending, carrier transport, Gummel - Poon model."
+          ],
+          "sessionalNote": "Optional III Theory",
+          "references": [
+            "Robert L. Boyelstad \"Electronic Devices and Circuit Theory\".",
+            "Jacob Millman, \"Integrated Electronics\"",
+            "Donald A. Neamen \"Semiconductor Physics and Devices: Basic Principles\""
+          ]
+        },
+        {
+          "courseCode": "ECE 4223",
+          "title": "Semiconductor Processing and Fabrication Technology",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Substrate materials: Crystal growth and wafer preparation, epitaxial growth technique, molecular beam epitaxy, chemical vapor phase epitaxy and chemical vapor deposition (CVD). Doping techniques: Diffusion and ion implantation. Growth and deposition of dielectric layers: Thermal oxidation, CVD, plasma CVD, sputtering and silicon-nitride growth. Introduction to Semiconductor Characterization Tools.",
+            "Etching: Wet chemical etching, silicon and GaAs etching, anisotropic etching, selective etching, dry physical etching, ion beam etching, sputtering etching and reactive ion etching. Cleaning: Surface cleaning, organic cleaning and RCA cleaning.",
+            "Lithography: Photoreactive materials, pattern generation, pattern transfer and metallization. Steps of lithography. Non-optical lithography.",
+            "Discrete device fabrication: Diode, transistor, resistor and capacitor.",
+            "Integrated circuit fabrication: Isolation - pn junction isolation, mesa isolation and oxide isolation. BJT based microcircuits, p-channel and n-channel MOSFETs, complimentary MOSFETs and silicon on insulator devices. Testing, bonding and packaging"
+          ],
+          "sessionalNote": "Optional III Theory",
+          "references": [
+            "The Science and Engineering of Microelectronic Fabrication by Stephen A. Campbell (Oxford University Press)",
+            "Semiconductor Manufacturing and Process Control by Gary S. May and Costas J. Spanos ( IEEE, Wiley-Interscience )",
+            "Silicon VLSI Technology: Fundamentals, Practice and Modeling by James D. Plummer, Michael D. Deal and Peter B. Griffin ( Prentice Hall Electronics and VLSI Series )"
+          ]
+        },
+        {
+          "courseCode": "ECE 4215",
+          "title": "Robotics and Machine Vision",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Introduction: Definition and laws of robotics; Classification, specification, and applications of robots; Components of robot systems.",
+            "Mechanical Design of Robots: The principles of robot geometry and kinematics; Degree of freedom; Mechanisms for manipulators and mobile robots.",
+            "Spatial Descriptions and Transformation: Description of position; Orientation and frames; Homogeneous transformations.",
+            "Manipulators Kinematics: Forward kinematics, backward kinematics, graphical methods, Denavit-Hartenberg convention.",
+            "Manipulators Dynamics: Eular-Lagrange equation, PID control, joint-level control, sensing and control for robot manipulators.",
+            "Robot Control Architecture: Trajectory generation and representation; Definition of robot workspace; Point to point robot planning algorithms.",
+            "Robotic Vision: Camera models; Geometry for multi camera systems; Matching of image areas; 3D reconstruction based on two or more cameras (sparse, dense) and uncertainty models; Photogrammetry/Stereo; Knowledge of pose estimation; Object Representation Alignment; Tracking of Objects (using e.g. the Kalman or particle filter)"
+          ],
+          "sessionalNote": "Optional III Theory",
+          "references": [
+            "Ken Stonecipher, \"Industrial Robotics, Machine Vision, and Artificial Intelligence,\"  Sams.",
+            "Krzysztof Okarma, \"Applications of Computer Vision in Automation and Robotics,\" MDPI."
+          ]
+        },
+        {
+          "courseCode": "ECE 4207",
+          "title": "Control System Engineering",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Introduction to Control System, Rotating Power Amplifier, AC & DC Servomotor. Input to Control System, Steady State Response to Step, Ramp and Parabolic Inputs, Transient Response, Poles and Zeros, Frequency Response from Pole Zero. Diagram, Routh’s Stability Criterion, Block Diagram Representation, Transfer. Function and Flow Graph, Absolute and Relative Stability, Parameter Sensitivity, Root locus, Frequency Response, Nyquist’s Stability Criterion.",
+            "Modern Control System: Introduction, State Variable Analysis, Canonical Forms, Controllability and Observability, Application of Eigen Values, Linear Control, System Design by State Feedback Control Design, P, I, PI and PID Types."
+          ],
+          "sessionalNote": "Optional IV Theory",
+          "references": [
+            "Nagrath, I.J. and Gopal, M., Control System Engineering, New Age International (P) Limited, Publishers (2003).",
+            "Ogata, K., Modern Control Engineering, Prentice−Hall of India Private Limited (2001).",
+            "Kuo, B.C., Automatic Control System, Prentice−Hall of India Private Limited (2002).",
+            "Sinha, N.K., Control System, New Age International (P) Limited, Publishers (2002)."
+          ]
+        },
+        {
+          "courseCode": "ECE 4208",
+          "title": "Control System Engineering Laboratory",
+          "credit": 0.75,
+          "contactHour": "1.5 hrs/week",
+          "topics": [
+            "P, I, PI, and PID Control, Step, Ramp and Impulse Response of First and Second Order Systems, Lead/Lag Controller Design, Modeling and Identification of Linear Time-invariant Systems, Implementation of Control Systems in a Computer, Saturation and other Nonlinearities in Control Systems, Frequency Response Analysis using Bode and Polar Plots, Switching Controllers.",
+            "Demonstrate the response of various input functions (i.e. Step, ramp and impulse)",
+            "Identification of damping in different orders",
+            "Time domain analysis",
+            "Stability analysis of linear system using various graphical methods",
+            "Frequency response analysis using polar plot",
+            "Design of PID Controller for speed control of DC Motor System.",
+            "Open ended Lab"
+          ],
+          "sessionalNote": "Optional IV Lab",
+          "references": [
+            "Nagrath, I.J. and Gopal, M., Control System Engineering, New Age International (P) Limited, Publishers (2003).",
+            "Ogata, K., Modern Control Engineering, Prentice−Hall of India Private Limited (2001).",
+            "Kuo, B.C., Automatic Control System, Prentice−Hall of India Private Limited (2002).",
+            "Sinha, N.K., Control System, New Age International (P) Limited, Publishers (2002)."
+          ]
+        },
+        {
+          "courseCode": "ECE 4217",
+          "title": "Electronic Instrumentation",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "The Instrumentation System: Application Domains, The Importance of Engineering Design, Precision and accuracy, Calibration, Dynamic range, Noise Floor to Saturation, Decibels, The Signal Plan Diagram for an amplifier System, Signal to Noise Ratio, Measurements that are Affected by the Instrument, Measuring a Marshmallow with Calipers.",
+            "The Need for Signal Conditioning: Amplification, Noise Control, Bandwidth Limiting (to limit noise), Distortion (of waveshape), Harmonic Generation, Linearity and Signal Compression, A-D Converter Step Size, Impedance Buffering.",
+            "Noise: Noise limits the Smallest Measurable signal, Thermal Noise, Noise Voltage and Current in Op-Amps, Noise Calculation example, Noise Measurement; an AC Voltmeter.",
+            "Operational Amplifier Imperfections: Offset Voltage and Drift, Bias Current, Offset Current, Power Supply Rejection Ratio, Common Mode Rejection Ratio.",
+            "The Transducer and its Conditioning Circuits: Thermistor, Sensitive but Nonlinear, Thermocouple, Small Signal, Linear, Wide Range."
+          ],
+          "sessionalNote": "Optional IV Theory",
+          "references": [
+            "H S Kalsi, \"Electronic Instrumentation\", The McGraw Hill Companies.",
+            "William David Cooper, \"Electronic Instrument and Measuring Techniques\", Prentice Hall of India Pvt. Ltd."
+          ]
+        },
+        {
+          "courseCode": "ECE 4218",
+          "title": "Electronic Instrumentation Laboratory",
+          "credit": 0.75,
+          "contactHour": "1.5 hrs/week",
+          "topics": [
+            "Use of Different instruments like: Function generator, Analog and Digital Oscilloscope, LCR meter, Vector Network Analyzer etc. Characterize the instruments to measure the noise floor, harmonic distortion, Analog to digital conversion efficiency and so on. Study and characterize the performance of different transducers.",
+            "Experiment on function generator, analog and digital oscilloscope, LCR meter.",
+            "Experiment on vector network analyzer.",
+            "Experiment on measurement of noise floor and harmonic distortion.",
+            "Experiment on measurement on analog to digital conversion efficiency.",
+            "Experiment on thermistor and its characteristics.",
+            "Experiment on thermocouple and its characteristics."
+          ],
+          "sessionalNote": "Optional IV Lab",
+          "references": [
+            "H S Kalsi, \"Electronic Instrumentation\", The McGraw Hill Companies.",
+            "William David Cooper, \"Electronic Instrument and Measuring Techniques\", Prentice Hall of India Pvt. Ltd."
+          ]
+        },
+        {
+          "courseCode": "ECE 4227",
+          "title": "Biomedical Engineering",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Biopotentials and Biosignals: Resting potential, Action potential, ECG, EEG, EMG, EOG Signals, their Origin and Applications in medical Diagnosis.",
+            "Biosignals Acquisitions and Bioinstrumentations: Electrodes, Transducers for Physiological Parameter Reading, their Characteristics, Biosensors, Measurement of Body Temperature, Blood Pressure and Heart Beat etc., Characteristics of biopotential amplifier, Instrumentation Amplifiers, Signal converters and conditioners.",
+            "Diagnostic Methods and ICT Applications: Biosignal based diagnosis techniques, Medical Imaging: Ultrasound, Optical, Xray-CT and MRI etc., Telemedicine and remote healthcare, Computers in medicine, e-health and related standards, Fundamentals of Bioinformatics.",
+            "Biomedical Equipment and Devices for Treatment: Patient Monitoring device, Surgical Diathermy Machines, Defibrillators, Pacemakers, Ventilators, Intensive Care units.   Lasers in Therapy.   Prosthesis and Prosthetic Devices.",
+            "Safety Aspects: Patient Safety, Electrical Shock Hazards Incorporation of Safety Aspects in Biomedical Instrumentation."
+          ],
+          "sessionalNote": "Optional IV Theory",
+          "references": [
+            "John G. Webster, Medical Instrumentation Application and Design, John Wiley & Sons, Hoboken, NJ, 2009.",
+            "Joseph J. Carr and John Michael Brown, Introduction to Biomedical Equipment Technology, Prentice Hall, 2001",
+            "R. S. Kahndpur, Handbook of Biomedical Instrumentation Technology and Applications, McGraw Hill, 2020"
+          ]
+        },
+        {
+          "courseCode": "ECE 4228",
+          "title": "Biomedical Engineering Laboratory",
+          "credit": 0.75,
+          "contactHour": "1.5 hrs/week",
+          "topics": [
+            "Biosignal (ECG, EMG, EEG, fNIRS etc) acquisition, processing, and analysis towards computer aided diagnosis; Medical image (X-ray, CT, MRI, ultrasound etc)  processing and analysis. Experiment with Patient monitoring device, Surgical diathermy device, Ventilation and Respiration module, Bio-system modeling and simulation.",
+            "Data acquisition of ECG, EEG, fNIRS signal using BIOPAC tools.",
+            "Implementation and simulation of biosignal processing methods on ECG, EEG, fNIRS signal",
+            "Implementation and simulation of medical image processing methods on X-ray , CT, MRI image",
+            "Experimental and demonstration of Patient Monitoring device",
+            "Experimental Surgical diathermy device, Shortwave diathermy device",
+            "Biomedical signal and image processing and analysis using MATLAB or LABVIEW Simulink"
+          ],
+          "sessionalNote": "Optional IV Lab",
+          "references": [
+            "John G. Webster, Medical Instrumentation Application and Design, John Wiley & Sons, Hoboken, NJ, 2009.",
+            "Joseph J. Carr and John Michael Brown, Introduction to Biomedical Equipment Technology, Prentice Hall, 2001",
+            "R. S. Kahndpur, Handbook of Biomedical Instrumentation Technology and Applications, McGraw Hill, 2020"
+          ]
+        },
+        {
+          "courseCode": "ECE 4269",
+          "title": "Embedded Systems",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Embedded systems introduction: Processor technologies, implementation technologies, and design technologies, overview of dedicated and automated systems and their specific requirements (robust design, environmental issues, temporal constraints, technological constraints, software systems), the product design cycle, development of a system specification including case studies, evaluation and justification of the available levels of system integration (custom chip design through to turnkey-systems) and technological choice, Power issues in embedded systems.",
+            "Software Issues: Development environment: compilers, linkers, debuggers, emulators, real time operating systems and kernels. Designing and implementing code for dedicated systems. IP- and Platform-Based SoC Designs.",
+            "Hardware Issues: Choice of processor: I/O, memory, speed, integration, development facilities, economics; DSP devices. Interfacing to commonly used peripheral devices. Backplane bus standards. Real-time interfacing & exception handling. Surface-mount assembly.",
+            "Transducers: Sensors for measuring physical phenomena, output devices such as power actuators and motors, data transformation, signal conditioning and data conversion, the impact of EMC regulations on design practice.",
+            "Wireless Embedded Systems Design: Protocol Design and Validation, Network Embedded Systems (Operating Systems and programming), Bluetooth and IrDA, Wireless Sensor Networks and ZigBee, Wireless LAN – IEEE 802.11, RFID, GSM and GPRS, Ubiquitous Computing.",
+            "Implementation technologies: Custom VLSI, standard cell and gate array, programmable logic devices (including FPGA’s). Design technologies: Synthesis (of custom processors using VHDL, synopsis FPGA Express and Xilinx FPGA’s, verification (simulation and test) and intellectual property."
+          ],
+          "sessionalNote": "Optional IV Theory",
+          "references": [
+            "M. Wolf, \"Computer as Components: Principles of Embedded Computing System Design\", 4th Edition, Morgan Kaufman Publishers 2016.",
+            "Lyla B Das, \"Embedded Systems an Integrated Approach\", 1st edition, Pearson, 2012.",
+            "A. Burns and A. Wellings, \"Real-time Systems and Programming Languages\", Addison-Wesley 2001"
+          ]
+        },
+        {
+          "courseCode": "ECE 4270",
+          "title": "Embedded Systems Laboratory",
+          "credit": 0.75,
+          "contactHour": "1.5 hrs/week",
+          "topics": [
+            "Experiments on design of embedded systems; interfacing with embedded systems from both hardware and software perspective; and development of embedded systems for practical applications.",
+            "Develop programs for microcontroller and Arduino embedded systems for various applications using different IDEs.",
+            "Develop programs for FPGA and Raspberry Pi embedded systems for various applications using different IDEs",
+            "Sensing and monitoring physiological parameters using embedded systems.",
+            "Interfacing and controlling of a DC motor using embedded systems.",
+            "Study and experimentation on wireless communication approaches of embedded systems.",
+            "Open ended lab"
+          ],
+          "sessionalNote": "Optional IV Lab",
+          "references": [
+            "Raj Kamal, Embedded Systems, Mc Graw Hill India."
+          ]
+        }
+      ],
+      "termNotes": []
+    }
+  },
+  "extras": {
+    "administrative_noise": [
+      "SHUNO EIKAHE EKTU DETAILE E ACHE, ETA PART 1, TAI DETAIL EI THIKMOTO SYLLABUS TA KORO. ETA \"ECE\" DEPT ER , KJHEYAL RAKHIO.",
+      "Contents",
+      "Part – A: Overview of the Program .....................................................................................................1",
+      "List of Abbreviations",
+      "BNQF ... KUET ... OBE ... PEO ... PO ... TEE ...",
+      "List of Bloom’s Taxonomy Domain/ Level ...",
+      "List of Knowledge Profile ...",
+      "List of Complex Engineering Problems ...",
+      "List of Complex Engineering Activities ...",
+      "Outcome Based Education (OBE) Curriculum",
+      "Department of Electronics and Communication Engineering",
+      "Khulna University of Engineering and Technology (KUET)",
+      "Part – A: Overview of the Program",
+      "1. Title of the Academic Program ...",
+      "2. Name of the University ...",
+      "... (full administrative text omitted for brevity)",
+      "Part – B: Overview of the Curriculum",
+      "15. Structure of the Curriculum",
+      "a) Duration ... b) Admission Requirements ... c) Total Minimum Credit Requirements ...",
+      "Area-Wise Credit Distribution tables",
+      "Part – C: Description of all Courses of the Program",
+      "17. Mapping of Program Outcomes (POs) ...",
+      "18. Mapping of Knowledge Profile ...",
+      "19. Course Profile of all courses ... (detailed mapping tables omitted)"
+    ],
+    "ambiguities": [
+      {
+        "raw": "rParameters",
+        "reason": "Probable OCR error for 'r-Parameters' or 'h-parameters' in ECE 1209 topics",
+        "possibleTargets": ["r-Parameters"]
+      },
+      {
+        "raw": "Walis’s Formula",
+        "reason": "Likely Wallis's formula",
+        "possibleTargets": ["Wallis's formula"]
+      },
+      {
+        "raw": "Wiedemann-Franz(orenz law",
+        "reason": "Malformed text, should be Wiedemann-Franz-Lorenz law",
+        "possibleTargets": ["Wiedemann-Franz law"]
+      },
+      {
+        "raw": "CSE 32**",
+        "reason": "Placeholder for optional courses, actual course codes not specified in term table",
+        "possibleTargets": ["CSE 3209", "CSE 3219", "CSE 3239"]
+      },
+      {
+        "raw": "ECE 41**",
+        "reason": "Placeholder for optional II courses",
+        "possibleTargets": ["ECE 4139", "ECE 4129", "ECE 4117"]
+      },
+      {
+        "raw": "ECE 4100 Industrial Attachment - - -",
+        "reason": "Non-credit attachment, details not provided",
+        "possibleTargets": []
+      },
+      {
+        "raw": "Hum 4209 course code appears only in Y4T2, but not in earlier list of general education courses",
+        "reason": "Inconsistency: Hum 4209 not listed in area-wise distribution but appears in term table",
+        "possibleTargets": []
+      },
+      {
+        "raw": "Teaching Plan of ECE 2100:",
+        "reason": "Course code mismatched: content describes Object Oriented Programming laboratory, which corresponds to CSE 2100, not ECE 2100. Likely typographical error in the source.",
+        "possibleTargets": ["CSE 2100"]
+      },
+      {
+        "raw": "CSE 3100 title 'Internet Programming Laboratory' vs earlier 'Web Programming Laboratory'",
+        "reason": "Inconsistency in course title between term table and detailed description.",
+        "possibleTargets": ["Web Programming Laboratory", "Internet Programming Laboratory"]
+      },
+      {
+        "raw": "Course code CSE 3219 titled 'Computer Peripherals and Interfacing' described as ECE 3219 in detailed description",
+        "reason": "Mismatch: detailed description section 19.59 uses ECE 3219, but term table lists CSE 3219. Using CSE 3219 to match term list.",
+        "possibleTargets": ["CSE 3219"]
+      },
+      {
+        "raw": "Course code CSE 3220 described as ECE 3220 in detailed description",
+        "reason": "Mismatch: section 19.60 uses ECE 3220, but term table lists CSE 3220. Using CSE 3220.",
+        "possibleTargets": ["CSE 3220"]
+      },
+      {
+        "raw": "Course code CSE 3239 described as ECE 3239 in detailed description",
+        "reason": "Mismatch: section 19.61 uses ECE 3239, term table lists CSE 3239. Using CSE 3239.",
+        "possibleTargets": ["CSE 3239"]
+      },
+      {
+        "raw": "Course code CSE 3240 described as ECE 3240 in detailed description",
+        "reason": "Mismatch: section 19.62 uses ECE 3240, term table lists CSE 3240. Using CSE 3240.",
+        "possibleTargets": ["CSE 3240"]
+      },
+      {
+        "raw": "ECE 4101 title 'VLSI Design and Nanotechnology' vs term table 'VLSI Design and Technology'",
+        "reason": "Inconsistency: detailed description gives title 'VLSI Design and Nanotechnology' while earlier area-wise list had 'VLSI Design and Technology'. Preserved as in detailed description.",
+        "possibleTargets": ["VLSI Design and Technology"]
+      },
+      {
+        "raw": "ECE 4203 Credit Hours : 4.00 in detailed description",
+        "reason": "Credit mismatch: earlier term table lists ECE 4203 as 3.0 credits, but detailed description heading says 4.00. Using 3.0 from term table.",
+        "possibleTargets": ["3.0"]
+      },
+      {
+        "raw": "ECE 4223 CIE Marks (%) : 90 TEE Marks (%) : 210",
+        "reason": "Percentages clearly erroneous (sum to 300), likely typo for CIE 30 TEE 70.",
+        "possibleTargets": ["CIE 30, TEE 70"]
+      }
+    ]
+  },
+  "qa": {
+    "termCount": 8,
+    "courseCount": 87,
+    "topicCount": 780,
+    "noiseCount": 16,
+    "ambiguityCount": 17
+  }
+}

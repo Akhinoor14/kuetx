@@ -253,7 +253,6 @@ export function Syllabus() {
 
   const [expandedTopics, setExpandedTopics] = useState({});
   const [openCourses, setOpenCourses] = useState({});
-  const [compactMode, setCompactMode] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [selfStudyData, setSelfStudyData] = useState(() => store.get('selfstudy_academic') || []);
 
@@ -339,17 +338,11 @@ export function Syllabus() {
     <div className="page-enter page-container">
       {/* Header */}
       <div style={{ marginBottom: 24 }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 12, flexWrap: 'wrap' }}>
-          <div>
-            <h1 style={{ fontSize: 24, fontWeight: 700, marginBottom: 4 }}>📚 {getTermLabelFromKey(displayTermKey)} Syllabus</h1>
-            <p style={{ fontSize: 13, color: 'var(--muted)' }}>
-              {courses.length} courses • {courses.reduce((sum, c) => sum + (c.credit || 0), 0).toFixed(1)} credits
-            </p>
-          </div>
-          <div style={{ display: 'flex', gap: 8 }}>
-            <button className={`btn btn-sm ${compactMode ? 'btn-primary' : 'btn-ghost'}`} onClick={() => setCompactMode(true)}>Compact</button>
-            <button className={`btn btn-sm ${!compactMode ? 'btn-primary' : 'btn-ghost'}`} onClick={() => setCompactMode(false)}>Expanded</button>
-          </div>
+        <div>
+          <h1 style={{ fontSize: 24, fontWeight: 700, marginBottom: 4 }}>📚 {getTermLabelFromKey(displayTermKey)} Syllabus</h1>
+          <p style={{ fontSize: 13, color: 'var(--muted)' }}>
+            {courses.length} courses • {courses.reduce((sum, c) => sum + (c.credits || 0), 0).toFixed(1)} credits
+          </p>
         </div>
       </div>
 
@@ -419,7 +412,7 @@ export function Syllabus() {
                       color: 'white',
                       borderRadius: 4
                     }}>
-                      {course.credit} cr
+                      {course.credits} cr
                     </div>
                   </div>
                   <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 6 }}>
@@ -489,25 +482,10 @@ export function Syllabus() {
                 {/* Topics Accordion */}
                 {topics.length > 0 ? (
                   <div style={{ flex: 1, overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
-                    <div style={{ padding: '10px 14px', borderBottom: '1px solid var(--border)', fontSize: 11, fontWeight: 600, color: 'var(--muted)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <div style={{ padding: '10px 14px', borderBottom: '1px solid var(--border)', fontSize: 11, fontWeight: 600, color: 'var(--muted)' }}>
                       <span>Topics ({topics.length})</span>
-                      {compactMode && (
-                        <button className="btn btn-ghost btn-sm" style={{ fontSize: 10 }} onClick={() => toggleCourse(course.id)}>
-                          {openCourses[course.id] ? 'Hide' : 'Show'} Topics
-                        </button>
-                      )}
                     </div>
-                    {compactMode && !openCourses[course.id] ? (
-                      <div style={{ padding: '10px 14px', fontSize: 11, color: 'var(--muted)' }}>
-                        {topics.slice(0, 3).map((t, i) => (
-                          <div key={i} style={{ marginBottom: 4 }}>• {t.substring(0, 80)}{t.length > 80 ? '...' : ''}</div>
-                        ))}
-                        {topics.length > 3 && (
-                          <div style={{ fontSize: 10, color: 'var(--muted)', fontStyle: 'italic' }}>+{topics.length - 3} more topics</div>
-                        )}
-                      </div>
-                    ) : (
-                      <div style={{ flex: 1, overflowY: 'auto', maxHeight: compactMode ? '320px' : '400px' }}>
+                    <div style={{ flex: 1, overflowY: 'auto', maxHeight: '400px' }}>
                         {topics.map((topic, idx) => {
                           const topicKey = `${course.code}-${idx}`;
                           const isExpanded = expandedTopics[topicKey];
@@ -581,8 +559,7 @@ export function Syllabus() {
                             </div>
                           );
                         })}
-                      </div>
-                    )}
+                    </div>
                   </div>
                 ) : (
                   <div style={{ padding: '20px 14px', textAlign: 'center', color: 'var(--muted)', fontSize: 11 }}>

@@ -478,7 +478,19 @@ export const getCurrentTermKey = (profile = {}) => {
 };
 
 // ─── Curriculum Selectors ───────────────────────────────────────────────
-const getDeptCurriculum = (deptCode) => CURRICULUM?.departments?.[deptCode] || null;
+const getDeptCurriculum = (deptCode) => {
+  const found = CURRICULUM?.departments?.[deptCode];
+  if (found) return found;
+  // Fallback: construct a safe empty department object so UI logic works
+  const metaDef = DEPARTMENTS.find(d => d.code === deptCode) || { code: deptCode, name: deptCode };
+  return {
+    meta: { code: metaDef.code, name: metaDef.name, acronym: metaDef.code },
+    terms: {},
+    optional: [],
+    notes: {},
+    syllabus: { terms: {}, courses: {} },
+  };
+};
 
 export const getDeptTerms = (deptCode) => getDeptCurriculum(deptCode)?.terms || {};
 
@@ -728,12 +740,30 @@ export const syncCurriculumCourses = (profile) => {
   const currentIndex = Math.max(0, getTermIndex(termKey));
   const deptTerms = getDeptTerms(current.dept);
 
+  const deptSyllabus = getDeptSyllabus(current.dept) || { terms: {} };
+
   const curriculumCourses = TERM_KEYS
-    .filter((key, index) => index <= currentIndex && Array.isArray(deptTerms[key]))
+    .filter((key, index) => index <= currentIndex)
     .flatMap((key, index) => {
-      const baseCourses = deptTerms[key] || [];
+      let baseCourses = Array.isArray(deptTerms[key]) ? deptTerms[key] : [];
+
+      // If term array is empty, try to derive base courses from syllabus.terms[key].courses
+      if ((!Array.isArray(baseCourses) || baseCourses.length === 0) && deptSyllabus?.terms?.[key]) {
+        const termObj = deptSyllabus.terms[key];
+        if (termObj && termObj.courses && typeof termObj.courses === 'object') {
+          baseCourses = Object.entries(termObj.courses).map(([code, info]) => ({
+            code: code,
+            title: info.title || info.name || '',
+            credits: info.credit ?? info.credits ?? info.creditsPerTerm ?? 0,
+            contactHours: info.contactHour || info.contactHours || '',
+            type: info.type || (info.sessionalNote ? 'Sessional' : 'Theory'),
+            isOptional: !!info.isOptional,
+          }));
+        }
+      }
+
       let optionalSlot = 0;
-      return baseCourses.map(base => {
+      return (baseCourses || []).map(base => {
         const status = index === currentIndex ? 'active' : 'completed';
         const slotIndex = base.isOptional ? optionalSlot++ : null;
         return buildCourseRecord({ deptCode: current.dept, termKey: key, base, status, optionalSlotIndex: slotIndex });

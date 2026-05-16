@@ -4,7 +4,7 @@ import { ESE_OPTIONAL_COURSES } from './optional.js';
 import { ESE_NOTES } from './notes.js';
 import { ESE_SYLLABUS } from './syllabus/index.js';
 
-export const ESE = {
+export const ESE_DEPARTMENT = {
   meta: ESE_META,
   terms: ESE_TERMS,
   optional: ESE_OPTIONAL_COURSES,
