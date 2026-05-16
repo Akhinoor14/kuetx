@@ -48,6 +48,7 @@ export const HONORS_CGPA                 = 3.75; // Art. 18.1
 export const DEANS_LIST_GPA              = 3.75; // Art. 18.2
 export const GOLD_MEDAL_CGPA             = 3.75; // Art. 18.3
 export const MAX_THEORY_COURSES_PER_TERM = 5;    // Art. 11.2
+export const TERM_DURATION_DAYS          = 180;  // ~6 months (13 weeks class + exam + buffer)
 export const MIN_CREDITS_PER_TERM        = 15;   // Art. 11.2
 export const MAX_CREDITS_PER_TERM        = 24;   // Art. 11.2
 export const REGISTRATION_WORKING_DAYS  = 8;    // Art. 11.5
@@ -373,8 +374,18 @@ export const computeCourseGrade = (course) => {
 // Compute CGPA across all courses
 export const computeCGPA = (courses) => {
   let pts = 0, cr = 0, earnedCredits = 0;
+  // Per-term resolution for legacy import: 'use_legacy' | 'use_courses'
+  const resolutions = store.get('legacyTermResolution') || {};
+  const legacyRows = getLegacyTermResults();
+  const legacyTermKeys = new Set(legacyRows.map(row => row?.termKey).filter(Boolean));
+
   courses.forEach(c => {
     if (c.type === 'NonCredit') return;
+    const termKey = `Y${c.year}T${c.term}`;
+    // If a legacy import exists for this term and the user has not chosen courses,
+    // keep the imported value as the active source of truth.
+    if (legacyTermKeys.has(termKey) && resolutions[termKey] !== 'use_courses') return;
+    if (resolutions[termKey] === 'use_legacy') return;
     const { grade, point, isX } = computeCourseGrade(c);
     if (isX) return;
     if (grade !== 'F' && grade !== 'W' && point >= 2.0 && c.credits) {
@@ -384,10 +395,14 @@ export const computeCGPA = (courses) => {
     }
   });
 
-  getLegacyTermResults().forEach(row => {
+  // Add legacy term contributions unless the resolution forces using course data
+  legacyRows.forEach(row => {
     const gpa = +row?.gpa;
     const credits = +row?.credits;
+    const termKey = row?.termKey;
+    if (!termKey) return;
     if (!Number.isFinite(gpa) || !Number.isFinite(credits) || credits <= 0) return;
+    if (resolutions[termKey] === 'use_courses') return; // prefer course data
     pts += gpa * credits;
     cr += credits;
     if (gpa >= 2.0) earnedCredits += credits;
@@ -466,6 +481,159 @@ export const getCurrentTermKey = (profile = {}) => {
 const getDeptCurriculum = (deptCode) => CURRICULUM?.departments?.[deptCode] || null;
 
 export const getDeptTerms = (deptCode) => getDeptCurriculum(deptCode)?.terms || {};
+
+export const getTermCreditsFromCurriculum = (deptCode, termKey) => {
+  const deptTerms = getDeptTerms(deptCode);
+  const coursesInTerm = deptTerms[termKey] || [];
+  return coursesInTerm.reduce((sum, course) => {
+    if (course.type === 'NonCredit') return sum;
+    return sum + (course.credits || 0);
+  }, 0);
+};
+
+// Calculate term timeline with holidays, exams, and breaks
+export const getTermTimeline = (termStartDate, deptCode, termKey) => {
+  if (!termStartDate) return null;
+  
+  try {
+    const start = new Date(termStartDate);
+    
+    // Get holidays from schedule
+    const schedule = store.get('schedule') || {};
+    const holidays = schedule.holidays || [];
+    
+    // Helper: Get holiday block info (returns {startDate, endDate, daysCount} or null)
+    const getHolidayBlockAt = (date) => {
+      for (let h of holidays) {
+        if (h.startDate && h.endDate) {
+          const hStart = new Date(h.startDate);
+          const hEnd = new Date(h.endDate);
+          if (date >= hStart && date <= hEnd) {
+            const daysCount = Math.ceil((hEnd - hStart) / (1000 * 60 * 60 * 24)) + 1;
+            return { startDate: hStart, endDate: hEnd, daysCount };
+          }
+        } else if (h.date === date.toISOString().split('T')[0]) {
+          return { startDate: date, endDate: date, daysCount: 1 };
+        }
+      }
+      return null;
+    };
+    
+    // Helper: Check if date is holiday
+    const isHoliday = (date) => getHolidayBlockAt(date) !== null;
+    
+    // Phase 1: Count 65 working days of classes
+    let workingDays = 0;
+    let currentDate = new Date(start);
+    while (workingDays < 65) {
+      if (!isHoliday(currentDate)) workingDays++;
+      currentDate.setDate(currentDate.getDate() + 1);
+    }
+    const classEndDate = new Date(currentDate);
+    classEndDate.setDate(classEndDate.getDate() - 1);
+    
+    // Phase 2: 10-day preparation leave
+    const prepLeaveStart = new Date(classEndDate);
+    prepLeaveStart.setDate(prepLeaveStart.getDate() + 1);
+    const prepLeaveEnd = new Date(prepLeaveStart);
+    prepLeaveEnd.setDate(prepLeaveEnd.getDate() + 9);
+    
+    // Phase 3: Get number of theory courses for exams
+    const deptTerms = getDeptTerms(deptCode);
+    const coursesInTerm = deptTerms[termKey] || [];
+    const theoryCourses = coursesInTerm.filter(c => c.type === 'Theory').length;
+    
+    // Schedule exams with gaps and special holiday blocks
+    let examDate = new Date(prepLeaveEnd);
+    examDate.setDate(examDate.getDate() + 1);
+    const examPhases = [];
+    const specialPeriods = [];
+    
+    for (let i = 0; i < theoryCourses; i++) {
+      // Skip to next valid exam date (after any holidays)
+      while (isHoliday(examDate)) {
+        examDate.setDate(examDate.getDate() + 1);
+      }
+      
+      examPhases.push({
+        course: i + 1,
+        examDate: new Date(examDate),
+        type: 'exam'
+      });
+      
+      // Move to next day for gap/holiday check
+      examDate.setDate(examDate.getDate() + 1);
+      
+      // Check for holiday block in the gap (only between exams, not after last)
+      if (i < theoryCourses - 1) {
+        const holidayBlock = getHolidayBlockAt(examDate);
+        
+        if (holidayBlock && holidayBlock.daysCount >= 4) {
+          // Holiday ≥4 days → counts as special period (separate from exam gap)
+          specialPeriods.push({
+            type: 'holiday',
+            startDate: holidayBlock.startDate,
+            endDate: holidayBlock.endDate,
+            daysCount: holidayBlock.daysCount
+          });
+          // Move past this holiday
+          examDate = new Date(holidayBlock.endDate);
+          examDate.setDate(examDate.getDate() + 1);
+        } else {
+          // Normal 4-5 day gap (skip any small holidays ≤3 days)
+          let gapDays = 0;
+          const gapStartDate = new Date(examDate);
+          while (gapDays < 4) {
+            if (!isHoliday(examDate)) {
+              gapDays++;
+            }
+            if (gapDays < 4) examDate.setDate(examDate.getDate() + 1);
+          }
+          examDate.setDate(examDate.getDate() + 1);
+        }
+      }
+    }
+    
+    // Phase 4: 7-10 day post-exam break
+    let postExamDate = new Date(examPhases[examPhases.length - 1].examDate);
+    postExamDate.setDate(postExamDate.getDate() + 1);
+    const postExamBreakEnd = new Date(postExamDate);
+    postExamBreakEnd.setDate(postExamBreakEnd.getDate() + 8); // 7-10 days (default 9)
+    
+    // Next semester start
+    const nextSemesterStart = new Date(postExamBreakEnd);
+    nextSemesterStart.setDate(nextSemesterStart.getDate() + 1);
+    
+    return {
+      classEndDate,
+      prepLeaveStart,
+      prepLeaveEnd,
+      examPhases,
+      specialPeriods,
+      postExamBreakStart: postExamDate,
+      postExamBreakEnd,
+      nextSemesterStart,
+      theoryCourses
+    };
+  } catch {
+    return null;
+  }
+};
+
+// Calculate term progress (0-100%) based on start date
+export const getTermProgress = (termStartDate) => {
+  if (!termStartDate) return 0;
+  try {
+    const start = new Date(termStartDate);
+    const today = new Date();
+    const elapsedMs = today - start;
+    const elapsedDays = Math.floor(elapsedMs / (1000 * 60 * 60 * 24));
+    const progress = Math.min(100, Math.max(0, (elapsedDays / TERM_DURATION_DAYS) * 100));
+    return Math.round(progress);
+  } catch {
+    return 0;
+  }
+};
 
 export const getDeptOptionalCourses = (deptCode) => getDeptCurriculum(deptCode)?.optional || [];
 
@@ -631,4 +799,5 @@ export const DEFAULT_PROFILE = {
   name: '', studentId: '', dept: '', session: '', batch: '', currentTerm: '', currentTermKey: '',
   totalCreditsRequired: MIN_CREDITS_GRADUATION, yearStarted: new Date().getFullYear(),
   isCR: false, hallName: '', roomNo: '', advisorName: '', advisorContact: '',
+  termStartDate: null, // ISO date string: YYYY-MM-DD
 };

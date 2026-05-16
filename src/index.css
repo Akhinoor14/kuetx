@@ -218,6 +218,143 @@ h3 { font-size: 15px; font-weight: 600; }
   box-sizing: border-box;
 }
 
+.dashboard-page {
+  position: relative;
+  font-family: 'Manrope', 'Sora', system-ui, -apple-system, sans-serif;
+  font-size: 15.5px;
+  line-height: 1.7;
+}
+
+.dashboard-page::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(900px 420px at 12% 0%, rgba(6, 182, 212, 0.12), transparent 60%),
+    radial-gradient(760px 420px at 92% 8%, rgba(245, 158, 11, 0.10), transparent 56%),
+    radial-gradient(820px 560px at 55% 100%, rgba(16, 185, 129, 0.08), transparent 52%);
+  z-index: 0;
+}
+
+.dashboard-page > * {
+  position: relative;
+  z-index: 1;
+}
+
+.dashboard-page .dashboard-hero {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.96), rgba(247, 253, 250, 0.92));
+  border-color: rgba(6, 182, 212, 0.12);
+  box-shadow: 0 14px 34px rgba(12, 34, 64, 0.06);
+}
+
+.dashboard-page h1,
+.dashboard-page .section-title,
+.dashboard-page .tag {
+  font-family: 'Space Grotesk', 'Sora', system-ui, sans-serif;
+}
+
+.dashboard-page h1 {
+  font-weight: 700;
+  letter-spacing: -0.05em;
+}
+
+.dashboard-page p,
+.dashboard-page .card,
+.dashboard-page .btn,
+.dashboard-page input,
+.dashboard-page select,
+.dashboard-page textarea,
+.dashboard-page label {
+  font-family: 'Manrope', 'Sora', system-ui, sans-serif;
+}
+
+@media (max-width: 768px) {
+  .dashboard-page {
+    font-size: 15px;
+    line-height: 1.72;
+  }
+
+  .dashboard-page .dashboard-hero {
+    padding: 20px 18px !important;
+    gap: 14px !important;
+    border-radius: 16px;
+    grid-template-columns: 1fr !important;
+  }
+
+  .dashboard-page .dashboard-hero-main {
+    min-width: 0 !important;
+    flex-basis: 100% !important;
+    padding-right: 0 !important;
+    gap: 14px !important;
+  }
+
+  .dashboard-page .dashboard-hero-date {
+    width: 100% !important;
+    min-width: 0 !important;
+    flex-basis: 100% !important;
+    align-self: stretch !important;
+  }
+
+  .dashboard-page .dashboard-hero h1 {
+    font-size: 30px !important;
+    line-height: 1.04 !important;
+    max-width: 100% !important;
+  }
+
+  .dashboard-page .dashboard-hero .tag {
+    font-size: 11px;
+    padding: 4px 8px;
+  }
+
+  .dashboard-page .dashboard-stats-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+  }
+
+  .dashboard-page .dashboard-stats-grid .card {
+    min-height: 132px;
+    padding: 16px !important;
+  }
+
+  .dashboard-page .dashboard-roadmap {
+    padding: 14px !important;
+  }
+
+  .dashboard-page .dashboard-roadmap-desktop-visual {
+    height: 64px !important;
+    margin-bottom: 6px !important;
+  }
+
+  .dashboard-page .dashboard-roadmap-legend {
+    gap: 8px !important;
+    margin-top: 2px !important;
+  }
+
+  .dashboard-page .dashboard-trend,
+  .dashboard-page .dashboard-roadmap {
+    overflow: hidden;
+  }
+}
+
+@media (max-width: 480px) {
+  .dashboard-page .dashboard-hero h1 {
+    font-size: 26px !important;
+  }
+
+  .dashboard-page .dashboard-stats-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .dashboard-page .dashboard-stats-grid .card {
+    min-height: 120px;
+  }
+
+  .dashboard-page .dashboard-roadmap .card {
+    padding: 12px !important;
+  }
+}
+
 /* ── Divider ─────────────────────────────────────────────────────────────── */
 .divider {
   height: 1px;
@@ -543,3 +680,122 @@ input[type="range"]::-webkit-slider-thumb {
 .text-xs    { font-size: 12px; }
 .fw-700 { font-weight: 700; }
 .fw-800 { font-weight: 800; }
+
+/* ── Mobile Responsive (Extra Small: < 640px) ──────────────────────────── */
+@media (max-width: 640px) {
+  .page-container {
+    padding: 12px;
+  }
+
+  body {
+    font-size: 14px;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-size: clamp(16px, 5vw, 24px);
+  }
+
+  .card {
+    padding: clamp(12px, 4vw, 20px);
+    border-radius: 8px;
+  }
+
+  .btn {
+    padding: 8px 14px;
+    font-size: 13px;
+    border-radius: 7px;
+  }
+
+  .btn-sm {
+    padding: 5px 10px;
+    font-size: 12px;
+  }
+
+  input, select, textarea {
+    font-size: 16px; /* Prevent zoom on iOS */
+    padding: 8px 11px;
+    border-radius: 8px;
+  }
+
+  .topbar {
+    padding: 0 12px;
+    height: 52px;
+  }
+
+  .tag {
+    padding: 4px 8px;
+    font-size: 11px;
+  }
+
+  .kuet-table {
+    font-size: 12px;
+  }
+
+  .kuet-table th {
+    padding: 6px 8px;
+    font-size: 10px;
+  }
+
+  .kuet-table td {
+    padding: 8px 10px;
+  }
+}
+
+/* ── Tablet (Small: 640px - 1024px) ───────────────────────────────────── */
+@media (max-width: 1024px) and (min-width: 641px) {
+  .page-container {
+    padding: 16px;
+  }
+
+  .card {
+    padding: clamp(14px, 3vw, 20px);
+  }
+
+  .form-row-3, .form-row-4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .calc-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── Extra Small: 320px - 480px ────────────────────────────────────────── */
+@media (max-width: 480px) {
+  .page-container {
+    padding: 8px;
+  }
+
+  .card {
+    padding: 10px;
+    border-radius: 6px;
+  }
+
+  .btn {
+    padding: 7px 12px;
+    font-size: 12px;
+  }
+
+  input, select, textarea {
+    font-size: 16px;
+    padding: 7px 10px;
+  }
+
+  label {
+    font-size: 11px;
+  }
+
+  .topbar {
+    padding: 0 8px;
+    height: 48px;
+  }
+
+  .divider {
+    margin: 12px 0;
+  }
+
+  .alert-critical, .alert-warning, .alert-success {
+    padding: 10px 12px;
+    font-size: 13px;
+  }
+}

@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Plus, Settings2, Clock3, PencilLine, Copy, CalendarDays, X } from 'lucide-react';
-import { store, uid, getAllCourses, getProfile, getCurrentTermKey, getRoutinePreviewDate, isRoutineHoliday } from '../store/store';
+import { store, uid, getAllCourses, getProfile, getCurrentTermKey, getRoutinePreviewDate, isRoutineHoliday, getTermTimeline } from '../store/store';
 
 const DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday'];
 const DAY_INDEX = { Sunday: 0, Monday: 1, Tuesday: 2, Wednesday: 3, Thursday: 4 };
@@ -463,6 +463,11 @@ export default function Schedule() {
     }
   };
 
+  // Exam overrides stored per-term: { [termKey]: [{ course: 1, examDate: 'YYYY-MM-DD' }, ...] }
+  const [examOverrides, setExamOverrides] = useState(() => store.get('examOverrides') || {});
+  const [editingExams, setEditingExams] = useState(false);
+  const [localExamEdits, setLocalExamEdits] = useState([]);
+
   const slotPreview = (slot) => {
     const cleanSlot = String(slot).replace(/\s+break\s*$/i, '').trim();
     const match = cleanSlot.match(/^(.+)-(.+)$/);
@@ -906,6 +911,134 @@ export default function Schedule() {
         </div>
         {importMessage && <div style={{ fontSize: 12, color: 'var(--muted)' }}>{importMessage}</div>}
       </div>
+      {/* === Detailed Term Roadmap (bottom of Schedule page) === */}
+      <div className="card" style={{ marginTop: 14, padding: 16 }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+          <div>
+            <div style={{ fontWeight: 700, fontSize: 14 }}>Term Roadmap (Detailed)</div>
+            <div style={{ fontSize: 12, color: 'var(--muted)' }}>Approximate timeline with manual override and holiday sync. Use Edit to adjust exam dates.</div>
+          </div>
+          <div style={{ display: 'flex', gap: 8 }}>
+            <button className="btn btn-ghost" onClick={() => {
+              // open holiday setup
+              setHolidaySetupOpen(v => !v);
+            }}>
+              <CalendarDays size={13} /> Add Holiday
+            </button>
+            <button className="btn btn-primary" onClick={() => {
+              const termKey = getCurrentTermKey(profile);
+              const timeline = getTermTimeline(profile?.termStartDate, profile?.dept, termKey);
+              if (!timeline) return alert('Term timeline not available — add term start date in Profile');
+              // prepare local edits from existing overrides or timeline
+              const overrides = (examOverrides && examOverrides[termKey]) || [];
+              const mapped = timeline.examPhases.map((p, i) => ({ course: p.course, examDate: (overrides[i]?.examDate) || p.examDate.toISOString().slice(0,10) }));
+              setLocalExamEdits(mapped);
+              setEditingExams(true);
+            }}>
+              <PencilLine size={13} /> Edit Exams
+            </button>
+          </div>
+        </div>
+
+        {(() => {
+          const termKey = getCurrentTermKey(profile);
+          const timeline = getTermTimeline(profile?.termStartDate, profile?.dept, termKey);
+          if (!timeline) {
+            return <div style={{ fontSize: 12, color: 'var(--muted)' }}>Add a term start date in Profile to view the detailed roadmap.</div>;
+          }
+
+          // apply overrides if present
+          const overrides = (examOverrides && examOverrides[termKey]) || [];
+          const examPhases = timeline.examPhases.map((p, i) => {
+            const o = overrides[i];
+            return { ...p, examDate: o && o.examDate ? new Date(o.examDate) : new Date(p.examDate) };
+          });
+
+          const format = (d) => new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+
+          return (
+            <div style={{ display: 'grid', gap: 8 }}>
+              <div style={{ fontSize: 13, fontWeight: 700 }}>{profile?.currentTerm || getCurrentTermKey(profile)}</div>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
+                <div style={{ padding: 10, borderRadius: 8, border: '1px solid var(--border)' }}>
+                  <div style={{ fontWeight: 700 }}>📚 Classes & Study</div>
+                  <div style={{ fontSize: 12, color: 'var(--muted)' }}>{format(new Date(profile?.termStartDate || new Date()))} → {format(timeline.classEndDate)} • 65 working days</div>
+                </div>
+                <div style={{ padding: 10, borderRadius: 8, border: '1px solid var(--border)' }}>
+                  <div style={{ fontWeight: 700 }}>🎓 Prep Leave</div>
+                  <div style={{ fontSize: 12, color: 'var(--muted)' }}>{format(timeline.prepLeaveStart)} → {format(timeline.prepLeaveEnd)} • 10 days</div>
+                </div>
+              </div>
+
+              <div style={{ padding: 10, borderRadius: 8, border: '1px solid var(--border)' }}>
+                <div style={{ fontWeight: 700 }}>✍️ Exam Period</div>
+                <div style={{ fontSize: 12, color: 'var(--muted)' }}>{examPhases.length} courses: {format(examPhases[0]?.examDate)} → {format(examPhases[examPhases.length - 1]?.examDate)}</div>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: 6, marginTop: 8 }}>
+                  {examPhases.map((ep, idx) => (
+                    <div key={idx} style={{ padding: 8, borderRadius: 8, background: 'var(--card)', border: '1px solid var(--border)', fontSize: 12 }}>
+                      <div style={{ fontWeight: 700 }}>Exam {ep.course}</div>
+                      <div style={{ color: 'var(--muted)' }}>{format(ep.examDate)}</div>
+                    </div>
+                  ))}
+                </div>
+                {timeline.specialPeriods && timeline.specialPeriods.length > 0 && (
+                  <div style={{ marginTop: 8, fontSize: 12, color: '#F59E0B' }}>
+                    ⚠️ Special holiday blocks during exams:
+                    {timeline.specialPeriods.map((sp, i) => (
+                      <div key={i}>• {sp.daysCount} days • {new Date(sp.startDate).toLocaleDateString()}</div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
+                <div style={{ padding: 10, borderRadius: 8, border: '1px solid var(--border)' }}>
+                  <div style={{ fontWeight: 700 }}>🌴 Post-Exam Break</div>
+                  <div style={{ fontSize: 12, color: 'var(--muted)' }}>{format(timeline.postExamBreakStart)} → {format(timeline.postExamBreakEnd)} • 7 days</div>
+                </div>
+                <div style={{ padding: 10, borderRadius: 8, border: '1px solid var(--border)' }}>
+                  <div style={{ fontWeight: 700 }}>🚀 Next Semester Starts</div>
+                  <div style={{ fontSize: 12, color: 'var(--muted)' }}>{format(timeline.nextSemesterStart)}</div>
+                </div>
+              </div>
+            </div>
+          );
+        })()}
+      </div>
+
+      {/* Edit Exams Modal */}
+      {editingExams && (
+        <div className="card" style={{ position: 'fixed', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(0,0,0,0.4)' }}>
+          <div style={{ width: 720, maxWidth: '95%', background: 'var(--bg)', borderRadius: 12, padding: 16 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+              <div style={{ fontWeight: 800 }}>Edit Exam Dates</div>
+              <button className="btn btn-ghost" onClick={() => setEditingExams(false)}>Close</button>
+            </div>
+            <div style={{ display: 'grid', gap: 8 }}>
+              {localExamEdits.map((e, i) => (
+                <div key={i} style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+                  <div style={{ width: 90, fontWeight: 700 }}>Exam {e.course}</div>
+                  <input type="date" value={e.examDate} onChange={ev => {
+                    const v = ev.target.value;
+                    setLocalExamEdits(prev => prev.map((p, idx) => idx === i ? { ...p, examDate: v } : p));
+                  }} />
+                </div>
+              ))}
+              <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end', marginTop: 8 }}>
+                <button className="btn btn-ghost" onClick={() => setEditingExams(false)}>Cancel</button>
+                <button className="btn btn-primary" onClick={() => {
+                  const termKey = getCurrentTermKey(profile);
+                  const next = { ...(examOverrides || {}) };
+                  next[termKey] = localExamEdits.map(x => ({ course: x.course, examDate: x.examDate }));
+                  setExamOverrides(next);
+                  store.set('examOverrides', next);
+                  setEditingExams(false);
+                }}>Save</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
