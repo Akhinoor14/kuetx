@@ -3,6 +3,8 @@ import { useTheme, THEMES } from '../hooks/useTheme';
 import { useLocation, Link } from 'react-router-dom';
 import { NAV } from '../nav';
 import { Logo, Wordmark } from './Logo';
+import { getProfile } from '../store/store';
+import { computeAlerts } from '../pages/Alerts';
 
 function getPageMeta(pathname) {
   for (const section of NAV) {
@@ -26,6 +28,10 @@ export function Navbar({ onMenuClick }) {
 
   const ThemeIcon = themeId === 'dark' ? Moon : themeId === 'milky' ? Droplets : Sun;
   const themeLabel = { light: 'Light', milky: 'Milky', dark: 'Dark' }[themeId];
+
+  // compute alert counts for badge
+  const alertCounts = computeAlerts(getProfile());
+  const alertCount = (alertCounts.critical?.length || 0) + (alertCounts.warnings?.length || 0);
 
   return (
     <header className="topbar">
@@ -63,12 +69,22 @@ export function Navbar({ onMenuClick }) {
       </button>
 
       {/* Alerts bell */}
-      <Link to="/alerts" style={{
+      <Link to="/alerts" aria-label={alertCount ? `${alertCount} alerts` : 'Alerts'} style={{
         display: 'flex', alignItems: 'center', padding: '7px 10px', borderRadius: 9,
         border: '1.5px solid var(--border)', background: 'transparent', color: 'var(--text)',
         textDecoration: 'none',
       }}>
-        <Bell size={17} />
+        <div style={{ position: 'relative', display: 'inline-flex', alignItems: 'center' }}>
+          <Bell size={17} />
+          {alertCount > 0 && (
+            <span style={{
+              position: 'absolute', top: -8, right: -8, minWidth: 18, height: 18, padding: '0 6px',
+              display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+              borderRadius: 999, background: 'var(--danger)', color: '#fff', fontSize: 11, fontWeight: 700,
+              boxShadow: '0 2px 6px rgba(0,0,0,0.12)'
+            }}>{alertCount}</span>
+          )}
+        </div>
       </Link>
 
       {/* Backup shortcut */}

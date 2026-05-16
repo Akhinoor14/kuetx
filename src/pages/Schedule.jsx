@@ -63,7 +63,7 @@ const DEFAULT_SETTINGS = {
   modelId: '50min',
   customSlots: DEFAULT_CUSTOM,
   customLabel: '',
-  messageFormat: 'plain',
+  messageFormat: 'whatsapp',
 };
 
 const MESSAGE_FORMATS = [
@@ -489,33 +489,16 @@ export default function Schedule() {
   const showSettingsPanel = editingSettings;
   const [fullScreenOpen, setFullScreenOpen] = useState(false);
 
-  useEffect(() => {
-    if (!fullScreenOpen) return;
-    const lock = async () => {
-      try {
-        if (screen.orientation && screen.orientation.lock) {
-          await screen.orientation.lock('landscape');
-        }
-      } catch (e) {
-        // ignore - orientation lock not supported or rejected
-      }
-    };
-    lock();
-    return () => {
-      try { if (screen.orientation && screen.orientation.unlock) screen.orientation.unlock(); } catch (e) {}
-    };
-  }, [fullScreenOpen]);
-
   const renderTimetable = (opts = {}) => {
     const tableStyle = { width: '100%', borderCollapse: 'collapse', fontSize: opts.large ? 15 : 13 };
     return (
-      <div style={{ overflowX: 'auto' }}>
+      <div className={`timetable-grid${opts.fullView ? ' full-view' : ''}`} style={{ overflowX: 'auto' }}>
         <table style={tableStyle}>
           <thead style={{ position: 'sticky', top: 0, zIndex: 2 }}>
             <tr>
-              <th style={{ padding: '12px 12px', borderBottom: '1px solid var(--border)', background: 'var(--surface)', minWidth: 110, textAlign: 'left' }}>Time</th>
+              <th className="time-col" style={{ padding: '12px 12px', borderBottom: '1px solid var(--border)', background: 'var(--surface)', minWidth: 110, textAlign: 'left' }}>Time</th>
               {DAYS.map(d => (
-                <th key={d} style={{ padding: 0, borderBottom: '1px solid var(--border)', background: 'var(--surface)', minWidth: 160 }}>
+                <th key={d} className={`timetable-day-col${d === selectedDay ? ' selected-day' : ''}`} style={{ padding: 0, borderBottom: '1px solid var(--border)', background: 'var(--surface)', minWidth: 160 }}>
                   <button
                     onClick={() => setSelectedDay(d)}
                     style={{
@@ -541,7 +524,7 @@ export default function Schedule() {
                 <tr key={p}>
                   <td style={{ padding: '12px 12px', borderBottom: '1px solid var(--border)', borderRight: '1px solid var(--border)', fontWeight: 700, fontSize: 13, color: 'var(--muted)', fontFamily: 'JetBrains Mono, monospace', whiteSpace: 'nowrap', background: breakSlot ? 'rgba(239,68,68,0.08)' : 'var(--bg)' }}>{slotPreview(p)}</td>
                   {DAYS.map(d => (
-                    <td key={d} style={{ padding: '6px', borderBottom: '1px solid var(--border)', borderRight: '1px solid var(--border)', verticalAlign: 'top', minHeight: 54, background: breakSlot ? 'rgba(239,68,68,0.08)' : d === selectedDay ? 'rgba(59,130,246,0.035)' : 'transparent' }}>
+                    <td key={d} className={`timetable-day-col${d === selectedDay ? ' selected-day' : ''}`} style={{ padding: '6px', borderBottom: '1px solid var(--border)', borderRight: '1px solid var(--border)', verticalAlign: 'top', minHeight: 54, background: breakSlot ? 'rgba(239,68,68,0.08)' : d === selectedDay ? 'rgba(59,130,246,0.035)' : 'transparent' }}>
                       {(grid[d]?.[p] || []).map(s => {
                         const c = getCourse(s.courseId);
                         return (
@@ -729,7 +712,7 @@ export default function Schedule() {
 
       </div>
 
-      <div className="card" style={{ marginBottom: 14, padding: 16 }}>
+      <div className="card day-preview-panel" style={{ marginBottom: 14, padding: 16 }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, alignItems: 'center', flexWrap: 'wrap', marginBottom: 10 }}>
           <div>
             <div style={{ fontWeight: 700, fontSize: 14 }}>Day Preview</div>
@@ -891,73 +874,71 @@ export default function Schedule() {
         <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', alignItems: 'center', marginBottom: 12 }}>
           <div>
             <div style={{ fontWeight: 700, fontSize: 15 }}>Timetable Grid</div>
-            <div style={{ fontSize: 13, color: 'var(--muted)' }}>Double-click any entry to edit. The grid stays compact and readable.</div>
+            <div style={{ fontSize: 13, color: 'var(--muted)' }}>Double-click any entry to edit.</div>
           </div>
-          <div style={{ fontSize: 12, color: 'var(--muted)' }}>{schedule.length} saved slot{schedule.length === 1 ? '' : 's'}</div>
+          <div style={{ display: 'flex', gap: 8, alignItems: 'center', fontSize: 12, color: 'var(--muted)' }}>
+            {schedule.length > 0 && (
+              <div style={{ fontSize: 12, color: 'var(--muted)' }}>{schedule.length} saved slot{schedule.length === 1 ? '' : 's'}</div>
+            )}
+            <button className="btn btn-ghost mobile-fullscreen-btn" onClick={() => setFullScreenOpen(true)} aria-label="Open timetable full screen">
+              <span className="fs-icon" aria-hidden style={{ display: 'inline-block', lineHeight: 0 }}>
+                ⤢
+              </span>
+              <span className="fs-label" style={{ marginLeft: 8, fontWeight: 700 }}>Full</span>
+            </button>
+          </div>
         </div>
-        <div style={{ overflowX: 'auto', border: '1px solid var(--border)', borderRadius: 14, background: 'var(--card)' }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
-            <thead style={{ position: 'sticky', top: 0, zIndex: 2 }}>
-              <tr>
-                <th style={{ padding: '12px 12px', borderBottom: '1px solid var(--border)', background: 'var(--surface)', minWidth: 110, textAlign: 'left' }}>Time</th>
-                {DAYS.map(d => (
-                  <th key={d} style={{ padding: 0, borderBottom: '1px solid var(--border)', background: 'var(--surface)', minWidth: 160 }}>
-                    <button
-                      onClick={() => setSelectedDay(d)}
-                      style={{
-                        width: '100%',
-                        padding: '12px 12px',
-                        border: 'none',
-                        background: 'transparent',
-                        cursor: 'pointer',
-                        fontWeight: d === selectedDay || d === today ? 700 : 500,
-                        color: d === selectedDay || d === today ? 'var(--accent)' : 'var(--text)',
-                      }}
-                    >
-                      {formatDayShort(d)}
-                    </button>
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {getSlotCatalog(schedule, slotList).map(p => {
-                const breakSlot = isBreakSlot(p);
-                return (
-                <tr key={p}>
-                  <td style={{ padding: '12px 12px', borderBottom: '1px solid var(--border)', borderRight: '1px solid var(--border)', fontWeight: 700, fontSize: 13, color: 'var(--muted)', fontFamily: 'JetBrains Mono, monospace', whiteSpace: 'nowrap', background: breakSlot ? 'rgba(239,68,68,0.08)' : 'var(--bg)' }}>{slotPreview(p)}</td>
-                  {DAYS.map(d => (
-                    <td key={d} style={{ padding: '6px', borderBottom: '1px solid var(--border)', borderRight: '1px solid var(--border)', verticalAlign: 'top', minHeight: 54, background: breakSlot ? 'rgba(239,68,68,0.08)' : d === selectedDay ? 'rgba(59,130,246,0.035)' : 'transparent' }}>
-                      {(grid[d]?.[p] || []).map(s => {
-                        const c = getCourse(s.courseId);
-                        return (
-                          <div key={s.id} onDoubleClick={() => startEdit(s)} title="Double-click to edit" style={{
-                            padding: '8px 9px', borderRadius: 11, fontSize: 12, lineHeight: 1.35, marginBottom: 4,
-                            background: 'linear-gradient(180deg, rgba(59,130,246,0.12), rgba(59,130,246,0.08))',
-                            border: '1px solid rgba(59,130,246,0.18)', color: 'var(--text)', position: 'relative', cursor: 'pointer',
-                          }}>
-                            <div style={{ fontWeight: 700, fontSize: 12, lineHeight: 1.35, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{s.displayName || c?.name || c?.code || '?'}</div>
-                            <div style={{ opacity: 0.88, fontSize: 11, marginTop: 3, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{s.teacherName || 'Teacher not set'}</div>
-                            <button onClick={() => startEdit(s)} style={{
-                              position: 'absolute', top: 2, right: 16, background: 'none', border: 'none',
-                              color: 'inherit', cursor: 'pointer', opacity: 0.55, padding: 0, lineHeight: 1,
-                            }}>✎</button>
-                            <button onClick={() => remove(s.id)} style={{
-                              position: 'absolute', top: 2, right: 2, background: 'none', border: 'none',
-                              color: 'inherit', cursor: 'pointer', opacity: 0.55, padding: 0, lineHeight: 1,
-                            }}>×</button>
-                          </div>
-                        );
-                      })}
-                    </td>
-                  ))}
-                </tr>
-                );
-              })}
-            </tbody>
-          </table>
+        <div className="mobile-preview-controls">
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, alignItems: 'center', marginBottom: 12 }}>
+            <span className="tag tag-blue">Today · {currentCalendarDay}</span>
+            <span className="tag tag-green">Selected · {selectedDay}</span>
+            <span className="tag tag-gray">Auto · {autoPreviewDay}</span>
+          </div>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 12 }}>
+            {DAYS.map(day => (
+              <button
+                key={day}
+                onClick={() => setSelectedDay(day)}
+                className="btn"
+                style={{
+                  padding: '8px 12px',
+                  border: selectedDay === day ? '1px solid var(--accent)' : '1px solid var(--border)',
+                  background: selectedDay === day ? 'rgba(59,130,246,0.08)' : 'var(--card)',
+                }}
+              >
+                {day}
+              </button>
+            ))}
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: 8, alignItems: 'center', marginBottom: 14 }}>
+            <div style={{ fontSize: 12, color: 'var(--muted)' }}>
+              {selectedClasses.length === 0 ? 'No classes added yet.' : `${selectedClasses.length} class${selectedClasses.length === 1 ? '' : 'es'} selected`}
+            </div>
+            <button className="btn btn-ghost" onClick={copySelectedSchedule}>
+              <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 22, height: 22, borderRadius: 999, background: selectedFormatLabel === 'WhatsApp' ? 'rgba(37,211,102,0.18)' : 'rgba(59,130,246,0.14)' }}>
+                <Copy size={12} />
+              </span>
+              <span style={{ marginLeft: 8, fontWeight: 700 }}>Copy {selectedFormatLabel}</span>
+            </button>
+          </div>
         </div>
+        
+        {renderTimetable()}
       </div>
+      {fullScreenOpen && (
+        <div className="fullscreen-overlay" onClick={() => setFullScreenOpen(false)}>
+          <div className="fullscreen-content fullscreen-rotated" onClick={e => e.stopPropagation()}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 10, marginBottom: 12 }}>
+              <div>
+                <div style={{ fontWeight: 700, fontSize: 16 }}>Timetable Full View</div>
+                <div style={{ fontSize: 12, color: 'var(--muted)' }}>Double-click any entry to edit.</div>
+              </div>
+              <button className="btn btn-ghost" onClick={() => setFullScreenOpen(false)}>Close</button>
+            </div>
+            {renderTimetable({ large: true, fullView: true })}
+          </div>
+        </div>
+      )}
       <div className="card" style={{ marginTop: 14, padding: 16, display: 'flex', flexDirection: 'column', gap: 12 }}>
         <div>
           <div style={{ fontWeight: 700, fontSize: 14, marginBottom: 2 }}>Routine Share</div>

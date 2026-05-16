@@ -27,6 +27,7 @@ import SmartScore from './pages/SmartScore';
 import Settings from './pages/Settings';
 import { Notes } from './pages/Notes';
 import Clubs from './pages/Clubs';
+import About from './pages/About';
 import { Tours, Social, Projects, Syllabus, TimeTracker, Tuition, Food, Reports } from './pages/Extras';
 
 function Layout() {
@@ -86,6 +87,7 @@ function Layout() {
             <Route path="/reports" element={<Reports />} />
             <Route path="/notes" element={<Notes />} />
             <Route path="/settings" element={<Settings />} />
+            <Route path="/about" element={<About />} />
           </Routes>
         </div>
         <Footer />

@@ -85,17 +85,17 @@ export default function Money() {
       {/* Add form */}
       {adding && (
         <div className="card" style={{ marginBottom: 16, borderColor: 'var(--accent)' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 10, marginBottom: 10 }}>
-            <div><label>Date</label><input type="date" value={form.date} onChange={e => set('date', e.target.value)} /></div>
-            <div>
+          <div className="form-row form-row-3" style={{ marginBottom: 10 }}>
+            <div className="form-field"><label>Date</label><input type="date" value={form.date} onChange={e => set('date', e.target.value)} /></div>
+            <div className="form-field">
               <label>Category</label>
               <select value={form.category} onChange={e => set('category', e.target.value)}>
                 {CATS.map(c => <option key={c}>{c}</option>)}
               </select>
             </div>
-            <div><label>Amount (৳)</label><input type="number" value={form.amount} onChange={e => set('amount', e.target.value)} placeholder="0" /></div>
+            <div className="form-field"><label>Amount (৳)</label><input type="number" value={form.amount} onChange={e => set('amount', e.target.value)} placeholder="0" /></div>
           </div>
-          <div style={{ marginBottom: 10 }}><label>Note</label><input value={form.note} onChange={e => set('note', e.target.value)} placeholder="Optional detail" /></div>
+          <div className="form-field" style={{ marginBottom: 10 }}><label>Note</label><input value={form.note} onChange={e => set('note', e.target.value)} placeholder="Optional detail" /></div>
           <div style={{ display: 'flex', gap: 8 }}>
             <button className="btn btn-primary" onClick={add}>Save</button>
             <button className="btn btn-ghost" onClick={() => setAdding(false)}>Cancel</button>

@@ -59,4 +59,10 @@ export const NAV = [
       { id: 'settings',   label: 'Settings',    icon: 'Settings',    path: '/settings' },
     ]
   },
+  {
+    group: 'Information',
+    items: [
+      { id: 'about',      label: 'About KUETX',  icon: 'Info',        path: '/about' },
+    ]
+  },
 ];
