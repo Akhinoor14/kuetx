@@ -84,31 +84,29 @@ export default function Profile() {
     <div className="page-enter page-container">
       {/* Setup Button - Top (only when no profile) */}
       {!hasProfile && (
-        <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 24 }}>
+        <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 20 }}>
           <button
             onClick={() => setIsModalOpen(true)}
             style={{
-              padding: '12px 24px',
-              background: 'var(--accent)',
+              padding: '10px 20px',
+              background: 'linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%)',
               color: 'white',
               border: 'none',
-              borderRadius: 10,
-              fontSize: 14,
+              borderRadius: 8,
+              fontSize: 13,
               fontWeight: 700,
               cursor: 'pointer',
               transition: 'all 0.3s ease',
-              boxShadow: '0 4px 12px rgba(22, 163, 74, 0.25)',
+              boxShadow: '0 4px 16px rgba(22, 163, 74, 0.25)',
               whiteSpace: 'nowrap',
-              letterSpacing: '0.3px',
+              letterSpacing: '0.4px',
             }}
             onMouseEnter={e => {
-              e.target.style.background = 'var(--accent2)';
-              e.target.style.boxShadow = '0 6px 20px rgba(22, 163, 74, 0.35)';
+              e.target.style.boxShadow = '0 8px 24px rgba(22, 163, 74, 0.4)';
               e.target.style.transform = 'translateY(-2px)';
             }}
             onMouseLeave={e => {
-              e.target.style.background = 'var(--accent)';
-              e.target.style.boxShadow = '0 4px 12px rgba(22, 163, 74, 0.25)';
+              e.target.style.boxShadow = '0 4px 16px rgba(22, 163, 74, 0.25)';
               e.target.style.transform = 'translateY(0)';
             }}
           >
@@ -138,81 +136,198 @@ export default function Profile() {
 
       {!hasProfile ? (
         <div style={{
-          background: 'linear-gradient(135deg, var(--accent) 0%, var(--accent2) 50%, rgba(163, 230, 53, 0.7) 100%)',
-          borderRadius: 16,
-          padding: 'clamp(60px, 15vw, 100px) clamp(20px, 5vw, 40px)',
+          background: 'linear-gradient(135deg, #16a34a 0%, #0ea5e9 50%, #a3e635 100%)',
+          borderRadius: 20,
+          padding: 'clamp(80px, 18vw, 140px) clamp(32px, 8vw, 56px)',
           textAlign: 'center',
-          marginBottom: 32,
+          marginBottom: 40,
           position: 'relative',
           overflow: 'hidden',
-          boxShadow: '0 16px 48px rgba(22, 163, 74, 0.3)',
-          border: '1px solid rgba(255, 255, 255, 0.2)',
+          boxShadow: '0 24px 64px rgba(22, 163, 74, 0.28), inset 0 1px 0 rgba(255,255,255,0.3)',
+          border: '1px solid rgba(255, 255, 255, 0.25)',
+          backdropFilter: 'blur(0px)',
         }}>
-          {/* Animated gradient orbs background */}
+          {/* Premium decorative elements */}
           <div style={{
             position: 'absolute',
-            top: -100,
-            left: -100,
-            width: 280,
-            height: 280,
-            borderRadius: '50%',
-            background: 'radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, transparent 70%)',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
             pointerEvents: 'none',
-            animation: 'orbFloat 8s ease-in-out infinite',
-          }}></div>
-          <div style={{
-            position: 'absolute',
-            bottom: -120,
-            right: -80,
-            width: 260,
-            height: 260,
-            borderRadius: '50%',
-            background: 'radial-gradient(circle, rgba(255, 255, 255, 0.12) 0%, transparent 70%)',
-            pointerEvents: 'none',
-            animation: 'orbFloat 10s ease-in-out infinite reverse',
-          }}></div>
-          
-          {/* Tortoise Icon - Centered, Large, Animated */}
+            overflow: 'hidden',
+            borderRadius: 20,
+          }}>
+            {/* Top-right gradient orb */}
+            <div style={{
+              position: 'absolute',
+              top: -120,
+              right: -80,
+              width: 320,
+              height: 320,
+              borderRadius: '50%',
+              background: 'radial-gradient(circle, rgba(255, 255, 255, 0.25) 0%, transparent 70%)',
+              pointerEvents: 'none',
+              animation: 'orbFloat 8s ease-in-out infinite',
+            }}></div>
+            
+            {/* Bottom-left gradient orb */}
+            <div style={{
+              position: 'absolute',
+              bottom: -140,
+              left: -100,
+              width: 300,
+              height: 300,
+              borderRadius: '50%',
+              background: 'radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, transparent 70%)',
+              pointerEvents: 'none',
+              animation: 'orbFloat 10s ease-in-out infinite reverse',
+            }}></div>
+
+            {/* Accent line elements */}
+            <div style={{
+              position: 'absolute',
+              top: 20,
+              left: 30,
+              width: 40,
+              height: 3,
+              background: 'rgba(255, 255, 255, 0.3)',
+              borderRadius: 2,
+              animation: 'slideInRight 0.8s ease-out 0.2s both',
+            }}></div>
+            <div style={{
+              position: 'absolute',
+              bottom: 30,
+              right: 40,
+              width: 60,
+              height: 2,
+              background: 'rgba(255, 255, 255, 0.25)',
+              borderRadius: 2,
+              animation: 'slideInLeft 0.8s ease-out 0.4s both',
+            }}></div>
+          </div>
+
+          {/* Content Container */}
           <div style={{
             position: 'relative',
             zIndex: 2,
             display: 'flex',
+            flexDirection: 'column',
             justifyContent: 'center',
             alignItems: 'center',
           }}>
+            {/* Premium Tortoise Avatar */}
             <div style={{
-              width: 160,
-              height: 160,
+              width: 'clamp(140px, 28vw, 180px)',
+              height: 'clamp(140px, 28vw, 180px)',
               borderRadius: '50%',
-              background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.1) 100%)',
+              background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.12) 100%)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              boxShadow: '0 12px 40px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255,255,255,0.6)',
-              border: '3px solid rgba(255, 255, 255, 0.4)',
+              boxShadow: '0 16px 48px rgba(0, 0, 0, 0.24), inset 0 1px 0 rgba(255,255,255,0.8), inset 0 -1px 0 rgba(0,0,0,0.1)',
+              border: '4px solid rgba(255, 255, 255, 0.5)',
               position: 'relative',
               animation: 'profileFloat 6s ease-in-out infinite',
-              backdropFilter: 'blur(10px)',
+              backdropFilter: 'blur(12px)',
+              marginBottom: 'clamp(28px, 6vw, 40px)',
             }}>
               <div style={{ 
-                fontSize: 90, 
+                fontSize: 'clamp(100px, 26vw, 130px)', 
                 animation: 'tortoiseBreathe 3s ease-in-out infinite',
-                filter: 'drop-shadow(0 4px 12px rgba(0, 0, 0, 0.15))',
+                filter: 'drop-shadow(0 6px 16px rgba(0, 0, 0, 0.2))',
               }}>
                 🐢
               </div>
-              {/* Subtle inner glow */}
+              
+              {/* Inner glow ring */}
               <div style={{
                 position: 'absolute',
-                inset: -8,
+                inset: -10,
                 borderRadius: '50%',
-                background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.05) 100%)',
-                opacity: 0.5,
+                background: 'conic-gradient(from 0deg, rgba(255, 255, 255, 0.3) 0deg, rgba(255, 255, 255, 0.05) 90deg, rgba(255, 255, 255, 0.3) 180deg)',
+                opacity: 0.6,
                 pointerEvents: 'none',
                 zIndex: -1,
-                filter: 'blur(12px)',
+                filter: 'blur(10px)',
+                animation: 'rotateRing 12s linear infinite',
               }}></div>
             </div>
+
+            {/* Premium Typography */}
+            <h2 style={{ 
+              fontSize: 'clamp(36px, 10vw, 56px)', 
+              fontWeight: 950, 
+              margin: '0 0 16px 0', 
+              letterSpacing: '-0.03em',
+              color: 'white',
+              lineHeight: 1.15,
+              textShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
+            }}>
+              Welcome to Your Profile
+            </h2>
+
+            {/* Elegant Divider */}
+            <div style={{
+              width: 60,
+              height: 3,
+              background: 'rgba(255, 255, 255, 0.5)',
+              borderRadius: 2,
+              margin: '12px 0 24px 0',
+              animation: 'slideInCenter 0.8s ease-out 0.3s both',
+            }}></div>
+
+            {/* Premium Subtitle */}
+            <p style={{ 
+              fontSize: 'clamp(15px, 3.2vw, 18px)', 
+              color: 'rgba(255, 255, 255, 0.92)', 
+              margin: '0 0 40px 0', 
+              fontWeight: 500, 
+              maxWidth: '520px',
+              lineHeight: 1.7,
+              letterSpacing: '0.2px',
+              textShadow: '0 1px 2px rgba(0, 0, 0, 0.05)',
+            }}>
+              Create your comprehensive profile to unlock personalized academic experiences and connect with your community
+            </p>
+
+            {/* Premium CTA Button */}
+            <button
+              onClick={() => setIsModalOpen(true)}
+              style={{
+                padding: 'clamp(14px, 3vw, 18px) clamp(32px, 8vw, 48px)',
+                background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.85) 100%)',
+                color: '#16a34a',
+                border: '2px solid rgba(255, 255, 255, 0.3)',
+                borderRadius: 14,
+                fontSize: 'clamp(15px, 2.5vw, 18px)',
+                fontWeight: 800,
+                cursor: 'pointer',
+                transition: 'all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)',
+                boxShadow: '0 12px 36px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255,255,255,0.8)',
+                letterSpacing: '0.5px',
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: 'clamp(8px, 2vw, 12px)',
+                position: 'relative',
+                overflow: 'hidden',
+                zIndex: 1,
+              }}
+              onMouseEnter={e => {
+                e.target.style.boxShadow = '0 16px 48px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255,255,255,0.8)';
+                e.target.style.transform = 'translateY(-6px) scale(1.08)';
+                e.target.style.background = 'linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.92) 100%)';
+              }}
+              onMouseLeave={e => {
+                e.target.style.boxShadow = '0 12px 36px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255,255,255,0.8)';
+                e.target.style.transform = 'translateY(0) scale(1)';
+                e.target.style.background = 'linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.85) 100%)';
+              }}
+            >
+              <span style={{ fontSize: 'clamp(16px, 3vw, 20px)', fontWeight: 900 }}>+</span>
+              <span>Start Setup</span>
+              <span style={{ fontSize: 'clamp(14px, 2.5vw, 16px)', marginLeft: 'clamp(4px, 1vw, 8px)', transition: 'transform 0.3s ease', display: 'inline-block' }}>→</span>
+            </button>
           </div>
         </div>
       ) : (
