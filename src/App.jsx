@@ -4,6 +4,7 @@ import { ThemeProvider } from './hooks/useTheme';
 import { Sidebar } from './components/Sidebar';
 import { Navbar } from './components/Navbar';
 import { Footer } from './components/Footer';
+import PWAInstallPrompt from './components/PWAInstallPrompt';
 
 // Pages
 import Dashboard from './pages/Dashboard';
@@ -91,6 +92,7 @@ function Layout() {
           </Routes>
         </div>
         <Footer />
+        <PWAInstallPrompt />
       </div>
     </div>
   );
