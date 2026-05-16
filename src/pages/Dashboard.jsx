@@ -106,43 +106,42 @@ export default function Dashboard() {
 
   const greeting = (() => {
     const h = new Date().getHours();
-    if (h < 5) return 'Good night';
+    if (h < 5) return 'Welcome';
     if (h < 12) return 'Good morning';
     if (h < 17) return 'Good afternoon';
     if (h < 20) return 'Good evening';
-    return 'Good night';
+    return 'Welcome';
   })();
 
   return (
     <div className="page-enter page-container dashboard-page">
       {/* Welcome */}
       {(profile.name || profile.dept || inferredBatch || currentTermLabel) && (
-        <div className="card dashboard-hero" style={{ marginBottom: 22, padding: '30px 30px', display: 'flex', justifyContent: 'space-between', alignItems: 'stretch', gap: 26, flexWrap: 'wrap', minHeight: 180 }}>
-          <div style={{ minWidth: 320, flex: '1 1 56%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: 20, paddingRight: 8 }}>
+        <div className="card dashboard-hero" style={{ marginBottom: 22, padding: 'clamp(16px, 4vw, 30px)', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: 18, alignItems: 'stretch', minHeight: 'auto' }}>
+          <div className="dashboard-hero-main" style={{ minWidth: 0, display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: 18, paddingRight: 'clamp(0px, 2vw, 8px)' }}>
             {profile.name && (
-              <div style={{ marginBottom: 2 }}>
-                <div style={{ fontSize: 15, fontWeight: 700, color: 'var(--muted)', marginBottom: 10, letterSpacing: '0.08em', textTransform: 'uppercase' }}>
+              <div style={{ marginBottom: 4 }}>
+                <div style={{ fontSize: 13, fontWeight: 800, color: 'var(--muted)', marginBottom: 8, letterSpacing: '0.10em', textTransform: 'uppercase' }}>
                   {greeting}
                 </div>
-                <h1 style={{ fontSize: 34, fontWeight: 800, letterSpacing: '-0.05em', lineHeight: 1.02, margin: 0, maxWidth: '20ch' }}>
+                <h1 style={{ fontSize: 'clamp(28px, 6vw, 36px)', fontWeight: 800, letterSpacing: '-0.055em', lineHeight: 1.0, margin: 0 }}>
                   {profile.name}
                 </h1>
               </div>
             )}
 
-            <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', alignItems: 'center', marginTop: profile.name ? 6 : 0, minHeight: 42 }}>
-              {profile.dept && <span className="tag tag-gray">{profile.dept}</span>}
-              {inferredBatch && <span className="tag tag-blue">2K{inferredBatch}</span>}
-              {currentTermLabel && <span className="tag tag-green">{currentTermLabel}</span>}
+            <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', alignItems: 'center', marginTop: profile.name ? 4 : 0, minHeight: 38 }}>
               {profile.isCR && <span className="tag tag-yellow">CR</span>}
             </div>
           </div>
 
-          <div style={{ width: 240, minWidth: 240, flex: '0 0 240px', padding: '18px 20px', borderRadius: 16, border: '1px solid rgba(var(--accentRGB), 0.12)', background: 'linear-gradient(180deg, rgba(var(--accentRGB), 0.04), rgba(255,255,255,0.96))', fontSize: 13, color: 'var(--muted)', whiteSpace: 'nowrap', alignSelf: 'flex-start', boxShadow: '0 6px 18px rgba(12, 34, 64, 0.04)', display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 6, minHeight: 96 }}>
-            <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--muted)' }}>Today</div>
-            <div style={{ fontSize: 14, fontWeight: 600, color: 'var(--text)', whiteSpace: 'normal', lineHeight: 1.35 }}>
+          <div className="dashboard-hero-date" style={{ minWidth: 'clamp(200px, 90vw, 240px)', padding: 'clamp(16px, 3vw, 20px)', borderRadius: 16, border: '1px solid rgba(var(--accentRGB), 0.12)', background: 'linear-gradient(180deg, rgba(var(--accentRGB), 0.05), rgba(255,255,255,0.98))', whiteSpace: 'normal', alignSelf: 'stretch', boxShadow: '0 8px 22px rgba(12, 34, 64, 0.05)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: 10 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: '0.10em', textTransform: 'uppercase', color: 'var(--muted)' }}>Today</div>
+            <div style={{ fontSize: 'clamp(13px, 3vw, 15px)', fontWeight: 700, color: 'var(--text)', whiteSpace: 'normal', lineHeight: 1.4 }}>
               {new Date().toLocaleDateString('en-BD', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
             </div>
+            <div style={{ height: 1, background: 'rgba(var(--accentRGB), 0.10)' }} />
+            <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--muted)' }}>{currentTermLabel || currentTerm || 'Term info'}</div>
           </div>
         </div>
       )}
@@ -152,10 +151,10 @@ export default function Dashboard() {
         <div className="card" style={{ marginBottom: 14, borderColor: 'var(--accent)', display: 'flex', alignItems: 'center', gap: 12 }}>
           <div style={{ fontSize: 28 }}>🐢</div>
           <div style={{ flex: 1 }}>
-            <div style={{ fontWeight: 600, fontSize: 14 }}>প্রোফাইল সেট আপ করো</div>
-            <div style={{ fontSize: 12, color: 'var(--muted)' }}>তোমার নাম ও ডিপার্টমেন্ট দাও — সব জায়গায় কাজে লাগবে</div>
+            <div style={{ fontWeight: 600, fontSize: 14 }}>Set Up Profile</div>
+            <div style={{ fontSize: 12, color: 'var(--muted)' }}>Add your name and department — it'll be used everywhere</div>
           </div>
-          <Link to="/profile" className="btn btn-primary">শুরু করো →</Link>
+          <Link to="/profile" className="btn btn-primary">Get started →</Link>
         </div>
       )}
 

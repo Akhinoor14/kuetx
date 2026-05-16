@@ -487,6 +487,92 @@ export default function Schedule() {
 
   const currentSettingsText = slotList.join('\n');
   const showSettingsPanel = editingSettings;
+  const [fullScreenOpen, setFullScreenOpen] = useState(false);
+
+  useEffect(() => {
+    if (!fullScreenOpen) return;
+    const lock = async () => {
+      try {
+        if (screen.orientation && screen.orientation.lock) {
+          await screen.orientation.lock('landscape');
+        }
+      } catch (e) {
+        // ignore - orientation lock not supported or rejected
+      }
+    };
+    lock();
+    return () => {
+      try { if (screen.orientation && screen.orientation.unlock) screen.orientation.unlock(); } catch (e) {}
+    };
+  }, [fullScreenOpen]);
+
+  const renderTimetable = (opts = {}) => {
+    const tableStyle = { width: '100%', borderCollapse: 'collapse', fontSize: opts.large ? 15 : 13 };
+    return (
+      <div style={{ overflowX: 'auto' }}>
+        <table style={tableStyle}>
+          <thead style={{ position: 'sticky', top: 0, zIndex: 2 }}>
+            <tr>
+              <th style={{ padding: '12px 12px', borderBottom: '1px solid var(--border)', background: 'var(--surface)', minWidth: 110, textAlign: 'left' }}>Time</th>
+              {DAYS.map(d => (
+                <th key={d} style={{ padding: 0, borderBottom: '1px solid var(--border)', background: 'var(--surface)', minWidth: 160 }}>
+                  <button
+                    onClick={() => setSelectedDay(d)}
+                    style={{
+                      width: '100%',
+                      padding: '12px 12px',
+                      border: 'none',
+                      background: 'transparent',
+                      cursor: 'pointer',
+                      fontWeight: d === selectedDay || d === today ? 700 : 500,
+                      color: d === selectedDay || d === today ? 'var(--accent)' : 'var(--text)',
+                    }}
+                  >
+                    {formatDayShort(d)}
+                  </button>
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {getSlotCatalog(schedule, slotList).map(p => {
+              const breakSlot = isBreakSlot(p);
+              return (
+                <tr key={p}>
+                  <td style={{ padding: '12px 12px', borderBottom: '1px solid var(--border)', borderRight: '1px solid var(--border)', fontWeight: 700, fontSize: 13, color: 'var(--muted)', fontFamily: 'JetBrains Mono, monospace', whiteSpace: 'nowrap', background: breakSlot ? 'rgba(239,68,68,0.08)' : 'var(--bg)' }}>{slotPreview(p)}</td>
+                  {DAYS.map(d => (
+                    <td key={d} style={{ padding: '6px', borderBottom: '1px solid var(--border)', borderRight: '1px solid var(--border)', verticalAlign: 'top', minHeight: 54, background: breakSlot ? 'rgba(239,68,68,0.08)' : d === selectedDay ? 'rgba(59,130,246,0.035)' : 'transparent' }}>
+                      {(grid[d]?.[p] || []).map(s => {
+                        const c = getCourse(s.courseId);
+                        return (
+                          <div key={s.id} onDoubleClick={() => startEdit(s)} title="Double-click to edit" style={{
+                            padding: '8px 9px', borderRadius: 11, fontSize: 12, lineHeight: 1.35, marginBottom: 4,
+                            background: 'linear-gradient(180deg, rgba(59,130,246,0.12), rgba(59,130,246,0.08))',
+                            border: '1px solid rgba(59,130,246,0.18)', color: 'var(--text)', position: 'relative', cursor: 'pointer',
+                          }}>
+                            <div style={{ fontWeight: 700, fontSize: 12, lineHeight: 1.35, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{s.displayName || c?.name || c?.code || '?'}</div>
+                            <div style={{ opacity: 0.88, fontSize: 11, marginTop: 3, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{s.teacherName || 'Teacher not set'}</div>
+                            <button onClick={() => startEdit(s)} style={{
+                              position: 'absolute', top: 2, right: 16, background: 'none', border: 'none',
+                              color: 'inherit', cursor: 'pointer', opacity: 0.55, padding: 0, lineHeight: 1,
+                            }}>✎</button>
+                            <button onClick={() => remove(s.id)} style={{
+                              position: 'absolute', top: 2, right: 2, background: 'none', border: 'none',
+                              color: 'inherit', cursor: 'pointer', opacity: 0.55, padding: 0, lineHeight: 1,
+                            }}>×</button>
+                          </div>
+                        );
+                      })}
+                    </td>
+                  ))}
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+    );
+  };
 
   return (
     <div className="page-enter page-container" style={{ maxWidth: 1180, margin: '0 auto', paddingBottom: 24 }}>

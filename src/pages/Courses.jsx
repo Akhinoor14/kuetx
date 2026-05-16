@@ -359,6 +359,12 @@ export default function Courses() {
         {!addingCustom && <button className="btn btn-primary" onClick={() => { setAddingCustom(true); setEditingCustom(null); }}><Plus size={14} /> Add Custom Course</button>}
       </div>
 
+      {courses.length === 0 && (
+        <div className="info-box" style={{ marginBottom: 18 }}>
+          <p>No curriculum is loaded for {profile?.dept || 'this department'} yet. The planner and self-study pages stay empty until this department's terms are populated.</p>
+        </div>
+      )}
+
       {addingCustom && <CustomCourseForm onSave={(f) => { setCustomCourses([{ ...f, id: uid(), source: 'custom' }, ...customCourses]); setVersion(v => v + 1); setAddingCustom(false); }} onCancel={() => setAddingCustom(false)} />}
 
       {courses.length > 0 && (

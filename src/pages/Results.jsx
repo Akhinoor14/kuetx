@@ -499,7 +499,8 @@ export default function Results() {
 
           {/* Course table */}
           <div className="card" style={{ padding: 0, overflow: 'hidden', background: 'var(--card)' }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12 }}>
+            <div style={{ overflowX: 'auto' }}>
+            <table className="kuet-table" style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12 }}>
               <thead>
                 <tr style={{ borderBottom: '2px solid var(--border)', background: 'rgba(var(--accentRGB), 0.03)' }}>
                   {['Code', 'Course Name', 'Type', 'Cr', 'Status', 'Total%', 'Grade', 'Point', 'Result Upload'].map(h => (
@@ -541,6 +542,7 @@ export default function Results() {
                 ))}
               </tbody>
             </table>
+            </div>
           </div>
 
           {/* Per-term import section */}

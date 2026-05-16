@@ -230,6 +230,7 @@ export default function Marks() {
   const profile = getProfile();
   const allCourses = getAllCourses(profile);
   const [marks, setMarks] = useState(() => store.get('marks') || {});
+  const deptLabel = profile?.dept || 'your department';
 
   const onChange = (id, field, value) => {
     const updated = { ...marks, [id]: { ...(marks[id] || {}), [field]: value } };
@@ -249,7 +250,7 @@ export default function Marks() {
         </div>
         <div className="empty-state">
           <div className="icon">📚</div>
-          <p>Add courses first, then come here to estimate your final marks.</p>
+          <p>No curriculum data is loaded for {deptLabel} yet. Open Courses to confirm the department setup or switch to a department with course data.</p>
         </div>
       </div>
     );

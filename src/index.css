@@ -279,6 +279,7 @@ h3 { font-size: 15px; font-weight: 600; }
     padding: 20px 18px !important;
     gap: 14px !important;
     border-radius: 16px;
+    grid-template-columns: 1fr !important;
   }
 
   .dashboard-page .dashboard-hero-main {
@@ -679,3 +680,122 @@ input[type="range"]::-webkit-slider-thumb {
 .text-xs    { font-size: 12px; }
 .fw-700 { font-weight: 700; }
 .fw-800 { font-weight: 800; }
+
+/* ── Mobile Responsive (Extra Small: < 640px) ──────────────────────────── */
+@media (max-width: 640px) {
+  .page-container {
+    padding: 12px;
+  }
+
+  body {
+    font-size: 14px;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-size: clamp(16px, 5vw, 24px);
+  }
+
+  .card {
+    padding: clamp(12px, 4vw, 20px);
+    border-radius: 8px;
+  }
+
+  .btn {
+    padding: 8px 14px;
+    font-size: 13px;
+    border-radius: 7px;
+  }
+
+  .btn-sm {
+    padding: 5px 10px;
+    font-size: 12px;
+  }
+
+  input, select, textarea {
+    font-size: 16px; /* Prevent zoom on iOS */
+    padding: 8px 11px;
+    border-radius: 8px;
+  }
+
+  .topbar {
+    padding: 0 12px;
+    height: 52px;
+  }
+
+  .tag {
+    padding: 4px 8px;
+    font-size: 11px;
+  }
+
+  .kuet-table {
+    font-size: 12px;
+  }
+
+  .kuet-table th {
+    padding: 6px 8px;
+    font-size: 10px;
+  }
+
+  .kuet-table td {
+    padding: 8px 10px;
+  }
+}
+
+/* ── Tablet (Small: 640px - 1024px) ───────────────────────────────────── */
+@media (max-width: 1024px) and (min-width: 641px) {
+  .page-container {
+    padding: 16px;
+  }
+
+  .card {
+    padding: clamp(14px, 3vw, 20px);
+  }
+
+  .form-row-3, .form-row-4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .calc-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── Extra Small: 320px - 480px ────────────────────────────────────────── */
+@media (max-width: 480px) {
+  .page-container {
+    padding: 8px;
+  }
+
+  .card {
+    padding: 10px;
+    border-radius: 6px;
+  }
+
+  .btn {
+    padding: 7px 12px;
+    font-size: 12px;
+  }
+
+  input, select, textarea {
+    font-size: 16px;
+    padding: 7px 10px;
+  }
+
+  label {
+    font-size: 11px;
+  }
+
+  .topbar {
+    padding: 0 8px;
+    height: 48px;
+  }
+
+  .divider {
+    margin: 12px 0;
+  }
+
+  .alert-critical, .alert-warning, .alert-success {
+    padding: 10px 12px;
+    font-size: 13px;
+  }
+}

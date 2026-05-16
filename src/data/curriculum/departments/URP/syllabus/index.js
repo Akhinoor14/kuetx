@@ -22,8 +22,13 @@ const TERM_SYLLABUS = {
 const mergeCourses = (...terms) => terms.reduce((acc, term) => ({ ...acc, ...term.courses }), {});
 
 export const URP_SYLLABUS = {
-  sourceFile: '',
+  sourceFile: "sylla\\urpcuriculumn.json",
   terms: TERM_SYLLABUS,
   optional: URP_SYLLABUS_OPTIONAL,
-  courses: { ...mergeCourses(URP_SYLLABUS_Y1T1, URP_SYLLABUS_Y1T2, URP_SYLLABUS_Y2T1, URP_SYLLABUS_Y2T2, URP_SYLLABUS_Y3T1, URP_SYLLABUS_Y3T2, URP_SYLLABUS_Y4T1, URP_SYLLABUS_Y4T2), ...URP_SYLLABUS_OPTIONAL.courses },
+  courses: {
+    ...mergeCourses(URP_SYLLABUS_Y1T1, URP_SYLLABUS_Y1T2, URP_SYLLABUS_Y2T1, URP_SYLLABUS_Y2T2, URP_SYLLABUS_Y3T1, URP_SYLLABUS_Y3T2, URP_SYLLABUS_Y4T1, URP_SYLLABUS_Y4T2),
+    ...URP_SYLLABUS_OPTIONAL.courses,
+  },
 };
+
+export default URP_SYLLABUS;

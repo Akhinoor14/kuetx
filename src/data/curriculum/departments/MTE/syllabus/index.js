@@ -22,7 +22,7 @@ const TERM_SYLLABUS = {
 const mergeCourses = (...terms) => terms.reduce((acc, term) => ({ ...acc, ...term.courses }), {});
 
 export const MTE_SYLLABUS = {
-  sourceFile: '',
+  sourceFile: 'Department of Mechatronics Engineering (KUET) Syllabus, Updated 23rd October 2024',
   terms: TERM_SYLLABUS,
   optional: MTE_SYLLABUS_OPTIONAL,
   courses: { ...mergeCourses(MTE_SYLLABUS_Y1T1, MTE_SYLLABUS_Y1T2, MTE_SYLLABUS_Y2T1, MTE_SYLLABUS_Y2T2, MTE_SYLLABUS_Y3T1, MTE_SYLLABUS_Y3T2, MTE_SYLLABUS_Y4T1, MTE_SYLLABUS_Y4T2), ...MTE_SYLLABUS_OPTIONAL.courses },

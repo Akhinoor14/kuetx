@@ -1,0 +1,847 @@
+{
+  "department": "Department of Urban and Regional Planning (URP), Khulna University of Engineering & Technology (KUET)",
+  "sourceType": "raw_text",
+  "terms": {
+    "Y1T1": {
+      "termKey": "Y1T1",
+      "title": "First Year First Term",
+      "courses": {
+        "URP 1111": {
+          "title": "History/Evolution of Human Settlements",
+          "credit": 3.0,
+          "contactHour": "3 Hours/week",
+          "topics": [
+            "The importance and significance of the study of history; human settlements as the physical expression of a civilization; origin and evolution of human settlements during the early civilization period.",
+            "history and growth of human settlements during the ancient periods: The Nile, the Mesopotamian, the Greek, and the roman and Indus civilizations.",
+            "Historical background and growth of Human settlements during the medieval and pre industrial revolution periods: the roles of churches, guilds and castles, guilds and mercantilism.",
+            "The Effects of the Dark Age and the Renaissance: Gunpowder, congestion and slums. The Industrial Revolution and its impact on human settlements and public health: inventions and use of machines, transportation etc. The growth of factory towns and its effects."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "URP 1113": {
+          "title": "Fundamentals of Planning Process",
+          "credit": 3.0,
+          "contactHour": "3 Hours/week",
+          "topics": [
+            "The basic generic concepts of planning: definition of planning, dimensions of planning, spatial versus sectoral planning, the variants of spatial and physical planning.",
+            "The planning process: the different stages in the continuous and cyclical process. Roles of planners, decision-makers and stakeholders in the planning process. Concepts of planning theory: rational approach, advocacy planning, adaptive planning, systems approach, Incremental Approach of Planning Mixed Scanning of Planning. Radical Planning"
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "URP 1152": {
+          "title": "Basic Design in Architecture",
+          "credit": 3.0,
+          "contactHour": "6 Hours/week",
+          "topics": [
+            "Elements of Design; point, line plane, volume, form and space. Composition: two dimension and three dimension principles of design; balance, harmony, emphasis, propagation, proportion, scale axis, symmetry, asymmetry etc."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "Ch 1117": {
+          "title": "Environmental Chemistry",
+          "credit": 3.0,
+          "contactHour": "3 Hours/week",
+          "topics": [
+            "Group Chemistry: Properties of alkaline metals, alkaline earth metals, transition metals.",
+            "Radioactivity: Theory of radioactivity, radioactive decay, Neutron Proton ration, Binding energy, Mass defect, Nuclear force.",
+            "Chemical bonding: VBT, MOT, H-bonding, Vander Waal's force.",
+            "Properties of solutions, acids and bases.",
+            "Organic Compounds: Organic reactions and their mechanisms, chemistry of polymers.",
+            "introduction to environmental science and scope, environmental segments, lithosphere, hydrosphere, biosphere and atmosphere, the composition of the atmosphere. industrial hazards, air and water pollutants, sources and different kinds of pollutants, the toxicity of pollutants. discussion on the properties of water and wastewater, characteristics of wastewater, transformation processes of pollutants, corrosion"
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "Ch 1118": {
+          "title": "Environmental Chemistry Lab",
+          "credit": 1.5,
+          "contactHour": "3 Hours/week",
+          "topics": [
+            "Course scopes: Laboratory tests and analysis of properties of solutions, acids and bases and corrosion reduction techniques."
+          ],
+          "sessionalNote": "Prerequisite(s): Ch 1117*, An asterisk (*) designates a course that may be taken concurrently.",
+          "references": []
+        },
+        "Hum 1117": {
+          "title": "Functional English",
+          "credit": 2.0,
+          "contactHour": "2 Hours/week",
+          "topics": [
+            "General Discussion: Introduction, Mastering Various Approaches to Learning English.",
+            "Grammatical Problem: Construction of words and sentences, grammatical problems, sentence variety and style, conditionals, grammar and usages, vocabulary and diction, clauses, prefixes & suffixes, synonyms and antonyms.",
+            "English phonetics: The phonetics systems and correct English pronunciation. reading skill: discussing readability, scan and skim reading, generating ideas through purposive reading, the reading of selected stories.",
+            "writing skill: principles of effective writing, organization in writing, planning and development, composition, precis writing, paragraph writing, amplification, free composition, general strategies for the writing process, generating ideas, identifying audiences and papooses, constructing arguments, stating problems, drafting and finalizing.",
+            "Approaches to Communication: Communication today, business communication, organization and organizational behavior, developing intra-personal interpersonal relationship, resumes and job letters, journal articles, technical and scientific presentations."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "Hum 1118": {
+          "title": "English Skills Practices",
+          "credit": 1.5,
+          "contactHour": "3 Hours/week",
+          "topics": [
+            "Vocabulary Building: Correct and Precise Diction, Affixes, Level of Appropriateness; Colloquial and standard, Informal and Formal.",
+            "Developing Reading Skill: Strategies of reading-skimming, scanning prediction, inference; analyzing and interpreting a variety of texts; practicing comprehension from literary and non-literary texts.",
+            "Developing Writing Skill: Sentences, sentence variety, generating sentences; clarity and correctness of sentences; linking sentences to form paragraphs. writing paragraphs, essays, reports, formal and informal letters. listening skill and note-taking: listening to recorded texts and class lectures and learning to take useful notes based on listening. developing speaking skills: oral skills including communicative expressions for personal identification, life at home, giving advice and opinion, instructions and directions, requests, complaints, apologies, describing peoples and places, narrating events."
+          ],
+          "sessionalNote": "Prerequisite(s): Hum 1117*",
+          "references": []
+        },
+        "Math 1117": {
+          "title": "Mathematics-I",
+          "credit": 3.0,
+          "contactHour": "3 Hours/week",
+          "topics": [
+            "Functions: Explicit, implicit, hyperbolic and logistic functions with their graphs.",
+            "Spherical trigonometry: Spherical triangle; relations between sides and angles of a spherical triangle; solution of the spherical triangle (right and oblique).",
+            "Matrix: The elementary transformation of matrices, inverse of matrix, rank, formation and solution of linear equations.",
+            "Geometry: Coordinate geometry in two dimensions: Change of axes, General equation of second degree; Coordinate geometry in three dimensions: Systems of coordinates and their relations, equations of the plane in different forms; the distance of a point from a plane; the angle between two planes; straight line: equations of straight lines, the plane containing a line, coplanar lines, the shortest distance between two lines.",
+            "Differential Calculus: Limit, continuity and differentiability, successive differentiation, maxima and minima of functions of single variable, derivation of the trigonometric function, common graphs of derivatives"
+          ],
+          "sessionalNote": null,
+          "references": []
+        }
+      },
+      "optionalCourses": [],
+      "termNotes": []
+    },
+    "Y1T2": {
+      "termKey": "Y1T2",
+      "title": "First Year Second Term",
+      "courses": {
+        "URP 1211": {
+          "title": "Urban Planning Principles",
+          "credit": 3.0,
+          "contactHour": "3 Hours/week",
+          "topics": [
+            "Definition, objective and scope of urban planning; Urban functions and Urban Systems: activities and land use components. Modern principles of planning-town center, residential area, recreational area, industrial area, commercial area, transportation network, metropolitan region, satellite town, new town, special areas like airport, seaport, railway station, bus terminal."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "URP 1251": {
+          "title": "Introduction to Architectural History",
+          "credit": 2.0,
+          "contactHour": "2 Hours/week",
+          "topics": [
+            "Introduction to architecture and architectural design. Evaluation and History of Architecture: Ancient, Classical, Roman, Gothic Renaissance, Baroque, Roccoco, modern and contemporary periods.  Art, culture and social movement and their impact in architecture, environmental and regional influences on architecture."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "URP 1254": {
+          "title": "Graphics for Planners",
+          "credit": 3.0,
+          "contactHour": "6 Hours/week",
+          "topics": [
+            "Introduction to the application of Computer-Aided Design (CAD). Sessional Line drawing quality, the study of scale, lettering. Freehand drawing and mechanical drawing; plan, section, elevation, isometric drawings of simple objects, one and two-point perspectives; shade and shadow of 3-dimensional drawings."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "URP 1281": {
+          "title": "Surveying and Cartography",
+          "credit": 3.0,
+          "contactHour": "3 Hours/week",
+          "topics": [
+            "This course covers the scopes of Engineering Surveys, such as: Definition, scope, importance and its uses, different types of engineering survey: reconnaissance survey; plane table survey; traverse survey; leveling and contouring; route surveying; land surveying area and volume calculation. Cartographic surveying: introductions to photogrammetry; remote sensing and global positioning system, types of maps; types of maps commonly used in Bangladesh, use of scales and scale conversion.",
+            "Elements of Map: Scale, communication objectives, subject matter and function. Mapping techniques: Physical models, photomaps, sketch maps, cartograms. Map analysis and map interpretation. The coordinate system and map scale.",
+            "Map Projections: Local grids, Geographical grids, Lambert's methods, Universal Transverse Mercator Grid, Land partitioning systems. Map projection techniques: Planar, cylindrical, conical, etc., terms and words related to land surveying in Bangladesh (CS, RS, etc.)"
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "URP 1282": {
+          "title": "Surveying and Cartography Workshop",
+          "credit": 3.0,
+          "contactHour": "3 Hours/week",
+          "topics": [
+            "Field survey of engineering survey: reconnaissance survey; plane table survey; traverse survey; leveling and contouring; route surveying; land surveying area and volume calculation. Physical models, photomaps, sketch maps, cartograms. Map analysis and map interpretation."
+          ],
+          "sessionalNote": "Prerequisite(s): URP 1281. 2 weeks of field survey related to course URP 1281 is arranged after First Year",
+          "references": []
+        },
+        "URP 1292": {
+          "title": "Communication and Presentation Techniques Studio",
+          "credit": 1.5,
+          "contactHour": "3 Hours/week",
+          "topics": [
+            "Techniques for communicating via different media - oral presentations, reports, posters, broadcasting, film, multimedia, Websites. Techniques of visual presentation - figures, diagrams, charts, maps, cartograms, photographic compositions, multimedia presentation etc."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "Hum 1217": {
+          "title": "Principles of Economics",
+          "credit": 3.0,
+          "contactHour": "3 Hours/week",
+          "topics": [
+            "Theory Introduction: Definition, scope, subject matters, relation with other social sciences and importance of studying with respect to urban and rural planning. theories of demand and supply and production: related concepts, types, cost and revenue curves, equilibrium analysis, factors of production, returns of scale.",
+            "theories of firm: various market conditions, determination of equilibrium. theories of income distribution: rent, wage, profit and interest, investment and employment, inflation.",
+            "National income: Definition, types, measuring method.",
+            "Principles of banking: Evolution of banking system, central, commercial and specialized banking system, credit policy.",
+            "Welfare economics: Definition, Patero optimality, social welfare maximization.",
+            "Linear programming and input-output analysis: concepts, use, techniques, Leontief matrix"
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "Math 1217": {
+          "title": "Mathematics-II",
+          "credit": 3.0,
+          "contactHour": "3 Hours/week",
+          "topics": [
+            "Integral calculus: Integration by substitution and by parts, standard integrals, improper integrals, definite integrals, area under plane curves, sectional calculus",
+            "Differential Equation: Partial derivatives, solution of 1st order differential equation by various methods, solutions of general linear equations of 2nd and higher-order."
+          ],
+          "sessionalNote": null,
+          "references": []
+        }
+      },
+      "optionalCourses": [],
+      "termNotes": []
+    },
+    "Y2T1": {
+      "termKey": "Y2T1",
+      "title": "Second Year First Term",
+      "courses": {
+        "URP 2113": {
+          "title": "Site and Area Planning",
+          "credit": 3.0,
+          "contactHour": "3 Hours/week",
+          "topics": [
+            "Introduction to site and area planning; types of site development.",
+            "Site selection and analysis: natural factors, cultural factors, and aesthete factors; land use and circulation; site drainage, grading and earthworm alignment of horizontal and vertical curves.",
+            "Site layouts and development for residential, institutional, industrial, shopping and other types of development.",
+            "Subdivision planning, landscape and plantation, key concepts in recreation planning, recreation needs and resources, functions and classification of open space, parks, and recreation areas, analyses of demand, supply and use pattern, parks and open space standards approach to developing standards, selection of sites, the recreation space master plan and its components, implementation strategies."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "URP 2115": {
+          "title": "Urban Planning Techniques",
+          "credit": 3.0,
+          "contactHour": "3 Hours/week",
+          "topics": [
+            "Functions, forms and contents of the urban development plan, strategy plan, structure plan, master plan local area plan, action plan, subject plan. data and information need for planning, planning techniques applied in different stages of the urban planning process, techniques for urban renewal and upgrading (conservation, improvement and redevelopment).",
+            "Participatory area planning/ land development techniques: land pulling, land banking, land sharing, land readjustment, guided land development. Planning standards for different urban functions, types of planning standards and their importance.",
+            "Urban planning studies and techniques of analysis of population, employment, economic functions, shopping, housing, leisure and recreation. Implementation tools and development control: Urban density, urban structures and forms, urban design aspects, FAR/building bulk, Transport Oriented Development (TOD) etc."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "URP 2182": {
+          "title": "Social and Physical Surveys",
+          "credit": 1.5,
+          "contactHour": "3 Hours/week",
+          "topics": [
+            "Meaning of survey, types of surveys, purpose of surveys and their applications in planning. Elements of social survey units, subjects and spatial coverage. Social survey methods, household survey and questionnaire preparation. Social survey data analysis methods, students will be required to work on a topic which would involve elements of social survey, i.e., questionnaire design and preparation, coding, data collection and analysis as part of their studio work, physical survey, the secondary survey on topography, land level, natural drainage and slope, primary survey of land uses, transportation network, access ways, utilities and services network, types of structures, age of structures, land values, population density distribution etc."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "URP 2192": {
+          "title": "Programming Techniques for Planners",
+          "credit": 1.5,
+          "contactHour": "3 Hours/week",
+          "topics": [
+            "Exercises for developing algorithms for simple computer programs for data analysis and solving planning problems; programming exercise in a high-level language like C/C++ involving, Python, inter alia, reading data from files, using different data types, interactive and conditional processing and producing formatted outputs."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "CE 2107": {
+          "title": "Construction Technology and Materials",
+          "credit": 3.0,
+          "contactHour": "3 Hours/week",
+          "topics": [
+            "Types, preparation, properties and uses of materials such as stone, brick, cement, sand, concrete, timber, soil, ferrous and non-ferrous metals and plastics; Specifications and quality control.",
+            "Building Construction Technology: Timbering trenches, types of foundations, brickwork, cavity wall construction, masonry, the center of arches and lintels, ground and upper floors, single roofs, states and tiled roofs, built-up roof and cuddling, windows and doors, partitions and plastering, plumbing and electrical installation.",
+            "Bridge construction technology, road construction technology."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "CE 2108": {
+          "title": "Construction Materials Lab",
+          "credit": 1.5,
+          "contactHour": "3 Hours/week",
+          "topics": [
+            "Lab works related to course 2107: Physical and mechanical properties testing of different construction materials (sand, cement, brick, concrete, rod, etc.)."
+          ],
+          "sessionalNote": "Prerequisite(s): CE 2107*",
+          "references": []
+        },
+        "URP 2191": {
+          "title": "Statistics for Planners-I",
+          "credit": 3.0,
+          "contactHour": "3 Hours/week",
+          "topics": [
+            "Summarizing data: Frequency distribution and graph presentations, statistical descriptions samples and population, measures of central tendency-mean, median, mode, measures dispersion range, mean deviation, variance and standard deviate moments, skewness and kurtosis.",
+            "Basic probability distributions: discrete and continuous probably, Binomial, Poisson and Normal distribution, sampling and sampling distributions."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "Hum 2117": {
+          "title": "Sociology for Planners",
+          "credit": 3.0,
+          "contactHour": "3 Hours/week",
+          "topics": [
+            "Definition, scope, the importance of sociology and its relation with urban and rural planning in particular.",
+            "Basic Concepts: society, community, association, institution, customs, family kinship, social structure, social stratification, group.",
+            "Culture: Elements of culture, subculture, counterculture, cultural relativism, ethnocentrism, cultural lag.",
+            "Industrialization and Urbanization: Industrialization and its impact, pre-industrial, industrial and post-industrial city, urbanization, urban growth, suburban and urbanism.",
+            "Urban social problems: urban crime, juvenile delinquency, vagrancy, blighted area, poverty, beggary, prostitution, leadership.",
+            "Environment and Society: major environmental issues, ecology, urban ecology, population and environment",
+            "Migration: Causes and consequences of migration, urbanization and migration, measurement and analysis regarding migration.",
+            "The fundamental characteristics of the welfare system: The social and institutional basis of economic development and community welfare; the role of social capital in local and community development."
+          ],
+          "sessionalNote": null,
+          "references": []
+        }
+      },
+      "optionalCourses": [],
+      "termNotes": []
+    },
+    "Y2T2": {
+      "termKey": "Y2T2",
+      "title": "Second Year Second Term",
+      "courses": {
+        "URP 2214": {
+          "title": "Site and Area Planning Studio",
+          "credit": 1.5,
+          "contactHour": "3 Hours/week",
+          "topics": [
+            "CAD application in site planning, Practical and field works relating to site, area and land subdivision planning."
+          ],
+          "sessionalNote": "Prerequisite(s): URP 2113",
+          "references": []
+        },
+        "URP 2251": {
+          "title": "Landscape Planning and Design",
+          "credit": 2.0,
+          "contactHour": "2 Hours/week",
+          "topics": [
+            "Introduction to landscape planning and its scope, historical references landscape planning and design. basic methods and approaches of ecological systems and climatic elements, landscape conservation in the macro and regional level, landscape planning in urban scale for residential, recreational and commercial environments, site development objectives and design principles, plantation, site planning and design."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "URP 2252": {
+          "title": "Landscape Planning and Design Studio",
+          "credit": 3.0,
+          "contactHour": "6 Hours/week",
+          "topics": [
+            "Application of design and planning principles and techniques of landscape developments, site analysis and study of landscape elements, application of landscape conservation principles and strategies on the regional level development process."
+          ],
+          "sessionalNote": "Prerequisite(s): URP 2251",
+          "references": []
+        },
+        "URP 2281": {
+          "title": "GIS and Remote Sensing",
+          "credit": 3.0,
+          "contactHour": "3 Hours/week",
+          "topics": [
+            "Meaning of GIS and its application in planning, essential elements GIS, data structures: raster data structures, vector data structures, data acquisition: existing data sets, developing new data sets, data entry, data management, data manipulation, analysis, modeling and 3D GIS.",
+            "Remote sensing and image analysis: Basic Concepts, satellite and sensors, aerial photogrammetry, application of aerial photogrammetry, processing of remotely sensed digital data, Integrate of remote sensing with GIS, applications of GIS in planning."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "URP 2291": {
+          "title": "Statistics for Planners-II",
+          "credit": 3.0,
+          "contactHour": "3 Hours/week",
+          "topics": [
+            "Decision Making: Statistical inference- hypothesis testing, inference about means, standard deviations and proportion.",
+            "Analysis of variance: Chi-Square test, measurement scales, non-parametric tests.",
+            "Simple correlation and linear regression: Least-squares equation, goodness-pf-fit criteria, standard errors, significance tests for coefficients, simple curvilinear regression by variable transformation. Forecasting methods-time series analysis, causal and probabilistic methods, population forecasting methods: Arithmetic, geometric logistic etc."
+          ],
+          "sessionalNote": "Prerequisite(s): URP 2191",
+          "references": []
+        },
+        "URP 2292": {
+          "title": "Computer Applications in Planning",
+          "credit": "3,00",
+          "contactHour": "6 Hours/week",
+          "topics": [
+            "Sessional application of statistical techniques in urban and regional analysis through the uses of application software such as SPSS, Excel etc. economic base analysis, industrial structure analysis, input-output analysis etc.",
+            "Statistical techniques: the test of independence, analysis of variance, correlation and regression analysis etc."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "CE 2241": {
+          "title": "Principles of Environmental Engineering",
+          "credit": 3.0,
+          "contactHour": "3 Hours/week",
+          "topics": [
+            "Water Supply: Objectives and basic elements of water supply system; water requirements; population prediction and water demand assessment; fire demand; planning of water supply systems: sources, abstraction, transmission, treatment and distribution of water; water quality assessment.",
+            "Sanitation: Urban and rural sanitation; low-cost sanitation technologies; elements of conventional water borne system - collection, transportation, treatment and disposal; planning of sanitation systems, storm drainage; solid waste management.",
+            "Environmental pollution: Air, water and soil, and noise pollution."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "Hum 2217": {
+          "title": "Public and Local Government Finance",
+          "credit": 3.0,
+          "contactHour": "3 Hours/week",
+          "topics": [
+            "Definition, scope and importance studying in the context of urban and regional planning.",
+            "Principles of Expenditure and Revenue/Taxation: types, principles and effects/incidence.",
+            "Public Debt: Meaning, types, role, and effects.",
+            "Public Expenditure: Meaning, nature, different theories, effects. Deficit Financing: meaning, importance, role, and effects.",
+            "Public Budget: Meaning, necessity, classification, and preparation process. Local Government Structure in Bangladesh: definition, types, nature, functional domains.",
+            "Local Government Finances: sources of revenues and items of expenditures and emerging issues, problems and potentialities of City Corporations."
+          ],
+          "sessionalNote": null,
+          "references": []
+        }
+      },
+      "optionalCourses": [],
+      "termNotes": []
+    },
+    "Y3T1": {
+      "termKey": "Y3T1",
+      "title": "Third Year First Term",
+      "courses": {
+        "URP 3112": {
+          "title": "Urban Planning Studio",
+          "credit": 3.0,
+          "contactHour": "6 Hours/week",
+          "topics": [
+            "Case studies in urban studies and planning. Studio works, practical and fieldwork on urban planning."
+          ],
+          "sessionalNote": "Prerequisite(s): URP 2215",
+          "references": []
+        },
+        "URP 3121": {
+          "title": "Rural Development Planning-I",
+          "credit": 3.0,
+          "contactHour": "3 Hours/week",
+          "topics": [
+            "The distinction between urban and rural areas, analysis of rural settlement patterns, social and cultural characteristics of rural communities, Meaning of rural development, the concept, nature and scope of integrated rural development, integration of functional and spatial aspects in the context of rural development, planning procedures for integrated rural development, resources for rural development-land, water, human, forest, livestock etc., policies for rural resources development, rural industrialization and rural center planning,",
+            "rural development programs in Bangladesh-past and present, governmental and non-governmental organizations involved in rural development activities, problems and issues in local level rural planning in Bangladesh.",
+            "Agricultural development programs and policy: World and Bangladesh Perspective"
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "URP 3161": {
+          "title": "Housing and Real Estate Development Theory",
+          "credit": 3.0,
+          "contactHour": "3 Hours/week",
+          "topics": [
+            "Social, physical, economic and cultural aspects of housing, typology of housing, nature of housing problems in Bangladesh and scopes for housing development (including real estate development), types and forms of ownership (single, multiple, tenancy in common, joint tenancy, general and limited partnership, syndicate, investment trust, condominiums, cooperatives etc.), accessibility to housing by different income groups.",
+            "Definition of real estate, real estate development principles, real estate market analysis and market development techniques, real estate trade cycle (both long term and short term).",
+            "Real estate instruments: Contract, deed, lease, mortgage, broker and brokerage, planning considerations for real estate development, evaluation of real estate projects-cost estimation, feasibility study, environmental impact statement, implementation, monitoring and management, regulatory measures to guide and monitor housing development and the developers."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "URP 3182": {
+          "title": "GIS and Remote Sensing Studio",
+          "credit": 3.0,
+          "contactHour": "6 Hours/week",
+          "topics": [
+            "Individual or group projects to analyze planning problems with the help of GIS and Remote sensing (RS) techniques."
+          ],
+          "sessionalNote": "Prerequisite(s): URP 3181",
+          "references": []
+        },
+        "CE 3107": {
+          "title": "Elements of Solid Mechanics",
+          "credit": 3.0,
+          "contactHour": "3 Hours/week",
+          "topics": [
+            "Force, resultants and components, moments and parallel coplanar forces, centroids, moments of inertia, Fundamental concepts of stress and strain.",
+            "Mechanical properties of materials: Stress and strain in member subject to tensile, compressive and shear forces, bending moment and shear force diagrams for statically determinate structures."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "CE 3151": {
+          "title": "Fundamentals of Transportation Engineering",
+          "credit": 3.0,
+          "contactHour": "3 Hours/week",
+          "topics": [
+            "Highway and pavement engineering, fundamentals of land use-transport planning, fundamentals of transport demand and supply analysis.",
+            "Urban transportation study: defining the study area and the network, volume study, O-D survey, parking survey, public transport survey, goods/freight traffic survey, employment survey, inventory of physical infrastructure, characteristics of different modes, concepts of roadway capacity, the hierarchy of roads, concept of the environmental area; pedestrian traffic, cross-sectional elements of roadway, Geometric design elements Highway, parking types, parking solution and parking capacity, planning standards for physical facilities. traffic management, concepts of travel demand management."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "Hum 3117": {
+          "title": "Accounting and Auditing for Planners",
+          "credit": 2.0,
+          "contactHour": "2 Hours/week",
+          "topics": [
+            "Introduction to Accounting; Accounting equation, business data processing transaction, double entry mechanism, journal, ledger, trial balance, preparation of financial statement, financial statement analysis.",
+            "Long-term investment Decision-Capital budgeting: Decision under uncertainty.",
+            "Cost concept and classification: Cost-volume-profit analysis, Break-Even-Point & sensitivity analysis.",
+            "Taxation-Definition of tax; types of tax; Cannons of tax: Tax administration in Bangladesh; tax holiday; capital allowance; corporation tax; tax credit.",
+            "Basic Concepts of Internal Audits, planning of introduction to internal auditing, internal control, techniques of internal auditing, scientific methods, report-writing, information technology, risk-based auditing, operational auditing"
+          ],
+          "sessionalNote": null,
+          "references": []
+        }
+      },
+      "optionalCourses": [],
+      "termNotes": []
+    },
+    "Y3T2": {
+      "termKey": "Y3T2",
+      "title": "Third Year Second Term",
+      "courses": {
+        "URP 3222": {
+          "title": "Rural Planning Studio",
+          "credit": 3.0,
+          "contactHour": "6 Hours/week",
+          "topics": [
+            "Individual or group projects involving the application of planning techniques for analyzing problems related to rural development planning."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "URP 3223": {
+          "title": "Regional Development Planning",
+          "credit": 3.0,
+          "contactHour": "3 Hours/week",
+          "topics": [
+            "Definition and types of regions, regionalization and the delineation of planning regions, levels of planning-national, regional, sub-regional and local, need and scope of regional planning.",
+            "Regional analysis: regional database, income measures and regional social accounting, input-output analysis, industrial structure analysis, interregional trade multiplier analysis.",
+            "Theories and models of regional growth: Aggregate growth models, industrial location theory- central place theory, growth pole theory, agro-politan growth, regional growth-convergence or divergence. regional development policies at home and abroad.",
+            "Policy issues: Place prosperity vs. people prosperity, economic development."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "URP 3231": {
+          "title": "Transportation Planning",
+          "credit": 3.0,
+          "contactHour": "3 Hours/week",
+          "topics": [
+            "Traffic engineering administration and function, the road user and the vehicles, speed, journey time and delay time, vehicles volume count classification and occupancy, trip generation, trip distribution, traffic assessment and model split, the role of different modes, cost structure.",
+            "The transportation planning process at national, regional and urban levels. fundamentals of transportation economics. transportation and environment, local area transportation planning, system modeling and strategy development.",
+            "Accident classification and injury prevention, parking, planning of transport infrastructure, planning for urban public transportation, NMT planning and management, travel demand management."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "URP 3232": {
+          "title": "Transportation Planning Studio",
+          "credit": 3.0,
+          "contactHour": "6 Hours/week",
+          "topics": [
+            "Field surveys and analysis of vehicles, speed, journey time and delay time, vehicles volume count classification and occupancy, trip generation, trip distribution, traffic assessment and model split, the role of different modes for residential area, shopping complex, precinct."
+          ],
+          "sessionalNote": "Prerequisite(s): CE 3131 and URP 3231.",
+          "references": []
+        },
+        "URP 3294": {
+          "title": "Research Methodology",
+          "credit": 1.5,
+          "contactHour": "3 Hours/week",
+          "topics": [
+            "Research idea generation through discussion, research outline development, research planning, data collection, research methods and tools, data analysis and interpretation, report writing and referencing"
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "URP 3291": {
+          "title": "Operations Research and Systems Analysis",
+          "credit": "2.00",
+          "contactHour": "2 Hours/week",
+          "topics": [
+            "Introduction to operations research, techniques for analyzing interconnected policy decision areas, optimization techniques in the decision-making process, elements of mathematical programming: linear programming, graph theory, network analysis; fundamentals of simulation techniques, queuing theory, systems approach in planning."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "CE 3207": {
+          "title": "Elements of Civil Engineering Structures",
+          "credit": "Missing",
+          "contactHour": "Not specified",
+          "topics": [
+            "Structural forms and systems for buildings, bridges, communication and transmission loads on structures, types of foundation, bearing capacity and settlement.",
+            "Introduction to design in reinforced and pre-stressed concrete, Design codes and provisions"
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "CE 3261": {
+          "title": "Water Resources Planning",
+          "credit": 3.0,
+          "contactHour": "3 Hours/week",
+          "topics": [
+            "Hydrologic cycle, precipitation streamflow, evaporation and transpiration, rainfall-runoff relationship, hydrograph analysis, groundwater occurrence and wells, the behavior of alluvial rivers, bathymetry survey, navigation and dredging, river training and bank protection works.",
+            "Irrigation engineering, flood mitigation approaches, mitigated water resource management-economic, social environmental and institutional aspects."
+          ],
+          "sessionalNote": null,
+          "references": []
+        }
+      },
+      "optionalCourses": [],
+      "termNotes": []
+    },
+    "Y4T1": {
+      "termKey": "Y4T1",
+      "title": "Fourth Year First Term",
+      "courses": {
+        "URP 4000": {
+          "title": "Project/Thesis",
+          "credit": 4.5,
+          "contactHour": "1 day/week",
+          "topics": [
+            "Major individual studies on real-world topics related to planning, transportation and environment. The objective is to develop initiative, self-reliance, creative ability and some planning experience for the students.",
+            "The outcomes of the study must be submitted in a comprehensive report following a standard format of presentation acceptable to the department along with appropriate drawings, maps, charts etc.",
+            "For the first-semester thesis proposal and methodology is developed for Pre-defense. After the end of the second semester, a defense presentation is held with the presence of the thesis supervisor and co-supervisor."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "URP 4100": {
+          "title": "Internship/Professional Attachment",
+          "credit": 0.0,
+          "contactHour": "4 weeks",
+          "topics": [
+            "Full-time attachment in the city, environmental or transportation planning and development-related organization/firm prescribed by the department. The performance will be evaluated based on the report submitted by the intern and the evaluation of the reporting officer at the organization/firm. Grade awarded shall be 'S' for satisfactory and 'U' for unsatisfactory."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "URP 4111": {
+          "title": "Utility Services and Infrastructure Planning",
+          "credit": 3.0,
+          "contactHour": "3 Hours/week",
+          "topics": [
+            "Planning, funding, provision, management and maintenance of basic utility services in urban areas: water supply, sewerage, drainage, electricity supply, gas and telephone, and associated problems.",
+            "Types of municipal services: transport infrastructure, street lighting, water supply, solid waste management, parks and open spaces, graveyards, markets, slaughterhouse, basic services for slums, public health and education, revenue sources of city corporations and municipalities, and problems faced in the delivery of services and collection of taxes.",
+            "National and regional infrastructure planning: Population and demand forecasting, planning of infrastructure networks-water supply and drainage, transportation, power supply.",
+            "Advanced application tools for infrastructure planning: GIS, GPS, remote sensing methods.",
+            "Infrastructure project financing."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "URP 4124": {
+          "title": "Regional Planning Studio",
+          "credit": 3.0,
+          "contactHour": "6 Hours/week",
+          "topics": [
+            "Individual or group projects involving the application of planning techniques for analyzing the urban growth prediction, land-use change, transportation and mixed-use development, city center and remote town development."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "URP 4141": {
+          "title": "Environmental Planning and Management",
+          "credit": 3.0,
+          "contactHour": "3 Hours/week",
+          "topics": [
+            "Theories of natural systems, the environmental impacts of human actions, carrying and assimilative capacities,",
+            "The environmental planning procedures: Defining planning area, inventory of environmental resources, assessment of environmental impacts-impact identification,",
+            "Mitigation of environmental impacts, urban heat island, carbon footprint, form of environmental taxation and its application along with case studies in environmental management."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "URP 4142": {
+          "title": "Environmental Planning and Management Studio",
+          "credit": 3.0,
+          "contactHour": "3 Hours/week",
+          "topics": [
+            "Air quality measurement, water quality assessment, watershed modeling and morphometric analysis, Application of tools and techniques for Initial Environmental Examination (IEE), Environmental Impact Assessment (EIA), different types of money, discounting technique, choice of discount rate and social time preference, investment criteria, basic concepts of financial accounting, dealing with risk and uncertainty, appraisal requirements by national and international financing agencies."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "URP 4171": {
+          "title": "Legal Basis of Planning",
+          "credit": 1.5,
+          "contactHour": "3 Hours/week",
+          "topics": [
+            "Legal aspects of planning and its importance. Enabling legislation process, planning laws in different countries. The Development Plan (structure and local) process and need for legislation, development control-planning permission, development orders, special forms of control. New town development laws. Compensation and betterment problems, urban renewal practice.",
+            "Planning laws in Bangladesh: Land acquisition and compensation rules and regulations, the meaning of development the control of development including planning permission, development orders, purchase pollution and their impact on the living environment."
+          ],
+          "sessionalNote": "Prerequisite(s): URP 4141*",
+          "references": []
+        },
+        "URP 4161": {
+          "title": "Project Planning and Management",
+          "credit": 3.0,
+          "contactHour": "3 Hours/week",
+          "topics": [
+            "Work Breakdown Structure, log frame generation, project cycle-designing, implementation and monitoring.",
+            "The welfare basis of social evaluation: Consumers surplus, producers surplus, Pareto optimality, transfer payments, intangible items, shadow pricing, externalities, equity problem, the concept of social cost-benefit analysis, time value of notice, the enforcement of planning controls, compensation and betterment problems with reference to Bangladesh."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "URP 4175": {
+          "title": "Resettlement Planning",
+          "credit": 2.0,
+          "contactHour": "2 Hours/week",
+          "topics": [
+            "Land acquisition and requisition policy and techniques causes for resettlements, resettlements and development",
+            "Resettlement Planning Guidelines: Introduction, resettlement plan in the project cycle, key planning concepts, consultation and participation, socio-economic information, relocation, income restoration, institutional framework, monitoring and evaluation.",
+            "Resettlements system analysis, resettlements policy, resettlements regulations, resettlements economics, resettlements management, practices in Bangladesh and various countries."
+          ],
+          "sessionalNote": null,
+          "references": []
+        }
+      },
+      "optionalCourses": [],
+      "termNotes": []
+    },
+    "Y4T2": {
+      "termKey": "Y4T2",
+      "title": "Fourth Year Second Term",
+      "courses": {
+        "URP 4217": {
+          "title": "Coastal and Special Zones Planning",
+          "credit": 2.0,
+          "contactHour": "2 Hours/week",
+          "topics": [
+            "Characteristics of the coastal zone (location, climate, geomorphology, hydro-morphology, ecology, vulnerability, natural disasters, people and livelihood, infrastructure, resources etc.), involved organizations, pertinent laws and regulations, national policies.",
+            "Study cases of planning/management on mangrove forest, coral reef, coastal fisheries/aquaculture. Industrial area planning, mining area planning, hill area planning, port area planning"
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "URP 4223": {
+          "title": "Urban and Regional Economics",
+          "credit": 3.0,
+          "contactHour": "3 Hours/week",
+          "topics": [
+            "Urban economics: Nature and functions of cities. Urban spatial structure: models of urban spatial structure, models of intra-urban location decisions.",
+            "Nature of urban problems: Land use, housing, urban transportation, urban environment and urban poverty.",
+            "The urban public sector: urban fiscal problems, methods of financing urban government expenditures.",
+            "Regional economics: The region as a concept, regional structure- systems of cities, industrial location patterns, transportation and the spatial organization of economic activities.",
+            "Measurement and change in regional economic activity: Bid rent analysis, interregional theory of income and trade, regional economic growth."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "URP 4243": {
+          "title": "Hazards and Disaster Management",
+          "credit": 2.0,
+          "contactHour": "2 Hours/week",
+          "topics": [
+            "Definition and types of hazards, assessment of hazards, vulnerability analysis, risk assessment, traditional and new disaster threats, basic characteristics of common disasters.",
+            "Disaster Management Cycle, Response: definition and some relevant aspects, general disaster management factors, special evacuation factors, problems related to effective response, details discussion of recovery, prevention, mitigation, preparedness of disaster.",
+            "Disaster management plans: Need for counter disaster plans, general considerations, format of a plan, critical areas, aspects for consideration.",
+            "Disaster and National Development: impact of disaster on national development, disaster management policy and national development."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "URP 4262": {
+          "title": "Project Planning Studio",
+          "credit": 1.5,
+          "contactHour": "3 Hours/week",
+          "topics": [
+            "Planning and construction project management through work breakdown structure, computer application in project management, sessional case studies in project evaluation. Project formulation practices and approval procedure in Bangladesh.",
+            "Preparation of project documents: PCP, PPs and TAPPs."
+          ],
+          "sessionalNote": "Prerequisite(s): URP 4161",
+          "references": []
+        },
+        "URP 4272": {
+          "title": "Participatory Planning Studio",
+          "credit": 1.5,
+          "contactHour": "3 Hours/week",
+          "topics": [
+            "Group projects involving application of the participatory approach to planning for the preparation of local level plans (i.e., deprived communities of slum, coastal area communities etc.), surveying and mapping through rapid rural appraisal and participatory rural appraisal,",
+            "Approaches to local level planning, guidelines for local-level planning, people's participation in planning-meaning and types of participation, approaches to participation-organizational and functional, problems of participation."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "URP 4273": {
+          "title": "Urban Governance",
+          "credit": 2.0,
+          "contactHour": "2 Hours/week",
+          "topics": [
+            "Introductory of Urban Governance: Understanding the concept/conceptual framework, definition, characteristics, good characteristics, involved actors, measuring good governance towards setting/determination of indicators; urban development verses governance, urban decentralization verses governance, the global campaign on urban governance",
+            "Gender issue: Why matters, linking urban governance with gender, women in urban local government structures, existing status, gender and norms of good urban governance, participation, policy options."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "URP 4275": {
+          "title": "Development Planning",
+          "credit": 3.0,
+          "contactHour": "3 Hours/week",
+          "topics": [
+            "Phases of development plan-the macro phase (national), the middle phase (regional), and the micro phase (micro-regional), relationships among the macro, middle and the micro phase.",
+            "Development Strategies: i.e., Import substitution strategy, export promotion strategy,",
+            "Formulation of development plans: Use of models in planning aggregate models, sector models, and inter-sectoral models. Important considerations in choosing particular models. Some problems of development planning: The concept of capital-output ratio, the choice of technique; investment criteria."
+          ],
+          "sessionalNote": null,
+          "references": []
+        }
+      },
+      "optionalCourses": [],
+      "termNotes": []
+    }
+  },
+  "extras": {
+    "administrative_noise": [
+      "Phone+88041769471-Ext:650 Fax+88041-774403",
+      "Email: headurp@kuet.ac.bd Web: https://kuet.ac.bd/department/URP/",
+      " All the theoretical courses are instructed through two sections by two faculty members.",
+      " Associated Departments: Assigned faculties would be responsible to take the curtained courses from the following departments: Dept. of Civil Engineering (CE), Industrial and Production Engineering (IPE), Architecture (Arch), Computer and Science Engineering (CSE), Chemistry (Ch), Mathematics (Math), Humanities (Hum)",
+      "Page 1 of 10",
+      "Page 2 of 10",
+      "Page 3 of 10",
+      "Page 4 of 10",
+      "Page 5 of 10",
+      "Page 6 of 10",
+      "Page 7 of 10",
+      "Page 8 of 10",
+      "Page 9 of 10",
+      "Page 10 of 10"
+    ],
+    "ambiguities": [
+      {
+        "raw": "URP 2292 credit line: Credits: 3,00",
+        "reason": "Credit value uses comma instead of decimal point. Treated as string '3,00'.",
+        "possibleTargets": ["Credit 3.00"]
+      },
+      {
+        "raw": "URP 3291 first credit line: Lecture: Theory; Credits: 3.00; 3 Hours/week; second credit line: Lecture: Theory; Credits: 2.00; 2 Hours/week",
+        "reason": "Two conflicting credit statements for same course; second line (2.00) used as final, but ambiguity remains.",
+        "possibleTargets": ["Credits 3.00", "Credits 2.00"]
+      },
+      {
+        "raw": "CE 3207 credit line missing",
+        "reason": "No credit and contact hour line found for this course in the provided text.",
+        "possibleTargets": ["Presumed similar to other CE theory courses (3.00 Credits, 3 Hours/week)"]
+      },
+      {
+        "raw": "URP 3112 prerequisite: URP 2215",
+        "reason": "Course code URP 2215 not found in any term; likely a typo for URP 2214 or non-existent course.",
+        "possibleTargets": ["URP 2214"]
+      },
+      {
+        "raw": "URP 4142 topic includes 'different types of money, discounting technique, choice of discount rate and social time preference, investment criteria, basic concepts of financial accounting...'",
+        "reason": "These financial appraisal topics seem misplaced in an Environmental Planning and Management Studio; possibly belong to Project Planning and Management (URP 4161) or another course.",
+        "possibleTargets": ["URP 4161", "URP 4142 (as given)"]
+      }
+    ]
+  },
+  "qa": {
+    "termCount": 8,
+    "courseCount": 63,
+    "topicCount": 123,
+    "noiseCount": 14,
+    "ambiguityCount": 5
+  }
+}

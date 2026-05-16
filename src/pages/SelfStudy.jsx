@@ -14,6 +14,7 @@ export default function SelfStudy() {
     return course?.type === 'Sessional' || name.includes('sessional');
   };
   const currentTermAcademicCourses = currentTermCourses.filter(course => !isSessionalCourse(course));
+  const deptLabel = profile?.dept || 'your department';
 
   const [academicSessions, setAcademicSessions] = useState(() => store.get('selfstudy_academic') || []);
   const [extraReading, setExtraReading] = useState(() => store.get('selfstudy_extra') || []);
@@ -430,6 +431,12 @@ export default function SelfStudy() {
           </button>
         </div>
       </div>
+
+      {courses.length === 0 && (
+        <div className="info-box" style={{ marginBottom: 16 }}>
+          <p>No curriculum data is available for {deptLabel}. The academic tracker can only auto-fill from loaded department courses.</p>
+        </div>
+      )}
 
       {activeTab === 'academic' && (
         <div style={{ marginBottom: 16 }}>
