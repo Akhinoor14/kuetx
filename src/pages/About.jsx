@@ -296,26 +296,25 @@ export default function About() {
       <div style={{
         padding: '2rem',
         border: '1px solid var(--border)',
-        borderRadius: '12px',
+        borderRadius: '14px',
         background: 'var(--card)',
         textAlign: 'center'
       }}>
-        <h3 style={{ fontSize: '1rem', fontWeight: 700, marginBottom: '1rem', color: 'var(--text)' }}>
+        <h3 style={{ fontSize: '1.05rem', fontWeight: 800, marginBottom: '1rem', color: 'var(--text)' }}>
           License & Acknowledgments
         </h3>
-        <p style={{ fontSize: '0.95rem', color: 'var(--muted)', lineHeight: 1.6, marginBottom: '1rem' }}>
-          KUETX is built with ❤️ for KUET students. Following KUET ordinance and best practices for student data management.
+        <p style={{ maxWidth: '680px', margin: '0 auto 1rem', fontSize: '0.97rem', color: 'var(--muted)', lineHeight: 1.75 }}>
+          KUETX is built with love for KUET students. It follows KUET guidelines and student data best practices so the experience stays safe, private, and supportive.
         </p>
-        <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', justifyContent: 'center' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem', alignItems: 'center', justifyContent: 'center' }}>
           <a href="https://a3kmstudio.vercel.app" target="_blank" rel="noopener noreferrer"
-            style={{ color: 'var(--accent)', textDecoration: 'none', fontSize: '0.9rem', fontWeight: 500 }}>
-            A3KM Studio
+            style={{ color: 'var(--accent)', textDecoration: 'none', fontSize: '0.95rem', fontWeight: 700, background: 'rgba(22,163,74,0.08)', padding: '0.7rem 1rem', borderRadius: '12px', border: '1px solid rgba(22,163,74,0.18)' }}>
+            Built by A3KM Studio
           </a>
-          <span style={{ color: 'var(--border)' }}>·</span>
-          <span style={{ fontSize: '0.9rem', color: 'var(--muted)' }}>© 2026 All Rights Reserved</span>
+          <span style={{ fontSize: '0.95rem', color: 'var(--muted)' }}>© 2026 All Rights Reserved</span>
         </div>
       </div>
     </div>
-    </div>
+  </div>
   );
 }
