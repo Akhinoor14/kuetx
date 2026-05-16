@@ -7,6 +7,7 @@ export const NAV = [
       { id: 'dashboard',   label: 'Dashboard',    icon: 'Grid',         path: '/' },
       { id: 'profile',     label: 'Profile',      icon: 'User',         path: '/profile' },
       { id: 'smart-score', label: 'Smart Score',  icon: 'Star',         path: '/smart-score' },
+      { id: 'notes',       label: 'Notes',       icon: 'FileText',    path: '/notes' },
     ]
   },
   {
@@ -55,7 +56,6 @@ export const NAV = [
     items: [
       { id: 'warnings',   label: 'Alerts',      icon: 'Bell',        path: '/alerts' },
       { id: 'reports',    label: 'Reports',     icon: 'BarChart2',   path: '/reports' },
-      { id: 'notes',      label: 'Notes',       icon: 'FileText',    path: '/notes' },
       { id: 'settings',   label: 'Settings',    icon: 'Settings',    path: '/settings' },
     ]
   },

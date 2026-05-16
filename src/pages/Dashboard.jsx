@@ -129,10 +129,6 @@ export default function Dashboard() {
                 </h1>
               </div>
             )}
-
-            <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', alignItems: 'center', marginTop: profile.name ? 4 : 0, minHeight: 38 }}>
-              {profile.isCR && <span className="tag tag-yellow">CR</span>}
-            </div>
           </div>
 
           <div className="dashboard-hero-date" style={{ minWidth: 'clamp(200px, 90vw, 240px)', padding: 'clamp(16px, 3vw, 20px)', borderRadius: 16, border: '1px solid rgba(var(--accentRGB), 0.12)', background: 'linear-gradient(180deg, rgba(var(--accentRGB), 0.05), rgba(255,255,255,0.98))', whiteSpace: 'normal', alignSelf: 'stretch', boxShadow: '0 8px 22px rgba(12, 34, 64, 0.05)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: 10 }}>

@@ -78,48 +78,48 @@ export default function SelfEval() {
         <div className="card" style={{ borderTop: '3px solid var(--danger)' }}>
           <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 10, color: 'var(--danger)' }}>⚠ খারাপ কাজ</div>
           <div style={{ display: 'flex', gap: 6, marginBottom: 8 }}>
-            <input value={newBad} onChange={e => setNewBad(e.target.value)} onKeyDown={e => e.key === 'Enter' && addBad(newBad)} placeholder="যোগ করুন..." style={{ fontSize: 12 }} />
-            <button className="btn btn-danger" style={{ padding: '5px 10px', flexShrink: 0 }} onClick={() => addBad(newBad)}><Plus size={12} /></button>
+            <input value={newBad} onChange={e => setNewBad(e.target.value)} onKeyDown={e => e.key === 'Enter' && addBad(newBad)} placeholder="যোগ করুন..." style={{ fontSize: 13 }} />
+            <button className="btn btn-danger" style={{ padding: '6px 12px', flexShrink: 0 }} onClick={() => addBad(newBad)}><Plus size={14} /></button>
           </div>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4, marginBottom: 8 }}>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 8 }}>
             {BAD_PRESETS.map(p => (
               <button key={p} onClick={() => addBad(p)} style={{
-                padding: '3px 8px', borderRadius: 4, fontSize: 10, border: '1px solid var(--border)',
-                background: 'transparent', color: 'var(--muted)', cursor: 'pointer', fontFamily: 'Sora, sans-serif',
+                padding: '6px 10px', borderRadius: 6, fontSize: 12, border: '1px solid var(--border)',
+                background: 'transparent', color: 'var(--muted)', cursor: 'pointer', fontFamily: 'Hind Siliguri, Sora, sans-serif',
               }}>{p}</button>
             ))}
           </div>
           {(rec.bad || []).map(b => (
-            <div key={b.id} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '4px 0', borderBottom: '1px solid var(--border)' }}>
-              <span style={{ flex: 1, fontSize: 12 }}>{b.text}</span>
-              <button onClick={() => removeBad(b.id)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--danger)' }}><Trash2 size={11} /></button>
+            <div key={b.id} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '6px 0', borderBottom: '1px solid var(--border)' }}>
+              <span style={{ flex: 1, fontSize: 13, fontFamily: 'Hind Siliguri, Sora, sans-serif' }}>{b.text}</span>
+              <button onClick={() => removeBad(b.id)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--danger)' }}><Trash2 size={13} /></button>
             </div>
           ))}
-          {(rec.bad || []).length === 0 && <div style={{ fontSize: 11, color: 'var(--muted)' }}>কোনো খারাপ কাজ নেই ✓</div>}
+          {(rec.bad || []).length === 0 && <div style={{ fontSize: 13, color: 'var(--muted)', fontFamily: 'Hind Siliguri, Sora, sans-serif' }}>কোনো খারাপ কাজ নেই ✓</div>}
         </div>
 
         {/* Good deeds */}
         <div className="card" style={{ borderTop: '3px solid var(--success)' }}>
           <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 10, color: 'var(--success)' }}>✓ ভালো কাজ</div>
           <div style={{ display: 'flex', gap: 6, marginBottom: 8 }}>
-            <input value={newGood} onChange={e => setNewGood(e.target.value)} onKeyDown={e => e.key === 'Enter' && addGood(newGood)} placeholder="যোগ করুন..." style={{ fontSize: 12 }} />
-            <button className="btn btn-primary" style={{ padding: '5px 10px', flexShrink: 0 }} onClick={() => addGood(newGood)}><Plus size={12} /></button>
+            <input value={newGood} onChange={e => setNewGood(e.target.value)} onKeyDown={e => e.key === 'Enter' && addGood(newGood)} placeholder="যোগ করুন..." style={{ fontSize: 13 }} />
+            <button className="btn btn-primary" style={{ padding: '6px 12px', flexShrink: 0 }} onClick={() => addGood(newGood)}><Plus size={14} /></button>
           </div>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4, marginBottom: 8 }}>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 8 }}>
             {GOOD_PRESETS.map(p => (
               <button key={p} onClick={() => addGood(p)} style={{
-                padding: '3px 8px', borderRadius: 4, fontSize: 10, border: '1px solid var(--border)',
-                background: 'transparent', color: 'var(--muted)', cursor: 'pointer', fontFamily: 'Sora, sans-serif',
+                padding: '6px 10px', borderRadius: 6, fontSize: 12, border: '1px solid var(--border)',
+                background: 'transparent', color: 'var(--muted)', cursor: 'pointer', fontFamily: 'Hind Siliguri, Sora, sans-serif',
               }}>{p}</button>
             ))}
           </div>
           {(rec.good || []).map(g => (
-            <div key={g.id} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '4px 0', borderBottom: '1px solid var(--border)' }}>
-              <span style={{ flex: 1, fontSize: 12 }}>{g.text}</span>
-              <button onClick={() => removeGood(g.id)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--muted)' }}><Trash2 size={11} /></button>
+            <div key={g.id} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '6px 0', borderBottom: '1px solid var(--border)' }}>
+              <span style={{ flex: 1, fontSize: 13, fontFamily: 'Hind Siliguri, Sora, sans-serif' }}>{g.text}</span>
+              <button onClick={() => removeGood(g.id)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--muted)' }}><Trash2 size={13} /></button>
             </div>
           ))}
-          {(rec.good || []).length === 0 && <div style={{ fontSize: 11, color: 'var(--muted)' }}>এখনো কিছু নেই</div>}
+          {(rec.good || []).length === 0 && <div style={{ fontSize: 13, color: 'var(--muted)', fontFamily: 'Hind Siliguri, Sora, sans-serif' }}>এখনো কিছু নেই</div>}
         </div>
       </div>
     </div>

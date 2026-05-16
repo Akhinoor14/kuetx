@@ -5,14 +5,21 @@ import { store, uid, getAllCourses, getDeptSyllabus, getProfile, getTermLabelFro
 // ── Tours ────────────────────────────────────────────────────────────────────
 export function Tours() {
   const [tours, setTours] = useState(() => store.get('tours') || []);
-  const [form, setForm] = useState({ name: '', date: '', companions: '', budget: '', spent: '', notes: '', type: 'with_friends' });
+  const [form, setForm] = useState({ name: '', date: '', companions: '', budget: '', spent: '', notes: '', type: 'with_friends', outline: [] });
   const [adding, setAdding] = useState(false);
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
+
+  const addOutlineSection = () => setForm(f => ({ ...f, outline: [...f.outline, { title: '', topics: [''] }] }));
+  const updateOutlineTitle = (index, title) => setForm(f => ({ ...f, outline: f.outline.map((s, i) => i === index ? { ...s, title } : s) }));
+  const updateOutlineTopic = (si, ti, value) => setForm(f => ({ ...f, outline: f.outline.map((s, i) => i === si ? { ...s, topics: s.topics.map((t, j) => j === ti ? value : t) } : s) }));
+  const addOutlineTopic = (index) => setForm(f => ({ ...f, outline: f.outline.map((s, i) => i === index ? { ...s, topics: [...s.topics, ''] } : s) }));
+  const removeOutlineSection = (index) => setForm(f => ({ ...f, outline: f.outline.filter((_, i) => i !== index) }));
+  const removeOutlineTopic = (si, ti) => setForm(f => ({ ...f, outline: f.outline.map((s, i) => i === si ? { ...s, topics: s.topics.filter((_, j) => j !== ti) } : s) }));
 
   const save = () => {
     const u = [{ ...form, id: uid() }, ...tours];
     setTours(u); store.set('tours', u); setAdding(false);
-    setForm({ name: '', date: '', companions: '', budget: '', spent: '', notes: '', type: 'with_friends' });
+    setForm({ name: '', date: '', companions: '', budget: '', spent: '', notes: '', type: 'with_friends', outline: [] });
   };
 
   return (
@@ -45,7 +52,46 @@ export function Tours() {
             <div><label>Budget (৳)</label><input type="number" value={form.budget} onChange={e => set('budget', e.target.value)} /></div>
             <div><label>Actual Spent (৳)</label><input type="number" value={form.spent} onChange={e => set('spent', e.target.value)} /></div>
           </div>
-          <div style={{ marginBottom: 10 }}><label>Notes / Memories</label><textarea value={form.notes} onChange={e => set('notes', e.target.value)} rows={2} placeholder="Highlights, tips for next time..." /></div>
+          <div style={{ marginBottom: 10 }}><label>Tour Description</label><textarea value={form.notes} onChange={e => set('notes', e.target.value)} rows={2} placeholder="Short summary: best moments, tips, highlights..." /></div>
+
+          <div style={{ marginBottom: 12, padding: 12, border: '1px solid var(--border)', borderRadius: 12, background: 'rgba(var(--accentRGB), 0.03)' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+              <div style={{ fontWeight: 700, fontSize: 13 }}>Trip Outline</div>
+              <button className="btn btn-ghost" style={{ padding: '6px 10px' }} onClick={addOutlineSection}>Add section</button>
+            </div>
+            {form.outline.length === 0 && (
+              <div style={{ fontSize: 12, color: 'var(--muted)' }}>Add chapters, stops, activities or topic groups to structure the trip plan.</div>
+            )}
+            {form.outline.map((section, si) => (
+              <div key={si} style={{ marginBottom: 10, padding: 10, borderRadius: 10, background: 'rgba(255,255,255,0.8)', border: '1px solid rgba(var(--accentRGB), 0.12)' }}>
+                <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginBottom: 8 }}>
+                  <input
+                    value={section.title}
+                    onChange={e => updateOutlineTitle(si, e.target.value)}
+                    placeholder={`Chapter ${si + 1} title`}
+                    style={{ flex: 1, minWidth: 0 }}
+                  />
+                  <button className="btn btn-danger" style={{ padding: '6px 10px' }} onClick={() => removeOutlineSection(si)}>Remove</button>
+                </div>
+                {section.topics.map((topic, ti) => (
+                  <div key={ti} style={{ display: 'flex', gap: 8, alignItems: 'center', marginBottom: 6 }}>
+                    <span style={{ width: 18, fontSize: 12, color: 'var(--muted)' }}>{si + 1}.{ti + 1}</span>
+                    <input
+                      value={topic}
+                      onChange={e => updateOutlineTopic(si, ti, e.target.value)}
+                      placeholder="Chapter / stop / topic"
+                      style={{ flex: 1, minWidth: 0 }}
+                    />
+                    {section.topics.length > 1 && (
+                      <button className="btn btn-ghost" style={{ padding: '6px 8px' }} onClick={() => removeOutlineTopic(si, ti)}>×</button>
+                    )}
+                  </div>
+                ))}
+                <button className="btn btn-secondary" style={{ padding: '6px 10px' }} onClick={() => addOutlineTopic(si)}>Add item</button>
+              </div>
+            ))}
+          </div>
+
           <div style={{ display: 'flex', gap: 8 }}>
             <button className="btn btn-primary" onClick={save}>Save</button>
             <button className="btn btn-ghost" onClick={() => setAdding(false)}>Cancel</button>
@@ -67,6 +113,23 @@ export function Tours() {
               <div style={{ fontSize: 12, color: 'var(--muted)' }}>{t.date} · {t.type?.replace('_', ' ')}</div>
               {t.companions && <div style={{ fontSize: 12, marginTop: 4 }}>👥 {t.companions}</div>}
               {t.notes && <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 4 }}>{t.notes}</div>}
+              {t.outline?.length > 0 && (
+                <div style={{ marginTop: 10, fontSize: 12 }}>
+                  <div style={{ fontWeight: 700, marginBottom: 6 }}>Trip outline</div>
+                  <div style={{ paddingLeft: 10 }}>
+                    {t.outline.map((section, si) => (
+                      <div key={si} style={{ marginBottom: 8 }}>
+                        {section.title && <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 4 }}>{section.title}</div>}
+                        <ul style={{ margin: 0, paddingLeft: 18, color: 'var(--muted)', fontSize: 12 }}>
+                          {section.topics.filter(Boolean).map((topic, ti) => (
+                            <li key={ti}>{topic}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
             <div style={{ textAlign: 'right' }}>
               {t.spent && <div style={{ fontWeight: 700, color: 'var(--danger)' }}>৳{(+t.spent).toLocaleString()}</div>}

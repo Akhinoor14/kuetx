@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -27,7 +29,7 @@ html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
 
 /* ── Base ────────────────────────────────────────────────────────────────── */
 body {
-  font-family: 'Sora', system-ui, -apple-system, sans-serif;
+  font-family: 'Sora', 'Hind Siliguri', system-ui, -apple-system, sans-serif;
   background:
     radial-gradient(1200px 500px at 0% -20%, rgba(14, 165, 233, 0.11), transparent 60%),
     radial-gradient(900px 500px at 100% -10%, rgba(22, 163, 74, 0.13), transparent 58%),
@@ -106,7 +108,7 @@ body {
   cursor:       pointer;
   border:       none;
   transition:   opacity 0.15s, transform 0.1s, background 0.15s;
-  font-family:  'Sora', sans-serif;
+  font-family:  'Sora', 'Hind Siliguri', sans-serif;
   white-space:  nowrap;
   text-decoration: none;
 }
@@ -119,7 +121,7 @@ body {
 
 /* ── Inputs ──────────────────────────────────────────────────────────────── */
 input, select, textarea {
-  font-family:   'Sora', sans-serif;
+  font-family:   'Sora', 'Hind Siliguri', sans-serif;
   font-size:     14px;        /* was 13px */
   background:    var(--inputBg);
   color:         var(--text);
@@ -220,7 +222,7 @@ h3 { font-size: 15px; font-weight: 600; }
 
 .dashboard-page {
   position: relative;
-  font-family: 'Manrope', 'Sora', system-ui, -apple-system, sans-serif;
+  font-family: 'Manrope', 'Sora', 'Hind Siliguri', system-ui, -apple-system, sans-serif;
   font-size: 15.5px;
   line-height: 1.7;
 }
@@ -251,7 +253,7 @@ h3 { font-size: 15px; font-weight: 600; }
 .dashboard-page h1,
 .dashboard-page .section-title,
 .dashboard-page .tag {
-  font-family: 'Space Grotesk', 'Sora', system-ui, sans-serif;
+  font-family: 'Space Grotesk', 'Sora', 'Hind Siliguri', system-ui, sans-serif;
 }
 
 .dashboard-page h1 {
@@ -266,7 +268,7 @@ h3 { font-size: 15px; font-weight: 600; }
 .dashboard-page select,
 .dashboard-page textarea,
 .dashboard-page label {
-  font-family: 'Manrope', 'Sora', system-ui, sans-serif;
+  font-family: 'Manrope', 'Sora', 'Hind Siliguri', system-ui, sans-serif;
 }
 
 @media (max-width: 768px) {
@@ -557,7 +559,7 @@ input[type="checkbox"] {
   color: var(--muted);
   border-bottom: 2.5px solid transparent;
   margin-bottom: -1.5px;
-  font-family: 'Sora', sans-serif;
+  font-family: 'Sora', 'Hind Siliguri', sans-serif;
   transition: color 0.15s;
 }
 .tab-btn.active {
