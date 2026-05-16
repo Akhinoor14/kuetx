@@ -1,0 +1,1034 @@
+{
+  "department": "Dept. of Mechatronics Engineering, KUET",
+  "sourceType": "raw_text",
+  "terms": {
+    "Y1T1": {
+      "termKey": "Y1T1",
+      "title": "First Year First Term",
+      "courses": {
+        "Ch 1131": {
+          "title": "Chemistry",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Chemical Bonding: Valence bond theory, Molecular orbital theory, Metallic bonding, Hydrogen bonding, Theory of resonance, Structures; Elements and compounds of Si and its relevant technologies.",
+            "Solutions: Types of solutions, Solubility and solution process, Colligative properties: Lowering of vapor pressure, Elevation of boiling point, Depression of freezing point, Osmosis, Osmotic pressure, Deduction of molecular formula & molecular weight from Raoult’sLaw.",
+            "Phase Rule: Understanding of phases, components, and degrees of freedom; the phase rule, phase diagram study of one component system.",
+            "Electrochemistry and Corrosion: Introduction to electrochemistry, Chemical corrosion, Corrosion of metals and alloys dry and wet environments, Mechanism of corrosion, Atmospheric and soil corrosion and their protective measures.",
+            "Chemical Equilibrium: Law of mass action and its application; Effect of pressure on chemical equilibrium; Le-Chateller’s theorem and application; Solvent and ion exchange processes.",
+            "Chemical Kinetics: Monitoring the progress of a reaction, Rate laws and rate constants; Experimental determination of rate law, Order and molecularity of a chemical reaction, Rate laws for reaction approaching equilibrium, Temperature dependence of reaction of reaction rates; Elementary reaction, steady state approximation; Analyzing pre-equilibria, Unimolecular reactions.",
+            "Nuclear Chemistry: Basic concepts of nuclear chemistry, Radiochemistry, Nuclear force, Nuclear reactions, Nuclear reactor, Application of nuclear chemistry."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "Ch 1132": {
+          "title": "Sessional on Chemistry",
+          "credit": 0.75,
+          "contactHour": "3/2 hrs/week",
+          "topics": [],
+          "sessionalNote": "Sessional Based on Ch 1131.",
+          "references": []
+        },
+        "Hum 1131": {
+          "title": "Sociology and Engineering Ethics",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Introducing Sociology: Definition, nature and scope of sociology; The socio-cultural context of the emergence of sociology; Sociological perspective- Functionalism, Conflict perspective and Symbolic interactionism, Sociological imagination; Importance of sociology for the student of Material Science and engineering.",
+            "Basic Concept of Sociology: Society, Community, Institution, Association, Organization, Group, Kinship, Social Structure, Social stratification; Methods and Techniques of Research in Sociology; Scientific method, steps of scientific research; Methods and techniques of sociological research; Ethic of Research.",
+            "Culture and Socialization: Definition and elements of culture; Basic concepts of culture cultural lag, cultural relativism, cultural hybridization, Ethnocentrism, Counter culture, Cultural shock; Definition and agencies of socialization; Theories of socialization; Impact of culture on socialization and personality development",
+            "Social Change and Social Problems: Definition and agencies of social change; Social policy and planning; Industrialization Urbanization and Social pathology; Crime and Deviance; Ageing and society; Globalization and changing pattern of family and marriage; Sociological conceptualization of religion and role of religion in society.",
+            "Engineering Ethics: Engineering as a profession, code of ethics, rights, duties and responsibilities. Engineering and professionalism, the negative face of engineering ethics, the positive face of engineering ethics, utilitarian thinking, respect for persons honesty, morality, globalization and ethical issues. Human rights, cases of ethics."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "Math 1131": {
+          "title": "Calculus and Geometry",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Calculus: Differential Calculus: Limit, continuity and differentiability of functions of single and several variables, Rolle's theorem,Cauchy's Mean value theorem, Taylor's theorem in infinite forms. Differentiation of composite and implicit functions, higher order derivatives, Partial differentiation. Harmonic functions, Taylor's expansion of function of several variables, Maxima and Minima (Single and Several variables), Points of inflection, Tangent, Normal and Asymptotes, Curvature, Concavity and Convexity of curve",
+            "Integral Calculus: Fundamental theorem of integral calculus, Mean value theorems, evaluation of definite integrals - reduction formulae.",
+            "Geometry: Change of origin and rotation of axes, System of co-ordinates, distance between two points; section formula; Projection, direction cosines; Equations of planes and lines."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "EE 1131": {
+          "title": "Electrical Circuits",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "DC Networks: Kirchhoff’s laws, node voltage and mesh current methods, Delta-star and star delta conversion, Superposition principle, Thevenin’s and Norton’s theorems.",
+            "Single phase AC Circuits: Single phase EMF generation, average and effective values of sinusoids, solution of R, L, C series circuits, the j operator, complex representation of impedances, phasor diagram, power factor, power in complex notation, solution of parallel and series, parallel circuits, power factor correction.",
+            "Three Phase AC Circuits: Three phase EMF generation, delta and wye connections, line and phase quantities, solution of three phase circuits, balanced supply voltage and balanced load, phasor diagram, measurement of power in three phase circuits, Three phase four wire circuits.",
+            "Magnetic Circuits: Ampere’s circuital law, B-H curve, solution of magnetic circuits, hysteresis and eddy current losses, relays, applications of magnetic force, resonance."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "EE 1132": {
+          "title": "Sessional on Electrical Circuits",
+          "credit": null,
+          "contactHour": "3 hrs/week",
+          "topics": [],
+          "sessionalNote": "Sessional Based on EE 1131.",
+          "references": []
+        },
+        "MTE 1101": {
+          "title": "Mechatronic Systems",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Introduction: Fundamentals of Mechatronics, Examples of different Mechatronic systems, Scope and applications of Mechatronics, Industrial revolution, Recent Trends in Mechatronic systems.",
+            "Sensors and Transducers: Introduction to sensors and transducers, classification of sensors, sensor characteristics, different types of mechanical and electrical sensors,",
+            "System Modeling and Control: Introduction to signals and systems, Modeling of Mechanical, Electrical, Fluid and Thermal systems. Basic components of Control system, Types of control system, System representation, System responses, Time constant, Measurement of system performance, Illustrative examples.",
+            "Actuation Systems: Introducing the Linear and rotary actuators, AC and DC motors, Solenoids, Stepper motor, Fluid power actuators and Smart actuators.",
+            "Instrumentation: Characteristics of instruments, Errors, Propagation of errors, Error types, Reduction of errors.",
+            "Robotics Concepts: Definition, and Laws of robots; Classification, specification, and applications of robotics."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "MTE 1102": {
+          "title": "Sessional on Mechatronic Systems",
+          "credit": 0.75,
+          "contactHour": "3/2 hrs/week",
+          "topics": [],
+          "sessionalNote": "Sessional Based on MTE 1101.",
+          "references": []
+        },
+        "MTE 1100": {
+          "title": "Engineering Graphics",
+          "credit": 1.5,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Introduction, Drawing equipment and use of instruments, Graphical mathematics, Geometrical construction, Theory of projection, Orthographic projection, Oblique projection, Orthographic and Auxiliary projection from pictorial views, Scale, Dimensioning rules, Orthographic views, Isometric drawing, Auxiliary views, Perspective views, Sectional views, Development of objects, Practical application of descriptive geometry."
+          ],
+          "sessionalNote": null,
+          "references": []
+        }
+      },
+      "optionalCourses": [],
+      "termNotes": []
+    },
+    "Y1T2": {
+      "termKey": "Y1T2",
+      "title": "First Year Second Term",
+      "courses": {
+        "Hum 1231": {
+          "title": "Technical and Communicative English",
+          "credit": 3.0,
+          "contactHour": "3 Hrs/Week",
+          "topics": [
+            "Review of Basic Grammer: Part of Speech, Sentence, Tense, Voice; International Phonetics Alphabet, Looking up a Dictionary entry; Vocabulary: Phrases anf Idioms, Prepositional Phrases, Analogy, Synonyms and Antonyms, Prefixes and Suffixes, Palindroms, Anagrams, Wh Questions, Notions and Functions, Transformation of Sentences.",
+            "Reading Comprehension: Francis Bacon’s Essays: Of Studies, Of Beauty, Of Travel, Of Love, Of Marriage and Single Life; Short stories by Renowned Writers: A Rose for Emily by William Faulkner, Bachelor’s Complaint of the Behavior of Married People by Charles Lamb, A Dissertation Upon Roast Pig by Charles Lamb, The Gift of the Magi by O’ Henry.",
+            "Techniques of Writing: Essay/Paragraph; The Mode of Discourse-Exposition, Description, Narration, Argumentation (EDNA); Letter and Email Writing; Report Writing: Formal and Informal, Tender and Schedule, Quotation, APA Style Sheet, Product Description, Translation"
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "Hum 1231_sessional": {
+          "title": "Sessional on Technical and Communicative English",
+          "credit": 0.75,
+          "contactHour": "3/2 Hrs/Week",
+          "topics": [
+            "Reading: Kinds and Procedures;  SQ3R Technique.",
+            "Writing: Kinds and Procedures.",
+            "Listening: Monologue, Dialogue and Group Conversation (Formal and Informal), Telephoning and Direction, Note Taking Skills.",
+            "Speaking: Basic Conversation, Job Interview, Seminar and paper Presentaion. Formal Speech, Telephoning, Difference between British and American English."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "Ph 1231": {
+          "title": "Physics",
+          "credit": 3.0,
+          "contactHour": "3 Hrs/Week",
+          "topics": [
+            "Static Electricity: Coulomb's law, Electric field, Electric flux and Gauss's law, Application of Gauss's law, Electric potential, Capacitors and Capacitance; Dynamic Electricity: Current, Drift velocity, Ohm's law, Kirchoff's law, Wheatstone bridge principle, Shunt; Magnetic effect on electricity and magnetic induction: Biot-Savert's law and its application, magneto-motive force, Ampere's law and its application; Faraday's laws of induction, Lenz's law, self-inductance and mutual inductance; Magnetism: Magnetic dipole, Magnetic field, magnetic field intensity, flux, permeability, susceptibility, Classifications of magnetic materials, magnetic domain, hysteresis; Optical instruments: Camera and photographic techniques, Compound microscope, Resolving power of a microscope, Telescope, Refracting astronomical telescope, Reflecting telescope.",
+            "Waves and Oscillation: Simple harmonic motion, Differential equation of simple harmonic motion, energy of S.H.M., Applications; Wave Motion: progressive wave, stationary wave, energy of progressive and stationary wave, Doppler's effect; Semiconductor Physics: Semiconductor, Intrinsic semiconductor, Extrinsic Semiconductor, Diodes, Conductivity of a Semiconductor, position of Fermi level, Characteristic of Diode, Rectifiers, Amplifiers and Transistors; LASER: Fundamental process of LASER, Properties of LASER, Population inversion, 2-level, 3-level and 4-level LASER, Ruby LASER, Semiconductor LASER"
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "Ph 1232": {
+          "title": "Sessional on Physics",
+          "credit": 0.75,
+          "contactHour": "3/2 hrs/week",
+          "topics": [],
+          "sessionalNote": "Sessional Based on Ph 1231.",
+          "references": []
+        },
+        "Math 1231": {
+          "title": "Vector, Matrix and Ordinary Differential Equation",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Vector Analysis: Transformation of vectors: scaling, rotation, translation; Linear dependence and independence vectors; Multiple products of vectors; Differentiation and integration of vectors together with elementary applications; Gradient of a scalar function; Divergence and curl of a vector function and their physical significance; Line, surface and volume integrals; Divergence theorem, Stoke’s theorem and Green’s theorem; Introduction to tensor.",
+            "Matrices: Review of matrix Algebra; Elementary transformation of matrices; Inverse of a matrix; Rank of a matrix; Normal and canonical forms; Solution of system of linear homogeneous and non-homogeneous equations; Linear transformations; Eigen values and Eigen vectors; Cayley-Hamilton Theorem",
+            "Ordinary Differential Equations: Formation of Differential Equations; First order differential equations: exact, linear and Bernoulli's form; Solution of second order differential equations with constant coefficients by various methods; Solution of higher order linear homogeneous and non homogeneous differential equations; Cauchy- Euler's equation; System of differential equations (order reduction)"
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "CSE 1231": {
+          "title": "Computer Programming",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Introduction: Concept of Algorithms: Development of programming logic, Algorithm, Flow chart; Assembly level language and Machine level language, High level language, Compiler, interpreter, Source and Object programs.",
+            "Programming with C/C++ Language: Preliminaries, Program construction and data types, I/O statements, Control statements structures, Decision making such as if, else-if, nested else-if, switch, goto, Loops such as while, do-while, for, etc, Expressions, Function and its Calling procedure, Recursion, Arrays and pointer, Structure, Application of computer programming for solving Mechatronics Engineering problems."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "CSE 1232": {
+          "title": "Sessional on Computer Programming",
+          "credit": 1.5,
+          "contactHour": "3 hrs/week",
+          "topics": [],
+          "sessionalNote": "Sessional Based on CSE 1231.",
+          "references": []
+        },
+        "ME 1231": {
+          "title": "Manufacturing Processes",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Introduction: Definition, Classification of manufacturing processes.",
+            "Casting: Design of patterns, Properties of molding sand, Core making, Methods of Sand casting, Die casting, Centrifugal and Allied casting, Precision investment casting, Casting defects and remedies.",
+            "Joining Processes: Soldering, Brazing, Welding and using of electrodes, Conventional welding processes: Gas, Arc, TIG, MIG, Submerged, Resistance, Thermit, LASER, Electron beam etc.",
+            "Metal Forming Processes: Various hot and cold working process, Dies, Drawing, Forming and Blanking operations.",
+            "Metal Removal Processes: Chip formation and Tool design, Tool geometry, Chip breakers. Cutting forces, Metal cutting dynamometers, Economics of metal cutting, Tool geometry, Cost and life of tool.",
+            "Different Machining Processes: Cutting tools and their analyses in turning, Milling, Drilling, Shaping, Grinding, Broaching etc. Machine Tools: Types, Main parts, Power transmission, Drives and control systems. Introduction of Automation and CNC Machine tools, Unconventional Machining Processes, Fabrication process for PCB making.",
+            "Processes for Plastic Products: Injection molding, Compression molding, Blow molding, Transfer molding, Compounding, Extrusion, Vacuum forming, Thermo-forming etc."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "ME 1232": {
+          "title": "Sessional on Manufacturing Processes",
+          "credit": 0.75,
+          "contactHour": "3/2 hrs/week",
+          "topics": [],
+          "sessionalNote": "Sessional Based on ME 1231.",
+          "references": []
+        }
+      },
+      "optionalCourses": [],
+      "termNotes": []
+    },
+    "Y2T1": {
+      "termKey": "Y2T1",
+      "title": "Second Year First Term",
+      "courses": {
+        "Hum 2131": {
+          "title": "Engineering Economics and Accounting",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Engineering Economics: Definition and Principle of Economics; Relation between Economics and Engineering.",
+            "Micro Economics: Theory of demand and supply and their elasticity’s; Price determination; Marginal analysis; Production, production function, types of productivity; Internal and external economics and diseconomies.",
+            "Macro Economics: Savings, investment, national income analysis; Inflation; Causes and analysis of project appraisal; NPV, IRR and their application; Cost benefit analysis. Monetary policy, Fiscal policy; Planning in Bangladesh.",
+            "Accounting: Objectives and Importance of accounting; Accounting as an information system; Basic concepts of accounting; Accounts transaction, accounting procedure; Financial statement analysis and interpretation; Cost concepts and classification; Costing methods; Cost-volume profit analysis; Budgetary control, Pay roll account."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "Math 2131": {
+          "title": "Fourier Analysis and Laplace Transform",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Fourier series: Fourier series, Convergence of Fourier series, Fourier series with different period, Half Range Fourier series, Linearity, Scaling, frequency shifting and time shifting properties.",
+            "Fourier Transform and its applications: Fourier Transform and Self-reciprocity of Fourier Transform.  Applications to boundary value problems.",
+            "Z-Transform: Discrete transform and definition of Z-transform, Properties, Stability, Causality, Region of convergence of Z-transform, Properties of Z-transform, Inverse Z-transform.",
+            "Laplace Transform: Definition and existence condition of Laplace transform. Properties of Laplace transform. Laplace Transform of elementary functions. Inverse Laplace transform and its properties. Solution of ordinary and partial differential equations using Laplace transform."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "EE 2131": {
+          "title": "Electronics",
+          "credit": 3.0,
+          "contactHour": "3 Hrs/Week",
+          "topics": [
+            "P-N Junction as a Circuit Element: Intrinsic and extrinsic semiconductors, n-type doping, p type doping and compensation doping; Diffusion and conduction Equations, Temperature dependence of conductivity, Carrier concentration temperature dependence, Transition and diffusion capacitance; Operational principle of p-n junction diode, contact potential, current voltage characteristics of a diode; Simplified DC and AC diode models, Dynamic resistance and capacitance.",
+            "Diode Circuits: Half wave and full wave rectifiers, Rectifiers with filter capacitor; Characteristics of a Zener diode, Zener shunt regulator, Clamping and Clipping circuits.",
+            "Bipolar Junction Transistor (BJT): Current components, BJT characteristics and regions of operation, BJT as an amplifier; Biasing the BJT for discrete circuits, small signal equivalent circuit models, BJT as a switch.",
+            "Field Effect Transistor (FET) Family: Structure and physical operation of JFET and MOSFET; Threshold voltage, Current-voltage characteristics of FET and MOSFET, single–stage MOS amplifiers, MOSFET as a switch.",
+            "Electronic Circuit Design: Operational Amplifiers (Op-Amp) and their gain, input and output impedances, Offset null adjustment, Frequency response and noise; Filters, Oscillators, Timers and Multi vibrators."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "EE 2132": {
+          "title": "Sessional on Electronics",
+          "credit": 1.5,
+          "contactHour": "3.00 Hrs/Week",
+          "topics": [],
+          "sessionalNote": "Sessional Based on EE2131.",
+          "references": []
+        },
+        "ME 2131": {
+          "title": "Engineering Mechanics",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Statics: Fundamental concept and principle of Mechanics, Equilibrium of particles and rigid bodies; Analysis of structure: Trusses, Frames and Machines; Centroids and center of gravity of areas and volumes; Frictions; Moments of inertia of areas and masses.",
+            "Kinematics: Rectilinear and curvilinear motion of particles; Motion relative to frame in translation; Tangential, normal, radial and transverse components; General plane motion, motion about a fixed point; Absolute velocity and acceleration; Relative velocity and acceleration.",
+            "Kinetics: Newton’s second law of motion; Linear and angular momentum; Radial and transverse components of motion; Principle of work and energy and its application; Potential energy, conservative forces; Conservation of energy and its applications; Principle of impulse and momentum; Direct and oblique central impact, Eccentric impact; Plane motion of rigid bodies; Equation of motion, Angular momentum and D’Alembert’s principle; Principle of Impulse and momentum for the plane motion of a rigid body."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "ME 2132": {
+          "title": "Sessional on Engineering Mechanics",
+          "credit": 0.75,
+          "contactHour": "3/2 hrs/week",
+          "topics": [],
+          "sessionalNote": "Sessional Based on ME 2131.",
+          "references": []
+        },
+        "MTE 2105": {
+          "title": "Sensors and Instrumentation",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Introduction: Functional elements of a measurement system, Errors in measurement and its eliminations, Classification of instruments.",
+            "Sensors: Selection of sensors and transducers; Sensor Evolution; Displacement sensors: LVDT, Ultrasonic sensor, Optical sensors; Force Sensor: Strain gauge, Piezo sensor and load cell sensor; Temperature Sensor: Thermocouple, RTD, Thermistors, Radiation pyrometry, Bimetallic thermometer;  Gas pressure thermometer; Humidity sensor; Speed sensor, Magnetic level gauge, Accelerometer and Gyro, Synchro, Magnetometer, Tachometer, Rotameter, Chemical sensor, Thermal imaging, Finger print sensor, Smart sensors and MEMS.",
+            "Instrumentation: Basic principles of DC and AC signal conditioning, Instrumentation amplifier, Analog signal filters, Analog signal Preprocessing, Digital signal processing, A/D and D/A converters, Sampling, Sample and Hold circuits.",
+            "Modular instrumentation: VXI, PXI, Virtual instrumentation notions.",
+            "Data Transmission and Telemetry: Methods of data transmission, DC/AC telemetry system and digital data transmission, Recording and display devices, Data acquisition system and microprocessor applications in instrumentation.",
+            "Calibration: Introduction, Calibration of pressure, temperature, Level measuring instruments; Relative humidity."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "MTE 2106": {
+          "title": "Sessional on Sensors and Instrumentations",
+          "credit": 1.5,
+          "contactHour": "3 hrs/week",
+          "topics": [],
+          "sessionalNote": "Sessional Based on MTE 2105.",
+          "references": []
+        },
+        "MTE 2100": {
+          "title": "CAD Practice",
+          "credit": 1.5,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Introduction to AutoCAD software, Practice of various commands of 2D and 3D drawing in AutoCAD, Drawing and dimensioning of a Machine Part using AutoCAD, Introduction to various Design Software: Solid Works/CATIA."
+          ],
+          "sessionalNote": null,
+          "references": []
+        }
+      },
+      "optionalCourses": [],
+      "termNotes": []
+    },
+    "Y2T2": {
+      "termKey": "Y2T2",
+      "title": "Second Year Second Term",
+      "courses": {
+        "Math 2231": {
+          "title": "Complex Variables and Harmonic Analysis",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Complex Variable: General functions of a complex variable, Limit, Continuity and Differentiability of complex functions and related theorems, Analyticity, Cauchy-Riemann equation, Harmonic   and conjugate harmonic functions of complex variable; Line integral of a complex function, Cauchy’s integral formula, Liouville’s theorem, Taylor’s and Laurent’s theorem; Different kinds of singular points and their justifications; Residue, Cauchy’s residue theorem; Contour integration; Conformal mapping with its application to Engineering problems.",
+            "Harmonic Analysis: Finite transformation, Harmonic functions, Laplace equations, Spherical harmonic, Surface zonal harmonic, Gravitational potential due to spherical shell and sphere.",
+            "Power Series Method: Solution of differential equations in series; Bessel’s functions and their properties; Legendre’s polynomials and their properties; Application of Bessel functions especially in mechanics."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "EE2231": {
+          "title": "Signals and Linear Systems",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Introduction to Linear Systems and Signal Classification: Signals: Classification, Basic operation on signals, Elementary signals, Representation of signals using impulse function; Systems: Classification; Properties of Linear Time Invariant (LTI) systems: Linearity, causality, Time invariance, Memory, Stability, Invertibility.",
+            "Time Domain Analysis of LTI Systems: Differential equations: System representation, Order of the system, Solution techniques, Zero state and Zero input response, System properties; Impulse response: Convolution integral, Determination of system properties; State variable: Basic concept, State equation and Time domain solution.",
+            "Analogous Systems: f-v and f-i analogy for different types of system.",
+            "Frequency Domain Analysis of LTI systems: Fourier series: Properties, Harmonic representation, System response, Frequency response of LTI systems; Fourier transformation properties; System transfer function, System response and distortion-less systems; Applications of time and frequency domain analyses: Solution of analog Electrical and Mechanical systems.",
+            "Applications of Laplace transformation: Solution of system equations, System transfer function, System stability and Frequency response and Application, Superposition integral."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "ME 2231": {
+          "title": "Thermodynamics and Heat Transfer",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Thermodynamics: Definition of different thermodynamic terms; Equation of state; Various thermodynamic processes; Specific heats, Internal energy, Enthalpy; Thermodynamic cycles, Zeroth Law, First Law, Heat and work transfer in flow and non-flow processes, Steady flow energy equation, Second law and Entropy.",
+            "Gas and Vapor Power Cycles: Carnot cycle, Otto cycle, Diesel cycle, Dual cycle, Brayton cycle and their applications; Rankine cycle, Reheat cycle, Regenerative cycle, Representation of various cycles on P-V and T-S planes, Cycle efficiency; Working principle of Boiler, IC Engines, Gas Turbines.",
+            "Refrigeration and Air Conditioning: Basic concepts of refrigeration and air conditioning systems, Applications, Working principle of Vapor compression and Vapor absorption refrigeration systems, Refrigerants and its properties.",
+            "Heat Transfer: Basic modes of Heat Transfer, Steady and Unsteady Heat conduction, Theory of thermal radiation, Electromagnetic spectrum, Plank’s law, Wein’s displacement law, Steffen Boltzman equation, Concept of black body and gray body, Kirchoff’s law; Basics of natural and forced convection; Basics of Heat exchangers."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "ME 1232_sessional_dup": {
+          "title": "Sessional on Thermodynamics and Heat Transfer",
+          "credit": 0.75,
+          "contactHour": "3/2 hrs/week",
+          "topics": [],
+          "sessionalNote": "Sessional Based on ME 2231.",
+          "references": []
+        },
+        "MTE 2207": {
+          "title": "Electro-Mechanical Systems",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Electromechanical Energy Conversion Fundamentals: Faraday's Law of Electromagnetic Induction, Fleming’s Rule and Lenz's Law.",
+            "Transformer: Principles, Equivalent circuit, Single phase and Three phase transformers, Short circuit and Open circuit tests.",
+            "DC generator: Construction, Principle of operation, Windings and Armature reaction, Performance evaluation and testing.",
+            "DC motor: Operation, Types, Speed-torque characteristics, Starting and Speed control.",
+            "Induction Motor: Theory of operation, Equivalent circuit, Slip, Torque-speed characteristics, Developed rotor power; Starting, Braking and speed control of Single and Three phase Induction motors.",
+            "Synchronous Machines: Operation, Excitation systems, Equivalent circuit, Effects of loading under different excitation conditions, V-curves, Starting and Method of synchronization.",
+            "Servo Drives: Operation of servo motors, Motion control system, Axis of motion, System power up, Over travel, Distance and position, Homing, Actuators.",
+            "Special Machines: Brushless DC motor, Stepper motor, Universal motor, Electrostatic motor, Switched Reluctance motor."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "MTE 2208": {
+          "title": "Sessional on Electro-Mechanical Systems",
+          "credit": 1.5,
+          "contactHour": "3 hrs/week",
+          "topics": [],
+          "sessionalNote": "Sessional Based on MTE 2207",
+          "references": []
+        },
+        "MTE 2201": {
+          "title": "Control Systems",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Introduction to Control System: Review of classical control and modeling; Steady state response to step, ramp, and parabolic inputs; Transient response; Poles and zeros, Frequency response from pole-zero diagram, Routh’s stability criterion; Block diagrams, Canonical forms; Transfer functions and signal flow graph; System types; Root locus, Frequency response, gain and phase margin; Phase lag and lead compensator design using root locus and bode diagram.",
+            "Modern Control System: Introduction, state variable analysis, controllability and observability, Application of Eigen value, Linear control system design by state feedback; Introduction to non linear control.",
+            "Controllers Design: On-off, P, PI, PD and PID controllers, their applications in control system design; Position control system.",
+            "Intelligent Control Systems: Optimal control methods: LQR and LQG; Kalman Filtering; Robust control."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "MTE 2202": {
+          "title": "Sessional on Control Systems",
+          "credit": 1.5,
+          "contactHour": "3 hrs/week",
+          "topics": [],
+          "sessionalNote": "Sessional Based on MTE 2201.",
+          "references": []
+        },
+        "MTE 2210": {
+          "title": "Modeling and Simulation",
+          "credit": 0.75,
+          "contactHour": "3/2 hrs/week",
+          "topics": [
+            "Mathematical Models, Mechanical, electrical, Fluid and Thermal system building blocks, Engineering systems, rotational-translational, electromechanical and hydraulic-mechanical systems, Modelling of dynamic systems. Modelling a system with MATLAB and simulate it by SIMULINK."
+          ],
+          "sessionalNote": null,
+          "references": []
+        }
+      },
+      "optionalCourses": [],
+      "termNotes": []
+    },
+    "Y3T1": {
+      "termKey": "Y3T1",
+      "title": "Third Year First Term",
+      "courses": {
+        "ME 3131": {
+          "title": "Fluid Mechanics and Machinery",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Introduction: Definition and properties of fluid; Fluid as a continuum.",
+            "Fluid Statics: Pressure at a point; Pressure gradient; Measurement of pressure; Buoyancy and floatation; Stability of submerged and floating bodies.",
+            "Fluid Dynamics: Velocity and acceleration of fluid particles; Types of fluid flow; Euler's equation; Bernoulli's equation; Continuity equation; Energy equation and their applications; Energy grade line and Hydraulic grade line.",
+            "Flow Through Pipes: Viscous flow in pipes; Laws of fluid friction; Losses in pipes and fittings; Laminar flow between parallel plates; Laminar flow through circular tubes; Concept of boundary layer.",
+            "Measurement of Fluid Flow: Pitot tube; Venturimeter; Rotameter; Orifices; Notches; Weirs etc.",
+            "Hydraulic Pumps: Introduction to Centrifugal and Reciprocating pump; Working principle; Work done, Slip, Efficiency; Minimum starting speed of Centrifugal pump; Cavitation; Priming of Centrifugal pump.",
+            "Hydraulic Turbines: Definition and classification; Working principles, Work done, Efficiency and Specific speed of Impulse and Reaction turbines."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "ME 3132": {
+          "title": "Sessional on Fluid Mechanics and Machinery",
+          "credit": 0.75,
+          "contactHour": "3/2 hrs/week",
+          "topics": [],
+          "sessionalNote": "Sessional Based on ME 3131",
+          "references": []
+        },
+        "MTE 3000": {
+          "title": "Industrial Training",
+          "credit": 0,
+          "contactHour": null,
+          "topics": [
+            "The students will complete a two-week attachment in a relevant company, institution, or organization to gain hands-on experience with mechatronic systems. Following the training program, each student should submit a report or create a presentation. The course can be completed at any suitable time during the third year (odd or even semester or vacation)."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "MTE 3100": {
+          "title": "Seminar and Scientific Writing",
+          "credit": 0.75,
+          "contactHour": "3/2 hrs/week",
+          "topics": [
+            "Introduction to scientific writing; An overview on thesis, journal and conference paper writing; Ethics of paper writing and plagiarism; Practice of scientific paper writing; Paper presentation related to Mechatronics Engineering."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "MTE 3103": {
+          "title": "Microprocessor, Microcontroller and Interfacing",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Introduction: Microprocessors, Microcomputers, and microcontrollers, Peripherals, and Interfacing.",
+            "Microprocessors: Evolution of microprocessors; 8086 microprocessors: Introduction, Architecture, Instruction sets, Constructing machine codes for 8086 instructions, Opcode, Addressing modes, Interrupts and 8259A (Priority Interrupt Controller), Traps and interrupts, I/O operation, Interrupt controller, An overview of Intel 80186, 80286, 80386 and Pentium processors, RISC processors, Parallelism in microprocessor, Bit-slice processor, Co-processors: Arithmetic co-processor, I/O processor, Math co-processor.",
+            "Microcontrollers: Overview/review of microcontroller architecture, Data representation, and memory usage. ATMEL microcontroller: Introduction, Classification, Pin configuration, Basic architecture, Memory, Registers, I/O ports; Assembly and C programming of microcontroller in Integrated Development Environment (IDE); General purpose input/output; User defined function; Binary counter; Timer; Interrupts; PWM techniques with timer/counter; Analog to digital converter; Reading sensor data.",
+            "Interfacing: General purpose peripherals and special purpose peripherals; I/O techniques; Memory Interfacing: Compatibility between memory and MPU system bus; Data Transfer Techniques: Synchronous, Asynchronous, Interrupt-Driven Mode, DMA Mode of Data Transfer, and Serial Data Transfer; Interfacing I/O devices - Keyboard, Mouse, Display devices, etc., Programmable Peripheral Interface (Intel 8255): Modes of operation, and Programming."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "MTE 3104": {
+          "title": "Sessional on Microprocessor, Microcontroller and Interfacing",
+          "credit": 1.5,
+          "contactHour": "3/2 hrs/week",
+          "topics": [],
+          "sessionalNote": "Sessional Based on MTE 3103",
+          "references": []
+        },
+        "MTE 3105": {
+          "title": "Linear Integrated Circuits and Digital Systems",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Operational Amplifier: Different configurations of operational amplifier ICs and their general linear and non-linear applications: Analog computation, Active filters, Waveform generator, Comparator, Frequency to voltage and voltage to frequency converters; Specialized IC applications: Analog multiplier, Switched capacitor filter, Phase-locked loop, Power amplifier, Voltage regulator.",
+            "Digital IC Logic Families: Introduction to digital IC logic families.",
+            "Combinational Logic Circuits: Review of binary codes; Logic gates and logic circuit; Implementation using basic and universal gates; Simplification of Boolean functions including Karnaugh map and tabular method; Parity bit generator and checker circuit design; Adders/ Subtractors; Code converters; Comparators; Multiplexers/ demultiplexers; ROM; PLA; PAL; RAM.",
+            "Sequential Logic Circuits: Comparison with combinational circuit; Latches and different flip flops with their applications; State behavior of synchronous sequential circuits and state table reduction; Mealy and Moore circuits; Registers; Counters; Sequence detectors.",
+            "Converters: Introduction to analog and digital data conversions; Different types of analog to digital and digital to analog converters with their operation and applications."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "MTE 3106": {
+          "title": "Sessional on Linear Integrated Circuit and Digital Systems",
+          "credit": 0.75,
+          "contactHour": "3/2 hrs/week",
+          "topics": [],
+          "sessionalNote": "Sessional Based on MTE 3105",
+          "references": []
+        },
+        "MTE 3107": {
+          "title": "Data Structure and Algorithm",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Introduction: Data types: primitive and non-primitive, Data structures: linear and non-linear, Abstract data types, Array.",
+            "Stacks and Queues: Basic operations and applications, Recursion.",
+            "Linked Lists: Basic Operations of singly and doubly linked lists.",
+            "Sorting: Insertion sort, Selection sort, Bubble sort, Merge sort, and Quick sort.",
+            "Searching and Hashing: Linear search, Binary search, Applications. Hashing and Storage management.",
+            "Trees: Binary Trees: Representation and Traversal, Binary Search Trees: Representation and Basic Operations.",
+            "Graphs: Representations, Basic operations, Traversals: DFS, BFS, Applications of DFS and BFS, Dijkstra's algorithm, A* algorithm, Floyd Wars hall’s algorithm."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "MTE 3108": {
+          "title": "Sessional on Data Structure and Algorithm",
+          "credit": 0.75,
+          "contactHour": "3/2 hrs/week",
+          "topics": [],
+          "sessionalNote": "Sessional Based on MTE 3107",
+          "references": []
+        },
+        "MTE 3113": {
+          "title": "Numerical Analysis and Statistics",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Numerical Methods: Introduction and mathematical background of the numerical methods; Round off and Truncation Errors in Numerical methods; Solution of nonlinear algebraic and transcendental equations, Interpolation; Numerical differentiation and Integration; Solution of linear system of equations; Numerical solution of ordinary equations; Numerical solution of partial differential equations; Finite difference and finite element methods; Application of numerical methods to problems from mechatronic systems and control engineering.",
+            "Statistics: Review of data; Frequency distribution; Mean, Median, Mode, Standard deviation; Moment, Skewness, Kurtosis; Dispersion; Rules of probability; Mathematical expectation; Probability distributions; Binomial, Poisson, Normal and Exponential distributions; Hypothesis testing; Chi-Square distribution; t- distribution; Correlation and regression analysis; Analysis of variance."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "MTE 3114": {
+          "title": "Sessional on Numerical Analysis and Statistics",
+          "credit": 0.75,
+          "contactHour": "3/2 hrs/week",
+          "topics": [],
+          "sessionalNote": "Sessional Based on MTE 3113",
+          "references": []
+        }
+      },
+      "optionalCourses": [],
+      "termNotes": []
+    },
+    "Y3T2": {
+      "termKey": "Y3T2",
+      "title": "Third Year Second Term",
+      "courses": {
+        "EEE 3231": {
+          "title": "Network and Communication Systems",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Network: Protocol hierarchies, Data link control; HLDC, DLL in internet; DLL of ATM; LAN protocols; Standards IEEE 802, Switches and hubs, Bridges, FDDI, Fast ethernet; Routing algorithm; Congestion control; Internetworking; Wireless networking; PAN; GSM; WAP; WAN; CAN; Wireless sensor networks; Network security and encryption.",
+            "Communication System: Digital communication; Topologies; Protocols and standards; Open systems interconnection communication model; Communication ports: Serial, Parallel; Serial interface: RS family, Parallel interface: GPIB bus, Dedicated interfaces: USB, Ethernet, Industrial communication buses, Remote sensing, Wi-Fi and Bluetooth-compatible cellular telephone system, Optical and satellite communication system for smart phone.",
+            "Communication Systems for Distributed Robots: Peer to peer; Tele-operation with Zigbee networks; Communication protocols for distributed sensors and Ambient Intelligence."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "ME 3231": {
+          "title": "Solid Mechanics and Machine Design",
+          "credit": 3.0,
+          "contactHour": "4 hrs/week",
+          "topics": [
+            "Stress and Strain: Introduction; Analysis of internal forces; Normal, shearing and bearing stresses; Stresses in thin-walled pressure vessel; Stress-Strain diagram; Deformations; Statically indeterminate members; Thermal stresses;",
+            "Torsion: Introduction; Torsion formula; Angle of twist; Analysis and design of circular shaft; Helical springs.",
+            "Statically Determinate Beams: Introduction; Different types of loading and supports; Shear force and bending moment diagrams; Stresses in beams, flexure formula, economic sections, shearing stresses in beams.",
+            "Statically Indeterminate Beams: Introduction; Propped and restrained beams; Design of restrained beams.",
+            "Combined Stresses: Introduction; Combined axial and bending stresses; Stress at a point; Mohr’s circle and its application to combined loadings.",
+            "Machine Design: Approach to design; Stress analysis; Tolerances and allowances; Variable loads and stress concentrations; Design of various types of springs; Shaft design; Design and selection of various types of bearings; Design of various types of gears; Design of clutches and brakes; Design and selection of flexible power transmitting elements; Belts, ropes, and chains."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "ME 3232": {
+          "title": "Sessional on Solid Mechanics and Machine Design",
+          "credit": 0.75,
+          "contactHour": "3/2 hrs/week",
+          "topics": [],
+          "sessionalNote": "Sessional Based on ME 3231",
+          "references": []
+        },
+        "MTE 3200": {
+          "title": "Special Studies and Project",
+          "credit": 1.5,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Study of special topic/ project/ research paper related to Mechatronics Engineering and development of a project; Report submission and presentation on the project."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "MTE 3201": {
+          "title": "Power Electronics and Drives",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Introduction to Power Electronics: Definition; Types of power electronics circuits.",
+            "Switches and Triggering Devices: BJT, MOSFET, SCR, IGBT, GTO, TRIAC, UJT and DIAC; Snubber commutation; Pulse circuit.",
+            "AC to DC Controlled Converter: Uncontrolled rectifiers (single phase and three phase); Controlled rectifiers (single phase and three phase); Dual converter.",
+            "AC to AC Controlled Converter: Phase-controlled converters (single phase and three phase); AC switch; Cycloconverter.",
+            "DC to DC Converter: Choppers (step down and step up); Switching regulators (buck, boost, buck-boost).",
+            "Inverter: Single phase and three phase voltage source and current source inverters; Voltage, frequency and harmonic control; PWM inverters; Resonance inverters; Space vector modulation in three phase inverters.",
+            "Power Electronic Control of Motors: DC motor speed control; Scalar control of polyphase induction motor; Stepper and servo motor control."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "MTE 3202": {
+          "title": "Sessional on Power Electronics and Drives",
+          "credit": 0.75,
+          "contactHour": "3/2 hrs/week",
+          "topics": [],
+          "sessionalNote": "Sessional Based on MTE 3201",
+          "references": []
+        },
+        "MTE 3203": {
+          "title": "Hydraulic and Pneumatic Control",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Hydraulic Control: Hydraulic pumps: Types, Characteristics, Selection; Hydraulic actuators: Types, Characteristics, and Selection; Hydraulic valves: Pressure, flow and direction control, Applications; Hydraulic accumulators; Hydraulic circuits: Hydraulic circuit symbols; Design of hydraulic circuits: Selection of components, Sequencing, and synchronizing circuits; Safety and maintenance of hydraulic circuits.",
+            "Pneumatic Control: Pneumatic compressors: Types, Characteristics, and Selection; Fluidics control elements: Sensors, Logic Circuits, Switching; Pneumatic circuit symbols; Pneumatic circuits: Design of pneumatic circuits, Selection of components, Classic, Cascade, Step counter, Electro-pneumatic and robotic circuits; Safety and maintenance of pneumatic circuits."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "MTE 3204": {
+          "title": "Sessional on Hydraulic and Pneumatic Control",
+          "credit": 0.75,
+          "contactHour": "3/2 hrs/week",
+          "topics": [],
+          "sessionalNote": "Sessional Based on MTE 3203",
+          "references": []
+        },
+        "MTE 3205": {
+          "title": "Robotics",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Introduction: Definition and laws of robotics; Classification, specification, and applications of robots; Components of robot systems: Manipulator arm, Robot end effectors, Robot sensors and actuators; Trends of robots: Historical trend and future direction.",
+            "Mechanical Design of Robots: Links and joints; Kinematic chain; Degree of freedom; Mechanisms and mechanics for manipulators and mobile robots.",
+            "Spatial Descriptions and Transformations: Description of position; Orientation and frames;  Homogeneous transformations.",
+            "Manipulator Kinematics: Link parameters and link co-ordinate systems; D-H homogeneous transformation matrices; Forward and inverse kinematics of serial manipulators; Jacobian matrix analysis.",
+            "Manipulator Dynamics: Newton-Euler formulation and Lagrangian formulation of serial manipulator.",
+            "Robot Control Architecture: Trajectory planning; Control of manipulators; Motor control; Low level robot vision; Robot programming.",
+            "Mobile robots: Mobile robot kinematics; Medical robot."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "MTE 3206": {
+          "title": "Sessional on Robotics",
+          "credit": 1.5,
+          "contactHour": "3 hrs/week",
+          "topics": [],
+          "sessionalNote": "Sessional Based on MTE 3205",
+          "references": []
+        }
+      },
+      "optionalCourses": [],
+      "termNotes": []
+    },
+    "Y4T1": {
+      "termKey": "Y4T1",
+      "title": "Fourth Year First Term",
+      "courses": {
+        "MTE 4000": {
+          "title": "Project and Thesis",
+          "credit": 1.5,
+          "contactHour": null,
+          "topics": [
+            "Project and thesis topic should be selected from theoretical and experimental investigation in the field of Mechatronics Engineering. The topics should provide an opportunity for the students to develop initiative, creative ability and engineering judgment. Individual or group study (preferable not more than two in a group) will be required.",
+            "At the end of term, the student/group is expected to complete the preliminary literature survey and select the topic for study. Each student/group is expected to take part in the presentation of at least one seminar in the term in front of an examination board. The seminar/seminars will be conducted on their respective Project/Thesis topic."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "MTE 4101": {
+          "title": "Industrial Automation",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Automation Systems: Introduction; Automation system components; Industrial data communications and wireless; Process control; Process field instrumentations; Overview of SCADA and DCS systems; Safety instrumentation and machinery; Maintenance and troubleshooting; Recent trends in industrial automation.",
+            "Programmable Logic Controller: Design and operational characteristics: Hardware, Internal Architecture, I/O devices; PLC information and communication techniques: PLC data, I/O processing; PLC programming methods: Ladder and Functional Block programming, IL, SFC and ST programming methods; PLC programming techniques: Internal Relays, Jump and Call, Timer, Counters, Shift Registers, Data Handling; Designing systems.",
+            "Applications: Automation system installation; TIA and HMI portal programming."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "MTE 4102": {
+          "title": "Sessional on Industrial Automation",
+          "credit": 1.5,
+          "contactHour": "3 hrs/week",
+          "topics": [],
+          "sessionalNote": "Sessional based on MTE 4101",
+          "references": []
+        },
+        "MTE 4103": {
+          "title": "Digital Signal Processing and Machine Vision",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Introduction to Digital Signal Processing (DSP): Discrete-time signals and systems; Impulse response; Finite impulse response (FIR) and infinite impulse response (IIR) of discrete time systems: Difference equation, Convolution.",
+            "Discrete Transformations: Discrete-time Fourier series, Discrete Fourier Transform (DFT) and properties, Fast Fourier Transform (FFT), Inverse Fast Fourier Transform (IFFT); Z transformation properties: Transfer function, and inverse Z-transform.",
+            "Correlation: Circular convolution; Auto correlation and cross correlation.",
+            "Digital Filters: FIR filters: Linear phase filters, Specifications, Design using window, optimal and frequency sampling methods; IIR filters: Specifications, Design using impulse variant, Bi-linear Z-transformation, Least square methods, and Finite precision effects.",
+            "Machine Vision: Components of machine vision system; Digital image representation and acquisition; Modern techniques for image analysis and enhancement; Two-dimensional system and transform theory; Feature extraction; Image Segmentation: Classification techniques by supervised and unsupervised learning; Image enhancement and restoration."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "MTE 4104": {
+          "title": "Sessional on Digital Signal Processing and Machine Vision",
+          "credit": 0.75,
+          "contactHour": "3/2 hrs/week",
+          "topics": [],
+          "sessionalNote": "Sessional based on MTE 4103",
+          "references": []
+        },
+        "MTE 4107": {
+          "title": "Design of Mechatronic Systems",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Introduction: Integrated complex mechatronics systems: Concept, structure, and applications; Mechatronics design process, Recognition of the need, Integrated design issues in Mechatronics.",
+            "Mechanical Systems Design: Elements of mechanical systems, Load conditions, Design and flexibility of structures, Man Machine Interface, Industrial design and ergonomics, Machine design principles, Design of some machine elements (gear, belt and pulley, and bearing).",
+            "Electrical and Electronic System Design: Important/advanced electronic circuits for mechatronics systems; Sensor modeling: Sensor selection and signal conditioning; Actuator design: Choice and selection of actuation system, Design of drive systems; Control system design: Choice of control system, Selection and design of controller, Embedded system design with microcontroller.",
+            "Intelligent System Design: Design and implementation of a prototype in artificial intelligence.",
+            "Real Time Interfacing: Elements of data acquisition and control, Overview of I/O process, Installation of I/O card and software, Networking and communication.",
+            "Integration and Optimization: Hardware-in-the loop simulation (prototyping), Integration of different systems (Mechanical, Electrical and Software), Optimization of the system.",
+            "Case Studies: Magnetic suspension for vibration control; Small weight measurement; Robust fault diagnosis of rolling bearing."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "MTE 4108": {
+          "title": "Sessional on Design of Mechatronic Systems",
+          "credit": 1.5,
+          "contactHour": "3 hrs/week",
+          "topics": [],
+          "sessionalNote": "Sessional based on MTE 4107",
+          "references": []
+        }
+      },
+      "optionalCourses": [
+        {
+          "code": "Optional-I",
+          "title": "Optional-I",
+          "credit": 3.0,
+          "contactHour": null,
+          "topics": [],
+          "sessionalNote": null,
+          "references": []
+        },
+        {
+          "code": "Optional-II",
+          "title": "Optional-II",
+          "credit": 3.0,
+          "contactHour": null,
+          "topics": [],
+          "sessionalNote": null,
+          "references": []
+        }
+      ],
+      "termNotes": []
+    },
+    "Y4T2": {
+      "termKey": "Y4T2",
+      "title": "Fourth Year Second Term",
+      "courses": {
+        "MTE 4000_2": {
+          "title": "Project and Thesis",
+          "credit": 3.0,
+          "contactHour": null,
+          "topics": [
+            "At the end of the term, the student/group is expected to complete the project/thesis and submit a report. Each student/group is expected to take part in the presentation of at least one seminar in the term in front of an examination board to present the complete project/thesis."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "MTE 4203": {
+          "title": "Embedded Systems and Internet of Things",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Introduction: Embedded systems’ overview, Characteristics of embedded systems, Internet of Things (IoT), IoT Devices, Evolution and technologies used in IoT.",
+            "Software Issues of Embedded Systems: Embedded programming, Designing, implementing, and testing software for embedded systems, Embedded systems’ design challenges – Optimizing design metrics, Constraint driven design, IP-based Design, Design methodology, Embedded software development process and tools, Real-time operating system (RTOS).",
+            "Hardware Issues of Embedded Systems: Choice of Processor, Memory, I/O, Interfacing to commonly used I/O devices, Types of interconnections, Sensors for measuring physical phenomena, Output devices such as power actuators and motors, Embedded systems on chip (SOC) Technology, Hardware and software co-design Issues.",
+            "Internet of Things (IoT):  Machine-to-machine communications, Interoperability in IoT, IoT embedded system programming, Sensors and components in IoT, IoT stacks, Design principles and methodologies used in IoT systems, Connectivity and programming of IoT devices, IoT Application Development - Solution Framework for IoT, IoT Communication Protocols, IoT cloud architecture, Fault Tolerance in IoT based Systems, IoT Security, Industrial IoT.",
+            "Case Studies: Healthcare, Agriculture, Robotics, Connected vehicles, Wearables, Smart home, Smart city.",
+            "Design Technologies: Synthesis of custom processors using VHDL; Verification (simulation and test) and intellectual property."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "MTE 4204": {
+          "title": "Sessional on Embedded Systems and Internet of Things",
+          "credit": 0.75,
+          "contactHour": "3/2 hrs/week",
+          "topics": [],
+          "sessionalNote": "Sessional based on MTE 4203",
+          "references": []
+        },
+        "MTE 4207": {
+          "title": "Computer Integrated Manufacturing",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Hardware Components of CIM: Fundamental of automation in manufacturing; Functions and components of CIMs; CNC machines and PLC; Automated material handling: Robots, Conveyors.",
+            "Software Components of CIM: APT/Part programming; CAD, CAM and their integration.",
+            "Product Data Management: Direct translation between CAD systems; CAD/CAM data exchange; Expert systems.",
+            "Production Process System: Flexible manufacturing systems; Planning and scheduling of flexible manufacturing systems; Lean production and agile manufacturing.",
+            "Process Planning: Process design and planning; Computer aided process planning; Group technology and cellular manufacturing; Automated data capture; Automated storage and retrieval systems; Automated inspection, testing principles and technologies; Automated assembly systems; Concurrent engineering; Factory areas networking; Factory of the future."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "MTE 4208": {
+          "title": "Sessional on Computer Integrated Manufacturing",
+          "credit": 0.75,
+          "contactHour": "3/2 hrs/week",
+          "topics": [],
+          "sessionalNote": "Sessional based on MTE 4207",
+          "references": []
+        },
+        "IPE 4231": {
+          "title": "Industrial Management",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Management Fundamentals: Brief history of the development of management theories; Management functions; Principles of management.",
+            "Organization Fundamentals: Organization structure; Types of organization; Span of control.",
+            "Personnel Management: Manpower planning; Recruitment training; Leadership style and types; Morale: Types and importance; Motivation: Theories of motivation; Job rotation, enlargement and enrichment.",
+            "Wages and Incentives: Job evaluation methods; Wage incentive plans; Fringe benefits.",
+            "Planning and Decision Making: Basic concept of Management Information System (MIS) and Decision Support System (DSS); Strategic planning: Importance and different steps; Decision making process: Classification and procedure of decision making.",
+            "Project Management: Introduction to project management; Initiating; Project life cycle; Planning; Scope of planning; Cost estimation; Time estimation; Scheduling; Project management plan; Quality planning; Communication planning; Risk management; Tracking and reporting; Earned value; Tools and resources; Controlling; Scope, quality, time, and cost control; Impact management; Procurement; Project recovery; Deliverable review and acceptance."
+          ],
+          "sessionalNote": null,
+          "references": []
+        }
+      },
+      "optionalCourses": [
+        {
+          "code": "MTE 4011",
+          "title": "Machine Learning",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Introduction: Aspects of machine learning; Introduction to supervised, unsupervised, semi supervised and reinforcement learning.",
+            "Supervised Machine Learning: Regression and Classification task; Different supervised machine learning algorithms: Linear Regression, Polynomial Regression, Naïve Bayes, Random Forest, Decision Trees, Logistic Regression, and Support Vector Machine.",
+            "Clustering and Unsupervised Machine Learning: Learning from unlabeled data; Basic concept of Clustering: Hierarchical clustering, K-means clustering, and KNN (k-nearest neighbors).",
+            "Artificial Neural Networks: Neurons and biological motivation; Perceptron and solving Boolean functions; Feed forward neural networks; Single layer and multilayer networks; Back propagation training method.",
+            "Dimensionality Reduction: Curse of the dimensionality; Empty space phenomenon; Linear and nonlinear techniques for dimensionality reduction.",
+            "Applications of Machine Learning: Apply machine learning techniques to solve real-world problems: Robotic control, Autonomous navigation, etc."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        {
+          "code": "MTE 4012",
+          "title": "Sessional on Machine Learning",
+          "credit": 0.75,
+          "contactHour": "3/2 hrs/week",
+          "topics": [],
+          "sessionalNote": "Sessional based on MTE 4011.",
+          "references": []
+        },
+        {
+          "code": "MTE 4013",
+          "title": "Artificial Intelligence",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Introduction: Definition; AI technique; Applications.",
+            "Intelligent Agent: Introduction, Structure of intelligent agent, Agent programs, Goal-based agents, Environments.",
+            "Problem Solving: Solving problem by searching, Problem solving by agent, Formulating problems, Search strategies, Breadth-First, Uniform cost, Depth-First, Depth limited and iterative deepening search, Informed search methods, Best-First, Greedy and A* search, Heuristic functions, IDA* search, Iterative improvement algorithms, Hill-Climbing search, Simulated annealing, Imperfect decisions, Alpha-Beta pruning.",
+            "Knowledge and Reasoning: Knowledge-based agent, Representation, Reasoning and logic, Propositional logic.",
+            "First-Order Logic: Syntax and semantics, Terms, Atomic and complex sentences, Quantifiers, Equality, Extensions and notational variations, Higher-order logic, Using first order logic, Axioms, Definitions and theorems. Inference in First-Order Logic: Inference rules involving quantifiers, generalized modus ponens, Canonical form, Unification, Forward and backward chaining, Completeness, Resolution inference rule, Canonical forms for resolution, Resolution proofs, Conversion to normal form.",
+            "Uncertain Knowledge and Reasoning: Uncertainty, Acting under uncertainty, Basic probability notation, Conditional probability, Axioms of probability, Bayes rules and its use, Normalization; Probabilistic Reasoning Systems: Representing knowledge in an uncertain domain, Knowledge engineering for uncertain reasoning, Default reasoning, Rule-based methods for uncertain reasoning, Dumpster-Shafer theory, Fuzzy sets and fuzzy logic.",
+            "Communicating, Perceiving, Planning and Acting: Natural language understanding: Syntactic processing, Ambiguity resolution, Text understanding; Action: The situation calculus, A simple solution to the framework problem, Complex actions; Planning: Planning in the situation calculus, The STRIPS representation, Planning as a reasoning task."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        {
+          "code": "MTE 4014",
+          "title": "Sessional on Artificial Intelligence",
+          "credit": 0.75,
+          "contactHour": "3/2 hrs/week",
+          "topics": [],
+          "sessionalNote": "Sessional based on MTE 4013",
+          "references": []
+        },
+        {
+          "code": "MTE 4021",
+          "title": "VLSI Design and Technology",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "MOSFET Logic Circuits: Introduction to MOS and CMOS technology: NMOS Inverter, CMOS inverter; CMOS processing technology: Overview of Silicon and GaAs semiconductor technology, Basic CMOS technology, CMOS process enhancement, Layout design rules, CAD tools for VLSI design.",
+            "MOSFET Logic gates: NMOS, CMOS, Dynamic and Domino Logic Gates; Clocked CMOS logic; Pass-Transistor logic; Transmission Gates; CMOS combinational, Sequential logic circuits; Bi-CMOS logic circuits; GaAs-MESFET logic circuits; Interfacing CMOS and Bipolar logic families: Circuit characterization and performance estimation, Resistance, and capacitance estimation, Switching characteristics, Delay models, Power dissipation, Packaging; Scaling of MOS transistor dimensions; Yield and reliability.",
+            "Computational Elements: CPU and ALU sub-systems; Design processes: Data-path, Addition, Multiplication, Counters, Shifters, Memory elements; Practical aspects of design tools and testability.",
+            "Fabrication and Processing Technology: Crystal growth; Wafer preparation: Photolithography, Oxidation, diffusion, Ion implantation, Etching; Introduction to NMOS and CMOS fabrication technology."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        {
+          "code": "MTE 4023",
+          "title": "MEMS and NEMS",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Overview and Introduction: New trends in Engineering and Science: Micro and Nanoscale systems; Introduction to design of MEMS and NEMS: Capacitive, Electrostatic, Piezoelectric, Magnetic, Optical and thermal principles; Applications of Micro- and Nano-electromechanical systems: Devices and structures.",
+            "MEMS and NEMS Fabrication Technologies: Basic of micro- and nano-fabrication technology: Thin film growth and deposition, Photolithography, X-ray lithography, Wet and dry chemical etching; Electrochemical machining; Ultrasonic machining; Plasma machining, and Laser machining; Packaging: Microsystems packaging, Essential packaging technologies, Selection of packaging materials.",
+            "Micro Sensors: Design of acoustic wave sensors, Vibratory gyroscope, Capacitive and piezoresistive pressure sensors.",
+            "Micro Actuators: Design of Actuators: Actuation using thermal forces, Shape memory alloys, Piezoelectric crystals, and electrostatic forces.",
+            "General Concepts in Nanotechnology: Definition; Atomic structure and atomic size; Quantum mechanics; Schrodinger equation and wave function theory; Van Der Waals interactions; Influence of nanoscience over micro; Emergence and challenges of nanotechnology.",
+            "Materials for MEMS and NEMS: Silicon, III-V and II-VI compounds, Polymers, Metals, CNT, Graphene and Perovskites.",
+            "Nano-sensors and Nano-actuators: Characteristics, mechanisms and applications in mechatronic systems; Case studies."
+          ],
+          "sessionalNote": null,
+          "references": []
+        }
+      ],
+      "termNotes": []
+    }
+  },
+  "extras": {
+    "administrative_noise": [
+      "Page 1",
+      "Page 6",
+      "Page 7",
+      "Page 8",
+      "Page 9",
+      "Page 10",
+      "Page 11",
+      "Page 12",
+      "Page 13",
+      "Page 14",
+      "Page 15",
+      "Page 16",
+      "Page 17",
+      "Page 18",
+      "Page 19",
+      "Page 20",
+      "Page 21",
+      "Page 22",
+      "Page 23",
+      "Page 24",
+      "Page 25",
+      "Page 26",
+      "Page 27",
+      "Page 28",
+      "Page 29",
+      "Page 30",
+      "Page 31",
+      "Page 32",
+      "Page 33",
+      "Page 34",
+      "Page 35",
+      "Page 36",
+      "Page 37",
+      "Page 38",
+      "Page 39",
+      "Page 40",
+      "Dept. of MTE, KUET (repeated headers)",
+      "Updated on (23rd October, 2024)"
+    ],
+    "ambiguities": [
+      {
+        "raw": "EE 1132 section: after 'EE 1132 Contact Hours: 3 hrs. /week   Sessional Based on EE 1131.' then next line 'MTE 1101' with 'Sessional on Electrical Circuits (Credit: 1.50)' appearing before 'Mechatronic Systems (Credit: 3.00)'. The credit 1.50 may belong to EE 1132 or be a separate sessional. Original OCR may have merged lines.",
+        "reason": "Unclear assignment of credit and title for EE 1132 and MTE 1101. No explicit credit given for EE 1132. The phrase 'Sessional on Electrical Circuits' is ambiguous in placement.",
+        "possibleTargets": ["EE 1132", "MTE 1101"]
+      },
+      {
+        "raw": "For Y4T1, Optional-I and Optional-II are listed without specific course codes or topics. They appear as placeholders.",
+        "reason": "No detailed content provided for optional courses.",
+        "possibleTargets": []
+      },
+      {
+        "raw": "For Y4T2, the optional courses section includes multiple course codes (MTE 4011, MTE 4012, MTE 4013, MTE 4014, MTE 4021, MTE 4023) but it is unclear which are selected as Optional-I and Optional-II. They are listed under 'Optional Courses I' and 'Optional Courses II'. The syllabus does not specify which two are taken.",
+        "reason": "The structure suggests multiple optional offerings, but the JSON schema expects exactly two optional courses per term. Preserving all as optionalCourses array.",
+        "possibleTargets": []
+      }
+    ]
+  },
+  "qa": {
+    "termCount": 8,
+    "courseCount": 70,
+    "topicCount": 189,
+    "noiseCount": 39,
+    "ambiguityCount": 3
+  }
+}
