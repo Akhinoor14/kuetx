@@ -636,12 +636,13 @@ export default function Schedule() {
                   <td style={{ padding: '12px 12px', borderBottom: '1px solid var(--border)', borderRight: '1px solid var(--border)', fontWeight: 700, fontSize: 13, color: 'var(--muted)', fontFamily: 'JetBrains Mono, monospace', whiteSpace: 'nowrap', background: breakSlot ? 'rgba(239,68,68,0.08)' : 'var(--bg)' }}>{slotPreview(p)}</td>
                   {DAYS.map(d => {
                     const dayItems = grid[d]?.[p] || [];
+                    const isEmptyCell = dayItems.length === 0;
                     return (
                       <td
                         key={d}
                         className={`timetable-day-col${d === selectedDay ? ' selected-day' : ''}`}
-                        onClick={dayItems.length === 0 ? () => handleEmptyCellClick(d, p) : undefined}
-                        title={dayItems.length === 0 ? 'Double-click to add class' : undefined}
+                        onClick={isEmptyCell ? () => handleEmptyCellClick(d, p) : undefined}
+                        title={isEmptyCell ? 'Double-click to add class' : undefined}
                         style={{
                           padding: '6px',
                           borderBottom: '1px solid var(--border)',
@@ -649,42 +650,58 @@ export default function Schedule() {
                           verticalAlign: 'top',
                           minHeight: 54,
                           background: breakSlot ? 'rgba(239,68,68,0.08)' : d === selectedDay ? 'rgba(59,130,246,0.035)' : 'transparent',
-                          cursor: dayItems.length === 0 ? 'pointer' : 'default',
+                          cursor: isEmptyCell ? 'pointer' : 'default',
                         }}
                       >
                         {dayItems.map(s => {
                           const c = getCourse(s.courseId);
                           return (
-                            <div 
-                              key={s.id} 
+                            <div
+                              key={s.id}
                               onClick={() => handleCellClick(s.id, s)}
-                              title="Double-click to edit" 
+                              title="Double-click to edit"
                               style={{
-                                padding: '8px 9px', borderRadius: 11, fontSize: 12, lineHeight: 1.35, marginBottom: 4,
+                                padding: '8px 9px',
+                                borderRadius: 11,
+                                fontSize: 12,
+                                lineHeight: 1.35,
+                                marginBottom: 4,
                                 background: 'linear-gradient(180deg, rgba(59,130,246,0.12), rgba(59,130,246,0.08))',
-                                border: '1px solid rgba(59,130,246,0.18)', color: 'var(--text)', position: 'relative', cursor: 'pointer',
+                                border: '1px solid rgba(59,130,246,0.18)',
+                                color: 'var(--text)',
+                                position: 'relative',
+                                cursor: 'pointer',
                                 userSelect: 'none',
                                 WebkitTouchCallout: 'none',
                                 WebkitUserSelect: 'none',
                               }}
                             >
-                            <div style={{ fontWeight: 700, fontSize: 12, lineHeight: 1.35, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{s.displayName || c?.name || c?.code || '?'}</div>
-                            <div style={{ opacity: 0.88, fontSize: 11, marginTop: 3, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{s.teacherName || 'Teacher not set'}</div>
-                            <button onClick={(e) => { e.stopPropagation(); startEdit(s); }} style={{
-                              position: 'absolute', top: 2, right: 16, background: 'none', border: 'none',
-                              color: 'inherit', cursor: 'pointer', opacity: 0.55, padding: 0, lineHeight: 1,
-                              touchAction: 'manipulation',
-                            }}>✎</button>
-                            <button onClick={(e) => { e.stopPropagation(); remove(s.id); }} style={{
-                              position: 'absolute', top: 2, right: 2, background: 'none', border: 'none',
-                              color: 'inherit', cursor: 'pointer', opacity: 0.55, padding: 0, lineHeight: 1,
-                              touchAction: 'manipulation',
-                            }}>×</button>
-                          </div>
-                        );
-                      })}
-                    </td>
-                  ))}
+                              <div style={{ fontWeight: 700, fontSize: 12, lineHeight: 1.35, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+                                {s.displayName || c?.name || c?.code || '?'}
+                              </div>
+                              <div style={{ opacity: 0.88, fontSize: 11, marginTop: 3, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+                                {s.teacherName || 'Teacher not set'}
+                              </div>
+                              <button onClick={(e) => { e.stopPropagation(); startEdit(s); }} style={{
+                                position: 'absolute', top: 2, right: 16, background: 'none', border: 'none',
+                                color: 'inherit', cursor: 'pointer', opacity: 0.55, padding: 0, lineHeight: 1,
+                                touchAction: 'manipulation',
+                              }}>
+                                ✎
+                              </button>
+                              <button onClick={(e) => { e.stopPropagation(); remove(s.id); }} style={{
+                                position: 'absolute', top: 2, right: 2, background: 'none', border: 'none',
+                                color: 'inherit', cursor: 'pointer', opacity: 0.55, padding: 0, lineHeight: 1,
+                                touchAction: 'manipulation',
+                              }}>
+                                ×
+                              </button>
+                            </div>
+                          );
+                        })}
+                      </td>
+                    );
+                  })}
                 </tr>
               );
             })}
