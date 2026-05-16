@@ -15,5 +15,5 @@ export const CSE_TERMS = {
   Y3T1,
   Y3T2,
   Y4T1,
-  Y4T2
+  Y4T2,
 };

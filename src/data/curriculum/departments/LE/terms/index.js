@@ -17,5 +17,3 @@ export const LE_TERMS = {
   Y4T1,
   Y4T2,
 };
-
-export default LE_TERMS;
