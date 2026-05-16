@@ -28,7 +28,7 @@ export const Y3T2 = [
     "title": "Digital Signal Processing Laboratory",
     "credits": 0.75,
     "contactHours": "1.5 hrs/week",
-    "type": "Theory",
+    "type": "Sessional",
     "isOptional": false
   },
   {
@@ -44,7 +44,7 @@ export const Y3T2 = [
     "title": "Optical Fiber Communications Laboratory",
     "credits": 0.75,
     "contactHours": "1.5 hrs/week",
-    "type": "Theory",
+    "type": "Sessional",
     "isOptional": false
   },
   {
@@ -60,7 +60,7 @@ export const Y3T2 = [
     "title": "Antenna Engineering Laboratory",
     "credits": 0.75,
     "contactHours": "1.5 hrs/week",
-    "type": "Theory",
+    "type": "Sessional",
     "isOptional": false
   },
   {
@@ -68,7 +68,7 @@ export const Y3T2 = [
     "title": "Modeling and Simulation Laboratory",
     "credits": 0.75,
     "contactHours": "1.5 hrs/week",
-    "type": "Theory",
+    "type": "Sessional",
     "isOptional": false
   },
   {
@@ -76,7 +76,7 @@ export const Y3T2 = [
     "title": "Database System",
     "credits": 3,
     "contactHours": "3 hrs/week",
-    "type": "Sessional",
+    "type": "Theory",
     "isOptional": false
   },
   {
@@ -92,7 +92,7 @@ export const Y3T2 = [
     "title": "Computer Peripherals and Interfacing",
     "credits": 3,
     "contactHours": "3 hrs/week",
-    "type": "Sessional",
+    "type": "Theory",
     "isOptional": false
   },
   {
@@ -108,7 +108,7 @@ export const Y3T2 = [
     "title": "Mobile Computing",
     "credits": 3,
     "contactHours": "3 hrs/week",
-    "type": "Sessional",
+    "type": "Theory",
     "isOptional": false
   },
   {

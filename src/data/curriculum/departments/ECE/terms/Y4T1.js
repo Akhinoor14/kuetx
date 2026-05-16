@@ -20,7 +20,7 @@ export const Y4T1 = [
     "title": "VLSI Design & Nanotechnology Laboratory",
     "credits": 0.75,
     "contactHours": "1.5 hrs/week",
-    "type": "Theory",
+    "type": "Sessional",
     "isOptional": false
   },
   {
@@ -36,7 +36,7 @@ export const Y4T1 = [
     "title": "Wireless Communications Laboratory",
     "credits": 0.75,
     "contactHours": "1.5 hrs/week",
-    "type": "Theory",
+    "type": "Sessional",
     "isOptional": false
   },
   {
@@ -60,7 +60,7 @@ export const Y4T1 = [
     "title": "Machine Learning Laboratory",
     "credits": 0.75,
     "contactHours": "1.5 hrs/week",
-    "type": "Theory",
+    "type": "Sessional",
     "isOptional": false
   },
   {
@@ -68,7 +68,7 @@ export const Y4T1 = [
     "title": "Technical Writing and Presentation",
     "credits": 0.75,
     "contactHours": "1.5 hrs/week",
-    "type": "Theory",
+    "type": "Sessional",
     "isOptional": false
   },
   {
@@ -76,7 +76,7 @@ export const Y4T1 = [
     "title": "TV Engineering",
     "credits": 3,
     "contactHours": "3 hrs/week",
-    "type": "Sessional",
+    "type": "Theory",
     "isOptional": false
   },
   {
@@ -92,7 +92,7 @@ export const Y4T1 = [
     "title": "Digital Image Processing",
     "credits": 3,
     "contactHours": "3 hrs/week",
-    "type": "Sessional",
+    "type": "Theory",
     "isOptional": false
   },
   {
@@ -108,7 +108,7 @@ export const Y4T1 = [
     "title": "Internet of Things",
     "credits": 3,
     "contactHours": "3 hrs/week",
-    "type": "Sessional",
+    "type": "Theory",
     "isOptional": false
   },
   {

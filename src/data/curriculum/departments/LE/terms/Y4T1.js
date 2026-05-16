@@ -12,7 +12,7 @@ export const Y4T1 = [
     "title": "Sessional on LE 4109",
     "credits": 0.75,
     "contactHours": "",
-    "type": "Theory",
+    "type": "Sessional",
     "isOptional": false
   },
   {
@@ -28,7 +28,7 @@ export const Y4T1 = [
     "title": "Sessional on LE 4111",
     "credits": 0.75,
     "contactHours": "",
-    "type": "Theory",
+    "type": "Sessional",
     "isOptional": false
   },
   {
@@ -44,7 +44,7 @@ export const Y4T1 = [
     "title": "Sessional on LE 4121",
     "credits": 0.75,
     "contactHours": "",
-    "type": "Theory",
+    "type": "Sessional",
     "isOptional": false
   },
   {
@@ -60,7 +60,7 @@ export const Y4T1 = [
     "title": "Sessional on LE 4123",
     "credits": 1.5,
     "contactHours": "",
-    "type": "Theory",
+    "type": "Sessional",
     "isOptional": false
   },
   {
@@ -68,7 +68,7 @@ export const Y4T1 = [
     "title": "Project Work/Thesis",
     "credits": 1.5,
     "contactHours": "",
-    "type": "Theory",
+    "type": "Sessional",
     "isOptional": false
   }
 ];

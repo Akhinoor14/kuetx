@@ -20,7 +20,7 @@ export const Y1T2 = [
     "title": "Analog Electronics-I Laboratory",
     "credits": 1.5,
     "contactHours": "3 hrs/week",
-    "type": "Theory",
+    "type": "Sessional",
     "isOptional": false
   },
   {
@@ -36,7 +36,7 @@ export const Y1T2 = [
     "title": "Computer Fundamentals & Programming Laboratory",
     "credits": 1.5,
     "contactHours": "3 hrs/week",
-    "type": "Theory",
+    "type": "Sessional",
     "isOptional": false
   },
   {
@@ -52,7 +52,7 @@ export const Y1T2 = [
     "title": "Chemistry Laboratory",
     "credits": 0.75,
     "contactHours": "1.5 hrs/week",
-    "type": "Theory",
+    "type": "Sessional",
     "isOptional": false
   },
   {
@@ -68,7 +68,7 @@ export const Y1T2 = [
     "title": "Technical English Laboratory",
     "credits": 0.75,
     "contactHours": "1.5 hrs/week",
-    "type": "Theory",
+    "type": "Sessional",
     "isOptional": false
   }
 ];

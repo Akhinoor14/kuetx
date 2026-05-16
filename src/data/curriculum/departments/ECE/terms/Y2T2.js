@@ -4,7 +4,7 @@ export const Y2T2 = [
     "title": "Electronic Circuits Design Laboratory",
     "credits": 0.75,
     "contactHours": "1.5 hrs/week",
-    "type": "Theory",
+    "type": "Sessional",
     "isOptional": false
   },
   {
@@ -20,7 +20,7 @@ export const Y2T2 = [
     "title": "Analog Communications Laboratory",
     "credits": 1.5,
     "contactHours": "3 hrs/week",
-    "type": "Theory",
+    "type": "Sessional",
     "isOptional": false
   },
   {
@@ -36,7 +36,7 @@ export const Y2T2 = [
     "title": "Microprocessors and Microcomputers Laboratory",
     "credits": 0.75,
     "contactHours": "1.5 hrs/week",
-    "type": "Theory",
+    "type": "Sessional",
     "isOptional": false
   },
   {
@@ -52,7 +52,7 @@ export const Y2T2 = [
     "title": "Electrical Drives & Instrumentation Laboratory",
     "credits": 0.75,
     "contactHours": "1.5 hrs/week",
-    "type": "Theory",
+    "type": "Sessional",
     "isOptional": false
   },
   {
@@ -68,7 +68,7 @@ export const Y2T2 = [
     "title": "Data Structures and Algorithm Laboratory",
     "credits": 1.5,
     "contactHours": "3 hrs/week",
-    "type": "Theory",
+    "type": "Sessional",
     "isOptional": false
   },
   {

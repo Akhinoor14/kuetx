@@ -4,7 +4,7 @@ export const Y4T1 = [
     "title": "Project & Thesis I",
     "credits": 1.5,
     "contactHours": "3 hrs/week",
-    "type": "Theory",
+    "type": "Sessional",
     "isOptional": false
   },
   {
@@ -20,7 +20,7 @@ export const Y4T1 = [
     "title": "Sessional on ESE 4105",
     "credits": 0.75,
     "contactHours": "3/2 hrs/week",
-    "type": "Theory",
+    "type": "Sessional",
     "isOptional": false
   },
   {
@@ -36,7 +36,7 @@ export const Y4T1 = [
     "title": "Sessional on ESE 4115",
     "credits": 0.75,
     "contactHours": "3/2 hrs/week",
-    "type": "Theory",
+    "type": "Sessional",
     "isOptional": false
   },
   {
@@ -52,7 +52,7 @@ export const Y4T1 = [
     "title": "Sessional on ESE 4125",
     "credits": 0.75,
     "contactHours": "3/2 hrs/week",
-    "type": "Theory",
+    "type": "Sessional",
     "isOptional": false
   },
   {
@@ -60,7 +60,7 @@ export const Y4T1 = [
     "title": "Energy Engineering Simulation II",
     "credits": 0.75,
     "contactHours": "3/2 hrs/week",
-    "type": "Theory",
+    "type": "Sessional",
     "isOptional": false
   }
 ];

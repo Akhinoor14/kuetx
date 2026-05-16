@@ -12,7 +12,7 @@ export const Y2T1 = [
     "title": "Sessional on Ch 2119",
     "credits": 0.75,
     "contactHours": "",
-    "type": "Theory",
+    "type": "Sessional",
     "isOptional": false
   },
   {
@@ -36,7 +36,7 @@ export const Y2T1 = [
     "title": "Sessional on LE 2101",
     "credits": 1.5,
     "contactHours": "",
-    "type": "Theory",
+    "type": "Sessional",
     "isOptional": false
   },
   {
@@ -44,7 +44,7 @@ export const Y2T1 = [
     "title": "Design & Pattern Making Practices",
     "credits": 0.75,
     "contactHours": "",
-    "type": "Theory",
+    "type": "Sessional",
     "isOptional": false
   },
   {
@@ -68,7 +68,7 @@ export const Y2T1 = [
     "title": "Sessional on ME 2119",
     "credits": 0.75,
     "contactHours": "",
-    "type": "Theory",
+    "type": "Sessional",
     "isOptional": false
   }
 ];

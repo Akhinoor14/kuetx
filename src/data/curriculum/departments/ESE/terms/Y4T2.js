@@ -4,7 +4,7 @@ export const Y4T2 = [
     "title": "Project & Thesis II",
     "credits": 3,
     "contactHours": "6 hrs/week",
-    "type": "Theory",
+    "type": "Sessional",
     "isOptional": false
   },
   {
@@ -20,7 +20,7 @@ export const Y4T2 = [
     "title": "Sessional on ESE 4213",
     "credits": 0.75,
     "contactHours": "3/2 hrs/week",
-    "type": "Theory",
+    "type": "Sessional",
     "isOptional": false
   },
   {
@@ -36,7 +36,7 @@ export const Y4T2 = [
     "title": "Sessional on ESE 4219",
     "credits": 0.75,
     "contactHours": "3/2 hrs/week",
-    "type": "Theory",
+    "type": "Sessional",
     "isOptional": false
   }
 ];

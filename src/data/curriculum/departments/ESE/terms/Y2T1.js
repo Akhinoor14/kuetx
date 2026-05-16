@@ -12,7 +12,7 @@ export const Y2T1 = [
     "title": "Sessional on EE 2113",
     "credits": 0.75,
     "contactHours": "3/2 hrs/week",
-    "type": "Theory",
+    "type": "Sessional",
     "isOptional": false
   },
   {
@@ -36,7 +36,7 @@ export const Y2T1 = [
     "title": "Sessional on ME 2113",
     "credits": 0.75,
     "contactHours": "3/2 hrs/week",
-    "type": "Theory",
+    "type": "Sessional",
     "isOptional": false
   },
   {
@@ -52,7 +52,7 @@ export const Y2T1 = [
     "title": "Sessional on ME 2115",
     "credits": 0.75,
     "contactHours": "3/2 hrs/week",
-    "type": "Theory",
+    "type": "Sessional",
     "isOptional": false
   },
   {
@@ -68,7 +68,7 @@ export const Y2T1 = [
     "title": "Sessional on CSE 2113",
     "credits": 1.5,
     "contactHours": "3 hrs/week",
-    "type": "Theory",
+    "type": "Sessional",
     "isOptional": false
   }
 ];

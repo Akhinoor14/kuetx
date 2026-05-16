@@ -12,7 +12,7 @@ export const Y2T2 = [
     "title": "Sessional on EE 2213",
     "credits": 0.75,
     "contactHours": "3/2 hrs/week",
-    "type": "Theory",
+    "type": "Sessional",
     "isOptional": false
   },
   {
@@ -44,7 +44,7 @@ export const Y2T2 = [
     "title": "Sessional on ME 2213",
     "credits": 0.75,
     "contactHours": "3/2 hrs/week",
-    "type": "Theory",
+    "type": "Sessional",
     "isOptional": false
   },
   {
@@ -60,7 +60,7 @@ export const Y2T2 = [
     "title": "Sessional on ESE 2209",
     "credits": 0.75,
     "contactHours": "3/2 hrs/week",
-    "type": "Theory",
+    "type": "Sessional",
     "isOptional": false
   },
   {
@@ -68,7 +68,7 @@ export const Y2T2 = [
     "title": "Energy Engineering Simulation I",
     "credits": 0.75,
     "contactHours": "3/2 hrs/week",
-    "type": "Theory",
+    "type": "Sessional",
     "isOptional": false
   }
 ];

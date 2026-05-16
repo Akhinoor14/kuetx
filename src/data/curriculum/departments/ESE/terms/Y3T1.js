@@ -12,7 +12,7 @@ export const Y3T1 = [
     "title": "Sessional on Math 3113",
     "credits": 1.5,
     "contactHours": "3 hrs/week",
-    "type": "Theory",
+    "type": "Sessional",
     "isOptional": false
   },
   {
@@ -28,7 +28,7 @@ export const Y3T1 = [
     "title": "Sessional on EE 3113",
     "credits": 0.75,
     "contactHours": "3/2 hrs/week",
-    "type": "Theory",
+    "type": "Sessional",
     "isOptional": false
   },
   {
@@ -44,7 +44,7 @@ export const Y3T1 = [
     "title": "Sessional on ESE 3105",
     "credits": 0.75,
     "contactHours": "3/2 hrs/week",
-    "type": "Theory",
+    "type": "Sessional",
     "isOptional": false
   },
   {
@@ -60,7 +60,7 @@ export const Y3T1 = [
     "title": "Sessional on ESE 3107",
     "credits": 0.75,
     "contactHours": "3/2 hrs/week",
-    "type": "Theory",
+    "type": "Sessional",
     "isOptional": false
   },
   {
@@ -76,7 +76,7 @@ export const Y3T1 = [
     "title": "Sessional on ESE 3123",
     "credits": 0.75,
     "contactHours": "3/2 hrs/week",
-    "type": "Theory",
+    "type": "Sessional",
     "isOptional": false
   }
 ];

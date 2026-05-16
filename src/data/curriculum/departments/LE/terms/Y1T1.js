@@ -12,7 +12,7 @@ export const Y1T1 = [
     "title": "Sessional on Ch 1119",
     "credits": 0.75,
     "contactHours": "",
-    "type": "Theory",
+    "type": "Sessional",
     "isOptional": false
   },
   {
@@ -28,7 +28,7 @@ export const Y1T1 = [
     "title": "Sessional on EEE 1119",
     "credits": 0.75,
     "contactHours": "",
-    "type": "Theory",
+    "type": "Sessional",
     "isOptional": false
   },
   {
@@ -60,7 +60,7 @@ export const Y1T1 = [
     "title": "Sessional on LE 1101",
     "credits": 1.5,
     "contactHours": "",
-    "type": "Theory",
+    "type": "Sessional",
     "isOptional": false
   },
   {
@@ -68,7 +68,7 @@ export const Y1T1 = [
     "title": "Engineering Drawing",
     "credits": 1.5,
     "contactHours": "",
-    "type": "Theory",
+    "type": "Sessional",
     "isOptional": false
   }
 ];

@@ -12,7 +12,7 @@ export const Y2T2 = [
     "title": "Sessional on EEE 2219",
     "credits": 0.75,
     "contactHours": "",
-    "type": "Theory",
+    "type": "Sessional",
     "isOptional": false
   },
   {
@@ -28,7 +28,7 @@ export const Y2T2 = [
     "title": "Computer Aided Graphics Design",
     "credits": 1.5,
     "contactHours": "",
-    "type": "Theory",
+    "type": "Sessional",
     "isOptional": false
   },
   {
@@ -44,7 +44,7 @@ export const Y2T2 = [
     "title": "Sessional on LE 2201",
     "credits": 1.5,
     "contactHours": "",
-    "type": "Theory",
+    "type": "Sessional",
     "isOptional": false
   },
   {
@@ -68,7 +68,7 @@ export const Y2T2 = [
     "title": "Sessional on LE 2205",
     "credits": 0.75,
     "contactHours": "",
-    "type": "Theory",
+    "type": "Sessional",
     "isOptional": false
   }
 ];

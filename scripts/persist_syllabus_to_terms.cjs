@@ -12,6 +12,7 @@ const TERM_KEYS = ['Y1T1','Y1T2','Y2T1','Y2T2','Y3T1','Y3T2','Y4T1','Y4T2'];
 
     const CUR = curriculum.CURRICULUM || { departments: {} };
     const DEPARTMENTS = store.DEPARTMENTS || [];
+    const { inferCourseTypeFromCode } = store;
     const base = path.resolve(__dirname, '..', 'src', 'data', 'curriculum', 'departments');
 
     for (const d of DEPARTMENTS) {
@@ -33,7 +34,7 @@ const TERM_KEYS = ['Y1T1','Y1T2','Y2T1','Y2T2','Y3T1','Y3T2','Y4T1','Y4T2'];
           title: info.title || info.name || '',
           credits: info.credit ?? info.credits ?? 0,
           contactHours: info.contactHour || info.contactHours || '',
-          type: info.type || (info.sessionalNote ? 'Sessional' : 'Theory'),
+          type: inferCourseTypeFromCode ? inferCourseTypeFromCode(codeKey, info.type) : (info.type || (info.sessionalNote ? 'Sessional' : 'Theory')),
           isOptional: !!info.isOptional,
         }));
 

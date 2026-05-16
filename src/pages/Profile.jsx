@@ -138,113 +138,85 @@ export default function Profile() {
 
       {!hasProfile ? (
         <div style={{
-          background: 'linear-gradient(135deg, rgba(22, 163, 74, 0.05) 0%, rgba(59, 130, 246, 0.05) 100%)',
-          border: '2px solid var(--border)',
+          background: 'linear-gradient(135deg, var(--accent) 0%, var(--accent2) 50%, rgba(163, 230, 53, 0.7) 100%)',
           borderRadius: 16,
-          padding: 'clamp(32px, 8vw, 48px)',
+          padding: 'clamp(60px, 15vw, 100px) clamp(20px, 5vw, 40px)',
           textAlign: 'center',
-          marginBottom: 24,
+          marginBottom: 32,
+          position: 'relative',
+          overflow: 'hidden',
+          boxShadow: '0 16px 48px rgba(22, 163, 74, 0.3)',
+          border: '1px solid rgba(255, 255, 255, 0.2)',
         }}>
-          <div style={{ fontSize: 56, marginBottom: 16, animation: 'float 3s ease-in-out infinite' }}>👤</div>
-          <h2 style={{ fontSize: 24, fontWeight: 800, margin: '0 0 8px 0', letterSpacing: '-0.01em' }}>No Profile Set Up Yet</h2>
-          <p style={{ fontSize: 15, color: 'var(--muted)', margin: '0 0 24px 0', fontWeight: 500, maxWidth: '400px', marginLeft: 'auto', marginRight: 'auto' }}>Create your profile to unlock all features in KUETx</p>
-          <button
-            onClick={() => setIsModalOpen(true)}
-            style={{
-              padding: '12px 28px',
-              background: 'var(--accent)',
-              color: 'white',
-              border: 'none',
-              borderRadius: 10,
-              fontSize: 14,
-              fontWeight: 700,
-              cursor: 'pointer',
-              transition: 'all 0.3s ease',
-              boxShadow: '0 4px 12px rgba(22, 163, 74, 0.25)',
-            }}
-            onMouseEnter={e => {
-              e.target.style.background = 'var(--accent2)';
-              e.target.style.transform = 'translateY(-2px)';
-            }}
-            onMouseLeave={e => {
-              e.target.style.background = 'var(--accent)';
-              e.target.style.transform = 'translateY(0)';
-            }}
-          >
-            + Create Profile
-          </button>
-        </div>
-      ) : (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 28 }}>
-          {/* Profile Header Card */}
+          {/* Animated gradient orbs background */}
           <div style={{
-            background: 'linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%)',
-            borderRadius: 16,
-            padding: 'clamp(20px, 5vw, 32px)',
-            color: 'white',
-            boxShadow: '0 8px 32px rgba(22, 163, 74, 0.3)',
-            display: 'flex',
-            gap: 'clamp(16px, 5vw, 28px)',
-            alignItems: 'center',
-            flexWrap: 'wrap',
+            position: 'absolute',
+            top: -100,
+            left: -100,
+            width: 280,
+            height: 280,
+            borderRadius: '50%',
+            background: 'radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, transparent 70%)',
+            pointerEvents: 'none',
+            animation: 'orbFloat 8s ease-in-out infinite',
+          }}></div>
+          <div style={{
+            position: 'absolute',
+            bottom: -120,
+            right: -80,
+            width: 260,
+            height: 260,
+            borderRadius: '50%',
+            background: 'radial-gradient(circle, rgba(255, 255, 255, 0.12) 0%, transparent 70%)',
+            pointerEvents: 'none',
+            animation: 'orbFloat 10s ease-in-out infinite reverse',
+          }}></div>
+          
+          {/* Tortoise Icon - Centered, Large, Animated */}
+          <div style={{
             position: 'relative',
-            overflow: 'hidden',
+            zIndex: 2,
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
           }}>
-            {/* Decorative Elements */}
             <div style={{
-              position: 'absolute',
-              top: -40,
-              right: -40,
-              width: 200,
-              height: 200,
+              width: 160,
+              height: 160,
               borderRadius: '50%',
-              background: 'rgba(255, 255, 255, 0.1)',
-              pointerEvents: 'none',
-            }}></div>
-            
-            {/* Profile Picture */}
-            <div style={{
-              width: 'clamp(90px, 22vw, 110px)',
-              height: 'clamp(90px, 22vw, 110px)',
-              borderRadius: '50%',
-              background: 'rgba(255, 255, 255, 0.15)',
-              border: '3px solid rgba(255, 255, 255, 0.35)',
+              background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.1) 100%)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              flexShrink: 0,
-              backdropFilter: 'blur(10px)',
+              boxShadow: '0 12px 40px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255,255,255,0.6)',
+              border: '3px solid rgba(255, 255, 255, 0.4)',
               position: 'relative',
-              zIndex: 1,
+              animation: 'profileFloat 6s ease-in-out infinite',
+              backdropFilter: 'blur(10px)',
             }}>
-              <Logo size={70} />
-            </div>
-
-            {/* Profile Info */}
-            <div style={{ flex: 1, minWidth: 0, position: 'relative', zIndex: 1 }}>
-              <div style={{ fontSize: 'clamp(28px, 7vw, 42px)', fontWeight: 900, marginBottom: 8, letterSpacing: '-0.03em', lineHeight: 1, textShadow: '0 2px 8px rgba(0, 0, 0, 0.1)' }}>{profile.name}</div>
-              <div style={{ fontSize: 'clamp(13px, 3vw, 16px)', opacity: 0.95, fontWeight: 600, letterSpacing: '0.5px' }}>ID: {profile.studentId}</div>
-            </div>
-
-            {profile.isCR && (
-              <div style={{
-                background: 'rgba(255, 255, 255, 0.2)',
-                padding: '10px 16px',
-                borderRadius: 8,
-                fontSize: 13,
-                fontWeight: 700,
-                backdropFilter: 'blur(10px)',
-                border: '1.5px solid rgba(255, 255, 255, 0.4)',
-                whiteSpace: 'nowrap',
-                position: 'relative',
-                zIndex: 1,
-                letterSpacing: '0.3px',
+              <div style={{ 
+                fontSize: 90, 
+                animation: 'tortoiseBreathe 3s ease-in-out infinite',
+                filter: 'drop-shadow(0 4px 12px rgba(0, 0, 0, 0.15))',
               }}>
-                🎓 Class Representative
+                🐢
               </div>
-            )}
+              {/* Subtle inner glow */}
+              <div style={{
+                position: 'absolute',
+                inset: -8,
+                borderRadius: '50%',
+                background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.05) 100%)',
+                opacity: 0.5,
+                pointerEvents: 'none',
+                zIndex: -1,
+                filter: 'blur(12px)',
+              }}></div>
+            </div>
           </div>
-
+        </div>
+      ) : (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 28 }}>
           {/* Information Cards Grid - Responsive */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: 20, marginTop: 8 }}>
             <InfoCard
@@ -302,34 +274,39 @@ export default function Profile() {
 
       {/* Edit Button - Bottom (only when profile exists) */}
       {hasProfile && (
-        <div style={{ display: 'flex', justifyContent: 'center', marginTop: 32, paddingTop: 28, borderTop: '1px solid var(--border)' }}>
+        <div style={{ display: 'flex', justifyContent: 'center', marginTop: 40, paddingTop: 32, borderTop: '1.5px solid var(--border)' }}>
           <button
             onClick={() => setIsModalOpen(true)}
             style={{
-              padding: '14px 36px',
-              background: 'var(--accent)',
+              padding: '16px 40px',
+              background: 'linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%)',
               color: 'white',
               border: 'none',
               borderRadius: 12,
-              fontSize: 15,
+              fontSize: 'clamp(14px, 2vw, 16px)',
               fontWeight: 700,
               cursor: 'pointer',
-              transition: 'all 0.3s ease',
-              boxShadow: '0 6px 20px rgba(22, 163, 74, 0.3)',
-              letterSpacing: '0.3px',
+              transition: 'all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)',
+              boxShadow: '0 8px 28px rgba(22, 163, 74, 0.35)',
+              letterSpacing: '0.4px',
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: 12,
+              position: 'relative',
+              overflow: 'hidden',
             }}
             onMouseEnter={e => {
-              e.target.style.background = 'var(--accent2)';
-              e.target.style.boxShadow = '0 8px 28px rgba(22, 163, 74, 0.4)';
-              e.target.style.transform = 'translateY(-3px)';
+              e.currentTarget.style.boxShadow = '0 12px 36px rgba(22, 163, 74, 0.5)';
+              e.currentTarget.style.transform = 'translateY(-4px) scale(1.06)';
             }}
             onMouseLeave={e => {
-              e.target.style.background = 'var(--accent)';
-              e.target.style.boxShadow = '0 6px 20px rgba(22, 163, 74, 0.3)';
-              e.target.style.transform = 'translateY(0)';
+              e.currentTarget.style.boxShadow = '0 8px 28px rgba(22, 163, 74, 0.35)';
+              e.currentTarget.style.transform = 'translateY(0) scale(1)';
             }}
           >
-            ✎ Edit Profile
+            <span style={{ fontSize: 18 }}>✎</span>
+            Edit Profile
+            <span style={{ fontSize: 16, marginLeft: 4, transition: 'transform 0.3s ease' }}>→</span>
           </button>
         </div>
       )}

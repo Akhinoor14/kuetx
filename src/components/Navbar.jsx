@@ -1,10 +1,12 @@
 import { Menu, Sun, Moon, Droplets, Bell, Download, ChevronRight } from 'lucide-react';
+import { useState } from 'react';
 import { useTheme, THEMES } from '../hooks/useTheme';
 import { useLocation, Link } from 'react-router-dom';
 import { NAV } from '../nav';
 import { Logo, Wordmark } from './Logo';
 import { getProfile } from '../store/store';
 import { computeAlerts } from '../pages/Alerts';
+import { NotificationPanel } from './NotificationPanel';
 
 function getPageMeta(pathname) {
   for (const section of NAV) {
@@ -20,6 +22,7 @@ export function Navbar({ onMenuClick }) {
   const { themeId, setTheme } = useTheme();
   const location = useLocation();
   const { label, group } = getPageMeta(location.pathname);
+  const [notificationOpen, setNotificationOpen] = useState(false);
 
   const cycleTheme = () => {
     const order = ['light', 'milky', 'dark'];
@@ -69,23 +72,36 @@ export function Navbar({ onMenuClick }) {
       </button>
 
       {/* Alerts bell */}
-      <Link to="/alerts" aria-label={alertCount ? `${alertCount} alerts` : 'Alerts'} style={{
-        display: 'flex', alignItems: 'center', padding: '7px 10px', borderRadius: 9,
-        border: '1.5px solid var(--border)', background: 'transparent', color: 'var(--text)',
-        textDecoration: 'none',
-      }}>
+      <button
+        id="notification-bell"
+        onClick={() => setNotificationOpen(!notificationOpen)}
+        aria-label={alertCount ? `${alertCount} alerts` : 'Alerts'}
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          padding: '7px 10px',
+          borderRadius: 9,
+          border: '1.5px solid var(--border)',
+          background: 'transparent',
+          color: 'var(--text)',
+          cursor: 'pointer',
+          transition: 'all 0.2s',
+        }}
+        onMouseEnter={(e) => e.currentTarget.style.background = 'var(--surfaceStrong)'}
+        onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
+      >
         <div style={{ position: 'relative', display: 'inline-flex', alignItems: 'center' }}>
           <Bell size={17} />
           {alertCount > 0 && (
             <span style={{
               position: 'absolute', top: -8, right: -8, minWidth: 18, height: 18, padding: '0 6px',
               display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-                borderRadius: 999, background: 'var(--danger)', color: 'var(--accentFg)', fontSize: 11, fontWeight: 700,
+              borderRadius: 999, background: 'var(--danger)', color: 'var(--accentFg)', fontSize: 11, fontWeight: 700,
               boxShadow: '0 2px 6px rgba(0,0,0,0.12)'
             }}>{alertCount}</span>
           )}
         </div>
-      </Link>
+      </button>
 
       {/* Backup shortcut */}
       <Link to="/settings" title="Backup data" style={{
@@ -95,6 +111,9 @@ export function Navbar({ onMenuClick }) {
       }}>
         <Download size={17} />
       </Link>
+
+      {/* Notification Panel */}
+      <NotificationPanel isOpen={notificationOpen} onClose={() => setNotificationOpen(false)} />
     </header>
   );
 }

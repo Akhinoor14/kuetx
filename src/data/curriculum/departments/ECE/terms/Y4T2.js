@@ -20,7 +20,7 @@ export const Y4T2 = [
     "title": "Satellite and Telecommunication Engineering Laboratory",
     "credits": 0.75,
     "contactHours": "1.5 hrs/week",
-    "type": "Theory",
+    "type": "Sessional",
     "isOptional": false
   },
   {
@@ -36,7 +36,7 @@ export const Y4T2 = [
     "title": "Computer Networks Laboratory",
     "credits": 1.5,
     "contactHours": "3 hrs/week",
-    "type": "Theory",
+    "type": "Sessional",
     "isOptional": false
   },
   {
@@ -52,7 +52,7 @@ export const Y4T2 = [
     "title": "Opto-Electronics Integrated Circuits",
     "credits": 3,
     "contactHours": "3 hrs/week",
-    "type": "Sessional",
+    "type": "Theory",
     "isOptional": false
   },
   {
@@ -60,7 +60,7 @@ export const Y4T2 = [
     "title": "Electronic Packaging and Materials",
     "credits": 3,
     "contactHours": "3 hrs/week",
-    "type": "Sessional",
+    "type": "Theory",
     "isOptional": false
   },
   {
@@ -68,7 +68,7 @@ export const Y4T2 = [
     "title": "Wireless Sensor Networks",
     "credits": 3,
     "contactHours": "3 hrs/week",
-    "type": "Sessional",
+    "type": "Theory",
     "isOptional": false
   },
   {
@@ -76,7 +76,7 @@ export const Y4T2 = [
     "title": "Power Supply System in Telecommunications",
     "credits": 3,
     "contactHours": "3 hrs/week",
-    "type": "Sessional",
+    "type": "Theory",
     "isOptional": false
   },
   {
@@ -84,7 +84,7 @@ export const Y4T2 = [
     "title": "Semiconductor Devices Theory",
     "credits": 3,
     "contactHours": "3 hrs/week",
-    "type": "Sessional",
+    "type": "Theory",
     "isOptional": false
   },
   {
@@ -92,7 +92,7 @@ export const Y4T2 = [
     "title": "Semiconductor Processing and Fabrication Technology",
     "credits": 3,
     "contactHours": "3 hrs/week",
-    "type": "Sessional",
+    "type": "Theory",
     "isOptional": false
   },
   {
@@ -100,7 +100,7 @@ export const Y4T2 = [
     "title": "Robotics and Machine Vision",
     "credits": 3,
     "contactHours": "3 hrs/week",
-    "type": "Sessional",
+    "type": "Theory",
     "isOptional": false
   },
   {
@@ -108,7 +108,7 @@ export const Y4T2 = [
     "title": "Control System Engineering",
     "credits": 3,
     "contactHours": "3 hrs/week",
-    "type": "Sessional",
+    "type": "Theory",
     "isOptional": false
   },
   {
@@ -124,7 +124,7 @@ export const Y4T2 = [
     "title": "Electronic Instrumentation",
     "credits": 3,
     "contactHours": "3 hrs/week",
-    "type": "Sessional",
+    "type": "Theory",
     "isOptional": false
   },
   {
@@ -140,7 +140,7 @@ export const Y4T2 = [
     "title": "Biomedical Engineering",
     "credits": 3,
     "contactHours": "3 hrs/week",
-    "type": "Sessional",
+    "type": "Theory",
     "isOptional": false
   },
   {
@@ -156,7 +156,7 @@ export const Y4T2 = [
     "title": "Embedded Systems",
     "credits": 3,
     "contactHours": "3 hrs/week",
-    "type": "Sessional",
+    "type": "Theory",
     "isOptional": false
   },
   {

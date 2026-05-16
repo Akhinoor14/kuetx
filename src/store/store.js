@@ -467,6 +467,24 @@ const parseTermKey = (termKey) => {
   return { year: Number(match[1]), term: Number(match[2]) };
 };
 
+// Infer course type from course code when type is missing or likely incorrect.
+// Heuristic: look at the numeric portion of the code; if the last digit is even → Sessional, odd → Theory.
+const inferCourseTypeFromCode = (code, currentType) => {
+  const allowed = ['Theory', 'Sessional', 'Project', 'Field', 'NonCredit'];
+  if (allowed.includes(currentType)) return currentType;
+  if (!code || typeof code !== 'string') return currentType || 'Theory';
+  const m = code.match(/\d+/g);
+  if (!m) return currentType || 'Theory';
+  const nums = m.join('');
+  const last = nums[nums.length - 1];
+  if (!last) return currentType || 'Theory';
+  const d = parseInt(last, 10);
+  if (!Number.isFinite(d)) return currentType || 'Theory';
+  return (d % 2 === 0) ? 'Sessional' : 'Theory';
+};
+
+export { inferCourseTypeFromCode };
+
 export const getProfile = () => {
   const raw = store.get('profile') || {};
   const currentTermKey = raw.currentTermKey || getTermKeyFromLabel(raw.currentTerm) || '';
@@ -760,6 +778,11 @@ export const syncCurriculumCourses = (profile) => {
             isOptional: !!info.isOptional,
           }));
         }
+      }
+
+      // Normalize/infer course types from code where appropriate (apply heuristic globally)
+      if (Array.isArray(baseCourses) && baseCourses.length > 0) {
+        baseCourses = baseCourses.map(b => ({ ...b, type: inferCourseTypeFromCode(b.code, b.type) }));
       }
 
       let optionalSlot = 0;

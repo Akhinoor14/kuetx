@@ -1273,3 +1273,122 @@ input[type="range"]::-webkit-slider-thumb {
   }
 }
 
+/* ── Profile Hero Animations ────────────────────────────────────────────── */
+@keyframes profileFloatSmooth {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+@keyframes avatarFloatSmooth {
+  0%, 100% {
+    transform: translateY(0px) scale(1);
+  }
+  50% {
+    transform: translateY(-12px) scale(1.02);
+  }
+}
+
+@keyframes avatarGlowPulse {
+  0%, 100% {
+    box-shadow: 0 8px 24px rgba(22, 163, 74, 0.3), inset 0 1px 0 rgba(255,255,255,0.4);
+  }
+  50% {
+    box-shadow: 0 12px 32px rgba(22, 163, 74, 0.5), inset 0 1px 0 rgba(255,255,255,0.5);
+  }
+}
+
+@keyframes iconBounce {
+  0%, 100% {
+    transform: scale(1) rotateZ(0deg);
+  }
+  25% {
+    transform: scale(1.05) rotateZ(-2deg);
+  }
+  75% {
+    transform: scale(1.05) rotateZ(2deg);
+  }
+}
+
+@keyframes tortoisePulse {
+  0%, 100% {
+    transform: scale(1);
+    filter: drop-shadow(0 0 0px rgba(22, 163, 74, 0));
+  }
+  50% {
+    transform: scale(1.08);
+    filter: drop-shadow(0 4px 8px rgba(22, 163, 74, 0.2));
+  }
+}
+
+@keyframes floatOrb {
+  0%, 100% {
+    transform: translateX(0) translateY(0);
+  }
+  33% {
+    transform: translateX(30px) translateY(-20px);
+  }
+  66% {
+    transform: translateX(-20px) translateY(30px);
+  }
+}
+
+@keyframes floatOrbReverse {
+  0%, 100% {
+    transform: translateX(0) translateY(0);
+  }
+  33% {
+    transform: translateX(-30px) translateY(20px);
+  }
+  66% {
+    transform: translateX(20px) translateY(-30px);
+  }
+}
+
+@keyframes badgePulse {
+  0%, 100% {
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3), 0 4px 12px rgba(0, 0, 0, 0.1);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.5), 0 6px 16px rgba(0, 0, 0, 0.15);
+    transform: scale(1.03);
+  }
+}
+
+/* ── Simplified Hero Section Animations ────────────────────────────────── */
+@keyframes profileFloat {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-24px);
+  }
+}
+
+@keyframes tortoiseBreathe {
+  0%, 100% {
+    transform: scale(1);
+    filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.15));
+  }
+  50% {
+    transform: scale(1.06);
+    filter: drop-shadow(0 6px 16px rgba(0, 0, 0, 0.22));
+  }
+}
+
+@keyframes orbFloat {
+  0%, 100% {
+    transform: translateX(0) translateY(0) rotate(0deg);
+  }
+  33% {
+    transform: translateX(40px) translateY(-30px) rotate(120deg);
+  }
+  66% {
+    transform: translateX(-40px) translateY(30px) rotate(240deg);
+  }
+}
+
