@@ -6,34 +6,89 @@ export default function About() {
     <div style={{ padding: '1.5rem 1rem', maxWidth: '1000px', margin: '0 auto' }}>
       {/* Hero Section */}
       <div style={{
-        textAlign: 'center',
         marginBottom: '3rem',
-        paddingBottom: '2rem',
-        borderBottom: '1px solid var(--border)'
+        padding: 'clamp(1.25rem, 3vw, 2rem)',
+        border: '1px solid var(--border)',
+        borderRadius: '24px',
+        background: 'radial-gradient(circle at top left, rgba(22,163,74,0.10), transparent 34%), linear-gradient(180deg, rgba(255,255,255,0.96), rgba(247,253,250,0.92))',
+        boxShadow: '0 18px 48px rgba(12, 34, 64, 0.07)'
       }}>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', alignItems: 'center' }}>
-          <div>
-            <Wordmark height={56} />
-          </div>
-          <h1 style={{ fontSize: '3rem', fontWeight: 900, margin: '1.1rem 0 0.5rem', color: 'var(--text)', lineHeight: 1.05, maxWidth: '820px' }}>
-            Student Life, Simplified.
-          </h1>
-          <p style={{ maxWidth: '720px', textAlign: 'center', fontSize: '1.05rem', color: 'var(--muted)', lineHeight: 1.7, margin: 0, fontWeight: 500 }}>
-            All‑in‑one Student Life OS for KUET — academics, finance, wellbeing, events, and campus life.
-          </p>
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'minmax(0, 1.3fr) minmax(260px, 0.9fr)',
+          gap: '1.5rem',
+          alignItems: 'center'
+        }}>
+          <div style={{ minWidth: 0 }}>
+            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '0.55rem', marginBottom: '0.9rem' }}>
+              <div style={{ padding: '0.45rem 0.7rem', borderRadius: '14px', background: 'rgba(22,163,74,0.10)', border: '1px solid rgba(22,163,74,0.14)' }}>
+                <Wordmark height={40} />
+              </div>
+              <div style={{ fontSize: '0.8rem', fontWeight: 800, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--muted)' }}>
+                About KUETX
+              </div>
+            </div>
 
-          <div style={{ marginTop: '1.2rem', display: 'flex', gap: '1rem', color: 'var(--muted)', fontSize: '0.95rem', alignItems: 'center', justifyContent: 'center' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', padding: '0.65rem 1rem', borderRadius: '14px', background: 'rgba(22,163,74,0.08)' }}>
-              <Icons.Users size={16} style={{ color: 'var(--accent)' }} />
-              <span>Trusted at KUET</span>
+            <h1 style={{ fontSize: 'clamp(2.25rem, 5vw, 3.4rem)', fontWeight: 900, margin: '0 0 0.75rem', color: 'var(--text)', lineHeight: 1.02, maxWidth: '12ch', letterSpacing: '-0.06em' }}>
+              Student life, simplified.
+            </h1>
+
+            <p style={{ maxWidth: '48rem', fontSize: '1.05rem', color: 'var(--muted)', lineHeight: 1.75, margin: 0, fontWeight: 500 }}>
+              KUETX is an all-in-one student life platform for KUET, bringing academics, finance, wellbeing, events, and daily campus tasks into one focused experience.
+            </p>
+
+            <div style={{ marginTop: '1.35rem', display: 'flex', flexWrap: 'wrap', gap: '0.75rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.7rem 1rem', borderRadius: '14px', background: 'rgba(22,163,74,0.08)', border: '1px solid rgba(22,163,74,0.12)', color: 'var(--text)', fontSize: '0.92rem', fontWeight: 600 }}>
+                <Icons.Users size={16} style={{ color: 'var(--accent)' }} />
+                Built for KUET students
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.7rem 1rem', borderRadius: '14px', background: 'rgba(14,165,233,0.08)', border: '1px solid rgba(14,165,233,0.12)', color: 'var(--text)', fontSize: '0.92rem', fontWeight: 600 }}>
+                <Icons.Building2 size={16} style={{ color: 'var(--accent)' }} />
+                Department-aware design
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.7rem 1rem', borderRadius: '14px', background: 'rgba(15,23,42,0.06)', border: '1px solid rgba(15,23,42,0.08)', color: 'var(--text)', fontSize: '0.92rem', fontWeight: 600 }}>
+                <Icons.ShieldCheck size={16} style={{ color: 'var(--accent)' }} />
+                Privacy-first by default
+              </div>
             </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', padding: '0.65rem 1rem', borderRadius: '14px', background: 'rgba(14,165,233,0.08)' }}>
-              <Icons.Building2 size={16} style={{ color: 'var(--accent)' }} />
-              <span>Dept‑integrated</span>
-            </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.45rem', padding: '0.65rem 1rem', borderRadius: '14px', background: 'rgba(15,23,42,0.06)' }}>
-              <Icons.ShieldCheck size={16} style={{ color: 'var(--accent)' }} />
-              <span>Privacy‑first</span>
+          </div>
+
+          <div style={{
+            padding: '1.1rem',
+            borderRadius: '20px',
+            border: '1px solid rgba(var(--accentRGB), 0.14)',
+            background: 'linear-gradient(180deg, rgba(255,255,255,0.96), rgba(248,250,252,0.92))',
+            boxShadow: '0 10px 28px rgba(15, 23, 42, 0.06)'
+          }}>
+            <div style={{
+              display: 'grid',
+              gap: '0.8rem'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.75rem', padding: '0.95rem 1rem', borderRadius: '16px', background: 'rgba(var(--accentRGB), 0.06)', border: '1px solid rgba(var(--accentRGB), 0.10)' }}>
+                <div>
+                  <div style={{ fontSize: '0.78rem', fontWeight: 800, letterSpacing: '0.10em', textTransform: 'uppercase', color: 'var(--muted)', marginBottom: '0.25rem' }}>Focus</div>
+                  <div style={{ fontSize: '0.98rem', fontWeight: 700, color: 'var(--text)' }}>Student productivity and clarity</div>
+                </div>
+                <Icons.Sparkles size={20} style={{ color: 'var(--accent)' }} />
+              </div>
+
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: '0.75rem' }}>
+                <div style={{ padding: '0.9rem 0.95rem', borderRadius: '16px', border: '1px solid var(--border)', background: 'rgba(255,255,255,0.75)' }}>
+                  <div style={{ fontSize: '1.2rem', fontWeight: 900, color: 'var(--text)', marginBottom: '0.15rem' }}>100%</div>
+                  <div style={{ fontSize: '0.82rem', color: 'var(--muted)', lineHeight: 1.5 }}>Local-first data handling</div>
+                </div>
+                <div style={{ padding: '0.9rem 0.95rem', borderRadius: '16px', border: '1px solid var(--border)', background: 'rgba(255,255,255,0.75)' }}>
+                  <div style={{ fontSize: '1.2rem', fontWeight: 900, color: 'var(--text)', marginBottom: '0.15rem' }}>KUET</div>
+                  <div style={{ fontSize: '0.82rem', color: 'var(--muted)', lineHeight: 1.5 }}>Context-aware workflows</div>
+                </div>
+              </div>
+
+              <div style={{ padding: '0.95rem 1rem', borderRadius: '16px', border: '1px solid var(--border)', background: 'rgba(255,255,255,0.75)' }}>
+                <div style={{ fontSize: '0.8rem', fontWeight: 800, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--muted)', marginBottom: '0.35rem' }}>Purpose</div>
+                <div style={{ fontSize: '0.95rem', color: 'var(--text)', lineHeight: 1.7 }}>
+                  To keep essential academic and student-life tools in one dependable place, without unnecessary complexity.
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -300,12 +355,54 @@ export default function About() {
         background: 'var(--card)',
         textAlign: 'center'
       }}>
-        <h3 style={{ fontSize: '1.05rem', fontWeight: 800, marginBottom: '1rem', color: 'var(--text)' }}>
+        <div style={{
+          display: 'inline-flex',
+          alignItems: 'center',
+          gap: '0.5rem',
+          padding: '0.35rem 0.75rem',
+          marginBottom: '0.9rem',
+          borderRadius: '999px',
+          border: '1px solid var(--border)',
+          background: 'rgba(255,255,255,0.04)',
+          fontSize: '0.8rem',
+          fontWeight: 700,
+          color: 'var(--muted)',
+          letterSpacing: '0.04em',
+          textTransform: 'uppercase'
+        }}>
           License & Acknowledgments
+        </div>
+
+        <h3 style={{ fontSize: '1.05rem', fontWeight: 800, marginBottom: '0.9rem', color: 'var(--text)' }}>
+          Responsible by design, built for KUET students
         </h3>
-        <p style={{ maxWidth: '680px', margin: '0 auto 1rem', fontSize: '0.97rem', color: 'var(--muted)', lineHeight: 1.75 }}>
-          KUETX is built with love for KUET students. It follows KUET guidelines and student data best practices so the experience stays safe, private, and supportive.
+
+        <p style={{ maxWidth: '720px', margin: '0 auto 1rem', fontSize: '0.97rem', color: 'var(--muted)', lineHeight: 1.75 }}>
+          KUETX is developed to support the academic and daily needs of KUET students with a strong focus on privacy, clarity, and responsible use. The experience is designed to align with KUET guidelines and student data best practices.
         </p>
+
+        <div style={{
+          maxWidth: '760px',
+          margin: '0 auto 1.25rem',
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
+          gap: '0.75rem',
+          textAlign: 'left'
+        }}>
+          <div style={{ padding: '0.85rem 1rem', borderRadius: '12px', border: '1px solid var(--border)', background: 'rgba(255,255,255,0.03)' }}>
+            <div style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--text)', marginBottom: '0.25rem' }}>Privacy-first</div>
+            <div style={{ fontSize: '0.9rem', color: 'var(--muted)', lineHeight: 1.6 }}>Designed to keep student information handled with care and minimal exposure.</div>
+          </div>
+          <div style={{ padding: '0.85rem 1rem', borderRadius: '12px', border: '1px solid var(--border)', background: 'rgba(255,255,255,0.03)' }}>
+            <div style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--text)', marginBottom: '0.25rem' }}>Student-focused</div>
+            <div style={{ fontSize: '0.9rem', color: 'var(--muted)', lineHeight: 1.6 }}>Built to make academic tracking simpler, faster, and more dependable.</div>
+          </div>
+          <div style={{ padding: '0.85rem 1rem', borderRadius: '12px', border: '1px solid var(--border)', background: 'rgba(255,255,255,0.03)' }}>
+            <div style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--text)', marginBottom: '0.25rem' }}>Acknowledgment</div>
+            <div style={{ fontSize: '0.9rem', color: 'var(--muted)', lineHeight: 1.6 }}>Developed and maintained by A3KM Studio with care for the KUET community.</div>
+          </div>
+        </div>
+
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem', alignItems: 'center', justifyContent: 'center' }}>
           <a href="https://a3kmstudio.vercel.app" target="_blank" rel="noopener noreferrer"
             style={{ color: 'var(--accent)', textDecoration: 'none', fontSize: '0.95rem', fontWeight: 700, background: 'rgba(22,163,74,0.08)', padding: '0.7rem 1rem', borderRadius: '12px', border: '1px solid rgba(22,163,74,0.18)' }}>
