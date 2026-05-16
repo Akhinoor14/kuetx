@@ -1,0 +1,1196 @@
+{
+  "department": "LE",
+  "sourceType": "raw_text",
+  "terms": {
+    "Y1T1": {
+      "termKey": "Y1T1",
+      "title": "First Year First Term",
+      "courses": {
+        "Ch 1119": {
+          "title": "Inorganic Chemistry",
+          "credit": 3.0,
+          "contactHour": "3.0 Hours per week",
+          "topics": [
+            "Oxidation and reduction reaction: Classification of chemical reactions with special reference to oxidation and reductions, oxidation number and oxidation state, difference between oxidation number and valance, oxidizing agent and reducing agent, equations involving oxidation- reduction reactions.",
+            "Acid-Base concept: Theories of Acid- Base, pH and pH scale, buffer solution and It’s mechanism, hard and soft acids and bases, acid base indicator.",
+            "Transition metal: General chemistry of transition elements with reference to Chromium, Titanium, Zinc, Iron, Cadmium, Nickel, Cobalt, chemical natures and application for leather production.",
+            "Co-ordination chemistry: Coordination or complex compounds, ligands or co-ordinating groups, coordination number, coordination sphere, chelate complexes, application of chelates, nomenclature of coordination compounds, isomerism-structural, geometrical, optical, optical isomerism in 6-coordinate complexes, Werner’s coordination theory, effective atomic number(EAN), limitation of EAN rules, valence bond theory (VBT) of structure of inorganic complex with simple examples, crystal field theory (CFT), application of crystal field theory, color of transition metal complexes.",
+            "Inorganic Salts used for Tannings: Chromium salts, its behavior in solution, oxidation rate, complex form of trivalent Ti.",
+            "Group Chemistry: Properties of different elements."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "Ch 1120": {
+          "title": "Sessional on Ch 1119",
+          "credit": 0.75,
+          "contactHour": "3/2 Hours per week",
+          "topics": [],
+          "sessionalNote": null,
+          "references": []
+        },
+        "EEE 1119": {
+          "title": "Basic Electrical Engineering",
+          "credit": 3.0,
+          "contactHour": "3.0 Hours per week",
+          "topics": [
+            "Introduction to Electricity: Electrostatics, Current & Electricity, Electrical units and Standards; Ohm’s law and Introduction to electrical measuring instruments; Storage Cells; Magnetic concepts and units; Magnetic circuits and magnetic forces.",
+            "Alternative Current and AC Quantities: Steady state solution of single-phase circuits, (R-L, R-C, and R-L-C), RMS and Average value of AC quantities, Phasor Algebra.",
+            "DC Machines: Constructional features and principles of operation; Shunt, series and compound generators and motors; Performance characteristics, starting and speed control of motors; 2 quadrant and 4 quadrant operation of motors; Choice of DC motors for industrial applications.",
+            "Transformers: Constructional features and principles of operation; losses, 3-phase connection of transformers.",
+            "Induction motors: Principles of operation; Equivalent circuit and circle diagram; Torque-speed characteristics; Improving starting torque for cage and wound rotor motors; Speed control and braking of induction motors; single phase induction motors and their uses.",
+            "Synchronous Generators & Motors: Introduction to Synchronous generators & motors.",
+            "Servo-motors: Working principle; it’s applications for Vehicle."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "EEE 1120": {
+          "title": "Sessional on EEE 1119",
+          "credit": 0.75,
+          "contactHour": "3/2 Hours per week",
+          "topics": [],
+          "sessionalNote": null,
+          "references": []
+        },
+        "Hum 1119": {
+          "title": "Economics & Sociology",
+          "credit": 3.0,
+          "contactHour": "3.0 Hours per week",
+          "topics": [
+            "Economics:",
+            "Micro Economics: Introduction: definition, scope and basic economic questions. Theories of demand and supply and their elasticity. Production and cost of production, production possibilities curve, returns to scale. Choice of technique. Theories of firms: perfect and imperfect competition, long run and short run.",
+            "Macro Economics: National Income: Definition, method and problems. Inflation and unemployment: Types, causes control of inflation. Business cycle. Monetary policy: definition, instrument and objectives.",
+            "Project evaluation: definition, Importance and cost-benefit analysis. Planning in Bangladesh.",
+            "Sociology: Introduction to sociology and its impact on engineering. Fundamental concept of society, community, associations, institution, social structure, race and ethnicity. Culture and Civilization: Introduction to culture and civilizations, bases of human behavior (Culture and Biology). The carriers of culture, familiarity with ancient civilization.",
+            "Industrialization and Urbanization: The Industrial city and the post Industrial city, Urbanization, Urbanism, urban growth and social relationship, suburban living, urban ecology."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "Math 1119": {
+          "title": "Mathematics I",
+          "credit": 4.0,
+          "contactHour": "4.0 Hours per week",
+          "topics": [
+            "Differential Calculus: Limit; Continuity: differentiability: Successive differentiation, Leibnitz’s theorem; Physical meaning of derivatives; Indeterminate forms. L’ Hospitals rule; Expansion of functions, Role’s theorem, Mean value theorem, Taylor's theorem. Maclaurin’s theorem: Maxima and minima of functions of one and two variables; Partial and total derivatives, Euler’s theorem: Concavity and convexity of functions.",
+            "Trigonometry: Complex numbers and functions; De-Moivre’s theorem and its applications; Summation of series.",
+            "Integral Calculus: Definition of integration; integration by the method of substitution: Integration by parts; Standard integrals; Definite integrals: Sum of infinite series; Method of successive reduction; Properties of definite integrals; Walli’s formula; Beta and gamma functions: Length of plane curves: Area hounded by plane curves: Volumes and surfaces of solid of revolution."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "LE 1101": {
+          "title": "Leather Manufacturing Technology I",
+          "credit": 3.0,
+          "contactHour": "3.0 Hours per week",
+          "topics": [
+            "Hides and skins: Introduction and historical background, definition of hides, skins and leather, types and sources of hides and skins, world supply position, supply position in Bangladesh.",
+            "Histological structure and chemical composition: Structure of raw hides and skins-the epidermis with especial reference to hairs, basal layer, dermis and hypo-dermis layers-their histo-chemical properties, structural difference between hides and skins of different origin, chemical composition of hides and skins, hair follicles and grain pattern of hides and skins, influence of climate, management, sex, age and food on the quality of hides and skins.",
+            "Slaughtering and procurement of hides & skins: Slaughtering and flaying of animals, tools, equipment and techniques for slaughtering and flaying, hides and skins of slaughtered and fallen animals, cares to be taken during flaying, handling and storage of raw hides and skins, collection practice in Bangladesh.",
+            "Preservation / curing of hides and skins: Introduction, objects and principles of preservation, short and long terms preservation, methods of preservation/curing, advantages’ and disadvantages of different types of curing, factors affecting preservation / curing process.",
+            "Defects of hides and skins: Definition, pre-mortem and post-mortem defects of hide and skin and their effect on leather, methods of identification of defects, common defects of hides and skins in Bangladesh and their remedies.",
+            "Sorting and gradation of raw hides and skins: Principles; objects, methods of sorting and grading of hides and skins, importance of sorting and grading in leather processing grading specification and practice in Bang1adcsh.",
+            "Soaking: Objects and mechanism of soaking, soaking of green, wet-salted, dry-salted and dried (flint)hides and skins, enzymatic soaking, factors influencing the soaking process, role of hyaluronic acid in soaking, aids and controls in soaking, soaking defects and their remedies, Green fleshing- its advantages and limitations for the production of quality leather."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "LE 1102": {
+          "title": "Sessional on LE 1101",
+          "credit": 1.5,
+          "contactHour": "3.0 Hours per week",
+          "topics": [],
+          "sessionalNote": null,
+          "references": []
+        },
+        "LE 1100": {
+          "title": "Engineering Drawing",
+          "credit": 1.5,
+          "contactHour": "3.0 Hours per week",
+          "topics": [
+            "Introduction; Instruments and their uses; First and Third Angle Projections; Orthographic Drawings; Isometric Views; Missing lines and views; Sectional views and conventional practices; Development of objects, Auxiliary views; Assembly drawing of leather engineering machineries."
+          ],
+          "sessionalNote": null,
+          "references": []
+        }
+      },
+      "optionalCourses": [],
+      "termNotes": []
+    },
+    "Y1T2": {
+      "termKey": "Y1T2",
+      "title": "First Year Second Term",
+      "courses": {
+        "Ch 1219": {
+          "title": "Organic Chemistry",
+          "credit": 3.0,
+          "contactHour": "3.0 Hours per week",
+          "topics": [
+            "Structure and bonding in organic molecule: Bonding structural formula of organic molecules, electronegativity and dipoles, quantum mechanics and atomic orbitals, molecular orbitals and bonding, hybridization and its consequences, bond energies and distances, bond angles, the shape of molecules, geometric structures, resonance structures.",
+            "Characteristic reactions and reaction mechanism of organic compounds: Types of organic reactions, fundamentals of organic reaction mechanism (Fission of bond, carbonium ion, carbanion), factors affecting organic reaction, attacking reagents and its role (electrophile and nucleophile), nucleohilic substitution: SN1 and SN2 reactions, electrophilic substitution reactions, free radical substitution reactions, addition reaction: nucleophilic, electrophilic and free radical addition reaction, elimination reaction: E1 and E2  reactions.",
+            "Isomerism: Classification of isomerism, classification of stereoisomerisms, optical isomerism:- polarized light, specific rotations, isomerism of substance containing one and two asymmetric carbon atoms, D.L. and R.S. configuration. Geometric isomerism:- condition for geometric isomerism, determination of configuration of cis-trans isomerism.",
+            "Benzene derivatives: Structure, preparation, reactivity and uses of: Halogen compounds- fluoro and chloro-chemicals. Hydroxy compounds- phenol, 3-naphthol, cresol, anthrasol. Nitro compounds- nitro benzene and its derivatives.",
+            "Amines and Diazocompounds: Structure, classification, nomenclature, preparation, salts of amines, industrial source, basicity of amines, sulphonation, dipolar ions, reactions of amines, diazonium salts: preparation of diazo compounds, replacement reaction, coupling reaction, synthesis and uses of azo compounds.",
+            "Carbohydrates: Chemistry and Structure of monosaccharaides, disaccharides and polysaccharides, uses of carbohydrates in Leather Industry."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "Ch 1220": {
+          "title": "Sessional on Ch 1219",
+          "credit": 0.75,
+          "contactHour": "3/2 Hours per week",
+          "topics": [],
+          "sessionalNote": null,
+          "references": []
+        },
+        "CSE 1219": {
+          "title": "Computer Fundamentals and Programming",
+          "credit": 3.0,
+          "contactHour": "3.0 Hours per week",
+          "topics": [
+            "Computer Fundamentals: Types and Generations of Computers, Basic Organization and Functional units of Computers. Storages classes.",
+            "Hardware Components: Various Input, Output and Memory Devices. Specifications.",
+            "Software and It’s Applications: Types of Software and concept of operating systems.",
+            "Flow Charts and Algorithms: Construction of flow charts and algorithms.",
+            "Number Systems: Binary, Octal, Hexadecimal, Codes and arithmatic operations.",
+            "Logic functions: Logic gates and their truth tables.",
+            "Programming using C/C++: Programming concepts; Structured programming language: data types, operators, expressions, control structures; Functions and program structures: function basics, parameter passing conventions, recursion; Arrays and pointers; Input and output: standard input and output, file access."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "CSE 1220": {
+          "title": "Sessional on CSE 1219",
+          "credit": 0.75,
+          "contactHour": "3/2 Hours per week",
+          "topics": [],
+          "sessionalNote": null,
+          "references": []
+        },
+        "Hum 1219": {
+          "title": "English",
+          "credit": 3.0,
+          "contactHour": "3.0 Hours per week",
+          "topics": [
+            "General Discussion: Introduction, Mastering Various Approaches to Learning English.",
+            "Grammatical Problem: Construction of Words and Sentences, Grammatical Problems, Sentence Variety and Style, Conditionals, Grammar & Uses, Vocabulary and Diction, Clauses, Prefixes & Suffixes, Synonyms & Antonyms.",
+            "English Phonetics: The Phonetics Systems and Correct English Pronunciation.",
+            "Reading Skill: Discussing Readability, Scan and Skim Reading, Generating Ideas through Purposive Reading, The Reading of Selected Stories.",
+            "Writing Skill: Principles of Effective Writing, Organization in Writing, Planning and Development, Composition, Precise Writing, Paragraph Writing, Amplification, Free Composition.",
+            "General Strategies for the Writing Process: Generating Ideas, Identifying Audiences and Purposes, Constructing Arguments, Stating Problems, Drafting and Finalizing.",
+            "Approaches to Communication: Communication Today, Business Communication, Organization and Organizational Behavior, Developing Intra-Personal Relationship, Introducing Dialogue, Notions and Functions of language.",
+            "Specific Applications: Tenders and Quotations, Resumes and Job Letters, Journal Articles, Technical and Scientific Presentation."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "Hum 1220": {
+          "title": "English Skills Practices",
+          "credit": 0.75,
+          "contactHour": "3/2 Hours per week",
+          "topics": [
+            "Four Basic Language Skills",
+            "Writing: It’s Kinds, Difference between Writing and Spoken Language, Writing technical reports, Note taking",
+            "Reading: Kinds & Purposes, Reading Technical, Literature, Books, Magazines and Scientific Journals.",
+            "Speaking and Listening: Effective Communication between Speaker and Listener, Techniques of Description, Use of Listening and Visual Aids."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "Math 1219": {
+          "title": "Mathematics II",
+          "credit": 3.0,
+          "contactHour": "3.0 Hours per week",
+          "topics": [
+            "Two dimensional geometry: Change of axis; General equation of second degree.",
+            "Three dimensional geometry: System of co-ordinates; Direction ratios and direction cosines of a line; Distance between two points; Section formula; Projections;",
+            "Plane: Standard equations of plane, equations of bisector planes, perpendicular distance of a point from a plane, angle between two planes;",
+            "Straight line: General equation of straight Line, Symmetrical form of a straight line, angle between line and plane, shortest distance between two lines, coplanar lines;",
+            "Sphere: Standard equation of sphere, section by a plane, angle of intersection of two spheres; Standard equations of cone, cylinder and central conicoids.",
+            "Differential equation: Order and degree of ordinary differential equations: Formation of differential equations: Solutions of first order differential equations by various methods; Solution of linear equations of second and higher orders with constant coefficients: Cauchy's and Legendre's form.",
+            "Partial differential equation: Formation; Solution of physical problems using variables separation technique."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "Ph 1219": {
+          "title": "Physics",
+          "credit": 4.0,
+          "contactHour": "4.0 Hours per week",
+          "topics": [
+            "Elasticity: Rigid body, perfectly elastic body, plastic body, stress and strain, elastic limit and elastic fatigue; Hook’s law and different elastic constants, moduli of elasticity, Poisson’s ratio, relation among different elastic constants and Poisson’s ratio, determination of elastic constants, factors affecting elasticity.",
+            "Thermodynamics: Kinetic Theory of gases, Fundamental assumptions, Pressure exerted by a gas, kinetic interpretation of temperatures, Law’s derived from kinetic theory of gases, degrees of freedom, law of equipartition of energy, mean free path; First law of thermodynamics and its application; Second law of thermodynamics; reversible and irreversible processes; Carnot cycle; Efficiency of heat engines; entropy and its physical concept;",
+            "Sound: Free, Forced and damped vibrations, Power dissipation in damped and forced vibrations,",
+            "Optics: Interference of light, Young’s experiment, Fresnel’s bi-prism, Newton’s rings, diffraction of light: Fresnel and Fraunhofer diffraction, diffraction gratings, resolving power of a grating, polarization, polarized and unpolarized light, polarization by reflection and refraction, Brewster’s law, double refraction.",
+            "Modern physics: Planck’s quantum theory, Photoelectric effect, Compton Effect, Wave-Particle duality de-Broglie waves, Nature of electrons orbits, orbital energy, Uncertainty principle and its applications, X-ray and their applications, Crystal structure, Fundamental types of lattices, Miller indices.",
+            "LASER: History of LASER, Properties of LASER spontaneous emission absorption and stimulated emission, population inversion generation of coherent radiation, tine coherence spatial coherence, Ruby LASER, Raman LASER, semiconductor LASER, Application of LASER",
+            "Nuclear physics: Radioactivity: Introduction to radioactivity, Laws of radio-active disintegration, half-life, secular and transient radioactive equilibrium, Practical application of radioactivity;",
+            "Nuclear energy: Fission and fusion processes, Chain reaction, the bindary energy of stable nuclei, mass defect, nuclear reactor."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "Ph 1220": {
+          "title": "Sessional on Ph 1219",
+          "credit": 0.75,
+          "contactHour": "3/2 Hours per week",
+          "topics": [],
+          "sessionalNote": null,
+          "references": []
+        }
+      },
+      "optionalCourses": [],
+      "termNotes": []
+    },
+    "Y2T1": {
+      "termKey": "Y2T1",
+      "title": "Second Year First Term",
+      "courses": {
+        "Ch 2119": {
+          "title": "Physical Chemistry",
+          "credit": 4.0,
+          "contactHour": "4.0 Hours per week",
+          "topics": [
+            "Solution: Types of solutions, solubility and solution process, colligative properties: lowering of vapor pressure, elevation of boiling point, depression of freezing point, osmosis, osmotic pressure, deduction of molecular formula & molecular weight from Raoult’s Law.",
+            "Photochemistry: Photochemical reactions and their effect. Laws of photochemistry, quantum yield, photosensitized reaction, fluorescence and phosphorescence, luminescence.",
+            "Surface chemistry: Adsorption, desorption and absorption, nature of adsorption, adsorption isotherms, application of adsorption.",
+            "Colloids: Introduction to colloids, different types of colloidal systems, lyophilic and lyophobic sols, preparation of colloids, dialysis, electrodialysis, ultrafiltration, electrophoresis, Tyndall effect, electrical properties of colloids, origin of charge of colloidal particles, electrical double layer. Micelles, CMC, application of colloids.",
+            "Electro-Chemistry: Electrolytic solution: Electrolyte, conductance, transport number, Kohlrausch's law, Debye-Hückel theory.",
+            "Electrochemical Cell: Nernst’s theory of electrode potential, type of electrodes and electrode potential, polarization and over potentials, origin of EMF, free energy and EMF, mode of mass transfer, lithium and lithium-ion battery, pH and its determination.",
+            "Corrosion and preventive measures of machineries: Definition of corrosion, behavior of iron and steel in atmosphere, types of corrosion-atmospheric, soil, high temperatures, stray current, protection from corrosion and its types inorganic coatings metallic coatings, non-metallic inorganic enamel and cathodic coatings, electroplating and galvanizing."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "Ch 2120": {
+          "title": "Sessional on Ch 2119",
+          "credit": 0.75,
+          "contactHour": "3/2 Hours per week",
+          "topics": [],
+          "sessionalNote": null,
+          "references": []
+        },
+        "Hum 2119": {
+          "title": "Accounting and Industrial Law",
+          "credit": 3.0,
+          "contactHour": "3.0 Hours per week",
+          "topics": [
+            "Accounting: Introduction, images of accounting. Users of accounting information generally accepted accounting principles (GAAP), relationship of accounting with engineering education. The recording process: Business transactions, steps in the recording process, accounting equation, account, rules of debit and credit, journal, ledger, trial balance and adjusting entries.",
+            "Preparation of Financial Statements: Single or multiple step income statements, owner’s equity statement, classified balance sheet, cash flow statement.",
+            "Cost accounting: Concept of cost, classification of cost, statement of cost, materials cost, labor cost, wages and salaries, operating and service costing.",
+            "Industrial law: Bangladesh Labor Act. 2006; Introduction, Inspectors and certifying Surgeons, Health and hygience, safety, welfare, working labor audits, employment of young persons, leave and holidays with wages, penalties and its implementation procedure.",
+            "Payment of wages Act; Shops and Establishment Act.",
+            "EPZ Workers Association and Industrial Relations Act, 2004.",
+            "International Labor Organization (ILO).",
+            "Bangladesh Environment Conservation Act, 1995 and Rules, 1997."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "LE 2101": {
+          "title": "Leather Manufacturing Technology II",
+          "credit": 3.0,
+          "contactHour": "3.0 Hours per week",
+          "topics": [
+            "Unhairing and Liming: Objectives of unhairing and liming. Types of unhairing and liming, advantage and disadvantage of pit liming and drum liming. Immunization of keratin, swelling of collagen based on Donnan's theory.",
+            "Fleshing: Objectives of fleshing, types of fleshing, advantage and disadvantage of fleshing.",
+            "Deliming and drenching: Objectives of deliming, selection of deliming agents, mechanism of drenching, test of deliming.",
+            "Bating: Objects of bating, mechanism of bating, effect of bating on leather quality, advantage and disadvantage of acid bate over alkaline bating.",
+            "Pickling: Objectives of pickling, methods of pickling, use of different acids and salts in pickling.",
+            "Degreasing: Principle of degreasing, types, merits and demits of different degreasing methods.",
+            "Chrome tanning: Historical development, principle of single bath and double bath chrome tanning process, masked and self-basified chrome tanning and their advantages and disadvantages, aging of wet blue and selection, objectives of sammying, splitting, shaving, trimming and weighing."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "LE 2102": {
+          "title": "Sessional on LE 2101",
+          "credit": 1.5,
+          "contactHour": "3.0 Hours per week",
+          "topics": [],
+          "sessionalNote": null,
+          "references": []
+        },
+        "LES 2100": {
+          "title": "Design & Pattern Making Practices",
+          "credit": 0.75,
+          "contactHour": "3/2 Hours per week",
+          "topics": [
+            "Design:  Design methodology, development of a collection, fashion and fashion accessories, product development.",
+            "Pattern making: Concept of pattern making, tools used in pattern making, free hand drawing, 2D-3D concept, requirements for pattern, pattern making for small articles.",
+            "Cutting: Basic principles of cutting, holding position of cutting knife, qualification of a Cutter, Clicking concept, cutting techniques",
+            "Stitch & Seam: Lock stitch and chain stitch, types of seam: closed seam, silked seam, Brooklyn seam, lapped seam, butted seam, welted seam, piped seam and open seam."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "Math 2119": {
+          "title": "Mathematics III",
+          "credit": 3.0,
+          "contactHour": "3.0 Hours per week",
+          "topics": [
+            "Vectors: Review of vector algebra, Dot and cross product: Vector triple products; Vector differentiation; Gradient, Divergence and curl, Line, surface and volume integrals,",
+            "Laplace Transforms: Integral transform; Laplace transform; existence condition of Laplace transform; properties of Laplace transform, Laplace transform of elementary functions; Inverse Laplace transform and its properties; Convolution theorem; use of Laplace transform to solve differential equations.",
+            "Fourier series: Dirichlet's conditions, general Fourier series, half range sine and cosine series: Parseval's identity.",
+            "Matrix: Types of matrices, review of matrix algebra, Elementary transformations, Inverse by elementary transformations, Rank of matrix, solutions of linear equations using matrix."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "ME 2119": {
+          "title": "Basic Mechanical Engineering",
+          "credit": 3.0,
+          "contactHour": "3.0 Hours per week",
+          "topics": [
+            "Thermodynamics: Some thermodynamics terms, work, heat, energy, internal energy and enthalpy;  First law of thermodynamics, reversible and irreversible processes, isothermal and adiabatic expansion, molar heat capacity at constant pressure and constant volume and their relation, Second law of thermodynamics, spontaneous process, entropy change; Third law of thermodynamics; Heat and work transfer for constant pressure, constant volume process; Isothermal, Adiabatic and Polytropic processes-Free expansion and Throttling process.",
+            "Air standard cycles: Principles of air standard cycles: Carnot cycle, Stirlings cycle, Otto cycle, Diesel cycle, Brayton cycle, Dual combustion Cycle.",
+            "I. C. Engines: Engine nomenclature and classification, S. I. Engine, C. I. Engine, Four Stroke cycle, Two stroke cycles, principles of  S. I. and C. I. engines.",
+            "Steam Boilers: Boiler functions and their efficiency, types and their capacities, sizes, fuel requirement, suitability, installation and maintenance; Auxiliaries and mountings of boilers, valves, heaters, economizers and air-preheater.",
+            "Steam turbines: Steam turbines-Impulse and Reaction types - Principles of operation."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "ME 2120": {
+          "title": "Sessional on ME 2119",
+          "credit": 0.75,
+          "contactHour": "3/2 Hours per week",
+          "topics": [],
+          "sessionalNote": null,
+          "references": []
+        }
+      },
+      "optionalCourses": [],
+      "termNotes": []
+    },
+    "Y2T2": {
+      "termKey": "Y2T2",
+      "title": "Second Year Second Term",
+      "courses": {
+        "EEE 2219": {
+          "title": "Electronics",
+          "credit": 3.0,
+          "contactHour": "3.0 Hours per week",
+          "topics": [
+            "Introduction to Electronic Devices: Classification of solids, Doping of Semiconductors, PN junctions, Semiconductor diodes, Rectifier diodes, schottky barrier diodes, Zener diodes, Tunnel diodes, Varactor diodes, LED, Photo diodes, Solar cells, Bipolar Junction Transistor, Field effect transistor, MOSFET, Unijunction transistor, SCR, Biasing of BJT and FET, Operational Amplifiers.",
+            "Introduction to Logic and Digital Circuits: Logic operations, Basic gates, OR, AND, NOT, NAND, NOR, X-OR; Flip-Flops, Shift registers, Counter, Binary and BCD code, Integrated circuits (IC), Microprocessors.",
+            "Industrial Electronics: Regulated power supplies, Ignitions, Resistance welding and Timing circuits, Induction heating, Di-electric heating.",
+            "Instrumentations: Introduction to Instruments, CRO, Transducers, Temperature measurement.",
+            "Communications: Introduction to Analog and Digital Communication, types of Modulation and Demodulation techniques."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "EEE 2220": {
+          "title": "Sessional on EEE 2219",
+          "credit": 0.75,
+          "contactHour": "3/2 Hours per week",
+          "topics": [],
+          "sessionalNote": null,
+          "references": []
+        },
+        "IPE 2219": {
+          "title": "Statistics",
+          "credit": 3.0,
+          "contactHour": "3.0 Hours per week",
+          "topics": [
+            "Introduction: Historical development of the subject, its nature and scope, nature of statistical data, attributes and variables, population and sample, collection and condensation of data. Frequency distribution, graphical distribution of data.",
+            "Measures of central tendency: Arithmetic mean, median and mode, quadric mean deciles and percentiles.",
+            "Measures of dispersion: Range, mean deviation, standard deviation, variance, quartile deviation, coefficient of variation, skewness and kurtosis.",
+            "Regression and correlation: Bivariate data, relationship between the varieties, methods of least squares, regression lines, correlation, correlation and regression coefficient, rank correlation.",
+            "Probability: Definition of probability and related concepts, laws of probability, discrete and continuous random variables, mathematical expectation, conditional probability, Binominals, Poisson and Normal distribution and their properties, Chi-square distribution, t-distribution, f-distribution.",
+            "Statistics for industry: Introduction, level of significance, hypothesis, important steps in a test of significance. Central limit theorem: Tests for means and variance.",
+            "ANOVA: Experimental designs: Randomized block design, and factorial design.",
+            "Educational statistics: Reliability and Validity tests."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "LE 2200": {
+          "title": "Computer Aided Graphics Design",
+          "credit": 1.5,
+          "contactHour": "3.0 Hours per week",
+          "topics": [
+            "Introduction to Computer Aided Design & drafting, Introduction to AutoCAD, planning and laying out a drawing, drawing 2D-3D objects, creating blocks, organizing information with layers, adding text to drawing, using dimensions, storing and linking data with graphics, getting & exchanging data from drawing, printing & plotting."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "LE 2201": {
+          "title": "Leather Manufacturing Technology III",
+          "credit": 3.0,
+          "contactHour": "3.0 Hours per week",
+          "topics": [
+            "Re-tanning and combination tannage: Objectives of retanning, chemistry and mechanism of retanning, selection of neutralizing agents, control of neutralization.",
+            "Dyeing and Fat liquoring: Classification of dyes and their application, factors effect on dyeing, application of dyeing auxiliaries. Objects of fat liquoring, classifications, mechanism of fat liquoring, effect of fat liquor. Modern trends of fat liquoring, curing and stuffing.",
+            "Vegetable tanning: Principle of vegetable tanning, sources, supply of vegetable tanning. Mechanism of vegetable tanning, manufacturing process of different vegetables tanning.",
+            "Synthetic tanning: Introduction, classification, collagen-syntan interaction, effect of syntan on dyeing and retaining auxiliaries.",
+            "Aldehyde tanning: Concept of aldehyde tanning, mechanism of aldehyde tanning.",
+            "Oil tanning: Objectives, theory of oil tanning, application of oil tanning for the production of chamois leather, conditions for oil tanning.",
+            "Bleaching: Methods of bleaching, factors, bleaching of vegetable and chrome tanned leather, effect of bleaching on leather quality.",
+            "Mechanical and manual operations of retanned leather: Objectives of Setting out, Vacuum drying, Tunnel/overhead drying, Vibrating staking, Toggle drying, Trimming, Dry vacuum."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "LE 2202": {
+          "title": "Sessional on LE 2201",
+          "credit": 1.5,
+          "contactHour": "3.0 Hours per week",
+          "topics": [],
+          "sessionalNote": null,
+          "references": []
+        },
+        "LE 2203": {
+          "title": "Materials Science for Leather Engineering",
+          "credit": 3.0,
+          "contactHour": "3.0 Hours per week",
+          "topics": [
+            "Water: Chemistry of water, collagen water system, types of water hardness, importance of water for hides/skins processing.",
+            "Salts: Types of salts, uses.",
+            "Biocides: Types of biocides, chemistry of biocides, application.",
+            "Soaking agents: Introduction, surface active agents, chemistry and application of surfactants.",
+            "Liming agents: Introduction, sources, production of lime, physical and chemical properties, purity of lime.",
+            "Deliming and bating agents: Introduction, common deliming, drenching and bating agents, chemistry and properties of deliming and bating agents.",
+            "Degreasing: Definition, practice of degreasing with aqueous emulsification, pressure and solvents.",
+            "Pickling and masking agents: Introduction, use of organic acids and salts in pickling, alum pickling, depickling, masking agents and importance of masking agents.",
+            "Tanning with metals salts: Complexing behavior of trivalent chromium, structure of chromium complex, basicity of tanning potential, hydrothermal stability, aluminum, zirconium, titanium and iron salts as tanning agents.",
+            "Vegetables tanning agents: Sources and structure of vegetable tannins, classification, importance of vegetable tanning materials in the leather processing.",
+            "Miscellaneous tanning agents: Chemistry and tanning action aldehyde, mono and di-isocyanates, epoxides and oil tanning agents, neutralizing agents."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "LE 2205": {
+          "title": "Leather and Polymer Chemistry",
+          "credit": 4.0,
+          "contactHour": "4.0 Hours per week",
+          "topics": [
+            "Protein: Classification of protein, sources of proteins, properties of proteins, amphoteric properties, de-amination and de-carboxylation of proteins, test of proteins and amino acids. Amino and imino acids in proteins, peptides linkage, formation of polypeptide chain, structure of peptides, functional groups, N-terminal and C-terminal residues.",
+            "Collagen chemistry: Collagen types, amino acids sequence in collagen, non-amino acid constituents, reactive groups, X-ray structures, molecular structures, biosynthesis, aggregation, phenomena of collagen, enzymatic decomposition of collagen.",
+            "Macromolecules: Introduction, classification, structure of macromolecules in solid and solution state.",
+            "Structure and properties of polymers: Chemical and geometrical structure of polymer molecules, glass transition temperature, properties, crystallinity of polymers.",
+            "Properties of commercial polymers: Introduction, polyamide and related polymers, phenol formaldehyde, urea-formaldehyde, melamine-formaldehyde, cellulose and related polymers, silicones, epoxies, fluoro polymers and biopolymers.",
+            "Histochemistry of hides and skins: Histological structure of hides and skins, fibre network and collagenous materials, morphology of hair, wool, non-collagenus and carbohydrate compounds in connective tissue matrix.",
+            "Enzymology: Definition, classifications, nomenclature, sources, types of microbial proteases, production, factors influences the enzyme activity, specificity and active site of enzyme.",
+            "Lipids: Classifications, sources, chemistry of natural fats and oils, iodine value, acid value, saponification of fats & oils, activation, synthetic fats and oils."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "LE 2206": {
+          "title": "Sessional on LE 2205",
+          "credit": 0.75,
+          "contactHour": "3/2 Hours per week",
+          "topics": [],
+          "sessionalNote": null,
+          "references": []
+        }
+      },
+      "optionalCourses": [],
+      "termNotes": []
+    },
+    "Y3T1": {
+      "termKey": "Y3T1",
+      "title": "Third Year First Term",
+      "courses": {
+        "LE 3101": {
+          "title": "Leather Manufacturing Technology IV",
+          "credit": 3.0,
+          "contactHour": "3.0 Hours per week",
+          "topics": [
+            "Drying of leather: Definition, water content in leather, theory of drying of solids, equilibrium and non-equilibrium state of leather; methods of drying, defects in drying, remedies.",
+            "Pre-finishing operation: Conditioning, milling, staining, buffing and snuffing, dedusting, polishing, rolling.",
+            "Finishing: Definition, classification, structure of finishes, basic products of finishing, defects and their remedies.",
+            "Finishing operations: Application of finishes-padding, brushing, spraying, curtain coating, printing and laminating; plating, glazing, polishing, ironing and Finiflex.",
+            "Manufacture of different types of leather: Shoe upper, garments, upholstery, gloving, technical leather; physical and chemical requirements, classification, methodology, optimization of process, trouble shooting."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "LE 3102": {
+          "title": "Sessional on LE 3101",
+          "credit": 1.5,
+          "contactHour": "3 Hours per week",
+          "topics": [
+            "Manufacturing practice of shoe upper, garments and technical leather."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "LE 3107": {
+          "title": "Dyeing and Finishing I",
+          "credit": 3.0,
+          "contactHour": "3.0 Hours per week",
+          "topics": [
+            "Color and constitution: Color concept, types of color and colorants, theory of color production, fluorescence, phosphorescence and chemiluminescence.",
+            "Primaries and intermediates: Different primaries and intermediates, unit process for primaries and intermediates.",
+            "Dyes: Nomenclature and classification of dyes, structure of natural and synthetic dyes; dyes preparation and their interaction with leather, selection of leather dyes, properties of leather dyes, leather dyes in Color Index (CI).",
+            "Leather dyeing: Practical aspect of dyeing effect, factors influence in dyeing, dyeing auxiliaries, levelness, fixation of dyes, color measurement, color different and color matching, dyeing defect and their remedies.",
+            "Theory of leather finishing: Concept of coating, preparation of leather surface for finishing, theory of adhesion, theory and mechanism of film formation, gloss and gloss retention, plasticization of finish film, evaluation and control of leather finishing.",
+            "Leather finishing materials: Types, various types of finishing agents."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "LE 3108": {
+          "title": "Sessional on LE 3107",
+          "credit": 0.75,
+          "contactHour": "3/2 Hours per week",
+          "topics": [
+            "Solubility of dyes, different chemical test of finished film."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "LE 3109": {
+          "title": "Leather Products Engineering I",
+          "credit": 3.0,
+          "contactHour": "3.0 Hours per week",
+          "topics": [
+            "Historical background and development of leather products: History of leather products, aspect of fashion, types of fashion, trends in fashion, leather products as apparel and types of leather products.",
+            "Color, Art and Design: Idea on art, design and color; motif, application of design.",
+            "Tools and equipments for leather products manufacture: Types of tools and their functions, tools and equipment for modern leather products manufacturing.",
+            "Pattern making: Concept of pattern making, types of pattern, indication of patterns, transferring the pattern, free hand drawing, 2D-3D concept, allowance, pattern making for leather products; different shaped pattern making and joining.",
+            "Cutting operations for leather products: Define cutting operations, types of cutting system, works to be done before cutting, during cutting and after cutting, pattern placement, cutting norms, wastage determination, advantage and limitation of cutting techniques.",
+            "Money bag, File folder and Photo frame: Introduction, types, raw materials, perspective drawing, list of components, measurement instruction, total pattern making, leather consumption, splitting and skiving instruction, construction and assembling."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "LE 3110": {
+          "title": "Sessional on LE 3109",
+          "credit": 0.75,
+          "contactHour": "3/2 Hours per week",
+          "topics": [
+            "Developing cutting pattern and sewing practice based on products."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "LE 3111": {
+          "title": "Footwear Engineering I",
+          "credit": 3.0,
+          "contactHour": "3.0 Hours per week",
+          "topics": [
+            "Human Foot: Foot anatomy, biometry of human foot, foot parameters, function of foot, foot dynamics; foot care and their relationship to footwear; foot troubles.",
+            "Footwear: Definition, history of footwear, foot gear, purpose of footwear, different types of footwear.",
+            "Foot measurement: Importance, procedure, measurement for bespoke footwear, foot surveys, length and girth measurement, fitting identification, multi fittings.",
+            "Parts of shoe: Parts of upper, lining and bottom; others components-toe puff, stiffener, shank piece, sock, eyelets and ornaments.",
+            "Footwear materials: Types of footwear upper materials, suitability of shoe upper materials; soling materials- properties and uses; insole materials, toe puff & stiffener materials, shank & heel materials, adhesives and threads; types of reinforcement materials and their uses.",
+            "Tools and Machineries: Types of tools, sewing, skiving, splitting, and stamping machines; their functions, needle insertion, safety practice.",
+            "Cutting and Stitching: Definition, principle of cutting, hand cutting tools, procedure, quality requirements for cutters, types of stitch."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "LE 3112": {
+          "title": "Sessional on LE 3111",
+          "credit": 0.75,
+          "contactHour": "3/2 Hours per week",
+          "topics": [
+            "Cutting and stitching practice, seam preparation."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "LE 3115": {
+          "title": "Analytical Chemistry for Leather Manufacture",
+          "credit": 3.0,
+          "contactHour": "3.0 Hours per week",
+          "topics": [
+            "Introduction: Accuracy and precision, errors, minimization of errors, significant figure and computation, evaluation of analytical results-Q test.",
+            "Thermal techniques: Differential thermal analysis (DTA), differential scanning calorimetry (DSC), thermo gravimetry (TG), basic principles and applications in leather science.",
+            "Ion Chromatography: Introduction, classification, principles and application in leather science.",
+            "Gas Chromatography: Introduction, classification, principles, instrumentation and their applications in leather science.",
+            "High Performance Liquid Chromatography (HPLC): Basic concept, comparison of HPLC with gas liquid chromatography, eluent delivery, sample injector, selection of column and detectors.",
+            "Ultraviolet-visible spectroscopy: Absorption laws, deviation from Beer’s Law, molar extinction coefficient, absorbing species, absorption spectrum and λmax, instrumentation, principles and applications in leather science.",
+            "Spectroscopy: Infrared (IR), nuclear magnetic resonance (NMR) and mass spectroscopy, atomic absorption spectroscopy (AAS); principles, instrumentations and applications."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "LE 3116": {
+          "title": "Sessional on LE 3115",
+          "credit": 0.75,
+          "contactHour": "3/2 Hours per week",
+          "topics": [
+            "Determination of chromic oxide, sulphide, chloride, etc."
+          ],
+          "sessionalNote": null,
+          "references": []
+        }
+      },
+      "optionalCourses": [],
+      "termNotes": []
+    },
+    "Y3T2": {
+      "termKey": "Y3T2",
+      "title": "Third Year Second Term",
+      "courses": {
+        "LE 3209": {
+          "title": "Leather Products Engineering II",
+          "credit": 3.0,
+          "contactHour": "3.0 Hours per week",
+          "topics": [
+            "Embossed, printing & Attaching: Introduction, printing and cutting of small component part; printing perforating watchstraps; process control, procedure and acceptance criteria of embossing, printing and attaching.",
+            "Joining techniques: Definition and properties of stitch, seam, sewing; types of seam; cable stitching, glove stitching, moccasin stitching; lacing,",
+            "Lining material & their uses: Silk, satin, velvet, rayon, poplin, moirette, fabric of mercerized cotton, printed cotton, drill, laminate, polyesters, wool and far, Polynesia.",
+            "Materials handling: Automated handling system, hand push movable trolleys, electromechanically power conveyors.",
+            "Product Development: Specification sheet, theme board preparation, material consumption and costing.",
+            "Sewing machines: Types of sewing machine and their properties, parts of sewing machine and their functions; feeding system and mechanism; Theory of stitch formation.",
+            "Bags: Types of bag, materials, tools and equipments, types of different gussets of bag shape and joining; attaching straps to gussets, flap fastening, pockets, making a one-gusset bag pattern, making stitch holes, attaching gussets, general working order, bag fastening-tongue and loop, double tongue and loop, loop and toggle, loop and bead/toggle/button strap and buckle, turn lock, draw string, zips, flaps and straps, Construction of different types of Gussets, leather consumption and costing for bag; Passport case: introduction, raw materials, perspective drawing, list of components, measurement instruction, total pattern making, leather consumption, splitting and skiving instruction, construction and assembling."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "LE 3210": {
+          "title": "Sessional on LE 3209",
+          "credit": 0.75,
+          "contactHour": "3/2 Hours per week",
+          "topics": [
+            "Joining techniques: Hand stitching, thong or lacing technique, button or rivet attaching, Practice of Embossing, printing & attaching, Construction and manufacturing process of Lunch Bag, Construction and manufacturing process of Passport case."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "LE 3211": {
+          "title": "Footwear Engineering II",
+          "credit": 3.0,
+          "contactHour": "3.0 Hours per week",
+          "topics": [
+            "Last: Definition, types, importance, parts and specification of last; last and foot; measurement grading systems; storage of last; raw materials for last, last styling and model making; last milling and manufacturing; hinging methods of last; last co-ordination; last features for different styles of footwear; defects and remedies of last.",
+            "Cutting: Definition, principles of cutting; methods of cutting; leather measurement systems; quality control in cutting room; productivity of cutting department; tightness and stretchiness of leather; quality parts of leather; grading system and sorting leather; area measurement; cutting terminology, cutting job sheet; tools and equipments-conventional and modern; environmental factors; storage of knives; safety methods of clicking; cutting principles of leather and synthetic materials.",
+            "Closing: Definition; evolutions and structure of the preparation of the upper- the preparation interventions, development and structure of the upper; assembly: threads, needles & seams; structural and development specificity of the sewing machines- stitch formation; finishing off; upper and lining assembling; upper and lining attaching.",
+            "Shoe bottom Lasting and Processing: Definition; objects and principles of lasting; preparatory operations prior to lasting; different methods of lasting/bottom adhesion; shape retention; lasting impressions; lasting faults- operational and materials faults; heat setting; heel preparation; sole preparation, pressing and attaching; relation between heel pairing and heel scouring; edge trimming and setting; lasting machines.",
+            "Shoe Construction and Moulding Technique: Different types of shoe construction and moulding techniques."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "LE 3212": {
+          "title": "Sessional on LE 3211",
+          "credit": 0.75,
+          "contactHour": "3/2 Hours per week",
+          "topics": [
+            "Design and development of complete set of patterns for different shoe style."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "LE 3219": {
+          "title": "Leather Microbiology",
+          "credit": 4.0,
+          "contactHour": "4.0 Hours per week",
+          "topics": [
+            "Histology of hides, skins and leather: Preparation of specimen for sectioning, different method of sectioning; methods for staining, stock solutions for staining; mounting techniques, quick test for defect identification.",
+            "Bacteriology: Bacteria and its morphology, functions of bacteria, biological needs of bacteria, nomenclature, classification, structure, nutritional requirements; growth of an organism in a medium; infection and immunity, dissociation and association of bacteria; different methods of staining of bacteria.",
+            "Mycology: Introduction, spores and its types; classification of moulds, morphology of moulds, biochemistry of moulds, laboratory technique for the study of mould; microbiological problems of leather industry and their remedy.",
+            "Biocides, Fungicides & Insecticides: Biocides- definition, classification and chemistry of bactericides, fungicides & insecticides; diseases and defects on hides, skins and leather caused by bacteria, insects and moulds with their remedy; application of bactericides, fungicides & insecticides in leather industry.",
+            "Control of microorganism: General principles of microbial control, control of undesirable microorganisms by physical means, chemical disinfectants and their use; sterilization and its kinds, method and means of sterilization, merits and demerits of different methods of sterilization; cause of sterilization failure; pasteurization.",
+            "Microbial fermentation: Methods of microbial fermentation, types of fermentations, fermentation equipment; preparation of media, preparation of inoculums, separation and purification of products.",
+            "Enzymology: Enzyme in leather industry; microbial cells in leather and allied industries; principle of industrial enzymology, enzyme activity; source of enzyme, selection of micro-organisms, mechanism of enzyme biosynthesis, manipulation of enzyme biosynthesis; particular technical enzyme preparation of amylolytic, cellulose, proteolytic, lactase, proteases, lipases, glucose oxidase, catalase, glucose isomase enzymes."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "LE 3220": {
+          "title": "Sessional on LE 3219",
+          "credit": 0.75,
+          "contactHour": "3/2 Hours per week",
+          "topics": [
+            "Culture of microorganism, preparation of different slides for microscopic examination."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "ME 3219": {
+          "title": "Fluid Mechanics & Machineries",
+          "credit": 3.0,
+          "contactHour": "3.0 Hours per week",
+          "topics": [
+            "Introduction: Fundamental concept and fluid as a continuum; Classification of fluids, viscosity and its measurement; Stress and strain of fluids; compressibility and elasticity; surface tension and capillarity; vapor pressure.",
+            "Fluid Static: pressure at a point, pressure gradient; manometers; pressure on plane and curved surfaces immersed in fluids; buoyancy and floatation, metacenter and metacentric height, stability of submerged and floating bodies.",
+            "Fluid Dynamics: velocity and acceleration of fluid particles, types of fluid flow, relation between system approach and control volume approach; continuity equation in integral and differential form; Euler’s equation, Bernoulli’s equation, energy equation and their applications.",
+            "Reciprocating pump: Definition and classification; work done, slip, effect of acceleration of piston and frictional losses on velocity and pressure during suction and delivery strokes; indicator diagram; air vessels, cavitation and efficiency.",
+            "Centrifugal pump: Definition and classification; advantages and disadvantages of centrifugal pump over reciprocating pump; work done, efficiency.",
+            "Blower and Compressor: Introduction, classification and applications."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "ME 3220": {
+          "title": "Sessional on ME 3219",
+          "credit": 0.75,
+          "contactHour": "3/2 Hours per week",
+          "topics": [],
+          "sessionalNote": null,
+          "references": []
+        },
+        "ME 3221": {
+          "title": "Manufacturing Process",
+          "credit": 3.0,
+          "contactHour": "3.0 Hours per week",
+          "topics": [
+            "Casting: Methods of sand casting; design of patterns; properties of molding sand; sand testing; core making; die casting; centrifugal and allied castings; precision investment casting; continuous casting; casting defects.",
+            "Welding and Allied Process: Gas welding, electric arc welding, shield arc welding, resistance welding, pressure welding, thermit welding, energy ray welding; welding defects; soldering; brazing and braze welding; metal spraying; hard facing.",
+            "Metal Forming Processes: Various hot and cold working processes; description of related machine and tools.",
+            "Metal Cutting Processes: Mechanism of chip formation; types of chip; chip breaker; cutting forces.",
+            "Machine Tools: Lathe machine and its accessories; turret and others special purpose lathes; drilling machine and other hole making processes; shapers and planers; milling machine and various milling operations; manufacturing processes of screw threads, gears and related machine.",
+            "Finishing operations: Grinding, surface grinding, centerless grinding; honing; lapping; super finishing.",
+            "Dies for Footwear and leather products: Different types of dies used in footwear and leather products manufacturing with their application and uses; cutting dies and die casting; centrifugal castings; procedural steps involved in dies making and die materials."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "ME 3222": {
+          "title": "Sessional on ME 3221",
+          "credit": 0.75,
+          "contactHour": "3/2 Hours per week",
+          "topics": [],
+          "sessionalNote": null,
+          "references": []
+        }
+      },
+      "optionalCourses": [],
+      "termNotes": []
+    },
+    "Y4T1": {
+      "termKey": "Y4T1",
+      "title": "Fourth Year First Term",
+      "courses": {
+        "LE 4109": {
+          "title": "Leather Products Engineering III",
+          "credit": 3.0,
+          "contactHour": "3.0 Hours per week",
+          "topics": [
+            "Clothing and Design: Introduction; Pre-history of renaissance, renaissance industrial revolution up to contemporary time; Clothing culture and communication, individual dress, men's /women's fashion wear; materials, cutting patterns, fitting garments, stitching, fashion accessories, elements of cutting; importance of notches.",
+            "Jacket: Different parts of simple jacket, construction of basic jacket block, modification of basic block, matching of leather grain and color, consumption, cutting of a simple jacket, control of cutting jackets, cutting of lining, size and models of different types of jacket; Collar and sleeve construction; neck line; hem line variations; assembling of different components; Trouble shooting of different steps in jacket manufacturing.",
+            "Waist Coat: Different parts of waist coat, classification of different waist coat, construction of basic waist coat block, modification and design development of different waist coat; Trouble shooting of waist coat manufacturing.",
+            "Skirt and Trouser: Different parts of simple skirt, ladies straight skirt, construction of basic skirt block; pleats construction; grading for skirts; modification in basic skirt block; design and construction of flayed skirt, paneled skirt and gored skirt; components attachment–pockets, pleats; Different parts of a simple trouser, basic trouser block, construction of trouser with pleats, components attachment-zip, modification to basic block, design and pattern making, fabrication; Trouble shooting of skirt and trouser manufacturing.",
+            "Unisex Garments Wear: Sophisticated coat-slicker, princess line, duster, wrap over/clutch, frock, pelerine, logger's cruiser, liberty cap, sun hat, ankle sock, tight, pants, bib, T-shirt, leggings, plain suit, splash suit.",
+            "Box work and Stiffened Articles: Introduction, hinges and fastenings, jewel box, large box work, flat stiffened work, gusseted pocket, sorts of gusset, turned edged articles, simple card case and envelope case."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "LE 4110": {
+          "title": "Sessional on LE 4109",
+          "credit": 0.75,
+          "contactHour": "3/2 Hours per week",
+          "topics": [
+            "Design development and manufacturing of pleated pocket and flap, gusset pocket and flap, piping pocket, false pocket, collars, jackets, waist coats, skirt and trousers."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "LE 4111": {
+          "title": "Footwear Engineering III",
+          "credit": 3.0,
+          "contactHour": "3.0 Hours per week",
+          "topics": [
+            "Organization of Clicking: Leather measurement systems; Material economy and importance; Cutting room lay out; Materials allowances and consumption; Clicking faults, effects and remedies; Knife engineering and management; Bottom components cutting; Standard lighting environment; Safety issues; Clicking room management; Productivity and quality control.",
+            "Organization of Closing: Sequence of operation for closing of different shoe styles; Machine requirements, machine setup and line balancing for different types of shoes; Quality parameters; Departmental management and work loading; Final inspection; Thread consumption; Working environment; Trouble shooting.",
+            "Shoe Bottom Lasting and Making: Preparation of insole, sole and heel; Sole pressing and attaching; Heel scouring; Edge trimming and setting; Need of machine lasting; Machine parts, functions and parameter setting; Operational sequence in lasting line for different shoe styles; Trouble shooting.",
+            "Shoe Construction and Moulding Technique: Methods of shoe constructions; Injection moulding (direct); Direct vulcanizing; Casting (direct) moulding shoe.",
+            "Shoe Room Treatment and Finishing: Objects and utility; Identification of leather finishes; Types of shoe finishes; Polishers; Spraying-types, techniques and machines; Pre-finishing and finishing operations; Tools, equipment and machineries; Trouble shooting; Packaging-Labeling; Dispatching.",
+            "Standard Workshop Guide: Machine requirements for 1000 pairs per day production; Machinery documentation and specification; Operator requirements and management; Workshops layout; List of equipment and hand tools; Rink system."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "LE 4112": {
+          "title": "Sessional on LE 4111",
+          "credit": 0.75,
+          "contactHour": "3/2 Hours per week",
+          "topics": [
+            "Design, development and manufacturing of basic footwear styles."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "LE 4121": {
+          "title": "Environmental Science & Engineering",
+          "credit": 3.0,
+          "contactHour": "3.0 Hours per week",
+          "topics": [
+            "Environment, Ecology and Pollution: Introduction, components of environment, factors affecting environment; Types and source of pollution; Acid rain and greenhouse effect; Types and effects of different pollutants; Environmental pollution control.",
+            "Chemistry and Characteristics of Environmental Parameters: Total solids, total dissolved solids, volatile matters, BOD5, COD, ThOD, ammonia, nitrogen, protein content, TOC, chlorides, alkalinity, pH, sulphide, DO, total coliform count, metal content.",
+            "Reuse, Recycling and Disposal of Solid Wastes: Waste generation from leather, footwear and leather goods industries; Utilization of leather wastes; Disposal of solid wastes.",
+            "Ecotoxicology: Definition, toxic hazards and their control, controls of substance hazardous to health, hazard evaluation, risk assessment and control.",
+            "Environmental Law: ECA-1995, ECR-1997; Enforcement, monitoring and auditing, government and industry policies, self-regulations by industry.",
+            "Environmental Impact Assessment: Concept, objectives, methodologies, screening, IEE, scoping, base line studies, impact evaluation, mitigation measures and monitoring."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "LE 4122": {
+          "title": "Sessional on LE 4121",
+          "credit": 0.75,
+          "contactHour": "3/2 Hours per week",
+          "topics": [
+            "Determinations of BOD, COD, DO, sulfate, phosphate, ammonia, nitrate, nitrite, TKN, Chromium."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "LE 4123": {
+          "title": "Computer Integrated Manufacturing Systems (CIMS)",
+          "credit": 3.0,
+          "contactHour": "3.0 Hours per week",
+          "topics": [
+            "Industrial Automation: Types and development of automation; application of computers to manufacturing.",
+            "Computer Integrated Manufacturing (CIM): Principles, essentials, effectiveness, advantages and disadvantages of CIM.",
+            "Computer Aided Design (CAD): Introduction; Fundamental concepts on coordinate systems; Absolute and incremental system; Applications; CAD facilities; Geometric modeling-2D, 3D, surface models and solid models; Optimum design; Computer-automated process and manufacturing planning; Function involved in AMP; Computer aided routing (CAR); CAR system flow.",
+            "CAD/CAM for Footwear and Leather Products: Introduction to CAM, NC, CNC devices for computer aided cutting; Computer aided stitching; Digitization-2D and 3D coordinate extraction; Principles and strategies for collection of data for imaging, rendering, data reduction and processing techniques for footwear and products design; CAD/CAM system; Automated assembly and materials handling; Industrial robots in manufacturing.",
+            "Software Systems for Footwear & Leather Products: Introduction to input and out-put devices, working principles; capabilities of CAD for styling purposes-color, basic primitives, etc.; use of 2D, 3D techniques; design development, pattern design, grading, pattern production and materials consumption calculation; Shoe master, Crispin, Lugges Master and Lectra designing systems- application, advantages and limitations."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "LE 4124": {
+          "title": "Sessional on LE 4123",
+          "credit": 1.5,
+          "contactHour": "3.0 Hours per week",
+          "topics": [
+            "Design and development of complete set of patterns for basic shoe styles using 2D-digitizer, 3D-digitizer and Shoe Master/Crispin systems; Design and development, grading, materials consumption calculation and production of complete set of patterns for basic shoe styles using Shoe Master/Crispin systems; Design and development, grading, materials consumption calculation and production of complete set of patterns for leather goods and garments using Lugges Master and Lectra designing systems."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "LE 4000": {
+          "title": "Project Work/Thesis",
+          "credit": 1.5,
+          "contactHour": "3.0 Hours per week",
+          "topics": [],
+          "sessionalNote": null,
+          "references": []
+        }
+      },
+      "optionalCourses": [
+        {
+          "title": "By-products Utilization Technology",
+          "credit": 3.0,
+          "contactHour": "3.0 Hours per week",
+          "topics": [
+            "Animal and Tannery By-products Utilization: Types and source of by-products; Present methods of collection, processing and utilization; Nomenclature of collagen containing by-products and residues; Collagen balance of leather production.",
+            "Collagenous Residues and Its Processing: Untanned residual hide and pelt residues, glue and gelatin stock, tanned semi-finished residues, wet blue, wet white, vegetable-tanned and finished leather by-products; Buffing dust; Processing of secondary collagen-mechanical, hydrolytic, biological and thermal processing methods.",
+            "Utilization Methods: Utilization in the form of collagenous surface network, reconstituted fibrous leather material, molecularly disperse collagen solutions, collagen hydrolysates, amino acids; Utilization of collagen and their secondary compounds; Utilization and disposal of chromium containing residues.",
+            "Reuse of Processed Residues in Leather Manufacture: Return of chromium, fat and collagen to the leather production process, use of collagen in tanning, finishing and wet finishing."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        {
+          "title": "Sessional on LE 4027",
+          "credit": 0.75,
+          "contactHour": "3/2 Hours per week",
+          "topics": [
+            "Manufacture of hide powder, glue, gelatin; recovery of chrome from chrome saving dust."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        {
+          "title": "Tannery Waste Management",
+          "credit": 3.0,
+          "contactHour": "3.0 Hours per week",
+          "topics": [
+            "Tannery Effluents: Source of liquid wastes in tanneries; Characterization and assessment of critical environmental parameters.",
+            "Treatment Technology: Principle, types of treatment-primary, secondary and tertiary treatment; Unit operations of ETP; Different types of technologies used for treatment of tannery wastes; Mechanism of physical, chemical and biological treatment; Concept of CETP; Disposal of sludge.",
+            "Solid Waste Management: Sources, compositions; Reuse and recycling; disposal of solid wastes; Incineration and energy recovery.",
+            "In-Plant Management for Pollution Reduction: House-keeping, segregation of waste streams, 3R of valuable waste materials -chromium, sulphide, organic materials, dissolved salts, energy and lime."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        {
+          "title": "Sessional on LE 4029",
+          "credit": 0.75,
+          "contactHour": "3/2 Hours per week",
+          "topics": [
+            "Separation of chromium, sulfide, organic materials, dissolved salts from effluent; Digestion of solid waste."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        {
+          "title": "Process Control and Automation",
+          "credit": 3.0,
+          "contactHour": "3.0 Hours per week",
+          "topics": [
+            "Introduction: Brief description of tannery operations where measurement and control is needed; Discussion of parameters to be measured and controlled, viz. flow, temperature, pressure, pH etc.; Discussion on necessity for controls; Advantages and disadvantages of process control and application in tannery.",
+            "Industrial Instrumentation: Qualities of measurement; Measurement of temperature, flow, pressure and vacuum, level and pH; Methods of composition analysis; Process instrumentation.",
+            "Process Control: Introduction to the concept of automatic control; Types of control; Controller combinations, pneumatic control circuits, hydraulic control circuits, electronic control circuits (PLC and Micro control) and applications.",
+            "Role of Computers in Process Control: Case studies in wet operation; Utility–requirements; PLC and Micro controller."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        {
+          "title": "Sessional on LE 4033",
+          "credit": 0.75,
+          "contactHour": "3/2 Hours per week",
+          "topics": [
+            "Experiments based on the theory of LE 4033"
+          ],
+          "sessionalNote": null,
+          "references": []
+        }
+      ],
+      "termNotes": []
+    },
+    "Y4T2": {
+      "termKey": "Y4T2",
+      "title": "Fourth Year Second Term",
+      "courses": {
+        "LE 4207": {
+          "title": "Dyeing and Finishing II",
+          "credit": 3.0,
+          "contactHour": "3.0 Hours per week",
+          "topics": [
+            "Behavior of Dyes in Solution: Nature of dye solution, aggregation of dyes; determination of aggregation number-Nernst-Husckel equation, Fick's law of diffusion; Activation energies of diffusion, factors effecting diffusibility, measurement of diffusion co-efficient; Dyeing with ionized dyes on substrate without sites; Affinity of dyes, determination of affinity in dyeing system, influence of affinity.",
+            "Thermodynamics of Dyeing: Thermodynamics laws, activity of dyes, standard affinities of dyes for fibres, equilibrium state on affinity; Adsorption isotherms, adsorption-at surface and dye bath-fibre interfaces; Dyeing equilibrium, electrical effect, half-time, velocity constant, heat, entropy and enthalpy of dyeing.",
+            "Colour and Vision: Theories of colour vision; Attributes of color, discrimination of color attributes; Colour space; Sensitivity of retinal cones; Method of investigating the perception of color; Color appearance phenomena.",
+            "Colorimetry and Colour System: Principle, additive and subtractive colour mixing; Different colour system, colour specification system, colour difference and evaluation; Kubelka-Munk equation, CMC method of colour matching, Properties and sources of artificial light; Color matching booth, visual color matching; Different fastness properties.",
+            "Rheology and Performance Properties of Coatings: Concept of rheology, rheological measurements and processes associated with coatings; Low VOC coatings- flow problems and solutions; mechanical performance, ageing processes and the retention properties; Chemical exposure.",
+            "Physics of film formation: Introduction, thermoplastic coatings, solutions of cross linking polymers, solvent less cross linking systems, disperse phase systems."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "LE 4208": {
+          "title": "Sessional on LE 4207",
+          "credit": 0.75,
+          "contactHour": "3/2 Hours per week",
+          "topics": [
+            "Color correction and matching of different leather in finishing; Comparative studies of effect and performance of different finishing agents."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "LE 4213": {
+          "title": "Testing of Leather & Allied Materials",
+          "credit": 3.0,
+          "contactHour": "3.0 Hours per week",
+          "topics": [
+            "Concept of testing: Objectives; Sampling; Conditioning; Popular thumb tests of leather, advantages and disadvantages of thumb tests.",
+            "Strength and Stretch of Leather: Strength properties of leather-tensile strength, stitch tearing strength, tongue tearing strength, Baumann tear strength, buckle tear strength, split tear strength, ball burst strength; Relationship between different strength, Effect of splitting, relative humidity, oil content, kind of tannage and method of finishing on strength of leather; Resilience properties of leather.",
+            "Tests for Finish Film: Test methods-Bond strength, heat resistance, cold crack resistance, light fastness, wet and dry rub fastness, water fastness, bleeding, elasticity, resistance to chemicals, moisture fastness etc.",
+            "Physical Tests for Upper and Lining Materials: Test methods-flexing endurance; vamp flexing, water vapor permeability, air permeability, water proof ness, abrasive resistance, resistance of cracking of grain, perspiration resistance, softness etc.; Determination and process control of shrinkage temperature; tests for safety footwear.",
+            "Tests for Soling and Insole Materials: Test for soling materials-apparent and real densities, abrasive resistance, absorption of water by Kubelka method, relative porosity etc.; Test for insole materials- flexing index, peel strength, Laminar strength etc.",
+            "Test for Important Accessories for Products and Footwear: Laces- Bodkin attachment strength, lace to eyelet abrasion test etc.; Velcro-Peel test, shear resistance etc.; Hook, eyelet’s, D-rings- attachment in leather, corrosion test etc.; Buckles-corrosion test, strength buckle and strap attachment etc.; Top piece; Top piece attachment strength etc."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "LE 4214": {
+          "title": "Sessional on LE 4213",
+          "credit": 1.5,
+          "contactHour": "3.0 Hours per week",
+          "topics": [
+            "Determination of tensile strength and % of elongation at break, strength (tear, stitch tears, tongue tear, split tear strength), flexing endurance, water-vapor permeability, scuff, heat, bending resistance, fastness (wash, color, light), shrinkage temperature, Bond strength, Cold crack resistance, wet and dry rub fastness, water fastness, bleeding, elasticity, resistance to chemicals, moisture fastness, thread tests, tests of accessories, slip resistance of sole leather, etc."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "LE 4217": {
+          "title": "Production & Quality Control",
+          "credit": 3.0,
+          "contactHour": "3.0 Hours per week",
+          "topics": [
+            "Concept of Production: Production-elements, production systems, selection of production process; Productivity- measurement, factors, key steps for improving productivity.",
+            "Production Planning and Control: Objectives, functions, factors determining the complexity, levels and categories.",
+            "Materials Handling: Objectives, classification, importance, general consideration for selecting handling equipment, material storage, packaging and shipment.",
+            "Inventory Management and Control: Objectives, systems, strategies for improving inventory management, EOQ model, inventory cost and control techniques.",
+            "Resource Scheduling: Introduction, objectives, scheduling and sequencing, Gantt chart, network analysis, critical path method (CPM), program evaluation and review technique (PERT).",
+            "Sales Forecasting: Introduction, purpose, methods, time series analysis, Forecasting for new products; Co-ordination between sales, manufacturing and purchase departments.",
+            "Quality and Quality Control: Quality–principles, benefits, drawbacks, polices, six sigma concept; zero defects; Quality management system; TQM-concept, ideal system, application on leather industry; Quality control- benefits, procedures, standards; Developing and implementation of quality control for leather industry.",
+            "Quality and Environmental Management Standards: Development of ISO-9000 series, content and application field of ISO-9000-9004 series; Introduction to ISO14000 series, structure of ISO14001 standard, occupational health hazards and safety."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "IPE 4219": {
+          "title": "Industrial Management & Entrepreneurship",
+          "credit": 3.0,
+          "contactHour": "3.0 Hours per week",
+          "topics": [
+            "Management Fundamentals: Basic theories of management; Management functions; Types of organizational structure; Principles of management; Organizational environments; Lines of command and response; Span of control; Centralization and decentralization of administration.",
+            "Human Resource Management: HRM process, human resource planning, recruitment, selection, training and development; Job evaluation; Merit rating; Promotions, transfers, demotions and separations; Salary and wages, wage incentive plans; Motivation, theories of motivation, job rotation, enlargement of conflict; Communication and counseling; Separation processes.",
+            "Strategic Management: Principles, planning and decision making, MIS, DSS.",
+            "Entrepreneurship Development: Concept of entrepreneurship, theories, development factors, process of developing entrepreneurship, profile of and entrepreneur, business initiation; Types of business, relative advantages and disadvantages; business plan; High–Tech entrepreneurship: characteristics, technology transfer and transfer risk, entrepreneurial failure."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "LE 4000": {
+          "title": "Project Work/Thesis",
+          "credit": 3.0,
+          "contactHour": "6.0 Hours per week",
+          "topics": [],
+          "sessionalNote": null,
+          "references": []
+        }
+      },
+      "optionalCourses": [
+        {
+          "title": "Materials Science for Footwear Products",
+          "credit": 3.0,
+          "contactHour": "3.0 Hours per week",
+          "topics": [
+            "Upper Materials: Leather-effect of structure on the properties of leather; Comparison between leather and synthetics; Variations in upper leather and their effects on clicking; Synthetic-structure, manufacture, properties and uses (PU and PVC coated fabrics, combination coatings, drill cloth, sugar coated fabric etc.).",
+            "Soling Materials: Properties, advantages, disadvantages, identification, compounding, uses of different soling materials-PVC, PU, TPU, TPR, EVA, MCR, rubber, leather sole etc.; Moulding techniques of soling materials.",
+            "Adhesives: Definition; Mechanism of adhesion, types, properties, composition, advantages and disadvantages, selection, testing and application of different types of adhesives-polychloroprene, latex, hot melt etc.; Backing materials; Adhesive used in different shoe constructions including DIP and DVP.",
+            "Needle and Thread: Needle: Specification, sizing system, points and manufacturing of needle; Needle-thread relationship; Needle-material relationship. Thread: Types, construction, identification and consumption of thread.",
+            "Reinforcement Materials: Physical properties, advantages and disadvantages, types, selection criteria, attaching system and uses of reinforcements; Indirect tape and reinforcement applications; Optimum reinforcement combination.",
+            "Components for Fabrication: Insole-properties, types, selection criteria, raw materials and manufacture of insole materials; In socks and foot bed; Heel- materials (wooden, ABS, EPDM etc.); raw materials selection, injection moulding and finishing; Shank- material (wood, fiber board, etc.); shank manufacturing; Toe puff and stiffeners-purpose, types, effects on footwear, selection criteria; Trouble shooting.",
+            "Fasteners & Accessories: Lace fabrics- raw materials and manufacture; types of eyelets; zippers and fasteners and their uses; Accessories: Types of accessories, fittings ornaments, embellishments; Methods of manufacture, moulding, electroplating and polishing.",
+            "Shoe and Products Finishing Materials: Cleaners; fillers; polishes; spray; modifiers; revivers; renovators; Chemical used for oily/waxy upper; dubbin, wax polishes; bottom finishes; heel and edge finishes; upper leather finishes; water containing finishing creams and some recipes; white polishes; dressing materials; wrinkle chasing."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        {
+          "title": "Sessional on LE 4025",
+          "credit": 0.75,
+          "contactHour": "3/2 Hours per week",
+          "topics": [
+            "Identification and manufacturing of different types of soles using moulding machines, DI and DVP process; Identification of various leather, fabrics and synthetic materials using destructive or non-destructive test."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        {
+          "title": "Eco-Friendly Tannery Operations",
+          "credit": 3.0,
+          "contactHour": "3.0 Hours per week",
+          "topics": [
+            "Cleaner Processing–Beamhouse: Ecofriendly process technologies-salt free curing options; sulphide free unhairing systems; ammonia free deliming; salt free pickling systems, solvent free degreasing systems; Paradigm shift from chemical processing of hides and skins to bio beam house processing.",
+            "Cleaner Processing-Tanning and Post Tanning: Less chrome and chrome-free tanning systems; Formaldehyde free syntan; VOCs, AOX free post tanning; Integrated strategies to achieve permissible standards of tannery effluents.",
+            "Cleaner Processing-Finishing: Solvent free finishing systems; Latest concepts and trends in leather finishing; Eco-labeling; Hazardous substances; REACH and COSHH regulations.",
+            "Cleaner Technologies-Advanced and Up gradation Techniques: Oil pull-up, waxy, burnishable, crazy horse, antique finish, screen printing, roller printing, metallic effects, electrostatic finishing and tie and dye finishing; Shoe suede, garment suede, grain finished effect; Up gradation of lower ends for better utilization; Transfer foil, lamination techniques, etc. in split finishing; Latest trends."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        {
+          "title": "Sessional on LE 4031",
+          "credit": 0.75,
+          "contactHour": "3/2 Hours per week",
+          "topics": [
+            "Production of leather using salt, sulfide, ammonia and solvent free agents; Chrome free and vegetable free crust leather; practice of finishing technique-wax pull up, metallic effect, transfer foil, burnish effect and shoe suede."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        {
+          "title": "Power Transmission & Maintenance Engineering",
+          "credit": 3.0,
+          "contactHour": "3.0 Hours per week",
+          "topics": [
+            "Drives and Power Transmission: Industrial requirements and ward Leonard system of drives; Servo-motors; Basic theory and applications; Electrical and mechanical power transmission system in leather and product machineries.",
+            "Lubrication and Seals: General properties and classification of different lubricants; Viscosity and factors affecting viscosity and other maintenance of common parts of plants; selection of lubricants, maintenance of sliding and rotating of parts.",
+            "Seals and Leakage: Seals materials (gasket, rubber, asbestos), maintenance of sealing parts and remedy of leakage.",
+            "Machines Maintenance: Necessity, role of preventive maintenance, classifications, planning, scheduling and control; Preparation of maintenance schedule for plants and machineries of leather engineering; Major faults and repairing.",
+            "Repairing Specifications: Repairing specifications of common parts of leather and product machineries (bearing, belts and alignments of shaft etc.), detection of defects and remedy etc.",
+            "Safety and Hazard: Safety hazards of machineries, legal framework in Bangladesh, international conventions; Need for safety and health; Hazard- classification, identification and assessment; MSDS; Hazards in the work place in the leather and sub sector; workplace exposure, monitoring and evaluation; Hazard prevention and control measures.",
+            "Productive Machine Safety in the Leather and sub-sector: Machine tools and electrical installations; Hazard prevention and safe guarding of leather machineries (guards, machine controls, and ergonomics)."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        {
+          "title": "Sessional on LE 4035",
+          "credit": 0.75,
+          "contactHour": "3/2 Hours per week",
+          "topics": [
+            "Experiments based on the theory of LE 4035"
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        {
+          "title": "Footwear Engineering IV",
+          "credit": 3.0,
+          "contactHour": "3.0 Hours per week",
+          "topics": [
+            "Specialized Footwear: Safety footwear: purpose, application field, special features, required standards for safety, construction and operational procedure; Sports footwear: Significance, special features, types, construction and operational procedure; Medicated Footwear: Diabetic and Orthopedic footwear- purpose, design, selection of material, manufacturing procedure.",
+            "Last & Mould Design and Development: Last: The planes with the foot movement axes, measurement grading systems, approach to mechanized construction, traditional design cycle, traditional processing cycle, 3D CAD design cycle; Mould: Mould design process, implementation procedures, sampling.",
+            "CAD/CAM Systems: CAD/CAM shoe design systems: 2D CAD design, 3D CAD design, CAD peripherals, CAD linking up with production (CAM) & the managerial systems; Cutting technology: automatic cutting presses, dieless cutting systems & applications; Sewing technology: Machines with automatic sewing cycle.",
+            "Handling and Conveyance Systems-Layout: Handling systems-hand pushed trolleys, manual conveyor and manual conveyor with unhooking systems; layouts; teamwork and modular systems.",
+            "Footwear Costing & Marketing: Costing: Cost categories, cost calculation criteria, costing methods; Market and its reference framework: International scene and development, the footwear market worldwide, distribution channels; Market analysis: overall market analysis, analysis of distribution system, analysis of the supply; Marketing strategy: elaborating the marketing strategy and the marketing mix.",
+            "Footwear Complaints: Defects identification in different steps of footwear manufacture, loss of trims and decorations, failure of buckles and other fasteners, failure of stitching and seam, tearing of uppers, wrinkling and collapse of toe puffs, cracking of soles, failure of sole adhesion, failure of heels and shanks, distortion and loss of shape, discoloration of uppers, upper surface damage and loss of finish."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        {
+          "title": "Sessional on LE 4011",
+          "credit": 0.75,
+          "contactHour": "3/2 Hours per week",
+          "topics": [
+            "Experiments based on the theory of LE 4011"
+          ],
+          "sessionalNote": null,
+          "references": []
+        }
+      ],
+      "termNotes": []
+    }
+  },
+  "extras": {
+    "administrative_noise": [
+      "Page 5 of 27",
+      "Page 6 of 27",
+      "Page 7 of 27",
+      "No. of Theory Courses : 5 Total Contact Hours: 16.00(T) +9.00(S) = 25.00",
+      "No. of Sessional Courses   : 4   Total Credit: 16.00(T) + 4.50(S) = 20.50",
+      "No. of Theory Courses : 5 Total Contact Hours: 16.00(T) + 6.00(S) =22.00",
+      "No. of Sessional Courses   : 4   Total Credit: 16.00(T) +3.00(S) = 19.00",
+      "Page 9 of 27",
+      "Page 10 of 27",
+      "Page 11 of 27",
+      "No. of Theory Courses : 5 Total Contact Hours: 16.00(T) +7.50(S) = 23.50",
+      "No. of Sessional Courses   : 4   Total Credit: 16.00(T) +3.75 (S) = 19.75",
+      "Page 12 of 27",
+      "Page 13 of 27",
+      "Page 14 of 27",
+      "No. of Theory Courses : 5 Total Contact Hours: 16.00(T) +9.00(S) = 25.00",
+      "No. of Sessional Courses   : 4   Total Credit: 16.00(T) +4.50(S) = 20.50",
+      "Page 15 of 27",
+      "Page 16 of 27",
+      "No. of Theory Courses : 5 Total Contact Hours: 15.00(T) + 9.00(S) = 24.00",
+      "No. of Sessional Courses   : 5   Total Credit: 15.00(T) +4.50(S) = 19.50",
+      "Page 17 of 27",
+      "Page 18 of 27",
+      "Page 19 of 27",
+      "No. of Theory Courses : 5 Total Contact Hours: 16.00(T) + 7.50(S) = 23.50",
+      "No. of Sessional Courses   : 4   Total Credit: 16.00(T) + 3.75(S) = 19.75",
+      "Page 20 of 27",
+      "Page 21 of 27",
+      "Page 22 of 27",
+      "Page 23 of 27",
+      "Page 24 of 27",
+      "Page 25 of 27",
+      "Page 26 of 27",
+      "Leather Engineering Department",
+      "Khulna University of Engineering & Technology (KUET)",
+      "Details Syllabus",
+      "No. of Theory Courses : 5 Total Contact Hours: 15.00(T) + 12.00(S) = 27.00",
+      "No. of Sessional Courses   : 5   Total Credit: 15.00(T) + 6.00(S) = 21.00",
+      "No. of Theory Courses : 5 Total Contact Hours: 15.00(T) +12.00(S) =27.00",
+      "No. of Sessional Courses   : 5   Total Credit: 15.00(T) + 6.00(S) = 21.00"
+    ],
+    "ambiguities": []
+  },
+  "qa": {
+    "termCount": 8,
+    "courseCount": 86,
+    "topicCount": 403,
+    "noiseCount": 36,
+    "ambiguityCount": 0
+  }
+}

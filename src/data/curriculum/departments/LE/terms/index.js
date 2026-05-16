@@ -7,7 +7,7 @@ import { Y3T2 } from './Y3T2.js';
 import { Y4T1 } from './Y4T1.js';
 import { Y4T2 } from './Y4T2.js';
 
-export const ESE_TERMS = {
+export const LE_TERMS = {
   Y1T1,
   Y1T2,
   Y2T1,
@@ -17,3 +17,5 @@ export const ESE_TERMS = {
   Y4T1,
   Y4T2,
 };
+
+export default LE_TERMS;

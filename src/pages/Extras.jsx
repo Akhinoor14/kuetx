@@ -246,15 +246,26 @@ export function Syllabus() {
 
   const allCourses = getAllCourses(profile);
   const deptSyllabus = getDeptSyllabus(profile.dept);
-
-  // Filter to only current term
-  const courses = allCourses.filter(c => c.year === termYear && c.term === termNo);
+  const [selectedCourseId] = useState(() => store.get('selectedSyllabusCourseid'));
+  const selectedCourse = selectedCourseId ? allCourses.find(c => c.id === selectedCourseId) : null;
+  const displayTermKey = selectedCourse ? `Y${selectedCourse.year}T${selectedCourse.term}` : currentTermKey;
+  const courses = selectedCourse ? [selectedCourse] : allCourses.filter(c => c.year === termYear && c.term === termNo);
 
   const [expandedTopics, setExpandedTopics] = useState({});
   const [openCourses, setOpenCourses] = useState({});
   const [compactMode, setCompactMode] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [selfStudyData, setSelfStudyData] = useState(() => store.get('selfstudy_academic') || []);
+
+  useEffect(() => {
+    if (selectedCourseId) store.remove('selectedSyllabusCourseid');
+  }, [selectedCourseId]);
+
+  useEffect(() => {
+    if (selectedCourse?.id) {
+      setOpenCourses({ [selectedCourse.id]: true });
+    }
+  }, [selectedCourse?.id]);
   
   const syllabusCourseMap = deptSyllabus?.courses || {};
   
@@ -330,7 +341,7 @@ export function Syllabus() {
       <div style={{ marginBottom: 24 }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 12, flexWrap: 'wrap' }}>
           <div>
-            <h1 style={{ fontSize: 24, fontWeight: 700, marginBottom: 4 }}>📚 {getTermLabelFromKey(currentTermKey)} Syllabus</h1>
+            <h1 style={{ fontSize: 24, fontWeight: 700, marginBottom: 4 }}>📚 {getTermLabelFromKey(displayTermKey)} Syllabus</h1>
             <p style={{ fontSize: 13, color: 'var(--muted)' }}>
               {courses.length} courses • {courses.reduce((sum, c) => sum + (c.credit || 0), 0).toFixed(1)} credits
             </p>
@@ -343,20 +354,23 @@ export function Syllabus() {
       </div>
 
       {/* Search & Filter */}
-      <div style={{ marginBottom: 16 }}>
-        <input 
-          type="text" 
-          placeholder="🔍 Search courses or topics..." 
-          value={searchQuery}
-          onChange={e => setSearchQuery(e.target.value)}
-          style={{ width: '100%' }}
-        />
-      </div>
+      {!selectedCourse && (
+        <div style={{ marginBottom: 16 }}>
+          <input 
+            type="text" 
+            placeholder="🔍 Search courses or topics..." 
+            value={searchQuery}
+            onChange={e => setSearchQuery(e.target.value)}
+            style={{ width: '100%' }}
+          />
+        </div>
+      )}
 
       {/* Courses Grid */}
       <div style={{ display: 'grid', gridTemplateColumns: courses.length === 1 ? '1fr' : 'repeat(auto-fit, minmax(380px, 1fr))', gap: 16, marginBottom: 20 }}>
         {courses
           .filter(c => {
+            if (selectedCourse) return true;
             const q = searchQuery.toLowerCase();
             if (c.name.toLowerCase().includes(q) || c.code.toLowerCase().includes(q)) return true;
             const topics = syllabusCourseMap[c.code]?.topics || [];
@@ -585,11 +599,11 @@ export function Syllabus() {
       {courses.length === 0 && (
         <div className="card" style={{ textAlign: 'center', padding: 40 }}>
           <div style={{ fontSize: 40, marginBottom: 12 }}>📚</div>
-          <p>No courses in {getTermLabelFromKey(currentTermKey)}. Check your Profile settings.</p>
+          <p>No courses in {getTermLabelFromKey(displayTermKey)}. Check your Profile settings.</p>
         </div>
       )}
 
-      {courses.length > 0 && courses.filter(c => 
+      {!selectedCourse && courses.length > 0 && courses.filter(c => 
         c.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
         c.code.toLowerCase().includes(searchQuery.toLowerCase())
       ).length === 0 && (

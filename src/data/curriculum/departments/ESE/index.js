@@ -1,8 +1,8 @@
-import { ESE_META } from './meta';
-import { ESE_TERMS } from './terms';
-import { ESE_OPTIONAL_COURSES } from './optional';
-import { ESE_NOTES } from './notes';
-import { ESE_SYLLABUS } from './syllabus';
+import { ESE_META } from './meta.js';
+import { ESE_TERMS } from './terms/index.js';
+import { ESE_OPTIONAL_COURSES } from './optional.js';
+import { ESE_NOTES } from './notes.js';
+import { ESE_SYLLABUS } from './syllabus/index.js';
 
 export const ESE = {
   meta: ESE_META,

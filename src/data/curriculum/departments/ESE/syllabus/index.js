@@ -1,12 +1,12 @@
-import { ESE_SYLLABUS_Y1T1 } from './Y1T1';
-import { ESE_SYLLABUS_Y1T2 } from './Y1T2';
-import { ESE_SYLLABUS_Y2T1 } from './Y2T1';
-import { ESE_SYLLABUS_Y2T2 } from './Y2T2';
-import { ESE_SYLLABUS_Y3T1 } from './Y3T1';
-import { ESE_SYLLABUS_Y3T2 } from './Y3T2';
-import { ESE_SYLLABUS_Y4T1 } from './Y4T1';
-import { ESE_SYLLABUS_Y4T2 } from './Y4T2';
-import { ESE_SYLLABUS_OPTIONAL } from './optional';
+import { ESE_SYLLABUS_Y1T1 } from './Y1T1.js';
+import { ESE_SYLLABUS_Y1T2 } from './Y1T2.js';
+import { ESE_SYLLABUS_Y2T1 } from './Y2T1.js';
+import { ESE_SYLLABUS_Y2T2 } from './Y2T2.js';
+import { ESE_SYLLABUS_Y3T1 } from './Y3T1.js';
+import { ESE_SYLLABUS_Y3T2 } from './Y3T2.js';
+import { ESE_SYLLABUS_Y4T1 } from './Y4T1.js';
+import { ESE_SYLLABUS_Y4T2 } from './Y4T2.js';
+import { ESE_SYLLABUS_OPTIONAL } from './optional.js';
 
 const TERM_SYLLABUS = {
   Y1T1: ESE_SYLLABUS_Y1T1,

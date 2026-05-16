@@ -4,7 +4,80 @@ import { useNavigate } from 'react-router-dom';
 import { COURSE_STATUSES, COURSE_TYPES, getAllCourses, getCustomCourses, getDeptOptionalCourses, getProfile, getTermLabelFromKey, setCourseOverride, setCustomCourses, setOptionalSelection, uid, store } from '../store/store';
 
 const YEARS = [1, 2, 3, 4];
-const STATUS_COLORS = { active: 'tag-green', completed: 'tag-blue', backlog: 'tag-red', withdrawal: 'tag-yellow', incomplete: 'tag-gray' };
+const CHIP_STYLE = {
+  fontSize: 9,
+  lineHeight: 1,
+  padding: '1px 7px',
+  minHeight: 18,
+  borderRadius: 999,
+  display: 'inline-flex',
+  alignItems: 'center'
+};
+const CHIP_ICON_STYLE = {
+  ...CHIP_STYLE,
+  width: 20,
+  padding: 0,
+  justifyContent: 'center'
+};
+
+// Status chip dropdown removed: use native select in forms to avoid showing active/completed chip in cards
+
+function NoteChipEditor({ value, onChange }) {
+  const [open, setOpen] = useState(false);
+  const hasValue = !!String(value || '').trim();
+
+  return (
+    <div style={{ position: 'relative' }}>
+      <button
+        type="button"
+        className="tag tag-gray"
+        style={{
+          ...CHIP_STYLE,
+          fontSize: 9,
+          fontWeight: 700,
+          cursor: 'pointer',
+          maxWidth: 130,
+          whiteSpace: 'nowrap'
+        }}
+        title={hasValue ? value : 'Notes / pre-reqs'}
+        onClick={() => setOpen(v => !v)}
+      >
+        <span style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>{hasValue ? 'Notes' : '+ Notes'}</span>
+      </button>
+      {open && (
+        <div
+          style={{
+            position: 'absolute',
+            top: 'calc(100% + 6px)',
+            right: 0,
+            zIndex: 20,
+            width: 260,
+            background: 'var(--surface)',
+            border: '1px solid var(--border)',
+            borderRadius: 10,
+            boxShadow: '0 12px 28px rgba(12, 34, 64, 0.12)',
+            padding: 8
+          }}
+        >
+          <textarea
+            autoFocus
+            value={value || ''}
+            onChange={e => onChange(e.target.value)}
+            onBlur={() => setOpen(false)}
+            placeholder="Notes / pre-reqs"
+            rows={3}
+            style={{ width: '100%', fontSize: 12, padding: 8, resize: 'none' }}
+          />
+          <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 6 }}>
+            <button type="button" className="btn btn-ghost btn-sm" style={{ padding: '4px 10px', fontSize: 11 }} onClick={() => setOpen(false)}>
+              Done
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
 
 function CustomCourseForm({ initial, onSave, onCancel }) {
   const blank = { code: '', name: '', type: 'Theory', credits: 3, year: 1, term: 1, status: 'active', isCore: true, notes: '' };
@@ -76,6 +149,7 @@ export default function Courses() {
     groups[k].items.push(c);
   });
   const sortedGroups = Object.values(groups).sort((a, b) => a.key.localeCompare(b.key));
+  const getStatusChipLabel = (status) => status ? `${status.charAt(0).toUpperCase()}${status.slice(1)}` : '';
 
   return (
     <div className="page-enter page-container">
@@ -113,19 +187,18 @@ export default function Courses() {
                       <span style={{ fontSize: 'clamp(13px,3.5vw,14px)', fontWeight: c.code && c.code.includes('CSE 2113') ? 800 : 600 }}>{c.name}</span>
                     </div>
                     <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginTop: 8, alignItems: 'center' }}>
-                      <span className={`tag ${STATUS_COLORS[c.status] || 'tag-gray'}`} style={{ fontSize: 12, padding: '4px 8px' }}>{c.status}</span>
-                      <span className="tag tag-gray" style={{ fontSize: 12, padding: '4px 8px' }}>{c.type}</span>
-                      <span className="tag tag-gray" style={{ fontSize: 12, padding: '4px 8px' }}>{c.credits} cr</span>
-                      {c.isCore && <span className="tag tag-blue" style={{ fontSize: 12, padding: '4px 8px' }}>Core</span>}
-                      {c.isOptional && <span className="tag tag-yellow" style={{ fontSize: 12, padding: '4px 8px' }}>Optional</span>}
-                      <button onClick={(e) => { e.stopPropagation(); viewCourseSyllabus(c.id); }} className="tag" style={{ marginLeft: 6, padding: '6px 8px', borderRadius: 8, border: '1px solid var(--border)', display: 'inline-flex', alignItems: 'center' }} title="Open syllabus"><BookOpen size={14} /></button>
+                      <span className="tag tag-gray" style={CHIP_STYLE}>{c.type}</span>
+                      <span className="tag tag-gray" style={CHIP_STYLE}>{c.credits} cr</span>
+                      {c.isOptional && <span className="tag tag-yellow" style={CHIP_STYLE}>Optional</span>}
+                      <NoteChipEditor value={c.notes || ''} onChange={(notes) => updateOverride(c.id, { notes })} />
+                      <button onClick={(e) => { e.stopPropagation(); viewCourseSyllabus(c.id); }} className="tag tag-blue" style={{ ...CHIP_STYLE, fontSize: 9, fontWeight: 700, cursor: 'pointer' }} title="Open exact syllabus">
+                        <BookOpen size={11} />
+                        <span style={{ marginLeft: 4 }}>Syllabus</span>
+                      </button>
                     </div>
-                    {c.notes && <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 8 }}>{c.notes}</div>}
                   </div>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 6, minWidth: 110, width: 110 }}>
                     {c.isOptional && <select value={c.optionalCode || ''} onChange={e => updateOptional(c, e.target.value)} style={{ fontSize: 13, padding: 6 }}><option value="">Select</option>{optionalCatalog.map(opt => <option key={opt.code} value={opt.code}>{opt.code} — {opt.title}</option>)}</select>}
-                    <select value={c.status} onChange={e => updateOverride(c.id, { status: e.target.value })} style={{ fontSize: 13, padding: 6 }}>{COURSE_STATUSES.map(s => <option key={s.id} value={s.id}>{s.label}</option>)}</select>
-                    <input value={c.notes || ''} onChange={e => updateOverride(c.id, { notes: e.target.value })} placeholder="Notes / pre-reqs" style={{ fontSize: 13, padding: 6 }} />
                   </div>
                 </div>
               ))}
@@ -147,11 +220,9 @@ export default function Courses() {
                         <span className="mono fw-700" style={{ fontSize: 14 }}>{c.code}</span>
                         <span style={{ fontSize: 14 }}>{c.name}</span>
                       </div>
-                      <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginTop: 6 }}>
-                        <span className={`tag ${STATUS_COLORS[c.status] || 'tag-gray'}`}>{c.status}</span>
-                        <span className="tag tag-gray">{c.type}</span>
-                        <span className="tag tag-gray">{c.credits} cr</span>
-                        {c.isCore && <span className="tag tag-blue">Core</span>}
+                      <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap', marginTop: 4 }}>
+                        <span className="tag tag-gray" style={CHIP_STYLE}>{c.type}</span>
+                        <span className="tag tag-gray" style={CHIP_STYLE}>{c.credits} cr</span>
                       </div>
                     </div>
                     <button className="btn btn-ghost btn-sm" onClick={() => setEditingCustom(c.id)} title="Edit">✎</button>

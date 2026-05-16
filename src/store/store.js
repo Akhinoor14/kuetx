@@ -2,7 +2,7 @@
 // Aligned with KUET Academic Ordinance (Effective 2nd Term, Session 2011-12)
 // Approved: 18th & 19th Academic Council meetings (2012)
 
-import { CURRICULUM } from '../data/curriculum';
+import { CURRICULUM } from '../data/curriculum/index.js';
 
 const PREFIX = 'kuetx_';
 
