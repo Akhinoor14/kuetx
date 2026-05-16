@@ -8,6 +8,7 @@ export default function Collapsible({
   defaultCollapsed = true,
   storageKey,
   right,
+  rightCollapsed, // optional: show when collapsed
   className = '',
   contentClassName = '',
 }) {
@@ -42,7 +43,7 @@ export default function Collapsible({
           {subtitle ? <div className="collapsible-subtitle">{subtitle}</div> : null}
         </div>
         <div className="collapsible-right">
-          {right}
+          {collapsed && rightCollapsed ? rightCollapsed : right}
           {collapsed ? <ChevronDown size={18} color="var(--muted)" /> : <ChevronUp size={18} color="var(--muted)" />}
         </div>
       </button>
