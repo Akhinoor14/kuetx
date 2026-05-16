@@ -1,74 +1,52 @@
-export const Y1T2 = [
-  {
-    "code": "Hum 1231",
-    "title": "Technical and Communicative English",
-    "credits": 3,
-    "contactHours": "3 Hours/week",
-    "type": "Theory",
-    "isOptional": false
-  },
-  {
-    "code": "Hum 1232",
-    "title": "Sessional on Technical and Communicative English",
-    "credits": 0.75,
-    "contactHours": "0.75 Hours/week",
-    "type": "Sessional",
-    "isOptional": false
-  },
-  {
-    "code": "Ph 1231",
-    "title": "Physics",
-    "credits": 3,
-    "contactHours": "3 Hours/week",
-    "type": "Theory",
-    "isOptional": false
-  },
-  {
-    "code": "Ph 1232",
-    "title": "Sessional on Physics",
-    "credits": 0.75,
-    "contactHours": "0.75 Hours/week",
-    "type": "Sessional",
-    "isOptional": false
-  },
-  {
-    "code": "Math 1231",
-    "title": "Vector, Matrix and Ordinary Differential Equation",
-    "credits": 3,
-    "contactHours": "3 Hours/week",
-    "type": "Theory",
-    "isOptional": false
-  },
-  {
-    "code": "CSE 1231",
-    "title": "Computer Programming",
-    "credits": 3,
-    "contactHours": "3 Hours/week",
-    "type": "Theory",
-    "isOptional": false
-  },
-  {
-    "code": "CSE 1232",
-    "title": "Sessional on Computer Programming",
-    "credits": 1.5,
-    "contactHours": "1.5 Hours/week",
-    "type": "Sessional",
-    "isOptional": false
-  },
-  {
-    "code": "ME 1231",
-    "title": "Manufacturing Processes",
-    "credits": 3,
-    "contactHours": "3 Hours/week",
-    "type": "Theory",
-    "isOptional": false
-  },
-  {
-    "code": "ME 1232",
-    "title": "Sessional on Manufacturing Processes",
-    "credits": 0.75,
-    "contactHours": "0.75 Hours/week",
-    "type": "Sessional",
-    "isOptional": false
-  }
-];
+export const MTE_TERMS_Y1T2 = {
+	termKey: 'Y1T2',
+	title: 'First Year Second Term',
+	courses: {
+	  "Hum 1231": {
+	    "title": "Technical and Communicative English",
+	    "credit": 3,
+	    "references": []
+	  },
+	  "Hum 1231_sessional": {
+	    "title": "Sessional on Technical and Communicative English",
+	    "credit": 0.75,
+	    "references": []
+	  },
+	  "Ph 1231": {
+	    "title": "Physics",
+	    "credit": 3,
+	    "references": []
+	  },
+	  "Ph 1232": {
+	    "title": "Sessional on Physics",
+	    "credit": 0.75,
+	    "references": []
+	  },
+	  "Math 1231": {
+	    "title": "Vector, Matrix and Ordinary Differential Equation",
+	    "credit": 3,
+	    "references": []
+	  },
+	  "CSE 1231": {
+	    "title": "Computer Programming",
+	    "credit": 3,
+	    "references": []
+	  },
+	  "CSE 1232": {
+	    "title": "Sessional on Computer Programming",
+	    "credit": 1.5,
+	    "references": []
+	  },
+	  "ME 1231": {
+	    "title": "Manufacturing Processes",
+	    "credit": 3,
+	    "references": []
+	  },
+	  "ME 1232": {
+	    "title": "Sessional on Manufacturing Processes",
+	    "credit": 0.75,
+	    "references": []
+	  }
+	},
+};
+export default MTE_TERMS_Y1T2;

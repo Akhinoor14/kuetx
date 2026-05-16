@@ -1,74 +1,52 @@
-export const Y2T1 = [
-  {
-    "code": "Hum 2131",
-    "title": "Engineering Economics and Accounting",
-    "credits": 3,
-    "contactHours": "3 Hours/week",
-    "type": "Theory",
-    "isOptional": false
-  },
-  {
-    "code": "Math 2131",
-    "title": "Fourier Analysis and Laplace Transform",
-    "credits": 3,
-    "contactHours": "3 Hours/week",
-    "type": "Theory",
-    "isOptional": false
-  },
-  {
-    "code": "EE 2131",
-    "title": "Electronics",
-    "credits": 3,
-    "contactHours": "3 Hours/week",
-    "type": "Theory",
-    "isOptional": false
-  },
-  {
-    "code": "EE 2132",
-    "title": "Sessional on Electronics",
-    "credits": 1.5,
-    "contactHours": "1.5 Hours/week",
-    "type": "Sessional",
-    "isOptional": false
-  },
-  {
-    "code": "ME 2131",
-    "title": "Engineering Mechanics",
-    "credits": 3,
-    "contactHours": "3 Hours/week",
-    "type": "Theory",
-    "isOptional": false
-  },
-  {
-    "code": "ME 2132",
-    "title": "Sessional on Engineering Mechanics",
-    "credits": 0.75,
-    "contactHours": "0.75 Hours/week",
-    "type": "Sessional",
-    "isOptional": false
-  },
-  {
-    "code": "MTE 2105",
-    "title": "Sensors and Instrumentations",
-    "credits": 3,
-    "contactHours": "3 Hours/week",
-    "type": "Theory",
-    "isOptional": false
-  },
-  {
-    "code": "MTE 2106",
-    "title": "Sessional on Sensors and Instrumentations",
-    "credits": 1.5,
-    "contactHours": "1.5 Hours/week",
-    "type": "Sessional",
-    "isOptional": false
-  },
-  {
-    "code": "MTE 2100",
-    "title": "CAD Practice",
-    "credits": 1.5,
-    "contactHours": "1.5 Hours/week",
-    "type": "Sessional",
-    "isOptional": false
-  }
-];
+export const MTE_TERMS_Y2T1 = {
+	termKey: 'Y2T1',
+	title: 'Second Year First Term',
+	courses: {
+	  "Hum 2131": {
+	    "title": "Engineering Economics and Accounting",
+	    "credit": 3,
+	    "references": []
+	  },
+	  "Math 2131": {
+	    "title": "Fourier Analysis and Laplace Transform",
+	    "credit": 3,
+	    "references": []
+	  },
+	  "EE 2131": {
+	    "title": "Electronics",
+	    "credit": 3,
+	    "references": []
+	  },
+	  "EE 2132": {
+	    "title": "Sessional on Electronics",
+	    "credit": 1.5,
+	    "references": []
+	  },
+	  "ME 2131": {
+	    "title": "Engineering Mechanics",
+	    "credit": 3,
+	    "references": []
+	  },
+	  "ME 2132": {
+	    "title": "Sessional on Engineering Mechanics",
+	    "credit": 0.75,
+	    "references": []
+	  },
+	  "MTE 2105": {
+	    "title": "Sensors and Instrumentation",
+	    "credit": 3,
+	    "references": []
+	  },
+	  "MTE 2106": {
+	    "title": "Sessional on Sensors and Instrumentations",
+	    "credit": 1.5,
+	    "references": []
+	  },
+	  "MTE 2100": {
+	    "title": "CAD Practice",
+	    "credit": 1.5,
+	    "references": []
+	  }
+	},
+};
+export default MTE_TERMS_Y2T1;

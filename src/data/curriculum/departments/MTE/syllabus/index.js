@@ -1,29 +1,21 @@
-import { MTE_SYLLABUS_Y1T1 } from './Y1T1.js';
-import { MTE_SYLLABUS_Y1T2 } from './Y1T2.js';
-import { MTE_SYLLABUS_Y2T1 } from './Y2T1.js';
-import { MTE_SYLLABUS_Y2T2 } from './Y2T2.js';
-import { MTE_SYLLABUS_Y3T1 } from './Y3T1.js';
-import { MTE_SYLLABUS_Y3T2 } from './Y3T2.js';
-import { MTE_SYLLABUS_Y4T1 } from './Y4T1.js';
-import { MTE_SYLLABUS_Y4T2 } from './Y4T2.js';
-import { MTE_SYLLABUS_OPTIONAL } from './optional.js';
-
-const TERM_SYLLABUS = {
-  Y1T1: MTE_SYLLABUS_Y1T1,
-  Y1T2: MTE_SYLLABUS_Y1T2,
-  Y2T1: MTE_SYLLABUS_Y2T1,
-  Y2T2: MTE_SYLLABUS_Y2T2,
-  Y3T1: MTE_SYLLABUS_Y3T1,
-  Y3T2: MTE_SYLLABUS_Y3T2,
-  Y4T1: MTE_SYLLABUS_Y4T1,
-  Y4T2: MTE_SYLLABUS_Y4T2,
-};
-
-const mergeCourses = (...terms) => terms.reduce((acc, term) => ({ ...acc, ...term.courses }), {});
+export { default as MTE_SYLLABUS_Y1T1 } from './Y1T1.js';
+export { default as MTE_SYLLABUS_Y1T2 } from './Y1T2.js';
+export { default as MTE_SYLLABUS_Y2T1 } from './Y2T1.js';
+export { default as MTE_SYLLABUS_Y2T2 } from './Y2T2.js';
+export { default as MTE_SYLLABUS_Y3T1 } from './Y3T1.js';
+export { default as MTE_SYLLABUS_Y3T2 } from './Y3T2.js';
+export { default as MTE_SYLLABUS_Y4T1 } from './Y4T1.js';
+export { default as MTE_SYLLABUS_Y4T2 } from './Y4T2.js';
 
 export const MTE_SYLLABUS = {
-  sourceFile: 'Department of Mechatronics Engineering (KUET) Syllabus, Updated 23rd October 2024',
-  terms: TERM_SYLLABUS,
-  optional: MTE_SYLLABUS_OPTIONAL,
-  courses: { ...mergeCourses(MTE_SYLLABUS_Y1T1, MTE_SYLLABUS_Y1T2, MTE_SYLLABUS_Y2T1, MTE_SYLLABUS_Y2T2, MTE_SYLLABUS_Y3T1, MTE_SYLLABUS_Y3T2, MTE_SYLLABUS_Y4T1, MTE_SYLLABUS_Y4T2), ...MTE_SYLLABUS_OPTIONAL.courses },
+  Y1T1: require('./Y1T1.js').default,
+  Y1T2: require('./Y1T2.js').default,
+  Y2T1: require('./Y2T1.js').default,
+  Y2T2: require('./Y2T2.js').default,
+  Y3T1: require('./Y3T1.js').default,
+  Y3T2: require('./Y3T2.js').default,
+  Y4T1: require('./Y4T1.js').default,
+  Y4T2: require('./Y4T2.js').default,
 };
+
+export default MTE_SYLLABUS;
