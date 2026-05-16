@@ -63,7 +63,7 @@ export function Tours() {
               <div style={{ fontSize: 12, color: 'var(--muted)' }}>Add chapters, stops, activities or topic groups to structure the trip plan.</div>
             )}
             {form.outline.map((section, si) => (
-              <div key={si} style={{ marginBottom: 10, padding: 10, borderRadius: 10, background: 'rgba(255,255,255,0.8)', border: '1px solid rgba(var(--accentRGB), 0.12)' }}>
+              <div key={si} style={{ marginBottom: 10, padding: 10, borderRadius: 10, background: 'var(--surfaceGlass)', border: '1px solid rgba(var(--accentRGB), 0.12)' }}>
                 <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginBottom: 8 }}>
                   <input
                     value={section.title}

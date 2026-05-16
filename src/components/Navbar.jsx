@@ -80,7 +80,7 @@ export function Navbar({ onMenuClick }) {
             <span style={{
               position: 'absolute', top: -8, right: -8, minWidth: 18, height: 18, padding: '0 6px',
               display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-              borderRadius: 999, background: 'var(--danger)', color: '#fff', fontSize: 11, fontWeight: 700,
+                borderRadius: 999, background: 'var(--danger)', color: 'var(--accentFg)', fontSize: 11, fontWeight: 700,
               boxShadow: '0 2px 6px rgba(0,0,0,0.12)'
             }}>{alertCount}</span>
           )}

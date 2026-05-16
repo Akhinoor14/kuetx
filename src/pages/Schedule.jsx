@@ -244,6 +244,54 @@ export default function Schedule() {
     note: '',
   });
 
+  // Quick cell form state (for double-click shortcut)
+  const [quickFormOpen, setQuickFormOpen] = useState(false);
+  const [quickFormData, setQuickFormData] = useState({ day: '', slot: '', courseId: '', teacherName: '', room: '', note: '', type: 'Theory' });
+  const [quickFormEditingId, setQuickFormEditingId] = useState(null);
+  
+  // Track double-click/double-tap
+  const lastClickRef = useRef({});
+  
+  const openQuickAdd = (day, slot) => {
+    setQuickFormEditingId(null);
+    setQuickFormData({
+      day: day || 'Sunday',
+      slot: slot || TIME_MODELS['50min'].slots[0],
+      courseId: '',
+      teacherName: '',
+      room: '',
+      note: '',
+      type: 'Theory',
+    });
+    setQuickFormOpen(true);
+  };
+
+  const handleCellClick = (id, item) => {
+    const now = Date.now();
+    const lastClick = lastClickRef.current[id] || 0;
+    
+    if (now - lastClick < 300) {
+      // Double click detected!
+      startEdit(item);
+      lastClickRef.current[id] = 0; // Reset
+    } else {
+      lastClickRef.current[id] = now;
+    }
+  };
+
+  const handleEmptyCellClick = (day, slot) => {
+    const key = `empty-${day}-${slot}`;
+    const now = Date.now();
+    const lastClick = lastClickRef.current[key] || 0;
+
+    if (now - lastClick < 300) {
+      openQuickAdd(day, slot);
+      lastClickRef.current[key] = 0;
+    } else {
+      lastClickRef.current[key] = now;
+    }
+  };
+
   const activeTemplate = TIME_MODELS[settings.modelId] || TIME_MODELS['50min'];
   const slotList = settings.modelId === 'custom' ? settings.customSlots : activeTemplate.slots;
   const holidayDates = settings.holidayDates || [];
@@ -295,24 +343,87 @@ export default function Schedule() {
   });
 
   const startEdit = (item) => {
-    setEditingId(item.id);
-    setAdding(true);
-    setForm({
+    setQuickFormEditingId(item.id);
+    setQuickFormData({
       day: item.day || 'Sunday',
       slot: item.slot || TIME_MODELS['50min'].slots[0],
       courseId: item.courseId || '',
-      displayName: item.displayName || '',
-      room: item.room || '',
       teacherName: item.teacherName || '',
-      type: item.type || 'Theory',
+      room: item.room || '',
       note: item.note || '',
+      type: item.type || 'Theory',
     });
+    setQuickFormOpen(true);
   };
 
   const cancelEdit = () => {
     setAdding(false);
     setEditingId(null);
     resetForm();
+  };
+
+  const closeQuickForm = () => {
+    setQuickFormOpen(false);
+    setQuickFormEditingId(null);
+    setQuickFormData({ day: '', slot: '', courseId: '', teacherName: '', room: '', note: '', type: 'Theory' });
+  };
+
+  const saveQuickForm = () => {
+    const { day, slot, courseId, teacherName, room, note, type } = quickFormData;
+    
+    if (!courseId || !slot) {
+      alert('Please select a course and time');
+      return;
+    }
+
+    const nextSlot = normalizeSlotKey(slot);
+    const normalizedTeacher = normalizeTeacherName(teacherName);
+
+    const nextEntry = {
+      day,
+      slot: nextSlot,
+      courseId,
+      displayName: '',
+      room,
+      teacherName: normalizedTeacher,
+      type,
+      note,
+      id: quickFormEditingId || uid()
+    };
+
+    // Check for overlaps/duplicates (same as in add function)
+    const hasExactDuplicate = schedule.some(item =>
+      item.id !== quickFormEditingId &&
+      item.day === nextEntry.day &&
+      normalizeSlotKey(item.slot) === nextSlot &&
+      item.courseId === nextEntry.courseId &&
+      (item.teacherName || '') === (nextEntry.teacherName || '') &&
+      (item.type || '') === (nextEntry.type || '')
+    );
+
+    if (hasExactDuplicate && !quickFormEditingId) {
+      alert('This class is already saved.');
+      return;
+    }
+
+    const hasOverlap = schedule.some(item => 
+      item.id !== quickFormEditingId && 
+      item.day === nextEntry.day && 
+      isSlotOverlap(item.slot, nextSlot)
+    );
+
+    if (hasOverlap) {
+      alert('That time overlaps with an existing class on the same day.');
+      return;
+    }
+
+    const updated = quickFormEditingId
+      ? normalizeScheduleEntries(schedule.map(item => item.id === quickFormEditingId ? nextEntry : item))
+      : normalizeScheduleEntries([...schedule, nextEntry]);
+
+    setSchedule(updated);
+    store.set('schedule', updated);
+    closeQuickForm();
   };
 
   const add = () => {
@@ -523,25 +634,51 @@ export default function Schedule() {
               return (
                 <tr key={p}>
                   <td style={{ padding: '12px 12px', borderBottom: '1px solid var(--border)', borderRight: '1px solid var(--border)', fontWeight: 700, fontSize: 13, color: 'var(--muted)', fontFamily: 'JetBrains Mono, monospace', whiteSpace: 'nowrap', background: breakSlot ? 'rgba(239,68,68,0.08)' : 'var(--bg)' }}>{slotPreview(p)}</td>
-                  {DAYS.map(d => (
-                    <td key={d} className={`timetable-day-col${d === selectedDay ? ' selected-day' : ''}`} style={{ padding: '6px', borderBottom: '1px solid var(--border)', borderRight: '1px solid var(--border)', verticalAlign: 'top', minHeight: 54, background: breakSlot ? 'rgba(239,68,68,0.08)' : d === selectedDay ? 'rgba(59,130,246,0.035)' : 'transparent' }}>
-                      {(grid[d]?.[p] || []).map(s => {
-                        const c = getCourse(s.courseId);
-                        return (
-                          <div key={s.id} onDoubleClick={() => startEdit(s)} title="Double-click to edit" style={{
-                            padding: '8px 9px', borderRadius: 11, fontSize: 12, lineHeight: 1.35, marginBottom: 4,
-                            background: 'linear-gradient(180deg, rgba(59,130,246,0.12), rgba(59,130,246,0.08))',
-                            border: '1px solid rgba(59,130,246,0.18)', color: 'var(--text)', position: 'relative', cursor: 'pointer',
-                          }}>
+                  {DAYS.map(d => {
+                    const dayItems = grid[d]?.[p] || [];
+                    return (
+                      <td
+                        key={d}
+                        className={`timetable-day-col${d === selectedDay ? ' selected-day' : ''}`}
+                        onClick={dayItems.length === 0 ? () => handleEmptyCellClick(d, p) : undefined}
+                        title={dayItems.length === 0 ? 'Double-click to add class' : undefined}
+                        style={{
+                          padding: '6px',
+                          borderBottom: '1px solid var(--border)',
+                          borderRight: '1px solid var(--border)',
+                          verticalAlign: 'top',
+                          minHeight: 54,
+                          background: breakSlot ? 'rgba(239,68,68,0.08)' : d === selectedDay ? 'rgba(59,130,246,0.035)' : 'transparent',
+                          cursor: dayItems.length === 0 ? 'pointer' : 'default',
+                        }}
+                      >
+                        {dayItems.map(s => {
+                          const c = getCourse(s.courseId);
+                          return (
+                            <div 
+                              key={s.id} 
+                              onClick={() => handleCellClick(s.id, s)}
+                              title="Double-click to edit" 
+                              style={{
+                                padding: '8px 9px', borderRadius: 11, fontSize: 12, lineHeight: 1.35, marginBottom: 4,
+                                background: 'linear-gradient(180deg, rgba(59,130,246,0.12), rgba(59,130,246,0.08))',
+                                border: '1px solid rgba(59,130,246,0.18)', color: 'var(--text)', position: 'relative', cursor: 'pointer',
+                                userSelect: 'none',
+                                WebkitTouchCallout: 'none',
+                                WebkitUserSelect: 'none',
+                              }}
+                            >
                             <div style={{ fontWeight: 700, fontSize: 12, lineHeight: 1.35, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{s.displayName || c?.name || c?.code || '?'}</div>
                             <div style={{ opacity: 0.88, fontSize: 11, marginTop: 3, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{s.teacherName || 'Teacher not set'}</div>
-                            <button onClick={() => startEdit(s)} style={{
+                            <button onClick={(e) => { e.stopPropagation(); startEdit(s); }} style={{
                               position: 'absolute', top: 2, right: 16, background: 'none', border: 'none',
                               color: 'inherit', cursor: 'pointer', opacity: 0.55, padding: 0, lineHeight: 1,
+                              touchAction: 'manipulation',
                             }}>✎</button>
-                            <button onClick={() => remove(s.id)} style={{
+                            <button onClick={(e) => { e.stopPropagation(); remove(s.id); }} style={{
                               position: 'absolute', top: 2, right: 2, background: 'none', border: 'none',
                               color: 'inherit', cursor: 'pointer', opacity: 0.55, padding: 0, lineHeight: 1,
+                              touchAction: 'manipulation',
                             }}>×</button>
                           </div>
                         );
@@ -1102,6 +1239,120 @@ export default function Schedule() {
                   setEditingExams(false);
                 }}>Save</button>
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Quick Form Modal */}
+      {quickFormOpen && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: 'rgba(0,0,0,0.5)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 1000,
+          padding: 12,
+        }} onClick={closeQuickForm}>
+          <div style={{
+            background: 'var(--card)',
+            borderRadius: 12,
+            border: '1px solid var(--border)',
+            padding: 20,
+            maxWidth: 400,
+            width: '100%',
+            boxShadow: '0 10px 40px rgba(0,0,0,0.2)',
+          }} onClick={e => e.stopPropagation()}>
+            <div style={{ fontWeight: 700, fontSize: 15, marginBottom: 16 }}>
+              {quickFormEditingId ? 'Quick Edit' : 'Quick Add'} · {quickFormData.day} · {slotPreview(quickFormData.slot)}
+            </div>
+            
+            <div style={{ display: 'grid', gap: 12, marginBottom: 16 }}>
+              {/* Course */}
+              <div>
+                <label style={{ fontSize: 12, fontWeight: 600 }}>Course</label>
+                <select
+                  value={quickFormData.courseId}
+                  onChange={e => setQuickFormData(d => ({ ...d, courseId: e.target.value }))}
+                  style={{ width: '100%', padding: '8px 10px', border: '1px solid var(--border)', borderRadius: 6, background: 'var(--bg)', color: 'var(--text)', fontSize: 13 }}
+                >
+                  <option value="">Select course</option>
+                  {currentTermCourses.map(c => <option key={c.id} value={c.id}>{c.code} — {c.name}</option>)}
+                </select>
+              </div>
+
+              {/* Type */}
+              <div>
+                <label style={{ fontSize: 12, fontWeight: 600 }}>Type</label>
+                <select
+                  value={quickFormData.type}
+                  onChange={e => setQuickFormData(d => ({ ...d, type: e.target.value }))}
+                  style={{ width: '100%', padding: '8px 10px', border: '1px solid var(--border)', borderRadius: 6, background: 'var(--bg)', color: 'var(--text)', fontSize: 13 }}
+                >
+                  <option value="Theory">Theory</option>
+                  <option value="Sessional">Lab / Sessional</option>
+                  <option value="Project">Project</option>
+                  <option value="Tutorial">Tutorial / Section</option>
+                </select>
+              </div>
+
+              {/* Teacher */}
+              <div>
+                <label style={{ fontSize: 12, fontWeight: 600 }}>Teacher</label>
+                <input
+                  type="text"
+                  value={quickFormData.teacherName}
+                  onChange={e => setQuickFormData(d => ({ ...d, teacherName: e.target.value }))}
+                  placeholder="Teacher name"
+                  style={{ width: '100%', padding: '8px 10px', border: '1px solid var(--border)', borderRadius: 6, background: 'var(--bg)', color: 'var(--text)', fontSize: 13, fontFamily: 'inherit' }}
+                />
+              </div>
+
+              {/* Room */}
+              <div>
+                <label style={{ fontSize: 12, fontWeight: 600 }}>Room</label>
+                <input
+                  type="text"
+                  value={quickFormData.room}
+                  onChange={e => setQuickFormData(d => ({ ...d, room: e.target.value }))}
+                  placeholder="Room number"
+                  style={{ width: '100%', padding: '8px 10px', border: '1px solid var(--border)', borderRadius: 6, background: 'var(--bg)', color: 'var(--text)', fontSize: 13, fontFamily: 'inherit' }}
+                />
+              </div>
+
+              {/* Note */}
+              <div>
+                <label style={{ fontSize: 12, fontWeight: 600 }}>Note</label>
+                <input
+                  type="text"
+                  value={quickFormData.note}
+                  onChange={e => setQuickFormData(d => ({ ...d, note: e.target.value }))}
+                  placeholder="Optional note"
+                  style={{ width: '100%', padding: '8px 10px', border: '1px solid var(--border)', borderRadius: 6, background: 'var(--bg)', color: 'var(--text)', fontSize: 13, fontFamily: 'inherit' }}
+                />
+              </div>
+            </div>
+
+            <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end' }}>
+              <button
+                onClick={closeQuickForm}
+                className="btn btn-ghost"
+                style={{ padding: '8px 14px' }}
+              >
+                Cancel
+              </button>
+              <button
+                onClick={saveQuickForm}
+                className="btn btn-primary"
+                style={{ padding: '8px 14px' }}
+              >
+                {quickFormEditingId ? 'Update' : 'Add'}
+              </button>
             </div>
           </div>
         </div>

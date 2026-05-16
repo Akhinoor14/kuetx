@@ -73,21 +73,71 @@ export function computeAlerts(profile) {
 export default function Alerts() {
   const profile = getProfile();
   const { critical, warnings, positives } = useMemo(() => computeAlerts(profile), [profile]);
+  const totalCount = critical.length + warnings.length + positives.length;
+
+  const tone = (color) => {
+    if (color === 'var(--danger)') {
+      return {
+        bg: 'var(--dangerBg)',
+        border: 'color-mix(in srgb, var(--danger) 28%, var(--border))',
+        iconBg: 'rgba(248, 113, 113, 0.14)',
+      };
+    }
+    if (color === 'var(--warning)') {
+      return {
+        bg: 'var(--warningBg)',
+        border: 'color-mix(in srgb, var(--warning) 28%, var(--border))',
+        iconBg: 'rgba(251, 191, 36, 0.14)',
+      };
+    }
+    return {
+      bg: 'var(--successBg)',
+      border: 'color-mix(in srgb, var(--success) 28%, var(--border))',
+      iconBg: 'rgba(74, 222, 128, 0.14)',
+    };
+  };
+
   const Section = ({ title, items, color, emoji }) => (
-    <div style={{ marginBottom: 20 }}>
-      <div style={{ fontSize: 13, fontWeight: 700, color, marginBottom: 8 }}>{emoji} {title} ({items.length})</div>
+    <div style={{
+      marginBottom: 16,
+      padding: 16,
+      borderRadius: 18,
+      border: '1px solid var(--border)',
+      background: 'linear-gradient(180deg, var(--surfaceGlassStrong), var(--surfaceGlass))',
+      boxShadow: '0 10px 28px rgba(0,0,0,0.10)',
+    }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, marginBottom: 12 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <div style={{
+            width: 34,
+            height: 34,
+            borderRadius: 12,
+            display: 'grid',
+            placeItems: 'center',
+            background: tone(color).iconBg,
+            border: `1px solid ${tone(color).border}`,
+          }}>{emoji}</div>
+          <div>
+            <div style={{ fontSize: 13, fontWeight: 800, color: 'var(--text)' }}>{title}</div>
+            <div style={{ fontSize: 12, color: 'var(--muted)' }}>{items.length} item{items.length === 1 ? '' : 's'}</div>
+          </div>
+        </div>
+        <div style={{ fontSize: 11, fontWeight: 800, color, padding: '6px 10px', borderRadius: 999, background: tone(color).iconBg, border: `1px solid ${tone(color).border}` }}>
+          {items.length || '0'}
+        </div>
+      </div>
       {items.length === 0
-        ? <div style={{ fontSize: 12, color: 'var(--muted)', padding: '8px 0' }}>None — all clear ✓</div>
+        ? <div style={{ fontSize: 12, color: 'var(--muted)', padding: '8px 2px' }}>None — all clear ✓</div>
         : items.map((a, i) => (
           <Link key={i} to={a.link || '#'} style={{
-            display: 'flex', alignItems: 'flex-start', gap: 10, padding: '9px 14px', borderRadius: 8, marginBottom: 5,
-            background: color === 'var(--danger)' ? '#fff1f1' : color === 'var(--warning)' ? '#fffbeb' : '#f0fdf4',
-            border: `1px solid ${color === 'var(--danger)' ? '#fecaca' : color === 'var(--warning)' ? '#fde68a' : '#bbf7d0'}`,
-            textDecoration: 'none', color: 'var(--text)', fontSize: 12,
+            display: 'flex', alignItems: 'flex-start', gap: 10, padding: '11px 14px', borderRadius: 14, marginBottom: 8,
+            background: tone(color).bg,
+            border: `1px solid ${tone(color).border}`,
+            textDecoration: 'none', color: 'var(--text)', fontSize: 12, boxShadow: '0 6px 18px rgba(0,0,0,0.06)',
           }}>
-            <div style={{ width: 7, height: 7, borderRadius: '50%', background: color, flexShrink: 0, marginTop: 4 }} />
-            <span style={{ flex: 1 }}>{a.msg}</span>
-            <span style={{ fontSize: 11, color: 'var(--muted)', flexShrink: 0 }}>→</span>
+            <div style={{ width: 8, height: 8, borderRadius: '50%', background: color, flexShrink: 0, marginTop: 4, boxShadow: `0 0 0 4px ${tone(color).iconBg}` }} />
+            <span style={{ flex: 1, lineHeight: 1.55 }}>{a.msg}</span>
+            <span style={{ fontSize: 11, color: 'var(--muted)', flexShrink: 0, paddingTop: 1 }}>→</span>
           </Link>
         ))
       }
@@ -96,11 +146,30 @@ export default function Alerts() {
 
   return (
     <div className="page-enter page-container">
-      <div style={{ marginBottom: 20 }}>
-        <h1 style={{ fontSize: 18, fontWeight: 700 }}>Alerts & Suggestions</h1>
-        <p style={{ fontSize: 12, color: 'var(--muted)' }}>
-          {critical.length} critical · {warnings.length} warnings · {positives.length} good news
-        </p>
+      <div className="hero-banner" style={{ marginBottom: 18, padding: 18, border: '1px solid rgba(var(--accentRGB), 0.14)', background: 'radial-gradient(circle at top left, rgba(var(--accentRGB), 0.12), transparent 34%), linear-gradient(180deg, var(--surfaceGlassStrong), var(--surfaceGlass))' }}>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 14, alignItems: 'center', justifyContent: 'space-between' }}>
+          <div>
+            <div style={{ fontSize: 11, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.10em', color: 'var(--muted)', marginBottom: 6 }}>Notifications</div>
+            <h1 style={{ fontSize: 22, fontWeight: 800, letterSpacing: '-0.04em', marginBottom: 4 }}>Alerts & Suggestions</h1>
+            <p style={{ fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.6, margin: 0 }}>
+              {totalCount} total signals · {critical.length} critical · {warnings.length} warnings · {positives.length} good news
+            </p>
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: 8, minWidth: 'min(100%, 360px)' }}>
+            <div style={{ padding: '10px 12px', borderRadius: 14, border: '1px solid color-mix(in srgb, var(--danger) 28%, var(--border))', background: 'var(--dangerBg)' }}>
+              <div style={{ fontSize: 11, color: 'var(--muted)', fontWeight: 700 }}>Critical</div>
+              <div style={{ fontSize: 18, fontWeight: 900, color: 'var(--danger)' }}>{critical.length}</div>
+            </div>
+            <div style={{ padding: '10px 12px', borderRadius: 14, border: '1px solid color-mix(in srgb, var(--warning) 28%, var(--border))', background: 'var(--warningBg)' }}>
+              <div style={{ fontSize: 11, color: 'var(--muted)', fontWeight: 700 }}>Warnings</div>
+              <div style={{ fontSize: 18, fontWeight: 900, color: 'var(--warning)' }}>{warnings.length}</div>
+            </div>
+            <div style={{ padding: '10px 12px', borderRadius: 14, border: '1px solid color-mix(in srgb, var(--success) 28%, var(--border))', background: 'var(--successBg)' }}>
+              <div style={{ fontSize: 11, color: 'var(--muted)', fontWeight: 700 }}>Good</div>
+              <div style={{ fontSize: 18, fontWeight: 900, color: 'var(--success)' }}>{positives.length}</div>
+            </div>
+          </div>
+        </div>
       </div>
       <Section title="Critical Alerts" items={critical} color="var(--danger)" emoji="🔴" />
       <Section title="Warnings" items={warnings} color="var(--warning)" emoji="🟡" />

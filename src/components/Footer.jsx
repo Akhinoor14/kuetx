@@ -20,7 +20,7 @@ export function Footer() {
             padding: '0.35rem 0.65rem',
             borderRadius: 999,
             background: 'var(--accent)',
-            color: '#fff',
+            color: 'var(--accentFg)',
             textDecoration: 'none',
             fontSize: '0.75rem',
             fontWeight: 700,

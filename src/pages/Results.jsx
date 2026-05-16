@@ -211,7 +211,7 @@ export default function Results() {
     const item = payload[0].payload;
     return (
       <div style={{
-        background: 'rgba(255,255,255,0.96)',
+        background: 'var(--surfaceGlassStrong)',
         border: '1px solid rgba(var(--accentRGB), 0.18)',
         borderRadius: 14,
         boxShadow: '0 18px 40px rgba(15, 23, 42, 0.14)',
@@ -264,7 +264,7 @@ export default function Results() {
                   <div style={{ fontSize: 13, color: 'var(--text)', fontWeight: 600 }}>Current standing versus graduation ceiling</div>
                 </div>
               </div>
-              <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '8px 12px', borderRadius: 999, background: 'rgba(255,255,255,0.62)', border: '1px solid rgba(var(--accentRGB), 0.12)', color: 'var(--text)', fontSize: 11, fontWeight: 700 }}>
+              <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, padding: '8px 12px', borderRadius: 999, background: 'var(--surfaceGlass)', border: '1px solid rgba(var(--accentRGB), 0.12)', color: 'var(--text)', fontSize: 11, fontWeight: 700 }}>
                 <TrendingUp size={14} />
                 Live CGPA outlook
               </div>
@@ -274,7 +274,7 @@ export default function Results() {
             <div style={{
               padding: '18px 20px',
               borderRadius: 18,
-              background: 'linear-gradient(180deg, rgba(255,255,255,0.86), rgba(255,255,255,0.70))',
+              background: 'linear-gradient(180deg, var(--surfaceGlassStrong), var(--surfaceGlass))',
               border: '1px solid rgba(var(--accentRGB), 0.12)',
               backdropFilter: 'blur(12px)',
               boxShadow: '0 8px 24px rgba(15, 23, 42, 0.06)'
@@ -301,7 +301,7 @@ export default function Results() {
             </div>
 
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minWidth: 56 }}>
-              <div style={{ width: 56, height: 56, borderRadius: 999, display: 'grid', placeItems: 'center', background: 'rgba(255,255,255,0.75)', border: '1px solid rgba(var(--accentRGB), 0.14)', color: 'var(--accent)', fontWeight: 900, fontSize: 18, boxShadow: '0 12px 24px rgba(15, 23, 42, 0.08)' }}>
+              <div style={{ width: 56, height: 56, borderRadius: 999, display: 'grid', placeItems: 'center', background: 'var(--surfaceGlassStrong)', border: '1px solid rgba(var(--accentRGB), 0.14)', color: 'var(--accent)', fontWeight: 900, fontSize: 18, boxShadow: '0 12px 24px rgba(15, 23, 42, 0.08)' }}>
                 <ArrowRight size={18} />
               </div>
             </div>
@@ -347,7 +347,7 @@ export default function Results() {
       )}
       {/* Chart */}
       {chartData.length > 0 && (
-        <div className="card" style={{ marginBottom: 14, padding: 18, background: 'linear-gradient(180deg, rgba(255,255,255,0.92), rgba(var(--accentRGB), 0.02))', border: '1px solid rgba(var(--accentRGB), 0.10)' }}>
+        <div className="card" style={{ marginBottom: 14, padding: 18, background: 'linear-gradient(180deg, var(--surfaceGlassStrong), rgba(var(--accentRGB), 0.02))', border: '1px solid rgba(var(--accentRGB), 0.10)' }}>
           <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 14, flexWrap: 'wrap', marginBottom: 14 }}>
             <div>
               <div style={{ fontSize: 11, fontWeight: 800, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.10em' }}>Progress Trend</div>
@@ -444,7 +444,7 @@ export default function Results() {
                 minWidth: 56,
                 boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
               }}>
-                <div style={{ fontSize: 9, color: 'rgba(255,255,255,0.7)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.03em' }}>GPA</div>
+                <div style={{ fontSize: 9, color: 'var(--muted)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.03em' }}>GPA</div>
                 <div style={{ fontSize: 16, fontWeight: 900, color: 'white', lineHeight: 1, marginTop: 2 }}>{isGpa ? gpaNum.toFixed(2) : '—'}</div>
               </div>
               {/* Credits */}

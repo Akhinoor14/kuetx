@@ -111,9 +111,9 @@ export default function Settings() {
       {msg && (
         <div style={{
           padding: '10px 14px', borderRadius: 8, marginBottom: 14, fontSize: 13,
-          background: msgType === 'error' ? '#fee2e2' : '#dcfce7',
-          color: msgType === 'error' ? '#991b1b' : '#166534',
-          border: `1px solid ${msgType === 'error' ? '#fca5a5' : '#bbf7d0'}`,
+          background: msgType === 'error' ? 'var(--dangerBg)' : 'var(--successBg)',
+          color: msgType === 'error' ? 'var(--danger)' : 'var(--success)',
+          border: `1px solid ${msgType === 'error' ? 'color-mix(in srgb, var(--danger) 28%, var(--border))' : 'color-mix(in srgb, var(--success) 28%, var(--border))'}`,
         }}>{msg}</div>
       )}
 
@@ -125,7 +125,7 @@ export default function Settings() {
             <button key={t.id} onClick={() => setTheme(t.id)} style={{
               flex: 1, padding: '10px 0', borderRadius: 8,
               border: `2px solid ${themeId === t.id ? 'var(--accent)' : 'var(--border)'}`,
-              background: themeId === t.id ? (t.id === 'dark' ? '#1a2e1a' : t.id === 'milky' ? '#fff8f0' : '#f0fdf4') : 'transparent',
+              background: themeId === t.id ? (t.id === 'dark' ? 'rgba(74, 222, 128, 0.12)' : t.id === 'milky' ? 'var(--surfaceGlassStrong)' : 'var(--successBg)') : 'transparent',
               cursor: 'pointer', fontSize: 13, fontWeight: themeId === t.id ? 700 : 400,
               color: themeId === t.id ? 'var(--accent)' : 'var(--muted)', fontFamily: 'Sora, sans-serif',
             }}>

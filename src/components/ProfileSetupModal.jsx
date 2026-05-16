@@ -39,7 +39,7 @@ const fieldStyle = {
   padding: '10px 12px',
   borderRadius: 8,
   border: '1px solid var(--border)',
-  background: 'rgba(255,255,255,0.9)',
+  background: 'var(--surfaceGlassStrong)',
   fontSize: 14,
   color: 'var(--text)',
   fontFamily: 'inherit',
@@ -61,7 +61,7 @@ const sectionStyle = {
   padding: 14,
   borderRadius: 12,
   border: '1px solid var(--border)',
-  background: 'rgba(255,255,255,0.72)',
+  background: 'var(--surfaceGlass)',
 };
 
 export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProfile = {} }) {
@@ -200,7 +200,7 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
                 <input type="tel" placeholder="e.g. 01700000000" value={form.advisorContact} onChange={handleChange('advisorContact')} inputMode="numeric" pattern="[0-9]*" style={fieldStyle} />
                 <div style={{ fontSize: 10, color: 'var(--muted)', marginTop: 4 }}>Advisor's contact number</div>
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '10px 12px', borderRadius: 10, border: '1px solid var(--border)', background: 'rgba(255,255,255,0.6)', gridColumn: 'span 2' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '10px 12px', borderRadius: 10, border: '1px solid var(--border)', background: 'var(--surfaceGlassSoft)', gridColumn: 'span 2' }}>
                 <label style={{ display: 'flex', gap: 8, alignItems: 'center', fontSize: 14, color: 'var(--text)', margin: 0, textTransform: 'none', letterSpacing: 0 }}>
                   <input type="checkbox" checked={!!form.isCR} onChange={handleChange('isCR')} /> Class Representative
                 </label>

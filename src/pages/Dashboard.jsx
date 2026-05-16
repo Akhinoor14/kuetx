@@ -131,7 +131,7 @@ export default function Dashboard() {
             )}
           </div>
 
-          <div className="dashboard-hero-date" style={{ minWidth: 'clamp(200px, 90vw, 240px)', padding: 'clamp(16px, 3vw, 20px)', borderRadius: 16, border: '1px solid rgba(var(--accentRGB), 0.12)', background: 'linear-gradient(180deg, rgba(var(--accentRGB), 0.05), rgba(255,255,255,0.98))', whiteSpace: 'normal', alignSelf: 'stretch', boxShadow: '0 8px 22px rgba(12, 34, 64, 0.05)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: 10 }}>
+          <div className="dashboard-hero-date" style={{ minWidth: 'clamp(200px, 90vw, 240px)', padding: 'clamp(16px, 3vw, 20px)', borderRadius: 16, border: '1px solid rgba(var(--accentRGB), 0.12)', background: 'linear-gradient(180deg, rgba(var(--accentRGB), 0.05), var(--surfaceGlassStrong))', whiteSpace: 'normal', alignSelf: 'stretch', boxShadow: '0 8px 22px rgba(12, 34, 64, 0.05)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: 10 }}>
             <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: '0.10em', textTransform: 'uppercase', color: 'var(--muted)' }}>Today</div>
             <div style={{ fontSize: 'clamp(13px, 3vw, 15px)', fontWeight: 700, color: 'var(--text)', whiteSpace: 'normal', lineHeight: 1.4 }}>
               {new Date().toLocaleDateString('en-BD', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
@@ -156,7 +156,7 @@ export default function Dashboard() {
 
       {/* Critical alerts */}
       {criticalAlerts.length > 0 && (
-        <div style={{ padding: '10px 14px', borderRadius: 10, marginBottom: 12, background: '#fff1f1', border: '1px solid #fecaca' }}>
+        <div style={{ padding: '10px 14px', borderRadius: 10, marginBottom: 12, background: 'var(--dangerBg)', border: '1px solid color-mix(in srgb, var(--danger) 28%, var(--border))' }}>
           <div style={{ fontWeight: 700, fontSize: 13, color: 'var(--danger)', marginBottom: 6, display: 'flex', alignItems: 'center', gap: 6 }}>
             <AlertTriangle size={14} /> {criticalAlerts.length} Critical Alert{criticalAlerts.length > 1 ? 's' : ''}
           </div>
@@ -170,7 +170,7 @@ export default function Dashboard() {
       )}
 
       {warningAlerts.length > 0 && (
-        <div style={{ padding: '8px 14px', borderRadius: 10, marginBottom: 12, background: '#fffbeb', border: '1px solid #fde68a' }}>
+        <div style={{ padding: '8px 14px', borderRadius: 10, marginBottom: 12, background: 'var(--warningBg)', border: '1px solid color-mix(in srgb, var(--warning) 28%, var(--border))' }}>
           <div style={{ fontSize: 12, color: 'var(--warning)' }}>
             ⚠ {warningAlerts.length} warning{warningAlerts.length > 1 ? 's' : ''} — <Link to="/alerts" style={{ color: 'var(--warning)' }}>view all</Link>
           </div>
@@ -418,7 +418,7 @@ export default function Dashboard() {
 
       {/* GPA Trend */}
       {termGPAs.length > 0 && (
-        <div className="card" style={{ marginBottom: 12, padding: 16, background: 'linear-gradient(180deg, rgba(255,255,255,0.92), rgba(var(--accentRGB), 0.02))', border: '1px solid rgba(var(--accentRGB), 0.10)' }}>
+        <div className="card" style={{ marginBottom: 12, padding: 16, background: 'linear-gradient(180deg, var(--surfaceGlassStrong), rgba(var(--accentRGB), 0.02))', border: '1px solid rgba(var(--accentRGB), 0.10)' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
             <div>
               <div style={{ fontSize: 11, fontWeight: 800, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.10em' }}>Progress Trend</div>
@@ -457,7 +457,7 @@ export default function Dashboard() {
                       fill: '#0891b2',
                       fontSize: 12,
                       fontWeight: 700,
-                      background: 'rgba(255,255,255,0.96)',
+                      background: 'var(--surfaceGlassStrong)',
                       padding: [4, 8],
                       borderRadius: 6
                     }}
@@ -495,7 +495,7 @@ export default function Dashboard() {
               
               <Tooltip
                 contentStyle={{
-                  background: 'rgba(255,255,255,0.96)',
+                  background: 'var(--surfaceGlassStrong)',
                   border: '1px solid rgba(var(--accentRGB), 0.18)',
                   borderRadius: 10,
                   boxShadow: '0 8px 24px rgba(15, 23, 42, 0.12)',
