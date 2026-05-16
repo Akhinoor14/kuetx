@@ -106,7 +106,7 @@ function LegacyCGPACalc() {
       </div>
 
       {/* Results */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10, marginBottom: 14 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', gap: 10, marginBottom: 14 }}>
         <div className="card" style={{ textAlign: 'center' }}>
           <div style={{ fontSize: 11, color: 'var(--muted)', marginBottom: 4 }}>Current CGPA</div>
           <div style={{ fontSize: 26, fontWeight: 800, color: cgpaColor }}>{cgpa ? cgpa.toFixed(2) : '—'}</div>

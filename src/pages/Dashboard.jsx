@@ -12,26 +12,26 @@ function StatCard({ label, value, sub, color, bgColor, icon: Icon, to }) {
       gap: 8, 
       cursor: to ? 'pointer' : 'default', 
       transition: 'all 0.2s',
-      padding: '20px',
+      padding: 'clamp(12px, 3vw, 20px)',
       border: `1.5px solid ${color}20`,
       background: bgColor || 'rgba(var(--accentRGB), 0.02)',
       boxShadow: `0 4px 12px ${color}12`,
       position: 'relative',
       overflow: 'hidden',
       borderRadius: 12,
-      minHeight: 140
+      minHeight: 'clamp(110px, 20vw, 140px)'
     }}>
       {/* Background accent blob */}
       <div style={{ position: 'absolute', top: -30, right: -30, width: 100, height: 100, borderRadius: '50%', background: `${color}08` }} />
       
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', zIndex: 1 }}>
-        <span style={{ fontSize: 10, color: 'var(--muted)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em' }}>{label}</span>
-        {Icon && <Icon size={20} color={color} strokeWidth={2.2} />}
+        <span style={{ fontSize: 'clamp(9px, 2vw, 10px)', color: 'var(--muted)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em' }}>{label}</span>
+        {Icon && <Icon size={18} color={color} strokeWidth={2.2} />}
       </div>
-      <div style={{ fontSize: 32, fontWeight: 900, color: color, letterSpacing: '-0.02em', lineHeight: 1, zIndex: 1 }}>
+      <div style={{ fontSize: 'clamp(24px, 6vw, 32px)', fontWeight: 900, color: color, letterSpacing: '-0.02em', lineHeight: 1, zIndex: 1 }}>
         {value}
       </div>
-      {sub && <div style={{ fontSize: 12, color: 'var(--muted)', fontWeight: 500, zIndex: 1, marginTop: 2 }}>{sub}</div>}
+      {sub && <div style={{ fontSize: 'clamp(11px, 2.5vw, 12px)', color: 'var(--muted)', fontWeight: 500, zIndex: 1, marginTop: 2 }}>{sub}</div>}
     </div>
   );
   return to ? <Link to={to} style={{ textDecoration: 'none' }}>{inner}</Link> : inner;
@@ -104,11 +104,28 @@ export default function Dashboard() {
   const criticalAlerts = alerts.filter(a => a.type === 'critical');
   const warningAlerts  = alerts.filter(a => a.type === 'warning');
 
+  const dhakaNow = new Date();
+  const dhakaTimeParts = new Intl.DateTimeFormat('en-BD', {
+    timeZone: 'Asia/Dhaka',
+    hour: 'numeric',
+    minute: '2-digit',
+    hour12: false,
+  }).formatToParts(dhakaNow);
+  const dhakaHour = Number(dhakaTimeParts.find(part => part.type === 'hour')?.value || 0);
+  const dhakaDateLabel = new Intl.DateTimeFormat('en-BD', {
+    timeZone: 'Asia/Dhaka',
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  }).format(dhakaNow);
+
   const greeting = (() => {
-    const h = new Date().getHours();
+    const h = dhakaHour;
     if (h < 5) return 'Welcome';
     if (h < 12) return 'Good morning';
-    if (h < 17) return 'Good afternoon';
+    if (h < 15) return 'Good day';
+    if (h < 18) return 'Good afternoon';
     if (h < 20) return 'Good evening';
     return 'Welcome';
   })();
@@ -116,32 +133,56 @@ export default function Dashboard() {
   return (
     <div className="page-enter page-container dashboard-page">
       {/* Welcome */}
-      {(profile.name || profile.dept || inferredBatch || currentTermLabel) && (
-        <div className="card dashboard-hero" style={{ marginBottom: 22, padding: 'clamp(16px, 4vw, 30px)', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: 18, alignItems: 'stretch', minHeight: 'auto' }}>
-          <div className="dashboard-hero-main" style={{ minWidth: 0, display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: 18, paddingRight: 'clamp(0px, 2vw, 8px)' }}>
-            {profile.name && (
-              <div style={{ marginBottom: 4 }}>
-                <div style={{ fontSize: 13, fontWeight: 800, color: 'var(--muted)', marginBottom: 8, letterSpacing: '0.10em', textTransform: 'uppercase' }}>
-                  {greeting}
-                </div>
-                <h1 style={{ fontSize: 'clamp(28px, 6vw, 36px)', fontWeight: 800, letterSpacing: '-0.055em', lineHeight: 1.0, margin: 0 }}>
-                  {profile.name}
-                </h1>
-              </div>
-            )}
+      {profile.name && (
+        <div className="card dashboard-hero" style={{
+          marginBottom: 22,
+          padding: 'clamp(16px, 3vw, 30px)',
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
+          gap: 'clamp(12px, 3vw, 18px)',
+          alignItems: 'stretch',
+          minHeight: 'auto',
+          position: 'relative',
+          overflow: 'hidden'
+        }}>
+          <div style={{ position: 'absolute', inset: 'auto -36px -44px auto', width: 'clamp(120px, 30vw, 180px)', height: 'clamp(120px, 30vw, 180px)', borderRadius: '50%', background: 'radial-gradient(circle, rgba(6,182,212,0.14), transparent 68%)', pointerEvents: 'none' }} />
+          <div style={{ position: 'absolute', inset: '-42px auto auto -36px', width: 'clamp(100px, 25vw, 160px)', height: 'clamp(100px, 25vw, 160px)', borderRadius: '50%', background: 'radial-gradient(circle, rgba(16,185,129,0.10), transparent 70%)', pointerEvents: 'none' }} />
 
-            <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', alignItems: 'center', marginTop: profile.name ? 4 : 0, minHeight: 38 }}>
+          <div className="dashboard-hero-main" style={{ minWidth: 0, display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: 'clamp(12px, 2vw, 16px)', paddingRight: 'clamp(0px, 1vw, 8px)', zIndex: 1 }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 'clamp(10px, 2vw, 12px)' }}>
+              <div style={{ display: 'inline-flex', alignSelf: 'flex-start', alignItems: 'center', gap: 8, padding: 'clamp(6px, 1vw, 7px) clamp(10px, 2vw, 12px)', borderRadius: 999, background: 'rgba(var(--accentRGB), 0.08)', border: '1px solid rgba(var(--accentRGB), 0.12)', color: 'var(--accent)', fontSize: 'clamp(10px, 1.5vw, 11px)', fontWeight: 800, letterSpacing: '0.10em', textTransform: 'uppercase' }}>
+                {greeting}
+              </div>
+
+              {profile.name && (
+                <div style={{ maxWidth: 760 }}>
+                  <h1 style={{ fontSize: 'clamp(26px, 5.5vw, 44px)', fontWeight: 800, letterSpacing: '-0.06em', lineHeight: 0.98, margin: 0 }}>
+                    {profile.name}
+                  </h1>
+                </div>
+              )}
+            </div>
+
+            <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', alignItems: 'center', marginTop: 2, minHeight: 38 }}>
               {profile.isCR && <span className="tag tag-yellow">CR</span>}
             </div>
           </div>
 
-          <div className="dashboard-hero-date" style={{ minWidth: 'clamp(200px, 90vw, 240px)', padding: 'clamp(16px, 3vw, 20px)', borderRadius: 16, border: '1px solid rgba(var(--accentRGB), 0.12)', background: 'linear-gradient(180deg, rgba(var(--accentRGB), 0.05), rgba(255,255,255,0.98))', whiteSpace: 'normal', alignSelf: 'stretch', boxShadow: '0 8px 22px rgba(12, 34, 64, 0.05)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: 10 }}>
-            <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: '0.10em', textTransform: 'uppercase', color: 'var(--muted)' }}>Today</div>
-            <div style={{ fontSize: 'clamp(13px, 3vw, 15px)', fontWeight: 700, color: 'var(--text)', whiteSpace: 'normal', lineHeight: 1.4 }}>
-              {new Date().toLocaleDateString('en-BD', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
+          <div className="dashboard-hero-date" style={{ minWidth: 'clamp(180px, 100%, 250px)', padding: 'clamp(14px, 2.5vw, 22px)', borderRadius: 18, border: '1px solid rgba(var(--accentRGB), 0.12)', background: 'linear-gradient(180deg, rgba(255,255,255,0.98), rgba(var(--accentRGB), 0.04))', whiteSpace: 'normal', alignSelf: 'stretch', boxShadow: '0 12px 28px rgba(12, 34, 64, 0.06)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: 'clamp(10px, 2vw, 12px)', zIndex: 1 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', gap: 10, alignItems: 'flex-start' }}>
+              <div>
+                <div style={{ fontSize: 'clamp(10px, 1.5vw, 11px)', fontWeight: 800, letterSpacing: '0.10em', textTransform: 'uppercase', color: 'var(--muted)' }}>Today</div>
+                <div style={{ marginTop: 'clamp(4px, 1vw, 6px)', fontSize: 'clamp(14px, 2.8vw, 18px)', fontWeight: 800, color: 'var(--text)', lineHeight: 1.25 }}>
+                  {dhakaDateLabel}
+                </div>
+              </div>
+              <div style={{ width: 12, height: 12, borderRadius: 999, background: 'linear-gradient(135deg, var(--accent2), var(--accent))', boxShadow: '0 0 0 6px rgba(var(--accentRGB), 0.08)' }} />
             </div>
             <div style={{ height: 1, background: 'rgba(var(--accentRGB), 0.10)' }} />
-            <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--muted)' }}>{currentTermLabel || currentTerm || 'Term info'}</div>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, flexWrap: 'wrap' }}>
+              <div style={{ fontSize: 'clamp(11px, 1.8vw, 12px)', fontWeight: 700, color: 'var(--muted)' }}>{profile.name ? 'Profile synced' : 'Set up your profile'}</div>
+              {profile.isCR && <span className="tag tag-yellow">CR mode</span>}
+            </div>
           </div>
         </div>
       )}
@@ -182,7 +223,7 @@ export default function Dashboard() {
       )}
 
       {/* Stat cards */}
-      <div className="dashboard-stats-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12, marginBottom: 14 }}>
+      <div className="dashboard-stats-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(90px, 1fr))', gap: 10, marginBottom: 14 }}>
         <StatCard 
           label="CGPA" 
           value={cgpaStr || '—'} 

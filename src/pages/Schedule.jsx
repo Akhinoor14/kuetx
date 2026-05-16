@@ -735,7 +735,7 @@ export default function Schedule() {
           <div style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 10, padding: '8px 12px', background: 'rgba(59,130,246,0.05)', borderRadius: 6, borderLeft: '3px solid var(--accent)' }}>
             💡 <strong>Multi-teacher courses:</strong> Enter multiple teacher names separated by comma or semicolon (e.g., "Dr. Smith, Dr. Jones") to add entries for all teachers at once.
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, minmax(0, 1fr))', gap: 10, marginBottom: 10 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(100px, 1fr))', gap: 10, marginBottom: 10 }}>
             <div>
               <label>Day</label>
               <select value={form.day} onChange={e => set('day', e.target.value)}>

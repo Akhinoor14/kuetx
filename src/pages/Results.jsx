@@ -585,7 +585,7 @@ export default function Results() {
                   <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--text)' }}>Import Past Result for {term.key}</div>
                   {termLegacy && <span className="tag tag-green">✓ Imported</span>}
                 </div>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr auto', gap: 10, alignItems: 'end' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', gap: 10, alignItems: 'end' }}>
                   <div>
                     <label style={{ fontSize: 10, fontWeight: 600, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.03em', marginBottom: 4, display: 'block' }}>GPA (0-4.00)</label>
                     <input 

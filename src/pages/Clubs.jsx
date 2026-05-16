@@ -57,7 +57,7 @@ export default function Clubs() {
       {addingClub && (
         <div className="card" style={{ marginBottom: 14, borderColor: 'var(--accent)' }}>
           <div style={{ fontWeight: 600, fontSize: 13, marginBottom: 10 }}>Add Club</div>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 10, marginBottom: 10 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: 10, marginBottom: 10 }}>
             <div><label>Club Name</label><input value={clubForm.name} onChange={e => setCF('name', e.target.value)} placeholder="KUET Robotics Club" /></div>
             <div><label>Your Role</label><input value={clubForm.role} onChange={e => setCF('role', e.target.value)} placeholder="Member / Secretary" /></div>
             <div><label>Member Since</label><input type="date" value={clubForm.since} onChange={e => setCF('since', e.target.value)} /></div>
@@ -72,7 +72,7 @@ export default function Clubs() {
       {addingAct && (
         <div className="card" style={{ marginBottom: 14, borderColor: 'var(--accent)' }}>
           <div style={{ fontWeight: 600, fontSize: 13, marginBottom: 10 }}>Log Club Activity</div>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 10, marginBottom: 10 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: 10, marginBottom: 10 }}>
             <div>
               <label>Club</label>
               <select value={actForm.clubId} onChange={e => setAF('clubId', e.target.value)}>

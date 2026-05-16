@@ -27,7 +27,7 @@ html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
 
 /* ── Base ────────────────────────────────────────────────────────────────── */
 body {
-  font-family: 'Sora', system-ui, -apple-system, sans-serif;
+  font-family: 'Lora', 'Georgia', serif;
   background:
     radial-gradient(1200px 500px at 0% -20%, rgba(14, 165, 233, 0.11), transparent 60%),
     radial-gradient(900px 500px at 100% -10%, rgba(22, 163, 74, 0.13), transparent 58%),
@@ -209,6 +209,18 @@ h3 { font-size: 15px; font-weight: 600; }
   to   { opacity: 1; transform: translateY(0); }
 }
 
+/* ── Float animation ─────────────────────────────────────────────────────── */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-12px); }
+}
+
+/* ── Slide in animation ──────────────────────────────────────────────────── */
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(-12px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
 /* Page container: used by pages to take full available width */
 .page-container {
   padding: 20px;
@@ -289,16 +301,24 @@ h3 { font-size: 15px; font-weight: 600; }
     gap: 14px !important;
   }
 
+  .dashboard-page .dashboard-hero-main h1 {
+    font-size: 32px !important;
+    line-height: 1 !important;
+  }
+
   .dashboard-page .dashboard-hero-date {
     width: 100% !important;
     min-width: 0 !important;
     flex-basis: 100% !important;
     align-self: stretch !important;
+    border-radius: 16px !important;
+  }
+
+  .dashboard-page .dashboard-hero-date > div:first-child {
+    align-items: flex-start !important;
   }
 
   .dashboard-page .dashboard-hero h1 {
-    font-size: 30px !important;
-    line-height: 1.04 !important;
     max-width: 100% !important;
   }
 
@@ -338,6 +358,18 @@ h3 { font-size: 15px; font-weight: 600; }
 }
 
 @media (max-width: 480px) {
+  .dashboard-page .dashboard-hero {
+    padding: 18px 16px !important;
+  }
+
+  .dashboard-page .dashboard-hero-main h1 {
+    font-size: 28px !important;
+  }
+
+  .dashboard-page .dashboard-hero-date {
+    padding: 16px !important;
+  }
+
   .dashboard-page .dashboard-hero h1 {
     font-size: 26px !important;
   }

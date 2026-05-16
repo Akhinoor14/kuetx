@@ -108,7 +108,7 @@ function CourseCard({ course, marks, onChange }) {
           🎯 Target Grade → Hall Exam Needed
         </label>
         {/* Inputs: Hall, CTs, Bonus, Assignment, Attendance */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 10 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 12, marginBottom: 10 }}>
           <div>
             <label style={{ fontSize: 12, fontWeight: 700 }}>Hall Exam (/210)</label>
             <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginTop: 6 }}>
@@ -131,7 +131,7 @@ function CourseCard({ course, marks, onChange }) {
           </div>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 12 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 12, marginBottom: 12 }}>
           <div>
             <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 6 }}>{teacher1Name} (CT/Bonus/Assign)</div>
             <div style={{ display: 'flex', gap: 8 }}>

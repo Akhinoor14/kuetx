@@ -120,7 +120,7 @@ export default function Namaz() {
             {editTimes ? 'Done' : 'Edit'}
           </button>
         </div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: 8 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(60px, 1fr))', gap: 8 }}>
           {PRAYERS.map(p => (
             <div key={p} style={{ textAlign: 'center' }}>
               <div style={{ fontSize: 11, color: 'var(--muted)', marginBottom: 4 }}>{p}</div>

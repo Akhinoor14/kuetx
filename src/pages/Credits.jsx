@@ -51,7 +51,7 @@ export default function Credits() {
         <p style={{ fontSize: 12, color: 'var(--muted)' }}>Art. 7.5: Min {required} credits for graduation</p>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10, marginBottom: 14 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', gap: 10, marginBottom: 14 }}>
         {[
           { label: 'Earned Credits', value: earnedCredits, sub: `of ${required} required` },
           { label: 'Remaining', value: required - earnedCredits, sub: 'to graduate' },

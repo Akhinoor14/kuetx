@@ -609,7 +609,7 @@ export default function Attendance() {
       {/* Slab reference */}
       <div className="card" style={{ marginTop: 24 }}>
         <div style={{ fontWeight: 700, fontSize: 14, marginBottom: 12 }}>Attendance → Marks Slab (Art. 14.2)</div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 6 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(80px, 1fr))', gap: 6 }}>
           {[['≥90%', '10/10', 'var(--success)'], ['85–90%', '9/10', ''], ['80–85%', '8/10', ''], ['75–80%', '7/10', ''],
             ['70–75%', '6/10', ''], ['65–70%', '5/10', ''], ['60–65%', '4/10', 'var(--warning)'], ['<60%', 'CANCELLED', 'var(--danger)']
           ].map(([range, marks, col]) => (
