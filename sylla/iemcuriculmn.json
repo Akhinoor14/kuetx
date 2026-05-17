@@ -1,0 +1,1190 @@
+{
+  "department": "IPE",
+  "sourceType": "raw_text",
+  "sourceFile": "Course-Curriculum-IEM.pdf (IPE department source)",
+  "terms": {
+    "Y1T1": {
+      "termKey": "Y1T1",
+      "title": "First Year First Term",
+      "courses": {
+        "IPE 1101": {
+          "title": "Manufacturing Process - I",
+          "credit": 3.00,
+          "contactHour": null,
+          "topics": [
+            "Introduction to manufacturing processes.",
+            "Casting: Discussion on pattern allowances, properties of molding sands, design of molds; Riser, runner, gate sprue and core, casting processes for ferrous and nonferrous metals; Sand, die, centrifugal, slush, plaster mold, loam mold, precision investment casting etc.; Casting defects; Cost analysis.",
+            "Joining methods: Soldering, brazing, conventional welding processes, gas, arc, TIG, MIG, thermit, resistance, friction, electro slag etc.; Special wélding processes: LASER, Electron beam, submerged arc welding etc.",
+            "Metal forming processes: Hot and cold extrusion, press working operations etc., rolling, cold drawing, deep drawing, forging, shearing, bending and press work.",
+            "Plastic product manufacturing processes: compounding, extrusion, injection molding, compression molding, blow molding, vacuum forming and hand lay up."
+          ],
+          "sessionalNote": null,
+          "references": [
+            "Manufacturing Engineering & Technology by Kalpakjain",
+            "Production Technology by RK Jain",
+            "Materials and Processes in Manufacturing by Degarmo"
+          ]
+        },
+        "CHEM 1111": {
+          "title": "Chemistry",
+          "credit": 3.00,
+          "contactHour": null,
+          "topics": [
+            "Coordination chemistry: Structure and bonding of coordination compounds; Different theories of coordination compounds and their limitations; Geometry, electronic spectra, isomerism of coordination compounds; Chelae compounds; Chemical bonding: Metallic bonding, hydrogen bonding; Structures: Elements and compounds of Si, Al etc.",
+            "Chemical kinetics: Monitoring the progress of a reaction, rate laws and rate constants; Experimental determination of rate law, order and molecularity of a chemical reaction, rate laws for reactions approaching equilibrium, temperature dependence of reaction rates; Elementary reaction, steady state approximation; Analyzing pre-equilibria, unimolecular reactions.",
+            "Electrochemistry: Specific conductance and equivalent conductance, measurement of electrolytic conductance, migration of ions, transport number, experimental determination of transport number; Electrochemical cell, relation between e.m.f and free energy, determination of e.m.f of a half cell, different types of reversible electrodes, oxidation-reduction potentials, the nearst's equation, determination of PH of a solution, concentration cell, liquid junction potential, determination of the values of thermodynamic functions from e.m.f measurement, corrosion, lithium-ion battery.",
+            "Phase Diagrams: Understanding of phases, components, and degrees of freedom; the phase rule, phase diagram study of one, two and three component systems; liquid-liquid phase diagram, liquid-solid phase diagram, cooling curves, congruent and incongruent melting point.",
+            "Adsorption: Physisorption and chemisorptions; the extent of adsorption; Langmuir isotherm, BET isotherm; Application of adsorption.",
+            "The Colloids: Introduction to colloids, different types of colloidal systems, lyophilic and lyophobic sols; Preparation of colloids; Dialysis, electro dialysis, ultra filtration, electrophoresis, electro osmosis; Tyndall effect, Brownian motion, electrical properties of sols, electric double layer and zeta potential; Micelles, application of colloids."
+          ],
+          "sessionalNote": null,
+          "references": [
+            "Essentials of Physical Chemistry by Arun Bahl and G. D. Tuli",
+            "Physical Chemistry volume I by Hrishikesh Chatterjee",
+            "Selected Topics In Inorganic chemistry by Dr. Wahid U. Malik and Dr. R. D. Madan"
+          ]
+        },
+        "HUM 1111": {
+          "title": "Economics",
+          "credit": 3.00,
+          "contactHour": null,
+          "topics": [
+            "Definition of Economics, principle of economics, concepts of micro and macro-economics; Theory of demand and supply and their elasticity's, price determination, nature of economics theory, applicability of economics theory to the problems of developing countries; Consumer behavior; Marginal analysis; Theory of optimization; Theory of firms; Cost functions; Production, production function, types of productivity; Market equilibrium and price; Market structure; Internal and external economics and diseconomies.",
+            "Savings, investment, national income analysis; GNP, GDP; Growth rate; Inflation causes. Monetary policy, Fiscal policy and trade policy with reference to Bangladesh; Planning in Bangladesh."
+          ],
+          "sessionalNote": null,
+          "references": [
+            "Principle of Economics by Gregory Mankiw",
+            "Macroeconomics by Gregory Mankiw"
+          ]
+        },
+        "MATH 1111": {
+          "title": "Mathematics - I",
+          "credit": 4.00,
+          "contactHour": null,
+          "topics": [
+            "Differential Calculus: Limit; Continuity; Differentiability; Differentiation; Differential; Successive differentiation: Successive differentiation, Leibnitz's theorem; Expansion of Function: Rolles theorem, mean-value theorem, Taylor's theorem in finite and infinite forms, Maclaurin's theorem in finite and infinite forms, Lagrange's and Cauchy's form of remainder; Indeterminate forms; Tangent and normal: Tangents and normals, subtangent and subnormal in cartesian and polar coordinates; Partial differentiation: Partial differentiation, Euler's theorem; Maxima and minima; Points of inflection with applications; Curvature; Asymptotes; Curve tracing; Evolute and involute: Envelopes.",
+            "Integral Calculus: Integration by parts; Method of substitution; Standard integrals; Integration by the method of successive reduction; Definite integrals: Definite integrals; its properties and uses, Walli's formula; Improper integrals, Differentiation and integration under sign of integration; Beta and Gamma function; Area under plane curves in cartesian and polar coordinates; Area between two curves in Cartesian and polar coordinates; Lengths of plane curves; Volume of solids of revolution; Volume of hollow solids of revolution by shell method; Area of surface of revolution.",
+            "Applications to engineering problems."
+          ],
+          "sessionalNote": null,
+          "references": [
+            "Differential Calculus by Joseph Edward",
+            "Differential Calculus by Das and Mukharjee",
+            "Differential & Integral Calculus by Abu Yosuf",
+            "Integral Calculus by Das and Mukharjee"
+          ]
+        },
+        "PHY 1111": {
+          "title": "Modern and Solid State Physics",
+          "credit": 4.00,
+          "contactHour": null,
+          "topics": [
+            "Relativity: Special theory of relativity, reference frames, Michelsion-Moreley experiment, Galilean transformation, Lorentz transformation, time dilation, length contraction, variation of mass, mass energy relation, mass less particles, velocity transformation.",
+            "Particle properties of waves: Photoelectric effect, quantum theory of light, compton effect.",
+            "Wave properties of particles: de Broglie waves, phase velocity, wave velocity and group velocity, uncertainty principle, application of uncertainty principle.",
+            "Atomic structure: Bohr's atom model, nature of electron orbits, orbital energy, origin of spectral lines, different series of spectral lines of hydrogen atom, orbital energy level diagram of hydrogen atom, Bohr's correspondence principle, vector atom model.",
+            "X-rays: Production of x-rays, origin of x-rays, x-ray spectrum; Moseley's law; applications of x-rays;",
+            "Atomic structure of matter: Atoms ions and molecules; States of matter: solids, liquids and gases; Inter particle forces.",
+            "Solid state physics: Structure of crystals, classification of solids, Einstein's model of the lattice heat capacity, specific heat of solids, Debye's model of the lattice heat capacity; Debye's approximation of high temperature and low temperature; Outstanding properties of metalas; Electrical conductivity and Ohm's law; Thermal conductivity; Momentum space; Fermi-Dirac distribution; Quantum theory of free electron; Escape of electron from a metal; Hall effect, Importance of Hall effect, Hall voltage, Hall coefficient, mobility, Hall angle and drift velocity, band theory; Velocity of electron according to band theory; Semiconductor.",
+            "Laser: History of laser, spontaneous emission, absorption and stimulated emission, generation of coherent radiation, time coherence, spatial coherence, spatial coherence, gas laser, ruby laser, model of ruby laser, YAG laser, Raman laser, semiconductor laser, application of laser."
+          ],
+          "sessionalNote": null,
+          "references": [
+            "Modern Physics by R. Murugeshan",
+            "Modern Physics by Stephen T. Thompton",
+            "Solid State Physics By H.E. Hall",
+            "Solid State Physics by Philip Hofmann"
+          ]
+        },
+        "IPE 1102": {
+          "title": "Manufacturing Process - I Sessional",
+          "credit": 1.50,
+          "contactHour": null,
+          "topics": [
+            "Acquaintance with different hand and machine tools; Pattern making; Molding sand and mold preparation; Metal casting; Different types of welding operations."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "CHEM 1112": {
+          "title": "Chemistry Sessional",
+          "credit": 0.75,
+          "contactHour": null,
+          "topics": [
+            "Volumetric analysis: Acid-base titration, Oxidation-reduction titration, Determination of Fe, Cu and Ca volumetrically.",
+            "Gravimetric analysis: Determination of Sulphate and Iron. Experiments will be designed related to the above concept."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "PHY 1112": {
+          "title": "Physics Sessional",
+          "credit": 0.75,
+          "contactHour": null,
+          "topics": [
+            "Sessional work compatible to course no. PHY 1111."
+          ],
+          "sessionalNote": null,
+          "references": []
+        }
+      },
+      "optionalCourses": [],
+      "termNotes": []
+    },
+    "Y1T2": {
+      "termKey": "Y1T2",
+      "title": "First Year Second Term",
+      "courses": {
+        "IPE 1201": {
+          "title": "Manufacturing Process - II",
+          "credit": 3.00,
+          "contactHour": null,
+          "topics": [
+            "Metal removing processes: Chip formation and tool design, tool geometry, chip breakers. Theory of metal cutting: Cutting forces, metal cutting dynamometers; Economics of metal cutting; Tool life; Cutting fluids.",
+            "Different machining processes: Turning, drilling, shaping, boring, planning, milling, grinding, reaming, broaching, etc. Manufacturing of threads and gears, metal finishing processes.",
+            "Modern machining processes: electro-chemical, electro-discharge, plasma arc, LASR beam, electron beam, ultrasonic and abrasive jet machining etc.",
+            "Selection of manufacturing processes on the basis of product characteristics and manufacturing economy."
+          ],
+          "sessionalNote": null,
+          "references": [
+            "Machine Tool Engineering by G.R Nagpal"
+          ]
+        },
+        "IPE 1203": {
+          "title": "Engineering Materials",
+          "credit": 3.00,
+          "contactHour": null,
+          "topics": [
+            "Atomic, molecular, crystalline and amorphous structures for metals, ceramic and polymers; Elastic and plastic behaviour of ceramic, glasses and polymer; The behaviour of materials in service: fracture, ductile-brittle transition, fatigue, creep, oxidation, degradation, theories of corrosion and corrosion prevention/protection; Materials as mixtures of elements: mixtures near and far from equilibrium, phase diagrams, phase changes.",
+            "Ceramics: Properties, raw materials, préparation, characterization and processing; principles and mechanisms of ceramic drying and firing process; defects and properties of ceramics; glazing and decoration; conventional and engineering ceramics; newer industrial ceramics.",
+            "Glasses: kinetics of crystallization and phase separation of glass transition; viscosity, chemical durability and thermal, electrical, optical, and mechanical properties of commercial glasses; relation of physical properties to glass structure and composition; tests of glass.",
+            "Polymers: Structure and properties of polymers and copolymers; thermoplastics and thermosets; product design; commercial processing of polymers; properties and testing of polymers; polymers and the environment. Rubber.",
+            "Composites: Theory of composites; fabrication, structure and use of different types of composites; properties of composites.",
+            "Introduction to Bio-materials."
+          ],
+          "sessionalNote": null,
+          "references": [
+            "Materials Science and Engineering by William D. Callister",
+            "Materials Science and Engineering by I.P. Singh and Subhash Chander"
+          ]
+        },
+        "IPE 1209": {
+          "title": "Computer Fundamentals and Programming Languages",
+          "credit": null,
+          "contactHour": null,
+          "topics": [
+            "Computer Fundamentals: Types and Generations of Computers, Basic, Organization and Functional units of Computers.",
+            "Hardware Components: Various Input, Output and Memory Devices. Specifications.",
+            "Software and Its Applications: Types of Software and concept of operating systems. Flow Charts and Mgorithms: Construction of flow charts and algorithms.",
+            "Programming using C/C++: Programming concepts; Structured programming language: data types, operators, expressions, control structures; Functions and program structures: function basics, parameter passing conventions, scope rules and storage classes, recursion; Header files; Preprocessor; Arrays and pointers; User defined data type: structures, unions, enumeration; Input and output: standard input and output, file access; Variable length argument list; Command line parameters; Error_ handling."
+          ],
+          "sessionalNote": null,
+          "references": [
+            "Programming in ANSI C by E. Balagurushami",
+            "Introduction to computers-Fundamentals of computer science by N. Subramanian"
+          ]
+        },
+        "HUM 1211": {
+          "title": "Professional English",
+          "credit": 3.00,
+          "contactHour": null,
+          "topics": [
+            "Parts of speech; Modals; Modifiers Appositive; Phrases and idioms; Word formation- synonyms and antonyms; suffixes and prefixes; Transformation of words; Sentence structure- Transformation of sentences; Common errors; Clauses; Notion and functions; Wh questions; Vocabulary and basic skills-writing, reading speaking and listening skills, dialogue, presentation and announcement.",
+            "Comprehensive writing: Paragraphs- Descriptive, Narrative, Expository; Report writing-formal, informal; Term paper and thesis writing technique; Business communications (DO letter, memo letter, official note etc.)"
+          ],
+          "sessionalNote": null,
+          "references": [
+            "Learning English The Easy Way by Sadruddin Ahmed",
+            "Professional English in Use (Engineering) by Mark Ibbotson"
+          ]
+        },
+        "MATH 1211": {
+          "title": "Mathematics - II",
+          "credit": 4.00,
+          "contactHour": null,
+          "topics": [
+            "Vectors: Review of vector algebra; Multiple products; Vector differentiation; Gradient; Divergence and curl, Line, surface and volume integrals; Curvilinear coordinates.",
+            "Matrices: Review of matrix algebra; Types of matrices. Elementary transformation: Elementary transformation, rank, normal and canonical forms, inverse; Linear dependence and independence of vectors and matrices; Solution of linear equations using matrix; Eigen values and eigen vectors.",
+            "Linear algebra: Linear dependence & independence; Linear mapping: Definition of linear map, rank and nullity; Sums and scalar products of linear mappings, composition of linear maps; Linear functionally and duality; Annihilators.",
+            "Co-ordinate geometry of two dimensions: Change of axis; Identification of conics with their properties.",
+            "Co-ordinate geometry of three dimensions: System of coordinates; Distance between two points; Section formula; Projections; Direction cosines; Equations of planes and lines; Perpendicular distance of a point from a line; angle between lines; Coplanar lines; Shortest distance between two lines; Standard equation of sphere; Cone and Cylinder.",
+            "Applications to engineering problems."
+          ],
+          "sessionalNote": null,
+          "references": [
+            "Vector Analysis by Murray R. Spigel",
+            "Matrices by Frank Ayers Jr.",
+            "Linear Algebra by Seymour Lipstucz",
+            "Solid Geometry by M.L Khanna",
+            "Textbook of Coordinate Geometry by Rahman & Bhattacharjee"
+          ]
+        },
+        "IPE 1200": {
+          "title": "Engineering Drawing",
+          "credit": 1.50,
+          "contactHour": null,
+          "topics": [
+            "Introduction; Instruments and their uses; First and Third Angle Projections; Orthographic Drawings; Isometric Views; Missing lines and views; Sectional views and conventional practices; Auxiliary views; Assembly drawing.",
+            "Building drawing fundamentals."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "IPE 1202": {
+          "title": "Manufacturing Process - II Sessional",
+          "credit": 1.50,
+          "contactHour": null,
+          "topics": [
+            "Sessional based on course no. IPE 1201."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "CSE 2112": {
+          "title": "Data Structures and Algorithms Sessional",
+          "credit": 1.50,
+          "contactHour": null,
+          "topics": [
+            "Sessional based on course no. ME 2111."
+          ],
+          "sessionalNote": null,
+          "references": []
+        }
+      },
+      "optionalCourses": [],
+      "termNotes": []
+    },
+    "Y2T1": {
+      "termKey": "Y2T1",
+      "title": "Second Year First Term",
+      "courses": {
+        "CSE 2111": {
+          "title": "Data Structures and Algorithms",
+          "credit": 3.00,
+          "contactHour": null,
+          "topics": [
+            "Data structures arrays, link lists, stacks, queues, trees and graphs, Algorithms for searching and Sorting, Complexity analysis, Hashing, File processing, Structured Programming."
+          ],
+          "sessionalNote": null,
+          "references": [
+            "Data Structure with Cby Seymour Lipschutz",
+            "Introduction to Algorithms by Thomas H. Cormen"
+          ]
+        },
+        "EEE 2111": {
+          "title": "Electrical Circuits and Machines",
+          "credit": 4.00,
+          "contactHour": null,
+          "topics": [
+            "Direct Current circuits: Laws and theorems, DC network analysis.",
+            "Alternating Current and AC Quantities: Steady state solution of single-phase circuits, (R, RL, and RLC), RMS and Average values of AC quantities, Phasor Algebra.",
+            "DC Machines: Constructional features and principle of operation; Shunt, series and compound generators and motors; Starting and speed control of motors; Choice of DC motors for industrial applications.",
+            "Transformers: Constructional features and principles of operation; 3-phase connection of transformers.",
+            "Induction motors: Principles of operation; Torque-speed characteristics; Improving starting torque for cage and wound rotor motors; Speed control and braking of induction motors; single phase induction motors and their uses.",
+            "Synchronous Generators: Principles of operations, emf equation, voltage regulation.",
+            "Synchronous Motors: Principles of operations; Starting and synchronization, AC motors for industrial applications.",
+            "Servo-motors, Self-Starter and Alternators: Constructional details and working principle; its applications for Vehicle."
+          ],
+          "sessionalNote": null,
+          "references": [
+            "Fundamentals of Electric Circuit by Charles K. Alexandar",
+            "Electrical Technology by B.L Theraja and A.K. Theraja",
+            "Electrical Machines by S.K Bhattacharya"
+          ]
+        },
+        "HUM-2111": {
+          "title": "Financial, Cost and Management Accounting",
+          "credit": 3.00,
+          "contactHour": null,
+          "topics": [
+            "Meaning and Importance of Accounting; Accounting Principles; Journal, Ledger, Cash-book; Trial Balance;",
+            "Final Accounts: Sole-Traders and Joint-stock Company; Depreciation: Different methods and their Computation.",
+            "Costs: Direct and Indirect Costs; Material, Labor and overhead; Job-order costing.",
+            "Process costing: Joint product, by product and Equivalent product.",
+            "Standard Costing: Material, price and overhead variances. Break- Even and Cost-Volume-Profit analysis.",
+            "Differential, Relevant and Marginal costing, Decision-making among alternative courses of action; Budget Cash and production Budget, Controllable & non-controllable expenditures, Flexible budget, Budget revision and re-allocation, Zero based budget, Budgetary Control."
+          ],
+          "sessionalNote": null,
+          "references": [
+            "Basic Accounting by S.A Hasib and S.E Kabir",
+            "Accounting Principles by Weygandt, Kimmel and Kieso"
+          ]
+        },
+        "MATH 2111": {
+          "title": "Mathematics - III",
+          "credit": 3.00,
+          "contactHour": null,
+          "topics": [
+            "Differential equations: Formation of differential equations; Order and degree of differential equations; Solution of 1st order and 1st degree differential equations by various methods;",
+            "Solutions of higher order linear differential equations by various methods; Solutions of linear partial differential equations by separation of variables.",
+            "Laplace Transform: Definition of Laplace transform; properties of Laplace transform; Laplace transform of elementary functions; Inverse of Laplace transform; Properties of Inverse Laplace transform; Convolution Theorem; Solution of differential equation using Laplace transform.",
+            "Complex variable: Complex number: Complex number, its representation and properties, Powers and roots; Complex variable: Limit, Derivative, Analytic function, Cauchy-Riemann equations; Singular points; Cauchy's theorem; Cauchy's integral formula; Taylor's and Laurent's theorem; Residues; Residue theorem; Contour integration; Conformal mapping and its use."
+          ],
+          "sessionalNote": null,
+          "references": [
+            "Differential Equation by Shepley L. Ross",
+            "Differential Equations by Frank Ayres Jr.",
+            "Complex Variables by Murray R. Spigel"
+          ]
+        },
+        "ME 2111": {
+          "title": "Engineering Mechanics and Theory of Machines",
+          "credit": 4.00,
+          "contactHour": null,
+          "topics": [
+            "Basic concepts of mechanics; Equilibrium of particles and rigid body; Forces in trusses and frames; Friction; Centroids and moment of inertia; kinetics of particles and rigid bodies.",
+            "Mechanisms: displacement, velocity and acceleration; Static and dynamic balancing of rotating components. Undamped and damped free vibration of one and two degrees of freedom; Forced vibrations; Whirling of shafts and rotors; Study of cams."
+          ],
+          "sessionalNote": null,
+          "references": [
+            "Mechanics for Engineers by Ferdinand P. Beer and E. Russel Johnston Jr.",
+            "Theory of Machines by R.S Khurmi and J.K Gupta"
+          ]
+        },
+        "CSE 2112": {
+          "title": "Data Structures and Algorithms Sessional",
+          "credit": 1.50,
+          "contactHour": null,
+          "topics": [
+            "Sessional based on course no. CSE 2111."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "EEE 2112": {
+          "title": "Electrical Circuits and Machines Sessional",
+          "credit": 1.50,
+          "contactHour": null,
+          "topics": [
+            "Sessional based on course no. EEE 2111."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "ME 2112": {
+          "title": "Engineering Mechanics and Theory of Machines Sessional",
+          "credit": 0.75,
+          "contactHour": null,
+          "topics": [
+            "Sessional based on course no. ME 2111."
+          ],
+          "sessionalNote": null,
+          "references": []
+        }
+      },
+      "optionalCourses": [],
+      "termNotes": []
+    },
+    "Y2T2": {
+      "termKey": "Y2T2",
+      "title": "Second Year Second Term",
+      "courses": {
+        "IPE 2207": {
+          "title": "Probability and Statistical Analysis",
+          "credit": 3.00,
+          "contactHour": null,
+          "topics": [
+            "Graphical representation of data, Basic laws of probability, conditional probability, Randomvariables; Measures of central tendency and dispersion. Mathematical expectation; transformation of variables; Moments and moment generating functions; Probability distributions: uniform, exponential, normal, binomial, Poisson; Central limit theorem; Chi-square distribution, t-distribution, F-distribution; Estimation of confidence interval; statistical hypothesis testing; goodness-of-fit tests; testing of means and variances; Experimental designs: Randomized block design and Factorial design.",
+            "Introduction to stochastic problems in engineering.",
+            "Reliability concepts and methodology for modeling, assessing and improving product reliability."
+          ],
+          "sessionalNote": null,
+          "references": [
+            "Statistical Procedures for Engineering, Management and Science by Leeland Blank",
+            "Probability & Statistics for Engineers and Scientists by Walpole and Myres"
+          ]
+        },
+        "IPE 2229": {
+          "title": "Industrial Psychology and Law",
+          "credit": 3.00,
+          "contactHour": null,
+          "topics": [
+            "Industrial Psychology: Definition, nature and scope of psychology; Psychology of the individual: socialization of the individual; Psychology of the group: Group formation, types of group, group solidarity and leadership; Psychology of attitudes: beliefs, prejudice, interest and ideologies; psychology of collective behavior: fashion, propaganda, mass communication, cooperation and conflict; Psychology of cognition: social stimulus and response, various types of instinct, difference between instinct and habit, difference between motivation, emotion and social behavior; Personality: factors and structure of personality types, theories of personality, personality and culture, abnormal personality type; Psychological tests in industries, their utility, reliability and validity; Work stress and mental health.",
+            "Industrial Law: Industrial Relation Ordinance 1969, Industrial Relations ordinance 1975 (Section one to thirty four). Environmental Conservation Act, 1995; Environmental Conservation Rule, 1997.",
+            "Factory Act: Introduction; Inspector and Certifying Surgeons; Health and Hygiene; Safety; Welfare; Working Hours of Adults; Employment of Young Persons; Leave and Holidays with Wages etc."
+          ],
+          "sessionalNote": null,
+          "references": [
+            "Labour Laws of Bangladesh by Mohammad Ataul Karim",
+            "The Bangladesh Labour Act & Rules by Nirmal Chandra Paul",
+            "Industrial Psychology by Dipak Bhattacharyya and Supta Bhattacharya"
+          ]
+        },
+        "EEE 2211": {
+          "title": "Electronics",
+          "credit": 3.00,
+          "contactHour": null,
+          "topics": [
+            "Introduction to Electronic Devices: Junctions, Semiconductor diodes, Rectifier diodes, schottky barrier diodes, Zener diodes, Tunnel diodes, Varactor diodes, LED, Photo diodes, Solar cells, Bipolar Junction Transistor, Field effect transistor, MOS, Unijunction transistor, SCR, Biasing of BJT and FET, Operational Amplifiers.",
+            "Introduction to Logic and Digital Circuits: Logic operations, Basic gates; OR, AND, NOT, NAND, NOR, X-OR; Flip-Flops; Shift registers; Counter; Binary and BCD code.",
+            "Industrial Electronics: Regulated power supplies; Ignitions; Resistance welding and Timing circuits, Induction heating, Di-electric heating.",
+            "Application: Introduction to Instruments; CRO, Transducers; Temperature measurement; Integrated circuits (IC); Microprocessors. Introduction to Analog and Digital Communication; Types of Modulation and Demodulation techniques."
+          ],
+          "sessionalNote": null,
+          "references": [
+            "Digital Electronics and Logic Design by M. Morris Mano",
+            "Principles of Electronics by V.K. Mehta and Rohit Mehta"
+          ]
+        },
+        "ME 2213": {
+          "title": "Mechanics of Solids",
+          "credit": 3.00,
+          "contactHour": null,
+          "topics": [
+            "Stress analysis: Statically indeterminate axially loaded member, axially loaded member, thermal and centrifugal stresses, Stresses in thin and thick walled cylinders and spheres.",
+            "Beams: Shear force and bending moment diagrams, Stresses in beams, Deflection of beams: integration and area moment methods, Introduction to reinforced concrete beams and slabs.",
+            "Torsion: Angle of twist; Modulus of rupture, Helical springs.",
+            "Combined stresses: principle stresses, Mohr's Circle.",
+            "Columns: Euler's formula, intermediate column formulas, the Secant formula; Flexure formula of curved beams.",
+            "Riveted and welded joints: Introduction to experimental stress analysis techniques; stain energy; Failure theories."
+          ],
+          "sessionalNote": null,
+          "references": [
+            "Strength of Materials by Ferdinand L. Singer and Andrew Pytel",
+            "Mechanics of Solids by Abdul Mubeen",
+            "Mechanics of Solids by ARBIND KUMAR SINGH"
+          ]
+        },
+        "ME 2215": {
+          "title": "Thermal Engineering and Heat Transfer",
+          "credit": 4.00,
+          "contactHour": null,
+          "topics": [
+            "Sources of energy: conventional and renewable; Thermodynamics: Fundamental concepts and laws, flow and non-flow processes; Introduction to: steam generating units, Thermodynamic cycles; internal combustion engines, steam turbines, gas turbines, refrigeration and air conditioning systems.",
+            "Introduction to heat transfer; Modes of heat transfer; Steady and unsteady state heat conduction and radiation heat transfer, Convection heat transfer; Natural and forced convection; Heat exchangers."
+          ],
+          "sessionalNote": null,
+          "references": [
+            "A Textbook of Thermal Engineering by R.S Khurmi and J.K Gupta",
+            "Heat Transfer by M. Necati Ozisik",
+            "Heat Transfer and Thermal Engineering by Edgar Miller"
+          ]
+        },
+        "IPE 2200": {
+          "title": "Computer Aided Design (CAD) Sessional - I",
+          "credit": 0.75,
+          "contactHour": null,
+          "topics": [
+            "Introduction to Computer Aided Design & Drafting, Introducing the AutoCAD 2002 window, Planning and Laying out a drawing, Drawing simple 2D objects, Creating Blocks, Organizing information with layers, Adding Text to Drawing, Using Dimensions, Storing and linking data with graphics, Getting & Exchanging data from drawing, Printing & Plotting."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "EEE 2212": {
+          "title": "Electronics Sessional",
+          "credit": 0.75,
+          "contactHour": null,
+          "topics": [
+            "Sessional based on course no. EEE 2211."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "ME 2214": {
+          "title": "Mechanics of Solids Sessional",
+          "credit": 0.75,
+          "contactHour": null,
+          "topics": [
+            "Experiments based on the theory of ME 2213."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "ME 2216": {
+          "title": "Thermal Engineering and Heat Transfer Sessional",
+          "credit": 1.50,
+          "contactHour": null,
+          "topics": [
+            "Sessional based on course no. ME 2215."
+          ],
+          "sessionalNote": null,
+          "references": []
+        }
+      },
+      "optionalCourses": [],
+      "termNotes": []
+    },
+    "Y3T1": {
+      "termKey": "Y3T1",
+      "title": "Third Year First Term",
+      "courses": {
+        "IPE 3103": {
+          "title": "Engineering Metallurgy",
+          "credit": 3.00,
+          "contactHour": null,
+          "topics": [
+            "History of the development of metallurgy; Mechanical and physical properties of metals; Crystalline structure of metal; Metallography; Imperfections of metals; Extraction and refining of metals; Phase diagram of the Fe-C system; Heat treatment of various metals and metallic alloys such as cast iron, plain carbon steel, low alloy steels, stainless steels, copper and copper alloys, aluminum, lead, nickel and nickel alloys, titanium and titanium alloys; Identification of alloys and its characteristics; Powder metallurgy; Tool materials; Non-destructive testing (NDT) of metals."
+          ],
+          "sessionalNote": null,
+          "references": [
+            "Introduction to Physical Metallurgy by Sydney Avner",
+            "Engineering Materials and Metallurgy by R.K. Rajput"
+          ]
+        },
+        "IPE 3105": {
+          "title": "Product Design -I",
+          "credit": 3.00,
+          "contactHour": null,
+          "topics": [
+            "Introduction.",
+            "Product Planning: Generic development process; Front-end process; Adapting the generic development process; Steps of Identifying Customer Needs of a Product.",
+            "Product Specifications: Steps of establishing target specification; Steps of refining the specifications.",
+            "Concept Generation of Product Design: Five step methodology of product concept generation.",
+            "Selection of Product Design Concept: Concept screening; Concept scoring; Prototyping of Product: Principle of prototyping; Planning for prototypes.",
+            "Product Architecture: Application of architecture; Implications of the architecture; Establishing the architecture.",
+            "Industrial Design of Product: Assessing the needs for industrial design; Industrial design process and management.",
+            "Designing Products for Manufacture and Assembly: Basics; Overview of DFMA methodology.",
+            "The Product Design and Process Selection: Types of process; Process flow structures; Product process matrix; The virtual factory; Specific equipment selection; Choosing among alternative process and equipment.",
+            "Product Development Economics: Elements of economic analysis; methodology of economics of product development projects.",
+            "Value Engineering and Product Design; Robust Design in Product Designing; Concurrent Engineering of Product Design; The KANO Model in Product Design; Managing The Supply Chain in Product Design; Product Reliability Concept in Product Design."
+          ],
+          "sessionalNote": null,
+          "references": [
+            "Product Design and Development by Karl T Ulrich",
+            "The Design of Everyday Things by Don Norman"
+          ]
+        },
+        "IPE 3115": {
+          "title": "Engineering Economy",
+          "credit": 3.00,
+          "contactHour": null,
+          "topics": [
+            "Introductions, objectives and scope of engineering economy;",
+            "Economic Analysis: Economic decisions; Types of strategic engineering economic decisions.",
+            "Financial statements: Net-worth; Balance sheet; Cash flow; ratios to make business decisions; cost concepts and behavior.",
+            "Money & investing: Concepts of time value of money; development of interest formulas.",
+            "Present worth analysis: Initial project screening method; present worth analysis.",
+            "Rate of return analysis: Payback method; internal rate of return.",
+            "Depreciation: Asset depreciation; book depreciation; tax depreciation; depletion.",
+            "Inflation: Meaning and measure of inflation; rate of return analysis under inflation.",
+            "Decision under risk and uncertainty: sensitivity analysis; break-even analysis; decision making under risk and uncertainty; replacement analysis.",
+            "Capital budgeting: Capital budgeting process; capital rationing and the profitability index; the cost of capital; public investment cost benefit analysis."
+          ],
+          "sessionalNote": null,
+          "references": [
+            "Engineering Economy by Leeland Blank",
+            "Engineering Economy by G. J. Thuesen"
+          ]
+        },
+        "IPE 3119": {
+          "title": "Operations Management",
+          "credit": 3.00,
+          "contactHour": null,
+          "topics": [
+            "Overview of operations management: Basic concepts: Management process, Basic purpose, Objectives, Targets, Production process, Production or Operations System, Types of production or operations systems; The role of operations management; Functions of operations management;",
+            "Demand forecasting: system and methods; Importance of demand forecasts; The demand forecasting system: Forecasting methods; Subjective (or Predictive) forecasting methods; Causal forecasting methods; Time series forecasting methods; Routine short-term forecasting;",
+            "Aggregate planning: Types of production plans; Phases of aggregate planning; The aggregate planning problem; Allocating demand to production periods assuming linear cost relationships; Allocating demand to production periods using alternatives with nonlinear costs; Comparison of aggregate planning methods; Implementation of aggregate planning; Master Production schedule.",
+            "Inventory systems and models: Specification of an inventory system; Determination of inventory related costs; Inventory model building; Economic-order-quantity (EOQ) model, Economic-production-quantity (EPQ) model; Inventory model allowing shortages, Inventory model allowing price discounts, A single-stage inventory model under conditions of risk.",
+            "Inventory-management systems: Determination of safety-stock size for specified service level; The fixed-order-quantity (Continuous-review); The Fixed-order-interval (Periodic-review) system; The base-stock (Optional -Replenishment) System; Bill of materials, Material- Requirements Planning (MRP);",
+            "Operations scheduling: Introduction: the scheduling system; Flow-shop scheduling; Job-shop scheduling; Project Scheduling with CPM and PERT.",
+            "JIT, MRP II, ERP, DRP, Supply chain management, Group Technology."
+          ],
+          "sessionalNote": null,
+          "references": [
+            "Operations Management by Kostas",
+            "Operations Management by William j Stevenson",
+            "Industrial Engineering and Production Management by Telsang"
+          ]
+        },
+        "ME 3111": {
+          "title": "Fluid Mechanics and Machinery",
+          "credit": 3.00,
+          "contactHour": null,
+          "topics": [
+            "Fluid properties; Pressure measurement;",
+            "Fluid statics: Force on submersed planes and curved surfaces;",
+            "Fluid dynamics: Continuity Equation, Euler equation, Energy equation, Bernoulli equation, Different flow measuring devices, Impulse Momentum equation; Pipe flow: Frictional losses in pipes and fittings (Moody diagram); Dimensional analysis and Similitude.",
+            "Fluid machinery: Centrifugal pumps; Introduction to Radial and Axial flow pumps; Reciprocating pumps; Cavitations; Introduction to Impulse and Reaction turbine, Compressor."
+          ],
+          "sessionalNote": null,
+          "references": [
+            "Hydraulics and Fluid Mechanics including Hydraulics Machine by Dr. P.N Modi",
+            "Fluid Mechanics and Hydraulics Machines by Dr. R.K. Bansal"
+          ]
+        },
+        "IPE 3100": {
+          "title": "Computer Aided Design (CAD) Sessional - II",
+          "credit": 1.50,
+          "contactHour": null,
+          "topics": [
+            "Introduction to Computer Aided Engineering; 3D Modeling; Rendering; Printing & Plotting; Animation using 3D Studio Max; Introduction to Solid Works and other softwares."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "IPE 3104": {
+          "title": "Engineering Metallurgy Sessional",
+          "credit": 0.75,
+          "contactHour": null,
+          "topics": [
+            "Sessional based on course no. IPE 3103."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "IPE 3106": {
+          "title": "Product Design - I Sessional",
+          "credit": 1.50,
+          "contactHour": null,
+          "topics": [
+            "Sessional based on course no. IPE 3105."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "ME 3112": {
+          "title": "Fluid Mechanics and Machinery Sessional",
+          "credit": 0.75,
+          "contactHour": null,
+          "topics": [
+            "Sessional based on course no. ME 3111."
+          ],
+          "sessionalNote": null,
+          "references": []
+        }
+      },
+      "optionalCourses": [],
+      "termNotes": []
+    },
+    "Y3T2": {
+      "termKey": "Y3T2",
+      "title": "Third Year Second Term",
+      "courses": {
+        "IPE 3205": {
+          "title": "Product Design -II",
+          "credit": 3.00,
+          "contactHour": null,
+          "topics": [
+            "Stress and strain analysis; Design of Nut and Bolt, Shaft, Spring, Column, Bearings, Gears, Belt, Rope and Chain Drives, Welded joints and Rivets."
+          ],
+          "sessionalNote": null,
+          "references": [
+            "Design of Machine elements by Virgil Moring Fairies",
+            "Design of Machine Elements by V. B. Bhandari"
+          ]
+        },
+        "IPE 3217": {
+          "title": "Operations Research",
+          "credit": 4.00,
+          "contactHour": null,
+          "topics": [
+            "Introduction and scope of operations research, Mathematical Modeling: Different kinds of modeling and their characteristics. Introduction to linear programming; Graphical method; Simplex algorithm; Duality and sensitivity analysis; Transportation and Transshipment Model; Assignment Model; Dynamic programming; Integer Linear programming B & B algorithm; Cutting plane algorithm; Decision making under uncertainty; Risk analysis; Game theory; Queuing models; Introduction to Markov Chain; Introduction to non-linear programming.",
+            "Applications of operation research in industrial and production engineering field."
+          ],
+          "sessionalNote": null,
+          "references": [
+            "Operations research: an introduction by Hamdy A Taha",
+            "Operations Research: A Practical Introduction by Camille C. Price"
+          ]
+        },
+        "IPE 3219": {
+          "title": "Production Systems Design",
+          "credit": 3.00,
+          "contactHour": null,
+          "topics": [
+            "System: The concept of a system and their classification.",
+            "Capacity Requirements Planning (CRP): Determination of capacity requirements; Evaluation of alternative plant sizes; Determination of equipment requirements.",
+            "Process Design: Introduction; Types of production processes; Methodology for process design; Graphic aids for process design; Process design and energy considerations; Process design and environmental pollution; recycling.",
+            "Methods and Motion Study: Introduction; Objective; Scope; Micro Memo Motion Study; Critical examination and selection of new method.",
+            "Work analysis, design and measurement: work study, work analysis; people or machines; A comparative evaluation; Work-content determination; Work-methods design; Work measurement; The effect of learning on standard times; learning curves.",
+            "Facility Layout: Dependence on layout on production flow; Product or line layout; Process layout; Fixed position layout; Group technology layout; layout design.",
+            "Facility Location: Introduction; The location problem; Approach to plant location; The Brown- Gibson approach for site selection."
+          ],
+          "sessionalNote": null,
+          "references": [
+            "Operations Management by Kostas",
+            "Industrial Engineering and Production Management by Martand Telsang"
+          ]
+        },
+        "IPE 3221": {
+          "title": "Quality Management",
+          "credit": 3.00,
+          "contactHour": null,
+          "topics": [
+            "Concepts of Quality: Emergence of modern concepts of quality and its management; quality redefined; identification of quality characteristics; quality of design; conformance and performance; Deming's principle on quality and productivity; quality costs and their interpretations.",
+            "Statistical Quality Control: Control and measurement of quality; elementary SPC tools; PDCA cycle; Pareto's law; cause and effect (fishbone) diagram; control charts; attribute control charts and variable control charts; measurement of variation and process capability analysis.",
+            "Six sigma: introduction; objectives; scope and analyze through DMAIC.",
+            "Design of Experiment (DOE): Identification of key variables for major sources of variations. Steps to improve existing system using DOE, QCC.",
+            "Acceptance sampling plans: QC curves; single and double sampling plans; sequential and rectifying inspection plans; AOQ. MLT STD 105D for inspection by attributes.",
+            "Quality and reliability: failure and survival probability; hazard rate; component and system reliability and its prediction; failure mode and fault tree analysis; reliability testing. Quality standards and their compliance, ISO 9000 and ISO 14000 etc.",
+            "Total Quality Management (TQM); application of TQM philosophy; quality planning; QFD; House of Quality; Frontiers of quality."
+          ],
+          "sessionalNote": null,
+          "references": [
+            "Quality Control and Management by Ahsan Akter Hasin",
+            "Introduction to Statistical Quality Control by Douglas C. Montgomery"
+          ]
+        },
+        "IPE 3223": {
+          "title": "Material Handling and Maintenance Management",
+          "credit": 3.00,
+          "contactHour": null,
+          "topics": [
+            "Issues and importance of handling of materials: Analysis of material handling problems; Classification of materials; unit load, bulk loads; Study of material handling systems and their efficiency; Selection and classification of material conveying equipment.",
+            "Product handling: Design system configuration conforming to various kinds of product features and layout characteristics.",
+            "Designing concepts of common handling and transfer equipment: different types of conveyors such as belt, screw, chain flight, bucket elevators, pneumatic hydraulic; cranes, and forklifts; Design of ware house facilities appropriate for relevant handling and transfer device; Automatic packaging devices; Testing procedure of packages; vibration test, drop test, performance limits; Algorithms to design and analyze discrete parts material storage and flow system such as Automated Storage/Retrieval System (ASRS); order picking; automated guided vehicle system(AGVS).",
+            "Maintenance Management: Concept of maintenance and value of maintenance management; maintenance organization and department structure (resource and administration); General properties & classification of lubricants used for maintenance; Maintenance of common parts; equipments; vehicles; sliding & silling parts; Fixed time replacement; condition based maintenance; preventive and corrective maintenance; Replacement strategies; Documentation and computer control in maintenance management; implementation of maintenance planning and scheduling; plant asset management; human factors in motivation skills in a maintenance environment; Total Productive Maintenance (TPM)."
+          ],
+          "sessionalNote": null,
+          "references": [
+            "Conveyors and Related Equipments by A. spikaovsky and V. dyacttkov",
+            "Manufacturing Facilities; Location, Planning, and Design by Dileep R. Sule"
+          ]
+        },
+        "IPE 3200": {
+          "title": "Business Communication Seminar",
+          "credit": 0.75,
+          "contactHour": null,
+          "topics": [],
+          "sessionalNote": null,
+          "references": []
+        },
+        "IPE 3206": {
+          "title": "Product Design -II Sessional",
+          "credit": 0.75,
+          "contactHour": null,
+          "topics": [
+            "Sessional work compatible to course no. IPE 3205."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "IPE 3218": {
+          "title": "Operations Research Sessional",
+          "credit": 0.75,
+          "contactHour": null,
+          "topics": [
+            "Sessional work compatible to course no. IPE 3217."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "IPE 3220": {
+          "title": "Production Systems Design Sessional",
+          "credit": 0.75,
+          "contactHour": null,
+          "topics": [
+            "Sessional work compatible to course no. IPE 3219."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "IPE 3222": {
+          "title": "Quality Management Sessional",
+          "credit": 0.75,
+          "contactHour": null,
+          "topics": [
+            "Sessional work compatible to course no. IPE 3221 and study on different types of measuring devices."
+          ],
+          "sessionalNote": null,
+          "references": []
+        }
+      },
+      "optionalCourses": [],
+      "termNotes": []
+    },
+    "Y4T1": {
+      "termKey": "Y4T1",
+      "title": "Fourth Year First Term",
+      "courses": {
+        "IPE 4109": {
+          "title": "Management Information System Analysis and Design",
+          "credit": 3.00,
+          "contactHour": null,
+          "topics": [
+            "Types of information; Management and information requirements; Qualities of information; Role, Task, Attribute 70nd Tools used by system analyst; System development life cycle; Information gathering; Requirements specifications and planning; Feasibility analysis; Data flow diagrams; Process specifications; Decision tables; Cost benefit analysis; Introduction to data model; Relational database design; Normal formis; Queries: Basic relational algebra and SQL; Data input methods; Design of files; Database management systems- Introduction, Advantages, Database administration, Database search strategies; Designing outputs; Introduction to electronic commerce; Control, Security and Ethics in system design; Computer hardware and software selection; Management issues of Networks and Telecommunications; ICT Rules."
+          ],
+          "sessionalNote": null,
+          "references": [
+            "Analysis and Design of Information Systems by Rajaraman",
+            "Management Information Systems: Managing the Digital Firm by Jane Laudon and Kenneth C. Laudon"
+          ]
+        },
+        "IPE 4125": {
+          "title": "Machine Tools",
+          "credit": 3.00,
+          "contactHour": null,
+          "topics": [
+            "Characteristics of machine tools; Recent development in the design; Drive systems; Design of mechanical drive; Speed gear boxes; Feed gear boxes; Infinity variables drive; PIV and other mechanical stepless drive; Electrical drive; Bearings; Spindles; Slide ways of machine tools; Machine tool structure; Detail study of engine lathe; Turret and automated lathes; Drilling machine; Shaper machine; Planner machine; Milling machine; Grinding machine; Forging machine; Mechanical, Electrical, Hydraulic and Numerical control systems CNC, DNC machine tools."
+          ],
+          "sessionalNote": null,
+          "references": [
+            "Machine Tool Engineering by G R Nagpal",
+            "Fundamentals of machining and machine tools by Geoffrey Boothroyd",
+            "MACHINE TOOL DESIGN by N. K. Mehta"
+          ]
+        },
+        "IPE 4129": {
+          "title": "Industrial Management and Entrepreneurship Development",
+          "credit": 4.00,
+          "contactHour": null,
+          "topics": [
+            "Management fundamentals: Basic theories of management; Management functions; Types of organizational structure; Principles of management; Organizational environments; Lines of command and response; Span of control; Centralization and decentralization of administration.",
+            "Human Resource Management: HRM process, Human resource planning, Recruitment, Selection, Training and development; Job evaluation; Merit rating; Promotions, transfers, demotions and separations; Salary and wages, Wage incentive plans; Motivation, Theories of Motivation, Job rotation, enlargement and enrichment; Leadership and leadership styles; Collective bargaining; Management of conflict; Communication and counseling; Separation processes.",
+            "Strategic Management: Principles, Planning and decision making.",
+            "Entrepreneurship Development: Concept of Entrepreneurship, theories, development factors, Process of developing entrepreneurship, Profile of an entrepreneur, business initiation; Types of business and their relative advantages and disadvantages; Business plan; High-Tech Entrepreneurship: characteristics, technology transfer and transfer risk, Entrepreneurial failure."
+          ],
+          "sessionalNote": null,
+          "references": [
+            "Industrial Engineering and Management by OP Khanna",
+            "Entrepreneurial Development by Shobha Singh Khanka"
+          ]
+        },
+        "IPE 4000": {
+          "title": "Project and Thesis",
+          "credit": 1.50,
+          "contactHour": null,
+          "topics": [
+            "Project and Thesis"
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "IPE 4002": {
+          "title": "Term Project",
+          "credit": 0.75,
+          "contactHour": null,
+          "topics": [
+            "Term Project"
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "IPE 4110": {
+          "title": "MIS Sessional",
+          "credit": 0.75,
+          "contactHour": null,
+          "topics": [
+            "Sessional work compatible to course no. IPE 4109."
+          ],
+          "sessionalNote": null,
+          "references": []
+        }
+      },
+      "optionalCourses": [],
+      "termNotes": []
+    },
+    "Y4T2": {
+      "termKey": "Y4T2",
+      "title": "Fourth Year Second Term",
+      "courses": {
+        "IPE 4228": {
+          "title": "CAM and Robotics Sessional",
+          "credit": 0.75,
+          "contactHour": null,
+          "topics": [
+            "Sessional work compatible to course no. IPE 4227."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "IPE 4009": {
+          "title": "Systems Modeling and Simulation",
+          "credit": 3.00,
+          "contactHour": null,
+          "topics": [
+            "Introduction to simulation; Types of simulation; Its advantages and short comings; Objectives of simulation in industrial and service organization; System and models; Simulation models; Input distribution specification; Generation of random numbers and random variables; Stochastic processes; Different queuing systems: Comparison of alternative system configuration; Output analysis of simulation models; Experimental design and Optimization; Simulation using programming language and software."
+          ],
+          "sessionalNote": null,
+          "references": [
+            "Theory of Modeling and Simulation by Bernard P. Zeigler",
+            "System Modeling and Simulation An Introduction by Frank L. Severance"
+          ]
+        },
+        "IPE 4019": {
+          "title": "Logistics and supply Chain Management",
+          "credit": 3.00,
+          "contactHour": null,
+          "topics": [
+            "Understanding the Supply Chain: Decision phases and process view of a supply chain; Competitive and supply chain strategies.",
+            "Aggregating Planning in a Supply Chain: Role of aggregate planning in Supply Chain; Aggregate planning problem; Strategies and planning using Linear Programming.",
+            "Planning and Managing Inventories in a Supply Chain: The role of cycle inventory in Supply Chain; Economies of scale to exploit quantity discounts; Short term discounting; Trade promotions; The role of safety inventory in a Supply Chain; Determining appropriate level of safety inventory; Importance of the level of product availability.",
+            "Transportation: Roles; Factors affecting transportation decision; Modes of transportation Design options for a transportation network; Tailored transportation; Routing and scheduling in transportation; Cross docking operation.",
+            "Information Technology In Supply Chain: Role, Importance: Use of Information Technology in supply chain; The role of e-business in supply chain; Impact; value and setting up e-business in practice; RFID technology; case studies;",
+            "Coordination in a supply chain: Lack of supply chain coordination and bullwhip effect; Effect of lack of coordination on performance; Obstacles to coordination; Achieving coordination in practice."
+          ],
+          "sessionalNote": null,
+          "references": [
+            "Supply Chain Management Strategic Planning and Operation by Sunil Chopra",
+            "Logistics & Supply Chain Management by Martin Christopher"
+          ]
+        },
+        "IPE 4021": {
+          "title": "Advanced Tools in Quality Management",
+          "credit": 3.00,
+          "contactHour": null,
+          "topics": [
+            "Failure Mode and Effect Analysis: Introduction, reliability requirements, failure rate, intent of FMBA, stages of FMEA, the design and process FMEA Document.",
+            "The Total Productive Maintenance: The plan, learning and promoting the philosophy, goal, developing plans, autonomous work group.",
+            "Quality Function Deployment: The QFD team, benefits, voice of the customer, building a house of quality, QFD process.",
+            "Experimental Design: Hypotheses, t test, F test, one factor at a time, orthogonal design, point and interval estimate, two factors, full factors, fractional factorials",
+            "The Economics of Reducing variation: Goalpost philosophy, Taguchi Loss Function, Factory tolerances, other loss functions, general loss function for Nominal-Is-Best situation.",
+            "Orthogonal Array selection and utilization: Typical/better/efficient test strategies, multiple level experiments, recommended experiment design approach summary, component identification design.",
+            "Analysis and interpretation methods for Experiments: Plotting methods, Analysis of Variation (ANOVA), No way/one way/two way/three way ANOVA, present contribution, multiple level experiments.",
+            "Parameter Design: Parameter and tolerance deign, explanation, control and noise factors, introduction to parameter design, signal-to-noise ratios, parameter design strategy, dynamic characteristics.",
+            "Tolerance Design: Introduction to tolerance design, tolerance design using loss function, identification of tolerance design factors, quality counter measures.",
+            "The KANO model, Benchmarking process, supplier selection and supplier rating, Kaizedn; 5S Reengineering, The juran Trilogy."
+          ],
+          "sessionalNote": null,
+          "references": [
+            "Quality Control and Management by Dr. M. Ahsan Akhtar Hasin",
+            "Juran's Quality Handbook by Joseph A. Defeo",
+            "Quality Management: Tools, Methods and Standards by Marco Sartor and Guido Orzes"
+          ]
+        },
+        "IPE 4027": {
+          "title": "Computer Integrated Manufacturing",
+          "credit": 3.00,
+          "contactHour": null,
+          "topics": [
+            "Automation and fundamentals of automation in manufacturing; Functions and components of CIMs; Group technology and cellular manufacturing; Classification and coding; Automated data capture; Automated material handling- robots, conveyors; Automated storage and retrieval system (AS/RS); Automated Inspection and testing principles and technologies; Introduction to manufacturing systems; Single station manufacturing cells. Flexible manufacturing systems: planning and scheduling; Manual assembly line; Automated assembly systems; Transfer lines and similar automated manufacturing systems; Process planning and concurrent engineering; Lean production and agile manufacturing; Factory areas networking; Factory of the future."
+          ],
+          "sessionalNote": null,
+          "references": [
+            "Automation, Production Systems and Computers-Integrated Manufacturing by Mikell P. Groover.",
+            "Computer Integrated Manufacturing by Alan Weatherall"
+          ]
+        },
+        "IPE 4029": {
+          "title": "Marketing Management",
+          "credit": 3.00,
+          "contactHour": null,
+          "topics": [
+            "Marketing concepts; Market orientation; relationship marketing; market segmentation and measurement; buyer behavior; marketing planning and budgeting; Concept of marketing mix, product, price, place and promotion; strateigic and tactical decisions; new product planning process; global marketing, case studies; R&D in marketing; Marketing ethics; Patent and Trademarks."
+          ],
+          "sessionalNote": null,
+          "references": [
+            "Marketing Management by Philip Kotler, Kevin Lane Keller, Malcolm Goodman",
+            "Principles of Marketing by Gary Armstrong and Philip Kotler",
+            "A framework for marketing management by Philip Kotler"
+          ]
+        },
+        "IPE 4037": {
+          "title": "Mechatronics",
+          "credit": 3.00,
+          "contactHour": null,
+          "topics": [
+            "Introduction to Mechatronics: Mechatronics systems, measurement systems, control systems, microprocessor-based controllers, response of systems, mechatronics approach.",
+            "Sensors and transducers: Performance terminology, sensors and transducers used in mechatronics systems, selection of sensors, inputting data by switches.",
+            "Signal conditioning: Signal conditioning processes, operational amplifier, protection, filtering, Wheatstone bridge, digital signals, multiplexers, data acquisition, digital signal processing, pulse modulation.",
+            "Data Presentation systems: Displays, data presentation elements, magnetic recording data acquisition systems, pneumatic and hydraulic systems, Rotary actuators, mechanical systems, mechanical aspects of motor selection, electrical systems, mechanical switches, solid-state switches, solenoids, DC & AC motors, stepper motors,",
+            "Control System: Basic system models, mathematical models, block diagrams, modeling dynamic systems, first-order and second-order systems, performance measures for second-order systems, system identification, the transfer function, systems with feedback loops, effect of pole location on transient response, MATLAB and SIMULINK. Sinusoidal input, phasors, frequency response, bode plots, stability.",
+            "Closed-loop controllers: Continuous and discrete processes, control modes, two-step mode, proportional mode, derivative, integral and PID control, digital controllers, control system performance, controller tuning, velocity and adaptive control.",
+            "Microprocessors: Applications & Programming of microprocessors and microcontrollers.",
+            "Input/output systems: Interfacing, input/output addressing, interface requirements peripheral interface adapters, serial communications interface.",
+            "Programmable logic controllers: Basic structure, input/output processing, Programming, mnemonics, timers, internal relays and counters, shift registers, master and jump controls, data handing, analogue input/output, selection of a PLC.",
+            "Communication systems: Digital communications, centralized, hierarchical and distributed control, networks, protocols, open systems interconnection communication model, communication interface.",
+            "Fault finding: Fault-detection techniques, watchdog timer, parity and error coding cheeks, common hardware faults, microprocessor systems, emulation and simulation.",
+            "Mechatronics Systems: Traditional and mechatronics designs, possible mechatronics design solutions, case studies of mechatronic systems."
+          ],
+          "sessionalNote": null,
+          "references": [
+            "Mechatronics; Electrical Control Systems in Mechanical and Electrical Engineering by William Bolton.",
+            "Introduction to mechatronics and measurement systems by David Alciatore",
+            "Mechatronics: Fundamentals and Applications by Clarence W. De Silva"
+          ]
+        },
+        "IPE 4039": {
+          "title": "Human Resource Management",
+          "credit": 3.00,
+          "contactHour": null,
+          "topics": [
+            "Overview and Introduction; The Strategic Process; SHRM; HR Roles in a Competitive Environment; HR Planning; EEO; Strategic and Administrative Effectiveness; Recruiting; Championship and Change; Selection; HR Development; The Future of HR; Productivity & TQM; Performance Appraisal; Compensation; Performance-Based Pay; Labor; Organizational Exit; Multinational & Integration of SHRM."
+          ],
+          "sessionalNote": null,
+          "references": [
+            "Human Resource Management by Garry Dessler and Biju Varkkey",
+            "Strategic Human Resource Management Perspective, Implementations and Challenges by Max Lucas and Jil Grant."
+          ]
+        },
+        "IPE 4049": {
+          "title": "Organizational Behavior",
+          "credit": 3.00,
+          "contactHour": null,
+          "topics": [
+            "Introduction: Overview of organizational behavior; Models-to wads explaining and predicting behavior.",
+            "The individual: Values and attitudes; Personality; Perception; Motivation; Learning; The group; Foundations of group behavior; Role analysis; Group Dynamics; Communication; Leadership; Power; Conflict.",
+            "The organizational system: Organization structure; job design; Performance evaluation and rewards; Organizational culture; Organizational development; Organizational dynamics; Organizational policies-an integration concept."
+          ],
+          "sessionalNote": null,
+          "references": [
+            "Organizational Behavior by Stephen P. Robbins and Neharika Vohra.",
+            "Organizational Behavior by Uhl Bien and Piccolo"
+          ]
+        },
+        "IPE 4059": {
+          "title": "Project Management",
+          "credit": 3.00,
+          "contactHour": null,
+          "topics": [
+            "Introduction to Project Management; Initiating; Project Life Cycle; Planning; Scope of Planning; Cost Estimating; Time Estimating; Scheduling; Project Management Plan; Quality Planning; Communication Planning; Risk Management; Executing; Performance Measurement; Tracking and Reporting; Earned Value; Tools and Resources; Controlling; Scope, Quality, Time, and Cost Control; Impact Management; Procurement; Project Recovery; Deliverable Review and Acceptance; PM Soft Skills; HR Planning; Documentation; Process Improvement: CMM, ISO 9000."
+          ],
+          "sessionalNote": null,
+          "references": [
+            "Project management: A managerial approach by Jack R. Meredith and Samuel J. Mantel",
+            "Project Management Absolute Beginner's Guide by Greg Horine"
+          ]
+        },
+        "IPE 4069": {
+          "title": "Managing Innovations & Technology",
+          "credit": 3.00,
+          "contactHour": null,
+          "topics": [
+            "Creativity, blocks to creativity, improving creativity; Management of creativity; Traits of creative individuals; Group creativity; Organizational climate on creativity; Techniques and exercises in creative problem solving; Types of technological change, their interrelationships; Opportunities of threats to technological change; Prediction, Projection and programming of technological change; Methods of technological forecasting; National technology planning; Technology assessments, selection and evaluation, corporate technology planning and corporate strategy."
+          ],
+          "sessionalNote": null,
+          "references": [
+            "Managing Innovation and Entrepreneurship in Technology Based Firms by Micheal J.C Martin",
+            "The Strategy of Managing Innovation and Technology by Murray R. Millson and David Wilemon."
+          ]
+        }
+      },
+      "optionalCourses": [],
+      "termNotes": []
+    }
+  },
+  "extras": {
+    "administrative_noise": [
+      "=== পেজ 6 — Course-Curriculum-IEM.pdf — পেজ 6 ===",
+      "Scanned with CS CamScanner",
+      "=== পেজ 7 — Course-Curriculum-IEM.pdf — পেজ 7 ===",
+      "=== পেজ 8 — Course-Curriculum-IEM.pdf — পেজ 8 ===",
+      "=== পেজ 9 — Course-Curriculum-IEM.pdf — পেজ 9 ===",
+      "=== পেজ 10 — Course-Curriculum-IEM.pdf — পেজ 10 ===",
+      "=== পেজ 11 — Course-Curriculum-IEM.pdf — পেজ 11 ===",
+      "=== পেজ 12 — Course-Curriculum-IEM.pdf — পেজ 12 ===",
+      "=== পেজ 13 — Course-Curriculum-IEM.pdf — পেজ 13 ===",
+      "=== পেজ 14 — Course-Curriculum-IEM.pdf — পেজ 14 ===",
+      "=== পেজ 15 — Course-Curriculum-IEM.pdf — পেজ 15 ===",
+      "=== পেজ 16 — Course-Curriculum-IEM.pdf — পেজ 16 ===",
+      "=== পেজ 17 — Course-Curriculum-IEM.pdf — পেজ 17 ===",
+      "=== পেজ 18 — Course-Curriculum-IEM.pdf — পেজ 18 ===",
+      "=== পেজ 19 — Course-Curriculum-IEM.pdf — পেজ 19 ===",
+      "=== পেজ 20 — Course-Curriculum-IEM.pdf — পেজ 20 ===",
+      "=== পেজ 21 — Course-Curriculum-IEM.pdf — পেজ 21 ===",
+      "=== পেজ 22 — Course-Curriculum-IEM.pdf — পেজ 22 ===",
+      "=== পেজ 23 — Course-Curriculum-IEM.pdf — পেজ 23 ===",
+      "=== পেজ 24 — Course-Curriculum-IEM.pdf — পেজ 24 ===",
+      "=== পেজ 25 — Course-Curriculum-IEM.pdf — পেজ 25 ===",
+      "=== পেজ 26 — Course-Curriculum-IEM.pdf — পেজ 26 ===",
+      "=== পেজ 27 — Course-Curriculum-IEM.pdf — পেজ 27 ===",
+      "=== পেজ 28 — Course-Curriculum-IEM.pdf — পেজ 28 ===",
+      "=== পেজ 29 — Course-Curriculum-IEM.pdf — পেজ 29 ===",
+      "=== পেজ 30 — Course-Curriculum-IEM.pdf — পেজ 30 ===",
+      "=== পেজ 31 — Course-Curriculum-IEM.pdf — পেজ 31 ===",
+      "=== পেজ 32 — Course-Curriculum-IEM.pdf — পেজ 32 ===",
+      "=== পেজ 33 — Course-Curriculum-IEM.pdf — পেজ 33 ===",
+      "=== পেজ 34 — Course-Curriculum-IEM.pdf — পেজ 34 ===",
+      "=== পেজ 35 — Course-Curriculum-IEM.pdf — পেজ 35 ===",
+      "=== পেজ 36 — Course-Curriculum-IEM.pdf — পেজ 36 ===",
+      "=== পেজ 37 — Course-Curriculum-IEM.pdf — পেজ 37 ===",
+      "Detailed Outline of Undergraduate Courses",
+      "(Effective from first year first term session-2011-12)",
+      "(Approved by 39th meeting of Academic Council on 13/11/12 and 15/11/12)",
+      "total",
+      "20",
+      "45",
+      "46",
+      "47",
+      "48",
+      "49",
+      "50",
+      "51",
+      "52",
+      "53",
+      "54",
+      "55",
+      "56",
+      "57",
+      "58",
+      "59",
+      "60",
+      "61",
+      "62",
+      "63",
+      "64",
+      "65",
+      "66",
+      "67",
+      "68",
+      "69",
+      "70",
+      "71",
+      "72",
+      "73",
+      "74",
+      "75",
+      "76",
+      "77",
+      "78",
+      "Fepoy)]+",
+      "ماری to make In",
+      "Jaiful sir's part o",
+      "lan",
+      "Bienen We",
+      "pronol",
+      "04",
+      "HROY",
+      "Fe (P",
+      "colourlou Sompornd",
+      "Stress Young modules and Modudw",
+      "Na idity",
+      "tortional",
+      "Previous",
+      "The day",
+      "Puns des",
+      "7",
+      "under",
+      "And",
+      "Monday",
+      "6. Tu dey",
+      "Thes day.",
+      "fived nes dame",
+      "lstenray"
+    ],
+    "ambiguities": [
+      {
+        "raw": "IPE 1209 Computer Fundamentals and Programming Languages missing credit line",
+        "reason": "No (Credit: ...) line found in OCR for this course. Credit unknown.",
+        "possibleTargets": [
+          "IPE 1209"
+        ]
+      },
+      {
+        "raw": "CSE 2112 Data Structures and Algorithms Sessional (Credit: 1.5) Sessional based on course no. ME 2111.",
+        "reason": "In Y1T2, this sessional references ME 2111 which is a second-year course; likely a misprint. The same course code appears in Y2T1 correctly referencing CSE 2111.",
+        "possibleTargets": [
+          "Y1T2 course list"
+        ]
+      },
+      {
+        "raw": "IPE 4228 CAM and Robotics Sessional references IPE 4227, which is not listed",
+        "reason": "Course IPE 4227 not found in the provided syllabus text.",
+        "possibleTargets": [
+          "IPE 4227"
+        ]
+      },
+      {
+        "raw": "Y4T2 term not explicitly stated; optional courses and IPE 4228 placed under Y4T2",
+        "reason": "No explicit term header for Fourth Year Second Term. Assigned based on course codes and sequence.",
+        "possibleTargets": [
+          "Y4T2"
+        ]
+      },
+      {
+        "raw": "PHY 1111 title line contains 'perdi' and prefix 'Stress Young modules and Modudw Na idity tortional'",
+        "reason": "OCR noise in title line; extracted title as 'Modern and Solid State Physics'.",
+        "possibleTargets": [
+          "PHY 1111"
+        ]
+      }
+    ]
+  },
+  "qa": {
+    "termCount": 8,
+    "courseCount": 65,
+    "topicCount": 275,
+    "noiseCount": 57,
+    "ambiguityCount": 5
+  }
