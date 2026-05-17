@@ -1,0 +1,25 @@
+export const ME_OPTIONAL_COURSES = [
+  { code: 'ME 4011', title: 'Advanced Thermodynamics', credit: 3 },
+  { code: 'ME 4013', title: 'Advanced Fluid Mechanics', credit: 3 },
+  { code: 'ME 4015', title: 'Automobile Engineering', credit: 3 },
+  { code: 'ME 4017', title: 'Refrigeration & Air Conditioning', credit: 3 },
+  { code: 'ME 4019', title: 'Aerodynamics', credit: 3 },
+  { code: 'ME 4021', title: 'Flight Dynamics', credit: 3 },
+  { code: 'ME 4023', title: 'Fluid Power Transmission and Control', credit: 3 },
+  { code: 'ME 4025', title: 'Finite Element Method', credit: 3 },
+  { code: 'ME 4031', title: 'Fatigue, Creep & Fracture', credit: 3 },
+  { code: 'ME 4035', title: 'Mechatronics', credit: 3 },
+  { code: 'ME 4041', title: 'Renewable Energy Technology', credit: 3 },
+  { code: 'ME 4051', title: 'Operations Research', credit: 3 },
+  { code: 'ME 4053', title: 'Managerial Economics', credit: 3 },
+  { code: 'ME 4055', title: 'Professional Ethics and Moral Thoughts', credit: 3 },
+  { code: 'ME 4057', title: 'Material Handling & Maintenance Engineering', credit: 3 },
+  { code: 'ME 4059', title: 'Engineering Tribology', credit: 3 },
+  { code: 'ME 4071', title: 'Modern Manufacturing Processes', credit: 3 },
+  { code: 'ME 4073', title: 'Industrial Process Technology', credit: 3 },
+  { code: 'ME 4081', title: 'CAD & CAM', credit: 3 },
+  { code: 'ME 4083', title: 'Robotics', credit: 3 },
+  { code: 'ME 4085', title: 'Servo Mechanism & Control Engineering', credit: 3 },
+];
+
+export default ME_OPTIONAL_COURSES;

@@ -1,0 +1,1377 @@
+{
+  "department": "ME",
+  "sourceType": "raw_text",
+  "sourceFile": "514024458-KUET-Mechanical-Syllabus.pdf",
+  "terms": {
+    "Y1T1": {
+      "termKey": "Y1T1",
+      "title": "First Year First Term",
+      "courses": {
+        "Ch 1105": {
+          "title": "Engineering Chemistry",
+          "credit": 3.00,
+          "contactHour": null,
+          "topics": [
+            "Chemistry of Polymer: Polymer and polymerization, co-polymerization, ionic polymerization, living polymer, structure and properties of macromolecules.",
+            "Plastics & Fibers: Fundamental characteristics, classification, raw materials and manufacture of plastics, some typical examples of plastics and their uses. Types of fibers, raw materials, application and manufacturing processes of synthetic fibers.",
+            "Rubber: sources of natural rubber, chemical treatment of latex, raw materials, synthetic reactions and properties of synthetic rubber.",
+            "Fertilizer, Paper, Sugar and Cement: Raw materials and manufacturimg process.",
+            "Colloids: Introduction to Colloids, Classification of Colloidal Systems, Preparation of Colloids. Properties of Colloids, Dialysis, Electrodialysis, Ultrafiltration, Electrophoresis, Electroosmosis Electrical Double Layer and Zeta potential. Micelles, Application of Colloids.",
+            "Chemical Corrosion: Introduction to Chemical corrosion, Direct chemical corrosion, Electrochemical corrosion, Factors affecting chemical corrosion, Galvanic corrosion, Atmospheric corrosion, Open air corrosion, Corrosion in contact to soil, Prevention of corrosion.",
+            "Glass & Ceramic: Raw materials, Classification, Manufacturing processes, properties and applications"
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "Ch 1106": {
+          "title": "Sessional on Ch 1105",
+          "credit": 1.50,
+          "contactHour": null,
+          "topics": [
+            "Volumetric analysis; Acid-base titration, Oxidation-reduction titration, Determination of Fe, Cu and Ca volumetrically.",
+            "Gravimetric analysis: Determination of Sulphate and Iron."
+          ],
+          "sessionalNote": "Sessional on Ch 1105",
+          "references": []
+        },
+        "Hum 1105": {
+          "title": "English",
+          "credit": 3.00,
+          "contactHour": null,
+          "topics": [
+            "Vocabulary and Structure: Better reading skills, better writing skills, better speaking skills, word formation; roots prefixes, suffixes, phrases and idioms: synonyms and antonyms; simple structures, complex and compound structure: Clauses, Identification and analysis of clauses.",
+            "Comprehension and Composition: Paragraph writing technique, formal and informal report writing, commercial correspondence; Memo, Letter; Application writing; Tender writing: Free composition writing; Precis writing:: Term paper and Thesis writing technique."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "Hum 1106": {
+          "title": "Sessional on Hum 1105",
+          "credit": 0.75,
+          "contactHour": null,
+          "topics": [
+            "Sessional based on Hum 1105."
+          ],
+          "sessionalNote": "Sessional on Hum 1105",
+          "references": []
+        },
+        "Math 1105": {
+          "title": "Mathematics I",
+          "credit": 4.00,
+          "contactHour": null,
+          "topics": [
+            "Differential Calculus: Continuity and Differentiation; Differentiation of explicit and implicit functions and parametric equations; Successive differentiation of various types of functions, Leibnitz's theorem. Expansion of Function: Rolles theorem, mean value theorem, Taylor's theorem in finite and infinite forms, Maclaurin's theorem in finite and infinite forms; Lagrange's form of reminder, Cauchy's form of reminder. Partial differentiation, Euler's theorem. Evaluation of indeterminate forms by L'Hospital's rule. Tangent and normal, subtangent and subnormal in cartesian and polar coordinates, pedal equation. Determination of maximum and minimum values of functions, point of inflexion and its properties. Asymptotes. Curvature, radius of curvature, center of curvature and chord of curvature. Curve tracing.",
+            "Integral calculus: Definition of integration's, integration by the method of substitution, integration by parts, standard integrals, integration by the method of successive reduction. Definite integral and its properties and use in summation of series. Walli's formula; Improper integral, beta function and gamma function. Area under a plane curve in Cartesian and polar coordinates, area of the region enclosed by two curves in Cartesian and polar coordinates. Arc length of curves in Cartesian and polar coordinates, parametric and pedal equations, intrinsic equation. Volumes of solid of revolution, volume of hollow solids of revolution by shell method, area of surface of revolution."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "ME 1105": {
+          "title": "Thermal Engineering",
+          "credit": 3.00,
+          "contactHour": null,
+          "topics": [
+            "Introduction to the fields of mechanical engineering.",
+            "Energy: Sources; world energy situation; energy situation in Bangladesh; prospect of different energy sources in Bangladesh.",
+            "Pure substances: Phase and phase diagram, critical parameters and their significance, triple point, properties of water and steam, construction of p-V, T-S and h-S diagram for water and steam, steam tables, Mollier chart.",
+            "Introduction to Heat engines: Working principle of Petrol, Diesel engine and Gas turbine.",
+            "Introduction to steam generation: Working principle of few common and modern boilers; major boiler mountings and accessories, equivalent evaporation and boiler efficiency.",
+            "Basic concepts of refrigeration and air conditioning: Vapour compression and absorption refrigeration processes, refrigerants and their desirable properties; Human comfort, summer and winter air conditioning systems.",
+            "Combustion and oxidation: Complete and incomplete combustion; Stoichiometric AFR; Heat of reaction; Chemically correct mixture and AFR; chemistry of combustion."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "ME 1106": {
+          "title": "Sessional on ME 1105",
+          "credit": 0.75,
+          "contactHour": null,
+          "topics": [
+            "Experiments based on the theory of ME 1105."
+          ],
+          "sessionalNote": "Sessional on ME 1105",
+          "references": []
+        },
+        "ME 1107": {
+          "title": "Manufacturing Process",
+          "credit": 4.00,
+          "contactHour": null,
+          "topics": [
+            "Introduction to Manufacturing Processes:",
+            "Casting: Methods of Sand Casting; Design of patterns; Properties of molding sand; Sand testing; Core making: Die casting; Centrifugal and Allied castings; Precision investment casting; Continuous casting; Casting defects.",
+            "Welding and Allied Process: Gas welding, Electric Arc welding, Shield Arc welding. Resistance welding, Pressure welding, Thermit welding, Energy ray welding: Welding defects; Soldering; Brazing and Braze welding: Metal spraying: Hard facing.",
+            "Metal Forming Processes: Various hot and cold working processes; Description of related machine and tools.",
+            "Metal Cutting Processes: Mechanism of chip formation; Types of chip; Chip breaker; Cutting forces.",
+            "Economics of Metal Cutting: Cutting fluid; Tool geometry; Cost and life of tool.",
+            "Machine Tools: Lathe machine and its accessories; Turret and others special purpose lathes; Drilling machine and other hole making processes; Shapers and Planers; Milling machine and various milling operations; Manufacturing processes of Screw threads, Gears and related machine.",
+            "Finishing Operations: Grinding, Surface grinding, Centerless grinding; Honing; Lapping; Superfinishing.",
+            "Modern Manufacturing Processes: ECM, EDM, USM, LBM, PAM etc;"
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "ME 1108": {
+          "title": "Sessional on ME 1107",
+          "credit": 0.75,
+          "contactHour": null,
+          "topics": [
+            "Practice of different operations on Lathe machine, Drilling machine, Milling machine, Shaper machine, Grinding machine etc and Experiments based on the theory of ME 1107."
+          ],
+          "sessionalNote": "Sessional on ME 1107",
+          "references": []
+        },
+        "MES 1102": {
+          "title": "Pattern Making, Casting and Welding Shop Practice",
+          "credit": 0.75,
+          "contactHour": null,
+          "topics": [
+            "Acquaintance with hand and machine tools used in wood working shop. Identification of timbers, Sawing, Planing and Chiseling practices. Pattern making;",
+            "Acquaintance with tools and appliance used in foundry; Molding sand preparation, Metal casting.",
+            "Acquaintance with tools and machines used in welding shop. Arc and gas welding practice."
+          ],
+          "sessionalNote": null,
+          "references": []
+        }
+      },
+      "optionalCourses": [],
+      "termNotes": []
+    },
+    "Y1T2": {
+      "termKey": "Y1T2",
+      "title": "First Year Second Term",
+      "courses": {
+        "Ph 1205": {
+          "title": "Physics II",
+          "credit": 4.00,
+          "contactHour": null,
+          "topics": [
+            "Modern Physics",
+            "Relativity: Special theory of relativity, Reference frames, Michelsion-Moreley experiment, Gelilean transformation, Lorentz transformation, Time dilation, Length contraction, Variation of mass, Mass energy relation, Mass less particles, Velocity transformation.",
+            "Particle Properties of Waves: Photoelectric effect, Quantum theory of light, Compton effect.",
+            "Wave Properties of Particles: De Broglie waves, Phase velocity and Group velocity.",
+            "Atomic Structure: Bhor's atom model, Nature of electron orbits, Orbital energy, origin of spectral lines, different series of spectral lines of Hydrogen, Orbital energy level diagram of Hydrogen atom, Correspondence principle, Vector atom model, Orbital states, space quantization, span quantization, Magnetic moment of orbital electron, Quantization of magnetic moment, Electron shell.",
+            "Laser: History of Laser, generation of coherent radiation; Time coherence, spatial coherence, Gas Laser, Ruby Laser, polarization inversion and stimulated emission, model of ruby Laser, YAG Laser, Raman Laser, Semiconductor Laser, Application of Laser.",
+            "Solid State Physics: Structure of crystals, Classification of solids, Einstein's model of the lattice, specific heat of the solids, Debye's model of the lattice heat capacity. Debye's approximation of high temperature and low temperature; Outstanding properties of metals, Electrical conductivity and Ohm's law, Thermal conductivity, Momentum space, Fermi-Dirac distribution, Quantum theory of Free electron, escape of electron from a metal, Importance of Hall effect, Hall Voltage, and Hall coefficient, Mobility, Hall angle and drift velocity, velocity of electron according to Band theory.",
+            "Nuclear Physics: Introduction to Nuclear Physics: nuclear constituents, nuclear properties, Radioactivity; introduction to radioactivity, Laws of radioactivity disintegration, binding energy, Packing fraction. Nuclear force, fission and fusion process. half-life, Mean life, Laws of successive disintegration, Practical application of radioactivity."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "Ph 1206": {
+          "title": "Sessional on Ph 1205",
+          "credit": 0.75,
+          "contactHour": null,
+          "topics": [
+            "Experiments based on optics, sound and the theory of Ph 1205."
+          ],
+          "sessionalNote": "Sessional on Ph 1205",
+          "references": []
+        },
+        "Hum 1205": {
+          "title": "Economics & Accounting",
+          "credit": 3.00,
+          "contactHour": null,
+          "topics": [
+            "Economics: Definition of Economics; principle of economics.",
+            "Micro Economics: Theory of Demand and supply and their elasticity's; price determination, nature of economic theory, applicability of economic theory to the problems of developing countries; marginal analysis; optimization; market; production, production function, types of productivity; Internal and external economics and diseconomics.",
+            "Macro Economics: Savings, investment, national income analysis; inflation; causes and analysis of project appraisal; NPV, IRR and their application; cost benefit analysis.",
+            "Monetary policy, Fiscal policy and trade policy with reference to Bangladesh; Planning in Bangladesh.",
+            "Accounting: Introduction: images of Accounting. Users of Accounting Information, Generally accepted accounting principle (GAAP), relationship of Accounting with engineering education.",
+            "The recording process: Business transactions, steps in the recording process, accounting equation, account, rules of debit and credit, Journal, Ledger, trial balance and adjusting entries.",
+            "Preparation of financial statement: Single or multiple step income statements, owner's equity statement, classified balance sheet, cash flow statement.",
+            "Cost Accounting: Concept of cost, classification of cost, statement of cost, material cost, labour cost, wages and salaries, operating and service costing."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "Math 1205": {
+          "title": "Mathematics II",
+          "credit": 3.00,
+          "contactHour": null,
+          "topics": [
+            "Coordinate geometry of three dimensions: System of coordinates. Distance between two points, section formula, projections, direction cosines. Planes. Straight lines. Sphere. Standard equations of Cone and central conicoids.",
+            "Differential equations: Origin and formation of differential equations; Order and degree of differential equations. Solution of Ist order Ist degree differential equations by varies methods, applications of Ist order differential equations in geometry and physical problems. Solutions of higher order linear differential equations with constant coefficients by various methods (general method, method of variation of parameters, method of undetermined coefficients and short method). Cauchy-Euler form of differential equations. Application of higher order differential equations."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "EE 1205": {
+          "title": "Electrical Engineering & Electrical Machines",
+          "credit": 4.00,
+          "contactHour": null,
+          "topics": [
+            "Electrical Engineering",
+            "Introduction to Electricity: Introduction to Ohm's law, Kirchoff's current law and Kirchoff's voltage law.",
+            "Alternative Current and AC Quantities: Steady state solution of single-phase circuits, (R, RL, and RLC), RMS and Average values of AC quantities, Phasor Algebra.",
+            "Electrical Machines",
+            "Induction motors: Principles of operation; Torque-speed characteristics; Improving starting torque for cage and wind rotor motors; Speed control and braking of induction motors; single phase induction motors and their uses.",
+            "Synchronous Machines: Principles of operation; Starting and synchronization of synchronous motors; AC motors for industrial applications.",
+            "Servo-motors, Self-Starter and Alternators: Constructional details and working principle; Its applications for Vehicle",
+            "DC Machines: Constructional features and principle of operation; Shunt, series and compound generators and motors; Starting and speed control of motors; Choice of DC motors for industrial applications.",
+            "Transformers: Constructional features and principles of operation; 3-phase connection of transformers."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "EE 1206": {
+          "title": "Sessional on EE 1205",
+          "credit": 0.75,
+          "contactHour": null,
+          "topics": [
+            "Experiments based on the theory of EE 1205."
+          ],
+          "sessionalNote": "Sessional on EE 1205",
+          "references": []
+        },
+        "ME 1209": {
+          "title": "Engineering Mechanics I",
+          "credit": 3.00,
+          "contactHour": null,
+          "topics": [
+            "Introduction: Fundamental concept and principles of mechanics; Resultant of several concurrent forces; Resolution of force into components.",
+            "Equilibrium of Particle; Free body diagram (Conditions of equilibrium in space; components of force in space; resultant of three dimensional force systems; equilibrium in space for concurrent and non-concurrent and parallel force systems); Principle of transmissibility of forces and force couple system; Moment of a couple; equivalent couple; equivalent system of force and force couple systems; reduction of a system of forces.",
+            "Centroids and Center of Gravity of area and volume; Moment of inertia of area and mass; radius of gyration; parallel axes theorem; product of inertia; ellipsoid of inertia; parallel and angular shift of an axis and transfer formula.",
+            "Analysis of structure, trusses and frames:",
+            "Law of Friction: Equilibrium under frictional resistance, sliding friction; wedges and square threaded screw; Journal and thrust friction; rolling and belt frictions.",
+            "Methods of Virtual Works: Application of principle of virtual work; mechanical efficiency; potential energy and equilibrium, stability of equilibrium."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "ME 1210": {
+          "title": "Sessional on ME 1209",
+          "credit": 0.75,
+          "contactHour": null,
+          "topics": [
+            "Experiments based on the theory of ME 1209"
+          ],
+          "sessionalNote": "Sessional on ME 1209",
+          "references": []
+        },
+        "ME 1200": {
+          "title": "Mechanical Engineering Drawing",
+          "credit": "N/A",
+          "contactHour": null,
+          "topics": [
+            "Fundamental principles and applications of Orthogonal projection; Visibility, Angle problem; Oblique projection; Isometric projection; Auxiliary projection, Orthographic and auxiliary projection from pictorial views; pictorial projection from orthographic views, Development of objects.",
+            "Descriptive Geometry: Projection, methods of transferring projection, practical application of descriptive geometry.",
+            "Working drawing of machine elements with sectional views."
+          ],
+          "sessionalNote": null,
+          "references": []
+        }
+      },
+      "optionalCourses": [],
+      "termNotes": []
+    },
+    "Y2T1": {
+      "termKey": "Y2T1",
+      "title": "Second Year First Term",
+      "courses": {
+        "Hum 2105": {
+          "title": "Industrial Environment and Sociology",
+          "credit": 3.00,
+          "contactHour": null,
+          "topics": [
+            "Industrial Environment:",
+            "Population and economic growth, industrialization, urbanization and energy-use; Causes of environmental pollution; Mass and energy balance for environmental engineering systems under steady state and unsteady state conditions;",
+            "Definition and characteristics of industrial and hazardous wastes, their generation rates and prevention; Introduction to I&H waste collection, transportation, treatment, monitoring, disposal and environmental impact.",
+            "Applicable international and national regulations and initiatives;",
+            "Introduction industrial law; Inspectors and certifying Surgeons, Health and hygiene, Safety, Welfare, Working hours of Adults, Employment of young persons, Leave and Holidays with wages, Penalties and Implementation procedure, Payment of wages Act, Shops and Establishment Act. Bangladesh Labour Act, 2006; EPZ Workers Association and Industrial Relations Act, 2004; Bangladesh Environment Conservation Act, 1995 and Rules, 1997; International Labour Organization (ILO);",
+            "Sociology:",
+            "Introduction to Sociology and its impact on engineering, fundamental concept of society, community, association, group, mob, Social history and culture of Bangladesh",
+            "Urbanization and industrialization in Bangladesh and their effects; urban ecology; social problem; population, poverty, beggary, immoral income, crime and juvenile delinquency."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "Math 2105": {
+          "title": "Mathematics III",
+          "credit": 3.00,
+          "contactHour": null,
+          "topics": [
+            "Vector Calculus: Differentiation and integration of vectors together with elementary applications: Gradient of a scalar functions: Divergence and Curl of a vector function; Physical significance of gradient, divergence and curl. Line, surface and volume integrals; Divergence and Curl: Stoke's theorem, Green's theorem, Gauss's theorem and their applications, Curvilinear Co-ordinates.",
+            "Matrices: Different types of matrices. Elementary transformat Inverse of matrices by elementary transformation. Linear de independence of vectors and matrices. Solutions of system of liar using matrix and consistency. Eigen value and Eigen vectors. Rank and dence and equations",
+            "Complex Variables: Complex variable and functions of complex variable. Limit and continuity of a function. Analytic function and its properties. Singularities."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "EE 2105": {
+          "title": "Electronics",
+          "credit": 3.00,
+          "contactHour": null,
+          "topics": [
+            "Introduction to Electronic Devices: Junctions, Semiconductor diodes, Rectifier diodes, schottky barrier diodes, Zener diodes, Tunnel diodes, Varactor diodes, LED, Photo diodes, Solar cells, Bipolar Junction Transistor, Field effect transistor, MOS, Unijunction transistor, SCR, DIAC, TRIAC, Vacuum tube.",
+            "Introduction to Amplifiers: Biasing; Classification of amplifiers; BJT and FET amplifiers; Operational amplifiers; Differential amplifier; Applications of amplifiers.",
+            "Introduction to Logic and Digital Circuits: Logic operations, Basic gates; OR, AND, NOT, NAND, NOR, X-OR; Flip-Flops; Shift registers; Counter; Binary and BCD code, Comparators.",
+            "Industrial Electronics: Regulated power supplies; Ignitions; Resistance welding and Timing circuits.",
+            "Application: Introduction to Instruments; CRO, Transducers; Temperature measurement; Audio Electronics; Integrated Circuits (IC); Microprocessors."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "EE 2106": {
+          "title": "Sessional on EE 2105",
+          "credit": 0.75,
+          "contactHour": null,
+          "topics": [
+            "Experiments based on the theory of EE 2105."
+          ],
+          "sessionalNote": "Sessional on EE 2105",
+          "references": []
+        },
+        "ME 2105": {
+          "title": "Thermodynamics",
+          "credit": 4.00,
+          "contactHour": null,
+          "topics": [
+            "Introduction: Macroscopic and Microscopic points of view; Definition of Thermodynamic terms; Heat, Work and their path dependence.",
+            "Ideal Gas: Definition and suitability as thermodynamic fluid; Equation of state; various thermodynamic processes. Specific heats; Internal energy; Enthalpy.",
+            "Laws of Thermodynamics: Statement and their corollaries, criterion of reversibility and irreversibility, entropy, Gibbs function and Helmohtzs function, Maxwell's relations.",
+            "Air Standard Cycles: Carnot cycle, Otto cycle, Diesel cycles, Dual cycle, Stirling cycle, Erricsion cycle, Joule cycle, Brayton cycle, and their applications; Representation of various cycles on p-V and T-s planes; Cycle efficiency; Air compressors and blowers.",
+            "Vapor Power Cycles: Carnot cycle, Rankine cycle; Reheat cycle, Regenerative cycle; Binary cycle; Introduction to combined cycle.",
+            "Mixture of Gases and Vapors: Mixture of ideal gases, gravimetric and volumetric analysis; Dalton's law of partial pressure, volume and entropy of gaseous mixture; Isentropic process with gaseous mixtures; Specific humidity, relative humidity, dew point, dry and wet bulb temperatures; Adiabatic saturation; Construction of psychometric chart and its uses.",
+            "Fuels and Its Properties: Classification of fuels; Formation of coal and petroleum fuel, grading of coal; Calorific value of fuels and its measurement; Freezing point, Flash point, Boiling point, Viscosity of liquid fuels; Modern development of solid, liquid and gaseous fuels, Nuclear fuels."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "ME 2106": {
+          "title": "Sessional on ME 2105",
+          "credit": 0.75,
+          "contactHour": null,
+          "topics": [
+            "Experiments based on the theory of ME 2105."
+          ],
+          "sessionalNote": "Sessional on ME 2105",
+          "references": []
+        },
+        "ME 2113": {
+          "title": "Fluid Mechanics I",
+          "credit": 3.00,
+          "contactHour": null,
+          "topics": [
+            "Introduction: Fundamental concept and fluid as a continuum; Classification of fluids. Viscosity and its measurement; Stress and strain of fluids; Compressibility and elasticity; Surface tension and capillarity; Vapor pressure.",
+            "Fluid Static: Pressure at a point, pressure gradient; Manometers; Pressure on plane and curved surfaces immersed in fluids; Buoyancy and floatation, metacenter and metacentric height, stability of submerged and floating bodies; Fluid containers subjected to constant acceleration and rotation.",
+            "Fluid Dynamics: Velocity and acceleration of fluid particles, types of fluid flow, relation between system approach and control volume approach; Continuity equation in integral and differential form; Euler's equation, Bernoulli's equation, Energy equation and their applications; Energy grade line and Hydraulic grade line.",
+            "Dimensional Analysis and Similitude: Fundamental and derived units, dimensional homogeneity: Buckingham's -theorem; Application of dimensional analysis in various practical engineering fluid flow problems; Significance of dimensionless numbers related to fluid mechanics and similitude.",
+            "Measurement of Fluid Flow: Measurement of fluid velocity by Pitot tube and Anemometer; Measurement of fluid flow by Venturimeter, rotameter, notches and weirs, flow through orifices and mouth pieces; Time required to emptying a tank due to flow through orifice at the bottom and at the side of the tank, flow between connected vessels."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "ME 2114": {
+          "title": "Sessional on ME 2113",
+          "credit": 3.00,
+          "contactHour": null,
+          "topics": [
+            "Experiments based on the theory of ME 2113."
+          ],
+          "sessionalNote": "Sessional on ME 2113",
+          "references": []
+        },
+        "ME 2100": {
+          "title": "Computer Aided Drawing",
+          "credit": 1.50,
+          "contactHour": null,
+          "topics": [
+            "Working drawing of machine elements using AutoCAD and Solidworks."
+          ],
+          "sessionalNote": null,
+          "references": []
+        }
+      },
+      "optionalCourses": [],
+      "termNotes": []
+    },
+    "Y2T2": {
+      "termKey": "Y2T2",
+      "title": "Second Year Second Term",
+      "courses": {
+        "Math 2205": {
+          "title": "Mathematics IV",
+          "credit": 4.00,
+          "contactHour": null,
+          "topics": [
+            "Fourier series: Existence of Fourier series, Fourier series with different period, Half range series.",
+            "Special functions: Bessel's functions and Legendre polynomials. Orthogonality, generating function and recurrence relations of them.",
+            "Partial Differential Equations (PDE): Formation and Classification of PDEs. Solution of one dimensional heat and wave equations. Solution of Laplace's equation in 2-dimensional Cartesian and polar coordinates with their application in heat distribution. Solution of Laplace's equation in spherical and cylindrical polar coordinates.",
+            "Laplace Transforms: Definition and existence condition of Laplace transform. Properties of Laplace transform. Transform of elementary functions. Inverse Laplace transform and its properties. Convolution. Solution of ordinary and partial differential equations using Laplace transform.",
+            "Definition of Laplace transforms; Elementary transformation and its properties; Convolution; Solution of differential equations by Laplace transforms."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "ME 2209": {
+          "title": "Engineering Mechanics II",
+          "credit": 3.00,
+          "contactHour": null,
+          "topics": [
+            "Kinematics of particles: Rectilinear and curvilinear motion of particles; Determination of the motion of a particle, motion of several particles, rectangular components of velocity and acceleration; Motion relative to frame in translation; tangential, normal, radial and transverse components.",
+            "Kinematics of rigid bodies: Translation; Rotation about a fixed axis; General plane motion, motion about a fixed point and general motion; Absolute velocity and acceleration, relative velocity and acceleration; Coriolis acceleration.",
+            "Kinetics of particles: Newton's second law of motion, linear and angular momentum, radial and transverse components of motion, motion under a central force, two body problem, satellite motion, equation of orbit, conditions of orbiting and escape, cycle time, changing of orbit.",
+            "Work and energy: Principle of work and energy and its efficiency: Potential energy, conservative forces; Conser application to space mechanics; Principle of impulse and oblique central impact.",
+            "Kinetics of rigid bodies: Plane motion of rigid bodies; Equation of motion, angular momentum and D'alembert principle, constrained plane motion; Work of forces acting on a rigid body, Kinetic energy of rigid body in plane motion; Principle of work and energy for the plane motion of rigid body, principle of impulse and momentum for the plane motion of a rigid body; Concentric impact.",
+            "Kinetics of rigid bodies in three dimension: Introduction; Angular momentum; Kinetic energy and motion of a rigid body in three dimension; Euler's equations of motion and their application in general motion; Eulerian angles and motion about a point fixed in space; Steady precision of gyroscope, motion of an axisymmetrical body under no force; Gyroscopic couple, effect of the gyroscopic couple on an aeroplane, a naval ship during streeing, pitching and rolling; Gyroscopic stabilization."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "ME 2210": {
+          "title": "Sessional on ME 2109",
+          "credit": 0.75,
+          "contactHour": null,
+          "topics": [
+            "Experiments Based on the theory of ME 2109."
+          ],
+          "sessionalNote": "Sessional on ME 2109",
+          "references": []
+        },
+        "ME 2211": {
+          "title": "Mechanics of Solid",
+          "credit": 4.00,
+          "contactHour": null,
+          "topics": [
+            "Stress and Strain: Introduction; Analysis of internal forces; Tensile, compressive, bearing and shearing stresses; Stresses in thin-walled pressure cylinder; Stress-strain diagram; Axial, biaxial and triaxial deformations; Statically indeterminate members; Thermal stresses.",
+            "Statically Determinate Beams: Introduction; Different types of loading and supports; Shear force and bending moment diagrams; Stresses in beams, flexure formula, economic sections, shearing stresses in beams, general shear formula; variation of shearing stresses in beams; Deflection of beams, double integration. area-moment and superposition methods; Reinforced beams, design of reinforced concrete beams.",
+            "Statically Indeterminate Beams: Introduction: Propped and restrained beams; Design of restrained beams; Continuous beams: Derivation of the three-moment equation and its applications; Determination of support reactions of con beams;",
+            "Torsion: Introduction; Torsion formula; Angle of twist: Shaft couplings and helical springs; Analysis and design of circular shaft.",
+            "Combined Stresses: Introduction; Combined axial and bending stresses; Kern of section; Stress at a point; Analytical method for the determination of stresses on oblique sections: Mohr's circle and its application to combined loadings: Transformation of strain components; Strain rosette;",
+            "Columns: Introduction; Critical load, slenderness ratio and classification of columns; Euler's formula, empirical formulas and secant formula.",
+            "Riveted and Welded Connections: Introduction; Stresses in riveted joints; Eccentrically loaded riveted and welded connections."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "ME 2212": {
+          "title": "Sessional on ME 2211",
+          "credit": 0.75,
+          "contactHour": null,
+          "topics": [
+            "Experiments based on the theory of ME 2211."
+          ],
+          "sessionalNote": "Sessional on ME 2211",
+          "references": []
+        },
+        "ME 2213": {
+          "title": "Fluid Mechanics II",
+          "credit": 3.00,
+          "contactHour": null,
+          "topics": [
+            "Impact of jets: Concept of momentum principle and derivation of momentum equations, Impact of jet on fixed and translating plane and curved vanes, Application of momentum equation to duct flow with and without change in direction, momentum and energy correction factor for laminar flow through pipes.",
+            "Viscous flow: Viscous flow in pipes, laws of fluid friction; Darcy -Weisbech equation: Pressure gradient and shear stress in laminar flow, Hagen-Poisuille law, laminar flow through inclined pipes, annulus pipes and parallel plates; Moody chart for friction and its application.",
+            "Flow over submerged body: Internal flow and external flow, Introduction to turbulent flow, Prandtl Law, effect of surface roughfness on internal and external flow over submerged body.",
+            "Boundary layer theory: Concept of boundary layer, boundary layer thickness, boundary layer growth and characteristics of boundary layer; Boundary layer equation and its application: Von-Karman integral m boundary layer over a flat plate and without zero pressure and its control, friction drag, displacement and momentum tin boundary layer, effect of pressure gradient on boundary layer, plate flow. Effect of surface roughness on boundary layer.",
+            "Compressible flow: Steady one dimensional flow, Continuity, momentum and energy equations, Mach cone, stagnation properties, Isentropic flow through nozzles. Adiabatic and Diabetic flow through pipes with friction and withou. friction, Shock waves. Fanno line and Rayleigh line."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "ME 2214": {
+          "title": "Sessional on ME 2213",
+          "credit": 0.75,
+          "contactHour": null,
+          "topics": [
+            "Experiments based on the theory of ME 2213."
+          ],
+          "sessionalNote": "Sessional on ME 2213",
+          "references": []
+        },
+        "ME 2221": {
+          "title": "Computer Programming",
+          "credit": 3.00,
+          "contactHour": null,
+          "topics": [
+            "FORTRAN",
+            "Fundamental of FORTRAN Language; Standard input/output statement and its field width; real and integer variables; built in mathematical functions; arithmetic assignment statement: conditional and unconditional transfer; flow chart, relational expressions, controlling a loop, logical and arithmetic IF statement, GO TO statement; DO loop, necessity of the CONTINUE statement, Nested DO loop, Implied DO loop, Arrays and subscripted variables, DIMENSION statement, Multidimensional arrays, Functions and Subroutines, program development and application; Sorting, Searching, solution of certain equations, String variables and constants; Logical constants and logical variables.",
+            "Special topics: IMPLICIT statement, double precision, COMMON statement, OPEN statement, CLOSE statement, REWIND Statement, BLOCK DATA statement, EQUIVALENCE statement.",
+            "Or, C",
+            "Introduction: Introductory outputs using C.",
+            "Data Types and Operator: Declaring variables of different data types and doing different types of operations on them, facing problems when internal result of calculation crosses the boundary of a data type.",
+            "Data Input/Output: Variation and formats of getting input and giving output",
+            "Debugging: Program debugging and testing.",
+            "Control Statements: Implementation of all types of control statement structures such as if, else-if, nested else-if, switch, goto, while, do-while, for, etc.",
+            "Arrays: single and multi dimensional arrays and their applications: matrix manipulation, sorting of data,",
+            "String: finding vowel and consonant from a given string, detecting palindrome, counting words of a string, reversing each words of a sentence, using different functions of string.h library.",
+            "Functions: Doing some previous problems using function, Passing arguments by value and by reference.",
+            "Recursion: Find Greatest Common Divisor, Fibonacci, Factorial, Tower of Hanoi.",
+            "Program Structure: Use static and global variable.",
+            "Pointers: Dynamic memory allocation, arrays of pointers, passing pointers to a function,.",
+            "Structures and Unions: Data processing using structures and union, linked lists.",
+            "File: Opening, closing, creating and processing data files. Introduction to low level programming."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "ME 2222": {
+          "title": "Sessional on ME 2221",
+          "credit": 1.50,
+          "contactHour": null,
+          "topics": [
+            "Programming practice with FORTRAN or C"
+          ],
+          "sessionalNote": "Sessional on ME 2221",
+          "references": []
+        }
+      },
+      "optionalCourses": [],
+      "termNotes": []
+    },
+    "Y3T1": {
+      "termKey": "Y3T1",
+      "title": "Third Year First Term",
+      "courses": {
+        "ME 3100": {
+          "title": "Special Studies",
+          "credit": 0.75,
+          "contactHour": null,
+          "topics": [
+            "Presentation on selected topics."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "ME 3105": {
+          "title": "Heat Transfer I",
+          "credit": 3.00,
+          "contactHour": null,
+          "topics": [
+            "Introduction: Basic modes of heat transfer; Thermal properties of materials.",
+            "Conduction: Law of conduction, Heat conduction equations of one, two and three dimensions; Solution of steady one dimensional heat flow without & with heat generation; Steady two dimensional heat flow with and without heat generation and with simple boundary conditions, Consideration of variable thermal conductivity; Composite walls, fins of uniform cross-sections, critical thickness and insulation; Unsteady heat conduction (Transient & Periodic): Analytical solution; Numerical solution; Relaxation method, emphasis on negligible thermal resistance; cases with practical exercise; Use of Heisler's chart.",
+            "Radiation: Theory of thermal radiation, Electromagnetic spectrum, Plank's law, Wein's displacement law, Steffen-Boltzman equation; Concept of black body and gray body; Spectral dependence of radiation properties; Kirchoff's law; Shape factor; Heat exchange between two radiating surfaces in presence and absence of re-radiating surfaces; Radiation shields; Solution of radiation problems by network method; Solar radiation; Atmospheric emission and absorption; measurement of solar & atmospheric radiation; Equilibrium temperature."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "ME 3106": {
+          "title": "Sessional on ME 3105",
+          "credit": 0.75,
+          "contactHour": null,
+          "topics": [
+            "Experiments Based on the theory of ME 3105."
+          ],
+          "sessionalNote": "Sessional on ME 3105",
+          "references": []
+        },
+        "ME 3109": {
+          "title": "Engineering Mechanics III",
+          "credit": 3.00,
+          "contactHour": null,
+          "topics": [
+            "Mechanics of Machinery: Inertia and kinetic energy of rotation and reciprocating parts; Turning moment diagram, fluctuation of energy and speed; Fly wheel; Balancing of stationary, rotating and reciprocating masses, balancing of in-line engines and v- engines, principle of direct and reverse cranks in balancing problems, Balancing machines; Law of gearing forms of t types of gear, Gear trains and their arrangements; Types of governors control, Cam and follower, various profiles of cams and their motions.",
+            "Vibration: Free, forced and damped vibration of systems having one ce of tion; afts, with freedom; Beat, resonance and transient phenomena in forced Tortional oscillation of shafts, whirling of shafts, transverse vibration simple pendulum treated by energy method; Simple situation of vibrat two degree of freedom having elastic constraints; Tortional oscillation hafts with multi rotors; Self-excited vibration; vibration measurement and measuring instruments, elastic suspension of machinery for isolation of vibration; Vibration absorber."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "ME 3110": {
+          "title": "Sessional on ME 3109",
+          "credit": 0.75,
+          "contactHour": null,
+          "topics": [
+            "Experiments based on the theory of ME 3109."
+          ],
+          "sessionalNote": "Sessional on ME 3109",
+          "references": []
+        },
+        "ME 3117": {
+          "title": "Machine Design I",
+          "credit": 3.00,
+          "contactHour": null,
+          "topics": [
+            "Approach to design; Stress analysis; Tolerances and allowances; Variable loads and stress concentrations; Screw fastening and rivet joints; Design of various types of springs; column design for central and eccentric loads. Combined stresses, shaft design; Design of keys and couplings; Design for combined stresses."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "ME 3118": {
+          "title": "Sessional on ME 3117",
+          "credit": 0.75,
+          "contactHour": null,
+          "topics": [
+            "To solve the design problems based on the theory of ME 3117."
+          ],
+          "sessionalNote": "Sessional on ME 3117",
+          "references": []
+        },
+        "ME 3119": {
+          "title": "Statistics & Quality Control",
+          "credit": 4.00,
+          "contactHour": null,
+          "topics": [
+            "Statistics",
+            "Introduction to data analysis: Basic Concepts about data, Events, Variables, probability, Population and Samples;",
+            "Data presentation formats: Grouped data, ungrouped data, Frequency distribution: relative and cumulative.",
+            "Properties of data: Average, Median, Mode, Standard deviation, Moment, Skewness, Peakedness and Coefficient of variation.",
+            "Probability: Basic concepts, Fundamentals of sets, Venn diagrams and set operations, Axioms of probability, Probability rules, Conditional probability and Independent events, Bayes formula. Statistical distributions and their uses: Introduction to probability density functions and their physical significance, Hypergeometric, Geometric, Binomial, Poisson, Normal, Uniform, Exponential. Yand t- distributions.",
+            "Introduction to statistical inference:- Rationale of hypothesis testing. Types of errors, One sided test, Two sided test, Operation characteristic curves. Statistical inference for goodness of fit.",
+            "Quality Control",
+            "Statistical process control: Introduction: Basic concepts of quality and quality costs.",
+            "Philosophy of statistical Process Control: Chance and assignable causes of quality variation;",
+            "Methods of Statistical Process control: Pareto analysis, cause and effect diagram, Histogram, control charts.",
+            "Statistical basis of the control chart: Basic principles, Choice of control limits; Sample size and sampling frequency; Rational subgroups, Analysis of Patterns on Control Charts;",
+            "Control charts for attributes: The control chart for fraction nonconforming: Development and operation of the control chart; Variable sample size; Non-manufacturing applications; the operating characteristic function and average run length calculations. Control charts for nonconformities (defects): Procedures with constant sample size: Procedures with variable sample size: Demerit systems; the operating characteristic function; Dealing with low-defect levels;",
+            "Control charts for variables: Control charts for, X, R and o; Statistical Basis of the Charts; Development and Use of X and R charts; Charts Based on Standard Values; Interpretation of X and R Charts; The operating-characteristic function; The average run length for the and R charts; The effect of non-normality on X and R charts.",
+            "Process-capability analysis: Process-capability analysis using histogram and control chart;",
+            "Acceptance sampling: for attributes: Types of sampling plares, J Random sampling: Guidelines for using acceptance sampling: plan for attributes, Double-sampling plans; Multiple-sampling pr sampling plans; Military standard: 105D:",
+            "TQM: Concept, QC circle, TQC, Impact on industries, ISO series."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "ME 3121": {
+          "title": "Numerical Computation for Mechanical Engineers",
+          "credit": 3.00,
+          "contactHour": null,
+          "topics": [
+            "Interpolation: Newton's formulae for forward and backward interpolation, Lagrange's interpolation method, Stirling's interpolation method and Bessel's interpolation method.",
+            "Solution of nonlinear algebraic equation: Iterative method, Regula falsi method, Newton-Raphson method; Graphical presentation and significance of the above methods; Initial approximation and convergence criteria, Checking for convergence.",
+            "Solution of linear algebraic equation: Iterative method, Matrix inversion method, Gauss elimination and pivoting method, Triangular factorization method.",
+            "Numerical differentiation: Expansion of a function by Taylor's series; Forward difference formula, Central difference formula and Backward difference formula, their error calculation and application. Graphical method of differentiation; Partial differentiation.",
+            "Numerical Integration: General formula for equidistant ordinates, Trapezoidal rule, Simpson's rule, Weddle's rule and calculation of their error; Graphical integration.",
+            "Solution of differential equations: Introduction to differential equation, geometric interpretation; Euler's method, Taylor series method, Rnuge-Kutta method of different order, Predictor-Corrector methods, their application and error analysis.",
+            "Solution of partial differential equations (PDE): Introduction to differential equation, geometric interpretation: Definition of Elliptic, Parabolic and Hyperbolic PDE and their solution by finite difference technique, D'Alemdert's solution, Crank-Nicholson method, Iterative method. Calculation of residuals and test of accuracy.",
+            "Curve fitting: Linear regression and correlation, Least squares estimators, confidence limits and test of significance.",
+            "Eigen values and Eigen vectors: Introduction and concept of Eigen value and Eigen vector. Solution of homogeneous linear system, estimation of the size of Eigen values."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "ME 3122": {
+          "title": "Sessional on ME 3121",
+          "credit": 0.75,
+          "contactHour": null,
+          "topics": [
+            "Computer applications on the problems based on the theory of ME 3121."
+          ],
+          "sessionalNote": "Sessional on ME 3121",
+          "references": []
+        }
+      },
+      "optionalCourses": [
+        {
+          "courseCode": "Optional-I",
+          "credit": 3.00
+        },
+        {
+          "courseCode": "Optional-II",
+          "credit": 3.00
+        }
+      ],
+      "termNotes": []
+    },
+    "Y3T2": {
+      "termKey": "Y3T2",
+      "title": "Third Year Second Term",
+      "courses": {
+        "ME 3200": {
+          "title": "Mechanical Engineering Project",
+          "credit": 0.75,
+          "contactHour": null,
+          "topics": [
+            "Development of a mechanical element."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "ME 3205": {
+          "title": "Heat Transfer II",
+          "credit": 3.00,
+          "contactHour": null,
+          "topics": [
+            "Convection: Review of hydrodynamic equations for boundary layer theory, Analysis of thermal boundary layer by control volume method: Laminar heat transfer over flat plate; Fully developed flow heat transfer through smooth pipes, Cases of constant heat flux and constant wall temperature boundary conditions; Applications of dimensional analysis to convection; Correlation of heat transfer in turbulent flow; Use of hydraulic diameter. Correlations for Free and forced convection heat transfer over horizontal and vertical plates, cylinders, spheres and inclined pipes; Horizontal and vertical tube bundles in cross flow.",
+            "Heat transfer with change of phase: Condensation. Drop-wise and film-wise condensation, their effect on heat transfer rate; Effect of film turbulence. Nuselt equations, condensation number; Melting and solidification; Boiling: Types of boiling; Processes of bubble growth and bubble dynamics; Pool & film boiling: boiling curve, Boiling with vapour production, critical heat flux; Forced convection boiling in horizontal and vertical tubes; Heat transfer rate in different boiling phenomena.",
+            "Heat Exchanger: Types of heat exchanger; Compact heat exchanger; LMTD and Effectiveness, NTU, Fouling and setting, methods of heat exchanger design.",
+            "Mass Transfer: Introduction. Fick's law of diffusion; Binary diffusion. Mass tranfer coefficient. Evaporation process and heat transfer; Convective mass transfer by analogy."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "ME 3206": {
+          "title": "Sessional on ME 3205",
+          "credit": 0.75,
+          "contactHour": null,
+          "topics": [
+            "Experiments based on the theory of ME 3205."
+          ],
+          "sessionalNote": "Sessional on ME 3205",
+          "references": []
+        },
+        "ME 3215": {
+          "title": "Engineering Metallurgy",
+          "credit": 4.00,
+          "contactHour": null,
+          "topics": [
+            "Metals and Alloys: Industrially significant properties of metals, malleability, ductility, hardness, toughness, fatigue resistance; Destructive and destructive tests applicable to metals. non-",
+            "Crystal Structure of Metals Types of crystal lattice, solidification of metals and alloys, nucleation, grain growth, variables affecting solidification; Equilibrium diagram for binary alloys, interpretation of equilibrium diagram: Structure and properties of metals and alloys related to equilibrium; Iron-Iron carbide equilibrium diagram.",
+            "Heat Treatment: Methods and effects of hardening, annealing, normalizing, quenching, tempering, case hardening processes, precipitation processes, nitriding, edge hardening. TTT diagram, S-curve.",
+            "Production, Properties and Uses: Ferrous materials; pig iron, wrought iron, cast iron; Types of cast iron, their properties and micro structures, effects of impurities on cast iron, Production of steels, their types: Bessemer and open hearth processes; Alloy steels; Stainless steels, carbon steels.",
+            "Production Methods: Properties and uses of copper, aluminum, nickel, tin and lead; Alloys of noble metals; Bearing materials; Spring materials.",
+            "Metallurgical Aspect of Metal Joining: Surface treatments, plating, metal coating, metal spraying.",
+            "Powder Metallurgy: Metal Powders characteristics, welding of powders, sintering, pressing."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "ME 3216": {
+          "title": "Sessional on ME 3215",
+          "credit": 0.75,
+          "contactHour": null,
+          "topics": [
+            "Experiments based on the theory of ME 3215."
+          ],
+          "sessionalNote": "Sessional on ME 3215",
+          "references": []
+        },
+        "ME 3217": {
+          "title": "Machine Design II",
+          "credit": 3.00,
+          "contactHour": null,
+          "topics": [
+            "Design and selection of bearings; Journal and plane surface bearings; Ball and roller bearings. Design of spur, helical, bevel and worm gears. Design of clutches and brakes; Design and selection of flexible power transmission elements; Belts, ropes and chains; Design of welded joints."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "ME 3218": {
+          "title": "Sessional on ME 3217",
+          "credit": 0.75,
+          "contactHour": null,
+          "topics": [
+            "Design, detailed drawing using application software, construction of a n element and presentation at the end of the term."
+          ],
+          "sessionalNote": "Sessional on ME 3217",
+          "references": []
+        },
+        "ME 3223": {
+          "title": "Power Plant Engineering",
+          "credit": 4.00,
+          "contactHour": null,
+          "topics": [
+            "Power Plants: Introduction, power and industry, types of power plants, Electrical energy situation in Bangladesh.",
+            "Types of load and load curves: Effect of variable load on power plant design and operation, methods of meeting up variable load problem, forecasting of loads and electrical energy requirements, choice of generation; Power plant economics; rate and rate structures; Fundamental components of electrical energy transmission system.",
+            "Diesel power plants: Fields of use, layout, working principle of Diesel engine, fuel handling, Diesel engine accessories, Performance of diesel engines, Heat balance.",
+            "Steam power plants: Fields of use, layout, Steam generators, fuels and fuel handling, combustion equipment, conditioning of feed water and processed water.",
+            "Gas turbine power plants: Fields of use, layout, working principles; Regenerator, inter-cooling, and reheating: application of combined cycle and its performance.",
+            "Hydro-electric power plants: Water power, principle of utilization, hydrograph, mass curve: Types of reservoirs, site selection and sizing of hydraulic equipment, governing system.",
+            "Nuclear power plants: Fields of use, layout, types. Principles of nuclear energy generation. Nuclear fuels. Nuclear reactor systems and their working principles, safety analysis and waste disposal.",
+            "Power plant accessories: Cooling tower and spray ponds, Chimney design and foundation design.",
+            "Safety and Precautions: Starting, Operation and Stopping."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "ME 3225": {
+          "title": "Measurement and Industrial Instrumentation",
+          "credit": 3.00,
+          "contactHour": null,
+          "topics": [
+            "Resolution, sensitivity, errors and significant digits. Statistic analysis and data improvement. Calibration. Review of bas electricity. Jata in Principles and applications of measuring instruments and sensors in mechanical engineering such as measurements of distance, linear and angular velocity. acceleration and vibration; measurements of temperature, humidity, energy and heat transfer; measurements of force, torque, stress and strain; measurement of viscosity, flow velocity, flow rate and pressure; etc. High temperature measurement and control."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "ME 3226": {
+          "title": "Sessional on ME 3225",
+          "credit": 0.75,
+          "contactHour": null,
+          "topics": [
+            "Experiments based on data acquisition, data analysis, PLC and sensors."
+          ],
+          "sessionalNote": "Sessional on ME 3225",
+          "references": []
+        }
+      },
+      "optionalCourses": [],
+      "termNotes": []
+    },
+    "Y4T1": {
+      "termKey": "Y4T1",
+      "title": "Fourth Year First Term",
+      "courses": {
+        "ME 4000": {
+          "title": "Project & Thesis I",
+          "credit": 1.50,
+          "contactHour": null,
+          "topics": [
+            "Theoretical and experimental investigation of various topics in Mechar al Engineering. The topic should provide an opportunity for the student to dev initiative, creative ability and engineering judgment. Individual or group st (preferable not more than two in a group) will be required. y At the end of semester the student is expected to complete the prelimin y literature survey and select the topic for study- each student/group is expected to take part in the presentation of a least one seminar in the semester. The seminar/seminars will be conducted on their respective Thesis/Project topic."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "ME 4105": {
+          "title": "Applied Thermodynamics",
+          "credit": 4.00,
+          "contactHour": null,
+          "topics": [
+            "Gas turbines: Open and closed cycle gas turbines and their performances; Modifications of simple gas turbines cycle; reheat, regenerative, inter-cooling etc. Jet propulsion and rocket propulsion; propellants and their criteria; Air-Fuel Ratio, Specific Fuel Consumption. Efficiency of propulsive units; Boosting.",
+            "Turbo-machinery: Steam turbines, Impulse and reaction type, convergent and divergent nozzles theory and design of nozzles; Stage efficiency, degree of reaction. Performance of steam turbines. Compounding of turbines, optimum velocity ratio, reheat factor and condition line, loses in steam turbines, steam turbine governing. Steam Condensers.",
+            "Internal combustion engines: Classification of engines, Engine testing, types of tests, measurement of torque, speed, fuel and air consumption etc.; Heat balance; Performance factors, indicator diagram, Indicated power, brake power, mep, specific fuel consumption; thermal, mechanical and volumetric efficiencies; performance curves, factors limiting performance of IC engines; Fuel metering of SI and Cl engines; reaction rate and flame propagation, auto ignition and chemical reaction; knocking and detonation in SI and Cl engines; fuel additives; Combustion chamber design of SI and CI engines; Scavenging and Supercharging;"
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "ME 4106": {
+          "title": "Sessional on ME 4105",
+          "credit": 0.75,
+          "contactHour": null,
+          "topics": [
+            "Experiments based on the theory of ME 4105."
+          ],
+          "sessionalNote": "Sessional on ME 4105",
+          "references": []
+        },
+        "ME 4113": {
+          "title": "Fluid Machinery",
+          "credit": 3.00,
+          "contactHour": null,
+          "topics": [
+            "Reciprocating pump: Definition and classification; work done, slip, effect of acceleration of piston and frictional losses on velocity and pressure during suction and delivery strokes; indicator diagram; air vessels. cavitation and efficiency.",
+            "Centrifugal pump: Definition and classification; advantages and disadvantages of centrifugal pump over reciprocating pump; work done, efficiency, characteristic curves, minimum starting speed, least diameter of impeller, cavitation, priming, limitation of suction lift and specific speed of centrifugal pump.",
+            "Water turbine: Definition and classification. Impulse and Reaction turbines; Eulers turbine equation. Efficiency of Impulse and Reaction turbines, specific speed. Governing of turbines; Selection and model test of turbines. Cavitation of turbines.",
+            "Blower and Compressor: Introduction, classification and applications.",
+            "Ideal fluid flow: Rotational and irrotational flows, Velocity potential and stream function; Free and forced vortex motions; Doublet, Cauchy-Rieman equation; Flow net; Combination of rectilinear flow with source and sink; Circulation and Vorticity, Flow around a cylinder with and without circulation, Magnus effect and aerodynamic lift.",
+            "Open channel flow: Chezy, Gangulle-Kutter, Bazin and Manning's Formulae; Economic cross-section, specific energy and critical depth, Froud number and its significance in open channel flow; Hydraulic jump."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "ME 4114": {
+          "title": "Sessional on ME 4113",
+          "credit": 0.75,
+          "contactHour": null,
+          "topics": [
+            "Experiments based on the theory of ME 4113."
+          ],
+          "sessionalNote": "Sessional on ME 4113",
+          "references": []
+        },
+        "ME 4127": {
+          "title": "Operations Management",
+          "credit": 3.00,
+          "contactHour": null,
+          "topics": [
+            "Overview of operations management: Some basic concepts: Management process, Basic purpose, Objectives, Targets, Production process, Production or Operations System, Types of production or operations systems; The role of operations management; Functions of operations management;",
+            "Economic analysis: Cost classification; Break-even analysis; Adjustments for the time value of money; Methods for evaluating capital investments;",
+            "Process design: Introduction, Types of production processes; Methodology for process design; Graphic aids for process design; Process design and energy considerations; Process design and environmental pollution Recycling.",
+            "Work analysis, design, and measurement: Work analysis; people or machines; A comparative evaluation; Work-content determination; Work-methods design; work measurement; The effect of learning on standard times; learning curves.",
+            "Layout and safety: Dependence of Layout on production flow; Product (or Line) Layout; Process layout, Fixed-Position layout, Group layout; Safety considerations and OSHA; layout design.",
+            "Facility location: Introduction: the location problem; Approach to plant location; The Brown-Gibson approach for site selection.",
+            "Demand forecasting: system and methods; Importance of demand forecasts; The demand forecasting system: Forecasting methods; Subjective (or Predictive) forecasting methods; Causal forecasting methods; Time series forecasting methods; Routine short-term forecasting;",
+            "Inventory systems and models: Specification of an inventory system; Determination of inventory related costs; Inventory model building; Economic-order-quantity (EOQ) model, Economic-production-quantity (EPQ) model; Inventory model allowing shortages, Inventory model allowing price discounts, A single-stage inventory model under conditions of risk.",
+            "Inventory-management systems: Determination of safety-stock size for specified service level; the fixed-order-quantity (Continuous-review); The Fixed-order-interval (Periodic-review) system; the base-stock (Optional Replenishment) System; Material-Requirements Planning (MRP);",
+            "JIT: Concept, JIT flow, implication.",
+            "Operations scheduling: Introduction: Jang system; Flow-shop scheduling; Job-shop scheduling; Project Scheduling with CPM and PERT."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "ME 4122": {
+          "title": "Simulation",
+          "credit": 0.75,
+          "contactHour": null,
+          "topics": [
+            "Solution of Mechanical Engineering Problems Using Standard Simulation Software"
+          ],
+          "sessionalNote": null,
+          "references": []
+        }
+      },
+      "optionalCourses": [],
+      "termNotes": []
+    },
+    "Y4T2": {
+      "termKey": "Y4T2",
+      "title": "Fourth Year Second Term",
+      "courses": {
+        "ME 4000": {
+          "title": "Project & Thesis II",
+          "credit": 3.00,
+          "contactHour": null,
+          "topics": [
+            "Theoretical and experimental investigation of various topics in Mechanical Engineering. The topic should provide an opportunity for the student to develop initiative, creative ability and engineering judgment. Individual or group study (preferable not more than two in a group) will be required. A completed report will have to submitted on the project and thesis an the end of the semester."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "ME 4207": {
+          "title": "Tool Engineering & Machine Tools",
+          "credit": 3.00,
+          "contactHour": null,
+          "topics": [
+            "Tool Engineering",
+            "Work holding devices: Degrees of freedoms, Basic principles of locations; locating methods and devices; Types of locator and their applications; Basic principle of clamping; Clamping devices and forces; Types of clamps.",
+            "Design and detail study of Jigs and fixtures: Types of drill jigs; Lathe, milling, boring, broaching and grinding fixtures.",
+            "Die design: Dies and punches; Introduction to die cutting operations; Cutting operation by punch; Die clearance; Blanking and piercing die design; strip layout; Bending, Forming and drawing dies; Drawing forces and blank size determination.",
+            "Machine Tools",
+            "Introduction to Machine Tools: General purpose and special purpose of machine tools; Recent developments in machine tools; Maintenance of machine tools.",
+            "Study and Operation Procedures: Power requirements, drive and power transmission mechanism of commonly used machine tools: Lathe, Drilling Machines; ray diagram and saw diagram; speed structure diagrams. Numerical Control of Machine Tools: Concept of CAM, CNC and DNC machines.",
+            "Machine Tools Structures: Study of beds, columns, teh and vibration control. stability"
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "ME 4208": {
+          "title": "Sessional on ME 4.",
+          "credit": 0.75,
+          "contactHour": null,
+          "topics": [
+            "Experiment based on the theory of ME 4207."
+          ],
+          "sessionalNote": "Sessional on ME 4.",
+          "references": []
+        },
+        "ME 4229": {
+          "title": "Industrial Management",
+          "credit": 3.00,
+          "contactHour": null,
+          "topics": [
+            "Management and Fundamentals: Brief history of the development of management theories, Management functions, Principles of Management.",
+            "Organization Fundamentals: Organization structure; Types of organization; Span of control.",
+            "Personal Management: Manpower planning, recruitment training; Leadership, style and types; Morale; Types and Importance, Motivation, Theories of Motivation; Job rotation, enlargement and enrichment.",
+            "Wages and Incentives: Job evaluation methods, wage incentive plans, Fringe Benefits.",
+            "Planning and Decision Making: Basic concept of Management information system (MIS) and Decision Support System (DSS), Strategic planning: importance and different steps, decision making process, Classification and procedure of decision making.",
+            "Budgeting: Budget, budget classification, budget revision and re-allocation, budgetary control, Types of expenditure and cost control through budgeting.",
+            "Marketing: Marketing concepts, Modern marketing process. Purchase. Purchasing procedure, purchasing methods, Sales, Industrial and Consumer selling, Distribution channel of goods, Sales promotion technique. Organization for purchasing and selling.",
+            "Research and Development: Research subjects, Developments of a new product or process, Product life cycle."
+          ],
+          "sessionalNote": null,
+          "references": []
+        }
+      },
+      "optionalCourses": [
+        {
+          "courseCode": "Optional-III",
+          "credit": 3.00
+        },
+        {
+          "courseCode": "Optional-IV",
+          "credit": 3.00
+        },
+        {
+          "courseCode": "Optional-V",
+          "credit": 3.00
+        }
+      ],
+      "termNotes": []
+    }
+  },
+  "extras": {
+    "administrative_noise": [
+      "=== Page 6 — 514024458-KUET-Mechanical-Syllabus.pdf — page 6 ===",
+      "44",
+      "Scanned by CamScanner",
+      "=== Page 7 — 514024458-KUET-Mechanical-Syllabus.pdf — page 7 ===",
+      "45",
+      "Scanned by CamScanner",
+      "=== Page 8 — 514024458-KUET-Mechanical-Syllabus.pdf — page 8 ===",
+      "46",
+      "Scanned by CamScanner",
+      "=== Page 9 — 514024458-KUET-Mechanical-Syllabus.pdf — page 9 ===",
+      "47",
+      "Scanned by CamScanner",
+      "=== Page 10 — 514024458-KUET-Mechanical-Syllabus.pdf — page 10 ===",
+      "48",
+      "Scanned by CamScanner",
+      "=== Page 11 — 514024458-KUET-Mechanical-Syllabus.pdf — page 11 ===",
+      "49",
+      "Scanned by CamScanner",
+      "=== Page 12 — 514024458-KUET-Mechanical-Syllabus.pdf — page 12 ===",
+      "Scanned by CamScanner",
+      "=== Page 13 — 514024458-KUET-Mechanical-Syllabus.pdf — page 13 ===",
+      "Scanned by CamScanner",
+      "=== Page 14 — 514024458-KUET-Mechanical-Syllabus.pdf — page 14 ===",
+      "Scanned by CamScanner",
+      "=== Page 15 — 514024458-KUET-Mechanical-Syllabus.pdf — page 15 ===",
+      "Scanned by CamScanner",
+      "=== Page 16 — 514024458-KUET-Mechanical-Syllabus.pdf — page 16 ===",
+      "Scanned by CamScanner",
+      "=== Page 17 — 514024458-KUET-Mechanical-Syllabus.pdf — page 17 ===",
+      "Scanned by CamScanner",
+      "=== Page 18 — 514024458-KUET-Mechanical-Syllabus.pdf — page 18 ===",
+      "Scanned by CamScanner",
+      "=== Page 19 — 514024458-KUET-Mechanical-Syllabus.pdf — page 19 ===",
+      "Scanned by CamScanner",
+      "=== Page 20 — 514024458-KUET-Mechanical-Syllabus.pdf — page 20 ===",
+      "58",
+      "Scanned by CamScanner",
+      "=== Page 21 — 514024458-KUET-Mechanical-Syllabus.pdf — page 21 ===",
+      "Scanned by CamScanner",
+      "=== Page 22 — 514024458-KUET-Mechanical-Syllabus.pdf — page 22 ===",
+      "Scanned by CamScanner",
+      "=== Page 23 — 514024458-KUET-Mechanical-Syllabus.pdf — page 23 ===",
+      "Scanned by CamScanner",
+      "=== Page 24 — 514024458-KUET-Mechanical-Syllabus.pdf — page 24 ===",
+      "Scanned by CamScanner",
+      "=== Page 25 — 514024458-KUET-Mechanical-Syllabus.pdf — page 25 ===",
+      "63",
+      "Scanned by CamScanner",
+      "=== Page 26 — 514024458-KUET-Mechanical-Syllabus.pdf — page 26 ===",
+      "Scanned by CamScanner",
+      "=== Page 27 — 514024458-KUET-Mechanical-Syllabus.pdf — page 27 ===",
+      "Scanned by CamScanner",
+      "=== Page 28 — 514024458-KUET-Mechanical-Syllabus.pdf — page 28 ===",
+      "Scanned by CamScanner",
+      "=== Page 29 — 514024458-KUET-Mechanical-Syllabus.pdf — page 29 ===",
+      "Scanned by CamScanner",
+      "=== Page 30 — 514024458-KUET-Mechanical-Syllabus.pdf — page 30 ===",
+      "Scanned by CamScanner",
+      "=== Page 31 — 514024458-KUET-Mechanical-Syllabus.pdf — page 31 ===",
+      "Scanned by CamScanner",
+      "=== Page 32 — 514024458-KUET-Mechanical-Syllabus.pdf — page 32 ===",
+      "70",
+      "Scanned by CamScanner",
+      "=== Page 33 — 514024458-KUET-Mechanical-Syllabus.pdf — page 33 ===",
+      "Scanned by CamScanner",
+      "=== Page 34 — 514024458-KUET-Mechanical-Syllabus.pdf — page 34 ===",
+      "Scanned by CamScanner",
+      "=== Page 35 — 514024458-KUET-Mechanical-Syllabus.pdf — page 35 ===",
+      "Scanned by CamScanner",
+      "=== Page 36 — 514024458-KUET-Mechanical-Syllabus.pdf — page 36 ===",
+      "Scanned by CamScanner",
+      "=== Page 37 — 514024458-KUET-Mechanical-Syllabus.pdf — page 37 ===",
+      "Scanned by CamScanner",
+      "=== Page 38 — 514024458-KUET-Mechanical-Syllabus.pdf — page 38 ===",
+      "Scanned by CamScanner",
+      "=== Page 39 — 514024458-KUET-Mechanical-Syllabus.pdf — page 39 ===",
+      "77",
+      "Scanned by CamScanner",
+      "=== Page 40 — 514024458-KUET-Mechanical-Syllabus.pdf — page 40 ===",
+      "Scanned by CamScanner",
+      "=== Page 41 — 514024458-KUET-Mechanical-Syllabus.pdf — page 41 ===",
+      "Scanned by CamScanner",
+      "=== Page 42 — 514024458-KUET-Mechanical-Syllabus.pdf — page 42 ===",
+      "Scanned by CamScanner",
+      "=== Page 43 — 514024458-KUET-Mechanical-Syllabus.pdf — page 43 ===",
+      "Scanned by CamScanner",
+      "=== Page 44 — 514024458-KUET-Mechanical-Syllabus.pdf — page 44 ===",
+      "Scanned by CamScanner",
+      "=== Page 45 — 514024458-KUET-Mechanical-Syllabus.pdf — page 45 ===",
+      "Scanned by CamScanner",
+      "=== Page 46 — 514024458-KUET-Mechanical-Syllabus.pdf — page 46 ===",
+      "84",
+      "Scanned by CamScanner",
+      "=== Page 47 — 514024458-KUET-Mechanical-Syllabus.pdf — page 47 ===",
+      "Scanned by CamScanner",
+      "=== Page 48 — 514024458-KUET-Mechanical-Syllabus.pdf — page 48 ===",
+      "Scanned by CamScanner",
+      "=== Page 49 — 514024458-KUET-Mechanical-Syllabus.pdf — page 49 ===",
+      "Scanned by CamScanner",
+      "=== Page 50 — 514024458-KUET-Mechanical-Syllabus.pdf — page 50 ===",
+      "Scanned by CamScanner",
+      "=== Page 51 — 514024458-KUET-Mechanical-Syllabus.pdf — page 51 ===",
+      "Scanned by CamScanner"
+    ],
+    "ambiguities": [
+      {
+        "raw": "ME 1200 Mechanical Engineering Drawing (no credit line)",
+        "reason": "Credit not specified in OCR text",
+        "possibleTargets": ["Missing credit value"]
+      },
+      {
+        "raw": "Elementary transformat Inverse of matrices by elementary transformation. Linear de independence of vectors and matrices. Solutions of system of liar using matrix and consistency. Eigen value and Eigen vectors. Rank and dence and equations",
+        "reason": "Garbled OCR text",
+        "possibleTargets": []
+      },
+      {
+        "raw": "Determination of support reactions of con beams;",
+        "reason": "Truncated line (likely 'continuous beams')",
+        "possibleTargets": []
+      },
+      {
+        "raw": "Law of gearing forms of t types of gear",
+        "reason": "Garbled text",
+        "possibleTargets": []
+      },
+      {
+        "raw": "Free, forced and damped vibration of systems having one ce of tion; afts, with freedom; Beat, resonance and transient phenomena in forced Tortional oscillation of shafts, whirling of shafts, transverse vibration simple pendulum treated by energy method; Simple situation of vibrat two degree of freedom having elastic constraints; Tortional oscillation hafts with multi rotors;",
+        "reason": "Heavily garbled OCR text",
+        "possibleTargets": []
+      },
+      {
+        "raw": "Sessional on ME 2109 (but parent course might be ME 2209)",
+        "reason": "Possible misprint: course code inconsistency",
+        "possibleTargets": ["ME 2209"]
+      },
+      {
+        "raw": "Sessional on ME 4.",
+        "reason": "Incomplete course code reference (likely ME 4207)",
+        "possibleTargets": ["ME 4207"]
+      },
+      {
+        "raw": "Jang system; Flow-shop scheduling",
+        "reason": "Possible misprint (Kanban system?)",
+        "possibleTargets": ["Kanban system"]
+      },
+      {
+        "raw": "Review of bas electricity. Jata in",
+        "reason": "Garbled text",
+        "possibleTargets": []
+      },
+      {
+        "raw": "Acceptance sampling: for attributes: Types of sampling plares, J Random sampling: Guidelines for using acceptance sampling: plan for attributes, Double-sampling plans; Multiple-sampling pr sampling plans; Military standard: 105D:",
+        "reason": "Garbled OCR text",
+        "possibleTargets": []
+      },
+      {
+        "raw": "Boundary layer equation and its application: Von-Karman integral m boundary layer over a flat plate and without zero pressure and its control, friction drag, displacement and momentum tin boundary layer",
+        "reason": "Garbled text",
+        "possibleTargets": []
+      }
+    ],
+    "optional_course_pool": {
+      "ME 4011": {
+        "title": "Advanced Thermodynamics",
+        "credit": 3.00,
+        "contactHour": null,
+        "topics": [
+          "Review of Thermodynamic laws and principles. Availability and energy analysis of thermodynamic system; Interpretation of entropy, General thermodynamic relations. Properties of pure substances at different phases, The clausius clapeyron equation. Equations of state and compressibility charts, Gibb's phase rule, Equilibrium and stability; Joule-kelvin effect and its application; Thermodynamics of magnetism; Magnetocaloric effect.",
+          "Chemical Thermodynamics (reactive system): Combustion reactions; enthalpy and entropy of formation; heat of fraction; adiabatic flame temperature; Irreversibialities in combustion process; Chemical equilibrium of ideal gases.",
+          "Thermodynamics of Irreversible processes and direct energy conversion: Phenomenological laws and onsager reciprocity relation and their applications, Thermoelectric phenomena and its applications to thermoelactic energy conversion: Thermionic converters, Fuel cell and magneto hydrodynamic devices."
+        ]
+      },
+      "ME 4013": {
+        "title": "Advanced Fluid Mechanics",
+        "credit": 3.00,
+        "contactHour": null,
+        "topics": [
+          "Kinematics of a fluid medium, the fundamental hydrodynamics equation for an ideal fluid; The simplest cases of motion of an ideal fluid; vortex motion of an ideal fluid; The plane motion of a body in an ideal fluid; The three dimensional motion of a body in an ideal fluid"
+        ]
+      },
+      "ME 4015": {
+        "title": "Automobile Engineering",
+        "credit": 3.00,
+        "contactHour": null,
+        "topics": [
+          "General Introduction to the automobile; components of the automobile ; Engine types; Details of the engine construction; cylinder block and crank case, cylinder head, piston and piston rings, gaskets, crank shaft, cam shaft, valves and valve operating mechanism, valve position.",
+          "Engine measurement and performance; fuel supply system, supply system, turbocharging, carburetion, Ignition Systems Electronic advance system. Lubricating system; Cooling sys Gasoline engine emission control. Transmission system comm shaft to driving wheel Differential and automatic tran converter: automobile body chassis and suspension system tires, front axle and steering system, brakes and braking sy power brake.",
+          "Storage battery construction, maintenance and chemistry: starter, motor, generator and auxiliary electric equipment, warning and indicating devices.",
+          "Engine testing motor vehicle services; automobile air conditioning, Automobile of the future."
+        ]
+      },
+      "ME 4017": {
+        "title": "Refrigeration and Air-conditioning",
+        "credit": 3.00,
+        "contactHour": null,
+        "topics": [
+          "Refrigeration",
+          "Review of basic concepts and definitions of refrigeration system, application of refrigeration, Vapor compression refrigeration, Analysis of Vapor compression refrigeration cycle, Multi pressure systems of refrigeration, Absorption refrigeration, air cycle refrigeration, steam jet refrigeration, Vortex tube refrigeration,",
+          "Low Temperature Refrigeration: Cascade system, Liquidification of gases, Linde-Hampson and Claude system.",
+          "Refrigerants: Properties and numerical classifications of commonly used refrigerants.",
+          "Description and Operations of Various types of compressors, evaporators, condensers, and expansion devices used in commercial refrigeration systems and its maintenance.",
+          "Air-conditioning",
+          "Study of Fundamental Air-conditioning: Application of air-conditioning system, Ventilation systems, Psychometric processes, Psychometry and comfort data with application to air conditioning problem. Cooling load calculation, requirement for special deign buildings, Modifications of existing buildings.",
+          "Central and Unit system of Air-conditioning: Duct designing, fans and control system, Air filter, Air distribution/Air handling. Air-conditioning systems, Air-conditioning equipment.",
+          "Air handling units, Calculation of dehumidified air quantity."
+        ]
+      },
+      "ME 4019": {
+        "title": "Aerodynamics",
+        "credit": 3.00,
+        "contactHour": null,
+        "topics": [
+          "Flow conservation equations, Review of ideal flow.",
+          "Dynamics of incompressible inviscid flow field: The Kelvin, Stokes and Helmholtz theorems. Elementary flows and their superposition.",
+          "Airfoil and Wing: Airfoil & Wing characteristics, aerodynamic forces and moment and their coefficients.",
+          "Incompressible flows around thin airfoils: Biot and Savart Law, Vortex line, Horse shoe Vortex.",
+          "Incompressible flow around wings: Prandtl's lifting line theory, induced angle, downwash, elliptic and general lift distribution, unswept & swept wings. twisted wing, wing body combinations.",
+          "Compressible subsonic flow: Linearized theory, compressibility corrections, Prandtl-Glauert equation, The area rule.",
+          "Transonic flow: Von Karmann's stall equations, Transonic full potential equation, supercritical airfoils.",
+          "Supersonic airfoil and wing theory: Supersonic airfoil & wings, shock-expansion theory. A brief discussion on hypersonic aerodynamics."
+        ]
+      },
+      "ME 4021": {
+        "title": "Flight Dynamics",
+        "credit": 3.00,
+        "contactHour": null,
+        "topics": [
+          "Introduction: Aviation history, Point-mass dynamics and forces.",
+          "Exploring the flight Envelope: Configuration of Aerodynamics, Crushing Flight performance, Gliding, Climbing, and Turning Performance.",
+          "The dynamics of Aircraft motion: Aircraft equations of motion, Linearized equations and modes of motion, Longitudinal dynamics, Lateral directional dynamics, Analysis of Time Response, Root-locus analysis of parameter variations, transfer functions and Frequency response.",
+          "Stability and Control: Config Aircraft control devices and sy Longitudinal dynamics and L criteria, Problems of high speed Atmosphere Hazards to Flight.",
+          "Power effects on flight stability, testing. Advanced problems of toual dynamics, Flying qualities de, Maneuvering and aeroelasticity.",
+          "Propulsion: Jets & Propellers. Jet propulsion, Turbojet engine, Turbo fan engine, Ramjet engine and Rocket engine."
+        ]
+      },
+      "ME 4023": {
+        "title": "Fluid Power Transmission and control",
+        "credit": 3.00,
+        "contactHour": null,
+        "topics": [
+          "Fluid Power Systems: Components, Advantages and its Industrial Applications. Transmission of Power at Static & Dynamic States. Properties of fluids. Selection of fluids, Additives. Seals, Sealing materials, Selection of seals. Filters and Strainers, Sources of Contamination of fluid & its Control. JIC Symbols/ISO Symbols for Hydraulic & Pneumatic Circuits.",
+          "Pumps: Type and functions of Vane pump, Gear pumps, Radial & Axial plunger pumps. Pump Characteristics Curves, Selection of Pumps for Hydraulic Power Transmission.",
+          "Accumulators & Intensifiers: Types & Functions of Accumulators, Intensifiers, Its Applications, Selection & Design Procedure.",
+          "Actuators: Linear & Rotary Actuators, Hydraulic motors; Types, Vane, Gear piston, Radial piston. Methods of control of Acceleration, Design Consideration for cylinders. Hoses & Pipes; Types, Materials, Pressure drop in Hoses and Pipes. Hydraulic Piping Connections and Branching.",
+          "Control of Fluid Power: Necessity of pressure control and Principle of operation, Pressure compensated and Temperature compensated flow control valves, Different ways and different positions valve, Directional and Flow control valves, Direct Operated, Pilot Operated, Relief valves. Pressure Reducing valve, Sequence valve, Servo valve & and their Functions. Manually operated and Solenoid operated Valve.",
+          "Design of Hydraulic Circuits: Meter in Meter out Circuits, Pressure control for cylinders. Flow Divider Circuits. Circuit illustrating use of Pressure Reducing valves. Sequencing valve. Counter balance valves. Unloading valves with the use of electrical controls. Accumulators. Bleed off Circuits etc.. Hydraulic Motor Braking, Hydrostatic Transmission and Servo system. Analysis of Hydraulic System. Maintenance, Trouble Shooting & Safety Precautions Hydraulic Circuits.",
+          "Pneumatics: Introduction to Pneumatic Power Sources, Reciprocating & Rotar Compressors, Roots-Blower etc. Comparison of Pneumatics with Hydraul Power Transmission. Air Preparation units, Filter, Regulators & Lubricator Actuators, Linear Single & Double Acting Rotary Actuators, Air motors Pressure Regulating valves. Directional control valves two way, three way & four way valves, Solenoid operated, Push button & Lever control valves. Flow control valves. Check valves and its Functions. Mechanical, Pneumatic & Electrical Power Control System. Pneumatic Circuits for Industrial Applications & Automation."
+        ]
+      },
+      "ME 4025": {
+        "title": "Finite Element Method",
+        "credit": 3.00,
+        "contactHour": null,
+        "topics": [
+          "Basic matrix theory, potential energy approach, direct stiffness method, calculus of variations, development of finite element theory, and modeling techniques. Applications in solid mechanics, heat transfer, fluids, and electromagnetic modeling techniques. devices, via both commercially available codes and student-written codes."
+        ]
+      },
+      "ME 4031": {
+        "title": "Fatigue, Creep and Fracture",
+        "credit": 3.00,
+        "contactHour": null,
+        "topics": [
+          "Fatigue: Fatigue failures, Types of fatigue loading, Simple stress fatigue properties with fixed and varying amplitude, combined stress fatigue properties, Notch sensitivity, Factors influencing fatigue strength, Utilization of fatigue properties in design.",
+          "Creep: creep-stress-time-temperature relations for simple tension and combined stresses, Recovery creep and relaxation, Testing technique, Creep in tension, bending, torsion and bulking.",
+          "Fracture: Basic modes of fracture, Theories of linear elastic fracture mechanics, Grifith theory of brittle fracture, Irwins theory of fracture in plastic materials, Stress intensity factors, Fracture toughness testing, Interpretation of test data."
+        ]
+      },
+      "ME 4035": {
+        "title": "Mechatronics",
+        "credit": 3.00,
+        "contactHour": null,
+        "topics": [
+          "Overview: Introduction, Importance and Application, Mecl Approach, 1 Interfacing, Microprocessor-Based Controllers and Microelectrom Instrumentation and Control Systems, An Introduction Micro- and Nanotechnology, New Directions in Nano, Micro-, and Mini-Scale Electromechanical Systems design.",
+          "Modeling and Simulation: Modeling of Electromechanical Systems, Structures and Materials. Modeling of Mechanical Systems for Mechatronics Applications, Modeling and Simulation for MEMS.",
+          "Rotational and Translational Micro electromechanical Systems: MEMS Synthesis, Micro fabrication, Analysis, and Optimization."
+        ]
+      },
+      "ME 4041": {
+        "title": "Renewable Energy Technology",
+        "credit": 3.00,
+        "contactHour": null,
+        "topics": [
+          "Sources of Energy: Energy cycle, Non renewable energy sources, Coal, oil, natural gas, nuclear fuel, oil shale and tar sands. Renewable energy sources, Solar, biomass, wind hydropower, geothermal, waves, ocean thermal and tidal.",
+          "Energy Conversion Techniques: Solar thermal conversion, semiconductor devices, Bio-chemical and Thermo-chemical conversion of biomass, wind energy conversion, hydropower, ocean thermal energy conversion.",
+          "Energy extraction : geothermal, waves, tides, nuclear fission and fusion.",
+          "Energy Converting Devices and Storage: Thermoelectric, Thermoionc converters, Fuel cells, Magnetohydrodynamics, Storage of solar energy, Demand of energy storage in stationary and transport applications.",
+          "Economic and environmental aspects of energy sources."
+        ]
+      },
+      "ME 4051": {
+        "title": "Operations Research",
+        "credit": 3.00,
+        "contactHour": null,
+        "topics": [
+          "Introduction: Origin and development of OR; Art of modeling: Assumptions, scope and limitations of OR models.",
+          "Lihear Programming: Formulations (maximization and minimization) and graphical solution.",
+          "The Simplex Method: development of the simplex method, primal plex ton; on, s of arce method, dual simplex method, special cases in simplex method apr degeneracy, alternative optima, unbounded solution, infeasible interpreting the simplex tableau: sensitivity analysis; optimum solution, resources, dual price (unit worth of a resource), maximum change in availability, maximum change in marginal profit/ cost.",
+          "Duality: definition of the dual problem, solution of the dual problem, relationship between primal and dual, objective values, optimal dual solution, economic interpretation of the dual problem, revised simplex method.",
+          "Transportation Model: Definition and applications of the transportation model, cases of balanced and unbalanced supply demand conditions; solution of the transportation problem; north west corner rule, vam, russels-approximation method; finding optimal solutions, the transshipment model.",
+          "The Assignment Model: Application areas; Hungarian method,",
+          "Integer Linear Programming: Illustrative applications of integer programming, cutting plane method, Branch-and-Bound algorithm.",
+          "Dynamic (Multistage) Programming: Elements of the DP Model; state, stage and decision variables; Forward and backward recursive equations, Examples of DP models and computations.",
+          "Decision Theory and Games: Decisions under risk, Decision trees, decisions under uncertainty, game theory; optimal solution of two-person zero-sum games, mixed strategies, graphical solution of (m x 2) and (2 x m) games.",
+          "Queuing Models: Basic elements of the queuing model, role of the Poisson and exponential distributions, pure birth and pure death processes, pure birth model, pure death model, queues with combined arrivals and departures, generalized Poisson model, steady-state measures of Performance, Specialized Poisson Queues; M/M/1(), M/M/1(k), M/M/c(x), M/M/c(k), Queues with bulk arrivals, limitations of exact solution, approximate solution technique of queues.",
+          "Simulation: Introduction, methodology, random, simulation of Queuing models: Introduction to non-linear Programming."
+        ]
+      },
+      "ME 4053": {
+        "title": "Managerial Economics",
+        "credit": 3.00,
+        "contactHour": null,
+        "topics": [
+          "Business: Single proprietorship, partnership, joint stock company, corporat private and public sectors business-collisions and combination, pools, citt share bond, loan, working capital, share market mortgage, bank rup liquidation.",
+          "Capital Investment: Streams of cash flow, interest, discounted cash flow, present value, uniform annual worth, rate of return, capital budgeting techniques, depreciation methods, appreciation, amortization, economic life, pay back, break even analysis.",
+          "Budgeting: Types of expenditure, controllable and non controllable expenditure, budget appropriations. flexible budget, budget revision and reallocation, zero based budget, cost control through budgeting.",
+          "Forecasting: purposes and factors of forecasting, methods of forecasting, regression analysis moving average and smoothing techniques.",
+          "Public Sector Economics: Cost benefit analysis, Cost effectiveness analysis, Direct and Indirect costs and benefits of public projects, Intangibles",
+          "Purchasing and Selling: Purchasing procedures, contracts and subcontracts, purchasing problems, marketing concepts, industrial and consumer selling, distribution channels of goods, marketing problems, sales promotion techniques, advertising, organization for purchasing and selling, sales department."
+        ]
+      },
+      "ME 4055": {
+        "title": "Professional Ethics and Moral Thoughts",
+        "credit": 3.00,
+        "contactHour": null,
+        "topics": [
+          "Introductions, egoism and relativism, relativism and subjectivism, Utilitarianism, rationalist Ethics, the Ethics of character and virtue.",
+          "Cultural relativism and cultural sensitivity, ethics and religion, professional ethics codes.",
+          "Definition of morality and moral thoughts, responsibility, interpersonal moral sentiments (anger, blame, and praise), respect for persons, intrapersonal moral sentiments (shame and guilt), reason, emotion, and intuition in moral judgment, morality and religion, confidentiality, privacy and harassment."
+        ]
+      },
+      "ME 4057": {
+        "title": "Materials Handling & Maintenance Engineering",
+        "credit": 3.00,
+        "contactHour": null,
+        "topics": [
+          "Materials Handling",
+          "Introduction: Importance of materials handling; Classification of conveying machines, Factors in selection conveying machines, Capacity of continues conveyors, design fundamental, limit load concept.",
+          "Types of Conveyors: Belt, Apron, flight, bucket, swing try, car and platfo conveyors, Roller conveyors, Oscillating and vibrating conveyors, Pneum and hydraulic conveyors, Safety of cranes and lift, Fork-lift, hopper, Chu Trucks.",
+          "Maintenance Engineering",
+          "Introduction: Necessity of maintenance, general properties and classification of different lubricants. viscosity and factors affection viscosity and other maintenance of common parts of plants, equipment, vehicle etc. maintenance of other sliding parts; maintenance of sealing parts (gasket, rubber seal, rubber ring), preparation of maintenance schedule for plants and machinery (boiler, turbine, pumps etc.) and execution of maintenance schedule, major faults and repairing, preparation of maintenance schedule for agricultural pump, common major faults and repairing."
+        ]
+      },
+      "ME 4059": {
+        "title": "Engineering Tribology",
+        "credit": 3.00,
+        "contactHour": null,
+        "topics": [
+          "Introduction: Introduction of Tribology, History of Tribology, Importance of Tribology, Tribological Failure Analysis.",
+          "Tribology in Solids: Structure and properties of solids, Surface roughness, Surface Engineering, Surface Examination and Characterization, Tribological properties of surface, Contact between surfaces, Hertzian Contacts, Elliptical Hertzian Contacts, Real Area of Contact, Stationary Heat Sources, Moving Heat Sources, Nominal and Flash Heating, Deformation, Fracture and fatigue.",
+          "Friction: Friction, Possible causes of friction, Laws of friction, Friction between elastic bodies, Experimental measurement of friction. The Friction of Solids.",
+          "Wear: Mechanisms of Wear, Types of wear, Adhesive wear, Abrasive wear, Fatigue wear, Impact wear, Corrosive wear, Scuffing, Fretting, Wear debris, Wear measurements. Wear Analysis Process, Wear Testing, Wear Modeling and Mapping.",
+          "Lubrication: Lubricant types and their compositions, Properties of lubri Measurement of viscosity, Additives, Lubrication and lubrication Viscous flow, One and Two Dimensional Reynolds equation lubrication, Boundary lubrication, Hydrostatic Bearings, Hydrody and Journal Bearings, Elasto hydrodynamic Lubrication, Roll Bearings, Heroic Tribology, Solid Lubricants.",
+          "Tribological components: Bearings, Performance and selection of bearing. seals, Gears, Micro components, Material processing."
+        ]
+      },
+      "ME 4071": {
+        "title": "Modern Manufacturing Processes",
+        "credit": 3.00,
+        "contactHour": null,
+        "topics": [
+          "Theory & application of Machining by Abrasive jet, Ultrasonics, water jet. Abrasive flow, Thermal assistance; Total Form machining & Low stress Grinding. Electrochemical machining & grinding, polishing, sharpening, honing & turning; Electrochemical Discharge Grinding, electrostream & shaped Tube electrolytic machining: Chemical & Thermo-chemical machining. Thermal energy methods in material processing (Machining/welding/heat treatment) by Electrodischarge; laser & electron beam; Plasma arc & ion beam. Physical vapour Deposition; Chemical vapour deposition & plasma spraying. High Energy Rate Forming & electroforming."
+        ]
+      },
+      "ME 4073": {
+        "title": "Industrial Process Technology",
+        "credit": 3.00,
+        "contactHour": null,
+        "topics": [
+          "Industries and Industrial centers of Bangladesh. Trend of industrialization in Bangladesh. Factors effecting industrial locations, importance of industry in national economy.",
+          "Introduction to the raw material and process technologies of glass, ceramics, cement, fertilizer, paper, sugar, natural gas and crude oil processing, polymers and petrochemicals, Rubber.",
+          "Cottage Industries: Industrial by products, Industrial wastes, Industrial pollution its effect and reduction."
+        ]
+      },
+      "ME 4081": {
+        "title": "CAD & CAM",
+        "credit": 3.00,
+        "contactHour": null,
+        "topics": [
+          "Computer Aided Design (CAD): Methodology of interactive, graplal, engineering design. Discretization, optimization and simulation in C); Algorithm development, Data structures of CAD; Engineering graphics d differential geometry in CAD; Geometric modeling, Application of geometrical design in conveyor systems, Sheet metal design; Design of pump and impeller surfaces, Practice on CAD.",
+          "Computer Aided Manufacturing (CAM): Numerical control machines; NC, CNC, DNC, Adaptive control of manufacturing process, Computer for process monitoring and control; Computer aided process planning (CAPP); Off line use of computer for production control; Computer types and languages for CAM. Flexible manufacturing system, Practice on CAM."
+        ]
+      },
+      "ME 4083": {
+        "title": "Robotics",
+        "credit": 3.00,
+        "contactHour": null,
+        "topics": [
+          "Introduction: History, Overview, Classification, specification and application, Future directions.",
+          "Components: Manipulator arm, End effectors, Actuators, Transmission elements, Sensors.",
+          "Manipulator Kinematics: Spatial descriptions and transformation, Manipulator kinematics, Inverse manipulator kinematics, Velocities and static forces.",
+          "Manipulator Dynamics: Newton's equation, Euler's equation, Lagrange formulation; Formulating manipulator dynamics in Cartesian space, Dynamic simulation and computational consideration.",
+          "Trajectory Generation: General considerations in path description and generation, Joint space schemes, Cartesian space schemes, path generation at run time, Planning of paths using the dynamic model.",
+          "Control: Basic concept, Transfer functions; Position control, Force control.",
+          "Robot Programming and languages: Requirements, Operating systems, Teaching; Languages."
+        ]
+      },
+      "ME 4085": {
+        "title": "Servomechanism & Control Engineering",
+        "credit": 3.00,
+        "contactHour": null,
+        "topics": [
+          "Orientation of control system, open loop and feedback control system, Representation of control components and systems, Back diagrams, Transfer functions Modeling of Mechanical, Hydraulic, Pneumatic, electrical control components, modeling of feedback-systems, Back diagram algebra and single flow graphs.",
+          "Time response of first, second and higher order systems using classical and Laplace transform approaches, system stability-analysis via Routh's stability criterion, basic actions and system type classification, system analysis, Preliminary design by root locus method, Frequency response analysis, use of Bode plot, polar plots, Nichols chart, M and Joci, gain-adjustment, Correlation between time and frequency response-margin.",
+          "Interconnected power system, its development in Bangladesh, Introduction to modern control theory."
+        ]
+      }
+    }
+  },
+  "qa": {
+    "termCount": 8,
+    "courseCount": 67,
+    "topicCount": 274,
+    "noiseCount": 66,
+    "ambiguityCount": 11
+  }
+}
