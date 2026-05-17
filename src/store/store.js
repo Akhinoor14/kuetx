@@ -510,23 +510,58 @@ const parseTermKey = (termKey) => {
   return { year: Number(match[1]), term: Number(match[2]) };
 };
 
-// Infer course type from course code when type is missing or likely incorrect.
-// Heuristic: look at the numeric portion of the code; if the last digit is even → Sessional, odd → Theory.
+// ─── PERMANENT RULES FOR COURSE CLASSIFICATION ───────────────────────────────────────────────
+
+/**
+ * Extract Year and Term from course code using first two digits
+ * Rule: 1st digit = Year (2 = Y2), 2nd digit = Term (1 = T1)
+ * Example: ME 2100 → {year: 2, term: 1} → Y2T1
+ * @param {string} code - Course code (e.g., "ME 2100", "EE 2105")
+ * @returns {Object} {year: number|null, term: number|null}
+ */
+const extractYearTermFromCode = (code) => {
+  if (!code || typeof code !== 'string') return { year: null, term: null };
+  const m = code.match(/\d+/);
+  if (!m) return { year: null, term: null };
+  const numPart = m[0];
+  if (numPart.length < 2) return { year: null, term: null };
+  const year = parseInt(numPart[0], 10);
+  const term = parseInt(numPart[1], 10);
+  return { 
+    year: (year >= 1 && year <= 4) ? year : null,
+    term: (term >= 1 && term <= 2) ? term : null
+  };
+};
+
+/**
+ * Infer course type from course code using PERMANENT RULE
+ * RULE: Last digit of numeric portion determines type (even = Sessional, odd = Theory)
+ * This rule is ALWAYS applied and OVERRIDES any existing type marking
+ * Example: ME 2100 (ends in 0, even) → Sessional, ME 2105 (ends in 5, odd) → Theory
+ * @param {string} code - Course code (e.g., "ME 2100")
+ * @param {string} currentType - Current type (ignored if code rule applies)
+ * @returns {string} Course type: 'Sessional' or 'Theory'
+ */
 const inferCourseTypeFromCode = (code, currentType) => {
-  const allowed = ['Theory', 'Sessional', 'Project', 'Field', 'NonCredit'];
-  if (allowed.includes(currentType)) return currentType;
+  // PERMANENT RULE: Extract last digit from course code and determine type
   if (!code || typeof code !== 'string') return currentType || 'Theory';
+  
   const m = code.match(/\d+/g);
-  if (!m) return currentType || 'Theory';
+  if (!m || m.length === 0) return currentType || 'Theory';
+  
   const nums = m.join('');
+  if (nums.length === 0) return currentType || 'Theory';
+  
   const last = nums[nums.length - 1];
-  if (!last) return currentType || 'Theory';
   const d = parseInt(last, 10);
+  
   if (!Number.isFinite(d)) return currentType || 'Theory';
+  
+  // PERMANENT RULE APPLICATION: even = Sessional, odd = Theory
   return (d % 2 === 0) ? 'Sessional' : 'Theory';
 };
 
-export { inferCourseTypeFromCode };
+export { inferCourseTypeFromCode, extractYearTermFromCode };
 
 export const getProfile = () => {
   const raw = store.get('profile') || {};

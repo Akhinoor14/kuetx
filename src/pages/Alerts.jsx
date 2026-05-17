@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { store, computeCourseGrade, computeCGPA, computeEffectiveAttendance, computeTermGPAs, MIN_ATTENDANCE_PERCENT, SCHOLARSHIP_ATTENDANCE_PCT, MAX_THEORY_COURSES_PER_TERM, MIN_CREDITS_FIRST_4_TERMS, MIN_CREDITS_FIRST_6_TERMS, HONORS_CGPA, DEANS_LIST_GPA, getAllCourses, getProfile, getCurrentTermKey } from '../store/store';
+import { store, computeCourseGrade, computeCGPA, computeEffectiveAttendance, computeTermGPAs, MIN_ATTENDANCE_PERCENT, SCHOLARSHIP_ATTENDANCE_PCT, MAX_THEORY_COURSES_PER_TERM, MIN_CREDITS_FIRST_4_TERMS, MIN_CREDITS_FIRST_6_TERMS, HONORS_CGPA, DEANS_LIST_GPA, getAllCourses, getProfile, getCurrentTermKey, getTermTimeline } from '../store/store';
 
 const normalizeTeacherLabel = (value) => String(value || '').trim().replace(/\s+/g, ' ');
 
@@ -102,8 +102,19 @@ export function computeAlerts(profile) {
       }
     }
 
-    if (noMarkCount > 0) {
-      warnings.push({ msg: `${currentTermKey}: ${noMarkCount} course${noMarkCount > 1 ? 's' : ''} still need marks entry`, link: '/marks' });
+    // Marks entry warning starts 3 months after the NEXT term starts.
+    if (noMarkCount > 0 && profile?.termStartDate && profile?.dept && currentTermKey) {
+      const timeline = getTermTimeline(profile.termStartDate, profile.dept, currentTermKey);
+      const nextTermStart = timeline?.nextSemesterStart;
+
+      if (nextTermStart instanceof Date && !Number.isNaN(nextTermStart.getTime())) {
+        const thresholdDate = new Date(nextTermStart);
+        thresholdDate.setMonth(thresholdDate.getMonth() + 3);
+
+        if (new Date() >= thresholdDate) {
+          warnings.push({ msg: `${currentTermKey}: ${noMarkCount} course${noMarkCount > 1 ? 's' : ''} still need marks entry`, link: '/marks' });
+        }
+      }
     }
   }
 

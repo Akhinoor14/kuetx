@@ -167,7 +167,10 @@ function DailyLog({ courses, logs, setLogs, schedule, scheduleSettings, combined
     }
     if (isTodayHoliday) return { marked: 0, total: 0 };
     coursesToCount.forEach(c => {
-      const teachers = getTeachersForCourse(schedule, c.id);
+      // Use date-specific teachers for scheduled dates, all teachers for manual marking
+      const teachers = scheduledCourses.length > 0 
+        ? getTeachersForCourseOnDate(schedule, c.id, date)
+        : getTeachersForCourse(schedule, c.id);
       const displayTeachers = teachers.length > 0 ? teachers : [''];
       displayTeachers.forEach(t => {
         total++;
@@ -187,7 +190,11 @@ function DailyLog({ courses, logs, setLogs, schedule, scheduleSettings, combined
 
     const cards = [];
     coursesToShow.forEach(course => {
-      const teachers = getTeachersForCourse(schedule, course.id);
+      // Use date-specific teachers if we have scheduled courses for this date
+      // Otherwise use all teachers for the course (for manual attendance marking)
+      const teachers = scheduledCourses.length > 0 
+        ? getTeachersForCourseOnDate(schedule, course.id, date)
+        : getTeachersForCourse(schedule, course.id);
       const displayTeachers = teachers.length > 0 ? teachers : [''];
       displayTeachers.forEach(teacher => {
         const key = `${course.id}_${teacher || ''}`;
@@ -204,7 +211,7 @@ function DailyLog({ courses, logs, setLogs, schedule, scheduleSettings, combined
       if (byCourse !== 0) return byCourse;
       return (a.teacher || '').localeCompare(b.teacher || '');
     });
-  }, [visibleCourses, courses, schedule, dayLog, showGiveAttendance, scheduledCourses.length, isTodayHoliday]);
+  }, [visibleCourses, courses, schedule, dayLog, showGiveAttendance, scheduledCourses.length, isTodayHoliday, date]);
 
   if (combinedMode) {
     return (
@@ -289,52 +296,66 @@ function DailyLog({ courses, logs, setLogs, schedule, scheduleSettings, combined
         </div>
       )}
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
         {cardsToShow.map(card => {
           const todayItems = scheduledCourses.find(item => item.courseId === card.course.id)?.items || [];
           const teacherLabel = card.teacher || (card.auto ? 'Auto' : 'Unassigned');
 
           return (
             <div key={card.key || card.course.id} className="card" style={{
-              padding: '14px 18px',
-              borderLeft: `4px solid var(--border)`,
+              padding: '10px 14px',
+              borderLeft: 'none',
+              background: card.status ? `var(--surface)` : 'var(--card)',
+              transition: 'all 0.2s ease',
             }}>
-              <div style={{ marginBottom: 12 }}>
-                <div style={{ fontWeight: 700, fontSize: 15 }}>{getDisplayCourseName(card.course)}</div>
-                <div style={{ fontSize: 13, color: 'var(--muted)' }}>{teacherLabel}</div>
-                {card.course.type && (
-                  <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 2 }}>{card.course.type}</div>
-                )}
-                {todayItems.length > 0 && (
-                  <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 3 }}>
-                    {todayItems.map(item => `${item.slot}${item.displayName ? ` — ${item.displayName}` : ''}`).join(' · ')}
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 12, marginBottom: 8 }}>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ fontWeight: 600, fontSize: 14, lineHeight: 1.3, marginBottom: 2 }}>
+                    {getDisplayCourseName(card.course)}
                   </div>
-                )}
+                  <div style={{ fontSize: 11, color: 'var(--muted)', display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
+                    <span>{teacherLabel}</span>
+                    {card.course.type && <span>· {card.course.type}</span>}
+                  </div>
+                  {todayItems.length > 0 && (
+                    <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 4, lineHeight: 1.3 }}>
+                      {todayItems.map(item => `${item.slot}`).join(' • ')}
+                    </div>
+                  )}
+                </div>
               </div>
 
-              {
-                <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
-                  {[
-                    { val: 'present', label: '✓ Present', on: '#dcfce7', off: 'var(--inputBg)', textOn: '#166534', textOff: 'var(--muted)', border: '#86efac' },
-                    { val: 'absent',  label: '✗ Absent',  on: '#fee2e2', off: 'var(--inputBg)', textOn: '#991b1b', textOff: 'var(--muted)', border: '#fca5a5' },
-                    { val: 'holiday', label: '⛔ No Class', on: '#fef9c3', off: 'var(--inputBg)', textOn: '#854d0e', textOff: 'var(--muted)', border: '#fde68a' },
-                  ].map(opt => {
-                    const active = card.status === opt.val;
-                    return (
-                      <button key={opt.val} onClick={() => mark(card.course.id, card.teacher, opt.val)} style={{
-                        padding: '6px 12px', borderRadius: 6, cursor: 'pointer', fontWeight: 700,
-                        fontSize: 12, fontFamily: 'Sora, sans-serif',
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 6 }}>
+                {[
+                  { val: 'present', label: '✓', title: 'Present', on: '#10b981', off: 'var(--inputBg)', textOn: 'white', textOff: 'var(--muted)' },
+                  { val: 'absent',  label: '✗', title: 'Absent',  on: '#ef4444', off: 'var(--inputBg)', textOn: 'white', textOff: 'var(--muted)' },
+                  { val: 'holiday', label: '⊘', title: 'No Class', on: '#f59e0b', off: 'var(--inputBg)', textOn: 'white', textOff: 'var(--muted)' },
+                ].map(opt => {
+                  const active = card.status === opt.val;
+                  return (
+                    <button 
+                      key={opt.val} 
+                      onClick={() => mark(card.course.id, card.teacher, opt.val)}
+                      title={opt.title}
+                      style={{
+                        padding: '8px 0', 
+                        borderRadius: 6, 
+                        cursor: 'pointer', 
+                        fontWeight: 700,
+                        fontSize: 16,
                         background: active ? opt.on : opt.off,
                         color: active ? opt.textOn : opt.textOff,
-                        border: `2px solid ${active ? opt.border : 'var(--border)'}`,
-                        transition: 'all 0.15s',
-                        flex: 1,
-                        minWidth: 0,
-                      }}>{opt.label}</button>
-                    );
-                  })}
-                </div>
-              }
+                        border: 'none',
+                        transition: 'all 0.2s ease',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}>
+                      {opt.label}
+                    </button>
+                  );
+                })}
+              </div>
             </div>
           );
         })}

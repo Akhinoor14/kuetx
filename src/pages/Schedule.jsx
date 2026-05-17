@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { Plus, Settings2, Clock3, PencilLine, Copy, CalendarDays, X, FileText } from 'lucide-react';
 import { store, uid, getAllCourses, getProfile, getCurrentTermKey, getRoutinePreviewDate, isRoutineHoliday, getTermTimeline } from '../store/store';
 import { useNavigate } from 'react-router-dom';
+import CourseTeacherDialog from '../components/CourseTeacherDialog';
 
 const DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday'];
 const DAY_INDEX = { Sunday: 0, Monday: 1, Tuesday: 2, Wednesday: 3, Thursday: 4 };
@@ -98,7 +99,30 @@ const normalizeSettings = (raw) => ({
   customSlots: Array.isArray(raw?.customSlots) && raw.customSlots.length ? raw.customSlots : DEFAULT_CUSTOM,
   messageFormat: MESSAGE_FORMATS.some(f => f.id === raw?.messageFormat) ? raw.messageFormat : DEFAULT_SETTINGS.messageFormat,
   holidayDates: Array.isArray(raw?.holidayDates) ? [...new Set(raw.holidayDates)].filter(Boolean).sort() : [],
+  courseTeacherMap: Object.entries(raw?.courseTeacherMap || {}).reduce((acc, [courseId, teachers]) => {
+    const normalizedTeachers = [...new Set((Array.isArray(teachers) ? teachers : [])
+      .map(name => normalizeTeacherName(name))
+      .filter(Boolean))].slice(0, 2);
+    if (normalizedTeachers.length > 0) acc[courseId] = normalizedTeachers;
+    return acc;
+  }, {}),
+  courseShortNameMap: Object.entries(raw?.courseShortNameMap || {}).reduce((acc, [courseId, shortName]) => {
+    const normalized = String(shortName || '').trim();
+    if (normalized) acc[courseId] = normalized;
+    return acc;
+  }, {}),
 });
+
+// Get all unique teacher names from schedule, sorted
+const getUniqueTeacherNames = (schedule) => {
+  const teachers = new Set();
+  (schedule || []).forEach(item => {
+    if (item.teacherName && item.teacherName.trim()) {
+      teachers.add(item.teacherName);
+    }
+  });
+  return Array.from(teachers).sort();
+};
 
 const normalizeSlotKey = (value) => String(value || '').trim();
 
@@ -159,6 +183,32 @@ const isSlotOverlap = (a, b) => {
 };
 
 const formatDayShort = (day) => day.slice(0, 3);
+
+const isSessionalType = (type) => /sessional|lab/i.test(String(type || ''));
+
+const isLongSessionalSlot = (slot) => {
+  const range = parseSlotRange(slot);
+  if (!range) return false;
+  return (range.end - range.start) >= 120;
+};
+
+const getPresetSessionalSlots = (modelId) => {
+  if (modelId === '50min') {
+    return [
+      '8:00 AM-10:30 AM',
+      '10:40 AM-1:10 PM',
+      '2:30 PM-5:00 PM',
+    ];
+  }
+  if (modelId === '40min') {
+    return [
+      '9:00 AM-11:00 AM',
+      '11:00 AM-1:00 PM',
+      '2:00 PM-4:00 PM',
+    ];
+  }
+  return [];
+};
 
 const getTomorrowDay = () => {
   const todayIndex = new Date().getDay();
@@ -329,8 +379,10 @@ export default function Schedule() {
 
   // Quick cell form state (for double-click shortcut)
   const [quickFormOpen, setQuickFormOpen] = useState(false);
-  const [quickFormData, setQuickFormData] = useState({ day: '', slot: '', courseId: '', teacherName: '', room: '', note: '', type: 'Theory' });
+  const [quickFormData, setQuickFormData] = useState({ day: '', slot: '', courseId: '', teacherName: '', displayName: '', room: '', note: '', type: 'Theory' });
   const [quickFormEditingId, setQuickFormEditingId] = useState(null);
+  const [courseTeacherDialogState, setCourseTeacherDialogState] = useState({ open: false, courseId: '', source: null });
+  const [allKnownTeachers, setAllKnownTeachers] = useState(() => getUniqueTeacherNames(schedule));
   
   // Track double-click/double-tap
   const lastClickRef = useRef({});
@@ -353,11 +405,34 @@ export default function Schedule() {
       slot: slot || TIME_MODELS['50min'].slots[0],
       courseId: '',
       teacherName: '',
+      displayName: '',
       room: '',
       note: '',
       type: 'Theory',
     });
     setQuickFormOpen(true);
+  };
+
+  const handleFormCourseChange = (courseId) => {
+    const teachers = getCourseTeachers(courseId);
+    setForm(prev => ({
+      ...prev,
+      courseId,
+      teacherName: teachers[0] || '',
+      displayName: courseShortNameMap[courseId] || prev.displayName || '',
+    }));
+    if (courseId) ensureCourseTeacherSetup(courseId, 'form');
+  };
+
+  const handleQuickCourseChange = (courseId) => {
+    const teachers = getCourseTeachers(courseId);
+    setQuickFormData(prev => ({
+      ...prev,
+      courseId,
+      teacherName: teachers[0] || '',
+      displayName: courseShortNameMap[courseId] || prev.displayName || '',
+    }));
+    if (courseId) ensureCourseTeacherSetup(courseId, 'quick');
   };
 
   const handleCellClick = (id, item) => {
@@ -412,17 +487,94 @@ export default function Schedule() {
 
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
 
-  const autoDisplayName = (courseId, teacherName) => {
-    const course = getCourse(courseId);
-    const base = course ? `${course.code} — ${course.name}` : '';
-    const teacher = normalizeTeacherName(teacherName) ? ` · ${normalizeTeacherName(teacherName)}` : '';
-    return `${base}${teacher}`.trim();
+  const getAllowedSlotsForType = (type) => {
+    if (isSessionalType(type)) {
+      const presetSlots = getPresetSessionalSlots(settings.modelId);
+      if (presetSlots.length) return presetSlots;
+      const sessionalSlots = slotList.filter(isLongSessionalSlot);
+      return sessionalSlots.length ? sessionalSlots : slotList;
+    }
+    const regularSlots = slotList.filter(slot => !isLongSessionalSlot(slot));
+    return regularSlots.length ? regularSlots : slotList;
+  };
+
+  const handleFormTypeChange = (nextType) => {
+    const allowed = getAllowedSlotsForType(nextType);
+    setForm(prev => ({
+      ...prev,
+      type: nextType,
+      slot: allowed.includes(prev.slot) ? prev.slot : (allowed[0] || prev.slot),
+    }));
+  };
+
+  const handleQuickTypeChange = (nextType) => {
+    const allowed = getAllowedSlotsForType(nextType);
+    setQuickFormData(prev => ({
+      ...prev,
+      type: nextType,
+      slot: allowed.includes(prev.slot) ? prev.slot : (allowed[0] || prev.slot),
+    }));
   };
 
   const persistSettings = (next) => {
     const normalized = normalizeSettings(next);
     setSettings(normalized);
     store.set('scheduleSettings', normalized);
+  };
+
+  const courseTeacherMap = settings.courseTeacherMap || {};
+  const courseShortNameMap = settings.courseShortNameMap || {};
+
+  const getCourseTeachers = (courseId) => {
+    if (!courseId) return [];
+    const mappedTeachers = Array.isArray(courseTeacherMap[courseId]) ? courseTeacherMap[courseId].filter(Boolean) : [];
+    if (mappedTeachers.length > 0) return mappedTeachers;
+
+    const fromSchedule = [...new Set(
+      (schedule || [])
+        .filter(item => item.courseId === courseId)
+        .flatMap(item => {
+          const many = Array.isArray(item.teacherNames) && item.teacherNames.length > 0 ? item.teacherNames : [item.teacherName];
+          return many.map(name => normalizeTeacherName(name)).filter(Boolean);
+        })
+    )].slice(0, 2);
+
+    return fromSchedule;
+  };
+
+  const ensureCourseTeacherSetup = (courseId, source) => {
+    if (!courseId) return false;
+    const teachers = getCourseTeachers(courseId);
+    if (teachers.length >= 2) return true;
+    setCourseTeacherDialogState({ open: true, courseId, source });
+    return false;
+  };
+
+  const updateCourseShortName = (courseId, value) => {
+    if (!courseId) return;
+    const trimmed = String(value || '').trim();
+    const nextMap = { ...(courseShortNameMap || {}) };
+    if (trimmed) nextMap[courseId] = trimmed;
+    else delete nextMap[courseId];
+    persistSettings({ ...settings, courseShortNameMap: nextMap });
+  };
+
+  useEffect(() => {
+    const teacherSet = new Set(getUniqueTeacherNames(schedule));
+    Object.values(courseTeacherMap || {}).forEach(list => {
+      (Array.isArray(list) ? list : []).forEach(name => {
+        const normalized = normalizeTeacherName(name);
+        if (normalized) teacherSet.add(normalized);
+      });
+    });
+    setAllKnownTeachers(Array.from(teacherSet).sort());
+  }, [schedule, courseTeacherMap]);
+
+  const autoDisplayName = (courseId, teacherName) => {
+    const course = getCourse(courseId);
+    const base = course ? `${course.code} — ${course.name}` : '';
+    const teacher = normalizeTeacherName(teacherName) ? ` · ${normalizeTeacherName(teacherName)}` : '';
+    return `${base}${teacher}`.trim();
   };
 
   const resetForm = () => setForm({
@@ -437,12 +589,14 @@ export default function Schedule() {
   });
 
   const startEdit = (item) => {
+    const courseTeachers = getCourseTeachers(item.courseId);
     setQuickFormEditingId(item.id);
     setQuickFormData({
       day: item.day || 'Sunday',
       slot: item.slot || TIME_MODELS['50min'].slots[0],
       courseId: item.courseId || '',
-      teacherName: item.teacherName || '',
+      teacherName: item.teacherName || courseTeachers[0] || '',
+      displayName: item.displayName || courseShortNameMap[item.courseId] || '',
       room: item.room || '',
       note: item.note || '',
       type: item.type || 'Theory',
@@ -459,51 +613,106 @@ export default function Schedule() {
   const closeQuickForm = () => {
     setQuickFormOpen(false);
     setQuickFormEditingId(null);
-    setQuickFormData({ day: '', slot: '', courseId: '', teacherName: '', room: '', note: '', type: 'Theory' });
+    setQuickFormData({ day: '', slot: '', courseId: '', teacherName: '', displayName: '', room: '', note: '', type: 'Theory' });
+  };
+
+  const handleCourseTeacherDialogClose = () => {
+    setCourseTeacherDialogState({ open: false, courseId: '', source: null });
+  };
+
+  const handleCourseTeacherDialogSave = (teachers) => {
+    const courseId = courseTeacherDialogState.courseId;
+    const normalizedTeachers = [...new Set((teachers || []).map(name => normalizeTeacherName(name)).filter(Boolean))].slice(0, 2);
+    if (!courseId || normalizedTeachers.length < 2) return;
+
+    const nextMap = {
+      ...(courseTeacherMap || {}),
+      [courseId]: normalizedTeachers,
+    };
+    persistSettings({ ...settings, courseTeacherMap: nextMap });
+
+    if (courseTeacherDialogState.source === 'form') {
+      setForm(prev => ({
+        ...prev,
+        courseId,
+        teacherName: prev.teacherName && normalizedTeachers.includes(prev.teacherName) ? prev.teacherName : normalizedTeachers[0],
+      }));
+    }
+
+    if (courseTeacherDialogState.source === 'quick') {
+      setQuickFormData(prev => ({
+        ...prev,
+        courseId,
+        teacherName: prev.teacherName && normalizedTeachers.includes(prev.teacherName) ? prev.teacherName : normalizedTeachers[0],
+      }));
+    }
+
+    handleCourseTeacherDialogClose();
   };
 
   const saveQuickForm = () => {
-    const { day, slot, courseId, teacherName, room, note, type } = quickFormData;
+    const { day, slot, courseId, teacherName, displayName, room, note, type } = quickFormData;
     
     if (!courseId || !slot) {
       alert('Please select a course and time');
       return;
     }
 
-    const nextSlot = normalizeSlotKey(slot);
-    const normalizedTeacher = normalizeTeacherName(teacherName);
+    const allowedSlots = getAllowedSlotsForType(type);
+    if (!allowedSlots.includes(slot)) {
+      alert(isSessionalType(type)
+        ? 'Sessional class must use a long lab slot (for example 2:30 PM-5:00 PM).'
+        : 'Theory/project/tutorial should use regular class slots.');
+      return;
+    }
 
-    const nextEntry = {
+    const availableTeachers = getCourseTeachers(courseId);
+    if (availableTeachers.length < 2) {
+      alert('Please set both teachers for this course first.');
+      ensureCourseTeacherSetup(courseId, 'quick');
+      return;
+    }
+
+    const selectedTeacher = normalizeTeacherName(teacherName);
+    if (!selectedTeacher) {
+      alert('Please select a teacher for this class');
+      return;
+    }
+
+    const nextSlot = normalizeSlotKey(slot);
+
+    const newEntry = {
       day,
       slot: nextSlot,
       courseId,
-      displayName: '',
+      displayName: String(displayName || '').trim() || courseShortNameMap[courseId] || autoDisplayName(courseId, selectedTeacher),
       room,
-      teacherName: normalizedTeacher,
+      teacherNames: availableTeachers,
+      teacherName: selectedTeacher,
       type,
       note,
       id: quickFormEditingId || uid()
     };
 
-    // Check for overlaps/duplicates (same as in add function)
-    const hasExactDuplicate = schedule.some(item =>
-      item.id !== quickFormEditingId &&
-      item.day === nextEntry.day &&
+    const existingSchedule = schedule.filter(item => item.id !== quickFormEditingId);
+
+    const hasExactDuplicate = existingSchedule.some(item =>
+      item.day === newEntry.day &&
       normalizeSlotKey(item.slot) === nextSlot &&
-      item.courseId === nextEntry.courseId &&
-      (item.teacherName || '') === (nextEntry.teacherName || '') &&
-      (item.type || '') === (nextEntry.type || '')
+      item.courseId === newEntry.courseId &&
+      (item.teacherName || '') === (newEntry.teacherName || '') &&
+      (item.type || '') === (newEntry.type || '')
     );
 
     if (hasExactDuplicate && !quickFormEditingId) {
-      alert('This class is already saved.');
+      alert(`This class is already saved for ${newEntry.teacherName || 'this teacher'}.`);
       return;
     }
 
-    const hasOverlap = schedule.some(item => 
-      item.id !== quickFormEditingId && 
-      item.day === nextEntry.day && 
-      isSlotOverlap(item.slot, nextSlot)
+    const hasOverlap = existingSchedule.some(item => 
+      item.day === newEntry.day && 
+      isSlotOverlap(item.slot, nextSlot) &&
+      item.courseId !== newEntry.courseId
     );
 
     if (hasOverlap) {
@@ -511,9 +720,11 @@ export default function Schedule() {
       return;
     }
 
+    updateCourseShortName(courseId, displayName);
+
     const updated = quickFormEditingId
-      ? normalizeScheduleEntries(schedule.map(item => item.id === quickFormEditingId ? nextEntry : item))
-      : normalizeScheduleEntries([...schedule, nextEntry]);
+      ? normalizeScheduleEntries(schedule.map(item => item.id === quickFormEditingId ? newEntry : item))
+      : normalizeScheduleEntries([...schedule, newEntry]);
 
     setSchedule(updated);
     store.set('schedule', updated);
@@ -522,55 +733,69 @@ export default function Schedule() {
 
   const add = () => {
     if (!form.courseId || !form.slot) return;
-    const nextSlot = normalizeSlotKey(form.slot);
-    
-    // Support multiple teachers (comma or semicolon separated)
-    // e.g., "Dr. Smith, Dr. Jones" or "Dr. Smith; Dr. Jones"
-    const teacherInputs = form.teacherName
-      .split(/[,;]/)
-      .map(t => t.trim())
-      .filter(t => t.length > 0)
-      .map(t => normalizeTeacherName(t));
-    
-    // If no teachers specified, create one entry without teacher
-    const teachers = teacherInputs.length > 0 ? teacherInputs : [''];
-    
-    // Create entries for each teacher
-    const newEntries = teachers.map(teacherName => ({
-      ...form,
-      teacherName,
-      displayName: form.displayName || autoDisplayName(form.courseId, teacherName),
-      slot: nextSlot,
-      id: uid()
-    }));
 
-    // Check for duplicates and overlaps for each new entry
-    for (const nextEntry of newEntries) {
-      const hasExactDuplicate = schedule.some(item =>
-        item.id !== editingId &&
-        item.day === nextEntry.day &&
-        normalizeSlotKey(item.slot) === nextSlot &&
-        item.courseId === nextEntry.courseId &&
-        (item.teacherName || '') === (nextEntry.teacherName || '') &&
-        (item.type || '') === (nextEntry.type || '') &&
-        (item.room || '') === (nextEntry.room || '')
-      );
-      if (hasExactDuplicate) {
-        alert(`This class is already saved for ${nextEntry.teacherName || 'this teacher'} in the same day and time.`);
-        return;
-      }
-
-      const hasOverlap = schedule.some(item => item.id !== editingId && item.day === nextEntry.day && isSlotOverlap(item.slot, nextSlot));
-      if (hasOverlap) {
-        alert('That time overlaps with an existing class on the same day.');
-        return;
-      }
+    const allowedSlots = getAllowedSlotsForType(form.type);
+    if (!allowedSlots.includes(form.slot)) {
+      alert(isSessionalType(form.type)
+        ? 'Sessional class must use a long lab slot (for example 2:30 PM-5:00 PM).'
+        : 'Theory/project/tutorial should use regular class slots.');
+      return;
     }
 
-    // If editing, replace the single entry; if adding, append all new entries
+    const availableTeachers = getCourseTeachers(form.courseId);
+    if (availableTeachers.length < 2) {
+      ensureCourseTeacherSetup(form.courseId, 'form');
+      return;
+    }
+
+    const selectedTeacher = normalizeTeacherName(form.teacherName);
+    if (!selectedTeacher) {
+      alert('Please select a teacher for this class');
+      return;
+    }
+
+    const nextSlot = normalizeSlotKey(form.slot);
+
+    const nextEntry = {
+      ...form,
+      teacherName: selectedTeacher,
+      teacherNames: availableTeachers,
+      displayName: String(form.displayName || '').trim() || courseShortNameMap[form.courseId] || autoDisplayName(form.courseId, selectedTeacher),
+      slot: nextSlot,
+      id: uid()
+    };
+
+    const existingSchedule = schedule.filter(item => item.id !== editingId);
+
+    const hasExactDuplicate = existingSchedule.some(item =>
+      item.day === nextEntry.day &&
+      normalizeSlotKey(item.slot) === nextSlot &&
+      item.courseId === nextEntry.courseId &&
+      (item.teacherName || '') === (nextEntry.teacherName || '') &&
+      (item.type || '') === (nextEntry.type || '') &&
+      (item.room || '') === (nextEntry.room || '')
+    );
+    if (hasExactDuplicate) {
+      alert(`This class is already saved for ${nextEntry.teacherName || 'this teacher'} in the same day and time.`);
+      return;
+    }
+
+    const hasUserTimeConflict = existingSchedule.some(item => 
+      item.id !== editingId && 
+      item.day === nextEntry.day && 
+      isSlotOverlap(item.slot, nextSlot) &&
+      item.courseId !== nextEntry.courseId
+    );
+    if (hasUserTimeConflict) {
+      alert('That time overlaps with an existing class on the same day.');
+      return;
+    }
+
+    updateCourseShortName(form.courseId, form.displayName);
+
     const updated = editingId
-      ? normalizeScheduleEntries(schedule.map(item => item.id === editingId ? { ...newEntries[0], id: editingId } : item))
-      : normalizeScheduleEntries([...schedule, ...newEntries]);
+      ? normalizeScheduleEntries(schedule.map(item => item.id === editingId ? { ...nextEntry, id: editingId } : item))
+      : normalizeScheduleEntries([...schedule, nextEntry]);
     
     setSchedule(updated);
     store.set('schedule', updated);
@@ -684,6 +909,37 @@ export default function Schedule() {
     });
     return next;
   }, [schedule, slotList]);
+
+  const tableSlots = useMemo(() => {
+    const slots = getSlotCatalog(schedule, slotList).filter(slot => !isLongSessionalSlot(slot));
+    return slots.length ? slots : getSlotCatalog(schedule, slotList);
+  }, [schedule, slotList]);
+
+  const tableLayout = useMemo(() => {
+    const starts = {};
+    const covered = {};
+
+    DAYS.forEach(day => {
+      starts[day] = {};
+      covered[day] = new Set();
+    });
+
+    schedule.forEach(item => {
+      if (!starts[item.day]) return;
+
+      const overlappingSlots = tableSlots.filter(slot => !String(slot).toLowerCase().includes('break') && isSlotOverlap(slot, item.slot));
+      const firstSlot = overlappingSlots[0] || tableSlots.find(slot => normalizeSlotKey(slot) === normalizeSlotKey(item.slot));
+      if (!firstSlot) return;
+
+      if (!starts[item.day][firstSlot]) starts[item.day][firstSlot] = [];
+      const rowSpan = Math.max(1, overlappingSlots.length || 1);
+      starts[item.day][firstSlot].push({ item, rowSpan });
+
+      overlappingSlots.slice(1).forEach(slot => covered[item.day].add(slot));
+    });
+
+    return { starts, covered };
+  }, [schedule, tableSlots]);
 
   const todayIndex = new Date().getDay();
   const today = DAYS[todayIndex] || 'Sunday';
@@ -858,17 +1114,21 @@ export default function Schedule() {
             </tr>
           </thead>
           <tbody>
-            {getSlotCatalog(schedule, slotList).map(p => {
+            {tableSlots.map(p => {
               const breakSlot = isBreakSlot(p);
               return (
                 <tr key={p}>
                   <td style={{ padding: '12px 12px', borderBottom: '1px solid var(--border)', borderRight: '1px solid var(--border)', fontWeight: 700, fontSize: 13, color: 'var(--muted)', fontFamily: 'JetBrains Mono, monospace', whiteSpace: 'nowrap', background: breakSlot ? 'rgba(239,68,68,0.08)' : 'var(--bg)' }}>{slotPreview(p)}</td>
                   {DAYS.map(d => {
-                    const dayItems = grid[d]?.[p] || [];
+                    if (tableLayout.covered[d]?.has(p)) return null;
+                    const entries = tableLayout.starts[d]?.[p] || [];
+                    const dayItems = entries.map(entry => entry.item);
+                    const rowSpan = entries.length === 1 ? entries[0].rowSpan : 1;
                     const isEmptyCell = dayItems.length === 0;
                     return (
                       <td
                         key={d}
+                        rowSpan={rowSpan > 1 ? rowSpan : undefined}
                         className={`timetable-day-col${d === selectedDay ? ' selected-day' : ''}`}
                         onClick={isEmptyCell ? () => handleEmptyCellClick(d, p) : undefined}
                         title={isEmptyCell ? 'Double-click to add class' : undefined}
@@ -884,6 +1144,7 @@ export default function Schedule() {
                       >
                         {dayItems.map(s => {
                           const c = getCourse(s.courseId);
+                          const hideTeacherInGrid = isSessionalType(s.type);
                           return (
                             <div
                               key={s.id}
@@ -905,12 +1166,14 @@ export default function Schedule() {
                                 WebkitUserSelect: 'none',
                               }}
                             >
-                              <div style={{ fontWeight: 700, fontSize: 12, lineHeight: 1.35, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
-                                {s.displayName || c?.name || c?.code || '?'}
+                              <div style={{ fontWeight: 800, fontSize: 12, lineHeight: 1.35, letterSpacing: '0.01em', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+                                {s.displayName || c?.code || c?.name || '?'}
                               </div>
-                              <div style={{ opacity: 0.88, fontSize: 11, marginTop: 3, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
-                                {s.teacherName || 'Teacher not set'}
-                              </div>
+                              {!hideTeacherInGrid && (
+                                <div style={{ fontSize: 11, fontWeight: 600, marginTop: 4, color: 'var(--text)', opacity: 0.95, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+                                  Teacher: {s.teacherName || 'Not set'}
+                                </div>
+                              )}
                               <button onClick={(e) => { e.stopPropagation(); startEdit(s); }} style={{
                                 position: 'absolute', top: 2, right: 16, background: 'none', border: 'none',
                                 color: 'inherit', cursor: 'pointer', opacity: 0.55, padding: 0, lineHeight: 1,
@@ -1245,7 +1508,7 @@ export default function Schedule() {
             {editingId && <span className="tag tag-blue">Editing</span>}
           </div>
           <div style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 10, padding: '8px 12px', background: 'rgba(59,130,246,0.05)', borderRadius: 6, borderLeft: '3px solid var(--accent)' }}>
-            💡 <strong>Multi-teacher courses:</strong> Enter multiple teacher names separated by comma or semicolon (e.g., "Dr. Smith, Dr. Jones") to add entries for all teachers at once.
+            💡 <strong>Course teacher setup:</strong> Every course needs two fixed teachers. If missing, a popup will ask for both teachers first.
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(100px, 1fr))', gap: 10, marginBottom: 10 }}>
             <div>
@@ -1257,12 +1520,12 @@ export default function Schedule() {
             <div>
               <label>Time</label>
               <select value={form.slot} onChange={e => set('slot', e.target.value)}>
-                {slotList.map(p => <option key={p} value={p}>{slotPreview(p)}</option>)}
+                {getAllowedSlotsForType(form.type).map(p => <option key={p} value={p}>{slotPreview(p)}</option>)}
               </select>
             </div>
             <div>
               <label>Type</label>
-              <select value={form.type} onChange={e => set('type', e.target.value)}>
+              <select value={form.type} onChange={e => handleFormTypeChange(e.target.value)}>
                 <option value="Theory">Theory</option>
                 <option value="Sessional">Lab / Sessional</option>
                 <option value="Project">Project</option>
@@ -1271,31 +1534,53 @@ export default function Schedule() {
             </div>
             <div style={{ gridColumn: 'span 2' }}>
               <label>Course</label>
-              <select value={form.courseId} onChange={e => set('courseId', e.target.value)}>
+              <select value={form.courseId} onChange={e => handleFormCourseChange(e.target.value)}>
                 <option value="">Select course</option>
                 {currentTermCourses.map(c => <option key={c.id} value={c.id}>{c.code} — {c.name}</option>)}
               </select>
             </div>
             <div style={{ gridColumn: 'span 3' }}>
-              <label>Show as</label>
+              <label>Show As (Grid Name)</label>
               <input
                 value={form.displayName}
-                onChange={e => set('displayName', e.target.value)}
-                placeholder={autoDisplayName(form.courseId, form.teacherName) || 'CSE 2201 — Data Structures · Imran Sir'}
+                onChange={e => {
+                  const nextName = e.target.value;
+                  set('displayName', nextName);
+                  if (form.courseId) updateCourseShortName(form.courseId, nextName);
+                }}
+                placeholder={autoDisplayName(form.courseId, form.teacherName || '') || 'CSE 2201 DS'}
               />
             </div>
-            <div>
-              <label>Teacher(s)</label>
-              <input value={form.teacherName} onChange={e => {
-                const input = e.target.value;
-                set('teacherName', input);
-                // Auto-update display name if only one teacher
-                if (!form.displayName && !input.includes(',') && !input.includes(';')) {
-                  const teacherName = normalizeTeacherName(input);
-                  set('displayName', autoDisplayName(form.courseId, teacherName));
-                }
-              }} placeholder="Dr. Smith or Dr. Smith, Dr. Jones" />
-              <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 3 }}>Comma or semicolon separated for multiple</div>
+            <div style={{ gridColumn: 'span 3' }}>
+              <label>Teacher (Select One)</label>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: 8 }}>
+                <select
+                  value={form.teacherName}
+                  onChange={e => set('teacherName', e.target.value)}
+                  disabled={!form.courseId || getCourseTeachers(form.courseId).length === 0}
+                >
+                  <option value="">Select teacher</option>
+                  {getCourseTeachers(form.courseId).map(name => (
+                    <option key={name} value={name}>{name}</option>
+                  ))}
+                </select>
+                <button
+                  type="button"
+                  className="btn btn-ghost"
+                  onClick={() => {
+                    if (!form.courseId) return;
+                    setCourseTeacherDialogState({ open: true, courseId: form.courseId, source: 'form' });
+                  }}
+                  disabled={!form.courseId}
+                >
+                  Edit Teachers
+                </button>
+              </div>
+              {form.courseId && getCourseTeachers(form.courseId).length < 2 && (
+                <div style={{ marginTop: 6, fontSize: 11, color: 'rgb(180,83,9)' }}>
+                  Please set two teachers for this course first.
+                </div>
+              )}
             </div>
             <div>
               <label>Room</label>
@@ -1821,7 +2106,7 @@ export default function Schedule() {
                 <label style={{ fontSize: 12, fontWeight: 600 }}>Course</label>
                 <select
                   value={quickFormData.courseId}
-                  onChange={e => setQuickFormData(d => ({ ...d, courseId: e.target.value }))}
+                  onChange={e => handleQuickCourseChange(e.target.value)}
                   style={{ width: '100%', padding: '8px 10px', border: '1px solid var(--border)', borderRadius: 6, background: 'var(--bg)', color: 'var(--text)', fontSize: 13 }}
                 >
                   <option value="">Select course</option>
@@ -1829,12 +2114,27 @@ export default function Schedule() {
                 </select>
               </div>
 
+              <div>
+                <label style={{ fontSize: 12, fontWeight: 600 }}>Show As (Grid Name)</label>
+                <input
+                  type="text"
+                  value={quickFormData.displayName}
+                  onChange={e => {
+                    const nextName = e.target.value;
+                    setQuickFormData(d => ({ ...d, displayName: nextName }));
+                    if (quickFormData.courseId) updateCourseShortName(quickFormData.courseId, nextName);
+                  }}
+                  placeholder={autoDisplayName(quickFormData.courseId, quickFormData.teacherName || '') || 'CSE 2201 DS'}
+                  style={{ width: '100%', padding: '8px 10px', border: '1px solid var(--border)', borderRadius: 6, background: 'var(--bg)', color: 'var(--text)', fontSize: 13, fontFamily: 'inherit' }}
+                />
+              </div>
+
               {/* Type */}
               <div>
                 <label style={{ fontSize: 12, fontWeight: 600 }}>Type</label>
                 <select
                   value={quickFormData.type}
-                  onChange={e => setQuickFormData(d => ({ ...d, type: e.target.value }))}
+                  onChange={e => handleQuickTypeChange(e.target.value)}
                   style={{ width: '100%', padding: '8px 10px', border: '1px solid var(--border)', borderRadius: 6, background: 'var(--bg)', color: 'var(--text)', fontSize: 13 }}
                 >
                   <option value="Theory">Theory</option>
@@ -1844,16 +2144,49 @@ export default function Schedule() {
                 </select>
               </div>
 
-              {/* Teacher */}
               <div>
-                <label style={{ fontSize: 12, fontWeight: 600 }}>Teacher</label>
-                <input
-                  type="text"
-                  value={quickFormData.teacherName}
-                  onChange={e => setQuickFormData(d => ({ ...d, teacherName: e.target.value }))}
-                  placeholder="Teacher name"
-                  style={{ width: '100%', padding: '8px 10px', border: '1px solid var(--border)', borderRadius: 6, background: 'var(--bg)', color: 'var(--text)', fontSize: 13, fontFamily: 'inherit' }}
-                />
+                <label style={{ fontSize: 12, fontWeight: 600 }}>Time</label>
+                <select
+                  value={quickFormData.slot}
+                  onChange={e => setQuickFormData(d => ({ ...d, slot: e.target.value }))}
+                  style={{ width: '100%', padding: '8px 10px', border: '1px solid var(--border)', borderRadius: 6, background: 'var(--bg)', color: 'var(--text)', fontSize: 13 }}
+                >
+                  {getAllowedSlotsForType(quickFormData.type).map(p => <option key={p} value={p}>{slotPreview(p)}</option>)}
+                </select>
+              </div>
+
+              {/* Teacher */}
+              <div style={{ gridColumn: 'span 2' }}>
+                <label style={{ fontSize: 12, fontWeight: 600 }}>Teacher (Select One)</label>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: 8 }}>
+                  <select
+                    value={quickFormData.teacherName}
+                    onChange={e => setQuickFormData(d => ({ ...d, teacherName: e.target.value }))}
+                    disabled={!quickFormData.courseId || getCourseTeachers(quickFormData.courseId).length === 0}
+                    style={{ width: '100%', padding: '8px 10px', border: '1px solid var(--border)', borderRadius: 6, background: 'var(--bg)', color: 'var(--text)', fontSize: 13 }}
+                  >
+                    <option value="">Select teacher</option>
+                    {getCourseTeachers(quickFormData.courseId).map(name => (
+                      <option key={name} value={name}>{name}</option>
+                    ))}
+                  </select>
+                  <button
+                    type="button"
+                    className="btn btn-ghost"
+                    onClick={() => {
+                      if (!quickFormData.courseId) return;
+                      setCourseTeacherDialogState({ open: true, courseId: quickFormData.courseId, source: 'quick' });
+                    }}
+                    disabled={!quickFormData.courseId}
+                  >
+                    Edit Teachers
+                  </button>
+                </div>
+                {quickFormData.courseId && getCourseTeachers(quickFormData.courseId).length < 2 && (
+                  <div style={{ marginTop: 6, fontSize: 11, color: 'rgb(180,83,9)' }}>
+                    This course needs two fixed teachers before adding class.
+                  </div>
+                )}
               </div>
 
               {/* Room */}
@@ -1892,6 +2225,7 @@ export default function Schedule() {
               <button
                 onClick={saveQuickForm}
                 className="btn btn-primary"
+                disabled={!!quickFormData.courseId && getCourseTeachers(quickFormData.courseId).length < 2}
                 style={{ padding: '8px 14px' }}
               >
                 {quickFormEditingId ? 'Update' : 'Add'}
@@ -1900,6 +2234,16 @@ export default function Schedule() {
           </div>
         </div>
       )}
+
+      <CourseTeacherDialog
+        isOpen={courseTeacherDialogState.open}
+        onClose={handleCourseTeacherDialogClose}
+        course={getCourse(courseTeacherDialogState.courseId)}
+        currentTeachers={getCourseTeachers(courseTeacherDialogState.courseId)}
+        onSave={handleCourseTeacherDialogSave}
+        allTeachers={allKnownTeachers}
+        requireTwoTeachers
+      />
     </div>
   );
 }
