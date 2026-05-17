@@ -1,12 +1,25 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { Plus, Trash2, Check } from 'lucide-react';
-import { store, uid, getAllCourses, getProfile } from '../store/store';
+import { store, uid, getAllCourses, getProfile, getCurrentTermKey } from '../store/store';
 
 export default function Assignments() {
   const profile = getProfile();
   const courses = getAllCourses(profile);
+  
+  // Filter courses to show only current term courses
+  const currentTermKey = getCurrentTermKey(profile);
+  const currentTermCourses = useMemo(() => {
+    if (!currentTermKey) return courses;
+    // Extract year and term from key (e.g., 'Y1T1' => year=1, term=1)
+    const match = currentTermKey.match(/Y(\d)T(\d)/);
+    if (!match) return courses;
+    const [, year, term] = match.map(Number);
+    return courses.filter(c => c.year === year && c.term === term);
+  }, [courses, currentTermKey]);
+  
   const [items, setItems] = useState(() => store.get('assignments') || []);
   const [adding, setAdding] = useState(false);
+  const [multipleMode, setMultipleMode] = useState(false);
   const [filter, setFilter] = useState('all');
   const [form, setForm] = useState({ courseId: '', title: '', desc: '', due: '', status: 'pending', priority: 'medium' });
 
@@ -14,8 +27,22 @@ export default function Assignments() {
 
   const add = () => {
     const updated = [{ ...form, id: uid() }, ...items];
-    setItems(updated); store.set('assignments', updated); setAdding(false);
-    setForm({ courseId: '', title: '', desc: '', due: '', status: 'pending', priority: 'medium' });
+    setItems(updated); 
+    store.set('assignments', updated); 
+    
+    // In multiple mode, keep the form and only clear title/desc; otherwise close
+    if (!multipleMode) {
+      setAdding(false);
+    }
+    
+    setForm({ 
+      courseId: multipleMode ? form.courseId : '', 
+      title: '', 
+      desc: '', 
+      due: multipleMode ? form.due : '', 
+      status: 'pending', 
+      priority: multipleMode ? form.priority : 'medium' 
+    });
   };
 
   const toggle = (id) => {
@@ -26,6 +53,29 @@ export default function Assignments() {
   const del = (id) => { const u = items.filter(a => a.id !== id); setItems(u); store.set('assignments', u); };
 
   const getCourse = (id) => courses.find(c => c.id === id);
+
+  // Color scheme for course badges
+  const getCourseColor = (courseId) => {
+    const colors = [
+      { bg: 'rgba(59,130,246,0.15)', border: 'rgba(59,130,246,0.35)', text: 'var(--accent)' },
+      { bg: 'rgba(34,197,94,0.15)', border: 'rgba(34,197,94,0.35)', text: 'rgb(34,197,94)' },
+      { bg: 'rgba(168,85,247,0.15)', border: 'rgba(168,85,247,0.35)', text: 'rgb(168,85,247)' },
+      { bg: 'rgba(249,115,22,0.15)', border: 'rgba(249,115,22,0.35)', text: 'rgb(249,115,22)' },
+      { bg: 'rgba(236,72,153,0.15)', border: 'rgba(236,72,153,0.35)', text: 'rgb(236,72,153)' },
+    ];
+    const index = (currentTermCourses.findIndex(c => c.id === courseId) % colors.length);
+    return colors[Math.max(0, index)];
+  };
+
+  // Calculate days left until due date
+  const getDaysLeft = (due) => {
+    if (!due) return null;
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const dueDate = new Date(`${due}T00:00:00`);
+    const daysLeft = Math.ceil((dueDate - today) / (1000 * 60 * 60 * 24));
+    return daysLeft;
+  };
 
   const filtered = items.filter(a => filter === 'all' ? true : filter === 'pending' ? a.status !== 'done' : a.status === 'done');
 
@@ -45,12 +95,27 @@ export default function Assignments() {
 
       {adding && (
         <div className="card" style={{ marginBottom: 16, borderColor: 'var(--accent)' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 10, marginBottom: 12 }}>
+            <div style={{ fontWeight: 600, fontSize: 13 }}>Add Assignment{multipleMode ? 's (Multiple Mode)' : ''}</div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 12 }}>
+              <label style={{ display: 'flex', alignItems: 'center', gap: 6, cursor: 'pointer' }}>
+                <input
+                  type="checkbox"
+                  checked={multipleMode}
+                  onChange={e => setMultipleMode(e.target.checked)}
+                  style={{ cursor: 'pointer' }}
+                />
+                Keep form open
+              </label>
+              <button className="btn btn-ghost" onClick={() => { setAdding(false); setMultipleMode(false); setForm({ courseId: '', title: '', desc: '', due: '', status: 'pending', priority: 'medium' }); }} style={{ padding: '4px 8px' }}>Close</button>
+            </div>
+          </div>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 10 }}>
             <div>
               <label>Course</label>
               <select value={form.courseId} onChange={e => set('courseId', e.target.value)}>
                 <option value="">Select course</option>
-                {courses.map(c => <option key={c.id} value={c.id}>{c.code}</option>)}
+                {currentTermCourses.map(c => <option key={c.id} value={c.id}>{c.code}</option>)}
               </select>
             </div>
             <div>
@@ -74,8 +139,8 @@ export default function Assignments() {
             <textarea value={form.desc} onChange={e => set('desc', e.target.value)} rows={2} placeholder="Topics, requirements..." />
           </div>
           <div style={{ display: 'flex', gap: 8 }}>
-            <button className="btn btn-primary" onClick={add}>Save</button>
-            <button className="btn btn-ghost" onClick={() => setAdding(false)}>Cancel</button>
+            <button className="btn btn-primary" onClick={add}>Add</button>
+            {multipleMode && <button className="btn btn-ghost" onClick={() => { setAdding(false); setMultipleMode(false); setForm({ courseId: '', title: '', desc: '', due: '', status: 'pending', priority: 'medium' }); }}>Done</button>}
           </div>
         </div>
       )}
@@ -94,9 +159,15 @@ export default function Assignments() {
       {filtered.map(a => {
         const c = getCourse(a.courseId);
         const overdue = a.status !== 'done' && isOverdue(a.due);
+        const daysLeft = getDaysLeft(a.due);
+        const courseColor = getCourseColor(a.courseId);
+        const priorityBg = a.priority === 'high' ? 'rgba(239,68,68,0.1)' : a.priority === 'medium' ? 'rgba(249,115,22,0.1)' : 'rgba(107,114,128,0.1)';
+        const priorityColor = a.priority === 'high' ? 'rgb(239,68,68)' : a.priority === 'medium' ? 'rgb(249,115,22)' : 'rgb(107,114,128)';
+        
         return (
           <div key={a.id} className="card" style={{
-            marginBottom: 6, opacity: a.status === 'done' ? 0.6 : 1,
+            marginBottom: 8, 
+            opacity: a.status === 'done' ? 0.6 : 1,
             borderLeft: `3px solid ${overdue ? 'var(--danger)' : a.status === 'done' ? 'var(--border)' : 'var(--accent)'}`,
           }}>
             <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
@@ -108,14 +179,71 @@ export default function Assignments() {
                 {a.status === 'done' && <Check size={11} color="var(--accentFg)" />}
               </button>
               <div style={{ flex: 1 }}>
-                <div style={{ display: 'flex', gap: 6, alignItems: 'center', flexWrap: 'wrap' }}>
-                  <span style={{ fontWeight: 600, fontSize: 13, textDecoration: a.status === 'done' ? 'line-through' : 'none' }}>{a.title}</span>
-                  {c && <span style={{ fontSize: 11, color: 'var(--accent)', fontFamily: 'JetBrains Mono, monospace' }}>{c.code}</span>}
-                  <span className={`tag ${priorityColor[a.priority]}`}>{a.priority}</span>
-                  {overdue && <span className="tag tag-red">Overdue</span>}
+                <div style={{ display: 'flex', gap: 8, alignItems: 'flex-start', flexWrap: 'wrap', marginBottom: 6 }}>
+                  {/* Course Badge */}
+                  {c && (
+                    <div
+                      style={{
+                        padding: '3px 10px',
+                        borderRadius: 5,
+                        background: courseColor.bg,
+                        border: `1px solid ${courseColor.border}`,
+                        color: courseColor.text,
+                        fontSize: 11,
+                        fontWeight: 700,
+                        whiteSpace: 'nowrap',
+                      }}
+                    >
+                      {c.code}
+                    </div>
+                  )}
+                  
+                  {/* Title */}
+                  <span style={{ 
+                    fontWeight: 600, 
+                    fontSize: 13, 
+                    textDecoration: a.status === 'done' ? 'line-through' : 'none',
+                    color: 'var(--text)',
+                    flex: 1,
+                  }}>
+                    {a.title}
+                  </span>
                 </div>
-                {a.due && <div style={{ fontSize: 11, color: overdue ? 'var(--danger)' : 'var(--muted)', marginTop: 2 }}>Due: {a.due}</div>}
-                {a.desc && <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 2 }}>{a.desc}</div>}
+                
+                {/* Meta Info: Days Left, Priority, Due Date */}
+                <div style={{ display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap', marginBottom: 6 }}>
+                  {a.due && (
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 11 }}>
+                      <span style={{ 
+                        color: overdue ? 'var(--danger)' : daysLeft === 0 ? 'rgb(239,68,68)' : 'var(--muted)',
+                        fontWeight: daysLeft <= 1 ? 700 : 500
+                      }}>
+                        📅 {overdue ? 'Overdue' : daysLeft === 0 ? 'Due today' : `${daysLeft} day${daysLeft !== 1 ? 's' : ''} left`}
+                      </span>
+                    </div>
+                  )}
+                  
+                  {/* Priority Tag */}
+                  <span
+                    style={{
+                      padding: '3px 8px',
+                      borderRadius: 4,
+                      background: priorityBg,
+                      color: priorityColor,
+                      fontSize: 10,
+                      fontWeight: 700,
+                      whiteSpace: 'nowrap',
+                    }}
+                  >
+                    {a.priority.toUpperCase()}
+                  </span>
+                </div>
+                
+                {/* Description */}
+                {a.desc && <div style={{ fontSize: 11, color: 'var(--muted)', marginBottom: 4, lineHeight: 1.4 }}>{a.desc}</div>}
+                
+                {/* Due Date */}
+                {a.due && <div style={{ fontSize: 10, color: 'var(--muted)' }}>Due: {a.due}</div>}
               </div>
               <button className="btn btn-ghost" style={{ padding: '4px 8px' }} onClick={() => del(a.id)}><Trash2 size={12} color="var(--danger)" /></button>
             </div>

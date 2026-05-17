@@ -67,6 +67,37 @@ export function computeAlerts(profile) {
   else if (earnedCredits >= 120)
     positives.push({ msg: `${earnedCredits} credits done — on track for graduation`, link: '/credits' });
 
+  // Assignment reminders (due within 3 days)
+  const assignments = store.get('assignments') || [];
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  
+  const threeDaysLater = new Date(today);
+  threeDaysLater.setDate(threeDaysLater.getDate() + 3);
+  
+  assignments
+    .filter(a => a.status !== 'done' && a.due)
+    .filter(a => {
+      const dueDate = new Date(`${a.due}T00:00:00`);
+      return dueDate >= today && dueDate <= threeDaysLater;
+    })
+    .sort((a, b) => new Date(`${a.due}T00:00:00`) - new Date(`${b.due}T00:00:00`))
+    .forEach(a => {
+      const course = courses.find(c => c.id === a.courseId);
+      const courseLabel = course?.code || 'Assignment';
+      const dueDate = new Date(`${a.due}T00:00:00`);
+      const daysLeft = Math.ceil((dueDate - today) / (1000 * 60 * 60 * 24));
+      
+      const topic = a.topic ? ` — ${a.topic}` : '';
+      const daysLabel = daysLeft === 0 ? 'TODAY' : daysLeft === 1 ? 'Tomorrow' : `${daysLeft} days left`;
+      
+      if (daysLeft === 0) {
+        critical.push({ msg: `${courseLabel}${topic} is DUE TODAY! ⚠️`, link: '/assignments' });
+      } else {
+        warnings.push({ msg: `${courseLabel}${topic} — Due in ${daysLabel}`, link: '/assignments' });
+      }
+    });
+
   return { critical, warnings, positives };
 }
 

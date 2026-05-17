@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { Plus, Settings2, Clock3, PencilLine, Copy, CalendarDays, X } from 'lucide-react';
+import { Plus, Settings2, Clock3, PencilLine, Copy, CalendarDays, X, FileText } from 'lucide-react';
 import { store, uid, getAllCourses, getProfile, getCurrentTermKey, getRoutinePreviewDate, isRoutineHoliday, getTermTimeline } from '../store/store';
+import { useNavigate } from 'react-router-dom';
 
 const DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday'];
 const DAY_INDEX = { Sunday: 0, Monday: 1, Tuesday: 2, Wednesday: 3, Thursday: 4 };
@@ -67,9 +68,8 @@ const DEFAULT_SETTINGS = {
 };
 
 const MESSAGE_FORMATS = [
-  { id: 'plain', label: 'Plain', sample: 'Schedule for Sunday' },
-  { id: 'whatsapp', label: 'WhatsApp', sample: '*Schedule for Sunday*' },
-  { id: 'telegram', label: 'Telegram', sample: 'Schedule for Sunday' },
+  { id: 'plain', label: 'Copy Text', sample: 'Schedule for Sunday' },
+  { id: 'whatsapp', label: 'Copy WhatsApp', sample: '📅 *Schedule for Sunday*' },
 ];
 
 const normalizeTeacherName = (value) => {
@@ -170,34 +170,107 @@ const getTomorrowDay = () => {
   return 'Sunday';
 };
 
-const buildDailyText = (day, classes, getCourse, messageFormat = 'plain') => {
+const buildDailyText = (day, classes, getCourse, assignments = [], messageFormat = 'plain') => {
   const lines = [];
+  
   if (messageFormat === 'whatsapp') {
-    lines.push(`*Schedule for ${day}*`);
-  } else if (messageFormat === 'telegram') {
-    lines.push(`Schedule for ${day}`);
+    // WhatsApp format: Time + Teacher only
+    lines.push(`*_📅 Schedule for ${day}_*`);
+    lines.push('');
+    
+    if (classes.length) {
+      const sortedClasses = classes.slice().sort((a, b) => a.slot.localeCompare(b.slot));
+      
+      sortedClasses.forEach((item, idx) => {
+        const course = getCourse(item.courseId);
+        const teacherLabel = item.teacherName || 'Teacher not set';
+        const cleanSlot = String(item.slot).replace(/\s+break\s*$/i, '').trim();
+        
+        // Simple format: Time — Teacher
+        lines.push(`${idx + 1}. *${cleanSlot}* — _${teacherLabel}_`);
+      });
+    }
+    
+    // Add assignments due in next 2 days
+    if (assignments.length > 0) {
+      lines.push('');
+      lines.push('────────────────');
+      lines.push('*_📌 Assignment Reminder_*');
+      lines.push('');
+      
+      // Group assignments by teacher
+      const byTeacher = {};
+      assignments.forEach(a => {
+        const course = getCourse(a.courseId);
+        const teacher = course?.teacher || 'Unknown Teacher';
+        if (!byTeacher[teacher]) byTeacher[teacher] = [];
+        byTeacher[teacher].push(a);
+      });
+      
+      // Format each teacher's assignments
+      Object.entries(byTeacher).forEach(([teacher, teacherAssignments]) => {
+        teacherAssignments.forEach((a, idx) => {
+          const dueDate = new Date(`${a.due}T00:00:00`);
+          const dateStr = dueDate.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+          
+          lines.push(`> Assignment for *${teacher}*`);
+          lines.push(`${a.topic || 'Assignment'}`);
+          lines.push(`_Deadline: ${dateStr}_ ⏰`);
+          
+          if (idx < teacherAssignments.length - 1) {
+            lines.push('');
+          }
+        });
+      });
+    }
   } else {
+    // Plain format
     lines.push(`Schedule for ${day}`);
+    
+    if (classes.length) {
+      classes
+        .slice()
+        .sort((a, b) => a.slot.localeCompare(b.slot))
+        .forEach(item => {
+          const course = getCourse(item.courseId);
+          const visibleLabel = item.displayName || course?.name || course?.code || 'Unknown Course';
+          const teacherLabel = item.teacherName || 'Teacher not set';
+          lines.push(`${item.slot} · ${visibleLabel} · ${teacherLabel}`);
+        });
+    }
+    
+    // Plain format assignment reminders
+    if (assignments.length > 0) {
+      lines.push('');
+      lines.push('────────────────');
+      lines.push('Assignment Reminder');
+      lines.push('');
+      
+      const byTeacher = {};
+      assignments.forEach(a => {
+        const course = getCourse(a.courseId);
+        const teacher = course?.teacher || 'Unknown Teacher';
+        if (!byTeacher[teacher]) byTeacher[teacher] = [];
+        byTeacher[teacher].push(a);
+      });
+      
+      Object.entries(byTeacher).forEach(([teacher, teacherAssignments]) => {
+        teacherAssignments.forEach((a, idx) => {
+          const dueDate = new Date(`${a.due}T00:00:00`);
+          const dateStr = dueDate.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+          
+          lines.push(`Assignment for ${teacher}`);
+          lines.push(`${a.topic || 'Assignment'}`);
+          lines.push(`Deadline: ${dateStr}`);
+          
+          if (idx < teacherAssignments.length - 1) {
+            lines.push('');
+          }
+        });
+      });
+    }
   }
-  if (!classes.length) {
-    lines.push('No classes added yet.');
-    return lines.join('\n');
-  }
-  classes
-    .slice()
-    .sort((a, b) => a.slot.localeCompare(b.slot))
-    .forEach(item => {
-      const course = getCourse(item.courseId);
-      const visibleLabel = item.displayName || course?.name || course?.code || 'Unknown Course';
-      const teacherLabel = item.teacherName || 'Teacher not set';
-      if (messageFormat === 'whatsapp') {
-        lines.push(`• *${item.slot}* · ${visibleLabel} · ${teacherLabel}`);
-      } else if (messageFormat === 'telegram') {
-        lines.push(`• ${item.slot} · ${visibleLabel} · ${teacherLabel}`);
-      } else {
-        lines.push(`${item.slot} · ${visibleLabel} · ${teacherLabel}`);
-      }
-    });
+  
   return lines.join('\n');
 };
 
@@ -209,6 +282,7 @@ const getRoutineLabel = (course, item) => {
 };
 
 export default function Schedule() {
+  const navigate = useNavigate();
   const profile = getProfile();
   const courses = useMemo(() => getAllCourses(profile), [profile.dept, profile.currentTermKey]);
   
@@ -222,6 +296,9 @@ export default function Schedule() {
     const [, year, term] = match.map(Number);
     return courses.filter(c => c.year === year && c.term === term);
   }, [courses, currentTermKey]);
+  
+  // Load assignments
+  const assignments = useMemo(() => store.get('assignments') || [], []);
   const [schedule, setSchedule] = useState(() => normalizeScheduleEntries(store.get('schedule') || []));
   const [settings, setSettings] = useState(() => normalizeSettings(store.get('scheduleSettings')));
   const [adding, setAdding] = useState(false);
@@ -231,6 +308,12 @@ export default function Schedule() {
   const [selectedDay, setSelectedDay] = useState(() => dateToDayName(getRoutinePreviewDate((store.get('scheduleSettings')?.holidayDates) || [])));
   const [holidaySetupOpen, setHolidaySetupOpen] = useState(false);
   const [holidayDate, setHolidayDate] = useState('');
+  const [holidayMode, setHolidayMode] = useState('calendar'); // 'single' or 'calendar'
+  const [calendarMonth, setCalendarMonth] = useState(() => {
+    const now = new Date();
+    return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+  });
+  const [calendarSelectedDates, setCalendarSelectedDates] = useState(new Set());
   const [nowTick, setNowTick] = useState(() => Date.now());
   const autoPreviewDayRef = useRef(getTomorrowDay());
   const [form, setForm] = useState({
@@ -259,6 +342,8 @@ export default function Schedule() {
   const closeHolidaySetup = () => {
     setHolidaySetupOpen(false);
     setHolidayDate('');
+    setHolidayMode('calendar');
+    setCalendarSelectedDates(new Set());
   };
   
   const openQuickAdd = (day, slot) => {
@@ -535,6 +620,58 @@ export default function Schedule() {
 
   const getCourse = (id) => courses.find(c => c.id === id);
 
+  // Get upcoming assignments for selected day (within 3 days before deadline)
+  const getUpcomingAssignmentsForDay = (day) => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    
+    // For each assignment, check if it falls within 3 days before its deadline on this day
+    return assignments
+      .filter(a => a.status !== 'done' && a.due)
+      .map(a => {
+        const dueDate = new Date(`${a.due}T00:00:00`);
+        const dayOfWeek = dueDate.toLocaleDateString('en-US', { weekday: 'long' });
+        
+        // Check if this assignment is for the selected day
+        if (dayOfWeek === day) {
+          const daysLeft = Math.ceil((dueDate - today) / (1000 * 60 * 60 * 24));
+          return { ...a, daysLeft, isToday: daysLeft === 0 };
+        }
+        return null;
+      })
+      .filter(Boolean)
+      .sort((a, b) => a.daysLeft - b.daysLeft);
+  };
+
+  // Get assignments due within next 2 days for copy format
+  const getAssignmentsNextTwoDays = () => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    
+    const twoDaysLater = new Date(today);
+    twoDaysLater.setDate(twoDaysLater.getDate() + 2);
+    
+    return assignments
+      .filter(a => a.status !== 'done' && a.due)
+      .filter(a => {
+        const dueDate = new Date(`${a.due}T00:00:00`);
+        return dueDate >= today && dueDate <= twoDaysLater;
+      })
+      .sort((a, b) => new Date(`${a.due}T00:00:00`) - new Date(`${b.due}T00:00:00`));
+  };
+
+  // Color scheme for course badges
+  const getCourseColor = (courseId, index) => {
+    const colors = [
+      { bg: 'rgba(59,130,246,0.15)', border: 'rgba(59,130,246,0.35)', text: 'var(--accent)' },
+      { bg: 'rgba(34,197,94,0.15)', border: 'rgba(34,197,94,0.35)', text: 'rgb(34,197,94)' },
+      { bg: 'rgba(168,85,247,0.15)', border: 'rgba(168,85,247,0.35)', text: 'rgb(168,85,247)' },
+      { bg: 'rgba(249,115,22,0.15)', border: 'rgba(249,115,22,0.35)', text: 'rgb(249,115,22)' },
+      { bg: 'rgba(236,72,153,0.15)', border: 'rgba(236,72,153,0.35)', text: 'rgb(236,72,153)' },
+    ];
+    return colors[index % colors.length];
+  };
+
   const grid = useMemo(() => {
     const next = {};
     DAYS.forEach(d => {
@@ -554,7 +691,7 @@ export default function Schedule() {
   const selectedClasses = schedule.filter(s => s.day === selectedDay);
   const currentCalendarDay = dateToDayName(new Date().toISOString().split('T')[0]);
   const selectedFormatLabel = MESSAGE_FORMATS.find(format => format.id === settings.messageFormat)?.label || 'Plain';
-  const selectedScheduleText = buildDailyText(selectedDay, selectedClasses, getCourse, settings.messageFormat);
+  const selectedScheduleText = buildDailyText(selectedDay, selectedClasses, getCourse, getAssignmentsNextTwoDays(), settings.messageFormat);
 
   const saveHolidayDates = (nextDates) => {
     persistSettings({ ...settings, holidayDates: [...new Set(nextDates)].sort() });
@@ -573,6 +710,89 @@ export default function Schedule() {
 
   const removeHolidayDate = (value) => {
     saveHolidayDates(holidayDates.filter(date => date !== value));
+  };
+
+  const toggleCalendarDate = (dateStr) => {
+    const newSet = new Set(calendarSelectedDates);
+    if (newSet.has(dateStr)) {
+      newSet.delete(dateStr);
+    } else {
+      newSet.add(dateStr);
+    }
+    setCalendarSelectedDates(newSet);
+  };
+
+  const addCalendarSelectedDates = () => {
+    if (calendarSelectedDates.size === 0) {
+      alert('Please select at least one date from the calendar.');
+      return;
+    }
+    saveHolidayDates([...holidayDates, ...Array.from(calendarSelectedDates)]);
+    setCalendarSelectedDates(new Set());
+  };
+
+  const renderCalendar = (monthStr) => {
+    const [year, month] = monthStr.split('-').map(Number);
+    const firstDay = new Date(year, month - 1, 1);
+    const lastDay = new Date(year, month, 0);
+    const daysInMonth = lastDay.getDate();
+    const startingDayOfWeek = firstDay.getDay();
+    
+    const weeks = [];
+    let week = [];
+    
+    // Add empty cells for days before month starts
+    for (let i = 0; i < startingDayOfWeek; i++) {
+      week.push(null);
+    }
+    
+    // Add days of month
+    for (let day = 1; day <= daysInMonth; day++) {
+      const dateStr = `${String(year).padStart(4, '0')}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+      week.push({ day, dateStr });
+      if (week.length === 7) {
+        weeks.push(week);
+        week = [];
+      }
+    }
+    
+    // Add empty cells to complete last week
+    if (week.length > 0) {
+      while (week.length < 7) {
+        week.push(null);
+      }
+      weeks.push(week);
+    }
+    
+    return weeks;
+  };
+
+  const monthName = (monthStr) => {
+    const [year, month] = monthStr.split('-').map(Number);
+    const date = new Date(year, month - 1, 1);
+    return date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+  };
+
+  const prevMonth = () => {
+    const [year, month] = calendarMonth.split('-').map(Number);
+    let prevM = month - 1;
+    let prevY = year;
+    if (prevM < 1) {
+      prevM = 12;
+      prevY = year - 1;
+    }
+    setCalendarMonth(`${String(prevY).padStart(4, '0')}-${String(prevM).padStart(2, '0')}`);
+  };
+
+  const nextMonth = () => {
+    const [year, month] = calendarMonth.split('-').map(Number);
+    let nextM = month + 1;
+    let nextY = year;
+    if (nextM > 12) {
+      nextM = 1;
+      nextY = year + 1;
+    }
+    setCalendarMonth(`${String(nextY).padStart(4, '0')}-${String(nextM).padStart(2, '0')}`);
   };
 
   const copySelectedSchedule = async () => {
@@ -865,22 +1085,22 @@ export default function Schedule() {
                 gap: 8,
                 padding: '9px 14px',
                 borderRadius: 999,
-                border: selectedFormatLabel === 'WhatsApp' ? '1px solid rgba(37,211,102,0.35)' : '1px solid rgba(59,130,246,0.24)',
-                background: selectedFormatLabel === 'WhatsApp'
+                border: settings.messageFormat === 'whatsapp' ? '1px solid rgba(37,211,102,0.35)' : '1px solid rgba(59,130,246,0.24)',
+                background: settings.messageFormat === 'whatsapp'
                   ? 'linear-gradient(180deg, rgba(37,211,102,0.16), rgba(37,211,102,0.10))'
                   : 'linear-gradient(180deg, rgba(59,130,246,0.12), rgba(59,130,246,0.06))',
-                boxShadow: selectedFormatLabel === 'WhatsApp'
+                boxShadow: settings.messageFormat === 'whatsapp'
                   ? '0 10px 24px rgba(37,211,102,0.12)'
                   : '0 10px 24px rgba(59,130,246,0.08)',
                 color: 'var(--text)',
                 fontWeight: 700,
               }}
             >
-              <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 22, height: 22, borderRadius: 999, background: selectedFormatLabel === 'WhatsApp' ? 'rgba(37,211,102,0.18)' : 'rgba(59,130,246,0.14)' }}>
+              <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 22, height: 22, borderRadius: 999, background: settings.messageFormat === 'whatsapp' ? 'rgba(37,211,102,0.18)' : 'rgba(59,130,246,0.14)' }}>
                 <Copy size={12} />
               </span>
               <span style={{ display: 'inline-flex', flexDirection: 'column', alignItems: 'flex-start', lineHeight: 1.05 }}>
-                <span style={{ fontSize: 12 }}>Copy {selectedFormatLabel}</span>
+                <span style={{ fontSize: 12 }}>{selectedFormatLabel}</span>
                 <span style={{ fontSize: 10, color: 'var(--muted)', fontWeight: 600 }}>selected format</span>
               </span>
             </button>
@@ -928,6 +1148,94 @@ export default function Schedule() {
             </div>
           )}
         </div>
+
+        {/* Assignments Preview Section */}
+        {(() => {
+          const dayAssignments = getUpcomingAssignmentsForDay(selectedDay);
+          return (
+            <div style={{ padding: 12, border: '1px solid var(--border)', borderRadius: 12, background: 'var(--bg)', marginTop: 12 }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+                <div style={{ fontWeight: 700, fontSize: 13 }}>📋 Assignments</div>
+                <button
+                  onClick={() => navigate('/assignments')}
+                  className="btn btn-ghost"
+                  style={{ padding: '4px 8px', fontSize: 11 }}
+                >
+                  <FileText size={11} /> View all
+                </button>
+              </div>
+              {dayAssignments.length === 0 ? (
+                <div style={{ fontSize: 12, color: 'var(--muted)' }}>No upcoming assignments.</div>
+              ) : (
+                <div style={{ display: 'grid', gap: 6 }}>
+                  {dayAssignments.map((assignment, index) => {
+                    const course = getCourse(assignment.courseId);
+                    const courseColor = getCourseColor(assignment.courseId, index);
+                    const priorityBg = assignment.priority === 'high' ? 'rgba(239,68,68,0.1)' : assignment.priority === 'medium' ? 'rgba(249,115,22,0.1)' : 'rgba(107,114,128,0.1)';
+                    const priorityColor = assignment.priority === 'high' ? 'rgb(239,68,68)' : assignment.priority === 'medium' ? 'rgb(249,115,22)' : 'rgb(107,114,128)';
+                    
+                    return (
+                      <div
+                        key={assignment.id}
+                        onClick={() => navigate('/assignments')}
+                        style={{
+                          padding: '10px 12px',
+                          borderRadius: 8,
+                          border: '1px solid var(--border)',
+                          background: 'var(--card)',
+                          cursor: 'pointer',
+                          transition: 'all 0.15s ease',
+                        }}
+                        onMouseEnter={e => e.currentTarget.style.borderColor = 'var(--accent)'}
+                        onMouseLeave={e => e.currentTarget.style.borderColor = 'var(--border)'}
+                      >
+                        <div style={{ display: 'flex', alignItems: 'flex-start', gap: 8, marginBottom: 4 }}>
+                          <div
+                            style={{
+                              padding: '2px 8px',
+                              borderRadius: 4,
+                              background: courseColor.bg,
+                              border: `1px solid ${courseColor.border}`,
+                              color: courseColor.text,
+                              fontSize: 11,
+                              fontWeight: 700,
+                              whiteSpace: 'nowrap',
+                              flexShrink: 0,
+                            }}
+                          >
+                            {course?.code || 'Unknown'}
+                          </div>
+                          <div style={{ flex: 1, minWidth: 0 }}>
+                            <div style={{ fontWeight: 600, fontSize: 12, color: 'var(--text)', marginBottom: 2 }}>
+                              {assignment.title}
+                            </div>
+                            <div style={{ display: 'flex', gap: 8, alignItems: 'center', fontSize: 11 }}>
+                              <span style={{ color: assignment.isToday ? 'rgb(239,68,68)' : 'var(--muted)' }}>
+                                📅 {assignment.isToday ? 'Due today' : `${assignment.daysLeft} day${assignment.daysLeft !== 1 ? 's' : ''} left`}
+                              </span>
+                              <span
+                                style={{
+                                  padding: '2px 6px',
+                                  borderRadius: 3,
+                                  background: priorityBg,
+                                  color: priorityColor,
+                                  fontSize: 10,
+                                  fontWeight: 600,
+                                }}
+                              >
+                                {assignment.priority}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          );
+        })()}
       </div>
 
       {adding && (
@@ -1050,10 +1358,10 @@ export default function Schedule() {
               {selectedClasses.length === 0 ? 'No classes added yet.' : `${selectedClasses.length} class${selectedClasses.length === 1 ? '' : 'es'} selected`}
             </div>
             <button className="btn btn-ghost" onClick={copySelectedSchedule}>
-              <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 22, height: 22, borderRadius: 999, background: selectedFormatLabel === 'WhatsApp' ? 'rgba(37,211,102,0.18)' : 'rgba(59,130,246,0.14)' }}>
+              <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 22, height: 22, borderRadius: 999, background: settings.messageFormat === 'whatsapp' ? 'rgba(37,211,102,0.18)' : 'rgba(59,130,246,0.14)' }}>
                 <Copy size={12} />
               </span>
-              <span style={{ marginLeft: 8, fontWeight: 700 }}>Copy {selectedFormatLabel}</span>
+              <span style={{ marginLeft: 8, fontWeight: 700 }}>{selectedFormatLabel}</span>
             </button>
           </div>
         </div>
@@ -1091,39 +1399,223 @@ export default function Schedule() {
         >
           <div
             className="card"
-            style={{ width: 560, maxWidth: '100%', padding: 16, background: 'var(--bg)' }}
+            style={{ width: 650, maxWidth: '100%', padding: 16, background: 'var(--bg)' }}
             onClick={e => e.stopPropagation()}
           >
-            <div style={{ display: 'flex', justifyContent: 'space-between', gap: 10, alignItems: 'center', marginBottom: 12 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', gap: 10, alignItems: 'center', marginBottom: 16 }}>
               <div>
                 <div style={{ fontWeight: 700, fontSize: 14 }}>Holiday Calendar</div>
-                <div style={{ fontSize: 12, color: 'var(--muted)' }}>Friday and Saturday are always holidays. Add extra dates below.</div>
+                <div style={{ fontSize: 12, color: 'var(--muted)' }}>Friday and Saturday are always holidays. Click dates to add.</div>
               </div>
               <button className="btn btn-ghost" onClick={closeHolidaySetup}>Close</button>
             </div>
+
+            {/* Mode Tabs */}
+            <div style={{ display: 'flex', gap: 8, marginBottom: 12, borderBottom: '1px solid var(--border)', paddingBottom: 8 }}>
+              <button
+                onClick={() => setHolidayMode('calendar')}
+                style={{
+                  padding: '8px 12px',
+                  borderBottom: holidayMode === 'calendar' ? '2px solid var(--accent)' : 'none',
+                  background: 'transparent',
+                  border: 'none',
+                  cursor: 'pointer',
+                  fontWeight: holidayMode === 'calendar' ? 700 : 400,
+                  color: holidayMode === 'calendar' ? 'var(--accent)' : 'var(--text)',
+                  fontSize: 13,
+                }}
+              >
+                📅 Calendar Picker
+              </button>
+              <button
+                onClick={() => setHolidayMode('single')}
+                style={{
+                  padding: '8px 12px',
+                  borderBottom: holidayMode === 'single' ? '2px solid var(--accent)' : 'none',
+                  background: 'transparent',
+                  border: 'none',
+                  cursor: 'pointer',
+                  fontWeight: holidayMode === 'single' ? 700 : 400,
+                  color: holidayMode === 'single' ? 'var(--accent)' : 'var(--text)',
+                  fontSize: 13,
+                }}
+              >
+                📆 Single Date
+              </button>
+            </div>
+
             <div style={{ display: 'grid', gap: 10 }}>
-              <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-                <input
-                  type="date"
-                  value={holidayDate}
-                  onChange={e => setHolidayDate(e.target.value)}
-                  style={{ minWidth: 170 }}
-                />
-                <button className="btn btn-primary" onClick={addHolidayDate} disabled={!holidayDate}>
-                  <CalendarDays size={13} /> Add Holiday
-                </button>
-              </div>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
-                {holidayDates.length === 0 ? (
-                  <div style={{ fontSize: 12, color: 'var(--muted)' }}>No extra holidays added yet.</div>
-                ) : holidayDates.map(date => (
-                  <span key={date} className="tag tag-gray" style={{ display: 'inline-flex', gap: 6, alignItems: 'center' }}>
-                    {date}
-                    <button onClick={() => removeHolidayDate(date)} style={{ border: 'none', background: 'transparent', cursor: 'pointer', color: 'inherit', padding: 0 }}>
-                      <X size={12} />
+              {/* Calendar Mode */}
+              {holidayMode === 'calendar' && (
+                <div>
+                  {/* Month Navigation */}
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+                    <button
+                      onClick={prevMonth}
+                      className="btn btn-ghost"
+                      style={{ padding: '8px 12px' }}
+                    >
+                      ← Previous
                     </button>
-                  </span>
-                ))}
+                    <div style={{ fontWeight: 700, fontSize: 14, minWidth: 180, textAlign: 'center' }}>
+                      {monthName(calendarMonth)}
+                    </div>
+                    <button
+                      onClick={nextMonth}
+                      className="btn btn-ghost"
+                      style={{ padding: '8px 12px' }}
+                    >
+                      Next →
+                    </button>
+                  </div>
+
+                  {/* Calendar Grid */}
+                  <div style={{ marginBottom: 16 }}>
+                    <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                      <thead>
+                        <tr>
+                          {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
+                            <th
+                              key={day}
+                              style={{
+                                padding: '8px 4px',
+                                textAlign: 'center',
+                                fontWeight: 700,
+                                fontSize: 12,
+                                color: 'var(--muted)',
+                                borderBottom: '1px solid var(--border)',
+                              }}
+                            >
+                              {day}
+                            </th>
+                          ))}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {renderCalendar(calendarMonth).map((week, weekIdx) => (
+                          <tr key={weekIdx}>
+                            {week.map((dayData, dayIdx) => {
+                              const isSelected = dayData && calendarSelectedDates.has(dayData.dateStr);
+                              const isInHolidays = dayData && holidayDates.includes(dayData.dateStr);
+                              const [, , dayNum] = calendarMonth.split('-').map(Number);
+                              const isFridayOrSaturday = [5, 6].includes(dayData?.dateStr ? new Date(`${dayData.dateStr}T00:00:00`).getDay() : -1);
+                              
+                              return (
+                                <td
+                                  key={dayIdx}
+                                  style={{
+                                    padding: '6px 4px',
+                                    textAlign: 'center',
+                                    height: 50,
+                                    borderBottom: '1px solid var(--border)',
+                                    borderRight: dayIdx < 6 ? '1px solid var(--border)' : 'none',
+                                  }}
+                                >
+                                  {dayData ? (
+                                    <button
+                                      onClick={() => toggleCalendarDate(dayData.dateStr)}
+                                      style={{
+                                        width: '100%',
+                                        height: '100%',
+                                        border: isSelected ? '2px solid var(--accent)' : isInHolidays ? '2px solid rgba(34,197,94,0.5)' : '1px solid transparent',
+                                        background: isSelected
+                                          ? 'rgba(59,130,246,0.15)'
+                                          : isInHolidays
+                                          ? 'rgba(34,197,94,0.1)'
+                                          : isFridayOrSaturday
+                                          ? 'rgba(239,68,68,0.08)'
+                                          : 'transparent',
+                                        borderRadius: 6,
+                                        cursor: 'pointer',
+                                        fontWeight: isSelected || isInHolidays ? 700 : 400,
+                                        fontSize: 13,
+                                        color: isFridayOrSaturday ? 'rgba(239,68,68,0.8)' : 'var(--text)',
+                                        transition: 'all 0.15s ease',
+                                      }}
+                                      title={isFridayOrSaturday ? 'Always holiday' : isInHolidays ? 'Already added' : 'Click to select'}
+                                    >
+                                      {dayData.day}
+                                    </button>
+                                  ) : null}
+                                </td>
+                              );
+                            })}
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+
+                  {/* Selected Count and Add Button */}
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: 12, borderRadius: 8, border: '1px solid var(--border)', background: 'rgba(59,130,246,0.05)', marginBottom: 12 }}>
+                    <div style={{ fontSize: 13 }}>
+                      <span style={{ fontWeight: 700 }}>{calendarSelectedDates.size}</span>
+                      <span style={{ color: 'var(--muted)' }}> date{calendarSelectedDates.size !== 1 ? 's' : ''} selected</span>
+                    </div>
+                    <button
+                      className="btn btn-primary"
+                      onClick={addCalendarSelectedDates}
+                      disabled={calendarSelectedDates.size === 0}
+                    >
+                      <CalendarDays size={13} /> Add to Holidays
+                    </button>
+                  </div>
+
+                  {/* Legend */}
+                  <div style={{ fontSize: 11, color: 'var(--muted)', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                      <div style={{ width: 20, height: 20, borderRadius: 4, background: 'rgba(59,130,246,0.15)', border: '2px solid var(--accent)' }} />
+                      <span>Selected</span>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                      <div style={{ width: 20, height: 20, borderRadius: 4, background: 'rgba(34,197,94,0.1)', border: '2px solid rgba(34,197,94,0.5)' }} />
+                      <span>Already added</span>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                      <div style={{ width: 20, height: 20, borderRadius: 4, background: 'rgba(239,68,68,0.08)', color: 'rgba(239,68,68,0.8)' }}>F</div>
+                      <span>Fri/Sat</span>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Single Date Mode */}
+              {holidayMode === 'single' && (
+                <div>
+                  <div style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 8 }}>Add one holiday date at a time:</div>
+                  <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                    <input
+                      type="date"
+                      value={holidayDate}
+                      onChange={e => setHolidayDate(e.target.value)}
+                      style={{ minWidth: 170, padding: '8px 10px', border: '1px solid var(--border)', borderRadius: 6, background: 'var(--bg)', color: 'var(--text)', fontSize: 13 }}
+                    />
+                    <button className="btn btn-primary" onClick={addHolidayDate} disabled={!holidayDate}>
+                      <CalendarDays size={13} /> Add Holiday
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* Holiday List */}
+              <div style={{ paddingTop: 8, borderTop: '1px solid var(--border)' }}>
+                <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 8 }}>
+                  Saved Holidays ({holidayDates.length})
+                </div>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+                  {holidayDates.length === 0 ? (
+                    <div style={{ fontSize: 12, color: 'var(--muted)' }}>No extra holidays added yet.</div>
+                  ) : (
+                    holidayDates.map(date => (
+                      <span key={date} className="tag tag-gray" style={{ display: 'inline-flex', gap: 6, alignItems: 'center' }}>
+                        {date}
+                        <button onClick={() => removeHolidayDate(date)} style={{ border: 'none', background: 'transparent', cursor: 'pointer', color: 'inherit', padding: 0 }}>
+                          <X size={12} />
+                        </button>
+                      </span>
+                    ))
+                  )}
+                </div>
               </div>
             </div>
           </div>
@@ -1144,13 +1636,13 @@ export default function Schedule() {
               minWidth: 160,
               padding: '10px 14px',
               borderRadius: 999,
-              border: selectedFormatLabel === 'WhatsApp' ? '1px solid rgba(37,211,102,0.35)' : '1px solid var(--border)',
-              background: selectedFormatLabel === 'WhatsApp' ? 'linear-gradient(180deg, rgba(37,211,102,0.16), rgba(37,211,102,0.10))' : 'var(--card)',
+              border: settings.messageFormat === 'whatsapp' ? '1px solid rgba(37,211,102,0.35)' : '1px solid var(--border)',
+              background: settings.messageFormat === 'whatsapp' ? 'linear-gradient(180deg, rgba(37,211,102,0.16), rgba(37,211,102,0.10))' : 'var(--card)',
               color: 'var(--text)',
               fontWeight: 700,
             }}
           >
-            <Copy size={13} /> Copy {selectedFormatLabel}
+            <Copy size={13} /> {selectedFormatLabel}
           </button>
           <button className="btn btn-ghost" onClick={exportRoutine} style={{ justifyContent: 'center', minWidth: 140, padding: '10px 14px' }}>Export routine</button>
           <label className="btn btn-ghost" style={{ cursor: 'pointer', justifyContent: 'center', minWidth: 140, padding: '10px 14px' }}>

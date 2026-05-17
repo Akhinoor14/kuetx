@@ -1,31 +1,35 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 export default function PWAInstallPrompt() {
   const [deferredPrompt, setDeferredPrompt] = useState(null);
-  const [visible, setVisible] = useState(false);
+  const [installed, setInstalled] = useState(false);
+  const [showHint, setShowHint] = useState(false);
+  const promptTimerRef = useRef(null);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
+
+    const isStandalone =
+      window.matchMedia?.('(display-mode: standalone)')?.matches ||
+      window.navigator.standalone === true;
+
+    if (isStandalone) {
+      setInstalled(true);
+      return;
+    }
 
     const beforeInstallHandler = (e) => {
       try {
         e.preventDefault();
       } catch {}
       setDeferredPrompt(e);
-
-      try {
-        const dismissed = localStorage.getItem('kuetx_pwa_prompt_dismissed');
-        if (!dismissed) setTimeout(() => setVisible(true), 800);
-      } catch {
-        setTimeout(() => setVisible(true), 800);
-      }
     };
 
     const appInstalled = () => {
       try {
         localStorage.setItem('kuetx_pwa_prompt_dismissed', 'installed');
       } catch {}
-      setVisible(false);
+      setInstalled(true);
       setDeferredPrompt(null);
     };
 
@@ -33,58 +37,63 @@ export default function PWAInstallPrompt() {
     window.addEventListener('appinstalled', appInstalled);
 
     return () => {
+      if (promptTimerRef.current) {
+        clearTimeout(promptTimerRef.current);
+      }
       window.removeEventListener('beforeinstallprompt', beforeInstallHandler);
       window.removeEventListener('appinstalled', appInstalled);
     };
   }, []);
 
-  if (!visible || !deferredPrompt) return null;
+  if (installed) return null;
 
   const onInstall = async () => {
     try {
+      if (!deferredPrompt) {
+        setShowHint(true);
+        window.clearTimeout(promptTimerRef.current);
+        promptTimerRef.current = window.setTimeout(() => setShowHint(false), 2600);
+        return;
+      }
+
       deferredPrompt.prompt();
       const choice = await deferredPrompt.userChoice;
       if (choice && choice.outcome === 'accepted') {
         try {
           localStorage.setItem('kuetx_pwa_prompt_dismissed', 'installed');
         } catch {}
-        setVisible(false);
+        setInstalled(true);
         setDeferredPrompt(null);
-      } else {
-        try {
-          localStorage.setItem('kuetx_pwa_prompt_dismissed', 'dismissed');
-        } catch {}
-        setVisible(false);
       }
+
+      setShowHint(false);
     } catch {
-      setVisible(false);
+      setShowHint(true);
     }
   };
 
-  const onDismiss = () => {
-    try {
-      localStorage.setItem('kuetx_pwa_prompt_dismissed', 'dismissed');
-    } catch {}
-    setVisible(false);
-  };
-
   return (
-    <div className="fixed bottom-6 right-6 z-50 max-w-sm">
-      <div className="bg-white/95 dark:bg-slate-800/95 backdrop-blur-md shadow-lg rounded-lg px-4 py-3 flex items-center gap-3 border">
-        <div className="flex-shrink-0">
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-indigo-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 2v6m0 8v6m8-8h-6M4 12H2" />
+    <div className="fixed bottom-3 right-3 z-50 flex flex-col items-end gap-1.5">
+      {showHint ? (
+        <div className="max-w-[10.5rem] rounded-xl border border-slate-200/80 bg-white/95 px-2.5 py-1.5 text-[11px] leading-4 text-slate-600 shadow-md backdrop-blur-md dark:border-slate-700/80 dark:bg-slate-900/95 dark:text-slate-300">
+          Use browser menu to install.
+        </div>
+      ) : null}
+
+      <button
+        type="button"
+        onClick={onInstall}
+        className="group inline-flex items-center gap-1.5 rounded-full border border-slate-200/80 bg-white/88 px-2.5 py-1.5 text-[11px] font-semibold text-slate-700 shadow-[0_6px_18px_rgba(15,23,42,0.12)] backdrop-blur-md transition hover:-translate-y-0.5 hover:bg-white hover:text-slate-900 hover:shadow-[0_10px_22px_rgba(15,23,42,0.16)] focus:outline-none focus:ring-2 focus:ring-emerald-500/35 dark:border-slate-700/80 dark:bg-slate-900/88 dark:text-slate-200 dark:hover:bg-slate-900 dark:hover:text-white"
+        title="Install KUETx"
+        aria-label="Install KUETx app"
+      >
+        <span className="flex h-4.5 w-4.5 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-600 transition group-hover:bg-emerald-500/15">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v12m0 0 4-4m-4 4-4-4M4 20h16" />
           </svg>
-        </div>
-        <div className="flex-1">
-          <div className="text-sm font-semibold text-slate-900 dark:text-slate-100">Install the app</div>
-          <div className="text-xs text-slate-600 dark:text-slate-300 mt-0.5">No hassle — fast &amp; easy.</div>
-        </div>
-        <div className="flex items-center gap-2">
-          <button onClick={onDismiss} className="text-sm px-3 py-1 rounded-md text-slate-700 hover:bg-slate-100 dark:text-slate-200">Maybe later</button>
-          <button onClick={onInstall} className="bg-indigo-600 text-white text-sm px-3 py-1 rounded-md hover:bg-indigo-700">Install</button>
-        </div>
-      </div>
+        </span>
+        <span>Install</span>
+      </button>
     </div>
   );
 }

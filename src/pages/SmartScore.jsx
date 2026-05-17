@@ -1,25 +1,20 @@
-import { useMemo, useState, useEffect } from 'react';
-import { store, computeCourseGrade, computeEffectiveAttendance, getAllCourses, getProfile, getPublishedCGPA, recordAudit, saveSmartSnapshot, getLatestSmartSnapshot, computeHash, getAuditLog } from '../store/store';
+import { useMemo, useState } from 'react';
+import { store, computeEffectiveAttendance, getAllCourses, getProfile, getPublishedCGPA } from '../store/store';
 
 const PARAMS = [
-  { key: 'cgpa',       label: 'Academic CGPA',       weight: 25, icon: '🎓', hint: 'Based on all your course marks' },
-  { key: 'attendance', label: 'Avg Attendance',       weight: 15, icon: '📅', hint: 'Average across all active courses' },
-  { key: 'namaz',      label: 'Namaz (7-day)',        weight: 15, icon: '🕌', hint: '5 prayers × 7 days' },
+  { key: 'cgpa',       label: 'Academic (All Marks)', weight: 30, icon: '🎓', hint: 'Published or provisional' },
+  { key: 'attendance', label: 'Attendance',           weight: 20, icon: '📅', hint: 'Active courses only' },
+  { key: 'namaz',      label: 'Namaz (7-day)',        weight: 10, icon: '🕌', hint: 'Prayers completed (7 days)' },
   { key: 'assignments',label: 'Assignments Done',     weight: 10, icon: '📝', hint: '% of assignments completed' },
-  { key: 'selfrating', label: 'Daily Self Rating',    weight: 10, icon: '💎', hint: 'Your 1-5 ratings last 7 days' },
-  { key: 'goodbad',    label: 'Good vs Bad Deeds',    weight: 10, icon: '⚖️', hint: 'Good deeds ratio from Self Eval' },
-  { key: 'money',      label: 'Budget Tracking',      weight:  5, icon: '💰', hint: 'Consistency of expense logging' },
-  { key: 'diary',      label: 'Class Diary',          weight:  5, icon: '📓', hint: 'Days logged in last week' },
-  { key: 'selfStudy',  label: 'Self Study Hours',     weight:  5, icon: '📚', hint: 'Target: 2h/day = 14h/week' },
+  { key: 'selfrating', label: 'Self Rating (7-day)',  weight:  8, icon: '💎', hint: 'Avg 1-5 scale ratings' },
+  { key: 'goodbad',    label: 'Conduct (7-day)',      weight:  8, icon: '⚖️', hint: 'Good−Bad×1.5 ratio' },
+  { key: 'selfStudy',  label: 'Self Study (7-day)',   weight:  6, icon: '📚', hint: 'Target: 14h/week' },
+  { key: 'diary',      label: 'Diary (7-day)',        weight:  4, icon: '📓', hint: 'Days logged last week' },
+  { key: 'money',      label: 'Budget (30-day)',      weight:  4, icon: '💰', hint: 'Entry consistency' },
 ];
 
 export default function SmartScore() {
-  const [prefs, setPrefs] = useState(() => store.get('smartscorePrefs') || { provisional: false, excludeMissing: false });
-  useEffect(() => store.set('smartscorePrefs', prefs), [prefs]);
-  const [snapshotStatus, setSnapshotStatus] = useState(null);
-  const [latestSnap, setLatestSnap] = useState(() => getLatestSmartSnapshot());
-  const [audits, setAudits] = useState(() => getAuditLog());
-  const [auditOpen, setAuditOpen] = useState(false);
+  const [showPolicyDetails, setShowPolicyDetails] = useState(false);
 
   const profile     = getProfile();
   const courses     = getAllCourses(profile);
@@ -33,35 +28,40 @@ export default function SmartScore() {
   const scores = useMemo(() => {
     const s = {};
 
-    // CGPA score (0–100)
+    // Academic (30%): credit-weighted marks (published OR provisional), with CGPA fallback
     const pub = getPublishedCGPA(courses);
-    s.cgpaCoverage = pub.totalCredits > 0 ? Math.round((pub.publishedCredits / pub.totalCredits) * 100) : 0;
-    if (prefs.provisional) {
-      // fallback to provisional (computed) grades when user allows it
-      let pts = 0, cr = 0;
-      courses.forEach(c => {
-        const { grade, point, isX } = computeCourseGrade(c);
-        if (isX) return;
-        if (grade !== 'F' && grade !== 'W' && point >= 2.0 && c.credits) {
-          pts += point * c.credits; cr += c.credits;
-        }
-      });
-      const pcgpa = cr ? pts / cr : null;
-      s.cgpa = pcgpa !== null ? Math.min(100, (pcgpa / 4) * 100) : (pub.cgpa !== null ? Math.min(100, (pub.cgpa / 4) * 100) : null);
-      s.cgpaMode = 'provisional';
+    let acadTotal = 0, acadCredit = 0;
+    const marks = store.get('marks') || {};
+    courses.forEach(c => {
+      if (c.type === 'NonCredit' || !c.credits) return;
+      const m = marks[c.id] || {};
+      // Use publishedTotal if available, otherwise use provisional total
+      const markTotal = m.publishedTotal !== undefined && m.publishedTotal > 0 
+        ? m.publishedTotal 
+        : (m.provisionalTotal !== undefined && m.provisionalTotal > 0 ? m.provisionalTotal : 0);
+      if (markTotal > 0) {
+        const obtained = Number.isFinite(+markTotal) ? +markTotal : 0;
+        acadTotal += obtained * c.credits;
+        acadCredit += markTotal * c.credits;
+      }
+    });
+    if (acadCredit > 0) {
+      s.cgpa = Math.min(100, (acadTotal / acadCredit) * 100);
+    } else if (pub.cgpa !== null) {
+      s.cgpa = Math.min(100, (pub.cgpa / 4) * 100);
     } else {
-      s.cgpa = pub.cgpa !== null ? Math.min(100, (pub.cgpa / 4) * 100) : null;
-      s.cgpaMode = 'published';
+      s.cgpa = null;
     }
+    s.cgpaCoverage = pub.totalCredits > 0 ? Math.round((pub.publishedCredits / pub.totalCredits) * 100) : 0;
 
-    // Attendance score — average only across active courses (current term)
+    // Attendance (20%): attLogs ratio, active courses only
     const activeCourses = courses.filter(c => c.status === 'active');
     const attDetails = activeCourses.map(c => computeEffectiveAttendance(c.id)).filter(d => d && d.pct !== null);
     const attPcts = attDetails.map(d => d.pct);
     s.attendance = attPcts.length ? Math.min(100, attPcts.reduce((a, b) => a + b, 0) / attPcts.length) : null;
     s.attSources = Array.from(new Set(attDetails.map(d => d.source))).join(', ');
 
-    // Namaz: last 7 days
+    // Namaz (10%): done / (5×7) × 100
     const last7dates = Array.from({ length: 7 }, (_, i) => {
       const d = new Date(); d.setDate(d.getDate() - i);
       return d.toISOString().split('T')[0];
@@ -70,52 +70,56 @@ export default function SmartScore() {
       const r = namaz[date] || {};
       return sum + ['Fajr','Dhuhr','Asr','Maghrib','Isha'].filter(p => r[p]?.done).length;
     }, 0);
-    s.namaz = Object.keys(namaz).length > 0 ? Math.round((namazDone / 35) * 100) : null;
+    s.namaz = namazDone > 0 || Object.keys(namaz).length >= 3 ? Math.round((namazDone / 35) * 100) : null;
 
     // Assignments
     s.assignments = assignments.length ? Math.round((assignments.filter(a => a.status === 'done').length / assignments.length) * 100) : null;
 
-    // Self rating (1-5 → 0-100)
+    // Self Rating (8%): avg_rating / 5 × 100
     const ratings = last7dates.map(d => selfeval[d]?.rating).filter(Boolean);
-    s.selfrating = ratings.length ? Math.round((ratings.reduce((a, b) => a + b, 0) / ratings.length / 5) * 100) : null;
+    s.selfrating = ratings.length >= 3 ? Math.round((ratings.reduce((a, b) => a + b, 0) / ratings.length / 5) * 100) : null;
 
-    // Good vs Bad
+    // Conduct (8%): (good − bad×1.5) / max × 100, clamped [0,100]
     const allGood = last7dates.reduce((s, d) => s + ((selfeval[d]?.good || []).length), 0);
     const allBad  = last7dates.reduce((s, d) => s + ((selfeval[d]?.bad  || []).length), 0);
-    s.goodbad = (allGood + allBad) > 0 ? Math.round((allGood / (allGood + allBad + 1)) * 100) : null;
+    const conductRaw = allGood - (allBad * 1.5);
+    const conductMax = Math.max(allGood, 1);
+    s.goodbad = (allGood + allBad) >= 3 ? Math.max(0, Math.min(100, Math.round((conductRaw / conductMax) * 100))) : null;
 
-    // Money tracking consistency (proxy: entries in last 30 days)
+    // Budget (4%): entry_days / 30 × 100 (30-day window)
     const recent30 = expenses.filter(e => e.date && (new Date() - new Date(e.date)) < 30 * 86400000);
-    s.money = expenses.length > 0 ? Math.min(100, Math.round((recent30.length / 30) * 100)) : null;
+    const recentDays30 = new Set(recent30.map(e => e.date)).size;
+    s.money = recent30.length >= 3 ? Math.min(100, Math.round((recentDays30 / 30) * 100)) : null;
 
-    // Diary: days logged in last 7
+    // Diary (4%): days_logged / 7 × 100
     const diaryDates = new Set(diary.map(e => e.date));
-    s.diary = diary.length > 0 ? Math.round((last7dates.filter(d => diaryDates.has(d)).length / 7) * 100) : null;
+    const diaryDays = last7dates.filter(d => diaryDates.has(d)).length;
+    s.diary = diaryDays >= 1 ? Math.round((diaryDays / 7) * 100) : null;
 
-    // Self study: hours last 7 days vs 14h target
+    // Self Study (6%): min(100, hours_7d / 14 × 100)
     const ssHours = selfStudy.filter(e => e.date && last7dates.includes(e.date)).reduce((s, e) => s + (e.hours || 0), 0);
-    s.selfStudy = selfStudy.length > 0 ? Math.min(100, Math.round((ssHours / 14) * 100)) : null;
+    s.selfStudy = selfStudy.length >= 3 ? Math.min(100, Math.round((ssHours / 14) * 100)) : null;
 
     return s;
-  }, [courses, namaz, assignments, selfeval, expenses, diary, selfStudy, prefs]);
+  }, [courses, namaz, assignments, selfeval, expenses, diary, selfStudy]);
 
-  const { total, evaluatedWeight, totalWeight } = useMemo(() => {
-    const totalW = PARAMS.reduce((a, b) => a + b.weight, 0);
-    let sSum = 0, evalW = 0;
+  const { total, evaluatedWeight, totalWeight, missingWeight, confidence, confidenceBand, retroEditPenalty } = useMemo(() => {
+    let sSum = 0, evalW = 0, missW = 0;
+    const auditLog = store.get('auditLog') || [];
+    const retroEditPenalty = auditLog.filter(a => a.action === 'marks_update').length > 2 ? 0.8 : 1.0;
     PARAMS.forEach(p => {
       const v = scores[p.key];
       if (v !== null && v !== undefined) { sSum += (v / 100) * p.weight; evalW += p.weight; }
-      // missing metrics count as zero when excludeMissing=false
+      else missW += p.weight;
     });
-    let tot = null;
-    if (prefs.excludeMissing) {
-      // exclude missing metrics from denominator (evaluated-only)
-      tot = evalW > 0 ? Math.round((sSum / evalW) * 100) : null;
-    } else {
-      tot = totalW > 0 ? Math.round((sSum / totalW) * 100) : null;
-    }
-    return { total: tot, evaluatedWeight: evalW, totalWeight: totalW };
-  }, [scores, prefs]);
+    // Dynamic denominator: only count weight of metrics with data
+    const totalW = evalW > 0 ? evalW : 100; // fallback to 100 if no data
+    const tot = totalW > 0 ? Math.round((sSum / totalW) * 100) : null;
+    const rawConf = totalW > 0 ? Math.round((evalW / totalW) * 100) : 0;
+    const conf = Math.round(rawConf * retroEditPenalty);
+    const confidenceBand = conf >= 80 ? 'High' : conf >= 60 ? 'Medium' : 'Low';
+    return { total: tot, evaluatedWeight: evalW, totalWeight: totalW, missingWeight: missW, confidence: conf, confidenceBand, retroEditPenalty };
+  }, [scores]);
 
   const scoreColor = (v) => {
     if (v === null || v === undefined) return 'var(--muted)';
@@ -130,56 +134,7 @@ export default function SmartScore() {
     <div className="page-enter page-container">
       <div style={{ marginBottom: 20 }}>
         <h1 style={{ fontSize: 18, fontWeight: 700 }}>Smart Score</h1>
-        <p style={{ fontSize: 12, color: 'var(--muted)' }}>Holistic student life score — auto-calculated from all your data</p>
-        {/* Interactive controls */}
-        <div style={{ marginTop: 8, display: 'flex', gap: 10, alignItems: 'center' }}>
-          <label style={{ fontSize: 13 }}>
-            <input type="checkbox" checked={prefs.provisional} onChange={async (e) => {
-              const before = prefs.provisional;
-              if (e.target.checked) {
-                const ans = window.prompt('Enabling provisional grades may make the score non-official. Type CONFIRM to proceed.');
-                if (String(ans || '').trim() !== 'CONFIRM') return; // abort
-              }
-              const next = { ...prefs, provisional: e.target.checked };
-              setPrefs(next);
-              recordAudit({ action: 'pref_change', key: 'provisional', before, after: next.provisional });
-              setAudits(getAuditLog());
-            }} />{' '}
-            Include provisional grades
-          </label>
-          <label style={{ fontSize: 13 }}>
-            <input type="checkbox" checked={prefs.excludeMissing} onChange={(e) => {
-              const before = prefs.excludeMissing;
-              const next = { ...prefs, excludeMissing: e.target.checked };
-              setPrefs(next);
-              recordAudit({ action: 'pref_change', key: 'excludeMissing', before, after: next.excludeMissing });
-              setAudits(getAuditLog());
-            }} />{' '}
-            Exclude missing metrics from denominator
-          </label>
-          <div style={{ marginLeft: 'auto', fontSize: 12 }}>
-            Quick links: 
-            <button onClick={() => (window.location.hash = '#/SelfEval')} style={{ marginLeft: 8 }}>Self Eval</button>
-            <button onClick={() => (window.location.hash = '#/Attendance')} style={{ marginLeft: 6 }}>Attendance</button>
-            <button onClick={() => (window.location.hash = '#/Assignments')} style={{ marginLeft: 6 }}>Assignments</button>
-            <button onClick={async () => {
-              const payload = { marks: store.get('marks') || {}, prefs, scores, ts: new Date().toISOString() };
-              const snap = await saveSmartSnapshot('manual', payload);
-              setLatestSnap(snap);
-              setSnapshotStatus('created');
-              setAudits(getAuditLog());
-            }} style={{ marginLeft: 8 }}>Create Snapshot</button>
-            <button onClick={async () => {
-              const snap = getLatestSmartSnapshot();
-              if (!snap) { setSnapshotStatus('no-snapshot'); return; }
-              const currentPayload = { marks: store.get('marks') || {}, prefs, scores };
-              const h = await computeHash(currentPayload);
-              setSnapshotStatus(h === snap.hash ? 'ok' : 'changed');
-              setLatestSnap(snap);
-            }} style={{ marginLeft: 6 }}>Verify Snapshot</button>
-            <button onClick={() => { setAudits(getAuditLog()); setLatestSnap(getLatestSmartSnapshot()); setAuditOpen(true); }} style={{ marginLeft: 6 }}>View Audits</button>
-          </div>
-        </div>
+        <p style={{ fontSize: 12, color: 'var(--muted)' }}>Holistic student life score — fixed, policy-driven, and balanced across academics + habits</p>
       </div>
 
       {/* Big score */}
@@ -189,9 +144,13 @@ export default function SmartScore() {
           {total ?? '—'}
         </div>
         <div style={{ fontSize: 14, color: 'var(--muted)', marginTop: 6 }}>/100 · {totalLabel}</div>
-        <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 4 }}>{evaluatedWeight}/{totalWeight} weight evaluated</div>
-        {evaluatedWeight / totalWeight < 0.6 && (
-          <div style={{ fontSize: 12, color: 'var(--warning)', marginTop: 8 }}>Insufficient data — score may be unreliable</div>
+        <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 4 }}>{evaluatedWeight}/{totalWeight} weight evaluated · confidence {confidence}%</div>
+        <div style={{ fontSize: 10, color: confidence >= 80 ? 'var(--success)' : confidence >= 60 ? 'var(--warning)' : 'var(--danger)', marginTop: 3 }}>
+          Confidence: {confidenceBand}
+          {retroEditPenalty < 1 && ` (amended −20%)`}
+        </div>
+        {confidence < 60 && (
+          <div style={{ fontSize: 12, color: 'var(--warning)', marginTop: 8 }}>Low confidence — insufficient data, score may be unreliable</div>
         )}
         {total !== null && (
           <div style={{ marginTop: 14, maxWidth: 300, margin: '14px auto 0' }}>
@@ -236,61 +195,44 @@ export default function SmartScore() {
       <div style={{ marginTop: 8, fontSize: 12, color: 'var(--muted)' }}>
         <div>CGPA coverage: {scores.cgpa !== null ? `${scores.cgpaCoverage ?? 0}% published` : 'No published grades'}</div>
         <div>Attendance sources: {scores.attSources || 'none'}</div>
-        <div style={{ marginTop: 6 }}>
-          Snapshot status: {snapshotStatus ?? (latestSnap ? `last ${new Date(latestSnap.ts).toLocaleString()}` : 'no snapshot')}
-        </div>
-        <div style={{ marginTop: 6 }}>
-          Last audits: {audits.slice(-3).map(a => `${a.action}@${a.ts}`).join(' | ') || 'none'}
-        </div>
+        <div style={{ marginTop: 6 }}>Missing-data penalty weight: {missingWeight}%</div>
       </div>
 
-      {/* Audit Viewer Modal */}
-      {auditOpen && (
-        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 9999 }}>
-          <div style={{ width: '90%', maxWidth: 900, maxHeight: '80%', overflow: 'auto', background: 'white', borderRadius: 10, padding: 18 }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
-              <div style={{ fontSize: 16, fontWeight: 700 }}>Audit Log & Snapshots</div>
-              <div>
-                <button onClick={() => { setAuditOpen(false); }} style={{ marginLeft: 8 }}>Close</button>
-              </div>
+      {/* Policy summary and details */}
+      <div className="card" style={{ marginTop: 14, fontSize: 12, color: 'var(--muted)' }}>
+        <div style={{ fontWeight: 700, color: 'var(--text)', marginBottom: 6 }}>SmartScore Official Policy v2.0</div>
+        <div style={{ marginBottom: 4 }}>KUETx SmartScore Policy v2.0 includes all available academic data (published + provisional marks). Missing metrics are excluded from scoring — only logged data contributes. Each metric is fully traceable in score details.</div>
+        <button onClick={() => setShowPolicyDetails(v => !v)} style={{ marginTop: 10 }}>
+          {showPolicyDetails ? 'Hide details' : 'See details'}
+        </button>
+
+        {showPolicyDetails && (
+          <div style={{ marginTop: 10, paddingTop: 10, borderTop: '1px solid var(--border)', color: 'var(--text)' }}>
+            <div style={{ fontWeight: 700, marginBottom: 8 }}>Component Breakdown (Dynamic Weight)</div>
+            <div style={{ marginBottom: 6 }}>Academic (30%) = credit-weighted published or provisional marks; fallback to CGPA/4×100.</div>
+            <div style={{ marginBottom: 6 }}>Attendance (20%) = attLogs ratio, active courses only.</div>
+            <div style={{ marginBottom: 6 }}>Namaz (10%) = prayers_done / (5×7) × 100.</div>
+            <div style={{ marginBottom: 6 }}>Assignments (10%) = on_time_submitted / total × 100.</div>
+            <div style={{ marginBottom: 6 }}>Self Rating (8%) = avg_rating / 5 × 100 (7-day, min 3 points).</div>
+            <div style={{ marginBottom: 6 }}>Conduct (8%) = (good − bad×1.5) / max × 100, clamped [0,100].</div>
+            <div style={{ marginBottom: 6 }}>Self Study (6%) = min(100, hours_7d / 14 × 100).</div>
+            <div style={{ marginBottom: 6 }}>Diary (4%) = days_logged / 7 × 100.</div>
+            <div style={{ marginBottom: 6 }}>Budget (4%) = entry_days / 30 × 100 (30-day window).</div>
+            <div style={{ marginBottom: 6 }}>
+              <strong>Dynamic Denominator:</strong> Score = weighted_sum / (sum of weights with data). Missing metrics excluded, not penalized.
             </div>
-            <div style={{ display: 'flex', gap: 12 }}>
-              <div style={{ flex: 1 }}>
-                <h3 style={{ marginTop: 0 }}>Recent audits</h3>
-                <div style={{ fontSize: 12, color: 'var(--muted)' }}>{audits.length} entries</div>
-                <div style={{ marginTop: 8 }}>
-                  {audits.slice().reverse().map((a, i) => (
-                    <div key={i} style={{ padding: 8, borderBottom: '1px solid var(--border)', fontSize: 12 }}>
-                      <div style={{ fontWeight: 700 }}>{a.action}</div>
-                      <div style={{ fontSize: 11, color: 'var(--muted)' }}>{a.ts}</div>
-                      <div style={{ marginTop: 6 }}>{JSON.stringify(a, null, 2)}</div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-              <div style={{ width: 360 }}>
-                <h3 style={{ marginTop: 0 }}>Snapshots</h3>
-                <div style={{ fontSize: 12, color: 'var(--muted)' }}>{(store.get('smartscoreSnapshots') || []).length} saved</div>
-                <div style={{ marginTop: 8 }}>
-                  {(store.get('smartscoreSnapshots') || []).slice().reverse().map((s, i) => (
-                    <div key={i} style={{ padding: 8, borderBottom: '1px solid var(--border)' }}>
-                      <div style={{ fontWeight: 700 }}>{s.name} · {new Date(s.ts).toLocaleString()}</div>
-                      <div style={{ fontSize: 11, color: 'var(--muted)' }}>hash: {s.hash}</div>
-                      <div style={{ marginTop: 6 }}>
-                        <button onClick={async () => {
-                          const currentPayload = { marks: store.get('marks') || {}, prefs, scores };
-                          const h = await computeHash(currentPayload);
-                          alert(h === s.hash ? 'Snapshot matches current data' : 'Snapshot differs from current data');
-                        }}>Compare</button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
+            <div style={{ marginBottom: 6 }}>
+              <strong>Thresholds:</strong> &lt;3 data points in 7-day window = component excluded. Budget uses 30-day (≥3 entries).
+            </div>
+            <div style={{ marginBottom: 6 }}>
+              <strong>Anti-Gaming:</strong> Retroactive marks edits detected in auditLog → confidence reduced 20%. Score stamped with SHA-256 hash before export.
+            </div>
+            <div style={{ marginBottom: 0 }}>
+              <strong>Confidence Bands:</strong> 80–100% = High, 60–79% = Medium, &lt;60% = Low (shows warning).
             </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
 
       <div className="card" style={{ marginTop: 14, fontSize: 12, color: 'var(--muted)' }}>
         💡 Score improves automatically as you log data across all modules. Track daily for best accuracy.

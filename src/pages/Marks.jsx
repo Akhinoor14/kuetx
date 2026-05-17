@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { store, getGradeFromPct, getAttendanceMarks, computeEffectiveAttendance, GRADE_SCALE, getAllCourses, getProfile, recordAudit } from '../store/store';
+import { store, getGradeFromPct, getAttendanceMarks, computeEffectiveAttendance, GRADE_SCALE, getAllCourses, getProfile, getCurrentTermKey, getTermTimeline, recordAudit } from '../store/store';
 import Collapsible from '../components/Collapsible';
 
 // ── Helper: Calculate required hall marks for a target grade ──────────────
@@ -27,10 +27,11 @@ function getTeachersForCourse(courseId) {
 }
 
 // ── Course card: Estimate Hall marks needed for target grade ──────────────
-function CourseCard({ course, marks, onChange }) {
+function CourseCard({ course, marks, onChange, isCurrentOngoingTerm }) {
   const m = marks[course.id] || {};
   const [showAdvanced, setShowAdvanced] = useState(false);
   const { pct: attPct } = computeEffectiveAttendance(course.id);
+  const inputDisabled = !!isCurrentOngoingTerm;
   
   const clamp = (value, min, max) => Math.min(max, Math.max(min, Number.isFinite(+value) ? +value : 0));
 
@@ -75,7 +76,7 @@ function CourseCard({ course, marks, onChange }) {
   const currentContinuous = Math.min(90, teacherContinuous1 + teacherContinuous2);
   const currentTotal = Math.min(300, hallTotal + currentContinuous);
   const currentGrade = getGradeFromPct(currentTotal);
-  const statusLabel = course.status === 'active' ? 'on going' : course.status;
+  const statusLabel = inputDisabled ? 'Not Yet Published' : (course.status === 'active' ? 'on going' : course.status);
 
   // Target grade & required hall calculation
   const targetGrade = m.targetGrade || null;
@@ -91,19 +92,24 @@ function CourseCard({ course, marks, onChange }) {
       storageKey={`marks:${course.id}:open`}
       right={(
         <div style={{ textAlign: 'right' }}>
-          <div style={{ fontSize: 12, fontWeight: 700, color: course.status === 'active' ? 'var(--accent)' : 'var(--text)' }}>{statusLabel}</div>
+          <div style={{ fontSize: 12, fontWeight: 700, color: inputDisabled ? '#b45309' : course.status === 'active' ? 'var(--accent)' : 'var(--text)' }}>{statusLabel}</div>
           <div style={{ fontSize: 11, color: 'var(--muted)' }}>{currentTotal.toFixed(1)}/300</div>
           <div style={{ fontSize: 11, color: 'var(--muted)' }}>CT {currentContinuous.toFixed(1)}/90</div>
         </div>
       )}
       rightCollapsed={(
         <div style={{ textAlign: 'right' }}>
-          <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--accent)' }}>{statusLabel}</div>
+          <div style={{ fontSize: 12, fontWeight: 700, color: inputDisabled ? '#b45309' : 'var(--accent)' }}>{statusLabel}</div>
           <div style={{ fontSize: 11, color: 'var(--muted)' }}>{currentTotal.toFixed(1)}/300</div>
           <div style={{ fontSize: 11, color: 'var(--muted)' }}>CT {currentContinuous.toFixed(1)}/90</div>
         </div>
       )}
     >
+        {inputDisabled && (
+          <div style={{ marginBottom: 10, padding: '10px 12px', borderRadius: 8, background: 'rgba(245, 158, 11, 0.10)', border: '1px solid rgba(245, 158, 11, 0.22)', fontSize: 12, color: '#92400e', fontWeight: 600 }}>
+            Result status: Not Yet Published. Mark entry is disabled for ongoing term courses.
+          </div>
+        )}
         <label style={{ fontSize: 11, color: 'var(--muted)', fontWeight: 600, marginBottom: 8, display: 'block' }}>
           🎯 Target Grade → Hall Exam Needed
         </label>
@@ -112,7 +118,7 @@ function CourseCard({ course, marks, onChange }) {
           <div>
             <label style={{ fontSize: 12, fontWeight: 700 }}>Hall Exam (/210)</label>
             <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginTop: 6 }}>
-              <input type="number" min={0} max={210} value={m.hall ?? ''} onChange={e => onChange(course.id, 'hall', Math.min(210, Math.max(0, +e.target.value || 0)))} style={{ width: 120, fontSize: 14 }} />
+              <input type="number" min={0} max={210} value={m.hall ?? ''} onChange={e => onChange(course.id, 'hall', Math.min(210, Math.max(0, +e.target.value || 0)))} disabled={inputDisabled} style={{ width: 120, fontSize: 14, opacity: inputDisabled ? 0.65 : 1 }} />
               <div style={{ fontSize: 12, color: 'var(--muted)' }}>/210</div>
             </div>
           </div>
@@ -120,11 +126,11 @@ function CourseCard({ course, marks, onChange }) {
             <label style={{ fontSize: 12, fontWeight: 700 }}>Attendance</label>
             <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 6 }}>Auto: {attPct !== null ? `${attPct}%` : 'No data'}</div>
             <div style={{ marginTop: 8, display: 'flex', gap: 8, alignItems: 'center' }}>
-              <label style={{ fontSize: 12 }}><input type="checkbox" checked={useAutoAtt} onChange={e => onChange(course.id, 'useAutoAtt', e.target.checked)} /> Auto</label>
+              <label style={{ fontSize: 12 }}><input type="checkbox" checked={useAutoAtt} onChange={e => onChange(course.id, 'useAutoAtt', e.target.checked)} disabled={inputDisabled} /> Auto</label>
               {!useAutoAtt && (
                 <div style={{ display: 'flex', gap: 8 }}>
-                  <input type="number" min={0} max={attendanceCap1} value={m.attTeacher1 ?? ''} onChange={e => onChange(course.id, 'attTeacher1', Math.min(attendanceCap1, Math.max(0, +e.target.value || 0)))} placeholder={teacher1Name} style={{ width: 80 }} />
-                  <input type="number" min={0} max={attendanceCap2} value={m.attTeacher2 ?? ''} onChange={e => onChange(course.id, 'attTeacher2', Math.min(attendanceCap2, Math.max(0, +e.target.value || 0)))} placeholder={teacher2Name} style={{ width: 80 }} />
+                  <input type="number" min={0} max={attendanceCap1} value={m.attTeacher1 ?? ''} onChange={e => onChange(course.id, 'attTeacher1', Math.min(attendanceCap1, Math.max(0, +e.target.value || 0)))} placeholder={teacher1Name} disabled={inputDisabled} style={{ width: 80, opacity: inputDisabled ? 0.65 : 1 }} />
+                  <input type="number" min={0} max={attendanceCap2} value={m.attTeacher2 ?? ''} onChange={e => onChange(course.id, 'attTeacher2', Math.min(attendanceCap2, Math.max(0, +e.target.value || 0)))} placeholder={teacher2Name} disabled={inputDisabled} style={{ width: 80, opacity: inputDisabled ? 0.65 : 1 }} />
                 </div>
               )}
             </div>
@@ -135,17 +141,17 @@ function CourseCard({ course, marks, onChange }) {
           <div>
             <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 6 }}>{teacher1Name} (CT/Bonus/Assign)</div>
             <div style={{ display: 'flex', gap: 8 }}>
-              <input type="number" min={0} max={30} value={m.ctTeacher1 ?? ''} onChange={e => onChange(course.id, 'ctTeacher1', Math.min(30, Math.max(0, +e.target.value || 0)))} placeholder="CT" style={{ width: 80 }} />
-              <input type="number" min={0} max={30} value={m.bonusTeacher1 ?? ''} onChange={e => onChange(course.id, 'bonusTeacher1', Math.min(30, Math.max(0, +e.target.value || 0)))} placeholder="Bonus" style={{ width: 80 }} />
-              <input type="number" min={0} max={15} value={m.assignmentTeacher1 ?? ''} onChange={e => onChange(course.id, 'assignmentTeacher1', Math.min(15, Math.max(0, +e.target.value || 0)))} placeholder="Assign" style={{ width: 80 }} />
+              <input type="number" min={0} max={30} value={m.ctTeacher1 ?? ''} onChange={e => onChange(course.id, 'ctTeacher1', Math.min(30, Math.max(0, +e.target.value || 0)))} placeholder="CT" disabled={inputDisabled} style={{ width: 80, opacity: inputDisabled ? 0.65 : 1 }} />
+              <input type="number" min={0} max={30} value={m.bonusTeacher1 ?? ''} onChange={e => onChange(course.id, 'bonusTeacher1', Math.min(30, Math.max(0, +e.target.value || 0)))} placeholder="Bonus" disabled={inputDisabled} style={{ width: 80, opacity: inputDisabled ? 0.65 : 1 }} />
+              <input type="number" min={0} max={15} value={m.assignmentTeacher1 ?? ''} onChange={e => onChange(course.id, 'assignmentTeacher1', Math.min(15, Math.max(0, +e.target.value || 0)))} placeholder="Assign" disabled={inputDisabled} style={{ width: 80, opacity: inputDisabled ? 0.65 : 1 }} />
             </div>
           </div>
           <div>
             <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 6 }}>{teacher2Name} (CT/Bonus/Assign)</div>
             <div style={{ display: 'flex', gap: 8 }}>
-              <input type="number" min={0} max={30} value={m.ctTeacher2 ?? ''} onChange={e => onChange(course.id, 'ctTeacher2', Math.min(30, Math.max(0, +e.target.value || 0)))} placeholder="CT" style={{ width: 80 }} />
-              <input type="number" min={0} max={30} value={m.bonusTeacher2 ?? ''} onChange={e => onChange(course.id, 'bonusTeacher2', Math.min(30, Math.max(0, +e.target.value || 0)))} placeholder="Bonus" style={{ width: 80 }} />
-              <input type="number" min={0} max={15} value={m.assignmentTeacher2 ?? ''} onChange={e => onChange(course.id, 'assignmentTeacher2', Math.min(15, Math.max(0, +e.target.value || 0)))} placeholder="Assign" style={{ width: 80 }} />
+              <input type="number" min={0} max={30} value={m.ctTeacher2 ?? ''} onChange={e => onChange(course.id, 'ctTeacher2', Math.min(30, Math.max(0, +e.target.value || 0)))} placeholder="CT" disabled={inputDisabled} style={{ width: 80, opacity: inputDisabled ? 0.65 : 1 }} />
+              <input type="number" min={0} max={30} value={m.bonusTeacher2 ?? ''} onChange={e => onChange(course.id, 'bonusTeacher2', Math.min(30, Math.max(0, +e.target.value || 0)))} placeholder="Bonus" disabled={inputDisabled} style={{ width: 80, opacity: inputDisabled ? 0.65 : 1 }} />
+              <input type="number" min={0} max={15} value={m.assignmentTeacher2 ?? ''} onChange={e => onChange(course.id, 'assignmentTeacher2', Math.min(15, Math.max(0, +e.target.value || 0)))} placeholder="Assign" disabled={inputDisabled} style={{ width: 80, opacity: inputDisabled ? 0.65 : 1 }} />
             </div>
           </div>
         </div>
@@ -165,6 +171,7 @@ function CourseCard({ course, marks, onChange }) {
               <button
                 key={gradeObj.grade}
                 onClick={() => onChange(course.id, 'targetGrade', isSelected ? null : gradeObj.grade)}
+                disabled={inputDisabled || !isPossible}
                 style={{
                   padding: '6px 8px',
                   borderRadius: 6,
@@ -176,9 +183,8 @@ function CourseCard({ course, marks, onChange }) {
                   color: isSelected ? 'var(--accent)' : isPossible ? 'var(--text)' : 'var(--muted)',
                   transition: 'all 0.15s',
                   textAlign: 'center',
-                  opacity: isPossible ? 1 : 0.5,
+                  opacity: inputDisabled ? 0.45 : (isPossible ? 1 : 0.5),
                 }}
-                disabled={!isPossible}
               >
                 <div>{gradeObj.grade}</div>
                 <div style={{ fontSize: 9, color: isSelected ? 'var(--accent)' : isPossible ? 'var(--muted)' : 'var(--muted)', marginTop: 2, fontWeight: 500 }}>
@@ -229,6 +235,12 @@ function CourseCard({ course, marks, onChange }) {
 export default function Marks() {
   const profile = getProfile();
   const allCourses = getAllCourses(profile);
+  const currentTermKey = getCurrentTermKey(profile);
+  const currentTermTimeline = currentTermKey ? getTermTimeline(profile?.termStartDate, profile?.dept, currentTermKey) : null;
+  const currentTermIsOngoing = !!(
+    (currentTermTimeline && new Date() <= currentTermTimeline.classEndDate) ||
+    (currentTermKey && allCourses.some(c => `Y${c.year}T${c.term}` === currentTermKey && (c.status === 'active' || c.status === 'backlog')))
+  );
   const [marks, setMarks] = useState(() => store.get('marks') || {});
   const deptLabel = profile?.dept || 'your department';
 
@@ -282,7 +294,13 @@ export default function Marks() {
               Theory Courses ({theory.length})
             </h2>
             {theory.map(c => (
-              <CourseCard key={c.id} course={c} marks={marks} onChange={onChange} />
+              <CourseCard
+                key={c.id}
+                course={c}
+                marks={marks}
+                onChange={onChange}
+                isCurrentOngoingTerm={currentTermIsOngoing && currentTermKey === `Y${c.year}T${c.term}`}
+              />
             ))}
           </div>
 

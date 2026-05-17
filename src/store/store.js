@@ -259,6 +259,18 @@ export const computeCourseGrade = (course) => {
   const marks = store.get('marks') || {};
   const m = marks[course.id] || {};
 
+  // If the term is explicitly marked as Not Yet Published in store,
+  // treat the course as not-published so pages don't show F or count it.
+  try {
+    const termKey = `Y${course.year}T${course.term}`;
+    const nyp = store.get('notYetPublishedTerms');
+    if (Array.isArray(nyp) && nyp.includes(termKey)) {
+      // compute a best-effort total for display but do not expose a failing grade
+      // fall through to compute total below, then override result at return time
+      m.__termMarkedNotPublished = true;
+    }
+  } catch (e) {}
+
   const publishedGrade = String(m.publishedGrade || '').trim().toUpperCase();
   if (publishedGrade) {
     let point = getGradePointByGrade(publishedGrade);
@@ -367,6 +379,10 @@ export const computeCourseGrade = (course) => {
   let gradeObj = getGradeFromPct(total);
   if (course.status === 'backlog' && gradeObj.point > BACKLOG_MAX_POINT) {
     gradeObj = GRADE_SCALE.find(g => g.grade === 'B+');
+  }
+  // If this course's term was marked as Not Yet Published, don't expose a final grade
+  if (m.__termMarkedNotPublished) {
+    return { grade: 'NOT YET PUBLISHED', point: null, total: Number.isFinite(total) ? +total.toFixed(1) : null, isNotPublished: true };
   }
   return { grade: gradeObj.grade, point: gradeObj.point, total: +total.toFixed(1) };
 };
