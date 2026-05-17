@@ -1,0 +1,1224 @@
+{
+  "department": "will be provided",
+  "sourceType": "raw_text",
+  "terms": {
+    "Y1T1": {
+      "termKey": "Y1T1",
+      "title": "First Year First Term",
+      "courses": {
+        "MSE 1101": {
+          "title": "Introduction to Materials Science and Engineering",
+          "credit": 3.0,
+          "contactHour": "3 Hrs./Week",
+          "prerequisite": "None",
+          "topics": [
+            "History: Stone age to modern age, Examples of different types of materials, Classification of materials, Advanced materials.",
+            "Atomic Structure and Bonding: Fundamental concepts, Electrons in materials, Periodic table, Bonding forces and energies, Primary interatomic bonds, Secondary bonding, The structure of crystalline solids, Unit cells, Metallic crystal structure, Miller indices, Density computation, Crystallographic directions, Crystallographic planes, Introduction to X-ray diffraction.",
+            "Imperfection in solids: Point defects (vacancies, interstitials), Line defects (dislocations), Area defects (grain boundary defects), Dislocations and its interactions.",
+            "Mechanical Properties: Concepts of stress strain, True stress, True strain, Stress strain behavior, Elastic properties of materials, Elastic modulus, Deformation, Tensile strength and Yield strength, Elongation, Hardness, Ductile fracture, Brittle fracture, Toughness, High temperature properties and application, Creep, Fatigue.",
+            "Strengthening mechanism: Strengthening by grain size reduction, Solid-solution strengthening, Strain hardening, Precipitation hardening and other hardening techniques.",
+            "Composite: Dispersion-strengthened composites, Calculation of strength of composite materials, Polymer-matrix composites, Metal-matrix composites, Ceramic-matrix composites, Carbon-carbon composites, Processing of fiber-reinforced composites. Materials Properties: Electrical properties (electrical conductivity, electronic and ionic conduction, energy band structures in solids, electron mobility, electrical resistivity of metals, electrical characteristics of commercial alloys), Semiconductor, Superconductor magnetic properties, Optical properties, Aspects of materials in design.",
+            "Nondestructive testing: Introduction to basic principle of dye penetration testing, Magnetic particle testing, Ultrasound tests, Radiography and Eddy current testing."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "EEE 1127": {
+          "title": "Electrical Engineering Fundamentals",
+          "credit": 4.0,
+          "contactHour": "4 Hrs./Week",
+          "prerequisite": "None",
+          "topics": [
+            "Introduction to Electrical Engineering: Essence of electricity, Electric current, Potential and potential difference, Electromotive force, Electric power, Ohm's law, Basic circuit components, Types of induced EMFs, Kirchhoff's laws, Joule's law, Series parallel circuits, Voltage and current division, Star-delta transformation, Simple problems.",
+            "Network Analysis: Branch current analysis, Loop analysis, Nodal and mesh analysis, Network theorems- Norton, Superposition, Thevenin's, Maximum power transfer theorems and simple problems.",
+            "Single-phase AC circuits: Principle of ac voltages, Waveforms and basic definitions, Average value, Root mean square value, Form factor and peak factor of sinusoidally varying quantities, Phasor representation of alternating quantities, The J operator and phasor algebra. Analysis, with phasor diagrams, of R, L, C, RL, RC and RLC circuits, Parallel and series-parallel circuits. Power in ac circuits- real power, Reactive power, Apparent power and power factor, Resonance in ac circuits, Simple problem.",
+            "Magnetic Circuits: Basic definitions, Analogy between electric and magnetic circuits, Ampere circuital law, Self and mutual inductance.",
+            "Basic Instruments: Introduction, Classification of instruments, Operating principles, Essential features of measuring instruments, Operating principles of moving coil and moving iron instruments (Ammeters and Voltmeters), Watt meters and energy meters.",
+            "DC Generators: Construction of DC generators, EMF equation, Principle of operation, Classification, Characteristics of different types of DC generator, Voltage build up and armature reaction.",
+            "DC Motors: Principle of operation, Speed equation, Classification, Characteristics of different types of DC motors, Starting of DC motors and methods for speed control.",
+            "Transformers: Working principle, Construction and Cooling, EMF equation, Equivalent circuits, Losses and efficiency.",
+            "Induction Motors: General principles, Rotating magnetic field, Production of torque, Speed- torque characteristics, starting and speed control.",
+            "Alternators: Construction and theory of operation."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "EEE 1128": {
+          "title": "Electrical Engineering Fundamentals Sessional",
+          "credit": 1.5,
+          "contactHour": "3 Hrs./Week",
+          "prerequisite": "None",
+          "topics": [
+            "Experiments based on EEE 1127."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "Math 1127": {
+          "title": "Differential and Integral Calculus",
+          "credit": 3.0,
+          "contactHour": "3 Hrs./Week",
+          "prerequisite": "None",
+          "topics": [
+            "Differential Calculus: Limit, Continuity, Differentiability, Differentiation review: Reviews of various differentiation of various types of functions, Application of differentiation, Successive differentiation; Successive differentiation of different types of functions, Leibnitz's theorem; Expansion of functions: Rolle's theorem; Cauchy's mean value theorem; Taylor's theorem (finite and infinite form); Maclaurin's theorem in finite and infinite forms; Cauchy's forms of remainder and Lagrange's form of remainder. Expansion of function by differentiation; Indeterminate forms; L'hospital rule; Partial differentiation, Euler's theorem. Maxima and minima (multiple variables); Tangent and normal, Subtangent and subnormal in Cartesian and polar coordinates; Asymptotes. Curvature, Radius of curvature, Circle and center of curvature.",
+            "Integral Calculus: Definition of integration, Integration by the substitution method, Integration by parts, Standard integrals, Integration by the method of successive reduction; Definite integrals, Its properties and uses in summation of series; Walli's formula, Improper integral; Differentiation under the sign of integration, Integration under the sign of integration, Beta and gamma functions; Multiple Integrals: Change of order of Integration, Jacobian of transformation, Double Integrals, Triple Integrals. Area under a plane curves in Cartesian and polar coordinates; Volume of solid revolution, Volume of hollow solids of revolutions by shell method; Area of surface of revolution."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "Ph 1127": {
+          "title": "Optics and Waves",
+          "credit": 3.0,
+          "contactHour": "3 Hrs./Week",
+          "prerequisite": "None",
+          "topics": [
+            "Simple Harmonic Motion: Physical characteristics of simple harmonic oscillators, Displacement, Velocity and acceleration, General solutions for simple harmonic motion and the phase angle, The energy of a simple harmonic oscillator, Numerical solution of simple harmonic oscillation.",
+            "The Damped Harmonic Oscillator: Physical characteristics of the damped harmonic oscillator, The equation of motion for a damped harmonic oscillator, Light damping, Heavy damping, Critical damping, Rate of energy loss in a damped harmonic oscillator.",
+            "Travelling Waves: Physical characteristics of waves, Travelling waves, Travelling sinusoidal waves, The wave equation, The equation of a vibrating string, The energy in a wave, The transport of energy by a wave, Waves at discontinuities.",
+            "Standing Waves: Standing waves on a string, Standing waves as the superposition of two travelling waves, The energy in a standing wave, The superposition principle, The superposition of normal modes, The amplitudes of normal modes and Fourier analysis.",
+            "Sound wave: Audible, Ultrasonic, Infrasonic and supersonic waves, Doppler's effects and its application, Application of ultrasonic sound, Acoustics.",
+            "Geometrical Optics: Combination of lenses, Defects of images, Optical instruments (compound microscope, polarizing microscope, resolving power of a microscope, electromagnetic lenses).",
+            "Interference: Nature of light, Interference of light, Coherent sources, Young double slit experiment, Energy distribution, Condition for interference, Production of interference fingers, Fresnel Bi-prism, Newton's ring.",
+            "Diffraction of light: Fresnel and Fraunhofer diffraction, Diffraction by single slit, Diffraction by double slit, Diffraction gratings, Polarization, Production and analysis of polarized light, Optical activity, Optics of crystals."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "Ph 1128": {
+          "title": "Optics and Waves Sessional",
+          "credit": 0.75,
+          "contactHour": "1.5 Hrs./Week",
+          "prerequisite": "None",
+          "topics": [
+            "Experiments based on Ph 1127"
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "Ch 1127": {
+          "title": "Inorganic and Physical Chemistry",
+          "credit": 3.0,
+          "contactHour": "3 Hrs./Week",
+          "prerequisite": "None",
+          "topics": [
+            "Chemical Bonding: Structure of atom, Different types of bonding (ionic, covalent, hydrogen and metallic bond); Born-Haber-cycle, Ionic crystals, Lewis structure, Molecular orbital theory, Solid state reaction.",
+            "Electro-Chemistry: Electrolytic process, Galvanic and voltaic process, Electrochemical cell (working, reference, counter electrode, half-cell), EMF, Standard electrode potential, Transport number, Polarization, Faraday's law, Nernst diffusion layer, Conductance, Corrosion.",
+            "Reaction and Kinetics: Oxidation and reduction, Balancing reaction monitoring the progress of a reaction, Rate laws and rate constants, Experimental determination of rate law, Order and molecularity of a chemical reaction, Rate laws for reaction approaching equilibrium, Temperature dependence of reaction of reaction rates, Elementary reaction, Steady state approximation, Solid state reactions.",
+            "Solution Chemistry: Introduction to aqueous solution, Acid and base, Colligative properties of dilute solution, Raoult's law (ideal mixture, non-ideal mixture, positive and negative deviation), Lowering of vapor pressure in solution, Boiling point elevation.",
+            "Phase Rule: Definition of phases, Components and degrees of freedom; The phase rule, Phase diagram study of one and two component systems, Liquid-liquid phase diagram, Liquid-solid phase diagram, Cooling curves, Congruent and incongruent melting point.",
+            "The Colloids: Introduction to colloids; Different types of colloidal systems and their preparation, purification, properties, protective action and application; Tyndall effect, Brownian motion; Electric double layer, Zeta potential, Micelle."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "Ch 1128": {
+          "title": "Inorganic and Physical Chemistry Sessional",
+          "credit": 1.5,
+          "contactHour": "3 Hrs./Week",
+          "prerequisite": "None",
+          "topics": [
+            "Volumetric Analysis: Acid-base titration, Oxidation-reduction titrations, and Determination of Fe, Cu, and Cr, Ni volumetrically, Chemical etching and Experiments based on Ch 1127."
+          ],
+          "sessionalNote": null,
+          "references": []
+        }
+      },
+      "optionalCourses": [],
+      "termNotes": []
+    },
+    "Y1T2": {
+      "termKey": "Y1T2",
+      "title": "First Year Second Term",
+      "courses": {
+        "ME 1220": {
+          "title": "Engineering Drawing Sessional-I",
+          "credit": 1.5,
+          "contactHour": "3 Hrs./Week",
+          "prerequisite": "None",
+          "topics": [
+            "Engineering drawing types, Orthographic drawing, Starting from simple objects to complicated objects, Isometric view of the objects, Section drawing, Auxiliary views."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "ME 1227": {
+          "title": "Engineering Mechanics",
+          "credit": 4.0,
+          "contactHour": "4 Hrs./Week",
+          "prerequisite": "None",
+          "topics": [
+            "Statics",
+            "Introduction: Basic concepts of mechanics, Composition and resolution of forces.",
+            "Equilibrium of particles: Condition for the equilibrium of particles, Free-body diagram, Coplanar force systems.",
+            "Force System Resultants: Moment of a force, Principle of moments, Moment of a force about a specified axis, Moment of a couple, Reduction of a force to couple system.",
+            "Equilibrium of a Rigid Body: Types of support, Free-body diagrams, Conditions of rigid body equilibrium, Moments and couples, Constraints and statistical determinacy.",
+            "Dynamics",
+            "Kinematics of Particles: Motion of particle, Rectilinear and curvilinear motion; Motion of several particles, Rectangular components of velocity and acceleration; Motion relative to frame in translation; tangential, normal, radial and transverse components.",
+            "Kinetics of Particles: Newton's second law of motion, Linear and angular momentum, Radial and transverse components of motion, Motion under central force, Two body problem.",
+            "Work and Energy: Principle of work and energy and its application; Power and efficiency; Potential energy, Conservative forces; Conservation of energy and it application; Principle of impulse and momentum; Direct and oblique central impact.",
+            "Rigid body: Introductory concepts of kinematics of rigid body.",
+            "Mechanics of Machinery: Inertia and kinetic energy of rotation and reciprocating parts; Turning moment diagram, Fluctuation of energy and speed; Flywheel; Balancing of stationary, rotating and reciprocating masses, Balancing of in-line engines and v-engines, Principle of direct and reverse cranks in balancing problems, Balancing machines; Law of gearing forms of tooth and types of gear; Gear trains and their arrangements; Types of governors and their control; Cam and follower, Various profiles of cams and their motions."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "Math 1227": {
+          "title": "Differential Equations and Geometry",
+          "credit": 3.0,
+          "contactHour": "3 Hrs./Week",
+          "prerequisite": "None",
+          "topics": [
+            "Differential Equations: Formation of differential equations, Order and degree of differential equation; Solution of differential equations of first order first degree by various methods; Application of first order differential equation, Solution of general linear equations of second and higher orders with constant coefficients, Solution of Euler's homogeneous linear equations.",
+            "Co-ordinate Geometry of Three Dimensions: Co-ordinates: Cartesian, Cylindrical and spherical polar, Distance between two points, Point of division, Projections, Direction cosines and direction ratios, Angle between two lines, Distance of a Point From a Line; Plane: Different form of the equations of a plane, Plane through points and lines, Angle between two planes, Distance of a point from a plane, Volume of tetrahedron; Straight line: Different form of a straight line, Line on a plane, Coplanar lines, Shortest distance; Sphere: Standard equations, Tangent plane, Circle, Orthogonality of spheres.",
+            "Laplace Transform: Definition and existence of Laplace transform; Properties of Laplace transform; Laplace transform of elementary functions; Inverse Laplace transform and its properties; Convolution; Applications: Solution of ordinary differential equation using Laplace transform."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "Ph 1227": {
+          "title": "Magnetism and Nuclear Physics",
+          "credit": 3.0,
+          "contactHour": "3 Hrs./Week",
+          "prerequisite": "None",
+          "topics": [
+            "Magnetism: Dipoles, Dipole moment, Dipole in an electric field, The magnetic effect of an electric current, Magnetic flux, Permeability and reluctance, Magnetic field strength, Magnetic potential, Flux density, Magnetization curve, Susceptibility, Magnetic induction, Laws of magnetic circuits: Ohm's law, Ampere's circuital law, Hysteresis and eddy current losses, The Biot-Savart law, Magnetic field near a long, straight, Electromagnetic induction.",
+            "Dielectrics and Ferroelectrics: Maxwell equations, Polarization, Macroscopic electric field, Local electric field at an atom, Dielectric constant and polarizability, Ferroelectric crystals, Ferroelectric domains, Piezoelectricity, Pyroelectricity, Classification of magnetic materials.",
+            "Properties of Magnetic Materials: Diamagnetism, Paramagnetism, Quantum theory of para-magnetism, Ferromagnetism, Ferromagnetic order, Ferrimagnetic order, Antiferromagnetism, Antiferromagnetic order.",
+            "Elasticity of Matter: Different modulus of elasticity and their relationship, Elastic, Fatigue, Poisson's ratio, Work done in deforming a body, Twisting by a cylinder, Maxwell's needle, Bending moment, Cantilever.",
+            "Nuclear Physics: Introduction to nuclear physics, Basic concepts of nuclear physics, Radioactivity, Radioactive decay, Measurement of decay rates, Calculation of decay rates, Half-life, Nuclear fission, Chain reactions, Nuclear fusion, Radiation dosimetry, Mechanism of nuclear reactor, Disposal of radioactive isotope, Materials for building reactors, Application of radiation to medical treatment and in industry."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "Ph 1228": {
+          "title": "Magnetism and Nuclear Physics Sessional",
+          "credit": 1.5,
+          "contactHour": "3 Hrs./Week",
+          "prerequisite": "None",
+          "topics": [
+            "Experiments based on the theory course of Ph 1227."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "Ch 1227": {
+          "title": "Organic Chemistry",
+          "credit": 3.0,
+          "contactHour": "3 Hrs./Week",
+          "prerequisite": "None",
+          "topics": [
+            "Structure and Bonding: Atomic orbitals, Hybridization, Sigma and Pi-bonding, Delocalization and resonance, Molecular shape, Nomenclature of organic compounds (aliphatic and aromatic), Isomers, Electronegativity and bond polarity, Bond order, Effect of bond order on bond length and bond strength.",
+            "Organic Reactions and Their Mechanism: Nucleophilic and electrophilic substitution reactions and their kinetics, Steric hindrance and stereochemistry. Structure of carbocations. Role of solvent in SN1 and SN2 reactions, El and E2.",
+            "Aromatic Compounds: Nomenclature of aromatic compounds, Benzene and aromaticity. Unusual stability of benzene, Modern theories of the structure of benzene, Aromatic compounds (phenol, aniline, pyrrole).",
+            "Polymers: Macromolecules & polymers, Classification of polymers, Molecular Weight, Degree of polymerization, Tactility, Thermoplastic and thermosetting, Chain-growth polymers, Types and mechanism of polymerization, Addition polymerization (free radical, cationic and anionic), Condensation and copolymerization, Coordination polymerization, Conducting polymers.",
+            "Biomolecules: Structure and reaction of cellulose, Structure of amino acids, Peptide linkage, Structure of proteins.",
+            "Spectroscopic Techniques: Fundamentals of spectroscopy, UV spectroscopy, IR spectroscopy."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "Ch 1228": {
+          "title": "Organic Chemistry Sessional",
+          "credit": 0.75,
+          "contactHour": "1.5 Hrs./Week",
+          "prerequisite": "None",
+          "topics": [
+            "Experiments based on the course Ch 1227, Organic Chemistry."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "Hum 1227": {
+          "title": "Technical English",
+          "credit": 3.0,
+          "contactHour": "3 Hrs./Week",
+          "prerequisite": "None",
+          "topics": [
+            "General Discussion: Introduction, Mastering various approaches to learning English.",
+            "Grammatical Problem: Construction of words and sentences, Grammatical problems, Sentence variety and style, Transformation of sentences; Common errors; Conditionals, Grammar and usages, Vocabulary and diction, Clauses, Prefixes & suffixes, Synonyms and antonyms.",
+            "Approaches to Communication: Communication today, Business communication, Organization and organizational behavior, Developing intra-personal interpersonal relationship, Introducing dialogue; Specific applications of tenders and quotations, Resumes and job letters, Do letter, Memo letter, Official note, Complaint letter, Newspaper letter, Journal articles.",
+            "English Phonetics: The phonetics systems and correct English pronunciation.",
+            "Writing skill: Principles of effective writing, Organization in writing, Planning and development, Composition, Precis writing, Paragraph writing, Amplification, Free composition.",
+            "General Strategies for the Writing Process: Generating ideas, Identifying audiences and purposes, Constructing arguments, Stating problems, Drafting and finalizing."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "Hum 1228": {
+          "title": "Technical English Sessional",
+          "credit": 0.75,
+          "contactHour": "1.5 Hrs./Week",
+          "prerequisite": "None",
+          "topics": [
+            "Developing Reading Skill: Strategies of reading-skimming, Scanning prediction, Inference; Analyzing and interpreting variety of texts; Practicing comprehension from literary and non literary texts.",
+            "Developing Writing Skill: Sentences, Sentence variety, Generating sentences; Clarity and correctness of sentences; Linking sentences to form paragraphs. Writing paragraphs, Essays, Reports, Formal and informal letters.",
+            "Listening Skill and Note Taking: Listening to recorded texts and class lectures and learning to take useful notes based on listening.",
+            "Developing Speaking Skill: Oral skills including communicative expressions for personal identification, Life at home, Giving advice and opinion, Instructions and directions, Requests, Complaints, Apologies, Describing peoples and places, Narrating events."
+          ],
+          "sessionalNote": null,
+          "references": []
+        }
+      },
+      "optionalCourses": [],
+      "termNotes": []
+    },
+    "Y2T1": {
+      "termKey": "Y2T1",
+      "title": "Second Year First Term",
+      "courses": {
+        "MSE 2101": {
+          "title": "Crystallography",
+          "credit": 3.0,
+          "contactHour": "3 Hrs./Week",
+          "prerequisite": "None",
+          "topics": [
+            "Crystal Structure and Bonding: Crystals and construction of crystal structure; Voids in crystal; Types of bonding; Relationship between structure and position of an element in the periodic table; Ceramics structure spinel and inverse spinel; Example of few common crystal structures.",
+            "Symmetry and Crystal system: Crystal symmetry-two and three dimensional patterns and lattices, Rotational symmetry, Mirror symmetry, The symmetry of the fourteen Bravais lattices; Crystal system- Space/ Bravais lattice, Unit cell, Common unit cells, Packing density, Nearest neighbor calculation.",
+            "Describing Lattice Planes and Directions in Crystals: Miller indices of crystallographic planes; Indices of direction; Linear density; Identification of planes; Planar direction and density calculation; Angle between two planes.",
+            "The Reciprocal Lattice: Reciprocal lattice vector; Reciprocal lattice unit cell; Reciprocal lattice for cubic crystal; Brillouin zone.",
+            "Determination of Crystal Structure: Diffraction of light, The diffraction of X-Ray, Bragg's analysis of X-Ray; Bragg's law; X-Ray diffraction from single crystal and polycrystalline materials; The X-Ray diffractometer, Analysis of X-Ray results; The insight of X-Ray technique X-Ray source, Recording technique, Peak broadening, Experimental sample; Neutron and Electron diffraction.",
+            "The Stereographic Projection: Construction of stereographic projection of a cubic crystal; Manipulation of stereographic projection-Wulff Net, Measurement of angles, Representation of symmetry on the stereographic projection; application of stereographic projection."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "MSE 2102": {
+          "title": "Crystallography Sessional",
+          "credit": 0.75,
+          "contactHour": "1.5 Hrs./Week",
+          "prerequisite": "None",
+          "topics": [
+            "Experiments based on the course MSE 2101."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "MSE 2103": {
+          "title": "Thermodynamics of Materials",
+          "credit": 3.0,
+          "contactHour": "3 Hrs./Week",
+          "prerequisite": "None",
+          "topics": [
+            "Introduction: Importance of thermodynamics study; The concepts of state; Simple equilibrium; The equation of state of an ideal gas; Extensive and intensive properties; Phase diagram and thermodynamic components.",
+            "The Structure of Thermodynamics: Classification of thermodynamic systems and variables; classification of relationships; Criterion for equilibrium.",
+            "The Laws of Thermodynamics: First law of thermodynamics; Second law of thermodynamics; Combination statement of first and second laws; The third law of thermodynamics; Relationship between entropy transfer and heat absorbed.",
+            "Thermodynamics Variables and Relationships: Classification of thermodynamic relationship; Defining thermodynamics-Enthalpy, Helmholtz free energy, Coefficient relations; Maxwell relations; General strategy for deriving thermodynamic relations.",
+            "Equilibrium in Thermodynamic Systems: Thermodynamic formulation of a general criterion for equilibrium; Mathematical formulation of the general conditions for equilibrium; Findings equilibrium conditions for a unary two-phase thermodynamic system.",
+            "Unary Heterogeneous Systems: Structure of the unary phase diagrams in (P, T) space; Clausius-Clapeyron equation; Integration of Clausius-Clapeyron equation; Triple points.",
+            "Multicomponent Homogeneous Non-reacting Systems (Solutions): Partial molar properties; Evaluation of partial molar properties; Relationships among partial molar properties; Chemical potential in multicomponent systems; Fugacities, activities, and activity coefficients, Behavior of dilute solutions.",
+            "Phase Equilibrium in Multicomponent Heterogeneous System: Conditions for equilibrium in a multicomponent non-reacting heterogeneous system; Gibbs phase rules; The structure of phase diagrams; The interpretation of phase diagram; Application of phase diagram in materials science.",
+            "Thermodynamics of Phase Diagram: Gibbs free energy and thermodynamic activity; Free energy composition (G-X) diagram; Construction of binary phase diagram; Three phase equilibria; Intermediate phases; Familiar with computer calculations of phase diagrams.",
+            "Multicomponent Multiphase Reacting System: Reactions in a multiphase system; Richardson-Ellingham charts for oxidation; Oxidation in CO/CO2 and H2/H2O mixtures; Predominance diagrams; Interpretation of predominance diagram."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "MSE 2108": {
+          "title": "Technical Writing and Presentation Skill Sessional",
+          "credit": 1.5,
+          "contactHour": "3 Hrs./Week",
+          "prerequisite": "None",
+          "topics": [
+            "Effective use of office tools in technical report writing, data interpretation and analysis, and presentation of the experimental results; Structure of the laboratory report; Oral presentation of experimental results in stipulated time; Plagiarism and bibliographic references."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "ME 2110": {
+          "title": "Machine Shop Sessional",
+          "credit": 0.75,
+          "contactHour": "1.5 Hrs./Week",
+          "prerequisite": "None",
+          "topics": [
+            "Practice of different operations on Lathe machine, Drilling machine, Milling machine, Shaper machine, Grinding machine etc. and acquaintance with hand and machine tools used in carpentry shops."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "ME 2120": {
+          "title": "Computer Aided Drawing",
+          "credit": 1.5,
+          "contactHour": "3 Hrs./Week",
+          "prerequisite": "ME 1220",
+          "topics": [
+            "Working drawing of machine elements using AutoCAD and Solidworks."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "ME 2127": {
+          "title": "Solid Mechanics",
+          "credit": 3.0,
+          "contactHour": "3 Hrs./Week",
+          "prerequisite": "None",
+          "topics": [
+            "Structural Analysis: Simple trusses; the method of joints; Zero-Force members; The method of sections; Frames and Machines.",
+            "Center of Gravity and Centroid: Center of gravity; Centroid of area and volume; Composite bodies; Theorems of Pappus and Guldinus.",
+            "Moments of Inertia: Definition of moments of inertia for areas; Parallel axis theorem for an area; Radius of gyration of an area; Moment of inertia for composite areas.",
+            "Stress and Strain: Introduction; Analysis of internal forces; Tensile, compressive, bearing and shearing stresses; Stresses in thin and thick walled cylinders and spheres due to internal pressure circumferential and longitudinal stresses; Stress-strain diagram.",
+            "Statically Determinate Beams: Different types of loading and supports; Shear force and bending moment diagrams; Stresses in beams; flexure formula; economic sections; shear stresses in beams; general shear formula; variation of shear stresses in beams; Deflection of beams, double integration, area-moment methods.",
+            "Introduction to combined stress (principal stress; Mohr's circle)",
+            "Columns: Introduction; Critical load, Slenderness ratio and classification of columns; Euler's formula, Empirical formulas and Secant formula.",
+            "Torsion: Introduction; Torsion formula; Angle of twist; modulus of rupture; Shaft couplings and helical springs; Analysis and design of solid and hollow shaft. Riveted, bolted and welded connections."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "Math 2127": {
+          "title": "Vector Analysis and Linear Algebra",
+          "credit": 3.0,
+          "contactHour": "3 Hrs./Week",
+          "prerequisite": "None",
+          "topics": [
+            "Vectors: Review of Vector Differentiation; Vector Differential Operator, Gradient, Divergence, Curl and their elementary applications; Vector Integration: Line, surface and volume integrals; Integral theorem: Green's, Gauss's and Stoke's theorem; Curvilinear coordinates: Orthogonal coordinates, Spherical and cylindrical polar co-ordinates, Differential operations in orthogonal coordinates.",
+            "Linear Algebra: Review of Matrix algebra, Elementary Transformation: Rank of a matrix, elementary, Normal, Echelon and canonical forms of matrices, Inverse by elementary transformation; Solution of linear equations: homogeneous and nonhomogeneous systems; Vector space and coordinate transformation; Null space; Quadratic forms; Matrix polynomials; Eigenvalues, eigenvectors and its properties, Caley-Hamilton theorem."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "Hum 2127": {
+          "title": "Accounting and Economics",
+          "credit": 3.0,
+          "contactHour": "3 Hrs./Week",
+          "prerequisite": "None",
+          "topics": [
+            "Accounting:",
+            "Introduction to accounting: Definition; Business environment; Forms of business organization; Introduction to accounting; Information systems; The use of the Accounting Equation; Accounting conventions and their use in the preparation of financial statements; Accounting equation; Business data processing Transaction; Double entry system of book-keeping.",
+            "Accounting Cycle: Journal; Ledger; Trial balance; Preparation of financial statement; Financial statement analysis; Short-term and Long-term finance; Capital budgeting.",
+            "Taxation: Definition of tax; Types of tax; Canons of tax; Tax administration in Bangladesh; Tax holiday; Capital allowance; corporation tax; Tax credit; Depreciation of fixed asset, methods.",
+            "Cost account: Payroll account, Material cost/inventory valuation.",
+            "Economics:",
+            "Definition scope and methods; Demand supply and their elasticities; Equilibrium analysis-partial and general; Consumer behavior; marginal utility; Indifference curve consumer's surplus; Producer behavior; Iso-quant, Iso-cost line; Factors of production function; Production possibility curve; Fixed cost and variable cost; Short run and long run costs, Total average and marginal cost; Laws of return; Internal and external economies and diseconomies; Market and forms; Perfect and imperfect competition; Price output determination; National income analysis; Inflation."
+          ],
+          "sessionalNote": null,
+          "references": []
+        }
+      },
+      "optionalCourses": [],
+      "termNotes": []
+    },
+    "Y2T2": {
+      "termKey": "Y2T2",
+      "title": "Second Year Second Term",
+      "courses": {
+        "MSE 2201": {
+          "title": "Phase Diagrams and Transformations",
+          "credit": 3.0,
+          "contactHour": "3 Hrs./Week",
+          "prerequisite": "None",
+          "topics": [
+            "Thermodynamics and Phase Diagrams: Definition of few terms- Equilibrium, Phase, Components; Unary systems; Binary systems; Single component systems; Gibbs free energy as a function of temperature; The driving force for solidification; Nonequilibrium cooling.",
+            "Binary Phase Diagrams: A simple phase diagram; Systems with a miscibility gap; Ordered alloys; Simple eutectic systems; Phase diagrams containing intermediate phases; Eutectic morphologies; Solidification and scale of eutectic structures; Competitive growth of dendrites and eutectics; Peritectic systems; The Gibbs phase rule; The lever rule; The effect of temperature on Solid Solubility.",
+            "Common Example of Binary Phase Diagrams: Aluminum-silicon eutectic system; Phase diagram of ceramics with example; Iron-Iron carbide phase diagram; Phase diagrams of common stainless steel and other non-ferrous systems.",
+            "Ternary and Multiphase Phase Diagrams: Introduction to ternary and quaternary systems and associated phase diagrams; The Gibbs triangle and construction rules for ternary phase diagrams; Space model of ternary systems; The Gibbs triangle; Tie lines; Ternary isomorphous systems.",
+            "Diffusion: Atomic mechanism of diffusion; Interstitial diffusion; Substitutional diffusion; Atomic mobility.",
+            "Solidification: Nucleation in Pure Metals-Homogeneous nucleation, Homogeneous nucleation Rate, Heterogeneous nucleation, Nucleation in melts, Growth of a pure solid; Continuous growth; Lateral growth; Surface nucleation; Alloy solidification; Solidification of single-phase alloys; Nucleation of precipitates from a supersaturated solid solution; Equilibrium solidification; Cellular and dendritic solidification; Eutectic solidification.",
+            "Diffusionless Transformation in Solids: Characteristics of diffusionless transformations; The solid solution of carbon in Iron; CCT diagram; Martensite crystallography; The Bain model of the fcc to bct transformation; Comparison of crystallographic theory with experimental results; Theories of martensite nucleation; Martensite growth; Effect of retained austenite; The development of nonequilibrium transition phases due to interfacial energy effects; Coherent, semi-coherent, and incoherent interfaces and energetics."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "MSE 2203": {
+          "title": "Mechanical Behavior of Materials",
+          "credit": 3.0,
+          "contactHour": "3 Hrs./Week",
+          "prerequisite": "MSE 2101",
+          "topics": [
+            "Elasticity: Isotropic elasticity; Variation of Young's modulus; Isotropic thermal expansion; Elastic anisotropy; Orientation dependence of elasticity.",
+            "Mechanical Testing: Tensile specimens; Stress-strain curves; Ductility; True stress and strain; Compression test; Plane strain compression; Plane strain tension; Torsion test; Bend tests; Correlation of Hardness and Ultimate tensile strength.",
+            "Strain Hardening of Metals: Introduction; Mathematical approximations; Power Law approximation; Necking; Work per volume; Localization of strain at defects; Notes; Problems.",
+            "Plasticity, Slip and Dislocation: Yield criteria; Von Mises Criterion; Flow rules; Slip systems; Schmid's law; Strains produce by slips; Strain hardening of fcc single crystals; Tensile deformation of fcc crystals; Slip in bcc crystals; Lattice rotation in tension; Lattice rotation in compression; Texture formation in polycrystals; Deformation of polycrystals; Dislocation geometry and energy- Theoretical strength of crystals, The nature of dislocations, Burgers vectors, Energy of a screw dislocation, Reactions between parallel dislocations and Frank's rule, Stress fields around dislocations, Stacking faults, Application of simple dislocation theory to plastic deformation; Dislocation mechanics-Frank-Read sources, Dislocation pile-ups, Cross-slip, Dislocation intersections, Climb.",
+            "Fracture Mechanics: Basic mechanism of ductile and brittle fracture; Griffith and Orowan theories of ideally brittle fracture; Fracture modes and fractography; Linear-elastic fracture mechanics; Stress concentration and concept of fracture toughness; Fracture mechanics in design; Ductile to Brittle Transition Temperature (DBTT); Factors affecting DBTT; Determination of DBTT.",
+            "Creep and Stress Rupture: Creep mechanisms; Structural changes during creep; Temperature dependence of creep; Metallurgical factors affecting creep; Deformation mechanism maps; creep- fatigue; Viscoelasticity; Alloys of high temperature use.",
+            "Fatigue: Fatigue failure; Stress cycles, Effect of mean stress; Factors affecting fatigue; Structural changes accompanying fatigue; Stress-strain/life description in fatigue (S-N curves, endurance strengths/fatigue limits; Crack propagation; Goodman relationship, Neuber's and Miner's rules, fatigue strength reduction factors); Low and high cycle fatigue; Application of fracture mechanics to fatigue-crack growth; Fatigue resistant design; Fatigue thresholds."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "MSE 2206": {
+          "title": "Compositional and Microstructural Analysis",
+          "credit": 1.5,
+          "contactHour": "3 Hrs./Week",
+          "prerequisite": "None",
+          "topics": [
+            "Compositional Analysis: (1) Determination of Total Carbon and Graphitic Carbon (2) Determination of Mn (3) Determination of Si (4) Determination of S (5) Determination of Solid Sample Composition using Spectro-OES.",
+            "Hicrostructural Analysis: (1) Preparation of samples (sectioning, mounting, nd grinding) (2) Preparation of samples (polishing and etching) and microscopy 3) Examination of low-carbon steel and medium-carbon steel (4) Examination of high-carbon steel and stainless steel (5) Examination of aluminum-base and copper-base alloys."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "MSE 2208": {
+          "title": "Materials Testing Sessional",
+          "credit": 1.5,
+          "contactHour": "3 Hrs./Week",
+          "prerequisite": "None",
+          "topics": [
+            "Laboratory based on MSE 2203."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "CSE 2227": {
+          "title": "Programing Techniques",
+          "credit": 3.0,
+          "contactHour": "3 Hrs./Week",
+          "prerequisite": "None",
+          "topics": [
+            "Introduction: Programming languages, Basic program syntax; Programming techniques: Structured (C programming Language) and Object Oriented Programming (C++ programming Language).",
+            "Structured Programming: Declaring variables and data types, Basic program structure, Input/output operations, Basic Operators, Control Statements, Conditional statements, Loops, Functions- declarations and calling, Strings, Pointers, Dynamic Memory allocation.",
+            "Object Oriented Programming: Introduction to Classes and Objects; File handling; Structure and Union."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "CSE 2228": {
+          "title": "Programing Techniques Sessional",
+          "credit": 1.5,
+          "contactHour": "3 Hrs./Week",
+          "prerequisite": "None",
+          "topics": [
+            "Laboratory based on CSE 2227."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "Math 2227": {
+          "title": "Statistics, Fourier Series and Numerical Analysis",
+          "credit": 3.0,
+          "contactHour": "3 Hrs./Week",
+          "prerequisite": "None",
+          "topics": [
+            "Statistics: Overview of the measures of central tendency and dispersion; Moments, skewness and kurtosis; Elementary probability theory, Random variable and probability distribution, expectation; Discontinuous probability distributions e.g. Binomial, Poison and Negative binomial along with their properties and illustrations; Continuous probability distributions, e.g. Normal and Exponential along with their properties and illustrations; Simple Correlation and Regression analysis.",
+            "Fourier Series: Euler Fourier series representation of functions; Conditions for existence of Fourier series; Fourier series with different periods; Fourier series for odd and even functions; Half range sine and cosine series; Complex form of Fourier Series; Parseval's identity; Practical Harmonic Analysis.",
+            "Numerical Analysis:",
+            "Interpolation: Simple differences, Newton's formula for forward and backward interpolation, Divided differences, Tables of divided differences, Relation between divided and simple differences, Newton's general interpolation formula, Lagrange's interpolation formula; Inverse interpolation by Lagrange's formula and by successive approximations.",
+            "Numerical Differentiation: Numerical differentiation by Newton's forward and backward formulae.",
+            "Numerical Integration: General quadrature formula for equidistant ordinates, Trapezoidal rule, Simpson's rule, Waddle rule, Calculation of errors, Gauss's quadrature formula, Newton's-cotes formula; Curve fitting: Principle of least squares; Linear, curvilinear and polynomial Curve fitting for one independent variables.",
+            "Finding of Roots: Regula-Falsi method, Newton-Raphson method, geometrical significance of the methods, convergence of methods; Solution of linear equations by iteration methods, Norm and condition number, Gauss elimination method."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "Ph 2227": {
+          "title": "Basic Quantum Mechanics and Solid State Physics",
+          "credit": 3.0,
+          "contactHour": "3 Hrs./Week",
+          "prerequisite": "None",
+          "topics": [
+            "Basic Quantum Mechanics: Photo-electric effect, Compton Effect, Atom model (Bohr's, Somerfield, Vector atom model), Hydrogen atom model, Wave properties of particles, Schrödinger equation, Quantum tunneling; Operator, Simple Harmonic Oscillation, Spherical and Polar co-ordinates.",
+            "Nanotechnology: Nanometer; Nanomaterials and nanotechnology; Classification of nanomaterials; Shape and structure of nanomaterials; Quantum well; Quantum dots; Semiconductor nanoparticles.",
+            "Solid State Physics: Lattice Vibration, Specific heat, Einstein Model, Debby Model, Free electron theory of metal, Transport properties (Static and Dynamic), Electrical and Thermal conductivity (Hall effect), Electron drift, Electron excitation, Photon excitation,, Quantum Process, Quantum confinement effect, Principle, Population inversion, Optical pumping.",
+            "LASER: Characteristics and application of LASER (history of LASER), Types of LASER (Ruby, He-Ne gas, Free electron LASER)."
+          ],
+          "sessionalNote": null,
+          "references": []
+        }
+      },
+      "optionalCourses": [],
+      "termNotes": []
+    },
+    "Y3T1": {
+      "termKey": "Y3T1",
+      "title": "Third Year First Term",
+      "courses": {
+        "MSE 3101": {
+          "title": "Transport Phenomena in Materials",
+          "credit": 3.0,
+          "contactHour": "3 Hrs./Week",
+          "prerequisite": "Math 2227",
+          "topics": [
+            "Momentum Transfer: Basic properties of fluid flow; Conservation laws (equation of continuity, Navier-Stokes equation, Bernoulli equation); Flow regime; Flow in a pipe; Flow around a solid body.",
+            "Basic Heat Transfer Principles: Physical origins of rate equations of the three principal modes of heat transfer; Thermal resistance concept.",
+            "One-Dimensional Steady-State Conduction: The plane wall; Radial systems; Conduction with thermal energy generation.",
+            "Two-Dimensional Steady-State Conduction: Finite-difference equations (The nodal network, Finite-difference form of heat equation, Energy balance method).",
+            "Transient conduction: Lumped capacitance method; Plane wall with convection; Radial systems with convection; Finite difference methods.",
+            "Convection: Convection boundary layers; Local and average convection coefficients; Laminar and turbulent flow.",
+            "Heat Exchangers: Heat exchanger types; Overall heat exchanger coefficient; Heat exchanger analysis: use of log mean temperature difference.",
+            "Radiation: Radiation heat fluxes; Radiation intensity; Blackbody radiation; View factor; Blackbody radiation exchange; Network method for radiation exchange in an enclosure.",
+            "Diffusion and Mass Transfer: Formulating diffusion in homogeneous media; Diffusion in porous media; Physical origins and rate equations; Mass transfer through chemical reaction; Chemical reaction model; Mass diffusion; Boundary conditions for mass transfer; Mass transfer in nonstationary media; Conservation of species for a stationary medium; Boundary conditions and discontinuous concentrations at interfaces; Transient diffusion."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "MSE 3103": {
+          "title": "Materials Manufacturing Processes",
+          "credit": 4.0,
+          "contactHour": "4 Hrs./Week",
+          "prerequisite": "None",
+          "topics": [
+            "Ianufacturing Properties of Materials: Structure of matter; Metals and lloys; Deformation and mechanical properties of materials; Control of material roperties.",
+            "Foundry Practices: Properties of moulding sand; Sand additives; Pattern and mould making; Core and core boxes; Melting; Pouring; Gates and risers; Cooling and solidification; Chvorinov's rule; Solidification shrinkage; Riser design; Defects in casting; Miscellaneous casting processes; Inspection of casting; Non-ferrous casting metals; Cast iron.",
+            "Forming Processes: Introduction; Plastic deformation and yield criteria; Relationship between tensile and shear yield stresses; Mechanics of forming processes- rolling, forging, drawing, bending, extrusion; Various forming operations, Advantages and disadvantages of hot and cold forming; Friction and lubrication in metal forming; Defects in metal forming.",
+            "Machining Processes: Mechanics of basic machining operation; Machining processes- shaping and planning; Turning and boring; Drilling, Milling; Abrasive machining and finishing operation; Surface finish; Economics of machining operations.",
+            "Shaping Processes for Polymers, Ceramics and Glasses: Properties of polymer melts; extrusion; Defects in extrusion; Injection molding; Compression and transfer molding; Blow molding and rotational molding; Thermoforming, Processing of traditional and new ceramics; Shaping processes in glass working.",
+            "Powder Metallurgy: Principles of powder metallurgy process; Powder manufacture; Powder blending; Powder compaction; Sintering; Finishing.",
+            "Advanced Manufacturing Processes: Additive manufacturing; Laser processing and manufacturing."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "MSE 3104": {
+          "title": "Materials Manufacturing Processes Sessional",
+          "credit": 1.5,
+          "contactHour": "3 Hrs./Week",
+          "prerequisite": "None",
+          "topics": [
+            "List of Experiments",
+            "Testing on foundry sand- Permeability for green sand, Compactability, Moisture determination, Sieve analysis and Grain fineness number, Wet and dry compression strength for green sand; Preparation of moulding sand mixtures; Melting and casting of ferrous and non-ferrous materials; Various casting processes; Structural analysis of cast metal; Hot working and cold working process; Metal working processes like Rolling, Forging, Extrusion, Wire, Rod and tube drawing, Sheet metal forming."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "MSE 3105": {
+          "title": "Welding and Materials Joining Processes",
+          "credit": 3.0,
+          "contactHour": "3 Hrs./Week",
+          "prerequisite": "None",
+          "topics": [
+            "Materials Joining Methods: Introduction to permanent and semi-permanent methods of materials joining namely Welding, Brazing, Soldering, Riveting, Adhesives, Nuts and bolts and washers, Knock-down fittings, Screws.",
+            "Soldering and Brazing: Solders; Classifications of soldering fluxes and its properties; Different types of soldering methods; Basic operations of soldering: Cleaning operations; Types of brazing joint; Basic operations in brazing; Brazing filler metals; Brazing fluxes, Quality control in brazing, Brazing applications.",
+            "Fusion Welding Process: Classification of welding processes; Welding process selection criteria; Principle of fusion welding, Traditional fusion welding processes: Oxy Fuel welding, Manual metal arc welding, Gas metal arc welding, Gas tungsten arc welding; Modern fusion welding process: Submerged arc welding, Electro-slag welding, Plasma arc welding; Special fusion welding process: Electron beam welding, Laser beam welding; Thermite welding; Preparation of thermite welding.",
+            "Solid State Welding Process: Resistance welding processes; Resistance spot and seam welding process; Projection welding; Pressure welding, Cold and Hot pressure welding, Forge welding, Roll welding, Explosion welding, Friction welding and Diffusion bonding.",
+            "Metallurgical Aspects of Welding: Weld metal solidification and weld-pool structure; Heat affected Zone (HAZ); Effect of welding parameters and processes on HAZ; Weld metal nucleation mechanism; Grain structure control; Effect of welding parameters on grain structure; Oxidation and de-oxidation of metals in welding; Dissolution of gases and its control; Weldability; Develop, analyse and detect the remedies of residual stress and distortion fusion zone; Weld decay; Refining of weld metals.",
+            "Miscellaneous Joining Processes: Types of adhesives; Selection of adhesive materials; Post treatment of adhesive joined materials; Types of riveting; Selection criteria of rivet joining; Ceramics joining; Polymer joining process. Weld Defects: Weld metal solidification cracking; Reducing solidification cracking; Liquation cracking; Lamellar Tearing; Imperfect shape and unacceptable contour.",
+            "Weld Design and Symbols: Design of the weld; Reference line of welding symbol; Size of welds; Field weld and reference tail; Typical welding symbols. Inspection and Testing of Weldment: Inspection prior to welding; In-process inspection; Testing of weldments: metallographic test, chemical test, mechanical test; Non-Destructive testing (NDT)."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "MSE 3106": {
+          "title": "Welding and Materials Joining Processes Sessional",
+          "credit": 0.75,
+          "contactHour": "1.5 Hrs./Week",
+          "prerequisite": "None",
+          "topics": [
+            "This laboratory course will comprehensively help to understand various forms of welding/joining in addition to welding defects which affect mechanical properties of welded parts.",
+            "List of Experiments",
+            "Soldering Process (Lap Joint); Brazing Process (Lap Joint); Metal Cutting and Gas Welding (Butt Joint); Starting an Arc and Running Stringer (Straight) Beads; Manual Metal Arc Welding (MMAW) Process: Gas Tungsten Arc Welding (GTAW) and Gas Metal Arc Welding (GMAW); Micro and Macro Examination of a Welded Joint; Investigation of Mechanical Properties of Welded Joint; Determination of Shear Strength of Soldered, Brazed and Resistance Spot Welded Joints; Oxygen-Acetylene Welding (OAW)."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "MSE 3107": {
+          "title": "Physical Metallurgy of Materials",
+          "credit": 3.0,
+          "contactHour": "3 Hrs./Week",
+          "prerequisite": "MSE 2201",
+          "topics": [
+            "Cold Working and Hot Working: Cold working, Effect of cold working on properties, Hot working, Recovery, Recrystallization, Nucleation and grain growth, Comparison of hot work and cold work.",
+            "Phase Transformation in Steel: Allotropic changes in iron, Iron-iron carbide equilibrium diagram, Cast iron, Steel and iron microstructures with phase relations, Transformation of steel on heating and cooling, Influence of alloying elements, Time-Temperature Transformation diagram, Continuous Cooling Transformation diagram, Effects of alloying elements on TTT diagram, Mechanism of pearlitic, Martensitic and bainitic transformation.",
+            "Heat Treatment Processes: Annealing, Normalizing, Hardening/Quenching, Hardenability: Jominy end-quench test, Mechanism of heat removal during quenching, Factors effecting quenching conditions, Tempering, Austempering and martempering process.",
+            "Surface Hardening and Surface Heat Treatment: Carburizing, Nitriding, Cyaniding, Flame hardening and Induction hardening, Laser and Electron beam hardening, Diffusion coating, Heat treatment of surface hardened materials.",
+            "Heat Treatment of Engineering Alloys: Heat treatment of cast iron-White cast iron, Grey cast iron, Heat treatment of non-ferrous alloys-Aluminum alloys, Copper alloys, Nickel alloys and Titanium alloys.",
+            "Application of Physical Metallurgy: Strengthening mechanisms of metals, Thermo mechanical treatment, Micro alloyed and ultra-high strength steel, Super alloy, Control of texture."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "MSE 3108": {
+          "title": "Physical Metallurgy of Materials Sessional",
+          "credit": 1.5,
+          "contactHour": "3 Hrs./Week",
+          "prerequisite": "None",
+          "topics": [
+            "This laboratory course offers practical knowledge of macro- and micro-graphic studies of Heat-treated steel, Alloy steel, Tool steel, Case hardened steel and Cast iron.",
+            "List of Experiments",
+            "Annealing of pre-stressed sample, Normalising of mild steel sample, Spheroidisation of high carbon steel, Quenching: study of quenching media, and time effects on hardening of steel, Tempering: Study of tempering temperature and time on tempering of steel, Carburisation of steel and case depth measurement, Heat treatment of Cast iron and stainless steel."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "Hum 3127": {
+          "title": "Government and Sociology",
+          "credit": 3.0,
+          "contactHour": "3 Hrs./Week",
+          "prerequisite": "None",
+          "topics": [
+            "Introduction of Government and Politics: Definition of government and politics; Scope and utility of government and politics; Origin and development of the state functions of modern welfare state; Role and quality of ideal citizen. Forms of Government: Definition and forms of government; Distinction between different forms of government.",
+            "Democratic Theories: Classical liberalism; Conservatism; Socialism; Contemporary liberalism; Fascism, Marxism, Communism; Nationalism; Democracy in the United States, European Union, Africa and Asia.",
+            "Basic Structures of Bangladesh Government: The executive, Legislative and judiciary; Constitution of Bangladesh; Basic principles and theory of governance in Bangladeshi Political system.",
+            "Introduction of Sociology: Definition, nature and scope of sociology; Socio-cultural context of the emergence of sociology; Sociological perspective-Functionalism, Conflict perspective and Symbolic interactionism, Sociological imagination.",
+            "Basic Concepts of Sociology: Society, Community, Institution, Association, Organization, Group, Kinship, Social Structure, Social stratification.",
+            "Methods and Techniques of Research in Sociology: Scientific method, Steps of scientific research; Methods and techniques of sociological research; Ethics of Research.",
+            "Culture and Socialization: Definition and elements of culture; Basic concepts of culture-Cultural lag, Cultural relativism, Cultural hybridization, Ethnocentrism, Counter culture, Cultural shock; Definition and agencies of socialization; Theories of socialization; Impact of culture on socialization and personality development.",
+            "Social Changes and Social Problems: Definition and agencies of social changes; Industrialization, Urbanization and Social pathology) Crime and Deviance; Globalization and changing pattern of family and marriage; Sociological conceptualization of religion and role of religion in society."
+          ],
+          "sessionalNote": null,
+          "references": []
+        }
+      },
+      "optionalCourses": [],
+      "termNotes": []
+    },
+    "Y3T2": {
+      "termKey": "Y3T2",
+      "title": "Third Year Second Term",
+      "courses": {
+        "MSE 3201": {
+          "title": "Materials Characterization",
+          "credit": 3.0,
+          "contactHour": "3 Hrs./Week",
+          "prerequisite": "MSE 2101",
+          "topics": [
+            "Structural Characterization: Crystallography basics; Properties of X-Ray; Diffraction pattern analysis; Phase identification, Phase quantification, Application of X-ray diffraction for phase diagram determination; Construction and operation of Transmission Electron Microscopy (TEM)- Crystal structure and Crystal defects detection; Polymeric materials analysis by Fourier-transform infrared spectroscopy (FTIR), Raman Spectroscopy.",
+            "Electrical Characterization: Bulk resistivity and measurement techniques; Spreading resistance technique; Contact resistivity and measurement techniques; Hall effect; Hall scattering factor; Deep-level defect analysis through Deep-level transient spectroscopy (DLTS); Scanning capacitance microscopy (SCM); tunneling-AFM (TUNA) tools for electrical characterization.",
+            "Surface Characterization: Basic principle of optical microscopy, Construction, modes of operation and application of Scanning Electron Microscopy (SEM), Specimen preparation for SEM; Operation modes, Image artifacts of atomic force microscope (AFM); Surface profilometer technique.",
+            "Compositional Characterization: Fundamental analysis, Qualitative and Quantitative analysis of X-ray emission spectroscopy- Energy Dispersive Spectroscopy (EDS), Wavelength Dispersive Spectroscopy (WDS); Basics of electron probe microscopic analysis (EPMA) and Atomic probe microscopy (APM) techniques for compositional analysis; X-ray Photoelectron Spectroscopy (XPS): Auger electron Spectroscopy (AES); Mass Spectroscopy (MS)-different ionization techniques for mass spectroscopy, ICP-MS, LA-MS; Optical Emission Spectroscopy (OES)- Spark-OES, ICP-OES; UV spectroscopy technique.",
+            "Thermal Characterization: Common characteristics of thermal events, Differential thermal analysis (DTA) and differential scanning calorimetry (DSC), Thermo gravimetric analysis (TGA)."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "MSE 3202": {
+          "title": "Materials Characterization Sessional",
+          "credit": 1.5,
+          "contactHour": "3 Hrs./Week",
+          "prerequisite": "None",
+          "topics": [
+            "Experiments based on the topics covered in MSE 3201 course."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "MSE 3203": {
+          "title": "Ceramics and Glass Engineering",
+          "credit": 3.0,
+          "contactHour": "3 Hrs./Week",
+          "prerequisite": "None",
+          "topics": [
+            "Structure and Defects of Ceramics: Ceramic bonding and crystal structure; Pauling's rules; Complex ceramic structures; Defects in ceramics; Kröger-Vink notation; Equations for point defects; Dislocations in ceramics; Surfaces and interfaces; Phase boundaries and pores.",
+            "Behavior of Ceramics: Mechanical behavior- Strength, Impact properties, Fatigue of ceramics; Fracture behavior; Toughening mechanisms in ceramics; Thermal behavior- Heat capacity, Thermal conductivity, Thermal expansion; Creep and Thermal stresses; Electrical behavior- Electronic conductivity, Ionic conductivity, Electrical insulators, Semiconductors, Superconductivity; Dielectric and magnetic behavior- Polarization, Dielectric properties, Piezoelectricity, Pyroelectricity, Ferroelectricity; Source of magnetism; Magnetic terminology; Applications of magnetic ceramics.",
+            "Processing of Ceramics: Powder processing; Shape-forming processes: Pressing, casting, and Plastic forming; Densification: Sintering, Hot pressing, and Hot isostatic pressing; Sol-gel processing; Glazing and decoration of ceramics.",
+            "Properties and Processing of Glass: Raw materials of glass making; Composition-and properties of common types of glass; Defects in glass; Glass processing: Processing bulk glass, Bubbles, Flat glass, Float-glass, Glassblowing, Coating glass, Safety glass, Chemical toughening process, Ceramming."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "MSE 3204": {
+          "title": "Ceramics and Glass Engineering Sessional",
+          "credit": 0.75,
+          "contactHour": "1.5 Hrs./Week",
+          "prerequisite": "None5",
+          "topics": [
+            "Experiments based on the topics covered in MSE 3203 course."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "MSE 3205": {
+          "title": "Corrosion and Surface Engineering",
+          "credit": 3.0,
+          "contactHour": "3 Hrs./Week",
+          "prerequisite": "Ch 1127",
+          "topics": [
+            "Corrosion",
+            "Introduction: Basic concepts; Faraday's law; Corrosion rate expression; Factors affecting corrosion rate; Phenomenological aspects of corrosive attacks.",
+            "Fundamentals of Corrosion Reactions: Standard free energy of reaction; Activity of electrolytes; Electrochemical equilibrium; Equilibrium potential and corrosion behavior; Pourbaix diagrams; Passivity; Polarization.",
+            "Environmental, Metallurgical and other Effects: Effect of oxygen and oxidizers; Effect of velocity; Effect of temperature; Effect of corrosive concentration; Effect of galvanic coupling.",
+            "Different Forms of Corrosion: Galvanic corrosion; Crevice corrosion; Pitting; Intergranular corrosion; Selective leaching; Erosion corrosion; Stress corrosion; Hydrogen damage.",
+            "High Temperature Corrosion: Mechanism and kinetics; High temperature materials; Metal-gas reaction at high temperature.",
+            "Surface Engineering",
+            "Introduction to Surface Engineering: Surface characteristics; Surface and interface; Texture and preparation methods.",
+            "Surface Coatings Techniques: Electro-and electroless-plating mechanisms, Bath characteristics and electrochemical parameters; Conversion coatings; Spray coating processes; Hot dipping; Advanced surface coating methods-PVD, CVD and LASER surface modification.",
+            "Testing and Quality Control of Coatings: Selection of coating materials and methods; Basic types of wear: Abrasive, Adhesive and Delamination wear; Frictional processes and friction coefficient; Influence of materials properties on wear resistance; Wear tests; Wear resistant materials and coatings."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "MSE 3206": {
+          "title": "Corrosion and Surface Engineering Sessional",
+          "credit": 1.5,
+          "contactHour": "3 Hrs./Week",
+          "prerequisite": "None",
+          "topics": [
+            "Experiments based on the MSE 3205 course."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "MSE 3208": {
+          "title": "Materials Processing Plant Design Sessional",
+          "credit": 0.75,
+          "contactHour": "1.5 Hrs./Week",
+          "prerequisite": "MSE 3103",
+          "topics": [
+            "This laboratory course will help the students understand about the design, erection, operation and maintenance of a materials processing plant and design a product manufacturing plant according to the engineering, economical and environmental consideration."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "IEM 3227": {
+          "title": "Industrial Management",
+          "credit": 3.0,
+          "contactHour": "3 Hrs./Week",
+          "prerequisite": "None",
+          "topics": [
+            "Introduction: Evolution and various thoughts of management, Organization and environment. Organization: Theory and structure, Co-ordination, Span of control, Authority, Delegation, Centralization and decentralization.",
+            "Personal Management: Need hierarchy, Motivation, Leadership, Method study, Appraisal, Wages and incentives, Organizational change and conflicts.",
+            "Cost and Financial Management: Elements of costs of products depreciation, Break even analysis.",
+            "Operations Management: Forecasting; Inventory management; Materials requisition planning (MRP); JIT; Master planning basic scheduling technique; CPM and PERT; Plant location and layout; Maintenance management; Manage information system (MIS); Computer aided process planning (CAPP); Manufacturing resource planning (MRP-II)."
+          ],
+          "sessionalNote": null,
+          "references": []
+        }
+      },
+      "optionalCourses": [
+        {
+          "code": "MSE 3207",
+          "title": "Materials Recycling and Environmental Aspects",
+          "credit": 3.0,
+          "contactHour": "3 Hrs./Week",
+          "prerequisite": "None",
+          "topics": [
+            "Material Dependence and Resource Consumption: Brief history of materials uses; The reliance on non-renewable materials; Materials use and the environment impact; Resource consumption and reserves; The resource base and resource life.",
+            "Environmental Legislation and Economic Factor: International treaties, protocols and conventions; National legislation: Standards, Directives, Taxes, trading tools; Economic instruments: Green taxes and Trading schemes; The consequence of legislation on industry.",
+            "The Materials Life Cycle: Life cycle assessment (LCA): Details and difficulties; streamlined LCA; Strategy for eco-selection of materials; Determinants of product life; End of first life; Problem of packaging; Resurrecting the materials: Recycling; Effluent treatment plant (ETP) and Sewage treatment plant (STP) process.",
+            "Eco-audit: Eco-attributes of materials; Carbon footprint; Eco-audits system and tools; Case study.",
+            "Selection Strategies and Materials for Green Energy: Materials profiles; Familiarize with Metals, Alloys, Polymers, Ceramics and Hybrids composite; Principles of materials selection; Selection criteria and property charts; Computer-aided selection; Case study.",
+            "Use of Sustainable Materials and Design for Sustainability: The concept of sustainable development; Ecological metaphor; Sustainable energy; Sustainable materials; Materials value and future options."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        {
+          "code": "MSE 3209",
+          "title": "Extractive Metallurgy",
+          "credit": 3.0,
+          "contactHour": "3 Hrs./Week",
+          "prerequisite": "None",
+          "topics": [
+            "Ore Processing: Definition of ore, Purposes of ore dressing, Ore handling, Ore sampling, Particle size analysis techniques, Comminution, Crushing techniques, Grinding processes, Industrial screening techniques, Classification and types of classifiers, Gravity separation, Dense medium separation (DMS), Froth flotation, Magnetic and electrical separation, Dewatering, Tailings disposal.",
+            "Extractive Metallurgy: Thermodynamic and kinetic principles of metal extraction, Ellingham diagrams. Pyrometallurgical process: Drying, Calcination, Roasting, Smelting. Hydrometallurgical Processes: Leaching, Theory of leaching, Role of oxygen in leaching operations, Bacterial leaching, Selective precipitation, Ion exchange, Solvent extraction, Pyro vs. hydrometallurgy. Electrometallurgical process: Electrolysis, Electrolytic extraction from aqueous and fused salt bath, Electroplating, Cell design.",
+            "Extraction of Common Metals: Fe and Sn extraction from consecutive oxides, Electrolytic reduction method of extracting Al and Mg from consecutive oxides, Self-reduction of Pb and Cu from their sulphides, Extraction of precious metals such as: Au, Ag, Pt, and U."
+          ],
+          "sessionalNote": null,
+          "references": []
+        }
+      ],
+      "termNotes": []
+    },
+    "Y4T1": {
+      "termKey": "Y4T1",
+      "title": "Fourth Year First Term",
+      "courses": {
+        "MSE 4000": {
+          "title": "Thesis/Project",
+          "credit": 1.5,
+          "contactHour": "3 Hrs./Week",
+          "prerequisite": "None",
+          "topics": [],
+          "sessionalNote": null,
+          "references": []
+        },
+        "MSE 4101": {
+          "title": "Modern Iron and Steel Making",
+          "credit": 4.0,
+          "contactHour": "4 Hrs./Week",
+          "prerequisite": "None",
+          "topics": [
+            "Iron Making",
+            "Blast Furnace Iron Making: Blast furnace-burden preparation; Auxiliary equipment: gas cleaning device, air preheating device; Blast furnace charging sequence; Blast furnace mass and heat balance; Blast furnace reactions; Blast furnace temperature, pressure and composition profile; Operational irregularities and remedial measures in Blast furnaces; Modern trends in Blast Furnace Technology.",
+            "Alternative Techniques of Iron Making: Low shaft and charcoal furnaces; Electro-thermal processes; Rotary and Cupola furnace; Sponge iron production; Kinetics of iron oxide reduction; Evaluation of activation energy for various reactions.",
+            "Ferroalloy Production: Production of Ferrosilicon; Ferromanganese; Silicomanganese; Ferrochromium; Ferromolybdenum.",
+            "Steel Making",
+            "Primary Steel Making: History of steel making; Principles of steel making; Raw materials and various steelmaking process: Open hearth furnace, Basic oxygen steelmaking; Induction furnace steelmaking, Electric arc furnace steelmaking; Stainless steel making; Sources of slag and role of slag.",
+            "Secondary Steelmaking and Casting: Ladle refining furnace, De-oxidation (or, \"killing\"), Vacuum degassing, Alloy addition, Inclusion removal, Ingot casting and Continuous casting; Casting defects."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "MSE 4103": {
+          "title": "Engineering Alloys and Materials Selection",
+          "credit": 3.0,
+          "contactHour": "3 Hrs./Week",
+          "prerequisite": "None",
+          "topics": [
+            "Engineering Alloys",
+            "Ferrous Materials: Different types of ferrous materials:- Plain carbon steels; Low alloy steels; High alloy steels; Stainless steels and maraging steels; Tool steels; High speed steel; Die steels; High strength low alloy steel and study their structure properties relationship and applications.",
+            "Nonferrous Materials: Different types of nonferrous materials:- Copper and its alloys; Aluminum and its alloys; Zinc and its alloys; Magnesium and its alloys; Titanium and its alloys; Nickel and its alloys; Magnetic alloys, Super alloys and study their structure properties relationship and applications.",
+            "Materials Selection",
+            "The Design Process and Material Property Charts: The design process; Types of design; Design tools and materials data; Exploring materials properties; The material property charts; Further understanding and interpretation of materials properties charts; Evolution of structural materials; Holes in material property space.",
+            "Basics of Materials Selection: The selection strategy; Material indices; The selection procedure; The structural index; Selection with multiple constraints; Conflicting objectives; Shape factors; Limits to shape efficiency; Material indices including shape; Case studies.",
+            "Designing Hybrid Materials and Process Selection: Holes in material-property space; The method: \"A+B+C configuration + Scale\"; Composites and sandwich structures; Cellular structures foams and lattices; Classifying processes; Systematic process selection; Ranking: Process cost; Case studies."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "MSE 4104": {
+          "title": "Engineering Alloys and Materials Selection Sessional",
+          "credit": 0.75,
+          "contactHour": "1.5 Hrs./Week",
+          "prerequisite": "None",
+          "topics": [
+            "Laboratory based on MSE 4103 by using Cambridge Engineering Selector (CES) EduPack software."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "MSE 4105": {
+          "title": "Polymer and Composite Materials",
+          "credit": 3.0,
+          "contactHour": "3 Hrs./Week",
+          "prerequisite": "None",
+          "topics": [
+            "Polymer",
+            "Introduction of Polymer: Definition; Classification; Structure and characteristics of different types of polymers; Applications of polymers.",
+            "Synthesis and Fabrication: Additional polymerization; Condensation polymerization; Copolymerization; Degree of polymerization; Mechanism of polymerization (free radical, cationic and anionic), Polymer additives and compounding; Processing methods: casting, open mold and close mold, extrusion, injection molding, blow molding, rotational molding, compression molding, calendaring, thermoforming.",
+            "Properties of Polymers: Physical and mechanical (hardness, toughness, tensile strength, compression strength, creep, fatigue) properties of polymers, Relation between melting temperature and glass transition temperature properties involving large and small deformation, Property requirements and polymer utilization.",
+            "Special Types of Polymers: Polyelectrolytes; Conducting polymers; Biomedical polymers; Thermally stable polymers; Thermoplastic; Liquid crystal polymer, Polymer composites.",
+            "Composite",
+            "Concept of Composites: Introduction; Types of composite materials, Matrix materials, Reinforcements; Types of fibers; Laminar composites; Flake composites; Filled composites; Particulate reinforced composites; applications of composite.",
+            "Fabrication of Composite Materials: Metal matrix composites (MMC); Ceramic matrix composites (CMC); Polymer matrix composites (PMC).",
+            "Properties of Composite Materials: Elastic properties of unidirectional and random fiber composites; Hybrid composites; Angle-plied composites; Mechanics of composites; Bonding mechanism adsorption and wetting, Interdiffusion, Mechanical keying, Bond strength coupling agents."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "MSE 4106": {
+          "title": "Polymer and Composite Materials Sessional",
+          "credit": 1.5,
+          "contactHour": "3 Hrs./Week",
+          "prerequisite": "None",
+          "topics": [
+            "Experiment based on the topics covered in MSE 4105 course."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "MSE 4107": {
+          "title": "Computational Materials Science",
+          "credit": 3.0,
+          "contactHour": "3 Hrs./Week",
+          "prerequisite": "None",
+          "topics": [
+            "Materials Modelling and Simulation: Computational materials science, Methods in computational materials science, Basic procedures of computational materials science, Monte Carlo method, Molecular dynamics, The random-walk model, Simulation to finite system.",
+            "Molecular Dynamics: Basics of molecular dynamics for atomic systems, Velocity rescaling, Molecular dynamics in other ensembles, Accelerated dynamics, Limitation of molecular dynamics, Molecular dynamics in materials research, Potentials, Solutions for Newton's equations of motion, Initialization, Integration /equilibration, Data production.",
+            "Mesoscopic Methods: Kinetic Monte Carlo method, Monte Carlo methods at the mesoscale, Cellular automata, Phase field methods: Conserved and non-conserved order parameters, Governing equations, One dimensional phase field calculation, Free energy of an interface, Local free energy functions, Other applications in materials research.",
+            "Density Functional Theory: Introduction, Kohn-Sham approach, Kohn-Sham equations, Exchange-correlation functional, Solving Kohn-Sham equations, DFT extensions and limitations, DFT exercises with quantum espresso: Quantum espresso, Si2-convergence test, Si2-band, Si7-vacancy, Si7-vacancy diffusion."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "MSE 4108": {
+          "title": "Computational Materials Science Sessional",
+          "credit": 1.5,
+          "contactHour": "3 Hrs./Week",
+          "prerequisite": "None",
+          "topics": [
+            "Sessional based on the topics covered in MSE 4107 course."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "MSE 4109": {
+          "title": "Electronic, Magnetic and Optical Properties of Materials",
+          "credit": 3.0,
+          "contactHour": "3 Hrs./Week",
+          "prerequisite": "Ph 1227",
+          "topics": [
+            "Electronic Properties: Electronic and ionic conduction, Colliding and drifting electrons, Electron in a potential well (bound electron), Finite potential barrier (tunnel effect), Electron in a periodic field of a crystal (the solid state), Band structure for metals and semiconductors, Fermi energy and Fermi surface, Complete density of states function within a band, Conduction in terms of band and atomic bonding models, Band gap engineering, Carrier transport phenomena, Hall effect, Mobility and carrier density in metals and nonmetals, Capacitance, Polarization of dielectrics, Dielectric constant, Current distribution, DC insulator and AC conductor (skin effect).",
+            "Magnetic Properties: Magnetic dipole, Origin of magnetic moment, Magnetization in a spin, Diamagnetism and paramagnetism, Ferromagnetism, Antiferromagnetism and ferrimagnetism, Langevin equation for dia & para magnetism, Curie law, Theory of paramagnetism, The influence of temperature on magnetic behavior, Domains and hysteresis, Magnetic anisotropy, Soft magnetic materials, Hard magnetic materials, Magnetic storage, Effect of magnetic properties on superconductivity.",
+            "Optical Properties: Optical constants: index of refraction, damping constant, reflectivity, and transmittance; Hagen-Rubens relation, Electromagnetic radiation. Atomistic theory of the optical properties: Free electrons without damping, Free electrons with damping (classical free electron theory of metals), Reflectivity, Bound electrons (classical electron theory of dielectric materials), Contributions of free electrons and harmonic oscillators to the optical constants. Absorption of light by interband and intraband transitions, Optical spectra of materials, Dispersion, Photoconductivity."
+          ],
+          "sessionalNote": null,
+          "references": []
+        }
+      },
+      "optionalCourses": [],
+      "termNotes": []
+    },
+    "Y4T2": {
+      "termKey": "Y4T2",
+      "title": "Fourth Year Second Term",
+      "courses": {
+        "MSE 4000": {
+          "title": "Thesis/Project",
+          "credit": 3.0,
+          "contactHour": "6 Hrs./Week",
+          "prerequisite": "None",
+          "topics": [],
+          "sessionalNote": null,
+          "references": []
+        },
+        "MSE 4201": {
+          "title": "Materials for Energy Conversion and Storage",
+          "credit": 3.0,
+          "contactHour": "3 Hrs./Week",
+          "prerequisite": "None",
+          "topics": [
+            "Energy conversion",
+            "Solar Cells: Photovoltaics; Inorganic, organic and perovskite solar cells.",
+            "Fuel Cells: Characteristics of fuel cell, Alkaline, Proton exchange membrane, Polymer electrolyte membrane, Direct methanol, Phosphoric acid, and Molten carbonate fuel cells, Solid oxide electrolytes.",
+            "Nuclear Fusion: Muon catalysed fusion, Pyroelectric fusion, Condensation fusion in solids, Fusion reactor materials; Fusion wastes.",
+            "Nuclear Fission: Nuclear fuel supply- uranium and plutonium, Thorium, Core components-nuclear fuels, Cladding materials, Out-of-core materials; Fission wastes.",
+            "Energy Storage",
+            "Hydrogen Storage: Metal oxide framework (MOF), Organic frameworks, Simple and complex hydrides, Carbonaceous materials-graphite, graphene, carbon nanotube, fullerenes, carbon nitride, Boron nitride nanomaterials, Zeolites and glass microspheres, Storage in polymers.",
+            "Batteries: Lead-acid battery, Na-S battery, Ni-Cd battery, Ni-MH battery, Li-ion battery, Metal-air batteries- Zinc-air, Li-air, Na-air.",
+            "Electrochemical Capacitors: Supercapacitors-electrodes, electrolytes, 2D materials, Flexible supercapacitors, Pseudocapacitors-metal oxide electrodes, Polymer electrodes, Li-ion capacitors. Piezoelectric energy harvesting and storage, Hybrid materials for energy conversion and storage."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "MSE 4202": {
+          "title": "Materials for Energy Conversion and Storage Sessional",
+          "credit": 0.75,
+          "contactHour": "1.5 Hrs./Week",
+          "prerequisite": "None",
+          "topics": [
+            "Experiment based on the topics covered in MSE 4201."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "MSE 4211": {
+          "title": "Professional Ethics",
+          "credit": 3.0,
+          "contactHour": "3 Hrs./Week",
+          "prerequisite": "None",
+          "topics": [
+            "Ethics vs. engineering ethics, Engineering and professionalism, Psychological basis of ethics, Religion and ethics, Egoism and relativism, Utilitarianism and rational utilitarianism, Ethics and other branches of knowledge, Intuitionism.",
+            "Concept of moral thoughts and moral judgment, Bases of human behavior, Moral development and reasoning, Morality and social institution, Moral rights and duties, Interpersonal moral sentiment, Occupational culture and ideology, Occupational stress, Morality and religion, Organizational commitment, Morality in international context.",
+            "Professionalism and codes of ethics, Engineering as social experimentation, Institutional ethics, Academic ethics, Understanding ethical problems, Ethical problems solving techniques, Professional responsibilities, Professional rights, Environmental ethics, Computer ethics, Analyzing issues of ethical problems, Utilitarian thinking respect for persons."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "MSE 4214": {
+          "title": "Failure Analysis Sessional",
+          "credit": 0.75,
+          "contactHour": "1.5 Hrs./Week",
+          "prerequisite": "None",
+          "topics": [
+            "Failure Analysis of Engineering Components:",
+            "Case Histories",
+            "Inspection of the failure of different engineering samples/components based on microscopic examination, chemical analysis, mechanical properties examination, nondestructive examination, analysis of data.",
+            "Artifact Investigation:",
+            "Dismantling and identification of materials of engineering components for improvement of engineering products."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "MSE 4216": {
+          "title": "Technical Seminar",
+          "credit": 0.75,
+          "contactHour": "1.5 Hrs./Week",
+          "prerequisite": "None",
+          "topics": [
+            "Theories and practical examples on real case studies to help the students develop the ability to gain knowledge on the rapid advancements in the field of Materials Science via self-learning techniques; Preparation of models, charts and reports based on the knowledge acquired from the studies and pointing out the salient features; Development of cognitive ability; Enhancement in communication, interpersonal skills, openness to criticism, improvement based on feedback; Recognizing the importance of voice and visual aids to enhance the presentation skill; Acknowledging students with the appropriate mannerism to present papers, official or, academic proposals, thesis etc."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "EEE 4227": {
+          "title": "Semiconductor Materials and Devices",
+          "credit": 3.0,
+          "contactHour": "3 Hrs./Week",
+          "prerequisite": "None",
+          "topics": [
+            "Semiconductor Materials and Properties: Introduction, Intrinsic semiconductor, Extrinsic semiconductor, Drift and diffusion Current, Excess carrier.",
+            "PN Junctions and Diodes: Basic structure of the p-n junction, Zero applied bias, Reverse applied bias, Junction breakdown, Diode circuit models, Current-Voltage relationship, Other types of diodes: Zener diode, etc. Diode applications.",
+            "The Bipolar Transistor: The bipolar transistor action, Minority carrier distribution, Transistor current components, Different transistor configurations, Transistor as a switch and amplifier, Transistor biasing, Thermal stabilization.",
+            "The Junction Field-Effect Transistor: JFET concepts, The device characteristics, FET amplifier.",
+            "Metal-Oxide-Semiconductor Field-Effect Transistor: The two-terminal MOS structure, The basic MOSFET operation, MOSFET types, MOSFET as a switch and amplifier.",
+            "Metal-Semiconductor and Hetero-Junctions: The schottky barrier diode, Metal-semiconductor ohmic contacts, Heterojunctions.",
+            "Optical Devices: Optical absorption, Photodetectors, Photoluminescence and electroluminescence, Light emitting diodes, Laser diodes.",
+            "Semiconductor Power Devices: Tunnel diode, Gunn diode, Impatt diode, Power bipolar transistors, Power MOSFETs, The thyristor, DIAC, TRIAC."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "Hum 4227": {
+          "title": "Project Management and Entrepreneurship",
+          "credit": 3.0,
+          "contactHour": "3 Hrs./Week",
+          "prerequisite": "None",
+          "topics": [
+            "Project Management Basics: Definition, Types and characteristics of projects, Triple constraints of project management, Project methodologies, Parts of a standard project, Projects vs. programs vs. portfolios, Project stakeholders.",
+            "Project Conceptualizing and Initiating: Developing success criteria, Creating the business case, Cost benefit analysis, Developing the project charter.",
+            "Project Planning: The work breakdown structure, Specification, Estimating using effort and duration, Techniques for accurate estimates, Methods to calculate start and finish dates of tasks, Network diagrams, Critical path method, Resource planning, Creating a project milestone schedule, Performance indicator, Project management tools, Gantt charts, Identifying and quantifying project risks, SWOT analysis, Financial management, Budget, Procurement, Procurement management, Case studies.",
+            "Project Execution and Control: Creating a high-performing project team, Team training, Techniques for effective communication and status reporting, Earned value management (EVM), Project scope management and developing a change control plan, Monitoring, Evaluation and managing risks and issues, Managing stakeholder expectations.",
+            "Project Closing: Scope verification, Transferring deliverables to the customer, Suitability of project and issues, Post-project review or evaluation.",
+            "Entrepreneurship: Theories of entrepreneurship, Types of entrepreneurship ventures, Roles of an entrepreneur, Innovation, Entrepreneurship process, Problem identification, Idea vs. opportunity, Business models and business planning, Financial statements."
+          ],
+          "sessionalNote": null,
+          "references": []
+        }
+      },
+      "optionalCourses": [
+        {
+          "code": "MSE 4231",
+          "title": "Biomaterials",
+          "credit": 3.0,
+          "contactHour": "3 Hrs./Week",
+          "prerequisite": "None",
+          "topics": [
+            "Fundamentals of Biomaterials: The necessity of biomaterials; Properties and sources of biomaterials; Natural biomaterials and biomimetic materials, Fundamentals of cell biology and biological systems, Biocompatibility, Cell-biomaterial interactions.",
+            "Biomaterial Alloys: Structure and properties of nitinol, Ferrous shape memory alloys (SMA), Stainless steel alloys, Copper based SMA, Cobalt-chromium based alloys, Titanium alloys; Tantalum and magnesium alloys in biomedical applications.",
+            "Bio-polymers and Bio-composites: Properties and applications of polymethylmethacrylate (PMMA), polylactic acids (PLA), polyglycolic acids (PGA), polycaprolactone (PCL) and polyurethanes biopolymers; Biodegradability in polymers; Colloids for biomedical applications; Hydrogels, Electroresponsive shape memory effect in bio-polymers; Biomedical composites; Composites as orthopedic implants.",
+            "Bio-ceramics: Bioactive glass, alumina, zirconia, calcium phosphates (CaP), hydroxyapatites (HA), tricalcium phosphates (TCP) bioceramics; Shape memory effect in ceramics and corresponding application. Advances in pyrolytic and activated carbon as biomaterials; Surface modification of biomedical implants, Drug delivery."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        {
+          "code": "MSE 4233",
+          "title": "Materials in Extreme Environments",
+          "credit": 3.0,
+          "contactHour": "3 Hrs./Week",
+          "prerequisite": "None",
+          "topics": [
+            "Materials Under High Pressure: Experimental and theoretical methods involved in the study of materials under pressure, Pressure induced phase transitions, Amorphization, Negative thermal expansion, Recrystallization of amorphous phase and dissociation in materials.",
+            "Materials Under Extreme Temperature: Intermetallics; Nickel, titanium, iron and zirconium aluminides, silicides, high entropy alloys and superalloys under high temperature environment; Glass-ceramics and their properties; Glass-ceramic sealants used for high temperature applications; Machinable glass-ceramics; Properties of refractories; Thermal expansion of materials; Correlation of physical properties with thermal expansion; Laser-induced vaporization-mass spectrometry on refractories under ultrahigh temperature. Thermal, mechanical and electrical properties of materials in cryogenic temperatures.",
+            "Materials Under High Stress Condition: Dynamic compression process; Mechanical properties of Al alloys in high strain rate; Shock wave induced omega phase transformation in zirconium and zirconium-niobium alloys; Study of phase transitions in uranium and thorium carbides; Severe plastic deformation of materials; Stress-grain size relation; Strain rate sensitivity; Fatigue and superelasticity under severe plastic deformation.",
+            "Materials in Hostile Chemical Environments: Reactions between slag and refractories; Pozzolans, tungsten and silicon carbides, boron and gallium nitrides, borosilicate glass and diamond based corrosion resistant materials; Resins, polymers and composites under harsh chemical environment; Chlorine and fluorinated polymers; Corrosion of polyethylene terephthalate (PET); Materials for the construction of pickling and galvanizing tanks."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        {
+          "code": "MSE 4235",
+          "title": "Nano-structured Materials",
+          "credit": 3.0,
+          "contactHour": "3 Hrs./Week",
+          "prerequisite": "None",
+          "topics": [
+            "Nanomaterials: Homogeneous nucleation of nanoparticles; Growth of nuclei; Spontaneous growth of nanowires and nanorods; Two dimensional nanomaterial thin films; Three dimensional superlattices; Superclusters and colloidal crystals; Carbon fullerenes; Nanotubes; Micro and mesoporous materials; Metal-metal, metal-oxide, semiconductor-oxide and oxide-oxide type core-shell structures; Organic-inorganic hybrids; Intercalation compounds; Nanocomposites and nanograined materials; Properties of nanocrystals; Importance of nanostructured materials; Challenges in nanotechnology.",
+            "Fabrication of Nanomaterials: Synthesis of metallic, semiconductor and oxide nanoparticles through heterogeneous nucleation; Kinetically confined synthesis of nanoparticles; Template based synthesis of nanowires and nanorods; Fabrication of thin film form and their interaction with the substrates, Electric arc deposition, Molecular beam epitaxy, Growth mechanisms, Epitaxial and kinetic effects in thin films, Synthesis of metal and semiconductor nanoparticles through colloidal routes; Sol-gel method of synthesis of nanoparticles and thin films, Hydrothermal synthesis, Sonochemical synthesis, Microwave synthesis, Nanolithography, Different methods of microfabrication,",
+            "Applications: Nanoelectronics; Nanodots; Biological applications of nanoparticles; Catalysis by gold nanoparticles; Band gap engineered quantum devices; Nanomechanics; Carbon nanotube emitters; Photo electrochemical cells; Photonic crystals and plasmon waveguides; Automobiles; Sports and toys; Textiles; Medical field; Agriculture and food; Space; Defence and engineering."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        {
+          "code": "MSE 4237",
+          "title": "Materials and Sustainable Development",
+          "credit": 3.0,
+          "contactHour": "3 Hrs./Week",
+          "prerequisite": "None",
+          "topics": [
+            "Materials, Energy and Sustainability: Environmental, social and economical aspects of materials usage and development; Sustainability; Sustainable development; Articulations of sustainable development.",
+            "Assessing Sustainable Developments: Dealing with complex systems; A layered approach to assessing a sustainable development; Assembling the layer; The detailed 5 steps.",
+            "Materials Supply-Chain Risk: Emerging constraint on material sourcing and usage; Price volatility risk; Monopoly of supply and geopolitical risk; Conflict risk; Legislation and regulation risk; Abundance risk; Changing expectation of corporate responsibility; Managing risk.",
+            "Corporate Sustainability and Materials: Corporate social responsibility and sustainability reporting; Case studies: Corporate SRs.",
+            "Case Studies: The structure of the case studies; Articulations of sustainable development that went wrong; Biopolymers to replace oil-based plastics; Wind farms as a source of renewable energy; Electric cars as the future for clean personal transport; Lighting incandescent, fluorescent, LED; Solar PV for low-carbon power; Bamboo as a sustainable building material.",
+            "Circular Materials Economy: The ecological metaphor; The scale of the vision; The circular materials economy, Creating a circular materials economy."
+          ],
+          "sessionalNote": null,
+          "references": []
+        }
+      ],
+      "termNotes": []
+    }
+  },
+  "extras": {
+    "administrative_noise": [
+      "=== পেজ 1 — Course Syllabus 11.pdf — পেজ 1 ===",
+      "=== পেজ 2 — Course Syllabus 11.pdf — পেজ 2 ===",
+      "=== পেজ 3 — Course Syllabus 11.pdf — পেজ 3 ===",
+      "=== পেজ 4 — Course Syllabus 11.pdf — পেজ 4 ===",
+      "=== পেজ 5 — Course Syllabus 11.pdf — পেজ 5 ===",
+      "=== পেজ 1 — Course Syllabus 12.pdf — পেজ 1 ===",
+      "=== পেজ 2 — Course Syllabus 12.pdf — পেজ 2 ===",
+      "=== পেজ 3 — Course Syllabus 12.pdf — পেজ 3 ===",
+      "=== পেজ 4 — Course Syllabus 12.pdf — পেজ 4 ===",
+      "=== পেজ 5 — Course Syllabus 12.pdf — পেজ 5 ===",
+      "=== পেজ 1 — Course Syllabus 21.pdf — পেজ 1 ===",
+      "=== পেজ 2 — Course Syllabus 21.pdf — পেজ 2 ===",
+      "=== পেজ 3 — Course Syllabus 21.pdf — পেজ 3 ===",
+      "=== পেজ 4 — Course Syllabus 21.pdf — পেজ 4 ===",
+      "=== পেজ 5 — Course Syllabus 21.pdf — পেজ 5 ===",
+      "=== পেজ 1 — Course Syllabus 22.pdf — পেজ 1 ===",
+      "=== পেজ 2 — Course Syllabus 22.pdf — পেজ 2 ===",
+      "=== পেজ 3 — Course Syllabus 22.pdf — পেজ 3 ===",
+      "=== পেজ 4 — Course Syllabus 22.pdf — পেজ 4 ===",
+      "=== পেজ 5 — Course Syllabus 22.pdf — পেজ 5 ===",
+      "=== পেজ 1 — Course Syllabus 31.pdf — পেজ 1 ===",
+      "=== পেজ 2 — Course Syllabus 31.pdf — পেজ 2 ===",
+      "=== পেজ 3 — Course Syllabus 31.pdf — পেজ 3 ===",
+      "=== পেজ 4 — Course Syllabus 31.pdf — পেজ 4 ===",
+      "=== পেজ 5 — Course Syllabus 31.pdf — পেজ 5 ===",
+      "=== পেজ 6 — Course Syllabus 31.pdf — পেজ 6 ===",
+      "=== পেজ 1 — Course Syllabus 32.pdf — পেজ 1 ===",
+      "=== পেজ 2 — Course Syllabus 32.pdf — পেজ 2 ===",
+      "=== পেজ 3 — Course Syllabus 32.pdf — পেজ 3 ===",
+      "=== পেজ 4 — Course Syllabus 32.pdf — পেজ 4 ===",
+      "=== পেজ 5 — Course Syllabus 32.pdf — পেজ 5 ===",
+      "=== পেজ 1 — Course Syllabus 41.pdf — পেজ 1 ===",
+      "=== পেজ 2 — Course Syllabus 41.pdf — পেজ 2 ===",
+      "=== পেজ 3 — Course Syllabus 41.pdf — পেজ 3 ===",
+      "=== পেজ 4 — Course Syllabus 41.pdf — পেজ 4 ===",
+      "=== পেজ 5 — Course Syllabus 41.pdf — পেজ 5 ===",
+      "=== পেজ 1 — Course Syllabus 42.pdf — পেজ 1 ===",
+      "=== পেজ 2 — Course Syllabus 42.pdf — পেজ 2 ===",
+      "=== পেজ 3 — Course Syllabus 42.pdf — পেজ 3 ===",
+      "=== পেজ 4 — Course Syllabus 42.pdf — পেজ 4 ===",
+      "=== পেজ 5 — Course Syllabus 42.pdf — পেজ 5 ===",
+      "=== পেজ 6 — Course Syllabus 42.pdf — পেজ 6 ===",
+      "=== পেজ 7 — Course Syllabus 42.pdf — পেজ 7 ==="
+    ],
+    "ambiguities": [
+      {
+        "raw": "Prereq.: None5",
+        "reason": "OCR noise: 'None5' likely meant 'None'; the digit 5 is a stray character.",
+        "possibleTargets": ["None"]
+      },
+      {
+        "raw": "Ianufacturing Properties of Materials",
+        "reason": "OCR typo: 'Ianufacturing' should be 'Manufacturing'.",
+        "possibleTargets": ["Manufacturing Properties of Materials"]
+      },
+      {
+        "raw": "Metals and lloys",
+        "reason": "OCR typo: 'lloys' should be 'alloys'.",
+        "possibleTargets": ["Metals and alloys"]
+      },
+      {
+        "raw": "Control of material roperties",
+        "reason": "OCR typo: 'roperties' should be 'properties'.",
+        "possibleTargets": ["Control of material properties"]
+      },
+      {
+        "raw": "Hicrostructural Analysis",
+        "reason": "OCR typo: 'Hicrostructural' should be 'Microstructural'.",
+        "possibleTargets": ["Microstructural Analysis"]
+      },
+      {
+        "raw": "nd grinding",
+        "reason": "OCR omission: 'nd' should be 'and'.",
+        "possibleTargets": ["and grinding"]
+      },
+      {
+        "raw": "Star-del-ta transformation",
+        "reason": "OCR noise: 'Star-del-ta' likely intended 'Star-delta'.",
+        "possibleTargets": ["Star-delta transformation"]
+      },
+      {
+        "raw": "Credits placement in Ch 1127: 'Ch 1127: Inorganic and Physical Chemistry : 3.00 Prereq.: None Contact hours: 3 Hrs./Week Credits'",
+        "reason": "The word 'Credits' appears at the end of the line, possibly a stray label; credit value already present as 3.00.",
+        "possibleTargets": []
+      },
+      {
+        "raw": "Temperature dependence of reaction of reaction rates",
+        "reason": "OCR duplication: 'of reaction' appears twice; likely intended 'Temperature dependence of reaction rates'.",
+        "possibleTargets": ["Temperature dependence of reaction rates"]
+      },
+      {
+        "raw": "Colligative properties of dilute solution (original OCR had 'Colliga-tive')",
+        "reason": "Hyphenation artifact merged; the word is 'Colligative'.",
+        "possibleTargets": ["Colligative properties of dilute solution"]
+      },
+      {
+        "raw": "Constraints and statistical determinacy",
+        "reason": "Possible typo: 'statistical determinacy' may be 'statical determinacy' (static determinacy).",
+        "possibleTargets": ["statical determinacy", "static determinacy"]
+      }
+    ]
+  },
+  "qa": {
+    "termCount": 8,
+    "courseCount": 68,
+    "topicCount": 316,
+    "noiseCount": 43,
+    "ambiguityCount": 11
+  }
+}
