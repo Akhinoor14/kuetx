@@ -6,14 +6,23 @@ import { CURRICULUM } from '../data/curriculum/index.js';
 
 const PREFIX = 'kuetx_';
 
+const emitStoreUpdate = () => {
+  try {
+    window.dispatchEvent(new Event('kuetx:store-updated'));
+  } catch {}
+};
+
 export const store = {
   get: (key) => {
     try { const r = localStorage.getItem(PREFIX + key); return r ? JSON.parse(r) : null; } catch { return null; }
   },
   set: (key, val) => {
-    try { localStorage.setItem(PREFIX + key, JSON.stringify(val)); } catch {}
+    try { localStorage.setItem(PREFIX + key, JSON.stringify(val)); emitStoreUpdate(); } catch {}
   },
-  remove: (key) => localStorage.removeItem(PREFIX + key),
+  remove: (key) => {
+    localStorage.removeItem(PREFIX + key);
+    emitStoreUpdate();
+  },
   exportAll: () => {
     const data = {};
     for (let i = 0; i < localStorage.length; i++) {
@@ -26,9 +35,11 @@ export const store = {
     Object.entries(data).forEach(([k, v]) => {
       if (k.startsWith(PREFIX)) localStorage.setItem(k, JSON.stringify(v));
     });
+    emitStoreUpdate();
   },
   clearAll: () => {
     Object.keys(localStorage).filter(k => k.startsWith(PREFIX)).forEach(k => localStorage.removeItem(k));
+    emitStoreUpdate();
   }
 };
 

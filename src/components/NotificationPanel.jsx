@@ -1,6 +1,6 @@
 import { X } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { useMemo, useEffect } from 'react';
+import { useMemo, useEffect, useState } from 'react';
 import { computeAlerts } from '../pages/Alerts';
 import { getProfile } from '../store/store';
 
@@ -28,7 +28,21 @@ const tone = (color) => {
 
 export function NotificationPanel({ isOpen, onClose }) {
   const profile = getProfile();
-  const { critical, warnings, positives } = useMemo(() => computeAlerts(profile), [profile]);
+  const [refreshTick, setRefreshTick] = useState(0);
+
+  useEffect(() => {
+    const handleStoreUpdate = () => setRefreshTick(t => t + 1);
+    window.addEventListener('kuetx:store-updated', handleStoreUpdate);
+    return () => window.removeEventListener('kuetx:store-updated', handleStoreUpdate);
+  }, []);
+
+  const { critical, warnings, positives, assignmentAlerts = [] } = useMemo(() => computeAlerts(profile), [profile, refreshTick]);
+
+  const assignmentCounts = {
+    overdue: assignmentAlerts.filter(a => a.priority === 'overdue').length,
+    today: assignmentAlerts.filter(a => a.priority === 'today').length,
+    soon: assignmentAlerts.filter(a => a.priority === 'soon').length,
+  };
 
   // Close on Escape key
   useEffect(() => {
@@ -95,6 +109,49 @@ export function NotificationPanel({ isOpen, onClose }) {
           </Link>
         ))
       }
+    </div>
+  );
+
+  const AssignmentSection = ({ items }) => (
+    <div style={{
+      marginBottom: 12,
+      padding: 12,
+      borderRadius: 12,
+      border: '1px solid var(--border)',
+      background: 'linear-gradient(180deg, var(--surfaceGlassStrong), var(--surfaceGlass))',
+    }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, marginBottom: 10 }}>
+        <div>
+          <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--text)' }}>📌 Assignments</div>
+          <div style={{ fontSize: 11, color: 'var(--muted)' }}>Overdue, today, and next 3 days</div>
+        </div>
+        <div style={{ fontSize: 11, fontWeight: 800, color: 'var(--accent)', padding: '6px 10px', borderRadius: 999, background: 'var(--accentBg)', border: '1px solid var(--border)' }}>{items.length}</div>
+      </div>
+      <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 10 }}>
+        <span style={{ padding: '4px 8px', borderRadius: 999, background: 'var(--danger)', color: 'white', fontSize: 10, fontWeight: 800 }}>Overdue {assignmentCounts.overdue}</span>
+        <span style={{ padding: '4px 8px', borderRadius: 999, background: 'var(--warning)', color: 'white', fontSize: 10, fontWeight: 800 }}>Today {assignmentCounts.today}</span>
+        <span style={{ padding: '4px 8px', borderRadius: 999, background: 'var(--success)', color: 'white', fontSize: 10, fontWeight: 800 }}>Next 3 days {assignmentCounts.soon}</span>
+      </div>
+      {items.length === 0 ? (
+        <div style={{ fontSize: 11, color: 'var(--muted)' }}>None ✓</div>
+      ) : items.map((item, index) => (
+        <Link key={`${item.link}-${index}`} to={item.link || '#'} onClick={onClose} style={{
+          display: 'flex', alignItems: 'flex-start', gap: 8, padding: '8px 10px', borderRadius: 10, marginBottom: 6,
+          background: 'var(--surface)',
+          border: '1px solid var(--border)',
+          textDecoration: 'none', color: 'var(--text)', fontSize: 11, lineHeight: 1.4,
+        }}>
+          <div style={{ width: 6, height: 6, borderRadius: '50%', background: item.priority === 'overdue' ? 'var(--danger)' : item.priority === 'today' ? 'var(--warning)' : 'var(--success)', flexShrink: 0, marginTop: 3 }} />
+          <div style={{ flex: 1 }}>
+            <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 4 }}>
+              <span style={{ padding: '2px 6px', borderRadius: 999, background: item.priority === 'overdue' ? 'var(--danger)' : item.priority === 'today' ? 'var(--warning)' : 'var(--success)', color: 'white', fontSize: 9, fontWeight: 800, textTransform: 'uppercase' }}>{item.priority}</span>
+              <span style={{ padding: '2px 6px', borderRadius: 999, background: 'rgba(0,0,0,0.05)', color: 'var(--muted)', fontSize: 9, fontWeight: 700 }}>{item.dueLabel}</span>
+            </div>
+            <div style={{ fontWeight: 700 }}>{item.teacherLabel}</div>
+            <div style={{ color: 'var(--muted)' }}>{item.msg}</div>
+          </div>
+        </Link>
+      ))}
     </div>
   );
 
@@ -177,6 +234,7 @@ export function NotificationPanel({ isOpen, onClose }) {
             </div>
           ) : (
             <>
+              {assignmentAlerts.length > 0 && <AssignmentSection items={assignmentAlerts} />}
               {critical.length > 0 && <Section title="Critical" items={critical} color="var(--danger)" emoji="🔴" />}
               {warnings.length > 0 && <Section title="Warnings" items={warnings} color="var(--warning)" emoji="🟡" />}
               {positives.length > 0 && <Section title="Positive" items={positives} color="var(--success)" emoji="🟢" />}
