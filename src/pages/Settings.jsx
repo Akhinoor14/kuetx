@@ -38,16 +38,16 @@ export default function Settings() {
     return () => { window.removeEventListener('online', on); window.removeEventListener('offline', off); };
   }, []);
 
-  // Calculate localStorage usage
+  // Calculate localStorage/IndexedDB usage
   useEffect(() => {
-    try {
-      let total = 0;
-      for (let i = 0; i < localStorage.length; i++) {
-        const k = localStorage.key(i);
-        total += (localStorage.getItem(k) || '').length;
+    (async () => {
+      try {
+        const used = await store.getStorageUsage();
+        setStorageInfo({ used, max: '50000' }); // 50MB IndexedDB limit
+      } catch {
+        setStorageInfo({ used: '0', max: '50000' });
       }
-      setStorageInfo({ used: (total / 1024).toFixed(1), max: '5120' });
-    } catch {}
+    })();
   }, []);
 
   const flash = (m, type = 'success') => { setMsg(m); setMsgType(type); setTimeout(() => setMsg(''), 3000); };
@@ -144,8 +144,8 @@ export default function Settings() {
           <Database size={14} /> Data Storage
         </div>
         <div style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 10, lineHeight: 1.6 }}>
-          All your data lives in your browser's <code style={{ background: 'var(--bg)', padding: '1px 5px', borderRadius: 4 }}>localStorage</code>.
-          It persists across sessions on the same device and browser — no server, no login.
+          All your data lives in your browser's <code style={{ background: 'var(--bg)', padding: '1px 5px', borderRadius: 4 }}>IndexedDB</code>.
+          It persists across sessions on the same device and browser — no server, no login, 50MB+ capacity.
         </div>
         {storageInfo && (
           <div style={{ marginBottom: 10 }}>
@@ -275,7 +275,7 @@ export default function Settings() {
       <div className="card">
         <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 8 }}>About KUETx</div>
         <div style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.8 }}>
-          <div><strong>Version:</strong> 1.0.0</div>
+          <div><strong>Version:</strong> 3.2.0</div>
           <div><strong>Ordinance:</strong> KUET Academic Ordinance — effective 2nd Term, Session 2011-12</div>
           <div><strong>Approved:</strong> 18th & 19th Academic Council meetings (2012)</div>
           <div><strong>Storage:</strong> 100% localStorage — offline, private, free forever</div>

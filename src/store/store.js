@@ -1,10 +1,37 @@
 // KUETx Global Store
 // Aligned with KUET Academic Ordinance (Effective 2nd Term, Session 2011-12)
 // Approved: 18th & 19th Academic Council meetings (2012)
+// Storage: IndexedDB (50MB+) with automatic migration from localStorage
 
 import { CURRICULUM } from '../data/curriculum/index.js';
+import { initDB, getFromDB, setInDB, removeFromDB, getAllKeysFromDB, getAllFromDB, clearDB, migrateFromLocalStorage, getStorageUsage } from './indexeddb-store.js';
 
 const PREFIX = 'kuetx_';
+
+// In-memory cache for synchronous access
+const memoryCache = new Map();
+let dbReady = false;
+
+// Initialize database on first load
+async function ensureDBReady() {
+  if (dbReady) return;
+  try {
+    await initDB();
+    await migrateFromLocalStorage();
+    // Pre-load all data into memory cache
+    const allKeys = await getAllKeysFromDB();
+    for (const key of allKeys) {
+      const value = await getFromDB(key.replace(PREFIX, ''));
+      if (value) memoryCache.set(key, value);
+    }
+    dbReady = true;
+  } catch (err) {
+    console.error('[KUETx Store] Initialization error:', err);
+  }
+}
+
+// Initialize immediately (non-blocking)
+ensureDBReady().catch(console.error);
 
 const emitStoreUpdate = () => {
   try {
@@ -14,32 +41,81 @@ const emitStoreUpdate = () => {
 
 export const store = {
   get: (key) => {
-    try { const r = localStorage.getItem(PREFIX + key); return r ? JSON.parse(r) : null; } catch { return null; }
+    try {
+      const cacheKey = PREFIX + key;
+      return memoryCache.has(cacheKey) ? memoryCache.get(cacheKey) : null;
+    } catch {
+      return null;
+    }
   },
+  
   set: (key, val) => {
-    try { localStorage.setItem(PREFIX + key, JSON.stringify(val)); emitStoreUpdate(); } catch {}
+    try {
+      const cacheKey = PREFIX + key;
+      memoryCache.set(cacheKey, val);
+      emitStoreUpdate();
+      // Persist to IndexedDB asynchronously
+      setInDB(key, val).catch(err => console.error('[KUETx Store] IDB set error:', err));
+    } catch (err) {
+      console.error('[KUETx Store] Set error:', err);
+    }
   },
+  
   remove: (key) => {
-    localStorage.removeItem(PREFIX + key);
-    emitStoreUpdate();
+    try {
+      const cacheKey = PREFIX + key;
+      memoryCache.delete(cacheKey);
+      emitStoreUpdate();
+      // Remove from IndexedDB asynchronously
+      removeFromDB(key).catch(err => console.error('[KUETx Store] IDB remove error:', err));
+    } catch (err) {
+      console.error('[KUETx Store] Remove error:', err);
+    }
   },
+  
   exportAll: () => {
     const data = {};
-    for (let i = 0; i < localStorage.length; i++) {
-      const k = localStorage.key(i);
-      if (k.startsWith(PREFIX)) try { data[k] = JSON.parse(localStorage.getItem(k)); } catch {}
+    for (const [k, v] of memoryCache.entries()) {
+      if (k.startsWith(PREFIX)) data[k] = v;
     }
     return data;
   },
+  
   importAll: (data) => {
-    Object.entries(data).forEach(([k, v]) => {
-      if (k.startsWith(PREFIX)) localStorage.setItem(k, JSON.stringify(v));
-    });
-    emitStoreUpdate();
+    try {
+      Object.entries(data).forEach(([k, v]) => {
+        if (k.startsWith(PREFIX)) {
+          memoryCache.set(k, v);
+          // Persist asynchronously
+          setInDB(k.replace(PREFIX, ''), v).catch(err => console.error('[KUETx Store] IDB import error:', err));
+        }
+      });
+      emitStoreUpdate();
+    } catch (err) {
+      console.error('[KUETx Store] Import error:', err);
+    }
   },
+  
   clearAll: () => {
-    Object.keys(localStorage).filter(k => k.startsWith(PREFIX)).forEach(k => localStorage.removeItem(k));
-    emitStoreUpdate();
+    try {
+      for (const k of memoryCache.keys()) {
+        if (k.startsWith(PREFIX)) memoryCache.delete(k);
+      }
+      emitStoreUpdate();
+      // Clear IndexedDB asynchronously
+      clearDB().catch(err => console.error('[KUETx Store] IDB clear error:', err));
+    } catch (err) {
+      console.error('[KUETx Store] Clear error:', err);
+    }
+  },
+  
+  // New: Get storage usage (for Settings page)
+  getStorageUsage: async () => {
+    try {
+      return await getStorageUsage();
+    } catch {
+      return '0';
+    }
   }
 };
 

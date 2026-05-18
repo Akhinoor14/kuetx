@@ -242,7 +242,7 @@ export function Sidebar({ open, onClose, compact = false, onToggleCompact }) {
 
         {/* Bottom */}
         <div style={{ padding: '10px 14px', borderTop: '1px solid var(--border)', fontSize: 11, color: 'var(--muted)', textAlign: 'center' }}>
-          {compact ? 'v3.0' : 'KUETx v3.0 · All data stored locally'}
+          {compact ? 'v3.2' : 'KUETx v3.2 · All data stored locally'}
         </div>
       </aside>
     </>
