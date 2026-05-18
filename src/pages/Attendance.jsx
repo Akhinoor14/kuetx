@@ -360,6 +360,9 @@ function DailyLog({ courses, logs, setLogs, schedule, scheduleSettings, combined
           <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}><span style={{ fontWeight: 700, color: '#10b981' }}>P</span> = Present</div>
           <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}><span style={{ fontWeight: 700, color: '#ef4444' }}>A</span> = Absent</div>
           <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}><span style={{ fontWeight: 700, color: 'var(--muted)' }}>—</span> = Not marked</div>
+          <div style={{ fontSize: 11, color: 'var(--muted)', width: '100%', textAlign: 'center' }}>
+            Holiday days are managed separately in the holiday calendar, not per course.
+          </div>
         </div>
       )}
 
@@ -370,14 +373,11 @@ function DailyLog({ courses, logs, setLogs, schedule, scheduleSettings, combined
             <div style={{ fontSize: 12 }}>Select a date with scheduled classes or enable "Give Attendance"</div>
           </div>
         ) : (() => {
-          // Soft background colors - subtle pastel shades
+          // Soft background colors - subtle pastel palette using only purple, green, blue
           const softColors = [
             'rgba(168, 85, 247, 0.08)',  // light purple
             'rgba(34, 197, 94, 0.08)',   // light green
             'rgba(59, 130, 246, 0.08)',  // light blue
-            'rgba(249, 115, 22, 0.08)',  // light orange
-            'rgba(236, 72, 153, 0.08)',  // light pink
-            'rgba(20, 184, 166, 0.08)',  // light teal
           ];
           const courseColorMap = {};
           let colorIndex = 0;
@@ -390,7 +390,6 @@ function DailyLog({ courses, logs, setLogs, schedule, scheduleSettings, combined
 
           return cardsToShow.map(card => {
             const todayItems = scheduledCourses.find(item => item.courseId === card.course.id)?.items || [];
-            const teacherLabel = card.teacher || (card.auto ? 'Auto' : 'Unassigned');
             const statusColors = { present: '#10b981', absent: '#ef4444' };
             const statusLabels = { present: 'Present', absent: 'Absent' };
             const bgColor = courseColorMap[card.course.id];
@@ -400,7 +399,7 @@ function DailyLog({ courses, logs, setLogs, schedule, scheduleSettings, combined
                 padding: '14px 16px',
                 borderRadius: 8,
                 background: bgColor,
-                border: '1px solid rgba(0, 0, 0, 0.05)',
+                border: '1px solid rgba(15, 23, 42, 0.08)',
                 transition: 'all 0.2s ease',
               }}>
                 {/* Course Info */}
@@ -441,19 +440,18 @@ function DailyLog({ courses, logs, setLogs, schedule, scheduleSettings, combined
                     { val: 'absent',  shortLabel: 'A', fullLabel: 'Absent',  emoji: '✗', color: '#ef4444' },
                   ].map(opt => {
                     const active = card.status === opt.val;
-                    const isMobile = window.innerWidth < 640;
-                    const btnLabel = isMobile ? opt.shortLabel : opt.fullLabel;
+                    const btnLabel = isCompact ? opt.shortLabel : opt.fullLabel;
                     return (
                       <button 
                         key={opt.val} 
                         onClick={() => mark(card.course.id, card.teacher, opt.val)}
                         title={`Mark as ${opt.fullLabel}`}
                         style={{
-                          padding: isMobile ? '8px 6px' : '8px 10px',
+                          padding: isCompact ? '8px 6px' : '8px 10px',
                           borderRadius: 6,
                           cursor: 'pointer',
                           fontWeight: 600,
-                          fontSize: isMobile ? 11 : 12,
+                          fontSize: isCompact ? 11 : 12,
                           background: active ? opt.color : 'var(--inputBg)',
                           color: active ? 'white' : 'var(--muted)',
                           border: active ? `2px solid ${opt.color}` : '1px solid var(--border)',
@@ -461,10 +459,10 @@ function DailyLog({ courses, logs, setLogs, schedule, scheduleSettings, combined
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'center',
-                          gap: isMobile ? 0 : 4,
+                          gap: isCompact ? 0 : 4,
                           minHeight: 32,
                         }}>
-                        {isMobile ? btnLabel : `${opt.emoji} ${btnLabel}`}
+                        {isCompact ? btnLabel : `${opt.emoji} ${btnLabel}`}
                       </button>
                     );
                   })}
@@ -729,6 +727,18 @@ export default function Attendance() {
 
   const holidayDates = scheduleSettings?.holidayDates || [];
 
+  const theoryCourses = courses.filter(c => !isAutoFull(c.type));
+  const heroCourseStats = theoryCourses.map(c => {
+    const teachers = getTeachersForCourse(scheduleSettings, schedule, c.id);
+    const displayTeachers = teachers.length > 0 ? teachers : [''];
+    const stats = displayTeachers.map(teacher => getEffective(c.id, teacher, logs, c.type));
+    const totalHeld = stats.reduce((sum, s) => sum + s.held, 0);
+    const totalAttended = stats.reduce((sum, s) => sum + s.attended, 0);
+    const pct = totalHeld > 0 ? Math.round((totalAttended / totalHeld) * 100) : null;
+    const status = pct === null ? 'neutral' : pct >= 75 ? 'safe' : pct >= 60 ? 'warning' : 'danger';
+    return { course: c, totalHeld, totalAttended, pct, status };
+  });
+
   const closeHolidaySetup = () => {
     setHolidaySetupOpen(false);
     setHolidayDate('');
@@ -842,24 +852,46 @@ export default function Attendance() {
   }
 
   return (
-    <div className="page-enter page-container">
-      <div style={{ marginBottom: 20, display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 12, flexWrap: 'wrap' }}>
-        <div style={{ flex: 1 }}>
-          <h1>Attendance</h1>
-          <p className="text-muted" style={{ marginTop: 4 }}>
-            Mark only the classes scheduled for that date — past dates always editable
-          </p>
-          {holidayDates.length > 0 && (
-            <div style={{ marginTop: 8, fontSize: 12, color: 'var(--accent)', fontWeight: 600 }}>
-              📅 {holidayDates.length} holiday{holidayDates.length !== 1 ? 's' : ''} configured (Fri & Sat are always holidays)
-            </div>
-          )}
-        </div>
-        <button className="btn btn-ghost" onClick={openHolidaySetup} style={{ whiteSpace: 'nowrap', marginTop: 2 }}>
-          <CalendarDays size={13} /> Add Holiday
-        </button>
-      </div>
+    <div className="attendance-page page-enter page-container">
+      <div className="attendance-hero">
+        <div className="attendance-hero-shell">
+          <div className="attendance-hero-copy">
+            <div className="attendance-kicker">Attendance</div>
+            <h1 className="attendance-title">Mark classes for scheduled dates — all past entries remain editable anytime</h1>
+            <p className="attendance-subtitle">Keep attendance aligned with your routine, manage holidays centrally, and make every log easy to review.</p>
+          </div>
 
+          <div className="attendance-hero-actions">
+            <button className="btn btn-primary attendance-holiday-btn" onClick={openHolidaySetup}>
+              <CalendarDays size={14} /> Add Holiday
+            </button>
+            <span className="attendance-hero-chip">
+              📅 {holidayDates.length} holiday{holidayDates.length !== 1 ? 's' : ''} configured
+            </span>
+          </div>
+        </div>
+
+        <div className="attendance-summary-grid">
+        {heroCourseStats.map(({ course, totalHeld, totalAttended, pct, status }) => (
+          <div key={course.id} className={`attendance-summary-card attendance-summary-card--${status}`}>
+            <div className="card-top">
+              <div className="course" title={course.name}>{course.code || getDisplayCourseName(course)}</div>
+              <div className="pct">{pct !== null ? `${pct}%` : '--'}</div>
+            </div>
+            <div className="meta">{totalAttended}/{totalHeld || 0} classes</div>
+            <div className="attendance-card-bar">
+              <div className="attendance-card-fill" style={{ width: `${pct !== null ? Math.min(100, pct) : 0}%`, background: attColor(pct) }} />
+            </div>
+            {pct === null && <div className="note">No attendance logged yet</div>}
+          </div>
+        ))}
+      </div>
+      {holidayDates.length > 0 && (
+        <div className="attendance-hero-pill">
+          📅 {holidayDates.length} holiday{holidayDates.length !== 1 ? 's' : ''} saved (Fri & Sat always holidays)
+        </div>
+      )}
+      </div>
       {todaySchedule.length > 0 && (
         <div className="card" style={{ marginBottom: 16 }}>
           <div style={{ fontWeight: 700, fontSize: 13, marginBottom: 8 }}>Routine Preview</div>
