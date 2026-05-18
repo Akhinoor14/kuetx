@@ -11,6 +11,12 @@ export const NAV = [
     ]
   },
   {
+    group: 'Class Rep',
+    items: [
+      { id: 'class-management', label: 'Class Management', icon: 'Users', path: '/class-management', requiresCR: true },
+    ]
+  },
+  {
     group: 'Academics',
     items: [
       { id: 'courses',    label: 'Courses',        icon: 'BookOpen',     path: '/courses' },

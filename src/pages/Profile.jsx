@@ -134,6 +134,27 @@ export default function Profile() {
         </div>
       )}
 
+      {profile && profile.isCR && (
+        <div style={{
+          padding: '16px 20px',
+          borderRadius: 12,
+          background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%)',
+          border: '2px solid rgba(59, 130, 246, 0.4)',
+          marginBottom: 24,
+          display: 'flex',
+          alignItems: 'center',
+          gap: 14,
+          fontWeight: 600,
+          color: 'var(--text)',
+        }}>
+          <span style={{ fontSize: 24 }}>👑</span>
+          <div>
+            <div style={{ fontWeight: 700, fontSize: 14 }}>Class Representative</div>
+            <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 2 }}>You have access to Class Management tools. Check the sidebar for new options.</div>
+          </div>
+        </div>
+      )}
+
       {!hasProfile ? (
         <div style={{
           background: 'linear-gradient(135deg, #16a34a 0%, #0ea5e9 50%, #a3e635 100%)',

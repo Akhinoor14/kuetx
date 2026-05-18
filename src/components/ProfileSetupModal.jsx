@@ -201,9 +201,15 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
                 <div style={{ fontSize: 10, color: 'var(--muted)', marginTop: 4 }}>Advisor's contact number</div>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '10px 12px', borderRadius: 10, border: '1px solid var(--border)', background: 'var(--surfaceGlassSoft)', gridColumn: 'span 2' }}>
-                <label style={{ display: 'flex', gap: 8, alignItems: 'center', fontSize: 14, color: 'var(--text)', margin: 0, textTransform: 'none', letterSpacing: 0 }}>
-                  <input type="checkbox" checked={!!form.isCR} onChange={handleChange('isCR')} /> Class Representative
-                </label>
+                <div style={{ width: '100%' }}>
+                  <label style={{ display: 'flex', gap: 8, alignItems: 'center', fontSize: 14, color: 'var(--text)', margin: 0, textTransform: 'none', letterSpacing: 0 }}>
+                    <input type="checkbox" checked={!!form.isCR} onChange={handleChange('isCR')} /> Class Representative
+                  </label>
+                  <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 6, lineHeight: 1.5 }}>
+                    If you select this, the CR section will appear in the sidebar and open the dedicated Class Management page.
+                    {form.isCR && ' Your CR tools will stay visible while this profile is active.'}
+                  </div>
+                </div>
               </div>
             </div>
           </div>

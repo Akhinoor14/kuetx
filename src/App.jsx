@@ -29,6 +29,7 @@ import Settings from './pages/Settings';
 import { Notes } from './pages/Notes';
 import Clubs from './pages/Clubs';
 import About from './pages/About';
+import ClassManagement from './pages/ClassManagement';
 import { Tours, Social, Projects, Syllabus, TimeTracker, Tuition, Food, Reports } from './pages/Extras';
 
 function Layout() {
@@ -89,6 +90,7 @@ function Layout() {
             <Route path="/notes" element={<Notes />} />
             <Route path="/settings" element={<Settings />} />
             <Route path="/about" element={<About />} />
+            <Route path="/class-management" element={<ClassManagement />} />
           </Routes>
         </div>
         <Footer />

@@ -835,21 +835,29 @@ export default function Schedule() {
     if (editingId === id) cancelEdit();
   };
 
-  const exportRoutine = () => {
-    const payload = {
-      version: 1,
-      exportedAt: new Date().toISOString(),
+  const buildRoutineBackupPayload = () => ({
+    version: 1,
+    type: 'kuetx-routine-backup',
+    exportedAt: new Date().toISOString(),
+    data: {
       schedule: normalizeScheduleEntries(schedule),
       scheduleSettings: settings,
-    };
+      examOverrides: examOverrides || {},
+      assignments: store.get('assignments') || [],
+      teachers: store.get('teachers') || [],
+    },
+  });
+
+  const exportRoutine = () => {
+    const payload = buildRoutineBackupPayload();
     const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = `kuetx-routine-${new Date().toISOString().slice(0, 10)}.json`;
+    link.download = `kuetx-routine-backup-${new Date().toISOString().slice(0, 10)}.json`;
     link.click();
     URL.revokeObjectURL(url);
-    setImportMessage('Routine exported successfully.');
+    setImportMessage('Routine backup exported successfully.');
   };
 
   const importRoutine = async (file) => {
@@ -857,15 +865,24 @@ export default function Schedule() {
     try {
       const text = await file.text();
       const payload = JSON.parse(text);
-      const nextSchedule = normalizeScheduleEntries(Array.isArray(payload.schedule) ? payload.schedule : []);
-      const nextSettings = normalizeSettings(payload.scheduleSettings || {});
+      const source = (payload && payload.data && typeof payload.data === 'object') ? payload.data : payload;
+      const nextSchedule = normalizeScheduleEntries(Array.isArray(source.schedule) ? source.schedule : []);
+      const nextSettings = normalizeSettings(source.scheduleSettings || {});
+      const nextExamOverrides = source.examOverrides && typeof source.examOverrides === 'object' ? source.examOverrides : {};
+      const nextAssignments = Array.isArray(source.assignments) ? source.assignments : [];
+      const nextTeachers = Array.isArray(source.teachers) ? source.teachers : [];
+
       setSchedule(nextSchedule);
       setSettings(nextSettings);
+      setExamOverrides(nextExamOverrides);
       store.set('schedule', nextSchedule);
       store.set('scheduleSettings', nextSettings);
-      setImportMessage(`Imported ${nextSchedule.length} class${nextSchedule.length === 1 ? '' : 'es'}.`);
+      store.set('examOverrides', nextExamOverrides);
+      store.set('assignments', nextAssignments);
+      store.set('teachers', nextTeachers);
+      setImportMessage(`Imported routine data with ${nextSchedule.length} class${nextSchedule.length === 1 ? '' : 'es'} and related assignment/teacher data.`);
     } catch {
-      setImportMessage('Import failed. Please use a valid routine JSON file.');
+      setImportMessage('Import failed. Please use a valid routine backup JSON file.');
     }
   };
 
@@ -1972,45 +1989,6 @@ export default function Schedule() {
         </div>
       )}
 
-      <div className="card" style={{ marginTop: 14, padding: 16, display: 'flex', flexDirection: 'column', gap: 12 }}>
-        <div>
-          <div style={{ fontWeight: 700, fontSize: 14, marginBottom: 2 }}>Routine Share</div>
-          <div style={{ fontSize: 12, color: 'var(--muted)' }}>Copy text in the selected format or share/import the full routine JSON.</div>
-        </div>
-        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
-          <button
-            className="btn btn-ghost"
-            onClick={copySelectedSchedule}
-            style={{
-              justifyContent: 'center',
-              minWidth: 160,
-              padding: '10px 14px',
-              borderRadius: 999,
-              border: settings.messageFormat === 'whatsapp' ? '1px solid rgba(37,211,102,0.35)' : '1px solid var(--border)',
-              background: settings.messageFormat === 'whatsapp' ? 'linear-gradient(180deg, rgba(37,211,102,0.16), rgba(37,211,102,0.10))' : 'var(--card)',
-              color: 'var(--text)',
-              fontWeight: 700,
-            }}
-          >
-            <Copy size={13} /> {selectedFormatLabel}
-          </button>
-          <button className="btn btn-ghost" onClick={exportRoutine} style={{ justifyContent: 'center', minWidth: 140, padding: '10px 14px' }}>Export routine</button>
-          <label className="btn btn-ghost" style={{ cursor: 'pointer', justifyContent: 'center', minWidth: 140, padding: '10px 14px' }}>
-            Import routine
-            <input
-              type="file"
-              accept="application/json"
-              style={{ display: 'none' }}
-              onChange={e => {
-                const file = e.target.files?.[0];
-                importRoutine(file);
-                e.target.value = '';
-              }}
-            />
-          </label>
-        </div>
-        {importMessage && <div style={{ fontSize: 12, color: 'var(--muted)' }}>{importMessage}</div>}
-      </div>
       {/* === Detailed Term Roadmap (bottom of Schedule page) === */}
       <div className="card" style={{ marginTop: 14, padding: 16 }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
@@ -2078,6 +2056,7 @@ export default function Schedule() {
                     </div>
                   ))}
                 </div>
+
                 {timeline.specialPeriods && timeline.specialPeriods.length > 0 && (
                   <div style={{ marginTop: 8, fontSize: 12, color: '#F59E0B' }}>
                     ⚠️ Special holiday blocks during exams:
@@ -2101,6 +2080,26 @@ export default function Schedule() {
             </div>
           );
         })()}
+      </div>
+
+      <div className="card" style={{ marginTop: 14, padding: 16, display: 'flex', flexDirection: 'column', gap: 12 }}>
+        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
+          <button className="btn btn-ghost" onClick={exportRoutine} style={{ justifyContent: 'center', minWidth: 140, padding: '10px 14px' }}>Export routine data</button>
+          <label className="btn btn-ghost" style={{ cursor: 'pointer', justifyContent: 'center', minWidth: 140, padding: '10px 14px' }}>
+            Import routine data
+            <input
+              type="file"
+              accept="application/json"
+              style={{ display: 'none' }}
+              onChange={e => {
+                const file = e.target.files?.[0];
+                importRoutine(file);
+                e.target.value = '';
+              }}
+            />
+          </label>
+        </div>
+        {importMessage && <div style={{ fontSize: 12, color: 'var(--muted)' }}>{importMessage}</div>}
       </div>
 
       {/* Edit Exams Modal */}

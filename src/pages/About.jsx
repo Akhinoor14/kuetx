@@ -133,7 +133,7 @@ export default function About() {
       </div>
 
       {/* Overview Section */}
-      <div style={{ marginBottom: '3.5rem' }}>
+      <div id="developer" style={{ marginBottom: '3.5rem' }}>
         <div style={{ marginBottom: '1.5rem' }}>
           <h2 style={{ fontSize: 'clamp(1.35rem, 4vw, 1.75rem)', fontWeight: 800, marginBottom: '0.35rem', color: 'var(--text)', letterSpacing: '-0.03em' }}>
             What is KUETX?

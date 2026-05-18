@@ -8,11 +8,19 @@ import { store } from '../store/store';
 export function Sidebar({ open, onClose, compact = false, onToggleCompact }) {
   const location = useLocation();
   const [notes, setNotes] = useState([]);
+  const [profile, setProfile] = useState(() => store.get('profile') || {});
   const [showNotes, setShowNotes] = useState(false);
 
   useEffect(() => {
     const storedNotes = store.get('notes') || [];
     setNotes(storedNotes);
+  }, []);
+
+  useEffect(() => {
+    const syncProfile = () => setProfile(store.get('profile') || {});
+    window.addEventListener('kuetx:store-updated', syncProfile);
+    syncProfile();
+    return () => window.removeEventListener('kuetx:store-updated', syncProfile);
   }, []);
 
   return (
@@ -89,39 +97,51 @@ export function Sidebar({ open, onClose, compact = false, onToggleCompact }) {
 
         {/* Nav groups */}
         <nav style={{ flex: 1, overflowY: 'auto', padding: '8px 10px 16px' }}>
-          {NAV.map((section, sectionIndex) => (
-            <div key={section.group}>
-              {compact && sectionIndex > 0 && (
-                <div
-                  style={{ height: 1, background: 'var(--border)', margin: '10px 12px', opacity: 0.55 }}
-                  aria-hidden="true"
-                />
-              )}
-              {!compact && (
-                <div style={{ fontSize: 10, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.09em', padding: '16px 6px 6px' }}>
-                  {section.group}
-                </div>
-              )}
-              {section.items.map(item => {
-                const Icon = Icons[item.icon] || Icons.Circle;
-                const active = location.pathname === item.path ||
-                  (item.path !== '/' && location.pathname.startsWith(item.path));
-                return (
-                  <Link
-                    key={item.id}
-                    to={item.path}
-                    onClick={onClose}
-                    className={`nav-item ${active ? 'active' : ''}`}
-                    title={item.label}
-                    style={compact ? { justifyContent: 'center', padding: '9px 0' } : undefined}
-                  >
-                    <Icon size={16} strokeWidth={active ? 2.5 : 1.8} style={{ flexShrink: 0 }} />
-                    {!compact && item.label}
-                  </Link>
-                );
-              })}
-            </div>
-          ))}
+          {NAV.map((section, sectionIndex) => {
+            // Check if any items in this section are visible
+            const visibleItems = section.items.filter(item => !item.requiresCR || profile.isCR);
+            
+            // Skip section if no items are visible
+            if (visibleItems.length === 0) return null;
+
+            return (
+              <div key={section.group}>
+                {compact && sectionIndex > 0 && (
+                  <div
+                    style={{ height: 1, background: 'var(--border)', margin: '10px 12px', opacity: 0.55 }}
+                    aria-hidden="true"
+                  />
+                )}
+                {!compact && (
+                  <div style={{ fontSize: 10, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.09em', padding: '16px 6px 6px' }}>
+                    {section.group}
+                  </div>
+                )}
+                {section.items.map(item => {
+                  const Icon = Icons[item.icon] || Icons.Circle;
+                  const active = location.pathname === item.path ||
+                    (item.path !== '/' && location.pathname.startsWith(item.path));
+                  // hide items that require CR unless user is CR
+                  if (item.requiresCR) {
+                    if (!profile.isCR) return null;
+                  }
+                  return (
+                    <Link
+                      key={item.id}
+                      to={item.path}
+                      onClick={onClose}
+                      className={`nav-item ${active ? 'active' : ''}`}
+                      title={item.label}
+                      style={compact ? { justifyContent: 'center', padding: '9px 0' } : undefined}
+                    >
+                      <Icon size={16} strokeWidth={active ? 2.5 : 1.8} style={{ flexShrink: 0 }} />
+                      {!compact && item.label}
+                    </Link>
+                  );
+                })}
+              </div>
+            );
+          })}
         </nav>
 
         {/* Notes Overview */}
