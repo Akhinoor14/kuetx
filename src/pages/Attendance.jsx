@@ -876,13 +876,26 @@ export default function Attendance() {
           <div key={course.id} className={`attendance-summary-card attendance-summary-card--${status}`}>
             <div className="card-top">
               <div className="course" title={course.name}>{course.code || getDisplayCourseName(course)}</div>
-              <div className="pct">{pct !== null ? `${pct}%` : '--'}</div>
+              <div className="pct" style={{ color: attColor(pct) }}>{pct !== null ? `${pct}%` : '--'}</div>
             </div>
             <div className="meta">{totalAttended}/{totalHeld || 0} classes</div>
             <div className="attendance-card-bar">
               <div className="attendance-card-fill" style={{ width: `${pct !== null ? Math.min(100, pct) : 0}%`, background: attColor(pct) }} />
             </div>
             {pct === null && <div className="note">No attendance logged yet</div>}
+            {pct !== null && (() => {
+              if (pct < MIN_ATTENDANCE_PERCENT) {
+                return <div className="note" style={{ color: 'var(--danger)' }}>⚠ Below minimum — course at risk</div>;
+              }
+              // how many more can be missed and still stay ≥ MIN_ATTENDANCE_PERCENT
+              const canMiss = totalHeld > 0
+                ? Math.floor((totalAttended - MIN_ATTENDANCE_PERCENT / 100 * (totalHeld)) / (1 - MIN_ATTENDANCE_PERCENT / 100))
+                : 0;
+              if (canMiss <= 0) {
+                return <div className="note" style={{ color: 'var(--warning)' }}>Cannot miss any more classes</div>;
+              }
+              return <div className="note" style={{ color: 'var(--success)' }}>Can miss {canMiss} more class{canMiss !== 1 ? 'es' : ''} and stay ≥{MIN_ATTENDANCE_PERCENT}%</div>;
+            })()}
           </div>
         ))}
       </div>
