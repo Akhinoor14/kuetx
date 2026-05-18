@@ -686,14 +686,15 @@ export function TimeTracker() {
       </div>
 
       {adding && (
-        <div className="card" style={{ marginBottom: 14, borderColor: 'var(--accent)' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 10, marginBottom: 10 }}>
-            <div><label>Date</label><input type="date" value={form.date} onChange={e => set('date', e.target.value)} /></div>
-            <div><label>Category</label><select value={form.category} onChange={e => set('category', e.target.value)}>{CATS.map(c => <option key={c}>{c}</option>)}</select></div>
-            <div><label>Hours</label><input type="number" value={form.hours} onChange={e => set('hours', e.target.value)} placeholder="1.5" min={0} step={0.25} /></div>
+        <div className="card time-tracker-form" style={{ marginBottom: 14, borderColor: 'var(--accent)' }}>
+          <div className="time-tracker-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 10, marginBottom: 10 }}>
+            <div className="form-field"><label>Date</label><input type="date" value={form.date} onChange={e => set('date', e.target.value)} /></div>
+            <div className="form-field"><label>Category</label><select value={form.category} onChange={e => set('category', e.target.value)}>{CATS.map(c => <option key={c}>{c}</option>)}</select></div>
+            <div className="form-field"><label>Hours</label><input type="number" value={form.hours} onChange={e => set('hours', e.target.value)} placeholder="1.5" min={0} step={0.25} /></div>
           </div>
-          <div style={{ marginBottom: 10 }}><label>Note</label><input value={form.note} onChange={e => set('note', e.target.value)} placeholder="Optional detail" /></div>
-          <div style={{ display: 'flex', gap: 8 }}>
+          <div className="form-field" style={{ marginBottom: 10 }}><label>Note</label><input value={form.note} onChange={e => set('note', e.target.value)} placeholder="Optional detail" /></div>
+
+          <div className="time-tracker-actions" style={{ display: 'flex', gap: 8 }}>
             <button className="btn btn-primary" onClick={save}>Save</button>
             <button className="btn btn-ghost" onClick={() => setAdding(false)}>Cancel</button>
           </div>
@@ -748,19 +749,21 @@ export function Tuition() {
       </div>
 
       {adding && (
-        <div className="card" style={{ marginBottom: 14, borderColor: 'var(--accent)' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 10, marginBottom: 10 }}>
-            <div><label>Student Name</label><input value={form.studentName} onChange={e => set('studentName', e.target.value)} placeholder="Rahim" /></div>
-            <div><label>Subject</label><input value={form.subject} onChange={e => set('subject', e.target.value)} placeholder="Math" /></div>
-            <div><label>Date</label><input type="date" value={form.date} onChange={e => set('date', e.target.value)} /></div>
+        <div className="card tuition-form" style={{ marginBottom: 14, borderColor: 'var(--accent)' }}>
+          <div className="tuition-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 10, marginBottom: 10 }}>
+            <div className="form-field"><label>Student Name</label><input value={form.studentName} onChange={e => set('studentName', e.target.value)} placeholder="Rahim" /></div>
+            <div className="form-field"><label>Subject</label><input value={form.subject} onChange={e => set('subject', e.target.value)} placeholder="Math" /></div>
+            <div className="form-field"><label>Date</label><input type="date" value={form.date} onChange={e => set('date', e.target.value)} /></div>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 10, marginBottom: 10 }}>
-            <div><label>Hours</label><input type="number" value={form.hours} onChange={e => set('hours', e.target.value)} placeholder="1.5" min={0} step={0.5} /></div>
-            <div><label>Travel Time (min)</label><input type="number" value={form.travelTime} onChange={e => set('travelTime', e.target.value)} placeholder="30" /></div>
-            <div><label>Travel Cost (৳)</label><input type="number" value={form.travelCost} onChange={e => set('travelCost', e.target.value)} placeholder="40" /></div>
-            <div><label>Fee Received (৳)</label><input type="number" value={form.fee} onChange={e => set('fee', e.target.value)} placeholder="500" /></div>
+
+          <div className="tuition-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', gap: 10, marginBottom: 10 }}>
+            <div className="form-field"><label>Hours</label><input type="number" value={form.hours} onChange={e => set('hours', e.target.value)} placeholder="1.5" min={0} step={0.5} /></div>
+            <div className="form-field"><label>Travel Time (min)</label><input type="number" value={form.travelTime} onChange={e => set('travelTime', e.target.value)} placeholder="30" /></div>
+            <div className="form-field"><label>Travel Cost (৳)</label><input type="number" value={form.travelCost} onChange={e => set('travelCost', e.target.value)} placeholder="40" /></div>
+            <div className="form-field"><label>Fee Received (৳)</label><input type="number" value={form.fee} onChange={e => set('fee', e.target.value)} placeholder="500" /></div>
           </div>
-          <div style={{ display: 'flex', gap: 8 }}>
+
+          <div className="tuition-actions time-tracker-actions" style={{ display: 'flex', gap: 8 }}>
             <button className="btn btn-primary" onClick={save}>Save</button>
             <button className="btn btn-ghost" onClick={() => setAdding(false)}>Cancel</button>
           </div>

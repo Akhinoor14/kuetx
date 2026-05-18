@@ -1694,7 +1694,7 @@ export default function Schedule() {
               <span className="fs-icon" aria-hidden style={{ display: 'inline-block', lineHeight: 0 }}>
                 ⤢
               </span>
-              <span className="fs-label" style={{ marginLeft: 8, fontWeight: 700 }}>Full</span>
+              <span className="fs-label" style={{ marginLeft: 8, fontWeight: 700 }}>Full Screen</span>
             </button>
           </div>
         </div>
@@ -1992,13 +1992,13 @@ export default function Schedule() {
       )}
 
       {/* === Detailed Term Roadmap (bottom of Schedule page) === */}
-      <div className="card" style={{ marginTop: 14, padding: 16 }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+      <div className="card term-roadmap-card" style={{ marginTop: 14, padding: 16 }}>
+        <div className="term-roadmap-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
           <div>
             <div style={{ fontWeight: 700, fontSize: 14 }}>Term Roadmap (Detailed)</div>
             <div style={{ fontSize: 12, color: 'var(--muted)' }}>Approximate timeline with manual override and holiday sync. Use Edit to adjust exam dates.</div>
           </div>
-          <div style={{ display: 'flex', gap: 8 }}>
+          <div className="term-roadmap-actions" style={{ display: 'flex', gap: 8 }}>
             <button className="btn btn-ghost" onClick={openHolidaySetup}>
               <CalendarDays size={13} /> Add Holiday
             </button>
@@ -2034,9 +2034,9 @@ export default function Schedule() {
           const format = (d) => new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
 
           return (
-            <div style={{ display: 'grid', gap: 8 }}>
+            <div className="term-roadmap-grid" style={{ display: 'grid', gap: 8 }}>
               <div style={{ fontSize: 13, fontWeight: 700 }}>{profile?.currentTerm || getCurrentTermKey(profile)}</div>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
+              <div className="term-roadmap-summary" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
                 <div style={{ padding: 10, borderRadius: 8, border: '1px solid var(--border)' }}>
                   <div style={{ fontWeight: 700 }}>📚 Classes & Study</div>
                   <div style={{ fontSize: 12, color: 'var(--muted)' }}>{format(new Date(profile?.termStartDate || new Date()))} → {format(timeline.classEndDate)} • 65 working days</div>
@@ -2047,14 +2047,14 @@ export default function Schedule() {
                 </div>
               </div>
 
-              <div style={{ padding: 10, borderRadius: 8, border: '1px solid var(--border)' }}>
+              <div className="term-roadmap-exams" style={{ padding: 10, borderRadius: 8, border: '1px solid var(--border)' }}>
                 <div style={{ fontWeight: 700 }}>✍️ Exam Period</div>
                 <div style={{ fontSize: 12, color: 'var(--muted)' }}>{examPhases.length} courses: {format(examPhases[0]?.examDate)} → {format(examPhases[examPhases.length - 1]?.examDate)}</div>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: 6, marginTop: 8 }}>
+                <div className="exam-phases-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: 8, marginTop: 8 }}>
                   {examPhases.map((ep, idx) => (
-                    <div key={idx} style={{ padding: 8, borderRadius: 8, background: 'var(--card)', border: '1px solid var(--border)', fontSize: 12 }}>
-                      <div style={{ fontWeight: 700 }}>Exam {ep.course}</div>
-                      <div style={{ color: 'var(--muted)' }}>{format(ep.examDate)}</div>
+                    <div key={idx} className="exam-phase-card" style={{ padding: 10, borderRadius: 8, background: 'var(--card)', border: '1px solid var(--border)', fontSize: 13 }}>
+                      <div style={{ fontWeight: 800 }}>Exam {ep.course}</div>
+                      <div style={{ color: 'var(--muted)', marginTop: 6 }}>{format(ep.examDate)}</div>
                     </div>
                   ))}
                 </div>
@@ -2069,7 +2069,7 @@ export default function Schedule() {
                 )}
               </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
+              <div className="term-roadmap-summary" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
                 <div style={{ padding: 10, borderRadius: 8, border: '1px solid var(--border)' }}>
                   <div style={{ fontWeight: 700 }}>🌴 Post-Exam Break</div>
                   <div style={{ fontSize: 12, color: 'var(--muted)' }}>{format(timeline.postExamBreakStart)} → {format(timeline.postExamBreakEnd)} • 7 days</div>
@@ -2106,33 +2106,37 @@ export default function Schedule() {
 
       {/* Edit Exams Modal */}
       {editingExams && (
-        <div className="card" style={{ position: 'fixed', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(0,0,0,0.55)', backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)' }}>
-          <div style={{ width: 720, maxWidth: '95%', background: 'var(--bg)', borderRadius: 12, padding: 16 }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+        <div className="card edit-exams-modal" role="dialog" aria-modal="true" style={{ position: 'fixed', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(0,0,0,0.55)', backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)' }}>
+          <div className="edit-exams-inner" style={{ width: 720, maxWidth: '95%', background: 'var(--bg)', borderRadius: 12, padding: 16, maxHeight: '86vh', overflow: 'auto', boxShadow: '0 10px 40px rgba(0,0,0,0.25)' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12, gap: 12, flexWrap: 'wrap' }}>
               <div style={{ fontWeight: 800 }}>Edit Exam Dates</div>
-              <button className="btn btn-ghost" onClick={() => setEditingExams(false)}>Close</button>
+              <div style={{ display: 'flex', gap: 8 }}>
+                <button className="btn btn-ghost" onClick={() => setEditingExams(false)}>Close</button>
+              </div>
             </div>
-            <div style={{ display: 'grid', gap: 8 }}>
+
+            <div style={{ display: 'grid', gap: 10 }}>
               {localExamEdits.map((e, i) => (
-                <div key={i} style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-                  <div style={{ width: 90, fontWeight: 700 }}>Exam {e.course}</div>
-                  <input type="date" value={e.examDate} onChange={ev => {
+                <div key={i} className="edit-exams-row" style={{ display: 'grid', gridTemplateColumns: '120px 1fr', gap: 8, alignItems: 'center' }}>
+                  <div style={{ fontWeight: 700 }}>{`Exam ${e.course}`}</div>
+                  <input className="edit-exam-date" type="date" value={e.examDate} onChange={ev => {
                     const v = ev.target.value;
                     setLocalExamEdits(prev => prev.map((p, idx) => idx === i ? { ...p, examDate: v } : p));
-                  }} />
+                  }} style={{ width: '100%', padding: '8px 10px', borderRadius: 8, border: '1px solid var(--border)' }} />
                 </div>
               ))}
-              <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end', marginTop: 8 }}>
-                <button className="btn btn-ghost" onClick={() => setEditingExams(false)}>Cancel</button>
-                <button className="btn btn-primary" onClick={() => {
-                  const termKey = getCurrentTermKey(profile);
-                  const next = { ...(examOverrides || {}) };
-                  next[termKey] = localExamEdits.map(x => ({ course: x.course, examDate: x.examDate }));
-                  setExamOverrides(next);
-                  store.set('examOverrides', next);
-                  setEditingExams(false);
-                }}>Save</button>
-              </div>
+            </div>
+
+            <div className="edit-exams-footer" style={{ display: 'flex', gap: 8, justifyContent: 'flex-end', marginTop: 12 }}>
+              <button className="btn btn-ghost" onClick={() => setEditingExams(false)}>Cancel</button>
+              <button className="btn btn-primary" onClick={() => {
+                const termKey = getCurrentTermKey(profile);
+                const next = { ...(examOverrides || {}) };
+                next[termKey] = localExamEdits.map(x => ({ course: x.course, examDate: x.examDate }));
+                setExamOverrides(next);
+                store.set('examOverrides', next);
+                setEditingExams(false);
+              }}>Save</button>
             </div>
           </div>
         </div>

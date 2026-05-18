@@ -811,7 +811,7 @@ export default function ClassManagement() {
               )}
               <button className="btn btn-ghost mobile-fullscreen-btn" onClick={() => setFullScreenOpen(true)} aria-label="Open timetable full screen">
                 <span className="fs-icon" aria-hidden style={{ display: 'inline-block', lineHeight: 0 }}>⤢</span>
-                <span className="fs-label" style={{ marginLeft: 8, fontWeight: 700 }}>Full</span>
+                <span className="fs-label" style={{ marginLeft: 8, fontWeight: 700 }}>Full Screen</span>
               </button>
             </div>
           </div>

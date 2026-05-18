@@ -55,41 +55,41 @@ export default function SelfEval() {
   const ratingLabel = ['', 'খুব খারাপ', 'খারাপ', 'ঠিক আছে', 'ভালো', 'অসাধারণ'][rec.rating || 3];
 
   return (
-    <div className="page-enter page-container">
+    <div className="page-enter page-container self-eval-page">
       {showSavedToast && (
-        <div style={{ position: 'fixed', top: 18, right: 18, zIndex: 1200, background: 'linear-gradient(180deg, rgba(16,185,129,0.16), rgba(16,185,129,0.10))', border: '1px solid rgba(16,185,129,0.25)', color: 'var(--text)', borderRadius: 999, padding: '10px 14px', boxShadow: '0 16px 40px rgba(0,0,0,0.12)', fontSize: 12, fontWeight: 700 }}>
+        <div className="selfeval-toast">
           ✓ Self Evaluation {saveStatus}
         </div>
       )}
-      <div style={{ marginBottom: 16 }}>
+      <div className="selfeval-header">
         <h1 style={{ fontSize: 18, fontWeight: 700 }}>Self Evaluation</h1>
         <p style={{ fontSize: 12, color: 'var(--muted)' }}>Daily accountability — good deeds, bad habits, self rating</p>
       </div>
 
-      <div style={{ display: 'flex', gap: 8, marginBottom: 16, alignItems: 'center' }}>
+      <div className="selfeval-toolbar">
         <input type="date" value={selDate} onChange={e => setSelDate(e.target.value)} style={{ width: 'auto' }} />
         <button className="btn btn-ghost" onClick={() => setSelDate(today)}>Today</button>
         <span className="tag tag-green" style={{ fontSize: 11 }}>{saveStatus}</span>
       </div>
 
       {/* Self Rating */}
-      <div className="card" style={{ marginBottom: 12 }}>
+      <div className="card selfeval-rating-card">
         <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 10 }}>আজকের দিনটা কেমন ছিল?</div>
-        <div style={{ display: 'flex', gap: 8, marginBottom: 6 }}>
+        <div style={{ display: 'flex', gap: 8, marginBottom: 6, alignItems: 'center', flexWrap: 'wrap' }}>
           {[1, 2, 3, 4, 5].map(v => (
-            <button key={v} onClick={() => setRatingVal(v)} style={{
-              width: 40, height: 40, borderRadius: 8, border: '2px solid',
+            <button key={v} className="rating-btn" onClick={() => setRatingVal(v)} style={{
+              width: 36, height: 36, borderRadius: 6, border: '2px solid',
               borderColor: (rec.rating || 3) >= v ? 'var(--accent)' : 'var(--border)',
               background: (rec.rating || 3) >= v ? 'var(--accent)' : 'transparent',
               color: (rec.rating || 3) >= v ? 'var(--accentFg)' : 'var(--muted)',
-              cursor: 'pointer', fontWeight: 700, fontSize: 15,
+              cursor: 'pointer', fontWeight: 700, fontSize: 13,
             }}>{v}</button>
           ))}
-          <span style={{ fontSize: 13, color: 'var(--muted)', alignSelf: 'center', marginLeft: 4 }}>{ratingLabel}</span>
+          <span style={{ fontSize: 12, color: 'var(--accent)', fontWeight: 600, marginLeft: 8 }}>{ratingLabel}</span>
         </div>
-        <div style={{ marginTop: 8 }}>
-          <label>Note for today</label>
-          <input value={rec.note || ''} onChange={e => update('note', e.target.value)} placeholder="আজকের কোনো ভাবনা বা সংকল্প..." />
+        <div style={{ marginTop: 10 }}>
+          <label style={{ display: 'block', fontSize: 12, fontWeight: 600, marginBottom: 6, color: 'var(--muted)' }}>Note for today</label>
+          <input value={rec.note || ''} onChange={e => update('note', e.target.value)} placeholder="আজকের কোনো ভাবনা বা সংকল্প..." style={{ fontSize: 14, padding: '10px 12px', minHeight: '40px' }} />
         </div>
         <div style={{ marginTop: 10, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, flexWrap: 'wrap' }}>
           <div style={{ fontSize: 11, color: 'var(--muted)' }}>Auto-saves on every change, so SmartScore updates immediately.</div>
@@ -97,53 +97,51 @@ export default function SelfEval() {
         </div>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+      <div className="selfeval-columns">
         {/* Bad deeds */}
-        <div className="card" style={{ borderTop: '3px solid var(--danger)' }}>
-          <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 10, color: 'var(--danger)' }}>⚠ খারাপ কাজ</div>
-          <div style={{ display: 'flex', gap: 6, marginBottom: 8 }}>
-            <input value={newBad} onChange={e => setNewBad(e.target.value)} onKeyDown={e => e.key === 'Enter' && addBad(newBad)} placeholder="যোগ করুন..." style={{ fontSize: 13 }} />
-            <button className="btn btn-danger" style={{ padding: '6px 12px', flexShrink: 0 }} onClick={() => addBad(newBad)}><Plus size={14} /></button>
+        <div className="card selfeval-panel selfeval-panel-bad">
+          <div className="selfeval-panel-title selfeval-panel-title-bad">⚠ খারাপ কাজ</div>
+          <div className="selfeval-add-row">
+            <input value={newBad} onChange={e => setNewBad(e.target.value)} onKeyDown={e => e.key === 'Enter' && addBad(newBad)} placeholder="যোগ করুন..." />
+            <button className="btn btn-danger selfeval-add-btn" onClick={() => addBad(newBad)}><Plus size={14} /></button>
           </div>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 8 }}>
+          <div className="selfeval-preset-group">
             {BAD_PRESETS.map(p => (
-              <button key={p} onClick={() => addBad(p)} style={{
-                padding: '6px 10px', borderRadius: 6, fontSize: 12, border: '1px solid var(--border)',
-                background: 'transparent', color: 'var(--muted)', cursor: 'pointer', fontFamily: 'Hind Siliguri, Sora, sans-serif',
-              }}>{p}</button>
+              <button key={p} className="selfeval-chip selfeval-chip-bad" onClick={() => addBad(p)}>{p}</button>
             ))}
           </div>
-          {(rec.bad || []).map(b => (
-            <div key={b.id} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '6px 0', borderBottom: '1px solid var(--border)' }}>
-              <span style={{ flex: 1, fontSize: 13, fontFamily: 'Hind Siliguri, Sora, sans-serif' }}>{b.text}</span>
-              <button onClick={() => removeBad(b.id)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--danger)' }}><Trash2 size={13} /></button>
-            </div>
-          ))}
-          {(rec.bad || []).length === 0 && <div style={{ fontSize: 13, color: 'var(--muted)', fontFamily: 'Hind Siliguri, Sora, sans-serif' }}>কোনো খারাপ কাজ নেই ✓</div>}
+          <div className="selfeval-list">
+            {(rec.bad || []).map(b => (
+              <div key={b.id} className="selfeval-list-item">
+                <span>{b.text}</span>
+                <button onClick={() => removeBad(b.id)} className="selfeval-remove-btn selfeval-remove-btn-bad"><Trash2 size={13} /></button>
+              </div>
+            ))}
+            {(rec.bad || []).length === 0 && <div className="selfeval-empty selfeval-empty-bad">কোনো খারাপ কাজ নেই ✓</div>}
+          </div>
         </div>
 
         {/* Good deeds */}
-        <div className="card" style={{ borderTop: '3px solid var(--success)' }}>
-          <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 10, color: 'var(--success)' }}>✓ ভালো কাজ</div>
-          <div style={{ display: 'flex', gap: 6, marginBottom: 8 }}>
-            <input value={newGood} onChange={e => setNewGood(e.target.value)} onKeyDown={e => e.key === 'Enter' && addGood(newGood)} placeholder="যোগ করুন..." style={{ fontSize: 13 }} />
-            <button className="btn btn-primary" style={{ padding: '6px 12px', flexShrink: 0 }} onClick={() => addGood(newGood)}><Plus size={14} /></button>
+        <div className="card selfeval-panel selfeval-panel-good">
+          <div className="selfeval-panel-title selfeval-panel-title-good">✓ ভালো কাজ</div>
+          <div className="selfeval-add-row">
+            <input value={newGood} onChange={e => setNewGood(e.target.value)} onKeyDown={e => e.key === 'Enter' && addGood(newGood)} placeholder="যোগ করুন..." />
+            <button className="btn btn-primary selfeval-add-btn" onClick={() => addGood(newGood)}><Plus size={14} /></button>
           </div>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 8 }}>
+          <div className="selfeval-preset-group">
             {GOOD_PRESETS.map(p => (
-              <button key={p} onClick={() => addGood(p)} style={{
-                padding: '6px 10px', borderRadius: 6, fontSize: 12, border: '1px solid var(--border)',
-                background: 'transparent', color: 'var(--muted)', cursor: 'pointer', fontFamily: 'Hind Siliguri, Sora, sans-serif',
-              }}>{p}</button>
+              <button key={p} className="selfeval-chip selfeval-chip-good" onClick={() => addGood(p)}>{p}</button>
             ))}
           </div>
-          {(rec.good || []).map(g => (
-            <div key={g.id} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '6px 0', borderBottom: '1px solid var(--border)' }}>
-              <span style={{ flex: 1, fontSize: 13, fontFamily: 'Hind Siliguri, Sora, sans-serif' }}>{g.text}</span>
-              <button onClick={() => removeGood(g.id)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--muted)' }}><Trash2 size={13} /></button>
-            </div>
-          ))}
-          {(rec.good || []).length === 0 && <div style={{ fontSize: 13, color: 'var(--muted)', fontFamily: 'Hind Siliguri, Sora, sans-serif' }}>এখনো কিছু নেই</div>}
+          <div className="selfeval-list">
+            {(rec.good || []).map(g => (
+              <div key={g.id} className="selfeval-list-item">
+                <span>{g.text}</span>
+                <button onClick={() => removeGood(g.id)} className="selfeval-remove-btn selfeval-remove-btn-good"><Trash2 size={13} /></button>
+              </div>
+            ))}
+            {(rec.good || []).length === 0 && <div className="selfeval-empty selfeval-empty-good">এখনো কিছু নেই</div>}
+          </div>
         </div>
       </div>
     </div>

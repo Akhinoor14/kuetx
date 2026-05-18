@@ -35,6 +35,169 @@
   --course-color-3: #bbf7d0; /* another light green */
 }
 
+/* Self Evaluation page visual improvements */
+.self-eval-page h1 { font-size: 20px; font-weight: 700; }
+.self-eval-page p { font-size: 13px; color: var(--muted); line-height: 1.4; }
+.self-eval-page .selfeval-header { margin-bottom: 16px; }
+.self-eval-page .selfeval-toolbar {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.self-eval-page .selfeval-toast {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1200;
+  background: rgba(17, 94, 89, 0.92);
+  border: 1px solid rgba(45, 212, 191, 0.28);
+  color: #ecfeff;
+  border-radius: 999px;
+  padding: 12px 16px;
+  box-shadow: 0 16px 40px rgba(0,0,0,0.16);
+  font-size: 13px;
+  font-weight: 700;
+}
+.self-eval-page .card { 
+  padding: 16px 14px; 
+  border-radius: 10px; 
+  background: linear-gradient(180deg, rgba(255,255,255,0.94), rgba(248,250,252,0.92));
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  box-shadow: 0 10px 28px rgba(15, 23, 42, 0.05);
+}
+.self-eval-page .card > div { font-size: 14px; }
+.self-eval-page .card span { font-size: 13px; }
+.self-eval-page .selfeval-rating-card { margin-bottom: 12px; }
+.self-eval-page .selfeval-columns {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 12px;
+}
+.self-eval-page .selfeval-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border-top-width: 4px;
+}
+.self-eval-page .selfeval-panel-bad { border-top-color: rgba(239, 68, 68, 0.9); }
+.self-eval-page .selfeval-panel-good { border-top-color: rgba(34, 197, 94, 0.9); }
+.self-eval-page .selfeval-panel-title {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.self-eval-page .selfeval-panel-title-bad { color: rgba(220, 38, 38, 0.95); }
+.self-eval-page .selfeval-panel-title-good { color: rgba(21, 128, 61, 0.95); }
+.self-eval-page .selfeval-add-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px;
+  align-items: center;
+}
+.self-eval-page .selfeval-add-btn {
+  min-width: 42px;
+  padding: 0 12px;
+  justify-content: center;
+}
+.self-eval-page .selfeval-preset-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.self-eval-page .selfeval-chip {
+  border: none;
+  border-radius: 999px;
+  padding: 8px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: 'Hind Siliguri', 'Sora', sans-serif;
+  transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease;
+}
+.self-eval-page .selfeval-chip:active { transform: scale(0.98); }
+.self-eval-page .selfeval-chip-bad {
+  background: rgba(254, 226, 226, 0.95);
+  color: rgba(153, 27, 27, 0.98);
+  box-shadow: inset 0 0 0 1px rgba(248, 113, 113, 0.16);
+}
+.self-eval-page .selfeval-chip-good {
+  background: rgba(220, 252, 231, 0.95);
+  color: rgba(21, 128, 61, 0.98);
+  box-shadow: inset 0 0 0 1px rgba(74, 222, 128, 0.16);
+}
+.self-eval-page .selfeval-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.self-eval-page .selfeval-list-item {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px;
+  align-items: center;
+  padding: 9px 10px;
+  border-radius: 10px;
+  background: rgba(248, 250, 252, 0.9);
+}
+.self-eval-page .selfeval-list-item span {
+  font-size: 13px;
+  line-height: 1.45;
+}
+.self-eval-page .selfeval-remove-btn {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 8px;
+}
+.self-eval-page .selfeval-remove-btn-bad { color: rgba(220, 38, 38, 0.95); }
+.self-eval-page .selfeval-remove-btn-good { color: rgba(107, 114, 128, 0.95); }
+.self-eval-page .selfeval-empty {
+  font-size: 13px;
+  line-height: 1.45;
+  padding: 6px 2px 0;
+  font-family: 'Hind Siliguri', 'Sora', sans-serif;
+}
+.self-eval-page .selfeval-empty-bad { color: rgba(185, 28, 28, 0.75); }
+.self-eval-page .selfeval-empty-good { color: rgba(22, 163, 74, 0.78); }
+.self-eval-page input { font-size: 14px; padding: 10px 11px; border-radius: 8px; }
+.self-eval-page .rating-btn {
+  width: 36px !important;
+  height: 36px !important;
+  font-size: 13px !important;
+  border-radius: 6px !important;
+}
+.self-eval-page .btn { padding: 9px 13px; font-size: 13px; }
+.self-eval-page .tag { font-size: 11px; }
+
+@media (max-width: 640px) {
+  .self-eval-page .selfeval-toolbar {
+    gap: 10px;
+    align-items: stretch;
+  }
+  .self-eval-page .selfeval-toolbar input,
+  .self-eval-page .selfeval-toolbar .btn,
+  .self-eval-page .selfeval-toolbar .tag { width: 100%; }
+  .self-eval-page .selfeval-toast {
+    bottom: 14px;
+    width: calc(100% - 28px);
+    text-align: center;
+  }
+  .self-eval-page .selfeval-grid { grid-template-columns: 1fr !important; }
+  .self-eval-page .card { padding: 14px 12px; }
+  .self-eval-page .rating-btn { width: 40px !important; height: 40px !important; font-size: 14px !important; }
+  .self-eval-page input { font-size: 15px; padding: 11px 12px; min-height: 44px; }
+  .self-eval-page .btn { width: 100%; padding: 10px 12px; }
+  .self-eval-page .selfeval-add-row { grid-template-columns: minmax(0, 1fr); }
+  .self-eval-page .selfeval-add-btn { width: 100%; min-height: 44px; }
+  .self-eval-page .selfeval-chip { padding: 8px 10px; }
+  .self-eval-page .selfeval-list-item { padding: 10px; }
+}
+
 .dark {
   color-scheme: dark;
 }
@@ -2370,10 +2533,25 @@ input[type="range"]::-webkit-slider-thumb {
 @media (max-width: 640px) {
   .mobile-fullscreen-btn {
     display: inline-flex;
-    padding: 6px 10px;
-    font-size: 13px;
+    align-items: center;
+    justify-content: center;
+    padding: 7px 12px;
+    font-size: 12px;
     gap: 6px;
-    border-radius: 8px;
+    border-radius: 10px;
+    border: 1px solid color-mix(in srgb, var(--accent) 45%, var(--border));
+    background: color-mix(in srgb, var(--accent) 10%, var(--surface));
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    white-space: nowrap;
+  }
+
+  .mobile-fullscreen-btn .fs-icon {
+    font-size: 15px;
+  }
+
+  .mobile-fullscreen-btn .fs-label {
+    display: inline;
   }
   .fullscreen-content {
     width: 100vw;
@@ -2429,6 +2607,47 @@ input[type="range"]::-webkit-slider-thumb {
     border-radius: 8px;
   }
 
+  /* Term roadmap adjustments for mobile */
+  .term-roadmap-card .term-roadmap-header {
+    gap: 10px;
+    align-items: flex-start;
+  }
+
+  .term-roadmap-actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .term-roadmap-actions .btn {
+    min-width: 110px;
+  }
+
+  .term-roadmap-card .term-roadmap-grid {
+    grid-auto-flow: row;
+  }
+
+  .term-roadmap-card .term-roadmap-summary,
+  .term-roadmap-card .term-roadmap-exams {
+    grid-template-columns: 1fr !important;
+  }
+
+  .exam-phases-grid {
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 10px;
+  }
+
+  .term-roadmap-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .term-roadmap-actions .btn {
+    width: 100%;
+    justify-content: center;
+    padding: 10px 12px;
+  }
+
   .btn {
     padding: 8px 14px;
     font-size: 13px;
@@ -2444,6 +2663,80 @@ input[type="range"]::-webkit-slider-thumb {
     font-size: 16px; /* Prevent zoom on iOS */
     padding: 8px 11px;
     border-radius: 8px;
+  }
+
+  /* Time tracker & tuition form mobile tweaks */
+  .time-tracker-form .time-tracker-grid,
+  .tuition-form .tuition-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .time-tracker-form .form-field label,
+  .tuition-form .form-field label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 12px;
+    font-weight: 700;
+  }
+
+  .time-tracker-form input,
+  .time-tracker-form select,
+  .tuition-form input,
+  .tuition-form select {
+    width: 100%;
+    padding: 10px 12px;
+    font-size: 15px;
+  }
+
+  .time-tracker-form .time-tracker-actions,
+  .tuition-form .time-tracker-actions {
+    gap: 8px;
+    margin-top: 6px;
+    flex-direction: row;
+  }
+
+  /* Sticky actions for small screens when form is tall */
+  /* Use sticky for most small sizes so actions stay near the inputs but scroll with the card.
+     For very small screens (<=420px) use fixed to float above content for immediate access. */
+  .time-tracker-form,
+  .tuition-form {
+    padding-bottom: 84px; /* room for sticky/fixed actions */
+  }
+
+  .time-tracker-form .time-tracker-actions,
+  .tuition-form .time-tracker-actions {
+    position: sticky;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 12px 6px;
+    background: linear-gradient(180deg, rgba(255,255,255,0), var(--bg));
+    border-top: 1px solid var(--border);
+    z-index: 30;
+  }
+
+  .time-tracker-form .time-tracker-actions .btn,
+  .tuition-form .time-tracker-actions .btn { flex: 1 1 48%; }
+
+  @media (max-width: 420px) {
+    .time-tracker-form .time-tracker-actions,
+    .tuition-form .time-tracker-actions {
+      position: fixed !important;
+      left: 12px !important;
+      right: 12px !important;
+      bottom: 12px !important;
+      padding: 10px !important;
+      border-radius: 12px !important;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.12) !important;
+      background: var(--bg) !important;
+      border-top: 1px solid rgba(0,0,0,0.04) !important;
+      z-index: 60 !important;
+    }
+    .time-tracker-form,
+    .tuition-form { padding-bottom: 120px; }
   }
 
   .topbar {
@@ -2470,10 +2763,59 @@ input[type="range"]::-webkit-slider-thumb {
   }
 }
 
+/* Edit Exams modal responsive tweaks */
+.edit-exams-modal {
+  z-index: 4000;
+}
+.edit-exams-modal .edit-exams-inner {
+  transition: transform 0.18s ease, opacity 0.12s ease;
+}
+.edit-exams-row .edit-exam-date {
+  box-sizing: border-box;
+}
+
+@media (max-width: 640px) {
+  .edit-exams-modal .edit-exams-inner {
+    width: 100vw !important;
+    height: 100vh !important;
+    max-width: none !important;
+    max-height: none !important;
+    border-radius: 0 !important;
+    padding: 14px !important;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .edit-exams-modal .edit-exams-inner > .edit-exams-footer {
+    position: sticky;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 10px 14px;
+    background: linear-gradient(180deg, rgba(255,255,255,0), var(--bg));
+    gap: 8px;
+    justify-content: flex-end;
+    display: flex;
+    border-top: 1px solid var(--border);
+  }
+
+  .edit-exams-row {
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
+  }
+
+  .edit-exams-row .edit-exam-date {
+    width: 100% !important;
+  }
+}
+
 @media (max-width: 420px) {
-  .mobile-fullscreen-btn { padding: 6px; }
-  .mobile-fullscreen-btn .fs-label { display: none; }
-  .mobile-fullscreen-btn .fs-icon { font-size: 16px; }
+  .mobile-fullscreen-btn {
+    padding: 6px 10px;
+    font-size: 11px;
+    gap: 5px;
+  }
+  .mobile-fullscreen-btn .fs-icon { font-size: 14px; }
 }
 
 /* ── Tablet (Small: 640px - 1024px) ───────────────────────────────────── */
