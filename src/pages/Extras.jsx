@@ -856,16 +856,16 @@ export function Food() {
       </div>
 
       {adding && (
-        <div className="card" style={{ marginBottom: 14, borderColor: 'var(--accent)' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 2fr 1fr', gap: 10, marginBottom: 10 }}>
-            <div><label>Date</label><input type="date" value={form.date} onChange={e => set('date', e.target.value)} /></div>
-            <div><label>Meal</label><select value={form.meal} onChange={e => set('meal', e.target.value)}>{['Breakfast','Lunch','Dinner','Snack'].map(m => <option key={m}>{m}</option>)}</select></div>
-            <div><label>Food Item</label><input value={form.item} onChange={e => set('item', e.target.value)} placeholder="Bhat, Dal, Chicken..." /></div>
-            <div><label>Calories (kcal)</label><input type="number" value={form.calories} onChange={e => set('calories', e.target.value)} placeholder="400" /></div>
+        <div className="card food-log-form-card" style={{ marginBottom: 14 }}>
+          <div className="food-log-form-grid">
+            <div className="food-log-field"><label>Date</label><input type="date" value={form.date} onChange={e => set('date', e.target.value)} /></div>
+            <div className="food-log-field"><label>Meal</label><select value={form.meal} onChange={e => set('meal', e.target.value)}>{['Breakfast','Lunch','Dinner','Snack'].map(m => <option key={m}>{m}</option>)}</select></div>
+            <div className="food-log-field food-log-item-field"><label>Food Item</label><input value={form.item} onChange={e => set('item', e.target.value)} placeholder="Bhat, Dal, Chicken..." /></div>
+            <div className="food-log-field"><label>Calories (kcal)</label><input type="number" value={form.calories} onChange={e => set('calories', e.target.value)} placeholder="400" /></div>
           </div>
-          <div style={{ display: 'flex', gap: 8 }}>
-            <button className="btn btn-primary" onClick={save}>Save</button>
-            <button className="btn btn-ghost" onClick={() => setAdding(false)}>Cancel</button>
+          <div className="food-log-actions">
+            <button className="btn btn-primary food-log-save-btn" onClick={save}>Save</button>
+            <button className="btn btn-ghost food-log-cancel-btn" onClick={() => setAdding(false)}>Cancel</button>
           </div>
         </div>
       )}

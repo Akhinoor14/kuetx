@@ -43,51 +43,51 @@ export default function Clubs() {
 
   return (
     <div className="page-enter page-container">
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+      <div className="clubs-header">
         <div>
           <h1 style={{ fontSize: 18, fontWeight: 700 }}>Clubs & Activities</h1>
           <p style={{ fontSize: 12, color: 'var(--muted)' }}>{clubs.length} clubs · {activities.length} activities</p>
         </div>
-        <div style={{ display: 'flex', gap: 6 }}>
+        <div className="clubs-header-actions">
           <button className="btn btn-ghost" onClick={() => { setAddingAct(true); setAddingClub(false); }}><Plus size={13} /> Activity</button>
           <button className="btn btn-primary" onClick={() => { setAddingClub(true); setAddingAct(false); }}><Plus size={13} /> Club</button>
         </div>
       </div>
 
       {addingClub && (
-        <div className="card" style={{ marginBottom: 14, borderColor: 'var(--accent)' }}>
+        <div className="card clubs-form-card clubs-form-card-club" style={{ marginBottom: 14 }}>
           <div style={{ fontWeight: 600, fontSize: 13, marginBottom: 10 }}>Add Club</div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: 10, marginBottom: 10 }}>
-            <div><label>Club Name</label><input value={clubForm.name} onChange={e => setCF('name', e.target.value)} placeholder="KUET Robotics Club" /></div>
-            <div><label>Your Role</label><input value={clubForm.role} onChange={e => setCF('role', e.target.value)} placeholder="Member / Secretary" /></div>
-            <div><label>Member Since</label><input type="date" value={clubForm.since} onChange={e => setCF('since', e.target.value)} /></div>
+          <div className="clubs-form-grid clubs-form-grid-club">
+            <div className="clubs-form-field"><label>Club Name</label><input value={clubForm.name} onChange={e => setCF('name', e.target.value)} placeholder="KUET Robotics Club" /></div>
+            <div className="clubs-form-field"><label>Your Role</label><input value={clubForm.role} onChange={e => setCF('role', e.target.value)} placeholder="Member / Secretary" /></div>
+            <div className="clubs-form-field"><label>Member Since</label><input type="date" value={clubForm.since} onChange={e => setCF('since', e.target.value)} /></div>
           </div>
-          <div style={{ display: 'flex', gap: 8 }}>
-            <button className="btn btn-primary" onClick={saveClub}><Check size={13} /> Save</button>
-            <button className="btn btn-ghost" onClick={() => setAddingClub(false)}><X size={13} /> Cancel</button>
+          <div className="clubs-form-actions">
+            <button className="btn btn-primary clubs-form-save" onClick={saveClub}><Check size={13} /> Save</button>
+            <button className="btn btn-ghost clubs-form-cancel" onClick={() => setAddingClub(false)}><X size={13} /> Cancel</button>
           </div>
         </div>
       )}
 
       {addingAct && (
-        <div className="card" style={{ marginBottom: 14, borderColor: 'var(--accent)' }}>
+        <div className="card clubs-form-card clubs-form-card-activity" style={{ marginBottom: 14 }}>
           <div style={{ fontWeight: 600, fontSize: 13, marginBottom: 10 }}>Log Club Activity</div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: 10, marginBottom: 10 }}>
-            <div>
+          <div className="clubs-form-grid clubs-form-grid-activity">
+            <div className="clubs-form-field">
               <label>Club</label>
               <select value={actForm.clubId} onChange={e => setAF('clubId', e.target.value)}>
                 <option value="">Select club</option>
                 {clubs.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
               </select>
             </div>
-            <div><label>Date</label><input type="date" value={actForm.date} onChange={e => setAF('date', e.target.value)} /></div>
-            <div><label>Hours Spent</label><input type="number" value={actForm.hours} onChange={e => setAF('hours', e.target.value)} placeholder="2" min={0} step={0.5} /></div>
+            <div className="clubs-form-field"><label>Date</label><input type="date" value={actForm.date} onChange={e => setAF('date', e.target.value)} /></div>
+            <div className="clubs-form-field"><label>Hours Spent</label><input type="number" value={actForm.hours} onChange={e => setAF('hours', e.target.value)} placeholder="2" min={0} step={0.5} /></div>
           </div>
-          <div style={{ marginBottom: 10 }}><label>Activity / Task</label><input value={actForm.title} onChange={e => setAF('title', e.target.value)} placeholder="Robotics workshop preparation" /></div>
-          <div style={{ marginBottom: 10 }}><label>Details</label><textarea value={actForm.desc} onChange={e => setAF('desc', e.target.value)} rows={2} placeholder="What was done..." /></div>
-          <div style={{ display: 'flex', gap: 8 }}>
-            <button className="btn btn-primary" onClick={saveAct}><Check size={13} /> Save</button>
-            <button className="btn btn-ghost" onClick={() => setAddingAct(false)}><X size={13} /> Cancel</button>
+          <div className="clubs-form-field clubs-form-wide"><label>Activity / Task</label><input value={actForm.title} onChange={e => setAF('title', e.target.value)} placeholder="Robotics workshop preparation" /></div>
+          <div className="clubs-form-field clubs-form-wide"><label>Details</label><textarea value={actForm.desc} onChange={e => setAF('desc', e.target.value)} rows={2} placeholder="What was done..." /></div>
+          <div className="clubs-form-actions">
+            <button className="btn btn-primary clubs-form-save" onClick={saveAct}><Check size={13} /> Save</button>
+            <button className="btn btn-ghost clubs-form-cancel" onClick={() => setAddingAct(false)}><X size={13} /> Cancel</button>
           </div>
         </div>
       )}

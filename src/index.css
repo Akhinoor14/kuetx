@@ -286,6 +286,108 @@ body {
   .dashboard-hero-date-lines {
     text-align: right;
   }
+
+  .clubs-header {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: stretch;
+    margin-bottom: 16px;
+  }
+  .clubs-header-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .clubs-header-actions .btn {
+    width: 100%;
+    justify-content: center;
+  }
+  .clubs-form-card {
+    padding: 14px 12px;
+    border-color: rgba(22, 163, 74, 0.16);
+    background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(248,250,252,0.95));
+  }
+  .clubs-form-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+  .clubs-form-field label {
+    font-size: 11px;
+    margin-bottom: 6px;
+    letter-spacing: 0.03em;
+  }
+  .clubs-form-field input,
+  .clubs-form-field select,
+  .clubs-form-field textarea {
+    min-height: 46px;
+    font-size: 15px;
+    padding: 12px 12px;
+    border-radius: 10px;
+    background: #fff;
+  }
+  .clubs-form-field textarea {
+    min-height: 90px;
+    resize: vertical;
+  }
+  .clubs-form-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .clubs-form-save,
+  .clubs-form-cancel {
+    width: 100%;
+    min-height: 46px;
+    justify-content: center;
+  }
+  .clubs-form-wide {
+    grid-column: 1 / -1;
+  }
+
+  .food-log-form-card {
+    padding: 14px 12px;
+    border-color: rgba(22, 163, 74, 0.18);
+    background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(248,250,252,0.95));
+  }
+  .food-log-form-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+  .food-log-field label {
+    font-size: 11px;
+    margin-bottom: 6px;
+    letter-spacing: 0.03em;
+  }
+  .food-log-field input,
+  .food-log-field select {
+    min-height: 46px;
+    font-size: 15px;
+    padding: 12px 12px;
+    border-radius: 10px;
+    background: #fff;
+  }
+  .food-log-item-field input::placeholder {
+    color: rgba(107, 114, 128, 0.78);
+  }
+  .food-log-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .food-log-save-btn,
+  .food-log-cancel-btn {
+    width: 100%;
+    min-height: 46px;
+    justify-content: center;
+  }
+  .food-log-cancel-btn {
+    border-color: rgba(148, 163, 184, 0.35);
+  }
 }
 
 /* ── Card ────────────────────────────────────────────────────────────────── */
