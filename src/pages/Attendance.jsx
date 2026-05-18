@@ -11,6 +11,13 @@ const addDays = (d, n) => {
 };
 const fmtDate = (d) => new Date(d + 'T00:00:00').toLocaleDateString('en-BD', { weekday: 'long', day: 'numeric', month: 'long' });
 
+const attColor = (pct) => {
+  if (pct === null || pct === undefined || Number.isNaN(pct)) return 'var(--muted)';
+  if (pct < MIN_ATTENDANCE_PERCENT) return 'var(--danger)';
+  if (pct < SCHOLARSHIP_ATTENDANCE_PCT) return 'var(--warning)';
+  return 'var(--success)';
+};
+
 // Check if course is session/lab (auto 100%)
 function isAutoFull(courseType) {
   return courseType && (courseType.toLowerCase().includes('session') || courseType.toLowerCase().includes('lab'));
