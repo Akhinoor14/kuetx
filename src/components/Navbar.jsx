@@ -49,7 +49,7 @@ export function Navbar({ onMenuClick }) {
 
       {/* Mobile logo */}
       <div className="md:hidden">
-        <Wordmark height={24} />
+        <Wordmark height={30} />
       </div>
 
       {/* Desktop breadcrumb */}

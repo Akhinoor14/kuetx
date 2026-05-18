@@ -104,9 +104,9 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
   };
 
   return (
-    <div style={{ position: 'fixed', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(0,0,0,0.45)', zIndex: 9999, padding: 16 }}>
-      <form onSubmit={handleSubmit} style={{ background: 'var(--surface)', padding: 20, borderRadius: 16, width: 760, maxWidth: '100%', maxHeight: '92vh', overflowY: 'auto', boxShadow: '0 18px 50px rgba(0,0,0,0.28)' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, alignItems: 'flex-start', marginBottom: 16, flexWrap: 'wrap' }}>
+    <div style={{ position: 'fixed', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(0,0,0,0.45)', zIndex: 9999, padding: 14 }}>
+      <form onSubmit={handleSubmit} style={{ background: 'var(--surface)', padding: 18, borderRadius: 18, width: 840, maxWidth: '100%', maxHeight: '92vh', overflowY: 'auto', boxShadow: '0 18px 50px rgba(0,0,0,0.28)' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, alignItems: 'flex-start', marginBottom: 14, flexWrap: 'wrap' }}>
           <div>
             <h3 style={{ margin: 0, fontSize: 20 }}>Profile Setup</h3>
             <p style={{ margin: '6px 0 0', fontSize: 13, color: 'var(--muted)' }}>Fill this once. The values will be used across dashboard, syllabus, results, and term tools.</p>
@@ -114,10 +114,10 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
           <div style={{ fontSize: 12, color: 'var(--muted)', fontWeight: 700 }}>Required fields first</div>
         </div>
 
-        <div style={{ display: 'grid', gap: 14 }}>
+        <div style={{ display: 'grid', gap: 12 }}>
           <div style={sectionStyle}>
             <div style={{ fontSize: 12, fontWeight: 800, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 12 }}>Personal</div>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 14 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 12 }}>
               <div>
                 <label style={labelStyle}>Full Name</label>
                 <input placeholder="Your full name" value={form.name} onChange={handleChange('name')} style={fieldStyle} />
@@ -131,7 +131,7 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
 
           <div style={sectionStyle}>
             <div style={{ fontSize: 12, fontWeight: 800, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 12 }}>Academic</div>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 14 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 12 }}>
               <div>
                 <label style={labelStyle}>Department</label>
                 <select value={form.dept || autoCalculatedDept} onChange={handleChange('dept')} style={fieldStyle}>
@@ -175,7 +175,7 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
 
           <div style={sectionStyle}>
             <div style={{ fontSize: 12, fontWeight: 800, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 12 }}>Residence & Advisor</div>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 14 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 12 }}>
               <div>
                 <label style={labelStyle}>Residential Hall</label>
                 <select value={form.hallName || ''} onChange={handleChange('hallName')} style={fieldStyle}>
@@ -200,7 +200,7 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
                 <input type="tel" placeholder="e.g. 01700000000" value={form.advisorContact} onChange={handleChange('advisorContact')} inputMode="numeric" pattern="[0-9]*" style={fieldStyle} />
                 <div style={{ fontSize: 10, color: 'var(--muted)', marginTop: 4 }}>Advisor's contact number</div>
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '10px 12px', borderRadius: 10, border: '1px solid var(--border)', background: 'var(--surfaceGlassSoft)', gridColumn: 'span 2' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '10px 12px', borderRadius: 10, border: '1px solid var(--border)', background: 'var(--surfaceGlassSoft)' }}>
                 <div style={{ width: '100%' }}>
                   <label style={{ display: 'flex', gap: 8, alignItems: 'center', fontSize: 14, color: 'var(--text)', margin: 0, textTransform: 'none', letterSpacing: 0 }}>
                     <input type="checkbox" checked={!!form.isCR} onChange={handleChange('isCR')} /> Class Representative

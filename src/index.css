@@ -110,6 +110,21 @@ body {
   .main-content.compact { margin-left: 0; width: 100%; }
 }
 
+@media (max-width: 640px) {
+  .dashboard-hero {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+  }
+  .dashboard-hero-date {
+    min-width: 0;
+    align-items: flex-end;
+    text-align: right;
+  }
+  .dashboard-hero-date-lines {
+    text-align: right;
+  }
+}
+
 /* ── Card ────────────────────────────────────────────────────────────────── */
 .card {
   background:    var(--card);
@@ -2589,6 +2604,14 @@ input[type="range"]::-webkit-slider-thumb {
   .hero-mobile-container div[style*="padding: '0.6rem 0.75rem'"] {
     padding: 0.55rem 0.7rem !important;
     font-size: 0.75rem !important;
+  }
+
+  .dev-social-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+
+  .dev-social-portfolio {
+    grid-column: 1 / -1;
   }
 }
 

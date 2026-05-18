@@ -97,6 +97,9 @@ export default function Dashboard() {
   const prepLeaveLabel = currentTermTimeline ? `${shortDate(currentTermTimeline.prepLeaveStart)} → ${shortDate(currentTermTimeline.prepLeaveEnd)}` : '';
   const examStartLabel = currentTermTimeline?.examPhases?.[0]?.examDate ? shortDate(currentTermTimeline.examPhases[0].examDate) : '';
   const examEndLabel = currentTermTimeline?.examPhases?.length ? shortDate(currentTermTimeline.examPhases[currentTermTimeline.examPhases.length - 1].examDate) : '';
+  const today = new Date();
+  const todayDateLine = today.toLocaleDateString('en-BD', { day: 'numeric', month: 'long', year: 'numeric' });
+  const todayDayLine = today.toLocaleDateString('en-BD', { weekday: 'long' });
 
   useEffect(() => {
     syncProfileAcademicMeta({ profile, courses });
@@ -145,11 +148,10 @@ export default function Dashboard() {
 
           <div className="dashboard-hero-date" style={{ minWidth: 'clamp(200px, 90vw, 240px)', padding: 'clamp(16px, 3vw, 20px)', borderRadius: 16, border: '1px solid rgba(var(--accentRGB), 0.12)', background: 'linear-gradient(180deg, rgba(var(--accentRGB), 0.05), var(--surfaceGlassStrong))', whiteSpace: 'normal', alignSelf: 'stretch', boxShadow: '0 8px 22px rgba(12, 34, 64, 0.05)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: 10 }}>
             <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: '0.10em', textTransform: 'uppercase', color: 'var(--muted)' }}>Today</div>
-            <div style={{ fontSize: 'clamp(13px, 3vw, 15px)', fontWeight: 700, color: 'var(--text)', whiteSpace: 'normal', lineHeight: 1.4 }}>
-              {new Date().toLocaleDateString('en-BD', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}
+            <div className="dashboard-hero-date-lines" style={{ fontSize: 'clamp(13px, 3vw, 15px)', fontWeight: 700, color: 'var(--text)', whiteSpace: 'normal', lineHeight: 1.35, display: 'grid', gap: 4 }}>
+              <div>{todayDateLine}</div>
+              <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--muted)' }}>{todayDayLine}</div>
             </div>
-            <div style={{ height: 1, background: 'rgba(var(--accentRGB), 0.10)' }} />
-            <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--muted)' }}>{currentTermLabel || currentTerm || 'Term info'}</div>
           </div>
         </div>
       )}

@@ -1127,6 +1127,7 @@ export default function Schedule() {
   const currentSettingsText = slotList.join('\n');
   const showSettingsPanel = editingSettings;
   const [fullScreenOpen, setFullScreenOpen] = useState(false);
+  const isFullScreenForm = fullScreenOpen;
 
   const renderTimetable = (opts = {}) => {
     const tableStyle = { width: '100%', borderCollapse: 'collapse', fontSize: opts.large ? 15 : 13 };
@@ -1174,6 +1175,7 @@ export default function Schedule() {
                         rowSpan={rowSpan > 1 ? rowSpan : undefined}
                         className={`timetable-day-col${d === selectedDay ? ' selected-day' : ''}`}
                         onClick={isEmptyCell ? () => handleEmptyCellClick(d, p) : undefined}
+                        onDoubleClick={isEmptyCell ? () => openQuickAdd(d, p) : undefined}
                         title={isEmptyCell ? 'Double-click to add class' : undefined}
                         style={{
                           padding: '6px',
@@ -1183,6 +1185,7 @@ export default function Schedule() {
                           minHeight: 54,
                           background: breakSlot ? 'rgba(239,68,68,0.08)' : d === selectedDay ? 'rgba(59,130,246,0.035)' : 'transparent',
                           cursor: isEmptyCell ? 'pointer' : 'default',
+                          touchAction: 'manipulation',
                         }}
                       >
                         {dayItems.map(s => {
@@ -1193,6 +1196,7 @@ export default function Schedule() {
                             <div
                               key={s.id}
                               onClick={() => handleCellClick(s.id, s)}
+                              onDoubleClick={() => startEdit(s)}
                               title="Double-click to edit"
                               style={{
                                 padding: '8px 9px',
@@ -1212,6 +1216,7 @@ export default function Schedule() {
                                 userSelect: 'none',
                                 WebkitTouchCallout: 'none',
                                 WebkitUserSelect: 'none',
+                                touchAction: 'manipulation',
                               }}
                             >
                               <div style={{ fontWeight: 800, fontSize: 12, lineHeight: 1.35, letterSpacing: '0.01em', display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden', flex: 1 }}>
@@ -1463,6 +1468,7 @@ export default function Schedule() {
         {/* Assignments Preview Section */}
         {(() => {
           const dayAssignments = getUpcomingAssignmentsForDay(selectedDay);
+          if (dayAssignments.length === 0) return null;
           return (
             <div style={{ padding: 12, border: '1px solid var(--border)', borderRadius: 12, background: 'var(--bg)', marginTop: 12 }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
@@ -1475,75 +1481,71 @@ export default function Schedule() {
                   <FileText size={11} /> View all
                 </button>
               </div>
-              {dayAssignments.length === 0 ? (
-                <div style={{ fontSize: 12, color: 'var(--muted)' }}>No upcoming assignments.</div>
-              ) : (
-                <div style={{ display: 'grid', gap: 6 }}>
-                  {dayAssignments.map((assignment, index) => {
-                    const course = getCourse(assignment.courseId);
-                    const courseColor = getCourseColor(assignment.courseId, index);
-                    const priorityBg = assignment.priority === 'high' ? 'rgba(239,68,68,0.1)' : assignment.priority === 'medium' ? 'rgba(249,115,22,0.1)' : 'rgba(107,114,128,0.1)';
-                    const priorityColor = assignment.priority === 'high' ? 'rgb(239,68,68)' : assignment.priority === 'medium' ? 'rgb(249,115,22)' : 'rgb(107,114,128)';
-                    
-                    return (
-                      <div
-                        key={assignment.id}
-                        onClick={() => navigate('/assignments')}
-                        style={{
-                          padding: '10px 12px',
-                          borderRadius: 8,
-                          border: '1px solid var(--border)',
-                          background: 'var(--card)',
-                          cursor: 'pointer',
-                          transition: 'all 0.15s ease',
-                        }}
-                        onMouseEnter={e => e.currentTarget.style.borderColor = 'var(--accent)'}
-                        onMouseLeave={e => e.currentTarget.style.borderColor = 'var(--border)'}
-                      >
-                        <div style={{ display: 'flex', alignItems: 'flex-start', gap: 8, marginBottom: 4 }}>
-                          <div
-                            style={{
-                              padding: '2px 8px',
-                              borderRadius: 4,
-                              background: courseColor.bg,
-                              border: `1px solid ${courseColor.border}`,
-                              color: courseColor.text,
-                              fontSize: 11,
-                              fontWeight: 700,
-                              whiteSpace: 'nowrap',
-                              flexShrink: 0,
-                            }}
-                          >
-                            {course?.code || 'Unknown'}
+              <div style={{ display: 'grid', gap: 6 }}>
+                {dayAssignments.map((assignment, index) => {
+                  const course = getCourse(assignment.courseId);
+                  const courseColor = getCourseColor(assignment.courseId, index);
+                  const priorityBg = assignment.priority === 'high' ? 'rgba(239,68,68,0.1)' : assignment.priority === 'medium' ? 'rgba(249,115,22,0.1)' : 'rgba(107,114,128,0.1)';
+                  const priorityColor = assignment.priority === 'high' ? 'rgb(239,68,68)' : assignment.priority === 'medium' ? 'rgb(249,115,22)' : 'rgb(107,114,128)';
+                  
+                  return (
+                    <div
+                      key={assignment.id}
+                      onClick={() => navigate('/assignments')}
+                      style={{
+                        padding: '10px 12px',
+                        borderRadius: 8,
+                        border: '1px solid var(--border)',
+                        background: 'var(--card)',
+                        cursor: 'pointer',
+                        transition: 'all 0.15s ease',
+                      }}
+                      onMouseEnter={e => e.currentTarget.style.borderColor = 'var(--accent)'}
+                      onMouseLeave={e => e.currentTarget.style.borderColor = 'var(--border)'}
+                    >
+                      <div style={{ display: 'flex', alignItems: 'flex-start', gap: 8, marginBottom: 4 }}>
+                        <div
+                          style={{
+                            padding: '2px 8px',
+                            borderRadius: 4,
+                            background: courseColor.bg,
+                            border: `1px solid ${courseColor.border}`,
+                            color: courseColor.text,
+                            fontSize: 11,
+                            fontWeight: 700,
+                            whiteSpace: 'nowrap',
+                            flexShrink: 0,
+                          }}
+                        >
+                          {course?.code || 'Unknown'}
+                        </div>
+                        <div style={{ flex: 1, minWidth: 0 }}>
+                          <div style={{ fontWeight: 600, fontSize: 12, color: 'var(--text)', marginBottom: 2 }}>
+                            {assignment.title}
                           </div>
-                          <div style={{ flex: 1, minWidth: 0 }}>
-                            <div style={{ fontWeight: 600, fontSize: 12, color: 'var(--text)', marginBottom: 2 }}>
-                              {assignment.title}
-                            </div>
-                            <div style={{ display: 'flex', gap: 8, alignItems: 'center', fontSize: 11 }}>
-                              <span style={{ color: assignment.isToday ? 'rgb(239,68,68)' : 'var(--muted)' }}>
-                                📅 {assignment.isToday ? 'Due today' : `${assignment.daysLeft} day${assignment.daysLeft !== 1 ? 's' : ''} left`}
-                              </span>
-                              <span
-                                style={{
-                                  padding: '2px 6px',
-                                  borderRadius: 3,
-                                  background: priorityBg,
-                                  color: priorityColor,
-                                  fontSize: 10,
-                                  fontWeight: 600,
-                                }}
-                              >
-                                {assignment.priority}
-                              </span>
-                            </div>
+                          <div style={{ display: 'flex', gap: 8, alignItems: 'center', fontSize: 11 }}>
+                            <span style={{ color: assignment.isToday ? 'rgb(239,68,68)' : 'var(--muted)' }}>
+                              📅 {assignment.isToday ? 'Due today' : `${assignment.daysLeft} day${assignment.daysLeft !== 1 ? 's' : ''} left`}
+                            </span>
+                            <span
+                              style={{
+                                padding: '2px 6px',
+                                borderRadius: 3,
+                                background: priorityBg,
+                                color: priorityColor,
+                                fontSize: 10,
+                                fontWeight: 600,
+                              }}
+                            >
+                              {assignment.priority}
+                            </span>
                           </div>
                         </div>
                       </div>
-                    );
-                  })}
-                </div>
-              )}
+                    </div>
+                  );
+                })}
+              </div>
             </div>
           );
         })()}
@@ -1734,7 +1736,7 @@ export default function Schedule() {
         {renderTimetable()}
       </div>
       {fullScreenOpen && (
-        <div className="fullscreen-overlay" onClick={() => setFullScreenOpen(false)}>
+        <div className="fullscreen-overlay" style={{ zIndex: 1100 }} onClick={() => setFullScreenOpen(false)}>
           <div className="fullscreen-content fullscreen-rotated" onClick={e => e.stopPropagation()}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 10, marginBottom: 12 }}>
               <div>
@@ -2148,25 +2150,30 @@ export default function Schedule() {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          zIndex: 1000,
+          zIndex: 3000,
           padding: 12,
         }} onClick={closeQuickForm}>
           <div style={{
             background: 'var(--card)',
-            borderRadius: 12,
+            borderRadius: 14,
             border: '1px solid var(--border)',
-            padding: 20,
-            maxWidth: 400,
-            width: '100%',
+            padding: isFullScreenForm ? 24 : 20,
+            maxWidth: isFullScreenForm ? '95vh' : 420,
+            width: isFullScreenForm ? 'min(980px, 95vh)' : '100%',
+            maxHeight: isFullScreenForm ? '95vw' : '85vh',
+            overflowY: 'auto',
             boxShadow: '0 10px 40px rgba(0,0,0,0.2)',
+            zIndex: 3010,
+            transform: isFullScreenForm ? 'rotate(90deg)' : 'none',
+            transformOrigin: 'center',
           }} onClick={e => e.stopPropagation()}>
             <div style={{ fontWeight: 700, fontSize: 15, marginBottom: 16 }}>
               {quickFormEditingId ? 'Quick Edit' : 'Quick Add'} · {quickFormData.day} · {slotPreview(quickFormData.slot)}
             </div>
             
-            <div style={{ display: 'grid', gap: 12, marginBottom: 16 }}>
+            <div style={{ display: 'grid', gap: 12, marginBottom: 16, gridTemplateColumns: isFullScreenForm ? 'repeat(3, minmax(0, 1fr))' : '1fr', columnGap: 16 }}>
               {/* Course */}
-              <div>
+              <div style={isFullScreenForm ? { gridColumn: 'span 2' } : undefined}>
                 <label style={{ fontSize: 12, fontWeight: 600 }}>Course</label>
                 <select
                   value={quickFormData.courseId}
@@ -2178,7 +2185,7 @@ export default function Schedule() {
                 </select>
               </div>
 
-              <div>
+              <div style={isFullScreenForm ? { gridColumn: 'span 1' } : undefined}>
                 <label style={{ fontSize: 12, fontWeight: 600 }}>Show As (Grid Name)</label>
                 <input
                   type="text"
@@ -2194,7 +2201,7 @@ export default function Schedule() {
               </div>
 
               {/* Type */}
-              <div>
+              <div style={isFullScreenForm ? { gridColumn: 'span 1' } : undefined}>
                 <label style={{ fontSize: 12, fontWeight: 600 }}>Type</label>
                 <select
                   value={quickFormData.type}
@@ -2208,7 +2215,7 @@ export default function Schedule() {
                 </select>
               </div>
 
-              <div>
+              <div style={isFullScreenForm ? { gridColumn: 'span 1' } : undefined}>
                 <label style={{ fontSize: 12, fontWeight: 600 }}>Time</label>
                 <select
                   value={quickFormData.slot}
@@ -2220,7 +2227,7 @@ export default function Schedule() {
               </div>
 
               {/* Teacher */}
-              <div style={{ gridColumn: 'span 2' }}>
+              <div style={isFullScreenForm ? { gridColumn: 'span 2' } : undefined}>
                 <label style={{ fontSize: 12, fontWeight: 600 }}>Teacher (Select One)</label>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: 8 }}>
                   <select
@@ -2254,7 +2261,7 @@ export default function Schedule() {
               </div>
 
               {/* Room */}
-              <div>
+              <div style={isFullScreenForm ? { gridColumn: 'span 1' } : undefined}>
                 <label style={{ fontSize: 12, fontWeight: 600 }}>Room</label>
                 <input
                   type="text"
@@ -2266,7 +2273,7 @@ export default function Schedule() {
               </div>
 
               {/* Note */}
-              <div>
+              <div style={isFullScreenForm ? { gridColumn: 'span 3' } : undefined}>
                 <label style={{ fontSize: 12, fontWeight: 600 }}>Note</label>
                 <input
                   type="text"

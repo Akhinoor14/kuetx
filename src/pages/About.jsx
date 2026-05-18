@@ -279,28 +279,29 @@ export default function About() {
             </div>
             
             <div style={{ display: 'grid', gap: '0.75rem' }}>
-              <div style={{ display: 'flex', gap: '0.6rem', flexWrap: 'wrap' }}>
-                <a href="mailto:mdakhinoorislam.official.2005@gmail.com" title="Email"
-                  style={{ flex: '1 1 auto', minWidth: '110px', padding: '0.75rem 1rem', borderRadius: '12px', background: 'rgba(239,68,68,.12)', border: '1px solid rgba(239,68,68,.20)', color: '#b91c1c', textDecoration: 'none', fontSize: '0.9rem', fontWeight: 700, textAlign: 'center' }}>
-                  Email
-                </a>
-                <a href="https://wa.me/8801724812042" target="_blank" rel="noopener noreferrer" title="WhatsApp"
-                  style={{ flex: '1 1 auto', minWidth: '110px', padding: '0.75rem 1rem', borderRadius: '12px', background: 'rgba(34,197,94,.12)', border: '1px solid rgba(34,197,94,.20)', color: 'var(--text)', textDecoration: 'none', fontSize: '0.9rem', fontWeight: 700, textAlign: 'center' }}>
-                  WhatsApp
-                </a>
-              </div>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', gap: '0.6rem' }}>
-                <a href="https://a3kmstudio.vercel.app/Portfolio_Clients/Mr_Akhinoor_Portfolio" target="_blank" rel="noopener noreferrer" style={{ padding: '0.75rem 1rem', borderRadius: '12px', background: 'rgba(14,165,233,.12)', border: '1px solid rgba(14,165,233,.18)', color: 'var(--text)', textDecoration: 'none', fontSize: '0.9rem', fontWeight: 700, textAlign: 'center' }}>
+              <div className="dev-social-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '0.6rem' }}>
+                <a href="https://a3kmstudio.vercel.app/Portfolio_Clients/Mr_Akhinoor_Portfolio" target="_blank" rel="noopener noreferrer" className="dev-social-portfolio" style={{ padding: '0.75rem 1rem', borderRadius: '12px', background: 'rgba(14,165,233,.12)', border: '1px solid rgba(14,165,233,.18)', color: 'var(--text)', textDecoration: 'none', fontSize: '0.9rem', fontWeight: 700, textAlign: 'center' }}>
                   Portfolio
                 </a>
                 <a href="https://github.com/Akhinoor14" target="_blank" rel="noopener noreferrer" style={{ padding: '0.75rem 1rem', borderRadius: '12px', background: 'rgba(51,65,85,.12)', border: '1px solid rgba(51,65,85,.16)', color: 'var(--text)', textDecoration: 'none', fontSize: '0.9rem', fontWeight: 700, textAlign: 'center' }}>
                   GitHub
+                </a>
+                <a href="https://www.linkedin.com/in/mdakhinoorislam/" target="_blank" rel="noopener noreferrer" style={{ padding: '0.75rem 1rem', borderRadius: '12px', background: 'rgba(37,99,235,.12)', border: '1px solid rgba(37,99,235,.18)', color: 'var(--text)', textDecoration: 'none', fontSize: '0.9rem', fontWeight: 700, textAlign: 'center' }}>
+                  LinkedIn
                 </a>
                 <a href="https://www.youtube.com/@noor_academy_study" target="_blank" rel="noopener noreferrer" style={{ padding: '0.75rem 1rem', borderRadius: '12px', background: 'rgba(239,68,68,.12)', border: '1px solid rgba(239,68,68,.18)', color: 'var(--text)', textDecoration: 'none', fontSize: '0.9rem', fontWeight: 700, textAlign: 'center' }}>
                   YouTube
                 </a>
                 <a href="https://www.facebook.com/mdakhinoorislam" target="_blank" rel="noopener noreferrer" style={{ padding: '0.75rem 1rem', borderRadius: '12px', background: 'rgba(59,89,152,.12)', border: '1px solid rgba(59,89,152,.18)', color: 'var(--text)', textDecoration: 'none', fontSize: '0.9rem', fontWeight: 700, textAlign: 'center' }}>
                   Facebook
+                </a>
+                <a href="mailto:mdakhinoorislam.official.2005@gmail.com" title="Email"
+                  style={{ padding: '0.75rem 1rem', borderRadius: '12px', background: 'rgba(239,68,68,.12)', border: '1px solid rgba(239,68,68,.20)', color: '#b91c1c', textDecoration: 'none', fontSize: '0.9rem', fontWeight: 700, textAlign: 'center' }}>
+                  Email
+                </a>
+                <a href="https://wa.me/8801724812042" target="_blank" rel="noopener noreferrer" title="WhatsApp"
+                  style={{ padding: '0.75rem 1rem', borderRadius: '12px', background: 'rgba(34,197,94,.12)', border: '1px solid rgba(34,197,94,.20)', color: 'var(--text)', textDecoration: 'none', fontSize: '0.9rem', fontWeight: 700, textAlign: 'center' }}>
+                  WhatsApp
                 </a>
               </div>
               <div style={{ display: 'grid', gap: '0.5rem' }}>

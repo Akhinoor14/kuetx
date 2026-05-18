@@ -286,6 +286,7 @@ export default function ClassManagement() {
   const [courseTeacherDialogState, setCourseTeacherDialogState] = useState({ open: false, courseId: '', source: null });
   const [allKnownTeachers, setAllKnownTeachers] = useState(() => getUniqueTeacherNames(schedule));
   const lastClickRef = useRef({});
+  const isFullScreenForm = fullScreenOpen;
 
   const getCourse = (id) => {
     const allCourses = store.get('courses') || [];
@@ -658,6 +659,7 @@ export default function ClassManagement() {
                         rowSpan={rowSpan > 1 ? rowSpan : undefined}
                         className={`timetable-day-col${d === selectedDay ? ' selected-day' : ''}`}
                         onClick={isEmptyCell ? () => handleEmptyCellClick(d, p) : undefined}
+                        onDoubleClick={isEmptyCell ? () => openQuickAdd(d, p) : undefined}
                         title={isEmptyCell ? 'Double-click to add class' : undefined}
                         style={{
                           padding: '6px',
@@ -667,6 +669,7 @@ export default function ClassManagement() {
                           minHeight: 54,
                           background: breakSlot ? 'rgba(239,68,68,0.08)' : d === selectedDay ? 'rgba(59,130,246,0.035)' : 'transparent',
                           cursor: isEmptyCell ? 'pointer' : 'default',
+                          touchAction: 'manipulation',
                         }}
                       >
                         {dayItems.map(s => {
@@ -675,6 +678,7 @@ export default function ClassManagement() {
                           return (
                             <div
                               key={s.id}
+                              onDoubleClick={() => startEdit(s)}
                               onClick={() => handleCellClick(s.id, s)}
                               title="Double-click to edit"
                               style={{
@@ -693,6 +697,7 @@ export default function ClassManagement() {
                                 position: 'relative',
                                 cursor: 'pointer',
                                 userSelect: 'none',
+                                touchAction: 'manipulation',
                               }}
                             >
                               <div style={{ fontWeight: 800, fontSize: 12, lineHeight: 1.35, letterSpacing: '0.01em', display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden', flex: 1 }}>
@@ -874,20 +879,24 @@ export default function ClassManagement() {
         }} onClick={closeQuickForm}>
           <div style={{
             background: 'var(--card)',
-            borderRadius: 12,
+            borderRadius: 14,
             border: '1px solid var(--border)',
-            padding: 20,
-            maxWidth: 400,
-            width: '100%',
+            padding: isFullScreenForm ? 24 : 20,
+            maxWidth: isFullScreenForm ? '95vh' : 420,
+            width: isFullScreenForm ? 'min(980px, 95vh)' : '100%',
+            maxHeight: isFullScreenForm ? '95vw' : '85vh',
+            overflowY: 'auto',
             boxShadow: '0 10px 40px rgba(0,0,0,0.2)',
             zIndex: 3010,
+            transform: isFullScreenForm ? 'rotate(90deg)' : 'none',
+            transformOrigin: 'center',
           }} onClick={e => e.stopPropagation()}>
             <div style={{ fontWeight: 700, fontSize: 15, marginBottom: 16 }}>
               {quickFormEditingId ? 'Quick Edit' : 'Quick Add'} · {quickFormData.day} · {slotPreview(quickFormData.slot)}
             </div>
 
-            <div style={{ display: 'grid', gap: 12, marginBottom: 16 }}>
-              <div>
+            <div style={{ display: 'grid', gap: 12, marginBottom: 16, gridTemplateColumns: isFullScreenForm ? 'repeat(3, minmax(0, 1fr))' : '1fr', columnGap: 16 }}>
+              <div style={isFullScreenForm ? { gridColumn: 'span 2' } : undefined}>
                 <label style={{ fontSize: 12, fontWeight: 600 }}>Course</label>
                 <select
                   value={quickFormData.courseId}
@@ -899,7 +908,7 @@ export default function ClassManagement() {
                 </select>
               </div>
 
-              <div>
+              <div style={isFullScreenForm ? { gridColumn: 'span 1' } : undefined}>
                 <label style={{ fontSize: 12, fontWeight: 600 }}>Show As (Grid Name)</label>
                 <input
                   type="text"
@@ -914,7 +923,7 @@ export default function ClassManagement() {
                 />
               </div>
 
-              <div>
+              <div style={isFullScreenForm ? { gridColumn: 'span 1' } : undefined}>
                 <label style={{ fontSize: 12, fontWeight: 600 }}>Type</label>
                 <select
                   value={quickFormData.type}
@@ -928,7 +937,7 @@ export default function ClassManagement() {
                 </select>
               </div>
 
-              <div>
+              <div style={isFullScreenForm ? { gridColumn: 'span 1' } : undefined}>
                 <label style={{ fontSize: 12, fontWeight: 600 }}>Time</label>
                 <select
                   value={quickFormData.slot}
@@ -939,7 +948,7 @@ export default function ClassManagement() {
                 </select>
               </div>
 
-              <div>
+              <div style={isFullScreenForm ? { gridColumn: 'span 2' } : undefined}>
                 <label style={{ fontSize: 12, fontWeight: 600 }}>Teacher (Select One)</label>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: 8 }}>
                   <select
@@ -972,7 +981,7 @@ export default function ClassManagement() {
                 )}
               </div>
 
-              <div>
+              <div style={isFullScreenForm ? { gridColumn: 'span 1' } : undefined}>
                 <label style={{ fontSize: 12, fontWeight: 600 }}>Room</label>
                 <input
                   type="text"
@@ -983,7 +992,7 @@ export default function ClassManagement() {
                 />
               </div>
 
-              <div>
+              <div style={isFullScreenForm ? { gridColumn: 'span 3' } : undefined}>
                 <label style={{ fontSize: 12, fontWeight: 600 }}>Note</label>
                 <input
                   type="text"
