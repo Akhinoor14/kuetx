@@ -23,6 +23,8 @@ export default function Settings() {
   const [msg, setMsg] = useState('');
   const [msgType, setMsgType] = useState('success');
   const [confirmReset, setConfirmReset] = useState(false);
+  const [confirmText, setConfirmText] = useState('');
+  const CONFIRM_PHRASE = 'delete all my data';
   const [isOnline, setIsOnline] = useState(navigator.onLine);
   const [autoBackup, setAutoBackupState] = useState(() => store.get('autoBackup') ?? true);
   const [lastBackup, setLastBackup] = useState(() => store.get('lastBackupTime') || null);
@@ -85,6 +87,7 @@ export default function Settings() {
     store.clearAll();
     flash('✓ All data cleared. Reloading...');
     setConfirmReset(false);
+    setConfirmText('');
     setTimeout(() => window.location.reload(), 1200);
   };
 
@@ -216,18 +219,53 @@ export default function Settings() {
       <div className="card" style={{ marginBottom: 14, borderColor: 'var(--danger)' }}>
         <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 12, color: 'var(--danger)' }}>⚠️ Danger Zone</div>
         {!confirmReset ? (
-          <button className="btn btn-ghost" onClick={() => setConfirmReset(true)}
+          <button className="btn btn-ghost" onClick={() => { setConfirmReset(true); setConfirmText(''); }}
             style={{ justifyContent: 'flex-start', color: 'var(--danger)', borderColor: 'var(--danger)' }}>
             <Trash2 size={14} /> Reset All Data
           </button>
         ) : (
           <div>
-            <p style={{ fontSize: 13, color: 'var(--danger)', marginBottom: 10 }}>
-              This will permanently erase everything. Download a backup first!
+            <p style={{ fontSize: 13, color: 'var(--danger)', marginBottom: 12 }}>
+              ⚠️ This will <strong>permanently erase everything</strong>. Download a backup first!
             </p>
+            <div style={{ marginBottom: 12, padding: '10px 12px', background: 'rgba(239, 68, 68, 0.05)', borderRadius: 8, border: '1px solid rgba(239, 68, 68, 0.15)' }}>
+              <div style={{ fontSize: 12, fontWeight: 600, marginBottom: 8, color: 'var(--danger)' }}>Type to confirm:</div>
+              <input
+                type="text"
+                value={confirmText}
+                onChange={e => setConfirmText(e.target.value)}
+                onPaste={e => e.preventDefault()}
+                placeholder={`Type: "${CONFIRM_PHRASE}"`}
+                style={{
+                  width: '100%',
+                  minHeight: '44px',
+                  fontSize: '14px',
+                  padding: '10px 12px',
+                  borderRadius: '8px',
+                  border: confirmText === CONFIRM_PHRASE ? '2px solid var(--success)' : '1.5px solid var(--border)',
+                  background: '#fff',
+                  marginBottom: 8,
+                }}
+              />
+              <div style={{ fontSize: 11, color: 'var(--muted)' }}>
+                Type <code style={{ background: 'var(--bg)', padding: '2px 6px', borderRadius: 4 }}>"{CONFIRM_PHRASE}"</code> exactly. Copy-paste is blocked for security.
+              </div>
+            </div>
             <div style={{ display: 'flex', gap: 8 }}>
-              <button className="btn btn-danger" onClick={resetAll}>Yes, delete everything</button>
-              <button className="btn btn-ghost" onClick={() => setConfirmReset(false)}>Cancel</button>
+              <button
+                className="btn btn-danger"
+                onClick={resetAll}
+                disabled={confirmText !== CONFIRM_PHRASE}
+                style={{
+                  opacity: confirmText === CONFIRM_PHRASE ? 1 : 0.5,
+                  cursor: confirmText === CONFIRM_PHRASE ? 'pointer' : 'not-allowed',
+                }}
+              >
+                Yes, delete everything
+              </button>
+              <button className="btn btn-ghost" onClick={() => { setConfirmReset(false); setConfirmText(''); }}>
+                Cancel
+              </button>
             </div>
           </div>
         )}
