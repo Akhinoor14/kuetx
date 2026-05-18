@@ -250,6 +250,407 @@ h3 { font-size: 15px; font-weight: 600; }
   box-sizing: border-box;
 }
 
+.assignments-page {
+  position: relative;
+  font-family: 'Manrope', 'Sora', 'Hind Siliguri', system-ui, -apple-system, sans-serif;
+  background: linear-gradient(180deg, #f7f7f4 0%, #f4f6f2 100%);
+}
+
+.assignments-page::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(900px 360px at 10% 0%, rgba(22, 163, 74, 0.08), transparent 62%),
+    radial-gradient(760px 320px at 92% 0%, rgba(59, 130, 246, 0.06), transparent 58%),
+    radial-gradient(720px 380px at 50% 100%, rgba(245, 158, 11, 0.05), transparent 58%);
+  z-index: 0;
+}
+
+.assignments-page > * {
+  position: relative;
+  z-index: 1;
+}
+
+.assignments-hero {
+  padding: 18px 0 8px;
+}
+
+.assignments-hero-inner {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 24px 20px;
+  border-radius: 24px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(255, 255, 255, 0.78));
+  border: 1px solid rgba(var(--accentRGB), 0.10);
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.06);
+  backdrop-filter: blur(10px);
+}
+
+.dark .assignments-hero-inner {
+  background: linear-gradient(180deg, rgba(18, 18, 18, 0.86), rgba(18, 18, 18, 0.72));
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.assignments-hero-copy {
+  min-width: 0;
+  max-width: 720px;
+}
+
+.assignments-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.assignments-title {
+  margin: 0 0 8px;
+  font-size: 30px;
+  line-height: 1.06;
+  letter-spacing: -0.05em;
+  font-weight: 800;
+  color: var(--text);
+}
+
+.assignments-subtitle {
+  margin: 0;
+  max-width: 58ch;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+.assignments-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.assignments-stat {
+  min-width: 180px;
+  padding: 12px 14px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid rgba(var(--accentRGB), 0.10);
+  background: rgba(255, 255, 255, 0.72);
+}
+
+.dark .assignments-stat {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.assignments-stat-pending {
+  border-color: rgba(var(--accentRGB), 0.14);
+}
+
+.assignments-stat-done {
+  border-color: rgba(34, 197, 94, 0.16);
+}
+
+.assignments-stat-icon {
+  font-size: 28px;
+  line-height: 1;
+}
+
+.assignments-stat-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.assignments-stat-value {
+  font-size: 22px;
+  font-weight: 900;
+  color: var(--text);
+}
+
+.assignments-stat-done .assignments-stat-value {
+  color: rgb(34, 197, 94);
+}
+
+.assignments-hero-actions {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+  min-width: 0;
+}
+
+.assignments-add-btn {
+  padding: 12px 18px;
+  border-radius: 14px;
+  font-size: 14px;
+  font-weight: 800;
+  box-shadow: 0 10px 24px rgba(var(--accentRGB), 0.18);
+}
+
+.assignments-content {
+  padding-top: 18px;
+}
+
+/* ── Attendance: unified card chrome & hero polish ─────────────────────── */
+.attendance-hero {
+  margin-bottom: 18px;
+}
+.attendance-hero-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 18px;
+  border-radius: 16px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.96), rgba(255,255,255,0.90));
+  border: 1px solid rgba(var(--accentRGB), 0.06);
+  box-shadow: 0 12px 30px rgba(12,34,64,0.05);
+  backdrop-filter: blur(6px);
+}
+.dark .attendance-hero-inner {
+  background: linear-gradient(180deg, rgba(18,18,18,0.84), rgba(18,18,18,0.72));
+  border-color: rgba(255,255,255,0.06);
+}
+
+.attendance-hero-copy { min-width: 0; }
+.attendance-hero-chip {
+  display: inline-flex; align-items: center; gap:8px;
+  padding: 6px 10px; border-radius: 999px; font-weight:700; font-size:13px;
+  background: var(--inputBg); color: var(--muted); border: 1px solid var(--border);
+}
+
+.attendance-summary-grid {
+  display: flex;
+  gap: 12px;
+  align-items: stretch;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  padding: 8px 4px;
+}
+
+.attendance-summary-card {
+  min-width: 220px;
+  max-width: 320px;
+  background: linear-gradient(180deg, var(--card), rgba(255,255,255,0.96));
+  border-radius: 12px;
+  border: 1px solid rgba(0,0,0,0.04);
+  padding: 14px 16px;
+  box-shadow: 0 6px 18px rgba(12,34,64,0.04);
+  transition: transform 180ms ease, box-shadow 180ms ease;
+  display: flex; flex-direction: column; gap:8px;
+}
+.attendance-summary-card:hover { transform: translateY(-4px); box-shadow: 0 18px 40px rgba(12,34,64,0.08); }
+
+.attendance-summary-card .card-top { display:flex; align-items:center; justify-content:space-between; gap:8px; }
+.attendance-summary-card .course { font-weight:700; font-size:14px; color:var(--text); }
+.attendance-summary-card .pct { font-weight:900; font-size:20px; color:var(--text); }
+.attendance-summary-card .meta { font-size:12px; color:var(--muted); }
+
+.attendance-summary-card .progress { margin-top:8px; height:10px; border-radius:999px; background:var(--border); overflow:hidden; }
+.attendance-summary-card .progress .progress-fill { height:100%; border-radius:999px; transition: width 420ms cubic-bezier(0.2,0,0.2,1); }
+.attendance-summary-card .progress .fill-success { background: linear-gradient(90deg, rgba(34,197,94,0.98), rgba(34,197,94,0.9)); }
+.attendance-summary-card .progress .fill-warning { background: linear-gradient(90deg, rgba(217,119,6,0.98), rgba(217,119,6,0.9)); }
+.attendance-summary-card .progress .fill-danger  { background: linear-gradient(90deg, rgba(220,38,38,0.98), rgba(220,38,38,0.9)); }
+
+/* subtle muted description area */
+.attendance-summary-card .note { font-size:12px; color:var(--muted); margin-top:6px; }
+
+@media (max-width: 900px) {
+  .attendance-summary-grid { gap: 10px; }
+  .attendance-summary-card { min-width: 200px; }
+  .attendance-hero-inner { padding: 14px; border-radius: 12px; }
+}
+
+
+.assignments-filters {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+
+.attendance-page {
+  position: relative;
+  font-family: 'Manrope', 'Sora', 'Hind Siliguri', system-ui, -apple-system, sans-serif;
+  background: linear-gradient(180deg, #f7f7f4 0%, #f3f6f5 100%);
+}
+
+.attendance-page::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(860px 340px at 10% 0%, rgba(22, 163, 74, 0.08), transparent 62%),
+    radial-gradient(780px 320px at 88% 0%, rgba(59, 130, 246, 0.06), transparent 58%),
+    radial-gradient(700px 360px at 50% 100%, rgba(245, 158, 11, 0.05), transparent 58%);
+  z-index: 0;
+}
+
+.attendance-page > * {
+  position: relative;
+  z-index: 1;
+}
+
+.attendance-hero {
+  padding-top: 6px;
+}
+
+.attendance-hero-shell {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 22px 20px;
+  border-radius: 24px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(255, 255, 255, 0.78));
+  border: 1px solid rgba(var(--accentRGB), 0.10);
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.06);
+  backdrop-filter: blur(10px);
+}
+
+.dark .attendance-hero-shell {
+  background: linear-gradient(180deg, rgba(18, 18, 18, 0.86), rgba(18, 18, 18, 0.72));
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.attendance-hero-copy {
+  min-width: 0;
+  max-width: 720px;
+}
+
+.attendance-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.attendance-title {
+  margin: 0 0 8px;
+  font-size: 30px;
+  line-height: 1.06;
+  letter-spacing: -0.05em;
+  font-weight: 800;
+  color: var(--text);
+}
+
+.attendance-subtitle {
+  margin: 0;
+  max-width: 60ch;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+.attendance-hero-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+  min-width: 0;
+}
+
+.attendance-holiday-btn {
+  padding: 11px 16px;
+  border-radius: 14px;
+  font-size: 13px;
+  font-weight: 800;
+  box-shadow: 0 10px 24px rgba(var(--accentRGB), 0.16);
+}
+
+.attendance-hero-chip {
+  padding: 9px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(var(--accentRGB), 0.10);
+  background: rgba(var(--accentRGB), 0.05);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.attendance-overview-block {
+  margin-bottom: 16px;
+}
+
+.attendance-overview-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.attendance-overview-title {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.2;
+  font-weight: 800;
+  color: var(--text);
+}
+
+.attendance-overview-note {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.attendance-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 10px;
+}
+
+.attendance-summary-card {
+  padding: 12px;
+  border-radius: 14px;
+  transition: transform 160ms ease, box-shadow 160ms ease;
+}
+
+.attendance-summary-card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.04);
+}
+
+.attendance-summary-empty {
+  padding: 14px 16px;
+  border-radius: 14px;
+  border: 1px dashed rgba(var(--accentRGB), 0.18);
+  background: rgba(var(--accentRGB), 0.04);
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.attendance-holiday-note {
+  margin-top: 12px;
+  padding: 10px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(var(--accentRGB), 0.08);
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.dark .attendance-holiday-note {
+  background: rgba(255, 255, 255, 0.04);
+}
+
 .dashboard-page {
   position: relative;
   font-family: 'Manrope', 'Sora', 'Hind Siliguri', system-ui, -apple-system, sans-serif;
@@ -359,6 +760,72 @@ h3 { font-size: 15px; font-weight: 600; }
     padding: 14px !important;
   }
 
+  .assignments-hero {
+    padding: 12px 0 4px;
+  }
+
+  .assignments-hero-inner {
+    padding: 18px 16px;
+    border-radius: 20px;
+    flex-direction: column;
+  }
+
+  .assignments-title {
+    font-size: 26px;
+  }
+
+  .assignments-stat {
+    min-width: 0;
+    flex: 1 1 150px;
+  }
+
+  .assignments-hero-actions {
+    width: 100%;
+  }
+
+  .assignments-add-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .assignments-filters {
+    gap: 8px;
+  }
+
+  .attendance-hero-shell {
+    padding: 18px 16px;
+    border-radius: 20px;
+    flex-direction: column;
+  }
+
+  .attendance-hero-actions {
+    width: 100%;
+    align-items: flex-start;
+  }
+
+  .attendance-holiday-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .attendance-hero-chip {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .attendance-overview-head {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .attendance-overview-note {
+    font-size: 10px;
+  }
+
+  .attendance-summary-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
   .dashboard-page .dashboard-roadmap-desktop-visual {
     height: 64px !important;
     margin-bottom: 6px !important;
@@ -386,6 +853,14 @@ h3 { font-size: 15px; font-weight: 600; }
 
   .dashboard-page .dashboard-stats-grid .card {
     min-height: 120px;
+  }
+
+  .attendance-title {
+    font-size: 24px;
+  }
+
+  .attendance-summary-grid {
+    grid-template-columns: 1fr;
   }
 
   .dashboard-page .dashboard-roadmap .card {

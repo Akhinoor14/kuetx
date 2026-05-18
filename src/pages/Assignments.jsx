@@ -156,231 +156,264 @@ export default function Assignments() {
 
   const priorityColor = { high: 'tag-red', medium: 'tag-yellow', low: 'tag-gray' };
 
-  return (
-    <div className="page-enter page-container">
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-        <div>
-          <h1 style={{ fontSize: 18, fontWeight: 700 }}>Assignments</h1>
-          <p style={{ fontSize: 12, color: 'var(--muted)' }}>{items.filter(a => a.status !== 'done').length} pending</p>
-        </div>
-        <button className="btn btn-primary" onClick={() => setAdding(true)}><Plus size={13} /> Add</button>
-      </div>
+  const pendingCount = items.filter(a => a.status !== 'done').length;
+  const doneCount = items.filter(a => a.status === 'done').length;
 
-      {adding && (
-        <div className="card" style={{ marginBottom: 16, borderColor: 'var(--accent)' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 10, marginBottom: 12 }}>
-            <div style={{ fontWeight: 600, fontSize: 13 }}>Add Assignment</div>
-            <button className="btn btn-ghost" onClick={() => { setAdding(false); setForm({ courseId: '', teacherName: '', titles: [''], title: '', desc: '', due: '', status: 'pending', priority: 'medium' }); }} style={{ padding: '4px 8px' }}>Close</button>
-          </div>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 10 }}>
-            <div>
-              <label>Course</label>
-              <select value={form.courseId} onChange={e => handleCourseChange(e.target.value)}>
-                <option value="">Select course</option>
-                {currentTermCourses.map(c => <option key={c.id} value={c.id}>{c.code} — {c.name}</option>)}
-              </select>
-            </div>
-            <div>
-              <label>Priority</label>
-              <select value={form.priority} onChange={e => set('priority', e.target.value)}>
-                <option value="high">High</option>
-                <option value="medium">Medium</option>
-                <option value="low">Low</option>
-              </select>
-            </div>
-          </div>
-          <div style={{ display: 'grid', gap: 10, marginBottom: 10 }}>
-            {form.titles.map((title, index) => (
-              <div key={index} style={{ display: 'grid', gap: 6 }}>
-                <label>{index === 0 ? 'Assignment Title' : `Title ${index + 1}`}</label>
-                <div style={{ display: 'flex', gap: 8, alignItems: 'stretch' }}>
-                  <input
-                    value={title}
-                    onChange={e => setTitleLine(index, e.target.value)}
-                    placeholder={index === 0 ? 'Lab Report #3 — Linked List' : `Another title`}
-                    style={{ flex: 1, minHeight: 44, borderRadius: 10, fontFamily: 'inherit' }}
-                  />
-                  {form.titles.length > 1 && (
-                    <button className="btn btn-ghost btn-sm" type="button" onClick={() => removeTitleLine(index)} style={{ whiteSpace: 'nowrap', minHeight: 44 }}>
-                      Remove
-                    </button>
-                  )}
+  return (
+    <div className="page-enter assignments-page">
+      <div className="assignments-hero">
+        <div className="page-container assignments-hero-inner">
+          <div className="assignments-hero-copy">
+            <div className="assignments-kicker">Academic planner</div>
+            <h1 className="assignments-title">Assignments</h1>
+            <p className="assignments-subtitle">Track coursework, deadlines, and completion status in one clean view.</p>
+
+            <div className="assignments-stats">
+              <div className="assignments-stat assignments-stat-pending">
+                <span className="assignments-stat-icon">📋</span>
+                <div>
+                  <div className="assignments-stat-label">Pending</div>
+                  <div className="assignments-stat-value">{pendingCount}</div>
                 </div>
               </div>
-            ))}
-            <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
-              <button type="button" className="btn btn-ghost" onClick={addTitleLine} style={{ height: 40 }}>
-                + Add title
-              </button>
-              <div style={{ fontSize: 11, color: 'var(--muted)' }}>
-                Add another title row here. Save when you are done to keep them as one assignment group.
+              <div className="assignments-stat assignments-stat-done">
+                <span className="assignments-stat-icon">✓</span>
+                <div>
+                  <div className="assignments-stat-label">Completed</div>
+                  <div className="assignments-stat-value">{doneCount}</div>
+                </div>
               </div>
             </div>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: 10, alignItems: 'end', marginBottom: 10 }}>
-            <div>
-              <label>Teacher</label>
-              <select
-                value={form.teacherName}
-                onChange={e => set('teacherName', e.target.value)}
-                disabled={!form.courseId || getCourseTeachers(form.courseId).length === 0}
-              >
-                <option value="">Select teacher</option>
-                {getCourseTeachers(form.courseId).map(name => <option key={name} value={name}>{name}</option>)}
-              </select>
-            </div>
-            <div style={{ display: 'flex', alignItems: 'end' }}>
-              <button
-                className="btn btn-ghost"
-                type="button"
-                onClick={() => form.courseId && setTeacherDialog({ open: true, courseId: form.courseId })}
-                disabled={!form.courseId}
-                style={{ height: 44 }}
-              >
-                {!form.courseId ? 'Select Course First' : getCourseTeachers(form.courseId).length >= 2 ? 'Edit Teachers' : 'Add Teacher'}
-              </button>
-            </div>
-            <div style={{ gridColumn: '1 / -1', fontSize: 11, color: 'var(--muted)' }}>
-              {form.courseId ? 'You can update teacher assignments here.' : 'Select a course to enable teacher setup.'}
-            </div>
-          </div>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 10, marginBottom: 10 }}>
-            <div>
-              <label>Due Date</label>
-              <input type="date" value={form.due} onChange={e => set('due', e.target.value)} />
-            </div>
-          </div>
-          <div style={{ marginBottom: 10 }}>
-            <label>Details</label>
-            <textarea value={form.desc} onChange={e => set('desc', e.target.value)} rows={2} placeholder="Topics, requirements..." />
-          </div>
-          <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 10 }}>
-            <button className="btn btn-primary" onClick={add}>Save assignment</button>
+
+          <div className="assignments-hero-actions">
+            <button className="btn btn-primary assignments-add-btn" onClick={() => setAdding(true)}>
+              <Plus size={16} />
+              Add Assignment
+            </button>
           </div>
         </div>
-      )}
-
-      <div style={{ display: 'flex', gap: 4, marginBottom: 14 }}>
-        {['all', 'pending', 'done'].map(f => (
-          <button key={f} onClick={() => setFilter(f)} style={{
-            padding: '5px 12px', borderRadius: 6, border: '1px solid var(--border)',
-            background: filter === f ? 'var(--accent)' : 'transparent',
-            color: filter === f ? 'var(--accentFg)' : 'var(--muted)',
-            cursor: 'pointer', fontSize: 12, fontFamily: 'Sora, sans-serif', fontWeight: 500,
-          }}>{f.charAt(0).toUpperCase() + f.slice(1)}</button>
-        ))}
       </div>
 
-      {filtered.map(a => {
-        const c = getCourse(a.courseId);
-        const teacherLabel = a.teacherName || getCourseTeachers(a.courseId)[0] || 'Teacher not set';
-        const overdue = a.status !== 'done' && isOverdue(a.due);
-        const daysLeft = getDaysLeft(a.due);
-        const courseColor = getCourseColor(a.courseId);
-        const priorityBg = a.priority === 'high' ? 'rgba(239,68,68,0.1)' : a.priority === 'medium' ? 'rgba(249,115,22,0.1)' : 'rgba(107,114,128,0.1)';
-        const priorityColor = a.priority === 'high' ? 'rgb(239,68,68)' : a.priority === 'medium' ? 'rgb(249,115,22)' : 'rgb(107,114,128)';
-        const assignmentTitles = Array.isArray(a.titles) ? a.titles.filter(Boolean) : [a.title].filter(Boolean);
-        
-        return (
-          <div key={a.id} className="card" style={{
-            marginBottom: 8, 
-            opacity: a.status === 'done' ? 0.6 : 1,
-            borderLeft: `3px solid ${overdue ? 'var(--danger)' : a.status === 'done' ? 'var(--border)' : 'var(--accent)'}`,
-          }}>
-            <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
-              <button onClick={() => toggle(a.id)} style={{
-                width: 18, height: 18, borderRadius: 4, border: `2px solid ${a.status === 'done' ? 'var(--accent)' : 'var(--border)'}`,
-                background: a.status === 'done' ? 'var(--accent)' : 'transparent',
-                cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: 2,
-              }}>
-                {a.status === 'done' && <Check size={11} color="var(--accentFg)" />}
-              </button>
-              <div style={{ flex: 1 }}>
-                <div style={{ display: 'flex', gap: 8, alignItems: 'flex-start', flexWrap: 'wrap', marginBottom: 6 }}>
-                  {/* Course Badge */}
-                  {c && (
-                    <div
-                      style={{
-                        padding: '3px 10px',
-                        borderRadius: 5,
-                        background: courseColor.bg,
-                        border: `1px solid ${courseColor.border}`,
-                        color: courseColor.text,
-                        fontSize: 11,
-                        fontWeight: 700,
-                        whiteSpace: 'nowrap',
-                      }}
-                    >
-                      {c.code}
-                    </div>
-                  )}
-                  
-                  {/* Title */}
-                  <div style={{ flex: 1, display: 'grid', gap: 4 }}>
-                    {assignmentTitles.map((text, idx) => (
-                      <span key={idx} style={{
-                        fontWeight: idx === 0 ? 600 : 500,
-                        fontSize: idx === 0 ? 13 : 12,
-                        textDecoration: a.status === 'done' ? 'line-through' : 'none',
-                        color: 'var(--text)',
-                        whiteSpace: 'pre-wrap',
-                      }}>
-                        {text}
-                      </span>
-                    ))}
+      <div className="page-container assignments-content">
+        {/* Add Form */}
+        {adding && (
+          <div className="card" style={{ marginBottom: 20, borderColor: 'var(--accent)', borderWidth: 2, boxShadow: '0 4px 16px rgba(22,163,74,0.1)' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 10, marginBottom: 18 }}>
+              <div style={{ fontWeight: 700, fontSize: 16, display: 'flex', alignItems: 'center', gap: 8 }}>
+                <span style={{ fontSize: 20 }}>➕</span>
+                Add New Assignment
+              </div>
+              <button className="btn btn-ghost" onClick={() => { setAdding(false); setForm({ courseId: '', teacherName: '', titles: [''], title: '', desc: '', due: '', status: 'pending', priority: 'medium' }); }} style={{ padding: '7px 12px', fontSize: 12, fontWeight: 600 }}>Cancel</button>
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14, marginBottom: 14 }}>
+              <div>
+                <label style={{ fontSize: 12, fontWeight: 700, marginBottom: 6, display: 'block', color: 'var(--text)' }}>Course</label>
+                <select value={form.courseId} onChange={e => handleCourseChange(e.target.value)} style={{ minHeight: 42 }}>
+                  <option value="">Select course</option>
+                  {currentTermCourses.map(c => <option key={c.id} value={c.id}>{c.code} — {c.name}</option>)}
+                </select>
+              </div>
+              <div>
+                <label style={{ fontSize: 12, fontWeight: 700, marginBottom: 6, display: 'block', color: 'var(--text)' }}>Priority</label>
+                <select value={form.priority} onChange={e => set('priority', e.target.value)} style={{ minHeight: 42 }}>
+                  <option value="high">🔴 High</option>
+                  <option value="medium">🟡 Medium</option>
+                  <option value="low">⚪ Low</option>
+                </select>
+              </div>
+            </div>
+            <div style={{ display: 'grid', gap: 12, marginBottom: 14 }}>
+              {form.titles.map((title, index) => (
+                <div key={index} style={{ display: 'grid', gap: 6 }}>
+                  <label style={{ fontSize: 12, fontWeight: 700, color: 'var(--text)' }}>{index === 0 ? 'Assignment Title' : `Title ${index + 1}`}</label>
+                  <div style={{ display: 'flex', gap: 10, alignItems: 'stretch' }}>
+                    <input value={title} onChange={e => setTitleLine(index, e.target.value)} placeholder={index === 0 ? 'Lab Report #3 — Linked List' : `Another title`} style={{ flex: 1, minHeight: 42, borderRadius: 10, fontFamily: 'inherit' }} />
+                    {form.titles.length > 1 && (
+                      <button className="btn btn-ghost btn-sm" type="button" onClick={() => removeTitleLine(index)} style={{ whiteSpace: 'nowrap', minHeight: 42 }}>Remove</button>
+                    )}
                   </div>
                 </div>
-                
-                {/* Meta Info: Days Left, Priority, Due Date */}
-                <div style={{ display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap', marginBottom: 6 }}>
-                  {a.due && (
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 11 }}>
-                      <span style={{ 
-                        color: overdue ? 'var(--danger)' : daysLeft === 0 ? 'rgb(239,68,68)' : 'var(--muted)',
-                        fontWeight: daysLeft <= 1 ? 700 : 500
-                      }}>
-                        📅 {overdue ? 'Overdue' : daysLeft === 0 ? 'Due today' : `${daysLeft} day${daysLeft !== 1 ? 's' : ''} left`}
-                      </span>
-                    </div>
-                  )}
-                  
-                  {/* Priority Tag */}
-                  <span
-                    style={{
-                      padding: '3px 8px',
-                      borderRadius: 4,
-                      background: priorityBg,
-                      color: priorityColor,
-                      fontSize: 10,
-                      fontWeight: 700,
-                      whiteSpace: 'nowrap',
-                    }}
-                  >
-                    {a.priority.toUpperCase()}
-                  </span>
-                </div>
-                
-                {/* Description */}
-                {a.desc && <div style={{ fontSize: 11, color: 'var(--muted)', marginBottom: 4, lineHeight: 1.4 }}>{a.desc}</div>}
-
-                <div style={{ fontSize: 11, color: 'var(--text)', opacity: 0.85, marginBottom: 4 }}>
-                  Teacher: {teacherLabel}
-                </div>
-                
-                {/* Due Date */}
-                {a.due && <div style={{ fontSize: 10, color: 'var(--muted)' }}>Due: {a.due}</div>}
+              ))}
+              <button type="button" className="btn btn-ghost" onClick={addTitleLine} style={{ height: 40, fontSize: 12, justifyContent: 'center', fontWeight: 600 }}>+ Add another title</button>
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: 12, alignItems: 'end', marginBottom: 14 }}>
+              <div>
+                <label style={{ fontSize: 12, fontWeight: 700, marginBottom: 6, display: 'block', color: 'var(--text)' }}>Teacher</label>
+                <select value={form.teacherName} onChange={e => set('teacherName', e.target.value)} disabled={!form.courseId || getCourseTeachers(form.courseId).length === 0} style={{ minHeight: 42 }}>
+                  <option value="">Select teacher</option>
+                  {getCourseTeachers(form.courseId).map(name => <option key={name} value={name}>{name}</option>)}
+                </select>
               </div>
-              <button className="btn btn-ghost" style={{ padding: '4px 8px' }} onClick={() => del(a.id)}><Trash2 size={12} color="var(--danger)" /></button>
+              <button className="btn btn-ghost" type="button" onClick={() => form.courseId && setTeacherDialog({ open: true, courseId: form.courseId })} disabled={!form.courseId} style={{ height: 42, fontSize: 12, fontWeight: 600 }}>
+                {!form.courseId ? 'Course First' : getCourseTeachers(form.courseId).length >= 2 ? 'Edit' : 'Add'}
+              </button>
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 12, marginBottom: 14 }}>
+              <div>
+                <label style={{ fontSize: 12, fontWeight: 700, marginBottom: 6, display: 'block', color: 'var(--text)' }}>Due Date</label>
+                <input type="date" value={form.due} onChange={e => set('due', e.target.value)} style={{ minHeight: 42 }} />
+              </div>
+            </div>
+            <div style={{ marginBottom: 14 }}>
+              <label style={{ fontSize: 12, fontWeight: 700, marginBottom: 6, display: 'block', color: 'var(--text)' }}>Details</label>
+              <textarea value={form.desc} onChange={e => set('desc', e.target.value)} rows={2} placeholder="Topics, requirements..." />
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 10 }}>
+              <button className="btn btn-primary" onClick={add} style={{ padding: '12px 20px', fontSize: 13, fontWeight: 700 }}>Save Assignment</button>
             </div>
           </div>
-        );
-      })}
+        )}
 
-      {filtered.length === 0 && !adding && (
-        <div className="card" style={{ textAlign: 'center', color: 'var(--muted)', padding: 40 }}>
-          <p>No assignments here.</p>
+        {/* Filter Tabs */}
+        <div className="assignments-filters">
+          {['all', 'pending', 'done'].map(f => (
+            <button key={f} onClick={() => setFilter(f)} style={{
+              padding: '10px 18px', borderRadius: 10, border: filter === f ? 'none' : '1.5px solid var(--border)',
+              background: filter === f ? 'linear-gradient(135deg, var(--accent) 0%, rgb(34,197,94) 100%)' : 'transparent',
+              color: filter === f ? 'white' : 'var(--text)',
+              cursor: 'pointer', fontSize: 13, fontFamily: 'inherit', fontWeight: 700,
+              transition: 'all 0.25s ease',
+              boxShadow: filter === f ? '0 4px 12px rgba(22,163,74,0.25)' : 'none',
+            }}>
+              {f === 'all' ? '📋 All' : f === 'pending' ? '⏳ Pending' : '✅ Done'}
+            </button>
+          ))}
         </div>
-      )}
+
+        {/* Assignment Grid */}
+        <div style={{ display: 'grid', gap: 12, marginBottom: 24 }}>
+          {filtered.map(a => {
+            const c = getCourse(a.courseId);
+            const teacherLabel = a.teacherName || getCourseTeachers(a.courseId)[0] || 'Not set';
+            const overdue = a.status !== 'done' && isOverdue(a.due);
+            const daysLeft = getDaysLeft(a.due);
+            const courseColor = getCourseColor(a.courseId);
+            const assignmentTitles = Array.isArray(a.titles) ? a.titles.filter(Boolean) : [a.title].filter(Boolean);
+            
+            // Priority styling
+            const priorityConfig = {
+              high: { color: '#dc2626', bg: 'rgba(220,38,38,0.08)', icon: '🔴', border: 'rgba(220,38,38,0.2)' },
+              medium: { color: '#ea580c', bg: 'rgba(234,88,12,0.08)', icon: '🟡', border: 'rgba(234,88,12,0.2)' },
+              low: { color: '#6b7280', bg: 'rgba(107,114,128,0.08)', icon: '⚪', border: 'rgba(107,114,128,0.2)' },
+            };
+            const priority = priorityConfig[a.priority] || priorityConfig.medium;
+
+            // Due date indicator
+            let dueBadgeText = '';
+            let dueBadgeColor = '';
+            if (overdue) { dueBadgeText = '⚠️ Overdue'; dueBadgeColor = '#dc2626'; }
+            else if (daysLeft === 0) { dueBadgeText = '🔔 Due today'; dueBadgeColor = '#ea580c'; }
+            else if (daysLeft === 1) { dueBadgeText = '⏰ Due tomorrow'; dueBadgeColor = '#ea580c'; }
+            else if (daysLeft <= 3) { dueBadgeText = `⏳ ${daysLeft} days left`; dueBadgeColor = '#f59e0b'; }
+            else if (daysLeft <= 7) { dueBadgeText = `📅 ${daysLeft} days left`; dueBadgeColor = '#10b981'; }
+            else { dueBadgeText = `📆 ${a.due}`; dueBadgeColor = 'var(--muted)'; }
+            
+            return (
+              <div key={a.id} style={{
+                padding: 16,
+                borderRadius: 14,
+                background: a.status === 'done' ? 'rgba(107,114,128,0.04)' : 'var(--surface)',
+                border: a.status === 'done' ? '1px solid rgba(107,114,128,0.08)' : `1px solid ${priority.border}`,
+                borderLeft: a.status === 'done' ? '4px solid rgba(107,114,128,0.2)' : `4px solid ${priority.color}`,
+                opacity: a.status === 'done' ? 0.75 : 1,
+                transition: 'all 0.2s ease',
+                cursor: 'default',
+                display: 'grid',
+                gridTemplateColumns: 'auto 1fr auto',
+                gap: 14,
+                alignItems: 'start',
+                boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
+              }}>
+                {/* Checkbox */}
+                <button onClick={() => toggle(a.id)} style={{
+                  width: 24, height: 24, borderRadius: 6, border: `2.5px solid ${a.status === 'done' ? 'var(--accent)' : priority.color}`,
+                  background: a.status === 'done' ? 'var(--accent)' : 'transparent',
+                  cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, transition: 'all 0.2s',
+                }}>
+                  {a.status === 'done' && <Check size={14} color="white" />}
+                </button>
+
+                {/* Main Content */}
+                <div style={{ display: 'grid', gap: 9 }}>
+                  {/* Title Row with Badge */}
+                  <div style={{ display: 'flex', gap: 12, alignItems: 'flex-start', flexWrap: 'wrap' }}>
+                    {c && (
+                      <div style={{
+                        padding: '5px 11px', borderRadius: 7, background: courseColor.bg, border: `1.5px solid ${courseColor.border}`,
+                        color: courseColor.text, fontSize: 11, fontWeight: 800, whiteSpace: 'nowrap',
+                        marginTop: 2
+                      }}>
+                        {c.code}
+                      </div>
+                    )}
+                    <div style={{ flex: 1 }}>
+                      {assignmentTitles.map((text, idx) => (
+                        <div key={idx} style={{
+                          fontWeight: idx === 0 ? 800 : 700,
+                          fontSize: idx === 0 ? 15 : 13,
+                          textDecoration: a.status === 'done' ? 'line-through' : 'none',
+                          color: a.status === 'done' ? 'var(--muted)' : 'var(--text)',
+                          lineHeight: 1.4,
+                        }}>
+                          {text}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Meta Row: Priority, Teacher, Due Date */}
+                  <div style={{ display: 'flex', gap: 14, alignItems: 'center', flexWrap: 'wrap', fontSize: 11 }}>
+                    {/* Priority Badge */}
+                    <span style={{
+                      padding: '5px 9px', borderRadius: 6, background: priority.bg, color: priority.color,
+                      fontWeight: 800, whiteSpace: 'nowrap', fontSize: 10, display: 'flex', alignItems: 'center', gap: 5
+                    }}>
+                      {priority.icon} {a.priority.toUpperCase()}
+                    </span>
+
+                    {/* Teacher Label */}
+                    <span style={{ color: 'var(--muted)', display: 'flex', alignItems: 'center', gap: 5, fontSize: 12 }}>
+                      👨‍🏫 {teacherLabel}
+                    </span>
+
+                    {/* Due Date Badge */}
+                    {a.due && (
+                      <span style={{
+                        padding: '5px 9px', borderRadius: 6, background: `${dueBadgeColor}12`, color: dueBadgeColor,
+                        fontWeight: 800, whiteSpace: 'nowrap', fontSize: 10, display: 'flex', alignItems: 'center', gap: 5
+                      }}>
+                        {dueBadgeText}
+                      </span>
+                    )}
+                  </div>
+
+                  {/* Description */}
+                  {a.desc && <div style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.6, marginTop: 2 }}>{a.desc}</div>}
+                </div>
+
+                {/* Delete Button */}
+                <button className="btn btn-ghost" style={{ padding: '7px 9px', minWidth: 0 }} onClick={() => del(a.id)} title="Delete">
+                  <Trash2 size={15} color="var(--danger)" />
+                </button>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Empty State */}
+        {filtered.length === 0 && !adding && (
+          <div style={{ padding: 60, textAlign: 'center', color: 'var(--muted)' }}>
+            <div style={{ fontSize: 48, marginBottom: 14 }}>{filter === 'done' ? '✅' : filter === 'pending' ? '⏳' : '📚'}</div>
+            <p style={{ fontSize: 15, fontWeight: 700, marginBottom: 6, color: 'var(--text)' }}>
+              {filter === 'done' ? 'No completed assignments yet' : filter === 'pending' ? 'All assignments done! 🎉' : 'No assignments yet'}
+            </p>
+            <p style={{ fontSize: 13, color: 'var(--muted)' }}>
+              {filter !== 'all' && `Try viewing "${['all', 'pending', 'done'][['all', 'pending', 'done'].indexOf(filter)]}" tab`}
+            </p>
+          </div>
+        )}
+      </div>
 
       <CourseTeacherDialog
         isOpen={teacherDialog.open}
