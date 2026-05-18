@@ -92,9 +92,6 @@ export default function Dashboard() {
   const currentTermTimeline = currentTermKey && profile?.termStartDate ? getTermTimeline(profile.termStartDate, profile?.dept, currentTermKey) : null;
   const currentTermProgress = currentTermTimeline ? getTermProgress(profile.termStartDate, scheduleSettings.holidayDates || []) : 0;
   const completedTerms = currentTermKey ? Math.max(0, Math.min(TERM_KEYS.length - 1, getTermIndex(currentTermKey))) : 0;
-  const termJourneyPct = currentTermKey
-    ? Math.min(100, Math.round(((completedTerms + (currentTermProgress / 100)) / TERM_KEYS.length) * 100))
-    : creditPct;
   const shortDate = (d) => new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
   const classEndLabel = currentTermTimeline?.classEndDate ? shortDate(currentTermTimeline.classEndDate) : '';
   const prepLeaveLabel = currentTermTimeline ? `${shortDate(currentTermTimeline.prepLeaveStart)} → ${shortDate(currentTermTimeline.prepLeaveEnd)}` : '';
@@ -105,6 +102,9 @@ export default function Dashboard() {
     syncProfileAcademicMeta({ profile, courses });
   }, [profile, courses]);
   const creditPct = Math.min(100, Math.round((earnedCredits / totalRequired) * 100));
+  const termJourneyPct = currentTermKey
+    ? Math.min(100, Math.round(((completedTerms + (currentTermProgress / 100)) / TERM_KEYS.length) * 100))
+    : creditPct;
   const cgpaStr = cgpa !== null ? cgpa.toFixed(2) : null;
   const cgpaColor = cgpaStr ? (parseFloat(cgpaStr) >= 3.75 ? 'var(--success)' : parseFloat(cgpaStr) < 2.20 ? 'var(--danger)' : 'var(--text)') : 'var(--muted)';
 

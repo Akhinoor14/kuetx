@@ -51,40 +51,16 @@ function getDisplayCourseName(course) {
     .trim();
   return cleaned || raw;
 }
-
-// Compute attendance from daily logs for a specific (course, teacher) pair
-function getEffective(courseId, teacherName, logs, courseType) {
-  const key = `${courseId}_${teacherName || ''}`;
-  let held = 0, attended = 0;
-  
-  // If session/lab, auto-full
-  if (isAutoFull(courseType)) {
-    return { held: 1, attended: 1, source: 'auto', percentage: 100 };
-  }
-  
-  // Count from daily logs
-  Object.values(logs).forEach(day => {
-    const v = day[key];
-    if (v === 'present' || v === 'absent') { 
-      held++; 
-      if (v === 'present') attended++; 
-    }
-  });
-  
-  const percentage = held > 0 ? Math.round((attended / held) * 100) : null;
-  if (held > 0) return { held, attended, source: 'log', percentage };
-  return { held: 0, attended: 0, source: 'none', percentage: null };
+// Calculate how many future misses (additional absent classes) are allowed
+// while still staying at or above the target percentage.
+function canMissForTarget(attended, held, targetPct) {
+  if (!held && attended === 0) return null;
+  const T = Number(targetPct) / 100;
+  if (T <= 0) return 0;
+  // Solve for m in: attended / (held + m) >= T  => m <= (attended / T) - held
+  const val = Math.floor((attended / T) - held);
+  return Math.max(0, val);
 }
-
-
-// Attendance status color
-function attColor(pct) {
-  if (pct === null) return 'var(--muted)';
-  if (pct < MIN_ATTENDANCE_PERCENT) return 'var(--danger)';
-  if (pct < SCHOLARSHIP_ATTENDANCE_PCT) return 'var(--warning)';
-  return 'var(--success)';
-}
-
 function getScheduleCoursesForDate(schedule, date) {
   const dayName = new Date(date + 'T00:00:00').toLocaleDateString('en-US', { weekday: 'long' });
   const byCourse = new Map();
@@ -372,9 +348,21 @@ function DailyLog({ courses, logs, setLogs, schedule, scheduleSettings, combined
       {/* Legend */}
       {cardsToShow.length > 0 && (
         <div style={{ marginBottom: 16, padding: '10px 14px', background: 'var(--inputBg)', borderRadius: 10, fontSize: 12, color: 'var(--muted)', display: 'flex', gap: 16, alignItems: 'center', justifyContent: 'center', flexWrap: 'wrap' }}>
-          <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}><span style={{ fontWeight: 700, color: '#10b981' }}>P</span> = Present</div>
-          <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}><span style={{ fontWeight: 700, color: '#ef4444' }}>A</span> = Absent</div>
-          <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}><span style={{ fontWeight: 700, color: 'var(--muted)' }}>—</span> = Not marked</div>
+          {isCompact ? (
+            <>
+              <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}><span style={{ fontWeight: 700, color: '#10b981' }}>P</span> = Present</div>
+              <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}><span style={{ fontWeight: 700, color: '#ef4444' }}>A</span> = Absent</div>
+              <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}><span style={{ fontWeight: 700, color: 'var(--muted)' }}>H</span> = Holiday (see calendar)</div>
+              <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}><span style={{ fontWeight: 700, color: '#6b7280' }}>N</span> = No class</div>
+            </>
+          ) : (
+            <>
+              <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}><span style={{ fontWeight: 700, color: '#10b981' }}>✓ Present</span></div>
+              <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}><span style={{ fontWeight: 700, color: '#ef4444' }}>✗ Absent</span></div>
+              <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}><span style={{ fontWeight: 700, color: 'var(--muted)' }}>Holiday</span> — managed in holiday calendar</div>
+              <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}><span style={{ fontWeight: 700, color: '#6b7280' }}>No class</span> — class not held / cancelled</div>
+            </>
+          )}
           <div style={{ fontSize: 11, color: 'var(--muted)', width: '100%', textAlign: 'center' }}>
             Holiday days are managed separately in the holiday calendar, not per course.
           </div>
@@ -390,9 +378,9 @@ function DailyLog({ courses, logs, setLogs, schedule, scheduleSettings, combined
         ) : (() => {
           // Soft background colors - subtle pastel palette using only purple, green, blue
           const softColors = [
-            'rgba(168, 85, 247, 0.08)',  // light purple
-            'rgba(34, 197, 94, 0.08)',   // light green
-            'rgba(59, 130, 246, 0.08)',  // light blue
+            'rgba(168, 85, 247, 0.06)',  // light purple
+            'rgba(34, 197, 94, 0.06)',   // light green
+            'rgba(16, 185, 129, 0.06)',  // light teal-green (subtle second green)
           ];
           const courseColorMap = {};
           let colorIndex = 0;
@@ -403,129 +391,85 @@ function DailyLog({ courses, logs, setLogs, schedule, scheduleSettings, combined
             }
           });
 
-          return cardsToShow.map(card => {
-            const todayItems = scheduledCourses.find(item => item.courseId === card.course.id)?.items || [];
-            const statusColors = { present: '#10b981', absent: '#ef4444' };
-            const statusLabels = { present: 'Present', absent: 'Absent' };
-            const bgColor = courseColorMap[card.course.id];
-            
-            // Check if teacher is assigned
-            const assignedTeachers = getTeachersForCourse(scheduleSettings, schedule, card.course.id);
-            const hasTeacher = assignedTeachers && assignedTeachers.length > 0;
-            const isMarked = card.status === 'present' || card.status === 'absent';
-            const canMark = hasTeacher || isMarked;
+          // Group cards by course so multiple teachers appear inside the same course card
+          const groups = {};
+          cardsToShow.forEach(card => {
+            const id = card.course.id;
+            if (!groups[id]) groups[id] = { course: card.course, entries: [] };
+            groups[id].entries.push({ teacher: card.teacher, key: card.key, status: card.status });
+          });
+
+          const grouped = Object.values(groups);
+
+          // deterministic pastel color generator per course id (unique hues)
+          const courseBgFromId = (id) => {
+            let h = 0;
+            for (let i = 0; i < id.length; i++) h = (h * 31 + id.charCodeAt(i)) % 360;
+            // keep saturation/lightness pastel-ish
+            return `hsla(${h}, 65%, 92%, 0.9)`; // background subtle
+          };
+
+          return grouped.map(group => {
+            const course = group.course;
+            const entries = group.entries;
+            const todayItems = scheduledCourses.find(item => item.courseId === course.id)?.items || [];
+            const statusColors = { present: '#10b981', absent: '#ef4444', 'no-class': '#6b7280' };
+            const statusLabels = { present: 'Present', absent: 'Absent', 'no-class': 'No class' };
+            const bgColor = courseColorMap[course.id] || courseBgFromId(course.id);
+
+            const assignedTeachers = getTeachersForCourse(scheduleSettings, schedule, course.id);
+            const hasAssignment = assignedTeachers && assignedTeachers.length > 0;
 
             return (
-              <div key={card.key || card.course.id} style={{
-                padding: '14px 16px',
-                borderRadius: 8,
-                background: !canMark ? 'rgba(239, 68, 68, 0.08)' : bgColor,
-                border: !canMark ? '2px solid rgba(239, 68, 68, 0.3)' : '1px solid rgba(15, 23, 42, 0.08)',
-                transition: 'all 0.2s ease',
-              }}>
-                {/* Course Info */}
+              <div key={course.id} style={{ padding: '14px 16px', borderRadius: 8, background: bgColor, border: '1px solid rgba(15, 23, 42, 0.06)', transition: 'all 0.2s ease' }}>
                 <div style={{ marginBottom: 10 }}>
-                  <div style={{ fontWeight: 700, fontSize: 14, marginBottom: 4 }}>
-                    {getDisplayCourseName(card.course)}
-                  </div>
+                  <div style={{ fontWeight: 700, fontSize: 14, marginBottom: 4 }}>{getDisplayCourseName(course)}</div>
                   <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
-                    {card.teacher && (
-                      <div style={{ fontSize: 12, color: hasTeacher ? 'var(--muted)' : '#ef4444', fontWeight: 500 }}>
-                        {card.teacher}
-                      </div>
-                    )}
-                    {!hasTeacher && !card.teacher && (
-                      <div style={{ fontSize: 12, color: '#ef4444', fontWeight: 600 }}>
-                        ⚠ No teacher assigned
-                      </div>
-                    )}
-                    {card.course.type && (
-                      <div style={{ fontSize: 11, color: 'var(--muted)', opacity: 0.7 }}>
-                        {card.course.type}
-                      </div>
-                    )}
-                    {todayItems.length > 0 && (
-                      <div style={{ fontSize: 10, color: 'var(--accent)', fontWeight: 600, padding: '1px 6px', background: 'rgba(var(--accentRGB), 0.12)', borderRadius: 3 }}>
-                        {todayItems.map(item => item.slot).join(' → ')}
-                      </div>
-                    )}
+                    {course.type && (<div style={{ fontSize: 11, color: 'var(--muted)', opacity: 0.7 }}>{course.type}</div>)}
+                    {todayItems.length > 0 && (<div style={{ fontSize: 10, color: 'var(--accent)', fontWeight: 600, padding: '1px 6px', background: 'rgba(var(--accentRGB), 0.12)', borderRadius: 3 }}>{todayItems.map(i => i.slot).join(' → ')}</div>)}
                   </div>
                 </div>
 
-                {/* Status Display */}
-                {card.status && (
-                  <div style={{ marginBottom: 10, padding: '6px 10px', background: `${statusColors[card.status] || 'var(--inputBg)'}20`, borderRadius: 5, fontSize: 11, fontWeight: 600, color: statusColors[card.status] || 'var(--muted)' }}>
-                    ✓ {statusLabels[card.status] || 'Marked'}
-                  </div>
-                )}
+                {/* Teacher rows inside course card */}
+                <div style={{ display: 'grid', gap: 8 }}>
+                  {entries.map((e, idx) => {
+                    const teacher = e.teacher || '';
+                    const status = e.status;
+                    const isMarked = status === 'present' || status === 'absent';
+                    const canMark = hasAssignment || isMarked;
 
-                {/* Teacher Required Warning */}
-                {!canMark && (
-                  <div style={{ marginBottom: 10, padding: '8px 10px', background: 'rgba(239, 68, 68, 0.12)', borderRadius: 6, fontSize: 12, color: '#ef4444', fontWeight: 600 }}>
-                    ⚠ Teacher assignment required before marking attendance
-                  </div>
-                )}
+                    return (
+                      <div key={e.key || `${course.id}_${idx}`} style={{ display: 'flex', justifyContent: 'space-between', gap: 12, alignItems: 'center', padding: '8px', background: 'rgba(255,255,255,0.02)', borderRadius: 6 }}>
+                        <div style={{ flex: 1 }}>
+                          <div style={{ fontWeight: 700 }}>{teacher || 'Unassigned'}</div>
+                          {!teacher && !hasAssignment && (<div style={{ fontSize: 12, color: '#ef4444', fontWeight: 600 }}>⚠ No teacher assigned</div>)}
+                        </div>
 
-                {/* Action Buttons - Responsive */}
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 6 }}>
-                  {canMark ? (
-                    [
-                      { val: 'present', shortLabel: 'P', fullLabel: 'Present', emoji: '✓', color: '#10b981' },
-                      { val: 'absent',  shortLabel: 'A', fullLabel: 'Absent',  emoji: '✗', color: '#ef4444' },
-                    ].map(opt => {
-                      const active = card.status === opt.val;
-                      const btnLabel = isCompact ? opt.shortLabel : opt.fullLabel;
-                      return (
-                        <button 
-                          key={opt.val} 
-                          onClick={() => mark(card.course.id, card.teacher, opt.val)}
-                          title={`Mark as ${opt.fullLabel}`}
-                          style={{
-                            padding: isCompact ? '8px 6px' : '8px 10px',
-                            borderRadius: 6,
-                            cursor: 'pointer',
-                            fontWeight: 600,
-                            fontSize: isCompact ? 11 : 12,
-                            background: active ? opt.color : 'var(--inputBg)',
-                            color: active ? 'white' : 'var(--muted)',
-                            border: active ? `2px solid ${opt.color}` : '1px solid var(--border)',
-                            transition: 'all 0.2s ease',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            gap: isCompact ? 0 : 4,
-                            minHeight: 32,
-                          }}>
-                          {isCompact ? btnLabel : `${opt.emoji} ${btnLabel}`}
-                        </button>
-                      );
-                    })
-                  ) : (
-                    <button 
-                      onClick={() => {
-                        setSelectedCard({ courseId: card.course.id, course: card.course });
-                        setTeacherDialogOpen(true);
-                      }}
-                      style={{
-                        gridColumn: '1 / -1',
-                        padding: '10px 12px',
-                        borderRadius: 6,
-                        cursor: 'pointer',
-                        fontWeight: 600,
-                        fontSize: 12,
-                        background: 'var(--accent)',
-                        color: 'white',
-                        border: 'none',
-                        transition: 'all 0.2s ease',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        gap: 6,
-                        minHeight: 40,
-                      }}>
-                        + Add Teacher
-                    </button>
-                  )}
+                        <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+                          {status && (
+                            <div style={{ padding: '6px 10px', background: `${(statusColors[status] || 'var(--muted)')}20`, borderRadius: 5, fontSize: 11, fontWeight: 600, color: statusColors[status] || 'var(--muted)' }}>
+                              {isCompact ? (status === 'present' ? 'P' : status === 'absent' ? 'A' : 'N') : (status === 'present' ? `✓ ${statusLabels[status]}` : status === 'absent' ? `✗ ${statusLabels[status]}` : statusLabels[status])}
+                            </div>
+                          )}
+
+                          {canMark ? (
+                            [
+                              { val: 'present', shortLabel: 'P', fullLabel: 'Present', emoji: '✓', color: '#10b981' },
+                              { val: 'absent', shortLabel: 'A', fullLabel: 'Absent', emoji: '✗', color: '#ef4444' },
+                            ].map(opt => {
+                              const active = status === opt.val;
+                              const btnLabel = isCompact ? opt.shortLabel : opt.fullLabel;
+                              return (
+                                <button key={opt.val} onClick={() => mark(course.id, teacher, opt.val)} title={`Mark as ${opt.fullLabel}`} style={{ padding: isCompact ? '8px 6px' : '8px 10px', borderRadius: 6, cursor: 'pointer', fontWeight: 600, fontSize: isCompact ? 11 : 12, background: active ? opt.color : 'var(--inputBg)', color: active ? 'white' : 'var(--muted)', border: active ? `2px solid ${opt.color}` : '1px solid var(--border)', transition: 'all 0.2s ease', minHeight: 32 }}>{isCompact ? btnLabel : `${opt.emoji} ${btnLabel}`}</button>
+                              );
+                            })
+                          ) : (
+                            <button onClick={() => { setSelectedCard({ courseId: course.id, course }); setTeacherDialogOpen(true); }} style={{ padding: '8px 12px', borderRadius: 6, cursor: 'pointer', fontWeight: 600, fontSize: 12, background: 'var(--accent)', color: 'white', border: 'none' }}>+ Add Teacher</button>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
             );
@@ -627,14 +571,11 @@ function Summary({ courses, logs, schedule, scheduleSettings, combinedMode, comb
       )}
 
       {(() => {
-        // Soft background colors - subtle pastel shades
+        // Soft background colors - subtle palette: purple + two greens
         const softColors = [
-          'rgba(168, 85, 247, 0.08)',  // light purple
-          'rgba(34, 197, 94, 0.08)',   // light green
-          'rgba(59, 130, 246, 0.08)',  // light blue
-          'rgba(249, 115, 22, 0.08)',  // light orange
-          'rgba(236, 72, 153, 0.08)',  // light pink
-          'rgba(20, 184, 166, 0.08)',  // light teal
+          'rgba(168, 85, 247, 0.06)',  // light purple
+          'rgba(34, 197, 94, 0.06)',   // light green
+          'rgba(16, 185, 129, 0.06)',  // light teal-green
         ];
         const courseColorMap = {};
         let colorIndex = 0;
@@ -775,6 +716,20 @@ function Summary({ courses, logs, schedule, scheduleSettings, combinedMode, comb
         </div>
         ));
       })()}
+
+      {/* Teacher Assignment Dialog */}
+      {selectedCourse && (
+        <CourseTeacherDialog
+          isOpen={teacherDialogOpen}
+          onClose={() => {
+            setTeacherDialogOpen(false);
+            setSelectedCourse(null);
+          }}
+          course={selectedCourse}
+          currentTeachers={getTeachersForCourse(scheduleSettings, schedule, selectedCourse.id)}
+          onSave={handleTeacherSave}
+        />
+      )}
     </div>
   );
 }
@@ -839,6 +794,7 @@ export default function Attendance() {
   };
 
   const holidayDates = scheduleSettings?.holidayDates || [];
+  const holidayCount = holidayDates.length;
 
   const theoryCourses = courses.filter(c => !isAutoFull(c.type));
   const heroCourseStats = theoryCourses.map(c => {
@@ -979,26 +935,34 @@ export default function Attendance() {
         </div>
 
         <div className="attendance-summary-grid">
-        {heroCourseStats.map(({ course, totalHeld, totalAttended, pct, status }) => (
-          <div key={course.id} className={`attendance-summary-card attendance-summary-card--${status}`}>
-            <div className="card-course">{course.code || getDisplayCourseName(course)}</div>
-            <div className="card-percentage" style={{ color: attColor(pct) }}>{pct !== null ? `${pct}%` : '--'}</div>
-            <div className="card-meta">{totalAttended}/{totalHeld || 0}</div>
-            {pct !== null && (() => {
-              const canMiss = totalHeld > 0
-                ? Math.floor((totalAttended - MIN_ATTENDANCE_PERCENT / 100 * (totalHeld)) / (1 - MIN_ATTENDANCE_PERCENT / 100))
-                : 0;
-              if (pct < MIN_ATTENDANCE_PERCENT) {
-                return <div className="card-status card-status-danger">≤60%<br />❌ &#199;&#195;&#162 cancelled</div>;
+        {heroCourseStats.map(({ course, totalHeld, totalAttended, pct, status }) => {
+          const thresholds = [90, 85, 80, 75, 70, 65, 60];
+          let statusNode = <div className="card-status card-status-neutral">No classes yet</div>;
+          if (pct !== null) {
+            if (pct < MIN_ATTENDANCE_PERCENT) {
+              statusNode = <div className="card-status card-status-danger">≤60% · ❌ CANCELLED</div>;
+            } else {
+              const slab = thresholds.find(t => pct >= t) || 60;
+              const canMiss = canMissForTarget(totalAttended, totalHeld, slab);
+              if (canMiss === null) {
+                statusNode = <div className="card-status card-status-neutral">No classes yet</div>;
+              } else if (canMiss <= 0) {
+                statusNode = <div className="card-status card-status-warning">⚠ No misses left (stay ≥{slab}%)</div>;
+              } else {
+                statusNode = <div className="card-status card-status-safe">✓ Can miss {canMiss} (stay ≥{slab}%)</div>;
               }
-              if (canMiss <= 0) {
-                return <div className="card-status card-status-warning">⚠ No misses left</div>;
-              }
-              return <div className="card-status card-status-safe">✓ Can miss {canMiss}</div>;
-            })()}
-            {pct === null && <div className="card-status card-status-neutral">No classes yet</div>}
-          </div>
-        ))}
+            }
+          }
+
+          return (
+            <div key={course.id} className={`attendance-summary-card attendance-summary-card--${status}`}>
+              <div className="card-course">{course.code || getDisplayCourseName(course)}</div>
+              <div className="card-percentage" style={{ color: attColor(pct) }}>{pct !== null ? `${pct}%` : '--'}</div>
+              <div className="card-meta">{totalAttended}/{totalHeld || 0}</div>
+              {statusNode}
+            </div>
+          );
+        })}
       </div>
       </div>
       {todaySchedule.length > 0 && (
@@ -1080,53 +1044,26 @@ export default function Attendance() {
             zIndex: 1200,
             padding: 12,
           }}
-          onClick={closeHolidaySetup}
+          onClick={() => closeHolidaySetup()}
         >
-          <div
-            className="card"
-            style={{ width: 650, maxWidth: '100%', padding: 16, background: 'var(--bg)' }}
-            onClick={e => e.stopPropagation()}
-          >
-            <div style={{ display: 'flex', justifyContent: 'space-between', gap: 10, alignItems: 'center', marginBottom: 16 }}>
-              <div>
-                <div style={{ fontWeight: 700, fontSize: 14 }}>Holiday Calendar</div>
-                <div style={{ fontSize: 12, color: 'var(--muted)' }}>Friday and Saturday are always holidays. Click dates to add.</div>
+          <>
+            <div className="attendance-hero-shell" onClick={e => e.stopPropagation()}>
+              <div style={{ flex: 1 }}>
+                <div className="attendance-hero-kicker">Attendance</div>
+                <div style={{ fontWeight: 800, fontSize: 18, marginBottom: 6 }}>Holiday Calendar</div>
+                <div style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.5 }}>
+                  Friday and Saturday are always holidays. Select dates below to add or remove them centrally.
+                </div>
               </div>
-              <button className="btn btn-ghost" onClick={closeHolidaySetup}>Close</button>
-            </div>
-
-            {/* Mode Tabs */}
-            <div style={{ display: 'flex', gap: 8, marginBottom: 12, borderBottom: '1px solid var(--border)', paddingBottom: 8 }}>
-              <button
-                onClick={() => setHolidayMode('calendar')}
-                style={{
-                  padding: '8px 12px',
-                  borderBottom: holidayMode === 'calendar' ? '2px solid var(--accent)' : 'none',
-                  background: 'transparent',
-                  border: 'none',
-                  cursor: 'pointer',
-                  fontWeight: holidayMode === 'calendar' ? 700 : 400,
-                  color: holidayMode === 'calendar' ? 'var(--accent)' : 'var(--text)',
-                  fontSize: 13,
-                }}
-              >
-                📅 Calendar Picker
-              </button>
-              <button
-                onClick={() => setHolidayMode('single')}
-                style={{
-                  padding: '8px 12px',
-                  borderBottom: holidayMode === 'single' ? '2px solid var(--accent)' : 'none',
-                  background: 'transparent',
-                  border: 'none',
-                  cursor: 'pointer',
-                  fontWeight: holidayMode === 'single' ? 700 : 400,
-                  color: holidayMode === 'single' ? 'var(--accent)' : 'var(--text)',
-                  fontSize: 13,
-                }}
-              >
-                📆 Single Date
-              </button>
+              <div className="attendance-hero-note">Holiday setup</div>
+              <div style={{ display: 'flex', gap: 8, marginTop: 8, marginBottom: 8 }}>
+                <button onClick={() => setHolidayMode('calendar')} className={`btn btn-ghost ${holidayMode === 'calendar' ? 'active' : ''}`} style={{ padding: '8px 12px' }}>
+                  📅 Calendar
+                </button>
+                <button onClick={() => setHolidayMode('single')} className={`btn btn-ghost ${holidayMode === 'single' ? 'active' : ''}`} style={{ padding: '8px 12px' }}>
+                  📆 Single Date
+                </button>
+              </div>
             </div>
 
             <div style={{ display: 'grid', gap: 10 }}>
@@ -1290,20 +1227,22 @@ export default function Attendance() {
                   {holidayDates.length === 0 ? (
                     <div style={{ fontSize: 12, color: 'var(--muted)' }}>No extra holidays added yet.</div>
                   ) : (
-                    holidayDates.map(date => (
-                      <span key={date} className="tag tag-gray" style={{ display: 'inline-flex', gap: 6, alignItems: 'center' }}>
-                        {date}
-                        <button onClick={() => removeHolidayDate(date)} style={{ border: 'none', background: 'transparent', cursor: 'pointer', color: 'inherit', padding: 0 }}>
-                          <X size={12} />
-                        </button>
-                      </span>
-                    ))
+                    <>
+                      {holidayDates.map(date => (
+                        <span key={date} className="tag tag-gray" style={{ display: 'inline-flex', gap: 6, alignItems: 'center' }}>
+                          {date}
+                          <button onClick={() => removeHolidayDate(date)} style={{ border: 'none', background: 'transparent', cursor: 'pointer', color: 'inherit', padding: 0 }}>
+                            <X size={12} />
+                          </button>
+                        </span>
+                      ))}
+                    </>
                   )}
                 </div>
               </div>
             </div>
+          </>
           </div>
-        </div>
       )}
     </div>
   );
