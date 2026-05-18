@@ -1,6 +1,7 @@
 import { useState, useMemo, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, CalendarDays, X } from 'lucide-react';
 import { store, getAttendanceMarks, MIN_ATTENDANCE_PERCENT, SCHOLARSHIP_ATTENDANCE_PCT, getAllCourses, getProfile, getRoutinePreviewDate, isRoutineHoliday } from '../store/store';
+import CourseTeacherDialog from '../components/CourseTeacherDialog';
 
 const todayStr = () => new Date().toISOString().split('T')[0];
 const addDays = (d, n) => { 
@@ -106,6 +107,8 @@ function DailyLog({ courses, logs, setLogs, schedule, scheduleSettings, combined
   const [date, setDate] = useState(todayStr());
   const [showGiveAttendance, setShowGiveAttendance] = useState(false);
   const [isCompact, setIsCompact] = useState(typeof window !== 'undefined' ? window.innerWidth < 640 : false);
+  const [teacherDialogOpen, setTeacherDialogOpen] = useState(false);
+  const [selectedCard, setSelectedCard] = useState(null);
   const dayLog = logs[date] || {};
   const isToday = date === todayStr();
   const dayName = new Date(date + 'T00:00:00').getDay();
@@ -205,6 +208,18 @@ function DailyLog({ courses, logs, setLogs, schedule, scheduleSettings, combined
     if (Object.keys(updated[date] || {}).length === 0) delete updated[date];
     setLogs(updated);
     store.set('attLogs', updated);
+  };
+
+  const handleTeacherSave = (teachers) => {
+    if (!selectedCard) return;
+    const { courseId } = selectedCard;
+    const updated = { ...scheduleSettings };
+    if (!updated.courseTeacherMap) updated.courseTeacherMap = {};
+    updated.courseTeacherMap[courseId] = teachers;
+    store.set('scheduleSettings', updated);
+    window.dispatchEvent(new Event('kuetx:store-updated'));
+    setTeacherDialogOpen(false);
+    setSelectedCard(null);
   };
 
   const markedTeachers = useMemo(() => {
@@ -393,13 +408,19 @@ function DailyLog({ courses, logs, setLogs, schedule, scheduleSettings, combined
             const statusColors = { present: '#10b981', absent: '#ef4444' };
             const statusLabels = { present: 'Present', absent: 'Absent' };
             const bgColor = courseColorMap[card.course.id];
+            
+            // Check if teacher is assigned
+            const assignedTeachers = getTeachersForCourse(scheduleSettings, schedule, card.course.id);
+            const hasTeacher = assignedTeachers && assignedTeachers.length > 0;
+            const isMarked = card.status === 'present' || card.status === 'absent';
+            const canMark = hasTeacher || isMarked;
 
             return (
               <div key={card.key || card.course.id} style={{
                 padding: '14px 16px',
                 borderRadius: 8,
-                background: bgColor,
-                border: '1px solid rgba(15, 23, 42, 0.08)',
+                background: !canMark ? 'rgba(239, 68, 68, 0.08)' : bgColor,
+                border: !canMark ? '2px solid rgba(239, 68, 68, 0.3)' : '1px solid rgba(15, 23, 42, 0.08)',
                 transition: 'all 0.2s ease',
               }}>
                 {/* Course Info */}
@@ -409,8 +430,13 @@ function DailyLog({ courses, logs, setLogs, schedule, scheduleSettings, combined
                   </div>
                   <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
                     {card.teacher && (
-                      <div style={{ fontSize: 12, color: 'var(--muted)', fontWeight: 500 }}>
+                      <div style={{ fontSize: 12, color: hasTeacher ? 'var(--muted)' : '#ef4444', fontWeight: 500 }}>
                         {card.teacher}
+                      </div>
+                    )}
+                    {!hasTeacher && !card.teacher && (
+                      <div style={{ fontSize: 12, color: '#ef4444', fontWeight: 600 }}>
+                        ⚠ No teacher assigned
                       </div>
                     )}
                     {card.course.type && (
@@ -433,39 +459,73 @@ function DailyLog({ courses, logs, setLogs, schedule, scheduleSettings, combined
                   </div>
                 )}
 
+                {/* Teacher Required Warning */}
+                {!canMark && (
+                  <div style={{ marginBottom: 10, padding: '8px 10px', background: 'rgba(239, 68, 68, 0.12)', borderRadius: 6, fontSize: 12, color: '#ef4444', fontWeight: 600 }}>
+                    ⚠ Teacher assignment required before marking attendance
+                  </div>
+                )}
+
                 {/* Action Buttons - Responsive */}
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 6 }}>
-                  {[
-                    { val: 'present', shortLabel: 'P', fullLabel: 'Present', emoji: '✓', color: '#10b981' },
-                    { val: 'absent',  shortLabel: 'A', fullLabel: 'Absent',  emoji: '✗', color: '#ef4444' },
-                  ].map(opt => {
-                    const active = card.status === opt.val;
-                    const btnLabel = isCompact ? opt.shortLabel : opt.fullLabel;
-                    return (
-                      <button 
-                        key={opt.val} 
-                        onClick={() => mark(card.course.id, card.teacher, opt.val)}
-                        title={`Mark as ${opt.fullLabel}`}
-                        style={{
-                          padding: isCompact ? '8px 6px' : '8px 10px',
-                          borderRadius: 6,
-                          cursor: 'pointer',
-                          fontWeight: 600,
-                          fontSize: isCompact ? 11 : 12,
-                          background: active ? opt.color : 'var(--inputBg)',
-                          color: active ? 'white' : 'var(--muted)',
-                          border: active ? `2px solid ${opt.color}` : '1px solid var(--border)',
-                          transition: 'all 0.2s ease',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          gap: isCompact ? 0 : 4,
-                          minHeight: 32,
-                        }}>
-                        {isCompact ? btnLabel : `${opt.emoji} ${btnLabel}`}
-                      </button>
-                    );
-                  })}
+                  {canMark ? (
+                    [
+                      { val: 'present', shortLabel: 'P', fullLabel: 'Present', emoji: '✓', color: '#10b981' },
+                      { val: 'absent',  shortLabel: 'A', fullLabel: 'Absent',  emoji: '✗', color: '#ef4444' },
+                    ].map(opt => {
+                      const active = card.status === opt.val;
+                      const btnLabel = isCompact ? opt.shortLabel : opt.fullLabel;
+                      return (
+                        <button 
+                          key={opt.val} 
+                          onClick={() => mark(card.course.id, card.teacher, opt.val)}
+                          title={`Mark as ${opt.fullLabel}`}
+                          style={{
+                            padding: isCompact ? '8px 6px' : '8px 10px',
+                            borderRadius: 6,
+                            cursor: 'pointer',
+                            fontWeight: 600,
+                            fontSize: isCompact ? 11 : 12,
+                            background: active ? opt.color : 'var(--inputBg)',
+                            color: active ? 'white' : 'var(--muted)',
+                            border: active ? `2px solid ${opt.color}` : '1px solid var(--border)',
+                            transition: 'all 0.2s ease',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            gap: isCompact ? 0 : 4,
+                            minHeight: 32,
+                          }}>
+                          {isCompact ? btnLabel : `${opt.emoji} ${btnLabel}`}
+                        </button>
+                      );
+                    })
+                  ) : (
+                    <button 
+                      onClick={() => {
+                        setSelectedCard({ courseId: card.course.id, course: card.course });
+                        setTeacherDialogOpen(true);
+                      }}
+                      style={{
+                        gridColumn: '1 / -1',
+                        padding: '10px 12px',
+                        borderRadius: 6,
+                        cursor: 'pointer',
+                        fontWeight: 600,
+                        fontSize: 12,
+                        background: 'var(--accent)',
+                        color: 'white',
+                        border: 'none',
+                        transition: 'all 0.2s ease',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        gap: 6,
+                        minHeight: 40,
+                      }}>
+                        + Add Teacher
+                    </button>
+                  )}
                 </div>
               </div>
             );
@@ -476,12 +536,28 @@ function DailyLog({ courses, logs, setLogs, schedule, scheduleSettings, combined
       <div style={{ marginTop: 16, padding: '10px 14px', background: 'var(--inputBg)', borderRadius: 10, fontSize: 13, color: 'var(--muted)' }}>
         💡 Tip: Back button jumps to previous class dates. All changes auto-save.
       </div>
+
+      {/* Teacher Assignment Dialog */}
+      {selectedCard && (
+        <CourseTeacherDialog
+          isOpen={teacherDialogOpen}
+          onClose={() => {
+            setTeacherDialogOpen(false);
+            setSelectedCard(null);
+          }}
+          course={selectedCard.course}
+          currentTeachers={getTeachersForCourse(scheduleSettings, schedule, selectedCard.courseId)}
+          onSave={handleTeacherSave}
+        />
+      )}
     </div>
   );
 }
 
 // ── Summary ───────────────────────────────────────────────────────────────
 function Summary({ courses, logs, schedule, scheduleSettings, combinedMode, combinedData, toggleCombinedMode, updateCombined }) {
+  const [teacherDialogOpen, setTeacherDialogOpen] = useState(false);
+  const [selectedCourse, setSelectedCourse] = useState(null);
 
   const theoryCourses = (courses || []).filter(c => !isAutoFull(c.type));
 
@@ -522,6 +598,17 @@ function Summary({ courses, logs, schedule, scheduleSettings, combinedMode, comb
     if (a.completed !== b.completed) return a.completed ? 1 : -1;
     return (a.course.name || '').localeCompare(b.course.name || '');
   });
+
+  const handleTeacherSave = (teachers) => {
+    if (!selectedCourse) return;
+    const updated = { ...scheduleSettings };
+    if (!updated.courseTeacherMap) updated.courseTeacherMap = {};
+    updated.courseTeacherMap[selectedCourse.id] = teachers;
+    store.set('scheduleSettings', updated);
+    window.dispatchEvent(new Event('kuetx:store-updated'));
+    setTeacherDialogOpen(false);
+    setSelectedCourse(null);
+  };
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
@@ -584,48 +671,74 @@ function Summary({ courses, logs, schedule, scheduleSettings, combinedMode, comb
 
           <div style={{ marginBottom: 12, paddingBottom: 12, borderBottom: '1px solid var(--border)' }}>
             <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--muted)', marginBottom: 8 }}>Per Teacher:</div>
-            <div style={{ display: 'grid', gridTemplateColumns: `repeat(${Math.min(displayTeachers.length, 2)}, 1fr)`, gap: 8 }}>
-              {displayTeachers.map(teacher => {
-                const s = stats[teacher || ''];
-                const tp = s.held > 0 ? Math.round((s.attended / s.held) * 100) : 0;
-                return (
-                  <div key={teacher || 'unknown'} style={{ padding: '8px', background: 'var(--inputBg)', borderRadius: 6, fontSize: 12 }}>
-                    <div style={{ fontWeight: 700, marginBottom: 8 }}>{teacher || 'Unassigned'}</div>
-                    {combinedMode ? (
-                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 6 }}>
-                        <label style={{ display: 'grid', gap: 4 }}>
-                          <span style={{ fontSize: 11, color: 'var(--muted)', fontWeight: 600 }}>Held</span>
-                          <input
-                            type="number"
-                            min="0"
-                            value={s.held}
-                            onChange={e => updateCombined(c.id, teacher, 'held', e.target.value)}
-                            placeholder="0"
-                            style={{ fontSize: 12 }}
-                          />
-                        </label>
-                        <label style={{ display: 'grid', gap: 4 }}>
-                          <span style={{ fontSize: 11, color: 'var(--muted)', fontWeight: 600 }}>Attended</span>
-                          <input
-                            type="number"
-                            min="0"
-                            max={s.held}
-                            value={s.attended}
-                            onChange={e => updateCombined(c.id, teacher, 'attended', e.target.value)}
-                            placeholder="0"
-                            style={{ fontSize: 12 }}
-                          />
-                        </label>
+            {displayTeachers.length === 1 && displayTeachers[0] === '' ? (
+              <div style={{ padding: '16px', background: 'rgba(239, 68, 68, 0.08)', border: '2px solid rgba(239, 68, 68, 0.3)', borderRadius: 6, textAlign: 'center' }}>
+                <div style={{ fontSize: 12, color: '#ef4444', fontWeight: 600, marginBottom: 10 }}>
+                  ⚠ No teachers assigned to this course
+                </div>
+                <button 
+                  onClick={() => {
+                    setSelectedCourse(c);
+                    setTeacherDialogOpen(true);
+                  }}
+                  style={{
+                    padding: '8px 16px',
+                    borderRadius: 6,
+                    cursor: 'pointer',
+                    fontWeight: 600,
+                    fontSize: 12,
+                    background: 'var(--accent)',
+                    color: 'white',
+                    border: 'none',
+                    transition: 'all 0.2s ease',
+                  }}>
+                  + Add Teacher
+                </button>
+              </div>
+            ) : (
+              <div style={{ display: 'grid', gridTemplateColumns: `repeat(${Math.min(displayTeachers.length, 2)}, 1fr)`, gap: 8 }}>
+                {displayTeachers.map(teacher => {
+                  const s = stats[teacher || ''];
+                  const tp = s.held > 0 ? Math.round((s.attended / s.held) * 100) : 0;
+                  return (
+                    <div key={teacher || 'unknown'} style={{ padding: '8px', background: 'var(--inputBg)', borderRadius: 6, fontSize: 12 }}>
+                      <div style={{ fontWeight: 700, marginBottom: 8 }}>{teacher || 'Unassigned'}</div>
+                      {combinedMode ? (
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 6 }}>
+                          <label style={{ display: 'grid', gap: 4 }}>
+                            <span style={{ fontSize: 11, color: 'var(--muted)', fontWeight: 600 }}>Held</span>
+                            <input
+                              type="number"
+                              min="0"
+                              value={s.held}
+                              onChange={e => updateCombined(c.id, teacher, 'held', e.target.value)}
+                              placeholder="0"
+                              style={{ fontSize: 12 }}
+                            />
+                          </label>
+                          <label style={{ display: 'grid', gap: 4 }}>
+                            <span style={{ fontSize: 11, color: 'var(--muted)', fontWeight: 600 }}>Attended</span>
+                            <input
+                              type="number"
+                              min="0"
+                              max={s.held}
+                              value={s.attended}
+                              onChange={e => updateCombined(c.id, teacher, 'attended', e.target.value)}
+                              placeholder="0"
+                              style={{ fontSize: 12 }}
+                            />
+                          </label>
+                        </div>
+                      ) : null}
+                      <div style={{ color: 'var(--muted)', fontSize: 12, marginTop: combinedMode ? 8 : 0, padding: combinedMode ? '8px' : 0, background: combinedMode ? 'rgba(0,0,0,0.02)' : 'transparent', borderRadius: 4 }}>
+                        <div style={{ fontWeight: 600 }}>{s.attended}/{s.held}</div>
+                        <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 2 }}>{tp}% attended</div>
                       </div>
-                    ) : null}
-                    <div style={{ color: 'var(--muted)', fontSize: 12, marginTop: combinedMode ? 8 : 0, padding: combinedMode ? '8px' : 0, background: combinedMode ? 'rgba(0,0,0,0.02)' : 'transparent', borderRadius: 4 }}>
-                      <div style={{ fontWeight: 600 }}>{s.attended}/{s.held}</div>
-                      <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 2 }}>{tp}% attended</div>
                     </div>
-                  </div>
-                );
-              })}
-            </div>
+                  );
+                })}
+              </div>
+            )}
           </div>
 
           {pct !== null && (
@@ -854,56 +967,39 @@ export default function Attendance() {
   return (
     <div className="attendance-page page-enter page-container">
       <div className="attendance-hero">
-        <div className="attendance-hero-shell">
-          <div className="attendance-hero-copy">
-            <div className="attendance-kicker">Attendance</div>
-            <h1 className="attendance-title">Mark classes for scheduled dates — all past entries remain editable anytime</h1>
-            <p className="attendance-subtitle">Keep attendance aligned with your routine, manage holidays centrally, and make every log easy to review.</p>
+        <div className="attendance-hero-header">
+          <div>
+            <div className="attendance-hero-kicker">OVERVIEW</div>
+            <h1 className="attendance-hero-heading">Attendance Summary</h1>
+            <p className="attendance-hero-subtext">THEORY COURSES ONLY</p>
           </div>
-
-          <div className="attendance-hero-actions">
-            <button className="btn btn-primary attendance-holiday-btn" onClick={openHolidaySetup}>
-              <CalendarDays size={14} /> Add Holiday
-            </button>
-            <span className="attendance-hero-chip">
-              📅 {holidayDates.length} holiday{holidayDates.length !== 1 ? 's' : ''} configured
-            </span>
-          </div>
+          <button className="btn btn-primary attendance-holiday-btn" onClick={openHolidaySetup}>
+            <CalendarDays size={14} /> Add Holiday
+          </button>
         </div>
 
         <div className="attendance-summary-grid">
         {heroCourseStats.map(({ course, totalHeld, totalAttended, pct, status }) => (
           <div key={course.id} className={`attendance-summary-card attendance-summary-card--${status}`}>
-            <div className="card-top">
-              <div className="course" title={course.name}>{course.code || getDisplayCourseName(course)}</div>
-              <div className="pct" style={{ color: attColor(pct) }}>{pct !== null ? `${pct}%` : '--'}</div>
-            </div>
-            <div className="meta">{totalAttended}/{totalHeld || 0} classes</div>
-            <div className="attendance-card-bar">
-              <div className="attendance-card-fill" style={{ width: `${pct !== null ? Math.min(100, pct) : 0}%`, background: attColor(pct) }} />
-            </div>
-            {pct === null && <div className="note">No attendance logged yet</div>}
+            <div className="card-course">{course.code || getDisplayCourseName(course)}</div>
+            <div className="card-percentage" style={{ color: attColor(pct) }}>{pct !== null ? `${pct}%` : '--'}</div>
+            <div className="card-meta">{totalAttended}/{totalHeld || 0}</div>
             {pct !== null && (() => {
-              if (pct < MIN_ATTENDANCE_PERCENT) {
-                return <div className="note" style={{ color: 'var(--danger)' }}>⚠ Below minimum — course at risk</div>;
-              }
-              // how many more can be missed and still stay ≥ MIN_ATTENDANCE_PERCENT
               const canMiss = totalHeld > 0
                 ? Math.floor((totalAttended - MIN_ATTENDANCE_PERCENT / 100 * (totalHeld)) / (1 - MIN_ATTENDANCE_PERCENT / 100))
                 : 0;
-              if (canMiss <= 0) {
-                return <div className="note" style={{ color: 'var(--warning)' }}>Cannot miss any more classes</div>;
+              if (pct < MIN_ATTENDANCE_PERCENT) {
+                return <div className="card-status card-status-danger">≤60%<br />❌ &#199;&#195;&#162 cancelled</div>;
               }
-              return <div className="note" style={{ color: 'var(--success)' }}>Can miss {canMiss} more class{canMiss !== 1 ? 'es' : ''} and stay ≥{MIN_ATTENDANCE_PERCENT}%</div>;
+              if (canMiss <= 0) {
+                return <div className="card-status card-status-warning">⚠ No misses left</div>;
+              }
+              return <div className="card-status card-status-safe">✓ Can miss {canMiss}</div>;
             })()}
+            {pct === null && <div className="card-status card-status-neutral">No classes yet</div>}
           </div>
         ))}
       </div>
-      {holidayDates.length > 0 && (
-        <div className="attendance-hero-pill">
-          📅 {holidayDates.length} holiday{holidayDates.length !== 1 ? 's' : ''} saved (Fri & Sat always holidays)
-        </div>
-      )}
       </div>
       {todaySchedule.length > 0 && (
         <div className="card" style={{ marginBottom: 16 }}>
