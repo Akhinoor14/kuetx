@@ -529,15 +529,38 @@ function Summary({ courses, logs, schedule, scheduleSettings, combinedMode, comb
     <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
       <div className="card" style={{ padding: 14, display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
         <div style={{ fontSize: 13, color: 'var(--muted)' }}>
-          Sessional/Lab cards are hidden here (always 100% auto). Use this page for theory attendance only.
+          Sessional/Lab cards are hidden here (always 100% auto). Use this for theory attendance overview and manual totals.
         </div>
         <button className="btn btn-ghost" onClick={toggleCombinedMode}>
           {combinedMode ? 'Combined Input: ON' : 'Combined Input: OFF'}
         </button>
       </div>
+      {combinedMode && (
+        <div className="card" style={{ padding: 12, fontSize: 12, color: 'var(--muted)' }}>
+          Enter per-teacher totals for each course. "Held" = total classes taken, "Attended" = your attended classes. Leave empty when no class was held; holidays are managed in the holiday setup.
+        </div>
+      )}
 
-      {courseCards.map(({ course: c, stats, displayTeachers, totalHeld, totalAttended, pct, attMarks, need75, canMiss }) => (
-        <div key={c.id} className="card" style={{ padding: 18 }}>
+      {(() => {
+        // Soft background colors - subtle pastel shades
+        const softColors = [
+          'rgba(168, 85, 247, 0.08)',  // light purple
+          'rgba(34, 197, 94, 0.08)',   // light green
+          'rgba(59, 130, 246, 0.08)',  // light blue
+          'rgba(249, 115, 22, 0.08)',  // light orange
+          'rgba(236, 72, 153, 0.08)',  // light pink
+          'rgba(20, 184, 166, 0.08)',  // light teal
+        ];
+        const courseColorMap = {};
+        let colorIndex = 0;
+        courseCards.forEach(card => {
+          if (!courseColorMap[card.course.id]) {
+            courseColorMap[card.course.id] = softColors[colorIndex % softColors.length];
+            colorIndex++;
+          }
+        });
+        return courseCards.map(({ course: c, stats, displayTeachers, totalHeld, totalAttended, pct, attMarks, need75, canMiss }) => (
+        <div key={c.id} className="card" style={{ padding: 18, background: courseColorMap[c.id], border: '1px solid rgba(0, 0, 0, 0.05)' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 14, flexWrap: 'wrap', gap: 10 }}>
             <div>
               <div style={{ fontWeight: 700, fontSize: 15 }}>{c.code} — {c.name}</div>
@@ -548,8 +571,8 @@ function Summary({ courses, logs, schedule, scheduleSettings, combinedMode, comb
             <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
               {attMarks !== null && (
                 <div style={{ textAlign: 'center' }}>
-                  <div style={{ fontSize: 11, color: 'var(--muted)' }}>Marks</div>
-                  <div style={{ fontSize: 20, fontWeight: 800, color: 'var(--accent)' }}>{attMarks}/10</div>
+                  <div style={{ fontSize: 11, color: 'var(--muted)' }}>Attendance Marks</div>
+                  <div style={{ fontSize: 20, fontWeight: 800, color: 'var(--accent)' }}>{Math.round(attMarks * 3)}/30</div>
                 </div>
               )}
               {pct !== null && (
@@ -569,29 +592,38 @@ function Summary({ courses, logs, schedule, scheduleSettings, combinedMode, comb
                 const tp = s.held > 0 ? Math.round((s.attended / s.held) * 100) : 0;
                 return (
                   <div key={teacher || 'unknown'} style={{ padding: '8px', background: 'var(--inputBg)', borderRadius: 6, fontSize: 12 }}>
-                    <div style={{ fontWeight: 700, marginBottom: 6 }}>{teacher || 'Unassigned'}</div>
+                    <div style={{ fontWeight: 700, marginBottom: 8 }}>{teacher || 'Unassigned'}</div>
                     {combinedMode ? (
                       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 6 }}>
-                        <input
-                          type="number"
-                          min="0"
-                          value={s.held}
-                          onChange={e => updateCombined(c.id, teacher, 'held', e.target.value)}
-                          placeholder="Held"
-                        />
-                        <input
-                          type="number"
-                          min="0"
-                          max={s.held}
-                          value={s.attended}
-                          onChange={e => updateCombined(c.id, teacher, 'attended', e.target.value)}
-                          placeholder="Attended"
-                        />
+                        <label style={{ display: 'grid', gap: 4 }}>
+                          <span style={{ fontSize: 11, color: 'var(--muted)', fontWeight: 600 }}>Held</span>
+                          <input
+                            type="number"
+                            min="0"
+                            value={s.held}
+                            onChange={e => updateCombined(c.id, teacher, 'held', e.target.value)}
+                            placeholder="0"
+                            style={{ fontSize: 12 }}
+                          />
+                        </label>
+                        <label style={{ display: 'grid', gap: 4 }}>
+                          <span style={{ fontSize: 11, color: 'var(--muted)', fontWeight: 600 }}>Attended</span>
+                          <input
+                            type="number"
+                            min="0"
+                            max={s.held}
+                            value={s.attended}
+                            onChange={e => updateCombined(c.id, teacher, 'attended', e.target.value)}
+                            placeholder="0"
+                            style={{ fontSize: 12 }}
+                          />
+                        </label>
                       </div>
-                    ) : (
-                      <div style={{ color: 'var(--muted)' }}>{s.attended}/{s.held} ({tp}%)</div>
-                    )}
-                    {combinedMode && <div style={{ color: 'var(--muted)', marginTop: 4 }}>{s.attended}/{s.held} ({tp}%)</div>}
+                    ) : null}
+                    <div style={{ color: 'var(--muted)', fontSize: 12, marginTop: combinedMode ? 8 : 0, padding: combinedMode ? '8px' : 0, background: combinedMode ? 'rgba(0,0,0,0.02)' : 'transparent', borderRadius: 4 }}>
+                      <div style={{ fontWeight: 600 }}>{s.attended}/{s.held}</div>
+                      <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 2 }}>{tp}% attended</div>
+                    </div>
                   </div>
                 );
               })}
@@ -630,7 +662,8 @@ function Summary({ courses, logs, schedule, scheduleSettings, combinedMode, comb
             </div>
           )}
         </div>
-      ))}
+        ));
+      })()}
     </div>
   );
 }
@@ -863,7 +896,7 @@ export default function Attendance() {
       )}
 
       <div className="tabs">
-        {[['daily', '📅 Daily Log'], ['summary', '📊 Summary & Stats']].map(([id, label]) => (
+        {[['daily', '📅 Daily Log'], ['summary', '📊 Attendance Overview']].map(([id, label]) => (
           <button key={id} className={`tab-btn ${tab === id ? 'active' : ''}`} onClick={() => setTab(id)}>{label}</button>
         ))}
       </div>

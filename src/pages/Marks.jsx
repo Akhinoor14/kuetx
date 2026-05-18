@@ -363,8 +363,9 @@ export default function Marks() {
               <button type="button" className="planner-help-close" onClick={() => setMarkingHelpOpen(false)}>×</button>
             </div>
 
-            <div className="planner-help-layout">
-              <div className="planner-help-stack">
+            <div className="planner-help-layout" style={{ gridTemplateColumns: '1fr', gap: 14 }}>
+              {/* Top Row: 3-column cards */}
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10 }}>
                 <div className="planner-help-card">
                   <strong>Each teacher</strong>
                   <div className="planner-help-mini-list">
@@ -385,17 +386,22 @@ export default function Marks() {
                 </div>
               </div>
 
+              {/* Bottom: Full-width attendance table */}
               <div className="planner-help-card planner-help-card-auto">
                 <strong>Auto attendance</strong>
-                <div className="planner-help-scale">
-                  <div><span>90%+</span><span>10</span></div>
-                  <div><span>85-89</span><span>9</span></div>
-                  <div><span>80-84</span><span>8</span></div>
-                  <div><span>75-79</span><span>7</span></div>
-                  <div><span>70-74</span><span>6</span></div>
-                  <div><span>65-69</span><span>5</span></div>
-                  <div><span>60-64</span><span>4</span></div>
-                  <div><span>Below 60</span><span>0</span></div>
+                <div className="planner-help-scale" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 6, fontSize: 12, marginTop: 10 }}>
+                  <div style={{ textAlign: 'center', fontWeight: 600, borderBottom: '1px solid rgba(var(--accentRGB), 0.2)', paddingBottom: 6 }}>Attendance %</div>
+                  <div style={{ textAlign: 'center', fontWeight: 600, borderBottom: '1px solid rgba(var(--accentRGB), 0.2)', paddingBottom: 6 }}>Per Teacher (0-15)</div>
+                  <div style={{ textAlign: 'center', fontWeight: 600, borderBottom: '1px solid rgba(var(--accentRGB), 0.2)', paddingBottom: 6 }}>Full Course (0-30)</div>
+                  
+                  <div style={{ textAlign: 'center' }}>90%+</div><div style={{ textAlign: 'center' }}>15</div><div style={{ textAlign: 'center' }}>30</div>
+                  <div style={{ textAlign: 'center' }}>85-89</div><div style={{ textAlign: 'center' }}>13.5</div><div style={{ textAlign: 'center' }}>27</div>
+                  <div style={{ textAlign: 'center' }}>80-84</div><div style={{ textAlign: 'center' }}>12</div><div style={{ textAlign: 'center' }}>24</div>
+                  <div style={{ textAlign: 'center' }}>75-79</div><div style={{ textAlign: 'center' }}>10.5</div><div style={{ textAlign: 'center' }}>21</div>
+                  <div style={{ textAlign: 'center' }}>70-74</div><div style={{ textAlign: 'center' }}>9</div><div style={{ textAlign: 'center' }}>18</div>
+                  <div style={{ textAlign: 'center' }}>65-69</div><div style={{ textAlign: 'center' }}>7.5</div><div style={{ textAlign: 'center' }}>15</div>
+                  <div style={{ textAlign: 'center' }}>60-64</div><div style={{ textAlign: 'center' }}>6</div><div style={{ textAlign: 'center' }}>12</div>
+                  <div style={{ textAlign: 'center' }}>Below 60</div><div style={{ textAlign: 'center' }}>0</div><div style={{ textAlign: 'center' }}>0</div>
                 </div>
               </div>
             </div>
