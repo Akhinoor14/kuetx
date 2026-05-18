@@ -1,13 +1,116 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Copy } from 'lucide-react';
-import { store, getProfile } from '../store/store';
+import { store, uid, getAllCourses, getProfile, getCurrentTermKey, getRoutinePreviewDate } from '../store/store';
+import CourseTeacherDialog from '../components/CourseTeacherDialog';
 
 const DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday'];
 
+const TIME_MODELS = {
+  '50min': {
+    id: '50min',
+    name: '50 Minute Model',
+    note: '8:00 start, lunch gap, lab slots supported',
+    slots: [
+      '8:00 AM-8:50 AM',
+      '8:50 AM-9:40 AM',
+      '9:40 AM-10:30 AM',
+      '10:30 AM-10:40 AM break',
+      '10:40 AM-11:30 AM',
+      '11:30 AM-12:20 PM',
+      '12:20 PM-1:10 PM',
+      '1:10 PM-2:30 PM break',
+      '2:30 PM-3:20 PM',
+      '3:20 PM-4:10 PM',
+      '4:10 PM-5:00 PM',
+      '2:30 PM-5:00 PM',
+    ],
+  },
+  '40min': {
+    id: '40min',
+    name: '40 Minute Model',
+    note: '9:00 start, shorter class cycle, lab slots supported',
+    slots: [
+      '9:00 AM-9:40 AM',
+      '9:40 AM-10:20 AM',
+      '10:20 AM-11:00 AM',
+      '11:00 AM-11:40 AM',
+      '11:40 AM-12:20 PM',
+      '12:20 PM-1:00 PM',
+      '1:00 PM-2:00 PM break',
+      '2:00 PM-2:40 PM',
+      '2:40 PM-3:20 PM',
+      '3:20 PM-4:00 PM',
+      '2:00 PM-5:00 PM',
+    ],
+  },
+};
+
+const DEFAULT_CUSTOM = [
+  '8:00 AM-8:50 AM',
+  '8:50 AM-9:40 AM',
+  '9:40 AM-10:30 AM',
+  '10:30 AM-10:40 AM break',
+  '10:40 AM-11:30 AM',
+  '11:30 AM-12:20 PM',
+  '12:20 PM-1:10 PM',
+  '1:10 PM-2:30 PM break',
+  '2:30 PM-3:20 PM',
+  '3:20 PM-4:10 PM',
+  '4:10 PM-5:00 PM',
+];
+
+const normalizeTeacherName = (value) => {
+  const clean = String(value || '').trim().replace(/\s+/g, ' ');
+  if (!clean) return '';
+  return /\bsir\.?$/i.test(clean) ? clean.replace(/\.$/, '') : `${clean} Sir`;
+};
+
 const DEFAULT_SETTINGS = {
+  modelId: '50min',
+  customSlots: DEFAULT_CUSTOM,
+  customLabel: '',
   messageFormat: 'whatsapp',
 };
+
+const MESSAGE_FORMATS = [
+  { id: 'plain', label: 'Copy Text' },
+  { id: 'whatsapp', label: 'Copy WhatsApp' },
+];
+
+const normalizeSettings = (raw) => ({
+  ...DEFAULT_SETTINGS,
+  ...(raw || {}),
+  customSlots: Array.isArray(raw?.customSlots) && raw.customSlots.length ? raw.customSlots : DEFAULT_CUSTOM,
+  messageFormat: MESSAGE_FORMATS.some(f => f.id === raw?.messageFormat) ? raw.messageFormat : DEFAULT_SETTINGS.messageFormat,
+  holidayDates: Array.isArray(raw?.holidayDates) ? [...new Set(raw.holidayDates)].filter(Boolean).sort() : [],
+  courseTeacherMap: Object.entries(raw?.courseTeacherMap || {}).reduce((acc, [courseId, teachers]) => {
+    const normalizedTeachers = [...new Set((Array.isArray(teachers) ? teachers : [])
+      .map(name => normalizeTeacherName(name))
+      .filter(Boolean))].slice(0, 2);
+    if (normalizedTeachers.length > 0) acc[courseId] = normalizedTeachers;
+    return acc;
+  }, {}),
+  courseShortNameMap: Object.entries(raw?.courseShortNameMap || {}).reduce((acc, [courseId, shortName]) => {
+    const normalized = String(shortName || '').trim();
+    if (normalized) acc[courseId] = normalized;
+    return acc;
+  }, {}),
+});
+
+const getUniqueTeacherNames = (schedule) => {
+  const teachers = new Set();
+  (schedule || []).forEach(item => {
+    if (item.teacherName && item.teacherName.trim()) {
+      teachers.add(item.teacherName);
+    }
+  });
+  return Array.from(teachers).sort();
+};
+
+const normalizeSlotKey = (value) => String(value || '').trim();
+
+const dateToDayName = (dateStr) => new Date(`${dateStr}T00:00:00`).toLocaleDateString('en-US', { weekday: 'long' });
 
 const parseTimeToMinutes = (value) => {
   let cleanValue = String(value || '').trim().replace(/\s+break\s*$/i, '').trim();
@@ -24,8 +127,17 @@ const parseTimeToMinutes = (value) => {
 const parseSlotRange = (slot) => {
   const match = String(slot || '').match(/^(.+?)\s*-\s*(.+)$/);
   if (!match) return null;
-  const start = parseTimeToMinutes(match[1]);
-  const end = parseTimeToMinutes(match[2]);
+
+  let startStr = match[1].trim();
+  let endStr = match[2].trim();
+
+  if (!/\b(AM|PM)\b/i.test(startStr) && /\b(AM|PM)\b/i.test(endStr)) {
+    const ampm = endStr.match(/\b(AM|PM)\b/i)?.[0] || '';
+    startStr = `${startStr} ${ampm}`.trim();
+  }
+
+  const start = parseTimeToMinutes(startStr);
+  const end = parseTimeToMinutes(endStr);
   if (start === null || end === null || end <= start) return null;
   return { start, end };
 };
@@ -35,10 +147,10 @@ const slotSortValue = (slot) => {
   return range ? range.start * 1000 + range.end : Number.MAX_SAFE_INTEGER;
 };
 
-const getSlotCatalog = (schedule) => {
+const getSlotCatalog = (schedule, baseSlots) => {
   const unique = new Map();
-  (schedule || []).forEach(item => {
-    const key = String(item.slot || '').trim();
+  [...(baseSlots || []), ...((schedule || []).map(item => item.slot))].forEach(slot => {
+    const key = normalizeSlotKey(slot);
     if (key) unique.set(key, key);
   });
   return [...unique.values()].sort((a, b) => slotSortValue(a) - slotSortValue(b) || a.localeCompare(b));
@@ -47,11 +159,21 @@ const getSlotCatalog = (schedule) => {
 const isSlotOverlap = (a, b) => {
   const rangeA = parseSlotRange(a);
   const rangeB = parseSlotRange(b);
-  if (!rangeA || !rangeB) return String(a || '').trim() === String(b || '').trim();
+  if (!rangeA || !rangeB) return normalizeSlotKey(a) === normalizeSlotKey(b);
   return rangeA.start < rangeB.end && rangeB.start < rangeA.end;
 };
 
 const formatDayShort = (day) => day.slice(0, 3);
+
+const isSessionalType = (type) => /sessional|lab/i.test(String(type || ''));
+
+const detectCourseType = (course) => {
+  if (!course || !course.code) return 'Theory';
+  const match = String(course.code).match(/(\d)(?:\D|$)/);
+  if (!match) return 'Theory';
+  const lastDigit = Number(match[1]);
+  return lastDigit % 2 === 0 ? 'Sessional' : 'Theory';
+};
 
 const isLongSessionalSlot = (slot) => {
   const range = parseSlotRange(slot);
@@ -59,10 +181,22 @@ const isLongSessionalSlot = (slot) => {
   return (range.end - range.start) >= 120;
 };
 
-const normalizeTeacherName = (value) => {
-  const clean = String(value || '').trim().replace(/\s+/g, ' ');
-  if (!clean) return '';
-  return /\bsir\.?$/i.test(clean) ? clean.replace(/\.$/, '') : `${clean} Sir`;
+const getPresetSessionalSlots = (modelId) => {
+  if (modelId === '50min') {
+    return [
+      '8:00 AM-10:30 AM',
+      '10:40 AM-1:10 PM',
+      '2:30 PM-5:00 PM',
+    ];
+  }
+  if (modelId === '40min') {
+    return [
+      '9:00 AM-11:00 AM',
+      '11:00 AM-1:00 PM',
+      '2:00 PM-4:00 PM',
+    ];
+  }
+  return [];
 };
 
 const normalizeScheduleEntries = (entries) => {
@@ -128,29 +262,316 @@ const buildRoutineBackupPayload = (schedule, scheduleSettings, assignments, teac
 
 export default function ClassManagement() {
   const profile = getProfile();
+  const courses = useMemo(() => getAllCourses(profile), [profile.dept, profile.currentTermKey]);
+  const currentTermKey = getCurrentTermKey(profile);
+  const currentTermCourses = useMemo(() => {
+    if (!currentTermKey) return courses;
+    const match = currentTermKey.match(/Y(\d)T(\d)/);
+    if (!match) return courses;
+    const [, year, term] = match.map(Number);
+    return courses.filter(c => c.year === year && c.term === term);
+  }, [courses, currentTermKey]);
+
   const [schedule, setSchedule] = useState(() => normalizeScheduleEntries(store.get('schedule') || []));
-  const [settings, setSettings] = useState(() => ({ ...DEFAULT_SETTINGS, ...(store.get('scheduleSettings') || {}) }));
+  const [settings, setSettings] = useState(() => normalizeSettings(store.get('scheduleSettings')));
   const [assignments, setAssignments] = useState(() => store.get('assignments') || []);
   const [teachers, setTeachers] = useState(() => store.get('teachers') || []);
   const [copied, setCopied] = useState(false);
   const [message, setMessage] = useState('');
-  const [selectedDay, setSelectedDay] = useState(() => {
-    for (const day of DAYS) {
-      if (schedule.some(item => item.day === day)) return day;
-    }
-    return 'Sunday';
-  });
+  const [selectedDay, setSelectedDay] = useState(() => dateToDayName(getRoutinePreviewDate((store.get('scheduleSettings')?.holidayDates) || [])));
   const [fullScreenOpen, setFullScreenOpen] = useState(false);
+  const [quickFormOpen, setQuickFormOpen] = useState(false);
+  const [quickFormData, setQuickFormData] = useState({ day: '', slot: '', courseId: '', teacherName: '', displayName: '', room: '', note: '', type: 'Theory' });
+  const [quickFormEditingId, setQuickFormEditingId] = useState(null);
+  const [courseTeacherDialogState, setCourseTeacherDialogState] = useState({ open: false, courseId: '', source: null });
+  const [allKnownTeachers, setAllKnownTeachers] = useState(() => getUniqueTeacherNames(schedule));
+  const lastClickRef = useRef({});
 
   const getCourse = (id) => {
     const allCourses = store.get('courses') || [];
     return allCourses.find(course => course.id === id);
   };
 
+  const activeTemplate = TIME_MODELS[settings.modelId] || TIME_MODELS['50min'];
+  const slotList = settings.modelId === 'custom' ? settings.customSlots : activeTemplate.slots;
+
+  const courseTeacherMap = settings.courseTeacherMap || {};
+  const courseShortNameMap = settings.courseShortNameMap || {};
+
+  const getCourseTeachers = (courseId) => {
+    if (!courseId) return [];
+    const mappedTeachers = Array.isArray(courseTeacherMap[courseId]) ? courseTeacherMap[courseId].filter(Boolean) : [];
+    if (mappedTeachers.length > 0) return mappedTeachers;
+
+    const fromSchedule = [...new Set(
+      (schedule || [])
+        .filter(item => item.courseId === courseId)
+        .flatMap(item => {
+          const many = Array.isArray(item.teacherNames) && item.teacherNames.length > 0 ? item.teacherNames : [item.teacherName];
+          return many.map(name => normalizeTeacherName(name)).filter(Boolean);
+        })
+    )].slice(0, 2);
+
+    return fromSchedule;
+  };
+
+  const ensureCourseTeacherSetup = (courseId, source) => {
+    if (!courseId) return false;
+    const teachers = getCourseTeachers(courseId);
+    if (teachers.length >= 2) return true;
+    setCourseTeacherDialogState({ open: true, courseId, source });
+    return false;
+  };
+
+  const updateCourseShortName = (courseId, value) => {
+    if (!courseId) return;
+    const trimmed = String(value || '').trim();
+    const nextMap = { ...(courseShortNameMap || {}) };
+    if (trimmed) nextMap[courseId] = trimmed;
+    else delete nextMap[courseId];
+    const normalized = normalizeSettings({ ...settings, courseShortNameMap: nextMap });
+    setSettings(normalized);
+    store.set('scheduleSettings', normalized);
+  };
+
+  useEffect(() => {
+    const teacherSet = new Set(getUniqueTeacherNames(schedule));
+    Object.values(courseTeacherMap || {}).forEach(list => {
+      (Array.isArray(list) ? list : []).forEach(name => {
+        const normalized = normalizeTeacherName(name);
+        if (normalized) teacherSet.add(normalized);
+      });
+    });
+    setAllKnownTeachers(Array.from(teacherSet).sort());
+  }, [schedule, courseTeacherMap]);
+
+  const autoDisplayName = (courseId, teacherName) => {
+    const course = getCourse(courseId);
+    const base = course ? `${course.code} — ${course.name}` : '';
+    const teacher = normalizeTeacherName(teacherName) ? ` · ${normalizeTeacherName(teacherName)}` : '';
+    return `${base}${teacher}`.trim();
+  };
+
+  const getAllowedSlotsForType = (type) => {
+    if (isSessionalType(type)) {
+      const presetSlots = getPresetSessionalSlots(settings.modelId);
+      if (presetSlots.length) return presetSlots;
+      const sessionalSlots = slotList.filter(isLongSessionalSlot);
+      return sessionalSlots.length ? sessionalSlots : slotList;
+    }
+    const regularSlots = slotList.filter(slot => !isLongSessionalSlot(slot));
+    return regularSlots.length ? regularSlots : slotList;
+  };
+
+  const openQuickAdd = (day, slot, courseId = '') => {
+    setQuickFormEditingId(null);
+    const range = parseSlotRange(slot);
+    const isLongSlot = range && (range.end - range.start) >= 120;
+    const autoType = isLongSlot ? 'Sessional' : 'Theory';
+
+    setQuickFormData({
+      day: day || 'Sunday',
+      slot: slot || TIME_MODELS['50min'].slots[0],
+      courseId: courseId || '',
+      teacherName: '',
+      displayName: '',
+      room: '',
+      note: '',
+      type: autoType,
+    });
+    setQuickFormOpen(true);
+  };
+
+  const handleQuickCourseChange = (courseId) => {
+    const teachersList = getCourseTeachers(courseId);
+    const course = getCourse(courseId);
+    const detectedType = detectCourseType(course);
+    const allowed = getAllowedSlotsForType(detectedType);
+    setQuickFormData(prev => ({
+      ...prev,
+      courseId,
+      teacherName: teachersList[0] || '',
+      displayName: courseShortNameMap[courseId] || prev.displayName || '',
+      type: detectedType,
+      slot: allowed.includes(prev.slot) ? prev.slot : (allowed[0] || prev.slot),
+    }));
+  };
+
+  const handleQuickTypeChange = (nextType) => {
+    const allowed = getAllowedSlotsForType(nextType);
+    setQuickFormData(prev => ({
+      ...prev,
+      type: nextType,
+      slot: allowed.includes(prev.slot) ? prev.slot : (allowed[0] || prev.slot),
+    }));
+  };
+
+  const handleCellClick = (id, item) => {
+    const now = Date.now();
+    const lastClick = lastClickRef.current[id] || 0;
+
+    if (now - lastClick < 300) {
+      startEdit(item);
+      lastClickRef.current[id] = 0;
+    } else {
+      lastClickRef.current[id] = now;
+    }
+  };
+
+  const handleEmptyCellClick = (day, slot, courseId = '') => {
+    const key = `empty-${day}-${slot}`;
+    const now = Date.now();
+    const lastClick = lastClickRef.current[key] || 0;
+
+    if (now - lastClick < 300) {
+      openQuickAdd(day, slot, courseId);
+      lastClickRef.current[key] = 0;
+    } else {
+      lastClickRef.current[key] = now;
+    }
+  };
+
+  const startEdit = (item) => {
+    const courseTeachers = getCourseTeachers(item.courseId);
+    setQuickFormEditingId(item.id);
+    setQuickFormData({
+      day: item.day || 'Sunday',
+      slot: item.slot || TIME_MODELS['50min'].slots[0],
+      courseId: item.courseId || '',
+      teacherName: item.teacherName || courseTeachers[0] || '',
+      displayName: item.displayName || courseShortNameMap[item.courseId] || '',
+      room: item.room || '',
+      note: item.note || '',
+      type: item.type || 'Theory',
+    });
+    setQuickFormOpen(true);
+  };
+
+  const closeQuickForm = () => {
+    setQuickFormOpen(false);
+    setQuickFormEditingId(null);
+    setQuickFormData({ day: '', slot: '', courseId: '', teacherName: '', displayName: '', room: '', note: '', type: 'Theory' });
+  };
+
+  const handleCourseTeacherDialogClose = () => {
+    setCourseTeacherDialogState({ open: false, courseId: '', source: null });
+  };
+
+  const handleCourseTeacherDialogSave = (teachersList) => {
+    const courseId = courseTeacherDialogState.courseId;
+    const normalizedTeachers = [...new Set((teachersList || []).map(name => normalizeTeacherName(name)).filter(Boolean))].slice(0, 2);
+    if (!courseId || normalizedTeachers.length < 2) return;
+
+    const nextMap = {
+      ...(courseTeacherMap || {}),
+      [courseId]: normalizedTeachers,
+    };
+    const normalized = normalizeSettings({ ...settings, courseTeacherMap: nextMap });
+    setSettings(normalized);
+    store.set('scheduleSettings', normalized);
+
+    if (courseTeacherDialogState.source === 'quick') {
+      setQuickFormData(prev => ({
+        ...prev,
+        courseId,
+        teacherName: prev.teacherName && normalizedTeachers.includes(prev.teacherName) ? prev.teacherName : normalizedTeachers[0],
+      }));
+    }
+
+    handleCourseTeacherDialogClose();
+  };
+
+  const saveQuickForm = () => {
+    const { day, slot, courseId, teacherName, displayName, room, note, type } = quickFormData;
+
+    if (!courseId || !slot) {
+      alert('Please select a course and time');
+      return;
+    }
+
+    const allowedSlots = getAllowedSlotsForType(type);
+    if (!allowedSlots.includes(slot)) {
+      alert(isSessionalType(type)
+        ? 'Sessional class must use a long lab slot (for example 2:30 PM-5:00 PM).'
+        : 'Theory/project/tutorial should use regular class slots.');
+      return;
+    }
+
+    const availableTeachers = getCourseTeachers(courseId);
+    if (availableTeachers.length < 2) {
+      alert('Please set both teachers for this course first.');
+      ensureCourseTeacherSetup(courseId, 'quick');
+      return;
+    }
+
+    const selectedTeacher = normalizeTeacherName(teacherName);
+    if (!selectedTeacher) {
+      alert('Please select a teacher for this class');
+      return;
+    }
+
+    const nextSlot = normalizeSlotKey(slot);
+
+    const newEntry = {
+      day,
+      slot: nextSlot,
+      courseId,
+      displayName: String(displayName || '').trim() || courseShortNameMap[courseId] || autoDisplayName(courseId, selectedTeacher),
+      room,
+      teacherNames: availableTeachers,
+      teacherName: selectedTeacher,
+      type,
+      note,
+      id: quickFormEditingId || uid(),
+    };
+
+    const existingSchedule = schedule.filter(item => item.id !== quickFormEditingId);
+
+    const hasExactDuplicate = existingSchedule.some(item =>
+      item.day === newEntry.day &&
+      normalizeSlotKey(item.slot) === nextSlot &&
+      item.courseId === newEntry.courseId &&
+      (item.teacherName || '') === (newEntry.teacherName || '') &&
+      (item.type || '') === (newEntry.type || '')
+    );
+
+    if (hasExactDuplicate && !quickFormEditingId) {
+      alert(`This class is already saved for ${newEntry.teacherName || 'this teacher'}.`);
+      return;
+    }
+
+    const hasOverlap = existingSchedule.some(item =>
+      item.day === newEntry.day &&
+      isSlotOverlap(item.slot, nextSlot) &&
+      item.courseId !== newEntry.courseId
+    );
+
+    if (hasOverlap) {
+      alert('That time overlaps with an existing class on the same day.');
+      return;
+    }
+
+    updateCourseShortName(courseId, displayName);
+
+    const updated = quickFormEditingId
+      ? normalizeScheduleEntries(schedule.map(item => item.id === quickFormEditingId ? newEntry : item))
+      : normalizeScheduleEntries([...schedule, newEntry]);
+
+    setSchedule(updated);
+    store.set('schedule', updated);
+    closeQuickForm();
+  };
+
+  const remove = (id) => {
+    const updated = normalizeScheduleEntries(schedule.filter(s => s.id !== id));
+    setSchedule(updated);
+    store.set('schedule', updated);
+  };
+
   const tableSlots = useMemo(() => {
-    const slots = getSlotCatalog(schedule).filter(slot => !isLongSessionalSlot(slot));
-    return slots.length ? slots : getSlotCatalog(schedule);
-  }, [schedule]);
+    const slots = getSlotCatalog(schedule, slotList).filter(slot => !isLongSessionalSlot(slot));
+    return slots.length ? slots : getSlotCatalog(schedule, slotList);
+  }, [schedule, slotList]);
 
   const tableLayout = useMemo(() => {
     const starts = {};
@@ -183,6 +604,13 @@ export default function ClassManagement() {
     () => buildDailyText(selectedDay, selectedClasses, getCourse, 'whatsapp'),
     [selectedDay, selectedClasses]
   );
+
+  const slotPreview = (slot) => {
+    const cleanSlot = String(slot).replace(/\s+break\s*$/i, '').trim();
+    const match = cleanSlot.match(/^(.+)-(.+)$/);
+    if (!match) return cleanSlot;
+    return `${match[1]} → ${match[2]}`;
+  };
 
   const renderTimetable = (opts = {}) => {
     const tableStyle = { width: '100%', borderCollapse: 'collapse', fontSize: opts.large ? 15 : 13 };
@@ -217,7 +645,7 @@ export default function ClassManagement() {
               const breakSlot = String(p).toLowerCase().includes('break');
               return (
                 <tr key={p}>
-                  <td style={{ padding: '12px 12px', borderBottom: '1px solid var(--border)', borderRight: '1px solid var(--border)', fontWeight: 700, fontSize: 13, color: 'var(--muted)', fontFamily: 'JetBrains Mono, monospace', whiteSpace: 'nowrap', background: breakSlot ? 'rgba(239,68,68,0.08)' : 'var(--bg)' }}>{String(p).replace(/\s+break\s*$/i, '').trim().replace(/^(.+)-(.+)$/, '$1 → $2')}</td>
+                  <td style={{ padding: '12px 12px', borderBottom: '1px solid var(--border)', borderRight: '1px solid var(--border)', fontWeight: 700, fontSize: 13, color: 'var(--muted)', fontFamily: 'JetBrains Mono, monospace', whiteSpace: 'nowrap', background: breakSlot ? 'rgba(239,68,68,0.08)' : 'var(--bg)' }}>{slotPreview(p)}</td>
                   {DAYS.map(d => {
                     if (tableLayout.covered[d]?.has(p)) return null;
                     const entries = tableLayout.starts[d]?.[p] || [];
@@ -229,7 +657,8 @@ export default function ClassManagement() {
                         key={d}
                         rowSpan={rowSpan > 1 ? rowSpan : undefined}
                         className={`timetable-day-col${d === selectedDay ? ' selected-day' : ''}`}
-                        title={isEmptyCell ? 'Routine preview' : undefined}
+                        onClick={isEmptyCell ? () => handleEmptyCellClick(d, p) : undefined}
+                        title={isEmptyCell ? 'Double-click to add class' : undefined}
                         style={{
                           padding: '6px',
                           borderBottom: '1px solid var(--border)',
@@ -237,15 +666,17 @@ export default function ClassManagement() {
                           verticalAlign: 'top',
                           minHeight: 54,
                           background: breakSlot ? 'rgba(239,68,68,0.08)' : d === selectedDay ? 'rgba(59,130,246,0.035)' : 'transparent',
-                          cursor: 'default',
+                          cursor: isEmptyCell ? 'pointer' : 'default',
                         }}
                       >
                         {dayItems.map(s => {
                           const c = getCourse(s.courseId);
-                          const isSessional = /sessional|lab/i.test(String(s.type || ''));
+                          const isSessional = isSessionalType(s.type);
                           return (
                             <div
                               key={s.id}
+                              onClick={() => handleCellClick(s.id, s)}
+                              title="Double-click to edit"
                               style={{
                                 padding: '8px 9px',
                                 borderRadius: 11,
@@ -260,6 +691,7 @@ export default function ClassManagement() {
                                   : '1px solid rgba(59,130,246,0.18)',
                                 color: 'var(--text)',
                                 position: 'relative',
+                                cursor: 'pointer',
                                 userSelect: 'none',
                               }}
                             >
@@ -271,6 +703,20 @@ export default function ClassManagement() {
                                   Teacher: {s.teacherName || 'Not set'}
                                 </div>
                               )}
+                              <button onClick={(e) => { e.stopPropagation(); startEdit(s); }} style={{
+                                position: 'absolute', top: 2, right: 16, background: 'none', border: 'none',
+                                color: 'inherit', cursor: 'pointer', opacity: 0.55, padding: 0, lineHeight: 1,
+                                touchAction: 'manipulation',
+                              }}>
+                                ✎
+                              </button>
+                              <button onClick={(e) => { e.stopPropagation(); remove(s.id); }} style={{
+                                position: 'absolute', top: 2, right: 2, background: 'none', border: 'none',
+                                color: 'inherit', cursor: 'pointer', opacity: 0.55, padding: 0, lineHeight: 1,
+                                touchAction: 'manipulation',
+                              }}>
+                                ×
+                              </button>
                             </div>
                           );
                         })}
@@ -352,7 +798,7 @@ export default function ClassManagement() {
           <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', alignItems: 'center', marginBottom: 12 }}>
             <div>
               <div style={{ fontWeight: 700, fontSize: 15 }}>Timetable Grid</div>
-              <div style={{ fontSize: 13, color: 'var(--muted)' }}>Same routine view as Schedule, tuned for CR use.</div>
+              <div style={{ fontSize: 13, color: 'var(--muted)' }}>Double-click any entry to edit.</div>
             </div>
             <div style={{ display: 'flex', gap: 8, alignItems: 'center', fontSize: 12, color: 'var(--muted)' }}>
               {schedule.length > 0 && (
@@ -361,40 +807,6 @@ export default function ClassManagement() {
               <button className="btn btn-ghost mobile-fullscreen-btn" onClick={() => setFullScreenOpen(true)} aria-label="Open timetable full screen">
                 <span className="fs-icon" aria-hidden style={{ display: 'inline-block', lineHeight: 0 }}>⤢</span>
                 <span className="fs-label" style={{ marginLeft: 8, fontWeight: 700 }}>Full</span>
-              </button>
-            </div>
-          </div>
-
-          <div className="mobile-preview-controls">
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, alignItems: 'center', marginBottom: 12 }}>
-              <span className="tag tag-blue">Selected · {selectedDay}</span>
-              <span className="tag tag-green">WhatsApp ready</span>
-            </div>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 12 }}>
-              {DAYS.map(day => (
-                <button
-                  key={day}
-                  onClick={() => setSelectedDay(day)}
-                  className="btn"
-                  style={{
-                    padding: '8px 12px',
-                    border: selectedDay === day ? '1px solid var(--accent)' : '1px solid var(--border)',
-                    background: selectedDay === day ? 'rgba(59,130,246,0.08)' : 'var(--card)',
-                  }}
-                >
-                  {day}
-                </button>
-              ))}
-            </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: 8, alignItems: 'center', marginBottom: 14 }}>
-              <div style={{ fontSize: 12, color: 'var(--muted)' }}>
-                {selectedClasses.length === 0 ? 'No classes added yet.' : `${selectedClasses.length} class${selectedClasses.length === 1 ? '' : 'es'} selected`}
-              </div>
-              <button className="btn btn-ghost" onClick={handleCopySchedule}>
-                <span style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 22, height: 22, borderRadius: 999, background: 'rgba(37,211,102,0.18)' }}>
-                  <Copy size={12} />
-                </span>
-                <span style={{ marginLeft: 8, fontWeight: 700 }}>Copy WhatsApp</span>
               </button>
             </div>
           </div>
@@ -445,13 +857,183 @@ export default function ClassManagement() {
         </div>
       </div>
 
+      {/* Quick Form Modal */}
+      {quickFormOpen && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: 'rgba(0,0,0,0.5)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 3000,
+          padding: 12,
+        }} onClick={closeQuickForm}>
+          <div style={{
+            background: 'var(--card)',
+            borderRadius: 12,
+            border: '1px solid var(--border)',
+            padding: 20,
+            maxWidth: 400,
+            width: '100%',
+            boxShadow: '0 10px 40px rgba(0,0,0,0.2)',
+            zIndex: 3010,
+          }} onClick={e => e.stopPropagation()}>
+            <div style={{ fontWeight: 700, fontSize: 15, marginBottom: 16 }}>
+              {quickFormEditingId ? 'Quick Edit' : 'Quick Add'} · {quickFormData.day} · {slotPreview(quickFormData.slot)}
+            </div>
+
+            <div style={{ display: 'grid', gap: 12, marginBottom: 16 }}>
+              <div>
+                <label style={{ fontSize: 12, fontWeight: 600 }}>Course</label>
+                <select
+                  value={quickFormData.courseId}
+                  onChange={e => handleQuickCourseChange(e.target.value)}
+                  style={{ width: '100%', padding: '8px 10px', border: '1px solid var(--border)', borderRadius: 6, background: 'var(--bg)', color: 'var(--text)', fontSize: 13 }}
+                >
+                  <option value="">Select course</option>
+                  {currentTermCourses.map(c => <option key={c.id} value={c.id}>{c.code} — {c.name}</option>)}
+                </select>
+              </div>
+
+              <div>
+                <label style={{ fontSize: 12, fontWeight: 600 }}>Show As (Grid Name)</label>
+                <input
+                  type="text"
+                  value={quickFormData.displayName}
+                  onChange={e => {
+                    const nextName = e.target.value;
+                    setQuickFormData(d => ({ ...d, displayName: nextName }));
+                    if (quickFormData.courseId) updateCourseShortName(quickFormData.courseId, nextName);
+                  }}
+                  placeholder={autoDisplayName(quickFormData.courseId, quickFormData.teacherName || '') || 'CSE 2201 DS'}
+                  style={{ width: '100%', padding: '8px 10px', border: '1px solid var(--border)', borderRadius: 6, background: 'var(--bg)', color: 'var(--text)', fontSize: 13, fontFamily: 'inherit' }}
+                />
+              </div>
+
+              <div>
+                <label style={{ fontSize: 12, fontWeight: 600 }}>Type</label>
+                <select
+                  value={quickFormData.type}
+                  onChange={e => handleQuickTypeChange(e.target.value)}
+                  style={{ width: '100%', padding: '8px 10px', border: '1px solid var(--border)', borderRadius: 6, background: 'var(--bg)', color: 'var(--text)', fontSize: 13 }}
+                >
+                  <option value="Theory">Theory</option>
+                  <option value="Sessional">Lab / Sessional</option>
+                  <option value="Project">Project</option>
+                  <option value="Tutorial">Tutorial / Section</option>
+                </select>
+              </div>
+
+              <div>
+                <label style={{ fontSize: 12, fontWeight: 600 }}>Time</label>
+                <select
+                  value={quickFormData.slot}
+                  onChange={e => setQuickFormData(d => ({ ...d, slot: e.target.value }))}
+                  style={{ width: '100%', padding: '8px 10px', border: '1px solid var(--border)', borderRadius: 6, background: 'var(--bg)', color: 'var(--text)', fontSize: 13 }}
+                >
+                  {getAllowedSlotsForType(quickFormData.type).map(p => <option key={p} value={p}>{slotPreview(p)}</option>)}
+                </select>
+              </div>
+
+              <div>
+                <label style={{ fontSize: 12, fontWeight: 600 }}>Teacher (Select One)</label>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: 8 }}>
+                  <select
+                    value={quickFormData.teacherName}
+                    onChange={e => setQuickFormData(d => ({ ...d, teacherName: e.target.value }))}
+                    disabled={!quickFormData.courseId || getCourseTeachers(quickFormData.courseId).length === 0}
+                    style={{ width: '100%', padding: '8px 10px', border: '1px solid var(--border)', borderRadius: 6, background: 'var(--bg)', color: 'var(--text)', fontSize: 13 }}
+                  >
+                    <option value="">Select teacher</option>
+                    {getCourseTeachers(quickFormData.courseId).map(name => (
+                      <option key={name} value={name}>{name}</option>
+                    ))}
+                  </select>
+                  <button
+                    type="button"
+                    className="btn btn-ghost"
+                    onClick={() => {
+                      if (!quickFormData.courseId) return;
+                      setCourseTeacherDialogState({ open: true, courseId: quickFormData.courseId, source: 'quick' });
+                    }}
+                    disabled={!quickFormData.courseId}
+                  >
+                    {getCourseTeachers(quickFormData.courseId).length >= 2 ? 'Edit Teachers' : 'Add Teacher'}
+                  </button>
+                </div>
+                {quickFormData.courseId && getCourseTeachers(quickFormData.courseId).length < 2 && (
+                  <div style={{ marginTop: 6, fontSize: 11, color: 'rgb(180,83,9)' }}>
+                    This course needs two fixed teachers before adding class.
+                  </div>
+                )}
+              </div>
+
+              <div>
+                <label style={{ fontSize: 12, fontWeight: 600 }}>Room</label>
+                <input
+                  type="text"
+                  value={quickFormData.room}
+                  onChange={e => setQuickFormData(d => ({ ...d, room: e.target.value }))}
+                  placeholder="Room number"
+                  style={{ width: '100%', padding: '8px 10px', border: '1px solid var(--border)', borderRadius: 6, background: 'var(--bg)', color: 'var(--text)', fontSize: 13, fontFamily: 'inherit' }}
+                />
+              </div>
+
+              <div>
+                <label style={{ fontSize: 12, fontWeight: 600 }}>Note</label>
+                <input
+                  type="text"
+                  value={quickFormData.note}
+                  onChange={e => setQuickFormData(d => ({ ...d, note: e.target.value }))}
+                  placeholder="Optional note"
+                  style={{ width: '100%', padding: '8px 10px', border: '1px solid var(--border)', borderRadius: 6, background: 'var(--bg)', color: 'var(--text)', fontSize: 13, fontFamily: 'inherit' }}
+                />
+              </div>
+            </div>
+
+            <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end' }}>
+              <button
+                onClick={closeQuickForm}
+                className="btn btn-ghost"
+                style={{ padding: '8px 14px' }}
+              >
+                Cancel
+              </button>
+              <button
+                onClick={saveQuickForm}
+                className="btn btn-primary"
+                disabled={!!quickFormData.courseId && getCourseTeachers(quickFormData.courseId).length < 2}
+                style={{ padding: '8px 14px' }}
+              >
+                {quickFormEditingId ? 'Update' : 'Add'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <CourseTeacherDialog
+        isOpen={courseTeacherDialogState.open}
+        onClose={handleCourseTeacherDialogClose}
+        course={getCourse(courseTeacherDialogState.courseId)}
+        currentTeachers={getCourseTeachers(courseTeacherDialogState.courseId)}
+        onSave={handleCourseTeacherDialogSave}
+        allTeachers={allKnownTeachers}
+        requireTwoTeachers
+      />
+
       {fullScreenOpen && (
-        <div className="fullscreen-overlay" onClick={() => setFullScreenOpen(false)}>
+        <div className="fullscreen-overlay" style={{ zIndex: 1100 }} onClick={() => setFullScreenOpen(false)}>
           <div className="fullscreen-content fullscreen-rotated" onClick={e => e.stopPropagation()}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 10, marginBottom: 12 }}>
               <div>
                 <div style={{ fontWeight: 700, fontSize: 16 }}>Timetable Full View</div>
                 <div style={{ fontSize: 12, color: 'var(--muted)' }}>Same routine grid, full screen.</div>
+                <div style={{ marginTop: 6, fontSize: 13, opacity: 0.95 }}>Double-click any entry to edit.</div>
               </div>
               <button className="btn btn-ghost" onClick={() => setFullScreenOpen(false)}>Close</button>
             </div>

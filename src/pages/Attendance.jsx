@@ -78,6 +78,48 @@ function getScheduleCoursesForDate(schedule, date) {
   }));
 }
 
+// Compute per-teacher effective attendance from daily logs or manual entries
+function getEffective(courseId, teacher, logs = {}, courseType) {
+  if (isAutoFull(courseType)) return { held: 0, attended: 0, percentage: 100, source: 'auto' };
+
+  // Count entries keyed as `${courseId}_${teacherName}` inside each day's log
+  let held = 0, attended = 0;
+  Object.values(logs).forEach(dayLog => {
+    if (!dayLog || typeof dayLog !== 'object') return;
+    Object.entries(dayLog).forEach(([key, val]) => {
+      if (!key) return;
+      const parts = key.split('_');
+      const cid = parts[0];
+      const tname = parts.slice(1).join('_') || '';
+      if (String(cid) !== String(courseId)) return;
+      // If teacher filter provided, only count matching teacher rows
+      const normTeacher = String(teacher || '').trim();
+      const normTname = String(tname || '').trim();
+      if (normTeacher !== '' && normTeacher !== normTname) return;
+      if (val === 'present' || val === 'absent') {
+        held++;
+        if (val === 'present') attended++;
+      }
+    });
+  });
+
+  if (held > 0) return { held, attended, percentage: Math.round((attended / held) * 100), source: 'log' };
+
+  // Fallback: check manual attendance store (supports per-course or per-course_teacher keys)
+  try {
+    const manual = store.get('attendance') || {};
+    const key = `${courseId}_${String(teacher || '').trim()}`;
+    const byKey = manual[key] || manual[courseId] || null;
+    if (byKey && byKey.held) {
+      const a = Number(byKey.attended || 0);
+      const h = Number(byKey.held || 0);
+      return { held: h, attended: a, percentage: h > 0 ? Math.round((a / h) * 100) : null, source: 'manual' };
+    }
+  } catch (e) {}
+
+  return { held: 0, attended: 0, percentage: null, source: 'none' };
+}
+
 // ── Daily Log ─────────────────────────────────────────────────────────────
 function DailyLog({ courses, logs, setLogs, schedule, scheduleSettings, combinedMode }) {
   const [date, setDate] = useState(todayStr());
