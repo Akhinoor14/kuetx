@@ -12,24 +12,31 @@ function calcHallNeeded(targetMinPct, continuousMarks) {
   return Math.min(210, hallNeeded);
 }
 
+const normalizeTeacherName = (value) => {
+  const clean = String(value || '').trim().replace(/\s+/g, ' ');
+  if (!clean) return '';
+  return /\bsir\.?$/i.test(clean) ? clean.replace(/\.$/, '') : `${clean} Sir`;
+};
+
 // ── Get teacher names from schedule ────────────────────────────────────────
 function getTeachersForCourse(courseId) {
-  const schedule = store.get('schedule') || [];
-  const teachers = [...new Set(
-    schedule
-      .filter(s => s.courseId === courseId)
-      .map(s => s.teacherName)
-      .filter(Boolean)
-  )];
-  // Return empty array if no schedule found (no placeholders)
-  return teachers;
+  const schedule = Array.isArray(store.get('schedule')) ? store.get('schedule') : [];
+  const settings = store.get('scheduleSettings') || {};
+  const fromCourseMap = Array.isArray(settings.courseTeacherMap?.[courseId]) ? settings.courseTeacherMap[courseId] : [];
+  const fromSchedule = schedule
+    .filter(s => s.courseId === courseId)
+    .flatMap(s => Array.isArray(s.teacherNames) && s.teacherNames.length > 0 ? s.teacherNames : [s.teacherName])
+    .map(normalizeTeacherName)
+    .filter(Boolean);
+
+  return [...new Set([...fromCourseMap, ...fromSchedule].map(normalizeTeacherName).filter(Boolean))];
 }
 
 // ── Course card: Modern grid-based layout ──────────────────────────────────
-function CourseCard({ course, marks, onChange, isCurrentOngoingTerm }) {
+function CourseCard({ course, marks, onChange, onOpenMarkingHelp, isCurrentOngoingTerm }) {
   const m = marks[course.id] || {};
   const { pct: attPct } = computeEffectiveAttendance(course.id);
-  const inputDisabled = !!isCurrentOngoingTerm;
+  const inputDisabled = false;
   
   const clamp = (value, min, max) => Math.min(max, Math.max(min, Number.isFinite(+value) ? +value : 0));
 
@@ -40,13 +47,12 @@ function CourseCard({ course, marks, onChange, isCurrentOngoingTerm }) {
   const hallTotal = clamp(m.hall, 0, 210);
   const ctTeacher1 = clamp(m.ctTeacher1, 0, 30);
   const ctTeacher2 = clamp(m.ctTeacher2, 0, 30);
-  const ctBonus1 = clamp(m.bonusTeacher1, 0, 30);
-  const ctBonus2 = clamp(m.bonusTeacher2, 0, 30);
-  const assignmentTeacher1 = clamp(m.assignmentTeacher1, 0, 15);
-  const assignmentTeacher2 = clamp(m.assignmentTeacher2, 0, 15);
 
-  const attendanceCap1 = Math.max(0, 15 - assignmentTeacher1);
-  const attendanceCap2 = Math.max(0, 15 - assignmentTeacher2);
+  // Teacher 1 & 2 can use standard (CT + Attendance) or manual override (0-45)
+  const useManual1 = !!m.useManualTeacher1;
+  const useManual2 = !!m.useManualTeacher2;
+  const manualMarks1 = clamp(m.manualTeacher1, 0, 45);
+  const manualMarks2 = clamp(m.manualTeacher2, 0, 45);
 
   // Attendance modes: 'auto' (pull from Attendance page),
   // 'manual_percent' (single percentage input), 'manual_marks' (per-teacher marks inputs)
@@ -56,23 +62,41 @@ function CourseCard({ course, marks, onChange, isCurrentOngoingTerm }) {
   const attendanceSourcePct = attMode === 'auto' ? attPct : (attMode === 'manual_percent' ? manualAttPct : null);
   const attendancePerTeacherFromPct = attendanceSourcePct !== null && attendanceSourcePct !== undefined ? (getAttendanceMarks(attendanceSourcePct) / 10) * 15 : 0;
 
-  const attendanceAuto1 = Math.min(attendancePerTeacherFromPct, attendanceCap1);
-  const attendanceAuto2 = Math.min(attendancePerTeacherFromPct, attendanceCap2);
+  // Attendance capped at 15 per teacher
+  const attendanceAuto1 = Math.min(attendancePerTeacherFromPct, 15);
+  const attendanceAuto2 = Math.min(attendancePerTeacherFromPct, 15);
 
-  const attTeacher1 = attMode === 'manual_marks' ? clamp(m.attTeacher1, 0, attendanceCap1) : attendanceAuto1;
-  const attTeacher2 = attMode === 'manual_marks' ? clamp(m.attTeacher2, 0, attendanceCap2) : attendanceAuto2;
+  const attTeacher1 = attMode === 'manual_marks' ? clamp(m.attTeacher1, 0, 15) : attendanceAuto1;
+  const attTeacher2 = attMode === 'manual_marks' ? clamp(m.attTeacher2, 0, 15) : attendanceAuto2;
 
-  const ctEffective1 = Math.min(30, ctTeacher1 + ctBonus1);
-  const ctEffective2 = Math.min(30, ctTeacher2 + ctBonus2);
-
-  const teacherContinuous1 = ctEffective1 + assignmentTeacher1 + attTeacher1;
-  const teacherContinuous2 = ctEffective2 + assignmentTeacher2 + attTeacher2;
-  const currentContinuous = Math.min(90, teacherContinuous1 + teacherContinuous2);
+  // Each teacher: either (CT + Attendance) or manual override
+  const teacher1Continuous = useManual1 ? manualMarks1 : Math.min(45, ctTeacher1 + attTeacher1);
+  const teacher2Continuous = useManual2 ? manualMarks2 : Math.min(45, ctTeacher2 + attTeacher2);
+  const currentContinuous = Math.min(90, teacher1Continuous + teacher2Continuous);
   const currentTotal = Math.min(300, hallTotal + currentContinuous);
   const currentGrade = getGradeFromPct(currentTotal);
 
   const targetGrade = m.targetGrade || null;
   const targetGradeObj = targetGrade ? GRADE_SCALE.find(g => g.grade === targetGrade) : null;
+  const teacherSyncLabel = teachers.length > 0 ? `Synced from Schedule: ${teachers.join(' · ')}` : '';
+  const requiredHallNode = targetGradeObj && targetGradeObj.minPct ? (() => {
+    const targetTotal = (targetGradeObj.minPct / 100) * 300;
+    const rawNeeded = Math.ceil(targetTotal - currentContinuous);
+    const possible = rawNeeded <= 210;
+    const neededToShow = Math.max(0, rawNeeded);
+    const boxClass = possible ? (neededToShow > hallTotal ? 'warning' : 'success') : 'danger';
+    return (
+      <div className={`planner-needed-box ${boxClass}`}>
+        <div className="planner-needed-label">To achieve {m.targetGrade}:</div>
+        <div className="planner-needed-value">
+          {possible
+            ? `${neededToShow}/210 hall marks needed`
+            : 'Impossible with current continuous'
+          }
+        </div>
+      </div>
+    );
+  })() : null;
 
   return (
     <div className="planner-course-card">
@@ -81,7 +105,6 @@ function CourseCard({ course, marks, onChange, isCurrentOngoingTerm }) {
         <div>
           <h3 className="planner-card-title">{course.code}</h3>
           <p className="planner-card-desc">{course.name}</p>
-          <p className="planner-card-note" style={{ marginTop: 6, fontSize: 12, color: 'var(--muted)' }}>Local estimate — does not affect official results.</p>
         </div>
       </div>
 
@@ -90,37 +113,41 @@ function CourseCard({ course, marks, onChange, isCurrentOngoingTerm }) {
       {/* Main Input Section */}
       <div className="planner-card-body">
         {/* Hall & Attendance Row */}
-        <div className="planner-grid-2">
-          <div className="planner-input-field">
+        <div className="planner-grid-2 planner-assessment-grid">
+          <div className="planner-input-field planner-hall-field">
             <label>Hall Exam</label>
-            <div className="planner-input-wrapper">
+            <div className="planner-input-wrapper planner-input-wrapper-hall">
               <input type="number" min={0} max={210} value={m.hall ?? ''} onChange={e => onChange(course.id, 'hall', Math.min(210, Math.max(0, +e.target.value || 0)))} disabled={inputDisabled} placeholder="0" />
               <span className="planner-input-unit">/210</span>
             </div>
           </div>
-          <div className="planner-input-field">
+
+          <div className="planner-input-field planner-attendance-field">
             <label>Attendance {attPct !== null ? `(${attPct}%)` : ''}</label>
-            <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginTop: 6 }}>
-              <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-                <label style={{ fontSize: 12, display: 'flex', alignItems: 'center', gap: 6 }}>
-                  <input type="radio" name={`attMode-${course.id}`} checked={attMode === 'auto'} onChange={() => onChange(course.id, 'attMode', 'auto')} disabled={inputDisabled} /> Auto
+            <div className="planner-attendance-shell">
+              <div className="planner-attendance-modes">
+                <label>
+                  <input type="radio" name={`attMode-${course.id}`} checked={attMode === 'auto'} onChange={() => onChange(course.id, 'attMode', 'auto')} disabled={inputDisabled} />
+                  Auto
                 </label>
-                <label style={{ fontSize: 12, display: 'flex', alignItems: 'center', gap: 6 }}>
-                  <input type="radio" name={`attMode-${course.id}`} checked={attMode === 'manual_percent'} onChange={() => onChange(course.id, 'attMode', 'manual_percent')} disabled={inputDisabled} /> Manual %
+                <label>
+                  <input type="radio" name={`attMode-${course.id}`} checked={attMode === 'manual_percent'} onChange={() => onChange(course.id, 'attMode', 'manual_percent')} disabled={inputDisabled} />
+                  Manual %
                 </label>
-                <label style={{ fontSize: 12, display: 'flex', alignItems: 'center', gap: 6 }}>
-                  <input type="radio" name={`attMode-${course.id}`} checked={attMode === 'manual_marks'} onChange={() => onChange(course.id, 'attMode', 'manual_marks')} disabled={inputDisabled} /> Manual Marks
+                <label>
+                  <input type="radio" name={`attMode-${course.id}`} checked={attMode === 'manual_marks'} onChange={() => onChange(course.id, 'attMode', 'manual_marks')} disabled={inputDisabled} />
+                  Manual Marks
                 </label>
               </div>
 
               {attMode === 'manual_percent' && (
-                <input type="number" min={0} max={100} value={m.attPctManual ?? ''} onChange={e => onChange(course.id, 'attPctManual', e.target.value === '' ? null : Math.min(100, Math.max(0, +e.target.value)))} placeholder="Attendance %" style={{ marginLeft: 8, width: 120 }} />
+                <input className="planner-attendance-inline-input" type="number" min={0} max={100} value={m.attPctManual ?? ''} onChange={e => onChange(course.id, 'attPctManual', e.target.value === '' ? null : Math.min(100, Math.max(0, +e.target.value)))} placeholder="Attendance %" />
               )}
 
               {attMode === 'manual_marks' && (
-                <div style={{ display: 'flex', gap: 6, flex: 1, marginLeft: 8 }}>
-                  <input type="number" min={0} max={attendanceCap1} value={m.attTeacher1 ?? ''} onChange={e => onChange(course.id, 'attTeacher1', Math.min(attendanceCap1, Math.max(0, +e.target.value || 0)))} placeholder="0" disabled={inputDisabled} style={{ flex: 1 }} />
-                  <input type="number" min={0} max={attendanceCap2} value={m.attTeacher2 ?? ''} onChange={e => onChange(course.id, 'attTeacher2', Math.min(attendanceCap2, Math.max(0, +e.target.value || 0)))} placeholder="0" disabled={inputDisabled} style={{ flex: 1 }} />
+                <div className="planner-attendance-marks">
+                  <input type="number" min={0} max={15} value={m.attTeacher1 ?? ''} onChange={e => onChange(course.id, 'attTeacher1', Math.min(15, Math.max(0, +e.target.value || 0)))} placeholder="T1" disabled={inputDisabled} />
+                  <input type="number" min={0} max={15} value={m.attTeacher2 ?? ''} onChange={e => onChange(course.id, 'attTeacher2', Math.min(15, Math.max(0, +e.target.value || 0)))} placeholder="T2" disabled={inputDisabled} />
                 </div>
               )}
             </div>
@@ -131,44 +158,65 @@ function CourseCard({ course, marks, onChange, isCurrentOngoingTerm }) {
         <div className="planner-teachers-section">
           <div className="planner-teacher-card">
             <div className="planner-teacher-name">{teacher1Name}</div>
-            <div className="planner-teacher-inputs">
+            {useManual1 ? (
               <div className="planner-input-field">
-                <label style={{ fontSize: 11 }}>CT</label>
-                <input type="number" min={0} max={30} value={m.ctTeacher1 ?? ''} onChange={e => onChange(course.id, 'ctTeacher1', Math.min(30, Math.max(0, +e.target.value || 0)))} disabled={inputDisabled} placeholder="0" />
+                <label style={{ fontSize: 11 }}>Marks (0-45)</label>
+                <input type="number" min={0} max={45} value={m.manualTeacher1 ?? ''} onChange={e => onChange(course.id, 'manualTeacher1', Math.min(45, Math.max(0, +e.target.value || 0)))} disabled={inputDisabled} placeholder="0" />
               </div>
-              <div className="planner-input-field">
-                <label style={{ fontSize: 11 }}>Bonus</label>
-                <input type="number" min={0} max={30} value={m.bonusTeacher1 ?? ''} onChange={e => onChange(course.id, 'bonusTeacher1', Math.min(30, Math.max(0, +e.target.value || 0)))} disabled={inputDisabled} placeholder="0" />
+            ) : (
+              <div className="planner-teacher-inputs">
+                <div className="planner-input-field">
+                  <label style={{ fontSize: 11 }}>CT (0-30)</label>
+                  <input type="number" min={0} max={30} value={m.ctTeacher1 ?? ''} onChange={e => onChange(course.id, 'ctTeacher1', Math.min(30, Math.max(0, +e.target.value || 0)))} disabled={inputDisabled} placeholder="0" />
+                </div>
+                <div className="planner-input-field">
+                  <label style={{ fontSize: 11 }}>Att (0-15)</label>
+                  <input type="number" min={0} max={15} value={m.attTeacher1 ?? ''} onChange={e => onChange(course.id, 'attTeacher1', Math.min(15, Math.max(0, +e.target.value || 0)))} placeholder="auto" style={{ opacity: attMode !== 'manual_marks' ? 0.6 : 1 }} />
+                </div>
               </div>
-              <div className="planner-input-field">
-                <label style={{ fontSize: 11 }}>Assign</label>
-                <input type="number" min={0} max={15} value={m.assignmentTeacher1 ?? ''} onChange={e => onChange(course.id, 'assignmentTeacher1', Math.min(15, Math.max(0, +e.target.value || 0)))} disabled={inputDisabled} placeholder="0" />
-              </div>
-            </div>
+            )}
+            <label style={{ fontSize: 11, marginTop: 10, display: 'flex', gap: 8, alignItems: 'center', padding: '8px 10px', borderRadius: 8, border: useManual1 ? '1px solid var(--accent)' : '1px solid rgba(var(--accentRGB), 0.1)', background: useManual1 ? 'rgba(var(--accentRGB), 0.06)' : 'transparent', cursor: 'pointer', transition: 'all 0.2s' }}>
+              <input type="checkbox" checked={useManual1} onChange={e => onChange(course.id, 'useManualTeacher1', e.target.checked)} disabled={inputDisabled} style={{ cursor: 'pointer', margin: 0 }} />
+              <span>Custom 0-45 marks</span>
+            </label>
           </div>
 
           <div className="planner-teacher-card">
             <div className="planner-teacher-name">{teacher2Name}</div>
-            <div className="planner-teacher-inputs">
+            {useManual2 ? (
               <div className="planner-input-field">
-                <label style={{ fontSize: 11 }}>CT</label>
-                <input type="number" min={0} max={30} value={m.ctTeacher2 ?? ''} onChange={e => onChange(course.id, 'ctTeacher2', Math.min(30, Math.max(0, +e.target.value || 0)))} disabled={inputDisabled} placeholder="0" />
+                <label style={{ fontSize: 11 }}>Marks (0-45)</label>
+                <input type="number" min={0} max={45} value={m.manualTeacher2 ?? ''} onChange={e => onChange(course.id, 'manualTeacher2', Math.min(45, Math.max(0, +e.target.value || 0)))} disabled={inputDisabled} placeholder="0" />
               </div>
-              <div className="planner-input-field">
-                <label style={{ fontSize: 11 }}>Bonus</label>
-                <input type="number" min={0} max={30} value={m.bonusTeacher2 ?? ''} onChange={e => onChange(course.id, 'bonusTeacher2', Math.min(30, Math.max(0, +e.target.value || 0)))} disabled={inputDisabled} placeholder="0" />
+            ) : (
+              <div className="planner-teacher-inputs">
+                <div className="planner-input-field">
+                  <label style={{ fontSize: 11 }}>CT (0-30)</label>
+                  <input type="number" min={0} max={30} value={m.ctTeacher2 ?? ''} onChange={e => onChange(course.id, 'ctTeacher2', Math.min(30, Math.max(0, +e.target.value || 0)))} disabled={inputDisabled} placeholder="0" />
+                </div>
+                <div className="planner-input-field">
+                  <label style={{ fontSize: 11 }}>Att (0-15)</label>
+                  <input type="number" min={0} max={15} value={m.attTeacher2 ?? ''} onChange={e => onChange(course.id, 'attTeacher2', Math.min(15, Math.max(0, +e.target.value || 0)))} placeholder="auto" style={{ opacity: attMode !== 'manual_marks' ? 0.6 : 1 }} />
+                </div>
               </div>
-              <div className="planner-input-field">
-                <label style={{ fontSize: 11 }}>Assign</label>
-                <input type="number" min={0} max={15} value={m.assignmentTeacher2 ?? ''} onChange={e => onChange(course.id, 'assignmentTeacher2', Math.min(15, Math.max(0, +e.target.value || 0)))} disabled={inputDisabled} placeholder="0" />
-              </div>
-            </div>
+            )}
+            <label style={{ fontSize: 11, marginTop: 10, display: 'flex', gap: 8, alignItems: 'center', padding: '8px 10px', borderRadius: 8, border: useManual2 ? '1px solid var(--accent)' : '1px solid rgba(var(--accentRGB), 0.1)', background: useManual2 ? 'rgba(var(--accentRGB), 0.06)' : 'transparent', cursor: 'pointer', transition: 'all 0.2s' }}>
+              <input type="checkbox" checked={useManual2} onChange={e => onChange(course.id, 'useManualTeacher2', e.target.checked)} disabled={inputDisabled} style={{ cursor: 'pointer', margin: 0 }} />
+              <span>Custom 0-45 marks</span>
+            </label>
           </div>
         </div>
 
+        {teacherSyncLabel && <div className="planner-sync-note">{teacherSyncLabel}</div>}
+
         {/* Grade Selector */}
         <div className="planner-target-section">
-          <label className="planner-target-label">🎯 Target Grade</label>
+          <div className="planner-target-head">
+            <label className="planner-target-label">🎯 Target Grade</label>
+            <button type="button" className="planner-help-link" onClick={onOpenMarkingHelp}>
+              How marking works
+            </button>
+          </div>
           <div className="planner-grade-buttons">
             {GRADE_SCALE.map(gradeObj => {
               const isSelected = m.targetGrade === gradeObj.grade;
@@ -200,28 +248,11 @@ function CourseCard({ course, marks, onChange, isCurrentOngoingTerm }) {
             <span>Total Marks</span>
             <strong>{currentTotal.toFixed(0)}/300</strong>
           </div>
-          <div style={{ marginTop: 8, fontSize: 12, color: 'var(--muted)' }}>This is an estimate only — does not affect official records.</div>
+          <div style={{ marginTop: 8, fontSize: 12, color: 'var(--muted)' }}>Estimate only. Full breakdown is in the help popup.</div>
         </div>
 
         {/* Required Hall Display */}
-        {targetGradeObj && targetGradeObj.minPct ? (() => {
-          const targetTotal = (targetGradeObj.minPct / 100) * 300;
-          const rawNeeded = Math.ceil(targetTotal - currentContinuous);
-          const possible = rawNeeded <= 210;
-          const neededToShow = Math.max(0, rawNeeded);
-          const boxClass = possible ? (neededToShow > hallTotal ? 'warning' : 'success') : 'danger';
-          return (
-            <div className={`planner-needed-box ${boxClass}`}>
-              <div className="planner-needed-label">To achieve {m.targetGrade}:</div>
-              <div className="planner-needed-value">
-                {possible
-                  ? `${neededToShow}/210 hall marks needed`
-                  : 'Impossible with current continuous'
-                }
-              </div>
-            </div>
-          );
-        })() : null}
+        {requiredHallNode}
       </div>
     </div>
   );
@@ -238,6 +269,7 @@ export default function Marks() {
     (currentTermKey && allCourses.some(c => `Y${c.year}T${c.term}` === currentTermKey && (c.status === 'active' || c.status === 'backlog')))
   );
   const [marks, setMarks] = useState(() => store.get('marks') || {});
+  const [markingHelpOpen, setMarkingHelpOpen] = useState(false);
   const deptLabel = profile?.dept || 'your department';
 
   const onChange = (id, field, value) => {
@@ -271,23 +303,18 @@ export default function Marks() {
     <div className="page-enter page-container marks-page">
       {/* Header Section */}
       <div className="planner-page-header">
-        <div>
-          <h1>📊 Term Planner</h1>
-          <p>Plan and estimate your final grades by entering continuous marks</p>
+        <div className="planner-page-copy">
+          <div className="planner-page-kicker">Academic planning</div>
+          <h1>Term Planner</h1>
+          <p>Track hall-needed targets in a compact, local-only workspace.</p>
+          <button type="button" className="planner-hero-link" onClick={() => setMarkingHelpOpen(true)}>
+            View marking system
+          </button>
         </div>
-        <div className="planner-header-stats">
-          <div className="planner-stat">
-            <span className="planner-stat-label">Active Courses</span>
-            <span className="planner-stat-value">{theory.length}</span>
-          </div>
-          <div className="planner-stat">
-            <span className="planner-stat-label">Current Term</span>
-            <span className="planner-stat-value">{currentTermKey || 'N/A'}</span>
-          </div>
-          <div className="planner-stat">
-            <span className="planner-stat-label">Status</span>
-            <span className="planner-stat-value">{currentTermIsOngoing ? '⏱ Ongoing' : '📋 Planning'}</span>
-          </div>
+        <div className="planner-header-pills" aria-label="Planner summary">
+          <span className="planner-pill">{theory.length} courses</span>
+          <span className="planner-pill">{currentTermKey || 'N/A'}</span>
+          <span className={`planner-pill ${currentTermIsOngoing ? 'is-active' : ''}`}>{currentTermIsOngoing ? 'Ongoing' : 'Planning'}</span>
         </div>
       </div>
 
@@ -307,6 +334,7 @@ export default function Marks() {
                 course={c}
                 marks={marks}
                 onChange={onChange}
+                onOpenMarkingHelp={() => setMarkingHelpOpen(true)}
                 isCurrentOngoingTerm={currentTermIsOngoing && currentTermKey === `Y${c.year}T${c.term}`}
               />
             ))}
@@ -316,13 +344,67 @@ export default function Marks() {
           <div className="planner-tips">
             <h3>💡 How It Works</h3>
             <ul>
-              <li><strong>Enter your marks:</strong> Hall exam, CT, Bonus, Assignments, and Attendance for each teacher</li>
-              <li><strong>Select target grade:</strong> Click on a grade to see how many hall marks you need</li>
-              <li><strong>Attendance:</strong> Automatically pulled from your Attendance page (can override)</li>
-              <li><strong>Final grades:</strong> Confirmed only after official results are published</li>
+              <li>Enter hall marks (0–210) and your continuous assessment marks per teacher (CT + Attendance).</li>
+              <li>Pick a target grade to instantly see how much hall you need to achieve it.</li>
+              <li>Attendance syncs from the Attendance page, or enter it manually as % or marks.</li>
             </ul>
           </div>
         </>
+      )}
+
+      {markingHelpOpen && (
+        <div className="planner-help-backdrop" onClick={() => setMarkingHelpOpen(false)}>
+          <div className="planner-help-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="planner-help-header">
+              <div>
+                <div className="planner-help-kicker">Marking system</div>
+                <h3>How this calculator works</h3>
+              </div>
+              <button type="button" className="planner-help-close" onClick={() => setMarkingHelpOpen(false)}>×</button>
+            </div>
+
+            <div className="planner-help-layout">
+              <div className="planner-help-stack">
+                <div className="planner-help-card">
+                  <strong>Each teacher</strong>
+                  <div className="planner-help-mini-list">
+                    <div>CT: 0-30</div>
+                    <div>Attendance: 0-15</div>
+                    <div>Total per teacher: 45</div>
+                  </div>
+                </div>
+
+                <div className="planner-help-card">
+                  <strong>Custom marks</strong>
+                  <p>If needed, check 'Custom 0-45 marks' and enter the full marks directly.</p>
+                </div>
+
+                <div className="planner-help-card">
+                  <strong>Hall exam (0-210)</strong>
+                  <p>Use the target grade buttons to see how much hall you need. Total = Hall (0-210) + Continuous (0-90).</p>
+                </div>
+              </div>
+
+              <div className="planner-help-card planner-help-card-auto">
+                <strong>Auto attendance</strong>
+                <div className="planner-help-scale">
+                  <div><span>90%+</span><span>10</span></div>
+                  <div><span>85-89</span><span>9</span></div>
+                  <div><span>80-84</span><span>8</span></div>
+                  <div><span>75-79</span><span>7</span></div>
+                  <div><span>70-74</span><span>6</span></div>
+                  <div><span>65-69</span><span>5</span></div>
+                  <div><span>60-64</span><span>4</span></div>
+                  <div><span>Below 60</span><span>0</span></div>
+                </div>
+              </div>
+            </div>
+
+            <div className="planner-help-footer">
+              <button type="button" className="btn btn-primary" onClick={() => setMarkingHelpOpen(false)}>Got it</button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );
