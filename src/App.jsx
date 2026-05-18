@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { ThemeProvider } from './hooks/useTheme';
 import { Sidebar } from './components/Sidebar';
 import { Navbar } from './components/Navbar';
@@ -41,6 +41,7 @@ function Layout() {
       return false;
     }
   });
+  const location = useLocation();
 
   useEffect(() => {
     try {
@@ -93,7 +94,7 @@ function Layout() {
             <Route path="/class-management" element={<ClassManagement />} />
           </Routes>
         </div>
-        <Footer />
+        {location.pathname !== '/about' && <Footer />}
         <PWAInstallPrompt />
       </div>
     </div>

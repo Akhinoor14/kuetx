@@ -142,7 +142,7 @@ export default function About() {
             Core capabilities that define the platform
           </p>
         </div>
-        <div style={{
+        <div className="about-capabilities-grid" style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
           gap: 'clamp(0.9rem, 2vw, 1.2rem)',
@@ -186,7 +186,7 @@ export default function About() {
             Organized into four powerful modules
           </p>
         </div>
-        <div style={{
+        <div className="about-features-grid" style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
           gap: 'clamp(0.9rem, 2vw, 1.2rem)'
@@ -434,17 +434,13 @@ export default function About() {
           License & Acknowledgments
         </div>
 
-        <h3 style={{ fontSize: '1.05rem', fontWeight: 800, marginBottom: '0.9rem', color: 'var(--text)' }}>
+        <h3 style={{ fontSize: '1.05rem', fontWeight: 800, marginBottom: '1.2rem', color: 'var(--text)' }}>
           Responsible by design, built for KUET students
         </h3>
 
-        <p style={{ maxWidth: '720px', margin: '0 auto 1rem', fontSize: '0.97rem', color: 'var(--muted)', lineHeight: 1.75 }}>
-          KUETX is developed to support the academic and daily needs of KUET students with a strong focus on privacy, clarity, and responsible use. The experience is designed to align with KUET guidelines and student data best practices.
-        </p>
-
         <div style={{
           maxWidth: '760px',
-          margin: '0 auto 1.25rem',
+          margin: '0 auto 1.5rem',
           display: 'grid',
           gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
           gap: '0.75rem',
@@ -462,14 +458,24 @@ export default function About() {
             <div style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--text)', marginBottom: '0.25rem' }}>Acknowledgment</div>
             <div style={{ fontSize: '0.9rem', color: 'var(--muted)', lineHeight: 1.6 }}>Developed and maintained by A3KM Studio with care for the KUET community.</div>
           </div>
+          <div style={{ padding: '0.85rem 1rem', borderRadius: '12px', border: '1px solid var(--border)', background: 'var(--surfaceGlassSoft)' }}>
+            <div style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--text)', marginBottom: '0.25rem' }}>Open Technology</div>
+            <div style={{ fontSize: '0.9rem', color: 'var(--muted)', lineHeight: 1.6 }}>Built with React, IndexedDB, and modern web standards for reliability and performance.</div>
+          </div>
         </div>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem', alignItems: 'center', justifyContent: 'center' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem', alignItems: 'center', justifyContent: 'center', marginBottom: '2rem' }}>
           <a href="https://a3kmstudio.vercel.app" target="_blank" rel="noopener noreferrer"
             style={{ color: 'var(--accent)', textDecoration: 'none', fontSize: '0.95rem', fontWeight: 700, background: 'rgba(22,163,74,0.08)', padding: '0.7rem 1rem', borderRadius: '12px', border: '1px solid rgba(22,163,74,0.18)' }}>
             Built by A3KM Studio
           </a>
           <span style={{ fontSize: '0.95rem', color: 'var(--muted)' }}>© 2026 All Rights Reserved</span>
+        </div>
+
+        <div style={{ maxWidth: '760px', margin: '0 auto', padding: '1rem', borderRadius: '14px', background: 'linear-gradient(135deg, rgba(22,163,74,0.06), rgba(14,165,233,0.03))', border: '1px solid rgba(22,163,74,0.12)', textAlign: 'center' }}>
+          <p style={{ margin: 0, fontSize: '0.93rem', color: 'var(--muted)', lineHeight: 1.6 }}>
+            Consolidating academics, finances, and personal growth into one focused platform for KUET students.
+          </p>
         </div>
       </div>
     </div>

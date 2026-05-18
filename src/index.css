@@ -3661,3 +3661,14 @@ input[type="range"]::-webkit-slider-thumb {
     transform: scaleX(1);
   }
 }
+
+/* ── About Page Responsive Features Grid ───────────────────────────────── */
+@media (max-width: 640px) {
+  .about-capabilities-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+  
+  .about-features-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
