@@ -388,6 +388,219 @@ body {
   .food-log-cancel-btn {
     border-color: rgba(148, 163, 184, 0.35);
   }
+
+  .projects-header {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: stretch;
+    margin-bottom: 16px;
+  }
+  .projects-add-btn {
+    width: 100%;
+    justify-content: center;
+  }
+  .projects-form-card {
+    padding: 14px 12px;
+    border-color: rgba(22, 163, 74, 0.16);
+    background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(248,250,252,0.95));
+  }
+  .projects-form-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .projects-form-field label {
+    font-size: 11px;
+    margin-bottom: 6px;
+    letter-spacing: 0.03em;
+  }
+  .projects-form-field input,
+  .projects-form-field select,
+  .projects-form-field textarea {
+    min-height: 46px;
+    font-size: 15px;
+    padding: 12px 12px;
+    border-radius: 10px;
+    background: #fff;
+  }
+  .projects-form-field textarea {
+    min-height: 92px;
+    resize: vertical;
+  }
+  .projects-form-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .projects-form-save,
+  .projects-form-cancel {
+    width: 100%;
+    min-height: 46px;
+    justify-content: center;
+  }
+  .projects-form-wide {
+    grid-column: 1 / -1;
+  }
+
+  .tours-header {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: stretch;
+    margin-bottom: 16px;
+  }
+  .tours-add-btn {
+    width: 100%;
+    justify-content: center;
+  }
+  .tours-form-card {
+    padding: 14px 12px;
+    border-color: rgba(22, 163, 74, 0.16);
+    background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(248,250,252,0.95));
+  }
+  .tours-form-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .tours-form-field label {
+    font-size: 11px;
+    margin-bottom: 6px;
+    letter-spacing: 0.03em;
+  }
+  .tours-form-field input,
+  .tours-form-field select,
+  .tours-form-field textarea {
+    min-height: 46px;
+    font-size: 15px;
+    padding: 12px 12px;
+    border-radius: 10px;
+    background: #fff;
+  }
+  .tours-form-field textarea {
+    min-height: 92px;
+    resize: vertical;
+  }
+  .tours-form-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .tours-form-save,
+  .tours-form-cancel {
+    width: 100%;
+    min-height: 46px;
+    justify-content: center;
+  }
+  .tours-form-wide {
+    grid-column: 1 / -1;
+  }
+  .tours-outline-card {
+    margin-bottom: 12px;
+    padding: 12px;
+    border: 1px solid rgba(148, 163, 184, 0.18);
+    border-radius: 12px;
+    background: rgba(248, 250, 252, 0.94);
+  }
+  .tours-outline-header {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    align-items: stretch;
+    margin-bottom: 10px;
+  }
+  .tours-outline-add-section,
+  .tours-outline-add-item,
+  .tours-outline-remove-section,
+  .tours-outline-remove-item {
+    width: 100%;
+    justify-content: center;
+  }
+  .tours-outline-section {
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 10px;
+    background: #fff;
+    border: 1px solid rgba(148, 163, 184, 0.14);
+  }
+  .tours-outline-section-row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+  .tours-outline-section-title,
+  .tours-outline-item-input {
+    min-height: 44px;
+    font-size: 15px;
+    padding: 11px 12px;
+  }
+  .tours-outline-item-row {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+  .tours-outline-item-index {
+    width: 28px;
+    text-align: center;
+    font-size: 12px;
+    color: var(--muted);
+    font-weight: 600;
+  }
+
+  .social-header {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: stretch;
+    margin-bottom: 16px;
+  }
+  .social-add-btn {
+    width: 100%;
+    justify-content: center;
+  }
+  .social-form-card {
+    padding: 14px 12px;
+    border-color: rgba(22, 163, 74, 0.16);
+    background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(248,250,252,0.95));
+  }
+  .social-form-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .social-form-field label {
+    font-size: 11px;
+    margin-bottom: 6px;
+    letter-spacing: 0.03em;
+  }
+  .social-form-field input {
+    min-height: 46px;
+    font-size: 15px;
+    padding: 12px 12px;
+    border-radius: 10px;
+    background: #fff;
+  }
+  .social-form-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .social-form-save,
+  .social-form-cancel {
+    width: 100%;
+    min-height: 46px;
+    justify-content: center;
+  }
+  .social-form-wide {
+    grid-column: 1 / -1;
+  }
 }
 
 /* ── Card ────────────────────────────────────────────────────────────────── */

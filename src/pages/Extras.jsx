@@ -24,20 +24,21 @@ export function Tours() {
 
   return (
     <div className="page-enter page-container">
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+      <div className="tours-header">
         <div>
           <h1 style={{ fontSize: 18, fontWeight: 700 }}>Tours</h1>
           <p style={{ fontSize: 12, color: 'var(--muted)' }}>Plan, track and remember your trips</p>
         </div>
-        <button className="btn btn-primary" onClick={() => setAdding(true)}><Plus size={13} /> Add Tour</button>
+        <button className="btn btn-primary tours-add-btn" onClick={() => setAdding(true)}><Plus size={13} /> Add Tour</button>
       </div>
 
       {adding && (
-        <div className="card" style={{ marginBottom: 14, borderColor: 'var(--accent)' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr', gap: 10, marginBottom: 10 }}>
-            <div><label>Tour / Destination</label><input value={form.name} onChange={e => set('name', e.target.value)} placeholder="Cox's Bazar trip" /></div>
-            <div><label>Date</label><input type="date" value={form.date} onChange={e => set('date', e.target.value)} /></div>
-            <div>
+        <div className="card tours-form-card" style={{ marginBottom: 14 }}>
+          <div style={{ fontWeight: 600, fontSize: 13, marginBottom: 10 }}>Add Tour</div>
+          <div className="tours-form-grid tours-form-grid-top">
+            <div className="tours-form-field tours-form-wide"><label>Tour / Destination</label><input value={form.name} onChange={e => set('name', e.target.value)} placeholder="Cox's Bazar trip" /></div>
+            <div className="tours-form-field"><label>Date</label><input type="date" value={form.date} onChange={e => set('date', e.target.value)} /></div>
+            <div className="tours-form-field">
               <label>Type</label>
               <select value={form.type} onChange={e => set('type', e.target.value)}>
                 <option value="solo">Solo</option>
@@ -47,54 +48,54 @@ export function Tours() {
               </select>
             </div>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 10, marginBottom: 10 }}>
-            <div><label>Companions</label><input value={form.companions} onChange={e => set('companions', e.target.value)} placeholder="Rahim, Karim..." /></div>
-            <div><label>Budget (৳)</label><input type="number" value={form.budget} onChange={e => set('budget', e.target.value)} /></div>
-            <div><label>Actual Spent (৳)</label><input type="number" value={form.spent} onChange={e => set('spent', e.target.value)} /></div>
+          <div className="tours-form-grid tours-form-grid-mid">
+            <div className="tours-form-field"><label>Companions</label><input value={form.companions} onChange={e => set('companions', e.target.value)} placeholder="Rahim, Karim..." /></div>
+            <div className="tours-form-field"><label>Budget (৳)</label><input type="number" value={form.budget} onChange={e => set('budget', e.target.value)} /></div>
+            <div className="tours-form-field"><label>Actual Spent (৳)</label><input type="number" value={form.spent} onChange={e => set('spent', e.target.value)} /></div>
           </div>
-          <div style={{ marginBottom: 10 }}><label>Tour Description</label><textarea value={form.notes} onChange={e => set('notes', e.target.value)} rows={2} placeholder="Short summary: best moments, tips, highlights..." /></div>
+          <div className="tours-form-field tours-form-wide" style={{ marginBottom: 10 }}><label>Tour Description</label><textarea value={form.notes} onChange={e => set('notes', e.target.value)} rows={2} placeholder="Short summary: best moments, tips, highlights..." /></div>
 
-          <div style={{ marginBottom: 12, padding: 12, border: '1px solid var(--border)', borderRadius: 12, background: 'rgba(var(--accentRGB), 0.03)' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+          <div className="tours-outline-card">
+            <div className="tours-outline-header">
               <div style={{ fontWeight: 700, fontSize: 13 }}>Trip Outline</div>
-              <button className="btn btn-ghost" style={{ padding: '6px 10px' }} onClick={addOutlineSection}>Add section</button>
+              <button className="btn btn-ghost tours-outline-add-section" onClick={addOutlineSection}>Add section</button>
             </div>
             {form.outline.length === 0 && (
               <div style={{ fontSize: 12, color: 'var(--muted)' }}>Add chapters, stops, activities or topic groups to structure the trip plan.</div>
             )}
             {form.outline.map((section, si) => (
-              <div key={si} style={{ marginBottom: 10, padding: 10, borderRadius: 10, background: 'var(--surfaceGlass)', border: '1px solid rgba(var(--accentRGB), 0.12)' }}>
-                <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginBottom: 8 }}>
+              <div key={si} className="tours-outline-section">
+                <div className="tours-outline-section-row">
                   <input
                     value={section.title}
                     onChange={e => updateOutlineTitle(si, e.target.value)}
                     placeholder={`Chapter ${si + 1} title`}
-                    style={{ flex: 1, minWidth: 0 }}
+                    className="tours-outline-section-title"
                   />
-                  <button className="btn btn-danger" style={{ padding: '6px 10px' }} onClick={() => removeOutlineSection(si)}>Remove</button>
+                  <button className="btn btn-danger tours-outline-remove-section" onClick={() => removeOutlineSection(si)}>Remove</button>
                 </div>
                 {section.topics.map((topic, ti) => (
-                  <div key={ti} style={{ display: 'flex', gap: 8, alignItems: 'center', marginBottom: 6 }}>
-                    <span style={{ width: 18, fontSize: 12, color: 'var(--muted)' }}>{si + 1}.{ti + 1}</span>
+                  <div key={ti} className="tours-outline-item-row">
+                    <span className="tours-outline-item-index">{si + 1}.{ti + 1}</span>
                     <input
                       value={topic}
                       onChange={e => updateOutlineTopic(si, ti, e.target.value)}
                       placeholder="Chapter / stop / topic"
-                      style={{ flex: 1, minWidth: 0 }}
+                      className="tours-outline-item-input"
                     />
                     {section.topics.length > 1 && (
-                      <button className="btn btn-ghost" style={{ padding: '6px 8px' }} onClick={() => removeOutlineTopic(si, ti)}>×</button>
+                      <button className="btn btn-ghost tours-outline-remove-item" onClick={() => removeOutlineTopic(si, ti)}>×</button>
                     )}
                   </div>
                 ))}
-                <button className="btn btn-secondary" style={{ padding: '6px 10px' }} onClick={() => addOutlineTopic(si)}>Add item</button>
+                <button className="btn btn-secondary tours-outline-add-item" onClick={() => addOutlineTopic(si)}>Add item</button>
               </div>
             ))}
           </div>
 
-          <div style={{ display: 'flex', gap: 8 }}>
-            <button className="btn btn-primary" onClick={save}>Save</button>
-            <button className="btn btn-ghost" onClick={() => setAdding(false)}>Cancel</button>
+          <div className="tours-form-actions">
+            <button className="btn btn-primary tours-form-save" onClick={save}>Save</button>
+            <button className="btn btn-ghost tours-form-cancel" onClick={() => setAdding(false)}>Cancel</button>
           </div>
         </div>
       )}
@@ -165,25 +166,26 @@ export function Social() {
 
   return (
     <div className="page-enter page-container">
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+      <div className="social-header">
         <div>
           <h1 style={{ fontSize: 18, fontWeight: 700 }}>Social Time</h1>
           <p style={{ fontSize: 12, color: 'var(--muted)' }}>Track time spent with friends — last 7 days: {total7.toFixed(1)}h</p>
         </div>
-        <button className="btn btn-primary" onClick={() => setAdding(true)}><Plus size={13} /> Log</button>
+        <button className="btn btn-primary social-add-btn" onClick={() => setAdding(true)}><Plus size={13} /> Log</button>
       </div>
 
       {adding && (
-        <div className="card" style={{ marginBottom: 14, borderColor: 'var(--accent)' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 10, marginBottom: 10 }}>
-            <div><label>Date</label><input type="date" value={form.date} onChange={e => set('date', e.target.value)} /></div>
-            <div><label>Activity</label><input value={form.activity} onChange={e => set('activity', e.target.value)} placeholder="Adda, gaming, walk..." /></div>
-            <div><label>Hours</label><input type="number" value={form.hours} onChange={e => set('hours', e.target.value)} placeholder="1.5" min={0} step={0.5} /></div>
+        <div className="card social-form-card" style={{ marginBottom: 14 }}>
+          <div style={{ fontWeight: 600, fontSize: 13, marginBottom: 10 }}>Log Social Time</div>
+          <div className="social-form-grid">
+            <div className="social-form-field"><label>Date</label><input type="date" value={form.date} onChange={e => set('date', e.target.value)} /></div>
+            <div className="social-form-field"><label>Activity</label><input value={form.activity} onChange={e => set('activity', e.target.value)} placeholder="Adda, gaming, walk..." /></div>
+            <div className="social-form-field"><label>Hours</label><input type="number" value={form.hours} onChange={e => set('hours', e.target.value)} placeholder="1.5" min={0} step={0.5} /></div>
           </div>
-          <div style={{ marginBottom: 10 }}><label>With whom</label><input value={form.persons} onChange={e => set('persons', e.target.value)} placeholder="Rahim, Karim..." /></div>
-          <div style={{ display: 'flex', gap: 8 }}>
-            <button className="btn btn-primary" onClick={save}>Save</button>
-            <button className="btn btn-ghost" onClick={() => setAdding(false)}>Cancel</button>
+          <div className="social-form-field social-form-wide" style={{ marginBottom: 10 }}><label>With whom</label><input value={form.persons} onChange={e => set('persons', e.target.value)} placeholder="Rahim, Karim..." /></div>
+          <div className="social-form-actions">
+            <button className="btn btn-primary social-form-save" onClick={save}>Save</button>
+            <button className="btn btn-ghost social-form-cancel" onClick={() => setAdding(false)}>Cancel</button>
           </div>
         </div>
       )}
@@ -228,25 +230,26 @@ export function Projects() {
 
   return (
     <div className="page-enter page-container">
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+      <div className="projects-header">
         <h1 style={{ fontSize: 18, fontWeight: 700 }}>Projects</h1>
-        <button className="btn btn-primary" onClick={() => setAdding(true)}><Plus size={13} /> Add Project</button>
+        <button className="btn btn-primary projects-add-btn" onClick={() => setAdding(true)}><Plus size={13} /> Add Project</button>
       </div>
 
       {adding && (
-        <div className="card" style={{ marginBottom: 14, borderColor: 'var(--accent)' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr', gap: 10, marginBottom: 10 }}>
-            <div><label>Project Name</label><input value={form.name} onChange={e => set('name', e.target.value)} placeholder="Smart Campus App" /></div>
-            <div><label>Type</label><select value={form.type} onChange={e => set('type', e.target.value)}>{TYPES.map(t => <option key={t}>{t}</option>)}</select></div>
-            <div><label>Status</label><select value={form.status} onChange={e => set('status', e.target.value)}><option value="active">Active</option><option value="done">Done</option><option value="paused">Paused</option></select></div>
+        <div className="card projects-form-card" style={{ marginBottom: 14 }}>
+          <div style={{ fontWeight: 600, fontSize: 13, marginBottom: 10 }}>Add Project</div>
+          <div className="projects-form-grid projects-form-grid-top">
+            <div className="projects-form-field projects-form-wide"><label>Project Name</label><input value={form.name} onChange={e => set('name', e.target.value)} placeholder="Smart Campus App" /></div>
+            <div className="projects-form-field"><label>Type</label><select value={form.type} onChange={e => set('type', e.target.value)}>{TYPES.map(t => <option key={t}>{t}</option>)}</select></div>
+            <div className="projects-form-field"><label>Status</label><select value={form.status} onChange={e => set('status', e.target.value)}><option value="active">Active</option><option value="done">Done</option><option value="paused">Paused</option></select></div>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 10 }}>
-            <div><label>Deadline</label><input type="date" value={form.deadline} onChange={e => set('deadline', e.target.value)} /></div>
+          <div className="projects-form-grid projects-form-grid-bottom">
+            <div className="projects-form-field projects-form-wide"><label>Deadline</label><input type="date" value={form.deadline} onChange={e => set('deadline', e.target.value)} /></div>
           </div>
-          <div style={{ marginBottom: 10 }}><label>Description</label><textarea value={form.desc} onChange={e => set('desc', e.target.value)} rows={2} /></div>
-          <div style={{ display: 'flex', gap: 8 }}>
-            <button className="btn btn-primary" onClick={save}>Save</button>
-            <button className="btn btn-ghost" onClick={() => setAdding(false)}>Cancel</button>
+          <div className="projects-form-field projects-form-wide" style={{ marginBottom: 10 }}><label>Description</label><textarea value={form.desc} onChange={e => set('desc', e.target.value)} rows={2} /></div>
+          <div className="projects-form-actions">
+            <button className="btn btn-primary projects-form-save" onClick={save}>Save</button>
+            <button className="btn btn-ghost projects-form-cancel" onClick={() => setAdding(false)}>Cancel</button>
           </div>
         </div>
       )}
