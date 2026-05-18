@@ -1,6 +1,13 @@
-import { useState, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Plus, Trash2, Check } from 'lucide-react';
 import { store, uid, getAllCourses, getProfile, getCurrentTermKey } from '../store/store';
+import CourseTeacherDialog from '../components/CourseTeacherDialog';
+
+const normalizeTeacherName = (value) => {
+  const clean = String(value || '').trim().replace(/\s+/g, ' ');
+  if (!clean) return '';
+  return /\bsir\.?$/i.test(clean) ? clean.replace(/\.$/, '') : `${clean} Sir`;
+};
 
 export default function Assignments() {
   const profile = getProfile();
@@ -18,30 +25,96 @@ export default function Assignments() {
   }, [courses, currentTermKey]);
   
   const [items, setItems] = useState(() => store.get('assignments') || []);
+  const [scheduleSettings, setScheduleSettings] = useState(() => store.get('scheduleSettings') || {});
   const [adding, setAdding] = useState(false);
-  const [multipleMode, setMultipleMode] = useState(false);
   const [filter, setFilter] = useState('all');
-  const [form, setForm] = useState({ courseId: '', title: '', desc: '', due: '', status: 'pending', priority: 'medium' });
+  const [form, setForm] = useState({ courseId: '', teacherName: '', titles: [''], title: '', desc: '', due: '', status: 'pending', priority: 'medium' });
+  const [teacherDialog, setTeacherDialog] = useState({ open: false, courseId: '' });
 
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
+  const setTitleLine = (index, value) => setForm(f => ({
+    ...f,
+    titles: f.titles.map((t, idx) => idx === index ? value : t),
+  }));
+  const addTitleLine = () => setForm(f => ({ ...f, titles: [...(f.titles || ['']), ''] }));
+  const removeTitleLine = (index) => setForm(f => ({
+    ...f,
+    titles: f.titles.filter((_, idx) => idx !== index) || [''],
+  }));
+
+  useEffect(() => {
+    const refresh = () => setScheduleSettings(store.get('scheduleSettings') || {});
+    window.addEventListener('kuetx:store-updated', refresh);
+    return () => window.removeEventListener('kuetx:store-updated', refresh);
+  }, []);
+
+  const courseTeacherMap = scheduleSettings?.courseTeacherMap || {};
+
+  const getCourseTeachers = (courseId) => {
+    const mapped = Array.isArray(courseTeacherMap?.[courseId]) ? courseTeacherMap[courseId].map(normalizeTeacherName).filter(Boolean) : [];
+    return [...new Set(mapped)].slice(0, 2);
+  };
+
+  const ensureCourseTeacherSetup = (courseId) => {
+    const teachers = getCourseTeachers(courseId);
+    if (teachers.length >= 2) return true;
+    setTeacherDialog({ open: true, courseId });
+    return false;
+  };
+
+  const handleCourseChange = (courseId) => {
+    const teachers = getCourseTeachers(courseId);
+    setForm(prev => ({
+      ...prev,
+      courseId,
+      teacherName: teachers[0] || '',
+    }));
+    if (courseId) ensureCourseTeacherSetup(courseId);
+  };
 
   const add = () => {
-    const updated = [{ ...form, id: uid() }, ...items];
-    setItems(updated); 
-    store.set('assignments', updated); 
-    
-    // In multiple mode, keep the form and only clear title/desc; otherwise close
-    if (!multipleMode) {
-      setAdding(false);
+    if (!form.courseId) return;
+    const teachers = getCourseTeachers(form.courseId);
+    if (teachers.length < 2) {
+      ensureCourseTeacherSetup(form.courseId);
+      return;
     }
-    
-    setForm({ 
-      courseId: multipleMode ? form.courseId : '', 
-      title: '', 
-      desc: '', 
-      due: multipleMode ? form.due : '', 
-      status: 'pending', 
-      priority: multipleMode ? form.priority : 'medium' 
+
+    const selectedTeacher = normalizeTeacherName(form.teacherName);
+    if (!selectedTeacher) {
+      alert('Please select a teacher for this assignment course.');
+      return;
+    }
+
+    const titles = (form.titles || [])
+      .map(line => String(line || '').trim())
+      .filter(Boolean);
+
+    if (titles.length === 0) {
+      alert('Please enter at least one assignment title.');
+      return;
+    }
+
+    const assignment = {
+      ...form,
+      titles,
+      title: titles[0],
+      teacherName: selectedTeacher,
+      id: uid(),
+    };
+
+    const updated = [assignment, ...items];
+    setItems(updated);
+    store.set('assignments', updated);
+    setForm({
+      courseId: form.courseId,
+      teacherName: form.teacherName,
+      titles: [''],
+      title: '',
+      desc: form.desc,
+      due: form.due,
+      status: 'pending',
+      priority: form.priority,
     });
   };
 
@@ -96,26 +169,15 @@ export default function Assignments() {
       {adding && (
         <div className="card" style={{ marginBottom: 16, borderColor: 'var(--accent)' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 10, marginBottom: 12 }}>
-            <div style={{ fontWeight: 600, fontSize: 13 }}>Add Assignment{multipleMode ? 's (Multiple Mode)' : ''}</div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 12 }}>
-              <label style={{ display: 'flex', alignItems: 'center', gap: 6, cursor: 'pointer' }}>
-                <input
-                  type="checkbox"
-                  checked={multipleMode}
-                  onChange={e => setMultipleMode(e.target.checked)}
-                  style={{ cursor: 'pointer' }}
-                />
-                Keep form open
-              </label>
-              <button className="btn btn-ghost" onClick={() => { setAdding(false); setMultipleMode(false); setForm({ courseId: '', title: '', desc: '', due: '', status: 'pending', priority: 'medium' }); }} style={{ padding: '4px 8px' }}>Close</button>
-            </div>
+            <div style={{ fontWeight: 600, fontSize: 13 }}>Add Assignment</div>
+            <button className="btn btn-ghost" onClick={() => { setAdding(false); setForm({ courseId: '', teacherName: '', titles: [''], title: '', desc: '', due: '', status: 'pending', priority: 'medium' }); }} style={{ padding: '4px 8px' }}>Close</button>
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 10 }}>
             <div>
               <label>Course</label>
-              <select value={form.courseId} onChange={e => set('courseId', e.target.value)}>
+              <select value={form.courseId} onChange={e => handleCourseChange(e.target.value)}>
                 <option value="">Select course</option>
-                {currentTermCourses.map(c => <option key={c.id} value={c.id}>{c.code}</option>)}
+                {currentTermCourses.map(c => <option key={c.id} value={c.id}>{c.code} — {c.name}</option>)}
               </select>
             </div>
             <div>
@@ -127,20 +189,73 @@ export default function Assignments() {
               </select>
             </div>
           </div>
-          <div style={{ marginBottom: 10 }}>
-            <label>Assignment Title</label>
-            <input value={form.title} onChange={e => set('title', e.target.value)} placeholder="Lab Report #3 — Linked List" />
+          <div style={{ display: 'grid', gap: 10, marginBottom: 10 }}>
+            {form.titles.map((title, index) => (
+              <div key={index} style={{ display: 'grid', gap: 6 }}>
+                <label>{index === 0 ? 'Assignment Title' : `Title ${index + 1}`}</label>
+                <div style={{ display: 'flex', gap: 8, alignItems: 'stretch' }}>
+                  <input
+                    value={title}
+                    onChange={e => setTitleLine(index, e.target.value)}
+                    placeholder={index === 0 ? 'Lab Report #3 — Linked List' : `Another title`}
+                    style={{ flex: 1, minHeight: 44, borderRadius: 10, fontFamily: 'inherit' }}
+                  />
+                  {form.titles.length > 1 && (
+                    <button className="btn btn-ghost btn-sm" type="button" onClick={() => removeTitleLine(index)} style={{ whiteSpace: 'nowrap', minHeight: 44 }}>
+                      Remove
+                    </button>
+                  )}
+                </div>
+              </div>
+            ))}
+            <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
+              <button type="button" className="btn btn-ghost" onClick={addTitleLine} style={{ height: 40 }}>
+                + Add title
+              </button>
+              <div style={{ fontSize: 11, color: 'var(--muted)' }}>
+                Add another title row here. Save when you are done to keep them as one assignment group.
+              </div>
+            </div>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 10 }}>
-            <div><label>Due Date</label><input type="date" value={form.due} onChange={e => set('due', e.target.value)} /></div>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: 10, alignItems: 'end', marginBottom: 10 }}>
+            <div>
+              <label>Teacher</label>
+              <select
+                value={form.teacherName}
+                onChange={e => set('teacherName', e.target.value)}
+                disabled={!form.courseId || getCourseTeachers(form.courseId).length === 0}
+              >
+                <option value="">Select teacher</option>
+                {getCourseTeachers(form.courseId).map(name => <option key={name} value={name}>{name}</option>)}
+              </select>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'end' }}>
+              <button
+                className="btn btn-ghost"
+                type="button"
+                onClick={() => form.courseId && setTeacherDialog({ open: true, courseId: form.courseId })}
+                disabled={!form.courseId}
+                style={{ height: 44 }}
+              >
+                {!form.courseId ? 'Select Course First' : getCourseTeachers(form.courseId).length >= 2 ? 'Edit Teachers' : 'Add Teacher'}
+              </button>
+            </div>
+            <div style={{ gridColumn: '1 / -1', fontSize: 11, color: 'var(--muted)' }}>
+              {form.courseId ? 'You can update teacher assignments here.' : 'Select a course to enable teacher setup.'}
+            </div>
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 10, marginBottom: 10 }}>
+            <div>
+              <label>Due Date</label>
+              <input type="date" value={form.due} onChange={e => set('due', e.target.value)} />
+            </div>
           </div>
           <div style={{ marginBottom: 10 }}>
             <label>Details</label>
             <textarea value={form.desc} onChange={e => set('desc', e.target.value)} rows={2} placeholder="Topics, requirements..." />
           </div>
-          <div style={{ display: 'flex', gap: 8 }}>
-            <button className="btn btn-primary" onClick={add}>Add</button>
-            {multipleMode && <button className="btn btn-ghost" onClick={() => { setAdding(false); setMultipleMode(false); setForm({ courseId: '', title: '', desc: '', due: '', status: 'pending', priority: 'medium' }); }}>Done</button>}
+          <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 10 }}>
+            <button className="btn btn-primary" onClick={add}>Save assignment</button>
           </div>
         </div>
       )}
@@ -158,11 +273,13 @@ export default function Assignments() {
 
       {filtered.map(a => {
         const c = getCourse(a.courseId);
+        const teacherLabel = a.teacherName || getCourseTeachers(a.courseId)[0] || 'Teacher not set';
         const overdue = a.status !== 'done' && isOverdue(a.due);
         const daysLeft = getDaysLeft(a.due);
         const courseColor = getCourseColor(a.courseId);
         const priorityBg = a.priority === 'high' ? 'rgba(239,68,68,0.1)' : a.priority === 'medium' ? 'rgba(249,115,22,0.1)' : 'rgba(107,114,128,0.1)';
         const priorityColor = a.priority === 'high' ? 'rgb(239,68,68)' : a.priority === 'medium' ? 'rgb(249,115,22)' : 'rgb(107,114,128)';
+        const assignmentTitles = Array.isArray(a.titles) ? a.titles.filter(Boolean) : [a.title].filter(Boolean);
         
         return (
           <div key={a.id} className="card" style={{
@@ -199,15 +316,19 @@ export default function Assignments() {
                   )}
                   
                   {/* Title */}
-                  <span style={{ 
-                    fontWeight: 600, 
-                    fontSize: 13, 
-                    textDecoration: a.status === 'done' ? 'line-through' : 'none',
-                    color: 'var(--text)',
-                    flex: 1,
-                  }}>
-                    {a.title}
-                  </span>
+                  <div style={{ flex: 1, display: 'grid', gap: 4 }}>
+                    {assignmentTitles.map((text, idx) => (
+                      <span key={idx} style={{
+                        fontWeight: idx === 0 ? 600 : 500,
+                        fontSize: idx === 0 ? 13 : 12,
+                        textDecoration: a.status === 'done' ? 'line-through' : 'none',
+                        color: 'var(--text)',
+                        whiteSpace: 'pre-wrap',
+                      }}>
+                        {text}
+                      </span>
+                    ))}
+                  </div>
                 </div>
                 
                 {/* Meta Info: Days Left, Priority, Due Date */}
@@ -241,6 +362,10 @@ export default function Assignments() {
                 
                 {/* Description */}
                 {a.desc && <div style={{ fontSize: 11, color: 'var(--muted)', marginBottom: 4, lineHeight: 1.4 }}>{a.desc}</div>}
+
+                <div style={{ fontSize: 11, color: 'var(--text)', opacity: 0.85, marginBottom: 4 }}>
+                  Teacher: {teacherLabel}
+                </div>
                 
                 {/* Due Date */}
                 {a.due && <div style={{ fontSize: 10, color: 'var(--muted)' }}>Due: {a.due}</div>}
@@ -256,6 +381,23 @@ export default function Assignments() {
           <p>No assignments here.</p>
         </div>
       )}
+
+      <CourseTeacherDialog
+        isOpen={teacherDialog.open}
+        onClose={() => setTeacherDialog({ open: false, courseId: '' })}
+        course={getCourse(teacherDialog.courseId)}
+        currentTeachers={getCourseTeachers(teacherDialog.courseId)}
+        onSave={(teachers) => {
+          const normalizedTeachers = [...new Set((teachers || []).map(normalizeTeacherName).filter(Boolean))].slice(0, 2);
+          const next = { ...(scheduleSettings || {}), courseTeacherMap: { ...(scheduleSettings?.courseTeacherMap || {}), [teacherDialog.courseId]: normalizedTeachers } };
+          store.set('scheduleSettings', next);
+          setScheduleSettings(next);
+          setForm(prev => ({ ...prev, courseId: teacherDialog.courseId, teacherName: prev.teacherName || normalizedTeachers[0] || '' }));
+          setTeacherDialog({ open: false, courseId: '' });
+        }}
+        allTeachers={Object.values(courseTeacherMap || {}).flat().map(normalizeTeacherName).filter(Boolean)}
+        requireTwoTeachers
+      />
     </div>
   );
 }

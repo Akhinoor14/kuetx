@@ -186,6 +186,15 @@ const formatDayShort = (day) => day.slice(0, 3);
 
 const isSessionalType = (type) => /sessional|lab/i.test(String(type || ''));
 
+// Detect course type based on course code: even code = Sessional, odd code = Theory
+const detectCourseType = (course) => {
+  if (!course || !course.code) return 'Theory';
+  const match = String(course.code).match(/(\d)(?:\D|$)/);
+  if (!match) return 'Theory';
+  const lastDigit = Number(match[1]);
+  return lastDigit % 2 === 0 ? 'Sessional' : 'Theory';
+};
+
 const isLongSessionalSlot = (slot) => {
   const range = parseSlotRange(slot);
   if (!range) return false;
@@ -222,6 +231,10 @@ const getTomorrowDay = () => {
 
 const buildDailyText = (day, classes, getCourse, assignments = [], messageFormat = 'plain') => {
   const lines = [];
+  const getClassShareLabel = (item) => {
+    const course = getCourse(item.courseId);
+    return item.displayName || course?.name || course?.code || 'Unknown Course';
+  };
   
   if (messageFormat === 'whatsapp') {
     // WhatsApp format: Time + Teacher only
@@ -232,12 +245,11 @@ const buildDailyText = (day, classes, getCourse, assignments = [], messageFormat
       const sortedClasses = classes.slice().sort((a, b) => a.slot.localeCompare(b.slot));
       
       sortedClasses.forEach((item, idx) => {
-        const course = getCourse(item.courseId);
-        const teacherLabel = item.teacherName || 'Teacher not set';
         const cleanSlot = String(item.slot).replace(/\s+break\s*$/i, '').trim();
+        const classLabel = isSessionalType(item.type) ? getClassShareLabel(item) : (item.teacherName || 'Teacher not set');
         
-        // Simple format: Time — Teacher
-        lines.push(`${idx + 1}. *${cleanSlot}* — _${teacherLabel}_`);
+        // Theory: Time — Teacher, Sessional: Time — Course/Lab name
+        lines.push(`${idx + 1}. *${cleanSlot}* — _${classLabel}_`);
       });
     }
     
@@ -283,9 +295,10 @@ const buildDailyText = (day, classes, getCourse, assignments = [], messageFormat
         .sort((a, b) => a.slot.localeCompare(b.slot))
         .forEach(item => {
           const course = getCourse(item.courseId);
-          const visibleLabel = item.displayName || course?.name || course?.code || 'Unknown Course';
+          const courseLabel = item.displayName || course?.name || course?.code || 'Unknown Course';
           const teacherLabel = item.teacherName || 'Teacher not set';
-          lines.push(`${item.slot} · ${visibleLabel} · ${teacherLabel}`);
+          const visibleLabel = isSessionalType(item.type) ? courseLabel : teacherLabel;
+          lines.push(`${item.slot} · ${visibleLabel}`);
         });
     }
     
@@ -398,41 +411,54 @@ export default function Schedule() {
     setCalendarSelectedDates(new Set());
   };
   
-  const openQuickAdd = (day, slot) => {
+  const openQuickAdd = (day, slot, courseId = '') => {
     setQuickFormEditingId(null);
+    // Auto-detect type based on slot length
+    const range = parseSlotRange(slot);
+    const isLongSlot = range && (range.end - range.start) >= 120;
+    const autoType = isLongSlot ? 'Sessional' : 'Theory';
+    
     setQuickFormData({
       day: day || 'Sunday',
       slot: slot || TIME_MODELS['50min'].slots[0],
-      courseId: '',
+      courseId: courseId || '',
       teacherName: '',
       displayName: '',
       room: '',
       note: '',
-      type: 'Theory',
+      type: autoType,
     });
     setQuickFormOpen(true);
   };
 
   const handleFormCourseChange = (courseId) => {
     const teachers = getCourseTeachers(courseId);
+    const course = getCourse(courseId);
+    const detectedType = detectCourseType(course);
+    const allowed = getAllowedSlotsForType(detectedType);
     setForm(prev => ({
       ...prev,
       courseId,
       teacherName: teachers[0] || '',
       displayName: courseShortNameMap[courseId] || prev.displayName || '',
+      type: detectedType,
+      slot: allowed.includes(prev.slot) ? prev.slot : (allowed[0] || prev.slot),
     }));
-    if (courseId) ensureCourseTeacherSetup(courseId, 'form');
   };
 
   const handleQuickCourseChange = (courseId) => {
     const teachers = getCourseTeachers(courseId);
+    const course = getCourse(courseId);
+    const detectedType = detectCourseType(course);
+    const allowed = getAllowedSlotsForType(detectedType);
     setQuickFormData(prev => ({
       ...prev,
       courseId,
       teacherName: teachers[0] || '',
       displayName: courseShortNameMap[courseId] || prev.displayName || '',
+      type: detectedType,
+      slot: allowed.includes(prev.slot) ? prev.slot : (allowed[0] || prev.slot),
     }));
-    if (courseId) ensureCourseTeacherSetup(courseId, 'quick');
   };
 
   const handleCellClick = (id, item) => {
@@ -448,13 +474,13 @@ export default function Schedule() {
     }
   };
 
-  const handleEmptyCellClick = (day, slot) => {
+  const handleEmptyCellClick = (day, slot, courseId = '') => {
     const key = `empty-${day}-${slot}`;
     const now = Date.now();
     const lastClick = lastClickRef.current[key] || 0;
 
     if (now - lastClick < 300) {
-      openQuickAdd(day, slot);
+      openQuickAdd(day, slot, courseId);
       lastClickRef.current[key] = 0;
     } else {
       lastClickRef.current[key] = now;
@@ -1145,6 +1171,7 @@ export default function Schedule() {
                         {dayItems.map(s => {
                           const c = getCourse(s.courseId);
                           const hideTeacherInGrid = isSessionalType(s.type);
+                          const isSessional = hideTeacherInGrid;
                           return (
                             <div
                               key={s.id}
@@ -1156,8 +1183,12 @@ export default function Schedule() {
                                 fontSize: 12,
                                 lineHeight: 1.35,
                                 marginBottom: 4,
-                                background: 'linear-gradient(180deg, rgba(59,130,246,0.12), rgba(59,130,246,0.08))',
-                                border: '1px solid rgba(59,130,246,0.18)',
+                                background: isSessional 
+                                  ? 'linear-gradient(180deg, rgba(34,197,94,0.12), rgba(34,197,94,0.08))'
+                                  : 'linear-gradient(180deg, rgba(59,130,246,0.12), rgba(59,130,246,0.08))',
+                                border: isSessional
+                                  ? '1px solid rgba(34,197,94,0.25)'
+                                  : '1px solid rgba(59,130,246,0.18)',
                                 color: 'var(--text)',
                                 position: 'relative',
                                 cursor: 'pointer',
@@ -1166,7 +1197,7 @@ export default function Schedule() {
                                 WebkitUserSelect: 'none',
                               }}
                             >
-                              <div style={{ fontWeight: 800, fontSize: 12, lineHeight: 1.35, letterSpacing: '0.01em', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+                              <div style={{ fontWeight: 800, fontSize: 12, lineHeight: 1.35, letterSpacing: '0.01em', display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden', flex: 1 }}>
                                 {s.displayName || c?.code || c?.name || '?'}
                               </div>
                               {!hideTeacherInGrid && (
@@ -1502,98 +1533,130 @@ export default function Schedule() {
       </div>
 
       {adding && (
-        <div className="card" style={{ marginBottom: 14, borderColor: 'var(--accent)', padding: 16 }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 10, marginBottom: 12 }}>
-            <div style={{ fontWeight: 600, fontSize: 13 }}>{editingId ? 'Edit Class Slot' : 'Add Class Slot'}</div>
-            {editingId && <span className="tag tag-blue">Editing</span>}
-          </div>
-          <div style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 10, padding: '8px 12px', background: 'rgba(59,130,246,0.05)', borderRadius: 6, borderLeft: '3px solid var(--accent)' }}>
-            💡 <strong>Course teacher setup:</strong> Every course needs two fixed teachers. If missing, a popup will ask for both teachers first.
-          </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(100px, 1fr))', gap: 10, marginBottom: 10 }}>
-            <div>
-              <label>Day</label>
-              <select value={form.day} onChange={e => set('day', e.target.value)}>
-                {DAYS.map(d => <option key={d}>{d}</option>)}
-              </select>
-            </div>
-            <div>
-              <label>Time</label>
-              <select value={form.slot} onChange={e => set('slot', e.target.value)}>
-                {getAllowedSlotsForType(form.type).map(p => <option key={p} value={p}>{slotPreview(p)}</option>)}
-              </select>
-            </div>
-            <div>
-              <label>Type</label>
-              <select value={form.type} onChange={e => handleFormTypeChange(e.target.value)}>
-                <option value="Theory">Theory</option>
-                <option value="Sessional">Lab / Sessional</option>
-                <option value="Project">Project</option>
-                <option value="Tutorial">Tutorial / Section</option>
-              </select>
-            </div>
-            <div style={{ gridColumn: 'span 2' }}>
-              <label>Course</label>
-              <select value={form.courseId} onChange={e => handleFormCourseChange(e.target.value)}>
-                <option value="">Select course</option>
-                {currentTermCourses.map(c => <option key={c.id} value={c.id}>{c.code} — {c.name}</option>)}
-              </select>
-            </div>
-            <div style={{ gridColumn: 'span 3' }}>
-              <label>Show As (Grid Name)</label>
-              <input
-                value={form.displayName}
-                onChange={e => {
-                  const nextName = e.target.value;
-                  set('displayName', nextName);
-                  if (form.courseId) updateCourseShortName(form.courseId, nextName);
-                }}
-                placeholder={autoDisplayName(form.courseId, form.teacherName || '') || 'CSE 2201 DS'}
-              />
-            </div>
-            <div style={{ gridColumn: 'span 3' }}>
-              <label>Teacher (Select One)</label>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: 8 }}>
-                <select
-                  value={form.teacherName}
-                  onChange={e => set('teacherName', e.target.value)}
-                  disabled={!form.courseId || getCourseTeachers(form.courseId).length === 0}
-                >
-                  <option value="">Select teacher</option>
-                  {getCourseTeachers(form.courseId).map(name => (
-                    <option key={name} value={name}>{name}</option>
-                  ))}
-                </select>
-                <button
-                  type="button"
-                  className="btn btn-ghost"
-                  onClick={() => {
-                    if (!form.courseId) return;
-                    setCourseTeacherDialogState({ open: true, courseId: form.courseId, source: 'form' });
-                  }}
-                  disabled={!form.courseId}
-                >
-                  Edit Teachers
-                </button>
-              </div>
-              {form.courseId && getCourseTeachers(form.courseId).length < 2 && (
-                <div style={{ marginTop: 6, fontSize: 11, color: 'rgb(180,83,9)' }}>
-                  Please set two teachers for this course first.
+        <div
+          style={{
+            position: 'fixed',
+            inset: 0,
+            background: 'rgba(0,0,0,0.48)',
+            backdropFilter: 'blur(10px)',
+            WebkitBackdropFilter: 'blur(10px)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 1500,
+            padding: 16,
+          }}
+          onClick={cancelEdit}
+        >
+          <div
+            className="card schedule-class-modal"
+            style={{ width: 'min(860px, 98vw)', maxHeight: '92vh', borderColor: 'var(--accent)', padding: 0, background: 'var(--bg)', overflow: 'hidden', display: 'flex', flexDirection: 'column', borderRadius: 24, boxShadow: '0 30px 80px rgba(0,0,0,0.16)' }}
+            onClick={e => e.stopPropagation()}
+          >
+            <div style={{ padding: 24, borderBottom: '1px solid var(--border)', background: 'var(--bg)', position: 'sticky', top: 0, zIndex: 1 }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
+                <div>
+                  <div style={{ fontWeight: 700, fontSize: 18, marginBottom: 4 }}>{editingId ? 'Edit Class Slot' : 'Add Class Slot'}</div>
+                  <div style={{ fontSize: 13, color: 'var(--muted)', maxWidth: 560 }}>A clean, course-aware class form with the selected teacher and short name visible at a glance.</div>
                 </div>
-              )}
+                {editingId && <span className="tag tag-blue">Editing</span>}
+              </div>
             </div>
-            <div>
-              <label>Room</label>
-              <input value={form.room} onChange={e => set('room', e.target.value)} placeholder="Room 301" />
+            <div style={{ padding: 24, overflowY: 'auto' }}>
+              <div style={{ fontSize: 13, color: 'var(--muted)', marginBottom: 16, padding: '12px 14px', background: 'rgba(59,130,246,0.08)', borderRadius: 14, borderLeft: '4px solid var(--accent)' }}>
+                💡 <strong>Course teacher setup:</strong> Every course needs two fixed teachers. If missing, a popup will ask for both teachers first.
+              </div>
+              <div className="schedule-add-form-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(220px, 1fr))', gap: 16, marginBottom: 18, alignItems: 'end' }}>
+                <div className="form-field">
+                  <label>Day</label>
+                  <select value={form.day} onChange={e => set('day', e.target.value)}>
+                    {DAYS.map(d => <option key={d}>{d}</option>)}
+                  </select>
+                </div>
+                <div className="form-field">
+                  <label>Time</label>
+                  <select value={form.slot} onChange={e => set('slot', e.target.value)}>
+                    {getAllowedSlotsForType(form.type).map(p => <option key={p} value={p}>{slotPreview(p)}</option>)}
+                  </select>
+                </div>
+                <div className="form-field">
+                  <label>Type</label>
+                  <select value={form.type} onChange={e => set('type', e.target.value)}>
+                    <option value="Theory">Theory</option>
+                    <option value="Sessional">Lab / Sessional</option>
+                    <option value="Project">Project</option>
+                    <option value="Tutorial">Tutorial / Section</option>
+                  </select>
+                </div>
+                <div className="form-field" style={{ gridColumn: 'span 2' }}>
+                  <label>Course</label>
+                  <select value={form.courseId} onChange={e => handleFormCourseChange(e.target.value)}>
+                    <option value="">Select course</option>
+                    {currentTermCourses.map(c => <option key={c.id} value={c.id}>{c.code} — {c.name}</option>)}
+                  </select>
+                </div>
+                <div className="form-field" style={{ gridColumn: 'span 3' }}>
+                  <label>Show As (Grid Name)</label>
+                  <input
+                    value={form.displayName}
+                    onChange={e => {
+                      const nextName = e.target.value;
+                      set('displayName', nextName);
+                      if (form.courseId) updateCourseShortName(form.courseId, nextName);
+                    }}
+                    placeholder={autoDisplayName(form.courseId, form.teacherName || '') || 'CSE 2201 DS'}
+                  />
+                </div>
+                <div className="form-field" style={{ gridColumn: 'span 3' }}>
+                  <label>Teacher (Select One)</label>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: 12, alignItems: 'center' }}>
+                    <select
+                      value={form.teacherName}
+                      onChange={e => set('teacherName', e.target.value)}
+                      disabled={!form.courseId || getCourseTeachers(form.courseId).length === 0}
+                    >
+                      <option value="">Select teacher</option>
+                      {getCourseTeachers(form.courseId).map(name => (
+                        <option key={name} value={name}>{name}</option>
+                      ))}
+                    </select>
+                    <button
+                      type="button"
+                      className="btn btn-ghost"
+                      onClick={() => {
+                        if (!form.courseId) return;
+                        setCourseTeacherDialogState({ open: true, courseId: form.courseId, source: 'form' });
+                      }}
+                      disabled={!form.courseId}
+                    >
+                      {!form.courseId ? 'Select Course First' : getCourseTeachers(form.courseId).length >= 2 ? 'Edit Teachers' : 'Add Teacher'}
+                    </button>
+                  </div>
+                  {form.courseId && getCourseTeachers(form.courseId).length < 2 && (
+                    <div style={{ marginTop: 8, fontSize: 12, color: 'rgb(180,83,9)' }}>
+                      Please set two teachers for this course first.
+                    </div>
+                  )}
+                  {!form.courseId && (
+                    <div style={{ marginTop: 8, fontSize: 12, color: 'var(--muted)' }}>
+                      Select a course to enable teacher setup.
+                    </div>
+                  )}
+                </div>
+                <div className="form-field">
+                  <label>Room</label>
+                  <input value={form.room} onChange={e => set('room', e.target.value)} placeholder="Room 301" />
+                </div>
+                <div className="form-field" style={{ gridColumn: 'span 3' }}>
+                  <label>Note</label>
+                  <input value={form.note} onChange={e => set('note', e.target.value)} placeholder="Optional note, teacher, batch, etc." />
+                </div>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 12, flexWrap: 'wrap' }}>
+                <button className="btn btn-ghost" onClick={cancelEdit} style={{ minWidth: 110 }}>Cancel</button>
+                <button className="btn btn-primary" onClick={add} style={{ minWidth: 110 }}>{editingId ? 'Save Changes' : 'Add Class'}</button>
+              </div>
             </div>
-            <div style={{ gridColumn: 'span 3' }}>
-              <label>Note</label>
-              <input value={form.note} onChange={e => set('note', e.target.value)} placeholder="Optional note, teacher, batch, etc." />
-            </div>
-          </div>
-          <div style={{ display: 'flex', gap: 8 }}>
-            <button className="btn btn-primary" onClick={add}>{editingId ? 'Save Changes' : 'Add'}</button>
-            <button className="btn btn-ghost" onClick={cancelEdit}>Cancel</button>
           </div>
         </div>
       )}
@@ -1673,7 +1736,9 @@ export default function Schedule() {
           style={{
             position: 'fixed',
             inset: 0,
-            background: 'rgba(0,0,0,0.5)',
+            background: 'rgba(0,0,0,0.6)',
+            backdropFilter: 'blur(8px)',
+            WebkitBackdropFilter: 'blur(8px)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -2040,7 +2105,7 @@ export default function Schedule() {
 
       {/* Edit Exams Modal */}
       {editingExams && (
-        <div className="card" style={{ position: 'fixed', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(0,0,0,0.4)' }}>
+        <div className="card" style={{ position: 'fixed', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(0,0,0,0.55)', backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)' }}>
           <div style={{ width: 720, maxWidth: '95%', background: 'var(--bg)', borderRadius: 12, padding: 16 }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
               <div style={{ fontWeight: 800 }}>Edit Exam Dates</div>
@@ -2134,7 +2199,7 @@ export default function Schedule() {
                 <label style={{ fontSize: 12, fontWeight: 600 }}>Type</label>
                 <select
                   value={quickFormData.type}
-                  onChange={e => handleQuickTypeChange(e.target.value)}
+                  onChange={e => setQuickFormData(d => ({ ...d, type: e.target.value }))}
                   style={{ width: '100%', padding: '8px 10px', border: '1px solid var(--border)', borderRadius: 6, background: 'var(--bg)', color: 'var(--text)', fontSize: 13 }}
                 >
                   <option value="Theory">Theory</option>
@@ -2179,7 +2244,7 @@ export default function Schedule() {
                     }}
                     disabled={!quickFormData.courseId}
                   >
-                    Edit Teachers
+                    {getCourseTeachers(quickFormData.courseId).length >= 2 ? 'Edit Teachers' : 'Add Teacher'}
                   </button>
                 </div>
                 {quickFormData.courseId && getCourseTeachers(quickFormData.courseId).length < 2 && (

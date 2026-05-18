@@ -70,7 +70,9 @@ export default function CourseTeacherDialog({
       style={{
         position: 'fixed',
         inset: 0,
-        background: 'rgba(0,0,0,0.5)',
+        background: 'rgba(0,0,0,0.6)',
+        backdropFilter: 'blur(8px)',
+        WebkitBackdropFilter: 'blur(8px)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -139,7 +141,6 @@ export default function CourseTeacherDialog({
           </label>
           <input
             type="text"
-            list="allTeachersList"
             value={teacher1}
             onChange={(e) => setTeacher1(e.target.value)}
             placeholder="e.g., Dr. Ahmed Khan"
@@ -156,11 +157,6 @@ export default function CourseTeacherDialog({
               outline: 'none',
             }}
           />
-          <datalist id="allTeachersList">
-            {allTeachers.map((name) => (
-              <option key={name} value={name} />
-            ))}
-          </datalist>
           <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 4 }}>
             Name will be normalized (e.g., "Ahmed" → "Ahmed Sir")
           </div>
@@ -173,7 +169,6 @@ export default function CourseTeacherDialog({
           </label>
           <input
             type="text"
-            list="allTeachersList"
             value={teacher2}
             onChange={(e) => setTeacher2(e.target.value)}
             placeholder={requireTwoTeachers ? 'e.g., Dr. Fatima Begum' : 'e.g., Dr. Fatima Begum (leave blank for single teacher)'}
@@ -224,7 +219,7 @@ export default function CourseTeacherDialog({
             className="btn btn-primary"
             style={{ padding: '10px 16px' }}
           >
-            Save Teachers
+            {currentTeachers.length >= 2 ? 'Edit Teachers' : 'Add Teacher'}
           </button>
         </div>
       </div>

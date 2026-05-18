@@ -23,10 +23,20 @@ function getTeachersForCourseOnDate(schedule, courseId, date) {
   return teachers;
 }
 
-function getTeachersForCourse(schedule, courseId) {
+const normalizeTeacherName = (value) => {
+  return String(value || '').trim().replace(/\s{2,}/g, ' ');
+};
+
+function getTeachersForCourse(settings, schedule, courseId) {
+  const mapped = Array.isArray(settings?.courseTeacherMap?.[courseId])
+    ? settings.courseTeacherMap[courseId].map(normalizeTeacherName).filter(Boolean)
+    : [];
+  if (mapped.length > 0) return [...new Set(mapped)];
+
   const teachers = [...new Set((schedule || [])
     .filter(s => s.courseId === courseId)
-    .map(s => s.teacherName)
+    .flatMap(s => Array.isArray(s.teacherNames) && s.teacherNames.length > 0 ? s.teacherNames : [s.teacherName])
+    .map(normalizeTeacherName)
     .filter(Boolean))];
   return teachers;
 }
@@ -161,16 +171,16 @@ function DailyLog({ courses, logs, setLogs, schedule, scheduleSettings, combined
 
   const markedTeachers = useMemo(() => {
     let total = 0, marked = 0;
-    let coursesToCount = (visibleCourses.length > 0 ? visibleCourses : courses).filter(c => !isAutoFull(c.type));
-    if (showGiveAttendance && scheduledCourses.length === 0) {
+    let coursesToCount = visibleCourses.length > 0 ? visibleCourses.filter(c => !isAutoFull(c.type)) : [];
+    if (showGiveAttendance && !isToday && scheduledCourses.length === 0) {
       coursesToCount = courses.filter(c => !isAutoFull(c.type));
     }
     if (isTodayHoliday) return { marked: 0, total: 0 };
     coursesToCount.forEach(c => {
       // Use date-specific teachers for scheduled dates, all teachers for manual marking
       const teachers = scheduledCourses.length > 0 
-        ? getTeachersForCourseOnDate(schedule, c.id, date)
-        : getTeachersForCourse(schedule, c.id);
+        ? getTeachersForCourseOnDate(scheduleSettings, schedule, c.id, date)
+        : getTeachersForCourse(scheduleSettings, schedule, c.id);
       const displayTeachers = teachers.length > 0 ? teachers : [''];
       displayTeachers.forEach(t => {
         total++;
@@ -179,22 +189,22 @@ function DailyLog({ courses, logs, setLogs, schedule, scheduleSettings, combined
       });
     });
     return { marked, total };
-  }, [visibleCourses, dayLog, date, schedule, courses, showGiveAttendance, scheduledCourses.length, isTodayHoliday]);
+  }, [visibleCourses, dayLog, date, schedule, courses, showGiveAttendance, scheduledCourses.length, isTodayHoliday, scheduleSettings]);
 
   const cardsToShow = useMemo(() => {
-    let coursesToShow = (visibleCourses.length > 0 ? visibleCourses : courses).filter(c => !isAutoFull(c.type));
-    if (showGiveAttendance && scheduledCourses.length === 0) {
+    let coursesToShow = visibleCourses.length > 0 ? visibleCourses.filter(c => !isAutoFull(c.type)) : [];
+    if (showGiveAttendance && !isToday && scheduledCourses.length === 0) {
       coursesToShow = courses.filter(c => !isAutoFull(c.type));
     }
     if (isTodayHoliday) return [];
 
     const cards = [];
     coursesToShow.forEach(course => {
-      // Use date-specific teachers if we have scheduled courses for this date
+      // Use date-specific teachers if there are scheduled entries for this date
       // Otherwise use all teachers for the course (for manual attendance marking)
       const teachers = scheduledCourses.length > 0 
-        ? getTeachersForCourseOnDate(schedule, course.id, date)
-        : getTeachersForCourse(schedule, course.id);
+        ? getTeachersForCourseOnDate(scheduleSettings, schedule, course.id, date)
+        : getTeachersForCourse(scheduleSettings, schedule, course.id);
       const displayTeachers = teachers.length > 0 ? teachers : [''];
       displayTeachers.forEach(teacher => {
         const key = `${course.id}_${teacher || ''}`;
@@ -251,7 +261,7 @@ function DailyLog({ courses, logs, setLogs, schedule, scheduleSettings, combined
             const updated = { ...logs };
             if (!updated[date]) updated[date] = {};
             coursesToMark.forEach(c => {
-              const teachers = getTeachersForCourseOnDate(schedule, c.id, date);
+              const teachers = getTeachersForCourseOnDate(scheduleSettings, schedule, c.id, date);
               const displayTeachers = teachers.length > 0 ? teachers : [''];
               if (!isAutoFull(c.type)) {
                 displayTeachers.forEach(t => {
@@ -284,15 +294,20 @@ function DailyLog({ courses, logs, setLogs, schedule, scheduleSettings, combined
         </div>
       )}
 
-      {courses.length > 0 && scheduledCourses.length === 0 && !isTodayHoliday && (
+      {courses.length > 0 && scheduledCourses.length === 0 && !isToday && !isTodayHoliday && (
         <div style={{ marginBottom: 16, padding: '12px', backgroundColor: 'rgba(251, 191, 36, 0.08)', borderRadius: 8, fontSize: 13, color: 'var(--muted)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <span>📅 No scheduled classes today, but you can mark attendance manually.</span>
+          <span>📅 No scheduled classes today on this date.</span>
           <button onClick={() => setShowGiveAttendance(!showGiveAttendance)} style={{
             padding: '6px 12px', borderRadius: 6, cursor: 'pointer', fontWeight: 600,
             fontSize: 12, background: 'var(--accent)', color: 'white', border: 'none'
           }}>
             {showGiveAttendance ? 'Hide' : 'Give Attendance'}
           </button>
+        </div>
+      )}
+      {courses.length > 0 && scheduledCourses.length === 0 && isToday && !isTodayHoliday && (
+        <div style={{ marginBottom: 16, padding: '12px', backgroundColor: 'rgba(147,197,253,0.14)', borderRadius: 8, fontSize: 13, color: 'var(--muted)' }}>
+          Today has no scheduled classes, so manual attendance is disabled for the current day.
         </div>
       )}
 
@@ -374,7 +389,7 @@ function Summary({ courses, logs, schedule, combinedMode, combinedData, toggleCo
   const theoryCourses = (courses || []).filter(c => !isAutoFull(c.type));
 
   const courseCards = theoryCourses.map(c => {
-    const teachers = getTeachersForCourse(schedule, c.id);
+    const teachers = getTeachersForCourse(scheduleSettings, schedule, c.id);
     const displayTeachers = teachers.length > 0 ? teachers : [''];
 
     const stats = {};

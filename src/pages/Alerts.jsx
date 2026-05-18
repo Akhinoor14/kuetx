@@ -25,6 +25,12 @@ export function computeAlerts(profile) {
   const currentTermCourses = currentTermKey
     ? courses.filter(c => `Y${c.year}T${c.term}` === currentTermKey && (c.status === 'active' || c.status === 'backlog'))
     : [];
+  const currentTermTimeline = currentTermKey ? getTermTimeline(profile?.termStartDate, profile?.dept, currentTermKey) : null;
+  const currentTermIsOngoing = !!(
+    (currentTermTimeline && new Date() <= currentTermTimeline.classEndDate) ||
+    (currentTermKey && currentTermCourses.length > 0)
+  );
+  const currentTermCourseIds = new Set(currentTermCourses.map(c => c.id));
 
   // Attendance per course
   courses.filter(c => c.status === 'active' || c.status === 'backlog').forEach(c => {
@@ -49,6 +55,13 @@ export function computeAlerts(profile) {
 
   // F in core courses
   courses.forEach(c => {
+    const termKey = `Y${c.year}T${c.term}`;
+    const courseMarks = marks[c.id] || {};
+    const hasPublishedResult = !!String(courseMarks.publishedGrade || courseMarks.resultGrade || '').trim();
+    const isCurrentOngoingCourse = currentTermIsOngoing && currentTermCourseIds.has(c.id);
+
+    if (isCurrentOngoingCourse && !hasPublishedResult) return;
+
     const { grade } = computeCourseGrade(c);
     if (grade === 'F' && c.isCore)
       critical.push({ msg: `${c.code}: F grade in core course — must repeat (Art. 16)`, link: '/results' });

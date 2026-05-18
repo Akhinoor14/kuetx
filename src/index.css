@@ -449,6 +449,63 @@ h3 { font-size: 15px; font-weight: 600; }
   .form-row-3 { grid-template-columns: 1fr; }
 }
 
+@media (max-width: 768px) {
+  .schedule-class-modal {
+    width: calc(100vw - 20px) !important;
+    max-width: calc(100vw - 20px) !important;
+    max-height: 92vh !important;
+    border-radius: 14px !important;
+  }
+
+  .schedule-class-modal > div:last-child {
+    padding: 12px !important;
+  }
+
+  .schedule-add-form-grid {
+    grid-template-columns: 1fr !important;
+    gap: 8px !important;
+  }
+
+  .schedule-add-form-grid > div {
+    grid-column: auto !important;
+  }
+
+  .schedule-class-modal .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .schedule-class-modal .btn-ghost {
+    width: 100%;
+  }
+
+  .schedule-class-modal select,
+  .schedule-class-modal input {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .schedule-class-modal {
+    width: calc(100vw - 12px) !important;
+    max-width: calc(100vw - 12px) !important;
+    max-height: 94vh !important;
+  }
+
+  .schedule-class-modal > div:first-child {
+    padding: 12px !important;
+  }
+
+  .schedule-class-modal > div:last-child {
+    padding: 12px !important;
+  }
+
+  .schedule-class-modal .btn {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+}
+
 /* ── Number display (big stat) ───────────────────────────────────────────── */
 .stat-num {
   font-size: 32px;
@@ -633,7 +690,542 @@ input[type="checkbox"] {
   border-color: rgba(74, 222, 128, 0.20);
 }
 
-/* ── Collapsible ───────────────────────────────────────────────────────── */
+.marks-page .marks-hero {
+  display: grid;
+  gap: 12px;
+}
+
+.marks-page .planner-pill-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.marks-page .planner-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: rgba(var(--accentRGB), 0.14);
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.marks-page .planner-pill-soft {
+  background: rgba(14, 165, 233, 0.12);
+  color: var(--accent2);
+}
+
+.marks-page .planner-input-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.marks-page .planner-meta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.marks-page .planner-grade-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
+  gap: 8px;
+}
+
+.marks-page .planner-status-block {
+  text-align: right;
+  min-width: 120px;
+}
+
+.marks-page .planner-status-label {
+  font-size: 12px;
+  font-weight: 700;
+  margin-bottom: 2px;
+}
+
+.marks-page .planner-status-meta {
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.marks-page .planner-course {
+  background: var(--surface);
+  border: 1px solid rgba(22, 163, 74, 0.10);
+  box-shadow: 0 20px 50px rgba(15, 23, 42, 0.08);
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.marks-page .planner-course .collapsible-shell::before {
+  width: 5px;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  border-radius: 999px;
+  opacity: 1;
+}
+
+.marks-page .planner-course .collapsible-head {
+  padding: 18px 22px 18px 24px;
+  background: rgba(22, 163, 74, 0.04);
+  border-bottom: 1px solid rgba(22, 163, 74, 0.08);
+}
+
+.marks-page .planner-course .collapsible-head:hover {
+  background: rgba(22, 163, 74, 0.08);
+}
+
+.marks-page .planner-course .collapsible-inner {
+  padding: 20px 22px 22px 24px;
+  background: var(--surface);
+}
+
+.marks-page .planner-course .collapsible-subtitle {
+  color: #475569;
+}
+
+.marks-page .planner-status-block {
+  text-align: right;
+  min-width: 140px;
+}
+
+.marks-page .planner-status-block .planner-status-meta {
+  display: block;
+}
+
+.marks-page .planner-input-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+  margin-bottom: 14px;
+}
+
+.marks-page .planner-grade-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+  gap: 10px;
+}
+
+.marks-page .planner-meta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.marks-page .planner-pill-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+/* ── NEW MODERN PLANNER DESIGN ──────────────────────────────────────────── */
+
+.marks-page .planner-page-header {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 20px;
+  align-items: flex-start;
+  margin-bottom: 32px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.marks-page .planner-page-header h1 {
+  margin-bottom: 6px;
+}
+
+.marks-page .planner-page-header p {
+  font-size: 14px;
+  color: var(--muted);
+  margin: 0;
+}
+
+.marks-page .planner-header-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+}
+
+.marks-page .planner-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 12px 16px;
+  background: rgba(var(--accentRGB), 0.08);
+  border-radius: 12px;
+  border: 1px solid rgba(var(--accentRGB), 0.15);
+}
+
+.marks-page .planner-stat-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.marks-page .planner-stat-value {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--accent);
+  margin-top: 6px;
+}
+
+/* Course Card */
+.marks-page .planner-course-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.06);
+  overflow: hidden;
+  margin-bottom: 16px;
+  transition: box-shadow 0.2s, border-color 0.2s;
+}
+
+.marks-page .planner-course-card:hover {
+  border-color: rgba(var(--accentRGB), 0.3);
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.10);
+}
+
+.marks-page .planner-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 18px 20px;
+  background: linear-gradient(135deg, rgba(var(--accentRGB), 0.06), rgba(14, 165, 233, 0.04));
+  border-bottom: 1px solid var(--border);
+}
+
+.marks-page .planner-card-title {
+  font-size: 16px;
+  font-weight: 700;
+  margin-bottom: 4px;
+  color: var(--text);
+}
+
+.marks-page .planner-card-desc {
+  font-size: 13px;
+  color: var(--muted);
+  margin: 0;
+}
+
+.marks-page .planner-card-meta {
+  text-align: right;
+}
+
+.marks-page .planner-card-status {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  display: block;
+  margin-bottom: 6px;
+}
+
+.marks-page .planner-card-marks {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.marks-page .planner-card-body {
+  padding: 20px;
+}
+
+/* Grid Layouts */
+.marks-page .planner-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+@media (max-width: 768px) {
+  .marks-page .planner-grid-2 {
+    grid-template-columns: 1fr;
+  }
+}
+
+.marks-page .planner-input-field {
+  display: flex;
+  flex-direction: column;
+}
+
+.marks-page .planner-input-field label {
+  font-size: 12px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: var(--text);
+  text-transform: none;
+  letter-spacing: normal;
+}
+
+.marks-page .planner-input-field input {
+  padding: 10px 12px;
+  border-radius: 10px;
+  font-size: 14px;
+}
+
+.marks-page .planner-input-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  position: relative;
+}
+
+.marks-page .planner-input-wrapper input {
+  flex: 1;
+}
+
+.marks-page .planner-input-unit {
+  font-size: 12px;
+  color: var(--muted);
+  font-weight: 600;
+  padding-right: 4px;
+}
+
+/* Teachers Section */
+.marks-page .planner-teachers-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 18px;
+  padding: 16px;
+  background: rgba(22, 163, 74, 0.03);
+  border-radius: 12px;
+  border: 1px solid rgba(22, 163, 74, 0.08);
+}
+
+@media (max-width: 768px) {
+  .marks-page .planner-teachers-section {
+    grid-template-columns: 1fr;
+  }
+}
+
+.marks-page .planner-teacher-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.marks-page .planner-teacher-name {
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: var(--text);
+  padding-bottom: 8px;
+  border-bottom: 2px solid rgba(var(--accentRGB), 0.2);
+}
+
+.marks-page .planner-teacher-inputs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.marks-page .planner-teacher-inputs .planner-input-field input {
+  padding: 8px 10px;
+  font-size: 13px;
+}
+
+/* Target Grade Section */
+.marks-page .planner-target-section {
+  margin-bottom: 18px;
+}
+
+.marks-page .planner-target-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  color: var(--text);
+}
+
+.marks-page .planner-grade-buttons {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(75px, 1fr));
+  gap: 8px;
+}
+
+.marks-page .planner-grade-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 8px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+  gap: 4px;
+}
+
+.marks-page .planner-grade-btn:hover:not(:disabled) {
+  border-color: var(--accent);
+  background: rgba(var(--accentRGB), 0.08);
+}
+
+.marks-page .planner-grade-btn.active {
+  border-color: var(--accent);
+  background: rgba(var(--accentRGB), 0.15);
+  color: var(--accent);
+}
+
+.marks-page .planner-grade-btn.impossible {
+  opacity: 0.5;
+  cursor: not-allowed;
+  color: var(--muted);
+}
+
+.marks-page .planner-grade-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.marks-page .planner-grade-btn span:last-child {
+  font-size: 10px;
+  font-weight: 600;
+  color: inherit;
+  opacity: 0.75;
+}
+
+/* Results Box */
+.marks-page .planner-result-box {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  padding: 14px;
+  background: rgba(var(--accentRGB), 0.05);
+  border-radius: 12px;
+  border: 1px solid rgba(var(--accentRGB), 0.12);
+  margin-bottom: 14px;
+}
+
+@media (max-width: 768px) {
+  .marks-page .planner-result-box {
+    grid-template-columns: 1fr;
+  }
+}
+
+.marks-page .planner-result-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: column;
+}
+
+.marks-page .planner-result-row span:first-child {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 6px;
+}
+
+.marks-page .planner-result-row strong {
+  font-size: 16px;
+  color: var(--text);
+}
+
+/* Needed Box */
+.marks-page .planner-needed-box {
+  padding: 14px;
+  border-radius: 12px;
+  border-left: 4px solid;
+}
+
+.marks-page .planner-needed-box.success {
+  background: rgba(76, 175, 80, 0.08);
+  border-left-color: #4caf50;
+}
+
+.marks-page .planner-needed-box.warning {
+  background: rgba(255, 193, 7, 0.08);
+  border-left-color: #ffc107;
+}
+
+.marks-page .planner-needed-box.danger {
+  background: rgba(244, 67, 54, 0.08);
+  border-left-color: #f44336;
+}
+
+.marks-page .planner-needed-label {
+  font-size: 11px;
+  color: var(--muted);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 6px;
+}
+
+.marks-page .planner-needed-value {
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.marks-page .planner-needed-box.success .planner-needed-value {
+  color: #4caf50;
+}
+
+.marks-page .planner-needed-box.warning .planner-needed-value {
+  color: #ffc107;
+}
+
+.marks-page .planner-needed-box.danger .planner-needed-value {
+  color: #f44336;
+}
+
+/* Courses Grid */
+.marks-page .planner-courses-grid {
+  margin-bottom: 32px;
+}
+
+/* Tips Section */
+.marks-page .planner-tips {
+  padding: 18px;
+  background: linear-gradient(135deg, rgba(14, 165, 233, 0.08), rgba(22, 163, 74, 0.06));
+  border: 1px solid rgba(14, 165, 233, 0.15);
+  border-radius: 16px;
+  margin-top: 20px;
+}
+
+.marks-page .planner-tips h3 {
+  margin: 0 0 12px 0;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.marks-page .planner-tips ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.marks-page .planner-tips li {
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 10px;
+  line-height: 1.5;
+}
+
+.marks-page .planner-tips li:last-child {
+  margin-bottom: 0;
+}
+
+
 .collapsible-shell {
   padding: 0;
   overflow: hidden;
