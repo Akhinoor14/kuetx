@@ -2,7 +2,7 @@ import { useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, ReferenceLine } from 'recharts';
 import { TrendingUp, Award, AlertTriangle, BookOpen, CalendarCheck, Clock, Wallet, Star } from 'lucide-react';
-import { store, cgpaToPercent, computeCGPA, computeTermGPAs, computeEffectiveAttendance, MIN_ATTENDANCE_PERCENT, SCHOLARSHIP_ATTENDANCE_PCT, computeCourseGrade, deriveAcademicMetaFromCourses, syncProfileAcademicMeta, getAllCourses, getProfile, getTermLabelFromKey, getCurrentTermKey, getTermProgress, getTermTimeline, TERM_DURATION_DAYS } from '../store/store';
+import { store, cgpaToPercent, computeCGPA, computeTermGPAs, computeEffectiveAttendance, MIN_ATTENDANCE_PERCENT, SCHOLARSHIP_ATTENDANCE_PCT, computeCourseGrade, deriveAcademicMetaFromCourses, syncProfileAcademicMeta, getAllCourses, getProfile, getTermLabelFromKey, getCurrentTermKey, getTermProgress, getTermTimeline, getTermIndex, TERM_KEYS } from '../store/store';
 
 function StatCard({ label, value, sub, color, bgColor, icon: Icon, to }) {
   const inner = (
@@ -83,11 +83,23 @@ export default function Dashboard() {
     }
   });
 
-  const { batch: derivedBatch, currentTerm: derivedTermLabel } = deriveAcademicMetaFromCourses(courses, profile);
+  const { batch: derivedBatch, currentTerm: derivedTermLabel, latestTermKey } = deriveAcademicMetaFromCourses(courses, profile);
 
-  const currentTermLabel = getTermLabelFromKey(profile.currentTermKey) || derivedTermLabel || profile.currentTerm || '';
-  const currentTermKey = getCurrentTermKey(profile);
+  const currentTermKey = getCurrentTermKey(profile) || latestTermKey;
+  const currentTermLabel = getTermLabelFromKey(currentTermKey) || derivedTermLabel || profile.currentTerm || '';
   const inferredBatch = profile.batch || derivedBatch;
+  const scheduleSettings = store.get('scheduleSettings') || {};
+  const currentTermTimeline = currentTermKey && profile?.termStartDate ? getTermTimeline(profile.termStartDate, profile?.dept, currentTermKey) : null;
+  const currentTermProgress = currentTermTimeline ? getTermProgress(profile.termStartDate, scheduleSettings.holidayDates || []) : 0;
+  const completedTerms = currentTermKey ? Math.max(0, Math.min(TERM_KEYS.length - 1, getTermIndex(currentTermKey))) : 0;
+  const termJourneyPct = currentTermKey
+    ? Math.min(100, Math.round(((completedTerms + (currentTermProgress / 100)) / TERM_KEYS.length) * 100))
+    : creditPct;
+  const shortDate = (d) => new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+  const classEndLabel = currentTermTimeline?.classEndDate ? shortDate(currentTermTimeline.classEndDate) : '';
+  const prepLeaveLabel = currentTermTimeline ? `${shortDate(currentTermTimeline.prepLeaveStart)} → ${shortDate(currentTermTimeline.prepLeaveEnd)}` : '';
+  const examStartLabel = currentTermTimeline?.examPhases?.[0]?.examDate ? shortDate(currentTermTimeline.examPhases[0].examDate) : '';
+  const examEndLabel = currentTermTimeline?.examPhases?.length ? shortDate(currentTermTimeline.examPhases[currentTermTimeline.examPhases.length - 1].examDate) : '';
 
   useEffect(() => {
     syncProfileAcademicMeta({ profile, courses });
@@ -217,171 +229,57 @@ export default function Dashboard() {
         />
       </div>
 
-      {/* Credit progress */}
-      <div className="card dashboard-roadmap" style={{ marginBottom: 12, padding: '20px' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 14, alignItems: 'flex-start' }}>
+      {/* Academic journey */}
+      <div className="card dashboard-roadmap" style={{ marginBottom: 12, padding: '18px 18px 16px', border: '1px solid rgba(var(--accentRGB), 0.10)', background: 'linear-gradient(180deg, rgba(var(--accentRGB), 0.04), var(--surfaceGlassStrong))' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, alignItems: 'flex-start', marginBottom: 10, flexWrap: 'wrap' }}>
           <div>
-            <div style={{ fontSize: 14, fontWeight: 700, marginBottom: 2 }}>Graduation Progress</div>
-            <div style={{ fontSize: 12, color: 'var(--muted)' }}>Your 4-year journey through 8 terms</div>
+            <div style={{ fontSize: 12, fontWeight: 800, letterSpacing: '0.10em', textTransform: 'uppercase', color: 'var(--muted)' }}>Academic Journey</div>
+            <div style={{ fontSize: 13, color: 'var(--muted)', marginTop: 4 }}>8 terms total. Each term contributes 12.5%.</div>
           </div>
-          <div style={{ fontSize: 20, fontWeight: 800, color: '#3B82F6' }}>{creditPct}%</div>
-        </div>
-
-        {/* Overall credit progress bar */}
-        <div style={{ marginBottom: 24 }}>
-          <div style={{ 
-            position: 'relative',
-            height: 12, 
-            borderRadius: 10,
-            background: 'rgba(59, 130, 246, 0.1)',
-            border: '1.5px solid rgba(59, 130, 246, 0.2)',
-            overflow: 'hidden',
-            marginBottom: 8
-          }}>
-            <div 
-              style={{ 
-                width: `${creditPct}%`,
-                height: '100%',
-                background: `linear-gradient(90deg, #3B82F6, #10B981)`,
-                borderRadius: 10,
-                transition: 'width 0.4s ease',
-                boxShadow: '0 2px 8px rgba(59, 130, 246, 0.3)'
-              }} 
-            />
-          </div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11, color: 'var(--muted)', fontWeight: 600 }}>
-            <span>{earnedCredits} earned</span>
-            <span>{totalRequired} required</span>
+          <div style={{ textAlign: 'right' }}>
+            <div style={{ fontSize: 30, fontWeight: 900, letterSpacing: '-0.04em', color: 'var(--text)', lineHeight: 1 }}>{termJourneyPct}%</div>
+            <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--muted)', marginTop: 2 }}>Journey complete</div>
           </div>
         </div>
 
-        {/* === Term Timeline (visual-only) === */}
-        {(() => {
-          const profile = getProfile();
-          const termStartDate = profile?.termStartDate;
-          const currentTerm = profile?.currentTerm || '';
-          if (!termStartDate) {
+        <div style={{ display: 'grid', gridTemplateColumns: `repeat(${TERM_KEYS.length}, 1fr)`, gap: 5, marginBottom: 12 }}>
+          {TERM_KEYS.map((termKey, index) => {
+            const isCurrent = termKey === currentTermKey;
+            const isDone = index < completedTerms;
+            const fill = isDone ? 100 : isCurrent ? Math.max(8, currentTermProgress) : 0;
             return (
-              <div style={{ padding: '12px', backgroundColor: 'rgba(59, 130, 246, 0.05)', borderRadius: 8, border: '1px solid rgba(59, 130, 246, 0.1)' }}>
-                <p style={{ margin: 0, fontSize: 12, color: 'var(--muted)' }}>
-                  💡 Add term start date in <a href="/profile" style={{ color: '#3B82F6', textDecoration: 'none', fontWeight: 600 }}>Profile</a> to see timeline.
-                </p>
+              <div key={termKey} style={{ height: 10, borderRadius: 999, background: 'rgba(var(--accentRGB), 0.08)', overflow: 'hidden', position: 'relative' }} title={getTermLabelFromKey(termKey)}>
+                <div style={{ width: `${fill}%`, height: '100%', borderRadius: 999, background: isDone ? '#10B981' : isCurrent ? 'linear-gradient(90deg, #3B82F6, #10B981)' : 'transparent', transition: 'width 0.3s ease' }} />
               </div>
             );
-          }
+          })}
+        </div>
 
-          const deptCode = profile?.dept;
-          const termKey = profile?.currentTermKey;
-          const timeline = getTermTimeline(termStartDate, deptCode, termKey);
-          const start = new Date(termStartDate);
-          const today = new Date();
-          const msDay = 1000 * 60 * 60 * 24;
-          const totalDays = TERM_DURATION_DAYS || 180;
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: 8, marginBottom: 8 }}>
+          <div style={{ padding: '10px 12px', borderRadius: 12, background: 'rgba(var(--accentRGB), 0.04)', border: '1px solid rgba(var(--accentRGB), 0.10)' }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 4 }}>Current term</div>
+            <div style={{ fontSize: 14, fontWeight: 800, lineHeight: 1.25 }}>{currentTermLabel || 'Not set'}</div>
+          </div>
+          <div style={{ padding: '10px 12px', borderRadius: 12, background: 'rgba(16,185,129,0.04)', border: '1px solid rgba(16,185,129,0.10)' }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 4 }}>Terms done</div>
+            <div style={{ fontSize: 14, fontWeight: 800, lineHeight: 1.25 }}>{completedTerms} completed</div>
+          </div>
+          <div style={{ padding: '10px 12px', borderRadius: 12, background: 'rgba(245,158,11,0.05)', border: '1px solid rgba(245,158,11,0.12)' }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 4 }}>Current term</div>
+            <div style={{ fontSize: 14, fontWeight: 800, lineHeight: 1.25 }}>{currentTermKey ? `${currentTermProgress}% done` : 'Set term start date'}</div>
+          </div>
+        </div>
 
-          if (!timeline) {
-            // fallback to simple progress
-            const progress = getTermProgress(termStartDate);
-            const elapsedDays = Math.floor((today - start) / msDay);
-            const weeksPassed = Math.floor(elapsedDays / 7);
-            const totalWeeks = 13;
-            return (
-              <div>
-                <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--muted)', marginBottom: 8, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                  Term Roadmap: {currentTerm}
-                </div>
-                <div style={{ height: 12, borderRadius: 10, background: 'rgba(59,130,246,0.08)', overflow: 'hidden', marginBottom: 8 }}>
-                  <div style={{ width: `${progress}%`, height: '100%', background: 'linear-gradient(90deg,#3B82F6,#10B981)', transition: 'width 0.3s ease' }} />
-                </div>
-                <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
-                  {Array.from({ length: totalWeeks }).map((_, i) => (
-                    <div key={i} style={{ width: 10, height: 10, borderRadius: 999, background: i < weeksPassed ? '#3B82F6' : i === weeksPassed ? '#10B981' : 'rgba(59,130,246,0.12)' }} />
-                  ))}
-                  <div style={{ marginLeft: 8, fontSize: 11, color: 'var(--muted)', fontWeight: 700 }}>{Math.min(totalWeeks, weeksPassed + 1)} / {totalWeeks} weeks</div>
-                </div>
-              </div>
-            );
-          }
+        <div style={{ fontSize: 12, color: 'var(--muted)', display: 'flex', justifyContent: 'space-between', gap: 10, flexWrap: 'wrap' }}>
+          <span>{currentTermProgress > 0 ? `${currentTermProgress}% of this term done` : 'Term progress updates automatically'}</span>
+          <span>{classEndLabel ? `Class end ${classEndLabel}${examEndLabel ? ` · Exams ${examStartLabel} → ${examEndLabel}` : ''}` : 'Add term start date to show dates'}</span>
+        </div>
 
-          // Build segments (calendar-day lengths) for visual mapping
-          const segs = [];
-          const segAdd = (label, color, s, e) => {
-            const startDay = Math.max(0, Math.floor((new Date(s) - start) / msDay));
-            const endDay = Math.max(startDay, Math.floor((new Date(e) - start) / msDay));
-            const days = endDay - startDay + 1;
-            const pct = Math.max(1, Math.round((days / totalDays) * 100));
-            segs.push({ label, color, startDay, endDay, days, pct, s: new Date(s), e: new Date(e) });
-          };
-
-          segAdd('Classes', '#3B82F6', start, timeline.classEndDate);
-          segAdd('Prep Leave', '#8B5CF6', timeline.prepLeaveStart, timeline.prepLeaveEnd);
-          if (timeline.specialPeriods && timeline.specialPeriods.length) {
-            // mark special holidays as separate amber segments between exams
-            timeline.specialPeriods.forEach(sp => segAdd('Holiday', '#F59E0B', sp.startDate, sp.endDate));
-          }
-          if (timeline.examPhases && timeline.examPhases.length) {
-            const first = timeline.examPhases[0].examDate;
-            const last = timeline.examPhases[timeline.examPhases.length - 1].examDate;
-            segAdd('Exams', '#EC4899', first, last);
-          }
-          segAdd('Post-Exam', '#F59E0B', timeline.postExamBreakStart, timeline.postExamBreakEnd);
-
-          // ensure segments sorted by startDay
-          segs.sort((a, b) => a.startDay - b.startDay);
-
-          const totalPct = segs.reduce((s, x) => s + x.pct, 0);
-
-          const currentSeg = segs.find(s => today >= s.s && today <= s.e) || null;
-
-          const formatShortDate = (d) => new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-          const examRows = timeline.examPhases?.map((ep, idx) => ({
-            label: `Exam ${idx + 1}`,
-            value: formatShortDate(ep.examDate),
-          })) || [];
-
-          return (
-            <div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', gap: 10, flexWrap: 'wrap', marginBottom: 6 }}>
-                <div style={{ fontSize: 12, fontWeight: 800, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>
-                  Term Roadmap: {currentTerm}
-                </div>
-                <Link to="/schedule" style={{ fontSize: 12, color: 'var(--accent)', textDecoration: 'none', fontWeight: 700 }}>
-                  Manual edit in Schedule →
-                </Link>
-              </div>
-
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(172px, 1fr))', gap: 8, marginBottom: 8 }}>
-                <div style={{ padding: '10px 12px', borderRadius: 12, border: '1px solid rgba(6,182,212,0.14)', background: 'rgba(6,182,212,0.04)' }}>
-                  <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--muted)', marginBottom: 4 }}>Current</div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', gap: 10, alignItems: 'baseline' }}>
-                    <div style={{ fontSize: 15, fontWeight: 800, color: 'var(--text)', lineHeight: 1.2 }}>{currentTerm}</div>
-                    <div style={{ fontSize: 12, fontWeight: 800, color: '#036b74' }}>Today</div>
-                  </div>
-                </div>
-
-                <div style={{ padding: '10px 12px', borderRadius: 12, border: '1px solid rgba(14,165,233,0.14)', background: 'rgba(14,165,233,0.04)' }}>
-                  <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--muted)', marginBottom: 4 }}>Classes end</div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', gap: 10, alignItems: 'baseline' }}>
-                    <div style={{ fontSize: 15, fontWeight: 800, color: 'var(--text)', lineHeight: 1.2 }}>65d</div>
-                    <div style={{ fontSize: 12, color: 'var(--muted)', fontWeight: 700 }}>{formatShortDate(timeline.classEndDate)}</div>
-                  </div>
-                </div>
-
-                <div style={{ padding: '10px 12px', borderRadius: 12, border: '1px solid rgba(139,92,246,0.14)', background: 'rgba(139,92,246,0.04)' }}>
-                  <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--muted)', marginBottom: 4 }}>Prep leave</div>
-                  <div style={{ fontSize: 14, fontWeight: 800, color: 'var(--text)', lineHeight: 1.25 }}>{formatShortDate(timeline.prepLeaveStart)} → {formatShortDate(timeline.prepLeaveEnd)}</div>
-                </div>
-
-                {examRows.map((row, idx) => (
-                  <div key={idx} style={{ padding: '10px 12px', borderRadius: 12, border: '1px solid rgba(236,72,153,0.14)', background: 'rgba(236,72,153,0.04)' }}>
-                    <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--muted)', marginBottom: 4 }}>{row.label}</div>
-                    <div style={{ fontSize: 14, fontWeight: 800, color: 'var(--text)', lineHeight: 1.25 }}>{row.value}</div>
-                  </div>
-                ))}
-              </div>
-
-            </div>
-          );
-        })()}
+        <div style={{ marginTop: 10, fontSize: 12, textAlign: 'right' }}>
+          <Link to="/schedule" style={{ color: 'var(--accent)', textDecoration: 'none', fontWeight: 700 }}>
+            Open Schedule →
+          </Link>
+        </div>
       </div>
 
       <style>{`

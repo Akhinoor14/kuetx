@@ -1,5 +1,5 @@
-import { useState, useMemo } from 'react';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { useState, useMemo, useEffect } from 'react';
+import { ChevronLeft, ChevronRight, CalendarDays, X } from 'lucide-react';
 import { store, getAttendanceMarks, MIN_ATTENDANCE_PERCENT, SCHOLARSHIP_ATTENDANCE_PCT, getAllCourses, getProfile, getRoutinePreviewDate, isRoutineHoliday } from '../store/store';
 
 const todayStr = () => new Date().toISOString().split('T')[0];
@@ -105,12 +105,50 @@ function getScheduleCoursesForDate(schedule, date) {
 function DailyLog({ courses, logs, setLogs, schedule, scheduleSettings, combinedMode }) {
   const [date, setDate] = useState(todayStr());
   const [showGiveAttendance, setShowGiveAttendance] = useState(false);
+  const [isCompact, setIsCompact] = useState(typeof window !== 'undefined' ? window.innerWidth < 640 : false);
   const dayLog = logs[date] || {};
   const isToday = date === todayStr();
   const dayName = new Date(date + 'T00:00:00').getDay();
   const isFriday = dayName === 5;
   const isHolidayDate = isRoutineHoliday(date, scheduleSettings?.holidayDates || []);
   const isTodayHoliday = isToday && isHolidayDate;
+
+  // Responsiveness: compact labels on small screens
+  useEffect(() => {
+    function onResize() { setIsCompact(window.innerWidth < 640); }
+    onResize();
+    window.addEventListener('resize', onResize);
+    return () => window.removeEventListener('resize', onResize);
+  }, []);
+
+  // Auto-mark 'no-class' for dates with no scheduled courses (simple, persistent)
+  useEffect(() => {
+    if (!date) return;
+    if (isToday) return; // don't auto-mark today
+    if (isTodayHoliday) return;
+    if (showGiveAttendance) return;
+    if ((scheduledCourses || []).length > 0) return;
+
+    const updated = { ...logs };
+    if (!updated[date]) updated[date] = {};
+    let changed = false;
+    courses.filter(c => !isAutoFull(c.type)).forEach(c => {
+      const teachers = getTeachersForCourse(scheduleSettings, schedule, c.id);
+      const displayTeachers = teachers.length > 0 ? teachers : [''];
+      displayTeachers.forEach(t => {
+        const key = `${c.id}_${t || ''}`;
+        if (!updated[date][key]) {
+          updated[date][key] = 'no-class';
+          changed = true;
+        }
+      });
+    });
+    if (changed) {
+      setLogs(updated);
+      store.set('attLogs', updated);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [date, schedule, scheduleSettings, showGiveAttendance, isToday, isTodayHoliday]);
 
   function holidayLabel(d) {
     const labels = scheduleSettings?.holidayLabels || {};
@@ -185,7 +223,7 @@ function DailyLog({ courses, logs, setLogs, schedule, scheduleSettings, combined
       displayTeachers.forEach(t => {
         total++;
         const key = `${c.id}_${t || ''}`;
-        if (dayLog[key]) marked++;
+        if (dayLog[key] === 'present' || dayLog[key] === 'absent') marked++;
       });
     });
     return { marked, total };
@@ -214,8 +252,8 @@ function DailyLog({ courses, logs, setLogs, schedule, scheduleSettings, combined
     });
 
     return cards.sort((a, b) => {
-      const aDone = Boolean(a.status);
-      const bDone = Boolean(b.status);
+      const aDone = (a.status === 'present' || a.status === 'absent');
+      const bDone = (b.status === 'present' || b.status === 'absent');
       if (aDone !== bDone) return aDone ? 1 : -1;
       const byCourse = (a.course.name || '').localeCompare(b.course.name || '');
       if (byCourse !== 0) return byCourse;
@@ -255,27 +293,6 @@ function DailyLog({ courses, logs, setLogs, schedule, scheduleSettings, combined
           <div style={{ fontSize: 14, fontWeight: 600 }}>{fmtDate(date)}</div>
           <div style={{ fontSize: 13, color: 'var(--muted)' }}>{markedTeachers.marked}/{markedTeachers.total || 0} marked</div>
         </div>
-        {scheduledCourses.length > 0 && !isToday && (
-          <button onClick={() => {
-            const coursesToMark = (visibleCourses.length > 0 ? visibleCourses : courses);
-            const updated = { ...logs };
-            if (!updated[date]) updated[date] = {};
-            coursesToMark.forEach(c => {
-              const teachers = getTeachersForCourseOnDate(scheduleSettings, schedule, c.id, date);
-              const displayTeachers = teachers.length > 0 ? teachers : [''];
-              if (!isAutoFull(c.type)) {
-                displayTeachers.forEach(t => {
-                  updated[date][`${c.id}_${t || ''}`] = 'holiday';
-                });
-              }
-            });
-            setLogs(updated);
-            store.set('attLogs', updated);
-          }} style={{
-            padding: '6px 12px', borderRadius: 6, cursor: 'pointer', fontWeight: 600,
-            fontSize: 12, background: 'rgba(251, 146, 60, 0.1)', color: 'var(--warning)', border: '1px solid var(--warning)'
-          }}>📅 Mark All as Holiday</button>
-        )}
       </div>
 
       {isFriday && !isTodayHoliday && (
@@ -295,11 +312,11 @@ function DailyLog({ courses, logs, setLogs, schedule, scheduleSettings, combined
       )}
 
       {courses.length > 0 && scheduledCourses.length === 0 && !isToday && !isTodayHoliday && (
-        <div style={{ marginBottom: 16, padding: '12px', backgroundColor: 'rgba(251, 191, 36, 0.08)', borderRadius: 8, fontSize: 13, color: 'var(--muted)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <span>📅 No scheduled classes today on this date.</span>
+        <div style={{ marginBottom: 16, padding: '12px 14px', backgroundColor: 'rgba(251, 191, 36, 0.08)', borderRadius: 8, fontSize: 13, color: 'var(--muted)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 10 }}>
+          <span>📅 No scheduled classes on this date</span>
           <button onClick={() => setShowGiveAttendance(!showGiveAttendance)} style={{
             padding: '6px 12px', borderRadius: 6, cursor: 'pointer', fontWeight: 600,
-            fontSize: 12, background: 'var(--accent)', color: 'white', border: 'none'
+            fontSize: 12, background: 'var(--accent)', color: 'white', border: 'none', whiteSpace: 'nowrap'
           }}>
             {showGiveAttendance ? 'Hide' : 'Give Attendance'}
           </button>
@@ -311,69 +328,151 @@ function DailyLog({ courses, logs, setLogs, schedule, scheduleSettings, combined
         </div>
       )}
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-        {cardsToShow.map(card => {
-          const todayItems = scheduledCourses.find(item => item.courseId === card.course.id)?.items || [];
-          const teacherLabel = card.teacher || (card.auto ? 'Auto' : 'Unassigned');
+      {scheduledCourses.length > 0 && (
+        <div className="card" style={{ marginBottom: 16, padding: '14px 16px' }}>
+          <div style={{ fontWeight: 700, fontSize: 13, marginBottom: 10, color: 'var(--muted)' }}>📋 Scheduled for this date ({scheduledCourses.length} course{scheduledCourses.length > 1 ? 's' : ''})</div>
+          <div style={{ display: 'grid', gap: 8 }}>
+            {scheduledCourses.sort((a, b) => {
+              const slotA = a.items?.[0]?.slot || '';
+              const slotB = b.items?.[0]?.slot || '';
+              return slotA.localeCompare(slotB);
+            }).map(item => {
+              const course = courses.find(c => c.id === item.courseId);
+              const slots = item.items.map(i => i.slot).join(', ');
+              const teachers = [...new Set(item.items.map(i => i.teacherName).filter(Boolean))].join(', ');
+              return (
+                <div key={item.courseId} style={{ display: 'flex', justifyContent: 'space-between', gap: 12, padding: '10px 12px', background: 'var(--inputBg)', borderRadius: 6, alignItems: 'center' }}>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontWeight: 600, fontSize: 13 }}>{getDisplayCourseName(course)}</div>
+                    <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 2 }}>{slots}{teachers && ` • ${teachers}`}</div>
+                  </div>
+                  <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--accent)' }}>✓ Mark</div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
 
-          return (
-            <div key={card.key || card.course.id} className="card" style={{
-              padding: '10px 14px',
-              borderLeft: 'none',
-              background: card.status ? `var(--surface)` : 'var(--card)',
-              transition: 'all 0.2s ease',
-            }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 12, marginBottom: 8 }}>
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ fontWeight: 600, fontSize: 14, lineHeight: 1.3, marginBottom: 2 }}>
+      {/* Legend */}
+      {cardsToShow.length > 0 && (
+        <div style={{ marginBottom: 16, padding: '10px 14px', background: 'var(--inputBg)', borderRadius: 10, fontSize: 12, color: 'var(--muted)', display: 'flex', gap: 16, alignItems: 'center', justifyContent: 'center', flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}><span style={{ fontWeight: 700, color: '#10b981' }}>P</span> = Present</div>
+          <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}><span style={{ fontWeight: 700, color: '#ef4444' }}>A</span> = Absent</div>
+          <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}><span style={{ fontWeight: 700, color: 'var(--muted)' }}>—</span> = Not marked</div>
+        </div>
+      )}
+
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+        {cardsToShow.length === 0 ? (
+          <div className="card" style={{ padding: '16px', textAlign: 'center', color: 'var(--muted)' }}>
+            <div style={{ fontSize: 14, marginBottom: 4 }}>📋 No classes to mark</div>
+            <div style={{ fontSize: 12 }}>Select a date with scheduled classes or enable "Give Attendance"</div>
+          </div>
+        ) : (() => {
+          // Soft background colors - subtle pastel shades
+          const softColors = [
+            'rgba(168, 85, 247, 0.08)',  // light purple
+            'rgba(34, 197, 94, 0.08)',   // light green
+            'rgba(59, 130, 246, 0.08)',  // light blue
+            'rgba(249, 115, 22, 0.08)',  // light orange
+            'rgba(236, 72, 153, 0.08)',  // light pink
+            'rgba(20, 184, 166, 0.08)',  // light teal
+          ];
+          const courseColorMap = {};
+          let colorIndex = 0;
+          cardsToShow.forEach(card => {
+            if (!courseColorMap[card.course.id]) {
+              courseColorMap[card.course.id] = softColors[colorIndex % softColors.length];
+              colorIndex++;
+            }
+          });
+
+          return cardsToShow.map(card => {
+            const todayItems = scheduledCourses.find(item => item.courseId === card.course.id)?.items || [];
+            const teacherLabel = card.teacher || (card.auto ? 'Auto' : 'Unassigned');
+            const statusColors = { present: '#10b981', absent: '#ef4444' };
+            const statusLabels = { present: 'Present', absent: 'Absent' };
+            const bgColor = courseColorMap[card.course.id];
+
+            return (
+              <div key={card.key || card.course.id} style={{
+                padding: '14px 16px',
+                borderRadius: 8,
+                background: bgColor,
+                border: '1px solid rgba(0, 0, 0, 0.05)',
+                transition: 'all 0.2s ease',
+              }}>
+                {/* Course Info */}
+                <div style={{ marginBottom: 10 }}>
+                  <div style={{ fontWeight: 700, fontSize: 14, marginBottom: 4 }}>
                     {getDisplayCourseName(card.course)}
                   </div>
-                  <div style={{ fontSize: 11, color: 'var(--muted)', display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
-                    <span>{teacherLabel}</span>
-                    {card.course.type && <span>· {card.course.type}</span>}
+                  <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
+                    {card.teacher && (
+                      <div style={{ fontSize: 12, color: 'var(--muted)', fontWeight: 500 }}>
+                        {card.teacher}
+                      </div>
+                    )}
+                    {card.course.type && (
+                      <div style={{ fontSize: 11, color: 'var(--muted)', opacity: 0.7 }}>
+                        {card.course.type}
+                      </div>
+                    )}
+                    {todayItems.length > 0 && (
+                      <div style={{ fontSize: 10, color: 'var(--accent)', fontWeight: 600, padding: '1px 6px', background: 'rgba(var(--accentRGB), 0.12)', borderRadius: 3 }}>
+                        {todayItems.map(item => item.slot).join(' → ')}
+                      </div>
+                    )}
                   </div>
-                  {todayItems.length > 0 && (
-                    <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 4, lineHeight: 1.3 }}>
-                      {todayItems.map(item => `${item.slot}`).join(' • ')}
-                    </div>
-                  )}
+                </div>
+
+                {/* Status Display */}
+                {card.status && (
+                  <div style={{ marginBottom: 10, padding: '6px 10px', background: `${statusColors[card.status] || 'var(--inputBg)'}20`, borderRadius: 5, fontSize: 11, fontWeight: 600, color: statusColors[card.status] || 'var(--muted)' }}>
+                    ✓ {statusLabels[card.status] || 'Marked'}
+                  </div>
+                )}
+
+                {/* Action Buttons - Responsive */}
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 6 }}>
+                  {[
+                    { val: 'present', shortLabel: 'P', fullLabel: 'Present', emoji: '✓', color: '#10b981' },
+                    { val: 'absent',  shortLabel: 'A', fullLabel: 'Absent',  emoji: '✗', color: '#ef4444' },
+                  ].map(opt => {
+                    const active = card.status === opt.val;
+                    const isMobile = window.innerWidth < 640;
+                    const btnLabel = isMobile ? opt.shortLabel : opt.fullLabel;
+                    return (
+                      <button 
+                        key={opt.val} 
+                        onClick={() => mark(card.course.id, card.teacher, opt.val)}
+                        title={`Mark as ${opt.fullLabel}`}
+                        style={{
+                          padding: isMobile ? '8px 6px' : '8px 10px',
+                          borderRadius: 6,
+                          cursor: 'pointer',
+                          fontWeight: 600,
+                          fontSize: isMobile ? 11 : 12,
+                          background: active ? opt.color : 'var(--inputBg)',
+                          color: active ? 'white' : 'var(--muted)',
+                          border: active ? `2px solid ${opt.color}` : '1px solid var(--border)',
+                          transition: 'all 0.2s ease',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          gap: isMobile ? 0 : 4,
+                          minHeight: 32,
+                        }}>
+                        {isMobile ? btnLabel : `${opt.emoji} ${btnLabel}`}
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
-
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 6 }}>
-                {[
-                  { val: 'present', label: '✓', title: 'Present', on: '#10b981', off: 'var(--inputBg)', textOn: 'white', textOff: 'var(--muted)' },
-                  { val: 'absent',  label: '✗', title: 'Absent',  on: '#ef4444', off: 'var(--inputBg)', textOn: 'white', textOff: 'var(--muted)' },
-                  { val: 'holiday', label: '⊘', title: 'No Class', on: '#f59e0b', off: 'var(--inputBg)', textOn: 'white', textOff: 'var(--muted)' },
-                ].map(opt => {
-                  const active = card.status === opt.val;
-                  return (
-                    <button 
-                      key={opt.val} 
-                      onClick={() => mark(card.course.id, card.teacher, opt.val)}
-                      title={opt.title}
-                      style={{
-                        padding: '8px 0', 
-                        borderRadius: 6, 
-                        cursor: 'pointer', 
-                        fontWeight: 700,
-                        fontSize: 16,
-                        background: active ? opt.on : opt.off,
-                        color: active ? opt.textOn : opt.textOff,
-                        border: 'none',
-                        transition: 'all 0.2s ease',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                      }}>
-                      {opt.label}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-          );
-        })}
+            );
+          });
+        })()}
       </div>
 
       <div style={{ marginTop: 16, padding: '10px 14px', background: 'var(--inputBg)', borderRadius: 10, fontSize: 13, color: 'var(--muted)' }}>
@@ -384,7 +483,7 @@ function DailyLog({ courses, logs, setLogs, schedule, scheduleSettings, combined
 }
 
 // ── Summary ───────────────────────────────────────────────────────────────
-function Summary({ courses, logs, schedule, combinedMode, combinedData, toggleCombinedMode, updateCombined }) {
+function Summary({ courses, logs, schedule, scheduleSettings, combinedMode, combinedData, toggleCombinedMode, updateCombined }) {
 
   const theoryCourses = (courses || []).filter(c => !isAutoFull(c.type));
 
@@ -542,14 +641,36 @@ export default function Attendance() {
   const courses = getAllCourses(profile).filter(c => c.status === 'active' || c.status === 'backlog');
   const [logs, setLogs] = useState(() => store.get('attLogs') || {});
   const [tab, setTab] = useState('daily');
-  const schedule = useMemo(() => store.get('schedule') || [], []);
-  const scheduleSettings = useMemo(() => store.get('scheduleSettings') || {}, []);
+  const [schedule, setSchedule] = useState(() => store.get('schedule') || []);
+  const [scheduleSettings, setScheduleSettings] = useState(() => store.get('scheduleSettings') || {});
   const todayDate = todayStr();
   const todayDayName = new Date(`${todayDate}T00:00:00`).toLocaleDateString('en-US', { weekday: 'long' });
   const isTodayHoliday = isRoutineHoliday(todayDate, scheduleSettings.holidayDates || []);
 
   const [combinedMode, setCombinedMode] = useState(() => store.get('attCombinedMode') || false);
   const [combinedData, setCombinedData] = useState(() => store.get('attCombinedData') || {});
+
+  const [holidaySetupOpen, setHolidaySetupOpen] = useState(false);
+  const [holidayDate, setHolidayDate] = useState('');
+  const [holidayMode, setHolidayMode] = useState('calendar');
+  const [calendarMonth, setCalendarMonth] = useState(() => {
+    const now = new Date();
+    return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+  });
+  const [calendarSelectedDates, setCalendarSelectedDates] = useState(new Set());
+
+  useEffect(() => {
+    const refresh = () => {
+      setLogs(store.get('attLogs') || {});
+      setSchedule(store.get('schedule') || []);
+      setScheduleSettings(store.get('scheduleSettings') || {});
+      setCombinedMode(!!store.get('attCombinedMode'));
+      setCombinedData(store.get('attCombinedData') || {});
+    };
+
+    window.addEventListener('kuetx:store-updated', refresh);
+    return () => window.removeEventListener('kuetx:store-updated', refresh);
+  }, []);
 
   const toggleCombinedMode = () => {
     const next = !combinedMode;
@@ -573,6 +694,106 @@ export default function Attendance() {
     store.set('attCombinedData', next);
   };
 
+  const holidayDates = scheduleSettings?.holidayDates || [];
+
+  const closeHolidaySetup = () => {
+    setHolidaySetupOpen(false);
+    setHolidayDate('');
+    setHolidayMode('calendar');
+    setCalendarSelectedDates(new Set());
+  };
+
+  const openHolidaySetup = () => {
+    setHolidaySetupOpen(true);
+  };
+
+  const saveHolidayDates = (nextDates) => {
+    store.set('scheduleSettings', { ...scheduleSettings, holidayDates: [...new Set(nextDates)].sort() });
+    setScheduleSettings(prev => ({ ...prev, holidayDates: [...new Set(nextDates)].sort() }));
+  };
+
+  const addHolidayDate = () => {
+    if (!holidayDate) return;
+    saveHolidayDates([...holidayDates, holidayDate]);
+    setHolidayDate('');
+  };
+
+  const removeHolidayDate = (value) => {
+    saveHolidayDates(holidayDates.filter(date => date !== value));
+  };
+
+  const toggleCalendarDate = (dateStr) => {
+    const newSet = new Set(calendarSelectedDates);
+    if (newSet.has(dateStr)) {
+      newSet.delete(dateStr);
+    } else {
+      newSet.add(dateStr);
+    }
+    setCalendarSelectedDates(newSet);
+  };
+
+  const addCalendarSelectedDates = () => {
+    if (calendarSelectedDates.size === 0) {
+      alert('Please select at least one date from the calendar.');
+      return;
+    }
+    saveHolidayDates([...holidayDates, ...Array.from(calendarSelectedDates)]);
+    setCalendarSelectedDates(new Set());
+  };
+
+  const monthName = (monthStr) => {
+    const [year, month] = monthStr.split('-').map(Number);
+    const date = new Date(year, month - 1, 1);
+    return date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+  };
+
+  const nextMonth = () => {
+    const [year, month] = calendarMonth.split('-').map(Number);
+    const next = month === 12 ? 1 : month + 1;
+    const nextYear = month === 12 ? year + 1 : year;
+    setCalendarMonth(`${nextYear}-${String(next).padStart(2, '0')}`);
+  };
+
+  const prevMonth = () => {
+    const [year, month] = calendarMonth.split('-').map(Number);
+    const prev = month === 1 ? 12 : month - 1;
+    const prevYear = month === 1 ? year - 1 : year;
+    setCalendarMonth(`${prevYear}-${String(prev).padStart(2, '0')}`);
+  };
+
+  const renderCalendar = (monthStr) => {
+    const [year, month] = monthStr.split('-').map(Number);
+    const firstDay = new Date(year, month - 1, 1);
+    const lastDay = new Date(year, month, 0);
+    const daysInMonth = lastDay.getDate();
+    const startingDayOfWeek = firstDay.getDay();
+
+    const weeks = [];
+    let week = [];
+
+    for (let i = 0; i < startingDayOfWeek; i++) {
+      week.push(null);
+    }
+
+    for (let day = 1; day <= daysInMonth; day++) {
+      const dateStr = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+      week.push({ day, dateStr });
+      if (week.length === 7) {
+        weeks.push(week);
+        week = [];
+      }
+    }
+
+    if (week.length > 0) {
+      while (week.length < 7) {
+        week.push(null);
+      }
+      weeks.push(week);
+    }
+
+    return weeks;
+  };
+
   const previewDate = getRoutinePreviewDate(scheduleSettings.holidayDates || []);
   const previewDay = new Date(`${previewDate}T00:00:00`).toLocaleDateString('en-US', { weekday: 'long' });
   const todaySchedule = schedule.filter(s => s.day === previewDay && courses.some(c => c.id === s.courseId));
@@ -589,11 +810,21 @@ export default function Attendance() {
 
   return (
     <div className="page-enter page-container">
-      <div style={{ marginBottom: 20 }}>
-        <h1>Attendance</h1>
-        <p className="text-muted" style={{ marginTop: 4 }}>
-          Mark only the classes scheduled for that date — past dates always editable
-        </p>
+      <div style={{ marginBottom: 20, display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 12, flexWrap: 'wrap' }}>
+        <div style={{ flex: 1 }}>
+          <h1>Attendance</h1>
+          <p className="text-muted" style={{ marginTop: 4 }}>
+            Mark only the classes scheduled for that date — past dates always editable
+          </p>
+          {holidayDates.length > 0 && (
+            <div style={{ marginTop: 8, fontSize: 12, color: 'var(--accent)', fontWeight: 600 }}>
+              📅 {holidayDates.length} holiday{holidayDates.length !== 1 ? 's' : ''} configured (Fri & Sat are always holidays)
+            </div>
+          )}
+        </div>
+        <button className="btn btn-ghost" onClick={openHolidaySetup} style={{ whiteSpace: 'nowrap', marginTop: 2 }}>
+          <CalendarDays size={13} /> Add Holiday
+        </button>
       </div>
 
       {todaySchedule.length > 0 && (
@@ -639,7 +870,7 @@ export default function Attendance() {
 
       {tab === 'daily'
         ? <DailyLog courses={courses} logs={logs} setLogs={setLogs} schedule={schedule} scheduleSettings={scheduleSettings} combinedMode={combinedMode} />
-        : <Summary courses={courses} logs={logs} schedule={schedule} combinedMode={combinedMode} combinedData={combinedData} toggleCombinedMode={toggleCombinedMode} updateCombined={updateCombined} />
+        : <Summary courses={courses} logs={logs} schedule={schedule} scheduleSettings={scheduleSettings} combinedMode={combinedMode} combinedData={combinedData} toggleCombinedMode={toggleCombinedMode} updateCombined={updateCombined} />
       }
 
       {/* Slab reference */}
@@ -659,6 +890,247 @@ export default function Attendance() {
           * The 10% covers class participation, attendance & assignments (Art. 14.1.i)
         </div>
       </div>
+
+      {/* Holiday Setup Modal */}
+      {holidaySetupOpen && (
+        <div
+          style={{
+            position: 'fixed',
+            inset: 0,
+            background: 'rgba(0,0,0,0.6)',
+            backdropFilter: 'blur(8px)',
+            WebkitBackdropFilter: 'blur(8px)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 1200,
+            padding: 12,
+          }}
+          onClick={closeHolidaySetup}
+        >
+          <div
+            className="card"
+            style={{ width: 650, maxWidth: '100%', padding: 16, background: 'var(--bg)' }}
+            onClick={e => e.stopPropagation()}
+          >
+            <div style={{ display: 'flex', justifyContent: 'space-between', gap: 10, alignItems: 'center', marginBottom: 16 }}>
+              <div>
+                <div style={{ fontWeight: 700, fontSize: 14 }}>Holiday Calendar</div>
+                <div style={{ fontSize: 12, color: 'var(--muted)' }}>Friday and Saturday are always holidays. Click dates to add.</div>
+              </div>
+              <button className="btn btn-ghost" onClick={closeHolidaySetup}>Close</button>
+            </div>
+
+            {/* Mode Tabs */}
+            <div style={{ display: 'flex', gap: 8, marginBottom: 12, borderBottom: '1px solid var(--border)', paddingBottom: 8 }}>
+              <button
+                onClick={() => setHolidayMode('calendar')}
+                style={{
+                  padding: '8px 12px',
+                  borderBottom: holidayMode === 'calendar' ? '2px solid var(--accent)' : 'none',
+                  background: 'transparent',
+                  border: 'none',
+                  cursor: 'pointer',
+                  fontWeight: holidayMode === 'calendar' ? 700 : 400,
+                  color: holidayMode === 'calendar' ? 'var(--accent)' : 'var(--text)',
+                  fontSize: 13,
+                }}
+              >
+                📅 Calendar Picker
+              </button>
+              <button
+                onClick={() => setHolidayMode('single')}
+                style={{
+                  padding: '8px 12px',
+                  borderBottom: holidayMode === 'single' ? '2px solid var(--accent)' : 'none',
+                  background: 'transparent',
+                  border: 'none',
+                  cursor: 'pointer',
+                  fontWeight: holidayMode === 'single' ? 700 : 400,
+                  color: holidayMode === 'single' ? 'var(--accent)' : 'var(--text)',
+                  fontSize: 13,
+                }}
+              >
+                📆 Single Date
+              </button>
+            </div>
+
+            <div style={{ display: 'grid', gap: 10 }}>
+              {/* Calendar Mode */}
+              {holidayMode === 'calendar' && (
+                <div>
+                  {/* Month Navigation */}
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+                    <button
+                      onClick={prevMonth}
+                      className="btn btn-ghost"
+                      style={{ padding: '8px 12px' }}
+                    >
+                      ← Previous
+                    </button>
+                    <div style={{ fontWeight: 700, fontSize: 14, minWidth: 180, textAlign: 'center' }}>
+                      {monthName(calendarMonth)}
+                    </div>
+                    <button
+                      onClick={nextMonth}
+                      className="btn btn-ghost"
+                      style={{ padding: '8px 12px' }}
+                    >
+                      Next →
+                    </button>
+                  </div>
+
+                  {/* Calendar Grid */}
+                  <div style={{ marginBottom: 16 }}>
+                    <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                      <thead>
+                        <tr>
+                          {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
+                            <th
+                              key={day}
+                              style={{
+                                padding: '8px 4px',
+                                textAlign: 'center',
+                                fontWeight: 700,
+                                fontSize: 12,
+                                color: 'var(--muted)',
+                                borderBottom: '1px solid var(--border)',
+                              }}
+                            >
+                              {day}
+                            </th>
+                          ))}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {renderCalendar(calendarMonth).map((week, weekIdx) => (
+                          <tr key={weekIdx}>
+                            {week.map((dayData, dayIdx) => {
+                              const isSelected = dayData && calendarSelectedDates.has(dayData.dateStr);
+                              const isInHolidays = dayData && holidayDates.includes(dayData.dateStr);
+                              const isFridayOrSaturday = [5, 6].includes(dayData?.dateStr ? new Date(`${dayData.dateStr}T00:00:00`).getDay() : -1);
+
+                              return (
+                                <td
+                                  key={dayIdx}
+                                  style={{
+                                    padding: '6px 4px',
+                                    textAlign: 'center',
+                                    height: 50,
+                                    borderBottom: '1px solid var(--border)',
+                                    borderRight: dayIdx < 6 ? '1px solid var(--border)' : 'none',
+                                  }}
+                                >
+                                  {dayData ? (
+                                    <button
+                                      onClick={() => toggleCalendarDate(dayData.dateStr)}
+                                      style={{
+                                        width: '100%',
+                                        height: '100%',
+                                        border: isSelected ? '2px solid var(--accent)' : isInHolidays ? '2px solid rgba(34,197,94,0.5)' : '1px solid transparent',
+                                        background: isSelected
+                                          ? 'rgba(59,130,246,0.15)'
+                                          : isInHolidays
+                                          ? 'rgba(34,197,94,0.1)'
+                                          : isFridayOrSaturday
+                                          ? 'rgba(239,68,68,0.08)'
+                                          : 'transparent',
+                                        borderRadius: 6,
+                                        cursor: 'pointer',
+                                        fontWeight: isSelected || isInHolidays ? 700 : 400,
+                                        fontSize: 13,
+                                        color: isFridayOrSaturday ? 'rgba(239,68,68,0.8)' : 'var(--text)',
+                                        transition: 'all 0.15s ease',
+                                      }}
+                                      title={isFridayOrSaturday ? 'Always holiday' : isInHolidays ? 'Already added' : 'Click to select'}
+                                    >
+                                      {dayData.day}
+                                    </button>
+                                  ) : null}
+                                </td>
+                              );
+                            })}
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+
+                  {/* Selected Count and Add Button */}
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: 12, borderRadius: 8, border: '1px solid var(--border)', background: 'rgba(59,130,246,0.05)', marginBottom: 12 }}>
+                    <div style={{ fontSize: 13 }}>
+                      <span style={{ fontWeight: 700 }}>{calendarSelectedDates.size}</span>
+                      <span style={{ color: 'var(--muted)' }}> date{calendarSelectedDates.size !== 1 ? 's' : ''} selected</span>
+                    </div>
+                    <button
+                      className="btn btn-primary"
+                      onClick={addCalendarSelectedDates}
+                      disabled={calendarSelectedDates.size === 0}
+                    >
+                      <CalendarDays size={13} /> Add to Holidays
+                    </button>
+                  </div>
+
+                  {/* Legend */}
+                  <div style={{ fontSize: 11, color: 'var(--muted)', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8 }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                      <div style={{ width: 20, height: 20, borderRadius: 4, background: 'rgba(59,130,246,0.15)', border: '2px solid var(--accent)' }} />
+                      <span>Selected</span>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                      <div style={{ width: 20, height: 20, borderRadius: 4, background: 'rgba(34,197,94,0.1)', border: '2px solid rgba(34,197,94,0.5)' }} />
+                      <span>Already added</span>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                      <div style={{ width: 20, height: 20, borderRadius: 4, background: 'rgba(239,68,68,0.08)', color: 'rgba(239,68,68,0.8)' }}>F</div>
+                      <span>Fri/Sat</span>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Single Date Mode */}
+              {holidayMode === 'single' && (
+                <div>
+                  <div style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 8 }}>Add one holiday date at a time:</div>
+                  <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                    <input
+                      type="date"
+                      value={holidayDate}
+                      onChange={e => setHolidayDate(e.target.value)}
+                      style={{ minWidth: 170, padding: '8px 10px', border: '1px solid var(--border)', borderRadius: 6, background: 'var(--bg)', color: 'var(--text)', fontSize: 13 }}
+                    />
+                    <button className="btn btn-primary" onClick={addHolidayDate} disabled={!holidayDate}>
+                      <CalendarDays size={13} /> Add Holiday
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* Holiday List */}
+              <div style={{ paddingTop: 8, borderTop: '1px solid var(--border)' }}>
+                <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 8 }}>
+                  Saved Holidays ({holidayDates.length})
+                </div>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+                  {holidayDates.length === 0 ? (
+                    <div style={{ fontSize: 12, color: 'var(--muted)' }}>No extra holidays added yet.</div>
+                  ) : (
+                    holidayDates.map(date => (
+                      <span key={date} className="tag tag-gray" style={{ display: 'inline-flex', gap: 6, alignItems: 'center' }}>
+                        {date}
+                        <button onClick={() => removeHolidayDate(date)} style={{ border: 'none', background: 'transparent', cursor: 'pointer', color: 'inherit', padding: 0 }}>
+                          <X size={12} />
+                        </button>
+                      </span>
+                    ))
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

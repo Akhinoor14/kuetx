@@ -606,31 +606,18 @@ export const getTermTimeline = (termStartDate, deptCode, termKey) => {
   try {
     const start = new Date(termStartDate);
     
-    // Get holidays from schedule
-    const schedule = store.get('schedule') || {};
-    const holidays = schedule.holidays || [];
+    // Get holidays from scheduleSettings
+    const scheduleSettings = store.get('scheduleSettings') || {};
+    const holidayDates = scheduleSettings.holidayDates || [];
     
-    // Helper: Get holiday block info (returns {startDate, endDate, daysCount} or null)
-    const getHolidayBlockAt = (date) => {
-      for (let h of holidays) {
-        if (h.startDate && h.endDate) {
-          const hStart = new Date(h.startDate);
-          const hEnd = new Date(h.endDate);
-          if (date >= hStart && date <= hEnd) {
-            const daysCount = Math.ceil((hEnd - hStart) / (1000 * 60 * 60 * 24)) + 1;
-            return { startDate: hStart, endDate: hEnd, daysCount };
-          }
-        } else if (h.date === date.toISOString().split('T')[0]) {
-          return { startDate: date, endDate: date, daysCount: 1 };
-        }
-      }
-      return null;
+    // Helper: Check if date is a holiday (Friday, Saturday, or in holiday list)
+    const isHoliday = (date) => {
+      const dayOfWeek = date.getDay();
+      const dateStr = date.toISOString().split('T')[0];
+      return dayOfWeek === 5 || dayOfWeek === 6 || holidayDates.includes(dateStr);
     };
     
-    // Helper: Check if date is holiday
-    const isHoliday = (date) => getHolidayBlockAt(date) !== null;
-    
-    // Phase 1: Count 65 working days of classes
+    // Phase 1: Count 65 working days of classes (excluding Fri, Sat, and holidays)
     let workingDays = 0;
     let currentDate = new Date(start);
     while (workingDays < 65) {
@@ -651,7 +638,7 @@ export const getTermTimeline = (termStartDate, deptCode, termKey) => {
     const coursesInTerm = deptTerms[termKey] || [];
     const theoryCourses = coursesInTerm.filter(c => c.type === 'Theory').length;
     
-    // Schedule exams with gaps and special holiday blocks
+    // Schedule exams with gaps (skip holidays)
     let examDate = new Date(prepLeaveEnd);
     examDate.setDate(examDate.getDate() + 1);
     const examPhases = [];
@@ -669,38 +656,21 @@ export const getTermTimeline = (termStartDate, deptCode, termKey) => {
         type: 'exam'
       });
       
-      // Move to next day for gap/holiday check
+      // Move to next day for gap
       examDate.setDate(examDate.getDate() + 1);
       
-      // Check for holiday block in the gap (only between exams, not after last)
+      // For gaps between exams, skip holidays automatically
       if (i < theoryCourses - 1) {
-        const holidayBlock = getHolidayBlockAt(examDate);
-        
-        if (holidayBlock && holidayBlock.daysCount >= 4) {
-          // Holiday ≥4 days → counts as special period (separate from exam gap)
-          specialPeriods.push({
-            type: 'holiday',
-            startDate: holidayBlock.startDate,
-            endDate: holidayBlock.endDate,
-            daysCount: holidayBlock.daysCount
-          });
-          // Move past this holiday
-          examDate = new Date(holidayBlock.endDate);
-          examDate.setDate(examDate.getDate() + 1);
-        } else {
-          // Normal 4-5 day gap (skip any small holidays ≤3 days)
-          let gapDays = 0;
-          const gapStartDate = new Date(examDate);
-          while (gapDays < 4) {
-            if (!isHoliday(examDate)) {
-              gapDays++;
-            }
-            if (gapDays < 4) examDate.setDate(examDate.getDate() + 1);
+        let gapDays = 0;
+        while (gapDays < 4) {
+          if (!isHoliday(examDate)) {
+            gapDays++;
           }
-          examDate.setDate(examDate.getDate() + 1);
+          if (gapDays < 4) examDate.setDate(examDate.getDate() + 1);
+        }
+        examDate.setDate(examDate.getDate() + 1);
         }
       }
-    }
     
     // Phase 4: 7-10 day post-exam break
     let postExamDate = new Date(examPhases[examPhases.length - 1].examDate);
@@ -728,16 +698,24 @@ export const getTermTimeline = (termStartDate, deptCode, termKey) => {
   }
 };
 
-// Calculate term progress (0-100%) based on start date
-export const getTermProgress = (termStartDate) => {
+// Calculate term progress (0-100%) based on the 65 working-day class window.
+// Holidays and Fri/Sat do not advance the counter.
+export const getTermProgress = (termStartDate, holidayDates = []) => {
   if (!termStartDate) return 0;
   try {
-    const start = new Date(termStartDate);
+    const start = new Date(`${termStartDate}T00:00:00`);
     const today = new Date();
-    const elapsedMs = today - start;
-    const elapsedDays = Math.floor(elapsedMs / (1000 * 60 * 60 * 24));
-    const progress = Math.min(100, Math.max(0, (elapsedDays / TERM_DURATION_DAYS) * 100));
-    return Math.round(progress);
+    const cursor = new Date(start);
+    let workingDays = 0;
+
+    while (cursor <= today && workingDays < 65) {
+      if (!isRoutineHoliday(localDateKey(cursor), holidayDates)) {
+        workingDays++;
+      }
+      cursor.setDate(cursor.getDate() + 1);
+    }
+
+    return Math.round((workingDays / 65) * 100);
   } catch {
     return 0;
   }
