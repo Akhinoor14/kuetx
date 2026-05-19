@@ -65,10 +65,10 @@ const sectionStyle = {
 };
 
 const stepTabs = [
-  { key: 'identity', title: 'Identity', note: 'Who you are' },
-  { key: 'academic', title: 'Academics', note: 'What the app needs' },
-  { key: 'residence', title: 'Residence', note: 'Optional details' },
-  { key: 'review', title: 'Review', note: 'Confirm and finish' },
+  { key: 'identity', title: 'Identity' },
+  { key: 'academic', title: 'Academics' },
+  { key: 'residence', title: 'Residence' },
+  { key: 'review', title: 'Review' },
 ];
 
 const requiredFieldMap = {
@@ -185,8 +185,8 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
   const canSubmit = stepIndex === stepTabs.length - 1;
 
   return (
-    <div style={{ position: 'fixed', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(0,0,0,0.45)', zIndex: 9999, padding: 14 }}>
-      <form onSubmit={handleSubmit} style={{ background: 'var(--surface)', padding: 18, borderRadius: 18, width: 920, maxWidth: '100%', maxHeight: '92vh', overflowY: 'auto', boxShadow: '0 18px 50px rgba(0,0,0,0.28)' }}>
+    <div style={{ position: 'fixed', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(0,0,0,0.45)', zIndex: 9999, padding: 'clamp(8px, 4vw, 14px)' }}>
+      <form onSubmit={handleSubmit} style={{ background: 'var(--surface)', padding: 'clamp(12px, 3vw, 18px)', borderRadius: 18, width: 'clamp(100%, 100%, 920px)', maxWidth: '100%', maxHeight: '92vh', overflowY: 'auto', boxShadow: '0 18px 50px rgba(0,0,0,0.28)' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, alignItems: 'flex-start', marginBottom: 14, flexWrap: 'wrap' }}>
           <div>
             <h3 style={{ margin: 0, fontSize: 20 }}>Profile Setup</h3>
@@ -208,7 +208,7 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
             <div
               key={step.key}
               style={{
-                padding: '8px 10px',
+                padding: '8px 12px',
                 borderRadius: 999,
                 border: idx === stepIndex ? '1px solid var(--accent)' : '1px solid var(--border)',
                 background: idx === stepIndex ? 'rgba(34,197,94,0.12)' : 'var(--surfaceGlassSoft)',
@@ -218,7 +218,6 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
               }}
             >
               {step.title}
-              <span style={{ marginLeft: 6, color: 'var(--muted)', fontWeight: 600 }}>{step.note}</span>
             </div>
           ))}
         </div>
@@ -333,29 +332,79 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
           )}
 
           {stepIndex === 3 && (
-            <div style={sectionStyle}>
-              <div style={{ fontSize: 12, fontWeight: 800, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 12 }}>Review</div>
-              <div style={{ display: 'grid', gap: 10 }}>
-                {[
-                  ['Name', form.name || '—'],
-                  ['Student ID', form.studentId || '—'],
-                  ['Department', form.dept || autoCalculatedDept || '—'],
-                  ['Session', form.session || '—'],
-                  ['Current Term', form.currentTermKey ? `${form.currentTermKey} - ${getTermLabelFromKey(form.currentTermKey)}` : '—'],
-                  ['Term Start Date', form.termStartDate || '—'],
-                  ['Hall', form.hallName || '—'],
-                  ['Room', form.roomNo || '—'],
-                  ['Advisor', form.advisorName || '—'],
-                  ['Advisor Contact', form.advisorContact || '—'],
-                  ['Class Representative', form.isCR ? 'Yes' : 'No'],
-                ].map(([label, value]) => (
-                  <div key={label} style={{ display: 'grid', gridTemplateColumns: '180px 1fr', gap: 12, paddingBottom: 10, borderBottom: '1px solid var(--border)', alignItems: 'start' }}>
-                    <span style={{ fontSize: 12, color: 'var(--muted)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: 0.5 }}>{label}</span>
-                    <span style={{ fontSize: 14, color: 'var(--text)', fontWeight: 500, wordBreak: 'break-word' }}>{value}</span>
-                  </div>
-                ))}
+            <>
+              <div style={sectionStyle}>
+                <div style={{ fontSize: 12, fontWeight: 800, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 12 }}>Review</div>
+                <div style={{ display: 'grid', gap: 8 }}>
+                  {[
+                    ['Name', form.name || '—'],
+                    ['Student ID', form.studentId || '—'],
+                    ['Department', form.dept || autoCalculatedDept || '—'],
+                    ['Session', form.session || '—'],
+                    ['Current Term', form.currentTermKey ? `${form.currentTermKey} - ${getTermLabelFromKey(form.currentTermKey)}` : '—'],
+                    ['Term Start Date', form.termStartDate || '—'],
+                    ['Hall', form.hallName || '—'],
+                    ['Room', form.roomNo || '—'],
+                    ['Advisor', form.advisorName || '—'],
+                    ['Advisor Contact', form.advisorContact || '—'],
+                    ['Class Representative', form.isCR ? 'Yes' : 'No'],
+                  ].map(([label, value]) => (
+                    <div key={label} style={{ display: 'grid', gridTemplateColumns: 'clamp(100px, 25%, 140px) 1fr', gap: 10, paddingBottom: 8, borderBottom: '1px solid var(--border)', alignItems: 'start' }}>
+                      <span style={{ fontSize: 11, color: 'var(--muted)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: 0.4 }}>{label}</span>
+                      <span style={{ fontSize: 13, color: 'var(--text)', fontWeight: 500, wordBreak: 'break-word' }}>{value}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
-            </div>
+
+              <div style={{
+                background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.08) 0%, rgba(168, 85, 247, 0.08) 100%)',
+                border: '1px solid rgba(59, 130, 246, 0.25)',
+                borderRadius: 12,
+                padding: 14,
+                display: 'flex',
+                gap: 12,
+                alignItems: 'flex-start',
+              }}>
+                <div style={{ fontSize: 18, flexShrink: 0 }}>💡</div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 8, flex: 1 }}>
+                  <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--text)' }}>
+                    Next: Import Previous Terms
+                  </div>
+                  <div style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.5 }}>
+                    Import previous term results to calculate CGPA and get better grade predictions.
+                  </div>
+                  <a 
+                    href="/results"
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: 6,
+                      color: 'var(--accent)',
+                      textDecoration: 'none',
+                      fontWeight: 700,
+                      fontSize: 11,
+                      cursor: 'pointer',
+                      marginTop: 4,
+                      transition: 'all 0.2s ease',
+                      letterSpacing: '0.3px',
+                      textTransform: 'uppercase',
+                    }}
+                    onMouseEnter={e => {
+                      e.currentTarget.style.color = 'var(--accent2)';
+                      e.currentTarget.style.transform = 'translateX(3px)';
+                    }}
+                    onMouseLeave={e => {
+                      e.currentTarget.style.color = 'var(--accent)';
+                      e.currentTarget.style.transform = 'translateX(0)';
+                    }}
+                  >
+                    Go to Results & GPA
+                    <span style={{ fontSize: 10, fontWeight: 900 }}>→</span>
+                  </a>
+                </div>
+              </div>
+            </>
           )}
         </div>
 

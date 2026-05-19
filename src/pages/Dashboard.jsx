@@ -192,7 +192,7 @@ export default function Dashboard() {
       )}
 
       {/* Stat cards */}
-      <div className="dashboard-stats-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 12, marginBottom: 14 }}>
+      <div className="dashboard-stats-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 8, marginBottom: 14 }}>
         <StatCard 
           label="CGPA" 
           value={cgpaStr || '—'} 

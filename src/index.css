@@ -1435,7 +1435,8 @@ h3 { font-size: 15px; font-weight: 600; }
   }
 
   .dashboard-page .dashboard-stats-grid {
-    grid-template-columns: 1fr !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 7px !important;
   }
 
   .dashboard-page .dashboard-stats-grid .card {

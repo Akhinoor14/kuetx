@@ -169,9 +169,9 @@ export default function Profile() {
         <div style={{
           background: 'linear-gradient(135deg, #16a34a 0%, #0ea5e9 50%, #a3e635 100%)',
           borderRadius: 20,
-          padding: 'clamp(80px, 18vw, 140px) clamp(32px, 8vw, 56px)',
+          padding: 'clamp(40px, 12vw, 140px) clamp(20px, 5vw, 56px)',
           textAlign: 'center',
-          marginBottom: 40,
+          marginBottom: 'clamp(20px, 4vw, 40px)',
           position: 'relative',
           overflow: 'hidden',
           boxShadow: '0 24px 64px rgba(22, 163, 74, 0.28), inset 0 1px 0 rgba(255,255,255,0.3)',
@@ -414,6 +414,55 @@ export default function Profile() {
                 { label: 'Contact', value: profile.advisorContact },
               ]}
             />
+          </div>
+
+          {/* Quick Tip: Import Previous Term Results */}
+          <div style={{
+            background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.08) 0%, rgba(168, 85, 247, 0.08) 100%)',
+            border: '1px solid rgba(59, 130, 246, 0.25)',
+            borderRadius: 14,
+            padding: 20,
+            display: 'flex',
+            gap: 16,
+            alignItems: 'flex-start',
+            marginTop: 8,
+          }}>
+            <div style={{ fontSize: 24, flexShrink: 0 }}>💡</div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 10, flex: 1 }}>
+              <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)' }}>
+                Previous Term Results?
+              </div>
+              <div style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.6 }}>
+                If you have completed previous terms at KUET, you can import your results and GPA history. This helps calculate your CGPA and provides better grade predictions.
+              </div>
+              <a 
+                href="/results"
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: 8,
+                  color: 'var(--accent)',
+                  textDecoration: 'none',
+                  fontWeight: 700,
+                  fontSize: 13,
+                  cursor: 'pointer',
+                  marginTop: 6,
+                  transition: 'all 0.2s ease',
+                  letterSpacing: '0.3px',
+                }}
+                onMouseEnter={e => {
+                  e.currentTarget.style.color = 'var(--accent2)';
+                  e.currentTarget.style.transform = 'translateX(4px)';
+                }}
+                onMouseLeave={e => {
+                  e.currentTarget.style.color = 'var(--accent)';
+                  e.currentTarget.style.transform = 'translateX(0)';
+                }}
+              >
+                Go to Results & GPA
+                <span style={{ fontSize: 12, fontWeight: 900 }}>→</span>
+              </a>
+            </div>
           </div>
         </div>
       )}
