@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect } from 'react';
-import { ChevronLeft, ChevronRight, CalendarDays, X } from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { store, getAttendanceMarks, MIN_ATTENDANCE_PERCENT, SCHOLARSHIP_ATTENDANCE_PCT, getAllCourses, getProfile, getRoutinePreviewDate, isRoutineHoliday } from '../store/store';
 import CourseTeacherDialog from '../components/CourseTeacherDialog';
 
@@ -10,13 +10,6 @@ const addDays = (d, n) => {
   return dt.toISOString().split('T')[0]; 
 };
 const fmtDate = (d) => new Date(d + 'T00:00:00').toLocaleDateString('en-BD', { weekday: 'long', day: 'numeric', month: 'long' });
-
-const attColor = (pct) => {
-  if (pct === null || pct === undefined || Number.isNaN(pct)) return 'var(--muted)';
-  if (pct < MIN_ATTENDANCE_PERCENT) return 'var(--danger)';
-  if (pct < SCHOLARSHIP_ATTENDANCE_PCT) return 'var(--warning)';
-  return 'var(--success)';
-};
 
 // Check if course is session/lab (auto 100%)
 function isAutoFull(courseType) {
@@ -58,16 +51,40 @@ function getDisplayCourseName(course) {
     .trim();
   return cleaned || raw;
 }
-// Calculate how many future misses (additional absent classes) are allowed
-// while still staying at or above the target percentage.
-function canMissForTarget(attended, held, targetPct) {
-  if (!held && attended === 0) return null;
-  const T = Number(targetPct) / 100;
-  if (T <= 0) return 0;
-  // Solve for m in: attended / (held + m) >= T  => m <= (attended / T) - held
-  const val = Math.floor((attended / T) - held);
-  return Math.max(0, val);
+
+// Compute attendance from daily logs for a specific (course, teacher) pair
+function getEffective(courseId, teacherName, logs, courseType) {
+  const key = `${courseId}_${teacherName || ''}`;
+  let held = 0, attended = 0;
+  
+  // If session/lab, auto-full
+  if (isAutoFull(courseType)) {
+    return { held: 1, attended: 1, source: 'auto', percentage: 100 };
+  }
+  
+  // Count from daily logs
+  Object.values(logs).forEach(day => {
+    const v = day[key];
+    if (v === 'present' || v === 'absent') { 
+      held++; 
+      if (v === 'present') attended++; 
+    }
+  });
+  
+  const percentage = held > 0 ? Math.round((attended / held) * 100) : null;
+  if (held > 0) return { held, attended, source: 'log', percentage };
+  return { held: 0, attended: 0, source: 'none', percentage: null };
 }
+
+
+// Attendance status color
+function attColor(pct) {
+  if (pct === null) return 'var(--muted)';
+  if (pct < MIN_ATTENDANCE_PERCENT) return 'var(--danger)';
+  if (pct < SCHOLARSHIP_ATTENDANCE_PCT) return 'var(--warning)';
+  return 'var(--success)';
+}
+
 function getScheduleCoursesForDate(schedule, date) {
   const dayName = new Date(date + 'T00:00:00').toLocaleDateString('en-US', { weekday: 'long' });
   const byCourse = new Map();
@@ -85,55 +102,11 @@ function getScheduleCoursesForDate(schedule, date) {
   }));
 }
 
-// Compute per-teacher effective attendance from daily logs or manual entries
-function getEffective(courseId, teacher, logs = {}, courseType) {
-  if (isAutoFull(courseType)) return { held: 0, attended: 0, percentage: 100, source: 'auto' };
-
-  // Count entries keyed as `${courseId}_${teacherName}` inside each day's log
-  let held = 0, attended = 0;
-  Object.values(logs).forEach(dayLog => {
-    if (!dayLog || typeof dayLog !== 'object') return;
-    Object.entries(dayLog).forEach(([key, val]) => {
-      if (!key) return;
-      const parts = key.split('_');
-      const cid = parts[0];
-      const tname = parts.slice(1).join('_') || '';
-      if (String(cid) !== String(courseId)) return;
-      // If teacher filter provided, only count matching teacher rows
-      const normTeacher = String(teacher || '').trim();
-      const normTname = String(tname || '').trim();
-      if (normTeacher !== '' && normTeacher !== normTname) return;
-      if (val === 'present' || val === 'absent') {
-        held++;
-        if (val === 'present') attended++;
-      }
-    });
-  });
-
-  if (held > 0) return { held, attended, percentage: Math.round((attended / held) * 100), source: 'log' };
-
-  // Fallback: check manual attendance store (supports per-course or per-course_teacher keys)
-  try {
-    const manual = store.get('attendance') || {};
-    const key = `${courseId}_${String(teacher || '').trim()}`;
-    const byKey = manual[key] || manual[courseId] || null;
-    if (byKey && byKey.held) {
-      const a = Number(byKey.attended || 0);
-      const h = Number(byKey.held || 0);
-      return { held: h, attended: a, percentage: h > 0 ? Math.round((a / h) * 100) : null, source: 'manual' };
-    }
-  } catch (e) {}
-
-  return { held: 0, attended: 0, percentage: null, source: 'none' };
-}
-
 // ── Daily Log ─────────────────────────────────────────────────────────────
 function DailyLog({ courses, logs, setLogs, schedule, scheduleSettings, combinedMode }) {
   const [date, setDate] = useState(todayStr());
   const [showGiveAttendance, setShowGiveAttendance] = useState(false);
   const [isCompact, setIsCompact] = useState(typeof window !== 'undefined' ? window.innerWidth < 640 : false);
-  const [teacherDialogOpen, setTeacherDialogOpen] = useState(false);
-  const [selectedCard, setSelectedCard] = useState(null);
   const dayLog = logs[date] || {};
   const isToday = date === todayStr();
   const dayName = new Date(date + 'T00:00:00').getDay();
@@ -235,18 +208,6 @@ function DailyLog({ courses, logs, setLogs, schedule, scheduleSettings, combined
     store.set('attLogs', updated);
   };
 
-  const handleTeacherSave = (teachers) => {
-    if (!selectedCard) return;
-    const { courseId } = selectedCard;
-    const updated = { ...scheduleSettings };
-    if (!updated.courseTeacherMap) updated.courseTeacherMap = {};
-    updated.courseTeacherMap[courseId] = teachers;
-    store.set('scheduleSettings', updated);
-    window.dispatchEvent(new Event('kuetx:store-updated'));
-    setTeacherDialogOpen(false);
-    setSelectedCard(null);
-  };
-
   const markedTeachers = useMemo(() => {
     let total = 0, marked = 0;
     let coursesToCount = visibleCourses.length > 0 ? visibleCourses.filter(c => !isAutoFull(c.type)) : [];
@@ -333,6 +294,27 @@ function DailyLog({ courses, logs, setLogs, schedule, scheduleSettings, combined
           <div style={{ fontSize: 14, fontWeight: 600 }}>{fmtDate(date)}</div>
           <div style={{ fontSize: 13, color: 'var(--muted)' }}>{markedTeachers.marked}/{markedTeachers.total || 0} marked</div>
         </div>
+        {scheduledCourses.length > 0 && !isToday && (
+          <button onClick={() => {
+            const coursesToMark = (visibleCourses.length > 0 ? visibleCourses : courses);
+            const updated = { ...logs };
+            if (!updated[date]) updated[date] = {};
+            coursesToMark.forEach(c => {
+              const teachers = getTeachersForCourseOnDate(scheduleSettings, schedule, c.id, date);
+              const displayTeachers = teachers.length > 0 ? teachers : [''];
+              if (!isAutoFull(c.type)) {
+                displayTeachers.forEach(t => {
+                  updated[date][`${c.id}_${t || ''}`] = 'holiday';
+                });
+              }
+            });
+            setLogs(updated);
+            store.set('attLogs', updated);
+          }} style={{
+            padding: '6px 12px', borderRadius: 6, cursor: 'pointer', fontWeight: 600,
+            fontSize: 12, background: 'rgba(251, 146, 60, 0.1)', color: 'var(--warning)', border: '1px solid var(--warning)'
+          }}>📅 Mark All as Holiday</button>
+        )}
       </div>
 
       {isFriday && !isTodayHoliday && (
@@ -394,163 +376,101 @@ function DailyLog({ courses, logs, setLogs, schedule, scheduleSettings, combined
         </div>
       )}
 
-      {/* Legend */}
-      {cardsToShow.length > 0 && (
-        <div style={{ marginBottom: 16, padding: '10px 14px', background: 'var(--inputBg)', borderRadius: 10, fontSize: 12, color: 'var(--muted)', display: 'flex', gap: 16, alignItems: 'center', justifyContent: 'center', flexWrap: 'wrap' }}>
-          {isCompact ? (
-            <>
-              <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}><span style={{ fontWeight: 700, color: '#10b981' }}>P</span> = Present</div>
-              <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}><span style={{ fontWeight: 700, color: '#ef4444' }}>A</span> = Absent</div>
-              <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}><span style={{ fontWeight: 700, color: 'var(--muted)' }}>H</span> = Holiday (see calendar)</div>
-              <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}><span style={{ fontWeight: 700, color: '#6b7280' }}>N</span> = No class</div>
-            </>
-          ) : (
-            <>
-              <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}><span style={{ fontWeight: 700, color: '#10b981' }}>✓ Present</span></div>
-              <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}><span style={{ fontWeight: 700, color: '#ef4444' }}>✗ Absent</span></div>
-              <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}><span style={{ fontWeight: 700, color: 'var(--muted)' }}>Holiday</span> — managed in holiday calendar</div>
-              <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}><span style={{ fontWeight: 700, color: '#6b7280' }}>No class</span> — class not held / cancelled</div>
-            </>
-          )}
-          <div style={{ fontSize: 11, color: 'var(--muted)', width: '100%', textAlign: 'center' }}>
-            Holiday days are managed separately in the holiday calendar, not per course.
-          </div>
-        </div>
-      )}
-
       <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
         {cardsToShow.length === 0 ? (
           <div className="card" style={{ padding: '16px', textAlign: 'center', color: 'var(--muted)' }}>
             <div style={{ fontSize: 14, marginBottom: 4 }}>📋 No classes to mark</div>
             <div style={{ fontSize: 12 }}>Select a date with scheduled classes or enable "Give Attendance"</div>
           </div>
-        ) : (() => {
-          // Soft background colors - subtle pastel palette using only purple, green, blue
-          const softColors = [
-            'rgba(168, 85, 247, 0.06)',  // light purple
-            'rgba(34, 197, 94, 0.06)',   // light green
-            'rgba(16, 185, 129, 0.06)',  // light teal-green (subtle second green)
-          ];
-          const courseColorMap = {};
-          let colorIndex = 0;
-          cardsToShow.forEach(card => {
-            if (!courseColorMap[card.course.id]) {
-              courseColorMap[card.course.id] = softColors[colorIndex % softColors.length];
-              colorIndex++;
-            }
-          });
-
-          // Group cards by course so multiple teachers appear inside the same course card
-          const groups = {};
-          cardsToShow.forEach(card => {
-            const id = card.course.id;
-            if (!groups[id]) groups[id] = { course: card.course, entries: [] };
-            groups[id].entries.push({ teacher: card.teacher, key: card.key, status: card.status });
-          });
-
-          const grouped = Object.values(groups);
-
-          // deterministic pastel color generator per course id (unique hues)
-          const courseBgFromId = (id) => {
-            let h = 0;
-            for (let i = 0; i < id.length; i++) h = (h * 31 + id.charCodeAt(i)) % 360;
-            // keep saturation/lightness pastel-ish
-            return `hsla(${h}, 65%, 92%, 0.9)`; // background subtle
-          };
-
-          return grouped.map(group => {
-            const course = group.course;
-            const entries = group.entries;
-            const todayItems = scheduledCourses.find(item => item.courseId === course.id)?.items || [];
-            const statusColors = { present: '#10b981', absent: '#ef4444', 'no-class': '#6b7280' };
-            const statusLabels = { present: 'Present', absent: 'Absent', 'no-class': 'No class' };
-            const bgColor = courseColorMap[course.id] || courseBgFromId(course.id);
-
-            const assignedTeachers = getTeachersForCourse(scheduleSettings, schedule, course.id);
-            const hasAssignment = assignedTeachers && assignedTeachers.length > 0;
+        ) : (
+          cardsToShow.map(card => {
+            const todayItems = scheduledCourses.find(item => item.courseId === card.course.id)?.items || [];
+            const teacherLabel = card.teacher || (card.auto ? 'Auto' : 'Unassigned');
+            const statusColors = { present: '#10b981', absent: '#ef4444', holiday: '#f59e0b' };
+            const statusLabels = { present: 'Present', absent: 'Absent', holiday: 'Holiday' };
 
             return (
-              <div key={course.id} style={{ padding: '14px 16px', borderRadius: 8, background: bgColor, border: '1px solid rgba(15, 23, 42, 0.06)', transition: 'all 0.2s ease' }}>
-                <div style={{ marginBottom: 10 }}>
-                  <div style={{ fontWeight: 700, fontSize: 14, marginBottom: 4 }}>{getDisplayCourseName(course)}</div>
-                  <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
-                    {course.type && (<div style={{ fontSize: 11, color: 'var(--muted)', opacity: 0.7 }}>{course.type}</div>)}
-                    {todayItems.length > 0 && (<div style={{ fontSize: 10, color: 'var(--accent)', fontWeight: 600, padding: '1px 6px', background: 'rgba(var(--accentRGB), 0.12)', borderRadius: 3 }}>{todayItems.map(i => i.slot).join(' → ')}</div>)}
+              <div key={card.key || card.course.id} className="card" style={{
+                padding: '14px 16px',
+                borderLeft: card.status ? `4px solid ${statusColors[card.status]}` : '4px solid var(--border)',
+                background: card.status ? 'var(--surface)' : 'var(--card)',
+                transition: 'all 0.2s ease',
+              }}>
+                {/* Course Info */}
+                <div style={{ marginBottom: 12 }}>
+                  <div style={{ fontWeight: 700, fontSize: 15, marginBottom: 4 }}>
+                    {getDisplayCourseName(card.course)}
+                  </div>
+                  <div style={{ display: 'flex', gap: 12, alignItems: 'center', flexWrap: 'wrap' }}>
+                    <div style={{ fontSize: 12, color: 'var(--muted)' }}>
+                      <span style={{ fontWeight: 600 }}>{teacherLabel}</span>
+                      {card.course.type && <span> · {card.course.type}</span>}
+                    </div>
+                    {todayItems.length > 0 && (
+                      <div style={{ fontSize: 11, color: 'var(--accent)', fontWeight: 600, padding: '2px 8px', background: 'rgba(var(--accentRGB), 0.1)', borderRadius: 4 }}>
+                        {todayItems.map(item => item.slot).join(' → ')}
+                      </div>
+                    )}
                   </div>
                 </div>
 
-                {/* Teacher rows inside course card */}
-                <div style={{ display: 'grid', gap: 8 }}>
-                  {entries.map((e, idx) => {
-                    const teacher = e.teacher || '';
-                    const status = e.status;
-                    const isMarked = status === 'present' || status === 'absent';
-                    const canMark = hasAssignment || isMarked;
+                {/* Status Display */}
+                {card.status && (
+                  <div style={{ marginBottom: 10, padding: '8px 12px', background: `${statusColors[card.status]}20`, borderRadius: 6, fontSize: 12, fontWeight: 600, color: statusColors[card.status] }}>
+                    ✓ Marked as: {statusLabels[card.status]}
+                  </div>
+                )}
 
+                {/* Action Buttons */}
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8 }}>
+                  {[
+                    { val: 'present', emoji: '✓', label: 'Present', color: '#10b981' },
+                    { val: 'absent',  emoji: '✗', label: 'Absent',  color: '#ef4444' },
+                    { val: 'holiday', emoji: '⊘', label: 'Holiday',  color: '#f59e0b' },
+                  ].map(opt => {
+                    const active = card.status === opt.val;
                     return (
-                      <div key={e.key || `${course.id}_${idx}`} style={{ display: 'flex', justifyContent: 'space-between', gap: 12, alignItems: 'center', padding: '8px', background: 'rgba(255,255,255,0.02)', borderRadius: 6 }}>
-                        <div style={{ flex: 1 }}>
-                          <div style={{ fontWeight: 700 }}>{teacher || 'Unassigned'}</div>
-                          {!teacher && !hasAssignment && (<div style={{ fontSize: 12, color: '#ef4444', fontWeight: 600 }}>⚠ No teacher assigned</div>)}
-                        </div>
-
-                        <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-                          {status && (
-                            <div style={{ padding: '6px 10px', background: `${(statusColors[status] || 'var(--muted)')}20`, borderRadius: 5, fontSize: 11, fontWeight: 600, color: statusColors[status] || 'var(--muted)' }}>
-                              {isCompact ? (status === 'present' ? 'P' : status === 'absent' ? 'A' : 'N') : (status === 'present' ? `✓ ${statusLabels[status]}` : status === 'absent' ? `✗ ${statusLabels[status]}` : statusLabels[status])}
-                            </div>
-                          )}
-
-                          {canMark ? (
-                            [
-                              { val: 'present', shortLabel: 'P', fullLabel: 'Present', emoji: '✓', color: '#10b981' },
-                              { val: 'absent', shortLabel: 'A', fullLabel: 'Absent', emoji: '✗', color: '#ef4444' },
-                            ].map(opt => {
-                              const active = status === opt.val;
-                              const btnLabel = isCompact ? opt.shortLabel : opt.fullLabel;
-                              return (
-                                <button key={opt.val} onClick={() => mark(course.id, teacher, opt.val)} title={`Mark as ${opt.fullLabel}`} style={{ padding: isCompact ? '8px 6px' : '8px 10px', borderRadius: 6, cursor: 'pointer', fontWeight: 600, fontSize: isCompact ? 11 : 12, background: active ? opt.color : 'var(--inputBg)', color: active ? 'white' : 'var(--muted)', border: active ? `2px solid ${opt.color}` : '1px solid var(--border)', transition: 'all 0.2s ease', minHeight: 32 }}>{isCompact ? btnLabel : `${opt.emoji} ${btnLabel}`}</button>
-                              );
-                            })
-                          ) : (
-                            <button onClick={() => { setSelectedCard({ courseId: course.id, course }); setTeacherDialogOpen(true); }} style={{ padding: '8px 12px', borderRadius: 6, cursor: 'pointer', fontWeight: 600, fontSize: 12, background: 'var(--accent)', color: 'white', border: 'none' }}>+ Add Teacher</button>
-                          )}
-                        </div>
-                      </div>
+                      <button 
+                        key={opt.val} 
+                        onClick={() => mark(card.course.id, card.teacher, opt.val)}
+                        title={`Mark as ${opt.label}`}
+                        style={{
+                          padding: '10px 8px',
+                          borderRadius: 8,
+                          cursor: 'pointer',
+                          fontWeight: 600,
+                          fontSize: 13,
+                          background: active ? opt.color : 'var(--inputBg)',
+                          color: active ? 'white' : 'var(--muted)',
+                          border: active ? `2px solid ${opt.color}` : '2px solid var(--border)',
+                          transition: 'all 0.2s ease',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          gap: 4,
+                          flexDirection: 'column',
+                        }}>
+                        <span style={{ fontSize: 18 }}>{opt.emoji}</span>
+                        <span style={{ fontSize: 11 }}>{opt.label}</span>
+                      </button>
                     );
                   })}
                 </div>
               </div>
             );
-          });
-        })()}
+          })
+        )}
       </div>
 
       <div style={{ marginTop: 16, padding: '10px 14px', background: 'var(--inputBg)', borderRadius: 10, fontSize: 13, color: 'var(--muted)' }}>
         💡 Tip: Back button jumps to previous class dates. All changes auto-save.
       </div>
-
-      {/* Teacher Assignment Dialog */}
-      {selectedCard && (
-        <CourseTeacherDialog
-          isOpen={teacherDialogOpen}
-          onClose={() => {
-            setTeacherDialogOpen(false);
-            setSelectedCard(null);
-          }}
-          course={selectedCard.course}
-          currentTeachers={getTeachersForCourse(scheduleSettings, schedule, selectedCard.courseId)}
-          onSave={handleTeacherSave}
-        />
-      )}
     </div>
   );
 }
 
 // ── Summary ───────────────────────────────────────────────────────────────
-function Summary({ courses, logs, schedule, scheduleSettings, combinedMode, combinedData, toggleCombinedMode, updateCombined }) {
-  const [teacherDialogOpen, setTeacherDialogOpen] = useState(false);
-  const [selectedCourse, setSelectedCourse] = useState(null);
+function Summary({ courses, logs, schedule, scheduleSettings, combinedMode, combinedData, toggleCombinedMode, updateCombined, onEditTeachers }) {
 
   const theoryCourses = (courses || []).filter(c => !isAutoFull(c.type));
 
@@ -592,50 +512,19 @@ function Summary({ courses, logs, schedule, scheduleSettings, combinedMode, comb
     return (a.course.name || '').localeCompare(b.course.name || '');
   });
 
-  const handleTeacherSave = (teachers) => {
-    if (!selectedCourse) return;
-    const updated = { ...scheduleSettings };
-    if (!updated.courseTeacherMap) updated.courseTeacherMap = {};
-    updated.courseTeacherMap[selectedCourse.id] = teachers;
-    store.set('scheduleSettings', updated);
-    window.dispatchEvent(new Event('kuetx:store-updated'));
-    setTeacherDialogOpen(false);
-    setSelectedCourse(null);
-  };
-
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
       <div className="card" style={{ padding: 14, display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
         <div style={{ fontSize: 13, color: 'var(--muted)' }}>
-          Sessional/Lab cards are hidden here (always 100% auto). Use this for theory attendance overview and manual totals.
+          Sessional/Lab cards are hidden here (always 100% auto). Use this page for theory attendance only.
         </div>
         <button className="btn btn-ghost" onClick={toggleCombinedMode}>
           {combinedMode ? 'Combined Input: ON' : 'Combined Input: OFF'}
         </button>
       </div>
-      {combinedMode && (
-        <div className="card" style={{ padding: 12, fontSize: 12, color: 'var(--muted)' }}>
-          Enter per-teacher totals for each course. "Held" = total classes taken, "Attended" = your attended classes. Leave empty when no class was held; holidays are managed in the holiday setup.
-        </div>
-      )}
 
-      {(() => {
-        // Soft background colors - subtle palette: purple + two greens
-        const softColors = [
-          'rgba(168, 85, 247, 0.06)',  // light purple
-          'rgba(34, 197, 94, 0.06)',   // light green
-          'rgba(16, 185, 129, 0.06)',  // light teal-green
-        ];
-        const courseColorMap = {};
-        let colorIndex = 0;
-        courseCards.forEach(card => {
-          if (!courseColorMap[card.course.id]) {
-            courseColorMap[card.course.id] = softColors[colorIndex % softColors.length];
-            colorIndex++;
-          }
-        });
-        return courseCards.map(({ course: c, stats, displayTeachers, totalHeld, totalAttended, pct, attMarks, need75, canMiss }) => (
-        <div key={c.id} className="card" style={{ padding: 18, background: courseColorMap[c.id], border: '1px solid rgba(0, 0, 0, 0.05)' }}>
+      {courseCards.map(({ course: c, stats, displayTeachers, totalHeld, totalAttended, pct, attMarks, need75, canMiss }) => (
+        <div key={c.id} className="card" style={{ padding: 18 }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 14, flexWrap: 'wrap', gap: 10 }}>
             <div>
               <div style={{ fontWeight: 700, fontSize: 15 }}>{c.code} — {c.name}</div>
@@ -646,8 +535,8 @@ function Summary({ courses, logs, schedule, scheduleSettings, combinedMode, comb
             <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
               {attMarks !== null && (
                 <div style={{ textAlign: 'center' }}>
-                  <div style={{ fontSize: 11, color: 'var(--muted)' }}>Attendance Marks</div>
-                  <div style={{ fontSize: 20, fontWeight: 800, color: 'var(--accent)' }}>{Math.round(attMarks * 3)}/30</div>
+                  <div style={{ fontSize: 11, color: 'var(--muted)' }}>Marks</div>
+                  <div style={{ fontSize: 20, fontWeight: 800, color: 'var(--accent)' }}>{attMarks}/10</div>
                 </div>
               )}
               {pct !== null && (
@@ -660,75 +549,51 @@ function Summary({ courses, logs, schedule, scheduleSettings, combinedMode, comb
           </div>
 
           <div style={{ marginBottom: 12, paddingBottom: 12, borderBottom: '1px solid var(--border)' }}>
-            <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--muted)', marginBottom: 8 }}>Per Teacher:</div>
-            {displayTeachers.length === 1 && displayTeachers[0] === '' ? (
-              <div style={{ padding: '16px', background: 'rgba(239, 68, 68, 0.08)', border: '2px solid rgba(239, 68, 68, 0.3)', borderRadius: 6, textAlign: 'center' }}>
-                <div style={{ fontSize: 12, color: '#ef4444', fontWeight: 600, marginBottom: 10 }}>
-                  ⚠ No teachers assigned to this course
-                </div>
-                <button 
-                  onClick={() => {
-                    setSelectedCourse(c);
-                    setTeacherDialogOpen(true);
-                  }}
-                  style={{
-                    padding: '8px 16px',
-                    borderRadius: 6,
-                    cursor: 'pointer',
-                    fontWeight: 600,
-                    fontSize: 12,
-                    background: 'var(--accent)',
-                    color: 'white',
-                    border: 'none',
-                    transition: 'all 0.2s ease',
-                  }}>
-                  + Add Teacher
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+              <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--muted)' }}>Per Teacher:</div>
+              {onEditTeachers && (
+                <button
+                  onClick={() => onEditTeachers(c.id)}
+                  className="btn btn-ghost btn-sm"
+                  style={{ fontSize: 12, padding: '4px 8px', color: 'var(--accent)' }}
+                >
+                  ✏️ Edit Teachers
                 </button>
-              </div>
-            ) : (
-              <div style={{ display: 'grid', gridTemplateColumns: `repeat(${Math.min(displayTeachers.length, 2)}, 1fr)`, gap: 8 }}>
-                {displayTeachers.map(teacher => {
-                  const s = stats[teacher || ''];
-                  const tp = s.held > 0 ? Math.round((s.attended / s.held) * 100) : 0;
-                  return (
-                    <div key={teacher || 'unknown'} style={{ padding: '8px', background: 'var(--inputBg)', borderRadius: 6, fontSize: 12 }}>
-                      <div style={{ fontWeight: 700, marginBottom: 8 }}>{teacher || 'Unassigned'}</div>
-                      {combinedMode ? (
-                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 6 }}>
-                          <label style={{ display: 'grid', gap: 4 }}>
-                            <span style={{ fontSize: 11, color: 'var(--muted)', fontWeight: 600 }}>Held</span>
-                            <input
-                              type="number"
-                              min="0"
-                              value={s.held}
-                              onChange={e => updateCombined(c.id, teacher, 'held', e.target.value)}
-                              placeholder="0"
-                              style={{ fontSize: 12 }}
-                            />
-                          </label>
-                          <label style={{ display: 'grid', gap: 4 }}>
-                            <span style={{ fontSize: 11, color: 'var(--muted)', fontWeight: 600 }}>Attended</span>
-                            <input
-                              type="number"
-                              min="0"
-                              max={s.held}
-                              value={s.attended}
-                              onChange={e => updateCombined(c.id, teacher, 'attended', e.target.value)}
-                              placeholder="0"
-                              style={{ fontSize: 12 }}
-                            />
-                          </label>
-                        </div>
-                      ) : null}
-                      <div style={{ color: 'var(--muted)', fontSize: 12, marginTop: combinedMode ? 8 : 0, padding: combinedMode ? '8px' : 0, background: combinedMode ? 'rgba(0,0,0,0.02)' : 'transparent', borderRadius: 4 }}>
-                        <div style={{ fontWeight: 600 }}>{s.attended}/{s.held}</div>
-                        <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 2 }}>{tp}% attended</div>
+              )}
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: `repeat(${Math.min(displayTeachers.length, 2)}, 1fr)`, gap: 8 }}>
+              {displayTeachers.map(teacher => {
+                const s = stats[teacher || ''];
+                const tp = s.held > 0 ? Math.round((s.attended / s.held) * 100) : 0;
+                return (
+                  <div key={teacher || 'unknown'} style={{ padding: '8px', background: 'var(--inputBg)', borderRadius: 6, fontSize: 12 }}>
+                    <div style={{ fontWeight: 700, marginBottom: 6 }}>{teacher || 'Unassigned'}</div>
+                    {combinedMode ? (
+                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 6 }}>
+                        <input
+                          type="number"
+                          min="0"
+                          value={s.held}
+                          onChange={e => updateCombined(c.id, teacher, 'held', e.target.value)}
+                          placeholder="Held"
+                        />
+                        <input
+                          type="number"
+                          min="0"
+                          max={s.held}
+                          value={s.attended}
+                          onChange={e => updateCombined(c.id, teacher, 'attended', e.target.value)}
+                          placeholder="Attended"
+                        />
                       </div>
-                    </div>
-                  );
-                })}
-              </div>
-            )}
+                    ) : (
+                      <div style={{ color: 'var(--muted)' }}>{s.attended}/{s.held} ({tp}%)</div>
+                    )}
+                    {combinedMode && <div style={{ color: 'var(--muted)', marginTop: 4 }}>{s.attended}/{s.held} ({tp}%)</div>}
+                  </div>
+                );
+              })}
+            </div>
           </div>
 
           {pct !== null && (
@@ -763,22 +628,7 @@ function Summary({ courses, logs, schedule, scheduleSettings, combinedMode, comb
             </div>
           )}
         </div>
-        ));
-      })()}
-
-      {/* Teacher Assignment Dialog */}
-      {selectedCourse && (
-        <CourseTeacherDialog
-          isOpen={teacherDialogOpen}
-          onClose={() => {
-            setTeacherDialogOpen(false);
-            setSelectedCourse(null);
-          }}
-          course={selectedCourse}
-          currentTeachers={getTeachersForCourse(scheduleSettings, schedule, selectedCourse.id)}
-          onSave={handleTeacherSave}
-        />
-      )}
+      ))}
     </div>
   );
 }
@@ -797,15 +647,7 @@ export default function Attendance() {
 
   const [combinedMode, setCombinedMode] = useState(() => store.get('attCombinedMode') || false);
   const [combinedData, setCombinedData] = useState(() => store.get('attCombinedData') || {});
-
-  const [holidaySetupOpen, setHolidaySetupOpen] = useState(false);
-  const [holidayDate, setHolidayDate] = useState('');
-  const [holidayMode, setHolidayMode] = useState('calendar');
-  const [calendarMonth, setCalendarMonth] = useState(() => {
-    const now = new Date();
-    return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
-  });
-  const [calendarSelectedDates, setCalendarSelectedDates] = useState(new Set());
+  const [courseTeacherDialogState, setCourseTeacherDialogState] = useState({ open: false, courseId: '' });
 
   useEffect(() => {
     const refresh = () => {
@@ -842,117 +684,26 @@ export default function Attendance() {
     store.set('attCombinedData', next);
   };
 
-  const holidayDates = scheduleSettings?.holidayDates || [];
-  const holidayCount = holidayDates.length;
-
-  const theoryCourses = courses.filter(c => !isAutoFull(c.type));
-  const heroCourseStats = theoryCourses.map(c => {
-    const teachers = getTeachersForCourse(scheduleSettings, schedule, c.id);
-    const displayTeachers = teachers.length > 0 ? teachers : [''];
-    const stats = displayTeachers.map(teacher => getEffective(c.id, teacher, logs, c.type));
-    const totalHeld = stats.reduce((sum, s) => sum + s.held, 0);
-    const totalAttended = stats.reduce((sum, s) => sum + s.attended, 0);
-    const pct = totalHeld > 0 ? Math.round((totalAttended / totalHeld) * 100) : null;
-    const status = pct === null ? 'neutral' : pct >= 75 ? 'safe' : pct >= 60 ? 'warning' : 'danger';
-    return { course: c, totalHeld, totalAttended, pct, status };
-  });
-
-  const closeHolidaySetup = () => {
-    setHolidaySetupOpen(false);
-    setHolidayDate('');
-    setHolidayMode('calendar');
-    setCalendarSelectedDates(new Set());
+  const handleCourseTeacherDialogOpen = (courseId) => {
+    setCourseTeacherDialogState({ open: true, courseId });
   };
 
-  const openHolidaySetup = () => {
-    setHolidaySetupOpen(true);
+  const handleCourseTeacherDialogClose = () => {
+    setCourseTeacherDialogState({ open: false, courseId: '' });
   };
 
-  const saveHolidayDates = (nextDates) => {
-    store.set('scheduleSettings', { ...scheduleSettings, holidayDates: [...new Set(nextDates)].sort() });
-    setScheduleSettings(prev => ({ ...prev, holidayDates: [...new Set(nextDates)].sort() }));
-  };
-
-  const addHolidayDate = () => {
-    if (!holidayDate) return;
-    saveHolidayDates([...holidayDates, holidayDate]);
-    setHolidayDate('');
-  };
-
-  const removeHolidayDate = (value) => {
-    saveHolidayDates(holidayDates.filter(date => date !== value));
-  };
-
-  const toggleCalendarDate = (dateStr) => {
-    const newSet = new Set(calendarSelectedDates);
-    if (newSet.has(dateStr)) {
-      newSet.delete(dateStr);
-    } else {
-      newSet.add(dateStr);
-    }
-    setCalendarSelectedDates(newSet);
-  };
-
-  const addCalendarSelectedDates = () => {
-    if (calendarSelectedDates.size === 0) {
-      alert('Please select at least one date from the calendar.');
-      return;
-    }
-    saveHolidayDates([...holidayDates, ...Array.from(calendarSelectedDates)]);
-    setCalendarSelectedDates(new Set());
-  };
-
-  const monthName = (monthStr) => {
-    const [year, month] = monthStr.split('-').map(Number);
-    const date = new Date(year, month - 1, 1);
-    return date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
-  };
-
-  const nextMonth = () => {
-    const [year, month] = calendarMonth.split('-').map(Number);
-    const next = month === 12 ? 1 : month + 1;
-    const nextYear = month === 12 ? year + 1 : year;
-    setCalendarMonth(`${nextYear}-${String(next).padStart(2, '0')}`);
-  };
-
-  const prevMonth = () => {
-    const [year, month] = calendarMonth.split('-').map(Number);
-    const prev = month === 1 ? 12 : month - 1;
-    const prevYear = month === 1 ? year - 1 : year;
-    setCalendarMonth(`${prevYear}-${String(prev).padStart(2, '0')}`);
-  };
-
-  const renderCalendar = (monthStr) => {
-    const [year, month] = monthStr.split('-').map(Number);
-    const firstDay = new Date(year, month - 1, 1);
-    const lastDay = new Date(year, month, 0);
-    const daysInMonth = lastDay.getDate();
-    const startingDayOfWeek = firstDay.getDay();
-
-    const weeks = [];
-    let week = [];
-
-    for (let i = 0; i < startingDayOfWeek; i++) {
-      week.push(null);
-    }
-
-    for (let day = 1; day <= daysInMonth; day++) {
-      const dateStr = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-      week.push({ day, dateStr });
-      if (week.length === 7) {
-        weeks.push(week);
-        week = [];
-      }
-    }
-
-    if (week.length > 0) {
-      while (week.length < 7) {
-        week.push(null);
-      }
-      weeks.push(week);
-    }
-
-    return weeks;
+  const handleCourseTeacherDialogSave = (teachersList) => {
+    const courseId = courseTeacherDialogState.courseId;
+    const updated = {
+      ...scheduleSettings,
+      courseTeacherMap: {
+        ...(scheduleSettings.courseTeacherMap || {}),
+        [courseId]: teachersList,
+      },
+    };
+    setScheduleSettings(updated);
+    store.set('scheduleSettings', updated);
+    handleCourseTeacherDialogClose();
   };
 
   const previewDate = getRoutinePreviewDate(scheduleSettings.holidayDates || []);
@@ -970,50 +721,14 @@ export default function Attendance() {
   }
 
   return (
-    <div className="attendance-page page-enter page-container">
-      <div className="attendance-hero">
-        <div className="attendance-hero-header">
-          <div>
-            <div className="attendance-hero-kicker">OVERVIEW</div>
-            <h1 className="attendance-hero-heading">Attendance Summary</h1>
-            <p className="attendance-hero-subtext">THEORY COURSES ONLY</p>
-          </div>
-          <button className="btn btn-primary attendance-holiday-btn" onClick={openHolidaySetup}>
-            <CalendarDays size={14} /> Add Holiday
-          </button>
-        </div>
-
-        <div className="attendance-summary-grid">
-        {heroCourseStats.map(({ course, totalHeld, totalAttended, pct, status }) => {
-          const thresholds = [90, 85, 80, 75, 70, 65, 60];
-          let statusNode = <div className="card-status card-status-neutral">No classes yet</div>;
-          if (pct !== null) {
-            if (pct < MIN_ATTENDANCE_PERCENT) {
-              statusNode = <div className="card-status card-status-danger">≤60% · ❌ CANCELLED</div>;
-            } else {
-              const slab = thresholds.find(t => pct >= t) || 60;
-              const canMiss = canMissForTarget(totalAttended, totalHeld, slab);
-              if (canMiss === null) {
-                statusNode = <div className="card-status card-status-neutral">No classes yet</div>;
-              } else if (canMiss <= 0) {
-                statusNode = <div className="card-status card-status-warning">⚠ No misses left (stay ≥{slab}%)</div>;
-              } else {
-                statusNode = <div className="card-status card-status-safe">✓ Can miss {canMiss} (stay ≥{slab}%)</div>;
-              }
-            }
-          }
-
-          return (
-            <div key={course.id} className={`attendance-summary-card attendance-summary-card--${status}`}>
-              <div className="card-course">{course.code || getDisplayCourseName(course)}</div>
-              <div className="card-percentage" style={{ color: attColor(pct) }}>{pct !== null ? `${pct}%` : '--'}</div>
-              <div className="card-meta">{totalAttended}/{totalHeld || 0}</div>
-              {statusNode}
-            </div>
-          );
-        })}
+    <div className="page-enter page-container">
+      <div style={{ marginBottom: 20 }}>
+        <h1>Attendance</h1>
+        <p className="text-muted" style={{ marginTop: 4 }}>
+          Mark only the classes scheduled for that date — past dates always editable
+        </p>
       </div>
-      </div>
+
       {todaySchedule.length > 0 && (
         <div className="card" style={{ marginBottom: 16 }}>
           <div style={{ fontWeight: 700, fontSize: 13, marginBottom: 8 }}>Routine Preview</div>
@@ -1050,14 +765,14 @@ export default function Attendance() {
       )}
 
       <div className="tabs">
-        {[['daily', '📅 Daily Log'], ['summary', '📊 Attendance Overview']].map(([id, label]) => (
+        {[['daily', '📅 Daily Log'], ['summary', '📊 Summary & Stats']].map(([id, label]) => (
           <button key={id} className={`tab-btn ${tab === id ? 'active' : ''}`} onClick={() => setTab(id)}>{label}</button>
         ))}
       </div>
 
       {tab === 'daily'
         ? <DailyLog courses={courses} logs={logs} setLogs={setLogs} schedule={schedule} scheduleSettings={scheduleSettings} combinedMode={combinedMode} />
-        : <Summary courses={courses} logs={logs} schedule={schedule} scheduleSettings={scheduleSettings} combinedMode={combinedMode} combinedData={combinedData} toggleCombinedMode={toggleCombinedMode} updateCombined={updateCombined} />
+        : <Summary courses={courses} logs={logs} schedule={schedule} scheduleSettings={scheduleSettings} combinedMode={combinedMode} combinedData={combinedData} toggleCombinedMode={toggleCombinedMode} updateCombined={updateCombined} onEditTeachers={handleCourseTeacherDialogOpen} />
       }
 
       {/* Slab reference */}
@@ -1078,221 +793,20 @@ export default function Attendance() {
         </div>
       </div>
 
-      {/* Holiday Setup Modal */}
-      {holidaySetupOpen && (
-        <div
-          style={{
-            position: 'fixed',
-            inset: 0,
-            background: 'rgba(0,0,0,0.6)',
-            backdropFilter: 'blur(8px)',
-            WebkitBackdropFilter: 'blur(8px)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            zIndex: 1200,
-            padding: 12,
-          }}
-          onClick={() => closeHolidaySetup()}
-        >
-          <>
-            <div className="attendance-hero-shell" onClick={e => e.stopPropagation()}>
-              <div style={{ flex: 1 }}>
-                <div className="attendance-hero-kicker">Attendance</div>
-                <div style={{ fontWeight: 800, fontSize: 18, marginBottom: 6 }}>Holiday Calendar</div>
-                <div style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.5 }}>
-                  Friday and Saturday are always holidays. Select dates below to add or remove them centrally.
-                </div>
-              </div>
-              <div className="attendance-hero-note">Holiday setup</div>
-              <div style={{ display: 'flex', gap: 8, marginTop: 8, marginBottom: 8 }}>
-                <button onClick={() => setHolidayMode('calendar')} className={`btn btn-ghost ${holidayMode === 'calendar' ? 'active' : ''}`} style={{ padding: '8px 12px' }}>
-                  📅 Calendar
-                </button>
-                <button onClick={() => setHolidayMode('single')} className={`btn btn-ghost ${holidayMode === 'single' ? 'active' : ''}`} style={{ padding: '8px 12px' }}>
-                  📆 Single Date
-                </button>
-              </div>
-            </div>
-
-            <div style={{ display: 'grid', gap: 10 }}>
-              {/* Calendar Mode */}
-              {holidayMode === 'calendar' && (
-                <div>
-                  {/* Month Navigation */}
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-                    <button
-                      onClick={prevMonth}
-                      className="btn btn-ghost"
-                      style={{ padding: '8px 12px' }}
-                    >
-                      ← Previous
-                    </button>
-                    <div style={{ fontWeight: 700, fontSize: 14, minWidth: 180, textAlign: 'center' }}>
-                      {monthName(calendarMonth)}
-                    </div>
-                    <button
-                      onClick={nextMonth}
-                      className="btn btn-ghost"
-                      style={{ padding: '8px 12px' }}
-                    >
-                      Next →
-                    </button>
-                  </div>
-
-                  {/* Calendar Grid */}
-                  <div style={{ marginBottom: 16 }}>
-                    <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-                      <thead>
-                        <tr>
-                          {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
-                            <th
-                              key={day}
-                              style={{
-                                padding: '8px 4px',
-                                textAlign: 'center',
-                                fontWeight: 700,
-                                fontSize: 12,
-                                color: 'var(--muted)',
-                                borderBottom: '1px solid var(--border)',
-                              }}
-                            >
-                              {day}
-                            </th>
-                          ))}
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {renderCalendar(calendarMonth).map((week, weekIdx) => (
-                          <tr key={weekIdx}>
-                            {week.map((dayData, dayIdx) => {
-                              const isSelected = dayData && calendarSelectedDates.has(dayData.dateStr);
-                              const isInHolidays = dayData && holidayDates.includes(dayData.dateStr);
-                              const isFridayOrSaturday = [5, 6].includes(dayData?.dateStr ? new Date(`${dayData.dateStr}T00:00:00`).getDay() : -1);
-
-                              return (
-                                <td
-                                  key={dayIdx}
-                                  style={{
-                                    padding: '6px 4px',
-                                    textAlign: 'center',
-                                    height: 50,
-                                    borderBottom: '1px solid var(--border)',
-                                    borderRight: dayIdx < 6 ? '1px solid var(--border)' : 'none',
-                                  }}
-                                >
-                                  {dayData ? (
-                                    <button
-                                      onClick={() => toggleCalendarDate(dayData.dateStr)}
-                                      style={{
-                                        width: '100%',
-                                        height: '100%',
-                                        border: isSelected ? '2px solid var(--accent)' : isInHolidays ? '2px solid rgba(34,197,94,0.5)' : '1px solid transparent',
-                                        background: isSelected
-                                          ? 'rgba(59,130,246,0.15)'
-                                          : isInHolidays
-                                          ? 'rgba(34,197,94,0.1)'
-                                          : isFridayOrSaturday
-                                          ? 'rgba(239,68,68,0.08)'
-                                          : 'transparent',
-                                        borderRadius: 6,
-                                        cursor: 'pointer',
-                                        fontWeight: isSelected || isInHolidays ? 700 : 400,
-                                        fontSize: 13,
-                                        color: isFridayOrSaturday ? 'rgba(239,68,68,0.8)' : 'var(--text)',
-                                        transition: 'all 0.15s ease',
-                                      }}
-                                      title={isFridayOrSaturday ? 'Always holiday' : isInHolidays ? 'Already added' : 'Click to select'}
-                                    >
-                                      {dayData.day}
-                                    </button>
-                                  ) : null}
-                                </td>
-                              );
-                            })}
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-
-                  {/* Selected Count and Add Button */}
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: 12, borderRadius: 8, border: '1px solid var(--border)', background: 'rgba(59,130,246,0.05)', marginBottom: 12 }}>
-                    <div style={{ fontSize: 13 }}>
-                      <span style={{ fontWeight: 700 }}>{calendarSelectedDates.size}</span>
-                      <span style={{ color: 'var(--muted)' }}> date{calendarSelectedDates.size !== 1 ? 's' : ''} selected</span>
-                    </div>
-                    <button
-                      className="btn btn-primary"
-                      onClick={addCalendarSelectedDates}
-                      disabled={calendarSelectedDates.size === 0}
-                    >
-                      <CalendarDays size={13} /> Add to Holidays
-                    </button>
-                  </div>
-
-                  {/* Legend */}
-                  <div style={{ fontSize: 11, color: 'var(--muted)', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8 }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                      <div style={{ width: 20, height: 20, borderRadius: 4, background: 'rgba(59,130,246,0.15)', border: '2px solid var(--accent)' }} />
-                      <span>Selected</span>
-                    </div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                      <div style={{ width: 20, height: 20, borderRadius: 4, background: 'rgba(34,197,94,0.1)', border: '2px solid rgba(34,197,94,0.5)' }} />
-                      <span>Already added</span>
-                    </div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                      <div style={{ width: 20, height: 20, borderRadius: 4, background: 'rgba(239,68,68,0.08)', color: 'rgba(239,68,68,0.8)' }}>F</div>
-                      <span>Fri/Sat</span>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {/* Single Date Mode */}
-              {holidayMode === 'single' && (
-                <div>
-                  <div style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 8 }}>Add one holiday date at a time:</div>
-                  <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-                    <input
-                      type="date"
-                      value={holidayDate}
-                      onChange={e => setHolidayDate(e.target.value)}
-                      style={{ minWidth: 170, padding: '8px 10px', border: '1px solid var(--border)', borderRadius: 6, background: 'var(--bg)', color: 'var(--text)', fontSize: 13 }}
-                    />
-                    <button className="btn btn-primary" onClick={addHolidayDate} disabled={!holidayDate}>
-                      <CalendarDays size={13} /> Add Holiday
-                    </button>
-                  </div>
-                </div>
-              )}
-
-              {/* Holiday List */}
-              <div style={{ paddingTop: 8, borderTop: '1px solid var(--border)' }}>
-                <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 8 }}>
-                  Saved Holidays ({holidayDates.length})
-                </div>
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
-                  {holidayDates.length === 0 ? (
-                    <div style={{ fontSize: 12, color: 'var(--muted)' }}>No extra holidays added yet.</div>
-                  ) : (
-                    <>
-                      {holidayDates.map(date => (
-                        <span key={date} className="tag tag-gray" style={{ display: 'inline-flex', gap: 6, alignItems: 'center' }}>
-                          {date}
-                          <button onClick={() => removeHolidayDate(date)} style={{ border: 'none', background: 'transparent', cursor: 'pointer', color: 'inherit', padding: 0 }}>
-                            <X size={12} />
-                          </button>
-                        </span>
-                      ))}
-                    </>
-                  )}
-                </div>
-              </div>
-            </div>
-          </>
-          </div>
-      )}
+      {/* Course Teacher Dialog */}
+      <CourseTeacherDialog
+        isOpen={courseTeacherDialogState.open}
+        onClose={handleCourseTeacherDialogClose}
+        course={courses.find(c => c.id === courseTeacherDialogState.courseId)}
+        currentTeachers={
+          courses.find(c => c.id === courseTeacherDialogState.courseId)
+            ? getTeachersForCourse(scheduleSettings, schedule, courseTeacherDialogState.courseId)
+            : []
+        }
+        onSave={handleCourseTeacherDialogSave}
+        allTeachers={[...new Set((schedule || []).flatMap(s => Array.isArray(s.teacherNames) && s.teacherNames.length > 0 ? s.teacherNames : [s.teacherName]).filter(Boolean))]}
+        requireTwoTeachers
+      />
     </div>
   );
 }

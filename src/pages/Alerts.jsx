@@ -131,6 +131,27 @@ export function computeAlerts(profile) {
     }
   }
 
+  // Check for past/completed terms with no entry at all
+  const allTermKeys = [...new Set(courses.map(c => `Y${c.year}T${c.term}`))].sort();
+  const termsWithNoEntry = {};
+  allTermKeys.forEach(termKey => {
+    if (termKey === currentTermKey) return; // Skip current term (handled above)
+    const termCourses = courses.filter(c => `Y${c.year}T${c.term}` === termKey && (c.status === 'active' || c.status === 'backlog'));
+    if (termCourses.length === 0) return;
+    const allNoEntry = termCourses.every(c => {
+      const courseMarks = marks[c.id] || {};
+      const hasAnyEntry = Object.values(courseMarks).some(v => v !== '' && v !== null && v !== undefined);
+      return !hasAnyEntry;
+    });
+    if (allNoEntry) {
+      termsWithNoEntry[termKey] = true;
+    }
+  });
+
+  Object.keys(termsWithNoEntry).sort().forEach(termKey => {
+    warnings.push({ msg: `${termKey}: Please enter your result`, link: '/results' });
+  });
+
   // Credit milestones
   const termKeys = [...new Set(courses.map(c => `Y${c.year}T${c.term}`))].sort();
   const first4Keys = termKeys.filter(k => k <= 'Y2T2');
@@ -139,14 +160,14 @@ export function computeAlerts(profile) {
       .filter(c => first4Keys.includes(`Y${c.year}T${c.term}`))
       .reduce((s, c) => { const { grade, point } = computeCourseGrade(c); return grade !== 'F' && point >= 2.0 ? s + (c.credits || 0) : s; }, 0);
     if (first4cr < MIN_CREDITS_FIRST_4_TERMS)
-      critical.push({ msg: `Only ${first4cr}/${MIN_CREDITS_FIRST_4_TERMS} credits in first 4 terms — Struck-off risk! (Art. 12.1.iv)`, link: '/credits' });
+      critical.push({ msg: `Only ${first4cr}/${MIN_CREDITS_FIRST_4_TERMS} credits in first 4 terms — Struck-off risk! (Art. 12.1.iv)`, link: '/results' });
   }
 
   // Graduation milestone
   if (earnedCredits >= (profile.totalCreditsRequired || 160))
-    positives.push({ msg: `All credits completed — eligible to apply for graduation! (Art. 28) 🎉`, link: '/credits' });
+    positives.push({ msg: `All credits completed — eligible to apply for graduation! (Art. 28) 🎉`, link: '/results' });
   else if (earnedCredits >= 120)
-    positives.push({ msg: `${earnedCredits} credits done — on track for graduation`, link: '/credits' });
+    positives.push({ msg: `${earnedCredits} credits done — on track for graduation`, link: '/results' });
 
   // Assignment reminders
   const assignments = store.get('assignments') || [];

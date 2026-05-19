@@ -66,7 +66,7 @@ export default function Dashboard() {
       termMap[k] = true;
     });
     const past4 = ['Y1T1','Y1T2','Y2T1','Y2T2'].filter(k => termMap[k]).length;
-    if (past4 >= 4 && earnedCredits < 36) alerts.push({ type: 'critical', msg: `Only ${earnedCredits}/36 credits in first 4 terms — Struck-off risk!`, link: '/credits' });
+    if (past4 >= 4 && earnedCredits < 36) alerts.push({ type: 'critical', msg: `Only ${earnedCredits}/36 credits in first 4 terms — Struck-off risk!`, link: '/results' });
 
     return { cgpa, earnedCredits, termGPAs, alerts };
   }, [courses]);
@@ -209,7 +209,6 @@ export default function Dashboard() {
           color="#10B981"
           bgColor="rgba(16, 185, 129, 0.08)"
           icon={Award} 
-          to="/credits" 
         />
         <StatCard 
           label="Active Courses" 

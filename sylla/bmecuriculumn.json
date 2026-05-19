@@ -1,0 +1,965 @@
+{
+  "department": "Biomedical Engineering",
+  "sourceType": "raw_text",
+  "terms": {
+    "Y1T1": {
+      "termKey": "Y1T1",
+      "title": "First Year First Term",
+      "courses": {
+        "BME 1101": {
+          "title": "Basic Biomedical Engineering",
+          "credit": 3.0,
+          "contactHour": "3 Hrs/week",
+          "topics": [
+            "Introduction: Definition, basic principles and problems in biomedical engineering, biomedical engineers, main fields of biomedical engineering, familiarization with the enabling technologies for biomedical engineering.",
+            "Electrophysiology: Concepts of cell, cell membrane, ion channel, resting and action potentials.",
+            "Biomaterials: Definition, properties, examples, biocompatibility, practical applications of biomaterials.",
+            "Bio-signals and bio-signal processing: Definition, classification, and origin of bio-signals, Overview of ECG, EEG and EMG signals, introduction to bio-signal processing, steps of bio-signal processing, applications of bio-signals and bio-processing.",
+            "Bioinstrumentation: Concepts of biosensors and transducers, bio-electrodes, medical instrumentation system, basic medical instruments and their applications.",
+            "Biomechanics: Definition, subfields of biomechanics, applications of biomechanics.",
+            "Medical imaging: Definition, Imaging modalities and their applications.",
+            "Overview of various topics: Molecular engineering, tissue engineering, rehabilitation engineering, biotechnology, bio-nanotechnology, etc.",
+            "Applications: Applications of engineering principles to selected medical and biological problems, Contemporary issues and roles of biomedical engineering."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "EEE 1115": {
+          "title": "Electrical Circuits",
+          "credit": 3.0,
+          "contactHour": "3 Hrs/week",
+          "topics": [
+            "Fundamental concepts: Voltage, current, power, energy, independent and dependent sources, sources of E.M.F., primary and secondary cells, resistance and impedance.",
+            "Energy storage elements: Inductors, capacitors, series and parallel combination of inductors and capacitors.",
+            "Basic circuit laws: Ohm’s law, Kirchhoff’s current and voltage laws, series and parallel circuits, voltage and current division, Wye-Delta transformation.",
+            "Circuit analysis: Nodal and mesh analysis, source transformation, Thevenin’s, Norton’s and Superposition theorems with applications, Millman’s theorem, Compensation theorem, Maximum power transfer theorem and Reciprocity theorem.",
+            "Magnetic circuits: Flux, permeability and reluctance, magnetic potential, flux density, magnetization curve; Laws of magnetic circuits: Ohm’s law and Ampere’s circuital law, different combination of magnetic circuits, magnetic resonance.",
+            "Alternating current circuits: Introduction to alternating current circuits, use of phasor and phasor algebra, instantaneous, average and R.M.S values, complex impedance; Power relations in A/C circuits: real, reactive and apparent power, power factor, power factor improvement.",
+            "Single-phase AC circuits: Series and parallel RL, RC and RLC circuits, series and parallel resonance.",
+            "Introduction to filter: Definition, types and its applications.",
+            "Measuring instruments: Introduction to ammeter, voltmeter, ohmmeter, multimeter, galvanometer and wattmeter."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "EEE 1116": {
+          "title": "Electrical Circuits Laboratory",
+          "credit": 1.5,
+          "contactHour": "3 Hrs/week",
+          "topics": [],
+          "sessionalNote": "Experiments based on EEE 1115 Electrical Circuits",
+          "references": []
+        },
+        "ME 1116": {
+          "title": "Engineering Drawing and Design",
+          "credit": 1.5,
+          "contactHour": "3 Hrs/week",
+          "topics": [
+            "Fundamental concepts: Principles and applications of orthogonal projection; Visibility, Angle problem; Oblique projection; Isometric projection; Auxiliary projection, Orthographic and auxiliary projection from pictorial views; Pictorial projection from orthogonal views; Development of objects.",
+            "Descriptive geometry: Projection, Methods of transferring projection, Practical application of descriptive geometry.",
+            "Drawing: Drawing of different machine elements with sectional views.",
+            "Design: Idea visualization; Flow-charting; Design optimization; Scientific instrument design; Manufacturing technology; Product design; Solid design; Design analysis."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "Ph 1115": {
+          "title": "Physics",
+          "credit": 3.0,
+          "contactHour": "3 Hrs/week",
+          "topics": [
+            "Wave and oscillations: Wave and composition of simple harmonic motion, simple harmonic motion, average value of kinetic and potential energies of a harmonic oscillation, superposition of simple harmonic motions, uses of Lissajous figure, damped oscillatory system, damped harmonic oscillation, the RLC circuit, forced vibration, quality factor of forced oscillator, sharpness of resonance, phase of driven oscillator, power absorption, types of waves, progressive and stationary wave, energy distribution due to progressive and stationary wave.",
+            "Sound wave and acoustics: Audiable, ultrasonic, infrasonic and supersonic waves, Doppler’s effects and its application, applications of ultrasonic sound, intensity of sound, Bel, sound pressure level, phonon, acoustic intensity, architectural acoustic, diffraction of sound, musical sound, and noises, speech, characteristic’s of musical sound, interference of sound wave, phase velocity and group velocity.",
+            "Electroacoustics (acoustical engineering): Electroacoustic phenomena, Electroacoustic music, Electroacoustic modulator.",
+            "Interference: Nature of light, interference of light, coherent source, young double slit experiment, energy distribution, condition for interference, production of interference fingers, Fresnel Bi-prism, Newton’s ring.",
+            "Optical instrument: Photographic camera, simple microscope, compound microscope, telescope, astronomical telescope, spectrometer.",
+            "Radiation and nuclear physics: Black body radiation, Planck’s quantum hypothesis, Photo electric effect, Compton effect, quantum state of energy, Dual character of light, X-ray diffraction, formulation of Bragg and Von Laue, application of x-ray, nuclear radiation, radioactivity, radioactive disintegration, artificial radioactivity, natural radioactivity, application of radioactivity, nuclear reactors."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "Ph 1116": {
+          "title": "Physics Laboratory",
+          "credit": 0.75,
+          "contactHour": "3/2 Hrs/week",
+          "topics": [],
+          "sessionalNote": "Experiments based on Ph 1115 Physics",
+          "references": []
+        },
+        "Ch 1115": {
+          "title": "Chemistry",
+          "credit": 3.0,
+          "contactHour": "3 Hrs/week",
+          "topics": [
+            "Crystal: Crystal and X-ray, crystal growth, crystal lattices and lattice symmetry, seven crystal systems, unit cell, defects in crystal.",
+            "Photochemistry: Definition, Beer-Lambert law, Luminescence, Fluorescence, Phosphorescence, Laws of photochemistry, Quantum yield, Photosensitized reaction.",
+            "Nuclear chemistry: Basic concepts of nuclear chemistry, Radiochemistry, Nuclear force, Nuclear reactions, Nuclear reactor, Application of nuclear chemistry.",
+            "Electro-chemistry: Electrolytes, Conductance, Origin of EMF, Nernst theory, Type of electrodes and electrode potentials, Transport number, Free energy and EMF, Electrical double layer, Factors affecting electrode reaction, Battery, Fuel cell, pH and its determination.",
+            "Chemistry of polymer: Polymer and polymerization, Co-polymerization, Living polymer, Structure and properties of polymer, conducting polymer.",
+            "Polarographic analysis: Current-voltage relationship, Mass and transport processes, Direct current (DC) polarography, Principles, advantages and applications of DC polarography, cyclic voltametry."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "Ch 1116": {
+          "title": "Chemistry Laboratory",
+          "credit": 0.75,
+          "contactHour": "3/2 Hrs/week",
+          "topics": [],
+          "sessionalNote": "Experiments based on Ch 1115 Chemistry",
+          "references": []
+        },
+        "Math 1115": {
+          "title": "Differential and Integral Calculus",
+          "credit": 3.0,
+          "contactHour": "3 Hrs/week",
+          "topics": [
+            "Differential calculus: Limit, continuity and differentiability; Differentiation: application of differentiation; Successive differentiation: Successive differentiation of different types of functions; Leibnitz’s theorem; Expansion of functions: Rolle’s theorem, Mean value theorem, Taylor’s theorem in finite and infinite forms, Maclaurin’s theorem in finite and infinite forms, Expansion of functions by differentiation; Indeterminate forms, L’ hospitals Rule; Partial differentiation: Differentiation of multi-variable functions, Euler’s theorem; Maximum and minimum: Maxima and minima of functions of one and two independent variables, Physical applications; Tangent and normal: Tangents and normals, Subtangent and subnormal in cartesian and polar co-ordinates; Asymptotes; Curvatures: Curvature, Radius of curvature, Circle and centre of curvature, Chord of curvature in cartesian and polar co-ordinates.",
+            "Integral calculus: Definition of integration; Integration by the method of substitution; Integration by parts; Standard integrals; Integration by the method of successive reduction; Definite integrals, its properties and uses in summation of series; Wallis’s formula; Improper integrals: Improper integrals, Differentiation under the sign of integration, Integration under the sign of integration; Beta and gamma functions; Double integration and triple integration for finding area and volume, Jacobian of the transformation."
+          ],
+          "sessionalNote": null,
+          "references": []
+        }
+      },
+      "optionalCourses": [],
+      "termNotes": []
+    },
+    "Y1T2": {
+      "termKey": "Y1T2",
+      "title": "First Year Second Term",
+      "courses": {
+        "BME 1201": {
+          "title": "Biochemistry",
+          "credit": 3.0,
+          "contactHour": "3 Hrs/week",
+          "topics": [
+            "Introduction: The molecular logic of life, Biomacromolecules- compositions and principles of organization, Energy and principles of bioenergetics.",
+            "Carbohydrate: Definition, Classification, Structure, properties and reactions of carbohydrates, Biological importance of carbohydrates, Uses of carbohydrates.",
+            "Protein: Classification, Amino acids, Structure, properties and chemical reactions, Electrophoresis and architecture of protein molecules, Functions of protein.",
+            "Enzymes: Chemical nature, General properties, Spectro-photometric measurement of enzymes, Isolation techniques, Enzyme biotechnology.",
+            "Lipids: Classification, Metabolism of lipids, Clolesterol, Bile acids, Transport of lipid metabolism, Chemical nature of lipid types: fattyacids, TAG, phospholipids, sphingolipids, glycolipids.",
+            "Nucleic acids: Definition, Chemical composition and function, Nucleosides and nucleotides, DNA and RNA, Re-combinant DNA and its applications."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "BME 1202": {
+          "title": "Biochemistry Laboratory",
+          "credit": 0.75,
+          "contactHour": "3/2 Hrs/week",
+          "topics": [],
+          "sessionalNote": "Experiments based on BME 1215 Biochemistry",
+          "references": []
+        },
+        "EEE 1215": {
+          "title": "Analog Electronics",
+          "credit": 3.0,
+          "contactHour": "3 Hrs/week",
+          "topics": [
+            "Semiconductor devices: Review of semiconductor, p-n junction diode characteristics, and different types of diode with their applications.",
+            "Power supply: Rectifier- half and full wave rectifier, regulated power supply, controlled and uncontrolled rectification.",
+            "Transistors: Transistor and its current components, transistor as an amplifier, BJT, different transistor configurations and their equivalent circuits, study of load lines, transistor switching times, detailed study of transistor biasing and thermal stabilization.",
+            "FET: Introduction, construction and characteristics, transfer characteristics, MOSFET, FET biasing, FET amplifier, NMOS, PMOS and CMOS.",
+            "Operational amplifier: Definition, applications, characteristics of Op-Amp, frequency response and noise, instrumentation amplifiers, active filters.",
+            "Small signal amplifiers: Analysis of low, medium and high frequencies.",
+            "Breakdown devices: Characteristics and applications of SCR, TRIAC, DIAC and UJT.",
+            "Power amplifiers: Definition, classification and applications of power amplifiers, push-pull power amplifier, and transistor amplifier with complementary symmetry, Tuned potential amplifier- single, double and cascaded.",
+            "Introduction to negative feedback amplifiers and oscillators: Basic concept of negative feedback, Negative feedback amplifier, Basic concept of oscillator, sinusoidal oscillator."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "EEE 1216": {
+          "title": "Analog Electronics Laboratory",
+          "credit": 1.5,
+          "contactHour": "3 Hrs/week",
+          "topics": [],
+          "sessionalNote": "Experiments based on EEE 1215 Analog Electronics",
+          "references": []
+        },
+        "CSE 1215": {
+          "title": "Computer Programming",
+          "credit": 3.0,
+          "contactHour": "3 Hrs/week",
+          "topics": [
+            "Programming language: Definition, Types of programming language, Program editor, Concepts of high level and low level language.",
+            "C fundamentals: The C character set, Identifiers and keywords, Data types, Constants, Variables, Arrays, Declaration, Expressions, Statements, Symbolic constants, Operators & Expressions, Arithmetic operators, Unary operators, Relational & logical operators, Assignment operator, Conditional operators, Library functions, Data input & output functions.",
+            "Control statements: While statement, Do while statement, For-Nested loops, if else, Switch, Break, Continue, comma operator, go to statement, programs.",
+            "Functions: Defining a function, Accessing a function, Passing arguments to functions, Specifying arguments data types, Function prototypes, Storage classes, auto, Static, Extern and register variables.",
+            "Arrays: Defining an array, Processing array, passing array to a function, Multi dimensional array, Array & strings.",
+            "Pointers: Declarations, Pointers to a function, pointer and one dimensional array, operating a pointer Pointers and multi dimensional arrays, arrays of pointers, passing functions to other functions.",
+            "Structures and unions: Definitions-Processing a structure-User defined data types-Structures and pointers-passing structure to functions-self referential structures.",
+            "Files: Open, close, Process, Operations on a file.",
+            "Preprocessor directives: Preprocessor Directives, Command Line Arguments.",
+            "C++ fundamentals: Introduction."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "CSE 1216": {
+          "title": "Computer Programming Laboratory",
+          "credit": 1.5,
+          "contactHour": "3 Hrs/week",
+          "topics": [],
+          "sessionalNote": "Experiments based on CSE 1215 Computer Programming",
+          "references": []
+        },
+        "Hum 1215": {
+          "title": "Technical English",
+          "credit": 3.0,
+          "contactHour": "3 Hrs/week",
+          "topics": [
+            "Grammar: Tense, article, preposition, subject-verb agreement, clause, conditional and sentence structure.",
+            "Vocabulary building: Correct and precise diction, affixes, level of appropriateness, Colloquial and standard, informal and formal.",
+            "Structure and written expression: The noun-phrase, the verb phrase, subject verb agreement, pronouns; verb as complements; questions; affirmative agreement (too/so); negative agreement (either/neither); negation; commands; modal auxiliaries; adjectives and adverbs; comparison; nouns functioning as adjective; enough with adjective, adverbs and nouns; cause connectors; passive voice ; causative verbs; relative clauses; that-other uses; subjunctive; inclusive; use of know/know how; clause of concession; problem verbs; style in written English; problem with vocabulary and prepositions; verbal idioms.",
+            "Scientific terminology: Construction of sentences and paragraphs; phrases and idioms; proverbs; punctuation; commercial correspondence and tender notice, amplification and description; Comprehension, précis, abstract; Technical report writing; standard forms of term papers, thesis, etc.",
+            "Skill developing: Developing reading skill, writing skill, listening skill and note taking, speaking skill, technical speech."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "Hum 1216": {
+          "title": "Technical English Laboratory",
+          "credit": 0.75,
+          "contactHour": "3/2 Hrs/week",
+          "topics": [],
+          "sessionalNote": "Experiments based on Hum 1215 English",
+          "references": []
+        },
+        "Math 1215": {
+          "title": "Coordinate Geometry and Differential Equations",
+          "credit": 3.0,
+          "contactHour": "3 Hrs/week",
+          "topics": [
+            "Coordinate Geometry of Two Dimensions: Translation and rotation of axes; Identification of conics with their properties.",
+            "Coordinate Geometry of Three Dimensions: Cartesian, Cylindrical polar and Spherical polar coordinates; distance of two points; Section formula; Projection; direction cosines and direction ratios; angle between two lines; distance of a point from a line; Planes: different forms of the equation of a plane, distance of a point from a plane, equations of bisector of planes; Straight line: different forms of equations of straight line, angle between a line and plane, coplanar lines, shortest distance between two lines; Sphere: General equation of the sphere, tangent plane, angle of intersection of two spheres; Cone: equation with vertex at origin; Standard equations of central conicoids.",
+            "Ordinary Differential Equations: Order and degree of ordinary differential equations; Formation of differential equations; Solutions of first order first degree differential equations by various methods; Solutions of general linear equations of second and higher orders with constant coefficients; Solution of linear homogeneous equations.",
+            "Partial Differential Equations (PDE):  Linear PDE with constant coefficients; Solution by separation of variables.",
+            "Series Solution: Solution of differential equations in series by the method of Frobenius, Bessel’s and Legendre’s differential equations and their solutions."
+          ],
+          "sessionalNote": null,
+          "references": []
+        }
+      },
+      "optionalCourses": [],
+      "termNotes": []
+    },
+    "Y2T1": {
+      "termKey": "Y2T1",
+      "title": "Second Year First Term",
+      "courses": {
+        "BME 2101": {
+          "title": "Human Anatomy",
+          "credit": 3.0,
+          "contactHour": "3 Hrs/week",
+          "topics": [
+            "Lower limb: Bones of lower limb; Front of thigh; Medial side of thigh; Gluteal region; Popliteal fossa; Back of thigh; Front, lateral and medial side of leg; Back of leg; Sole of foot; Joints of lower limb; Venous and lymphatic drainage; Arches of foot.",
+            "Abdomen: Introduction to abdomen and osteology; Anterior abdominal wall; Male external genital organ; Abdominal cavity and peritoneum; Abdominal part of oesophagus and stomach; Small and large intestine; Large blood vessel of gut; Extrahepatic billiary apparatus; Spleen, Pancrease and liver; Kidney and ureter; Diaphragm; Posterior abdominal wall; Suprarenal gland and chromaffin system; Perineum; Urinary bladder and urethra; Boundary and contents of pelvis; Female reproductive system; Male reproductive organ; Rectum and anal canal; Wall of pelvis.",
+            "Upper limb: Bones of upper limb; Pectoral region; Axilla; Back; Cutaneous nerves, superficial veins and lymphatic drainage; Scapular region; Arm; Forearm and hand; Joints of upper limb.",
+            "Thorax: Bones and joints of thorax, wall of thorax, thoracic cavity and pleurae; Lungs; Mediastinum; Pericardium and heart; Superior vena cava, aorta and pulmonary trunk; Trachea, oesophagus and thoracic duct.",
+            "Head and neck: Osteology head and neck; Scalp, temple and face; Side of neck; Back of neck; Contents of vertebral canal; Cranial cavity; Contents of orbit; Anterior triangle of neck; Parotid region; Temporal and infratemporal region; Submadibular region; Deep structure in neck; Prevertebral region; Mouth and pharynx; Nose and paranasal sinuses; Larynx; Ear; Eye ball.",
+            "Brain: Introduction; Meaning of the brain and spinal cord; Spinal cord; Cranial nerves; Brainstem; Cerebellum; Fourth ventricle; Cerebrum; Third ventricle, lateral ventricle and limbic system; Neural pathways and reticular formation; Blood supply of brain and spinal cord.",
+            "Histology: Histology of all human organs.",
+            "Embryology: Introduction to embryology."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "BME 2151": {
+          "title": "Numerical Methods and Statistics",
+          "credit": 4.0,
+          "contactHour": "4 Hrs/week",
+          "topics": [
+            "Numerical Errors: Different types of error, Error in functional evaluation, Propagation of error in arithmetic process and Truncation errors.",
+            "Single Non-linear Equation: Method of iteration, Bisection method, False Position method, Secant method, fixed point method, Newton Raphson method and its convergence.",
+            "Interpolation: Difference tables, Newton interpolation formula and error, Divided difference and central difference formula, Lagranges Interpolation formula.",
+            "Solution of Systems of Linear Equations: Gaussian elimination, Gauss elimination with Pivoting, Gauss-Jordan method.",
+            "Numerical Differentiation and Integration: Trapezoidal rule, Simpson’s rule, Rhomberg rule with error and Weddle’s method.",
+            "Solution of Ordinary and Partial Differential Equations: Modified Euler method, Euler’s method; Runge-Kutta method, linear algebraic systems; Introduction to partial differential equation, Geometric interpretation, Elliptic, parabolic and hyperbolic partial differential equation.",
+            "Probability: Introduction, sets and probability, random variable and its probability distributions, treatment of grouped sampled data, some discrete probability distributions, normal distribution.",
+            "Statistical Analyses: Frequency distribution, Measure of central tendency: Mean median, mode, index number, variance, mean deviation, standard deviation, quartile deviation, time series analysis.",
+            "Curve fitting: Relationship between variables, Equations of approximating curves, Straight line, Method of least squares, Least square parabola, Problem involving two or more variable.",
+            "Correlation and regression: Linear correlation, Measures of correlation, least square regression lines, Standard error of estimate, Coefficient of correlation, Remarks concerning the correlation coefficient, Rank correlation formula, Regression lines and the linear correlation coefficient, Regression application to time series, Sampling theory of correlation and regression.",
+            "Hypothesis testing: Test of independence and goodness of fit, Statistical significance, t test, Chi-square test."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "BME 2152": {
+          "title": "Numerical Methods and Statistics Laboratory",
+          "credit": 1.5,
+          "contactHour": "3 Hrs/week",
+          "topics": [],
+          "sessionalNote": "Experiments based on BME 2117 Numerical Methods and Statistics",
+          "references": []
+        },
+        "ECE 2115": {
+          "title": "Digital Electronics and Logic Design",
+          "credit": 3.0,
+          "contactHour": "3 Hrs/week",
+          "topics": [
+            "Number systems and Boolean algebra: Review of binary, octal and hexadecimal number systems; Conversion methods; Number representation; Signed, unsigned, fixed point, floating point numbers; Addition and subtraction in different bases; Complement, subtraction using complements; Binary multiplication & division; Different coding system; Boolean algebra, various gates, sum of products and product of sums, standard and canonical forms and other logical operations; Simplification of Boolean function using Karnaugh map methods, tabular method, implementation of logic circuit using various gates, universal gates.",
+            "Combinational logic design: Design procedure of Adder, subtractor, code converters, parity bit checker and magnitude comparator; Analysis of different combination circuits, encoder, decoder, multiplexer, demultiplexer, ROM, PLA and their applications.",
+            "Sequential logic design: Introduction to sequential circuits, analysis and synthesis of synchronous and asynchronous sequential circuits; SR, JK, Master slave, T and D type flip-flops, their characteristics and triggering; Binary counter, classification, Synchronous and asynchronous counter design and analysis, ring counter, Johnson counters, ripple counter and counter with parallel load; Concept of state, state diagram, state table; Serial adder; Sequence detector.",
+            "Digital integrated circuits: Characteristics of digital ICs, voltage and current ratings, noise margin, propagation delay, power dissipation; Brief description of TTL, DTL, RTL, ECL, IL, MOS and CMOS logic and their characteristics, principles of operation and application; Comparison of performance of various logic families; Various memory devices and their interfacing; A/D & D/A converters and their applications."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "ECE 2116": {
+          "title": "Digital Electronics and Logic Design Laboratory",
+          "credit": 1.5,
+          "contactHour": "3 Hrs/week",
+          "topics": [],
+          "sessionalNote": "Experiments based on ECE 2115 Digital Electronics and Logic Design",
+          "references": []
+        },
+        "ME 2115": {
+          "title": "Basic Mechanics and Thermodynamics",
+          "credit": 3.0,
+          "contactHour": "3 Hrs/week",
+          "topics": [
+            "Engineering mechanics: Fundamental concepts and principles of mechanics, Free body diagram, Principles of transmissibility of forces and force couple system, Centroides and center of gravity of area and volume.",
+            "Fluid mechanics: Concepts of fluids, Nature and classification of fluids, Basic flow concepts, Fluid statics, Hydrostatic forces on surfaces, Rigid body motion, Pressure measurements, Bernoulli’s equation, Flow metering, Introduction to compressible and incompressible flow, Isentropic flows, Fluid dynamic principles and their application in natural organs and substitutes, Flow consideration in their design.",
+            "Thermodynamics: Zeroth law of thermodynamics and its significance, Energy and First law, Different thermodynamic processes, Work done during adiabatic and isothermal processes, Energy transfer as heat for a control volume, Second law of thermodynamics, Entropy and heat conduction in human body.",
+            "Introduction to heat transfer: Concepts of conduction, convection and radiation."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "ME 2116": {
+          "title": "Basic Mechanics and Thermodynamics Laboratory",
+          "credit": 1.5,
+          "contactHour": "3 Hrs/week",
+          "topics": [],
+          "sessionalNote": "Experiments based on ME 2115 Basic Mechanics and Thermodynamics",
+          "references": []
+        },
+        "Math 2115": {
+          "title": "Transforms Analysis",
+          "credit": 3.0,
+          "contactHour": "3 Hrs/week",
+          "topics": [
+            "Transform methods: Concept of transformation, Examples for transformation.",
+            "Laplace transform: Definition; Existence conditions; Properties of Laplace transforms; Transforms of standard functions, Unit step function, Dirac delta function and Periodic functions; Transforms of derivatives and integrals; Inverse Laplace transform; Convolution theorem.",
+            "Fourier analysis: Fourier series and Fourier co-efficient, Dirichlet’s condition and Fourier expansion, Convergence of Fourier series, Exponential form of Fourier series, Change of interval, Half range series, Parseval’s identity.",
+            "Fourier transform: Fourier integrals: Fourier sine, cosine and general integrals; Fourier transform: Finite and infinite Fourier sine and cosine transform, Transforms of standard functions, Properties, Convolution theorem; Discrete and Fast Fourier Transforms: Discrete Fourier Transforms; Discrete convolution, Periodic sequence and circular convolution; Decimation, In-time algorithm; Computation of inverse DFT.",
+            "Z-transform: Z-transform of standard functions, Inverse Z-transform (Partial fraction expansions), Properties of Z-transform, Solution of difference equation.",
+            "Wavelet transform: Introduction and application in biomedical engineering."
+          ],
+          "sessionalNote": null,
+          "references": []
+        }
+      },
+      "optionalCourses": [],
+      "termNotes": []
+    },
+    "Y2T2": {
+      "termKey": "Y2T2",
+      "title": "Second Year Second Term",
+      "courses": {
+        "BME 2211": {
+          "title": "Signals and Systems",
+          "credit": 3.0,
+          "contactHour": "3 Hrs/week",
+          "topics": [
+            "Introduction: Definition, representation and classification continuous time (CT) and discrete time (DT) signals; Basic CT and DT signals; Basic operations on CT and DT signals; Definition and classification of system.",
+            "Continuous time signal and system: Linear time invariant (LTI) systems; Convolution integral; Linearity, causality, time invariance, memory, stability, invertibility; CT system representation by different equations.",
+            "Discrete time signal and system: Linear shift invariant (LSI) systems; Convolution sum; Causality and stability; DT system representation by difference equations.",
+            "Fourier analysis of CT signals and systems: Continuous Time Fourier Series (CTFS) and Fourier Transforms (CTFT), Properties, Inverse CTFT, Frequency domain characterization of LTI systems.",
+            "Sampling: Representing a CT signal by samples, Shannon’s Sampling Theorem, Effect of under sampling, Aliasing, Reconstruction of CT signal from samples, Discrete time processing of CT signals.",
+            "Fourier analysis of DT signals and systems: Fourier series representation of DT periodic signals, Properties, Representation of DT periodic signals by Discrete time Fourier transform (DTFT), Properties, Inverse DTFT, Frequency response of systems characterized by difference equations.",
+            "Transform operations on CT signals and systems: Laplace transform, properties, inverse transform, solution of system equations, system transfer function, system stability and frequency response and applications, convolution integral and its application, superposition integral.",
+            "Transform operations on DT signals and systems: Z-transforms and its properties, inverse Z-transform, analysis of LSI systems using Z-transform, stability and causality, solution of difference equation."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "BME 2212": {
+          "title": "Signals and Systems Laboratory",
+          "credit": 1.5,
+          "contactHour": "3 Hrs/week",
+          "topics": [],
+          "sessionalNote": "Experiments based on BME 2215 Signals and Systems",
+          "references": []
+        },
+        "BME 2201": {
+          "title": "Human Physiology",
+          "credit": 3.0,
+          "contactHour": "3 Hrs/week",
+          "topics": [
+            "Basic concepts of human physiology: Structure of the cell and cell membrane, Function of each component of the cell, Cell reproduction, Membrane potential, Action potential, Secondary messengers.",
+            "Blood and immunity: Blood cells and their function, Blood clotting, Blood groups, Estimation of RBC, WBC and PLATELET, Immunity and immunodeficiency, Transplantation, Graft rejection and graft versus host reaction.",
+            "Cardiovascular system: Properties of heart muscle, Conductive system of heart, Cardiac cycle, Conduction of cardiac impulse, Electrocardiography, Standard leads of ECG, Regulation of heart rate, Regulation of blood pressure, Fetal circulation.",
+            "Nervous system: Structure, Properties and function of neuron, Synapses and synaptic transmission, Concept of sensory receptor and sense organ, Neurotransmitters and their classification, Neuromuscular junction and nerve impulse transmission, Reflexes with their classification and reflex arc, Velocity of conduction of nerve impulse, Autonomic nervous system.",
+            "Respiratory system: Pulmonary ventilation, Physical principles of gas exchanges, Pulmonary volume and capacities, Transport of oxygen and carbondioxide in the blood and tissue, Regulations of respiration, Pulmonary function tests.",
+            "Digestive and excretory systems: Local hormone of GIT, Digestive enzymes, Mechanism of HCL secretion, Digestion and absorption of GIT, Mechanism of urine formation and acidification of urine, Renal function test, Skin and sweat gland, Secretion of exocrine and endocrine glands, Temperature regulation.",
+            "Special senses: Optics of vision, Receptor and neural function of retina, Photochemistry of vision, Central neurophysiology of vision, EOG, Mechanism of hearing, Hearing loss, Audiograms, Hearing tests, Taste and smell sensors."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "BME 2202": {
+          "title": "Human Physiology Laboratory",
+          "credit": 1.5,
+          "contactHour": "3 Hrs/week",
+          "topics": [],
+          "sessionalNote": "Experiments based on BME 2217 Human Physiology",
+          "references": []
+        },
+        "BME 2231": {
+          "title": "Biomedical Instrumentation",
+          "credit": 3.0,
+          "contactHour": "3 Hrs/week",
+          "topics": [
+            "Introduction: Basic concepts of instrumentation, biomedical instrumentation, biomedical instrumentation system, applications of biomedical instrumentation.",
+            "Biomedical amplifiers: Bio-potential amplifiers, instrumentation amplifiers, preamplifiers, their characteristics, limitations and applications.",
+            "Sensors and transducers : Historical perspective, signal transduction; sensor and transducer types and technologies, terminology and working principles; Main technical definitions, calibration, selectivity, sensitivity, reproducibility, detection limits, response time, problems and trade-offs.",
+            "Physico-chemical transducer: Electrochemical transducers; Semiconductor transducers; Optical transducers; Thermal transducers; piezoelectric and acoustic-wave transducer; Limitations and problems to be addressed, overview of performance and applications.",
+            "Biosensors: Catalytic biosensors, mono-enzyme electrodes, bi-enzyme electrodes, enzyme sequence electrodes and enzyme competition electrodes, Affinity based biosensors, Inhibition-based biosensors, Cell-based biosensors, Blood-gas monitoring and blood glucose sensors, Biochips and biosensor arrays, Problems and limitations.",
+            "Biomedical instruments: Introduction to diagnostic instruments: ECG, EEG, EMG; Therapeutic instruments: pacemaker, defibrillator, incubator; Life support systems: heart lung machine, haemodialyzer and ventilator; Clinical laboratory instruments: spectrophotometer, automated chemical analyzers.",
+            "Biomeasurement: Measurement of bioelectric potential; Blood flow, pressure and volume; Cardiac output; Heart sound of blood;",
+            "Electrical safety: Physiological effects of electrical current, Shock hazards from electric equipments, Methods of accident prevention."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "BME 2232": {
+          "title": "Biomedical Instrumentation Laboratory",
+          "credit": 1.5,
+          "contactHour": "3 Hrs/week",
+          "topics": [],
+          "sessionalNote": "Experiments based on BME 2219 Biomedical Instrumentation",
+          "references": []
+        },
+        "Hum 2215": {
+          "title": "Economics and Sociology",
+          "credit": 3.0,
+          "contactHour": "3 Hrs/week",
+          "topics": [
+            "Economics: Definition, scope and methods, Demand, supply and their elasticity’s equilibrium analysis partial and general; Consumer behavior, marginal utility, indifference curve, consumer’s surplus; producer behavior; iso-quant, iso-cost line. Factors of production function; production possibility curve; fixed cost and variable cost; short run and long run costs, total, average and marginal cost; laws of returns; internal and external economics and diseconomies; market, E-marketing and market forms; perfect and imperfect competition; price output determinations, Introductory ideas on GNP, GDP, perceptual income, interest, rent, saving, investment, inflation; project approval, NPV, IRR & their application, cost benefit analysis, customer to business and business to customer analysis.",
+            "Sociology: Definition and importance of sociology; Social structure of Bangladesh; Society, community, association, institution, group; Stages in the evolution of human civilization; Definition and characteristics of culture, culture contents, cultural lag, culture and civilization; The growth of capitalism, features and social consequences, socialism; Family, forms and functions of family, functions of family in modern industrial society, marriage, forms of marriage, functions of marriage, urbanization and industrialization; Change-evolution-progress-development, factors in social change; Human migration, population and resources; Crime, deviance, juvenile delinquency, youth unrest; Effects of technological factors on social life."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "Math 2215": {
+          "title": "Linear Algebra, Complex Variables and Vector Analysis",
+          "credit": 4.0,
+          "contactHour": "4 Hrs/week",
+          "topics": [
+            "Linear Algebra: Matrix Operations:  Field and Matrices over a field, Product of matrices by partitioning, Symmetric, Diagonal and other special types of matrices with their properties, Elementary transformations and equivalent matrices, Rank, Inverse of a square matrix by elementary row operation; Systems of Linear Equations: Solutions of systems of homogeneous linear equations, Existence of nontrivial solutions of set of homogeneous linear equations, Consistency of system of linear equations, Solution of non-homogenous equations using matrix; Vector Spaces: General vector spaces, Column, Row and Null Spaces, Basis and Dimension; Eigen Systems: Eigen values and Eigen vectors; Estimation of the size of Eigen values; Inner-Product Vector Spaces: Inner-product spaces, Orthogonality.",
+            "Complex Variable: Complex number system; General functions of a complex variable; Limits and continuity of a function of complex variable and related theorems; Analytic functions, Complex differentiation, sufficient condition for analyticity and Cauchy-Riemann equations; Harmonic functions and conjugate harmonic functions, Construction of analytic functions when either part is given(Miline-Thomson method); Different types singularities; Line integral of a complex function; Cauchy’s integral theorem and converse of Cauchy’s theorem.",
+            "Vector Analysis: Transformation of vectors on a plane: scaling, rotation, translation; Linear dependence and independence of vectors; scalar and vector fields, Differentiation of vectors together with elementary applications; Gradient, divergence and curl of point functions and related forms; Green’s, Stoke’s and Gauss’s theorem and their applications."
+          ],
+          "sessionalNote": null,
+          "references": []
+        }
+      },
+      "optionalCourses": [],
+      "termNotes": []
+    },
+    "Y3T1": {
+      "termKey": "Y3T1",
+      "title": "Third Year First Term",
+      "courses": {
+        "BME 3101": {
+          "title": "Cell Biology",
+          "credit": 3.0,
+          "contactHour": "3Hrs/week",
+          "topics": [
+            "Introduction to cell biology; Types of cell; Parts of the cell: Membranes and Organelles; Animal cells: Structure and Organelles; Plant cell: Structure and Organelles; Membrane Structure and Cross Transport; Energy from food; Energy Conversion: Mitochondria and Chloroplasts; Intracellular Organelle Transport; Mechanisms of cell communication; Cytoskeleton; Cell junctions, Cell adhesion, and extracellular matrix; Cell division, Cell cycle control, and Cell death; Protein structure and function; Enzyme catalysis, kinetics, inhibition, and control; DNA; Chromosomes; Genomes; DNA Replication, repair, and recombination; Control of gene expression; DNA sequencing; Cancer and Stem cells."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "BME 3103": {
+          "title": "Bioelectricity",
+          "credit": 3.0,
+          "contactHour": "3Hrs/week",
+          "topics": [
+            "Introduction to electrical fields; Bioelectric potentials and currents; Channels; Resting and action potentials; Bioimpedance; Electrical conductivity; Impulse propagation; Electrical properties of tissues; Nervous system: basic organization of CNS and PNS, electrical signal in cells; Simple neural circuits: signal pathway, signal propagation and recording, heart circuit, resting potential neural membrane, Nernst equation, derivation, chemical basis of electrical signals, ion channel; model of biological conductors; core conductor model; Hodgkin-Huxley model; ionic conductance; Derivation of Hodgkin-Huxley model; Application of the Hodgkin-Huxley model in epilepsy; Parkinson’s disease; drug addiction diseases; Clinical applications of bioelectricity."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "BME 3111": {
+          "title": "Biomedical Signal Processing",
+          "credit": 3.0,
+          "contactHour": "3Hrs/week",
+          "topics": [
+            "Introduction to biomedical signals: Nature and origin of biomedical signals; objectives and steps of biomedical signal processing; key signal processing operations, real-world applications of biomedical signal and signal processing, artifacts encountered and difficulties in biomedical signal analysis; A/D and D/A conversion of signals.",
+            "Discrete transformation: Discrete Fourier series, discrete Fourier transform and inverse discrete Fourier transform, fast Fourier transform and its inverse, butterfly structure, properties of DFT/FFT, computation complexity of DFT and FFT, decimation-in-time and frequency, radix-2 FFT, Discrete transform in biomedical signal processing applications.",
+            "Z-transform in biomedical signal:  Z-transform and inverse Z-transform, Different methods of inverse Z-transform, properties of z-transform, application of z-transform in biomedical signal processing.",
+            "Convolution and correlation: Cross and auto correlation, fast correlation, Convolution: Linear, circular, fast convolution, and properties; implementation and applications of correlation and convolution in biomedical signal analysis.",
+            "Introduction to Walsh, Hadamard, KLT, and DCT transform.",
+            "Digital filter design: Introduction and types of digital filters, FIR and IIR filters, choosing between FIR and IIR filters, filter design steps, principle of adaptive filter; adaptive noise canceller, illustrative examples.",
+            "FIR Filter Design: Features, specifications, coefficient calculation methods, different window method, optimal method, frequency sampling method, comparison of the window, optimum, and frequency sampling methods, realization structures for FIR filters design, finite world length effects in FIR digital filters.",
+            "IIR Filter design: Features, specification, design steps, different coefficient calculation methods, realization structure and implementation of IIR filters, application examples in biomedical signals.",
+            "Spectrum estimation and analysis: Principle of spectrum estimation; modern parametric and autoregressive spectrum estimation methods and their comparison, Spectral analysis of ECG, EEG, EMG, and EOG signals.",
+            "Data reduction techniques: Need for data reduction; turning point algorithm; AZTEC algorithm; CORTES algorithm; FAN algorithm; Arithmetic, LZW, and Huffman coding technique and data compression techniques comparison."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "BME 3112": {
+          "title": "Biomedical Signal Processing Laboratory",
+          "credit": 1.5,
+          "contactHour": "3Hrs/week",
+          "topics": [],
+          "sessionalNote": "Experiments based on BME 3111 Biomedical Signal Processing",
+          "references": []
+        },
+        "BME 3114": {
+          "title": "Biomedical Modeling and Simulation Laboratory",
+          "credit": 1.5,
+          "contactHour": "3Hrs/week",
+          "topics": [],
+          "sessionalNote": "Overview of Biomedical Modeling and Simulation Tools. Mathematical model of a biological system (Cardio respiratory system, Circulation system, Physiologic control system, etc), biological membrane model with programming software.",
+          "references": []
+        },
+        "BME 3141": {
+          "title": "X-ray and Ultrasound Imaging",
+          "credit": 3.0,
+          "contactHour": "3Hrs/week",
+          "topics": [
+            "X-ray imaging: Fundamentals of  x-ray: electromagnetic radiation, interactions between x-rays and matter, intensity of  x-ray beam, attenuation; Generation and detection of x-rays: x-ray generation, x-ray generators, filters, beam restrictors and grids, intensifying screens, fluorescent screens, image intensifiers, x-ray detectors; X-ray image characteristics: spatial resolution, image noise, image contrast, receiver operating curve (ROC), biological effects of ionizing radiation, film processors-wet &dry.",
+            "X-ray diagnostic methods: conventional x-ray radiography; fluoroscopy; angiography; mammography and xeroradiography; image subtraction.",
+            "Computed tomography: conventional tomography; Computed tomography: projection function, algorithms for image reconstruction, CT number, image artifacts, spiral CT; recent developments: digital radiography, digital subtraction angiography (DSA), 3D reconstruction, dynamic spatial reconstructor (DSR).",
+            "Ultrasound imaging: Fundamentals of acoustic propagation: stress strain relationship, characteristic impedance, intensity, reflection and refraction, attenuation, absorption & scattering, Doppler effect; generation and detection of ultrasound-piezoelectric effect; ultrasonic transducers, Transducer beam characteristics: Huygens’s principle, beam profiles, pulsed ultrasonic field, axial and lateral resolution, focusing, arrays.",
+            "Ultrasonic diagnostic methods: Pulse echo systems: amplitude mode (A-mode), brightness mode (B-mode), motion mode (M-mode), constant depth mode (C-mode); Doppler methods; duplex imaging; tissue characterization; color Doppler flow imaging; power Doppler imaging; Image characteristics: ultrasonic texture or speckle, speckle reduction, compensation of phase aberration, biological effects of ultrasound; video printers."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "BME 3142": {
+          "title": "X-ray and Ultrasound Imaging Laboratory",
+          "credit": 1.5,
+          "contactHour": "3Hrs/week",
+          "topics": [],
+          "sessionalNote": "Experiments based on BME 3141 X-ray and Ultrasound Imaging",
+          "references": []
+        },
+        "CSE 3115": {
+          "title": "Microprocessors and Microcontrollers",
+          "credit": 3.0,
+          "contactHour": "3Hrs/week",
+          "topics": [
+            "Introduction: Microprocessors, microcomputers and microcontrollers; different types of microprocessors and its applications.",
+            "Microprocessors: 8086 internal architecture; processor status and flag registers; Machine and assembly language programming: instruction format, instruction sets, opcode, addressing modes, branching and looping, traps and interrupts, I/O operation, interrupt controller; overview of Intel 80186, 80286, 80386 and pentium processors; RISC processors; parallelism in microprocessor; bit-slice processor.",
+            "Co-processors and DMA: arithmetic co-processor; I/O processor; programmable timer; DMA data transfer; DMA controller.",
+            "Microcontrollers: Introduction to micro-controllers; overview/review of microcontroller architecture; data representation and memory usage; microcontroller programming; Microcontroller based system design: hardware design, building, debugging, testing and linking program modules; hardware implementation and I/O support; Analysis of application examples: recursion and stack usage, and traffic light controller; input / output architecture; analysis of timing and memory requirements; real time operation.",
+            "Application: brain chip design & implantation; embedded system design; etc."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "CSE 3116": {
+          "title": "Microprocessors and Microcontrollers Laboratory",
+          "credit": 1.5,
+          "contactHour": "3Hrs/week",
+          "topics": [],
+          "sessionalNote": "Experiments based on CSE 3115 Microprocessors and Microcontrollers.",
+          "references": []
+        }
+      },
+      "optionalCourses": [],
+      "termNotes": []
+    },
+    "Y3T2": {
+      "termKey": "Y3T2",
+      "title": "Third Year Second Term",
+      "courses": {
+        "BME 3200": {
+          "title": "Biomedical Systems Design Project",
+          "credit": 1.5,
+          "contactHour": "3Hrs/week",
+          "topics": [],
+          "sessionalNote": "System Design or Development in the area of Biomedical Engineering.",
+          "references": []
+        },
+        "BME 3211": {
+          "title": "Biomaterials and Prosthetics",
+          "credit": 3.0,
+          "contactHour": "3Hrs/week",
+          "topics": [
+            "Fundamentals of biomaterials science: biological systems (membrane structure & receptors, cell- biomaterials interactions); Chronological development of different biomaterials; Classification of biomaterials used in prosthetics; Disinfection and sterilization of biomaterials.",
+            "Physio-chemical properties of biomaterials: mechanical (elasticity, yield stress, ductility, toughness, strength, fatigue, hardness, wear resistance), tribological (friction, wear, lubricity), morphology and texture, physical (electrical, optical, magnetic, thermal), chemical and biological properties.",
+            "Metallic Biomaterials: stainless steel; cobalt chromium alloys; titanium based alloys; Nitinol and other metals; metallic corrosion; biological tolerance of implant metals; manufacturing of implants.",
+            "Ceramics Biomaterials: relatively bioinert  bioceramics; biodegradable ceramics; surface  reactive or bioactive ceramics; composites; analysis of ceramic surfaces; deterioration of ceramics; manufacturing technique.",
+            "Polymers: polymers in biomedical use; biodegradable synthetic polymers; silicone rubber;  plasma polymerization; microorganism in polymeric implants; bio-polymers; polymer sterilization; degradation.",
+            "Surface treatment and Characterization of biomaterials.",
+            "Application of biomaterials in prosthetics and artificial organs: Uses of biomaterials: orthopedics (examples total hip replacement; knee implants); cardiovascular application; ophthalmic; dental application; extracorporeal devices.",
+            "Introduction to artificial organs; artificial heart, lung, kidney, and liver: functional replacement and related key issues; artificial blood and artificial skin. Artificial limbs and related engineering and psychological issues; design principles of implantable devices and systems; state-of-the-art implantable prosthetic devices for hearing and other disabilities."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "BME 3213": {
+          "title": "Biomechanics",
+          "credit": 3.0,
+          "contactHour": "3Hrs/week",
+          "topics": [
+            "Introduction to mechanics:review of the principles of mechanics; vector mechanics- resultant forces in space; equilibrium of coplanar forces;Newton’s laws of motion; work and energy, gyroscopic motion.",
+            "Hard tissue mechanics: bone structure & composition; mechanical properties of bone; cortical and cancellous bones; visco-elastic properties; Maxwell & Voight models: anisotropy, electrical properties of bone, fracture mechanisms.",
+            "Soft tissue mechanics: pseudo elasticity; nonlinear stress-strain relationship; viscosity; structure; function and mechanical properties of skin; ligaments and tendons.",
+            "Biomechanics of joints: skeletal joints; skeletal muscles; basic considerations; basic assumption and limitations; mechanics of the elbow; mechanics of shoulder; mechanics of spinal column;mechanics of hip; mechanics of knee; mechanics of ankle.",
+            "Locomotion: human locomotion; gait analysis and goniometry; ergonomics; Foot pressure measurements: pedobarograph; force platform; mechanics of foot; Total hip prosthesis: requirements, different types of components, stress analysis & instrumentation, knee prosthesis."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "BME 3231": {
+          "title": "Biomedical Devices and Control",
+          "credit": 3.0,
+          "contactHour": "3Hrs/week",
+          "topics": [
+            "Introduction to biomedical devices.",
+            "Respiratory monitors: disease states requiring artificial respiratory system; respiratory impedance plethysmography; pneumotachometers; pulmonary function analyzers; respiratory gas analyzers; alarm circuits.",
+            "Patient monitoring systems: special care units; ICU/CCU equipments; Bed side patient monitoring systems: multiparameters, measurement of heart rate & pulse rate, recording system; Oximeters: principle, intravascular oximeter; cardiotacograph; methods of monitoring fetal heart rate; monitoring labour activity; baby incubator; pain analyzer.",
+            "Electro surgery machine: principle of surgical diathermy; surgical diathermy machine; safety aspects in electro-surgical units; surgical diathermy analyzers; switches, fuses, circuit breakers, relays for electrical power control; RF power generators for electro surgery; measuring RF power output from the ESM; testing electro-surgery unit (dummy loads).",
+            "Therapeutic equipments: Lithotripsy: stone disease problem; extra-corporeal shock-wave therapy; automated drug delivery devices; Radiotherapy equipment: use of HV x-ray machines; development of betatron; cobalt-60 machine; medical linear accelerator machine.",
+            "Physiotherapy & Electrotherapy equipments: high frequency heat therapy; short wave diathermy; microwave diathermy; ultrasonic therapy unit; electro diagnostic / therapeutic apparatus; pain relief through electrical stimulation; bladder stimulators; neuro-stimulators.",
+            "Electromagnetic interference to medical electronic equipment: types& sources of EMI; EMI effects; dealing with signal overload problems; EMI to biomedical sensors; internode problems; Some solutions; dealing with TVI/ BCI; medical equipment & EMI."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "BME 3232": {
+          "title": "Biomedical Devices and Control Laboratory",
+          "credit": 1.5,
+          "contactHour": "3Hrs/week",
+          "topics": [],
+          "sessionalNote": "Experiments based on BME 3231 Biomedical Devices and Control",
+          "references": []
+        },
+        "BME 3241": {
+          "title": "Magnetic and Nuclear Imaging",
+          "credit": 3.0,
+          "contactHour": "3Hrs/week",
+          "topics": [
+            "Basics of magnetic resonance imaging:Fundamentals of nuclear magnetic resonance: angular momentum, magnetic dipole moment, magnetization, Larmor frequency, rotating frame of reference and RF magnetic field, free induction decay (FID); Fourier spectrum of the NMR signal; spin density; relaxation times; pulse sequences.",
+            "MRI system & imaging methods: introduction; magnet; room temperature and magnetic field gradients; NMR coil/probe; transmitter; receiver; data acquisition; Imaging methods: introduction, slice selection, frequency encoding, phase encoding; spin-echo imaging; gradient echo imaging; blood flow imaging; Characteristics of MRI images: spatial resolution, image contrast; Biological effects of magnetic fields: static magnetic fields, radio-frequency fields, gradient magnetic field; imaging safety; functional MRI.",
+            "Radionuclide imaging:introduction; Fundamentals of radioactivity: nuclear particles, nuclear activity and half-life, units of measuring nuclear activity, specific activity, interaction of nuclear particles and matter, attenuation of gamma radiation; radionuclides; Generation & detection of nuclear emission: radionuclide generators, nuclear radiation detectors, collimators; Diagnostic methods using radiation detector probes: thyroid function test, renal function test, blood volume measurement; Radionuclide imaging systems: rectilinear scanner, scintillation camera, SPECT, PET."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "BME 3242": {
+          "title": "Magnetic and Nuclear Imaging Laboratory",
+          "credit": 1.5,
+          "contactHour": "3Hrs/week",
+          "topics": [],
+          "sessionalNote": "Experiments based on BME 3241 Magnetic and Nuclear Imaging",
+          "references": []
+        },
+        "ECE 3215": {
+          "title": "Body Sensor Networks",
+          "credit": 3.0,
+          "contactHour": "3Hrs/week",
+          "topics": [
+            "Introduction:Introduction to wearable medical devices and bio-sensing technologies; wireless sensor networks; design of on-body and in-body biosensors.",
+            "Wireless communication: Introduction; inductive coupling; RF communication in the body; implanted transceiver; antenna design; antenna testing; matching network; propagation; external transceiver; conclusion.",
+            "Network topologies, communication protocols, and standard:Different network topologies; body sensor network (BSN) application scenarios: stand-alone BSN, pervasive sensor networks, global healthcare connectivity; standardization of wireless personal and body area network: wireless regulatory environment, wireless communication standard, IEEE 802.15.1 medium-rate wireless personal area networks; healthcare system integration (ISO/IEEE 11073 personal health device communication).",
+            "BSN for healthcare and wellbeing: monitoring patients with chronic disease, hospital patients, elderly patients; life style and wellbeing.",
+            "Technical challenges facing BSN: improved sensor design; MEMS and bioMEMS; biocompatibility, integratibility and resorbability; energy supply and demand; wireless data-paths, antenna design, system security and reliability; multi-sensor fusion and context-aware sensing; remote sensing; integrated therapeutic systems."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "ECE 3216": {
+          "title": "Body Sensor Networks Laboratory",
+          "credit": 1.5,
+          "contactHour": "3Hrs/week",
+          "topics": [],
+          "sessionalNote": "Experiments based on ECE 3215 Body Sensor Networks",
+          "references": []
+        }
+      },
+      "optionalCourses": [],
+      "termNotes": []
+    },
+    "Y4T1": {
+      "termKey": "Y4T1",
+      "title": "Fourth Year First Term",
+      "courses": {
+        "BME 4000": {
+          "title": "Final Year Project/Thesis",
+          "credit": 1.5,
+          "contactHour": "3Hrs/week",
+          "topics": [],
+          "sessionalNote": "Study of Problem or Design and Analysis of Circuits and Systems in the Fields of Biomedical Engineering (Continued to the 4th Year 2nd Semester)",
+          "references": []
+        },
+        "BME 4170": {
+          "title": "Seminar",
+          "credit": 0.5,
+          "contactHour": "1Hrs/week",
+          "topics": [
+            "Related Topics."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "BME 4111": {
+          "title": "Biomedical Image Processing",
+          "credit": 3.0,
+          "contactHour": "3Hrs/week",
+          "topics": [
+            "Basic bioimage processing systems: Bioimage Sources, Characteristics, Image Representation Hardware and Software Requirements.",
+            "Two-dimensional systems: Properties of Two-Dimensional Sequences and Systems, 2D Fourier Transform, 2D Z-Transform, 2D Sampling Theory, Image Quantization, Image Perception, Quality Measures.",
+            "Image transforms: 2D DFT, 2D DCT, Sine Transform, Hadamard, Slant and KL Transform.",
+            "Bio-image compression algorithms: Pixel Coding-PCM, Run Length Coding, Predictive Technique DPCM, Transform Coding-DCT, Vector Quantization, VQ in Image Coding, Wavelet Based Compression, Inter-frame Coding, Standards for Image Compression-JPEG, MPEG.",
+            "Image segmentation: Feature Extraction, Edge Detection, Boundary Extraction, Region Representation, Moment Representation, Shape Features, Scene Matching Image Segmentation, Classification Techniques of Supervised and Non-supervised Learning.",
+            "Color image processing: Color Fundamentals, Color Models, Pseudo Color Image Processing, Basics of Full-Color Image Processing, Color Transformations, Smoothing & Sharpening, Color Segmentation, Noise in Color Images, Color Image Compression.",
+            "Image reconstruction: Introduction, Fourier slice theorem, filtered back projection algorithm for parallel projection data, algebraic reconstruction techniques, application to bioimages."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "BME 4112": {
+          "title": "Biomedical Image Processing Laboratory",
+          "credit": 0.75,
+          "contactHour": "3/2Hrs/week",
+          "topics": [],
+          "sessionalNote": "Experiments based on BME 4111 Biomedical Image Processing",
+          "references": []
+        },
+        "BME 4141": {
+          "title": "Brain and Neuroengineering",
+          "credit": 3.0,
+          "contactHour": "3Hrs/week",
+          "topics": [
+            "Introduction to biology of brain; Introduction to neuroengineering: Beginning, development and current status; Neural system and neuron activity; Neural information processing and learning; Mechanisms underlying neurological disorders (stroke, Parkinson's disease, Alzheimer's disease or epilepsy.); Neural interfacing for treatment of neurological diseases; Neural computation and artificial neural network; Neuromuscular and neuromechanical systems; Neural-machine interface and neuroprosthesis; Engineering of special senses: artificial retinas, cochlea, and noses; replacement and restoring of neural function; neural-related cellular and molecular engineering techniques; neural regeneration; neural modulation technologies (optogenetic techniques, functional electrical stimulation and repeated trancranical magnetic stimulation); Neuroimaging: Principles, characteristics and applications of functional magnetic resonance imaging (fMRI) and functional near-infrared spectroscopy (fNIR), electric and magnetic field of human brain (EEG and MEG)."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "BME 4142": {
+          "title": "Brain and Neuroengineering Laboratory",
+          "credit": 0.75,
+          "contactHour": "3/2Hrs/week",
+          "topics": [],
+          "sessionalNote": "Experiments based on BME 4141 Brain and Neuroengineering",
+          "references": []
+        },
+        "BME 4131": {
+          "title": "Bio-Optics",
+          "credit": 3.0,
+          "contactHour": "3Hrs/week",
+          "topics": [
+            "Fundamentals of light and matter; Light-matter interactions; Various types of spectroscopy; Principles of laser and non-linear optics; Photobiology: Interaction of light with cell and tissue, Photo process in bio-polymer, optical biopsy; Bioimaging: Principles and Techniques; Optical biosensor: Fiber-optic biosensor, Planar waveguide biosensor, Interferometric biosensor, Surface Plasmon resonance biosensor; Microarray technology for Genomics and Proteomics; Flow cytometry; Light-activated therapy; Tissue engineering with light: Laser tissue contouring and restructuring, laser tissue welding, Femtolaser surgery; Optical tweezers and scissors; Nanotechnology for bio-optics; Biomaterials for optics."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "BME 4151": {
+          "title": "Clinical Engineering and Hospital Management",
+          "credit": 3.0,
+          "contactHour": "3Hrs/week",
+          "topics": [
+            "Clinical Engineering: Introduction to Clinical Engineering, Difference between biomedical engineer and clinical engineer, Role of clinical engineers.",
+            "Introduction to Hospital: Role of hospital in health care, Classification of hospital and architecture: General hospital, specialized hospital, primary health care – their role and functions. Aspects of hospital services – inpatient, outpatient and emergency, Familiarization with different departments in hospital.",
+            "Planning and building of modern hospital: Hospital planning and design, Site selection, Guiding principle in hospital facilities & services, Modern hospital architecture, Plans for hospital construction, Alternate power supply; Wiring, Standby generator and lift facilities.",
+            "Administrative service: Hospital organizational structure, Human resource management, Financial management, Admission and billing issues, Hospital information flow and handling, Medical record and information systems, Material management, Marketing management, Evaluation and quality assurance of hospital services, Familiarization with hospital related standardization and regulation policies.",
+            "Medical services: Servicing, predictive and preventive maintenance, testing of equipment in diagnostic laboratories, radiation therapy department, surgical department, and operation theater. Training of personnel for medical equipment maintenance, Preparation of estimates, specifications, and procurement.",
+            "Engineering services: Electrical System, Air condition system, Water supply & sanitary system, Centralized medical gas system, Telecommunication system, Environmental control (Fire and noise resistant environment), Safety and security System, Disposal of hospital wastes."
+          ],
+          "sessionalNote": null,
+          "references": []
+        }
+      },
+      "optionalCourses": [
+        {
+          "title": "BioMEMS",
+          "credit": 3.0,
+          "contactHour": "3Hrs/week",
+          "topics": [
+            "Introduction to mems and Microsystems:MEMS and Microsystems; Typical MEMS and Microsystems products; Evolution of Micro fabrications; Microsystems and Microelectronics; Multidisciplinary nature of Microsystems Design and Manufacture; Microsystems and Miniaturization; Applications of Microsystems in health care industry; BioMEMS; Fabrication; Structure; Driving force behind biomedical applications: Diagnostics, Drug delivery systems, Tissue engineering, Minimally invasive procedures, Biocompatibility.",
+            "Working principles of Microsystems:Introduction; Micro-sensors; Microactuation; MEMS with Microactuators; Microaccelerometers;Microfluidics.",
+            "Materials for mems and microsystems: Introduction; Substrates and Wafers; Active Substrate Materials; Ideal silicon substrate for MEMS; single-crystal silicon & wafers; crystal structure; mechanical properties; Silicon Compounds: Silicon dioxide, silicon carbide, silicon nitride, polycrystalline silicon, Silicon Piezoresistors, Gallium Arsenide, Quartz, Piezoelectric Crystals, Polymers,Packaging Materials.",
+            "Microsystems fabrication & design:Molecular theory of Matter and Intermolecular forces; Ions and Ionization; Plasma Physics; Photolithography; Ion implantation; Diffusion; Oxidation: Thermal oxidation, Silicon dioxide; Chemical vapor deposition: Working principle, Chemical reactions in CVD, Enhanced CVD; Etching: Chemical & Plasma etching; LIGA Process: General description of the LIGA process; Micro system Design considerations.",
+            "Emerging biomems technology: Introduction; Minimally invasive surgery; Point-of-care Clinical Diagnosis; Syncope assessment; Continuous glucose monitoring; Microdroplet analysis; Endoscopy: Introduction, Micro-optical scanner; Neurosciences: Introduction, Micro-probes; Ophthalmology: Introduction, Retinal implants; Tissue Engineering: Introduction, Cell patterning & bioreactors, Cell based biosensors, Homeland security."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        {
+          "title": "Biosensors and Biochips",
+          "credit": 3.0,
+          "contactHour": "3Hrs/week",
+          "topics": [
+            "Biosensors: Definition; Structure of biosensors; Types of bioreceptors (enzymes, immunological receptors, nucleic acids, others);Types of signal transduction (optical, mass transport, electrical, electrochemical).",
+            "Chemical Sensor and Micro sensors: Electrochemical sensors: voltammetry, amperometry, conductometry; Principles of solid-state chemical microsensors; microsensor arrays; Microsensors for ions (ISFET); Gas sensors (GASFET) and other sensors.",
+            "Biosensors fabrication: Materials for biosensors fabrication; Methods for biosensors fabrication.",
+            "Application of biosensors: Clinical application: glucose monitoring; Implantable sensors: drug monitoring; Environmental monitoring; Technological process control: food monitoring; Forensic science; Odor sensors.",
+            "Biochips: Classification of biochips; Design methodologies and tools; Fabrication methods; Chemical and biological functionalization of surfaces; Analysis methods: genotyping/mutations, gene expression, proteomics; Fluorescence analysis on biochips.",
+            "Applications of biochips: Medical diagnostics; Environmental diagnostics; Analysis of the transcriptome."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        {
+          "title": "Medical Robotics",
+          "credit": 3.0,
+          "contactHour": "3Hrs/week",
+          "topics": [
+            "Introduction to electrical machine; motor; motor principles; different types of motor(switched reluctance motor, universal motor, induction motor, hysteresis motor, synchronous reluctance motor, axial rotor motor, stepper motor, etc).",
+            "Introduction to medical robotics, mechanical structures and dynamics, robotic sensing and control, human-robot interface, surgical robotic systems, rehabilitation robotic systems, micro-scale robotic medical devices, state-of-the-art in medical robotics."
+          ],
+          "sessionalNote": null,
+          "references": []
+        }
+      ],
+      "termNotes": []
+    },
+    "Y4T2": {
+      "termKey": "Y4T2",
+      "title": "Fourth Year Second Term",
+      "courses": {
+        "BME 4000": {
+          "title": "Final Year Project/Thesis",
+          "credit": 3.0,
+          "contactHour": "6Hrs/week",
+          "topics": [],
+          "sessionalNote": "Study of Problem or Design and Analysis of Circuits and Systems in the Fields of Biomedical Engineering (Continued from the 4th Year 2nd Semester)",
+          "references": []
+        },
+        "BME 4231": {
+          "title": "Telemedicine and Health Care",
+          "credit": 3.0,
+          "contactHour": "3Hrs/week",
+          "topics": [
+            "Introduction to Telemedicine and Telehealth; Practical Examples/Case Studies; Telehealth in the Home; Smart housing and communities; Telemedicine for health professionals; Telehealth in the Developing World; Human and sociotechnical factors; Ethical and legal challenges; Evaluation of telemedicine systems; Concepts of P-healthcare (personalized healthcare), E-medicine, and M-healthcare (mobile healthcare); Basic techniques in telemedicine and M-healthcare: communication systems and networks, medical devices, E-healthcare records, wireless communications in medicine, information security and confidentiality, medical data coding and compression, functions of PACS and HIS; Future Trends in Telemedicine.",
+            "Applications: Tele-consultation, tele-geriatrics, tele-monitoring, M- healthcare, smart wards."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "BME 4232": {
+          "title": "Telemedicine and Health Care Laboratory",
+          "credit": 1.5,
+          "contactHour": "3Hrs/week",
+          "topics": [],
+          "sessionalNote": "Experiments based on BME 4231 Telemedicine and Health Care",
+          "references": []
+        },
+        "BME 4251": {
+          "title": "Biomedical Ethics and Safety",
+          "credit": 3.0,
+          "contactHour": "3Hrs/week",
+          "topics": [
+            "Biomedical Ethics: Examination of fundamental ethical principles; Issues related to experimentation on human subjects, Ethics of delivering sad news to patients, informed consent, confidentiality, and transplant surgery; Introduction to standards for evaluating medical devices.",
+            "Biomedical Safety: Introduction to Safety Standards and History of Safety; Biosafety in Microbiological and Biomedical Laboratories (BMBL) and Bloodborne Pathogens Training; Respiratory Protection; Radiation Safety; Fire Safety; Practices from technologists, researchers, clinicians, and regulators:About technology transfer, disclosure of intellectual property, patenting, FDA and SFDA approval, and relevant laws; Safety practices in the laboratory, clinics, diagnostic centre and hospital; Medical waste management and safety."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "BME 4221": {
+          "title": "Bioinformatics",
+          "credit": 3.0,
+          "contactHour": "3Hrs/week",
+          "topics": [
+            "Biological foundation of bioinformatics; Biological databases; Sequence comparisons and sequence-based database searches; Decoding of eukaryotic genomes; Protein structures: prediction, alignment, classification; protein structure-based rational drug design; phylogenetic trees; Microarray data analysis: normalization, clustering; Systems biology; Biological networks; Functional analysis of genomes; Comparative genome analysis."
+          ],
+          "sessionalNote": null,
+          "references": []
+        }
+      },
+      "optionalCourses": [
+        {
+          "title": "Rehabilitation Engineering",
+          "credit": 3.0,
+          "contactHour": "3Hrs/week",
+          "topics": [
+            "Introduction to Rehabilitation: Definition; Epidemiology of Rehabilitation; Health; Levels of Prevention; Preventive Rehabilitation; Diagnosis of Disability; Functional Diagnosis; Importance of Physiatry in Functional diagnosis; Impairment disability handicap; Primary & secondary Disabilities; Effects of prolonged inactivity & Bed rest on body system.",
+            "Principles in management of communication: Impairment: Introduction to communication, Aphasia, Types of aphasia, Treatment of aphasic patient; Augmentative communication: general form of communication, types of visual aids, Hearing aids, Types of conventional hearing aid, Writing aids.",
+            "Orthotic devices in rehabilitation engineering: General orthotics; Classification of orthotics: functional & regional; General principles of Orthosis; Biomechanics of orthoses; merits & demerits of orthotics; Material design consideration in orthotics; Calipers: FO, AFO, KAFO, HKAFO; Spinal Orthosis; Cervical; Head cervical thoracic orthosis; Thoraco lumbar sacral orthosis; Lumbo sacro orthosis; Splints: functions & types.",
+            "Prosthetic devices: Introduction; Partial foot prostheses:  Foot-ankle assembly; Trans femoral Prostheses: Knee unit, Axis system, Friction Mechanisms, Extension aid, Stabilizers, Socket; Disarticulation Prostheses: Knee Disarticulation Prostheses, Hip Disarticulation Prostheses.",
+            "Mobility aids: Walking frames; Parallel bars; Rollators; Quadripods; Tripods & walking sticks; Crutches; Wheel chairs."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        {
+          "title": "Bio-Analytical Methods",
+          "credit": 3.0,
+          "contactHour": "3Hrs/week",
+          "topics": [
+            "Introduction: Introduction, Modern approaches in Bioanalysis and Bioassays.",
+            "Spectroscopic techniques: Spectroscopic techniques: UV-Visible spectroscopy, Fluorescence spectroscopy, IR spectroscopy, CD spectroscopy, and Mass spectroscopy.",
+            "Microscopic Techniques: Light Microscopy; Fluorescence microscopy, Atomic force microscope, Electron microscope, Scanning electron microscopy, Transmission Electron microscope. Application of microscope in analyzing biological samples.",
+            "Electrophoretic Techniques: Electrophoresis; Principle, Design of horizontal and vertical gel electrophoresis apparatus, performing electrophoresis techniques, application of electrophoresis in analyzing macromolecules.",
+            "Chromatographic Techniques: Chromatographic chromatography, HPLC, TLC, Paper chromatography. techniques; Principles, Column",
+            "Advanced Techniques: Protein crystallization; Theory and methods; API-electrospray and MALDI-TOF; Massspectrometry; Enzyme and cell immobilization techniques; DNA & Peptide Synthesis and sequencing."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        {
+          "title": "Bio-Nanotechnology",
+          "credit": 3.0,
+          "contactHour": "3Hrs/week",
+          "topics": [
+            "Basicconcepts on nanotechnology: length scales (<100 nm) effect on properties of materials and devices; Overview of bionanotechnology: challenges and opportunities associated with biotechnology on the nanoscale; Nanostructured interfaces and bioengineered materials: quantum dots, DNA, self-assembly and templating, surface patterning and functionalization, nanoanalytics and applications; DNA nanotechnology and design; Peptide nanotechnology; Protein nanotechnology; Virus-cell based nanotechnology; Bacteria nanotechnology; Super-resolution imaging of biomolecular nanostructures; Nanotechnology safety and environment; Impact of nanotechnology on society and industry."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        {
+          "title": "Molecular Modeling",
+          "credit": 3.0,
+          "contactHour": "3Hrs/week",
+          "topics": [
+            "Introduction to Molecular Modeling; Potential Energy Surfaces & Optimization Methods; ab Initio MO Theory: From the Beginning; Methods for Electron Correlation; Semi-Empirical Molecular Orbital Methods; Density Functional Theory (DFT); Frontier Orbital Theory (FMO); Introduction to Molecular Mechanics; Advanced Electrostatics for Force Fields; Basics of Molecular Dynamics Simulation; Using Molecular Dynamics to Compute Properties; Introduction to Monte Carlo Methods; Electrostatics & Solvation in Biomolecules; Calculation of Free Energy; Small Molecular & Protein Docking; Tutorial & Introduction to AutoDock; Distance Geometry in NMR Structure Refinement; Calculation of Rates via Brownian Dynamics; Protein Structure Prediction & Design; Quantum Mechanics/Molecular Mechanics (QM/MM); Coarse-Grained Modeling Methods."
+          ],
+          "sessionalNote": null,
+          "references": []
+        }
+      ],
+      "termNotes": []
+    }
+  },
+  "extras": {
+    "administrative_noise": [],
+    "ambiguities": [
+      {
+        "raw": "Experiments based on BME 1215 Biochemistry",
+        "reason": "Course code BME 1215 does not exist; likely refers to BME 1201 Biochemistry.",
+        "possibleTargets": ["BME 1201"]
+      },
+      {
+        "raw": "Experiments based on BME 2215 Signals and Systems",
+        "reason": "Course code BME 2215 does not exist; likely refers to BME 2211 Signals and Systems.",
+        "possibleTargets": ["BME 2211"]
+      },
+      {
+        "raw": "Experiments based on BME 2217 Human Physiology",
+        "reason": "Course code BME 2217 does not exist; likely refers to BME 2201 Human Physiology.",
+        "possibleTargets": ["BME 2201"]
+      },
+      {
+        "raw": "Experiments based on BME 2219 Biomedical Instrumentation",
+        "reason": "Course code BME 2219 does not exist; likely refers to BME 2231 Biomedical Instrumentation.",
+        "possibleTargets": ["BME 2231"]
+      },
+      {
+        "raw": "Experiments based on BME 2117 Numerical Methods and Statistics",
+        "reason": "Course code BME 2117 does not exist; likely refers to BME 2151 Numerical Methods and Statistics.",
+        "possibleTargets": ["BME 2151"]
+      },
+      {
+        "raw": "Continued from the 4th Year 2nd Semester",
+        "reason": "The BME 4000 continuation note in Y4T2 says 'Continued from the 4th Year 2nd Semester' which seems inconsistent (should likely be '4th Year 1st Semester').",
+        "possibleTargets": []
+      }
+    ]
+  },
+  "qa": {
+    "termCount": 8,
+    "courseCount": 66,
+    "topicCount": 306,
+    "noiseCount": 0,
+    "ambiguityCount": 6
+  }
+}

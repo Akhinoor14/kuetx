@@ -345,13 +345,24 @@ export const computeCourseGrade = (course) => {
   if (!course) return { grade: 'F', point: 0, total: 0 };
   const marks = store.get('marks') || {};
   const m = marks[course.id] || {};
+  const hasAnyEntry = Object.entries(m).some(([key, value]) => key !== '__termMarkedNotPublished' && value !== '' && value !== null && value !== undefined);
+
+  const termKey = `Y${course.year}T${course.term}`;
+  const nyp = store.get('notYetPublishedTerms');
+  const termMarkedNotPublished = Array.isArray(nyp) && nyp.includes(termKey);
+
+  if (termMarkedNotPublished && !hasAnyEntry) {
+    return { grade: 'NOT YET PUBLISHED', point: null, total: null, isNotPublished: true };
+  }
+
+  if (!hasAnyEntry && course.type !== 'NonCredit') {
+    return { grade: '—', point: null, total: null, isNoEntry: true };
+  }
 
   // If the term is explicitly marked as Not Yet Published in store,
   // treat the course as not-published so pages don't show F or count it.
   try {
-    const termKey = `Y${course.year}T${course.term}`;
-    const nyp = store.get('notYetPublishedTerms');
-    if (Array.isArray(nyp) && nyp.includes(termKey)) {
+    if (termMarkedNotPublished) {
       // compute a best-effort total for display but do not expose a failing grade
       // fall through to compute total below, then override result at return time
       m.__termMarkedNotPublished = true;

@@ -16,6 +16,21 @@ export default function Results() {
     (currentTermTimeline && new Date() <= currentTermTimeline.classEndDate) ||
     (currentTermKey && courses.some(c => `Y${c.year}T${c.term}` === currentTermKey && (c.status === 'active' || c.status === 'backlog')))
   );
+  const currentTermIndex = currentTermKey ? TERM_KEYS.indexOf(currentTermKey) : -1;
+  const previousTermKey = currentTermIndex > 0 ? TERM_KEYS[currentTermIndex - 1] : null;
+  const addMonths = (date, months) => {
+    const next = new Date(date.getTime());
+    next.setMonth(next.getMonth() + months);
+    return next;
+  };
+  const notPublishedWindowEnd = profile?.termStartDate ? addMonths(new Date(profile.termStartDate), 3) : null;
+  const notPublishedWindowOpen = !!(
+    currentTermIsOngoing &&
+    previousTermKey &&
+    notPublishedWindowEnd &&
+    new Date() <= notPublishedWindowEnd
+  );
+  const isNotPublishedEligibleTerm = (termKey) => !!(notPublishedWindowOpen && termKey === previousTermKey);
   const [marks, setMarks] = useState(() => store.get('marks') || {});
   const [legacyTerms, setLegacyTerms] = useState(() => getLegacyTermResults());
   const [legacyResolutions, setLegacyResolutions] = useState(() => store.get('legacyTermResolution') || {});
@@ -140,7 +155,7 @@ export default function Results() {
       const termKey = `Y${c.year}T${c.term}`;
       const isCurrentTerm = termKey === currentTermKey;
       const isOngoingCurrentTerm = isCurrentTerm && currentTermIsOngoing;
-      const isTermMarkedNotYetPublished = notYetPublishedSet.has(termKey);
+      const isTermMarkedNotYetPublished = notYetPublishedSet.has(termKey) && isNotPublishedEligibleTerm(termKey);
 
       if (hasPublishedResult) {
         return { ...c, grade: computed.grade, gradePoint: computed.point, total: computed.total, isX: computed.isX, hasAnyEntry, displayStatus: 'completed', resultState: 'published', resultNote: '' };
@@ -516,7 +531,53 @@ export default function Results() {
         const isCurrentTerm = term.key === currentTermKey;
         const termIsOngoing = isCurrentTerm && currentTermIsOngoing;
         const hasOfficialResults = term.hasOfficialResults;
-        const isTermMarkedNotYetPublished = notYetPublishedSet.has(term.key);
+        const isTermMarkedNotYetPublished = notYetPublishedSet.has(term.key) && isNotPublishedEligibleTerm(term.key);
+        const isNotPublishedEligible = isNotPublishedEligibleTerm(term.key);
+        const termStatus = (() => {
+          if (termIsOngoing) {
+            return {
+              key: 'ongoing',
+              label: 'Ongoing',
+              tone: 'tag-green',
+              description: 'Current term is still running.',
+            };
+          }
+
+          if (!isTermMarkedNotYetPublished && courseCount > 0 && officialCount === courseCount) {
+            return {
+              key: 'completed',
+              label: 'Completed',
+              tone: 'tag-blue',
+              description: `All ${courseCount} subjects are complete.`,
+            };
+          }
+
+          if (isTermMarkedNotYetPublished) {
+            const publishedText = officialCount > 0 ? `${officialCount}/${courseCount} subjects published` : 'No official results published yet';
+            const waitingCount = pendingCount + notPublishedCount + ongoingCount;
+            const waitingText = waitingCount > 0
+              ? `${waitingCount} subject${waitingCount === 1 ? '' : 's'} still waiting`
+              : 'Result is marked as not published';
+
+            return {
+              key: 'not_published',
+              label: 'Result not published',
+              tone: 'tag-yellow',
+              description: `${publishedText} · ${waitingText}`,
+            };
+          }
+
+          const pendingLabel = noEntryCount > 0
+            ? `${noEntryCount} subject${noEntryCount === 1 ? '' : 's'} missing marks`
+            : `${pendingCount} subject${pendingCount === 1 ? '' : 's'} pending`;
+
+          return {
+            key: 'not_entered',
+            label: 'Not entered',
+            tone: 'tag-gray',
+            description: `Official results are not entered yet · ${pendingLabel}`,
+          };
+        })();
 
         return (
         <Collapsible
@@ -527,7 +588,7 @@ export default function Results() {
           defaultCollapsed={true}
           storageKey={`results:term:${term.key}:open`}
           right={(
-            <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 16, flexWrap: 'wrap' }}>
               {/* Completion Progress */}
               <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                 <div style={{ fontSize: 10, color: 'var(--muted)', minWidth: 28, textAlign: 'right' }}>{completionPct}%</div>
@@ -553,6 +614,11 @@ export default function Results() {
               <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', minWidth: 50, textAlign: 'center' }}>
                 <div style={{ fontSize: 9, color: 'var(--muted)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.03em' }}>Credits</div>
                 <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', marginTop: 2 }}>{term.totalCredits}</div>
+              </div>
+              {/* Term Status */}
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', minWidth: 96, textAlign: 'center' }}>
+                <div style={{ fontSize: 9, color: 'var(--muted)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.03em' }}>Status</div>
+                <span className={`tag ${termStatus.tone}`} style={{ fontSize: 10, marginTop: 2 }}>{termStatus.label}</span>
               </div>
             </div>
           )}
@@ -585,6 +651,14 @@ export default function Results() {
               <div style={{ fontSize: 10, color: 'var(--muted)', marginBottom: 4, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.03em' }}>Weighted Average</div>
               <div style={{ fontSize: 18, fontWeight: 700, color: gpaColor }}>{isGpa ? gpaNum.toFixed(2) : '—'}</div>
             </div>
+            {/* Status summary */}
+            <div style={{ flex: 1.2, minWidth: 180 }}>
+              <div style={{ fontSize: 10, color: 'var(--muted)', marginBottom: 4, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.03em' }}>Term Status</div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
+                <span className={`tag ${termStatus.tone}`} style={{ fontSize: 10 }}>{termStatus.label}</span>
+                <span style={{ fontSize: 12, color: 'var(--muted)' }}>{termStatus.description}</span>
+              </div>
+            </div>
             {/* Conflict resolution controls */}
             {term.conflict && (
               <div style={{ minWidth: 260, display: 'flex', flexDirection: 'column', gap: 8 }}>
@@ -597,20 +671,21 @@ export default function Results() {
                 </div>
               </div>
             )}
-            <div style={{ minWidth: 240, display: 'flex', flexDirection: 'column', gap: 8 }}>
-              <div style={{ fontSize: 11, color: 'var(--muted)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em' }}>Term Result State</div>
-              <button
-                className={isTermMarkedNotYetPublished ? 'btn btn-sm' : 'btn btn-ghost btn-sm'}
-                onClick={() => toggleNotYetPublishedTerm(term.key)}
-                disabled={termIsOngoing}
-                title={termIsOngoing ? 'Current ongoing term is always shown as Ongoing' : 'Toggle Not Yet Published for this term'}
-              >
-                {isTermMarkedNotYetPublished ? 'Marked: Not Yet Published' : 'Mark as Not Yet Published'}
-              </button>
-              <div style={{ fontSize: 11, color: 'var(--muted)' }}>
-                {termIsOngoing ? 'Current term is controlled by Ongoing state.' : 'Use this when marks exist but official result is not published.'}
+            {isNotPublishedEligible && (
+              <div style={{ minWidth: 240, display: 'flex', flexDirection: 'column', gap: 8 }}>
+                <div style={{ fontSize: 11, color: 'var(--muted)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em' }}>Result Publish Control</div>
+                <button
+                  className={isTermMarkedNotYetPublished ? 'btn btn-sm' : 'btn btn-ghost btn-sm'}
+                  onClick={() => toggleNotYetPublishedTerm(term.key)}
+                  title={isTermMarkedNotYetPublished ? 'Click to undo not published status' : 'Mark the previous term as not published'}
+                >
+                  {isTermMarkedNotYetPublished ? 'Undo: Result not published' : 'Mark result not published'}
+                </button>
+                <div style={{ fontSize: 11, color: 'var(--muted)' }}>
+                  Available only for the previous term during the first 3 months of the running term.
+                </div>
               </div>
-            </div>
+            )}
             {!term.conflict && !hasOfficialResults && (pendingCount > 0 || ongoingCount > 0) && (
               <div style={{ minWidth: 260, display: 'flex', flexDirection: 'column', gap: 6, padding: '10px 12px', borderRadius: 10, background: termIsOngoing ? 'rgba(59,130,246,0.08)' : 'rgba(245,158,11,0.08)', border: termIsOngoing ? '1px solid rgba(59,130,246,0.18)' : '1px solid rgba(245,158,11,0.18)' }}>
                 <div style={{ fontSize: 12, fontWeight: 700, color: termIsOngoing ? '#1d4ed8' : '#b45309' }}>
@@ -629,7 +704,7 @@ export default function Results() {
             <table className="kuet-table" style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12 }}>
               <thead>
                 <tr style={{ borderBottom: '2px solid var(--border)', background: 'rgba(var(--accentRGB), 0.03)' }}>
-                  {['Code', 'Course Name', 'Type', 'Cr', 'Status', 'Total%', 'Grade', 'Point', 'Result Upload'].map(h => (
+                  {['Code', 'Course Name', 'Cr', 'Grade', 'Point', 'Result Upload'].map(h => (
                     <th key={h} style={{ padding: '10px 12px', textAlign: 'left', fontWeight: 700, color: 'var(--text)', fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.05em', fontFamily: 'var(--font-mono)' }}>{h}</th>
                   ))}
                 </tr>
@@ -638,22 +713,10 @@ export default function Results() {
                 {term.courses.map((c, idx) => (
                   <tr key={c.id} style={{ borderBottom: '1px solid var(--border)', background: idx % 2 ? 'transparent' : 'rgba(0,0,0,0.01)', transition: 'background 0.2s' }}>
                     <td style={{ padding: '10px 12px', fontFamily: 'var(--font-mono)', fontWeight: 700, fontSize: 12, color: 'var(--accent)' }}>{c.code}</td>
-                    <td style={{ padding: '10px 12px', maxWidth: 200, fontWeight: 500 }}>{c.name}</td>
-                    <td style={{ padding: '10px 12px', fontSize: 11 }}><span className="tag tag-gray" style={{ fontSize: 10 }}>{c.type}</span></td>
+                    <td style={{ padding: '10px 12px', maxWidth: 240, fontWeight: 500 }}>{c.name}</td>
                     <td style={{ padding: '10px 12px', fontWeight: 600 }}>{c.credits}</td>
-                    <td style={{ padding: '10px 12px' }}>
-                      <span className={`tag ${c.displayStatus === 'completed' ? 'tag-blue' : c.displayStatus === 'ongoing' ? 'tag-green' : c.displayStatus === 'not_published' ? 'tag-yellow' : 'tag-gray'}`} style={{ fontSize: 10 }}>
-                        {c.displayStatus === 'completed' ? 'Completed' : c.displayStatus === 'ongoing' ? 'Ongoing' : c.displayStatus === 'not_published' ? 'Not Yet Published' : 'No Entry'}
-                      </span>
-                    </td>
-                    <td style={{ padding: '10px 12px', fontFamily: 'var(--font-mono)', fontSize: 11, color: 'var(--muted)' }}>{c.isX ? 'X' : (c.total ?? '—')}</td>
                     <td style={{ padding: '10px 12px', fontWeight: 700, color: gradeColor(c.grade), fontSize: 13 }}>
-                      <div>{c.grade}</div>
-                      {c.displayStatus !== 'completed' && (
-                        <div style={{ fontSize: 10, fontWeight: 600, color: 'var(--muted)', marginTop: 2 }}>
-                          {c.resultNote}
-                        </div>
-                      )}
+                      {c.grade}
                     </td>
                     <td style={{ padding: '10px 12px', fontFamily: 'var(--font-mono)', fontWeight: 600, fontSize: 11 }}>{Number.isFinite(+c.gradePoint) ? (+c.gradePoint).toFixed(2) : '—'}</td>
                     <td style={{ padding: '10px 12px', minWidth: 170 }}>

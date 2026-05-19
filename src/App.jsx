@@ -13,11 +13,11 @@ import Courses from './pages/Courses';
 import Attendance from './pages/Attendance';
 import Marks from './pages/Marks';
 import Results from './pages/Results';
-import Credits from './pages/Credits';
 import Schedule from './pages/Schedule';
 import Teachers from './pages/Teachers';
 import Diary from './pages/Diary';
 import Assignments from './pages/Assignments';
+import TermQS from './pages/TermQS';
 import SelfStudy from './pages/SelfStudy';
 import Namaz from './pages/Namaz';
 import SelfEval from './pages/SelfEval';
@@ -67,12 +67,12 @@ function Layout() {
             <Route path="/attendance" element={<Attendance />} />
             <Route path="/marks" element={<Marks />} />
             <Route path="/results" element={<Results />} />
-            <Route path="/credits" element={<Credits />} />
             <Route path="/schedule" element={<Schedule />} />
             <Route path="/teachers" element={<Teachers />} />
             <Route path="/syllabus" element={<Syllabus />} />
             <Route path="/diary" element={<Diary />} />
             <Route path="/assignments" element={<Assignments />} />
+            <Route path="/term-qs" element={<TermQS />} />
             <Route path="/self-study" element={<SelfStudy />} />
             <Route path="/time" element={<TimeTracker />} />
             <Route path="/namaz" element={<Namaz />} />

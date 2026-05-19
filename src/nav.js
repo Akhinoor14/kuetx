@@ -19,21 +19,21 @@ export const NAV = [
   {
     group: 'Academics',
     items: [
-      { id: 'courses',    label: 'Courses',        icon: 'BookOpen',     path: '/courses' },
-      { id: 'attendance', label: 'Attendance',     icon: 'CalendarCheck',path: '/attendance' },
-      { id: 'marks',      label: 'Term Planner',   icon: 'ClipboardList',path: '/marks' },
-      { id: 'results',    label: 'Results & GPA',  icon: 'TrendingUp',   path: '/results' },
-      { id: 'credits',    label: 'Credits',        icon: 'Award',        path: '/credits' },
-      { id: 'schedule',   label: 'Class Schedule', icon: 'Clock',        path: '/schedule' },
-      { id: 'teachers',   label: 'Teachers',       icon: 'Users',        path: '/teachers' },
-      { id: 'syllabus',   label: 'Syllabus',       icon: 'List',         path: '/syllabus' },
+      { id: 'courses',    label: 'Courses',              icon: 'BookOpen',     path: '/courses' },
+      { id: 'attendance', label: 'Attendance',           icon: 'CalendarCheck',path: '/attendance' },
+      { id: 'schedule',   label: 'Class Schedule',       icon: 'Clock',        path: '/schedule' },
+      { id: 'assignments',label: 'Assignments',          icon: 'FileText',     path: '/assignments' },
+      { id: 'syllabus',   label: 'Syllabus',             icon: 'List',         path: '/syllabus' },
+      { id: 'term-qs',    label: 'Term Question & Solution', icon: 'HelpCircle', path: '/term-qs' },
+      { id: 'marks',      label: 'Term Planner',         icon: 'ClipboardList',path: '/marks' },
+      { id: 'results',    label: 'Results & GPA',        icon: 'TrendingUp',   path: '/results' },
+      { id: 'teachers',   label: 'Teachers',             icon: 'Users',        path: '/teachers' },
     ]
   },
   {
     group: 'Daily Life',
     items: [
       { id: 'diary',      label: 'Class Diary',    icon: 'BookOpen',     path: '/diary' },
-      { id: 'assignments',label: 'Assignments',    icon: 'FileText',     path: '/assignments' },
       { id: 'self-study', label: 'Self Study',     icon: 'Activity',     path: '/self-study' },
       { id: 'time',       label: 'Time Tracker',   icon: 'Timer',        path: '/time' },
       { id: 'namaz',      label: 'Namaz Tracker',  icon: 'Moon',         path: '/namaz' },
