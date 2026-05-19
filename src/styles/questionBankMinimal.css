@@ -1,0 +1,33 @@
+/* Minimal modern styles for Question Bank */
+:root{
+  --bg:#f7fafc;--card:#ffffff;--muted:#6b7280;--accent:#2563eb;--success:#16a34a;--text:#0f172a;--border:#e6eef8;
+}
+body{background:var(--bg);color:var(--text);font-family:Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial}
+.qb-root{max-width:980px;margin:28px auto;padding:18px}
+.qb-hero{display:flex;justify-content:space-between;align-items:center;gap:20px;padding:18px 0}
+.qb-badge{font-size:12px;font-weight:800;color:var(--accent);background:rgba(37,99,235,0.08);padding:6px 10px;border-radius:999px}
+.qb-title{margin:0;font-size:20px}
+.qb-sub{margin:4px 0 0;color:var(--muted);font-size:13px}
+.qb-stats{display:flex;gap:12px}
+.qb-stats .s{background:var(--card);padding:10px;border-radius:10px;border:1px solid var(--border);min-width:76px;text-align:center}
+.qb-stats .n{font-weight:800;font-size:16px}
+.qb-stats .l{font-size:11px;color:var(--muted)}
+.qb-controls{display:flex;justify-content:space-between;align-items:center;margin:14px 0;gap:12px}
+.qb-search input{padding:10px 12px;border-radius:10px;border:1px solid var(--border);min-width:280px}
+.qb-actions{display:flex;gap:8px;align-items:center}
+.chip{padding:8px 12px;border-radius:10px;border:1px solid var(--border);background:transparent;cursor:pointer;font-weight:700;font-size:13px}
+.chip.active{background:linear-gradient(90deg,var(--accent),var(--success));color:white;border:none}
+.contribute{display:inline-flex;gap:8px;align-items:center;padding:8px 12px;border-radius:10px;background:var(--accent);color:white;border:none;font-weight:700}
+.qb-list{display:grid;gap:12px;margin-top:8px}
+.qb-empty{display:grid;gap:10px;place-items:center;padding:28px;border-radius:12px;background:var(--card);border:1px solid var(--border)}
+.qb-empty .emoji{font-size:34px}
+.btn{padding:8px 12px;border-radius:10px;border:1px solid var(--border);background:transparent;cursor:pointer}
+.btn.primary{background:linear-gradient(90deg,var(--accent),var(--success));color:white;border:none}
+.qb-card{display:grid;grid-template-columns:120px 1fr 170px;gap:12px;align-items:center;padding:14px;border-radius:12px;background:var(--card);border:1px solid var(--border)}
+.qb-card .meta{display:flex;flex-direction:column;gap:6px}
+.qb-card .code{font-weight:800}
+.qb-card .term{font-size:12px;color:var(--muted)}
+.qb-card .name{font-weight:800}
+.qb-card .sub{font-size:13px;color:var(--muted)}
+.card-actions{display:flex;gap:8px;justify-self:end}
+.qb-footer-note{text-align:center;margin-top:18px;color:var(--muted);font-size:13px}

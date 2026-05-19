@@ -1,0 +1,1674 @@
+{
+  "department": "Electrical and Electronic Engineering (EEE)",
+  "sourceType": "raw_text",
+  "terms": {
+    "Y1T1": {
+      "termKey": "Y1T1",
+      "title": "First Year First Term",
+      "courses": {
+        "EEE 1101": {
+          "title": "Electrical Circuits I",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Introduction of electrical power sources, ideal and practical sources, linear circuit elements.",
+            "DC analysis of series, parallel and series-parallel circuits.",
+            "Kirchhoff’s Voltage and current laws, voltage, current, power and energy.",
+            "Sinusoidal wave: Average and effective values, form factor, peak factor, phase relation and phasors.",
+            "Steady state AC analysis of series, parallel and series parallel circuits, phase relation between voltage and current, concept of impedance, power, power factor, phasor diagram.",
+            "Network theorems: Superposition theorem, Thevenin’s theorem, Norton’s theorem, maximum power transfer theorem, substitution theorem and reciprocity theorem.",
+            "Frequency response of ac circuits, resonance phenomena.",
+            "Magnetic circuit and concepts: flux, fields, permeability reluctance, analysis of series, parallel and series- parallel magnetic circuit."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "EEE 1102": {
+          "title": "Electrical Circuits I Sessional",
+          "credit": 1.5,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Sessional based on the theory of course EEE 1101."
+          ],
+          "sessionalNote": "Sessional",
+          "references": []
+        },
+        "CSE 1111": {
+          "title": "Computer Programming",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Introduction to digital computers.",
+            "Programming languages, algorithms and flow charts.",
+            "Structured programming using C: Variables and constants, operators, expressions, control statements, functions, array, pointer, structure union, user defined data types, input-output files.",
+            "Object oriented programming using C++: Introduction, classes and objects; polymorphism; function and operator overloading; inheritance."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "CSE 1112": {
+          "title": "Computer Programming Sessional",
+          "credit": 1.5,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Sessional based on the theory of course CSE 1111."
+          ],
+          "sessionalNote": "Sessional",
+          "references": []
+        },
+        "Math 1101": {
+          "title": "Engg. Mathematics I",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Differential Calculus: Review of differentiation of various types of functions.",
+            "Rolle’s theorem, Mean value theorem.",
+            "Taylor’s and Maclaurin’s theorems in finite and infinite forms.",
+            "Divergency and Convergency of series.",
+            "Partial differentiation, Euler’s theorem.",
+            "Tangent, normal and curvature.",
+            "Determination of maximum and minimum values of functions and their application.",
+            "Integral Calculus: Review of indefinite and definite integration of various types of functions.",
+            "Use of definite integration in summing series.",
+            "Walli’s formulae.",
+            "Improper integrals.",
+            "Beta function and Gamma functions.",
+            "Area under a plane curve and area of a region enclosed by two curves in cartesian and polar coordinates.",
+            "Volume and surface areas of solids of revolution.",
+            "Co-ordinate Geometry: Co-ordinate geometry of three dimension- System of co-ordinates, transformation of co-ordinates, distance between two points, section formula, projection, direction cosines, equations of planes and lines."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "Phy 1111": {
+          "title": "Physics",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Atomic Structure: Thompsons, Rutherford and Bhor's atomic model.",
+            "Atomic arrangement in solid.",
+            "Different types of bonds in solid-metallic, Vander Walls and ionic bond.",
+            "Electronic structure of materials: Free electron theory, Metallic conduction.",
+            "Energy bands, Brillouin zones, Temperature dependence of metallic conductivity.",
+            "Semiconductors: Band theory, intrinsic and extrinsic semiconductors, Fermi levels, mobility and electrical conductivity, carrier diffusion and life time.",
+            "Magnetic materials: Properties, Dia-, Para- and Ferro-magnetism.",
+            "Hysteressis loop, B-H curve, Energy losses in magnetic materials and their measurements.",
+            "Soft and hard magnetic materials, ferrities.",
+            "Thermal electricity: thermocouple, Seebeck effect, Peltier and Thompson effect, Thermo-emf.",
+            "Photoelectricity: Laws of photoemission and Einstein's equation.",
+            "Photoelectric cell and its use.",
+            "Sound: Simple harmonic motion, wave equation, Principle of superposition.",
+            "Beats, Dispersion, Phase and group velocities, Doppler's effect, Free and force vibrations.",
+            "Physical Optics: Theories of light; Hyugen's principle and construction.",
+            "Interference of light: Young's double slit experiment, Fresnel bi-prism, Newton's ring, interferometers.",
+            "Diffraction of light: Fresnel and Fraunhoffer diffraction, diffraction by single and double slit diffraction gratings.",
+            "Polarization, production and analysis of polarized light, optical activity, optics of crystals."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "Phy 1112": {
+          "title": "Physics Sessional",
+          "credit": 0.75,
+          "contactHour": "3/2 hrs/week",
+          "topics": [
+            "Sessional based on the theory of course Phy 1111."
+          ],
+          "sessionalNote": "Sessional",
+          "references": []
+        },
+        "Hum 1111": {
+          "title": "Technical English",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Grammar: Grammatical principles, modals, phrases & idioms, prefixes & suffixes, sentence structures,wh& yes/no questions, conditional sentences.",
+            "Vocabulary: Technical & scientific vocabulary, defining terms.",
+            "Spoken English: Introduction to phonetic symbols, dialogue, responding to particular situations, extempore speech.",
+            "Reading: Comprehension of technical & non-technical materials skimming, scanning, inferring & responding to context.",
+            "Technical Writing: Paragraph & composition writing on scientific & other themes, report writing, research paper writing, library references.",
+            "Professional communication: Business letter, job application, memos, quotations, tender notice."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "Hum 1112": {
+          "title": "Technical English Sessional",
+          "credit": 0.75,
+          "contactHour": "3/2 hrs/week",
+          "topics": [
+            "Developing Reading Skill: Strategies of reading-skimming, scanning, predicting, inferencing; Analyzing and interpreting variety of texts; Practicing comprehension from literary and nonliterary texts.",
+            "Developing Writing Skill: Sentences, sentence variety, generating sentences; Clarity and correctness of sentences, linking sentences to form paragraphs, writing paragraphs, essays, reports, formal and informal letters.",
+            "Developing Listening Skill and Note Taking: Listening to recorded texts and class lectures and learning to take useful notes based on listening.",
+            "Developing Speaking Skill: Oral skills including communicative expressions for personal identification, life at home, giving advice and opinion, instruction and directions, requests, complains, apologies, describing people and places, narrating events."
+          ],
+          "sessionalNote": "Sessional",
+          "references": []
+        }
+      },
+      "optionalCourses": [],
+      "termNotes": []
+    },
+    "Y1T2": {
+      "termKey": "Y1T2",
+      "title": "First Year Second Term",
+      "courses": {
+        "EEE 1201": {
+          "title": "Electrical Circuits II",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Polyphase system, balanced and unbalanced three phase circuit analysis.",
+            "Two-port network analysis.",
+            "Coupled circuit.",
+            "Introduction to filter."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "EEE 1202": {
+          "title": "Electrical Circuits II Sessional",
+          "credit": 0.75,
+          "contactHour": "3/2 hrs/week",
+          "topics": [
+            "Sessional based on the theory of course EEE 1201."
+          ],
+          "sessionalNote": "Sessional",
+          "references": []
+        },
+        "EEE 1203": {
+          "title": "Electronics I",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Signals, their origin and processing in electronic system.",
+            "Development of electronic processing devices; Vacuum tubes and semiconductor devices; P-N junction semiconductor diodes; Application of diode as rectifier, Zener diode and its application.",
+            "BJT, FET, MOSFET : Characteristics, Biasing techniques, Stabilization factors, Compensation.",
+            "Equivalent circuits, single stage amplifiers at midband frequencies.",
+            "Power amplifiers.",
+            "Heat sink."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "EEE 1204": {
+          "title": "Electronics I Sessional",
+          "credit": 1.5,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Sessional based on the theory of course EEE 1203."
+          ],
+          "sessionalNote": "Sessional",
+          "references": []
+        },
+        "Chem 1211": {
+          "title": "Chemistry",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Different types of chemical bonds and their properties.",
+            "Modern concepts of acids and bases.",
+            "Problems involving acid base titration.",
+            "Properties and uses of noble gases.",
+            "Electrochemistry, Mechanism of electrolytic conduction, Transport number, Kohl-Rausch’s law.",
+            "Ionization of water and concept of pH.",
+            "Different types of cells, Cell emf.",
+            "Single electrode potentials, their determination and application.",
+            "Secondary Cells or Accumulators, lead accumulator and alkaline accumulator.",
+            "Different types of solutions.",
+            "Factors influencing the solubility of a substance, solution of gas in liguids.",
+            "Colligative properties of dilute solution.",
+            "Le-chatelier’s theorem and some of its important industrial applications.",
+            "Thermochemistry, chemical kinetics."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "Chem 1212": {
+          "title": "Chemistry Sessional",
+          "credit": 0.75,
+          "contactHour": "3/2 hrs/week",
+          "topics": [
+            "Laboratory experiments based on theory of course Chem 1211."
+          ],
+          "sessionalNote": "Sessional",
+          "references": []
+        },
+        "Hum 1211": {
+          "title": "Financial Account and Economic Analysis",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Accountancy: Basic accounting principles, Transaction, Journal, Ledger and Accounts.",
+            "Cash book, Bank Reconciliation statement.",
+            "Preparation of Financial Statement.",
+            "Cost Accounts and its objects.",
+            "Cost classification.",
+            "Elements of costs, preparation of cost sheet.",
+            "Overhead allocation.",
+            "Use of Relevant costs in Decision-Making, Standard costing.",
+            "Material cost variance.",
+            "Break even analysis.",
+            "Economics: Definition of Economics.",
+            "Economics and Engineering.",
+            "Micro-Economics: The theory of demand and supply and their elasticity.",
+            "Price determination.",
+            "Nature of an economic theory, applicability of economic theories to the problems of developing countries.",
+            "Indifference curve technique.",
+            "Marginal analysis.",
+            "Production, production function, types of productivity.",
+            "Rational region of production of an engineering firm.",
+            "Concepts of market and market structure.",
+            "Cost analysis and cost function.",
+            "Small scale production and large scale production.",
+            "Optimization.",
+            "Theory of distribution.",
+            "Macro-Economics: Savings, investment, employment, National income analysis.",
+            "Inflation.",
+            "Monetary policy, fiscal policy and trade policy with reference to Bangladesh.",
+            "Economics of development and planning."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "Math 1201": {
+          "title": "Engg. Mathematics II",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Ordinary differential equations: Degree and order of ODE, Formation of differential equations, Solution of first order Differential equations by various methods, Solution of first order but higher degree ODE, Solution of general linear equations of second and higher order with constant coefficients, Solution of homogeneous linear equations and its applications, Solutions of Differential equations of higher order when dependent and independent variable are absent, Solution of differential equation by the method based on factorization of operators.",
+            "Partial differential equations: Lagrange’s method of solving PDE of order one, Integral surfaces passing through a given curve, Non linear PDE of order one (Complete, Particular, Singular and general integrals) ; Standard forms f(p,q)=0, z=px+qy+f(p,q), f(p,q,z) = 0, f1 (x,p)= f2(y,q), Charpit’s method, Second order PDE; Its nomenclature and classifications to canonical (Standard) parabolic, elliptic, hyperbolic, Solution by separations of variables, Linear PDE with constants coefficients.",
+            "Series solution: Solution of differential equations in series by the method of Frobenius, Bessel’s functions, Legendre’s Polynomials and their properties."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "ME 1200": {
+          "title": "Engineering Drawing",
+          "credit": 1.5,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Introduction.",
+            "Orthographic projections.",
+            "Pictorial views.",
+            "Drawing standards and practices.",
+            "Interpenetrating of surfaces.",
+            "Development of surfaces.",
+            "Machine drawings.",
+            "Technical sketching.",
+            "Introduction to computer-aided-drawing."
+          ],
+          "sessionalNote": null,
+          "references": []
+        }
+      },
+      "optionalCourses": [],
+      "termNotes": []
+    },
+    "Y2T1": {
+      "termKey": "Y2T1",
+      "title": "Second Year First Term",
+      "courses": {
+        "EEE 2100": {
+          "title": "Electrical Shop Practice",
+          "credit": 1.5,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Electrician’s tools, splices, soldering, code practices.",
+            "Electrical and electronic symbols, Safety rules, electricity rules and electricity codes.",
+            "Electrical wiring system design drawing and estimation for residential and commercial house wiring and Industrial installation wiring.",
+            "Use of meggers, Insulation test, Grounding earth resistance measurement using earth resistance tester.",
+            "Battery charging."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "EEE 2103": {
+          "title": "Electronics II",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "BJT, FET, MOSFET multistage amplifier circuits.",
+            "Frequency response of single stage and multistage amplifiers.",
+            "Introduction to CMOS and its applications.",
+            "Introduction to operational amplifiers: Basic linear and non linear applications.",
+            "Frequency response, bandwidth and other practical limitation of op-amps, compensation techniques.",
+            "Feedback concept, Improvement of amplifier characteristics by negative feedback.",
+            "Classification, analysis of feedback amplifier.",
+            "Sinusoidal oscillators: Concept and its classification.",
+            "Active filters.",
+            "Negative impedance converters."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "EEE 2104": {
+          "title": "Electronics II Sessional",
+          "credit": 1.5,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Sessional based on the theory of course EEE 2103."
+          ],
+          "sessionalNote": "Sessional",
+          "references": []
+        },
+        "EEE 2105": {
+          "title": "Electrical Machine I",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Transformer: Ideal transformer- transformation ratio, no-load and load vector diagrams; actual transformer- equivalent circuit, regulation, short circuit and open circuit tests.",
+            "Three phase transformer and its connections; Vector group of three phase transformers; Phase conversion.",
+            "Three Phase Induction Motor: Rotating magnetic field, equivalent circuit, vector diagram, torque-speed characteristics, effect of changing rotor resistance and reactance on torque-speed curves, motor torque and developed rotor power, no-load test, blocked rotor test, starting and braking and speed control; Induction generator.",
+            "Single Phase Induction Motor: Theory of operation, equivalent circuit and starting."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "EEE 2106": {
+          "title": "Electrical Machine I Sessional",
+          "credit": 1.5,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Sessional based on the theory of course EEE 2105."
+          ],
+          "sessionalNote": "Sessional",
+          "references": []
+        },
+        "Math 2101": {
+          "title": "Engg. Mathematics III",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Matrix: Definition of matrix, Different types of matrix, Algebra of matrix, Adjoin and inverse of a matrix, Elementary transformations of matrix, Matrix polynomials, Calay-Hamilton theory with uses of rank and nullity, Normal and canonical forms, Solution of linear equations, Eigenvalues and eigenvectors.",
+            "Vector Analysis: Review of vector algebra: Addition and subtraction of vectors, Scalar and vector product of two vectors and their geometrical interpretation, Triple products and multiple products, Linear dependents and independents of vectors.",
+            "Vector Calculus: Differentiation and Integration of Vectors together with elementary applications, Definition of line, Surface and volume Integrals, Gradient, Divergence and curl of point functions, various formulae, Gauss’s theorem, Stoke’s theorem, Green’s theorem.",
+            "Fourier Analysis: Real and complex form of Fourier series, Finite transform, Fourier Integral, Fourier transforms and their uses in solving boundary value problems of wave equations.",
+            "Laplce Transforms: Definition Laplace transforms of some elementary functions, Sufficient conditions for existence of Laplace Transforms, Inverse Laplace Transforms, Laplace Transforms of derivatives.",
+            "The unit step function, Periodic function, Some special theorems on Laplace Transforms, Partial fractions, Solutions of differential equations by Laplace Transforms, Evaluation of improper integrals."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "ME 2101": {
+          "title": "Basic Mechanical Engineering",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Study of fuels.",
+            "Steam generation units with accessories and mountings.",
+            "Study of steam generation and steam turbines.",
+            "Introduction to internal combustion engines and their cycles.",
+            "Study of SI and CI engines and gas turbines with their accessories.",
+            "Refrigeration and air conditioning with their application.",
+            "Refrigeration equipment: compressors, condensers and evaporators.",
+            "Type of fluid machinery.",
+            "Study of impulse and reaction turbine.",
+            "Pelton wheel and Kalpan turbine.",
+            "Study of centrifugal and axial flow machines.",
+            "Pumps, fans, blowers and compressors.",
+            "Study of reciprocation pumps."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "ME 2102": {
+          "title": "Basic Mechanical Engineering Sessional",
+          "credit": 0.75,
+          "contactHour": "3/2 hrs/week",
+          "topics": [
+            "Sessional based on the theory of course ME 2101."
+          ],
+          "sessionalNote": "Sessional",
+          "references": []
+        },
+        "IPE 2111": {
+          "title": "Legal Issues and Management for Engineers",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Business and industrial law: Law of contract, elements of valid contract.",
+            "Consideration, Parties competent to contact.",
+            "Sale of goods, hire and purchase.",
+            "Negotiable instrument.",
+            "Industrial law in Bangladesh: various ordinance payments of wages, legislation relating employment in industries, factories, shops and agriculture, trade union act.",
+            "Human resources management in business: Human factors and motivation, leadership, group decision making and communication, job gradation, process of performance appraisal and reward systems, managing information for decision and management information systems.",
+            "Marketing management: Understanding marketing management, developing marketing strategies, conducting marketing research, analyzing consumer and business market, identifying market segments and targets, dealing with competition.",
+            "Safety: Evolution of modern safety concepts, industrial hazard, safety and risk management, productivity, worker health and safety, proactive management techniques for safety management, safety standards and regulations for engineering works, fire safety, hazardous materials."
+          ],
+          "sessionalNote": null,
+          "references": []
+        }
+      },
+      "optionalCourses": [],
+      "termNotes": []
+    },
+    "Y2T2": {
+      "termKey": "Y2T2",
+      "title": "Second Year Second Term",
+      "courses": {
+        "Math 2201": {
+          "title": "Engg. Mathematics IV",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Complex variable: Complex number system, General functions of a complex variable, Limits and continuity of a function of complex variable and related theorems; Complex differentiation and the Cauchy-Riemann equations, Mapping by elementary functions, Line Integral of a complex function, Cauchy's Integral theorem, Cauchy's Integral formula, Liouville's theorem, Taylor's theorem and Laurent's theorem.",
+            "Singular points, Residue, Cauchy's Residue theorem.",
+            "Evaluation of residues, Contour integration, Conformal mapping.",
+            "Statistical Analysis: Frequency distribution; Mean, Median, Mode and other measures of central tendency; Standard deviation and other measures of dispersion; Moments skewness and kurtosis; Elementary probability theory and discontinuous probability distributions (Binomial, Poisson and negative binomial); Characteristics of distributions; Elementary sampling theory; Estimation; Hypothesis testing and regression analysis."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "EEE 2203": {
+          "title": "Electronics III",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Wave shaping: Linear and non-linear wave shaping, Clipping and Clamping circuits, Non Linear function circuits.",
+            "Negative resistance switching circuits.",
+            "Timing circuits; Bi-stable, mono-stable and Astable multivibrators, Sweep and staircase generator, IC 555 and its application.",
+            "Application of op-amp in timing circuits, Comparators, Schimtt’s Trigger.",
+            "Pulse generator, VCO, PLL, Blocking oscillators."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "EEE 2204": {
+          "title": "Electronics III Sessional",
+          "credit": 1.5,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Sessional based on the theory of course of  EEE 2203"
+          ],
+          "sessionalNote": "Sessional",
+          "references": []
+        },
+        "EEE 2205": {
+          "title": "Electrical Machine II",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "DC Generators: Types, no-load voltage characteristics, build up of a self excited shunt generator, load-voltage characteristic, effect of speed on no-load and load characteristics and voltage regulation, armature reaction.",
+            "DC Motor: Operating principle, counter emf, torque, speed, torque-speed characteristics, starting, braking, and speed control.",
+            "Synchronous Generator: Windings, excitation systems, equivalent circuit, vector diagrams at different loads, factors affecting voltage regulation, synchronous impedance, synchronous impedance methods of predicting voltage regulation and its limitations.",
+            "Parallel operation: necessary conditions, synchronizing, circulating current and vector diagram.",
+            "Synchronous Motor: Operation, loading effect, effect of changing excitation, V-curves, and starting methods."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "EEE 2206": {
+          "title": "Electrical Machine II Sessional",
+          "credit": 1.5,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Sessional based on the theory of course EEE 2205."
+          ],
+          "sessionalNote": "Sessional",
+          "references": []
+        },
+        "EEE 2211": {
+          "title": "Measurement and Instrumentation",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Introduction : Methods of measurement.",
+            "Statistical method applied to field of measurement and error analysis and calibration.",
+            "Resistance, Inductance and Capacitance measurements: Different methods of measuring high, medium and low resistances.",
+            "Methods of measuring self and mutual inductance and capacitance measurement.",
+            "A.C. and DC bridge methods, Measurement of insulation and earth resistances.",
+            "Localization of cable fault.",
+            "Magnetic measurement: Flux meter, Flux and Flux density measurement.",
+            "Determination of iron losses and their separation.",
+            "Measuring instruments : Classification of measuring instruments.",
+            "Ammeter, Voltmeter, wattmeter, AVO meter, Energy meter, Ampere-hour meter and Maximum demand meter for measuring AC and DC quantities.",
+            "Speed, frequency and phase difference measurements.",
+            "Illumination measurement.",
+            "Electronic measuring instruments: Digital instruments, VTVM, Q-meter and CRO.",
+            "Instrumentation : Extension of instrument range.",
+            "Use of C.T. and P.T and calculation of their burden, Instrumentation of substation.",
+            "Measurement of non-electrical quantities: Transducer.",
+            "Measurement of temperature, pressure, displacement, velocity, acceleration.",
+            "Strain gauge and their applications."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "EEE 2212": {
+          "title": "Measurement and Instrumentation Sessional",
+          "credit": 1.5,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Sessional based on the theory of course EEE 2211."
+          ],
+          "sessionalNote": "Sessional",
+          "references": []
+        },
+        "EEE 2213": {
+          "title": "Digital Electronics I",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Analysis and Synthesis of Digital Logic Circuits: Number system, codes, and conversion.",
+            "Boolean algebra, De Morgan’s law, logic gates and truth tables, combinational logic design, minimization techniques, implementation of basic static logic gates in CMOS and BiCMOS.",
+            "Arithmetic and data handling logic circuits, decoders and encoders, multiplexers and combinational circuit design.",
+            "Programmable Logic Devices: Logic arrays, Field Programmable Logic Arrays and Programmable Read Only Memory.",
+            "Sequential Circuits: Different types of latches, flip-flops and their design using ASM approach, timing analysis, timing analysis and power optimization of sequential circuits.",
+            "Modular sequential logic circuit design: Shift registers, counters and their applications."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "EEE 2214": {
+          "title": "Digital Electronics I Sessional",
+          "credit": 0.75,
+          "contactHour": "3/2 hrs/week",
+          "topics": [
+            "Sessional based on the theory of course EEE 2213."
+          ],
+          "sessionalNote": "Sessional",
+          "references": []
+        }
+      },
+      "optionalCourses": [],
+      "termNotes": []
+    },
+    "Y3T1": {
+      "termKey": "Y3T1",
+      "title": "Third Year First Term",
+      "courses": {
+        "EEE 3100": {
+          "title": "Electronic Shop Practice",
+          "credit": 1.5,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Introduction to formal procedures of preventive maintenance.",
+            "Circuit tracing, trouble shooting, fault repairing, soldering and de-soldering of electronic circuits.",
+            "Design of PCB layout, etching.",
+            "Radio receivers: Principles of operations, circuit tracing, fault finding by signal injection alignment.",
+            "TV camera, B/W TV, color TV.",
+            "CD and VCD player."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "EEE 3101": {
+          "title": "Signals and Linear Systems",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Analogous system, Response to non-sinusoidal voltage, L-system.",
+            "Transform methods, Purpose and nature of transform, Fourier and Laplace transforms.",
+            "Impulse function.",
+            "Convolution integral and their application to network and system analysis.",
+            "Filter equations, modern filters."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "EEE 3105": {
+          "title": "Control Systems",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Introductory Concepts: Open loop versus closed loop feedback system.",
+            "Input output relationship.",
+            "Transfer function.",
+            "DC machine dynamics, performance criteria, sensitivity and accuracy.",
+            "Analysis of control systems time and frequency domain error constants.",
+            "Stability of control system : Routh-Hurwitz criterion, bode plot, polar plot.",
+            "Nyquist method.",
+            "Root locus techniques.",
+            "Frequency response analysis.",
+            "Nicholes chart, compensation.",
+            "Introduction to non-linear control system.",
+            "State variable characterization of systems, transition matrix, canonical forms.",
+            "Controllability and observability."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "EEE 3106": {
+          "title": "Control Systems Sessional",
+          "credit": 0.75,
+          "contactHour": "3/2 hrs/week",
+          "topics": [
+            "Sessional based on the theory of course EEE 3105."
+          ],
+          "sessionalNote": "Sessional",
+          "references": []
+        },
+        "EEE 3107": {
+          "title": "Electromagnetic Fields and Waves",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Electrostatics and Magnetostatics using vector methods.",
+            "Fields in dielectrics and conductors.",
+            "Boundary conditions of Electric and Magnetic fields.",
+            "Time Varying Fields; Maxwell’s equation and poynting vector.",
+            "Uniform plane wave and its transmission and reflection.",
+            "Skin effect and Surface resistance.",
+            "Wave guides.",
+            "Introduction to radiation system."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "EEE 3109": {
+          "title": "Computational Methods in Electrical Engineering",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Computer algorithm Mathematical modeling of physical systems.",
+            "Iterative Techniques, Solution of simultaneous equations, Interpolation, Curve fitting, Solution of Differential Equations.",
+            "Numerical solution of Integration.",
+            "Application of the above techniques in Electrical & Electronic Engineering through computer program."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "EEE 3110": {
+          "title": "Computational Methods in Electrical Engineering Sessional",
+          "credit": 1.5,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Sessional based on the theory of course EEE 3109."
+          ],
+          "sessionalNote": "Sessional",
+          "references": []
+        },
+        "EEE 3117": {
+          "title": "Communication Engineering I",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Introduction: Principle, evolution, networks, exchange and international regulatory bodies.",
+            "Telephone apparatus: Microphone, speakers, ringer, pulse tone dialing mechanism, side-tone mechanism, local and central batteries and advanced features.",
+            "Switching system: Introduction to analog system, digital switching systems – space division switching, blocking probability and multistage switching, time division switching and two dimensional switching.",
+            "Traffic analysis: Traffic characterization, grades of service, network blocking probabilities, delay system and queuing.",
+            "Modern telephone services and network: Internet telephony, facsimile, integrated services digital network, asynchronous transfer mode and intelligent networks."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "EEE 3118": {
+          "title": "Communication Engineering I Sessional",
+          "credit": 0.75,
+          "contactHour": "3/2 hrs/week",
+          "topics": [
+            "Sessional based on the theory of course EEE 3117."
+          ],
+          "sessionalNote": "Sessional",
+          "references": []
+        }
+      },
+      "optionalCourses": [],
+      "termNotes": []
+    },
+    "Y3T2": {
+      "termKey": "Y3T2",
+      "title": "Third Year Second Term",
+      "courses": {
+        "EEE 3200": {
+          "title": "Electrical and Electronic Circuit Simulation Sessional",
+          "credit": 1.5,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Verification of theories and concepts learned in electrical and electronic circuit theory courses using simulation software(s).",
+            "Design of electrical (DC and AC) and electronic circuits by simulation."
+          ],
+          "sessionalNote": "Sessional",
+          "references": []
+        },
+        "EEE 3203": {
+          "title": "Power Electronics",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Power semiconductor switches and triggering devices: BJT, MOSFET, SCR, IGBT, GTO, TRIAC, UJT and DIAC.",
+            "Rectifiers: Uncontrolled and controlled single phase and three phase.",
+            "Regulated power supplies: Linear-series and shunt, switching buck, buckboost, boost and cuk regulators.",
+            "AC voltage controllers, single and three phase.",
+            "Choppers.",
+            "DC motor control.",
+            "Single phase cycloconverter.",
+            "Inverters: single phase and three phase current and voltage source.",
+            "AC motor control.",
+            "Stepper motor control.",
+            "Resonance inverters.",
+            "Pulse width modulation control of static converters."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "EEE 3204": {
+          "title": "Power Electronics Sessional",
+          "credit": 0.75,
+          "contactHour": "3/2 hrs/week",
+          "topics": [
+            "Sessional based on the theory of course EEE 3203."
+          ],
+          "sessionalNote": "Sessional",
+          "references": []
+        },
+        "EEE 3205": {
+          "title": "Power Plant Engineering and Economy",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Introduction to thermal, hydro and nuclear power stations.",
+            "Nuclear reactor, reactor construction and control.",
+            "Power reactors.",
+            "Central station reactors.",
+            "Nuclear hazards.",
+            "Variable load problems, plotting and analysis of load curves, chronological load curves and load duration curve.",
+            "Energy load curve and its use.",
+            "Load factor, capacity factor, demand factor, utilization factor, diversity factor etc. and there impact over the cost analysis of power generation and utilization.",
+            "Load forecasting, selection of units and plant location.",
+            "Load shearing: Base load and peak load plants.",
+            "Use of chronological load curves to distribute load among units.",
+            "Power plant Economics: Economic operation of power plants.",
+            "Input output curve, heat rate curve, incremental rate curve.",
+            "Use of incremental rate curve for optimum load scheduling.",
+            "Transmission line loss, determination of loss co-efficient.",
+            "Economic conductor selection, Kelvin’s law.",
+            "Graphical method for location of distribution systems.",
+            "Tariff and tariff design.",
+            "Bus system.",
+            "Importance of power control.",
+            "Current limiting reactors.",
+            "Different types of bus system layout.",
+            "Forces on bus section in case of short circuit."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "EEE 3209": {
+          "title": "Microprocessor, Interfacing and System Design",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Fundamental Concepts: Microprocessor: A programmable device; microcomputer components and support ICs, building blocks of MPU based systems, microprocessor buses, programming principles using MASM, microprocessor instructions.",
+            "16-bit Architecture: Pin diagram and functions, memory organization, bus activities, register layout, internal processing blocks.",
+            "Instruction Set: Classifications of instructions, addressing modes, address computing chart.",
+            "I/O Controller Programming: Port definition and read/write instructions, parallel I/O programming using 8255, serial I/O programming using 8251, display programming using 8279 and LCD, keyboard programming using 8279 and discrete components, generation of timing functions using 8254 Timer/Counter.",
+            "Interrupt Structure: Interrupt terminologies, hardware and software interrupt, multiple interrupt management, 8259 interrupt controller.",
+            "Data Conversion Algorithm: BCD2BIN conversion, BIN2BCD conversion, binary multiplication, binary division.",
+            "System Design (8086 based digital weighing machine: DWM) Topdown/Bottomup design concept, hardware block diagram, control program flow chart, weight/rate acquisition and processing and display, cost computation and processing and display.",
+            "Advanced Microprocessors and Microcontrollers: History of the evolution of MPU/MCU, multitasking systems, PVAM operation of Intel high performance architecture, overview of 80286 architecture, instruction and programming; overview of 80386 architecture, instruction and programming; CISC and RISC microcontrollers, instruction and programming."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "EEE 3210": {
+          "title": "Microprocessor, Interfacing and System Design Sessional",
+          "credit": 1.5,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Sessional based on the theory of course EEE 3209."
+          ],
+          "sessionalNote": "Sessional",
+          "references": []
+        },
+        "EEE 3211": {
+          "title": "Power System I",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Inductance and Capacitance of overhead power line.",
+            "Line representation : equivalent circuit of short, medium and long line.",
+            "Network representation: single line and reactance diagram of power system and per unit representation.",
+            "Load flow studies : Gauss – seidel and Newton-Raphson method.",
+            "Control of voltage, real power and reactive power.",
+            "Reactive power compensation.",
+            "Fault analysis: Symmetrical fault calculation, symmetrical components, sequence impedance and sequence networks, different unsymmetrical fault calculation.",
+            "Introduction to different kinds of relays and circuit breakers.",
+            "Typical layout of substation equipment."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "EEE 3212": {
+          "title": "Power System I Sessional",
+          "credit": 1.5,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Sessional based on the theory of course EEE 3211."
+          ],
+          "sessionalNote": "Sessional",
+          "references": []
+        },
+        "EEE 3217": {
+          "title": "Communication Engineering II",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Overview of communication system: Basic principles, fundamental elements, system limitations, message source, bandwidth requirements, transmission media types, bandwidth and transmission capacity.",
+            "Noise: Source, characteristics of various types of noise and signal to noise ratio.",
+            "Communication systems: Analog and digital.",
+            "Continuous wave modulation: Transmission types- base-band transmission, carrier transmission; Amplitude and Angle Modulations & Demodulations, Sampling and Pulse Modulations; line coding- formats and bandwidths.",
+            "Binary Modulated Bandpass Signaling: OOK, BPSK, DPSK, FSK, MSK bandwidth requirements, detection and noise performance, Multilevel Modulated Bandpass Signaling, Multiplexing: TDM- principle, receiver synchronization, frame synchronization, TDM of multiple bit rate systems; FDM- principle, de-multiplexing; wavelength-division multiplexing multiple-access network- time-division multiple-access, frequency-division multiple access, code-division multiple-access - spread spectrum multiplexing, coding techniques and constraints of CDMA.",
+            "Communication system design: design parameters, channel selection criteria and performance simulation."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "EEE 3218": {
+          "title": "Communication Engineering II Sessional",
+          "credit": 0.75,
+          "contactHour": "3/2 hrs/week",
+          "topics": [
+            "Sessional based on the theory of course EEE 3217."
+          ],
+          "sessionalNote": "Sessional",
+          "references": []
+        }
+      },
+      "optionalCourses": [],
+      "termNotes": []
+    },
+    "Y4T1": {
+      "termKey": "Y4T1",
+      "title": "Fourth Year First Term",
+      "courses": {
+        "EEE 4000": {
+          "title": "Project and Thesis",
+          "credit": 1.5,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "A project/thesis course will be assigned to the students in 4th year 1st semester class and it will continue till 4th year 2nd semester.",
+            "The objective is to provide an opportunity to the students to develop initiative, creative ability, confidence and engineering judgment.",
+            "The results of the work should be submitted in the form of a dissertation, which should include appropriate drawings, charts, tables, references etc.",
+            "A grade X shall be awarded for this course in 4th year 1st semester.",
+            "Final assessment on this course will be done in 4th year 2nd semester."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "EEE 4100": {
+          "title": "Industrial Training",
+          "credit": 1.0,
+          "contactHour": "2 hrs/week",
+          "topics": [
+            "Students will be attached with the industries/service agencies for two weeks after completing their Third year first semester (before starting Third year second semester/during any vacation in Third year second semester) to gain practical knowledge.",
+            "It is a 1-credit course and without completion of this course the student will not fulfill the requirements of B. Sc. Engineering Degree."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "EEE 4107": {
+          "title": "Digital Signal Processing",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Introduction to Digital Signal Processing (DSP): Discrete-time signals and systems, analog to digital conversion, impulse response, finite impulse response (FIR) and infinite impulse response (IIR) of discrete time systems, difference equation, convolution, transient and steady state response.",
+            "Discrete Transformations:  Discrete Fourier series, discrete-time Fourier series, discrete Fourier transform (DFT) and properties, fast Fourier transform (FFT), inverse fast Fourier transform, Z-transformation- properties, transfer function, poles and zeroes and inverse Z-transform.",
+            "Correlation:  Circular convolution, auto correlation and cross correlation.",
+            "Digital Filters:  FIR filters- linear phase filters, specifications, design using window, optimal and frequency sampling methods; IIR filters- specifications, design using impulse variant, bi-linear z-transformation, least square methods and finite precision effects."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "EEE 4108": {
+          "title": "Digital Signal Processing Sessional",
+          "credit": 0.75,
+          "contactHour": "3/2 hrs/week",
+          "topics": [
+            "Sessional based on the theory of course EEE 4107."
+          ],
+          "sessionalNote": "Sessional",
+          "references": []
+        },
+        "EEE 4117": {
+          "title": "Radio and TV Engineering",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Introduction to radio communication, History, Frequency management.",
+            "Design of radio transmitter and receiver circuits using scattering-parameter methods.",
+            "Circuits include oscillators, radio frequency amplifiers and matching networks, mixers and detectors.",
+            "Design of amplitude, frequency, and pulse-modulated communication systems, including modulators, detectors, and the effects of noise.",
+            "Television: Introduction, principle of operation, transmitter and receiver, Receiving and transmitting antenna.",
+            "Camera tube, Picture tube, Electron beam scanning, T-lines, balun, duplexer, Vestigial side-band filters.",
+            "Introduction to color TV, VCR, CCTV, CATV, MATV, TV Booster."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "EEE 4118": {
+          "title": "Radio and TV Engineering Sessional",
+          "credit": 0.75,
+          "contactHour": "3/2 hrs/week",
+          "topics": [
+            "Sessional based on the theory of course EEE 4117."
+          ],
+          "sessionalNote": "Sessional",
+          "references": []
+        },
+        "IPE 4111": {
+          "title": "Project and Operations Management",
+          "credit": 2.0,
+          "contactHour": "2 hrs/week",
+          "topics": [
+            "Project identification and selection, planning, appraisal, project implementation, project organization, budgeting, scheduling using bar diagram, CPM, PERT, resource allocation, information system and project control, project termination, matrix organization, project manager, contract negotiation and conflict resolution, evaluation of an investment project, project failure and risk control.",
+            "Production systems, product/service life cycle, forecasting models, bill of materials, material and inventory management: Inventory models, ABC analysis, coding and standardization.",
+            "Aggregate planning, MPS, MRP, capacity planning, operating scheduling, facility location algorithm, facility layout techniques, work study."
+          ],
+          "sessionalNote": null,
+          "references": []
+        }
+      },
+      "optionalCourses": [
+        {
+          "title": "Power System II",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Design and constructional features of overhead power transmission lines and underground cables.",
+            "DC and AC power distribution.",
+            "Stability: Swing equation, power angle equation, equal area criterion, multi-machine system, step-by-step solution of swing equation, factors affecting transient stability.",
+            "Flexible AC transmission system.",
+            "High voltage DC transmission system.",
+            "Power system harmonics."
+          ],
+          "sessionalNote": null,
+          "references": [],
+          "courseCode": "EEE 4141"
+        },
+        {
+          "title": "Power System II Sessional",
+          "credit": 0.75,
+          "contactHour": "3/2 hrs/week",
+          "topics": [
+            "Sessional based on the theory of course EEE 4142."
+          ],
+          "sessionalNote": "Sessional",
+          "references": [],
+          "courseCode": "EEE 4142"
+        },
+        {
+          "title": "Digital Electronics II",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "TTL: TTL NAND gate operation, current-sourcing and current-sinking action, totem pole output circuit, TTL NOR gate, standard TTL characteristics, supply voltage and temperature range, voltage levels, power dissipation, propagation delay, fan out, introduction to improved TTL series, TTL loading and fan out, other TTL characteristics, connecting TTL outputs together, open collector output, Tri-state, TTL driving CMOS, problem with TTL.",
+            "ECL: Basic ECL circuit, CL OR/NOR gate, ECL characteristics, fan out, speed of operation.",
+            "CMOS Logic Families: Introduction to the working principle of enhance type NMOS, PMOS and depletion MOS. Comparison of NMOS and PMOS with respect to speed. Design of NOMS inverter with resistive load, with NMOS enhancement load and with NMOS depletion load. Egde time and speed calculation for NMOS inverter with depletion load. CMOS inverter: Circuit diagram, operation, transfer characteristic and noise margin. Design of basic CMOS gates (NAND gate and NOR gate) with specified parameters (rise time and fall time). Circuit implementation from logic equations. NMOS pass transistors and CMPS pass gate. Implementation of multiplexer by NMOS and CMOS pass gate. Buffer circuit. CMOS gates driving TTL gates and comparison of CMOS logics with TTL logics. Design of basic logic gates using CMOS and BiCMOS.",
+            "Interfacing Data Converters: Digital to Analog Converters (D/A): The binary weighted resistor D/A converter. The R/2R ladder D/A converter. The inverted ladder D/A converter. Specification for D/A converters (resolution, linearity, settling time and accuracy). Analog to Digital Converters (A/D): Flash converters, Successive approximation converter and Dual slope converter. A/D converter specifications (analog input voltage, input impedance, accuracy, conversion time etc.). A comparison of converter types. Sample and hold circuit (S/H), interconnecting the S/H circuit and the A/D converter."
+          ],
+          "sessionalNote": null,
+          "references": [],
+          "courseCode": "EEE 4161"
+        },
+        {
+          "title": "Digital Electronics II Sessional",
+          "credit": 0.75,
+          "contactHour": "3/2 hrs/week",
+          "topics": [
+            "Sessional based on the theory of course EEE 4161."
+          ],
+          "sessionalNote": "Sessional",
+          "references": [],
+          "courseCode": "EEE 4162"
+        },
+        {
+          "title": "Processing and Fabrication Technology",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Monolithic Fabrication Processes and Structures: Substrate materials: Crystal growth and wafer preparation. Basic MOS process, Basic Bipolar process, Photolithographic process, pattern generation, pattern transfer, mask alignment, soft and hard baking, Photomask fabrication. Thermal oxidation, oxide quality, oxide thickness characterization.",
+            "Cleaning: Surface cleaning, organic cleaning and RCA cleaning.",
+            "Diffusion: Mathematical model, constant source diffusion, limited source diffusion, two-step diffusion, sheet resistance.Diffusion systems: Boron, Phosphorous, Ion implementation.",
+            "Etching: Wet chemical etching, silicon and GaAs etching, anisotropic etching, selective etching, dry physical etching, ion beam etching, sputtering etching and reactive ion etching.",
+            "Film Deposition: Evaporation, sputtering, CVD, Epitaxy.",
+            "Isolation: p-n junction isolation, mesa isolation and oxide isolation, BJT based microcircuits, p-channel and n-channel MOSFETs, complimentary MOSFETs and silicon on insulator devices. Testing, bonding and packaging.",
+            "Interconnection, contacts, packaging and testing."
+          ],
+          "sessionalNote": null,
+          "references": [],
+          "courseCode": "EEE 4165"
+        },
+        {
+          "title": "Processing and Fabrication Technology Sessional",
+          "credit": 0.75,
+          "contactHour": "3/2 hrs/week",
+          "topics": [
+            "Sessional: Sessional based on theory of course EEE 4165"
+          ],
+          "sessionalNote": "Sessional",
+          "references": [],
+          "courseCode": "EEE 4166"
+        },
+        {
+          "title": "Microwave Engineering",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "UHF Transmission Lines: Voltage and current in ideal transmission lines, reflection, transmission, standing wave, impedance transformation, smith chart, impedance matching and lossy transmission lines.",
+            "Microwave Components: Cavities, Slow wave structures, Waveguide Tees, Directional Couplers, Circulators and Isolators, S-parameter.",
+            "Microwave tubes: Klystron amplifier, multicavity klystron amplifier, Reflex Klystron oscillator, magnetron, TWT amplifier, BWO.",
+            "Semiconductor microwave devices: Tunnel diodes, Gunn-Effect diodes, IMPATT diodes.",
+            "Microwave measurements."
+          ],
+          "sessionalNote": null,
+          "references": [],
+          "courseCode": "EEE 4181"
+        },
+        {
+          "title": "Microwave Engineering Sessional",
+          "credit": 0.75,
+          "contactHour": "3/2 hrs/week",
+          "topics": [
+            "Sessional based on the theory of course EEE 4181."
+          ],
+          "sessionalNote": "Sessional",
+          "references": [],
+          "courseCode": "EEE 4182"
+        },
+        {
+          "title": "High Voltage Engineering",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Ionization and decay process: Townsend’s first and second ionization coefficient. Electric breakdown in gases. Townsend’s criterion for spark breakdown. Sparking potential. Penning effect. Corona discharges, power loss calculation. Breakdown of solid and liquid dielectrics.",
+            "Generation of high voltage: Alternating voltage, transformer cascade. Series resonant circuit for high voltage ac testing. Test of dc and ac cable.",
+            "Transient Voltage: Impulse wave shape. Impulse voltage generator and its mathematical analysis. Design consideration of impulse generators. Triggering of impulse generators.",
+            "DC voltage doubler and cascade circuits. Electrostatic generator, voltage stabilization. Measurement of high voltage. Electrostatic voltmeter, sphere gap. Potential divider. High Voltage testing of power system equipment. Oil testing. Design consideration of transmission line based on direct stroke. High voltage transient in transmission line. High voltage lightning arrester. Insulation co-ordination."
+          ],
+          "sessionalNote": null,
+          "references": [],
+          "courseCode": "EEE 4143"
+        },
+        {
+          "title": "High Voltage Engineering Sessional",
+          "credit": 0.75,
+          "contactHour": "3/2 hrs/week",
+          "topics": [
+            "Sessional based on the theory of course EEE 4143."
+          ],
+          "sessionalNote": "Sessional",
+          "references": [],
+          "courseCode": "EEE 4144"
+        },
+        {
+          "title": "VLSI",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Introduction to Microelectronics and MOS Technology, Basic Electrical Properties and Circuit Design Processes of MOS and Bi CMOS Circuits, Inverter Circuits, Sub-System Design Processes and Layout, Scaling of MOS Circuits: Scaling Models and Scaling Factors, Limitation of Scaling.",
+            "Computational Elements: Design of an ALU Sub-System, Adder, Multipliers, Memory Registers, Dynamic & Static Flip-Flops, Bus Arbitration and Aspects of System Timing. CMOS Fabrication, Practical Aspects of Design Tools and Test-Ability CMOS Design, Behavioral Description, Structural Description, Physical Description and Design Verification. Introduction to Ga-As Technology: Ultra-Fast Circuits and Systems.",
+            "VHDL background and basic concepts, structural specifications of hardware design organization and parameterisation."
+          ],
+          "sessionalNote": null,
+          "references": [],
+          "courseCode": "EEE 4163"
+        },
+        {
+          "title": "VLSI Sessional",
+          "credit": 0.75,
+          "contactHour": "3/2 hrs/week",
+          "topics": [
+            "Sessional based on the theory of course EEE 4163."
+          ],
+          "sessionalNote": "Sessional",
+          "references": [],
+          "courseCode": "EEE 4164"
+        },
+        {
+          "title": "Digital Communication",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Introduction : Communication channels, mathematical model and characteristics. Probability and stochastic process.",
+            "Source coding: Mathematical models of information, entropy, Huffman code and linear predictive coding.",
+            "Digital transmission system: Base band digital transmission, inter-symbol interference, bandwidth, power efficiency, modulation and coding trade-off.",
+            "Receiver for AWGN channels: Correlation demodulator and maximum likehood receiver.",
+            "Channel capacity and coding: Channel models and capacities and random selection of codes. Block codes and conventional codes: Linear block codes, convolution codes and coded modulation. Spread spectrum signals and system."
+          ],
+          "sessionalNote": null,
+          "references": [],
+          "courseCode": "EEE 4183"
+        },
+        {
+          "title": "Digital Communication Sessional",
+          "credit": 0.75,
+          "contactHour": "3/2 hrs/week",
+          "topics": [
+            "Sessional based on the theory of course EEE 4183."
+          ],
+          "sessionalNote": "Sessional",
+          "references": [],
+          "courseCode": "EEE 4184"
+        }
+      ],
+      "termNotes": [
+        "Elective I and II to be chosen from respective track (Power, Electronics, Communication) as listed in optionalCourses. Placeholder codes EEE ****."
+      ]
+    },
+    "Y4T2": {
+      "termKey": "Y4T2",
+      "title": "Fourth Year Second Term",
+      "courses": {
+        "EEE 4000": {
+          "title": "Project and Thesis",
+          "credit": 3.0,
+          "contactHour": "6 hrs/week",
+          "topics": [
+            "A project/thesis course will be assigned to the students in 4th year 1st semester class and it will continue till 4th year 2nd semester.",
+            "The objective is to provide an opportunity to the students to develop initiative, creative ability, confidence and engineering judgment.",
+            "The results of the work should be submitted in the form of a dissertation, which should include appropriate drawings, charts, tables, references etc.",
+            "A grade X shall be awarded for this course in 4th year 1st semester.",
+            "Final assessment on this course will be done in 4th year 2nd semester."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "EEE 4200": {
+          "title": "Seminar",
+          "credit": 1.0,
+          "contactHour": "2 hrs/week",
+          "topics": [
+            "Students will work in groups or individually to prepare review articles on the corresponding topic of their thesis/project and will present before audience."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "EEE 4209": {
+          "title": "Embedded System Design",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Embedded Processing – Evolution, Issues and Challenges;",
+            "System and Processor Architecture: von Neumann, Harvard and their variants;",
+            "Memory Architecture and Devices;",
+            "Input-Output Devices and Mechanisms;",
+            "Instruction Set and Addressing Modes;",
+            "Interfacing of Memory and Peripheral Devices – Functional and Timing Issues;",
+            "Application Specific Logic Design using Field Programmable Devices and ASICs;",
+            "Analog to Digital and Digital to Analog Converters;",
+            "Bus I/O and Networking Considerations;",
+            "Bus and Wireless Protocols;",
+            "Embedded Systems Software: Constraints and Performance Targets;",
+            "Real-time Operating Systems: Introduction, Scheduling in Real-time Operating Systems;",
+            "Memory and I/O Management: Device Drivers;",
+            "Embedded Software Development: Flow, Environments and Tools, System Specification and Modelling, Programming Paradigms, System Verification;",
+            "Performance Analysis and Optimisation: Speed, Power and Area Optimisation;",
+            "Testing of Embedded Systems System Design Examples using Microcontrollers, PLC, and FPGA."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "EEE 4210": {
+          "title": "Embedded System Design Sessional",
+          "credit": 0.75,
+          "contactHour": "3/2 hrs/week",
+          "topics": [
+            "Sessional based on the theory of course EEE 4209."
+          ],
+          "sessionalNote": "Sessional",
+          "references": []
+        },
+        "EEE 4217": {
+          "title": "Mobile Cellular Communication",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Introduction: Concept, evolution and fundamentals, analog and digital cellular systems.",
+            "Cellular Radio System: Frequency reuse, co-channel interference, cell splitting and components",
+            "Mobile Radio Propagation: Propagation characteristics, models for radio propagation, antenna at cell site and mobile antenna.",
+            "Frequency Management and Channel Assignment: Fundamentals, spectrum utilization, fundamentals of channel assignment, traffic and channel assignment.",
+            "Handoffs and Dropped Calls: Reasons and types, forced handoffs, mobile assisted handoffs and dropped call rate.",
+            "Diversity Techniques: Concept of diversity branch and signal paths, diversity types, Alamouti space-time block coding; carrier to noise and carrier to interference ratio performance.",
+            "Digital Cellular Systems: Global system for mobile, OFDM. GSM, AMPS, GPRS, EDGE, W-CDMA, generations of mobile communication, Packet switching and data communication"
+          ],
+          "sessionalNote": null,
+          "references": []
+        }
+      },
+      "optionalCourses": [
+        {
+          "courseCode": "EEE 4241",
+          "title": "Power System Protection",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Philosophy of switchgear and protection. Circuit breakers, principle of arc extinction in DC and AC circuit breakers. Recovery voltage, rate of rise of recovery voltage and other transient phenomena. Switching surges. Disconnection of unloaded transformer and transmission line. Speed of circuit breaker. Construction, operation, rating and testing of bulk oil and minimum oil breaker, SF6 circuit breaker, ABCB, ACB, and VCB. Selection of circuit breaker. Travelling wave in transmission line. Surge absorber, lightning arrester, horn gap, its rating and testing.",
+            "Protective relaying: Relay voltage rating, high, medium and low. Basic protective zone. Relaying Scheme.",
+            "Electromechanical Relays: Principal, general equation. overcurrent, balanced current, overvoltage, distance, directional, positive sequence, negative sequence and differential relays and their applications.",
+            "Static relays: Introduction to solid state device in the construction of static relays. Different type of static relays.",
+            "Generator protection. Transformer protection, Bucholz’s relay. Protection of bus bar, transmission line, feeder etc. Relay testing."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        {
+          "courseCode": "EEE 4242",
+          "title": "Power System Protection Sessional",
+          "credit": 0.75,
+          "contactHour": "3/2 hrs/week",
+          "topics": [
+            "Sessional based on the theory of course EEE 4241."
+          ],
+          "sessionalNote": "Sessional",
+          "references": []
+        },
+        {
+          "courseCode": "EEE 4261",
+          "title": "Biomedical Engineering",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Medical terminology, cell physiology, membrane potential, action  potential, Rhythmic excitation of heart.",
+            "Transducers used in medical diagnostics.",
+            "Biomedical Instrumentation: Normal Electrocardiograph, ECG simulator, Watch filter, ECG amplifier, pulse beat monitor, pace maker, galvanic skin resistance detector, respiratory and suction apparatus.",
+            "Electronic stethoscope. Electronic clinical thermometer, blood flow and pressure monitoring recorders, metabolic rate measurement.",
+            "Special topics: Bio-telemetry, application of ultrasonic and laser in biology and medicine. Clinical X- ray equipment. Fluoroscopy. Infrared heating."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        {
+          "courseCode": "EEE 4262",
+          "title": "Biomedical Engineering Sessional",
+          "credit": 0.75,
+          "contactHour": "3/2 hrs/week",
+          "topics": [
+            "Sessional based on the theory of course EEE 4261."
+          ],
+          "sessionalNote": "Sessional",
+          "references": []
+        },
+        {
+          "courseCode": "EEE 4267",
+          "title": "Transducers and Instrumentation",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Introduction : Functional elements of Instrumentation system, classification, standards and calibration of different instruments, use of personal computer in instrumentation.",
+            "Static performance of Instruments : Errors and uncertainties, propagation of uncertainties, Accuracy, Precision, Resulation, Linearity etc., Impedance loading and matching, selection of instruments.",
+            "Transducer elements : Analog and digital transducer, Active and passive transducer. Construction, operating principle and characteristics of Resistive, Inductive and capacitive transducer, Strain Gauge, Light dependent transducer, LVDT, Piezoelectric, Hall effect transducer, Thermistor, Thermocouple, RTD, Proximity transducer.",
+            "Data Acquisition and display : Amplifiers, Compensators, Filters, A-D and D-A converter, Data transmission elements, Display and recording elements.",
+            "Motion measurement : Relative and absolute motion, Linear and rotational motion measurement.",
+            "Force measurement : Pneumatic and elastic force, measurement of time varying force.",
+            "Pressure measurement : High, moderate and low (Vacuum) pressure measurement.",
+            "Torque and power measurement : transmission dynamometers, non-contact dynamometers.",
+            "Temperature measurement : Measurement of ambient temperature, temperature monitoring and control, measurement of high temperature, use of RTD, Pyrometers.",
+            "Flow measurement : Linear resistance element flow meter, Ultrasonic flow meter, electromagnetic flow meter. Hot wire anemometer, Laser Doppler anemometer.",
+            "Acoustic measurement : Sound pressure and power level, Loudness, sound level meter. Microphones, Piezoelectric crystal type microphone, Electrodynamics type microphone, Carbon microphone.",
+            "Computer aided instrumentation : Example of a few open loop and closed loop control system using different transducers and personal computer."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        {
+          "courseCode": "EEE 4268",
+          "title": "Transducers and Instrumentation Sessional",
+          "credit": 0.75,
+          "contactHour": "3/2 hrs/week",
+          "topics": [
+            "Sessional: Sessional based on theory of course EEE 4267"
+          ],
+          "sessionalNote": "Sessional",
+          "references": []
+        },
+        {
+          "courseCode": "EEE 4281",
+          "title": "Antennas and Propagation",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Fundamental of Antennas: Vector Potential Functions, Electric and Magnetic Fields for Electric and Magnetic Current Sources, Solution of Vector Potential Wave Equation.",
+            "Antenna Arrays: Two-Element Array, N-element Linear Arrays: Broad-side, End-fire, Phased, Binomial, Dolph- Tchebyschef and Super-directive Arrays, Determination of Array Factor and Patterns, Planar and Circular Arrays.",
+            "Travelling-Wave and Broad-band Antennas: Long wire, V, Rhombic and Helical Antennas, Yagi, Uda array, Frequency Independent and Log-periodic Antennas.",
+            "Aperture, Reflector and Lens Antennas: Huygens's Principle, Rectangular and Circular Apertures, Microstrip Antennas.",
+            "Babinet's Principle, Sectoral, Pyramidal and Conical Horns, Parabolic and Cassegrain Reflector Antennas, Lens Antennas.",
+            "Antenna Measurement: Antenna ranges, Radiation Pattern, Gain and Directivity, Polarization.",
+            "Radio wave propagation: Ground wave propagation, Ionospheric propagation, Propagation losses."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        {
+          "courseCode": "EEE 4282",
+          "title": "Antennas and Propagation Sessional",
+          "credit": 0.75,
+          "contactHour": "3/2 hrs/week",
+          "topics": [
+            "Sessional based on the theory of course EEE 4281."
+          ],
+          "sessionalNote": "Sessional",
+          "references": []
+        },
+        {
+          "courseCode": "EEE 4243",
+          "title": "Power System Operation and Control",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Principles of power system operation : SCADA, convention and competitive environment.",
+            "Unit commitment, static security analysis, state estimation, optimal power flow, automatic generation control and dynamic security analysis."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        {
+          "courseCode": "EEE 4263",
+          "title": "Optoelectronics",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Light : Nature of light, Polarization, superposition, interference, diffraction, sources, blackbody radiation.",
+            "Modulation of light : Elliptical polarization, Birefringence, quarter wave plate, optical activity, electro-optic effect, Kerr modulators, scanning and switching, magneto –optic devices, acousto-optic effect, nonlinear optics.",
+            "Display devices: Luminescence, photoluminescence, cathodoluminescent, LED materials, LED construction, response time, plasma displays, LCD, numerical display.",
+            "Lasers : Emission and absorbs ion, Einstein relation, optical feedback, laser losses, line shape function, modes, classes of laser, laser applications, distance measurements, holography.",
+            "Photo detectors : Thermal detectors, photon devices, vacuum photodiodes, Noise, Image intensifier, junction detectors, detector arrays.",
+            "Optical communication system: Fiber optic communication, integrated optics.",
+            "Noncommunication applications: Optical fiber sensors, Light guiding fiber."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        {
+          "courseCode": "EEE 4283",
+          "title": "Radar and Satellite Communication",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Radar: Introduction to Radar,  Radar Equation CZ, Operating Principle of Radar with Block Diagram, CW and FM Radar, Tracking Radar, Antennas for Radar, Radar Receivers, Radar Transmitting System, Duplexer, Usable Frequencies for Radar, Radar Applications.",
+            "Satellite Communication: Overview of Satellite System Engineering. Spacecraft, Introduction, to Spacecraft Subsystem. (AOCS), Telemetry, Tracking and command (TT&C). Spacecraft Antennas, Basic Antenna Types and Relationships Spacecraft, Antennas in Practice, Frequency Reuse Equipment Reliability and Space Qualification, Reliability redundancy. Multiple Access. Earth station Technology : Earth Station Design, Earth Station Design for Low System Noise Temperature, Large  Earth Station Antennas.",
+            "Satellite  Television  Broadcasting  Networks, VSAT technology."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        {
+          "courseCode": "EEE 4245",
+          "title": "Electrical Machine III",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Special Machines: Series universal motor, permanent magnet DC motor, unipolars and bipolar brush less DC motors, stepper motor and control circuits. Reluctance and hysteresis motors with drives circuits, switched reluctance motor, electro static motor, repulsion motor, synchros and control transformers. Permanent magnet synchronous motors.",
+            "Acyclic Machines: Generators, conduction pump and induction pump.",
+            "Magneto Hydrodynamic Generators: Fuel cells, thermoelectric generators, flywheels, vector control, linear motors and traction."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        {
+          "courseCode": "EEE 4247",
+          "title": "Renewable Energy",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Importance of renewable energy, sources. Statistics regarding solar radiation and wind speed. Insulation: geographical distribution, atmospheric factors, measurements.",
+            "Solar cell: principle of operation, spectral response, factors affecting conversion efficiency, I-V characteristics, maximum power output. PV modules and arrays: stationary and tracking. PV systems: stand alone, battery storage, inverter interfaces with grid.",
+            "Wind turbine generators: types, operational characteristics, cut-in and cut-out speed, control, grid interfacings, AC-DC-AC link. Wind and Tidal energy conversion."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        {
+          "courseCode": "EEE 4269",
+          "title": "Photovoltaic System",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Introduction to Photovoltaic Systems; Solar Radiation; the PN-junction and Solar cell physics; function and performance of the components in the PV-system; batteries, power point tracker, DC-AC inverter, charge regulator; system design of stand-alone and grid connected systems; building integration of PV-systems.",
+            "Fundamentals of photo-electrochemistry, Fundamentals and applications in electron-transfer reactions, electrochemistry. Experimental techniques in photo-cells, Modules, and Arrays, Batteries, Charge Controllers, Inverters, System Sizing, Mechanical Integration, Electrical Integration, Design the domestic solar cell, Net metering of PV systems; Commissioning, Maintenance, and Troubleshooting;",
+            "Si-based Solar cells, extremely thin absorber (ETA) cells, Organic donor-acceptor heterojunction solar cells, Dye-sensitized mesoscopic solar cells, semiconductor/ liquid junction solar cells, Photo-electrochemical storage cells."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        {
+          "courseCode": "EEE 4285",
+          "title": "Optical Fiber Communication",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Introduction : Historical perspective, basic system, nature of light, advantages and applications of fiber optic.",
+            "Optics review : Ray theory and applications, lenses, imaging, numerical aperture, diffraction.",
+            "Light wave fundamentals : Electromagnetive waves, Dispersion, polarization, resonant cavities, reflection at plane boundary, critical angle.",
+            "Integrated optic waveguides : Slab waveguide, Modes in symmetric and asymmetric waveguide, coupling, Dispersion and distortion, Integrated optic components.",
+            "Optic fiber waveguide : Step index fiber, graded index fiber, attenuation, pulse distortion and information rate, construction of optic fiber, optic fiber cables.",
+            "Light sources : LED, LD, distributed feedback LD, optical amplifiers, fiber laser, vertical cavity surface emitting laser diode.",
+            "Light detectors : Photo detection, photo multiplier, semiconductor photodiode, PIN photodiode, avalanche photodiode.",
+            "Couplers and connectors : Connector principle, end preparation, splices, connectors, source coupling.",
+            "Network distribution and fiber components: Directional couplers, star couplers, switches, isolator, wave-length division multiplexing, fiber bragg grating.",
+            "Modulation: LED modulation, LD modulation, Analogue and digital modulation, modulation formats, optic heterodyne receivers.",
+            "Noise and detection : Thermal shot and noise, SNR, error rates, receiver circuit design.",
+            "System design: Analogue and digital system design, few real life problems and examples."
+          ],
+          "sessionalNote": null,
+          "references": []
+        }
+      ],
+      "termNotes": [
+        "Elective III (theory + sessional), Elective IV (theory only), Elective V (theory only) to be chosen from respective track as per optionalCourses listing."
+      ]
+    }
+  },
+  "extras": {
+    "administrative_noise": [
+      "Chapter 3",
+      "Syllabus for Undergraduate Program",
+      "Semester Credit Distribution",
+      "S.N. Year/ Semester Theory Sessional Total Credits No of Course Credits No of Course Credits",
+      "1 1st/Odd 5 15 4 4.50 19.50",
+      "2 1st/Even  5 15 4 4.50 19.50",
+      "3 2nd/Odd 5 15 4 5.25 20.25",
+      "4 2nd /Even 5 15 4 5.25 20.25",
+      "5 3rd/Odd 5 15 4 4.50 19.50",
+      "6 3rd/Even 5 15 5 6.00 21.00",
+      "7 4th/Odd 5 14 6 5.50 19.50",
+      "8 4th/Even  5 15 4 5.50 20.50",
+      "Total 40 119 33 41.00 160.00",
+      "Summary of Undergraduate Course Plan",
+      "S.N. Course Type Credit %",
+      "1 Departmental Courses   Core Courses Theory 69  Lab 32.75  Elective Courses Theory 15  Lab 2.25  Sub-Total 119.0 74.38",
+      "2 Related Courses   Humanities Theory 11  Lab 0.75  Sub-Total 11.75 7.34 Basic Sciences Theory 18   Lab 1.5  Sub-Total  19.50 12.19 Related Engg. Theory 6   Lab 3.75  Sub-Total 9.75 6.09 Total 160 100.00",
+      "List of Undergraduate Courses",
+      "Core Courses (EEE)",
+      "S.N. Course Number Course Title Contact Hrs/week Credit",
+      "1 EEE 1101 Electrical Circuits  3 3.0",
+      "2 EEE 1102 Electrical Circuits  Sessional 3 1.5",
+      "3 EEE 1201 Electrical Circuits   3 3.0",
+      "4 EEE 1202 Electrical Circuits  Sessional 3/2 0.75",
+      "5 EEE 1203 Electronics  3 3.0",
+      "6 EEE 1204 Electronics  Sessional 3 1.5",
+      "7 EEE 2100 Electrical Shop Practice  3 1.5",
+      "8 EEE 2103 Electronics  3 3.0",
+      "9 EEE 2104 Electronics  Sessional 3 1.5",
+      "10 EEE 2203 Electronics I 3 3.0",
+      "11 EEE 2204 Electronics I Sessional 3 1.5",
+      "12 EEE 2105 Electrical Machine  3 3.0",
+      "13 EEE 2106 Electrical Machine  Sessional 3 1.5",
+      "14 EEE 2205 Electrical Machine  3 3.0",
+      "15 EEE 2206 Electrical Machine  Sessional 3 1.5",
+      "16 EEE 2211 Measurement and Instrumentation 3 3.0",
+      "17 EEE 2212 Measurement and Instrumentation Sessional 3 1.5",
+      "18 EEE 2213 Digital Electronics I  3 3.0",
+      "19 EEE 2214 Digital Electronics I Sessional 3/2 0.75",
+      "20 EEE 3100 Electronic Shop Practice 3 1.5",
+      "21 EEE 3101 Signals and Linear Systems 3 3.0",
+      "22 EEE 3105 Control Systems  3 3.0",
+      "23 EEE 3106 Control Systems Sessional 3/2 0.75",
+      "24 EEE 3107 Electromagnetic Fields & Waves 3 3.0",
+      "25 EEE 3109 Computational Methods in Electrical Engineering 3 3.0",
+      "26 EEE 3110 Computational Methods in Electrical Engineering Sessional 3 1.5",
+      "27 EEE 3117 Communication Engineering I 3 3.0",
+      "28 EEE 3118 Communication Engineering I Sessional 3/2 0.75",
+      "29 EEE 3200 Electrical and Electronic Circuit Simulation Sessional 3 1.5",
+      "30 EEE 3203 Power Electronics 3 3.0",
+      "31 EEE 3204 Power Electronics Sessional 3/2 0.75",
+      "32 EEE 3205 Power Plant Engineering and Economy  3 3.0",
+      "33 EEE 3209 Microprocessor, Interfacing and System Design 3 3.0",
+      "34 EEE 3210 Microprocessor, Interfacing and System Design Sessional 3 1.5",
+      "35 EEE 3211 Power System  3 3.0",
+      "36 EEE 3212 Power System  Sessional 3 1.5",
+      "37 EEE 3217 Communication Engineering II 3 3.0",
+      "38 EEE 3218 Communication Engineering II Sessional 3/2 0.75",
+      "39 EEE 4000 Project and Thesis 3 4.5",
+      "40 EEE 4100 Industrial Training 3 1.0",
+      "41 EEE 4107 Digital Signal Processing  3 3.0",
+      "42 EEE 4108 Digital Signal Processing Sessional 3/2 0.75",
+      "43 EEE 4117 Radio and TV Engineering  3 3.0",
+      "44 EEE 4118 Radio and TV Engineering Sessional 3/2 0.75",
+      "45 EEE 4200 Seminar 3 1.0",
+      "46 EEE 4209 Embedded System Design 3 3.0",
+      "47 EEE 4210 Embedded System Design Sessional 3/2 0.75",
+      "48 EEE 4217 Mobile Cellular Communication  3 3.0",
+      "Total   101.75",
+      "Core Courses (Humanities)",
+      "S.N. Course Number Course Title Contact Hrs/week Credits",
+      "1 Hum 1111 Technical English  3 3.0",
+      "2 Hum 1112 Technical English Sessional 3/2 0.75",
+      "3 Hum 1211 Financial Account and Economic Analysis 3 3.0",
+      "Total 7.5 6.75",
+      "Core Courses (Mathematics)",
+      "S.N. Course Number Course Title Contact Hrs/week Credits",
+      "1 Math 1101 Engg. Mathematics  3 3.0",
+      "2 Math 1201 Engg. Mathematics  3 3.0",
+      "3 Math 2101 Engg. Mathematics  3 3.0",
+      "4 Math 2201 Engg. Mathematics V 3 3.0",
+      "Total 12 12.0",
+      "Core Courses (Physics)",
+      "S.N. Course Number Course Title Contact Hrs/week Credits",
+      "1 Phy 1111 Physics 3 3.0",
+      "2 Phy 1112 Physics Sessional 3/2 0.75",
+      "Total 4.5 3.75",
+      "Core Courses (Chemistry)",
+      "S.N. Course Number Course Title Contact Hrs/week Credits",
+      "1 Chem 1211 Chemistry 3 3.0",
+      "2 Chem 1212 Chemistry Sessional 3/2 0.75",
+      "Total 4.5 3.75",
+      "Core Courses (ME)",
+      "S.N. Course Number Course Title Contact Hrs/week Credits",
+      "1 ME 1200 Engineering Drawing 3 1.50",
+      "2 ME 2101                      Basic Mechanical Engineering  3 3.0",
+      "3 ME 2102                      Basic Mechanical Engineering Sessional 3/2 0.75 Total 7.5 5.25",
+      "Core Courses (CSE)",
+      "S.N. Course Number Course Title Contact Hrs/week Credits",
+      "1 CSE 1111 Computer Programming 3 3.0",
+      "2 CSE 1112 Computer Programming Sessional 3 1.5",
+      "Total 6 4.5",
+      "Core Courses (IPE)",
+      "S.N. Course Number Course Title Contact Hrs/week Credits",
+      "1 IPE 2111 Legal Issues and Management for Engineers  3 3.0",
+      "2 IPE 4111 Project and Operations Management  2 2.0",
+      "Total 5 5.0",
+      "Elective Courses",
+      "From 4th year Odd semester, the department starts offering elective courses under three (3) major tracks viz. Power-, Electronics-, and Communication- Engineering.",
+      "Track selection: 1. Students will be divided into the three major tracks on the basis of options given by the students and their CGPA at the end of 3rd year odd semester. For regular students, this will be done in 3rd year even semester. 2. Maximum number of students in any major group will be N/3, where N is the total number of students in a class. 3. A student will have to take five (5) elective courses along with the corresponding sessional courses from the respective track. 4. Students will be assigned their projects/ theses in 4th year odd semester. The theme of project/thesis shall reflect the respective track. 5. Maximum class size of an elective course for regular students will be N/3. However, a student who has previously failed in an elective course will be allowed to re-register the course regardless of the class size. 6. In case of any unforeseen situation or ambiguity, the UGAC will take an appropriate decision.",
+      "Power Group",
+      "Electronics Group",
+      "Communication Group",
+      "4. Prerequisite Courses",
+      "S. N. Course Prerequisite Course",
+      "1 EEE 1201 EEE 1101",
+      "2 EEE 1203 EEE 1101",
+      "3 EEE 2103 EEE 1203",
+      "4 EEE 2105 EEE 1101",
+      "5 EEE 2203 EEE 2103",
+      "6 EEE 2205 EEE 2105",
+      "7 EEE 2213 EEE 1203",
+      "8 EEE 3105 EEE 1201",
+      "9 EEE 3107 Math 2101",
+      "10 EEE 3109 CSE 1112",
+      "11 EEE 3203 EEE 2213",
+      "12 EEE 3209 EEE 2213",
+      "13 EEE 4209 EEE 3209",
+      "Semester Course Plan",
+      "Details Syllabus",
+      "1. Core Courses offered by the Department of EEE",
+      "2. Elective Courses offered by the Department of EEE",
+      "2.1 Power Group",
+      "2.2 Electronics Group",
+      "2.3 Communication Group",
+      "3. Courses from other departments",
+      "3.1 Department of Computer Science and Engineering",
+      "3.2 Department of Mechanical Engineering",
+      "3.3 Department of Mathematics",
+      "3.4 Department of Physics",
+      "3.5 Department of Chemistry",
+      "3.6 Department of Humanities",
+      "Page 2", "Page 3", "Page 4", "Page 5", "Page 6", "Page 7", "Page 8", "Page 9", "Page 10", "Page 11", "Page 12", "Page 13", "Page 14", "Page 15", "Page 16", "Page 17", "Page 18", "Page 19", "Page 20", "Page 21", "Page 22", "Page 23", "Page 24", "Page 25", "Page 26", "Page 27", "Page 28", "Page 29", "Page 30", "Page 31", "Page 32", "Page 33", "Page 34", "Page 35", "Page 36"
+    ],
+    "ambiguities": [
+      {
+        "raw": "EEE 1101 Electrical Circuits ",
+        "reason": "OCR artifact '' likely represents Roman numeral I",
+        "possibleTargets": ["Electrical Circuits I"]
+      },
+      {
+        "raw": "EEE 1201 Electrical Circuits ",
+        "reason": "OCR artifact '' likely represents Roman numeral II",
+        "possibleTargets": ["Electrical Circuits II"]
+      },
+      {
+        "raw": "EEE 1203 Electronics ",
+        "reason": "OCR artifact '' likely represents Roman numeral I",
+        "possibleTargets": ["Electronics I"]
+      },
+      {
+        "raw": "EEE 2103 Electronics ",
+        "reason": "OCR artifact '' likely represents Roman numeral II",
+        "possibleTargets": ["Electronics II"]
+      },
+      {
+        "raw": "EEE 2203 Electronics I",
+        "reason": "OCR artifact 'I' likely represents Roman numeral III",
+        "possibleTargets": ["Electronics III"]
+      },
+      {
+        "raw": "EEE 2105 Electrical Machine ",
+        "reason": "OCR artifact '' likely represents Roman numeral I",
+        "possibleTargets": ["Electrical Machine I"]
+      },
+      {
+        "raw": "EEE 2205 Electrical Machine ",
+        "reason": "OCR artifact '' likely represents Roman numeral II",
+        "possibleTargets": ["Electrical Machine II"]
+      },
+      {
+        "raw": "EEE 3211 Power System ",
+        "reason": "OCR artifact '' likely represents Roman numeral I",
+        "possibleTargets": ["Power System I"]
+      },
+      {
+        "raw": "Math 1101 Engg. Mathematics ",
+        "reason": "OCR artifact '' likely represents Roman numeral I",
+        "possibleTargets": ["Engg. Mathematics I"]
+      },
+      {
+        "raw": "Math 1201 Engg. Mathematics ",
+        "reason": "OCR artifact '' likely represents Roman numeral II",
+        "possibleTargets": ["Engg. Mathematics II"]
+      },
+      {
+        "raw": "Math 2101 Engg. Mathematics ",
+        "reason": "OCR artifact '' likely represents Roman numeral III",
+        "possibleTargets": ["Engg. Mathematics III"]
+      },
+      {
+        "raw": "Math 2201 Engg. Mathematics V",
+        "reason": "OCR artifact 'V' likely represents Roman numeral IV",
+        "possibleTargets": ["Engg. Mathematics IV"]
+      },
+      {
+        "raw": "EEE 4142 Sessional based on the theory of course EEE 4142.",
+        "reason": "Self-referencing sessional note (should likely refer to EEE 4141)",
+        "possibleTargets": ["EEE 4141"]
+      }
+    ]
+  },
+  "qa": {
+    "termCount": 8,
+    "courseCount": 118,
+    "topicCount": 644,
+    "noiseCount": 172,
+    "ambiguityCount": 13
+  }
+}

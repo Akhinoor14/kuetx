@@ -24,7 +24,7 @@ export const NAV = [
       { id: 'schedule',   label: 'Class Schedule',       icon: 'Clock',        path: '/schedule' },
       { id: 'assignments',label: 'Assignments',          icon: 'FileText',     path: '/assignments' },
       { id: 'syllabus',   label: 'Syllabus',             icon: 'List',         path: '/syllabus' },
-      { id: 'term-qs',    label: 'Term Question & Solution', icon: 'HelpCircle', path: '/term-qs' },
+      { id: 'qbank',      label: 'Question Bank',        icon: 'BookMarked',   path: '/question-bank' },
       { id: 'marks',      label: 'Term Planner',         icon: 'ClipboardList',path: '/marks' },
       { id: 'results',    label: 'Results & GPA',        icon: 'TrendingUp',   path: '/results' },
       { id: 'teachers',   label: 'Teachers',             icon: 'Users',        path: '/teachers' },

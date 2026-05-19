@@ -7,6 +7,7 @@ import { IPE_DEPARTMENT as IPE } from './IPE/index.js';
 import { LE_DEPARTMENT as LE } from './LE/index.js';
 import { URP_DEPARTMENT as URP } from './URP/index.js';
 import { BME_DEPARTMENT as BME } from './BME/index.js';
+import { EEE_DEPARTMENT as EEE } from './EEE/index.js';
 
 export const DEPARTMENTS = {
   ECE,
@@ -17,5 +18,6 @@ export const DEPARTMENTS = {
   IPE,
   LE,
   BME,
+  EEE,
   URP,
 };
