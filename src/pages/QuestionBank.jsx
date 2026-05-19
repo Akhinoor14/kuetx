@@ -56,7 +56,10 @@ export default function QuestionBank() {
     alert('Preparing course ZIP — simulated');
   };
 
-  const openForm = () => window.open('https://forms.gle/9NahxuzSeeU6NTLw6', '_blank');
+  const openForm = () => {
+    const ok = window.confirm('We will redirect you to a Google Form. Do you want to continue?');
+    if (ok) window.open('https://forms.gle/9NahxuzSeeU6NTLw6', '_blank');
+  };
 
   useEffect(() => {
     // no-op placeholder to keep parity with previous behaviour
@@ -85,16 +88,16 @@ export default function QuestionBank() {
         <div className="qb-actions">
           <button className={`chip ${viewCurrent ? 'active' : ''}`} onClick={() => setViewCurrent(true)}>Current term</button>
           <button className={`chip ${!viewCurrent ? 'active' : ''}`} onClick={() => setViewCurrent(false)}>All terms</button>
-          <button className="contribute" onClick={() => { setShowContribute(true); openForm(); }}><BookMarked size={14}/> Contribute</button>
         </div>
       </div>
 
       <main className="qb-list">
         {filtered.length === 0 ? (
-          <div className="qb-empty">
-            <div className="emoji">📭</div>
-            <div>No question sets found.</div>
-            <button className="btn" onClick={openForm}>Report missing paper</button>
+          <div className="qb-help">
+            <div className="qb-help-meta">Need solutions or questions?</div>
+            <div className="qb-help-title">Share a question paper or solution to help others.</div>
+            <div className="qb-help-sub">Tap contribute to send the missing content and keep the bank complete.</div>
+            <button className="btn primary" onClick={openForm}>Contribute</button>
           </div>
         ) : (
           filtered.map(item => (

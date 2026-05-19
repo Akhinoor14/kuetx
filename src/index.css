@@ -1330,13 +1330,26 @@ h3 { font-size: 15px; font-weight: 600; }
   }
 
   .dashboard-page .dashboard-stats-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-    gap: 10px !important;
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 8px !important;
   }
 
   .dashboard-page .dashboard-stats-grid .card {
-    min-height: 132px;
-    padding: 16px !important;
+    min-height: auto;
+    padding: 12px 12px !important;
+  }
+
+  .dashboard-page .dashboard-stats-grid .card span:first-child {
+    font-size: 9px !important;
+  }
+
+  .dashboard-page .dashboard-stats-grid .card div:nth-child(2) {
+    font-size: 24px !important;
+  }
+
+  .dashboard-page .dashboard-stats-grid .card div:last-child {
+    font-size: 11px !important;
   }
 
   .dashboard-page .dashboard-roadmap {

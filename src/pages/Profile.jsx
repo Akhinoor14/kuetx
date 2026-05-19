@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { store, getProfile, DEFAULT_PROFILE, DEPARTMENTS } from '../store/store';
 import ProfileSetupModal from '../components/ProfileSetupModal';
 import { Logo } from '../components/Logo';
@@ -63,11 +63,21 @@ export default function Profile() {
   const [profile, setProfile] = useState(getProfile() || DEFAULT_PROFILE);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [saved, setSaved] = useState(false);
+  const autoOpenedRef = useRef(false);
 
   const getDeptName = (code) => {
     const dept = DEPARTMENTS.find(d => d.code === code);
     return dept ? dept.name : code;
   };
+
+  const hasMinimumProfile = !!(profile?.name && profile?.studentId && profile?.dept && profile?.session && profile?.currentTermKey);
+
+  useEffect(() => {
+    if (!hasMinimumProfile && !autoOpenedRef.current) {
+      setIsModalOpen(true);
+      autoOpenedRef.current = true;
+    }
+  }, [hasMinimumProfile]);
 
   const handleSaveProfile = (formData) => {
     const nextProfile = { ...DEFAULT_PROFILE, ...formData };
@@ -78,7 +88,7 @@ export default function Profile() {
     setTimeout(() => setSaved(false), 2500);
   };
 
-  const hasProfile = profile && profile.name && profile.studentId;
+  const hasProfile = hasMinimumProfile;
 
   return (
     <div className="page-enter page-container">

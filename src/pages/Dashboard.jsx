@@ -9,17 +9,17 @@ function StatCard({ label, value, sub, color, bgColor, icon: Icon, to }) {
     <div className="card" style={{ 
       display: 'flex', 
       flexDirection: 'column', 
-      gap: 8, 
+      gap: 6, 
       cursor: to ? 'pointer' : 'default', 
       transition: 'all 0.2s',
-      padding: '20px',
+      padding: '14px 16px',
       border: `1.5px solid ${color}20`,
       background: bgColor || 'rgba(var(--accentRGB), 0.02)',
       boxShadow: `0 4px 12px ${color}12`,
       position: 'relative',
       overflow: 'hidden',
       borderRadius: 12,
-      minHeight: 140
+      minHeight: 100
     }}>
       {/* Background accent blob */}
       <div style={{ position: 'absolute', top: -30, right: -30, width: 100, height: 100, borderRadius: '50%', background: `${color}08` }} />
@@ -192,7 +192,7 @@ export default function Dashboard() {
       )}
 
       {/* Stat cards */}
-      <div className="dashboard-stats-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12, marginBottom: 14 }}>
+      <div className="dashboard-stats-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 12, marginBottom: 14 }}>
         <StatCard 
           label="CGPA" 
           value={cgpaStr || '—'} 
