@@ -935,10 +935,13 @@ export default function PDFViewer({ initialUrl, initialName, onTextExtracted, on
   const pdfjsRef = useRef(null);
   const fsTimerRef = useRef(null);
   const viewerWidthRef = useRef(0);
+  const [viewerWidth, setViewerWidth] = useState(0);
   const pageInputRef = useRef(null);
   const lastManualZoomRef = useRef(1.25);
   const fitWidthActiveRef = useRef(false);
   const lastAutoFitWidthRef = useRef(0);
+  const mobileWidthFitAppliedRef = useRef(false);
+  const manualZoomUsedRef = useRef(false);
   const wasMobileRef = useRef(false);
   const mobileAutoFitDoneRef = useRef(false);
   const pinchStartDistRef = useRef(0);
@@ -956,6 +959,7 @@ export default function PDFViewer({ initialUrl, initialName, onTextExtracted, on
           setSidebarOpen(false);
           setOcrOpen(false);
           mobileAutoFitDoneRef.current = false;
+          mobileWidthFitAppliedRef.current = false;
         }
       } else {
         setFitMode("page");
@@ -1001,6 +1005,7 @@ export default function PDFViewer({ initialUrl, initialName, onTextExtracted, on
     const clamped = Math.max(0.25, Math.min(4, +numericZoom.toFixed(2)));
     lastManualZoomRef.current = clamped;
     fitWidthActiveRef.current = false;
+    manualZoomUsedRef.current = true;
     setFitMode("page");
     setZoom(clamped);
   }, [zoom]);
@@ -1014,6 +1019,8 @@ export default function PDFViewer({ initialUrl, initialName, onTextExtracted, on
     const newZoom = Math.min(4, +(available / baseWidth).toFixed(2));
     lastManualZoomRef.current = baseZoom;
     fitWidthActiveRef.current = true;
+    manualZoomUsedRef.current = false;
+    mobileWidthFitAppliedRef.current = true;
     setFitMode("width");
     lastAutoFitWidthRef.current = available;
     setZoom(newZoom);
@@ -1026,11 +1033,9 @@ export default function PDFViewer({ initialUrl, initialName, onTextExtracted, on
   }, [renderedPages, zoom, fitToWidthFromCanvas]);
 
   useEffect(() => {
-    if (!isMobileView || fitMode !== "width" || !renderedPages[0]) return;
-    const available = Math.round(viewerWidthRef.current);
-    if (!available || lastAutoFitWidthRef.current === available) return;
+    if (!isMobileView || manualZoomUsedRef.current || mobileWidthFitAppliedRef.current || !renderedPages[0] || !viewerWidth) return;
     fitToWidthFromCanvas(renderedPages[0].canvas.width, zoom);
-  }, [isMobileView, fitMode, renderedPages.length, fitToWidthFromCanvas, zoom]);
+  }, [isMobileView, renderedPages.length, fitToWidthFromCanvas, viewerWidth, zoom]);
 
   // ── Keyboard shortcuts ──
   useEffect(() => {
@@ -1068,7 +1073,9 @@ export default function PDFViewer({ initialUrl, initialName, onTextExtracted, on
   useEffect(() => {
     if (!viewerRef.current) return;
     const ro = new ResizeObserver(entries => {
-      viewerWidthRef.current = entries[0].contentRect.width;
+      const width = Math.round(entries[0].contentRect.width);
+      viewerWidthRef.current = width;
+      setViewerWidth(width);
     });
     ro.observe(viewerRef.current);
     return () => ro.disconnect();
@@ -1150,6 +1157,8 @@ export default function PDFViewer({ initialUrl, initialName, onTextExtracted, on
     setPageInput("1");
     lastManualZoomRef.current = 1.25;
     fitWidthActiveRef.current = false;
+    manualZoomUsedRef.current = false;
+    mobileWidthFitAppliedRef.current = false;
     setRenderedPages([]); setThumbs([]); setOcrPages([]); setToc([]); setDocInfo([]);
     try {
       setLoadPct(25);
