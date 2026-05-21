@@ -69,38 +69,38 @@ const STYLES = `
   padding: 0 10px;
   flex-shrink: 0;
   z-index: 100;
+  overflow: hidden;
 }
-.tb-brand {
-  display: flex; align-items: center; gap: 7px;
-  margin-right: 6px; flex-shrink: 0;
+.tb-cluster {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+  flex-shrink: 0;
 }
-.tb-brand-icon {
-  width: 26px; height: 26px;
-  background: linear-gradient(135deg, #1e3a6e, #3a6fd8);
-  border-radius: 7px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 13px; flex-shrink: 0;
-  box-shadow: 0 0 0 1px rgba(79,142,247,0.3);
+.tb-cluster-nav,
+.tb-cluster-zoom,
+.tb-cluster-tools,
+.tb-cluster-meta {
+  gap: 4px;
 }
-.tb-brand-name {
-  font-family: var(--font-display);
-  font-size: 14px; font-weight: 800;
-  background: linear-gradient(90deg, #4f8ef7, #a78bfa);
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-  letter-spacing: 0.01em; white-space: nowrap;
+.tb-cluster-meta {
+  margin-left: auto;
 }
-.tb-sep { width: 1px; height: 22px; background: var(--border); flex-shrink: 0; margin: 0 2px; }
 .tb-btn {
   width: 30px; height: 30px;
-  border: none; background: transparent;
+  border: 1px solid transparent; background: transparent;
   border-radius: var(--r); color: var(--text-dim);
   display: flex; align-items: center; justify-content: center;
   cursor: pointer; transition: background 0.13s, color 0.13s;
   flex-shrink: 0; position: relative;
 }
 .tb-btn:hover:not(:disabled) { background: var(--surface2); color: var(--text); }
-.tb-btn.on { background: var(--accent); color: #fff; }
-.tb-btn.on:hover { background: #3a7de8; }
+.tb-btn:focus-visible {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent-dim);
+}
 .tb-btn:disabled { opacity: 0.3; cursor: default; }
 .tb-btn svg { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; pointer-events: none; }
 .tb-page-nav { display: flex; align-items: center; gap: 4px; }
@@ -120,7 +120,6 @@ const STYLES = `
   padding: 0 5px; outline: none; cursor: pointer; font-family: var(--font-mono);
 }
 .tb-zoom option { background: var(--surface2); }
-.tb-spacer { flex: 1; min-width: 4px; }
 .tb-mode {
   display: flex; gap: 2px;
   background: var(--surface2); border: 1px solid var(--border);
@@ -136,13 +135,12 @@ const STYLES = `
 .tb-mode-btn.on { background: var(--accent); color: #fff; box-shadow: 0 0 0 1px rgba(79,142,247,0.4); }
 .tb-mode-btn:not(.on) { background: transparent; color: var(--text-dim); }
 .tb-mode-btn:not(.on):hover { color: var(--text); }
-.tb-ocr-badge {
-  position: absolute; top: 2px; right: 2px;
-  min-width: 13px; height: 13px; border-radius: 7px; padding: 0 2px;
-  background: var(--green); color: #000;
-  font-size: 8px; font-weight: 700;
-  display: flex; align-items: center; justify-content: center;
+.tb-mode-btn:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--accent-dim);
 }
+.tb-mobile-toggle { display: none; }
+.tb-mobile-menu { display: none; }
 .tb-filename {
   font-size: 11px; color: var(--text-mid); max-width: 200px;
   overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
@@ -610,51 +608,99 @@ const STYLES = `
     height: 100dvh;
   }
   .topbar {
-    height: auto;
-    min-height: var(--topbar-h);
-    padding: 6px 8px;
-    flex-wrap: wrap;
-    gap: 6px;
-    align-content: flex-start;
+    min-height: 42px;
+    height: 42px;
+    padding: 4px 6px;
+    gap: 4px;
+    flex-wrap: nowrap;
+    align-content: center;
+    overflow-x: auto;
+    overflow-y: hidden;
+    border-bottom-color: color-mix(in srgb, var(--border) 70%, var(--accent) 30%);
+    scrollbar-width: none;
+    -ms-overflow-style: none;
   }
-  .tb-brand {
-    margin-right: 0;
+  .topbar.mobile-fixed {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 300;
+    background: color-mix(in srgb, var(--surface) 96%, var(--text) 4%);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 1px 0 rgba(0,0,0,0.2);
+    transition: transform 0.2s ease;
+    justify-content: space-between;
+    padding: 6px 8px;
+  }
+  .topbar::-webkit-scrollbar { display: none; }
+  .tb-cluster {
+    width: max-content;
+    flex-wrap: nowrap;
+  }
+  .tb-cluster-nav {
+    width: auto;
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+  .tb-cluster-zoom {
+    display: none;
+  }
+  .tb-cluster-tools,
+  .tb-cluster-meta,
+  .tb-mobile-toggle,
+  .tb-mobile-menu {
+    display: none;
   }
   .tb-sep {
     display: none;
   }
-  .tb-spacer {
-    display: none;
+  .tb-cluster-mobile-actions {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-left: auto;
+    flex: 0 0 auto;
   }
   .tb-filename {
-    order: 20;
-    max-width: 100%;
-    width: 100%;
-  }
-  .tb-mode {
-    order: 30;
-    width: 100%;
-    justify-content: stretch;
-  }
-  .tb-mode-btn {
-    flex: 1;
-  }
-  .search-bar {
-    order: 15;
-    width: 100%;
-  }
-  .search-input {
-    width: 100%;
-    min-width: 0;
+    display: none;
   }
   .tb-page-nav {
     gap: 3px;
+    min-width: 0;
+    flex: 0 0 auto;
   }
   .tb-page-input {
-    width: 46px;
+    width: 44px;
+    height: 26px;
+    font-size: 11px;
+  }
+  .tb-btn {
+    width: 30px;
+    height: 30px;
+  }
+  .tb-btn svg {
+    width: 15px;
+    height: 15px;
+  }
+  .tb-cluster-mobile-actions .tb-mode-btn {
+    min-height: 30px;
+    padding: 0 10px;
+    font-size: 10px;
+    letter-spacing: 0.02em;
   }
   .pv-body {
     position: relative;
+    margin-top: 42px;
+  }
+  .s-tabs {
+    padding: 0 8px;
+  }
+  .s-tab:nth-child(n+2) {
+    display: none;
+  }
+  .s-tab:first-child {
+    flex: 1;
   }
   .sidebar.open {
     position: absolute;
@@ -686,6 +732,17 @@ const STYLES = `
     width: calc(100vw - 24px);
     padding: 16px;
   }
+  .search-bar.mobile {
+    width: 100%;
+    height: auto;
+    padding: 6px 8px;
+    flex-wrap: wrap;
+  }
+  .search-bar.mobile .search-input {
+    width: 100%;
+    min-width: 0;
+    height: 28px;
+  }
 }
 
 @media (max-width: 540px) {
@@ -693,16 +750,20 @@ const STYLES = `
     --sidebar-w: 88vw;
     --ocr-w: 92vw;
   }
-  .tb-brand-name {
-    font-size: 13px;
+  .topbar {
+    padding: 5px 6px;
   }
-  .tb-btn {
-    width: 28px;
-    height: 28px;
+  .tb-cluster {
+    gap: 2px;
   }
-  .tb-page-input,
-  .tb-zoom {
-    height: 24px;
+  .tb-btn { width: 28px; height: 28px; }
+  .tb-page-nav {
+    gap: 2px;
+    flex: 0 0 auto;
+  }
+  .tb-page-input { width: 38px; height: 24px; }
+  .tb-filename {
+    display: none;
   }
   .statusbar {
     gap: 8px;
@@ -831,6 +892,7 @@ export default function PDFViewer({ initialUrl, initialName, onTextExtracted, on
   const [pdfDoc, setPdfDoc] = useState(null);
   const [totalPages, setTotalPages] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
+  const [pageInput, setPageInput] = useState("1");
   const [zoom, setZoom] = useState(1.25);
   const [rotation, setRotation] = useState(0);
   const [twoPage, setTwoPage] = useState(false);
@@ -862,6 +924,7 @@ export default function PDFViewer({ initialUrl, initialName, onTextExtracted, on
   const [urlModal, setUrlModal] = useState(false);
   const [urlInput, setUrlInput] = useState("");
   const [fitMode, setFitMode] = useState("page"); // "page" | "width" | "auto"
+  const [isMobileView, setIsMobileView] = useState(false);
 
   // OCR state
   const [ocrPages, setOcrPages] = useState([]);
@@ -872,6 +935,37 @@ export default function PDFViewer({ initialUrl, initialName, onTextExtracted, on
   const pdfjsRef = useRef(null);
   const fsTimerRef = useRef(null);
   const viewerWidthRef = useRef(0);
+  const pageInputRef = useRef(null);
+  const lastManualZoomRef = useRef(1.25);
+  const fitWidthActiveRef = useRef(false);
+  const lastAutoFitWidthRef = useRef(0);
+  const wasMobileRef = useRef(false);
+  const mobileAutoFitDoneRef = useRef(false);
+  const pinchStartDistRef = useRef(0);
+  const pinchStartZoomRef = useRef(1.25);
+  const lastScrollTopRef = useRef(0);
+
+  useEffect(() => {
+    const syncMobileLayout = () => {
+      const mobile = window.innerWidth <= 768;
+      setIsMobileView(mobile);
+      if (mobile) {
+        setFitMode("width");
+        setSidebarTab("thumbs");
+        if (!wasMobileRef.current) {
+          setSidebarOpen(false);
+          setOcrOpen(false);
+          mobileAutoFitDoneRef.current = false;
+        }
+      } else {
+        setFitMode("page");
+      }
+      wasMobileRef.current = mobile;
+    };
+    syncMobileLayout();
+    window.addEventListener("resize", syncMobileLayout);
+    return () => window.removeEventListener("resize", syncMobileLayout);
+  }, []);
 
   // ── Load PDF.js ──
   useEffect(() => {
@@ -900,6 +994,44 @@ export default function PDFViewer({ initialUrl, initialName, onTextExtracted, on
     return () => el.remove();
   }, []);
 
+  const applyZoom = useCallback((nextZoom) => {
+    const baseZoom = Number.isFinite(zoom) ? zoom : 1.25;
+    const resolved = typeof nextZoom === "function" ? nextZoom(baseZoom) : nextZoom;
+    const numericZoom = Number.isFinite(resolved) ? resolved : 1.25;
+    const clamped = Math.max(0.25, Math.min(4, +numericZoom.toFixed(2)));
+    lastManualZoomRef.current = clamped;
+    fitWidthActiveRef.current = false;
+    setFitMode("page");
+    setZoom(clamped);
+  }, [zoom]);
+
+  const fitToWidthFromCanvas = useCallback((currentCanvasWidth, currentZoom = zoom) => {
+    const baseZoom = Number.isFinite(currentZoom) ? currentZoom : 1.25;
+    const available = viewerWidthRef.current - 60;
+    if (!(currentCanvasWidth > 0) || available <= 0) return false;
+    const baseWidth = currentCanvasWidth / baseZoom;
+    if (!(baseWidth > 0)) return false;
+    const newZoom = Math.min(4, +(available / baseWidth).toFixed(2));
+    lastManualZoomRef.current = baseZoom;
+    fitWidthActiveRef.current = true;
+    setFitMode("width");
+    lastAutoFitWidthRef.current = available;
+    setZoom(newZoom);
+    return true;
+  }, [zoom]);
+
+  const fitToWidth = useCallback(() => {
+    if (!renderedPages[0]) return;
+    fitToWidthFromCanvas(renderedPages[0].canvas.width, zoom);
+  }, [renderedPages, zoom, fitToWidthFromCanvas]);
+
+  useEffect(() => {
+    if (!isMobileView || fitMode !== "width" || !renderedPages[0]) return;
+    const available = Math.round(viewerWidthRef.current);
+    if (!available || lastAutoFitWidthRef.current === available) return;
+    fitToWidthFromCanvas(renderedPages[0].canvas.width, zoom);
+  }, [isMobileView, fitMode, renderedPages.length, fitToWidthFromCanvas, zoom]);
+
   // ── Keyboard shortcuts ──
   useEffect(() => {
     const handler = (e) => {
@@ -915,9 +1047,9 @@ export default function PDFViewer({ initialUrl, initialName, onTextExtracted, on
         if (e.key === "ArrowRight" || e.key === "ArrowDown") goToPage(currentPage + 1);
         if (e.key === "Home") goToPage(1);
         if (e.key === "End") goToPage(totalPages);
-        if (e.key === "+" || e.key === "=") setZoom(z => Math.min(4, +(z + 0.25).toFixed(2)));
-        if (e.key === "-") setZoom(z => Math.max(0.25, +(z - 0.25).toFixed(2)));
-        if (e.key === "0") setZoom(1);
+        if (e.key === "+" || e.key === "=") applyZoom(z => Math.min(4, +(z + 0.25).toFixed(2)));
+        if (e.key === "-") applyZoom(z => Math.max(0.25, +(z - 0.25).toFixed(2)));
+        if (e.key === "0") applyZoom(1);
         if (e.key === "f" || e.key === "F") setFullscreen(v => !v);
       }
       if ((e.ctrlKey || e.metaKey) && e.key === "f" && !inInput) {
@@ -930,7 +1062,7 @@ export default function PDFViewer({ initialUrl, initialName, onTextExtracted, on
     };
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
-  }, [fullscreen, searchVisible, urlModal, pdfDoc, currentPage, totalPages]);
+  }, [fullscreen, searchVisible, urlModal, pdfDoc, currentPage, totalPages, applyZoom]);
 
   // ── Measure viewer width for fit ──
   useEffect(() => {
@@ -1014,11 +1146,15 @@ export default function PDFViewer({ initialUrl, initialName, onTextExtracted, on
     if (!pdfjsRef.current) { toast("PDF.js is loading, try again shortly", "err"); return; }
     setLoading(true); setLoadPct(10);
     setDocName(name || "document.pdf"); setDocSize(size);
+    setCurrentPage(1);
+    setPageInput("1");
+    lastManualZoomRef.current = 1.25;
+    fitWidthActiveRef.current = false;
     setRenderedPages([]); setThumbs([]); setOcrPages([]); setToc([]); setDocInfo([]);
     try {
       setLoadPct(25);
       const doc = await pdfjsRef.current.getDocument(src).promise;
-      setPdfDoc(doc); setTotalPages(doc.numPages); setCurrentPage(1);
+      setPdfDoc(doc); setTotalPages(doc.numPages); setCurrentPage(1); setPageInput("1");
       setLoadPct(40);
 
       const pages = Array.from({ length: doc.numPages }, (_, i) => ({
@@ -1028,6 +1164,11 @@ export default function PDFViewer({ initialUrl, initialName, onTextExtracted, on
       setOcrPages(pages);
 
       await renderAll(doc, zoom, rotation, pages);
+      if (window.matchMedia("(max-width: 768px)").matches && pages[0]?.canvas?.width) {
+        mobileAutoFitDoneRef.current = false;
+        fitToWidthFromCanvas(pages[0].canvas.width, zoom);
+        mobileAutoFitDoneRef.current = true;
+      }
       setLoadPct(90);
 
       // TOC
@@ -1093,7 +1234,7 @@ export default function PDFViewer({ initialUrl, initialName, onTextExtracted, on
 
       // Blob for OCR
       const blob = await new Promise(r => c.toBlob(r, "image/jpeg", 0.92));
-      const url = URL.createObjectURL(blob);
+      const url = blob ? URL.createObjectURL(blob) : "";
       if (ocrList) ocrList[p - 1] = { ...ocrList[p - 1], blob, url };
 
       if (p % 3 === 0 || p === doc.numPages) {
@@ -1130,11 +1271,19 @@ export default function PDFViewer({ initialUrl, initialName, onTextExtracted, on
   const goToPage = useCallback((p) => {
     p = Math.max(1, Math.min(totalPages, p));
     setCurrentPage(p);
-    setTimeout(() => {
+    setPageInput(String(p));
+    requestAnimationFrame(() => {
       const el = viewerRef.current?.querySelector(`[data-page="${p}"]`);
-      el?.scrollIntoView({ behavior: "smooth", block: "start" });
-    }, 30);
+      if (el) el.scrollIntoView({ behavior: "smooth", block: "start", inline: "nearest" });
+      else viewerRef.current?.scrollTo({ top: 0, behavior: "smooth" });
+    });
   }, [totalPages]);
+
+  const commitPageInput = useCallback(() => {
+    const next = parseInt(pageInput, 10);
+    if (Number.isFinite(next)) goToPage(next);
+    else setPageInput(String(currentPage));
+  }, [currentPage, goToPage, pageInput]);
 
   // ── Download ──
   const downloadPDF = useCallback(() => {
@@ -1146,28 +1295,33 @@ export default function PDFViewer({ initialUrl, initialName, onTextExtracted, on
   const printPDF = useCallback(async () => {
     if (!renderedPages.length) return;
     const w = window.open("", "_blank");
+    if (!w) {
+      toast("Popup blocked — allow popups to print", "err", 4500);
+      return;
+    }
     w.document.write(`<html><head><title>${docName}</title><style>
       body{margin:0;padding:0;background:#fff;}
       img{display:block;width:100%;page-break-after:always;margin-bottom:0}
       @media print{img{page-break-after:always}}
     </style></head><body>`);
     renderedPages.forEach(rp => w.document.write(`<img src="${rp.dataUrl}" />`));
-    w.document.write("</body></html>");
+    w.document.write(`<script>
+      window.addEventListener('load', () => {
+        const images = Array.from(document.images);
+        Promise.all(images.map(img => img.complete ? Promise.resolve() : new Promise(resolve => {
+          img.addEventListener('load', resolve, { once: true });
+          img.addEventListener('error', resolve, { once: true });
+        }))).then(() => {
+          window.focus();
+          window.print();
+        });
+      });
+    <\/script></body></html>`);
     w.document.close();
-    w.onload = () => { w.focus(); w.print(); };
     toast("Print dialog opened", "ok");
   }, [renderedPages, docName]);
 
   // ── Fit width ──
-  const fitToWidth = useCallback(() => {
-    if (!renderedPages[0]) return;
-    const available = viewerWidthRef.current - 60;
-    if (available <= 0) return;
-    const baseWidth = renderedPages[0].canvas.width / zoom;
-    const newZoom = Math.min(4, +(available / baseWidth).toFixed(2));
-    setZoom(newZoom);
-  }, [renderedPages, zoom]);
-
   // ── OCR: Upload single ──
   const uploadPage = useCallback(async (idx, keyIdx = 0) => {
     const pg = ocrPages[idx];
@@ -1309,164 +1463,150 @@ export default function PDFViewer({ initialUrl, initialName, onTextExtracted, on
     <div className="pv-root">
       {/* ── Inject CSS ── */}
       {/* ── TOPBAR ── */}
-      <div className="topbar">
-        {/* Brand */}
-        <div className="tb-brand">
-          <div className="tb-brand-icon">📄</div>
-          <span className="tb-brand-name">PDF Viewer</span>
-        </div>
-        {onClose && (
-          <button className="tb-btn" onClick={onClose} title="Close viewer">
-            <Ic d={IC.x} />
+      <div className={`topbar ${isMobileView ? "mobile-fixed" : ""}`}>
+        <div className="tb-cluster tb-cluster-nav">
+          {!isMobileView && onClose && (
+            <button className="tb-btn" onClick={onClose} title="Close viewer">
+              <Ic d={IC.x} />
+            </button>
+          )}
+          <button className="tb-btn" onClick={() => setSidebarOpen(v => !v)} title="Toggle sidebar [S]">
+            <Ic d={IC.sidebar} />
           </button>
-        )}
-        <div className="tb-sep" />
-
-        {/* Sidebar toggle */}
-        <button className="tb-btn" onClick={() => setSidebarOpen(v => !v)} title="Toggle sidebar [S]">
-          <Ic d={IC.sidebar} />
-        </button>
-
-        {/* Open file */}
-        <button className="tb-btn" onClick={() => fileInputRef.current?.click()} title="Open PDF file">
-          <Ic d={IC.open} />
-        </button>
-
-        {/* Open URL */}
-        <button className="tb-btn" onClick={() => setUrlModal(true)} title="Open from URL">
-          <Ic d={IC.url} />
-        </button>
-
-        <div className="tb-sep" />
-
-        {/* Navigation */}
-        <button className="tb-btn" onClick={() => goToPage(1)} disabled={!pdfDoc || currentPage <= 1} title="First page [Home]">
-          <Ic d={IC.first} />
-        </button>
-        <button className="tb-btn" onClick={() => goToPage(currentPage - 1)} disabled={!pdfDoc || currentPage <= 1} title="Previous page [←]">
-          <Ic d={IC.prev} />
-        </button>
-        <div className="tb-page-nav">
-          <input className="tb-page-input" type="number" min={1} max={totalPages || 1}
-            value={currentPage} disabled={!pdfDoc}
-            onChange={e => goToPage(parseInt(e.target.value) || 1)} />
-          <span className="tb-total">/ {totalPages || "—"}</span>
+          <button className="tb-btn" onClick={() => goToPage(currentPage - 1)} disabled={!pdfDoc || currentPage <= 1} title="Previous page [←]">
+            <Ic d={IC.prev} />
+          </button>
+          <div className="tb-page-nav">
+            <input className="tb-page-input" type="number" min={1} max={totalPages || 1}
+              ref={pageInputRef}
+              value={pageInput} disabled={!pdfDoc}
+              onChange={e => setPageInput(e.target.value)}
+              onKeyDown={e => { if (e.key === "Enter") commitPageInput(); }}
+              onBlur={commitPageInput} />
+            <span className="tb-total">/ {totalPages || "—"}</span>
+          </div>
+          <button className="tb-btn" onClick={() => goToPage(currentPage + 1)} disabled={!pdfDoc || currentPage >= totalPages} title="Next page [→]">
+            <Ic d={IC.next} />
+          </button>
         </div>
-        <button className="tb-btn" onClick={() => goToPage(currentPage + 1)} disabled={!pdfDoc || currentPage >= totalPages} title="Next page [→]">
-          <Ic d={IC.next} />
-        </button>
-        <button className="tb-btn" onClick={() => goToPage(totalPages)} disabled={!pdfDoc || currentPage >= totalPages} title="Last page [End]">
-          <Ic d={IC.last} />
-        </button>
 
-        <div className="tb-sep" />
+        <div className="tb-cluster tb-cluster-mobile-actions">
+          <button className="tb-btn" onClick={() => setRotation(r => (r + 90) % 360)} disabled={!pdfDoc} title="Rotate 90°">
+            <Ic d={IC.rotate} />
+          </button>
+          <button className={`tb-btn ${twoPage ? "on" : ""}`} onClick={() => setTwoPage(v => !v)} disabled={!pdfDoc} title="Two-page spread">
+            <Ic d={IC.columns} />
+          </button>
+          <button className="tb-btn" onClick={() => { setFullscreen(true); setFsPage(currentPage); }} disabled={!pdfDoc} title="Fullscreen [F]">
+            <Ic d={IC.expand} />
+          </button>
+          <button className={`tb-mode-btn ${mode === "ocr" ? "on" : ""}`} onClick={() => { setMode("ocr"); setOcrOpen(true); }} disabled={!pdfDoc} title="OCR mode" aria-label="OCR mode">
+            OCR
+          </button>
+        </div>
 
-        {/* Zoom */}
-        <button className="tb-btn" onClick={() => setZoom(z => Math.max(0.25, +(z - 0.25).toFixed(2)))} disabled={!pdfDoc} title="Zoom out [-]">
-          <Ic d={IC.zoomOut} />
-        </button>
-        <select className="tb-zoom" value={zoom} disabled={!pdfDoc}
-          onChange={e => setZoom(parseFloat(e.target.value))}>
-          {[0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 2.5, 3, 4].map(z => (
-            <option key={z} value={z}>{Math.round(z * 100)}%</option>
-          ))}
-        </select>
-        <button className="tb-btn" onClick={() => setZoom(z => Math.min(4, +(z + 0.25).toFixed(2)))} disabled={!pdfDoc} title="Zoom in [+]">
-          <Ic d={IC.zoomIn} />
-        </button>
-        <button className="tb-btn" onClick={fitToWidth} disabled={!pdfDoc} title="Fit to width">
-          <Ic d={IC.fit} />
-        </button>
+        <div className="tb-cluster tb-cluster-zoom">
+          <button className="tb-btn" onClick={() => applyZoom(z => Math.max(0.25, +(z - 0.25).toFixed(2)))} disabled={!pdfDoc} title="Zoom out [-]">
+            <Ic d={IC.zoomOut} />
+          </button>
+          <select className="tb-zoom" value={Number.isFinite(zoom) ? zoom : 1.25} disabled={!pdfDoc}
+            onChange={e => applyZoom(parseFloat(e.target.value))}>
+            {[0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 2.5, 3, 4].map(z => (
+              <option key={z} value={z}>{Math.round(z * 100)}%</option>
+            ))}
+          </select>
+          <button className="tb-btn" onClick={() => applyZoom(z => Math.min(4, +(z + 0.25).toFixed(2)))} disabled={!pdfDoc} title="Zoom in [+]">
+            <Ic d={IC.zoomIn} />
+          </button>
+          <button className="tb-btn" onClick={fitToWidth} disabled={!pdfDoc} title="Fit to width">
+            <Ic d={IC.fit} />
+          </button>
+        </div>
 
-        <div className="tb-sep" />
+        <div className="tb-cluster tb-cluster-tools">
+          <button className="tb-btn" onClick={() => setRotation(r => (r + 90) % 360)} disabled={!pdfDoc} title="Rotate 90°">
+            <Ic d={IC.rotate} />
+          </button>
+          <button className={`tb-btn ${twoPage ? "on" : ""}`} onClick={() => setTwoPage(v => !v)} disabled={!pdfDoc} title="Two-page spread">
+            <Ic d={IC.columns} />
+          </button>
+          <button className={`tb-btn ${searchVisible ? "on" : ""}`} onClick={() => setSearchVisible(v => !v)} disabled={!pdfDoc} title="Find in document [Ctrl+F]">
+            <Ic d={IC.search} />
+          </button>
 
-        {/* Tools */}
-        <button className="tb-btn" onClick={() => setRotation(r => (r + 90) % 360)} disabled={!pdfDoc} title="Rotate 90°">
-          <Ic d={IC.rotate} />
-        </button>
-        <button className={`tb-btn ${twoPage ? "on" : ""}`} onClick={() => setTwoPage(v => !v)} disabled={!pdfDoc} title="Two-page spread">
-          <Ic d={IC.columns} />
-        </button>
-        <button className={`tb-btn ${searchVisible ? "on" : ""}`} onClick={() => setSearchVisible(v => !v)} disabled={!pdfDoc} title="Find in document [Ctrl+F]">
-          <Ic d={IC.search} />
-        </button>
+          {searchVisible && (
+            <div className={`search-bar ${searchFocus ? "focus" : ""}`}>
+              <Ic d={IC.search} s={12} style={{ color: "var(--text-dim)", flexShrink: 0 }} />
+              <input className="search-input" placeholder="Search…" value={searchTerm}
+                autoFocus
+                onFocus={() => setSearchFocus(true)}
+                onBlur={() => setSearchFocus(false)}
+                onChange={e => setSearchTerm(e.target.value)}
+                onKeyDown={e => {
+                  if (e.key === "Enter") {
+                    if (!searchResults.length) return;
+                    const ni = e.shiftKey
+                      ? (searchIdx - 1 + searchResults.length) % searchResults.length
+                      : (searchIdx + 1) % searchResults.length;
+                    setSearchIdx(ni); goToPage(searchResults[ni].page);
+                  }
+                }}
+              />
+              {searchResults.length > 0 && (
+                <>
+                  <span className="search-count">{searchIdx + 1}/{searchResults.length}</span>
+                  <button className="tb-btn" style={{ width: 22, height: 22 }} onClick={() => {
+                    const ni = (searchIdx - 1 + searchResults.length) % searchResults.length;
+                    setSearchIdx(ni); goToPage(searchResults[ni].page);
+                  }} title="Previous search result" aria-label="Previous search result"><Ic d={IC.prev} s={11} /></button>
+                  <button className="tb-btn" style={{ width: 22, height: 22 }} onClick={() => {
+                    const ni = (searchIdx + 1) % searchResults.length;
+                    setSearchIdx(ni); goToPage(searchResults[ni].page);
+                  }} title="Next search result" aria-label="Next search result"><Ic d={IC.next} s={11} /></button>
+                </>
+              )}
+              <button className="tb-btn" style={{ width: 22, height: 22 }} onClick={() => { setSearchVisible(false); setSearchTerm(""); }} title="Close search" aria-label="Close search">
+                <Ic d={IC.x} s={11} />
+              </button>
+            </div>
+          )}
 
-        {/* Search bar */}
-        {searchVisible && (
-          <div className={`search-bar ${searchFocus ? "focus" : ""}`}>
-            <Ic d={IC.search} s={12} style={{ color: "var(--text-dim)", flexShrink: 0 }} />
-            <input className="search-input" placeholder="Search…" value={searchTerm}
-              autoFocus
-              onFocus={() => setSearchFocus(true)}
-              onBlur={() => setSearchFocus(false)}
-              onChange={e => setSearchTerm(e.target.value)}
-              onKeyDown={e => {
-                if (e.key === "Enter") {
-                  if (!searchResults.length) return;
-                  const ni = e.shiftKey
-                    ? (searchIdx - 1 + searchResults.length) % searchResults.length
-                    : (searchIdx + 1) % searchResults.length;
-                  setSearchIdx(ni); goToPage(searchResults[ni].page);
-                }
+          <button className="tb-btn" onClick={printPDF} disabled={!pdfDoc} title="Print">
+            <Ic d={IC.print} />
+          </button>
+          <button className="tb-btn" onClick={() => { setFullscreen(true); setFsPage(currentPage); }} disabled={!pdfDoc} title="Fullscreen [F]">
+            <Ic d={IC.expand} />
+          </button>
+        </div>
+
+        <div className="tb-cluster tb-cluster-meta">
+          {docName && <span className="tb-filename">{docName}</span>}
+
+          <div className="tb-mode">
+            <button
+              className={`tb-mode-btn ${mode === "viewer" ? "on" : ""}`}
+              onClick={() => {
+                setMode("viewer");
+                setOcrOpen(false);
               }}
-            />
-            {searchResults.length > 0 && (
-              <>
-                <span className="search-count">{searchIdx + 1}/{searchResults.length}</span>
-                <button className="tb-btn" style={{ width: 22, height: 22 }} onClick={() => {
-                  const ni = (searchIdx - 1 + searchResults.length) % searchResults.length;
-                  setSearchIdx(ni); goToPage(searchResults[ni].page);
-                }}><Ic d={IC.prev} s={11} /></button>
-                <button className="tb-btn" style={{ width: 22, height: 22 }} onClick={() => {
-                  const ni = (searchIdx + 1) % searchResults.length;
-                  setSearchIdx(ni); goToPage(searchResults[ni].page);
-                }}><Ic d={IC.next} s={11} /></button>
-              </>
-            )}
-            <button className="tb-btn" style={{ width: 22, height: 22 }} onClick={() => { setSearchVisible(false); setSearchTerm(""); }}>
-              <Ic d={IC.x} s={11} />
+              title="Reader mode"
+              aria-label="Reader mode"
+            >
+              Reader
+            </button>
+            <button
+              className={`tb-mode-btn ${mode === "ocr" ? "on" : ""}`}
+              onClick={() => {
+                setMode("ocr");
+                setOcrOpen(true);
+              }}
+              title="OCR mode"
+              aria-label="OCR mode"
+            >
+              OCR {donePgs > 0 ? `(${donePgs}✓)` : ""}
             </button>
           </div>
-        )}
-
-        <div className="tb-sep" />
-
-        {/* Print */}
-        <button className="tb-btn" onClick={printPDF} disabled={!pdfDoc} title="Print">
-          <Ic d={IC.print} />
-        </button>
-
-        <div className="tb-spacer" />
-
-        {/* Filename */}
-        {docName && <span className="tb-filename">{docName}</span>}
-
-        {/* Mode toggle */}
-        <div className="tb-mode">
-          <button
-            className={`tb-mode-btn ${mode === "viewer" ? "on" : ""}`}
-            onClick={() => {
-              setMode("viewer");
-              setOcrOpen(false);
-            }}
-          >
-            Reader
-          </button>
-          <button
-            className={`tb-mode-btn ${mode === "ocr" ? "on" : ""}`}
-            onClick={() => {
-              setMode("ocr");
-              setOcrOpen(true);
-            }}
-          >
-            OCR {donePgs > 0 ? `(${donePgs}✓)` : ""}
-          </button>
         </div>
-
-        {/* Fullscreen */}
-        <button className="tb-btn" onClick={() => { setFullscreen(true); setFsPage(currentPage); }} disabled={!pdfDoc} title="Fullscreen [F]">
-          <Ic d={IC.expand} />
-        </button>
       </div>
 
       {/* ── BODY ── */}
@@ -1491,7 +1631,7 @@ export default function PDFViewer({ initialUrl, initialName, onTextExtracted, on
                   onClick={() => goToPage(th.num)}>
                   <div className="thumb-wrap">
                     <canvas ref={el => {
-                      if (el && th.canvas) {
+                      if (el && th.canvas && th.canvas.width > 0 && th.canvas.height > 0) {
                         el.width = th.canvas.width; el.height = th.canvas.height;
                         el.getContext("2d").drawImage(th.canvas, 0, 0);
                       }
@@ -1529,7 +1669,30 @@ export default function PDFViewer({ initialUrl, initialName, onTextExtracted, on
         </div>
 
         {/* ── VIEWER ── */}
-        <div className="viewer" ref={viewerRef} tabIndex={0}
+        <div className={`viewer ${isMobileView ? "mobile" : ""}`} ref={viewerRef} tabIndex={0}
+          onTouchStart={e => {
+            if (!isMobileView) return;
+            if (e.touches.length === 2) {
+              const dx = e.touches[0].clientX - e.touches[1].clientX;
+              const dy = e.touches[0].clientY - e.touches[1].clientY;
+              pinchStartDistRef.current = Math.hypot(dx, dy) || 1;
+              pinchStartZoomRef.current = zoom;
+            }
+          }}
+          onTouchMove={e => {
+            if (!isMobileView || e.touches.length !== 2 || !pinchStartDistRef.current) return;
+            const dx = e.touches[0].clientX - e.touches[1].clientX;
+            const dy = e.touches[0].clientY - e.touches[1].clientY;
+            const dist = Math.hypot(dx, dy) || 1;
+            e.preventDefault();
+            applyZoom(Math.max(0.25, Math.min(4, +(pinchStartZoomRef.current * (dist / pinchStartDistRef.current)).toFixed(2))));
+          }}
+          onTouchEnd={e => {
+            if (!isMobileView) return;
+            if (e.touches.length < 2) {
+              pinchStartDistRef.current = 0;
+            }
+          }}
           onDragOver={e => { e.preventDefault(); setDrag(true); }}
           onDragLeave={() => setDrag(false)}
           onDrop={e => { e.preventDefault(); setDrag(false); handleFile(e.dataTransfer.files[0]); }}>
@@ -1576,7 +1739,7 @@ export default function PDFViewer({ initialUrl, initialName, onTextExtracted, on
                 return rp ? (
                   <div key={pNum} className="page-wrap" data-page={pNum}>
                     <canvas ref={el => {
-                      if (el && rp.canvas) {
+                      if (el && rp.canvas && rp.canvas.width > 0 && rp.canvas.height > 0) {
                         el.width = rp.canvas.width; el.height = rp.canvas.height;
                         el.getContext("2d").drawImage(rp.canvas, 0, 0);
                       }
@@ -1826,7 +1989,7 @@ export default function PDFViewer({ initialUrl, initialName, onTextExtracted, on
       {fullscreen && (
         <div className="fs-overlay">
           <div className={`fs-bar ${fsBarVisible ? "" : "hide"}`}>
-            <button className="tb-btn" onClick={() => setFsPage(p => Math.max(1, p - 1))} style={{ color: "#fff" }}>
+            <button className="tb-btn" onClick={() => setFsPage(p => Math.max(1, p - 1))} style={{ color: "#fff" }} title="Previous page" aria-label="Previous page">
               <Ic d={IC.prev} />
             </button>
             <div className="tb-page-nav">
@@ -1836,17 +1999,17 @@ export default function PDFViewer({ initialUrl, initialName, onTextExtracted, on
                 onChange={e => setFsPage(Math.max(1, Math.min(totalPages, parseInt(e.target.value) || 1)))} />
               <span className="tb-total" style={{ color: "rgba(255,255,255,0.4)" }}>/ {totalPages}</span>
             </div>
-            <button className="tb-btn" onClick={() => setFsPage(p => Math.min(totalPages, p + 1))} style={{ color: "#fff" }}>
+            <button className="tb-btn" onClick={() => setFsPage(p => Math.min(totalPages, p + 1))} style={{ color: "#fff" }} title="Next page" aria-label="Next page">
               <Ic d={IC.next} />
             </button>
             <div className="tb-sep" style={{ background: "rgba(255,255,255,0.1)" }} />
-            <button className="tb-btn" onClick={() => setFsZoom(z => Math.max(0.5, +(z - 0.25).toFixed(2)))} style={{ color: "#fff" }}>
+            <button className="tb-btn" onClick={() => setFsZoom(z => Math.max(0.5, +(z - 0.25).toFixed(2)))} style={{ color: "#fff" }} title="Zoom out" aria-label="Zoom out">
               <Ic d={IC.zoomOut} />
             </button>
             <span style={{ color: "rgba(255,255,255,0.6)", fontSize: 11, fontFamily: "var(--font-mono)", minWidth: 42, textAlign: "center" }}>
               {Math.round(fsZoom * 100)}%
             </span>
-            <button className="tb-btn" onClick={() => setFsZoom(z => Math.min(4, +(z + 0.25).toFixed(2)))} style={{ color: "#fff" }}>
+            <button className="tb-btn" onClick={() => setFsZoom(z => Math.min(4, +(z + 0.25).toFixed(2)))} style={{ color: "#fff" }} title="Zoom in" aria-label="Zoom in">
               <Ic d={IC.zoomIn} />
             </button>
             <div style={{ flex: 1 }} />

@@ -160,7 +160,7 @@ export default function QuestionBank() {
       openContributionPrompt();
       return;
     }
-    navigate(`/question-bank/view?src=${encodeURIComponent(`/${item.filePath}`)}&title=${encodeURIComponent(`${item.dept} ${ytLabel(item.year, item.term)} ${item.examYear}`)}`);
+    navigate(`/question-bank/view?src=${encodeURIComponent(`/${item.filePath}`)}`);
   }, [navigate, openContributionPrompt]);
 
   const handleDownload = useCallback((item) => {
