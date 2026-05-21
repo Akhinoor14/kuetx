@@ -1,8 +1,8 @@
-import { useState, useMemo, useCallback } from 'react';
+import { useEffect, useState, useMemo, useCallback } from 'react';
 import {
   BookOpen, Download, Search, Filter, ChevronDown, ChevronRight,
   FileText, AlertCircle, ExternalLink, BookMarked, Share2, Info,
-  CheckCircle, Clock, Layers
+  CheckCircle, Clock, Layers, Eye, X
 } from 'lucide-react';
 import { getProfile } from '../store/store';
 import {
@@ -17,6 +17,9 @@ import {
 const QB_OVERRIDES = {
   // Example: 'ESE_Y2T1_Regular_2023': { available: true, addedAt: '2025-05-21' },
 };
+
+const CONTRIBUTION_FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLScE5eujz_Vu5LFgkZkiGtWurliPsOiGLmUYTKftBZNSkYTPmg/viewform?embedded=true';
+const CONTRIBUTION_FALLBACK_URL = 'https://forms.gle/9NahxuzSeeU6NTLw6';
 
 // Merge overrides into data
 const QB_DATA = QUESTION_BANK.map(q => ({
@@ -52,6 +55,15 @@ export default function QuestionBank() {
   const [expandedGroups, setExpandedGroups] = useState({});
   const [view, setView] = useState('grouped'); // grouped | list
   const [showFilters, setShowFilters] = useState(false);
+  const [showIntroPrompt, setShowIntroPrompt] = useState(true);
+  const [showContributionForm, setShowContributionForm] = useState(false);
+  const [viewerItem, setViewerItem] = useState(null);
+
+  useEffect(() => {
+    if (myDept) {
+      setSelectedDept(prev => (prev ? prev : myDept));
+    }
+  }, [myDept]);
 
   // Global stats
   const globalStats = useMemo(() => ({
@@ -95,9 +107,38 @@ export default function QuestionBank() {
     setExpandedGroups(prev => ({ ...prev, [key]: !prev[key] }));
   }, []);
 
+  const openContributionFlow = useCallback(() => {
+    setShowIntroPrompt(false);
+    setShowContributionForm(true);
+  }, []);
+
+  const openContributionPrompt = useCallback(() => {
+    setShowIntroPrompt(true);
+  }, []);
+
+  const closeContributionPrompt = useCallback(() => {
+    setShowIntroPrompt(false);
+  }, []);
+
+  const closeContributionForm = useCallback(() => {
+    setShowContributionForm(false);
+  }, []);
+
+  const openPaperViewer = useCallback((item) => {
+    if (!item.available) {
+      openContributionPrompt();
+      return;
+    }
+    setViewerItem(item);
+  }, [openContributionPrompt]);
+
+  const closePaperViewer = useCallback(() => {
+    setViewerItem(null);
+  }, []);
+
   const handleDownload = useCallback((item) => {
     if (!item.available) {
-      window.alert('This question paper is not yet available for download.\n\nWant to contribute? Tap "Contribute" to submit a paper.');
+      openContributionPrompt();
       return;
     }
     const url = `/${item.filePath}`;
@@ -107,13 +148,7 @@ export default function QuestionBank() {
     document.body.appendChild(a);
     a.click();
     a.remove();
-  }, []);
-
-  const handleContribute = () => {
-    if (window.confirm('এটি Google Form এ redirect করবে। Continue করতে OK চাপুন।')) {
-      window.open('https://forms.gle/9NahxuzSeeU6NTLw6', '_blank');
-    }
-  };
+  }, [openContributionPrompt]);
 
   const clearFilters = () => {
     setSearch(''); setSelectedDept(myDept || ''); setSelectedYear('');
@@ -126,7 +161,8 @@ export default function QuestionBank() {
   ].filter(Boolean).length;
 
   return (
-    <div className="qb2-wrap">
+    <div className="qb2-page">
+      <div className="qb2-wrap">
       {/* ── HERO ── */}
       <div className="qb2-hero">
         <div className="qb2-hero-text">
@@ -136,6 +172,10 @@ export default function QuestionBank() {
             {globalStats.total} papers across {globalStats.depts} departments &nbsp;·&nbsp;
             {globalStats.available} available for download
           </p>
+          <div className="qb2-hero-hint">
+            <span className="qb2-hero-chip">Default view: {myDept ? `${DEPT_CODE_SHORT[myDept] || myDept} department` : 'all departments'}</span>
+            <span className="qb2-hero-chip qb2-hero-chip-soft">Switch departments from Filters anytime</span>
+          </div>
         </div>
         <div className="qb2-stats">
           <StatBox n={globalStats.total} l="Total Papers" color="blue"/>
@@ -203,7 +243,7 @@ export default function QuestionBank() {
       <div className="qb2-contribute-strip">
         <Info size={14}/>
         <span>Don't see your paper? Help others by contributing.</span>
-        <button className="qb2-contribute-btn" onClick={handleContribute}>
+        <button className="qb2-contribute-btn" onClick={openContributionPrompt}>
           Contribute <ExternalLink size={12}/>
         </button>
       </div>
@@ -213,8 +253,8 @@ export default function QuestionBank() {
         <EmptyState onClear={clearFilters} />
       ) : view === 'list' ? (
         <div className="qb2-list">
-          {filtered.map(item => (
-            <PaperRow key={item.id} item={item} onDownload={handleDownload} />
+          {filtered.map((item, index) => (
+            <PaperRow key={`${item.id}-${index}`} item={item} onDownload={handleDownload} onView={openPaperViewer} />
           ))}
         </div>
       ) : (
@@ -226,6 +266,7 @@ export default function QuestionBank() {
               expandedGroups={expandedGroups}
               toggleGroup={toggleGroup}
               onDownload={handleDownload}
+              onView={openPaperViewer}
             />
           ))}
         </div>
@@ -236,10 +277,105 @@ export default function QuestionBank() {
         <Info size={13}/>
         <span>
           Papers marked <span className="qb2-avail-dot">●</span> are available for download.
-          Others are catalogued but PDFs not yet uploaded.
-          Files are stored as compressed (.zst) originals.
+          Use View to open any available PDF inside the site.
+          The current runtime serves PDFs; compressed .zst originals stay in the offline archive.
         </span>
       </div>
+      </div>
+
+      {showIntroPrompt && (
+        <div className="qb2-modal-backdrop" role="presentation" onClick={closeContributionPrompt}>
+          <div className="qb2-modal" role="dialog" aria-modal="true" aria-labelledby="qb2-intro-title" onClick={e => e.stopPropagation()}>
+            <div className="qb2-modal-top">
+              <div>
+                <div className="qb2-modal-kicker">Question Bank help</div>
+                <h2 id="qb2-intro-title" className="qb2-modal-title">We are collecting question papers and solutions</h2>
+              </div>
+              <button className="qb2-modal-close" type="button" onClick={closeContributionPrompt} aria-label="Close help popup">
+                <X size={16} />
+              </button>
+            </div>
+            <p className="qb2-modal-text">
+              If you have any question paper or solution, you can share it here.
+              It helps us keep the Question Bank complete for everyone.
+            </p>
+            <div className="qb2-modal-actions">
+              <button className="qb2-secondary-btn" type="button" onClick={closeContributionPrompt}>Not now</button>
+              <button className="qb2-primary-btn" type="button" onClick={openContributionFlow}>Continue</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showContributionForm && (
+        <div className="qb2-modal-backdrop" role="presentation" onClick={closeContributionForm}>
+          <div className="qb2-modal qb2-modal-wide" role="dialog" aria-modal="true" aria-labelledby="qb2-form-title" onClick={e => e.stopPropagation()}>
+            <div className="qb2-modal-top">
+              <div>
+                <div className="qb2-modal-kicker">Google Form</div>
+                <h2 id="qb2-form-title" className="qb2-modal-title">Share a paper without leaving the site</h2>
+              </div>
+              <button className="qb2-modal-close" type="button" onClick={closeContributionForm} aria-label="Close form popup">
+                <X size={16} />
+              </button>
+            </div>
+            <p className="qb2-modal-text">
+              The form is embedded below. If it does not load, use the open button as a fallback.
+            </p>
+            <div className="qb2-form-frame-wrap">
+              <iframe
+                title="Question Bank contribution form"
+                src={CONTRIBUTION_FORM_URL}
+                className="qb2-form-frame"
+                loading="lazy"
+              />
+            </div>
+            <div className="qb2-modal-actions qb2-modal-actions-between">
+              <a className="qb2-secondary-btn qb2-link-btn" href={CONTRIBUTION_FALLBACK_URL} target="_blank" rel="noreferrer">
+                Open Google Form
+              </a>
+              <button className="qb2-primary-btn" type="button" onClick={closeContributionForm}>Done</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {viewerItem && (
+        <div className="qb2-modal-backdrop" role="presentation" onClick={closePaperViewer}>
+          <div className="qb2-modal qb2-modal-wide qb2-viewer-modal" role="dialog" aria-modal="true" aria-labelledby="qb2-viewer-title" onClick={e => e.stopPropagation()}>
+            <div className="qb2-modal-top">
+              <div>
+                <div className="qb2-modal-kicker">Paper preview</div>
+                <h2 id="qb2-viewer-title" className="qb2-modal-title">
+                  {DEPT_CODE_SHORT[viewerItem.dept] || viewerItem.dept} · {ytLabel(viewerItem.year, viewerItem.term)} · {viewerItem.examYear}
+                </h2>
+              </div>
+              <button className="qb2-modal-close" type="button" onClick={closePaperViewer} aria-label="Close paper preview">
+                <X size={16} />
+              </button>
+            </div>
+            <p className="qb2-modal-text">
+              You can read the paper inside the site or download the PDF from here.
+            </p>
+            <div className="qb2-viewer-actions">
+              <button className="qb2-primary-btn" type="button" onClick={() => handleDownload(viewerItem)}>
+                <Download size={14} /> Download PDF
+              </button>
+              <a className="qb2-secondary-btn qb2-link-btn" href={`/${viewerItem.filePath}`} target="_blank" rel="noreferrer">
+                Open in new tab
+              </a>
+            </div>
+            <div className="qb2-form-frame-wrap qb2-viewer-frame-wrap">
+              <iframe
+                title={`${viewerItem.dept} paper preview`}
+                src={`/${viewerItem.filePath}`}
+                className="qb2-viewer-frame"
+                loading="lazy"
+              />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -263,7 +399,7 @@ function StatBox({ n, l, color }) {
   );
 }
 
-function DeptGroup({ deptGroup, expandedGroups, toggleGroup, onDownload }) {
+function DeptGroup({ deptGroup, expandedGroups, toggleGroup, onDownload, onView }) {
   const deptKey = `dept_${deptGroup.dept}`;
   const isDeptOpen = expandedGroups[deptKey] !== false; // default open
   const totalInDept = Object.values(deptGroup.years).flatMap(t => Object.values(t).flat()).length;
@@ -305,8 +441,8 @@ function DeptGroup({ deptGroup, expandedGroups, toggleGroup, onDownload }) {
                       </button>
                       {isOpen && (
                         <div className="qb2-papers-grid">
-                          {papers.sort((a,b) => b.examYear - a.examYear).map(p => (
-                            <PaperCard key={p.id} item={p} onDownload={onDownload}/>
+                          {papers.slice().sort((a,b) => b.examYear - a.examYear).map((p, index) => (
+                            <PaperCard key={`${p.id}-${index}`} item={p} onDownload={onDownload} onView={onView}/>
                           ))}
                         </div>
                       )}
@@ -322,7 +458,7 @@ function DeptGroup({ deptGroup, expandedGroups, toggleGroup, onDownload }) {
   );
 }
 
-function PaperCard({ item, onDownload }) {
+function PaperCard({ item, onDownload, onView }) {
   return (
     <div className={`qb2-paper-card ${item.available ? 'available' : 'unavailable'}`}>
       <div className="qb2-paper-top">
@@ -337,20 +473,32 @@ function PaperCard({ item, onDownload }) {
       </div>
       <div className="qb2-paper-bot">
         <span className="qb2-paper-degree">{item.degree}</span>
-        <button
-          className={`qb2-dl-btn ${item.available ? 'ready' : 'not-ready'}`}
-          onClick={() => onDownload(item)}
-          title={item.available ? `Download ${item.examYear} paper` : 'Not yet available'}
-        >
-          <Download size={13}/>
-          {item.available ? 'Download' : 'Pending'}
-        </button>
+        <div className="qb2-paper-actions">
+          {item.available && (
+            <button
+              className="qb2-view-btn-mini"
+              onClick={() => onView(item)}
+              title={`Preview ${item.examYear} paper`}
+            >
+              <Eye size={13}/>
+              View
+            </button>
+          )}
+          <button
+            className={`qb2-dl-btn ${item.available ? 'ready' : 'not-ready'}`}
+            onClick={() => onDownload(item)}
+            title={item.available ? `Download ${item.examYear} paper` : 'Not yet available'}
+          >
+            <Download size={13}/>
+            {item.available ? 'Download' : 'Pending'}
+          </button>
+        </div>
       </div>
     </div>
   );
 }
 
-function PaperRow({ item, onDownload }) {
+function PaperRow({ item, onDownload, onView }) {
   return (
     <div className={`qb2-paper-row ${item.available ? 'available' : ''}`}>
       <div className="qb2-row-left">
@@ -365,6 +513,12 @@ function PaperRow({ item, onDownload }) {
           ? <CheckCircle size={14} className="qb2-icon-avail"/>
           : <Clock size={14} className="qb2-icon-pending"/>
         }
+        {item.available && (
+          <button className="qb2-view-btn-mini" onClick={() => onView(item)}>
+            <Eye size={13}/>
+            View
+          </button>
+        )}
         <button
           className={`qb2-dl-btn ${item.available ? 'ready' : 'not-ready'}`}
           onClick={() => onDownload(item)}

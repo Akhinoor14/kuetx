@@ -50,6 +50,51 @@ export function useBottomNavTabs() {
   return [tabs, saveTabs];
 }
 
+// Backwards-compatible favourites hook — returns an array of favourite nav IDs
+export function useBottomNavFavourites() {
+  const [favourites, setFavourites] = useState(() => {
+    try {
+      const tabs = store.get('bottomnav_tabs_v2');
+      if (Array.isArray(tabs) && tabs.length > 0) return tabs.map(t => t.id).filter(Boolean);
+      const old = store.get('bottomnav_favourites');
+      if (Array.isArray(old) && old.length > 0) return old;
+      // default quick-access favourites (keep dashboard excluded)
+      return DEFAULT_TABS.map(t => t.id).filter(Boolean);
+    } catch {
+      return [];
+    }
+  });
+
+  useEffect(() => {
+    const sync = () => {
+      try {
+        const tabs = store.get('bottomnav_tabs_v2');
+        if (Array.isArray(tabs) && tabs.length > 0) return setFavourites(tabs.map(t => t.id).filter(Boolean));
+        const old = store.get('bottomnav_favourites');
+        if (Array.isArray(old)) return setFavourites(old);
+        setFavourites(DEFAULT_TABS.map(t => t.id));
+      } catch {
+        // ignore
+      }
+    };
+    window.addEventListener('kuetx:store-updated', sync);
+    sync();
+    return () => window.removeEventListener('kuetx:store-updated', sync);
+  }, []);
+
+  const toggleFavourite = (id) => {
+    try {
+      const tabs = store.get('bottomnav_tabs_v2') || (Array.isArray(store.get('bottomnav_favourites')) ? store.get('bottomnav_favourites').map(i => ({ type: 'page', id: i })) : DEFAULT_TABS);
+      const exists = tabs.some(t => t.id === id);
+      const newTabs = exists ? tabs.filter(t => t.id !== id) : [...tabs, { type: 'page', id }];
+      store.set('bottomnav_tabs_v2', newTabs);
+      setFavourites(newTabs.map(t => t.id));
+    } catch {}
+  };
+
+  return [favourites, toggleFavourite];
+}
+
 // All available nav items (flattened, filtered by CR)
 export function getAllNavItems(profile) {
   return NAV.flatMap(section =>

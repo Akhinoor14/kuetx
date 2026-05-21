@@ -92,11 +92,14 @@ function makeEntries(dept, year, term, degree, examYears, examType = 'Regular') 
   }));
 }
 
+import { QB_GENERATED_OVERRIDES } from './generatedQuestionBankAvailability.js';
+
 // ─────────────────────────────────────────────────────────────────────────────
 // QB OVERRIDES
-// Set available: true once the PDF is placed in public/questions/
+// Generated availability is merged with any hand-maintained overrides.
 // ─────────────────────────────────────────────────────────────────────────────
 const QB_OVERRIDES = {
+  ...QB_GENERATED_OVERRIDES,
   // 'ESE_Y2T1_Regular_2023': { available: true, addedAt: '2025-05-21' },
 };
 
@@ -126,7 +129,7 @@ const RAW_QB = [
   ...makeEntries('ARCH', 3, 0, 'B. Arch', [2022],                   'Backlog'),
   ...makeEntries('ARCH', 3, 0, 'B. Arch', [2022],                   'Special Backlog'),
   ...makeEntries('ARCH', 4, 0, 'B. Arch', [2022],                   'Backlog'),
-  ...makeEntries('ARCH', 5, 0, 'B. Arch', [2022, 2023],             'Backlog'),
+  ...makeEntries('ARCH', 5, 0, 'B. Arch', [2022],                   'Backlog'),
   ...makeEntries('ARCH', 5, 0, 'B. Arch', [2023],                   'Special Backlog'),
 
   // ══════════════════════════════════════════════════════════════════════════
@@ -314,7 +317,7 @@ const RAW_QB = [
   // 14. MECHATRONICS ENGINEERING (MTE)
   //     Source: Department of Mechatronics Engineering — JSON verified
   // ══════════════════════════════════════════════════════════════════════════
-  ...makeEntries('MTE', 1, 1, 'B.Sc. Engg', [2019,2020,2021,2023]),
+  ...makeEntries('MTE', 1, 1, 'B.Sc. Engg', [2019,2020,2021,2022,2023]),
   ...makeEntries('MTE', 1, 2, 'B.Sc. Engg', [2020,2021,2022,2023]),
   ...makeEntries('MTE', 2, 1, 'B.Sc. Engg', [2020,2021,2022,2023]),
   ...makeEntries('MTE', 2, 2, 'B.Sc. Engg', [2020,2021,2022]),
