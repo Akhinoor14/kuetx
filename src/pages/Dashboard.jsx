@@ -2,7 +2,9 @@ import { useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, ReferenceLine } from 'recharts';
 import { TrendingUp, Award, AlertTriangle, BookOpen, CalendarCheck, Clock, Wallet, Star } from 'lucide-react';
+import * as Icons from 'lucide-react';
 import { store, cgpaToPercent, computeCGPA, computeTermGPAs, computeEffectiveAttendance, MIN_ATTENDANCE_PERCENT, SCHOLARSHIP_ATTENDANCE_PCT, computeCourseGrade, deriveAcademicMetaFromCourses, syncProfileAcademicMeta, getAllCourses, getProfile, getTermLabelFromKey, getCurrentTermKey, getTermProgress, getTermTimeline, getTermIndex, TERM_KEYS } from '../store/store';
+import { useBottomNavFavourites, getAllNavItems } from '../components/BottomNav';
 
 function StatCard({ label, value, sub, color, bgColor, icon: Icon, to }) {
   const inner = (
@@ -40,6 +42,7 @@ function StatCard({ label, value, sub, color, bgColor, icon: Icon, to }) {
 export default function Dashboard() {
   const profile  = getProfile();
   const courses  = getAllCourses(profile);
+  const [favourites] = useBottomNavFavourites();
 
   const { cgpa, earnedCredits, termGPAs, alerts } = useMemo(() => {
     const { cgpa, earnedCredits } = computeCGPA(courses);
@@ -155,6 +158,28 @@ export default function Dashboard() {
           </div>
         </div>
       )}
+
+      {/* Mobile Quick Access — shows favourite pages as icon grid, only on small screens */}
+      <div className="dashboard-mobile-quickaccess">
+        {getAllNavItems(profile)
+          .filter(item => favourites.includes(item.id) && item.id !== 'dashboard')
+          .slice(0, 8)
+          .map(item => {
+            const Icon = Icons[item.icon] || Icons.Circle;
+            return (
+              <Link
+                key={item.id}
+                to={item.path}
+                className="dashboard-quickaccess-item"
+              >
+                <div className="dashboard-quickaccess-icon">
+                  <Icon size={20} strokeWidth={1.8} />
+                </div>
+                <span>{item.label}</span>
+              </Link>
+            );
+          })}
+      </div>
 
       {/* Setup prompt */}
       {!profile.name && (

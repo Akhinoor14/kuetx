@@ -5,6 +5,7 @@ import { Sidebar } from './components/Sidebar';
 import { Navbar } from './components/Navbar';
 import { Footer } from './components/Footer';
 import PWAInstallPrompt from './components/PWAInstallPrompt';
+import { BottomNav, AllPagesDrawer, GroupMiniDrawer } from './components/BottomNav';
 
 // Pages
 import Dashboard from './pages/Dashboard';
@@ -34,6 +35,8 @@ import { Tours, Social, Projects, Syllabus, TimeTracker, Tuition, Food, Reports 
 
 function Layout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [allPagesOpen, setAllPagesOpen] = useState(false);
+  const [groupDrawer, setGroupDrawer] = useState(null); // { section } or null
   const [sidebarCompact, setSidebarCompact] = useState(() => {
     try {
       return localStorage.getItem('kuetx_sidebar_compact') === 'true';
@@ -96,6 +99,17 @@ function Layout() {
         </div>
         {location.pathname !== '/about' && <Footer />}
         <PWAInstallPrompt />
+        {/* Mobile bottom navigation */}
+        <BottomNav
+          onOpenMore={() => setAllPagesOpen(true)}
+          onOpenGroup={(section) => setGroupDrawer({ section })}
+        />
+        <AllPagesDrawer open={allPagesOpen} onClose={() => setAllPagesOpen(false)} />
+        <GroupMiniDrawer
+          section={groupDrawer?.section}
+          open={!!groupDrawer}
+          onClose={() => setGroupDrawer(null)}
+        />
       </div>
     </div>
   );

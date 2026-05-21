@@ -1,9 +1,9 @@
-import { Menu, Sun, Moon, Droplets, Bell, Download, ChevronRight } from 'lucide-react';
+import { Sun, Moon, Droplets, Bell, Download, ChevronRight } from 'lucide-react';
 import { useState } from 'react';
-import { useTheme, THEMES } from '../hooks/useTheme';
+import { useTheme } from '../hooks/useTheme';
 import { useLocation, Link } from 'react-router-dom';
 import { NAV } from '../nav';
-import { Logo, Wordmark } from './Logo';
+import { Wordmark } from './Logo';
 import { getProfile } from '../store/store';
 import { computeAlerts } from '../pages/Alerts';
 import { NotificationPanel } from './NotificationPanel';
@@ -32,24 +32,19 @@ export function Navbar({ onMenuClick }) {
   const ThemeIcon = themeId === 'dark' ? Moon : themeId === 'milky' ? Droplets : Sun;
   const themeLabel = { light: 'Light', milky: 'Milky', dark: 'Dark' }[themeId];
 
-  // compute alert counts for badge
   const alertCounts = computeAlerts(getProfile());
   const alertCount = (alertCounts.critical?.length || 0) + (alertCounts.warnings?.length || 0);
 
   return (
     <header className="topbar">
-      {/* Mobile hamburger */}
-      <button
-        onClick={onMenuClick}
-        style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 6, display: 'flex', borderRadius: 8 }}
-        className="md:hidden"
-      >
-        <Menu size={22} color="var(--text)" />
-      </button>
+      {/* Mobile: Logo left side */}
+      <div className="topbar-logo" style={{ display: 'flex', alignItems: 'center' }}>
+        <Wordmark height={28} />
+      </div>
 
-      {/* Mobile logo */}
-      <div className="md:hidden">
-        <Wordmark height={30} />
+      {/* Mobile: Page title center */}
+      <div className="topbar-page-title">
+        {label !== 'KUETx' ? label : ''}
       </div>
 
       {/* Desktop breadcrumb */}
@@ -77,17 +72,13 @@ export function Navbar({ onMenuClick }) {
         onClick={() => setNotificationOpen(!notificationOpen)}
         aria-label={alertCount ? `${alertCount} alerts` : 'Alerts'}
         style={{
-          display: 'flex',
-          alignItems: 'center',
-          padding: '7px 10px',
-          borderRadius: 9,
+          display: 'flex', alignItems: 'center',
+          padding: '7px 10px', borderRadius: 9,
           border: '1.5px solid var(--border)',
-          background: 'transparent',
-          color: 'var(--text)',
-          cursor: 'pointer',
-          transition: 'all 0.2s',
+          background: 'transparent', color: 'var(--text)',
+          cursor: 'pointer', transition: 'all 0.2s',
         }}
-        onMouseEnter={(e) => e.currentTarget.style.background = 'var(--surfaceStrong)'}
+        onMouseEnter={(e) => e.currentTarget.style.background = 'var(--inputBg)'}
         onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
       >
         <div style={{ position: 'relative', display: 'inline-flex', alignItems: 'center' }}>
@@ -96,16 +87,16 @@ export function Navbar({ onMenuClick }) {
             <span style={{
               position: 'absolute', top: -8, right: -8, minWidth: 18, height: 18, padding: '0 6px',
               display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-              borderRadius: 999, background: 'var(--danger)', color: 'var(--accentFg)', fontSize: 11, fontWeight: 700,
-              boxShadow: '0 2px 6px rgba(0,0,0,0.12)'
+              borderRadius: 999, background: 'var(--danger)', color: '#fff', fontSize: 11, fontWeight: 700,
+              boxShadow: '0 2px 6px rgba(0,0,0,0.12)',
             }}>{alertCount}</span>
           )}
         </div>
       </button>
 
-      {/* Backup shortcut */}
-      <Link to="/settings" title="Backup data" style={{
-        display: 'flex', alignItems: 'center', padding: '7px 10px', borderRadius: 9,
+      {/* Backup shortcut — hidden on mobile (accessible via Settings in More drawer) */}
+      <Link to="/settings" title="Backup data" className="hidden md:flex" style={{
+        alignItems: 'center', padding: '7px 10px', borderRadius: 9,
         border: '1.5px solid var(--border)', background: 'transparent', color: 'var(--text)',
         textDecoration: 'none',
       }}>
