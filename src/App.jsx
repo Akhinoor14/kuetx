@@ -19,6 +19,7 @@ import Teachers from './pages/Teachers';
 import Diary from './pages/Diary';
 import Assignments from './pages/Assignments';
 import QuestionBank from './pages/QuestionBank';
+import QuestionBankViewer from './pages/QuestionBankViewer';
 import SelfStudy from './pages/SelfStudy';
 import Namaz from './pages/Namaz';
 import SelfEval from './pages/SelfEval';
@@ -45,6 +46,7 @@ function Layout() {
     }
   });
   const location = useLocation();
+  const isQuestionBankViewer = location.pathname === '/question-bank/view';
 
   useEffect(() => {
     try {
@@ -54,14 +56,19 @@ function Layout() {
 
   return (
     <div style={{ display: 'flex', minHeight: '100vh' }}>
-      <Sidebar
-        open={sidebarOpen}
-        compact={sidebarCompact}
-        onToggleCompact={() => setSidebarCompact(v => !v)}
-        onClose={() => setSidebarOpen(false)}
-      />
-      <div className={`main-content ${sidebarCompact ? 'compact' : ''}`}>
-        <Navbar onMenuClick={() => setSidebarOpen(o => !o)} />
+      {!isQuestionBankViewer && (
+        <Sidebar
+          open={sidebarOpen}
+          compact={sidebarCompact}
+          onToggleCompact={() => setSidebarCompact(v => !v)}
+          onClose={() => setSidebarOpen(false)}
+        />
+      )}
+      <div
+        className={`main-content ${sidebarCompact && !isQuestionBankViewer ? 'compact' : ''}`}
+        style={isQuestionBankViewer ? { marginLeft: 0, width: '100%' } : undefined}
+      >
+        {!isQuestionBankViewer && <Navbar onMenuClick={() => setSidebarOpen(o => !o)} />}
         <div style={{ flex: 1 }}>
           <Routes>
             <Route path="/" element={<Dashboard />} />
@@ -76,6 +83,7 @@ function Layout() {
             <Route path="/diary" element={<Diary />} />
             <Route path="/assignments" element={<Assignments />} />
             <Route path="/question-bank" element={<QuestionBank />} />
+            <Route path="/question-bank/view" element={<QuestionBankViewer />} />
             <Route path="/self-study" element={<SelfStudy />} />
             <Route path="/time" element={<TimeTracker />} />
             <Route path="/namaz" element={<Namaz />} />
@@ -97,19 +105,23 @@ function Layout() {
             <Route path="/class-management" element={<ClassManagement />} />
           </Routes>
         </div>
-        {location.pathname !== '/about' && <Footer />}
-        <PWAInstallPrompt />
+        {location.pathname !== '/about' && !isQuestionBankViewer && <Footer />}
+        {!isQuestionBankViewer && <PWAInstallPrompt />}
         {/* Mobile bottom navigation */}
-        <BottomNav
-          onOpenMore={() => setAllPagesOpen(true)}
-          onOpenGroup={(section) => setGroupDrawer({ section })}
-        />
-        <AllPagesDrawer open={allPagesOpen} onClose={() => setAllPagesOpen(false)} />
-        <GroupMiniDrawer
-          section={groupDrawer?.section}
-          open={!!groupDrawer}
-          onClose={() => setGroupDrawer(null)}
-        />
+        {!isQuestionBankViewer && (
+          <BottomNav
+            onOpenMore={() => setAllPagesOpen(true)}
+            onOpenGroup={(section) => setGroupDrawer({ section })}
+          />
+        )}
+        {!isQuestionBankViewer && <AllPagesDrawer open={allPagesOpen} onClose={() => setAllPagesOpen(false)} />}
+        {!isQuestionBankViewer && (
+          <GroupMiniDrawer
+            section={groupDrawer?.section}
+            open={!!groupDrawer}
+            onClose={() => setGroupDrawer(null)}
+          />
+        )}
       </div>
     </div>
   );

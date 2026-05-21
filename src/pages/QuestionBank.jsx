@@ -1,14 +1,17 @@
 import { useEffect, useState, useMemo, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   BookOpen, Download, Search, Filter, ChevronDown, ChevronRight,
   FileText, AlertCircle, ExternalLink, BookMarked, Share2, Info,
   CheckCircle, Clock, Layers, Eye, X
 } from 'lucide-react';
-import { getProfile } from '../store/store';
+import { getProfile, getCurrentTermKey } from '../store/store';
 import {
   QUESTION_BANK, QB_DEPARTMENTS, QB_DEPT_CODE_MAP,
   getQBStats, getQBForDept, getQBForTerm, ytLabel,
 } from '../data/questionbank/questionBankData';
+
+import '../styles/questionBank2.css';
 
 // ──────────────────────────────────────────
 // QB OVERRIDES (set available: true here when PDFs are placed in public/)
@@ -40,30 +43,58 @@ const DEPT_CODE_SHORT = {
 const YEAR_LABELS = ['', '1st Year', '2nd Year', '3rd Year', '4th Year', '5th Year'];
 const TERM_LABELS = ['', '1st Term', '2nd Term'];
 
+const getDefaultExpandedGroups = (deptCode, currentTermKey) => {
+  if (!deptCode || !currentTermKey) return {};
+  const [yearPart, termPart] = String(currentTermKey).split('T');
+  const year = Number(yearPart?.replace(/^Y/, ''));
+  const term = Number(termPart);
+  if (!Number.isFinite(year) || !Number.isFinite(term)) return {};
+  return {
+    [`dept_${deptCode}`]: true,
+    [`${deptCode}_Y${year}T${term}`]: true,
+  };
+};
+
 // ──────────────────────────────────────────
 // MAIN COMPONENT
 // ──────────────────────────────────────────
 export default function QuestionBank() {
+  const navigate = useNavigate();
   const profile = getProfile();
-  const myDept = profile?.department ? (QB_DEPT_CODE_MAP[profile.department] || null) : null;
+  const profileDeptRaw = String(profile?.dept || '').trim();
+  const myDept = profileDeptRaw
+    ? (QB_DEPT_CODE_MAP[profileDeptRaw]
+      || QB_DEPT_CODE_MAP[Object.keys(QB_DEPT_CODE_MAP).find(key => key.toLowerCase() === profileDeptRaw.toLowerCase()) || '']
+      || null)
+    : null;
+  const currentTermKey = getCurrentTermKey(profile);
+  const defaultExpandedGroups = useMemo(
+    () => getDefaultExpandedGroups(myDept, currentTermKey),
+    [myDept, currentTermKey],
+  );
 
   const [search, setSearch] = useState('');
   const [selectedDept, setSelectedDept] = useState(myDept || '');
   const [selectedYear, setSelectedYear] = useState('');
   const [selectedTerm, setSelectedTerm] = useState('');
   const [showOnlyAvailable, setShowOnlyAvailable] = useState(false);
-  const [expandedGroups, setExpandedGroups] = useState({});
+  const [expandedGroups, setExpandedGroups] = useState(defaultExpandedGroups);
   const [view, setView] = useState('grouped'); // grouped | list
   const [showFilters, setShowFilters] = useState(false);
   const [showIntroPrompt, setShowIntroPrompt] = useState(true);
   const [showContributionForm, setShowContributionForm] = useState(false);
-  const [viewerItem, setViewerItem] = useState(null);
 
   useEffect(() => {
     if (myDept) {
       setSelectedDept(prev => (prev ? prev : myDept));
     }
   }, [myDept]);
+
+  useEffect(() => {
+    if (Object.keys(expandedGroups).length === 0 && Object.keys(defaultExpandedGroups).length > 0) {
+      setExpandedGroups(defaultExpandedGroups);
+    }
+  }, [defaultExpandedGroups, expandedGroups]);
 
   // Global stats
   const globalStats = useMemo(() => ({
@@ -129,12 +160,8 @@ export default function QuestionBank() {
       openContributionPrompt();
       return;
     }
-    setViewerItem(item);
-  }, [openContributionPrompt]);
-
-  const closePaperViewer = useCallback(() => {
-    setViewerItem(null);
-  }, []);
+    navigate(`/question-bank/view?src=${encodeURIComponent(`/${item.filePath}`)}&title=${encodeURIComponent(`${item.dept} ${ytLabel(item.year, item.term)} ${item.examYear}`)}`);
+  }, [navigate, openContributionPrompt]);
 
   const handleDownload = useCallback((item) => {
     if (!item.available) {
@@ -153,6 +180,7 @@ export default function QuestionBank() {
   const clearFilters = () => {
     setSearch(''); setSelectedDept(myDept || ''); setSelectedYear('');
     setSelectedTerm(''); setShowOnlyAvailable(false);
+    setExpandedGroups(defaultExpandedGroups);
   };
 
   const activeFilterCount = [
@@ -173,8 +201,10 @@ export default function QuestionBank() {
             {globalStats.available} available for download
           </p>
           <div className="qb2-hero-hint">
-            <span className="qb2-hero-chip">Default view: {myDept ? `${DEPT_CODE_SHORT[myDept] || myDept} department` : 'all departments'}</span>
-            <span className="qb2-hero-chip qb2-hero-chip-soft">Switch departments from Filters anytime</span>
+            <span className="qb2-hero-chip">Default view: {myDept ? `${DEPT_CODE_SHORT[myDept] || myDept} department` : 'set your profile department'}</span>
+            <span className="qb2-hero-chip qb2-hero-chip-soft">
+              {currentTermKey ? `Current term ${currentTermKey} opens first` : 'Current term opens first after profile setup'}
+            </span>
           </div>
         </div>
         <div className="qb2-stats">
@@ -196,6 +226,33 @@ export default function QuestionBank() {
               value={search}
               onChange={e => setSearch(e.target.value)}
             />
+          </div>
+          <div className="qb2-inline-dept">
+            <span className="qb2-inline-dept-label">
+              {myDept ? 'Default dept' : 'Dept'}
+            </span>
+            <select
+              className="qb2-inline-dept-select"
+              value={selectedDept}
+              onChange={e => setSelectedDept(e.target.value)}
+              aria-label="Select department filter"
+            >
+              <option value="">All Departments</option>
+              {ALL_DEPTS.map(d => (
+                <option key={d.code} value={d.code}>
+                  {DEPT_CODE_SHORT[d.code]} — {d.name.replace('Department of ', '')}
+                </option>
+              ))}
+            </select>
+            {myDept && selectedDept !== myDept && (
+              <button
+                type="button"
+                className="qb2-inline-dept-reset"
+                onClick={() => setSelectedDept(myDept)}
+              >
+                My dept
+              </button>
+            )}
           </div>
           <button
             className={`qb2-filter-btn ${showFilters ? 'active' : ''}`}
@@ -264,6 +321,7 @@ export default function QuestionBank() {
               key={deptGroup.dept}
               deptGroup={deptGroup}
               expandedGroups={expandedGroups}
+                defaultExpandedGroups={defaultExpandedGroups}
               toggleGroup={toggleGroup}
               onDownload={handleDownload}
               onView={openPaperViewer}
@@ -340,42 +398,6 @@ export default function QuestionBank() {
         </div>
       )}
 
-      {viewerItem && (
-        <div className="qb2-modal-backdrop" role="presentation" onClick={closePaperViewer}>
-          <div className="qb2-modal qb2-modal-wide qb2-viewer-modal" role="dialog" aria-modal="true" aria-labelledby="qb2-viewer-title" onClick={e => e.stopPropagation()}>
-            <div className="qb2-modal-top">
-              <div>
-                <div className="qb2-modal-kicker">Paper preview</div>
-                <h2 id="qb2-viewer-title" className="qb2-modal-title">
-                  {DEPT_CODE_SHORT[viewerItem.dept] || viewerItem.dept} · {ytLabel(viewerItem.year, viewerItem.term)} · {viewerItem.examYear}
-                </h2>
-              </div>
-              <button className="qb2-modal-close" type="button" onClick={closePaperViewer} aria-label="Close paper preview">
-                <X size={16} />
-              </button>
-            </div>
-            <p className="qb2-modal-text">
-              You can read the paper inside the site or download the PDF from here.
-            </p>
-            <div className="qb2-viewer-actions">
-              <button className="qb2-primary-btn" type="button" onClick={() => handleDownload(viewerItem)}>
-                <Download size={14} /> Download PDF
-              </button>
-              <a className="qb2-secondary-btn qb2-link-btn" href={`/${viewerItem.filePath}`} target="_blank" rel="noreferrer">
-                Open in new tab
-              </a>
-            </div>
-            <div className="qb2-form-frame-wrap qb2-viewer-frame-wrap">
-              <iframe
-                title={`${viewerItem.dept} paper preview`}
-                src={`/${viewerItem.filePath}`}
-                className="qb2-viewer-frame"
-                loading="lazy"
-              />
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
@@ -399,9 +421,9 @@ function StatBox({ n, l, color }) {
   );
 }
 
-function DeptGroup({ deptGroup, expandedGroups, toggleGroup, onDownload, onView }) {
+function DeptGroup({ deptGroup, expandedGroups, defaultExpandedGroups, toggleGroup, onDownload, onView }) {
   const deptKey = `dept_${deptGroup.dept}`;
-  const isDeptOpen = expandedGroups[deptKey] !== false; // default open
+  const isDeptOpen = expandedGroups[deptKey] ?? defaultExpandedGroups[deptKey] ?? false;
   const totalInDept = Object.values(deptGroup.years).flatMap(t => Object.values(t).flat()).length;
   const availInDept = Object.values(deptGroup.years).flatMap(t => Object.values(t).flat()).filter(q => q.available).length;
 
@@ -427,7 +449,7 @@ function DeptGroup({ deptGroup, expandedGroups, toggleGroup, onDownload, onView 
               <div className="qb2-terms">
                 {Object.entries(terms).sort(([a],[b]) => a-b).map(([term, papers]) => {
                   const termKey = `${deptGroup.dept}_Y${year}T${term}`;
-                  const isOpen = expandedGroups[termKey] !== false; // default open
+                  const isOpen = expandedGroups[termKey] ?? defaultExpandedGroups[termKey] ?? false;
                   const avail = papers.filter(p => p.available).length;
                   return (
                     <div key={term} className="qb2-term-group">

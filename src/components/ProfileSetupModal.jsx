@@ -3,9 +3,22 @@ import { DEPARTMENTS, DEFAULT_PROFILE, TERM_KEYS, getTermLabelFromKey } from '..
 
 // Map dept codes: roll middle 2 digits -> dept code
 const ROLL_DEPT_MAP = {
-  '13': 'ESE', // Energy Science & Engineering
-  '07': 'CSE', // Computer Science & Engineering
-  // Add more as needed
+  '25': 'ARCH',
+  '23': 'BECM',
+  '15': 'BME',
+  '01': 'CE',
+  '29': 'ChE',
+  '07': 'CSE',
+  '09': 'ECE',
+  '03': 'EEE',
+  '13': 'ESE',
+  '11': 'IPE',
+  '19': 'LE',
+  '05': 'ME',
+  '27': 'MSE',
+  '31': 'MTE',
+  '21': 'TE',
+  '17': 'URP',
 };
 
 const HALL_OPTIONS = [
@@ -86,7 +99,11 @@ const toDateInputValue = (value) => {
 const getFieldError = (key, form, autoCalculatedDept) => {
   const value = key === 'dept' ? (form.dept || autoCalculatedDept) : form[key];
   if (key === 'name' && !String(value || '').trim()) return 'Name is required';
-  if (key === 'studentId' && !String(value || '').trim()) return 'Student ID is required';
+  if (key === 'studentId') {
+    const v = String(value || '').trim();
+    if (!v) return 'Student ID is required';
+    if (!/^\d{7}$/.test(v)) return 'Student ID must be a 7-digit number';
+  }
   if (key === 'dept' && !String(value || '').trim()) return 'Department is required';
   if (key === 'session' && !String(value || '').trim()) return 'Academic session is required';
   if (key === 'currentTermKey' && !String(value || '').trim()) return 'Current term is required';
@@ -113,7 +130,11 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
   if (!isOpen) return null;
 
   const handleChange = (key) => (e) => {
-    const val = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
+    let val = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
+    if (key === 'studentId') {
+      // Allow only digits and enforce max length 7
+      val = String(val || '').replace(/\D/g, '').slice(0, 7);
+    }
     setForm(prev => ({ ...prev, [key]: val }));
     setErrors(prev => ({ ...prev, [key]: '' }));
   };
@@ -238,14 +259,9 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
                   {errors.studentId && <div style={{ fontSize: 11, color: '#dc2626', marginTop: 5 }}>{errors.studentId}</div>}
                 </div>
                 <div>
-                  <label style={labelStyle}>Department</label>
-                  <select value={form.dept || autoCalculatedDept} onChange={handleChange('dept')} style={fieldStyle}>
-                    <option value="">Select your department</option>
-                    {DEPARTMENTS.map(dept => (
-                      <option key={dept.code} value={dept.code}>{dept.code} - {dept.name}</option>
-                    ))}
-                  </select>
-                  {autoCalculatedDept && <div style={{ fontSize: 10, color: 'var(--accent)', marginTop: 4 }}>Detected from ID: {autoCalculatedDept}</div>}
+                  <label style={labelStyle}>Department (auto)</label>
+                  <input value={autoCalculatedDept || ''} readOnly style={{ ...fieldStyle, background: 'var(--surfaceGlassStrong)' }} />
+                  {autoCalculatedDept && <div style={{ fontSize: 11, color: 'var(--accent)', marginTop: 6, fontWeight: 700 }}>Detected from ID: {autoCalculatedDept}</div>}
                   {errors.dept && <div style={{ fontSize: 11, color: '#dc2626', marginTop: 5 }}>{errors.dept}</div>}
                 </div>
                 <div>

@@ -1,0 +1,30 @@
+import { useMemo } from 'react';
+import { useEffect } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import PDFViewer from '../components/PDFViewer';
+
+export default function QuestionBankViewer() {
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+
+  const initialUrl = searchParams.get('src') || '';
+  const initialName = useMemo(() => searchParams.get('title') || 'Question paper', [searchParams]);
+
+  useEffect(() => {
+    if (!initialUrl) {
+      navigate('/question-bank', { replace: true });
+    }
+  }, [initialUrl, navigate]);
+
+  if (!initialUrl) return null;
+
+  return (
+    <div style={{ minHeight: '100vh', background: 'var(--bg, #0c0d10)' }}>
+      <PDFViewer
+        initialUrl={initialUrl}
+        initialName={initialName}
+        onClose={() => navigate('/question-bank')}
+      />
+    </div>
+  );
+}
