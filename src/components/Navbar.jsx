@@ -1,4 +1,4 @@
-import { Sun, Moon, Droplets, Bell, Download, ChevronRight } from 'lucide-react';
+import { Sun, Moon, Droplets, Bell, Download, ChevronRight, Menu } from 'lucide-react';
 import { useState } from 'react';
 import { useTheme } from '../hooks/useTheme';
 import { useLocation, Link } from 'react-router-dom';
@@ -37,6 +37,22 @@ export function Navbar({ onMenuClick }) {
 
   return (
     <header className="topbar">
+      {/* Mobile menu toggle */}
+      <button
+        type="button"
+        onClick={onMenuClick}
+        className="md:hidden"
+        aria-label="Open navigation menu"
+        style={{
+          display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+          width: 36, height: 36, borderRadius: 9,
+          border: '1.5px solid var(--border)', background: 'transparent',
+          color: 'var(--text)', cursor: 'pointer', flexShrink: 0,
+        }}
+      >
+        <Menu size={18} />
+      </button>
+
       {/* Mobile: Logo left side */}
       <div className="topbar-logo" style={{ display: 'flex', alignItems: 'center' }}>
         <Wordmark height={28} />
