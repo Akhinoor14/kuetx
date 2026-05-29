@@ -74,8 +74,11 @@ export default function PWAInstallPrompt() {
   const [deferredPrompt, setDeferredPrompt] = useState(null);
   const [installed, setInstalled] = useState(false);
   const [showHint, setShowHint] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
+  const [hiddenUntil, setHiddenUntil] = useState(0);
   const [env] = useState(() => detectEnv());
   const hintTimer = useRef(null);
+  const hideTimer = useRef(null);
 
   useEffect(() => {
     if (env.isStandalone) { setInstalled(true); return; }
@@ -84,6 +87,18 @@ export default function PWAInstallPrompt() {
     try {
       if (localStorage.getItem('kuetx_pwa_installed') === '1') {
         setInstalled(true); return;
+      }
+    } catch {}
+
+    const now = Date.now();
+    try {
+      const stored = Number(localStorage.getItem('kuetx_pwa_install_hide_until') || 0);
+      if (stored > now) {
+        setHiddenUntil(stored);
+        hideTimer.current = setTimeout(() => {
+          setHiddenUntil(0);
+          try { localStorage.removeItem('kuetx_pwa_install_hide_until'); } catch {}
+        }, stored - now);
       }
     } catch {}
 
@@ -101,12 +116,13 @@ export default function PWAInstallPrompt() {
     window.addEventListener('appinstalled', onInstalled);
     return () => {
       clearTimeout(hintTimer.current);
+      clearTimeout(hideTimer.current);
       window.removeEventListener('beforeinstallprompt', onBeforeInstall);
       window.removeEventListener('appinstalled', onInstalled);
     };
   }, []);
 
-  if (installed) return null;
+  if (installed || hiddenUntil > Date.now()) return null;
 
   const handleInstall = async () => {
     // Native prompt available (Chrome Android, Edge, Samsung sometimes)
@@ -131,8 +147,39 @@ export default function PWAInstallPrompt() {
 
   const instructions = getManualInstructions(env);
 
+  const handleLater = () => {
+    const hideUntilMs = Date.now() + 8 * 60 * 60 * 1000;
+    setHiddenUntil(hideUntilMs);
+    setShowPopup(false);
+    setShowHint(false);
+    try { localStorage.setItem('kuetx_pwa_install_hide_until', String(hideUntilMs)); } catch {}
+    clearTimeout(hideTimer.current);
+    hideTimer.current = setTimeout(() => {
+      setHiddenUntil(0);
+      try { localStorage.removeItem('kuetx_pwa_install_hide_until'); } catch {}
+    }, 8 * 60 * 60 * 1000);
+  };
+
   return (
     <div className="pwa-prompt-wrap">
+      {showPopup && (
+        <div className="pwa-popup" role="dialog" aria-label="Install app">
+          <div className="pwa-popup-title">Install KUETx?</div>
+          <div className="pwa-popup-sub">Get the app experience with offline access.</div>
+          <div className="pwa-popup-actions">
+            <button type="button" className="pwa-popup-primary" onClick={() => { setShowPopup(false); handleInstall(); }}>
+              Install now
+            </button>
+            <button type="button" className="pwa-popup-secondary" onClick={handleLater}>
+              Install later
+            </button>
+            <button type="button" className="pwa-popup-ghost" onClick={() => setShowPopup(false)}>
+              No
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Manual install hint */}
       {showHint && (
         <div className="pwa-hint-card" role="dialog" aria-label="How to install">
@@ -152,11 +199,11 @@ export default function PWAInstallPrompt() {
       {/* Floating install button */}
       <button
         type="button"
-        onClick={handleInstall}
-        className={`pwa-install-btn${showHint ? ' active' : ''}`}
+        onClick={() => setShowPopup(true)}
+        className={`pwa-install-btn${showHint || showPopup ? ' active' : ''}`}
         title="Install KUETx app"
         aria-label="Install KUETx"
-        aria-expanded={showHint}
+        aria-expanded={showHint || showPopup}
       >
         <span className="pwa-install-icon">
           <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="none"

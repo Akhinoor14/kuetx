@@ -6,11 +6,12 @@ import { store, getProfile } from '../store/store';
 import { computeAlerts } from '../pages/Alerts';
 
 // ── Constants ────────────────────────────────────────────────────────────────
-const MAX_TABS = 3; // Max pinned tabs (excluding Dashboard). Dashboard always slot 1.
+const MAX_TABS = 4; // Max pinned tabs (excluding Dashboard). Total = 5 tabs on mobile.
 const DEFAULT_TABS = [
   { type: 'page', id: 'attendance' },
   { type: 'page', id: 'marks' },
   { type: 'page', id: 'schedule' },
+  { type: 'page', id: 'assignments' },
 ];
 
 // Group icon map — pick a representative icon per section group
@@ -23,6 +24,46 @@ const GROUP_ICONS = {
   'Activities':   'Layers',
   'Tools':        'Settings',
   'Information':  'Info',
+};
+
+const CUSTOM_GROUP_ICONS = [
+  'Folder',
+  'Sparkles',
+  'Star',
+  'BookOpen',
+  'CalendarCheck',
+  'Clock',
+  'Layers',
+  'Wallet',
+  'MessageCircle',
+  'Activity',
+  'ShieldCheck',
+  'Heart',
+  'MapPin',
+  'Settings',
+];
+
+const USAGE_KEY = 'nav_usage_v1';
+const MAX_RECENT = 6;
+
+const COMPACT_BOTTOM_NAV_LABELS = {
+  'Class Schedule': 'Schedule',
+  'Assignments': 'Tasks',
+  'Term Planner': 'Planner',
+};
+
+const getBottomNavLabel = (label) => COMPACT_BOTTOM_NAV_LABELS[label] || label;
+
+const getUsageState = () => {
+  try {
+    const saved = store.get(USAGE_KEY);
+    if (saved && typeof saved === 'object') return saved;
+  } catch {}
+  return { counts: {}, recent: [] };
+};
+
+const saveUsageState = (next) => {
+  try { store.set(USAGE_KEY, next); } catch {}
 };
 
 // ── Hooks ────────────────────────────────────────────────────────────────────
@@ -50,12 +91,32 @@ export function useBottomNavTabs() {
   return [tabs, saveTabs];
 }
 
+// Custom user groups for the bottom nav (and More drawer)
+export function useBottomNavGroups() {
+  const [groups, setGroups] = useState(() => {
+    try {
+      const saved = store.get('bottomnav_groups_v1');
+      if (Array.isArray(saved)) return saved;
+      return [];
+    } catch {
+      return [];
+    }
+  });
+
+  const saveGroups = (next) => {
+    setGroups(next);
+    try { store.set('bottomnav_groups_v1', next); } catch {}
+  };
+
+  return [groups, saveGroups];
+}
+
 // Backwards-compatible favourites hook — returns an array of favourite nav IDs
 export function useBottomNavFavourites() {
   const [favourites, setFavourites] = useState(() => {
     try {
       const tabs = store.get('bottomnav_tabs_v2');
-      if (Array.isArray(tabs) && tabs.length > 0) return tabs.map(t => t.id).filter(Boolean);
+      if (Array.isArray(tabs) && tabs.length > 0) return tabs.filter(t => t.type === 'page').map(t => t.id).filter(Boolean);
       const old = store.get('bottomnav_favourites');
       if (Array.isArray(old) && old.length > 0) return old;
       // default quick-access favourites (keep dashboard excluded)
@@ -69,7 +130,7 @@ export function useBottomNavFavourites() {
     const sync = () => {
       try {
         const tabs = store.get('bottomnav_tabs_v2');
-        if (Array.isArray(tabs) && tabs.length > 0) return setFavourites(tabs.map(t => t.id).filter(Boolean));
+        if (Array.isArray(tabs) && tabs.length > 0) return setFavourites(tabs.filter(t => t.type === 'page').map(t => t.id).filter(Boolean));
         const old = store.get('bottomnav_favourites');
         if (Array.isArray(old)) return setFavourites(old);
         setFavourites(DEFAULT_TABS.map(t => t.id));
@@ -88,11 +149,24 @@ export function useBottomNavFavourites() {
       const exists = tabs.some(t => t.id === id);
       const newTabs = exists ? tabs.filter(t => t.id !== id) : [...tabs, { type: 'page', id }];
       store.set('bottomnav_tabs_v2', newTabs);
-      setFavourites(newTabs.map(t => t.id));
+      setFavourites(newTabs.filter(t => t.type === 'page').map(t => t.id));
     } catch {}
   };
 
   return [favourites, toggleFavourite];
+}
+
+export function useNavUsageData() {
+  const [usage, setUsage] = useState(() => getUsageState());
+
+  useEffect(() => {
+    const sync = () => setUsage(getUsageState());
+    window.addEventListener('kuetx:store-updated', sync);
+    sync();
+    return () => window.removeEventListener('kuetx:store-updated', sync);
+  }, []);
+
+  return usage;
 }
 
 // All available nav items (flattened, filtered by CR)
@@ -114,6 +188,7 @@ export function getVisibleSections(profile) {
 export function BottomNav({ onOpenMore, onOpenGroup }) {
   const location = useLocation();
   const [pinnedTabs] = useBottomNavTabs();
+  const [customGroups] = useBottomNavGroups();
   const [alertCount, setAlertCount] = useState(0);
   const [alertMap, setAlertMap] = useState({});
   const [profile, setProfile] = useState(() => store.get('profile') || {});
@@ -169,12 +244,44 @@ export function BottomNav({ onOpenMore, onOpenGroup }) {
 
   const allItems = getAllNavItems(profile);
   const sections = getVisibleSections(profile);
+  const customGroupMap = new Map(customGroups.map(g => [g.id, g]));
+
+  useEffect(() => {
+    if (!allItems.length) return;
+    const match = allItems.find(item =>
+      location.pathname === item.path ||
+      (item.path !== '/' && location.pathname.startsWith(item.path))
+    );
+    if (!match) return;
+    const usage = getUsageState();
+    const counts = { ...usage.counts };
+    counts[match.id] = (counts[match.id] || 0) + 1;
+    const recent = [match.id, ...usage.recent.filter(id => id !== match.id)].slice(0, MAX_RECENT);
+    saveUsageState({ counts, recent });
+  }, [location.pathname, allItems]);
+
+  const resolveGroupItems = (group) => {
+    const itemMap = new Map(allItems.map(i => [i.id, i]));
+    return (group.items || []).map(id => itemMap.get(id)).filter(Boolean);
+  };
 
   // Resolve pinned tabs into renderable items
   const resolvedTabs = pinnedTabs
     .filter(t => t.id !== 'dashboard')
     .map(t => {
       if (t.type === 'group') {
+        const custom = customGroupMap.get(t.id);
+        if (custom) {
+          const section = { group: custom.label, items: resolveGroupItems(custom) };
+          if (section.items.length === 0) return null;
+          const iconName = custom.icon || 'Folder';
+          const isActive = section.items.some(item =>
+            location.pathname === item.path ||
+            (item.path !== '/' && location.pathname.startsWith(item.path))
+          );
+          return { type: 'group', id: t.id, label: custom.label, iconName, section, isActive };
+        }
+
         const section = sections.find(s => s.group === t.id);
         if (!section) return null;
         const iconName = GROUP_ICONS[section.group] || 'Folder';
@@ -234,7 +341,7 @@ export function BottomNav({ onOpenMore, onOpenGroup }) {
           <div className="bottom-nav-icon-wrap">
             <Icons.Grid size={22} strokeWidth={dashActive ? 2.5 : 1.8} />
           </div>
-          <span>Dashboard</span>
+          <span>{getBottomNavLabel('Dashboard')}</span>
           {alertMap && alertMap[dashboardItem.path] && (
             <span className={`tab-badge tab-badge--${alertMap[dashboardItem.path].level}`}>{alertMap[dashboardItem.path].count > 9 ? '9+' : alertMap[dashboardItem.path].count}</span>
           )}
@@ -270,7 +377,7 @@ export function BottomNav({ onOpenMore, onOpenGroup }) {
             <div className="bottom-nav-icon-wrap">
               <Icon size={22} strokeWidth={tab.isActive ? 2.5 : 1.8} />
             </div>
-            <span>{tab.label}</span>
+            <span>{getBottomNavLabel(tab.label)}</span>
             {alertMap && alertMap[tab.item.path] && (
               <span className={`tab-badge tab-badge--${alertMap[tab.item.path].level}`}>{alertMap[tab.item.path].count > 9 ? '9+' : alertMap[tab.item.path].count}</span>
             )}
@@ -278,21 +385,20 @@ export function BottomNav({ onOpenMore, onOpenGroup }) {
         );
       })}
 
-      {/* More button */}
+      {/* More handle (doesn't consume a tab slot) */}
       <button
-        className="bottom-nav-tab"
+        className="bottom-nav-more-handle"
         onClick={onOpenMore}
-        aria-label="All pages"
+        aria-label="Open all pages"
       >
-        <div className="bottom-nav-icon-wrap" style={{ position: 'relative' }}>
-          <Icons.LayoutGrid size={22} strokeWidth={1.8} />
-          {alertCount > 0 && (
-            <span className="bottom-nav-badge">
-              {alertCount > 9 ? '9+' : alertCount}
-            </span>
-          )}
-        </div>
-        <span>More</span>
+        <Icons.LayoutGrid size={16} strokeWidth={2} />
+        <span>Pages</span>
+        <Icons.ChevronUp size={12} strokeWidth={2.4} />
+        {alertCount > 0 && (
+          <span className="bottom-nav-badge">
+            {alertCount > 9 ? '9+' : alertCount}
+          </span>
+        )}
       </button>
     </nav>
   );
@@ -397,19 +503,35 @@ export function GroupMiniDrawer({ section, open, onClose }) {
 }
 
 // ── All Pages Drawer ──────────────────────────────────────────────────────────
-export function AllPagesDrawer({ open, onClose }) {
+export function AllPagesDrawer({ open, onClose, onOpenGroup }) {
   const location = useLocation();
   const [pinnedTabs, setPinnedTabs] = useBottomNavTabs();
+  const [customGroups, setCustomGroups] = useBottomNavGroups();
   const [editMode, setEditMode] = useState(false);
+  const [groupDraft, setGroupDraft] = useState(null);
+  const [toast, setToast] = useState(null);
+  const [searchText, setSearchText] = useState('');
+  const [sectionFilter, setSectionFilter] = useState('all');
   const [profile] = useState(() => store.get('profile') || {});
   const drawerRef = useRef(null);
   const dragStartY = useRef(null);
   const dragCurrentY = useRef(0);
   const dragItemId = useRef(null);
   const dragOverId = useRef(null);
+  const toastTimer = useRef(null);
+  const usage = useNavUsageData();
 
   useEffect(() => { if (open) onClose(); }, [location.pathname]);
   useEffect(() => { if (!open) setEditMode(false); }, [open]);
+  useEffect(() => { if (!open) setGroupDraft(null); }, [open]);
+  useEffect(() => { if (!open) { setSearchText(''); setSectionFilter('all'); } }, [open]);
+  useEffect(() => {
+    if (!open && toastTimer.current) {
+      clearTimeout(toastTimer.current);
+      toastTimer.current = null;
+      setToast(null);
+    }
+  }, [open]);
 
   useEffect(() => {
     if (!open) return;
@@ -448,14 +570,158 @@ export function AllPagesDrawer({ open, onClose }) {
   // Check if a page or group is pinned
   const isPinned = (type, id) => pinnedTabs.some(t => t.type === type && t.id === id);
 
+  const customGroupMap = new Map(customGroups.map(g => [g.id, g]));
+  const groupItemMap = new Map(allItems.map(i => [i.id, i]));
+  const customGroupItems = (group) => (group.items || []).map(id => groupItemMap.get(id)).filter(Boolean);
+
   const togglePin = (type, id) => {
+    const alreadyPinned = isPinned(type, id);
     if (id === 'dashboard') return;
-    if (isPinned(type, id)) {
-      setPinnedTabs(pinnedTabs.filter(t => !(t.type === type && t.id === id)));
-    } else {
-      if (tabCount >= MAX_TABS) return;
-      setPinnedTabs([...pinnedTabs, { type, id }]);
+    if (alreadyPinned) {
+      const nextTabs = pinnedTabs.filter(t => !(t.type === type && t.id === id));
+      setPinnedTabs(nextTabs);
+      showToast({
+        message: type === 'group' ? 'Group removed from tabs' : 'Removed from tabs',
+        undo: () => setPinnedTabs(pinnedTabs),
+      });
+      return true;
     }
+    if (tabCount >= MAX_TABS) {
+      showToast({
+        message: type === 'group' ? 'Free a tab first to pin this group' : 'Free a tab first to pin this page',
+      });
+      return false;
+    }
+    const nextTabs = [...pinnedTabs, { type, id }];
+    setPinnedTabs(nextTabs);
+    if (type === 'page') {
+      const nextGroups = customGroups.map(group => ({
+        ...group,
+        items: (group.items || []).filter(itemId => itemId !== id),
+      })).filter(group => (group.items || []).length > 0);
+      setCustomGroups(nextGroups);
+    }
+    showToast({
+      message: type === 'group' ? 'Group pinned to tabs' : 'Pinned to tabs',
+      undo: () => setPinnedTabs(pinnedTabs),
+    });
+    return true;
+  };
+
+  const groupedItemIds = (() => {
+    const grouped = new Set();
+    customGroups.forEach(group => (group.items || []).forEach(id => grouped.add(id)));
+    pinnedTabs.filter(t => t.type === 'group').forEach(t => {
+      const custom = customGroupMap.get(t.id);
+      if (custom) {
+        (custom.items || []).forEach(id => grouped.add(id));
+        return;
+      }
+      const section = sections.find(s => s.group === t.id);
+      if (section) section.items.forEach(item => grouped.add(item.id));
+    });
+    return grouped;
+  })();
+
+  const pinnedPageIds = new Set(pinnedTabs.filter(t => t.type === 'page').map(t => t.id));
+  const hiddenInMore = new Set(['dashboard', ...groupedItemIds, ...pinnedPageIds]);
+
+  const groupTiles = [
+    ...customGroups
+      .map(group => ({
+        id: group.id,
+        label: group.label,
+        items: customGroupItems(group),
+        icon: group.icon || 'Folder',
+        isCustom: true,
+        isPinned: isPinned('group', group.id),
+      }))
+      .filter(group => group.items.length > 0),
+    ...pinnedTabs.filter(t => t.type === 'group').map(t => {
+      const section = sections.find(s => s.group === t.id);
+      if (!section) return null;
+      return {
+        id: t.id,
+        label: section.group,
+        items: section.items,
+        icon: GROUP_ICONS[section.group] || 'Folder',
+        isCustom: false,
+        isPinned: true,
+      };
+    }).filter(Boolean),
+  ];
+
+  const suggestedItems = (() => {
+    const counts = usage?.counts || {};
+    return allItems
+      .filter(item => item.id !== 'dashboard')
+      .filter(item => !hiddenInMore.has(item.id))
+      .map(item => ({ item, score: counts[item.id] || 0 }))
+      .filter(row => row.score > 0)
+      .sort((a, b) => b.score - a.score)
+      .slice(0, 4)
+      .map(row => row.item);
+  })();
+
+  const recentItems = (usage?.recent || [])
+    .map(id => allItems.find(item => item.id === id))
+    .filter(Boolean)
+    .filter(item => !hiddenInMore.has(item.id));
+
+  const startNewGroup = () => {
+    setGroupDraft({ id: null, label: '', items: [], icon: 'Folder' });
+  };
+
+  const startEditGroup = (group) => {
+    setGroupDraft({ id: group.id, label: group.label, items: [...(group.items || [])], icon: group.icon || 'Folder' });
+  };
+
+  const saveGroup = () => {
+    if (!groupDraft) return;
+    const label = groupDraft.label.trim();
+    if (!label || groupDraft.items.length === 0) return;
+    const id = groupDraft.id || `custom:${label.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')}-${Date.now().toString(36).slice(-4)}`;
+    const nextGroup = { id, label, items: [...groupDraft.items], icon: groupDraft.icon || 'Folder' };
+    const nextGroups = groupDraft.id
+      ? customGroups.map(g => g.id === groupDraft.id ? nextGroup : g)
+      : [...customGroups, nextGroup];
+    setCustomGroups(nextGroups);
+    setGroupDraft(null);
+    showToast({
+      message: groupDraft.id ? 'Group updated' : 'Group created',
+      undo: () => setCustomGroups(customGroups),
+    });
+  };
+
+  const removeGroup = (id) => {
+    const prevGroups = customGroups;
+    const prevTabs = pinnedTabs;
+    setCustomGroups(customGroups.filter(g => g.id !== id));
+    setPinnedTabs(pinnedTabs.filter(t => !(t.type === 'group' && t.id === id)));
+    showToast({
+      message: 'Group deleted',
+      undo: () => { setCustomGroups(prevGroups); setPinnedTabs(prevTabs); },
+    });
+  };
+
+  const showToast = ({ message, undo }) => {
+    if (toastTimer.current) clearTimeout(toastTimer.current);
+    setToast({ message, undo });
+    toastTimer.current = setTimeout(() => {
+      setToast(null);
+      toastTimer.current = null;
+    }, 2600);
+  };
+
+  const resetToDefaults = () => {
+    const prevTabs = pinnedTabs;
+    const prevGroups = customGroups;
+    setPinnedTabs(DEFAULT_TABS);
+    setCustomGroups([]);
+    showToast({
+      message: 'Reset to recommended defaults',
+      undo: () => { setPinnedTabs(prevTabs); setCustomGroups(prevGroups); },
+    });
   };
 
   const reorderPinned = (fromId, toId) => {
@@ -468,6 +734,36 @@ export function AllPagesDrawer({ open, onClose }) {
     next.splice(toIndex, 0, moved);
     setPinnedTabs(next);
   };
+
+  const movePinned = (id, dir) => {
+    const index = pinnedTabs.findIndex(t => t.id === id);
+    if (index === -1) return;
+    const nextIndex = index + dir;
+    if (nextIndex < 0 || nextIndex >= pinnedTabs.length) return;
+    const next = [...pinnedTabs];
+    const [moved] = next.splice(index, 1);
+    next.splice(nextIndex, 0, moved);
+    setPinnedTabs(next);
+  };
+
+  const resolvePinnedLabel = (tab) => {
+    if (tab.type === 'group') {
+      const custom = customGroupMap.get(tab.id);
+      if (custom) return custom.label;
+      const section = sections.find(s => s.group === tab.id);
+      return section ? section.group : tab.id;
+    }
+    const item = allItems.find(i => i.id === tab.id);
+    return item ? item.label : tab.id;
+  };
+
+  const normalizedQuery = searchText.trim().toLowerCase();
+  const filteredGroupTiles = groupTiles.filter(group =>
+    normalizedQuery ? group.label.toLowerCase().includes(normalizedQuery) : true
+  );
+  const filteredSections = sections.filter(section =>
+    sectionFilter === 'all' || sectionFilter === 'ungrouped' || section.group === sectionFilter
+  );
 
   return (
     <>
@@ -503,7 +799,7 @@ export function AllPagesDrawer({ open, onClose }) {
               </div>
             )}
           </div>
-          <div style={{ display: 'flex', gap: 8 }}>
+          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', justifyContent: 'flex-end' }}>
             <button
               onClick={() => setEditMode(e => !e)}
               className={`drawer-edit-btn${editMode ? ' active' : ''}`}
@@ -512,6 +808,11 @@ export function AllPagesDrawer({ open, onClose }) {
                 ? <><Icons.Check size={14} /> Done</>
                 : <><Icons.Star size={14} /> Edit Tabs</>}
             </button>
+            {editMode && (
+              <button onClick={resetToDefaults} className="drawer-edit-btn ghost">
+                <Icons.RotateCcw size={14} /> Reset
+              </button>
+            )}
             <button onClick={onClose} className="drawer-close-btn" aria-label="Close">
               <Icons.X size={16} />
             </button>
@@ -529,14 +830,280 @@ export function AllPagesDrawer({ open, onClose }) {
           </div>
         )}
 
+        {/* Search + filter */}
+        <div className="drawer-search">
+          <div className="drawer-search-field">
+            <Icons.Search size={14} />
+            <input
+              value={searchText}
+              onChange={(e) => setSearchText(e.target.value)}
+              placeholder="Search pages or groups"
+            />
+          </div>
+          <select
+            className="drawer-search-select"
+            value={sectionFilter}
+            onChange={(e) => setSectionFilter(e.target.value)}
+          >
+            <option value="all">All sections</option>
+            <option value="ungrouped">Ungrouped only</option>
+            {sections.map(section => (
+              <option key={section.group} value={section.group}>{section.group}</option>
+            ))}
+          </select>
+        </div>
+
         {/* Nav sections */}
         <div className="drawer-scroll">
-          {sections.map(section => {
+          {!editMode && filteredGroupTiles.length > 0 && (
+            <div className="drawer-section">
+              <div className="drawer-section-header">
+                <span className="drawer-section-label">Groups</span>
+              </div>
+              <div className="group-card-grid">
+                {filteredGroupTiles.map(group => {
+                  const Icon = Icons[group.icon] || Icons.Folder;
+                  return (
+                    <button
+                      key={group.id}
+                      className="group-card"
+                      onClick={() => {
+                        if (group.items.length === 0) return;
+                        onClose();
+                        if (typeof onOpenGroup === 'function') {
+                          onOpenGroup({ group: group.label, items: group.items });
+                        }
+                      }}
+                    >
+                      <div className="group-card-icon">
+                        <Icon size={18} />
+                      </div>
+                      <div className="group-card-title">{group.label}</div>
+                      <div className="group-card-meta">{group.items.length} items</div>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
+          {!editMode && recentItems.length > 0 && (
+            <div className="drawer-section">
+              <div className="drawer-section-header">
+                <span className="drawer-section-label">Recently used</span>
+              </div>
+              <div className="drawer-recent-row">
+                {recentItems.map(item => {
+                  const Icon = Icons[item.icon] || Icons.Circle;
+                  return (
+                    <Link key={item.id} to={item.path} className="drawer-recent-chip">
+                      <Icon size={16} />
+                      <span>{item.label}</span>
+                    </Link>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
+          {!editMode && suggestedItems.length >= 3 && (
+            <div className="drawer-section">
+              <div className="drawer-section-header">
+                <span className="drawer-section-label">Suggested group</span>
+              </div>
+              <div className="group-suggest-card">
+                <div>
+                  <div className="group-card-title">Most used</div>
+                  <div className="group-card-meta">{suggestedItems.length} items</div>
+                </div>
+                <button
+                  className="group-chip primary"
+                  onClick={() => {
+                    const id = `custom:most-used-${Date.now().toString(36).slice(-4)}`;
+                    const nextGroups = [...customGroups, { id, label: 'Most used', items: suggestedItems.map(i => i.id), icon: 'Sparkles' }];
+                    setCustomGroups(nextGroups);
+                    showToast({ message: 'Suggested group created', undo: () => setCustomGroups(customGroups) });
+                  }}
+                >
+                  Create
+                </button>
+              </div>
+            </div>
+          )}
+
+          {editMode && (
+            <div className="drawer-section">
+              <div className="drawer-section-header">
+                <span className="drawer-section-label">Custom Groups</span>
+              </div>
+              <div className="group-card-grid">
+                {customGroups.map(group => {
+                  const pinned = isPinned('group', group.id);
+                  const canAddGroup = tabCount < MAX_TABS || pinned;
+                  const Icon = Icons[group.icon || 'Folder'] || Icons.Folder;
+                  return (
+                    <div
+                      key={group.id}
+                      className="group-card group-card--edit"
+                      onTouchStart={(e) => {
+                        const target = e.currentTarget;
+                        target._pressTimer = setTimeout(() => startEditGroup(group), 350);
+                      }}
+                      onTouchMove={(e) => {
+                        const timer = e.currentTarget._pressTimer;
+                        if (timer) { clearTimeout(timer); e.currentTarget._pressTimer = null; }
+                      }}
+                      onTouchEnd={(e) => {
+                        const timer = e.currentTarget._pressTimer;
+                        if (timer) clearTimeout(timer);
+                      }}
+                    >
+                      <div className="group-card-icon">
+                        <Icon size={18} />
+                      </div>
+                      <div className="group-card-title">{group.label}</div>
+                      <div className="group-card-meta">{(group.items || []).length} items</div>
+                      <div className="group-card-actions">
+                        <button
+                          className={`group-chip${pinned ? ' active' : ''}${!canAddGroup && !pinned ? ' disabled' : ''}`}
+                          onClick={() => { if (canAddGroup || pinned) togglePin('group', group.id); }}
+                        >
+                          {pinned ? 'Pinned' : 'Pin group'}
+                        </button>
+                        <button className="group-chip" onClick={() => startEditGroup(group)}>Edit</button>
+                        <button className="group-chip danger" onClick={() => removeGroup(group.id)}>Delete</button>
+                      </div>
+                    </div>
+                  );
+                })}
+                <button className="group-add-card" onClick={startNewGroup}>
+                  <Icons.Plus size={16} /> Create group
+                </button>
+              </div>
+
+              {groupDraft && (
+                <div className="group-editor">
+                  <div className="group-editor-header">
+                    <div className="group-editor-title">{groupDraft.id ? 'Edit group' : 'Create group'}</div>
+                    <button className="drawer-close-btn" onClick={() => setGroupDraft(null)} aria-label="Close">
+                      <Icons.X size={14} />
+                    </button>
+                  </div>
+                  <div className="group-editor-body">
+                    <label className="group-label">Group name</label>
+                    <input
+                      className="group-input"
+                      value={groupDraft.label}
+                      onChange={(e) => setGroupDraft(d => ({ ...d, label: e.target.value }))}
+                      placeholder="e.g., Exam Tools"
+                    />
+                    <div className="group-label" style={{ marginTop: 10 }}>Icon</div>
+                    <div className="group-icon-row">
+                      {CUSTOM_GROUP_ICONS.map((iconName) => {
+                        const Icon = Icons[iconName] || Icons.Folder;
+                        const active = groupDraft.icon === iconName;
+                        return (
+                          <button
+                            key={iconName}
+                            className={`group-icon-chip${active ? ' active' : ''}`}
+                            onClick={() => setGroupDraft(d => ({ ...d, icon: iconName }))}
+                            aria-pressed={active}
+                            aria-label={`Icon ${iconName}`}
+                          >
+                            <Icon size={16} />
+                          </button>
+                        );
+                      })}
+                    </div>
+                    <div className="group-label" style={{ marginTop: 10 }}>Choose pages</div>
+                    <div className="group-item-grid">
+                      {allItems.filter(item => item.id !== 'dashboard').map(item => {
+                        const selected = groupDraft.items.includes(item.id);
+                        const reserved = hiddenInMore.has(item.id) && !selected;
+                        const Icon = Icons[item.icon] || Icons.Circle;
+                        return (
+                          <button
+                            key={item.id}
+                            className={`group-item-chip${selected ? ' selected' : ''}${reserved ? ' disabled' : ''}`}
+                            onClick={() => {
+                              if (reserved) return;
+                              setGroupDraft(d => ({
+                                ...d,
+                                items: d.items.includes(item.id)
+                                  ? d.items.filter(i => i !== item.id)
+                                  : [...d.items, item.id],
+                              }));
+                            }}
+                          >
+                            <Icon size={16} />
+                            <span>{item.label}</span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                    <div className="group-editor-actions">
+                      <button className="group-chip" onClick={() => setGroupDraft(null)}>Cancel</button>
+                      <button
+                        className={`group-chip primary${(!groupDraft.label.trim() || groupDraft.items.length === 0) ? ' disabled' : ''}`}
+                        onClick={saveGroup}
+                        disabled={!groupDraft.label.trim() || groupDraft.items.length === 0}
+                      >
+                        Save group
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
+          {editMode && pinnedTabs.length > 1 && (
+            <div className="drawer-section">
+              <div className="drawer-section-header">
+                <span className="drawer-section-label">Pinned order</span>
+              </div>
+              <div className="drawer-order-list">
+                {pinnedTabs.map((tab, index) => (
+                  <div key={`${tab.type}-${tab.id}`} className="drawer-order-item">
+                    <span>{resolvePinnedLabel(tab)}</span>
+                    <div className="drawer-order-actions">
+                      <button
+                        className="drawer-order-btn"
+                        disabled={index === 0}
+                        onClick={() => movePinned(tab.id, -1)}
+                      >
+                        <Icons.ChevronUp size={14} />
+                      </button>
+                      <button
+                        className="drawer-order-btn"
+                        disabled={index === pinnedTabs.length - 1}
+                        onClick={() => movePinned(tab.id, 1)}
+                      >
+                        <Icons.ChevronDown size={14} />
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {filteredSections.map(section => {
             const isDashOnlySection = section.group === 'Overview';
             const groupPinned = isPinned('group', section.group);
             const groupIconName = GROUP_ICONS[section.group] || 'Folder';
             const GroupIcon = Icons[groupIconName] || Icons.Folder;
             const canAdd = tabCount < MAX_TABS;
+
+            const visibleItems = section.items
+              .filter(item => editMode || !hiddenInMore.has(item.id))
+              .filter(item => {
+                if (sectionFilter === 'ungrouped' && hiddenInMore.has(item.id)) return false;
+                if (!normalizedQuery) return true;
+                return item.label.toLowerCase().includes(normalizedQuery);
+              });
+
+            if (visibleItems.length === 0) return null;
 
             return (
               <div key={section.group} className="drawer-section">
@@ -560,12 +1127,13 @@ export function AllPagesDrawer({ open, onClose }) {
 
                 {/* Items grid */}
                 <div className="drawer-grid">
-                  {section.items.map(item => {
+                  {visibleItems.map(item => {
                     const Icon = Icons[item.icon] || Icons.Circle;
                     const active = location.pathname === item.path ||
                       (item.path !== '/' && location.pathname.startsWith(item.path));
                     const isDashboard = item.id === 'dashboard';
                     const pagePinned = isPinned('page', item.id);
+                    const inCustomGroup = customGroups.some(group => (group.items || []).includes(item.id));
                     const canAddPage = !pagePinned && canAdd && !groupPinned;
 
                     if (editMode) {
@@ -579,6 +1147,7 @@ export function AllPagesDrawer({ open, onClose }) {
                             pagePinned ? 'fav' : '',
                             isDashboard ? 'pinned' : '',
                             groupPinned ? 'group-member-pinned' : '',
+                            inCustomGroup ? 'group-member-pinned' : '',
                             (!canAddPage && !pagePinned && !isDashboard && !groupPinned) ? 'disabled' : '',
                           ].filter(Boolean).join(' ')}
                           aria-pressed={pagePinned || groupPinned}
@@ -665,7 +1234,7 @@ export function AllPagesDrawer({ open, onClose }) {
                               <Icons.Lock size={9} color="#fff" />
                             </div>
                           )}
-                          {groupPinned && !isDashboard && (
+                          {(groupPinned || inCustomGroup) && !isDashboard && (
                             <div className="drawer-item-group-badge">
                               <Icons.Layers size={8} color="#fff" />
                             </div>
@@ -693,6 +1262,22 @@ export function AllPagesDrawer({ open, onClose }) {
           })}
         </div>
       </div>
+      {toast && (
+        <div className="nav-toast" role="status" aria-live="polite">
+          <span>{toast.message}</span>
+          {toast.undo && (
+            <button
+              className="nav-toast-undo"
+              onClick={() => {
+                toast.undo();
+                setToast(null);
+              }}
+            >
+              Undo
+            </button>
+          )}
+        </div>
+      )}
     </>
   );
 }

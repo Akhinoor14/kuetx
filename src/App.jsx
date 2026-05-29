@@ -54,6 +54,22 @@ function Layout() {
     } catch {}
   }, [sidebarCompact]);
 
+  useEffect(() => {
+    const openAllPages = () => setAllPagesOpen(true);
+    window.addEventListener('kuetx:open-all-pages', openAllPages);
+    return () => window.removeEventListener('kuetx:open-all-pages', openAllPages);
+  }, []);
+
+  useEffect(() => {
+    const openGroup = (event) => {
+      const section = event?.detail?.section;
+      if (!section) return;
+      setGroupDrawer({ section });
+    };
+    window.addEventListener('kuetx:open-group', openGroup);
+    return () => window.removeEventListener('kuetx:open-group', openGroup);
+  }, []);
+
   return (
     <div style={{ display: 'flex', minHeight: '100vh' }}>
       {!isQuestionBankViewer && (
@@ -114,7 +130,13 @@ function Layout() {
             onOpenGroup={(section) => setGroupDrawer({ section })}
           />
         )}
-        {!isQuestionBankViewer && <AllPagesDrawer open={allPagesOpen} onClose={() => setAllPagesOpen(false)} />}
+        {!isQuestionBankViewer && (
+          <AllPagesDrawer
+            open={allPagesOpen}
+            onClose={() => setAllPagesOpen(false)}
+            onOpenGroup={(section) => setGroupDrawer({ section })}
+          />
+        )}
         {!isQuestionBankViewer && (
           <GroupMiniDrawer
             section={groupDrawer?.section}

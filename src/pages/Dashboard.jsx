@@ -1,10 +1,10 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, ReferenceLine } from 'recharts';
 import { TrendingUp, Award, AlertTriangle, BookOpen, CalendarCheck, Clock, Wallet, Star } from 'lucide-react';
 import * as Icons from 'lucide-react';
 import { store, cgpaToPercent, computeCGPA, computeTermGPAs, computeEffectiveAttendance, MIN_ATTENDANCE_PERCENT, SCHOLARSHIP_ATTENDANCE_PCT, computeCourseGrade, deriveAcademicMetaFromCourses, syncProfileAcademicMeta, getAllCourses, getProfile, getTermLabelFromKey, getCurrentTermKey, getTermProgress, getTermTimeline, getTermIndex, TERM_KEYS } from '../store/store';
-import { useBottomNavFavourites, getAllNavItems } from '../components/BottomNav';
+import { useBottomNavFavourites, useBottomNavGroups, getAllNavItems } from '../components/BottomNav';
 
 function StatCard({ label, value, sub, color, bgColor, icon: Icon, to }) {
   const inner = (
@@ -43,6 +43,9 @@ export default function Dashboard() {
   const profile  = getProfile();
   const courses  = getAllCourses(profile);
   const [favourites] = useBottomNavFavourites();
+  const [customGroups] = useBottomNavGroups();
+  const allNavItems = useMemo(() => getAllNavItems(profile), [profile]);
+  const [recentCleared, setRecentCleared] = useState(false);
 
   const { cgpa, earnedCredits, termGPAs, alerts } = useMemo(() => {
     const { cgpa, earnedCredits } = computeCGPA(courses);
@@ -131,6 +134,43 @@ export default function Dashboard() {
     return 'Welcome';
   })();
 
+  const usage = store.get('nav_usage_v1') || { recent: [], counts: {} };
+  const pinnedItems = allNavItems
+    .filter(item => favourites.includes(item.id) && item.id !== 'dashboard')
+    .slice(0, 6);
+  const recentItems = (usage.recent || [])
+    .map(id => allNavItems.find(item => item.id === id))
+    .filter(Boolean)
+    .filter(item => item.id !== 'dashboard')
+    .filter(item => !pinnedItems.some(p => p.id === item.id))
+    .slice(0, 4);
+  const suggestedItems = allNavItems
+    .filter(item => (usage.counts?.[item.id] || 0) > 0)
+    .filter(item => item.id !== 'dashboard')
+    .filter(item => !pinnedItems.some(p => p.id === item.id))
+    .filter(item => !recentItems.some(r => r.id === item.id))
+    .sort((a, b) => (usage.counts?.[b.id] || 0) - (usage.counts?.[a.id] || 0))
+    .slice(0, 3);
+  const quickGroups = (customGroups || []).slice(0, 3);
+  const openAllPages = () => {
+    try { window.dispatchEvent(new Event('kuetx:open-all-pages')); } catch {}
+  };
+  const openGroup = (group) => {
+    try {
+      window.dispatchEvent(new CustomEvent('kuetx:open-group', { detail: { section: { group: group.label, items: group.items || [] } } }));
+    } catch {
+      openAllPages();
+    }
+  };
+  const clearRecent = () => {
+    try {
+      const next = { ...(usage || {}), recent: [] };
+      store.set('nav_usage_v1', next);
+      setRecentCleared(true);
+      setTimeout(() => setRecentCleared(false), 1400);
+    } catch {}
+  };
+
   return (
     <div className="page-enter page-container dashboard-page">
       {/* Welcome */}
@@ -159,26 +199,89 @@ export default function Dashboard() {
         </div>
       )}
 
-      {/* Mobile Quick Access — shows favourite pages as icon grid, only on small screens */}
-      <div className="dashboard-mobile-quickaccess">
-        {getAllNavItems(profile)
-          .filter(item => favourites.includes(item.id) && item.id !== 'dashboard')
-          .slice(0, 8)
-          .map(item => {
+      {/* Quick Access — pinned, recent, and groups */}
+      <div className="card dashboard-quickaccess-card">
+        <div className="dashboard-quickaccess-header">
+          <div>
+            <div className="dashboard-quickaccess-title">Quick Access</div>
+            <div className="dashboard-quickaccess-sub">Your most useful pages in one place</div>
+          </div>
+          <button
+            className={`dashboard-quickaccess-manage${pinnedItems.length === 0 ? ' primary' : ''}`}
+            onClick={openAllPages}
+          >
+            Manage
+          </button>
+        </div>
+
+        <div className="dashboard-quickaccess-grid">
+          {pinnedItems.map(item => {
             const Icon = Icons[item.icon] || Icons.Circle;
             return (
-              <Link
-                key={item.id}
-                to={item.path}
-                className="dashboard-quickaccess-item"
-              >
+              <Link key={item.id} to={item.path} className="dashboard-quickaccess-item">
                 <div className="dashboard-quickaccess-icon">
-                  <Icon size={20} strokeWidth={1.8} />
+                  <Icon size={18} strokeWidth={1.8} />
                 </div>
                 <span>{item.label}</span>
               </Link>
             );
           })}
+          {pinnedItems.length === 0 && (
+            <div className="dashboard-quickaccess-empty">
+              Pin your top pages to see them here.
+              <button className="dashboard-quickaccess-empty-btn" onClick={openAllPages}>Pick pages</button>
+            </div>
+          )}
+        </div>
+
+        {recentItems.length > 0 && (
+          <div className="dashboard-quickaccess-row">
+            <div className="dashboard-quickaccess-row-head">
+              <div className="dashboard-quickaccess-row-label">Recent</div>
+              <div className="dashboard-quickaccess-row-actions">
+                {recentCleared && <span className="dashboard-quickaccess-cleared">Cleared</span>}
+                <button className="dashboard-quickaccess-clear" onClick={clearRecent}>Clear</button>
+              </div>
+            </div>
+            <div className="dashboard-quickaccess-chips">
+              {recentItems.map(item => (
+                <Link key={item.id} to={item.path} className="dashboard-quickaccess-chip">
+                  {item.label}
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {suggestedItems.length > 0 && (
+          <div className="dashboard-quickaccess-row">
+            <div className="dashboard-quickaccess-row-label">Suggested</div>
+            <div className="dashboard-quickaccess-chips">
+              {suggestedItems.map(item => {
+                const Icon = Icons[item.icon] || Icons.Circle;
+                return (
+                  <Link key={item.id} to={item.path} className="dashboard-quickaccess-chip with-icon">
+                    <Icon size={12} strokeWidth={2} />
+                    {item.label}
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
+        {quickGroups.length > 0 && (
+          <div className="dashboard-quickaccess-row">
+            <div className="dashboard-quickaccess-row-label">Groups</div>
+            <div className="dashboard-quickaccess-chips">
+              {quickGroups.map(group => (
+                <button key={group.id} className="dashboard-quickaccess-chip ghost" onClick={() => openGroup(group)}>
+                  {group.label} ({(group.items || []).length})
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Setup prompt */}
@@ -494,29 +597,6 @@ export default function Dashboard() {
           </div>
         </div>
       )}
-
-      {/* Quick nav */}
-      <div className="section-title">Quick Access</div>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(130px, 1fr))', gap: 8 }}>
-        {[
-          { to: '/attendance', label: 'Attendance', icon: CalendarCheck, emoji: '📅' },
-          { to: '/marks',      label: 'Marks & CT',  icon: BookOpen,      emoji: '📝' },
-          { to: '/schedule',   label: 'Schedule',    icon: Clock,         emoji: '🗓' },
-          { to: '/calculators',label: 'Calculators', icon: TrendingUp,    emoji: '🧮' },
-          { to: '/namaz',      label: 'Namaz',       icon: Star,          emoji: '🕌' },
-          { to: '/smart-score',label: 'Smart Score', icon: Award,         emoji: '⭐' },
-          { to: '/alerts',     label: 'Alerts',      icon: AlertTriangle, emoji: '⚠' },
-          { to: '/settings',   label: 'Backup',      icon: Award,         emoji: '💾' },
-        ].map(({ to, label, emoji }) => (
-          <Link key={to} to={to} style={{
-            display: 'flex', alignItems: 'center', gap: 8, padding: '10px 12px', borderRadius: 8,
-            background: 'var(--card)', border: '1px solid var(--border)', fontSize: 13, fontWeight: 500,
-            color: 'var(--text)', textDecoration: 'none',
-          }}>
-            <span style={{ fontSize: 15 }}>{emoji}</span> {label}
-          </Link>
-        ))}
-      </div>
 
       {courses.length === 0 && profile.name && (
         <div className="card" style={{ marginTop: 16, textAlign: 'center', color: 'var(--muted)', padding: 30 }}>
