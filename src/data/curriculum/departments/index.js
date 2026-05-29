@@ -21,7 +21,7 @@ export const DEPARTMENTS = {
   LE,
   BME,
   EEE,
-  CHE,
   CE,
+  CHE,
   URP,
 };

@@ -27,10 +27,10 @@ const isSessionalCourse = course => {
     'workshop',
     'practice',
     'practices',
+    'drawing',
     'project',
     'thesis',
     'training',
-    'simulation',
     'seminar'
   ];
 
@@ -44,7 +44,7 @@ const isSessionalCourse = course => {
   }
 
   const contact = course.contactHour || '';
-  if (contact.includes('3/2') || contact.includes('1.5 hrs')) {
+  if (contact.includes('3/2')) {
     return true;
   }
 
@@ -86,10 +86,7 @@ const buildOptionalList = terms => {
     }
     term.optionalCourses.forEach(course => {
       const code = course.courseCode;
-      if (!code) {
-        return;
-      }
-      if (byCode.has(code)) {
+      if (!code || byCode.has(code)) {
         return;
       }
       const credits = normalizeCredit(course.credit);
