@@ -5,7 +5,7 @@ export const MTE_SYLLABUS_Y4T1 = {
 	  "MTE 4000": {
 	    "title": "Project and Thesis",
 	    "credit": 1.5,
-	    "contactHour": null,
+	    "contactHour": "3 hrs/week",
 	    "topics": [
 	      "Project and thesis topic should be selected from theoretical and experimental investigation in the field of Mechatronics Engineering. The topics should provide an opportunity for the students to develop initiative, creative ability and engineering judgment. Individual or group study (preferable not more than two in a group) will be required.",
 	      "At the end of term, the student/group is expected to complete the preliminary literature survey and select the topic for study. Each student/group is expected to take part in the presentation of at least one seminar in the term in front of an examination board. The seminar/seminars will be conducted on their respective Project/Thesis topic."

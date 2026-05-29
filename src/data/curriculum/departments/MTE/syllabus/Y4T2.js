@@ -5,7 +5,7 @@ export const MTE_SYLLABUS_Y4T2 = {
 	  "MTE 4000_2": {
 	    "title": "Project and Thesis",
 	    "credit": 3,
-	    "contactHour": null,
+	    "contactHour": "6 hrs/week",
 	    "topics": [
 	      "At the end of the term, the student/group is expected to complete the project/thesis and submit a report. Each student/group is expected to take part in the presentation of at least one seminar in the term in front of an examination board to present the complete project/thesis."
 	    ],

@@ -37,8 +37,8 @@ export const IPE_SYLLABUS_Y1T2 = {
     },
     "IPE 1209": {
       "title": "Computer Fundamentals and Programming Languages",
-      "credit": null,
-      "contactHour": null,
+      "credit": 3,
+      "contactHour": "3 hrs/week",
       "topics": [
         "Computer Fundamentals: Types and Generations of Computers, Basic, Organization and Functional units of Computers.",
         "Hardware Components: Various Input, Output and Memory Devices. Specifications.",

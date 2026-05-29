@@ -8,7 +8,7 @@
       "courses": {
         "Ch 1129": {
           "title": "Inorganic Chemistry",
-          "credit": 3,
+          "credit": 3.0,
           "contactHour": "3 hrs/wk",
           "topics": [
             "Atomic Structure: Modern concept of atomic structure, quantization of energy, atomic spectra, wave nature of electron, electronic configuration, periodic table, various properties of elements in terms of periodic table.",
@@ -25,15 +25,15 @@
         },
         "Ch 1130": {
           "title": "Inorganic Chemistry Lab",
-          "credit": 1.5,
-          "contactHour": "3 hrs/week",
+          "credit": null,
+          "contactHour": "3 hrs/wk",
           "topics": [],
           "sessionalNote": "Sessional based on theory course Ch 1129",
           "references": []
         },
         "ChE 1101": {
           "title": "Fundamentals of Chemical Engineering",
-          "credit": 3,
+          "credit": 3.0,
           "contactHour": "3 hrs/wk",
           "topics": [
             "Scope of chemical engineering; Principles of chemical engineering calculations: Systems of units, basic concepts of dimensional analysis, process variables, basis of calculation, conservation of mass and energy; Material balance: Overall component balance, recycle and bypass, simple reactive systems and combustion reactions; Energy balance: Forms of energy, first law of thermodynamics, thermodynamic data and tables, energy balance on closed and open systems, and application of mass and energy balance to real processes; Measurements of process variables: Fluid statics, manometry, flow measurement, temperature measurement."
@@ -43,7 +43,7 @@
         },
         "Hum 1129": {
           "title": "Technical and Communicative English",
-          "credit": 3,
+          "credit": 3.0,
           "contactHour": "3 hrs/wk",
           "topics": [
             "Review of basic Grammar: Part of speech, Sentence, Tense, Voice; International phonetics alphabet, Looking up a Dictionary entry; Vocabulary; Phrases and Idioms, Prepositional phrases, Analogy, Synonyms and Antonyms, Prefixes and Suffixes, Palindromes, Anagrams, Wh Questions, Notions and Functions, Transformation of sentences; Reading Comprehension; Francis Bacon’s Essays: Of Studies, Of Beauty, Of Travel, Of Love, Of Marriage and Single life; Short stories by renowned writers: A Rose for Emily by William Faulkner, Bachelor’s complaint of the behavior of married people by Charles Lamb, A dissertation upon Roast pig by Charles Lamb, The Gift of the Magi by O’Henry.",
@@ -55,7 +55,7 @@
         "Hum 1130": {
           "title": "Technical and Communicative English Lab",
           "credit": 0.75,
-          "contactHour": "3/2 hrs/week",
+          "contactHour": "3/2 hrs/wk",
           "topics": [
             "Reading: Kinds and Procedures; SQ3R Technique;",
             "Writing: Kinds and Procedures",
@@ -68,7 +68,7 @@
         },
         "Math 1129": {
           "title": "Differential Calculus and Geometry",
-          "credit": 3,
+          "credit": 3.0,
           "contactHour": "3 hrs/wk",
           "topics": [
             "Differential calculus: Continuity and differentiability of a function; Differentiation: Reviews of differentiation of various types of function, application of differentiation; Successive differentiation: Successive differentiation of different types of function, Leibnitz's theorem; Expansion of functions: Rolle's theorem, Mean value theorem, Taylor's theorem (finite and infinite forms), Maclaurin's theorem in finite and infinite forms; Maximum and minimum: Maxima and minima of different types of function, Physical application, Indeterminate forms, L' hospitals Rule, Partial differentiation; Tangents and normal: Tangents and normal, Sub tangent and subnormal in cartesian and polar co-ordinates.",
@@ -79,7 +79,7 @@
         },
         "Ph 1129": {
           "title": "Physics I",
-          "credit": 3,
+          "credit": 3.0,
           "contactHour": "3 hrs/wk",
           "topics": [
             "Waves and Oscillations: Simple harmonic motion, energy distribution of SHM, Superposition principle, Lissajous Figures; Free, Damped, and Forced vibrations, Resonance power dissipation and power absorption; Wave Motion: Transverse and longitudinal waves, progressive and stationary waves, energy of progressive and stationary waves, group velocity and phase velocity, beat; Sound Waves: Audible, infrasonic, ultrasonic and supersonic waves, Doppler effect; Acoustics: Intensity of sound, Bel, sound pressure and intensity level, Reverberation, Sabine’s formula; Nuclear Energy: Binding energy, mass defect, nuclear forces; Radioactivity: Introduction to radioactivity, alpha, beta and gamma radiation, laws of radioactive disintegration, half life, mean life, application of radioactivity; Nuclear reaction: Fision and fusion processes, chain reaction.",
@@ -91,7 +91,7 @@
         "MES 1130": {
           "title": "Workshop Practices",
           "credit": 1.5,
-          "contactHour": "3 hrs/week",
+          "contactHour": "3 hrs/wk",
           "topics": [
             "Acquaintance with tools and appliances used in foundry; Molding sand preparation, Metal casting.",
             "Acquaintance with tools and machine used in welding. Arc and gas welding practices.",
@@ -110,7 +110,7 @@
       "courses": {
         "Ch 1229": {
           "title": "Physical Chemistry I",
-          "credit": 3,
+          "credit": 3.0,
           "contactHour": "3 hrs/wk",
           "topics": [
             "Solution: Types of solution, solubility and solution process, effect of temperature and pressure on solubility, Henry’s law, ideal and non-ideal solution, distribution law, Dilute solution and colligative properties. Colloids and emulsion: Types of colloids and emulsion, stability, purification, application. Thermo-chemistry: Laws of thermochemistry, enthalpy change in different chemical reactions, effect of temperature on heat of reaction. Second law of thermodynamics and its applications. Equilibrium: Chemical equilibrium of homogeneous and heterogeneous reactions, thermodynamic treatment of equilibrium constant. Ionic equilibrium, buffer solution, Henderson-Hasselbalch equation and its application; Ionization of water and pH scale."
@@ -121,14 +121,14 @@
         "Ch 1230": {
           "title": "Physical Chemistry Lab I",
           "credit": 0.75,
-          "contactHour": "3/2 hrs/week",
+          "contactHour": "3/2 hrs/wk",
           "topics": [],
           "sessionalNote": "Sessional based on theory course Ch 1229",
           "references": []
         },
         "EEE 1229": {
           "title": "Electrical Circuits and Machines",
-          "credit": 3,
+          "credit": 3.0,
           "contactHour": "3 hrs/wk",
           "topics": [
             "Electrical Circuit: Introduction to Electricity; Ohm’s law, Kirchoff’s current law and Kirchoff’s voltage law. Alternative Current and AC quantities; Steady state solution of single-phase circuits(R, RL, and RLC), RMS and Average values of AC quantities, Phasor algebra.",
@@ -139,15 +139,15 @@
         },
         "EEE 1230": {
           "title": "Electrical Circuit and Machine Lab",
-          "credit": 1.5,
-          "contactHour": "3 hrs/week",
+          "credit": null,
+          "contactHour": "3 hrs/wk",
           "topics": [],
           "sessionalNote": "Sessional based on theory course EEE 1229.",
           "references": []
         },
         "Math 1229": {
           "title": "Integral Calculus and Differential Equations",
-          "credit": 3,
+          "credit": 3.0,
           "contactHour": "3 hrs/wk",
           "topics": [
             "Integral calculus: Integration by the method of substitution, Integration by parts, Standard integrals, Integration by the method of successive reduction, Definite integral and its properties, Improper integrals, Beta and Gamma functions; Area under a plane curve in cartesian and polar coordinates, Area of the region enclosed by two curves in cartesian and polar coordinates; Length of curves in cartesian and polar coordinates; Area and volume of surface of revolution.",
@@ -158,7 +158,7 @@
         },
         "ME 1229": {
           "title": "Thermodynamics",
-          "credit": 3,
+          "credit": 3.0,
           "contactHour": "3 hrs/wk",
           "topics": [
             "Introduction: macroscopic and microscopic view point; Definition of thermodynamic terms; Extensive and intensive properties; Heat, work and their path dependence; Equation of state and its applications; Various thermodynamic processes’; First law of thermodynamics; Internal energy, Enthalpy; Non-flow and steady flow energy equation; Reversible and irreversible processes, Causes of irreversibility; Phase diagram, p-V-T behavior of pure substances; Standard heat of reaction; Effect of temperature on heat of reaction; Second law of thermodynamics and its corollaries; Third law of thermodynamics; Thermodynamic cycles: gas cycles, vapor cycles and their efficiencies; Boiler and its performance, mountings and accessories; Internal combustion engine fundamentals."
@@ -169,14 +169,14 @@
         "ME 1230": {
           "title": "Thermodynamics Lab",
           "credit": 0.75,
-          "contactHour": "3/2 hrs/week",
+          "contactHour": "3/2 hrs/wk",
           "topics": [],
           "sessionalNote": "Sessional based on theory course ME 1229",
           "references": []
         },
         "Ph 1229": {
           "title": "Physics II",
-          "credit": 3,
+          "credit": 3.0,
           "contactHour": "3 hrs/wk",
           "topics": [
             "Solid State Physics: Crystal structure: Two and three dimensional crystal systems, coordination number, packing fraction, Miller indices, X-ray diffraction and Bragg’s law; Different types of bond in solid: Metallic, Vander Waals, covalent and ionic bonds; Specific heat of solid: Einstein’s model, Debye’s model; Free electron theory: Outstanding properties of metals, Sommerfeld free electron model, Hall effect, Hall voltage and Hall coefficient; Magnetism: Magnetic properties of matter, magneto-motive force, magnetic field intensity, magnetic induction, permeability and susceptibility, classification of magnetic materials, Magnetic Hysteresis; Nanoscience: Nanomaterials and Nanotechnology, classification of nanomaterials, shape and structure of nanomaterials, basic aspects of synthesis of nanoparticles, Bottom-up and Top-down approaches, Quantum dot.",
@@ -188,7 +188,7 @@
         "Ph 1230": {
           "title": "Physics Lab",
           "credit": 1.5,
-          "contactHour": "3 hrs/week",
+          "contactHour": "3 hrs/wk",
           "topics": [],
           "sessionalNote": "Sessional based on theory courses Ph 1129 and Ph 1229.",
           "references": []
@@ -203,7 +203,7 @@
       "courses": {
         "Ch 2129": {
           "title": "Physical Chemistry II",
-          "credit": 3,
+          "credit": 3.0,
           "contactHour": "3 hrs/wk",
           "topics": [
             "Chemical kinetics, monitoring the progress of a reaction, rate laws and rate constants, order and molecularity of a chemical reaction, rate laws for reaction first, second and third order reaction, temperature dependence on reaction rates, elementary reaction, uni-molecular reactions.",
@@ -218,14 +218,14 @@
         "Ch 2130": {
           "title": "Physical Chemistry II Lab",
           "credit": 1.5,
-          "contactHour": "3 hrs/week",
+          "contactHour": "3 hrs/wk",
           "topics": [],
           "sessionalNote": "Experiments based on theory course Ch 2129.",
           "references": []
         },
         "ChE 2103": {
           "title": "Material and Energy Balance",
-          "credit": 3,
+          "credit": 3.0,
           "contactHour": "3 hrs/wk",
           "topics": [
             "Review of Fundamentals of Chemical Engineering.",
@@ -240,7 +240,7 @@
         },
         "ME 2129": {
           "title": "Mechanics of Solid",
-          "credit": 3,
+          "credit": 3.0,
           "contactHour": "3 hrs/wk",
           "topics": [
             "Engineering Mechanics: Basic concepts of Mechanics; Statics of particles and rigid bodies; Free body diagram; Moment of forces; Equilibrium of forces in two and three dimensions; Centroids of line and area; Moment of inertia of areas and masses;",
@@ -253,7 +253,7 @@
         },
         "Math 2129": {
           "title": "Vector Analysis, Matrices, and Laplace Transform",
-          "credit": 3,
+          "credit": 3.0,
           "contactHour": "3 hrs/wk",
           "topics": [
             "Vector Analysis: Review of vector algebra, Triple product of vectors; Vector differentiation: Differentiation of vectors, Application to geometry and mechanics; Vector differential operator: gradient, divergence and curl of point functions; Vector integrations: line, surface and volume integrals; Integral theorems: Gauss's, Stoke's and Green's theorems and their applications.",
@@ -265,7 +265,7 @@
         },
         "Hum 2129": {
           "title": "Sociology and Industrial environment",
-          "credit": 3,
+          "credit": 3.0,
           "contactHour": "3 hrs/wk",
           "topics": [
             "Sociology: Introduction to Sociology and its impact on engineering, fundamental concept of society, community, association, group, mob, Social history and culture of Bangladesh Urbanization and industrialization in Bangladesh and their effects; urban ecology; social problem; population, poverty, beggary, immoral income, crime and juvenile delinquency.",
@@ -277,7 +277,7 @@
         "ChE 2130": {
           "title": "Computer Language and its Applications",
           "credit": 1.5,
-          "contactHour": "3 hrs/week",
+          "contactHour": "3 hrs/wk",
           "topics": [
             "Advanced use of Spreadsheet Softwares: Data input, manipulation and representation; Advanced built-in and user-defined functions; Optimization, root-finding and non-linear regression using solver functions.",
             "Octave: Introduction to Octave Fundamentals. Solution of chemical engineering problems."
@@ -288,7 +288,7 @@
         "ME 2150": {
           "title": "Engineering Graphics",
           "credit": 1.5,
-          "contactHour": "3 hrs/week",
+          "contactHour": "3 hrs/wk",
           "topics": [
             "Working drawing of machine elements using AutoCAD and Solidworks."
           ],
@@ -305,7 +305,7 @@
       "courses": {
         "Ch 2229": {
           "title": "Organic Chemistry",
-          "credit": 3,
+          "credit": 3.0,
           "contactHour": "3 hrs/wk",
           "topics": [
             "Structure and bonding in organic molecule, bonding structural formula of organic molecules, atomic orbitals, molecular orbitals and bonding, hybridization and its consequences, the shape of molecules, geometric structures, resonance structures.",
@@ -321,14 +321,14 @@
         "Ch 2230": {
           "title": "Organic Chemistry Lab",
           "credit": 1.5,
-          "contactHour": "3 hrs/week",
+          "contactHour": "3 hrs/wk",
           "topics": [],
           "sessionalNote": "Sessional based on theory course Ch 2229",
           "references": []
         },
         "ChE 2205": {
           "title": "Fluid Mechanics",
-          "credit": 3,
+          "credit": 3.0,
           "contactHour": "3 hrs/wk",
           "topics": [
             "Fundamental concept of fluid as a continuum; Properties and classification of fluids; Stress and strain of fluids; Viscosity and its measurement.",
@@ -345,14 +345,14 @@
         "ChE 2206": {
           "title": "Fluid Mechanics Lab",
           "credit": 0.75,
-          "contactHour": "3/2 hrs/week",
+          "contactHour": "3/2 hrs/wk",
           "topics": [],
           "sessionalNote": "Experiments based on theory course ChE 2205.",
           "references": []
         },
         "EE 2229": {
           "title": "Electronics",
-          "credit": 3,
+          "credit": 3.0,
           "contactHour": "3 hrs/wk",
           "topics": [
             "P-N junction, p-n junction diode, Diode circuits: Half wave and full wave rectifiers, rectifiers with filter capacitor, characteristics of a Zener diode, Zener shunt regulator, clamping and clipping circuits. Bipolar Junction Transistor (BJT) as a circuit element: current components, BJT characteristics and regions of operation, BJT as an amplifier.",
@@ -366,14 +366,14 @@
         "EE 2230": {
           "title": "Electronics Lab",
           "credit": 1.5,
-          "contactHour": "3 hrs/week",
+          "contactHour": "3 hrs/wk",
           "topics": [],
           "sessionalNote": "Experiments based on theory course EE 2229.",
           "references": []
         },
         "Hum 2229": {
           "title": "Accounting and Economics",
-          "credit": 3,
+          "credit": 3.0,
           "contactHour": "3 hrs/wk",
           "topics": [
             "Economics: Definition of Economics; principle of economics.",
@@ -386,7 +386,7 @@
         },
         "Math 2229": {
           "title": "Numerical Methods and Statistics",
-          "credit": 3,
+          "credit": 3.0,
           "contactHour": "3 hrs/wk",
           "topics": [
             "Numerical Methods: Numerical integrations: General quadrature formula for equidistant ordinates; Trapezoidal rule, Simson's rules and Weddle's rule, Calculation of errors, Relative study of the rules; Gauss's quadrature formula; Legendre polynomials; Newton's Cote's formula; Principle of least squares; Curve fitting; Solution of algebraic and transcendental equations by graphical method; Regula-Falsi method; Newton-Raphson method, Geometrical significance, Convergence of iteration and Newton-Raphson methods; Solution of simultaneous equations by Newton-Raphson and iteration methods; Solution of first order ordinary differential equations by Taylor’s, Picard’s, Euler's and Runge-Kutta methods; Equation developing, modeling and solving by using various technique.",
@@ -398,7 +398,7 @@
         "Math 2230": {
           "title": "Practices on Numerical Methods",
           "credit": 0.75,
-          "contactHour": "3/2 hrs/week",
+          "contactHour": "3/2 hrs/wk",
           "topics": [],
           "sessionalNote": "Simulation based on theory course Math 2229.",
           "references": []
@@ -406,7 +406,7 @@
         "ChE 2204": {
           "title": "Practices on ChE 1101 and ChE 2103",
           "credit": 1.5,
-          "contactHour": "3 hrs/week",
+          "contactHour": "3 hrs/wk",
           "topics": [],
           "sessionalNote": null,
           "references": []
@@ -431,7 +431,7 @@
         },
         "ChE 3107": {
           "title": "Chemical Engineering Thermodynamics",
-          "credit": 3,
+          "credit": 3.0,
           "contactHour": "3 hrs/week",
           "topics": [
             "Solution thermodynamics: Relationships among the thermodynamic properties for systems of variable composition; partial molar properties; fugacity and fugacity coefficients; fugacities in ideal solutions; property changes of mixing; activity and activity coefficients; heat effects of mixing processes.",
@@ -453,7 +453,7 @@
         },
         "ChE 3109": {
           "title": "Heat Transfer",
-          "credit": 3,
+          "credit": 3.0,
           "contactHour": "3 hrs/week",
           "topics": [
             "Introduction: Basics of heat transfer; thermodynamics and heat transfer; application areas of heat transfer.",
@@ -476,7 +476,7 @@
         },
         "ChE 3111": {
           "title": "Mass Transfer I",
-          "credit": 3,
+          "credit": 3.0,
           "contactHour": "3 hrs/week",
           "topics": [
             "Basics: Introduction to mass transfer processes.Vapor liquid equilibria; Equilibrium stage concept;",
@@ -498,7 +498,7 @@
         },
         "ChE 3113": {
           "title": "Environmental Science",
-          "credit": 3,
+          "credit": 3.0,
           "contactHour": "3 hrs/week",
           "topics": [
             "Water pollution: Sources, causes and effects; wastewater characteristics.",
@@ -512,7 +512,7 @@
         },
         "ChE 3117": {
           "title": "Unit Operation",
-          "credit": 3,
+          "credit": 3.0,
           "contactHour": "3 hrs/week",
           "topics": [
             "Mechanical separation: Techniques of separation; selection of basic separator type; gravity settlers; impingement separations; centrifugal separators; fabric filtration; electrostatic precipitation and scrubbers.",
@@ -544,7 +544,7 @@
       "courses": {
         "ChE 3211": {
           "title": "Mass Transfer II",
-          "credit": 3,
+          "credit": 3.0,
           "contactHour": "3 hrs/week",
           "topics": [
             "Diffusion: Diffusion of gases and liquids; diffusion through stagnant layer and equimolar counter diffusion; mass transfer between gas and liquid phases; two film and other theories.",
@@ -567,7 +567,7 @@
         },
         "ChE 3215": {
           "title": "Particle Technology",
-          "credit": 3,
+          "credit": 3.0,
           "contactHour": "3 hrs/week",
           "topics": [
             "Properties of particulate solids: Particle size and shape: mean diameters; screen analysis; analytical size distribution function; size distribution of feed and products of crystallizers and size reduction equipment.",
@@ -588,7 +588,7 @@
         },
         "ChE 3219": {
           "title": "Corrosion Engineering",
-          "credit": 3,
+          "credit": 3.0,
           "contactHour": "3 hrs/week",
           "topics": [
             "Introduction: Corrosion and its mechanism; different forms of corrosion; corrosion of iron and steel.",
@@ -609,7 +609,7 @@
         },
         "ChE 3221": {
           "title": "Transport Phenomena",
-          "credit": 3,
+          "credit": 3.0,
           "contactHour": "3 hrs/week",
           "topics": [
             "Momentum transport: Derivation of equations of continuity and motion (Navier-Stoke’s equation); application in laminar and turbulent flow problems.",
@@ -632,7 +632,7 @@
         },
         "ChE 3233": {
           "title": "Process Safety Management",
-          "credit": 3,
+          "credit": 3.0,
           "contactHour": "3 hrs/week",
           "topics": [
             "Introduction to process safety: Process safety and its importance; applications of engineering principles to process safety; Industrial hygiene; personal protective equipment; physical hazard; fire and explosion hazard; toxic chemical hazard; electrical hazard; accident statistics; safety audit; emergency preparedness plan; International safety management standards.",
@@ -681,7 +681,7 @@
         },
         "ChE 4123": {
           "title": "Process Control",
-          "credit": 3,
+          "credit": 3.0,
           "contactHour": "3 hrs/week",
           "topics": [
             "Basic concepts of process control: Objectives of process control; Design aspects; Hardware elements. Modeling for control purpose: Development of mathematical models; Review of Laplace transform; Input-output model, Transfer functions and State-space models; Linearization of nonlinear models; Empirical models from process data.",
@@ -704,7 +704,7 @@
         },
         "ChE 4125": {
           "title": "Process Design",
-          "credit": 3,
+          "credit": 3.0,
           "contactHour": "3 hrs/week",
           "topics": [
             "Design Consideration: Design basis; Process flow diagram; Process flow sheet development; Piping and instruments diagram.",
@@ -720,7 +720,7 @@
         },
         "ChE 4127": {
           "title": "Reaction Engineering",
-          "credit": 3,
+          "credit": 3.0,
           "contactHour": "3 hrs/week",
           "topics": [
             "Thermodynamics of reaction: Review of relevant thermodynamic concepts: equilibrium constant; Effect of temperature and pressure; Determination of equilibrium composition.",
@@ -742,8 +742,8 @@
         },
         "ChE 4150": {
           "title": "Industrial Training",
-          "credit": 0,
-          "contactHour": "3/2 hrs/week",
+          "credit": 0.0,
+          "contactHour": null,
           "topics": [
             "Industrial training will be held for 2 weeks for the students in different process industries of Bangladesh to get hands-on working experiences. Time of the industrial training will be decided by the department. Reports must be submitted by the groups for their visit including process description, PFD, PBD, process parameter, control and safety features."
           ],
@@ -755,7 +755,7 @@
         {
           "courseCode": "ChE 4011",
           "title": "Food Preservation and Processing",
-          "credit": 3,
+          "credit": 3.0,
           "contactHour": "3 hrs/week",
           "topics": [
             "Food properties: Classification of foods; Composition and nutritive value of protein, carbohydrate, vitamins, minerals, lipids and pectic substances; Natural pigment; Food additives",
@@ -771,7 +771,7 @@
         {
           "courseCode": "ChE 4013",
           "title": "Polymers and Petrochemicals",
-          "credit": 3,
+          "credit": 3.0,
           "contactHour": "3 hrs/week",
           "topics": [
             "Introduction: Introduction to polymers and petrochemicals; Prospects of polymer and petrochemical industries in Bangladesh.",
@@ -786,7 +786,7 @@
         {
           "courseCode": "ChE 4017",
           "title": "Cement, Fertilizer, Pulp and Paper Technology",
-          "credit": 3,
+          "credit": 3.0,
           "contactHour": "3 hrs/week",
           "topics": [
             "Cement: Overview of cement industries in Bangladesh, Raw materials, Manufacturing process; Properties of cement.",
@@ -799,7 +799,7 @@
         {
           "courseCode": "ChE 4023",
           "title": "Mathematical Models in Chemical Engineering",
-          "credit": 3,
+          "credit": 3.0,
           "contactHour": "3 hrs/week",
           "topics": [
             "Developing models: Fundamentals of model; Classification of mathematical models; Model formulation and Fundamental laws.",
@@ -815,7 +815,7 @@
         {
           "courseCode": "ChE 4027",
           "title": "Biochemistry",
-          "credit": 3,
+          "credit": 3.0,
           "contactHour": "3 hrs/week",
           "topics": [
             "Introduction: Molecular logic of living system; Cells and biomolecules; Water, acids and buffer solution.",
@@ -831,7 +831,7 @@
         {
           "courseCode": "ChE 4071",
           "title": "Biochemical Engineering I",
-          "credit": 3,
+          "credit": 3.0,
           "contactHour": "3 hrs/week",
           "topics": [
             "Microorganism: Nature; Importance and Classification of Microorganism; Industrially important microorganisms; Future perspective of microorganism.",
@@ -849,7 +849,7 @@
         {
           "courseCode": "ChE 4073",
           "title": "Biochemical Engineering II",
-          "credit": 3,
+          "credit": 3.0,
           "contactHour": "3 hrs/week",
           "topics": [
             "Biological reactor: Design and analysis of fed-batch reactors; Enzyme catalyzed reactions in CSTRs; CSTR reactors with recycle and wall growth; The ideal plug-flow reactor; Reactor dynamic models and stability; Reactor with non-ideal mixing; Sterilization reactor; Packed bed bioreactor; Bubble column bioreactor; Fluidized bed reactor; Trickle bed reactor.",
@@ -864,7 +864,7 @@
         {
           "courseCode": "ChE 4081",
           "title": "Environmental Engineering Applications",
-          "credit": 3,
+          "credit": 3.0,
           "contactHour": "3 hrs/week",
           "topics": [
             "Waste management: Physical and chemical characterization of wastes; Resource conservation; Treatment and disposal methods; Sanitary landfills and composting, Medical/Infectious waste; E-waste; Waste to energy.",
@@ -879,7 +879,7 @@
         {
           "courseCode": "ChE 4083",
           "title": "Industrial Pollution Control",
-          "credit": 3,
+          "credit": 3.0,
           "contactHour": "3 hrs/week",
           "topics": [
             "Industrial pollutants: Sources of pollutants; Environmental Standards and measurement technologies.",
@@ -894,7 +894,7 @@
         {
           "courseCode": "ChE 4091",
           "title": "Natural Gas Engineering",
-          "credit": 3,
+          "credit": 3.0,
           "contactHour": "3 hrs/week",
           "topics": [
             "Natural gas properties: Compressibility; Gas density; Formation volume factor; Viscosity; Pseudo critical properties.",
@@ -915,7 +915,7 @@
         {
           "courseCode": "ChE 4093",
           "title": "Petroleum Reservoir Engineering",
-          "credit": 3,
+          "credit": 3.0,
           "contactHour": "3 hrs/week",
           "topics": [
             "Introduction: Overview; Various roles in the field of petroleum; Roles of reservoir engineering the field of petroleum.",
@@ -940,7 +940,7 @@
       "courses": {
         "ChE 4000": {
           "title": "Project & Thesis",
-          "credit": 3,
+          "credit": 3.0,
           "contactHour": "6 hrs/week",
           "topics": [
             "Students will continue their research work from the previous term. They should consult closely with their supervisor throughout the completion of the research work. Normally, students will submit drafts of individual chapters to the supervisor as they are completed. The department will declare a specific deadline for project & thesis submission and oral presentation. Students will submit their report through their supervisor. They will also present their project & thesis in an oral examination along with a complete demonstration of the project & thesis."
@@ -950,7 +950,7 @@
         },
         "ChE 4200": {
           "title": "Process and Plant Design II",
-          "credit": 3,
+          "credit": 3.0,
           "contactHour": "6 hrs/week",
           "topics": [
             "The work of Process and Plant Design I will be continued in this term. Students have to design major process equipment including instrumentation and materials of constructions, codes and standards for the equipment, utilities, process simulation, economic evaluation of the plant and development of a financially optimized model, sensitivity analysis, design of plant layout, process licensors and vendor selection, and hazard analysis of the plant."
@@ -960,7 +960,7 @@
         },
         "ChE 4225": {
           "title": "Project Management and Professional Ethics",
-          "credit": 3,
+          "credit": 3.0,
           "contactHour": "3 hrs/week",
           "topics": [
             "Introduction to project: Definition, various facts of the problem of managing projects, technical specification of projects, life cycle concepts, identification of decision areas, project evaluation criteria.",
@@ -977,7 +977,7 @@
         },
         "ChE 4229": {
           "title": "Economics and Management of Chemical Process Industries",
-          "credit": 3,
+          "credit": 3.0,
           "contactHour": "3 hrs/week",
           "topics": [
             "Engineering economics and chemical process industries.",
@@ -993,7 +993,7 @@
         },
         "ChE 4231": {
           "title": "Refinery Engineering",
-          "credit": 3,
+          "credit": 3.0,
           "contactHour": "3 hrs/week",
           "topics": [
             "Introduction: Origin, formation and composition of petroleum; Evaluation of crude oils; Refinery products and their uses; Laboratory analysis of petroleum products.",
@@ -1009,7 +1009,7 @@
         {
           "courseCode": "ChE 4011",
           "title": "Food Preservation and Processing",
-          "credit": 3,
+          "credit": 3.0,
           "contactHour": "3 hrs/week",
           "topics": [
             "Food properties: Classification of foods; Composition and nutritive value of protein, carbohydrate, vitamins, minerals, lipids and pectic substances; Natural pigment; Food additives",
@@ -1025,7 +1025,7 @@
         {
           "courseCode": "ChE 4013",
           "title": "Polymers and Petrochemicals",
-          "credit": 3,
+          "credit": 3.0,
           "contactHour": "3 hrs/week",
           "topics": [
             "Introduction: Introduction to polymers and petrochemicals; Prospects of polymer and petrochemical industries in Bangladesh.",
@@ -1040,7 +1040,7 @@
         {
           "courseCode": "ChE 4017",
           "title": "Cement, Fertilizer, Pulp and Paper Technology",
-          "credit": 3,
+          "credit": 3.0,
           "contactHour": "3 hrs/week",
           "topics": [
             "Cement: Overview of cement industries in Bangladesh, Raw materials, Manufacturing process; Properties of cement.",
@@ -1053,7 +1053,7 @@
         {
           "courseCode": "ChE 4023",
           "title": "Mathematical Models in Chemical Engineering",
-          "credit": 3,
+          "credit": 3.0,
           "contactHour": "3 hrs/week",
           "topics": [
             "Developing models: Fundamentals of model; Classification of mathematical models; Model formulation and Fundamental laws.",
@@ -1069,7 +1069,7 @@
         {
           "courseCode": "ChE 4027",
           "title": "Biochemistry",
-          "credit": 3,
+          "credit": 3.0,
           "contactHour": "3 hrs/week",
           "topics": [
             "Introduction: Molecular logic of living system; Cells and biomolecules; Water, acids and buffer solution.",
@@ -1085,7 +1085,7 @@
         {
           "courseCode": "ChE 4071",
           "title": "Biochemical Engineering I",
-          "credit": 3,
+          "credit": 3.0,
           "contactHour": "3 hrs/week",
           "topics": [
             "Microorganism: Nature; Importance and Classification of Microorganism; Industrially important microorganisms; Future perspective of microorganism.",
@@ -1103,7 +1103,7 @@
         {
           "courseCode": "ChE 4073",
           "title": "Biochemical Engineering II",
-          "credit": 3,
+          "credit": 3.0,
           "contactHour": "3 hrs/week",
           "topics": [
             "Biological reactor: Design and analysis of fed-batch reactors; Enzyme catalyzed reactions in CSTRs; CSTR reactors with recycle and wall growth; The ideal plug-flow reactor; Reactor dynamic models and stability; Reactor with non-ideal mixing; Sterilization reactor; Packed bed bioreactor; Bubble column bioreactor; Fluidized bed reactor; Trickle bed reactor.",
@@ -1118,7 +1118,7 @@
         {
           "courseCode": "ChE 4081",
           "title": "Environmental Engineering Applications",
-          "credit": 3,
+          "credit": 3.0,
           "contactHour": "3 hrs/week",
           "topics": [
             "Waste management: Physical and chemical characterization of wastes; Resource conservation; Treatment and disposal methods; Sanitary landfills and composting, Medical/Infectious waste; E-waste; Waste to energy.",
@@ -1133,7 +1133,7 @@
         {
           "courseCode": "ChE 4083",
           "title": "Industrial Pollution Control",
-          "credit": 3,
+          "credit": 3.0,
           "contactHour": "3 hrs/week",
           "topics": [
             "Industrial pollutants: Sources of pollutants; Environmental Standards and measurement technologies.",
@@ -1148,7 +1148,7 @@
         {
           "courseCode": "ChE 4091",
           "title": "Natural Gas Engineering",
-          "credit": 3,
+          "credit": 3.0,
           "contactHour": "3 hrs/week",
           "topics": [
             "Natural gas properties: Compressibility; Gas density; Formation volume factor; Viscosity; Pseudo critical properties.",
@@ -1169,7 +1169,7 @@
         {
           "courseCode": "ChE 4093",
           "title": "Petroleum Reservoir Engineering",
-          "credit": 3,
+          "credit": 3.0,
           "contactHour": "3 hrs/week",
           "topics": [
             "Introduction: Overview; Various roles in the field of petroleum; Roles of reservoir engineering the field of petroleum.",
@@ -1220,48 +1220,32 @@
       {
         "raw": "ChE 1101   Fundamentals of Chemical Engineering     3 hrs/wk Credit 1.50 Credit 3.00",
         "reason": "Two credit values listed: 1.50 and 3.00. Selected 3.00 as final credit, but 1.50 may be a typographical error or indicate a split between theory and lab. Course does not have a separate lab, so likely a stray line.",
-        "possibleTargets": [
-          "ChE 1101 credit 3.00",
-          "ChE 1101 credit 1.50"
-        ]
+        "possibleTargets": ["ChE 1101 credit 3.00", "ChE 1101 credit 1.50"]
       },
       {
         "raw": "Ch 1130 Inorganic Chemistry Lab 3 hrs/wk Sessional based on theory course Ch 1129",
         "reason": "No credit value explicitly shown. Lab courses often carry 1.50 credits, but not listed. Credit set to null.",
-        "possibleTargets": [
-          "credit 1.50"
-        ]
+        "possibleTargets": ["credit 1.50"]
       },
       {
         "raw": "EEE 1230 Electrical Circuit and Machine Lab 3 hrs/wk Sessional based on theory course EEE 1229.",
         "reason": "No credit value provided. Likely 1.50 credits, but not confirmed.",
-        "possibleTargets": [
-          "credit 1.50"
-        ]
+        "possibleTargets": ["credit 1.50"]
       },
       {
         "raw": "Ch 2229 Organic Chemistry 3 hrs/wk Credit 1.50 Credit 3.00",
         "reason": "Duplicate credit lines (1.50 and 3.00). Theory course credit selected as 3.00, but 1.50 might be an error.",
-        "possibleTargets": [
-          "credit 3.00"
-        ]
+        "possibleTargets": ["credit 3.00"]
       },
       {
         "raw": "ChE 4150 Industrial Training Credit: 0.00 contact hour not listed",
         "reason": "Credit 0.00 and no contact hour provided; likely pass/fail training. Contact hour set to null.",
-        "possibleTargets": [
-          "contact hour 3 hrs/week",
-          "credit 0.75"
-        ]
+        "possibleTargets": ["contact hour 3 hrs/week", "credit 0.75"]
       },
       {
         "raw": "Optional Courses - General (Optional I and III) and Specialization (Optional II and IV) blocks",
         "reason": "The term assignment (Y4T1 or Y4T2) for individual optional courses is not explicitly specified. Courses are placed in optionalCourses for both Y4T1 and Y4T2 with a term note.",
-        "possibleTargets": [
-          "assign General optional to Y4T1 only",
-          "assign Specialization to Y4T2 only",
-          "split by Optional I/II/III/IV slots"
-        ]
+        "possibleTargets": ["assign General optional to Y4T1 only", "assign Specialization to Y4T2 only", "split by Optional I/II/III/IV slots"]
       }
     ]
   },

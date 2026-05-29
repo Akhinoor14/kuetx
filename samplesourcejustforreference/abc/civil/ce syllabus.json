@@ -1,0 +1,1866 @@
+{
+  "department": "Civil Engineering",
+  "sourceType": "raw_text",
+  "terms": {
+    "Y1T1": {
+      "termKey": "Y1T1",
+      "title": "First Year First Term",
+      "courses": {
+        "CE 1109": {
+          "title": "Surveying",
+          "credit": 4.0,
+          "contactHour": "4 hrs/week",
+          "topics": [
+            "Reconnaissance survey",
+            "linear measurements",
+            "traverse survey",
+            "plane table survey",
+            "levelling & contouring",
+            "calculation of areas and volumes",
+            "problems on heights & distances",
+            "curves and curve ranging, transition curve, vertical curve",
+            "Tacheometry: introduction, principles and problems on tacheometry",
+            "Astronomical surveying: definition, instruments, astronomical corrections, systems of time",
+            "Photogrammetry: introduction of terrestrial photography, aerial photography, reading of photo mossaic, scale",
+            "project surveying",
+            "errors in surveying",
+            "remote sensing",
+            "introduction and application of global positioning system (GPS) and geographical information system (GIS)."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "Ch 1101": {
+          "title": "Chemistry-I",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Electronic configuration",
+            "Various properties of elements in terms of periodic table",
+            "Physical and chemical properties of liquids",
+            "Chemical equilibrium, Reaction, kinetics and theories of reaction rates.",
+            "Chemistry of cement, silicates and limes",
+            "Chemistry of polymerization: different types of polymers and their properties, polymer degradation, elastomers and composite materials.",
+            "Introduction to paints and varnishes, pretreatment of the surface, metallic, nonmetallic and organic protective coating, types of paints and their uses.",
+            "Adsorption chemistry: surface growth, surface composition, adsorption isotherms",
+            "Metallic bonds",
+            "structures of elements and compounds",
+            "Defects in crystal."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "Math 1101": {
+          "title": "Differential and Integral Calculus",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Differential Calculus: Limit",
+            "continuity",
+            "differentiability",
+            "Differentiation: review of differentiation of various types of function, application of differentiation",
+            "Successive differentiation: successive differentiation of different types of function, Leibnitz theorem",
+            "Expansion of function: Rolle's theorem, mean value theorem, Taylor's theorem (finite and infinite forms)",
+            "Maclaurin's theorem (finite and infinite forms)",
+            "Cauchy's form of remainders and Lagrange's form of remainder",
+            "Indeterminate form: evaluation of limits",
+            "La Hospital's rule",
+            "Partial differentiation: partial differentiation, Euler's theorem",
+            "Maximum and minimum: maximum and minimum of different types function, physical application",
+            "Tangent and Normal: tangent & normal, subtangents & subnormal in Cartesian and polar coordinates",
+            "Asymptotes",
+            "Curvature: curvature, radius of curvature, center of curvature, circle of curvature, chord of curvature in Cartesian and polar coordinates",
+            "Curve tracing",
+            "evolute and involute",
+            "Envelopes.",
+            "Integral Calculus: Definition of integration, integration by the method of substitution",
+            "integration by parts",
+            "standard integrals",
+            "integration by the method of successive reduction",
+            "definite integrals, its properties and use in summation of series",
+            "Wallis' formula",
+            "improper integrals",
+            "differentiation under sign of integration",
+            "integration under sign of integration",
+            "beta & gamma function",
+            "length of plane curves, area bounded by plane curves, volumes and surfaces of solids of revolution."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "Ph 1101": {
+          "title": "Physics-I",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Heat and Thermodynamics: Thermometry: Zeroth law of thermodynamics",
+            "concepts of temperature",
+            "measurement of low and high temperature",
+            "constant volume thermometers",
+            "resistance thermometer and thermocouple & radiation parameters.",
+            "Calorimetry: Newton's law of cooling and radiation correction",
+            "determination of Cp and Cy.",
+            "Kinetic theory of gases: Fundamental assumptions",
+            "pressure exerted by a gas",
+            "deduction of Boyle's law, Charles's law, Avogadro's law and Graham's law of diffusion",
+            "Kinetic interpretation of temperature",
+            "principle of equipartition of energy",
+            "atomicity of gases",
+            "mean free path.",
+            "Equation of State: Equation of state",
+            "Andrew's experiment",
+            "Vander Waal's equation",
+            "critical constants and deficiency of Vander Waal's equation and Boyle's temperature.",
+            "Thermodynamics: First law of thermodynamics and its application",
+            "adiabatic and isothermal transformations",
+            "work done by a gas",
+            "second law of thermodynamics",
+            "reversible and irreversible processes",
+            "Carnot cycle",
+            "efficiency of heat engines",
+            "entropy and its physical concept.",
+            "Waves and Oscillations: Simple harmonic motion: Simple harmonic motion, simple harmonic motion of a mass between two springs",
+            "simple harmonic motion of a loaded spring",
+            "superposition principle",
+            "damped oscillations",
+            "forced oscillations",
+            "resonance, sharpness of resonance",
+            "vibration of membranes and columns.",
+            "Lissajous Figures: Lissajous figures, combination and composition of simple harmonic motions.",
+            "Wave motion: Transverse and longitudinal nature of waves",
+            "progressive and stationary waves",
+            "power and intensity of wave motion",
+            "energy calculation of progressive and stationary waves",
+            "interference of sound waves",
+            "wave velocity, group velocity and phase velocity",
+            "sound waves: audible, ultrasonic, infrasonic and supersonic waves",
+            "Beat, Melde's experiment, Doppler's effect, application of Doppler's effect.",
+            "noise insulation and reduction, sound distribution.",
+            "Sabine's formula: room Acoustics: Intensity of sound. Bel. acoustic intensity, architectural acoustics.",
+            "requisites of a good auditorium.",
+            "Properties of Matter: Atomic structure of matter: Atoms, ions and molecules",
+            "states of matter: solids, liquids and gases",
+            "interparticle forces.",
+            "Surface tension: Molecular forces",
+            "surface tension",
+            "surface effects",
+            "free surface energy",
+            "molecular theory of surface tension",
+            "excess pressure theorem",
+            "capillarity and the angle of contact.",
+            "Crystallography: Types of bonds, types of crystals, X-ray diffraction and Bragg's law, plasticity and crystal defects, metals, insulator and semiconductor."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "Hum 1101": {
+          "title": "English",
+          "credit": 2.0,
+          "contactHour": "2 hrs/week",
+          "topics": [
+            "English phonetics: the places and manners of articulation of the English sounds",
+            "Vocabulary",
+            "English grammar: construction of sentences and paragraphs, common mistakes in grammar, phrases and idioms, proverbs, punctuation.",
+            "Amplification",
+            "Clause",
+            "Comprehension",
+            "Composition on current affairs",
+            "Precis writing",
+            "Commercial correspondence and tender notice.",
+            "Technical report writing: Preparation of report on project management and planning."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "CE 1100": {
+          "title": "Civil Engineering Drawing-I",
+          "credit": 1.5,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Introduction: lettering, numbering and heading",
+            "Plane geometry: pentagon, hexagon, octagon, ellipse, parabola, hyperbola",
+            "Projection (Solid Geometry): cube, triangular prism, square prism, pentagonal prism, hexagonal prism, cone, and cylinder",
+            "Development: cube, pyramid, cone, prism",
+            "Isometric drawing",
+            "Section and true shape: cube, pyramid, cone, prism",
+            "Interpretation of Solids."
+          ],
+          "sessionalNote": "Lab/Sessional",
+          "references": []
+        },
+        "Ch 1102": {
+          "title": "Sessional on Chemistry-I",
+          "credit": 0.75,
+          "contactHour": "1.5 hrs/week",
+          "topics": [
+            "Volumetric analysis: acid-base titration, oxidation-reduction titration, iodometric titration",
+            "Determination of pH of a solution."
+          ],
+          "sessionalNote": "Lab/Sessional",
+          "references": []
+        },
+        "Ph 1102": {
+          "title": "Sessional on Physics-I",
+          "credit": 0.75,
+          "contactHour": "1.5 hrs/week",
+          "topics": [
+            "To draw a graph showing the sensitivity of a balance with load",
+            "Determination of Young's modulus of a short wire by Searle's dynamic method",
+            "Determination of surface tension of water by capillary tube method",
+            "Determination of specific heat of liquid by method of cooling",
+            "Determination of thermal conductivity of a bad conductor by Lee's and Chartlon's method",
+            "Determination of frequency of a tuning fork by Melde's experiment",
+            "Determination of focal length of a concave lens by an auxiliary convex lens."
+          ],
+          "sessionalNote": "Lab/Sessional",
+          "references": []
+        },
+        "Hum 1102": {
+          "title": "English Skills Practices",
+          "credit": 0.75,
+          "contactHour": "1.5 hrs/week",
+          "topics": [
+            "Grammar: tense, article, preposition, subject-verb agreement, clause, conditional and sentence Structure.",
+            "Vocabulary building: Correct and practice diction, affixes, level of appropriateness, colloquial and standing, informal and formal.",
+            "Developing reading skill: Strategic of reading, skimming, scanning, predicting, inferring, analyzing and interpreting variety of texts, practicing comprehension from literary and nonliterary texts.",
+            "Developing writing skill: Sentences, sentence variety, generating sentences, clarity and correctness of sentences, linking sentences to form paragraphs, writing paragraphs, essays and reports, formal and informal letters.",
+            "Listening skill and note talking: Listening sentences to recorded texts and class lectures and learning to take useful notes based on listening.",
+            "Developing speaking: oral skills including communicative expressions for personal identification, life at home, giving advice and option, instruction and directions, requests, complaints, apologies people and places, narrating events."
+          ],
+          "sessionalNote": "Lab/Sessional",
+          "references": []
+        },
+        "EE 1172": {
+          "title": "Sessional on Basic Electrical Engineering",
+          "credit": 0.75,
+          "contactHour": "1.5 hrs/week",
+          "topics": [
+            "Experiments based on fundamental concepts of electrical series and parallel circuits",
+            "Measurement of AC quantities",
+            "Measurement of power",
+            "Electrical wiring: house wiring & industrial installation wiring."
+          ],
+          "sessionalNote": "Lab/Sessional",
+          "references": []
+        }
+      },
+      "optionalCourses": [],
+      "termNotes": []
+    },
+    "Y1T2": {
+      "termKey": "Y1T2",
+      "title": "First Year Second Term",
+      "courses": {
+        "CE 1211": {
+          "title": "Engineering Mechanics",
+          "credit": 4.0,
+          "contactHour": "4 hrs/week",
+          "topics": [
+            "Introduction",
+            "coplanar concurrent forces",
+            "moments and parallel coplanar forces",
+            "nonconcurrent non-parallel coplanar forces",
+            "non-coplanar forces",
+            "centroids",
+            "moment of inertia of areas",
+            "moment of inertia of masses",
+            "friction",
+            "flexible cords",
+            "plane motion",
+            "force systems that produce rectilinear motion",
+            "work, kinetic energy & power",
+            "impulse and momentum."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "Ch 1201": {
+          "title": "Chemistry-II",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Thermodynamics: First, second and third laws of thermodynamics",
+            "Entropy, Reversible work, Gibb's free energy",
+            "Phase rule and its application.",
+            "Thermo-Chemistry: Laws of thermo-chemistry and problems based on them: Kirchoff's equation.",
+            "Electro-Chemistry: Electrolytes",
+            "Source of E.M.F.",
+            "Electro-chemical series: pH value and its determination.",
+            "Colloid and colloidal solution: Classification, preparation, purification, properties, protective action and application of colloids.",
+            "Chemical corrosion: Introduction to chemical corrosion, corrosion of metals and alloys in dry and wet environments, mechanism of corrosion, atmospheric and soil corrosion and their protective measures.",
+            "Chemistry of environmental pollution: Environment and its characteristics, chemistry of toxic metal and non-metal pollutants, analytical techniques used in the determination of pollutants, chemical concept of DO, BOD, COD and threshold odor number, chemistry involved in water treatment plants, quality of industrial wastewater."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "Math 1201": {
+          "title": "Differential Equation, Statistics and Special Functions",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Statistics: Frequency distribution and its graphical representation",
+            "Mean, Median, Mode and other measures of central tendency",
+            "Standard deviation and other measures of dispersion",
+            "Moments",
+            "Skewness and Kurtosis",
+            "Elementary probability theory",
+            "Expectation",
+            "Discontinuous probability distributions (Binomial, Poison and Negative binomial)",
+            "Continuous probability distributions (Normal and Exponential)",
+            "Sampling theory",
+            "Estimation theory",
+            "Hypothesis testing",
+            "Correlation and regression analysis.",
+            "Differential Equations: Formation of differential equation",
+            "Order and degree of differential equation",
+            "Solution of first order and first degree ordinary differential equations by various methods, Equation of first order and higher degree",
+            "Solution of linear differential equation of second and higher order with constant coefficients",
+            "Application of differential equations in physical problems",
+            "Solution of differential equations when the dependent or independent variable is absent",
+            "Application of differential equation.",
+            "Partial Differential Equations: Method of separation of variables with the use of initial and boundary conditions.",
+            "Series Solution of Differential Equation: Ordinary points, Singularities, Power series",
+            "Solution of linear differential equations by the method of Frobenious.",
+            "Special Functions: Bessel's differential equation, Bessel's function and its properties",
+            "Legendre differential equation, Legendre polynomial and its properties."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "Ph 1201": {
+          "title": "Physics-II",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Modern Physics: Relativity: Special theory of relativity, reference frames, Michelsion-Moreley experiment, Galilean transformation, Lorentz transformation, time Dilation, length contraction, variation of mass, mass energy relation, mass less particles, velocity transformation.",
+            "Particle Properties of Waves: Photoelectric effect, quantum theory of light, Compton effect.",
+            "Wave Properties of Particles: De Broglie waves, phase velocity and group velocity.",
+            "Atom Structure: Bohr's atom model, nature of electron orbits, orbital energy, origin of spectral lines, different series of spectral lines of hydrogen, orbital energy level diagram of hydrogen atom, correspondence principle, vector atom model, orbital states, space quantization, spin quantization, magnetic moment of orbital electron, quantization of magnetic moment, electron shell.",
+            "Nuclear Physics: Introduction to nuclear physics: Nuclear constituents, nuclear properties, binding energy",
+            "packing fraction, nuclear force, fission and fusion processes.",
+            "Radioactivity: Introduction to radioactivity, laws of radioactive disintegration, half-life, mean life, laws of successive disintegration, practical application of radioactivity.",
+            "Magnetism: Magnetic properties of matter, magnetomotive force, magnetic field intensity, magnetic induction, permeability and susceptibility, classification of magnetic materials, magnetization curves of ferromagnetic materials, magnetic circuits, magnetostriction.",
+            "Physical Optics: Interference: Theories of light, Huygen's principle and construction, interference of light, Young's double slit experiment, interference due to multiple reflection, Newton's rings.",
+            "Diffraction: Fresnel and Fraunhoffer diffraction, diffraction by single slit, diffraction by double slit, diffraction gratings.",
+            "Polarization: Production and analysis of polarized light, optical activity, optics of crystals."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "Hum 1201": {
+          "title": "Economics & Accounting",
+          "credit": 4.0,
+          "contactHour": "4 hrs/week",
+          "topics": [
+            "Economics: Definition of economics",
+            "principle of economics.",
+            "Micro Economics: Theory of demand & supply and their elasticities",
+            "price determination",
+            "nature of an economic theory",
+            "applicability of economic theories to the problems of developing countries",
+            "indifference curve technique",
+            "marginal analysis",
+            "optimization, market",
+            "production, production function, types of productivity",
+            "fixed cost and variable cost",
+            "internal and external economics and diseconomies.",
+            "Macro Economics: Savings, investment",
+            "national income analysis",
+            "inflation",
+            "monitory policy, fiscal policy and trade policy with reference to Bangladesh",
+            "planning in Bangladesh.",
+            "Accounting: Introduction: Definition of accounting, its needs and importance, various images of accounting, accounting and its environment, Users of accounting information, Generally Accepted Accounting Principles (GAAP) between book-keeping and accounting, relationship of accounting with engineering education.",
+            "Accounting Cycle: The recording process, Business transactions, Steps in the recording process, the accounting equation, the account, Rules of Debit and Credit, Double entry systems of accounting.",
+            "The Journal, the Ledger, Cash book, the trail balance, financial statement (considering adjusting entries).",
+            "Cost accounting, concept of cost, classification of cost, statement of cost, operating and service costing."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "CE 1200": {
+          "title": "Civil Engineering Drawing-II",
+          "credit": 1.5,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Plan, elevation and sections of one storied and multi-storied buildings",
+            "reinforcement details of beams, slabs, stairs etc.",
+            "plan and section of septic tank",
+            "detail drawing of roof truss",
+            "plan, elevation and sections of culverts, bridges and other hydraulic structures",
+            "Building services drawings",
+            "introduction to computer aided drafting."
+          ],
+          "sessionalNote": "Lab/Sessional",
+          "references": []
+        },
+        "Ch 1202": {
+          "title": "Sessional on Chemistry-II",
+          "credit": 0.75,
+          "contactHour": "1.5 hrs/week",
+          "topics": [
+            "Salts analysis (qualitative)",
+            "Gravimetric analysis: determination of Fe, Cu, Ca, CI, SO4 volumetrically."
+          ],
+          "sessionalNote": "Lab/Sessional",
+          "references": []
+        },
+        "Ph 1202": {
+          "title": "Sessional on Physics-II",
+          "credit": 0.75,
+          "contactHour": "1.5 hrs/week",
+          "topics": [
+            "Determination of angle of prism & refractive index of the material of a prism by rotation of telescope of a spectrometer",
+            "Determination of wave length of sodium light by plane diffraction grating",
+            "Determination of resolving power of a plane diffraction grating",
+            "Determination of wave length of sodium light by measuring the diameter of Newton's ring",
+            "Determination of specific rotation of sugar solution by a polarimeter",
+            "Determination of the value of unknown resistance & to verify the laws of series and parallel resistance by means of P.O. Box",
+            "Comparison of the E.M.F's of two cells with the help of a potentiometer",
+            "Determination of the specific resistance per cm of the wire of Cary Foster's bridge."
+          ],
+          "sessionalNote": "Lab/Sessional",
+          "references": []
+        }
+      },
+      "optionalCourses": [],
+      "termNotes": []
+    },
+    "Y2T1": {
+      "termKey": "Y2T1",
+      "title": "Second Year First Term",
+      "courses": {
+        "CE 2105": {
+          "title": "Engineering Materials",
+          "credit": 4.0,
+          "contactHour": "4 hrs/week",
+          "topics": [
+            "Introduction and importance of Engineering materials.",
+            "Bricks: Constituents of brick clay, harmful ingredients of brick clay. Manufacture, characteristics, test and specification, classification and use",
+            "Different types of bricks (hollow, perforated, angular, mud etc.), sand cement block, ceramic products, different types of tiles.",
+            "Aggregate: Classification and properties of aggregate, bulking of aggregate, grading of aggregate, testing of aggregate",
+            "Classification, properties, test and function of sand.",
+            "Cement and Lime: Properties, uses and classification of lime",
+            "Difference between cement and lime",
+            "Manufacture of cement, types of cement, composition of cement, Functions of various ingredients of cement, physical properties of Portland cement, testing of cement.",
+            "Mortar and Plaster: Types of mortar, function of sand and surki in mortars, uses of mortar, preparation of cement mortar, precautions in using mortars, special mortars",
+            "Plastering",
+            "Pointing.",
+            "Paints & Varnishes: White and color washing, distempering, plastic and cement paint, water repellent paints, epoxy coating.",
+            "Concrete: Function of aggregate and water in concrete, segregation, bleeding, properties of concrete, strength and workability of concrete, factors influencing the properties of concrete, creep of concrete, chemical attack of concrete",
+            "Design of concrete mixes",
+            "Use of admixtures in concrete and their properties.",
+            "Other materials: Introduction to ply wood, plastic wood, and their properties, Geo-textiles, FRP, Synthetic fiber, Ferrocement etc",
+            "Properties and uses of rubber, timber, plastics, glass and aluminium. Corrosion of metals."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "CE 2111": {
+          "title": "Mechanics of Solids-I",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Fundamental concepts of stress and strain",
+            "Mechanical properties of materials",
+            "Strain energy",
+            "stresses and strains in members subjected to tension, compression, shear and temperature changes",
+            "Bending moment and shear force diagrams of beams and frames",
+            "Flexural and shearing stresses in beams",
+            "Shear center",
+            "Thin-walled pressure containers",
+            "Riveted and welded joints."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "CE 2161": {
+          "title": "Fluid Mechanics",
+          "credit": 4.0,
+          "contactHour": "4 hrs/week",
+          "topics": [
+            "Development and scope of fluid mechanics: Fluid properties",
+            "Fluid statics",
+            "Bernoulli's equation, momentum equation and forces of fluid flow",
+            "similitude kinematics of fluid flow",
+            "Concepts and basic equations-continuity equation, and dimensional analysis",
+            "steady incompressible flow in pressure conduits: Laminar and turbulent flow",
+            "General equation for fluid friction",
+            "Empirical equations for pipe flow",
+            "Minor losses in pipe flow",
+            "Pipes in series and parallel, branching of pipes, pipe networks",
+            "Fluid measurement: pitot tube, orifice, mouthpiece, nozzle, venturimeter, weir, notch."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "Math 2101": {
+          "title": "Coordinate Geometry, Spherical Trigonometry & Vector Analysis",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Coordinate Geometry of three dimensions: System of co-ordinate",
+            "Distance between two points",
+            "Section formula",
+            "Projection",
+            "Direction cosines",
+            "Equation of planes and lines",
+            "Condition of perpendicularity and parallelism of planes and straight lines",
+            "Perpendicular distance of a point from a straight line",
+            "Coplanar lines",
+            "Shortest distance between two straight lines",
+            "Volume of a tetrahedron",
+            "Sphere, cone and cylinder with their properties.",
+            "Spherical Trigonometry: Spherical triangle",
+            "Properties of Spherical triangle",
+            "Relations between sides and angles of a spherical triangle",
+            "Solution of spherical triangle.",
+            "Vector Analysis: Review of vector algebra",
+            "Multiple product",
+            "Vector differentiation: elementary differentiation, gradient, divergence, curl",
+            "Vector integration: ordinary integrals, line integrals, surface integrals, volume integrals",
+            "Integral theorems: Green's theorem, Gauss' divergence theorem, Stokes' theorem",
+            "Curvilinear coordinates: Orthogonal coordinates, spherical polar coordinates, cylindrical polar coordinates."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "Hum 2101": {
+          "title": "Sociology & Government",
+          "credit": 2.0,
+          "contactHour": "2 hrs/week",
+          "topics": [
+            "Sociology: Meaning and scope of sociology",
+            "Basic concepts: society, community, association, group, family",
+            "Social structure of Bangladesh",
+            "Population and world resources",
+            "Industrial revolution",
+            "Urban ecology",
+            "Social contract",
+            "Social change",
+            "Social problems",
+            "Population crime",
+            "Juvenile delinquency.",
+            "Government: Some basic concepts of government and politics",
+            "Functions, organs and forms of modern state and government",
+            "Citizenship",
+            "U.N.O.",
+            "Government and politics of Bangladesh",
+            "Some major administrative systems of developed countries",
+            "Local self-government."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "CE 2100": {
+          "title": "Details of Construction-I",
+          "credit": 1.5,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Foundations, different types of foundations",
+            "Brick masonry",
+            "framed structure and bearing walls",
+            "Arches and lintels",
+            "Details of floors and roofs",
+            "Pointing: Plastering and interior finishing",
+            "Scaffolding and staging: Shoring and underpinning",
+            "Thermal insulation and acoustics",
+            "Types and construction details of stairs",
+            "House plumbing",
+            "Detection, alarm & fire-fighting system."
+          ],
+          "sessionalNote": "Lab/Sessional",
+          "references": []
+        },
+        "CE 2106": {
+          "title": "Sessional on Engineering Materials",
+          "credit": 1.5,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Test for specific gravity, unit weight, moisture content and absorption of coarse and fine aggregates",
+            "Gradation of coarse and fine aggregates",
+            "Abrasion test of coarse aggregates",
+            "Normal consistency, setting time, fineness, soundness, specific gravity test of cement",
+            "Tensile and compressive strength test of cement mortar",
+            "design and testing of concrete mix",
+            "Tests on bricks."
+          ],
+          "sessionalNote": "Lab/Sessional",
+          "references": []
+        },
+        "CE 2110": {
+          "title": "Practical Surveying",
+          "credit": 1.5,
+          "contactHour": "3 weeks in field",
+          "topics": [
+            "Practice on handling of instruments",
+            "Chain survey",
+            "Plane table survey: Traverse survey by theodolite",
+            "Leveling",
+            "Contouring",
+            "Route project",
+            "House setting",
+            "Curve setting",
+            "Stadia surveying",
+            "Height and distance problem."
+          ],
+          "sessionalNote": "Field work",
+          "references": []
+        }
+      },
+      "optionalCourses": [],
+      "termNotes": []
+    },
+    "Y2T2": {
+      "termKey": "Y2T2",
+      "title": "Second Year Second Term",
+      "courses": {
+        "CE 2207": {
+          "title": "Numerical Analysis and Computer Programming",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Numerical Analysis: Solutions of algebraic and transcendental equations: Bisection method, Regula-Falsi method, Newton-Raphson method, Iteration method",
+            "Rate of convergence",
+            "Order of errors",
+            "Interpolation: simple differences, difference tables, differences of a polynomial, Newton's formula for interpolation, central difference interpolation formula, divided differences, tables of divided differences, Newton's general interpolation formula, Lagrange's interpolation formula, inverse interpolation by Lagrange's formula and by successive approximation",
+            "Solutions of system of linear equations: matrices, Gaussian elimination method, Gauss-Seidal iteration method",
+            "Numerical differentiation and integration",
+            "Finite differences",
+            "Curve fitting by least squares",
+            "Solution of differential equations: Picard's method, Euler's method and Runge-Kutta method.",
+            "Computer Programming: Introduction",
+            "Detailed study of FORTRAN language",
+            "Introduction to C",
+            "Computer applications in Civil Engineering problems."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "CE 2211": {
+          "title": "Mechanics of Solids-II",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Transformation of stresses",
+            "Deflection of beams by direct integration and moment area methods",
+            "Torsional stresses in shafts and tubes",
+            "Combined stresses",
+            "Helical springs",
+            "Buckling of columns."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "CE 2231": {
+          "title": "Engineering Geology & Geomorphology",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Role of engineering geology in Civil Engineering.",
+            "Minerals: Origin, identification and classification of minerals",
+            "Physical properties of minerals, mineraloids.",
+            "Rocks: Qualitative and quantitative description and classification of rock masses, their physical and mechanical properties",
+            "Earthquake, landslides and other geological hazards",
+            "Geology of Bangladesh",
+            "Seismic and geological map of Bangladesh.",
+            "Structural geology: Faults, types of faults",
+            "fold and fold type",
+            "domes",
+            "basins",
+            "erosional process",
+            "quantitative analysis of erosional land forms.",
+            "Geomorphology of Bangladesh, role of geomorphology in Civil Engineering.",
+            "Channel development",
+            "Channel widening, valley shape",
+            "Stream terraces",
+            "Alluvial flood plains",
+            "Deltas and alluvial fans",
+            "Channel morphology",
+            "Channel patterns and river basin."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "CE 2261": {
+          "title": "Hydrology",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Hydrologic cycle",
+            "Weather and hydrology",
+            "Precipitation, evaporation and transpiration",
+            "Infiltration",
+            "Stream flow",
+            "Application of telemetry and remote sensing in hydrologic data acquisition",
+            "Rainfall-runoff relations",
+            "Hydrographs, unit hydrographs",
+            "Hydrologic routing",
+            "Statistical methods in hydrology",
+            "Ground water hydrology."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "Math 2201": {
+          "title": "Matrices, Laplace Transform & Fourier Series",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Matrices: Types of matrices",
+            "Review of matrix algebra",
+            "Elementary transformations",
+            "Inverse by elementary transformation",
+            "Rank",
+            "Linear dependence and independence of vectors and matrices",
+            "Solution of linear equations using matrix",
+            "Vector spaces",
+            "Linear transformation",
+            "Eigen values and eigen vectors. Cayley-Hamilton theorem: Digitalization of square matrices",
+            "Orthogonal reduction of symmetrical matrices.",
+            "Laplace Transform: Definition",
+            "Sufficient condition for existence of Laplace transform",
+            "Laplace transform of elementary functions",
+            "Properties of Laplace transform",
+            "Inverse Laplace transform",
+            "Properties of inverse Laplace transform",
+            "Solution of differential equation and evaluation of improper integrals by using Laplace transform.",
+            "Fourier Series: Periodic function",
+            "Odd and even function",
+            "Sufficient condition for Fourier series representation",
+            "Representation of function in Fourier series",
+            "Half range series",
+            "Perseval's identity",
+            "Fourier integral",
+            "Evaluation of improper integrals using Fourier integrals."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "CE 2200": {
+          "title": "Details of Estimating",
+          "credit": 1.5,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Analysis of rates",
+            "Detailed estimate and specification of all major items of work of a building and highway",
+            "Fundamentals of costing and estimating of electrical and mechanical works."
+          ],
+          "sessionalNote": "Lab/Sessional",
+          "references": []
+        },
+        "CE 2208": {
+          "title": "Sessional on Computer Programming",
+          "credit": 1.5,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Operating system for computer",
+            "Development of FORTRAN & C program and solution of Civil Engineering problems",
+            "Use of different software packages."
+          ],
+          "sessionalNote": "Lab/Sessional",
+          "references": []
+        },
+        "CE 2212": {
+          "title": "Sessional on Mechanics of Solids-II",
+          "credit": 1.5,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Tension, direct shear and impact tests of mild steel specimen",
+            "Compression test of timber specimen",
+            "Hardness test of metals",
+            "Determination of shear center",
+            "Helical spring test",
+            "Static bending test",
+            "Load-deflection behavior of simple beam",
+            "Slender column test."
+          ],
+          "sessionalNote": "Lab/Sessional",
+          "references": []
+        },
+        "CE 2262": {
+          "title": "Sessional on Fluid Mechanics",
+          "credit": 1.5,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Center of pressure",
+            "Proof of Bernoulli's theorem",
+            "Flow through venturimeter, orifice and mouthpiece",
+            "Flow over V-notch, sharp-crested and broad-crested weir",
+            "Coefficient of velocity by co-ordinate method",
+            "Fluid friction in pipe."
+          ],
+          "sessionalNote": "Lab/Sessional",
+          "references": []
+        }
+      },
+      "optionalCourses": [],
+      "termNotes": []
+    },
+    "Y3T1": {
+      "termKey": "Y3T1",
+      "title": "Third Year First Term",
+      "courses": {
+        "CE 3111": {
+          "title": "Structural Analysis and Design-I",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Stability and determinacy of structures",
+            "Analysis of statically determinate trusses and arches",
+            "Shear force and bending moment diagrams of statically determinate structures",
+            "Influence lines for statically determinate structures",
+            "Moving loads on beams, frames and trusses",
+            "Cables and cable supported structures",
+            "Suspension bridge."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "CE 3113": {
+          "title": "Reinforced Concrete Structures-I",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Fundamental behaviour of reinforced concrete members",
+            "Introduction to WSD and USD methods",
+            "analysis and design of singly & doubly reinforced beams: T-beams",
+            "Diagonal tension, bond and anchorage according to WSD and USD methods",
+            "One way and two-way slab according to WSD and USD methods."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "CE 3131": {
+          "title": "Geotechnical Engineering-I",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Introduction to geotechnical engineering",
+            "Formation, composition, structure and fabrics of soils",
+            "Index properties of soils",
+            "Identification and classification of soils",
+            "Phase relationships",
+            "Soil compaction",
+            "Principles of total and effective stresses",
+            "Permeability and seepage",
+            "Capillarity and flow net",
+            "Shear strength",
+            "Stress distribution."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "CE 3141": {
+          "title": "Environmental Engineering-I",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Introduction to Environmental Engineering.",
+            "Drinking water",
+            "Water, sanitation and health",
+            "Introduction to water supply",
+            "Population forecasting, water requirement.",
+            "Water supply sources",
+            "Ground water exploration and problems",
+            "Aquifer properties and ground water flow",
+            "Well hydraulics and well design",
+            "Common water supply systems with specific reference to Bangladesh",
+            "Different types of hand pumps",
+            "Installation and O&M of hand pumps",
+            "Problems in water supply",
+            "Alternative water supply technologies for problematic areas in Bangladesh.",
+            "Water collection and intake",
+            "Water transmission and distribution system",
+            "Analysis and design of distribution network",
+            "Pressure conduits",
+            "Fire hydrants",
+            "Leak detection",
+            "Unaccounted loss of water.",
+            "Water quality parameters and standards",
+            "Water treatment: plain sedimentation, coagulation and flocculation, filtration, softening, disinfection",
+            "other treatment methods",
+            "Small scale iron and arsenic removal units, arsenic mitigation in Bangladesh. Socio- economic aspects of water supply and sanitation."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "CE 3161": {
+          "title": "Engineering Hydraulics",
+          "credit": 4.0,
+          "contactHour": "4 hrs/week",
+          "topics": [
+            "Introduction: open channel flow definition, its classification, velocity and pressure distributions",
+            "Energy principles and its application: energy equation, specific energy, critical flow, transition problems, and controls",
+            "Momentum principles and its application: momentum equation, specific momentum, hydraulic jump and stilling basins",
+            "Uniform flow and its computation",
+            "Steady-Gradually Varied Flow (GVF) and its computation",
+            "Design of channels",
+            "Flow measurements with and without structures in open channel.",
+            "Impact of water jet",
+            "Principles of hydraulic machines.",
+            "Pumps: turbine, submergible and others."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "CE 3100": {
+          "title": "Details of Construction-II",
+          "credit": 0.75,
+          "contactHour": "1.5 hrs/week",
+          "topics": [
+            "Introduction to construction equipments for road, bridge and building, Safety in constructions",
+            "definition and classification of construction accidents, safety program for construction, Locating hazards, safety equipments.",
+            "Building Services: Introduction, Systems of plumbing, Water supply fittings, Sanitary fittings, Building drainage system."
+          ],
+          "sessionalNote": "Lab/Sessional",
+          "references": []
+        },
+        "CE 3112": {
+          "title": "Sessional on Structural Analysis and Design-I",
+          "credit": 1.5,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Design of members and connections of a roof truss and a plate girder bridge."
+          ],
+          "sessionalNote": "Lab/Sessional",
+          "references": []
+        },
+        "CE 3132": {
+          "title": "Sessional on Geotechnical Engineering-I",
+          "credit": 0.75,
+          "contactHour": "1.5 hrs/week",
+          "topics": [
+            "Field identification of soil samples",
+            "Specific gravity test",
+            "Atterberg limits tests",
+            "Grain size analysis by sieve and hydrometer",
+            "Standard Proctor compaction test",
+            "Modified Proctor compaction test",
+            "Permeability (constant & variable) test."
+          ],
+          "sessionalNote": "Lab/Sessional",
+          "references": []
+        },
+        "CE 3142": {
+          "title": "Sessional on Environmental Engineering-I",
+          "credit": 0.75,
+          "contactHour": "1.5 hrs/week",
+          "topics": [
+            "Laboratory safety and introduction to laboratory equipment and accessories",
+            "Sampling procedure",
+            "Physical and chemical tests of water and wastewater."
+          ],
+          "sessionalNote": "Lab/Sessional",
+          "references": []
+        },
+        "CE 3162": {
+          "title": "Sessional on Engineering Hydraulics",
+          "credit": 1.5,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Experiments on sluice gate, venture flume, Parshall flume, cut-throat flume, hydraulic jump, velocity distribution profile, Manning's roughness coefficient, specific force and specific energy",
+            "GVF profile computation",
+            "Pipe surge and water hammer",
+            "Preparation and analysis of hydrographs",
+            "Aquifer characteristics and estimation of yield from wells."
+          ],
+          "sessionalNote": "Lab/Sessional",
+          "references": []
+        }
+      },
+      "optionalCourses": [],
+      "termNotes": []
+    },
+    "Y3T2": {
+      "termKey": "Y3T2",
+      "title": "Third Year Second Term",
+      "courses": {
+        "CE 3211": {
+          "title": "Structural Analysis and Design-II",
+          "credit": 4.0,
+          "contactHour": "4 hrs/week",
+          "topics": [
+            "Analysis of wind and earthquake loads on structures",
+            "Approximate analysis of statically indeterminate structures: mill bents, portal frames, braced trusses and multi storied building frames",
+            "Deflection of beams, frames and trusses by different methods: unit load, elastic load, conjugate beam etc",
+            "Analysis of space trusses",
+            "Analysis of statically indeterminate beams by three moment equation."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "CE 3213": {
+          "title": "Reinforced Concrete Structures-II",
+          "credit": 4.0,
+          "contactHour": "4 hrs/week",
+          "topics": [
+            "Lintels",
+            "Staircases",
+            "Columns",
+            "Footings",
+            "Retaining walls",
+            "Reinforced concrete floor and roof systems",
+            "Flat slabs and flat plates",
+            "Plastic hinge idea and collapse mechanism",
+            "Yield line method",
+            "Introduction to prestressed concrete."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "CE 3231": {
+          "title": "Geotechnical Engineering-II",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Soil investigation techniques",
+            "Direct measurement of consistency and relative density",
+            "Correlation of strength parameters with N-values",
+            "Lateral earth pressure",
+            "Compressibility and settlement",
+            "Bearing capacity",
+            "Slope stability analysis."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "CE 3241": {
+          "title": "Environmental Engineering-II",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Environmental Sanitation: Introduction, environmental pollution, protection and management",
+            "Sanitation practices in Bangladesh",
+            "Different sanitation options-pit latrines, pour flush latrines etc.",
+            "Community latrine cum bio-gas plant",
+            "Design and construction of inspection pit, septic tank and soak well",
+            "Building sanitation",
+            "Code of practice.",
+            "Wastewater: Estimation of wastewater",
+            "Wastewater collection system",
+            "Design, construction and maintenance of sanitary sewer and storm drainage system",
+            "Small bore sewer system",
+            "Wastewater characterization, BOD, COD, SS etc.",
+            "Microbiology of wastewater",
+            "Preliminary, primary and secondary treatment",
+            "Waste stabilization ponds and other methods and disposal of wastewater",
+            "Treatment and disposal of industrial effluents.",
+            "Health & Hygiene: Disease description, transmission and control",
+            "Integrated approach for water, sanitation and health education."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "CE 3251": {
+          "title": "Transportation Engineering-I",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Introduction to transportation engineering",
+            "Development of transportation system",
+            "Elements of transportation system",
+            "Transportation in Bangladesh",
+            "Modal share",
+            "Transportation planning concepts",
+            "Collection, study and analysis of basic data",
+            "Highway location and surveys",
+            "Geometric design of highways",
+            "Elements of design, cross-section elements, curves and sight distances",
+            "Road intersections",
+            "Traffic engineering",
+            "the road/traffic system, vehicle and traffic characteristics",
+            "Traffic control devices, traffic studies, parking and roadway lighting.",
+            "Highway materials",
+            "Production, properties and uses of bituminous materials",
+            "Introduction to highway machineries."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "CE 3200": {
+          "title": "Project and Seminar",
+          "credit": 0.75,
+          "contactHour": "1.5 hrs/week",
+          "topics": [
+            "Introduction to Technical Writing and Presentation techniques",
+            "Assignment on technical Writing for a specific Topic",
+            "Presentation and Submission of report."
+          ],
+          "sessionalNote": "Sessional",
+          "references": []
+        },
+        "CE 3214": {
+          "title": "Sessional on Reinforced Concrete Structures",
+          "credit": 1.5,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Design of a slab bridge and a deck-girder bridge and preparation of drawing using CAD software",
+            "Introduction to segmental prestressed cantilever bridge."
+          ],
+          "sessionalNote": "Lab/Sessional",
+          "references": []
+        },
+        "CE 3232": {
+          "title": "Sessional on Geotechnical Engineering-II",
+          "credit": 0.75,
+          "contactHour": "1.5 hrs/week",
+          "topics": [
+            "Relative density test",
+            "Field compaction test",
+            "Unconfined compression test",
+            "Direct shear test",
+            "Triaxial compression test",
+            "Consolidation test."
+          ],
+          "sessionalNote": "Lab/Sessional",
+          "references": []
+        },
+        "CE 3242": {
+          "title": "Sessional on Environmental Engineering-II",
+          "credit": 0.75,
+          "contactHour": "1.5 hrs/week",
+          "topics": [
+            "Bacteriological tests of water",
+            "Design of water supply system."
+          ],
+          "sessionalNote": "Lab/Sessional",
+          "references": []
+        },
+        "CE 3252": {
+          "title": "Sessional on Transportation Engineering-I",
+          "credit": 0.75,
+          "contactHour": "1.5 hrs/week",
+          "topics": [
+            "Roadway capacity studies",
+            "Tests on bituminous materials."
+          ],
+          "sessionalNote": "Lab/Sessional",
+          "references": []
+        }
+      },
+      "optionalCourses": [],
+      "termNotes": []
+    },
+    "Y4T1": {
+      "termKey": "Y4T1",
+      "title": "Fourth Year First Term",
+      "courses": {
+        "CE 4000": {
+          "title": "Project & Thesis",
+          "credit": 1.5,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Experimental and theoretical investigation of various topics in structural engineering, concrete technology, environmental engineering, transportation engineering, geotechnical engineering and water resource engineering",
+            "Individual or group study of one or more topics from any of the above fields",
+            "The students will be required to submit thesis/project report at the end of the work."
+          ],
+          "sessionalNote": "Project & Thesis (credit assessed at end of Year 4 Term 2)",
+          "references": []
+        },
+        "CE 4101": {
+          "title": "Project Planning & Construction Management",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Principles of management",
+            "Principles of construction management",
+            "Construction contracts and specifications",
+            "Inspection and quality control",
+            "Construction safety",
+            "Construction planning and scheduling",
+            "PERT, CPM, case studies, resource scheduling",
+            "PERT: a cost accounting system, linear programming",
+            "Decision making and simulation",
+            "Psychology in administration",
+            "Materials management",
+            "Demand forecasting",
+            "Inventory control",
+            "Personnel management",
+            "Stores management",
+            "Procurement",
+            "Project planning and evaluation",
+            "Feasibility reports, cash flow, pay back period, internal rate of return",
+            "Benefit-cost ratio",
+            "Construction equipment and plants",
+            "Replacement studies."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "CE 4111": {
+          "title": "Structural Analysis and Design-III",
+          "credit": 4.0,
+          "contactHour": "4 hrs/week",
+          "topics": [
+            "Difference between force and displacement method",
+            "Analysis of statically indeterminate structures (beams, frames, trusses) by slope deflection, moment distribution, force methods",
+            "Analysis of composite structures",
+            "Influence lines for statically indeterminate beams, frames, arches and grids",
+            "Stiffness matrix",
+            "Member stiffness",
+            "Stiffness transformation",
+            "Assembly of stiffness matrices & solution for beams, frames and plane trusses",
+            "Flexibility matrix",
+            "Basic concepts on shell structures",
+            "Structural forms and their application."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "CE 4131": {
+          "title": "Geotechnical Engineering-III",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Types of foundation, Foundation engineering report and selection of foundation",
+            "Design of footings (spread footings and special footings), mat foundations",
+            "Pile foundations",
+            "Caissons, Sheet-piling wall",
+            "Introduction to Cofferdams, machine foundations and soil improvement techniques."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "CE 4151": {
+          "title": "Transportation Engineering-II",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Highways: Subgrade, subbase and base courses",
+            "Soil stabilization in road constructions",
+            "Low-cost roads",
+            "Mix design methods",
+            "Design of flexible & rigid pavements, construction and maintenance of flexible and rigid pavements.",
+            "Railways: General requirements, alignment, permanent way, station and yards",
+            "Signaling, points and crossings, maintenance.",
+            "Waterways: Introduction to waterways, description of main features of waterways."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "CE 4161": {
+          "title": "Irrigation and Flood Control",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Irrigation: Importance of irrigation",
+            "Source and quality of irrigation water",
+            "Soil-water relationship",
+            "Consumptive use",
+            "Estimation of irrigation water requirements and scheduling",
+            "Methods of irrigation",
+            "Design of irrigation canal system",
+            "Irrigation structures",
+            "Irrigation pumps",
+            "Problems of irrigated land",
+            "Irrigation projects and institutional constraints.",
+            "Flood control: Flood and its causes",
+            "Methods of flood management: structural and non-structural measures",
+            "Economic aspects of flood management",
+            "Flood risk and vulnerability analysis, direct and indirect losses of flood, Flood damage assessment, flood damage in urban and rural areas."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "CE 4112": {
+          "title": "Sessional on Structural Analysis and Design-II",
+          "credit": 1.5,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Introduction to tall buildings in different countries of the world",
+            "Design of a high-rise office/residential building."
+          ],
+          "sessionalNote": "Lab/Sessional",
+          "references": []
+        },
+        "CE 4114": {
+          "title": "Sessional on Structural Analysis & Design-III",
+          "credit": 1.5,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Principles of different types of bridges over rivers and wide canals",
+            "Detailed design of a balanced cantilever bridge."
+          ],
+          "sessionalNote": "Lab/Sessional",
+          "references": []
+        },
+        "CE 4152": {
+          "title": "Sessional on Transportation Engineering-II",
+          "credit": 0.75,
+          "contactHour": "1.5 hrs/week",
+          "topics": [
+            "Tests on subgrade, subbase and base materials",
+            "Mix design."
+          ],
+          "sessionalNote": "Lab/Sessional",
+          "references": []
+        }
+      },
+      "optionalCourses": [],
+      "termNotes": []
+    },
+    "Y4T2": {
+      "termKey": "Y4T2",
+      "title": "Fourth Year Second Term",
+      "courses": {
+        "CE 4000": {
+          "title": "Project & Thesis",
+          "credit": 3.0,
+          "contactHour": "6 hrs/week",
+          "topics": [
+            "Experimental and theoretical investigation of various topics in structural engineering, concrete technology, environmental engineering, transportation engineering, geotechnical engineering and water resource engineering",
+            "Individual or group study of one or more topics from any of the above fields",
+            "The students will be required to submit Thesis/Project report at the end of the work."
+          ],
+          "sessionalNote": "Project & Thesis continuation",
+          "references": []
+        }
+      },
+      "optionalCourses": [
+        {
+          "courseCode": "CE 4210",
+          "title": "Sessional on Structural Analysis and Design-IV",
+          "credit": 1.5,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Design of various reinforced concrete structures, e.g., water tank and precast roof etc."
+          ],
+          "sessionalNote": "Optional Sessional",
+          "references": []
+        },
+        {
+          "courseCode": "CE 4211",
+          "title": "Prestressed Concrete",
+          "credit": 2.0,
+          "contactHour": "2 hrs/week",
+          "topics": [
+            "Introduction",
+            "Materials",
+            "Losses of prestress",
+            "Analysis and design for flexure",
+            "Diagonal tension or shear",
+            "Deflections",
+            "Bond and bearing",
+            "Design of post-tensioned slab."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        {
+          "courseCode": "CE 4213",
+          "title": "Theory of Elasticity and Elastic Instability of Structures",
+          "credit": 2.0,
+          "contactHour": "2 hrs/week",
+          "topics": [
+            "Introduction to theory of elasticity",
+            "Plane stress and plane strain conditions",
+            "Two-dimensional problems in rectangular and polar coordinates",
+            "Torsion of circular and noncircular shafts",
+            "Instability of structures",
+            "Stability functions."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        {
+          "courseCode": "CE 4215",
+          "title": "Introduction to Finite Element Method",
+          "credit": 2.0,
+          "contactHour": "2 hrs/week",
+          "topics": [
+            "Introduction to finite element method as applied to Civil Engineering problems",
+            "One dimensional stress deformation and time dependent flow problem",
+            "Two-dimensional plane stress and plane strain analysis of stress deformation problems."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        {
+          "courseCode": "CE 4217",
+          "title": "Structural Dynamics",
+          "credit": 2.0,
+          "contactHour": "2 hrs/week",
+          "topics": [
+            "Formulation of equation of motion",
+            "Vibration",
+            "SDOF and MDOF systems",
+            "Response to harmonic and impulse loading and vibration analysis by Rayleigh's method."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        {
+          "courseCode": "CE 4219",
+          "title": "Design of Steel Structures",
+          "credit": 2.0,
+          "contactHour": "2 hrs/week",
+          "topics": [
+            "Behaviour of structural steel members and steel frames",
+            "Code requirements",
+            "Design of tension and compression members by WSD and LFD methods",
+            "Design of beam, beam-columns",
+            "Joint design."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        {
+          "courseCode": "CE 4230",
+          "title": "Sessional on Geotechnical Engineering-III",
+          "credit": 1.5,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Preparation of soil report, interpretation of soil test result, establishment of sub-soil profile and design of foundations."
+          ],
+          "sessionalNote": "Optional Sessional",
+          "references": []
+        },
+        {
+          "courseCode": "CE 4231",
+          "title": "Geotechnical Engineering-IV",
+          "credit": 2.0,
+          "contactHour": "2 hrs/week",
+          "topics": [
+            "Retaining walls, Cofferdams, Pier and abutments",
+            "Piles subjected to lateral loads",
+            "Analysis and design of machine foundation, Dewatering and slurry wall construction, soil improvement techniques."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        {
+          "courseCode": "CE 4233",
+          "title": "Geotechnical Engineering-V",
+          "credit": 2.0,
+          "contactHour": "2 hrs/week",
+          "topics": [
+            "Introduction to critical state soil mechanics, SHANSEP and stress path methods",
+            "One, two and three-dimensional consolidation problems",
+            "Pore pressure coefficients",
+            "Soil structure-interaction",
+            "Earthquake and liquefaction problems",
+            "Numerical solution of geotechnical engineering problems."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        {
+          "courseCode": "CE 4235",
+          "title": "Geotechnical Engineering-VI",
+          "credit": 2.0,
+          "contactHour": "2 hrs/week",
+          "topics": [
+            "Introduction to soil-water interaction problems",
+            "Permeability, capillarity and soil suction",
+            "Seepage analysis, stability of natural, man-made slope",
+            "and excavation subjected to seepage, water current, wave action etc.",
+            "Theories of filters and revetment design",
+            "Hydraulic fills."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        {
+          "courseCode": "CE 4240",
+          "title": "Sessional on Environmental Engineering-III",
+          "credit": 1.5,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Design of sewerage systems",
+            "Field visits/assignments on existing water supply and sanitation technologies",
+            "Case study on users' participation",
+            "O & M practices and ownership",
+            "Community managed projects."
+          ],
+          "sessionalNote": "Optional Sessional",
+          "references": []
+        },
+        {
+          "courseCode": "CE 4241",
+          "title": "Environmental Pollution Control",
+          "credit": 2.0,
+          "contactHour": "2 hrs/week",
+          "topics": [
+            "Water pollution: sources and types of pollutants: Waste assimilation capacity of streams",
+            "Dissolved oxygen modeling: Ecological balance of streams",
+            "Industrial pollution",
+            "Heavy metal contamination",
+            "Detergent pollution and eutrophication",
+            "Ground water pollution: Marine pollution: Pollution control measures",
+            "Water quality monitoring and management.",
+            "Air pollution: Sources and types of pollutants",
+            "Effects of various pollutants on human health, Materials and plants",
+            "Air pollution meteorology",
+            "Global warming and greenhouse effects",
+            "Emission standards from industrial sources",
+            "Air pollution monitoring and control measures",
+            "Ozone layer depletion",
+            "Acid rain deposition.",
+            "Noise pollution: Noise and people, Noise standards, measurements and controls."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        {
+          "courseCode": "CE 4243",
+          "title": "Solid Waste Management",
+          "credit": 2.0,
+          "contactHour": "2 hrs/week",
+          "topics": [
+            "Sources and types of solid wastes",
+            "Physical and chemical properties of solid wastes",
+            "Solid wastes generation",
+            "On-site handling, storage and processing, collection of solid wastes",
+            "Community and municipal collection systems",
+            "Transfer stations and transport",
+            "Recycling, reuse and resources recovery",
+            "Treatment methods: composting, incineration etc.",
+            "Landfills",
+            "Integrated solid waste management",
+            "Hazardous waste management."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        {
+          "courseCode": "CE 4245",
+          "title": "Environmental Development Project",
+          "credit": 2.0,
+          "contactHour": "2 hrs/week",
+          "topics": [
+            "Environment and sustainable development",
+            "Environmental policies, legislation and act",
+            "Environmental implication of sectoral development",
+            "Environmental quality standards",
+            "Environmental issues and priorities",
+            "Environmental impact assessment of development schemes: baseline studies, assessment methodologies",
+            "Economics of environmental management",
+            "Special topics."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        {
+          "courseCode": "CE 4250",
+          "title": "Sessional on Transportation Engineering-III",
+          "credit": 1.5,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Design of flexible and rigid pavements for highways and airfield pavements",
+            "Geometric design",
+            "Roadway intersections design, roadway capacity calculation",
+            "Traffic studies and design."
+          ],
+          "sessionalNote": "Optional Sessional",
+          "references": []
+        },
+        {
+          "courseCode": "CE 4251",
+          "title": "Transportation Engineering-III",
+          "credit": 2.0,
+          "contactHour": "2 hrs/week",
+          "topics": [
+            "The transportation planning process",
+            "Traffic management concepts",
+            "Traffic accident investigations, city road and street networks: grade separation and interchanges, pedestrian and bicycle facilities",
+            "The urban bypass, environmental aspects of highway traffic and transportation projects",
+            "Elements of traffic flow."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        {
+          "courseCode": "CE 4253",
+          "title": "Transportation Engineering-IV",
+          "credit": 2.0,
+          "contactHour": "2 hrs/week",
+          "topics": [
+            "Highways drainage and drainage structures",
+            "Evaluation and strengthening of pavements",
+            "Importance, advantages and trends in air transportation",
+            "Planning and design of airports",
+            "Aircraft characteristics related to airport design",
+            "Types and elements of airport planning studies",
+            "Airport configuration",
+            "Geometric design of the landing area",
+            "Terminal area",
+            "Heliports",
+            "Design of airport pavements",
+            "Lighting, marking and signing",
+            "Airport drainage."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        {
+          "courseCode": "CE 4255",
+          "title": "Transportation Engineering-V",
+          "credit": 2.0,
+          "contactHour": "2 hrs/week",
+          "topics": [
+            "Highway needs study",
+            "Highway planning, economics and financing",
+            "Evaluation and analysis of transportation projects",
+            "Management, monitoring, organization and implementation of transportation projects",
+            "Selected case studies",
+            "Traffic engineering administration and legislation",
+            "Urban public transportation and freight movement."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        {
+          "courseCode": "CE 4260",
+          "title": "Sessional on Water Resources Engineering-I",
+          "credit": 1.5,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Design of hydraulic structures, river training works",
+            "Groundwater resource assessment and water well design."
+          ],
+          "sessionalNote": "Optional Sessional",
+          "references": []
+        },
+        {
+          "courseCode": "CE 4261",
+          "title": "River Engineering",
+          "credit": 2.0,
+          "contactHour": "2 hrs/week",
+          "topics": [
+            "Behavior of alluvial rivers",
+            "River channel pattern and fluvial processes",
+            "Aggradation and degradation",
+            "Local scours, river training and bank protection works",
+            "Navigation and dredging",
+            "Sediment movement in river channels, bed forms and flow regimes."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        {
+          "courseCode": "CE 4263",
+          "title": "Coastal Engineering",
+          "credit": 2.0,
+          "contactHour": "2 hrs/week",
+          "topics": [
+            "Coast and coastal features",
+            "Tides and currents",
+            "Tidal flow measurement",
+            "Waves and storm surges",
+            "Docks and harbour",
+            "Forces of waves and tides in the design of coastal and harbour structures",
+            "Coastal sedimentation processes",
+            "Deltas and estuaries",
+            "Shore protection works",
+            "Dredging and dredgers."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        {
+          "courseCode": "CE 4265",
+          "title": "Hydraulic Structures",
+          "credit": 2.0,
+          "contactHour": "2 hrs/week",
+          "topics": [
+            "Design principles of hydraulic structures, types of hydraulic structures",
+            "Design of dams, barrages, weirs, spillways, energy dissipaters and spillway gates",
+            "Cross drainage works."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        {
+          "courseCode": "CE 4267",
+          "title": "Ground Water Engineering",
+          "credit": 2.0,
+          "contactHour": "2 hrs/week",
+          "topics": [
+            "Groundwater in hydrologic cycle and its occurrence: Physical properties and principles of groundwater movement",
+            "Groundwater and well hydraulics",
+            "Groundwater resource evaluation",
+            "Groundwater levels and environmental influences: Water pollution and contaminant transport",
+            "Recharge of groundwater",
+            "Saline water intrusion in aquifers: Groundwater management."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        {
+          "courseCode": "Hum 4201",
+          "title": "Professional Practices and Communication Skills",
+          "credit": 2.0,
+          "contactHour": "2 hrs/week",
+          "topics": [
+            "The project cycle",
+            "Project proposal",
+            "Contractual provisions",
+            "Techniques of specification writing",
+            "Evaluation of bids",
+            "Project evaluation.",
+            "Interpretation of literature, documents etc.",
+            "Communicating",
+            "Preparation of report",
+            "Industrial and labor relations",
+            "Professional ethics in Civil Engineering."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        {
+          "courseCode": "Hum 4203",
+          "title": "Socio-economic Aspects of Development Projects",
+          "credit": 2.0,
+          "contactHour": "2 hrs/week",
+          "topics": [
+            "Economic and social structure",
+            "Development and economic growth",
+            "Socio-economic indicators",
+            "Population, prosperity and poverty",
+            "Employment of work force",
+            "Population displacement",
+            "Rehabilitation strategy",
+            "Productivity, land loss, land use and land ownership patterns",
+            "Fisheries and aqua culture",
+            "Deforestation and afforestation",
+            "Communication, commerce, industries and other economic benefits",
+            "Water supply, sanitation, health and nutrition",
+            "Inequalities in distribution of benefits and losses",
+            "Socio-economic survey",
+            "Case studies."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        {
+          "courseCode": "Hum 4205",
+          "title": "Integrated Water Resources Planning and Management",
+          "credit": 2.0,
+          "contactHour": "2 hrs/week",
+          "topics": [
+            "Basic concepts in integrated water resources management",
+            "Economic, environmental and industrial aspects of integrated water resources",
+            "Participation of beneficiaries",
+            "Formation of users' group",
+            "Fisheries and navigation management",
+            "Strategic planning",
+            "System analysis approach, conceptual framework, models, and analytical techniques of integrated water resources planning and management."
+          ],
+          "sessionalNote": null,
+          "references": []
+        }
+      ],
+      "termNotes": [
+        "Students shall take one optional thesis related theory course & the corresponding sessional course from any optional group of I-V and four more optional theory courses from other options of I-VI but not more than one from each option & another corresponding sessional course."
+      ]
+    }
+  },
+  "extras": {
+    "administrative_noise": [
+      "পেজ 1 — CIVIL Engineering full syllebus KUET pdf.pdf — পেজ 1",
+      "SUMMARY OF UNDERGRADUATE COURSES",
+      "Year/Term  No. of Theory Courses  Theory Contact hours  Theory Credit hours  No. of Lab/Sess. Courses  Lab/Sess. Contact hours  Lab/Sess. Credit hours  Total Contact hours  Total Credit hours  1-1 5 15.0 15.0 5 9.0 4.50 24.0 19.50  1-2 5 17.0 17.0 3 6.0 3.00 23.0 20.00  2-1 5 16.0 16.0 3 9.0 4.50 25.0 20.50  2-2 5 15.0 15.0 4 12.0 6.00 27.0 21.00  3-1 5 16.0 16.0 5 10.5 5.25 26.5 21.25  3-2 5 17.0 17.0 5 9.0 4.50 26.0 21.50  4-1 5 15.0 15.0 4 10.5 5.25 26.5 21.25  4-2 5 10.0 10.0 3 12.0 6.00 22.0 16.00  Total 40 121.0 121.0 32 78.0 39.0 200.0 161.00",
+      "Group of Courses A. Basic Science B. Mathematics C. Humanities D. Allied Engineering E. Civil Engineering (Core Courses) F. Civil Engineering (Optional Courses) G. Project & Thesis Required Credits 15.0 12.0 8.75 0.75 107.0 13.0 4.50 Total 161.0",
+      "36",
+      "CS CamScanner",
+      "পেজ 2 — CIVIL Engineering full syllebus KUET pdf.pdf — পেজ 2",
+      "DETAIL OUTLINE OF UNDERGRADUATE COURSES",
+      "27",
+      "CS CamScanner",
+      "পেজ 3 — CIVIL Engineering full syllebus KUET pdf.pdf — পেজ 3",
+      "38",
+      "CS CamScanner",
+      "পেজ 4 — CIVIL Engineering full syllebus KUET pdf.pdf — পেজ 4",
+      "39",
+      "CS CamScanner",
+      "পেজ 5 — CIVIL Engineering full syllebus KUET pdf.pdf — পেজ 5",
+      "CS CamScanner",
+      "পেজ 6 — CIVIL Engineering full syllebus KUET pdf.pdf — পেজ 6",
+      "41",
+      "CS CamScanner",
+      "পেজ 7 — CIVIL Engineering full syllebus KUET pdf.pdf — পেজ 7",
+      "42",
+      "CS CamScanner",
+      "পেজ 8 — CIVIL Engineering full syllebus KUET pdf.pdf — পেজ 8",
+      "43",
+      "CS CamScanner",
+      "পেজ 9 — CIVIL Engineering full syllebus KUET pdf.pdf — পেজ 9",
+      "CS CamScanner",
+      "পেজ 10 — CIVIL Engineering full syllebus KUET pdf.pdf — পেজ 10",
+      "CS CamScanner",
+      "পেজ 11 — CIVIL Engineering full syllebus KUET pdf.pdf — পেজ 11",
+      "45",
+      "CS CamScanner",
+      "পেজ 12 — CIVIL Engineering full syllebus KUET pdf.pdf — পেজ 12",
+      "46",
+      "CS CamScanner",
+      "পেজ 13 — CIVIL Engineering full syllebus KUET pdf.pdf — পেজ 13",
+      "47",
+      "CS CamScanner",
+      "পেজ 14 — CIVIL Engineering full syllebus KUET pdf.pdf — পেজ 14",
+      "CS CamScanner",
+      "পেজ 15 — CIVIL Engineering full syllebus KUET pdf.pdf — পেজ 15",
+      "CS CamScanner",
+      "পেজ 16 — CIVIL Engineering full syllebus KUET pdf.pdf — পেজ 16",
+      "CS CamScanner",
+      "পেজ 17 — CIVIL Engineering full syllebus KUET pdf.pdf — পেজ 17",
+      "CS CamScanner",
+      "পেজ 18 — CIVIL Engineering full syllebus KUET pdf.pdf — পেজ 18",
+      "CS CamScanner",
+      "পেজ 19 — CIVIL Engineering full syllebus KUET pdf.pdf — পেজ 19",
+      "53",
+      "CS CamScanner",
+      "পেজ 20 — CIVIL Engineering full syllebus KUET pdf.pdf — পেজ 20",
+      "54",
+      "CS CamScanner",
+      "পেজ 21 — CIVIL Engineering full syllebus KUET pdf.pdf — পেজ 21",
+      "55",
+      "CS CamScanner",
+      "পেজ 22 — CIVIL Engineering full syllebus KUET pdf.pdf — পেজ 22",
+      "56",
+      "CS CamScanner",
+      "পেজ 23 — CIVIL Engineering full syllebus KUET pdf.pdf — পেজ 23",
+      "57",
+      "CS CamScanner",
+      "পেজ 24 — CIVIL Engineering full syllebus KUET pdf.pdf — পেজ 24",
+      "58",
+      "CS CamScanner",
+      "পেজ 25 — CIVIL Engineering full syllebus KUET pdf.pdf — পেজ 25",
+      "59",
+      "CS CamScanner",
+      "পেজ 26 — CIVIL Engineering full syllebus KUET pdf.pdf — পেজ 26",
+      "60",
+      "CS CamScanner",
+      "পেজ 27 — CIVIL Engineering full syllebus KUET pdf.pdf — পেজ 27",
+      "61",
+      "CS CamScanner",
+      "পেজ 28 — CIVIL Engineering full syllebus KUET pdf.pdf — পেজ 28",
+      "62",
+      "CS CamScanner"
+    ],
+    "ambiguities": [
+      {
+        "raw": "In 3rd Year 2nd Term table, Theory Credits sum to 16.00 but detailed credits for CE3211(4), CE3213(4), CE3231(3), CE3241(3), CE3251(3) sum to 17.00. Sessional credits table sum 5.25 but computed from individual courses (0.75+1.5+0.75+0.75+0.75) = 4.5. Detailed outlines confirm individual credits, so table sums may be misprinted.",
+        "reason": "Mismatch between table totals and sum of individual course credits; individual course credits from detailed outlines are used.",
+        "possibleTargets": ["Y3T2"]
+      },
+      {
+        "raw": "Contact hours for CE 2110 Practical Surveying: table says 3.0 but detailed outline says '3.0 weeks in field'. Ambiguous unit.",
+        "reason": "Unit 'weeks in field' non-standard; kept as original string '3 weeks in field'.",
+        "possibleTargets": ["CE 2110"]
+      },
+      {
+        "raw": "Math 1201 credit listed as 3,00 (comma) in table, taken as 3.00.",
+        "reason": "OCR punctuation noise.",
+        "possibleTargets": ["Math 1201"]
+      }
+    ]
+  },
+  "qa": {
+    "termCount": 8,
+    "courseCount": 66,
+    "topicCount": 798,
+    "noiseCount": 42,
+    "ambiguityCount": 3
+  }
+}

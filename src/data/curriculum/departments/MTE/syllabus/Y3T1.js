@@ -29,7 +29,7 @@ export const MTE_SYLLABUS_Y3T1 = {
 	  "MTE 3000": {
 	    "title": "Industrial Training",
 	    "credit": 0,
-	    "contactHour": null,
+	    "contactHour": "2 hrs/week",
 	    "topics": [
 	      "The students will complete a two-week attachment in a relevant company, institution, or organization to gain hands-on experience with mechatronic systems. Following the training program, each student should submit a report or create a presentation. The course can be completed at any suitable time during the third year (odd or even semester or vacation)."
 	    ],

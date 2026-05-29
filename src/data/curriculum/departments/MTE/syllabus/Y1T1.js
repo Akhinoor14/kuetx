@@ -67,7 +67,7 @@ export const MTE_SYLLABUS_Y1T1 = {
 	  },
 	  "EE 1132": {
 	    "title": "Sessional on Electrical Circuits",
-	    "credit": null,
+	    "credit": 1.5,
 	    "contactHour": "3 hrs/week",
 	    "topics": [],
 	    "sessionalNote": "Sessional Based on EE 1131.",
