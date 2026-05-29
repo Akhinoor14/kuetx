@@ -1,0 +1,1259 @@
+{
+  "department": "will be provided",
+  "sourceType": "raw_text",
+  "terms": {
+    "Y1T1": {
+      "termKey": "Y1T1",
+      "title": "First Year First Term",
+      "courses": {
+        "Ch 1129": {
+          "title": "Inorganic Chemistry",
+          "credit": 3.0,
+          "contactHour": "3 hrs/wk",
+          "topics": [
+            "Atomic Structure: Modern concept of atomic structure, quantization of energy, atomic spectra, wave nature of electron, electronic configuration, periodic table, various properties of elements in terms of periodic table.",
+            "Chemical Bonding: Valence bond theory, shape of molecules, molecular orbital theory, metallic bonding, theory of resonance, hydrogen bonding and their applications.",
+            "Conductors, Semiconductors, and Noble gases, their applications.",
+            "Nuclear Chemistry: Basic concepts of nuclear chemistry, radioactive decay, isotopes, neutron proton ratio, binding energy, mass defect, nuclear force, nuclear reactions, nuclear reactor, application of nuclear chemistry and nuclear hazards.",
+            "Coordination Chemistry: Coordination compounds, structure and bonding of coordination compounds, isomerism of coordination compounds, chelates, EAN rule, different theories of coordination compounds and their limitations.",
+            "Acids, Bases and Salts: Theories of Acid-Base, salt and salt hydrolysis, pH and pH scale, hard and soft acids and bases, common ion effects and applications, acid base indicators and theories.",
+            "Inorganic Compounds of B, C, N and Si: Properties, preparations, structures and applications.",
+            "Transition Metals, Lanthanides, and Actinides: Occurrence, preparation, properties and applications."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "Ch 1130": {
+          "title": "Inorganic Chemistry Lab",
+          "credit": null,
+          "contactHour": "3 hrs/wk",
+          "topics": [],
+          "sessionalNote": "Sessional based on theory course Ch 1129",
+          "references": []
+        },
+        "ChE 1101": {
+          "title": "Fundamentals of Chemical Engineering",
+          "credit": 3.0,
+          "contactHour": "3 hrs/wk",
+          "topics": [
+            "Scope of chemical engineering; Principles of chemical engineering calculations: Systems of units, basic concepts of dimensional analysis, process variables, basis of calculation, conservation of mass and energy; Material balance: Overall component balance, recycle and bypass, simple reactive systems and combustion reactions; Energy balance: Forms of energy, first law of thermodynamics, thermodynamic data and tables, energy balance on closed and open systems, and application of mass and energy balance to real processes; Measurements of process variables: Fluid statics, manometry, flow measurement, temperature measurement."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "Hum 1129": {
+          "title": "Technical and Communicative English",
+          "credit": 3.0,
+          "contactHour": "3 hrs/wk",
+          "topics": [
+            "Review of basic Grammar: Part of speech, Sentence, Tense, Voice; International phonetics alphabet, Looking up a Dictionary entry; Vocabulary; Phrases and Idioms, Prepositional phrases, Analogy, Synonyms and Antonyms, Prefixes and Suffixes, Palindromes, Anagrams, Wh Questions, Notions and Functions, Transformation of sentences; Reading Comprehension; Francis Bacon’s Essays: Of Studies, Of Beauty, Of Travel, Of Love, Of Marriage and Single life; Short stories by renowned writers: A Rose for Emily by William Faulkner, Bachelor’s complaint of the behavior of married people by Charles Lamb, A dissertation upon Roast pig by Charles Lamb, The Gift of the Magi by O’Henry.",
+            "Techniques of Writing: Essay/Paragraph; The Mode of Discourse-Exposition, Description, Narration, Argumentation (EDNA); Letter and Email Writing; Report Writing: Formal and Informal, Tender and Schedule, Quotation, APA Style sheet, Product description, Translation."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "Hum 1130": {
+          "title": "Technical and Communicative English Lab",
+          "credit": 0.75,
+          "contactHour": "3/2 hrs/wk",
+          "topics": [
+            "Reading: Kinds and Procedures; SQ3R Technique;",
+            "Writing: Kinds and Procedures",
+            "Listening: Monologue, Dialogue and Group Conversation (Formal and Informal), Telephoning and Direction, Note Taking Skills.",
+            "Speaking: Basic Conversation, Job Interview, Seminar and paper Presentation.",
+            "Formal Speech, Telephoning, Difference between British and American English"
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "Math 1129": {
+          "title": "Differential Calculus and Geometry",
+          "credit": 3.0,
+          "contactHour": "3 hrs/wk",
+          "topics": [
+            "Differential calculus: Continuity and differentiability of a function; Differentiation: Reviews of differentiation of various types of function, application of differentiation; Successive differentiation: Successive differentiation of different types of function, Leibnitz's theorem; Expansion of functions: Rolle's theorem, Mean value theorem, Taylor's theorem (finite and infinite forms), Maclaurin's theorem in finite and infinite forms; Maximum and minimum: Maxima and minima of different types of function, Physical application, Indeterminate forms, L' hospitals Rule, Partial differentiation; Tangents and normal: Tangents and normal, Sub tangent and subnormal in cartesian and polar co-ordinates.",
+            "Coordinate Geometry: Coordinate Geometry of two dimensions: Change of axes, Translation and rotation of axes, Identification of conics with their properties; Coordinate Geometry of Three Dimensions: Cartesian coordinates, Cylindrical polar and Spherical polar coordinates, distance of two points, Section formula, Projection, Direction cosines and direction ratios, angle between two lines, distance of a point from a line; Planes: different forms of the equation of a plane, distance of a point from a plane; Straight line: different forms of equation of straight line, angle between a line and plane, coplanar lines, shortest distance between two lines."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "Ph 1129": {
+          "title": "Physics I",
+          "credit": 3.0,
+          "contactHour": "3 hrs/wk",
+          "topics": [
+            "Waves and Oscillations: Simple harmonic motion, energy distribution of SHM, Superposition principle, Lissajous Figures; Free, Damped, and Forced vibrations, Resonance power dissipation and power absorption; Wave Motion: Transverse and longitudinal waves, progressive and stationary waves, energy of progressive and stationary waves, group velocity and phase velocity, beat; Sound Waves: Audible, infrasonic, ultrasonic and supersonic waves, Doppler effect; Acoustics: Intensity of sound, Bel, sound pressure and intensity level, Reverberation, Sabine’s formula; Nuclear Energy: Binding energy, mass defect, nuclear forces; Radioactivity: Introduction to radioactivity, alpha, beta and gamma radiation, laws of radioactive disintegration, half life, mean life, application of radioactivity; Nuclear reaction: Fision and fusion processes, chain reaction.",
+            "Thermometry: Temperature, Zeroth law of thermodynamics, Measurement of low and high temperatures, platinum resistance thermometer, thermocouple and radiation pyrometer; Kinetic Theory: Kinetic theory of gases, Law’s derived from kinetic theory of gases, Vander Waal’s equation of state; Particle properties of wave: Photoelectric effect, Quantum theory of light, Compton effect; Atom model: Bohr’s atom model; Magnetic effect on electricity and magnetic induction: Biot-Savert’s law and its application, magneto-motive force, Ampere’s law and its application, Faraday’s laws of induction, Lenz’s law, self-inductance and mutual inductance, Maxwell equation; Dielectrics and Ferroelectrics: Dielectric constant and polarizability, ferroelectric crystals, ferroelectric domains, pizoelectricity, pyroelectricity."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "MES 1130": {
+          "title": "Workshop Practices",
+          "credit": 1.5,
+          "contactHour": "3 hrs/wk",
+          "topics": [
+            "Acquaintance with tools and appliances used in foundry; Molding sand preparation, Metal casting.",
+            "Acquaintance with tools and machine used in welding. Arc and gas welding practices.",
+            "Acquaintance with hand and machine tools used in Machine shop. Introduction and practices with lathe, drill, shaper, and milling machines."
+          ],
+          "sessionalNote": null,
+          "references": []
+        }
+      },
+      "optionalCourses": [],
+      "termNotes": []
+    },
+    "Y1T2": {
+      "termKey": "Y1T2",
+      "title": "First Year Second Term",
+      "courses": {
+        "Ch 1229": {
+          "title": "Physical Chemistry I",
+          "credit": 3.0,
+          "contactHour": "3 hrs/wk",
+          "topics": [
+            "Solution: Types of solution, solubility and solution process, effect of temperature and pressure on solubility, Henry’s law, ideal and non-ideal solution, distribution law, Dilute solution and colligative properties. Colloids and emulsion: Types of colloids and emulsion, stability, purification, application. Thermo-chemistry: Laws of thermochemistry, enthalpy change in different chemical reactions, effect of temperature on heat of reaction. Second law of thermodynamics and its applications. Equilibrium: Chemical equilibrium of homogeneous and heterogeneous reactions, thermodynamic treatment of equilibrium constant. Ionic equilibrium, buffer solution, Henderson-Hasselbalch equation and its application; Ionization of water and pH scale."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "Ch 1230": {
+          "title": "Physical Chemistry Lab I",
+          "credit": 0.75,
+          "contactHour": "3/2 hrs/wk",
+          "topics": [],
+          "sessionalNote": "Sessional based on theory course Ch 1229",
+          "references": []
+        },
+        "EEE 1229": {
+          "title": "Electrical Circuits and Machines",
+          "credit": 3.0,
+          "contactHour": "3 hrs/wk",
+          "topics": [
+            "Electrical Circuit: Introduction to Electricity; Ohm’s law, Kirchoff’s current law and Kirchoff’s voltage law. Alternative Current and AC quantities; Steady state solution of single-phase circuits(R, RL, and RLC), RMS and Average values of AC quantities, Phasor algebra.",
+            "Electrical Machines: DC Machines: Constructional features and principle of operation; Shunt, series, and compound generators and motors; Starting and speed control of motors; Choice of DC motors for industrial applications. Induction motors: Principles of operation; Torque-Speed characteristics; improving starting torque for cage and wind rotor motors; Speed control and braking of induction motors; Single phase induction motors and their uses. Synchronous machines: Principles of operation; Starting and synchronization of synchronous motors; AC motors for industrial applications. Servo motors, Self-starter and Alternators: Constructional details and working principles and its application. Transformer: Constructional features and principles of operation; 3-phase connection of transformers."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "EEE 1230": {
+          "title": "Electrical Circuit and Machine Lab",
+          "credit": null,
+          "contactHour": "3 hrs/wk",
+          "topics": [],
+          "sessionalNote": "Sessional based on theory course EEE 1229.",
+          "references": []
+        },
+        "Math 1229": {
+          "title": "Integral Calculus and Differential Equations",
+          "credit": 3.0,
+          "contactHour": "3 hrs/wk",
+          "topics": [
+            "Integral calculus: Integration by the method of substitution, Integration by parts, Standard integrals, Integration by the method of successive reduction, Definite integral and its properties, Improper integrals, Beta and Gamma functions; Area under a plane curve in cartesian and polar coordinates, Area of the region enclosed by two curves in cartesian and polar coordinates; Length of curves in cartesian and polar coordinates; Area and volume of surface of revolution.",
+            "Differential equations: Origin and formation of differential equations, Order and degree of differential equations, Solution of first order first degree differential equations by various methods, Applications of first order differential equations in physical problems, Solutions of second and higher order linear differential equations with constant coefficients by various methods, Solutions of homogeneous linear equations, Application of higher order differential equations."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "ME 1229": {
+          "title": "Thermodynamics",
+          "credit": 3.0,
+          "contactHour": "3 hrs/wk",
+          "topics": [
+            "Introduction: macroscopic and microscopic view point; Definition of thermodynamic terms; Extensive and intensive properties; Heat, work and their path dependence; Equation of state and its applications; Various thermodynamic processes’; First law of thermodynamics; Internal energy, Enthalpy; Non-flow and steady flow energy equation; Reversible and irreversible processes, Causes of irreversibility; Phase diagram, p-V-T behavior of pure substances; Standard heat of reaction; Effect of temperature on heat of reaction; Second law of thermodynamics and its corollaries; Third law of thermodynamics; Thermodynamic cycles: gas cycles, vapor cycles and their efficiencies; Boiler and its performance, mountings and accessories; Internal combustion engine fundamentals."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "ME 1230": {
+          "title": "Thermodynamics Lab",
+          "credit": 0.75,
+          "contactHour": "3/2 hrs/wk",
+          "topics": [],
+          "sessionalNote": "Sessional based on theory course ME 1229",
+          "references": []
+        },
+        "Ph 1229": {
+          "title": "Physics II",
+          "credit": 3.0,
+          "contactHour": "3 hrs/wk",
+          "topics": [
+            "Solid State Physics: Crystal structure: Two and three dimensional crystal systems, coordination number, packing fraction, Miller indices, X-ray diffraction and Bragg’s law; Different types of bond in solid: Metallic, Vander Waals, covalent and ionic bonds; Specific heat of solid: Einstein’s model, Debye’s model; Free electron theory: Outstanding properties of metals, Sommerfeld free electron model, Hall effect, Hall voltage and Hall coefficient; Magnetism: Magnetic properties of matter, magneto-motive force, magnetic field intensity, magnetic induction, permeability and susceptibility, classification of magnetic materials, Magnetic Hysteresis; Nanoscience: Nanomaterials and Nanotechnology, classification of nanomaterials, shape and structure of nanomaterials, basic aspects of synthesis of nanoparticles, Bottom-up and Top-down approaches, Quantum dot.",
+            "Physical Optics: Interference: Nature of light, intensity and energy distribution, Young’s double slit experiment, Fresnel bi-prism, Newton’s rings; Diffraction of light: Fresnel and Fraunhoffer diffraction, diffraction of single slit, diffraction of double slit, diffraction grating, dispersive and resolving power of diffraction grating; Polarization: Production and analysis of polarized light, plane of polarization, polarization by reflection, Brewster’s law, Nicol prism, polarizer and analyzer, optical activity, wave plates; LASER: History of LASER, characteristics and application of LASER, population inversion, optical pumping, Ruby LASER, He-Ne gas LASER, Dye or liquid LASER, and chemical LASER."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "Ph 1230": {
+          "title": "Physics Lab",
+          "credit": 1.5,
+          "contactHour": "3 hrs/wk",
+          "topics": [],
+          "sessionalNote": "Sessional based on theory courses Ph 1129 and Ph 1229.",
+          "references": []
+        }
+      },
+      "optionalCourses": [],
+      "termNotes": []
+    },
+    "Y2T1": {
+      "termKey": "Y2T1",
+      "title": "Second Year First Term",
+      "courses": {
+        "Ch 2129": {
+          "title": "Physical Chemistry II",
+          "credit": 3.0,
+          "contactHour": "3 hrs/wk",
+          "topics": [
+            "Chemical kinetics, monitoring the progress of a reaction, rate laws and rate constants, order and molecularity of a chemical reaction, rate laws for reaction first, second and third order reaction, temperature dependence on reaction rates, elementary reaction, uni-molecular reactions.",
+            "Adsorption and adsorption isotherm, catalysis.",
+            "Fundamentals of molecular spectroscopy, rotational and vibrational spectra of molecules. Phase equilibria, phase rule and its application.",
+            "Electrochemistry, electrolytes, Nernst’s theory of electrode potential, type of electrodes and electrode potentials, EMF measurement, polarization and over potentials, origin of EMF, free energy and EMF, electrical double layer, modes of mass transfer, lithium ion battery, transport number, pH value and its determination, electrode potentials and corrosion, electroplating and galvanizing.",
+            "Photochemistry, photochemical reactions and their effect, laws of photochemistry, quantum yield, photosensitized reaction, fluorescence and phosphorescence, luminescence."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "Ch 2130": {
+          "title": "Physical Chemistry II Lab",
+          "credit": 1.5,
+          "contactHour": "3 hrs/wk",
+          "topics": [],
+          "sessionalNote": "Experiments based on theory course Ch 2129.",
+          "references": []
+        },
+        "ChE 2103": {
+          "title": "Material and Energy Balance",
+          "credit": 3.0,
+          "contactHour": "3 hrs/wk",
+          "topics": [
+            "Review of Fundamentals of Chemical Engineering.",
+            "Material balances for reacting and non-reacting chemical and biochemical systems including recycle, bypass and purge.",
+            "Operations involving vaporization, humidification, psychrometry and phase diagrams. Introduction to Energy Balances; Energy balance involving change of phases; Enthalpy-composition diagrams; Effects of temperature and pressure on heats of formation and heats of reaction.",
+            "Material balances with chemical reactions and multiple components including use of algebraic techniques.",
+            "Material and Energy Balances on transient processes.",
+            "Case study: combined material and energy balances."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "ME 2129": {
+          "title": "Mechanics of Solid",
+          "credit": 3.0,
+          "contactHour": "3 hrs/wk",
+          "topics": [
+            "Engineering Mechanics: Basic concepts of Mechanics; Statics of particles and rigid bodies; Free body diagram; Moment of forces; Equilibrium of forces in two and three dimensions; Centroids of line and area; Moment of inertia of areas and masses;",
+            "Solid Mechanics: Stress and Strain: Introduction; Analysis of internal forces; Tensile, compressive, bearing and shearing stresses; Stresses in thin-walled pressure vessel; Stress-strain diagram; Axial deformations; Thermal stresses.",
+            "Statically Determinate Beams: Introduction; Different types of loading and supports; Shear force and bending moment diagrams. Stresses in beams: flexure formula, economic sections, shearing stresses in beams, general shear formula.",
+            "Torsion: Introduction; Torsion formula; Angle of twist; Shaft couplings and helical springs; Analysis and design of circular shaft."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "Math 2129": {
+          "title": "Vector Analysis, Matrices, and Laplace Transform",
+          "credit": 3.0,
+          "contactHour": "3 hrs/wk",
+          "topics": [
+            "Vector Analysis: Review of vector algebra, Triple product of vectors; Vector differentiation: Differentiation of vectors, Application to geometry and mechanics; Vector differential operator: gradient, divergence and curl of point functions; Vector integrations: line, surface and volume integrals; Integral theorems: Gauss's, Stoke's and Green's theorems and their applications.",
+            "Matrices: Review of matrix algebra; Different types of matrices with their properties; Elementary transformations: inverse by elementary transformation; rank; Normal and canonical form; linear dependence and independence of vectors and matrices; solution of linear equations by using matrix: Quadratic forms and matrix polynomials; Eigen values and Eigen vectors, Cayley - Hamilton theorem.",
+            "Laplace transform: Laplace transforms of elementary functions, Sufficient conditions for the existence of Laplace transforms, properties of Laplace transforms, inverse Laplace transforms and its properties, convolution theorem, Laplace transform of unit step, error and periodic functions; Application of Laplace transform to solve ordinary differential equations; Evaluation of improper integrals by Laplace transforms."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "Hum 2129": {
+          "title": "Sociology and Industrial environment",
+          "credit": 3.0,
+          "contactHour": "3 hrs/wk",
+          "topics": [
+            "Sociology: Introduction to Sociology and its impact on engineering, fundamental concept of society, community, association, group, mob, Social history and culture of Bangladesh Urbanization and industrialization in Bangladesh and their effects; urban ecology; social problem; population, poverty, beggary, immoral income, crime and juvenile delinquency.",
+            "Industrial Environment: Population and economic growth, industrialization, urbanization and energy-use; Causes of environmental pollution; Definition and characteristics of industrial and hazardous wastes, their generation rates and prevention; Introduction to I&H waste collection, transportation, treatment, monitoring, disposal and environmental impact. Applicable international and national regulations and initiatives; Introduction to industrial law; Inspectors and certifying Surgeons, Health and hygiene, Safety, Welfare, Working hours of Adults, Employment of young persons, Leave and Holidays with wages, Payment of wages Act, Shops and Establishment Act, Bangladesh Labour Act, 2006; EPZ Workers Association and Industrial Relations Act, 2004; Bangladesh Environment Conservation Act, 1995 and Rules, 1997; International Labour Organization (ILO)."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "ChE 2130": {
+          "title": "Computer Language and its Applications",
+          "credit": 1.5,
+          "contactHour": "3 hrs/wk",
+          "topics": [
+            "Advanced use of Spreadsheet Softwares: Data input, manipulation and representation; Advanced built-in and user-defined functions; Optimization, root-finding and non-linear regression using solver functions.",
+            "Octave: Introduction to Octave Fundamentals. Solution of chemical engineering problems."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "ME 2150": {
+          "title": "Engineering Graphics",
+          "credit": 1.5,
+          "contactHour": "3 hrs/wk",
+          "topics": [
+            "Working drawing of machine elements using AutoCAD and Solidworks."
+          ],
+          "sessionalNote": null,
+          "references": []
+        }
+      },
+      "optionalCourses": [],
+      "termNotes": []
+    },
+    "Y2T2": {
+      "termKey": "Y2T2",
+      "title": "Second Year Second Term",
+      "courses": {
+        "Ch 2229": {
+          "title": "Organic Chemistry",
+          "credit": 3.0,
+          "contactHour": "3 hrs/wk",
+          "topics": [
+            "Structure and bonding in organic molecule, bonding structural formula of organic molecules, atomic orbitals, molecular orbitals and bonding, hybridization and its consequences, the shape of molecules, geometric structures, resonance structures.",
+            "Characteristic reactions and reaction mechanism of organic compounds, types of organic reactions, fundamentals of organic reaction mechanism, attacking reagents and its role (electrophile and nucleophile), substitution, addition and elimination reactions.",
+            "Isomerism, classification of isomerism, optical isomerism, polarized light, DL and RS configuration, geometric isomerism, condition for geometric isomerism, determination of configuration of cis-trans isomerism.",
+            "Aromatic compounds and aromaticity, preparation, properties, reactions and industrial applications of benzene and its derivatives.",
+            "Carbohydrates, structure of monosaccharaides and disaccharides, applications.",
+            "Chemistry of polymerization, polymerization reaction, synthetic and natural polymers, electrical & electronic properties of polymer, plastic and rubber, conducting polymer."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "Ch 2230": {
+          "title": "Organic Chemistry Lab",
+          "credit": 1.5,
+          "contactHour": "3 hrs/wk",
+          "topics": [],
+          "sessionalNote": "Sessional based on theory course Ch 2229",
+          "references": []
+        },
+        "ChE 2205": {
+          "title": "Fluid Mechanics",
+          "credit": 3.0,
+          "contactHour": "3 hrs/wk",
+          "topics": [
+            "Fundamental concept of fluid as a continuum; Properties and classification of fluids; Stress and strain of fluids; Viscosity and its measurement.",
+            "Fluid statics: Concept of fluid static pressure; Absolute and gauge pressure; Pressure measurement by manometers and pressure gauges.",
+            "Fluid dynamics: Velocity and acceleration of fluid particles; Types of fluid flow; continuity equation; Euler’s equation; Bernoulli’s equation; Energy equation and its applications; Hydraulic grade line and energy grade line.",
+            "Measurements of fluid flow: Measurement of fluid velocity by pitot tube; Flow measurement by venturimeter, orifice meter and rotameter.",
+            "Dimensional analysis: Fundamental and derived units; Dimensional homogeneity; Buckingham’s PI theorem; Application of it in fluid flow problems.",
+            "Flow through pipes: Viscous flow in pipe; Laws of fluid friction; Darcy-Weisbach equation; Hagen–Poiseuille law; Losses in pipe flow.",
+            "Fluid machineries: Definition, classification, working principle and application of Reciprocating pump and Centrifugal pump."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "ChE 2206": {
+          "title": "Fluid Mechanics Lab",
+          "credit": 0.75,
+          "contactHour": "3/2 hrs/wk",
+          "topics": [],
+          "sessionalNote": "Experiments based on theory course ChE 2205.",
+          "references": []
+        },
+        "EE 2229": {
+          "title": "Electronics",
+          "credit": 3.0,
+          "contactHour": "3 hrs/wk",
+          "topics": [
+            "P-N junction, p-n junction diode, Diode circuits: Half wave and full wave rectifiers, rectifiers with filter capacitor, characteristics of a Zener diode, Zener shunt regulator, clamping and clipping circuits. Bipolar Junction Transistor (BJT) as a circuit element: current components, BJT characteristics and regions of operation, BJT as an amplifier.",
+            "Metal Oxide Semiconductor Field Effect Transistor (MOSFET) as circuit element: structure and physical operation of an enhancement MOSFET.",
+            "Description of differential amplifiers, small-signal operation, differential and common mode gains, RC coupled mid-band frequency amplifier. Operational amplifiers (Op-Amp): Properties of ideal Op-Amps, non-inverting and inverting amplifiers, inverting integrators, differentiator, weighted summer and other applications of Op-Amp circuits, effects of finite open loop gain and bandwidth on circuit performance, logic signal operation of Op-Amp.",
+            "Analysis and synthesis of digital logic circuits: Basic logic functions, Boolean algebra, combinational logic design, minimization of combinational logic. Fuel Cells, Solar Panels."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "EE 2230": {
+          "title": "Electronics Lab",
+          "credit": 1.5,
+          "contactHour": "3 hrs/wk",
+          "topics": [],
+          "sessionalNote": "Experiments based on theory course EE 2229.",
+          "references": []
+        },
+        "Hum 2229": {
+          "title": "Accounting and Economics",
+          "credit": 3.0,
+          "contactHour": "3 hrs/wk",
+          "topics": [
+            "Economics: Definition of Economics; principle of economics.",
+            "Micro Economics: Theory of Demand and supply and their elasticity's; price determination, nature of economic theory, applicability of economic theory to the problems of developing countries; marginal analysis; optimization; market; production, production function, types of productivity; Internal and external economics and diseconomics.",
+            "Macro Economics: Savings, investment, national income analysis; inflation; causes and analysis of project appraisal; NPV, IRR and their application; cost benefit analysis. Monetary policy, Fiscal policy and trade policy with reference to Bangladesh; Planning in Bangladesh.",
+            "Accounting: Introduction: images of Accounting. Users of Accounting Information, Generally accepted accounting principle (GAAP), relationship of Accounting with engineering education. Recording process: Business transactions, steps in the recording process, accounting equation, account, rules of debit and credit, Journal, Ledger, trial balance and adjusting entries. Preparation of financial statement: Single or multiple step income statements, owner's equity statement, classified balance sheet, cash flow statement. Cost Accounting: Concept of cost, classification of cost, statement of cost, material cost, labour cost, wages and salaries, operating and service costing."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "Math 2229": {
+          "title": "Numerical Methods and Statistics",
+          "credit": 3.0,
+          "contactHour": "3 hrs/wk",
+          "topics": [
+            "Numerical Methods: Numerical integrations: General quadrature formula for equidistant ordinates; Trapezoidal rule, Simson's rules and Weddle's rule, Calculation of errors, Relative study of the rules; Gauss's quadrature formula; Legendre polynomials; Newton's Cote's formula; Principle of least squares; Curve fitting; Solution of algebraic and transcendental equations by graphical method; Regula-Falsi method; Newton-Raphson method, Geometrical significance, Convergence of iteration and Newton-Raphson methods; Solution of simultaneous equations by Newton-Raphson and iteration methods; Solution of first order ordinary differential equations by Taylor’s, Picard’s, Euler's and Runge-Kutta methods; Equation developing, modeling and solving by using various technique.",
+            "Statistics: Frequency and Frequency Distribution and its Graphical Representation; Measures of Central Tendencies; Measure of Dispersions; Elementary Probability Theory; Probability Distributions and Expectations; Discontinuous Probability Distribution (Binomial, Poisson and Negative Binomial Distributions); Continuous Probability Distributions (Normal and Exponential Distribution); Regression and Correlation analysis; Hypothesis testing."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "Math 2230": {
+          "title": "Practices on Numerical Methods",
+          "credit": 0.75,
+          "contactHour": "3/2 hrs/wk",
+          "topics": [],
+          "sessionalNote": "Simulation based on theory course Math 2229.",
+          "references": []
+        },
+        "ChE 2204": {
+          "title": "Practices on ChE 1101 and ChE 2103",
+          "credit": 1.5,
+          "contactHour": "3 hrs/wk",
+          "topics": [],
+          "sessionalNote": null,
+          "references": []
+        }
+      },
+      "optionalCourses": [],
+      "termNotes": []
+    },
+    "Y3T1": {
+      "termKey": "Y3T1",
+      "title": "Third Year First Term",
+      "courses": {
+        "ChE 3100": {
+          "title": "Technical writing and Seminar",
+          "credit": 0.75,
+          "contactHour": "3/2 hrs/week",
+          "topics": [
+            "Introduction to writing on scientific topic; guidelines to write thesis/project, journal, conference and term paper; ethics of paper writing and plagiarism; scientific paper writing and presentation of seminars related to chemical engineering problem."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "ChE 3107": {
+          "title": "Chemical Engineering Thermodynamics",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Solution thermodynamics: Relationships among the thermodynamic properties for systems of variable composition; partial molar properties; fugacity and fugacity coefficients; fugacities in ideal solutions; property changes of mixing; activity and activity coefficients; heat effects of mixing processes.",
+            "Phase equilibria: Nature and criteria of equilibrium; phase rule and Duhem’s theorem; vapor-liquid equilibrium calculations for miscible systems; Gibbs-Duhem equation.",
+            "Chemical reaction equilibria: Reaction coordinate; equilibrium criteria for chemical reactions; equilibrium constant; effect of temperature on equilibrium constants; phase rule and Duhem’s theorem for reacting systems.",
+            "Theories and applications of flow processes: conservation of mass and energy; mechanical energy balances; maximum velocity in pipe flow; metering and throttling processes; nozzles; compressors; ejectors.",
+            "Refrigeration and liquefaction: Carnot refrigeration cycle; air-refrigeration cycle; vapor-compression cycles; comparison of refrigeration cycles; absorption refrigeration, heat pump; liquefaction processes."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "ChE 3108": {
+          "title": "Chemical Engineering Thermodynamics Lab",
+          "credit": 0.75,
+          "contactHour": "3/2 hrs/week",
+          "topics": [],
+          "sessionalNote": "Experiments based on the theory of ChE 3107.",
+          "references": []
+        },
+        "ChE 3109": {
+          "title": "Heat Transfer",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Introduction: Basics of heat transfer; thermodynamics and heat transfer; application areas of heat transfer.",
+            "Conduction: Mechanism of thermal conduction in solids, liquids and gases; other thermal properties; steady state heat conduction in one dimension; transient heat conduction.",
+            "Convection: Approximate solutions of convection heat transfer; use of dimensionless correlations for forced and free convection.",
+            "Radiation: Laws of radiation; black body radiation; exchange of energy between two surfaces.",
+            "Heat transfer during phase change: Boiling and condensation.",
+            "Heat exchangers: Classification; parallel and counter flow heat exchangers; log mean temperature difference (LMTD) in various flow arrangements; effectiveness; thermal and mechanical design of heat exchangers."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "ChE 3110": {
+          "title": "Heat Transfer Lab",
+          "credit": 0.75,
+          "contactHour": "3/2 hrs/week",
+          "topics": [],
+          "sessionalNote": "Experiments based on the theory of ChE 3109.",
+          "references": []
+        },
+        "ChE 3111": {
+          "title": "Mass Transfer I",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Basics: Introduction to mass transfer processes.Vapor liquid equilibria; Equilibrium stage concept;",
+            "Binary Distillation: Flash distillation; column distillation; simplified methods for stage calculations; batch distillation; staged column design.",
+            "Gas-liquid absorption: Analytical and graphical methods for stage calculations.",
+            "Solvent Extraction: Liquid-liquid extraction in single and multiple contact extractor with completely immiscible and partially miscible solvent; selection of solvents; use of triangular diagram for stage calculations.",
+            "Other separation processes: Batch and continuous leaching and washing of solids."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "ChE 3112": {
+          "title": "Mass Transfer I Lab",
+          "credit": 0.75,
+          "contactHour": "3/2 hrs/week",
+          "topics": [],
+          "sessionalNote": "Experiments based on the theory of ChE 3111.",
+          "references": []
+        },
+        "ChE 3113": {
+          "title": "Environmental Science",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Water pollution: Sources, causes and effects; wastewater characteristics.",
+            "Wastewater treatment: Primary, secondary and tertiary treatment; aerobic and anaerobic treatment; sludge treatment and disposal; nitrogen and phosphorous removal; eutrophication.",
+            "Air pollution: Sources, causes and effects; types of pollutants; air pollution meteorology; atmospheric dispersion and modeling; air pollution abatement techniques.",
+            "Noise pollution: The concept of sound; ranges of sound level; health effects of noise; noise control.",
+            "Environmental laws and regulations: National and global environmental laws (ISO 14000), regulations and conventions, environmental quality standards."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "ChE 3117": {
+          "title": "Unit Operation",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Mechanical separation: Techniques of separation; selection of basic separator type; gravity settlers; impingement separations; centrifugal separators; fabric filtration; electrostatic precipitation and scrubbers.",
+            "Size reduction: Types, purpose and mechanism of size reduction; energy utilization for size reduction; factors affecting size reduction; size reduction equipment.",
+            "Solid handling machinery: Selection criteria; belt conveyors; screw conveyors/elevators; bucket elevators; chain conveyors/elevators.",
+            "Pressure relieving devices: Types; material of construction; installation.",
+            "Mixing and agitation: Types of impeller; flow pattern; shape factor; power consumption.",
+            "Ejectors: types; material of construction.",
+            "Evaporators: Basic concepts and types; performance of tubular evaporators; auxiliary equipment; design and maintenance of evaporators."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "ChE 3118": {
+          "title": "Unit Operation Lab",
+          "credit": 1.5,
+          "contactHour": "3 hrs/week",
+          "topics": [],
+          "sessionalNote": "Experiments based on the theory of ChE 3117.",
+          "references": []
+        }
+      },
+      "optionalCourses": [],
+      "termNotes": []
+    },
+    "Y3T2": {
+      "termKey": "Y3T2",
+      "title": "Third Year Second Term",
+      "courses": {
+        "ChE 3211": {
+          "title": "Mass Transfer II",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Diffusion: Diffusion of gases and liquids; diffusion through stagnant layer and equimolar counter diffusion; mass transfer between gas and liquid phases; two film and other theories.",
+            "Mass Transfer in Packed Column: HTU and NTU concepts; mass transfer coefficients; Continuous contact mass transfer; packed column; gas absorption in packed column.",
+            "Cooling Tower: Humidification and dehumidification operations; design of cooling towers.",
+            "Membrane Separation Process: Gas separation, liquid separation, dialysis, pervaporation, reverse osmosis.",
+            "Adsorption: Principles; industrial application with special emphasis on ion exchange and pressure swing adsorption.",
+            "Multicomponent distillation: Bubble and dew point calculations for multicomponent systems; simplified methods for calculation of stages."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "ChE 3212": {
+          "title": "Mass Transfer II Lab",
+          "credit": 0.75,
+          "contactHour": "3/2 hrs/week",
+          "topics": [],
+          "sessionalNote": "Experiments based on the theory of ChE 3211.",
+          "references": []
+        },
+        "ChE 3215": {
+          "title": "Particle Technology",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Properties of particulate solids: Particle size and shape: mean diameters; screen analysis; analytical size distribution function; size distribution of feed and products of crystallizers and size reduction equipment.",
+            "Pressure in masses of particles: Bulk properties of particulates; Mohr stress diagram; storage of solids; bin design.",
+            "Filtration: Filtration operations and basic equations for incompressible and compressible cakes; deep bed, pressure, vacuum and centrifugal filtration; filter media; filter aids; cake washing and dewatering; optimum design of semi-continuous filtration equipment.",
+            "Particulate Solids Flow and Separation: Flow past a sphere; drag coefficient; terminal setting velocity; pressure drop in packed beds; fluidization and sedimentation; slurry transport and pneumatic conveying; fluid-solid separation based on momentum transport; classification, pretreatment of solid-liquid mixture, theory of coagulation, flocculation and flotation; gravity thickening; crystallization."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "ChE 3216": {
+          "title": "Particle Technology Lab",
+          "credit": 0.75,
+          "contactHour": "3/2 hrs/week",
+          "topics": [],
+          "sessionalNote": "Experiments based on the theory of ChE 3215.",
+          "references": []
+        },
+        "ChE 3219": {
+          "title": "Corrosion Engineering",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Introduction: Corrosion and its mechanism; different forms of corrosion; corrosion of iron and steel.",
+            "Corrosion principles: Thermodynamics of corrosion; electrochemical reactions, passivity and polarization; environmental effects; metallurgical and other aspects.",
+            "Corrosion under various conditions: Atmospheric corrosion; underground corrosion; microbial induced corrosion (MIC); oxidation and high temperature corrosion etc.",
+            "Corrosion protection and prevention: Cathodic protection; anodic protection; use of coatings for corrosion prevention; alloying for better corrosion resistance; case study of material selection; corrosion monitoring and analysis."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "ChE 3220": {
+          "title": "Corrosion Engineering Lab",
+          "credit": 0.75,
+          "contactHour": "3/2 hrs/week",
+          "topics": [],
+          "sessionalNote": "Experiments based on the theory of ChE 3219.",
+          "references": []
+        },
+        "ChE 3221": {
+          "title": "Transport Phenomena",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Momentum transport: Derivation of equations of continuity and motion (Navier-Stoke’s equation); application in laminar and turbulent flow problems.",
+            "Energy transport: Derivation of energy equation; application to heat transfer problems involving conduction, forced and free convection; application in laminar and turbulent flow problems.",
+            "Mass transport: Derivation of species conservation equations for binary and multicomponent mixtures; application in laminar and turbulent flow problems.",
+            "Correlations and analogies: Use of correlations to solve mass transfer problems; analogies used for mass transfer, heat transfer and friction factor."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "ChE 3230": {
+          "title": "Computational Technique for Chemical Engineers",
+          "credit": 1.5,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Design, modelling and optimization of various components of chemical engineering; creation of dynamic block diagrams of chemical process; design systems with multi-domain models; data validation and reconciliation."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "ChE 3233": {
+          "title": "Process Safety Management",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Introduction to process safety: Process safety and its importance; applications of engineering principles to process safety; Industrial hygiene; personal protective equipment; physical hazard; fire and explosion hazard; toxic chemical hazard; electrical hazard; accident statistics; safety audit; emergency preparedness plan; International safety management standards.",
+            "Hazard analysis and risk assessment: Hazards identification, mitigation, and prevention, with special emphasis on the chemical process industries; What-If analysis; HAZOP; Fault tree analysis; Event tree analysis; Bow-Tie diagram; risk assessment techniques; condition monitoring and preventive maintenance; previous safety incidents, sample case study."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "ChE 3240": {
+          "title": "Process Simulation Lab",
+          "credit": 1.5,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Solving core calculations of chemical engineering, including those concerned with mass balance, energy balance, vapor-liquid equilibrium, heat transfer, mass transfer, chemical kinetics and distillation. Performing steady-state and dynamic simulation, process design, performance modelling and optimization of industry based real life chemical engineering problem."
+          ],
+          "sessionalNote": null,
+          "references": []
+        }
+      },
+      "optionalCourses": [],
+      "termNotes": []
+    },
+    "Y4T1": {
+      "termKey": "Y4T1",
+      "title": "Fourth Year First Term",
+      "courses": {
+        "ChE 4000": {
+          "title": "Project & Thesis",
+          "credit": 1.5,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Department will assign a supervisor for each student. The topic of the project & thesis will be selected by the students based on their interest in the relevant field of Chemical Engineering in consultation with their supervisor. The topic should provide an opportunity for the student to develop initiative, creative ability and engineering judgment. At the end of the term, the student is expected to complete the preliminary literature survey and select the topic for study. Each student/group has to present a seminar on the progress of their work. A brief report needs to be submitted during the presentation of the project & thesis."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "ChE 4100": {
+          "title": "Process and Plant Design I",
+          "credit": 1.5,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "The students will design a full chemical process plant under supervision of a teacher. Process and Plant Design I will cover project definition, sources of raw materials and specifications, location of plant site and geographical data, selection of the processes, process description, environmental impacts, technical specifications, development of process flowsheet, material and energy balance. The evaluation of the student will be completed in this term."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "ChE 4123": {
+          "title": "Process Control",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Basic concepts of process control: Objectives of process control; Design aspects; Hardware elements. Modeling for control purpose: Development of mathematical models; Review of Laplace transform; Input-output model, Transfer functions and State-space models; Linearization of nonlinear models; Empirical models from process data.",
+            "Dynamic behavior of chemical processes: Operability of process; First, second, and higher-order processes; Time Delay; Interactive and non-interactive systems in series. Multiple-Input, Multiple-Output (MIMO) Processes.",
+            "Feedback control systems: Concept, feedback controllers and final control elements; Closed-loop responses; Concept of stability; Routh Stability criterion; Root locus diagrams; Controller design, tuning, and troubleshooting.",
+            "Frequency response analysis: Bode diagrams; Nyquist plots; Bode stability criteria; Control system design.",
+            "Enhanced control systems: Cascade, selective, feedforward, and ratio controls. Preliminaries of distributed control system (DCS) and programmable logic controller (PLC).",
+            "Instrumentation: Basic measurement devices and working principles for level, flow, pressure and temperature measurement devices; control valves."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "ChE 4124": {
+          "title": "Process Control Lab",
+          "credit": 0.75,
+          "contactHour": "3/2 hrs/week",
+          "topics": [],
+          "sessionalNote": "Experiments based on the theory of ChE 4123",
+          "references": []
+        },
+        "ChE 4125": {
+          "title": "Process Design",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Design Consideration: Design basis; Process flow diagram; Process flow sheet development; Piping and instruments diagram.",
+            "Codes and Standards: Design codes; Codes and standards; Heat exchanger, pressure vessels and pipeline codes.",
+            "Material Selection and Fabrication: Material selection and different fabrication techniques.",
+            "Equipment Design: Heat transfer equipment: Reboiler design, condenser design; Separation Equipment: Distillation and absorption column design.",
+            "Valve: Types of valves, control valve construction, control valve sizing, valve characteristics.",
+            "Pipe Line: Determination of pipe size, pipeline thickness calculation, vibration prevention and control, insulation of pipeline, types of fittings, steam traps and drain in piping, types of supports, gasket, flange and their selection criteria.",
+            "Preliminary estimation of costs: Sizing and costing of equipment; Estimation of investment, capital, operating and product costs."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "ChE 4127": {
+          "title": "Reaction Engineering",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Thermodynamics of reaction: Review of relevant thermodynamic concepts: equilibrium constant; Effect of temperature and pressure; Determination of equilibrium composition.",
+            "Chemical kinetics: Mathematical characterization; Interpretation of batch reactor data; Reaction mechanisms and molecular theories of chemical kinetics. Reversible, parallel, series, and complex multiple reactions systems.",
+            "Ideal reactors for homogeneous reactions: Ideal reactor models; Design for single reactions; Recycle reactors; Design for multiple reactions; Temperature and pressure effects on reactor sizing; Choosing the reactor type.",
+            "Heterogeneous catalysis: Adsorption isotherms; Preparation and characterization; Poisoning and deactivation; Kinetics of heterogeneous reactions.",
+            "Ideal reactors for heterogeneous reactions: Diffusion in heterogeneous reactions; Packed and fluidized bed reactors; Trickle bed and slurry reactors."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "ChE 4128": {
+          "title": "Reaction Engineering Lab",
+          "credit": 0.75,
+          "contactHour": "3/2 hrs/week",
+          "topics": [],
+          "sessionalNote": "Experiments based on the theory of ChE 4127",
+          "references": []
+        },
+        "ChE 4150": {
+          "title": "Industrial Training",
+          "credit": 0.0,
+          "contactHour": null,
+          "topics": [
+            "Industrial training will be held for 2 weeks for the students in different process industries of Bangladesh to get hands-on working experiences. Time of the industrial training will be decided by the department. Reports must be submitted by the groups for their visit including process description, PFD, PBD, process parameter, control and safety features."
+          ],
+          "sessionalNote": null,
+          "references": []
+        }
+      },
+      "optionalCourses": [
+        {
+          "courseCode": "ChE 4011",
+          "title": "Food Preservation and Processing",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Food properties: Classification of foods; Composition and nutritive value of protein, carbohydrate, vitamins, minerals, lipids and pectic substances; Natural pigment; Food additives",
+            "Food spoilage: Chemical, microbial, and physical spoilages; Food poisoning.",
+            "Fundamentals of microbiology: Microbes in food and fermentation industries; Physiology and genetics of microbes; Growth and destruction of microorganisms; Enzymes.",
+            "Food preservation: Principles; Physical, biological and chemical processing; Effects of cooking and other processing on the nutritive value.",
+            "Microorganism in natural products: Sources, control method and prevention; Energy metabolism of aerobic and anaerobic microbes; Nitrogen fixation.",
+            "Food packaging: Basics of food packaging requirements; Importance of food packaging; Different types of packaging materials; Factors affecting the choice of packaging materials."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        {
+          "courseCode": "ChE 4013",
+          "title": "Polymers and Petrochemicals",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Introduction: Introduction to polymers and petrochemicals; Prospects of polymer and petrochemical industries in Bangladesh.",
+            "Polymers: Fundamentals of different types of polymeric materials; Properties of polymers; Classification of polymeric materials; Nomenclature for polymers; Molecular weight and its measurement; Polymerization mechanisms and methods; Reactor types; Manufacture and technological properties of PE, PP, PVC, PVA, PTFE, nylons, polyesters, and synthetic rubbers.",
+            "Composition of petroleum: Laboratory tests; Refinery products; Characterization of crude oil.",
+            "Petrochemicals: Kinetics and reaction mechanism; Manufacturing technologies and uses of ammonia; methanol; oxo-chemicals, acetylene, vinyl chloride, synthetic detergents, olefins, dienes, waxes, and aromatics.",
+            "Modern industrial problems: Energy conservation in petrochemical industries; Pollution control in petrochemical industries; New trends in petrochemical industries; Planning and commissioning of a petrochemicals complex."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        {
+          "courseCode": "ChE 4017",
+          "title": "Cement, Fertilizer, Pulp and Paper Technology",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Cement: Overview of cement industries in Bangladesh, Raw materials, Manufacturing process; Properties of cement.",
+            "Fertilizer: Role of fertilizers in agriculture; Fertilizer market world view; Fertilizer industries in Bangladesh; Types; Raw materials; manufacturing processes; design considerations.",
+            "Pulp and Paper: Structural and physical properties of pulp and paper; World market demand; Pulp and paper industries in Bangladesh. Chemistry; digestion and chemical recovery for kraft process; Process equipment; Advanced uses of black liquor; Bleaching, beating, and sizing in the papermaking process; Paper machine; Environmental problems associated with pulp and paper industries."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        {
+          "courseCode": "ChE 4023",
+          "title": "Mathematical Models in Chemical Engineering",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Developing models: Fundamentals of model; Classification of mathematical models; Model formulation and Fundamental laws.",
+            "Analyses of models and strategies for solving steady-state processes: Direct and iterative methods for linear models; linearization-based solution strategies for nonlinear models.",
+            "Analyses of models and strategies for solving dynamic processes: Numerical tools for initial value ODE problems of CSTR and other reactor models; Stability; Stiffness; Scaling; Interpolation and extrapolation.",
+            "Fundamental characteristics of optimization: Concepts of function continuity, convexity, and concavity.",
+            "Numerical solution methods: Newton and quasi-Newton; Finite difference approximations; Polynomial approximation; Termination criteria.",
+            "Linear programming: Geometry of linear programs; Simplex algorithm; Barrier method; Sensitivity analysis. Nonlinear and mixed integer programming, and other methods. Selected advanced optimization methods."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        {
+          "courseCode": "ChE 4027",
+          "title": "Biochemistry",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Introduction: Molecular logic of living system; Cells and biomolecules; Water, acids and buffer solution.",
+            "Proteins: Amino acid sequences and structures; Classification of proteins.",
+            "Enzymes: Mechanism; Kinetics and inhibition.",
+            "Nucleic acid: Nucleotide; DNA and RNA structures; DNA replication, transcription and translation; Genetic code and genetic engineering.",
+            "Bio macromolecules: Sugar; Polysaccharide; Lipid; Vitamins; Coenzymes; Biological membrane; Digestion of polysaccharide, proteins and lipid.",
+            "Metabolism: Glycolysis and oxidative phosphorylation, Biological high-energy compound, Oxidation of fatty acid and oxidative degradation of amino acid, Photosynthetic phosphorylation; Interrelationship of metabolism, Biochemical Characterization, Synthetic biology."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        {
+          "courseCode": "ChE 4071",
+          "title": "Biochemical Engineering I",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Microorganism: Nature; Importance and Classification of Microorganism; Industrially important microorganisms; Future perspective of microorganism.",
+            "Biomolecules: The hierarchy of cellular organization; Metabolic stoichiometry.",
+            "Molecular genetics and control: Brief introduction to molecular genetics; Alteration of cellular DNA; Commercial applications of microbial genetics and mutant populations; Recombinant DNA technology; Growth and reproduction of a single cell.",
+            "Kinetics of enzyme reaction: Michaelis-Menten equation; Different factors influencing enzyme activity; Enzyme deactivation; Enzyme reactions in heterogeneous systems.",
+            "Immobilized enzyme technology: Enzyme immobilization; Industrial processes; Medical and analytical applications of immobilized enzymes; Utilization and regeneration of cofactors.",
+            "Immobilized enzyme kinetics: Effects of external mass transfer resistance; Analysis of intraparticle diffusion and reaction; Simultaneous film and intraparticle mass transfer resistances; Effects of inhibitors, temperature and pH on immobilized enzyme catalytic activity and deactivation.",
+            "Batch fermentation: Biomass yield and formation; Rates of reaction; Limiting substrate concentration; Monod equation.",
+            "Food and environment: Introduction to food microbiology; food preservation technique and Environmental biotechnology."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        {
+          "courseCode": "ChE 4073",
+          "title": "Biochemical Engineering II",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Biological reactor: Design and analysis of fed-batch reactors; Enzyme catalyzed reactions in CSTRs; CSTR reactors with recycle and wall growth; The ideal plug-flow reactor; Reactor dynamic models and stability; Reactor with non-ideal mixing; Sterilization reactor; Packed bed bioreactor; Bubble column bioreactor; Fluidized bed reactor; Trickle bed reactor.",
+            "Transport in bioprocess system: Basic mass transfer concepts; Rates of metabolic oxygen utilization; Determination of oxygen transfer rates; Mass transfer coefficients for bubbles and bubble swarms; Estimation of dispersed phase interfacial area and holdup.",
+            "Microbial culture for bio product development: Cell separation technique and recovery of useful product; Analysis of multiple interacting microbial population; Mixed microbial population in application and natural systems.",
+            "Biosensors: Classes and components; Transducing mechanism; Sensitivity and selectivity; Nano biosensors; Instrumentation and control.",
+            "Cell response: Cell signaling and quantification of cellular response; Basic cloning technology."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        {
+          "courseCode": "ChE 4081",
+          "title": "Environmental Engineering Applications",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Waste management: Physical and chemical characterization of wastes; Resource conservation; Treatment and disposal methods; Sanitary landfills and composting, Medical/Infectious waste; E-waste; Waste to energy.",
+            "Radioactive material management: Radioactive and hazardous material sources and management.",
+            "Environmental Impact Assessment (EIA): Legal and Administrative framework; EIA process; EIA approach and methodology; Environmental and Social impacts; Evaluation of hazards and risks; Economic Assessment of EIA; Environmental Management & Monitoring Plan.",
+            "Climate change: Adaptation and Mitigation Strategies; Conferences of Parties (COP); Bangladesh’s action to mitigate climate change.",
+            "Modern technologies: Green hydrogen fuel; Drip irrigation; Solar energy."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        {
+          "courseCode": "ChE 4083",
+          "title": "Industrial Pollution Control",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Industrial pollutants: Sources of pollutants; Environmental Standards and measurement technologies.",
+            "Control of pollution: Control and management of sources of air and water pollution; pollution control technologies.",
+            "Pollution control of industries: Fertilizer and Pesticides industries; Textile industries; Pulp and Paper industries; Cement industries; Pharmaceutical industries; Iron and steel industries; Tannery and leather industries.",
+            "Pollution control of power sector: Particulate matter; Flue gas desulphurization; Electrostatic precipitator.",
+            "Modern technologies: Carbon capture; Electro Catalytic Oxidation (ECO); Renewable energy sources and prospects in Bangladesh."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        {
+          "courseCode": "ChE 4091",
+          "title": "Natural Gas Engineering",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Natural gas properties: Compressibility; Gas density; Formation volume factor; Viscosity; Pseudo critical properties.",
+            "Phase behavior of hydrocarbon systems: Phase Behavior of Pure and Multicomponent System; Classification and phase behavior of Reservoir Fluids; Retrograde condensation; Gas cycling,",
+            "Gas well deliverability: Diffusivity Equation for Gas Flow; Empirical Deliverability Equation; Stabilization Time; Analysis of Gas Well Deliverability Test.",
+            "Analysis of water hydrocarbon system: Gas-water system; Dew point and dew point depression; Gas hydrates; Absorption dehydration.",
+            "Unconventional reservoirs: Shale Gas; Coal bed methane.",
+            "Gas production system: Different components of gas production system; Production pressure profile.",
+            "Separation: Classification of Separators and their application; Separator design.",
+            "Sweetening: Classification; Solid Bed Sweetening Process; Molecular Sieve Process; Physical Absorption Process; Chemical Absorption Process; Sulfur Recovery.",
+            "LNG and NGL: Liquefaction, storage and regasification of LNG; Recovery and Separation of NGL; Methods of Fractionation.",
+            "Gas gathering and transportation: Gas gathering system; Series, parallel and looped pipeline flow and pressure drop calculation.",
+            "Natural gas industry: Natural gas industry in Bangladesh; Model Gas Purchasing Agreement."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        {
+          "courseCode": "ChE 4093",
+          "title": "Petroleum Reservoir Engineering",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Introduction: Overview; Various roles in the field of petroleum; Roles of reservoir engineering the field of petroleum.",
+            "Origin of petroleum: Definition; Petroleum Geology; Theories of origin; Types of rocks; Rock Cycle; Petroleum generation, migration and accumulation; Various types of geologic structures - warps, folds, joints, faults, unconformities and traps; Types of reservoir rocks.",
+            "Properties of reservoir rocks: Permeability: Definition; Unit and dimension; Darcy law and its application; Up scaling; Measurement methods; Use of relative and effective permeability; Porosity: Types and definitions; Controlling parameters; Measurement methods; Up scaling; compressibility; Saturation: Types and definitions; Determination and measurement methods; Up scaling; Capillary Pressure: Surface kinetics; Wettability; Distribution; Hysteresis.",
+            "Well logging and drilling: Well logging; Different well logging techniques and logging interpretation; Well drilling; Different methods of drilling; safety procedures of drilling; Environmental wastes from gas drilling; Treatment and disposal methods.",
+            "Drive mechanism: Definition; Rock and liquid expansion drive; Depletion drive; Gas cap drive; Gravity drainage; Water drive; Combination drive.",
+            "Reservoir analysis: Material balance techniques, Gas reservoir analysis; Oil reservoir analysis; Reserve estimation.",
+            "Decline curve analysis: Objective of decline curve analysis; Constant percentage decline; Harmonic decline; hyperbolic decline."
+          ],
+          "sessionalNote": null,
+          "references": []
+        }
+      ],
+      "termNotes": [
+        "Optional courses listed under 'Optional Courses - General (Optional I and III)' and 'Specialization (Optional II and IV)' are included as optional choices in both Y4T1 and Y4T2. Exact term assignment may vary."
+      ]
+    },
+    "Y4T2": {
+      "termKey": "Y4T2",
+      "title": "Fourth Year Second Term",
+      "courses": {
+        "ChE 4000": {
+          "title": "Project & Thesis",
+          "credit": 3.0,
+          "contactHour": "6 hrs/week",
+          "topics": [
+            "Students will continue their research work from the previous term. They should consult closely with their supervisor throughout the completion of the research work. Normally, students will submit drafts of individual chapters to the supervisor as they are completed. The department will declare a specific deadline for project & thesis submission and oral presentation. Students will submit their report through their supervisor. They will also present their project & thesis in an oral examination along with a complete demonstration of the project & thesis."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "ChE 4200": {
+          "title": "Process and Plant Design II",
+          "credit": 3.0,
+          "contactHour": "6 hrs/week",
+          "topics": [
+            "The work of Process and Plant Design I will be continued in this term. Students have to design major process equipment including instrumentation and materials of constructions, codes and standards for the equipment, utilities, process simulation, economic evaluation of the plant and development of a financially optimized model, sensitivity analysis, design of plant layout, process licensors and vendor selection, and hazard analysis of the plant."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "ChE 4225": {
+          "title": "Project Management and Professional Ethics",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Introduction to project: Definition, various facts of the problem of managing projects, technical specification of projects, life cycle concepts, identification of decision areas, project evaluation criteria.",
+            "Network models for project planning: Concepts in network modeling; development of project networks, CPM and PERT models, identification of critical paths.",
+            "Managing project: Project crashing; Resource leveling; Schedule slippage.",
+            "Techniques of project monitoring: PROMPT, PERTIT and URT; Real- time project monitoring; role of computers in project monitoring and control.",
+            "Materials planning for projects: Models of inventory management, materials requirement planning, inventory control, materials procurement, contract negotiation, vendors’ selection, Inspection and performance testing of materials.",
+            "Organization for effective project management: Matrix structure and its implications. ISO 14000, Environment management systems (EMS), Application of Environmental impact assessment (EIA) for projects.",
+            "Risk assessment of projects: Identify, categorize, prioritize, and mitigate how to avoid these risks ahead of time.",
+            "Professional ethics: Ethics and responsibilities of engineers; ethical leadership in engineering and society; Conflicts of interest; Ethics in workplace, Ethics in digital era, Ethics in research and development; Privacy and confidential issues."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "ChE 4229": {
+          "title": "Economics and Management of Chemical Process Industries",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Engineering economics and chemical process industries.",
+            "Investment cost and interest calculation: Costs classification; types of interest; cash flow, discounted cash flow, concept of present worth, annuities, concept of equivalence, determining MARR, PW, FW, AW, IRR, ERR and payback period; Depreciation.",
+            "Comparing alternatives: Basic concepts for comparing alternatives: the study period, alternatives having equal useful lives, alternatives having different useful lives, Capitalized worth method; Mutually exclusive combinations of projects; Dealing with uncertainty nature of risk, uncertainty and sensitivity; Sources of uncertainty; Sensitivity analysis.",
+            "Evaluating projects with B/C ratio method: Differences between private and public projects; Self-liquidating and multipurpose projects; Difficulties in evaluating public sector projects; Interest rate for public projects; Evaluating independent projects and mutually exclusive alternatives by B/C ratios, value chain concept, element of input-output analysis.",
+            "Capital budgeting: Capital budgeting process; capital rationing and the profitability index.",
+            "Taxes and insurance: Types of taxes, insurances and insurance requirements for manufacturing concern.",
+            "Functions of management in CPI: Decision-making: organizing, planning, directing, communicating and controlling. Quantitative techniques in decision-making; Decision making under risk and uncertainty."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "ChE 4231": {
+          "title": "Refinery Engineering",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Introduction: Origin, formation and composition of petroleum; Evaluation of crude oils; Refinery products and their uses; Laboratory analysis of petroleum products.",
+            "Fractionation of petroleum: Processes such as fractional distillation, cracking, reforming, catalytic reforming; Conversion of petroleum gasses into motor fuel, aviation fuel, lubricating oils and petroleum waxes; Separation of azeotropic mixture.",
+            "Refinery flow sheeting: Equipment design; Layout; Safety measures and environmental aspects.",
+            "Process technology: Process technologies of oil, condensate and sugar refineries in Bangladesh; Sources of supply and demand."
+          ],
+          "sessionalNote": null,
+          "references": []
+        }
+      },
+      "optionalCourses": [
+        {
+          "courseCode": "ChE 4011",
+          "title": "Food Preservation and Processing",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Food properties: Classification of foods; Composition and nutritive value of protein, carbohydrate, vitamins, minerals, lipids and pectic substances; Natural pigment; Food additives",
+            "Food spoilage: Chemical, microbial, and physical spoilages; Food poisoning.",
+            "Fundamentals of microbiology: Microbes in food and fermentation industries; Physiology and genetics of microbes; Growth and destruction of microorganisms; Enzymes.",
+            "Food preservation: Principles; Physical, biological and chemical processing; Effects of cooking and other processing on the nutritive value.",
+            "Microorganism in natural products: Sources, control method and prevention; Energy metabolism of aerobic and anaerobic microbes; Nitrogen fixation.",
+            "Food packaging: Basics of food packaging requirements; Importance of food packaging; Different types of packaging materials; Factors affecting the choice of packaging materials."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        {
+          "courseCode": "ChE 4013",
+          "title": "Polymers and Petrochemicals",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Introduction: Introduction to polymers and petrochemicals; Prospects of polymer and petrochemical industries in Bangladesh.",
+            "Polymers: Fundamentals of different types of polymeric materials; Properties of polymers; Classification of polymeric materials; Nomenclature for polymers; Molecular weight and its measurement; Polymerization mechanisms and methods; Reactor types; Manufacture and technological properties of PE, PP, PVC, PVA, PTFE, nylons, polyesters, and synthetic rubbers.",
+            "Composition of petroleum: Laboratory tests; Refinery products; Characterization of crude oil.",
+            "Petrochemicals: Kinetics and reaction mechanism; Manufacturing technologies and uses of ammonia; methanol; oxo-chemicals, acetylene, vinyl chloride, synthetic detergents, olefins, dienes, waxes, and aromatics.",
+            "Modern industrial problems: Energy conservation in petrochemical industries; Pollution control in petrochemical industries; New trends in petrochemical industries; Planning and commissioning of a petrochemicals complex."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        {
+          "courseCode": "ChE 4017",
+          "title": "Cement, Fertilizer, Pulp and Paper Technology",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Cement: Overview of cement industries in Bangladesh, Raw materials, Manufacturing process; Properties of cement.",
+            "Fertilizer: Role of fertilizers in agriculture; Fertilizer market world view; Fertilizer industries in Bangladesh; Types; Raw materials; manufacturing processes; design considerations.",
+            "Pulp and Paper: Structural and physical properties of pulp and paper; World market demand; Pulp and paper industries in Bangladesh. Chemistry; digestion and chemical recovery for kraft process; Process equipment; Advanced uses of black liquor; Bleaching, beating, and sizing in the papermaking process; Paper machine; Environmental problems associated with pulp and paper industries."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        {
+          "courseCode": "ChE 4023",
+          "title": "Mathematical Models in Chemical Engineering",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Developing models: Fundamentals of model; Classification of mathematical models; Model formulation and Fundamental laws.",
+            "Analyses of models and strategies for solving steady-state processes: Direct and iterative methods for linear models; linearization-based solution strategies for nonlinear models.",
+            "Analyses of models and strategies for solving dynamic processes: Numerical tools for initial value ODE problems of CSTR and other reactor models; Stability; Stiffness; Scaling; Interpolation and extrapolation.",
+            "Fundamental characteristics of optimization: Concepts of function continuity, convexity, and concavity.",
+            "Numerical solution methods: Newton and quasi-Newton; Finite difference approximations; Polynomial approximation; Termination criteria.",
+            "Linear programming: Geometry of linear programs; Simplex algorithm; Barrier method; Sensitivity analysis. Nonlinear and mixed integer programming, and other methods. Selected advanced optimization methods."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        {
+          "courseCode": "ChE 4027",
+          "title": "Biochemistry",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Introduction: Molecular logic of living system; Cells and biomolecules; Water, acids and buffer solution.",
+            "Proteins: Amino acid sequences and structures; Classification of proteins.",
+            "Enzymes: Mechanism; Kinetics and inhibition.",
+            "Nucleic acid: Nucleotide; DNA and RNA structures; DNA replication, transcription and translation; Genetic code and genetic engineering.",
+            "Bio macromolecules: Sugar; Polysaccharide; Lipid; Vitamins; Coenzymes; Biological membrane; Digestion of polysaccharide, proteins and lipid.",
+            "Metabolism: Glycolysis and oxidative phosphorylation, Biological high-energy compound, Oxidation of fatty acid and oxidative degradation of amino acid, Photosynthetic phosphorylation; Interrelationship of metabolism, Biochemical Characterization, Synthetic biology."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        {
+          "courseCode": "ChE 4071",
+          "title": "Biochemical Engineering I",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Microorganism: Nature; Importance and Classification of Microorganism; Industrially important microorganisms; Future perspective of microorganism.",
+            "Biomolecules: The hierarchy of cellular organization; Metabolic stoichiometry.",
+            "Molecular genetics and control: Brief introduction to molecular genetics; Alteration of cellular DNA; Commercial applications of microbial genetics and mutant populations; Recombinant DNA technology; Growth and reproduction of a single cell.",
+            "Kinetics of enzyme reaction: Michaelis-Menten equation; Different factors influencing enzyme activity; Enzyme deactivation; Enzyme reactions in heterogeneous systems.",
+            "Immobilized enzyme technology: Enzyme immobilization; Industrial processes; Medical and analytical applications of immobilized enzymes; Utilization and regeneration of cofactors.",
+            "Immobilized enzyme kinetics: Effects of external mass transfer resistance; Analysis of intraparticle diffusion and reaction; Simultaneous film and intraparticle mass transfer resistances; Effects of inhibitors, temperature and pH on immobilized enzyme catalytic activity and deactivation.",
+            "Batch fermentation: Biomass yield and formation; Rates of reaction; Limiting substrate concentration; Monod equation.",
+            "Food and environment: Introduction to food microbiology; food preservation technique and Environmental biotechnology."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        {
+          "courseCode": "ChE 4073",
+          "title": "Biochemical Engineering II",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Biological reactor: Design and analysis of fed-batch reactors; Enzyme catalyzed reactions in CSTRs; CSTR reactors with recycle and wall growth; The ideal plug-flow reactor; Reactor dynamic models and stability; Reactor with non-ideal mixing; Sterilization reactor; Packed bed bioreactor; Bubble column bioreactor; Fluidized bed reactor; Trickle bed reactor.",
+            "Transport in bioprocess system: Basic mass transfer concepts; Rates of metabolic oxygen utilization; Determination of oxygen transfer rates; Mass transfer coefficients for bubbles and bubble swarms; Estimation of dispersed phase interfacial area and holdup.",
+            "Microbial culture for bio product development: Cell separation technique and recovery of useful product; Analysis of multiple interacting microbial population; Mixed microbial population in application and natural systems.",
+            "Biosensors: Classes and components; Transducing mechanism; Sensitivity and selectivity; Nano biosensors; Instrumentation and control.",
+            "Cell response: Cell signaling and quantification of cellular response; Basic cloning technology."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        {
+          "courseCode": "ChE 4081",
+          "title": "Environmental Engineering Applications",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Waste management: Physical and chemical characterization of wastes; Resource conservation; Treatment and disposal methods; Sanitary landfills and composting, Medical/Infectious waste; E-waste; Waste to energy.",
+            "Radioactive material management: Radioactive and hazardous material sources and management.",
+            "Environmental Impact Assessment (EIA): Legal and Administrative framework; EIA process; EIA approach and methodology; Environmental and Social impacts; Evaluation of hazards and risks; Economic Assessment of EIA; Environmental Management & Monitoring Plan.",
+            "Climate change: Adaptation and Mitigation Strategies; Conferences of Parties (COP); Bangladesh’s action to mitigate climate change.",
+            "Modern technologies: Green hydrogen fuel; Drip irrigation; Solar energy."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        {
+          "courseCode": "ChE 4083",
+          "title": "Industrial Pollution Control",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Industrial pollutants: Sources of pollutants; Environmental Standards and measurement technologies.",
+            "Control of pollution: Control and management of sources of air and water pollution; pollution control technologies.",
+            "Pollution control of industries: Fertilizer and Pesticides industries; Textile industries; Pulp and Paper industries; Cement industries; Pharmaceutical industries; Iron and steel industries; Tannery and leather industries.",
+            "Pollution control of power sector: Particulate matter; Flue gas desulphurization; Electrostatic precipitator.",
+            "Modern technologies: Carbon capture; Electro Catalytic Oxidation (ECO); Renewable energy sources and prospects in Bangladesh."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        {
+          "courseCode": "ChE 4091",
+          "title": "Natural Gas Engineering",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Natural gas properties: Compressibility; Gas density; Formation volume factor; Viscosity; Pseudo critical properties.",
+            "Phase behavior of hydrocarbon systems: Phase Behavior of Pure and Multicomponent System; Classification and phase behavior of Reservoir Fluids; Retrograde condensation; Gas cycling,",
+            "Gas well deliverability: Diffusivity Equation for Gas Flow; Empirical Deliverability Equation; Stabilization Time; Analysis of Gas Well Deliverability Test.",
+            "Analysis of water hydrocarbon system: Gas-water system; Dew point and dew point depression; Gas hydrates; Absorption dehydration.",
+            "Unconventional reservoirs: Shale Gas; Coal bed methane.",
+            "Gas production system: Different components of gas production system; Production pressure profile.",
+            "Separation: Classification of Separators and their application; Separator design.",
+            "Sweetening: Classification; Solid Bed Sweetening Process; Molecular Sieve Process; Physical Absorption Process; Chemical Absorption Process; Sulfur Recovery.",
+            "LNG and NGL: Liquefaction, storage and regasification of LNG; Recovery and Separation of NGL; Methods of Fractionation.",
+            "Gas gathering and transportation: Gas gathering system; Series, parallel and looped pipeline flow and pressure drop calculation.",
+            "Natural gas industry: Natural gas industry in Bangladesh; Model Gas Purchasing Agreement."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        {
+          "courseCode": "ChE 4093",
+          "title": "Petroleum Reservoir Engineering",
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Introduction: Overview; Various roles in the field of petroleum; Roles of reservoir engineering the field of petroleum.",
+            "Origin of petroleum: Definition; Petroleum Geology; Theories of origin; Types of rocks; Rock Cycle; Petroleum generation, migration and accumulation; Various types of geologic structures - warps, folds, joints, faults, unconformities and traps; Types of reservoir rocks.",
+            "Properties of reservoir rocks: Permeability: Definition; Unit and dimension; Darcy law and its application; Up scaling; Measurement methods; Use of relative and effective permeability; Porosity: Types and definitions; Controlling parameters; Measurement methods; Up scaling; compressibility; Saturation: Types and definitions; Determination and measurement methods; Up scaling; Capillary Pressure: Surface kinetics; Wettability; Distribution; Hysteresis.",
+            "Well logging and drilling: Well logging; Different well logging techniques and logging interpretation; Well drilling; Different methods of drilling; safety procedures of drilling; Environmental wastes from gas drilling; Treatment and disposal methods.",
+            "Drive mechanism: Definition; Rock and liquid expansion drive; Depletion drive; Gas cap drive; Gravity drainage; Water drive; Combination drive.",
+            "Reservoir analysis: Material balance techniques, Gas reservoir analysis; Oil reservoir analysis; Reserve estimation.",
+            "Decline curve analysis: Objective of decline curve analysis; Constant percentage decline; Harmonic decline; hyperbolic decline."
+          ],
+          "sessionalNote": null,
+          "references": []
+        }
+      ],
+      "termNotes": [
+        "Optional courses listed under 'Optional Courses - General (Optional I and III)' and 'Specialization (Optional II and IV)' are included as optional choices in both Y4T1 and Y4T2. Exact term assignment may vary."
+      ]
+    }
+  },
+  "extras": {
+    "administrative_noise": [
+      "Detailed Outline of Undergraduate Courses",
+      "6",
+      "7",
+      "8",
+      "10",
+      "11",
+      "12",
+      "13",
+      "14",
+      "15",
+      "16",
+      "17",
+      "18",
+      "19",
+      "20",
+      "21",
+      "22",
+      "23",
+      "24",
+      "25",
+      "26",
+      "27",
+      "28",
+      "29"
+    ],
+    "ambiguities": [
+      {
+        "raw": "ChE 1101   Fundamentals of Chemical Engineering     3 hrs/wk Credit 1.50 Credit 3.00",
+        "reason": "Two credit values listed: 1.50 and 3.00. Selected 3.00 as final credit, but 1.50 may be a typographical error or indicate a split between theory and lab. Course does not have a separate lab, so likely a stray line.",
+        "possibleTargets": ["ChE 1101 credit 3.00", "ChE 1101 credit 1.50"]
+      },
+      {
+        "raw": "Ch 1130 Inorganic Chemistry Lab 3 hrs/wk Sessional based on theory course Ch 1129",
+        "reason": "No credit value explicitly shown. Lab courses often carry 1.50 credits, but not listed. Credit set to null.",
+        "possibleTargets": ["credit 1.50"]
+      },
+      {
+        "raw": "EEE 1230 Electrical Circuit and Machine Lab 3 hrs/wk Sessional based on theory course EEE 1229.",
+        "reason": "No credit value provided. Likely 1.50 credits, but not confirmed.",
+        "possibleTargets": ["credit 1.50"]
+      },
+      {
+        "raw": "Ch 2229 Organic Chemistry 3 hrs/wk Credit 1.50 Credit 3.00",
+        "reason": "Duplicate credit lines (1.50 and 3.00). Theory course credit selected as 3.00, but 1.50 might be an error.",
+        "possibleTargets": ["credit 3.00"]
+      },
+      {
+        "raw": "ChE 4150 Industrial Training Credit: 0.00 contact hour not listed",
+        "reason": "Credit 0.00 and no contact hour provided; likely pass/fail training. Contact hour set to null.",
+        "possibleTargets": ["contact hour 3 hrs/week", "credit 0.75"]
+      },
+      {
+        "raw": "Optional Courses - General (Optional I and III) and Specialization (Optional II and IV) blocks",
+        "reason": "The term assignment (Y4T1 or Y4T2) for individual optional courses is not explicitly specified. Courses are placed in optionalCourses for both Y4T1 and Y4T2 with a term note.",
+        "possibleTargets": ["assign General optional to Y4T1 only", "assign Specialization to Y4T2 only", "split by Optional I/II/III/IV slots"]
+      }
+    ]
+  },
+  "qa": {
+    "termCount": 8,
+    "courseCount": 78,
+    "topicCount": 241,
+    "noiseCount": 24,
+    "ambiguityCount": 6
+  }
+}

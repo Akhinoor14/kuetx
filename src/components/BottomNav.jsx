@@ -115,7 +115,12 @@ export function BottomNav({ onOpenMore, onOpenGroup }) {
   const location = useLocation();
   const [pinnedTabs] = useBottomNavTabs();
   const [alertCount, setAlertCount] = useState(0);
+  const [alertMap, setAlertMap] = useState({});
   const [profile, setProfile] = useState(() => store.get('profile') || {});
+  const longPressTimer = useRef(null);
+  const touchDraggingState = useRef(false);
+  const touchStartY = useRef(null);
+  const touchCurrentY = useRef(0);
 
   useEffect(() => {
     const sync = () => setProfile(store.get('profile') || {});
@@ -127,7 +132,38 @@ export function BottomNav({ onOpenMore, onOpenGroup }) {
   useEffect(() => {
     try {
       const counts = computeAlerts(getProfile());
-      setAlertCount((counts.critical?.length || 0) + (counts.warnings?.length || 0));
+      const total = (counts.critical?.length || 0) + (counts.warnings?.length || 0) + (counts.positives?.length || 0) + (counts.assignmentAlerts?.length || 0);
+      setAlertCount(total);
+
+      // Build a map of alerts per path for per-tab badges
+      const map = {};
+      const mapDetail = {};
+      ['critical','warnings','positives','assignmentAlerts'].forEach(key => {
+        (counts[key] || []).forEach(a => {
+          if (a && a.link) {
+            map[a.link] = (map[a.link] || 0) + 1;
+            // determine highest severity for the link
+            const existing = mapDetail[a.link];
+            const level = (() => {
+              if (key === 'critical') return 'danger';
+              if (key === 'assignmentAlerts') {
+                if (a.priority === 'overdue') return 'danger';
+                if (a.priority === 'today') return 'warning';
+                return 'info';
+              }
+              if (key === 'warnings') return 'warning';
+              return 'info';
+            })();
+            const priorityOrder = { danger: 3, warning: 2, info: 1 };
+            if (!existing || priorityOrder[level] > priorityOrder[existing.level]) {
+              mapDetail[a.link] = { level, count: map[a.link] };
+            } else {
+              mapDetail[a.link].count = map[a.link];
+            }
+          }
+        });
+      });
+      setAlertMap(mapDetail);
     } catch {}
   }, [location.pathname]);
 
@@ -162,8 +198,31 @@ export function BottomNav({ onOpenMore, onOpenGroup }) {
   const dashboardItem = allItems.find(i => i.id === 'dashboard');
   const dashActive = location.pathname === '/';
 
+  const handleTouchStart = (e) => {
+    touchStartY.current = e.touches[0].clientY;
+    touchCurrentY.current = 0;
+  };
+
+  const handleTouchMove = (e) => {
+    if (touchStartY.current === null) return;
+    touchCurrentY.current = e.touches[0].clientY - touchStartY.current;
+  };
+
+  const handleTouchEnd = () => {
+    // Detect a deliberate swipe-up (negative delta beyond threshold)
+    if (touchCurrentY.current < -60) {
+      try { onOpenMore(); } catch {}
+    }
+    touchStartY.current = null;
+    touchCurrentY.current = 0;
+  };
+
   return (
-    <nav className="bottom-nav" aria-label="Main navigation">
+    <nav className="bottom-nav" aria-label="Main navigation"
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
+    >
       {/* Dashboard — always first */}
       {dashboardItem && (
         <Link
@@ -176,6 +235,9 @@ export function BottomNav({ onOpenMore, onOpenGroup }) {
             <Icons.Grid size={22} strokeWidth={dashActive ? 2.5 : 1.8} />
           </div>
           <span>Dashboard</span>
+          {alertMap && alertMap[dashboardItem.path] && (
+            <span className={`tab-badge tab-badge--${alertMap[dashboardItem.path].level}`}>{alertMap[dashboardItem.path].count > 9 ? '9+' : alertMap[dashboardItem.path].count}</span>
+          )}
         </Link>
       )}
 
@@ -209,6 +271,9 @@ export function BottomNav({ onOpenMore, onOpenGroup }) {
               <Icon size={22} strokeWidth={tab.isActive ? 2.5 : 1.8} />
             </div>
             <span>{tab.label}</span>
+            {alertMap && alertMap[tab.item.path] && (
+              <span className={`tab-badge tab-badge--${alertMap[tab.item.path].level}`}>{alertMap[tab.item.path].count > 9 ? '9+' : alertMap[tab.item.path].count}</span>
+            )}
           </Link>
         );
       })}
@@ -340,6 +405,8 @@ export function AllPagesDrawer({ open, onClose }) {
   const drawerRef = useRef(null);
   const dragStartY = useRef(null);
   const dragCurrentY = useRef(0);
+  const dragItemId = useRef(null);
+  const dragOverId = useRef(null);
 
   useEffect(() => { if (open) onClose(); }, [location.pathname]);
   useEffect(() => { if (!open) setEditMode(false); }, [open]);
@@ -389,6 +456,17 @@ export function AllPagesDrawer({ open, onClose }) {
       if (tabCount >= MAX_TABS) return;
       setPinnedTabs([...pinnedTabs, { type, id }]);
     }
+  };
+
+  const reorderPinned = (fromId, toId) => {
+    if (!fromId || !toId || fromId === toId) return;
+    const fromIndex = pinnedTabs.findIndex(t => t.id === fromId);
+    const toIndex = pinnedTabs.findIndex(t => t.id === toId);
+    if (fromIndex === -1 || toIndex === -1) return;
+    const next = [...pinnedTabs];
+    const [moved] = next.splice(fromIndex, 1);
+    next.splice(toIndex, 0, moved);
+    setPinnedTabs(next);
   };
 
   return (
@@ -504,6 +582,78 @@ export function AllPagesDrawer({ open, onClose }) {
                             (!canAddPage && !pagePinned && !isDashboard && !groupPinned) ? 'disabled' : '',
                           ].filter(Boolean).join(' ')}
                           aria-pressed={pagePinned || groupPinned}
+                          draggable={pagePinned && !isDashboard}
+                          onDragStart={(e) => {
+                            if (!pagePinned || isDashboard) return;
+                            dragItemId.current = item.id;
+                            e.dataTransfer.setData('text/plain', item.id);
+                            e.dataTransfer.effectAllowed = 'move';
+                            e.currentTarget.classList.add('dragging');
+                          }}
+                          onDragOver={(e) => {
+                            if (!pagePinned || isDashboard) return;
+                            e.preventDefault();
+                            dragOverId.current = item.id;
+                            e.currentTarget.classList.add('drag-over');
+                          }}
+                          onDrop={(e) => {
+                            if (!pagePinned || isDashboard) return;
+                            e.preventDefault();
+                            const fromId = dragItemId.current || e.dataTransfer.getData('text/plain');
+                            const toId = item.id;
+                            reorderPinned(fromId, toId);
+                            dragItemId.current = null;
+                            dragOverId.current = null;
+                            e.currentTarget.classList.remove('drag-over');
+                          }}
+                          onDragEnd={(e) => { dragItemId.current = null; dragOverId.current = null; e.currentTarget.classList.remove('dragging'); }}
+                          onTouchStart={(e) => {
+                            if (!pagePinned || isDashboard) return;
+                            // start long-press timer to enter drag mode
+                            longPressTimer.current = setTimeout(() => {
+                              touchDraggingState.current = true;
+                              dragItemId.current = item.id;
+                              e.currentTarget.classList.add('dragging');
+                            }, 280);
+                          }}
+                          onTouchMove={(e) => {
+                            // if user moves before long-press threshold, cancel
+                            const touch = e.touches[0];
+                            if (!longPressTimer.current) return;
+                            // simple movement threshold
+                            if (Math.abs(touch.clientY - e.target.getBoundingClientRect().top) > 10) {
+                              clearTimeout(longPressTimer.current);
+                              longPressTimer.current = null;
+                            }
+                            if (!touchDraggingState.current) return;
+                            const el = document.elementFromPoint(touch.clientX, touch.clientY);
+                            if (!el) return;
+                            const nearest = el.closest && el.closest('.drawer-item-btn');
+                            if (nearest) {
+                              const id = nearest.getAttribute('data-page-id');
+                              if (id && id !== dragOverId.current) {
+                                // remove previous
+                                document.querySelectorAll('.drawer-item-btn.drag-over').forEach(n => n.classList.remove('drag-over'));
+                                dragOverId.current = id;
+                                nearest.classList.add('drag-over');
+                              }
+                            }
+                          }}
+                          onTouchEnd={(e) => {
+                            if (longPressTimer.current) { clearTimeout(longPressTimer.current); longPressTimer.current = null; }
+                            if (touchDraggingState.current) {
+                              const fromId = dragItemId.current;
+                              const toId = dragOverId.current;
+                              if (fromId && toId && fromId !== toId) reorderPinned(fromId, toId);
+                              touchDraggingState.current = false;
+                              dragItemId.current = null; dragOverId.current = null;
+                              e.currentTarget.classList.remove('dragging');
+                              document.querySelectorAll('.drawer-item-btn.drag-over').forEach(n => n.classList.remove('drag-over'));
+                            } else {
+                              if (longPressTimer.current) { clearTimeout(longPressTimer.current); longPressTimer.current = null; }
+                            }
+                          }}
+                          data-page-id={item.id}
                         >
                           {pagePinned && !isDashboard && (
                             <div className="drawer-item-check">
