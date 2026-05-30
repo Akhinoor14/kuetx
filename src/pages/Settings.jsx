@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useTheme, THEMES } from '../hooks/useTheme';
 import { store } from '../store/store';
 import { Download, Upload, Trash2, HardDrive, RefreshCw, Shield, Database, Wifi, WifiOff } from 'lucide-react';
@@ -20,7 +19,6 @@ function downloadJSON(data, filename) {
 }
 
 export default function Settings() {
-  const navigate = useNavigate();
   const { themeId, setTheme } = useTheme();
   const [msg, setMsg] = useState('');
   const [msgType, setMsgType] = useState('success');
@@ -142,18 +140,6 @@ export default function Settings() {
               {t.id === 'light' ? '☀️' : t.id === 'milky' ? '🥛' : '🌙'} {t.label}
             </button>
           ))}
-        </div>
-      </div>
-
-      <div className="card" style={{ marginBottom: 14 }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap' }}>
-          <div>
-            <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 4 }}>Navigation</div>
-            <div style={{ fontSize: 12, color: 'var(--muted)' }}>Open the separate page for nav presets, calendar switching, gestures, and bottom tabs.</div>
-          </div>
-          <button className="btn btn-primary" onClick={() => navigate('/settings/navigation')}>
-            Open Navigation Settings
-          </button>
         </div>
       </div>
 

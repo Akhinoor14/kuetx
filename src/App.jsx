@@ -5,7 +5,6 @@ import { Sidebar } from './components/Sidebar';
 import { Navbar } from './components/Navbar';
 import { Footer } from './components/Footer';
 import PWAInstallPrompt from './components/PWAInstallPrompt';
-import { BottomNav, AllPagesDrawer, GroupMiniDrawer, useIsMobileNav } from './components/BottomNav';
 
 // Pages
 import Dashboard from './pages/Dashboard';
@@ -28,8 +27,6 @@ import Calculators from './pages/Calculators';
 import Alerts from './pages/Alerts';
 import SmartScore from './pages/SmartScore';
 import Settings from './pages/Settings';
-import NavigationSettings from './pages/NavigationSettings';
-import SettingsNavGuide from './pages/SettingsNavGuide';
 import { Notes } from './pages/Notes';
 import Clubs from './pages/Clubs';
 import About from './pages/About';
@@ -38,8 +35,6 @@ import { Tours, Social, Projects, Syllabus, TimeTracker, Tuition, Food, Reports 
 
 function Layout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [allPagesOpen, setAllPagesOpen] = useState(false);
-  const [groupDrawer, setGroupDrawer] = useState(null); // { section } or null
   const [sidebarCompact, setSidebarCompact] = useState(() => {
     try {
       return localStorage.getItem('kuetx_sidebar_compact') === 'true';
@@ -48,7 +43,6 @@ function Layout() {
     }
   });
   const location = useLocation();
-  const isMobileNav = useIsMobileNav();
   const isQuestionBankViewer = location.pathname === '/question-bank/view';
 
   useEffect(() => {
@@ -56,28 +50,6 @@ function Layout() {
       localStorage.setItem('kuetx_sidebar_compact', sidebarCompact ? 'true' : 'false');
     } catch {}
   }, [sidebarCompact]);
-
-  useEffect(() => {
-    const openAllPages = () => setAllPagesOpen(true);
-    window.addEventListener('kuetx:open-all-pages', openAllPages);
-    return () => window.removeEventListener('kuetx:open-all-pages', openAllPages);
-  }, []);
-
-  useEffect(() => {
-    const openGroup = (event) => {
-      const section = event?.detail?.section;
-      if (!section) return;
-      setGroupDrawer({ section });
-    };
-    window.addEventListener('kuetx:open-group', openGroup);
-    return () => window.removeEventListener('kuetx:open-group', openGroup);
-  }, []);
-
-  useEffect(() => {
-    if (isMobileNav) return;
-    setAllPagesOpen(false);
-    setGroupDrawer(null);
-  }, [isMobileNav]);
 
   return (
     <div style={{ display: 'flex', minHeight: '100vh' }}>
@@ -126,35 +98,12 @@ function Layout() {
             <Route path="/reports" element={<Reports />} />
             <Route path="/notes" element={<Notes />} />
             <Route path="/settings" element={<Settings />} />
-            <Route path="/settings/navigation" element={<NavigationSettings />} />
-            <Route path="/settings/navigation/guide" element={<SettingsNavGuide />} />
             <Route path="/about" element={<About />} />
             <Route path="/class-management" element={<ClassManagement />} />
           </Routes>
         </div>
         {location.pathname !== '/about' && !isQuestionBankViewer && <Footer />}
         {!isQuestionBankViewer && <PWAInstallPrompt />}
-        {/* Mobile bottom navigation */}
-        {!isQuestionBankViewer && isMobileNav && (
-          <BottomNav
-            onOpenMore={() => setAllPagesOpen(true)}
-            onOpenGroup={(section) => setGroupDrawer({ section })}
-          />
-        )}
-        {!isQuestionBankViewer && isMobileNav && (
-          <AllPagesDrawer
-            open={allPagesOpen}
-            onClose={() => setAllPagesOpen(false)}
-            onOpenGroup={(section) => setGroupDrawer({ section })}
-          />
-        )}
-        {!isQuestionBankViewer && isMobileNav && (
-          <GroupMiniDrawer
-            section={groupDrawer?.section}
-            open={!!groupDrawer}
-            onClose={() => setGroupDrawer(null)}
-          />
-        )}
       </div>
     </div>
   );

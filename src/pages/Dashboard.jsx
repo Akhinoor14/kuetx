@@ -5,8 +5,6 @@ import { TrendingUp, Award, AlertTriangle, BookOpen, CalendarCheck, Clock, Walle
 import * as Icons from 'lucide-react';
 import { store, cgpaToPercent, computeCGPA, computeTermGPAs, computeEffectiveAttendance, MIN_ATTENDANCE_PERCENT, SCHOLARSHIP_ATTENDANCE_PCT, computeCourseGrade, deriveAcademicMetaFromCourses, syncProfileAcademicMeta, getAllCourses, getProfile, getTermLabelFromKey, getCurrentTermKey, getTermProgress, getTermTimeline, getTermIndex, TERM_KEYS, getTimerActiveState, formatDurationMs, PRODUCTIVE_TIME_CATEGORIES } from '../store/store';
 import ticker from '../lib/ticker';
-import { useBottomNavFavourites, useBottomNavGroups, getAllNavItems } from '../components/BottomNav';
-import QuickAccessManager from '../components/QuickAccessManager';
 
 function StatCard({ label, value, sub, color, bgColor, icon: Icon, to }) {
   const inner = (
@@ -45,11 +43,12 @@ export default function Dashboard() {
   const profile  = getProfile();
   const courses  = getAllCourses(profile);
   const [, setStoreRefreshTick] = useState(0);
-  const [favourites] = useBottomNavFavourites();
-  const [customGroups] = useBottomNavGroups();
-  const allNavItems = useMemo(() => getAllNavItems(profile), [profile]);
-  const [recentCleared, setRecentCleared] = useState(false);
-  const [showQuickManager, setShowQuickManager] = useState(false);
+  const quickAccessLinks = useMemo(() => ([
+    { id: 'profile', label: 'Profile', icon: 'User', path: '/profile' },
+    { id: 'courses', label: 'Courses', icon: 'BookOpen', path: '/courses' },
+    { id: 'attendance', label: 'Attendance', icon: 'CalendarCheck', path: '/attendance' },
+    { id: 'settings', label: 'Settings', icon: 'Star', path: '/settings' },
+  ]), []);
 
   const { cgpa, earnedCredits, termGPAs, alerts } = useMemo(() => {
     const { cgpa, earnedCredits } = computeCGPA(courses);
@@ -159,43 +158,6 @@ export default function Dashboard() {
     return 'Welcome';
   })();
 
-  const usage = store.get('nav_usage_v1') || { recent: [], counts: {} };
-  const pinnedItems = allNavItems
-    .filter(item => favourites.includes(item.id) && item.id !== 'dashboard')
-    .slice(0, 6);
-  const recentItems = (usage.recent || [])
-    .map(id => allNavItems.find(item => item.id === id))
-    .filter(Boolean)
-    .filter(item => item.id !== 'dashboard')
-    .filter(item => !pinnedItems.some(p => p.id === item.id))
-    .slice(0, 4);
-  const suggestedItems = allNavItems
-    .filter(item => (usage.counts?.[item.id] || 0) > 0)
-    .filter(item => item.id !== 'dashboard')
-    .filter(item => !pinnedItems.some(p => p.id === item.id))
-    .filter(item => !recentItems.some(r => r.id === item.id))
-    .sort((a, b) => (usage.counts?.[b.id] || 0) - (usage.counts?.[a.id] || 0))
-    .slice(0, 3);
-  const quickGroups = (customGroups || []).slice(0, 3);
-  const openAllPages = () => {
-    try { window.dispatchEvent(new Event('kuetx:open-all-pages')); } catch {}
-  };
-  const openGroup = (group) => {
-    try {
-      window.dispatchEvent(new CustomEvent('kuetx:open-group', { detail: { section: { group: group.label, items: group.items || [] } } }));
-    } catch {
-      openAllPages();
-    }
-  };
-  const clearRecent = () => {
-    try {
-      const next = { ...(usage || {}), recent: [] };
-      store.set('nav_usage_v1', next);
-      setRecentCleared(true);
-      setTimeout(() => setRecentCleared(false), 1400);
-    } catch {}
-  };
-
   return (
     <div className="page-enter page-container dashboard-page">
       {/* Welcome */}
@@ -229,53 +191,24 @@ export default function Dashboard() {
         <div className="dashboard-quickaccess-header">
           <div>
             <div className="dashboard-quickaccess-title">Quick Access</div>
-            {pinnedItems.length > 0 && <div className="dashboard-quickaccess-sub">Your favorites</div>}
+            <div className="dashboard-quickaccess-sub">Common pages</div>
           </div>
-          <button
-            className={`dashboard-quickaccess-manage${pinnedItems.length === 0 ? ' primary' : ''}`}
-            onClick={() => setShowQuickManager(true)}
-          >
-            {pinnedItems.length === 0 ? 'Get Started' : 'Customize'}
-          </button>
         </div>
 
-        {pinnedItems.length > 0 ? (
-          <>
-            <div className="dashboard-quickaccess-grid">
-              {pinnedItems.map(item => {
-                const Icon = Icons[item.icon] || Icons.Circle;
-                return (
-                  <Link key={item.id} to={item.path} className="dashboard-quickaccess-item">
-                    <div className="dashboard-quickaccess-icon">
-                      <Icon size={18} strokeWidth={1.8} />
-                    </div>
-                    <span>{item.label}</span>
-                  </Link>
-                );
-              })}
-            </div>
-            
-            {recentItems.length > 0 && (
-              <div style={{ marginTop: 14, paddingTop: 14, borderTop: '1px solid var(--divider)', fontSize: 11, fontWeight: 600, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.05em', display: 'flex', alignItems: 'center', gap: 8 }}>
-                <span>Recently visited:</span>
-                <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', flex: 1 }}>
-                  {recentItems.map(item => (
-                    <Link key={item.id} to={item.path} className="dashboard-quickaccess-chip dashboard-quickaccess-recent-link">
-                      {item.label}
-                    </Link>
-                  ))}
+        <div className="dashboard-quickaccess-grid">
+          {quickAccessLinks.map(item => {
+            const Icon = Icons[item.icon] || Icons.Circle;
+            return (
+              <Link key={item.id} to={item.path} className="dashboard-quickaccess-item">
+                <div className="dashboard-quickaccess-icon">
+                  <Icon size={18} strokeWidth={1.8} />
                 </div>
-              </div>
-            )}
-          </>
-        ) : (
-          <div className="dashboard-quickaccess-empty">
-            Pin your top pages to see them here.
-            <button className="dashboard-quickaccess-empty-btn" onClick={openAllPages}>Pick pages</button>
-          </div>
-        )}
+                <span>{item.label}</span>
+              </Link>
+            );
+          })}
+        </div>
       </div>
-      <QuickAccessManager open={showQuickManager} onClose={() => setShowQuickManager(false)} />
 
       {/* Setup prompt */}
       {!profile.name && (
