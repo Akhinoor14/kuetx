@@ -2,6 +2,58 @@ import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { store, computeCourseGrade, computeCGPA, computeEffectiveAttendance, computeTermGPAs, MIN_ATTENDANCE_PERCENT, SCHOLARSHIP_ATTENDANCE_PCT, MAX_THEORY_COURSES_PER_TERM, MIN_CREDITS_FIRST_4_TERMS, MIN_CREDITS_FIRST_6_TERMS, HONORS_CGPA, DEANS_LIST_GPA, getAllCourses, getProfile, getCurrentTermKey, getTermTimeline, PRODUCTIVE_TIME_CATEGORIES, getTimerSessions } from '../store/store';
 
+export const ALERT_DISMISSED_KEY = 'alertDismissedIds_v1';
+
+const normalizeAlertPart = (value) => String(value || '')
+  .trim()
+  .toLowerCase()
+  .replace(/\s+/g, ' ')
+  .replace(/[^a-z0-9]+/g, '-')
+  .replace(/^-+|-+$/g, '');
+
+export const getAlertId = (group, item, index = 0) => {
+  const parts = [
+    group,
+    item?.kind,
+    item?.priority,
+    item?.title,
+    item?.teacherLabel,
+    item?.courseLabel,
+    item?.dueLabel,
+    item?.link,
+    item?.msg,
+    index,
+  ]
+    .filter(part => part !== undefined && part !== null && String(part).trim() !== '')
+    .map(normalizeAlertPart);
+
+  return parts.join('|');
+};
+
+export const getDismissedAlertIds = () => {
+  const saved = store.get(ALERT_DISMISSED_KEY);
+  return new Set(Array.isArray(saved) ? saved : []);
+};
+
+export const setAlertDismissed = (id, dismissed = true) => {
+  if (!id) return;
+  const saved = store.get(ALERT_DISMISSED_KEY);
+  const next = new Set(Array.isArray(saved) ? saved : []);
+  if (dismissed) next.add(id);
+  else next.delete(id);
+  store.set(ALERT_DISMISSED_KEY, [...next]);
+};
+
+export const decorateAlerts = (alerts, dismissedIds) => ({
+  critical: alerts.critical.map((item, index) => ({ ...item, id: getAlertId('critical', item, index) })),
+  warnings: alerts.warnings.map((item, index) => ({ ...item, id: getAlertId('warnings', item, index) })),
+  positives: alerts.positives.map((item, index) => ({ ...item, id: getAlertId('positives', item, index) })),
+  assignmentAlerts: alerts.assignmentAlerts.map((item, index) => ({ ...item, id: getAlertId('assignments', item, index) })),
+  dismissedIds,
+});
+
+export const filterUnreadAlerts = (items, dismissedIds) => items.filter(item => !dismissedIds.has(item.id));
+
 const normalizeTeacherLabel = (value) => String(value || '').trim().replace(/\s+/g, ' ');
 
 const formatDateLabel = (dateStr) => {
@@ -256,13 +308,25 @@ export default function Alerts() {
     return () => window.removeEventListener('kuetx:store-updated', handleStoreUpdate);
   }, []);
 
-  const { critical, warnings, positives, assignmentAlerts } = useMemo(() => computeAlerts(profile), [profile, refreshTick]);
-  const totalCount = critical.length + warnings.length + positives.length + assignmentAlerts.length;
+  const dismissedIds = useMemo(() => getDismissedAlertIds(), [refreshTick]);
+  const groupedAlerts = useMemo(() => decorateAlerts(computeAlerts(profile), dismissedIds), [profile, refreshTick, dismissedIds]);
+  const unreadCritical = filterUnreadAlerts(groupedAlerts.critical, dismissedIds);
+  const unreadWarnings = filterUnreadAlerts(groupedAlerts.warnings, dismissedIds);
+  const unreadPositives = filterUnreadAlerts(groupedAlerts.positives, dismissedIds);
+  const unreadAssignments = filterUnreadAlerts(groupedAlerts.assignmentAlerts, dismissedIds);
+  const readCritical = groupedAlerts.critical.length - unreadCritical.length;
+  const readWarnings = groupedAlerts.warnings.length - unreadWarnings.length;
+  const readPositives = groupedAlerts.positives.length - unreadPositives.length;
+  const readAssignments = groupedAlerts.assignmentAlerts.length - unreadAssignments.length;
+  const totalCount = unreadCritical.length + unreadWarnings.length + unreadPositives.length + unreadAssignments.length;
   const assignmentCounts = {
-    overdue: assignmentAlerts.filter(a => a.priority === 'overdue').length,
-    today: assignmentAlerts.filter(a => a.priority === 'today').length,
-    soon: assignmentAlerts.filter(a => a.priority === 'soon').length,
+    overdue: unreadAssignments.filter(a => a.priority === 'overdue').length,
+    today: unreadAssignments.filter(a => a.priority === 'today').length,
+    soon: unreadAssignments.filter(a => a.priority === 'soon').length,
   };
+
+  const dismissAlert = (id) => setAlertDismissed(id, true);
+  const restoreAlert = (id) => setAlertDismissed(id, false);
 
   const tone = (color) => {
     if (color === 'var(--danger)') {
@@ -286,7 +350,7 @@ export default function Alerts() {
     };
   };
 
-  const Section = ({ title, items, color, emoji }) => (
+  const Section = ({ title, items, color, emoji, emptyLabel = 'None — all clear ✓' }) => (
     <div style={{
       marginBottom: 16,
       padding: 16,
@@ -316,18 +380,39 @@ export default function Alerts() {
         </div>
       </div>
       {items.length === 0
-        ? <div style={{ fontSize: 12, color: 'var(--muted)', padding: '8px 2px' }}>None — all clear ✓</div>
+        ? <div style={{ fontSize: 12, color: 'var(--muted)', padding: '8px 2px' }}>{emptyLabel}</div>
         : items.map((a, i) => (
-          <Link key={i} to={a.link || '#'} style={{
-            display: 'flex', alignItems: 'flex-start', gap: 10, padding: '11px 14px', borderRadius: 14, marginBottom: 8,
+          <div key={a.id || i} style={{
+            display: 'flex', alignItems: 'stretch', gap: 10, padding: '11px 14px', borderRadius: 14, marginBottom: 8,
             background: tone(color).bg,
             border: `1px solid ${tone(color).border}`,
-            textDecoration: 'none', color: 'var(--text)', fontSize: 12, boxShadow: '0 6px 18px rgba(0,0,0,0.06)',
+            fontSize: 12, boxShadow: '0 6px 18px rgba(0,0,0,0.06)',
           }}>
-            <div style={{ width: 8, height: 8, borderRadius: '50%', background: color, flexShrink: 0, marginTop: 4, boxShadow: `0 0 0 4px ${tone(color).iconBg}` }} />
-            <span style={{ flex: 1, lineHeight: 1.55 }}>{a.msg}</span>
-            <span style={{ fontSize: 11, color: 'var(--muted)', flexShrink: 0, paddingTop: 1 }}>→</span>
-          </Link>
+            <Link to={a.link || '#'} onClick={() => dismissAlert(a.id)} style={{
+              display: 'flex', alignItems: 'flex-start', gap: 10, textDecoration: 'none', color: 'var(--text)', flex: 1,
+            }}>
+              <div style={{ width: 8, height: 8, borderRadius: '50%', background: color, flexShrink: 0, marginTop: 4, boxShadow: `0 0 0 4px ${tone(color).iconBg}` }} />
+              <span style={{ flex: 1, lineHeight: 1.55 }}>{a.msg}</span>
+              <span style={{ fontSize: 11, color: 'var(--muted)', flexShrink: 0, paddingTop: 1 }}>→</span>
+            </Link>
+            <button
+              type="button"
+              onClick={() => restoreAlert(a.id)}
+              style={{
+                border: '1px solid var(--border)',
+                background: 'var(--surface)',
+                color: 'var(--muted)',
+                borderRadius: 10,
+                padding: '6px 10px',
+                fontSize: 11,
+                fontWeight: 700,
+                cursor: 'pointer',
+                alignSelf: 'center',
+              }}
+            >
+              Restore
+            </button>
+          </div>
         ))
       }
     </div>
@@ -376,29 +461,47 @@ export default function Alerts() {
       {items.length === 0 ? (
         <div style={{ fontSize: 12, color: 'var(--muted)' }}>None — all clear ✓</div>
       ) : items.map((item, index) => (
-        <Link key={`${item.link}-${index}`} to={item.link || '#'} style={{
+        <div key={item.id || `${item.link}-${index}`} style={{
           display: 'flex',
-          alignItems: 'flex-start',
+          alignItems: 'stretch',
           gap: 10,
           padding: '10px 12px',
           borderRadius: 12,
           marginBottom: 8,
           background: 'var(--surface)',
           border: '1px solid var(--border)',
-          textDecoration: 'none',
           color: 'var(--text)',
           fontSize: 12,
           lineHeight: 1.45,
         }}>
-          <div style={{ flex: 1 }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap', marginBottom: 6 }}>
-              <span style={{ padding: '3px 8px', borderRadius: 999, background: color, color: 'white', fontSize: 10, fontWeight: 800, textTransform: 'uppercase' }}>{item.priority}</span>
-              <span style={{ padding: '3px 8px', borderRadius: 999, background: 'rgba(0,0,0,0.04)', color: 'var(--muted)', fontSize: 10, fontWeight: 700 }}>Due {item.dueLabel}</span>
+          <Link to={item.link || '#'} onClick={() => dismissAlert(item.id)} style={{ flex: 1, textDecoration: 'none', color: 'inherit' }}>
+            <div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap', marginBottom: 6 }}>
+                <span style={{ padding: '3px 8px', borderRadius: 999, background: color, color: 'white', fontSize: 10, fontWeight: 800, textTransform: 'uppercase' }}>{item.priority}</span>
+                <span style={{ padding: '3px 8px', borderRadius: 999, background: 'rgba(0,0,0,0.04)', color: 'var(--muted)', fontSize: 10, fontWeight: 700 }}>Due {item.dueLabel}</span>
+              </div>
+              <div style={{ fontWeight: 700, marginBottom: 4 }}>{item.teacherLabel}</div>
+              <div style={{ color: 'var(--muted)' }}>{item.msg}</div>
             </div>
-            <div style={{ fontWeight: 700, marginBottom: 4 }}>{item.teacherLabel}</div>
-            <div style={{ color: 'var(--muted)' }}>{item.msg}</div>
-          </div>
-        </Link>
+          </Link>
+          <button
+            type="button"
+            onClick={() => restoreAlert(item.id)}
+            style={{
+              border: '1px solid var(--border)',
+              background: 'var(--surface)',
+              color: 'var(--muted)',
+              borderRadius: 10,
+              padding: '6px 10px',
+              fontSize: 11,
+              fontWeight: 700,
+              cursor: 'pointer',
+              alignSelf: 'center',
+            }}
+          >
+            Restore
+          </button>
+        </div>
       ))}
     </div>
   );
@@ -411,21 +514,21 @@ export default function Alerts() {
             <div style={{ fontSize: 11, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.10em', color: 'var(--muted)', marginBottom: 6 }}>Notifications</div>
             <h1 style={{ fontSize: 22, fontWeight: 800, letterSpacing: '-0.04em', marginBottom: 4 }}>Alerts & Suggestions</h1>
             <p style={{ fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.6, margin: 0 }}>
-              {totalCount} total signals · {critical.length} critical · {warnings.length} warnings · {positives.length} good news · {assignmentAlerts.length} assignments
+              {totalCount} unread signals · {unreadCritical.length} critical · {unreadWarnings.length} warnings · {unreadPositives.length} good news · {unreadAssignments.length} assignments
             </p>
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: 8, minWidth: 'min(100%, 360px)' }}>
             <div style={{ padding: '10px 12px', borderRadius: 14, border: '1px solid color-mix(in srgb, var(--danger) 28%, var(--border))', background: 'var(--dangerBg)' }}>
               <div style={{ fontSize: 11, color: 'var(--muted)', fontWeight: 700 }}>Critical</div>
-              <div style={{ fontSize: 18, fontWeight: 900, color: 'var(--danger)' }}>{critical.length}</div>
+              <div style={{ fontSize: 18, fontWeight: 900, color: 'var(--danger)' }}>{unreadCritical.length}</div>
             </div>
             <div style={{ padding: '10px 12px', borderRadius: 14, border: '1px solid color-mix(in srgb, var(--warning) 28%, var(--border))', background: 'var(--warningBg)' }}>
               <div style={{ fontSize: 11, color: 'var(--muted)', fontWeight: 700 }}>Warnings</div>
-              <div style={{ fontSize: 18, fontWeight: 900, color: 'var(--warning)' }}>{warnings.length}</div>
+              <div style={{ fontSize: 18, fontWeight: 900, color: 'var(--warning)' }}>{unreadWarnings.length}</div>
             </div>
             <div style={{ padding: '10px 12px', borderRadius: 14, border: '1px solid color-mix(in srgb, var(--success) 28%, var(--border))', background: 'var(--successBg)' }}>
               <div style={{ fontSize: 11, color: 'var(--muted)', fontWeight: 700 }}>Good</div>
-              <div style={{ fontSize: 18, fontWeight: 900, color: 'var(--success)' }}>{positives.length}</div>
+              <div style={{ fontSize: 18, fontWeight: 900, color: 'var(--success)' }}>{unreadPositives.length}</div>
             </div>
           </div>
         </div>
@@ -445,26 +548,35 @@ export default function Alerts() {
 
         <AssignmentGroup
           title="Overdue"
-          items={assignmentAlerts.filter(a => a.priority === 'overdue')}
+          items={unreadAssignments.filter(a => a.priority === 'overdue')}
           color="var(--danger)"
           badge="!"
         />
         <AssignmentGroup
           title="Due Today"
-          items={assignmentAlerts.filter(a => a.priority === 'today')}
+          items={unreadAssignments.filter(a => a.priority === 'today')}
           color="var(--warning)"
           badge="1"
         />
         <AssignmentGroup
           title="Next 3 Days"
-          items={assignmentAlerts.filter(a => a.priority === 'soon')}
+          items={unreadAssignments.filter(a => a.priority === 'soon')}
           color="var(--success)"
           badge="3"
         />
       </div>
-      <Section title="Critical Alerts" items={critical} color="var(--danger)" emoji="🔴" />
-      <Section title="Warnings" items={warnings} color="var(--warning)" emoji="🟡" />
-      <Section title="Good News" items={positives} color="var(--success)" emoji="🟢" />
+      <Section title="Critical Alerts" items={unreadCritical} color="var(--danger)" emoji="🔴" emptyLabel={readCritical ? `${readCritical} critical alert${readCritical > 1 ? 's' : ''} already read` : 'None — all clear ✓'} />
+      <Section title="Warnings" items={unreadWarnings} color="var(--warning)" emoji="🟡" emptyLabel={readWarnings ? `${readWarnings} warning${readWarnings > 1 ? 's' : ''} already read` : 'None — all clear ✓'} />
+      <Section title="Good News" items={unreadPositives} color="var(--success)" emoji="🟢" emptyLabel={readPositives ? `${readPositives} positive update${readPositives > 1 ? 's' : ''} already read` : 'None — all clear ✓'} />
+
+      {(readCritical + readWarnings + readPositives + readAssignments) > 0 && (
+        <div style={{ marginBottom: 16, padding: 16, borderRadius: 18, border: '1px solid var(--border)', background: 'linear-gradient(180deg, var(--surfaceGlassStrong), var(--surfaceGlass))', boxShadow: '0 10px 28px rgba(0,0,0,0.10)' }}>
+          <div style={{ fontSize: 13, fontWeight: 800, color: 'var(--text)', marginBottom: 8 }}>Read notifications</div>
+          <div style={{ fontSize: 12, color: 'var(--muted)' }}>
+            এগুলো badge count-এ আর আসবে না. Restore দিলে আবার unread হিসেবে ফিরবে.
+          </div>
+        </div>
+      )}
     </div>
   );
 }

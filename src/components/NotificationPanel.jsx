@@ -1,29 +1,13 @@
 import { X } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { useMemo, useEffect, useState } from 'react';
-import { computeAlerts } from '../pages/Alerts';
+import { useEffect, useMemo, useState } from 'react';
+import { computeAlerts, decorateAlerts, filterUnreadAlerts, getDismissedAlertIds, setAlertDismissed } from '../pages/Alerts';
 import { getProfile } from '../store/store';
 
 const tone = (color) => {
-  if (color === 'var(--danger)') {
-    return {
-      bg: 'var(--dangerBg)',
-      border: 'color-mix(in srgb, var(--danger) 28%, var(--border))',
-      iconBg: 'rgba(248, 113, 113, 0.14)',
-    };
-  }
-  if (color === 'var(--warning)') {
-    return {
-      bg: 'var(--warningBg)',
-      border: 'color-mix(in srgb, var(--warning) 28%, var(--border))',
-      iconBg: 'rgba(251, 191, 36, 0.14)',
-    };
-  }
-  return {
-    bg: 'var(--successBg)',
-    border: 'color-mix(in srgb, var(--success) 28%, var(--border))',
-    iconBg: 'rgba(74, 222, 128, 0.14)',
-  };
+  if (color === 'var(--danger)') return { bg: 'var(--dangerBg)', border: 'color-mix(in srgb, var(--danger) 28%, var(--border))', iconBg: 'rgba(248, 113, 113, 0.14)' };
+  if (color === 'var(--warning)') return { bg: 'var(--warningBg)', border: 'color-mix(in srgb, var(--warning) 28%, var(--border))', iconBg: 'rgba(251, 191, 36, 0.14)' };
+  return { bg: 'var(--successBg)', border: 'color-mix(in srgb, var(--success) 28%, var(--border))', iconBg: 'rgba(74, 222, 128, 0.14)' };
 };
 
 export function NotificationPanel({ isOpen, onClose }) {
@@ -31,12 +15,17 @@ export function NotificationPanel({ isOpen, onClose }) {
   const [refreshTick, setRefreshTick] = useState(0);
 
   useEffect(() => {
-    const handleStoreUpdate = () => setRefreshTick(t => t + 1);
-    window.addEventListener('kuetx:store-updated', handleStoreUpdate);
-    return () => window.removeEventListener('kuetx:store-updated', handleStoreUpdate);
+    const handle = () => setRefreshTick(t => t + 1);
+    window.addEventListener('kuetx:store-updated', handle);
+    return () => window.removeEventListener('kuetx:store-updated', handle);
   }, []);
 
-  const { critical, warnings, positives, assignmentAlerts = [] } = useMemo(() => computeAlerts(profile), [profile, refreshTick]);
+  const dismissedIds = useMemo(() => getDismissedAlertIds(), [refreshTick]);
+  const grouped = useMemo(() => decorateAlerts(computeAlerts(profile), dismissedIds), [profile, refreshTick, dismissedIds]);
+  const critical = filterUnreadAlerts(grouped.critical, dismissedIds);
+  const warnings = filterUnreadAlerts(grouped.warnings, dismissedIds);
+  const positives = filterUnreadAlerts(grouped.positives, dismissedIds);
+  const assignmentAlerts = filterUnreadAlerts(grouped.assignmentAlerts, dismissedIds);
 
   const assignmentCounts = {
     overdue: assignmentAlerts.filter(a => a.priority === 'overdue').length,
@@ -44,197 +33,71 @@ export function NotificationPanel({ isOpen, onClose }) {
     soon: assignmentAlerts.filter(a => a.priority === 'soon').length,
   };
 
-  // Close on Escape key
+  const markRead = (id) => setAlertDismissed(id, true);
+
   useEffect(() => {
     if (!isOpen) return;
-    const handleEscape = (e) => {
-      if (e.key === 'Escape') onClose();
-    };
-    document.addEventListener('keydown', handleEscape);
-    return () => document.removeEventListener('keydown', handleEscape);
+    const onKey = (e) => { if (e.key === 'Escape') onClose(); };
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
   }, [isOpen, onClose]);
 
-  // Close on click outside
   useEffect(() => {
     if (!isOpen) return;
-    const handleClickOutside = (e) => {
+    const onClick = (e) => {
       const panel = document.getElementById('notification-panel');
       const bell = document.getElementById('notification-bell');
-      if (panel && !panel.contains(e.target) && !bell?.contains(e.target)) {
-        onClose();
-      }
+      if (panel && !panel.contains(e.target) && !bell?.contains(e.target)) onClose();
     };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener('mousedown', onClick);
+    return () => document.removeEventListener('mousedown', onClick);
   }, [isOpen, onClose]);
 
   if (!isOpen) return null;
 
   const Section = ({ title, items, color, emoji }) => (
-    <div style={{
-      marginBottom: 12,
-      padding: 12,
-      borderRadius: 12,
-      border: `1px solid ${tone(color).border}`,
-      background: tone(color).bg,
-    }}>
+    <div style={{ marginBottom: 12, padding: 12, borderRadius: 12, border: `1px solid ${tone(color).border}`, background: tone(color).bg }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
-        <div style={{
-          width: 28,
-          height: 28,
-          borderRadius: 8,
-          display: 'grid',
-          placeItems: 'center',
-          background: tone(color).iconBg,
-          border: `1px solid ${tone(color).border}`,
-          fontSize: 14,
-        }}>{emoji}</div>
+        <div style={{ width: 28, height: 28, borderRadius: 8, display: 'grid', placeItems: 'center', background: tone(color).iconBg, border: `1px solid ${tone(color).border}`, fontSize: 14 }}>{emoji}</div>
         <div>
           <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--text)' }}>{title}</div>
           <div style={{ fontSize: 11, color: 'var(--muted)' }}>{items.length} item{items.length === 1 ? '' : 's'}</div>
         </div>
       </div>
-      {items.length === 0
-        ? <div style={{ fontSize: 11, color: 'var(--muted)', padding: '6px 2px' }}>None ✓</div>
-        : items.map((a, i) => (
-          <Link key={i} to={a.link || '#'} onClick={onClose} style={{
-            display: 'flex', alignItems: 'flex-start', gap: 8, padding: '8px 10px', borderRadius: 10, marginBottom: 6,
-            background: 'var(--surface)',
-            border: '1px solid var(--border)',
-            textDecoration: 'none', color: 'var(--text)', fontSize: 11, lineHeight: 1.4, transition: 'all 0.2s',
-            cursor: 'pointer',
-          }} onMouseEnter={(e) => e.currentTarget.style.background = 'var(--surfaceStrong)'} onMouseLeave={(e) => e.currentTarget.style.background = 'var(--surface)'}>
+      {items.length === 0 ? (
+        <div style={{ fontSize: 11, color: 'var(--muted)', padding: '6px 2px' }}>None ✓</div>
+      ) : items.map((a, i) => (
+        <div key={a.id || i} style={{ display: 'flex', alignItems: 'stretch', gap: 8, padding: '8px 10px', borderRadius: 10, marginBottom: 6, background: 'var(--surface)', border: '1px solid var(--border)' }}>
+          <Link to={a.link || '#'} onClick={() => { markRead(a.id); onClose(); }} style={{ display: 'flex', alignItems: 'flex-start', gap: 8, flex: 1, textDecoration: 'none', color: 'var(--text)', fontSize: 11, lineHeight: 1.4 }}>
             <div style={{ width: 6, height: 6, borderRadius: '50%', background: color, flexShrink: 0, marginTop: 3 }} />
             <span style={{ flex: 1 }}>{a.msg}</span>
           </Link>
-        ))
-      }
-    </div>
-  );
-
-  const AssignmentSection = ({ items }) => (
-    <div style={{
-      marginBottom: 12,
-      padding: 12,
-      borderRadius: 12,
-      border: '1px solid var(--border)',
-      background: 'linear-gradient(180deg, var(--surfaceGlassStrong), var(--surfaceGlass))',
-    }}>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, marginBottom: 10 }}>
-        <div>
-          <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--text)' }}>📌 Assignments</div>
-          <div style={{ fontSize: 11, color: 'var(--muted)' }}>Overdue, today, and next 3 days</div>
+          <button type="button" onClick={() => markRead(a.id)} style={{ border: '1px solid var(--border)', background: 'var(--surface)', color: 'var(--muted)', borderRadius: 8, padding: '4px 8px', fontSize: 10, fontWeight: 700, cursor: 'pointer', alignSelf: 'center' }}>Read</button>
         </div>
-        <div style={{ fontSize: 11, fontWeight: 800, color: 'var(--accent)', padding: '6px 10px', borderRadius: 999, background: 'var(--accentBg)', border: '1px solid var(--border)' }}>{items.length}</div>
-      </div>
-      <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 10 }}>
-        <span style={{ padding: '4px 8px', borderRadius: 999, background: 'var(--danger)', color: 'white', fontSize: 10, fontWeight: 800 }}>Overdue {assignmentCounts.overdue}</span>
-        <span style={{ padding: '4px 8px', borderRadius: 999, background: 'var(--warning)', color: 'white', fontSize: 10, fontWeight: 800 }}>Today {assignmentCounts.today}</span>
-        <span style={{ padding: '4px 8px', borderRadius: 999, background: 'var(--success)', color: 'white', fontSize: 10, fontWeight: 800 }}>Next 3 days {assignmentCounts.soon}</span>
-      </div>
-      {items.length === 0 ? (
-        <div style={{ fontSize: 11, color: 'var(--muted)' }}>None ✓</div>
-      ) : items.map((item, index) => (
-        <Link key={`${item.link}-${index}`} to={item.link || '#'} onClick={onClose} style={{
-          display: 'flex', alignItems: 'flex-start', gap: 8, padding: '8px 10px', borderRadius: 10, marginBottom: 6,
-          background: 'var(--surface)',
-          border: '1px solid var(--border)',
-          textDecoration: 'none', color: 'var(--text)', fontSize: 11, lineHeight: 1.4,
-        }}>
-          <div style={{ width: 6, height: 6, borderRadius: '50%', background: item.priority === 'overdue' ? 'var(--danger)' : item.priority === 'today' ? 'var(--warning)' : 'var(--success)', flexShrink: 0, marginTop: 3 }} />
-          <div style={{ flex: 1 }}>
-            <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 4 }}>
-              <span style={{ padding: '2px 6px', borderRadius: 999, background: item.priority === 'overdue' ? 'var(--danger)' : item.priority === 'today' ? 'var(--warning)' : 'var(--success)', color: 'white', fontSize: 9, fontWeight: 800, textTransform: 'uppercase' }}>{item.priority}</span>
-              <span style={{ padding: '2px 6px', borderRadius: 999, background: 'rgba(0,0,0,0.05)', color: 'var(--muted)', fontSize: 9, fontWeight: 700 }}>{item.dueLabel}</span>
-            </div>
-            <div style={{ fontWeight: 700 }}>{item.teacherLabel}</div>
-            <div style={{ color: 'var(--muted)' }}>{item.msg}</div>
-          </div>
-        </Link>
       ))}
     </div>
   );
 
   return (
     <>
-      {/* Backdrop */}
-      <div style={{
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        background: 'transparent',
-        zIndex: 999,
-      }} />
-
-      {/* Panel */}
-      <div id="notification-panel" style={{
-        position: 'fixed',
-        top: 60,
-        right: 16,
-        width: 'min(360px, calc(100vw - 32px))',
-        maxHeight: 'calc(100vh - 100px)',
-        background: 'var(--surface)',
-        border: '1px solid var(--border)',
-        borderRadius: 14,
-        boxShadow: '0 20px 60px rgba(0,0,0,0.20)',
-        zIndex: 1000,
-        display: 'flex',
-        flexDirection: 'column',
-        animation: 'slideDown 0.2s ease-out',
-      }}>
-        {/* Header */}
-        <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          padding: 12,
-          borderBottom: '1px solid var(--border)',
-        }}>
+      <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'transparent', zIndex: 999 }} />
+      <div id="notification-panel" style={{ position: 'fixed', top: 60, right: 16, width: 'min(360px, calc(100vw - 32px))', maxHeight: 'calc(100vh - 100px)', background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 14, boxShadow: '0 20px 60px rgba(0,0,0,0.20)', zIndex: 1000, display: 'flex', flexDirection: 'column', animation: 'slideDown 0.2s ease-out' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: 12, borderBottom: '1px solid var(--border)' }}>
           <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)' }}>Notifications</div>
-          <button
-            onClick={onClose}
-            style={{
-              background: 'transparent',
-              border: 'none',
-              cursor: 'pointer',
-              padding: 4,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: 'var(--muted)',
-              transition: 'color 0.2s',
-            }}
-            onMouseEnter={(e) => e.currentTarget.style.color = 'var(--text)'}
-            onMouseLeave={(e) => e.currentTarget.style.color = 'var(--muted)'}
-          >
+          <button onClick={onClose} style={{ background: 'transparent', border: 'none', cursor: 'pointer', padding: 4, display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--muted)', transition: 'color 0.2s' }} onMouseEnter={(e)=>e.currentTarget.style.color='var(--text)'} onMouseLeave={(e)=>e.currentTarget.style.color='var(--muted)'}>
             <X size={18} />
           </button>
         </div>
 
-        {/* Content */}
-        <div style={{
-          flex: 1,
-          overflowY: 'auto',
-          padding: 12,
-        }}>
-          {critical.length === 0 && warnings.length === 0 && positives.length === 0 ? (
-            <div style={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
-              padding: 32,
-              textAlign: 'center',
-              color: 'var(--muted)',
-            }}>
+        <div style={{ flex: 1, overflowY: 'auto', padding: 12 }}>
+          {assignmentAlerts.length === 0 && critical.length === 0 && warnings.length === 0 && positives.length === 0 ? (
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: 32, textAlign: 'center', color: 'var(--muted)' }}>
               <div style={{ fontSize: 14, fontWeight: 600, marginBottom: 8 }}>All clear!</div>
               <div style={{ fontSize: 12 }}>No notifications at the moment.</div>
             </div>
           ) : (
             <>
-              {assignmentAlerts.length > 0 && <AssignmentSection items={assignmentAlerts} />}
+              {assignmentAlerts.length > 0 && <Section title="Assignments" items={assignmentAlerts} color="var(--accent)" emoji="📌" />}
               {critical.length > 0 && <Section title="Critical" items={critical} color="var(--danger)" emoji="🔴" />}
               {warnings.length > 0 && <Section title="Warnings" items={warnings} color="var(--warning)" emoji="🟡" />}
               {positives.length > 0 && <Section title="Positive" items={positives} color="var(--success)" emoji="🟢" />}
@@ -242,41 +105,14 @@ export function NotificationPanel({ isOpen, onClose }) {
           )}
         </div>
 
-        {/* Footer link to full alerts page */}
-        {(critical.length > 0 || warnings.length > 0 || positives.length > 0) && (
-          <div style={{
-            borderTop: '1px solid var(--border)',
-            padding: 10,
-          }}>
-            <Link to="/alerts" onClick={onClose} style={{
-              display: 'block',
-              textAlign: 'center',
-              fontSize: 12,
-              color: 'var(--accent)',
-              textDecoration: 'none',
-              padding: '8px 12px',
-              borderRadius: 8,
-              transition: 'background 0.2s',
-              cursor: 'pointer',
-            }} onMouseEnter={(e) => e.currentTarget.style.background = 'var(--accentBg)'} onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}>
-              View all alerts →
+        {(assignmentAlerts.length > 0 || critical.length > 0 || warnings.length > 0 || positives.length > 0) && (
+          <div style={{ borderTop: '1px solid var(--border)', padding: 10 }}>
+            <Link to="/alerts" onClick={onClose} style={{ display: 'block', textAlign: 'center', fontSize: 12, color: 'var(--accent)', textDecoration: 'none', padding: '8px 12px', borderRadius: 8, cursor: 'pointer' }} onMouseEnter={(e)=>e.currentTarget.style.background='var(--accentBg)'} onMouseLeave={(e)=>e.currentTarget.style.background='transparent'}>
+              View all alerts
             </Link>
           </div>
         )}
       </div>
-
-      <style>{`
-        @keyframes slideDown {
-          from {
-            opacity: 0;
-            transform: translateY(-8px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-      `}</style>
     </>
   );
 }

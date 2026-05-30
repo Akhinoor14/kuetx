@@ -1,11 +1,11 @@
 import { Sun, Moon, Droplets, Bell, Download, ChevronRight } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTheme } from '../hooks/useTheme';
 import { useLocation, Link } from 'react-router-dom';
 import { NAV } from '../nav';
 import { Wordmark } from './Logo';
 import { getProfile } from '../store/store';
-import { computeAlerts } from '../pages/Alerts';
+import { computeAlerts, decorateAlerts, filterUnreadAlerts, getDismissedAlertIds } from '../pages/Alerts';
 import { NotificationPanel } from './NotificationPanel';
 
 function getPageMeta(pathname) {
@@ -23,6 +23,13 @@ export function Navbar({ onMenuClick }) {
   const location = useLocation();
   const { label, group } = getPageMeta(location.pathname);
   const [notificationOpen, setNotificationOpen] = useState(false);
+  const [refreshTick, setRefreshTick] = useState(0);
+
+  useEffect(() => {
+    const handleStoreUpdate = () => setRefreshTick(t => t + 1);
+    window.addEventListener('kuetx:store-updated', handleStoreUpdate);
+    return () => window.removeEventListener('kuetx:store-updated', handleStoreUpdate);
+  }, []);
 
   const cycleTheme = () => {
     const order = ['light', 'milky', 'dark'];
@@ -32,8 +39,13 @@ export function Navbar({ onMenuClick }) {
   const ThemeIcon = themeId === 'dark' ? Moon : themeId === 'milky' ? Droplets : Sun;
   const themeLabel = { light: 'Light', milky: 'Milky', dark: 'Dark' }[themeId];
 
-  const alertCounts = computeAlerts(getProfile());
-  const alertCount = (alertCounts.critical?.length || 0) + (alertCounts.warnings?.length || 0);
+  const dismissedIds = useMemo(() => getDismissedAlertIds(), [refreshTick]);
+  const alertCounts = useMemo(() => decorateAlerts(computeAlerts(getProfile()), dismissedIds), [dismissedIds, refreshTick]);
+  const unreadCritical = filterUnreadAlerts(alertCounts.critical, dismissedIds);
+  const unreadWarnings = filterUnreadAlerts(alertCounts.warnings, dismissedIds);
+  const unreadPositives = filterUnreadAlerts(alertCounts.positives, dismissedIds);
+  const unreadAssignments = filterUnreadAlerts(alertCounts.assignmentAlerts, dismissedIds);
+  const alertCount = unreadCritical.length + unreadWarnings.length + unreadPositives.length + unreadAssignments.length;
 
   return (
     <header className="topbar">

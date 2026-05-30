@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Plus, Trash2, Play, Pause, Square, RotateCcw } from 'lucide-react';
+import { Plus, Trash2, Play, Pause, Square, RotateCcw, Save } from 'lucide-react';
 import {
   store,
   uid,
@@ -818,11 +818,23 @@ export function TimeTracker() {
         <button className="btn btn-primary" onClick={() => setManualOpen(true)}><Plus size={13} /> Log Time</button>
       </div>
 
-      <div className="card" style={{ marginBottom: 14, borderColor: 'var(--accent)', background: 'linear-gradient(180deg, rgba(var(--accentRGB), 0.06), var(--surfaceGlassStrong))' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', gap: 10, marginBottom: 10, flexWrap: 'wrap' }}>
-          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-            <button className={`btn ${mode === TIMER_MODES.UP ? 'btn-primary' : 'btn-ghost'}`} onClick={() => setMode(TIMER_MODES.UP)} disabled={timer.isRunning}>Count Up</button>
-            <button className={`btn ${mode === TIMER_MODES.DOWN ? 'btn-primary' : 'btn-ghost'}`} onClick={() => setMode(TIMER_MODES.DOWN)} disabled={timer.isRunning}>Count Down</button>
+      <div className="card time-tracker-card" style={{ marginBottom: 14 }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', gap: 10, marginBottom: 10, flexWrap: 'wrap', alignItems: 'center' }}>
+          <div>
+            <div className="segmented-control" role="tablist" aria-label="Timer mode">
+              <button
+                className={`segmented-btn ${mode === TIMER_MODES.UP ? 'active' : ''}`}
+                onClick={() => setMode(TIMER_MODES.UP)}
+                disabled={timer.isRunning}
+                aria-pressed={mode === TIMER_MODES.UP}
+              >Count Up</button>
+              <button
+                className={`segmented-btn ${mode === TIMER_MODES.DOWN ? 'active' : ''}`}
+                onClick={() => setMode(TIMER_MODES.DOWN)}
+                disabled={timer.isRunning}
+                aria-pressed={mode === TIMER_MODES.DOWN}
+              >Count Down</button>
+            </div>
           </div>
           <div style={{ fontSize: 12, color: 'var(--muted)', alignSelf: 'center' }}>
             Status: <span style={{ fontWeight: 700, color: timer.isRunning ? 'var(--success)' : timer.isCompleted ? 'var(--warning)' : 'var(--muted)' }}>{timer.state.status}</span>
@@ -842,11 +854,11 @@ export function TimeTracker() {
                   const c = 2 * Math.PI * r;
                   const dash = (pct / 100) * c;
                   const offset = c - dash;
-                  return <circle cx="50" cy="50" r="36" stroke="var(--accent)" strokeWidth="8" fill="none" strokeLinecap="round" strokeDasharray={`${c} ${c}`} strokeDashoffset={offset} transform="rotate(-90 50 50)" />;
+                  return <circle cx="50" cy="50" r="36" stroke="var(--accent)" strokeWidth="8" fill="none" strokeLinecap="round" strokeDasharray={`${c} ${c}`} strokeDashoffset={offset} transform="rotate(-90 50 50)" style={{ transition: 'stroke-dashoffset 180ms linear' }} />;
                 })()
               ) : (
                 <g>
-                  <circle cx="50" cy="50" r="36" stroke="rgba(59,130,246,0.18)" strokeWidth="8" fill="none" />
+                  <circle cx="50" cy="50" r="36" stroke="rgba(59,130,246,0.18)" strokeWidth="8" fill="none" style={{ transition: 'stroke-dashoffset 180ms linear' }} />
                 </g>
               )}
             </svg>
@@ -861,11 +873,30 @@ export function TimeTracker() {
             </div>
           </div>
 
-          <div style={{ display: 'flex', gap: 8, justifyContent: 'center', marginTop: 6 }}>
-            <button className="btn btn-ghost btn-sm" onClick={() => { setCountdownInput({ hours: '0', minutes: '25', seconds: '0' }); setMode(TIMER_MODES.DOWN); setPomodoro(p => ({ ...p, enabled: true, isWork: true, workMs: 25 * 60000, breakMs: 5 * 60000 })); }}>Pomodoro 25</button>
-            <button className="btn btn-ghost btn-sm" onClick={() => { setCountdownInput({ hours: '0', minutes: '50', seconds: '0' }); setMode(TIMER_MODES.DOWN); setPomodoro(p => ({ ...p, enabled: true, isWork: true, workMs: 50 * 60000, breakMs: 10 * 60000 })); }}>50/10</button>
-            <button className="btn btn-ghost btn-sm" onClick={() => { setCountdownInput({ hours: '0', minutes: '15', seconds: '0' }); setMode(TIMER_MODES.DOWN); }}>15m</button>
+          <div style={{ marginTop: 6, width: '100%' }}>
+            <div style={{ fontSize: 11, color: 'var(--muted)', textAlign: 'center', marginBottom: 6, fontWeight: 600 }}>Countdown</div>
+            <div style={{ display: 'flex', gap: 8, justifyContent: 'center', flexWrap: 'wrap' }}>
+              <button className="btn btn-ghost btn-sm" title="25 minutes work, 5 minutes break" onClick={() => { setCountdownInput({ hours: '0', minutes: '25', seconds: '0' }); setMode(TIMER_MODES.DOWN); setPomodoro(p => ({ ...p, enabled: true, isWork: true, workMs: 25 * 60000, breakMs: 5 * 60000 })); }}>25m ↓</button>
+              <button className="btn btn-ghost btn-sm" title="50 minutes work, 10 minutes break" onClick={() => { setCountdownInput({ hours: '0', minutes: '50', seconds: '0' }); setMode(TIMER_MODES.DOWN); setPomodoro(p => ({ ...p, enabled: true, isWork: true, workMs: 50 * 60000, breakMs: 10 * 60000 })); }}>50m ↓</button>
+              <button className="btn btn-ghost btn-sm" title="15 minute countdown" onClick={() => { setCountdownInput({ hours: '0', minutes: '15', seconds: '0' }); setMode(TIMER_MODES.DOWN); }}>15m ↓</button>
+            </div>
+            <div style={{ fontSize: 11, color: 'var(--muted)', textAlign: 'center', marginTop: 6 }}>Presets include short breaks where applicable</div>
           </div>
+        </div>
+
+        <div style={{ display: 'flex', gap: 8, justifyContent: 'center', marginTop: 8 }}>
+          <button className={`btn btn-ghost btn-sm`} onClick={() => {
+            const next = { ...timerPrefs, sound: !timerPrefs.sound };
+            setTimerPrefsState(next); store.set('timer_prefs_v1', next);
+          }} title="Toggle sound">{timerPrefs.sound ? '🔊 Sound' : '🔈 Sound'}</button>
+          <button className={`btn btn-ghost btn-sm`} onClick={() => {
+            const next = { ...timerPrefs, vibrate: !timerPrefs.vibrate };
+            setTimerPrefsState(next); store.set('timer_prefs_v1', next);
+          }} title="Toggle vibrate">{timerPrefs.vibrate ? '📳 Vibrate' : '📴 Vibrate'}</button>
+          <button className={`btn btn-ghost btn-sm`} onClick={() => {
+            const next = { ...timerPrefs, notify: !timerPrefs.notify };
+            setTimerPrefsState(next); store.set('timer_prefs_v1', next);
+          }} title="Toggle desktop notifications">{timerPrefs.notify ? '🔔 Notify' : '🔕 Notify'}</button>
         </div>
 
         {mode === TIMER_MODES.DOWN && (
@@ -887,40 +918,10 @@ export function TimeTracker() {
           )}
           {timer.isRunning && <button className="btn btn-ghost" onClick={timer.pause}><Pause size={13} /> Pause</button>}
           {timer.isPaused && <button className="btn btn-primary" onClick={timer.resume}><Play size={13} /> Resume</button>}
-          {(timer.isRunning || timer.isPaused) && <button className="btn btn-primary" onClick={handleStopAndSave}><Square size={13} /> Stop & Save</button>}
+          {(timer.isRunning || timer.isPaused) && <button className="btn btn-primary" onClick={handleStopAndSave}><Save size={13} /> Stop & Save</button>}
           {(timer.isPaused || timer.isCompleted || timer.isIdle) && <button className="btn btn-ghost" onClick={timer.reset}><RotateCcw size={13} /> Reset</button>}
         </div>
-        <div className="time-tracker-alerts" style={{ display: 'flex', gap: 8, marginTop: 10, alignItems: 'center', justifyContent: 'center', flexWrap: 'wrap' }}>
-          <label style={{ fontSize: 12, color: 'var(--muted)', marginRight: 8 }}>Reminders:</label>
-          <button className={`btn btn-ghost btn-sm${timerPrefs.notify ? ' active' : ''}`} onClick={() => {
-            const next = { ...timerPrefs, notify: !timerPrefs.notify };
-            setTimerPrefsState(next); store.set('timer_prefs_v1', next);
-          }}>{timerPrefs.notify ? 'Notify ✓' : 'Notify'}</button>
-          <button className={`btn btn-ghost btn-sm${timerPrefs.sound ? ' active' : ''}`} onClick={() => {
-            const next = { ...timerPrefs, sound: !timerPrefs.sound };
-            setTimerPrefsState(next); store.set('timer_prefs_v1', next);
-          }}>{timerPrefs.sound ? 'Sound ✓' : 'Sound'}</button>
-          <button className={`btn btn-ghost btn-sm${timerPrefs.vibrate ? ' active' : ''}`} onClick={() => {
-            const next = { ...timerPrefs, vibrate: !timerPrefs.vibrate };
-            setTimerPrefsState(next); store.set('timer_prefs_v1', next);
-          }}>{timerPrefs.vibrate ? 'Vibrate ✓' : 'Vibrate'}</button>
-          <button className="btn btn-ghost btn-sm" onClick={() => {
-            try {
-              if (!('Notification' in window)) return alert('Notifications not supported in this browser');
-              if (Notification.permission === 'granted') return alert('Notifications already granted');
-              Notification.requestPermission().then(p => {
-                if (p === 'granted') alert('Notifications enabled'); else alert('Notifications denied');
-              });
-            } catch (e) { /* ignore */ }
-          }}>Permission</button>
-          <div style={{ marginLeft: 8 }}>
-            <label style={{ fontSize: 12, color: 'var(--muted)', marginRight: 6 }}>Pomodoro</label>
-            <button className={`btn btn-ghost btn-sm${pomodoro.enabled ? ' active' : ''}`} onClick={() => setPomodoro(p => ({ ...p, enabled: !p.enabled }))}>{pomodoro.enabled ? 'On ✓' : 'Off'}</button>
-          </div>
-        </div>
-        <div className="time-tracker-templates-help" style={{ marginTop: 8 }}>
-          {pomodoro.enabled ? 'Pomodoro auto-cycle is on.' : 'Pomodoro is off.'}
-        </div>
+        {/* Reminders / Pomodoro UI removed for a minimal compact design */}
       </div>
 
       {manualOpen && (
@@ -933,7 +934,7 @@ export function TimeTracker() {
           <div className="form-field" style={{ marginBottom: 10 }}><label>Note</label><input value={form.note} onChange={e => set('note', e.target.value)} placeholder="Optional detail" /></div>
 
           <div className="time-tracker-actions" style={{ display: 'flex', gap: 8 }}>
-            <button className="btn btn-primary" onClick={saveManualLog}>Save</button>
+            <button className="btn btn-primary" onClick={saveManualLog}><Save size={13} /> Save</button>
             <button className="btn btn-ghost" onClick={() => setManualOpen(false)}>Cancel</button>
           </div>
         </div>
@@ -948,43 +949,47 @@ export function TimeTracker() {
       {sessions.length > 0 && (
         <div className="card" style={{ marginTop: 14 }}>
           <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 10 }}>Recent Digital Sessions</div>
-          {sessions.slice(0, 8).map(s => (
-            <div key={s.id} style={{ display: 'flex', justifyContent: 'space-between', gap: 10, alignItems: 'center', padding: '7px 0', borderBottom: '1px solid var(--border)', fontSize: 12 }}>
-              <div style={{ minWidth: 0 }}>
-                <div style={{ fontWeight: 600 }}>{s.category} · {s.mode === TIMER_MODES.DOWN ? 'count down' : 'count up'}</div>
-                <div style={{ color: 'var(--muted)' }}>{new Date(s.endedAt || s.savedAt).toLocaleString('en-BD')}{s.note ? ` · ${s.note}` : ''}</div>
+          <div className="time-session-list">
+            {sessions.slice(0, 8).map(s => (
+              <div key={s.id} className="time-session-item">
+                <div className="time-session-main">
+                  <div className="time-session-title">{s.category} · {s.mode === TIMER_MODES.DOWN ? 'count down' : 'count up'}</div>
+                  <div className="time-session-meta">{new Date(s.endedAt || s.savedAt).toLocaleString('en-BD')}{s.note ? ` · ${s.note}` : ''}</div>
+                </div>
+                <div className="time-session-actions">
+                  <div className="time-session-duration">{formatDurationMs(s.actualMs || 0)}</div>
+                  <div className="time-session-buttons">
+                    <button className="btn btn-ghost btn-sm" title="Edit" onClick={() => {
+                      const newHours = prompt('Hours (decimal)', String(hoursFromMs(s.actualMs || 0)));
+                      if (newHours === null) return;
+                      const newCat = prompt('Category', s.category) || s.category;
+                      const updated = { ...s, actualMs: Math.round((Number(newHours) || 0) * 3600000), category: newCat, savedAt: Date.now() };
+                      const next = sessions.map(x => x.id === s.id ? updated : x);
+                      setTimerSessions(next);
+                      setSessions(next);
+                    }}>Edit</button>
+                    <button className="btn btn-ghost btn-sm" title="Delete" onClick={() => {
+                      if (!confirm('Delete this session?')) return;
+                      const next = sessions.filter(x => x.id !== s.id);
+                      setTimerSessions(next);
+                      setSessions(next);
+                    }}>Delete</button>
+                    <button className="btn btn-ghost btn-sm" title="Merge Prev" onClick={() => {
+                      const idx = sessions.findIndex(x => x.id === s.id);
+                      if (idx <= 0) return alert('No previous session to merge with');
+                      const prev = sessions[idx - 1];
+                      if (!confirm(`Merge this session into previous (${prev.category} · ${formatDurationMs(prev.actualMs || 0)})?`)) return;
+                      const merged = { ...prev, actualMs: (Number(prev.actualMs || 0) + Number(s.actualMs || 0)), note: `${prev.note || ''} + ${s.note || ''}`, savedAt: Date.now() };
+                      const next = sessions.slice().filter(x => x.id !== s.id && x.id !== prev.id);
+                      next.splice(idx - 1, 0, merged);
+                      setTimerSessions(next);
+                      setSessions(next);
+                    }}>Merge</button>
+                  </div>
+                </div>
               </div>
-              <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-                <div style={{ fontWeight: 700 }}>{formatDurationMs(s.actualMs || 0)}</div>
-                <button className="btn btn-ghost btn-sm" onClick={() => {
-                  const newHours = prompt('Hours (decimal)', String(hoursFromMs(s.actualMs || 0)));
-                  if (newHours === null) return;
-                  const newCat = prompt('Category', s.category) || s.category;
-                  const updated = { ...s, actualMs: Math.round((Number(newHours) || 0) * 3600000), category: newCat, savedAt: Date.now() };
-                  const next = sessions.map(x => x.id === s.id ? updated : x);
-                  setTimerSessions(next);
-                  setSessions(next);
-                }}>Edit</button>
-                <button className="btn btn-ghost btn-sm" onClick={() => {
-                  if (!confirm('Delete this session?')) return;
-                  const next = sessions.filter(x => x.id !== s.id);
-                  setTimerSessions(next);
-                  setSessions(next);
-                }}>Delete</button>
-                <button className="btn btn-ghost btn-sm" onClick={() => {
-                  const idx = sessions.findIndex(x => x.id === s.id);
-                  if (idx <= 0) return alert('No previous session to merge with');
-                  const prev = sessions[idx - 1];
-                  if (!confirm(`Merge this session into previous (${prev.category} · ${formatDurationMs(prev.actualMs || 0)})?`)) return;
-                  const merged = { ...prev, actualMs: (Number(prev.actualMs || 0) + Number(s.actualMs || 0)), note: `${prev.note || ''} + ${s.note || ''}`, savedAt: Date.now() };
-                  const next = sessions.slice().filter(x => x.id !== s.id && x.id !== prev.id);
-                  next.splice(idx - 1, 0, merged);
-                  setTimerSessions(next);
-                  setSessions(next);
-                }}>Merge Prev</button>
-              </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       )}
     </div>

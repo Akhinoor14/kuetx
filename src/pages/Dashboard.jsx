@@ -4,6 +4,7 @@ import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianG
 import { TrendingUp, Award, AlertTriangle, BookOpen, CalendarCheck, Clock, Wallet, Star } from 'lucide-react';
 import * as Icons from 'lucide-react';
 import { store, cgpaToPercent, computeCGPA, computeTermGPAs, computeEffectiveAttendance, MIN_ATTENDANCE_PERCENT, SCHOLARSHIP_ATTENDANCE_PCT, computeCourseGrade, deriveAcademicMetaFromCourses, syncProfileAcademicMeta, getAllCourses, getProfile, getTermLabelFromKey, getCurrentTermKey, getTermProgress, getTermTimeline, getTermIndex, TERM_KEYS, getTimerActiveState, formatDurationMs, PRODUCTIVE_TIME_CATEGORIES } from '../store/store';
+import { NAV } from '../nav';
 import ticker from '../lib/ticker';
 
 function StatCard({ label, value, sub, color, bgColor, icon: Icon, to }) {
@@ -43,12 +44,7 @@ export default function Dashboard() {
   const profile  = getProfile();
   const courses  = getAllCourses(profile);
   const [, setStoreRefreshTick] = useState(0);
-  const quickAccessLinks = useMemo(() => ([
-    { id: 'profile', label: 'Profile', icon: 'User', path: '/profile' },
-    { id: 'courses', label: 'Courses', icon: 'BookOpen', path: '/courses' },
-    { id: 'attendance', label: 'Attendance', icon: 'CalendarCheck', path: '/attendance' },
-    { id: 'settings', label: 'Settings', icon: 'Star', path: '/settings' },
-  ]), []);
+  // Quick access removed — kept minimal dashboard content
 
   const { cgpa, earnedCredits, termGPAs, alerts } = useMemo(() => {
     const { cgpa, earnedCredits } = computeCGPA(courses);
@@ -183,32 +179,47 @@ export default function Dashboard() {
               <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--muted)' }}>{todayDayLine}</div>
             </div>
           </div>
+            {/* Class Rep section - visible only to class reps */}
+            {profile.isCR && (
+              <div className="card cr-card" style={{ marginBottom: 12, padding: 12, borderRadius: 12 }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <div>
+                    <div style={{ fontSize: 11, fontWeight: 800, textTransform: 'uppercase', color: 'var(--muted)', marginBottom: 4 }}>Class Representative</div>
+                    <div style={{ fontSize: 15, fontWeight: 800 }}>Class Management</div>
+                    <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 6 }}>CR tools (visible only to class reps). New CR pages appear here automatically.</div>
+                  </div>
+                  <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+                    {/* primary link: class-management if present */}
+                    {(() => {
+                      const primary = NAV.flatMap(g => g.items || []).find(i => i.id === 'class-management');
+                      if (!primary) return null;
+                      const IconComp = Icons[primary.icon] || null;
+                      return (
+                        <Link key={primary.id} to={primary.path} className="btn btn-primary" style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
+                          {IconComp && <IconComp size={14} />} <span style={{ fontWeight: 800 }}>{primary.label}</span>
+                        </Link>
+                      );
+                    })()}
+                  </div>
+                </div>
+
+                {/* additional CR-only pages as small chips */}
+                <div style={{ marginTop: 12, display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                  {NAV.flatMap(g => g.items || []).filter(i => i.requiresCR && i.id !== 'class-management').map(it => {
+                    const IconComp = Icons[it.icon] || null;
+                    return (
+                      <Link key={it.id} to={it.path} className="cr-chip" style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
+                        {IconComp && <IconComp size={13} />} <span style={{ fontSize: 13, fontWeight: 700 }}>{it.label}</span>
+                      </Link>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
         </div>
       )}
 
-      {/* Quick Access — Clean & Minimal */}
-      <div className="card dashboard-quickaccess-card">
-        <div className="dashboard-quickaccess-header">
-          <div>
-            <div className="dashboard-quickaccess-title">Quick Access</div>
-            <div className="dashboard-quickaccess-sub">Common pages</div>
-          </div>
-        </div>
-
-        <div className="dashboard-quickaccess-grid">
-          {quickAccessLinks.map(item => {
-            const Icon = Icons[item.icon] || Icons.Circle;
-            return (
-              <Link key={item.id} to={item.path} className="dashboard-quickaccess-item">
-                <div className="dashboard-quickaccess-icon">
-                  <Icon size={18} strokeWidth={1.8} />
-                </div>
-                <span>{item.label}</span>
-              </Link>
-            );
-          })}
-        </div>
-      </div>
+      {/* Quick Access removed */}
 
       {/* Setup prompt */}
       {!profile.name && (
