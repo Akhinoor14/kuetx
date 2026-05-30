@@ -11,8 +11,7 @@ const TEXTRIVA_URL = "https://textriva.vercel.app/";
 
 // ─── CSS ─────────────────────────────────────────────────────────────────────
 const STYLES = `
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&family=Cabinet+Grotesk:wght@700;800&display=swap');
-
+/* system fonts only (offline) */
 :root {
   --surface2: color-mix(in srgb, var(--surface) 94%, var(--text) 6%);
   --surface3: color-mix(in srgb, var(--surface) 88%, var(--text) 12%);
@@ -34,9 +33,9 @@ const STYLES = `
   --r: 6px;
   --r2: 10px;
   --r3: 14px;
-  --font: 'DM Sans', system-ui, sans-serif;
-  --font-display: 'Cabinet Grotesk', 'DM Sans', sans-serif;
-  --font-mono: 'DM Mono', 'Fira Code', monospace;
+  --font: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+  --font-display: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, 'Roboto Mono', 'Courier New', monospace;
   --shadow-sm: 0 1px 4px rgba(0,0,0,0.18);
   --shadow: 0 4px 20px rgba(0,0,0,0.14);
   --shadow-lg: 0 8px 40px rgba(0,0,0,0.18);

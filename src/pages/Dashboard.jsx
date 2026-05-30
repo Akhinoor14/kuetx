@@ -158,7 +158,8 @@ export default function Dashboard() {
     <div className="page-enter page-container dashboard-page">
       {/* Welcome */}
       {(profile.name || profile.dept || inferredBatch || currentTermLabel) && (
-        <div className="card dashboard-hero" style={{ marginBottom: 22, padding: 'clamp(16px, 4vw, 30px)', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: 18, alignItems: 'stretch', minHeight: 'auto' }}>
+        <Link to="/profile" style={{ textDecoration: 'none' }}>
+        <div className="card dashboard-hero" style={{ marginBottom: 22, padding: 'clamp(16px, 4vw, 30px)', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: 18, alignItems: 'stretch', minHeight: 'auto', cursor: 'pointer' }}>
           <div className="dashboard-hero-main" style={{ minWidth: 0, display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: 18, paddingRight: 'clamp(0px, 2vw, 8px)' }}>
             {profile.name && (
               <div style={{ marginBottom: 4 }}>
@@ -179,44 +180,9 @@ export default function Dashboard() {
               <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--muted)' }}>{todayDayLine}</div>
             </div>
           </div>
-            {/* Class Rep section - visible only to class reps */}
-            {profile.isCR && (
-              <div className="card cr-card" style={{ marginBottom: 12, padding: 12, borderRadius: 12 }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <div>
-                    <div style={{ fontSize: 11, fontWeight: 800, textTransform: 'uppercase', color: 'var(--muted)', marginBottom: 4 }}>Class Representative</div>
-                    <div style={{ fontSize: 15, fontWeight: 800 }}>Class Management</div>
-                    <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 6 }}>CR tools (visible only to class reps). New CR pages appear here automatically.</div>
-                  </div>
-                  <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-                    {/* primary link: class-management if present */}
-                    {(() => {
-                      const primary = NAV.flatMap(g => g.items || []).find(i => i.id === 'class-management');
-                      if (!primary) return null;
-                      const IconComp = Icons[primary.icon] || null;
-                      return (
-                        <Link key={primary.id} to={primary.path} className="btn btn-primary" style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
-                          {IconComp && <IconComp size={14} />} <span style={{ fontWeight: 800 }}>{primary.label}</span>
-                        </Link>
-                      );
-                    })()}
-                  </div>
-                </div>
-
-                {/* additional CR-only pages as small chips */}
-                <div style={{ marginTop: 12, display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-                  {NAV.flatMap(g => g.items || []).filter(i => i.requiresCR && i.id !== 'class-management').map(it => {
-                    const IconComp = Icons[it.icon] || null;
-                    return (
-                      <Link key={it.id} to={it.path} className="cr-chip" style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
-                        {IconComp && <IconComp size={13} />} <span style={{ fontSize: 13, fontWeight: 700 }}>{it.label}</span>
-                      </Link>
-                    );
-                  })}
-                </div>
-              </div>
-            )}
+            {/* Class Rep card removed per request */}
         </div>
+        </Link>
       )}
 
       {/* Quick Access removed */}

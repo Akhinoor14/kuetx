@@ -19,6 +19,7 @@ const PINNED_BUTTONS = [
 
 const PANEL_TITLES = {
   'most-used': 'Most used',
+  'quick-cr': 'Quick',
   study: 'Study',
   money: 'Wallet',
   menu: 'Menu',
@@ -27,6 +28,7 @@ const PANEL_TITLES = {
 
 const PANEL_SUBTITLES = {
   'most-used': 'Eight shortcuts tuned to your habits',
+  'quick-cr': 'CR tools above your shortcuts',
   study: 'Academics & daily tools',
   money: 'Money & activities',
   menu: 'Tools, notes, settings, and more',
@@ -113,6 +115,18 @@ const buildPanelSections = (profile, panel, itemMap, mostUsedItems) => {
     return [{ group: 'Most used', items: mostUsedItems }];
   }
 
+  if (panel === 'quick-cr') {
+    const crItems = NAV.flatMap(s => s.items || [])
+      .filter(i => i.requiresCR && profile?.isCR)
+      .map(i => itemMap.get(i.id) || i)
+      .filter(Boolean);
+
+    const sections = [];
+    if (crItems.length) sections.push({ group: 'CR', items: crItems });
+    sections.push({ group: 'Most used', items: mostUsedItems });
+    return sections;
+  }
+
   const groups = PANEL_SECTION_GROUPS[panel] || [];
   const sections = [];
 
@@ -157,18 +171,18 @@ function NavGridItem({ item, onSelect }) {
     'profile': 'Profile',
     'smart-score': 'Score',
     'notes': 'Notes',
-    'class-management': 'Class Mgmt',
+    'class-management': 'Class',
     'courses': 'Courses',
     'attendance': 'Attend',
-    'schedule': 'Schedule',
-    'assignments': 'Assign',
+    'schedule': 'Sched',
+    'assignments': 'Tasks',
     'syllabus': 'Syllabus',
     'qbank': 'QBank',
     'marks': 'Planner',
-    'results': 'Results',
-    'teachers': 'Teachers',
+    'results': 'GPA',
+    'teachers': 'Tchr',
     'diary': 'Diary',
-    'self-study': 'Self-Study',
+    'self-study': 'Self',
     'time': 'Time',
     'namaz': 'Namaz',
     'self-eval': 'Self-Eval',
@@ -273,17 +287,11 @@ export function BottomNav() {
   const pinnedButtons = useMemo(() => {
     const base = [
       { id: 'dashboard', label: 'Home', icon: 'Home', kind: 'route', path: '/' },
-      { id: 'most-used', label: 'Quick', icon: 'Star', kind: 'panel', panel: 'most-used' },
+      { id: 'most-used', label: profile?.isCR ? 'CR' : 'Quick', icon: profile?.isCR ? 'Users' : 'Star', kind: 'panel', panel: profile?.isCR ? 'quick-cr' : 'most-used' },
       { id: 'study', label: 'Study', icon: 'BookOpen', kind: 'panel', panel: 'study' },
       { id: 'money', label: 'Wallet', icon: 'Wallet', kind: 'panel', panel: 'money' },
       { id: 'menu', label: 'Menu', icon: 'Menu', kind: 'panel', panel: 'menu' },
     ];
-
-    if (profile?.isCR) {
-      // insert CR tab after Quick (index 2)
-      const crButton = { id: 'cr', label: 'CR', icon: 'Users', kind: 'panel', panel: 'cr' };
-      base.splice(2, 0, crButton);
-    }
 
     return base;
   }, [profile]);
@@ -300,7 +308,7 @@ export function BottomNav() {
 
   const isButtonActive = (button) => {
     if (button.kind === 'route') return activeRoute(itemMap.get(button.id) || { path: button.path });
-    if (button.panel === 'most-used') return activePanel === 'most-used' || isMostUsedActive;
+    if (button.panel === 'most-used' || button.panel === 'quick-cr') return (activePanel === 'most-used' || activePanel === 'quick-cr') || isMostUsedActive;
     if (button.panel === 'study') return activePanel === 'study' || isStudyActive;
     if (button.panel === 'money') return activePanel === 'money' || isMoneyActive;
     if (button.panel === 'menu') return activePanel === 'menu' || isMenuActive;
@@ -321,11 +329,16 @@ export function BottomNav() {
       />
       <div className="mobile-bottom-nav-panel-wrap">
         <div className="mobile-bottom-nav-panel-container">
-          <div className="mobile-bottom-nav-panel" role="dialog" aria-modal="true" aria-label={PANEL_TITLES[activePanel]}>
+          <div className="mobile-bottom-nav-panel" role="dialog" aria-modal="true" aria-label={(activePanel === 'quick-cr' && profile?.isCR) ? 'Class Rep' : PANEL_TITLES[activePanel]}>
             <div className="mobile-bottom-nav-panel-head">
-              <div>
-                <div className="mobile-bottom-nav-panel-title">{PANEL_TITLES[activePanel]}</div>
-                <div className="mobile-bottom-nav-panel-subtitle">{PANEL_SUBTITLES[activePanel]}</div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                {(activePanel === 'quick-cr' && profile?.isCR) ? (
+                  <span className="mobile-bottom-nav-panel-icon-large"><Icons.Users size={20} /></span>
+                ) : null}
+                <div>
+                  <div className="mobile-bottom-nav-panel-title">{(activePanel === 'quick-cr' && profile?.isCR) ? 'Class Rep' : PANEL_TITLES[activePanel]}</div>
+                  <div className="mobile-bottom-nav-panel-subtitle">{(activePanel === 'quick-cr' && profile?.isCR) ? 'CR tools above your shortcuts' : PANEL_SUBTITLES[activePanel]}</div>
+                </div>
               </div>
               <button type="button" className="mobile-bottom-nav-close" onClick={() => setActivePanel(null)} aria-label="Close panel">
                 <Icons.X size={16} />
@@ -349,7 +362,7 @@ export function BottomNav() {
       {panelLayer}
       <nav className="mobile-bottom-nav" aria-label="Mobile navigation">
         <div className="mobile-bottom-nav-shell">
-          {PINNED_BUTTONS.map(button => {
+          {pinnedButtons.map(button => {
             const Icon = Icons[button.icon] || Icons.Circle;
             const active = isButtonActive(button);
 

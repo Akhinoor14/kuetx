@@ -5,7 +5,7 @@ import { Sidebar } from './components/Sidebar';
 import { Navbar } from './components/Navbar';
 import { Footer } from './components/Footer';
 import PWAInstallPrompt from './components/PWAInstallPrompt';
-import { BottomNav } from './components/BottomNav';
+import { BottomNav, useIsMobileNav } from './components/BottomNav';
 
 // Pages
 import Dashboard from './pages/Dashboard';
@@ -44,6 +44,7 @@ function Layout() {
     }
   });
   const location = useLocation();
+  const isMobileNav = useIsMobileNav();
   const isQuestionBankViewer = location.pathname === '/question-bank/view';
 
   useEffect(() => {
@@ -103,7 +104,7 @@ function Layout() {
             <Route path="/class-management" element={<ClassManagement />} />
           </Routes>
         </div>
-        {location.pathname !== '/about' && !isQuestionBankViewer && <Footer />}
+        {location.pathname !== '/about' && !isQuestionBankViewer && !isMobileNav && <Footer />}
         {!isQuestionBankViewer && <PWAInstallPrompt />}
         {!isQuestionBankViewer && <BottomNav />}
       </div>

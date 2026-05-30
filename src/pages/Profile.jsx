@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import * as Icons from 'lucide-react';
 import { store, getProfile, DEFAULT_PROFILE, DEPARTMENTS } from '../store/store';
 import ProfileSetupModal from '../components/ProfileSetupModal';
 import { Logo } from '../components/Logo';
@@ -92,38 +93,58 @@ export default function Profile() {
 
   return (
     <div className="page-enter page-container">
-      {/* Setup Button - Top (only when no profile) */}
-      {!hasProfile && (
-        <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 20 }}>
-          <button
-            onClick={() => setIsModalOpen(true)}
-            style={{
-              padding: '10px 20px',
-              background: 'linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%)',
-              color: 'white',
-              border: 'none',
-              borderRadius: 8,
-              fontSize: 13,
-              fontWeight: 700,
-              cursor: 'pointer',
-              transition: 'all 0.3s ease',
-              boxShadow: '0 4px 16px rgba(22, 163, 74, 0.25)',
-              whiteSpace: 'nowrap',
-              letterSpacing: '0.4px',
-            }}
-            onMouseEnter={e => {
-              e.target.style.boxShadow = '0 8px 24px rgba(22, 163, 74, 0.4)';
-              e.target.style.transform = 'translateY(-2px)';
-            }}
-            onMouseLeave={e => {
-              e.target.style.boxShadow = '0 4px 16px rgba(22, 163, 74, 0.25)';
-              e.target.style.transform = 'translateY(0)';
-            }}
-          >
-            + Setup Profile
-          </button>
-        </div>
-      )}
+      {/* Top-right action: setup button or compact simulate-CR toggle */}
+      <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 20 }}>
+        {!hasProfile ? (
+          <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+            <button
+              onClick={() => setIsModalOpen(true)}
+              style={{
+                padding: '10px 20px',
+                background: 'linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%)',
+                color: 'white',
+                border: 'none',
+                borderRadius: 8,
+                fontSize: 13,
+                fontWeight: 700,
+                cursor: 'pointer',
+                transition: 'all 0.3s ease',
+                boxShadow: '0 4px 16px rgba(22, 163, 74, 0.25)',
+                whiteSpace: 'nowrap',
+                letterSpacing: '0.4px',
+              }}
+              onMouseEnter={e => {
+                e.target.style.boxShadow = '0 8px 24px rgba(22, 163, 74, 0.4)';
+                e.target.style.transform = 'translateY(-2px)';
+              }}
+              onMouseLeave={e => {
+                e.target.style.boxShadow = '0 4px 16px rgba(22, 163, 74, 0.25)';
+                e.target.style.transform = 'translateY(0)';
+              }}
+            >
+              + Setup Profile
+            </button>
+          </div>
+        ) : (
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            <button
+              onClick={() => {
+                const next = { ...profile, isCR: !profile.isCR };
+                store.set('profile', next);
+                setProfile(next);
+                setSaved(true);
+                setTimeout(() => setSaved(false), 2200);
+              }}
+              title="Toggle Class Rep simulation"
+              className={`profile-cr-pill ${profile.isCR ? 'active' : ''}`}
+            >
+              <Icons.Users size={16} />
+              <span style={{ whiteSpace: 'nowrap' }}>{profile.isCR ? 'CR ON' : 'Simulate CR'}</span>
+            </button>
+            <div style={{ fontSize: 12, color: 'var(--muted)' }}>Test CR UI</div>
+          </div>
+        )}
+      </div>
 
       {saved && (
         <div style={{
@@ -143,6 +164,8 @@ export default function Profile() {
           <span style={{ fontSize: 18 }}>✓</span> Profile updated successfully!
         </div>
       )}
+
+      
 
       {profile && profile.isCR && (
         <div style={{
