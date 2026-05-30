@@ -1,18 +1,17 @@
 import { Link, useLocation } from 'react-router-dom';
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
+import { createPortal } from 'react-dom';
 import * as Icons from 'lucide-react';
 import { NAV } from '../nav';
 import { store, getProfile } from '../store/store';
+import { DEFAULT_NAV_LAYOUT } from './nav-system/useNavLayout';
 import { computeAlerts } from '../pages/Alerts';
 
 // ── Constants ────────────────────────────────────────────────────────────────
-const MAX_TABS = 4; // Max pinned tabs (excluding Dashboard). Total = 5 tabs on mobile.
-const DEFAULT_TABS = [
-  { type: 'page', id: 'attendance' },
-  { type: 'page', id: 'marks' },
-  { type: 'page', id: 'schedule' },
-  { type: 'page', id: 'assignments' },
-];
+const MAX_TABS = 3; // Middle slots only. Dashboard and Menu stay fixed.
+// Use centralized defaults from useNavLayout
+const DEFAULT_GROUPS = DEFAULT_NAV_LAYOUT.customGroups;
+const DEFAULT_TABS = DEFAULT_NAV_LAYOUT.pinnedTabs;
 
 // Group icon map — pick a representative icon per section group
 const GROUP_ICONS = {
@@ -44,15 +43,49 @@ const CUSTOM_GROUP_ICONS = [
 ];
 
 const USAGE_KEY = 'nav_usage_v1';
-const MAX_RECENT = 6;
+const MAX_RECENT = 8;
+const ICON_SIZE = 20;
+const ICON_STROKE = 1.8;
 
 const COMPACT_BOTTOM_NAV_LABELS = {
   'Class Schedule': 'Schedule',
   'Assignments': 'Tasks',
   'Term Planner': 'Planner',
+  'Most used': 'Most',
+  'Academics & Daily': 'Study',
+  'Finance & Activities': 'Finance',
+  'Dashboard': 'Home',
 };
 
+const MOBILE_NAV_QUERY = '(max-width: 767.98px)';
+
 const getBottomNavLabel = (label) => COMPACT_BOTTOM_NAV_LABELS[label] || label;
+
+export function useIsMobileNav() {
+  const [isMobileNav, setIsMobileNav] = useState(() => {
+    if (typeof window === 'undefined' || !window.matchMedia) return false;
+    return window.matchMedia(MOBILE_NAV_QUERY).matches;
+  });
+
+  useEffect(() => {
+    if (typeof window === 'undefined' || !window.matchMedia) return undefined;
+
+    const mediaQuery = window.matchMedia(MOBILE_NAV_QUERY);
+    const sync = (event) => setIsMobileNav(event.matches);
+
+    setIsMobileNav(mediaQuery.matches);
+
+    if (mediaQuery.addEventListener) {
+      mediaQuery.addEventListener('change', sync);
+      return () => mediaQuery.removeEventListener('change', sync);
+    }
+
+    mediaQuery.addListener(sync);
+    return () => mediaQuery.removeListener(sync);
+  }, []);
+
+  return isMobileNav;
+}
 
 const getUsageState = () => {
   try {
@@ -71,11 +104,11 @@ export function useBottomNavTabs() {
   const [tabs, setTabs] = useState(() => {
     try {
       const saved = store.get('bottomnav_tabs_v2');
-      if (Array.isArray(saved) && saved.length > 0) return saved;
+      if (Array.isArray(saved) && saved.length > 0) return saved.slice(0, MAX_TABS);
       // migrate old favourites format
       const old = store.get('bottomnav_favourites');
       if (Array.isArray(old) && old.length > 0) {
-        return old.filter(id => id !== 'dashboard').map(id => ({ type: 'page', id }));
+        return old.filter(id => id !== 'dashboard').map(id => ({ type: 'page', id })).slice(0, MAX_TABS);
       }
       return DEFAULT_TABS;
     } catch {
@@ -84,8 +117,9 @@ export function useBottomNavTabs() {
   });
 
   const saveTabs = (newTabs) => {
-    setTabs(newTabs);
-    try { store.set('bottomnav_tabs_v2', newTabs); } catch {}
+    const nextTabs = Array.isArray(newTabs) ? newTabs.slice(0, MAX_TABS) : [];
+    setTabs(nextTabs);
+    try { store.set('bottomnav_tabs_v2', nextTabs); } catch {}
   };
 
   return [tabs, saveTabs];
@@ -96,10 +130,10 @@ export function useBottomNavGroups() {
   const [groups, setGroups] = useState(() => {
     try {
       const saved = store.get('bottomnav_groups_v1');
-      if (Array.isArray(saved)) return saved;
-      return [];
+      if (Array.isArray(saved) && saved.length > 0) return saved;
+      return DEFAULT_GROUPS;
     } catch {
-      return [];
+      return DEFAULT_GROUPS;
     }
   });
 
@@ -119,8 +153,8 @@ export function useBottomNavFavourites() {
       if (Array.isArray(tabs) && tabs.length > 0) return tabs.filter(t => t.type === 'page').map(t => t.id).filter(Boolean);
       const old = store.get('bottomnav_favourites');
       if (Array.isArray(old) && old.length > 0) return old;
-      // default quick-access favourites (keep dashboard excluded)
-      return DEFAULT_TABS.map(t => t.id).filter(Boolean);
+      // default quick-access favourites (pages only)
+      return [];
     } catch {
       return [];
     }
@@ -130,10 +164,15 @@ export function useBottomNavFavourites() {
     const sync = () => {
       try {
         const tabs = store.get('bottomnav_tabs_v2');
-        if (Array.isArray(tabs) && tabs.length > 0) return setFavourites(tabs.filter(t => t.type === 'page').map(t => t.id).filter(Boolean));
-        const old = store.get('bottomnav_favourites');
-        if (Array.isArray(old)) return setFavourites(old);
-        setFavourites(DEFAULT_TABS.map(t => t.id));
+        const next = (Array.isArray(tabs) && tabs.length > 0)
+          ? tabs.filter(t => t.type === 'page').map(t => t.id).filter(Boolean)
+          : (Array.isArray(store.get('bottomnav_favourites')) ? store.get('bottomnav_favourites') : []);
+        setFavourites(prev => {
+          try {
+            if (JSON.stringify(prev) === JSON.stringify(next)) return prev;
+          } catch {}
+          return next;
+        });
       } catch {
         // ignore
       }
@@ -145,7 +184,7 @@ export function useBottomNavFavourites() {
 
   const toggleFavourite = (id) => {
     try {
-      const tabs = store.get('bottomnav_tabs_v2') || (Array.isArray(store.get('bottomnav_favourites')) ? store.get('bottomnav_favourites').map(i => ({ type: 'page', id: i })) : DEFAULT_TABS);
+      const tabs = store.get('bottomnav_tabs_v2') || (Array.isArray(store.get('bottomnav_favourites')) ? store.get('bottomnav_favourites').map(i => ({ type: 'page', id: i })) : []);
       const exists = tabs.some(t => t.id === id);
       const newTabs = exists ? tabs.filter(t => t.id !== id) : [...tabs, { type: 'page', id }];
       store.set('bottomnav_tabs_v2', newTabs);
@@ -160,7 +199,17 @@ export function useNavUsageData() {
   const [usage, setUsage] = useState(() => getUsageState());
 
   useEffect(() => {
-    const sync = () => setUsage(getUsageState());
+    const sync = () => {
+      try {
+        const next = getUsageState();
+        setUsage(prev => {
+          try {
+            if (JSON.stringify(prev) === JSON.stringify(next)) return prev;
+          } catch {}
+          return next;
+        });
+      } catch {}
+    };
     window.addEventListener('kuetx:store-updated', sync);
     sync();
     return () => window.removeEventListener('kuetx:store-updated', sync);
@@ -187,10 +236,13 @@ export function getVisibleSections(profile) {
 // ── BottomNav ─────────────────────────────────────────────────────────────────
 export function BottomNav({ onOpenMore, onOpenGroup }) {
   const location = useLocation();
+  const isMobileNav = useIsMobileNav();
   const [pinnedTabs] = useBottomNavTabs();
   const [customGroups] = useBottomNavGroups();
+  const usage = useNavUsageData();
   const [alertCount, setAlertCount] = useState(0);
   const [alertMap, setAlertMap] = useState({});
+  const [menuOpen, setMenuOpen] = useState(false);
   const [profile, setProfile] = useState(() => store.get('profile') || {});
   const longPressTimer = useRef(null);
   const touchDraggingState = useRef(false);
@@ -198,11 +250,31 @@ export function BottomNav({ onOpenMore, onOpenGroup }) {
   const touchCurrentY = useRef(0);
 
   useEffect(() => {
-    const sync = () => setProfile(store.get('profile') || {});
+    const sync = () => {
+      try {
+        const next = store.get('profile') || {};
+        setProfile(prev => {
+          try {
+            if (JSON.stringify(prev) === JSON.stringify(next)) return prev;
+          } catch {
+            // fallthrough
+          }
+          return next;
+        });
+      } catch {}
+    };
     window.addEventListener('kuetx:store-updated', sync);
     sync();
     return () => window.removeEventListener('kuetx:store-updated', sync);
   }, []);
+
+  useEffect(() => {
+    setMenuOpen(false);
+  }, [location.pathname]);
+
+  useEffect(() => {
+    if (!isMobileNav) setMenuOpen(false);
+  }, [isMobileNav]);
 
   useEffect(() => {
     try {
@@ -242,22 +314,31 @@ export function BottomNav({ onOpenMore, onOpenGroup }) {
     } catch {}
   }, [location.pathname]);
 
-  const allItems = getAllNavItems(profile);
-  const sections = getVisibleSections(profile);
-  const customGroupMap = new Map(customGroups.map(g => [g.id, g]));
+  const allItems = useMemo(() => getAllNavItems(profile), [profile]);
+  const sections = useMemo(() => getVisibleSections(profile), [profile]);
+  const customGroupMap = useMemo(() => new Map((customGroups || []).map(g => [g.id, g])), [customGroups]);
 
+  // Usage tracking: record navigation counts + recent list for 'Most used'
   useEffect(() => {
-    if (!allItems.length) return;
-    const match = allItems.find(item =>
-      location.pathname === item.path ||
-      (item.path !== '/' && location.pathname.startsWith(item.path))
-    );
-    if (!match) return;
-    const usage = getUsageState();
-    const counts = { ...usage.counts };
-    counts[match.id] = (counts[match.id] || 0) + 1;
-    const recent = [match.id, ...usage.recent.filter(id => id !== match.id)].slice(0, MAX_RECENT);
-    saveUsageState({ counts, recent });
+    try {
+      if (!allItems || allItems.length === 0) return;
+      const match = allItems.find(item =>
+        location.pathname === item.path ||
+        (item.path !== '/' && location.pathname.startsWith(item.path))
+      );
+      if (!match) return;
+      const usage = getUsageState();
+      const counts = { ...(usage.counts || {}) };
+      counts[match.id] = (counts[match.id] || 0) + 1;
+      const recent = [match.id, ...((usage.recent || []).filter(id => id !== match.id))].slice(0, MAX_RECENT);
+      const countsChanged = Object.keys(counts).some(k => counts[k] !== (usage.counts || {})[k]);
+      const recentChanged = recent.length !== ((usage.recent || []).length) || recent.some((v, i) => v !== (usage.recent || [])[i]);
+      if (countsChanged || recentChanged) {
+        saveUsageState({ counts, recent });
+        // emit store update so other parts pick it up
+        try { window.dispatchEvent(new Event('kuetx:store-updated')); } catch {}
+      }
+    } catch {}
   }, [location.pathname, allItems]);
 
   const resolveGroupItems = (group) => {
@@ -269,6 +350,25 @@ export function BottomNav({ onOpenMore, onOpenGroup }) {
   const resolvedTabs = pinnedTabs
     .filter(t => t.id !== 'dashboard')
     .map(t => {
+      // special synthetic "most-used" group resolved from usage data
+      if (t.type === 'group' && t.id === 'most-used') {
+        const recentIds = (usage?.recent || []).slice(0, MAX_RECENT);
+        let items = recentIds.map(id => allItems.find(i => i.id === id)).filter(Boolean);
+        // Fallback: if no usage data yet, show first useful pages as starter set
+        if (items.length === 0) {
+          const fallback = [];
+          for (let i = 0; i < allItems.length && fallback.length < MAX_RECENT; i += 1) {
+            const it = allItems[i];
+            if (it && it.id !== 'dashboard') fallback.push(it);
+          }
+          items = fallback;
+        }
+        if (items.length === 0) return null;
+        const section = { group: 'Most used', items };
+        const iconName = 'Sparkles';
+        const isActive = items.some(item => location.pathname === item.path || (item.path !== '/' && location.pathname.startsWith(item.path)));
+        return { type: 'group', id: t.id, label: 'Most used', iconName, section, isActive };
+      }
       if (t.type === 'group') {
         const custom = customGroupMap.get(t.id);
         if (custom) {
@@ -324,6 +424,8 @@ export function BottomNav({ onOpenMore, onOpenGroup }) {
     touchCurrentY.current = 0;
   };
 
+  if (!isMobileNav) return null;
+
   return (
     <nav className="bottom-nav" aria-label="Main navigation"
       onTouchStart={handleTouchStart}
@@ -339,7 +441,7 @@ export function BottomNav({ onOpenMore, onOpenGroup }) {
           aria-current={dashActive ? 'page' : undefined}
         >
           <div className="bottom-nav-icon-wrap">
-            <Icons.Grid size={22} strokeWidth={dashActive ? 2.5 : 1.8} />
+            <Icons.Grid size={ICON_SIZE} strokeWidth={ICON_STROKE} />
           </div>
           <span>{getBottomNavLabel('Dashboard')}</span>
           {alertMap && alertMap[dashboardItem.path] && (
@@ -359,10 +461,10 @@ export function BottomNav({ onOpenMore, onOpenGroup }) {
               onClick={() => onOpenGroup(tab.section)}
               aria-label={tab.label}
             >
-              <div className="bottom-nav-icon-wrap">
-                <Icon size={22} strokeWidth={tab.isActive ? 2.5 : 1.8} />
-              </div>
-              <span>{tab.label}</span>
+                  <div className="bottom-nav-icon-wrap">
+                    <Icon size={ICON_SIZE} strokeWidth={ICON_STROKE} />
+                  </div>
+                  <span>{getBottomNavLabel(tab.label)}</span>
             </button>
           );
         }
@@ -375,7 +477,7 @@ export function BottomNav({ onOpenMore, onOpenGroup }) {
             aria-current={tab.isActive ? 'page' : undefined}
           >
             <div className="bottom-nav-icon-wrap">
-              <Icon size={22} strokeWidth={tab.isActive ? 2.5 : 1.8} />
+              <Icon size={ICON_SIZE} strokeWidth={ICON_STROKE} />
             </div>
             <span>{getBottomNavLabel(tab.label)}</span>
             {alertMap && alertMap[tab.item.path] && (
@@ -385,21 +487,50 @@ export function BottomNav({ onOpenMore, onOpenGroup }) {
         );
       })}
 
-      {/* More handle (doesn't consume a tab slot) */}
       <button
-        className="bottom-nav-more-handle"
-        onClick={onOpenMore}
-        aria-label="Open all pages"
+        className="bottom-nav-menu-button"
+        onClick={() => setMenuOpen(v => !v)}
+        aria-label="Open menu"
+        aria-expanded={menuOpen}
       >
-        <Icons.LayoutGrid size={16} strokeWidth={2} />
-        <span>Pages</span>
-        <Icons.ChevronUp size={12} strokeWidth={2.4} />
+        <Icons.Menu size={ICON_SIZE} strokeWidth={ICON_STROKE} />
+        <span className="bottom-nav-label">{getBottomNavLabel('Menu')}</span>
         {alertCount > 0 && (
           <span className="bottom-nav-badge">
             {alertCount > 9 ? '9+' : alertCount}
           </span>
         )}
       </button>
+
+      {menuOpen && (
+        <>
+          <div className="bottom-nav-menu-backdrop" onClick={() => setMenuOpen(false)} aria-hidden="true" />
+          <div className="bottom-nav-menu-popup" role="menu" aria-label="Quick menu">
+            <div className="bottom-nav-menu-title">Quick Menu</div>
+            <div className="bottom-nav-menu-grid">
+              <Link to="/settings" onClick={() => setMenuOpen(false)} className="bottom-nav-menu-item">
+                <Icons.Settings size={14} />
+                <span>Settings</span>
+              </Link>
+              <Link to="/settings/navigation" onClick={() => setMenuOpen(false)} className="bottom-nav-menu-item">
+                <Icons.SlidersHorizontal size={14} />
+                <span>Bottom Bar Control</span>
+              </Link>
+              <button type="button" onClick={() => { setMenuOpen(false); onOpenMore?.(); }} className="bottom-nav-menu-item">
+                <Icons.LayoutGrid size={14} />
+                <span>All Pages</span>
+              </button>
+            </div>
+            <div className="bottom-nav-menu-subtitle">Information tools</div>
+            <div className="bottom-nav-menu-links">
+              <Link to="/about" onClick={() => setMenuOpen(false)}>About</Link>
+              <Link to="/alerts" onClick={() => setMenuOpen(false)}>Alerts</Link>
+              <Link to="/reports" onClick={() => setMenuOpen(false)}>Reports</Link>
+              <Link to="/notes" onClick={() => setMenuOpen(false)}>Notes</Link>
+            </div>
+          </div>
+        </>
+      )}
     </nav>
   );
 }
@@ -490,7 +621,7 @@ export function GroupMiniDrawer({ section, open, onClose }) {
                   to={item.path}
                   className={`drawer-item-link${active ? ' active' : ''}`}
                 >
-                  <Icon size={22} strokeWidth={active ? 2.5 : 1.8} />
+                  <Icon size={ICON_SIZE} strokeWidth={active ? (ICON_STROKE + 0.7) : ICON_STROKE} />
                   <span className="drawer-item-label">{item.label}</span>
                 </Link>
               );
@@ -500,6 +631,9 @@ export function GroupMiniDrawer({ section, open, onClose }) {
       </div>
     </>
   );
+
+  if (typeof document === 'undefined') return sheet;
+  return createPortal(sheet, document.body);
 }
 
 // ── All Pages Drawer ──────────────────────────────────────────────────────────
@@ -765,7 +899,7 @@ export function AllPagesDrawer({ open, onClose, onOpenGroup }) {
     sectionFilter === 'all' || sectionFilter === 'ungrouped' || section.group === sectionFilter
   );
 
-  return (
+  const sheet = (
     <>
       <div
         className={`all-pages-backdrop${open ? ' open' : ''}`}
@@ -794,6 +928,7 @@ export function AllPagesDrawer({ open, onClose, onOpenGroup }) {
           <div>
             <div className="drawer-title">All Pages</div>
             {editMode && (
+
               <div className="drawer-subtitle">
                 {tabCount}/{MAX_TABS} pinned{tabCount === 0 ? ' — Dashboard only' : ''}
               </div>
@@ -1280,4 +1415,7 @@ export function AllPagesDrawer({ open, onClose, onOpenGroup }) {
       )}
     </>
   );
+
+  if (typeof document === 'undefined') return sheet;
+  return createPortal(sheet, document.body);
 }

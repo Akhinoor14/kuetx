@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { store, computeCourseGrade, computeCGPA, computeEffectiveAttendance, computeTermGPAs, MIN_ATTENDANCE_PERCENT, SCHOLARSHIP_ATTENDANCE_PCT, MAX_THEORY_COURSES_PER_TERM, MIN_CREDITS_FIRST_4_TERMS, MIN_CREDITS_FIRST_6_TERMS, HONORS_CGPA, DEANS_LIST_GPA, getAllCourses, getProfile, getCurrentTermKey, getTermTimeline } from '../store/store';
+import { store, computeCourseGrade, computeCGPA, computeEffectiveAttendance, computeTermGPAs, MIN_ATTENDANCE_PERCENT, SCHOLARSHIP_ATTENDANCE_PCT, MAX_THEORY_COURSES_PER_TERM, MIN_CREDITS_FIRST_4_TERMS, MIN_CREDITS_FIRST_6_TERMS, HONORS_CGPA, DEANS_LIST_GPA, getAllCourses, getProfile, getCurrentTermKey, getTermTimeline, PRODUCTIVE_TIME_CATEGORIES, getTimerSessions } from '../store/store';
 
 const normalizeTeacherLabel = (value) => String(value || '').trim().replace(/\s+/g, ' ');
 
@@ -171,8 +171,11 @@ export function computeAlerts(profile) {
 
   // Assignment reminders
   const assignments = store.get('assignments') || [];
+  const timelogs = store.get('timelogs') || [];
+  const timerSessions = getTimerSessions();
   const today = new Date();
   today.setHours(0, 0, 0, 0);
+  const todayKey = today.toISOString().split('T')[0];
 
   assignments
     .filter(a => a.status !== 'done' && a.due)
@@ -224,6 +227,21 @@ export function computeAlerts(profile) {
         });
       }
     });
+
+  const todayProductiveHours = timelogs
+    .filter(item => item?.date === todayKey && PRODUCTIVE_TIME_CATEGORIES.includes(item?.category))
+    .reduce((sum, item) => sum + (Number(item?.hours) || 0), 0);
+
+  if (todayProductiveHours === 0) {
+    warnings.push({ msg: 'No productive focus session logged today. Start a timer in Time Tracker.', link: '/time' });
+  } else if (todayProductiveHours >= 4) {
+    positives.push({ msg: `Great focus streak: ${todayProductiveHours.toFixed(1)} productive hours logged today.`, link: '/time' });
+  }
+
+  const latestTimer = timerSessions[0];
+  if (latestTimer?.stoppedReason === 'completed' && latestTimer?.mode === 'down') {
+    positives.push({ msg: 'Countdown completed successfully in your latest session.', link: '/time' });
+  }
 
   return { critical, warnings, positives, assignmentAlerts };
 }

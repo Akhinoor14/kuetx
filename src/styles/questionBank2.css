@@ -574,7 +574,7 @@
 @media (max-width: 599px) {
   .qb2-wrap { padding: 12px 12px 80px; }
   .qb2-hero { flex-direction: column; align-items: flex-start; gap: 14px; padding: 16px; margin: -12px -12px 0; }
-  .qb2-title { font-size: 20px; }
+  .qb2-title { font-size: 18px; line-height: 1.12; }
   .qb2-stats { width: 100%; grid-template-columns: repeat(4, 1fr); gap: 6px; }
   .qb2-search-row { flex-direction: column; align-items: stretch; }
   .qb2-inline-dept { width: 100%; flex-wrap: wrap; justify-content: space-between; }

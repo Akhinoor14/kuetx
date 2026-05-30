@@ -1,6 +1,23 @@
-import { useEffect, useState } from 'react';
-import { Plus, Trash2, Check, Clock3 } from 'lucide-react';
-import { store, uid, getAllCourses, getDeptSyllabus, getProfile, getTermLabelFromKey } from '../store/store';
+import { useEffect, useMemo, useState } from 'react';
+import { Plus, Trash2, Play, Pause, Square, RotateCcw } from 'lucide-react';
+import {
+  store,
+  uid,
+  getAllCourses,
+  getDeptSyllabus,
+  getProfile,
+  getTermLabelFromKey,
+  TIMER_MODES,
+  PRODUCTIVE_TIME_CATEGORIES,
+  DISTRACTION_TIME_CATEGORIES,
+  appendTimerSession,
+  getTimerSessions,
+  hoursFromMs,
+  formatDurationMs,
+  msToHms,
+  setTimerSessions,
+} from '../store/store';
+import useTimerEngine from '../hooks/useTimerEngine';
 
 // ── Tours ────────────────────────────────────────────────────────────────────
 export function Tours() {
@@ -660,23 +677,136 @@ export function Syllabus() {
 
 // ── Time Tracker ──────────────────────────────────────────────────────────────
 export function TimeTracker() {
+  const timer = useTimerEngine();
   const [logs, setLogs] = useState(() => store.get('timelogs') || []);
+  const [sessions, setSessions] = useState(() => getTimerSessions());
+  const [manualOpen, setManualOpen] = useState(false);
+  const [mode, setMode] = useState(TIMER_MODES.UP);
+  const [countdownInput, setCountdownInput] = useState({ hours: '0', minutes: '25', seconds: '0' });
   const [form, setForm] = useState({ date: new Date().toISOString().split('T')[0], category: 'Study', hours: '', note: '' });
-  const [adding, setAdding] = useState(false);
+  const [lastAutoSavedId, setLastAutoSavedId] = useState(null);
+  const [timerPrefs, setTimerPrefsState] = useState(() => store.get('timer_prefs_v1') || { sound: true, vibrate: true, notify: true });
+  const [pomodoro, setPomodoro] = useState(() => ({ enabled: false, isWork: true, workMs: 25 * 60000, breakMs: 5 * 60000, longBreakMs: 15 * 60000, cycles: 0 }));
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
 
   const CATS = ['Study', 'Class', 'Self Study', 'Facebook/YouTube', 'Gaming', 'Sleep', 'Exercise', 'Tuition', 'Travel', 'Adda', 'Other'];
 
-  const save = () => {
-    const u = [{ ...form, hours: +form.hours, id: uid() }, ...logs];
-    setLogs(u); store.set('timelogs', u); setAdding(false);
+  const toInt = (value) => {
+    const n = Number.parseInt(String(value || '0'), 10);
+    return Number.isFinite(n) ? Math.max(0, n) : 0;
   };
 
-  // Today stats
+  const countdownMs = useMemo(() => {
+    const hours = toInt(countdownInput.hours);
+    const minutes = Math.min(59, toInt(countdownInput.minutes));
+    const seconds = Math.min(59, toInt(countdownInput.seconds));
+    return (((hours * 60) + minutes) * 60 + seconds) * 1000;
+  }, [countdownInput]);
+
+  const persistCompatibilityLog = (entry) => {
+    const list = [{ ...entry, id: uid() }, ...(store.get('timelogs') || [])];
+    store.set('timelogs', list);
+    setLogs(list);
+  };
+
+  const saveTimerSession = (state, stopReason) => {
+    const actualMs = Math.max(0, Number(state.accumulatedMs) || 0);
+    if (!actualMs) return;
+
+    const session = {
+      id: state.id || uid(),
+      mode: state.mode,
+      plannedMs: state.mode === TIMER_MODES.DOWN ? (state.targetMs || 0) : null,
+      actualMs,
+      startedAt: state.createdAt || Date.now(),
+      endedAt: state.endedAt || Date.now(),
+      stoppedReason: stopReason || 'manual',
+      category: state.category || form.category,
+      note: state.note || form.note || '',
+      savedAt: Date.now(),
+    };
+
+    setSessions(appendTimerSession(session));
+
+    const date = new Date(session.endedAt).toISOString().split('T')[0];
+    persistCompatibilityLog({
+      date,
+      category: session.category,
+      hours: hoursFromMs(session.actualMs),
+      note: session.note ? `${session.note} [Digital Timer]` : '[Digital Timer]',
+      source: 'digital_timer',
+      timerMode: session.mode,
+    });
+
+    if (session.category === 'Self Study' || session.category === 'Study') {
+      store.set('selfstudy_timer_prefill', {
+        topic: session.note || 'Focused study session',
+        hours: hoursFromMs(session.actualMs),
+        date,
+      });
+    }
+  };
+
+  const saveManualLog = () => {
+    const u = [{ ...form, hours: +form.hours, id: uid() }, ...logs];
+    setLogs(u);
+    store.set('timelogs', u);
+    setManualOpen(false);
+  };
+
+  const handleStart = () => {
+    if (timer.isRunning) return;
+    if (mode === TIMER_MODES.UP) {
+      timer.startUp({ category: form.category, note: form.note });
+      return;
+    }
+    const started = timer.startDown(countdownMs, { category: form.category, note: form.note });
+    if (!started) alert('Please set a valid countdown time.');
+  };
+
+  const handleStopAndSave = () => {
+    if (timer.isIdle) return;
+    const stopped = timer.stop('manual');
+    saveTimerSession(stopped, 'manual');
+  };
+
+  useEffect(() => {
+    if (!timer.isCompleted || !timer.state?.id) return;
+    if (lastAutoSavedId === timer.state.id) return;
+    const endedState = {
+      ...timer.state,
+      endedAt: timer.state.endedAt || Date.now(),
+      accumulatedMs: timer.state.mode === TIMER_MODES.DOWN ? timer.state.targetMs : timer.elapsedMs,
+    };
+    saveTimerSession(endedState, 'completed');
+    setLastAutoSavedId(timer.state.id);
+    // Pomodoro auto-cycle: if enabled and we were running a countdown, auto-start the next segment
+    try {
+      if (pomodoro.enabled && timer.state.mode === TIMER_MODES.DOWN) {
+        const wasWork = pomodoro.isWork;
+        // toggle work/break
+        const nextIsWork = !wasWork;
+        setPomodoro(p => ({ ...p, isWork: nextIsWork, cycles: nextIsWork ? p.cycles + 1 : p.cycles }));
+        const nextMs = wasWork ? (pomodoro.breakMs || 5 * 60000) : (pomodoro.workMs || 25 * 60000);
+        // start next countdown automatically
+        setTimeout(() => {
+          try { timer.startDown(nextMs, { category: form.category, note: form.note }); } catch {}
+        }, 400);
+      }
+    } catch (e) {}
+  }, [timer.isCompleted, timer.state, timer.elapsedMs, lastAutoSavedId]);
+
   const today = new Date().toISOString().split('T')[0];
   const todayLogs = logs.filter(l => l.date === today);
-  const productive = todayLogs.filter(l => ['Study', 'Class', 'Self Study', 'Exercise'].includes(l.category)).reduce((s, l) => s + l.hours, 0);
-  const waste = todayLogs.filter(l => ['Facebook/YouTube', 'Gaming'].includes(l.category)).reduce((s, l) => s + l.hours, 0);
+  const productive = todayLogs
+    .filter(l => PRODUCTIVE_TIME_CATEGORIES.includes(l.category))
+    .reduce((s, l) => s + (Number(l.hours) || 0), 0);
+  const waste = todayLogs
+    .filter(l => DISTRACTION_TIME_CATEGORIES.includes(l.category))
+    .reduce((s, l) => s + (Number(l.hours) || 0), 0);
+
+  const targetPreview = formatDurationMs(countdownMs);
+  const timerHms = msToHms(timer.displayMs);
 
   return (
     <div className="page-enter page-container">
@@ -685,10 +815,115 @@ export function TimeTracker() {
           <h1 style={{ fontSize: 18, fontWeight: 700 }}>Time Tracker</h1>
           <p style={{ fontSize: 12, color: 'var(--muted)' }}>Today: {productive}h productive · {waste}h scrolled away</p>
         </div>
-        <button className="btn btn-primary" onClick={() => setAdding(true)}><Plus size={13} /> Log Time</button>
+        <button className="btn btn-primary" onClick={() => setManualOpen(true)}><Plus size={13} /> Log Time</button>
       </div>
 
-      {adding && (
+      <div className="card" style={{ marginBottom: 14, borderColor: 'var(--accent)', background: 'linear-gradient(180deg, rgba(var(--accentRGB), 0.06), var(--surfaceGlassStrong))' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', gap: 10, marginBottom: 10, flexWrap: 'wrap' }}>
+          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+            <button className={`btn ${mode === TIMER_MODES.UP ? 'btn-primary' : 'btn-ghost'}`} onClick={() => setMode(TIMER_MODES.UP)} disabled={timer.isRunning}>Count Up</button>
+            <button className={`btn ${mode === TIMER_MODES.DOWN ? 'btn-primary' : 'btn-ghost'}`} onClick={() => setMode(TIMER_MODES.DOWN)} disabled={timer.isRunning}>Count Down</button>
+          </div>
+          <div style={{ fontSize: 12, color: 'var(--muted)', alignSelf: 'center' }}>
+            Status: <span style={{ fontWeight: 700, color: timer.isRunning ? 'var(--success)' : timer.isCompleted ? 'var(--warning)' : 'var(--muted)' }}>{timer.state.status}</span>
+          </div>
+        </div>
+
+        <div className="time-tracker-visual" style={{ marginBottom: 12 }}>
+          <div className="time-tracker-ring" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 14, padding: 18 }}>
+            <svg viewBox="0 0 100 100" width="110" height="110" className={timer.isRunning ? 'running' : ''} aria-hidden>
+              <circle cx="50" cy="50" r="36" stroke="var(--border)" strokeWidth="8" fill="none" />
+              {mode === TIMER_MODES.DOWN && timer.state?.targetMs ? (
+                (() => {
+                  const target = Number(timer.state.targetMs) || 0;
+                  const rem = Number(timer.remainingMs) || 0;
+                  const pct = target > 0 ? Math.max(0, Math.min(100, Math.round((1 - rem / target) * 100))) : 0;
+                  const r = 36;
+                  const c = 2 * Math.PI * r;
+                  const dash = (pct / 100) * c;
+                  const offset = c - dash;
+                  return <circle cx="50" cy="50" r="36" stroke="var(--accent)" strokeWidth="8" fill="none" strokeLinecap="round" strokeDasharray={`${c} ${c}`} strokeDashoffset={offset} transform="rotate(-90 50 50)" />;
+                })()
+              ) : (
+                <g>
+                  <circle cx="50" cy="50" r="36" stroke="rgba(59,130,246,0.18)" strokeWidth="8" fill="none" />
+                </g>
+              )}
+            </svg>
+
+            <div style={{ textAlign: 'center' }}>
+              <div className="time-tracker-display" style={{ fontSize: 44, fontWeight: 800, letterSpacing: '0.08em', fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Consolas, monospace', lineHeight: 1 }}>
+                {String(timerHms.hours).padStart(2, '0')}:{String(timerHms.minutes).padStart(2, '0')}:{String(timerHms.seconds).padStart(2, '0')}
+              </div>
+              <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 8 }}>
+                {mode === TIMER_MODES.DOWN ? `Target: ${targetPreview}` : '00:00:00 to infinity'}
+              </div>
+            </div>
+          </div>
+
+          <div style={{ display: 'flex', gap: 8, justifyContent: 'center', marginTop: 6 }}>
+            <button className="btn btn-ghost btn-sm" onClick={() => { setCountdownInput({ hours: '0', minutes: '25', seconds: '0' }); setMode(TIMER_MODES.DOWN); setPomodoro(p => ({ ...p, enabled: true, isWork: true, workMs: 25 * 60000, breakMs: 5 * 60000 })); }}>Pomodoro 25</button>
+            <button className="btn btn-ghost btn-sm" onClick={() => { setCountdownInput({ hours: '0', minutes: '50', seconds: '0' }); setMode(TIMER_MODES.DOWN); setPomodoro(p => ({ ...p, enabled: true, isWork: true, workMs: 50 * 60000, breakMs: 10 * 60000 })); }}>50/10</button>
+            <button className="btn btn-ghost btn-sm" onClick={() => { setCountdownInput({ hours: '0', minutes: '15', seconds: '0' }); setMode(TIMER_MODES.DOWN); }}>15m</button>
+          </div>
+        </div>
+
+        {mode === TIMER_MODES.DOWN && (
+          <div className="time-tracker-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(70px, 1fr))', gap: 8, marginBottom: 10 }}>
+            <div className="form-field"><label>Hour</label><input type="number" min={0} value={countdownInput.hours} onChange={(e) => setCountdownInput(v => ({ ...v, hours: e.target.value }))} disabled={timer.isRunning} /></div>
+            <div className="form-field"><label>Minute</label><input type="number" min={0} max={59} value={countdownInput.minutes} onChange={(e) => setCountdownInput(v => ({ ...v, minutes: e.target.value }))} disabled={timer.isRunning} /></div>
+            <div className="form-field"><label>Second</label><input type="number" min={0} max={59} value={countdownInput.seconds} onChange={(e) => setCountdownInput(v => ({ ...v, seconds: e.target.value }))} disabled={timer.isRunning} /></div>
+          </div>
+        )}
+
+        <div className="time-tracker-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 10, marginBottom: 10 }}>
+          <div className="form-field"><label>Category</label><select value={form.category} onChange={e => set('category', e.target.value)}>{CATS.map(c => <option key={c}>{c}</option>)}</select></div>
+          <div className="form-field" style={{ gridColumn: 'span 2' }}><label>Session Note</label><input value={form.note} onChange={e => set('note', e.target.value)} placeholder="What are you doing right now?" /></div>
+        </div>
+
+        <div className="time-tracker-actions" style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+          {!timer.isRunning && !timer.isPaused && !timer.isCompleted && (
+            <button className="btn btn-primary" onClick={handleStart}><Play size={13} /> Start</button>
+          )}
+          {timer.isRunning && <button className="btn btn-ghost" onClick={timer.pause}><Pause size={13} /> Pause</button>}
+          {timer.isPaused && <button className="btn btn-primary" onClick={timer.resume}><Play size={13} /> Resume</button>}
+          {(timer.isRunning || timer.isPaused) && <button className="btn btn-primary" onClick={handleStopAndSave}><Square size={13} /> Stop & Save</button>}
+          {(timer.isPaused || timer.isCompleted || timer.isIdle) && <button className="btn btn-ghost" onClick={timer.reset}><RotateCcw size={13} /> Reset</button>}
+        </div>
+        <div className="time-tracker-alerts" style={{ display: 'flex', gap: 8, marginTop: 10, alignItems: 'center', justifyContent: 'center', flexWrap: 'wrap' }}>
+          <label style={{ fontSize: 12, color: 'var(--muted)', marginRight: 8 }}>Reminders:</label>
+          <button className={`btn btn-ghost btn-sm${timerPrefs.notify ? ' active' : ''}`} onClick={() => {
+            const next = { ...timerPrefs, notify: !timerPrefs.notify };
+            setTimerPrefsState(next); store.set('timer_prefs_v1', next);
+          }}>{timerPrefs.notify ? 'Notify ✓' : 'Notify'}</button>
+          <button className={`btn btn-ghost btn-sm${timerPrefs.sound ? ' active' : ''}`} onClick={() => {
+            const next = { ...timerPrefs, sound: !timerPrefs.sound };
+            setTimerPrefsState(next); store.set('timer_prefs_v1', next);
+          }}>{timerPrefs.sound ? 'Sound ✓' : 'Sound'}</button>
+          <button className={`btn btn-ghost btn-sm${timerPrefs.vibrate ? ' active' : ''}`} onClick={() => {
+            const next = { ...timerPrefs, vibrate: !timerPrefs.vibrate };
+            setTimerPrefsState(next); store.set('timer_prefs_v1', next);
+          }}>{timerPrefs.vibrate ? 'Vibrate ✓' : 'Vibrate'}</button>
+          <button className="btn btn-ghost btn-sm" onClick={() => {
+            try {
+              if (!('Notification' in window)) return alert('Notifications not supported in this browser');
+              if (Notification.permission === 'granted') return alert('Notifications already granted');
+              Notification.requestPermission().then(p => {
+                if (p === 'granted') alert('Notifications enabled'); else alert('Notifications denied');
+              });
+            } catch (e) { /* ignore */ }
+          }}>Permission</button>
+          <div style={{ marginLeft: 8 }}>
+            <label style={{ fontSize: 12, color: 'var(--muted)', marginRight: 6 }}>Pomodoro</label>
+            <button className={`btn btn-ghost btn-sm${pomodoro.enabled ? ' active' : ''}`} onClick={() => setPomodoro(p => ({ ...p, enabled: !p.enabled }))}>{pomodoro.enabled ? 'On ✓' : 'Off'}</button>
+          </div>
+        </div>
+        <div className="time-tracker-templates-help" style={{ marginTop: 8 }}>
+          {pomodoro.enabled ? 'Pomodoro auto-cycle is on.' : 'Pomodoro is off.'}
+        </div>
+      </div>
+
+      {manualOpen && (
         <div className="card time-tracker-form" style={{ marginBottom: 14, borderColor: 'var(--accent)' }}>
           <div className="time-tracker-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 10, marginBottom: 10 }}>
             <div className="form-field"><label>Date</label><input type="date" value={form.date} onChange={e => set('date', e.target.value)} /></div>
@@ -698,27 +933,58 @@ export function TimeTracker() {
           <div className="form-field" style={{ marginBottom: 10 }}><label>Note</label><input value={form.note} onChange={e => set('note', e.target.value)} placeholder="Optional detail" /></div>
 
           <div className="time-tracker-actions" style={{ display: 'flex', gap: 8 }}>
-            <button className="btn btn-primary" onClick={save}>Save</button>
-            <button className="btn btn-ghost" onClick={() => setAdding(false)}>Cancel</button>
+            <button className="btn btn-primary" onClick={saveManualLog}>Save</button>
+            <button className="btn btn-ghost" onClick={() => setManualOpen(false)}>Cancel</button>
           </div>
         </div>
       )}
 
-      {todayLogs.length > 0 && (
-        <div className="card" style={{ marginBottom: 14 }}>
-          <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 10 }}>Today's Breakdown</div>
-          {todayLogs.map(l => (
-            <div key={l.id} style={{ display: 'flex', justifyContent: 'space-between', padding: '5px 0', borderBottom: '1px solid var(--border)', fontSize: 12 }}>
-              <span style={{ color: ['Facebook/YouTube','Gaming'].includes(l.category) ? 'var(--danger)' : ['Study','Class','Self Study','Exercise'].includes(l.category) ? 'var(--success)' : 'var(--text)' }}>{l.category}</span>
-              <span style={{ fontWeight: 600 }}>{l.hours}h</span>
-            </div>
-          ))}
+      {logs.length === 0 && !manualOpen && (
+        <div className="card" style={{ textAlign: 'center', color: 'var(--muted)', padding: 40 }}>
+          <p>Start logging your time to see where your day goes.</p>
         </div>
       )}
 
-      {logs.length === 0 && !adding && (
-        <div className="card" style={{ textAlign: 'center', color: 'var(--muted)', padding: 40 }}>
-          <p>Start logging your time to see where your day goes.</p>
+      {sessions.length > 0 && (
+        <div className="card" style={{ marginTop: 14 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 10 }}>Recent Digital Sessions</div>
+          {sessions.slice(0, 8).map(s => (
+            <div key={s.id} style={{ display: 'flex', justifyContent: 'space-between', gap: 10, alignItems: 'center', padding: '7px 0', borderBottom: '1px solid var(--border)', fontSize: 12 }}>
+              <div style={{ minWidth: 0 }}>
+                <div style={{ fontWeight: 600 }}>{s.category} · {s.mode === TIMER_MODES.DOWN ? 'count down' : 'count up'}</div>
+                <div style={{ color: 'var(--muted)' }}>{new Date(s.endedAt || s.savedAt).toLocaleString('en-BD')}{s.note ? ` · ${s.note}` : ''}</div>
+              </div>
+              <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+                <div style={{ fontWeight: 700 }}>{formatDurationMs(s.actualMs || 0)}</div>
+                <button className="btn btn-ghost btn-sm" onClick={() => {
+                  const newHours = prompt('Hours (decimal)', String(hoursFromMs(s.actualMs || 0)));
+                  if (newHours === null) return;
+                  const newCat = prompt('Category', s.category) || s.category;
+                  const updated = { ...s, actualMs: Math.round((Number(newHours) || 0) * 3600000), category: newCat, savedAt: Date.now() };
+                  const next = sessions.map(x => x.id === s.id ? updated : x);
+                  setTimerSessions(next);
+                  setSessions(next);
+                }}>Edit</button>
+                <button className="btn btn-ghost btn-sm" onClick={() => {
+                  if (!confirm('Delete this session?')) return;
+                  const next = sessions.filter(x => x.id !== s.id);
+                  setTimerSessions(next);
+                  setSessions(next);
+                }}>Delete</button>
+                <button className="btn btn-ghost btn-sm" onClick={() => {
+                  const idx = sessions.findIndex(x => x.id === s.id);
+                  if (idx <= 0) return alert('No previous session to merge with');
+                  const prev = sessions[idx - 1];
+                  if (!confirm(`Merge this session into previous (${prev.category} · ${formatDurationMs(prev.actualMs || 0)})?`)) return;
+                  const merged = { ...prev, actualMs: (Number(prev.actualMs || 0) + Number(s.actualMs || 0)), note: `${prev.note || ''} + ${s.note || ''}`, savedAt: Date.now() };
+                  const next = sessions.slice().filter(x => x.id !== s.id && x.id !== prev.id);
+                  next.splice(idx - 1, 0, merged);
+                  setTimerSessions(next);
+                  setSessions(next);
+                }}>Merge Prev</button>
+              </div>
+            </div>
+          ))}
         </div>
       )}
     </div>
@@ -895,6 +1161,8 @@ export function Reports() {
   const namaz   = store.get('namaz') || {};
   const selfeval = store.get('selfeval') || {};
   const diary   = store.get('diary') || [];
+  const timerSessions = getTimerSessions();
+  const timerHours = timerSessions.reduce((sum, session) => sum + hoursFromMs(session.actualMs || 0), 0);
 
   const exportReport = (period) => {
     const now = new Date();
@@ -905,6 +1173,8 @@ export function Reports() {
       `Courses: ${courses.length}`,
       `Diary Entries: ${diary.length}`,
       `Expenses logged: ${expenses.length}`,
+      `Digital timer sessions: ${timerSessions.length}`,
+      `Digital timer hours: ${timerHours.toFixed(2)}h`,
       '',
       'Generated by KUETx — KUET Student Life OS',
     ];
@@ -940,6 +1210,8 @@ export function Reports() {
           ['Courses', courses.length],
           ['Expenses recorded', expenses.length],
           ['Diary entries', diary.length],
+          ['Digital timer sessions', timerSessions.length],
+          ['Digital timer hours', `${timerHours.toFixed(2)}h`],
           ['Days with Namaz data', Object.keys(namaz).length],
           ['Self-eval days', Object.keys(selfeval).length],
         ].map(([k, v]) => (

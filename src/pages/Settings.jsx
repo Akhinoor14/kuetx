@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useTheme, THEMES } from '../hooks/useTheme';
 import { store } from '../store/store';
 import { Download, Upload, Trash2, HardDrive, RefreshCw, Shield, Database, Wifi, WifiOff } from 'lucide-react';
@@ -19,6 +20,7 @@ function downloadJSON(data, filename) {
 }
 
 export default function Settings() {
+  const navigate = useNavigate();
   const { themeId, setTheme } = useTheme();
   const [msg, setMsg] = useState('');
   const [msgType, setMsgType] = useState('success');
@@ -109,7 +111,7 @@ export default function Settings() {
   return (
     <div className="page-enter page-container">
       <h1 style={{ fontSize: 18, fontWeight: 700, marginBottom: 4 }}>Settings</h1>
-      <p style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 20 }}>Theme, data storage, backup and restore</p>
+      <p style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 20 }}>Theme, backup, and storage</p>
 
       {msg && (
         <div style={{
@@ -126,15 +128,32 @@ export default function Settings() {
         <div style={{ display: 'flex', gap: 8 }}>
           {Object.values(THEMES).map(t => (
             <button key={t.id} onClick={() => setTheme(t.id)} style={{
-              flex: 1, padding: '10px 0', borderRadius: 8,
+              flex: 1,
+              padding: '10px 0',
+              borderRadius: 8,
               border: `2px solid ${themeId === t.id ? 'var(--accent)' : 'var(--border)'}`,
               background: themeId === t.id ? (t.id === 'dark' ? 'rgba(74, 222, 128, 0.12)' : t.id === 'milky' ? 'var(--surfaceGlassStrong)' : 'var(--successBg)') : 'transparent',
-              cursor: 'pointer', fontSize: 13, fontWeight: themeId === t.id ? 700 : 400,
-              color: themeId === t.id ? 'var(--accent)' : 'var(--muted)', fontFamily: 'Sora, sans-serif',
+              cursor: 'pointer',
+              fontSize: 13,
+              fontWeight: themeId === t.id ? 700 : 400,
+              color: themeId === t.id ? 'var(--accent)' : 'var(--muted)',
+              fontFamily: 'Sora, sans-serif',
             }}>
               {t.id === 'light' ? '☀️' : t.id === 'milky' ? '🥛' : '🌙'} {t.label}
             </button>
           ))}
+        </div>
+      </div>
+
+      <div className="card" style={{ marginBottom: 14 }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap' }}>
+          <div>
+            <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 4 }}>Navigation</div>
+            <div style={{ fontSize: 12, color: 'var(--muted)' }}>Open the separate page for nav presets, calendar switching, gestures, and bottom tabs.</div>
+          </div>
+          <button className="btn btn-primary" onClick={() => navigate('/settings/navigation')}>
+            Open Navigation Settings
+          </button>
         </div>
       </div>
 

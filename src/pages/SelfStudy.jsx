@@ -63,6 +63,20 @@ export default function SelfStudy() {
     store.remove('syllabusStudyPrefill');
   }, []);
 
+  useEffect(() => {
+    const timerPrefill = store.get('selfstudy_timer_prefill');
+    if (!timerPrefill) return;
+    setActiveTab('academic');
+    setAddingAcademic(true);
+    setAcademicForm(prev => ({
+      ...prev,
+      date: timerPrefill.date || prev.date,
+      topic: timerPrefill.topic || prev.topic,
+      hours: timerPrefill.hours ? String(timerPrefill.hours) : prev.hours,
+    }));
+    store.remove('selfstudy_timer_prefill');
+  }, []);
+
   const toggleCourse = (courseId) => {
     setOpenCourses(prev => ({ ...prev, [courseId]: !prev[courseId] }));
   };

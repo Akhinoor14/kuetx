@@ -3,8 +3,10 @@ import { Link } from 'react-router-dom';
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, ReferenceLine } from 'recharts';
 import { TrendingUp, Award, AlertTriangle, BookOpen, CalendarCheck, Clock, Wallet, Star } from 'lucide-react';
 import * as Icons from 'lucide-react';
-import { store, cgpaToPercent, computeCGPA, computeTermGPAs, computeEffectiveAttendance, MIN_ATTENDANCE_PERCENT, SCHOLARSHIP_ATTENDANCE_PCT, computeCourseGrade, deriveAcademicMetaFromCourses, syncProfileAcademicMeta, getAllCourses, getProfile, getTermLabelFromKey, getCurrentTermKey, getTermProgress, getTermTimeline, getTermIndex, TERM_KEYS } from '../store/store';
+import { store, cgpaToPercent, computeCGPA, computeTermGPAs, computeEffectiveAttendance, MIN_ATTENDANCE_PERCENT, SCHOLARSHIP_ATTENDANCE_PCT, computeCourseGrade, deriveAcademicMetaFromCourses, syncProfileAcademicMeta, getAllCourses, getProfile, getTermLabelFromKey, getCurrentTermKey, getTermProgress, getTermTimeline, getTermIndex, TERM_KEYS, getTimerActiveState, formatDurationMs, PRODUCTIVE_TIME_CATEGORIES } from '../store/store';
+import ticker from '../lib/ticker';
 import { useBottomNavFavourites, useBottomNavGroups, getAllNavItems } from '../components/BottomNav';
+import QuickAccessManager from '../components/QuickAccessManager';
 
 function StatCard({ label, value, sub, color, bgColor, icon: Icon, to }) {
   const inner = (
@@ -42,10 +44,12 @@ function StatCard({ label, value, sub, color, bgColor, icon: Icon, to }) {
 export default function Dashboard() {
   const profile  = getProfile();
   const courses  = getAllCourses(profile);
+  const [, setStoreRefreshTick] = useState(0);
   const [favourites] = useBottomNavFavourites();
   const [customGroups] = useBottomNavGroups();
   const allNavItems = useMemo(() => getAllNavItems(profile), [profile]);
   const [recentCleared, setRecentCleared] = useState(false);
+  const [showQuickManager, setShowQuickManager] = useState(false);
 
   const { cgpa, earnedCredits, termGPAs, alerts } = useMemo(() => {
     const { cgpa, earnedCredits } = computeCGPA(courses);
@@ -110,6 +114,14 @@ export default function Dashboard() {
   useEffect(() => {
     syncProfileAcademicMeta({ profile, courses });
   }, [profile, courses]);
+
+  useEffect(() => {
+    const refresh = () => setStoreRefreshTick(v => v + 1);
+    window.addEventListener('kuetx:store-updated', refresh);
+    const unsubTick = ticker.subscribeTicker(() => setStoreRefreshTick(v => v + 1));
+    return () => { window.removeEventListener('kuetx:store-updated', refresh); unsubTick(); };
+  }, []);
+
   const creditPct = Math.min(100, Math.round((earnedCredits / totalRequired) * 100));
   const termJourneyPct = currentTermKey
     ? Math.min(100, Math.round(((completedTerms + (currentTermProgress / 100)) / TERM_KEYS.length) * 100))
@@ -119,8 +131,21 @@ export default function Dashboard() {
 
   const activeCourses = courses.filter(c => c.status === 'active').length;
   const expenses = store.get('expenses') || [];
+  const timelogs = store.get('timelogs') || [];
+  const timerState = getTimerActiveState();
   const thisMonth = new Date().toISOString().slice(0, 7);
   const monthTotal = expenses.filter(e => e.date?.startsWith(thisMonth)).reduce((s, e) => s + (e.amount || 0), 0);
+  const todayKey = new Date().toISOString().split('T')[0];
+  const todayFocusHours = timelogs
+    .filter(item => item?.date === todayKey && PRODUCTIVE_TIME_CATEGORIES.includes(item?.category))
+    .reduce((sum, item) => sum + (Number(item?.hours) || 0), 0);
+  const timerDisplayMs = (() => {
+    if (!timerState) return 0;
+    const base = Math.max(0, Number(timerState.accumulatedMs) || 0);
+    if (timerState.status !== 'running') return base;
+    const startedAt = Number(timerState.startedAt) || Date.now();
+    return base + Math.max(0, Date.now() - startedAt);
+  })();
 
   const criticalAlerts = alerts.filter(a => a.type === 'critical');
   const warningAlerts  = alerts.filter(a => a.type === 'warning');
@@ -199,90 +224,58 @@ export default function Dashboard() {
         </div>
       )}
 
-      {/* Quick Access — pinned, recent, and groups */}
+      {/* Quick Access — Clean & Minimal */}
       <div className="card dashboard-quickaccess-card">
         <div className="dashboard-quickaccess-header">
           <div>
             <div className="dashboard-quickaccess-title">Quick Access</div>
-            <div className="dashboard-quickaccess-sub">Your most useful pages in one place</div>
+            {pinnedItems.length > 0 && <div className="dashboard-quickaccess-sub">Your favorites</div>}
           </div>
           <button
             className={`dashboard-quickaccess-manage${pinnedItems.length === 0 ? ' primary' : ''}`}
-            onClick={openAllPages}
+            onClick={() => setShowQuickManager(true)}
           >
-            Manage
+            {pinnedItems.length === 0 ? 'Get Started' : 'Customize'}
           </button>
         </div>
 
-        <div className="dashboard-quickaccess-grid">
-          {pinnedItems.map(item => {
-            const Icon = Icons[item.icon] || Icons.Circle;
-            return (
-              <Link key={item.id} to={item.path} className="dashboard-quickaccess-item">
-                <div className="dashboard-quickaccess-icon">
-                  <Icon size={18} strokeWidth={1.8} />
-                </div>
-                <span>{item.label}</span>
-              </Link>
-            );
-          })}
-          {pinnedItems.length === 0 && (
-            <div className="dashboard-quickaccess-empty">
-              Pin your top pages to see them here.
-              <button className="dashboard-quickaccess-empty-btn" onClick={openAllPages}>Pick pages</button>
-            </div>
-          )}
-        </div>
-
-        {recentItems.length > 0 && (
-          <div className="dashboard-quickaccess-row">
-            <div className="dashboard-quickaccess-row-head">
-              <div className="dashboard-quickaccess-row-label">Recent</div>
-              <div className="dashboard-quickaccess-row-actions">
-                {recentCleared && <span className="dashboard-quickaccess-cleared">Cleared</span>}
-                <button className="dashboard-quickaccess-clear" onClick={clearRecent}>Clear</button>
-              </div>
-            </div>
-            <div className="dashboard-quickaccess-chips">
-              {recentItems.map(item => (
-                <Link key={item.id} to={item.path} className="dashboard-quickaccess-chip">
-                  {item.label}
-                </Link>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {suggestedItems.length > 0 && (
-          <div className="dashboard-quickaccess-row">
-            <div className="dashboard-quickaccess-row-label">Suggested</div>
-            <div className="dashboard-quickaccess-chips">
-              {suggestedItems.map(item => {
+        {pinnedItems.length > 0 ? (
+          <>
+            <div className="dashboard-quickaccess-grid">
+              {pinnedItems.map(item => {
                 const Icon = Icons[item.icon] || Icons.Circle;
                 return (
-                  <Link key={item.id} to={item.path} className="dashboard-quickaccess-chip with-icon">
-                    <Icon size={12} strokeWidth={2} />
-                    {item.label}
+                  <Link key={item.id} to={item.path} className="dashboard-quickaccess-item">
+                    <div className="dashboard-quickaccess-icon">
+                      <Icon size={18} strokeWidth={1.8} />
+                    </div>
+                    <span>{item.label}</span>
                   </Link>
                 );
               })}
             </div>
-          </div>
-        )}
-
-        {quickGroups.length > 0 && (
-          <div className="dashboard-quickaccess-row">
-            <div className="dashboard-quickaccess-row-label">Groups</div>
-            <div className="dashboard-quickaccess-chips">
-              {quickGroups.map(group => (
-                <button key={group.id} className="dashboard-quickaccess-chip ghost" onClick={() => openGroup(group)}>
-                  {group.label} ({(group.items || []).length})
-                </button>
-              ))}
-            </div>
+            
+            {recentItems.length > 0 && (
+              <div style={{ marginTop: 14, paddingTop: 14, borderTop: '1px solid var(--divider)', fontSize: 11, fontWeight: 600, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.05em', display: 'flex', alignItems: 'center', gap: 8 }}>
+                <span>Recently visited:</span>
+                <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', flex: 1 }}>
+                  {recentItems.map(item => (
+                    <Link key={item.id} to={item.path} className="dashboard-quickaccess-chip dashboard-quickaccess-recent-link">
+                      {item.label}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            )}
+          </>
+        ) : (
+          <div className="dashboard-quickaccess-empty">
+            Pin your top pages to see them here.
+            <button className="dashboard-quickaccess-empty-btn" onClick={openAllPages}>Pick pages</button>
           </div>
         )}
       </div>
+      <QuickAccessManager open={showQuickManager} onClose={() => setShowQuickManager(false)} />
 
       {/* Setup prompt */}
       {!profile.name && (
@@ -356,6 +349,28 @@ export default function Dashboard() {
           icon={Wallet} 
           to="/money" 
         />
+      </div>
+
+      <div className="card" style={{ marginBottom: 12, padding: 14, border: '1px solid rgba(var(--accentRGB), 0.18)', background: 'linear-gradient(180deg, rgba(var(--accentRGB), 0.05), var(--surfaceGlassStrong))' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
+          <div>
+            <div style={{ fontSize: 12, fontWeight: 800, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--muted)' }}>Focus Timer</div>
+            <div style={{ fontSize: 14, fontWeight: 700, marginTop: 4 }}>
+              {timerState?.status === 'running' ? 'Running now' : timerState?.status === 'paused' ? 'Paused' : 'No active session'}
+            </div>
+            <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 2 }}>
+              Today productive: {todayFocusHours.toFixed(2)}h
+            </div>
+          </div>
+          <div style={{ textAlign: 'right' }}>
+            <div style={{ fontSize: 28, fontWeight: 800, lineHeight: 1, fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Consolas, monospace' }}>
+              {formatDurationMs(timerDisplayMs)}
+            </div>
+            <Link to="/time" style={{ display: 'inline-block', marginTop: 6, fontSize: 12, fontWeight: 700, color: 'var(--accent)', textDecoration: 'none' }}>
+              Open Time Tracker →
+            </Link>
+          </div>
+        </div>
       </div>
 
       {/* Academic journey */}

@@ -3,13 +3,16 @@ import { useState, useEffect } from 'react';
 import * as Icons from 'lucide-react';
 import { NAV } from '../nav';
 import { Logo, Wordmark } from './Logo';
-import { store } from '../store/store';
+import { store, DEFAULT_PROFILE } from '../store/store';
+import { useNavConfig } from './nav-system/useNavConfig';
 
 export function Sidebar({ open, onClose, compact = false, onToggleCompact }) {
   const location = useLocation();
   const [notes, setNotes] = useState([]);
-  const [profile, setProfile] = useState(() => store.get('profile') || {});
+  const [profile, setProfile] = useState(() => store.get('profile') || DEFAULT_PROFILE);
+  const [navConfig] = useNavConfig();
   const [showNotes, setShowNotes] = useState(false);
+  const canSeeCrBoard = !!profile.isCR && navConfig.cr_board_enabled;
 
   useEffect(() => {
     const storedNotes = store.get('notes') || [];
@@ -17,7 +20,7 @@ export function Sidebar({ open, onClose, compact = false, onToggleCompact }) {
   }, []);
 
   useEffect(() => {
-    const syncProfile = () => setProfile(store.get('profile') || {});
+    const syncProfile = () => setProfile(store.get('profile') || DEFAULT_PROFILE);
     window.addEventListener('kuetx:store-updated', syncProfile);
     syncProfile();
     return () => window.removeEventListener('kuetx:store-updated', syncProfile);
@@ -99,7 +102,7 @@ export function Sidebar({ open, onClose, compact = false, onToggleCompact }) {
         <nav style={{ flex: 1, overflowY: 'auto', padding: '8px 10px 16px' }}>
           {NAV.map((section, sectionIndex) => {
             // Check if any items in this section are visible
-            const visibleItems = section.items.filter(item => !item.requiresCR || profile.isCR);
+            const visibleItems = section.items.filter(item => !item.requiresCR || canSeeCrBoard);
             
             // Skip section if no items are visible
             if (visibleItems.length === 0) return null;
@@ -123,7 +126,7 @@ export function Sidebar({ open, onClose, compact = false, onToggleCompact }) {
                     (item.path !== '/' && location.pathname.startsWith(item.path));
                   // hide items that require CR unless user is CR
                   if (item.requiresCR) {
-                    if (!profile.isCR) return null;
+                    if (!canSeeCrBoard) return null;
                   }
                   return (
                     <Link

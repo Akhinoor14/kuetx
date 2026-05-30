@@ -275,6 +275,123 @@ export const getYearClass = (earned) => {
 export const uid = () => Math.random().toString(36).slice(2, 9);
 export const formatGPA = (n) => (+n || 0).toFixed(2);
 
+// ─── Time Tracker helpers ────────────────────────────────────────────────
+const TIMER_ACTIVE_KEY = 'timerActiveState_v1';
+const TIMER_SESSIONS_KEY = 'timerSessions_v1';
+const TIMER_PREFS_KEY = 'timer_prefs_v1';
+
+export const TIMER_MODES = {
+  UP: 'up',
+  DOWN: 'down',
+};
+
+export const PRODUCTIVE_TIME_CATEGORIES = ['Study', 'Class', 'Self Study', 'Exercise'];
+export const DISTRACTION_TIME_CATEGORIES = ['Facebook/YouTube', 'Gaming'];
+
+export const msToHms = (ms) => {
+  const safeMs = Math.max(0, Number.isFinite(+ms) ? +ms : 0);
+  const totalSeconds = Math.floor(safeMs / 1000);
+  const seconds = totalSeconds % 60;
+  const totalMinutes = Math.floor(totalSeconds / 60);
+  const minutes = totalMinutes % 60;
+  const hours = Math.floor(totalMinutes / 60);
+  return { hours, minutes, seconds, totalSeconds };
+};
+
+export const formatDurationMs = (ms) => {
+  const { hours, minutes, seconds } = msToHms(ms);
+  return [hours, minutes, seconds].map(v => String(v).padStart(2, '0')).join(':');
+};
+
+export const hoursFromMs = (ms) => {
+  const safeMs = Math.max(0, Number.isFinite(+ms) ? +ms : 0);
+  return +(safeMs / 3600000).toFixed(2);
+};
+
+export const getTimerActiveState = () => {
+  const raw = store.get(TIMER_ACTIVE_KEY);
+  return raw && typeof raw === 'object' ? raw : null;
+};
+
+export const setTimerActiveState = (state) => {
+  if (!state || typeof state !== 'object') return;
+  store.set(TIMER_ACTIVE_KEY, state);
+};
+
+export const clearTimerActiveState = () => {
+  store.remove(TIMER_ACTIVE_KEY);
+};
+
+export const getTimerSessions = () => {
+  const raw = store.get(TIMER_SESSIONS_KEY);
+  return Array.isArray(raw) ? raw : [];
+};
+
+export const setTimerSessions = (sessions) => {
+  store.set(TIMER_SESSIONS_KEY, Array.isArray(sessions) ? sessions : []);
+};
+
+export const appendTimerSession = (session) => {
+  const list = getTimerSessions();
+  const next = [session, ...list].slice(0, 600);
+  setTimerSessions(next);
+  return next;
+};
+
+export const getTimerPrefs = () => {
+  try {
+    const raw = store.get(TIMER_PREFS_KEY);
+    if (raw && typeof raw === 'object') return raw;
+  } catch {}
+  return { sound: true, vibrate: true, notify: true };
+};
+
+export const setTimerPrefs = (prefs) => {
+  try {
+    const next = { sound: true, vibrate: true, notify: true, ...(prefs || {}) };
+    store.set(TIMER_PREFS_KEY, next);
+    return next;
+  } catch {
+    return { sound: true, vibrate: true, notify: true };
+  }
+};
+
+// Timer templates (per-category presets)
+const TIMER_TEMPLATES_KEY = 'timer_templates_v1';
+export const getTimerTemplates = () => {
+  try {
+    const raw = store.get(TIMER_TEMPLATES_KEY);
+    return Array.isArray(raw) ? raw : [];
+  } catch { return []; }
+};
+
+export const setTimerTemplates = (templates) => {
+  try {
+    const next = Array.isArray(templates) ? templates : [];
+    store.set(TIMER_TEMPLATES_KEY, next);
+    return next;
+  } catch { return []; }
+};
+
+export const saveTimerTemplate = (template) => {
+  try {
+    const list = getTimerTemplates();
+    const t = { id: template.id || uid(), name: template.name || 'Preset', category: template.category || 'Study', mode: template.mode || TIMER_MODES.DOWN, ms: template.ms || 1500000 };
+    const next = [t, ...list.filter(x => x.id !== t.id)];
+    setTimerTemplates(next);
+    return t;
+  } catch { return null; }
+};
+
+export const removeTimerTemplate = (id) => {
+  try {
+    const list = getTimerTemplates();
+    const next = list.filter(t => t.id !== id);
+    setTimerTemplates(next);
+    return next;
+  } catch { return getTimerTemplates(); }
+};
+
 // Working-day adder — skips Friday & Saturday (Bangladesh weekend)
 export const addWorkingDays = (startDate, days) => {
   const date = new Date(startDate + 'T00:00:00');
@@ -293,6 +410,8 @@ const localDateKey = (date) => {
   const day = String(date.getDate()).padStart(2, '0');
   return `${year}-${month}-${day}`;
 };
+
+export const getLocalDateKey = (date = new Date()) => localDateKey(date);
 
 export const isRoutineHoliday = (dateStr, holidayDates = []) => {
   const dayOfWeek = new Date(`${dateStr}T00:00:00`).getDay();
