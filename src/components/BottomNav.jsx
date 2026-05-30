@@ -1,17 +1,22 @@
 import { Link, useLocation } from 'react-router-dom';
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
-import { createPortal } from 'react-dom';
 import * as Icons from 'lucide-react';
 import { NAV } from '../nav';
 import { store, getProfile } from '../store/store';
-import { DEFAULT_NAV_LAYOUT } from './nav-system/useNavLayout';
 import { computeAlerts } from '../pages/Alerts';
 
 // ── Constants ────────────────────────────────────────────────────────────────
 const MAX_TABS = 3; // Middle slots only. Dashboard and Menu stay fixed.
-// Use centralized defaults from useNavLayout
-const DEFAULT_GROUPS = DEFAULT_NAV_LAYOUT.customGroups;
-const DEFAULT_TABS = DEFAULT_NAV_LAYOUT.pinnedTabs;
+const DEFAULT_GROUPS = [
+  { id: 'most-used', label: 'Most used', items: [], icon: 'Sparkles', isDefault: true, isSynthetic: true },
+  { id: 'academics-daily-default', label: 'Academics & Daily', items: ['courses', 'syllabus', 'qbank', 'teachers', 'diary', 'self-study', 'namaz', 'self-eval'], icon: 'BookOpen', isDefault: true },
+  { id: 'finance-activity-default', label: 'Finance & Activities', items: ['payments', 'fees', 'scholarships', 'clubs', 'events'], icon: 'Wallet', isDefault: true },
+];
+const DEFAULT_TABS = [
+  { type: 'group', id: 'most-used' },
+  { type: 'group', id: 'academics-daily-default' },
+  { type: 'group', id: 'finance-activity-default' },
+];
 
 // Group icon map — pick a representative icon per section group
 const GROUP_ICONS = {
@@ -44,17 +49,11 @@ const CUSTOM_GROUP_ICONS = [
 
 const USAGE_KEY = 'nav_usage_v1';
 const MAX_RECENT = 8;
-const ICON_SIZE = 20;
-const ICON_STROKE = 1.8;
 
 const COMPACT_BOTTOM_NAV_LABELS = {
   'Class Schedule': 'Schedule',
   'Assignments': 'Tasks',
   'Term Planner': 'Planner',
-  'Most used': 'Most',
-  'Academics & Daily': 'Study',
-  'Finance & Activities': 'Finance',
-  'Dashboard': 'Home',
 };
 
 const MOBILE_NAV_QUERY = '(max-width: 767.98px)';
@@ -318,28 +317,24 @@ export function BottomNav({ onOpenMore, onOpenGroup }) {
   const sections = useMemo(() => getVisibleSections(profile), [profile]);
   const customGroupMap = useMemo(() => new Map((customGroups || []).map(g => [g.id, g])), [customGroups]);
 
-  // Usage tracking: record navigation counts + recent list for 'Most used'
-  useEffect(() => {
-    try {
-      if (!allItems || allItems.length === 0) return;
-      const match = allItems.find(item =>
-        location.pathname === item.path ||
-        (item.path !== '/' && location.pathname.startsWith(item.path))
-      );
-      if (!match) return;
-      const usage = getUsageState();
-      const counts = { ...(usage.counts || {}) };
-      counts[match.id] = (counts[match.id] || 0) + 1;
-      const recent = [match.id, ...((usage.recent || []).filter(id => id !== match.id))].slice(0, MAX_RECENT);
-      const countsChanged = Object.keys(counts).some(k => counts[k] !== (usage.counts || {})[k]);
-      const recentChanged = recent.length !== ((usage.recent || []).length) || recent.some((v, i) => v !== (usage.recent || [])[i]);
-      if (countsChanged || recentChanged) {
-        saveUsageState({ counts, recent });
-        // emit store update so other parts pick it up
-        try { window.dispatchEvent(new Event('kuetx:store-updated')); } catch {}
-      }
-    } catch {}
-  }, [location.pathname, allItems]);
+  // Usage tracking temporarily disabled to avoid render loops while other refactors settle.
+  // useEffect(() => {
+  //   if (!allItems.length) return;
+  //   const match = allItems.find(item =>
+  //     location.pathname === item.path ||
+  //     (item.path !== '/' && location.pathname.startsWith(item.path))
+  //   );
+  //   if (!match) return;
+  //   const usage = getUsageState();
+  //   const counts = { ...usage.counts };
+  //   counts[match.id] = (counts[match.id] || 0) + 1;
+  //   const recent = [match.id, ...usage.recent.filter(id => id !== match.id)].slice(0, MAX_RECENT);
+  //   const countsChanged = Object.keys(counts).some(k => counts[k] !== (usage.counts[k] || 0));
+  //   const recentChanged = recent.length !== (usage.recent || []).length || recent.some((v, i) => v !== (usage.recent || [])[i]);
+  //   if (countsChanged || recentChanged) {
+  //     saveUsageState({ counts, recent });
+  //   }
+  // }, [location.pathname, allItems]);
 
   const resolveGroupItems = (group) => {
     const itemMap = new Map(allItems.map(i => [i.id, i]));
@@ -353,16 +348,7 @@ export function BottomNav({ onOpenMore, onOpenGroup }) {
       // special synthetic "most-used" group resolved from usage data
       if (t.type === 'group' && t.id === 'most-used') {
         const recentIds = (usage?.recent || []).slice(0, MAX_RECENT);
-        let items = recentIds.map(id => allItems.find(i => i.id === id)).filter(Boolean);
-        // Fallback: if no usage data yet, show first useful pages as starter set
-        if (items.length === 0) {
-          const fallback = [];
-          for (let i = 0; i < allItems.length && fallback.length < MAX_RECENT; i += 1) {
-            const it = allItems[i];
-            if (it && it.id !== 'dashboard') fallback.push(it);
-          }
-          items = fallback;
-        }
+        const items = recentIds.map(id => allItems.find(i => i.id === id)).filter(Boolean);
         if (items.length === 0) return null;
         const section = { group: 'Most used', items };
         const iconName = 'Sparkles';
@@ -441,7 +427,7 @@ export function BottomNav({ onOpenMore, onOpenGroup }) {
           aria-current={dashActive ? 'page' : undefined}
         >
           <div className="bottom-nav-icon-wrap">
-            <Icons.Grid size={ICON_SIZE} strokeWidth={ICON_STROKE} />
+            <Icons.Grid size={22} strokeWidth={1.8} />
           </div>
           <span>{getBottomNavLabel('Dashboard')}</span>
           {alertMap && alertMap[dashboardItem.path] && (
@@ -461,10 +447,10 @@ export function BottomNav({ onOpenMore, onOpenGroup }) {
               onClick={() => onOpenGroup(tab.section)}
               aria-label={tab.label}
             >
-                  <div className="bottom-nav-icon-wrap">
-                    <Icon size={ICON_SIZE} strokeWidth={ICON_STROKE} />
-                  </div>
-                  <span>{getBottomNavLabel(tab.label)}</span>
+              <div className="bottom-nav-icon-wrap">
+                <Icon size={22} strokeWidth={1.8} />
+              </div>
+              <span>{tab.label}</span>
             </button>
           );
         }
@@ -477,7 +463,7 @@ export function BottomNav({ onOpenMore, onOpenGroup }) {
             aria-current={tab.isActive ? 'page' : undefined}
           >
             <div className="bottom-nav-icon-wrap">
-              <Icon size={ICON_SIZE} strokeWidth={ICON_STROKE} />
+              <Icon size={22} strokeWidth={1.8} />
             </div>
             <span>{getBottomNavLabel(tab.label)}</span>
             {alertMap && alertMap[tab.item.path] && (
@@ -493,8 +479,8 @@ export function BottomNav({ onOpenMore, onOpenGroup }) {
         aria-label="Open menu"
         aria-expanded={menuOpen}
       >
-        <Icons.Menu size={ICON_SIZE} strokeWidth={ICON_STROKE} />
-        <span className="bottom-nav-label">{getBottomNavLabel('Menu')}</span>
+        <Icons.Menu size={16} strokeWidth={1.8} />
+        <span className="bottom-nav-label">Menu</span>
         {alertCount > 0 && (
           <span className="bottom-nav-badge">
             {alertCount > 9 ? '9+' : alertCount}
@@ -621,7 +607,7 @@ export function GroupMiniDrawer({ section, open, onClose }) {
                   to={item.path}
                   className={`drawer-item-link${active ? ' active' : ''}`}
                 >
-                  <Icon size={ICON_SIZE} strokeWidth={active ? (ICON_STROKE + 0.7) : ICON_STROKE} />
+                  <Icon size={22} strokeWidth={active ? 2.5 : 1.8} />
                   <span className="drawer-item-label">{item.label}</span>
                 </Link>
               );
@@ -631,9 +617,6 @@ export function GroupMiniDrawer({ section, open, onClose }) {
       </div>
     </>
   );
-
-  if (typeof document === 'undefined') return sheet;
-  return createPortal(sheet, document.body);
 }
 
 // ── All Pages Drawer ──────────────────────────────────────────────────────────
@@ -899,7 +882,7 @@ export function AllPagesDrawer({ open, onClose, onOpenGroup }) {
     sectionFilter === 'all' || sectionFilter === 'ungrouped' || section.group === sectionFilter
   );
 
-  const sheet = (
+  return (
     <>
       <div
         className={`all-pages-backdrop${open ? ' open' : ''}`}
@@ -928,7 +911,6 @@ export function AllPagesDrawer({ open, onClose, onOpenGroup }) {
           <div>
             <div className="drawer-title">All Pages</div>
             {editMode && (
-
               <div className="drawer-subtitle">
                 {tabCount}/{MAX_TABS} pinned{tabCount === 0 ? ' — Dashboard only' : ''}
               </div>
@@ -1415,7 +1397,4 @@ export function AllPagesDrawer({ open, onClose, onOpenGroup }) {
       )}
     </>
   );
-
-  if (typeof document === 'undefined') return sheet;
-  return createPortal(sheet, document.body);
 }
