@@ -1,9 +1,11 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, ReferenceLine } from 'recharts';
+import LazyRechartsArea from '../components/LazyRechartsArea';
+import { ResponsiveContainer, AreaChart, Area, Tooltip, CartesianGrid, XAxis, YAxis, ReferenceLine } from 'recharts';
 import { TrendingUp, Award, AlertTriangle, BookOpen, CalendarCheck, Clock, Wallet, Star } from 'lucide-react';
 import * as Icons from 'lucide-react';
-import { store, cgpaToPercent, computeCGPA, computeTermGPAs, computeEffectiveAttendance, MIN_ATTENDANCE_PERCENT, SCHOLARSHIP_ATTENDANCE_PCT, computeCourseGrade, deriveAcademicMetaFromCourses, syncProfileAcademicMeta, getAllCourses, getProfile, getTermLabelFromKey, getCurrentTermKey, getTermProgress, getTermTimeline, getTermIndex, TERM_KEYS, getTimerActiveState, formatDurationMs, PRODUCTIVE_TIME_CATEGORIES } from '../store/store';
+import { store, cgpaToPercent, computeCGPA, computeTermGPAs, computeEffectiveAttendance, MIN_ATTENDANCE_PERCENT, SCHOLARSHIP_ATTENDANCE_PCT, computeCourseGrade, deriveAcademicMetaFromCourses, syncProfileAcademicMeta, getProfile, getTermLabelFromKey, getCurrentTermKey, getTermProgress, getTermTimeline, getTermIndex, TERM_KEYS, getTimerActiveState, formatDurationMs, PRODUCTIVE_TIME_CATEGORIES } from '../store/store';
+import { getAllCourses } from '../store/curriculumStore';
 import { NAV } from '../nav';
 import ticker from '../lib/ticker';
 
@@ -210,15 +212,6 @@ export default function Dashboard() {
               • {a.msg}
             </Link>
           ))}
-          {criticalAlerts.length > 3 && <Link to="/alerts" style={{ fontSize: 12, color: 'var(--danger)' }}>+ {criticalAlerts.length - 3} more →</Link>}
-        </div>
-      )}
-
-      {warningAlerts.length > 0 && (
-        <div style={{ padding: '8px 14px', borderRadius: 10, marginBottom: 12, background: 'var(--warningBg)', border: '1px solid color-mix(in srgb, var(--warning) 28%, var(--border))' }}>
-          <div style={{ fontSize: 12, color: 'var(--warning)' }}>
-            ⚠ {warningAlerts.length} warning{warningAlerts.length > 1 ? 's' : ''} — <Link to="/alerts" style={{ color: 'var(--warning)' }}>view all</Link>
-          </div>
         </div>
       )}
 
@@ -230,7 +223,7 @@ export default function Dashboard() {
           sub={cgpaStr ? `≈${cgpaToPercent(parseFloat(cgpaStr)).toFixed(1)}%` : 'No data yet'} 
           color="#3B82F6"
           bgColor="rgba(59, 130, 246, 0.08)"
-          icon={TrendingUp} 
+          icon={TrendingUp}
           to="/results" 
         />
         <StatCard 
@@ -260,6 +253,20 @@ export default function Dashboard() {
           to="/money" 
         />
       </div>
+
+      {/* GPA Trend Chart (lazy) */}
+      {termGPAs.length > 0 && (
+        <div className="card" style={{ marginBottom: 12, padding: 16, background: 'linear-gradient(180deg, var(--surfaceGlassStrong), rgba(var(--accentRGB), 0.02))', border: '1px solid rgba(var(--accentRGB), 0.10)' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
+            <div>
+              <div style={{ fontSize: 11, fontWeight: 800, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.10em' }}>Progress Trend</div>
+              <div style={{ fontSize: 16, fontWeight: 800, letterSpacing: '-0.03em', marginTop: 4 }}>GPA per Term</div>
+            </div>
+            <Link to="/results" style={{ fontSize: 12, color: 'var(--accent)', textDecoration: 'none', fontWeight: 600 }}>Full results →</Link>
+          </div>
+          <LazyRechartsArea data={termGPAs.filter(t => t.gpa > 0)} height={180} />
+        </div>
+      )}
 
       <div className="card" style={{ marginBottom: 12, padding: 14, border: '1px solid rgba(var(--accentRGB), 0.18)', background: 'linear-gradient(180deg, rgba(var(--accentRGB), 0.05), var(--surfaceGlassStrong))' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>

@@ -1,7 +1,8 @@
 ﻿import { useMemo, useState, useRef, useEffect } from 'react';
 import { Plus, Trash2, X, Check, BookOpen } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { COURSE_STATUSES, COURSE_TYPES, getAllCourses, getCustomCourses, getDeptOptionalCourses, getProfile, getTermLabelFromKey, setCourseOverride, setCustomCourses, setOptionalSelection, uid, store } from '../store/store';
+import { COURSE_STATUSES, COURSE_TYPES, getCustomCourses, getProfile, getTermLabelFromKey, setCourseOverride, setCustomCourses, uid, store } from '../store/store';
+import { getAllCourses, getDeptOptionalCourses, setOptionalSelection } from '../store/curriculumStore';
 
 const YEARS = [1, 2, 3, 4];
 const STATUS_COLORS = { active: 'tag-green', completed: 'tag-blue', backlog: 'tag-red', withdrawal: 'tag-yellow', incomplete: 'tag-gray' };

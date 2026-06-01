@@ -1,7 +1,6 @@
 import { X } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useEffect, useMemo, useState } from 'react';
-import { computeAlerts, decorateAlerts, filterUnreadAlerts, getDismissedAlertIds, setAlertDismissed } from '../pages/Alerts';
 import { getProfile } from '../store/store';
 
 const tone = (color) => {
@@ -13,6 +12,7 @@ const tone = (color) => {
 export function NotificationPanel({ isOpen, onClose }) {
   const profile = getProfile();
   const [refreshTick, setRefreshTick] = useState(0);
+  const [alertApi, setAlertApi] = useState(null);
 
   useEffect(() => {
     const handle = () => setRefreshTick(t => t + 1);
@@ -20,12 +20,26 @@ export function NotificationPanel({ isOpen, onClose }) {
     return () => window.removeEventListener('kuetx:store-updated', handle);
   }, []);
 
-  const dismissedIds = useMemo(() => getDismissedAlertIds(), [refreshTick]);
-  const grouped = useMemo(() => decorateAlerts(computeAlerts(profile), dismissedIds), [profile, refreshTick, dismissedIds]);
-  const critical = filterUnreadAlerts(grouped.critical, dismissedIds);
-  const warnings = filterUnreadAlerts(grouped.warnings, dismissedIds);
-  const positives = filterUnreadAlerts(grouped.positives, dismissedIds);
-  const assignmentAlerts = filterUnreadAlerts(grouped.assignmentAlerts, dismissedIds);
+  useEffect(() => {
+    let cancelled = false;
+    import('../lib/alertUtils').then(module => {
+      if (!cancelled) setAlertApi(module);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const dismissedIds = useMemo(() => (alertApi ? alertApi.getDismissedAlertIds() : new Set()), [alertApi, refreshTick]);
+  const grouped = useMemo(() => (
+    alertApi
+      ? alertApi.decorateAlerts(alertApi.computeAlerts(profile), dismissedIds)
+      : { critical: [], warnings: [], positives: [], assignmentAlerts: [] }
+  ), [profile, refreshTick, dismissedIds, alertApi]);
+  const critical = alertApi ? alertApi.filterUnreadAlerts(grouped.critical, dismissedIds) : [];
+  const warnings = alertApi ? alertApi.filterUnreadAlerts(grouped.warnings, dismissedIds) : [];
+  const positives = alertApi ? alertApi.filterUnreadAlerts(grouped.positives, dismissedIds) : [];
+  const assignmentAlerts = alertApi ? alertApi.filterUnreadAlerts(grouped.assignmentAlerts, dismissedIds) : [];
 
   const assignmentCounts = {
     overdue: assignmentAlerts.filter(a => a.priority === 'overdue').length,
@@ -33,7 +47,7 @@ export function NotificationPanel({ isOpen, onClose }) {
     soon: assignmentAlerts.filter(a => a.priority === 'soon').length,
   };
 
-  const markRead = (id) => setAlertDismissed(id, true);
+  const markRead = (id) => alertApi?.setAlertDismissed(id, true);
 
   useEffect(() => {
     if (!isOpen) return;

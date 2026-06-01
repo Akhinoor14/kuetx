@@ -1,10 +1,8 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Plus, Trash2, Play, Pause, Square, RotateCcw, Save } from 'lucide-react';
+import { Plus, Trash2, Play, Pause, Square, RotateCcw, Save, ChevronDown } from 'lucide-react';
 import {
   store,
   uid,
-  getAllCourses,
-  getDeptSyllabus,
   getProfile,
   getTermLabelFromKey,
   TIMER_MODES,
@@ -17,7 +15,50 @@ import {
   msToHms,
   setTimerSessions,
 } from '../store/store';
+import { getAllCourses, getDeptSyllabus } from '../store/curriculumStore';
 import useTimerEngine from '../hooks/useTimerEngine';
+
+const TIME_TRACKER_CATEGORIES = ['Study', 'Class', 'Self Study', 'Facebook/YouTube', 'Gaming', 'Sleep', 'Exercise', 'Tuition', 'Travel', 'Adda', 'Other'];
+
+function TimeTrackerCategorySelect({ value, onChangeValue, className = '' }) {
+  const [open, setOpen] = useState(false);
+  const setCategory = (next) => {
+    onChangeValue(next);
+    setOpen(false);
+  };
+
+  return (
+    <div className={`form-field time-tracker-select-field ${className}`.trim()}>
+      <label>Category</label>
+      <div className="time-tracker-select-shell time-tracker-select-desktop">
+        <select className="time-tracker-select" value={value} onChange={(e) => setCategory(e.target.value)}>
+          {TIME_TRACKER_CATEGORIES.map(c => <option key={c}>{c}</option>)}
+        </select>
+        <ChevronDown size={14} className="time-tracker-select-icon" aria-hidden="true" />
+      </div>
+      <div className="time-tracker-mobile-category-picker">
+        <button type="button" className="time-tracker-category-toggle" onClick={() => setOpen(v => !v)} aria-expanded={open}>
+          <span>{value}</span>
+          <ChevronDown size={14} className={`time-tracker-select-icon ${open ? 'is-open' : ''}`} aria-hidden="true" />
+        </button>
+        {open && (
+          <div className="time-tracker-category-panel">
+            {TIME_TRACKER_CATEGORIES.map((category) => (
+              <button
+                key={category}
+                type="button"
+                className={`time-tracker-category-option ${category === value ? 'active' : ''}`}
+                onClick={() => setCategory(category)}
+              >
+                {category}
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
 
 // ── Tours ────────────────────────────────────────────────────────────────────
 export function Tours() {
@@ -689,8 +730,6 @@ export function TimeTracker() {
   const [pomodoro, setPomodoro] = useState(() => ({ enabled: false, isWork: true, workMs: 25 * 60000, breakMs: 5 * 60000, longBreakMs: 15 * 60000, cycles: 0 }));
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
 
-  const CATS = ['Study', 'Class', 'Self Study', 'Facebook/YouTube', 'Gaming', 'Sleep', 'Exercise', 'Tuition', 'Travel', 'Adda', 'Other'];
-
   const toInt = (value) => {
     const n = Number.parseInt(String(value || '0'), 10);
     return Number.isFinite(n) ? Math.max(0, n) : 0;
@@ -807,191 +846,215 @@ export function TimeTracker() {
 
   const targetPreview = formatDurationMs(countdownMs);
   const timerHms = msToHms(timer.displayMs);
+  const timerStatusLabel = timer.isRunning ? 'Running' : timer.isPaused ? 'Paused' : timer.isCompleted ? 'Completed' : 'Idle';
+  const timerModeLabel = mode === TIMER_MODES.DOWN ? 'Count Down' : 'Count Up';
+  const todayTotal = productive + waste;
+  const focusRatio = todayTotal > 0 ? Math.round((productive / todayTotal) * 100) : 0;
+  const latestSession = sessions[0] || null;
 
   return (
-    <div className="page-enter page-container">
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-        <div>
-          <h1 style={{ fontSize: 18, fontWeight: 700 }}>Time Tracker</h1>
-          <p style={{ fontSize: 12, color: 'var(--muted)' }}>Today: {productive}h productive · {waste}h scrolled away</p>
+    <div className="page-container time-tracker-page">
+      <div className="time-tracker-hero">
+        <div className="time-tracker-hero-copy">
+          <div className="time-tracker-kicker">Focus by design</div>
+          <h1>Time Tracker</h1>
+          <p>Run a clean focus timer, log work fast, and review the day without visual clutter.</p>
         </div>
-        <button className="btn btn-primary" onClick={() => setManualOpen(true)}><Plus size={13} /> Log Time</button>
       </div>
 
-      <div className="card time-tracker-card" style={{ marginBottom: 14 }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', gap: 10, marginBottom: 10, flexWrap: 'wrap', alignItems: 'center' }}>
-          <div>
-            <div className="segmented-control" role="tablist" aria-label="Timer mode">
-              <button
-                className={`segmented-btn ${mode === TIMER_MODES.UP ? 'active' : ''}`}
-                onClick={() => setMode(TIMER_MODES.UP)}
-                disabled={timer.isRunning}
-                aria-pressed={mode === TIMER_MODES.UP}
-              >Count Up</button>
-              <button
-                className={`segmented-btn ${mode === TIMER_MODES.DOWN ? 'active' : ''}`}
-                onClick={() => setMode(TIMER_MODES.DOWN)}
-                disabled={timer.isRunning}
-                aria-pressed={mode === TIMER_MODES.DOWN}
-              >Count Down</button>
+      <div className="time-tracker-layout">
+        <div className="time-tracker-main-column">
+          {/* ── TIMER PANEL ────────────────────────────────────────── */}
+          <div className="card time-tracker-panel time-tracker-card">
+            {/* Header: Mode + Status */}
+            <div className="time-tracker-header-section">
+              <div className="time-tracker-mode-switch" role="tablist" aria-label="Timer mode">
+                <button
+                  className={`time-tracker-mode-btn ${mode === TIMER_MODES.UP ? 'active' : ''}`}
+                  onClick={() => setMode(TIMER_MODES.UP)}
+                  disabled={timer.isRunning}
+                  aria-pressed={mode === TIMER_MODES.UP}
+                >
+                  Count Up
+                </button>
+                <button
+                  className={`time-tracker-mode-btn ${mode === TIMER_MODES.DOWN ? 'active' : ''}`}
+                  onClick={() => setMode(TIMER_MODES.DOWN)}
+                  disabled={timer.isRunning}
+                  aria-pressed={mode === TIMER_MODES.DOWN}
+                >
+                  Count Down
+                </button>
+              </div>
+              <div className={`time-tracker-status-pill ${timer.isRunning ? 'is-running' : timer.isCompleted ? 'is-complete' : ''}`}>
+                <span>Status</span>
+                <strong>{timerStatusLabel}</strong>
+              </div>
             </div>
-          </div>
-          <div style={{ fontSize: 12, color: 'var(--muted)', alignSelf: 'center' }}>
-            Status: <span style={{ fontWeight: 700, color: timer.isRunning ? 'var(--success)' : timer.isCompleted ? 'var(--warning)' : 'var(--muted)' }}>{timer.state.status}</span>
-          </div>
-        </div>
 
-        <div className="time-tracker-visual" style={{ marginBottom: 12 }}>
-          <div className="time-tracker-ring" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 14, padding: 18 }}>
-            <svg viewBox="0 0 100 100" width="110" height="110" className={timer.isRunning ? 'running' : ''} aria-hidden>
-              <circle cx="50" cy="50" r="36" stroke="var(--border)" strokeWidth="8" fill="none" />
-              {mode === TIMER_MODES.DOWN && timer.state?.targetMs ? (
-                (() => {
-                  const target = Number(timer.state.targetMs) || 0;
-                  const rem = Number(timer.remainingMs) || 0;
-                  const pct = target > 0 ? Math.max(0, Math.min(100, Math.round((1 - rem / target) * 100))) : 0;
-                  const r = 36;
-                  const c = 2 * Math.PI * r;
-                  const dash = (pct / 100) * c;
-                  const offset = c - dash;
-                  return <circle cx="50" cy="50" r="36" stroke="var(--accent)" strokeWidth="8" fill="none" strokeLinecap="round" strokeDasharray={`${c} ${c}`} strokeDashoffset={offset} transform="rotate(-90 50 50)" style={{ transition: 'stroke-dashoffset 180ms linear' }} />;
-                })()
-              ) : (
-                <g>
-                  <circle cx="50" cy="50" r="36" stroke="rgba(59,130,246,0.18)" strokeWidth="8" fill="none" style={{ transition: 'stroke-dashoffset 180ms linear' }} />
-                </g>
+            {/* Display Section */}
+            <div className="time-tracker-display-section">
+              <div className="time-tracker-ring-row">
+                <div className="time-tracker-ring-text">
+                  <div className="time-tracker-digits">{String(timerHms.hours).padStart(2, '0')}:{String(timerHms.minutes).padStart(2, '0')}:{String(timerHms.seconds).padStart(2, '0')}</div>
+                  <div className="time-tracker-dial-caption">{mode === TIMER_MODES.DOWN ? `Target ${targetPreview}` : 'Open-ended focus session'}</div>
+                </div>
+                <div className={`time-tracker-ring ${mode === TIMER_MODES.DOWN ? 'is-countdown' : ''}`}>
+                  <svg viewBox="0 0 100 100" aria-hidden className={timer.isRunning ? 'running' : ''}>
+                    <circle cx="50" cy="50" r="36" stroke="var(--border)" strokeWidth="8" fill="none" />
+                    {mode === TIMER_MODES.DOWN && timer.state?.targetMs ? (() => {
+                      const target = Number(timer.state.targetMs) || 0;
+                      const remaining = Number(timer.remainingMs) || 0;
+                      const pct = target > 0 ? Math.max(0, Math.min(100, Math.round((1 - remaining / target) * 100))) : 0;
+                      const radius = 36;
+                      const circumference = 2 * Math.PI * radius;
+                      const dash = (pct / 100) * circumference;
+                      const offset = circumference - dash;
+                      return <circle cx="50" cy="50" r="36" stroke="var(--accent)" strokeWidth="8" fill="none" strokeLinecap="round" strokeDasharray={`${circumference} ${circumference}`} strokeDashoffset={offset} transform="rotate(-90 50 50)" style={{ transition: 'stroke-dashoffset 180ms linear' }} />;
+                    })() : (
+                      <circle cx="50" cy="50" r="36" stroke="rgba(59,130,246,0.16)" strokeWidth="8" fill="none" />
+                    )}
+                  </svg>
+                </div>
+              </div>
+            </div>
+
+            {/* Presets + Prefs Row */}
+            <div className="time-tracker-controls-row">
+              <div className="time-tracker-presets-group">
+                <div className="time-tracker-section-label">Quick start</div>
+                <div className="time-tracker-preset-row">
+                  <button className="btn btn-ghost btn-sm" title="25 min" onClick={() => { setCountdownInput({ hours: '0', minutes: '25', seconds: '0' }); setMode(TIMER_MODES.DOWN); setPomodoro(p => ({ ...p, enabled: true, isWork: true, workMs: 25 * 60000, breakMs: 5 * 60000 })); }}>25m</button>
+                  <button className="btn btn-ghost btn-sm" title="50 min" onClick={() => { setCountdownInput({ hours: '0', minutes: '50', seconds: '0' }); setMode(TIMER_MODES.DOWN); setPomodoro(p => ({ ...p, enabled: true, isWork: true, workMs: 50 * 60000, breakMs: 10 * 60000 })); }}>50m</button>
+                  <button className="btn btn-ghost btn-sm" title="15 min" onClick={() => { setCountdownInput({ hours: '0', minutes: '15', seconds: '0' }); setMode(TIMER_MODES.DOWN); }}>15m</button>
+                </div>
+              </div>
+              <div className="time-tracker-prefs-group">
+                <div className="time-tracker-section-label">Preferences</div>
+                <div className="time-tracker-preferences-row">
+                  <button className="time-tracker-pref-btn-compact" title="Toggle sound" onClick={() => { const next = { ...timerPrefs, sound: !timerPrefs.sound }; setTimerPrefsState(next); store.set('timer_prefs_v1', next); }}>{timerPrefs.sound ? '🔊' : '🔈'}</button>
+                  <button className="time-tracker-pref-btn-compact" title="Toggle vibrate" onClick={() => { const next = { ...timerPrefs, vibrate: !timerPrefs.vibrate }; setTimerPrefsState(next); store.set('timer_prefs_v1', next); }}>{timerPrefs.vibrate ? '📳' : '📴'}</button>
+                  <button className="time-tracker-pref-btn-compact" title="Toggle notify" onClick={() => { const next = { ...timerPrefs, notify: !timerPrefs.notify }; setTimerPrefsState(next); store.set('timer_prefs_v1', next); }}>{timerPrefs.notify ? '🔔' : '🔕'}</button>
+                </div>
+              </div>
+            </div>
+
+            {/* Today's Stats */}
+            <div className="time-tracker-stats-section">
+              <div className="time-tracker-stat-item">
+                <div className="stat-label">Productive</div>
+                <div className="stat-value">{productive}h</div>
+              </div>
+              <div className="time-tracker-stat-item">
+                <div className="stat-label">Distracted</div>
+                <div className="stat-value">{waste}h</div>
+              </div>
+              <div className="time-tracker-stat-item">
+                <div className="stat-label">Focus ratio</div>
+                <div className="stat-value">{focusRatio}%</div>
+              </div>
+            </div>
+
+            {/* Countdown Inputs (show only when in DOWN mode) */}
+            {mode === TIMER_MODES.DOWN && (
+              <div className="time-tracker-countdown-section">
+                <div className="time-tracker-section-label">Set countdown</div>
+                <div className="time-tracker-grid time-tracker-countdown-grid">
+                  <div className="form-field"><label>H</label><input type="number" min={0} value={countdownInput.hours} onChange={(e) => setCountdownInput(v => ({ ...v, hours: e.target.value }))} disabled={timer.isRunning} /></div>
+                  <div className="form-field"><label>M</label><input type="number" min={0} max={59} value={countdownInput.minutes} onChange={(e) => setCountdownInput(v => ({ ...v, minutes: e.target.value }))} disabled={timer.isRunning} /></div>
+                  <div className="form-field"><label>S</label><input type="number" min={0} max={59} value={countdownInput.seconds} onChange={(e) => setCountdownInput(v => ({ ...v, seconds: e.target.value }))} disabled={timer.isRunning} /></div>
+                </div>
+              </div>
+            )}
+
+            {/* Form Section: Category + Note */}
+            <div className="time-tracker-form-section">
+              <div className="time-tracker-section-label">This session</div>
+              <div className="time-tracker-grid time-tracker-info-grid">
+                <TimeTrackerCategorySelect value={form.category} onChangeValue={(next) => set('category', next)} />
+                <div className="form-field time-tracker-note-field"><label>Note</label><input value={form.note} onChange={e => set('note', e.target.value)} placeholder="What are you doing?" /></div>
+              </div>
+            </div>
+
+            {/* Action Buttons */}
+            <div className="time-tracker-actions-section">
+              {!timer.isRunning && !timer.isPaused && !timer.isCompleted && (
+                <button className="btn btn-primary" onClick={handleStart}><Play size={13} /> Start</button>
               )}
-            </svg>
-
-            <div style={{ textAlign: 'center' }}>
-              <div className="time-tracker-display" style={{ fontSize: 44, fontWeight: 800, letterSpacing: '0.08em', fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Consolas, monospace', lineHeight: 1 }}>
-                {String(timerHms.hours).padStart(2, '0')}:{String(timerHms.minutes).padStart(2, '0')}:{String(timerHms.seconds).padStart(2, '0')}
-              </div>
-              <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 8 }}>
-                {mode === TIMER_MODES.DOWN ? `Target: ${targetPreview}` : '00:00:00 to infinity'}
-              </div>
+              {timer.isRunning && <button className="btn btn-ghost" onClick={timer.pause}><Pause size={13} /> Pause</button>}
+              {timer.isPaused && <button className="btn btn-primary" onClick={timer.resume}><Play size={13} /> Resume</button>}
+              {(timer.isRunning || timer.isPaused) && <button className="btn btn-primary" onClick={handleStopAndSave}><Square size={13} /> Stop & Save</button>}
+              {(timer.isPaused || timer.isCompleted || timer.isIdle) && <button className="btn btn-ghost" onClick={timer.reset}><RotateCcw size={13} /> Reset</button>}
             </div>
           </div>
 
-          <div style={{ marginTop: 6, width: '100%' }}>
-            <div style={{ fontSize: 11, color: 'var(--muted)', textAlign: 'center', marginBottom: 6, fontWeight: 600 }}>Countdown</div>
-            <div style={{ display: 'flex', gap: 8, justifyContent: 'center', flexWrap: 'wrap' }}>
-              <button className="btn btn-ghost btn-sm" title="25 minutes work, 5 minutes break" onClick={() => { setCountdownInput({ hours: '0', minutes: '25', seconds: '0' }); setMode(TIMER_MODES.DOWN); setPomodoro(p => ({ ...p, enabled: true, isWork: true, workMs: 25 * 60000, breakMs: 5 * 60000 })); }}>25m ↓</button>
-              <button className="btn btn-ghost btn-sm" title="50 minutes work, 10 minutes break" onClick={() => { setCountdownInput({ hours: '0', minutes: '50', seconds: '0' }); setMode(TIMER_MODES.DOWN); setPomodoro(p => ({ ...p, enabled: true, isWork: true, workMs: 50 * 60000, breakMs: 10 * 60000 })); }}>50m ↓</button>
-              <button className="btn btn-ghost btn-sm" title="15 minute countdown" onClick={() => { setCountdownInput({ hours: '0', minutes: '15', seconds: '0' }); setMode(TIMER_MODES.DOWN); }}>15m ↓</button>
+          {manualOpen && (
+            <div className="card time-tracker-panel time-tracker-log-form">
+              <div className="time-tracker-panel-head">
+                <div>
+                  <div className="time-tracker-section-label">Manual entry</div>
+                  <h2>Log a session</h2>
+                </div>
+                <button className="btn btn-ghost btn-sm" onClick={() => setManualOpen(false)}>Close</button>
+              </div>
+              <div className="time-tracker-grid time-tracker-manual-grid">
+                <div className="form-field"><label>Date</label><input type="date" value={form.date} onChange={e => set('date', e.target.value)} /></div>
+                <TimeTrackerCategorySelect value={form.category} onChangeValue={(next) => set('category', next)} />
+                <div className="form-field"><label>Hours</label><input type="number" value={form.hours} onChange={e => set('hours', e.target.value)} placeholder="1.5" min={0} step={0.25} /></div>
+              </div>
+              <div className="form-field"><label>Note</label><input value={form.note} onChange={e => set('note', e.target.value)} placeholder="Optional detail" /></div>
+
+              <div className="time-tracker-actions">
+                <button className="btn btn-primary" onClick={saveManualLog}><Save size={13} /> Save</button>
+                <button className="btn btn-ghost" onClick={() => setManualOpen(false)}>Cancel</button>
+              </div>
             </div>
-            <div style={{ fontSize: 11, color: 'var(--muted)', textAlign: 'center', marginTop: 6 }}>Presets include short breaks where applicable</div>
-          </div>
-        </div>
-
-        <div style={{ display: 'flex', gap: 8, justifyContent: 'center', marginTop: 8 }}>
-          <button className={`btn btn-ghost btn-sm`} onClick={() => {
-            const next = { ...timerPrefs, sound: !timerPrefs.sound };
-            setTimerPrefsState(next); store.set('timer_prefs_v1', next);
-          }} title="Toggle sound">{timerPrefs.sound ? '🔊 Sound' : '🔈 Sound'}</button>
-          <button className={`btn btn-ghost btn-sm`} onClick={() => {
-            const next = { ...timerPrefs, vibrate: !timerPrefs.vibrate };
-            setTimerPrefsState(next); store.set('timer_prefs_v1', next);
-          }} title="Toggle vibrate">{timerPrefs.vibrate ? '📳 Vibrate' : '📴 Vibrate'}</button>
-          <button className={`btn btn-ghost btn-sm`} onClick={() => {
-            const next = { ...timerPrefs, notify: !timerPrefs.notify };
-            setTimerPrefsState(next); store.set('timer_prefs_v1', next);
-          }} title="Toggle desktop notifications">{timerPrefs.notify ? '🔔 Notify' : '🔕 Notify'}</button>
-        </div>
-
-        {mode === TIMER_MODES.DOWN && (
-          <div className="time-tracker-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(70px, 1fr))', gap: 8, marginBottom: 10 }}>
-            <div className="form-field"><label>Hour</label><input type="number" min={0} value={countdownInput.hours} onChange={(e) => setCountdownInput(v => ({ ...v, hours: e.target.value }))} disabled={timer.isRunning} /></div>
-            <div className="form-field"><label>Minute</label><input type="number" min={0} max={59} value={countdownInput.minutes} onChange={(e) => setCountdownInput(v => ({ ...v, minutes: e.target.value }))} disabled={timer.isRunning} /></div>
-            <div className="form-field"><label>Second</label><input type="number" min={0} max={59} value={countdownInput.seconds} onChange={(e) => setCountdownInput(v => ({ ...v, seconds: e.target.value }))} disabled={timer.isRunning} /></div>
-          </div>
-        )}
-
-        <div className="time-tracker-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 10, marginBottom: 10 }}>
-          <div className="form-field"><label>Category</label><select value={form.category} onChange={e => set('category', e.target.value)}>{CATS.map(c => <option key={c}>{c}</option>)}</select></div>
-          <div className="form-field" style={{ gridColumn: 'span 2' }}><label>Session Note</label><input value={form.note} onChange={e => set('note', e.target.value)} placeholder="What are you doing right now?" /></div>
-        </div>
-
-        <div className="time-tracker-actions" style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-          {!timer.isRunning && !timer.isPaused && !timer.isCompleted && (
-            <button className="btn btn-primary" onClick={handleStart}><Play size={13} /> Start</button>
           )}
-          {timer.isRunning && <button className="btn btn-ghost" onClick={timer.pause}><Pause size={13} /> Pause</button>}
-          {timer.isPaused && <button className="btn btn-primary" onClick={timer.resume}><Play size={13} /> Resume</button>}
-          {(timer.isRunning || timer.isPaused) && <button className="btn btn-primary" onClick={handleStopAndSave}><Save size={13} /> Stop & Save</button>}
-          {(timer.isPaused || timer.isCompleted || timer.isIdle) && <button className="btn btn-ghost" onClick={timer.reset}><RotateCcw size={13} /> Reset</button>}
-        </div>
-        {/* Reminders / Pomodoro UI removed for a minimal compact design */}
-      </div>
 
-      {manualOpen && (
-        <div className="card time-tracker-form" style={{ marginBottom: 14, borderColor: 'var(--accent)' }}>
-          <div className="time-tracker-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 10, marginBottom: 10 }}>
-            <div className="form-field"><label>Date</label><input type="date" value={form.date} onChange={e => set('date', e.target.value)} /></div>
-            <div className="form-field"><label>Category</label><select value={form.category} onChange={e => set('category', e.target.value)}>{CATS.map(c => <option key={c}>{c}</option>)}</select></div>
-            <div className="form-field"><label>Hours</label><input type="number" value={form.hours} onChange={e => set('hours', e.target.value)} placeholder="1.5" min={0} step={0.25} /></div>
-          </div>
-          <div className="form-field" style={{ marginBottom: 10 }}><label>Note</label><input value={form.note} onChange={e => set('note', e.target.value)} placeholder="Optional detail" /></div>
+          {logs.length === 0 && !manualOpen && (
+            <div className="card time-tracker-empty-state">
+              <p>Start logging your time to see where your day goes.</p>
+            </div>
+          )}
 
-          <div className="time-tracker-actions" style={{ display: 'flex', gap: 8 }}>
-            <button className="btn btn-primary" onClick={saveManualLog}><Save size={13} /> Save</button>
-            <button className="btn btn-ghost" onClick={() => setManualOpen(false)}>Cancel</button>
-          </div>
-        </div>
-      )}
-
-      {logs.length === 0 && !manualOpen && (
-        <div className="card" style={{ textAlign: 'center', color: 'var(--muted)', padding: 40 }}>
-          <p>Start logging your time to see where your day goes.</p>
-        </div>
-      )}
-
-      {sessions.length > 0 && (
-        <div className="card" style={{ marginTop: 14 }}>
-          <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 10 }}>Recent Digital Sessions</div>
-          <div className="time-session-list">
-            {sessions.slice(0, 8).map(s => (
-              <div key={s.id} className="time-session-item">
-                <div className="time-session-main">
-                  <div className="time-session-title">{s.category} · {s.mode === TIMER_MODES.DOWN ? 'count down' : 'count up'}</div>
-                  <div className="time-session-meta">{new Date(s.endedAt || s.savedAt).toLocaleString('en-BD')}{s.note ? ` · ${s.note}` : ''}</div>
+          {sessions.length > 0 && (
+            <div className="card time-tracker-panel time-tracker-sessions-panel">
+              <div className="time-tracker-panel-head">
+                <div>
+                  <div className="time-tracker-section-label">Digital history</div>
+                  <h2>Recent sessions</h2>
                 </div>
-                <div className="time-session-actions">
-                  <div className="time-session-duration">{formatDurationMs(s.actualMs || 0)}</div>
-                  <div className="time-session-buttons">
-                    <button className="btn btn-ghost btn-sm" title="Edit" onClick={() => {
-                      const newHours = prompt('Hours (decimal)', String(hoursFromMs(s.actualMs || 0)));
-                      if (newHours === null) return;
-                      const newCat = prompt('Category', s.category) || s.category;
-                      const updated = { ...s, actualMs: Math.round((Number(newHours) || 0) * 3600000), category: newCat, savedAt: Date.now() };
-                      const next = sessions.map(x => x.id === s.id ? updated : x);
-                      setTimerSessions(next);
-                      setSessions(next);
-                    }}>Edit</button>
-                    <button className="btn btn-ghost btn-sm" title="Delete" onClick={() => {
-                      if (!confirm('Delete this session?')) return;
-                      const next = sessions.filter(x => x.id !== s.id);
-                      setTimerSessions(next);
-                      setSessions(next);
-                    }}>Delete</button>
-                    <button className="btn btn-ghost btn-sm" title="Merge Prev" onClick={() => {
-                      const idx = sessions.findIndex(x => x.id === s.id);
-                      if (idx <= 0) return alert('No previous session to merge with');
-                      const prev = sessions[idx - 1];
-                      if (!confirm(`Merge this session into previous (${prev.category} · ${formatDurationMs(prev.actualMs || 0)})?`)) return;
-                      const merged = { ...prev, actualMs: (Number(prev.actualMs || 0) + Number(s.actualMs || 0)), note: `${prev.note || ''} + ${s.note || ''}`, savedAt: Date.now() };
-                      const next = sessions.slice().filter(x => x.id !== s.id && x.id !== prev.id);
-                      next.splice(idx - 1, 0, merged);
-                      setTimerSessions(next);
-                      setSessions(next);
-                    }}>Merge</button>
-                  </div>
-                </div>
+                <div className="time-tracker-panel-note">{sessions.length} total · Showing latest 8</div>
               </div>
-            ))}
-          </div>
+              <div className="time-session-list">
+                {sessions.slice(0, 8).map((s, idx) => (
+                  <div key={s.id} className="time-session-item" data-index={idx}>
+                    <div className="time-session-left">
+                      <div className="time-session-badge-group">
+                        <div className="time-session-category-badge">{s.category}</div>
+                        <div className={`time-session-mode-badge ${s.mode === TIMER_MODES.DOWN ? 'countdown' : 'countup'}`}>
+                          {s.mode === TIMER_MODES.DOWN ? '⏱' : '▶'}
+                        </div>
+                      </div>
+                      <div className="time-session-meta-block">
+                        <div className="time-session-datetime">{new Date(s.endedAt || s.savedAt).toLocaleDateString('en-BD')}</div>
+                        <div className="time-session-time">{new Date(s.endedAt || s.savedAt).toLocaleTimeString('en-BD', {hour:'2-digit', minute:'2-digit'})}</div>
+                        {s.note && <div className="time-session-note">{s.note}</div>}
+                      </div>
+                    </div>
+                    <div className="time-session-right">
+                      <div className="time-session-duration-display">{formatDurationMs(s.actualMs || 0)}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
-      )}
+
+        <div className="time-tracker-side-column">
+        </div>
+      </div>
     </div>
   );
 }

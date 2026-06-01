@@ -1,7 +1,8 @@
 import { useMemo, useState } from 'react';
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, ReferenceLine, LabelList } from 'recharts';
 import { Sparkles, Target, TrendingUp, ArrowRight } from 'lucide-react';
-import { store, GRADE_SCALE, cgpaToPercent, computeCourseGrade, getAllCourses, getLegacyTermResults, getProfile, setLegacyTermResults, TERM_KEYS, getTermCreditsFromCurriculum, getCurrentTermKey, getTermTimeline, recordAudit } from '../store/store';
+import { store, GRADE_SCALE, cgpaToPercent, computeCourseGrade, getLegacyTermResults, getProfile, setLegacyTermResults, TERM_KEYS, getCurrentTermKey, getTermTimeline, recordAudit } from '../store/store';
+import { getAllCourses, getTermCreditsFromCurriculum } from '../store/curriculumStore';
 import Collapsible from '../components/Collapsible';
 
 export default function Results() {

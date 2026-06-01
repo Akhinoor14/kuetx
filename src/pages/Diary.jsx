@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Plus, Trash2, ChevronDown, ChevronUp, Copy } from 'lucide-react';
-import { store, uid, getAllCourses, getDeptSyllabus, getProfile } from '../store/store';
+import { store, uid, getProfile } from '../store/store';
+import { getAllCourses, getDeptSyllabus } from '../store/curriculumStore';
 
 // Helper: Get today's schedule courses
 const getTodaySchedule = (courses) => {

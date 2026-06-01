@@ -2,8 +2,9 @@ import { useState, useMemo, useEffect, useCallback } from 'react';
 import { ChevronLeft, ChevronRight, AlertTriangle, CheckCircle, TrendingUp, Users, BookOpen, Award, CalendarDays, X } from 'lucide-react';
 import {
   store, getAttendanceMarks, MIN_ATTENDANCE_PERCENT, SCHOLARSHIP_ATTENDANCE_PCT,
-  getAllCourses, getProfile, getRoutinePreviewDate, isRoutineHoliday
+  getProfile, getRoutinePreviewDate, isRoutineHoliday
 } from '../store/store';
+import { getAllCourses } from '../store/curriculumStore';
 import CourseTeacherDialog from '../components/CourseTeacherDialog';
 
 // ── Utils ──────────────────────────────────────────────────────────────────

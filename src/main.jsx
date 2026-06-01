@@ -2,13 +2,13 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
 import './index.css'
-import { store } from './store/store.js'
+import { store, ensureDBReady } from './store/store.js'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <App />
   </React.StrictMode>,
-)
+);
 
 // Weekly backup reminder (fires 3s after load)
 ;(() => {
@@ -28,3 +28,26 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     else store.set('backupReminderSnoozed', new Date().toDateString());
   }, 3000);
 })();
+
+// Warm IDB cache in the background for large data sets
+ensureDBReady().catch(console.error);
+
+// Pre-warm heavy selectors in idle time to keep page transitions instant
+const warmup = () => {
+  const run = () => {
+    import('./store/curriculumStore.js')
+      .then(({ getAllCourses }) => {
+        try { getAllCourses(store.get('profile') || {}); } catch {}
+      })
+      .catch(() => {});
+  };
+
+  if (typeof window !== 'undefined' && 'requestIdleCallback' in window) {
+    window.requestIdleCallback(run, { timeout: 2000 });
+  } else {
+    setTimeout(run, 2000);
+  }
+};
+
+warmup();
+

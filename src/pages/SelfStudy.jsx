@@ -1,7 +1,8 @@
 import { useState, useMemo, useEffect } from 'react';
 import { Plus, Trash2, Clock3, Check } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
-import { store, uid, getAllCourses, getDeptSyllabus, getProfile, getTermLabelFromKey } from '../store/store';
+import { store, uid, getProfile, getTermLabelFromKey } from '../store/store';
+import { getAllCourses, getDeptSyllabus } from '../store/curriculumStore';
 
 export default function SelfStudy() {
   const profile = getProfile();

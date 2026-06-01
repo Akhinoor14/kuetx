@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Plus, Trash2, Check } from 'lucide-react';
-import { store, uid, getAllCourses, getProfile, getCurrentTermKey } from '../store/store';
+import { store, uid, getProfile, getCurrentTermKey } from '../store/store';
+import { getAllCourses } from '../store/curriculumStore';
 import CourseTeacherDialog from '../components/CourseTeacherDialog';
 
 const normalizeTeacherName = (value) => {

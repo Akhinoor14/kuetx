@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Plus, Settings2, Clock3, PencilLine, Copy, CalendarDays, X, FileText } from 'lucide-react';
-import { store, uid, getAllCourses, getProfile, getCurrentTermKey, getRoutinePreviewDate, isRoutineHoliday, getTermTimeline } from '../store/store';
+import { store, uid, getProfile, getCurrentTermKey, getRoutinePreviewDate, isRoutineHoliday, getTermTimeline } from '../store/store';
+import { getAllCourses } from '../store/curriculumStore';
 import { useNavigate } from 'react-router-dom';
 import CourseTeacherDialog from '../components/CourseTeacherDialog';
 

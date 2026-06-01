@@ -42,7 +42,17 @@ self.addEventListener('fetch', (e) => {
         }
         return res;
       })
-      .catch(() => caches.match(e.request).then(cached => cached || caches.match('/index.html')))
+      .catch(() => {
+        return caches.match(e.request)
+          .then(cached => {
+            if (cached) return cached;
+            return caches.match('/index.html');
+          })
+          .then(fallback => {
+            if (fallback) return fallback;
+            return new Response('Offline', { status: 503, statusText: 'Offline' });
+          });
+      })
   );
 });
 

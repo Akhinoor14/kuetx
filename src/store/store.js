@@ -3,7 +3,6 @@
 // Approved: 18th & 19th Academic Council meetings (2012)
 // Storage: IndexedDB (50MB+) with automatic migration from localStorage
 
-import { CURRICULUM } from '../data/curriculum/index.js';
 import { initDB, getFromDB, setInDB, removeFromDB, getAllKeysFromDB, getAllFromDB, clearDB, migrateFromLocalStorage, getStorageUsage } from './indexeddb-store.js';
 
 const PREFIX = 'kuetx_';
@@ -13,7 +12,7 @@ const memoryCache = new Map();
 let dbReady = false;
 
 // Initialize database on first load
-async function ensureDBReady() {
+export async function ensureDBReady() {
   if (dbReady) return;
   try {
     await initDB();
@@ -21,17 +20,19 @@ async function ensureDBReady() {
     // Pre-load all data into memory cache
     const allKeys = await getAllKeysFromDB();
     for (const key of allKeys) {
+      const cacheKey = key;
+      if (memoryCache.has(cacheKey)) continue;
       const value = await getFromDB(key.replace(PREFIX, ''));
-      if (value) memoryCache.set(key, value);
+      if (value !== null && value !== undefined) memoryCache.set(cacheKey, value);
     }
     dbReady = true;
+    emitStoreUpdate();
   } catch (err) {
     console.error('[KUETx Store] Initialization error:', err);
   }
 }
 
-// Initialize immediately (non-blocking)
-ensureDBReady().catch(console.error);
+// DB preloading is invoked by the app bootstrap before first render.
 
 const emitStoreUpdate = () => {
   try {
@@ -43,7 +44,17 @@ export const store = {
   get: (key) => {
     try {
       const cacheKey = PREFIX + key;
-      return memoryCache.has(cacheKey) ? memoryCache.get(cacheKey) : null;
+      if (memoryCache.has(cacheKey)) return memoryCache.get(cacheKey);
+      // Sync fallback for instant reads
+      const raw = localStorage.getItem(cacheKey);
+      if (raw) {
+        try {
+          const parsed = JSON.parse(raw);
+          memoryCache.set(cacheKey, parsed);
+          return parsed;
+        } catch {}
+      }
+      return null;
     } catch {
       return null;
     }
@@ -53,6 +64,7 @@ export const store = {
     try {
       const cacheKey = PREFIX + key;
       memoryCache.set(cacheKey, val);
+      try { localStorage.setItem(cacheKey, JSON.stringify(val)); } catch {}
       emitStoreUpdate();
       // Persist to IndexedDB asynchronously
       setInDB(key, val).catch(err => console.error('[KUETx Store] IDB set error:', err));
@@ -65,6 +77,7 @@ export const store = {
     try {
       const cacheKey = PREFIX + key;
       memoryCache.delete(cacheKey);
+      try { localStorage.removeItem(cacheKey); } catch {}
       emitStoreUpdate();
       // Remove from IndexedDB asynchronously
       removeFromDB(key).catch(err => console.error('[KUETx Store] IDB remove error:', err));
@@ -86,6 +99,7 @@ export const store = {
       Object.entries(data).forEach(([k, v]) => {
         if (k.startsWith(PREFIX)) {
           memoryCache.set(k, v);
+          try { localStorage.setItem(k, JSON.stringify(v)); } catch {}
           // Persist asynchronously
           setInDB(k.replace(PREFIX, ''), v).catch(err => console.error('[KUETx Store] IDB import error:', err));
         }
@@ -99,7 +113,10 @@ export const store = {
   clearAll: () => {
     try {
       for (const k of memoryCache.keys()) {
-        if (k.startsWith(PREFIX)) memoryCache.delete(k);
+        if (k.startsWith(PREFIX)) {
+          memoryCache.delete(k);
+          try { localStorage.removeItem(k); } catch {}
+        }
       }
       emitStoreUpdate();
       // Clear IndexedDB asynchronously
@@ -322,18 +339,44 @@ export const clearTimerActiveState = () => {
   store.remove(TIMER_ACTIVE_KEY);
 };
 
+const normalizeTimerSessions = (sessions) => {
+  if (!Array.isArray(sessions)) return [];
+  const seen = new Set();
+  return sessions.map((session) => {
+    const current = session && typeof session === 'object' ? { ...session } : { id: uid() };
+    let nextId = current.id || uid();
+    while (seen.has(nextId)) nextId = uid();
+    seen.add(nextId);
+    return { ...current, id: nextId };
+  });
+};
+
+const getTimerSessionSortTs = (session) => {
+  if (!session || typeof session !== 'object') return 0;
+  return Number(session.savedAt || session.endedAt || session.updatedAt || session.createdAt || 0) || 0;
+};
+
+const sortTimerSessions = (sessions) => {
+  return normalizeTimerSessions(sessions)
+    .sort((a, b) => {
+      const diff = getTimerSessionSortTs(b) - getTimerSessionSortTs(a);
+      if (diff !== 0) return diff;
+      return String(b.id || '').localeCompare(String(a.id || ''));
+    });
+};
+
 export const getTimerSessions = () => {
   const raw = store.get(TIMER_SESSIONS_KEY);
-  return Array.isArray(raw) ? raw : [];
+  return sortTimerSessions(raw);
 };
 
 export const setTimerSessions = (sessions) => {
-  store.set(TIMER_SESSIONS_KEY, Array.isArray(sessions) ? sessions : []);
+  store.set(TIMER_SESSIONS_KEY, sortTimerSessions(sessions));
 };
 
 export const appendTimerSession = (session) => {
   const list = getTimerSessions();
-  const next = [session, ...list].slice(0, 600);
+  const next = sortTimerSessions([session, ...list]).slice(0, 600);
   setTimerSessions(next);
   return next;
 };
@@ -462,6 +505,20 @@ export const computeEffectiveAttendance = (courseId) => {
 // Compute grade for one course
 export const computeCourseGrade = (course) => {
   if (!course) return { grade: 'F', point: 0, total: 0 };
+
+  // Lightweight memoization: avoid recomputing grades repeatedly when marks object hasn't changed
+  try {
+    if (typeof computeCourseGrade._marksRef === 'undefined') {
+      computeCourseGrade._marksRef = null;
+      computeCourseGrade._cache = new Map();
+    }
+    const currentMarksRef = store.get('marks') || {};
+    if (currentMarksRef !== computeCourseGrade._marksRef) {
+      computeCourseGrade._marksRef = currentMarksRef;
+      computeCourseGrade._cache = new Map();
+    }
+    if (computeCourseGrade._cache.has(course.id)) return computeCourseGrade._cache.get(course.id);
+  } catch (e) {}
   const marks = store.get('marks') || {};
   const m = marks[course.id] || {};
   const hasAnyEntry = Object.entries(m).some(([key, value]) => key !== '__termMarkedNotPublished' && value !== '' && value !== null && value !== undefined);
@@ -602,6 +659,7 @@ export const computeCourseGrade = (course) => {
     return { grade: 'NOT YET PUBLISHED', point: null, total: Number.isFinite(total) ? +total.toFixed(1) : null, isNotPublished: true };
   }
   return { grade: gradeObj.grade, point: gradeObj.point, total: +total.toFixed(1) };
+  try { computeCourseGrade._cache.set(course.id, { grade: gradeObj.grade, point: gradeObj.point, total: +total.toFixed(1) }); } catch (e) {}
 };
 
 // Compute CGPA across all courses
@@ -779,32 +837,6 @@ export const getCurrentTermKey = (profile = {}) => {
   return profile.currentTermKey || getTermKeyFromLabel(profile.currentTerm) || '';
 };
 
-// ─── Curriculum Selectors ───────────────────────────────────────────────
-const getDeptCurriculum = (deptCode) => {
-  const found = CURRICULUM?.departments?.[deptCode];
-  if (found) return found;
-  // Fallback: construct a safe empty department object so UI logic works
-  const metaDef = DEPARTMENTS.find(d => d.code === deptCode) || { code: deptCode, name: deptCode };
-  return {
-    meta: { code: metaDef.code, name: metaDef.name, acronym: metaDef.code },
-    terms: {},
-    optional: [],
-    notes: {},
-    syllabus: { terms: {}, courses: {} },
-  };
-};
-
-export const getDeptTerms = (deptCode) => getDeptCurriculum(deptCode)?.terms || {};
-
-export const getTermCreditsFromCurriculum = (deptCode, termKey) => {
-  const deptTerms = getDeptTerms(deptCode);
-  const coursesInTerm = deptTerms[termKey] || [];
-  return coursesInTerm.reduce((sum, course) => {
-    if (course.type === 'NonCredit') return sum;
-    return sum + (course.credits || 0);
-  }, 0);
-};
-
 // Calculate term timeline with holidays, exams, and breaks
 export const getTermTimeline = (termStartDate, deptCode, termKey) => {
   if (!termStartDate) return null;
@@ -927,10 +959,6 @@ export const getTermProgress = (termStartDate, holidayDates = []) => {
   }
 };
 
-export const getDeptOptionalCourses = (deptCode) => getDeptCurriculum(deptCode)?.optional || [];
-
-export const getDeptSyllabus = (deptCode) => getDeptCurriculum(deptCode)?.syllabus || null;
-
 export const buildCourseId = (deptCode, termKey, code) => `${deptCode}:${termKey}:${code}`;
 
 export const getCustomCourses = () => {
@@ -970,95 +998,6 @@ export const setOptionalSelection = ({ deptCode, termKey, slotIndex, code }) => 
   store.set('optionalSelections', next);
   return next;
 };
-
-const resolveOptionalCourse = (deptCode, selectedCode) => {
-  if (!selectedCode) return null;
-  return getDeptOptionalCourses(deptCode).find(c => c.code === selectedCode) || null;
-};
-
-const buildCourseRecord = ({ deptCode, termKey, base, status, optionalSlotIndex }) => {
-  const { year, term } = parseTermKey(termKey);
-  const overrides = getCourseOverrides();
-  const courseId = base.isOptional
-    ? `${deptCode}:${termKey}:OPT${(optionalSlotIndex || 0) + 1}`
-    : buildCourseId(deptCode, termKey, base.code);
-  const optionalSelections = getOptionalSelections();
-  const selectedOptionalCode = optionalSlotIndex !== null
-    ? optionalSelections?.[deptCode]?.[termKey]?.[optionalSlotIndex]
-    : '';
-  const optionalCourse = base.isOptional ? resolveOptionalCourse(deptCode, selectedOptionalCode) : null;
-  const resolvedCode = optionalCourse?.code || base.code;
-  const resolvedTitle = optionalCourse?.title || base.title;
-  const resolvedCredits = optionalCourse?.credits ?? base.credits;
-  const record = {
-    id: courseId,
-    source: 'curriculum',
-    deptCode,
-    year,
-    term,
-    status,
-    isCore: true,
-    notes: '',
-    contactHours: base.contactHours || '',
-    type: base.type,
-    credits: resolvedCredits,
-    code: resolvedCode,
-    name: resolvedTitle,
-    isOptional: !!base.isOptional,
-    optionalSlotIndex,
-    optionalCode: optionalCourse?.code || '',
-    baseCode: base.code,
-  };
-  const override = overrides[record.id];
-  return override ? { ...record, ...override } : record;
-};
-
-export const syncCurriculumCourses = (profile) => {
-  const current = profile || getProfile();
-  if (!current?.dept) return getCustomCourses();
-  const termKey = getCurrentTermKey(current) || TERM_KEYS[0];
-  const currentIndex = Math.max(0, getTermIndex(termKey));
-  const deptTerms = getDeptTerms(current.dept);
-
-  const deptSyllabus = getDeptSyllabus(current.dept) || { terms: {} };
-
-  const curriculumCourses = TERM_KEYS
-    .filter((key, index) => index <= currentIndex)
-    .flatMap((key, index) => {
-      let baseCourses = Array.isArray(deptTerms[key]) ? deptTerms[key] : [];
-
-      // If term array is empty, try to derive base courses from syllabus.terms[key].courses
-      if ((!Array.isArray(baseCourses) || baseCourses.length === 0) && deptSyllabus?.terms?.[key]) {
-        const termObj = deptSyllabus.terms[key];
-        if (termObj && termObj.courses && typeof termObj.courses === 'object') {
-          baseCourses = Object.entries(termObj.courses).map(([code, info]) => ({
-            code: code,
-            title: info.title || info.name || '',
-            credits: info.credit ?? info.credits ?? info.creditsPerTerm ?? 0,
-            contactHours: info.contactHour || info.contactHours || '',
-            type: info.type || (info.sessionalNote ? 'Sessional' : 'Theory'),
-            isOptional: !!info.isOptional,
-          }));
-        }
-      }
-
-      // Normalize/infer course types from code where appropriate (apply heuristic globally)
-      if (Array.isArray(baseCourses) && baseCourses.length > 0) {
-        baseCourses = baseCourses.map(b => ({ ...b, type: inferCourseTypeFromCode(b.code, b.type) }));
-      }
-
-      let optionalSlot = 0;
-      return (baseCourses || []).map(base => {
-        const status = index === currentIndex ? 'active' : 'completed';
-        const slotIndex = base.isOptional ? optionalSlot++ : null;
-        return buildCourseRecord({ deptCode: current.dept, termKey: key, base, status, optionalSlotIndex: slotIndex });
-      });
-    });
-
-  return [...curriculumCourses, ...getCustomCourses()];
-};
-
-export const getAllCourses = (profile) => syncCurriculumCourses(profile);
 
 export const deriveAcademicMetaFromCourses = (courses, profile = {}) => {
   const list = Array.isArray(courses) ? courses : [];

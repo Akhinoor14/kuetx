@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
-import { store, GRADE_SCALE, cgpaToPercent, addWorkingDays, getAllCourses, getLegacyTermResults, getProfile, setLegacyTermResults } from '../store/store';
+import { store, GRADE_SCALE, cgpaToPercent, addWorkingDays, getLegacyTermResults, getProfile, setLegacyTermResults } from '../store/store';
+import { getAllCourses } from '../store/curriculumStore';
 
 const TERM_KEYS = ['Y1T1', 'Y1T2', 'Y2T1', 'Y2T2', 'Y3T1', 'Y3T2', 'Y4T1', 'Y4T2'];
 

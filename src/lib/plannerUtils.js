@@ -95,6 +95,23 @@ export const getPlanTeacherCounts = (plan = {}) => {
   return counts;
 };
 
+export const getCourseTeacherCountsFromSchedule = (schedule = [], courseId = '') => {
+  const counts = {};
+  (Array.isArray(schedule) ? schedule : []).forEach(entry => {
+    if (!entry || entry.courseId !== courseId) return;
+    const teacher = String(entry.teacherName || '').trim();
+    if (!teacher) return;
+    counts[teacher] = (counts[teacher] || 0) + 1;
+  });
+  return counts;
+};
+
+export const getCourseScheduleEntries = (schedule = [], courseId = '') => {
+  return (Array.isArray(schedule) ? schedule : [])
+    .filter(entry => entry && entry.courseId === courseId)
+    .slice();
+};
+
 export const buildExportPayload = ({ termKey, plannerState, settings, schedule }) => ({
   meta: {
     version: 1,
