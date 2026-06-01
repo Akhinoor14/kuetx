@@ -10,16 +10,44 @@ import holidaysData from '../data/holidays.json';
 const CT_QUIZ_PLANS_KEY = 'ct_quiz_plans';
 
 /**
+ * Generate termCode from termStartDate and termKey
+ * Example: termStartDate="2026-09-01", termKey="Y1T1" => "T2026S1"
+ */
+export function generateTermCode(termStartDate, termKey) {
+  if (!termStartDate || !termKey) return null;
+  
+  try {
+    const date = new Date(termStartDate);
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1; // 1-12
+    
+    // Determine season: S1 (Sept-Dec) or S2 (Jan-May)
+    // S1: months 9-12, S2: months 1-5
+    const season = month >= 9 || month <= 5 ? (month >= 9 ? 'S1' : 'S2') : 'S1';
+    
+    return `T${year}${season}`;
+  } catch (e) {
+    console.error('[ctQuizStore] Error generating termCode:', e);
+    return null;
+  }
+}
+
+/**
  * Get all holidays for a term
  */
 export function getTermHolidays(termCode) {
   try {
+    if (!termCode) return [];
+    
     // Extract year: T2026S1 -> 2026
     const yearMatch = termCode?.match(/T(\d{4})/);
     const year = yearMatch ? yearMatch[1] : new Date().getFullYear().toString();
 
     const termHols = holidaysData[year]?.[termCode];
-    if (!termHols) return [];
+    if (!termHols) {
+      console.warn('[ctQuizStore] No holidays found for termCode:', termCode);
+      return [];
+    }
 
     const dates = [];
     
@@ -78,7 +106,7 @@ export function validateTermStartDate(dateValue) {
 
 /**
  * Get term timeline info (start date, end date, weeks, etc.)
- * Now with validation of termStartDate format
+ * Now with proper termCode generation and holiday sync
  */
 export function getTermTimelineInfo(profile = {}) {
   try {
@@ -91,8 +119,31 @@ export function getTermTimelineInfo(profile = {}) {
       return null;
     }
 
-    const timeline = getTermTimeline(termStartDate, dept, termKey);
-    return timeline;
+    // CRITICAL: Generate termCode from termStartDate and termKey
+    const termCode = generateTermCode(termStartDate, termKey);
+    if (!termCode) {
+      console.error('[ctQuizStore] Failed to generate termCode', { termStartDate, termKey });
+      return null;
+    }
+
+    // Load holidays for this specific term
+    const holidays = getTermHolidays(termCode);
+
+    // Calculate instruction days from termStartDate (not from holidays.json dates)
+    // This ensures we use the profile's term start date, not the stored one
+    const termEndDate = calculateTermEndDate(termStartDate, holidays);
+    const instructionDays = calculateInstructionDays(termStartDate, termEndDate, holidays);
+
+    return {
+      termCode,
+      termKey,
+      dept,
+      termStartDate,
+      termEndDate,
+      holidays,
+      instructionDays,
+      totalInstructionDays: instructionDays.length,
+    };
   } catch (e) {
     console.error('[ctQuizStore] Error getting term timeline:', e);
     return null;
@@ -100,15 +151,31 @@ export function getTermTimelineInfo(profile = {}) {
 }
 
 /**
+ * Calculate approximate term end date
+ * Assumes ~18 weeks per semester
+ */
+function calculateTermEndDate(termStartDate, holidays = []) {
+  try {
+    const start = new Date(termStartDate);
+    const end = new Date(start);
+    end.setDate(end.getDate() + 120); // ~18 weeks
+    return end.toISOString().split('T')[0];
+  } catch (e) {
+    return null;
+  }
+}
+
+/**
  * Get current term courses with teacher info from schedule
+ * IMPORTANT: Respects current department in profile
  */
 export function getCurrentTermCourses(profile = {}) {
   try {
     const dept = profile.dept || 'ME';
     const termKey = getCurrentTermKey(profile);
 
-    // Get curriculum courses
-    const allCourses = getAllCourses(profile);
+    // Get curriculum courses - USES CURRENT DEPT FROM PROFILE
+    const allCourses = getAllCourses({ ...profile, dept });
     
     // Get current term courses (filter by termKey match)
     const currentTermCourses = allCourses.filter(course => {
@@ -120,10 +187,14 @@ export function getCurrentTermCourses(profile = {}) {
     const scheduleSettings = store.get('scheduleSettings') || {};
     const courseTeacherMap = scheduleSettings.courseTeacherMap || {};
 
-    return currentTermCourses.map(course => ({
+    const enriched = currentTermCourses.map(course => ({
       ...course,
       teachers: courseTeacherMap[course.courseId] || ['Teacher 1', 'Teacher 2'],
+      // Mark course type: odd codes = theory (3 CTs), even codes = sessional (1 CT)
+      courseType: (parseInt(course.code?.match(/\d+$/)?.[0]) || 1) % 2 === 1 ? 'Theory' : 'Sessional',
     }));
+
+    return enriched;
   } catch (e) {
     console.error('[ctQuizStore] Error getting current term courses:', e);
     return [];

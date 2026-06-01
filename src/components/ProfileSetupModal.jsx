@@ -102,12 +102,37 @@ const getFieldError = (key, form, autoCalculatedDept) => {
   if (key === 'studentId') {
     const v = String(value || '').trim();
     if (!v) return 'Student ID is required';
-    if (!/^\d{7}$/.test(v)) return 'Student ID must be a 7-digit number';
+    if (!/^\\d{7}$/.test(v)) return 'Student ID must be a 7-digit number';
   }
   if (key === 'dept' && !String(value || '').trim()) return 'Department is required';
   if (key === 'session' && !String(value || '').trim()) return 'Academic session is required';
   if (key === 'currentTermKey' && !String(value || '').trim()) return 'Current term is required';
   return '';
+};
+
+/**
+ * Validate termStartDate format - must be ISO format (YYYY-MM-DD)
+ */
+const validateTermStartDate = (value) => {
+  if (!value) return null; // Optional field
+  
+  // Check if it's ISO format
+  if (/^\d{4}-\d{2}-\d{2}$/.test(value)) {
+    const parsed = new Date(value + 'T00:00:00Z');
+    if (!isNaN(parsed.getTime())) {
+      return value; // Valid ISO date
+    }
+  }
+  
+  // Try to parse as Date object
+  try {
+    const parsed = new Date(value);
+    if (!isNaN(parsed.getTime())) {
+      return parsed.toISOString().split('T')[0]; // Convert to ISO
+    }
+  } catch (e) {}
+  
+  return null; // Invalid date
 };
 
 export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProfile = {} }) {
@@ -180,6 +205,18 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
       setStepIndex(0);
       return;
     }
+
+    // Validate termStartDate format
+    const validatedTermStartDate = validateTermStartDate(form.termStartDate);
+    if (form.termStartDate && !validatedTermStartDate) {
+      setErrors(prev => ({
+        ...prev,
+        termStartDate: 'Invalid date format. Please use YYYY-MM-DD format.'
+      }));
+      setStepIndex(1);
+      return;
+    }
+
     const next = {
       ...DEFAULT_PROFILE,
       ...form,
@@ -194,7 +231,8 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
       roomNo: String(form.roomNo || '').trim(),
       advisorName: String(form.advisorName || '').trim(),
       advisorContact: String(form.advisorContact || '').trim(),
-      termStartDate: form.termStartDate || null,
+      // Ensure termStartDate is in ISO format (YYYY-MM-DD)
+      termStartDate: validatedTermStartDate || null,
       yearStarted: form.yearStarted ? new Date(form.yearStarted).getFullYear() : DEFAULT_PROFILE.yearStarted,
       totalCreditsRequired: Number(form.totalCreditsRequired) || DEFAULT_PROFILE.totalCreditsRequired,
     };
@@ -291,7 +329,8 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
                 <div>
                   <label style={labelStyle}>Term Start Date</label>
                   <input type="date" value={form.termStartDate || ''} onChange={handleChange('termStartDate')} style={fieldStyle} />
-                  <div style={{ fontSize: 10, color: 'var(--muted)', marginTop: 4 }}>Used for timeline and alert calculations</div>
+                  {errors.termStartDate && <div style={{ fontSize: 11, color: '#dc2626', marginTop: 5 }}>{errors.termStartDate}</div>}
+                  {!errors.termStartDate && <div style={{ fontSize: 10, color: 'var(--muted)', marginTop: 4 }}>Used for timeline and alert calculations</div>}
                 </div>
                 <div>
                   <label style={labelStyle}>When Did You Start?</label>

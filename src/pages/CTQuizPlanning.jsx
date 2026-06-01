@@ -44,6 +44,8 @@ const pressureLabel = (pressure) => {
 export default function CTQuizPlanning() {
   // State - profile must be reactive to detect updates from ProfileSetupModal
   const [profile, setProfile] = useState(getProfile());
+  const [prevDept, setPrevDept] = useState(profile.dept);
+  const [prevTermStartDate, setPrevTermStartDate] = useState(profile.termStartDate);
   const termKey = getCurrentTermKey(profile);
   const termLabel = getTermLabelFromKey(termKey);
 
@@ -58,26 +60,59 @@ export default function CTQuizPlanning() {
 
   // Data
   const termInfo = useMemo(() => getTermTimelineInfo(profile), [profile]);
-  const holidays = useMemo(() => getTermHolidays(termInfo?.termCode), [termInfo?.termCode]);
+  const holidays = useMemo(() => {
+    if (!termInfo?.termCode) {
+      console.warn('[CTQuizPlanning] No termCode available for holiday lookup');
+      return [];
+    }
+    return getTermHolidays(termInfo.termCode);
+  }, [termInfo?.termCode]);
   const deptInfo = useMemo(() => getDepartmentInfo(profile?.dept), [profile?.dept]);
 
   // Listen to store updates and refresh profile
   useEffect(() => {
     const handleStoreUpdate = () => {
-      setProfile(getProfile());
+      const newProfile = getProfile();
+      setProfile(newProfile);
     };
     window.addEventListener('kuetx:store-updated', handleStoreUpdate);
     return () => window.removeEventListener('kuetx:store-updated', handleStoreUpdate);
   }, []);
 
-  // Load data when termKey or profile changes
+  // Detect department or term start date changes and trigger reload
+  useEffect(() => {
+    const deptChanged = profile.dept && profile.dept !== prevDept;
+    const termStartDateChanged = profile.termStartDate && profile.termStartDate !== prevTermStartDate;
+    
+    if (deptChanged || termStartDateChanged) {
+      if (deptChanged) {
+        console.log('[CTQuizPlanning] Department changed from', prevDept, 'to', profile.dept, '- reloading courses');
+      }
+      if (termStartDateChanged) {
+        console.log('[CTQuizPlanning] Term start date changed from', prevTermStartDate, 'to', profile.termStartDate, '- refreshing holidays');
+      }
+      setPrevDept(profile.dept);
+      setPrevTermStartDate(profile.termStartDate);
+      loadData();
+    }
+  }, [profile.dept, profile.termStartDate, prevDept, prevTermStartDate]);
+
+  // Load data when termKey changes
   useEffect(() => {
     loadData();
-  }, [termKey, profile]);
+  }, [termKey]);
 
   function loadData() {
     setLoading(true);
     try {
+      // Validate that termInfo is available
+      if (!termInfo || !termInfo.termCode) {
+        console.warn('[CTQuizPlanning] Cannot load data: missing termInfo or termCode');
+        notify('Please set up your term start date in your profile', 'warning');
+        setLoading(false);
+        return;
+      }
+
       // Get existing plans or create new
       let existingPlans = getCTQuizPlans(profile);
       
@@ -98,9 +133,9 @@ export default function CTQuizPlanning() {
                 success: true,
                 courseId: course.courseId,
                 courseName: course.title || course.code,
-                courseType: course.type === 'Sessional' ? 'sessional' : 'theory',
+                courseType: course.courseType === 'Sessional' ? 'sessional' : 'theory',
                 credits: course.credits,
-                numCTs: course.type === 'Sessional' ? 1 : 3,
+                numCTs: course.courseType === 'Sessional' ? 1 : 3,
                 ctDates: [modelData.ctDates[idx]] || [],
                 ctTeacherMap: {},
                 teachers: course.teachers || ['Teacher 1', 'Teacher 2'],
@@ -111,7 +146,7 @@ export default function CTQuizPlanning() {
               
               setCourses(scheduled);
               saveCTQuizPlans({
-                termCode: termInfo?.termCode,
+                termCode: termInfo.termCode,
                 dept: profile.dept,
                 model: selectedModel,
                 courses: scheduled,
@@ -127,12 +162,12 @@ export default function CTQuizPlanning() {
               const result = scheduleCourseCTs({
                 courseId: course.courseId,
                 courseName: course.title || course.code,
-                courseType: course.type === 'Sessional' ? 'sessional' : 'theory',
+                courseType: course.courseType === 'Sessional' ? 'sessional' : 'theory',
                 credits: course.credits,
-                termStartDate: termInfo?.termStartDate,
-                termEndDate: termInfo?.termEndDate,
+                termStartDate: termInfo.termStartDate,
+                termEndDate: termInfo.termEndDate,
                 holidays,
-                numCTs: course.type === 'Sessional' ? 1 : 3,
+                numCTs: course.courseType === 'Sessional' ? 1 : 3,
                 teachers: course.teachers || ['Teacher 1', 'Teacher 2'],
                 model: selectedModel,
               });
@@ -141,7 +176,7 @@ export default function CTQuizPlanning() {
 
             setCourses(scheduled);
             saveCTQuizPlans({
-              termCode: termInfo?.termCode,
+              termCode: termInfo.termCode,
               dept: profile.dept,
               model: selectedModel,
               courses: scheduled,
@@ -158,11 +193,24 @@ export default function CTQuizPlanning() {
   }
 
   function regenerateSchedules(newModel) {
+    if (!termInfo || !termInfo.termCode) {
+      notify('Cannot regenerate: term information missing', 'error');
+      return;
+    }
+
     setLoading(true);
     try {
       const rescheduled = courses.map(course => {
         const result = scheduleCourseCTs({
-          ...course,
+          courseId: course.courseId,
+          courseName: course.courseName,
+          courseType: course.courseType,
+          credits: course.credits,
+          termStartDate: termInfo.termStartDate,
+          termEndDate: termInfo.termEndDate,
+          holidays,
+          numCTs: course.numCTs,
+          teachers: course.teachers,
           model: newModel,
         });
         return result.success ? result : course;
@@ -171,9 +219,9 @@ export default function CTQuizPlanning() {
       setCourses(rescheduled);
       setSelectedModel(newModel);
 
-      // Save
+      // Save with termCode
       saveCTQuizPlans({
-        termCode: termInfo?.termCode,
+        termCode: termInfo.termCode,
         dept: profile.dept,
         model: newModel,
         courses: rescheduled,
@@ -181,6 +229,7 @@ export default function CTQuizPlanning() {
 
       notify('Schedule regenerated', 'success');
     } catch (e) {
+      console.error('Error regenerating schedule:', e);
       notify('Error regenerating schedule', 'error');
     }
     setLoading(false);

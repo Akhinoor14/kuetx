@@ -29,6 +29,10 @@ export default function Settings() {
   const [autoBackup, setAutoBackupState] = useState(() => store.get('autoBackup') ?? true);
   const [lastBackup, setLastBackup] = useState(() => store.get('lastBackupTime') || null);
   const [storageInfo, setStorageInfo] = useState(null);
+  const [previewOpen, setPreviewOpen] = useState(false);
+  const [previewInfo, setPreviewInfo] = useState(null);
+  const [importReport, setImportReport] = useState(null);
+  const [selectedKeys, setSelectedKeys] = useState(null);
 
   useEffect(() => {
     const on  = () => setIsOnline(true);
@@ -53,10 +57,24 @@ export default function Settings() {
   const flash = (m, type = 'success') => { setMsg(m); setMsgType(type); setTimeout(() => setMsg(''), 3000); };
 
   // Manual export
-  const exportData = () => {
+  async function sha256Hex(str) {
+    const buf = new TextEncoder().encode(str);
+    const hash = await crypto.subtle.digest('SHA-256', buf);
+    return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, '0')).join('');
+  }
+
+  const exportData = async () => {
     const data = store.exportAll();
+    const payload = { ...data, _exportedAt: new Date().toISOString(), _version: '1.0' };
+    try {
+      const json = JSON.stringify(payload);
+      const checksum = await sha256Hex(json);
+      payload._checksum = checksum;
+    } catch (err) {
+      console.warn('Could not compute checksum', err);
+    }
     const ts = new Date().toISOString().split('T')[0];
-    downloadJSON({ ...data, _exportedAt: new Date().toISOString(), _version: '1.0' }, `kuetx-backup-${ts}.json`);
+    downloadJSON(payload, `kuetx-backup-${ts}.json`);
     store.set('lastBackupTime', new Date().toISOString());
     setLastBackup(new Date().toISOString());
     flash('✓ Backup downloaded! Keep it safe.');
@@ -72,15 +90,69 @@ export default function Settings() {
       try {
         const data = JSON.parse(ev.target.result);
         // Validate it's a KUETx backup
-        const hasKuetxKeys = Object.keys(data).some(k => k.startsWith('kuetx_'));
-        if (!hasKuetxKeys) { flash('✗ This doesn\'t look like a KUETx backup file', 'error'); return; }
-        store.importAll(data);
-        flash('✓ Data restored! Reloading...');
-        setTimeout(() => window.location.reload(), 1200);
-      } catch { flash('✗ Could not read backup file', 'error'); }
+        const keys = Object.keys(data || {});
+        const kuetxKeys = keys.filter(k => k.startsWith('kuetx_'));
+        if (kuetxKeys.length === 0) { flash('✗ This doesn\'t look like a KUETx backup file', 'error'); return; }
+
+        // Prepare preview info (key list + sizes)
+        const items = kuetxKeys.map(k => {
+          const raw = JSON.stringify(data[k]);
+          return { key: k, sizeKB: (new Blob([raw]).size / 1024).toFixed(2) };
+        }).sort((a, b) => b.sizeKB - a.sizeKB);
+        const totalKB = items.reduce((s, it) => s + parseFloat(it.sizeKB), 0).toFixed(2);
+        setPreviewInfo({ fileName: file.name, ts: data._exportedAt || null, version: data._version || null, items, totalKB, rawData: data });
+        setSelectedKeys(items.map(i => i.key));
+        setPreviewOpen(true);
+      } catch (err) { console.error(err); flash('✗ Could not read backup file', 'error'); }
     };
     reader.readAsText(file);
     e.target.value = '';
+  };
+
+  const confirmImport = async () => {
+    if (!previewInfo) return;
+    setPreviewOpen(false);
+    const data = previewInfo.rawData;
+    // Version compatibility check (simple)
+    if (data._version && data._version !== '1.0') {
+      flash('⚠️ Backup version mismatch — proceeding may cause issues', 'error');
+    }
+    // If user selected a subset, build filtered payload
+    const keysToImport = Array.isArray(selectedKeys) && selectedKeys.length > 0 ? selectedKeys : Object.keys(data).filter(k => k.startsWith('kuetx_'));
+    const payload = {};
+    for (const k of keysToImport) payload[k] = data[k];
+
+    // Check checksum only when restoring full file
+    if (data._checksum && keysToImport.length === Object.keys(data).filter(k => k.startsWith('kuetx_')).length) {
+      try {
+        const copy = { ...data };
+        delete copy._checksum;
+        const json = JSON.stringify(copy);
+        const c = await sha256Hex(json);
+        if (c !== data._checksum) {
+          flash('✗ Backup integrity check failed (checksum mismatch)', 'error');
+          // Still allow user to proceed if they confirm (for now we abort)
+          return;
+        }
+      } catch (err) {
+        console.warn('Checksum verify failed', err);
+      }
+    }
+
+    // Perform import with per-key reporting
+    try {
+      const report = await store.importAllReport(payload);
+      setImportReport(report);
+      if (report.failed.length === 0) {
+        flash('✓ Data restored! Reloading...');
+        setTimeout(() => window.location.reload(), 1200);
+      } else {
+        flash(`⚠️ Some keys failed to restore (${report.failed.length})`, 'error');
+      }
+    } catch (err) {
+      console.error(err);
+      flash('✗ Import failed', 'error');
+    }
   };
 
   const resetAll = () => {
@@ -219,6 +291,74 @@ export default function Settings() {
           💡 <strong>Tip:</strong> Save backup to Google Drive / Telegram Saved Messages / Email yourself for safekeeping. When you restore, all courses, marks, attendance, diary entries come back exactly as they were.
         </div>
       </div>
+
+      {/* Import preview modal (simple) */}
+      {previewOpen && previewInfo && (
+        <div style={{ position: 'fixed', left: 0, top: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 200 }}>
+          <div style={{ width: 'min(720px, 95%)', maxHeight: '80vh', overflow: 'auto', background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: 16 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <div>
+                <div style={{ fontWeight: 700 }}>Restore preview</div>
+                <div style={{ fontSize: 12, color: 'var(--muted)' }}>{previewInfo.fileName} • {previewInfo.items.length} keys • ~{previewInfo.totalKB} KB</div>
+                {previewInfo.version && <div style={{ fontSize: 12, color: 'var(--muted)' }}>Backup version: {previewInfo.version}</div>}
+              </div>
+              <div>
+                <button className="btn btn-ghost" onClick={() => { setPreviewOpen(false); setPreviewInfo(null); }}>Cancel</button>
+                <button className="btn btn-primary" onClick={confirmImport} style={{ marginLeft: 8 }}>Confirm Restore</button>
+              </div>
+            </div>
+
+            <div style={{ marginTop: 12 }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <div style={{ fontSize: 13, fontWeight: 600 }}>Keys (largest first)</div>
+                <div style={{ fontSize: 12 }}>
+                  <label style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
+                    <input type="checkbox" checked={selectedKeys?.length === previewInfo.items.length} onChange={(e) => {
+                      if (e.target.checked) setSelectedKeys(previewInfo.items.map(i => i.key)); else setSelectedKeys([]);
+                    }} />
+                    Select all
+                  </label>
+                </div>
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 80px', gap: 8, fontSize: 12, marginTop: 8 }}>
+                {previewInfo.items.map(it => (
+                  <div key={it.key} style={{ display: 'contents' }}>
+                    <div style={{ padding: '6px 8px', borderRadius: 6, background: 'var(--bg)', border: '1px solid var(--border)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', display: 'flex', alignItems: 'center', gap: 8 }}>
+                      <input type="checkbox" checked={selectedKeys?.includes(it.key)} onChange={(e) => {
+                        setSelectedKeys(s => {
+                          const next = new Set(s || []);
+                          if (e.target.checked) next.add(it.key); else next.delete(it.key);
+                          return Array.from(next);
+                        });
+                      }} />
+                      <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{it.key}</div>
+                    </div>
+                    <div style={{ padding: '6px 8px', borderRadius: 6, background: 'var(--bg)', border: '1px solid var(--border)', textAlign: 'right' }}>{it.sizeKB} KB</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Import report */}
+      {importReport && (
+        <div className="card" style={{ marginBottom: 14 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 8 }}>Restore report</div>
+          <div style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 8 }}>
+            Imported: <strong>{importReport.imported.length}</strong> keys. Failed: <strong>{importReport.failed.length}</strong> keys.
+          </div>
+          {importReport.failed.length > 0 && (
+            <div style={{ fontSize: 12 }}>
+              <div style={{ fontWeight: 600, marginBottom: 6 }}>Failures</div>
+              <ul style={{ marginLeft: 16 }}>
+                {importReport.failed.map(f => <li key={f.key}><strong>{f.key}</strong>: {f.error}</li>)}
+              </ul>
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Danger zone */}
       <div className="card" style={{ marginBottom: 14, borderColor: 'var(--danger)' }}>

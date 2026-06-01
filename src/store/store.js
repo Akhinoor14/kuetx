@@ -109,6 +109,29 @@ export const store = {
       console.error('[KUETx Store] Import error:', err);
     }
   },
+
+  // Import with per-key reporting (returns { imported: [keys], failed: [{key,error}] })
+  importAllReport: async (data) => {
+    const report = { imported: [], failed: [] };
+    try {
+      for (const [k, v] of Object.entries(data)) {
+        if (!k.startsWith(PREFIX)) continue;
+        try {
+          memoryCache.set(k, v);
+          try { localStorage.setItem(k, JSON.stringify(v)); } catch {}
+          await setInDB(k.replace(PREFIX, ''), v);
+          report.imported.push(k);
+        } catch (err) {
+          console.error('[KUETx Store] IDB import error:', err);
+          report.failed.push({ key: k, error: String(err) });
+        }
+      }
+      emitStoreUpdate();
+    } catch (err) {
+      console.error('[KUETx Store] ImportAllReport error:', err);
+    }
+    return report;
+  },
   
   clearAll: () => {
     try {
