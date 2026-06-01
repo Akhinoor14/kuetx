@@ -73,11 +73,9 @@ function getManualInstructions(env) {
 export default function PWAInstallPrompt() {
   const [deferredPrompt, setDeferredPrompt] = useState(null);
   const [installed, setInstalled] = useState(false);
-  const [showHint, setShowHint] = useState(false);
-  const [showPopup, setShowPopup] = useState(false);
+  const [panelMode, setPanelMode] = useState(null);
   const [hiddenUntil, setHiddenUntil] = useState(0);
   const [env] = useState(() => detectEnv());
-  const hintTimer = useRef(null);
   const hideTimer = useRef(null);
 
   useEffect(() => {
@@ -110,12 +108,12 @@ export default function PWAInstallPrompt() {
       try { localStorage.setItem('kuetx_pwa_installed', '1'); } catch {}
       setInstalled(true);
       setDeferredPrompt(null);
+      setPanelMode(null);
     };
 
     window.addEventListener('beforeinstallprompt', onBeforeInstall);
     window.addEventListener('appinstalled', onInstalled);
     return () => {
-      clearTimeout(hintTimer.current);
       clearTimeout(hideTimer.current);
       window.removeEventListener('beforeinstallprompt', onBeforeInstall);
       window.removeEventListener('appinstalled', onInstalled);
@@ -134,15 +132,16 @@ export default function PWAInstallPrompt() {
           try { localStorage.setItem('kuetx_pwa_installed', '1'); } catch {}
           setInstalled(true);
           setDeferredPrompt(null);
+          setPanelMode(null);
         }
       } catch {
         // prompt() failed — fall through to manual hint
-        setShowHint(v => !v);
+        setPanelMode('hint');
       }
       return;
     }
     // No native prompt — show manual instructions
-    setShowHint(v => !v);
+    setPanelMode('hint');
   };
 
   const instructions = getManualInstructions(env);
@@ -150,8 +149,7 @@ export default function PWAInstallPrompt() {
   const handleLater = () => {
     const hideUntilMs = Date.now() + 8 * 60 * 60 * 1000;
     setHiddenUntil(hideUntilMs);
-    setShowPopup(false);
-    setShowHint(false);
+    setPanelMode(null);
     try { localStorage.setItem('kuetx_pwa_install_hide_until', String(hideUntilMs)); } catch {}
     clearTimeout(hideTimer.current);
     hideTimer.current = setTimeout(() => {
@@ -162,48 +160,63 @@ export default function PWAInstallPrompt() {
 
   return (
     <div className="pwa-prompt-wrap">
-      {showPopup && (
-        <div className="pwa-popup" role="dialog" aria-label="Install app">
-          <div className="pwa-popup-title">Install KUETx?</div>
-          <div className="pwa-popup-sub">Get the app experience with offline access.</div>
-          <div className="pwa-popup-actions">
-            <button type="button" className="pwa-popup-primary" onClick={() => { setShowPopup(false); handleInstall(); }}>
-              Install now
-            </button>
-            <button type="button" className="pwa-popup-secondary" onClick={handleLater}>
-              Install later
-            </button>
-            <button type="button" className="pwa-popup-ghost" onClick={() => setShowPopup(false)}>
-              No
-            </button>
+      {panelMode === 'ask' && (
+        <div className="pwa-dialog-backdrop" role="presentation" onClick={handleLater}>
+          <div className="pwa-dialog-card" role="dialog" aria-label="Install app" onClick={(event) => event.stopPropagation()}>
+            <div className="pwa-dialog-kicker">KUETx App</div>
+            <div className="pwa-dialog-title">Install KUETx for faster access</div>
+            <div className="pwa-dialog-sub">Open the app in a dedicated window, keep offline access, and come back in one tap.</div>
+            <div className="pwa-dialog-points">
+              <div className="pwa-dialog-point"><span>•</span><span>Works offline after sync</span></div>
+              <div className="pwa-dialog-point"><span>•</span><span>Feels like a native app</span></div>
+              <div className="pwa-dialog-point"><span>•</span><span>Uses less browser chrome</span></div>
+            </div>
+            <div className="pwa-dialog-actions">
+              <button type="button" className="pwa-dialog-primary" onClick={() => { setPanelMode(null); handleInstall(); }}>
+                Install now
+              </button>
+              <button type="button" className="pwa-dialog-secondary" onClick={() => setPanelMode('hint')}>
+                Show steps
+              </button>
+              <button type="button" className="pwa-dialog-ghost" onClick={handleLater}>
+                Not now
+              </button>
+            </div>
           </div>
         </div>
       )}
 
       {/* Manual install hint */}
-      {showHint && (
-        <div className="pwa-hint-card" role="dialog" aria-label="How to install">
-          <div className="pwa-hint-title">Install KUETx</div>
-          {instructions.steps.map((step, i) => (
-            <div key={i} className="pwa-hint-step">
-              <span className="pwa-hint-num">{i + 1}</span>
-              <span className="pwa-hint-text">{step.text}</span>
+      {panelMode === 'hint' && (
+        <div className="pwa-dialog-backdrop" role="presentation" onClick={() => setPanelMode(null)}>
+          <div className="pwa-dialog-card pwa-dialog-card-hint" role="dialog" aria-label="How to install" onClick={(event) => event.stopPropagation()}>
+            <div className="pwa-dialog-kicker">Manual install</div>
+            <div className="pwa-dialog-title">Install KUETx from your browser menu</div>
+            <div className="pwa-dialog-sub">Follow these browser-specific steps if the install button is not available.</div>
+            <div className="pwa-hint-steps">
+              {instructions.steps.map((step, i) => (
+                <div key={i} className="pwa-hint-step">
+                  <span className="pwa-hint-num">{i + 1}</span>
+                  <span className="pwa-hint-text">{step.text}</span>
+                </div>
+              ))}
             </div>
-          ))}
-          <button className="pwa-hint-dismiss" onClick={() => setShowHint(false)}>
-            Got it
-          </button>
+            <div className="pwa-dialog-actions">
+              <button className="pwa-dialog-secondary" type="button" onClick={() => setPanelMode('ask')}>Back</button>
+              <button className="pwa-dialog-primary" type="button" onClick={() => setPanelMode(null)}>Got it</button>
+            </div>
+          </div>
         </div>
       )}
 
       {/* Floating install button */}
       <button
         type="button"
-        onClick={() => setShowPopup(true)}
-        className={`pwa-install-btn${showHint || showPopup ? ' active' : ''}`}
+        onClick={() => setPanelMode('ask')}
+        className={`pwa-install-btn${panelMode ? ' active' : ''}`}
         title="Install KUETx app"
         aria-label="Install KUETx"
-        aria-expanded={showHint || showPopup}
+        aria-expanded={!!panelMode}
       >
         <span className="pwa-install-icon">
           <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" fill="none"

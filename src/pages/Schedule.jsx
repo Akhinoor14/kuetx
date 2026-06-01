@@ -4,6 +4,7 @@ import { store, uid, getProfile, getCurrentTermKey, getRoutinePreviewDate, isRou
 import { getAllCourses } from '../store/curriculumStore';
 import { useNavigate } from 'react-router-dom';
 import CourseTeacherDialog from '../components/CourseTeacherDialog';
+import { notify } from '../lib/notify';
 
 const DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday'];
 const DAY_INDEX = { Sunday: 0, Monday: 1, Tuesday: 2, Wednesday: 3, Thursday: 4 };
@@ -681,28 +682,28 @@ export default function Schedule() {
     const { day, slot, courseId, teacherName, displayName, room, note, type } = quickFormData;
     
     if (!courseId || !slot) {
-      alert('Please select a course and time');
+      notify('Please select a course and time', 'error');
       return;
     }
 
     const allowedSlots = getAllowedSlotsForType(type);
     if (!allowedSlots.includes(slot)) {
-      alert(isSessionalType(type)
+      notify(isSessionalType(type)
         ? 'Sessional class must use a long lab slot (for example 2:30 PM-5:00 PM).'
-        : 'Theory/project/tutorial should use regular class slots.');
+        : 'Theory/project/tutorial should use regular class slots.', 'error');
       return;
     }
 
     const availableTeachers = getCourseTeachers(courseId);
     if (availableTeachers.length < 2) {
-      alert('Please set both teachers for this course first.');
+      notify('Please set both teachers for this course first.', 'error');
       ensureCourseTeacherSetup(courseId, 'quick');
       return;
     }
 
     const selectedTeacher = normalizeTeacherName(teacherName);
     if (!selectedTeacher) {
-      alert('Please select a teacher for this class');
+      notify('Please select a teacher for this class', 'error');
       return;
     }
 
@@ -732,7 +733,7 @@ export default function Schedule() {
     );
 
     if (hasExactDuplicate && !quickFormEditingId) {
-      alert(`This class is already saved for ${newEntry.teacherName || 'this teacher'}.`);
+      notify(`This class is already saved for ${newEntry.teacherName || 'this teacher'}.`, 'error');
       return;
     }
 
@@ -743,7 +744,7 @@ export default function Schedule() {
     );
 
     if (hasOverlap) {
-      alert('That time overlaps with an existing class on the same day.');
+      notify('That time overlaps with an existing class on the same day.', 'error');
       return;
     }
 
@@ -763,9 +764,9 @@ export default function Schedule() {
 
     const allowedSlots = getAllowedSlotsForType(form.type);
     if (!allowedSlots.includes(form.slot)) {
-      alert(isSessionalType(form.type)
+      notify(isSessionalType(form.type)
         ? 'Sessional class must use a long lab slot (for example 2:30 PM-5:00 PM).'
-        : 'Theory/project/tutorial should use regular class slots.');
+        : 'Theory/project/tutorial should use regular class slots.', 'error');
       return;
     }
 
@@ -777,7 +778,7 @@ export default function Schedule() {
 
     const selectedTeacher = normalizeTeacherName(form.teacherName);
     if (!selectedTeacher) {
-      alert('Please select a teacher for this class');
+      notify('Please select a teacher for this class', 'error');
       return;
     }
 
@@ -803,7 +804,7 @@ export default function Schedule() {
       (item.room || '') === (nextEntry.room || '')
     );
     if (hasExactDuplicate) {
-      alert(`This class is already saved for ${nextEntry.teacherName || 'this teacher'} in the same day and time.`);
+      notify(`This class is already saved for ${nextEntry.teacherName || 'this teacher'} in the same day and time.`, 'error');
       return;
     }
 
@@ -814,7 +815,7 @@ export default function Schedule() {
       item.courseId !== nextEntry.courseId
     );
     if (hasUserTimeConflict) {
-      alert('That time overlaps with an existing class on the same day.');
+      notify('That time overlaps with an existing class on the same day.', 'error');
       return;
     }
 
@@ -1024,7 +1025,7 @@ export default function Schedule() {
 
   const addCalendarSelectedDates = () => {
     if (calendarSelectedDates.size === 0) {
-      alert('Please select at least one date from the calendar.');
+      notify('Please select at least one date from the calendar.', 'error');
       return;
     }
     saveHolidayDates([...holidayDates, ...Array.from(calendarSelectedDates)]);
@@ -2006,7 +2007,7 @@ export default function Schedule() {
             <button className="btn btn-primary" onClick={() => {
               const termKey = getCurrentTermKey(profile);
               const timeline = getTermTimeline(profile?.termStartDate, profile?.dept, termKey);
-              if (!timeline) return alert('Term timeline not available — add term start date in Profile');
+              if (!timeline) return notify('Term timeline not available — add term start date in Profile', 'error');
               // prepare local edits from existing overrides or timeline
               const overrides = (examOverrides && examOverrides[termKey]) || [];
               const mapped = timeline.examPhases.map((p, i) => ({ course: p.course, examDate: (overrides[i]?.examDate) || p.examDate.toISOString().slice(0,10) }));

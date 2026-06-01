@@ -1887,6 +1887,269 @@ h3 { font-size: 15px; font-weight: 600; }
   }
 }
 
+  .class-management-page {
+    position: relative;
+    font-family: 'Manrope', 'Sora', 'Hind Siliguri', system-ui, -apple-system, sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+  }
+
+  .class-management-page::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(860px 360px at 12% 0%, rgba(22, 163, 74, 0.08), transparent 60%),
+      radial-gradient(760px 320px at 92% 10%, rgba(59, 130, 246, 0.06), transparent 58%),
+      radial-gradient(820px 420px at 50% 100%, rgba(245, 158, 11, 0.04), transparent 58%);
+    z-index: 0;
+  }
+
+  .class-management-page > * {
+    position: relative;
+    z-index: 1;
+  }
+
+  .class-management-page .class-management-hero {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 22px 20px;
+    margin-bottom: 16px;
+    border-radius: 24px;
+    border: 1px solid rgba(var(--accentRGB), 0.10);
+    background: linear-gradient(135deg, rgba(var(--accentRGB), 0.06), var(--surfaceGlassStrong));
+    box-shadow: 0 14px 34px rgba(0, 0, 0, 0.08);
+  }
+
+  .dark .class-management-page .class-management-hero {
+    background: linear-gradient(180deg, var(--surfaceGlassStrong), var(--surfaceGlass));
+    border-color: var(--border);
+    box-shadow: 0 14px 34px rgba(0, 0, 0, 0.12);
+  }
+
+  .class-management-page .class-management-hero-copy {
+    min-width: 0;
+    display: grid;
+    gap: 6px;
+  }
+
+  .class-management-page .class-management-kicker {
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .class-management-page .class-management-hero h2 {
+    margin: 0;
+    font-size: clamp(28px, 4vw, 36px);
+    line-height: 1.05;
+    letter-spacing: -0.05em;
+    font-weight: 800;
+  }
+
+  .class-management-page .class-management-subtitle {
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  .class-management-page .class-management-meta-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .class-management-page .class-management-meta-chip {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 10px;
+    border-radius: 999px;
+    border: 1px solid rgba(var(--accentRGB), 0.12);
+    background: rgba(var(--accentRGB), 0.05);
+    color: var(--text);
+    font-size: 12px;
+    font-weight: 700;
+  }
+
+  .class-management-page .class-management-hero-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-shrink: 0;
+  }
+
+  .class-management-page .class-management-tab-group {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 6px;
+    border-radius: 18px;
+    border: 1px solid rgba(var(--accentRGB), 0.10);
+    background: rgba(255, 255, 255, 0.56);
+    backdrop-filter: blur(12px);
+  }
+
+  .dark .class-management-page .class-management-tab-group {
+    background: rgba(255, 255, 255, 0.04);
+  }
+
+  .class-management-page .class-management-tab {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 42px;
+    padding: 0 16px;
+    border-radius: 12px;
+    border: 1px solid transparent;
+    background: transparent;
+    color: var(--muted);
+    font: inherit;
+    font-size: 13px;
+    font-weight: 800;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .class-management-page .class-management-tab:hover {
+    transform: translateY(-1px);
+    color: var(--text);
+  }
+
+  .class-management-page .class-management-tab.is-active {
+    background: var(--accent);
+    color: var(--accentFg);
+    border-color: transparent;
+    box-shadow: 0 10px 24px rgba(var(--accentRGB), 0.18);
+  }
+
+  .class-management-page .class-management-routine-card,
+  .class-management-page .class-management-planner-card {
+    border-radius: 22px;
+  }
+
+  .class-management-page .class-management-section-label {
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.10em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 6px;
+  }
+
+  .class-management-page .class-management-section-title {
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    margin-bottom: 6px;
+  }
+
+  .class-management-page .class-management-section-copy {
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.65;
+  }
+
+  .class-management-page .class-management-mode-switch {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 6px;
+    border-radius: 16px;
+    border: 1px solid rgba(var(--accentRGB), 0.10);
+    background: rgba(255, 255, 255, 0.5);
+  }
+
+  .dark .class-management-page .class-management-mode-switch {
+    background: rgba(255, 255, 255, 0.04);
+  }
+
+  .class-management-page .class-management-mode-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 40px;
+    padding: 0 14px;
+    border-radius: 11px;
+    border: 1px solid transparent;
+    background: transparent;
+    color: var(--muted);
+    font: inherit;
+    font-size: 13px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: transform 0.15s ease, background 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .class-management-page .class-management-mode-button:hover {
+    transform: translateY(-1px);
+    color: var(--text);
+  }
+
+  .class-management-page .class-management-mode-button.is-active {
+    background: linear-gradient(135deg, var(--accent), #22c55e);
+    color: var(--accentFg);
+    box-shadow: 0 10px 24px rgba(var(--accentRGB), 0.18);
+  }
+
+  @media (max-width: 768px) {
+    .class-management-page {
+      font-size: 14px;
+      line-height: 1.72;
+    }
+
+    .class-management-page .class-management-hero {
+      padding: 18px 16px;
+      border-radius: 18px;
+      flex-direction: column;
+    }
+
+    .class-management-page .class-management-hero-actions {
+      width: 100%;
+      justify-content: flex-start;
+    }
+
+    .class-management-page .class-management-tab-group {
+      width: 100%;
+    }
+
+    .class-management-page .class-management-tab {
+      flex: 1 1 0;
+    }
+
+    .class-management-page .class-management-routine-card,
+    .class-management-page .class-management-planner-card {
+      border-radius: 18px;
+    }
+
+    .class-management-page .class-management-section-title {
+      font-size: 16px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .class-management-page .class-management-hero {
+      padding: 16px 14px;
+    }
+
+    .class-management-page .class-management-tab-group,
+    .class-management-page .class-management-mode-switch {
+      padding: 5px;
+      gap: 6px;
+    }
+
+    .class-management-page .class-management-tab,
+    .class-management-page .class-management-mode-button {
+      min-height: 38px;
+      padding: 0 12px;
+      font-size: 12px;
+    }
+  }
+
 /* ── Divider ─────────────────────────────────────────────────────────────── */
 .divider {
   height: 1px;
@@ -4250,12 +4513,14 @@ input[type="range"]::-webkit-slider-thumb {
 
 /* Controls Row: Presets + Prefs */
 .time-tracker-controls-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 8px 0; margin-bottom: 6px; border-bottom: none; }
-.time-tracker-presets-group, .time-tracker-prefs-group { display: flex; flex-direction: column; gap: 5px; }
+.time-tracker-controls-row.has-actions { grid-template-columns: 1fr 1fr auto; }
+.time-tracker-presets-group, .time-tracker-prefs-group, .time-tracker-actions-inline { display: flex; flex-direction: column; gap: 5px; }
 .time-tracker-preset-row { display: flex; gap: 4px; flex-wrap: wrap; }
 .time-tracker-preset-row .btn { flex: 1; min-width: 45px; font-size: 11px; padding: 8px 10px; border-radius: 10px; background: linear-gradient(135deg, var(--surface), color-mix(in srgb, var(--surface) 80%, white)); border: 1px solid color-mix(in srgb, var(--border) 70%, transparent); color: var(--text); font-weight: 600; transition: all 0.18s; cursor: pointer; }
 .time-tracker-preset-row .btn:hover { background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 8%, var(--surface)), color-mix(in srgb, var(--accent) 6%, white)); border-color: var(--accent); }
 .time-tracker-preset-row .btn.active { background: linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 90%, white)); color: white; box-shadow: 0 4px 12px color-mix(in srgb, var(--accent) 28%, transparent); }
 .time-tracker-preferences-row { display: flex; gap: 4px; }
+.time-tracker-actions-row { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
 .time-tracker-pref-btn-compact { border: 1.5px solid color-mix(in srgb, var(--border) 80%, transparent); border-radius: 8px; background: linear-gradient(135deg, var(--surface), color-mix(in srgb, var(--surface) 80%, white)); color: var(--text); padding: 7px 9px; font-size: 13px; cursor: pointer; transition: all 0.15s; }
 .time-tracker-pref-btn-compact:hover { background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 10%, var(--surface)), color-mix(in srgb, var(--accent) 8%, white)); border-color: var(--accent); }
 .time-tracker-pref-btn-compact.active { background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 20%, white), color-mix(in srgb, var(--accent) 14%, white)); border-color: var(--accent); color: var(--accent); }
@@ -4446,7 +4711,6 @@ input[type="range"]::-webkit-slider-thumb {
 .time-tracker-log-form { display: grid; gap: 14px; }
 .time-tracker-empty-state { text-align: center; color: var(--muted); padding: 32px 24px; }
 
-.time-tracker-sessions-panel { }
 .time-session-list { display: flex; flex-direction: column; gap: 8px; }
 .time-session-collapsible { border-radius: 14px; background: linear-gradient(180deg, rgba(255,255,255,0.97), rgba(248,250,252,0.94)); border: 1px solid color-mix(in srgb, var(--border) 84%, transparent); box-shadow: 0 6px 18px rgba(15,23,42,0.04); }
 .time-session-collapsible::before { width: 3px; }
@@ -4492,6 +4756,7 @@ input[type="range"]::-webkit-slider-thumb {
 /* Desktop: Optimized layout */
 @media (min-width: 961px) {
   .time-tracker-controls-row { grid-template-columns: 1fr 1fr; }
+  .time-tracker-controls-row.has-actions { grid-template-columns: 1fr 1fr auto; }
   .time-tracker-presets-group { flex-direction: column; }
   .time-tracker-preset-row { justify-content: flex-start; }
   .time-tracker-prefs-group { flex-direction: column; }

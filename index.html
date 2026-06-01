@@ -25,17 +25,6 @@
     <link href="/vendor/fullcalendar-fallback.css" rel="stylesheet" />
   </head>
   <body>
-    <script>
-      // Redirect common alternate route to the app's class-management page
-      (function(){
-        try{
-          const p = location.pathname.replace(/\/+$/, '');
-          if (p === '/ct-quiz-management') {
-            location.replace('/class-management');
-          }
-        }catch(e){}
-      })();
-    </script>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
     <!-- FullCalendar removed: using local simple calendar component instead -->

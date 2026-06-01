@@ -3,6 +3,7 @@ import { Plus, Trash2, Check } from 'lucide-react';
 import { store, uid, getProfile, getCurrentTermKey } from '../store/store';
 import { getAllCourses } from '../store/curriculumStore';
 import CourseTeacherDialog from '../components/CourseTeacherDialog';
+import { notify } from '../lib/notify';
 
 const normalizeTeacherName = (value) => {
   const clean = String(value || '').trim().replace(/\s+/g, ' ');
@@ -75,7 +76,7 @@ export default function TermQS() {
 
   const add = () => {
     if (!form.courseId || !form.title || !form.year) {
-      alert('Please fill in Course, Title, and Year fields.');
+      notify('Please fill in Course, Title, and Year fields.', 'error');
       return;
     }
     const teachers = getCourseTeachers(form.courseId);
@@ -86,7 +87,7 @@ export default function TermQS() {
 
     const selectedTeacher = normalizeTeacherName(form.teacherName);
     if (!selectedTeacher) {
-      alert('Please select a teacher.');
+      notify('Please select a teacher.', 'error');
       return;
     }
 

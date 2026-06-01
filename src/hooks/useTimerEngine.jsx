@@ -320,7 +320,7 @@ export default function useTimerEngine() {
     const finalElapsedMs = current.mode === TIMER_MODES.DOWN ? Math.min(current.targetMs || 0, elapsedMs) : elapsedMs;
     const finalized = {
       ...current,
-      status: stoppedReason === 'completed' ? STATUS.COMPLETED : STATUS.PAUSED,
+      status: STATUS.COMPLETED,
       accumulatedMs: finalElapsedMs,
       startedAt: null,
       endedAt: ts,

@@ -1,18 +1,19 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Users, X } from 'lucide-react';
+import { CalendarDays, Clock3, Copy, Download, Users, X } from 'lucide-react';
 import { store, uid, getProfile, getCurrentTermKey } from '../store/store';
 import { getAllCourses } from '../store/curriculumStore';
 import CourseTeacherDialog from '../components/CourseTeacherDialog';
-import Schedule from './Schedule';
 import {
   createDefaultCoursePlan,
+  buildExportPayload,
   getCourseTeacherCountsFromSchedule,
   matchesTerm,
   normalizeTeacherList,
 } from '../lib/plannerUtils';
 
 const TERM_KEY_RE = /^Y\dT\d$/;
+const ROUTINE_DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday'];
 
 export default function ClassManagement() {
   const profile = getProfile();
@@ -27,7 +28,11 @@ export default function ClassManagement() {
   const [settings, setSettings] = useState(() => store.get('scheduleSettings') || {});
   const [plannerState, setPlannerState] = useState(() => store.get('classManagementPlans') || {});
   const [activeTab, setActiveTab] = useState('routine');
-  const [viewMode, setViewMode] = useState('automatic');
+  const [selectedRoutineDay, setSelectedRoutineDay] = useState(() => {
+    const today = ROUTINE_DAYS[new Date().getDay()];
+    return today || 'Sunday';
+  });
+  const [viewMode, setViewMode] = useState(() => store.get('classManagementPlannerMode') || 'automatic');
   const [courseTeacherDialogState, setCourseTeacherDialogState] = useState({ open: false, courseId: '' });
   const [detailState, setDetailState] = useState({ open: false, courseId: '' });
   const [resetState, setResetState] = useState({ open: false, course: null, count: 0 });
@@ -51,6 +56,66 @@ export default function ClassManagement() {
   };
 
   const currentTermPlans = useMemo(() => getCurrentTermPlans(plannerState), [plannerState, currentTermKey]);
+  const courseMap = useMemo(() => new Map(allCourses.map(course => [course.id, course])), [allCourses]);
+
+  const currentTermScheduleEntries = useMemo(() => {
+    const currentCourseIds = new Set(currentTermCourses.map(course => course.id));
+    return (schedule || []).filter(entry => currentCourseIds.has(entry.courseId));
+  }, [schedule, currentTermCourses]);
+
+  const routineEntriesByDay = useMemo(() => {
+    const next = ROUTINE_DAYS.reduce((acc, day) => ({ ...acc, [day]: [] }), {});
+    currentTermScheduleEntries.forEach(entry => {
+      if (!next[entry.day]) return;
+      next[entry.day].push(entry);
+    });
+    ROUTINE_DAYS.forEach(day => {
+      next[day] = next[day].slice().sort((a, b) => String(a.slot || '').localeCompare(String(b.slot || '')));
+    });
+    return next;
+  }, [currentTermScheduleEntries]);
+
+  const selectedRoutineEntries = routineEntriesByDay[selectedRoutineDay] || [];
+  const assignedTeacherCount = useMemo(() => {
+    const teacherNames = new Set();
+    currentTermCourses.forEach(course => {
+      const teachers = currentTermPlans?.[course.id]?.teachers || settings?.courseTeacherMap?.[course.id] || [];
+      (teachers || []).forEach(teacher => {
+        if (teacher) teacherNames.add(teacher);
+      });
+    });
+    return teacherNames.size;
+  }, [currentTermCourses, currentTermPlans, settings?.courseTeacherMap]);
+  const currentTermScheduledCourseCount = useMemo(() => {
+    return new Set(currentTermScheduleEntries.map(entry => entry.courseId)).size;
+  }, [currentTermScheduleEntries]);
+
+  useEffect(() => {
+    if (selectedRoutineEntries.length > 0) return;
+    const firstDayWithEntries = ROUTINE_DAYS.find(day => (routineEntriesByDay[day] || []).length > 0);
+    if (firstDayWithEntries && firstDayWithEntries !== selectedRoutineDay) {
+      setSelectedRoutineDay(firstDayWithEntries);
+    }
+  }, [routineEntriesByDay, selectedRoutineDay, selectedRoutineEntries.length]);
+
+  const formatRoutineSlot = (value) => String(value || '').replace(/\s+break\s*$/i, '').trim();
+
+  const buildRoutineCopyText = (day, entries) => {
+    if (!entries.length) {
+      return `Routine for ${day}\n\nNo classes added yet.`;
+    }
+
+    const lines = [`*_📅 Routine for ${day}_*`, ''];
+
+    entries.forEach((entry, index) => {
+      const course = courseMap.get(entry.courseId);
+      const courseLabel = entry.displayName || course?.code || course?.name || 'Unknown Course';
+      const teacherLabel = entry.teacherName || 'Teacher not set';
+      lines.push(`${index + 1}. *${formatRoutineSlot(entry.slot)}* — _${courseLabel} · ${teacherLabel}_`);
+    });
+
+    return lines.join('\n');
+  };
 
   const refreshFromStore = () => {
     setSchedule(store.get('schedule') || []);
@@ -69,6 +134,10 @@ export default function ClassManagement() {
   useEffect(() => {
     store.set('classManagementPlans', plannerState);
   }, [plannerState]);
+
+  useEffect(() => {
+    store.set('classManagementPlannerMode', viewMode);
+  }, [viewMode]);
 
   useEffect(() => {
     const handleStoreUpdate = () => refreshFromStore();
@@ -193,6 +262,36 @@ export default function ClassManagement() {
     setActiveTab('planner');
   };
 
+  const copyRoutineForSelectedDay = async () => {
+    const text = buildRoutineCopyText(selectedRoutineDay, selectedRoutineEntries);
+    try {
+      await navigator.clipboard.writeText(text);
+    } catch {
+      // no-op
+    }
+  };
+
+  const exportRoutineBackup = () => {
+    const payload = {
+      type: 'kuetx-routine-backup',
+      exportedAt: new Date().toISOString(),
+      data: buildExportPayload({
+        termKey: currentTermKey,
+        plannerState,
+        settings,
+        schedule,
+      }),
+    };
+
+    const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `kuetx-routine-backup-${new Date().toISOString().slice(0, 10)}.json`;
+    link.click();
+    URL.revokeObjectURL(url);
+  };
+
   const resetPlan = (course) => {
     if (!course?.id) return;
     const existingLogs = (schedule || []).filter(entry => entry.courseId === course.id).length;
@@ -240,40 +339,180 @@ export default function ClassManagement() {
   };
 
   return (
-    <div className="page-enter page-container" style={{ maxWidth: 1120 }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12, gap: 12, flexWrap: 'wrap' }}>
-        <div>
-          <h2 style={{ margin: 0 }}>Class Management</h2>
-          <div style={{ color: 'var(--muted)', fontSize: 13, marginTop: 4 }}>
+    <div className="page-enter page-container class-management-page" style={{ maxWidth: 1120 }}>
+      <div className="class-management-hero">
+        <div className="class-management-hero-copy">
+          <div className="class-management-kicker">Class Management</div>
+          <h2>Routine control for CR work</h2>
+          <div className="class-management-subtitle">
             Profile: {profile.name || '—'} {profile.isCR ? '· Class Rep' : ''} · Term: {currentTermKey || 'Unknown'}
           </div>
+          <div className="class-management-meta-row" style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 10 }}>
+            <div className="class-management-meta-chip">Routine</div>
+            <div className="class-management-meta-chip">Planner</div>
+            <div className="class-management-meta-chip">Export / Copy</div>
+          </div>
         </div>
-        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-          <button onClick={loadRoutineFromStore} className={activeTab === 'routine' ? 'btn btn-primary' : 'btn btn-ghost'}>Routine</button>
-          <button onClick={loadPlannerFromStore} className={activeTab === 'planner' ? 'btn btn-primary' : 'btn btn-ghost'}>Planner</button>
-          <Link to="/settings" className="btn btn-ghost">Settings Backup</Link>
+        <div className="class-management-hero-actions">
+          <div className="class-management-tab-group" role="tablist" aria-label="Class management views">
+            <button
+              type="button"
+              onClick={loadRoutineFromStore}
+              className={activeTab === 'routine' ? 'class-management-tab is-active' : 'class-management-tab'}
+              aria-pressed={activeTab === 'routine'}
+            >
+              Routine
+            </button>
+            <button
+              type="button"
+              onClick={loadPlannerFromStore}
+              className={activeTab === 'planner' ? 'class-management-tab is-active' : 'class-management-tab'}
+              aria-pressed={activeTab === 'planner'}
+            >
+              Class Planner
+            </button>
+          </div>
         </div>
       </div>
 
       <div style={{ display: 'grid', gap: 14 }}>
-        {activeTab === 'routine' && <Schedule />}
-
-        {activeTab === 'planner' && (
-          <div className="card" style={{ padding: 20, boxShadow: '0 8px 30px rgba(2,6,23,0.06)', background: 'var(--surface-elevated)' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 12, marginBottom: 14, flexWrap: 'wrap' }}>
-              <div>
-                <div style={{ fontSize: 16, fontWeight: 800 }}>Current term planner</div>
-                <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 4 }}>
-                  Count progress from schedule by default. Manual logging is available in details.
-                </div>
+        {activeTab === 'routine' && (
+          <div className="card class-management-routine-card" style={{ padding: 18, display: 'grid', gap: 16, background: 'linear-gradient(180deg, rgba(59,130,246,0.05), rgba(16,185,129,0.03))' }}>
+            <div className="class-management-routine-top" style={{ display: 'flex', justifyContent: 'space-between', gap: 12, alignItems: 'stretch', flexWrap: 'wrap' }}>
+              <div style={{ minWidth: 0, flex: 1 }}>
+                <div className="class-management-section-label" style={{ letterSpacing: '0.12em' }}>Routine Snapshot</div>
+                <div className="class-management-section-title" style={{ fontSize: 26, lineHeight: 1.08 }}>Professional Class Routine Management</div>
+                <div className="class-management-section-copy" style={{ maxWidth: 620 }}>Effortlessly manage and share your class routine. Export backups, communicate schedules, and maintain complete control over all CR responsibilities.</div>
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
-                <button onClick={() => setViewMode('automatic')} className={viewMode === 'automatic' ? 'btn btn-primary' : 'btn btn-ghost'} style={{ minWidth: 110 }}>Automatic</button>
-                <button onClick={() => setViewMode('manual')} className={viewMode === 'manual' ? 'btn btn-primary' : 'btn btn-ghost'} style={{ minWidth: 110 }}>Manual</button>
+
+              <div className="class-management-routine-actions" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(100px, 1fr))', gap: 8, width: '100%', alignSelf: 'center', maxWidth: 'none' }}>
+                <button type="button" title="Copy WhatsApp routine" className="btn" onClick={copyRoutineForSelectedDay} style={{ minWidth: 0, justifyContent: 'center', height: 40, borderRadius: 999, fontSize: '13px', background: '#25D366', color: 'white', border: 'none', fontWeight: 600, boxShadow: '0 4px 12px rgba(37, 211, 102, 0.25)', transition: 'all 0.2s' }}>
+                  <Copy size={13} /> WhatsApp
+                </button>
+                <button type="button" title="Export routine backup" className="btn" onClick={exportRoutineBackup} style={{ minWidth: 0, justifyContent: 'center', height: 40, borderRadius: 999, fontSize: '13px', background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', color: 'white', border: 'none', fontWeight: 600, boxShadow: '0 4px 12px rgba(102, 126, 234, 0.25)', transition: 'all 0.2s' }}>
+                  <Download size={13} /> Export
+                </button>
+                <Link to="/schedule" title="Open full schedule" className="btn btn-primary" style={{ minWidth: 0, justifyContent: 'center', height: 40, borderRadius: 999, textDecoration: 'none', fontSize: '13px', fontWeight: 600 }}>
+                  Open Schedule
+                </Link>
               </div>
             </div>
 
-            <div style={{ display: 'grid', gap: 14 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: 10 }}>
+              <div style={{ padding: 14, borderRadius: 16, border: '1px solid rgba(59,130,246,0.16)', background: 'rgba(255,255,255,0.72)', boxShadow: '0 10px 24px rgba(15,23,42,0.04)' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 11, color: 'var(--muted)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+                  <Clock3 size={14} /> Routine days
+                </div>
+                <div style={{ fontSize: 30, fontWeight: 900, marginTop: 8, letterSpacing: '-0.05em' }}>{ROUTINE_DAYS.length}</div>
+              </div>
+              <div style={{ padding: 14, borderRadius: 16, border: '1px solid rgba(16,185,129,0.16)', background: 'rgba(255,255,255,0.72)', boxShadow: '0 10px 24px rgba(15,23,42,0.04)' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 11, color: 'var(--muted)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+                  <CalendarDays size={14} /> Logged classes
+                </div>
+                <div style={{ fontSize: 30, fontWeight: 900, marginTop: 8, letterSpacing: '-0.05em' }}>{currentTermScheduleEntries.length}</div>
+              </div>
+              <div style={{ padding: 14, borderRadius: 16, border: '1px solid rgba(124,58,237,0.16)', background: 'rgba(255,255,255,0.72)', boxShadow: '0 10px 24px rgba(15,23,42,0.04)' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 11, color: 'var(--muted)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+                  <Users size={14} /> Assigned teachers
+                </div>
+                <div style={{ fontSize: 30, fontWeight: 900, marginTop: 8, letterSpacing: '-0.05em' }}>{assignedTeacherCount}</div>
+              </div>
+            </div>
+
+            <div className="class-management-day-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(90px, 1fr))', gap: 8 }}>
+              {ROUTINE_DAYS.map(day => {
+                const count = routineEntriesByDay[day]?.length || 0;
+                const isActive = selectedRoutineDay === day;
+                return (
+                  <button
+                    key={day}
+                    type="button"
+                    onClick={() => setSelectedRoutineDay(day)}
+                    className={isActive ? 'btn btn-primary' : 'btn btn-ghost'}
+                    style={{ width: '100%', justifyContent: 'space-between', paddingLeft: 14, paddingRight: 14, height: 46, borderRadius: 14, boxShadow: isActive ? '0 12px 26px rgba(59,130,246,0.20)' : 'none', whiteSpace: 'nowrap' }}
+                  >
+                    <span>{day}</span>
+                    <span style={{ fontSize: 11, opacity: 0.9, minWidth: 18, textAlign: 'right' }}>{count}</span>
+                  </button>
+                );
+              })}
+            </div>
+
+            <div style={{ display: 'grid', gap: 10 }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, alignItems: 'center', flexWrap: 'wrap' }}>
+                <div>
+                  <div style={{ fontSize: 15, fontWeight: 900 }}>{selectedRoutineDay}</div>
+                  <div style={{ fontSize: 12, color: 'var(--muted)' }}>{selectedRoutineEntries.length} class{selectedRoutineEntries.length === 1 ? '' : 'es'} shown for the day.</div>
+                </div>
+                <div className="class-management-meta-row" style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+                  <div className="class-management-meta-chip">{currentTermScheduledCourseCount} courses</div>
+                  <div className="class-management-meta-chip">CR view</div>
+                </div>
+              </div>
+
+              {selectedRoutineEntries.length === 0 ? (
+                <div style={{ padding: 16, borderRadius: 14, border: '1px dashed var(--border)', background: 'var(--bg)', color: 'var(--muted)', fontSize: 13 }}>
+                  No routine entries for {selectedRoutineDay}.
+                </div>
+              ) : (
+                <div style={{ display: 'grid', gap: 10 }}>
+                  {selectedRoutineEntries.map(entry => {
+                    const course = courseMap.get(entry.courseId);
+                    return (
+                      <div key={entry.id} style={{ display: 'flex', justifyContent: 'space-between', gap: 12, alignItems: 'flex-start', padding: 14, borderRadius: 14, border: '1px solid var(--border)', background: 'linear-gradient(180deg, var(--surface), var(--bg))' }}>
+                        <div style={{ minWidth: 0, flex: 1 }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap', marginBottom: 6 }}>
+                            <div style={{ fontSize: 13, fontWeight: 900 }}>{formatRoutineSlot(entry.slot)}</div>
+                            <span className="tag tag-blue">{course?.code || 'Unknown course'}</span>
+                          </div>
+                          <div style={{ fontSize: 14, fontWeight: 800, color: 'var(--text)' }}>{entry.displayName || course?.name || course?.code || 'Unknown Course'}</div>
+                          <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 4 }}>
+                            {entry.teacherName || 'Teacher not set'}{entry.room ? ` · Room ${entry.room}` : ''}{entry.type ? ` · ${entry.type}` : ''}
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'planner' && (
+          <div className="card class-management-planner-card">
+            <div className="class-management-planner-header">
+              <div>
+                <div className="class-management-section-label">Class Planner</div>
+                <div className="class-management-section-title">Current term overview</div>
+                <div className="class-management-section-copy">
+                  Auto counts from schedule. Manual mode enables +1 logging.
+                </div>
+              </div>
+              <div className="class-management-mode-switch" role="tablist" aria-label="Planner mode">
+                <button
+                  type="button"
+                  onClick={() => setViewMode('automatic')}
+                  className={viewMode === 'automatic' ? 'class-management-mode-button is-active' : 'class-management-mode-button'}
+                  aria-pressed={viewMode === 'automatic'}
+                >
+                  Automatic
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setViewMode('manual')}
+                  className={viewMode === 'manual' ? 'class-management-mode-button is-active' : 'class-management-mode-button'}
+                  aria-pressed={viewMode === 'manual'}
+                >
+                  Manual
+                </button>
+              </div>
+              <div style={{ marginTop: 8, fontSize: 12, color: 'var(--muted)', lineHeight: 1.5, maxWidth: 420 }}>
+                Automatic uses live schedule counts. Manual keeps the same stored plans and only changes the quick +1 logging flow.
+              </div>
+            </div>
+
+            <div style={{ display: 'grid', gap: 14, padding: 12, marginTop: 12 }}>
               {currentTermCourses.length === 0 && (
                 <div style={{ padding: 16, border: '1px dashed var(--border)', borderRadius: 14, color: 'var(--muted)', fontSize: 13 }}>
                   No current-term courses found.
@@ -293,40 +532,44 @@ export default function ClassManagement() {
                       const percent = plannedTotal ? Math.min(100, Math.round((totalLogged / plannedTotal) * 100)) : 0;
 
                       return (
-                        <div key={course.id} style={{ border: '1px solid var(--border)', borderRadius: 12, overflow: 'hidden', background: 'var(--surface)', boxShadow: '0 6px 18px rgba(2,6,23,0.04)', transition: 'transform 150ms ease' }}>
-                          <div style={{ padding: 14, display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--border)' }}>
+                        <div key={course.id} style={{ border: '1px solid var(--border)', borderRadius: 14, background: 'var(--surface)', padding: 12, boxShadow: '0 6px 18px rgba(2,6,23,0.04)' }}>
+                          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12 }}>
                             <div style={{ minWidth: 0 }}>
-                              <div style={{ fontSize: 14, fontWeight: 800, color: 'var(--text)' }}>{course.code}</div>
-                              <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 2 }}>{course.credits || 0} credit · {plannedTotal} planned</div>
+                              <div style={{ fontSize: 15, fontWeight: 800, color: 'var(--text)' }}>{course.code}</div>
+                              <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 3 }}>{course.credits || 0} credit · {plannedTotal} planned</div>
                             </div>
-                            <div style={{ textAlign: 'right', paddingLeft: 16 }}>
-                              <div style={{ fontSize: 18, fontWeight: 900, color: 'var(--text)' }}>{totalLogged}</div>
-                              <div style={{ fontSize: 10, color: 'var(--muted)' }}>{percent}% · {plannedTotal}</div>
+                            <div style={{ textAlign: 'right' }}>
+                              <div style={{ fontSize: 18, fontWeight: 900, color: 'var(--text)' }}>{totalLogged} / {plannedTotal}</div>
+                              <div style={{ fontSize: 11, color: 'var(--muted)' }}>{percent}% completed</div>
                             </div>
                           </div>
 
-                          {/* Teachers Section */}
+                          <div style={{ height: 6, background: 'var(--bg)', borderRadius: 999, marginTop: 10, overflow: 'hidden' }}>
+                            <div style={{ width: `${percent}%`, height: '100%', background: 'linear-gradient(90deg, var(--accent), rgba(100,150,255,0.6))' }} />
+                          </div>
+
                           {hasTeachers ? (
-                            <div style={{ display: 'grid', gap: 8, padding: 12 }}>
+                            <div style={{ display: 'grid', gap: 8, marginTop: 10 }}>
                               {assignedTeachers.map((teacher, index) => (
                                 <div key={`${course.id}-teacher-${index}`} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 12px', background: 'var(--bg)', borderRadius: 8 }}>
                                   <div style={{ flex: 1 }} title={teacher}>
-                                    <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--text)' }}>{getInitials(teacher)}</div>
+                                    <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)' }}>{teacher}</div>
                                   </div>
-                                  {viewMode === 'automatic' ? (
-                                    <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--accent)', minWidth: 40, textAlign: 'right' }}>
+                                  <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                                    <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--accent)', minWidth: 35, textAlign: 'right' }}>
                                       {teacherCounts[teacher] || 0}
                                     </div>
-                                  ) : (
-                                    <button onClick={() => quickLogClass(course, teacher)} className="btn btn-primary btn-sm" style={{ padding: '6px 10px', fontSize: 11, fontWeight: 600 }}>
-                                      +1
-                                    </button>
-                                  )}
+                                    {viewMode === 'manual' && (
+                                      <button onClick={() => quickLogClass(course, teacher)} className="btn btn-primary" style={{ padding: '8px 14px', fontSize: 12, fontWeight: 700 }}>
+                                        +1
+                                      </button>
+                                    )}
+                                  </div>
                                 </div>
                               ))}
                             </div>
                           ) : (
-                            <div style={{ padding: 12, textAlign: 'center' }}>
+                            <div style={{ marginTop: 10 }}>
                               <button onClick={() => openTeacherDialog(course.id)} className="btn btn-secondary btn-sm" style={{ padding: '8px 12px', fontSize: 12, fontWeight: 600 }}>
                                 📝 Assign Teachers
                               </button>
@@ -334,7 +577,7 @@ export default function ClassManagement() {
                           )}
 
                           {hasTeachers && (
-                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, padding: 12, borderTop: '1px solid var(--border)' }}>
+                            <div style={{ marginTop: 10, display: 'flex', justifyContent: 'flex-end', gap: 8 }}>
                               <button onClick={() => openCourseDetails(course.id)} className="btn btn-ghost btn-sm" style={{ padding: '8px 10px', fontSize: 11, fontWeight: 600 }}>Details</button>
                               <button onClick={() => resetPlan(course)} className="btn btn-ghost btn-sm" style={{ padding: '8px 10px', fontSize: 11, fontWeight: 600 }}>Reset</button>
                             </div>
@@ -356,28 +599,28 @@ export default function ClassManagement() {
                       const percent = plannedTotal ? Math.min(100, Math.round((totalLogged / plannedTotal) * 100)) : 0;
 
                       return (
-                        <div key={course.id} style={{ border: '1px solid var(--border)', borderRadius: 12, overflow: 'hidden', background: 'linear-gradient(180deg, var(--surface) 0%, var(--bg) 100%)', padding: 12, boxShadow: '0 8px 24px rgba(2,6,23,0.06)' }}>
+                        <div key={course.id} style={{ border: '1px solid var(--border)', borderRadius: 14, background: 'var(--surface)', padding: 12, boxShadow: '0 6px 18px rgba(2,6,23,0.04)' }}>
                           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12 }}>
                             <div style={{ minWidth: 0 }}>
                               <div style={{ fontSize: 15, fontWeight: 800, color: 'var(--text)' }}>{course.code}</div>
-                              <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 4 }}>{course.credits || 0} credit · {plannedTotal} planned</div>
+                              <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 3 }}>{course.credits || 0} credit · {plannedTotal} planned</div>
                             </div>
-
-                            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                              <div style={{ textAlign: 'right' }}>
-                                <div style={{ fontSize: 20, fontWeight: 900, color: 'var(--text)' }}>{totalLogged}</div>
-                                <div style={{ fontSize: 11, color: 'var(--muted)' }}>{percent}% · {plannedTotal}</div>
-                              </div>
+                            <div style={{ textAlign: 'right' }}>
+                              <div style={{ fontSize: 18, fontWeight: 900, color: 'var(--text)' }}>{totalLogged} / {plannedTotal}</div>
+                              <div style={{ fontSize: 11, color: 'var(--muted)' }}>{percent}% completed</div>
                             </div>
                           </div>
 
-                          <div style={{ marginTop: 12, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                          <div style={{ height: 6, background: 'var(--bg)', borderRadius: 999, marginTop: 10, overflow: 'hidden' }}>
+                            <div style={{ width: `${percent}%`, height: '100%', background: 'linear-gradient(90deg, var(--accent), rgba(100,150,255,0.6))' }} />
+                          </div>
+
+                          <div style={{ marginTop: 10, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                             <div>
                               {viewMode === 'manual' && (
-                                <button onClick={() => quickLogClass(course, '')} className="btn btn-primary" style={{ padding: '8px 12px', fontSize: 13, fontWeight: 800, borderRadius: 10 }}>+1</button>
+                                <button onClick={() => quickLogClass(course, '')} className="btn btn-primary" style={{ padding: '8px 12px', fontSize: 12, fontWeight: 800, borderRadius: 10 }}>+1</button>
                               )}
                             </div>
-
                             <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
                               <button onClick={() => openCourseDetails(course.id)} className="btn btn-ghost" style={{ padding: '8px 10px', fontSize: 12 }}>Details</button>
                               <button onClick={() => resetPlan(course)} className="btn btn-ghost" style={{ padding: '8px 10px', fontSize: 12 }}>Reset</button>
@@ -390,15 +633,7 @@ export default function ClassManagement() {
               )}
             </div>
 
-            <div style={{ padding: 12, borderRadius: 12, border: '1px solid var(--border)', background: 'var(--bg-secondary)', marginTop: 8 }}>
-              <div style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.6 }}>
-                {viewMode === 'automatic' ? (
-                  <>📊 <strong>Automatic mode:</strong> Shows counts from schedule automatically. Open Details for manual logging.</>
-                ) : (
-                  <>✏️ <strong>Manual mode:</strong> Click "+1" to manually log classes. Counts still track schedule automatically.</>
-                )}
-              </div>
-            </div>
+
           </div>
         )}
 

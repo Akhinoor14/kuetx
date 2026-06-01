@@ -1,4 +1,6 @@
 import { useMemo, useState, useRef, useEffect } from 'react';
+import PromptDialog from './PromptDialog';
+import { notify } from '../lib/notify';
 
 function parseISO(s){ if (s instanceof Date) return s; return new Date(s + 'T00:00:00'); }
 function formatISO(d){ return d.toISOString().slice(0,10); }
@@ -22,6 +24,7 @@ export default function SimpleCalendar({ events = [], onEventChange }){
   const [year, setYear] = useState(today.getFullYear());
   const [month, setMonth] = useState(today.getMonth());
   const longPressRef = useRef(null);
+  const [promptState, setPromptState] = useState(null);
 
   // normalize events: ensure start/end ISO strings
   const normalized = useMemo(()=>{
@@ -82,21 +85,39 @@ export default function SimpleCalendar({ events = [], onEventChange }){
                   const id = ev.id || `${ev.title}-${ev.start}`;
                   const span = (()=>{ if (!ev.end) return 1; const s = parseISO(ev.start); const e = parseISO(ev.end); return Math.max(1, Math.ceil((e - s)/(1000*60*60*24))+1); })();
                   return (
-                    <div key={id} draggable onDragStart={(e)=>e.dataTransfer.setData('text/event-id', id)} onTouchStart={(ev)=>{
-                      const t = setTimeout(()=>{ const v = prompt('Long press detected. Change date (YYYY-MM-DD)', dateStr); if (v) onEventChange && onEventChange({ ...ev, start: v }, 'edit'); }, 600);
+                    <div key={id} draggable onDragStart={(e)=>e.dataTransfer.setData('text/event-id', id)} onTouchStart={(event)=>{
+                      const t = setTimeout(()=>{ setPromptState({ event: ev, defaultValue: dateStr }); }, 600);
                       longPressRef.current[id] = t;
-                    }} onTouchEnd={(ev)=>{ const t = longPressRef.current[id]; if (t) clearTimeout(t); longPressRef.current[id]=null; }} style={{ background: 'linear-gradient(90deg, #eef2ff, #e6ffef)', padding: '4px 8px', borderRadius: 6, fontSize: 12, display:'flex', justifyContent:'space-between', alignItems:'center' }}>
+                    }} onTouchEnd={(event)=>{ const t = longPressRef.current[id]; if (t) clearTimeout(t); longPressRef.current[id]=null; }} style={{ background: 'linear-gradient(90deg, #eef2ff, #e6ffef)', padding: '4px 8px', borderRadius: 6, fontSize: 12, display:'flex', justifyContent:'space-between', alignItems:'center' }}>
                       <div style={{ overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap', fontWeight:700 }}>{ev.title}</div>
                       <div style={{ marginLeft:8, fontSize:11, color:'var(--muted)' }}>{span>1?`${span}d`:''}</div>
                     </div>
                   );
                 })}
-                {evs.length>3 && <div style={{ color:'var(--muted)', fontSize:12 }}><button className="btn btn-ghost" onClick={()=> alert(evs.map(e=>e.title).join('\n'))}>+{evs.length-3} more</button></div>}
+                {evs.length>3 && <div style={{ color:'var(--muted)', fontSize:12 }}><button className="btn btn-ghost" onClick={()=> notify(evs.map(e=>e.title).join(', '), 'info', 5000)}>+{evs.length-3} more</button></div>}
               </div>
             </div>
           );
         })}
       </div>
+
+      <PromptDialog
+        open={!!promptState}
+        title="Change date"
+        message="Enter a new date in YYYY-MM-DD format."
+        defaultValue={promptState?.defaultValue || ''}
+        placeholder="YYYY-MM-DD"
+        confirmLabel="Apply"
+        cancelLabel="Cancel"
+        onConfirm={(value) => {
+          const nextDate = String(value || '').trim();
+          if (nextDate && promptState?.event) {
+            onEventChange && onEventChange({ ...promptState.event, start: nextDate }, 'edit');
+          }
+          setPromptState(null);
+        }}
+        onCancel={() => setPromptState(null)}
+      />
     </div>
   );
 }

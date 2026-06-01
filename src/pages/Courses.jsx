@@ -3,6 +3,7 @@ import { Plus, Trash2, X, Check, BookOpen } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { COURSE_STATUSES, COURSE_TYPES, getCustomCourses, getProfile, getTermLabelFromKey, setCourseOverride, setCustomCourses, uid, store } from '../store/store';
 import { getAllCourses, getDeptOptionalCourses, setOptionalSelection } from '../store/curriculumStore';
+import ConfirmDialog from '../components/ConfirmDialog';
 
 const YEARS = [1, 2, 3, 4];
 const STATUS_COLORS = { active: 'tag-green', completed: 'tag-blue', backlog: 'tag-red', withdrawal: 'tag-yellow', incomplete: 'tag-gray' };
@@ -312,6 +313,7 @@ export default function Courses() {
   const [addingCustom, setAddingCustom] = useState(false);
   const [editingCustom, setEditingCustom] = useState(null);
   const [version, setVersion] = useState(0);
+  const [deleteTarget, setDeleteTarget] = useState(null);
   const [expandedTerms, setExpandedTerms] = useState(() => {
     const k = profile?.currentTermKey || '';
     return k ? { [k]: true } : {};
@@ -432,7 +434,7 @@ export default function Courses() {
                       </div>
                     </div>
                     <button className="btn btn-ghost btn-sm" onClick={() => setEditingCustom(c.id)} title="Edit">✎</button>
-                    <button className="btn btn-ghost btn-sm" onClick={() => { if (confirm('Delete this custom course?')) { setCustomCourses(customCourses.filter(x => x.id !== c.id)); setVersion(v => v + 1); } }} title="Delete"><Trash2 size={14} color="var(--danger)" /></button>
+                    <button className="btn btn-ghost btn-sm" onClick={() => setDeleteTarget(c.id)} title="Delete"><Trash2 size={14} color="var(--danger)" /></button>
                   </div>
                 )}
               </div>
@@ -440,6 +442,21 @@ export default function Courses() {
           </div>
         </div>
       )}
+
+      <ConfirmDialog
+        open={!!deleteTarget}
+        title="Delete custom course?"
+        message="This will permanently remove the custom course from your local list."
+        confirmLabel="Delete"
+        cancelLabel="Cancel"
+        confirmTone="danger"
+        onConfirm={() => {
+          setCustomCourses(customCourses.filter(x => x.id !== deleteTarget));
+          setVersion(v => v + 1);
+          setDeleteTarget(null);
+        }}
+        onCancel={() => setDeleteTarget(null)}
+      />
 
       {courses.length === 0 && !addingCustom && (
         <div className="empty-state">

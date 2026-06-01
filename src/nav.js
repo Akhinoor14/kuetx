@@ -13,8 +13,8 @@ export const NAV = [
   {
     group: 'Class Rep',
     items: [
-      { id: 'class-management', label: 'Class Mgmt', icon: 'Users', path: '/class-management', requiresCR: true, showInDashboard: false },
-      { id: 'ct-quiz', label: 'CT Quiz', icon: 'FileText', path: '/ct-quiz-management', requiresCR: true, showInDashboard: false },
+      { id: 'class-management', label: 'Class Management', icon: 'Users', path: '/class-management', requiresCR: true, showInDashboard: false },
+      { id: 'ct-quiz-planning', label: 'CT & Quiz Planning', icon: 'Calendar', path: '/ct-quiz-planning', requiresCR: true, showInDashboard: false },
     ]
   },
   {

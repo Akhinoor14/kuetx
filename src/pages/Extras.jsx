@@ -806,11 +806,18 @@ export function TimeTracker() {
   const handleStopAndSave = () => {
     if (timer.isIdle) return;
     const stopped = timer.stop('manual');
+    setLastAutoSavedId(stopped.id);
     saveTimerSession(stopped, 'manual');
   };
 
   useEffect(() => {
     if (!timer.isCompleted || !timer.state?.id) return;
+    if (timer.state.stoppedReason === 'manual') {
+      if (lastAutoSavedId !== timer.state.id) {
+        setLastAutoSavedId(timer.state.id);
+      }
+      return;
+    }
     if (lastAutoSavedId === timer.state.id) return;
     const endedState = {
       ...timer.state,
@@ -920,7 +927,7 @@ export function TimeTracker() {
             </div>
 
             {/* Presets + Prefs Row */}
-            <div className="time-tracker-controls-row">
+            <div className={`time-tracker-controls-row ${timer.isRunning || timer.isPaused ? 'has-actions' : ''}`}>
               <div className="time-tracker-presets-group">
                 <div className="time-tracker-section-label">Quick start</div>
                 <div className="time-tracker-preset-row">
@@ -937,6 +944,16 @@ export function TimeTracker() {
                   <button className="time-tracker-pref-btn-compact" title="Toggle notify" onClick={() => { const next = { ...timerPrefs, notify: !timerPrefs.notify }; setTimerPrefsState(next); store.set('timer_prefs_v1', next); }}>{timerPrefs.notify ? '🔔' : '🔕'}</button>
                 </div>
               </div>
+              {(timer.isRunning || timer.isPaused) && (
+                <div className="time-tracker-actions-inline">
+                  <div className="time-tracker-section-label">Actions</div>
+                  <div className="time-tracker-actions-row">
+                    {timer.isRunning && <button className="btn btn-ghost time-tracker-action-btn" onClick={timer.pause}><Pause size={13} /> Pause</button>}
+                    {timer.isPaused && <button className="btn btn-primary time-tracker-action-btn" onClick={timer.resume}><Play size={13} /> Resume</button>}
+                    <button className="btn btn-primary time-tracker-action-btn" onClick={handleStopAndSave}><Square size={13} /> Stop</button>
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Today's Stats */}
@@ -977,15 +994,14 @@ export function TimeTracker() {
             </div>
 
             {/* Action Buttons */}
-            <div className="time-tracker-actions-section">
-              {!timer.isRunning && !timer.isPaused && !timer.isCompleted && (
-                <button className="btn btn-primary" onClick={handleStart}><Play size={13} /> Start</button>
-              )}
-              {timer.isRunning && <button className="btn btn-ghost" onClick={timer.pause}><Pause size={13} /> Pause</button>}
-              {timer.isPaused && <button className="btn btn-primary" onClick={timer.resume}><Play size={13} /> Resume</button>}
-              {(timer.isRunning || timer.isPaused) && <button className="btn btn-primary" onClick={handleStopAndSave}><Square size={13} /> Stop & Save</button>}
-              {(timer.isPaused || timer.isCompleted || timer.isIdle) && <button className="btn btn-ghost" onClick={timer.reset}><RotateCcw size={13} /> Reset</button>}
-            </div>
+            {!(timer.isRunning || timer.isPaused) && (
+              <div className="time-tracker-actions-section">
+                {!timer.isRunning && !timer.isPaused && !timer.isCompleted && (
+                  <button className="btn btn-primary" onClick={handleStart}><Play size={13} /> Start</button>
+                )}
+                {(timer.isPaused || timer.isCompleted || timer.isIdle) && <button className="btn btn-ghost" onClick={timer.reset}><RotateCcw size={13} /> Reset</button>}
+              </div>
+            )}
           </div>
 
           {manualOpen && (

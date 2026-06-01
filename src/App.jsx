@@ -6,6 +6,8 @@ import { Navbar } from './components/Navbar';
 import { Footer } from './components/Footer';
 import PWAInstallPrompt from './components/PWAInstallPrompt';
 import { BottomNav, useIsMobileNav } from './components/BottomNav';
+import GlobalToasts from './components/GlobalToasts';
+import BackupReminderGate from './components/BackupReminderGate';
 
 // Pages
 import Dashboard from './pages/Dashboard';
@@ -32,6 +34,7 @@ import { Notes } from './pages/Notes';
 import Clubs from './pages/Clubs';
 import About from './pages/About';
 import ClassManagement from './pages/ClassManagement';
+import CTQuizPlanning from './pages/CTQuizPlanning';
 import { Tours, Social, Projects, Syllabus, TimeTracker, Tuition, Food, Reports } from './pages/Extras';
 
 function Layout() {
@@ -102,11 +105,14 @@ function Layout() {
             <Route path="/settings" element={<Settings />} />
             <Route path="/about" element={<About />} />
             <Route path="/class-management" element={<ClassManagement />} />
+            <Route path="/ct-quiz-planning" element={<CTQuizPlanning />} />
           </Routes>
         </div>
         {location.pathname !== '/about' && !isQuestionBankViewer && !isMobileNav && <Footer />}
         {!isQuestionBankViewer && <PWAInstallPrompt />}
         {!isQuestionBankViewer && <BottomNav />}
+        <GlobalToasts />
+        <BackupReminderGate />
       </div>
     </div>
   );

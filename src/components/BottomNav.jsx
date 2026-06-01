@@ -171,7 +171,7 @@ function NavGridItem({ item, onSelect }) {
     'profile': 'Profile',
     'smart-score': 'Score',
     'notes': 'Notes',
-    'class-management': 'Class',
+    'class-management': 'Class Management',
     'courses': 'Courses',
     'attendance': 'Attend',
     'schedule': 'Sched',
@@ -281,9 +281,8 @@ export function BottomNav() {
     if (!isMobileNav) setActivePanel(null);
   }, [isMobileNav]);
 
-  if (!isMobileNav) return null;
-
   // build pinned buttons dynamically so we can add CR tab when profile.isCR
+  // MUST be BEFORE the conditional return to comply with React Hooks rules
   const pinnedButtons = useMemo(() => {
     const base = [
       { id: 'dashboard', label: 'Home', icon: 'Home', kind: 'route', path: '/' },
@@ -305,6 +304,8 @@ export function BottomNav() {
   const isStudyActive = studySections.some(section => section.items.some(activeRoute));
   const isMoneyActive = moneySections.some(section => section.items.some(activeRoute));
   const isMenuActive = menuSections.some(section => section.items.some(activeRoute));
+
+  if (!isMobileNav) return null;
 
   const isButtonActive = (button) => {
     if (button.kind === 'route') return activeRoute(itemMap.get(button.id) || { path: button.path });

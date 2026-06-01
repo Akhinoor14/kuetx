@@ -3,6 +3,7 @@ import { Plus, Trash2, Check } from 'lucide-react';
 import { store, uid, getProfile, getCurrentTermKey } from '../store/store';
 import { getAllCourses } from '../store/curriculumStore';
 import CourseTeacherDialog from '../components/CourseTeacherDialog';
+import { notify } from '../lib/notify';
 
 const normalizeTeacherName = (value) => {
   const clean = String(value || '').trim().replace(/\s+/g, ' ');
@@ -83,7 +84,7 @@ export default function Assignments() {
 
     const selectedTeacher = normalizeTeacherName(form.teacherName);
     if (!selectedTeacher) {
-      alert('Please select a teacher for this assignment course.');
+      notify('Please select a teacher for this assignment course.', 'error');
       return;
     }
 
@@ -92,7 +93,7 @@ export default function Assignments() {
       .filter(Boolean);
 
     if (titles.length === 0) {
-      alert('Please enter at least one assignment title.');
+      notify('Please enter at least one assignment title.', 'error');
       return;
     }
 

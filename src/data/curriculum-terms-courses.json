@@ -1,0 +1,80 @@
+{
+  "departments": {
+    "CSE": {
+      "name": "Computer Science & Engineering",
+      "semesters": {
+        "1": {
+          "termCode": "T2024S1",
+          "termName": "Spring 2024",
+          "startDate": "2024-01-15",
+          "endDate": "2024-05-31",
+          "courses": [
+            { "id": "CSE101", "code": "CSE101", "name": "Intro to CS", "credits": 3, "ctCount": 3, "quizCount": 0 },
+            { "id": "CSE102L", "code": "CSE102L", "name": "Programming Lab", "credits": 1.5, "ctCount": 2, "quizCount": 1 },
+            { "id": "MATH101", "code": "MATH101", "name": "Calculus I", "credits": 3, "ctCount": 3, "quizCount": 0 }
+          ]
+        },
+        "2": {
+          "termCode": "T2024S2",
+          "termName": "Summer 2024",
+          "startDate": "2024-06-01",
+          "endDate": "2024-08-31",
+          "courses": [
+            { "id": "CSE201", "code": "CSE201", "name": "Data Structures", "credits": 3, "ctCount": 3, "quizCount": 0 },
+            { "id": "CSE202L", "code": "CSE202L", "name": "DS Lab", "credits": 1.5, "ctCount": 2, "quizCount": 1 }
+          ]
+        }
+      }
+    },
+    "EEE": {
+      "name": "Electrical & Electronic Engineering",
+      "semesters": {
+        "1": {
+          "termCode": "T2024S1",
+          "termName": "Spring 2024",
+          "startDate": "2024-01-15",
+          "endDate": "2024-05-31",
+          "courses": [
+            { "id": "EEE101", "code": "EEE101", "name": "Circuit Analysis", "credits": 3, "ctCount": 3, "quizCount": 0 },
+            { "id": "EEE102L", "code": "EEE102L", "name": "Circuit Lab", "credits": 1.5, "ctCount": 2, "quizCount": 1 }
+          ]
+        }
+      }
+    },
+    "ME": {
+      "name": "Mechanical Engineering",
+      "semesters": {
+        "1": {
+          "termCode": "T2026S1",
+          "termName": "Fall 2026",
+          "startDate": "2026-09-01",
+          "endDate": "2026-12-31",
+          "courses": [
+            { "id": "ME101", "code": "ME101", "name": "Thermodynamics I", "credits": 3, "ctCount": 3, "quizCount": 1 },
+            { "id": "ME102L", "code": "ME102L", "name": "Thermo Lab", "credits": 1.5, "ctCount": 2, "quizCount": 0 }
+          ]
+        },
+        "2": {
+          "termCode": "T2026S2",
+          "termName": "Spring 2027",
+          "startDate": "2027-01-01",
+          "endDate": "2027-05-31",
+          "courses": [
+            { "id": "ME201", "code": "ME201", "name": "Fluid Mechanics", "credits": 3, "ctCount": 3, "quizCount": 1 }
+          ]
+        }
+      }
+    }
+  },
+  "currentUser": {
+    "dept": "ME",
+    "semester": "1"
+  },
+  "notes": {
+    "TODO_DEPARTMENTS": [
+      "BioMed - সব term/course info আসবে পরে",
+      "Textile - semester wise courses define হবে",
+      "Architecture - schedule finalize হলে add হবে"
+    ]
+  }
+}

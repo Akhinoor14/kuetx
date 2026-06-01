@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import { Plus, Trash2, Edit2, X, Check } from 'lucide-react';
 import { store, uid } from '../store/store';
+import ConfirmDialog from '../components/ConfirmDialog';
 
 export default function Teachers() {
   const [teachers, setTeachers] = useState(() => store.get('teachers') || []);
   const [adding, setAdding] = useState(false);
   const [editing, setEditing] = useState(null);
+  const [deleteTarget, setDeleteTarget] = useState(null);
   const [form, setForm] = useState({ name: '', initial: '', title: '', dept: '', phone: '', email: '', courses: '', officeRoom: '', rating: '', notes: '' });
 
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
@@ -23,7 +25,13 @@ export default function Teachers() {
   };
 
   const startEdit = (t) => { setForm(t); setEditing(t.id); setAdding(false); };
-  const del = (id) => { if (confirm('Delete?')) { const u = teachers.filter(t => t.id !== id); setTeachers(u); store.set('teachers', u); } };
+  const del = (id) => setDeleteTarget(id);
+  const confirmDelete = () => {
+    const u = teachers.filter(t => t.id !== deleteTarget);
+    setTeachers(u);
+    store.set('teachers', u);
+    setDeleteTarget(null);
+  };
 
   return (
     <div className="page-enter page-container">
@@ -99,6 +107,17 @@ export default function Teachers() {
           </div>
         ))}
       </div>
+
+      <ConfirmDialog
+        open={!!deleteTarget}
+        title="Delete teacher?"
+        message="This will remove the teacher from your local data."
+        confirmLabel="Delete"
+        cancelLabel="Cancel"
+        confirmTone="danger"
+        onConfirm={confirmDelete}
+        onCancel={() => setDeleteTarget(null)}
+      />
     </div>
   );
 }
