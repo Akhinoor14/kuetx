@@ -49,16 +49,45 @@ export function getTermHolidays(termCode) {
 }
 
 /**
+ * Validate and normalize termStartDate
+ * Ensures it's in ISO format (YYYY-MM-DD)
+ */
+export function validateTermStartDate(dateValue) {
+  if (!dateValue) return null;
+  
+  // If it's already an ISO string, validate format
+  if (typeof dateValue === 'string') {
+    if (/^\d{4}-\d{2}-\d{2}$/.test(dateValue)) {
+      const parsed = new Date(dateValue);
+      if (!isNaN(parsed.getTime())) {
+        return dateValue;
+      }
+    }
+  }
+  
+  // Try to parse as Date object
+  try {
+    const parsed = new Date(dateValue);
+    if (!isNaN(parsed.getTime())) {
+      return parsed.toISOString().split('T')[0];
+    }
+  } catch (e) {}
+  
+  return null;
+}
+
+/**
  * Get term timeline info (start date, end date, weeks, etc.)
+ * Now with validation of termStartDate format
  */
 export function getTermTimelineInfo(profile = {}) {
   try {
     const dept = profile.dept || 'ME';
     const termKey = getCurrentTermKey(profile);
-    const termStartDate = profile.termStartDate;
+    let termStartDate = validateTermStartDate(profile.termStartDate);
 
     if (!termStartDate) {
-      console.warn('[ctQuizStore] No termStartDate in profile');
+      console.warn('[ctQuizStore] No valid termStartDate in profile', { raw: profile.termStartDate, dept, termKey });
       return null;
     }
 
