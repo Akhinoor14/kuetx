@@ -389,13 +389,13 @@ export default function ClassManagement() {
       <div style={{ display: 'grid', gap: 14 }}>
         {activeTab === 'routine' && (
           <div>
-            <div className="card class-management-actions-card" style={{ padding: 16, borderRadius: 22, border: '1px solid rgba(15,23,42,0.08)', background: 'rgba(255,255,255,0.94)', boxShadow: '0 30px 70px rgba(15,23,42,0.08)' }}>
-              <div className="class-management-actions-grid" style={{ display: 'flex', gap: 12, flexWrap: 'nowrap', overflowX: 'auto', width: '100%' }}>
+            <div className="card class-management-actions-card" style={{ padding: 14, borderRadius: 22, border: '1px solid rgba(15,23,42,0.08)', background: 'linear-gradient(180deg, rgba(248,250,252,0.98), rgba(255,255,255,0.96))', boxShadow: '0 18px 40px rgba(15,23,42,0.06)', marginBottom: 16 }}>
+              <div className="class-management-actions-grid" style={{ display: 'flex', gap: 10, flexWrap: 'nowrap', overflowX: 'auto', width: '100%' }}>
                 <button type="button" title="Copy WhatsApp routine" className="btn class-management-action-btn btn-whatsapp" onClick={copyRoutineForSelectedDay}>
-                  <Copy size={16} /> WhatsApp
+                  <Copy size={14} /> WhatsApp
                 </button>
                 <button type="button" title="Export routine backup" className="btn class-management-action-btn btn-export" onClick={exportRoutineBackup}>
-                  <Download size={16} /> Export
+                  <Download size={14} /> Export
                 </button>
                 <Link to="/schedule" title="Open full schedule" className="btn class-management-action-btn btn-schedule">
                   Open Schedule
@@ -403,43 +403,43 @@ export default function ClassManagement() {
               </div>
             </div>
 
-            <div className="card class-management-routine-card" style={{ padding: 20, display: 'grid', gap: 18, borderRadius: 22, border: '1px solid rgba(15,23,42,0.08)', background: 'rgba(255,255,255,0.94)', boxShadow: '0 30px 70px rgba(15,23,42,0.08)' }}>
+            <div className="card class-management-routine-card" style={{ padding: 24, display: 'grid', gap: 24, borderRadius: 22, border: '1px solid rgba(59,130,246,0.12)', background: 'linear-gradient(135deg, rgba(59,130,246,0.04), rgba(129,140,248,0.04))', boxShadow: '0 20px 48px rgba(15,23,42,0.04)' }}>
               <div className="class-management-routine-top" style={{ display: 'flex', justifyContent: 'space-between', gap: 12, alignItems: 'stretch', flexWrap: 'wrap' }}>
                 <div style={{ minWidth: 0, flex: 1 }}>
-                  <div className="class-management-section-label" style={{ letterSpacing: '0.12em' }}>Routine Snapshot</div>
-                  <div className="class-management-section-title" style={{ fontSize: 26, lineHeight: 1.08 }}>Professional Class Routine Management</div>
-                  <div className="class-management-section-copy" style={{ maxWidth: 620 }}>Effortlessly manage and share your class routine. Export backups, communicate schedules, and maintain complete control over all CR responsibilities.</div>
+                  <div className="class-management-section-label" style={{ letterSpacing: '0.12em', marginBottom: 4 }}>Routine Snapshot</div>
+                  <div className="class-management-section-title" style={{ fontSize: 24, lineHeight: 1.1, marginBottom: 8 }}>Professional Class Routine Management</div>
+                  <div className="class-management-section-copy" style={{ maxWidth: 620, fontSize: 13 }}>Effortlessly manage and share your class routine. Export backups, communicate schedules, and maintain complete control over all CR responsibilities.</div>
                 </div>
               </div>
 
-              <div className="class-management-stats-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10 }}>
-                <div style={{ padding: 14, borderRadius: 16, border: '1px solid rgba(59,130,246,0.16)', background: 'rgba(249,250,251,0.92)', boxShadow: '0 10px 24px rgba(15,23,42,0.04)' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 11, color: 'var(--muted)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+              <div className="class-management-stats-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 14 }}>
+                <div style={{ padding: 16, borderRadius: 16, border: '1px solid rgba(59,130,246,0.18)', background: 'linear-gradient(135deg, rgba(59,130,246,0.08), rgba(59,130,246,0.04))', boxShadow: '0 8px 16px rgba(59,130,246,0.06)' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 10, color: 'rgba(37,99,235,0.84)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 8 }}>
                     <Clock3 size={14} /> Days
                   </div>
-                  <div style={{ fontSize: 30, fontWeight: 900, marginTop: 8, letterSpacing: '-0.05em' }}>{ROUTINE_DAY_DEFS.length}</div>
+                  <div style={{ fontSize: 28, fontWeight: 900, letterSpacing: '-0.05em', color: 'rgba(37,99,235,0.96)' }}>{ROUTINE_DAY_DEFS.length}</div>
                 </div>
-                <div style={{ padding: 14, borderRadius: 16, border: '1px solid rgba(16,185,129,0.16)', background: 'rgba(249,250,251,0.92)', boxShadow: '0 10px 24px rgba(15,23,42,0.04)' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 11, color: 'var(--muted)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+                <div style={{ padding: 16, borderRadius: 16, border: '1px solid rgba(16,185,129,0.18)', background: 'linear-gradient(135deg, rgba(16,185,129,0.08), rgba(16,185,129,0.04))', boxShadow: '0 8px 16px rgba(16,185,129,0.06)' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 10, color: 'rgba(4,174,124,0.84)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 8 }}>
                     <CalendarDays size={14} /> Classes
                   </div>
-                  <div style={{ fontSize: 30, fontWeight: 900, marginTop: 8, letterSpacing: '-0.05em' }}>{currentTermScheduleEntries.length}</div>
+                  <div style={{ fontSize: 28, fontWeight: 900, letterSpacing: '-0.05em', color: 'rgba(4,174,124,0.96)' }}>{currentTermScheduleEntries.length}</div>
                 </div>
-                <div style={{ padding: 14, borderRadius: 16, border: '1px solid rgba(124,58,237,0.16)', background: 'rgba(249,250,251,0.92)', boxShadow: '0 10px 24px rgba(15,23,42,0.04)' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 11, color: 'var(--muted)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+                <div style={{ padding: 16, borderRadius: 16, border: '1px solid rgba(124,58,237,0.18)', background: 'linear-gradient(135deg, rgba(124,58,237,0.08), rgba(124,58,237,0.04))', boxShadow: '0 8px 16px rgba(124,58,237,0.06)' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 10, color: 'rgba(109,40,217,0.84)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 8 }}>
                     <Users size={14} /> Teachers
                   </div>
-                  <div style={{ fontSize: 30, fontWeight: 900, marginTop: 8, letterSpacing: '-0.05em' }}>{assignedTeacherCount}</div>
+                  <div style={{ fontSize: 28, fontWeight: 900, letterSpacing: '-0.05em', color: 'rgba(109,40,217,0.96)' }}>{assignedTeacherCount}</div>
                 </div>
               </div>
 
-              <div style={{ display: 'grid', gap: 10 }}>
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, alignItems: 'center', justifyContent: 'space-between', padding: '0 4px', borderBottom: '1px solid rgba(15,23,42,0.08)' }}>
+              <div style={{ display: 'grid', gap: 18 }}>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, alignItems: 'center', justifyContent: 'space-between', padding: '0 4px', borderBottom: '1px solid rgba(15,23,42,0.08)', paddingBottom: 14 }}>
                   <div style={{ fontSize: 12, color: 'var(--muted)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.12em' }}>Daily Routine</div>
                   <div style={{ fontSize: 12, color: 'var(--muted)', fontWeight: 700 }}>{selectedRoutineLabel}</div>
                 </div>
 
-                <div className="class-management-day-grid single-row" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(90px, 1fr))', gap: 10, marginTop: 4 }}>
+                <div className="class-management-day-grid single-row" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(90px, 1fr))', gap: 12, marginTop: 0 }}>
                   {ROUTINE_DAY_DEFS.map(def => {
                     const count = routineEntriesByDay[def.key]?.length || 0;
                     const isActive = selectedRoutineDay === def.key;
@@ -458,7 +458,7 @@ export default function ClassManagement() {
                   })}
                 </div>
 
-                <div style={{ display: 'grid', gap: 10 }}>
+                <div style={{ display: 'grid', gap: 14 }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, alignItems: 'center', flexWrap: 'wrap' }}>
                     <div>
                       <div style={{ fontSize: 15, fontWeight: 900 }}>{selectedRoutineLabel}</div>
@@ -471,22 +471,22 @@ export default function ClassManagement() {
                   </div>
 
                   {selectedRoutineEntries.length === 0 ? (
-                    <div style={{ padding: 16, borderRadius: 14, border: '1px dashed rgba(15,23,42,0.12)', background: 'rgba(248,250,252,0.9)', color: 'var(--muted)', fontSize: 13 }}>
+                    <div style={{ padding: 18, borderRadius: 14, border: '1px dashed rgba(15,23,42,0.12)', background: 'rgba(248,250,252,0.9)', color: 'var(--muted)', fontSize: 13 }}>
                       No routine entries for {selectedRoutineLabel}.
                     </div>
                   ) : (
-                    <div style={{ display: 'grid', gap: 10 }}>
+                    <div style={{ display: 'grid', gap: 12 }}>
                       {selectedRoutineEntries.map(entry => {
                         const course = courseMap.get(entry.courseId);
                         return (
-                          <div key={entry.id} style={{ display: 'flex', justifyContent: 'space-between', gap: 12, alignItems: 'flex-start', padding: 14, borderRadius: 14, border: '1px solid var(--border)', background: 'linear-gradient(180deg, var(--surface), var(--bg))' }}>
+                          <div key={entry.id} style={{ display: 'flex', justifyContent: 'space-between', gap: 12, alignItems: 'flex-start', padding: 16, borderRadius: 14, border: '1px solid var(--border)', background: 'linear-gradient(180deg, var(--surface), var(--bg))' }}>
                             <div style={{ minWidth: 0, flex: 1 }}>
-                              <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap', marginBottom: 6 }}>
+                              <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap', marginBottom: 8 }}>
                                 <div style={{ fontSize: 13, fontWeight: 900 }}>{formatRoutineSlot(entry.slot)}</div>
                                 <span className="tag tag-blue">{course?.code || 'Unknown course'}</span>
                               </div>
                               <div style={{ fontSize: 14, fontWeight: 800, color: 'var(--text)' }}>{entry.displayName || course?.name || course?.code || 'Unknown Course'}</div>
-                              <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 4 }}>
+                              <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 6 }}>
                                 {entry.teacherName || 'Teacher not set'}{entry.room ? ` · Room ${entry.room}` : ''}{entry.type ? ` · ${entry.type}` : ''}
                               </div>
                             </div>
