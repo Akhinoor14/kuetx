@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { ThemeProvider } from './hooks/useTheme';
+import { usePageTracker } from './hooks/usePageTracker';
 import { Sidebar } from './components/Sidebar';
 import { Navbar } from './components/Navbar';
 import { Footer } from './components/Footer';
@@ -34,10 +35,11 @@ import { Notes } from './pages/Notes';
 import Clubs from './pages/Clubs';
 import About from './pages/About';
 import ClassManagement from './pages/ClassManagement';
-import CTQuizPlanning from './pages/CTQuizPlanning';
 import { Tours, Social, Projects, Syllabus, TimeTracker, Tuition, Food, Reports } from './pages/Extras';
+import QuickAccess from './pages/QuickAccess';
 
 function Layout() {
+  usePageTracker();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [sidebarCompact, setSidebarCompact] = useState(() => {
     try {
@@ -74,6 +76,7 @@ function Layout() {
         <div style={{ flex: 1 }}>
           <Routes>
             <Route path="/" element={<Dashboard />} />
+            <Route path="/quick-access" element={<QuickAccess />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/courses" element={<Courses />} />
             <Route path="/attendance" element={<Attendance />} />
@@ -105,7 +108,6 @@ function Layout() {
             <Route path="/settings" element={<Settings />} />
             <Route path="/about" element={<About />} />
             <Route path="/class-management" element={<ClassManagement />} />
-            <Route path="/ct-quiz-planning" element={<CTQuizPlanning />} />
           </Routes>
         </div>
         {location.pathname !== '/about' && !isQuestionBankViewer && !isMobileNav && <Footer />}

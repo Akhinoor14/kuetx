@@ -4,17 +4,17 @@ export const NAV = [
   {
     group: 'Overview',
     items: [
-      { id: 'dashboard',   label: 'Dashboard',    icon: 'Grid',         path: '/' },
-      { id: 'profile',     label: 'Profile',      icon: 'User',         path: '/profile' },
-      { id: 'smart-score', label: 'Smart Score',  icon: 'Star',         path: '/smart-score' },
-      { id: 'notes',       label: 'Notes',       icon: 'FileText',    path: '/notes' },
+      { id: 'dashboard',   label: 'Dashboard',      icon: 'Grid',         path: '/' },
+      { id: 'quick-access', label: 'Quick Access',  icon: 'Zap',         path: '/quick-access' },
+      { id: 'profile',     label: 'Profile',        icon: 'User',         path: '/profile' },
+      { id: 'smart-score', label: 'Smart Score',    icon: 'Star',         path: '/smart-score' },
+      { id: 'notes',       label: 'Notes',          icon: 'FileText',     path: '/notes' },
     ]
   },
   {
     group: 'Class Rep',
     items: [
       { id: 'class-management', label: 'Class Management', icon: 'Users', path: '/class-management', requiresCR: true, showInDashboard: false },
-      { id: 'ct-quiz-planning', label: 'CT & Quiz Planning', icon: 'Calendar', path: '/ct-quiz-planning', requiresCR: true, showInDashboard: false },
     ]
   },
   {

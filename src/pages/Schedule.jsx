@@ -498,6 +498,7 @@ export default function Schedule() {
     return () => clearInterval(timer);
   }, []);
 
+
   const autoPreviewDate = useMemo(
     () => getRoutinePreviewDate(holidayDates, new Date(nowTick)),
     [holidayDates, nowTick]

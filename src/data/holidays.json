@@ -1,39 +1,67 @@
 {
-  "comment": "KUET Academic Holidays - Adjustable per term",
+  "comment": "KUET Academic Holidays - Year-based single source of truth. Any term in a year uses these holidays.",
+  "2025": {
+    "holidays": [
+      { "date": "2025-09-01", "name": "University Day" },
+      { "date": "2025-09-04", "name": "Janmastami" },
+      { "date": "2025-10-18", "end": "2025-10-24", "name": "Durgapuja" },
+      { "date": "2025-12-14", "name": "Shaheed Intellectuals Day" },
+      { "date": "2025-12-16", "name": "Victory Day" },
+      { "date": "2025-12-25", "name": "Christmas Day" }
+    ],
+    "nonInstructionWeeks": [
+      { "start": "2025-09-01", "end": "2025-09-07", "name": "Semester Opening Week" },
+      { "start": "2025-12-20", "end": "2025-12-31", "name": "Winter Break & Final Exam Prep" }
+    ],
+    "notes": "All 2025 academic events. First semester: Sept-Dec. Second semester starts Jan 2026."
+  },
   "2026": {
-    "T2026S1": {
-      "termStartDate": "2026-09-01",
-      "termEndDate": "2026-12-31",
-      "holidays": [
-        { "date": "2026-09-16", "name": "Eid ul-Fitr (approx)" },
-        { "date": "2026-09-17", "name": "Eid ul-Fitr Holiday" },
-        { "date": "2026-10-09", "name": "Eid ul-Adha Holiday" },
-        { "date": "2026-10-10", "name": "Eid ul-Adha Holiday" },
-        { "date": "2026-10-20", "name": "Ashura (Bijoy Dashami)" },
-        { "date": "2026-12-16", "name": "Victory Day" },
-        { "date": "2026-12-25", "name": "Christmas & Winter Break Start" }
-      ],
-      "nonInstructionWeeks": [
-        { "start": "2026-09-01", "end": "2026-09-07", "name": "Semester Opening Week" },
-        { "start": "2026-12-20", "end": "2026-12-31", "name": "Winter Break & Final Exam Prep" }
-      ],
-      "notes": "First 2 weeks: no CTs. Last week: no CTs. Adjust holidays per academic calendar."
-    },
-    "T2026S2": {
-      "termStartDate": "2027-01-15",
-      "termEndDate": "2027-05-31",
-      "holidays": [
-        { "date": "2027-02-21", "name": "International Mother Language Day (observed)" },
-        { "date": "2027-03-17", "name": "Eid ul-Fitr (approx)" },
-        { "date": "2027-03-18", "name": "Eid ul-Fitr Holiday" },
-        { "date": "2027-04-26", "name": "Eid ul-Adha Holiday" },
-        { "date": "2027-05-01", "name": "Labour Day" }
-      ],
-      "nonInstructionWeeks": [
-        { "start": "2027-01-15", "end": "2027-01-21", "name": "Semester Opening Week" },
-        { "start": "2027-05-20", "end": "2027-05-31", "name": "Final Exam Prep & Closure" }
-      ],
-      "notes": "First 2 weeks: no CTs. Last week: no CTs."
-    }
+    "holidays": [
+      { "date": "2026-01-01", "name": "Winter Vacation" },
+      { "date": "2026-01-17", "name": "Shab-e-Meraj" },
+      { "date": "2026-01-23", "name": "Sharaswati Puja" },
+      { "date": "2026-02-04", "name": "Shab-e-Barat" },
+      { "date": "2026-02-21", "name": "Shaheed Dibash & Int'l Mother Language Day" },
+      { "date": "2026-03-17", "name": "Shab-e-Quadr" },
+      { "date": "2026-03-20", "name": "Jumatul Bida" },
+      { "date": "2026-03-26", "name": "Independence & National Day" },
+      { "date": "2026-04-14", "name": "Bangla New Year" },
+      { "date": "2026-05-01", "name": "May Day & Buddha Purnima" },
+      { "date": "2026-09-01", "name": "University Day" },
+      { "date": "2026-09-04", "name": "Janmastami" },
+      { "date": "2026-08-05", "name": "July Mass Uprising Day (observed)" },
+      { "date": "2026-08-26", "name": "Eid-e-Miladunnobi" },
+      { "date": "2026-12-14", "name": "Shaheed Intellectuals Day" },
+      { "date": "2026-12-16", "name": "Victory Day" },
+      { "date": "2026-12-25", "name": "Christmas Day" }
+    ],
+    "nonInstructionWeeks": [
+      { "start": "2026-01-01", "end": "2026-01-07", "name": "Semester Opening Week (S2)" },
+      { "start": "2026-03-01", "end": "2026-03-30", "name": "Ramadan Vacation" },
+      { "start": "2026-03-17", "end": "2026-03-25", "name": "Eid-ul-Fitr Holiday" },
+      { "start": "2026-05-20", "end": "2026-05-31", "name": "Final Exam Prep & Closure (S2)" },
+      { "start": "2026-09-01", "end": "2026-09-07", "name": "Semester Opening Week (S1)" },
+      { "start": "2026-10-18", "end": "2026-10-24", "name": "Durgapuja" },
+      { "start": "2026-12-14", "end": "2026-12-31", "name": "Final Exam Prep & Winter Break (S1)" }
+    ],
+    "notes": "Year 2026: Contains both S2 (Jan-May) and S1 (Sept-Dec) term holidays. Teachers can add custom holidays."
+  },
+  "2027": {
+    "holidays": [
+      { "date": "2027-02-21", "name": "International Mother Language Day" },
+      { "date": "2027-02-26", "name": "Eid-ul-Adha" },
+      { "date": "2027-03-17", "name": "Shab-e-Quadr" },
+      { "date": "2027-03-20", "name": "Jumatul Bida" },
+      { "date": "2027-03-26", "name": "Independence & National Day" },
+      { "date": "2027-04-14", "name": "Bangla New Year" },
+      { "date": "2027-05-01", "name": "May Day & Buddha Purnima" }
+    ],
+    "nonInstructionWeeks": [
+      { "start": "2027-01-15", "end": "2027-01-21", "name": "Semester Opening Week" },
+      { "start": "2027-03-15", "end": "2027-03-31", "name": "Ramadan Vacation" },
+      { "start": "2027-04-10", "end": "2027-04-18", "name": "Eid-ul-Fitr Holiday" },
+      { "start": "2027-05-20", "end": "2027-05-31", "name": "Final Exam Prep & Closure" }
+    ],
+    "notes": "Year 2027: S2 (Jan-May) term holidays. Add more holidays as needed for the full year."
   }
 }

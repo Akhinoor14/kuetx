@@ -1,362 +1,145 @@
 /**
- * CT & Quiz Planning Store
- * Centralized data access layer - integrates with existing ecosystem
+ * CT Quiz & Holidays Store
+ * Year-based holiday system - single source of truth
+ * 
+ * All holidays are stored by calendar year in holidays.json
+ * Any term in that year automatically gets those holidays
  */
 
-import { store, getProfile, getCurrentTermKey, getTermTimeline, DEPARTMENTS } from '../store/store';
-import { getAllCourses } from '../store/curriculumStore';
 import holidaysData from '../data/holidays.json';
-
-const CT_QUIZ_PLANS_KEY = 'ct_quiz_plans';
+import { store } from '../store/store';
 
 /**
- * Generate termCode from termStartDate and termKey
- * Example: termStartDate="2026-09-01", termKey="Y1T1" => "T2026S1"
+ * Get holidays for a given year
+ * @param {number|string} year - Calendar year (e.g., 2025, 2026, 2027)
+ * @returns {Array} Array of holiday objects {date, name, end?}
  */
-export function generateTermCode(termStartDate, termKey) {
-  if (!termStartDate || !termKey) return null;
+export function getYearHolidays(year) {
+  const yearKey = String(year);
+  const yearData = holidaysData[yearKey];
   
-  try {
-    const date = new Date(termStartDate);
-    const year = date.getFullYear();
-    const month = date.getMonth() + 1; // 1-12
-    
-    // Determine season: S1 (Sept-Dec) or S2 (Jan-May)
-    // S1: months 9-12, S2: months 1-5
-    const season = month >= 9 || month <= 5 ? (month >= 9 ? 'S1' : 'S2') : 'S1';
-    
-    return `T${year}${season}`;
-  } catch (e) {
-    console.error('[ctQuizStore] Error generating termCode:', e);
-    return null;
+  if (!yearData) {
+    console.warn(`[ctQuizStore] No holidays found for year: ${year}`);
+    return [];
   }
+  
+  const allHolidays = [];
+  
+  // Collect from all holiday lists
+  if (yearData.holidays?.length) {
+    allHolidays.push(...yearData.holidays);
+  }
+  if (yearData.nonInstructionWeeks?.length) {
+    allHolidays.push(...yearData.nonInstructionWeeks);
+  }
+  if (yearData.singleHolidayDates?.length) {
+    allHolidays.push(...yearData.singleHolidayDates);
+  }
+  
+  return allHolidays;
 }
 
 /**
- * Get all holidays for a term
+ * Extract calendar year from a profile with termStartDate
+ * @param {Object} profile - User profile {termStartDate, dept, ...}
+ * @returns {number} Calendar year
  */
+export function getCalendarYearFromProfile(profile) {
+  if (!profile?.termStartDate) return new Date().getFullYear();
+  const year = new Date(profile.termStartDate).getFullYear();
+  return year;
+}
+
+/**
+ * Sync holidays from holidays.json to scheduleSettings
+ * Merges with existing user-added holidays
+ * @param {Object} profile - User profile {termStartDate, ...}
+ */
+export function syncTermHolidaysToSettings(profile) {
+  const year = getCalendarYearFromProfile(profile);
+  const defaultHolidays = getYearHolidays(year);
+  
+  // Get current schedule settings
+  const scheduleSettings = store.get('scheduleSettings') || {};
+  const existingHolidayDates = scheduleSettings.holidayDates || [];
+  
+  // Merge: default holidays + user additions (no duplicates)
+  const merged = [...defaultHolidays];
+  
+  // Add user-added holidays that aren't already there
+  existingHolidayDates.forEach(userHol => {
+    const exists = merged.some(dHol => 
+      (dHol.date === userHol.date && dHol.name === userHol.name) ||
+      (dHol.start === userHol.start && dHol.end === userHol.end)
+    );
+    if (!exists) {
+      merged.push(userHol);
+    }
+  });
+  
+  // Sort by date
+  merged.sort((a, b) => {
+    const dateA = new Date(a.date || a.start);
+    const dateB = new Date(b.date || b.start);
+    return dateA - dateB;
+  });
+  
+  // Update store
+  scheduleSettings.holidayDates = merged;
+  scheduleSettings.holidayYear = year;
+  store.set('scheduleSettings', scheduleSettings);
+  
+  console.log(`[ctQuizStore] Synced ${merged.length} holidays for year ${year}`);
+}
+
+/**
+ * Dummy exports for compatibility with existing imports
+ * These can be removed once all imports are cleaned up
+ */
+
 export function getTermHolidays(termCode) {
-  try {
-    if (!termCode) return [];
-    
-    // Extract year: T2026S1 -> 2026
-    const yearMatch = termCode?.match(/T(\d{4})/);
-    const year = yearMatch ? yearMatch[1] : new Date().getFullYear().toString();
+  // If no termCode, fallback to current year
+  if (!termCode) return getYearHolidays(new Date().getFullYear());
+  return getYearHolidays(new Date().getFullYear());
+}
 
-    const termHols = holidaysData[year]?.[termCode];
-    if (!termHols) {
-      console.warn('[ctQuizStore] No holidays found for termCode:', termCode);
-      return [];
-    }
-
-    const dates = [];
-    
-    // Add individual holidays
-    if (termHols.holidays && Array.isArray(termHols.holidays)) {
-      dates.push(...termHols.holidays.map(h => h.date));
-    }
-
-    // Add non-instruction weeks
-    if (termHols.nonInstructionWeeks && Array.isArray(termHols.nonInstructionWeeks)) {
-      termHols.nonInstructionWeeks.forEach(week => {
-        const start = new Date(week.start);
-        const end = new Date(week.end);
-        const current = new Date(start);
-        while (current <= end) {
-          dates.push(current.toISOString().split('T')[0]);
-          current.setDate(current.getDate() + 1);
-        }
-      });
-    }
-
-    return [...new Set(dates)].sort();
-  } catch (e) {
-    console.error('[ctQuizStore] Error loading holidays:', e);
-    return [];
+export function getTermTimelineInfo(profile) {
+  if (!profile?.termStartDate) {
+    return { termStartDate: null, termCode: null };
   }
+  const year = getCalendarYearFromProfile(profile);
+  return {
+    termStartDate: profile.termStartDate,
+    year,
+    termCode: `Y${year}T1`, // Dummy - not used in year-based system
+  };
 }
 
-/**
- * Validate and normalize termStartDate
- * Ensures it's in ISO format (YYYY-MM-DD)
- */
-export function validateTermStartDate(dateValue) {
-  if (!dateValue) return null;
-  
-  // If it's already an ISO string, validate format
-  if (typeof dateValue === 'string') {
-    if (/^\d{4}-\d{2}-\d{2}$/.test(dateValue)) {
-      const parsed = new Date(dateValue);
-      if (!isNaN(parsed.getTime())) {
-        return dateValue;
-      }
-    }
-  }
-  
-  // Try to parse as Date object
-  try {
-    const parsed = new Date(dateValue);
-    if (!isNaN(parsed.getTime())) {
-      return parsed.toISOString().split('T')[0];
-    }
-  } catch (e) {}
-  
-  return null;
+export function getDepartmentInfo(dept) {
+  return { dept, name: dept || 'Unknown' };
 }
 
-/**
- * Get term timeline info (start date, end date, weeks, etc.)
- * Now with proper termCode generation and holiday sync
- */
-export function getTermTimelineInfo(profile = {}) {
+export function getCTQuizPlans() {
+  return store.get('ctQuizPlans') || {};
+}
+
+export function saveCTQuizPlans(plans) {
+  store.set('ctQuizPlans', plans);
+}
+
+export function getCurrentTermCourses(profile) {
+  return [];
+}
+
+export function exportPlansAsJSON(plans) {
+  return JSON.stringify(plans, null, 2);
+}
+
+export function importPlansFromJSON(json) {
   try {
-    const dept = profile.dept || 'ME';
-    const termKey = getCurrentTermKey(profile);
-    let termStartDate = validateTermStartDate(profile.termStartDate);
-
-    if (!termStartDate) {
-      console.warn('[ctQuizStore] No valid termStartDate in profile', { raw: profile.termStartDate, dept, termKey });
-      return null;
-    }
-
-    // CRITICAL: Generate termCode from termStartDate and termKey
-    const termCode = generateTermCode(termStartDate, termKey);
-    if (!termCode) {
-      console.error('[ctQuizStore] Failed to generate termCode', { termStartDate, termKey });
-      return null;
-    }
-
-    // Load holidays for this specific term
-    const holidays = getTermHolidays(termCode);
-
-    // Calculate instruction days from termStartDate (not from holidays.json dates)
-    // This ensures we use the profile's term start date, not the stored one
-    const termEndDate = calculateTermEndDate(termStartDate, holidays);
-    const instructionDays = calculateInstructionDays(termStartDate, termEndDate, holidays);
-
-    return {
-      termCode,
-      termKey,
-      dept,
-      termStartDate,
-      termEndDate,
-      holidays,
-      instructionDays,
-      totalInstructionDays: instructionDays.length,
-    };
+    return JSON.parse(json);
   } catch (e) {
-    console.error('[ctQuizStore] Error getting term timeline:', e);
-    return null;
-  }
-}
-
-/**
- * Calculate approximate term end date
- * Assumes ~18 weeks per semester
- */
-function calculateTermEndDate(termStartDate, holidays = []) {
-  try {
-    const start = new Date(termStartDate);
-    const end = new Date(start);
-    end.setDate(end.getDate() + 120); // ~18 weeks
-    return end.toISOString().split('T')[0];
-  } catch (e) {
-    return null;
-  }
-}
-
-/**
- * Get current term courses with teacher info from schedule
- * IMPORTANT: Respects current department in profile
- */
-export function getCurrentTermCourses(profile = {}) {
-  try {
-    const dept = profile.dept || 'ME';
-    const termKey = getCurrentTermKey(profile);
-
-    // Get curriculum courses - USES CURRENT DEPT FROM PROFILE
-    const allCourses = getAllCourses({ ...profile, dept });
-    
-    // Get current term courses (filter by termKey match)
-    const currentTermCourses = allCourses.filter(course => {
-      const courseTermKey = course.courseId?.split(':')?.[1];
-      return courseTermKey === termKey;
-    });
-
-    // Enrich with teacher info from schedule settings
-    const scheduleSettings = store.get('scheduleSettings') || {};
-    const courseTeacherMap = scheduleSettings.courseTeacherMap || {};
-
-    const enriched = currentTermCourses.map(course => ({
-      ...course,
-      teachers: courseTeacherMap[course.courseId] || ['Teacher 1', 'Teacher 2'],
-      // Mark course type: odd codes = theory (3 CTs), even codes = sessional (1 CT)
-      courseType: (parseInt(course.code?.match(/\d+$/)?.[0]) || 1) % 2 === 1 ? 'Theory' : 'Sessional',
-    }));
-
-    return enriched;
-  } catch (e) {
-    console.error('[ctQuizStore] Error getting current term courses:', e);
-    return [];
-  }
-}
-
-/**
- * Get CT/Quiz plans for current term
- */
-export function getCTQuizPlans(profile = {}) {
-  try {
-    const termKey = getCurrentTermKey(profile);
-    const allPlans = store.get(CT_QUIZ_PLANS_KEY) || {};
-    return allPlans[termKey] || null;
-  } catch (e) {
-    console.error('[ctQuizStore] Error getting CT/Quiz plans:', e);
-    return null;
-  }
-}
-
-/**
- * Save CT/Quiz plans for current term
- */
-export function saveCTQuizPlans(plans, profile = {}) {
-  try {
-    const termKey = getCurrentTermKey(profile);
-    const allPlans = store.get(CT_QUIZ_PLANS_KEY) || {};
-    allPlans[termKey] = {
-      ...plans,
-      lastModified: new Date().toISOString().split('T')[0],
-    };
-    store.set(CT_QUIZ_PLANS_KEY, allPlans);
-    return true;
-  } catch (e) {
-    console.error('[ctQuizStore] Error saving CT/Quiz plans:', e);
-    return false;
-  }
-}
-
-/**
- * Get department info
- */
-export function getDepartmentInfo(deptCode = 'ME') {
-  const dept = DEPARTMENTS.find(d => d.code === deptCode);
-  return dept || { code: deptCode, name: deptCode, seats: 0 };
-}
-
-/**
- * Calculate default CT count for theory course
- */
-export function getDefaultCTCount(credits = 3) {
-  // Default: 3 CTs minimum for most theory courses
-  if (credits >= 3) return 3;
-  if (credits >= 2) return 2;
-  return 1;
-}
-
-/**
- * Calculate instruction days (business days excluding holidays and opening/closing weeks)
- */
-export function calculateInstructionDays(termStartDate, termEndDate, holidays = [], skipFirstWeeks = 2, skipLastWeeks = 1) {
-  try {
-    const start = new Date(termStartDate);
-    const end = new Date(termEndDate);
-    
-    // Calculate week boundaries
-    const firstWeekEnd = new Date(start);
-    firstWeekEnd.setDate(firstWeekEnd.getDate() + skipFirstWeeks * 7);
-    
-    const lastWeekStart = new Date(end);
-    lastWeekStart.setDate(lastWeekStart.getDate() - skipLastWeeks * 7);
-    
-    // Get business days
-    const holidaySet = new Set(holidays);
-    const businessDays = [];
-    
-    const current = new Date(firstWeekEnd);
-    while (current <= lastWeekStart) {
-      const dateStr = current.toISOString().split('T')[0];
-      const isWeekend = current.getDay() === 0 || current.getDay() === 6;
-      const isHoliday = holidaySet.has(dateStr);
-      
-      if (!isWeekend && !isHoliday) {
-        businessDays.push(dateStr);
-      }
-      
-      current.setDate(current.getDate() + 1);
-    }
-    
-    return businessDays;
-  } catch (e) {
-    console.error('[ctQuizStore] Error calculating instruction days:', e);
-    return [];
-  }
-}
-
-/**
- * Generate evenly-spaced CT dates
- */
-export function generateCTDates(availableDays = [], numCTs = 3, minGapDays = 12) {
-  try {
-    if (!availableDays.length || numCTs <= 0) return [];
-    
-    const dates = [];
-    const step = Math.max(1, Math.floor((availableDays.length - 1) / (numCTs + 1)));
-    
-    for (let i = 1; i <= numCTs; i++) {
-      const idx = Math.min(i * step, availableDays.length - 1);
-      dates.push(availableDays[idx]);
-    }
-    
-    // Validate gaps
-    const warnings = [];
-    for (let i = 1; i < dates.length; i++) {
-      const prev = new Date(dates[i - 1]);
-      const curr = new Date(dates[i]);
-      const gapDays = Math.floor((curr - prev) / (1000 * 60 * 60 * 24));
-      if (gapDays < minGapDays) {
-        warnings.push(`Gap between ${dates[i - 1]} and ${dates[i]} is ${gapDays} days (min: ${minGapDays})`);
-      }
-    }
-    
-    return { dates, warnings };
-  } catch (e) {
-    console.error('[ctQuizStore] Error generating CT dates:', e);
-    return { dates: [], warnings: ['Error generating dates'] };
-  }
-}
-
-/**
- * Export plans to JSON
- */
-export function exportPlansAsJSON(profile = {}) {
-  try {
-    const plans = getCTQuizPlans(profile);
-    if (!plans) return null;
-    
-    return {
-      exportedAt: new Date().toISOString(),
-      profile: {
-        dept: profile.dept,
-        termKey: getCurrentTermKey(profile),
-      },
-      plans,
-    };
-  } catch (e) {
-    console.error('[ctQuizStore] Error exporting plans:', e);
-    return null;
-  }
-}
-
-/**
- * Import plans from JSON
- */
-export function importPlansFromJSON(jsonData, profile = {}) {
-  try {
-    if (!jsonData?.plans) throw new Error('Invalid import format');
-    
-    saveCTQuizPlans(jsonData.plans, profile);
-    return true;
-  } catch (e) {
-    console.error('[ctQuizStore] Error importing plans:', e);
-    return false;
+    console.error('Invalid JSON:', e);
+    return {};
   }
 }

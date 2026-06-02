@@ -5,6 +5,8 @@ import { NAV } from '../nav';
 import { Logo, Wordmark } from './Logo';
 import { store, DEFAULT_PROFILE } from '../store/store';
 import { useNavConfig } from './nav-system/useNavConfig';
+import { useFavorites } from '../hooks/useFavorites';
+import { usePinnedPages } from '../hooks/usePinnedPages';
 
 export function Sidebar({ open, onClose, compact = false, onToggleCompact }) {
   const location = useLocation();
@@ -12,7 +14,26 @@ export function Sidebar({ open, onClose, compact = false, onToggleCompact }) {
   const [profile, setProfile] = useState(() => store.get('profile') || DEFAULT_PROFILE);
   const [navConfig] = useNavConfig();
   const [showNotes, setShowNotes] = useState(false);
+  const [showQuickAccess, setShowQuickAccess] = useState(true);
+  const { favorites } = useFavorites();
+  const { pinnedPages } = usePinnedPages();
   const canSeeCrBoard = !!profile.isCR && navConfig.cr_board_enabled;
+
+  const getPageLabel = (path) => {
+    for (const section of NAV) {
+      const item = section.items.find(i => i.path === path);
+      if (item) return item.label;
+    }
+    return path === '/' ? 'Dashboard' : path;
+  };
+
+  const getPageIcon = (path) => {
+    for (const section of NAV) {
+      const item = section.items.find(i => i.path === path);
+      if (item) return Icons[item.icon] || Icons.Circle;
+    }
+    return Icons.Circle;
+  };
 
   useEffect(() => {
     const storedNotes = store.get('notes') || [];
@@ -97,6 +118,155 @@ export function Sidebar({ open, onClose, compact = false, onToggleCompact }) {
             </Link>
           )}
         </div>
+
+        {/* Quick Access Section */}
+        {!compact && (pinnedPages.length > 0 || favorites.length > 0) && (
+          <div style={{ padding: '12px 14px', borderTop: '1px solid var(--border)', borderBottom: '1px solid var(--border)' }}>
+            <button
+              onClick={() => setShowQuickAccess(!showQuickAccess)}
+              style={{
+                width: '100%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                background: 'transparent',
+                border: 'none',
+                cursor: 'pointer',
+                color: 'var(--text)',
+                fontSize: 12,
+                fontWeight: 600,
+                padding: '8px 0',
+              }}
+            >
+              <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                <Icons.Zap size={14} style={{ color: 'var(--accent)' }} />
+                Quick Access
+              </span>
+              <Icons.ChevronDown size={14} style={{ transform: showQuickAccess ? 'rotate(180deg)' : 'rotate(0)', transition: 'transform 0.2s' }} />
+            </button>
+
+            {showQuickAccess && (
+              <div style={{ marginTop: 8, paddingTop: 8, borderTop: '1px solid var(--border)', fontSize: 12 }}>
+                {pinnedPages.length > 0 && (
+                  <div style={{ marginBottom: 12 }}>
+                    <div style={{ fontSize: 10, fontWeight: 600, color: 'var(--muted)', marginBottom: 6, textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: 4 }}>
+                      <Icons.Pin size={10} /> Pinned
+                    </div>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+                      {pinnedPages.slice(0, 3).map(path => {
+                        const Icon = getPageIcon(path);
+                        return (
+                          <Link
+                            key={path}
+                            to={path}
+                            onClick={onClose}
+                            style={{
+                              padding: '6px 8px',
+                              borderRadius: 4,
+                              background: 'var(--bg-secondary)',
+                              border: '1px solid var(--border)',
+                              textDecoration: 'none',
+                              color: 'var(--text)',
+                              fontSize: 11,
+                              overflow: 'hidden',
+                              textOverflow: 'ellipsis',
+                              whiteSpace: 'nowrap',
+                              display: 'flex',
+                              alignItems: 'center',
+                              gap: 6,
+                              transition: 'all 0.2s',
+                            }}
+                            onMouseEnter={(e) => e.currentTarget.style.borderColor = 'var(--accent)'}
+                            onMouseLeave={(e) => e.currentTarget.style.borderColor = 'var(--border)'}
+                          >
+                            <Icon size={12} style={{ flexShrink: 0 }} />
+                            <span style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                              {getPageLabel(path)}
+                            </span>
+                          </Link>
+                        );
+                      })}
+                      {pinnedPages.length > 3 && (
+                        <div style={{ fontSize: 10, color: 'var(--muted)', padding: '4px 0' }}>
+                          +{pinnedPages.length - 3} more
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {favorites.length > 0 && (
+                  <div style={{ marginBottom: 12 }}>
+                    <div style={{ fontSize: 10, fontWeight: 600, color: 'var(--muted)', marginBottom: 6, textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: 4 }}>
+                      <Icons.Star size={10} /> Favorites
+                    </div>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+                      {favorites.slice(0, 3).map(path => {
+                        const Icon = getPageIcon(path);
+                        return (
+                          <Link
+                            key={path}
+                            to={path}
+                            onClick={onClose}
+                            style={{
+                              padding: '6px 8px',
+                              borderRadius: 4,
+                              background: 'var(--bg-secondary)',
+                              border: '1px solid var(--border)',
+                              textDecoration: 'none',
+                              color: 'var(--text)',
+                              fontSize: 11,
+                              overflow: 'hidden',
+                              textOverflow: 'ellipsis',
+                              whiteSpace: 'nowrap',
+                              display: 'flex',
+                              alignItems: 'center',
+                              gap: 6,
+                              transition: 'all 0.2s',
+                            }}
+                            onMouseEnter={(e) => e.currentTarget.style.borderColor = '#fbbf24'}
+                            onMouseLeave={(e) => e.currentTarget.style.borderColor = 'var(--border)'}
+                          >
+                            <Icons.Star size={12} style={{ flexShrink: 0, color: '#fbbf24' }} />
+                            <span style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                              {getPageLabel(path)}
+                            </span>
+                          </Link>
+                        );
+                      })}
+                      {favorites.length > 3 && (
+                        <div style={{ fontSize: 10, color: 'var(--muted)', padding: '4px 0' }}>
+                          +{favorites.length - 3} more
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                <Link
+                  to="/quick-access"
+                  onClick={() => {
+                    onClose();
+                    setShowQuickAccess(false);
+                  }}
+                  style={{
+                    display: 'block',
+                    padding: '8px 0',
+                    color: 'var(--accent)',
+                    textDecoration: 'none',
+                    fontSize: 11,
+                    fontWeight: 600,
+                    marginTop: 8,
+                    borderTop: '1px solid var(--border)',
+                    paddingTop: 10,
+                  }}
+                >
+                  View All Pages →
+                </Link>
+              </div>
+            )}
+          </div>
+        )}
 
         {/* Nav groups */}
         <nav style={{ flex: 1, overflowY: 'auto', padding: '8px 10px 16px' }}>

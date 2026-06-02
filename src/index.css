@@ -2642,6 +2642,52 @@ h3 { font-size: 15px; font-weight: 600; }
   backdrop-filter: blur(10px);
 }
 
+/* Generic KUETx dialog styles for backup reminder and confirmations */
+.kuetx-dialog-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 2500;
+  display: grid;
+  place-items: center;
+  padding: 18px;
+  background: rgba(15, 23, 42, 0.54);
+  backdrop-filter: blur(10px);
+}
+
+.kuetx-dialog-card {
+  width: min(560px, 100%);
+  max-height: min(86vh, 760px);
+  overflow: auto;
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 30px 90px rgba(15, 23, 42, 0.22);
+  padding: 22px 20px;
+}
+
+.kuetx-dialog-title {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 14px;
+  color: var(--text);
+}
+
+.kuetx-dialog-body {
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text);
+  margin-bottom: 22px;
+  white-space: pre-wrap;
+}
+
+.kuetx-dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
 .qb2-modal {
   width: min(560px, 100%);
   max-height: min(86vh, 860px);

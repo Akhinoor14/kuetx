@@ -835,6 +835,8 @@ export default function Attendance() {
     return () => window.removeEventListener('kuetx:store-updated', refresh);
   }, []);
 
+  // (removed) previously synced term holidays via ctQuizStore; no-op now
+
   const toggleCombined = () => {
     const next = !combinedMode;
     setCombinedMode(next);

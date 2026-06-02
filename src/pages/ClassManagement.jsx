@@ -145,6 +145,8 @@ export default function ClassManagement() {
     return () => window.removeEventListener('kuetx:store-updated', handleStoreUpdate);
   }, []);
 
+  // (removed) holiday sync via ctQuizStore — no-op
+
   useEffect(() => {
     if (!currentTermKey) return;
 
@@ -419,7 +421,7 @@ export default function ClassManagement() {
               </div>
             </div>
 
-            <div className="class-management-day-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(90px, 1fr))', gap: 8 }}>
+            <div className="class-management-day-grid single-row" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(90px, 1fr))', gap: 8 }}>
               {ROUTINE_DAYS.map(day => {
                 const count = routineEntriesByDay[day]?.length || 0;
                 const isActive = selectedRoutineDay === day;
