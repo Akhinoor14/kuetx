@@ -166,7 +166,6 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
 
   const autoCalculatedBatch = extractBatchFromRoll(form.studentId);
   const autoCalculatedDept = extractDeptCodeFromRoll(form.studentId);
-  const selectedDept = form.dept || autoCalculatedDept;
 
   const validateStep = (index) => {
     const stepFields = requiredFieldMap[index] || [];
@@ -299,7 +298,7 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
                 </div>
                 <div>
                   <label style={labelStyle}>Department</label>
-                  <select value={selectedDept} onChange={(e) => setForm(prev => ({ ...prev, dept: e.target.value }))} style={fieldStyle}>
+                  <select value={form.dept || ''} onChange={(e) => setForm(prev => ({ ...prev, dept: e.target.value }))} style={fieldStyle}>
                     <option value="">Select department</option>
                     {DEPARTMENTS.map(dept => (
                       <option key={dept.code} value={dept.code}>{dept.code} - {dept.name}</option>
@@ -307,7 +306,7 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
                   </select>
                   {autoCalculatedDept && !form.dept && (
                     <div style={{ fontSize: 11, color: 'var(--accent)', marginTop: 6, fontWeight: 700 }}>
-                      Auto-detected from ID: {autoCalculatedDept}
+                      Auto-detected from ID: {autoCalculatedDept}. It will be used if you leave this blank.
                     </div>
                   )}
                   {!autoCalculatedDept && (
