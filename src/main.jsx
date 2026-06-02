@@ -4,6 +4,7 @@ import App from './App.jsx'
 import './index.css'
 // FullCalendar styles are provided via a local fallback in index.html (public/vendor/fullcalendar-fallback.css)
 import { store, ensureDBReady } from './store/store.js'
+import { getAllCourses } from './store/curriculumStore.js'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
@@ -17,11 +18,7 @@ ensureDBReady().catch(console.error);
 // Pre-warm heavy selectors in idle time to keep page transitions instant
 const warmup = () => {
   const run = () => {
-    import('./store/curriculumStore.js')
-      .then(({ getAllCourses }) => {
-        try { getAllCourses(store.get('profile') || {}); } catch {}
-      })
-      .catch(() => {});
+    try { getAllCourses(store.get('profile') || {}); } catch {}
   };
 
   if (typeof window !== 'undefined' && 'requestIdleCallback' in window) {

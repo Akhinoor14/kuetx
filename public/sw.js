@@ -32,6 +32,9 @@ self.addEventListener('fetch', (e) => {
   if (e.request.method !== 'GET') return;
   if (!e.request.url.startsWith('http')) return;
 
+  const acceptsHtml = e.request.headers.get('accept')?.includes('text/html');
+  const isNavigation = e.request.mode === 'navigate' || acceptsHtml;
+
   e.respondWith(
     fetch(e.request)
       .then(res => {
@@ -46,7 +49,8 @@ self.addEventListener('fetch', (e) => {
         return caches.match(e.request)
           .then(cached => {
             if (cached) return cached;
-            return caches.match('/index.html');
+            if (isNavigation) return caches.match('/index.html');
+            return null;
           })
           .then(fallback => {
             if (fallback) return fallback;

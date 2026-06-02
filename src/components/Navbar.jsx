@@ -5,6 +5,7 @@ import { useLocation, Link } from 'react-router-dom';
 import { NAV } from '../nav';
 import { Wordmark } from './Logo';
 import { getProfile } from '../store/store';
+import * as alertApi from '../lib/alertUtils';
 import { NotificationPanel } from './NotificationPanel';
 
 function getPageMeta(pathname) {
@@ -23,22 +24,11 @@ export function Navbar({ onMenuClick }) {
   const { label, group } = getPageMeta(location.pathname);
   const [notificationOpen, setNotificationOpen] = useState(false);
   const [refreshTick, setRefreshTick] = useState(0);
-  const [alertApi, setAlertApi] = useState(null);
 
   useEffect(() => {
     const handleStoreUpdate = () => setRefreshTick(t => t + 1);
     window.addEventListener('kuetx:store-updated', handleStoreUpdate);
     return () => window.removeEventListener('kuetx:store-updated', handleStoreUpdate);
-  }, []);
-
-  useEffect(() => {
-    let cancelled = false;
-    import('../lib/alertUtils').then(module => {
-      if (!cancelled) setAlertApi(module);
-    });
-    return () => {
-      cancelled = true;
-    };
   }, []);
 
   const cycleTheme = () => {
@@ -49,16 +39,14 @@ export function Navbar({ onMenuClick }) {
   const ThemeIcon = themeId === 'dark' ? Moon : themeId === 'milky' ? Droplets : Sun;
   const themeLabel = { light: 'Light', milky: 'Milky', dark: 'Dark' }[themeId];
 
-  const dismissedIds = useMemo(() => (alertApi ? alertApi.getDismissedAlertIds() : new Set()), [alertApi, refreshTick]);
+  const dismissedIds = useMemo(() => alertApi.getDismissedAlertIds(), [refreshTick]);
   const alertCounts = useMemo(() => (
-    alertApi
-      ? alertApi.decorateAlerts(alertApi.computeAlerts(getProfile()), dismissedIds)
-      : { critical: [], warnings: [], positives: [], assignmentAlerts: [] }
-  ), [alertApi, dismissedIds, refreshTick]);
-  const unreadCritical = alertApi ? alertApi.filterUnreadAlerts(alertCounts.critical, dismissedIds) : [];
-  const unreadWarnings = alertApi ? alertApi.filterUnreadAlerts(alertCounts.warnings, dismissedIds) : [];
-  const unreadPositives = alertApi ? alertApi.filterUnreadAlerts(alertCounts.positives, dismissedIds) : [];
-  const unreadAssignments = alertApi ? alertApi.filterUnreadAlerts(alertCounts.assignmentAlerts, dismissedIds) : [];
+    alertApi.decorateAlerts(alertApi.computeAlerts(getProfile()), dismissedIds)
+  ), [dismissedIds, refreshTick]);
+  const unreadCritical = alertApi.filterUnreadAlerts(alertCounts.critical, dismissedIds);
+  const unreadWarnings = alertApi.filterUnreadAlerts(alertCounts.warnings, dismissedIds);
+  const unreadPositives = alertApi.filterUnreadAlerts(alertCounts.positives, dismissedIds);
+  const unreadAssignments = alertApi.filterUnreadAlerts(alertCounts.assignmentAlerts, dismissedIds);
   const alertCount = unreadCritical.length + unreadWarnings.length + unreadPositives.length + unreadAssignments.length;
 
   return (

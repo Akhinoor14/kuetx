@@ -2,6 +2,7 @@ import { X } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useEffect, useMemo, useState } from 'react';
 import { getProfile } from '../store/store';
+import * as alertApi from '../lib/alertUtils';
 
 const tone = (color) => {
   if (color === 'var(--danger)') return { bg: 'var(--dangerBg)', border: 'color-mix(in srgb, var(--danger) 28%, var(--border))', iconBg: 'rgba(248, 113, 113, 0.14)' };
@@ -12,7 +13,6 @@ const tone = (color) => {
 export function NotificationPanel({ isOpen, onClose }) {
   const profile = getProfile();
   const [refreshTick, setRefreshTick] = useState(0);
-  const [alertApi, setAlertApi] = useState(null);
 
   useEffect(() => {
     const handle = () => setRefreshTick(t => t + 1);
@@ -20,26 +20,12 @@ export function NotificationPanel({ isOpen, onClose }) {
     return () => window.removeEventListener('kuetx:store-updated', handle);
   }, []);
 
-  useEffect(() => {
-    let cancelled = false;
-    import('../lib/alertUtils').then(module => {
-      if (!cancelled) setAlertApi(module);
-    });
-    return () => {
-      cancelled = true;
-    };
-  }, []);
-
-  const dismissedIds = useMemo(() => (alertApi ? alertApi.getDismissedAlertIds() : new Set()), [alertApi, refreshTick]);
-  const grouped = useMemo(() => (
-    alertApi
-      ? alertApi.decorateAlerts(alertApi.computeAlerts(profile), dismissedIds)
-      : { critical: [], warnings: [], positives: [], assignmentAlerts: [] }
-  ), [profile, refreshTick, dismissedIds, alertApi]);
-  const critical = alertApi ? alertApi.filterUnreadAlerts(grouped.critical, dismissedIds) : [];
-  const warnings = alertApi ? alertApi.filterUnreadAlerts(grouped.warnings, dismissedIds) : [];
-  const positives = alertApi ? alertApi.filterUnreadAlerts(grouped.positives, dismissedIds) : [];
-  const assignmentAlerts = alertApi ? alertApi.filterUnreadAlerts(grouped.assignmentAlerts, dismissedIds) : [];
+  const dismissedIds = useMemo(() => alertApi.getDismissedAlertIds(), [refreshTick]);
+  const grouped = useMemo(() => alertApi.decorateAlerts(alertApi.computeAlerts(profile), dismissedIds), [profile, refreshTick, dismissedIds]);
+  const critical = alertApi.filterUnreadAlerts(grouped.critical, dismissedIds);
+  const warnings = alertApi.filterUnreadAlerts(grouped.warnings, dismissedIds);
+  const positives = alertApi.filterUnreadAlerts(grouped.positives, dismissedIds);
+  const assignmentAlerts = alertApi.filterUnreadAlerts(grouped.assignmentAlerts, dismissedIds);
 
   const assignmentCounts = {
     overdue: assignmentAlerts.filter(a => a.priority === 'overdue').length,
