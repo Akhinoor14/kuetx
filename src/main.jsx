@@ -10,8 +10,14 @@ import { getAllCourses } from './store/curriculumStore.js'
 // Initialize app after DB is ready
 async function initializeApp() {
   try {
-    // Await DB initialization BEFORE rendering React
-    await ensureDBReady();
+    // Await DB initialization but don't block the UI for too long.
+    // If the user's IndexedDB is very large, waiting indefinitely causes a blank page.
+    // Race the DB init against a short timeout so the app renders quickly.
+    const dbInit = ensureDBReady();
+    const timeout = new Promise((resolve) => setTimeout(resolve, 2000));
+    await Promise.race([dbInit, timeout]);
+    // Allow any later DB init errors to be logged without blocking render
+    dbInit.catch(err => console.error('[KUETx] ensureDBReady error:', err));
   } catch (err) {
     console.error('[KUETx] Initialization error:', err);
     // Continue even if DB fails - app can still work with localStorage only
