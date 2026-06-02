@@ -13,7 +13,14 @@ import {
 } from '../lib/plannerUtils';
 
 const TERM_KEY_RE = /^Y\dT\d$/;
-const ROUTINE_DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday'];
+const ROUTINE_DAY_DEFS = [
+  { key: 'Sunday', label: 'Sun' },
+  { key: 'Monday', label: 'Mon' },
+  { key: 'Tuesday', label: 'Tue' },
+  { key: 'Wednesday', label: 'Wed' },
+  { key: 'Thursday', label: 'Thu' },
+];
+const ROUTINE_DAY_KEYS = ROUTINE_DAY_DEFS.map(d => d.key);
 
 export default function ClassManagement() {
   const profile = getProfile();
@@ -29,8 +36,8 @@ export default function ClassManagement() {
   const [plannerState, setPlannerState] = useState(() => store.get('classManagementPlans') || {});
   const [activeTab, setActiveTab] = useState('routine');
   const [selectedRoutineDay, setSelectedRoutineDay] = useState(() => {
-    const today = ROUTINE_DAYS[new Date().getDay()];
-    return today || 'Sunday';
+    const todayKey = ROUTINE_DAY_KEYS[new Date().getDay()];
+    return todayKey || 'Sunday';
   });
   const [viewMode, setViewMode] = useState(() => store.get('classManagementPlannerMode') || 'automatic');
   const [courseTeacherDialogState, setCourseTeacherDialogState] = useState({ open: false, courseId: '' });
@@ -64,18 +71,19 @@ export default function ClassManagement() {
   }, [schedule, currentTermCourses]);
 
   const routineEntriesByDay = useMemo(() => {
-    const next = ROUTINE_DAYS.reduce((acc, day) => ({ ...acc, [day]: [] }), {});
+    const next = ROUTINE_DAY_KEYS.reduce((acc, day) => ({ ...acc, [day]: [] }), {});
     currentTermScheduleEntries.forEach(entry => {
       if (!next[entry.day]) return;
       next[entry.day].push(entry);
     });
-    ROUTINE_DAYS.forEach(day => {
+    ROUTINE_DAY_KEYS.forEach(day => {
       next[day] = next[day].slice().sort((a, b) => String(a.slot || '').localeCompare(String(b.slot || '')));
     });
     return next;
   }, [currentTermScheduleEntries]);
 
   const selectedRoutineEntries = routineEntriesByDay[selectedRoutineDay] || [];
+  const selectedRoutineLabel = ROUTINE_DAY_DEFS.find(d => d.key === selectedRoutineDay)?.key || selectedRoutineDay;
   const assignedTeacherCount = useMemo(() => {
     const teacherNames = new Set();
     currentTermCourses.forEach(course => {
@@ -92,7 +100,7 @@ export default function ClassManagement() {
 
   useEffect(() => {
     if (selectedRoutineEntries.length > 0) return;
-    const firstDayWithEntries = ROUTINE_DAYS.find(day => (routineEntriesByDay[day] || []).length > 0);
+    const firstDayWithEntries = ROUTINE_DAY_KEYS.find(day => (routineEntriesByDay[day] || []).length > 0);
     if (firstDayWithEntries && firstDayWithEntries !== selectedRoutineDay) {
       setSelectedRoutineDay(firstDayWithEntries);
     }
@@ -325,6 +333,7 @@ export default function ClassManagement() {
   };
 
   const openTeacherDialog = (courseId) => setCourseTeacherDialogState({ open: true, courseId });
+  const openCourseTeacherDialog = openTeacherDialog; // Alias for planner code
   const handleCourseTeacherDialogClose = () => setCourseTeacherDialogState({ open: false, courseId: '' });
   const handleCourseTeacherDialogSave = (teachersList) => {
     const courseId = courseTeacherDialogState.courseId;
@@ -356,11 +365,11 @@ export default function ClassManagement() {
           </div>
         </div>
         <div className="class-management-hero-actions">
-          <div className="class-management-tab-group" role="tablist" aria-label="Class management views">
+          <div className="class-management-mode-switch" role="tablist" aria-label="Class management views">
             <button
               type="button"
               onClick={loadRoutineFromStore}
-              className={activeTab === 'routine' ? 'class-management-tab is-active' : 'class-management-tab'}
+              className={activeTab === 'routine' ? 'class-management-mode-button is-active' : 'class-management-mode-button'}
               aria-pressed={activeTab === 'routine'}
             >
               Routine
@@ -368,7 +377,7 @@ export default function ClassManagement() {
             <button
               type="button"
               onClick={loadPlannerFromStore}
-              className={activeTab === 'planner' ? 'class-management-tab is-active' : 'class-management-tab'}
+              className={activeTab === 'planner' ? 'class-management-mode-button is-active' : 'class-management-mode-button'}
               aria-pressed={activeTab === 'planner'}
             >
               Class Planner
@@ -379,104 +388,115 @@ export default function ClassManagement() {
 
       <div style={{ display: 'grid', gap: 14 }}>
         {activeTab === 'routine' && (
-          <div className="card class-management-routine-card" style={{ padding: 18, display: 'grid', gap: 16, background: 'linear-gradient(180deg, rgba(59,130,246,0.05), rgba(16,185,129,0.03))' }}>
-            <div className="class-management-routine-top" style={{ display: 'flex', justifyContent: 'space-between', gap: 12, alignItems: 'stretch', flexWrap: 'wrap' }}>
-              <div style={{ minWidth: 0, flex: 1 }}>
-                <div className="class-management-section-label" style={{ letterSpacing: '0.12em' }}>Routine Snapshot</div>
-                <div className="class-management-section-title" style={{ fontSize: 26, lineHeight: 1.08 }}>Professional Class Routine Management</div>
-                <div className="class-management-section-copy" style={{ maxWidth: 620 }}>Effortlessly manage and share your class routine. Export backups, communicate schedules, and maintain complete control over all CR responsibilities.</div>
-              </div>
-
-              <div className="class-management-routine-actions" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(100px, 1fr))', gap: 8, width: '100%', alignSelf: 'center', maxWidth: 'none' }}>
-                <button type="button" title="Copy WhatsApp routine" className="btn" onClick={copyRoutineForSelectedDay} style={{ minWidth: 0, justifyContent: 'center', height: 40, borderRadius: 999, fontSize: '13px', background: '#25D366', color: 'white', border: 'none', fontWeight: 600, boxShadow: '0 4px 12px rgba(37, 211, 102, 0.25)', transition: 'all 0.2s' }}>
-                  <Copy size={13} /> WhatsApp
+          <div>
+            <div className="card class-management-actions-card" style={{ padding: 16, borderRadius: 22, border: '1px solid rgba(15,23,42,0.08)', background: 'rgba(255,255,255,0.94)', boxShadow: '0 30px 70px rgba(15,23,42,0.08)' }}>
+              <div className="class-management-actions-grid" style={{ display: 'flex', gap: 12, flexWrap: 'nowrap', overflowX: 'auto', width: '100%' }}>
+                <button type="button" title="Copy WhatsApp routine" className="btn class-management-action-btn btn-whatsapp" onClick={copyRoutineForSelectedDay}>
+                  <Copy size={16} /> WhatsApp
                 </button>
-                <button type="button" title="Export routine backup" className="btn" onClick={exportRoutineBackup} style={{ minWidth: 0, justifyContent: 'center', height: 40, borderRadius: 999, fontSize: '13px', background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)', color: 'white', border: 'none', fontWeight: 600, boxShadow: '0 4px 12px rgba(102, 126, 234, 0.25)', transition: 'all 0.2s' }}>
-                  <Download size={13} /> Export
+                <button type="button" title="Export routine backup" className="btn class-management-action-btn btn-export" onClick={exportRoutineBackup}>
+                  <Download size={16} /> Export
                 </button>
-                <Link to="/schedule" title="Open full schedule" className="btn btn-primary" style={{ minWidth: 0, justifyContent: 'center', height: 40, borderRadius: 999, textDecoration: 'none', fontSize: '13px', fontWeight: 600 }}>
+                <Link to="/schedule" title="Open full schedule" className="btn class-management-action-btn btn-schedule">
                   Open Schedule
                 </Link>
               </div>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: 10 }}>
-              <div style={{ padding: 14, borderRadius: 16, border: '1px solid rgba(59,130,246,0.16)', background: 'rgba(255,255,255,0.72)', boxShadow: '0 10px 24px rgba(15,23,42,0.04)' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 11, color: 'var(--muted)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em' }}>
-                  <Clock3 size={14} /> Routine days
-                </div>
-                <div style={{ fontSize: 30, fontWeight: 900, marginTop: 8, letterSpacing: '-0.05em' }}>{ROUTINE_DAYS.length}</div>
-              </div>
-              <div style={{ padding: 14, borderRadius: 16, border: '1px solid rgba(16,185,129,0.16)', background: 'rgba(255,255,255,0.72)', boxShadow: '0 10px 24px rgba(15,23,42,0.04)' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 11, color: 'var(--muted)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em' }}>
-                  <CalendarDays size={14} /> Logged classes
-                </div>
-                <div style={{ fontSize: 30, fontWeight: 900, marginTop: 8, letterSpacing: '-0.05em' }}>{currentTermScheduleEntries.length}</div>
-              </div>
-              <div style={{ padding: 14, borderRadius: 16, border: '1px solid rgba(124,58,237,0.16)', background: 'rgba(255,255,255,0.72)', boxShadow: '0 10px 24px rgba(15,23,42,0.04)' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 11, color: 'var(--muted)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em' }}>
-                  <Users size={14} /> Assigned teachers
-                </div>
-                <div style={{ fontSize: 30, fontWeight: 900, marginTop: 8, letterSpacing: '-0.05em' }}>{assignedTeacherCount}</div>
-              </div>
-            </div>
-
-            <div className="class-management-day-grid single-row" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(90px, 1fr))', gap: 8 }}>
-              {ROUTINE_DAYS.map(day => {
-                const count = routineEntriesByDay[day]?.length || 0;
-                const isActive = selectedRoutineDay === day;
-                return (
-                  <button
-                    key={day}
-                    type="button"
-                    onClick={() => setSelectedRoutineDay(day)}
-                    className={isActive ? 'btn btn-primary' : 'btn btn-ghost'}
-                    style={{ width: '100%', justifyContent: 'space-between', paddingLeft: 14, paddingRight: 14, height: 46, borderRadius: 14, boxShadow: isActive ? '0 12px 26px rgba(59,130,246,0.20)' : 'none', whiteSpace: 'nowrap' }}
-                  >
-                    <span>{day}</span>
-                    <span style={{ fontSize: 11, opacity: 0.9, minWidth: 18, textAlign: 'right' }}>{count}</span>
-                  </button>
-                );
-              })}
-            </div>
-
-            <div style={{ display: 'grid', gap: 10 }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, alignItems: 'center', flexWrap: 'wrap' }}>
-                <div>
-                  <div style={{ fontSize: 15, fontWeight: 900 }}>{selectedRoutineDay}</div>
-                  <div style={{ fontSize: 12, color: 'var(--muted)' }}>{selectedRoutineEntries.length} class{selectedRoutineEntries.length === 1 ? '' : 'es'} shown for the day.</div>
-                </div>
-                <div className="class-management-meta-row" style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-                  <div className="class-management-meta-chip">{currentTermScheduledCourseCount} courses</div>
-                  <div className="class-management-meta-chip">CR view</div>
+            <div className="card class-management-routine-card" style={{ padding: 20, display: 'grid', gap: 18, borderRadius: 22, border: '1px solid rgba(15,23,42,0.08)', background: 'rgba(255,255,255,0.94)', boxShadow: '0 30px 70px rgba(15,23,42,0.08)' }}>
+              <div className="class-management-routine-top" style={{ display: 'flex', justifyContent: 'space-between', gap: 12, alignItems: 'stretch', flexWrap: 'wrap' }}>
+                <div style={{ minWidth: 0, flex: 1 }}>
+                  <div className="class-management-section-label" style={{ letterSpacing: '0.12em' }}>Routine Snapshot</div>
+                  <div className="class-management-section-title" style={{ fontSize: 26, lineHeight: 1.08 }}>Professional Class Routine Management</div>
+                  <div className="class-management-section-copy" style={{ maxWidth: 620 }}>Effortlessly manage and share your class routine. Export backups, communicate schedules, and maintain complete control over all CR responsibilities.</div>
                 </div>
               </div>
 
-              {selectedRoutineEntries.length === 0 ? (
-                <div style={{ padding: 16, borderRadius: 14, border: '1px dashed var(--border)', background: 'var(--bg)', color: 'var(--muted)', fontSize: 13 }}>
-                  No routine entries for {selectedRoutineDay}.
+              <div className="class-management-stats-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10 }}>
+                <div style={{ padding: 14, borderRadius: 16, border: '1px solid rgba(59,130,246,0.16)', background: 'rgba(249,250,251,0.92)', boxShadow: '0 10px 24px rgba(15,23,42,0.04)' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 11, color: 'var(--muted)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+                    <Clock3 size={14} /> Days
+                  </div>
+                  <div style={{ fontSize: 30, fontWeight: 900, marginTop: 8, letterSpacing: '-0.05em' }}>{ROUTINE_DAY_DEFS.length}</div>
                 </div>
-              ) : (
-                <div style={{ display: 'grid', gap: 10 }}>
-                  {selectedRoutineEntries.map(entry => {
-                    const course = courseMap.get(entry.courseId);
+                <div style={{ padding: 14, borderRadius: 16, border: '1px solid rgba(16,185,129,0.16)', background: 'rgba(249,250,251,0.92)', boxShadow: '0 10px 24px rgba(15,23,42,0.04)' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 11, color: 'var(--muted)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+                    <CalendarDays size={14} /> Classes
+                  </div>
+                  <div style={{ fontSize: 30, fontWeight: 900, marginTop: 8, letterSpacing: '-0.05em' }}>{currentTermScheduleEntries.length}</div>
+                </div>
+                <div style={{ padding: 14, borderRadius: 16, border: '1px solid rgba(124,58,237,0.16)', background: 'rgba(249,250,251,0.92)', boxShadow: '0 10px 24px rgba(15,23,42,0.04)' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 11, color: 'var(--muted)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em' }}>
+                    <Users size={14} /> Teachers
+                  </div>
+                  <div style={{ fontSize: 30, fontWeight: 900, marginTop: 8, letterSpacing: '-0.05em' }}>{assignedTeacherCount}</div>
+                </div>
+              </div>
+
+              <div style={{ display: 'grid', gap: 10 }}>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, alignItems: 'center', justifyContent: 'space-between', padding: '0 4px', borderBottom: '1px solid rgba(15,23,42,0.08)' }}>
+                  <div style={{ fontSize: 12, color: 'var(--muted)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.12em' }}>Daily Routine</div>
+                  <div style={{ fontSize: 12, color: 'var(--muted)', fontWeight: 700 }}>{selectedRoutineLabel}</div>
+                </div>
+
+                <div className="class-management-day-grid single-row" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(90px, 1fr))', gap: 10, marginTop: 4 }}>
+                  {ROUTINE_DAY_DEFS.map(def => {
+                    const count = routineEntriesByDay[def.key]?.length || 0;
+                    const isActive = selectedRoutineDay === def.key;
                     return (
-                      <div key={entry.id} style={{ display: 'flex', justifyContent: 'space-between', gap: 12, alignItems: 'flex-start', padding: 14, borderRadius: 14, border: '1px solid var(--border)', background: 'linear-gradient(180deg, var(--surface), var(--bg))' }}>
-                        <div style={{ minWidth: 0, flex: 1 }}>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap', marginBottom: 6 }}>
-                            <div style={{ fontSize: 13, fontWeight: 900 }}>{formatRoutineSlot(entry.slot)}</div>
-                            <span className="tag tag-blue">{course?.code || 'Unknown course'}</span>
-                          </div>
-                          <div style={{ fontSize: 14, fontWeight: 800, color: 'var(--text)' }}>{entry.displayName || course?.name || course?.code || 'Unknown Course'}</div>
-                          <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 4 }}>
-                            {entry.teacherName || 'Teacher not set'}{entry.room ? ` · Room ${entry.room}` : ''}{entry.type ? ` · ${entry.type}` : ''}
-                          </div>
-                        </div>
-                      </div>
+                      <button
+                        key={def.key}
+                        type="button"
+                        onClick={() => setSelectedRoutineDay(def.key)}
+                        className={`btn class-management-day-button ${isActive ? 'active' : 'btn-ghost'}`}
+                        style={{ width: '100%', justifyContent: 'space-between', paddingLeft: 14, paddingRight: 14, height: 48, whiteSpace: 'nowrap' }}
+                      >
+                        <span>{def.label}</span>
+                        <span style={{ fontSize: 11, opacity: 0.85, minWidth: 18, textAlign: 'right' }}>{count}</span>
+                      </button>
                     );
                   })}
                 </div>
-              )}
+
+                <div style={{ display: 'grid', gap: 10 }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, alignItems: 'center', flexWrap: 'wrap' }}>
+                    <div>
+                      <div style={{ fontSize: 15, fontWeight: 900 }}>{selectedRoutineLabel}</div>
+                      <div style={{ fontSize: 12, color: 'var(--muted)' }}>{selectedRoutineEntries.length} class{selectedRoutineEntries.length === 1 ? '' : 'es'} shown for the day.</div>
+                    </div>
+                    <div className="class-management-meta-row" style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+                      <div className="class-management-meta-chip">{currentTermScheduledCourseCount} courses</div>
+                      <div className="class-management-meta-chip">CR view</div>
+                    </div>
+                  </div>
+
+                  {selectedRoutineEntries.length === 0 ? (
+                    <div style={{ padding: 16, borderRadius: 14, border: '1px dashed rgba(15,23,42,0.12)', background: 'rgba(248,250,252,0.9)', color: 'var(--muted)', fontSize: 13 }}>
+                      No routine entries for {selectedRoutineLabel}.
+                    </div>
+                  ) : (
+                    <div style={{ display: 'grid', gap: 10 }}>
+                      {selectedRoutineEntries.map(entry => {
+                        const course = courseMap.get(entry.courseId);
+                        return (
+                          <div key={entry.id} style={{ display: 'flex', justifyContent: 'space-between', gap: 12, alignItems: 'flex-start', padding: 14, borderRadius: 14, border: '1px solid var(--border)', background: 'linear-gradient(180deg, var(--surface), var(--bg))' }}>
+                            <div style={{ minWidth: 0, flex: 1 }}>
+                              <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap', marginBottom: 6 }}>
+                                <div style={{ fontSize: 13, fontWeight: 900 }}>{formatRoutineSlot(entry.slot)}</div>
+                                <span className="tag tag-blue">{course?.code || 'Unknown course'}</span>
+                              </div>
+                              <div style={{ fontSize: 14, fontWeight: 800, color: 'var(--text)' }}>{entry.displayName || course?.name || course?.code || 'Unknown Course'}</div>
+                              <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 4 }}>
+                                {entry.teacherName || 'Teacher not set'}{entry.room ? ` · Room ${entry.room}` : ''}{entry.type ? ` · ${entry.type}` : ''}
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+              </div>
             </div>
           </div>
         )}
