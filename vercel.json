@@ -1,6 +1,9 @@
 {
-  "routes": [
-    { "src": "^/(.*\\..+)$", "dest": "/$1" },
-    { "src": "/.*", "dest": "/index.html" }
+  "buildCommand": "npm run build",
+  "outputDirectory": "dist",
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/index.html" }
   ]
 }
+
+
