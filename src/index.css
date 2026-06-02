@@ -6998,6 +6998,11 @@ input[type="range"]::-webkit-slider-thumb {
   margin-bottom: 2px;
 }
 
+.pwa-hint-steps {
+  display: grid;
+  gap: 10px;
+}
+
 .pwa-hint-step {
   display: flex;
   align-items: flex-start;
@@ -7022,6 +7027,11 @@ input[type="range"]::-webkit-slider-thumb {
   margin-top: 1px;
 }
 
+.pwa-hint-text {
+  display: block;
+  color: var(--text);
+}
+
 .pwa-hint-text strong {
   color: var(--accent);
 }
@@ -7043,6 +7053,120 @@ input[type="range"]::-webkit-slider-thumb {
 .pwa-hint-dismiss:hover {
   background: rgba(255,255,255,1);
   border-color: rgba(var(--accentRGB), 0.16);
+  transform: translateY(-1px);
+}
+
+.pwa-dialog-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1450;
+  display: grid;
+  place-items: center;
+  padding: 18px;
+  background: rgba(15, 23, 42, 0.52);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.pwa-dialog-card {
+  width: min(92vw, 420px);
+  max-width: 420px;
+  border-radius: 22px;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  background: rgba(255, 255, 255, 0.98);
+  box-shadow: 0 28px 90px rgba(15, 23, 42, 0.18);
+  padding: 22px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.pwa-dialog-card-hint {
+  background: linear-gradient(180deg, rgba(248, 255, 250, 0.96), rgba(255, 255, 255, 0.98));
+}
+
+.pwa-dialog-kicker {
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.pwa-dialog-title {
+  font-size: 18px;
+  font-weight: 800;
+  line-height: 1.25;
+  color: var(--text);
+}
+
+.pwa-dialog-sub {
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.pwa-dialog-points {
+  display: grid;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.pwa-dialog-point {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 13px;
+  color: var(--text);
+  line-height: 1.5;
+}
+
+.pwa-dialog-point span:first-child {
+  color: var(--accent);
+  min-width: 16px;
+  line-height: 1;
+}
+
+.pwa-dialog-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.pwa-dialog-primary,
+.pwa-dialog-secondary,
+.pwa-dialog-ghost {
+  min-width: 90px;
+  border-radius: 12px;
+  padding: 10px 14px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.pwa-dialog-primary {
+  background: var(--accent);
+  color: var(--accentFg);
+  border: 1px solid transparent;
+}
+
+.pwa-dialog-secondary {
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+
+.pwa-dialog-ghost {
+  background: transparent;
+  color: var(--muted);
+  border: 1px solid transparent;
+}
+
+.pwa-dialog-primary:hover,
+.pwa-dialog-secondary:hover,
+.pwa-dialog-ghost:hover {
   transform: translateY(-1px);
 }
 

@@ -3,7 +3,7 @@ import { DEPARTMENTS, DEFAULT_PROFILE, TERM_KEYS, getTermLabelFromKey } from '..
 
 // Map dept codes: roll middle 2 digits -> dept code
 const ROLL_DEPT_MAP = {
-  '25': 'ARCH',
+  '25': 'Arch',
   '23': 'BECM',
   '15': 'BME',
   '01': 'CE',
@@ -166,6 +166,7 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
 
   const autoCalculatedBatch = extractBatchFromRoll(form.studentId);
   const autoCalculatedDept = extractDeptCodeFromRoll(form.studentId);
+  const selectedDept = form.dept || autoCalculatedDept;
 
   const validateStep = (index) => {
     const stepFields = requiredFieldMap[index] || [];
@@ -297,9 +298,23 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
                   {errors.studentId && <div style={{ fontSize: 11, color: '#dc2626', marginTop: 5 }}>{errors.studentId}</div>}
                 </div>
                 <div>
-                  <label style={labelStyle}>Department (auto)</label>
-                  <input value={autoCalculatedDept || ''} readOnly style={{ ...fieldStyle, background: 'var(--surfaceGlassStrong)' }} />
-                  {autoCalculatedDept && <div style={{ fontSize: 11, color: 'var(--accent)', marginTop: 6, fontWeight: 700 }}>Detected from ID: {autoCalculatedDept}</div>}
+                  <label style={labelStyle}>Department</label>
+                  <select value={selectedDept} onChange={(e) => setForm(prev => ({ ...prev, dept: e.target.value }))} style={fieldStyle}>
+                    <option value="">Select department</option>
+                    {DEPARTMENTS.map(dept => (
+                      <option key={dept.code} value={dept.code}>{dept.code} - {dept.name}</option>
+                    ))}
+                  </select>
+                  {autoCalculatedDept && !form.dept && (
+                    <div style={{ fontSize: 11, color: 'var(--accent)', marginTop: 6, fontWeight: 700 }}>
+                      Auto-detected from ID: {autoCalculatedDept}
+                    </div>
+                  )}
+                  {!autoCalculatedDept && (
+                    <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 6 }}>
+                      Department could not be auto-detected from your roll number. Please choose it manually.
+                    </div>
+                  )}
                   {errors.dept && <div style={{ fontSize: 11, color: '#dc2626', marginTop: 5 }}>{errors.dept}</div>}
                 </div>
                 <div>
