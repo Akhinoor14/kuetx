@@ -24,6 +24,100 @@
 			"isBackground": false,
 			"problemMatcher": [],
 			"group": "build"
+		},
+		{
+			"label": "git-verify",
+			"type": "shell",
+			"command": "cmd.exe",
+			"args": [
+				"/c",
+				"git status --short && git for-each-ref refs/original --format='%(refname)'"
+			],
+			"isBackground": false,
+			"problemMatcher": [
+				"$msCompile"
+			]
+		},
+		{
+			"label": "git-verify-clean",
+			"type": "shell",
+			"command": "cmd.exe",
+			"args": [
+				"/c",
+				"git status --short && git for-each-ref refs/original --format=\"%(refname)\""
+			],
+			"isBackground": false,
+			"problemMatcher": [
+				"$msCompile"
+			]
+		},
+		{
+			"label": "git-cleanup-verify",
+			"type": "shell",
+			"command": "cmd.exe",
+			"args": [
+				"/c",
+				"git for-each-ref refs/original --format=\"%(refname)\" & echo --- & git status --short & echo --- & git count-objects -vH"
+			],
+			"isBackground": false,
+			"problemMatcher": [
+				"$msCompile"
+			]
+		},
+		{
+			"label": "git-pack-inspect",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-Command",
+				"git verify-pack -v .git/objects/pack/*.idx | Select-Object -First 20"
+			],
+			"isBackground": false,
+			"problemMatcher": [
+				"$msCompile"
+			]
+		},
+		{
+			"label": "git-pack-inspect2",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-Command",
+				"Get-ChildItem .git/objects/pack -Filter *.idx | ForEach-Object { git verify-pack -v $_.FullName } | Select-Object -First 20"
+			],
+			"isBackground": false,
+			"problemMatcher": [
+				"$msCompile"
+			]
+		},
+		{
+			"label": "git-pack-largest",
+			"type": "shell",
+			"command": "powershell",
+			"args": [
+				"-NoProfile",
+				"-Command",
+				"Get-ChildItem .git/objects/pack -Filter *.idx | ForEach-Object { git verify-pack -v $_.FullName } | Sort-Object { [int]($_ -split '\\s+')[2] } -Descending | Select-Object -First 20"
+			],
+			"isBackground": false,
+			"problemMatcher": [
+				"$msCompile"
+			]
+		},
+		{
+			"label": "git-bash-check",
+			"type": "shell",
+			"command": "cmd.exe",
+			"args": [
+				"/c",
+				"where bash"
+			],
+			"isBackground": false,
+			"problemMatcher": [
+				"$msCompile"
+			]
 		}
 	]
 }
