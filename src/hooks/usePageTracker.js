@@ -9,7 +9,7 @@ export function usePageTracker() {
 
   useEffect(() => {
     // Skip tracking for certain pages
-    const skipPaths = ['/settings', '/about'];
+    const skipPaths = ['/settings', '/about', '/quick-access'];
     if (skipPaths.includes(location.pathname)) return;
 
     const stats = store.get(STORAGE_KEY) || {};

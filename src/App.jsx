@@ -35,6 +35,7 @@ import { Notes } from './pages/Notes';
 import Clubs from './pages/Clubs';
 import About from './pages/About';
 import ClassManagement from './pages/ClassManagement';
+import CTQuizPlanning from './pages/CTQuizPlanning';
 import { Tours, Social, Projects, Syllabus, TimeTracker, Tuition, Food, Reports } from './pages/Extras';
 import QuickAccess from './pages/QuickAccess';
 
@@ -108,6 +109,7 @@ function Layout() {
             <Route path="/settings" element={<Settings />} />
             <Route path="/about" element={<About />} />
             <Route path="/class-management" element={<ClassManagement />} />
+            <Route path="/ct-quiz-planning" element={<CTQuizPlanning />} />
           </Routes>
         </div>
         {location.pathname !== '/about' && !isQuestionBankViewer && !isMobileNav && <Footer />}

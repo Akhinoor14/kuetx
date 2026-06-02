@@ -150,7 +150,7 @@ const buildPanelSections = (profile, panel, itemMap, mostUsedItems) => {
 
 const recordUsage = (allItems, pathname) => {
   const match = allItems.find(item => pathname === item.path || (item.path !== '/' && pathname.startsWith(item.path)));
-  if (!match) return;
+  if (!match || match.id === 'quick-access') return;
 
   const usage = getUsageState();
   const counts = { ...(usage.counts || {}) };

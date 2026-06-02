@@ -15,6 +15,7 @@ export const NAV = [
     group: 'Class Rep',
     items: [
       { id: 'class-management', label: 'Class Management', icon: 'Users', path: '/class-management', requiresCR: true, showInDashboard: false },
+      { id: 'ct-quiz-planning', label: 'CT & Quiz Planner', icon: 'CalendarCheck', path: '/ct-quiz-planning', requiresCR: true, showInDashboard: false },
     ]
   },
   {

@@ -982,6 +982,38 @@ body {
 .btn-ghost   { background: transparent; color: var(--text); border: 1.5px solid var(--border); }
 .btn-danger  { background: var(--danger); color: #fff; }
 .btn-sm      { padding: 6px 13px; font-size: 13px; border-radius: 7px; }
+.btn-whatsapp {
+  background: linear-gradient(180deg, rgba(37,211,102,0.18), rgba(37,211,102,0.08));
+  color: white;
+  border: 1px solid rgba(37,211,102,0.12);
+  box-shadow: 0 8px 20px rgba(37,211,102,0.10);
+}
+.btn-export {
+  background: linear-gradient(135deg, rgba(102,126,234,0.20), rgba(118,75,162,0.16));
+  color: white;
+  border: 1px solid rgba(102,126,234,0.12);
+  box-shadow: 0 8px 20px rgba(102,126,234,0.10);
+}
+.btn-ghost {
+  background: rgba(255,255,255,0.06);
+  color: var(--text);
+  border: 1px solid rgba(100,116,139,0.12);
+}
+
+/* Keep the routine day buttons in a single horizontal row on all screens */
+.class-management-day-grid.single-row {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 6px;
+}
+.class-management-day-grid.single-row > button {
+  flex: 0 0 auto;
+  min-width: 84px;
+}
+.btn-danger  { background: var(--danger); color: #fff; }
+.btn-sm      { padding: 6px 13px; font-size: 13px; border-radius: 9px; }
 
 .dark .btn-danger { color: var(--accentFg); }
 
@@ -1067,6 +1099,93 @@ h3 { font-size: 15px; font-weight: 600; }
   border-radius: 4px;
   background:    var(--accent);
   transition:    width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.settings-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.42);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+  padding: 20px;
+  overflow: auto;
+}
+.settings-modal-panel {
+  width: min(720px, 100%);
+  max-height: calc(100vh - 40px);
+  overflow: auto;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 20px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.16);
+}
+.settings-modal-header,
+.settings-modal-subheader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.settings-modal-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+.settings-restore-grid {
+  display: grid;
+  grid-template-columns: 1fr 96px;
+  gap: 8px;
+  font-size: 12px;
+  margin-top: 8px;
+}
+.settings-restore-key {
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  overflow: hidden;
+}
+.settings-restore-size {
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  text-align: right;
+  white-space: nowrap;
+}
+
+@media (max-width: 620px) {
+  .settings-modal-backdrop {
+    align-items: flex-start;
+    padding: 12px;
+  }
+  .settings-modal-panel {
+    padding: 14px;
+  }
+  .settings-modal-header,
+  .settings-modal-subheader {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .settings-modal-actions {
+    width: 100%;
+    justify-content: flex-start;
+  }
+  .settings-restore-grid {
+    grid-template-columns: 1fr;
+  }
+  .settings-restore-size {
+    text-align: left;
+  }
 }
 
 /* ── Page enter animation ────────────────────────────────────────────────── */
@@ -1913,15 +2032,16 @@ h3 { font-size: 15px; font-weight: 600; }
 
   .class-management-page .class-management-hero {
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     justify-content: space-between;
     gap: 16px;
-    padding: 22px 20px;
+    padding: 24px 22px;
+    min-height: 110px;
     margin-bottom: 16px;
     border-radius: 24px;
-    border: 1px solid rgba(var(--accentRGB), 0.10);
-    background: linear-gradient(135deg, rgba(var(--accentRGB), 0.06), var(--surfaceGlassStrong));
-    box-shadow: 0 14px 34px rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(var(--accentRGB), 0.08);
+    background: linear-gradient(135deg, rgba(var(--accentRGB), 0.04), var(--surfaceGlassStrong));
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.06);
   }
 
   .dark .class-management-page .class-management-hero {
@@ -1934,6 +2054,7 @@ h3 { font-size: 15px; font-weight: 600; }
     min-width: 0;
     display: grid;
     gap: 6px;
+    flex: 1 1 0;
   }
 
   .class-management-page .class-management-kicker {
@@ -1980,6 +2101,18 @@ h3 { font-size: 15px; font-weight: 600; }
     align-items: center;
     justify-content: flex-end;
     flex-shrink: 0;
+    width: 100%;
+    min-width: 220px;
+  }
+
+  .class-management-page .class-management-mode-switch {
+    display: inline-flex;
+    gap: 10px;
+    padding: 6px;
+    border-radius: 999px;
+    border: 1px solid rgba(15, 23, 42, 0.08);
+    background: rgba(255,255,255,0.96);
+    box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
   }
 
   .class-management-page .class-management-tab-group {
@@ -2030,6 +2163,9 @@ h3 { font-size: 15px; font-weight: 600; }
   .class-management-page .class-management-routine-card,
   .class-management-page .class-management-planner-card {
     border-radius: 22px;
+    border: 1px solid rgba(148,163,184,0.12);
+    background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(248,250,252,0.95));
+    box-shadow: 0 20px 48px rgba(15,23,42,0.06);
   }
 
   .class-management-page .class-management-section-label {
@@ -2052,6 +2188,251 @@ h3 { font-size: 15px; font-weight: 600; }
     color: var(--muted);
     font-size: 13px;
     line-height: 1.65;
+  }
+
+  .class-management-page .class-management-actions-card {
+    width: 100%;
+    box-shadow: 0 18px 40px rgba(15, 23, 42, 0.06);
+    background: linear-gradient(180deg, rgba(248,250,252,0.98), rgba(255,255,255,0.96));
+    border: 1px solid rgba(148, 163, 184, 0.16);
+    padding: 18px;
+  }
+
+  .class-management-page .class-management-actions-card .class-management-actions-grid {
+    display: flex;
+    gap: 12px;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    width: 100%;
+    padding-bottom: 2px;
+  }
+
+  .class-management-page .class-management-actions-card .class-management-actions-grid > * {
+    flex: 1 1 0;
+    min-width: 130px;
+  }
+
+  .class-management-page .class-management-page .class-management-action-btn.btn-schedule,
+  .class-management-page .class-management-action-btn.btn-schedule {
+    grid-column: auto;
+  }
+
+  .class-management-page .class-management-action-btn {
+    min-width: 0;
+    width: auto;
+    justify-content: center;
+    height: 52px;
+    border-radius: 16px;
+    font-size: 14px;
+    font-weight: 800;
+    gap: 8px;
+    padding: 0 14px;
+    transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.18s ease, background 0.18s ease;
+  }
+
+  .class-management-page .class-management-action-btn:hover {
+    transform: translateY(-1px);
+  }
+
+  .class-management-page .class-management-action-btn.btn-whatsapp {
+    background: linear-gradient(135deg, rgba(52,211,153,0.18), rgba(16,185,129,0.12));
+    color: rgba(15,23,42,0.96);
+    border: 1px solid rgba(16,185,129,0.18);
+    box-shadow: 0 14px 28px rgba(16,185,129,0.08);
+  }
+
+  .class-management-page .class-management-action-btn.btn-export {
+    background: linear-gradient(135deg, rgba(129,140,248,0.18), rgba(196,181,253,0.14));
+    color: rgba(15,23,42,0.96);
+    border: 1px solid rgba(129,140,248,0.18);
+    box-shadow: 0 14px 28px rgba(99,102,241,0.08);
+  }
+
+  .class-management-page .class-management-action-btn.btn-schedule {
+    grid-column: 1 / -1;
+    background: linear-gradient(135deg, rgba(59,130,246,0.16), rgba(59,130,246,0.08));
+    color: rgba(15,23,42,0.96);
+    border: 1px solid rgba(59,130,246,0.18);
+    box-shadow: 0 12px 28px rgba(59,130,246,0.10);
+  }
+
+  .class-management-page .class-management-mode-switch {
+    display: inline-flex;
+    gap: 10px;
+    padding: 6px;
+    border-radius: 999px;
+    border: 1px solid rgba(15, 23, 42, 0.08);
+    background: rgba(255,255,255,0.96);
+    box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
+  }
+
+  .class-management-page .class-management-mode-button {
+    flex: 1 1 0;
+    min-height: 48px;
+    padding: 0 18px;
+    border-radius: 999px;
+    border: 1px solid rgba(15,23,42,0.08);
+    background: rgba(255,255,255,0.96);
+    color: rgba(15,23,42,0.86);
+    font-size: 14px;
+    font-weight: 800;
+    box-shadow: inset 0 0 0 1px rgba(15,23,42,0.04);
+    transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+  }
+
+  .class-management-page .class-management-mode-button:hover {
+    transform: translateY(-1px);
+  }
+
+  .class-management-page .class-management-mode-button.is-active {
+    background: linear-gradient(135deg, #16a34a 0%, #22c55e 100%);
+    color: white;
+    border-color: transparent;
+    box-shadow: 0 16px 40px rgba(22, 163, 74, 0.18);
+  }
+
+  .class-management-page .class-management-stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .class-management-page .class-management-day-grid.single-row {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(80px, 1fr));
+    gap: 10px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 4px;
+  }
+
+  .class-management-page .class-management-day-button {
+    width: 100%;
+    min-width: 90px;
+    justify-content: space-between;
+    border-radius: 16px;
+    padding-left: 14px;
+    padding-right: 14px;
+    height: 48px;
+    background: #ffffff;
+    color: rgba(15,23,42,0.92);
+    border: 1px solid rgba(15,23,42,0.08);
+    box-shadow: 0 10px 22px rgba(15,23,42,0.04);
+    transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+  }
+
+  .class-management-page .class-management-day-button:hover {
+    transform: translateY(-1px);
+  }
+
+  .class-management-page .class-management-day-button.active {
+    background: rgba(59,130,246,0.12);
+    border-color: rgba(59,130,246,0.22);
+    color: rgba(15,23,42,0.96);
+    box-shadow: 0 18px 38px rgba(59,130,246,0.12);
+  }
+
+  .class-management-page .class-management-day-button.active span:last-child {
+    color: rgba(37,99,235,0.96);
+  }
+
+  .class-management-page .class-management-card-footer {
+    display: flex;
+    grid-template-columns: repeat(5, minmax(80px, 1fr));
+    gap: 10px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 4px;
+  }
+
+  .class-management-page .class-management-day-grid.single-row > button {
+    flex: 0 0 auto;
+    min-width: 90px;
+    justify-content: space-between;
+  }
+
+  .class-management-page .class-management-card-footer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .class-management-page .class-management-card-footer .class-management-meta-row {
+    gap: 8px;
+  }
+
+  .class-management-page .class-management-hero {
+    padding: 24px 24px;
+    border-radius: 24px;
+    gap: 20px;
+  }
+
+  .class-management-page .class-management-hero-copy {
+    gap: 10px;
+  }
+
+  @media (max-width: 900px) {
+    .class-management-page .class-management-hero {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .class-management-page .class-management-hero-actions {
+      width: 100%;
+      justify-content: flex-start;
+    }
+
+    .class-management-page .class-management-tab-group {
+      width: 100%;
+      justify-content: stretch;
+      gap: 8px;
+    }
+
+    .class-management-page .class-management-tab {
+      flex: 1 1 0;
+      min-width: 0;
+    }
+  }
+
+  @media (max-width: 680px) {
+    .class-management-page .class-management-hero {
+      padding: 18px 16px;
+    }
+
+    .class-management-page .class-management-stats-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .class-management-page .class-management-day-grid.single-row {
+      grid-template-columns: repeat(5, minmax(70px, 1fr));
+      gap: 8px;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .class-management-page .class-management-hero {
+      padding: 16px 14px;
+    }
+
+    .class-management-page .class-management-stats-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .class-management-page .class-management-day-grid.single-row {
+      grid-template-columns: repeat(5, minmax(68px, 1fr));
+    }
+
+    .class-management-page .class-management-section-title {
+      font-size: 20px;
+    }
+
+    .class-management-page .class-management-tab {
+      min-height: 38px;
+      font-size: 12px;
+      padding: 0 10px;
+    }
   }
 
   .class-management-page .class-management-mode-switch {

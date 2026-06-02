@@ -2,6 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
 import './index.css'
+// FullCalendar styles are provided via a local fallback in index.html (public/vendor/fullcalendar-fallback.css)
 import { store, ensureDBReady } from './store/store.js'
 
 ReactDOM.createRoot(document.getElementById('root')).render(

@@ -294,22 +294,22 @@ export default function Settings() {
 
       {/* Import preview modal (simple) */}
       {previewOpen && previewInfo && (
-        <div style={{ position: 'fixed', left: 0, top: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.4)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 200 }}>
-          <div style={{ width: 'min(720px, 95%)', maxHeight: '80vh', overflow: 'auto', background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 10, padding: 16 }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <div className="settings-modal-backdrop">
+          <div className="settings-modal-panel">
+            <div className="settings-modal-header">
               <div>
                 <div style={{ fontWeight: 700 }}>Restore preview</div>
                 <div style={{ fontSize: 12, color: 'var(--muted)' }}>{previewInfo.fileName} • {previewInfo.items.length} keys • ~{previewInfo.totalKB} KB</div>
                 {previewInfo.version && <div style={{ fontSize: 12, color: 'var(--muted)' }}>Backup version: {previewInfo.version}</div>}
               </div>
-              <div>
+              <div className="settings-modal-actions">
                 <button className="btn btn-ghost" onClick={() => { setPreviewOpen(false); setPreviewInfo(null); }}>Cancel</button>
-                <button className="btn btn-primary" onClick={confirmImport} style={{ marginLeft: 8 }}>Confirm Restore</button>
+                <button className="btn btn-primary" onClick={confirmImport}>Confirm Restore</button>
               </div>
             </div>
 
             <div style={{ marginTop: 12 }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <div className="settings-modal-subheader">
                 <div style={{ fontSize: 13, fontWeight: 600 }}>Keys (largest first)</div>
                 <div style={{ fontSize: 12 }}>
                   <label style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
@@ -320,10 +320,10 @@ export default function Settings() {
                   </label>
                 </div>
               </div>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 80px', gap: 8, fontSize: 12, marginTop: 8 }}>
+              <div className="settings-restore-grid">
                 {previewInfo.items.map(it => (
                   <div key={it.key} style={{ display: 'contents' }}>
-                    <div style={{ padding: '6px 8px', borderRadius: 6, background: 'var(--bg)', border: '1px solid var(--border)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <div className="settings-restore-key">
                       <input type="checkbox" checked={selectedKeys?.includes(it.key)} onChange={(e) => {
                         setSelectedKeys(s => {
                           const next = new Set(s || []);
@@ -333,7 +333,7 @@ export default function Settings() {
                       }} />
                       <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{it.key}</div>
                     </div>
-                    <div style={{ padding: '6px 8px', borderRadius: 6, background: 'var(--bg)', border: '1px solid var(--border)', textAlign: 'right' }}>{it.sizeKB} KB</div>
+                    <div className="settings-restore-size">{it.sizeKB} KB</div>
                   </div>
                 ))}
               </div>
