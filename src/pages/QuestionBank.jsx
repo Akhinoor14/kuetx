@@ -427,10 +427,10 @@ export default function QuestionBank() {
 
 function StatBox({ n, l, color }) {
   const colors = {
-    blue: 'rgba(37,99,235,0.1)',
-    green: 'rgba(22,163,74,0.1)',
-    purple: 'rgba(124,58,237,0.1)',
-    orange: 'rgba(234,88,12,0.1)',
+    blue: '#2563eb',
+    green: '#059669',
+    purple: '#9333ea',
+    orange: '#ea580c',
   };
   return (
     <div className="qb2-stat" style={{ background: colors[color] }}>
