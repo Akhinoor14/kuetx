@@ -262,18 +262,17 @@ export default function About() {
                   Md Akhinoor Islam
                 </h3>
                 <p style={{ fontSize: '0.9rem', color: 'var(--accent)', fontWeight: 700, margin: 0, marginBottom: '0.5rem' }}>
-                  Lead Developer & Founder
+                  Founder & Lead Builder
                 </p>
                 <div style={{ fontSize: '0.85rem', color: 'var(--muted)', fontWeight: 500, lineHeight: 1.5 }}>
-                  <div>Energy Science & Engineering</div>
-                  <div>KUET Student</div>
+                  <div>Writes prompts, not code. Ships anyway.</div>
                 </div>
               </div>
             </div>
 
             <div style={{ display: 'grid', gap: '0.5rem', marginBottom: '1.5rem', fontSize: '0.92rem', color: 'var(--muted)', lineHeight: 1.6 }}>
               <div><strong style={{ color: 'var(--text)' }}>Status:</strong> Undergraduate Student</div>
-              <div><strong style={{ color: 'var(--text)' }}>Institution:</strong> KUET</div>
+              <div><strong style={{ color: 'var(--text)' }}>Institution:</strong> KUET,Khulna</div>
               <div><strong style={{ color: 'var(--text)' }}>Department:</strong> Energy Science & Engineering</div>
               <div><strong style={{ color: 'var(--text)' }}>Studio:</strong> A3KM Studio</div>
             </div>
