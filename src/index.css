@@ -1403,26 +1403,6 @@ h3 { font-size: 15px; font-weight: 600; }
   border-radius: 18px;
   background: rgba(255, 255, 255, 0.82);
 
-/* ── PWA Install button (small, polished floating button) ───────────────── */
-.pwa-prompt-wrap { position: fixed; right: 18px; bottom: calc(18px + env(safe-area-inset-bottom, 0px)); z-index: 1400; }
-.pwa-install-btn {
-  display: inline-flex; align-items: center; gap: 8px; padding: 8px 12px; border-radius: 999px;
-  background: linear-gradient(180deg, var(--accent), #0ea44b); color: var(--accentFg); border: none;
-  box-shadow: 0 8px 26px rgba(16, 185, 129, 0.18); font-weight: 800; font-size: 13px; cursor: pointer;
-  transition: transform 160ms ease, box-shadow 160ms ease, opacity 120ms ease; backdrop-filter: blur(6px);
-}
-.pwa-install-btn:active { transform: translateY(1px) scale(0.995); }
-.pwa-install-btn .pwa-install-icon { display: inline-flex; width: 18px; height: 18px; align-items: center; justify-content: center; }
-.pwa-install-btn.active { background: linear-gradient(180deg, #ffffff, #f7fff8); color: var(--accent); box-shadow: 0 10px 30px rgba(16, 185, 129, 0.06); border: 1px solid rgba(22,163,74,0.08); }
-.pwa-hint-card {
-  width: 320px; max-width: calc(100vw - 36px); padding: 12px; border-radius: 12px; background: linear-gradient(180deg, #ffffff, #f8fffb);
-  box-shadow: 0 18px 46px rgba(8, 38, 25, 0.08); border: 1px solid rgba(22,163,74,0.08); margin-bottom: 10px;
-}
-.pwa-hint-title { font-weight: 800; margin-bottom: 8px; color: var(--text); }
-.pwa-hint-step { display:flex; gap:10px; align-items:center; padding:6px 4px; font-size:13px; color:var(--muted); }
-.pwa-hint-num { width:28px; height:28px; display:inline-flex; align-items:center; justify-content:center; background:rgba(var(--accentRGB),0.08); color:var(--accent); border-radius:8px; font-weight:800; }
-.pwa-hint-dismiss { margin-top:8px; padding:8px 10px; border-radius:8px; background:transparent; border:1px solid rgba(var(--accentRGB),0.08); cursor:pointer; font-weight:700; }
-
 /* ── Question Bank (qb2) — compact, clean list & cards ─────────────────── */
 .qb2-wrap { display: flex; flex-direction: column; gap: 12px; }
 .qb2-hero { display:flex; justify-content:space-between; gap:12px; align-items:center; }
@@ -6936,28 +6916,27 @@ input[type="range"]::-webkit-slider-thumb {
 .pwa-install-btn {
   display: inline-flex;
   align-items: center;
-  gap: 7px;
-  padding: 8px 12px;
+  justify-content: center;
+  gap: 10px;
+  padding: 10px 16px;
   border-radius: 999px;
-  border: 1px solid rgba(22, 163, 74, 0.14);
-  background: linear-gradient(180deg, rgba(240, 253, 244, 0.64), rgba(255, 255, 255, 0.72));
-  color: var(--text);
-  font-size: 12px;
+  border: 1px solid rgba(var(--accentRGB), 0.12);
+  background: linear-gradient(180deg, rgba(16, 185, 129, 0.12), rgba(255, 255, 255, 0.96));
+  color: var(--accent);
+  font-size: 13px;
   font-weight: 800;
-  font-family: inherit;
   cursor: pointer;
-  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.08), 0 6px 18px rgba(22, 163, 74, 0.10);
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.12);
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
-  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease, border-color 0.18s ease;
   -webkit-tap-highlight-color: transparent;
-  user-select: none;
 }
 .pwa-install-btn:hover,
 .pwa-install-btn.active {
   transform: translateY(-1px);
-  box-shadow: 0 14px 34px rgba(15, 23, 42, 0.10), 0 8px 22px rgba(22, 163, 74, 0.12);
-  background: linear-gradient(180deg, rgba(236, 253, 245, 0.86), rgba(250, 255, 251, 0.86));
+  box-shadow: 0 20px 44px rgba(15, 23, 42, 0.14);
+  background: linear-gradient(180deg, rgba(236, 253, 245, 0.96), rgba(255, 255, 255, 1));
   border-color: rgba(var(--accentRGB), 0.20);
 }
 .pwa-install-btn:active {
@@ -6968,7 +6947,7 @@ input[type="range"]::-webkit-slider-thumb {
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  background: color-mix(in srgb, var(--accent) 12%, transparent);
+  background: rgba(var(--accentRGB), 0.18);
   color: var(--accent);
   display: inline-flex;
   align-items: center;
@@ -6978,8 +6957,9 @@ input[type="range"]::-webkit-slider-thumb {
 
 /* ── Hint card (manual install steps) ────── */
 .pwa-hint-card {
-  width: 268px;
-  padding: 14px 14px 12px;
+  width: 100%;
+  max-width: 360px;
+  padding: 16px 16px 14px;
   border-radius: 18px;
   border: 1px solid rgba(22, 163, 74, 0.10);
   background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(248,255,250,0.96));
@@ -6988,11 +6968,11 @@ input[type="range"]::-webkit-slider-thumb {
   -webkit-backdrop-filter: blur(18px);
   display: flex;
   flex-direction: column;
-  gap: 9px;
+  gap: 10px;
 }
 
 .pwa-hint-title {
-  font-size: 12.5px;
+  font-size: 13px;
   font-weight: 900;
   color: var(--text);
   margin-bottom: 2px;
@@ -7007,19 +6987,19 @@ input[type="range"]::-webkit-slider-thumb {
   display: flex;
   align-items: flex-start;
   gap: 10px;
-  font-size: 12.25px;
+  font-size: 14px;
   color: var(--text);
-  line-height: 1.45;
+  line-height: 1.55;
 }
 
 .pwa-hint-num {
   flex-shrink: 0;
-  width: 24px;
-  height: 24px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
-  background: rgba(var(--accentRGB), 0.10);
+  background: rgba(var(--accentRGB), 0.12);
   color: var(--accent);
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 900;
   display: flex;
   align-items: center;
@@ -7038,18 +7018,15 @@ input[type="range"]::-webkit-slider-thumb {
 
 .pwa-hint-dismiss {
   align-self: flex-end;
-  padding: 8px 10px;
-  border-radius: 10px;
+  padding: 10px 14px;
+  border-radius: 14px;
+  background: rgba(255,255,255,0.98);
   border: 1px solid rgba(var(--accentRGB), 0.10);
-  background: rgba(255,255,255,0.92);
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 800;
-  font-family: inherit;
   color: var(--text);
-  cursor: pointer;
-  transition: background 0.12s ease, transform 0.12s ease, border-color 0.12s ease;
-  -webkit-tap-highlight-color: transparent;
 }
+
 .pwa-hint-dismiss:hover {
   background: rgba(255,255,255,1);
   border-color: rgba(var(--accentRGB), 0.16);
@@ -7069,46 +7046,46 @@ input[type="range"]::-webkit-slider-thumb {
 }
 
 .pwa-dialog-card {
-  width: min(92vw, 420px);
+  width: min(96vw, 420px);
   max-width: 420px;
-  border-radius: 22px;
+  border-radius: 24px;
   border: 1px solid rgba(15, 23, 42, 0.08);
-  background: rgba(255, 255, 255, 0.98);
-  box-shadow: 0 28px 90px rgba(15, 23, 42, 0.18);
-  padding: 22px 20px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(248, 255, 250, 0.96));
+  box-shadow: 0 28px 80px rgba(15, 23, 42, 0.18);
+  padding: 24px 22px;
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 16px;
 }
 
 .pwa-dialog-card-hint {
-  background: linear-gradient(180deg, rgba(248, 255, 250, 0.96), rgba(255, 255, 255, 0.98));
+  background: linear-gradient(180deg, rgba(248, 255, 250, 0.98), rgba(255, 255, 255, 0.98));
 }
 
 .pwa-dialog-kicker {
   font-size: 12px;
   font-weight: 900;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--accent);
 }
 
 .pwa-dialog-title {
-  font-size: 18px;
-  font-weight: 800;
-  line-height: 1.25;
+  font-size: 20px;
+  font-weight: 900;
+  line-height: 1.2;
   color: var(--text);
 }
 
 .pwa-dialog-sub {
   color: var(--muted);
-  font-size: 14px;
-  line-height: 1.6;
+  font-size: 15px;
+  line-height: 1.65;
 }
 
 .pwa-dialog-points {
   display: grid;
-  gap: 8px;
+  gap: 10px;
   margin-top: 4px;
 }
 
@@ -7116,14 +7093,14 @@ input[type="range"]::-webkit-slider-thumb {
   display: flex;
   align-items: flex-start;
   gap: 10px;
-  font-size: 13px;
+  font-size: 14px;
   color: var(--text);
   line-height: 1.5;
 }
 
 .pwa-dialog-point span:first-child {
   color: var(--accent);
-  min-width: 16px;
+  min-width: 18px;
   line-height: 1;
 }
 
@@ -7138,10 +7115,10 @@ input[type="range"]::-webkit-slider-thumb {
 .pwa-dialog-secondary,
 .pwa-dialog-ghost {
   min-width: 90px;
-  border-radius: 12px;
-  padding: 10px 14px;
-  font-size: 13px;
-  font-weight: 700;
+  border-radius: 14px;
+  padding: 14px 16px;
+  font-size: 14px;
+  font-weight: 800;
   cursor: pointer;
   transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
 }
@@ -7153,9 +7130,9 @@ input[type="range"]::-webkit-slider-thumb {
 }
 
 .pwa-dialog-secondary {
-  background: transparent;
+  background: rgba(255, 255, 255, 0.98);
   color: var(--text);
-  border: 1px solid var(--border);
+  border: 1px solid rgba(var(--accentRGB), 0.16);
 }
 
 .pwa-dialog-ghost {
@@ -7174,26 +7151,46 @@ input[type="range"]::-webkit-slider-thumb {
   .pwa-prompt-wrap {
     right: 12px;
     left: 12px;
-    bottom: calc(108px + env(safe-area-inset-bottom, 0px));
-    display: flex;
+    bottom: calc(88px + env(safe-area-inset-bottom, 0px));
+    align-items: center;
     justify-content: center;
   }
 
   .pwa-install-btn {
-    padding: 8px 12px;
-    max-width: 100%;
+    width: 100%;
+    max-width: 420px;
+    padding: 12px 16px;
+    font-size: 14px;
   }
 
-  .pwa-hint-card {
+  .pwa-dialog-card {
     width: 100%;
-    max-width: 360px;
+    max-width: 100%;
+    border-radius: 22px;
+    padding: 20px;
+  }
+
+  .pwa-dialog-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .pwa-dialog-primary,
+  .pwa-dialog-secondary,
+  .pwa-dialog-ghost {
+    width: 100%;
+    min-width: auto;
+  }
+
+  .pwa-dialog-primary {
+    padding: 16px 18px;
   }
 }
 
 /* Slightly smaller on very small screens */
 @media (max-width: 420px) {
-  .pwa-install-btn { padding: 7px 10px; font-size: 11.75px; }
-  .pwa-hint-num { width: 22px; height: 22px; font-size: 10.5px }
+  .pwa-install-btn { padding: 10px 14px; font-size: 13px; gap: 8px; }
+  .pwa-hint-num { width: 24px; height: 24px; font-size: 11px; }
 }
 
 /* PWA popup modal (explicit styles to avoid page flow overlap) */

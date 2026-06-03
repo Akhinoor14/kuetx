@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState, useRef } from 'react';
 import { DEPARTMENTS, DEFAULT_PROFILE, TERM_KEYS, getTermLabelFromKey } from '../store/store';
 
 // Map dept codes: roll middle 2 digits -> dept code
@@ -56,7 +56,7 @@ const fieldStyle = {
   fontSize: 14,
   color: 'var(--text)',
   fontFamily: 'inherit',
-  height: 44,
+  height: 48,
   boxSizing: 'border-box',
 };
 
@@ -152,6 +152,41 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
     setErrors({});
   }, [isOpen, initial]);
 
+  // Auto-select department when a valid student ID is entered.
+  // Overwrite the department field to match the roll when the detected
+  // department differs from the current value (keeps manual choice only
+  // until the roll changes).
+  useEffect(() => {
+    setForm(prev => {
+      const dept = extractDeptCodeFromRoll(prev.studentId);
+      if (dept && prev.dept !== dept) {
+        return { ...prev, dept };
+      }
+      return prev;
+    });
+    // clear any dept validation error when studentId changes
+    setErrors(prev => ({ ...prev, dept: '' }));
+  }, [form.studentId]);
+
+  // Highlight animation when dept auto-updates
+  const [deptHighlight, setDeptHighlight] = useState(false);
+  const deptHighlightTimeout = useRef(null);
+  useEffect(() => {
+    const detected = extractDeptCodeFromRoll(form.studentId);
+    if (detected && form.dept === detected) {
+      // trigger highlight
+      setDeptHighlight(true);
+      if (deptHighlightTimeout.current) clearTimeout(deptHighlightTimeout.current);
+      deptHighlightTimeout.current = setTimeout(() => setDeptHighlight(false), 700);
+    }
+    return () => {
+      if (deptHighlightTimeout.current) {
+        clearTimeout(deptHighlightTimeout.current);
+        deptHighlightTimeout.current = null;
+      }
+    };
+  }, [form.dept, form.studentId]);
+
   if (!isOpen) return null;
 
   const handleChange = (key) => (e) => {
@@ -243,9 +278,27 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
   const showOptionalSkip = stepIndex === 2;
   const canSubmit = stepIndex === stepTabs.length - 1;
 
+  const modalCss = `
+  .kuetx-profile-modal form { max-width: 920px; width: min(98vw, 920px); }
+  .kuetx-profile-modal .field-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
+  .kuetx-profile-modal .section { padding: 14px; border-radius: 12px; }
+  .kuetx-profile-modal .actions { display: flex; justify-content: space-between; gap: 8px; align-items: center; }
+  .kuetx-profile-modal .actions .left { margin-right: auto; }
+
+  @media (max-width: 640px) {
+    .kuetx-profile-modal form { padding: 14px; border-radius: 12px; }
+    .kuetx-profile-modal .field-grid { grid-template-columns: 1fr; }
+    .kuetx-profile-modal .actions { flex-direction: column-reverse; align-items: stretch; }
+    .kuetx-profile-modal .actions button { width: 100%; }
+    .kuetx-profile-modal .step-tabs { gap: 6px; }
+    .kuetx-profile-modal h3 { font-size: 18px; }
+  }
+  `;
+
   return (
-    <div style={{ position: 'fixed', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(0,0,0,0.45)', zIndex: 9999, padding: 'clamp(8px, 4vw, 14px)' }}>
-      <form onSubmit={handleSubmit} style={{ background: 'var(--surface)', padding: 'clamp(12px, 3vw, 18px)', borderRadius: 18, width: 'clamp(100%, 100%, 920px)', maxWidth: '100%', maxHeight: '92vh', overflowY: 'auto', boxShadow: '0 18px 50px rgba(0,0,0,0.28)' }}>
+    <div className="kuetx-profile-modal" style={{ position: 'fixed', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(0,0,0,0.45)', zIndex: 9999, padding: '8px' }}>
+      <style>{modalCss}</style>
+      <form onSubmit={handleSubmit} style={{ background: 'var(--surface)', padding: 'clamp(12px, 6vw, 20px)', borderRadius: 16, width: 'min(920px, 98vw)', maxWidth: '100%', maxHeight: '94vh', overflowY: 'auto', boxShadow: '0 14px 40px rgba(0,0,0,0.24)' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, alignItems: 'flex-start', marginBottom: 14, flexWrap: 'wrap' }}>
           <div>
             <h3 style={{ margin: 0, fontSize: 20 }}>Profile Setup</h3>
@@ -283,9 +336,9 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
 
         <div style={{ display: 'grid', gap: 12 }}>
           {stepIndex === 0 && (
-            <div style={sectionStyle}>
+            <div className="section" style={sectionStyle}>
               <div style={{ fontSize: 12, fontWeight: 800, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 12 }}>Identity</div>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 12 }}>
+              <div className="field-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 12 }}>
                 <div>
                   <label style={labelStyle}>Full Name</label>
                   <input placeholder="Your full name" value={form.name} onChange={handleChange('name')} style={fieldStyle} />
@@ -298,18 +351,27 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
                 </div>
                 <div>
                   <label style={labelStyle}>Department</label>
-                  <select value={form.dept || ''} onChange={(e) => setForm(prev => ({ ...prev, dept: e.target.value }))} style={fieldStyle}>
+                  <select
+                    value={form.dept || ''}
+                    onChange={(e) => setForm(prev => ({ ...prev, dept: e.target.value }))}
+                    style={{
+                      ...fieldStyle,
+                      transition: 'box-shadow 0.28s ease, transform 0.18s ease, border-color 0.18s ease',
+                      boxShadow: deptHighlight ? '0 10px 30px rgba(59,130,246,0.14)' : 'none',
+                      transform: deptHighlight ? 'translateY(-3px)' : 'none',
+                      borderColor: deptHighlight ? 'rgba(59,130,246,0.9)' : undefined,
+                    }}
+                  >
                     <option value="">Select department</option>
                     {DEPARTMENTS.map(dept => (
                       <option key={dept.code} value={dept.code}>{dept.code} - {dept.name}</option>
                     ))}
                   </select>
-                  {autoCalculatedDept && !form.dept && (
-                    <div style={{ fontSize: 11, color: 'var(--accent)', marginTop: 6, fontWeight: 700 }}>
-                      Auto-detected from ID: {autoCalculatedDept}. It will be used if you leave this blank.
+                  {autoCalculatedDept ? (
+                    <div style={{ fontSize: 11, color: form.dept === autoCalculatedDept ? 'var(--accent)' : 'var(--muted)', marginTop: 6, fontWeight: 700 }}>
+                      {form.dept === autoCalculatedDept ? `Auto-selected from ID: ${autoCalculatedDept}` : `Detected from ID: ${autoCalculatedDept}`}
                     </div>
-                  )}
-                  {!autoCalculatedDept && (
+                  ) : (
                     <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 6 }}>
                       Department could not be auto-detected from your roll number. Please choose it manually.
                     </div>
@@ -327,9 +389,9 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
           )}
 
           {stepIndex === 1 && (
-            <div style={sectionStyle}>
+            <div className="section" style={sectionStyle}>
               <div style={{ fontSize: 12, fontWeight: 800, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 12 }}>Academic essentials</div>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 12 }}>
+              <div className="field-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 12 }}>
                 <div>
                   <label style={labelStyle}>Current Term</label>
                   <select value={form.currentTermKey || ''} onChange={handleChange('currentTermKey')} style={fieldStyle}>
@@ -361,9 +423,9 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
           )}
 
           {stepIndex === 2 && (
-            <div style={sectionStyle}>
+            <div className="section" style={sectionStyle}>
               <div style={{ fontSize: 12, fontWeight: 800, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 12 }}>Residence & advisor</div>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 12 }}>
+              <div className="field-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 12 }}>
                 <div>
                   <label style={labelStyle}>Residential Hall</label>
                   <select value={form.hallName || ''} onChange={handleChange('hallName')} style={fieldStyle}>
@@ -402,7 +464,7 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
 
           {stepIndex === 3 && (
             <>
-              <div style={sectionStyle}>
+              <div className="section" style={sectionStyle}>
                 <div style={{ fontSize: 12, fontWeight: 800, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 12 }}>Review</div>
                 <div style={{ display: 'grid', gap: 8 }}>
                   {[
@@ -477,9 +539,9 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
           )}
         </div>
 
-        <div style={{ display: 'flex', justifyContent: 'space-between', gap: 8, marginTop: 16, flexWrap: 'wrap', alignItems: 'center' }}>
+        <div className="actions" style={{ display: 'flex', justifyContent: 'space-between', gap: 8, marginTop: 16, flexWrap: 'wrap', alignItems: 'center' }}>
           <button type="button" onClick={onClose} style={{ padding: '10px 14px', borderRadius: 8, border: '1px solid var(--border)', background: 'transparent', color: 'var(--text)' }}>Cancel</button>
-          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginLeft: 'auto' }}>
+          <div className="left" style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginLeft: 'auto' }}>
             {stepIndex > 0 && (
               <button type="button" onClick={goBack} style={{ padding: '10px 14px', borderRadius: 8, border: '1px solid var(--border)', background: 'transparent', color: 'var(--text)' }}>Back</button>
             )}
