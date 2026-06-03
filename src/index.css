@@ -2751,7 +2751,7 @@ h3 { font-size: 15px; font-weight: 600; }
 .qb2-title {
   font-size: 24px;
   font-weight: 700;
-  color: #5e0909;
+  color: #0b0a0a;
   margin: 0;
   letter-spacing: -0.5px;
 }
@@ -2776,11 +2776,11 @@ h3 { font-size: 15px; font-weight: 600; }
   gap: 4px;
   padding: 4px 10px;
   background: #eff6ff;
-  border: 1px solid #dbeafe;
+  border: 1px solid #c3d6ef;
   border-radius: 6px;
   font-size: 11px;
   font-weight: 700;
-  color: #1e40af;
+  color: #4e5876;
 }
 
 .qb2-hero-chip-soft {
@@ -2801,9 +2801,9 @@ h3 { font-size: 15px; font-weight: 600; }
   padding: 10px 12px;
   border-radius: 12px;
   text-align: center;
-  border: 1px solid rgba(148, 163, 184, 0.22);
-  background: #f8fafc;
-  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.06);
+  border: 1px solid rgba(0, 0, 0, 0.22);
+  background: #000000;
+  box-shadow: 0 2px 8px rgba(22, 31, 52, 0.06);
   transition: all 0.2s ease;
 }
 
@@ -2813,23 +2813,23 @@ h3 { font-size: 15px; font-weight: 600; }
 }
 
 .qb2-stat:nth-child(1) {
-  background: #f8fbff;
-  color: #1e3a8a;
+  background: #9ee0fd;
+  color: #ffffff;
 }
 
 .qb2-stat:nth-child(2) {
-  background: #f2fdf6;
-  color: #115e3c;
+  background: #6af4a6;
+  color: #ffffff;
 }
 
 .qb2-stat:nth-child(3) {
-  background: #faf7ff;
-  color: #4c1d95;
+  background: #ba98f5;
+  color: #ffffff;
 }
 
 .qb2-stat:nth-child(4) {
-  background: #fffaf2;
-  color: #7c2d12;
+  background: #e89258;
+  color: #ffffff;
 }
 
 .qb2-stat-n {
