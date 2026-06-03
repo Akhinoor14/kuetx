@@ -2886,7 +2886,7 @@ h3 { font-size: 15px; font-weight: 600; }
 }
 
 .qb2-search-icon {
-  color: #94a3b8;
+  color: #778aa4;
   flex-shrink: 0;
 }
 
@@ -2896,11 +2896,11 @@ h3 { font-size: 15px; font-weight: 600; }
   background: transparent;
   outline: none;
   font-size: 12px;
-  color: #1e293b;
+  color: #212223;
 }
 
 .qb2-search-input::placeholder {
-  color: #cbd5e1;
+  color: #35383a;
 }
 
 .qb2-inline-dept {
@@ -2911,7 +2911,7 @@ h3 { font-size: 15px; font-weight: 600; }
 
 .qb2-inline-dept-label {
   font-size: 12px;
-  color: #64748b;
+  color: #404a59;
   white-space: nowrap;
   font-weight: 600;
 }
