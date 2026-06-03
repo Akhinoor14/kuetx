@@ -5,7 +5,6 @@ import { getAllCourses } from '../store/curriculumStore';
 import { useNavigate } from 'react-router-dom';
 import CourseTeacherDialog from '../components/CourseTeacherDialog';
 import { notify } from '../lib/notify';
-import '../styles/pages/schedule.css';
 
 const DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday'];
 const DAY_INDEX = { Sunday: 0, Monday: 1, Tuesday: 2, Wednesday: 3, Thursday: 4 };

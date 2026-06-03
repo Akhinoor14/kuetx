@@ -11,7 +11,6 @@ import {
   matchesTerm,
   normalizeTeacherList,
 } from '../lib/plannerUtils';
-import '../styles/pages/class-management.css';
 
 const TERM_KEY_RE = /^Y\dT\d$/;
 const ROUTINE_DAY_DEFS = [

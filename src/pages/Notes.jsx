@@ -2,7 +2,6 @@
 import { useState } from 'react';
 import { Plus, Trash2, Edit2, X, Check } from 'lucide-react';
 import { store, uid } from '../store/store';
-import '../styles/pages/notes.css';
 
 export function Notes() {
   const [notes, setNotes] = useState(() => store.get('notes') || []);

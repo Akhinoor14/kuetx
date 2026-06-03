@@ -2,7 +2,6 @@ import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { getProfile } from '../store/store';
 import { computeAlerts, decorateAlerts, filterUnreadAlerts, getDismissedAlertIds, setAlertDismissed } from '../lib/alertUtils';
-import '../styles/pages/alerts.css';
 
 export default function Alerts() {
   const profile = getProfile();

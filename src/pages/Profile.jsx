@@ -3,7 +3,6 @@ import * as Icons from 'lucide-react';
 import { store, getProfile, DEFAULT_PROFILE, DEPARTMENTS } from '../store/store';
 import ProfileSetupModal from '../components/ProfileSetupModal';
 import { Logo } from '../components/Logo';
-import '../styles/pages/profile.css';
 
 const InfoCard = ({ icon, title, items }) => (
   <div style={{

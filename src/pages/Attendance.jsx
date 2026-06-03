@@ -6,7 +6,6 @@ import {
 } from '../store/store';
 import { getAllCourses } from '../store/curriculumStore';
 import CourseTeacherDialog from '../components/CourseTeacherDialog';
-import '../styles/pages/attendance.css';
 
 // ── Utils ──────────────────────────────────────────────────────────────────
 const todayStr = () => new Date().toISOString().split('T')[0];

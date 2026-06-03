@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Plus, Trash2 } from 'lucide-react';
 import { store, uid } from '../store/store';
-import '../styles/pages/self-eval.css';
 
 const BAD_PRESETS = ['মিথ্যা কথা বলা', 'গালি দেওয়া', 'নামাজ মিস', 'সময় নষ্ট করা', 'অন্যকে কষ্ট দেওয়া', 'হিংসা করা'];
 const GOOD_PRESETS = ['কাউকে সাহায্য করা', 'ভালো পড়াশোনা', 'সময়মতো নামাজ', 'ব্যায়াম করা', 'বই পড়া', 'সৎ কাজ করা'];

@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import { COURSE_STATUSES, COURSE_TYPES, getCustomCourses, getProfile, getTermLabelFromKey, setCourseOverride, setCustomCourses, uid, store } from '../store/store';
 import { getAllCourses, getDeptOptionalCourses, setOptionalSelection } from '../store/curriculumStore';
 import ConfirmDialog from '../components/ConfirmDialog';
-import '../styles/pages/courses.css';
 
 const YEARS = [1, 2, 3, 4];
 const STATUS_COLORS = { active: 'tag-green', completed: 'tag-blue', backlog: 'tag-red', withdrawal: 'tag-yellow', incomplete: 'tag-gray' };

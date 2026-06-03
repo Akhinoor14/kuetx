@@ -11,7 +11,6 @@ import {
   getQBStats, getQBForDept, getQBForTerm, ytLabel,
 } from '../data/questionbank/questionBankData';
 
-import '../styles/pages/question-bank.css';
 
 // ──────────────────────────────────────────
 // QB OVERRIDES (set available: true here when PDFs are placed in public/)

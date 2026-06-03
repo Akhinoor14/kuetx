@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import { useTheme, THEMES } from '../hooks/useTheme';
 import { store } from '../store/store';
 import { Download, Upload, Trash2, HardDrive, RefreshCw, Shield, Database, Wifi, WifiOff } from 'lucide-react';
-import '../styles/pages/settings.css';
 
 // ── Auto-backup to localStorage snapshot ─────────────────────────────────────
 const BACKUP_KEY = 'kuetx_autobackup_';

@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { store, getGradeFromPct, getAttendanceMarks, computeEffectiveAttendance, GRADE_SCALE, getProfile, getCurrentTermKey, getTermTimeline, recordAudit } from '../store/store';
 import { getAllCourses } from '../store/curriculumStore';
-import '../styles/pages/marks.css';
 
 // ── Helper: Calculate required hall marks for a target grade ──────────────
 function calcHallNeeded(targetMinPct, continuousMarks) {

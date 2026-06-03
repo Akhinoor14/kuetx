@@ -4,7 +4,6 @@ import { Sparkles, Target, TrendingUp, ArrowRight } from 'lucide-react';
 import { store, GRADE_SCALE, cgpaToPercent, computeCourseGrade, getLegacyTermResults, getProfile, setLegacyTermResults, TERM_KEYS, getCurrentTermKey, getTermTimeline, recordAudit } from '../store/store';
 import { getAllCourses, getTermCreditsFromCurriculum } from '../store/curriculumStore';
 import Collapsible from '../components/Collapsible';
-import '../styles/pages/results.css';
 
 export default function Results() {
   const profile = getProfile();

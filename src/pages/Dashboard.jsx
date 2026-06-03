@@ -8,7 +8,6 @@ import { store, cgpaToPercent, computeCGPA, computeTermGPAs, computeEffectiveAtt
 import { getAllCourses } from '../store/curriculumStore';
 import { NAV } from '../nav';
 import ticker from '../lib/ticker';
-import '../styles/pages/dashboard.css';
 
 function StatCard({ label, value, sub, color, bgColor, icon: Icon, to }) {
   const inner = (

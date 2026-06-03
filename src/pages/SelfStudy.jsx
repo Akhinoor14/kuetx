@@ -3,7 +3,6 @@ import { Plus, Trash2, Clock3, Check } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import { store, uid, getProfile, getTermLabelFromKey } from '../store/store';
 import { getAllCourses, getDeptSyllabus } from '../store/curriculumStore';
-import '../styles/pages/self-study.css';
 
 export default function SelfStudy() {
   const profile = getProfile();

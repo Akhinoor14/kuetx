@@ -2,7 +2,6 @@ import { useMemo } from 'react';
 import { useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import PDFViewer from '../components/PDFViewer';
-import '../styles/pages/question-bank-viewer.css';
 
 function getFileNameFromPath(path) {
   const raw = (path || '').split('?')[0].split('#')[0];

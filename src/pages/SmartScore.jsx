@@ -1,7 +1,6 @@
 import { useMemo, useState } from 'react';
 import { store, computeEffectiveAttendance, getProfile, getPublishedCGPA } from '../store/store';
 import { getAllCourses } from '../store/curriculumStore';
-import '../styles/pages/smart-score.css';
 
 const PARAMS = [
   { key: 'cgpa',       label: 'Academic (All Marks)', weight: 30, icon: '🎓', hint: 'Published or provisional' },

@@ -6,7 +6,6 @@ import { useFavorites } from '../hooks/useFavorites';
 import { usePinnedPages } from '../hooks/usePinnedPages';
 import { getPageStats, getAllPageStats } from '../hooks/usePageTracker';
 import { store } from '../store/store';
-import '../styles/pages/quick-access.css';
 
 export default function QuickAccess() {
   const [mostUsed, setMostUsed] = useState([]);
