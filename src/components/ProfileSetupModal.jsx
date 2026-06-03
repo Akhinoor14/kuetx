@@ -424,13 +424,13 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
                   {errors.currentTermKey && <div style={{ fontSize: 11, color: '#dc2626', marginTop: 5 }}>{errors.currentTermKey}</div>}
                 </div>
                 <div>
-                  <label style={labelStyle}>Term Start Date</label>
+                  <label style={labelStyle}>Current Term Start Date</label>
                   <input type="date" value={form.termStartDate || ''} onChange={handleChange('termStartDate')} style={fieldStyle} />
                   {errors.termStartDate && <div style={{ fontSize: 11, color: '#dc2626', marginTop: 5 }}>{errors.termStartDate}</div>}
                   {!errors.termStartDate && <div style={{ fontSize: 10, color: 'var(--muted)', marginTop: 4 }}>Used for timeline and alert calculations</div>}
                 </div>
                 <div>
-                  <label style={labelStyle}>When Did You Start?</label>
+                  <label style={labelStyle}>When Did You Start KUET?</label>
                   <input type="date" value={form.yearStarted || ''} onChange={handleChange('yearStarted')} style={fieldStyle} />
                   <div style={{ fontSize: 10, color: 'var(--muted)', marginTop: 4 }}>Default year is used if you skip this</div>
                 </div>
