@@ -17,6 +17,7 @@ import {
 } from '../store/store';
 import { getAllCourses, getDeptSyllabus } from '../store/curriculumStore';
 import useTimerEngine from '../hooks/useTimerEngine';
+import '../styles/pages/extras.css';
 
 const TIME_TRACKER_CATEGORIES = ['Study', 'Class', 'Self Study', 'Facebook/YouTube', 'Gaming', 'Sleep', 'Exercise', 'Tuition', 'Travel', 'Adda', 'Other'];
 

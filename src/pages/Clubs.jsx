@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Plus, Trash2, Edit2, X, Check } from 'lucide-react';
 import { store, uid } from '../store/store';
+import '../styles/pages/clubs.css';
 
 export default function Clubs() {
   const [clubs, setClubs] = useState(() => store.get('clubs') || []);

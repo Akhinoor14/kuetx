@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { store } from '../store/store';
+import '../styles/pages/namaz.css';
 
 const PRAYERS = ['Fajr', 'Dhuhr', 'Asr', 'Maghrib', 'Isha'];
 

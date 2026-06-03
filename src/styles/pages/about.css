@@ -1,0 +1,193 @@
+/* ══════════════════════════════════════════════════════════════ */
+/* ABOUT PAGE - Mobile-First Responsive Design */
+/* ══════════════════════════════════════════════════════════════ */
+
+.about-page {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  background: var(--bg);
+}
+
+.about-page-header {
+  padding: 16px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.about-page-header h1 {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0;
+}
+
+.about-page-header p {
+  font-size: 13px;
+  color: var(--muted);
+  margin: 4px 0 0 0;
+}
+
+.about-page-content {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.about-page-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.about-page-section-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text);
+  padding: 0 0 8px 0;
+  border-bottom: 2px solid var(--accent);
+}
+
+.about-page-card {
+  padding: 16px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+}
+
+.about-page-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border-color: var(--accent);
+}
+
+.about-page-button {
+  padding: 10px 16px;
+  background: var(--accent);
+  color: var(--accentFg);
+  border: none;
+  border-radius: var(--r);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.about-page-button:hover {
+  filter: brightness(0.9);
+  box-shadow: 0 4px 12px rgba(var(--accentRGB), 0.3);
+}
+
+.about-page-input {
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  background: var(--inputBg);
+  color: var(--text);
+  font-size: 14px;
+  width: 100%;
+}
+
+.about-page-input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(var(--accentRGB), 0.1);
+}
+
+/* ── MOBILE OPTIMIZATIONS (< 640px) ── */
+@media (max-width: 639px) {
+  .about-page-header {
+    padding: 12px;
+  }
+
+  .about-page-header h1 {
+    font-size: 20px;
+  }
+
+  .about-page-content {
+    padding: 12px;
+    gap: 12px;
+  }
+
+  .about-page-card {
+    padding: 12px;
+  }
+
+  .about-page-button {
+    width: 100%;
+    padding: 12px;
+    font-size: 14px;
+  }
+}
+
+/* ── TABLET OPTIMIZATIONS (640px - 1023px) ── */
+@media (min-width: 640px) and (max-width: 1023px) {
+  .about-page-content {
+    padding: 20px;
+  }
+
+  .about-page-section {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+
+  .about-page-card {
+    padding: 16px;
+  }
+}
+
+/* ── DESKTOP OPTIMIZATIONS (>= 1024px) ── */
+@media (min-width: 1024px) {
+  .about-page-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 24px;
+    gap: 24px;
+  }
+
+  .about-page-section {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+
+  .about-page-card {
+    padding: 20px;
+  }
+
+  .about-page-section:nth-child(even) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* ── UTILITY CLASSES ── */
+.about-page-full-width {
+  grid-column: 1 / -1;
+}
+
+.about-page-half-width {
+  grid-column: span 1;
+}
+
+.about-page-hidden-mobile {
+  display: none;
+}
+
+@media (min-width: 640px) {
+  .about-page-hidden-mobile {
+    display: block;
+  }
+}
+
+.about-page-hidden-desktop {
+  display: block;
+}
+
+@media (min-width: 1024px) {
+  .about-page-hidden-desktop {
+    display: none;
+  }
+}

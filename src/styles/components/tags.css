@@ -1,0 +1,30 @@
+/* ──────────────────────────────────────────────────────────────────── */
+/* TAGS & BADGES */
+/* ──────────────────────────────────────────────────────────────────── */
+
+.tag, .badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 8px;
+  border-radius: 99px;
+  font-size: 12px;
+  font-weight: 600;
+  background: var(--accentSoft);
+  color: var(--accent);
+}
+
+.badge-danger {
+  background: #fee;
+  color: var(--danger);
+}
+
+.badge-warning {
+  background: #fef3c7;
+  color: var(--warning);
+}
+
+.badge-success {
+  background: var(--successBg);
+  color: var(--success);
+}

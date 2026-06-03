@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Plus, Trash2, Edit2, X, Check } from 'lucide-react';
 import { store, uid } from '../store/store';
 import ConfirmDialog from '../components/ConfirmDialog';
+import '../styles/pages/teachers.css';
 
 export default function Teachers() {
   const [teachers, setTeachers] = useState(() => store.get('teachers') || []);

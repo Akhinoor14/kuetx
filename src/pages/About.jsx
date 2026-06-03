@@ -1,5 +1,6 @@
 import { Wordmark } from '../components/Logo';
 import * as Icons from 'lucide-react';
+import '../styles/pages/about.css';
 
 export default function About() {
   return (

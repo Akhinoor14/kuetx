@@ -1,0 +1,52 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* BASE STYLES */
+@import './base/reset.css';
+@import './base/themes.css';
+@import './base/typography.css';
+
+/* COMPONENTS STYLES */
+@import './components/buttons.css';
+@import './components/cards.css';
+@import './components/inputs.css';
+@import './components/modal.css';
+@import './components/nav.css';
+@import './components/progress.css';
+@import './components/tags.css';
+
+/* PAGES STYLES */
+@import './pages/about.css';
+@import './pages/alerts.css';
+@import './pages/assignments.css';
+@import './pages/attendance.css';
+@import './pages/calculators.css';
+@import './pages/class-management.css';
+@import './pages/clubs.css';
+@import './pages/courses.css';
+@import './pages/c-t-quiz-planning.css';
+@import './pages/dashboard.css';
+@import './pages/diary.css';
+@import './pages/extras.css';
+@import './pages/marks.css';
+@import './pages/money.css';
+@import './pages/namaz.css';
+@import './pages/notes.css';
+@import './pages/profile.css';
+@import './pages/question-bank.css';
+@import './pages/question-bank-viewer.css';
+@import './pages/quick-access.css';
+@import './pages/results.css';
+@import './pages/schedule.css';
+@import './pages/self-eval.css';
+@import './pages/self-study.css';
+@import './pages/settings.css';
+@import './pages/smart-score.css';
+@import './pages/teachers.css';
+@import './pages/term-q-s.css';
+
+/* UTILS STYLES */
+@import './utils/animations.css';
+@import './utils/layout.css';
+@import './utils/pwa.css';

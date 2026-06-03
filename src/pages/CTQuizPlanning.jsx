@@ -7,6 +7,7 @@ import CTPlannerCalendar from '../components/CTPlannerCalendar';
 import EventModal from '../components/EventModal';
 import { countWeeklyPressure, detectConflicts, generateSuggestions } from '../lib/smartAssist';
 import { keyFor as utilKeyFor, countEventsInWeekOf as utilCountEventsInWeekOf } from '../lib/ctPlannerUtils';
+import '../styles/pages/c-t-quiz-planning.css';
 
 function makeMonthMatrix(year, month) {
   const first = new Date(year, month, 1);

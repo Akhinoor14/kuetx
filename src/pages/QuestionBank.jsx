@@ -11,7 +11,7 @@ import {
   getQBStats, getQBForDept, getQBForTerm, ytLabel,
 } from '../data/questionbank/questionBankData';
 
-import '../styles/questionBank2.css';
+import '../styles/pages/question-bank.css';
 
 // ──────────────────────────────────────────
 // QB OVERRIDES (set available: true here when PDFs are placed in public/)
@@ -23,6 +23,8 @@ const QB_OVERRIDES = {
 
 const CONTRIBUTION_FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLScE5eujz_Vu5LFgkZkiGtWurliPsOiGLmUYTKftBZNSkYTPmg/viewform?embedded=true';
 const CONTRIBUTION_FALLBACK_URL = 'https://forms.gle/9NahxuzSeeU6NTLw6';
+const CONTRIBUTION_PROMPT_LAST_SHOWN_KEY = 'questionBank_contribution_prompt_last_shown';
+const CONTRIBUTION_PROMPT_COOLDOWN_MS = 2 * 60 * 60 * 1000; // 2 hours
 
 // Merge overrides into data
 const QB_DATA = QUESTION_BANK.map(q => ({
@@ -81,8 +83,19 @@ export default function QuestionBank() {
   const [expandedGroups, setExpandedGroups] = useState(defaultExpandedGroups);
   const [view, setView] = useState('grouped'); // grouped | list
   const [showFilters, setShowFilters] = useState(false);
-  const [showIntroPrompt, setShowIntroPrompt] = useState(true);
+  const [showIntroPrompt, setShowIntroPrompt] = useState(false);
   const [showContributionForm, setShowContributionForm] = useState(false);
+
+  useEffect(() => {
+    const lastShown = Number(localStorage.getItem(CONTRIBUTION_PROMPT_LAST_SHOWN_KEY) || '0');
+    const now = Date.now();
+    const shouldShow = !lastShown || (now - lastShown >= CONTRIBUTION_PROMPT_COOLDOWN_MS);
+
+    if (shouldShow) {
+      localStorage.setItem(CONTRIBUTION_PROMPT_LAST_SHOWN_KEY, String(now));
+      setShowIntroPrompt(true);
+    }
+  }, []);
 
   useEffect(() => {
     if (myDept) {
@@ -138,18 +151,25 @@ export default function QuestionBank() {
     setExpandedGroups(prev => ({ ...prev, [key]: !prev[key] }));
   }, []);
 
+  const persistContributionPromptTimestamp = useCallback(() => {
+    localStorage.setItem(CONTRIBUTION_PROMPT_LAST_SHOWN_KEY, String(Date.now()));
+  }, []);
+
   const openContributionFlow = useCallback(() => {
+    persistContributionPromptTimestamp();
     setShowIntroPrompt(false);
     setShowContributionForm(true);
-  }, []);
+  }, [persistContributionPromptTimestamp]);
 
   const openContributionPrompt = useCallback(() => {
+    persistContributionPromptTimestamp();
     setShowIntroPrompt(true);
-  }, []);
+  }, [persistContributionPromptTimestamp]);
 
   const closeContributionPrompt = useCallback(() => {
+    persistContributionPromptTimestamp();
     setShowIntroPrompt(false);
-  }, []);
+  }, [persistContributionPromptTimestamp]);
 
   const closeContributionForm = useCallback(() => {
     setShowContributionForm(false);

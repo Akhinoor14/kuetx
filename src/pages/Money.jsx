@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react';
 import { Plus, Trash2 } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import { store, uid } from '../store/store';
+import '../styles/pages/money.css';
 
 const CATS = ['Course Fee', 'Hall Fee', 'Meal/Food', 'Transport', 'Junior Treat', 'Tour', 'Personal', 'Stationery', 'Other'];
 

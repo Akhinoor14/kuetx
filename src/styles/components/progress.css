@@ -1,0 +1,29 @@
+/* ──────────────────────────────────────────────────────────────────── */
+/* PROGRESS BARS & LOADERS */
+/* ──────────────────────────────────────────────────────────────────── */
+
+.progress {
+  height: 8px;
+  background: var(--inputBg);
+  border-radius: 99px;
+  overflow: hidden;
+}
+
+.progress-bar {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 99px;
+  transition: width 0.3s ease;
+}
+
+.progress-bar.danger {
+  background: var(--danger);
+}
+
+.progress-bar.warning {
+  background: var(--warning);
+}
+
+.progress-bar.success {
+  background: var(--success);
+}

@@ -1,0 +1,193 @@
+/* ══════════════════════════════════════════════════════════════ */
+/* NOTES PAGE - Mobile-First Responsive Design */
+/* ══════════════════════════════════════════════════════════════ */
+
+.notes-page {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  background: var(--bg);
+}
+
+.notes-page-header {
+  padding: 16px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 16px;
+}
+
+.notes-page-header h1 {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0;
+}
+
+.notes-page-header p {
+  font-size: 13px;
+  color: var(--muted);
+  margin: 4px 0 0 0;
+}
+
+.notes-page-content {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.notes-page-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.notes-page-section-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text);
+  padding: 0 0 8px 0;
+  border-bottom: 2px solid var(--accent);
+}
+
+.notes-page-card {
+  padding: 16px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+}
+
+.notes-page-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border-color: var(--accent);
+}
+
+.notes-page-button {
+  padding: 10px 16px;
+  background: var(--accent);
+  color: var(--accentFg);
+  border: none;
+  border-radius: var(--r);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.notes-page-button:hover {
+  filter: brightness(0.9);
+  box-shadow: 0 4px 12px rgba(var(--accentRGB), 0.3);
+}
+
+.notes-page-input {
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  background: var(--inputBg);
+  color: var(--text);
+  font-size: 14px;
+  width: 100%;
+}
+
+.notes-page-input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(var(--accentRGB), 0.1);
+}
+
+/* ── MOBILE OPTIMIZATIONS (< 640px) ── */
+@media (max-width: 639px) {
+  .notes-page-header {
+    padding: 12px;
+  }
+
+  .notes-page-header h1 {
+    font-size: 20px;
+  }
+
+  .notes-page-content {
+    padding: 12px;
+    gap: 12px;
+  }
+
+  .notes-page-card {
+    padding: 12px;
+  }
+
+  .notes-page-button {
+    width: 100%;
+    padding: 12px;
+    font-size: 14px;
+  }
+}
+
+/* ── TABLET OPTIMIZATIONS (640px - 1023px) ── */
+@media (min-width: 640px) and (max-width: 1023px) {
+  .notes-page-content {
+    padding: 20px;
+  }
+
+  .notes-page-section {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+
+  .notes-page-card {
+    padding: 16px;
+  }
+}
+
+/* ── DESKTOP OPTIMIZATIONS (>= 1024px) ── */
+@media (min-width: 1024px) {
+  .notes-page-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 24px;
+    gap: 24px;
+  }
+
+  .notes-page-section {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+  }
+
+  .notes-page-card {
+    padding: 20px;
+  }
+
+  .notes-page-section:nth-child(even) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* ── UTILITY CLASSES ── */
+.notes-page-full-width {
+  grid-column: 1 / -1;
+}
+
+.notes-page-half-width {
+  grid-column: span 1;
+}
+
+.notes-page-hidden-mobile {
+  display: none;
+}
+
+@media (min-width: 640px) {
+  .notes-page-hidden-mobile {
+    display: block;
+  }
+}
+
+.notes-page-hidden-desktop {
+  display: block;
+}
+
+@media (min-width: 1024px) {
+  .notes-page-hidden-desktop {
+    display: none;
+  }
+}
