@@ -210,27 +210,31 @@ export default function QuestionBank() {
   return (
     <div className="qb2-page">
       <div className="qb2-wrap">
-      {/* ── HERO ── */}
-      <div className="qb2-hero">
-        <div className="qb2-hero-text">
-          <div className="qb2-badge"><BookMarked size={12}/> Question Bank</div>
-          <h1 className="qb2-title">KUET Past Papers</h1>
-          <p className="qb2-sub">
-            {globalStats.total} papers across {globalStats.depts} departments &nbsp;·&nbsp;
-            {globalStats.available} available for download
-          </p>
-          <div className="qb2-hero-hint">
-            <span className="qb2-hero-chip">Default view: {myDept ? `${DEPT_CODE_SHORT[myDept] || myDept} department` : 'set your profile department'}</span>
-            <span className="qb2-hero-chip qb2-hero-chip-soft">
-              {currentTermKey ? `Current term ${currentTermKey} opens first` : 'Current term opens first after profile setup'}
-            </span>
+      {/* ── HERO (minimal) ── */}
+      <div className="qb-min-card">
+        <div className="qb-min-head">
+          <h1>KUET Past Papers</h1>
+          <p className="qb-min-sub">Default view: {myDept ? `${DEPT_CODE_SHORT[myDept] || myDept} department` : 'set your profile department'}</p>
+        </div>
+
+        <div className="qb-min-stats">
+          <div className="stat">
+            <div className="num">{globalStats.total}</div>
+            <div className="lbl">Total Papers</div>
+          </div>
+          <div className="stat">
+            <div className="num">{globalStats.available}</div>
+            <div className="lbl">Available</div>
+          </div>
+          <div className="stat">
+            <div className="num">{globalStats.depts}</div>
+            <div className="lbl">Departments</div>
           </div>
         </div>
-        <div className="qb2-stats">
-          <StatBox n={globalStats.total} l="Total Papers" color="blue"/>
-          <StatBox n={globalStats.available} l="Available" color="green"/>
-          <StatBox n={globalStats.depts} l="Departments" color="purple"/>
-          <StatBox n={filtered.length} l="Showing" color="orange"/>
+
+        <div className="qb-min-actions">
+          <button className="kb-btn primary" onClick={() => setView('grouped')}>Browse Papers</button>
+          <button className="kb-btn subtle" onClick={openContributionPrompt}>Contribute</button>
         </div>
       </div>
 

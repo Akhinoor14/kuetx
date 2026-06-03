@@ -164,22 +164,22 @@ export default function PWAInstallPrompt() {
         <div className="pwa-dialog-backdrop" role="presentation" onClick={handleLater}>
           <div className="pwa-dialog-card" role="dialog" aria-label="Install app" onClick={(event) => event.stopPropagation()}>
             <div className="pwa-dialog-kicker">KUETx App</div>
-            <div className="pwa-dialog-title">Install KUETx for faster access</div>
-            <div className="pwa-dialog-sub">Open the app in a dedicated window, keep offline access, and come back in one tap.</div>
+            <div className="pwa-dialog-title">Install KUETx</div>
+            <div className="pwa-dialog-sub">Dedicated window, offline access, one-tap launch.</div>
             <div className="pwa-dialog-points">
-              <div className="pwa-dialog-point"><span>•</span><span>Works offline after sync</span></div>
-              <div className="pwa-dialog-point"><span>•</span><span>Feels like a native app</span></div>
-              <div className="pwa-dialog-point"><span>•</span><span>Uses less browser chrome</span></div>
+              <div className="pwa-dialog-point"><span>•</span><span>Offline ready</span></div>
+              <div className="pwa-dialog-point"><span>•</span><span>Native feel</span></div>
+              <div className="pwa-dialog-point"><span>•</span><span>Less chrome</span></div>
             </div>
             <div className="pwa-dialog-actions">
               <button type="button" className="pwa-dialog-primary" onClick={() => { setPanelMode(null); handleInstall(); }}>
-                Install now
+                Install
               </button>
               <button type="button" className="pwa-dialog-secondary" onClick={() => setPanelMode('hint')}>
-                Show steps
+                Steps
               </button>
               <button type="button" className="pwa-dialog-ghost" onClick={handleLater}>
-                Not now
+                Later
               </button>
             </div>
           </div>

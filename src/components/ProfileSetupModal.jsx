@@ -47,6 +47,11 @@ const extractDeptCodeFromRoll = (roll) => {
   return ROLL_DEPT_MAP[deptDigits] || '';
 };
 
+const isRollValid = (roll) => {
+  const r = String(roll || '').trim();
+  return /^\d{7}$/.test(r);
+};
+
 const fieldStyle = {
   width: '100%',
   padding: '10px 12px',
@@ -102,7 +107,7 @@ const getFieldError = (key, form, autoCalculatedDept) => {
   if (key === 'studentId') {
     const v = String(value || '').trim();
     if (!v) return 'Student ID is required';
-    if (!/^\\d{7}$/.test(v)) return 'Student ID must be a 7-digit number';
+    if (!/^\d{7}$/.test(v)) return 'Student ID must be a 7-digit number';
   }
   if (key === 'dept' && !String(value || '').trim()) return 'Department is required';
   if (key === 'session' && !String(value || '').trim()) return 'Academic session is required';
@@ -282,14 +287,23 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
   .kuetx-profile-modal form { max-width: 920px; width: min(98vw, 920px); }
   .kuetx-profile-modal .field-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
   .kuetx-profile-modal .section { padding: 14px; border-radius: 12px; }
-  .kuetx-profile-modal .actions { display: flex; justify-content: space-between; gap: 8px; align-items: center; }
-  .kuetx-profile-modal .actions .left { margin-right: auto; }
+  .kuetx-profile-modal .actions { display: flex; justify-content: space-between; gap: 12px; align-items: center; }
+  .kuetx-profile-modal .actions .left { margin-left: auto; display: flex; gap: 12px; flex-wrap: wrap; }
+  .kuetx-profile-modal button { transition: all 0.2s ease; min-height: 44px; display: flex; align-items: center; justify-content: center; }
+  .kuetx-profile-modal button:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+  .kuetx-profile-modal button:active { transform: translateY(0); }
+
+  @media (max-width: 768px) {
+    .kuetx-profile-modal .actions { flex-direction: column; }
+    .kuetx-profile-modal .actions .left { width: 100%; margin-left: 0; }
+    .kuetx-profile-modal .actions button { width: 100%; }
+    .kuetx-profile-modal .actions .primary-action { order: -1; }
+  }
 
   @media (max-width: 640px) {
     .kuetx-profile-modal form { padding: 14px; border-radius: 12px; }
     .kuetx-profile-modal .field-grid { grid-template-columns: 1fr; }
-    .kuetx-profile-modal .actions { flex-direction: column-reverse; align-items: stretch; }
-    .kuetx-profile-modal .actions button { width: 100%; }
+    .kuetx-profile-modal .actions button { font-size: 14px; padding: 12px 16px; }
     .kuetx-profile-modal .step-tabs { gap: 6px; }
     .kuetx-profile-modal h3 { font-size: 18px; }
   }
@@ -354,9 +368,12 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
                   <select
                     value={form.dept || ''}
                     onChange={(e) => setForm(prev => ({ ...prev, dept: e.target.value }))}
+                    disabled={isRollValid(form.studentId) && autoCalculatedDept ? true : false}
                     style={{
                       ...fieldStyle,
-                      transition: 'box-shadow 0.28s ease, transform 0.18s ease, border-color 0.18s ease',
+                      opacity: isRollValid(form.studentId) && autoCalculatedDept ? 0.6 : 1,
+                      cursor: isRollValid(form.studentId) && autoCalculatedDept ? 'not-allowed' : 'pointer',
+                      transition: 'box-shadow 0.28s ease, transform 0.18s ease, border-color 0.18s ease, opacity 0.2s ease',
                       boxShadow: deptHighlight ? '0 10px 30px rgba(59,130,246,0.14)' : 'none',
                       transform: deptHighlight ? 'translateY(-3px)' : 'none',
                       borderColor: deptHighlight ? 'rgba(59,130,246,0.9)' : undefined,
@@ -367,13 +384,17 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
                       <option key={dept.code} value={dept.code}>{dept.code} - {dept.name}</option>
                     ))}
                   </select>
-                  {autoCalculatedDept ? (
-                    <div style={{ fontSize: 11, color: form.dept === autoCalculatedDept ? 'var(--accent)' : 'var(--muted)', marginTop: 6, fontWeight: 700 }}>
-                      {form.dept === autoCalculatedDept ? `Auto-selected from ID: ${autoCalculatedDept}` : `Detected from ID: ${autoCalculatedDept}`}
+                  {autoCalculatedDept && isRollValid(form.studentId) ? (
+                    <div style={{ fontSize: 11, color: 'var(--accent)', marginTop: 6, fontWeight: 700 }}>
+                      ✓ Auto-selected from roll: {autoCalculatedDept}
+                    </div>
+                  ) : autoCalculatedDept ? (
+                    <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 6 }}>
+                      Detected: {autoCalculatedDept}. Please fix your roll number to auto-select.
                     </div>
                   ) : (
                     <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 6 }}>
-                      Department could not be auto-detected from your roll number. Please choose it manually.
+                      Enter a 7-digit roll number to auto-select, or choose manually.
                     </div>
                   )}
                   {errors.dept && <div style={{ fontSize: 11, color: '#dc2626', marginTop: 5 }}>{errors.dept}</div>}
@@ -539,19 +560,19 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
           )}
         </div>
 
-        <div className="actions" style={{ display: 'flex', justifyContent: 'space-between', gap: 8, marginTop: 16, flexWrap: 'wrap', alignItems: 'center' }}>
-          <button type="button" onClick={onClose} style={{ padding: '10px 14px', borderRadius: 8, border: '1px solid var(--border)', background: 'transparent', color: 'var(--text)' }}>Cancel</button>
-          <div className="left" style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginLeft: 'auto' }}>
+        <div className="actions" style={{ display: 'flex', justifyContent: 'space-between', gap: 12, marginTop: 16, flexWrap: 'wrap', alignItems: 'center' }}>
+          <button type="button" onClick={onClose} style={{ padding: '12px 16px', borderRadius: 8, border: '1px solid var(--border)', background: 'transparent', color: 'var(--text)', fontWeight: 600 }}>Cancel</button>
+          <div className="left" style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginLeft: 'auto' }}>
             {stepIndex > 0 && (
-              <button type="button" onClick={goBack} style={{ padding: '10px 14px', borderRadius: 8, border: '1px solid var(--border)', background: 'transparent', color: 'var(--text)' }}>Back</button>
+              <button type="button" onClick={goBack} style={{ padding: '12px 16px', borderRadius: 8, border: '1px solid var(--border)', background: 'transparent', color: 'var(--text)', fontWeight: 600 }}>Back</button>
             )}
             {showOptionalSkip && (
-              <button type="button" onClick={skipStep} style={{ padding: '10px 14px', borderRadius: 8, border: '1px dashed var(--border)', background: 'transparent', color: 'var(--muted)' }}>Skip this step</button>
+              <button type="button" onClick={skipStep} style={{ padding: '12px 16px', borderRadius: 8, border: '1px dashed var(--border)', background: 'transparent', color: 'var(--muted)', fontWeight: 600 }}>Skip</button>
             )}
             {!canSubmit ? (
-              <button type="button" onClick={goNext} style={{ padding: '10px 14px', background: 'var(--accent)', color: '#fff', border: 'none', borderRadius: 8, fontWeight: 700 }}>Next</button>
+              <button type="button" onClick={goNext} className="primary-action" style={{ padding: '12px 18px', background: 'var(--accent)', color: '#fff', border: 'none', borderRadius: 8, fontWeight: 700, minWidth: 100 }}>Next</button>
             ) : (
-              <button type="submit" style={{ padding: '10px 14px', background: 'var(--accent)', color: '#fff', border: 'none', borderRadius: 8, fontWeight: 700 }}>Finish Setup</button>
+              <button type="submit" className="primary-action" style={{ padding: '12px 18px', background: 'var(--accent)', color: '#fff', border: 'none', borderRadius: 8, fontWeight: 700, minWidth: 120 }}>Finish Setup</button>
             )}
           </div>
         </div>
