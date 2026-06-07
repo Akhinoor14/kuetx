@@ -310,9 +310,9 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
   `;
 
   return (
-    <div className="kuetx-profile-modal" style={{ position: 'fixed', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(0,0,0,0.45)', zIndex: 9999, padding: '8px' }}>
+    <div className="kuetx-profile-modal" style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(0,0,0,0.45)', zIndex: 9999, padding: '8px', pointerEvents: 'auto' }}>
       <style>{modalCss}</style>
-      <form onSubmit={handleSubmit} style={{ background: 'var(--surface)', padding: 'clamp(12px, 6vw, 20px)', borderRadius: 16, width: 'min(920px, 98vw)', maxWidth: '100%', maxHeight: '94vh', overflowY: 'auto', boxShadow: '0 14px 40px rgba(0,0,0,0.24)' }}>
+      <form onSubmit={handleSubmit} style={{ background: 'var(--surface)', padding: 'clamp(12px, 6vw, 20px)', borderRadius: 16, width: 'min(920px, 98vw)', maxWidth: '100%', maxHeight: '94vh', overflowY: 'auto', boxShadow: '0 14px 40px rgba(0,0,0,0.24)', pointerEvents: 'auto' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, alignItems: 'flex-start', marginBottom: 14, flexWrap: 'wrap' }}>
           <div>
             <h3 style={{ margin: 0, fontSize: 20 }}>Profile Setup</h3>

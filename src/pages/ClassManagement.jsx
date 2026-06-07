@@ -710,7 +710,10 @@ export default function ClassManagement() {
           <div
             style={{
               position: 'fixed',
-              inset: 0,
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
               zIndex: 2100,
               background: 'rgba(12, 18, 28, 0.64)',
               backdropFilter: 'blur(6px)',
@@ -718,10 +721,11 @@ export default function ClassManagement() {
               alignItems: 'center',
               justifyContent: 'center',
               padding: 18,
+              pointerEvents: 'auto',
             }}
             onClick={closeCourseDetails}
           >
-            <div className="card" style={{ width: 720, maxWidth: '100%', maxHeight: '92vh', overflow: 'auto', padding: 20, boxShadow: '0 10px 30px rgba(2,6,23,0.32)' }} onClick={(e) => e.stopPropagation()}>
+            <div className="card" style={{ width: 720, maxWidth: '100%', maxHeight: '92vh', overflow: 'auto', padding: 20, boxShadow: '0 10px 30px rgba(2,6,23,0.32)', pointerEvents: 'auto' }} onClick={(e) => e.stopPropagation()}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 12, marginBottom: 14 }}>
                 <div>
                   <div style={{ fontSize: 18, fontWeight: 800 }}>{course.code}</div>

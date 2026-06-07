@@ -1303,13 +1303,13 @@ export default function Schedule() {
             <button className="btn btn-ghost" onClick={() => setEditingSettings(v => !v)} style={{ fontSize: '12px' }}>
               <Settings2 size={13} /> Settings
             </button>
-            <button className="btn btn-ghost" onClick={openHolidaySetup} style={{ fontSize: '12px' }}>
+            <button className="btn btn-ghost" onClick={openHolidaySetup} style={{ fontSize: '12px' }} title="Set holidays and off days">
               <CalendarDays size={13} /> Holiday
             </button>
-            <button className="btn btn-secondary" onClick={() => setCourseTeacherDialogState({ open: true, courseId: '', source: 'header' })} style={{ fontSize: '12px' }}>
-              <Plus size={13} /> Add Teacher
+            <button className="btn btn-secondary" onClick={() => setCourseTeacherDialogState({ open: true, courseId: '', source: 'header' })} style={{ fontSize: '12px' }} title="Assign teachers to courses for the routine">
+              <Plus size={13} /> Assign Teachers
             </button>
-            <button className="btn btn-primary" onClick={() => { setEditingId(null); resetForm(); setAdding(true); }} style={{ fontSize: '12px' }}>
+            <button className="btn btn-primary" onClick={() => { setEditingId(null); resetForm(); setAdding(true); }} style={{ fontSize: '12px' }} title="Add a new class slot to the schedule">
               <Plus size={13} /> Add Class
             </button>
           </div>
@@ -1589,7 +1589,10 @@ export default function Schedule() {
         <div
           style={{
             position: 'fixed',
-            inset: 0,
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
             background: 'rgba(0,0,0,0.48)',
             backdropFilter: 'blur(10px)',
             WebkitBackdropFilter: 'blur(10px)',
@@ -1598,12 +1601,13 @@ export default function Schedule() {
             justifyContent: 'center',
             zIndex: 1500,
             padding: 16,
+            pointerEvents: 'auto',
           }}
           onClick={cancelEdit}
         >
           <div
             className="card schedule-class-modal"
-            style={{ width: 'min(860px, 98vw)', maxHeight: '92vh', borderColor: 'var(--accent)', padding: 0, background: 'var(--bg)', overflow: 'hidden', display: 'flex', flexDirection: 'column', borderRadius: 24, boxShadow: '0 30px 80px rgba(0,0,0,0.16)' }}
+            style={{ width: 'min(860px, 98vw)', maxHeight: '92vh', borderColor: 'var(--accent)', padding: 0, background: 'var(--bg)', overflow: 'hidden', display: 'flex', flexDirection: 'column', borderRadius: 24, boxShadow: '0 30px 80px rgba(0,0,0,0.16)', pointerEvents: 'auto' }}
             onClick={e => e.stopPropagation()}
           >
             <div style={{ padding: 24, borderBottom: '1px solid var(--border)', background: 'var(--bg)', position: 'sticky', top: 0, zIndex: 1 }}>
@@ -1789,7 +1793,10 @@ export default function Schedule() {
         <div
           style={{
             position: 'fixed',
-            inset: 0,
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
             background: 'rgba(0,0,0,0.6)',
             backdropFilter: 'blur(8px)',
             WebkitBackdropFilter: 'blur(8px)',
@@ -1798,12 +1805,13 @@ export default function Schedule() {
             justifyContent: 'center',
             zIndex: 1200,
             padding: 12,
+            pointerEvents: 'auto',
           }}
           onClick={closeHolidaySetup}
         >
           <div
             className="card"
-            style={{ width: 650, maxWidth: '100%', padding: 16, background: 'var(--bg)' }}
+            style={{ width: 650, maxWidth: '100%', padding: 16, background: 'var(--bg)', pointerEvents: 'auto' }}
             onClick={e => e.stopPropagation()}
           >
             <div style={{ display: 'flex', justifyContent: 'space-between', gap: 10, alignItems: 'center', marginBottom: 16 }}>
@@ -2141,8 +2149,8 @@ export default function Schedule() {
 
       {/* Edit Exams Modal */}
       {editingExams && (
-        <div className="card edit-exams-modal" role="dialog" aria-modal="true" style={{ position: 'fixed', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(0,0,0,0.55)', backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)' }}>
-          <div className="edit-exams-inner" style={{ width: 720, maxWidth: '95%', background: 'var(--bg)', borderRadius: 12, padding: 16, maxHeight: '86vh', overflow: 'auto', boxShadow: '0 10px 40px rgba(0,0,0,0.25)' }}>
+        <div className="card edit-exams-modal" role="dialog" aria-modal="true" style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(0,0,0,0.55)', backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)', zIndex: 2000, padding: 12, pointerEvents: 'auto' }}>
+          <div className="edit-exams-inner" style={{ width: 720, maxWidth: '95%', background: 'var(--bg)', borderRadius: 12, padding: 16, maxHeight: '86vh', overflow: 'auto', boxShadow: '0 10px 40px rgba(0,0,0,0.25)', pointerEvents: 'auto' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12, gap: 12, flexWrap: 'wrap' }}>
               <div style={{ fontWeight: 800 }}>Edit Exam Dates</div>
               <div style={{ display: 'flex', gap: 8 }}>
@@ -2353,6 +2361,7 @@ export default function Schedule() {
         onSave={handleCourseTeacherDialogSave}
         allTeachers={allKnownTeachers}
         requireTwoTeachers
+        source={courseTeacherDialogState.source}
         onNavigateToTeachers={() => {
           handleCourseTeacherDialogClose();
           navigate('/teachers');

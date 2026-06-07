@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { X, Book } from 'lucide-react';
+import { X, Book, CheckCircle2 } from 'lucide-react';
 
 const normalizeTeacherName = (value) => {
   const clean = String(value || '').trim().replace(/\s+/g, ' ');
@@ -18,24 +18,29 @@ export default function CourseTeacherDialog({
   onSave,
   allTeachers = [],
   requireTwoTeachers = false,
+  source = '',
   onNavigateToTeachers,
 }) {
   const [selectedCourseId, setSelectedCourseId] = useState(course?.id || selectedCourseIdProp || '');
   const [teacher1, setTeacher1] = useState(currentTeachers[0] || '');
   const [teacher2, setTeacher2] = useState(currentTeachers[1] || '');
   const [error, setError] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
 
   const activeCourse = course || courseOptions.find((c) => c.id === selectedCourseId);
+  const isHeaderSource = source === 'header';
 
   useEffect(() => {
     setSelectedCourseId(course?.id || selectedCourseIdProp || '');
     setTeacher1(currentTeachers[0] || '');
     setTeacher2(currentTeachers[1] || '');
     setError('');
+    setSuccessMessage('');
   }, [isOpen, currentTeachers, course?.id, selectedCourseIdProp]);
 
   const handleSave = () => {
     setError('');
+    setSuccessMessage('');
 
     if (!activeCourse) {
       setError('Please select a course to assign teachers.');
@@ -63,10 +68,19 @@ export default function CourseTeacherDialog({
     const teachers = normalized2 ? [normalized1, normalized2] : [normalized1];
     onSave(teachers);
     
-    // Reset form
-    setTeacher1('');
-    setTeacher2('');
-    setError('');
+    // Show success message
+    setSuccessMessage(`✓ Teachers assigned for ${activeCourse.code}`);
+    
+    // Reset form after a moment
+    setTimeout(() => {
+      setTeacher1('');
+      setTeacher2('');
+      setError('');
+      setSuccessMessage('');
+      if (!isHeaderSource) {
+        onClose();
+      }
+    }, 1500);
   };
 
   const handleClose = () => {
@@ -74,6 +88,7 @@ export default function CourseTeacherDialog({
     setTeacher1(currentTeachers[0] || '');
     setTeacher2(currentTeachers[1] || '');
     setError('');
+    setSuccessMessage('');
     onClose();
   };
 
@@ -83,7 +98,10 @@ export default function CourseTeacherDialog({
     <div
       style={{
         position: 'fixed',
-        inset: 0,
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
         background: 'rgba(0,0,0,0.6)',
         backdropFilter: 'blur(8px)',
         WebkitBackdropFilter: 'blur(8px)',
@@ -92,7 +110,7 @@ export default function CourseTeacherDialog({
         justifyContent: 'center',
         zIndex: 2000,
         padding: '12px',
-        overflowY: 'auto',
+        pointerEvents: 'auto',
       }}
       onClick={handleClose}
     >
@@ -101,20 +119,28 @@ export default function CourseTeacherDialog({
         style={{
           width: '100%',
           maxWidth: '480px',
+          maxHeight: 'calc(100vh - 24px)',
+          overflowY: 'auto',
           padding: '20px',
           background: 'var(--bg)',
           borderRadius: '12px',
           boxShadow: '0 20px 60px rgba(0,0,0,0.2)',
-          margin: 'auto',
+          pointerEvents: 'auto',
         }}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 12, marginBottom: '18px' }}>
           <div>
-            <div style={{ fontSize: '15px', fontWeight: '800', color: 'var(--text)' }}>Assign Teachers</div>
+            <div style={{ fontSize: '15px', fontWeight: '800', color: 'var(--text)' }}>
+              {isHeaderSource ? 'Course Teacher Setup' : 'Assign Teachers'}
+            </div>
             <div style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '4px', maxWidth: '100%', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-              {activeCourse ? `${activeCourse.code} · ${activeCourse.name}` : 'Select a course to set teachers'}
+              {activeCourse 
+                ? `${activeCourse.code} · ${activeCourse.name}` 
+                : isHeaderSource 
+                  ? 'Pick a course and assign its teachers' 
+                  : 'Select a course to set teachers'}
             </div>
           </div>
           <button
@@ -136,6 +162,27 @@ export default function CourseTeacherDialog({
             <X size={20} />
           </button>
         </div>
+
+        {/* Success Message */}
+        {successMessage && (
+          <div
+            style={{
+              padding: '10px 12px',
+              borderRadius: 8,
+              background: 'rgba(34,197,94,0.1)',
+              border: '1px solid rgba(34,197,94,0.3)',
+              color: 'var(--success)',
+              fontSize: 13,
+              marginBottom: 16,
+              fontWeight: 600,
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+            }}
+          >
+            <CheckCircle2 size={16} /> {successMessage}
+          </div>
+        )}
 
         {/* Error Message */}
         {error && (
@@ -247,20 +294,23 @@ export default function CourseTeacherDialog({
           </div>
         </div>
 
-        {/* Info box */}
+        {/* Info box - context specific */}
         <div
           style={{
             padding: '10px 12px',
             borderRadius: 8,
-            background: 'rgba(59,130,246,0.08)',
-            border: '1px solid rgba(59,130,246,0.2)',
-            fontSize: '12px',
+            background: isHeaderSource ? 'rgba(59,130,246,0.1)' : 'rgba(59,130,246,0.08)',
+            border: isHeaderSource ? '1px solid rgba(59,130,246,0.3)' : '1px solid rgba(59,130,246,0.2)',
+            fontSize: isHeaderSource ? '12px' : '11px',
             color: 'var(--muted)',
             marginBottom: '16px',
             lineHeight: 1.5,
           }}
         >
-          <strong style={{ color: 'var(--accent)' }}>ℹ️</strong> After assigning, select either teacher when adding class entries. Use Edit to change later.
+          <strong style={{ color: 'var(--accent)' }}>ℹ️</strong> 
+          {isHeaderSource 
+            ? ' Assign teachers to courses. Later, when adding class entries, you\'ll choose one of these teachers for that class.' 
+            : ' After assigning, select either teacher when adding class entries. Use Edit to change later.'}
         </div>
 
         {/* Buttons */}
@@ -290,7 +340,7 @@ export default function CourseTeacherDialog({
             style={{ padding: '10px 14px', fontSize: '12px' }}
             disabled={!activeCourse}
           >
-            {currentTeachers.length >= 2 ? 'Edit Teachers' : 'Add Teacher'}
+            {currentTeachers.length >= 2 ? 'Update Teachers' : 'Assign'}
           </button>
         </div>
       </div>

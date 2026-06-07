@@ -3,8 +3,8 @@ import React from 'react';
 export default function EventModal({ open, data, courses = [], teachersMap = {}, onChange, onSave, onCancel }) {
   if (!open) return null;
   return (
-    <div style={{ position: 'fixed', inset: 0, background: 'rgba(2,6,23,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 60 }}>
-      <div style={{ width: 560, background: 'white', borderRadius: 12, padding: 18, boxShadow: '0 10px 40px rgba(2,6,23,0.4)' }}>
+    <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(2,6,23,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 60, padding: 12, pointerEvents: 'auto' }}>
+      <div style={{ width: 560, maxWidth: '100%', background: 'white', borderRadius: 12, padding: 18, boxShadow: '0 10px 40px rgba(2,6,23,0.4)', pointerEvents: 'auto', maxHeight: '90vh', overflowY: 'auto' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
           <div style={{ fontWeight: 800 }}>Add / Edit Event</div>
           <div style={{ fontSize: 12, color: 'var(--muted)' }}>{data?.date || ''}</div>
