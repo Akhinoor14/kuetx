@@ -3,6 +3,7 @@ import { Plus, Trash2, X, Check, BookOpen } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { COURSE_STATUSES, COURSE_TYPES, getCustomCourses, getProfile, getTermLabelFromKey, setCourseOverride, setCustomCourses, uid, store } from '../store/store';
 import { getAllCourses, getDeptOptionalCourses, setOptionalSelection } from '../store/curriculumStore';
+import CourseTeacherDialog from '../components/CourseTeacherDialog';
 import ConfirmDialog from '../components/ConfirmDialog';
 
 const YEARS = [1, 2, 3, 4];
@@ -322,6 +323,8 @@ export default function Courses() {
   const courses = useMemo(() => getAllCourses(profile), [profile.dept, profile.currentTermKey, version]);
   const customCourses = useMemo(() => getCustomCourses(), [version]);
   const optionalCatalog = getDeptOptionalCourses(profile.dept);
+  const [settings, setSettings] = useState(() => store.get('scheduleSettings') || {});
+  const [courseTeacherDialogState, setCourseTeacherDialogState] = useState({ open: false, courseId: '' });
 
   const toggleTerm = (key) => setExpandedTerms(p => ({ ...p, [key]: !p[key] }));
   const viewCourseSyllabus = (id) => {
@@ -340,6 +343,60 @@ export default function Courses() {
       code
     });
     setVersion(v => v + 1);
+  };
+
+  const normalizeTeacherName = (value) => {
+    const clean = String(value || '').trim().replace(/\s+/g, ' ');
+    if (!clean) return '';
+    return /\bsir\.?$/i.test(clean) ? clean.replace(/\.$/, '') : `${clean} Sir`;
+  };
+
+  const normalizeTeacherList = (teachers = []) => {
+    return [...new Set((teachers || [])
+      .map(normalizeTeacherName)
+      .filter(Boolean))].slice(0, 2);
+  };
+
+  const getCourseTeachers = (courseId) => {
+    return Array.isArray(settings?.courseTeacherMap?.[courseId]) ? settings.courseTeacherMap[courseId] : [];
+  };
+
+  const openTeacherDialog = (courseId) => setCourseTeacherDialogState({ open: true, courseId });
+  const handleCourseTeacherDialogClose = () => setCourseTeacherDialogState({ open: false, courseId: '' });
+
+  const handleCourseTeacherDialogSave = (teachers) => {
+    const courseId = courseTeacherDialogState.courseId;
+    if (!courseId) return;
+    const normalizedTeachers = normalizeTeacherList(teachers);
+    if (normalizedTeachers.length < 2) return;
+
+    const nextSettings = { ...(settings || {}), courseTeacherMap: { ...(settings.courseTeacherMap || {}), [courseId]: normalizedTeachers } };
+    store.set('scheduleSettings', nextSettings);
+    setSettings(nextSettings);
+
+    const existingTeachers = store.get('teachers') || [];
+    const existingNames = new Set(existingTeachers.map(t => t.name));
+    const newTeachers = normalizedTeachers
+      .filter(name => !existingNames.has(name))
+      .map(name => ({
+        id: uid(),
+        name,
+        initial: name.split(/\s+/).map(part => part[0].toUpperCase()).join(''),
+        title: '',
+        dept: profile?.dept || '',
+        phone: '',
+        email: '',
+        courses: '',
+        officeRoom: '',
+        rating: '',
+        notes: 'Auto-added from course page',
+      }));
+
+    if (newTeachers.length > 0) {
+      store.set('teachers', [...existingTeachers, ...newTeachers]);
+    }
+
+    handleCourseTeacherDialogClose();
   };
 
   const filtered = filterYear === 'all' ? courses : courses.filter(c => c.year === +filterYear);
@@ -402,7 +459,23 @@ export default function Courses() {
                         <BookOpen size={11} />
                         <span style={{ marginLeft: 4 }}>Syllabus</span>
                       </button>
+                      {`Y${c.year}T${c.term}` === profile.currentTermKey && (
+                        <button onClick={(e) => { e.stopPropagation(); openTeacherDialog(c.id); }} className="tag tag-indigo" style={{ ...CHIP_STYLE, fontSize: 9, fontWeight: 700, cursor: 'pointer' }}>
+                          {getCourseTeachers(c.id).length >= 2 ? 'Edit Teachers' : 'Add Teachers'}
+                        </button>
+                      )}
                     </div>
+                    {`Y${c.year}T${c.term}` === profile.currentTermKey && (
+                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 8, alignItems: 'center' }}>
+                        {getCourseTeachers(c.id).length > 0 ? (
+                          getCourseTeachers(c.id).map((teacher, index) => (
+                            <span key={index} className="tag tag-gray" style={{ ...CHIP_STYLE, fontSize: 11 }}>{teacher}</span>
+                          ))
+                        ) : (
+                          <span className="tag tag-muted" style={{ ...CHIP_STYLE, fontSize: 11, color: 'var(--muted)' }}>No teachers set</span>
+                        )}
+                      </div>
+                    )}
                   </div>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 6, minWidth: 110, width: 110 }}>
                     {c.isOptional && <select value={c.optionalCode || ''} onChange={e => updateOptional(c, e.target.value)} style={{ fontSize: 13, padding: 6 }}><option value="">Select</option>{optionalCatalog.map(opt => <option key={opt.code} value={opt.code}>{opt.code} — {opt.title}</option>)}</select>}
@@ -456,6 +529,15 @@ export default function Courses() {
           setDeleteTarget(null);
         }}
         onCancel={() => setDeleteTarget(null)}
+      />
+
+      <CourseTeacherDialog
+        isOpen={courseTeacherDialogState.open}
+        onClose={handleCourseTeacherDialogClose}
+        course={courses.find(course => course.id === courseTeacherDialogState.courseId)}
+        currentTeachers={getCourseTeachers(courseTeacherDialogState.courseId)}
+        onSave={handleCourseTeacherDialogSave}
+        requireTwoTeachers={true}
       />
 
       {courses.length === 0 && !addingCustom && (

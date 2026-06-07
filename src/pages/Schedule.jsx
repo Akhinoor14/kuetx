@@ -1306,6 +1306,9 @@ export default function Schedule() {
             <button className="btn btn-ghost" onClick={openHolidaySetup} style={{ fontSize: '12px' }}>
               <CalendarDays size={13} /> Holiday
             </button>
+            <button className="btn btn-secondary" onClick={() => setCourseTeacherDialogState({ open: true, courseId: '', source: 'header' })} style={{ fontSize: '12px' }}>
+              <Plus size={13} /> Add Teacher
+            </button>
             <button className="btn btn-primary" onClick={() => { setEditingId(null); resetForm(); setAdding(true); }} style={{ fontSize: '12px' }}>
               <Plus size={13} /> Add Class
             </button>
