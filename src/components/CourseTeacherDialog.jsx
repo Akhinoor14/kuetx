@@ -18,7 +18,7 @@ export default function CourseTeacherDialog({
   onSave,
   allTeachers = [],
   requireTwoTeachers = false,
-  source = '',
+  source = '', // 'form' or 'quick' (within Add Class form)
   onNavigateToTeachers,
 }) {
   const [selectedCourseId, setSelectedCourseId] = useState(course?.id || selectedCourseIdProp || '');
@@ -28,7 +28,7 @@ export default function CourseTeacherDialog({
   const [successMessage, setSuccessMessage] = useState('');
 
   const activeCourse = course || courseOptions.find((c) => c.id === selectedCourseId);
-  const isHeaderSource = source === 'header';
+  const isFormSource = source === 'form' || source === 'quick';
 
   useEffect(() => {
     setSelectedCourseId(course?.id || selectedCourseIdProp || '');
@@ -71,15 +71,13 @@ export default function CourseTeacherDialog({
     // Show success message
     setSuccessMessage(`✓ Teachers assigned for ${activeCourse.code}`);
     
-    // Reset form after a moment
+    // Reset form after a moment (form source closes, courses source resets for next)
     setTimeout(() => {
       setTeacher1('');
       setTeacher2('');
       setError('');
       setSuccessMessage('');
-      if (!isHeaderSource) {
-        onClose();
-      }
+      onClose();
     }, 1500);
   };
 
@@ -133,14 +131,14 @@ export default function CourseTeacherDialog({
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 12, marginBottom: '18px' }}>
           <div>
             <div style={{ fontSize: '15px', fontWeight: '800', color: 'var(--text)' }}>
-              {isHeaderSource ? 'Course Teacher Setup' : 'Assign Teachers'}
+              {isFormSource ? 'Assign Teachers' : 'Edit Course Teachers'}
             </div>
             <div style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '4px', maxWidth: '100%', overflow: 'hidden', textOverflow: 'ellipsis' }}>
               {activeCourse 
                 ? `${activeCourse.code} · ${activeCourse.name}` 
-                : isHeaderSource 
-                  ? 'Pick a course and assign its teachers' 
-                  : 'Select a course to set teachers'}
+                : isFormSource 
+                  ? 'Select a course to set its teachers' 
+                  : 'Update course teachers'}
             </div>
           </div>
           <button
@@ -299,23 +297,23 @@ export default function CourseTeacherDialog({
           style={{
             padding: '10px 12px',
             borderRadius: 8,
-            background: isHeaderSource ? 'rgba(59,130,246,0.1)' : 'rgba(59,130,246,0.08)',
-            border: isHeaderSource ? '1px solid rgba(59,130,246,0.3)' : '1px solid rgba(59,130,246,0.2)',
-            fontSize: isHeaderSource ? '12px' : '11px',
+            background: 'rgba(59,130,246,0.08)',
+            border: '1px solid rgba(59,130,246,0.2)',
+            fontSize: '11px',
             color: 'var(--muted)',
             marginBottom: '16px',
             lineHeight: 1.5,
           }}
         >
           <strong style={{ color: 'var(--accent)' }}>ℹ️</strong> 
-          {isHeaderSource 
-            ? ' Assign teachers to courses. Later, when adding class entries, you\'ll choose one of these teachers for that class.' 
-            : ' After assigning, select either teacher when adding class entries. Use Edit to change later.'}
+          {isFormSource 
+            ? ' Teachers must be pre-assigned in the Courses page. If not assigned yet, go to Courses → Find course → Click "Add Teachers".' 
+            : ' Update the teachers assigned to this course. This will be used when selecting teachers for class entries.'}
         </div>
 
         {/* Buttons */}
         <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end', flexWrap: 'wrap' }}>
-          {onNavigateToTeachers && (
+          {onNavigateToTeachers && !isFormSource && (
             <button
               onClick={() => {
                 handleClose();
