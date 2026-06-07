@@ -299,7 +299,9 @@ export default function Settings() {
             <div className="settings-modal-header">
               <div>
                 <div style={{ fontWeight: 700 }}>Restore preview</div>
-                <div style={{ fontSize: 12, color: 'var(--muted)' }}>{previewInfo.fileName} • {previewInfo.items.length} keys • ~{previewInfo.totalKB} KB</div>
+                <div style={{ fontSize: 12, color: 'var(--muted)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', minWidth: 0 }}>
+                  <span title={previewInfo.fileName}>{previewInfo.fileName}</span> • {previewInfo.items.length} keys • ~{previewInfo.totalKB} KB
+                </div>
                 {previewInfo.version && <div style={{ fontSize: 12, color: 'var(--muted)' }}>Backup version: {previewInfo.version}</div>}
               </div>
               <div className="settings-modal-actions">

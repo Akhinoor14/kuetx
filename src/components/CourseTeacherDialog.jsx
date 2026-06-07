@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { X } from 'lucide-react';
+import { X, Book } from 'lucide-react';
 
 const normalizeTeacherName = (value) => {
   const clean = String(value || '').trim().replace(/\s+/g, ' ');
@@ -15,6 +15,7 @@ export default function CourseTeacherDialog({
   onSave,
   allTeachers = [],
   requireTwoTeachers = false,
+  onNavigateToTeachers,
 }) {
   const [teacher1, setTeacher1] = useState(currentTeachers[0] || '');
   const [teacher2, setTeacher2] = useState(currentTeachers[1] || '');
@@ -77,25 +78,29 @@ export default function CourseTeacherDialog({
         alignItems: 'center',
         justifyContent: 'center',
         zIndex: 2000,
-        padding: 12,
+        padding: '12px',
+        overflowY: 'auto',
       }}
       onClick={handleClose}
     >
       <div
         className="card"
         style={{
-          width: 500,
-          maxWidth: '100%',
-          padding: 24,
+          width: '100%',
+          maxWidth: '480px',
+          padding: '20px',
           background: 'var(--bg)',
+          borderRadius: '12px',
+          boxShadow: '0 20px 60px rgba(0,0,0,0.2)',
+          margin: 'auto',
         }}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 12, marginBottom: 20 }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 12, marginBottom: '18px' }}>
           <div>
-            <div style={{ fontSize: 16, fontWeight: 800, color: 'var(--text)' }}>Assign Teachers</div>
-            <div style={{ fontSize: 13, color: 'var(--muted)', marginTop: 2 }}>
+            <div style={{ fontSize: '15px', fontWeight: '800', color: 'var(--text)' }}>Assign Teachers</div>
+            <div style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '4px', maxWidth: '100%', overflow: 'hidden', textOverflow: 'ellipsis' }}>
               {course.code} · {course.name}
             </div>
           </div>
@@ -110,6 +115,9 @@ export default function CourseTeacherDialog({
               alignItems: 'center',
               justifyContent: 'center',
               opacity: 0.6,
+              flexShrink: 0,
+              width: '28px',
+              height: '28px',
             }}
           >
             <X size={20} />
@@ -135,8 +143,8 @@ export default function CourseTeacherDialog({
         )}
 
         {/* Teacher 1 */}
-        <div style={{ marginBottom: 16 }}>
-          <label style={{ display: 'block', fontSize: 13, fontWeight: 700, marginBottom: 6, color: 'var(--text)' }}>
+        <div style={{ marginBottom: '14px' }}>
+          <label style={{ display: 'block', fontSize: '13px', fontWeight: '700', marginBottom: '6px', color: 'var(--text)' }}>
             Teacher 1 (Required) *
           </label>
           <input
@@ -152,19 +160,20 @@ export default function CourseTeacherDialog({
               borderRadius: 8,
               background: 'var(--surface)',
               color: 'var(--text)',
-              fontSize: 13,
+              fontSize: '13px',
               fontFamily: 'inherit',
               outline: 'none',
+              boxSizing: 'border-box',
             }}
           />
-          <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 4 }}>
+          <div style={{ fontSize: '11px', color: 'var(--muted)', marginTop: '4px' }}>
             Name will be normalized (e.g., "Ahmed" → "Ahmed Sir")
           </div>
         </div>
 
         {/* Teacher 2 */}
-        <div style={{ marginBottom: 20 }}>
-          <label style={{ display: 'block', fontSize: 13, fontWeight: 700, marginBottom: 6, color: 'var(--text)' }}>
+        <div style={{ marginBottom: '16px' }}>
+          <label style={{ display: 'block', fontSize: '13px', fontWeight: '700', marginBottom: '6px', color: 'var(--text)' }}>
             Teacher 2 {requireTwoTeachers ? '(Required) *' : '(Optional)'}
           </label>
           <input
@@ -179,12 +188,13 @@ export default function CourseTeacherDialog({
               borderRadius: 8,
               background: 'var(--surface)',
               color: 'var(--text)',
-              fontSize: 13,
+              fontSize: '13px',
               fontFamily: 'inherit',
               outline: 'none',
+              boxSizing: 'border-box',
             }}
           />
-          <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 4 }}>
+          <div style={{ fontSize: '11px', color: 'var(--muted)', marginTop: '4px' }}>
             {requireTwoTeachers ? 'Please provide both teachers for this course.' : 'For co-teaching. Leave empty for single teacher.'}
           </div>
         </div>
@@ -196,28 +206,40 @@ export default function CourseTeacherDialog({
             borderRadius: 8,
             background: 'rgba(59,130,246,0.08)',
             border: '1px solid rgba(59,130,246,0.2)',
-            fontSize: 12,
+            fontSize: '12px',
             color: 'var(--muted)',
-            marginBottom: 20,
+            marginBottom: '16px',
             lineHeight: 1.5,
           }}
         >
-          <strong style={{ color: 'var(--accent)' }}>ℹ️ Info:</strong> After assigning, you can select either teacher when adding class entries. Edit button lets you change later.
+          <strong style={{ color: 'var(--accent)' }}>ℹ️</strong> After assigning, select either teacher when adding class entries. Use Edit to change later.
         </div>
 
         {/* Buttons */}
-        <div style={{ display: 'flex', gap: 10, justifyContent: 'flex-end' }}>
+        <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end', flexWrap: 'wrap' }}>
+          {onNavigateToTeachers && (
+            <button
+              onClick={() => {
+                handleClose();
+                onNavigateToTeachers();
+              }}
+              className="btn btn-ghost"
+              style={{ padding: '10px 14px', fontSize: '12px', display: 'inline-flex', alignItems: 'center', gap: '6px' }}
+            >
+              <Book size={13} /> Manage Teachers
+            </button>
+          )}
           <button
             onClick={handleClose}
             className="btn btn-ghost"
-            style={{ padding: '10px 16px' }}
+            style={{ padding: '10px 14px', fontSize: '12px' }}
           >
             Cancel
           </button>
           <button
             onClick={handleSave}
             className="btn btn-primary"
-            style={{ padding: '10px 16px' }}
+            style={{ padding: '10px 14px', fontSize: '12px' }}
           >
             {currentTeachers.length >= 2 ? 'Edit Teachers' : 'Add Teacher'}
           </button>

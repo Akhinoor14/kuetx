@@ -654,12 +654,39 @@ export default function Schedule() {
     const normalizedTeachers = [...new Set((teachers || []).map(name => normalizeTeacherName(name)).filter(Boolean))].slice(0, 2);
     if (!courseId || normalizedTeachers.length < 2) return;
 
+    // Update course-teacher mapping
     const nextMap = {
       ...(courseTeacherMap || {}),
       [courseId]: normalizedTeachers,
     };
     persistSettings({ ...settings, courseTeacherMap: nextMap });
 
+    // Sync: Auto-add teachers to Teachers database if they don't exist
+    const existingTeachers = store.get('teachers') || [];
+    const existingNames = new Set(existingTeachers.map(t => t.name));
+    
+    const newTeachers = normalizedTeachers
+      .filter(name => !existingNames.has(name))
+      .map(name => ({
+        id: uid(),
+        name,
+        initial: name.split(/\s+/).map(part => part[0].toUpperCase()).join(''),
+        title: '',
+        dept: profile?.dept || '',
+        phone: '',
+        email: '',
+        courses: '',
+        officeRoom: '',
+        rating: '',
+        notes: 'Auto-added from schedule',
+      }));
+
+    if (newTeachers.length > 0) {
+      const updatedTeachers = [...existingTeachers, ...newTeachers];
+      store.set('teachers', updatedTeachers);
+    }
+
+    // Update form states
     if (courseTeacherDialogState.source === 'form') {
       setForm(prev => ({
         ...prev,
@@ -1135,13 +1162,13 @@ export default function Schedule() {
   const renderTimetable = (opts = {}) => {
     const tableStyle = { width: '100%', borderCollapse: 'collapse', fontSize: opts.large ? 15 : 13 };
     return (
-      <div className={`timetable-grid${opts.fullView ? ' full-view' : ''}`} style={{ overflowX: 'auto' }}>
+      <div className={`timetable-grid${opts.fullView ? ' full-view' : ''}`} style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch', scrollBehavior: 'smooth' }}>
         <table style={tableStyle}>
           <thead style={{ position: 'sticky', top: 0, zIndex: 2 }}>
             <tr>
-              <th className="time-col" style={{ padding: '12px 12px', borderBottom: '1px solid var(--border)', background: 'var(--surface)', minWidth: 110, textAlign: 'left' }}>Time</th>
+              <th className="time-col" style={{ padding: 'clamp(8px, 2vw, 12px) clamp(6px, 1.5vw, 12px)', borderBottom: '1px solid var(--border)', background: 'var(--surface)', minWidth: 'clamp(85px, 15vw, 110px)', textAlign: 'left', fontSize: 'clamp(11px, 2.5vw, 13px)' }}>Time</th>
               {DAYS.map(d => (
-                <th key={d} className={`timetable-day-col${d === selectedDay ? ' selected-day' : ''}`} style={{ padding: 0, borderBottom: '1px solid var(--border)', background: 'var(--surface)', minWidth: 160 }}>
+                <th key={d} className={`timetable-day-col${d === selectedDay ? ' selected-day' : ''}`} style={{ padding: 0, borderBottom: '1px solid var(--border)', background: 'var(--surface)', minWidth: 'clamp(120px, 20vw, 160px)' }}>
                   <button
                     onClick={() => setSelectedDay(d)}
                     style={{
@@ -1165,7 +1192,7 @@ export default function Schedule() {
               const breakSlot = isBreakSlot(p);
               return (
                 <tr key={p}>
-                  <td style={{ padding: '12px 12px', borderBottom: '1px solid var(--border)', borderRight: '1px solid var(--border)', fontWeight: 700, fontSize: 13, color: 'var(--muted)', fontFamily: 'JetBrains Mono, monospace', whiteSpace: 'nowrap', background: breakSlot ? 'rgba(239,68,68,0.08)' : 'var(--bg)' }}>{slotPreview(p)}</td>
+                  <td style={{ padding: 'clamp(8px, 2vw, 12px) clamp(6px, 1.5vw, 12px)', borderBottom: '1px solid var(--border)', borderRight: '1px solid var(--border)', fontWeight: 700, fontSize: 'clamp(11px, 2.5vw, 13px)', color: 'var(--muted)', fontFamily: 'JetBrains Mono, monospace', whiteSpace: 'nowrap', background: breakSlot ? 'rgba(239,68,68,0.08)' : 'var(--bg)' }}>{slotPreview(p)}</td>
                   {DAYS.map(d => {
                     if (tableLayout.covered[d]?.has(p)) return null;
                     const entries = tableLayout.starts[d]?.[p] || [];
@@ -1181,11 +1208,11 @@ export default function Schedule() {
                         onDoubleClick={isEmptyCell ? () => openQuickAdd(d, p) : undefined}
                         title={isEmptyCell ? 'Double-click to add class' : undefined}
                         style={{
-                          padding: '6px',
+                          padding: 'clamp(4px, 1.5vw, 6px)',
                           borderBottom: '1px solid var(--border)',
                           borderRight: '1px solid var(--border)',
                           verticalAlign: 'top',
-                          minHeight: 54,
+                          minHeight: 'clamp(45px, 12vw, 54px)',
                           background: breakSlot ? 'rgba(239,68,68,0.08)' : d === selectedDay ? 'rgba(59,130,246,0.035)' : 'transparent',
                           cursor: isEmptyCell ? 'pointer' : 'default',
                           touchAction: 'manipulation',
@@ -1222,11 +1249,11 @@ export default function Schedule() {
                                 touchAction: 'manipulation',
                               }}
                             >
-                              <div style={{ fontWeight: 800, fontSize: 12, lineHeight: 1.35, letterSpacing: '0.01em', display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden', flex: 1 }}>
+                              <div style={{ fontWeight: 800, fontSize: 'clamp(10px, 2.5vw, 12px)', lineHeight: 1.35, letterSpacing: '0.01em', display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden', flex: 1 }}>
                                 {s.displayName || c?.code || c?.name || '?'}
                               </div>
                               {!hideTeacherInGrid && (
-                                <div style={{ fontSize: 11, fontWeight: 600, marginTop: 4, color: 'var(--text)', opacity: 0.95, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+                                <div style={{ fontSize: 'clamp(9px, 2vw, 11px)', fontWeight: 600, marginTop: 'clamp(2px, 0.5vw, 4px)', color: 'var(--text)', opacity: 0.95, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
                                   Teacher: {s.teacherName || 'Not set'}
                                 </div>
                               )}
@@ -1260,26 +1287,26 @@ export default function Schedule() {
   };
 
   return (
-    <div className="page-enter page-container" style={{ maxWidth: 1180, margin: '0 auto', paddingBottom: 24 }}>
+    <div className="page-enter page-container" style={{ maxWidth: '1180px', margin: '0 auto', paddingBottom: '20px', paddingLeft: '12px', paddingRight: '12px' }}>
       <div className="card" style={{ marginBottom: 14, padding: '18px' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 16, flexWrap: 'wrap' }}>
-          <div style={{ minWidth: 240, flex: 1 }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap', marginBottom: 6 }}>
-              <h1 style={{ fontSize: 22, fontWeight: 800, letterSpacing: '-0.03em', margin: 0 }}>Class Schedule</h1>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '12px', flexWrap: 'wrap', rowGap: '10px' }}>
+          <div style={{ minWidth: '200px', flex: 1 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap', marginBottom: '6px' }}>
+              <h1 style={{ fontSize: '20px', fontWeight: '800', letterSpacing: '-0.03em', margin: '0' }}>Class Schedule</h1>
               <span className="tag tag-blue">5-day week</span>
             </div>
-            <p style={{ fontSize: 13, color: 'var(--muted)', margin: 0, maxWidth: 620 }}>
+            <p style={{ fontSize: '13px', color: 'var(--muted)', margin: '0', maxWidth: '600px', lineHeight: 1.4 }}>
               Minimal routine builder for Sun–Thu classes. Keep the display clean, choose the share format, then copy or import/export the full routine when needed.
             </p>
           </div>
-          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', justifyContent: 'flex-end' }}>
-            <button className="btn btn-ghost" onClick={() => setEditingSettings(v => !v)}>
+          <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', justifyContent: 'flex-end', minWidth: '220px' }}>
+            <button className="btn btn-ghost" onClick={() => setEditingSettings(v => !v)} style={{ fontSize: '12px' }}>
               <Settings2 size={13} /> Settings
             </button>
-            <button className="btn btn-ghost" onClick={openHolidaySetup}>
-              <CalendarDays size={13} /> Holiday Setup
+            <button className="btn btn-ghost" onClick={openHolidaySetup} style={{ fontSize: '12px' }}>
+              <CalendarDays size={13} /> Holiday
             </button>
-            <button className="btn btn-primary" onClick={() => { setEditingId(null); resetForm(); setAdding(true); }}>
+            <button className="btn btn-primary" onClick={() => { setEditingId(null); resetForm(); setAdding(true); }} style={{ fontSize: '12px' }}>
               <Plus size={13} /> Add Class
             </button>
           </div>
@@ -1297,7 +1324,7 @@ export default function Schedule() {
               <span className="tag tag-gray">{settings.modelId === 'custom' ? 'Custom' : activeTemplate.id}</span>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 8, marginBottom: 8 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 8, marginBottom: 8 }}>
               {Object.values(TIME_MODELS).map(model => (
                 <button
                   key={model.id}
@@ -1425,7 +1452,7 @@ export default function Schedule() {
             </button>
           </div>
         </div>
-        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 12 }}>
+        <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '12px' }}>
           {DAYS.map(day => (
             <button
               key={day}
@@ -1433,6 +1460,7 @@ export default function Schedule() {
               className="btn"
               style={{
                 padding: '8px 12px',
+                fontSize: '12px',
                 border: selectedDay === day ? '1px solid var(--accent)' : '1px solid var(--border)',
                 background: selectedDay === day ? 'rgba(59,130,246,0.08)' : 'var(--card)',
               }}
@@ -1454,12 +1482,12 @@ export default function Schedule() {
                 const teacherName = item.teacherName || 'Teacher not set';
                 const timeRange = item.slot;
                 return (
-                  <div key={item.id} style={{ display: 'grid', gridTemplateColumns: '100px 1fr', gap: 12, alignItems: 'flex-start', padding: '10px 12px', borderRadius: 10, border: '1px solid var(--border)', background: 'var(--card)' }}>
-                    <div style={{ fontWeight: 700, fontSize: 12, color: 'var(--accent)', lineHeight: 1.3 }}>{timeRange}</div>
-                    <div style={{ minWidth: 0 }}>
-                      <div style={{ fontWeight: 700, fontSize: 13, color: 'var(--text)', marginBottom: 3 }}>{courseCode}</div>
-                      <div style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 4, lineHeight: 1.3 }}>{courseName}</div>
-                      <div style={{ fontSize: 11, color: 'var(--text)', opacity: 0.8 }}>→ {teacherName}</div>
+                  <div key={item.id} style={{ display: 'grid', gridTemplateColumns: '90px 1fr', gap: '10px', alignItems: 'flex-start', padding: '10px 12px', borderRadius: '10px', border: '1px solid var(--border)', background: 'var(--card)' }}>
+                    <div style={{ fontWeight: '700', fontSize: '11px', color: 'var(--accent)', lineHeight: 1.3, wordBreak: 'break-word' }}>{timeRange}</div>
+                    <div style={{ minWidth: '0' }}>
+                      <div style={{ fontWeight: '700', fontSize: '13px', color: 'var(--text)', marginBottom: '3px' }}>{courseCode}</div>
+                      <div style={{ fontSize: '12px', color: 'var(--muted)', marginBottom: '4px', lineHeight: 1.3 }}>{courseName}</div>
+                      <div style={{ fontSize: '11px', color: 'var(--text)', opacity: 0.8, wordBreak: 'break-word' }}>→ {teacherName}</div>
                     </div>
                   </div>
                 );
@@ -1588,20 +1616,20 @@ export default function Schedule() {
               <div style={{ fontSize: 13, color: 'var(--muted)', marginBottom: 16, padding: '12px 14px', background: 'rgba(59,130,246,0.08)', borderRadius: 14, borderLeft: '4px solid var(--accent)' }}>
                 💡 <strong>Course teacher setup:</strong> Every course needs two fixed teachers. If missing, a popup will ask for both teachers first.
               </div>
-              <div className="schedule-add-form-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(220px, 1fr))', gap: 16, marginBottom: 18, alignItems: 'end' }}>
-                <div className="form-field">
+              <div className="schedule-add-form-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: 16, marginBottom: 18, alignItems: 'end' }}>
+                <div className="form-field" style={{ gridColumn: 'span 1' }}>
                   <label>Day</label>
                   <select value={form.day} onChange={e => set('day', e.target.value)}>
                     {DAYS.map(d => <option key={d}>{d}</option>)}
                   </select>
                 </div>
-                <div className="form-field">
+                <div className="form-field" style={{ gridColumn: 'span 1' }}>
                   <label>Time</label>
                   <select value={form.slot} onChange={e => set('slot', e.target.value)}>
                     {getAllowedSlotsForType(form.type).map(p => <option key={p} value={p}>{slotPreview(p)}</option>)}
                   </select>
                 </div>
-                <div className="form-field">
+                <div className="form-field" style={{ gridColumn: 'span 1' }}>
                   <label>Type</label>
                   <select value={form.type} onChange={e => set('type', e.target.value)}>
                     <option value="Theory">Theory</option>
@@ -1610,14 +1638,14 @@ export default function Schedule() {
                     <option value="Tutorial">Tutorial / Section</option>
                   </select>
                 </div>
-                <div className="form-field" style={{ gridColumn: 'span 2' }}>
+                <div className="form-field" style={{ gridColumn: 'span 1' }}>
                   <label>Course</label>
                   <select value={form.courseId} onChange={e => handleFormCourseChange(e.target.value)}>
                     <option value="">Select course</option>
                     {currentTermCourses.map(c => <option key={c.id} value={c.id}>{c.code} — {c.name}</option>)}
                   </select>
                 </div>
-                <div className="form-field" style={{ gridColumn: 'span 3' }}>
+                <div className="form-field" style={{ gridColumn: 'span 1' }}>
                   <label>Show As (Grid Name)</label>
                   <input
                     value={form.displayName}
@@ -1629,9 +1657,13 @@ export default function Schedule() {
                     placeholder={autoDisplayName(form.courseId, form.teacherName || '') || 'CSE 2201 DS'}
                   />
                 </div>
-                <div className="form-field" style={{ gridColumn: 'span 3' }}>
+                <div className="form-field" style={{ gridColumn: 'span 1' }}>
+                  <label>Room</label>
+                  <input value={form.room} onChange={e => set('room', e.target.value)} placeholder="Room 301" />
+                </div>
+                <div className="form-field" style={{ gridColumn: 'span 1' }}>
                   <label>Teacher (Select One)</label>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: 12, alignItems: 'center' }}>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: 8, alignItems: 'center' }}>
                     <select
                       value={form.teacherName}
                       onChange={e => set('teacherName', e.target.value)}
@@ -1650,28 +1682,25 @@ export default function Schedule() {
                         setCourseTeacherDialogState({ open: true, courseId: form.courseId, source: 'form' });
                       }}
                       disabled={!form.courseId}
+                      style={{ padding: '8px 10px', fontSize: '11px' }}
                     >
                       {!form.courseId ? 'Select Course First' : getCourseTeachers(form.courseId).length >= 2 ? 'Edit Teachers' : 'Add Teacher'}
                     </button>
                   </div>
                   {form.courseId && getCourseTeachers(form.courseId).length < 2 && (
-                    <div style={{ marginTop: 8, fontSize: 12, color: 'rgb(180,83,9)' }}>
+                    <div style={{ marginTop: 6, fontSize: 11, color: 'rgb(180,83,9)', gridColumn: 'span 1' }}>
                       Please set two teachers for this course first.
                     </div>
                   )}
                   {!form.courseId && (
-                    <div style={{ marginTop: 8, fontSize: 12, color: 'var(--muted)' }}>
+                    <div style={{ marginTop: 6, fontSize: 11, color: 'var(--muted)', gridColumn: 'span 1' }}>
                       Select a course to enable teacher setup.
                     </div>
                   )}
                 </div>
-                <div className="form-field">
-                  <label>Room</label>
-                  <input value={form.room} onChange={e => set('room', e.target.value)} placeholder="Room 301" />
-                </div>
-                <div className="form-field" style={{ gridColumn: 'span 3' }}>
+                <div className="form-field" style={{ gridColumn: 'span 1' }}>
                   <label>Note</label>
-                  <input value={form.note} onChange={e => set('note', e.target.value)} placeholder="Optional note, teacher, batch, etc." />
+                  <input value={form.note} onChange={e => set('note', e.target.value)} placeholder="Optional note" />
                 </div>
               </div>
               <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 12, flexWrap: 'wrap' }}>
@@ -2164,8 +2193,8 @@ export default function Schedule() {
             background: 'var(--card)',
             borderRadius: 14,
             border: '1px solid var(--border)',
-            padding: isFullScreenForm ? 24 : 20,
-            maxWidth: isFullScreenForm ? '95vh' : 420,
+            padding: isFullScreenForm ? 24 : 'clamp(16px, 4vw, 20px)',
+            maxWidth: isFullScreenForm ? '95vh' : 'min(calc(100vw - 24px), 420px)',
             width: isFullScreenForm ? 'min(980px, 95vh)' : '100%',
             maxHeight: isFullScreenForm ? '95vw' : '85vh',
             overflowY: 'auto',
@@ -2321,6 +2350,10 @@ export default function Schedule() {
         onSave={handleCourseTeacherDialogSave}
         allTeachers={allKnownTeachers}
         requireTwoTeachers
+        onNavigateToTeachers={() => {
+          handleCourseTeacherDialogClose();
+          navigate('/teachers');
+        }}
       />
     </div>
   );

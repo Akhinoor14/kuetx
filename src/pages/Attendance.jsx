@@ -219,23 +219,23 @@ function HolidayModal({ isOpen, onClose, scheduleSettings, onSave }) {
   if (!isOpen) return null;
   return (
     <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.65)', backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 2100, padding: 12 }} onClick={onClose}>
-      <div className="card" style={{ width: 480, maxWidth: '100%', maxHeight: '90vh', overflowY: 'auto', padding: 20, background: 'var(--bg)' }} onClick={e => e.stopPropagation()}>
+      <div className="card" style={{ width: 'min(calc(100vw - 24px), 480px)', maxWidth: '100%', maxHeight: '90vh', overflowY: 'auto', padding: 'clamp(16px, 4vw, 20px)', background: 'var(--bg)' }} onClick={e => e.stopPropagation()}>
         {/* Header */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 'clamp(12px, 3vw, 14px)', gap: 8 }}>
           <div>
-            <div style={{ fontWeight: 800, fontSize: 15 }}>Holiday Calendar</div>
-            <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 2 }}>Fri & Sat always off. Click dates to add extras.</div>
+            <div style={{ fontWeight: 800, fontSize: 'clamp(14px, 4vw, 15px)' }}>Holiday Calendar</div>
+            <div style={{ fontSize: 'clamp(11px, 2.5vw, 12px)', color: 'var(--muted)', marginTop: 2 }}>Fri & Sat always off. Click dates to add extras.</div>
           </div>
-          <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 4, opacity: 0.6, display: 'flex', alignItems: 'center' }}>
+          <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 4, opacity: 0.6, display: 'flex', alignItems: 'center', minWidth: 32, minHeight: 32, justifyContent: 'center' }}>
             <X size={20} />
           </button>
         </div>
 
         {/* Mode tabs */}
-        <div style={{ display: 'flex', gap: 4, marginBottom: 14, borderBottom: '1px solid var(--border)', paddingBottom: 10 }}>
+        <div style={{ display: 'flex', gap: 4, marginBottom: 'clamp(12px, 3vw, 14px)', borderBottom: '1px solid var(--border)', paddingBottom: 10, flexWrap: 'wrap' }}>
           {[['calendar', '📅 Calendar'], ['single', '📆 Single Date']].map(([id, label]) => (
             <button key={id} onClick={() => setMode(id)} style={{
-              padding: '7px 14px', borderRadius: 8, border: 'none', cursor: 'pointer', fontSize: 12, fontWeight: mode === id ? 800 : 500,
+              padding: '7px 12px', borderRadius: 8, border: 'none', cursor: 'pointer', fontSize: 'clamp(11px, 2vw, 12px)', fontWeight: mode === id ? 800 : 500,
               background: mode === id ? 'var(--accent)' : 'transparent', color: mode === id ? 'white' : 'var(--muted)',
             }}>{label}</button>
           ))}
@@ -244,15 +244,15 @@ function HolidayModal({ isOpen, onClose, scheduleSettings, onSave }) {
         {/* Calendar Mode */}
         {mode === 'calendar' && (
           <div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-              <button className="btn btn-ghost btn-sm" onClick={prevMonth}>← Prev</button>
-              <div style={{ fontWeight: 700, fontSize: 13 }}>{monthName(calMonth)}</div>
-              <button className="btn btn-ghost btn-sm" onClick={nextMonth}>Next →</button>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'clamp(10px, 2vw, 12px)', gap: 8, flexWrap: 'wrap' }}>
+              <button className="btn btn-ghost btn-sm" onClick={prevMonth} style={{ fontSize: 'clamp(11px, 2vw, 12px)', padding: 'clamp(6px, 1.5vw, 8px) 10px' }}>← Prev</button>
+              <div style={{ fontWeight: 700, fontSize: 'clamp(12px, 2.5vw, 13px)' }}>{monthName(calMonth)}</div>
+              <button className="btn btn-ghost btn-sm" onClick={nextMonth} style={{ fontSize: 'clamp(11px, 2vw, 12px)', padding: 'clamp(6px, 1.5vw, 8px) 10px' }}>Next →</button>
             </div>
-            <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: 12 }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: 'clamp(10px, 2vw, 12px)', fontSize: 'clamp(11px, 2vw, 12px)' }}>
               <thead>
                 <tr>{['S','M','T','W','T','F','S'].map((d,i) => (
-                  <th key={i} style={{ fontSize: 11, color: i === 5 || i === 6 ? 'var(--danger)' : 'var(--muted)', padding: '4px 2px', textAlign: 'center', fontWeight: 700 }}>{d}</th>
+                  <th key={i} style={{ fontSize: 'clamp(10px, 2vw, 11px)', color: i === 5 || i === 6 ? 'var(--danger)' : 'var(--muted)', padding: '4px 2px', textAlign: 'center', fontWeight: 700 }}>{d}</th>
                 ))}</tr>
               </thead>
               <tbody>
@@ -266,9 +266,9 @@ function HolidayModal({ isOpen, onClose, scheduleSettings, onSave }) {
                       return (
                         <td key={di} style={{ padding: '2px', textAlign: 'center' }}>
                           <button onClick={() => !isFriSat && toggleCal(cell.dateStr)} style={{
-                            width: 34, height: 34, borderRadius: 8, border: isSel ? '2px solid var(--accent)' : isAdded ? '2px solid var(--success)' : '1px solid transparent',
+                            width: 'clamp(32px, 12vw, 34px)', height: 'clamp(32px, 12vw, 34px)', borderRadius: 8, border: isSel ? '2px solid var(--accent)' : isAdded ? '2px solid var(--success)' : '1px solid transparent',
                             background: isSel ? 'rgba(59,130,246,0.15)' : isAdded ? 'rgba(34,197,94,0.12)' : isFriSat ? 'rgba(239,68,68,0.08)' : 'transparent',
-                            cursor: isFriSat ? 'default' : 'pointer', fontSize: 12, fontWeight: isSel || isAdded ? 700 : 400,
+                            cursor: isFriSat ? 'default' : 'pointer', fontSize: 'clamp(11px, 2vw, 12px)', fontWeight: isSel || isAdded ? 700 : 400,
                             color: isFriSat ? 'rgba(239,68,68,0.7)' : 'var(--text)',
                           }}>{cell.day}</button>
                         </td>
@@ -278,9 +278,9 @@ function HolidayModal({ isOpen, onClose, scheduleSettings, onSave }) {
                 ))}
               </tbody>
             </table>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14, padding: '8px 12px', background: dark ? 'rgba(59,130,246,0.08)' : 'rgba(59,130,246,0.05)', borderRadius: 9, border: '1px solid rgba(59,130,246,0.15)' }}>
-              <span style={{ fontSize: 12, color: 'var(--muted)' }}><strong style={{ color: 'var(--text)' }}>{selected.size}</strong> selected</span>
-              <button className="btn btn-primary btn-sm" onClick={addSelected} disabled={!selected.size} style={{ fontSize: 12 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'clamp(12px, 3vw, 14px)', padding: 'clamp(8px, 2vw, 12px)', background: dark ? 'rgba(59,130,246,0.08)' : 'rgba(59,130,246,0.05)', borderRadius: 9, border: '1px solid rgba(59,130,246,0.15)', gap: 8, flexWrap: 'wrap' }}>
+              <span style={{ fontSize: 'clamp(11px, 2vw, 12px)', color: 'var(--muted)' }}><strong style={{ color: 'var(--text)' }}>{selected.size}</strong> selected</span>
+              <button className="btn btn-primary btn-sm" onClick={addSelected} disabled={!selected.size} style={{ fontSize: 'clamp(11px, 2vw, 12px)' }}>
                 <CalendarDays size={12} /> Add to Holidays
               </button>
             </div>
@@ -289,24 +289,24 @@ function HolidayModal({ isOpen, onClose, scheduleSettings, onSave }) {
 
         {/* Single date mode */}
         {mode === 'single' && (
-          <div style={{ marginBottom: 14, display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+          <div style={{ marginBottom: 'clamp(12px, 3vw, 14px)', display: 'flex', gap: 8, flexWrap: 'wrap' }}>
             <input type="date" value={singleDate} onChange={e => setSingleDate(e.target.value)}
-              style={{ flex: 1, minWidth: 150, padding: '9px 12px', border: '1px solid var(--border)', borderRadius: 8, background: 'var(--surface)', color: 'var(--text)', fontSize: 13 }} />
-            <button className="btn btn-primary" onClick={addSingle} disabled={!singleDate} style={{ fontSize: 13 }}>
+              style={{ flex: 1, minWidth: 150, padding: 'clamp(8px, 2vw, 9px) clamp(10px, 2vw, 12px)', border: '1px solid var(--border)', borderRadius: 8, background: 'var(--surface)', color: 'var(--text)', fontSize: 'clamp(12px, 2vw, 13px)' }} />
+            <button className="btn btn-primary" onClick={addSingle} disabled={!singleDate} style={{ fontSize: 'clamp(12px, 2vw, 13px)', whiteSpace: 'nowrap' }}>
               <CalendarDays size={13} /> Add
             </button>
           </div>
         )}
 
         {/* Saved holidays list */}
-        <div style={{ borderTop: '1px solid var(--border)', paddingTop: 12 }}>
-          <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 8 }}>Saved Holidays ({holidayDates.length})</div>
+        <div style={{ borderTop: '1px solid var(--border)', paddingTop: 'clamp(10px, 2vw, 12px)' }}>
+          <div style={{ fontSize: 'clamp(11px, 2vw, 12px)', fontWeight: 700, marginBottom: 8 }}>Saved Holidays ({holidayDates.length})</div>
           {holidayDates.length === 0 ? (
-            <div style={{ fontSize: 12, color: 'var(--muted)' }}>No extra holidays added yet.</div>
+            <div style={{ fontSize: 'clamp(11px, 2vw, 12px)', color: 'var(--muted)' }}>No extra holidays added yet.</div>
           ) : (
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
               {holidayDates.map(d => (
-                <span key={d} className="tag tag-gray" style={{ display: 'inline-flex', gap: 5, alignItems: 'center', fontSize: 11 }}>
+                <span key={d} className="tag tag-gray" style={{ display: 'inline-flex', gap: 5, alignItems: 'center', fontSize: 'clamp(10px, 2vw, 11px)', padding: 'clamp(4px, 1vw, 6px) clamp(6px, 1.5vw, 8px)' }}>
                   {d}
                   <button onClick={() => removeSingle(d)} style={{ border: 'none', background: 'transparent', cursor: 'pointer', padding: 0, color: 'inherit', display: 'flex', alignItems: 'center' }}>
                     <X size={11} />
