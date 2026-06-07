@@ -1,4 +1,5 @@
 import { useState, useMemo, useEffect, useCallback } from 'react';
+import Modal from '../components/Modal';
 import { ChevronLeft, ChevronRight, AlertTriangle, CheckCircle, TrendingUp, Users, BookOpen, Award, CalendarDays, X } from 'lucide-react';
 import {
   store, getAttendanceMarks, MIN_ATTENDANCE_PERCENT, SCHOLARSHIP_ATTENDANCE_PCT,
@@ -218,8 +219,8 @@ function HolidayModal({ isOpen, onClose, scheduleSettings, onSave }) {
 
   if (!isOpen) return null;
   return (
-    <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.65)', backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 2100, padding: 12, pointerEvents: 'auto' }} onClick={onClose}>
-      <div className="card" style={{ width: 'min(calc(100vw - 24px), 480px)', maxWidth: '100%', maxHeight: '90vh', overflowY: 'auto', padding: 'clamp(16px, 4vw, 20px)', background: 'var(--bg)', pointerEvents: 'auto' }} onClick={e => e.stopPropagation()}>
+    <Modal onClose={onClose} contentStyle={{ width: 'min(calc(100vw - 24px), 480px)', maxWidth: '100%', maxHeight: '90vh', overflowY: 'auto', padding: 'clamp(16px, 4vw, 20px)', background: 'var(--bg)', pointerEvents: 'auto' }}>
+      <div className="card" style={{ width: '100%', maxHeight: '100%', overflowY: 'auto', background: 'transparent', pointerEvents: 'auto' }}>
         {/* Header */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 'clamp(12px, 3vw, 14px)', gap: 8 }}>
           <div>
@@ -317,7 +318,7 @@ function HolidayModal({ isOpen, onClose, scheduleSettings, onSave }) {
           )}
         </div>
       </div>
-    </div>
+    </Modal>
   );
 }
 

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { X, Book, CheckCircle2 } from 'lucide-react';
 
 const normalizeTeacherName = (value) => {
@@ -92,22 +93,19 @@ export default function CourseTeacherDialog({
 
   if (!isOpen) return null;
 
-  return (
+  const modalContent = (
     <div
       style={{
         position: 'fixed',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
+        inset: 0,
         background: 'rgba(0,0,0,0.6)',
         backdropFilter: 'blur(8px)',
         WebkitBackdropFilter: 'blur(8px)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        zIndex: 2000,
-        padding: '12px',
+        zIndex: 100001,
+        padding: '16px',
         pointerEvents: 'auto',
       }}
       onClick={handleClose}
@@ -116,13 +114,13 @@ export default function CourseTeacherDialog({
         className="card"
         style={{
           width: '100%',
-          maxWidth: '480px',
-          maxHeight: 'calc(100vh - 24px)',
+          maxWidth: '520px',
+          maxHeight: 'calc(100vh - 32px)',
           overflowY: 'auto',
           padding: '20px',
           background: 'var(--bg)',
-          borderRadius: '12px',
-          boxShadow: '0 20px 60px rgba(0,0,0,0.2)',
+          borderRadius: '14px',
+          boxShadow: '0 24px 80px rgba(0,0,0,0.24)',
           pointerEvents: 'auto',
         }}
         onClick={(e) => e.stopPropagation()}
@@ -344,4 +342,6 @@ export default function CourseTeacherDialog({
       </div>
     </div>
   );
+
+  return typeof document !== 'undefined' ? createPortal(modalContent, document.body) : null;
 }

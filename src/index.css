@@ -964,24 +964,34 @@ body {
 .btn {
   display:      inline-flex;
   align-items:  center;
-  gap:          7px;
-  padding:      9px 18px;     /* bigger tap target */
-  border-radius: 9px;
-  font-size:    14px;         /* was 13px */
+  justify-content: center;
+  gap:          8px;
+  padding:      10px 18px;
+  border-radius: 999px;
+  font-size:    14px;
   font-weight:  600;
   cursor:       pointer;
   border:       none;
-  transition:   opacity 0.15s, transform 0.1s, background 0.15s;
+  transition:   transform 0.12s ease, opacity 0.12s ease, background 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
   font-family:  'Sora', 'Hind Siliguri', sans-serif;
   white-space:  nowrap;
   text-decoration: none;
 }
-.btn:hover  { opacity: 0.87; }
-.btn:active { transform: scale(0.97); }
-.btn-primary { background: var(--accent); color: var(--accentFg); }
-.btn-ghost   { background: transparent; color: var(--text); border: 1.5px solid var(--border); }
+.btn:hover  { opacity: 0.94; }
+.btn:active { transform: translateY(1px) scale(0.98); }
+.btn-primary { background: var(--accent); color: var(--accentFg); box-shadow: 0 10px 24px rgba(59, 130, 246, 0.14); }
+.btn-secondary {
+    background: rgba(59, 130, 246, 0.12);
+    color: var(--accent);
+    border: 1.5px solid rgba(59, 130, 246, 0.22);
+    box-shadow: inset 0 0 0 1px rgba(59, 130, 246, 0.08);
+}
+.btn-secondary:hover { background: rgba(59, 130, 246, 0.18); }
+.btn-ghost   { background: rgba(255,255,255,0.08); color: var(--text); border: 1.5px solid rgba(148,163,184,0.22); }
+.btn-ghost:hover { background: rgba(255,255,255,0.14); }
 .btn-danger  { background: var(--danger); color: #fff; }
-.btn-sm      { padding: 6px 13px; font-size: 13px; border-radius: 7px; }
+.btn-sm      { padding: 8px 14px; font-size: 12px; border-radius: 999px; }
+.btn svg { display: inline-block; }
 .btn-whatsapp {
   background: linear-gradient(180deg, rgba(37,211,102,0.18), rgba(37,211,102,0.08));
   color: white;
@@ -1059,6 +1069,7 @@ label {
 .tag-red    { background: #fee2e2; color: #7f1d1d; }
 .tag-yellow { background: #fef9c3; color: #713f12; }
 .tag-blue   { background: #dbeafe; color: #1e3a5f; }
+.tag-pink   { background: #ffe4ec; color: #9f1d72; }
 .tag-gray   { background: var(--border); color: var(--muted); }
 .tag-orange { background: #ffedd5; color: #7c2d12; }
 

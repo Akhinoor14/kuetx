@@ -378,8 +378,24 @@ export default function TermQS() {
 
       {teacherDialog.open && (
         <CourseTeacherDialog 
-          courseId={teacherDialog.courseId} 
+          isOpen={teacherDialog.open}
           onClose={() => setTeacherDialog({ open: false, courseId: '' })}
+          course={getCourse(teacherDialog.courseId)}
+          currentTeachers={getCourseTeachers(teacherDialog.courseId)}
+          onSave={(teachers) => {
+            const normalizedTeachers = [...new Set((teachers || []).map(normalizeTeacherName).filter(Boolean))].slice(0, 2);
+            const nextSettings = {
+              ...scheduleSettings,
+              courseTeacherMap: {
+                ...(scheduleSettings?.courseTeacherMap || {}),
+                [teacherDialog.courseId]: normalizedTeachers,
+              },
+            };
+            store.set('scheduleSettings', nextSettings);
+            setScheduleSettings(nextSettings);
+            setTeacherDialog({ open: false, courseId: '' });
+          }}
+          requireTwoTeachers
         />
       )}
     </div>

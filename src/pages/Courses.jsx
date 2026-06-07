@@ -25,6 +25,8 @@ const CHIP_ICON_STYLE = {
   justifyContent: 'center'
 };
 
+const getTeacherChipClass = () => 'tag tag-pink';
+
 // Status chip dropdown removed: use native select in forms to avoid showing active/completed chip in cards
 
 function StatusChip({ course, onChange }) {
@@ -325,6 +327,49 @@ export default function Courses() {
   const optionalCatalog = getDeptOptionalCourses(profile.dept);
   const [settings, setSettings] = useState(() => store.get('scheduleSettings') || {});
   const [courseTeacherDialogState, setCourseTeacherDialogState] = useState({ open: false, courseId: '' });
+  const [teacherInfoState, setTeacherInfoState] = useState({ open: false, courseId: '', teacherName: '', teacher: null });
+  const teacherInfoTimerRef = useRef(null);
+
+  useEffect(() => {
+    return () => {
+      if (teacherInfoTimerRef.current) {
+        clearTimeout(teacherInfoTimerRef.current);
+      }
+    };
+  }, []);
+
+  const getTeacherInfo = (name) => {
+    const teachers = store.get('teachers') || [];
+    return teachers.find(t => normalizeTeacherName(t.name) === normalizeTeacherName(name)) || null;
+  };
+
+  const openTeacherInfo = (courseId, teacherName) => {
+    const teacher = getTeacherInfo(teacherName);
+    setTeacherInfoState({ open: true, courseId, teacherName, teacher });
+  };
+
+  const closeTeacherInfo = () => setTeacherInfoState(prev => ({ ...prev, open: false }));
+
+  const handleTeacherChipClick = (courseId, teacherName) => {
+    if (teacherInfoTimerRef.current) {
+      clearTimeout(teacherInfoTimerRef.current);
+      teacherInfoTimerRef.current = null;
+      return;
+    }
+    teacherInfoTimerRef.current = window.setTimeout(() => {
+      openTeacherInfo(courseId, teacherName);
+      teacherInfoTimerRef.current = null;
+    }, 280);
+  };
+
+  const handleTeacherChipDoubleClick = (courseId) => {
+    if (teacherInfoTimerRef.current) {
+      clearTimeout(teacherInfoTimerRef.current);
+      teacherInfoTimerRef.current = null;
+    }
+    setTeacherInfoState(prev => ({ ...prev, open: false }));
+    openTeacherDialog(courseId);
+  };
 
   const toggleTerm = (key) => setExpandedTerms(p => ({ ...p, [key]: !p[key] }));
   const viewCourseSyllabus = (id) => {
@@ -435,6 +480,100 @@ export default function Courses() {
         </div>
       )}
 
+      {teacherInfoState.open && (
+        <div
+          style={{
+            position: 'fixed',
+            top: 92,
+            right: 18,
+            zIndex: 1100,
+            width: 'min(360px, calc(100vw - 32px))',
+            maxWidth: 360,
+          }}
+          onClick={closeTeacherInfo}
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="card"
+            style={{
+              padding: 18,
+              border: '1px solid var(--border)',
+              borderRadius: 18,
+              boxShadow: '0 22px 56px rgba(15, 23, 42, 0.16)',
+              background: 'var(--surface)',
+              minWidth: 280,
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12, marginBottom: 16 }}>
+              <div style={{ width: 42, height: 42, borderRadius: 14, background: 'rgba(59,130,246,0.12)', display: 'grid', placeItems: 'center', color: 'var(--accent)', fontWeight: 700, fontSize: 18 }}>
+                {teacherInfoState.teacher?.initial || (teacherInfoState.teacherName || '?').slice(0, 1)}
+              </div>
+              <div style={{ minWidth: 0, flex: 1 }}>
+                <div style={{ fontSize: 16, fontWeight: 700, marginBottom: 4, lineHeight: 1.25 }}>{teacherInfoState.teacher?.name || teacherInfoState.teacherName}</div>
+                <div style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.4 }}>
+                  {teacherInfoState.teacher?.title || 'Teacher information preview'}
+                </div>
+              </div>
+              <button
+                type="button"
+                className="btn btn-ghost"
+                onClick={closeTeacherInfo}
+                style={{ padding: '6px 10px', minWidth: 'auto', fontSize: 14, lineHeight: 1 }}
+              >
+                ×
+              </button>
+            </div>
+            {teacherInfoState.teacher ? (
+              <div style={{ display: 'grid', gap: 10, fontSize: 13, color: 'var(--text)' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: 'auto 1fr', gap: '4px 12px', alignItems: 'center' }}>
+                  <span style={{ color: 'var(--muted)' }}>Dept</span>
+                  <span>{teacherInfoState.teacher.dept || '—'}</span>
+                </div>
+                <div style={{ display: 'grid', gridTemplateColumns: 'auto 1fr', gap: '4px 12px', alignItems: 'center' }}>
+                  <span style={{ color: 'var(--muted)' }}>Courses</span>
+                  <span>{teacherInfoState.teacher.courses || '—'}</span>
+                </div>
+                <div style={{ display: 'grid', gridTemplateColumns: 'auto 1fr', gap: '4px 12px', alignItems: 'center' }}>
+                  <span style={{ color: 'var(--muted)' }}>Office</span>
+                  <span>{teacherInfoState.teacher.officeRoom || '—'}</span>
+                </div>
+                <div style={{ display: 'grid', gridTemplateColumns: 'auto 1fr', gap: '4px 12px', alignItems: 'center' }}>
+                  <span style={{ color: 'var(--muted)' }}>Phone</span>
+                  <span>{teacherInfoState.teacher.phone || '—'}</span>
+                </div>
+                <div style={{ display: 'grid', gridTemplateColumns: 'auto 1fr', gap: '4px 12px', alignItems: 'center' }}>
+                  <span style={{ color: 'var(--muted)' }}>Email</span>
+                  <span>{teacherInfoState.teacher.email || '—'}</span>
+                </div>
+                {teacherInfoState.teacher.rating && (
+                  <div style={{ display: 'grid', gridTemplateColumns: 'auto 1fr', gap: '4px 12px', alignItems: 'center' }}>
+                    <span style={{ color: 'var(--muted)' }}>Rating</span>
+                    <span>{'★'.repeat(+teacherInfoState.teacher.rating)}{'☆'.repeat(5 - +teacherInfoState.teacher.rating)}</span>
+                  </div>
+                )}
+                {teacherInfoState.teacher.notes && (
+                  <div style={{ marginTop: 10, padding: 12, borderRadius: 14, background: 'rgba(59,130,246,0.08)', fontSize: 12, color: 'var(--muted)', lineHeight: 1.5 }}>
+                    {teacherInfoState.teacher.notes}
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.6 }}>
+                No teacher card exists yet for <strong>{teacherInfoState.teacherName}</strong>.
+                <div style={{ marginTop: 10, display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                  <button className="btn btn-sm btn-secondary" type="button" onClick={() => { closeTeacherInfo(); navigate('/teachers'); }} style={{ padding: '6px 10px', fontSize: 12 }}>
+                    Open Teachers page
+                  </button>
+                  <button className="btn btn-sm btn-ghost" type="button" onClick={() => { closeTeacherInfo(); openTeacherDialog(teacherInfoState.courseId); }} style={{ padding: '6px 10px', fontSize: 12 }}>
+                    Edit course teachers
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
       {sortedGroups.map(g => (
         <div key={g.key} style={{ marginBottom: 18 }}>
           <button onClick={() => toggleTerm(g.key)} style={{ width: '100%', textAlign: 'left', padding: '10px 12px', borderRadius: 8, border: '1px solid var(--border)', background: expandedTerms[g.key] ? 'rgba(59,130,246,0.06)' : 'transparent', display: 'flex', alignItems: 'center', gap: 8 }}>
@@ -443,46 +582,61 @@ export default function Courses() {
           </button>
           {expandedTerms[g.key] && (
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginTop: 8 }}>
-              {g.items.map(c => (
-                <div key={c.id} className="card" style={{ display: 'flex', alignItems: 'flex-start', gap: 12, padding: '10px' }}>
-                  <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
-                      <span className="mono fw-700" style={{ fontSize: 'clamp(12px,3.5vw,14px)', color: c.code && c.code.includes('CSE 2113') ? 'var(--accent)' : 'inherit' }}>{c.code}</span>
-                      <span style={{ fontSize: 'clamp(13px,3.5vw,14px)', fontWeight: c.code && c.code.includes('CSE 2113') ? 800 : 600 }}>{c.name}</span>
-                    </div>
-                    <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginTop: 8, alignItems: 'center' }}>
-                      <span className="tag tag-gray" style={CHIP_STYLE}>{c.type}</span>
-                      <span className="tag tag-gray" style={CHIP_STYLE}>{c.credits} cr</span>
-                      {c.isOptional && <span className="tag tag-yellow" style={CHIP_STYLE}>Optional</span>}
-                      <NoteChipEditor value={c.notes || ''} onChange={(notes) => updateOverride(c.id, { notes })} />
-                      <button onClick={(e) => { e.stopPropagation(); viewCourseSyllabus(c.id); }} className="tag tag-blue" style={{ ...CHIP_STYLE, fontSize: 9, fontWeight: 700, cursor: 'pointer' }} title="Open exact syllabus">
-                        <BookOpen size={11} />
-                        <span style={{ marginLeft: 4 }}>Syllabus</span>
-                      </button>
-                      {`Y${c.year}T${c.term}` === profile.currentTermKey && (
-                        <button onClick={(e) => { e.stopPropagation(); openTeacherDialog(c.id); }} className="tag tag-indigo" style={{ ...CHIP_STYLE, fontSize: 9, fontWeight: 700, cursor: 'pointer' }}>
-                          {getCourseTeachers(c.id).length >= 2 ? 'Edit Teachers' : 'Add Teachers'}
+              {g.items.map(c => {
+                const courseTeachers = getCourseTeachers(c.id);
+                const hasTeachers = courseTeachers.length > 0;
+
+                return (
+                  <div key={c.id} className="card" style={{ display: 'flex', alignItems: 'flex-start', gap: 12, padding: '10px' }}>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
+                        <span className="mono fw-700" style={{ fontSize: 'clamp(12px,3.5vw,14px)', color: c.code && c.code.includes('CSE 2113') ? 'var(--accent)' : 'inherit' }}>{c.code}</span>
+                        <span style={{ fontSize: 'clamp(13px,3.5vw,14px)', fontWeight: c.code && c.code.includes('CSE 2113') ? 800 : 600 }}>{c.name}</span>
+                      </div>
+                      <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginTop: 8, alignItems: 'center' }}>
+                        <span className="tag tag-gray" style={CHIP_STYLE}>{c.type}</span>
+                        <span className="tag tag-gray" style={CHIP_STYLE}>{c.credits} cr</span>
+                        {c.isOptional && <span className="tag tag-yellow" style={CHIP_STYLE}>Optional</span>}
+                        <NoteChipEditor value={c.notes || ''} onChange={(notes) => updateOverride(c.id, { notes })} />
+                        <button onClick={(e) => { e.stopPropagation(); viewCourseSyllabus(c.id); }} className="tag tag-blue" style={{ ...CHIP_STYLE, fontSize: 9, fontWeight: 700, cursor: 'pointer' }} title="Open exact syllabus">
+                          <BookOpen size={11} />
+                          <span style={{ marginLeft: 4 }}>Syllabus</span>
                         </button>
+                      </div>
+                      {`Y${c.year}T${c.term}` === profile.currentTermKey && (
+                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 8, alignItems: 'center' }}>
+                          {hasTeachers ? (
+                            courseTeachers.map((teacher, index) => (
+                              <span
+                                key={index}
+                                className={getTeacherChipClass(teacher)}
+                                style={{ ...CHIP_STYLE, fontSize: 11, cursor: 'pointer' }}
+                                onClick={(e) => { e.stopPropagation(); handleTeacherChipClick(c.id, teacher); }}
+                                onDoubleClick={(e) => { e.stopPropagation(); handleTeacherChipDoubleClick(c.id); }}
+                                title="Single click to preview teacher info, double click to edit"
+                              >
+                                {teacher}
+                              </span>
+                            ))
+                          ) : (
+                            <span className="tag tag-muted" style={{ ...CHIP_STYLE, fontSize: 11, color: 'var(--muted)' }}>No teachers set</span>
+                          )}
+                        </div>
                       )}
                     </div>
-                    {`Y${c.year}T${c.term}` === profile.currentTermKey && (
-                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 8, alignItems: 'center' }}>
-                        {getCourseTeachers(c.id).length > 0 ? (
-                          getCourseTeachers(c.id).map((teacher, index) => (
-                            <span key={index} className="tag tag-gray" style={{ ...CHIP_STYLE, fontSize: 11 }}>{teacher}</span>
-                          ))
-                        ) : (
-                          <span className="tag tag-muted" style={{ ...CHIP_STYLE, fontSize: 11, color: 'var(--muted)' }}>No teachers set</span>
-                        )}
-                      </div>
-                    )}
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 6, minWidth: 110, width: 110, alignItems: 'flex-end' }}>
+                      {c.isOptional && <select value={c.optionalCode || ''} onChange={e => updateOptional(c, e.target.value)} style={{ fontSize: 13, padding: 6 }}><option value="">Select</option>{optionalCatalog.map(opt => <option key={opt.code} value={opt.code}>{opt.code} — {opt.title}</option>)}</select>}
+                      {!hasTeachers && `Y${c.year}T${c.term}` === profile.currentTermKey && (
+                        <button className="btn btn-secondary btn-sm" onClick={() => openTeacherDialog(c.id)} style={{ padding: '6px 10px', fontSize: 12, fontWeight: 700, minWidth: 98, justifyContent: 'center' }}>
+                          <BookOpen size={12} />
+                          Add
+                        </button>
+                      )}
+                      <StatusChip course={c} onChange={newStatus => updateOverride(c.id, { status: newStatus })} />
+                    </div>
                   </div>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: 6, minWidth: 110, width: 110 }}>
-                    {c.isOptional && <select value={c.optionalCode || ''} onChange={e => updateOptional(c, e.target.value)} style={{ fontSize: 13, padding: 6 }}><option value="">Select</option>{optionalCatalog.map(opt => <option key={opt.code} value={opt.code}>{opt.code} — {opt.title}</option>)}</select>}
-                    <StatusChip course={c} onChange={newStatus => updateOverride(c.id, { status: newStatus })} />
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           )}
         </div>

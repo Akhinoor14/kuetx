@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { Plus, Settings2, Clock3, PencilLine, Copy, CalendarDays, X, FileText } from 'lucide-react';
+import Modal from '../components/Modal';
+import { Plus, Settings2, Clock3, PencilLine, Copy, CalendarDays, X, FileText, BookOpen } from 'lucide-react';
 import { store, uid, getProfile, getCurrentTermKey, getRoutinePreviewDate, isRoutineHoliday, getTermTimeline } from '../store/store';
 import { getAllCourses } from '../store/curriculumStore';
 import { useNavigate } from 'react-router-dom';
@@ -1296,17 +1297,23 @@ export default function Schedule() {
               <span className="tag tag-blue">5-day week</span>
             </div>
             <p style={{ fontSize: '13px', color: 'var(--muted)', margin: '0', maxWidth: '600px', lineHeight: 1.4 }}>
-              Minimal routine builder for Sun–Thu classes. Keep the display clean, choose the share format, then copy or import/export the full routine when needed.
+              Clean Sun–Thu routine builder. Pick a share format, then copy or import/export the schedule as needed.
+            </p>
+            <p style={{ fontSize: '12px', color: 'var(--muted)', margin: '6px 0 0', maxWidth: '600px', lineHeight: 1.4 }}>
+              Assign teachers first via <strong>Manage Course Teachers</strong> before adding schedule entries.
             </p>
           </div>
           <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', justifyContent: 'flex-end', minWidth: '220px' }}>
-            <button className="btn btn-ghost" onClick={() => setEditingSettings(v => !v)} style={{ fontSize: '12px' }}>
+            <button className="btn btn-ghost btn-sm" onClick={() => setEditingSettings(v => !v)} style={{ fontSize: '12px' }}>
               <Settings2 size={13} /> Settings
             </button>
-            <button className="btn btn-ghost" onClick={openHolidaySetup} style={{ fontSize: '12px' }} title="Set holidays and off days">
+            <button className="btn btn-ghost btn-sm" onClick={openHolidaySetup} style={{ fontSize: '12px' }} title="Set holidays and off days">
               <CalendarDays size={13} /> Holiday
             </button>
-            <button className="btn btn-primary" onClick={() => { setEditingId(null); resetForm(); setAdding(true); }} style={{ fontSize: '12px' }} title="Add a new class slot to the schedule">
+            <button className="btn btn-secondary btn-sm" onClick={() => navigate('/courses')} style={{ fontSize: '12px' }} title="Open the Courses page and assign teachers per course">
+              <BookOpen size={13} /> Manage Course Teachers
+            </button>
+            <button className="btn btn-primary btn-sm" onClick={() => { setEditingId(null); resetForm(); setAdding(true); }} style={{ fontSize: '12px' }} title="Add a new class slot to the schedule">
               <Plus size={13} /> Add Class
             </button>
           </div>
@@ -1583,137 +1590,113 @@ export default function Schedule() {
       </div>
 
       {adding && (
-        <div
-          style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            background: 'rgba(0,0,0,0.48)',
-            backdropFilter: 'blur(10px)',
-            WebkitBackdropFilter: 'blur(10px)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            zIndex: 1500,
-            padding: 16,
-            pointerEvents: 'auto',
-          }}
-          onClick={cancelEdit}
-        >
-          <div
-            className="card schedule-class-modal"
-            style={{ width: 'min(860px, 98vw)', maxHeight: '92vh', borderColor: 'var(--accent)', padding: 0, background: 'var(--bg)', overflow: 'hidden', display: 'flex', flexDirection: 'column', borderRadius: 24, boxShadow: '0 30px 80px rgba(0,0,0,0.16)', pointerEvents: 'auto' }}
-            onClick={e => e.stopPropagation()}
-          >
-            <div style={{ padding: 24, borderBottom: '1px solid var(--border)', background: 'var(--bg)', position: 'sticky', top: 0, zIndex: 1 }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
-                <div>
-                  <div style={{ fontWeight: 700, fontSize: 18, marginBottom: 4 }}>{editingId ? 'Edit Class Slot' : 'Add Class Slot'}</div>
-                  <div style={{ fontSize: 13, color: 'var(--muted)', maxWidth: 560 }}>A clean, course-aware class form with the selected teacher and short name visible at a glance.</div>
-                </div>
-                {editingId && <span className="tag tag-blue">Editing</span>}
+        <Modal onClose={cancelEdit} contentStyle={{ width: 'min(860px, 98vw)', maxHeight: '92vh', borderColor: 'var(--accent)', padding: 0, background: 'var(--bg)', overflow: 'hidden', display: 'flex', flexDirection: 'column', borderRadius: 24, boxShadow: '0 30px 80px rgba(0,0,0,0.16)' }}>
+          <div style={{ padding: 24, borderBottom: '1px solid var(--border)', background: 'var(--bg)', position: 'sticky', top: 0, zIndex: 1 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
+              <div>
+                <div style={{ fontWeight: 700, fontSize: 18, marginBottom: 4 }}>{editingId ? 'Edit Class Slot' : 'Add Class Slot'}</div>
+                <div style={{ fontSize: 13, color: 'var(--muted)', maxWidth: 560 }}>A clean, course-aware class form with the selected teacher and short name visible at a glance.</div>
               </div>
-            </div>
-            <div style={{ padding: 24, overflowY: 'auto' }}>
-              <div style={{ fontSize: 13, color: 'var(--muted)', marginBottom: 16, padding: '12px 14px', background: 'rgba(59,130,246,0.08)', borderRadius: 14, borderLeft: '4px solid var(--accent)' }}>
-                💡 <strong>Course teacher setup:</strong> Every course needs two fixed teachers. If missing, a popup will ask for both teachers first.
-              </div>
-              <div className="schedule-add-form-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: 16, marginBottom: 18, alignItems: 'end' }}>
-                <div className="form-field" style={{ gridColumn: 'span 1' }}>
-                  <label>Day</label>
-                  <select value={form.day} onChange={e => set('day', e.target.value)}>
-                    {DAYS.map(d => <option key={d}>{d}</option>)}
-                  </select>
-                </div>
-                <div className="form-field" style={{ gridColumn: 'span 1' }}>
-                  <label>Time</label>
-                  <select value={form.slot} onChange={e => set('slot', e.target.value)}>
-                    {getAllowedSlotsForType(form.type).map(p => <option key={p} value={p}>{slotPreview(p)}</option>)}
-                  </select>
-                </div>
-                <div className="form-field" style={{ gridColumn: 'span 1' }}>
-                  <label>Type</label>
-                  <select value={form.type} onChange={e => set('type', e.target.value)}>
-                    <option value="Theory">Theory</option>
-                    <option value="Sessional">Lab / Sessional</option>
-                    <option value="Project">Project</option>
-                    <option value="Tutorial">Tutorial / Section</option>
-                  </select>
-                </div>
-                <div className="form-field" style={{ gridColumn: 'span 1' }}>
-                  <label>Course</label>
-                  <select value={form.courseId} onChange={e => handleFormCourseChange(e.target.value)}>
-                    <option value="">Select course</option>
-                    {currentTermCourses.map(c => <option key={c.id} value={c.id}>{c.code} — {c.name}</option>)}
-                  </select>
-                </div>
-                <div className="form-field" style={{ gridColumn: 'span 1' }}>
-                  <label>Show As (Grid Name)</label>
-                  <input
-                    value={form.displayName}
-                    onChange={e => {
-                      const nextName = e.target.value;
-                      set('displayName', nextName);
-                      if (form.courseId) updateCourseShortName(form.courseId, nextName);
-                    }}
-                    placeholder={autoDisplayName(form.courseId, form.teacherName || '') || 'CSE 2201 DS'}
-                  />
-                </div>
-                <div className="form-field" style={{ gridColumn: 'span 1' }}>
-                  <label>Room</label>
-                  <input value={form.room} onChange={e => set('room', e.target.value)} placeholder="Room 301" />
-                </div>
-                <div className="form-field" style={{ gridColumn: 'span 1' }}>
-                  <label>Teacher (Select One)</label>
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: 8, alignItems: 'center' }}>
-                    <select
-                      value={form.teacherName}
-                      onChange={e => set('teacherName', e.target.value)}
-                      disabled={!form.courseId || getCourseTeachers(form.courseId).length === 0}
-                    >
-                      <option value="">Select teacher</option>
-                      {getCourseTeachers(form.courseId).map(name => (
-                        <option key={name} value={name}>{name}</option>
-                      ))}
-                    </select>
-                    <button
-                      type="button"
-                      className="btn btn-ghost"
-                      onClick={() => {
-                        if (!form.courseId) return;
-                        setCourseTeacherDialogState({ open: true, courseId: form.courseId, source: 'form' });
-                      }}
-                      disabled={!form.courseId}
-                      style={{ padding: '8px 10px', fontSize: '11px' }}
-                    >
-                      {!form.courseId ? 'Select Course First' : getCourseTeachers(form.courseId).length >= 2 ? 'Edit Teachers' : 'Add Teacher'}
-                    </button>
-                  </div>
-                  {form.courseId && getCourseTeachers(form.courseId).length < 2 && (
-                    <div style={{ marginTop: 6, fontSize: 11, color: 'rgb(180,83,9)', gridColumn: 'span 1' }}>
-                      Please set two teachers for this course first.
-                    </div>
-                  )}
-                  {!form.courseId && (
-                    <div style={{ marginTop: 6, fontSize: 11, color: 'var(--muted)', gridColumn: 'span 1' }}>
-                      Select a course to enable teacher setup.
-                    </div>
-                  )}
-                </div>
-                <div className="form-field" style={{ gridColumn: 'span 1' }}>
-                  <label>Note</label>
-                  <input value={form.note} onChange={e => set('note', e.target.value)} placeholder="Optional note" />
-                </div>
-              </div>
-              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 12, flexWrap: 'wrap' }}>
-                <button className="btn btn-ghost" onClick={cancelEdit} style={{ minWidth: 110 }}>Cancel</button>
-                <button className="btn btn-primary" onClick={add} style={{ minWidth: 110 }}>{editingId ? 'Save Changes' : 'Add Class'}</button>
-              </div>
+              {editingId && <span className="tag tag-blue">Editing</span>}
             </div>
           </div>
-        </div>
+          <div style={{ padding: 24, overflowY: 'auto' }}>
+            <div style={{ fontSize: 13, color: 'var(--muted)', marginBottom: 16, padding: '12px 14px', background: 'rgba(59,130,246,0.08)', borderRadius: 14, borderLeft: '4px solid var(--accent)' }}>
+              💡 <strong>Course teacher setup:</strong> Every course needs two fixed teachers. If missing, a popup will ask for both teachers first.
+            </div>
+            <div className="schedule-add-form-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: 16, marginBottom: 18, alignItems: 'end' }}>
+              <div className="form-field" style={{ gridColumn: 'span 1' }}>
+                <label>Day</label>
+                <select value={form.day} onChange={e => set('day', e.target.value)}>
+                  {DAYS.map(d => <option key={d}>{d}</option>)}
+                </select>
+              </div>
+              <div className="form-field" style={{ gridColumn: 'span 1' }}>
+                <label>Time</label>
+                <select value={form.slot} onChange={e => set('slot', e.target.value)}>
+                  {getAllowedSlotsForType(form.type).map(p => <option key={p} value={p}>{slotPreview(p)}</option>)}
+                </select>
+              </div>
+              <div className="form-field" style={{ gridColumn: 'span 1' }}>
+                <label>Type</label>
+                <select value={form.type} onChange={e => set('type', e.target.value)}>
+                  <option value="Theory">Theory</option>
+                  <option value="Sessional">Lab / Sessional</option>
+                  <option value="Project">Project</option>
+                  <option value="Tutorial">Tutorial / Section</option>
+                </select>
+              </div>
+              <div className="form-field" style={{ gridColumn: 'span 1' }}>
+                <label>Course</label>
+                <select value={form.courseId} onChange={e => handleFormCourseChange(e.target.value)}>
+                  <option value="">Select course</option>
+                  {currentTermCourses.map(c => <option key={c.id} value={c.id}>{c.code} — {c.name}</option>)}
+                </select>
+              </div>
+              <div className="form-field" style={{ gridColumn: 'span 1' }}>
+                <label>Show As (Grid Name)</label>
+                <input
+                  value={form.displayName}
+                  onChange={e => {
+                    const nextName = e.target.value;
+                    set('displayName', nextName);
+                    if (form.courseId) updateCourseShortName(form.courseId, nextName);
+                  }}
+                  placeholder={autoDisplayName(form.courseId, form.teacherName || '') || 'CSE 2201 DS'}
+                />
+              </div>
+              <div className="form-field" style={{ gridColumn: 'span 1' }}>
+                <label>Room</label>
+                <input value={form.room} onChange={e => set('room', e.target.value)} placeholder="Room 301" />
+              </div>
+              <div className="form-field" style={{ gridColumn: 'span 1' }}>
+                <label>Teacher (Select One)</label>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: 8, alignItems: 'center' }}>
+                  <select
+                    value={form.teacherName}
+                    onChange={e => set('teacherName', e.target.value)}
+                    disabled={!form.courseId || getCourseTeachers(form.courseId).length === 0}
+                  >
+                    <option value="">Select teacher</option>
+                    {getCourseTeachers(form.courseId).map(name => (
+                      <option key={name} value={name}>{name}</option>
+                    ))}
+                  </select>
+                  <button
+                    type="button"
+                    className="btn btn-ghost"
+                    onClick={() => {
+                      if (!form.courseId) return;
+                      setCourseTeacherDialogState({ open: true, courseId: form.courseId, source: 'form' });
+                    }}
+                    disabled={!form.courseId}
+                    style={{ padding: '8px 10px', fontSize: '11px' }}
+                  >
+                    {!form.courseId ? 'Select Course First' : getCourseTeachers(form.courseId).length >= 2 ? 'Edit Teachers' : 'Add Teacher'}
+                  </button>
+                </div>
+                {form.courseId && getCourseTeachers(form.courseId).length < 2 && (
+                  <div style={{ marginTop: 6, fontSize: 11, color: 'rgb(180,83,9)', gridColumn: 'span 1' }}>
+                    Please set two teachers for this course first.
+                  </div>
+                )}
+                {!form.courseId && (
+                  <div style={{ marginTop: 6, fontSize: 11, color: 'var(--muted)', gridColumn: 'span 1' }}>
+                    Select a course to enable teacher setup.
+                  </div>
+                )}
+              </div>
+              <div className="form-field" style={{ gridColumn: 'span 1' }}>
+                <label>Note</label>
+                <input value={form.note} onChange={e => set('note', e.target.value)} placeholder="Optional note" />
+              </div>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 12, flexWrap: 'wrap' }}>
+              <button className="btn btn-ghost" onClick={cancelEdit} style={{ minWidth: 110 }}>Cancel</button>
+              <button className="btn btn-primary" onClick={add} style={{ minWidth: 110 }}>{editingId ? 'Save Changes' : 'Add Class'}</button>
+            </div>
+          </div>
+        </Modal>
       )}
 
       <div className="card" style={{ padding: 16 }}>
@@ -1787,29 +1770,16 @@ export default function Schedule() {
       )}
 
       {holidaySetupOpen && (
-        <div
-          style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            background: 'rgba(0,0,0,0.6)',
-            backdropFilter: 'blur(8px)',
-            WebkitBackdropFilter: 'blur(8px)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            zIndex: 1200,
-            padding: 12,
-            pointerEvents: 'auto',
-          }}
-          onClick={closeHolidaySetup}
-        >
+        <Modal onClose={closeHolidaySetup} contentStyle={{
+          width: 650,
+          maxWidth: '100%',
+          padding: 16,
+          background: 'var(--bg)',
+          pointerEvents: 'auto',
+        }}>
           <div
             className="card"
             style={{ width: 650, maxWidth: '100%', padding: 16, background: 'var(--bg)', pointerEvents: 'auto' }}
-            onClick={e => e.stopPropagation()}
           >
             <div style={{ display: 'flex', justifyContent: 'space-between', gap: 10, alignItems: 'center', marginBottom: 16 }}>
               <div>
@@ -2028,7 +1998,7 @@ export default function Schedule() {
               </div>
             </div>
           </div>
-        </div>
+        </Modal>
       )}
 
       {/* === Detailed Term Roadmap (bottom of Schedule page) === */}
@@ -2146,8 +2116,8 @@ export default function Schedule() {
 
       {/* Edit Exams Modal */}
       {editingExams && (
-        <div className="card edit-exams-modal" role="dialog" aria-modal="true" style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(0,0,0,0.55)', backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)', zIndex: 2000, padding: 12, pointerEvents: 'auto' }}>
-          <div className="edit-exams-inner" style={{ width: 720, maxWidth: '95%', background: 'var(--bg)', borderRadius: 12, padding: 16, maxHeight: '86vh', overflow: 'auto', boxShadow: '0 10px 40px rgba(0,0,0,0.25)', pointerEvents: 'auto' }}>
+        <Modal onClose={() => setEditingExams(false)} className="edit-exams-modal" contentStyle={{ width: 720, maxWidth: '95%', background: 'var(--bg)', borderRadius: 12, padding: 16, maxHeight: '86vh', overflow: 'auto', boxShadow: '0 10px 40px rgba(0,0,0,0.25)', pointerEvents: 'auto' }}>
+          <div className="card edit-exams-inner" style={{ width: 720, maxWidth: '95%', background: 'var(--bg)', borderRadius: 12, padding: 16, maxHeight: '86vh', overflow: 'auto', boxShadow: '0 10px 40px rgba(0,0,0,0.25)', pointerEvents: 'auto' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12, gap: 12, flexWrap: 'wrap' }}>
               <div style={{ fontWeight: 800 }}>Edit Exam Dates</div>
               <div style={{ display: 'flex', gap: 8 }}>
@@ -2179,175 +2149,165 @@ export default function Schedule() {
               }}>Save</button>
             </div>
           </div>
-        </div>
+        </Modal>
       )}
 
       {/* Quick Form Modal */}
       {quickFormOpen && (
-        <div style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          background: 'rgba(0,0,0,0.5)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          zIndex: 3000,
-          padding: 12,
-        }} onClick={closeQuickForm}>
-          <div style={{
-            background: 'var(--card)',
-            borderRadius: 14,
-            border: '1px solid var(--border)',
-            padding: isFullScreenForm ? 24 : 'clamp(16px, 4vw, 20px)',
-            maxWidth: isFullScreenForm ? '95vh' : 'min(calc(100vw - 24px), 420px)',
-            width: isFullScreenForm ? 'min(980px, 95vh)' : '100%',
-            maxHeight: isFullScreenForm ? '95vw' : '85vh',
-            overflowY: 'auto',
-            boxShadow: '0 10px 40px rgba(0,0,0,0.2)',
-            zIndex: 3010,
-            transform: isFullScreenForm ? 'rotate(90deg)' : 'none',
-            transformOrigin: 'center',
-          }} onClick={e => e.stopPropagation()}>
-            <div style={{ fontWeight: 700, fontSize: 15, marginBottom: 16 }}>
-              {quickFormEditingId ? 'Quick Edit' : 'Quick Add'} · {quickFormData.day} · {slotPreview(quickFormData.slot)}
+        <Modal onClose={closeQuickForm} contentStyle={{
+          background: 'var(--card)',
+          borderRadius: 14,
+          border: '1px solid var(--border)',
+          padding: isFullScreenForm ? 24 : 'clamp(16px, 4vw, 20px)',
+          maxWidth: isFullScreenForm ? '95vh' : 'min(calc(100vw - 24px), 420px)',
+          width: isFullScreenForm ? 'min(980px, 95vh)' : '100%',
+          maxHeight: isFullScreenForm ? '95vw' : '85vh',
+          overflowY: 'auto',
+          boxShadow: '0 10px 40px rgba(0,0,0,0.2)',
+          transform: isFullScreenForm ? 'rotate(90deg)' : 'none',
+          transformOrigin: 'center',
+        }}>
+          <div style={{ fontWeight: 700, fontSize: 15, marginBottom: 16 }}>
+            {quickFormEditingId ? 'Quick Edit' : 'Quick Add'} · {quickFormData.day} · {slotPreview(quickFormData.slot)}
+          </div>
+          
+          <div style={{ display: 'grid', gap: 12, marginBottom: 16, gridTemplateColumns: isFullScreenForm ? 'repeat(3, minmax(0, 1fr))' : '1fr', columnGap: 16 }}>
+            {/* Course */}
+            <div style={isFullScreenForm ? { gridColumn: 'span 2' } : undefined}>
+              <label style={{ fontSize: 12, fontWeight: 600 }}>Course</label>
+              <select
+                value={quickFormData.courseId}
+                onChange={e => handleQuickCourseChange(e.target.value)}
+                style={{ width: '100%', padding: '8px 10px', border: '1px solid var(--border)', borderRadius: 6, background: 'var(--bg)', color: 'var(--text)', fontSize: 13 }}
+              >
+                <option value="">Select course</option>
+                {currentTermCourses.map(c => <option key={c.id} value={c.id}>{c.code} — {c.name}</option>)}
+              </select>
             </div>
-            
-            <div style={{ display: 'grid', gap: 12, marginBottom: 16, gridTemplateColumns: isFullScreenForm ? 'repeat(3, minmax(0, 1fr))' : '1fr', columnGap: 16 }}>
-              {/* Course */}
-              <div style={isFullScreenForm ? { gridColumn: 'span 2' } : undefined}>
-                <label style={{ fontSize: 12, fontWeight: 600 }}>Course</label>
+
+            <div style={isFullScreenForm ? { gridColumn: 'span 1' } : undefined}>
+              <label style={{ fontSize: 12, fontWeight: 600 }}>Show As (Grid Name)</label>
+              <input
+                type="text"
+                value={quickFormData.displayName}
+                onChange={e => {
+                  const nextName = e.target.value;
+                  setQuickFormData(d => ({ ...d, displayName: nextName }));
+                  if (quickFormData.courseId) updateCourseShortName(quickFormData.courseId, nextName);
+                }}
+                placeholder={autoDisplayName(quickFormData.courseId, quickFormData.teacherName || '') || 'CSE 2201 DS'}
+                style={{ width: '100%', padding: '8px 10px', border: '1px solid var(--border)', borderRadius: 6, background: 'var(--bg)', color: 'var(--text)', fontSize: 13, fontFamily: 'inherit' }}
+              />
+            </div>
+
+            {/* Type */}
+            <div style={isFullScreenForm ? { gridColumn: 'span 1' } : undefined}>
+              <label style={{ fontSize: 12, fontWeight: 600 }}>Type</label>
+              <select
+                value={quickFormData.type}
+                onChange={e => setQuickFormData(d => ({ ...d, type: e.target.value }))}
+                style={{ width: '100%', padding: '8px 10px', border: '1px solid var(--border)', borderRadius: 6, background: 'var(--bg)', color: 'var(--text)', fontSize: 13 }}
+              >
+                <option value="Theory">Theory</option>
+                <option value="Sessional">Lab / Sessional</option>
+                <option value="Project">Project</option>
+                <option value="Tutorial">Tutorial / Section</option>
+              </select>
+            </div>
+
+            <div style={isFullScreenForm ? { gridColumn: 'span 1' } : undefined}>
+              <label style={{ fontSize: 12, fontWeight: 600 }}>Time</label>
+              <select
+                value={quickFormData.slot}
+                onChange={e => setQuickFormData(d => ({ ...d, slot: e.target.value }))}
+                style={{ width: '100%', padding: '8px 10px', border: '1px solid var(--border)', borderRadius: 6, background: 'var(--bg)', color: 'var(--text)', fontSize: 13 }}
+              >
+                {getAllowedSlotsForType(quickFormData.type).map(p => <option key={p} value={p}>{slotPreview(p)}</option>)}
+              </select>
+            </div>
+
+            {/* Teacher */}
+            <div style={isFullScreenForm ? { gridColumn: 'span 2' } : undefined}>
+              <label style={{ fontSize: 12, fontWeight: 600 }}>Teacher (Select One)</label>
+              <div style={{ display: 'grid', gridTemplateColumns: isFullScreenForm ? '1fr' : '1fr auto', gap: 8 }}>
                 <select
-                  value={quickFormData.courseId}
-                  onChange={e => handleQuickCourseChange(e.target.value)}
+                  value={quickFormData.teacherName}
+                  onChange={e => setQuickFormData(d => ({ ...d, teacherName: e.target.value }))}
+                  disabled={!quickFormData.courseId || getCourseTeachers(quickFormData.courseId).length === 0}
                   style={{ width: '100%', padding: '8px 10px', border: '1px solid var(--border)', borderRadius: 6, background: 'var(--bg)', color: 'var(--text)', fontSize: 13 }}
                 >
-                  <option value="">Select course</option>
-                  {currentTermCourses.map(c => <option key={c.id} value={c.id}>{c.code} — {c.name}</option>)}
+                  <option value="">Select teacher</option>
+                  {getCourseTeachers(quickFormData.courseId).map(name => (
+                    <option key={name} value={name}>{name}</option>
+                  ))}
                 </select>
-              </div>
-
-              <div style={isFullScreenForm ? { gridColumn: 'span 1' } : undefined}>
-                <label style={{ fontSize: 12, fontWeight: 600 }}>Show As (Grid Name)</label>
-                <input
-                  type="text"
-                  value={quickFormData.displayName}
-                  onChange={e => {
-                    const nextName = e.target.value;
-                    setQuickFormData(d => ({ ...d, displayName: nextName }));
-                    if (quickFormData.courseId) updateCourseShortName(quickFormData.courseId, nextName);
+                <button
+                  type="button"
+                  className="btn btn-ghost"
+                  onClick={() => {
+                    if (!quickFormData.courseId) return;
+                    setCourseTeacherDialogState({ open: true, courseId: quickFormData.courseId, source: 'quick' });
                   }}
-                  placeholder={autoDisplayName(quickFormData.courseId, quickFormData.teacherName || '') || 'CSE 2201 DS'}
-                  style={{ width: '100%', padding: '8px 10px', border: '1px solid var(--border)', borderRadius: 6, background: 'var(--bg)', color: 'var(--text)', fontSize: 13, fontFamily: 'inherit' }}
-                />
-              </div>
-
-              {/* Type */}
-              <div style={isFullScreenForm ? { gridColumn: 'span 1' } : undefined}>
-                <label style={{ fontSize: 12, fontWeight: 600 }}>Type</label>
-                <select
-                  value={quickFormData.type}
-                  onChange={e => setQuickFormData(d => ({ ...d, type: e.target.value }))}
-                  style={{ width: '100%', padding: '8px 10px', border: '1px solid var(--border)', borderRadius: 6, background: 'var(--bg)', color: 'var(--text)', fontSize: 13 }}
+                  disabled={!quickFormData.courseId}
+                  style={{ minWidth: 120 }}
                 >
-                  <option value="Theory">Theory</option>
-                  <option value="Sessional">Lab / Sessional</option>
-                  <option value="Project">Project</option>
-                  <option value="Tutorial">Tutorial / Section</option>
-                </select>
+                  {!quickFormData.courseId ? 'Select Course First' : getCourseTeachers(quickFormData.courseId).length >= 2 ? 'Edit Teachers' : 'Add Teacher'}
+                </button>
               </div>
-
-              <div style={isFullScreenForm ? { gridColumn: 'span 1' } : undefined}>
-                <label style={{ fontSize: 12, fontWeight: 600 }}>Time</label>
-                <select
-                  value={quickFormData.slot}
-                  onChange={e => setQuickFormData(d => ({ ...d, slot: e.target.value }))}
-                  style={{ width: '100%', padding: '8px 10px', border: '1px solid var(--border)', borderRadius: 6, background: 'var(--bg)', color: 'var(--text)', fontSize: 13 }}
-                >
-                  {getAllowedSlotsForType(quickFormData.type).map(p => <option key={p} value={p}>{slotPreview(p)}</option>)}
-                </select>
-              </div>
-
-              {/* Teacher */}
-              <div style={isFullScreenForm ? { gridColumn: 'span 2' } : undefined}>
-                <label style={{ fontSize: 12, fontWeight: 600 }}>Teacher (Select One)</label>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: 8 }}>
-                  <select
-                    value={quickFormData.teacherName}
-                    onChange={e => setQuickFormData(d => ({ ...d, teacherName: e.target.value }))}
-                    disabled={!quickFormData.courseId || getCourseTeachers(quickFormData.courseId).length === 0}
-                    style={{ width: '100%', padding: '8px 10px', border: '1px solid var(--border)', borderRadius: 6, background: 'var(--bg)', color: 'var(--text)', fontSize: 13 }}
-                  >
-                    <option value="">Select teacher</option>
-                    {getCourseTeachers(quickFormData.courseId).map(name => (
-                      <option key={name} value={name}>{name}</option>
-                    ))}
-                  </select>
-                  <button
-                    type="button"
-                    className="btn btn-ghost"
-                    onClick={() => {
-                      if (!quickFormData.courseId) return;
-                      setCourseTeacherDialogState({ open: true, courseId: quickFormData.courseId, source: 'quick' });
-                    }}
-                    disabled={!quickFormData.courseId}
-                  >
-                    {getCourseTeachers(quickFormData.courseId).length >= 2 ? 'Edit Teachers' : 'Add Teacher'}
-                  </button>
+              {!quickFormData.courseId ? (
+                <div style={{ marginTop: 6, fontSize: 11, color: 'var(--muted)' }}>
+                  Select a course first to enable teacher setup.
                 </div>
-                {quickFormData.courseId && getCourseTeachers(quickFormData.courseId).length < 2 && (
-                  <div style={{ marginTop: 6, fontSize: 11, color: 'rgb(180,83,9)' }}>
-                    This course needs two fixed teachers before adding class.
-                  </div>
-                )}
-              </div>
-
-              {/* Room */}
-              <div style={isFullScreenForm ? { gridColumn: 'span 1' } : undefined}>
-                <label style={{ fontSize: 12, fontWeight: 600 }}>Room</label>
-                <input
-                  type="text"
-                  value={quickFormData.room}
-                  onChange={e => setQuickFormData(d => ({ ...d, room: e.target.value }))}
-                  placeholder="Room number"
-                  style={{ width: '100%', padding: '8px 10px', border: '1px solid var(--border)', borderRadius: 6, background: 'var(--bg)', color: 'var(--text)', fontSize: 13, fontFamily: 'inherit' }}
-                />
-              </div>
-
-              {/* Note */}
-              <div style={isFullScreenForm ? { gridColumn: 'span 3' } : undefined}>
-                <label style={{ fontSize: 12, fontWeight: 600 }}>Note</label>
-                <input
-                  type="text"
-                  value={quickFormData.note}
-                  onChange={e => setQuickFormData(d => ({ ...d, note: e.target.value }))}
-                  placeholder="Optional note"
-                  style={{ width: '100%', padding: '8px 10px', border: '1px solid var(--border)', borderRadius: 6, background: 'var(--bg)', color: 'var(--text)', fontSize: 13, fontFamily: 'inherit' }}
-                />
-              </div>
+              ) : getCourseTeachers(quickFormData.courseId).length < 2 && (
+                <div style={{ marginTop: 6, fontSize: 11, color: 'rgb(180,83,9)' }}>
+                  This course needs two fixed teachers before adding class.
+                </div>
+              )}
             </div>
 
-            <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end' }}>
-              <button
-                onClick={closeQuickForm}
-                className="btn btn-ghost"
-                style={{ padding: '8px 14px' }}
-              >
-                Cancel
-              </button>
-              <button
-                onClick={saveQuickForm}
-                className="btn btn-primary"
-                disabled={!!quickFormData.courseId && getCourseTeachers(quickFormData.courseId).length < 2}
-                style={{ padding: '8px 14px' }}
-              >
-                {quickFormEditingId ? 'Update' : 'Add'}
-              </button>
+            {/* Room */}
+            <div style={isFullScreenForm ? { gridColumn: 'span 1' } : undefined}>
+              <label style={{ fontSize: 12, fontWeight: 600 }}>Room</label>
+              <input
+                type="text"
+                value={quickFormData.room}
+                onChange={e => setQuickFormData(d => ({ ...d, room: e.target.value }))}
+                placeholder="Room number"
+                style={{ width: '100%', padding: '8px 10px', border: '1px solid var(--border)', borderRadius: 6, background: 'var(--bg)', color: 'var(--text)', fontSize: 13, fontFamily: 'inherit' }}
+              />
+            </div>
+
+            {/* Note */}
+            <div style={isFullScreenForm ? { gridColumn: 'span 3' } : undefined}>
+              <label style={{ fontSize: 12, fontWeight: 600 }}>Note</label>
+              <input
+                type="text"
+                value={quickFormData.note}
+                onChange={e => setQuickFormData(d => ({ ...d, note: e.target.value }))}
+                placeholder="Optional note"
+                style={{ width: '100%', padding: '8px 10px', border: '1px solid var(--border)', borderRadius: 6, background: 'var(--bg)', color: 'var(--text)', fontSize: 13, fontFamily: 'inherit' }}
+              />
             </div>
           </div>
-        </div>
+
+          <div style={{ display: 'flex', gap: 8, justifyContent: 'flex-end' }}>
+            <button
+              onClick={closeQuickForm}
+              className="btn btn-ghost"
+              style={{ padding: '8px 14px' }}
+            >
+              Cancel
+            </button>
+            <button
+              onClick={saveQuickForm}
+              className="btn btn-primary"
+              disabled={!!quickFormData.courseId && getCourseTeachers(quickFormData.courseId).length < 2}
+              style={{ padding: '8px 14px' }}
+            >
+              {quickFormEditingId ? 'Update' : 'Add'}
+            </button>
+          </div>
+        </Modal>
       )}
 
       <CourseTeacherDialog
@@ -2358,7 +2318,7 @@ export default function Schedule() {
         onSave={handleCourseTeacherDialogSave}
         allTeachers={allKnownTeachers}
         requireTwoTeachers
-        source="form"
+        source={courseTeacherDialogState.source}
         onNavigateToTeachers={() => {
           handleCourseTeacherDialogClose();
           navigate('/teachers');
