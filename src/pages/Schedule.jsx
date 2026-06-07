@@ -1306,9 +1306,6 @@ export default function Schedule() {
             <button className="btn btn-ghost" onClick={openHolidaySetup} style={{ fontSize: '12px' }} title="Set holidays and off days">
               <CalendarDays size={13} /> Holiday
             </button>
-            <button className="btn btn-secondary" onClick={() => setCourseTeacherDialogState({ open: true, courseId: '', source: 'header' })} style={{ fontSize: '12px' }} title="Assign teachers to courses for the routine">
-              <Plus size={13} /> Assign Teachers
-            </button>
             <button className="btn btn-primary" onClick={() => { setEditingId(null); resetForm(); setAdding(true); }} style={{ fontSize: '12px' }} title="Add a new class slot to the schedule">
               <Plus size={13} /> Add Class
             </button>
@@ -2361,7 +2358,7 @@ export default function Schedule() {
         onSave={handleCourseTeacherDialogSave}
         allTeachers={allKnownTeachers}
         requireTwoTeachers
-        source={courseTeacherDialogState.source}
+        source="form"
         onNavigateToTeachers={() => {
           handleCourseTeacherDialogClose();
           navigate('/teachers');
