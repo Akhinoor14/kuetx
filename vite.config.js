@@ -3,6 +3,8 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 // import { VitePWA } from 'vite-plugin-pwa' // temporarily disabled to avoid install/peer-dep issues
 
+const projectRootDir = path.resolve(__dirname);
+
 export default defineConfig({
   plugins: [
     react(),
@@ -14,6 +16,19 @@ export default defineConfig({
     //   devOptions: { enabled: true },
     // }),
   ],
+  resolve: {
+    alias: {
+      react: path.resolve(projectRootDir, 'node_modules/react'),
+      'react-dom': path.resolve(projectRootDir, 'node_modules/react-dom'),
+      'react-dom/client': path.resolve(projectRootDir, 'node_modules/react-dom/client'),
+      'react/jsx-runtime': path.resolve(projectRootDir, 'node_modules/react/jsx-runtime'),
+      'react/jsx-dev-runtime': path.resolve(projectRootDir, 'node_modules/react/jsx-dev-runtime'),
+    },
+    dedupe: ['react', 'react-dom'],
+  },
+  optimizeDeps: {
+    include: ['react', 'react-dom', 'react/jsx-runtime', 'react/jsx-dev-runtime'],
+  },
   build: {
     rollupOptions: {
       output: {

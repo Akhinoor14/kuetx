@@ -148,8 +148,10 @@ const buildPanelSections = (profile, panel, itemMap, mostUsedItems) => {
   return sections;
 };
 
+const isActivePath = (itemPath, pathname) => pathname === itemPath;
+
 const recordUsage = (allItems, pathname) => {
-  const match = allItems.find(item => pathname === item.path || (item.path !== '/' && pathname.startsWith(item.path)));
+  const match = allItems.find(item => isActivePath(item.path, pathname));
   if (!match || match.id === 'quick-access') return;
 
   const usage = getUsageState();
@@ -178,6 +180,7 @@ function NavGridItem({ item, onSelect }) {
     'assignments': 'Assignments',
     'syllabus': 'Syllabus',
     'qbank': 'Question Bank',
+    'solutions': 'Solutions',
     'marks': 'Term Planner',
     'results': 'Results',
     'teachers': 'Teachers',
@@ -269,6 +272,14 @@ export function BottomNav() {
     };
   }, []);
 
+  // debug: log icons available and check BookOpen/Users presence
+  try {
+    // eslint-disable-next-line no-console
+    console.log('BottomNav icons sample:', Object.keys(Icons).slice(0, 60));
+    // eslint-disable-next-line no-console
+    console.log('BottomNav: BookOpen present?', !!Icons.BookOpen, ' Users present?', !!Icons.Users);
+  } catch (e) {}
+
   useEffect(() => {
     recordUsage(allItems, location.pathname);
   }, [allItems, location.pathname]);
@@ -295,7 +306,7 @@ export function BottomNav() {
     return base;
   }, [profile]);
 
-  const activeRoute = (item) => location.pathname === item.path || (item.path !== '/' && location.pathname.startsWith(item.path));
+  const activeRoute = (item) => isActivePath(item.path, location.pathname);
   const studySections = buildPanelSections(profile, 'study', itemMap, mostUsedItems);
   const moneySections = buildPanelSections(profile, 'money', itemMap, mostUsedItems);
   const menuSections = buildPanelSections(profile, 'menu', itemMap, mostUsedItems);

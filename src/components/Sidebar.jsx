@@ -9,6 +9,14 @@ import { useFavorites } from '../hooks/useFavorites';
 import { usePinnedPages } from '../hooks/usePinnedPages';
 
 export function Sidebar({ open, onClose, compact = false, onToggleCompact }) {
+  // debug: log available icons and check common icon names
+  try {
+    // limit output length
+    // eslint-disable-next-line no-console
+    console.log('Sidebar icons sample:', Object.keys(Icons).slice(0, 60));
+    // eslint-disable-next-line no-console
+    console.log('Sidebar: BookOpen present?', !!Icons.BookOpen, ' Users present?', !!Icons.Users);
+  } catch (e) {}
   const location = useLocation();
   const [notes, setNotes] = useState([]);
   const [profile, setProfile] = useState(() => store.get('profile') || DEFAULT_PROFILE);
@@ -292,8 +300,7 @@ export function Sidebar({ open, onClose, compact = false, onToggleCompact }) {
                 )}
                 {section.items.map(item => {
                   const Icon = Icons[item.icon] || Icons.Circle;
-                  const active = location.pathname === item.path ||
-                    (item.path !== '/' && location.pathname.startsWith(item.path));
+                  const active = location.pathname === item.path;
                   // hide items that require CR unless user is CR
                   if (item.requiresCR) {
                     if (!canSeeCrBoard) return null;
