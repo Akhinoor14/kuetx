@@ -27,6 +27,7 @@ export const NAV = [
       { id: 'assignments',label: 'Assignments',          icon: 'FileText',     path: '/assignments' },
       { id: 'syllabus',   label: 'Syllabus',             icon: 'List',         path: '/syllabus' },
       { id: 'qbank',      label: 'Question Bank',        icon: 'BookMarked',   path: '/question-bank' },
+      { id: 'solutions',  label: 'Solutions',            icon: 'BookOpen',     path: '/question-bank/solutions' },
       { id: 'marks',      label: 'Term Planner',         icon: 'ClipboardList',path: '/marks' },
       { id: 'results',    label: 'Results & GPA',        icon: 'TrendingUp',   path: '/results' },
       { id: 'teachers',   label: 'Teachers',             icon: 'Users',        path: '/teachers' },

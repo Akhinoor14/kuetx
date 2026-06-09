@@ -1,0 +1,17 @@
+{
+  "subject": "Fluid Mechanics",
+  "subject_code": "ME 2115",
+  "term": "Y2T1",
+  "department": "ESE",
+  "exam_year": "2018",
+  "generated_by": "KUETx Solution Bank",
+  "questions": [
+    {
+      "id": "Q01a",
+      "question": "Define fluid and list its properties.",
+      "type": "theory",
+      "short_answer": "A fluid is a substance that deforms continuously under applied shear stress. Key properties include density, viscosity, surface tension, and compressibility.",
+      "detailed_answer": "A fluid is defined as a substance that cannot resist a shear force without continuous deformation. Fluids flow to fill the shape of their containers."
+    }
+  ]
+}

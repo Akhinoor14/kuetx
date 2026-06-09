@@ -23,6 +23,7 @@ import Diary from './pages/Diary';
 import Assignments from './pages/Assignments';
 import QuestionBank from './pages/QuestionBank';
 import QuestionBankViewer from './pages/QuestionBankViewer';
+import QuestionBankSolutions from './pages/QuestionBankSolutions';
 import SelfStudy from './pages/SelfStudy';
 import Namaz from './pages/Namaz';
 import SelfEval from './pages/SelfEval';
@@ -90,6 +91,7 @@ function Layout() {
             <Route path="/assignments" element={<Assignments />} />
             <Route path="/question-bank" element={<QuestionBank />} />
             <Route path="/question-bank/view" element={<QuestionBankViewer />} />
+            <Route path="/question-bank/solutions" element={<QuestionBankSolutions />} />
             <Route path="/self-study" element={<SelfStudy />} />
             <Route path="/time" element={<TimeTracker />} />
             <Route path="/namaz" element={<Namaz />} />
