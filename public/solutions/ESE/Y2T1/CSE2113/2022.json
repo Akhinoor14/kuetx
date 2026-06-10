@@ -7,17 +7,17 @@
   "generated_by": "KUETx Solution Bank",
   "questions": [
     {
-      "id": "Q01a",
+      "id": 1,
       "question": "What are the differences between Compilers and Pseudo-compilers? Explain Octave order of precedence by describing the execution of following code written in Octave.\nx = 5\ny = 2\n(x+y)^2 - (x+y)/(x-y) + 2 + sqrt((x+y)/(2*x-y))",
       "type": "theory",
       "short_answer": "A compiler translates the entire source code into machine code before execution, while a pseudo-compiler (like Octave/MATLAB interpreter) translates and executes code line by line. Octave follows BODMAS/PEMDAS precedence: parentheses first, then exponentiation, then multiplication/division (left to right), then addition/subtraction (left to right).",
-      "detailed_answer": "Differences between Compilers and Pseudo-compilers:\n\n| Feature | Compiler | Pseudo-compiler / Interpreter |\n|---|---|---|\n| Translation | Entire program at once | Line by line |\n| Execution speed | Faster (pre-compiled) | Slower (translates at runtime) |\n| Error detection | All errors shown after full scan | Stops at first error |\n| Output | Standalone executable | Needs interpreter to run |\n| Example | GCC (C/C++) | Octave, Python, MATLAB |\n\nOctave Order of Precedence (high to low):\n1. Parentheses ( )\n2. Exponentiation ^ (right to left)\n3. Unary minus (-)\n4. Multiplication (*), Division (/), Left division (\\) — left to right\n5. Addition (+), Subtraction (-) — left to right\n\nCode Execution Trace (assuming $x=5$, $y=2$):\n\nExpression: $$(x+y)^2 - \\frac{x+y}{x-y} + 2 + \\sqrt{\\frac{x+y}{2x-y}}$$\n\nStep 1 — Evaluate all parentheses:\n  $(x+y) = (5+2) = 7$\n  $(x-y) = (5-2) = 3$\n  $(2*x-y) = (2\\cdot5-2) = (10-2) = 8$\n\nStep 2 — Exponentiation:\n  $7^2 = 49$\n\nStep 3 — Multiplication/Division (left to right):\n  $\\frac{x+y}{x-y} = 7/3 \\approx 2.3333$\n  $\\frac{x+y}{2x-y} = 7/8 = 0.875$\n\nStep 4 — sqrt:\n  $\\sqrt{0.875} \\approx 0.9354$\n\nStep 5 — Addition/Subtraction (left to right):\n  $49 - 2.3333 + 2 + 0.9354$\n  $= 46.6667 + 2 + 0.9354$\n  $= 49.6021$\n\nFinal Result $\\approx 49.60$",
+      "detailed_answer": "Differences between Compilers and Pseudo-compilers:\n\n| Feature | Compiler | Pseudo-compiler / Interpreter |\n|---|---|---|\n| Translation | Entire program at once | Line by line |\n| Execution speed | Faster (pre-compiled) | Slower (translates at runtime) |\n| Error detection | All errors shown after full scan | Stops at first error |\n| Output | Standalone executable | Needs interpreter to run |\n| Example | GCC (C/C++) | Octave, Python, MATLAB |\n\nOctave Order of Precedence (high to low):\n1. Parentheses ( )\n2. Exponentiation ^ (right to left)\n3. Unary minus (-)\n4. Multiplication (*), Division (/), Left division (\\) — left to right\n5. Addition (+), Subtraction (-) — left to right\n\nCode Execution Trace (assuming x=5, y=2):\n\nExpression: $$(x+y)^2 - \\frac{x+y}{x-y} + 2 + \\sqrt{\\frac{x+y}{2x-y}}$$\n\nStep 1 — Evaluate all parentheses:\n  $(x+y) = (5+2) = 7$\n  $(x-y) = (5-2) = 3$\n  $(2*x-y) = (2\\cdot5-2) = (10-2) = 8$\n\nStep 2 — Exponentiation:\n  $7^2 = 49$\n\nStep 3 — Multiplication/Division (left to right):\n  $\\frac{x+y}{x-y} = 7/3 \\approx 2.3333$\n  $\\frac{x+y}{2x-y} = 7/8 = 0.875$\n\nStep 4 — sqrt:\n  $\\sqrt{0.875} \\approx 0.9354$\n\nStep 5 — Addition/Subtraction (left to right):\n  $49 - 2.3333 + 2 + 0.9354$\n  $= 46.6667 + 2 + 0.9354$\n  $= 49.6021$\n\nFinal Result $\\approx 49.60$",
       "explanation_bn": "Compiler পুরো program একসাথে translate করে machine code এ, তারপর run করে। কিন্তু Octave একটা pseudo-compiler বা interpreter — এটা প্রতিটা line একে একে পড়ে আর সাথে সাথে execute করে। Octave এর precedence মনে রাখার সহজ উপায় হলো BODMAS: আগে Bracket, তারপর Power (^), তারপর Multiply/Divide, সবশেষে Add/Subtract।",
       "matlab": null,
       "python": null
     },
     {
-      "id": "Q01b",
+      "id": 2,
       "question": "The distance traveled by a ball falling in the air is given by equation x = x0 + v0*t + 1/2 * a * t^2. Use MATLAB to calculate the position of the ball at time t = 5s if x0 = 10m, v0 = 12 m/s and a = -9.81 m/s^2.",
       "type": "numerical",
       "short_answer": "Using $x = x_0 + v_0 t + \\frac{1}{2} a t^2$ with the given values: $x = 10 + 12(5) + \\frac{1}{2}(-9.81)(25) = 10 + 60 - 122.625 = -52.625$ m.",
@@ -27,7 +27,7 @@
       "python": "# Ball position calculation using kinematic equation\n# Given values\nx0 = 10       # initial position in meters\nv0 = 12       # initial velocity in m/s\na  = -9.81    # acceleration due to gravity in m/s^2\nt  = 5        # time in seconds\n\n# Apply kinematic equation: x = x0 + v0*t + 0.5*a*t^2\nx = x0 + v0*t + 0.5*a*t**2\n\n# Display the result\nprint(f'Position of ball at t = {t} s is: {x:.4f} m')"
     },
     {
-      "id": "Q01c",
+      "id": 3,
       "question": "Explain different formats of displaying a number in Octave with example.",
       "type": "theory",
       "short_answer": "Octave provides multiple display formats via the 'format' command, including short, long, short e, long e, rat, and bank, each controlling how numbers are shown in the command window.",
@@ -37,7 +37,7 @@
       "python": null
     },
     {
-      "id": "Q02a",
+      "id": 4,
       "question": "Define data and datafile with examples. Mention different data types used in MATLAB language and how do you create a character array in MATLAB.",
       "type": "theory",
       "short_answer": "Data is raw information (numbers, text, etc.) and a datafile is a file used to store data persistently. MATLAB supports data types including double, char, logical, int, uint, single, cell, and struct. A character array is created using single quotes: ch = 'Hello'.",
@@ -47,7 +47,7 @@
       "python": null
     },
     {
-      "id": "Q02b",
+      "id": 5,
       "question": "Explain the steps those are needed to write the output in a file.",
       "type": "theory",
       "short_answer": "To write output to a file in MATLAB: open the file with fopen(), write data using fprintf() or fwrite(), then close the file with fclose().",
@@ -57,7 +57,7 @@
       "python": "# Writing output to a file in Python\nwith open('output.txt', 'w') as f:  # open file for writing\n    x = 42                          # sample data\n    name = 'KUET'                   # sample string\n    f.write(f'Number: {x}\\n')      # write integer\n    f.write(f'Name: {name}\\n')     # write string\nprint('File written successfully.')"
     },
     {
-      "id": "Q02c",
+      "id": 6,
       "question": "Define variables, x=0.85, y=12.5, and then use them to create a column vector that has following elements: Sin(80y), y^x, ln(x), x*y, and sqrt(x+y)",
       "type": "numerical",
       "short_answer": "The column vector v = [sin(80*y); y^x; log(x); x*y; sqrt(x+y)] with x=0.85, y=12.5 gives approximately [-0.9589; 8.9910; -0.1625; 10.6250; 3.6401].",
@@ -67,7 +67,7 @@
       "python": "import numpy as np\n\n# Define variables\nx = 0.85\ny = 12.5\n\n# Create column vector (as numpy array)\nv = np.array([\n    np.sin(80 * y),   # element 1: sin(80y)\n    y ** x,           # element 2: y^x\n    np.log(x),        # element 3: natural log of x\n    x * y,            # element 4: x * y\n    np.sqrt(x + y)    # element 5: sqrt(x+y)\n])\n\nprint('Column vector v:')\nprint(v.reshape(-1, 1))  # display as column"
     },
     {
-      "id": "Q02d",
+      "id": 7,
       "question": "The spread of a computer virus through a computer network can be modeled by N(t) = 200*e^(0.15t) where N(t) is the number of computers infected t time in minutes. Write a MATLAB script to: i) Determine how long it takes for the number of infected computers to double. ii) Determine how long it takes for 1,000,000 computers to be infected.",
       "type": "numerical",
       "short_answer": "i) Doubling time t = ln(2)/0.15 ≈ 4.62 minutes. ii) Time to infect 1,000,000 computers: t = ln(5000)/0.15 ≈ 56.76 minutes.",
@@ -77,7 +77,7 @@
       "python": "import numpy as np\n\n# Virus spread model: N(t) = 200 * exp(0.15*t)\nN0 = 200       # initial infected computers\nr = 0.15       # growth rate\n\n# Part i: Doubling time\nt_double = np.log(2) / r\nprint(f'i) Doubling time = {t_double:.4f} minutes')\n\n# Part ii: Time for 1,000,000 infections\nN_target = 1_000_000\nt_million = np.log(N_target / N0) / r\nprint(f'ii) Time to infect 1,000,000 = {t_million:.4f} minutes')"
     },
     {
-      "id": "Q03a",
+      "id": 8,
       "question": "Define the system of linear equations. Explain with an example of the representation of a linear system into vector equation and Matrix equation. Derive a system of equations to find the partial fraction decomposition of 4x²/[(x+1)(x-1)²] = A/(x+1) + B/(x-1) + C/(x-1)². Then write MATLAB code to solve the system i) by considering the augmented Matrix, ii) by considering the coefficient Matrix.",
       "type": "numerical",
       "short_answer": "A system of linear equations is a set of equations where each equation is linear in the unknowns. For the partial fraction 4x²/[(x+1)(x-1)²], solving gives A=1, B=3, C=2.",
@@ -87,7 +87,7 @@
       "python": "import numpy as np\n\n# Coefficient matrix for the system\nA_coeff = np.array([[1,  1,  0],\n                    [-2, 0,  1],\n                    [1, -1,  1]], dtype=float)\n\nb = np.array([4, 0, 0], dtype=float)  # right-hand side\n\n# Method i: Using augmented matrix\nAug = np.hstack([A_coeff, b.reshape(-1, 1)])  # augmented matrix\nprint('Augmented matrix:\\n', Aug)\n\n# Method ii: Solve using numpy\nsol = np.linalg.solve(A_coeff, b)  # solve A*x = b\nprint(f'A = {sol[0]}, B = {sol[1]}, C = {sol[2]}')"
     },
     {
-      "id": "Q03b",
+      "id": 9,
       "question": "Define SVD and PLU decomposition with mathematical relation and write an example code to find them using MATLAB with the reconstruction of the original Matrix. Also, Discuss the different types of SVD.",
       "type": "theory",
       "short_answer": "SVD decomposes a matrix as A = U*S*V', where U and V are orthogonal and S is diagonal. PLU decomposes A as P*A = L*U. Types of SVD include full SVD, thin/economy SVD, and truncated SVD.",
@@ -97,7 +97,7 @@
       "python": "import numpy as np\n\n# SVD Decomposition\nA = np.array([[4, 3], [6, 3], [2, 1]], dtype=float)\n\n# Full SVD\nU, S_vals, Vt = np.linalg.svd(A, full_matrices=True)  # full SVD\nS = np.zeros(A.shape)                                  # build S matrix\nnp.fill_diagonal(S, S_vals)\nA_recon = U @ S @ Vt                                   # reconstruct\nprint('SVD error:', np.linalg.norm(A - A_recon))\n\n# LU Decomposition (scipy)\nfrom scipy.linalg import lu\nB = np.array([[2,1,1],[4,3,3],[8,7,9]], dtype=float)\nP, L, U = lu(B)                # P @ B = L @ U in scipy convention\nB_recon = P @ L @ U            # reconstruct\nprint('PLU error:', np.linalg.norm(B - B_recon))"
     },
     {
-      "id": "Q03c",
+      "id": 10,
       "question": "Write a MATLAB code for creating a 4x4 random matrix. Use built-in function to find eigen vectors and eigen values of that matrix. Also check if the eigen vectors are linearly independent and span R.",
       "type": "numerical",
       "short_answer": "Use rand(4) to create a 4×4 random matrix, [V,D] = eig(A) to find eigenvectors (V) and eigenvalues (D). Linear independence is checked via rank(V)==4 and det(V)~=0.",
@@ -107,7 +107,7 @@
       "python": "import numpy as np\n\n# Create a 4x4 random matrix\nA = np.random.rand(4, 4)    # random 4x4 matrix\nprint('Random Matrix A:')\nprint(A)\n\n# Find eigenvalues and eigenvectors\neivals, eivecs = np.linalg.eig(A)  # eigenvalues and eigenvectors\nprint('Eigenvalues:', eigvals)\nprint('Eigenvectors (columns):')\nprint(eivecs)\n\n# Check linear independence via rank\nr = np.linalg.matrix_rank(eivecs)  # rank of eigenvector matrix\nprint(f'Rank of eigenvector matrix: {r}')\nif r == 4:\n    print('Eigenvectors are linearly independent and span R4.')\nelse:\n    print('Eigenvectors are NOT linearly independent.')"
     },
     {
-      "id": "Q04a",
+      "id": 11,
       "question": "What is meant by function in MATLAB? Briefly explain how to create and call anonymous and user-defined functions in MATLAB with examples.",
       "type": "theory",
       "short_answer": "A function in MATLAB is a reusable block of code that performs a specific task. Anonymous functions are created using the @ operator in one line; user-defined functions are written in separate .m files using the 'function' keyword.",
@@ -117,7 +117,7 @@
       "python": null
     },
     {
-      "id": "Q04b",
+      "id": 12,
       "question": "Define local and global variables with MATLAB examples. Write an anonymous MATLAB function for y(x) = 0.6x³*e^(-0.47x) + 1.5x²*e^(-0.6x). i) Use the function to calculate y(-2) and y(4). ii) Use the function to calculate y(x) for -4 <= x <= 8",
       "type": "numerical",
       "short_answer": "Local variables exist only within the function scope; global variables are declared with 'global' and shared across functions. The anonymous function is defined with element-wise operations (.^, .*) to work with vectors.",
@@ -127,7 +127,7 @@
       "python": "import numpy as np\nimport matplotlib.pyplot as plt\n\n# Define the anonymous-style function using lambda\ny = lambda x: 0.6*x**3*np.exp(-0.47*x) + 1.5*x**2*np.exp(-0.6*x)\n\n# Part i: Calculate y(-2) and y(4)\nprint(f'y(-2) = {y(-2):.4f}')\nprint(f'y(4)  = {y(4):.4f}')\n\n# Part ii: Calculate y(x) for -4 <= x <= 8\nx = np.arange(-4, 8.1, 0.1)  # create x vector\ny_vals = y(x)                  # compute y values\n\n# Plot\nplt.plot(x, y_vals, 'b-', linewidth=2)\nplt.xlabel('x'); plt.ylabel('y(x)')\nplt.title('y(x) = 0.6x³e^(-0.47x) + 1.5x²e^(-0.6x)')\nplt.grid(True); plt.show()"
     },
     {
-      "id": "Q04c",
+      "id": 13,
       "question": "Write a function 'y = is_prime(x)' to check whether x is prime (y=1 if x is prime) or not (y=0 if x is not prime). Using this function write a program to find first 50 prime numbers, store these prime numbers in variable 'prime_numbers', and display these numbers.",
       "type": "numerical",
       "short_answer": "The is_prime function checks divisibility from 2 to sqrt(x). The main program loops through integers, calling is_prime until 50 primes are collected in the prime_numbers array.",
@@ -137,7 +137,7 @@
       "python": "import math\n\ndef is_prime(x):\n    \"\"\"Return 1 if x is prime, 0 otherwise.\"\"\"\n    if x < 2:\n        return 0  # not prime\n    for i in range(2, int(math.sqrt(x)) + 1):  # check up to sqrt(x)\n        if x % i == 0:     # divisible means not prime\n            return 0\n    return 1               # no divisor found: prime\n\n# Find first 50 prime numbers\nprime_numbers = []   # list to store primes\nn = 2                # start from 2\n\nwhile len(prime_numbers) < 50:   # until 50 primes found\n    if is_prime(n) == 1:         # check primality\n        prime_numbers.append(n)  # add to list\n    n += 1                       # next number\n\nprint('First 50 prime numbers:')\nprint(prime_numbers)"
     },
     {
-      "id": "Q05a",
+      "id": 14,
       "question": "With proper example and syntax explain the function of the following command: i) magic, ii) find, iii) cumsum",
       "type": "theory",
       "short_answer": "magic(n) creates an n×n magic square; find() returns indices of non-zero or condition-matching elements; cumsum() computes the cumulative sum of elements along a vector or matrix.",
@@ -147,7 +147,7 @@
       "python": "import numpy as np\n\n# i) Magic square (manual for 3x3)\nM = np.array([[8,1,6],[3,5,7],[4,9,2]])  # 3x3 magic square\nprint('Magic square:\\n', M)\nprint('Row sum:', M[0].sum())\n\n# ii) find equivalent: np.where\nA = np.array([[1,0,3],[0,5,0]])\nidx = np.where(A != 0)       # indices of non-zero elements\nidx_cond = np.where(A > 2)   # indices where A > 2\nprint('Non-zero indices:', list(zip(*idx)))\nprint('Indices where A>2:', list(zip(*idx_cond)))\n\n# iii) cumsum\nv = np.array([1,2,3,4,5])\nC = np.cumsum(v)              # cumulative sum\nprint('Cumulative sum:', C)"
     },
     {
-      "id": "Q05b",
+      "id": 15,
       "question": "With proper example explain how meshgrid command transforms two different vectors into array of the same size?",
       "type": "theory",
       "short_answer": "meshgrid(x,y) takes two 1D vectors and creates two 2D arrays of the same size, where X has x repeated along rows and Y has y repeated along columns. This is used to evaluate functions over a 2D grid.",
@@ -157,7 +157,7 @@
       "python": "import numpy as np\nimport matplotlib.pyplot as plt\nfrom mpl_toolkits.mplot3d import Axes3D\n\n# meshgrid example\nx = np.array([1, 2, 3])     # x vector\ny = np.array([10, 20, 40])  # y vector\n\nX, Y = np.meshgrid(x, y)   # create 2D grids\nprint('X matrix:\\n', X)\nprint('Y matrix:\\n', Y)\n\n# Surface plot example\nxg = np.arange(-2, 2.1, 0.5)\nyg = np.arange(-2, 2.1, 0.5)\nXg, Yg = np.meshgrid(xg, yg)\nZ = Xg**2 + Yg**2\n\nfig = plt.figure()\nax = fig.add_subplot(111, projection='3d')\nax.plot_surface(Xg, Yg, Z)\nplt.show()"
     },
     {
-      "id": "Q05c",
+      "id": 16,
       "question": "A matrix is given as: M = [[3, 8, 9], [-5, 0, 11], [5, 2, 4]]. What will be the output of the following command? i) aM(:, length(M):-1:1), ii) a1=M(find(M > 4)), iii) [not specified clearly], iv) c = cumsum(sum(M))",
       "type": "numerical",
       "short_answer": "i) Reverses columns of M; ii) Elements of M greater than 4 as a column vector [8;9;11;5]; iv) cumsum(sum(M)) gives the running sum of column sums.",
@@ -167,7 +167,7 @@
       "python": "import numpy as np\n\n# Given matrix\nM = np.array([[3, 8, 9], [-5, 0, 11], [5, 2, 4]])\n\n# i) Reverse column order\naM = M[:, ::-1]             # reverse all columns\nprint('i) aM:\\n', aM)\n\n# ii) Elements greater than 4\na1 = M[M > 4]               # elements where M > 4\nprint('ii) Elements > 4:', a1)\n\n# iv) cumsum of column sums\nc = np.cumsum(M.sum(axis=0))  # sum along columns, then cumsum\nprint('iv) c =', c)"
     },
     {
-      "id": "Q05d",
+      "id": 17,
       "question": "Writing a single line command create the following matrix using eye, ones and zeros commands: D = [[1,0,1,1,0,0],[0,1,1,1,0,0],[0,0,1,1,1,0]]",
       "type": "numerical",
       "short_answer": "D = [eye(3), ones(3,1), [ones(2,1); 0], zeros(3,1)] constructs D in a single line using horizontal concatenation of identity, ones, and zeros blocks.",
@@ -177,7 +177,7 @@
       "python": "import numpy as np\n\n# Single line to create matrix D\nD = np.hstack([np.eye(3,2), np.ones((3,2)), [[0],[0],[1]], np.zeros((3,1))])\nprint('Matrix D:')\nprint(D.astype(int))"
     },
     {
-      "id": "Q06a",
+      "id": 18,
       "question": "Why do line command use in 2D plotting? With proper syntax explain how line command is used?",
       "type": "theory",
       "short_answer": "The line command in MATLAB adds lines to an existing plot with fine-grained control over properties. Unlike plot(), line() adds to the current axes without replacing existing content and requires specifying x and y data directly.",
@@ -187,7 +187,7 @@
       "python": null
     },
     {
-      "id": "Q06b",
+      "id": 19,
       "question": "With proper syntax explain the function of the following plotting commands: i) semilogx, ii) errorbar, iii) fplot",
       "type": "theory",
       "short_answer": "semilogx plots with logarithmic x-axis; errorbar adds error bars to data points; fplot automatically evaluates and plots a mathematical function over a range.",
@@ -197,7 +197,7 @@
       "python": null
     },
     {
-      "id": "Q06c",
+      "id": 20,
       "question": "Two parametric equations are given: y = sin³(t), x = cos³(t), u = sin(t), v = cos(t). In one figure, make plots of y versus x and v versus u for 0 <= t <= 2pi. Format the plot such that both axes will range from -2 to 2.",
       "type": "numerical",
       "short_answer": "Create t from 0 to 2π, compute x,y,u,v, then use subplot or hold on to plot both curves in one figure, with axis([-2 2 -2 2]) to set the range.",
@@ -207,7 +207,7 @@
       "python": "import numpy as np\nimport matplotlib.pyplot as plt\n\nt = np.linspace(0, 2*np.pi, 1000)  # parameter t\n\n# Parametric coordinates\nx = np.cos(t)**3    # x = cos^3(t)\ny = np.sin(t)**3    # y = sin^3(t)\nu = np.cos(t)       # u = cos(t)\nv = np.sin(t)       # v = sin(t)\n\nplt.figure()\nplt.plot(x, y, 'b-', linewidth=2, label='Astroid')\nplt.plot(u, v, 'r--', linewidth=2, label='Unit circle')\nplt.axis([-2, 2, -2, 2])    # set axis range\nplt.xlabel('x / u'); plt.ylabel('y / v')\nplt.title('Parametric Curves')\nplt.legend(); plt.grid(True); plt.show()"
     },
     {
-      "id": "Q06d",
+      "id": 21,
       "question": "What is line specifiers? What are the things included in line specifiers.",
       "type": "theory",
       "short_answer": "Line specifiers are shorthand strings used in MATLAB plot commands to set the color, line style, and marker type of a plotted line, e.g., 'r--o' means red, dashed, circle markers.",
@@ -217,7 +217,7 @@
       "python": null
     },
     {
-      "id": "Q07a",
+      "id": 22,
       "question": "With proper syntax explain the function of polyder command.",
       "type": "theory",
       "short_answer": "polyder(p) computes the derivative of a polynomial represented as a coefficient vector p in MATLAB. It returns the coefficient vector of the derivative polynomial.",
@@ -227,7 +227,7 @@
       "python": "import numpy as np\n\n# polyder equivalent in numpy\np = np.poly1d([3, 2, -1, 5])   # polynomial: 3x^3 + 2x^2 - x + 5\ndp = p.deriv()                  # compute derivative\nprint('Derivative polynomial:', dp)\nprint('dp at x=2:', dp(2))      # evaluate at x=2"
     },
     {
-      "id": "Q07b",
+      "id": 23,
       "question": "An experimental data fits the following function: y = b * x^m. Briefly explain how will you determine the value b and m.",
       "type": "theory",
       "short_answer": "Take the logarithm of both sides: log(y) = log(b) + m*log(x). This is linear in log-log space. Use polyfit(log(x), log(y), 1) to find slope m and intercept log(b), then b = e^(intercept).",
@@ -237,7 +237,7 @@
       "python": "import numpy as np\nimport matplotlib.pyplot as plt\n\nx_data = np.array([1, 2, 3, 4, 5])\ny_data = np.array([2, 8, 18, 32, 50])\n\n# Linearize\nX = np.log(x_data)\nY = np.log(y_data)\n\n# Linear fit in log-log space\ncoeffs = np.polyfit(X, Y, 1)  # fit line\nm = coeffs[0]                  # slope = m\nb = np.exp(coeffs[1])          # b = e^intercept\nprint(f'm = {m:.4f}, b = {b:.4f}')\n\ny_fit = b * x_data**m\nplt.plot(x_data, y_data, 'ro', label='Data')\nplt.plot(x_data, y_fit, 'b-', label='Fit')\nplt.legend(); plt.grid(True); plt.show()"
     },
     {
-      "id": "Q07c",
+      "id": 24,
       "question": "The relationship between two variables p and t is: p = (m*t)/(b+t). Data: t=[1,2,3,4,6,8,10], p=[2.1,3,4,4.6,5.4,6.1,6.4,6.6]. Determine the constant m and b by curve fitting.",
       "type": "numerical",
       "short_answer": "Linearize by taking reciprocal: 1/p = b/(m*t) + 1/m = (b/m)*(1/t) + 1/m. Use polyfit on (1/t, 1/p) to find slope = b/m and intercept = 1/m, then extract m and b.",
@@ -247,7 +247,7 @@
       "python": "import numpy as np\nimport matplotlib.pyplot as plt\n\nt = np.array([1, 2, 3, 4, 6, 8, 10])\np = np.array([2.1, 3, 4, 4.6, 5.4, 6.1, 6.4])\n\n# Linearize: 1/p = (b/m)*(1/t) + 1/m\nT = 1 / t\nP = 1 / p\n\ncoeffs = np.polyfit(T, P, 1)   # linear fit\nA = coeffs[0]                   # slope = b/m\nB = coeffs[1]                   # intercept = 1/m\n\nm = 1 / B\nb = A * m\nprint(f'm = {m:.4f}, b = {b:.4f}')\n\nt_fit = np.linspace(0.5, 12, 100)\np_fit = m * t_fit / (b + t_fit)\nplt.plot(t, p, 'ro', label='Data')\nplt.plot(t_fit, p_fit, 'b-', label='Fit')\nplt.legend(); plt.grid(True); plt.show()"
     },
     {
-      "id": "Q07d",
+      "id": 25,
       "question": "Make a 3-D surface plot of the function z = (y²)/4 - 2*sin(1.5x) in the domain -3 <= x <= 3 and -3 <= y <= 3",
       "type": "numerical",
       "short_answer": "Use meshgrid to create a 2D grid for x and y, compute z = y.^2/4 - 2*sin(1.5*x) at each point, then use surf() or mesh() to plot the 3D surface.",
@@ -257,7 +257,7 @@
       "python": "import numpy as np\nimport matplotlib.pyplot as plt\nfrom mpl_toolkits.mplot3d import Axes3D\n\n# Create 2D grid\nx = np.arange(-3, 3.1, 0.1)\ny = np.arange(-3, 3.1, 0.1)\nX, Y = np.meshgrid(x, y)\n\n# Compute z\nZ = Y**2 / 4 - 2*np.sin(1.5*X)  # z function\n\n# 3D surface plot\nfig = plt.figure()\nax = fig.add_subplot(111, projection='3d')\nax.plot_surface(X, Y, Z, cmap='viridis')\nax.set_xlabel('x'); ax.set_ylabel('y'); ax.set_zlabel('z')\nplt.title('z = y²/4 - 2sin(1.5x)')\nplt.show()"
     },
     {
-      "id": "Q08a",
+      "id": 26,
       "question": "Suppose a code is written as: x=[20,25]; y=[100,120]; y1=112; x1=interp1(x,y,y1,'nearest'); x2=interp1(x,y,y2,'Linear'); x3=interp1(x,y,y1,'Spline'); x=interp1(x,y,y1,'Pchip'). Is there any error? If yes, rectify the error and write the correct code and explain the output.",
       "type": "numerical",
       "short_answer": "Errors: (1) y2 is undefined (should be y1); (2) 'Linear' should be 'linear' (lowercase); (3) x is overwritten — final variable should be x4. The interp1 function interpolates: given x and y vectors, find x value corresponding to a given y value.",
@@ -267,7 +267,7 @@
       "python": "import numpy as np\n\n# Data\nx = np.array([20, 25])\ny = np.array([100, 120])\ny1 = 112  # query point\n\n# Find x corresponding to y1 using interpolation\n# Linear interpolation (numpy)\nx2 = np.interp(y1, y, x)   # linear interpolation\nprint(f'Linear: x = {x2}')\n\n# For nearest, spline etc., scipy is used\nfrom scipy.interpolate import interp1d\nf_nearest = interp1d(y, x, kind='nearest')\nf_cubic = interp1d(y, x, kind='linear')  # only 2 pts, linear=cubic\nprint(f'Nearest: x = {f_nearest(y1)}')"
     },
     {
-      "id": "Q08b",
+      "id": 27,
       "question": "Draw the flow chart for if-elseif-else-end structure and describe program for this construct with MATLAB code.",
       "type": "theory",
       "short_answer": "The if-elseif-else-end structure evaluates conditions sequentially; if the first condition is false, it checks elseif conditions one by one, and executes the else block if none are true.",
@@ -277,7 +277,7 @@
       "python": "# if-elif-else example in Python\nscore = 75   # student score\n\nif score >= 90:       # check for A\n    grade = 'A'\nelif score >= 80:     # check for B\n    grade = 'B'\nelif score >= 70:     # check for C\n    grade = 'C'\nelif score >= 60:     # check for D\n    grade = 'D'\nelse:                 # fail\n    grade = 'F'\n\nprint(f'Score: {score}, Grade: {grade}')"
     },
     {
-      "id": "Q08c",
+      "id": 28,
       "question": "Rectify the error in the following code: i) s=input(\"Enter a text string: \"); if (s == 'Hi') disp(\"you entered Hi\"); else if Disp(\"you did not enter Hi\") end. ii) m=1 While 1 Disp('CSE 2113') end",
       "type": "theory",
       "short_answer": "Errors in i): double quotes for input/disp should be single quotes, 'else if' should be 'elseif', comparison should use strcmp(), and a missing 'end'. Errors in ii): 'While' and 'Disp' should be lowercase, missing semicolon after m=1, and infinite loop has no break.",
@@ -287,7 +287,7 @@
       "python": "# Corrected Code i) in Python\ns = input('Enter a text string: ')   # read string\nif s == 'Hi':                          # compare strings\n    print('you entered Hi')\nelse:\n    print('you did not enter Hi')\n\n# Corrected Code ii) in Python\nm = 1                                  # initialize counter\nwhile m <= 5:                          # loop 5 times\n    print('CSE 2113')                 # print message\n    m += 1                            # increment to avoid infinite loop"
     },
     {
-      "id": "Q08d",
+      "id": 29,
       "question": "The reciprocal Fibonacci constant Ψ is defined by Ψ = Σ(n=1 to ∞) 1/F_n where F_n are Fibonacci numbers 1,1,2,3,5,8,13,... Write a program that calculates Ψ for a given n. Execute for n=10 and n=100.",
       "type": "numerical",
       "short_answer": "Generate Fibonacci numbers up to F_n using the recurrence F_n = F_{n-1} + F_{n-2}, then sum their reciprocals. For n=10: Ψ≈3.3399, for n=100: Ψ≈3.35988... (converges to the Reciprocal Fibonacci constant ≈3.3598856).",
