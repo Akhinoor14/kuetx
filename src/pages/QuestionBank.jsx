@@ -231,11 +231,6 @@ export default function QuestionBank() {
             <div className="lbl">Departments</div>
           </div>
         </div>
-
-        <div className="qb-min-actions">
-          <button className="kb-btn primary" onClick={() => setView('grouped')}>Browse Papers</button>
-          <button className="kb-btn subtle" onClick={openContributionPrompt}>Contribute</button>
-        </div>
       </div>
 
       {/* ── SEARCH + FILTERS ── */}

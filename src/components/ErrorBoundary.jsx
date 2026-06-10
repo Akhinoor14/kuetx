@@ -64,10 +64,13 @@ export class ErrorBoundary extends React.Component {
               color: 'var(--muted)',
               maxWidth: '90vw',
               overflow: 'auto',
-              maxHeight: 200,
+              maxHeight: 400,
               fontFamily: 'monospace'
             }}>
-              {this.state.error?.toString()}
+              <div style={{whiteSpace: 'pre-wrap', textAlign: 'left'}}>
+                {this.state.error?.toString()}
+                {this.state.error?.stack && ('\n\n' + this.state.error.stack)}
+              </div>
             </div>
           )}
         </div>

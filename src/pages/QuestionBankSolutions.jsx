@@ -608,9 +608,11 @@ function QuestionCard({ question: q, globalIdx, showYearBadge, t, bookmarks, tog
   const isBookmarked = bookmarks?.has(bmKey);
 
   return (
-    <div className="q-card" style={{
+    <div className="q-card" data-open={open} style={{
       background: t.card,
-      border: `1px solid ${open ? typeColor.border + '55' : t.border}`,
+      borderTop: `1px solid ${open ? typeColor.border + '55' : t.border}`,
+      borderRight: `1px solid ${open ? typeColor.border + '55' : t.border}`,
+      borderBottom: `1px solid ${open ? typeColor.border + '55' : t.border}`,
       borderLeft: `4px solid ${typeColor.border}`,
       borderRadius: 12,
       overflow: 'hidden',
@@ -933,7 +935,7 @@ export default function QuestionBankSolutions() {
         setView('courses');
       }
     }
-  }, []);
+  }, [searchParams]);
 
   // Filters (for 'all' view)
   const [filterYears, setFilterYears]     = useState(new Set());
@@ -1101,27 +1103,14 @@ export default function QuestionBankSolutions() {
 
   const PageHeader = () => (
     <div className="page-header">
-      <div style={{ display: 'flex', alignItems: 'center', gap: 11 }}>
-        <div className="icon-wrap" style={{ border: `1px solid ${t.accent}40` }}>
-          <BookOpen size={20} color={t.accent} />
+      <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+        <div className="icon-wrap" style={{ background: `linear-gradient(135deg, ${t.accent}15, ${t.accent}08)`, border: `1.5px solid ${t.accent}30`, boxShadow: `0 0 20px ${t.accent}20, inset 0 0 10px ${t.accent}08` }}>
+          <BookOpen size={22} color={t.accent} strokeWidth={1.8} />
         </div>
         <div style={{ flex: 1 }}>
-          <h1 style={{ margin: 0, fontSize: 18, fontWeight: 800, color: t.text }}>Solution Bank</h1>
-          <p style={{ margin: 0, fontSize: 12, color: t.textSub, marginTop: 1 }}>Past paper solutions with step-by-step answers</p>
+          <h1 style={{ margin: 0, fontSize: 20, fontWeight: 800, color: t.text, letterSpacing: '-0.02em' }}>Solution Bank</h1>
+          <p style={{ margin: 0, fontSize: 12.5, color: t.textSub, marginTop: 2, fontWeight: 500 }}>Past paper solutions with step-by-step answers</p>
         </div>
-        <button
-          onClick={toggleTheme}
-          style={{
-            background: t.surface, border: `1px solid ${t.border}`, borderRadius: 8,
-            padding: '7px 10px', cursor: 'pointer', color: t.textSub,
-            display: 'flex', alignItems: 'center', gap: 5, fontSize: 11, fontWeight: 600,
-            transition: 'all .15s',
-          }}
-          title="Toggle theme"
-        >
-          {dark ? <Sun size={14} /> : <Moon size={14} />}
-          {dark ? 'Light' : 'Dark'}
-        </button>
       </div>
     </div>
   );
@@ -1151,16 +1140,22 @@ export default function QuestionBankSolutions() {
   const DeptTermBar = () => (
     <div className="dept-term-bar">
       <div style={{ flex: 1, minWidth: 150 }}>
-        <div style={{ fontSize: 10, fontWeight: 700, color: t.textMut, letterSpacing: '0.07em', textTransform: 'uppercase', marginBottom: 4 }}>Department</div>
-        <select value={selectedDept} onChange={e => { setSelectedDept(e.target.value); setSelectedTerm(Object.keys(AVAILABLE_SOLUTIONS[e.target.value] || {})[0] || 'Y2T1'); }} className="select">
-          {depts.map(code => <option key={code} value={code}>{code} — {QB_DEPARTMENTS[code]?.split('of ')[1] || QB_DEPARTMENTS[code] || code}</option>)}
-        </select>
+        <div style={{ fontSize: 9.5, fontWeight: 700, color: t.accent, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 6, opacity: 0.8 }}>📚 Department</div>
+        <div style={{ position: 'relative' }}>
+          <select value={selectedDept} onChange={e => { setSelectedDept(e.target.value); setSelectedTerm(Object.keys(AVAILABLE_SOLUTIONS[e.target.value] || {})[0] || 'Y2T1'); }} className="select" style={{ paddingRight: 32 }}>
+            {depts.map(code => <option key={code} value={code}>{code} — {QB_DEPARTMENTS[code]?.split('of ')[1] || QB_DEPARTMENTS[code] || code}</option>)}
+          </select>
+          <ChevronDown size={14} color={t.textMut} style={{ position: 'absolute', right: 10, top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none', opacity: 0.6 }} />
+        </div>
       </div>
       <div style={{ flex: 1, minWidth: 110 }}>
-        <div style={{ fontSize: 10, fontWeight: 700, color: t.textMut, letterSpacing: '0.07em', textTransform: 'uppercase', marginBottom: 4 }}>Term</div>
-        <select value={selectedTerm} onChange={e => setSelectedTerm(e.target.value)} className="select">
-          {terms.map(term => <option key={term} value={term}>{term}</option>)}
-        </select>
+        <div style={{ fontSize: 9.5, fontWeight: 700, color: t.accent, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 6, opacity: 0.8 }}>📅 Term</div>
+        <div style={{ position: 'relative' }}>
+          <select value={selectedTerm} onChange={e => setSelectedTerm(e.target.value)} className="select" style={{ paddingRight: 32 }}>
+            {terms.map(term => <option key={term} value={term}>{term}</option>)}
+          </select>
+          <ChevronDown size={14} color={t.textMut} style={{ position: 'absolute', right: 10, top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none', opacity: 0.6 }} />
+        </div>
       </div>
     </div>
   );
@@ -1175,9 +1170,9 @@ export default function QuestionBankSolutions() {
         <div style={s.secTitle}>Browse Solutions</div>
         <div style={{ fontSize: 13, color: t.textSub, marginBottom: 18 }}>Select department and term to see available courses</div>
         <DeptTermBar />
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
-          <div style={{ fontSize: 10, fontWeight: 700, color: t.textMut, letterSpacing: '0.07em', textTransform: 'uppercase' }}>Available now · {courses.length} course{courses.length !== 1 ? 's' : ''}</div>
-          <button onClick={goCourses} style={{ background: t.accent, color: '#fff', border: 'none', borderRadius: 7, padding: '7px 18px', fontWeight: 700, fontSize: 13, cursor: 'pointer', fontFamily: 'inherit' }}>Browse all →</button>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+          <div style={{ fontSize: 10, fontWeight: 700, color: t.textMut, letterSpacing: '0.08em', textTransform: 'uppercase', opacity: 0.8 }}>📚 Available now · {courses.length} course{courses.length !== 1 ? 's' : ''}</div>
+          <button onClick={goCourses} style={{ background: t.accent, color: '#fff', border: 'none', borderRadius: 8, padding: '9px 20px', fontWeight: 700, fontSize: 13, cursor: 'pointer', fontFamily: 'inherit', transition: 'all 0.18s', boxShadow: `0 4px 12px ${t.accent}30` }} onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = `0 8px 20px ${t.accent}40`; }} onMouseLeave={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = `0 4px 12px ${t.accent}30`; }}>Browse all →</button>
         </div>
         <div className="course-grid">
           {courses.map(course => (

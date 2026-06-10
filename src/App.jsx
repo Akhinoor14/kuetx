@@ -91,7 +91,7 @@ function Layout() {
             <Route path="/assignments" element={<Assignments />} />
             <Route path="/question-bank" element={<QuestionBank />} />
             <Route path="/question-bank/view" element={<QuestionBankViewer />} />
-            <Route path="/question-bank/solutions" element={<QuestionBankSolutions />} />
+            <Route path="/solutions" element={<QuestionBankSolutions />} />
             <Route path="/self-study" element={<SelfStudy />} />
             <Route path="/time" element={<TimeTracker />} />
             <Route path="/namaz" element={<Namaz />} />
