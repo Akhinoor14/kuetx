@@ -6,6 +6,7 @@ import {
   Bookmark, BookmarkCheck, Copy, Check, Sun, Moon,
 } from 'lucide-react';
 import 'katex/dist/katex.min.css';
+import '../styles/questionbank.css';
 import { getProfile, getCurrentTermKey } from '../store/store';
 import { QB_DEPARTMENTS, QB_DEPT_CODE_MAP } from '../data/questionbank/questionBankData';
 
@@ -607,7 +608,7 @@ function QuestionCard({ question: q, globalIdx, showYearBadge, t, bookmarks, tog
   const isBookmarked = bookmarks?.has(bmKey);
 
   return (
-    <div style={{
+    <div className="q-card" style={{
       background: t.card,
       border: `1px solid ${open ? typeColor.border + '55' : t.border}`,
       borderLeft: `4px solid ${typeColor.border}`,
@@ -620,10 +621,11 @@ function QuestionCard({ question: q, globalIdx, showYearBadge, t, bookmarks, tog
       {/* ── LAYER 1: Header — always visible, click to expand ── */}
       <div
         onClick={() => setOpen(o => !o)}
+        className="q-header"
         style={{ display: 'grid', gridTemplateColumns: '50px 1fr 32px', cursor: 'pointer', userSelect: 'none' }}
       >
         {/* Q-number */}
-        <div style={{
+        <div className="q-num" style={{
           background: t.numBg, color: t.numText,
           fontFamily: "'JetBrains Mono',monospace", fontSize: 12, fontWeight: 800,
           display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -633,7 +635,7 @@ function QuestionCard({ question: q, globalIdx, showYearBadge, t, bookmarks, tog
         </div>
 
         {/* Question text + badges */}
-        <div style={{ padding: '12px 12px 10px' }}>
+        <div className="q-text" style={{ padding: '12px 12px 10px' }}>
           <div style={{ fontWeight: 600, fontSize: 13.5, color: t.text, lineHeight: 1.55 }}>
             <InlineMathLine text={q.question} t={t} mathStyle={isMathLine(q.question)} />
           </div>
@@ -656,7 +658,7 @@ function QuestionCard({ question: q, globalIdx, showYearBadge, t, bookmarks, tog
         </div>
 
         {/* Chevron */}
-        <div style={{
+        <div className="q-chevron" style={{
           display: 'flex', alignItems: 'flex-start', justifyContent: 'center',
           paddingTop: 14, color: t.textMut,
           transition: 'transform .22s',
@@ -668,7 +670,7 @@ function QuestionCard({ question: q, globalIdx, showYearBadge, t, bookmarks, tog
 
       {/* ── LAYER 2: Quick Answer — always visible ── */}
       {q.short_answer && (
-        <div style={{
+        <div className="q-quick" style={{
           borderTop: `1px solid ${t.borderSub}`,
           background: t.shortBg, padding: '9px 13px 9px 64px',
         }}>
@@ -680,7 +682,7 @@ function QuestionCard({ question: q, globalIdx, showYearBadge, t, bookmarks, tog
       )}
 
       {/* Action bar — bookmark button */}
-      <div style={{
+      <div className="q-actions" style={{
         borderTop: `1px dashed ${t.borderSub}`,
         background: t.shortBg, padding: '6px 13px 6px 64px',
         display: 'flex', alignItems: 'center', gap: 8,
@@ -712,15 +714,15 @@ function QuestionCard({ question: q, globalIdx, showYearBadge, t, bookmarks, tog
 
       {/* ── LAYER 3: Expanded body ── */}
       {open && (
-        <div>
+        <div className="q-body">
           {q.detailed_answer && (
-            <div style={{ borderTop: `1px solid ${t.borderSub}`, padding: '12px 14px', background: t.surface }}>
+            <div className="q-section" style={{ borderTop: `1px solid ${t.borderSub}`, padding: '12px 14px', background: t.surface }}>
               <div style={{ fontSize: 9.5, fontWeight: 700, color: t.blue, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 6 }}>● Full Solution</div>
               <AnswerBlock text={q.detailed_answer} t={t} />
             </div>
           )}
           {q.explanation_bn && (
-            <div style={{ borderTop: `1px solid ${t.borderSub}`, background: t.bnBg, padding: '10px 14px' }}>
+            <div className="q-section" style={{ borderTop: `1px solid ${t.borderSub}`, background: t.bnBg, padding: '10px 14px' }}>
               <div style={{ fontSize: 9.5, fontWeight: 700, color: t.yellow, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 5 }}>● বাংলায় ব্যাখ্যা</div>
               <div style={{ fontFamily: "'Nirmala UI','Hind Siliguri',sans-serif", color: t.yellowText, fontSize: 13, lineHeight: 1.9 }}>
                 <AnswerBlock text={q.explanation_bn} t={t} />
@@ -728,7 +730,7 @@ function QuestionCard({ question: q, globalIdx, showYearBadge, t, bookmarks, tog
             </div>
           )}
           {hasCode && (
-            <div style={{ borderTop: `1px solid ${t.borderSub}`, padding: '10px 14px' }}>
+            <div className="q-section" style={{ borderTop: `1px solid ${t.borderSub}`, padding: '10px 14px' }}>
               <div style={{ fontSize: 9.5, fontWeight: 700, color: t.accent, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 5 }}>● Code</div>
               <CodeBlock matlab={q.matlab} python={q.python} t={t} />
             </div>
@@ -845,6 +847,31 @@ function FilterBar({ allYears, allTypes, activeYears, activeTypes, onYearToggle,
 // ─────────────────────────────────────────────────────────────────────────────
 export default function QuestionBankSolutions() {
   const { t, dark, toggle: toggleTheme } = useSolutionsTheme();
+  useEffect(() => {
+    const r = document.documentElement;
+    r.style.setProperty('--sol-bg', t.bg);
+    r.style.setProperty('--sol-surface', t.surface);
+    r.style.setProperty('--sol-card', t.card);
+    r.style.setProperty('--sol-border', t.border);
+    r.style.setProperty('--sol-bordsub', t.borderSub);
+    r.style.setProperty('--sol-text', t.text);
+    r.style.setProperty('--sol-textsub', t.textSub);
+    r.style.setProperty('--sol-textmut', t.textMut);
+    r.style.setProperty('--sol-accent', t.accent);
+    r.style.setProperty('--sol-blue', t.blue);
+    r.style.setProperty('--sol-yellow', t.yellow);
+    r.style.setProperty('--sol-codebgm', t.codeBgM);
+    r.style.setProperty('--sol-codebgp', t.codeBgP);
+    r.style.setProperty('--sol-numbg', t.numBg);
+    r.style.setProperty('--sol-numtext', t.numText);
+    r.style.setProperty('--sol-shortbg', t.shortBg);
+    r.style.setProperty('--sol-bnbg', t.bnBg);
+    r.style.setProperty('--sol-eqbg', t.eqBg);
+    r.style.setProperty('--sol-eqb', t.eqBord);
+    r.style.setProperty('--sol-cardHov', t.cardHov);
+    r.style.setProperty('--sol-accentGlow', t.accentGlow || 'transparent');
+    r.style.setProperty('--sol-blueBg', t.blueBg || 'transparent');
+  }, [t]);
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const { bookmarks, toggleBookmark } = useBookmarks();
@@ -1073,9 +1100,9 @@ export default function QuestionBankSolutions() {
   };
 
   const PageHeader = () => (
-    <div style={{ padding: '24px 0 18px', borderBottom: `1px solid ${t.border}`, marginBottom: 18 }}>
+    <div className="page-header">
       <div style={{ display: 'flex', alignItems: 'center', gap: 11 }}>
-        <div style={{ background: t.accentGlow, border: `1px solid ${t.accent}40`, borderRadius: 10, padding: '9px', display: 'flex' }}>
+        <div className="icon-wrap" style={{ border: `1px solid ${t.accent}40` }}>
           <BookOpen size={20} color={t.accent} />
         </div>
         <div style={{ flex: 1 }}>
@@ -1122,16 +1149,16 @@ export default function QuestionBankSolutions() {
   );
 
   const DeptTermBar = () => (
-    <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', marginBottom: 20, padding: '12px 14px', background: t.surface, borderRadius: 10, border: `1px solid ${t.border}` }}>
+    <div className="dept-term-bar">
       <div style={{ flex: 1, minWidth: 150 }}>
         <div style={{ fontSize: 10, fontWeight: 700, color: t.textMut, letterSpacing: '0.07em', textTransform: 'uppercase', marginBottom: 4 }}>Department</div>
-        <select value={selectedDept} onChange={e => { setSelectedDept(e.target.value); setSelectedTerm(Object.keys(AVAILABLE_SOLUTIONS[e.target.value] || {})[0] || 'Y2T1'); }} style={s.select}>
+        <select value={selectedDept} onChange={e => { setSelectedDept(e.target.value); setSelectedTerm(Object.keys(AVAILABLE_SOLUTIONS[e.target.value] || {})[0] || 'Y2T1'); }} className="select">
           {depts.map(code => <option key={code} value={code}>{code} — {QB_DEPARTMENTS[code]?.split('of ')[1] || QB_DEPARTMENTS[code] || code}</option>)}
         </select>
       </div>
       <div style={{ flex: 1, minWidth: 110 }}>
         <div style={{ fontSize: 10, fontWeight: 700, color: t.textMut, letterSpacing: '0.07em', textTransform: 'uppercase', marginBottom: 4 }}>Term</div>
-        <select value={selectedTerm} onChange={e => setSelectedTerm(e.target.value)} style={s.select}>
+        <select value={selectedTerm} onChange={e => setSelectedTerm(e.target.value)} className="select">
           {terms.map(term => <option key={term} value={term}>{term}</option>)}
         </select>
       </div>
@@ -1143,7 +1170,7 @@ export default function QuestionBankSolutions() {
   // ════════════════════════════════════════════════════════════════════════════
   if (view === 'home') return (
     <div style={s.page}>
-      <div style={s.wrap}>
+      <div className="wrap">
         <PageHeader />
         <div style={s.secTitle}>Browse Solutions</div>
         <div style={{ fontSize: 13, color: t.textSub, marginBottom: 18 }}>Select department and term to see available courses</div>
@@ -1152,10 +1179,10 @@ export default function QuestionBankSolutions() {
           <div style={{ fontSize: 10, fontWeight: 700, color: t.textMut, letterSpacing: '0.07em', textTransform: 'uppercase' }}>Available now · {courses.length} course{courses.length !== 1 ? 's' : ''}</div>
           <button onClick={goCourses} style={{ background: t.accent, color: '#fff', border: 'none', borderRadius: 7, padding: '7px 18px', fontWeight: 700, fontSize: 13, cursor: 'pointer', fontFamily: 'inherit' }}>Browse all →</button>
         </div>
-        <div style={s.courseGrid}>
+        <div className="course-grid">
           {courses.map(course => (
             <div key={course.code} onClick={() => { setSelectedCourse(course.code); setView('years'); }}
-              style={{ background: t.card, border: `1px solid ${t.border}`, borderLeft: `3px solid ${t.accent}`, borderRadius: 10, padding: '16px 18px', cursor: 'pointer' }}
+              className="course-card"
               onMouseEnter={e => e.currentTarget.style.background = t.cardHov}
               onMouseLeave={e => e.currentTarget.style.background = t.card}
             >
@@ -1175,17 +1202,16 @@ export default function QuestionBankSolutions() {
   // ════════════════════════════════════════════════════════════════════════════
   if (view === 'courses') return (
     <div style={s.page}>
-      <div style={s.wrap}>
+      <div className="wrap">
         <PageHeader />
         <Breadcrumb />
-        <span onClick={goHome} style={s.back}><ArrowLeft size={13} /> Back</span>
+        <span onClick={goHome} className="back"><ArrowLeft size={13} /> Back</span>
         <DeptTermBar />
         <div style={s.secTitle}>Courses</div>
         <div style={s.secSub}>{selectedDept} · {selectedTerm} · {courses.length} available</div>
-        <div style={s.courseGrid}>
+        <div className="course-grid">
           {courses.map(course => (
-            <div key={course.code} onClick={() => goYears(course.code)}
-              style={{ background: t.card, border: `1px solid ${t.border}`, borderLeft: `4px solid ${t.accent}`, borderRadius: 10, padding: '16px 18px', cursor: 'pointer', transition: 'background .12s' }}
+            <div key={course.code} onClick={() => goYears(course.code)} className="course-card" style={{ borderLeft: `4px solid ${t.accent}` }}
               onMouseEnter={e => e.currentTarget.style.background = t.cardHov}
               onMouseLeave={e => e.currentTarget.style.background = t.card}
             >
@@ -1211,10 +1237,10 @@ export default function QuestionBankSolutions() {
   // ════════════════════════════════════════════════════════════════════════════
   if (view === 'years') return (
     <div style={s.page}>
-      <div style={s.wrap}>
+      <div className="wrap">
         <PageHeader />
         <Breadcrumb />
-        <span onClick={goCourses} style={s.back}><ArrowLeft size={13} /> All Courses</span>
+        <span onClick={goCourses} className="back"><ArrowLeft size={13} /> All Courses</span>
 
         {courseInfo && (
           <div style={{ background: t.surface, border: `1px solid ${t.border}`, borderLeft: `4px solid ${t.accent}`, borderRadius: '0 10px 10px 0', padding: '12px 16px', marginBottom: 20 }}>
@@ -1236,7 +1262,7 @@ export default function QuestionBankSolutions() {
           )}
         </div>
 
-        <div style={s.yearGrid}>
+        <div className="year-grid">
           {availableYears.length > 0
             ? availableYears.map(year => (
                 <div key={year} onClick={() => goSolutions(year)}
@@ -1273,10 +1299,10 @@ export default function QuestionBankSolutions() {
   if (view === 'all') return (
     <div style={s.page}>
       <div className="qs-print-area">
-        <div style={s.wrap}>
+        <div className="wrap">
           <div className="qs-no-print"><PageHeader /></div>
           <div className="qs-no-print"><Breadcrumb /></div>
-          <span className="qs-no-print" onClick={() => setView('years')} style={s.back}><ArrowLeft size={13} /> Back to Years</span>
+          <span className="qs-no-print back" onClick={() => setView('years')}><ArrowLeft size={13} /> Back to Years</span>
 
         {courseInfo && (
           <div style={{ background: t.surface, border: `1px solid ${t.border}`, borderLeft: `4px solid ${t.blue}`, borderRadius: '0 10px 10px 0', padding: '10px 14px', marginBottom: 18 }}>
@@ -1342,9 +1368,9 @@ export default function QuestionBankSolutions() {
                   bookmarks={bookmarks}
                 />
 
-                <div className="qs-no-print" style={s.searchBox}>
-                  <Search size={14} style={{ position: 'absolute', top: 11, left: 12, color: t.textMut, pointerEvents: 'none' }} />
-                  <input type="text" placeholder="Search all questions…" value={searchRaw} onChange={e => setSearchRaw(e.target.value)} style={s.searchIn} />
+                <div className="qs-no-print search-box">
+                  <Search size={14} className="search-icon" style={{ color: t.textMut }} />
+                  <input type="text" className="search-input" placeholder="Search all questions…" value={searchRaw} onChange={e => setSearchRaw(e.target.value)} />
                 </div>
 
                 <div style={{ fontSize: 12, color: t.textMut, marginBottom: 14, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -1448,10 +1474,10 @@ export default function QuestionBankSolutions() {
   return (
     <div style={s.page}>
       <div className="qs-print-area">
-        <div style={s.wrap}>
+        <div className="wrap">
           <div className="qs-no-print"><PageHeader /></div>
           <div className="qs-no-print"><Breadcrumb /></div>
-          <span className="qs-no-print" onClick={() => setView('years')} style={s.back}><ArrowLeft size={13} /> {selectedYear} Papers</span>
+          <span className="qs-no-print back" onClick={() => setView('years')}><ArrowLeft size={13} /> {selectedYear} Papers</span>
 
         {loading && (
           <div style={{ textAlign: 'center', padding: '50px 0', color: t.textMut }}>
@@ -1507,9 +1533,9 @@ export default function QuestionBankSolutions() {
 
             {showFormulas && FORMULA_SHEETS[selectedCourse] && <FormulaPanel courseCode={selectedCourse} t={t} onClose={() => setShowFormulas(false)} />}
 
-            <div className="qs-no-print" style={s.searchBox}>
-              <Search size={14} style={{ position: 'absolute', top: 11, left: 12, color: t.textMut, pointerEvents: 'none' }} />
-              <input type="text" placeholder="Search questions…" value={searchRaw} onChange={e => setSearchRaw(e.target.value)} style={s.searchIn} />
+            <div className="qs-no-print search-box">
+              <Search size={14} className="search-icon" style={{ color: t.textMut }} />
+              <input type="text" className="search-input" placeholder="Search questions…" value={searchRaw} onChange={e => setSearchRaw(e.target.value)} />
             </div>
 
             {search && <div style={{ fontSize: 11.5, color: t.textMut, marginBottom: 12 }}>{filteredQuestions.length} result{filteredQuestions.length !== 1 ? 's' : ''}</div>}
