@@ -142,8 +142,49 @@ export default function QuickAccess() {
     );
   };
 
+  const sectionGridStyle = {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
+    gap: 10,
+    width: '100%',
+  };
+
+  const statsGridStyle = {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
+    gap: 12,
+    width: '100%',
+  };
+
+  const stats = [
+    {
+      label: 'Total Pages Visited',
+      value: allStats.length,
+      icon: <Icons.Layers size={18} color="var(--accent)" />,
+      color: 'var(--accent)',
+    },
+    {
+      label: 'Total Page Views',
+      value: allStats.reduce((sum, s) => sum + s.count, 0),
+      icon: <Icons.BarChart3 size={18} color="var(--accent)" />,
+      color: 'var(--accent)',
+    },
+    {
+      label: 'Favorited Pages',
+      value: favorites.length,
+      icon: <Icons.Star size={18} color="#fbbf24" />,
+      color: '#fbbf24',
+    },
+    {
+      label: 'Pinned Pages',
+      value: pinnedPages.length,
+      icon: <Icons.Pin size={18} color="var(--accent)" />,
+      color: 'var(--accent)',
+    },
+  ];
+
   return (
-    <div style={{ padding: '16px', maxWidth: 940, margin: '0 auto' }}>
+    <div style={{ padding: '16px', width: '100%', maxWidth: 1180, margin: '0 auto', minWidth: 0 }}>
       <h1 style={{ fontSize: 22, fontWeight: 700, marginBottom: 6 }}>Quick Access</h1>
       <p style={{ color: 'var(--muted)', marginBottom: 18, fontSize: 13 }}>
         Your most used pages, favorites, and pinned shortcuts
@@ -156,7 +197,7 @@ export default function QuickAccess() {
             <Icons.Pin size={16} style={{ color: 'var(--accent)' }} />
             Pinned Pages
           </h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
+          <div style={sectionGridStyle}>
             {pinnedPages.map(path => (
               <PageCard key={path} path={path} />
             ))}
@@ -171,7 +212,7 @@ export default function QuickAccess() {
             <Icons.Star size={16} style={{ color: '#fbbf24' }} />
             Favorites
           </h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
+          <div style={sectionGridStyle}>
             {favorites.map(path => {
               const stat = allStats.find(s => s.path === path);
               return (
@@ -208,7 +249,7 @@ export default function QuickAccess() {
             <p style={{ margin: 0, fontSize: 13 }}>No page views tracked yet. Start exploring to see your most used pages!</p>
           </div>
         ) : (
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
+          <div style={sectionGridStyle}>
             {mostUsed.map((stat) => (
               <PageCard 
                 key={stat.path} 
@@ -228,33 +269,8 @@ export default function QuickAccess() {
             <h3 style={{ fontSize: 14, fontWeight: 700, margin: 0 }}>Statistics</h3>
             <div style={{ fontSize: 12, color: 'var(--muted)' }}>Quick snapshot of your usage</div>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(170px, 1fr))', gap: 12 }}>
-            {[
-              {
-                label: 'Total Pages Visited',
-                value: allStats.length,
-                icon: <Icons.Layers size={18} color="var(--accent)" />,
-                color: 'var(--accent)',
-              },
-              {
-                label: 'Total Page Views',
-                value: allStats.reduce((sum, s) => sum + s.count, 0),
-                icon: <Icons.BarChart3 size={18} color="var(--accent)" />,
-                color: 'var(--accent)',
-              },
-              {
-                label: 'Favorited Pages',
-                value: favorites.length,
-                icon: <Icons.Star size={18} color="#fbbf24" />,
-                color: '#fbbf24',
-              },
-              {
-                label: 'Pinned Pages',
-                value: pinnedPages.length,
-                icon: <Icons.Pin size={18} color="var(--accent)" />,
-                color: 'var(--accent)',
-              },
-            ].map((stat) => (
+          <div style={statsGridStyle}>
+            {stats.map((stat) => (
               <div
                 key={stat.label}
                 style={{

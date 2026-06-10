@@ -855,24 +855,48 @@ export function TimeTracker() {
   const timerHms = msToHms(timer.displayMs);
   const timerStatusLabel = timer.isRunning ? 'Running' : timer.isPaused ? 'Paused' : timer.isCompleted ? 'Completed' : 'Idle';
   const timerModeLabel = mode === TIMER_MODES.DOWN ? 'Count Down' : 'Count Up';
+  let countdownCircle = <circle cx="50" cy="50" r="36" stroke="rgba(59,130,246,0.16)" strokeWidth="8" fill="none" />;
+  if (mode === TIMER_MODES.DOWN && timer.state?.targetMs) {
+    const target = Number(timer.state.targetMs) || 0;
+    const remaining = Number(timer.remainingMs) || 0;
+    const pct = target > 0 ? Math.max(0, Math.min(100, Math.round((1 - remaining / target) * 100))) : 0;
+    const radius = 36;
+    const circumference = 2 * Math.PI * radius;
+    const dash = (pct / 100) * circumference;
+    const offset = circumference - dash;
+    countdownCircle = (
+      <circle
+        cx="50"
+        cy="50"
+        r="36"
+        stroke="var(--accent)"
+        strokeWidth="8"
+        fill="none"
+        strokeLinecap="round"
+        strokeDasharray={`${circumference} ${circumference}`}
+        strokeDashoffset={offset}
+        transform="rotate(-90 50 50)"
+        style={{ transition: 'stroke-dashoffset 180ms linear' }}
+      />
+    );
+  }
   const todayTotal = productive + waste;
   const focusRatio = todayTotal > 0 ? Math.round((productive / todayTotal) * 100) : 0;
   const latestSession = sessions[0] || null;
 
   return (
     <div className="page-container time-tracker-page">
-      <div className="time-tracker-hero">
-        <div className="time-tracker-hero-copy">
-          <div className="time-tracker-kicker">Focus by design</div>
-          <h1>Time Tracker</h1>
-          <p>Run a clean focus timer, log work fast, and review the day without visual clutter.</p>
-        </div>
-      </div>
-
       <div className="time-tracker-layout">
         <div className="time-tracker-main-column">
-          {/* ── TIMER PANEL ────────────────────────────────────────── */}
-          <div className="card time-tracker-panel time-tracker-card">
+          <div className="card time-tracker-panel time-tracker-card time-tracker-panel--merged">
+            <div className="time-tracker-hero time-tracker-hero--merged">
+              <div className="time-tracker-hero-copy">
+                <div className="time-tracker-kicker">Focus by design</div>
+                <h1>Time Tracker</h1>
+                <p>Run a clean focus timer, log work fast, and review the day without visual clutter.</p>
+              </div>
+            </div>
+            <div className="time-tracker-panel-body">
             {/* Header: Mode + Status */}
             <div className="time-tracker-header-section">
               <div className="time-tracker-mode-switch" role="tablist" aria-label="Timer mode">
@@ -909,18 +933,7 @@ export function TimeTracker() {
                 <div className={`time-tracker-ring ${mode === TIMER_MODES.DOWN ? 'is-countdown' : ''}`}>
                   <svg viewBox="0 0 100 100" aria-hidden className={timer.isRunning ? 'running' : ''}>
                     <circle cx="50" cy="50" r="36" stroke="var(--border)" strokeWidth="8" fill="none" />
-                    {mode === TIMER_MODES.DOWN && timer.state?.targetMs ? (() => {
-                      const target = Number(timer.state.targetMs) || 0;
-                      const remaining = Number(timer.remainingMs) || 0;
-                      const pct = target > 0 ? Math.max(0, Math.min(100, Math.round((1 - remaining / target) * 100))) : 0;
-                      const radius = 36;
-                      const circumference = 2 * Math.PI * radius;
-                      const dash = (pct / 100) * circumference;
-                      const offset = circumference - dash;
-                      return <circle cx="50" cy="50" r="36" stroke="var(--accent)" strokeWidth="8" fill="none" strokeLinecap="round" strokeDasharray={`${circumference} ${circumference}`} strokeDashoffset={offset} transform="rotate(-90 50 50)" style={{ transition: 'stroke-dashoffset 180ms linear' }} />;
-                    })() : (
-                      <circle cx="50" cy="50" r="36" stroke="rgba(59,130,246,0.16)" strokeWidth="8" fill="none" />
-                    )}
+                    {countdownCircle}
                   </svg>
                 </div>
               </div>
@@ -1002,8 +1015,11 @@ export function TimeTracker() {
                 {(timer.isPaused || timer.isCompleted || timer.isIdle) && <button className="btn btn-ghost" onClick={timer.reset}><RotateCcw size={13} /> Reset</button>}
               </div>
             )}
+            </div>{/* end time-tracker-panel-body */}
           </div>
+        </div>
 
+        <div className="time-tracker-side-column">
           {manualOpen && (
             <div className="card time-tracker-panel time-tracker-log-form">
               <div className="time-tracker-panel-head">
@@ -1066,9 +1082,6 @@ export function TimeTracker() {
               </div>
             </div>
           )}
-        </div>
-
-        <div className="time-tracker-side-column">
         </div>
       </div>
     </div>

@@ -600,144 +600,222 @@ function CodeBlock({ matlab, python, t }) {
 // ─────────────────────────────────────────────────────────────────────────────
 // QUESTION CARD
 // ─────────────────────────────────────────────────────────────────────────────
-function QuestionCard({ question: q, globalIdx, showYearBadge, t, bookmarks, toggleBookmark, courseKey }) {
-  const [open, setOpen] = useState(false);
+function QuestionCard({ question: q, globalIdx, showYearBadge, t, bookmarks, toggleBookmark, courseKey, onOpenDetail }) {
   const typeColor = getTypeColor(q.type);
   const hasCode = q.matlab || q.python;
   const bmKey = `${courseKey}_${q._year || ''}_${q.id}`;
   const isBookmarked = bookmarks?.has(bmKey);
 
   return (
-    <div className="q-card" data-open={open} style={{
-      background: t.card,
-      borderTop: `1px solid ${open ? typeColor.border + '55' : t.border}`,
-      borderRight: `1px solid ${open ? typeColor.border + '55' : t.border}`,
-      borderBottom: `1px solid ${open ? typeColor.border + '55' : t.border}`,
-      borderLeft: `4px solid ${typeColor.border}`,
-      borderRadius: 12,
-      overflow: 'hidden',
-      marginBottom: 12,
-      transition: 'border-color .15s, box-shadow .15s',
-      boxShadow: open ? '0 4px 20px rgba(0,0,0,0.12)' : 'none',
-    }}>
-      {/* ── LAYER 1: Header — always visible, click to expand ── */}
-      <div
-        onClick={() => setOpen(o => !o)}
-        className="q-header"
-        style={{ display: 'grid', gridTemplateColumns: '50px 1fr 32px', cursor: 'pointer', userSelect: 'none' }}
-      >
-        {/* Q-number */}
-        <div className="q-num" style={{
-          background: t.numBg, color: t.numText,
-          fontFamily: "'JetBrains Mono',monospace", fontSize: 12, fontWeight: 800,
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          borderRight: `1px solid ${t.borderSub}`, flexShrink: 0,
-        }}>
-          {q.id || `Q${globalIdx + 1}`}
+      <div className="q-card" style={{
+        background: t.card,
+        border: `1px solid ${t.border}`,
+        borderLeft: `4px solid ${typeColor.border}`,
+        borderRadius: 12,
+        overflow: 'hidden',
+        marginBottom: 12,
+        transition: 'border-color .15s, box-shadow .15s',
+      }}>
+        {/* ── LAYER 1: Header — always visible, click to open popup ── */}
+        <div
+          onClick={() => (q.detailed_answer || hasCode) && onOpenDetail(q)}
+          className="q-header"
+          style={{ display: 'grid', gridTemplateColumns: '50px 1fr 32px', cursor: (q.detailed_answer || hasCode) ? 'pointer' : 'default', userSelect: 'none' }}
+        >
+          {/* Q-number */}
+          <div className="q-num" style={{
+            background: t.numBg, color: t.numText,
+            fontFamily: "'JetBrains Mono',monospace", fontSize: 12, fontWeight: 800,
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            borderRight: `1px solid ${t.borderSub}`, flexShrink: 0,
+          }}>
+            {q.id || `Q${globalIdx + 1}`}
+          </div>
+
+          {/* Question text + badges */}
+          <div className="q-text" style={{ padding: '12px 12px 10px' }}>
+            <div style={{ fontWeight: 600, fontSize: 13.5, color: t.text, lineHeight: 1.55 }}>
+              <InlineMathLine text={q.question} t={t} mathStyle={isMathLine(q.question)} />
+            </div>
+            <div style={{ display: 'flex', gap: 5, marginTop: 6, flexWrap: 'wrap', alignItems: 'center' }}>
+              {q.type && (
+                <span style={{
+                  fontSize: 9.5, fontWeight: 700, color: typeColor.text,
+                  background: typeColor.bg, border: `1px solid ${typeColor.border}30`,
+                  borderRadius: 4, padding: '2px 7px', letterSpacing: '0.06em', textTransform: 'uppercase',
+                }}>{q.type}</span>
+              )}
+              {showYearBadge && q._year && (
+                <span style={{
+                  fontSize: 9.5, fontWeight: 600, color: t.blue,
+                  background: t.blueBg, border: `1px solid ${t.blue}30`,
+                  borderRadius: 4, padding: '2px 7px',
+                }}>{q._year}</span>
+              )}
+            </div>
+          </div>
+
+          {/* Chevron */}
+          <div className="q-chevron" style={{
+            display: 'flex', alignItems: 'flex-start', justifyContent: 'center',
+            paddingTop: 14, color: t.textMut,
+            transition: 'transform .22s',
+            transform: 'none',
+          }}>
+            <ChevronDown size={14} />
+          </div>
         </div>
 
-        {/* Question text + badges */}
-        <div className="q-text" style={{ padding: '12px 12px 10px' }}>
-          <div style={{ fontWeight: 600, fontSize: 13.5, color: t.text, lineHeight: 1.55 }}>
+        {/* ── LAYER 2: Quick Answer — always visible ── */}
+        {q.short_answer && (
+          <div className="q-quick" style={{
+            borderTop: `1px solid ${t.borderSub}`,
+            background: t.shortBg, padding: '9px 13px 9px 64px',
+          }}>
+            <div style={{ fontSize: 9.5, fontWeight: 700, color: t.accent, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 5 }}>
+              ● Quick Answer
+            </div>
+            <AnswerBlock text={q.short_answer} t={t} />
+          </div>
+        )}
+
+        {/* Action bar — bookmark button */}
+        <div className="q-actions" style={{
+          borderTop: `1px dashed ${t.borderSub}`,
+          background: t.shortBg, padding: '6px 13px 6px 64px',
+          display: 'flex', alignItems: 'center', gap: 8,
+        }}>
+          {(q.detailed_answer || hasCode) && (
+            <button onClick={() => onOpenDetail(q)} style={{
+              fontSize: 11, fontWeight: 600, color: t.blue, background: t.blueBg,
+              border: `1px solid ${t.blue}30`, borderRadius: 6, padding: '3px 10px',
+              cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4,
+            }}>
+              📖 Full Solution
+            </button>
+          )}
+          {toggleBookmark && (
+            <button
+              onClick={e => { e.stopPropagation(); toggleBookmark(bmKey); }}
+              style={{
+                marginLeft: 'auto', background: 'none', border: 'none', cursor: 'pointer',
+                color: isBookmarked ? '#FBBF24' : t.textMut, padding: '3px 6px',
+                display: 'flex', alignItems: 'center', gap: 4, fontSize: 11,
+                fontWeight: 600, transition: 'color .15s',
+              }}
+            >
+              {isBookmarked ? <BookmarkCheck size={14} /> : <Bookmark size={14} />}
+              {isBookmarked ? 'Saved' : 'Save'}
+            </button>
+          )}
+        </div>
+      </div>
+  );
+}
+
+function QuestionDetail({ question: q, t, bookmarks, toggleBookmark, courseKey, courseMeta = {}, onClose }) {
+  const [showQuestion, setShowQuestion] = useState(true);
+  const typeColor = getTypeColor(q.type);
+  const hasCode = q.matlab || q.python;
+  const bmKey = `${courseKey}_${q._year || ''}_${q.id}`;
+  const isBookmarked = bookmarks?.has(bmKey);
+  const courseLabel = courseMeta.subject_code ? `${courseMeta.subject_code} — ${courseMeta.subject}` : null;
+  const examLabel = courseMeta.term ? `${courseMeta.term} · ${courseMeta.exam_year || ''}` : null;
+
+  return (
+    <div className="solution-detail-page" style={{ background: t.surface, border: `1px solid ${t.border}`, borderRadius: 18, padding: 24, marginBottom: 20 }}>
+      <div className="solution-detail-header">
+        <div className="solution-detail-headline">
+          <div className="solution-detail-actions">
+            <button onClick={onClose} className="solution-detail-back">← Back to questions</button>
+            <span className="solution-detail-type" style={{ color: typeColor.text, background: typeColor.bg, borderColor: `${typeColor.border}30` }}>{q.type || 'Question'}</span>
+          </div>
+          <div className="solution-detail-title-row">
+            <div className="solution-detail-number">Question {q.id || ''}</div>
+            {q._year && <div className="solution-detail-year">{q._year}</div>}
+          </div>
+          <div className="solution-detail-heading">
             <InlineMathLine text={q.question} t={t} mathStyle={isMathLine(q.question)} />
           </div>
-          <div style={{ display: 'flex', gap: 5, marginTop: 6, flexWrap: 'wrap', alignItems: 'center' }}>
-            {q.type && (
-              <span style={{
-                fontSize: 9.5, fontWeight: 700, color: typeColor.text,
-                background: typeColor.bg, border: `1px solid ${typeColor.border}30`,
-                borderRadius: 4, padding: '2px 7px', letterSpacing: '0.06em', textTransform: 'uppercase',
-              }}>{q.type}</span>
-            )}
-            {showYearBadge && q._year && (
-              <span style={{
-                fontSize: 9.5, fontWeight: 600, color: t.blue,
-                background: t.blueBg, border: `1px solid ${t.blue}30`,
-                borderRadius: 4, padding: '2px 7px',
-              }}>{q._year}</span>
-            )}
+          {(courseLabel || examLabel || courseMeta.totalQuestions) && (
+            <div className="solution-detail-meta">
+              {courseLabel && <span>{courseLabel}</span>}
+              {examLabel && <span>{examLabel}</span>}
+              {courseMeta.totalQuestions ? <span>{courseMeta.totalQuestions} questions</span> : null}
+            </div>
+          )}
+        </div>
+        <div className="solution-detail-controls">
+          {toggleBookmark && (
+            <button onClick={() => toggleBookmark(bmKey)} className={`solution-detail-bookmark ${isBookmarked ? 'saved' : ''}`}>
+              {isBookmarked ? '★ Saved' : '☆ Save'}
+            </button>
+          )}
+          {q.short_answer && (
+            <button onClick={() => setShowQuestion(prev => !prev)} className="solution-detail-toggle">
+              {showQuestion ? 'Hide Question' : 'Show Question'}
+            </button>
+          )}
+        </div>
+      </div>
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, justifyContent: 'space-between', alignItems: 'flex-start' }}>
+        <div style={{ minWidth: 0, flex: 1 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10, flexWrap: 'wrap' }}>
+            <button onClick={onClose} style={{ background: 'transparent', border: '1px solid ' + t.border, borderRadius: 8, color: t.textMut, padding: '8px 12px', cursor: 'pointer', fontSize: 12, fontWeight: 700 }}>
+              ← Back to list
+            </button>
+            <span style={{ fontSize: 11, color: typeColor.text, background: typeColor.bg, border: `1px solid ${typeColor.border}30`, borderRadius: 6, padding: '4px 9px', fontWeight: 700, textTransform: 'uppercase' }}>{q.type || 'Question'}</span>
+          </div>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, alignItems: 'center', marginBottom: 10 }}>
+            <div style={{ fontSize: 13, fontWeight: 700, color: t.textMut, textTransform: 'uppercase', letterSpacing: '0.08em' }}>Question {q.id || ''}</div>
+            {q._year && <div style={{ fontSize: 11, color: t.textMut, background: t.blueBg, border: `1px solid ${t.blue}25`, borderRadius: 6, padding: '4px 8px' }}>{q._year}</div>}
+          </div>
+          <div style={{ fontSize: 16, fontWeight: 700, color: t.text, lineHeight: 1.6, marginBottom: 14 }}>
+            <InlineMathLine text={q.question} t={t} mathStyle={isMathLine(q.question)} />
           </div>
         </div>
-
-        {/* Chevron */}
-        <div className="q-chevron" style={{
-          display: 'flex', alignItems: 'flex-start', justifyContent: 'center',
-          paddingTop: 14, color: t.textMut,
-          transition: 'transform .22s',
-          transform: open ? 'rotate(180deg)' : 'none',
-        }}>
-          <ChevronDown size={14} />
+        <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', alignItems: 'center' }}>
+          {toggleBookmark && (
+            <button onClick={() => toggleBookmark(bmKey)} style={{ background: isBookmarked ? t.accentGlow : t.surface, color: isBookmarked ? t.accent : t.text, border: `1px solid ${isBookmarked ? t.accent + '40' : t.border}`, borderRadius: 8, padding: '8px 12px', fontSize: 12, fontWeight: 700, cursor: 'pointer' }}>
+              {isBookmarked ? '★ Saved' : '☆ Save'}
+            </button>
+          )}
+          {q.short_answer && (
+            <button onClick={() => setShowQuestion(prev => !prev)} style={{ background: t.blueBg, color: t.blue, border: `1px solid ${t.blue}30`, borderRadius: 8, padding: '8px 12px', fontSize: 12, fontWeight: 700, cursor: 'pointer' }}>
+              {showQuestion ? 'Hide Question' : 'Show Question'}
+            </button>
+          )}
         </div>
       </div>
 
-      {/* ── LAYER 2: Quick Answer — always visible ── */}
-      {q.short_answer && (
-        <div className="q-quick" style={{
-          borderTop: `1px solid ${t.borderSub}`,
-          background: t.shortBg, padding: '9px 13px 9px 64px',
-        }}>
-          <div style={{ fontSize: 9.5, fontWeight: 700, color: t.accent, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 5 }}>
-            ● Quick Answer
-          </div>
+      {q.short_answer && showQuestion && (
+        <div style={{ border: `1px solid ${t.borderSub}`, borderRadius: 12, background: t.shortBg, padding: 16, marginBottom: 20 }}>
+          <div style={{ fontSize: 10.5, fontWeight: 700, color: t.accent, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 8 }}>Quick Answer</div>
           <AnswerBlock text={q.short_answer} t={t} />
         </div>
       )}
 
-      {/* Action bar — bookmark button */}
-      <div className="q-actions" style={{
-        borderTop: `1px dashed ${t.borderSub}`,
-        background: t.shortBg, padding: '6px 13px 6px 64px',
-        display: 'flex', alignItems: 'center', gap: 8,
-      }}>
-        {(q.detailed_answer || hasCode) && (
-          <button onClick={() => setOpen(o => !o)} style={{
-            fontSize: 11, fontWeight: 600, color: t.blue, background: t.blueBg,
-            border: `1px solid ${t.blue}30`, borderRadius: 6, padding: '3px 10px',
-            cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4,
-          }}>
-            {open ? '▲ Close' : '📖 Full Solution'}
-          </button>
-        )}
-        {toggleBookmark && (
-          <button
-            onClick={e => { e.stopPropagation(); toggleBookmark(bmKey); }}
-            style={{
-              marginLeft: 'auto', background: 'none', border: 'none', cursor: 'pointer',
-              color: isBookmarked ? '#FBBF24' : t.textMut, padding: '3px 6px',
-              display: 'flex', alignItems: 'center', gap: 4, fontSize: 11,
-              fontWeight: 600, transition: 'color .15s',
-            }}
-          >
-            {isBookmarked ? <BookmarkCheck size={14} /> : <Bookmark size={14} />}
-            {isBookmarked ? 'Saved' : 'Save'}
-          </button>
-        )}
-      </div>
+      {q.detailed_answer && (
+        <section className="solution-detail-section" style={{ marginBottom: 18 }}>
+          <div style={{ fontSize: 12, fontWeight: 700, color: t.text, marginBottom: 10 }}>Step-by-step Solution</div>
+          <div style={{ background: t.card, border: `1px solid ${t.border}`, borderRadius: 12, padding: 18 }}>
+            <AnswerBlock text={q.detailed_answer} t={t} tryDerivation />
+          </div>
+        </section>
+      )}
 
-      {/* ── LAYER 3: Expanded body ── */}
-      {open && (
-        <div className="q-body">
-          {q.detailed_answer && (
-            <div className="q-section" style={{ borderTop: `1px solid ${t.borderSub}`, padding: '12px 14px', background: t.surface }}>
-              <div style={{ fontSize: 9.5, fontWeight: 700, color: t.blue, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 6 }}>● Full Solution</div>
-              <AnswerBlock text={q.detailed_answer} t={t} />
-            </div>
-          )}
-          {q.explanation_bn && (
-            <div className="q-section" style={{ borderTop: `1px solid ${t.borderSub}`, background: t.bnBg, padding: '10px 14px' }}>
-              <div style={{ fontSize: 9.5, fontWeight: 700, color: t.yellow, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 5 }}>● বাংলায় ব্যাখ্যা</div>
-              <div style={{ fontFamily: "'Nirmala UI','Hind Siliguri',sans-serif", color: t.yellowText, fontSize: 13, lineHeight: 1.9 }}>
-                <AnswerBlock text={q.explanation_bn} t={t} />
-              </div>
-            </div>
-          )}
-          {hasCode && (
-            <div className="q-section" style={{ borderTop: `1px solid ${t.borderSub}`, padding: '10px 14px' }}>
-              <div style={{ fontSize: 9.5, fontWeight: 700, color: t.accent, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 5 }}>● Code</div>
-              <CodeBlock matlab={q.matlab} python={q.python} t={t} />
-            </div>
-          )}
-        </div>
+      {q.explanation_bn && (
+        <section className="solution-detail-section" style={{ marginBottom: 18, background: t.bnBg, border: `1px solid ${t.borderSub}`, borderRadius: 12, padding: 18 }}>
+          <div style={{ fontSize: 12, fontWeight: 700, color: t.yellow, marginBottom: 10 }}>বাংলা ব্যাখ্যা</div>
+          <AnswerBlock text={q.explanation_bn} t={t} />
+        </section>
+      )}
+
+      {hasCode && (
+        <section className="solution-detail-section" style={{ marginBottom: 0 }}>
+          <div style={{ fontSize: 12, fontWeight: 700, color: t.text, marginBottom: 10 }}>Code</div>
+          <CodeBlock matlab={q.matlab} python={q.python} t={t} />
+        </section>
       )}
     </div>
   );
@@ -746,7 +824,7 @@ function QuestionCard({ question: q, globalIdx, showYearBadge, t, bookmarks, tog
 // ─────────────────────────────────────────────────────────────────────────────
 // AVAILABLE SOLUTIONS CONFIG
 // Structure: { DEPT: { TERM: { COURSECODE: { name, courseCode } } } }
-// Add new courses here as JSON files are added to /public/solutions/
+// Add new courses here as JSON files are added to /public/solution-data/
 // ─────────────────────────────────────────────────────────────────────────────
 const AVAILABLE_SOLUTIONS = {
   ESE: {
@@ -907,6 +985,7 @@ export default function QuestionBankSolutions() {
   const [showFormulas, setShowFormulas] = useState(false);
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [filterBookmarked, setFilterBookmarked] = useState(false);
+  const [selectedQuestion, setSelectedQuestion] = useState(null);
 
   // Shared
   const [loading, setLoading]             = useState(false);
@@ -958,7 +1037,7 @@ export default function QuestionBankSolutions() {
     setYearMeta({});
     Promise.all(
       PROBE_YEARS.map(year =>
-        fetch(`/solutions/${selectedDept}/${selectedTerm}/${selectedCourse}/${year}.json`)
+        fetch(`/solution-data/${selectedDept}/${selectedTerm}/${selectedCourse}/${year}.json`)
           .then(r => r.ok ? r.json() : null)
           .then(data => {
             if (!data) return null;
@@ -977,7 +1056,7 @@ export default function QuestionBankSolutions() {
   useEffect(() => {
     if (!selectedCourse || !selectedYear) { setSolutionData(null); return; }
     setLoading(true);
-    fetch(`/solutions/${selectedDept}/${selectedTerm}/${selectedCourse}/${selectedYear}.json`)
+    fetch(`/solution-data/${selectedDept}/${selectedTerm}/${selectedCourse}/${selectedYear}.json`)
       .then(r => r.ok ? r.json() : null)
       .then(data => { setSolutionData(data); setLoading(false); setSearchRaw(''); })
       .catch(() => { setSolutionData(null); setLoading(false); });
@@ -991,7 +1070,7 @@ export default function QuestionBankSolutions() {
     setFilterYears(new Set()); setFilterTypes(new Set());
     Promise.all(
       availableYears.map(year =>
-        fetch(`/solutions/${selectedDept}/${selectedTerm}/${selectedCourse}/${year}.json`)
+        fetch(`/solution-data/${selectedDept}/${selectedTerm}/${selectedCourse}/${year}.json`)
           .then(r => r.ok ? r.json() : null)
           .then(data => data ? { year, questions: (data.questions || []).map(q => ({ ...q, _year: String(year) })) } : null)
           .catch(() => null)
@@ -1067,24 +1146,33 @@ export default function QuestionBankSolutions() {
   // ── Nav helpers
   function goHome() {
     setView('home'); setSelectedCourse(null); setSelectedYear(null);
-    setSolutionData(null); setSearchRaw(''); setSearchParams({});
+    setSolutionData(null); setSelectedQuestion(null); setSearchRaw(''); setSearchParams({});
   }
   function goCourses() {
-    setView('courses'); setSelectedYear(null); setSolutionData(null); setSearchRaw('');
+    setView('courses'); setSelectedYear(null); setSolutionData(null); setSelectedQuestion(null); setSearchRaw('');
     setSearchParams({ dept: selectedDept, term: selectedTerm });
   }
   function goYears(code) {
-    setSelectedCourse(code); setSelectedYear(null); setSolutionData(null);
+    setSelectedCourse(code); setSelectedYear(null); setSolutionData(null); setSelectedQuestion(null);
     setView('years'); setSearchRaw('');
     setSearchParams({ dept: selectedDept, term: selectedTerm, course: code });
   }
   function goSolutions(year) {
-    setSelectedYear(String(year)); setView('solutions'); setSearchRaw('');
+    setSelectedYear(String(year)); setView('solutions'); setSelectedQuestion(null); setSearchRaw('');
     setSearchParams({ dept: selectedDept, term: selectedTerm, course: selectedCourse, year: String(year) });
   }
   function goAll() {
-    setView('all'); setSearchRaw(''); setFilterYears(new Set()); setFilterTypes(new Set()); setVisibleCount(20); setAllViewTab('questions'); setFilterBookmarked(false);
+    setView('all'); setSearchRaw(''); setSelectedQuestion(null); setFilterYears(new Set()); setFilterTypes(new Set()); setVisibleCount(20); setAllViewTab('questions'); setFilterBookmarked(false);
     setSearchParams({ dept: selectedDept, term: selectedTerm, course: selectedCourse, year: 'all' });
+  }
+
+  function openQuestionDetail(question) {
+    setSelectedQuestion(question);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function closeQuestionDetail() {
+    setSelectedQuestion(null);
   }
 
   // ── Shared UI elements
@@ -1142,7 +1230,7 @@ export default function QuestionBankSolutions() {
       <div style={{ flex: 1, minWidth: 150 }}>
         <div style={{ fontSize: 9.5, fontWeight: 700, color: t.accent, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 6, opacity: 0.8 }}>📚 Department</div>
         <div style={{ position: 'relative' }}>
-          <select value={selectedDept} onChange={e => { setSelectedDept(e.target.value); setSelectedTerm(Object.keys(AVAILABLE_SOLUTIONS[e.target.value] || {})[0] || 'Y2T1'); }} className="select" style={{ paddingRight: 32 }}>
+          <select value={selectedDept} onChange={e => { setSelectedDept(e.target.value); setSelectedTerm(Object.keys(AVAILABLE_SOLUTIONS[e.target.value] || {})[0] || 'Y2T1'); }} className="sol-select" style={{ paddingRight: 32 }}>
             {depts.map(code => <option key={code} value={code}>{code} — {QB_DEPARTMENTS[code]?.split('of ')[1] || QB_DEPARTMENTS[code] || code}</option>)}
           </select>
           <ChevronDown size={14} color={t.textMut} style={{ position: 'absolute', right: 10, top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none', opacity: 0.6 }} />
@@ -1151,7 +1239,7 @@ export default function QuestionBankSolutions() {
       <div style={{ flex: 1, minWidth: 110 }}>
         <div style={{ fontSize: 9.5, fontWeight: 700, color: t.accent, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 6, opacity: 0.8 }}>📅 Term</div>
         <div style={{ position: 'relative' }}>
-          <select value={selectedTerm} onChange={e => setSelectedTerm(e.target.value)} className="select" style={{ paddingRight: 32 }}>
+          <select value={selectedTerm} onChange={e => setSelectedTerm(e.target.value)} className="sol-select" style={{ paddingRight: 32 }}>
             {terms.map(term => <option key={term} value={term}>{term}</option>)}
           </select>
           <ChevronDown size={14} color={t.textMut} style={{ position: 'absolute', right: 10, top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none', opacity: 0.6 }} />
@@ -1386,6 +1474,7 @@ export default function QuestionBankSolutions() {
                           bookmarks={bookmarks}
                           toggleBookmark={toggleBookmark}
                           courseKey={courseKey}
+                          onOpenDetail={openQuestionDetail}
                         />
                       ))}
                       {visibleCount < filteredAllQuestions.length && (
@@ -1528,28 +1617,49 @@ export default function QuestionBankSolutions() {
 
             {showFormulas && FORMULA_SHEETS[selectedCourse] && <FormulaPanel courseCode={selectedCourse} t={t} onClose={() => setShowFormulas(false)} />}
 
-            <div className="qs-no-print search-box">
-              <Search size={14} className="search-icon" style={{ color: t.textMut }} />
-              <input type="text" className="search-input" placeholder="Search questions…" value={searchRaw} onChange={e => setSearchRaw(e.target.value)} />
-            </div>
+            {selectedQuestion ? (
+              <QuestionDetail
+                question={selectedQuestion}
+                t={t}
+                bookmarks={bookmarks}
+                toggleBookmark={toggleBookmark}
+                courseKey={courseKey}
+                courseMeta={{
+                  subject_code: solutionData?.subject_code,
+                  subject: solutionData?.subject,
+                  term: solutionData?.term,
+                  exam_year: solutionData?.exam_year,
+                  totalQuestions: solutionData?.questions?.length || 0,
+                }}
+                onClose={closeQuestionDetail}
+              />
+            ) : (
+              <>
+                <div className="qs-no-print search-box">
+                  <Search size={14} className="search-icon" style={{ color: t.textMut }} />
+                  <input type="text" className="search-input" placeholder="Search questions…" value={searchRaw} onChange={e => setSearchRaw(e.target.value)} />
+                </div>
 
-            {search && <div style={{ fontSize: 11.5, color: t.textMut, marginBottom: 12 }}>{filteredQuestions.length} result{filteredQuestions.length !== 1 ? 's' : ''}</div>}
+                {search && <div style={{ fontSize: 11.5, color: t.textMut, marginBottom: 12 }}>{filteredQuestions.length} result{filteredQuestions.length !== 1 ? 's' : ''}</div>}
 
-            {filteredQuestions.length === 0
-              ? <div style={{ textAlign: 'center', padding: 40, color: t.textMut }}>No questions match.</div>
-              : filteredQuestions.map((q, idx) => (
-                  <QuestionCard
-                    key={q.id ?? idx}
-                    question={q}
-                    globalIdx={idx}
-                    showYearBadge={false}
-                    t={t}
-                    bookmarks={bookmarks}
-                    toggleBookmark={toggleBookmark}
-                    courseKey={courseKey}
-                  />
-                ))
-            }
+                {filteredQuestions.length === 0
+                  ? <div style={{ textAlign: 'center', padding: 40, color: t.textMut }}>No questions match.</div>
+                  : filteredQuestions.map((q, idx) => (
+                      <QuestionCard
+                        key={q.id ?? idx}
+                        question={q}
+                        globalIdx={idx}
+                        showYearBadge={false}
+                        t={t}
+                        bookmarks={bookmarks}
+                        toggleBookmark={toggleBookmark}
+                        courseKey={courseKey}
+                        onOpenDetail={openQuestionDetail}
+                      />
+                    ))
+                }
+              </>
+            )}
           </>
         )}
 
