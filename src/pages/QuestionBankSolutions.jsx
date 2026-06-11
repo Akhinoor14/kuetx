@@ -1,8 +1,8 @@
 import { useEffect, useState, useMemo, useCallback, useRef } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import {
   BookOpen, ChevronRight, Search, ArrowLeft, Calendar,
-  Layers, Filter, X, Tag, Hash, ChevronDown,
+  Layers, Filter, X, Hash, ChevronDown,
   Bookmark, BookmarkCheck, Copy, Check, Sun, Moon,
 } from 'lucide-react';
 import 'katex/dist/katex.min.css';
@@ -180,28 +180,65 @@ function InlineMathLine({ text, t, mathStyle }) {
   );
 }
 
+// Tokenise a string into: bold (**x** or __x__), italic (*x* or _x_),
+// inline-code (`x`), math ($x$ etc.) and plain text — in one pass.
+function tokeniseInline(text) {
+  const tokens = [];
+  // Order matters: longer/greedier patterns first
+  const re = /(\*\*|__)(.+?)\1|(\*|_)(.+?)\3|(`[^`]+`)|(\$\$[\s\S]+?\$\$|\$[^$\n]+?\$|\\\([\s\S]+?\\\)|\\\[[\s\S]+?\\\])/g;
+  let last = 0, m;
+  while ((m = re.exec(text)) !== null) {
+    if (m.index > last) tokens.push({ type: 'text', val: text.slice(last, m.index) });
+    if (m[1])      tokens.push({ type: 'bold',   val: m[2] });          // **x** __x__
+    else if (m[3]) tokens.push({ type: 'italic', val: m[4] });          // *x* _x_
+    else if (m[5]) tokens.push({ type: 'code',   val: m[5].slice(1,-1) }); // `x`
+    else if (m[6]) {                                                     // math
+      const raw = m[6];
+      const disp = raw.startsWith('$$') || raw.startsWith('\\[');
+      let val;
+      if (raw.startsWith('$$'))      val = raw.slice(2,-2).trim();
+      else if (raw.startsWith('\\['))val = raw.slice(2,-2).trim();
+      else if (raw.startsWith('\\('))val = raw.slice(2,-2).trim();
+      else                           val = raw.slice(1,-1).trim();
+      tokens.push({ type: 'math', val, display: disp });
+    }
+    last = m.index + m[0].length;
+  }
+  if (last < text.length) tokens.push({ type: 'text', val: text.slice(last) });
+  return tokens;
+}
+
 function renderInlineCode(text, t) {
-  if (!text.includes('`')) return <InlineMathLine text={text} t={t} mathStyle={isMathLine(text)} />;
-  const parts = text.split(/(`[^`]+`)/g);
+  // Fast path — nothing special
+  if (!/\*\*|__|[*_`]|\$|\\[\[(]/.test(text))
+    return <InlineMathLine text={text} t={t} mathStyle={isMathLine(text)} />;
+
+  const tokens = tokeniseInline(text);
   return (
     <>
-      {parts.map((p, i) =>
-        p.startsWith('`') && p.endsWith('`')
-          ? <code key={i} style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: '0.87em', background: t.eqBg, color: t.blue, padding: '1px 6px', borderRadius: 4, border: `1px solid ${t.border}` }}>{p.slice(1, -1)}</code>
-          : <InlineMathLine key={i} text={p} t={t} mathStyle={isMathLine(p)} />
-      )}
+      {tokens.map((tok, i) => {
+        if (tok.type === 'bold')
+          return <strong key={i} style={{ fontWeight: 700, color: t.text }}>{tok.val}</strong>;
+        if (tok.type === 'italic')
+          return <em key={i} style={{ fontStyle: 'italic', color: t.textSub }}>{tok.val}</em>;
+        if (tok.type === 'code')
+          return <code key={i} style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: '0.87em', background: t.eqBg, color: t.blue, padding: '1px 6px', borderRadius: 4, border: `1px solid ${t.border}` }}>{tok.val}</code>;
+        if (tok.type === 'math')
+          return <MathSpan key={i} src={tok.val} display={tok.display} />;
+        // plain text — still run through math-char detection
+        return <InlineMathLine key={i} text={tok.val} t={t} mathStyle={isMathLine(tok.val)} />;
+      })}
     </>
   );
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// ANSWER PARSER — 1:1 with generate.js logic
+// ANSWER PARSER
 // ─────────────────────────────────────────────────────────────────────────────
 function parseAnswer(text) {
   if (!text) return [{ type: 'blank' }];
   const lines = text.split('\n');
 
-  // Table detection
   const SEP = /^\|[\s\-|:]+\|$/;
   const tableRanges = new Set();
   let ti = 0;
@@ -218,13 +255,11 @@ function parseAnswer(text) {
   const segs = [];
   let i = 0;
   while (i < lines.length) {
-    // Table
     if (tableRanges.has(i)) {
       const tl = [];
       while (i < lines.length && tableRanges.has(i)) { tl.push(lines[i]); i++; }
       segs.push({ type: 'table', lines: tl }); continue;
     }
-    // Fenced code
     const fenceMatch = lines[i].trim().match(/^(`{3,})/);
     if (fenceMatch) {
       const fence = fenceMatch[1];
@@ -235,11 +270,9 @@ function parseAnswer(text) {
       if (i < lines.length) i++;
       segs.push({ type: 'fencedcode', lines: codeLines, lang }); continue;
     }
-    // Normalize: $[arr;arr]$ → `arr;arr`
     const rawNorm = lines[i].trim().replace(/\$([^$\n]*;[^$\n]*)\$/g, (match, inner) =>
       /\\/.test(inner) ? match : '`' + inner.trim() + '`'
     );
-    // Normalize: single $ around \begin → $$
     const raw = rawNorm.replace(
       /^\$(\s*\\begin\{[a-z*]+\}[\s\S]*?\\end\{[a-z*]+\}\s*)\$$/,
       '$$$$$1$$$$'
@@ -429,19 +462,15 @@ function FormulaPanel({ courseCode, t, onClose }) {
   const formulas = FORMULA_SHEETS[courseCode];
   if (!formulas) return null;
   return (
-    <div style={{
-      background: t.surface, border: `1px solid ${t.border}`, borderRadius: 12,
-      padding: '14px', marginBottom: 16,
-      boxShadow: '0 4px 24px rgba(0,0,0,0.12)',
-    }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-        <span style={{ fontSize: 12, fontWeight: 700, color: t.accent, letterSpacing: '0.08em', textTransform: 'uppercase' }}>📐 Formula Sheet — {courseCode}</span>
-        <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', color: t.textMut, fontSize: 16, padding: '0 4px' }}>×</button>
+    <div className="formula-panel">
+      <div className="formula-panel-header">
+        <span className="formula-panel-title">📐 Formula Sheet — {courseCode}</span>
+        <button onClick={onClose} className="formula-panel-close">×</button>
       </div>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: 8 }}>
+      <div className="formula-grid">
         {formulas.map((f, i) => (
-          <div key={i} style={{ background: t.card, border: `1px solid ${t.borderSub}`, borderRadius: 8, padding: '8px 12px' }}>
-            <div style={{ fontSize: 9.5, fontWeight: 700, color: t.textMut, letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: 6 }}>{f.name}</div>
+          <div key={i} className="formula-item" style={{ background: t.card, border: `1px solid ${t.borderSub}` }}>
+            <div className="formula-name" style={{ color: t.textMut }}>{f.name}</div>
             <MathSpan src={f.tex} display={false} />
           </div>
         ))}
@@ -524,7 +553,6 @@ function AnswerBlock({ text, t, tryDerivation = false }) {
           );
         }
 
-        // prose
         return <div key={idx} style={{ marginBottom: 2 }}>{renderInlineCode(seg.content, t)}</div>;
       })}
     </div>
@@ -598,233 +626,265 @@ function CodeBlock({ matlab, python, t }) {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// QUESTION CARD
+// QUESTION CARD — redesigned
 // ─────────────────────────────────────────────────────────────────────────────
 function QuestionCard({ question: q, globalIdx, showYearBadge, t, bookmarks, toggleBookmark, courseKey, onOpenDetail }) {
   const typeColor = getTypeColor(q.type);
   const hasCode = q.matlab || q.python;
   const bmKey = `${courseKey}_${q._year || ''}_${q.id}`;
   const isBookmarked = bookmarks?.has(bmKey);
+  const hasDetail = q.detailed_answer || hasCode;
 
   return (
-      <div className="q-card" style={{
-        background: t.card,
-        border: `1px solid ${t.border}`,
-        borderLeft: `4px solid ${typeColor.border}`,
-        borderRadius: 12,
-        overflow: 'hidden',
-        marginBottom: 12,
-        transition: 'border-color .15s, box-shadow .15s',
-      }}>
-        {/* ── LAYER 1: Header — always visible, click to open popup ── */}
-        <div
-          onClick={() => (q.detailed_answer || hasCode) && onOpenDetail(q)}
-          className="q-header"
-          style={{ display: 'grid', gridTemplateColumns: '50px 1fr 32px', cursor: (q.detailed_answer || hasCode) ? 'pointer' : 'default', userSelect: 'none' }}
-        >
-          {/* Q-number */}
-          <div className="q-num" style={{
-            background: t.numBg, color: t.numText,
-            fontFamily: "'JetBrains Mono',monospace", fontSize: 12, fontWeight: 800,
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            borderRight: `1px solid ${t.borderSub}`, flexShrink: 0,
-          }}>
-            {q.id || `Q${globalIdx + 1}`}
+    <div className="qcard" style={{ background: t.card, border: `1px solid ${t.border}`, borderLeft: `3px solid ${typeColor.border}` }}>
+      {/* ── Header row ── */}
+      <div className="qcard-head" onClick={() => hasDetail && onOpenDetail(q)} style={{ cursor: hasDetail ? 'pointer' : 'default' }}>
+        <div className="qcard-num" style={{ background: t.numBg, color: t.numText, borderRight: `1px solid ${t.borderSub}` }}>
+          {q.id || `Q${globalIdx + 1}`}
+        </div>
+        <div className="qcard-body">
+          <div className="qcard-question" style={{ color: t.text }}>
+            <InlineMathLine text={q.question} t={t} mathStyle={isMathLine(q.question)} />
           </div>
-
-          {/* Question text + badges */}
-          <div className="q-text" style={{ padding: '12px 12px 10px' }}>
-            <div style={{ fontWeight: 600, fontSize: 13.5, color: t.text, lineHeight: 1.55 }}>
-              <InlineMathLine text={q.question} t={t} mathStyle={isMathLine(q.question)} />
-            </div>
-            <div style={{ display: 'flex', gap: 5, marginTop: 6, flexWrap: 'wrap', alignItems: 'center' }}>
-              {q.type && (
-                <span style={{
-                  fontSize: 9.5, fontWeight: 700, color: typeColor.text,
-                  background: typeColor.bg, border: `1px solid ${typeColor.border}30`,
-                  borderRadius: 4, padding: '2px 7px', letterSpacing: '0.06em', textTransform: 'uppercase',
-                }}>{q.type}</span>
-              )}
-              {showYearBadge && q._year && (
-                <span style={{
-                  fontSize: 9.5, fontWeight: 600, color: t.blue,
-                  background: t.blueBg, border: `1px solid ${t.blue}30`,
-                  borderRadius: 4, padding: '2px 7px',
-                }}>{q._year}</span>
-              )}
-            </div>
-          </div>
-
-          {/* Chevron */}
-          <div className="q-chevron" style={{
-            display: 'flex', alignItems: 'flex-start', justifyContent: 'center',
-            paddingTop: 14, color: t.textMut,
-            transition: 'transform .22s',
-            transform: 'none',
-          }}>
-            <ChevronDown size={14} />
+          <div className="qcard-tags">
+            {q.type && (
+              <span className="qtag" style={{ color: typeColor.text, background: typeColor.bg, borderColor: `${typeColor.border}25` }}>{q.type}</span>
+            )}
+            {showYearBadge && q._year && (
+              <span className="qtag" style={{ color: t.blue, background: t.blueBg, borderColor: `${t.blue}25` }}>{q._year}</span>
+            )}
+            {hasCode && (
+              <span className="qtag qtag-code" style={{ color: '#FFD700', background: 'rgba(255,215,0,0.08)', borderColor: 'rgba(255,215,0,0.2)' }}>⬡ code</span>
+            )}
           </div>
         </div>
-
-        {/* ── LAYER 2: Quick Answer — always visible ── */}
-        {q.short_answer && (
-          <div className="q-quick" style={{
-            borderTop: `1px solid ${t.borderSub}`,
-            background: t.shortBg, padding: '9px 13px 9px 64px',
-          }}>
-            <div style={{ fontSize: 9.5, fontWeight: 700, color: t.accent, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 5 }}>
-              ● Quick Answer
-            </div>
-            <AnswerBlock text={q.short_answer} t={t} />
+        {hasDetail && (
+          <div className="qcard-arrow" style={{ color: t.textMut }}>
+            <ChevronRight size={14} />
           </div>
         )}
-
-        {/* Action bar — bookmark button */}
-        <div className="q-actions" style={{
-          borderTop: `1px dashed ${t.borderSub}`,
-          background: t.shortBg, padding: '6px 13px 6px 64px',
-          display: 'flex', alignItems: 'center', gap: 8,
-        }}>
-          {(q.detailed_answer || hasCode) && (
-            <button onClick={() => onOpenDetail(q)} style={{
-              fontSize: 11, fontWeight: 600, color: t.blue, background: t.blueBg,
-              border: `1px solid ${t.blue}30`, borderRadius: 6, padding: '3px 10px',
-              cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4,
-            }}>
-              📖 Full Solution
-            </button>
-          )}
-          {toggleBookmark && (
-            <button
-              onClick={e => { e.stopPropagation(); toggleBookmark(bmKey); }}
-              style={{
-                marginLeft: 'auto', background: 'none', border: 'none', cursor: 'pointer',
-                color: isBookmarked ? '#FBBF24' : t.textMut, padding: '3px 6px',
-                display: 'flex', alignItems: 'center', gap: 4, fontSize: 11,
-                fontWeight: 600, transition: 'color .15s',
-              }}
-            >
-              {isBookmarked ? <BookmarkCheck size={14} /> : <Bookmark size={14} />}
-              {isBookmarked ? 'Saved' : 'Save'}
-            </button>
-          )}
-        </div>
       </div>
+
+      {/* ── Quick answer strip ── */}
+      {q.short_answer && (
+        <div className="qcard-quick" style={{ background: t.shortBg, borderTop: `1px solid ${t.borderSub}` }}>
+          <span className="qcard-quick-label" style={{ color: t.accent }}>ANS</span>
+          <div className="qcard-quick-text" style={{ color: t.text }}>
+            <AnswerBlock text={q.short_answer} t={t} />
+          </div>
+        </div>
+      )}
+
+      {/* ── Actions ── */}
+      <div className="qcard-footer" style={{ borderTop: `1px dashed ${t.borderSub}`, background: t.shortBg }}>
+        {hasDetail && (
+          <button onClick={() => onOpenDetail(q)} className="qcard-btn qcard-btn-primary" style={{ color: t.blue, background: t.blueBg, borderColor: `${t.blue}30` }}>
+            <BookOpen size={11} /> Full Solution
+          </button>
+        )}
+        {toggleBookmark && (
+          <button
+            onClick={e => { e.stopPropagation(); toggleBookmark(bmKey); }}
+            className="qcard-btn qcard-btn-bm"
+            style={{ color: isBookmarked ? '#FBBF24' : t.textMut, marginLeft: 'auto' }}
+          >
+            {isBookmarked ? <BookmarkCheck size={13} /> : <Bookmark size={13} />}
+            <span>{isBookmarked ? 'Saved' : 'Save'}</span>
+          </button>
+        )}
+      </div>
+    </div>
   );
 }
 
-function QuestionDetail({ question: q, t, bookmarks, toggleBookmark, courseKey, courseMeta = {}, onClose }) {
-  const [showQuestion, setShowQuestion] = useState(true);
+// ─────────────────────────────────────────────────────────────────────────────
+// SOLUTION OVERLAY — full-screen "subpage" for a single question's solution
+// (replaces the old separate /question-bank/.../:questionId route entirely)
+// ─────────────────────────────────────────────────────────────────────────────
+function SolutionOverlay({ question: q, t, dark, toggleTheme, bookmarks, toggleBookmark, courseKey, courseMeta = {}, questionList = [], onClose, onNavigate }) {
   const typeColor = getTypeColor(q.type);
   const hasCode = q.matlab || q.python;
+  const year = q._year || courseMeta.exam_year || '';
   const bmKey = `${courseKey}_${q._year || ''}_${q.id}`;
   const isBookmarked = bookmarks?.has(bmKey);
-  const courseLabel = courseMeta.subject_code ? `${courseMeta.subject_code} — ${courseMeta.subject}` : null;
-  const examLabel = courseMeta.term ? `${courseMeta.term} · ${courseMeta.exam_year || ''}` : null;
+
+  const idx = questionList.findIndex(x => String(x.id) === String(q.id) && String(x._year || '') === String(q._year || ''));
+  const prevQ = idx > 0 ? questionList[idx - 1] : null;
+  const nextQ = idx !== -1 && idx < questionList.length - 1 ? questionList[idx + 1] : null;
+
+  // Lock background scroll while overlay is open
+  useEffect(() => {
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => { document.body.style.overflow = prevOverflow; };
+  }, []);
+  // Scroll overlay back to top whenever the question changes (prev/next nav)
+  useEffect(() => {
+    const el = document.querySelector('.qov-overlay');
+    if (el) el.scrollTop = 0;
+  }, [q]);
+  // Esc key closes overlay
+  useEffect(() => {
+    const onKey = e => { if (e.key === 'Escape') onClose(); };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [onClose]);
 
   return (
-    <div className="solution-detail-page" style={{ background: t.surface, border: `1px solid ${t.border}`, borderRadius: 18, padding: 24, marginBottom: 20 }}>
-      <div className="solution-detail-header">
-        <div className="solution-detail-headline">
-          <div className="solution-detail-actions">
-            <button onClick={onClose} className="solution-detail-back">← Back to questions</button>
-            <span className="solution-detail-type" style={{ color: typeColor.text, background: typeColor.bg, borderColor: `${typeColor.border}30` }}>{q.type || 'Question'}</span>
+    <div className="qov-overlay" style={{ background: t.bg, color: t.text }}>
+      {/* top bar */}
+      <div className="solpage-topbar" style={{ background: t.surface, borderBottom: `1px solid ${t.border}` }}>
+        <div className="solpage-topbar-inner">
+          <button onClick={onClose} className="solpage-back" style={{ color: t.textMut, border: `1px solid ${t.border}` }}>
+            <ArrowLeft size={14} />
+            <span>Back</span>
+          </button>
+
+          <div className="solpage-topbar-crumb" style={{ color: t.textMut }}>
+            <BookOpen size={13} color={t.accent} />
+            <span style={{ color: t.accent, fontWeight: 700, fontSize: 12 }}>Solution Bank</span>
+            {courseMeta.subject_code && (<><ChevronRight size={11} /><span style={{ fontSize: 12 }}>{courseMeta.subject_code}</span></>)}
+            {year && (<><ChevronRight size={11} /><span style={{ fontSize: 12 }}>{year}</span></>)}
           </div>
-          <div className="solution-detail-title-row">
-            <div className="solution-detail-number">Question {q.id || ''}</div>
-            {q._year && <div className="solution-detail-year">{q._year}</div>}
+
+          <div style={{ marginLeft: 'auto', display: 'flex', gap: 8, alignItems: 'center' }}>
+            {toggleBookmark && (
+              <button
+                onClick={() => toggleBookmark(bmKey)}
+                className="solpage-bm-btn"
+                style={{
+                  color: isBookmarked ? '#FBBF24' : t.textMut,
+                  background: isBookmarked ? 'rgba(251,191,36,0.1)' : 'transparent',
+                  border: `1px solid ${isBookmarked ? 'rgba(251,191,36,0.35)' : t.border}`,
+                }}
+              >
+                {isBookmarked ? <BookmarkCheck size={15} /> : <Bookmark size={15} />}
+              </button>
+            )}
+            {toggleTheme && (
+              <button onClick={toggleTheme} className="solpage-theme-btn" style={{ color: t.textMut, border: `1px solid ${t.border}` }}>
+                {dark ? <Sun size={14} /> : <Moon size={14} />}
+              </button>
+            )}
           </div>
-          <div className="solution-detail-heading">
+        </div>
+      </div>
+
+      <div className="solpage-wrap">
+        {/* question header card */}
+        <div className="solpage-qhead" style={{ background: t.surface, border: `1px solid ${t.border}` }}>
+          <div className="solpage-badges">
+            <span className="solpage-badge" style={{ background: typeColor.bg, color: typeColor.text, border: `1px solid ${typeColor.border}40` }}>
+              {q.type || 'Question'}
+            </span>
+            {year && (
+              <span className="solpage-badge solpage-badge-year" style={{ background: t.blueBg, color: t.blue, border: `1px solid ${t.blue}30` }}>
+                {year}
+              </span>
+            )}
+            {courseMeta.subject_code && (
+              <span className="solpage-badge" style={{ background: t.numBg, color: t.numText, border: `1px solid ${t.accent}20`, fontFamily: "'JetBrains Mono',monospace" }}>
+                {courseMeta.subject_code}
+              </span>
+            )}
+            {hasCode && (
+              <span className="solpage-badge" style={{ background: 'rgba(255,215,0,0.08)', color: '#FFD700', border: '1px solid rgba(255,215,0,0.2)' }}>
+                ⬡ Code
+              </span>
+            )}
+          </div>
+
+          <div className="solpage-qnum" style={{ color: t.textMut }}>
+            Question {q.id}
+            {questionList.length > 0 && idx !== -1 && (
+              <span style={{ color: t.textMut, fontWeight: 400 }}> / {questionList.length}</span>
+            )}
+          </div>
+
+          <div className="solpage-qtext" style={{ color: t.text }}>
             <InlineMathLine text={q.question} t={t} mathStyle={isMathLine(q.question)} />
           </div>
-          {(courseLabel || examLabel || courseMeta.totalQuestions) && (
-            <div className="solution-detail-meta">
-              {courseLabel && <span>{courseLabel}</span>}
-              {examLabel && <span>{examLabel}</span>}
-              {courseMeta.totalQuestions ? <span>{courseMeta.totalQuestions} questions</span> : null}
+
+          {(courseMeta.subject || courseMeta.term) && (
+            <div className="solpage-qmeta" style={{ color: t.textMut }}>
+              {[courseMeta.subject, courseMeta.term, year].filter(Boolean).join(' · ')}
             </div>
           )}
         </div>
-        <div className="solution-detail-controls">
-          {toggleBookmark && (
-            <button onClick={() => toggleBookmark(bmKey)} className={`solution-detail-bookmark ${isBookmarked ? 'saved' : ''}`}>
-              {isBookmarked ? '★ Saved' : '☆ Save'}
-            </button>
-          )}
+
+        {/* answer sections */}
+        <div className="solpage-sections">
           {q.short_answer && (
-            <button onClick={() => setShowQuestion(prev => !prev)} className="solution-detail-toggle">
-              {showQuestion ? 'Hide Question' : 'Show Question'}
-            </button>
+            <div className="solpage-section" style={{ background: t.shortBg, border: `1px solid ${t.border}` }}>
+              <div className="solpage-section-label" style={{ color: t.accent }}>Quick Answer</div>
+              <div className="solpage-section-body"><AnswerBlock text={q.short_answer} t={t} /></div>
+            </div>
+          )}
+
+          {q.detailed_answer && (
+            <div className="solpage-section" style={{ background: t.card, border: `1px solid ${t.borderSub}` }}>
+              <div className="solpage-section-label" style={{ color: t.text }}>Step-by-step Solution</div>
+              <div className="solpage-section-body"><AnswerBlock text={q.detailed_answer} t={t} tryDerivation /></div>
+            </div>
+          )}
+
+          {q.explanation_bn && (
+            <div className="solpage-section" style={{ background: t.bnBg, border: `1px solid ${t.borderSub}` }}>
+              <div className="solpage-section-label" style={{ color: t.yellow }}>বাংলা ব্যাখ্যা</div>
+              <div className="solpage-section-body"><AnswerBlock text={q.explanation_bn} t={t} /></div>
+            </div>
+          )}
+
+          {hasCode && (
+            <div className="solpage-section" style={{ background: t.card, border: `1px solid ${t.borderSub}` }}>
+              <div className="solpage-section-label" style={{ color: t.text }}>Code</div>
+              <div className="solpage-section-body"><CodeBlock matlab={q.matlab} python={q.python} t={t} /></div>
+            </div>
+          )}
+
+          {!q.short_answer && !q.detailed_answer && !q.explanation_bn && !hasCode && (
+            <div style={{ textAlign: 'center', padding: '48px 0', color: t.textMut }}>
+              <div style={{ fontSize: 32, marginBottom: 12 }}>📝</div>
+              <div style={{ fontSize: 14, fontWeight: 500 }}>Solution not available yet for this question.</div>
+            </div>
           )}
         </div>
+
+        {/* prev / next navigation */}
+        {(prevQ || nextQ) && (
+          <div className="solpage-nav" style={{ borderTop: `1px solid ${t.border}` }}>
+            {prevQ ? (
+              <button onClick={() => onNavigate(prevQ)} className="solpage-nav-btn solpage-nav-prev" style={{ background: t.card, border: `1px solid ${t.border}`, color: t.text }}>
+                <ArrowLeft size={14} style={{ flexShrink: 0 }} />
+                <div className="solpage-nav-content">
+                  <div className="solpage-nav-label" style={{ color: t.textMut }}>← Previous</div>
+                  <div className="solpage-nav-qtext" style={{ color: t.text }}>
+                    Q{prevQ.id}: <InlineMathLine text={(prevQ.question || '').slice(0, 60) + ((prevQ.question || '').length > 60 ? '…' : '')} t={t} mathStyle={false} />
+                  </div>
+                </div>
+              </button>
+            ) : <div />}
+
+            {nextQ ? (
+              <button onClick={() => onNavigate(nextQ)} className="solpage-nav-btn solpage-nav-next" style={{ background: t.card, border: `1px solid ${t.border}`, color: t.text }}>
+                <div className="solpage-nav-content" style={{ textAlign: 'right' }}>
+                  <div className="solpage-nav-label" style={{ color: t.textMut }}>Next →</div>
+                  <div className="solpage-nav-qtext" style={{ color: t.text }}>
+                    Q{nextQ.id}: <InlineMathLine text={(nextQ.question || '').slice(0, 60) + ((nextQ.question || '').length > 60 ? '…' : '')} t={t} mathStyle={false} />
+                  </div>
+                </div>
+                <ChevronRight size={14} style={{ flexShrink: 0 }} />
+              </button>
+            ) : <div />}
+          </div>
+        )}
       </div>
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, justifyContent: 'space-between', alignItems: 'flex-start' }}>
-        <div style={{ minWidth: 0, flex: 1 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10, flexWrap: 'wrap' }}>
-            <button onClick={onClose} style={{ background: 'transparent', border: '1px solid ' + t.border, borderRadius: 8, color: t.textMut, padding: '8px 12px', cursor: 'pointer', fontSize: 12, fontWeight: 700 }}>
-              ← Back to list
-            </button>
-            <span style={{ fontSize: 11, color: typeColor.text, background: typeColor.bg, border: `1px solid ${typeColor.border}30`, borderRadius: 6, padding: '4px 9px', fontWeight: 700, textTransform: 'uppercase' }}>{q.type || 'Question'}</span>
-          </div>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, alignItems: 'center', marginBottom: 10 }}>
-            <div style={{ fontSize: 13, fontWeight: 700, color: t.textMut, textTransform: 'uppercase', letterSpacing: '0.08em' }}>Question {q.id || ''}</div>
-            {q._year && <div style={{ fontSize: 11, color: t.textMut, background: t.blueBg, border: `1px solid ${t.blue}25`, borderRadius: 6, padding: '4px 8px' }}>{q._year}</div>}
-          </div>
-          <div style={{ fontSize: 16, fontWeight: 700, color: t.text, lineHeight: 1.6, marginBottom: 14 }}>
-            <InlineMathLine text={q.question} t={t} mathStyle={isMathLine(q.question)} />
-          </div>
-        </div>
-        <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', alignItems: 'center' }}>
-          {toggleBookmark && (
-            <button onClick={() => toggleBookmark(bmKey)} style={{ background: isBookmarked ? t.accentGlow : t.surface, color: isBookmarked ? t.accent : t.text, border: `1px solid ${isBookmarked ? t.accent + '40' : t.border}`, borderRadius: 8, padding: '8px 12px', fontSize: 12, fontWeight: 700, cursor: 'pointer' }}>
-              {isBookmarked ? '★ Saved' : '☆ Save'}
-            </button>
-          )}
-          {q.short_answer && (
-            <button onClick={() => setShowQuestion(prev => !prev)} style={{ background: t.blueBg, color: t.blue, border: `1px solid ${t.blue}30`, borderRadius: 8, padding: '8px 12px', fontSize: 12, fontWeight: 700, cursor: 'pointer' }}>
-              {showQuestion ? 'Hide Question' : 'Show Question'}
-            </button>
-          )}
-        </div>
-      </div>
-
-      {q.short_answer && showQuestion && (
-        <div style={{ border: `1px solid ${t.borderSub}`, borderRadius: 12, background: t.shortBg, padding: 16, marginBottom: 20 }}>
-          <div style={{ fontSize: 10.5, fontWeight: 700, color: t.accent, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 8 }}>Quick Answer</div>
-          <AnswerBlock text={q.short_answer} t={t} />
-        </div>
-      )}
-
-      {q.detailed_answer && (
-        <section className="solution-detail-section" style={{ marginBottom: 18 }}>
-          <div style={{ fontSize: 12, fontWeight: 700, color: t.text, marginBottom: 10 }}>Step-by-step Solution</div>
-          <div style={{ background: t.card, border: `1px solid ${t.border}`, borderRadius: 12, padding: 18 }}>
-            <AnswerBlock text={q.detailed_answer} t={t} tryDerivation />
-          </div>
-        </section>
-      )}
-
-      {q.explanation_bn && (
-        <section className="solution-detail-section" style={{ marginBottom: 18, background: t.bnBg, border: `1px solid ${t.borderSub}`, borderRadius: 12, padding: 18 }}>
-          <div style={{ fontSize: 12, fontWeight: 700, color: t.yellow, marginBottom: 10 }}>বাংলা ব্যাখ্যা</div>
-          <AnswerBlock text={q.explanation_bn} t={t} />
-        </section>
-      )}
-
-      {hasCode && (
-        <section className="solution-detail-section" style={{ marginBottom: 0 }}>
-          <div style={{ fontSize: 12, fontWeight: 700, color: t.text, marginBottom: 10 }}>Code</div>
-          <CodeBlock matlab={q.matlab} python={q.python} t={t} />
-        </section>
-      )}
     </div>
   );
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
 // AVAILABLE SOLUTIONS CONFIG
-// Structure: { DEPT: { TERM: { COURSECODE: { name, courseCode } } } }
-// Add new courses here as JSON files are added to /public/solution-data/
 // ─────────────────────────────────────────────────────────────────────────────
 const AVAILABLE_SOLUTIONS = {
   ESE: {
@@ -861,52 +921,40 @@ function getTypeColor(type) {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// FILTER BAR — type + year (used in 'all' view)
+// FILTER BAR
 // ─────────────────────────────────────────────────────────────────────────────
 function FilterBar({ allYears, allTypes, activeYears, activeTypes, onYearToggle, onTypeToggle, onClear, t, filterBookmarked, setFilterBookmarked, bookmarks }) {
   const hasActive = activeYears.size > 0 || activeTypes.size > 0 || filterBookmarked;
-  const [openYear, setOpenYear] = useState(false);
-  const [openType, setOpenType] = useState(false);
 
   const Pill = ({ label, active, onClick }) => (
-    <button onClick={onClick} style={{
-      fontSize: 11, fontWeight: 600, padding: '3px 9px', borderRadius: 20, cursor: 'pointer',
+    <button onClick={onClick} className="filter-pill" style={{
       border: `1px solid ${active ? t.filterActiveBord : t.border}`,
       background: active ? t.filterActiveBg : 'transparent',
       color: active ? t.filterActiveText : t.textSub,
-      transition: 'all .12s',
     }}>{label}</button>
   );
 
   return (
-    <div style={{ background: t.surface, border: `1px solid ${t.border}`, borderRadius: 10, padding: '10px 14px', marginBottom: 16, display: 'flex', flexWrap: 'wrap', gap: 10, alignItems: 'center' }}>
-      <Filter size={13} color={t.textMut} />
+    <div className="filter-bar" style={{ background: t.surface, border: `1px solid ${t.border}` }}>
+      <Filter size={12} color={t.textMut} style={{ flexShrink: 0 }} />
 
-      {/* Year pills */}
       {allYears.length > 0 && (
-        <div style={{ display: 'flex', gap: 5, alignItems: 'center', flexWrap: 'wrap' }}>
-          <span style={{ fontSize: 10, fontWeight: 700, color: t.textMut, letterSpacing: '0.07em', textTransform: 'uppercase', marginRight: 2 }}>Year</span>
-          {allYears.map(y => (
-            <Pill key={y} label={y} active={activeYears.has(y)} onClick={() => onYearToggle(y)} />
-          ))}
+        <div className="filter-group">
+          <span className="filter-label" style={{ color: t.textMut }}>Year</span>
+          {allYears.map(y => <Pill key={y} label={y} active={activeYears.has(y)} onClick={() => onYearToggle(y)} />)}
         </div>
       )}
 
-      {allYears.length > 0 && allTypes.length > 0 && <div style={{ width: 1, height: 20, background: t.border }} />}
+      {allYears.length > 0 && allTypes.length > 0 && <div className="filter-divider" style={{ background: t.border }} />}
 
-      {/* Type pills */}
       {allTypes.length > 0 && (
-        <div style={{ display: 'flex', gap: 5, alignItems: 'center', flexWrap: 'wrap' }}>
-          <span style={{ fontSize: 10, fontWeight: 700, color: t.textMut, letterSpacing: '0.07em', textTransform: 'uppercase', marginRight: 2 }}>Type</span>
-          {allTypes.map(ty => (
-            <Pill key={ty} label={ty} active={activeTypes.has(ty)} onClick={() => onTypeToggle(ty)} />
-          ))}
-          <button onClick={() => { setFilterBookmarked(v => !v); }} style={{
-            fontSize: 11, fontWeight: 600, padding: '3px 9px', borderRadius: 20, cursor: 'pointer',
+        <div className="filter-group">
+          <span className="filter-label" style={{ color: t.textMut }}>Type</span>
+          {allTypes.map(ty => <Pill key={ty} label={ty} active={activeTypes.has(ty)} onClick={() => onTypeToggle(ty)} />)}
+          <button onClick={() => setFilterBookmarked(v => !v)} className="filter-pill" style={{
             border: `1px solid ${filterBookmarked ? '#FBBF24' : t.border}`,
             background: filterBookmarked ? 'rgba(251,191,36,0.12)' : 'transparent',
             color: filterBookmarked ? '#FBBF24' : t.textMut,
-            transition: 'all .12s', display: 'flex', alignItems: 'center', gap: 4,
           }}>
             ⭐ Saved{filterBookmarked && bookmarks.size > 0 ? ` (${bookmarks.size})` : ''}
           </button>
@@ -914,8 +962,8 @@ function FilterBar({ allYears, allTypes, activeYears, activeTypes, onYearToggle,
       )}
 
       {hasActive && (
-        <button onClick={onClear} style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 4, fontSize: 11, fontWeight: 600, color: t.textMut, background: 'transparent', border: 'none', cursor: 'pointer', padding: '3px 6px' }}>
-          <X size={12} /> Clear
+        <button onClick={onClear} className="filter-clear" style={{ color: t.textMut }}>
+          <X size={11} /> Clear
         </button>
       )}
     </div>
@@ -927,6 +975,8 @@ function FilterBar({ allYears, allTypes, activeYears, activeTypes, onYearToggle,
 // ─────────────────────────────────────────────────────────────────────────────
 export default function QuestionBankSolutions() {
   const { t, dark, toggle: toggleTheme } = useSolutionsTheme();
+
+  // Inject CSS variables
   useEffect(() => {
     const r = document.documentElement;
     r.style.setProperty('--sol-bg', t.bg);
@@ -952,7 +1002,7 @@ export default function QuestionBankSolutions() {
     r.style.setProperty('--sol-accentGlow', t.accentGlow || 'transparent');
     r.style.setProperty('--sol-blueBg', t.blueBg || 'transparent');
   }, [t]);
-  const navigate = useNavigate();
+
   const [searchParams, setSearchParams] = useSearchParams();
   const { bookmarks, toggleBookmark } = useBookmarks();
   const profile = getProfile();
@@ -964,34 +1014,34 @@ export default function QuestionBankSolutions() {
        null)
     : null;
 
-  // ── Navigation
-  // views: 'home' | 'courses' | 'years' | 'solutions' | 'all'
-  const [view, setView]                   = useState('home');
-  const [selectedDept, setSelectedDept]   = useState(myDept || 'ESE');
-  const [selectedTerm, setSelectedTerm]   = useState('Y2T1');
+  const [view, setView]                     = useState('home');
+  const [selectedDept, setSelectedDept]     = useState(myDept || 'ESE');
+  const [selectedTerm, setSelectedTerm]     = useState('Y2T1');
   const [selectedCourse, setSelectedCourse] = useState(null);
-  const [selectedYear, setSelectedYear]   = useState(null);
+  const [selectedYear, setSelectedYear]     = useState(null);
   const [availableYears, setAvailableYears] = useState([]);
-  const [yearMeta, setYearMeta] = useState({});
-  const [solutionData, setSolutionData]   = useState(null);
-
-  // 'all' view state — all years merged
-  const [allYearsData, setAllYearsData]   = useState([]); // [{year, questions}]
-  const [allLoading, setAllLoading]       = useState(false);
-  const [visibleCount, setVisibleCount]   = useState(20);
-  const [allViewTab, setAllViewTab]       = useState('questions');
-
-  // Shared
-  const [showFormulas, setShowFormulas] = useState(false);
-  const [showScrollTop, setShowScrollTop] = useState(false);
+  const [yearMeta, setYearMeta]             = useState({});
+  const [solutionData, setSolutionData]     = useState(null);
+  const [allYearsData, setAllYearsData]     = useState([]);
+  const [allLoading, setAllLoading]         = useState(false);
+  const [visibleCount, setVisibleCount]     = useState(20);
+  const [allViewTab, setAllViewTab]         = useState('questions');
+  const [showFormulas, setShowFormulas]     = useState(false);
+  const [showScrollTop, setShowScrollTop]   = useState(false);
   const [filterBookmarked, setFilterBookmarked] = useState(false);
   const [selectedQuestion, setSelectedQuestion] = useState(null);
-
-  // Shared
-  const [loading, setLoading]             = useState(false);
-  const [searchRaw, setSearchRaw]         = useState('');
+  const [loading, setLoading]               = useState(false);
+  const [searchRaw, setSearchRaw]           = useState('');
   const search = useDebounce(searchRaw, 220);
 
+  // Scroll-to-top visibility
+  useEffect(() => {
+    const onScroll = () => setShowScrollTop(window.scrollY > 300);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  // URL param restore
   useEffect(() => {
     const dept   = searchParams.get('dept');
     const term   = searchParams.get('term');
@@ -1002,25 +1052,16 @@ export default function QuestionBankSolutions() {
       if (term) setSelectedTerm(term);
       if (course && AVAILABLE_SOLUTIONS[dept]?.[term]?.[course]) {
         setSelectedCourse(course);
-        if (year === 'all') {
-          setView('all');
-        } else if (year) {
-          setSelectedYear(year);
-          setView('solutions');
-        } else {
-          setView('years');
-        }
-      } else if (term) {
-        setView('courses');
-      }
+        if (year === 'all') setView('all');
+        else if (year) { setSelectedYear(year); setView('solutions'); }
+        else setView('years');
+      } else if (term) setView('courses');
     }
   }, [searchParams]);
 
-  // Filters (for 'all' view)
-  const [filterYears, setFilterYears]     = useState(new Set());
-  const [filterTypes, setFilterTypes]     = useState(new Set());
+  const [filterYears, setFilterYears] = useState(new Set());
+  const [filterTypes, setFilterTypes] = useState(new Set());
 
-  // ── Derived
   const depts   = useMemo(() => Object.keys(AVAILABLE_SOLUTIONS), []);
   const terms   = useMemo(() => Object.keys(AVAILABLE_SOLUTIONS[selectedDept] || {}), [selectedDept]);
   const courses = useMemo(() => {
@@ -1041,9 +1082,7 @@ export default function QuestionBankSolutions() {
           .then(r => r.ok ? r.json() : null)
           .then(data => {
             if (!data) return null;
-            if (!cancelled) {
-              setYearMeta(prev => ({ ...prev, [String(year)]: { count: data.questions?.length || 0 } }));
-            }
+            if (!cancelled) setYearMeta(prev => ({ ...prev, [String(year)]: { count: data.questions?.length || 0 } }));
             return year;
           })
           .catch(() => null)
@@ -1062,11 +1101,10 @@ export default function QuestionBankSolutions() {
       .catch(() => { setSolutionData(null); setLoading(false); });
   }, [selectedDept, selectedTerm, selectedCourse, selectedYear]);
 
-  // Load all years (for 'all' view)
+  // Load all years
   useEffect(() => {
     if (view !== 'all' || !selectedCourse || availableYears.length === 0) return;
-    setAllLoading(true);
-    setAllYearsData([]);
+    setAllLoading(true); setAllYearsData([]);
     setFilterYears(new Set()); setFilterTypes(new Set());
     Promise.all(
       availableYears.map(year =>
@@ -1081,7 +1119,6 @@ export default function QuestionBankSolutions() {
     });
   }, [view, selectedCourse, availableYears]);
 
-  // ── Questions for 'solutions' (single year)
   const filteredQuestions = useMemo(() => {
     if (!solutionData?.questions) return [];
     if (!search.trim()) return solutionData.questions;
@@ -1091,43 +1128,31 @@ export default function QuestionBankSolutions() {
       (q.question || '').toLowerCase().includes(sq) ||
       (q.short_answer || '').toLowerCase().includes(sq) ||
       (q.detailed_answer || '').toLowerCase().includes(sq) ||
-      (q.explanation_bn || '').includes(search)  // bangla: don't lowercase
+      (q.explanation_bn || '').includes(search)
     );
   }, [solutionData, search]);
 
-  // ── Questions for 'all' view (merged + filtered)
-  const allMergedQuestions = useMemo(() => {
-    const all = allYearsData.flatMap(d => d.questions);
-    return all;
-  }, [allYearsData]);
-
+  const allMergedQuestions = useMemo(() => allYearsData.flatMap(d => d.questions), [allYearsData]);
   const allUniqueYears = useMemo(() => [...new Set(allMergedQuestions.map(q => q._year))].sort((a, b) => b - a), [allMergedQuestions]);
   const allUniqueTypes = useMemo(() => [...new Set(allMergedQuestions.map(q => q.type).filter(Boolean))].sort(), [allMergedQuestions]);
 
   const frequencyData = useMemo(() => {
     if (allMergedQuestions.length === 0) return [];
     const types = allUniqueTypes.length > 0 ? allUniqueTypes : ['theory', 'numerical', 'programming'];
-    const years = allUniqueYears;
     return types.map(type => {
-      const byYear = {};
-      let total = 0;
-      years.forEach(y => {
+      const byYear = {}; let total = 0;
+      allUniqueYears.forEach(y => {
         const count = allMergedQuestions.filter(q => q._year === y && q.type === type).length;
-        byYear[y] = count;
-        total += count;
+        byYear[y] = count; total += count;
       });
       return { type, byYear, total };
-    }).filter(row => row.total > 0)
-      .sort((a, b) => b.total - a.total);
+    }).filter(row => row.total > 0).sort((a, b) => b.total - a.total);
   }, [allMergedQuestions, allUniqueTypes, allUniqueYears]);
 
   const filteredAllQuestions = useMemo(() => {
     let qs = allMergedQuestions;
     if (filterBookmarked) {
-      qs = qs.filter(q => {
-        const key = `${selectedDept}_${selectedTerm}_${selectedCourse}_${q._year || ''}_${q.id}`;
-        return bookmarks.has(key);
-      });
+      qs = qs.filter(q => bookmarks.has(`${selectedDept}_${selectedTerm}_${selectedCourse}_${q._year || ''}_${q.id}`));
     }
     if (filterYears.size > 0) qs = qs.filter(q => filterYears.has(q._year));
     if (filterTypes.size > 0) qs = qs.filter(q => filterTypes.has(q.type));
@@ -1137,13 +1162,13 @@ export default function QuestionBankSolutions() {
         (q.question || '').toLowerCase().includes(sq) ||
         (q.short_answer || '').toLowerCase().includes(sq) ||
         (q.detailed_answer || '').toLowerCase().includes(sq) ||
-        (q.explanation_bn || '').includes(search)  // bangla: don't lowercase
+        (q.explanation_bn || '').includes(search)
       );
     }
     return qs;
   }, [allMergedQuestions, filterBookmarked, bookmarks, filterYears, filterTypes, search, selectedDept, selectedTerm, selectedCourse]);
 
-  // ── Nav helpers
+  // Nav helpers
   function goHome() {
     setView('home'); setSelectedCourse(null); setSelectedYear(null);
     setSolutionData(null); setSelectedQuestion(null); setSearchRaw(''); setSearchParams({});
@@ -1162,116 +1187,169 @@ export default function QuestionBankSolutions() {
     setSearchParams({ dept: selectedDept, term: selectedTerm, course: selectedCourse, year: String(year) });
   }
   function goAll() {
-    setView('all'); setSearchRaw(''); setSelectedQuestion(null); setFilterYears(new Set()); setFilterTypes(new Set()); setVisibleCount(20); setAllViewTab('questions'); setFilterBookmarked(false);
+    setView('all'); setSearchRaw(''); setSelectedQuestion(null);
+    setFilterYears(new Set()); setFilterTypes(new Set()); setVisibleCount(20);
+    setAllViewTab('questions'); setFilterBookmarked(false);
     setSearchParams({ dept: selectedDept, term: selectedTerm, course: selectedCourse, year: 'all' });
   }
-
   function openQuestionDetail(question) {
     setSelectedQuestion(question);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
+  function closeQuestionDetail() { setSelectedQuestion(null); }
+  function navigateToQuestion(question) { setSelectedQuestion(question); }
 
-  function closeQuestionDetail() {
-    setSelectedQuestion(null);
-  }
+  // ── Shared sub-components ──────────────────────────────────────────────────
 
-  // ── Shared UI elements
-  const s = {
-    page:  { minHeight: '100vh', background: t.bg, color: t.text, fontFamily: "'Inter',sans-serif", paddingBottom: 60 },
-    wrap:  { maxWidth: 860, margin: '0 auto', padding: '0 16px' },
-    back:  { display: 'inline-flex', alignItems: 'center', gap: 5, color: t.accent, fontWeight: 600, fontSize: 12.5, cursor: 'pointer', marginBottom: 16, padding: '5px 11px', border: `1px solid ${t.accent}35`, borderRadius: 6, background: t.accentGlow, userSelect: 'none' },
-    secTitle: { fontSize: 20, fontWeight: 800, color: t.text, marginBottom: 3 },
-    secSub:   { fontSize: 13, color: t.textSub, marginBottom: 20 },
-    select: { background: t.selBg, color: t.text, border: `1px solid ${t.selBord}`, borderRadius: 7, padding: '8px 11px', fontSize: 13, outline: 'none', cursor: 'pointer', minWidth: 120, fontFamily: "'Inter',sans-serif" },
-    courseGrid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(230px,1fr))', gap: 12 },
-    yearGrid:   { display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(120px,1fr))', gap: 10 },
-    searchBox:  { position: 'relative', marginBottom: 14 },
-    searchIn:   { width: '100%', padding: '9px 13px 9px 36px', background: t.card, border: `1px solid ${t.border}`, borderRadius: 8, color: t.text, fontSize: 13, outline: 'none', boxSizing: 'border-box', fontFamily: "'Inter',sans-serif" },
-  };
+  // Compact top nav bar (visible on all views except home)
+  const TopNav = () => (
+    <div className="topnav qs-no-print" style={{ background: t.surface, borderBottom: `1px solid ${t.border}` }}>
+      <div className="topnav-inner wrap">
+        {/* Logo / home link */}
+        <button onClick={goHome} className="topnav-logo" style={{ color: t.accent }}>
+          <BookOpen size={16} strokeWidth={2} />
+          <span>Solution Bank</span>
+        </button>
 
-  const PageHeader = () => (
-    <div className="page-header">
-      <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-        <div className="icon-wrap" style={{ background: `linear-gradient(135deg, ${t.accent}15, ${t.accent}08)`, border: `1.5px solid ${t.accent}30`, boxShadow: `0 0 20px ${t.accent}20, inset 0 0 10px ${t.accent}08` }}>
-          <BookOpen size={22} color={t.accent} strokeWidth={1.8} />
+        {/* Breadcrumb trail */}
+        <div className="topnav-crumb" style={{ color: t.textMut }}>
+          {['courses','years','solutions','all'].includes(view) && (
+            <>
+              <ChevronRight size={11} />
+              <span
+                onClick={view !== 'courses' ? goCourses : undefined}
+                className={view === 'courses' ? 'crumb-active' : 'crumb-link'}
+                style={{ color: view === 'courses' ? t.text : t.textMut }}
+              >{selectedDept}·{selectedTerm}</span>
+            </>
+          )}
+          {['years','solutions','all'].includes(view) && courseInfo && (
+            <>
+              <ChevronRight size={11} />
+              <span
+                onClick={view !== 'years' ? () => setView('years') : undefined}
+                className={view === 'years' ? 'crumb-active' : 'crumb-link'}
+                style={{ color: view === 'years' ? t.text : t.textMut }}
+              >{courseInfo.courseCode}</span>
+            </>
+          )}
+          {view === 'solutions' && selectedYear && (
+            <>
+              <ChevronRight size={11} />
+              <span className="crumb-active" style={{ color: t.text }}>{selectedYear}</span>
+            </>
+          )}
+          {view === 'all' && (
+            <>
+              <ChevronRight size={11} />
+              <span className="crumb-active" style={{ color: t.text }}>All Papers</span>
+            </>
+          )}
         </div>
-        <div style={{ flex: 1 }}>
-          <h1 style={{ margin: 0, fontSize: 20, fontWeight: 800, color: t.text, letterSpacing: '-0.02em' }}>Solution Bank</h1>
-          <p style={{ margin: 0, fontSize: 12.5, color: t.textSub, marginTop: 2, fontWeight: 500 }}>Past paper solutions with step-by-step answers</p>
-        </div>
+
+        {/* Theme toggle */}
+        <button onClick={toggleTheme} className="topnav-theme" style={{ color: t.textMut, border: `1px solid ${t.border}` }}>
+          {dark ? <Sun size={14} /> : <Moon size={14} />}
+        </button>
       </div>
     </div>
   );
 
-  const Breadcrumb = () => (
-    <div style={{ display: 'flex', alignItems: 'center', gap: 5, padding: '8px 0 12px', fontSize: 11.5, color: t.textMut, flexWrap: 'wrap' }}>
-      <span onClick={goHome} style={{ color: t.accent, cursor: 'pointer', fontWeight: 500 }}>Solutions</span>
-      {['courses','years','solutions','all'].includes(view) && <>
-        <ChevronRight size={11} color={t.textMut} />
-        <span onClick={view !== 'courses' ? goCourses : undefined} style={{ color: view === 'courses' ? t.text : t.textMut, cursor: view !== 'courses' ? 'pointer' : 'default', fontWeight: view === 'courses' ? 600 : 400 }}>{selectedDept}·{selectedTerm}</span>
-      </>}
-      {['years','solutions','all'].includes(view) && courseInfo && <>
-        <ChevronRight size={11} color={t.textMut} />
-        <span onClick={view === 'solutions' || view === 'all' ? () => setView('years') : undefined} style={{ color: view === 'years' ? t.text : t.textMut, cursor: view !== 'years' ? 'pointer' : 'default', fontWeight: view === 'years' ? 600 : 400 }}>{courseInfo.courseCode}</span>
-      </>}
-      {view === 'solutions' && selectedYear && <>
-        <ChevronRight size={11} color={t.textMut} />
-        <span style={{ color: t.text, fontWeight: 600 }}>{selectedYear}</span>
-      </>}
-      {view === 'all' && <>
-        <ChevronRight size={11} color={t.textMut} />
-        <span style={{ color: t.text, fontWeight: 600 }}>All Papers</span>
-      </>}
-    </div>
-  );
-
-  const DeptTermBar = () => (
-    <div className="dept-term-bar">
-      <div style={{ flex: 1, minWidth: 150 }}>
-        <div style={{ fontSize: 9.5, fontWeight: 700, color: t.accent, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 6, opacity: 0.8 }}>📚 Department</div>
-        <div style={{ position: 'relative' }}>
-          <select value={selectedDept} onChange={e => { setSelectedDept(e.target.value); setSelectedTerm(Object.keys(AVAILABLE_SOLUTIONS[e.target.value] || {})[0] || 'Y2T1'); }} className="sol-select" style={{ paddingRight: 32 }}>
+  // Dept + Term inline selectors (compact row)
+  const DeptTermRow = () => (
+    <div className="dt-row qs-no-print">
+      <div className="dt-field">
+        <label className="dt-label" style={{ color: t.accent }}>Dept</label>
+        <div className="dt-select-wrap">
+          <select
+            value={selectedDept}
+            onChange={e => { setSelectedDept(e.target.value); setSelectedTerm(Object.keys(AVAILABLE_SOLUTIONS[e.target.value] || {})[0] || 'Y2T1'); }}
+            className="dt-select"
+            style={{ background: t.card, color: t.text, border: `1px solid ${t.border}` }}
+          >
             {depts.map(code => <option key={code} value={code}>{code} — {QB_DEPARTMENTS[code]?.split('of ')[1] || QB_DEPARTMENTS[code] || code}</option>)}
           </select>
-          <ChevronDown size={14} color={t.textMut} style={{ position: 'absolute', right: 10, top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none', opacity: 0.6 }} />
+          <ChevronDown size={12} color={t.textMut} className="dt-chevron" />
         </div>
       </div>
-      <div style={{ flex: 1, minWidth: 110 }}>
-        <div style={{ fontSize: 9.5, fontWeight: 700, color: t.accent, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 6, opacity: 0.8 }}>📅 Term</div>
-        <div style={{ position: 'relative' }}>
-          <select value={selectedTerm} onChange={e => setSelectedTerm(e.target.value)} className="sol-select" style={{ paddingRight: 32 }}>
+      <div className="dt-field">
+        <label className="dt-label" style={{ color: t.accent }}>Term</label>
+        <div className="dt-select-wrap">
+          <select
+            value={selectedTerm}
+            onChange={e => setSelectedTerm(e.target.value)}
+            className="dt-select"
+            style={{ background: t.card, color: t.text, border: `1px solid ${t.border}` }}
+          >
             {terms.map(term => <option key={term} value={term}>{term}</option>)}
           </select>
-          <ChevronDown size={14} color={t.textMut} style={{ position: 'absolute', right: 10, top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none', opacity: 0.6 }} />
+          <ChevronDown size={12} color={t.textMut} className="dt-chevron" />
         </div>
       </div>
     </div>
   );
+
+  // Shared page wrapper
+  const page = { minHeight: '100vh', background: t.bg, color: t.text, fontFamily: "'Inter',sans-serif", paddingBottom: 60 };
 
   // ════════════════════════════════════════════════════════════════════════════
   // VIEW: HOME
   // ════════════════════════════════════════════════════════════════════════════
   if (view === 'home') return (
-    <div style={s.page}>
-      <div className="wrap">
-        <PageHeader />
-        <div style={s.secTitle}>Browse Solutions</div>
-        <div style={{ fontSize: 13, color: t.textSub, marginBottom: 18 }}>Select department and term to see available courses</div>
-        <DeptTermBar />
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-          <div style={{ fontSize: 10, fontWeight: 700, color: t.textMut, letterSpacing: '0.08em', textTransform: 'uppercase', opacity: 0.8 }}>📚 Available now · {courses.length} course{courses.length !== 1 ? 's' : ''}</div>
-          <button onClick={goCourses} style={{ background: t.accent, color: '#fff', border: 'none', borderRadius: 8, padding: '9px 20px', fontWeight: 700, fontSize: 13, cursor: 'pointer', fontFamily: 'inherit', transition: 'all 0.18s', boxShadow: `0 4px 12px ${t.accent}30` }} onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = `0 8px 20px ${t.accent}40`; }} onMouseLeave={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = `0 4px 12px ${t.accent}30`; }}>Browse all →</button>
+    <div style={page}>
+      {/* Hero */}
+      <div className="home-hero" style={{ background: t.surface, borderBottom: `1px solid ${t.border}` }}>
+        <div className="wrap home-hero-inner">
+          <div className="home-hero-left">
+            <div className="home-hero-eyebrow" style={{ color: t.accent }}>
+              <BookOpen size={13} /> KUET Solution Bank
+            </div>
+            <h1 className="home-hero-title" style={{ color: t.text }}>
+              Past Papers,<br />
+              <span style={{ color: t.accent }}>Solved.</span>
+            </h1>
+            <p className="home-hero-sub" style={{ color: t.textSub }}>
+              Step-by-step solutions for KUET exam questions — theory, numerical & code.
+            </p>
+            <button onClick={goCourses} className="home-hero-cta" style={{ background: t.accent, color: '#022009' }}>
+              Browse Courses →
+            </button>
+          </div>
+          <div className="home-hero-stats">
+            <div className="home-stat" style={{ background: t.card, border: `1px solid ${t.border}` }}>
+              <div className="home-stat-n" style={{ color: t.accent }}>{courses.length}</div>
+              <div className="home-stat-l" style={{ color: t.textSub }}>Courses</div>
+            </div>
+            <div className="home-stat" style={{ background: t.card, border: `1px solid ${t.border}` }}>
+              <div className="home-stat-n" style={{ color: t.blue }}>{PROBE_YEARS.length}</div>
+              <div className="home-stat-l" style={{ color: t.textSub }}>Years</div>
+            </div>
+            <div className="home-stat" style={{ background: t.card, border: `1px solid ${t.border}` }}>
+              <div className="home-stat-n" style={{ color: t.yellow }}>3</div>
+              <div className="home-stat-l" style={{ color: t.textSub }}>Types</div>
+            </div>
+          </div>
         </div>
+      </div>
+
+      <div className="wrap" style={{ paddingTop: 24 }}>
+        <DeptTermRow />
+
+        <div className="section-head" style={{ marginBottom: 14 }}>
+          <div className="section-title" style={{ color: t.text }}>Available Courses</div>
+          <div className="section-sub" style={{ color: t.textSub }}>{selectedDept} · {selectedTerm} · {courses.length} available</div>
+        </div>
+
         <div className="course-grid">
           {courses.map(course => (
-            <div key={course.code} onClick={() => { setSelectedCourse(course.code); setView('years'); }}
+            <div
+              key={course.code}
+              onClick={() => goYears(course.code)}
               className="course-card"
-              onMouseEnter={e => e.currentTarget.style.background = t.cardHov}
-              onMouseLeave={e => e.currentTarget.style.background = t.card}
+              style={{ background: t.card, border: `1px solid ${t.border}`, borderTop: `3px solid ${t.accent}` }}
             >
-              <div style={{ fontSize: 10, color: t.accent, fontWeight: 700, letterSpacing: '0.07em', textTransform: 'uppercase', marginBottom: 5 }}>{course.courseCode}</div>
-              <div style={{ fontSize: 14, fontWeight: 700, color: t.text, lineHeight: 1.4 }}>{course.name}</div>
-              <div style={{ marginTop: 8, fontSize: 11, color: t.textMut }}>View past papers →</div>
+              <div className="course-card-code" style={{ color: t.accent }}>{course.courseCode}</div>
+              <div className="course-card-name" style={{ color: t.text }}>{course.name}</div>
+              <div className="course-card-hint" style={{ color: t.textMut }}>View past papers →</div>
             </div>
           ))}
         </div>
@@ -1284,31 +1362,37 @@ export default function QuestionBankSolutions() {
   // VIEW: COURSES
   // ════════════════════════════════════════════════════════════════════════════
   if (view === 'courses') return (
-    <div style={s.page}>
-      <div className="wrap">
-        <PageHeader />
-        <Breadcrumb />
-        <span onClick={goHome} className="back"><ArrowLeft size={13} /> Back</span>
-        <DeptTermBar />
-        <div style={s.secTitle}>Courses</div>
-        <div style={s.secSub}>{selectedDept} · {selectedTerm} · {courses.length} available</div>
+    <div style={page}>
+      <TopNav />
+      <div className="wrap" style={{ paddingTop: 20 }}>
+        <DeptTermRow />
+        <div className="section-head">
+          <div className="section-title" style={{ color: t.text }}>Courses</div>
+          <div className="section-sub" style={{ color: t.textSub }}>{selectedDept} · {selectedTerm} · {courses.length} available</div>
+        </div>
         <div className="course-grid">
           {courses.map(course => (
-            <div key={course.code} onClick={() => goYears(course.code)} className="course-card" style={{ borderLeft: `4px solid ${t.accent}` }}
-              onMouseEnter={e => e.currentTarget.style.background = t.cardHov}
-              onMouseLeave={e => e.currentTarget.style.background = t.card}
+            <div
+              key={course.code}
+              onClick={() => goYears(course.code)}
+              className="course-card"
+              style={{ background: t.card, border: `1px solid ${t.border}`, borderTop: `3px solid ${t.accent}` }}
             >
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 10 }}>
-                <span style={{ fontSize: 10.5, fontWeight: 700, color: t.accent, background: t.accentGlow, border: `1px solid ${t.accent}30`, borderRadius: 5, padding: '3px 8px', letterSpacing: '0.06em' }}>{course.courseCode}</span>
-                <Layers size={15} color={t.textMut} />
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 8 }}>
+                <div className="course-card-code" style={{ color: t.accent, margin: 0 }}>{course.courseCode}</div>
+                <Layers size={14} color={t.textMut} />
               </div>
-              <div style={{ fontSize: 14, fontWeight: 700, color: t.text, lineHeight: 1.4, marginBottom: 8 }}>{course.name}</div>
-              <div style={{ fontSize: 11, color: t.textMut, display: 'flex', alignItems: 'center', gap: 4 }}>
-                <Calendar size={11} /> View past papers →
+              <div className="course-card-name" style={{ color: t.text }}>{course.name}</div>
+              <div className="course-card-hint" style={{ color: t.textMut }}>
+                <Calendar size={10} /> View past papers →
               </div>
             </div>
           ))}
-          {courses.length === 0 && <div style={{ gridColumn: '1/-1', textAlign: 'center', padding: 40, color: t.textMut }}>No courses yet for {selectedDept} · {selectedTerm}</div>}
+          {courses.length === 0 && (
+            <div style={{ gridColumn: '1/-1', textAlign: 'center', padding: '40px 0', color: t.textMut }}>
+              No courses yet for {selectedDept} · {selectedTerm}
+            </div>
+          )}
         </div>
       </div>
       <KatexStyle />
@@ -1319,54 +1403,65 @@ export default function QuestionBankSolutions() {
   // VIEW: YEARS
   // ════════════════════════════════════════════════════════════════════════════
   if (view === 'years') return (
-    <div style={s.page}>
-      <div className="wrap">
-        <PageHeader />
-        <Breadcrumb />
-        <span onClick={goCourses} className="back"><ArrowLeft size={13} /> All Courses</span>
-
+    <div style={page}>
+      <TopNav />
+      <div className="wrap" style={{ paddingTop: 20 }}>
+        {/* Course info bar */}
         {courseInfo && (
-          <div style={{ background: t.surface, border: `1px solid ${t.border}`, borderLeft: `4px solid ${t.accent}`, borderRadius: '0 10px 10px 0', padding: '12px 16px', marginBottom: 20 }}>
-            <div style={{ fontSize: 10, color: t.accent, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 3 }}>{courseInfo.courseCode}</div>
-            <div style={{ fontSize: 16, fontWeight: 800, color: t.text }}>{courseInfo.name}</div>
-            <div style={{ fontSize: 11.5, color: t.textMut, marginTop: 2 }}>{selectedDept} · {selectedTerm}</div>
+          <div className="course-info-bar" style={{ background: t.surface, border: `1px solid ${t.border}`, borderLeft: `4px solid ${t.accent}` }}>
+            <div>
+              <div className="course-info-code" style={{ color: t.accent }}>{courseInfo.courseCode}</div>
+              <div className="course-info-name" style={{ color: t.text }}>{courseInfo.name}</div>
+            </div>
+            <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+              {FORMULA_SHEETS[selectedCourse] && (
+                <button
+                  onClick={() => setShowFormulas(v => !v)}
+                  className="icon-btn"
+                  style={{ color: showFormulas ? t.accent : t.textMut, background: showFormulas ? t.accentGlow : 'transparent', border: `1px solid ${showFormulas ? t.accent + '40' : t.border}` }}
+                >
+                  📐
+                </button>
+              )}
+              {availableYears.length > 0 && (
+                <button onClick={goAll} className="btn-secondary" style={{ color: t.blue, background: t.blueBg, border: `1px solid ${t.blue}35` }}>
+                  <Hash size={12} /> All years
+                </button>
+              )}
+            </div>
           </div>
         )}
 
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
-          <div>
-            <div style={s.secTitle}>Past Papers</div>
-            <div style={{ fontSize: 12.5, color: t.textSub }}>{availableYears.length === 0 ? 'Checking available years…' : `${availableYears.length} year${availableYears.length !== 1 ? 's' : ''} available`}</div>
+        {showFormulas && <FormulaPanel courseCode={selectedCourse} t={t} onClose={() => setShowFormulas(false)} />}
+
+        <div className="section-head">
+          <div className="section-title" style={{ color: t.text }}>Past Papers</div>
+          <div className="section-sub" style={{ color: t.textSub }}>
+            {availableYears.length === 0 ? 'Checking available years…' : `${availableYears.length} year${availableYears.length !== 1 ? 's' : ''} found`}
           </div>
-          {availableYears.length > 0 && (
-            <button onClick={goAll} style={{ background: t.blueBg, color: t.blue, border: `1px solid ${t.blueDim}40`, borderRadius: 7, padding: '7px 14px', fontWeight: 700, fontSize: 12, cursor: 'pointer', fontFamily: 'inherit', display: 'flex', alignItems: 'center', gap: 6 }}>
-              <Hash size={13} /> All years combined
-            </button>
-          )}
         </div>
 
         <div className="year-grid">
           {availableYears.length > 0
             ? availableYears.map(year => (
-                <div key={year} onClick={() => goSolutions(year)}
-                  style={{ background: t.card, border: `1px solid ${t.border}`, borderRadius: 10, padding: '18px 12px', cursor: 'pointer', textAlign: 'center', transition: 'border-color .12s' }}
-                  onMouseEnter={e => { e.currentTarget.style.borderColor = t.accent; e.currentTarget.style.transform = 'translateY(-2px)'; }}
-                  onMouseLeave={e => { e.currentTarget.style.borderColor = t.border; e.currentTarget.style.transform = 'none'; }}
+                <div
+                  key={year}
+                  onClick={() => goSolutions(year)}
+                  className="year-card"
+                  style={{ background: t.card, border: `1px solid ${t.border}` }}
                 >
-                  <div style={{ fontSize: 24, fontWeight: 800, color: t.accent, fontFamily: "'JetBrains Mono',monospace" }}>{year}</div>
-                  <div style={{ fontSize: 10.5, color: t.textMut, marginTop: 4 }}>Exam</div>
-                  <div style={{ marginTop: 8, fontSize: 9.5, background: t.accentGlow, color: t.accent, borderRadius: 4, padding: '2px 7px', display: 'inline-block', fontWeight: 700, letterSpacing: '0.07em' }}>AVAILABLE</div>
+                  <div className="year-card-n" style={{ color: t.accent }}>{year}</div>
+                  <div className="year-card-label" style={{ color: t.textMut }}>Exam</div>
                   {yearMeta[String(year)]?.count > 0 && (
-                    <div style={{ fontSize: 10, color: t.textMut, marginTop: 4 }}>
-                      {yearMeta[String(year)].count} questions
-                    </div>
+                    <div className="year-card-count" style={{ color: t.textMut }}>{yearMeta[String(year)].count} Qs</div>
                   )}
+                  <div className="year-card-badge" style={{ background: t.accentGlow, color: t.accent }}>Available</div>
                 </div>
               ))
             : PROBE_YEARS.slice().reverse().map(year => (
-                <div key={year} style={{ background: t.card, border: `1px solid ${t.border}`, borderRadius: 10, padding: '18px 12px', textAlign: 'center', opacity: 0.3 }}>
-                  <div style={{ fontSize: 24, fontWeight: 800, color: t.textMut, fontFamily: "'JetBrains Mono',monospace" }}>{year}</div>
-                  <div style={{ fontSize: 10, color: t.textMut, marginTop: 4 }}>Checking…</div>
+                <div key={year} className="year-card year-card-ghost" style={{ background: t.card, border: `1px solid ${t.border}` }}>
+                  <div className="year-card-n" style={{ color: t.textMut }}>{year}</div>
+                  <div className="year-card-label" style={{ color: t.textMut }}>Checking…</div>
                 </div>
               ))
           }
@@ -1377,177 +1472,154 @@ export default function QuestionBankSolutions() {
   );
 
   // ════════════════════════════════════════════════════════════════════════════
-  // VIEW: ALL YEARS — merged questions with filter panel
+  // VIEW: ALL YEARS
   // ════════════════════════════════════════════════════════════════════════════
   if (view === 'all') return (
-    <div style={s.page}>
+    <div style={page}>
       <div className="qs-print-area">
-        <div className="wrap">
-          <div className="qs-no-print"><PageHeader /></div>
-          <div className="qs-no-print"><Breadcrumb /></div>
-          <span className="qs-no-print back" onClick={() => setView('years')}><ArrowLeft size={13} /> Back to Years</span>
-
-        {courseInfo && (
-          <div style={{ background: t.surface, border: `1px solid ${t.border}`, borderLeft: `4px solid ${t.blue}`, borderRadius: '0 10px 10px 0', padding: '10px 14px', marginBottom: 18 }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12, marginBottom: 12 }}>
+        <TopNav />
+        <div className="wrap" style={{ paddingTop: 16 }}>
+          {/* Course + controls bar */}
+          {courseInfo && (
+            <div className="course-info-bar" style={{ background: t.surface, border: `1px solid ${t.border}`, borderLeft: `4px solid ${t.blue}` }}>
               <div>
-                <div style={{ fontSize: 10, color: t.blue, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 2 }}>{courseInfo.courseCode} · All Papers</div>
-                <div style={{ fontSize: 15, fontWeight: 800, color: t.text }}>{courseInfo.name}</div>
+                <div className="course-info-code" style={{ color: t.blue }}>{courseInfo.courseCode} · All Papers</div>
+                <div className="course-info-name" style={{ color: t.text }}>{courseInfo.name}</div>
               </div>
               {FORMULA_SHEETS[selectedCourse] && (
-                <button onClick={() => setShowFormulas(v => !v)} style={{
-                  background: showFormulas ? t.accentGlow : t.surface,
-                  color: showFormulas ? t.accent : t.textMut,
-                  border: `1px solid ${showFormulas ? t.accent + '40' : t.border}`,
-                  borderRadius: 6, padding: '6px 12px', fontSize: 11, fontWeight: 700,
-                  cursor: 'pointer', fontFamily: 'inherit', display: 'flex', alignItems: 'center', gap: 5,
-                }}>
-                  📐 Formulas
+                <button onClick={() => setShowFormulas(v => !v)} className="icon-btn" style={{ color: showFormulas ? t.accent : t.textMut, background: showFormulas ? t.accentGlow : 'transparent', border: `1px solid ${showFormulas ? t.accent + '40' : t.border}` }}>
+                  📐
                 </button>
               )}
             </div>
-            <div style={{ fontSize: 11.5, color: t.textMut }}>{selectedDept} · {selectedTerm} · {availableYears.join(', ')}</div>
-            {showFormulas && <FormulaPanel courseCode={selectedCourse} t={t} onClose={() => setShowFormulas(false)} />}
-          </div>
-        )}
+          )}
 
-        {allLoading && (
-          <div style={{ textAlign: 'center', padding: '40px 0', color: t.textMut }}>
-            <div style={{ fontSize: 26, marginBottom: 8 }}>⏳</div>
-            <div style={{ fontSize: 13 }}>Loading all years…</div>
-          </div>
-        )}
+          {showFormulas && <FormulaPanel courseCode={selectedCourse} t={t} onClose={() => setShowFormulas(false)} />}
 
-        {!allLoading && allMergedQuestions.length > 0 && (
-          <>
-            <div style={{ display: 'flex', gap: 8, marginBottom: 16, borderBottom: `1px solid ${t.border}`, paddingBottom: 0 }}>
-              {[
-                { id: 'questions', label: `Questions (${allMergedQuestions.length})` },
-                { id: 'analysis', label: '📊 Analysis' },
-              ].map(tab => (
-                <button key={tab.id} onClick={() => setAllViewTab(tab.id)} style={{
-                  padding: '8px 16px', border: 'none', background: 'none', cursor: 'pointer',
-                  fontSize: 12.5, fontWeight: 700, fontFamily: 'inherit',
-                  color: allViewTab === tab.id ? t.accent : t.textMut,
-                  borderBottom: `2px solid ${allViewTab === tab.id ? t.accent : 'transparent'}`,
-                  marginBottom: -1, transition: 'color .15s',
-                }}>{tab.label}</button>
-              ))}
+          {allLoading && (
+            <div className="loading-state" style={{ color: t.textMut }}>
+              <div className="loading-icon">⏳</div>
+              <div>Loading all years…</div>
             </div>
+          )}
 
-            {allViewTab === 'questions' && (
-              <>
-                <FilterBar
-                  allYears={allUniqueYears}
-                  allTypes={allUniqueTypes}
-                  activeYears={filterYears}
-                  activeTypes={filterTypes}
-                  onYearToggle={y => { setFilterYears(prev => { const s = new Set(prev); s.has(y) ? s.delete(y) : s.add(y); return s; }); setVisibleCount(20); }}
-                  onTypeToggle={ty => { setFilterTypes(prev => { const s = new Set(prev); s.has(ty) ? s.delete(ty) : s.add(ty); return s; }); setVisibleCount(20); }}
-                  onClear={() => { setFilterYears(new Set()); setFilterTypes(new Set()); setVisibleCount(20); setFilterBookmarked(false); }}
-                  t={t}
-                  filterBookmarked={filterBookmarked}
-                  setFilterBookmarked={setFilterBookmarked}
-                  bookmarks={bookmarks}
-                />
+          {!allLoading && allMergedQuestions.length > 0 && (
+            <>
+              {/* Tabs */}
+              <div className="tab-bar qs-no-print" style={{ borderBottom: `1px solid ${t.border}` }}>
+                {[
+                  { id: 'questions', label: `Questions (${allMergedQuestions.length})` },
+                  { id: 'analysis', label: '📊 Analysis' },
+                ].map(tab => (
+                  <button
+                    key={tab.id}
+                    onClick={() => setAllViewTab(tab.id)}
+                    className={`tab-btn ${allViewTab === tab.id ? 'tab-active' : ''}`}
+                    style={{
+                      color: allViewTab === tab.id ? t.accent : t.textMut,
+                      borderBottom: `2px solid ${allViewTab === tab.id ? t.accent : 'transparent'}`,
+                    }}
+                  >{tab.label}</button>
+                ))}
+              </div>
 
-                <div className="qs-no-print search-box">
-                  <Search size={14} className="search-icon" style={{ color: t.textMut }} />
-                  <input type="text" className="search-input" placeholder="Search all questions…" value={searchRaw} onChange={e => setSearchRaw(e.target.value)} />
-                </div>
+              {allViewTab === 'questions' && (
+                <>
+                  <FilterBar
+                    allYears={allUniqueYears} allTypes={allUniqueTypes}
+                    activeYears={filterYears} activeTypes={filterTypes}
+                    onYearToggle={y => { setFilterYears(prev => { const s = new Set(prev); s.has(y) ? s.delete(y) : s.add(y); return s; }); setVisibleCount(20); }}
+                    onTypeToggle={ty => { setFilterTypes(prev => { const s = new Set(prev); s.has(ty) ? s.delete(ty) : s.add(ty); return s; }); setVisibleCount(20); }}
+                    onClear={() => { setFilterYears(new Set()); setFilterTypes(new Set()); setVisibleCount(20); setFilterBookmarked(false); }}
+                    t={t} filterBookmarked={filterBookmarked} setFilterBookmarked={setFilterBookmarked} bookmarks={bookmarks}
+                  />
 
-                <div style={{ fontSize: 12, color: t.textMut, marginBottom: 14, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                  <span>{filteredAllQuestions.length} of {allMergedQuestions.length} question{allMergedQuestions.length !== 1 ? 's' : ''}</span>
-                  {(filterYears.size > 0 || filterTypes.size > 0 || filterBookmarked) && <span style={{ color: t.accent }}>Filtered</span>}
-                </div>
+                  <div className="search-box qs-no-print">
+                    <Search size={14} className="search-icon" style={{ color: t.textMut }} />
+                    <input type="text" className="search-input" placeholder="Search all questions…" value={searchRaw} onChange={e => setSearchRaw(e.target.value)} />
+                  </div>
 
-                {filteredAllQuestions.length === 0
-                  ? <div style={{ textAlign: 'center', padding: 40, color: t.textMut }}>No questions match the current filters.</div>
-                  : <>
+                  <div className="results-count qs-no-print" style={{ color: t.textMut }}>
+                    {filteredAllQuestions.length} of {allMergedQuestions.length} questions
+                    {(filterYears.size > 0 || filterTypes.size > 0 || filterBookmarked) && <span style={{ color: t.accent, marginLeft: 6 }}>· filtered</span>}
+                  </div>
+
+                  {selectedQuestion ? (
+                    <SolutionOverlay
+                      question={selectedQuestion} t={t} dark={dark} toggleTheme={toggleTheme}
+                      bookmarks={bookmarks} toggleBookmark={toggleBookmark}
+                      courseKey={courseKey}
+                      courseMeta={{ subject_code: courseInfo?.courseCode, subject: courseInfo?.name, term: selectedTerm }}
+                      questionList={filteredAllQuestions}
+                      onClose={closeQuestionDetail}
+                      onNavigate={navigateToQuestion}
+                    />
+                  ) : filteredAllQuestions.length === 0 ? (
+                    <div className="empty-state" style={{ color: t.textMut }}>No questions match the current filters.</div>
+                  ) : (
+                    <>
                       {filteredAllQuestions.slice(0, visibleCount).map((q, idx) => (
                         <QuestionCard
-                          key={`${q._year}-${q.id}`}
-                          question={q}
-                          globalIdx={idx}
-                          showYearBadge
-                          t={t}
-                          bookmarks={bookmarks}
-                          toggleBookmark={toggleBookmark}
-                          courseKey={courseKey}
-                          onOpenDetail={openQuestionDetail}
+                          key={`${q._year}-${q.id}`} question={q} globalIdx={idx} showYearBadge
+                          t={t} bookmarks={bookmarks} toggleBookmark={toggleBookmark}
+                          courseKey={courseKey} onOpenDetail={openQuestionDetail}
                         />
                       ))}
                       {visibleCount < filteredAllQuestions.length && (
                         <div style={{ textAlign: 'center', padding: '16px 0' }}>
-                          <button
-                            onClick={() => setVisibleCount(c => c + 20)}
-                            style={{
-                              background: t.blueBg, color: t.blue, border: `1px solid ${t.blue}35`,
-                              borderRadius: 8, padding: '9px 24px', fontWeight: 700, fontSize: 13,
-                              cursor: 'pointer', fontFamily: 'inherit',
-                            }}
-                          >
+                          <button onClick={() => setVisibleCount(c => c + 20)} className="load-more-btn" style={{ background: t.blueBg, color: t.blue, border: `1px solid ${t.blue}35` }}>
                             Load 20 more ({filteredAllQuestions.length - visibleCount} remaining)
                           </button>
                         </div>
                       )}
                     </>
-                }
-              </>
-            )}
+                  )}
+                </>
+              )}
 
-            {allViewTab === 'analysis' && frequencyData.length > 0 && (
-              <div>
-                <div style={{ fontSize: 13, color: t.textSub, marginBottom: 14 }}>
-                  Question type frequency across {allUniqueYears.length} exam years
-                </div>
-                <div style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
-                  <table style={{ borderCollapse: 'separate', borderSpacing: 0, width: '100%', fontSize: 12.5, borderRadius: 8, overflow: 'hidden', border: `1px solid ${t.border}` }}>
-                    <thead>
-                      <tr style={{ background: t.numBg }}>
-                        <td style={{ padding: '9px 14px', fontWeight: 700, color: t.numText, borderBottom: `2px solid ${t.border}` }}>Type</td>
-                        {allUniqueYears.map(y => (
-                          <td key={y} style={{ padding: '9px 10px', fontWeight: 700, color: t.numText, textAlign: 'center', borderBottom: `2px solid ${t.border}` }}>{y}</td>
-                        ))}
-                        <td style={{ padding: '9px 10px', fontWeight: 700, color: t.accent, textAlign: 'center', borderBottom: `2px solid ${t.border}` }}>Total</td>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {frequencyData.map((row, ri) => (
-                        <tr key={row.type} style={{ background: ri % 2 === 0 ? t.surface : t.card }}>
-                          <td style={{ padding: '8px 14px', fontWeight: 600, color: t.text, textTransform: 'capitalize', borderRight: `1px solid ${t.borderSub}` }}>{row.type}</td>
+              {allViewTab === 'analysis' && frequencyData.length > 0 && (
+                <div style={{ marginTop: 8 }}>
+                  <div style={{ fontSize: 12.5, color: t.textSub, marginBottom: 14 }}>
+                    Question type frequency across {allUniqueYears.length} exam years
+                  </div>
+                  <div style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
+                    <table className="freq-table" style={{ border: `1px solid ${t.border}` }}>
+                      <thead>
+                        <tr style={{ background: t.numBg }}>
+                          <td style={{ padding: '9px 14px', fontWeight: 700, color: t.numText, borderBottom: `2px solid ${t.border}` }}>Type</td>
                           {allUniqueYears.map(y => (
-                            <td key={y} style={{ padding: '8px 10px', textAlign: 'center', color: row.byYear[y] > 0 ? t.text : t.textMut, borderRight: `1px solid ${t.borderSub}` }}>
-                              {row.byYear[y] > 0 ? row.byYear[y] : '—'}
-                            </td>
+                            <td key={y} style={{ padding: '9px 10px', fontWeight: 700, color: t.numText, textAlign: 'center', borderBottom: `2px solid ${t.border}` }}>{y}</td>
                           ))}
-                          <td style={{ padding: '8px 10px', textAlign: 'center', fontWeight: 700, color: t.accent }}>{row.total}</td>
+                          <td style={{ padding: '9px 10px', fontWeight: 700, color: t.accent, textAlign: 'center', borderBottom: `2px solid ${t.border}` }}>Total</td>
                         </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                      </thead>
+                      <tbody>
+                        {frequencyData.map((row, ri) => (
+                          <tr key={row.type} style={{ background: ri % 2 === 0 ? t.surface : t.card }}>
+                            <td style={{ padding: '8px 14px', fontWeight: 600, color: t.text, textTransform: 'capitalize', borderRight: `1px solid ${t.borderSub}` }}>{row.type}</td>
+                            {allUniqueYears.map(y => (
+                              <td key={y} style={{ padding: '8px 10px', textAlign: 'center', color: row.byYear[y] > 0 ? t.text : t.textMut, borderRight: `1px solid ${t.borderSub}` }}>
+                                {row.byYear[y] > 0 ? row.byYear[y] : '—'}
+                              </td>
+                            ))}
+                            <td style={{ padding: '8px 10px', textAlign: 'center', fontWeight: 700, color: t.accent }}>{row.total}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
-              </div>
-            )}
-          </>
-        )}
+              )}
+            </>
+          )}
+        </div>
+      </div>
 
-        {showScrollTop && (
-          <button
-            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            style={{
-              position: 'fixed', bottom: 80, right: 20, zIndex: 100,
-              background: t.accent, color: '#fff', border: 'none', borderRadius: 24,
-              padding: '9px 16px', fontWeight: 700, fontSize: 12.5, cursor: 'pointer',
-              boxShadow: '0 4px 16px rgba(0,0,0,0.25)', fontFamily: 'inherit',
-              display: 'flex', alignItems: 'center', gap: 5,
-            }}
-          >
-            ↑ Top
-          </button>
-        )}
-      </div>
-      </div>
+      {showScrollTop && (
+        <button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="scroll-top-btn" style={{ background: t.accent, color: '#022009' }}>
+          ↑ Top
+        </button>
+      )}
       <KatexStyle />
     </div>
   );
@@ -1556,121 +1628,112 @@ export default function QuestionBankSolutions() {
   // VIEW: SOLUTIONS — single year
   // ════════════════════════════════════════════════════════════════════════════
   return (
-    <div style={s.page}>
+    <div style={page}>
       <div className="qs-print-area">
-        <div className="wrap">
-          <div className="qs-no-print"><PageHeader /></div>
-          <div className="qs-no-print"><Breadcrumb /></div>
-          <span className="qs-no-print back" onClick={() => setView('years')}><ArrowLeft size={13} /> {selectedYear} Papers</span>
+        <TopNav />
+        <div className="wrap" style={{ paddingTop: 16 }}>
 
-        {loading && (
-          <div style={{ textAlign: 'center', padding: '50px 0', color: t.textMut }}>
-            <div style={{ fontSize: 26, marginBottom: 8 }}>⏳</div>
-            <div>Loading solutions…</div>
-          </div>
-        )}
-
-        {!loading && solutionData && (
-          <>
-            {/* Meta */}
-            <div style={{ background: t.surface, border: `1px solid ${t.border}`, borderRadius: 10, padding: '12px 16px', marginBottom: 16, display: 'flex', flexWrap: 'wrap', gap: 14, alignItems: 'center' }}>
-              <div>
-                <div style={{ fontSize: 10, color: t.textMut, fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase' }}>Course</div>
-                <div style={{ fontSize: 14, fontWeight: 700, color: t.text }}>{solutionData.subject_code} — {solutionData.subject}</div>
-              </div>
-              <div style={{ width: 1, height: 30, background: t.border }} />
-              <div>
-                <div style={{ fontSize: 10, color: t.textMut, fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase' }}>Exam</div>
-                <div style={{ fontSize: 13, color: t.textSub }}>{solutionData.term} · {solutionData.exam_year}</div>
-              </div>
-              <div style={{ width: 1, height: 30, background: t.border }} />
-              <div>
-                <div style={{ fontSize: 10, color: t.textMut, fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase' }}>Questions</div>
-                <div style={{ fontSize: 14, fontWeight: 700, color: t.accent }}>{solutionData.questions?.length || 0}</div>
-              </div>
-              <div style={{ marginLeft: 'auto', display: 'flex', flexWrap: 'wrap', gap: 10, alignItems: 'center' }}>
-                {FORMULA_SHEETS[selectedCourse] && (
-                  <button onClick={() => setShowFormulas(v => !v)} className="qs-no-print" style={{
-                    background: showFormulas ? t.accentGlow : t.surface,
-                    color: showFormulas ? t.accent : t.textMut,
-                    border: `1px solid ${showFormulas ? t.accent + '40' : t.border}`,
-                    borderRadius: 6, padding: '6px 12px', fontSize: 11, fontWeight: 700,
-                    cursor: 'pointer', fontFamily: 'inherit', display: 'flex', alignItems: 'center', gap: 6,
-                  }}>
-                    📐 Formulas
-                  </button>
-                )}
-                <button onClick={() => window.print()} className="qs-no-print" style={{
-                  background: t.surface,
-                  color: t.textMut,
-                  border: `1px solid ${t.border}`,
-                  borderRadius: 6, padding: '6px 12px', fontSize: 11, fontWeight: 700,
-                  cursor: 'pointer', fontFamily: 'inherit', display: 'flex', alignItems: 'center', gap: 6,
-                }}>
-                  🖨️ Print
-                </button>
-                <button onClick={goAll} className="qs-no-print" style={{ background: t.blueBg, color: t.blue, border: `1px solid ${t.blue}35`, borderRadius: 6, padding: '6px 12px', fontSize: 11, fontWeight: 700, cursor: 'pointer', fontFamily: 'inherit', display: 'flex', alignItems: 'center', gap: 5 }}>
-                  <Hash size={12} /> All years
-                </button>
-              </div>
+          {loading && (
+            <div className="loading-state" style={{ color: t.textMut }}>
+              <div className="loading-icon">⏳</div>
+              <div>Loading solutions…</div>
             </div>
+          )}
 
-            {showFormulas && FORMULA_SHEETS[selectedCourse] && <FormulaPanel courseCode={selectedCourse} t={t} onClose={() => setShowFormulas(false)} />}
-
-            {selectedQuestion ? (
-              <QuestionDetail
-                question={selectedQuestion}
-                t={t}
-                bookmarks={bookmarks}
-                toggleBookmark={toggleBookmark}
-                courseKey={courseKey}
-                courseMeta={{
-                  subject_code: solutionData?.subject_code,
-                  subject: solutionData?.subject,
-                  term: solutionData?.term,
-                  exam_year: solutionData?.exam_year,
-                  totalQuestions: solutionData?.questions?.length || 0,
-                }}
-                onClose={closeQuestionDetail}
-              />
-            ) : (
-              <>
-                <div className="qs-no-print search-box">
-                  <Search size={14} className="search-icon" style={{ color: t.textMut }} />
-                  <input type="text" className="search-input" placeholder="Search questions…" value={searchRaw} onChange={e => setSearchRaw(e.target.value)} />
+          {!loading && solutionData && (
+            <>
+              {/* Meta bar */}
+              <div className="meta-bar qs-no-print" style={{ background: t.surface, border: `1px solid ${t.border}` }}>
+                <div className="meta-bar-main">
+                  <div>
+                    <div className="meta-bar-label" style={{ color: t.textMut }}>Course</div>
+                    <div className="meta-bar-value" style={{ color: t.text }}>{solutionData.subject_code} — {solutionData.subject}</div>
+                  </div>
+                  <div className="meta-bar-div" style={{ background: t.border }} />
+                  <div>
+                    <div className="meta-bar-label" style={{ color: t.textMut }}>Exam</div>
+                    <div className="meta-bar-value meta-bar-sub" style={{ color: t.textSub }}>{solutionData.term} · {solutionData.exam_year}</div>
+                  </div>
+                  <div className="meta-bar-div" style={{ background: t.border }} />
+                  <div>
+                    <div className="meta-bar-label" style={{ color: t.textMut }}>Questions</div>
+                    <div className="meta-bar-value meta-bar-accent" style={{ color: t.accent }}>{solutionData.questions?.length || 0}</div>
+                  </div>
                 </div>
+                <div className="meta-bar-actions">
+                  {FORMULA_SHEETS[selectedCourse] && (
+                    <button onClick={() => setShowFormulas(v => !v)} className="icon-btn" style={{ color: showFormulas ? t.accent : t.textMut, background: showFormulas ? t.accentGlow : 'transparent', border: `1px solid ${showFormulas ? t.accent + '40' : t.border}` }}>
+                      📐
+                    </button>
+                  )}
+                  <button onClick={() => window.print()} className="icon-btn" style={{ color: t.textMut, background: 'transparent', border: `1px solid ${t.border}` }}>
+                    🖨️
+                  </button>
+                  <button onClick={goAll} className="btn-secondary" style={{ color: t.blue, background: t.blueBg, border: `1px solid ${t.blue}35` }}>
+                    <Hash size={12} /> All years
+                  </button>
+                </div>
+              </div>
 
-                {search && <div style={{ fontSize: 11.5, color: t.textMut, marginBottom: 12 }}>{filteredQuestions.length} result{filteredQuestions.length !== 1 ? 's' : ''}</div>}
+              {showFormulas && FORMULA_SHEETS[selectedCourse] && <FormulaPanel courseCode={selectedCourse} t={t} onClose={() => setShowFormulas(false)} />}
 
-                {filteredQuestions.length === 0
-                  ? <div style={{ textAlign: 'center', padding: 40, color: t.textMut }}>No questions match.</div>
-                  : filteredQuestions.map((q, idx) => (
-                      <QuestionCard
-                        key={q.id ?? idx}
-                        question={q}
-                        globalIdx={idx}
-                        showYearBadge={false}
-                        t={t}
-                        bookmarks={bookmarks}
-                        toggleBookmark={toggleBookmark}
-                        courseKey={courseKey}
-                        onOpenDetail={openQuestionDetail}
-                      />
-                    ))
-                }
-              </>
-            )}
-          </>
-        )}
+              {selectedQuestion ? (
+                <SolutionOverlay
+                  question={selectedQuestion} t={t} dark={dark} toggleTheme={toggleTheme}
+                  bookmarks={bookmarks} toggleBookmark={toggleBookmark}
+                  courseKey={courseKey}
+                  courseMeta={{
+                    subject_code: solutionData?.subject_code,
+                    subject: solutionData?.subject,
+                    term: solutionData?.term,
+                    exam_year: solutionData?.exam_year,
+                  }}
+                  questionList={filteredQuestions}
+                  onClose={closeQuestionDetail}
+                  onNavigate={navigateToQuestion}
+                />
+              ) : (
+                <>
+                  <div className="search-box qs-no-print">
+                    <Search size={14} className="search-icon" style={{ color: t.textMut }} />
+                    <input type="text" className="search-input" placeholder="Search questions…" value={searchRaw} onChange={e => setSearchRaw(e.target.value)} />
+                  </div>
 
-        {!loading && !solutionData && (
-          <div style={{ textAlign: 'center', padding: 50, color: t.textMut }}>
-            <BookOpen size={38} style={{ marginBottom: 12, opacity: 0.35 }} />
-            <div>Could not load solutions for {selectedYear}.</div>
-          </div>
-        )}
+                  {search && (
+                    <div className="results-count qs-no-print" style={{ color: t.textMut }}>
+                      {filteredQuestions.length} result{filteredQuestions.length !== 1 ? 's' : ''}
+                    </div>
+                  )}
+
+                  {filteredQuestions.length === 0
+                    ? <div className="empty-state" style={{ color: t.textMut }}>No questions match.</div>
+                    : filteredQuestions.map((q, idx) => (
+                        <QuestionCard
+                          key={q.id ?? idx} question={q} globalIdx={idx} showYearBadge={false}
+                          t={t} bookmarks={bookmarks} toggleBookmark={toggleBookmark}
+                          courseKey={courseKey} onOpenDetail={openQuestionDetail}
+                        />
+                      ))
+                  }
+                </>
+              )}
+            </>
+          )}
+
+          {!loading && !solutionData && (
+            <div className="empty-state" style={{ color: t.textMut }}>
+              <BookOpen size={36} style={{ marginBottom: 10, opacity: 0.3 }} />
+              <div>Could not load solutions for {selectedYear}.</div>
+            </div>
+          )}
+        </div>
       </div>
-      </div>
+
+      {showScrollTop && (
+        <button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} className="scroll-top-btn" style={{ background: t.accent, color: '#022009' }}>
+          ↑ Top
+        </button>
+      )}
       <KatexStyle />
     </div>
   );
@@ -1684,17 +1747,15 @@ function KatexStyle() {
       .katex-display { overflow-x: auto; padding: 4px 0; margin: 0 !important; }
       .katex-display > .katex { text-align: left; }
       @media (max-width: 480px) {
-        /* Remove left indent on small screens */
-        .qs-quick, .qs-actions, .qs-section { padding-left: 14px !important; }
-        /* Smaller Q-number badge */
-        .qs-qnum { min-width: 36px !important; font-size: 10px !important; }
-        /* Filter pills — horizontal scroll */
-        .qs-filter-bar { overflow-x: auto !important; flex-wrap: nowrap !important; -webkit-overflow-scrolling: touch !important; scrollbar-width: none !important; }
+        .qcard-quick, .qcard-footer { padding-left: 12px !important; }
+        .qcard-num { min-width: 34px !important; font-size: 10px !important; }
+        .filter-bar { overflow-x: auto !important; flex-wrap: nowrap !important; -webkit-overflow-scrolling: touch !important; scrollbar-width: none !important; }
+        .filter-bar::-webkit-scrollbar { display: none; }
       }
       @media print {
         .qs-no-print { display: none !important; }
         .qs-print-area { display: block !important; }
-        .q-card-body { max-height: none !important; }
+        .qcard { break-inside: avoid; }
       }
     `}</style>
   );
