@@ -49,7 +49,7 @@
     {
       "id": 5,
       "question": "Write an Octave script to calculate the value of k for h=5, b=4 in. and a=1.5. k = sigma * sqrt(pi*a) * [(1 - a/(2b) + 0.326*(a/b)^2) / (sqrt(1 - a/b))], sigma = 1200",
-      "type": "numerical",
+      "type": "programming",
       "short_answer": "Substituting h=5, b=4, a=1.5, sigma=1200 into the formula gives the stress intensity factor k. The Octave script directly evaluates this expression.",
       "detailed_answer": "Given:\n  h = 5\n  b = 4 inches\n  a = 1.5\n  sigma = 1200\n\nFormula:\n  k = sigma * sqrt(pi * a) * [(1 - a/(2*b) + 0.326*(a/b)^2) / sqrt(1 - a/b)]\n\nStep-by-step calculation:\n  a/b = 1.5/4 = 0.375\n  a/(2b) = 1.5/8 = 0.1875\n  (a/b)^2 = 0.375^2 = 0.140625\n  0.326 * 0.140625 = 0.045844\n\n  Numerator of bracket = 1 - 0.1875 + 0.045844 = 0.858344\n  1 - a/b = 1 - 0.375 = 0.625\n  sqrt(0.625) = 0.7906\n\n  Bracket value = 0.858344 / 0.7906 = 1.0857\n\n  sqrt(pi * a) = sqrt(pi * 1.5) = sqrt(4.7124) = 2.1708\n\n  k = 1200 * 2.1708 * 1.0857\n  k ≈ 2826.6\n\nNote: h is given but does not appear explicitly in this formula — it may define geometry context.",
       "explanation_bn": "এই সমস্যাটি fracture mechanics এর stress intensity factor (k) বের করার একটি numerical calculation। দেওয়া formula তে h, b, a এবং sigma এর মান বসিয়ে step by step গণনা করা হয়। Octave এ এটি সরাসরি একটি expression হিসেবে লেখা যায় এবং result print করা হয়।",
@@ -69,7 +69,7 @@
     {
       "id": 7,
       "question": "Write octave code to solve the following system represented by the network shown in figure. i) solve the system by considering augmented matrix ii) solve the system by considering coefficient matrix.",
-      "type": "numerical",
+      "type": "programming",
       "short_answer": "Applying KCL at each node of the network gives a system of linear equations. The system is solved using augmented matrix (rref) and coefficient matrix (backslash operator) methods in Octave.",
       "detailed_answer": "Network Analysis:\nFrom the figure, the network has 5 nodes and 5 branch currents x1 through x5.\nBranch resistances: top = 20 ohm, left = 10 ohm, right = 10 ohm.\n\nApplying KCL (sum of currents = 0) at each node:\n\nNode 1: x1 + x2 = 20        (source node, top-left)\nNode 2: x3 + x4 = x2        → -x2 + x3 + x4 = 0\nNode 3: x2 = x3 + x5        → x2 - x3 - x5 = 0\nNode 4: x1 = x5 + 10        → x1 - x5 = 10\nNode 5: x4 + x5 = 10        (bottom-right, sink node)\n\nRearranging in standard Ax = b form:\n  x1 + x2 + 0x3 + 0x4 + 0x5 = 20\n  0x1 - x2 + x3 + x4 + 0x5 = 0\n  0x1 + x2 - x3 + 0x4 - x5 = 0\n  x1 + 0x2 + 0x3 + 0x4 - x5 = 10\n  0x1 + 0x2 + 0x3 + x4 + x5 = 10\n\nMatrix A:\n  [ 1   1   0   0   0 ]\n  [ 0  -1   1   1   0 ]\n  [ 0   1  -1   0  -1 ]\n  [ 1   0   0   0  -1 ]\n  [ 0   0   0   1   1 ]\n\nb = [20; 0; 0; 10; 10]\n\ni) Augmented Matrix Method: Form [A|b], apply rref to get solution\nii) Coefficient Matrix Method: Solve x = A \\ b directly",
       "explanation_bn": "এই network এ প্রতিটি node এ KCL (Kirchhoff's Current Law) apply করলে কিছু linear equations পাওয়া যায়। এই equations গুলোকে matrix form এ লিখলে Ax = b হয়। Octave এ দুটি উপায়ে solve করা যায়: augmented matrix [A|b] থেকে rref() function ব্যবহার করে, অথবা সরাসরি backslash operator (A\\b) দিয়ে। দুটো method এ একই result আসে।",
@@ -79,7 +79,7 @@
     {
       "id": 8,
       "question": "Explain matrix decomposition with example. For the following matrix, write MATLAB code to calculate i) LU decomposition of A, and ii) SVD of A. A = [[1,2,-2],[-2,5,-2],[-6,6,-3]]",
-      "type": "numerical",
+      "type": "programming",
       "short_answer": "Matrix decomposition breaks a matrix into simpler factor matrices. LU decomposes A into Lower and Upper triangular matrices; SVD decomposes A into U, S, V matrices. Both are used for solving systems and analysis.",
       "detailed_answer": "Matrix Decomposition:\nMatrix decomposition (factorization) is the process of breaking a matrix into a product of simpler matrices. It simplifies solving linear systems, computing determinants, and analyzing matrix properties.\n\ni) LU Decomposition:\nLU decomposition factors matrix A into:\n  A = L * U\nWhere:\n  L = Lower triangular matrix (zeros above diagonal)\n  U = Upper triangular matrix (zeros below diagonal)\n\nUsed for: Solving Ax = b efficiently, computing det(A)\n\nIn MATLAB/Octave: [L, U, P] = lu(A)\n  P is a permutation matrix such that P*A = L*U\n\nFor A = [1 2 -2; -2 5 -2; -6 6 -3]:\n  lu(A) returns L, U, P such that P*A = L*U\n\nii) SVD (Singular Value Decomposition):\nSVD factors any matrix A into:\n  A = U * S * V'\nWhere:\n  U = m×m orthogonal matrix (left singular vectors)\n  S = m×n diagonal matrix (singular values, non-negative)\n  V = n×n orthogonal matrix (right singular vectors)\n\nUsed for: Dimensionality reduction, pseudoinverse, data compression, PCA\n\nIn MATLAB/Octave: [U, S, V] = svd(A)\n\nGiven: A = [1 2 -2; -2 5 -2; -6 6 -3]",
       "explanation_bn": "Matrix decomposition মানে হলো একটি matrix কে কয়েকটি সহজ matrix এর গুণফল হিসেবে ভেঙে ফেলা। LU decomposition এ matrix A কে L (lower triangular) এবং U (upper triangular) matrix এ ভাগ করা হয়, যা linear system solve করতে সাহায্য করে। SVD তে A কে তিনটি matrix U, S, V তে ভাগ করা হয় — এটি data analysis এবং dimensionality reduction এ ব্যবহৃত হয়।",
@@ -89,7 +89,7 @@
     {
       "id": 9,
       "question": "Define Eigen value and Eigen vectors with geometric interpretation of Eigen values. Using octave commands find the Eigen values and Eigen vectors of the following Matrix T. T = [[-1,0,-1],[-1,-3,0],[-4,-13,-1]]",
-      "type": "numerical",
+      "type": "programming",
       "short_answer": "Eigenvalues (λ) and eigenvectors (v) satisfy Av = λv. Geometrically, eigenvectors represent directions unchanged by transformation, and eigenvalues represent the scaling factor. For T, use [V,D] = eig(T) in Octave.",
       "detailed_answer": "Eigenvalue Definition:\nFor a square matrix A, a scalar λ is an eigenvalue if there exists a non-zero vector v such that:\n  A * v = λ * v\nThis means: applying matrix A to vector v only scales it by λ, without changing its direction.\n\nEigenvector Definition:\nThe non-zero vector v that satisfies A*v = λ*v is called the eigenvector corresponding to eigenvalue λ.\n\nTo find eigenvalues: solve det(A - λI) = 0  (characteristic equation)\nTo find eigenvectors: solve (A - λI)v = 0 for each λ\n\nGeometric Interpretation:\n- An eigenvector points in a direction that is NOT changed (rotated) by the linear transformation represented by A\n- The eigenvalue λ tells HOW MUCH the vector is stretched or compressed:\n  λ > 1 : vector stretched (scaled up)\n  0 < λ < 1 : vector compressed (scaled down)\n  λ = 1 : no change in length\n  λ < 0 : direction reversed and scaled\n  λ = 0 : vector maps to zero (singular matrix)\n- Real eigenvalues = real scaling along an axis\n- Complex eigenvalues = rotation involved\n\nGiven Matrix:\nT = [-1  0  -1;\n     -1 -3   0;\n     -4 -13  -1]\n\nOctave command: [V, D] = eig(T)\n  V = matrix of eigenvectors (columns)\n  D = diagonal matrix of eigenvalues",
       "explanation_bn": "Eigenvalue (λ) এবং eigenvector (v) হলো এমন একটি scalar এবং vector যারা এই সম্পর্ক মেনে চলে: A*v = λ*v। মানে হলো, matrix A দিয়ে transform করলে eigenvector এর direction পরিবর্তন হয় না — শুধু λ গুণে scale হয়। Geometrically বলতে গেলে, eigenvector হলো সেই বিশেষ direction যেটি transformation এর পরেও একই দিকে থাকে। Octave এ eig() function দিয়ে এগুলো সহজেই বের করা যায়।",
@@ -109,7 +109,7 @@
     {
       "id": 11,
       "question": "Write a user defined function in Octave for y = f(x) = (x^4 * sqrt(3x+5)) / ((x^2+1)^2). Calculate y for x = 1,3,5,7,9 and 11. i) using anonymous function named 'myfunctiona' ii) using function file named 'myfunctionf'",
-      "type": "numerical",
+      "type": "programming",
       "short_answer": "The function y = (x^4 * sqrt(3x+5)) / ((x^2+1)^2) is implemented both as an anonymous function (one-liner with @) and as a named function file (myfunctionf.m) in Octave.",
       "detailed_answer": "Given function:\n  y = f(x) = (x^4 * sqrt(3x + 5)) / ((x^2 + 1)^2)\n\nValues to compute: x = 1, 3, 5, 7, 9, 11\n\ni) Anonymous Function (myfunctiona):\nAn anonymous function is a one-line function defined using the @ symbol. It does not require a separate file.\n\nSyntax: fname = @(x) expression;\n\nmyfunctiona = @(x) (x.^4 .* sqrt(3.*x + 5)) ./ ((x.^2 + 1).^2);\n\nNote: Use element-wise operators (.*, ./, .^) to handle vector inputs.\n\nii) Function File (myfunctionf.m):\nA function file contains a full function definition saved as myfunctionf.m\n\nfunction y = myfunctionf(x)\n  y = (x.^4 .* sqrt(3.*x + 5)) ./ ((x.^2 + 1).^2);\nend\n\nComputed values for x = [1, 3, 5, 7, 9, 11]:\n  x=1:  y = (1 * sqrt(8)) / (4) = 2.828/4 = 0.7071\n  x=3:  y = (81 * sqrt(14)) / (100) = 81*3.742/100 = 3.031\n  x=5:  y = (625 * sqrt(20)) / (676) = 625*4.472/676 = 4.133\n  (and so on — exact values computed by Octave)",
       "explanation_bn": "Anonymous function হলো @ দিয়ে এক লাইনে লেখা function — কোনো file save করতে হয় না। আর function file এ পুরো function definition .m file এ save করতে হয়। দুটোই একই কাজ করে, তবে function file বড় বা জটিল function এর জন্য বেশি উপযুক্ত। Vector input এর জন্য element-wise operators (.^, .*, ./) ব্যবহার করা জরুরি।",
@@ -159,7 +159,7 @@
     {
       "id": 16,
       "question": "By writing a single line octave code create the following matrices: i) [[0,0,0],[0,4,0],[0,0,1]] ii) [[0,0,1,1],[0,0,2,2],[1,1,0,3]] iii) [[32,32,32],[32,0,32],[32,32,32]]",
-      "type": "numerical",
+      "type": "programming",
       "short_answer": "Use diag(), blkdiag(), zeros(), ones(), and arithmetic operations to build these matrices in single-line Octave expressions.",
       "detailed_answer": "i) Matrix: [0 0 0; 0 4 0; 0 0 1]\nThis is a diagonal matrix with diagonal elements [0, 4, 1].\nSingle line: diag([0, 4, 1])\n\nii) Matrix: [0 0 1 1; 0 0 2 2; 1 1 0 3]\nThis can be constructed as:\n  [zeros(3,2), [1;2;0], [1;2;3]] — not quite matching\n  Better approach: [zeros(2,2), ones(2,1)*[1,1]; ones(1,2), zeros(1,1), 3]\n  Or: [zeros(3,2), [1;2;0]; [1,1,0,3]] — row by row\nSingle line: [[zeros(2,2), [1;2], [1;2]]; [1,1,0,3]]\n\nActually the cleanest:\n  [zeros(3,2), [1;2;0], [1;2;3]]  does not match row 3\nSingle line approach:\n  A = [zeros(2,2),[1 1;2 2]; 1 1 0 3]\n\niii) Matrix: [32 32 32; 32 0 32; 32 32 32]\nThis is 32 everywhere except center which is 0.\n= 32 * ones(3,3) - 32 * (diag([0,1,0]))\nSingle line: 32*ones(3,3) - diag([0,32,0])\n\nCorrect single-line solutions:\n  i)  diag([0, 4, 1])\n  ii) [zeros(2,2), [1 1; 2 2]; 1 1 0 3]\n  iii) 32*ones(3,3) - diag([0,32,0])",
       "explanation_bn": "এই matrix গুলো single line এ তৈরি করতে Octave এর built-in functions ব্যবহার করতে হয়। diag() দিয়ে diagonal matrix বানানো যায়। ones() দিয়ে সব 1 এর matrix, zeros() দিয়ে সব 0 এর matrix তৈরি করা যায়। এরপর arithmetic operation (যেমন 32*ones(3,3)) দিয়ে desired values পাওয়া যায়।",
@@ -179,7 +179,7 @@
     {
       "id": 18,
       "question": "Plot the function f(x) = x^3 - 2x^2 - 10sin^2(x) - e^(0.9x) and g(x) = -3x^4 + 10x^2 - 3 for -2 <= x <= 4 in one figure with legend and label to the axes.",
-      "type": "numerical",
+      "type": "programming",
       "short_answer": "Both f(x) and g(x) are plotted over -2 to 4 using plot() with hold on, then legend(), xlabel(), ylabel(), and title() are added.",
       "detailed_answer": "Given:\n  f(x) = x^3 - 2x^2 - 10*sin^2(x) - e^(0.9x)\n  g(x) = -3x^4 + 10x^2 - 3\n  Domain: -2 <= x <= 4\n\nSteps:\n1. Create x vector from -2 to 4 with small step (e.g., 0.01)\n2. Compute f(x) and g(x) using element-wise operations\n3. Plot f(x) with a line specifier\n4. Use hold on to keep the plot\n5. Plot g(x) with a different line specifier\n6. Add xlabel, ylabel, title, legend, and grid\n\nNote: sin^2(x) means (sin(x))^2, computed as sin(x).^2 in Octave\n      e^(0.9x) is exp(0.9.*x) in Octave",
       "explanation_bn": "দুটো function f(x) এবং g(x) কে একই plot এ দেখাতে হলে প্রথমে plot() দিয়ে f(x) আঁকতে হবে, তারপর hold on দিয়ে সেই plot ধরে রেখে g(x) আঁকতে হবে। legend() দিয়ে কোন curve কোন function তা বোঝানো হয়। xlabel() এবং ylabel() দিয়ে axes এ label দেওয়া হয়।",
@@ -199,7 +199,7 @@
     {
       "id": 20,
       "question": "A function is given as z = r*theta where 0 <= theta <= 360 deg and 0 <= r <= 2. Write an octave code for: i) To plot the surface in 3-D plane. ii) To take projection in xy, xz and yz plane.",
-      "type": "numerical",
+      "type": "programming",
       "short_answer": "Convert polar coordinates (r, theta) to Cartesian (x, y, z) where x=r*cos(theta), y=r*sin(theta), z=r*theta. Use surf() for 3D plot and view() for projections.",
       "detailed_answer": "Given:\n  z = r * theta\n  theta range: 0 to 360 degrees (0 to 2*pi radians)\n  r range: 0 to 2\n\nConversion to Cartesian coordinates for 3D plotting:\n  x = r * cos(theta)\n  y = r * sin(theta)\n  z = r * theta\n\nSteps:\n1. Create meshgrid of r and theta values\n2. Compute x, y, z\n3. Plot 3D surface using surf()\n4. Take projections using view():\n   - XY plane: view(0, 90)    (top view, looking down Z axis)\n   - XZ plane: view(0, 0)     (front view, looking along Y axis)\n   - YZ plane: view(90, 0)    (side view, looking along X axis)\n\nNote: theta must be in radians for trigonometric functions.",
       "explanation_bn": "z = r*theta একটি spiral surface তৈরি করে। 3D plot করতে হলে polar coordinates (r, theta) কে Cartesian (x, y, z) এ convert করতে হবে। surf() দিয়ে 3D surface দেখানো যায়। Projection নিতে view() command ব্যবহার করা হয় — view(0,90) দিলে XY plane (উপর থেকে), view(0,0) দিলে XZ plane (সামনে থেকে), view(90,0) দিলে YZ plane (পাশ থেকে) দেখা যায়।",
@@ -219,7 +219,7 @@
     {
       "id": 22,
       "question": "The polynomial cp = 0.99403 + 1.671e-4*T + 9.7215e-8*T^2 - 9.5838e-11*T^3 relates specific heat of dry air to temperature. Write Octave code to: i) find cp for T = 0 to 1200K, ii) find temperature for cp = 1.1 kJ/(kg K).",
-      "type": "numerical",
+      "type": "programming",
       "short_answer": "Evaluate the polynomial for T in [0,1200] for part i. For part ii, rearrange as cp - 1.1 = 0 and use roots() to find T, or use fzero() for the nonlinear root.",
       "detailed_answer": "Given polynomial:\n  cp = 0.99403 + 1.671e-4*T + 9.7215e-8*T^2 - 9.5838e-11*T^3\n\nNote: The problem states 9.7215e-8 for T^2 coefficient (corrected from the question's formatting).\n\ni) Find cp for T = 0 to 1200K:\n   Create a vector T from 0 to 1200\n   Evaluate polynomial for each T\n   Plot cp vs T\n\nii) Find T for cp = 1.1:\n   Set cp = 1.1 and solve:\n   0.99403 + 1.671e-4*T + 9.7215e-8*T^2 - 9.5838e-11*T^3 = 1.1\n   Rearrange: -9.5838e-11*T^3 + 9.7215e-8*T^2 + 1.671e-4*T + (0.99403 - 1.1) = 0\n\n   Coefficient vector (descending power):\n   [-9.5838e-11, 9.7215e-8, 1.671e-4, (0.99403-1.1)]\n\n   Use roots() to find T values, then pick physically meaningful one (0 to 1200K range).",
       "explanation_bn": "এই সমস্যায় একটি polynomial দিয়ে dry air এর specific heat (cp) কে temperature (T) এর সাথে relate করা হয়েছে। Part i তে T এর range দিয়ে cp এর values বের করা হয় এবং plot করা হয়। Part ii তে cp = 1.1 দিয়ে equation টিকে root-finding problem এ পরিণত করা হয় এবং roots() দিয়ে T এর মান বের করা হয়।",
@@ -239,7 +239,7 @@
     {
       "id": 24,
       "question": "Suppose x = [20, 29] and y = [100, 121]. Write an octave code to determine the value of y at x = 36 through interpolation.",
-      "type": "numerical",
+      "type": "programming",
       "short_answer": "Using linear interpolation with interp1() in Octave, y at x=36 can be estimated by extrapolating the line through (20,100) and (29,121).",
       "detailed_answer": "Given:\n  x = [20, 29]\n  y = [100, 121]\n  Find: y at x = 36\n\nManual Calculation (Linear Interpolation/Extrapolation):\n  Slope m = (y2 - y1) / (x2 - x1) = (121 - 100) / (29 - 20) = 21/9 = 2.333\n\n  y at x=36: y = y1 + m*(x - x1)\n             y = 100 + 2.333*(36 - 20)\n             y = 100 + 2.333*16\n             y = 100 + 37.33\n             y = 137.33\n\nNote: x=36 is outside the given range [20,29], so this is extrapolation, not interpolation. interp1() with 'linear' and 'extrap' option handles this.",
       "explanation_bn": "দেওয়া দুটি point (20,100) এবং (29,121) এর মধ্যে দিয়ে একটি সরলরেখা draw করে সেই রেখার সমীকরণ ব্যবহার করে x=36 এ y এর মান বের করা হয়। যেহেতু x=36 দেওয়া range এর বাইরে (20 থেকে 29), তাই এটি আসলে extrapolation। Octave এ interp1() function এটি করতে পারে।",
@@ -249,7 +249,7 @@
     {
       "id": 25,
       "question": "An experiment data fits mu = (C * T^(3/2)) / (T + S). Through curve fitting determine C and S. Write Octave code for data: T = [-20, 0, 40, 100, 200, 300, 400], mu = [1.63, 1.71, 1.87, 2.17, 2.53, 2.98, 3.32]",
-      "type": "numerical",
+      "type": "programming",
       "short_answer": "Linearize the equation by rearranging to mu/T^(3/2) = C/(T+S), then use nonlinear least squares fitting with lsqcurvefit() or fminsearch() in Octave to determine C and S.",
       "detailed_answer": "Given:\n  mu = (C * T^(3/2)) / (T + S)\n  Data: T = [-20, 0, 40, 100, 200, 300, 400]\n         mu = [1.63, 1.71, 1.87, 2.17, 2.53, 2.98, 3.32]\n\nNote: T values must be in absolute temperature (Kelvin). Convert: T_K = T_Celsius + 273.15\n\nLinearization Approach:\n  mu = C * T^(3/2) / (T + S)\n  mu * (T + S) = C * T^(3/2)\n  mu*T + mu*S = C * T^(3/2)\n  Divide by T^(3/2):\n  mu/T^(1/2) + mu*S/T^(3/2) = C\n\n  Let Y = mu/sqrt(T), X = mu/T^(3/2):\n  Y = C - S*X\n\n  This is linear: Y = C - S*X\n  Use polyfit to find C (intercept) and -S (slope)\n\nAlternative: Use nonlinear fitting with lsqcurvefit or fminsearch.\n\nFitting Steps:\n1. Convert T from Celsius to Kelvin\n2. Define the model function\n3. Use lsqcurvefit or fminsearch to minimize sum of squared errors\n4. Extract C and S from result",
       "explanation_bn": "Sutherland's law অনুযায়ী gas এর viscosity (mu) temperature এর সাথে এই nonlinear সম্পর্কে থাকে। C এবং S বের করতে equation টিকে রূপান্তর করে linear form এ আনা যায়, তারপর polyfit দিয়ে solve করা যায়। অথবা directly nonlinear curve fitting (lsqcurvefit) ব্যবহার করা যায়। Temperature কে অবশ্যই Kelvin এ convert করতে হবে।",
@@ -289,7 +289,7 @@
     {
       "id": 29,
       "question": "For the given series e^x = 1 + x + x^2/2! + x^3/3! + ... Use for loop to calculate e^15 using 20 terms of the series.",
-      "type": "numerical",
+      "type": "programming",
       "short_answer": "Using 20 terms of the Taylor series expansion of e^x with x=15, the sum approximates e^15 ≈ 3,269,446.68. The exact value is e^15 ≈ 3,269,446.79.",
       "detailed_answer": "Given:\n  e^x = sum from n=0 to infinity of x^n / n!\n  x = 15\n  Number of terms = 20 (n = 0 to 19)\n\nFormula for each term:\n  term_n = x^n / n!\n\nSum = term_0 + term_1 + term_2 + ... + term_19\n    = 1 + 15 + 15^2/2! + 15^3/3! + ... + 15^19/19!\n\nComputing manually (first few terms):\n  n=0: 15^0/0! = 1/1 = 1\n  n=1: 15^1/1! = 15\n  n=2: 15^2/2! = 225/2 = 112.5\n  n=3: 15^3/3! = 3375/6 = 562.5\n  n=4: 15^4/4! = 50625/24 = 2109.375\n  ... (continue to n=19)\n\nSum of 20 terms ≈ 3,269,446.68\n\nExact value: e^15 = 3,269,446.79\n\nNote: For x=15, 20 terms gives a good approximation but not exact, since the series requires more terms for large x values to fully converge.",
       "explanation_bn": "e^x এর Taylor series expansion হলো 1 + x + x²/2! + x³/3! + ... এই সিরিজের প্রতিটি term হলো x^n / n!। for loop দিয়ে n=0 থেকে n=19 পর্যন্ত প্রতিটি term হিসাব করে সব যোগ করলে e^15 এর approximate মান পাওয়া যায়। factorial এর জন্য factorial() function বা manually গুণ করে বের করা যায়।",

@@ -39,7 +39,7 @@
     {
       "id": 4,
       "question": "The electric field intensity E(z) due to a ring of radius R at any point z along the axis of the ring is given by E(z) = (lambda * R * z) / (2 * epsilon_0 * (z^2 + R^2)^(3/2)). Here lambda is the charge density, epsilon_0 = 8.85e-12 is the electric constant, and R is the radius of the ring. Consider lambda = 1.7e-7 C/m and R = 6 cm. Write an Octave program to: (i) Determine E(z) at z = 0, 2, 4, 6, 8 and 10 cm. (ii) Determine the distance z where E is maximum by creating a vector z ranging from 2 cm to 6 cm with spacing 0.01 cm.",
-      "type": "numerical",
+      "type": "programming",
       "short_answer": "E(z) is computed using the ring formula with given constants. Maximum E occurs near $z = R/\\sqrt{2} \\approx 4.24$ cm.",
       "detailed_answer": "Given:\n- $\\lambda = 1.7 \\times 10^{-7}$ C/m (charge density)\n- $\\epsilon_0 = 8.85 \\times 10^{-12}$ F/m (electric constant)\n- $R = 6$ cm $= 0.06$ m\n- Formula: $$E(z) = \\frac{\\lambda R z}{2\\epsilon_0 (z^2 + R^2)^{3/2}}$$\n\nNote: All distances must be converted to meters.\n\nPart (i): $E$ at $z = 0, 2, 4, 6, 8, 10$ cm\n\nAt $z = 0$ m the numerator is zero, so $E = 0$ N/C.\nAt $z = 0.02$ m: $E = \\frac{1.7\\times10^{-7} \\cdot 0.06 \\cdot 0.02}{2 \\cdot 8.85\\times10^{-12} \\cdot (0.02^2 + 0.06^2)^{1.5}}$ yields a significant value.\n\nPart (ii): Maximum $E$\nThe theoretical maximum of E(z) for a ring occurs at:\n$$z_{\\max} = \\frac{R}{\\sqrt{2}} = \\frac{0.06}{1.414} \\approx 0.0424\\text{ m} = 4.24\\text{ cm}$$\n\nThe Octave script below computes both parts numerically.",
       "explanation_bn": "এই সমস্যায় একটি charged ring এর axis বরাবর electric field বের করতে হবে। $z = 0$ তে field শূন্য কারণ সব force cancel হয়ে যায়। $z$ বাড়ার সাথে সাথে field বাড়ে, একটি maximum পয়েন্টে পৌঁছায়, তারপর আবার কমে। Octave-এ আমরা vector $z$ তৈরি করে সবগুলো $z$-এর জন্য একসাথে $E$ হিসাব করি এবং max() দিয়ে সর্বোচ্চ মান খুঁজি।",
@@ -79,7 +79,7 @@
     {
       "id": 8,
       "question": "The stress intensity factor k is given by k = sigma * sqrt(pi*a) * [(1 - a/(2b) + 0.326*(a/b)^2) / sqrt(1 - a/b)]. Write an Octave script to calculate k with b = 4 in, a = 1.5 in, sigma = 12000 psi.",
-      "type": "numerical",
+      "type": "programming",
       "short_answer": "Substituting values into the formula gives $k \\approx 26,350$ psi·√in (computed numerically by Octave).",
       "detailed_answer": "Given:\n- $b = 4$ in\n- $a = 1.5$ in\n- $\\sigma = 12000$ psi\n\nFormula:\n$$k = \\sigma \\sqrt{\\pi a} \\cdot \\frac{1 - \\frac{a}{2b} + 0.326\\left(\\frac{a}{b}\\right)^2}{\\sqrt{1 - \\frac{a}{b}}}$$\n\nStep-by-step calculation:\n\nStep 1: Calculate $a/b$\n$a/b = 1.5/4 = 0.375$\n\nStep 2: Numerator of bracket\n$1 - \\frac{a}{2b} + 0.326\\left(\\frac{a}{b}\\right)^2$\n$= 1 - \\frac{1.5}{2\\cdot4} + 0.326(0.375)^2$\n$= 1 - 0.1875 + 0.326(0.140625)$\n$= 1 - 0.1875 + 0.04584 = 0.85834$\n\nStep 3: Denominator of bracket\n$\\sqrt{1 - a/b} = \\sqrt{1 - 0.375} = \\sqrt{0.625} = 0.7906$\n\nStep 4: Bracket value\n$0.85834 / 0.7906 = 1.0857$\n\nStep 5: $\\sqrt{\\pi a}$\n$\\sqrt{\\pi \\cdot 1.5} = \\sqrt{4.7124} = 2.1708$\n\nStep 6: $k$\n$k = 12000 \\cdot 2.1708 \\cdot 1.0857$\n$k \\approx 28,268$ psi·√in\n\n(Exact value computed by Octave script below)",
       "explanation_bn": "এই সমস্যায় Fracture Mechanics এর stress intensity factor K বের করতে হবে। সূত্রটি দেখতে জটিল মনে হলেও, শুধু প্রতিটি variable এর মান বসিয়ে দিলেই হয়। Octave-এ এটি এক লাইনেই করা যায়। $a/b$ ratio থেকে numerator এবং denominator আলাদা করে হিসাব করে bracket-এর মান বের করি, তারপর বাকি অংশ গুণ করি।",
@@ -89,7 +89,7 @@
     {
       "id": 9,
       "question": "Use a single command to create a row vector (assign it to a variable named a) with 6 elements such that the last element is 4.7 and the rest of the elements are 0s. Do not type the vector elements explicitly.",
-      "type": "numerical",
+      "type": "programming",
       "short_answer": "$a = [\\text{zeros}(1,5), 4.7]$ creates a 6-element row vector with five zeros followed by 4.7.",
       "detailed_answer": "Requirement:\n- Row vector named 'a'\n- 6 elements total\n- Last element = 4.7\n- First 5 elements = 0\n- Do NOT type elements explicitly\n- Use a single command\n\nSolution:\n`a = [zeros(1,5), 4.7];`\n\nExplanation:\n- `zeros(1,5)` creates a 1x5 row vector of all zeros: `[0, 0, 0, 0, 0]`\n- `[zeros(1,5), 4.7]` concatenates that with 4.7 to get `[0, 0, 0, 0, 0, 4.7]`\n- This is all done in one command\n\nResult: `a = [0, 0, 0, 0, 0, 4.7]`\n\nAlternative single commands:\n% Method 2: start with zeros then assign last\n`a = zeros(1,6); a(end) = 4.7;`  % (two commands, NOT acceptable)\n\n% Method 3 (single command):\n`a = [zeros(1,5) 4.7];`  % same as above, comma optional",
       "explanation_bn": "এই সমস্যায় manually 0 type করা যাবে না। zeros(1,5) function ব্যবহার করে 5টি শূন্য তৈরি করতে হবে এবং তার সাথে 4.7 concatenate করতে হবে। এটি একটি সুন্দর trick যা বড় vector তৈরিতেও কাজে লাগে।",
@@ -119,7 +119,7 @@
     {
       "id": 12,
       "question": "Write an Octave script to solve the following system of linear equations by checking whether the system is consistent: 4x - 2y + 6z = 8; 2x + 8y + 2z = 4; 6x + 10y + 3z = 0",
-      "type": "numerical",
+      "type": "programming",
       "short_answer": "The system can be solved using Octave's backslash operator ($A\\backslash b$). Consistency is checked by comparing rank of $A$ with rank of the augmented matrix $[A|b]$.",
       "detailed_answer": "System of equations:\n$4x - 2y + 6z = 8$\n$2x + 8y + 2z = 4$\n$6x + 10y + 3z = 0$\n\nMatrix form: $A \\cdot [x; y; z] = b$\n\n$A = \\begin{bmatrix} 4 & -2 & 6 \\\\ 2 & 8 & 2 \\\\ 6 & 10 & 3 \\end{bmatrix}$\n\n`b = [8; 4; 0]`\n\nConsistency Check:\n- A system is consistent if $\\text{rank}(A) = \\text{rank}([A|b])$\n- If $\\text{rank}(A) = \\text{rank}([A|b]) = n$ (number of unknowns) → unique solution\n- If $\\text{rank}(A) = \\text{rank}([A|b]) < n$ → infinite solutions\n- If $\\text{rank}(A) \\neq \\text{rank}([A|b])$ → no solution (inconsistent)\n\nFor this system:\n$\\det(A) \\neq 0$ (system has a unique solution)\n\nSolution using Octave backslash:\n`x = A \\ b`\n\nThe Octave script below performs both checks and solves.",
       "explanation_bn": "Linear equation system solve করার জন্য Octave-এ $A\\backslash b$ ব্যবহার করি। কিন্তু আগে check করতে হবে system টি consistent কিনা। Consistency check করা হয় $\\text{rank}(A)$ এবং $\\text{rank}([A\\ b])$ তুলনা করে। দুটো rank সমান হলে consistent, আর না হলে no solution। Unique solution পেতে হলে $\\text{rank}(A)$ অবশ্যই unknown-এর সংখ্যার সমান হতে হবে।",
@@ -129,7 +129,7 @@
     {
       "id": 13,
       "question": "Write Octave script to fit data points with first, second, third, and fifth-order polynomials, and make plots for each. x = [1,2.2,3.7,6.4,7.2,9.2,14.2,17.8,20.5,23.2]; y = [12,9,6.6,9,11.5,8.5,5.5,9.6,6.5,2.2]",
-      "type": "numerical",
+      "type": "programming",
       "short_answer": "Use polyfit(x,y,n) to fit an nth-order polynomial and polyval(p,x) to evaluate it. Plot original points and fitted curve together using subplot.",
       "detailed_answer": "Approach:\n1. `polyfit(x, y, n)` returns coefficients of an `n`-th degree polynomial that best fits the data\n2. `polyval(p, x_fine)` evaluates the polynomial on a fine grid for smooth plotting\n3. Use subplot to show all four fits in one figure\n\nFor each polynomial order n:\n- `p = polyfit(x, y, n)` — get coefficients\n- `x_fine = linspace(min(x), max(x), 100)` — fine $x$ for smooth curve\n- `y_fit = polyval(p, x_fine)` — evaluate polynomial\n- Plot data points and fitted curve\n\nNote on overfitting:\n- Higher order polynomials (5th) fit the given data points more closely but may oscillate wildly between them (Runge's phenomenon)\n- Lower order (1st) gives a simple trend line",
       "explanation_bn": "Curve fitting মানে হলো কিছু data point-এর মধ্য দিয়ে একটি polynomial সরানো। Octave-এ polyfit() function দিয়ে এটি করা হয়। Order যত বাড়বে, curve তত data-এর কাছাকাছি যাবে। কিন্তু অতিরিক্ত high order দিলে curve data point-এর মাঝখানে অস্বাভাবিক oscillate করতে পারে।",
@@ -139,7 +139,7 @@
     {
       "id": 14,
       "question": "N = [[2,10,18,29,41],[4,12,20,32,44],[6,14,23,38,47],[8,16,26,38,50]]. What will be displayed by Octave? (i) A = [N(1,1:4)', N(2,2:5)'] (ii) B = [N(:,3)', N(3,:)]",
-      "type": "numerical",
+      "type": "programming",
       "short_answer": "A is a 4x2 matrix from specific rows/columns of N. B is a 1x9 row vector combining column 3 and row 3 of N.",
       "detailed_answer": "Matrix N (4x5):\n     col1  col2  col3  col4  col5\nrow1:  2    10    18    29    41\nrow2:  4    12    20    32    44\nrow3:  6    14    23    38    47\nrow4:  8    16    26    38    50\n\n---\n\nPart (i): `A = [N(1,1:4)', N(2,2:5)']`\n\n`N(1, 1:4)` = first row, columns 1 to 4 = `[2, 10, 18, 29]`  (1x4 row vector)\n`N(1, 1:4)'` = transpose = `[2; 10; 18; 29]`  (4x1 column vector)\n\n`N(2, 2:5)` = second row, columns 2 to 5 = `[12, 20, 32, 44]`  (1x4 row vector)\n`N(2, 2:5)'` = transpose = `[12; 20; 32; 44]`  (4x1 column vector)\n\n`A = [col1, col2]` = horizontally concatenate two 4x1 vectors:\n$$A = \\begin{bmatrix} 2 & 12 \\\\ 10 & 20 \\\\ 18 & 32 \\\\ 29 & 44 \\end{bmatrix}$$\n\n$A$ is a 4x2 matrix.\n\n---\n\nPart (ii): `B = [N(:,3)', N(3,:)]`\n\n`N(:, 3)` = all rows, column 3 = `[18; 20; 23; 26]`  (4x1 column vector)\n`N(:, 3)'` = transpose = `[18, 20, 23, 26]`  (1x4 row vector)\n\n`N(3, :)` = row 3, all columns = `[6, 14, 23, 38, 47]`  (1x5 row vector)\n\n`B = [N(:,3)', N(3,:)]` = horizontally concatenate 1x4 and 1x5:\n`B = [18, 20, 23, 26, 6, 14, 23, 38, 47]`\n\n$B$ is a 1x9 row vector.",
       "explanation_bn": "N matrix থেকে বিভিন্নভাবে row ও column select করা হচ্ছে। N(1,1:4) মানে 1ম row এর 1 থেকে 4 নম্বর column। ' দিয়ে transpose করা হয়। N(:,3) মানে সব row এর 3য় column। এই selected part গুলোকে [] দিয়ে concatenate করে নতুন matrix বা vector তৈরি করা হচ্ছে।",
@@ -159,7 +159,7 @@
     {
       "id": 16,
       "question": "Write a user-defined function y = fact(x) to calculate factorial n! without using built-in factorial. Show error if negative or non-integer. Use it for: (i) 9! (ii) 8.5! (iii) 0! (iv) -5!",
-      "type": "numerical",
+      "type": "programming",
       "short_answer": "Use a loop to compute factorial. Check if input is negative or non-integer using floor(x)~=x or x<0 conditions before computing.",
       "detailed_answer": "Factorial Definition:\n$n! = n \\times (n-1) \\times (n-2) \\times \\dots \\times 1$, and $0! = 1$\n\nFunction Design:\n- Input: `x` (number whose factorial is needed)\n- Output: `y` (= `x!`)\n- Validation: if `x < 0` OR `floor(x) ~= x` → display error and stop\n\nExpected outputs for the test cases:\n(i) $9! = 9\\cdot8\\cdot7\\cdot6\\cdot5\\cdot4\\cdot3\\cdot2\\cdot1 = 362880$\n(ii) 8.5! → Error: non-integer input\n(iii) $0! = 1$ (by definition)\n(iv) -5! → Error: negative input\n\nSee Octave script for the function definition and test calls.",
       "explanation_bn": "Factorial হলো একটি number থেকে 1 পর্যন্ত সব integer-এর গুণফল। $0! = 1$ by definition। আমরা loop দিয়ে এটি হিসাব করব। Input negative বা non-integer হলে error দেখাতে হবে। $\\text{floor}(x) \\neq x$ দিয়ে check করি $x$ integer কিনা।",
@@ -239,7 +239,7 @@
     {
       "id": 24,
       "question": "Create three row vectors: a=[3,-15,11,-4,2,?], b=[[7,-9,2,13,1,-2]], c=[-2,4,-7,8,0,9]. (i) Create a matrix in which the rows are vectors a, b, c, and c. (ii) Create a matrix in which the columns are the vectors b, c, and a.",
-      "type": "numerical",
+      "type": "programming",
       "short_answer": "Part (i): Use [a; b; c; c] to stack as rows. Part (ii): Use [b', c', a'] to place as columns.",
       "detailed_answer": "Given vectors (each 1x6):\n`a = [3, -15, 11, -4, 2, 0]`   % (assuming last element is 0 based on context)\n`b = [7, -9, 2, 13, 1, -2]`\n`c = [-2, 4, -7, 8, 0, 9]`\n\nPart (i): Matrix with rows = a, b, c, c\n- Stack rows using semicolon:\n  `M1 = [a; b; c; c]`\n- Result (4x6 matrix):\n  $$M_1 = \\begin{bmatrix} 3 & -15 & 11 & -4 & 2 & 0 \\\\ 7 & -9 & 2 & 13 & 1 & -2 \\\\ -2 & 4 & -7 & 8 & 0 & 9 \\\\ -2 & 4 & -7 & 8 & 0 & 9 \\end{bmatrix}$$\n\nPart (ii): Matrix with columns = b, c, a\n- Columns are formed by transposing (column vectors) and concatenating horizontally:\n  `M2 = [b', c', a']`\n- Each transposed vector is 6x1, horizontally joined gives 6x3\n- Result (6x3 matrix):\n  $$M_2 = \\begin{bmatrix} 7 & -2 & 3 \\\\ -9 & 4 & -15 \\\\ 2 & -7 & 11 \\\\ 13 & 8 & -4 \\\\ 1 & 0 & 2 \\\\ -2 & 9 & 0 \\end{bmatrix}$$",
       "explanation_bn": "Row হিসেবে জোড়া লাগাতে semicolon ব্যবহার করা হয়: [a; b; c; c]। Column হিসেবে জোড়া লাগাতে প্রতিটি vector কে transpose করে পাশাপাশি রাখতে হয়: [b', c', a']। Row vector transpose করলে column vector হয়, এবং সেগুলো horizontal concatenation করলে matrix এর column হয়।",
@@ -249,7 +249,7 @@
     {
       "id": 25,
       "question": "Create matrix A = [[36,34,32,30,28,26],[24,22,20,18,16,14],[12,10,8,6,4,2]] using one command. Then: (i) row vector ha = second row of A (ii) column vector hb = sixth column of A (iii) row vector hc = first two elements of row 3 + last three elements of row 1",
-      "type": "numerical",
+      "type": "programming",
       "short_answer": "$A = \\text{reshape}(36:-2:2, 6, 3)'$ creates the matrix. $ha=A(2,:)$, $hb=A(:,6)$, $hc=[A(3,1:2), A(1,4:6)]$.",
       "detailed_answer": "Creating Matrix A with one command:\n`A = reshape(36:-2:2, 6, 3)'`\n\nExplanation:\n- `36:-2:2` generates `[36,34,32,...,4,2]` — 18 elements\n- `reshape(..., 6, 3)` makes it 6x3\n- Transpose (') makes it 3x6\n\nResult:\n$$A = \\begin{bmatrix} 36 & 34 & 32 & 30 & 28 & 26 \\\\ 24 & 22 & 20 & 18 & 16 & 14 \\\\ 12 & 10 & 8 & 6 & 4 & 2 \\end{bmatrix}$$\n\nPart (i): `ha` = second row of `A`\n`ha = A(2, :)`\n`ha = [24, 22, 20, 18, 16, 14]`  (1x6 row vector)\n\nPart (ii): `hb` = sixth column of `A`\n`hb = A(:, 6)`\n`hb = [26; 14; 2]`  (3x1 column vector)\n\nPart (iii): `hc` = first two elements of row 3 + last three elements of row 1\n`hc = [A(3, 1:2), A(1, 4:6)]`\n\n`A(3, 1:2) = [12, 10]`\n`A(1, 4:6) = [30, 28, 26]`\n`hc = [12, 10, 30, 28, 26]`  (1x5 row vector)",
       "explanation_bn": "A matrix তৈরি করার জন্য 36 থেকে 2 পর্যন্ত 2 step-এ sequence বানিয়ে reshape করি। A(2,:) মানে 2য় row-এর সব column, A(:,6) মানে সব row-এর 6ষ্ঠ column। hc তৈরিতে দুটি আলাদা অংশ []  দিয়ে concatenate করা হয়।",
@@ -259,7 +259,7 @@
     {
       "id": 26,
       "question": "A projectile is fired with speed v0 = 162 m/s at angle alpha = 70 deg. x(t) = v0*cos(alpha)*t, y(t) = v0*sin(alpha)*t - 0.5*g*t^2 where g=9.81. Find r(t) and theta(t) for t = 1, 6, 11, ..., 31 sec.",
-      "type": "numerical",
+      "type": "programming",
       "short_answer": "Compute $x(t)$ and $y(t)$ vectors, then $r=\\sqrt{x^2+y^2}$ and $\\theta=\\text{atan2d}(y,x)$ for $t=1:5:31$.",
       "detailed_answer": "Given:\n- $v_0 = 162$ m/s\n- $\\alpha = 70$ degrees = $70\\pi/180$ radians\n- $g = 9.81$ m/s$^2$\n- $t = 1, 6, 11, 16, 21, 26, 31$ (step 5, starting at 1)\n\nEquations:\n$x(t) = v_0 \\cos(\\alpha) \\cdot t$\n$y(t) = v_0 \\sin(\\alpha) \\cdot t - \\frac{1}{2} g t^2$\n$r(t) = \\sqrt{x(t)^2 + y(t)^2}$\n$\\theta(t) = \\text{atan2}(y(t), x(t))$ in degrees\n\nNote: $t = 1, 6, 11, \\dots, 31$ means start=1, step=5, end=31 → 7 values\n\nSample calculation at t = 1 s:\n$\\alpha_{\\text{rad}} = 70 \\cdot \\pi/180 = 1.2217$ rad\n$x(1) = 162 \\cdot \\cos(1.2217) \\cdot 1 = 162 \\cdot 0.342 = 55.41$ m\n$y(1) = 162 \\cdot \\sin(1.2217) \\cdot 1 - 0.5\\cdot9.81\\cdot1 = 162\\cdot0.9397 - 4.905 = 152.23 - 4.905 = 147.32$ m\n$r(1) = \\sqrt{55.41^2 + 147.32^2} = \\sqrt{3070 + 21703} = \\sqrt{24773} = 157.4$ m\n$\\theta(1) = \\text{atan2d}(147.32, 55.41) \\approx 69.4$ degrees",
       "explanation_bn": "Projectile motion-এ $x$ এবং $y$ component আলাদাভাবে calculate করি। $r$ হলো origin থেকে projectile-এর distance এবং $\\theta$ হলো $x$-axis এর সাথে কোণ। Octave-এ vector operation ব্যবহার করে একসাথে সব $t$-এর জন্য হিসাব করা যায়।",
@@ -269,7 +269,7 @@
     {
       "id": 27,
       "question": "For a 5-year $20000 car loan with 6.5% yearly interest and $391.32 monthly payment, calculate loan balance B and percent paid after every 6 months (n=6,12,...,60). Display as a three-column table.",
-      "type": "numerical",
+      "type": "programming",
       "short_answer": "Use formula $B = A(1+r/1200)^n - P\\frac{(1+r/1200)^n - 1}{r/1200}$ for each $n$. Percent paid $= (1 - B/A)\\times 100$.",
       "detailed_answer": "Given:\n- $A = 20000$ (loan amount)\n- $P = 391.32$ (monthly payment)\n- $r = 6.5$ (yearly interest rate in %)\n- $n$ varies: $6, 12, 18, \\dots, 54, 60$\n\nFormula:\n$$B = A\\left(1 + \\frac{r}{1200}\\right)^n - P\\frac{\\left(1 + \\frac{r}{1200}\\right)^n - 1}{\\frac{r}{1200}}$$\n\nLet $q = 1 + \\frac{r}{1200} = 1 + \\frac{6.5}{1200} = 1.005417$\n\nAt n=6:\n$B = 20000 \\cdot q^6 - 391.32 \\cdot \\frac{q^6 - 1}{r/1200}$\n  $= 20000 \\cdot 1.03299 - 391.32 \\cdot \\frac{1.03299-1}{0.005417}$\n  $= 20659.8 - 391.32 \\cdot 6.09$\n  $= 20659.8 - 2383.7$\n  $\\approx 18276$\nPercent paid $= (1 - \\frac{18276}{20000})\\times100 \\approx 8.62\\%$\n\nFull table computed by Octave code below.",
       "explanation_bn": "Loan balance formula-টি compound interest কে মাসিক payment দিয়ে adjust করে। প্রতি 6 মাস পর বাকি balance কত সেটা calculate করি। Percentage paid = $1 - B/A$ (অর্থাৎ কতটুকু loan শোধ হয়েছে)। Table তৈরি করতে fprintf দিয়ে formatted output দিই।",
@@ -279,7 +279,7 @@
     {
       "id": 28,
       "question": "Write a script to plot f(x) = (x^2-5x-12)/(x^2-x-6) for -1<=x<=7, avoiding the vertical asymptote at x=3. Use two vectors x1 (from -1 to 2.9) and x2 (from 3.1 to 7). Format y-axis from -20 to 20.",
-      "type": "numerical",
+      "type": "programming",
       "short_answer": "Split domain into $x_1=-1:0.01:2.9$ and $x_2=3.1:0.01:7$, compute $y_1$ and $y_2$ for each, then plot both on same axes with ylim([-20,20]).",
       "detailed_answer": "Function: $$f(x) = \\frac{x^2 - 5x - 12}{x^2 - x - 6}$$\n\nNote: Denominator $= (x-3)(x+2)$\n- Vertical asymptotes at $x = 3$ and $x = -2$\n- But domain is $-1$ to $7$, so only $x=3$ is in range\n\nApproach:\n- $x_1$: elements from $-1$ to $2.9$ (before asymptote)\n- $x_2$: elements from $3.1$ to $7$ (after asymptote)\n- Compute $y_1$ and $y_2$ separately\n- Plot both curves on the same axes\n- Restrict y-axis to $[-20, 20]$ to show behavior clearly\n\nThe code below implements this with proper formatting.",
       "explanation_bn": "$x = 3$ তে denominator শূন্য হয়, তাই ওই জায়গায় function undefined। সেখানে vertical asymptote আছে। দুটো আলাদা vector ব্যবহার করে asymptote কে এড়িয়ে দুটো আলাদা curve আঁকি। ylim দিয়ে y-axis-এর range সীমাবদ্ধ করি যাতে asymptote-এর কাছাকাছি অসীম মানগুলো graph-কে নষ্ট না করে।",
@@ -309,7 +309,7 @@
     {
       "id": 31,
       "question": "A linear transformation is given by A = [[0,1,0],[0,0,1],[4,-17,8]]. Find its eigenvalues and eigenvectors.",
-      "type": "numerical",
+      "type": "programming",
       "short_answer": "Solve $\\det(A - \\lambda I) = 0$ to get characteristic polynomial, then find eigenvectors for each eigenvalue.",
       "detailed_answer": "Given:\n$A = \\begin{bmatrix} 0 & 1 & 0 \\\\ 0 & 0 & 1 \\\\ 4 & -17 & 8 \\end{bmatrix}$\n\nStep 1: Characteristic Equation\n$\\det(A - \\lambda I) = 0$\n\n$A - \\lambda I = \\begin{bmatrix} -\\lambda & 1 & 0 \\\\ 0 & -\\lambda & 1 \\\\ 4 & -17 & 8-\\lambda \\end{bmatrix}$\n\n$\\det = -\\lambda \\cdot [(-\\lambda)(8-\\lambda) - (1)(-17)] - 1\\cdot[(0)(8-\\lambda) - (1)(4)] + 0$\n\nExpanding first minor: $(-\\lambda)(8-\\lambda) + 17 = -8\\lambda + \\lambda^2 + 17$\nFirst term: $-\\lambda(\\lambda^2 - 8\\lambda + 17)$\n\nSecond minor: $0 - 4 = -4$\nSecond term: $-1 \\cdot (-4) = 4$\n\nCharacteristic polynomial:\n$-\\lambda^3 + 8\\lambda^2 - 17\\lambda + 4 = 0$\nor: $\\lambda^3 - 8\\lambda^2 + 17\\lambda - 4 = 0$\n\nStep 2: Find Roots\nTesting = 4:\n$64 - 128 + 68 - 4 = 0 \\checkmark$\n\nFactor: $(\\lambda - 4)(\\lambda^2 - 4\\lambda + 1) = 0$\nRemaining roots: $\\lambda = \\frac{4 \\pm \\sqrt{16-4}}{2} = \\frac{4 \\pm \\sqrt{12}}{2} = 2 \\pm \\sqrt{3}$\n\nEigenvalues:\n$\\lambda_1 = 4$\n$\\lambda_2 = 2 + \\sqrt{3} \\approx 3.732$\n$\\lambda_3 = 2 - \\sqrt{3} \\approx 0.268$\n\nStep 3: Find eigenvectors\nFor $\\lambda_1 = 4$: Solve $(A - 4I)\\mathbf{v} = 0$\n$A - 4I = \\begin{bmatrix} -4 & 1 & 0 \\\\ 0 & -4 & 1 \\\\ 4 & -17 & 4 \\end{bmatrix}$\nRow reduce → $\\mathbf{v} = [1; 4; 16]$ (scaled)\n\nFor $\\lambda_2, \\lambda_3$: Similar procedure with their respective values.\n(See Octave code for exact computation)",
       "explanation_bn": "Eigenvalue খুঁজতে $\\det(A - \\lambda I) = 0$ সমীকরণ solve করি। এই characteristic polynomial-এর roots হলো eigenvalues। তারপর প্রতিটি eigenvalue-এর জন্য $(A - \\lambda I)\\mathbf{v} = 0$ solve করে eigenvector পাই। Octave-এ eig() function দিয়ে সরাসরি এটি করা যায়।",
@@ -319,7 +319,7 @@
     {
       "id": 32,
       "question": "A matrix T = [[-1,0,1],[-1,3,0],[-4,13,-1]] is given. Use Octave commands to find its inverse in a single statement.",
-      "type": "numerical",
+      "type": "programming",
       "short_answer": "Use inv(T) to find the inverse of matrix T in a single Octave command.",
       "detailed_answer": "Given:\n$T = \\begin{bmatrix} -1 & 0 & 1 \\\\ -1 & 3 & 0 \\\\ -4 & 13 & -1 \\end{bmatrix}$\n\nTo find inverse in a single statement:\n`T_inv = inv(T)`\n\nVerification ($T \\cdot T_{\\text{inv}}$ should equal Identity matrix $I$):\nIf $\\det(T) \\neq 0$, the inverse exists.\n\n$\\det(T) = -1\\cdot(3\\cdot(-1) - 0\\cdot13) - 0\\cdot(-1\\cdot(-1) - 0\\cdot(-4)) + 1\\cdot(-1\\cdot13 - 3\\cdot(-4))$\n$= -1\\cdot(-3) - 0 + 1\\cdot(-13 + 12)$\n$= 3 + 0 + (-1) = 2$\n\nSince $\\det(T) = 2 \\neq 0$, the inverse exists.\n\nInverse formula: $T^{-1} = \\frac{1}{\\det(T)} \\cdot \\text{adj}(T)$\n\nThe exact numerical inverse is computed by Octave's inv() function.",
       "explanation_bn": "Matrix-এর inverse বের করা মানে এমন একটি matrix খোঁজা যেটা দিয়ে $T$ কে গুণ করলে identity matrix পাওয়া যায়। Octave-এ inv() function সরাসরি এটি করে। আগে check করতে হবে $\\det(T) \\neq 0$, না হলে inverse exist করে না।",

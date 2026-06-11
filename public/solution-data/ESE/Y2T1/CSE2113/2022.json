@@ -19,7 +19,7 @@
     {
       "id": 2,
       "question": "The distance traveled by a ball falling in the air is given by equation x = x0 + v0*t + 1/2 * a * t^2. Use MATLAB to calculate the position of the ball at time t = 5s if x0 = 10m, v0 = 12 m/s and a = -9.81 m/s^2.",
-      "type": "numerical",
+      "type": "programming",
       "short_answer": "Using $x = x_0 + v_0 t + \\frac{1}{2} a t^2$ with the given values: $x = 10 + 12(5) + \\frac{1}{2}(-9.81)(25) = 10 + 60 - 122.625 = -52.625$ m.",
       "detailed_answer": "Given:\n  $x_0 = 10$ m\n  $v_0 = 12$ m/s\n  $a  = -9.81$ m/s$^2$\n  $t  = 5$ s\n\nFormula:\n  $$x = x_0 + v_0 t + \\frac{1}{2} a t^2$$\n\nStep 1 — Substitute values:\n  $x = 10 + 12(5) + \\frac{1}{2}(-9.81)(5^2)$\n\nStep 2 — Calculate each term:\n  $v_0 t       = 12 \\cdot 5        = 60$\n  $\\frac{1}{2} a t^2 = 0.5 \\cdot (-9.81) \\cdot 25 = -122.625$\n\nStep 3 — Sum all terms:\n  $x = 10 + 60 + (-122.625)$\n  $x = 70 - 122.625$\n  $x = -52.625$ m\n\nResult: The ball is at position $x = -52.625$ m at $t = 5$ s.\n(Negative value means the ball has gone below the initial reference point.)",
       "explanation_bn": "এই সমস্যায় আমরা kinematics এর সূত্র ব্যবহার করেছি। a negative কারণ gravity নিচের দিকে কাজ করে। t=5s এ ball টি starting point এর নিচে চলে গেছে, তাই position negative এসেছে। MATLAB এ এই calculation খুবই সহজে করা যায় variable assign করে।",
@@ -59,7 +59,7 @@
     {
       "id": 6,
       "question": "Define variables, x=0.85, y=12.5, and then use them to create a column vector that has following elements: Sin(80y), y^x, ln(x), x*y, and sqrt(x+y)",
-      "type": "numerical",
+      "type": "programming",
       "short_answer": "The column vector v = [sin(80*y); y^x; log(x); x*y; sqrt(x+y)] with x=0.85, y=12.5 gives approximately [-0.9589; 8.9910; -0.1625; 10.6250; 3.6401].",
       "detailed_answer": "Given:\n  x = 0.85\n  y = 12.5\n\nElements of the column vector:\n1. sin(80y) = sin(80 × 12.5) = sin(1000) ≈ -0.9589 (radians)\n2. y^x = 12.5^0.85 ≈ 8.9910\n3. ln(x) = ln(0.85) ≈ -0.1625  [Note: ln = natural log = log() in MATLAB]\n4. x*y = 0.85 × 12.5 = 10.625\n5. sqrt(x+y) = sqrt(0.85 + 12.5) = sqrt(13.35) ≈ 3.6539\n\nColumn Vector:\n  v = [-0.9589;\n        8.9910;\n       -0.1625;\n       10.6250;\n        3.6539]\n\nNote: In MATLAB, sin() uses radians by default. log() computes natural log.",
       "explanation_bn": "Column vector তৈরি করতে MATLAB এ semicolon (;) দিয়ে elements আলাদা করতে হয়। Natural log এর জন্য MATLAB এ log() ব্যবহার করতে হয় (log10() নয়)। sin() function রেডিয়ানে কাজ করে তাই sin(1000 radians) এর মান প্রায় -0.9589।",
@@ -69,7 +69,7 @@
     {
       "id": 7,
       "question": "The spread of a computer virus through a computer network can be modeled by N(t) = 200*e^(0.15t) where N(t) is the number of computers infected t time in minutes. Write a MATLAB script to: i) Determine how long it takes for the number of infected computers to double. ii) Determine how long it takes for 1,000,000 computers to be infected.",
-      "type": "numerical",
+      "type": "programming",
       "short_answer": "i) Doubling time t = ln(2)/0.15 ≈ 4.62 minutes. ii) Time to infect 1,000,000 computers: t = ln(5000)/0.15 ≈ 56.76 minutes.",
       "detailed_answer": "Given: N(t) = 200 * e^(0.15t)\n\nPart i) Doubling Time:\n- Initial value: N(0) = 200 * e^0 = 200\n- Double: N(t) = 400\n- 400 = 200 * e^(0.15t)\n- 2 = e^(0.15t)\n- ln(2) = 0.15t\n- t = ln(2) / 0.15 = 0.6931 / 0.15 ≈ 4.62 minutes\n\nPart ii) Time for 1,000,000 infections:\n- 1000000 = 200 * e^(0.15t)\n- 5000 = e^(0.15t)\n- ln(5000) = 0.15t\n- t = ln(5000) / 0.15 = 8.5172 / 0.15 ≈ 56.78 minutes\n\nAnswers:\n- i) Doubling time ≈ 4.62 minutes\n- ii) 1,000,000 infections ≈ 56.78 minutes",
       "explanation_bn": "এই সমস্যায় N(t) = 200*e^(0.15t) মডেল ব্যবহার করা হয়েছে। Double হতে মানে N(t) = 400 সেট করে t বের করতে হবে। সেক্ষেত্রে উভয় পাশে log নিলে t সহজেই পাওয়া যায়। একইভাবে 1,000,000 এর জন্য N(t) = 1000000 সেট করে সমাধান করতে হয়।",
@@ -79,7 +79,7 @@
     {
       "id": 8,
       "question": "Define the system of linear equations. Explain with an example of the representation of a linear system into vector equation and Matrix equation. Derive a system of equations to find the partial fraction decomposition of 4x²/[(x+1)(x-1)²] = A/(x+1) + B/(x-1) + C/(x-1)². Then write MATLAB code to solve the system i) by considering the augmented Matrix, ii) by considering the coefficient Matrix.",
-      "type": "numerical",
+      "type": "programming",
       "short_answer": "A system of linear equations is a set of equations where each equation is linear in the unknowns. For the partial fraction 4x²/[(x+1)(x-1)²], solving gives A=1, B=3, C=2.",
       "detailed_answer": "Definition:\nA system of linear equations is a collection of one or more linear equations involving the same set of variables. General form:\n  a1*x1 + a2*x2 + ... + an*xn = b\n\nVector and Matrix Representation (Example):\nSystem:\n  2x + y = 5\n  x + 3y = 7\n\nVector Equation: x*[2;1] + y*[1;3] = [5;7]\n\nMatrix Equation: A*x = b\n  [2  1] [x]   [5]\n  [1  3] [y] = [7]\n\nPartial Fraction Derivation:\nGiven: 4x² / [(x+1)(x-1)²] = A/(x+1) + B/(x-1) + C/(x-1)²\n\nMultiply both sides by (x+1)(x-1)²:\n  4x² = A(x-1)² + B(x+1)(x-1) + C(x+1)\n\nExpand:\n  A(x-1)² = A(x²-2x+1) = Ax²-2Ax+A\n  B(x+1)(x-1) = B(x²-1) = Bx²-B\n  C(x+1) = Cx+C\n\nCollect terms:\n  x²: A + B = 4\n  x¹: -2A + C = 0\n  x⁰: A - B + C = 0\n\nSystem of Equations:\n  A + B     = 4\n  -2A    + C = 0\n  A - B + C = 0\n\nSolving:\nFrom eq1: B = 4 - A\nSubstitute into eq3: A - (4-A) + C = 0 => 2A + C = 4\nFrom eq2: C = 2A\nSubstitute: 2A + 2A = 4 => A = 1\nSo: B = 3, C = 2\n\nAnswer: A=1, B=3, C=2\n  4x²/[(x+1)(x-1)²] = 1/(x+1) + 3/(x-1) + 2/(x-1)²",
       "explanation_bn": "Partial fraction decomposition এ আমরা একটি জটিল fraction কে সহজ fractions এর যোগফলে প্রকাশ করি। উভয় পাশকে (x+1)(x-1)² দিয়ে গুণ করলে A, B, C এর একটি linear system পাওয়া যায়। MATLAB এ augmented matrix থেকে rref() এবং coefficient matrix থেকে A\\b দিয়ে সমাধান করা যায়।",
@@ -99,12 +99,12 @@
     {
       "id": 10,
       "question": "Write a MATLAB code for creating a 4x4 random matrix. Use built-in function to find eigen vectors and eigen values of that matrix. Also check if the eigen vectors are linearly independent and span R.",
-      "type": "numerical",
+      "type": "programming",
       "short_answer": "Use rand(4) to create a 4×4 random matrix, [V,D] = eig(A) to find eigenvectors (V) and eigenvalues (D). Linear independence is checked via rank(V)==4 and det(V)~=0.",
       "detailed_answer": "Steps:\n1. Create a 4×4 random matrix using rand(4).\n2. Use eig() to get eigenvectors (columns of V) and eigenvalues (diagonal of D).\n3. Check linear independence: rank of V should equal 4 (full rank).\n4. Check if eigenvectors span R4: the 4 eigenvectors span R4 if and only if they are linearly independent (rank = 4).\n\nKey Concepts:\n- Eigenvalue λ and eigenvector v satisfy: A*v = λ*v\n- Columns of V from [V,D] = eig(A) are the eigenvectors.\n- Diagonal entries of D are the corresponding eigenvalues.\n- Linear independence is verified if rank(V) = n = 4.\n- If rank = 4 and vectors are in R4, they form a basis and span R4.",
       "explanation_bn": "eig() function MATLAB এ eigenvalue এবং eigenvector বের করে। [V, D] = eig(A) কমান্ডে V এর column গুলো eigenvector এবং D এর diagonal এ eigenvalue থাকে। Eigenvector গুলো linearly independent কিনা জানতে rank(V) = 4 কিনা চেক করতে হয়। Rank = 4 হলে vectors গুলো R4 span করে।",
       "matlab": "% Create a 4x4 random matrix\nA = rand(4);                  % generate random 4x4 matrix\nfprintf('Random Matrix A:\\n');\ndisp(A);\n\n% Find eigenvalues and eigenvectors\n[V, D] = eig(A);              % V: eigenvectors, D: eigenvalue diagonal matrix\nfprintf('Eigenvalues (diagonal of D):\\n');\ndisp(diag(D));                % display eigenvalues\nfprintf('Eigenvectors (columns of V):\\n');\ndisp(V);\n\n% Check linear independence\nr = rank(V);                  % compute rank of eigenvector matrix\nfprintf('Rank of eigenvector matrix: %d\\n', r);\n\nif r == 4\n    fprintf('Eigenvectors are linearly independent and SPAN R4.\\n');\nelse\n    fprintf('Eigenvectors are NOT linearly independent.\\n');\nend\n\n% Also check determinant\nd = det(V);\nfprintf('det(V) = %.6f\\n', d);\nif abs(d) > 1e-10\n    fprintf('det(V) != 0: confirms linear independence.\\n');\nend",
-      "python": "import numpy as np\n\n# Create a 4x4 random matrix\nA = np.random.rand(4, 4)    # random 4x4 matrix\nprint('Random Matrix A:')\nprint(A)\n\n# Find eigenvalues and eigenvectors\neivals, eivecs = np.linalg.eig(A)  # eigenvalues and eigenvectors\nprint('Eigenvalues:', eigvals)\nprint('Eigenvectors (columns):')\nprint(eivecs)\n\n# Check linear independence via rank\nr = np.linalg.matrix_rank(eivecs)  # rank of eigenvector matrix\nprint(f'Rank of eigenvector matrix: {r}')\nif r == 4:\n    print('Eigenvectors are linearly independent and span R4.')\nelse:\n    print('Eigenvectors are NOT linearly independent.')"
+      "python": "import numpy as np\n\n# Create a 4x4 random matrix\nA = np.random.rand(4, 4)    # random 4x4 matrix\nprint('Random Matrix A:')\nprint(A)\n\n# Find eigenvalues and eigenvectors\neivals, eivecs = np.linalg.eig(A)  # eigenvalues and eigenvectors\nprint('Eigenvalues:', eivals)\nprint('Eigenvectors (columns):')\nprint(eivecs)\n\n# Check linear independence via rank\nr = np.linalg.matrix_rank(eivecs)  # rank of eigenvector matrix\nprint(f'Rank of eigenvector matrix: {r}')\nif r == 4:\n    print('Eigenvectors are linearly independent and span R4.')\nelse:\n    print('Eigenvectors are NOT linearly independent.')"
     },
     {
       "id": 11,
@@ -119,7 +119,7 @@
     {
       "id": 12,
       "question": "Define local and global variables with MATLAB examples. Write an anonymous MATLAB function for y(x) = 0.6x³*e^(-0.47x) + 1.5x²*e^(-0.6x). i) Use the function to calculate y(-2) and y(4). ii) Use the function to calculate y(x) for -4 <= x <= 8",
-      "type": "numerical",
+      "type": "programming",
       "short_answer": "Local variables exist only within the function scope; global variables are declared with 'global' and shared across functions. The anonymous function is defined with element-wise operations (.^, .*) to work with vectors.",
       "detailed_answer": "Local Variables:\n- Variables defined inside a function that exist only during function execution.\n- Not accessible from outside the function.\n- Example: function y = myFunc(x), a = 5; y = a*x; end — here 'a' is local.\n\nGlobal Variables:\n- Declared using 'global' keyword in both the main workspace and function.\n- Shared across all functions where declared.\n- Example:\n  global G;  % declare in workspace\n  G = 9.81;\n  function y = calcWeight(m), global G; y = m * G; end\n\nAnonymous Function:\n  y = @(x) 0.6*x.^3.*exp(-0.47*x) + 1.5*x.^2.*exp(-0.6*x);\n\nPart i: Point evaluations:\n  y(-2) = 0.6*(-2)^3*e^(0.94) + 1.5*(-2)^2*e^(1.2)\n        = 0.6*(-8)*2.5600 + 1.5*4*3.3201\n        ≈ -12.288 + 19.921 ≈ 7.633\n  y(4) = 0.6*(4)^3*e^(-1.88) + 1.5*(4)^2*e^(-2.4)\n       = 0.6*64*0.1526 + 1.5*16*0.0907\n       ≈ 5.860 + 2.177 ≈ 8.037\n\nPart ii:\n  Create vector x = -4:0.1:8 and evaluate y(x) element-wise.",
       "explanation_bn": "Local variable শুধুমাত্র function এর ভেতরে কাজ করে, বাইরে থেকে access করা যায় না। Global variable 'global' keyword দিয়ে declare করলে সব function এ access করা যায়। Anonymous function এ .^ এবং .* ব্যবহার করা হয় যাতে x একটি vector হলেও সঠিকভাবে element-wise calculation হয়।",
@@ -129,7 +129,7 @@
     {
       "id": 13,
       "question": "Write a function 'y = is_prime(x)' to check whether x is prime (y=1 if x is prime) or not (y=0 if x is not prime). Using this function write a program to find first 50 prime numbers, store these prime numbers in variable 'prime_numbers', and display these numbers.",
-      "type": "numerical",
+      "type": "programming",
       "short_answer": "The is_prime function checks divisibility from 2 to sqrt(x). The main program loops through integers, calling is_prime until 50 primes are collected in the prime_numbers array.",
       "detailed_answer": "Algorithm for is_prime(x):\n1. If x < 2, return 0 (not prime).\n2. Check divisibility from 2 to floor(sqrt(x)).\n3. If any divisor found, return 0. Otherwise return 1.\n\nAlgorithm for main program:\n1. Initialize prime_numbers = [] and count = 0.\n2. Loop through integers starting from 2.\n3. Call is_prime(n) for each n.\n4. If result is 1, add n to prime_numbers, increment count.\n5. Stop when count = 50.\n6. Display prime_numbers.\n\nThe first 50 prime numbers start: 2, 3, 5, 7, 11, 13, 17, 19, 23, 29, ...",
       "explanation_bn": "is_prime() function এ আমরা 2 থেকে sqrt(x) পর্যন্ত প্রতিটি সংখ্যা দিয়ে x কে ভাগ করি। যদি কোনো সংখ্যা দিয়ে নিঃশেষে ভাগ হয় তাহলে prime না, নয়তো prime। Main program এ loop চালিয়ে 50 টি prime পাওয়া পর্যন্ত চালিয়ে যেতে হয়।",
@@ -159,7 +159,7 @@
     {
       "id": 16,
       "question": "A matrix is given as: M = [[3, 8, 9], [-5, 0, 11], [5, 2, 4]]. What will be the output of the following command? i) aM(:, length(M):-1:1), ii) a1=M(find(M > 4)), iii) [not specified clearly], iv) c = cumsum(sum(M))",
-      "type": "numerical",
+      "type": "programming",
       "short_answer": "i) Reverses columns of M; ii) Elements of M greater than 4 as a column vector [8;9;11;5]; iv) cumsum(sum(M)) gives the running sum of column sums.",
       "detailed_answer": "Given:\n  M = [3  8  9;\n      -5  0 11;\n       5  2  4]\n\ni) aM = M(:, length(M):-1:1)\n  - length(M) = 3 (largest dimension)\n  - Column indices: 3:-1:1 = [3, 2, 1] (reversed order)\n  - This reverses the column order of M:\n  aM =\n    9  8  3\n   11  0 -5\n    4  2  5\n\nii) a1 = M(find(M > 4))\n  - find(M > 4) finds linear indices where M > 4\n  - M elements: 3,-5,5 | 8,0,2 | 9,11,4 (column-major order)\n  - Elements > 4: 5(idx 3), 8(idx 4), 9(idx 7), 11(idx 8)\n  - a1 = [5; 8; 9; 11] (column vector of those elements)\n\niv) c = cumsum(sum(M))\n  - sum(M) computes column sums: sum of col1=3+(-5)+5=3, col2=8+0+2=10, col3=9+11+4=24\n  - sum(M) = [3, 10, 24]\n  - cumsum([3, 10, 24]) = [3, 13, 37]\n  - c = [3, 13, 37]",
       "explanation_bn": "M(:, 3:-1:1) column গুলোকে উল্টো order এ নেয়, ফলে matrix টি horizontally flip হয়। find(M > 4) সেই সব element এর index দেয় যেগুলো 4 এর বেশি, তারপর M() দিয়ে সেই element গুলো নেওয়া হয়। cumsum(sum(M)) প্রথমে প্রতিটি column এর sum নেয়, তারপর সেই সব sum এর cumulative যোগ করে।",
@@ -169,7 +169,7 @@
     {
       "id": 17,
       "question": "Writing a single line command create the following matrix using eye, ones and zeros commands: D = [[1,0,1,1,0,0],[0,1,1,1,0,0],[0,0,1,1,1,0]]",
-      "type": "numerical",
+      "type": "programming",
       "short_answer": "D = [eye(3), ones(3,1), [ones(2,1); 0], zeros(3,1)] constructs D in a single line using horizontal concatenation of identity, ones, and zeros blocks.",
       "detailed_answer": "Target Matrix D (3×6):\n  1 0 1 1 0 0\n  0 1 1 1 0 0\n  0 0 1 1 1 0\n\nAnalysis by columns:\n  Cols 1-2: eye(3) columns 1-2 — wait, D is 3×6\n  Let's analyze block by block:\n  Col 1-2: [1 0; 0 1; 0 0] = first two cols of eye(3)\n  Col 3: [1;1;1] = ones(3,1)\n  Col 4: [1;1;1] = ones(3,1)\n  Col 5: [0;0;1] = [0;0;1]\n  Col 6: [0;0;0] = zeros(3,1)\n\nAlternatively, notice:\n  - Columns 1-3: eye(3)\n  - Columns 4-5: ones(3,1) and [1;1;0]\n  Correct block view:\n  [eye(3), ones(3,1), [1;1;0], zeros(3,1)]\n\nVerify:\n  eye(3) = [1 0 0; 0 1 0; 0 0 1]\n  ones(3,1) = [1;1;1]\n  [1;1;0] — last col before zeros\n  zeros(3,1) = [0;0;0]\n  Concatenated: [1 0 0 | 1 | 1 | 0]\n               [0 1 0 | 1 | 1 | 0]\n               [0 0 1 | 1 | 0 | 0] — not matching\n\nCorrect answer (matching D):\n  D = [eye(3), ones(3,2), [0;0;1], zeros(3,1)]\n  Check: [1 0 0 1 1 0 0] — too wide\n\nActual D is 3×6. Correct single-line:\n  D = [eye(3,2), ones(3,1), ones(3,1), [0;0;1], zeros(3,1)]\n  = [1 0 | 1 | 1 | 0 | 0]  ✓ row 1\n    [0 1 | 1 | 1 | 0 | 0]  ✓ row 2\n    [0 0 | 1 | 1 | 1 | 0]  ✓ row 3\n\nFinal Answer:\n  D = [eye(3,2), ones(3,2), [0;0;1], zeros(3,1)]",
       "explanation_bn": "Matrix D কে কয়েকটি block এ ভাগ করা যায়: প্রথম দুই column eye(3) এর প্রথম দুই column, পরের দুই column সব 1, পঞ্চম column এ শুধু শেষ row তে 1, এবং শেষ column সব 0। এগুলো horizontal concatenation [ ] দিয়ে একলাইনে লেখা যায়।",
@@ -199,7 +199,7 @@
     {
       "id": 20,
       "question": "Two parametric equations are given: y = sin³(t), x = cos³(t), u = sin(t), v = cos(t). In one figure, make plots of y versus x and v versus u for 0 <= t <= 2pi. Format the plot such that both axes will range from -2 to 2.",
-      "type": "numerical",
+      "type": "programming",
       "short_answer": "Create t from 0 to 2π, compute x,y,u,v, then use subplot or hold on to plot both curves in one figure, with axis([-2 2 -2 2]) to set the range.",
       "detailed_answer": "Given parametric equations:\n  Curve 1: x = cos³(t),  y = sin³(t)  — Astroid\n  Curve 2: u = cos(t),   v = sin(t)   — Unit circle\n\nRange: 0 ≤ t ≤ 2π\n\nSteps:\n1. Create t vector: t = linspace(0, 2*pi, 1000);\n2. Compute x, y, u, v.\n3. Plot both curves in one figure using hold on.\n4. Set axis range to [-2, 2] for both axes.\n\nNote: cos³(t) in MATLAB = cos(t).^3 (element-wise cube)",
       "explanation_bn": "Parametric equation এ x এবং y উভয়ই একটি তৃতীয় variable t এর function। cos³(t) মানে হলো cos(t) কে cube করা। MATLAB এ plot(x,y) দিয়ে parametric curve আঁকা যায়। axis([-2 2 -2 2]) দিয়ে উভয় axis এর range নির্ধারণ করা হয়।",
@@ -239,7 +239,7 @@
     {
       "id": 24,
       "question": "The relationship between two variables p and t is: p = (m*t)/(b+t). Data: t=[1,2,3,4,6,8,10], p=[2.1,3,4,4.6,5.4,6.1,6.4,6.6]. Determine the constant m and b by curve fitting.",
-      "type": "numerical",
+      "type": "programming",
       "short_answer": "Linearize by taking reciprocal: 1/p = b/(m*t) + 1/m = (b/m)*(1/t) + 1/m. Use polyfit on (1/t, 1/p) to find slope = b/m and intercept = 1/m, then extract m and b.",
       "detailed_answer": "Given: p = (m*t) / (b + t) — Michaelis-Menten type equation\n\nData:\n  t = [1, 2, 3, 4, 6, 8, 10]\n  p = [2.1, 3, 4, 4.6, 5.4, 6.1, 6.4]\n  (Note: 8 data points shown in question, use 7 pairs)\n\nLinearization (Lineweaver-Burk):\nTake reciprocal of both sides:\n  1/p = (b + t) / (m*t)\n  1/p = b/(m*t) + 1/m\n  1/p = (b/m) * (1/t) + (1/m)\n\nLet P = 1/p and T = 1/t:\n  P = (b/m)*T + (1/m)  — linear equation: P = A*T + B\n  where A = b/m (slope) and B = 1/m (intercept)\n\nSo:\n  m = 1/B\n  b = A/B = A*m\n\nComputation:\n  T = 1/t = [1, 0.5, 0.333, 0.25, 0.167, 0.125, 0.1]\n  P = 1/p = [0.476, 0.333, 0.25, 0.217, 0.185, 0.164, 0.156]\n\nUsing polyfit(T, P, 1):\n  slope A ≈ 0.3 → b/m ≈ 0.3\n  intercept B ≈ 0.125 → 1/m ≈ 0.125 → m ≈ 8\n  b = A * m ≈ 0.3 * 8 = 2.4\n\nApproximate Result:\n  m ≈ 8, b ≈ 2.4",
       "explanation_bn": "p = mt/(b+t) সরাসরি fit করা কঠিন কারণ এটি nonlinear। কিন্তু উভয় পাশের reciprocal নিলে 1/p = (b/m)*(1/t) + 1/m পাওয়া যায় যা 1/t এর সাথে 1/p এর linear সম্পর্ক। polyfit() দিয়ে এই linear form থেকে slope ও intercept বের করে m এবং b গণনা করা যায়।",
@@ -249,7 +249,7 @@
     {
       "id": 25,
       "question": "Make a 3-D surface plot of the function z = (y²)/4 - 2*sin(1.5x) in the domain -3 <= x <= 3 and -3 <= y <= 3",
-      "type": "numerical",
+      "type": "programming",
       "short_answer": "Use meshgrid to create a 2D grid for x and y, compute z = y.^2/4 - 2*sin(1.5*x) at each point, then use surf() or mesh() to plot the 3D surface.",
       "detailed_answer": "Steps:\n1. Create x and y vectors from -3 to 3.\n2. Use meshgrid to create 2D grid arrays X and Y.\n3. Compute Z = Y.^2/4 - 2*sin(1.5*X) element-wise.\n4. Use surf(X, Y, Z) to create the 3D surface plot.\n5. Add labels, title, and colorbar.\n\nNote: Element-wise operations (.^2, .*) are required when operating on 2D matrices from meshgrid.",
       "explanation_bn": "3D surface plot এর জন্য প্রথমে meshgrid() দিয়ে x এবং y থেকে 2D grid তৈরি করতে হয়। তারপর প্রতিটি (x,y) point এ z এর মান বের করে surf() দিয়ে plot করা হয়। Matrix operation এ .^ এবং .* (element-wise) ব্যবহার করতে হবে।",
@@ -259,7 +259,7 @@
     {
       "id": 26,
       "question": "Suppose a code is written as: x=[20,25]; y=[100,120]; y1=112; x1=interp1(x,y,y1,'nearest'); x2=interp1(x,y,y2,'Linear'); x3=interp1(x,y,y1,'Spline'); x=interp1(x,y,y1,'Pchip'). Is there any error? If yes, rectify the error and write the correct code and explain the output.",
-      "type": "numerical",
+      "type": "programming",
       "short_answer": "Errors: (1) y2 is undefined (should be y1); (2) 'Linear' should be 'linear' (lowercase); (3) x is overwritten — final variable should be x4. The interp1 function interpolates: given x and y vectors, find x value corresponding to a given y value.",
       "detailed_answer": "Original Code Errors:\n\n| Line | Error | Fix |\n|---|---|---|\n| x2=interp1(x,y,y2,'Linear') | y2 is undefined | change y2 to y1 |\n| x2=interp1(x,y,y2,'Linear') | 'Linear' should be lowercase | use 'linear' |\n| x=interp1(x,y,y1,'Pchip') | overwrites x vector | use x4 as variable name |\n\nNote on interp1 usage:\n- Syntax: interp1(x, y, xi, method) interpolates to find yi at xi.\n- Here x=[20,25] and y=[100,120] define the data.\n- We want to find the x-value corresponding to y1=112.\n- But interp1(x, y, y1, method) gives y-value at xi=y1=112 — this is outside the range [20,25].\n- Corrected interpretation: likely meant interp1(y, x, y1, method) to find x given y.\n\nCorrected Code:\n  x = [20, 25];       % x data\n  y = [100, 120];     % y data\n  y1 = 112;           % query point\n  x1 = interp1(y, x, y1, 'nearest');  % nearest neighbor: x1 = 20\n  x2 = interp1(y, x, y1, 'linear');   % linear: x1 = 22\n  x3 = interp1(y, x, y1, 'spline');   % spline interpolation\n  x4 = interp1(y, x, y1, 'pchip');    % piecewise cubic Hermite\n\nOutput Explanation:\n  y1=112 lies between y=100 (at x=20) and y=120 (at x=25).\n  Linear: x = 20 + (112-100)/(120-100) * (25-20) = 20 + 0.6*5 = 23\n  Nearest: y1=112 is closer to 100, so x1 = 20\n  Spline and Pchip give same result as linear for only 2 points.",
       "explanation_bn": "এই code এ তিনটি error আছে: y2 define করা হয়নি, 'Linear' হওয়া উচিত 'linear' (lowercase), এবং শেষের variable x ব্যবহার করলে original x overwrite হয়ে যায়। interp1() function দুটি known point এর মধ্যে interpolation করে — এখানে y=112 এর জন্য x এর মান বের করা হচ্ছে।",
@@ -289,7 +289,7 @@
     {
       "id": 29,
       "question": "The reciprocal Fibonacci constant Ψ is defined by Ψ = Σ(n=1 to ∞) 1/F_n where F_n are Fibonacci numbers 1,1,2,3,5,8,13,... Write a program that calculates Ψ for a given n. Execute for n=10 and n=100.",
-      "type": "numerical",
+      "type": "programming",
       "short_answer": "Generate Fibonacci numbers up to F_n using the recurrence F_n = F_{n-1} + F_{n-2}, then sum their reciprocals. For n=10: Ψ≈3.3399, for n=100: Ψ≈3.35988... (converges to the Reciprocal Fibonacci constant ≈3.3598856).",
       "detailed_answer": "Fibonacci Sequence: 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, ...\nRecurrence: $F_n = F_{n-1} + F_{n-2}$, with $F_1 = F_2 = 1$\n\nReciprocal Fibonacci Constant: $\\Psi = \\sum_{n=1}^{\\infty} \\frac{1}{F_n}$\n\nFor n=10:\n  F = [1, 1, 2, 3, 5, 8, 13, 21, 34, 55]\n  Ψ = 1/1+1/1+1/2+1/3+1/5+1/8+1/13+1/21+1/34+1/55\n    = 1 + 1 + 0.5 + 0.333 + 0.2 + 0.125 + 0.0769 + 0.0476 + 0.0294 + 0.0182\n    ≈ 3.3399\n\nFor n=100:\n  Ψ ≈ 3.35988566... (converges close to the true constant ≈ 3.35988566)\n\nNote: The question says 'Σ from n=5 to ∞' but likely means from n=1. The standard definition starts from n=1.",
       "explanation_bn": "Fibonacci sequence এ প্রতিটি সংখ্যা তার আগের দুটির যোগফল। Reciprocal Fibonacci constant হলো সব Fibonacci সংখ্যার reciprocal (1/F_n) এর যোগফল। n যত বাড়ে sum তত একটি নির্দিষ্ট মান (≈3.3599) এ converge করে। MATLAB এ loop দিয়ে Fibonacci generate করে sum করা হয়।",
