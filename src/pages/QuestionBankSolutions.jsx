@@ -895,7 +895,7 @@ const AVAILABLE_SOLUTIONS = {
   },
 };
 
-const PROBE_YEARS = [2018, 2019, 2020, 2021, 2022, 2023, 2024];
+const PROBE_YEARS = [2018, 2019, 2020, 2021, 2022, 2023];
 
 const FORMULA_SHEETS = {
   ME2115: [
@@ -1310,9 +1310,6 @@ export default function QuestionBankSolutions() {
             <p className="home-hero-sub" style={{ color: t.textSub }}>
               Step-by-step solutions for KUET exam questions — theory, numerical & code.
             </p>
-            <button onClick={goCourses} className="home-hero-cta" style={{ background: t.accent, color: '#022009' }}>
-              Browse Courses →
-            </button>
           </div>
           <div className="home-hero-stats">
             <div className="home-stat" style={{ background: t.card, border: `1px solid ${t.border}` }}>
