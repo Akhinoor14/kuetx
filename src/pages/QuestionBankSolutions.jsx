@@ -180,19 +180,16 @@ function InlineMathLine({ text, t, mathStyle }) {
   );
 }
 
-// Tokenise a string into: bold (**x** or __x__), italic (*x* or _x_),
-// inline-code (`x`), math ($x$ etc.) and plain text — in one pass.
 function tokeniseInline(text) {
   const tokens = [];
-  // Order matters: longer/greedier patterns first
   const re = /(\*\*|__)(.+?)\1|(\*|_)(.+?)\3|(`[^`]+`)|(\$\$[\s\S]+?\$\$|\$[^$\n]+?\$|\\\([\s\S]+?\\\)|\\\[[\s\S]+?\\\])/g;
   let last = 0, m;
   while ((m = re.exec(text)) !== null) {
     if (m.index > last) tokens.push({ type: 'text', val: text.slice(last, m.index) });
-    if (m[1])      tokens.push({ type: 'bold',   val: m[2] });          // **x** __x__
-    else if (m[3]) tokens.push({ type: 'italic', val: m[4] });          // *x* _x_
-    else if (m[5]) tokens.push({ type: 'code',   val: m[5].slice(1,-1) }); // `x`
-    else if (m[6]) {                                                     // math
+    if (m[1])      tokens.push({ type: 'bold',   val: m[2] });
+    else if (m[3]) tokens.push({ type: 'italic', val: m[4] });
+    else if (m[5]) tokens.push({ type: 'code',   val: m[5].slice(1,-1) });
+    else if (m[6]) {
       const raw = m[6];
       const disp = raw.startsWith('$$') || raw.startsWith('\\[');
       let val;
@@ -209,7 +206,6 @@ function tokeniseInline(text) {
 }
 
 function renderInlineCode(text, t) {
-  // Fast path — nothing special
   if (!/\*\*|__|[*_`]|\$|\\[\[(]/.test(text))
     return <InlineMathLine text={text} t={t} mathStyle={isMathLine(text)} />;
 
@@ -225,7 +221,6 @@ function renderInlineCode(text, t) {
           return <code key={i} style={{ fontFamily: "'JetBrains Mono',monospace", fontSize: '0.87em', background: t.eqBg, color: t.blue, padding: '1px 6px', borderRadius: 4, border: `1px solid ${t.border}` }}>{tok.val}</code>;
         if (tok.type === 'math')
           return <MathSpan key={i} src={tok.val} display={tok.display} />;
-        // plain text — still run through math-char detection
         return <InlineMathLine key={i} text={tok.val} t={t} mathStyle={isMathLine(tok.val)} />;
       })}
     </>
@@ -237,6 +232,7 @@ function renderInlineCode(text, t) {
 // ─────────────────────────────────────────────────────────────────────────────
 function parseAnswer(text) {
   if (!text) return [{ type: 'blank' }];
+  text = text.replace(/\\n/g, '\n');
   const lines = text.split('\n');
 
   const SEP = /^\|[\s\-|:]+\|$/;
@@ -350,6 +346,7 @@ function EquationBlock({ content, t }) {
 
 function parseDerivationSegments(text) {
   if (!text) return null;
+  text = text.replace(/\\n/g, '\n');
   const lines = text.split('\n').map(l => l.trim()).filter(Boolean);
   const hasGiven  = lines.some(l => /^given[:\s]/i.test(l));
   const hasStep   = lines.some(l => /^step\s*\d+/i.test(l));
@@ -698,8 +695,7 @@ function QuestionCard({ question: q, globalIdx, showYearBadge, t, bookmarks, tog
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-// SOLUTION OVERLAY — full-screen "subpage" for a single question's solution
-// (replaces the old separate /question-bank/.../:questionId route entirely)
+// SOLUTION OVERLAY
 // ─────────────────────────────────────────────────────────────────────────────
 function SolutionOverlay({ question: q, t, dark, toggleTheme, bookmarks, toggleBookmark, courseKey, courseMeta = {}, questionList = [], onClose, onNavigate }) {
   const typeColor = getTypeColor(q.type);
@@ -712,18 +708,15 @@ function SolutionOverlay({ question: q, t, dark, toggleTheme, bookmarks, toggleB
   const prevQ = idx > 0 ? questionList[idx - 1] : null;
   const nextQ = idx !== -1 && idx < questionList.length - 1 ? questionList[idx + 1] : null;
 
-  // Lock background scroll while overlay is open
   useEffect(() => {
     const prevOverflow = document.body.style.overflow;
     document.body.style.overflow = 'hidden';
     return () => { document.body.style.overflow = prevOverflow; };
   }, []);
-  // Scroll overlay back to top whenever the question changes (prev/next nav)
   useEffect(() => {
     const el = document.querySelector('.qov-overlay');
     if (el) el.scrollTop = 0;
   }, [q]);
-  // Esc key closes overlay
   useEffect(() => {
     const onKey = e => { if (e.key === 'Escape') onClose(); };
     window.addEventListener('keydown', onKey);
@@ -831,7 +824,7 @@ function SolutionOverlay({ question: q, t, dark, toggleTheme, bookmarks, toggleB
           {q.explanation_bn && (
             <div className="solpage-section" style={{ background: t.bnBg, border: `1px solid ${t.borderSub}` }}>
               <div className="solpage-section-label" style={{ color: t.yellow }}>বাংলা ব্যাখ্যা</div>
-              <div className="solpage-section-body"><AnswerBlock text={q.explanation_bn} t={t} /></div>
+              <div className="solpage-section-body sol-bn-section"><AnswerBlock text={q.explanation_bn} t={t} /></div>
             </div>
           )}
 
@@ -1200,17 +1193,14 @@ export default function QuestionBankSolutions() {
 
   // ── Shared sub-components ──────────────────────────────────────────────────
 
-  // Compact top nav bar (visible on all views except home)
   const TopNav = () => (
     <div className="topnav qs-no-print" style={{ background: t.surface, borderBottom: `1px solid ${t.border}` }}>
       <div className="topnav-inner wrap">
-        {/* Logo / home link */}
         <button onClick={goHome} className="topnav-logo" style={{ color: t.accent }}>
           <BookOpen size={16} strokeWidth={2} />
           <span>Solution Bank</span>
         </button>
 
-        {/* Breadcrumb trail */}
         <div className="topnav-crumb" style={{ color: t.textMut }}>
           {['courses','years','solutions','all'].includes(view) && (
             <>
@@ -1246,7 +1236,6 @@ export default function QuestionBankSolutions() {
           )}
         </div>
 
-        {/* Theme toggle */}
         <button onClick={toggleTheme} className="topnav-theme" style={{ color: t.textMut, border: `1px solid ${t.border}` }}>
           {dark ? <Sun size={14} /> : <Moon size={14} />}
         </button>
@@ -1254,7 +1243,6 @@ export default function QuestionBankSolutions() {
     </div>
   );
 
-  // Dept + Term inline selectors (compact row)
   const DeptTermRow = () => (
     <div className="dt-row qs-no-print">
       <div className="dt-field">
@@ -1288,7 +1276,6 @@ export default function QuestionBankSolutions() {
     </div>
   );
 
-  // Shared page wrapper
   const page = { minHeight: '100vh', background: t.bg, color: t.text, fontFamily: "'Inter',sans-serif", paddingBottom: 60 };
 
   // ════════════════════════════════════════════════════════════════════════════
@@ -1296,7 +1283,6 @@ export default function QuestionBankSolutions() {
   // ════════════════════════════════════════════════════════════════════════════
   if (view === 'home') return (
     <div style={page}>
-      {/* Hero */}
       <div className="home-hero" style={{ background: t.surface, borderBottom: `1px solid ${t.border}` }}>
         <div className="wrap home-hero-inner">
           <div className="home-hero-left">
@@ -1403,7 +1389,6 @@ export default function QuestionBankSolutions() {
     <div style={page}>
       <TopNav />
       <div className="wrap" style={{ paddingTop: 20 }}>
-        {/* Course info bar */}
         {courseInfo && (
           <div className="course-info-bar" style={{ background: t.surface, border: `1px solid ${t.border}`, borderLeft: `4px solid ${t.accent}` }}>
             <div>
@@ -1476,7 +1461,6 @@ export default function QuestionBankSolutions() {
       <div className="qs-print-area">
         <TopNav />
         <div className="wrap" style={{ paddingTop: 16 }}>
-          {/* Course + controls bar */}
           {courseInfo && (
             <div className="course-info-bar" style={{ background: t.surface, border: `1px solid ${t.border}`, borderLeft: `4px solid ${t.blue}` }}>
               <div>
@@ -1502,7 +1486,6 @@ export default function QuestionBankSolutions() {
 
           {!allLoading && allMergedQuestions.length > 0 && (
             <>
-              {/* Tabs */}
               <div className="tab-bar qs-no-print" style={{ borderBottom: `1px solid ${t.border}` }}>
                 {[
                   { id: 'questions', label: `Questions (${allMergedQuestions.length})` },
@@ -1639,7 +1622,6 @@ export default function QuestionBankSolutions() {
 
           {!loading && solutionData && (
             <>
-              {/* Meta bar */}
               <div className="meta-bar qs-no-print" style={{ background: t.surface, border: `1px solid ${t.border}` }}>
                 <div className="meta-bar-main">
                   <div>
@@ -1739,7 +1721,6 @@ export default function QuestionBankSolutions() {
 function KatexStyle() {
   return (
     <style>{`
-      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600;700&display=swap');
       .katex { font-size: 1.06em; }
       .katex-display { overflow-x: auto; padding: 4px 0; margin: 0 !important; }
       .katex-display > .katex { text-align: left; }
