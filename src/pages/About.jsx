@@ -279,7 +279,7 @@ export default function About() {
             
             <div style={{ display: 'grid', gap: '0.75rem' }}>
               <div className="dev-social-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '0.6rem' }}>
-                <a href="https://a3kmstudio.vercel.app/Portfolio_Clients/Mr_Akhinoor_Portfolio" target="_blank" rel="noopener noreferrer" className="dev-social-portfolio" style={{ padding: '0.75rem 1rem', borderRadius: '12px', background: 'rgba(14,165,233,.12)', border: '1px solid rgba(14,165,233,.18)', color: 'var(--text)', textDecoration: 'none', fontSize: '0.9rem', fontWeight: 700, textAlign: 'center' }}>
+                <a href="https://a3kmstudio.vercel.app/Portfolio_Clients/Mr_Akhinoor_Portfolio/index.html" target="_blank" rel="noopener noreferrer" className="dev-social-portfolio" style={{ padding: '0.75rem 1rem', borderRadius: '12px', background: 'rgba(14,165,233,.12)', border: '1px solid rgba(14,165,233,.18)', color: 'var(--text)', textDecoration: 'none', fontSize: '0.9rem', fontWeight: 700, textAlign: 'center' }}>
                   Portfolio
                 </a>
                 <a href="https://github.com/Akhinoor14" target="_blank" rel="noopener noreferrer" style={{ padding: '0.75rem 1rem', borderRadius: '12px', background: 'rgba(51,65,85,.12)', border: '1px solid rgba(51,65,85,.16)', color: 'var(--text)', textDecoration: 'none', fontSize: '0.9rem', fontWeight: 700, textAlign: 'center' }}>
@@ -315,8 +315,8 @@ export default function About() {
                   <a href="https://bloodsync-dream.vercel.app/" target="_blank" rel="noopener noreferrer" style={{ padding: '0.75rem 1rem', borderRadius: '12px', border: '1px solid var(--border)', background: 'rgba(255,255,255,0.5)', color: 'var(--text)', textDecoration: 'none', fontSize: '0.9rem', fontWeight: 700, textAlign: 'center' }}>
                     BloodSync
                   </a>
-                  <a href="https://fx991ex-calculator.vercel.app/" target="_blank" rel="noopener noreferrer" style={{ padding: '0.75rem 1rem', borderRadius: '12px', border: '1px solid var(--border)', background: 'rgba(255,255,255,0.5)', color: 'var(--text)', textDecoration: 'none', fontSize: '0.9rem', fontWeight: 700, textAlign: 'center' }}>
-                    FX991EX
+                  <a href="https://scriptova.vercel.app/" target="_blank" rel="noopener noreferrer" style={{ padding: '0.75rem 1rem', borderRadius: '12px', border: '1px solid var(--border)', background: 'rgba(255,255,255,0.5)', color: 'var(--text)', textDecoration: 'none', fontSize: '0.9rem', fontWeight: 700, textAlign: 'center' }}>
+                    Scriptova
                   </a>
                 </div>
               </div>
