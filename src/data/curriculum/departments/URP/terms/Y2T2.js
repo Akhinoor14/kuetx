@@ -42,8 +42,8 @@ export const Y2T2 = [
   {
     "code": "URP 2292",
     "title": "Computer Applications in Planning",
-    "credits": "3,00",
-    "contactHours": "6 Hours/week",
+    "credits": "3",
+    "contactHours": "3 Hours/week",
     "type": "Sessional",
     "isOptional": false
   },
