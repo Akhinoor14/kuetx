@@ -652,10 +652,10 @@ export default function Results() {
             borderBottom: '1px solid var(--border)',
             flexWrap: 'wrap'
           }}>
-            {/* Total Marks */}
+            {/* FIX 1: Grade Points — correct label, correct values */}
             <div style={{ flex: 1, minWidth: 120 }}>
-              <div style={{ fontSize: 10, color: 'var(--muted)', marginBottom: 4, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.03em' }}>Total Mark Points</div>
-              <div style={{ fontSize: 18, fontWeight: 700, color: 'var(--accent)' }}>{term.totalCredits} / {courseCount * 4.0}</div>
+              <div style={{ fontSize: 10, color: 'var(--muted)', marginBottom: 4, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.03em' }}>Grade Points</div>
+              <div style={{ fontSize: 18, fontWeight: 700, color: 'var(--accent)' }}>{term.pts.toFixed(2)} / {(term.totalCredits * 4.0).toFixed(2)}</div>
             </div>
             {/* Completion */}
             <div style={{ flex: 1, minWidth: 120 }}>
@@ -729,7 +729,10 @@ export default function Results() {
                 </tr>
               </thead>
               <tbody>
-                {term.courses.map((c, idx) => (
+                {/* FIX 2: Disable select dropdowns for ongoing term courses */}
+                {term.courses.map((c, idx) => {
+                  const isOngoingCourse = term.key === currentTermKey && currentTermIsOngoing;
+                  return (
                   <tr key={c.id} style={{ borderBottom: '1px solid var(--border)', background: idx % 2 ? 'transparent' : 'rgba(0,0,0,0.01)', transition: 'background 0.2s' }}>
                     <td style={{ padding: '10px 12px', fontFamily: 'var(--font-mono)', fontWeight: 700, fontSize: 12, color: 'var(--accent)' }}>{c.code}</td>
                     <td style={{ padding: '10px 12px', maxWidth: 240, fontWeight: 500 }}>{c.name}</td>
@@ -742,19 +745,32 @@ export default function Results() {
                       {String(c.id).startsWith('legacy-') ? (
                         <span className="text-xs text-muted">Imported</span>
                       ) : c.type === 'Sessional' ? (
-                        <select value={(marks[c.id] || {}).resultGrade || ''} onChange={e => onMarkChange(c.id, 'resultGrade', e.target.value)}>
-                          <option value="">Upload grade</option>
-                          {GRADE_SCALE.map(g => <option key={g.grade} value={g.grade}>{g.grade}</option>)}
+                        <select
+                          value={(marks[c.id] || {}).resultGrade || ''}
+                          onChange={e => onMarkChange(c.id, 'resultGrade', e.target.value)}
+                          disabled={isOngoingCourse}
+                          title={isOngoingCourse ? 'Result upload disabled for ongoing term' : ''}
+                          style={isOngoingCourse ? { opacity: 0.45, cursor: 'not-allowed', pointerEvents: 'none' } : {}}
+                        >
+                          <option value="">{isOngoingCourse ? 'Ongoing — locked' : 'Upload grade'}</option>
+                          {!isOngoingCourse && GRADE_SCALE.map(g => <option key={g.grade} value={g.grade}>{g.grade}</option>)}
                         </select>
                       ) : (
-                        <select value={(marks[c.id] || {}).publishedGrade || ''} onChange={e => onMarkChange(c.id, 'publishedGrade', e.target.value)}>
-                          <option value="">Upload grade</option>
-                          {GRADE_SCALE.map(g => <option key={g.grade} value={g.grade}>{g.grade}</option>)}
+                        <select
+                          value={(marks[c.id] || {}).publishedGrade || ''}
+                          onChange={e => onMarkChange(c.id, 'publishedGrade', e.target.value)}
+                          disabled={isOngoingCourse}
+                          title={isOngoingCourse ? 'Result upload disabled for ongoing term' : ''}
+                          style={isOngoingCourse ? { opacity: 0.45, cursor: 'not-allowed', pointerEvents: 'none' } : {}}
+                        >
+                          <option value="">{isOngoingCourse ? 'Ongoing — locked' : 'Upload grade'}</option>
+                          {!isOngoingCourse && GRADE_SCALE.map(g => <option key={g.grade} value={g.grade}>{g.grade}</option>)}
                         </select>
                       )}
                     </td>
                   </tr>
-                ))}
+                  );
+                })}
               </tbody>
             </table>
             </div>
