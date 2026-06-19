@@ -7,6 +7,7 @@ import { store, DEFAULT_PROFILE } from '../store/store';
 import { useNavConfig } from './nav-system/useNavConfig';
 import { useFavorites } from '../hooks/useFavorites';
 import { usePinnedPages } from '../hooks/usePinnedPages';
+import DriveConnectButton from './DriveConnectButton';
 
 export function Sidebar({ open, onClose, compact = false, onToggleCompact }) {
   // debug: log available icons and check common icon names
@@ -421,8 +422,15 @@ export function Sidebar({ open, onClose, compact = false, onToggleCompact }) {
         )}
 
         {/* Bottom */}
-        <div style={{ padding: '10px 14px', borderTop: '1px solid var(--border)', fontSize: 11, color: 'var(--muted)', textAlign: 'center' }}>
-          {compact ? 'v3.2' : 'KUETx v3.2 · All data stored locally'}
+        <div style={{ padding: '10px 14px', borderTop: '1px solid var(--border)', fontSize: 11, color: 'var(--muted)' }}>
+          {compact ? (
+            <div style={{ textAlign: 'center' }}>v3.2</div>
+          ) : (
+            <>
+              <DriveConnectButton variant="badge" />
+              <div style={{ marginTop: 4, color: 'var(--muted)', fontSize: 10 }}>KUETx v3.2 · Data stored locally</div>
+            </>
+          )}
         </div>
       </aside>
     </>

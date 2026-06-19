@@ -507,6 +507,22 @@ export const getRoutinePreviewDate = (holidayDates = [], now = new Date()) => {
 
 // Get effective attendance for a course — daily logs take priority
 export const computeEffectiveAttendance = (courseId) => {
+  const source = store.get('attAttendanceSource') || 'daily';
+  if (source === 'combined') {
+    const combined = store.get('attCombinedData') || {};
+    let held = 0, attended = 0;
+    Object.entries(combined).forEach(([key, value]) => {
+      if (key === courseId || key.startsWith(`${courseId}_`)) {
+        const h = Number(value?.held || 0);
+        const a = Number(value?.attended || 0);
+        held += h;
+        attended += a;
+      }
+    });
+    if (held > 0) return { held, attended, pct: Math.round((attended / held) * 100), source: 'combined' };
+    return { held: 0, attended: 0, pct: null, source: 'combined' };
+  }
+
   const logs   = store.get('attLogs') || {};
   const manual = store.get('attendance') || {};
   let held = 0, attended = 0;

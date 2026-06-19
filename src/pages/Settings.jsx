@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useTheme, THEMES } from '../hooks/useTheme';
 import { store } from '../store/store';
-import { Download, Upload, Trash2, HardDrive, RefreshCw, Shield, Database, Wifi, WifiOff } from 'lucide-react';
+import { Download, Upload, Trash2, HardDrive, RefreshCw, Shield, Database, Wifi, WifiOff, Cloud } from 'lucide-react';
+import DriveConnectButton from '../components/DriveConnectButton';
+import { scheduleAutoBackup } from '../lib/driveSync';
 
 // ── Auto-backup to localStorage snapshot ─────────────────────────────────────
 const BACKUP_KEY = 'kuetx_autobackup_';
@@ -39,6 +41,8 @@ export default function Settings() {
     const off = () => setIsOnline(false);
     window.addEventListener('online', on);
     window.addEventListener('offline', off);
+    // Trigger auto Drive backup if connected and 24h passed
+    scheduleAutoBackup(() => store.exportAll());
     return () => { window.removeEventListener('online', on); window.removeEventListener('offline', off); };
   }, []);
 
@@ -290,6 +294,17 @@ export default function Settings() {
         <div style={{ marginTop: 12, padding: '8px 12px', borderRadius: 7, background: 'var(--bg)', fontSize: 11, color: 'var(--muted)', lineHeight: 1.6 }}>
           💡 <strong>Tip:</strong> Save backup to Google Drive / Telegram Saved Messages / Email yourself for safekeeping. When you restore, all courses, marks, attendance, diary entries come back exactly as they were.
         </div>
+      </div>
+
+      {/* Drive Sync */}
+      <div className="card" style={{ marginBottom: 14 }}>
+        <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 4, display: 'flex', alignItems: 'center', gap: 6 }}>
+          <Cloud size={14} /> Google Drive Sync
+        </div>
+        <div style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 12 }}>
+          Auto-backup to your own Google Drive. No server. Works across devices.
+        </div>
+        <DriveConnectButton variant="full" />
       </div>
 
       {/* Import preview modal (simple) */}

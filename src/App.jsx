@@ -9,6 +9,7 @@ import PWAInstallPrompt from './components/PWAInstallPrompt';
 import { BottomNav, useIsMobileNav } from './components/BottomNav';
 import GlobalToasts from './components/GlobalToasts';
 import BackupReminderGate from './components/BackupReminderGate';
+import DriveAnnouncementModal from './components/DriveAnnouncementModal';
 
 // Pages
 import Dashboard from './pages/Dashboard';
@@ -119,6 +120,7 @@ function Layout() {
         {!isQuestionBankViewer && <BottomNav />}
         <GlobalToasts />
         <BackupReminderGate />
+        <DriveAnnouncementModal />
       </div>
     </div>
   );

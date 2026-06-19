@@ -146,6 +146,11 @@ function CourseCard({ course, marks, onChange, onOpenMarkingHelp, isCurrentOngoi
                   Auto from Attendance page
                 </div>
               )}
+              {attMode === 'auto' && attSource === 'combined' && (
+                <div style={{ fontSize: 11, marginTop: 6, color: 'var(--muted)' }}>
+                  Auto from Combined attendance data
+                </div>
+              )}
               {attMode === 'auto' && attSource === 'manual' && (
                 <div style={{ fontSize: 11, marginTop: 6, color: 'var(--muted)' }}>
                   Auto from manual attendance entry

@@ -857,7 +857,7 @@ export default function Attendance() {
   const profile = getProfile();
   const courses = getAllCourses(profile).filter(c => c.status === 'active' || c.status === 'backlog');
   const [logs, setLogs] = useState(() => store.get('attLogs') || {});
-  const [tab, setTab] = useState('daily');
+  const [tab, setTab] = useState(() => store.get('attAttendanceSource') === 'combined' ? 'combined' : 'daily');
   const [schedule, setSchedule] = useState(() => store.get('schedule') || []);
   const [settings, setSettings] = useState(() => store.get('scheduleSettings') || {});
   const [combinedMode, setCombinedMode] = useState(() => !!store.get('attCombinedMode'));
@@ -883,6 +883,12 @@ export default function Attendance() {
     setCombinedMode(next);
     store.set('attCombinedMode', next);
   };
+
+  useEffect(() => {
+    const source = tab === 'daily' ? 'daily' : (combinedMode ? 'combined' : 'daily');
+    store.set('attAttendanceSource', source);
+  }, [tab, combinedMode]);
+
   const updateCombined = (courseId, teacher, field, value) => {
     const key = `${courseId}_${teacher || ''}`;
     const safe = Math.max(0, Number(value) || 0);

@@ -2,6 +2,7 @@ import { createPortal } from 'react-dom';
 import { Link, useLocation } from 'react-router-dom';
 import { useEffect, useMemo, useState } from 'react';
 import * as Icons from 'lucide-react';
+import DriveConnectButton from './DriveConnectButton';
 import { NAV } from '../nav';
 import { getProfile, store } from '../store/store';
 
@@ -352,6 +353,12 @@ export function BottomNav() {
                   <div className="mobile-bottom-nav-panel-subtitle">{(activePanel === 'quick-cr' && profile?.isCR) ? 'CR tools above your shortcuts' : PANEL_SUBTITLES[activePanel]}</div>
                 </div>
               </div>
+              {/* Drive status badge in panel header (menu) */}
+              {activePanel === 'menu' && (
+                <div style={{ marginLeft: 12 }}>
+                  <DriveConnectButton variant="badge" />
+                </div>
+              )}
               <button type="button" className="mobile-bottom-nav-close" onClick={() => setActivePanel(null)} aria-label="Close panel">
                 <Icons.X size={16} />
               </button>
