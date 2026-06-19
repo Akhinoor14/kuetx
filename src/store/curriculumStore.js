@@ -61,7 +61,7 @@ export const getTermCreditsFromCurriculum = (deptCode, termKey) => {
   const coursesInTerm = deptTerms[termKey] || [];
   return coursesInTerm.reduce((sum, course) => {
     if (course.type === 'NonCredit') return sum;
-    return sum + (course.credits || 0);
+    return sum + (Number(course.credits) || 0);
   }, 0);
 };
 
@@ -116,7 +116,7 @@ const buildCourseRecord = ({ deptCode, termKey, base, status, optionalSlotIndex 
   const optionalCourse = base.isOptional ? resolveOptionalCourse(deptCode, selectedOptionalCode) : null;
   const resolvedCode = optionalCourse?.code || base.code;
   const resolvedTitle = optionalCourse?.title || base.title;
-  const resolvedCredits = optionalCourse?.credits ?? base.credits;
+  const resolvedCredits = Number(optionalCourse?.credits ?? base.credits) || 0;
   const record = {
     id: courseId,
     source: 'curriculum',

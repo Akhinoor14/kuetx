@@ -647,8 +647,13 @@ export default function Results() {
           }}>
             {/* Total Marks */}
             <div style={{ flex: 1, minWidth: 120 }}>
-              <div style={{ fontSize: 10, color: 'var(--muted)', marginBottom: 4, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.03em' }}>Total Mark Points</div>
-              <div style={{ fontSize: 18, fontWeight: 700, color: 'var(--accent)' }}>{term.totalCredits} / {courseCount * 4.0}</div>
+              <div style={{ fontSize: 10, color: 'var(--muted)', marginBottom: 4, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.03em' }}>Grade Points</div>
+              <div style={{ fontSize: 18, fontWeight: 700, color: 'var(--accent)' }}>
+                {term.pts > 0 ? term.pts.toFixed(2) : '—'}
+                <span style={{ fontSize: 13, fontWeight: 400, color: 'var(--muted)', marginLeft: 4 }}>
+                  / {(term.totalCredits * 4.0).toFixed(2)}
+                </span>
+              </div>
             </div>
             {/* Completion */}
             <div style={{ flex: 1, minWidth: 120 }}>
