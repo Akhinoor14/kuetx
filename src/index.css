@@ -1138,6 +1138,69 @@ h3 { font-size: 15px; font-weight: 600; }
   margin-top:     22px;
 }
 
+/* ── Stat Mini (hero card stat tiles) ───────────────────────────────────── */
+.stat-mini {
+  background:    var(--surface);
+  border:        1px solid var(--border);
+  border-radius: 10px;
+  padding:       10px 12px;
+  text-align:    left;
+  min-width:     0;
+}
+.stat-mini-val {
+  font-size:    16px;
+  font-weight:  700;
+  color:        var(--text);
+  white-space:  nowrap;
+  overflow:     hidden;
+  text-overflow: ellipsis;
+}
+.stat-mini-lbl {
+  font-size:     11px;
+  color:         var(--muted);
+  margin-top:    2px;
+  white-space:   nowrap;
+  overflow:      hidden;
+  text-overflow: ellipsis;
+}
+.stat-mini-success { border-color: rgba(22, 163, 74, 0.3); background: var(--successBg); }
+.stat-mini-success .stat-mini-val { color: var(--success); }
+.stat-mini-danger  { border-color: rgba(220, 38, 38, 0.3); background: var(--dangerBg); }
+.stat-mini-danger  .stat-mini-val { color: var(--danger); }
+.stat-mini-warning { border-color: rgba(217, 119, 6, 0.3); background: var(--warningBg); }
+.stat-mini-warning .stat-mini-val { color: var(--warning); }
+
+.dark .stat-mini { background: rgba(255,255,255,0.04); }
+
+/* ── Filter Tabs ─────────────────────────────────────────────────────────── */
+.filter-tab-row {
+  display:       flex;
+  flex-wrap:     wrap;
+  gap:           6px;
+}
+.filter-tab {
+  display:       inline-flex;
+  align-items:   center;
+  padding:       6px 13px;
+  border-radius: 999px;
+  font-size:     12px;
+  font-weight:   600;
+  color:         var(--muted);
+  background:    var(--surface);
+  border:        1.5px solid var(--border);
+  cursor:        pointer;
+  transition:    background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+  white-space:   nowrap;
+}
+.filter-tab:hover { background: var(--inputBg); color: var(--text); }
+.filter-tab.active {
+  background:   var(--accent);
+  color:        var(--accentFg);
+  border-color: var(--accent);
+}
+
+.dark .filter-tab { background: rgba(255,255,255,0.04); }
+
 /* ── Progress ────────────────────────────────────────────────────────────── */
 .progress-bar {
   height:        8px;
