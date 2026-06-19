@@ -182,7 +182,7 @@ function CourseCard({ course, marks, onChange, onOpenMarkingHelp, isCurrentOngoi
                 </div>
                 <div className="planner-input-field">
                   <label style={{ fontSize: 11 }}>Att (0-15)</label>
-                  <input type="number" min={0} max={15} value={m.attTeacher1 ?? ''} onChange={e => onChange(course.id, 'attTeacher1', Math.min(15, Math.max(0, +e.target.value || 0)))} placeholder="auto" style={{ opacity: attMode !== 'manual_marks' ? 0.6 : 1 }} />
+                  <input type="number" min={0} max={15} value={attMode === 'manual_marks' ? (m.attTeacher1 ?? '') : attendanceAuto1} onChange={e => onChange(course.id, 'attTeacher1', Math.min(15, Math.max(0, +e.target.value || 0)))} placeholder="auto" style={{ opacity: attMode !== 'manual_marks' ? 0.6 : 1 }} disabled={attMode !== 'manual_marks'} />
                 </div>
               </div>
             )}
@@ -207,7 +207,7 @@ function CourseCard({ course, marks, onChange, onOpenMarkingHelp, isCurrentOngoi
                 </div>
                 <div className="planner-input-field">
                   <label style={{ fontSize: 11 }}>Att (0-15)</label>
-                  <input type="number" min={0} max={15} value={m.attTeacher2 ?? ''} onChange={e => onChange(course.id, 'attTeacher2', Math.min(15, Math.max(0, +e.target.value || 0)))} placeholder="auto" style={{ opacity: attMode !== 'manual_marks' ? 0.6 : 1 }} />
+                  <input type="number" min={0} max={15} value={attMode === 'manual_marks' ? (m.attTeacher2 ?? '') : attendanceAuto2} onChange={e => onChange(course.id, 'attTeacher2', Math.min(15, Math.max(0, +e.target.value || 0)))} placeholder="auto" style={{ opacity: attMode !== 'manual_marks' ? 0.6 : 1 }} disabled={attMode !== 'manual_marks'} />
                 </div>
               </div>
             )}
