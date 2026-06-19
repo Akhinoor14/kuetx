@@ -4,6 +4,7 @@
 // Storage: IndexedDB (50MB+) with automatic migration from localStorage
 
 import { initDB, getFromDB, setInDB, removeFromDB, getAllKeysFromDB, getAllFromDB, clearDB, migrateFromLocalStorage, getStorageUsage } from './indexeddb-store.js';
+import { clearAllCoursesCache } from './curriculumStore.js';
 
 const PREFIX = 'kuetx_';
 
@@ -1006,6 +1007,7 @@ export const setCourseOverride = (courseId, patch) => {
   const overrides = getCourseOverrides();
   const next = { ...overrides, [courseId]: { ...(overrides[courseId] || {}), ...(patch || {}) } };
   store.set('courseOverrides', next);
+  try { clearAllCoursesCache(); } catch {}
   return next;
 };
 

@@ -3,7 +3,7 @@ import * as Icons from 'lucide-react';
 
 export default function About() {
   return (
-    <div style={{ padding: '1.5rem 1rem', maxWidth: '1000px', margin: '0 auto' }}>
+    <div style={{ padding: '1.5rem 1rem', width: '100%', margin: '0 auto' }}>
       {/* Hero Section */}
       <div style={{
         marginBottom: '3rem',
@@ -295,7 +295,7 @@ export default function About() {
                   Facebook
                 </a>
                 <a href="mailto:mdakhinoorislam.official.2005@gmail.com" title="Email"
-                  style={{ padding: '0.75rem 1rem', borderRadius: '12px', background: 'rgba(239,68,68,.12)', border: '1px solid rgba(239,68,68,.20)', color: '#b91c1c', textDecoration: 'none', fontSize: '0.9rem', fontWeight: 700, textAlign: 'center' }}>
+                  style={{ padding: '0.75rem 1rem', borderRadius: '12px', background: 'rgba(var(--accentRGB), 0.12)', border: '1px solid rgba(var(--accentRGB), 0.20)', color: 'var(--danger)', textDecoration: 'none', fontSize: '0.9rem', fontWeight: 700, textAlign: 'center' }}>
                   Email
                 </a>
                 <a href="https://wa.me/8801724812042" target="_blank" rel="noopener noreferrer" title="WhatsApp"

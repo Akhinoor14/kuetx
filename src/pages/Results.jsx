@@ -61,6 +61,17 @@ export default function Results() {
   };
 
   const onMarkChange = (courseId, field, value) => {
+    // Prevent editing marks for courses in the ongoing current term
+    try {
+      const course = courses.find(c => c.id === courseId);
+      const termKey = course ? `Y${course.year}T${course.term}` : null;
+      const isOngoingCourse = termKey && termKey === currentTermKey && currentTermIsOngoing;
+      if (isOngoingCourse) {
+        alert('Editing marks for courses in the ongoing term is disabled.');
+        return;
+      }
+    } catch (e) {}
+
     const next = { ...marks, [courseId]: { ...(marks[courseId] || {}), [field]: value } };
     setMarks(next);
     store.set('marks', next);

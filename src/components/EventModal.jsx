@@ -45,8 +45,8 @@ export default function EventModal({ open, data, courses = [], teachersMap = {},
         </div>
 
         <div style={{ display: 'flex', justifyContent: 'flex-end', gap: 8, marginTop: 12 }}>
-          <button onClick={onCancel} style={{ padding: '8px 12px', background: 'transparent', border: '1px solid var(--border)', borderRadius: 8 }}>Cancel</button>
-          <button onClick={() => onSave(data)} style={{ padding: '8px 12px', background: '#6366f1', color: 'white', borderRadius: 8 }}>Save</button>
+          <button onClick={onCancel} style={{ padding: '8px 12px', background: 'transparent', border: '1px solid var(--border)', borderRadius: 8, color: 'var(--text)' }}>Cancel</button>
+          <button onClick={() => onSave(data)} style={{ padding: '8px 12px', background: 'var(--accent)', color: '#ffffff', borderRadius: 8, border: 'none', fontWeight: 600 }}>Save</button>
         </div>
       </div>
     </Modal>

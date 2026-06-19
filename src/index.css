@@ -943,6 +943,46 @@ body {
   .social-form-wide {
     grid-column: 1 / -1;
   }
+
+  @media (min-width: 720px) {
+    .tours-form-grid,
+    .projects-form-grid,
+    .social-form-grid,
+    .food-log-form-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .tours-form-grid.tours-form-grid-top,
+    .tours-form-grid.tours-form-grid-mid {
+      grid-template-columns: 1.5fr 1fr 1fr;
+    }
+
+    .projects-form-grid.projects-form-grid-top,
+    .projects-form-grid.projects-form-grid-bottom {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .food-log-form-card .food-log-actions,
+    .projects-form-actions,
+    .tours-form-actions,
+    .social-form-actions {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .food-log-save-btn,
+    .food-log-cancel-btn,
+    .projects-form-save,
+    .projects-form-cancel,
+    .tours-form-save,
+    .tours-form-cancel,
+    .social-form-save,
+    .social-form-cancel {
+      width: auto;
+      flex: 1;
+    }
+  }
 }
 
 /* ── Card ────────────────────────────────────────────────────────────────── */

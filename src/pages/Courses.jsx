@@ -116,7 +116,19 @@ function NoteChipEditor({ value, onChange }) {
 }
 
 function CustomCourseForm({ initial, onSave, onCancel }) {
-  const blank = { code: '', name: '', type: 'Theory', credits: 3, year: 1, term: 1, status: 'active', isCore: true, notes: '', chapters: [] };
+  const profile = getProfile();
+  let defaultYear = 1;
+  let defaultTerm = 1;
+  const currentTermKey = profile?.currentTermKey;
+  if (currentTermKey) {
+    const m = String(currentTermKey).match(/^Y(\d+)T(\d+)$/);
+    if (m) {
+      defaultYear = +m[1];
+      defaultTerm = +m[2];
+    }
+  }
+
+  const blank = { code: '', name: '', type: 'Theory', credits: 3, year: defaultYear, term: defaultTerm, status: 'active', isCore: true, notes: '', chapters: [] };
   const [f, setF] = useState(initial || blank);
   const [newChapter, setNewChapter] = useState('');
   const [expandedChapter, setExpandedChapter] = useState(null);
@@ -170,6 +182,10 @@ function CustomCourseForm({ initial, onSave, onCancel }) {
         <div><label>Type</label><select value={f.type} onChange={e => set('type', e.target.value)}>{COURSE_TYPES.map(t => <option key={t.id} value={t.id}>{t.label}</option>)}</select></div>
         <div><label>Credits</label><input type="number" value={f.credits} onChange={e => set('credits', +e.target.value)} min={0.5} max={6} step={0.5} /></div>
       </div>
+       <div className="form-row form-row-2">
+         <div><label>Year</label><select value={f.year} onChange={e => set('year', +e.target.value)}>{YEARS.map(y => <option key={y} value={y}>Year {y}</option>)}</select></div>
+         <div><label>Term</label><select value={f.term} onChange={e => set('term', +e.target.value)}><option value={1}>Term 1</option><option value={2}>Term 2</option></select></div>
+       </div>
       
       {/* Chapters/Syllabus */}
       <div style={{ marginTop: 16, paddingTop: 12, borderTop: '1px solid var(--border)' }}>

@@ -3,6 +3,7 @@ import { Calendar as CalendarIcon, PlusCircle, ArrowLeft, ArrowRight, Trash, Inf
 import { store, uid, getProfile, getCurrentTermKey } from '../store/store';
 import { getAllCourses } from '../store/curriculumStore';
 import { notify } from '../lib/notify';
+import { useTheme } from '../hooks/useTheme';
 import CTPlannerCalendar from '../components/CTPlannerCalendar';
 import EventModal from '../components/EventModal';
 import { countWeeklyPressure, detectConflicts, generateSuggestions } from '../lib/smartAssist';
@@ -37,6 +38,8 @@ function pressureLabel(count) {
 }
 
 export default function CTQuizPlanning() {
+  const { themeId } = useTheme();
+  const isDark = themeId === 'dark';
   const today = new Date();
   const profile = getProfile();
   const currentTermKey = getCurrentTermKey(profile);
@@ -271,9 +274,9 @@ export default function CTQuizPlanning() {
 
   if (underConstruction) {
     return (
-      <div className="page-container" style={{ maxWidth: 1080, margin: '28px auto', padding: 20, minHeight: 'calc(100vh - 120px)', background: 'radial-gradient(circle at top left, rgba(99,102,241,0.12), transparent 26%), radial-gradient(circle at top right, rgba(6,182,212,0.12), transparent 22%), #f7fbff' }}>
+      <div className="page-container" style={{ width: '100%', margin: '28px auto', padding: 20, minHeight: 'calc(100vh - 120px)', background: `var(--bg)` }}>
         <div style={{ display: 'grid', gap: 24 }}>
-          <section style={{ overflow: 'hidden', borderRadius: 28, padding: '36px 28px', background: 'linear-gradient(135deg, rgba(124,58,237,0.95), rgba(6,182,212,0.95))', color: 'white', boxShadow: '0 30px 80px rgba(15,23,42,0.15)' }}>
+          <section style={{ overflow: 'hidden', borderRadius: 28, padding: '36px 28px', background: `linear-gradient(135deg, var(--accent), var(--accent2))`, color: 'white', boxShadow: '0 30px 80px rgba(15,23,42,0.15)' }}>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 16, alignItems: 'center' }}>
               <div style={{ width: 68, height: 68, borderRadius: 20, background: 'rgba(255,255,255,0.16)', display: 'grid', placeItems: 'center' }}>
                 <CalendarIcon size={34} />
@@ -290,14 +293,14 @@ export default function CTQuizPlanning() {
 
           <section style={{ display: 'grid', gap: 18 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-              <span style={{ width: 10, height: 10, borderRadius: '50%', background: '#7c3aed' }} />
-              <div style={{ fontSize: 18, fontWeight: 800 }}>What the planner will do</div>
+              <span style={{ width: 10, height: 10, borderRadius: '50%', background: `var(--accent)` }} />
+              <div style={{ fontSize: 18, fontWeight: 800, color: 'var(--text)' }}>What the planner will do</div>
             </div>
 
             <div style={{ display: 'grid', gap: 16, gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))' }}>
               {featureCards.map(card => (
-                <div key={card.title} style={{ padding: 20, borderRadius: 22, background: 'white', border: '1px solid rgba(15,23,42,0.08)', boxShadow: '0 18px 34px rgba(15,23,42,0.06)' }}>
-                  <div style={{ fontSize: 16, fontWeight: 800, marginBottom: 12 }}>{card.title}</div>
+                <div key={card.title} style={{ padding: 20, borderRadius: 22, background: `var(--card)`, border: `1px solid var(--border)`, boxShadow: '0 18px 34px rgba(15,23,42,0.06)' }}>
+                  <div style={{ fontSize: 16, fontWeight: 800, marginBottom: 12, color: 'var(--text)' }}>{card.title}</div>
                   <ul style={{ margin: 0, paddingLeft: 18, color: 'var(--muted)', fontSize: 14, lineHeight: 1.8 }}>
                     {card.items.map(item => <li key={item}>{item}</li>)}
                   </ul>
@@ -306,24 +309,24 @@ export default function CTQuizPlanning() {
             </div>
           </section>
 
-          <section style={{ display: 'grid', gap: 12, padding: 24, borderRadius: 24, background: 'white', border: '1px solid rgba(15,23,42,0.08)', boxShadow: '0 20px 40px rgba(15,23,42,0.06)' }}>
+          <section style={{ display: 'grid', gap: 12, padding: 24, borderRadius: 24, background: `var(--card)`, border: `1px solid var(--border)`, boxShadow: '0 20px 40px rgba(15,23,42,0.06)' }}>
             <div style={{ display: 'grid', gap: 10 }}>
-              <div style={{ fontSize: 16, fontWeight: 800 }}>Why this page looks like this</div>
+              <div style={{ fontSize: 16, fontWeight: 800, color: 'var(--text)' }}>Why this page looks like this</div>
               <p style={{ margin: 0, color: 'var(--muted)', fontSize: 14, lineHeight: 1.8 }}>
                 The planner is still under development, so the current screen shows a polished preview instead of unfinished content.
               </p>
             </div>
             <div style={{ display: 'grid', gap: 10, gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))' }}>
-              <div style={{ padding: 16, borderRadius: 18, background: '#f8fafc', border: '1px solid rgba(148,163,184,0.16)' }}>
-                <div style={{ fontSize: 13, fontWeight: 800, marginBottom: 6 }}>Clean presentation</div>
+              <div style={{ padding: 16, borderRadius: 18, background: `var(--surface)`, border: `1px solid var(--border)` }}>
+                <div style={{ fontSize: 13, fontWeight: 800, marginBottom: 6, color: 'var(--text)' }}>Clean presentation</div>
                 <div style={{ color: 'var(--muted)', fontSize: 13 }}>Short, clear sections with bold headings.</div>
               </div>
-              <div style={{ padding: 16, borderRadius: 18, background: '#f8fafc', border: '1px solid rgba(148,163,184,0.16)' }}>
-                <div style={{ fontSize: 13, fontWeight: 800, marginBottom: 6 }}>Minimal text</div>
+              <div style={{ padding: 16, borderRadius: 18, background: `var(--surface)`, border: `1px solid var(--border)` }}>
+                <div style={{ fontSize: 13, fontWeight: 800, marginBottom: 6, color: 'var(--text)' }}>Minimal text</div>
                 <div style={{ color: 'var(--muted)', fontSize: 13 }}>Only the key planner ideas are shown here.</div>
               </div>
-              <div style={{ padding: 16, borderRadius: 18, background: '#f8fafc', border: '1px solid rgba(148,163,184,0.16)' }}>
-                <div style={{ fontSize: 13, fontWeight: 800, marginBottom: 6 }}>Preview mode</div>
+              <div style={{ padding: 16, borderRadius: 18, background: `var(--surface)`, border: `1px solid var(--border)` }}>
+                <div style={{ fontSize: 13, fontWeight: 800, marginBottom: 6, color: 'var(--text)' }}>Preview mode</div>
                 <div style={{ color: 'var(--muted)', fontSize: 13 }}>The real planner will replace this page later.</div>
               </div>
             </div>
@@ -334,13 +337,13 @@ export default function CTQuizPlanning() {
   }
 
   return (
-    <div className="page-container" style={{ maxWidth: 1100, margin: '28px auto', padding: 20 }}>
+    <div className="page-container" style={{ width: '100%', margin: '28px auto', padding: 20 }}>
       <div style={{ display: 'flex', gap: 16, alignItems: 'center', marginBottom: 18 }}>
-        <div style={{ background: 'linear-gradient(135deg,#7c3aed, #06b6d4)', padding: 12, borderRadius: 12, color: 'white' }}>
+        <div style={{ background: `linear-gradient(135deg, var(--accent), var(--accent2))`, padding: 12, borderRadius: 12, color: 'white' }}>
           <CalendarIcon size={34} />
         </div>
         <div style={{ flex: 1 }}>
-          <h1 style={{ margin: 0, fontSize: 26, fontWeight: 800 }}>CT & Quiz Planner</h1>
+          <h1 style={{ margin: 0, fontSize: 26, fontWeight: 800, color: 'var(--text)' }}>CT & Quiz Planner</h1>
           <div style={{ color: 'var(--muted)', fontSize: 14 }}>A lightweight demo planner — click a date to view or add events. Smart hints will show below.</div>
         </div>
         <div style={{ textAlign: 'right' }}>
@@ -349,7 +352,7 @@ export default function CTQuizPlanning() {
       </div>
 
       <div className="ct-planner-layout">
-        <div style={{ background: 'white', borderRadius: 12, padding: 14, border: '1px solid rgba(15, 23, 42, 0.06)' }}>
+        <div style={{ background: 'var(--card)', borderRadius: 12, padding: 14, border: `1px solid var(--border)` }}>
           <CTPlannerCalendar schedule={schedule} viewDate={new Date(viewYear, viewMonth, 1)} onDateClick={onFcDateClick} onEventClick={onFcEventClick} onEventDrop={onFcEventDrop} />
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 8 }}>
             <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>

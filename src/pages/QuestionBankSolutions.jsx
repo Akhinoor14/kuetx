@@ -8,7 +8,55 @@ import {
 import 'katex/dist/katex.min.css';
 import '../styles/questionbank.css';
 import { getProfile, getCurrentTermKey } from '../store/store';
+import { useTheme } from '../hooks/useTheme';
 import { QB_DEPARTMENTS, QB_DEPT_CODE_MAP } from '../data/questionbank/questionBankData';
+
+// ─────────────────────────────────────────────────────────────────────────────
+// THEME — Using central theme system, adapted for solutions page display
+// ─────────────────────────────────────────────────────────────────────────────
+
+// Map central theme to solutions theme structure
+function mapCentralThemeToSolutions(themeId) {
+  const isDark = themeId === 'dark';
+  
+  if (isDark) {
+    return {
+      bg: '#0C1220', surface: '#131D2E', card: '#1A2740',
+      cardHov: '#1F3050', border: '#243451', borderSub: '#1A2B44',
+      accent: '#22C55E', accentDim: '#16A34A', accentGlow: 'rgba(34,197,94,0.12)',
+      blue: '#60A5FA', blueDim: '#3B82F6', blueBg: 'rgba(96,165,250,0.08)',
+      yellow: '#FBBF24', yellowBg: 'rgba(251,191,36,0.08)', yellowText: '#FDE68A',
+      text: '#E8F0FE', textSub: '#8BA3C4', textMut: '#4A6080',
+      eqBg: '#0E1A30', eqBord: '#3B82F6',
+      codeBgM: '#111827', codeBgP: '#060D17',
+      numBg: '#0D2E1A', numText: '#4ADE80',
+      shortBg: 'rgba(34,197,94,0.07)', shortBord: '#22C55E',
+      bnBg: 'rgba(251,191,36,0.07)', bnBord: '#FBBF24',
+      tagBg: 'rgba(96,165,250,0.12)', tagText: '#93C5FD', tagBord: 'rgba(96,165,250,0.3)',
+      divider: '#1A2B44',
+      selBg: '#1A2740', selBord: '#243451',
+      filterActiveBg: 'rgba(34,197,94,0.12)', filterActiveBord: '#22C55E', filterActiveText: '#4ADE80',
+    };
+  } else {
+    return {
+      bg: '#F0F4FA', surface: '#FFFFFF', card: '#FFFFFF',
+      cardHov: '#F0FDF4', border: '#D1DCF0', borderSub: '#E2ECF8',
+      accent: '#16A34A', accentDim: '#15803D', accentGlow: 'rgba(22,163,74,0.1)',
+      blue: '#2563EB', blueDim: '#1D4ED8', blueBg: 'rgba(37,99,235,0.06)',
+      yellow: '#D97706', yellowBg: 'rgba(217,119,6,0.07)', yellowText: '#92400E',
+      text: '#0F1F3D', textSub: '#3D5A80', textMut: '#8BA3C4',
+      eqBg: '#EEF4FF', eqBord: '#2563EB',
+      codeBgM: '#1C2333', codeBgP: '#0D1117',
+      numBg: '#DCFCE7', numText: '#15803D',
+      shortBg: '#F0FDF4', shortBord: '#16A34A',
+      bnBg: '#FFFBEB', bnBord: '#D97706',
+      tagBg: 'rgba(37,99,235,0.06)', tagText: '#1D4ED8', tagBord: 'rgba(37,99,235,0.2)',
+      divider: '#E2ECF8',
+      selBg: '#FFFFFF', selBord: '#D1DCF0',
+      filterActiveBg: 'rgba(22,163,74,0.08)', filterActiveBord: '#16A34A', filterActiveText: '#15803D',
+    };
+  }
+}
 
 // ─────────────────────────────────────────────────────────────────────────────
 // THEME — dark / light with system preference
@@ -51,27 +99,11 @@ const T = {
 };
 
 function useSolutionsTheme() {
-  const [dark, setDark] = useState(() => {
-    const saved = localStorage.getItem('kuetx-sol-theme');
-    if (saved) return saved === 'dark';
-    return window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)').matches : true;
-  });
-  useEffect(() => {
-    const mq = window.matchMedia('(prefers-color-scheme: dark)');
-    const h = e => {
-      if (!localStorage.getItem('kuetx-sol-theme')) setDark(e.matches);
-    };
-    mq.addEventListener('change', h);
-    return () => mq.removeEventListener('change', h);
-  }, []);
-  function toggle() {
-    setDark(d => {
-      const next = !d;
-      localStorage.setItem('kuetx-sol-theme', next ? 'dark' : 'light');
-      return next;
-    });
-  }
-  return { t: dark ? T.dark : T.light, dark, toggle };
+  const { themeId } = useTheme();
+  const isDark = themeId === 'dark';
+  const t = mapCentralThemeToSolutions(themeId);
+  
+  return { t, dark: isDark };
 }
 
 function useDebounce(value, delay) {
@@ -697,7 +729,7 @@ function QuestionCard({ question: q, globalIdx, showYearBadge, t, bookmarks, tog
 // ─────────────────────────────────────────────────────────────────────────────
 // SOLUTION OVERLAY
 // ─────────────────────────────────────────────────────────────────────────────
-function SolutionOverlay({ question: q, t, dark, toggleTheme, bookmarks, toggleBookmark, courseKey, courseMeta = {}, questionList = [], onClose, onNavigate }) {
+function SolutionOverlay({ question: q, t, dark, bookmarks, toggleBookmark, courseKey, courseMeta = {}, questionList = [], onClose, onNavigate }) {
   const typeColor = getTypeColor(q.type);
   const hasCode = q.matlab || q.python;
   const year = q._year || courseMeta.exam_year || '';
@@ -754,8 +786,8 @@ function SolutionOverlay({ question: q, t, dark, toggleTheme, bookmarks, toggleB
                 {isBookmarked ? <BookmarkCheck size={15} /> : <Bookmark size={15} />}
               </button>
             )}
-            {toggleTheme && (
-              <button onClick={toggleTheme} className="solpage-theme-btn" style={{ color: t.textMut, border: `1px solid ${t.border}` }}>
+            {false && (
+              <button onClick={() => {}} className="solpage-theme-btn" style={{ color: t.textMut, border: `1px solid ${t.border}` }}>
                 {dark ? <Sun size={14} /> : <Moon size={14} />}
               </button>
             )}
@@ -967,7 +999,7 @@ function FilterBar({ allYears, allTypes, activeYears, activeTypes, onYearToggle,
 // MAIN COMPONENT
 // ─────────────────────────────────────────────────────────────────────────────
 export default function QuestionBankSolutions() {
-  const { t, dark, toggle: toggleTheme } = useSolutionsTheme();
+  const { t, dark } = useSolutionsTheme();
 
   // Inject CSS variables
   useEffect(() => {
@@ -1236,9 +1268,11 @@ export default function QuestionBankSolutions() {
           )}
         </div>
 
-        <button onClick={toggleTheme} className="topnav-theme" style={{ color: t.textMut, border: `1px solid ${t.border}` }}>
+        {false && (
+        <button onClick={() => {}} className="topnav-theme" style={{ color: t.textMut, border: `1px solid ${t.border}` }}>
           {dark ? <Sun size={14} /> : <Moon size={14} />}
         </button>
+        )}
       </div>
     </div>
   );
@@ -1526,7 +1560,7 @@ export default function QuestionBankSolutions() {
 
                   {selectedQuestion ? (
                     <SolutionOverlay
-                      question={selectedQuestion} t={t} dark={dark} toggleTheme={toggleTheme}
+                      question={selectedQuestion} t={t} dark={dark}
                       bookmarks={bookmarks} toggleBookmark={toggleBookmark}
                       courseKey={courseKey}
                       courseMeta={{ subject_code: courseInfo?.courseCode, subject: courseInfo?.name, term: selectedTerm }}
@@ -1658,7 +1692,7 @@ export default function QuestionBankSolutions() {
 
               {selectedQuestion ? (
                 <SolutionOverlay
-                  question={selectedQuestion} t={t} dark={dark} toggleTheme={toggleTheme}
+                  question={selectedQuestion} t={t} dark={dark}
                   bookmarks={bookmarks} toggleBookmark={toggleBookmark}
                   courseKey={courseKey}
                   courseMeta={{

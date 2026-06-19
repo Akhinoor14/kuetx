@@ -83,6 +83,17 @@ const getCustomCourses = () => {
   return [];
 };
 
+// Merge any stored course overrides into custom course records so UI updates (status, notes, etc.) apply
+const getCustomCoursesWithOverrides = () => {
+  const custom = store.get('customCourses') || [];
+  const overrides = getCourseOverrides();
+  if (!Array.isArray(custom)) return [];
+  return custom.map(c => {
+    const o = overrides[c.id];
+    return o ? { ...c, ...o } : c;
+  });
+};
+
 const getCourseOverrides = () => store.get('courseOverrides') || {};
 
 const getOptionalSelections = () => store.get('optionalSelections') || {};
@@ -170,7 +181,7 @@ export const syncCurriculumCourses = (profile) => {
       });
     });
 
-  return [...curriculumCourses, ...getCustomCourses()];
+  return [...curriculumCourses, ...getCustomCoursesWithOverrides()];
 };
 
 export const getAllCourses = (profile) => {

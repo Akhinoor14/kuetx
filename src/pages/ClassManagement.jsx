@@ -350,7 +350,7 @@ export default function ClassManagement() {
   };
 
   return (
-    <div className="page-enter page-container class-management-page" style={{ maxWidth: 1120 }}>
+    <div className="page-enter page-container class-management-page" style={{ width: '100%' }}>
       <div className="class-management-hero">
         <div className="class-management-hero-copy">
           <div className="class-management-kicker">Class Management</div>

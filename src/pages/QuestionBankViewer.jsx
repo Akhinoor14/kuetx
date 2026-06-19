@@ -25,7 +25,7 @@ export default function QuestionBankViewer() {
   if (!initialUrl) return null;
 
   return (
-    <div style={{ minHeight: '100vh', background: 'var(--bg, #0c0d10)' }}>
+    <div style={{ minHeight: '100vh', background: 'var(--bg)' }}>
       <PDFViewer
         initialUrl={initialUrl}
         initialName={initialName}
