@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect, useCallback } from 'react';
+import { useState, useMemo, useEffect, useCallback, useRef } from 'react';
 import Modal from '../components/Modal';
 import { ChevronLeft, ChevronRight, AlertTriangle, CheckCircle, TrendingUp, Users, BookOpen, Award, CalendarDays, X } from 'lucide-react';
 import {
@@ -127,7 +127,18 @@ function getScheduleCoursesForDate(schedule, date) {
   }));
 }
 
-// Card color palettes – adjacent hues, close but distinct
+// ── Priority hint — ONE per card ───────────────────────────────────────────
+function getHint(pct, canMiss, needNext) {
+  if (pct === null) return null;
+  if (pct < MIN_ATTENDANCE_PERCENT) return { type: 'danger', text: 'At risk — below 60%' };
+  if (canMiss === 0) return { type: 'warn', text: 'No absences left' };
+  if (canMiss !== null && canMiss <= 2) return { type: 'warn', text: `${canMiss} miss${canMiss !== 1 ? 'es' : ''} → drops` };
+  if (needNext !== null && needNext > 0) return { type: 'info', text: `${needNext} more → ↑ grade` };
+  if (pct >= 90) return { type: 'good', text: 'Top slab ✓' };
+  if (canMiss !== null && canMiss > 2) return { type: 'muted', text: `Miss up to ${canMiss}` };
+  return null;
+}
+
 const PALETTE_L = [
   { bg: '#eef6ee', bd: '#b8dab8' }, { bg: '#eef3fb', bd: '#b5cff5' },
   { bg: '#f5eefb', bd: '#d4b5f5' }, { bg: '#fef6ee', bd: '#f5ceaa' },
@@ -155,7 +166,7 @@ function useDark() {
   return dark;
 }
 
-// ── Holiday Setup Modal (self-contained, same as Schedule page) ─────────────
+// ── Holiday Setup Modal ────────────────────────────────────────────────────
 function HolidayModal({ isOpen, onClose, scheduleSettings, onSave }) {
   const [mode, setMode] = useState('calendar');
   const [singleDate, setSingleDate] = useState('');
@@ -221,7 +232,6 @@ function HolidayModal({ isOpen, onClose, scheduleSettings, onSave }) {
   return (
     <Modal onClose={onClose} contentStyle={{ width: 'min(calc(100vw - 24px), 480px)', maxWidth: '100%', maxHeight: '90vh', overflowY: 'auto', padding: 'clamp(16px, 4vw, 20px)', background: 'var(--bg)', pointerEvents: 'auto' }}>
       <div className="card" style={{ width: '100%', maxHeight: '100%', overflowY: 'auto', background: 'transparent', pointerEvents: 'auto' }}>
-        {/* Header */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 'clamp(12px, 3vw, 14px)', gap: 8 }}>
           <div>
             <div style={{ fontWeight: 800, fontSize: 'clamp(14px, 4vw, 15px)' }}>Holiday Calendar</div>
@@ -231,8 +241,6 @@ function HolidayModal({ isOpen, onClose, scheduleSettings, onSave }) {
             <X size={20} />
           </button>
         </div>
-
-        {/* Mode tabs */}
         <div style={{ display: 'flex', gap: 4, marginBottom: 'clamp(12px, 3vw, 14px)', borderBottom: '1px solid var(--border)', paddingBottom: 10, flexWrap: 'wrap' }}>
           {[['calendar', '📅 Calendar'], ['single', '📆 Single Date']].map(([id, label]) => (
             <button key={id} onClick={() => setMode(id)} style={{
@@ -241,8 +249,6 @@ function HolidayModal({ isOpen, onClose, scheduleSettings, onSave }) {
             }}>{label}</button>
           ))}
         </div>
-
-        {/* Calendar Mode */}
         {mode === 'calendar' && (
           <div>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 'clamp(10px, 2vw, 12px)', gap: 8, flexWrap: 'wrap' }}>
@@ -287,8 +293,6 @@ function HolidayModal({ isOpen, onClose, scheduleSettings, onSave }) {
             </div>
           </div>
         )}
-
-        {/* Single date mode */}
         {mode === 'single' && (
           <div style={{ marginBottom: 'clamp(12px, 3vw, 14px)', display: 'flex', gap: 8, flexWrap: 'wrap' }}>
             <input type="date" value={singleDate} onChange={e => setSingleDate(e.target.value)}
@@ -298,8 +302,6 @@ function HolidayModal({ isOpen, onClose, scheduleSettings, onSave }) {
             </button>
           </div>
         )}
-
-        {/* Saved holidays list */}
         <div style={{ borderTop: '1px solid var(--border)', paddingTop: 'clamp(10px, 2vw, 12px)' }}>
           <div style={{ fontSize: 'clamp(11px, 2vw, 12px)', fontWeight: 700, marginBottom: 8 }}>Saved Holidays ({holidayDates.length})</div>
           {holidayDates.length === 0 ? (
@@ -322,106 +324,124 @@ function HolidayModal({ isOpen, onClose, scheduleSettings, onSave }) {
   );
 }
 
-// ── Hero Card ──────────────────────────────────────────────────────────────
+// ── Compact Hero Card ──────────────────────────────────────────────────────
 function AttendanceHero({ courses, logs, schedule, settings, combinedMode, combinedData }) {
   const dark = useDark();
   const theory = (courses || []).filter(c => !isAutoFull(c.type));
 
-  const stats = useMemo(() => theory.map(c => {
-    const teachers = getTeachersForCourse(settings, schedule, c.id);
-    const ts = teachers.length ? teachers : [''];
-    let totalHeld = 0, totalAttended = 0;
-    ts.forEach(t => {
-      let s;
-      if (combinedMode) {
-        const key = `${c.id}_${t || ''}`;
-        s = { held: Number(combinedData[key]?.held || 0), attended: Number(combinedData[key]?.attended || 0) };
-      } else {
-        s = getEffective(c.id, t, logs);
-      }
-      totalHeld += s.held; totalAttended += s.attended;
+  // Stable initial order — computed once, never re-sorted on data change
+  const stableOrder = useRef(null);
+
+  const stats = useMemo(() => {
+    const computed = theory.map(c => {
+      const teachers = getTeachersForCourse(settings, schedule, c.id);
+      const ts = teachers.length ? teachers : [''];
+      let totalHeld = 0, totalAttended = 0;
+      ts.forEach(t => {
+        let s;
+        if (combinedMode) {
+          const key = `${c.id}_${t || ''}`;
+          s = { held: Number(combinedData[key]?.held || 0), attended: Number(combinedData[key]?.attended || 0) };
+        } else {
+          s = getEffective(c.id, t, logs);
+        }
+        totalHeld += s.held; totalAttended += s.attended;
+      });
+      const pct = totalHeld > 0 ? Math.round((totalAttended / totalHeld) * 100) : null;
+      const canMiss = pct !== null ? classesUntilDrop(totalAttended, totalHeld, pct) : null;
+      const needNext = pct !== null && pct < 90 ? classesNeededForNextSlab(totalAttended, totalHeld, pct) : null;
+      return {
+        c, pct, totalHeld, totalAttended,
+        fullMarks: getFullCourseMarks(pct),
+        canMiss, needNext,
+        slab: getCurrentSlab(pct),
+        hint: getHint(pct, canMiss, needNext),
+      };
     });
-    const pct = totalHeld > 0 ? Math.round((totalAttended / totalHeld) * 100) : null;
-    return {
-      c, pct, totalHeld, totalAttended,
-      fullMarks: getFullCourseMarks(pct),
-      ptMarks: getPerTeacherMarks(pct),
-      canMiss: pct !== null ? classesUntilDrop(totalAttended, totalHeld, pct) : null,
-      needNext: pct !== null && pct < 90 ? classesNeededForNextSlab(totalAttended, totalHeld, pct) : null,
-      slab: getCurrentSlab(pct),
-      hasTeachers: ts.some(t => !!t),
-    };
-  }).sort((a, b) => {
-    const r = p => p === null ? 3 : p < 60 ? 0 : p < 75 ? 1 : 2;
-    return r(a.pct) - r(b.pct);
-  }), [theory, combinedMode, combinedData, logs, schedule, settings]);
+
+    // Sort only on first render
+    if (!stableOrder.current) {
+      const sorted = computed.slice().sort((a, b) => {
+        const r = p => p === null ? 3 : p < 60 ? 0 : p < 75 ? 1 : 2;
+        return r(a.pct) - r(b.pct);
+      });
+      stableOrder.current = sorted.map(s => s.c.id);
+      return sorted;
+    }
+
+    // Subsequent renders: preserve stable order
+    const map = new Map(computed.map(s => [s.c.id, s]));
+    return stableOrder.current.map(id => map.get(id)).filter(Boolean);
+  }, [theory, combinedMode, combinedData, logs, schedule, settings]);
 
   if (!theory.length) return (
-    <div className="card" style={{ padding: '20px 16px', textAlign: 'center', color: 'var(--muted)', marginBottom: 18 }}>
-      <BookOpen size={28} strokeWidth={1.5} style={{ margin: '0 auto 8px', opacity: 0.35 }} />
+    <div className="card" style={{ padding: '16px', textAlign: 'center', color: 'var(--muted)', marginBottom: 14 }}>
+      <BookOpen size={24} strokeWidth={1.5} style={{ margin: '0 auto 6px', opacity: 0.35 }} />
       <div style={{ fontWeight: 700, fontSize: 13 }}>No active theory courses</div>
     </div>
   );
 
   return (
-    <div style={{ marginBottom: 18 }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
-        <div style={{ fontSize: 11, fontWeight: 800, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Live Attendance</div>
-        <div style={{ fontSize: 11, color: 'var(--muted)' }}>{combinedMode ? 'Combined' : 'Daily log'} · {theory.length} courses</div>
+    <div style={{ marginBottom: 14 }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 7 }}>
+        <div style={{ fontSize: 10, fontWeight: 800, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Live Attendance</div>
+        <div style={{ fontSize: 10, color: 'var(--muted)' }}>{combinedMode ? 'Combined' : 'Daily log'} · {theory.length} courses</div>
       </div>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-        {stats.map(({ c, pct, totalHeld, totalAttended, fullMarks, ptMarks, canMiss, needNext, slab }) => {
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
+        {stats.map(({ c, pct, totalHeld, totalAttended, fullMarks, slab, hint }) => {
           const col = attColor(pct);
           const hasData = totalHeld > 0;
-          const isGood = pct !== null && pct >= SCHOLARSHIP_ATTENDANCE_PCT;
-          const isDanger = pct !== null && pct < MIN_ATTENDANCE_PERCENT;
-          const isWarn = pct !== null && !isGood && !isDanger;
+          const hintCol = hint?.type === 'danger' ? 'var(--danger)' : hint?.type === 'warn' ? 'var(--warning)' : hint?.type === 'good' ? 'var(--success)' : hint?.type === 'info' ? 'var(--accent)' : 'var(--muted)';
 
           return (
-            <div key={c.id} style={{ background: attBg(pct, dark), border: `1.5px solid ${attBorder(pct, dark)}`, borderRadius: 14, padding: '11px 13px' }}>
-              {/* Row 1 */}
-              <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10, marginBottom: hasData ? 8 : 0 }}>
+            <div key={c.id} style={{
+              background: attBg(pct, dark),
+              border: `1.5px solid ${attBorder(pct, dark)}`,
+              borderRadius: 11,
+              padding: '7px 10px',
+            }}>
+              {/* Single main row */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                {/* Course info */}
                 <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ fontWeight: 700, fontSize: 14, lineHeight: 1.2, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{getDisplayCourseName(c)}</div>
-                  <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 2 }}>{c.code}{c.credits ? ` · ${c.credits}cr` : ''}</div>
+                  <div style={{ fontWeight: 700, fontSize: 13, lineHeight: 1.2, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                    {getDisplayCourseName(c)}
+                  </div>
+                  <div style={{ fontSize: 10, color: 'var(--muted)', marginTop: 1, display: 'flex', alignItems: 'center', gap: 5, flexWrap: 'wrap' }}>
+                    <span>{c.code}{c.credits ? ` · ${c.credits}cr` : ''}</span>
+                    {hasData && <span style={{ color: col, fontWeight: 700 }}>{slab?.label}</span>}
+                    {hasData && <span>{totalAttended}/{totalHeld}</span>}
+                    {hint && <span style={{ color: hintCol, fontWeight: 700 }}>· {hint.text}</span>}
+                  </div>
                 </div>
+
+                {/* Right: marks + % */}
                 {hasData ? (
-                  <div style={{ display: 'flex', gap: 6, alignItems: 'center', flexShrink: 0 }}>
-                    <div style={{ textAlign: 'center', padding: '4px 8px', borderRadius: 8, background: dark ? 'rgba(255,255,255,0.07)' : 'rgba(0,0,0,0.05)' }}>
-                      <div style={{ fontSize: 8, color: 'var(--muted)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', lineHeight: 1 }}>marks</div>
-                      <div style={{ fontSize: 14, fontWeight: 900, color: col, lineHeight: 1.2, marginTop: 1 }}>{fullMarks ?? '—'}<span style={{ fontSize: 9, opacity: 0.7 }}>/30</span></div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 5, flexShrink: 0 }}>
+                    <div style={{ textAlign: 'right' }}>
+                      <div style={{ fontSize: 9, color: 'var(--muted)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', lineHeight: 1 }}>marks</div>
+                      <div style={{ fontSize: 13, fontWeight: 900, color: col, lineHeight: 1.1 }}>{fullMarks ?? '—'}<span style={{ fontSize: 8, opacity: 0.7 }}>/30</span></div>
                     </div>
-                    <div style={{ padding: '6px 10px', borderRadius: 10, background: col, color: '#fff', fontWeight: 900, fontSize: 19, lineHeight: 1, letterSpacing: '-0.02em', minWidth: 52, textAlign: 'center' }}>
-                      {pct}<span style={{ fontSize: 10, fontWeight: 600 }}>%</span>
+                    <div style={{
+                      padding: '4px 8px', borderRadius: 8,
+                      background: pct >= 90 ? col : col,
+                      color: '#fff', fontWeight: 900, fontSize: 16, lineHeight: 1,
+                      minWidth: 44, textAlign: 'center',
+                      boxShadow: pct >= 90 ? `0 0 0 2px ${col}33` : 'none',
+                    }}>
+                      {pct}<span style={{ fontSize: 9, fontWeight: 600 }}>%</span>
                     </div>
                   </div>
-                ) : <div style={{ fontSize: 11, color: 'var(--muted)', fontStyle: 'italic', paddingTop: 3 }}>No data</div>}
+                ) : (
+                  <div style={{ fontSize: 10, color: 'var(--muted)', fontStyle: 'italic' }}>No data</div>
+                )}
               </div>
 
+              {/* Progress bar — flush, 2px */}
               {hasData && (
-                <>
-                  {/* Progress */}
-                  <div style={{ height: 3, background: dark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.07)', borderRadius: 99, marginBottom: 7, overflow: 'hidden' }}>
-                    <div style={{ height: '100%', borderRadius: 99, width: `${Math.min(100, pct)}%`, background: col, transition: 'width 0.5s ease' }} />
-                  </div>
-                  {/* Stats row */}
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: 11, gap: 6, flexWrap: 'wrap' }}>
-                    <div style={{ color: 'var(--muted)' }}>
-                      <span style={{ fontWeight: 700, color: 'var(--text)' }}>{totalAttended}/{totalHeld}</span>
-                      {ptMarks !== null && <span style={{ marginLeft: 5 }}>· <span style={{ fontWeight: 700, color: col }}>{ptMarks}/15</span> per teacher</span>}
-                    </div>
-                    {isDanger && <div style={{ color: 'var(--danger)', fontWeight: 700, display: 'flex', alignItems: 'center', gap: 3 }}><AlertTriangle size={10} /> At risk</div>}
-                    {isWarn && canMiss !== null && canMiss <= 2 && <div style={{ color: 'var(--warning)', fontWeight: 700 }}>⚠ {canMiss} miss{canMiss !== 1 ? 'es' : ''} → drops</div>}
-                    {isGood && pct >= 90 && <div style={{ color: 'var(--success)', fontWeight: 700, display: 'flex', alignItems: 'center', gap: 3 }}><Award size={9} /> Top slab</div>}
-                    {isGood && pct < 90 && needNext !== null && needNext > 0 && <div style={{ color: 'var(--muted)' }}><span style={{ fontWeight: 700, color: 'var(--accent)' }}>{needNext}</span> more → ↑ grade</div>}
-                    {isGood && canMiss !== null && pct < 90 && <div style={{ color: 'var(--muted)' }}>Miss up to <span style={{ fontWeight: 700, color: 'var(--text)' }}>{canMiss}</span> safely</div>}
-                  </div>
-                  {/* Slab line */}
-                  <div style={{ marginTop: 7, paddingTop: 6, borderTop: dark ? '1px solid rgba(255,255,255,0.06)' : '1px solid rgba(0,0,0,0.05)', fontSize: 10, color: 'var(--muted)' }}>
-                    Slab: <span style={{ fontWeight: 800, color: col }}>{slab?.label || '—'}</span>
-                    {isGood && needNext === 0 && <span style={{ marginLeft: 6, color: 'var(--success)', fontWeight: 700 }}>· Max marks ✓</span>}
-                  </div>
-                </>
+                <div style={{ height: 2, background: dark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.07)', borderRadius: 99, marginTop: 6, overflow: 'hidden' }}>
+                  <div style={{ height: '100%', borderRadius: 99, width: `${Math.min(100, pct)}%`, background: col, transition: 'width 0.5s ease' }} />
+                </div>
               )}
             </div>
           );
@@ -442,7 +462,6 @@ function DailyLog({ courses, logs, setLogs, schedule, settings, onEditTeachers }
   const scheduledCourses = getScheduleCoursesForDate(schedule, date);
   const schIds = scheduledCourses.map(s => s.courseId);
 
-  // past weekday dates (Mon-Thu only)
   const pastDates = useMemo(() => {
     const out = [];
     for (let i = 1; i <= 180; i++) {
@@ -511,7 +530,7 @@ function DailyLog({ courses, logs, setLogs, schedule, settings, onEditTeachers }
   return (
     <div>
       {/* Date nav */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 12 }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 10 }}>
         <button className="btn btn-ghost btn-sm" onClick={goPrev} disabled={!pastDates.length || date === pastDates[pastDates.length - 1]} style={{ flexShrink: 0, padding: '6px 8px' }}>
           <ChevronLeft size={16} />
         </button>
@@ -524,11 +543,11 @@ function DailyLog({ courses, logs, setLogs, schedule, settings, onEditTeachers }
       </div>
 
       {/* Date + progress */}
-      <div style={{ marginBottom: 12 }}>
+      <div style={{ marginBottom: 10 }}>
         <div style={{ fontWeight: 700, fontSize: 14 }}>{fmtDate(date)}</div>
         {!isHoliday && totalCount > 0 && (
           <div style={{ display: 'flex', alignItems: 'center', gap: 7, marginTop: 4 }}>
-            <div style={{ height: 5, width: 70, borderRadius: 99, background: dark ? 'rgba(255,255,255,0.10)' : 'rgba(0,0,0,0.08)', overflow: 'hidden', flexShrink: 0 }}>
+            <div style={{ height: 4, width: 70, borderRadius: 99, background: dark ? 'rgba(255,255,255,0.10)' : 'rgba(0,0,0,0.08)', overflow: 'hidden', flexShrink: 0 }}>
               <div style={{ height: '100%', borderRadius: 99, width: `${totalCount ? (markedCount / totalCount) * 100 : 0}%`, background: markedCount === totalCount ? 'var(--success)' : 'var(--accent)', transition: 'width 0.3s' }} />
             </div>
             <span style={{ fontSize: 11, color: 'var(--muted)' }}>
@@ -541,16 +560,16 @@ function DailyLog({ courses, logs, setLogs, schedule, settings, onEditTeachers }
 
       {/* Holiday */}
       {isHoliday && (
-        <div className="card" style={{ padding: '18px 14px', textAlign: 'center', marginBottom: 10 }}>
-          <div style={{ fontSize: 28, marginBottom: 6 }}>🎉</div>
+        <div className="card" style={{ padding: '16px 14px', textAlign: 'center', marginBottom: 10 }}>
+          <div style={{ fontSize: 24, marginBottom: 5 }}>🎉</div>
           <div style={{ fontWeight: 700, fontSize: 14 }}>{holidayLabel(date)}</div>
-          <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 3 }}>No classes today</div>
+          <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 2 }}>No classes today</div>
         </div>
       )}
 
       {/* No schedule notice */}
       {!isHoliday && schIds.length === 0 && !isToday && (
-        <div style={{ marginBottom: 12, padding: '10px 13px', background: dark ? 'rgba(251,191,36,0.06)' : 'rgba(251,191,36,0.07)', border: dark ? '1px solid rgba(251,191,36,0.15)' : '1px solid rgba(251,191,36,0.18)', borderRadius: 10, display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 8 }}>
+        <div style={{ marginBottom: 10, padding: '9px 12px', background: dark ? 'rgba(251,191,36,0.06)' : 'rgba(251,191,36,0.07)', border: dark ? '1px solid rgba(251,191,36,0.15)' : '1px solid rgba(251,191,36,0.18)', borderRadius: 10, display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 8 }}>
           <span style={{ fontSize: 12, color: 'var(--muted)' }}>📅 No scheduled classes</span>
           <button onClick={() => setShowGive(s => !s)} style={{ padding: '5px 11px', borderRadius: 8, cursor: 'pointer', fontWeight: 700, fontSize: 11, background: 'var(--accent)', color: 'white', border: 'none' }}>
             {showGive ? 'Hide' : 'Give Attendance'}
@@ -558,74 +577,73 @@ function DailyLog({ courses, logs, setLogs, schedule, settings, onEditTeachers }
         </div>
       )}
       {!isHoliday && schIds.length === 0 && isToday && (
-        <div className="card" style={{ padding: '12px 14px', fontSize: 12, color: 'var(--muted)', marginBottom: 10 }}>
+        <div className="card" style={{ padding: '11px 14px', fontSize: 12, color: 'var(--muted)', marginBottom: 10 }}>
           No classes scheduled for today.
         </div>
       )}
 
       {/* Teacher warning */}
       {!isHoliday && cardData.some(c => !c.hasTeachers) && (
-        <div style={{ marginBottom: 10, padding: '9px 13px', background: dark ? 'rgba(217,119,6,0.08)' : 'rgba(255,251,235,1)', border: dark ? '1px solid rgba(217,119,6,0.22)' : '1px solid rgba(217,119,6,0.22)', borderRadius: 10, display: 'flex', alignItems: 'flex-start', gap: 6, fontSize: 12, color: 'var(--warning)' }}>
-          <Users size={13} style={{ marginTop: 1, flexShrink: 0 }} />
-          <span>Some courses have no teachers assigned. Assign both teachers via Schedule page — both are required for attendance marking.</span>
+        <div style={{ marginBottom: 10, padding: '8px 12px', background: dark ? 'rgba(217,119,6,0.08)' : 'rgba(255,251,235,1)', border: dark ? '1px solid rgba(217,119,6,0.22)' : '1px solid rgba(217,119,6,0.22)', borderRadius: 10, display: 'flex', alignItems: 'flex-start', gap: 6, fontSize: 12, color: 'var(--warning)' }}>
+          <Users size={12} style={{ marginTop: 1, flexShrink: 0 }} />
+          <span>Some courses have no teachers assigned. Assign both teachers via Schedule page.</span>
         </div>
       )}
 
       {/* Course cards */}
       {!isHoliday && (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 9 }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
           {cardData.length === 0 && (
-            <div className="card" style={{ padding: '20px 14px', textAlign: 'center', color: 'var(--muted)' }}>
-              <div style={{ fontSize: 22, marginBottom: 7, opacity: 0.4 }}>📋</div>
+            <div className="card" style={{ padding: '18px 14px', textAlign: 'center', color: 'var(--muted)' }}>
+              <div style={{ fontSize: 20, marginBottom: 6, opacity: 0.4 }}>📋</div>
               <div style={{ fontSize: 13, fontWeight: 600 }}>No classes to mark</div>
-              <div style={{ fontSize: 11, marginTop: 4 }}>
+              <div style={{ fontSize: 11, marginTop: 3 }}>
                 {isToday ? 'No scheduled classes today.' : 'Use Give Attendance for unscheduled days.'}
               </div>
             </div>
           )}
 
-          {cardData.map(({ course, displayTeachers, hasTeachers, slots, pal, teacherRows, allDone }) => (
-            <div key={course.id} style={{ background: pal.bg, border: `1.5px solid ${pal.bd}`, borderRadius: 14, padding: '11px 13px' }}>
+          {cardData.map(({ course, hasTeachers, slots, pal, teacherRows, allDone }) => (
+            <div key={course.id} style={{ background: pal.bg, border: `1.5px solid ${pal.bd}`, borderRadius: 13, padding: '10px 12px' }}>
               {/* Course header */}
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 8, marginBottom: 10 }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 8, marginBottom: 9 }}>
                 <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ fontWeight: 700, fontSize: 14, lineHeight: 1.2, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{getDisplayCourseName(course)}</div>
-                  <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 2 }}>
+                  <div style={{ fontWeight: 700, fontSize: 13, lineHeight: 1.2, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{getDisplayCourseName(course)}</div>
+                  <div style={{ fontSize: 10, color: 'var(--muted)', marginTop: 1 }}>
                     {course.code}
-                    {slots.length > 0 && <span style={{ color: 'var(--accent)', fontWeight: 700, marginLeft: 6 }}>{slots.map(s => s.slot).join(', ')}</span>}
+                    {slots.length > 0 && <span style={{ color: 'var(--accent)', fontWeight: 700, marginLeft: 5 }}>{slots.map(s => s.slot).join(', ')}</span>}
                   </div>
                 </div>
-                <div style={{ display: 'flex', gap: 6, alignItems: 'center', flexShrink: 0 }}>
-                  {allDone && <div style={{ padding: '2px 8px', borderRadius: 20, background: 'var(--success)', color: '#fff', fontSize: 10, fontWeight: 700, display: 'flex', alignItems: 'center', gap: 2 }}><CheckCircle size={9} /> Done</div>}
-                  {/* Teacher assign button — same dialog as Schedule */}
-                  <button onClick={() => onEditTeachers(course.id)} style={{ padding: '3px 8px', borderRadius: 7, border: `1px solid ${dark ? 'rgba(255,255,255,0.15)' : pal.bd}`, background: dark ? 'rgba(255,255,255,0.06)' : 'rgba(255,255,255,0.65)', cursor: 'pointer', fontSize: 10, fontWeight: 700, color: hasTeachers ? 'var(--accent)' : 'var(--warning)', display: 'flex', alignItems: 'center', gap: 3 }}>
+                <div style={{ display: 'flex', gap: 5, alignItems: 'center', flexShrink: 0 }}>
+                  {allDone && <div style={{ padding: '2px 7px', borderRadius: 20, background: 'var(--success)', color: '#fff', fontSize: 10, fontWeight: 700, display: 'flex', alignItems: 'center', gap: 2 }}><CheckCircle size={9} /> Done</div>}
+                  <button onClick={() => onEditTeachers(course.id)} style={{ padding: '3px 7px', borderRadius: 7, border: `1px solid ${dark ? 'rgba(255,255,255,0.15)' : pal.bd}`, background: dark ? 'rgba(255,255,255,0.06)' : 'rgba(255,255,255,0.65)', cursor: 'pointer', fontSize: 10, fontWeight: 700, color: hasTeachers ? 'var(--accent)' : 'var(--warning)', display: 'flex', alignItems: 'center', gap: 3 }}>
                     <Users size={9} /> {hasTeachers ? 'Teachers' : 'Assign'}
                   </button>
                 </div>
               </div>
 
-              {/* Teacher rows — both in one card */}
+              {/* Teacher rows */}
               {!hasTeachers ? (
-                <div style={{ fontSize: 12, color: 'var(--warning)', padding: '8px 10px', background: dark ? 'rgba(217,119,6,0.10)' : 'rgba(255,251,235,1)', borderRadius: 9, border: '1px solid rgba(217,119,6,0.20)', display: 'flex', alignItems: 'center', gap: 6 }}>
-                  <AlertTriangle size={12} />
-                  <span>Assign teachers first to mark attendance.</span>
-                  <button onClick={() => onEditTeachers(course.id)} style={{ marginLeft: 'auto', padding: '4px 10px', borderRadius: 6, fontSize: 11, fontWeight: 700, background: 'var(--warning)', color: 'white', border: 'none', cursor: 'pointer', flexShrink: 0 }}>Assign</button>
+                <div style={{ fontSize: 12, color: 'var(--warning)', padding: '7px 10px', background: dark ? 'rgba(217,119,6,0.10)' : 'rgba(255,251,235,1)', borderRadius: 9, border: '1px solid rgba(217,119,6,0.20)', display: 'flex', alignItems: 'center', gap: 6 }}>
+                  <AlertTriangle size={11} />
+                  <span>Assign teachers first.</span>
+                  <button onClick={() => onEditTeachers(course.id)} style={{ marginLeft: 'auto', padding: '3px 9px', borderRadius: 6, fontSize: 11, fontWeight: 700, background: 'var(--warning)', color: 'white', border: 'none', cursor: 'pointer', flexShrink: 0 }}>Assign</button>
                 </div>
               ) : (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 7 }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
                   {teacherRows.map(({ teacher, key, status }) => (
-                    <div key={key} style={{ background: dark ? 'rgba(0,0,0,0.22)' : 'rgba(255,255,255,0.65)', borderRadius: 10, padding: '9px 11px', border: dark ? '1px solid rgba(255,255,255,0.07)' : '1px solid rgba(255,255,255,0.80)', backdropFilter: 'blur(4px)' }}>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 8, marginBottom: 7 }}>
-                        <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--muted)', display: 'flex', alignItems: 'center', gap: 4 }}>
+                    <div key={key} style={{ background: dark ? 'rgba(0,0,0,0.22)' : 'rgba(255,255,255,0.65)', borderRadius: 9, padding: '8px 10px', border: dark ? '1px solid rgba(255,255,255,0.07)' : '1px solid rgba(255,255,255,0.80)' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 8, marginBottom: 6 }}>
+                        <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--muted)', display: 'flex', alignItems: 'center', gap: 3 }}>
                           <Users size={9} /> {teacher || 'Unknown teacher'}
                         </div>
                         {status && (
-                          <div style={{ fontSize: 10, fontWeight: 700, padding: '2px 8px', borderRadius: 20, background: status === 'present' ? 'rgba(16,185,129,0.12)' : 'rgba(239,68,68,0.12)', color: status === 'present' ? '#10b981' : '#ef4444' }}>
+                          <div style={{ fontSize: 10, fontWeight: 700, padding: '2px 7px', borderRadius: 20, background: status === 'present' ? 'rgba(16,185,129,0.12)' : 'rgba(239,68,68,0.12)', color: status === 'present' ? '#10b981' : '#ef4444' }}>
                             {status === 'present' ? '✓ Present' : '✗ Absent'}
                           </div>
                         )}
                       </div>
-                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 7 }}>
+                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 6 }}>
                         {[
                           { val: 'present', label: 'Present', icon: '✓', col: '#10b981' },
                           { val: 'absent',  label: 'Absent',  icon: '✗', col: '#ef4444' },
@@ -633,7 +651,7 @@ function DailyLog({ courses, logs, setLogs, schedule, settings, onEditTeachers }
                           const active = status === opt.val;
                           return (
                             <button key={opt.val} onClick={() => mark(course.id, teacher, opt.val)} style={{
-                              padding: '9px 6px', borderRadius: 9, cursor: 'pointer', fontWeight: 700, fontSize: 12,
+                              padding: '8px 6px', borderRadius: 8, cursor: 'pointer', fontWeight: 700, fontSize: 12,
                               background: active ? opt.col : dark ? 'rgba(255,255,255,0.07)' : 'rgba(255,255,255,0.80)',
                               color: active ? 'white' : 'var(--muted)',
                               border: `2px solid ${active ? opt.col : dark ? 'rgba(255,255,255,0.10)' : 'rgba(0,0,0,0.07)'}`,
@@ -662,101 +680,146 @@ function CombinedAtt({ courses, logs, schedule, settings, combinedMode, combined
   const dark = useDark();
   const theory = (courses || []).filter(c => !isAutoFull(c.type));
 
-  const cards = useMemo(() => theory.map(c => {
-    const teachers = getTeachersForCourse(settings, schedule, c.id);
-    const ts = teachers.length ? teachers : [''];
-    const stats = {};
-    ts.forEach(t => {
-      if (combinedMode) {
-        const key = `${c.id}_${t || ''}`;
-        const h = Number(combinedData[key]?.held || 0);
-        const a = Number(combinedData[key]?.attended || 0);
-        stats[t || ''] = { held: h, attended: a, pct: h > 0 ? Math.round((a / h) * 100) : null };
-      } else {
-        const s = getEffective(c.id, t, logs);
-        stats[t || ''] = { ...s, pct: s.percentage };
-      }
+  // Stable order for combined tab — lock on first render
+  const stableOrder = useRef(null);
+
+  const cards = useMemo(() => {
+    const computed = theory.map(c => {
+      const teachers = getTeachersForCourse(settings, schedule, c.id);
+      const ts = teachers.length ? teachers : [''];
+      const stats = {};
+      ts.forEach(t => {
+        if (combinedMode) {
+          const key = `${c.id}_${t || ''}`;
+          const h = Number(combinedData[key]?.held || 0);
+          const a = Number(combinedData[key]?.attended || 0);
+          stats[t || ''] = { held: h, attended: a, pct: h > 0 ? Math.round((a / h) * 100) : null };
+        } else {
+          const s = getEffective(c.id, t, logs);
+          stats[t || ''] = { ...s, pct: s.percentage };
+        }
+      });
+      let th = 0, ta = 0;
+      Object.values(stats).forEach(s => { th += s.held; ta += s.attended; });
+      const pct = th > 0 ? Math.round((ta / th) * 100) : null;
+      const canMiss = pct !== null ? classesUntilDrop(ta, th, pct) : null;
+      const needNext = pct !== null && pct < 90 ? classesNeededForNextSlab(ta, th, pct) : null;
+      return {
+        c, ts, stats, th, ta, pct,
+        fullMarks: getFullCourseMarks(pct),
+        canMiss, needNext,
+        slab: getCurrentSlab(pct),
+        hint: getHint(pct, canMiss, needNext),
+        assigned: getTeachersForCourse(settings, schedule, c.id).length >= 2,
+      };
     });
-    let th = 0, ta = 0;
-    Object.values(stats).forEach(s => { th += s.held; ta += s.attended; });
-    const pct = th > 0 ? Math.round((ta / th) * 100) : null;
-    return { c, ts, stats, th, ta, pct, fullMarks: getFullCourseMarks(pct), canMiss: pct !== null ? classesUntilDrop(ta, th, pct) : null, needNext: pct !== null && pct < 90 ? classesNeededForNextSlab(ta, th, pct) : null, slab: getCurrentSlab(pct), assigned: getTeachersForCourse(settings, schedule, c.id).length >= 2 };
-  }).sort((a, b) => {
-    const r = p => p === null ? 3 : p < 60 ? 0 : p < 75 ? 1 : 2;
-    return r(a.pct) - r(b.pct);
-  }), [theory, combinedMode, combinedData, logs, schedule, settings]);
+
+    // Lock order on first render
+    if (!stableOrder.current) {
+      const sorted = computed.slice().sort((a, b) => {
+        const r = p => p === null ? 3 : p < 60 ? 0 : p < 75 ? 1 : 2;
+        return r(a.pct) - r(b.pct);
+      });
+      stableOrder.current = sorted.map(s => s.c.id);
+      return sorted;
+    }
+    const map = new Map(computed.map(s => [s.c.id, s]));
+    return stableOrder.current.map(id => map.get(id)).filter(Boolean);
+  }, [theory, combinedMode, combinedData, logs, schedule, settings]);
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 9 }}>
       {/* Mode toggle */}
-      <div className="card" style={{ padding: '12px 14px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
-        <div>
-          <div style={{ fontSize: 13, fontWeight: 700 }}>Input Mode</div>
-          <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 2 }}>
-            {combinedMode ? 'Enter class counts manually' : 'Auto-computed from Daily Log'}
+      <div className="card" style={{ padding: '11px 13px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 10 }}>
+          <div>
+            <div style={{ fontSize: 12, fontWeight: 700 }}>Input Mode</div>
+            <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 1 }}>
+              {combinedMode
+                ? 'Manual — enter Held & Attended per teacher'
+                : 'Auto — calculated from Daily Log entries'}
+            </div>
           </div>
+          <button className={`btn ${combinedMode ? 'btn-primary' : 'btn-ghost'}`} onClick={toggleCombined} style={{ fontSize: 11, whiteSpace: 'nowrap', flexShrink: 0 }}>
+            {combinedMode ? '⚡ Manual ON' : 'Switch to Manual'}
+          </button>
         </div>
-        <button className={`btn ${combinedMode ? 'btn-primary' : 'btn-ghost'}`} onClick={toggleCombined} style={{ fontSize: 12, whiteSpace: 'nowrap' }}>
-          {combinedMode ? '⚡ Combined ON' : 'Use Combined Input'}
-        </button>
       </div>
 
-      {cards.map(({ c, ts, stats, th, ta, pct, fullMarks, canMiss, needNext, slab, assigned }) => {
+      {cards.map(({ c, ts, stats, th, ta, pct, fullMarks, canMiss, needNext, slab, hint, assigned }) => {
         const col = attColor(pct);
+        const hintCol = hint?.type === 'danger' ? 'var(--danger)' : hint?.type === 'warn' ? 'var(--warning)' : hint?.type === 'good' ? 'var(--success)' : hint?.type === 'info' ? 'var(--accent)' : 'var(--muted)';
+
         return (
-          <div key={c.id} className="card" style={{ padding: '14px', border: pct !== null ? `1.5px solid ${attBorder(pct, dark)}` : undefined, background: pct !== null ? attBg(pct, dark) : undefined }}>
-            {/* Header */}
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 8, marginBottom: 12 }}>
+          <div key={c.id} className="card" style={{ padding: '12px 13px', border: pct !== null ? `1.5px solid ${attBorder(pct, dark)}` : undefined, background: pct !== null ? attBg(pct, dark) : undefined }}>
+            {/* Header row */}
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 8, marginBottom: 10 }}>
               <div style={{ flex: 1, minWidth: 0 }}>
-                <div style={{ fontWeight: 700, fontSize: 14, lineHeight: 1.2 }}>{c.code} — {c.name}</div>
-                <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 2 }}>Y{c.year} T{c.term} · {c.credits}cr{th > 0 ? ` · ${combinedMode ? 'combined' : 'daily log'}` : ''}</div>
+                <div style={{ fontWeight: 700, fontSize: 13, lineHeight: 1.2, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{c.code} — {c.name}</div>
+                <div style={{ fontSize: 10, color: 'var(--muted)', marginTop: 1, display: 'flex', alignItems: 'center', gap: 5, flexWrap: 'wrap' }}>
+                  <span>Y{c.year} T{c.term} · {c.credits}cr</span>
+                  {pct !== null && <span style={{ color: col, fontWeight: 700 }}>{slab?.label}</span>}
+                  {hint && <span style={{ color: hintCol, fontWeight: 700 }}>· {hint.text}</span>}
+                </div>
               </div>
               {pct !== null && (
-                <div style={{ flexShrink: 0, textAlign: 'right' }}>
-                  <div style={{ fontSize: 28, fontWeight: 900, color: col, lineHeight: 1, letterSpacing: '-0.03em' }}>{pct}%</div>
-                  <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 2 }}><span style={{ fontWeight: 700, color: col }}>{fullMarks ?? '—'}/30</span> marks</div>
+                <div style={{ flexShrink: 0, display: 'flex', alignItems: 'center', gap: 5 }}>
+                  <div style={{ textAlign: 'right' }}>
+                    <div style={{ fontSize: 9, color: 'var(--muted)', fontWeight: 700, textTransform: 'uppercase', lineHeight: 1 }}>marks</div>
+                    <div style={{ fontSize: 13, fontWeight: 900, color: col }}>{fullMarks ?? '—'}<span style={{ fontSize: 8, opacity: 0.7 }}>/30</span></div>
+                  </div>
+                  <div style={{ padding: '4px 8px', borderRadius: 8, background: col, color: '#fff', fontWeight: 900, fontSize: 18, lineHeight: 1, minWidth: 44, textAlign: 'center' }}>
+                    {pct}<span style={{ fontSize: 9 }}>%</span>
+                  </div>
                 </div>
               )}
             </div>
 
             {/* Unassigned warning */}
             {!assigned && (
-              <div style={{ marginBottom: 10, padding: '8px 11px', background: dark ? 'rgba(217,119,6,0.10)' : 'rgba(255,251,235,1)', border: '1px solid rgba(217,119,6,0.22)', borderRadius: 9, fontSize: 12, color: 'var(--warning)', display: 'flex', alignItems: 'center', gap: 6 }}>
-                <Users size={12} style={{ flexShrink: 0 }} />
+              <div style={{ marginBottom: 9, padding: '7px 10px', background: dark ? 'rgba(217,119,6,0.10)' : 'rgba(255,251,235,1)', border: '1px solid rgba(217,119,6,0.22)', borderRadius: 8, fontSize: 11, color: 'var(--warning)', display: 'flex', alignItems: 'center', gap: 5 }}>
+                <Users size={11} style={{ flexShrink: 0 }} />
                 <span>Both teachers must be assigned first.</span>
-                <button onClick={() => onEditTeachers(c.id)} style={{ marginLeft: 'auto', padding: '4px 10px', borderRadius: 6, fontSize: 11, fontWeight: 700, background: 'var(--warning)', color: 'white', border: 'none', cursor: 'pointer', flexShrink: 0 }}>Assign</button>
+                <button onClick={() => onEditTeachers(c.id)} style={{ marginLeft: 'auto', padding: '3px 9px', borderRadius: 6, fontSize: 11, fontWeight: 700, background: 'var(--warning)', color: 'white', border: 'none', cursor: 'pointer', flexShrink: 0 }}>Assign</button>
               </div>
             )}
 
-            {/* Per-teacher inputs */}
-            <div style={{ marginBottom: 10 }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
-                <div style={{ fontSize: 11, fontWeight: 800, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Per Teacher</div>
-                <button onClick={() => onEditTeachers(c.id)} className="btn btn-ghost btn-sm" style={{ fontSize: 11, padding: '3px 8px', color: 'var(--accent)' }}>
-                  <Users size={10} /> Edit
+            {/* Per-teacher inputs — always side by side */}
+            <div style={{ marginBottom: pct !== null ? 8 : 0 }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
+                <div style={{ fontSize: 10, fontWeight: 800, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Per Teacher</div>
+                <button onClick={() => onEditTeachers(c.id)} className="btn btn-ghost btn-sm" style={{ fontSize: 10, padding: '2px 7px', color: 'var(--accent)' }}>
+                  <Users size={9} /> Edit
                 </button>
               </div>
-              <div style={{ display: 'grid', gridTemplateColumns: `repeat(${Math.min(ts.length, 2)}, 1fr)`, gap: 7 }}>
+              <div style={{ display: 'grid', gridTemplateColumns: `repeat(${Math.min(ts.length, 2)}, 1fr)`, gap: 6 }}>
                 {ts.map(t => {
                   const s = stats[t || ''];
                   const tp = s.pct;
                   return (
-                    <div key={t || 'x'} style={{ padding: '9px 11px', background: dark ? 'rgba(255,255,255,0.04)' : 'var(--inputBg)', borderRadius: 10, border: dark ? '1px solid rgba(255,255,255,0.07)' : '1px solid var(--border)' }}>
-                      <div style={{ fontWeight: 700, fontSize: 11, marginBottom: 6, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', color: 'var(--text)' }}>
+                    <div key={t || 'x'} style={{ padding: '8px 10px', background: dark ? 'rgba(255,255,255,0.04)' : 'var(--inputBg)', borderRadius: 9, border: dark ? '1px solid rgba(255,255,255,0.07)' : '1px solid var(--border)' }}>
+                      <div style={{ fontWeight: 700, fontSize: 11, marginBottom: 5, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', color: 'var(--text)' }}>
                         {t || 'Unassigned'}
                       </div>
                       {combinedMode ? (
                         <>
-                          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 5, marginBottom: 5 }}>
-                            <input type="number" min="0" value={s.held} onChange={e => updateCombined(c.id, t, 'held', e.target.value)} placeholder="Held" style={{ fontSize: 12, padding: '5px 7px' }} />
-                            <input type="number" min="0" max={s.held} value={s.attended} onChange={e => updateCombined(c.id, t, 'attended', e.target.value)} placeholder="Att" style={{ fontSize: 12, padding: '5px 7px' }} />
+                          {/* Labeled inputs */}
+                          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 4, marginBottom: 4 }}>
+                            <div>
+                              <div style={{ fontSize: 9, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 2 }}>Held</div>
+                              <input type="number" min="0" value={s.held} onChange={e => updateCombined(c.id, t, 'held', e.target.value)} style={{ width: '100%', fontSize: 12, padding: '5px 6px', boxSizing: 'border-box' }} />
+                            </div>
+                            <div>
+                              <div style={{ fontSize: 9, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 2 }}>Attended</div>
+                              <input type="number" min="0" max={s.held} value={s.attended} onChange={e => updateCombined(c.id, t, 'attended', e.target.value)} style={{ width: '100%', fontSize: 12, padding: '5px 6px', boxSizing: 'border-box' }} />
+                            </div>
                           </div>
-                          {tp !== null && <div style={{ fontSize: 11, color: attColor(tp), fontWeight: 700 }}>{tp}% · {getPerTeacherMarks(tp) ?? '—'}/15</div>}
+                          {tp !== null && <div style={{ fontSize: 10, color: attColor(tp), fontWeight: 700 }}>{tp}% · {getPerTeacherMarks(tp) ?? '—'}/15</div>}
                         </>
                       ) : (
                         <div>
-                          <div style={{ fontSize: 14, fontWeight: 700 }}>{s.attended}/{s.held}</div>
-                          {tp !== null ? <div style={{ fontSize: 11, color: attColor(tp), fontWeight: 700, marginTop: 2 }}>{tp}% · {getPerTeacherMarks(tp) ?? '—'}/15</div> : <div style={{ fontSize: 11, color: 'var(--muted)' }}>No data</div>}
+                          <div style={{ fontSize: 13, fontWeight: 700 }}>{s.attended}/{s.held}</div>
+                          {tp !== null ? <div style={{ fontSize: 10, color: attColor(tp), fontWeight: 700, marginTop: 1 }}>{tp}% · {getPerTeacherMarks(tp) ?? '—'}/15</div> : <div style={{ fontSize: 10, color: 'var(--muted)' }}>No data</div>}
                         </div>
                       )}
                     </div>
@@ -765,43 +828,19 @@ function CombinedAtt({ courses, logs, schedule, settings, combinedMode, combined
               </div>
             </div>
 
+            {/* Progress + status */}
             {pct !== null && (
               <>
-                <div style={{ height: 6, background: dark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.06)', borderRadius: 99, marginBottom: 6, overflow: 'hidden' }}>
+                <div style={{ height: 2, background: dark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.06)', borderRadius: 99, marginBottom: 5, overflow: 'hidden' }}>
                   <div style={{ height: '100%', borderRadius: 99, width: `${Math.min(100, pct)}%`, background: col, transition: 'width 0.4s ease' }} />
                 </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11, color: 'var(--muted)', marginBottom: 9 }}>
-                  <span style={{ fontWeight: 600 }}>{ta}/{th} classes · Slab: <span style={{ color: col, fontWeight: 700 }}>{slab?.label || '—'}</span></span>
-                  {canMiss !== null && <span>Miss up to <span style={{ fontWeight: 700, color: 'var(--text)' }}>{canMiss}</span></span>}
-                </div>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
-                  {pct < MIN_ATTENDANCE_PERCENT ? (
-                    <div style={{ padding: '7px 11px', fontSize: 12, background: dark ? 'rgba(220,38,38,0.12)' : 'rgba(254,242,242,1)', border: '1px solid rgba(220,38,38,0.22)', borderRadius: 8, color: 'var(--danger)', fontWeight: 700, display: 'flex', alignItems: 'center', gap: 5 }}>
-                      <AlertTriangle size={11} /> Below 60% — Course may be cancelled
-                    </div>
-                  ) : pct < SCHOLARSHIP_ATTENDANCE_PCT ? (
-                    <div style={{ padding: '7px 11px', fontSize: 12, background: dark ? 'rgba(217,119,6,0.10)' : 'rgba(255,251,235,1)', border: '1px solid rgba(217,119,6,0.18)', borderRadius: 8, color: 'var(--warning)', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 5 }}>
-                      <AlertTriangle size={11} /> Below 75% — Scholarship ineligible
-                    </div>
-                  ) : (
-                    <div style={{ padding: '7px 11px', fontSize: 12, background: dark ? 'rgba(34,197,94,0.08)' : 'rgba(240,253,244,1)', border: '1px solid rgba(34,197,94,0.18)', borderRadius: 8, color: 'var(--success)', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 5 }}>
-                      <CheckCircle size={11} /> Good standing · Scholarship eligible
-                    </div>
-                  )}
-                  {needNext !== null && needNext > 0 && needNext <= 6 && (
-                    <div style={{ padding: '7px 11px', fontSize: 12, background: dark ? 'rgba(59,130,246,0.08)' : 'rgba(239,246,255,1)', border: '1px solid rgba(59,130,246,0.18)', borderRadius: 8, color: 'var(--accent)', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 5 }}>
-                      <TrendingUp size={11} /> Attend {needNext} more → next slab
-                    </div>
-                  )}
-                  {canMiss !== null && canMiss <= 2 && pct >= 60 && (
-                    <div style={{ padding: '7px 11px', fontSize: 12, background: dark ? 'rgba(217,119,6,0.10)' : 'rgba(255,251,235,1)', border: '1px solid rgba(217,119,6,0.18)', borderRadius: 8, color: 'var(--warning)', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 5 }}>
-                      <AlertTriangle size={11} /> Only {canMiss} absence{canMiss !== 1 ? 's' : ''} left in current slab
-                    </div>
-                  )}
+                <div style={{ fontSize: 10, color: 'var(--muted)' }}>
+                  {ta}/{th} classes
+                  {canMiss !== null && canMiss > 2 && <span> · Miss up to <span style={{ fontWeight: 700, color: 'var(--text)' }}>{canMiss}</span></span>}
                 </div>
               </>
             )}
-            {th === 0 && <div style={{ fontSize: 12, color: 'var(--muted)', textAlign: 'center', padding: '6px 0' }}>{combinedMode ? 'Enter held/attended counts above.' : 'No daily log entries yet.'}</div>}
+            {th === 0 && <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 4 }}>{combinedMode ? 'Enter held/attended counts above.' : 'No daily log entries yet.'}</div>}
           </div>
         );
       })}
@@ -823,7 +862,6 @@ export default function Attendance() {
   const [holidayOpen, setHolidayOpen] = useState(false);
   const dark = useDark();
 
-  // Sync from store on external updates
   useEffect(() => {
     const refresh = () => {
       setLogs(store.get('attLogs') || {});
@@ -835,8 +873,6 @@ export default function Attendance() {
     window.addEventListener('kuetx:store-updated', refresh);
     return () => window.removeEventListener('kuetx:store-updated', refresh);
   }, []);
-
-  // (removed) previously synced term holidays via ctQuizStore; no-op now
 
   const toggleCombined = () => {
     const next = !combinedMode;
@@ -866,7 +902,6 @@ export default function Attendance() {
     store.set('scheduleSettings', next);
   };
 
-  // Today's schedule for preview
   const todayDate = todayStr();
   const isTodayHoliday = isRoutineHoliday(todayDate, settings.holidayDates || []);
   const previewDate = getRoutinePreviewDate(settings.holidayDates || []);
@@ -884,14 +919,14 @@ export default function Attendance() {
 
   return (
     <div className="page-enter page-container">
-      {/* Page header + holiday button */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 18, gap: 10 }}>
+      {/* Page header */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 14, gap: 10 }}>
         <div>
           <h1>Attendance</h1>
-          <p className="text-muted" style={{ marginTop: 3, fontSize: 13 }}>Mark · Track · Improve</p>
+          <p className="text-muted" style={{ marginTop: 2, fontSize: 13 }}>Mark · Track · Improve</p>
         </div>
-        <button className="btn btn-ghost btn-sm" onClick={() => setHolidayOpen(true)} style={{ flexShrink: 0, display: 'flex', alignItems: 'center', gap: 5, fontSize: 12 }}>
-          <CalendarDays size={13} /> Holidays
+        <button className="btn btn-ghost btn-sm" onClick={() => setHolidayOpen(true)} style={{ flexShrink: 0, display: 'flex', alignItems: 'center', gap: 4, fontSize: 11 }}>
+          <CalendarDays size={12} /> Holidays
         </button>
       </div>
 
@@ -900,25 +935,25 @@ export default function Attendance() {
 
       {/* Today schedule strip */}
       {todaySchedule.length > 0 && (
-        <div className="card" style={{ marginBottom: 16, padding: '12px 14px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 9 }}>
-            <div style={{ fontSize: 11, fontWeight: 800, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.07em' }}>Today's Classes</div>
-            <div style={{ fontSize: 11, color: 'var(--muted)' }}>
+        <div className="card" style={{ marginBottom: 13, padding: '10px 13px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 7 }}>
+            <div style={{ fontSize: 10, fontWeight: 800, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.07em' }}>Today's Classes</div>
+            <div style={{ fontSize: 10, color: 'var(--muted)' }}>
               {new Date().toLocaleDateString('en-BD', { weekday: 'short', day: 'numeric', month: 'short' })}
             </div>
           </div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
             {todaySchedule.map((item, idx) => {
               const c = courses.find(x => x.id === item.courseId);
               const pal = dark ? PALETTE_D[idx % PALETTE_D.length] : PALETTE_L[idx % PALETTE_L.length];
               return (
-                <div key={item.id || idx} style={{ display: 'flex', gap: 10, padding: '8px 11px', background: pal.bg, border: `1px solid ${pal.bd}`, borderRadius: 10, alignItems: 'center' }}>
-                  <div style={{ fontWeight: 900, fontSize: 12, color: 'var(--accent)', minWidth: 32, flexShrink: 0 }}>{item.slot}</div>
+                <div key={item.id || idx} style={{ display: 'flex', gap: 9, padding: '7px 10px', background: pal.bg, border: `1px solid ${pal.bd}`, borderRadius: 9, alignItems: 'center' }}>
+                  <div style={{ fontWeight: 900, fontSize: 11, color: 'var(--accent)', minWidth: 30, flexShrink: 0 }}>{item.slot}</div>
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <div style={{ fontSize: 12, fontWeight: 700, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.displayName || getDisplayCourseName(c)}</div>
-                    {item.teacherName && <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 1, display: 'flex', alignItems: 'center', gap: 3 }}><Users size={8} /> {item.teacherName}</div>}
+                    {item.teacherName && <div style={{ fontSize: 10, color: 'var(--muted)', marginTop: 1, display: 'flex', alignItems: 'center', gap: 3 }}><Users size={8} /> {item.teacherName}</div>}
                   </div>
-                  {item.room && <div style={{ fontSize: 11, color: 'var(--muted)', flexShrink: 0 }}>R.{item.room}</div>}
+                  {item.room && <div style={{ fontSize: 10, color: 'var(--muted)', flexShrink: 0 }}>R.{item.room}</div>}
                 </div>
               );
             })}
@@ -926,14 +961,14 @@ export default function Attendance() {
         </div>
       )}
       {todaySchedule.length === 0 && (
-        <div className="card" style={{ marginBottom: 16, padding: '11px 14px', fontSize: 12, color: 'var(--muted)', textAlign: 'center' }}>
+        <div className="card" style={{ marginBottom: 13, padding: '10px 13px', fontSize: 12, color: 'var(--muted)', textAlign: 'center' }}>
           {isTodayHoliday ? '🎉 Holiday today — enjoy!' : 'No scheduled classes today'}
         </div>
       )}
 
       {/* Tabs */}
-      <div className="tabs" style={{ marginBottom: 14 }}>
-        {[['daily', '📅 Daily Log'], ['combined', '📊 Combined Attendance']].map(([id, label]) => (
+      <div className="tabs" style={{ marginBottom: 12 }}>
+        {[['daily', '📅 Daily Log'], ['combined', '📊 Combined']].map(([id, label]) => (
           <button key={id} className={`tab-btn${tab === id ? ' active' : ''}`} onClick={() => setTab(id)}>{label}</button>
         ))}
       </div>
@@ -954,39 +989,31 @@ export default function Attendance() {
       )}
 
       {/* Marks slab reference */}
-      <div className="card" style={{ marginTop: 22, padding: '14px' }}>
-        <div style={{ fontWeight: 800, fontSize: 12, marginBottom: 10, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.07em' }}>Marks Reference (Art. 14.2)</div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 5 }}>
+      <div className="card" style={{ marginTop: 20, padding: '12px 13px' }}>
+        <div style={{ fontWeight: 800, fontSize: 10, marginBottom: 8, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.07em' }}>Marks Reference (Art. 14.2)</div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 4 }}>
           {ATT_SLABS.map(slab => {
             const isG = slab.minPct >= 75, isB = slab.minPct < 60;
             return (
-              <div key={slab.label} style={{ textAlign: 'center', padding: '8px 3px', borderRadius: 9, background: isG ? (dark ? 'rgba(34,197,94,0.10)' : 'rgba(22,163,74,0.07)') : isB ? (dark ? 'rgba(220,38,38,0.10)' : 'rgba(220,38,38,0.07)') : (dark ? 'rgba(217,119,6,0.10)' : 'rgba(217,119,6,0.06)'), border: `1px solid ${isG ? 'rgba(22,163,74,0.15)' : isB ? 'rgba(220,38,38,0.15)' : 'rgba(217,119,6,0.15)'}` }}>
-                <div style={{ fontWeight: 900, fontSize: 14, color: isG ? 'var(--success)' : isB ? 'var(--danger)' : 'var(--warning)', lineHeight: 1 }}>{isB ? '0' : slab.fullCourse}</div>
-                <div style={{ fontSize: 8, color: 'var(--muted)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em', marginTop: 1 }}>/30</div>
+              <div key={slab.label} style={{ textAlign: 'center', padding: '6px 3px', borderRadius: 8, background: isG ? (dark ? 'rgba(34,197,94,0.10)' : 'rgba(22,163,74,0.07)') : isB ? (dark ? 'rgba(220,38,38,0.10)' : 'rgba(220,38,38,0.07)') : (dark ? 'rgba(217,119,6,0.10)' : 'rgba(217,119,6,0.06)'), border: `1px solid ${isG ? 'rgba(22,163,74,0.15)' : isB ? 'rgba(220,38,38,0.15)' : 'rgba(217,119,6,0.15)'}` }}>
+                <div style={{ fontWeight: 900, fontSize: 13, color: isG ? 'var(--success)' : isB ? 'var(--danger)' : 'var(--warning)', lineHeight: 1 }}>{isB ? '0' : slab.fullCourse}</div>
+                <div style={{ fontSize: 8, color: 'var(--muted)', fontWeight: 700, textTransform: 'uppercase', marginTop: 1 }}>/30</div>
                 <div style={{ fontSize: 9, color: 'var(--muted)', marginTop: 2, fontWeight: 600 }}>{slab.label}</div>
               </div>
             );
           })}
         </div>
-        <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 8 }}>Per teacher: /15 · Full course: /30 · Both teachers combined</div>
+        <div style={{ fontSize: 10, color: 'var(--muted)', marginTop: 6 }}>Per teacher: /15 · Full course: /30</div>
       </div>
 
       {/* Holiday Modal */}
-      <HolidayModal
-        isOpen={holidayOpen}
-        onClose={() => setHolidayOpen(false)}
-        scheduleSettings={settings}
-        onSave={saveHolidaySettings}
-      />
+      <HolidayModal isOpen={holidayOpen} onClose={() => setHolidayOpen(false)} scheduleSettings={settings} onSave={saveHolidaySettings} />
 
-      {/* Teacher Dialog — same component as Schedule page */}
+      {/* Teacher Dialog */}
       <CourseTeacherDialog
-        isOpen={teacherDlg.open}
-        onClose={closeTeachers}
-        course={selectedCourse}
-        currentTeachers={currentTeachers}
-        onSave={saveTeachers}
-        allTeachers={allTeachers}
+        isOpen={teacherDlg.open} onClose={closeTeachers}
+        course={selectedCourse} currentTeachers={currentTeachers}
+        onSave={saveTeachers} allTeachers={allTeachers}
         requireTwoTeachers
       />
     </div>
