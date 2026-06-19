@@ -391,67 +391,74 @@ export default function Results() {
               </div>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) auto minmax(0, 1fr)', gap: 14, alignItems: 'stretch' }}>
+            <div style={{ display: 'flex', flexWrap: 'nowrap', gap: 'clamp(6px, 2.5vw, 14px)', alignItems: 'stretch' }}>
+            {/* Current CGPA card */}
             <div style={{
-              padding: '18px 20px',
+              flex: '1 1 0',
+              minWidth: 0,
+              padding: 'clamp(8px, 3vw, 14px) clamp(8px, 3vw, 16px)',
               borderRadius: 18,
               background: 'linear-gradient(180deg, var(--surfaceGlassStrong), var(--surfaceGlass))',
               border: '1px solid rgba(var(--accentRGB), 0.12)',
               backdropFilter: 'blur(12px)',
               boxShadow: '0 8px 24px rgba(15, 23, 42, 0.06)'
             }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, marginBottom: 8 }}>
-                <div style={{ fontSize: 11, color: 'var(--muted)', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.10em' }}>Current CGPA</div>
-                <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '6px 10px', borderRadius: 999, background: 'rgba(var(--accentRGB), 0.08)', color: 'var(--accent)', fontSize: 11, fontWeight: 700 }}>
-                  <Target size={13} />
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 4, marginBottom: 8, flexWrap: 'nowrap' }}>
+                <div style={{ fontSize: 'clamp(9px, 2.4vw, 11px)', color: 'var(--muted)', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.06em', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', minWidth: 0 }}>Current CGPA</div>
+                <div style={{ display: 'inline-flex', alignItems: 'center', gap: 3, padding: 'clamp(3px, 1vw, 4px) clamp(5px, 1.6vw, 8px)', borderRadius: 999, background: 'rgba(var(--accentRGB), 0.08)', color: 'var(--accent)', fontSize: 'clamp(9px, 2.2vw, 10px)', fontWeight: 700, flexShrink: 0, whiteSpace: 'nowrap' }}>
+                  <Target size={11} />
                   Now
                 </div>
               </div>
-              <div style={{ display: 'flex', alignItems: 'flex-end', gap: 12, flexWrap: 'wrap' }}>
-                <div style={{ fontSize: 56, fontWeight: 900, letterSpacing: '-0.06em', color: cgpa >= 3.75 ? '#059669' : cgpa >= 2.20 ? '#0f172a' : '#dc2626', lineHeight: 0.95 }}>
+              <div style={{ display: 'flex', alignItems: 'flex-end', gap: 8, flexWrap: 'wrap' }}>
+                <div style={{ fontSize: 'clamp(24px, 9vw, 48px)', fontWeight: 900, letterSpacing: '-0.05em', color: cgpa >= 3.75 ? '#059669' : cgpa >= 2.20 ? '#0f172a' : '#dc2626', lineHeight: 0.95 }}>
                   {cgpa.toFixed(2)}
                 </div>
-                <div style={{ paddingBottom: 10, color: 'var(--muted)', fontSize: 12, fontWeight: 600, display: 'flex', alignItems: 'center', gap: 8 }}>
-                  <span style={{ width: 6, height: 6, borderRadius: 999, background: cgpa >= 3.75 ? '#10b981' : '#3b82f6' }} />
+                <div style={{ paddingBottom: 6, color: 'var(--muted)', fontSize: 'clamp(9px, 2.2vw, 11px)', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 5 }}>
+                  <span style={{ width: 6, height: 6, borderRadius: 999, background: cgpa >= 3.75 ? '#10b981' : '#3b82f6', flexShrink: 0 }} />
                   {cgpaToPercent(cgpa).toFixed(2)}% equivalent
                 </div>
               </div>
-              <div style={{ marginTop: 14, height: 8, background: 'rgba(var(--accentRGB), 0.10)', borderRadius: 999, overflow: 'hidden' }}>
+              <div style={{ marginTop: 10, height: 6, background: 'rgba(var(--accentRGB), 0.10)', borderRadius: 999, overflow: 'hidden' }}>
                 <div style={{ width: `${Math.min(100, (cgpa / 4) * 100)}%`, height: '100%', borderRadius: 999, background: cgpa >= 3.75 ? 'linear-gradient(90deg, #10b981, #059669)' : 'linear-gradient(90deg, #3b82f6, #0ea5e9)', transition: 'width 0.35s ease' }} />
               </div>
             </div>
 
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minWidth: 56 }}>
-              <div style={{ width: 56, height: 56, borderRadius: 999, display: 'grid', placeItems: 'center', background: 'var(--surfaceGlassStrong)', border: '1px solid rgba(var(--accentRGB), 0.14)', color: 'var(--accent)', fontWeight: 900, fontSize: 18, boxShadow: '0 12px 24px rgba(15, 23, 42, 0.08)' }}>
-                <ArrowRight size={18} />
+            {/* Arrow divider */}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, alignSelf: 'center' }}>
+              <div style={{ width: 'clamp(22px, 7vw, 44px)', height: 'clamp(22px, 7vw, 44px)', borderRadius: 999, display: 'grid', placeItems: 'center', background: 'var(--surfaceGlassStrong)', border: '1px solid rgba(var(--accentRGB), 0.14)', color: 'var(--accent)', boxShadow: '0 8px 20px rgba(15, 23, 42, 0.08)' }}>
+                <ArrowRight size={14} style={{ width: 'clamp(10px, 3vw, 16px)', height: 'clamp(10px, 3vw, 16px)' }} />
               </div>
             </div>
 
+            {/* Max Possible CGPA card */}
             <div style={{
-              padding: '18px 20px',
+              flex: '1 1 0',
+              minWidth: 0,
+              padding: 'clamp(8px, 3vw, 14px) clamp(8px, 3vw, 16px)',
               borderRadius: 18,
               background: 'linear-gradient(180deg, rgba(16, 185, 129, 0.14), rgba(16, 185, 129, 0.08))',
               border: '1px solid rgba(16, 185, 129, 0.18)',
               backdropFilter: 'blur(12px)',
               boxShadow: '0 8px 24px rgba(15, 23, 42, 0.06)'
             }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, marginBottom: 8 }}>
-                <div style={{ fontSize: 11, color: 'var(--muted)', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.10em' }}>Max Possible CGPA</div>
-                <div style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '6px 10px', borderRadius: 999, background: 'rgba(16, 185, 129, 0.12)', color: '#059669', fontSize: 11, fontWeight: 700 }}>
-                  <Sparkles size={13} />
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 4, marginBottom: 8, flexWrap: 'nowrap' }}>
+                <div style={{ fontSize: 'clamp(9px, 2.4vw, 11px)', color: 'var(--muted)', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.06em', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', minWidth: 0 }}>Max Possible</div>
+                <div style={{ display: 'inline-flex', alignItems: 'center', gap: 3, padding: 'clamp(3px, 1vw, 4px) clamp(5px, 1.6vw, 8px)', borderRadius: 999, background: 'rgba(16, 185, 129, 0.12)', color: '#059669', fontSize: 'clamp(9px, 2.2vw, 10px)', fontWeight: 700, flexShrink: 0, whiteSpace: 'nowrap' }}>
+                  <Sparkles size={11} />
                   Ceiling
                 </div>
               </div>
-              <div style={{ display: 'flex', alignItems: 'flex-end', gap: 12, flexWrap: 'wrap' }}>
-                <div style={{ fontSize: 56, fontWeight: 900, letterSpacing: '-0.06em', color: '#059669', lineHeight: 0.95 }}>
+              <div style={{ display: 'flex', alignItems: 'flex-end', gap: 8, flexWrap: 'wrap' }}>
+                <div style={{ fontSize: 'clamp(24px, 9vw, 48px)', fontWeight: 900, letterSpacing: '-0.05em', color: '#059669', lineHeight: 0.95 }}>
                   {maxCgpa !== null ? maxCgpa.toFixed(2) : '—'}
                 </div>
-                <div style={{ paddingBottom: 10, color: 'var(--muted)', fontSize: 12, fontWeight: 600, display: 'flex', alignItems: 'center', gap: 8 }}>
-                  <span style={{ width: 6, height: 6, borderRadius: 999, background: '#10b981' }} />
+                <div style={{ paddingBottom: 6, color: 'var(--muted)', fontSize: 'clamp(9px, 2.2vw, 11px)', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 5 }}>
+                  <span style={{ width: 6, height: 6, borderRadius: 999, background: '#10b981', flexShrink: 0 }} />
                   if all remaining get 4.0
                 </div>
               </div>
-              <div style={{ marginTop: 14, height: 8, background: 'rgba(16, 185, 129, 0.12)', borderRadius: 999, overflow: 'hidden' }}>
+              <div style={{ marginTop: 10, height: 6, background: 'rgba(16, 185, 129, 0.12)', borderRadius: 999, overflow: 'hidden' }}>
                 <div style={{ width: maxCgpa !== null ? `${Math.min(100, (maxCgpa / 4) * 100)}%` : '0%', height: '100%', borderRadius: 999, background: 'linear-gradient(90deg, #34d399, #10b981)', transition: 'width 0.35s ease' }} />
               </div>
             </div>
@@ -647,13 +654,8 @@ export default function Results() {
           }}>
             {/* Total Marks */}
             <div style={{ flex: 1, minWidth: 120 }}>
-              <div style={{ fontSize: 10, color: 'var(--muted)', marginBottom: 4, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.03em' }}>Grade Points</div>
-              <div style={{ fontSize: 18, fontWeight: 700, color: 'var(--accent)' }}>
-                {term.pts > 0 ? term.pts.toFixed(2) : '—'}
-                <span style={{ fontSize: 13, fontWeight: 400, color: 'var(--muted)', marginLeft: 4 }}>
-                  / {(term.totalCredits * 4.0).toFixed(2)}
-                </span>
-              </div>
+              <div style={{ fontSize: 10, color: 'var(--muted)', marginBottom: 4, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.03em' }}>Total Mark Points</div>
+              <div style={{ fontSize: 18, fontWeight: 700, color: 'var(--accent)' }}>{term.totalCredits} / {courseCount * 4.0}</div>
             </div>
             {/* Completion */}
             <div style={{ flex: 1, minWidth: 120 }}>
