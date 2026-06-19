@@ -2014,11 +2014,16 @@ export default function Schedule() {
             </button>
             <button className="btn btn-primary" onClick={() => {
               const termKey = getCurrentTermKey(profile);
+              if (!profile?.termStartDate) return notify('Term timeline not available — add term start date in Profile', 'error');
+              if (!profile?.dept) return notify('Term timeline not available — add department in Profile', 'error');
+              if (!termKey) return notify('Current term not recognized — set current term in Profile', 'error');
               const timeline = getTermTimeline(profile?.termStartDate, profile?.dept, termKey);
-              if (!timeline) return notify('Term timeline not available — add term start date in Profile', 'error');
-              // prepare local edits from existing overrides or timeline
+              if (!timeline) return notify('Unable to build term timeline — check the term start date in Profile', 'error');
               const overrides = (examOverrides && examOverrides[termKey]) || [];
               const mapped = timeline.examPhases.map((p, i) => ({ course: p.course, examDate: (overrides[i]?.examDate) || p.examDate.toISOString().slice(0,10) }));
+              if (mapped.length === 0) {
+                return notify('No theory exam courses found for this term. Confirm department and current term in Profile.', 'error');
+              }
               setLocalExamEdits(mapped);
               setEditingExams(true);
             }}>
@@ -2040,6 +2045,9 @@ export default function Schedule() {
             const o = overrides[i];
             return { ...p, examDate: o && o.examDate ? new Date(o.examDate) : new Date(p.examDate) };
           });
+          const hasExamPhases = examPhases.length > 0;
+          const examStartDate = hasExamPhases ? examPhases[0].examDate : null;
+          const examEndDate = hasExamPhases ? examPhases[examPhases.length - 1].examDate : null;
 
           const format = (d) => new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
 
@@ -2059,15 +2067,23 @@ export default function Schedule() {
 
               <div className="term-roadmap-exams" style={{ padding: 10, borderRadius: 8, border: '1px solid var(--border)' }}>
                 <div style={{ fontWeight: 700 }}>✍️ Exam Period</div>
-                <div style={{ fontSize: 12, color: 'var(--muted)' }}>{examPhases.length} courses: {format(examPhases[0]?.examDate)} → {format(examPhases[examPhases.length - 1]?.examDate)}</div>
-                <div className="exam-phases-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: 8, marginTop: 8 }}>
-                  {examPhases.map((ep, idx) => (
-                    <div key={idx} className="exam-phase-card" style={{ padding: 10, borderRadius: 8, background: 'var(--card)', border: '1px solid var(--border)', fontSize: 13 }}>
-                      <div style={{ fontWeight: 800 }}>Exam {ep.course}</div>
-                      <div style={{ color: 'var(--muted)', marginTop: 6 }}>{format(ep.examDate)}</div>
-                    </div>
-                  ))}
+                <div style={{ fontSize: 12, color: 'var(--muted)' }}>
+                  {hasExamPhases ? `${examPhases.length} courses: ${format(examStartDate)} → ${format(examEndDate)}` : 'No theory exam courses found for this term.'}
                 </div>
+                {hasExamPhases ? (
+                  <div className="exam-phases-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: 8, marginTop: 8 }}>
+                    {examPhases.map((ep, idx) => (
+                      <div key={idx} className="exam-phase-card" style={{ padding: 10, borderRadius: 8, background: 'var(--card)', border: '1px solid var(--border)', fontSize: 13 }}>
+                        <div style={{ fontWeight: 800 }}>Exam {ep.course}</div>
+                        <div style={{ color: 'var(--muted)', marginTop: 6 }}>{format(ep.examDate)}</div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div style={{ marginTop: 8, fontSize: 12, color: 'var(--muted)' }}>
+                    No exam dates available. Check your current term and department in Profile.
+                  </div>
+                )}
 
                 {timeline.specialPeriods && timeline.specialPeriods.length > 0 && (
                   <div style={{ marginTop: 8, fontSize: 12, color: '#F59E0B' }}>
@@ -2126,20 +2142,26 @@ export default function Schedule() {
             </div>
 
             <div style={{ display: 'grid', gap: 10 }}>
-              {localExamEdits.map((e, i) => (
-                <div key={i} className="edit-exams-row" style={{ display: 'grid', gridTemplateColumns: '120px 1fr', gap: 8, alignItems: 'center' }}>
-                  <div style={{ fontWeight: 700 }}>{`Exam ${e.course}`}</div>
-                  <input className="edit-exam-date" type="date" value={e.examDate} onChange={ev => {
-                    const v = ev.target.value;
-                    setLocalExamEdits(prev => prev.map((p, idx) => idx === i ? { ...p, examDate: v } : p));
-                  }} style={{ width: '100%', padding: '8px 10px', borderRadius: 8, border: '1px solid var(--border)' }} />
+              {localExamEdits.length > 0 ? (
+                localExamEdits.map((e, i) => (
+                  <div key={i} className="edit-exams-row" style={{ display: 'grid', gridTemplateColumns: '120px 1fr', gap: 8, alignItems: 'center' }}>
+                    <div style={{ fontWeight: 700 }}>{`Exam ${e.course}`}</div>
+                    <input className="edit-exam-date" type="date" value={e.examDate} onChange={ev => {
+                      const v = ev.target.value;
+                      setLocalExamEdits(prev => prev.map((p, idx) => idx === i ? { ...p, examDate: v } : p));
+                    }} style={{ width: '100%', padding: '8px 10px', borderRadius: 8, border: '1px solid var(--border)' }} />
+                  </div>
+                ))
+              ) : (
+                <div style={{ padding: 12, borderRadius: 10, background: 'rgba(255,235,205,0.55)', color: '#92400e', fontSize: 13 }}>
+                  No exam dates are available for editing. Make sure your current term, department, and term start date are correctly set in Profile.
                 </div>
-              ))}
+              )}
             </div>
 
             <div className="edit-exams-footer" style={{ display: 'flex', gap: 8, justifyContent: 'flex-end', marginTop: 12 }}>
               <button className="btn btn-ghost" onClick={() => setEditingExams(false)}>Cancel</button>
-              <button className="btn btn-primary" onClick={() => {
+              <button className="btn btn-primary" disabled={localExamEdits.length === 0} onClick={() => {
                 const termKey = getCurrentTermKey(profile);
                 const next = { ...(examOverrides || {}) };
                 next[termKey] = localExamEdits.map(x => ({ course: x.course, examDate: x.examDate }));

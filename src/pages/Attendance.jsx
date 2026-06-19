@@ -387,8 +387,8 @@ function AttendanceHero({ courses, logs, schedule, settings, combinedMode, combi
         <div style={{ fontSize: 10, fontWeight: 800, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Live Attendance</div>
         <div style={{ fontSize: 10, color: 'var(--muted)' }}>{combinedMode ? 'Combined' : 'Daily log'} · {theory.length} courses</div>
       </div>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
-        {stats.map(({ c, pct, totalHeld, totalAttended, fullMarks, slab, hint }) => {
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+        {stats.map(({ c, pct, totalHeld, totalAttended, slab, hint }) => {
           const col = attColor(pct);
           const hasData = totalHeld > 0;
           const hintCol = hint?.type === 'danger' ? 'var(--danger)' : hint?.type === 'warn' ? 'var(--warning)' : hint?.type === 'good' ? 'var(--success)' : hint?.type === 'info' ? 'var(--accent)' : 'var(--muted)';
@@ -397,49 +397,53 @@ function AttendanceHero({ courses, logs, schedule, settings, combinedMode, combi
             <div key={c.id} style={{
               background: attBg(pct, dark),
               border: `1.5px solid ${attBorder(pct, dark)}`,
-              borderRadius: 11,
-              padding: '7px 10px',
+              borderRadius: 10,
+              padding: '6px 9px',
             }}>
-              {/* Single main row */}
               <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                {/* Course info */}
+                {/* Left: 2 lines */}
                 <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ fontWeight: 700, fontSize: 13, lineHeight: 1.2, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                  {/* Line 1 — course name */}
+                  <div style={{ fontWeight: 700, fontSize: 13, lineHeight: 1.25, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                     {getDisplayCourseName(c)}
                   </div>
-                  <div style={{ fontSize: 10, color: 'var(--muted)', marginTop: 1, display: 'flex', alignItems: 'center', gap: 5, flexWrap: 'wrap' }}>
-                    <span>{c.code}{c.credits ? ` · ${c.credits}cr` : ''}</span>
-                    {hasData && <span style={{ color: col, fontWeight: 700 }}>{slab?.label}</span>}
-                    {hasData && <span>{totalAttended}/{totalHeld}</span>}
-                    {hint && <span style={{ color: hintCol, fontWeight: 700 }}>· {hint.text}</span>}
+                  {/* Line 2 — meta inline */}
+                  <div style={{ fontSize: 10, color: 'var(--muted)', marginTop: 2, display: 'flex', alignItems: 'center', gap: 0, overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>
+                    <span style={{ opacity: 0.7 }}>{c.code}</span>
+                    {hasData && <>
+                      <span style={{ opacity: 0.35, margin: '0 4px' }}>·</span>
+                      <span style={{ color: col, fontWeight: 800 }}>{slab?.label}</span>
+                      <span style={{ opacity: 0.35, margin: '0 4px' }}>·</span>
+                      <span>{totalAttended}/{totalHeld}</span>
+                    </>}
+                    {hint && <>
+                      <span style={{ opacity: 0.35, margin: '0 4px' }}>·</span>
+                      <span style={{ color: hintCol, fontWeight: 700 }}>{hint.text}</span>
+                    </>}
                   </div>
                 </div>
 
-                {/* Right: marks + % */}
-                {hasData ? (
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 5, flexShrink: 0 }}>
-                    <div style={{ textAlign: 'right' }}>
-                      <div style={{ fontSize: 9, color: 'var(--muted)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em', lineHeight: 1 }}>marks</div>
-                      <div style={{ fontSize: 13, fontWeight: 900, color: col, lineHeight: 1.1 }}>{fullMarks ?? '—'}<span style={{ fontSize: 8, opacity: 0.7 }}>/30</span></div>
-                    </div>
+                {/* Right: % pill only — fixed 46px */}
+                <div style={{ flexShrink: 0 }}>
+                  {hasData ? (
                     <div style={{
-                      padding: '4px 8px', borderRadius: 8,
-                      background: pct >= 90 ? col : col,
-                      color: '#fff', fontWeight: 900, fontSize: 16, lineHeight: 1,
-                      minWidth: 44, textAlign: 'center',
-                      boxShadow: pct >= 90 ? `0 0 0 2px ${col}33` : 'none',
+                      width: 46, height: 32, borderRadius: 8,
+                      background: col, color: '#fff',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      fontWeight: 900, fontSize: 15, lineHeight: 1,
+                      letterSpacing: '-0.02em',
                     }}>
-                      {pct}<span style={{ fontSize: 9, fontWeight: 600 }}>%</span>
+                      {pct}<span style={{ fontSize: 9, fontWeight: 600, letterSpacing: 0 }}>%</span>
                     </div>
-                  </div>
-                ) : (
-                  <div style={{ fontSize: 10, color: 'var(--muted)', fontStyle: 'italic' }}>No data</div>
-                )}
+                  ) : (
+                    <div style={{ fontSize: 10, color: 'var(--muted)', fontStyle: 'italic' }}>—</div>
+                  )}
+                </div>
               </div>
 
-              {/* Progress bar — flush, 2px */}
+              {/* Progress bar 2px flush */}
               {hasData && (
-                <div style={{ height: 2, background: dark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.07)', borderRadius: 99, marginTop: 6, overflow: 'hidden' }}>
+                <div style={{ height: 2, background: dark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.07)', borderRadius: 99, marginTop: 5, overflow: 'hidden' }}>
                   <div style={{ height: '100%', borderRadius: 99, width: `${Math.min(100, pct)}%`, background: col, transition: 'width 0.5s ease' }} />
                 </div>
               )}

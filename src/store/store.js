@@ -896,9 +896,9 @@ export const getTermTimeline = (termStartDate, deptCode, termKey) => {
     prepLeaveEnd.setDate(prepLeaveEnd.getDate() + 9);
     
     // Phase 3: Get number of theory courses for exams
-    const deptTerms = getDeptTerms(deptCode);
-    const coursesInTerm = deptTerms[termKey] || [];
-    const theoryCourses = coursesInTerm.filter(c => c.type === 'Theory').length;
+    // Safe fallback — typically 5 theory courses per term
+    // User can manually override exam dates via Edit Exams modal
+    const theoryCourses = 5;
     
     // Schedule exams with gaps (skip holidays)
     let examDate = new Date(prepLeaveEnd);

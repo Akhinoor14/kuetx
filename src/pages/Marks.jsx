@@ -36,7 +36,7 @@ function getTeachersForCourse(courseId) {
 // ── Course card: Modern grid-based layout ──────────────────────────────────
 function CourseCard({ course, marks, onChange, onOpenMarkingHelp, isCurrentOngoingTerm }) {
   const m = marks[course.id] || {};
-  const { pct: attPct } = computeEffectiveAttendance(course.id);
+  const { pct: attPct, source: attSource } = computeEffectiveAttendance(course.id);
   const inputDisabled = false;
   
   const clamp = (value, min, max) => Math.min(max, Math.max(min, Number.isFinite(+value) ? +value : 0));
@@ -141,6 +141,16 @@ function CourseCard({ course, marks, onChange, onOpenMarkingHelp, isCurrentOngoi
                 </label>
               </div>
 
+              {attMode === 'auto' && attSource === 'log' && (
+                <div style={{ fontSize: 11, marginTop: 6, color: 'var(--muted)' }}>
+                  Auto from Attendance page
+                </div>
+              )}
+              {attMode === 'auto' && attSource === 'manual' && (
+                <div style={{ fontSize: 11, marginTop: 6, color: 'var(--muted)' }}>
+                  Auto from manual attendance entry
+                </div>
+              )}
               {attMode === 'manual_percent' && (
                 <input className="planner-attendance-inline-input" type="number" min={0} max={100} value={m.attPctManual ?? ''} onChange={e => onChange(course.id, 'attPctManual', e.target.value === '' ? null : Math.min(100, Math.max(0, +e.target.value)))} placeholder="Attendance %" />
               )}
