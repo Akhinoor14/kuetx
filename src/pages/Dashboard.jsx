@@ -130,9 +130,9 @@ export default function Dashboard() {
   const expenses = store.get('expenses') || [];
   const timelogs = store.get('timelogs') || [];
   const timerState = getTimerActiveState();
-  const thisMonth = new Date().toISOString().slice(0, 7);
+  const _dm = new Date(); const thisMonth = `${_dm.getFullYear()}-${String(_dm.getMonth()+1).padStart(2,'0')}`;
   const monthTotal = expenses.filter(e => e.date?.startsWith(thisMonth)).reduce((s, e) => s + (e.amount || 0), 0);
-  const todayKey = new Date().toISOString().split('T')[0];
+  const _dk = new Date(); const todayKey = `${_dk.getFullYear()}-${String(_dk.getMonth()+1).padStart(2,'0')}-${String(_dk.getDate()).padStart(2,'0')}`;
   const todayFocusHours = timelogs
     .filter(item => item?.date === todayKey && PRODUCTIVE_TIME_CATEGORIES.includes(item?.category))
     .reduce((sum, item) => sum + (Number(item?.hours) || 0), 0);

@@ -9,7 +9,7 @@ const INCOME_CATS = ['Family',  'Tution','Scholarship', 'Part-time', 'Freelance'
 
 const fmtMonth = (y, m) => new Date(y, m, 1).toLocaleDateString('en-BD', { month: 'long', year: 'numeric' });
 const parseLocalDate = (dateStr) => dateStr ? new Date(dateStr + 'T00:00:00') : new Date();
-const todayStr = () => new Date().toISOString().split('T')[0];
+const todayStr = () => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; };
 
 export default function Money() {
   const [entries, setEntries] = useState(() => store.get('money_entries') || []);
