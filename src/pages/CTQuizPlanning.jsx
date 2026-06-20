@@ -204,7 +204,7 @@ export default function CTQuizPlanning() {
     if (!id) return;
     const ev = findEventById(id);
     if (!ev) return;
-    const targetIso = (() => { const dt = new Date(viewYear, viewMonth, targetDay); return dt.toISOString().slice(0,10); })();
+    const targetIso = (() => { const dt = new Date(viewYear, viewMonth, targetDay); return `${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,'0')}-${String(dt.getDate()).padStart(2,'0')}`; })();
     if (holidayDates.includes(targetIso)) {
       window.alert('Cannot move event to a holiday date.');
       dragItemRef.current = null;
@@ -262,7 +262,7 @@ export default function CTQuizPlanning() {
     const lines = ['CT Planner — Weekly', ''];
     for (let i = 0; i < 7; i++) {
       const d = new Date(start.getFullYear(), start.getMonth(), start.getDate() + i);
-      const key = d.toISOString().slice(0,10);
+      const key = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
       const list = events[key] || [];
       lines.push(d.toDateString());
       if (!list.length) lines.push('  No events');

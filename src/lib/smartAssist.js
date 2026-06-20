@@ -6,7 +6,7 @@ export function countWeeklyPressure(schedule = [], assignments = [], centerIso) 
   for (let i = 0; i < 7; i++) {
     const d = new Date(start);
     d.setDate(start.getDate() + i);
-    const iso = d.toISOString().slice(0,10);
+    const iso = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
     count += (schedule || []).filter(s => (s.date || '').slice(0,10) === iso).length;
     count += (assignments || []).filter(a => (a.due || '').slice(0,10) === iso).length;
   }

@@ -3,6 +3,8 @@ import { Plus, Trash2, ChevronDown, ChevronUp, Copy } from 'lucide-react';
 import { store, uid, getProfile } from '../store/store';
 import { getAllCourses, getDeptSyllabus } from '../store/curriculumStore';
 
+const todayStr = () => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; };
+
 // Helper: Get today's schedule courses
 const getTodaySchedule = (courses) => {
   const today = new Date().toLocaleDateString('en-US', { weekday: 'long' });
@@ -21,7 +23,7 @@ export default function Diary() {
   const [adding, setAdding] = useState(false);
   const [expanded, setExpanded] = useState({});
   const [form, setForm] = useState({
-    date: new Date().toISOString().split('T')[0],
+    date: todayStr(),
     courseId: '', topics: '', notes: '', selfRating: 4, missed: false
   });
 
@@ -53,7 +55,7 @@ export default function Diary() {
     setEntries(updated); 
     store.set('diary', updated); 
     setAdding(false);
-    setForm({ date: new Date().toISOString().split('T')[0], courseId: '', topics: '', notes: '', selfRating: 4, missed: false });
+    setForm({ date: todayStr(), courseId: '', topics: '', notes: '', selfRating: 4, missed: false });
   };
 
   const del = (id) => { const u = entries.filter(e => e.id !== id); setEntries(u); store.set('diary', u); };
@@ -90,7 +92,7 @@ export default function Diary() {
               <label>Course</label>
               <select value={form.courseId} onChange={e => set('courseId', e.target.value)}>
                 <option value="">Select course</option>
-                {form.date === new Date().toISOString().split('T')[0] && todaySchedule.length > 0 && (
+                {form.date === todayStr() && todaySchedule.length > 0 && (
                   <>
                     <optgroup label="Today's Schedule">
                       {todaySchedule.map(item => (

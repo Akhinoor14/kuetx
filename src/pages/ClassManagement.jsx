@@ -297,7 +297,8 @@ export default function ClassManagement() {
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = `kuetx-routine-backup-${new Date().toISOString().slice(0, 10)}.json`;
+    const _td = new Date();
+    link.download = `kuetx-routine-backup-${_td.getFullYear()}-${String(_td.getMonth()+1).padStart(2,'0')}-${String(_td.getDate()).padStart(2,'0')}.json`;
     link.click();
     URL.revokeObjectURL(url);
   };

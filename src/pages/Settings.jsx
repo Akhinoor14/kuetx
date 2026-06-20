@@ -77,7 +77,8 @@ export default function Settings() {
     } catch (err) {
       console.warn('Could not compute checksum', err);
     }
-    const ts = new Date().toISOString().split('T')[0];
+    const _td = new Date();
+    const ts = `${_td.getFullYear()}-${String(_td.getMonth()+1).padStart(2,'0')}-${String(_td.getDate()).padStart(2,'0')}`;
     downloadJSON(payload, `kuetx-backup-${ts}.json`);
     store.set('lastBackupTime', new Date().toISOString());
     setLastBackup(new Date().toISOString());

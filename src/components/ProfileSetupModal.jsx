@@ -135,7 +135,7 @@ const validateTermStartDate = (value) => {
   try {
     const parsed = new Date(value);
     if (!isNaN(parsed.getTime())) {
-      return parsed.toISOString().split('T')[0]; // Convert to ISO
+      return `${parsed.getFullYear()}-${String(parsed.getMonth()+1).padStart(2,'0')}-${String(parsed.getDate()).padStart(2,'0')}`; // Convert to local ISO
     }
   } catch (e) {}
   

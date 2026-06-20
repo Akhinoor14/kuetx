@@ -4,6 +4,8 @@ import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recha
 import { store, uid, getProfile, getTermLabelFromKey } from '../store/store';
 import { getAllCourses, getDeptSyllabus } from '../store/curriculumStore';
 
+const todayStr = () => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; };
+
 export default function SelfStudy() {
   const profile = getProfile();
   const courses = getAllCourses(profile);
@@ -36,7 +38,7 @@ export default function SelfStudy() {
   const [showHistory, setShowHistory] = useState(false);
 
   const [academicForm, setAcademicForm] = useState({
-    date: new Date().toISOString().split('T')[0],
+    date: todayStr(),
     courseId: '',
     topic: '',
     hours: ''
@@ -45,7 +47,7 @@ export default function SelfStudy() {
   const [extraForm, setExtraForm] = useState({
     category: 'book',
     title: '',
-    startDate: new Date().toISOString().split('T')[0],
+    startDate: todayStr(),
     endDate: '',
     notes: '',
     attachment: ''
@@ -96,7 +98,7 @@ export default function SelfStudy() {
   const toggleAcademicComplete = (id) => {
     const session = academicSessions.find(item => item.id === id);
     if (!session) return;
-    const today = new Date().toISOString().split('T')[0];
+    const today = todayStr();
     const endDate = !session.endDate ? today : null;
     updateAcademicDates(id, session.startDate || today, endDate);
   };
@@ -118,7 +120,7 @@ export default function SelfStudy() {
     store.set('selfstudy_academic', updated);
     setAddingAcademic(false);
     setAcademicForm({
-      date: new Date().toISOString().split('T')[0],
+      date: todayStr(),
       courseId: '',
       topic: '',
       hours: ''
@@ -138,7 +140,7 @@ export default function SelfStudy() {
     setExtraForm({
       category: 'book',
       title: '',
-      startDate: new Date().toISOString().split('T')[0],
+      startDate: todayStr(),
       endDate: '',
       notes: '',
       attachment: ''
@@ -146,7 +148,7 @@ export default function SelfStudy() {
   };
 
   const toggleExtraDone = (id) => {
-    const today = new Date().toISOString().split('T')[0];
+    const today = todayStr();
     const updated = extraReading.map(item => (
       item.id === id ? { ...item, endDate: item.endDate ? '' : today, done: !item.endDate } : item
     ));
@@ -182,7 +184,7 @@ export default function SelfStudy() {
   };
 
   const startTopic = (courseId, topic) => {
-    const today = new Date().toISOString().split('T')[0];
+    const today = todayStr();
     const inProgress = academicSessions.find(session => session.courseId === courseId && session.topic === topic && !session.endDate);
     if (inProgress) return;
 
@@ -201,7 +203,7 @@ export default function SelfStudy() {
   };
 
   const endTopic = (courseId, topic) => {
-    const today = new Date().toISOString().split('T')[0];
+    const today = todayStr();
     let updatedOne = false;
     const updated = academicSessions.map(session => {
       if (updatedOne) return session;
@@ -299,7 +301,7 @@ export default function SelfStudy() {
   }).reduce((sum, session) => sum + (Number(session.hours) || 0), 0);
 
   // Today's quick stats
-  const today = new Date().toISOString().split('T')[0];
+  const today = todayStr();
   const todayHours = academicSessions.filter(s => s.date === today).reduce((sum, s) => sum + (Number(s.hours) || 0), 0);
   const todayTopicsTouched = new Set(academicSessions.filter(s => s.date === today).map(s => `${s.courseId}:${s.topic}`)).size;
 
@@ -308,7 +310,7 @@ export default function SelfStudy() {
     const days = Array.from({length: 7}, (_, i) => {
       const d = new Date();
       d.setDate(d.getDate() - (6 - i));
-      return d.toISOString().split('T')[0];
+      return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
     });
     return days.map(day => ({
       day,
@@ -403,7 +405,7 @@ export default function SelfStudy() {
   const weeklyData = Array.from({ length: 7 }).map((_, i) => {
     const d = new Date();
     d.setDate(d.getDate() - (6 - i));
-    const key = d.toISOString().split('T')[0];
+    const key = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
     const total = academicSessions
       .filter(session => session.date === key)
       .reduce((sum, session) => sum + (session.hours || 0), 0);

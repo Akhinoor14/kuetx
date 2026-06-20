@@ -885,7 +885,8 @@ export default function Schedule() {
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = `kuetx-routine-backup-${new Date().toISOString().slice(0, 10)}.json`;
+    const _td = new Date();
+    link.download = `kuetx-routine-backup-${_td.getFullYear()}-${String(_td.getMonth()+1).padStart(2,'0')}-${String(_td.getDate()).padStart(2,'0')}.json`;
     link.click();
     URL.revokeObjectURL(url);
     setImportMessage('Routine backup exported successfully.');
@@ -1019,7 +1020,7 @@ export default function Schedule() {
   const today = DAYS[todayIndex] || 'Sunday';
   const todayClasses = schedule.filter(s => s.day === today);
   const selectedClasses = schedule.filter(s => s.day === selectedDay);
-  const currentCalendarDay = dateToDayName(new Date().toISOString().split('T')[0]);
+  const currentCalendarDay = today;
   const selectedFormatLabel = MESSAGE_FORMATS.find(format => format.id === settings.messageFormat)?.label || 'Plain';
   const selectedScheduleText = buildDailyText(selectedDay, selectedClasses, getCourse, getAssignmentsNextTwoDays(), settings.messageFormat);
 

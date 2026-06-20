@@ -19,6 +19,10 @@ import { getAllCourses, getDeptSyllabus } from '../store/curriculumStore';
 import useTimerEngine from '../hooks/useTimerEngine';
 import Modal from '../components/Modal';
 
+// Local-date helpers (avoid toISOString(), which shifts to UTC and breaks date-keys at night in BD/UTC+6)
+const todayStr = () => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; };
+const dateKey = (d) => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+
 const TIME_TRACKER_CATEGORIES = ['Study', 'Class', 'Self Study', 'Facebook/YouTube', 'Gaming', 'Sleep', 'Exercise', 'Tuition', 'Travel', 'Adda', 'Other'];
 
 function TimeTrackerCategorySelect({ value, onChangeValue, className = '' }) {
@@ -374,7 +378,7 @@ const QUICK_ACTIVITIES = ['Adda', 'Gaming', 'Walk', 'Movie', 'Food', 'Study toge
 
 export function Social() {
   const [logs, setLogs] = useState(() => store.get('social') || []);
-  const [form, setForm] = useState({ date: new Date().toISOString().split('T')[0], activity: '', persons: '', hours: '' });
+  const [form, setForm] = useState({ date: todayStr(), activity: '', persons: '', hours: '' });
   const [adding, setAdding] = useState(false);
   const [chartPeriod, setChartPeriod] = useState('week');
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
@@ -383,7 +387,7 @@ export function Social() {
     if (!form.activity.trim() || !form.hours) return;
     const u = [{ ...form, hours: +form.hours, id: uid() }, ...logs];
     setLogs(u); store.set('social', u); setAdding(false);
-    setForm({ date: new Date().toISOString().split('T')[0], activity: '', persons: '', hours: '' });
+    setForm({ date: todayStr(), activity: '', persons: '', hours: '' });
   };
 
   const deleteLog = (id) => {
@@ -418,7 +422,7 @@ export function Social() {
   const last7Days = Array.from({ length: 7 }, (_, i) => {
     const d = new Date(now);
     d.setDate(d.getDate() - (6 - i));
-    const dateStr = d.toISOString().split('T')[0];
+    const dateStr = dateKey(d);
     const dayLogs = logs.filter(l => l.date === dateStr);
     const total = dayLogs.reduce((s, l) => s + (+l.hours || 0), 0);
     const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
@@ -557,7 +561,7 @@ export function Projects() {
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
   const setEdit = (k, v) => setEditForm(f => ({ ...f, [k]: v }));
 
-  const today = new Date().toISOString().split('T')[0];
+  const today = todayStr();
 
   const saveProject = () => {
     if (!form.name.trim()) return;
@@ -889,7 +893,7 @@ export function Syllabus() {
   };
 
   const markTopicDone = (courseId, topic) => {
-    const today = new Date().toISOString().split('T')[0];
+    const today = todayStr();
     const openIndex = selfStudyData.findIndex(s => s.courseId === courseId && s.topic === topic && !s.endDate);
     let next = [];
     if (openIndex >= 0) {
@@ -1077,7 +1081,7 @@ export function TimeTracker() {
   const [manualOpen, setManualOpen] = useState(false);
   const [mode, setMode] = useState(TIMER_MODES.UP);
   const [countdownInput, setCountdownInput] = useState({ hours: '0', minutes: '25', seconds: '0' });
-  const [form, setForm] = useState({ date: new Date().toISOString().split('T')[0], category: 'Study', hours: '', note: '' });
+  const [form, setForm] = useState({ date: todayStr(), category: 'Study', hours: '', note: '' });
   const [lastAutoSavedId, setLastAutoSavedId] = useState(null);
   const [timerPrefs, setTimerPrefsState] = useState(() => store.get('timer_prefs_v1') || { sound: true, vibrate: true, notify: true });
   const [pomodoro, setPomodoro] = useState(() => ({ enabled: false, isWork: true, workMs: 25 * 60000, breakMs: 5 * 60000, longBreakMs: 15 * 60000, cycles: 0 }));
@@ -1117,7 +1121,7 @@ export function TimeTracker() {
       savedAt: Date.now(),
     };
     setSessions(appendTimerSession(session));
-    const date = new Date(session.endedAt).toISOString().split('T')[0];
+    const date = dateKey(new Date(session.endedAt));
     persistCompatibilityLog({
       date,
       category: session.category,
@@ -1171,7 +1175,7 @@ export function TimeTracker() {
     } catch (e) {}
   }, [timer.isCompleted, timer.state, timer.elapsedMs, lastAutoSavedId]);
 
-  const today = new Date().toISOString().split('T')[0];
+  const today = todayStr();
   const todayLogs = logs.filter(l => l.date === today);
   const productive = todayLogs.filter(l => PRODUCTIVE_TIME_CATEGORIES.includes(l.category)).reduce((s, l) => s + (Number(l.hours) || 0), 0);
   const waste = todayLogs.filter(l => DISTRACTION_TIME_CATEGORIES.includes(l.category)).reduce((s, l) => s + (Number(l.hours) || 0), 0);
@@ -1375,7 +1379,7 @@ export function TimeTracker() {
 // ── Tuition Tracker ───────────────────────────────────────────────────────────
 export function Tuition() {
   const [sessions, setSessions] = useState(() => store.get('tuition') || []);
-  const [form, setForm] = useState({ studentName: '', subject: '', date: new Date().toISOString().split('T')[0], hours: '', travelTime: '', travelCost: '', fee: '' });
+  const [form, setForm] = useState({ studentName: '', subject: '', date: todayStr(), hours: '', travelTime: '', travelCost: '', fee: '' });
   const [adding, setAdding] = useState(false);
   const [expandedStudent, setExpandedStudent] = useState(null);
   const [filterStudent, setFilterStudent] = useState('all');
@@ -1385,7 +1389,7 @@ export function Tuition() {
     if (!form.studentName.trim()) return;
     const u = [{ ...form, hours: +form.hours, travelTime: +form.travelTime, travelCost: +form.travelCost, fee: +form.fee, id: uid() }, ...sessions];
     setSessions(u); store.set('tuition', u); setAdding(false);
-    setForm({ studentName: '', subject: '', date: new Date().toISOString().split('T')[0], hours: '', travelTime: '', travelCost: '', fee: '' });
+    setForm({ studentName: '', subject: '', date: todayStr(), hours: '', travelTime: '', travelCost: '', fee: '' });
   };
 
   const deleteSession = (id) => {
@@ -1591,9 +1595,9 @@ export function Food() {
   const profileData = store.get('profile') || {};
   const [bmi, setBmi] = useState(() => store.get('bmi_data') || { weight: '', height: '', activityLevel: 'light' });
   const [logs, setLogs] = useState(() => store.get('foodlogs') || []);
-  const [form, setForm] = useState({ date: new Date().toISOString().split('T')[0], meal: 'Lunch', item: '', calories: '' });
+  const [form, setForm] = useState({ date: todayStr(), meal: 'Lunch', item: '', calories: '' });
   const [adding, setAdding] = useState(false);
-  const [viewDate, setViewDate] = useState(new Date().toISOString().split('T')[0]);
+  const [viewDate, setViewDate] = useState(todayStr());
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
   const setBMI = (k, v) => {
     const next = { ...bmi, [k]: v };
@@ -1616,7 +1620,7 @@ export function Food() {
     setLogs(u); store.set('foodlogs', u); setAdding(false);
   };
 
-  const today = new Date().toISOString().split('T')[0];
+  const today = todayStr();
   const viewLogs = logs.filter(l => l.date === viewDate);
   const viewCal = viewLogs.reduce((s, l) => s + (+l.calories || 0), 0);
   const todayCal = logs.filter(l => l.date === today).reduce((s, l) => s + (+l.calories || 0), 0);
@@ -1625,7 +1629,7 @@ export function Food() {
   const last7 = Array.from({ length: 7 }, (_, i) => {
     const d = new Date();
     d.setDate(d.getDate() - (6 - i));
-    const ds = d.toISOString().split('T')[0];
+    const ds = dateKey(d);
     const dayLogs = logs.filter(l => l.date === ds);
     const cal = dayLogs.reduce((s, l) => s + (+l.calories || 0), 0);
     const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
@@ -1773,21 +1777,21 @@ export function Food() {
 // ── Reports ───────────────────────────────────────────────────────────────────
 function getDateRange(period) {
   const now = new Date();
-  const today = now.toISOString().split('T')[0];
+  const today = dateKey(now);
   if (period === 'Daily') {
     return { start: today, end: today, label: today };
   }
   if (period === 'Weekly') {
     const start = new Date(now); start.setDate(now.getDate() - 6);
-    return { start: start.toISOString().split('T')[0], end: today, label: `Last 7 days` };
+    return { start: dateKey(start), end: today, label: `Last 7 days` };
   }
   if (period === 'Monthly') {
     const start = new Date(now.getFullYear(), now.getMonth(), 1);
-    return { start: start.toISOString().split('T')[0], end: today, label: `${start.toLocaleString('default', { month: 'long' })} ${now.getFullYear()}` };
+    return { start: dateKey(start), end: today, label: `${start.toLocaleString('default', { month: 'long' })} ${now.getFullYear()}` };
   }
   // Semester: last 6 months
   const start = new Date(now); start.setMonth(now.getMonth() - 5); start.setDate(1);
-  return { start: start.toISOString().split('T')[0], end: today, label: 'Current semester' };
+  return { start: dateKey(start), end: today, label: 'Current semester' };
 }
 
 function inRange(dateStr, start, end) {
@@ -1816,7 +1820,7 @@ export function Reports() {
   // Filtered data by period
   const periodTimeSessions = timerSessions.filter(s => {
     if (!s.endedAt) return false;
-    const d = new Date(s.endedAt).toISOString().split('T')[0];
+    const d = dateKey(new Date(s.endedAt));
     return inRange(d, start, end);
   });
   const periodTimelogs = timelogs.filter(l => l.date && inRange(l.date, start, end));
@@ -1904,7 +1908,7 @@ export function Reports() {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `kuetx-${period.toLowerCase()}-report-${now.toISOString().split('T')[0]}.txt`;
+    a.download = `kuetx-${period.toLowerCase()}-report-${dateKey(now)}.txt`;
     a.click();
     URL.revokeObjectURL(url);
   };
@@ -1930,7 +1934,7 @@ export function Reports() {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `kuetx-${period.toLowerCase()}-report-${now.toISOString().split('T')[0]}.csv`;
+    a.download = `kuetx-${period.toLowerCase()}-report-${dateKey(now)}.csv`;
     a.click();
     URL.revokeObjectURL(url);
   };

@@ -65,7 +65,7 @@ export default function SmartScore() {
     // Namaz (10%): done / (5×7) × 100
     const last7dates = Array.from({ length: 7 }, (_, i) => {
       const d = new Date(); d.setDate(d.getDate() - i);
-      return d.toISOString().split('T')[0];
+      return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
     });
     const namazDone = last7dates.reduce((sum, date) => {
       const r = namaz[date] || {};

@@ -3,7 +3,7 @@ import PromptDialog from './PromptDialog';
 import { notify } from '../lib/notify';
 
 function parseISO(s){ if (s instanceof Date) return s; return new Date(s + 'T00:00:00'); }
-function formatISO(d){ return d.toISOString().slice(0,10); }
+function formatISO(d){ return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; }
 
 function monthGrid(year, month){
   // month: 0-11

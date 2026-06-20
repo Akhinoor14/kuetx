@@ -30,7 +30,8 @@ export default function CTPlannerCalendar({ schedule = [], viewDate = new Date()
       eventDrop={(info) => {
         const id = info.event.id;
         const newDate = info.event.start;
-        if (onEventDrop) onEventDrop(id, newDate.toISOString().slice(0,10));
+        const localIso = `${newDate.getFullYear()}-${String(newDate.getMonth()+1).padStart(2,'0')}-${String(newDate.getDate()).padStart(2,'0')}`;
+        if (onEventDrop) onEventDrop(id, localIso);
       }}
       height="auto"
     />

@@ -6,7 +6,7 @@ const BAD_PRESETS = ['মিথ্যা কথা বলা', 'গালি দ
 const GOOD_PRESETS = ['কাউকে সাহায্য করা', 'ভালো পড়াশোনা', 'সময়মতো নামাজ', 'ব্যায়াম করা', 'বই পড়া', 'সৎ কাজ করা'];
 
 export default function SelfEval() {
-  const today = new Date().toISOString().split('T')[0];
+  const _td = new Date(); const today = `${_td.getFullYear()}-${String(_td.getMonth()+1).padStart(2,'0')}-${String(_td.getDate()).padStart(2,'0')}`;
   const [records, setRecords] = useState(() => store.get('selfeval') || {});
   const [selDate, setSelDate] = useState(today);
   const [newBad, setNewBad] = useState('');
