@@ -5,24 +5,47 @@ import { NAV } from '../nav';
 import { useFavorites } from '../hooks/useFavorites';
 import { usePinnedPages } from '../hooks/usePinnedPages';
 import { getPageStats, getAllPageStats } from '../hooks/usePageTracker';
-import { store } from '../store/store';
+import { getProfile } from '../store/store';
 
-export default function QuickAccess() {
+// CR-only pages pulled straight from NAV (single source of truth)
+const CR_PATHS = NAV.flatMap(s => s.items || [])
+  .filter(i => i.requiresCR)
+  .map(i => i.path);
+
+/**
+ * QuickAccessPanel — the reusable core of the Quick Access experience.
+ * Used both as the full `/quick-access` page (desktop/route) and inside the
+ * mobile bottom-nav drawer (`inPanel`).
+ *
+ * @param {boolean} inPanel     - true when rendered inside the mobile drawer (tighter spacing)
+ * @param {function} onNavigate - called when a page card is clicked (e.g. to close the drawer)
+ */
+export function QuickAccessPanel({ inPanel = false, onNavigate } = {}) {
   const [mostUsed, setMostUsed] = useState([]);
   const [allStats, setAllStats] = useState([]);
   const { favorites, toggleFavorite, isFavorite } = useFavorites();
   const { pinnedPages, togglePin, isPinned } = usePinnedPages();
-  const [profile] = useState(() => store.get('profile') || {});
+  const [profile, setProfile] = useState(() => getProfile() || {});
 
   useEffect(() => {
     const syncStats = () => {
       setMostUsed(getPageStats());
       setAllStats(getAllPageStats());
     };
+    const syncProfile = () => setProfile(getProfile() || {});
     syncStats();
+    syncProfile();
     window.addEventListener('kuetx:store-updated', syncStats);
-    return () => window.removeEventListener('kuetx:store-updated', syncStats);
+    window.addEventListener('kuetx:store-updated', syncProfile);
+    return () => {
+      window.removeEventListener('kuetx:store-updated', syncStats);
+      window.removeEventListener('kuetx:store-updated', syncProfile);
+    };
   }, []);
+
+  const isCR = !!profile?.isCR;
+  const crPages = isCR ? CR_PATHS : [];
+  const handleNavigate = () => { if (onNavigate) onNavigate(); };
 
   const getPageLabel = (path) => {
     for (const section of NAV) {
@@ -77,6 +100,7 @@ export default function QuickAccess() {
       pin: { bg: 'rgba(var(--accentRGB),0.12)', color: 'var(--accent)' },
       fav: { bg: 'rgba(251,191,36,0.12)', color: '#fbbf24' },
       used: { bg: 'rgba(var(--accentRGB),0.08)', color: 'var(--accent)' },
+      cr: { bg: 'rgba(167,139,250,0.14)', color: '#a78bfa' },
       neutral: { bg: 'rgba(var(--accentRGB),0.06)', color: 'var(--muted)' },
     };
     const { bg: iconBg, color: iconColor } = iconStyles[variant] || iconStyles.neutral;
@@ -85,6 +109,7 @@ export default function QuickAccess() {
       pin: { bg: 'rgba(var(--accentRGB),0.1)', color: 'var(--accent)', border: '1px solid rgba(var(--accentRGB),0.25)' },
       fav: { bg: 'rgba(251,191,36,0.1)', color: '#fbbf24', border: '1px solid rgba(251,191,36,0.25)' },
       used: { bg: 'rgba(var(--accentRGB),0.08)', color: 'var(--accent)', border: '1px solid rgba(var(--accentRGB),0.2)' },
+      cr: { bg: 'rgba(167,139,250,0.1)', color: '#a78bfa', border: '1px solid rgba(167,139,250,0.25)' },
       neutral: { bg: 'rgba(var(--accentRGB),0.06)', color: 'var(--accent)', border: '1px solid rgba(var(--accentRGB),0.15)' },
     };
     const badge = badgeStyles[variant] || badgeStyles.neutral;
@@ -92,6 +117,7 @@ export default function QuickAccess() {
     return (
       <Link
         to={path}
+        onClick={handleNavigate}
         style={{
           display: 'flex',
           alignItems: 'center',
@@ -212,9 +238,10 @@ export default function QuickAccess() {
   ];
 
   return (
-    <div style={{ padding: '16px', width: '100%', margin: '0 auto', minWidth: 0 }}>
+    <div style={{ padding: inPanel ? '2px 2px 8px' : '16px', width: '100%', margin: '0 auto', minWidth: 0 }}>
 
-      {/* ── HERO CARD ── */}
+      {/* ── HERO CARD (full page only — drawer already has its own header) ── */}
+      {!inPanel && (
       <div style={{
         background: 'var(--bg-secondary)',
         border: '1px solid rgba(var(--accentRGB),0.25)',
@@ -283,6 +310,25 @@ export default function QuickAccess() {
           ))}
         </div>
       </div>
+      )}
+
+      {/* ── CR OVERVIEW (only for class representatives) ── */}
+      {crPages.length > 0 && (
+        <section style={{ marginBottom: 24 }}>
+          <SectionHead
+            icon={Icons.Users}
+            label="CR Dashboard"
+            count={crPages.length}
+            iconColor="#a78bfa"
+            iconBg="rgba(167,139,250,0.14)"
+          />
+          <div style={gridStyle}>
+            {crPages.map(path => (
+              <PageCard key={path} path={path} variant="cr" />
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* ── PINNED ── */}
       {pinnedPages.length > 0 && (
@@ -365,8 +411,8 @@ export default function QuickAccess() {
         )}
       </section>
 
-      {/* ── STATS ── */}
-      {allStats.length > 0 && (
+      {/* ── STATS (full page only) ── */}
+      {!inPanel && allStats.length > 0 && (
         <section>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
             <span style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)' }}>Statistics</span>
@@ -397,4 +443,9 @@ export default function QuickAccess() {
       )}
     </div>
   );
+}
+
+// Default export: the full `/quick-access` route page
+export default function QuickAccess() {
+  return <QuickAccessPanel />;
 }

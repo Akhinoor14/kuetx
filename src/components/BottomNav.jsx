@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { useEffect, useMemo, useState } from 'react';
 import * as Icons from 'lucide-react';
 import DriveConnectButton from './DriveConnectButton';
+import { QuickAccessPanel } from '../pages/QuickAccess';
 import { NAV } from '../nav';
 import { getProfile, store } from '../store/store';
 
@@ -10,37 +11,24 @@ const MOBILE_NAV_QUERY = '(max-width: 767.98px)';
 const USAGE_KEY = 'nav_usage_v1';
 const MAX_MOST_USED = 8;
 
-const PINNED_BUTTONS = [
-  { id: 'dashboard', label: 'Home', icon: 'Home', kind: 'route', path: '/' },
-  { id: 'most-used', label: 'Quick', icon: 'Star', kind: 'panel', panel: 'most-used' },
-  { id: 'study', label: 'Study', icon: 'BookOpen', kind: 'panel', panel: 'study' },
-  { id: 'money', label: 'Wallet', icon: 'Wallet', kind: 'panel', panel: 'money' },
-  { id: 'menu', label: 'Menu', icon: 'Menu', kind: 'panel', panel: 'menu' },
-];
-
 const PANEL_TITLES = {
-  'most-used': 'Most used',
-  'quick-cr': 'Quick',
+  'quick-access': 'Quick Access',
   study: 'Study',
   money: 'Wallet',
   menu: 'Menu',
-  cr: 'Class Rep',
 };
 
 const PANEL_SUBTITLES = {
-  'most-used': 'Eight shortcuts tuned to your habits',
-  'quick-cr': 'CR tools above your shortcuts',
+  'quick-access': 'Your shortcuts, favorites & stats',
   study: 'Academics & daily tools',
   money: 'Money & activities',
   menu: 'Tools, notes, settings, and more',
-  cr: 'CR tools & pages',
 };
 
 const PANEL_SECTION_GROUPS = {
   study: ['Academics', 'Daily Life'],
   money: ['Finance', 'Activities'],
   menu: ['Overview', 'Class Rep', 'Tools', 'Information'],
-  cr: ['Class Rep'],
 };
 
 export function useIsMobileNav() {
@@ -112,22 +100,6 @@ const resolveMostUsedItems = (profile, usage) => {
 };
 
 const buildPanelSections = (profile, panel, itemMap, mostUsedItems) => {
-  if (panel === 'most-used') {
-    return [{ group: 'Most used', items: mostUsedItems }];
-  }
-
-  if (panel === 'quick-cr') {
-    const crItems = NAV.flatMap(s => s.items || [])
-      .filter(i => i.requiresCR && profile?.isCR)
-      .map(i => itemMap.get(i.id) || i)
-      .filter(Boolean);
-
-    const sections = [];
-    if (crItems.length) sections.push({ group: 'CR', items: crItems });
-    sections.push({ group: 'Most used', items: mostUsedItems });
-    return sections;
-  }
-
   const groups = PANEL_SECTION_GROUPS[panel] || [];
   const sections = [];
 
@@ -273,14 +245,6 @@ export function BottomNav() {
     };
   }, []);
 
-  // debug: log icons available and check BookOpen/Users presence
-  try {
-    // eslint-disable-next-line no-console
-    console.log('BottomNav icons sample:', Object.keys(Icons).slice(0, 60));
-    // eslint-disable-next-line no-console
-    console.log('BottomNav: BookOpen present?', !!Icons.BookOpen, ' Users present?', !!Icons.Users);
-  } catch (e) {}
-
   useEffect(() => {
     recordUsage(allItems, location.pathname);
   }, [allItems, location.pathname]);
@@ -298,7 +262,7 @@ export function BottomNav() {
   const pinnedButtons = useMemo(() => {
     const base = [
       { id: 'dashboard', label: 'Home', icon: 'Home', kind: 'route', path: '/' },
-      { id: 'most-used', label: profile?.isCR ? 'CR' : 'Quick', icon: profile?.isCR ? 'Users' : 'Star', kind: 'panel', panel: profile?.isCR ? 'quick-cr' : 'most-used' },
+      { id: 'quick-access', label: profile?.isCR ? 'CR' : 'Quick', icon: profile?.isCR ? 'Users' : 'Star', kind: 'panel', panel: 'quick-access' },
       { id: 'study', label: 'Study', icon: 'BookOpen', kind: 'panel', panel: 'study' },
       { id: 'money', label: 'Wallet', icon: 'Wallet', kind: 'panel', panel: 'money' },
       { id: 'menu', label: 'Menu', icon: 'Menu', kind: 'panel', panel: 'menu' },
@@ -312,7 +276,7 @@ export function BottomNav() {
   const moneySections = buildPanelSections(profile, 'money', itemMap, mostUsedItems);
   const menuSections = buildPanelSections(profile, 'menu', itemMap, mostUsedItems);
 
-  const isMostUsedActive = mostUsedItems.some(activeRoute);
+  const isQuickAccessActive = isActivePath('/quick-access', location.pathname);
   const isStudyActive = studySections.some(section => section.items.some(activeRoute));
   const isMoneyActive = moneySections.some(section => section.items.some(activeRoute));
   const isMenuActive = menuSections.some(section => section.items.some(activeRoute));
@@ -321,7 +285,7 @@ export function BottomNav() {
 
   const isButtonActive = (button) => {
     if (button.kind === 'route') return activeRoute(itemMap.get(button.id) || { path: button.path });
-    if (button.panel === 'most-used' || button.panel === 'quick-cr') return (activePanel === 'most-used' || activePanel === 'quick-cr') || isMostUsedActive;
+    if (button.panel === 'quick-access') return activePanel === 'quick-access' || isQuickAccessActive;
     if (button.panel === 'study') return activePanel === 'study' || isStudyActive;
     if (button.panel === 'money') return activePanel === 'money' || isMoneyActive;
     if (button.panel === 'menu') return activePanel === 'menu' || isMenuActive;
@@ -342,15 +306,15 @@ export function BottomNav() {
       />
       <div className="mobile-bottom-nav-panel-wrap">
         <div className="mobile-bottom-nav-panel-container">
-          <div className="mobile-bottom-nav-panel" role="dialog" aria-modal="true" aria-label={(activePanel === 'quick-cr' && profile?.isCR) ? 'Class Rep' : PANEL_TITLES[activePanel]}>
+          <div className="mobile-bottom-nav-panel" role="dialog" aria-modal="true" aria-label={(activePanel === 'quick-access' && profile?.isCR) ? 'Class Rep' : PANEL_TITLES[activePanel]}>
             <div className="mobile-bottom-nav-panel-head">
               <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                {(activePanel === 'quick-cr' && profile?.isCR) ? (
+                {(activePanel === 'quick-access' && profile?.isCR) ? (
                   <span className="mobile-bottom-nav-panel-icon-large"><Icons.Users size={20} /></span>
                 ) : null}
                 <div>
-                  <div className="mobile-bottom-nav-panel-title">{(activePanel === 'quick-cr' && profile?.isCR) ? 'Class Rep' : PANEL_TITLES[activePanel]}</div>
-                  <div className="mobile-bottom-nav-panel-subtitle">{(activePanel === 'quick-cr' && profile?.isCR) ? 'CR tools above your shortcuts' : PANEL_SUBTITLES[activePanel]}</div>
+                  <div className="mobile-bottom-nav-panel-title">{(activePanel === 'quick-access' && profile?.isCR) ? 'CR Quick Access' : PANEL_TITLES[activePanel]}</div>
+                  <div className="mobile-bottom-nav-panel-subtitle">{(activePanel === 'quick-access' && profile?.isCR) ? 'CR tools above your shortcuts' : PANEL_SUBTITLES[activePanel]}</div>
                 </div>
               </div>
               {/* Drive status badge in panel header (menu) */}
@@ -365,9 +329,13 @@ export function BottomNav() {
             </div>
 
             <div className="mobile-bottom-nav-panel-body">
-              {panelSections.map(section => (
-                <PanelSection key={section.group} title={section.group} items={section.items} onSelect={() => setActivePanel(null)} />
-              ))}
+              {activePanel === 'quick-access' ? (
+                <QuickAccessPanel inPanel onNavigate={() => setActivePanel(null)} />
+              ) : (
+                panelSections.map(section => (
+                  <PanelSection key={section.group} title={section.group} items={section.items} onSelect={() => setActivePanel(null)} />
+                ))
+              )}
             </div>
           </div>
         </div>

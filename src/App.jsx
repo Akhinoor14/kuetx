@@ -10,6 +10,8 @@ import { BottomNav, useIsMobileNav } from './components/BottomNav';
 import GlobalToasts from './components/GlobalToasts';
 import BackupReminderGate from './components/BackupReminderGate';
 import DriveAnnouncementModal from './components/DriveAnnouncementModal';
+import { store } from './store/store';
+import { startAutoSync, stopAutoSync, isDriveConnected } from './lib/driveSync';
 
 // Pages
 import Dashboard from './pages/Dashboard';
@@ -127,6 +129,18 @@ function Layout() {
 }
 
 export default function App() {
+  useEffect(() => {
+    // Start the real-time Drive auto-sync engine (push on change + poll pull)
+    // if the user already connected Drive on this device.
+    if (isDriveConnected()) {
+      startAutoSync(
+        () => store.exportAll(),
+        (data) => store.importAllReport(data)
+      );
+    }
+    return () => stopAutoSync();
+  }, []);
+
   return (
     <ThemeProvider>
       <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>

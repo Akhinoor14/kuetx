@@ -5,7 +5,7 @@
  */
 
 import { useState, useEffect, useCallback } from 'react';
-import { Cloud, CloudOff, CloudUpload, RotateCcw, LogOut } from 'lucide-react';
+import { Cloud, CloudOff, CloudUpload, RotateCcw, LogOut, RefreshCw } from 'lucide-react';
 import {
   isDriveConnected,
   getDriveToken,
@@ -15,6 +15,8 @@ import {
   signOutFromDrive,
   uploadToDrive,
   downloadFromDrive,
+  syncNow,
+  startAutoSync,
 } from '../lib/driveSync';
 import { store } from '../store/store';
 import { notify } from '../lib/notify';
@@ -40,6 +42,7 @@ export default function DriveConnectButton({ variant = 'full', onConnected }) {
   const [lastBackup, setLastBackup] = useState(getDriveLastBackup);
   const [loading, setLoading] = useState(false);
   const [restoring, setRestoring] = useState(false);
+  const [syncStatus, setSyncStatus] = useState('idle'); // idle | pending | syncing | synced | error
 
   // Sync state when localStorage changes (other tabs / same session)
   const syncState = useCallback(() => {
@@ -51,6 +54,17 @@ export default function DriveConnectButton({ variant = 'full', onConnected }) {
   useEffect(() => {
     window.addEventListener('kuetx:drive-updated', syncState);
     return () => window.removeEventListener('kuetx:drive-updated', syncState);
+  }, [syncState]);
+
+  // Live sync status (driven by the auto-sync engine in driveSync.js)
+  useEffect(() => {
+    const onSync = (e) => {
+      const { status } = e.detail || {};
+      if (status) setSyncStatus(status);
+      if (status === 'synced' || status === 'idle') syncState();
+    };
+    window.addEventListener('kuetx:drive-sync', onSync);
+    return () => window.removeEventListener('kuetx:drive-sync', onSync);
   }, [syncState]);
 
   const emitUpdate = () => window.dispatchEvent(new Event('kuetx:drive-updated'));
@@ -74,6 +88,12 @@ export default function DriveConnectButton({ variant = 'full', onConnected }) {
         notify('Connected but first backup failed — try manually', 'error');
       }
 
+      // Start the real-time auto-sync engine (push on change + background pull)
+      startAutoSync(
+        () => store.exportAll(),
+        (data) => store.importAllReport(data)
+      );
+
       onConnected?.();
     } catch (err) {
       if (err.message !== 'popup_closed_by_user') {
@@ -81,6 +101,18 @@ export default function DriveConnectButton({ variant = 'full', onConnected }) {
       }
     } finally {
       setLoading(false);
+    }
+  };
+
+  // ── Instant Sync Now (pull + merge + push) ──────────────────────────────
+  const handleSyncNow = async () => {
+    if (syncStatus === 'syncing') return;
+    try {
+      await syncNow();
+      syncState();
+      notify('🔄 Synced with Google Drive!', 'success');
+    } catch (err) {
+      notify(`Sync failed: ${err.message}`, 'error');
     }
   };
 
@@ -133,6 +165,12 @@ export default function DriveConnectButton({ variant = 'full', onConnected }) {
   // VARIANT: badge — one-liner for Sidebar bottom / BottomNav
   // ─────────────────────────────────────────────────────────────────────────
   if (variant === 'badge') {
+    const isSyncing = syncStatus === 'syncing';
+    const isPending = syncStatus === 'pending';
+    const statusLabel = connected
+      ? (isSyncing ? 'Syncing…' : isPending ? 'Pending…' : `Drive · ${formatRelativeTime(lastBackup)}`)
+      : 'Connect Drive';
+
     return (
       <div
         style={{
@@ -141,20 +179,27 @@ export default function DriveConnectButton({ variant = 'full', onConnected }) {
           gap: 6,
           fontSize: 11,
           color: connected ? 'var(--accent)' : 'var(--muted)',
-          cursor: connected ? 'default' : 'pointer',
+          cursor: isSyncing ? 'wait' : 'pointer',
           padding: '4px 0',
         }}
-        onClick={!connected ? handleConnect : undefined}
-        title={connected ? `Drive: ${email || 'connected'} · Last: ${formatRelativeTime(lastBackup)}` : 'Click to connect Google Drive'}
+        onClick={connected ? handleSyncNow : handleConnect}
+        title={
+          connected
+            ? `Drive: ${email || 'connected'} · Last: ${formatRelativeTime(lastBackup)} · Click to sync now`
+            : 'Click to connect Google Drive'
+        }
       >
         {connected
-          ? <Cloud size={12} strokeWidth={2} />
+          ? (
+            <RefreshCw
+              size={12}
+              strokeWidth={2}
+              style={isSyncing ? { animation: 'kuetx-spin 0.9s linear infinite' } : undefined}
+            />
+          )
           : <CloudOff size={12} strokeWidth={2} />}
-        <span>
-          {connected
-            ? `Drive · ${formatRelativeTime(lastBackup)}`
-            : 'Connect Drive'}
-        </span>
+        <span>{statusLabel}</span>
+        <style>{`@keyframes kuetx-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }`}</style>
       </div>
     );
   }
@@ -269,12 +314,23 @@ export default function DriveConnectButton({ variant = 'full', onConnected }) {
           <>
             <button
               className="btn btn-primary"
+              onClick={handleSyncNow}
+              disabled={syncStatus === 'syncing'}
+              style={{ justifyContent: 'flex-start' }}
+            >
+              <RefreshCw size={14} style={syncStatus === 'syncing' ? { animation: 'kuetx-spin 0.9s linear infinite' } : undefined} />
+              {syncStatus === 'syncing' ? 'Syncing...' : 'Sync Now (pull + push)'}
+              <style>{`@keyframes kuetx-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }`}</style>
+            </button>
+
+            <button
+              className="btn btn-ghost"
               onClick={handleBackupNow}
               disabled={loading}
               style={{ justifyContent: 'flex-start' }}
             >
               <CloudUpload size={14} />
-              {loading ? 'Uploading...' : 'Backup Now'}
+              {loading ? 'Uploading...' : 'Backup Now (push only)'}
             </button>
 
             <button
@@ -298,6 +354,16 @@ export default function DriveConnectButton({ variant = 'full', onConnected }) {
           </>
         )}
       </div>
+
+      {/* Live auto-sync status */}
+      {connected && (
+        <div style={{ marginTop: 10, fontSize: 11, color: 'var(--muted)' }}>
+          {syncStatus === 'syncing' && '🔄 Syncing with Drive…'}
+          {syncStatus === 'pending' && '✏️ Changes detected — will sync shortly…'}
+          {(syncStatus === 'synced' || syncStatus === 'idle') && '✅ Auto real-time sync is active for this device.'}
+          {syncStatus === 'error' && '⚠️ Last sync attempt failed.'}
+        </div>
+      )}
 
       {/* Info note */}
       <div style={{ marginTop: 12, padding: '8px 12px', borderRadius: 7, background: 'var(--bg)', fontSize: 11, color: 'var(--muted)', lineHeight: 1.6 }}>

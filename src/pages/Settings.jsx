@@ -3,7 +3,6 @@ import { useTheme, THEMES } from '../hooks/useTheme';
 import { store } from '../store/store';
 import { Download, Upload, Trash2, HardDrive, RefreshCw, Shield, Database, Wifi, WifiOff, Cloud } from 'lucide-react';
 import DriveConnectButton from '../components/DriveConnectButton';
-import { scheduleAutoBackup } from '../lib/driveSync';
 
 // ── Auto-backup to localStorage snapshot ─────────────────────────────────────
 const BACKUP_KEY = 'kuetx_autobackup_';
@@ -41,8 +40,6 @@ export default function Settings() {
     const off = () => setIsOnline(false);
     window.addEventListener('online', on);
     window.addEventListener('offline', off);
-    // Trigger auto Drive backup if connected and 24h passed
-    scheduleAutoBackup(() => store.exportAll());
     return () => { window.removeEventListener('online', on); window.removeEventListener('offline', off); };
   }, []);
 

@@ -10,8 +10,8 @@ const UPDATES = [
     icon: '☁️',
     tag: 'New',
     tagColor: '#16a34a',
-    title: 'Google Drive Sync',
-    body: 'Your data now backs up to your own Google Drive — access it from any device. No KUETx server. Full privacy.',
+    title: 'Google Drive Real-Time Sync',
+    body: 'Your data now auto-syncs to your own Google Drive in the background, with instant sync via the Drive badge. No KUETx server. Full privacy.',
   },
   {
     id: 2,
@@ -174,14 +174,14 @@ export default function DriveAnnouncementModal() {
                   lineHeight: 1.2,
                   marginBottom: 8,
                 }}>
-                  Sync your data across<br />all your devices
+                  Sync your data across<br />all your devices, instantly
                 </div>
                 <div style={{
                   fontSize: 13,
                   color: 'rgba(255,255,255,0.82)',
                   lineHeight: 1.6,
                 }}>
-                  Connect Google Drive to back up KUETx data and restore it anywhere — phone, tablet, or computer.
+                  Connect Google Drive once — after that, changes sync automatically in the background, or tap the Drive badge anytime for an instant sync.
                 </div>
 
                 {/* Step indicator */}
@@ -207,8 +207,8 @@ export default function DriveAnnouncementModal() {
                 <div style={{ marginTop: 18, display: 'flex', flexDirection: 'column', gap: 12 }}>
                   {[
                     { icon: '🔑', text: 'Sign in with Google — one tap, no password needed' },
-                    { icon: '📁', text: 'Data saved to "KUETx Backups" in your own Drive' },
-                    { icon: '🔄', text: 'Restore on any device by signing in again' },
+                    { icon: '📁', text: 'Data saved to a single "KUETx Backups" file in your own Drive' },
+                    { icon: '🔄', text: 'Auto-syncs in the background — or tap the Drive badge for instant sync' },
                     { icon: '🔒', text: 'KUETx has zero server access — your data, your Drive' },
                   ].map((item, i) => (
                     <div key={i} style={{ display: 'flex', gap: 10, alignItems: 'flex-start' }}>
