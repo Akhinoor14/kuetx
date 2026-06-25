@@ -12,13 +12,17 @@ const CR_PATHS = NAV.flatMap(s => s.items || [])
   .filter(i => i.requiresCR)
   .map(i => i.path);
 
+const MOBILE_QUERY = '(max-width: 767.98px)';
+
 /**
  * QuickAccessPanel — the reusable core of the Quick Access experience.
- * Used both as the full `/quick-access` page (desktop/route) and inside the
- * mobile bottom-nav drawer (`inPanel`).
+ * Rendered as the full `/quick-access` page on both desktop and mobile
+ * (mobile bottom-nav now routes here directly instead of opening a drawer).
+ * Card layout switches automatically: compact icon-grid tiles on narrow
+ * screens, the detailed horizontal list on desktop.
  *
- * @param {boolean} inPanel     - true when rendered inside the mobile drawer (tighter spacing)
- * @param {function} onNavigate - called when a page card is clicked (e.g. to close the drawer)
+ * @param {boolean} inPanel     - reserved for embedding inside a panel/drawer (tighter spacing)
+ * @param {function} onNavigate - called when a page card is clicked (e.g. to close a drawer)
  */
 export function QuickAccessPanel({ inPanel = false, onNavigate } = {}) {
   const [mostUsed, setMostUsed] = useState([]);
@@ -26,6 +30,19 @@ export function QuickAccessPanel({ inPanel = false, onNavigate } = {}) {
   const { favorites, toggleFavorite, isFavorite } = useFavorites();
   const { pinnedPages, togglePin, isPinned } = usePinnedPages();
   const [profile, setProfile] = useState(() => getProfile() || {});
+  const [isMobile, setIsMobile] = useState(() =>
+    typeof window !== 'undefined' ? window.matchMedia(MOBILE_QUERY).matches : false
+  );
+
+  useEffect(() => {
+    const mq = window.matchMedia(MOBILE_QUERY);
+    const sync = (e) => setIsMobile(e.matches);
+    sync(mq);
+    mq.addEventListener ? mq.addEventListener('change', sync) : mq.addListener(sync);
+    return () => {
+      mq.removeEventListener ? mq.removeEventListener('change', sync) : mq.removeListener(sync);
+    };
+  }, []);
 
   useEffect(() => {
     const syncStats = () => {
@@ -114,6 +131,117 @@ export function QuickAccessPanel({ inPanel = false, onNavigate } = {}) {
     };
     const badge = badgeStyles[variant] || badgeStyles.neutral;
 
+    // ── COMPACT MODE (mobile): app-icon style tile ──
+    // Tap = open page · star badge (top-right) = toggle favorite ·
+    // long-press / right-click = toggle pin (small dot on the icon shows pinned state)
+    if (isMobile) {
+      let pressTimer = null;
+      let longPressFired = false;
+
+      const startPress = () => {
+        longPressFired = false;
+        pressTimer = setTimeout(() => {
+          longPressFired = true;
+          togglePin(path);
+          if (navigator.vibrate) navigator.vibrate(12);
+        }, 500);
+      };
+      const cancelPress = () => {
+        if (pressTimer) clearTimeout(pressTimer);
+        pressTimer = null;
+      };
+      const handleClick = (e) => {
+        if (longPressFired) {
+          e.preventDefault();
+          longPressFired = false;
+          return;
+        }
+        handleNavigate();
+      };
+
+      return (
+        <Link
+          to={path}
+          onClick={handleClick}
+          onTouchStart={startPress}
+          onTouchEnd={cancelPress}
+          onTouchMove={cancelPress}
+          onContextMenu={(e) => { e.preventDefault(); togglePin(path); }}
+          style={{
+            position: 'relative',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'flex-start',
+            gap: 6,
+            padding: '12px 4px 8px',
+            borderRadius: 14,
+            border: '1px solid var(--border)',
+            background: 'var(--bg-secondary)',
+            textDecoration: 'none',
+            color: 'var(--text)',
+            minHeight: 86,
+            WebkitTapHighlightColor: 'transparent',
+            userSelect: 'none',
+          }}
+        >
+          {/* Favorite badge */}
+          <button
+            onClick={(e) => { e.preventDefault(); e.stopPropagation(); toggleFavorite(path); }}
+            title={favorite ? 'Unfavorite' : 'Favorite'}
+            style={{
+              position: 'absolute', top: 4, right: 4,
+              width: 22, height: 22, borderRadius: 7,
+              background: favorite ? 'rgba(251,191,36,0.14)' : 'transparent',
+              border: 'none', cursor: 'pointer',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              color: favorite ? '#fbbf24' : 'var(--muted)',
+            }}
+          >
+            <Icons.Star size={12} fill={favorite ? 'currentColor' : 'none'} />
+          </button>
+
+          {/* Icon */}
+          <div style={{
+            width: 40, height: 40, borderRadius: 12,
+            background: iconBg,
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            position: 'relative',
+          }}>
+            <Icon size={18} color={iconColor} />
+            {pinned && (
+              <span style={{
+                position: 'absolute', bottom: -2, right: -2,
+                width: 11, height: 11, borderRadius: '50%',
+                background: 'var(--accent)',
+                border: '2px solid var(--bg-secondary)',
+              }} />
+            )}
+            {showCount && count > 0 && (
+              <span style={{
+                position: 'absolute', top: -4, left: -4,
+                fontSize: 9, fontWeight: 700, lineHeight: 1,
+                background: badge.bg, color: badge.color, border: badge.border,
+                borderRadius: 8, padding: '2px 4px', minWidth: 14, textAlign: 'center',
+              }}>
+                {count}
+              </span>
+            )}
+          </div>
+
+          {/* Label */}
+          <div style={{
+            fontSize: 10.5, fontWeight: 600, textAlign: 'center', lineHeight: 1.25,
+            display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical',
+            overflow: 'hidden', wordBreak: 'break-word', maxWidth: '100%',
+          }}>
+            {label}
+          </div>
+        </Link>
+      );
+    }
+
+    // ── LIST MODE (desktop): horizontal row with explicit pin/favorite buttons ──
     return (
       <Link
         to={path}
@@ -216,12 +344,21 @@ export function QuickAccessPanel({ inPanel = false, onNavigate } = {}) {
     );
   };
 
-  const gridStyle = {
+  const listGridStyle = {
     display: 'grid',
     gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))',
     gap: 8,
     width: '100%',
   };
+
+  const compactGridStyle = {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fill, minmax(88px, 1fr))',
+    gap: 8,
+    width: '100%',
+  };
+
+  const gridStyle = isMobile ? compactGridStyle : listGridStyle;
 
   const statsGridStyle = {
     display: 'grid',
