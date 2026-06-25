@@ -1,4 +1,4 @@
-import { Sun, Moon, Droplets, Bell, Download, ChevronRight } from 'lucide-react';
+import { Sun, Moon, Droplets, Bell, Download, ChevronRight, BookOpen } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { useTheme } from '../hooks/useTheme';
 import { useLocation, Link } from 'react-router-dom';
@@ -24,7 +24,7 @@ export function Navbar({ onMenuClick }) {
   const { label, group } = getPageMeta(location.pathname);
   const [notificationOpen, setNotificationOpen] = useState(false);
   const [refreshTick, setRefreshTick] = useState(0);
-  const [guideOpen, setGuideOpen] = useState(() => !localStorage.getItem('kuetx_guide_seen'));
+  const [guideOpen, setGuideOpen] = useState(false); // controlled by App queue now
 
   useEffect(() => {
     const handleStoreUpdate = () => setRefreshTick(t => t + 1);
@@ -120,7 +120,22 @@ export function Navbar({ onMenuClick }) {
         </div>
       </button>
 
-      {/* Backup shortcut — hidden on mobile (accessible via Settings in More drawer) */}
+      {/* Guide button — always accessible */}
+      <button
+        onClick={() => setGuideOpen(true)}
+        title="KUETx Guide"
+        style={{
+          display: 'flex', alignItems: 'center', padding: '7px 10px', borderRadius: 9,
+          border: '1.5px solid var(--border)', background: 'transparent', color: 'var(--text)',
+          cursor: 'pointer',
+        }}
+        onMouseEnter={e => e.currentTarget.style.background = 'var(--inputBg)'}
+        onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+      >
+        <BookOpen size={17} />
+      </button>
+
+      {/* Backup shortcut — hidden on mobile */}
       <Link to="/settings" title="Backup data" className="hidden md:flex" style={{
         alignItems: 'center', padding: '7px 10px', borderRadius: 9,
         border: '1.5px solid var(--border)', background: 'transparent', color: 'var(--text)',

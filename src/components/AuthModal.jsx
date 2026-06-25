@@ -68,7 +68,7 @@ const btnGhost = {
   textDecoration: 'underline',
 };
 
-export default function AuthModal({ mode = 'login', isUpgrade = false, onClose, onSuccess }) {
+export default function AuthModal({ mode = 'login', isUpgrade = false, onClose, onSuccess, queueMode = false }) {
   const [tab, setTab] = useState(mode); // 'login' | 'register'
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -117,9 +117,10 @@ export default function AuthModal({ mode = 'login', isUpgrade = false, onClose, 
       zIndex: 9999, padding: 16,
     }}>
       <div style={{
-        background: 'var(--card)', borderRadius: 16, padding: 24,
-        width: '100%', maxWidth: 400, position: 'relative',
+        background: 'var(--card)', borderRadius: 18, padding: 24,
+        width: '100%', maxWidth: 500, position: 'relative',
         border: '1px solid var(--border)',
+        boxShadow: '0 32px 80px rgba(0,0,0,0.28)',
       }}>
         {/* Close */}
         {onClose && !isUpgrade && (
@@ -134,11 +135,13 @@ export default function AuthModal({ mode = 'login', isUpgrade = false, onClose, 
         {/* Header */}
         <div style={{ marginBottom: 20 }}>
           <div style={{ fontWeight: 800, fontSize: 18, marginBottom: 4 }}>
-            {isUpgrade ? '🔒 Account তৈরি করো' : tab === 'login' ? '👋 আবার স্বাগতম' : '🎉 নতুন Account'}
+            {isUpgrade ? '🔒 Account তৈরি করো' : queueMode ? '☁️ Sync account connect করো' : tab === 'login' ? '👋 আবার স্বাগতম' : '🎉 নতুন Account'}
           </div>
           <div style={{ fontSize: 12, color: 'var(--muted)' }}>
             {isUpgrade
               ? 'তোমার সব data সেভ থাকবে। যেকোনো device থেকে access করতে পারবে।'
+              : queueMode
+              ? 'Google Drive sync চালু করতে account দরকার। Data শুধু তোমার Drive-এ যাবে, KUETx server-এ না।'
               : tab === 'login'
               ? 'Login করলে সব device এ data sync হবে।'
               : 'Account বানাও — সব data cloud এ save হবে।'}
@@ -222,7 +225,7 @@ export default function AuthModal({ mode = 'login', isUpgrade = false, onClose, 
         {!isUpgrade && onClose && (
           <div style={{ textAlign: 'center', marginTop: 10 }}>
             <button style={{ ...btnGhost, color: 'var(--muted)', textDecoration: 'none', fontSize: 12 }} onClick={onClose}>
-              এখন না — login ছাড়াই ব্যবহার করব
+              {queueMode ? 'Skip for now — continue without account →' : 'এখন না — login ছাড়াই ব্যবহার করব'}
             </button>
           </div>
         )}

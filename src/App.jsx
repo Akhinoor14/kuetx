@@ -12,8 +12,10 @@ import GlobalToasts from './components/GlobalToasts';
 import BackupReminderGate from './components/BackupReminderGate';
 import AuthModal from './components/AuthModal';
 import ModeSelectModal from './components/ModeSelectModal';
+import GuideModal from './components/GuideModal';
 import useFirebaseAuth from './hooks/useFirebaseAuth';
 import { isModeChosen } from './lib/modeFilter';
+import { store } from './store/store';
 
 // Pages
 import Dashboard from './pages/Dashboard';
@@ -134,11 +136,9 @@ function Layout({ authState }) {
           </Routes>
         </div>
         {location.pathname !== '/about' && !isQuestionBankViewer && !isMobileNav && <Footer />}
-        <AnnouncementModal />
         {!isQuestionBankViewer && <PWAInstallPrompt />}
         {!isQuestionBankViewer && <BottomNav />}
         <GlobalToasts />
-        <BackupReminderGate />
 
         {/* Account upgrade modal (anonymous → real account) */}
         {showUpgradeModal && (
@@ -156,21 +156,80 @@ function Layout({ authState }) {
   );
 }
 
+// ── Startup queue — shows one popup at a time ─────────────────────────────
+function shouldShowAnnouncement() {
+  try {
+    const lastShown = store.get('announcementV2LastShown');
+    const showCount = store.get('announcementV2ShowCount') || 0;
+    const interval = showCount >= 3 ? 604800000 : 259200000;
+    return !lastShown || Date.now() - new Date(lastShown).getTime() >= interval;
+  } catch { return false; }
+}
+
+function shouldShowBackup() {
+  try {
+    const autoBackup = store.get('autoBackup') ?? true;
+    if (!autoBackup) return false;
+    const last = store.get('lastBackupTime');
+    if (!last) { store.set('lastBackupTime', new Date().toISOString()); return false; }
+    const elapsedDays = (Date.now() - new Date(last)) / 86400000;
+    if (elapsedDays < 7) return false;
+    if (store.get('backupReminderSnoozed') === new Date().toDateString()) return false;
+    return true;
+  } catch { return false; }
+}
+
+function buildQueue(isAnonymous) {
+  const q = [];
+  if (!isModeChosen()) q.push('mode');
+  if (isAnonymous) q.push('auth');
+  if (shouldShowAnnouncement()) q.push('announcement');
+  if (shouldShowBackup()) q.push('backup');
+  return q;
+}
+
 export default function App() {
   const authState = useFirebaseAuth();
   const [showAuthModal, setShowAuthModal] = useState(false);
-  const [showModeSelect, setShowModeSelect] = useState(() => !isModeChosen());
+  const [queue, setQueue] = useState([]);
+  const [queueBuilt, setQueueBuilt] = useState(false);
+  const current = queue[0] || null;
 
+  // Build queue once auth is ready so we know isAnonymous
   useEffect(() => {
-    if (!authState.authReady) return;
-    // Don't auto-show auth — user can choose to login from Settings or Navbar
-  }, [authState.authReady]);
+    if (!authState.authReady || queueBuilt) return;
+    setQueue(buildQueue(authState.isAnonymous));
+    setQueueBuilt(true);
+  }, [authState.authReady, authState.isAnonymous, queueBuilt]);
+
+  const advance = () => setQueue(q => q.slice(1));
+
+  const handleAuthSuccess = async (user) => {
+    advance();
+    if (!user.isAnonymous) {
+      await authState.onAccountUpgraded(user);
+    }
+  };
 
   return (
     <ThemeProvider>
       <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
-        {showModeSelect && (
-          <ModeSelectModal onDone={() => setShowModeSelect(false)} />
+        {current === 'mode' && (
+          <ModeSelectModal onDone={advance} />
+        )}
+        {current === 'auth' && (
+          <AuthModal
+            mode="login"
+            queueMode={true}
+            onClose={advance}
+            onSuccess={handleAuthSuccess}
+          />
+        )}
+        {current === 'announcement' && (
+          <AnnouncementModal open={true} onClose={advance} />
+        )}
+        {current === 'backup' && (
+          <BackupReminderGate open={true} onClose={advance} />
         )}
         <Layout authState={authState} />
         {/* Global auth modal (triggered from anywhere via window.__kuetxShowAuth) */}
