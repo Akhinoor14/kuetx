@@ -1138,6 +1138,18 @@ export default function Schedule() {
   const [examOverrides, setExamOverrides] = useState(() => store.get('examOverrides') || {});
   const [editingExams, setEditingExams] = useState(false);
   const [localExamEdits, setLocalExamEdits] = useState([]);
+  const [roadmapConfig, setRoadmapConfig] = useState(() => store.get('roadmapConfig') || {
+    classDays: 65,
+    prepLeaveDays: 10,
+    examCount: 5,
+    examGapDays: 4,
+    postBreakDays: 9,
+  });
+  const [roadmapSettingsOpen, setRoadmapSettingsOpen] = useState(false);
+  const saveRoadmapConfig = (next) => {
+    setRoadmapConfig(next);
+    store.set('roadmapConfig', next);
+  };
 
   const slotPreview = (slot) => {
     const cleanSlot = String(slot).replace(/\s+break\s*$/i, '').trim();
@@ -2009,106 +2021,179 @@ export default function Schedule() {
 
       {/* === Detailed Term Roadmap (bottom of Schedule page) === */}
       <div className="card term-roadmap-card" style={{ marginTop: 14, padding: 16 }}>
-        <div className="term-roadmap-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+        {/* Header */}
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 12, gap: 8, flexWrap: 'wrap' }}>
           <div>
-            <div style={{ fontWeight: 700, fontSize: 14 }}>Term Roadmap (Detailed)</div>
-            <div style={{ fontSize: 12, color: 'var(--muted)' }}>Approximate timeline with manual override and holiday sync. Use Edit to adjust exam dates.</div>
+            <div style={{ fontWeight: 700, fontSize: 14 }}>Term Roadmap</div>
+            <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 2 }}>Holiday-aware · Adjustable phases · Exam date override</div>
           </div>
-          <div className="term-roadmap-actions" style={{ display: 'flex', gap: 8 }}>
-            <button className="btn btn-ghost" onClick={openHolidaySetup}>
-              <CalendarDays size={13} /> Add Holiday
+          <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+            <button className="btn btn-ghost" style={{ fontSize: 12, padding: '6px 10px' }} onClick={openHolidaySetup}>
+              <CalendarDays size={12} /> Holiday
             </button>
-            <button className="btn btn-primary" onClick={() => {
+            <button className="btn btn-ghost" style={{ fontSize: 12, padding: '6px 10px' }} onClick={() => setRoadmapSettingsOpen(v => !v)}>
+              <Settings2 size={12} /> Configure
+            </button>
+            <button className="btn btn-primary" style={{ fontSize: 12, padding: '6px 10px' }} onClick={() => {
               const termKey = getCurrentTermKey(profile);
-              if (!profile?.termStartDate) return notify('Term timeline not available — add term start date in Profile', 'error');
-              if (!profile?.dept) return notify('Term timeline not available — add department in Profile', 'error');
-              if (!termKey) return notify('Current term not recognized — set current term in Profile', 'error');
-              const timeline = getTermTimeline(profile?.termStartDate, profile?.dept, termKey);
-              if (!timeline) return notify('Unable to build term timeline — check the term start date in Profile', 'error');
+              if (!profile?.termStartDate) return notify('Add term start date in Profile first', 'error');
+              if (!profile?.dept) return notify('Add your department in Profile first', 'error');
+              if (!termKey) return notify('Set current term in Profile first', 'error');
+              const timeline = getTermTimeline(profile?.termStartDate, profile?.dept, termKey, roadmapConfig);
+              if (!timeline) return notify('Unable to build timeline — check term start date in Profile', 'error');
               const overrides = (examOverrides && examOverrides[termKey]) || [];
               const mapped = timeline.examPhases.map((p, i) => ({ course: p.course, examDate: (overrides[i]?.examDate) || p.examDate.toISOString().slice(0,10) }));
-              if (mapped.length === 0) {
-                return notify('No theory exam courses found for this term. Confirm department and current term in Profile.', 'error');
-              }
+              if (mapped.length === 0) return notify('No theory courses found for this term', 'error');
               setLocalExamEdits(mapped);
               setEditingExams(true);
             }}>
-              <PencilLine size={13} /> Edit Exams
+              <PencilLine size={12} /> Edit Exams
             </button>
           </div>
         </div>
 
+        {/* Roadmap Config Panel */}
+        {roadmapSettingsOpen && (
+          <div style={{ background: 'var(--card)', border: '1px solid var(--border)', borderRadius: 10, padding: 14, marginBottom: 12, display: 'grid', gap: 10 }}>
+            <div style={{ fontWeight: 700, fontSize: 13, marginBottom: 2 }}>⚙️ Configure Roadmap</div>
+            {[
+              { key: 'classDays',     label: 'Class Days (working)',  min: 30,  max: 120, step: 1 },
+              { key: 'prepLeaveDays', label: 'Prep Leave (days)',      min: 3,   max: 30,  step: 1 },
+              { key: 'examCount',     label: 'Theory Exams',           min: 1,   max: 12,  step: 1 },
+              { key: 'examGapDays',   label: 'Gap Between Exams (working days)', min: 1, max: 14, step: 1 },
+              { key: 'postBreakDays', label: 'Post-Exam Break (days)', min: 3,   max: 60,  step: 1 },
+            ].map(({ key, label, min, max, step }) => (
+              <div key={key} style={{ display: 'grid', gridTemplateColumns: '1fr auto', alignItems: 'center', gap: 10 }}>
+                <div>
+                  <div style={{ fontSize: 12, fontWeight: 600, marginBottom: 4 }}>{label}</div>
+                  <input
+                    type="range" min={min} max={max} step={step}
+                    value={roadmapConfig[key] ?? (key === 'classDays' ? 65 : key === 'prepLeaveDays' ? 10 : key === 'examCount' ? 5 : key === 'examGapDays' ? 4 : 9)}
+                    onChange={e => saveRoadmapConfig({ ...roadmapConfig, [key]: Number(e.target.value) })}
+                    style={{ width: '100%', accentColor: 'var(--accent)' }}
+                  />
+                </div>
+                <div style={{ minWidth: 32, textAlign: 'center', fontWeight: 800, fontSize: 14, color: 'var(--accent)' }}>
+                  {roadmapConfig[key] ?? (key === 'classDays' ? 65 : key === 'prepLeaveDays' ? 10 : key === 'examCount' ? 5 : key === 'examGapDays' ? 4 : 9)}
+                </div>
+              </div>
+            ))}
+            <button className="btn btn-ghost" style={{ fontSize: 11, alignSelf: 'flex-start', padding: '5px 10px' }}
+              onClick={() => saveRoadmapConfig({ classDays: 65, prepLeaveDays: 10, examCount: 5, examGapDays: 4, postBreakDays: 9 })}>
+              Reset to defaults
+            </button>
+          </div>
+        )}
+
+        {/* Roadmap Timeline */}
         {(() => {
           const termKey = getCurrentTermKey(profile);
-          const timeline = getTermTimeline(profile?.termStartDate, profile?.dept, termKey);
+          const timeline = getTermTimeline(profile?.termStartDate, profile?.dept, termKey, roadmapConfig);
           if (!timeline) {
-            return <div style={{ fontSize: 12, color: 'var(--muted)' }}>Add a term start date in Profile to view the detailed roadmap.</div>;
+            return (
+              <div style={{ fontSize: 12, color: 'var(--muted)', padding: '12px 0' }}>
+                Add a term start date in Profile to view the roadmap.
+              </div>
+            );
           }
 
-          // apply overrides if present
           const overrides = (examOverrides && examOverrides[termKey]) || [];
           const examPhases = timeline.examPhases.map((p, i) => {
             const o = overrides[i];
             return { ...p, examDate: o && o.examDate ? new Date(o.examDate) : new Date(p.examDate) };
           });
           const hasExamPhases = examPhases.length > 0;
-          const examStartDate = hasExamPhases ? examPhases[0].examDate : null;
           const examEndDate = hasExamPhases ? examPhases[examPhases.length - 1].examDate : null;
+          const fmt = (d) => new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
 
-          const format = (d) => new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+          // Duration tag: term start → last exam
+          const durationTag = timeline.durationMonths != null
+            ? (timeline.durationMonths < 1.5
+                ? `${timeline.durationWeeks}w`
+                : `${timeline.durationMonths}mo`)
+            : null;
 
           return (
-            <div className="term-roadmap-grid" style={{ display: 'grid', gap: 8 }}>
-              <div style={{ fontSize: 13, fontWeight: 700 }}>{profile?.currentTerm || getCurrentTermKey(profile)}</div>
-              <div className="term-roadmap-summary" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
+            <div style={{ display: 'grid', gap: 8 }}>
+              {/* Term label + duration tag */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <div style={{ fontWeight: 700, fontSize: 13 }}>{profile?.currentTerm || termKey}</div>
+                {durationTag && (
+                  <span style={{ fontSize: 10, fontWeight: 700, background: 'var(--accent)', color: '#fff', borderRadius: 99, padding: '2px 7px', letterSpacing: 0.3 }}>
+                    {durationTag} total
+                  </span>
+                )}
+              </div>
+
+              {/* Phase cards row 1 */}
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
                 <div style={{ padding: 10, borderRadius: 8, border: '1px solid var(--border)' }}>
-                  <div style={{ fontWeight: 700 }}>📚 Classes & Study</div>
-                  <div style={{ fontSize: 12, color: 'var(--muted)' }}>{format(new Date(profile?.termStartDate || new Date()))} → {format(timeline.classEndDate)} • 65 working days</div>
+                  <div style={{ fontWeight: 700, fontSize: 12 }}>📚 Classes</div>
+                  <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 3 }}>
+                    {fmt(new Date(profile.termStartDate))} → {fmt(timeline.classEndDate)}
+                  </div>
+                  <div style={{ fontSize: 10, color: 'var(--accent)', marginTop: 2, fontWeight: 600 }}>{timeline.classDays} working days</div>
                 </div>
                 <div style={{ padding: 10, borderRadius: 8, border: '1px solid var(--border)' }}>
-                  <div style={{ fontWeight: 700 }}>🎓 Prep Leave</div>
-                  <div style={{ fontSize: 12, color: 'var(--muted)' }}>{format(timeline.prepLeaveStart)} → {format(timeline.prepLeaveEnd)} • 10 days</div>
+                  <div style={{ fontWeight: 700, fontSize: 12 }}>🎓 Prep Leave</div>
+                  <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 3 }}>
+                    {fmt(timeline.prepLeaveStart)} → {fmt(timeline.prepLeaveEnd)}
+                  </div>
+                  <div style={{ fontSize: 10, color: 'var(--accent)', marginTop: 2, fontWeight: 600 }}>{timeline.prepLeaveDays} days</div>
                 </div>
               </div>
 
-              <div className="term-roadmap-exams" style={{ padding: 10, borderRadius: 8, border: '1px solid var(--border)' }}>
-                <div style={{ fontWeight: 700 }}>✍️ Exam Period</div>
-                <div style={{ fontSize: 12, color: 'var(--muted)' }}>
-                  {hasExamPhases ? `${examPhases.length} courses: ${format(examStartDate)} → ${format(examEndDate)}` : 'No theory exam courses found for this term.'}
+              {/* Exams */}
+              <div style={{ padding: 10, borderRadius: 8, border: '1px solid var(--border)' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 6 }}>
+                  <div style={{ fontWeight: 700, fontSize: 12 }}>✍️ Exams</div>
+                  {hasExamPhases && (
+                    <span style={{ fontSize: 10, color: 'var(--muted)' }}>
+                      {examPhases.length} courses · gap: {timeline.examGapDays}d
+                    </span>
+                  )}
                 </div>
                 {hasExamPhases ? (
-                  <div className="exam-phases-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: 8, marginTop: 8 }}>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(110px, 1fr))', gap: 6 }}>
                     {examPhases.map((ep, idx) => (
-                      <div key={idx} className="exam-phase-card" style={{ padding: 10, borderRadius: 8, background: 'var(--card)', border: '1px solid var(--border)', fontSize: 13 }}>
-                        <div style={{ fontWeight: 800 }}>Exam {ep.course}</div>
-                        <div style={{ color: 'var(--muted)', marginTop: 6 }}>{format(ep.examDate)}</div>
+                      <div key={idx} style={{ padding: '7px 10px', borderRadius: 7, background: 'var(--bg)', border: '1px solid var(--border)', fontSize: 12 }}>
+                        <div style={{ fontWeight: 700 }}>Exam {ep.course}</div>
+                        <div style={{ color: 'var(--muted)', fontSize: 11, marginTop: 3 }}>{fmt(ep.examDate)}</div>
                       </div>
                     ))}
                   </div>
                 ) : (
-                  <div style={{ marginTop: 8, fontSize: 12, color: 'var(--muted)' }}>
-                    No exam dates available. Check your current term and department in Profile.
-                  </div>
+                  <div style={{ fontSize: 11, color: 'var(--muted)' }}>No theory courses found — check dept & term in Profile.</div>
                 )}
-
-                {timeline.specialPeriods && timeline.specialPeriods.length > 0 && (
-                  <div style={{ marginTop: 8, fontSize: 12, color: '#F59E0B' }}>
-                    ⚠️ Special holiday blocks during exams:
+                {timeline.specialPeriods?.length > 0 && (
+                  <div style={{ marginTop: 8, fontSize: 11, color: '#F59E0B' }}>
+                    ⚠️ Holiday blocks during exams:
                     {timeline.specialPeriods.map((sp, i) => (
-                      <div key={i}>• {sp.daysCount} days • {new Date(sp.startDate).toLocaleDateString()}</div>
+                      <div key={i}>• {sp.daysCount} days from {new Date(sp.startDate).toLocaleDateString()}</div>
                     ))}
                   </div>
                 )}
               </div>
 
-              <div className="term-roadmap-summary" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
+              {/* Phase cards row 2 */}
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
                 <div style={{ padding: 10, borderRadius: 8, border: '1px solid var(--border)' }}>
-                  <div style={{ fontWeight: 700 }}>🌴 Post-Exam Break</div>
-                  <div style={{ fontSize: 12, color: 'var(--muted)' }}>{format(timeline.postExamBreakStart)} → {format(timeline.postExamBreakEnd)} • 7 days</div>
+                  <div style={{ fontWeight: 700, fontSize: 12 }}>🌴 Post-Exam Break</div>
+                  <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 3 }}>
+                    {fmt(timeline.postExamBreakStart)} → {fmt(timeline.postExamBreakEnd)}
+                  </div>
+                  <div style={{ fontSize: 10, color: 'var(--accent)', marginTop: 2, fontWeight: 600 }}>{timeline.postBreakDays} days</div>
                 </div>
                 <div style={{ padding: 10, borderRadius: 8, border: '1px solid var(--border)' }}>
-                  <div style={{ fontWeight: 700 }}>🚀 Next Semester Starts</div>
-                  <div style={{ fontSize: 12, color: 'var(--muted)' }}>{format(timeline.nextSemesterStart)}</div>
+                  <div style={{ fontWeight: 700, fontSize: 12 }}>🚀 Next Semester</div>
+                  <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 3 }}>
+                    Starts {fmt(timeline.nextSemesterStart)}
+                  </div>
+                  {examEndDate && (
+                    <div style={{ fontSize: 10, color: 'var(--accent)', marginTop: 2, fontWeight: 600 }}>
+                      Last exam {fmt(examEndDate)}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

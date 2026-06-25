@@ -10,8 +10,10 @@ import { BottomNav, useIsMobileNav } from './components/BottomNav';
 import GlobalToasts from './components/GlobalToasts';
 import BackupReminderGate from './components/BackupReminderGate';
 import DriveAnnouncementModal from './components/DriveAnnouncementModal';
+import AuthModal from './components/AuthModal';
 import { store } from './store/store';
 import { startAutoSync, stopAutoSync, isDriveConnected } from './lib/driveSync';
+import useFirebaseAuth from './hooks/useFirebaseAuth';
 
 // Pages
 import Dashboard from './pages/Dashboard';
@@ -43,7 +45,7 @@ import CTQuizPlanning from './pages/CTQuizPlanning';
 import { Tours, Social, Projects, Syllabus, TimeTracker, Tuition, Food, Reports } from './pages/Extras';
 import QuickAccess from './pages/QuickAccess';
 
-function Layout() {
+function Layout({ authState }) {
   usePageTracker();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [sidebarCompact, setSidebarCompact] = useState(() => {
@@ -53,6 +55,7 @@ function Layout() {
       return false;
     }
   });
+  const [showUpgradeModal, setShowUpgradeModal] = useState(false);
   const location = useLocation();
   const isMobileNav = useIsMobileNav();
   const isQuestionBankViewer = location.pathname === '/question-bank/view';
@@ -62,6 +65,12 @@ function Layout() {
       localStorage.setItem('kuetx_sidebar_compact', sidebarCompact ? 'true' : 'false');
     } catch {}
   }, [sidebarCompact]);
+
+  // Expose upgrade modal trigger globally so Settings page can call it
+  useEffect(() => {
+    window.__kuetxShowUpgrade = () => setShowUpgradeModal(true);
+    return () => { delete window.__kuetxShowUpgrade; };
+  }, []);
 
   return (
     <div style={{ display: 'flex', minHeight: '100vh' }}>
@@ -77,7 +86,14 @@ function Layout() {
         className={`main-content ${sidebarCompact && !isQuestionBankViewer ? 'compact' : ''}`}
         style={isQuestionBankViewer ? { marginLeft: 0, width: '100%' } : undefined}
       >
-        {!isQuestionBankViewer && <Navbar onMenuClick={() => setSidebarOpen(o => !o)} />}
+        {!isQuestionBankViewer && (
+          <Navbar
+            onMenuClick={() => setSidebarOpen(o => !o)}
+            syncStatus={authState.syncStatus}
+            isAnonymous={authState.isAnonymous}
+            onShowUpgrade={() => setShowUpgradeModal(true)}
+          />
+        )}
         <div style={{ flex: 1 }}>
           <Routes>
             <Route path="/" element={<Dashboard />} />
@@ -123,15 +139,29 @@ function Layout() {
         <GlobalToasts />
         <BackupReminderGate />
         <DriveAnnouncementModal />
+
+        {/* Account upgrade modal (anonymous → real account) */}
+        {showUpgradeModal && (
+          <AuthModal
+            isUpgrade={true}
+            onClose={() => setShowUpgradeModal(false)}
+            onSuccess={async (user) => {
+              setShowUpgradeModal(false);
+              await authState.onAccountUpgraded(user);
+            }}
+          />
+        )}
       </div>
     </div>
   );
 }
 
 export default function App() {
+  const authState = useFirebaseAuth();
+  const [showAuthModal, setShowAuthModal] = useState(false);
+
   useEffect(() => {
-    // Start the real-time Drive auto-sync engine (push on change + poll pull)
-    // if the user already connected Drive on this device.
+    // Keep Google Drive sync running alongside Firebase (optional, for users who connected Drive)
     if (isDriveConnected()) {
       startAutoSync(
         () => store.exportAll(),
@@ -141,10 +171,30 @@ export default function App() {
     return () => stopAutoSync();
   }, []);
 
+  // Show auth modal only after auth is ready and user is anonymous
+  // Give a short delay so the app loads first
+  useEffect(() => {
+    if (!authState.authReady) return;
+    // Don't auto-show — user can choose to login from Settings or Navbar
+  }, [authState.authReady]);
+
   return (
     <ThemeProvider>
       <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
-        <Layout />
+        <Layout authState={authState} />
+        {/* Global auth modal (triggered from anywhere via window.__kuetxShowAuth) */}
+        {showAuthModal && (
+          <AuthModal
+            mode="login"
+            onClose={() => setShowAuthModal(false)}
+            onSuccess={async (user) => {
+              setShowAuthModal(false);
+              if (!user.isAnonymous) {
+                await authState.onAccountUpgraded(user);
+              }
+            }}
+          />
+        )}
       </BrowserRouter>
     </ThemeProvider>
   );
