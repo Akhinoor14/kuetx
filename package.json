@@ -1,7 +1,7 @@
 {
   "name": "kuetx",
   "private": true,
-  "version": "3.2.0",
+  "version": "3.3.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -17,6 +17,7 @@
     "baseline-browser-mapping": "^2.10.35",
     "clsx": "^2.1.1",
     "date-fns": "^3.6.0",
+    "firebase": "^10.14.1",
     "jspdf": "^4.2.1",
     "jspdf-autotable": "^5.0.8",
     "katex": "^0.17.0",
