@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Plus, Trash2, Play, Pause, Square, RotateCcw, Save, ChevronDown, Edit2, Check, X } from 'lucide-react';
+import { Plus, Trash2, Play, Pause, Square, RotateCcw, Save, ChevronDown, ChevronRight, Edit2, Check, X } from 'lucide-react';
 import {
   store,
   uid,
@@ -182,9 +182,10 @@ export function Tours() {
 
       {/* Add Form */}
       {adding && (
-        <Modal onClose={() => { setAdding(false); setOutlineOpen(false); }} overlayStyle={{ padding: 12 }} contentStyle={{ width: '100%', maxWidth: 560, borderRadius: 20, padding: 0, background: 'transparent', maxHeight: 'calc(100vh - 24px)', overflow: 'auto' }}>
-          <div className="card tours-form-card" style={{ marginBottom: 0, borderRadius: 20 }}>
-            <div style={{ fontWeight: 600, fontSize: 13, marginBottom: 10 }}>Add Tour</div>
+        <Modal onClose={() => { setAdding(false); setOutlineOpen(false); }} overlayStyle={{ padding: 12 }} contentStyle={{ width: '100%', maxWidth: 560, borderRadius: 20, padding: 0, background: 'transparent', maxHeight: 'min(640px, calc(100vh - 24px))', display: 'flex' }}>
+          <div className="card tours-form-card" style={{ marginBottom: 0, borderRadius: 20, display: 'flex', flexDirection: 'column', maxHeight: '100%', overflow: 'hidden', padding: 0 }}>
+            <div style={{ fontWeight: 600, fontSize: 13, padding: '16px 16px 0' }}>Add Tour</div>
+            <div style={{ flex: 1, overflowY: 'auto', padding: '10px 16px 16px' }}>
             <div className="tours-form-grid tours-form-grid-top">
               <div className="tours-form-field tours-form-wide">
                 <label>Tour / Destination</label>
@@ -220,54 +221,66 @@ export function Tours() {
               <textarea value={form.notes} onChange={e => set('notes', e.target.value)} rows={2} placeholder="Best moments, tips, highlights..." />
             </div>
 
-            {/* Trip Outline */}
+            {/* Trip Outline (collapsible) */}
             <div className="tours-outline-card">
-              <div style={{ fontWeight: 600, fontSize: 12, marginBottom: 8, color: 'var(--muted)', letterSpacing: 0.3, textTransform: 'uppercase' }}>
-                Trip Outline {form.outline.length > 0 ? `· ${form.outline.length} section${form.outline.length > 1 ? 's' : ''}` : ''}
-              </div>
-              {form.outline.length === 0 && (
-                <div style={{ fontSize: 12, color: 'var(--muted)', padding: '4px 0 8px' }}>Add stops, activities or day-plans to structure the trip.</div>
-              )}
-              {form.outline.map((section, si) => (
-                <div key={si} className="tours-outline-section" style={{ marginBottom: 10 }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 6 }}>
-                    <input
-                      value={section.title}
-                      onChange={e => updateOutlineTitle(si, e.target.value)}
-                      placeholder={`Day ${si + 1} / Stop title`}
-                      className="tours-outline-section-title"
-                      style={{ flex: 1 }}
-                    />
-                    <button
-                      style={{ flexShrink: 0, padding: '4px 6px', borderRadius: 6, border: '1px solid var(--border)', background: 'transparent', cursor: 'pointer', color: 'var(--danger)', fontSize: 14, lineHeight: 1 }}
-                      onClick={() => removeOutlineSection(si)}
-                      title="Remove section"
-                    >✕</button>
-                  </div>
-                  {section.topics.map((topic, ti) => (
-                    <div key={ti} className="tours-outline-item-row" style={{ display: 'flex', alignItems: 'center', gap: 5, marginBottom: 5 }}>
-                      <span className="tours-outline-item-index" style={{ fontSize: 11, color: 'var(--muted)', minWidth: 24, flexShrink: 0 }}>{si + 1}.{ti + 1}</span>
-                      <input
-                        value={topic}
-                        onChange={e => updateOutlineTopic(si, ti, e.target.value)}
-                        placeholder="Activity / stop / note"
-                        className="tours-outline-item-input"
-                        style={{ flex: 1 }}
-                      />
-                      <button
-                        style={{ flexShrink: 0, padding: '2px 6px', borderRadius: 5, border: '1px solid var(--border)', background: 'transparent', cursor: 'pointer', color: 'var(--muted)', fontSize: 13, lineHeight: 1 }}
-                        onClick={() => removeOutlineTopic(si, ti)}
-                        title="Remove item"
-                      >×</button>
+              <button
+                type="button"
+                onClick={() => setOutlineOpen(o => !o)}
+                style={{ display: 'flex', alignItems: 'center', gap: 6, width: '100%', background: 'transparent', border: 'none', cursor: 'pointer', padding: 0, marginBottom: outlineOpen ? 8 : 0 }}
+              >
+                <ChevronRight size={13} style={{ color: 'var(--muted)', transform: outlineOpen ? 'rotate(90deg)' : 'none', transition: 'transform 0.15s ease', flexShrink: 0 }} />
+                <span style={{ fontWeight: 600, fontSize: 12, color: 'var(--muted)', letterSpacing: 0.3, textTransform: 'uppercase' }}>
+                  Trip Outline {form.outline.length > 0 ? `· ${form.outline.length} section${form.outline.length > 1 ? 's' : ''}` : '(optional)'}
+                </span>
+              </button>
+              {outlineOpen && (
+                <>
+                  {form.outline.length === 0 && (
+                    <div style={{ fontSize: 12, color: 'var(--muted)', padding: '4px 0 8px' }}>Add stops, activities or day-plans to structure the trip.</div>
+                  )}
+                  {form.outline.map((section, si) => (
+                    <div key={si} className="tours-outline-section" style={{ marginBottom: 10 }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 6 }}>
+                        <input
+                          value={section.title}
+                          onChange={e => updateOutlineTitle(si, e.target.value)}
+                          placeholder={`Day ${si + 1} / Stop title`}
+                          className="tours-outline-section-title"
+                          style={{ flex: 1 }}
+                        />
+                        <button
+                          style={{ flexShrink: 0, padding: '4px 6px', borderRadius: 6, border: '1px solid var(--border)', background: 'transparent', cursor: 'pointer', color: 'var(--danger)', fontSize: 14, lineHeight: 1 }}
+                          onClick={() => removeOutlineSection(si)}
+                          title="Remove section"
+                        >✕</button>
+                      </div>
+                      {section.topics.map((topic, ti) => (
+                        <div key={ti} className="tours-outline-item-row" style={{ display: 'flex', alignItems: 'center', gap: 5, marginBottom: 5 }}>
+                          <span className="tours-outline-item-index" style={{ fontSize: 11, color: 'var(--muted)', minWidth: 24, flexShrink: 0 }}>{si + 1}.{ti + 1}</span>
+                          <input
+                            value={topic}
+                            onChange={e => updateOutlineTopic(si, ti, e.target.value)}
+                            placeholder="Activity / stop / note"
+                            className="tours-outline-item-input"
+                            style={{ flex: 1 }}
+                          />
+                          <button
+                            style={{ flexShrink: 0, padding: '2px 6px', borderRadius: 5, border: '1px solid var(--border)', background: 'transparent', cursor: 'pointer', color: 'var(--muted)', fontSize: 13, lineHeight: 1 }}
+                            onClick={() => removeOutlineTopic(si, ti)}
+                            title="Remove item"
+                          >×</button>
+                        </div>
+                      ))}
+                      <button className="btn btn-ghost" style={{ fontSize: 11, padding: '3px 8px', marginTop: 2 }} onClick={() => addOutlineTopic(si)}>+ Add item</button>
                     </div>
                   ))}
-                  <button className="btn btn-ghost" style={{ fontSize: 11, padding: '3px 8px', marginTop: 2 }} onClick={() => addOutlineTopic(si)}>+ Add item</button>
-                </div>
-              ))}
-              <button className="btn btn-ghost" style={{ fontSize: 12, marginTop: 4 }} onClick={addOutlineSection}>+ Add section</button>
+                  <button className="btn btn-ghost" style={{ fontSize: 12, marginTop: 4 }} onClick={addOutlineSection}>+ Add section</button>
+                </>
+              )}
+            </div>
             </div>
 
-            <div className="tours-form-actions">
+            <div className="tours-form-actions" style={{ padding: '12px 16px', borderTop: '1px solid var(--border)', background: 'var(--card)', flexShrink: 0 }}>
               <button className="btn btn-primary tours-form-save" onClick={save}>Save</button>
               <button className="btn btn-ghost tours-form-cancel" onClick={() => { setAdding(false); setOutlineOpen(false); }}>Cancel</button>
             </div>

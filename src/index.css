@@ -1193,10 +1193,11 @@ h3 { font-size: 15px; font-weight: 600; }
   white-space:   nowrap;
 }
 .filter-tab:hover { background: var(--inputBg); color: var(--text); }
-.filter-tab.active {
-  background:   var(--accent);
-  color:        var(--accentFg);
-  border-color: var(--accent);
+.filter-tab.active,
+.dark .filter-tab.active {
+  background:   var(--accent) !important;
+  color:        var(--accentFg) !important;
+  border-color: var(--accent) !important;
 }
 
 .dark .filter-tab { background: rgba(255,255,255,0.04); }
@@ -2559,6 +2560,42 @@ h3 { font-size: 15px; font-weight: 600; }
     }
   }
 
+/* ── Class Management — dark mode fixes ─────────────────────────────────── */
+.dark .class-management-page .class-management-mode-switch,
+.dark .class-management-page .class-management-routine-card,
+.dark .class-management-page .class-management-planner-card {
+  background: rgba(255,255,255,0.04);
+  border-color: var(--border);
+}
+.dark .class-management-page .class-management-mode-button {
+  background: rgba(255,255,255,0.04);
+  color: var(--text);
+  border-color: var(--border);
+}
+.dark .class-management-page .class-management-mode-button.is-active {
+  background: linear-gradient(135deg, #16a34a 0%, #22c55e 100%);
+  color: #fff;
+  border-color: transparent;
+}
+.dark .class-management-page .class-management-day-button {
+  background: rgba(255,255,255,0.04);
+  color: var(--text);
+  border-color: var(--border);
+}
+.dark .class-management-page .class-management-day-button.active {
+  background: rgba(59,130,246,0.18);
+  border-color: rgba(59,130,246,0.4);
+  color: var(--text);
+}
+.dark .class-management-page .class-management-day-button.active span:last-child {
+  color: #93c5fd;
+}
+.dark .class-management-page .class-management-action-btn.btn-whatsapp,
+.dark .class-management-page .class-management-action-btn.btn-export,
+.dark .class-management-page .class-management-action-btn.btn-schedule {
+  color: var(--text);
+}
+
 /* ── Divider ─────────────────────────────────────────────────────────────── */
 .divider {
   height: 1px;
@@ -3212,6 +3249,39 @@ h3 { font-size: 15px; font-weight: 600; }
   background: #f8fafc;
   border-radius: 8px;
   border: 1px solid #e2e8f0;
+}
+
+/* ── Question Bank — dark mode fixes ─────────────────────────────────────── */
+.dark .qb2-inline-dept-select,
+.dark .qb2-select,
+.dark .qb2-inline-dept-reset,
+.dark .qb2-clear-btn,
+.dark .qb2-clear-btn2,
+.dark .qb2-filter-btn,
+.dark .qb2-view-btn {
+  background: rgba(255,255,255,0.04);
+  color: var(--text);
+  border-color: var(--border);
+}
+.dark .qb2-filter-btn:hover,
+.dark .qb2-view-btn:hover,
+.dark .qb2-inline-dept-select:hover,
+.dark .qb2-select:hover {
+  background: rgba(255,255,255,0.08);
+  border-color: var(--border);
+}
+.dark .qb2-filter-btn.active,
+.dark .qb2-view-btn.active {
+  background: #3b82f6;
+  color: #fff;
+  border-color: #3b82f6;
+}
+.dark .qb2-filters {
+  background: rgba(255,255,255,0.04);
+  border-color: var(--border);
+}
+.dark .qb2-check-label {
+  color: var(--text);
 }
 
 .qb2-check-label {

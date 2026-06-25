@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo, useState, useRef } from 'react';
 import Modal from './Modal';
 import { DEPARTMENTS, DEFAULT_PROFILE, TERM_KEYS, getTermLabelFromKey, BATCH_START_DATES } from '../store/store';
-import DriveConnectButton from './DriveConnectButton';
 
 // Map dept codes: roll middle 2 digits -> dept code
 const ROLL_DEPT_MAP = {
@@ -461,11 +460,6 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
                   <input type="number" placeholder="e.g. 160" value={form.totalCreditsRequired} onChange={handleChange('totalCreditsRequired')} min={1} max={300} style={fieldStyle} />
                   <div style={{ fontSize: 10, color: 'var(--muted)', marginTop: 4 }}>Default graduation target if you leave it blank</div>
                 </div>
-              </div>
-
-              {/* Optional Drive backup */}
-              <div style={{ marginTop: 14 }}>
-                <DriveConnectButton variant="compact" />
               </div>
             </div>
           )}

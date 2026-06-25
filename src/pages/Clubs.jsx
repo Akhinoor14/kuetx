@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Plus, Trash2, X, Check } from 'lucide-react';
 import { store, uid } from '../store/store';
+import Modal from '../components/Modal';
 
 const ld = () => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; };
 
@@ -198,16 +199,15 @@ export default function Clubs() {
 
       {/* Add Club Modal */}
       {modal === 'club' && (
-        <div style={{
-          position: 'fixed', inset: 0, zIndex: 1000,
-          background: 'rgba(0,0,0,0.45)', display: 'flex',
-          alignItems: 'flex-end', justifyContent: 'center',
-        }} onClick={() => setModal(null)}>
-          <div style={{
+        <Modal
+          onClose={() => setModal(null)}
+          overlayStyle={{ alignItems: 'flex-end', background: 'rgba(0,0,0,0.45)', padding: 0 }}
+          contentStyle={{
             background: 'var(--card)', borderRadius: '16px 16px 0 0',
             padding: '20px 20px calc(20px + env(safe-area-inset-bottom, 0))',
             width: '100%', maxWidth: 500, boxShadow: '0 -8px 40px rgba(0,0,0,0.18)',
-          }} onClick={e => e.stopPropagation()}>
+          }}
+        >
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
               <div>
                 <div style={{ fontSize: 16, fontWeight: 800 }}>Add Club</div>
@@ -224,22 +224,20 @@ export default function Clubs() {
               <button onClick={() => setModal(null)} style={{ flex: 1, padding: 11, borderRadius: 10, border: '1.5px solid var(--border)', background: 'var(--inputBg)', color: 'var(--muted)', fontWeight: 600, fontSize: 13, cursor: 'pointer', fontFamily: 'Sora, sans-serif' }}>Cancel</button>
               <button onClick={saveClub} style={{ flex: 2, padding: 11, borderRadius: 10, border: 'none', background: 'var(--accent)', color: '#fff', fontWeight: 700, fontSize: 13, cursor: 'pointer', fontFamily: 'Sora, sans-serif' }}>✓ Save Club</button>
             </div>
-          </div>
-        </div>
+        </Modal>
       )}
 
       {/* Log Activity Modal */}
       {modal === 'activity' && (
-        <div style={{
-          position: 'fixed', inset: 0, zIndex: 1000,
-          background: 'rgba(0,0,0,0.45)', display: 'flex',
-          alignItems: 'flex-end', justifyContent: 'center',
-        }} onClick={() => setModal(null)}>
-          <div style={{
+        <Modal
+          onClose={() => setModal(null)}
+          overlayStyle={{ alignItems: 'flex-end', background: 'rgba(0,0,0,0.45)', padding: 0 }}
+          contentStyle={{
             background: 'var(--card)', borderRadius: '16px 16px 0 0',
             padding: '20px 20px calc(20px + env(safe-area-inset-bottom, 0))',
             width: '100%', maxWidth: 500, boxShadow: '0 -8px 40px rgba(0,0,0,0.18)',
-          }} onClick={e => e.stopPropagation()}>
+          }}
+        >
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
               <div>
                 <div style={{ fontSize: 16, fontWeight: 800 }}>Log Activity</div>
@@ -266,8 +264,7 @@ export default function Clubs() {
               <button onClick={() => setModal(null)} style={{ flex: 1, padding: 11, borderRadius: 10, border: '1.5px solid var(--border)', background: 'var(--inputBg)', color: 'var(--muted)', fontWeight: 600, fontSize: 13, cursor: 'pointer', fontFamily: 'Sora, sans-serif' }}>Cancel</button>
               <button onClick={saveAct} style={{ flex: 2, padding: 11, borderRadius: 10, border: 'none', background: 'var(--accent)', color: '#fff', fontWeight: 700, fontSize: 13, cursor: 'pointer', fontFamily: 'Sora, sans-serif' }}>✓ Save Activity</button>
             </div>
-          </div>
-        </div>
+        </Modal>
       )}
     </div>
   );

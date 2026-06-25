@@ -9,10 +9,7 @@ import PWAInstallPrompt from './components/PWAInstallPrompt';
 import { BottomNav, useIsMobileNav } from './components/BottomNav';
 import GlobalToasts from './components/GlobalToasts';
 import BackupReminderGate from './components/BackupReminderGate';
-import DriveAnnouncementModal from './components/DriveAnnouncementModal';
 import AuthModal from './components/AuthModal';
-import { store } from './store/store';
-import { startAutoSync, stopAutoSync, isDriveConnected } from './lib/driveSync';
 import useFirebaseAuth from './hooks/useFirebaseAuth';
 
 // Pages
@@ -138,7 +135,6 @@ function Layout({ authState }) {
         {!isQuestionBankViewer && <BottomNav />}
         <GlobalToasts />
         <BackupReminderGate />
-        <DriveAnnouncementModal />
 
         {/* Account upgrade modal (anonymous → real account) */}
         {showUpgradeModal && (
@@ -159,17 +155,6 @@ function Layout({ authState }) {
 export default function App() {
   const authState = useFirebaseAuth();
   const [showAuthModal, setShowAuthModal] = useState(false);
-
-  useEffect(() => {
-    // Keep Google Drive sync running alongside Firebase (optional, for users who connected Drive)
-    if (isDriveConnected()) {
-      startAutoSync(
-        () => store.exportAll(),
-        (data) => store.importAllReport(data)
-      );
-    }
-    return () => stopAutoSync();
-  }, []);
 
   // Show auth modal only after auth is ready and user is anonymous
   // Give a short delay so the app loads first

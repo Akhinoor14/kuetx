@@ -1,5 +1,5 @@
 // KUETx Service Worker — offline cache + background sync
-const CACHE_NAME = 'kuetx-v3.2';
+const CACHE_NAME = 'kuetx-v3.3';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
