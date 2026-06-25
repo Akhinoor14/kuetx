@@ -141,7 +141,7 @@ export default function AuthModal({ mode = 'login', isUpgrade = false, onClose, 
             {isUpgrade
               ? 'তোমার সব data সেভ থাকবে। যেকোনো device থেকে access করতে পারবে।'
               : queueMode
-              ? 'Google Drive sync চালু করতে account দরকার। Data শুধু তোমার Drive-এ যাবে, KUETx server-এ না।'
+              ? 'Firebase sync চালু করতে account দরকার। সব device-এ data sync হবে, যেকোনো জায়গা থেকে access করতে পারবে।'
               : tab === 'login'
               ? 'Login করলে সব device এ data sync হবে।'
               : 'Account বানাও — সব data cloud এ save হবে।'}

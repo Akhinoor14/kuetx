@@ -5,14 +5,22 @@ import { BookOpen, ArrowRight, X, Sparkles } from 'lucide-react';
 const UPDATES = [
   {
     id: 1,
-    icon: '☁️',
+    icon: '🔥',
     tag: 'New',
     tagColor: '#16a34a',
-    title: 'Google Drive Real-Time Sync',
-    body: 'Data auto-syncs to your own Google Drive. No KUETx server, full privacy.',
+    title: 'Firebase Sync',
+    body: 'Real-time cloud sync across all your devices. Sign in once — data follows you everywhere.',
   },
   {
     id: 2,
+    icon: '🔄',
+    tag: 'New',
+    tagColor: '#16a34a',
+    title: 'Auto Update',
+    body: 'App updates automatically in the background. You get a toast when a new version is ready.',
+  },
+  {
+    id: 3,
     icon: '🎓',
     tag: 'Rebuilt',
     tagColor: '#2563eb',
@@ -20,7 +28,7 @@ const UPDATES = [
     body: 'KUET marking slab logic, hero cards, daily log with merged teacher cards.',
   },
   {
-    id: 3,
+    id: 4,
     icon: '📊',
     tag: 'Fixed',
     tagColor: '#d97706',
@@ -28,20 +36,12 @@ const UPDATES = [
     body: 'Grade Points now shows real achieved vs max (credit-weighted). CGPA card fixed.',
   },
   {
-    id: 4,
+    id: 5,
     icon: '🧭',
     tag: 'New',
     tagColor: '#16a34a',
     title: 'JR Mode',
     body: 'Academic-only view — hides Finance, Activities & Wellbeing for a cleaner experience.',
-  },
-  {
-    id: 5,
-    icon: '🏛️',
-    tag: 'Rebuilt',
-    tagColor: '#2563eb',
-    title: 'Clubs, Namaz & QuickAccess',
-    body: 'Gradient heroes, color-coded cards, bottom sheet modals as standard form pattern.',
   },
   {
     id: 6,
@@ -50,14 +50,6 @@ const UPDATES = [
     tagColor: '#7c3aed',
     title: 'Dark Mode',
     body: 'Overrides across Attendance, Question Bank, Time Tracker, Self Eval, CT Planner.',
-  },
-  {
-    id: 7,
-    icon: '🔐',
-    tag: 'New',
-    tagColor: '#16a34a',
-    title: 'Firebase Auth',
-    body: 'Account connect in startup queue. Google Drive sync needs a real account.',
   },
 ];
 

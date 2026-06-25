@@ -7,6 +7,7 @@ import { Navbar } from './components/Navbar';
 import { Footer } from './components/Footer';
 import AnnouncementModal from './components/DriveAnnouncementModal';
 import PWAInstallPrompt from './components/PWAInstallPrompt';
+import PWAUpdatePrompt from './components/PWAUpdatePrompt';
 import { BottomNav, useIsMobileNav } from './components/BottomNav';
 import GlobalToasts from './components/GlobalToasts';
 import BackupReminderGate from './components/BackupReminderGate';
@@ -82,6 +83,7 @@ function Layout({ authState }) {
           compact={sidebarCompact}
           onToggleCompact={() => setSidebarCompact(v => !v)}
           onClose={() => setSidebarOpen(false)}
+          authState={authState}
         />
       )}
       <div
@@ -137,6 +139,7 @@ function Layout({ authState }) {
         </div>
         {location.pathname !== '/about' && !isQuestionBankViewer && !isMobileNav && <Footer />}
         {!isQuestionBankViewer && <PWAInstallPrompt />}
+        <PWAUpdatePrompt />
         {!isQuestionBankViewer && <BottomNav />}
         <GlobalToasts />
 

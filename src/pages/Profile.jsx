@@ -15,6 +15,7 @@ import { getAllCourses } from '../store/curriculumStore';
 import ProfileSetupModal from '../components/ProfileSetupModal';
 import AuthModal from '../components/AuthModal';
 import { onAuthChange, logout } from '../lib/firebaseAuth';
+import { pushAllToFirestore, startFirebaseSync } from '../lib/firebaseSync';
 import { uploadProfilePicture, getProfilePhotoURL, deleteProfilePicture } from '../lib/profilePicture';
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
@@ -390,6 +391,19 @@ export default function Profile() {
     try { await logout(); } catch {}
   };
 
+  // Called when user logs in from Profile page — push local data up then start sync
+  const handleAuthSuccess = async (user) => {
+    setShowAuthModal(false);
+    if (user && !user.isAnonymous) {
+      try {
+        await pushAllToFirestore(user.uid);
+        await startFirebaseSync(user.uid, {});
+      } catch (err) {
+        console.warn('[KUETx Profile] Post-login sync failed:', err.message);
+      }
+    }
+  };
+
   // ── Live data from store ──────────────────────────────────────────────────
 
   const liveData = useMemo(() => {
@@ -520,7 +534,7 @@ export default function Profile() {
           </div>
         </div>
         <ProfileSetupModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onSave={handleSave} initialProfile={profile} />
-        {showAuthModal && <AuthModal mode="login" isUpgrade={!!firebaseUser?.isAnonymous} onClose={() => setShowAuthModal(false)} onSuccess={() => setShowAuthModal(false)} />}
+        {showAuthModal && <AuthModal mode="login" isUpgrade={!!firebaseUser?.isAnonymous} onClose={() => setShowAuthModal(false)} onSuccess={handleAuthSuccess} />}
       </div>
     );
   }
@@ -951,7 +965,7 @@ export default function Profile() {
       {/* Modals */}
       <ProfileSetupModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onSave={handleSave} initialProfile={profile} />
       {showAuthModal && (
-        <AuthModal mode="login" isUpgrade={!!firebaseUser?.isAnonymous} onClose={() => setShowAuthModal(false)} onSuccess={() => setShowAuthModal(false)} />
+        <AuthModal mode="login" isUpgrade={!!firebaseUser?.isAnonymous} onClose={() => setShowAuthModal(false)} onSuccess={handleAuthSuccess} />
       )}
       {showAvatarModal && (
         <AvatarUploadModal

@@ -31,7 +31,27 @@ const GROUP_COLORS = {
   'Tools':       '#64748b',
 };
 
-export function Sidebar({ open, onClose, compact = false, onToggleCompact }) {
+// ── Firebase sync status pill ─────────────────────────────────────────────────
+function SyncBadge({ status }) {
+  const cfg = {
+    synced:   { color: '#10b981', label: 'Synced',   icon: <Icons.CheckCircle2 size={11} /> },
+    syncing:  { color: '#f59e0b', label: 'Syncing…', icon: <Icons.RefreshCw size={11} style={{ animation: 'spin 1s linear infinite' }} /> },
+    pending:  { color: '#f59e0b', label: 'Pending',  icon: <Icons.Clock size={11} /> },
+    error:    { color: '#ef4444', label: 'Error',    icon: <Icons.WifiOff size={11} /> },
+    idle:     { color: 'var(--muted)', label: 'Idle', icon: <Icons.Cloud size={11} /> },
+  }[status] || { color: 'var(--muted)', label: status, icon: <Icons.Cloud size={11} /> };
+
+  return (
+    <span style={{
+      display: 'inline-flex', alignItems: 'center', gap: 4,
+      fontSize: 10, fontWeight: 600, color: cfg.color,
+    }}>
+      {cfg.icon} {cfg.label}
+    </span>
+  );
+}
+
+export function Sidebar({ open, onClose, compact = false, onToggleCompact, authState }) {
   const location = useLocation();
   const [profile, setProfile] = useState(() => store.get('profile') || DEFAULT_PROFILE);
   const [navConfig] = useNavConfig();
@@ -105,6 +125,11 @@ export function Sidebar({ open, onClose, compact = false, onToggleCompact }) {
   };
 
   const quickItems = [...new Set([...pinnedPages, ...favorites])].slice(0, 5);
+
+  // Auth info from authState prop
+  const isAnonymous = authState?.isAnonymous ?? true;
+  const syncStatus = authState?.syncStatus ?? 'idle';
+  const displayName = authState?.displayName || null;
 
   return (
     <>
@@ -236,10 +261,58 @@ export function Sidebar({ open, onClose, compact = false, onToggleCompact }) {
           })}
         </nav>
 
-        {/* Bottom */}
-        <div style={{ padding: '10px 14px', borderTop: '1px solid var(--border)', fontSize: 10, color: 'var(--muted)' }}>
-          {compact ? <div style={{ textAlign: 'center' }}>v3</div> : <div>KUETx v3.2 · Local data</div>}
+        {/* Bottom — Firebase status + account */}
+        <div style={{ padding: compact ? '10px 8px' : '10px 14px', borderTop: '1px solid var(--border)' }}>
+          {compact ? (
+            // Compact: just a colored dot
+            <div style={{ display: 'flex', justifyContent: 'center' }} title={isAnonymous ? 'No account' : `Signed in · ${syncStatus}`}>
+              <div style={{
+                width: 8, height: 8, borderRadius: '50%',
+                background: isAnonymous ? 'var(--muted)' :
+                  syncStatus === 'synced' ? '#10b981' :
+                  syncStatus === 'error' ? '#ef4444' : '#f59e0b',
+              }} />
+            </div>
+          ) : (
+            <div>
+              {/* Account row */}
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 6, marginBottom: 5 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 6, minWidth: 0 }}>
+                  <div style={{
+                    width: 22, height: 22, borderRadius: '50%', flexShrink: 0,
+                    background: isAnonymous ? 'var(--inputBg)' : 'color-mix(in srgb, var(--accent) 15%, var(--surface))',
+                    border: `1.5px solid ${isAnonymous ? 'var(--border)' : 'var(--accent)'}`,
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  }}>
+                    {isAnonymous
+                      ? <Icons.UserX size={11} color="var(--muted)" />
+                      : <Icons.User size={11} color="var(--accent)" />}
+                  </div>
+                  <span style={{ fontSize: 11, color: 'var(--text)', fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: 100 }}>
+                    {isAnonymous ? 'No account' : (displayName || 'Signed in')}
+                  </span>
+                </div>
+
+                {/* Connect / sync status */}
+                {isAnonymous ? (
+                  <button
+                    onClick={() => window.__kuetxShowUpgrade?.()}
+                    style={{ fontSize: 10, fontWeight: 700, color: 'var(--accent)', background: 'color-mix(in srgb, var(--accent) 10%, var(--surface))', border: '1px solid color-mix(in srgb, var(--accent) 30%, transparent)', borderRadius: 5, padding: '3px 7px', cursor: 'pointer', whiteSpace: 'nowrap', flexShrink: 0 }}
+                  >
+                    Connect
+                  </button>
+                ) : (
+                  <SyncBadge status={syncStatus} />
+                )}
+              </div>
+
+              {/* Version line */}
+              <div style={{ fontSize: 10, color: 'var(--muted)' }}>KUETx v3.4 · Firebase sync</div>
+            </div>
+          )}
         </div>
+
+        <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
       </aside>
     </>
   );

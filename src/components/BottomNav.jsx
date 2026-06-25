@@ -17,15 +17,15 @@ const PANEL_TITLES = {
 };
 
 const PANEL_SUBTITLES = {
-  study: 'Academics & daily tools',
+  study: 'Academics, daily tools & wellbeing',
   money: 'Money & activities',
   menu: 'Tools, notes, settings, and more',
 };
 
 const PANEL_SECTION_GROUPS = {
-  study: ['Academics', 'Daily Life'],
+  study: ['Academics', 'Daily Life', 'Wellbeing'],
   money: ['Finance', 'Activities'],
-  menu: ['Overview', 'Class Rep', 'Tools', 'Information'],
+  menu: ['Overview', 'Class Rep', 'Tools'],
 };
 
 export function useIsMobileNav() {

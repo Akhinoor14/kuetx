@@ -16,8 +16,6 @@ import { store } from '../store/store';
 
 // Keys we never sync to Firebase (device-local things)
 const EXCLUDED_KEYS = [
-  'drive_token', 'drive_email', 'drive_folder_id',
-  'drive_last_backup', 'drive_last_remote_mtime',
   'autoBackup', 'lastBackupTime',
 ];
 
@@ -145,33 +143,27 @@ const startStoreListener = () => {
   _storeListener = (e) => {
     if (!_uid) return;
 
-    // Get all current data and find what changed
-    // We debounce per-key to batch rapid changes
-    const allData = store.exportAll();
-    for (const [prefixedKey, value] of Object.entries(allData)) {
-      const key = prefixedKey.replace('kuetx_', '');
-      if (!shouldSync(key)) continue;
+    // Only push the key that actually changed (passed via event detail)
+    const changedKey = e.detail?.key;
+    if (!changedKey || !shouldSync(changedKey)) return;
 
-      // Clear existing timer for this key
-      if (_pushTimers[key]) {
-        clearTimeout(_pushTimers[key]);
+    const value = store.get(changedKey);
+    if (value === null || value === undefined) return;
+
+    // Debounce per-key to batch rapid changes
+    if (_pushTimers[changedKey]) clearTimeout(_pushTimers[changedKey]);
+
+    emitStatus('pending');
+
+    _pushTimers[changedKey] = setTimeout(async () => {
+      delete _pushTimers[changedKey];
+      if (!_isSyncing) { _isSyncing = true; emitStatus('syncing'); }
+      await pushKey(changedKey, value);
+      if (Object.keys(_pushTimers).length === 0) {
+        _isSyncing = false;
+        emitStatus('synced', { at: new Date().toISOString() });
       }
-
-      emitStatus('pending');
-
-      _pushTimers[key] = setTimeout(async () => {
-        delete _pushTimers[key];
-        if (!_isSyncing) {
-          _isSyncing = true;
-          emitStatus('syncing');
-        }
-        await pushKey(key, value);
-        if (Object.keys(_pushTimers).length === 0) {
-          _isSyncing = false;
-          emitStatus('synced', { at: new Date().toISOString() });
-        }
-      }, PUSH_DEBOUNCE_MS);
-    }
+    }, PUSH_DEBOUNCE_MS);
   };
 
   window.addEventListener('kuetx:store-updated', _storeListener);

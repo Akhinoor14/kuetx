@@ -6,15 +6,24 @@
 import { useState, useEffect } from 'react';
 import { onAuthChange, loginAnonymously } from '../lib/firebaseAuth';
 import { startFirebaseSync, stopFirebaseSync, pushAllToFirestore } from '../lib/firebaseSync';
-import { store } from '../store/store';
 
 export default function useFirebaseAuth() {
-  const [user, setUser] = useState(null);          // Firebase user object
+  const [user, setUser] = useState(null);           // Firebase user object
   const [authReady, setAuthReady] = useState(false); // auth state loaded
   const [syncStatus, setSyncStatus] = useState('idle'); // idle|syncing|synced|error|pending
 
   useEffect(() => {
+    let prevUid = null;
+
     const unsubscribe = onAuthChange(async (firebaseUser) => {
+      const newUid = firebaseUser?.uid || null;
+
+      // Stop old sync session whenever user switches (logout, account change)
+      if (prevUid && prevUid !== newUid) {
+        stopFirebaseSync();
+      }
+      prevUid = newUid;
+
       setUser(firebaseUser);
       setAuthReady(true);
 
@@ -25,7 +34,7 @@ export default function useFirebaseAuth() {
         });
       } else {
         // Not logged in → login anonymously so data is always tied to a uid
-        stopFirebaseSync();
+        setSyncStatus('idle');
         try {
           await loginAnonymously();
           // onAuthChange will fire again with the anonymous user

@@ -1,5 +1,5 @@
-// KUETx Service Worker — offline cache + background sync
-const CACHE_NAME = 'kuetx-v3.3';
+// KUETx Service Worker — offline cache + auto-update
+const CACHE_NAME = 'kuetx-v3.4';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
@@ -18,32 +18,35 @@ const isSameOriginAsset = (request) => {
   );
 };
 
-// Install — cache static assets
+// Install — cache static assets, then wait (skipWaiting called after user confirms)
 self.addEventListener('install', (e) => {
   e.waitUntil(
     caches.open(CACHE_NAME).then(cache => cache.addAll(STATIC_ASSETS))
   );
-  self.skipWaiting();
+  // Don't skipWaiting here — wait for user confirmation via message
 });
 
-// Activate — clean old caches
+// Activate — clean ALL old caches, claim clients
 self.addEventListener('activate', (e) => {
   e.waitUntil(
     caches.keys().then(keys =>
       Promise.all(keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k)))
-    )
+    ).then(() => self.clients.claim())
   );
-  self.clients.claim();
 });
 
-// Fetch — cache first for known local assets, network first for navigation, fallback to cache
+// Fetch — cache first for assets, network first for navigation
 self.addEventListener('fetch', (e) => {
   if (e.request.method !== 'GET') return;
   if (!e.request.url.startsWith('http')) return;
 
   const acceptsHtml = e.request.headers.get('accept')?.includes('text/html');
   const isNavigation = e.request.mode === 'navigate' || acceptsHtml;
-  const shouldUseCacheFirst = isSameOriginAsset(e.request) || e.request.destination === 'style' || e.request.destination === 'script' || e.request.destination === 'image';
+  const shouldUseCacheFirst =
+    isSameOriginAsset(e.request) ||
+    e.request.destination === 'style' ||
+    e.request.destination === 'script' ||
+    e.request.destination === 'image';
 
   const fetchAndCache = () => fetch(e.request)
     .then(res => {
@@ -55,20 +58,33 @@ self.addEventListener('fetch', (e) => {
     });
 
   e.respondWith(
-    (shouldUseCacheFirst ? caches.match(e.request).then(cached => cached || fetchAndCache()) : fetchAndCache())
+    (shouldUseCacheFirst
+      ? caches.match(e.request).then(cached => cached || fetchAndCache())
+      : fetchAndCache()
+    )
       .catch(() => caches.match(e.request))
       .then(cached => {
         if (cached) return cached;
         if (isNavigation) {
           return caches.match('/index.html')
-            .then(indexResponse => indexResponse || new Response('Offline', { status: 503, statusText: 'Offline' }));
+            .then(r => r || new Response('Offline', { status: 503 }));
         }
-        return new Response('Offline', { status: 503, statusText: 'Offline' });
+        return new Response('Offline', { status: 503 });
       })
   );
 });
 
-// Message — trigger manual backup export notification
+// Message handler
 self.addEventListener('message', (e) => {
-  if (e.data?.type === 'SKIP_WAITING') self.skipWaiting();
+  // User confirmed update → activate new SW
+  if (e.data?.type === 'SKIP_WAITING') {
+    self.skipWaiting();
+  }
+});
+
+// Notify all clients when a new SW is waiting
+self.addEventListener('install', () => {
+  self.clients.matchAll({ includeUncontrolled: true, type: 'window' }).then(clients => {
+    clients.forEach(client => client.postMessage({ type: 'SW_WAITING' }));
+  });
 });

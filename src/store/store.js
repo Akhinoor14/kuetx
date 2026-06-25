@@ -35,9 +35,9 @@ export async function ensureDBReady() {
 
 // DB preloading is invoked by the app bootstrap before first render.
 
-const emitStoreUpdate = () => {
+const emitStoreUpdate = (key = null) => {
   try {
-    window.dispatchEvent(new Event('kuetx:store-updated'));
+    window.dispatchEvent(new CustomEvent('kuetx:store-updated', { detail: { key } }));
   } catch {}
 };
 
@@ -66,7 +66,7 @@ export const store = {
       const cacheKey = PREFIX + key;
       memoryCache.set(cacheKey, val);
       try { localStorage.setItem(cacheKey, JSON.stringify(val)); } catch {}
-      emitStoreUpdate();
+      emitStoreUpdate(key);
       // Persist to IndexedDB asynchronously
       setInDB(key, val).catch(err => console.error('[KUETx Store] IDB set error:', err));
     } catch (err) {
