@@ -517,7 +517,8 @@ export default function Courses() {
               borderRadius: 18,
               boxShadow: '0 22px 56px rgba(15, 23, 42, 0.16)',
               background: 'var(--surface)',
-              minWidth: 280,
+              minWidth: 0,
+              width: '100%',
             }}
           >
             <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12, marginBottom: 16 }}>

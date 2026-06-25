@@ -878,7 +878,14 @@ export const getCurrentTermKey = (profile = {}) => {
 };
 
 // Calculate term timeline with holidays, exams, and breaks
-export const getTermTimeline = (termStartDate, deptCode, termKey) => {
+// Batch university start dates (not term — set by university, auto-fills Profile)
+export const BATCH_START_DATES = {
+  '2k23': '2024-10-28',
+  '2k24': '2025-09-17',
+  '2k25': '2026-07-28',
+};
+
+export const getTermTimeline = (termStartDate, deptCode, termKey, roadmapConfig = {}) => {
   if (!termStartDate) return null;
   
   try {
@@ -887,6 +894,13 @@ export const getTermTimeline = (termStartDate, deptCode, termKey) => {
     // Get holidays from scheduleSettings
     const scheduleSettings = store.get('scheduleSettings') || {};
     const holidayDates = scheduleSettings.holidayDates || [];
+
+    // Roadmap config — user-editable, with safe defaults
+    const classDays     = Math.max(30, Math.min(120, Number(roadmapConfig.classDays)     || 65));
+    const prepLeaveDays = Math.max(3,  Math.min(30,  Number(roadmapConfig.prepLeaveDays) || 10));
+    const examCount     = Math.max(1,  Math.min(12,  Number(roadmapConfig.examCount)     || 5));
+    const examGapDays   = Math.max(2,  Math.min(14,  Number(roadmapConfig.examGapDays)   || 4));
+    const postBreakDays = Math.max(3,  Math.min(60,  Number(roadmapConfig.postBreakDays) || 9));
     
     // Helper: Check if date is a holiday (Friday, Saturday, or in holiday list)
     const isHoliday = (date) => {
@@ -895,70 +909,60 @@ export const getTermTimeline = (termStartDate, deptCode, termKey) => {
       return dayOfWeek === 5 || dayOfWeek === 6 || holidayDates.includes(dateStr);
     };
     
-    // Phase 1: Count 65 working days of classes (excluding Fri, Sat, and holidays)
+    // Phase 1: Count N working days of classes (excluding Fri, Sat, and holidays)
     let workingDays = 0;
     let currentDate = new Date(start);
-    while (workingDays < 65) {
+    while (workingDays < classDays) {
       if (!isHoliday(currentDate)) workingDays++;
       currentDate.setDate(currentDate.getDate() + 1);
     }
     const classEndDate = new Date(currentDate);
     classEndDate.setDate(classEndDate.getDate() - 1);
     
-    // Phase 2: 10-day preparation leave
+    // Phase 2: Preparation leave
     const prepLeaveStart = new Date(classEndDate);
     prepLeaveStart.setDate(prepLeaveStart.getDate() + 1);
     const prepLeaveEnd = new Date(prepLeaveStart);
-    prepLeaveEnd.setDate(prepLeaveEnd.getDate() + 9);
+    prepLeaveEnd.setDate(prepLeaveEnd.getDate() + prepLeaveDays - 1);
     
-    // Phase 3: Get number of theory courses for exams
-    // Safe fallback — typically 5 theory courses per term
-    // User can manually override exam dates via Edit Exams modal
-    const theoryCourses = 5;
-    
-    // Schedule exams with gaps (skip holidays)
+    // Phase 3: Exams with configurable gap (skip holidays)
     let examDate = new Date(prepLeaveEnd);
     examDate.setDate(examDate.getDate() + 1);
     const examPhases = [];
     const specialPeriods = [];
     
-    for (let i = 0; i < theoryCourses; i++) {
-      // Skip to next valid exam date (after any holidays)
+    for (let i = 0; i < examCount; i++) {
       while (isHoliday(examDate)) {
         examDate.setDate(examDate.getDate() + 1);
       }
-      
-      examPhases.push({
-        course: i + 1,
-        examDate: new Date(examDate),
-        type: 'exam'
-      });
-      
-      // Move to next day for gap
+      examPhases.push({ course: i + 1, examDate: new Date(examDate), type: 'exam' });
       examDate.setDate(examDate.getDate() + 1);
-      
-      // For gaps between exams, skip holidays automatically
-      if (i < theoryCourses - 1) {
+      if (i < examCount - 1) {
         let gapDays = 0;
-        while (gapDays < 4) {
-          if (!isHoliday(examDate)) {
-            gapDays++;
-          }
-          if (gapDays < 4) examDate.setDate(examDate.getDate() + 1);
+        while (gapDays < examGapDays) {
+          if (!isHoliday(examDate)) gapDays++;
+          if (gapDays < examGapDays) examDate.setDate(examDate.getDate() + 1);
         }
         examDate.setDate(examDate.getDate() + 1);
-        }
       }
+    }
     
-    // Phase 4: 7-10 day post-exam break
+    // Phase 4: Post-exam break
     let postExamDate = new Date(examPhases[examPhases.length - 1].examDate);
     postExamDate.setDate(postExamDate.getDate() + 1);
     const postExamBreakEnd = new Date(postExamDate);
-    postExamBreakEnd.setDate(postExamBreakEnd.getDate() + 8); // 7-10 days (default 9)
+    postExamBreakEnd.setDate(postExamBreakEnd.getDate() + postBreakDays - 1);
     
     // Next semester start
     const nextSemesterStart = new Date(postExamBreakEnd);
     nextSemesterStart.setDate(nextSemesterStart.getDate() + 1);
+
+    // Duration summary: term start → last exam (in weeks & months)
+    const lastExam = examPhases[examPhases.length - 1].examDate;
+    const diffMs = lastExam - start;
+    const diffDays = Math.round(diffMs / (1000 * 60 * 60 * 24));
+    const diffWeeks = Math.round(diffDays / 7);
+    const diffMonths = parseFloat((diffDays / 30.44).toFixed(1));
     
     return {
       classEndDate,
@@ -969,7 +973,14 @@ export const getTermTimeline = (termStartDate, deptCode, termKey) => {
       postExamBreakStart: postExamDate,
       postExamBreakEnd,
       nextSemesterStart,
-      theoryCourses
+      theoryCourses: examCount,
+      classDays,
+      prepLeaveDays,
+      examGapDays,
+      postBreakDays,
+      durationDays: diffDays,
+      durationWeeks: diffWeeks,
+      durationMonths: diffMonths,
     };
   } catch {
     return null;

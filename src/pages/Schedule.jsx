@@ -1292,7 +1292,7 @@ export default function Schedule() {
     <div className="page-enter page-container" style={{ width: '100%', margin: '0 auto', paddingBottom: '20px', paddingLeft: '12px', paddingRight: '12px' }}>
       <div className="card" style={{ marginBottom: 14, padding: '18px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '12px', flexWrap: 'wrap', rowGap: '10px' }}>
-          <div style={{ minWidth: '200px', flex: 1 }}>
+          <div style={{ flex: 1, minWidth: 0 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap', marginBottom: '6px' }}>
               <h1 style={{ fontSize: '20px', fontWeight: '800', letterSpacing: '-0.03em', margin: '0' }}>Class Schedule</h1>
               <span className="tag tag-blue">5-day week</span>
@@ -1304,12 +1304,9 @@ export default function Schedule() {
               Assign teachers first via <strong>Manage Course Teachers</strong> before adding schedule entries.
             </p>
           </div>
-          <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', justifyContent: 'flex-end', minWidth: '220px' }}>
+          <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', justifyContent: 'flex-end' }}>
             <button className="btn btn-ghost btn-sm" onClick={() => setEditingSettings(v => !v)} style={{ fontSize: '12px' }}>
               <Settings2 size={13} /> Settings
-            </button>
-            <button className="btn btn-ghost btn-sm" onClick={openHolidaySetup} style={{ fontSize: '12px' }} title="Set holidays and off days">
-              <CalendarDays size={13} /> Holiday
             </button>
             <button className="btn btn-secondary btn-sm" onClick={() => navigate('/courses')} style={{ fontSize: '12px' }} title="Open the Courses page and assign teachers per course">
               <BookOpen size={13} /> Manage Course Teachers
@@ -1411,9 +1408,12 @@ export default function Schedule() {
                   <div style={{ fontSize: 13, fontWeight: 700 }}>Holiday Calendar</div>
                   <div style={{ fontSize: 11, color: 'var(--muted)' }}>Friday and Saturday are always holidays. Open the popup to add extra dates.</div>
                 </div>
-                <button className="btn btn-ghost" onClick={openHolidaySetup}>
-                  Open Calendar
-                </button>
+                <span
+                  onClick={openHolidaySetup}
+                  style={{ fontSize: 11, color: 'var(--accent)', cursor: 'pointer', textDecoration: 'underline', whiteSpace: 'nowrap' }}
+                >
+                  Manage ↗
+                </span>
               </div>
             </div>
           </div>
@@ -1772,15 +1772,18 @@ export default function Schedule() {
 
       {holidaySetupOpen && (
         <Modal onClose={closeHolidaySetup} contentStyle={{
-          width: 650,
+          width: 'min(600px, 100vw - 24px)',
           maxWidth: '100%',
-          padding: 16,
+          maxHeight: 'calc(100vh - 40px)',
+          overflowY: 'auto',
+          padding: 0,
           background: 'var(--bg)',
+          borderRadius: 12,
           pointerEvents: 'auto',
         }}>
           <div
             className="card"
-            style={{ width: 650, maxWidth: '100%', padding: 16, background: 'var(--bg)', pointerEvents: 'auto' }}
+            style={{ width: '100%', padding: 16, background: 'var(--bg)', pointerEvents: 'auto', border: 'none', borderRadius: 12 }}
           >
             <div style={{ display: 'flex', justifyContent: 'space-between', gap: 10, alignItems: 'center', marginBottom: 16 }}>
               <div>
@@ -1837,7 +1840,7 @@ export default function Schedule() {
                     >
                       ← Previous
                     </button>
-                    <div style={{ fontWeight: 700, fontSize: 14, minWidth: 180, textAlign: 'center' }}>
+                    <div style={{ fontWeight: 700, fontSize: 14, flex: 1, textAlign: 'center' }}>
                       {monthName(calendarMonth)}
                     </div>
                     <button
@@ -1850,8 +1853,8 @@ export default function Schedule() {
                   </div>
 
                   {/* Calendar Grid */}
-                  <div style={{ marginBottom: 16 }}>
-                    <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                  <div style={{ marginBottom: 16, overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
+                    <table style={{ width: '100%', minWidth: 280, borderCollapse: 'collapse' }}>
                       <thead>
                         <tr>
                           {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
@@ -1884,9 +1887,9 @@ export default function Schedule() {
                                 <td
                                   key={dayIdx}
                                   style={{
-                                    padding: '6px 4px',
+                                    padding: '2px',
                                     textAlign: 'center',
-                                    height: 50,
+                                    height: 48,
                                     borderBottom: '1px solid var(--border)',
                                     borderRight: dayIdx < 6 ? '1px solid var(--border)' : 'none',
                                   }}
@@ -1896,7 +1899,9 @@ export default function Schedule() {
                                       onClick={() => toggleCalendarDate(dayData.dateStr)}
                                       style={{
                                         width: '100%',
+                                        minWidth: 44,
                                         height: '100%',
+                                        minHeight: 44,
                                         border: isSelected ? '2px solid var(--accent)' : isInHolidays ? '2px solid rgba(34,197,94,0.5)' : '1px solid transparent',
                                         background: isSelected
                                           ? 'rgba(59,130,246,0.15)'
@@ -1927,7 +1932,7 @@ export default function Schedule() {
                   </div>
 
                   {/* Selected Count and Add Button */}
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: 12, borderRadius: 8, border: '1px solid var(--border)', background: 'rgba(59,130,246,0.05)', marginBottom: 12 }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 8, padding: 12, borderRadius: 8, border: '1px solid var(--border)', background: 'rgba(59,130,246,0.05)', marginBottom: 12 }}>
                     <div style={{ fontSize: 13 }}>
                       <span style={{ fontWeight: 700 }}>{calendarSelectedDates.size}</span>
                       <span style={{ color: 'var(--muted)' }}> date{calendarSelectedDates.size !== 1 ? 's' : ''} selected</span>
@@ -1942,7 +1947,7 @@ export default function Schedule() {
                   </div>
 
                   {/* Legend */}
-                  <div style={{ fontSize: 11, color: 'var(--muted)', display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8 }}>
+                  <div style={{ fontSize: 11, color: 'var(--muted)', display: 'flex', flexWrap: 'wrap', gap: 10 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                       <div style={{ width: 20, height: 20, borderRadius: 4, background: 'rgba(59,130,246,0.15)', border: '2px solid var(--accent)' }} />
                       <span>Selected</span>
@@ -1982,12 +1987,12 @@ export default function Schedule() {
                 <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 8 }}>
                   Saved Holidays ({holidayDates.length})
                 </div>
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, maxHeight: 160, overflowY: 'auto' }}>
                   {holidayDates.length === 0 ? (
                     <div style={{ fontSize: 12, color: 'var(--muted)' }}>No extra holidays added yet.</div>
                   ) : (
                     holidayDates.map(date => (
-                      <span key={date} className="tag tag-gray" style={{ display: 'inline-flex', gap: 6, alignItems: 'center' }}>
+                      <span key={date} className="tag tag-gray" style={{ display: 'inline-flex', gap: 6, alignItems: 'center', flexShrink: 0 }}>
                         {date}
                         <button onClick={() => removeHolidayDate(date)} style={{ border: 'none', background: 'transparent', cursor: 'pointer', color: 'inherit', padding: 0 }}>
                           <X size={12} />
@@ -2133,8 +2138,8 @@ export default function Schedule() {
 
       {/* Edit Exams Modal */}
       {editingExams && (
-        <Modal onClose={() => setEditingExams(false)} className="edit-exams-modal" contentStyle={{ width: 720, maxWidth: '95%', background: 'var(--bg)', borderRadius: 12, padding: 16, maxHeight: '86vh', overflow: 'auto', boxShadow: '0 10px 40px rgba(0,0,0,0.25)', pointerEvents: 'auto' }}>
-          <div className="card edit-exams-inner" style={{ width: 720, maxWidth: '95%', background: 'var(--bg)', borderRadius: 12, padding: 16, maxHeight: '86vh', overflow: 'auto', boxShadow: '0 10px 40px rgba(0,0,0,0.25)', pointerEvents: 'auto' }}>
+        <Modal onClose={() => setEditingExams(false)} className="edit-exams-modal" contentStyle={{ width: 'min(720px, 100vw - 24px)', maxWidth: '100%', background: 'var(--bg)', borderRadius: 12, padding: 16, maxHeight: '86vh', overflow: 'auto', boxShadow: '0 10px 40px rgba(0,0,0,0.25)', pointerEvents: 'auto' }}>
+          <div className="card edit-exams-inner" style={{ width: '100%', maxWidth: '100%', background: 'var(--bg)', borderRadius: 12, padding: 16, maxHeight: '86vh', overflow: 'auto', boxShadow: '0 10px 40px rgba(0,0,0,0.25)', pointerEvents: 'auto' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12, gap: 12, flexWrap: 'wrap' }}>
               <div style={{ fontWeight: 800 }}>Edit Exam Dates</div>
               <div style={{ display: 'flex', gap: 8 }}>
@@ -2145,7 +2150,7 @@ export default function Schedule() {
             <div style={{ display: 'grid', gap: 10 }}>
               {localExamEdits.length > 0 ? (
                 localExamEdits.map((e, i) => (
-                  <div key={i} className="edit-exams-row" style={{ display: 'grid', gridTemplateColumns: '120px 1fr', gap: 8, alignItems: 'center' }}>
+                  <div key={i} className="edit-exams-row" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(120px, 100%), 1fr))', gap: 8, alignItems: 'center' }}>
                     <div style={{ fontWeight: 700 }}>{`Exam ${e.course}`}</div>
                     <input className="edit-exam-date" type="date" value={e.examDate} onChange={ev => {
                       const v = ev.target.value;

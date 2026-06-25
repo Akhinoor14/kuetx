@@ -680,7 +680,7 @@ export default function Results() {
             </div>
             {/* Conflict resolution controls */}
             {term.conflict && (
-              <div style={{ minWidth: 260, display: 'flex', flexDirection: 'column', gap: 8 }}>
+              <div style={{ minWidth: 0, flex: '1 1 240px', display: 'flex', flexDirection: 'column', gap: 8 }}>
                 <div style={{ fontSize: 12, fontWeight: 700, color: '#b45309' }}>Mismatch detected</div>
                 <div style={{ fontSize: 12, color: 'var(--muted)' }}>Imported: {term.conflict.legacyGpa} ({term.conflict.legacyCredits}cr) — Courses: {term.conflict.courseGpa ?? '—'} ({term.conflict.courseCredits}cr)</div>
                 <div style={{ display: 'flex', gap: 8 }}>
@@ -691,7 +691,7 @@ export default function Results() {
               </div>
             )}
             {isNotPublishedEligible && (
-              <div style={{ minWidth: 240, display: 'flex', flexDirection: 'column', gap: 8 }}>
+              <div style={{ minWidth: 0, flex: '1 1 220px', display: 'flex', flexDirection: 'column', gap: 8 }}>
                 <div style={{ fontSize: 11, color: 'var(--muted)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.04em' }}>Result Publish Control</div>
                 <button
                   className={isTermMarkedNotYetPublished ? 'btn btn-sm' : 'btn btn-ghost btn-sm'}
@@ -706,7 +706,7 @@ export default function Results() {
               </div>
             )}
             {!term.conflict && !hasOfficialResults && (pendingCount > 0 || ongoingCount > 0) && (
-              <div style={{ minWidth: 260, display: 'flex', flexDirection: 'column', gap: 6, padding: '10px 12px', borderRadius: 10, background: termIsOngoing ? 'rgba(59,130,246,0.08)' : 'rgba(245,158,11,0.08)', border: termIsOngoing ? '1px solid rgba(59,130,246,0.18)' : '1px solid rgba(245,158,11,0.18)' }}>
+              <div style={{ minWidth: 0, flex: '1 1 240px', display: 'flex', flexDirection: 'column', gap: 6, padding: '10px 12px', borderRadius: 10, background: termIsOngoing ? 'rgba(59,130,246,0.08)' : 'rgba(245,158,11,0.08)', border: termIsOngoing ? '1px solid rgba(59,130,246,0.18)' : '1px solid rgba(245,158,11,0.18)' }}>
                 <div style={{ fontSize: 12, fontWeight: 700, color: termIsOngoing ? '#1d4ed8' : '#b45309' }}>
                   {termIsOngoing ? 'Ongoing term' : notPublishedCount > 0 ? 'Result not yet published' : 'Result pending'}
                 </div>

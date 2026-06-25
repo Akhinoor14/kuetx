@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState, useRef } from 'react';
 import Modal from './Modal';
-import { DEPARTMENTS, DEFAULT_PROFILE, TERM_KEYS, getTermLabelFromKey } from '../store/store';
+import { DEPARTMENTS, DEFAULT_PROFILE, TERM_KEYS, getTermLabelFromKey, BATCH_START_DATES } from '../store/store';
 import DriveConnectButton from './DriveConnectButton';
 
 // Map dept codes: roll middle 2 digits -> dept code
@@ -175,7 +175,20 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
     setErrors(prev => ({ ...prev, dept: '' }));
   }, [form.studentId]);
 
-  // Highlight animation when dept auto-updates
+  // Auto-fill university start date from batch (only if user hasn't manually set it)
+  useEffect(() => {
+    const batch = extractBatchFromRoll(form.studentId);
+    if (!batch) return;
+    const batchStart = BATCH_START_DATES[batch];
+    if (!batchStart) return;
+    setForm(prev => {
+      // Don't overwrite if user already manually entered something different
+      const existingBatchDates = Object.values(BATCH_START_DATES);
+      const alreadyManual = prev.yearStarted && !existingBatchDates.includes(prev.yearStarted);
+      if (alreadyManual) return prev;
+      return prev.yearStarted === batchStart ? prev : { ...prev, yearStarted: batchStart };
+    });
+  }, [form.studentId]);
   const [deptHighlight, setDeptHighlight] = useState(false);
   const deptHighlightTimeout = useRef(null);
   useEffect(() => {
@@ -434,7 +447,14 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
                 <div>
                   <label style={labelStyle}>When Did You Start KUET?</label>
                   <input type="date" value={form.yearStarted || ''} onChange={handleChange('yearStarted')} style={fieldStyle} />
-                  <div style={{ fontSize: 10, color: 'var(--muted)', marginTop: 4 }}>Default year is used if you skip this</div>
+                  {(() => {
+                    const batch = extractBatchFromRoll(form.studentId);
+                    const batchStart = batch && BATCH_START_DATES[batch];
+                    if (batchStart && form.yearStarted === batchStart) {
+                      return <div style={{ fontSize: 10, color: 'var(--accent)', marginTop: 4, fontWeight: 700 }}>✓ Auto-filled from batch {batch} ({batchStart})</div>;
+                    }
+                    return <div style={{ fontSize: 10, color: 'var(--muted)', marginTop: 4 }}>Auto-filled from batch. Override manually if needed.</div>;
+                  })()}
                 </div>
                 <div>
                   <label style={labelStyle}>Total Credits Required</label>

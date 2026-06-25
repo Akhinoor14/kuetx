@@ -679,14 +679,14 @@ export default function ClassManagement() {
 
       {/* Non-blocking reset toast */}
       {resetState.open && resetState.course && (
-        <div style={{ position: 'fixed', right: 18, bottom: 18, zIndex: 2200 }}>
-          <div className="card" style={{ width: 360, maxWidth: '92vw', padding: 12, borderRadius: 10, boxShadow: '0 6px 18px rgba(2,6,23,0.12)' }}>
-            <div style={{ display: 'flex', gap: 10, alignItems: 'flex-start' }}>
-              <div style={{ flex: 1 }}>
+        <div style={{ position: 'fixed', right: 18, bottom: 18, zIndex: 2200, maxWidth: 'calc(100vw - 24px)' }}>
+          <div className="card" style={{ width: 'min(360px, 100vw - 24px)', maxWidth: '92vw', padding: 12, borderRadius: 10, boxShadow: '0 6px 18px rgba(2,6,23,0.12)' }}>
+            <div style={{ display: 'flex', gap: 10, alignItems: 'flex-start', flexWrap: 'wrap' }}>
+              <div style={{ flex: 1, minWidth: 0 }}>
                 <div style={{ fontSize: 14, fontWeight: 800 }}>{resetState.course.code}</div>
                 <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 6 }}>Restore defaults{resetState.count ? ` · will remove ${resetState.count} logged entr${resetState.count === 1 ? 'y' : 'ies'}` : ''}.</div>
               </div>
-              <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+              <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
                 <button onClick={() => { if (resetState.timer) clearTimeout(resetState.timer); confirmResetPlan(true); }} className="btn btn-danger btn-sm" style={{ padding: '6px 10px' }}>Reset & Remove</button>
                 <button onClick={() => { if (resetState.timer) clearTimeout(resetState.timer); confirmResetPlan(false); }} className="btn btn-primary btn-sm" style={{ padding: '6px 10px' }}>Reset only</button>
                 <button onClick={cancelResetPlan} className="btn btn-ghost btn-sm" style={{ padding: '6px 8px' }} aria-label="Dismiss">×</button>
@@ -726,7 +726,7 @@ export default function ClassManagement() {
             }}
             onClick={closeCourseDetails}
           >
-            <div className="card" style={{ width: 720, maxWidth: '100%', maxHeight: '92vh', overflow: 'auto', padding: 20, boxShadow: '0 10px 30px rgba(2,6,23,0.32)', pointerEvents: 'auto' }} onClick={(e) => e.stopPropagation()}>
+          <div className="card" style={{ width: 'min(720px, 100vw - 24px)', maxWidth: '100%', maxHeight: '92vh', overflow: 'auto', padding: 20, boxShadow: '0 10px 30px rgba(2,6,23,0.32)', pointerEvents: 'auto' }} onClick={(e) => e.stopPropagation()}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 12, marginBottom: 14 }}>
                 <div>
                   <div style={{ fontSize: 18, fontWeight: 800 }}>{course.code}</div>
