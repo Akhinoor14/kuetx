@@ -63,6 +63,18 @@ export function Footer() {
           </Link>
 
           <div style={{ display: 'flex', gap: '0.4rem', alignItems: 'center', flexWrap: 'wrap' }}>
+            <a
+              href="https://www.facebook.com/kuetx"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{...footerButtonStyle, fontSize: 'clamp(0.65rem, 1.5vw, 0.75rem)', padding: 'clamp(0.3rem, 1vw, 0.35rem) clamp(0.5rem, 1vw, 0.65rem)', background: '#1877F2', textDecoration: 'none' }}
+              onMouseEnter={e => handleButtonHover(e, true)}
+              onMouseLeave={e => handleButtonHover(e, false)}
+            >
+              <Icons.Facebook size={12} />
+              Community
+            </a>
+
             <Link
               to="/about"
               style={{...footerButtonStyle, fontSize: 'clamp(0.65rem, 1.5vw, 0.75rem)', padding: 'clamp(0.3rem, 1vw, 0.35rem) clamp(0.5rem, 1vw, 0.65rem)' }}

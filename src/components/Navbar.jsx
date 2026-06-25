@@ -32,6 +32,12 @@ export function Navbar({ onMenuClick }) {
     return () => window.removeEventListener('kuetx:store-updated', handleStoreUpdate);
   }, []);
 
+  useEffect(() => {
+    const handleOpenGuide = () => setGuideOpen(true);
+    window.addEventListener('kuetx:openGuide', handleOpenGuide);
+    return () => window.removeEventListener('kuetx:openGuide', handleOpenGuide);
+  }, []);
+
   const cycleTheme = () => {
     const order = ['light', 'milky', 'dark'];
     setTheme(order[(order.indexOf(themeId) + 1) % order.length]);

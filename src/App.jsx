@@ -5,12 +5,15 @@ import { usePageTracker } from './hooks/usePageTracker';
 import { Sidebar } from './components/Sidebar';
 import { Navbar } from './components/Navbar';
 import { Footer } from './components/Footer';
+import AnnouncementModal from './components/DriveAnnouncementModal';
 import PWAInstallPrompt from './components/PWAInstallPrompt';
 import { BottomNav, useIsMobileNav } from './components/BottomNav';
 import GlobalToasts from './components/GlobalToasts';
 import BackupReminderGate from './components/BackupReminderGate';
 import AuthModal from './components/AuthModal';
+import ModeSelectModal from './components/ModeSelectModal';
 import useFirebaseAuth from './hooks/useFirebaseAuth';
+import { isModeChosen } from './lib/modeFilter';
 
 // Pages
 import Dashboard from './pages/Dashboard';
@@ -131,6 +134,7 @@ function Layout({ authState }) {
           </Routes>
         </div>
         {location.pathname !== '/about' && !isQuestionBankViewer && !isMobileNav && <Footer />}
+        <AnnouncementModal />
         {!isQuestionBankViewer && <PWAInstallPrompt />}
         {!isQuestionBankViewer && <BottomNav />}
         <GlobalToasts />
@@ -155,17 +159,19 @@ function Layout({ authState }) {
 export default function App() {
   const authState = useFirebaseAuth();
   const [showAuthModal, setShowAuthModal] = useState(false);
+  const [showModeSelect, setShowModeSelect] = useState(() => !isModeChosen());
 
-  // Show auth modal only after auth is ready and user is anonymous
-  // Give a short delay so the app loads first
   useEffect(() => {
     if (!authState.authReady) return;
-    // Don't auto-show — user can choose to login from Settings or Navbar
+    // Don't auto-show auth — user can choose to login from Settings or Navbar
   }, [authState.authReady]);
 
   return (
     <ThemeProvider>
       <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+        {showModeSelect && (
+          <ModeSelectModal onDone={() => setShowModeSelect(false)} />
+        )}
         <Layout authState={authState} />
         {/* Global auth modal (triggered from anywhere via window.__kuetxShowAuth) */}
         {showAuthModal && (

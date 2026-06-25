@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useTheme, THEMES } from '../hooks/useTheme';
 import { store } from '../store/store';
-import { Download, Upload, Trash2, HardDrive, RefreshCw, Shield, Database, Wifi, WifiOff, Cloud } from 'lucide-react';
+import { Download, Upload, Trash2, HardDrive, RefreshCw, Shield, Database, Wifi, WifiOff, Cloud, LayoutDashboard, GraduationCap } from 'lucide-react';
+import { getAppMode, setAppMode } from '../lib/modeFilter';
 
 // ── Auto-backup to localStorage snapshot ─────────────────────────────────────
 const BACKUP_KEY = 'kuetx_autobackup_';
@@ -20,6 +21,7 @@ function downloadJSON(data, filename) {
 
 export default function Settings() {
   const { themeId, setTheme } = useTheme();
+  const [appMode, setAppModeState] = useState(getAppMode);
   const [msg, setMsg] = useState('');
   const [msgType, setMsgType] = useState('success');
   const [confirmReset, setConfirmReset] = useState(false);
@@ -192,6 +194,33 @@ export default function Settings() {
           border: `1px solid ${msgType === 'error' ? 'color-mix(in srgb, var(--danger) 28%, var(--border))' : 'color-mix(in srgb, var(--success) 28%, var(--border))'}`,
         }}>{msg}</div>
       )}
+
+      {/* App Mode */}
+      <div className="card" style={{ marginBottom: 14 }}>
+        <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 4 }}>App Mode</div>
+        <div style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 12 }}>JR mode hides Finance, Activities & Wellbeing sections.</div>
+        <div style={{ display: 'flex', gap: 8 }}>
+          {[
+            { id: 'full', label: 'Full KUETx', Icon: LayoutDashboard, desc: 'সব কিছু' },
+            { id: 'jr',   label: 'JR KUETx',   Icon: GraduationCap,  desc: 'Academic focus' },
+          ].map(({ id, label, Icon, desc }) => (
+            <button key={id} onClick={() => { setAppMode(id); setAppModeState(id); }}
+              style={{
+                flex: 1, padding: '10px 8px', borderRadius: 10, cursor: 'pointer', textAlign: 'left',
+                border: `2px solid ${appMode === id ? 'var(--accent)' : 'var(--border)'}`,
+                background: appMode === id ? 'color-mix(in srgb, var(--accent) 10%, var(--surface))' : 'var(--surface)',
+                display: 'flex', alignItems: 'center', gap: 8,
+                transition: 'border-color 0.15s, background 0.15s',
+              }}>
+              <Icon size={15} color={appMode === id ? 'var(--accent)' : 'var(--muted)'} style={{ flexShrink: 0 }} />
+              <div>
+                <div style={{ fontSize: 12, fontWeight: 700, color: appMode === id ? 'var(--accent)' : 'var(--text)' }}>{label}</div>
+                <div style={{ fontSize: 10, color: 'var(--muted)' }}>{desc}</div>
+              </div>
+            </button>
+          ))}
+        </div>
+      </div>
 
       {/* Theme */}
       <div className="card" style={{ marginBottom: 14 }}>

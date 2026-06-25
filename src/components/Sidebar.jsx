@@ -7,45 +7,43 @@ import { store, DEFAULT_PROFILE } from '../store/store';
 import { useNavConfig } from './nav-system/useNavConfig';
 import { useFavorites } from '../hooks/useFavorites';
 import { usePinnedPages } from '../hooks/usePinnedPages';
+import { getAppMode, filterNav, getJrCustomHidden, getJrCustomShown } from '../lib/modeFilter';
+
+const GROUP_ICONS = {
+  'Overview':    'LayoutDashboard',
+  'Class Rep':   'Shield',
+  'Academics':   'GraduationCap',
+  'Daily Life':  'Sunrise',
+  'Wellbeing':   'Heart',
+  'Activities':  'Layers',
+  'Finance':     'Wallet',
+  'Tools':       'Wrench',
+};
+
+const GROUP_COLORS = {
+  'Overview':    'var(--accent)',
+  'Class Rep':   '#a78bfa',
+  'Academics':   '#3b82f6',
+  'Daily Life':  '#f59e0b',
+  'Wellbeing':   '#ec4899',
+  'Activities':  '#f97316',
+  'Finance':     '#10b981',
+  'Tools':       '#64748b',
+};
 
 export function Sidebar({ open, onClose, compact = false, onToggleCompact }) {
-  // debug: log available icons and check common icon names
-  try {
-    // limit output length
-    // eslint-disable-next-line no-console
-    console.log('Sidebar icons sample:', Object.keys(Icons).slice(0, 60));
-    // eslint-disable-next-line no-console
-    console.log('Sidebar: BookOpen present?', !!Icons.BookOpen, ' Users present?', !!Icons.Users);
-  } catch (e) {}
   const location = useLocation();
-  const [notes, setNotes] = useState([]);
   const [profile, setProfile] = useState(() => store.get('profile') || DEFAULT_PROFILE);
   const [navConfig] = useNavConfig();
-  const [showNotes, setShowNotes] = useState(false);
-  const [showQuickAccess, setShowQuickAccess] = useState(true);
   const { favorites } = useFavorites();
   const { pinnedPages } = usePinnedPages();
+  const [mode, setMode] = useState(getAppMode);
   const canSeeCrBoard = !!profile.isCR && navConfig.cr_board_enabled;
 
-  const getPageLabel = (path) => {
-    for (const section of NAV) {
-      const item = section.items.find(i => i.path === path);
-      if (item) return item.label;
-    }
-    return path === '/' ? 'Dashboard' : path;
-  };
-
-  const getPageIcon = (path) => {
-    for (const section of NAV) {
-      const item = section.items.find(i => i.path === path);
-      if (item) return Icons[item.icon] || Icons.Circle;
-    }
-    return Icons.Circle;
-  };
-
   useEffect(() => {
-    const storedNotes = store.get('notes') || [];
-    setNotes(storedNotes);
+    const handler = (e) => setMode(e.detail?.mode || getAppMode());
+    window.addEventListener('kuetx:mode-changed', handler);
+    return () => window.removeEventListener('kuetx:mode-changed', handler);
   }, []);
 
   useEffect(() => {
@@ -55,380 +53,192 @@ export function Sidebar({ open, onClose, compact = false, onToggleCompact }) {
     return () => window.removeEventListener('kuetx:store-updated', syncProfile);
   }, []);
 
+  const filteredNav = filterNav(NAV, mode, canSeeCrBoard, getJrCustomHidden(), getJrCustomShown());
+
+  const activeGroup = (() => {
+    for (const section of filteredNav) {
+      if (section.items.some(i => i.path === location.pathname)) return section.group;
+    }
+    return null;
+  })();
+
+  const [collapsed, setCollapsed] = useState(() => {
+    try {
+      const saved = JSON.parse(localStorage.getItem('kuetx_sidebar_collapsed') || '{}');
+      const init = {};
+      NAV.forEach(s => { init[s.group] = saved[s.group] !== undefined ? saved[s.group] : true; });
+      if (activeGroup) init[activeGroup] = false;
+      return init;
+    } catch {
+      const init = {};
+      NAV.forEach(s => { init[s.group] = true; });
+      if (activeGroup) init[activeGroup] = false;
+      return init;
+    }
+  });
+
+  useEffect(() => {
+    if (!activeGroup) return;
+    setCollapsed(prev => {
+      if (!prev[activeGroup]) return prev;
+      const next = { ...prev, [activeGroup]: false };
+      try { localStorage.setItem('kuetx_sidebar_collapsed', JSON.stringify(next)); } catch {}
+      return next;
+    });
+  }, [activeGroup]);
+
+  const toggleGroup = (group) => {
+    setCollapsed(prev => {
+      const next = { ...prev, [group]: !prev[group] };
+      try { localStorage.setItem('kuetx_sidebar_collapsed', JSON.stringify(next)); } catch {}
+      return next;
+    });
+  };
+
+  const getPageLabel = (path) => {
+    for (const s of NAV) { const i = s.items.find(i => i.path === path); if (i) return i.label; }
+    return path === '/' ? 'Dashboard' : path;
+  };
+  const getPageIcon = (path) => {
+    for (const s of NAV) { const i = s.items.find(i => i.path === path); if (i) return Icons[i.icon] || Icons.Circle; }
+    return Icons.Circle;
+  };
+
+  const quickItems = [...new Set([...pinnedPages, ...favorites])].slice(0, 5);
+
   return (
     <>
       {open && (
-        <div
-          style={{ position: 'fixed', inset: 0, zIndex: 30, background: 'rgba(0,0,0,0.45)', backdropFilter: 'blur(2px)' }}
-          className="md:hidden"
-          onClick={onClose}
-        />
+        <div style={{ position: 'fixed', inset: 0, zIndex: 30, background: 'rgba(0,0,0,0.45)', backdropFilter: 'blur(2px)' }}
+          className="md:hidden" onClick={onClose} />
       )}
 
       <aside className={`sidebar ${open ? 'open' : ''} ${compact ? 'compact' : ''}`}>
+
         {/* Logo */}
         <div style={{ padding: compact ? '16px 10px 12px' : '18px 16px 14px', borderBottom: '1px solid var(--border)' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: compact ? 'center' : 'space-between', gap: 8 }}>
             {compact ? (
-              <button
-                onClick={onToggleCompact}
-                className="hidden md:flex"
-                style={{
-                  border: 'none',
-                  background: 'transparent',
-                  cursor: 'pointer',
-                  padding: 0,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
-                title="Expand sidebar"
-              >
+              <button onClick={onToggleCompact} className="hidden md:flex"
+                style={{ border: 'none', background: 'transparent', cursor: 'pointer', padding: 0, alignItems: 'center', justifyContent: 'center' }} title="Expand">
                 <Logo size={40} />
               </button>
             ) : (
-              <Link
-                to="/about"
-                onClick={onClose}
-                style={{ display: 'inline-flex', alignItems: 'center', gap: 8, textDecoration: 'none', color: 'inherit' }}
-              >
+              <Link to="/about" onClick={onClose}
+                style={{ display: 'inline-flex', alignItems: 'center', gap: 8, textDecoration: 'none', color: 'inherit' }}>
                 <Wordmark height={32} />
               </Link>
             )}
-
             {!compact && (
-              <button
-                onClick={onToggleCompact}
-                className="hidden md:flex"
-                style={{
-                  width: 28,
-                  height: 28,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  borderRadius: 8,
-                  border: '1px solid var(--border)',
-                  background: 'transparent',
-                  cursor: 'pointer',
-                  color: 'var(--muted)',
-                }}
-                title="Compact sidebar"
-              >
+              <button onClick={onToggleCompact} className="hidden md:flex"
+                style={{ width: 28, height: 28, alignItems: 'center', justifyContent: 'center', borderRadius: 8, border: '1px solid var(--border)', background: 'transparent', cursor: 'pointer', color: 'var(--muted)' }} title="Compact">
                 <Icons.PanelLeftClose size={14} />
               </button>
             )}
           </div>
           {!compact && (
-            <Link
-              to="/about"
-              onClick={onClose}
-              style={{ fontSize: 11, color: 'var(--muted)', marginTop: 4, display: 'inline-block', textDecoration: 'none' }}
-            >
-              Student Life OS for KUET
-            </Link>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 5 }}>
+              <div style={{ fontSize: 10, color: 'var(--muted)' }}>Student Life OS · KUET</div>
+              {mode === 'jr' && (
+                <span style={{ fontSize: 9, fontWeight: 700, color: '#3b82f6', background: 'rgba(59,130,246,0.1)', border: '1px solid rgba(59,130,246,0.2)', borderRadius: 4, padding: '1px 5px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>JR</span>
+              )}
+            </div>
           )}
         </div>
 
-        {/* Quick Access Section */}
-        {!compact && (pinnedPages.length > 0 || favorites.length > 0) && (
-          <div style={{ padding: '12px 14px', borderTop: '1px solid var(--border)', borderBottom: '1px solid var(--border)' }}>
-            <button
-              onClick={() => setShowQuickAccess(!showQuickAccess)}
-              style={{
-                width: '100%',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                background: 'transparent',
-                border: 'none',
-                cursor: 'pointer',
-                color: 'var(--text)',
-                fontSize: 12,
-                fontWeight: 600,
-                padding: '8px 0',
-              }}
-            >
-              <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                <Icons.Zap size={14} style={{ color: 'var(--accent)' }} />
-                Quick Access
-              </span>
-              <Icons.ChevronDown size={14} style={{ transform: showQuickAccess ? 'rotate(180deg)' : 'rotate(0)', transition: 'transform 0.2s' }} />
-            </button>
-
-            {showQuickAccess && (
-              <div style={{ marginTop: 8, paddingTop: 8, borderTop: '1px solid var(--border)', fontSize: 12 }}>
-                {pinnedPages.length > 0 && (
-                  <div style={{ marginBottom: 12 }}>
-                    <div style={{ fontSize: 10, fontWeight: 600, color: 'var(--muted)', marginBottom: 6, textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: 4 }}>
-                      <Icons.Pin size={10} /> Pinned
-                    </div>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-                      {pinnedPages.slice(0, 3).map(path => {
-                        const Icon = getPageIcon(path);
-                        return (
-                          <Link
-                            key={path}
-                            to={path}
-                            onClick={onClose}
-                            style={{
-                              padding: '6px 8px',
-                              borderRadius: 4,
-                              background: 'var(--bg-secondary)',
-                              border: '1px solid var(--border)',
-                              textDecoration: 'none',
-                              color: 'var(--text)',
-                              fontSize: 11,
-                              overflow: 'hidden',
-                              textOverflow: 'ellipsis',
-                              whiteSpace: 'nowrap',
-                              display: 'flex',
-                              alignItems: 'center',
-                              gap: 6,
-                              transition: 'all 0.2s',
-                            }}
-                            onMouseEnter={(e) => e.currentTarget.style.borderColor = 'var(--accent)'}
-                            onMouseLeave={(e) => e.currentTarget.style.borderColor = 'var(--border)'}
-                          >
-                            <Icon size={12} style={{ flexShrink: 0 }} />
-                            <span style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                              {getPageLabel(path)}
-                            </span>
-                          </Link>
-                        );
-                      })}
-                      {pinnedPages.length > 3 && (
-                        <div style={{ fontSize: 10, color: 'var(--muted)', padding: '4px 0' }}>
-                          +{pinnedPages.length - 3} more
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                )}
-
-                {favorites.length > 0 && (
-                  <div style={{ marginBottom: 12 }}>
-                    <div style={{ fontSize: 10, fontWeight: 600, color: 'var(--muted)', marginBottom: 6, textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: 4 }}>
-                      <Icons.Star size={10} /> Favorites
-                    </div>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-                      {favorites.slice(0, 3).map(path => {
-                        const Icon = getPageIcon(path);
-                        return (
-                          <Link
-                            key={path}
-                            to={path}
-                            onClick={onClose}
-                            style={{
-                              padding: '6px 8px',
-                              borderRadius: 4,
-                              background: 'var(--bg-secondary)',
-                              border: '1px solid var(--border)',
-                              textDecoration: 'none',
-                              color: 'var(--text)',
-                              fontSize: 11,
-                              overflow: 'hidden',
-                              textOverflow: 'ellipsis',
-                              whiteSpace: 'nowrap',
-                              display: 'flex',
-                              alignItems: 'center',
-                              gap: 6,
-                              transition: 'all 0.2s',
-                            }}
-                            onMouseEnter={(e) => e.currentTarget.style.borderColor = '#fbbf24'}
-                            onMouseLeave={(e) => e.currentTarget.style.borderColor = 'var(--border)'}
-                          >
-                            <Icons.Star size={12} style={{ flexShrink: 0, color: '#fbbf24' }} />
-                            <span style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                              {getPageLabel(path)}
-                            </span>
-                          </Link>
-                        );
-                      })}
-                      {favorites.length > 3 && (
-                        <div style={{ fontSize: 10, color: 'var(--muted)', padding: '4px 0' }}>
-                          +{favorites.length - 3} more
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                )}
-
-                <Link
-                  to="/quick-access"
-                  onClick={() => {
-                    onClose();
-                    setShowQuickAccess(false);
-                  }}
-                  style={{
-                    display: 'block',
-                    padding: '8px 0',
-                    color: 'var(--accent)',
-                    textDecoration: 'none',
-                    fontSize: 11,
-                    fontWeight: 600,
-                    marginTop: 8,
-                    borderTop: '1px solid var(--border)',
-                    paddingTop: 10,
-                  }}
-                >
-                  View All Pages →
-                </Link>
-              </div>
-            )}
+        {/* Quick strip */}
+        {!compact && quickItems.length > 0 && (
+          <div style={{ padding: '10px 12px', borderBottom: '1px solid var(--border)' }}>
+            <div style={{ fontSize: 10, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 6, display: 'flex', alignItems: 'center', gap: 5 }}>
+              <Icons.Zap size={10} color="var(--accent)" /> Quick
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+              {quickItems.map(path => {
+                const Icon = getPageIcon(path);
+                const active = location.pathname === path;
+                return (
+                  <Link key={path} to={path} onClick={onClose}
+                    style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '6px 8px', borderRadius: 8, textDecoration: 'none', fontSize: 12, fontWeight: active ? 700 : 500, color: active ? 'var(--accent)' : 'var(--text)', background: active ? 'color-mix(in srgb, var(--accent) 10%, var(--surface))' : 'transparent', transition: 'background 0.1s' }}
+                    onMouseEnter={e => { if (!active) e.currentTarget.style.background = 'var(--inputBg)'; }}
+                    onMouseLeave={e => { if (!active) e.currentTarget.style.background = 'transparent'; }}
+                  >
+                    <Icon size={13} style={{ flexShrink: 0, color: active ? 'var(--accent)' : 'var(--muted)' }} />
+                    <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{getPageLabel(path)}</span>
+                  </Link>
+                );
+              })}
+            </div>
           </div>
         )}
 
-        {/* Nav groups */}
-        <nav style={{ flex: 1, overflowY: 'auto', padding: '8px 10px 16px' }}>
-          {NAV.map((section, sectionIndex) => {
-            // Check if any items in this section are visible
-            const visibleItems = section.items.filter(item => !item.requiresCR || canSeeCrBoard);
-            
-            // Skip section if no items are visible
-            if (visibleItems.length === 0) return null;
+        {/* Nav */}
+        <nav style={{ flex: 1, overflowY: 'auto', padding: compact ? '8px 6px 16px' : '6px 8px 16px' }}>
+          {filteredNav.map((section, idx) => {
+            const GroupIcon = Icons[GROUP_ICONS[section.group]] || Icons.Circle;
+            const groupColor = GROUP_COLORS[section.group] || 'var(--muted)';
+            const isCollapsed = collapsed[section.group];
+            const isActive = section.group === activeGroup;
+
+            if (compact) {
+              return (
+                <div key={section.group}>
+                  {idx > 0 && <div style={{ height: 1, background: 'var(--border)', margin: '8px 10px', opacity: 0.5 }} />}
+                  {section.items.map(item => {
+                    const Icon = Icons[item.icon] || Icons.Circle;
+                    const active = location.pathname === item.path;
+                    return (
+                      <Link key={item.id} to={item.path} onClick={onClose}
+                        className={`nav-item ${active ? 'active' : ''}`}
+                        title={item.label}
+                        style={{ justifyContent: 'center', padding: '9px 0' }}>
+                        <Icon size={16} strokeWidth={active ? 2.5 : 1.8} style={{ flexShrink: 0 }} />
+                      </Link>
+                    );
+                  })}
+                </div>
+              );
+            }
 
             return (
-              <div key={section.group}>
-                {compact && sectionIndex > 0 && (
-                  <div
-                    style={{ height: 1, background: 'var(--border)', margin: '10px 12px', opacity: 0.55 }}
-                    aria-hidden="true"
-                  />
-                )}
-                {!compact && (
-                  <div style={{ fontSize: 10, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.09em', padding: '16px 6px 6px' }}>
+              <div key={section.group} style={{ marginBottom: 2 }}>
+                <button onClick={() => toggleGroup(section.group)}
+                  style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 7, padding: '7px 8px 5px', background: 'transparent', border: 'none', cursor: 'pointer', borderRadius: 8, transition: 'background 0.1s' }}
+                  onMouseEnter={e => e.currentTarget.style.background = 'var(--inputBg)'}
+                  onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+                >
+                  <div style={{ width: 20, height: 20, borderRadius: 6, background: isActive ? `color-mix(in srgb, ${groupColor} 15%, var(--surface))` : 'var(--inputBg)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    <GroupIcon size={11} color={isActive ? groupColor : 'var(--muted)'} />
+                  </div>
+                  <span style={{ flex: 1, textAlign: 'left', fontSize: 11, fontWeight: isActive ? 700 : 600, color: isActive ? groupColor : 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.07em' }}>
                     {section.group}
+                  </span>
+                  <Icons.ChevronDown size={12} color="var(--muted)"
+                    style={{ transform: isCollapsed ? 'rotate(-90deg)' : 'rotate(0deg)', transition: 'transform 0.18s ease', flexShrink: 0 }} />
+                </button>
+
+                {!isCollapsed && (
+                  <div style={{ paddingLeft: 4 }}>
+                    {section.items.map(item => {
+                      const Icon = Icons[item.icon] || Icons.Circle;
+                      const active = location.pathname === item.path;
+                      return (
+                        <Link key={item.id} to={item.path} onClick={onClose}
+                          className={`nav-item ${active ? 'active' : ''}`} title={item.label}>
+                          <Icon size={15} strokeWidth={active ? 2.5 : 1.8} style={{ flexShrink: 0 }} />
+                          {item.label}
+                        </Link>
+                      );
+                    })}
                   </div>
                 )}
-                {section.items.map(item => {
-                  const Icon = Icons[item.icon] || Icons.Circle;
-                  const active = location.pathname === item.path;
-                  // hide items that require CR unless user is CR
-                  if (item.requiresCR) {
-                    if (!canSeeCrBoard) return null;
-                  }
-                  return (
-                    <Link
-                      key={item.id}
-                      to={item.path}
-                      onClick={onClose}
-                      className={`nav-item ${active ? 'active' : ''}`}
-                      title={item.label}
-                      style={compact ? { justifyContent: 'center', padding: '9px 0' } : undefined}
-                    >
-                      <Icon size={16} strokeWidth={active ? 2.5 : 1.8} style={{ flexShrink: 0 }} />
-                      {!compact && item.label}
-                    </Link>
-                  );
-                })}
               </div>
             );
           })}
         </nav>
 
-        {/* Notes Overview */}
-        {!compact && (
-          <div style={{ padding: '12px 14px', borderTop: '1px solid var(--border)', borderBottom: '1px solid var(--border)' }}>
-            <button
-              onClick={() => setShowNotes(!showNotes)}
-              style={{
-                width: '100%',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                background: 'transparent',
-                border: 'none',
-                cursor: 'pointer',
-                color: 'var(--text)',
-                fontSize: 12,
-                fontWeight: 600,
-                padding: '8px 0',
-              }}
-            >
-              <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                <Icons.FileText size={14} style={{ color: 'var(--accent)' }} />
-                Notes Overview
-              </span>
-              <Icons.ChevronDown size={14} style={{ transform: showNotes ? 'rotate(180deg)' : 'rotate(0)', transition: 'transform 0.2s' }} />
-            </button>
-
-            {showNotes && (
-              <div style={{ marginTop: 8, paddingTop: 8, borderTop: '1px solid var(--border)', fontSize: 12 }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8, color: 'var(--muted)' }}>
-                  <span>Total Notes</span>
-                  <span style={{ fontWeight: 600, color: 'var(--text)' }}>{notes.length}</span>
-                </div>
-
-                {notes.filter(n => n.pinned).length > 0 && (
-                  <div style={{ marginBottom: 8 }}>
-                    <div style={{ fontSize: 10, fontWeight: 600, color: 'var(--muted)', marginBottom: 6, textTransform: 'uppercase' }}>Pinned</div>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-                      {notes.filter(n => n.pinned).slice(0, 3).map(note => (
-                        <Link
-                          key={note.id}
-                          to="/notes"
-                          onClick={onClose}
-                          style={{
-                            padding: '6px 8px',
-                            borderRadius: 4,
-                            background: 'var(--bg-secondary)',
-                            border: '1px solid var(--border)',
-                            textDecoration: 'none',
-                            color: 'var(--text)',
-                            fontSize: 11,
-                            overflow: 'hidden',
-                            textOverflow: 'ellipsis',
-                            whiteSpace: 'nowrap',
-                            display: 'block',
-                            transition: 'all 0.2s',
-                          }}
-                          onMouseEnter={(e) => e.target.style.borderColor = 'var(--accent)'}
-                          onMouseLeave={(e) => e.target.style.borderColor = 'var(--border)'}
-                        >
-                          {note.title || '(untitled)'}
-                        </Link>
-                      ))}
-                      {notes.filter(n => n.pinned).length > 3 && (
-                        <div style={{ fontSize: 10, color: 'var(--muted)', padding: '4px 0' }}>
-                          +{notes.filter(n => n.pinned).length - 3} more
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                )}
-
-                <Link
-                  to="/notes"
-                  onClick={() => {
-                    onClose();
-                    setShowNotes(false);
-                  }}
-                  style={{
-                    display: 'block',
-                    padding: '8px 0',
-                    color: 'var(--accent)',
-                    textDecoration: 'none',
-                    fontSize: 11,
-                    fontWeight: 600,
-                    marginTop: 8,
-                    borderTop: '1px solid var(--border)',
-                    paddingTop: 10,
-                  }}
-                >
-                  View All Notes →
-                </Link>
-              </div>
-            )}
-          </div>
-        )}
-
         {/* Bottom */}
-        <div style={{ padding: '10px 14px', borderTop: '1px solid var(--border)', fontSize: 11, color: 'var(--muted)' }}>
-          {compact ? (
-            <div style={{ textAlign: 'center' }}>v3.2</div>
-          ) : (
-            <>
-              <div style={{ marginTop: 4, color: 'var(--muted)', fontSize: 10 }}>KUETx v3.2 · Data stored locally</div>
-            </>
-          )}
+        <div style={{ padding: '10px 14px', borderTop: '1px solid var(--border)', fontSize: 10, color: 'var(--muted)' }}>
+          {compact ? <div style={{ textAlign: 'center' }}>v3</div> : <div>KUETx v3.2 · Local data</div>}
         </div>
       </aside>
     </>

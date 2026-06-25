@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from 'react';
 import * as Icons from 'lucide-react';
 import { NAV } from '../nav';
 import { getProfile, store } from '../store/store';
+import { filterNav, getAppMode } from '../lib/modeFilter';
 
 const MOBILE_NAV_QUERY = '(max-width: 767.98px)';
 const USAGE_KEY = 'nav_usage_v1';
@@ -67,12 +68,7 @@ const saveUsageState = (next) => {
   } catch {}
 };
 
-const getVisibleSections = (profile) => NAV
-  .map(section => ({
-    ...section,
-    items: section.items.filter(item => !item.requiresCR || profile?.isCR),
-  }))
-  .filter(section => section.items.length > 0);
+const getVisibleSections = (profile) => filterNav(NAV, getAppMode(), !!profile?.isCR);
 
 const getAllNavItems = (profile) => getVisibleSections(profile).flatMap(section => section.items);
 
