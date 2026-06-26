@@ -2820,6 +2820,11 @@ h3 { font-size: 15px; font-weight: 600; }
   to   { transform: translateX(0);    opacity: 1; }
 }
 
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
 .topbar {
   height: 56px;
   background: var(--surface);

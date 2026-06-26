@@ -1,4 +1,4 @@
-import { Sun, Moon, Droplets, Bell, Download, ChevronRight, BookOpen, CloudOff, Cloud, LogOut, User, Settings, ExternalLink, X, Menu } from 'lucide-react';
+import { Sun, Moon, Droplets, Bell, Download, ChevronRight, BookOpen, CloudOff, Cloud, LogOut, User, Settings, ExternalLink, X, Menu, RefreshCw } from 'lucide-react';
 import { useEffect, useMemo, useState, useRef } from 'react';
 import { useTheme, THEMES } from '../hooks/useTheme';
 import { useLocation, Link } from 'react-router-dom';
@@ -31,6 +31,7 @@ export function Navbar({ onMenuClick }) {
   const [lastSyncedAt, setLastSyncedAt] = useState(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [loggingOut, setLoggingOut] = useState(false);
+  const [pulling, setPulling] = useState(false);
   const drawerRef = useRef(null);
 
   useEffect(() => {
@@ -99,8 +100,17 @@ export function Navbar({ onMenuClick }) {
     setGuideOpen(false);
   };
 
-  const handleSignOut = async () => {
-    setLoggingOut(true);
+  const handlePullNow = async () => {
+    if (pulling) return;
+    setPulling(true);
+    try {
+      const { pullNow } = await import('../lib/firebaseSync');
+      await pullNow();
+    } catch (e) { console.error(e); }
+    finally { setPulling(false); }
+  };
+
+  const handleSignOut = async () => {    setLoggingOut(true);
     try {
       const { logout } = await import('../lib/firebaseAuth');
       await logout();
@@ -182,7 +192,7 @@ export function Navbar({ onMenuClick }) {
 
       {/* ── Slide-in Drawer ── */}
       {drawerOpen && (
-        <div style={{ position: 'fixed', inset: 0, zIndex: 200 }}>
+        <div style={{ position: 'fixed', inset: 0, zIndex: 3600 }}>
           {/* Scrim */}
           <div
             onClick={() => setDrawerOpen(false)}
@@ -203,6 +213,8 @@ export function Navbar({ onMenuClick }) {
               overflowY: 'auto',
               boxShadow: '-12px 0 48px rgba(0,0,0,0.18)',
               animation: 'drawerSlideIn 0.22s cubic-bezier(0.22,1,0.36,1)',
+              /* bottom padding clears the floating BottomNav (~80px) + safe area */
+              paddingBottom: 'calc(80px + env(safe-area-inset-bottom, 0px))',
             }}
           >
             {/* ── Header row ── */}
@@ -322,6 +334,20 @@ export function Navbar({ onMenuClick }) {
                         </div>
                       </div>
                       <div style={{ display: 'flex', gap: 6 }}>
+                        <button
+                          onClick={handlePullNow}
+                          disabled={pulling}
+                          title="Pull latest from cloud"
+                          style={{
+                            width: 32, height: 32, borderRadius: 8,
+                            border: '1px solid var(--border)', background: 'var(--surface)',
+                            cursor: 'pointer', flexShrink: 0,
+                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            color: 'var(--muted)',
+                          }}
+                        >
+                          <RefreshCw size={12} style={{ animation: pulling ? 'spin 1s linear infinite' : 'none' }} />
+                        </button>
                         <a
                           href="https://console.firebase.google.com"
                           target="_blank" rel="noopener noreferrer"
