@@ -58,7 +58,6 @@ const COUNT_KEY = 'announcementV2ShowCount';
 
 export default function AnnouncementModal({ open: openProp, onClose: onCloseProp } = {}) {
   const [open, setOpen] = useState(false);
-  const [guideOpen, setGuideOpen] = useState(false);
 
   useEffect(() => {
     if (openProp !== undefined) { setOpen(openProp); return; }
@@ -82,42 +81,6 @@ export default function AnnouncementModal({ open: openProp, onClose: onCloseProp
   };
 
   if (!open) return null;
-
-  // Guide PDF inline panel
-  if (guideOpen) {
-    return (
-      <>
-        <div style={{ position: 'fixed', inset: 0, zIndex: 4999, background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(6px)' }} onClick={() => setGuideOpen(false)} />
-        <div style={{ position: 'fixed', inset: 0, zIndex: 5000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16, pointerEvents: 'none' }}>
-          <div onClick={e => e.stopPropagation()} style={{
-            pointerEvents: 'auto', width: '100%', maxWidth: 500,
-            maxHeight: 'calc(100dvh - 40px)', background: 'var(--card)',
-            border: '1px solid var(--border)', borderRadius: 18,
-            boxShadow: '0 32px 80px rgba(0,0,0,0.28)',
-            display: 'flex', flexDirection: 'column', overflow: 'hidden',
-          }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 18px', borderBottom: '1px solid var(--border)', flexShrink: 0 }}>
-              <div>
-                <div style={{ fontWeight: 800, fontSize: 15, color: 'var(--text)' }}>📖 KUETx Guide</div>
-                <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 1 }}>How to use every feature</div>
-              </div>
-              <button onClick={() => setGuideOpen(false)} style={{ background: 'transparent', border: 'none', cursor: 'pointer', color: 'var(--muted)', padding: 6, borderRadius: 8, display: 'flex', alignItems: 'center' }}>
-                <X size={17} />
-              </button>
-            </div>
-            <div style={{ flex: 1, overflow: 'hidden', minHeight: 0 }}>
-              <iframe src="/KUETx_Guide .pdf" title="KUETx Guide" style={{ width: '100%', height: '100%', minHeight: 400, border: 'none' }} />
-            </div>
-            <div style={{ padding: '12px 18px', borderTop: '1px solid var(--border)', flexShrink: 0, background: 'var(--bg)' }}>
-              <button onClick={() => setGuideOpen(false)} className="btn btn-primary" style={{ width: '100%', justifyContent: 'center', fontSize: 13 }}>
-                Back to Updates
-              </button>
-            </div>
-          </div>
-        </div>
-      </>
-    );
-  }
 
   return (
     <>
@@ -164,7 +127,7 @@ export default function AnnouncementModal({ open: openProp, onClose: onCloseProp
 
           {/* Guide CTA — prominent banner */}
           <div
-            onClick={() => setGuideOpen(true)}
+            onClick={() => window.dispatchEvent(new CustomEvent('kuetx:openGuide'))}
             style={{
               margin: '14px 14px 0',
               padding: '13px 16px',
@@ -188,7 +151,7 @@ export default function AnnouncementModal({ open: openProp, onClose: onCloseProp
             </div>
             <div style={{ flex: 1, minWidth: 0 }}>
               <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', marginBottom: 2 }}>
-                KUETx Guide — PDF
+                KUETx Guide
               </div>
               <div style={{ fontSize: 11, color: 'var(--muted)' }}>
                 প্রতিটা feature কীভাবে use করবে step-by-step

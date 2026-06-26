@@ -105,6 +105,20 @@ export default function ModeSelectModal({ onDone }) {
             })}
           </div>
 
+          {/* Detailed guide link */}
+          <button
+            onClick={() => window.dispatchEvent(new CustomEvent('kuetx:openGuide'))}
+            style={{
+              display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
+              width: '100%', margin: '14px 0 0', padding: '8px',
+              background: 'transparent', border: 'none', cursor: 'pointer',
+              fontSize: 12.5, fontWeight: 600, color: 'var(--accent)',
+            }}
+          >
+            <Icons.BookOpen size={13} />
+            চান বিস্তারিত guideline দেখতে? এখানে ক্লিক করুন
+          </button>
+
           {/* Footer */}
           <div style={{ padding: '16px 18px 20px' }}>
             <button

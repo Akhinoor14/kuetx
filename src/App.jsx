@@ -13,7 +13,6 @@ import GlobalToasts from './components/GlobalToasts';
 import BackupReminderGate from './components/BackupReminderGate';
 import AuthModal from './components/AuthModal';
 import ModeSelectModal from './components/ModeSelectModal';
-import GuideModal from './components/GuideModal';
 import useFirebaseAuth from './hooks/useFirebaseAuth';
 import { isModeChosen } from './lib/modeFilter';
 import { store } from './store/store';

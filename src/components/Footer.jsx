@@ -63,6 +63,16 @@ export function Footer() {
           </Link>
 
           <div style={{ display: 'flex', gap: '0.4rem', alignItems: 'center', flexWrap: 'wrap' }}>
+            <button
+              style={{...footerButtonStyle, fontSize: 'clamp(0.65rem, 1.5vw, 0.75rem)', padding: 'clamp(0.3rem, 1vw, 0.35rem) clamp(0.5rem, 1vw, 0.65rem)' }}
+              onMouseEnter={e => handleButtonHover(e, true)}
+              onMouseLeave={e => handleButtonHover(e, false)}
+              onClick={() => window.dispatchEvent(new CustomEvent('kuetx:openGuide'))}
+            >
+              <Icons.BookOpen size={12} />
+              Guide
+            </button>
+
             <a
               href="https://www.facebook.com/kuetx"
               target="_blank"
