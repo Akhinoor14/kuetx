@@ -225,31 +225,70 @@ export function Sidebar({ open, onClose, compact = false, onToggleCompact, authS
             }
 
             return (
-              <div key={section.group} style={{ marginBottom: 2 }}>
+              <div key={section.group} style={{ marginBottom: isCollapsed ? 2 : 4 }}>
                 <button onClick={() => toggleGroup(section.group)}
-                  style={{ width: '100%', display: 'flex', alignItems: 'center', gap: 7, padding: '7px 8px 5px', background: 'transparent', border: 'none', cursor: 'pointer', borderRadius: 8, transition: 'background 0.1s' }}
-                  onMouseEnter={e => e.currentTarget.style.background = 'var(--inputBg)'}
-                  onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+                  style={{
+                    width: '100%', display: 'flex', alignItems: 'center', gap: 7,
+                    padding: isCollapsed ? '5px 8px' : '6px 8px 5px',
+                    background: isCollapsed
+                      ? `color-mix(in srgb, ${groupColor} 9%, var(--surface))`
+                      : 'transparent',
+                    border: 'none',
+                    borderLeft: isCollapsed ? `3px solid ${groupColor}` : '3px solid transparent',
+                    cursor: 'pointer',
+                    borderRadius: isCollapsed ? '0 8px 8px 0' : 8,
+                    transition: 'all 0.15s ease',
+                    marginLeft: isCollapsed ? 0 : 0,
+                  }}
+                  onMouseEnter={e => {
+                    e.currentTarget.style.background = isCollapsed
+                      ? `color-mix(in srgb, ${groupColor} 15%, var(--surface))`
+                      : 'var(--inputBg)';
+                  }}
+                  onMouseLeave={e => {
+                    e.currentTarget.style.background = isCollapsed
+                      ? `color-mix(in srgb, ${groupColor} 9%, var(--surface))`
+                      : 'transparent';
+                  }}
                 >
-                  <div style={{ width: 20, height: 20, borderRadius: 6, background: isActive ? `color-mix(in srgb, ${groupColor} 15%, var(--surface))` : 'var(--inputBg)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                    <GroupIcon size={11} color={isActive ? groupColor : 'var(--muted)'} />
+                  <div style={{
+                    width: 20, height: 20, borderRadius: 6, flexShrink: 0,
+                    background: isCollapsed
+                      ? `color-mix(in srgb, ${groupColor} 20%, var(--surface))`
+                      : isActive
+                        ? `color-mix(in srgb, ${groupColor} 15%, var(--surface))`
+                        : 'var(--inputBg)',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    transition: 'background 0.15s',
+                  }}>
+                    <GroupIcon size={11} color={isCollapsed ? groupColor : isActive ? groupColor : 'var(--muted)'} />
                   </div>
-                  <span style={{ flex: 1, textAlign: 'left', fontSize: 11, fontWeight: isActive ? 700 : 600, color: isActive ? groupColor : 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.07em' }}>
+                  <span style={{
+                    flex: 1, textAlign: 'left', fontSize: 11,
+                    fontWeight: isCollapsed ? 700 : isActive ? 700 : 600,
+                    color: isCollapsed ? groupColor : isActive ? groupColor : 'var(--muted)',
+                    textTransform: 'uppercase', letterSpacing: '0.07em',
+                    transition: 'color 0.15s',
+                  }}>
                     {section.group}
                   </span>
-                  <Icons.ChevronDown size={12} color="var(--muted)"
-                    style={{ transform: isCollapsed ? 'rotate(-90deg)' : 'rotate(0deg)', transition: 'transform 0.18s ease', flexShrink: 0 }} />
+                  <Icons.ChevronDown size={12}
+                    color={isCollapsed ? groupColor : 'var(--muted)'}
+                    style={{ transform: isCollapsed ? 'rotate(-90deg)' : 'rotate(0deg)', transition: 'transform 0.18s ease, color 0.15s', flexShrink: 0 }} />
                 </button>
 
                 {!isCollapsed && (
-                  <div style={{ paddingLeft: 4 }}>
+                  <div style={{ paddingLeft: 4, borderLeft: `2px solid color-mix(in srgb, ${groupColor} 20%, transparent)`, marginLeft: 10, marginTop: 2 }}>
                     {section.items.map(item => {
                       const Icon = Icons[item.icon] || Icons.Circle;
                       const active = location.pathname === item.path;
                       return (
                         <Link key={item.id} to={item.path} onClick={onClose}
-                          className={`nav-item ${active ? 'active' : ''}`} title={item.label}>
-                          <Icon size={15} strokeWidth={active ? 2.5 : 1.8} style={{ flexShrink: 0 }} />
+                          className={`nav-item ${active ? 'active' : ''}`}
+                          title={item.label}
+                          style={active ? { color: groupColor, background: `color-mix(in srgb, ${groupColor} 10%, var(--surface))` } : {}}>
+                          <Icon size={15} strokeWidth={active ? 2.5 : 1.8}
+                            style={{ flexShrink: 0, color: active ? groupColor : undefined }} />
                           {item.label}
                         </Link>
                       );

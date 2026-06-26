@@ -137,7 +137,7 @@ function Layout({ authState }) {
             <Route path="/ct-quiz-planning" element={<CTQuizPlanning />} />
           </Routes>
         </div>
-        {location.pathname !== '/about' && !isQuestionBankViewer && !isMobileNav && <Footer />}
+        {location.pathname !== '/about' && !isQuestionBankViewer && !isMobileNav && <Footer syncStatus={authState.syncStatus} isAnonymous={authState.isAnonymous} displayName={authState.displayName} />}
         {!isQuestionBankViewer && <PWAInstallPrompt />}
         <PWAUpdatePrompt />
         {!isQuestionBankViewer && <BottomNav />}
