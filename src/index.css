@@ -2815,6 +2815,11 @@ h3 { font-size: 15px; font-weight: 600; }
 .toggle[data-on="false"] .toggle-knob { left: 4px; }
 
 /* ── Navbar height ────────────────────────────────────────────────────────── */
+@keyframes drawerSlideIn {
+  from { transform: translateX(100%); opacity: 0; }
+  to   { transform: translateX(0);    opacity: 1; }
+}
+
 .topbar {
   height: 56px;
   background: var(--surface);
@@ -2846,11 +2851,13 @@ h3 { font-size: 15px; font-weight: 600; }
   font-weight: 700;
   font-size: 14px;
   color: var(--text);
-  max-width: 45%;
+  /* clamp so it never reaches the action buttons on the right (~160px) or logo on left (~90px) */
+  max-width: min(38vw, 160px);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
   pointer-events: none;
+  z-index: 0;
 }
 @media (min-width: 769px) {
   .topbar-page-title { display: none; }

@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useTheme, THEMES } from '../hooks/useTheme';
 import { store } from '../store/store';
-import { Download, Upload, Trash2, HardDrive, RefreshCw, Shield, Database, Wifi, WifiOff, Cloud, CloudOff, CheckCircle, AlertCircle, LayoutDashboard, GraduationCap } from 'lucide-react';
-import { onAuthChange } from '../lib/firebaseAuth';
+import { Download, Upload, Trash2, HardDrive, Shield, Database, Wifi, WifiOff, Cloud, CloudOff, CheckCircle, LayoutDashboard, GraduationCap, LogOut, User, ExternalLink } from 'lucide-react';
+import { onAuthChange, logout, loginWithGoogle, loginWithEmail, registerWithEmail } from '../lib/firebaseAuth';
 import { getAppMode, setAppMode } from '../lib/modeFilter';
 
 // ── Auto-backup to localStorage snapshot ─────────────────────────────────────
@@ -38,6 +38,20 @@ export default function Settings() {
   const [firebaseUser, setFbUser] = useState(null);
   const [fbSyncStatus, setFbSyncStatus] = useState('idle');
   const [fbLastSynced, setFbLastSynced] = useState(null);
+  const [loggingOut, setLoggingOut] = useState(false);
+
+  const handleSignOut = async () => {
+    if (!window.confirm('Sign out করবে? তোমার data এই device এ থাকবে, শুধু cloud sync বন্ধ হবে।')) return;
+    setLoggingOut(true);
+    try {
+      await logout();
+      flash('✓ Signed out। Data locally safe আছে।');
+    } catch (err) {
+      flash('✗ Sign out failed: ' + err.message, 'error');
+    } finally {
+      setLoggingOut(false);
+    }
+  };
 
   useEffect(() => {
     const unsub = onAuthChange((u) => setFbUser(u));
@@ -353,6 +367,104 @@ export default function Settings() {
           <div>⚡ <strong>Real-time</strong> — একটা device এ change হলে ১-৩ সেকেন্ডে অন্যটায় আসে</div>
           <div>🔒 <strong>Privacy</strong> — শুধু তুমি তোমার data দেখতে পাবে</div>
         </div>
+      </div>
+
+      {/* 👤 Account */}
+      <div className="card" style={{ marginBottom: 14 }}>
+        <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 10, display: 'flex', alignItems: 'center', gap: 6 }}>
+          <User size={14} /> Account
+        </div>
+
+        {!firebaseUser || firebaseUser.isAnonymous ? (
+          <div>
+            <div style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 10, lineHeight: 1.6 }}>
+              এখন Offline mode এ আছো। Login করলে সব device এ sync হবে।
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+              <button
+                className="btn btn-primary"
+                onClick={async () => {
+                  try { await loginWithGoogle(); flash('✓ Google দিয়ে login সফল!'); }
+                  catch (err) { flash('✗ ' + (err.message || 'Login failed'), 'error'); }
+                }}
+                style={{ justifyContent: 'flex-start' }}
+              >
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style={{ flexShrink: 0 }}>
+                  <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                  <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                  <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+                  <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+                </svg>
+                Google দিয়ে Login
+              </button>
+            </div>
+          </div>
+        ) : (
+          <div>
+            {/* User info card */}
+            <div style={{
+              display: 'flex', alignItems: 'center', gap: 10,
+              padding: '10px 12px', borderRadius: 8,
+              background: 'var(--bg)', border: '1px solid var(--border)',
+              marginBottom: 12,
+            }}>
+              {firebaseUser.photoURL ? (
+                <img src={firebaseUser.photoURL} alt="" style={{ width: 36, height: 36, borderRadius: '50%', flexShrink: 0 }} />
+              ) : (
+                <div style={{ width: 36, height: 36, borderRadius: '50%', background: 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                  <User size={18} color="#fff" />
+                </div>
+              )}
+              <div style={{ minWidth: 0 }}>
+                <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                  {firebaseUser.displayName || 'User'}
+                </div>
+                <div style={{ fontSize: 11, color: 'var(--muted)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                  {firebaseUser.email}
+                </div>
+                <div style={{ fontSize: 10, color: 'var(--success)', marginTop: 2 }}>● Cloud sync চালু</div>
+              </div>
+            </div>
+
+            {/* Firebase data management info */}
+            <div style={{
+              padding: '10px 12px', borderRadius: 8,
+              background: 'color-mix(in srgb, var(--accent) 6%, var(--bg))',
+              border: '1px solid color-mix(in srgb, var(--accent) 20%, var(--border))',
+              marginBottom: 12, fontSize: 12, lineHeight: 1.7,
+            }}>
+              <div style={{ fontWeight: 600, marginBottom: 6, color: 'var(--text)' }}>🔐 তোমার Firebase data control</div>
+              <div style={{ color: 'var(--muted)', marginBottom: 8 }}>
+                Firebase Console থেকে তুমি নিজের সব data দেখতে ও delete করতে পারবে:
+              </div>
+              <a
+                href="https://console.firebase.google.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  display: 'inline-flex', alignItems: 'center', gap: 4,
+                  fontSize: 11, color: 'var(--accent)', fontWeight: 600,
+                  textDecoration: 'none',
+                }}
+              >
+                console.firebase.google.com <ExternalLink size={10} />
+              </a>
+              <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 8, lineHeight: 1.6 }}>
+                💡 <strong>Easiest option:</strong> নিচে "Sign Out" করো — তোমার Firebase data automatically delete হবে না, শুধু sync বন্ধ হবে। Data পুরো মুছতে চাইলে নিচের Danger Zone ব্যবহার করো (local data মুছবে), আর Firebase এর data মুছতে হলে Console এ গিয়ে করতে হবে।
+              </div>
+            </div>
+
+            {/* Sign out */}
+            <button
+              className="btn btn-ghost"
+              onClick={handleSignOut}
+              disabled={loggingOut}
+              style={{ justifyContent: 'flex-start', color: 'var(--danger)', borderColor: 'color-mix(in srgb, var(--danger) 40%, var(--border))' }}
+            >
+              <LogOut size={14} /> {loggingOut ? 'Signing out...' : 'Sign Out'}
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Backup & restore */}
