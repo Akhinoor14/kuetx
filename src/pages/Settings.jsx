@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useTheme, THEMES } from '../hooks/useTheme';
 import { store } from '../store/store';
-import { Download, Upload, Trash2, HardDrive, RefreshCw, Shield, Database, Wifi, WifiOff, Cloud, LayoutDashboard, GraduationCap } from 'lucide-react';
+import { Download, Upload, Trash2, HardDrive, RefreshCw, Shield, Database, Wifi, WifiOff, Cloud, CloudOff, CheckCircle, AlertCircle, LayoutDashboard, GraduationCap } from 'lucide-react';
+import { onAuthChange } from '../lib/firebaseAuth';
 import { getAppMode, setAppMode } from '../lib/modeFilter';
 
 // ── Auto-backup to localStorage snapshot ─────────────────────────────────────
@@ -34,6 +35,24 @@ export default function Settings() {
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewInfo, setPreviewInfo] = useState(null);
   const [importReport, setImportReport] = useState(null);
+  const [firebaseUser, setFbUser] = useState(null);
+  const [fbSyncStatus, setFbSyncStatus] = useState('idle');
+  const [fbLastSynced, setFbLastSynced] = useState(null);
+
+  useEffect(() => {
+    const unsub = onAuthChange((u) => setFbUser(u));
+    return () => unsub();
+  }, []);
+
+  useEffect(() => {
+    const handler = (e) => {
+      const s = e.detail?.status;
+      if (s) setFbSyncStatus(s);
+      if (s === 'synced' && e.detail?.at) setFbLastSynced(e.detail.at);
+    };
+    window.addEventListener('kuetx:firebase-sync', handler);
+    return () => window.removeEventListener('kuetx:firebase-sync', handler);
+  }, []);
   const [selectedKeys, setSelectedKeys] = useState(null);
 
   useEffect(() => {
@@ -273,6 +292,66 @@ export default function Settings() {
           <div style={{ color: 'var(--muted)' }}>
             ⚠️ Clearing browser data or switching browsers will erase your data. Always keep a backup.
           </div>
+        </div>
+      </div>
+
+      {/* ☁️ Cloud Sync */}
+      <div className="card" style={{ marginBottom: 14 }}>
+        <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 10, display: 'flex', alignItems: 'center', gap: 6 }}>
+          <Cloud size={14} /> Cloud Sync
+        </div>
+
+        {/* Data safety banner — always show */}
+        <div style={{
+          display: 'flex', alignItems: 'flex-start', gap: 10,
+          padding: '10px 12px', borderRadius: 8,
+          background: 'color-mix(in srgb, var(--success) 10%, var(--bg))',
+          border: '1px solid color-mix(in srgb, var(--success) 25%, var(--border))',
+          marginBottom: 12,
+        }}>
+          <CheckCircle size={14} color="var(--success)" style={{ flexShrink: 0, marginTop: 1 }} />
+          <div style={{ fontSize: 12, color: 'var(--text)', lineHeight: 1.6 }}>
+            <strong>তোমার সব data এই device এ locally safe আছে।</strong>
+            <span style={{ color: 'var(--muted)', display: 'block' }}>Internet ছাড়াও KUETx পুরোপুরি কাজ করে। Cloud sync হলো bonus — অন্য device এ data পাওয়ার জন্য।</span>
+          </div>
+        </div>
+
+        {/* Auth status */}
+        {!firebaseUser || firebaseUser.isAnonymous ? (
+          <div style={{ padding: '10px 12px', borderRadius: 8, background: 'var(--bg)', border: '1px solid var(--border)', marginBottom: 10 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
+              <CloudOff size={13} color="var(--muted)" />
+              <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--text)' }}>Cloud sync বন্ধ (Offline mode)</span>
+            </div>
+            <div style={{ fontSize: 11, color: 'var(--muted)', lineHeight: 1.6 }}>
+              Google বা Email দিয়ে login করলে সব data Firestore এ backup হবে এবং যেকোনো device থেকে access করতে পারবে।
+            </div>
+          </div>
+        ) : (
+          <div style={{ padding: '10px 12px', borderRadius: 8, background: 'var(--bg)', border: '1px solid var(--border)', marginBottom: 10 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
+              <span style={{
+                width: 8, height: 8, borderRadius: '50%', display: 'inline-block', flexShrink: 0,
+                background: fbSyncStatus === 'synced' ? '#22c55e' : fbSyncStatus === 'error' ? '#ef4444' : '#f59e0b',
+              }} />
+              <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--text)' }}>
+                {fbSyncStatus === 'synced' ? 'Synced ✓' : fbSyncStatus === 'syncing' ? 'Syncing...' : fbSyncStatus === 'error' ? 'Sync error' : 'Connecting...'}
+              </span>
+            </div>
+            <div style={{ fontSize: 11, color: 'var(--muted)' }}>{firebaseUser.displayName || firebaseUser.email}</div>
+            {fbLastSynced && (
+              <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 2 }}>
+                Last synced: {new Date(fbLastSynced).toLocaleString('en-BD', { hour: '2-digit', minute: '2-digit', day: 'numeric', month: 'short' })}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* How it works */}
+        <div style={{ fontSize: 11, color: 'var(--muted)', lineHeight: 1.8, padding: '8px 10px', background: 'var(--bg)', borderRadius: 7, border: '1px solid var(--border)' }}>
+          <div>📱 <strong>Same account → অন্য device</strong> — সব data automatically sync হয়</div>
+          <div>⚡ <strong>Real-time</strong> — একটা device এ change হলে ১-৩ সেকেন্ডে অন্যটায় আসে</div>
+          <div>🔒 <strong>Privacy</strong> — শুধু তুমি তোমার data দেখতে পাবে</div>
         </div>
       </div>
 

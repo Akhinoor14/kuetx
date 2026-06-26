@@ -14,6 +14,7 @@ import BackupReminderGate from './components/BackupReminderGate';
 import AuthModal from './components/AuthModal';
 import ModeSelectModal from './components/ModeSelectModal';
 import useFirebaseAuth from './hooks/useFirebaseAuth';
+import DataSafeToast from './components/DataSafeToast';
 import { isModeChosen } from './lib/modeFilter';
 import { store } from './store/store';
 
@@ -141,6 +142,7 @@ function Layout({ authState }) {
         <PWAUpdatePrompt />
         {!isQuestionBankViewer && <BottomNav />}
         <GlobalToasts />
+        <DataSafeToast />
 
         {/* Account upgrade modal (anonymous → real account) */}
         {showUpgradeModal && (

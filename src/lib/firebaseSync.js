@@ -31,7 +31,8 @@ let _unsubscribers = [];
 let _pushTimers = {};
 let _storeListener = null;
 let _isSyncing = false;
-let _onSyncStatus = null; // callback(status: 'synced'|'syncing'|'error'|'offline')
+let _onSyncStatus = null;
+let _lastPullCount = 0; // callback(status: 'synced'|'syncing'|'error'|'offline')
 
 const PUSH_DEBOUNCE_MS = 1500;
 
@@ -81,9 +82,16 @@ export const pullAllFromFirestore = async (uid) => {
     }
 
     emitStatus('synced', { at: new Date().toISOString() });
+    return Object.keys(remoteData).length; // how many docs were pulled
   } catch (err) {
+    // New anonymous users have no data yet → permission-denied is expected, skip silently
+    if (err.code === 'permission-denied') {
+      emitStatus('synced', { at: new Date().toISOString() });
+      return 0;
+    }
     console.warn('[KUETx Firebase] Pull failed:', err.message);
     emitStatus('error', { message: err.message });
+    return 0;
   }
 };
 
@@ -130,6 +138,8 @@ const startRealtimeListener = (uid) => {
     });
     emitStatus('synced', { at: new Date().toISOString(), remote: true });
   }, (err) => {
+    // Anonymous users with no Firestore data yet → permission-denied is expected
+    if (err.code === 'permission-denied') return;
     console.warn('[KUETx Firebase] Snapshot error:', err.message);
     emitStatus('error', { message: err.message });
   });
@@ -180,7 +190,8 @@ export const startFirebaseSync = async (uid, { onSyncStatus } = {}) => {
   _onSyncStatus = onSyncStatus || null;
 
   // 1. Pull remote data first (so we don't lose data from other devices)
-  await pullAllFromFirestore(uid);
+  const pulledCount = await pullAllFromFirestore(uid);
+  _lastPullCount = pulledCount ?? 0;
 
   // 2. Start real-time listener (Firestore → local)
   startRealtimeListener(uid);
@@ -213,3 +224,4 @@ export const stopFirebaseSync = () => {
 
 export const isFirebaseSyncing = () => _isSyncing;
 export const getFirebaseUid = () => _uid;
+export const getLastPullCount = () => _lastPullCount;

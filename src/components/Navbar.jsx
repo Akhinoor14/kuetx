@@ -1,4 +1,4 @@
-import { Sun, Moon, Droplets, Bell, Download, ChevronRight, BookOpen } from 'lucide-react';
+import { Sun, Moon, Droplets, Bell, Download, ChevronRight, BookOpen, CloudOff, Cloud, Loader } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { useTheme } from '../hooks/useTheme';
 import { useLocation, Link } from 'react-router-dom';
@@ -26,6 +26,10 @@ export function Navbar({ onMenuClick }) {
   const [notificationOpen, setNotificationOpen] = useState(false);
   const [refreshTick, setRefreshTick] = useState(0);
   const [guideOpen, setGuideOpen] = useState(false); // controlled by App queue now
+  const [syncStatus, setSyncStatus] = useState('idle');
+  const [firebaseUser, setFirebaseUser] = useState(null);
+  const [syncPopover, setSyncPopover] = useState(false);
+  const [lastSyncedAt, setLastSyncedAt] = useState(null);
 
   useEffect(() => {
     const handleStoreUpdate = () => setRefreshTick(t => t + 1);
@@ -37,6 +41,26 @@ export function Navbar({ onMenuClick }) {
     const handleOpenGuide = () => setGuideOpen(true);
     window.addEventListener('kuetx:openGuide', handleOpenGuide);
     return () => window.removeEventListener('kuetx:openGuide', handleOpenGuide);
+  }, []);
+
+  // Firebase sync status listener
+  useEffect(() => {
+    const handleSync = (e) => {
+      const s = e.detail?.status || 'idle';
+      setSyncStatus(s);
+      if (s === 'synced' && e.detail?.at) setLastSyncedAt(e.detail.at);
+    };
+    window.addEventListener('kuetx:firebase-sync', handleSync);
+    return () => window.removeEventListener('kuetx:firebase-sync', handleSync);
+  }, []);
+
+  // Firebase auth state — track if user is anonymous or real
+  useEffect(() => {
+    let unsub = () => {};
+    import('../lib/firebaseAuth').then(({ onAuthChange }) => {
+      unsub = onAuthChange((u) => setFirebaseUser(u));
+    }).catch(() => {});
+    return () => unsub();
   }, []);
 
   const cycleTheme = () => {
@@ -83,9 +107,109 @@ export function Navbar({ onMenuClick }) {
 
       <div style={{ flex: 1 }} />
 
-      {/* Theme toggle */}
-      <button onClick={cycleTheme} style={{
-        display: 'flex', alignItems: 'center', gap: 6, padding: '7px 12px', borderRadius: 9,
+      {/* Firebase sync dot — clickable popover */}
+      {(() => {
+        const isAnon = !firebaseUser || firebaseUser.isAnonymous;
+        const dotColor = isAnon
+          ? '#9ca3af'
+          : syncStatus === 'synced' ? '#22c55e'
+          : syncStatus === 'syncing' || syncStatus === 'pending' ? '#f59e0b'
+          : syncStatus === 'error' ? '#ef4444'
+          : '#9ca3af';
+        const shortName = isAnon ? 'Offline' : (firebaseUser.displayName?.split(' ')[0] || firebaseUser.email?.split('@')[0] || 'Synced');
+        const statusLabel = isAnon ? 'Not logged in' : syncStatus === 'synced' ? 'Synced' : syncStatus === 'syncing' ? 'Syncing...' : syncStatus === 'pending' ? 'Saving...' : syncStatus === 'error' ? 'Error' : 'Connecting...';
+        return (
+          <div style={{ position: 'relative' }}>
+            <button
+              onClick={() => setSyncPopover(p => !p)}
+              style={{
+                display: 'flex', alignItems: 'center', gap: 5,
+                padding: '6px 10px', borderRadius: 9,
+                border: '1.5px solid var(--border)',
+                background: syncPopover ? 'var(--inputBg)' : 'transparent',
+                cursor: 'pointer',
+              }}
+            >
+              <span style={{
+                width: 8, height: 8, borderRadius: '50%',
+                background: dotColor,
+                boxShadow: dotColor !== '#9ca3af' ? `0 0 6px ${dotColor}88` : 'none',
+                display: 'inline-block', flexShrink: 0,
+                animation: (syncStatus === 'syncing' || syncStatus === 'pending') ? 'pulse 1.2s infinite' : 'none',
+              }} />
+              <span className="hidden md:inline" style={{ fontSize: 12, fontWeight: 600, color: 'var(--muted)', maxWidth: 90, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                {shortName}
+              </span>
+            </button>
+
+            {syncPopover && (
+              <>
+                {/* Backdrop */}
+                <div onClick={() => setSyncPopover(false)} style={{ position: 'fixed', inset: 0, zIndex: 98 }} />
+                {/* Popover */}
+                <div style={{
+                  position: 'absolute', top: 'calc(100% + 8px)', right: 0,
+                  width: 260, background: 'var(--surface)',
+                  border: '1.5px solid var(--border)', borderRadius: 12,
+                  boxShadow: '0 8px 32px rgba(0,0,0,0.14)', zIndex: 99,
+                  padding: 14, fontFamily: 'Sora, sans-serif',
+                }}>
+                  {/* Header */}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
+                    <span style={{ width: 10, height: 10, borderRadius: '50%', background: dotColor, display: 'inline-block', flexShrink: 0 }} />
+                    <span style={{ fontWeight: 700, fontSize: 13, color: 'var(--text)' }}>{statusLabel}</span>
+                  </div>
+
+                  {/* User info */}
+                  <div style={{ background: 'var(--bg)', borderRadius: 8, padding: '8px 10px', marginBottom: 10, fontSize: 12 }}>
+                    {isAnon ? (
+                      <>
+                        <div style={{ fontWeight: 600, color: 'var(--text)', marginBottom: 2 }}>👤 Offline Mode</div>
+                        <div style={{ color: 'var(--muted)', lineHeight: 1.5 }}>তোমার সব data এই device এ safe আছে। Login করলে সব device এ sync হবে।</div>
+                      </>
+                    ) : (
+                      <>
+                        <div style={{ fontWeight: 600, color: 'var(--text)', marginBottom: 2 }}>
+                          {firebaseUser.displayName || firebaseUser.email}
+                        </div>
+                        <div style={{ color: 'var(--muted)', fontSize: 11 }}>{firebaseUser.email}</div>
+                        {lastSyncedAt && (
+                          <div style={{ color: 'var(--muted)', fontSize: 11, marginTop: 4 }}>
+                            Last synced: {new Date(lastSyncedAt).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
+                          </div>
+                        )}
+                      </>
+                    )}
+                  </div>
+
+                  {/* Data safety note */}
+                  <div style={{ fontSize: 11, color: 'var(--muted)', lineHeight: 1.6, padding: '6px 8px', background: 'var(--bg)', borderRadius: 7, border: '1px solid var(--border)' }}>
+                    💾 Data সবসময় <strong>locally safe</strong> — internet ছাড়াও কাজ করে।
+                    {!isAnon && ' Firestore এ real-time backup চলছে।'}
+                  </div>
+
+                  {/* CTA */}
+                  {isAnon && (
+                    <Link to="/settings" onClick={() => setSyncPopover(false)} style={{
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      marginTop: 10, padding: '8px', borderRadius: 8,
+                      background: 'var(--accent)', color: '#fff',
+                      fontSize: 12, fontWeight: 600, textDecoration: 'none',
+                      gap: 6,
+                    }}>
+                      Login করো → সব device এ sync পাও
+                    </Link>
+                  )}
+                </div>
+              </>
+            )}
+          </div>
+        );
+      })()}
+
+      {/* Theme toggle — icon only on mobile */}
+      <button onClick={cycleTheme} title={`Theme: ${themeLabel}`} style={{
+        display: 'flex', alignItems: 'center', gap: 6, padding: '7px 10px', borderRadius: 9,
         border: '1.5px solid var(--border)', background: 'transparent', cursor: 'pointer',
         fontSize: 13, fontWeight: 600, color: 'var(--text)', fontFamily: 'Sora, sans-serif',
       }}>

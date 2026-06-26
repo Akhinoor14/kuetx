@@ -5,7 +5,7 @@
 
 import { useState, useEffect } from 'react';
 import { onAuthChange, loginAnonymously } from '../lib/firebaseAuth';
-import { startFirebaseSync, stopFirebaseSync, pushAllToFirestore } from '../lib/firebaseSync';
+import { startFirebaseSync, stopFirebaseSync, pushAllToFirestore, getLastPullCount } from '../lib/firebaseSync';
 
 export default function useFirebaseAuth() {
   const [user, setUser] = useState(null);           // Firebase user object
@@ -32,6 +32,14 @@ export default function useFirebaseAuth() {
         await startFirebaseSync(firebaseUser.uid, {
           onSyncStatus: (status) => setSyncStatus(status),
         });
+
+        // If this is a real (non-anonymous) account and Firestore had NO data,
+        // it means this is their first login on this device — push local data up.
+        // This handles: "used anonymously on phone → Google login on PC"
+        if (!firebaseUser.isAnonymous && getLastPullCount() === 0) {
+          console.log('[KUETx] New device first login — pushing local data to Firestore');
+          await pushAllToFirestore(firebaseUser.uid);
+        }
       } else {
         // Not logged in → login anonymously so data is always tied to a uid
         setSyncStatus('idle');
