@@ -7,7 +7,7 @@ import { usePinnedPages } from '../hooks/usePinnedPages';
 import { getPageStats, getAllPageStats } from '../hooks/usePageTracker';
 import { getProfile } from '../store/store';
 import { filterNav, getAppMode } from '../lib/modeFilter';
-import heroBg from '../assets/profile-hero-bg.svg';
+import { heroBgDataUri as heroBg } from '../assets/profileHeroBg';
 
 const CR_PATHS = NAV.flatMap(s => s.items || []).filter(i => i.requiresCR).map(i => i.path);
 const MOBILE_QUERY = '(max-width: 767.98px)';
@@ -213,7 +213,7 @@ export function QuickAccessPanel({ inPanel = false, onNavigate } = {}) {
   // ── BROWSE TAB (All Pages — group boxes)
   const BrowseTab = () => (
     <div>
-      <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(auto-fit, minmax(320px, 1fr))', gap: 14 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(3, 1fr)', gap: 14 }}>
         {filterNav(NAV, getAppMode(), isCR).map(section => {
           const meta = GROUP_META[section.group] || { icon: 'Circle', color: '#64748b' };
           const GroupIcon = Icons[meta.icon] || Icons.Circle;

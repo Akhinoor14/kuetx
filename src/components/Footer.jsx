@@ -56,10 +56,10 @@ export function Footer({ syncStatus, isAnonymous, displayName }) {
 
   return (
     <>
-      <footer style={{ marginTop: '2rem', borderTop: '1px solid var(--border)', background: 'var(--surface)' }}>
+      <footer style={{ marginTop: '2rem', borderTop: '1px solid var(--border)', background: 'var(--surface)', width: '100%', boxSizing: 'border-box' }}>
 
         {/* ── Main row ── */}
-        <div style={{ maxWidth: 1040, width: '100%', margin: '0 auto', padding: '16px 24px 12px', display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: 12, boxSizing: 'border-box' }}>
+        <div style={{ width: '100%', padding: '10px 24px 8px', display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between', gap: 10, boxSizing: 'border-box' }}>
 
           {/* Left: logo */}
           <Link to="/about" style={{ display: 'flex', alignItems: 'center', gap: 10, textDecoration: 'none', color: 'inherit' }}>
@@ -98,7 +98,7 @@ export function Footer({ syncStatus, isAnonymous, displayName }) {
         </div>
 
         {/* ── Bottom micro row ── */}
-        <div style={{ maxWidth: 1040, width: '100%', margin: '0 auto', padding: '10px 24px 14px', display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', gap: 8, borderTop: '1px solid var(--border)', boxSizing: 'border-box' }}>
+        <div style={{ width: '100%', padding: '7px 24px 10px', display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', gap: 8, borderTop: '1px solid var(--border)', boxSizing: 'border-box' }}>
 
           {/* Left: copyright */}
           <span style={{ fontSize: 11, color: 'var(--muted)' }}>

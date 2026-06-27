@@ -18,7 +18,7 @@ import AuthModal from '../components/AuthModal';
 import { onAuthChange, logout } from '../lib/firebaseAuth';
 import { pushAllToFirestore, startFirebaseSync } from '../lib/firebaseSync';
 import { uploadProfilePicture, getProfilePhotoURL, deleteProfilePicture } from '../lib/profilePicture';
-import heroBg from '../assets/profile-hero-bg.svg';
+import { heroBgDataUri as heroBg } from '../assets/profileHeroBg';
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
