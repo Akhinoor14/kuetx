@@ -79,8 +79,8 @@ function NavCell({ item, groupColor, active, onClose, is3col }) {
   const Icon = Icons[item.icon] || Icons.Circle;
   const shortLabel = SHORT_LABELS[item.label] || item.label;
   const [hovered, setHovered] = useState(false);
-  const iconSize = is3col ? 12 : 14;
-  const labelSize = is3col ? 9 : 10;
+  const iconSize = is3col ? 14 : 14;
+  const labelSize = is3col ? 10 : 10;
 
   return (
     <Link
@@ -111,7 +111,7 @@ function NavCell({ item, groupColor, active, onClose, is3col }) {
     >
       {/* Icon wrapper */}
       <div style={{
-        width: 28, height: 28,
+        width: is3col ? 32 : 28, height: is3col ? 32 : 28,
         borderRadius: 7,
         flexShrink: 0,
         background: `color-mix(in srgb, ${groupColor} 15%, var(--surface))`,
@@ -253,8 +253,7 @@ export function Sidebar({ open, onClose, mode = '2col', onCycleMode, authState }
             ) : (
               <Link to="/quick-access" onClick={onClose}
                 style={{ display: 'inline-flex', alignItems: 'center', gap: 6, textDecoration: 'none', color: 'inherit', minWidth: 0, overflow: 'hidden', flexShrink: 1 }}>
-                <Logo size={mode === '2col' ? 24 : 30} />
-                <Wordmark height={mode === '2col' ? 18 : 26} />
+                <Wordmark height={mode === '2col' ? 20 : 26} />
               </Link>
             )}
             {/* Cycle button — always visible on desktop (no Tailwind hidden/flex) */}
