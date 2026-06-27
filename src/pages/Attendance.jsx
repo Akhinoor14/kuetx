@@ -387,7 +387,7 @@ function AttendanceHero({ courses, logs, schedule, settings, combinedMode, combi
         <div style={{ fontSize: 10, fontWeight: 800, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Live Attendance</div>
         <div style={{ fontSize: 10, color: 'var(--muted)' }}>{combinedMode ? 'Combined' : 'Daily log'} · {theory.length} courses</div>
       </div>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: 4 }}>
         {stats.map(({ c, pct, totalHeld, totalAttended, slab, hint }) => {
           const col = attColor(pct);
           const hasData = totalHeld > 0;
@@ -398,52 +398,47 @@ function AttendanceHero({ courses, logs, schedule, settings, combinedMode, combi
               background: attBg(pct, dark),
               border: `1.5px solid ${attBorder(pct, dark)}`,
               borderRadius: 10,
-              padding: '6px 9px',
+              padding: '7px 9px 6px',
+              display: 'flex', flexDirection: 'column', gap: 4,
             }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                {/* Left: 2 lines */}
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  {/* Line 1 — course name */}
-                  <div style={{ fontWeight: 700, fontSize: 13, lineHeight: 1.25, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                    {getDisplayCourseName(c)}
-                  </div>
-                  {/* Line 2 — meta inline */}
-                  <div style={{ fontSize: 10, color: 'var(--muted)', marginTop: 2, display: 'flex', alignItems: 'center', gap: 0, overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>
-                    <span style={{ opacity: 0.7 }}>{c.code}</span>
-                    {hasData && <>
-                      <span style={{ opacity: 0.35, margin: '0 4px' }}>·</span>
-                      <span style={{ color: col, fontWeight: 800 }}>{slab?.label}</span>
-                      <span style={{ opacity: 0.35, margin: '0 4px' }}>·</span>
-                      <span>{totalAttended}/{totalHeld}</span>
-                    </>}
-                    {hint && <>
-                      <span style={{ opacity: 0.35, margin: '0 4px' }}>·</span>
-                      <span style={{ color: hintCol, fontWeight: 700 }}>{hint.text}</span>
-                    </>}
-                  </div>
+              {/* Top row: course name + % badge */}
+              <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 6 }}>
+                <div style={{ fontWeight: 700, fontSize: 12, lineHeight: 1.3, flex: 1, minWidth: 0 }}>
+                  {getDisplayCourseName(c)}
                 </div>
-
-                {/* Right: % pill only — fixed 46px */}
-                <div style={{ flexShrink: 0 }}>
-                  {hasData ? (
-                    <div style={{
-                      width: 46, height: 32, borderRadius: 8,
-                      background: col, color: '#fff',
-                      display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      fontWeight: 900, fontSize: 15, lineHeight: 1,
-                      letterSpacing: '-0.02em',
-                    }}>
-                      {pct}<span style={{ fontSize: 9, fontWeight: 600, letterSpacing: 0 }}>%</span>
-                    </div>
-                  ) : (
-                    <div style={{ fontSize: 10, color: 'var(--muted)', fontStyle: 'italic' }}>—</div>
-                  )}
-                </div>
+                {hasData ? (
+                  <div style={{
+                    flexShrink: 0, minWidth: 36, height: 22, borderRadius: 6,
+                    background: col, color: '#fff',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    fontWeight: 900, fontSize: 12, lineHeight: 1, paddingInline: 4,
+                  }}>
+                    {pct}<span style={{ fontSize: 8, fontWeight: 600 }}>%</span>
+                  </div>
+                ) : (
+                  <div style={{ fontSize: 10, color: 'var(--muted)' }}>—</div>
+                )}
               </div>
 
-              {/* Progress bar 2px flush */}
+              {/* Meta row: code · count · slab */}
+              <div style={{ fontSize: 10, color: 'var(--muted)', display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '0 3px' }}>
+                <span style={{ opacity: 0.7 }}>{c.code}</span>
+                {hasData && <>
+                  <span style={{ opacity: 0.3 }}>·</span>
+                  <span>{totalAttended}/{totalHeld}</span>
+                  <span style={{ opacity: 0.3 }}>·</span>
+                  <span style={{ color: col, fontWeight: 700 }}>{slab?.label}</span>
+                </>}
+              </div>
+
+              {/* Hint */}
+              {hint && (
+                <div style={{ fontSize: 10, color: hintCol, fontWeight: 600, lineHeight: 1.2 }}>{hint.text}</div>
+              )}
+
+              {/* Progress bar */}
               {hasData && (
-                <div style={{ height: 2, background: dark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.07)', borderRadius: 99, marginTop: 5, overflow: 'hidden' }}>
+                <div style={{ height: 2, background: dark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.07)', borderRadius: 99, overflow: 'hidden' }}>
                   <div style={{ height: '100%', borderRadius: 99, width: `${Math.min(100, pct)}%`, background: col, transition: 'width 0.5s ease' }} />
                 </div>
               )}

@@ -715,18 +715,6 @@ export default function Profile() {
 
       {/* ── Stats Grid ── */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(155px, 1fr))', gap: 12 }}>
-        {/* Attendance */}
-        {liveData.attData ? (
-          <StatCard
-            ring={attPct} color={attColor}
-            label="Attendance"
-            value={`${liveData.attData.attended}/${liveData.attData.held}`}
-            sub={attLabel}
-          />
-        ) : (
-          <StatCard icon="📅" label="Attendance" value="No data" color="var(--muted)" />
-        )}
-
         {/* CGPA */}
         {liveData.cgpaData ? (
           <StatCard icon="🎓" label="CGPA" value={liveData.cgpaData.cgpa} sub={cgpaLabel} color={cgpaColor} />
