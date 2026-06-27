@@ -51,23 +51,12 @@ import QuickAccess from './pages/QuickAccess';
 function Layout({ authState }) {
   usePageTracker();
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [sidebarCompact, setSidebarCompact] = useState(() => {
-    try {
-      return localStorage.getItem('kuetx_sidebar_compact') === 'true';
-    } catch {
-      return false;
-    }
-  });
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
   const location = useLocation();
   const isMobileNav = useIsMobileNav();
   const isQuestionBankViewer = location.pathname === '/question-bank/view';
 
-  useEffect(() => {
-    try {
-      localStorage.setItem('kuetx_sidebar_compact', sidebarCompact ? 'true' : 'false');
-    } catch {}
-  }, [sidebarCompact]);
+
 
   // Expose upgrade modal trigger globally so Settings page can call it
   useEffect(() => {
@@ -80,14 +69,12 @@ function Layout({ authState }) {
       {!isQuestionBankViewer && (
         <Sidebar
           open={sidebarOpen}
-          compact={sidebarCompact}
-          onToggleCompact={() => setSidebarCompact(v => !v)}
           onClose={() => setSidebarOpen(false)}
           authState={authState}
         />
       )}
       <div
-        className={`main-content ${sidebarCompact && !isQuestionBankViewer ? 'compact' : ''}`}
+        className="main-content"
         style={isQuestionBankViewer ? { marginLeft: 0, width: '100%' } : undefined}
       >
         {!isQuestionBankViewer && (
