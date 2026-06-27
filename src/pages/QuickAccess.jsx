@@ -7,7 +7,7 @@ import { usePinnedPages } from '../hooks/usePinnedPages';
 import { getPageStats, getAllPageStats } from '../hooks/usePageTracker';
 import { getProfile } from '../store/store';
 import { filterNav, getAppMode } from '../lib/modeFilter';
-import { heroBgDataUri as heroBg } from '../assets/profileHeroBg';
+
 
 const CR_PATHS = NAV.flatMap(s => s.items || []).filter(i => i.requiresCR).map(i => i.path);
 const MOBILE_QUERY = '(max-width: 767.98px)';
@@ -248,9 +248,7 @@ export function QuickAccessPanel({ inPanel = false, onNavigate } = {}) {
 
       {/* Hero (full page only) */}
       {!inPanel && (
-        <div style={{
-          backgroundImage: `linear-gradient(135deg, rgba(22,163,74,0.6) 0%, rgba(14,165,233,0.45) 100%), url(${heroBg})`,
-          backgroundSize: 'cover', backgroundPosition: 'center',
+        <div className="hero-bg" style={{
           padding: isMobile ? '16px 18px 14px' : '18px 24px 16px', position: 'relative', overflow: 'hidden',
         }}>
           <div style={{ position: 'absolute', top: -50, right: -50, width: 180, height: 180, borderRadius: '50%', background: 'rgba(255,255,255,0.06)', pointerEvents: 'none' }} />

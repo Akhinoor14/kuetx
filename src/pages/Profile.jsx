@@ -18,7 +18,7 @@ import AuthModal from '../components/AuthModal';
 import { onAuthChange, logout } from '../lib/firebaseAuth';
 import { pushAllToFirestore, startFirebaseSync } from '../lib/firebaseSync';
 import { uploadProfilePicture, getProfilePhotoURL, deleteProfilePicture } from '../lib/profilePicture';
-import { heroBgDataUri as heroBg } from '../assets/profileHeroBg';
+
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
@@ -616,9 +616,7 @@ export default function Profile() {
       )}
 
       {/* ── Hero: Avatar + Name + Edit ── */}
-      <div style={{
-        backgroundImage: `linear-gradient(135deg, rgba(22,163,74,0.55) 0%, rgba(14,165,233,0.45) 100%), url(${heroBg})`,
-        backgroundSize: 'cover', backgroundPosition: 'center',
+      <div className="hero-bg" style={{
         borderRadius: 20, padding: 'clamp(20px,4vw,32px) clamp(20px,4vw,32px)',
         display: 'flex', alignItems: 'center', gap: 'clamp(14px,3vw,24px)',
         boxShadow: '0 8px 32px rgba(22,163,74,0.18)', flexWrap: 'wrap',
