@@ -12,6 +12,15 @@ import { useTheme } from '../hooks/useTheme';
 import { QB_DEPARTMENTS, QB_DEPT_CODE_MAP } from '../data/questionbank/questionBankData';
 
 // ─────────────────────────────────────────────────────────────────────────────
+// SOLUTION BANK — Contribution / Community constants
+// ─────────────────────────────────────────────────────────────────────────────
+const SOLUTION_CONTRIBUTION_FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLScE5eujz_Vu5LFgkZkiGtWurliPsOiGLmUYTKftBZNSkYTPmg/viewform?embedded=true';
+const SOLUTION_CONTRIBUTION_FALLBACK_URL = 'https://forms.gle/9NahxuzSeeU6NTLw6';
+const SOLUTION_CONTRIBUTION_PROMPT_KEY = 'solutionBank_contribution_prompt_last_shown';
+const SOLUTION_CONTRIBUTION_COOLDOWN_MS = 2 * 60 * 60 * 1000; // 2 hours
+const WA_NUMBER = '8801724812042';
+
+// ─────────────────────────────────────────────────────────────────────────────
 // THEME — Using central theme system, adapted for solutions page display
 // ─────────────────────────────────────────────────────────────────────────────
 
@@ -1058,6 +1067,31 @@ export default function QuestionBankSolutions() {
   const [loading, setLoading]               = useState(false);
   const [searchRaw, setSearchRaw]           = useState('');
   const search = useDebounce(searchRaw, 220);
+  const [showContribIntro, setShowContribIntro] = useState(false);
+  const [showContribForm, setShowContribForm]   = useState(false);
+
+  // Auto-show contribution prompt (same cooldown pattern as QuestionBank)
+  useEffect(() => {
+    const lastShown = Number(localStorage.getItem(SOLUTION_CONTRIBUTION_PROMPT_KEY) || '0');
+    const now = Date.now();
+    if (!lastShown || now - lastShown >= SOLUTION_CONTRIBUTION_COOLDOWN_MS) {
+      localStorage.setItem(SOLUTION_CONTRIBUTION_PROMPT_KEY, String(now));
+      setShowContribIntro(true);
+    }
+  }, []);
+
+  const openContribFlow = useCallback(() => {
+    localStorage.setItem(SOLUTION_CONTRIBUTION_PROMPT_KEY, String(Date.now()));
+    setShowContribIntro(false);
+    setShowContribForm(true);
+  }, []);
+
+  const closeContribIntro = useCallback(() => {
+    localStorage.setItem(SOLUTION_CONTRIBUTION_PROMPT_KEY, String(Date.now()));
+    setShowContribIntro(false);
+  }, []);
+
+  const closeContribForm = useCallback(() => setShowContribForm(false), []);
 
   // Scroll-to-top visibility
   useEffect(() => {
@@ -1369,8 +1403,118 @@ export default function QuestionBankSolutions() {
               <div className="course-card-hint" style={{ color: t.textMut }}>View past papers →</div>
             </div>
           ))}
+          {courses.length === 0 && (
+            <div style={{ gridColumn: '1/-1', padding: '48px 24px', textAlign: 'center' }}>
+              <div style={{
+                maxWidth: 480, margin: '0 auto',
+                background: t.card, border: `1px solid ${t.border}`,
+                borderRadius: 12, padding: '36px 28px',
+              }}>
+                <div style={{ fontSize: 32, marginBottom: 12 }}>📚</div>
+                <div style={{ fontWeight: 700, fontSize: 17, color: t.text, marginBottom: 8 }}>
+                  No solutions available yet
+                </div>
+                <div style={{ fontSize: 14, color: t.textSub, lineHeight: 1.65, marginBottom: 24 }}>
+                  We currently don't have any solutions for <strong style={{ color: t.text }}>{selectedDept} · {selectedTerm}</strong>.
+                  Questions are available, but solutions take time and community effort to build.
+                  <br /><br />
+                  We'd love your help! With better community participation, we can grow this into
+                  a complete resource for every KUET student. 🌱
+                </div>
+                <div style={{ display: 'flex', gap: 10, justifyContent: 'center', flexWrap: 'wrap' }}>
+                  <button
+                    onClick={openContribFlow}
+                    style={{
+                      background: t.accent, color: '#fff',
+                      border: 'none', borderRadius: 8,
+                      padding: '10px 20px', fontSize: 14, fontWeight: 600,
+                      cursor: 'pointer',
+                    }}
+                  >
+                    Help us grow 🤝
+                  </button>
+                  <a
+                    href={`https://wa.me/${WA_NUMBER}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    style={{
+                      display: 'inline-flex', alignItems: 'center', gap: 6,
+                      background: '#25D366', color: '#fff',
+                      borderRadius: 8, padding: '10px 20px',
+                      fontSize: 14, fontWeight: 600,
+                      textDecoration: 'none',
+                    }}
+                  >
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+                      <path d="M12 0C5.373 0 0 5.373 0 12c0 2.124.558 4.118 1.533 5.846L.057 23.882l6.204-1.626A11.934 11.934 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.012-1.374l-.359-.213-3.724.976.995-3.622-.234-.372A9.818 9.818 0 1112 21.818z"/>
+                    </svg>
+                    Contact Us
+                  </a>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
+
+      {showContribIntro && (
+        <div className="qb2-modal-backdrop" role="presentation" onClick={closeContribIntro}>
+          <div className="qb2-modal" role="dialog" aria-modal="true" onClick={e => e.stopPropagation()}>
+            <div className="qb2-modal-top">
+              <div>
+                <div className="qb2-modal-kicker">Solution Bank help</div>
+                <h2 className="qb2-modal-title">Help us build a better Solution Bank</h2>
+              </div>
+              <button className="qb2-modal-close" type="button" onClick={closeContribIntro} aria-label="Close">
+                <X size={16} />
+              </button>
+            </div>
+            <p className="qb2-modal-text">
+              We're building a community-powered solution database for KUET students.
+              If you have solved past papers or partial solutions, your contribution can make
+              a real difference for hundreds of students. Every bit helps. 🙏
+            </p>
+            <div className="qb2-modal-actions">
+              <button className="qb2-secondary-btn" type="button" onClick={closeContribIntro}>Not now</button>
+              <button className="qb2-primary-btn" type="button" onClick={openContribFlow}>I want to help</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showContribForm && (
+        <div className="qb2-modal-backdrop" role="presentation" onClick={closeContribForm}>
+          <div className="qb2-modal qb2-modal-wide" role="dialog" aria-modal="true" onClick={e => e.stopPropagation()}>
+            <div className="qb2-modal-top">
+              <div>
+                <div className="qb2-modal-kicker">Contribute a Solution</div>
+                <h2 className="qb2-modal-title">Share a solution without leaving the site</h2>
+              </div>
+              <button className="qb2-modal-close" type="button" onClick={closeContribForm} aria-label="Close">
+                <X size={16} />
+              </button>
+            </div>
+            <p className="qb2-modal-text">
+              Fill in the form below. If it doesn't load, use the open button as a fallback.
+            </p>
+            <div className="qb2-form-frame-wrap">
+              <iframe
+                title="Solution Bank contribution form"
+                src={SOLUTION_CONTRIBUTION_FORM_URL}
+                className="qb2-form-frame"
+                loading="lazy"
+              />
+            </div>
+            <div className="qb2-modal-actions qb2-modal-actions-between">
+              <a className="qb2-secondary-btn qb2-link-btn" href={SOLUTION_CONTRIBUTION_FALLBACK_URL} target="_blank" rel="noreferrer">
+                Open Google Form
+              </a>
+              <button className="qb2-primary-btn" type="button" onClick={closeContribForm}>Done</button>
+            </div>
+          </div>
+        </div>
+      )}
       <KatexStyle />
     </div>
   );
@@ -1406,12 +1550,117 @@ export default function QuestionBankSolutions() {
             </div>
           ))}
           {courses.length === 0 && (
-            <div style={{ gridColumn: '1/-1', textAlign: 'center', padding: '40px 0', color: t.textMut }}>
-              No courses yet for {selectedDept} · {selectedTerm}
+            <div style={{ gridColumn: '1/-1', padding: '48px 24px', textAlign: 'center' }}>
+              <div style={{
+                maxWidth: 480, margin: '0 auto',
+                background: t.card, border: `1px solid ${t.border}`,
+                borderRadius: 12, padding: '36px 28px',
+              }}>
+                <div style={{ fontSize: 32, marginBottom: 12 }}>📚</div>
+                <div style={{ fontWeight: 700, fontSize: 17, color: t.text, marginBottom: 8 }}>
+                  No solutions available yet
+                </div>
+                <div style={{ fontSize: 14, color: t.textSub, lineHeight: 1.65, marginBottom: 24 }}>
+                  We currently don't have any solutions for <strong style={{ color: t.text }}>{selectedDept} · {selectedTerm}</strong>.
+                  Questions are available, but solutions take time and community effort to build.
+                  <br /><br />
+                  We'd love your help! With better community participation, we can grow this into
+                  a complete resource for every KUET student. 🌱
+                </div>
+                <div style={{ display: 'flex', gap: 10, justifyContent: 'center', flexWrap: 'wrap' }}>
+                  <button
+                    onClick={openContribFlow}
+                    style={{
+                      background: t.accent, color: '#fff',
+                      border: 'none', borderRadius: 8,
+                      padding: '10px 20px', fontSize: 14, fontWeight: 600,
+                      cursor: 'pointer',
+                    }}
+                  >
+                    Help us grow 🤝
+                  </button>
+                  <a
+                    href={`https://wa.me/${WA_NUMBER}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    style={{
+                      display: 'inline-flex', alignItems: 'center', gap: 6,
+                      background: '#25D366', color: '#fff',
+                      borderRadius: 8, padding: '10px 20px',
+                      fontSize: 14, fontWeight: 600,
+                      textDecoration: 'none',
+                    }}
+                  >
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+                      <path d="M12 0C5.373 0 0 5.373 0 12c0 2.124.558 4.118 1.533 5.846L.057 23.882l6.204-1.626A11.934 11.934 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.012-1.374l-.359-.213-3.724.976.995-3.622-.234-.372A9.818 9.818 0 1112 21.818z"/>
+                    </svg>
+                    Contact Us
+                  </a>
+                </div>
+              </div>
             </div>
           )}
         </div>
       </div>
+
+      {showContribIntro && (
+        <div className="qb2-modal-backdrop" role="presentation" onClick={closeContribIntro}>
+          <div className="qb2-modal" role="dialog" aria-modal="true" onClick={e => e.stopPropagation()}>
+            <div className="qb2-modal-top">
+              <div>
+                <div className="qb2-modal-kicker">Solution Bank help</div>
+                <h2 className="qb2-modal-title">Help us build a better Solution Bank</h2>
+              </div>
+              <button className="qb2-modal-close" type="button" onClick={closeContribIntro} aria-label="Close">
+                <X size={16} />
+              </button>
+            </div>
+            <p className="qb2-modal-text">
+              We're building a community-powered solution database for KUET students.
+              If you have solved past papers or partial solutions, your contribution can make
+              a real difference for hundreds of students. Every bit helps. 🙏
+            </p>
+            <div className="qb2-modal-actions">
+              <button className="qb2-secondary-btn" type="button" onClick={closeContribIntro}>Not now</button>
+              <button className="qb2-primary-btn" type="button" onClick={openContribFlow}>I want to help</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showContribForm && (
+        <div className="qb2-modal-backdrop" role="presentation" onClick={closeContribForm}>
+          <div className="qb2-modal qb2-modal-wide" role="dialog" aria-modal="true" onClick={e => e.stopPropagation()}>
+            <div className="qb2-modal-top">
+              <div>
+                <div className="qb2-modal-kicker">Contribute a Solution</div>
+                <h2 className="qb2-modal-title">Share a solution without leaving the site</h2>
+              </div>
+              <button className="qb2-modal-close" type="button" onClick={closeContribForm} aria-label="Close">
+                <X size={16} />
+              </button>
+            </div>
+            <p className="qb2-modal-text">
+              Fill in the form below. If it doesn't load, use the open button as a fallback.
+            </p>
+            <div className="qb2-form-frame-wrap">
+              <iframe
+                title="Solution Bank contribution form"
+                src={SOLUTION_CONTRIBUTION_FORM_URL}
+                className="qb2-form-frame"
+                loading="lazy"
+              />
+            </div>
+            <div className="qb2-modal-actions qb2-modal-actions-between">
+              <a className="qb2-secondary-btn qb2-link-btn" href={SOLUTION_CONTRIBUTION_FALLBACK_URL} target="_blank" rel="noreferrer">
+                Open Google Form
+              </a>
+              <button className="qb2-primary-btn" type="button" onClick={closeContribForm}>Done</button>
+            </div>
+          </div>
+        </div>
+      )}
       <KatexStyle />
     </div>
   );
