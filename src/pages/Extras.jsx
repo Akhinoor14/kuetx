@@ -1884,7 +1884,7 @@ export function Reports() {
 
   const profile = getProfile();
   const courses = getAllCourses(profile);
-  const expenses = store.get('expenses') || [];
+  const expenses = store.get('money_entries') || [];
   const namaz = store.get('namaz') || {};
   const selfeval = store.get('selfeval') || {};
   const diary = store.get('diary') || [];
@@ -1903,7 +1903,7 @@ export function Reports() {
     return inRange(d, start, end);
   });
   const periodTimelogs = timelogs.filter(l => l.date && inRange(l.date, start, end));
-  const periodExpenses = expenses.filter(e => e.date && inRange(e.date, start, end));
+  const periodExpenses = expenses.filter(e => e.type === 'expense' && e.date && inRange(e.date, start, end));
   const periodDiary = diary.filter(d => d.date && inRange(d.date, start, end));
   const periodSocial = social.filter(s => s.date && inRange(s.date, start, end));
   const periodFood = foodlogs.filter(f => f.date && inRange(f.date, start, end));

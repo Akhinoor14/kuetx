@@ -10,6 +10,7 @@ import {
   store, getProfile, DEFAULT_PROFILE, DEPARTMENTS,
   getLegacyTermResults, TERM_KEYS, MIN_ATTENDANCE_PERCENT,
   SCHOLARSHIP_ATTENDANCE_PCT, HONORS_CGPA, MIN_CGPA_GRADUATION,
+  computeCGPA,
 } from '../store/store';
 import { getAllCourses } from '../store/curriculumStore';
 import ProfileSetupModal from '../components/ProfileSetupModal';
@@ -17,6 +18,7 @@ import AuthModal from '../components/AuthModal';
 import { onAuthChange, logout } from '../lib/firebaseAuth';
 import { pushAllToFirestore, startFirebaseSync } from '../lib/firebaseSync';
 import { uploadProfilePicture, getProfilePhotoURL, deleteProfilePicture } from '../lib/profilePicture';
+import heroBg from '../assets/profile-hero-bg.svg';
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
@@ -56,15 +58,11 @@ const computeCurrentTermGPA = (marks = {}, courses = []) => {
   return totalCredits > 0 ? { gpa: (totalPoints / totalCredits).toFixed(2), credits: totalCredits } : null;
 };
 
-/** Compute legacy CGPA from term results */
-const computeLegacyCGPA = (legacyTerms = []) => {
-  let tp = 0, tc = 0;
-  legacyTerms.forEach(r => {
-    const gpa = parseFloat(r.gpa);
-    const cr = parseFloat(r.credits);
-    if (!isNaN(gpa) && !isNaN(cr) && cr > 0) { tp += gpa * cr; tc += cr; }
-  });
-  return tc > 0 ? { cgpa: (tp / tc).toFixed(2), credits: tc } : null;
+/** Compute CGPA — uses the same engine as Dashboard/Results so course-entered
+ * grades are included, not just manually imported legacy terms. */
+const computeFullCGPA = (courses) => {
+  const { cgpa, earnedCredits } = computeCGPA(courses);
+  return cgpa !== null ? { cgpa: cgpa.toFixed(2), credits: earnedCredits } : null;
 };
 
 // ─── Mini Components ──────────────────────────────────────────────────────────
@@ -510,7 +508,7 @@ export default function Profile() {
     const monthIncome = monthEntries.filter(e => e.type === 'income').reduce((s, e) => s + Number(e.amount || 0), 0);
 
     // GPA
-    const cgpaData = computeLegacyCGPA(legacyTerms);
+    const cgpaData = computeFullCGPA(courses);
     const currentTermCourses = courses.filter(c => `Y${c.year}T${c.term}` === profile.currentTermKey);
     const currentTermGPA = computeCurrentTermGPA(marks, currentTermCourses);
 
@@ -619,7 +617,8 @@ export default function Profile() {
 
       {/* ── Hero: Avatar + Name + Edit ── */}
       <div style={{
-        background: 'linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%)',
+        backgroundImage: `linear-gradient(135deg, rgba(22,163,74,0.55) 0%, rgba(14,165,233,0.45) 100%), url(${heroBg})`,
+        backgroundSize: 'cover', backgroundPosition: 'center',
         borderRadius: 20, padding: 'clamp(20px,4vw,32px) clamp(20px,4vw,32px)',
         display: 'flex', alignItems: 'center', gap: 'clamp(14px,3vw,24px)',
         boxShadow: '0 8px 32px rgba(22,163,74,0.18)', flexWrap: 'wrap',
@@ -664,16 +663,16 @@ export default function Profile() {
         {/* Info */}
         <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap', marginBottom: 4 }}>
-            <div style={{ fontSize: 'clamp(18px,4vw,26px)', fontWeight: 900, color: 'white', letterSpacing: '-0.02em', lineHeight: 1.2 }}>
+            <div style={{ fontSize: 'clamp(18px,4vw,26px)', fontWeight: 900, color: 'white', letterSpacing: '-0.02em', lineHeight: 1.2, fontFamily: "'Space Grotesk', 'Sora', 'Hind Siliguri', system-ui, sans-serif" }}>
               {profile.name}
             </div>
             {profile.isCR && <Badge label="👑 CR" color="#fff" bg="rgba(255,255,255,0.2)" />}
           </div>
-          <div style={{ fontSize: 'clamp(12px,2.5vw,14px)', color: 'rgba(255,255,255,0.85)', lineHeight: 1.6 }}>
+          <div style={{ fontSize: 'clamp(12px,2.5vw,14px)', color: 'rgba(255,255,255,0.85)', lineHeight: 1.6, fontFamily: "'Space Grotesk', 'Sora', 'Hind Siliguri', system-ui, sans-serif" }}>
             {profile.studentId && <span>{profile.studentId}</span>}
             {profile.dept && <span> · {getDeptName(profile.dept)}</span>}
           </div>
-          <div style={{ fontSize: 'clamp(11px,2vw,13px)', color: 'rgba(255,255,255,0.7)', marginTop: 2 }}>
+          <div style={{ fontSize: 'clamp(11px,2vw,13px)', color: 'rgba(255,255,255,0.7)', marginTop: 2, fontFamily: "'Space Grotesk', 'Sora', 'Hind Siliguri', system-ui, sans-serif" }}>
             {profile.session && <span>Session: {profile.session}</span>}
             {profile.currentTerm && <span> · {profile.currentTerm}</span>}
           </div>

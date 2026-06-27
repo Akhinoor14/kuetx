@@ -22,7 +22,7 @@ export default function SmartScore() {
   const namaz       = store.get('namaz') || {};
   const assignments = store.get('assignments') || [];
   const selfeval    = store.get('selfeval') || {};
-  const expenses    = store.get('expenses') || [];
+  const expenses    = store.get('money_entries') || [];
   const diary       = store.get('diary') || [];
   const selfStudy   = store.get('selfstudy') || [];
 
@@ -88,7 +88,7 @@ export default function SmartScore() {
     s.goodbad = (allGood + allBad) >= 3 ? Math.max(0, Math.min(100, Math.round((conductRaw / conductMax) * 100))) : null;
 
     // Budget (4%): entry_days / 30 × 100 (30-day window)
-    const recent30 = expenses.filter(e => e.date && (new Date() - new Date(e.date)) < 30 * 86400000);
+    const recent30 = expenses.filter(e => e.type === 'expense' && e.date && (new Date() - new Date(e.date)) < 30 * 86400000);
     const recentDays30 = new Set(recent30.map(e => e.date)).size;
     s.money = recent30.length >= 3 ? Math.min(100, Math.round((recentDays30 / 30) * 100)) : null;
 

@@ -222,16 +222,6 @@ const getPresetSessionalSlots = (modelId) => {
   return [];
 };
 
-const getTomorrowDay = () => {
-  const todayIndex = new Date().getDay();
-  for (let step = 1; step <= 7; step++) {
-    const idx = (todayIndex + step) % 7;
-    const day = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][idx];
-    if (DAYS.includes(day)) return day;
-  }
-  return 'Sunday';
-};
-
 const buildDailyText = (day, classes, getCourse, assignments = [], messageFormat = 'plain') => {
   const lines = [];
   const getClassShareLabel = (item) => {
@@ -381,7 +371,7 @@ export default function Schedule() {
   });
   const [calendarSelectedDates, setCalendarSelectedDates] = useState(new Set());
   const [nowTick, setNowTick] = useState(() => Date.now());
-  const autoPreviewDayRef = useRef(getTomorrowDay());
+  const autoPreviewDayRef = useRef(dateToDayName(getRoutinePreviewDate((store.get('scheduleSettings')?.holidayDates) || [])));
   const [form, setForm] = useState({
     day: 'Sunday',
     slot: TIME_MODELS['50min'].slots[0],

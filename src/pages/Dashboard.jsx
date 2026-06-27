@@ -127,11 +127,11 @@ export default function Dashboard() {
   const cgpaColor = cgpaStr ? (parseFloat(cgpaStr) >= 3.75 ? 'var(--success)' : parseFloat(cgpaStr) < 2.20 ? 'var(--danger)' : 'var(--text)') : 'var(--muted)';
 
   const activeCourses = courses.filter(c => c.status === 'active').length;
-  const expenses = store.get('expenses') || [];
+  const moneyEntries = store.get('money_entries') || [];
   const timelogs = store.get('timelogs') || [];
   const timerState = getTimerActiveState();
   const _dm = new Date(); const thisMonth = `${_dm.getFullYear()}-${String(_dm.getMonth()+1).padStart(2,'0')}`;
-  const monthTotal = expenses.filter(e => e.date?.startsWith(thisMonth)).reduce((s, e) => s + (e.amount || 0), 0);
+  const monthTotal = moneyEntries.filter(e => e.type === 'expense' && e.date?.startsWith(thisMonth)).reduce((s, e) => s + (e.amount || 0), 0);
   const _dk = new Date(); const todayKey = `${_dk.getFullYear()}-${String(_dk.getMonth()+1).padStart(2,'0')}-${String(_dk.getDate()).padStart(2,'0')}`;
   const todayFocusHours = timelogs
     .filter(item => item?.date === todayKey && PRODUCTIVE_TIME_CATEGORIES.includes(item?.category))

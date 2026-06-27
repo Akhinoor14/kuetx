@@ -7,6 +7,7 @@ import { usePinnedPages } from '../hooks/usePinnedPages';
 import { getPageStats, getAllPageStats } from '../hooks/usePageTracker';
 import { getProfile } from '../store/store';
 import { filterNav, getAppMode } from '../lib/modeFilter';
+import heroBg from '../assets/profile-hero-bg.svg';
 
 const CR_PATHS = NAV.flatMap(s => s.items || []).filter(i => i.requiresCR).map(i => i.path);
 const MOBILE_QUERY = '(max-width: 767.98px)';
@@ -74,61 +75,50 @@ export function QuickAccessPanel({ inPanel = false, onNavigate } = {}) {
     return Icons.Circle;
   };
 
-  // ── Compact row for pinned/favorites/most-used lists
-  const PageRow = ({ path, count, accent }) => {
+  // ── Page tile — icon on top, label below (bKash-style grid tile), used everywhere
+  const PageTile = ({ path, count, accent, showPin = true }) => {
     const Icon = getPageIcon(path);
     const label = getPageLabel(path);
     const favorite = isFavorite(path);
     const pinned = isPinned(path);
     const meta = getPathMeta(path);
     const color = accent || meta?.color || 'var(--accent)';
-
     return (
       <Link to={path} onClick={handleNavigate}
-        style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '7px 10px', borderRadius: 9, textDecoration: 'none', color: 'var(--text)', transition: 'background 0.1s', background: 'transparent' }}
-        onMouseEnter={e => e.currentTarget.style.background = `${color}0d`}
-        onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+        className="qa-tile"
+        style={{
+          display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 7,
+          padding: '14px 6px 10px', borderRadius: 16,
+          border: '1px solid var(--border)', background: 'var(--surface)',
+          textDecoration: 'none', color: 'var(--text)',
+          minHeight: 92, position: 'relative',
+          WebkitTapHighlightColor: 'transparent',
+          transition: 'transform 0.15s, box-shadow 0.15s, border-color 0.15s',
+        }}
+        onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = `0 6px 16px ${color}20`; e.currentTarget.style.borderColor = `${color}40`; }}
+        onMouseLeave={e => { e.currentTarget.style.transform = ''; e.currentTarget.style.boxShadow = ''; e.currentTarget.style.borderColor = 'var(--border)'; }}
       >
-        <div style={{ width: 30, height: 30, borderRadius: 8, background: `${color}18`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-          <Icon size={14} color={color} strokeWidth={1.8} />
-        </div>
-        <span style={{ flex: 1, fontSize: 13, fontWeight: 500, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{label}</span>
-        {count > 0 && (
-          <span style={{ fontSize: 10, fontWeight: 700, background: `${color}18`, color, border: `1px solid ${color}30`, borderRadius: 8, padding: '1px 6px', flexShrink: 0 }}>{count}</span>
-        )}
-        <div style={{ display: 'flex', gap: 1, flexShrink: 0, opacity: 0.6 }}>
-          <button onClick={e => { e.preventDefault(); e.stopPropagation(); togglePin(path); }}
-            style={{ width: 24, height: 24, background: 'transparent', border: 'none', cursor: 'pointer', borderRadius: 6, display: 'flex', alignItems: 'center', justifyContent: 'center', color: pinned ? 'var(--accent)' : 'var(--muted)' }}>
-            {pinned ? <Icons.Pin size={11} fill="currentColor" /> : <Icons.Pin size={11} />}
-          </button>
+        {/* Top-right controls */}
+        <div style={{ position: 'absolute', top: 4, right: 4, display: 'flex', gap: 1 }}>
+          {showPin && (
+            <button onClick={e => { e.preventDefault(); e.stopPropagation(); togglePin(path); }}
+              style={{ width: 20, height: 20, borderRadius: 5, background: 'transparent', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: pinned ? color : 'var(--muted)', opacity: pinned ? 1 : 0.45 }}>
+              <Icons.Pin size={10} fill={pinned ? 'currentColor' : 'none'} />
+            </button>
+          )}
           <button onClick={e => { e.preventDefault(); e.stopPropagation(); toggleFavorite(path); }}
-            style={{ width: 24, height: 24, background: 'transparent', border: 'none', cursor: 'pointer', borderRadius: 6, display: 'flex', alignItems: 'center', justifyContent: 'center', color: favorite ? '#fbbf24' : 'var(--muted)' }}>
-            {favorite ? <Icons.Star size={11} fill="currentColor" /> : <Icons.Star size={11} />}
+            style={{ width: 20, height: 20, borderRadius: 5, background: 'transparent', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: favorite ? '#fbbf24' : 'var(--muted)', opacity: favorite ? 1 : 0.45 }}>
+            <Icons.Star size={10} fill={favorite ? 'currentColor' : 'none'} />
           </button>
         </div>
-      </Link>
-    );
-  };
 
-  // ── Mobile grid tile
-  const PageTile = ({ path, accent }) => {
-    const Icon = getPageIcon(path);
-    const label = getPageLabel(path);
-    const favorite = isFavorite(path);
-    const meta = getPathMeta(path);
-    const color = accent || meta?.color || 'var(--accent)';
-    return (
-      <Link to={path} onClick={handleNavigate}
-        style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6, padding: '12px 4px 8px', borderRadius: 14, border: '1px solid var(--border)', background: 'var(--surface)', textDecoration: 'none', color: 'var(--text)', minHeight: 82, position: 'relative', WebkitTapHighlightColor: 'transparent' }}
-      >
-        <button onClick={e => { e.preventDefault(); e.stopPropagation(); toggleFavorite(path); }}
-          style={{ position: 'absolute', top: 4, right: 4, width: 20, height: 20, borderRadius: 5, background: 'transparent', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: favorite ? '#fbbf24' : 'var(--muted)' }}>
-          <Icons.Star size={10} fill={favorite ? 'currentColor' : 'none'} />
-        </button>
-        <div style={{ width: 36, height: 36, borderRadius: 11, background: `${color}18`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <Icon size={16} color={color} />
+        <div style={{ width: 40, height: 40, borderRadius: 12, background: `${color}18`, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
+          <Icon size={18} color={color} strokeWidth={1.8} />
+          {count > 0 && (
+            <span style={{ position: 'absolute', bottom: -6, right: -6, fontSize: 9, fontWeight: 700, color: '#fff', background: color, borderRadius: 20, padding: '1px 5px', border: '1.5px solid var(--surface)', lineHeight: 1.3 }}>{count}</span>
+          )}
         </div>
-        <div style={{ fontSize: 10, fontWeight: 600, textAlign: 'center', lineHeight: 1.25, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden', maxWidth: '100%' }}>
+        <div style={{ fontSize: 11, fontWeight: 600, textAlign: 'center', lineHeight: 1.25, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden', maxWidth: '100%' }}>
           {label}
         </div>
       </Link>
@@ -149,8 +139,7 @@ export function QuickAccessPanel({ inPanel = false, onNavigate } = {}) {
     </div>
   );
 
-  const rowGrid = { display: 'grid', gridTemplateColumns: isMobile ? 'repeat(auto-fill, minmax(80px, 1fr))' : '1fr', gap: isMobile ? 8 : 2 };
-  const twoCol = { display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 2 };
+  const tileGrid = { display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(86px, 1fr))', gap: 10 };
 
   // ── HOME TAB
   const HomeTab = () => (
@@ -160,11 +149,8 @@ export function QuickAccessPanel({ inPanel = false, onNavigate } = {}) {
       {isCR && CR_PATHS.length > 0 && (
         <section>
           <SectionLabel icon={Icons.Shield} label="CR Dashboard" color="#a78bfa" count={CR_PATHS.length} />
-          <div style={rowGrid}>
-            {CR_PATHS.map(path => isMobile
-              ? <PageTile key={path} path={path} accent="#a78bfa" />
-              : <PageRow key={path} path={path} accent="#a78bfa" />
-            )}
+          <div style={tileGrid}>
+            {CR_PATHS.map(path => <PageTile key={path} path={path} accent="#a78bfa" />)}
           </div>
         </section>
       )}
@@ -173,11 +159,8 @@ export function QuickAccessPanel({ inPanel = false, onNavigate } = {}) {
       {pinnedPages.length > 0 && (
         <section>
           <SectionLabel icon={Icons.Pin} label="Pinned" color="var(--accent)" count={pinnedPages.length} />
-          <div style={rowGrid}>
-            {pinnedPages.map(path => isMobile
-              ? <PageTile key={path} path={path} />
-              : <PageRow key={path} path={path} />
-            )}
+          <div style={tileGrid}>
+            {pinnedPages.map(path => <PageTile key={path} path={path} />)}
           </div>
         </section>
       )}
@@ -186,12 +169,10 @@ export function QuickAccessPanel({ inPanel = false, onNavigate } = {}) {
       {favorites.length > 0 && (
         <section>
           <SectionLabel icon={Icons.Star} label="Favorites" color="#f59e0b" count={favorites.length} />
-          <div style={rowGrid}>
+          <div style={tileGrid}>
             {favorites.map(path => {
               const stat = allStats.find(s => s.path === path);
-              return isMobile
-                ? <PageTile key={path} path={path} accent="#f59e0b" />
-                : <PageRow key={path} path={path} count={stat?.count || 0} accent="#f59e0b" />;
+              return <PageTile key={path} path={path} count={stat?.count || 0} accent="#f59e0b" />;
             })}
           </div>
         </section>
@@ -206,11 +187,8 @@ export function QuickAccessPanel({ inPanel = false, onNavigate } = {}) {
             <p style={{ margin: 0, fontSize: 12, color: 'var(--muted)' }}>No page views yet. Start exploring KUETx!</p>
           </div>
         ) : (
-          <div style={isMobile ? rowGrid : twoCol}>
-            {mostUsed.map(stat => isMobile
-              ? <PageTile key={stat.path} path={stat.path} />
-              : <PageRow key={stat.path} path={stat.path} count={stat.count} />
-            )}
+          <div style={tileGrid}>
+            {mostUsed.map(stat => <PageTile key={stat.path} path={stat.path} count={stat.count} />)}
           </div>
         )}
       </section>
@@ -235,7 +213,7 @@ export function QuickAccessPanel({ inPanel = false, onNavigate } = {}) {
   // ── BROWSE TAB (All Pages — group boxes)
   const BrowseTab = () => (
     <div>
-      <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(2, 1fr)', gap: 14 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(auto-fit, minmax(320px, 1fr))', gap: 14 }}>
         {filterNav(NAV, getAppMode(), isCR).map(section => {
           const meta = GROUP_META[section.group] || { icon: 'Circle', color: '#64748b' };
           const GroupIcon = Icons[meta.icon] || Icons.Circle;
@@ -250,34 +228,11 @@ export function QuickAccessPanel({ inPanel = false, onNavigate } = {}) {
                 <span style={{ fontSize: 10, fontWeight: 700, color: meta.color, background: `${meta.color}18`, border: `1px solid ${meta.color}28`, borderRadius: 20, padding: '1px 7px' }}>{section.items.length}</span>
               </div>
               {/* Items */}
-              <div style={{ padding: '6px 6px 8px' }}>
+              <div style={{ padding: '10px', display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(82px, 1fr))', gap: 8 }}>
                 {section.items.map(item => {
                   const stat = allStats.find(s => s.path === item.path);
-                  const Icon = Icons[item.icon] || Icons.Circle;
-                  const favorite = isFavorite(item.path);
-                  const pinned = isPinned(item.path);
                   return (
-                    <Link key={item.id} to={item.path} onClick={handleNavigate}
-                      style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '6px 8px', borderRadius: 8, textDecoration: 'none', color: 'var(--text)', background: 'transparent', transition: 'background 0.1s' }}
-                      onMouseEnter={e => e.currentTarget.style.background = `${meta.color}0d`}
-                      onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
-                    >
-                      <Icon size={13} color={meta.color} strokeWidth={1.8} style={{ flexShrink: 0 }} />
-                      <span style={{ flex: 1, fontSize: 12, fontWeight: 500, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.label}</span>
-                      {stat?.count > 0 && (
-                        <span style={{ fontSize: 10, color: meta.color, background: `${meta.color}15`, border: `1px solid ${meta.color}25`, borderRadius: 7, padding: '0px 5px', fontWeight: 700, flexShrink: 0 }}>{stat.count}</span>
-                      )}
-                      <div style={{ display: 'flex', gap: 0, flexShrink: 0 }}>
-                        <button onClick={e => { e.preventDefault(); e.stopPropagation(); togglePin(item.path); }}
-                          style={{ width: 22, height: 22, background: 'transparent', border: 'none', cursor: 'pointer', borderRadius: 5, display: 'flex', alignItems: 'center', justifyContent: 'center', color: pinned ? meta.color : 'var(--muted)', opacity: pinned ? 1 : 0.5 }}>
-                          {pinned ? <Icons.Pin size={10} fill="currentColor" /> : <Icons.Pin size={10} />}
-                        </button>
-                        <button onClick={e => { e.preventDefault(); e.stopPropagation(); toggleFavorite(item.path); }}
-                          style={{ width: 22, height: 22, background: 'transparent', border: 'none', cursor: 'pointer', borderRadius: 5, display: 'flex', alignItems: 'center', justifyContent: 'center', color: favorite ? '#fbbf24' : 'var(--muted)', opacity: favorite ? 1 : 0.5 }}>
-                          {favorite ? <Icons.Star size={10} fill="currentColor" /> : <Icons.Star size={10} />}
-                        </button>
-                      </div>
-                    </Link>
+                    <PageTile key={item.id} path={item.path} count={stat?.count || 0} accent={meta.color} />
                   );
                 })}
               </div>
@@ -293,22 +248,27 @@ export function QuickAccessPanel({ inPanel = false, onNavigate } = {}) {
 
       {/* Hero (full page only) */}
       {!inPanel && (
-        <div style={{ background: 'linear-gradient(135deg, var(--accent) 0%, color-mix(in srgb, var(--accent) 70%, #1e40af) 100%)', padding: isMobile ? '28px 20px 24px' : '32px 28px 28px', position: 'relative', overflow: 'hidden' }}>
-          <div style={{ position: 'absolute', top: -60, right: -60, width: 220, height: 220, borderRadius: '50%', background: 'rgba(255,255,255,0.06)', pointerEvents: 'none' }} />
-          <div style={{ position: 'absolute', bottom: -30, left: '30%', width: 140, height: 140, borderRadius: '50%', background: 'rgba(255,255,255,0.04)', pointerEvents: 'none' }} />
-          <div style={{ position: 'relative' }}>
-            <div style={{ fontSize: 10, fontWeight: 700, color: 'rgba(255,255,255,0.6)', letterSpacing: '1.5px', textTransform: 'uppercase', marginBottom: 6 }}>Quick Access · KUETx</div>
-            <div style={{ fontSize: isMobile ? 22 : 28, fontWeight: 800, color: '#fff', lineHeight: 1.15, marginBottom: 4, fontFamily: 'Sora, sans-serif' }}>{profile?.name || 'Student'}</div>
-            <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.65)', marginBottom: 20 }}>{profile?.department || 'KUET'} · {profile?.year ? `Year ${profile.year}` : 'Student'}</div>
-            <div style={{ display: 'flex', gap: 0, background: 'rgba(0,0,0,0.15)', borderRadius: 10, overflow: 'hidden', width: 'fit-content' }}>
+        <div style={{
+          backgroundImage: `linear-gradient(135deg, rgba(22,163,74,0.6) 0%, rgba(14,165,233,0.45) 100%), url(${heroBg})`,
+          backgroundSize: 'cover', backgroundPosition: 'center',
+          padding: isMobile ? '16px 18px 14px' : '18px 24px 16px', position: 'relative', overflow: 'hidden',
+        }}>
+          <div style={{ position: 'absolute', top: -50, right: -50, width: 180, height: 180, borderRadius: '50%', background: 'rgba(255,255,255,0.06)', pointerEvents: 'none' }} />
+          <div style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 14, flexWrap: 'wrap' }}>
+            <div style={{ minWidth: 0 }}>
+              <div style={{ fontSize: 10, fontWeight: 700, color: 'rgba(255,255,255,0.6)', letterSpacing: '1.5px', textTransform: 'uppercase', marginBottom: 4, fontFamily: "'Space Grotesk', 'Sora', sans-serif" }}>Quick Access · KUETx</div>
+              <div style={{ fontSize: isMobile ? 19 : 23, fontWeight: 800, color: '#fff', lineHeight: 1.15, marginBottom: 2, fontFamily: "'Space Grotesk', 'Sora', sans-serif" }}>{profile?.name || 'Student'}</div>
+              <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.65)', fontFamily: "'Space Grotesk', 'Sora', sans-serif" }}>{profile?.department || 'KUET'} · {profile?.year ? `Year ${profile.year}` : 'Student'}</div>
+            </div>
+            <div style={{ display: 'flex', gap: 0, background: 'rgba(0,0,0,0.18)', borderRadius: 10, overflow: 'hidden', width: 'fit-content' }}>
               {[
                 { val: allStats.length, lbl: 'Visited' },
                 { val: totalViews,      lbl: 'Views' },
                 { val: favorites.length,lbl: 'Favs' },
                 { val: pinnedPages.length, lbl: 'Pinned' },
               ].map(({ val, lbl }, i) => (
-                <div key={i} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '8px 16px', borderRight: i < 3 ? '1px solid rgba(255,255,255,0.12)' : 'none', minWidth: 56 }}>
-                  <div style={{ fontSize: 17, fontWeight: 800, color: '#fff', lineHeight: 1 }}>{val}</div>
+                <div key={i} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '6px 13px', borderRight: i < 3 ? '1px solid rgba(255,255,255,0.12)' : 'none', minWidth: 50 }}>
+                  <div style={{ fontSize: 15, fontWeight: 800, color: '#fff', lineHeight: 1, fontFamily: "'Space Grotesk', 'Sora', sans-serif" }}>{val}</div>
                   <div style={{ fontSize: 9, color: 'rgba(255,255,255,0.55)', marginTop: 2, fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px' }}>{lbl}</div>
                 </div>
               ))}
