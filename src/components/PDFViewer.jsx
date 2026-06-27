@@ -2,8 +2,8 @@ import { useState, useRef, useEffect, useCallback, useMemo } from "react";
 
 // ─── CONFIG ──────────────────────────────────────────────────────────────────
 const IMGBB_KEYS = [
-  "62fc5d13a0d74ed141f98499810358c2",
-  "31ca35c7b2f10825f785a80b26b9ac3b",
+  "67cd74715bea46c247e48155e2c6d8e6",
+  "4ef55f2fecee8424ce5a46bc1ee6ceac",
 ];
 const PDFJS_CDN = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js";
 const PDFJS_WORKER = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
