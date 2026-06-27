@@ -417,6 +417,32 @@ export default function Profile() {
   const [firebaseUser, setFirebaseUser] = useState(null);
   const [photoURL, setPhotoURL] = useState(null);
   const autoOpenedRef = useRef(false);
+  const [namazTick, setNamazTick] = useState(0);
+  const [reminderTick, setReminderTick] = useState(0);
+  const reminderTimerRef = useRef(null);
+
+  const advanceReminder = useCallback(() => {
+    setReminderTick(t => t + 1);
+    // reset the hourly timer
+    if (reminderTimerRef.current) clearInterval(reminderTimerRef.current);
+    reminderTimerRef.current = setInterval(() => {
+      setReminderTick(t => t + 1);
+    }, 3600000);
+  }, []);
+
+  // Hourly reminder shuffle + namaz sync every minute
+  useEffect(() => {
+    reminderTimerRef.current = setInterval(() => {
+      setReminderTick(t => t + 1);
+    }, 3600000);
+    const namazInterval = setInterval(() => {
+      setNamazTick(t => t + 1);
+    }, 60000);
+    return () => {
+      clearInterval(reminderTimerRef.current);
+      clearInterval(namazInterval);
+    };
+  }, []);
 
   useEffect(() => {
     const unsub = onAuthChange(async u => {
@@ -558,7 +584,7 @@ export default function Profile() {
       streak, legacyTerms, diary, notes, marks, courses,
       studyStreak, namazDone,
     };
-  }, [profile]);
+  }, [profile, namazTick]);
 
   // ── Attendance status ─────────────────────────────────────────────────────
   const attPct = liveData.attData?.pct;
@@ -952,92 +978,159 @@ export default function Profile() {
             </Section>
           )}
 
-          {/* ── Academic Journey Timeline ── */}
-          {profile.currentTermKey && profile.yearStarted && (() => {
+          {/* ── Today's Focus (standalone — no profile.currentTermKey dependency) ── */}
+          {(() => {
             const PRAYERS_LIST = ['Fajr', 'Dhuhr', 'Asr', 'Maghrib', 'Isha'];
             const PRAYER_AR = { Fajr: 'ফজর', Dhuhr: 'যোহর', Asr: 'আসর', Maghrib: 'মাগরিব', Isha: 'ইশা' };
-            const now = new Date();
+            const PRAYER_ICON = { Fajr: '🌙', Dhuhr: '☀️', Asr: '🌤️', Maghrib: '🌅', Isha: '🌃' };
 
-            // motivational tips pool
-            const TIPS = [
-              'ছোট ছোট পদক্ষেপ বড় লক্ষ্যে পৌঁছে দেয়।',
-              'আজকের পরিশ্রম কালকের সাফল্য।',
-              'Consistency beats intensity — every single time.',
-              'তুমি যতটুকু এগিয়েছ, সেটাই তোমার শক্তি।',
-              'Focus on progress, not perfection.',
-              'একদিনে সব না হলেও, প্রতিদিন একটু করে এগো।',
-              'Hard days build strong engineers.',
-              'তোমার journey unique — compare করো না, complete করো।',
+            // Re-read namaz from store directly so it's always fresh (namazTick triggers useMemo)
+            const freshNamaz = store.get('namaz') || {};
+            const todayKey = new Date().toISOString().split('T')[0];
+            const todayNamazFresh = freshNamaz[todayKey] || {};
+            const namazStatus = PRAYERS_LIST.map(p => ({
+              done: !!todayNamazFresh[p]?.done,
+              masjid: !!todayNamazFresh[p]?.masjid,
+            }));
+            const namazCount = namazStatus.filter(s => s.done).length;
+
+            // Quran / Islamic bani — hourly shuffle, click to advance
+            const QURAN_BANIS = [
+              { text: 'وَمَن يَتَّقِ اللَّهَ يَجْعَل لَّهُ مَخْرَجًا', ref: 'সূরা তালাক ৬৫:২', bn: 'যে আল্লাহকে ভয় করে, তিনি তার জন্য পথ বের করে দেন।' },
+              { text: 'إِنَّ مَعَ الْعُسْرِ يُسْرًا', ref: 'সূরা ইনশিরাহ ৯৪:৬', bn: 'নিশ্চয়ই কষ্টের সাথেই রয়েছে স্বস্তি।' },
+              { text: 'وَقُل رَّبِّ زِدْنِي عِلْمًا', ref: 'সূরা ত্বহা ২০:১১৪', bn: 'বলো: হে আমার রব, আমার জ্ঞান বৃদ্ধি করো।' },
+              { text: 'فَاذْكُرُونِي أَذْكُرْكُمْ', ref: 'সূরা বাকারা ২:১৫২', bn: 'তোমরা আমাকে স্মরণ কোরো, আমি তোমাদের স্মরণ করব।' },
+              { text: 'إِنَّ اللَّهَ لَا يُضِيعُ أَجْرَ الْمُحْسِنِينَ', ref: 'সূরা তওবা ৯:১২০', bn: 'নিশ্চয়ই আল্লাহ সৎকর্মশীলদের পুরস্কার নষ্ট করেন না।' },
+              { text: 'وَتَوَكَّلْ عَلَى اللَّهِ ۚ وَكَفَىٰ بِاللَّهِ وَكِيلًا', ref: 'সূরা নিসা ৪:৮১', bn: 'আল্লাহর উপর ভরসা কোরো — তিনিই যথেষ্ট কর্মবিধায়ক।' },
+              { text: 'اقْرَأْ بِاسْمِ رَبِّكَ الَّذِي خَلَقَ', ref: 'সূরা আলাক ৯৬:১', bn: 'পড়ো তোমার রবের নামে, যিনি সৃষ্টি করেছেন।' },
+              { text: 'وَأَن لَّيْسَ لِلْإِنسَانِ إِلَّا مَا سَعَىٰ', ref: 'সূরা নাজম ৫৩:৩৯', bn: 'মানুষ শুধু তাই পায় যা সে চেষ্টা করে।' },
+              { text: 'يَرْفَعِ اللَّهُ الَّذِينَ آمَنُوا مِنكُمْ وَالَّذِينَ أُوتُوا الْعِلْمَ دَرَجَاتٍ', ref: 'সূরা মুজাদালা ৫৮:১১', bn: 'আল্লাহ মুমিনদের এবং যাদের জ্ঞান দেওয়া হয়েছে তাদের মর্যাদা উন্নত করবেন।' },
+              { text: 'وَبَشِّرِ الصَّابِرِينَ', ref: 'সূরা বাকারা ২:১৫৫', bn: 'আর ধৈর্যশীলদের সুসংবাদ দাও।' },
+              { text: 'حَسْبُنَا اللَّهُ وَنِعْمَ الْوَكِيلُ', ref: 'সূরা আলে ইমরান ৩:১৭৩', bn: 'আল্লাহই আমাদের জন্য যথেষ্ট — কত উত্তম কর্মবিধায়ক।' },
+              { text: 'وَعَسَىٰ أَن تَكْرَهُوا شَيْئًا وَهُوَ خَيْرٌ لَّكُمْ', ref: 'সূরা বাকারা ২:২১৬', bn: 'হয়তো কোনো কিছু তোমাদের কাছে অপছন্দের কিন্তু তা তোমাদের জন্য কল্যাণকর।' },
+              { text: 'إِنَّ اللَّهَ مَعَ الصَّابِرِينَ', ref: 'সূরা বাকারা ২:১৫৩', bn: 'নিশ্চয়ই আল্লাহ ধৈর্যশীলদের সাথে আছেন।' },
+              { text: 'فَإِذَا فَرَغْتَ فَانصَبْ', ref: 'সূরা ইনশিরাহ ৯৪:৭', bn: 'যখন তুমি ফুরসত পাবে, তখন পরিশ্রমে নিমগ্ন হও।' },
+              { text: 'وَاللَّهُ يُحِبُّ الْمُحْسِنِينَ', ref: 'সূরা আলে ইমরান ৩:১৩৪', bn: 'আর আল্লাহ সৎকর্মশীলদের ভালোবাসেন।' },
+              { text: 'إِنَّ اللَّهَ لَا يُغَيِّرُ مَا بِقَوْمٍ حَتَّىٰ يُغَيِّرُوا مَا بِأَنفُسِهِمْ', ref: 'সূরা রাদ ১৩:১১', bn: 'আল্লাহ কোনো জাতির অবস্থা পরিবর্তন করেন না, যতক্ষণ না তারা নিজেরা নিজেদের পরিবর্তন করে।' },
+              { text: 'وَقَالَ رَبُّكُمُ ادْعُونِي أَسْتَجِبْ لَكُمْ', ref: 'সূরা গাফির ৪০:৬০', bn: 'তোমাদের রব বলেছেন: আমাকে ডাকো, আমি তোমাদের সাড়া দেবো।' },
+              { text: 'وَمَن يَتَوَكَّلْ عَلَى اللَّهِ فَهُوَ حَسْبُهُ', ref: 'সূরা তালাক ৬৫:৩', bn: 'যে আল্লাহর উপর ভরসা করে, তিনিই তার জন্য যথেষ্ট।' },
+              { text: 'وَلَا تَهِنُوا وَلَا تَحْزَنُوا وَأَنتُمُ الْأَعْلَوْنَ', ref: 'সূরা আলে ইমরান ৩:১৩৯', bn: 'হতাশ হয়ো না, দুঃখ করো না — তোমরাই বিজয়ী হবে।' },
+              { text: 'سَنُرِيهِمْ آيَاتِنَا فِي الْآفَاقِ وَفِي أَنفُسِهِمْ', ref: 'সূরা ফুসসিলাত ৪১:৫৩', bn: 'আমি তাদের দেখাবো আমার নিদর্শন — মহাবিশ্বে এবং তাদের নিজেদের মধ্যে।' },
+              { text: 'وَفَوْقَ كُلِّ ذِي عِلْمٍ عَلِيمٌ', ref: 'সূরা ইউসুফ ১২:৭৬', bn: 'প্রতিটি জ্ঞানীর উপরে রয়েছে আরও জ্ঞানী।' },
+              { text: 'وَمَا أُوتِيتُم مِّنَ الْعِلْمِ إِلَّا قَلِيلًا', ref: 'সূরা ইসরা ১৭:৮৫', bn: 'তোমাদের জ্ঞান অতি সামান্যই দেওয়া হয়েছে।' },
+              { text: 'يُؤْتِي الْحِكْمَةَ مَن يَشَاءُ ۚ وَمَن يُؤْتَ الْحِكْمَةَ فَقَدْ أُوتِيَ خَيْرًا كَثِيرًا', ref: 'সূরা বাকারা ২:২৬৯', bn: 'তিনি যাকে চান প্রজ্ঞা দান করেন — আর যে প্রজ্ঞা পায়, সে বিশাল কল্যাণ পায়।' },
+              { text: 'أَفَلَا يَتَدَبَّرُونَ الْقُرْآنَ', ref: 'সূরা নিসা ৪:৮২', bn: 'তারা কি কুরআন নিয়ে চিন্তাভাবনা করে না?' },
+              { text: 'رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً وَفِي الْآخِرَةِ حَسَنَةً', ref: 'সূরা বাকারা ২:২০১', bn: 'হে আমাদের রব! আমাদের দুনিয়ায় কল্যাণ দাও এবং আখিরাতেও কল্যাণ দাও।' },
+              { text: 'إِنَّمَا يَخْشَى اللَّهَ مِنْ عِبَادِهِ الْعُلَمَاءُ', ref: 'সূরা ফাতির ৩৫:২৮', bn: 'আল্লাহর বান্দাদের মধ্যে কেবল জ্ঞানীরাই তাঁকে যথাযথ ভয় করে।' },
+              { text: 'وَاصْبِرْ وَمَا صَبْرُكَ إِلَّا بِاللَّهِ', ref: 'সূরা নাহল ১৬:১২৭', bn: 'ধৈর্য ধারণ করো — আর তোমার ধৈর্য একমাত্র আল্লাহর সাহায্যেই সম্ভব।' },
+              { text: 'وَمَن يَعْمَلْ مِثْقَالَ ذَرَّةٍ خَيْرًا يَرَهُ', ref: 'সূরা যিলযাল ৯৯:৭', bn: 'কেউ অণু পরিমাণ ভালো কাজ করলে সে তা দেখবে।' },
+              { text: 'خُذِ الْعَفْوَ وَأْمُرْ بِالْعُرْفِ وَأَعْرِضْ عَنِ الْجَاهِلِينَ', ref: 'সূরা আরাফ ৭:১৯৯', bn: 'ক্ষমাকে আঁকড়ে ধরো, ভালো কাজের আদেশ দাও, আর মূর্খদের এড়িয়ে চলো।' },
+              { text: 'وَلَا تَيْأَسُوا مِن رَّوْحِ اللَّهِ', ref: 'সূরা ইউসুফ ১২:৮৭', bn: 'আল্লাহর রহমত থেকে কখনো নিরাশ হয়ো না।' },
+              { text: 'وَاللَّهُ خَيْرُ الرَّازِقِينَ', ref: 'সূরা জুমুআ ৬২:১১', bn: 'আল্লাহই সর্বোত্তম রিজিকদাতা।' },
+              { text: 'هُوَ الَّذِي جَعَلَ لَكُمُ الْأَرْضَ ذَلُولًا فَامْشُوا فِي مَنَاكِبِهَا', ref: 'সূরা মুলক ৬৭:১৫', bn: 'তিনিই পৃথিবীকে তোমাদের জন্য সুগম করেছেন — তার পথে চলো।' },
+              { text: 'إِنَّ مَعَ الصَّبْرِ النَّصْرَ وَمَعَ الْكَرْبِ الْفَرَجَ', ref: 'হাদিস — তিরমিজি', bn: 'জেনে রাখো: ধৈর্যের সাথে বিজয় আসে, আর সংকটের সাথে মুক্তি আসে।' },
             ];
-            const tip = TIPS[Math.floor((now.getDate() + now.getMonth()) % TIPS.length)];
+            const bani = QURAN_BANIS[reminderTick % QURAN_BANIS.length];
 
             return (
               <>
                 {/* Today's Focus */}
                 <Section title="Today's Focus" icon="✨">
-                  {/* Namaz dots */}
+                  {/* ── Namaz tracker ── */}
                   <div>
-                    <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 8 }}>🕌 Namaz</div>
-                    <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-                      {PRAYERS_LIST.map((p, i) => (
-                        <div key={p} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
-                          <div style={{
-                            width: 30, height: 30, borderRadius: '50%',
-                            background: liveData.namazDone[i]
-                              ? 'var(--accent)'
-                              : 'var(--border)',
-                            display: 'flex', alignItems: 'center', justifyContent: 'center',
-                            fontSize: 12,
-                            transition: 'background 0.2s',
-                          }}>
-                            {liveData.namazDone[i] ? '✓' : ''}
+                    <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 10 }}>🕌 নামাজ — আজকের</div>
+                    <div style={{ display: 'flex', gap: 6, alignItems: 'flex-end' }}>
+                      {PRAYERS_LIST.map((p, i) => {
+                        const s = namazStatus[i];
+                        const bgColor = s.masjid ? 'var(--accent)' : s.done ? '#16a34a' : 'var(--border)';
+                        const textColor = (s.done || s.masjid) ? '#fff' : 'var(--muted)';
+                        return (
+                          <div key={p} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 5, flex: 1 }}>
+                            <div style={{
+                              width: '100%', aspectRatio: '1', borderRadius: 10,
+                              background: bgColor,
+                              display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+                              gap: 2,
+                              transition: 'all 0.2s',
+                              boxShadow: (s.done || s.masjid) ? `0 2px 8px ${bgColor}60` : 'none',
+                              minWidth: 40, maxWidth: 56,
+                            }}>
+                              <span style={{ fontSize: 14 }}>{PRAYER_ICON[p]}</span>
+                              {s.masjid && <span style={{ fontSize: 8, color: '#fff', fontWeight: 700, letterSpacing: 0.3 }}>মসজিদ</span>}
+                              {s.done && !s.masjid && <span style={{ fontSize: 10, color: textColor, fontWeight: 700 }}>✓</span>}
+                            </div>
+                            <span style={{ fontSize: 9, color: (s.done || s.masjid) ? 'var(--accent)' : 'var(--muted)', fontWeight: 700 }}>
+                              {PRAYER_AR[p]}
+                            </span>
                           </div>
-                          <span style={{ fontSize: 9, color: liveData.namazDone[i] ? 'var(--accent)' : 'var(--muted)', fontWeight: 600 }}>
-                            {PRAYER_AR[p]}
-                          </span>
+                        );
+                      })}
+                      <div style={{ marginLeft: 8, textAlign: 'right', paddingBottom: 18 }}>
+                        <div style={{ fontSize: 22, fontWeight: 900, color: namazCount === 5 ? '#16a34a' : 'var(--accent)', lineHeight: 1 }}>
+                          {namazCount}<span style={{ fontSize: 13, color: 'var(--muted)', fontWeight: 500 }}>/5</span>
                         </div>
-                      ))}
-                      <div style={{ marginLeft: 'auto', textAlign: 'right' }}>
-                        <div style={{ fontSize: 18, fontWeight: 900, color: 'var(--accent)' }}>
-                          {liveData.namazDone.filter(Boolean).length}<span style={{ fontSize: 12, color: 'var(--muted)', fontWeight: 500 }}>/5</span>
+                        <div style={{ fontSize: 9, color: 'var(--muted)', marginTop: 2 }}>
+                          {namazCount === 5 ? '✅ পূর্ণ' : `${5 - namazCount} বাকি`}
                         </div>
-                        <div style={{ fontSize: 10, color: 'var(--muted)' }}>today</div>
                       </div>
                     </div>
                   </div>
 
                   <div style={{ height: 1, background: 'var(--border)' }} />
 
-                  {/* Study streak */}
+                  {/* ── Study streak ── */}
                   <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                    <div style={{ fontSize: 28 }}>📚</div>
-                    <div>
+                    <div style={{ fontSize: 26 }}>📚</div>
+                    <div style={{ flex: 1 }}>
                       <div style={{ fontSize: 15, fontWeight: 800, color: 'var(--text)' }}>
                         {liveData.studyStreak > 0
-                          ? <>{liveData.studyStreak} day{liveData.studyStreak > 1 ? 's' : ''} <span style={{ fontSize: 12, color: '#f59e0b' }}>🔥</span></>
-                          : '—'}
+                          ? <>{liveData.studyStreak} day{liveData.studyStreak > 1 ? 's' : ''} <span style={{ fontSize: 13 }}>🔥</span></>
+                          : <span style={{ color: 'var(--muted)', fontWeight: 600 }}>—</span>}
                       </div>
-                      <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 1 }}>
-                        Study streak · {liveData.studyHours > 0 ? `${liveData.studyHours}h total logged` : 'No sessions yet'}
+                      <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 2 }}>
+                        Study streak · {liveData.studyHours > 0 ? `${liveData.studyHours.toFixed(1)}h logged` : 'No sessions yet'}
                       </div>
                     </div>
+                    {liveData.studyHours > 0 && (
+                      <div style={{ textAlign: 'right' }}>
+                        <div style={{ fontSize: 16, fontWeight: 900, color: '#f59e0b' }}>{liveData.studyHours.toFixed(1)}h</div>
+                        <div style={{ fontSize: 9, color: 'var(--muted)' }}>total</div>
+                      </div>
+                    )}
                   </div>
 
                   <div style={{ height: 1, background: 'var(--border)' }} />
 
-                  {/* Motivational tip */}
-                  <div style={{
-                    padding: '10px 12px', borderRadius: 9,
-                    background: 'color-mix(in srgb, var(--accent) 5%, var(--bg))',
-                    borderLeft: '3px solid color-mix(in srgb, var(--accent) 40%, transparent)',
-                  }}>
-                    <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--accent)', marginBottom: 3, textTransform: 'uppercase', letterSpacing: '0.05em' }}>💬 Daily Reminder</div>
-                    <div style={{ fontSize: 12, color: 'var(--text)', lineHeight: 1.5, fontStyle: 'italic' }}>{tip}</div>
+                  {/* ── Quran Daily Reminder (hourly shuffle, click to advance) ── */}
+                  <div
+                    onClick={advanceReminder}
+                    style={{
+                      padding: '12px 14px', borderRadius: 10, cursor: 'pointer',
+                      background: 'color-mix(in srgb, var(--accent) 6%, var(--bg))',
+                      border: '1px solid color-mix(in srgb, var(--accent) 20%, transparent)',
+                      transition: 'opacity 0.15s',
+                      userSelect: 'none',
+                    }}
+                    onMouseEnter={e => e.currentTarget.style.opacity = '0.8'}
+                    onMouseLeave={e => e.currentTarget.style.opacity = '1'}
+                  >
+                    <div style={{ fontSize: 10, fontWeight: 800, color: 'var(--accent)', marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.07em', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                      <span style={{ display: 'flex', alignItems: 'center', gap: 5 }}><span>📖</span> কুরআনের বাণী</span>
+                      <span style={{ fontSize: 9, color: 'var(--muted)', fontWeight: 600, letterSpacing: 0 }}>tap for next ›</span>
+                    </div>
+                    <div style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.7, fontFamily: '"Amiri", serif', textAlign: 'right', direction: 'rtl', marginBottom: 6 }}>
+                      {bani.text}
+                    </div>
+                    <div style={{ fontSize: 12, color: 'var(--text)', lineHeight: 1.55, fontStyle: 'italic', marginBottom: 4 }}>
+                      "{bani.bn}"
+                    </div>
+                    <div style={{ fontSize: 10, color: 'var(--muted)', fontWeight: 600 }}>{bani.ref}</div>
                   </div>
                 </Section>
               </>
             );
           })()}
+
         </div>
       </div>
 
