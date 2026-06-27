@@ -316,6 +316,13 @@ body {
 .main-content.mode-compact { margin-left: 64px;  width: calc(100% - 64px); }
 .main-content.mode-2col    { margin-left: 160px; width: calc(100% - 160px); }
 .main-content.mode-3col    { margin-left: 210px; width: calc(100% - 210px); }
+/* ── Large display: wider sidebar ── */
+@media (min-width: 1400px) {
+  .sidebar.mode-2col         { width: 192px; }
+  .sidebar.mode-3col         { width: 256px; }
+  .main-content.mode-2col    { margin-left: 192px; width: calc(100% - 192px); }
+  .main-content.mode-3col    { margin-left: 256px; width: calc(100% - 256px); }
+}
 @media (max-width: 768px) {
   .sidebar { transform: translateX(-210px); }
   .sidebar.open { transform: translateX(0); box-shadow: 4px 0 20px rgba(0,0,0,0.15); }

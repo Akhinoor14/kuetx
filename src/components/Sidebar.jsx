@@ -240,11 +240,11 @@ export function Sidebar({ open, onClose, mode = '2col', onCycleMode, authState }
         <div style={{ padding: compact ? '16px 10px 12px' : '16px 14px 12px', borderBottom: '1px solid var(--border)', flexShrink: 0 }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: compact ? 'center' : 'space-between', gap: 8 }}>
             {compact ? (
+              /* Compact: logo doubles as expand button */
               <button onClick={onCycleMode}
                 onMouseEnter={() => setLogoHovered(true)}
                 onMouseLeave={() => setLogoHovered(false)}
-                className="hidden md:flex"
-                style={{ border: 'none', background: 'transparent', cursor: 'pointer', padding: 0, alignItems: 'center', justifyContent: 'center', transition: 'opacity 0.15s' }}
+                style={{ border: 'none', background: 'transparent', cursor: 'pointer', padding: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'opacity 0.15s' }}
                 title="Expand sidebar">
                 {logoHovered
                   ? <Icons.PanelLeftOpen size={28} color="var(--accent)" />
@@ -252,14 +252,16 @@ export function Sidebar({ open, onClose, mode = '2col', onCycleMode, authState }
               </button>
             ) : (
               <Link to="/quick-access" onClick={onClose}
-                style={{ display: 'inline-flex', alignItems: 'center', gap: 8, textDecoration: 'none', color: 'inherit' }}>
-                <Wordmark height={30} />
+                style={{ display: 'inline-flex', alignItems: 'center', gap: 6, textDecoration: 'none', color: 'inherit', minWidth: 0, overflow: 'hidden', flexShrink: 1 }}>
+                <Logo size={mode === '2col' ? 24 : 30} />
+                <Wordmark height={mode === '2col' ? 18 : 26} />
               </Link>
             )}
+            {/* Cycle button — always visible on desktop (no Tailwind hidden/flex) */}
             {!compact && (
-              <button onClick={onCycleMode} className="hidden md:flex"
+              <button onClick={onCycleMode}
                 title={mode === '2col' ? 'Switch to 3-col' : 'Switch to compact'}
-                style={{ width: 28, height: 28, alignItems: 'center', justifyContent: 'center', borderRadius: 8, border: '1px solid var(--border)', background: 'transparent', cursor: 'pointer', color: 'var(--muted)', flexShrink: 0 }}>
+                style={{ width: 28, height: 28, display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: 8, border: '1px solid var(--border)', background: 'transparent', cursor: 'pointer', color: 'var(--muted)', flexShrink: 0 }}>
                 {mode === '2col'
                   ? <Icons.LayoutGrid size={14} />
                   : <Icons.PanelLeftClose size={14} />}
