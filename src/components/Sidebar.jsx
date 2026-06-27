@@ -31,6 +31,29 @@ const GROUP_COLORS = {
   'Tools':       '#64748b',
 };
 
+// Short labels for 2-col grid (tight space)
+const SHORT_LABELS = {
+  'Quick Access':      'Quick',
+  'Class Management':  'CR Board',
+  'CT & Quiz Planner': 'CT Plan',
+  'Attendance':        'Attend.',
+  'Class Schedule':    'Schedule',
+  'Assignments':       'Assign.',
+  'Question Bank':     'Q. Bank',
+  'Solution Bank':     'Sol. Bank',
+  'Term Planner':      'Planner',
+  'Results & GPA':     'Results',
+  'Class Diary':       'Diary',
+  'Self Study':        'Study',
+  'Time Tracker':      'Time',
+  'Namaz Tracker':     'Namaz',
+  'Self Eval':         'Self Eval',
+  'Smart Score':       'Score',
+  'Social Time':       'Social',
+  'Food & Health':     'Food',
+  'About KUETx':       'About',
+};
+
 // ── Firebase sync status pill ─────────────────────────────────────────────────
 function SyncBadge({ status }) {
   const cfg = {
@@ -48,6 +71,115 @@ function SyncBadge({ status }) {
     }}>
       {cfg.icon} {cfg.label}
     </span>
+  );
+}
+
+// ── 2-col grid cell ───────────────────────────────────────────────────────────
+function NavCell({ item, groupColor, active, onClose }) {
+  const Icon = Icons[item.icon] || Icons.Circle;
+  const shortLabel = SHORT_LABELS[item.label] || item.label;
+  const [hovered, setHovered] = useState(false);
+
+  return (
+    <Link
+      to={item.path}
+      onClick={onClose}
+      title={item.label}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'flex-start',
+        gap: 5,
+        padding: '8px 4px',
+        borderRadius: 8,
+        textDecoration: 'none',
+        minHeight: 58,
+        transition: 'background 0.12s, outline 0.12s',
+        background: active
+          ? `color-mix(in srgb, ${groupColor} 12%, var(--surface))`
+          : hovered
+          ? `color-mix(in srgb, ${groupColor} 8%, var(--surface))`
+          : 'transparent',
+        outline: active ? `1.5px solid color-mix(in srgb, ${groupColor} 40%, transparent)` : 'none',
+        outlineOffset: '-1px',
+      }}
+    >
+      {/* Icon wrapper */}
+      <div style={{
+        width: 28, height: 28,
+        borderRadius: 7,
+        flexShrink: 0,
+        background: `color-mix(in srgb, ${groupColor} 15%, var(--surface))`,
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+      }}>
+        <Icon
+          size={14}
+          strokeWidth={active ? 2.5 : 1.8}
+          color={active ? groupColor : `color-mix(in srgb, ${groupColor} 70%, var(--muted))`}
+        />
+      </div>
+      {/* Label */}
+      <span style={{
+        fontSize: 10,
+        fontWeight: active ? 700 : 500,
+        color: active ? groupColor : 'var(--text)',
+        textAlign: 'center',
+        lineHeight: 1.3,
+        display: '-webkit-box',
+        WebkitLineClamp: 2,
+        WebkitBoxOrient: 'vertical',
+        overflow: 'hidden',
+        wordBreak: 'break-word',
+        width: '100%',
+      }}>
+        {shortLabel}
+      </span>
+    </Link>
+  );
+}
+
+// ── Group header ──────────────────────────────────────────────────────────────
+function GroupHeader({ group, groupColor, itemCount }) {
+  const GroupIcon = Icons[GROUP_ICONS[group]] || Icons.Circle;
+  return (
+    <div style={{
+      display: 'flex',
+      alignItems: 'center',
+      gap: 6,
+      padding: '5px 8px',
+      marginBottom: 4,
+      marginTop: 2,
+      background: `color-mix(in srgb, ${groupColor} 5%, var(--surface))`,
+      borderLeft: `3px solid ${groupColor}`,
+      borderRadius: '0 6px 6px 0',
+    }}>
+      {/* Color dot */}
+      <div style={{
+        width: 6, height: 6, borderRadius: '50%', flexShrink: 0,
+        background: groupColor,
+      }} />
+      <span style={{
+        flex: 1,
+        fontSize: 10, fontWeight: 700,
+        color: groupColor,
+        textTransform: 'uppercase',
+        letterSpacing: '0.07em',
+      }}>
+        {group}
+      </span>
+      <span style={{
+        fontSize: 9, fontWeight: 600,
+        color: 'var(--muted)',
+        background: 'var(--inputBg)',
+        borderRadius: 4,
+        padding: '1px 5px',
+      }}>
+        {itemCount}
+      </span>
+    </div>
   );
 }
 
@@ -75,46 +207,6 @@ export function Sidebar({ open, onClose, compact = false, onToggleCompact, authS
 
   const filteredNav = filterNav(NAV, mode, canSeeCrBoard, getJrCustomHidden(), getJrCustomShown());
 
-  const activeGroup = (() => {
-    for (const section of filteredNav) {
-      if (section.items.some(i => i.path === location.pathname)) return section.group;
-    }
-    return null;
-  })();
-
-  const [collapsed, setCollapsed] = useState(() => {
-    try {
-      const saved = JSON.parse(localStorage.getItem('kuetx_sidebar_collapsed') || '{}');
-      const init = {};
-      NAV.forEach(s => { init[s.group] = saved[s.group] !== undefined ? saved[s.group] : true; });
-      if (activeGroup) init[activeGroup] = false;
-      return init;
-    } catch {
-      const init = {};
-      NAV.forEach(s => { init[s.group] = true; });
-      if (activeGroup) init[activeGroup] = false;
-      return init;
-    }
-  });
-
-  useEffect(() => {
-    if (!activeGroup) return;
-    setCollapsed(prev => {
-      if (!prev[activeGroup]) return prev;
-      const next = { ...prev, [activeGroup]: false };
-      try { localStorage.setItem('kuetx_sidebar_collapsed', JSON.stringify(next)); } catch {}
-      return next;
-    });
-  }, [activeGroup]);
-
-  const toggleGroup = (group) => {
-    setCollapsed(prev => {
-      const next = { ...prev, [group]: !prev[group] };
-      try { localStorage.setItem('kuetx_sidebar_collapsed', JSON.stringify(next)); } catch {}
-      return next;
-    });
-  };
-
   const getPageLabel = (path) => {
     for (const s of NAV) { const i = s.items.find(i => i.path === path); if (i) return i.label; }
     return path === '/' ? 'Dashboard' : path;
@@ -140,29 +232,30 @@ export function Sidebar({ open, onClose, compact = false, onToggleCompact, authS
 
       <aside className={`sidebar ${open ? 'open' : ''} ${compact ? 'compact' : ''}`}>
 
-        {/* Logo */}
-        <div style={{ padding: compact ? '16px 10px 12px' : '18px 16px 14px', borderBottom: '1px solid var(--border)' }}>
+        {/* ── Logo header ── */}
+        <div style={{ padding: compact ? '16px 10px 12px' : '16px 14px 12px', borderBottom: '1px solid var(--border)', flexShrink: 0 }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: compact ? 'center' : 'space-between', gap: 8 }}>
             {compact ? (
               <button onClick={onToggleCompact} className="hidden md:flex"
                 style={{ border: 'none', background: 'transparent', cursor: 'pointer', padding: 0, alignItems: 'center', justifyContent: 'center' }} title="Expand">
-                <Logo size={40} />
+                <Logo size={38} />
               </button>
             ) : (
-              <Link to="/about" onClick={onClose}
+              <Link to="/quick-access" onClick={onClose}
                 style={{ display: 'inline-flex', alignItems: 'center', gap: 8, textDecoration: 'none', color: 'inherit' }}>
-                <Wordmark height={32} />
+                <Wordmark height={30} />
               </Link>
             )}
             {!compact && (
               <button onClick={onToggleCompact} className="hidden md:flex"
-                style={{ width: 28, height: 28, alignItems: 'center', justifyContent: 'center', borderRadius: 8, border: '1px solid var(--border)', background: 'transparent', cursor: 'pointer', color: 'var(--muted)' }} title="Compact">
+                style={{ width: 28, height: 28, alignItems: 'center', justifyContent: 'center', borderRadius: 8, border: '1px solid var(--border)', background: 'transparent', cursor: 'pointer', color: 'var(--muted)', flexShrink: 0 }}
+                title="Compact mode">
                 <Icons.PanelLeftClose size={14} />
               </button>
             )}
           </div>
           {!compact && (
-            <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 5 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 4 }}>
               <div style={{ fontSize: 10, color: 'var(--muted)' }}>Student Life OS · KUET</div>
               {mode === 'jr' && (
                 <span style={{ fontSize: 9, fontWeight: 700, color: '#3b82f6', background: 'rgba(59,130,246,0.1)', border: '1px solid rgba(59,130,246,0.2)', borderRadius: 4, padding: '1px 5px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>JR</span>
@@ -171,19 +264,19 @@ export function Sidebar({ open, onClose, compact = false, onToggleCompact, authS
           )}
         </div>
 
-        {/* Quick strip */}
+        {/* ── Quick strip ── */}
         {!compact && quickItems.length > 0 && (
-          <div style={{ padding: '10px 12px', borderBottom: '1px solid var(--border)' }}>
-            <div style={{ fontSize: 10, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 6, display: 'flex', alignItems: 'center', gap: 5 }}>
+          <div style={{ padding: '8px 10px', borderBottom: '1px solid var(--border)', flexShrink: 0 }}>
+            <div style={{ fontSize: 10, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 5, display: 'flex', alignItems: 'center', gap: 5 }}>
               <Icons.Zap size={10} color="var(--accent)" /> Quick
             </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
               {quickItems.map(path => {
                 const Icon = getPageIcon(path);
                 const active = location.pathname === path;
                 return (
                   <Link key={path} to={path} onClick={onClose}
-                    style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '6px 8px', borderRadius: 8, textDecoration: 'none', fontSize: 12, fontWeight: active ? 700 : 500, color: active ? 'var(--accent)' : 'var(--text)', background: active ? 'color-mix(in srgb, var(--accent) 10%, var(--surface))' : 'transparent', transition: 'background 0.1s' }}
+                    style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '5px 7px', borderRadius: 7, textDecoration: 'none', fontSize: 12, fontWeight: active ? 700 : 500, color: active ? 'var(--accent)' : 'var(--text)', background: active ? 'color-mix(in srgb, var(--accent) 10%, var(--surface))' : 'transparent', transition: 'background 0.1s' }}
                     onMouseEnter={e => { if (!active) e.currentTarget.style.background = 'var(--inputBg)'; }}
                     onMouseLeave={e => { if (!active) e.currentTarget.style.background = 'transparent'; }}
                   >
@@ -196,17 +289,16 @@ export function Sidebar({ open, onClose, compact = false, onToggleCompact, authS
           </div>
         )}
 
-        {/* Nav */}
-        <nav style={{ flex: 1, overflowY: 'auto', padding: compact ? '8px 6px 16px' : '6px 8px 16px' }}>
+        {/* ── Nav ── */}
+        <nav style={{ flex: 1, overflowY: 'auto', padding: compact ? '8px 6px 16px' : '6px 6px 16px' }}>
           {filteredNav.map((section, idx) => {
-            const GroupIcon = Icons[GROUP_ICONS[section.group]] || Icons.Circle;
             const groupColor = GROUP_COLORS[section.group] || 'var(--muted)';
-            const isCollapsed = collapsed[section.group];
 
+            /* ── Compact mode: icon-only list ── */
             if (compact) {
               return (
                 <div key={section.group}>
-                  {idx > 0 && <div style={{ height: 1, background: 'var(--border)', margin: '8px 10px', opacity: 0.5 }} />}
+                  {idx > 0 && <div style={{ height: 1, background: 'var(--border)', margin: '6px 10px', opacity: 0.5 }} />}
                   {section.items.map(item => {
                     const Icon = Icons[item.icon] || Icons.Circle;
                     const active = location.pathname === item.path;
@@ -223,81 +315,38 @@ export function Sidebar({ open, onClose, compact = false, onToggleCompact, authS
               );
             }
 
+            /* ── Default: 2-col grid with group header ── */
             return (
-              <div key={section.group} style={{ marginBottom: isCollapsed ? 2 : 4 }}>
-                <button onClick={() => toggleGroup(section.group)}
-                  style={{
-                    width: '100%', display: 'flex', alignItems: 'center', gap: 7,
-                    padding: isCollapsed ? '5px 8px' : '6px 8px 5px',
-                    background: `color-mix(in srgb, ${groupColor} ${isCollapsed ? 9 : 7}%, var(--surface))`,
-                    border: 'none',
-                    borderLeft: `3px solid ${isCollapsed ? groupColor : `color-mix(in srgb, ${groupColor} 55%, transparent)`}`,
-                    cursor: 'pointer',
-                    borderRadius: isCollapsed ? '0 8px 8px 0' : '0 8px 8px 0',
-                    transition: 'all 0.15s ease',
-                    marginLeft: 0,
-                  }}
-                  onMouseEnter={e => {
-                    e.currentTarget.style.background = `color-mix(in srgb, ${groupColor} ${isCollapsed ? 15 : 12}%, var(--surface))`;
-                  }}
-                  onMouseLeave={e => {
-                    e.currentTarget.style.background = `color-mix(in srgb, ${groupColor} ${isCollapsed ? 9 : 7}%, var(--surface))`;
-                  }}
-                >
-                  <div style={{
-                    width: 20, height: 20, borderRadius: 6, flexShrink: 0,
-                    background: `color-mix(in srgb, ${groupColor} 20%, var(--surface))`,
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    transition: 'background 0.15s',
-                  }}>
-                    <GroupIcon size={11} color={groupColor} />
-                  </div>
-                  <span style={{
-                    flex: 1, textAlign: 'left', fontSize: 11,
-                    fontWeight: 700,
-                    color: groupColor,
-                    textTransform: 'uppercase', letterSpacing: '0.07em',
-                    transition: 'color 0.15s',
-                  }}>
-                    {section.group}
-                  </span>
-                  <Icons.ChevronDown size={12}
-                    color={groupColor}
-                    style={{ transform: isCollapsed ? 'rotate(-90deg)' : 'rotate(0deg)', transition: 'transform 0.18s ease, color 0.15s', flexShrink: 0 }} />
-                </button>
-
-                {!isCollapsed && (
-                  <div style={{
-                    paddingLeft: 4, marginLeft: 10, marginTop: 2, paddingTop: 2, paddingBottom: 2,
-                    borderLeft: `2px solid color-mix(in srgb, ${groupColor} 25%, transparent)`,
-                    background: `color-mix(in srgb, ${groupColor} 4%, transparent)`,
-                    borderRadius: '0 0 8px 8px',
-                  }}>
-                    {section.items.map(item => {
-                      const Icon = Icons[item.icon] || Icons.Circle;
-                      const active = location.pathname === item.path;
-                      return (
-                        <Link key={item.id} to={item.path} onClick={onClose}
-                          className={`nav-item ${active ? 'active' : ''}`}
-                          title={item.label}
-                          style={active ? { color: groupColor, background: `color-mix(in srgb, ${groupColor} 10%, var(--surface))` } : {}}>
-                          <Icon size={15} strokeWidth={active ? 2.5 : 1.8}
-                            style={{ flexShrink: 0, color: active ? groupColor : undefined }} />
-                          {item.label}
-                        </Link>
-                      );
-                    })}
-                  </div>
-                )}
+              <div key={section.group} style={{ marginBottom: 8 }}>
+                <GroupHeader
+                  group={section.group}
+                  groupColor={groupColor}
+                  itemCount={section.items.length}
+                />
+                <div style={{
+                  display: 'grid',
+                  gridTemplateColumns: '1fr 1fr',
+                  gap: 3,
+                  padding: '0 2px',
+                }}>
+                  {section.items.map(item => (
+                    <NavCell
+                      key={item.id}
+                      item={item}
+                      groupColor={groupColor}
+                      active={location.pathname === item.path}
+                      onClose={onClose}
+                    />
+                  ))}
+                </div>
               </div>
             );
           })}
         </nav>
 
-        {/* Bottom — Firebase status + account */}
-        <div style={{ padding: compact ? '10px 8px' : '10px 14px', borderTop: '1px solid var(--border)' }}>
+        {/* ── Bottom — Firebase status + account ── */}
+        <div style={{ padding: compact ? '10px 8px' : '10px 14px', borderTop: '1px solid var(--border)', flexShrink: 0 }}>
           {compact ? (
-            // Compact: just a colored dot
             <div style={{ display: 'flex', justifyContent: 'center' }} title={isAnonymous ? 'No account' : `Signed in · ${syncStatus}`}>
               <div style={{
                 width: 8, height: 8, borderRadius: '50%',
@@ -308,7 +357,6 @@ export function Sidebar({ open, onClose, compact = false, onToggleCompact, authS
             </div>
           ) : (
             <div>
-              {/* Account row */}
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 6, marginBottom: 5 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 6, minWidth: 0 }}>
                   <div style={{
@@ -325,8 +373,6 @@ export function Sidebar({ open, onClose, compact = false, onToggleCompact, authS
                     {isAnonymous ? 'No account' : (displayName || 'Signed in')}
                   </span>
                 </div>
-
-                {/* Connect / sync status */}
                 {isAnonymous ? (
                   <button
                     onClick={() => window.__kuetxShowUpgrade?.()}
@@ -338,8 +384,6 @@ export function Sidebar({ open, onClose, compact = false, onToggleCompact, authS
                   <SyncBadge status={syncStatus} />
                 )}
               </div>
-
-              {/* Version line */}
               <div style={{ fontSize: 10, color: 'var(--muted)' }}>KUETx v3.4 · Firebase sync</div>
             </div>
           )}

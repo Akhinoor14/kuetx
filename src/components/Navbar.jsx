@@ -139,9 +139,9 @@ export function Navbar({ onMenuClick }) {
     <>
       <header className="topbar">
         {/* Logo — mobile */}
-        <div className="topbar-logo" style={{ display: 'flex', alignItems: 'center' }}>
+        <Link to="/quick-access" className="topbar-logo" style={{ alignItems: 'center', textDecoration: 'none' }}>
           <Wordmark height={28} />
-        </div>
+        </Link>
 
         {/* Page title — mobile center */}
         <div className="topbar-page-title">
@@ -224,7 +224,9 @@ export function Navbar({ onMenuClick }) {
               borderBottom: '1px solid var(--border)',
               flexShrink: 0,
             }}>
-              <Wordmark height={24} />
+              <Link to="/quick-access" onClick={() => setDrawerOpen(false)} style={{ textDecoration: "none" }}>
+                <Wordmark height={24} />
+              </Link>
               <button onClick={() => setDrawerOpen(false)} style={{
                 width: 32, height: 32, borderRadius: 8, border: '1px solid var(--border)',
                 background: 'transparent', cursor: 'pointer', color: 'var(--muted)',
