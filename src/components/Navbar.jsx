@@ -139,9 +139,9 @@ export function Navbar({ onMenuClick }) {
     <>
       <header className="topbar">
         {/* Logo — mobile */}
-        <Link to="/quick-access" className="topbar-logo" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', color: 'inherit' }}>
+        <div className="topbar-logo" style={{ display: 'flex', alignItems: 'center' }}>
           <Wordmark height={28} />
-        </Link>
+        </div>
 
         {/* Page title — mobile center */}
         <div className="topbar-page-title">

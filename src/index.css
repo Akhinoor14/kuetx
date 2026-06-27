@@ -284,8 +284,7 @@ body {
 
 /* ── Layout ──────────────────────────────────────────────────────────────── */
 .sidebar {
-  width: var(--sidebar-width, 240px);
-  min-width: var(--sidebar-width, 240px);
+  width: 230px;
   height: 100vh;
   background: var(--surface);
   border-right: 1px solid var(--border);
@@ -303,11 +302,11 @@ body {
 }
 .sidebar-collapsed { transform: translateX(-230px); }
 .main-content {
-  margin-left: var(--sidebar-width, 240px);
+  margin-left: 230px;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  width: calc(100% - var(--sidebar-width, 240px));
+  width: calc(100% - 230px);
   flex: 1 1 auto;
   min-width: 0;
 }
