@@ -524,6 +524,23 @@ export default function Profile() {
     const studyHours = (Array.isArray(studySessions) ? studySessions : [])
       .reduce((s, ss) => s + Number(ss.hours || 0), 0);
 
+    // Study streak (consecutive days with any session)
+    const studyByDate = {};
+    (Array.isArray(studySessions) ? studySessions : []).forEach(ss => {
+      if (ss.date) studyByDate[ss.date] = true;
+    });
+    let studyStreak = 0;
+    const sd = new Date();
+    for (let i = 0; i < 60; i++) {
+      const key = sd.toISOString().split('T')[0];
+      if (studyByDate[key]) { studyStreak++; sd.setDate(sd.getDate() - 1); } else break;
+    }
+
+    // Namaz today
+    const namazRecords = store.get('namaz') || {};
+    const todayNamaz = namazRecords[today] || {};
+    const namazDone = ['Fajr','Dhuhr','Asr','Maghrib','Isha'].map(p => !!todayNamaz[p]?.done);
+
     // Self eval streak
     const evalDays = Object.keys(selfEval).sort().reverse();
     let streak = 0;
@@ -539,6 +556,7 @@ export default function Profile() {
       cgpaData, currentTermGPA, currentTermCourses,
       todayEval, recentNotes, recentDiary, studyHours,
       streak, legacyTerms, diary, notes, marks, courses,
+      studyStreak, namazDone,
     };
   }, [profile]);
 
@@ -933,6 +951,152 @@ export default function Profile() {
               <a href="/notes" style={{ fontSize: 12, color: 'var(--accent)', fontWeight: 600, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 4 }}>All Notes →</a>
             </Section>
           )}
+
+          {/* ── Academic Journey Timeline ── */}
+          {profile.currentTermKey && profile.yearStarted && (() => {
+            const PRAYERS_LIST = ['Fajr', 'Dhuhr', 'Asr', 'Maghrib', 'Isha'];
+            const PRAYER_AR = { Fajr: 'ফজর', Dhuhr: 'যোহর', Asr: 'আসর', Maghrib: 'মাগরিব', Isha: 'ইশা' };
+            const allTerms = TERM_KEYS; // ['Y1T1','Y1T2',...]
+            const currentIdx = allTerms.indexOf(profile.currentTermKey);
+            const startDate = new Date(profile.yearStarted);
+            const now = new Date();
+            const totalMonths = Math.max(0, Math.round((now - startDate) / (1000 * 60 * 60 * 24 * 30.4)));
+            const totalExpected = 48; // 4 years
+            const progressPct = Math.min(100, Math.round((totalMonths / totalExpected) * 100));
+
+            // motivational tips pool
+            const TIPS = [
+              'ছোট ছোট পদক্ষেপ বড় লক্ষ্যে পৌঁছে দেয়।',
+              'আজকের পরিশ্রম কালকের সাফল্য।',
+              'Consistency beats intensity — every single time.',
+              'তুমি যতটুকু এগিয়েছ, সেটাই তোমার শক্তি।',
+              'Focus on progress, not perfection.',
+              'একদিনে সব না হলেও, প্রতিদিন একটু করে এগো।',
+              'Hard days build strong engineers.',
+              'তোমার journey unique — compare করো না, complete করো।',
+            ];
+            const tip = TIPS[Math.floor((now.getDate() + now.getMonth()) % TIPS.length)];
+
+            return (
+              <>
+                {/* Journey Timeline */}
+                <Section title="Academic Journey" icon="🎓">
+                  {/* Progress bar */}
+                  <div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11, color: 'var(--muted)', marginBottom: 6 }}>
+                      <span>{new Date(profile.yearStarted).toLocaleDateString('en-GB', { month: 'short', year: 'numeric' })}</span>
+                      <span style={{ fontWeight: 700, color: 'var(--accent)' }}>{progressPct}% complete</span>
+                      <span>Graduation</span>
+                    </div>
+                    <div style={{ height: 6, background: 'var(--border)', borderRadius: 99, overflow: 'hidden' }}>
+                      <div style={{ width: `${progressPct}%`, height: '100%', background: 'linear-gradient(90deg, var(--accent), var(--accent2))', borderRadius: 99, transition: 'width 0.6s ease' }} />
+                    </div>
+                    <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 5 }}>
+                      ~{totalMonths} months in · {Math.max(0, totalExpected - totalMonths)} months to go
+                    </div>
+                  </div>
+
+                  {/* Term dots */}
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '6px 4px', marginTop: 4 }}>
+                    {allTerms.map((tk, i) => {
+                      const done = i < currentIdx;
+                      const current = i === currentIdx;
+                      const future = i > currentIdx;
+                      const [yr, tr] = [tk[1], tk[3]];
+                      return (
+                        <div key={tk} style={{
+                          display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4,
+                          padding: '8px 4px', borderRadius: 8,
+                          background: current
+                            ? 'color-mix(in srgb, var(--accent) 10%, var(--surface))'
+                            : done ? 'var(--bg)' : 'transparent',
+                          border: current
+                            ? '1.5px solid color-mix(in srgb, var(--accent) 35%, transparent)'
+                            : '1.5px solid transparent',
+                        }}>
+                          <div style={{
+                            width: 28, height: 28, borderRadius: '50%',
+                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            fontSize: 11, fontWeight: 800,
+                            background: done ? 'var(--accent)' : current ? 'color-mix(in srgb, var(--accent) 20%, var(--surface))' : 'var(--border)',
+                            color: done ? '#fff' : current ? 'var(--accent)' : 'var(--muted)',
+                          }}>
+                            {done ? '✓' : current ? '→' : `${yr}.${tr}`}
+                          </div>
+                          <span style={{ fontSize: 9, fontWeight: 700, color: current ? 'var(--accent)' : done ? 'var(--text)' : 'var(--muted)', textAlign: 'center', lineHeight: 1.2 }}>
+                            Y{yr}T{tr}{current ? '\n●' : ''}
+                          </span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </Section>
+
+                {/* Today's Focus */}
+                <Section title="Today's Focus" icon="✨">
+                  {/* Namaz dots */}
+                  <div>
+                    <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 8 }}>🕌 Namaz</div>
+                    <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+                      {PRAYERS_LIST.map((p, i) => (
+                        <div key={p} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
+                          <div style={{
+                            width: 30, height: 30, borderRadius: '50%',
+                            background: liveData.namazDone[i]
+                              ? 'var(--accent)'
+                              : 'var(--border)',
+                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                            fontSize: 12,
+                            transition: 'background 0.2s',
+                          }}>
+                            {liveData.namazDone[i] ? '✓' : ''}
+                          </div>
+                          <span style={{ fontSize: 9, color: liveData.namazDone[i] ? 'var(--accent)' : 'var(--muted)', fontWeight: 600 }}>
+                            {PRAYER_AR[p]}
+                          </span>
+                        </div>
+                      ))}
+                      <div style={{ marginLeft: 'auto', textAlign: 'right' }}>
+                        <div style={{ fontSize: 18, fontWeight: 900, color: 'var(--accent)' }}>
+                          {liveData.namazDone.filter(Boolean).length}<span style={{ fontSize: 12, color: 'var(--muted)', fontWeight: 500 }}>/5</span>
+                        </div>
+                        <div style={{ fontSize: 10, color: 'var(--muted)' }}>today</div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div style={{ height: 1, background: 'var(--border)' }} />
+
+                  {/* Study streak */}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                    <div style={{ fontSize: 28 }}>📚</div>
+                    <div>
+                      <div style={{ fontSize: 15, fontWeight: 800, color: 'var(--text)' }}>
+                        {liveData.studyStreak > 0
+                          ? <>{liveData.studyStreak} day{liveData.studyStreak > 1 ? 's' : ''} <span style={{ fontSize: 12, color: '#f59e0b' }}>🔥</span></>
+                          : '—'}
+                      </div>
+                      <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 1 }}>
+                        Study streak · {liveData.studyHours > 0 ? `${liveData.studyHours}h total logged` : 'No sessions yet'}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div style={{ height: 1, background: 'var(--border)' }} />
+
+                  {/* Motivational tip */}
+                  <div style={{
+                    padding: '10px 12px', borderRadius: 9,
+                    background: 'color-mix(in srgb, var(--accent) 5%, var(--bg))',
+                    borderLeft: '3px solid color-mix(in srgb, var(--accent) 40%, transparent)',
+                  }}>
+                    <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--accent)', marginBottom: 3, textTransform: 'uppercase', letterSpacing: '0.05em' }}>💬 Daily Reminder</div>
+                    <div style={{ fontSize: 12, color: 'var(--text)', lineHeight: 1.5, fontStyle: 'italic' }}>{tip}</div>
+                  </div>
+                </Section>
+              </>
+            );
+          })()}
         </div>
       </div>
 

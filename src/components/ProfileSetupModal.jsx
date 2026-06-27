@@ -287,7 +287,8 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
       advisorContact: String(form.advisorContact || '').trim(),
       // Ensure termStartDate is in ISO format (YYYY-MM-DD)
       termStartDate: validatedTermStartDate || null,
-      yearStarted: form.yearStarted ? new Date(form.yearStarted).getFullYear() : DEFAULT_PROFILE.yearStarted,
+      // Store full ISO date (YYYY-MM-DD) for kuetStart
+      yearStarted: form.yearStarted || null,
       totalCreditsRequired: Number(form.totalCreditsRequired) || DEFAULT_PROFILE.totalCreditsRequired,
     };
     if (onSave) onSave(next);
@@ -445,14 +446,39 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
                 </div>
                 <div>
                   <label style={labelStyle}>When Did You Start KUET?</label>
-                  <input type="date" value={form.yearStarted || ''} onChange={handleChange('yearStarted')} style={fieldStyle} />
                   {(() => {
                     const batch = extractBatchFromRoll(form.studentId);
                     const batchStart = batch && BATCH_START_DATES[batch];
-                    if (batchStart && form.yearStarted === batchStart) {
-                      return <div style={{ fontSize: 10, color: 'var(--accent)', marginTop: 4, fontWeight: 700 }}>✓ Auto-filled from batch {batch} ({batchStart})</div>;
+                    const displayDate = batchStart
+                      ? new Date(batchStart).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })
+                      : null;
+                    if (batchStart) {
+                      return (
+                        <>
+                          <div style={{
+                            ...fieldStyle,
+                            background: 'var(--inputBg)',
+                            color: 'var(--text)',
+                            opacity: 0.75,
+                            cursor: 'not-allowed',
+                            display: 'flex', alignItems: 'center', gap: 6,
+                            userSelect: 'none',
+                          }}>
+                            <span style={{ fontSize: 13 }}>📅</span>
+                            <span style={{ fontWeight: 600 }}>{displayDate}</span>
+                          </div>
+                          <div style={{ fontSize: 10, color: 'var(--accent)', marginTop: 4, fontWeight: 700 }}>
+                            ✓ Fixed date for batch {batch} — not editable
+                          </div>
+                        </>
+                      );
                     }
-                    return <div style={{ fontSize: 10, color: 'var(--muted)', marginTop: 4 }}>Auto-filled from batch. Override manually if needed.</div>;
+                    return (
+                      <>
+                        <input type="date" value={form.yearStarted || ''} onChange={handleChange('yearStarted')} style={fieldStyle} />
+                        <div style={{ fontSize: 10, color: 'var(--muted)', marginTop: 4 }}>Enter your KUET joining date manually.</div>
+                      </>
+                    );
                   })()}
                 </div>
                 <div>

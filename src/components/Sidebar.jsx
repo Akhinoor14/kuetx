@@ -75,10 +75,12 @@ function SyncBadge({ status }) {
 }
 
 // ── 2-col grid cell ───────────────────────────────────────────────────────────
-function NavCell({ item, groupColor, active, onClose }) {
+function NavCell({ item, groupColor, active, onClose, is3col }) {
   const Icon = Icons[item.icon] || Icons.Circle;
   const shortLabel = SHORT_LABELS[item.label] || item.label;
   const [hovered, setHovered] = useState(false);
+  const iconSize = is3col ? 12 : 14;
+  const labelSize = is3col ? 9 : 10;
 
   return (
     <Link
@@ -116,14 +118,14 @@ function NavCell({ item, groupColor, active, onClose }) {
         display: 'flex', alignItems: 'center', justifyContent: 'center',
       }}>
         <Icon
-          size={14}
+          size={iconSize}
           strokeWidth={active ? 2.5 : 1.8}
           color={active ? groupColor : `color-mix(in srgb, ${groupColor} 70%, var(--muted))`}
         />
       </div>
       {/* Label */}
       <span style={{
-        fontSize: 10,
+        fontSize: labelSize,
         fontWeight: active ? 700 : 500,
         color: active ? groupColor : 'var(--text)',
         textAlign: 'center',
@@ -183,17 +185,19 @@ function GroupHeader({ group, groupColor, itemCount }) {
   );
 }
 
-export function Sidebar({ open, onClose, compact = false, onToggleCompact, authState }) {
+export function Sidebar({ open, onClose, mode = '2col', onCycleMode, authState }) {
   const location = useLocation();
   const [profile, setProfile] = useState(() => store.get('profile') || DEFAULT_PROFILE);
   const [navConfig] = useNavConfig();
   const { favorites } = useFavorites();
   const { pinnedPages } = usePinnedPages();
-  const [mode, setMode] = useState(getAppMode);
+  const [appMode, setAppMode] = useState(getAppMode);
+  const compact = mode === 'compact';
+  const [logoHovered, setLogoHovered] = useState(false);
   const canSeeCrBoard = !!profile.isCR && navConfig.cr_board_enabled;
 
   useEffect(() => {
-    const handler = (e) => setMode(e.detail?.mode || getAppMode());
+    const handler = (e) => setAppMode(e.detail?.mode || getAppMode());
     window.addEventListener('kuetx:mode-changed', handler);
     return () => window.removeEventListener('kuetx:mode-changed', handler);
   }, []);
@@ -205,7 +209,7 @@ export function Sidebar({ open, onClose, compact = false, onToggleCompact, authS
     return () => window.removeEventListener('kuetx:store-updated', syncProfile);
   }, []);
 
-  const filteredNav = filterNav(NAV, mode, canSeeCrBoard, getJrCustomHidden(), getJrCustomShown());
+  const filteredNav = filterNav(NAV, appMode, canSeeCrBoard, getJrCustomHidden(), getJrCustomShown());
 
   const getPageLabel = (path) => {
     for (const s of NAV) { const i = s.items.find(i => i.path === path); if (i) return i.label; }
@@ -230,15 +234,21 @@ export function Sidebar({ open, onClose, compact = false, onToggleCompact, authS
           className="md:hidden" onClick={onClose} />
       )}
 
-      <aside className={`sidebar ${open ? 'open' : ''} ${compact ? 'compact' : ''}`}>
+      <aside className={`sidebar ${open ? 'open' : ''} mode-${mode}`}>
 
         {/* ── Logo header ── */}
         <div style={{ padding: compact ? '16px 10px 12px' : '16px 14px 12px', borderBottom: '1px solid var(--border)', flexShrink: 0 }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: compact ? 'center' : 'space-between', gap: 8 }}>
             {compact ? (
-              <button onClick={onToggleCompact} className="hidden md:flex"
-                style={{ border: 'none', background: 'transparent', cursor: 'pointer', padding: 0, alignItems: 'center', justifyContent: 'center' }} title="Expand">
-                <Logo size={38} />
+              <button onClick={onCycleMode}
+                onMouseEnter={() => setLogoHovered(true)}
+                onMouseLeave={() => setLogoHovered(false)}
+                className="hidden md:flex"
+                style={{ border: 'none', background: 'transparent', cursor: 'pointer', padding: 0, alignItems: 'center', justifyContent: 'center', transition: 'opacity 0.15s' }}
+                title="Expand sidebar">
+                {logoHovered
+                  ? <Icons.PanelLeftOpen size={28} color="var(--accent)" />
+                  : <Logo size={38} />}
               </button>
             ) : (
               <Link to="/quick-access" onClick={onClose}
@@ -247,17 +257,19 @@ export function Sidebar({ open, onClose, compact = false, onToggleCompact, authS
               </Link>
             )}
             {!compact && (
-              <button onClick={onToggleCompact} className="hidden md:flex"
-                style={{ width: 28, height: 28, alignItems: 'center', justifyContent: 'center', borderRadius: 8, border: '1px solid var(--border)', background: 'transparent', cursor: 'pointer', color: 'var(--muted)', flexShrink: 0 }}
-                title="Compact mode">
-                <Icons.PanelLeftClose size={14} />
+              <button onClick={onCycleMode} className="hidden md:flex"
+                title={mode === '2col' ? 'Switch to 3-col' : 'Switch to compact'}
+                style={{ width: 28, height: 28, alignItems: 'center', justifyContent: 'center', borderRadius: 8, border: '1px solid var(--border)', background: 'transparent', cursor: 'pointer', color: 'var(--muted)', flexShrink: 0 }}>
+                {mode === '2col'
+                  ? <Icons.LayoutGrid size={14} />
+                  : <Icons.PanelLeftClose size={14} />}
               </button>
             )}
           </div>
           {!compact && (
             <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 4 }}>
               <div style={{ fontSize: 10, color: 'var(--muted)' }}>Student Life OS · KUET</div>
-              {mode === 'jr' && (
+              {appMode === 'jr' && (
                 <span style={{ fontSize: 9, fontWeight: 700, color: '#3b82f6', background: 'rgba(59,130,246,0.1)', border: '1px solid rgba(59,130,246,0.2)', borderRadius: 4, padding: '1px 5px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>JR</span>
               )}
             </div>
@@ -315,7 +327,7 @@ export function Sidebar({ open, onClose, compact = false, onToggleCompact, authS
               );
             }
 
-            /* ── Default: 2-col grid with group header ── */
+            /* ── 2-col / 3-col grid with group header ── */
             return (
               <div key={section.group} style={{ marginBottom: 8 }}>
                 <GroupHeader
@@ -325,7 +337,7 @@ export function Sidebar({ open, onClose, compact = false, onToggleCompact, authS
                 />
                 <div style={{
                   display: 'grid',
-                  gridTemplateColumns: '1fr 1fr',
+                  gridTemplateColumns: mode === '3col' ? '1fr 1fr 1fr' : '1fr 1fr',
                   gap: 3,
                   padding: '0 2px',
                 }}>
@@ -336,6 +348,7 @@ export function Sidebar({ open, onClose, compact = false, onToggleCompact, authS
                       groupColor={groupColor}
                       active={location.pathname === item.path}
                       onClose={onClose}
+                      is3col={mode === '3col'}
                     />
                   ))}
                 </div>

@@ -51,11 +51,11 @@ import QuickAccess from './pages/QuickAccess';
 function Layout({ authState }) {
   usePageTracker();
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [sidebarCompact, setSidebarCompact] = useState(() => {
+  const [sidebarMode, setSidebarMode] = useState(() => {
     try {
-      return localStorage.getItem('kuetx_sidebar_compact') === 'true';
+      return localStorage.getItem('kuetx_sidebar_mode') || '2col';
     } catch {
-      return false;
+      return '2col';
     }
   });
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
@@ -65,9 +65,9 @@ function Layout({ authState }) {
 
   useEffect(() => {
     try {
-      localStorage.setItem('kuetx_sidebar_compact', sidebarCompact ? 'true' : 'false');
+      localStorage.setItem('kuetx_sidebar_mode', sidebarMode);
     } catch {}
-  }, [sidebarCompact]);
+  }, [sidebarMode]);
 
   // Expose upgrade modal trigger globally so Settings page can call it
   useEffect(() => {
@@ -80,14 +80,14 @@ function Layout({ authState }) {
       {!isQuestionBankViewer && (
         <Sidebar
           open={sidebarOpen}
-          compact={sidebarCompact}
-          onToggleCompact={() => setSidebarCompact(v => !v)}
+          mode={sidebarMode}
+          onCycleMode={() => setSidebarMode(m => m === 'compact' ? '2col' : m === '2col' ? '3col' : 'compact')}
           onClose={() => setSidebarOpen(false)}
           authState={authState}
         />
       )}
       <div
-        className={`main-content ${sidebarCompact && !isQuestionBankViewer ? 'compact' : ''}`}
+        className={`main-content ${!isQuestionBankViewer ? `mode-${sidebarMode}` : ''}`}
         style={isQuestionBankViewer ? { marginLeft: 0, width: '100%' } : undefined}
       >
         {!isQuestionBankViewer && (

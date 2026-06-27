@@ -182,44 +182,61 @@ export function Tours() {
 
       {/* Add Form */}
       {adding && (
-        <Modal onClose={() => { setAdding(false); setOutlineOpen(false); }} overlayStyle={{ padding: 12 }} contentStyle={{ width: '100%', maxWidth: 560, borderRadius: 20, padding: 0, background: 'transparent', maxHeight: 'min(640px, calc(100vh - 24px))', display: 'flex' }}>
-          <div className="card tours-form-card" style={{ marginBottom: 0, borderRadius: 20, display: 'flex', flexDirection: 'column', maxHeight: '100%', overflow: 'hidden', padding: 0 }}>
-            <div style={{ fontWeight: 600, fontSize: 13, padding: '16px 16px 0' }}>Add Tour</div>
-            <div style={{ flex: 1, overflowY: 'auto', padding: '10px 16px 16px' }}>
-            <div className="tours-form-grid tours-form-grid-top">
-              <div className="tours-form-field tours-form-wide">
-                <label>Tour / Destination</label>
-                <input value={form.name} onChange={e => set('name', e.target.value)} placeholder="Cox's Bazar trip" />
+        <Modal onClose={() => { setAdding(false); setOutlineOpen(false); }} overlayStyle={{ padding: '12px 8px' }} contentStyle={{ width: '100%', maxWidth: 680, borderRadius: 20, padding: 0, background: 'transparent', maxHeight: 'min(90vh, calc(100vh - 24px))', display: 'flex' }}>
+          <div className="card tours-form-card" style={{ marginBottom: 0, borderRadius: 20, display: 'flex', flexDirection: 'column', maxHeight: '100%', overflow: 'hidden', padding: 0, width: '100%' }}>
+            {/* Modal header */}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 20px 12px', borderBottom: '1px solid var(--border)', flexShrink: 0 }}>
+              <div>
+                <div style={{ fontWeight: 700, fontSize: 15 }}>✈️ Add Tour</div>
+                <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 2 }}>Log a trip, plan the route, track spending</div>
               </div>
-              <div className="tours-form-field">
-                <label>Date</label>
-                <input type="date" value={form.date} onChange={e => set('date', e.target.value)} />
-              </div>
-              <div className="tours-form-field">
-                <label>Type</label>
-                <select value={form.type} onChange={e => set('type', e.target.value)}>
-                  {TOUR_TYPES.map(tt => <option key={tt.value} value={tt.value}>{tt.label}</option>)}
-                </select>
-              </div>
+              <button onClick={() => { setAdding(false); setOutlineOpen(false); }} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--muted)', padding: 4, borderRadius: 6 }}><X size={16} /></button>
             </div>
-            <div className="tours-form-grid tours-form-grid-mid">
-              <div className="tours-form-field">
-                <label>Companions</label>
-                <input value={form.companions} onChange={e => set('companions', e.target.value)} placeholder="Rahim, Karim..." />
+            <div style={{ flex: 1, overflowY: 'auto', padding: '16px 20px' }}>
+
+              {/* Destination — full width prominent */}
+              <div style={{ marginBottom: 14 }}>
+                <label style={{ fontSize: 11, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.06em', display: 'block', marginBottom: 6 }}>📍 Destination / Tour Name *</label>
+                <input value={form.name} onChange={e => set('name', e.target.value)} placeholder="e.g. Cox's Bazar trip, Rangamati 2-day tour..." style={{ width: '100%', fontSize: 15, fontWeight: 600, padding: '10px 12px', borderRadius: 10, border: '1.5px solid var(--border)', background: 'var(--inputBg)', color: 'var(--text)', outline: 'none', boxSizing: 'border-box' }} />
               </div>
-              <div className="tours-form-field">
-                <label>Budget (৳)</label>
-                <input type="number" value={form.budget} onChange={e => set('budget', e.target.value)} placeholder="5000" />
+
+              {/* Date + Type row */}
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 14 }}>
+                <div>
+                  <label style={{ fontSize: 11, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.06em', display: 'block', marginBottom: 6 }}>📅 Date</label>
+                  <input type="date" value={form.date} onChange={e => set('date', e.target.value)} style={{ width: '100%', padding: '9px 10px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--inputBg)', color: 'var(--text)', fontSize: 13, boxSizing: 'border-box' }} />
+                </div>
+                <div>
+                  <label style={{ fontSize: 11, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.06em', display: 'block', marginBottom: 6 }}>🏷️ Type</label>
+                  <select value={form.type} onChange={e => set('type', e.target.value)} style={{ width: '100%', padding: '9px 10px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--inputBg)', color: 'var(--text)', fontSize: 13, boxSizing: 'border-box' }}>
+                    {TOUR_TYPES.map(tt => <option key={tt.value} value={tt.value}>{tt.label}</option>)}
+                  </select>
+                </div>
               </div>
-              <div className="tours-form-field">
-                <label>Actual Spent (৳)</label>
-                <input type="number" value={form.spent} onChange={e => set('spent', e.target.value)} placeholder="4800" />
+
+              {/* Companions */}
+              <div style={{ marginBottom: 14 }}>
+                <label style={{ fontSize: 11, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.06em', display: 'block', marginBottom: 6 }}>👥 Companions</label>
+                <input value={form.companions} onChange={e => set('companions', e.target.value)} placeholder="Rahim, Karim, Jamal..." style={{ width: '100%', padding: '9px 10px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--inputBg)', color: 'var(--text)', fontSize: 13, boxSizing: 'border-box' }} />
               </div>
-            </div>
-            <div className="tours-form-field tours-form-wide" style={{ marginBottom: 10 }}>
-              <label>Notes / Highlights</label>
-              <textarea value={form.notes} onChange={e => set('notes', e.target.value)} rows={2} placeholder="Best moments, tips, highlights..." />
-            </div>
+
+              {/* Budget + Spent row */}
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 14 }}>
+                <div>
+                  <label style={{ fontSize: 11, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.06em', display: 'block', marginBottom: 6 }}>💰 Budget (৳)</label>
+                  <input type="number" value={form.budget} onChange={e => set('budget', e.target.value)} placeholder="5000" style={{ width: '100%', padding: '9px 10px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--inputBg)', color: 'var(--text)', fontSize: 13, boxSizing: 'border-box' }} />
+                </div>
+                <div>
+                  <label style={{ fontSize: 11, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.06em', display: 'block', marginBottom: 6 }}>🧾 Actual Spent (৳)</label>
+                  <input type="number" value={form.spent} onChange={e => set('spent', e.target.value)} placeholder="4800" style={{ width: '100%', padding: '9px 10px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--inputBg)', color: 'var(--text)', fontSize: 13, boxSizing: 'border-box' }} />
+                </div>
+              </div>
+
+              {/* Notes */}
+              <div style={{ marginBottom: 14 }}>
+                <label style={{ fontSize: 11, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.06em', display: 'block', marginBottom: 6 }}>📝 Notes / Highlights</label>
+                <textarea value={form.notes} onChange={e => set('notes', e.target.value)} rows={3} placeholder="Best moments, tips, what to eat, hidden gems..." style={{ width: '100%', padding: '9px 10px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--inputBg)', color: 'var(--text)', fontSize: 13, resize: 'vertical', boxSizing: 'border-box', fontFamily: 'inherit' }} />
+              </div>
 
             {/* Trip Outline (collapsible) */}
             <div className="tours-outline-card">
@@ -280,8 +297,8 @@ export function Tours() {
             </div>
             </div>
 
-            <div className="tours-form-actions" style={{ padding: '12px 16px', borderTop: '1px solid var(--border)', background: 'var(--card)', flexShrink: 0 }}>
-              <button className="btn btn-primary tours-form-save" onClick={save}>Save</button>
+            <div className="tours-form-actions" style={{ padding: '12px 20px', borderTop: '1px solid var(--border)', background: 'var(--card)', flexShrink: 0 }}>
+              <button className="btn btn-primary tours-form-save" onClick={save}>Save Tour</button>
               <button className="btn btn-ghost tours-form-cancel" onClick={() => { setAdding(false); setOutlineOpen(false); }}>Cancel</button>
             </div>
           </div>
@@ -626,14 +643,129 @@ export function Social() {
 
 // ── Projects ─────────────────────────────────────────────────────────────────
 const PROJECT_TYPES = ['Academic', 'Personal', 'Club', 'Freelance', 'Research', 'Other'];
-const TYPE_COLORS = { Academic: 'tag-purple', Personal: 'tag-blue', Club: 'tag-green', Freelance: 'tag-yellow', Research: 'tag-pink', Other: 'tag-gray' };
-const STATUS_COLORS = { active: 'tag-green', done: 'tag-blue', paused: 'tag-yellow' };
+const TYPE_COLORS = {
+  Academic:  { bg: 'rgba(139,92,246,0.1)',  border: 'rgba(139,92,246,0.3)',  text: '#7c3aed', tag: 'tag-purple' },
+  Personal:  { bg: 'rgba(59,130,246,0.1)',  border: 'rgba(59,130,246,0.3)',  text: '#2563eb', tag: 'tag-blue'   },
+  Club:      { bg: 'rgba(16,185,129,0.1)',  border: 'rgba(16,185,129,0.3)',  text: '#059669', tag: 'tag-green'  },
+  Freelance: { bg: 'rgba(245,158,11,0.1)',  border: 'rgba(245,158,11,0.3)',  text: '#d97706', tag: 'tag-yellow' },
+  Research:  { bg: 'rgba(236,72,153,0.1)',  border: 'rgba(236,72,153,0.3)',  text: '#db2777', tag: 'tag-pink'   },
+  Other:     { bg: 'rgba(100,116,139,0.1)', border: 'rgba(100,116,139,0.3)', text: '#475569', tag: 'tag-gray'   },
+};
+const STATUS_META = {
+  active: { label: 'Active', color: '#10b981', bg: 'rgba(16,185,129,0.1)', emoji: '🟢' },
+  done:   { label: 'Done',   color: '#3b82f6', bg: 'rgba(59,130,246,0.1)',  emoji: '✅' },
+  paused: { label: 'Paused', color: '#f59e0b', bg: 'rgba(245,158,11,0.1)',  emoji: '⏸️' },
+};
+const PRIORITY_META = {
+  high:   { label: 'High',   color: '#ef4444', emoji: '🔴' },
+  medium: { label: 'Medium', color: '#f59e0b', emoji: '🟡' },
+  low:    { label: 'Low',    color: '#10b981', emoji: '🟢' },
+};
+const PROJECT_EMOJIS = ['🚀','💡','🛠️','📱','🌐','🤖','📊','🎨','⚡','🔬','📚','🏗️','🎯','💻','🌱','🔧'];
+
+function ProjectFormModal({ title, form, set, onSave, onClose }) {
+  const tc = TYPE_COLORS[form.type] || TYPE_COLORS.Other;
+  return (
+    <Modal onClose={onClose} overlayStyle={{ padding: '12px 8px' }} contentStyle={{ width: '100%', maxWidth: 680, borderRadius: 20, padding: 0, background: 'transparent', maxHeight: 'min(90vh, calc(100vh - 24px))', display: 'flex' }}>
+      <div style={{ background: 'var(--card)', borderRadius: 20, display: 'flex', flexDirection: 'column', maxHeight: '100%', overflow: 'hidden', width: '100%' }}>
+        {/* Header */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 20px 12px', borderBottom: '1px solid var(--border)', flexShrink: 0 }}>
+          <div>
+            <div style={{ fontWeight: 700, fontSize: 15 }}>{title}</div>
+            <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 2 }}>Fill in the details — GitHub, stack, deadline</div>
+          </div>
+          <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--muted)', padding: 4 }}><X size={16} /></button>
+        </div>
+
+        <div style={{ flex: 1, overflowY: 'auto', padding: '16px 20px' }}>
+          {/* Emoji picker + Name row */}
+          <div style={{ display: 'flex', gap: 10, marginBottom: 14, alignItems: 'flex-end' }}>
+            <div>
+              <label style={{ fontSize: 11, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.06em', display: 'block', marginBottom: 6 }}>Icon</label>
+              <select value={form.emoji || '🚀'} onChange={e => set('emoji', e.target.value)}
+                style={{ fontSize: 22, width: 52, height: 42, borderRadius: 10, border: `1.5px solid ${tc.border}`, background: tc.bg, textAlign: 'center', cursor: 'pointer' }}>
+                {PROJECT_EMOJIS.map(e => <option key={e} value={e}>{e}</option>)}
+              </select>
+            </div>
+            <div style={{ flex: 1 }}>
+              <label style={{ fontSize: 11, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.06em', display: 'block', marginBottom: 6 }}>Project Name *</label>
+              <input value={form.name} onChange={e => set('name', e.target.value)} placeholder="Smart Campus App, Arduino Book..." style={{ width: '100%', fontSize: 14, fontWeight: 600, padding: '10px 12px', borderRadius: 10, border: '1.5px solid var(--border)', background: 'var(--inputBg)', color: 'var(--text)', boxSizing: 'border-box' }} />
+            </div>
+          </div>
+
+          {/* Type + Status + Priority */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10, marginBottom: 14 }}>
+            <div>
+              <label style={{ fontSize: 11, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.06em', display: 'block', marginBottom: 6 }}>Category</label>
+              <select value={form.type} onChange={e => set('type', e.target.value)} style={{ width: '100%', padding: '9px 10px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--inputBg)', color: 'var(--text)', fontSize: 13, boxSizing: 'border-box' }}>
+                {PROJECT_TYPES.map(t => <option key={t}>{t}</option>)}
+              </select>
+            </div>
+            <div>
+              <label style={{ fontSize: 11, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.06em', display: 'block', marginBottom: 6 }}>Status</label>
+              <select value={form.status} onChange={e => set('status', e.target.value)} style={{ width: '100%', padding: '9px 10px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--inputBg)', color: 'var(--text)', fontSize: 13, boxSizing: 'border-box' }}>
+                <option value="active">🟢 Active</option>
+                <option value="done">✅ Done</option>
+                <option value="paused">⏸️ Paused</option>
+              </select>
+            </div>
+            <div>
+              <label style={{ fontSize: 11, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.06em', display: 'block', marginBottom: 6 }}>Priority</label>
+              <select value={form.priority || 'medium'} onChange={e => set('priority', e.target.value)} style={{ width: '100%', padding: '9px 10px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--inputBg)', color: 'var(--text)', fontSize: 13, boxSizing: 'border-box' }}>
+                <option value="high">🔴 High</option>
+                <option value="medium">🟡 Medium</option>
+                <option value="low">🟢 Low</option>
+              </select>
+            </div>
+          </div>
+
+          {/* Description */}
+          <div style={{ marginBottom: 14 }}>
+            <label style={{ fontSize: 11, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.06em', display: 'block', marginBottom: 6 }}>Description</label>
+            <textarea value={form.desc || ''} onChange={e => set('desc', e.target.value)} rows={2} placeholder="What is this project about?" style={{ width: '100%', padding: '9px 10px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--inputBg)', color: 'var(--text)', fontSize: 13, resize: 'vertical', boxSizing: 'border-box', fontFamily: 'inherit' }} />
+          </div>
+
+          {/* Tech Stack */}
+          <div style={{ marginBottom: 14 }}>
+            <label style={{ fontSize: 11, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.06em', display: 'block', marginBottom: 6 }}>🛠️ Tech Stack <span style={{ fontWeight: 400, textTransform: 'none' }}>(comma separated)</span></label>
+            <input value={form.techStack || ''} onChange={e => set('techStack', e.target.value)} placeholder="React, Firebase, Arduino, Python..." style={{ width: '100%', padding: '9px 10px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--inputBg)', color: 'var(--text)', fontSize: 13, boxSizing: 'border-box' }} />
+          </div>
+
+          {/* GitHub + Live URL */}
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 14 }}>
+            <div>
+              <label style={{ fontSize: 11, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.06em', display: 'block', marginBottom: 6 }}>🐙 GitHub Repo</label>
+              <input value={form.github || ''} onChange={e => set('github', e.target.value)} placeholder="https://github.com/..." style={{ width: '100%', padding: '9px 10px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--inputBg)', color: 'var(--text)', fontSize: 12, boxSizing: 'border-box' }} />
+            </div>
+            <div>
+              <label style={{ fontSize: 11, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.06em', display: 'block', marginBottom: 6 }}>🌐 Live / Demo URL</label>
+              <input value={form.liveUrl || ''} onChange={e => set('liveUrl', e.target.value)} placeholder="https://myproject.vercel.app" style={{ width: '100%', padding: '9px 10px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--inputBg)', color: 'var(--text)', fontSize: 12, boxSizing: 'border-box' }} />
+            </div>
+          </div>
+
+          {/* Deadline */}
+          <div style={{ marginBottom: 4 }}>
+            <label style={{ fontSize: 11, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.06em', display: 'block', marginBottom: 6 }}>📅 Deadline</label>
+            <input type="date" value={form.deadline || ''} onChange={e => set('deadline', e.target.value)} style={{ width: '100%', padding: '9px 10px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--inputBg)', color: 'var(--text)', fontSize: 13, boxSizing: 'border-box' }} />
+          </div>
+        </div>
+
+        <div style={{ display: 'flex', gap: 8, padding: '12px 20px', borderTop: '1px solid var(--border)', flexShrink: 0 }}>
+          <button className="btn btn-primary" style={{ flex: 1 }} onClick={onSave}>Save Project</button>
+          <button className="btn btn-ghost" onClick={onClose}>Cancel</button>
+        </div>
+      </div>
+    </Modal>
+  );
+}
 
 export function Projects() {
+  const EMPTY_FORM = { name: '', emoji: '🚀', type: 'Academic', status: 'active', priority: 'medium', desc: '', deadline: '', techStack: '', github: '', liveUrl: '' };
   const [projects, setProjects] = useState(() => store.get('projects') || []);
-  const [form, setForm] = useState({ name: '', type: 'Academic', status: 'active', desc: '', deadline: '' });
+  const [form, setForm] = useState(EMPTY_FORM);
   const [adding, setAdding] = useState(false);
   const [filterStatus, setFilterStatus] = useState('all');
+  const [filterType, setFilterType] = useState('all');
   const [expandedId, setExpandedId] = useState(null);
   const [editingId, setEditingId] = useState(null);
   const [editForm, setEditForm] = useState(null);
@@ -641,234 +773,220 @@ export function Projects() {
   const setEdit = (k, v) => setEditForm(f => ({ ...f, [k]: v }));
 
   const today = todayStr();
+  const isOverdue = (p) => p.deadline && p.deadline < today && p.status === 'active';
 
   const saveProject = () => {
     if (!form.name.trim()) return;
     const u = [{ ...form, id: uid(), tasks: [] }, ...projects];
     setProjects(u); store.set('projects', u); setAdding(false);
-    setForm({ name: '', type: 'Academic', status: 'active', desc: '', deadline: '' });
+    setForm(EMPTY_FORM);
   };
-
   const deleteProject = (id) => {
     const u = projects.filter(x => x.id !== id); setProjects(u); store.set('projects', u);
     if (expandedId === id) setExpandedId(null);
   };
-
-  const startEdit = (p) => { setEditingId(p.id); setEditForm({ ...p }); setExpandedId(null); };
+  const startEdit = (p) => { setEditingId(p.id); setEditForm({ ...EMPTY_FORM, ...p }); setExpandedId(null); };
   const saveEdit = () => {
     const u = projects.map(p => p.id === editingId ? { ...editForm } : p);
     setProjects(u); store.set('projects', u); setEditingId(null); setEditForm(null);
   };
-
-  // Task operations
   const addTask = (projectId, text) => {
     if (!text.trim()) return;
     const u = projects.map(p => p.id === projectId ? { ...p, tasks: [...(p.tasks || []), { id: uid(), text, done: false }] } : p);
     setProjects(u); store.set('projects', u);
   };
-
   const toggleTask = (projectId, taskId) => {
     const u = projects.map(p => p.id === projectId ? { ...p, tasks: (p.tasks || []).map(t => t.id === taskId ? { ...t, done: !t.done } : t) } : p);
     setProjects(u); store.set('projects', u);
   };
-
   const deleteTask = (projectId, taskId) => {
     const u = projects.map(p => p.id === projectId ? { ...p, tasks: (p.tasks || []).filter(t => t.id !== taskId) } : p);
     setProjects(u); store.set('projects', u);
   };
 
-  const isOverdue = (p) => p.deadline && p.deadline < today && p.status === 'active';
-
   const counts = { all: projects.length, active: projects.filter(p => p.status === 'active').length, done: projects.filter(p => p.status === 'done').length, paused: projects.filter(p => p.status === 'paused').length };
   const overdueCount = projects.filter(p => isOverdue(p)).length;
 
-  const filtered = filterStatus === 'all' ? projects : projects.filter(p => p.status === filterStatus);
+  let filtered = projects;
+  if (filterStatus !== 'all') filtered = filtered.filter(p => p.status === filterStatus);
+  if (filterType !== 'all') filtered = filtered.filter(p => p.type === filterType);
+
+  // Group by type
+  const grouped = {};
+  filtered.forEach(p => {
+    const key = p.type || 'Other';
+    if (!grouped[key]) grouped[key] = [];
+    grouped[key].push(p);
+  });
+  const groupOrder = PROJECT_TYPES.filter(t => grouped[t]);
 
   return (
     <div className="page-enter page-container">
-      {/* Hero Card */}
+      {/* Hero */}
       <div className="card" style={{ marginBottom: 14 }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 10 }}>
           <div>
             <h1 style={{ fontSize: 18, fontWeight: 700 }}>Projects</h1>
-            <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 2 }}>Track academic and personal projects with tasks</p>
+            <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 2 }}>Track your builds — academic, personal, club & beyond</p>
           </div>
-          <button className="btn btn-primary" onClick={() => setAdding(true)}><Plus size={13} /> Add Project</button>
+          <button className="btn btn-primary" onClick={() => { setForm(EMPTY_FORM); setAdding(true); }}><Plus size={13} /> Add Project</button>
         </div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(80px, 1fr))', gap: 8, marginTop: 14 }}>
           <div className="stat-mini"><div className="stat-mini-val">{counts.active}</div><div className="stat-mini-lbl">Active</div></div>
           <div className="stat-mini"><div className="stat-mini-val">{counts.done}</div><div className="stat-mini-lbl">Done</div></div>
           <div className="stat-mini"><div className="stat-mini-val">{counts.paused}</div><div className="stat-mini-lbl">Paused</div></div>
-          {overdueCount > 0 && (
-            <div className="stat-mini stat-mini-danger"><div className="stat-mini-val">{overdueCount}</div><div className="stat-mini-lbl">Overdue</div></div>
-          )}
+          {overdueCount > 0 && <div className="stat-mini stat-mini-danger"><div className="stat-mini-val">{overdueCount}</div><div className="stat-mini-lbl">Overdue</div></div>}
         </div>
       </div>
 
-      {/* Filter tabs */}
-      <div className="filter-tab-row" style={{ marginBottom: 12 }}>
-        {[['all', 'All'], ['active', 'Active'], ['done', 'Done'], ['paused', 'Paused']].map(([k, l]) => (
+      {/* Filters */}
+      <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 12 }}>
+        {[['all','All'], ['active','Active'], ['done','Done'], ['paused','Paused']].map(([k,l]) => (
           <button key={k} className={`filter-tab ${filterStatus === k ? 'active' : ''}`} onClick={() => setFilterStatus(k)}>{l} ({counts[k] || 0})</button>
+        ))}
+        <div style={{ width: 1, background: 'var(--border)', margin: '0 4px' }} />
+        <button className={`filter-tab ${filterType === 'all' ? 'active' : ''}`} onClick={() => setFilterType('all')}>All Types</button>
+        {PROJECT_TYPES.filter(t => projects.some(p => p.type === t)).map(t => (
+          <button key={t} className={`filter-tab ${filterType === t ? 'active' : ''}`} onClick={() => setFilterType(t)}>{t}</button>
         ))}
       </div>
 
-      {/* Add Form */}
-      {adding && (
-        <Modal onClose={() => setAdding(false)} overlayStyle={{ padding: 12 }} contentStyle={{ width: '100%', maxWidth: 560, borderRadius: 20, padding: 0, background: 'transparent', maxHeight: 'calc(100vh - 24px)', overflow: 'auto' }}>
-          <div className="card projects-form-card" style={{ marginBottom: 0, borderRadius: 20 }}>
-            <div style={{ fontWeight: 600, fontSize: 13, marginBottom: 10 }}>Add Project</div>
-            <div className="projects-form-grid projects-form-grid-top">
-              <div className="projects-form-field projects-form-wide">
-                <label>Project Name</label>
-                <input value={form.name} onChange={e => set('name', e.target.value)} placeholder="Smart Campus App" />
-              </div>
-              <div className="projects-form-field">
-                <label>Type</label>
-                <select value={form.type} onChange={e => set('type', e.target.value)}>
-                  {PROJECT_TYPES.map(t => <option key={t}>{t}</option>)}
-                </select>
-              </div>
-              <div className="projects-form-field">
-                <label>Status</label>
-                <select value={form.status} onChange={e => set('status', e.target.value)}>
-                  <option value="active">Active</option>
-                  <option value="done">Done</option>
-                  <option value="paused">Paused</option>
-                </select>
-              </div>
-            </div>
-            <div className="projects-form-grid projects-form-grid-bottom">
-              <div className="projects-form-field projects-form-wide">
-                <label>Deadline</label>
-                <input type="date" value={form.deadline} onChange={e => set('deadline', e.target.value)} />
-              </div>
-            </div>
-            <div className="projects-form-field projects-form-wide" style={{ marginBottom: 10 }}>
-              <label>Description</label>
-              <textarea value={form.desc} onChange={e => set('desc', e.target.value)} rows={2} />
-            </div>
-            <div className="projects-form-actions">
-              <button className="btn btn-primary projects-form-save" onClick={saveProject}>Save</button>
-              <button className="btn btn-ghost projects-form-cancel" onClick={() => setAdding(false)}>Cancel</button>
-            </div>
-          </div>
-        </Modal>
-      )}
+      {/* Add Modal */}
+      {adding && <ProjectFormModal title="✨ New Project" form={form} set={set} onSave={saveProject} onClose={() => setAdding(false)} />}
+      {editingId && editForm && <ProjectFormModal title="✏️ Edit Project" form={editForm} set={setEdit} onSave={saveEdit} onClose={() => { setEditingId(null); setEditForm(null); }} />}
 
-      {filtered.length === 0 && !adding && (
+      {filtered.length === 0 && (
         <div className="card" style={{ textAlign: 'center', color: 'var(--muted)', padding: 40 }}>
-          <p>{projects.length === 0 ? 'Track your academic and personal projects here.' : `No ${filterStatus} projects.`}</p>
+          <div style={{ fontSize: 32, marginBottom: 8 }}>🚀</div>
+          <p>{projects.length === 0 ? 'Add your first project — GitHub repo, Arduino build, research, anything.' : 'No projects match this filter.'}</p>
         </div>
       )}
 
-      {filtered.map(p => {
-        const tasks = p.tasks || [];
-        const doneTasks = tasks.filter(t => t.done).length;
-        const progress = tasks.length > 0 ? Math.round((doneTasks / tasks.length) * 100) : 0;
-        const overdue = isOverdue(p);
-        const isExpanded = expandedId === p.id;
-        const isEditing = editingId === p.id;
-
-        if (isEditing && editForm) {
-          return (
-            <div key={p.id} className="card" style={{ marginBottom: 8 }}>
-              <div style={{ fontWeight: 600, fontSize: 13, marginBottom: 10 }}>Edit Project</div>
-              <div className="projects-form-grid projects-form-grid-top">
-                <div className="projects-form-field projects-form-wide">
-                  <label>Project Name</label>
-                  <input value={editForm.name} onChange={e => setEdit('name', e.target.value)} />
-                </div>
-                <div className="projects-form-field">
-                  <label>Type</label>
-                  <select value={editForm.type} onChange={e => setEdit('type', e.target.value)}>
-                    {PROJECT_TYPES.map(t => <option key={t}>{t}</option>)}
-                  </select>
-                </div>
-                <div className="projects-form-field">
-                  <label>Status</label>
-                  <select value={editForm.status} onChange={e => setEdit('status', e.target.value)}>
-                    <option value="active">Active</option>
-                    <option value="done">Done</option>
-                    <option value="paused">Paused</option>
-                  </select>
-                </div>
-              </div>
-              <div className="projects-form-field" style={{ marginBottom: 10 }}>
-                <label>Deadline</label>
-                <input type="date" value={editForm.deadline || ''} onChange={e => setEdit('deadline', e.target.value)} />
-              </div>
-              <div className="projects-form-field projects-form-wide" style={{ marginBottom: 10 }}>
-                <label>Description</label>
-                <textarea value={editForm.desc || ''} onChange={e => setEdit('desc', e.target.value)} rows={2} />
-              </div>
-              <div style={{ display: 'flex', gap: 8 }}>
-                <button className="btn btn-primary" onClick={saveEdit}><Check size={13} /> Save</button>
-                <button className="btn btn-ghost" onClick={() => { setEditingId(null); setEditForm(null); }}>Cancel</button>
-              </div>
-            </div>
-          );
-        }
-
+      {/* Grouped cards */}
+      {groupOrder.map(groupName => {
+        const tc = TYPE_COLORS[groupName] || TYPE_COLORS.Other;
         return (
-          <div key={p.id} className="card" style={{ marginBottom: 8 }}>
-            {/* Project header */}
-            <div style={{ display: 'flex', alignItems: 'flex-start', gap: 8 }}>
-              <div style={{ flex: 1, minWidth: 0 }}>
-                <div style={{ display: 'flex', gap: 6, alignItems: 'center', flexWrap: 'wrap', marginBottom: 4 }}>
-                  <span style={{ fontWeight: 700, fontSize: 14 }}>{p.name}</span>
-                  <span className={`tag ${STATUS_COLORS[p.status] || 'tag-gray'}`}>{p.status}</span>
-                  <span className={`tag ${TYPE_COLORS[p.type] || 'tag-gray'}`}>{p.type}</span>
-                  {overdue && <span className="tag tag-red">Overdue</span>}
-                </div>
-                {p.desc && <div style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 4 }}>{p.desc}</div>}
-                {p.deadline && (
-                  <div style={{ fontSize: 11, color: overdue ? 'var(--danger)' : 'var(--muted)' }}>
-                    Deadline: {p.deadline}{overdue ? ' ⚠️' : ''}
-                  </div>
-                )}
-
-                {/* Progress bar */}
-                {tasks.length > 0 && (
-                  <div style={{ marginTop: 8 }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11, color: 'var(--muted)', marginBottom: 3 }}>
-                      <span>{doneTasks}/{tasks.length} tasks done</span>
-                      <span style={{ color: progress === 100 ? 'var(--success)' : 'var(--muted)', fontWeight: 600 }}>{progress}%</span>
-                    </div>
-                    <div className="progress-bar">
-                      <div className="progress-fill" style={{ width: `${progress}%`, background: progress === 100 ? 'var(--success)' : 'var(--accent)', transition: 'width 0.3s' }} />
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              <div style={{ display: 'flex', gap: 4, flexShrink: 0 }}>
-                <button className="btn btn-ghost" style={{ padding: '4px 7px', fontSize: 11 }} onClick={() => setExpandedId(isExpanded ? null : p.id)}>
-                  {isExpanded ? '▾' : '▸'} Tasks {tasks.length > 0 ? `(${tasks.length})` : ''}
-                </button>
-                <button className="btn btn-ghost" style={{ padding: '4px 7px' }} onClick={() => startEdit(p)}><Edit2 size={11} /></button>
-                <button className="btn btn-ghost" style={{ padding: '4px 7px' }} onClick={() => deleteProject(p.id)}><Trash2 size={11} color="var(--danger)" /></button>
-              </div>
-            </div>
-
-            {/* Task checklist */}
-            {isExpanded && (
-              <div style={{ marginTop: 12, borderTop: '1px solid var(--border)', paddingTop: 10 }}>
-                {tasks.map(task => (
-                  <div key={task.id} style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
-                    <button
-                      className="btn btn-ghost"
-                      style={{ padding: '2px 6px', border: `1px solid ${task.done ? 'var(--success)' : 'var(--border)'}`, borderRadius: 4, color: task.done ? 'var(--success)' : 'var(--muted)', minWidth: 24, fontSize: 12 }}
-                      onClick={() => toggleTask(p.id, task.id)}
-                    >
-                      {task.done ? '✓' : '○'}
-                    </button>
-                    <span style={{ flex: 1, fontSize: 13, textDecoration: task.done ? 'line-through' : 'none', color: task.done ? 'var(--muted)' : 'var(--text)' }}>{task.text}</span>
-                    <button className="btn btn-ghost" style={{ padding: '2px 6px' }} onClick={() => deleteTask(p.id, task.id)}><X size={10} color="var(--danger)" /></button>
-                  </div>
-                ))}
-                <AddTaskInline onAdd={(text) => addTask(p.id, text)} />
+          <div key={groupName} style={{ marginBottom: 20 }}>
+            {/* Group header — only when showing all types */}
+            {filterType === 'all' && groupOrder.length > 1 && (
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10 }}>
+                <div style={{ height: 1, flex: 1, background: 'var(--border)' }} />
+                <span style={{ fontSize: 11, fontWeight: 700, color: tc.text, background: tc.bg, border: `1px solid ${tc.border}`, borderRadius: 20, padding: '3px 10px', textTransform: 'uppercase', letterSpacing: '0.06em' }}>{groupName}</span>
+                <div style={{ height: 1, flex: 1, background: 'var(--border)' }} />
               </div>
             )}
+
+            {grouped[groupName].map(p => {
+              const tasks = p.tasks || [];
+              const doneTasks = tasks.filter(t => t.done).length;
+              const progress = tasks.length > 0 ? Math.round((doneTasks / tasks.length) * 100) : 0;
+              const overdue = isOverdue(p);
+              const isExpanded = expandedId === p.id;
+              const sm = STATUS_META[p.status] || STATUS_META.active;
+              const pm = PRIORITY_META[p.priority] || PRIORITY_META.medium;
+              const techTags = (p.techStack || '').split(',').map(s => s.trim()).filter(Boolean);
+
+              return (
+                <div key={p.id} className="card" style={{ marginBottom: 10, borderLeft: `3px solid ${tc.text}`, padding: 0, overflow: 'hidden' }}>
+                  {/* Card header */}
+                  <div style={{ padding: '14px 16px', cursor: 'pointer' }} onClick={() => setExpandedId(isExpanded ? null : p.id)}>
+                    <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12 }}>
+                      {/* Emoji logo */}
+                      <div style={{ width: 44, height: 44, borderRadius: 12, background: tc.bg, border: `1.5px solid ${tc.border}`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22, flexShrink: 0 }}>
+                        {p.emoji || '🚀'}
+                      </div>
+
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap', marginBottom: 4 }}>
+                          <span style={{ fontWeight: 700, fontSize: 14, color: 'var(--text)' }}>{p.name}</span>
+                          <span style={{ fontSize: 11, fontWeight: 700, color: sm.color, background: sm.bg, borderRadius: 20, padding: '2px 8px' }}>{sm.emoji} {sm.label}</span>
+                          <span style={{ fontSize: 10, color: pm.color }}>{pm.emoji}</span>
+                          {overdue && <span className="tag tag-red">⚠️ Overdue</span>}
+                        </div>
+                        {p.desc && <div style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 6, lineHeight: 1.4 }}>{p.desc}</div>}
+
+                        {/* Tech stack tags */}
+                        {techTags.length > 0 && (
+                          <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap', marginBottom: 6 }}>
+                            {techTags.map(t => (
+                              <span key={t} style={{ fontSize: 10, fontWeight: 600, color: tc.text, background: tc.bg, border: `1px solid ${tc.border}`, borderRadius: 4, padding: '2px 6px' }}>{t}</span>
+                            ))}
+                          </div>
+                        )}
+
+                        {/* Links row */}
+                        {(p.github || p.liveUrl) && (
+                          <div style={{ display: 'flex', gap: 8, marginBottom: 6 }}>
+                            {p.github && (
+                              <a href={p.github} target="_blank" rel="noopener noreferrer"
+                                onClick={e => e.stopPropagation()}
+                                style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 11, fontWeight: 700, color: '#1f2937', background: '#f3f4f6', border: '1px solid #e5e7eb', borderRadius: 6, padding: '3px 8px', textDecoration: 'none' }}>
+                                🐙 GitHub
+                              </a>
+                            )}
+                            {p.liveUrl && (
+                              <a href={p.liveUrl} target="_blank" rel="noopener noreferrer"
+                                onClick={e => e.stopPropagation()}
+                                style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 11, fontWeight: 700, color: '#fff', background: 'var(--accent)', border: 'none', borderRadius: 6, padding: '3px 8px', textDecoration: 'none' }}>
+                                🌐 Live
+                              </a>
+                            )}
+                          </div>
+                        )}
+
+                        {/* Deadline + task progress */}
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
+                          {p.deadline && (
+                            <span style={{ fontSize: 11, color: overdue ? 'var(--danger)' : 'var(--muted)' }}>
+                              📅 {new Date(p.deadline).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
+                            </span>
+                          )}
+                          {tasks.length > 0 && (
+                            <span style={{ fontSize: 11, color: 'var(--muted)' }}>
+                              ✅ {doneTasks}/{tasks.length} tasks · {progress}%
+                            </span>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Action buttons */}
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: 4, flexShrink: 0 }} onClick={e => e.stopPropagation()}>
+                        <button className="btn btn-ghost" style={{ padding: '4px 7px' }} onClick={() => startEdit(p)}><Edit2 size={11} /></button>
+                        <button className="btn btn-ghost" style={{ padding: '4px 7px' }} onClick={() => deleteProject(p.id)}><Trash2 size={11} color="var(--danger)" /></button>
+                      </div>
+                    </div>
+
+                    {/* Progress bar */}
+                    {tasks.length > 0 && (
+                      <div style={{ marginTop: 10 }}>
+                        <div style={{ height: 4, background: 'var(--border)', borderRadius: 99, overflow: 'hidden' }}>
+                          <div style={{ width: `${progress}%`, height: '100%', background: progress === 100 ? '#10b981' : tc.text, borderRadius: 99, transition: 'width 0.3s' }} />
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Expanded tasks */}
+                  {isExpanded && (
+                    <div style={{ borderTop: '1px solid var(--border)', padding: '12px 16px', background: 'var(--bg)' }}>
+                      <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 8 }}>Tasks</div>
+                      {tasks.map(task => (
+                        <div key={task.id} style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
+                          <button
+                            className="btn btn-ghost"
+                            style={{ padding: '2px 6px', border: `1px solid ${task.done ? '#10b981' : 'var(--border)'}`, borderRadius: 4, color: task.done ? '#10b981' : 'var(--muted)', minWidth: 24, fontSize: 12 }}
+                            onClick={() => toggleTask(p.id, task.id)}
+                          >{task.done ? '✓' : '○'}</button>
+                          <span style={{ flex: 1, fontSize: 13, textDecoration: task.done ? 'line-through' : 'none', color: task.done ? 'var(--muted)' : 'var(--text)' }}>{task.text}</span>
+                          <button className="btn btn-ghost" style={{ padding: '2px 6px' }} onClick={() => deleteTask(p.id, task.id)}><X size={10} color="var(--danger)" /></button>
+                        </div>
+                      ))}
+                      <AddTaskInline onAdd={(text) => addTask(p.id, text)} />
+                    </div>
+                  )}
+                </div>
+              );
+            })}
           </div>
         );
       })}

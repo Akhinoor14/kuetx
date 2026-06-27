@@ -882,7 +882,7 @@ export const getCurrentTermKey = (profile = {}) => {
 export const BATCH_START_DATES = {
   '2k23': '2024-10-28',
   '2k24': '2025-09-17',
-  '2k25': '2026-07-28',
+  '2k25': '2026-06-28',
 };
 
 export const getTermTimeline = (termStartDate, deptCode, termKey, roadmapConfig = {}) => {
