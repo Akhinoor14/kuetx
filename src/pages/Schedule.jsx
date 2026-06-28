@@ -1131,7 +1131,7 @@ export default function Schedule() {
                           minHeight: 'clamp(56px, 12vw, 72px)',
                           background: isLabCell
                             ? 'linear-gradient(180deg, rgba(34,197,94,0.15), rgba(34,197,94,0.08))'
-                            : breakSlot ? 'rgba(239,68,68,0.08)' : d === selectedDay ? 'rgba(59,130,246,0.035)' : 'transparent',
+                            : d === selectedDay ? 'rgba(59,130,246,0.035)' : 'transparent',
                           cursor: isEmptyCell ? 'pointer' : 'default',
                           touchAction: 'manipulation',
                           textAlign: isLabCell ? 'center' : undefined,
