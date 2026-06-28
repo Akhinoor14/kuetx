@@ -153,7 +153,7 @@ const parseTimeToMinutes = (value) => {
 };
 
 const parseSlotRange = (slot) => {
-  const match = String(slot || '').match(/^(.+?)\s*-\s*(.+)$/);
+  const match = String(slot || '').match(/^(.+?)\s*(?:→|->|–|—|-)\s*(.+)$/);
   if (!match) return null;
   
   let startStr = match[1].trim();
@@ -180,9 +180,12 @@ const slotSortValue = (slot) => {
 
 const getSlotCatalog = (schedule, baseSlots) => {
   const unique = new Map();
+  // baseSlots always take priority; schedule slots fill in extras
   [...(baseSlots || []), ...((schedule || []).map(item => item.slot))].forEach(slot => {
-    const key = normalizeSlotKey(slot);
-    if (key) unique.set(key, key);
+    const range = parseSlotRange(slot);
+    // Use time-based key so '9:40 AM → 10:30 AM' and '9:40 AM - 10:30 AM' map to same slot
+    const key = range ? `${range.start}-${range.end}` : normalizeSlotKey(slot);
+    if (key && !unique.has(key)) unique.set(key, slot); // keep first (baseSlot) spelling
   });
   return [...unique.values()].sort((a, b) => slotSortValue(a) - slotSortValue(b) || a.localeCompare(b));
 };
@@ -2072,16 +2075,10 @@ export default function Schedule() {
               <div style={{ fontSize: 12, fontWeight: 600, marginBottom: 6 }}>Class Days (working)</div>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginBottom: 4 }}>
                 <div>
-                  <div style={{ fontSize: 11, color: 'var(--muted)', marginBottom: 3 }}>Start Date</div>
-                  <input
-                    type="date"
-                    value={roadmapConfig.classStartDate || profile?.termStartDate || ''}
-                    onChange={e => saveRoadmapConfig({ ...roadmapConfig, classStartDate: e.target.value })}
-                    style={{ width: '100%', padding: '6px 8px', borderRadius: 6, border: '1px solid var(--border)', background: 'var(--input)', color: 'var(--text)', fontSize: 12 }}
-                  />
+                  <div style={{ fontSize: 11, color: 'var(--muted)', marginBottom: 3 }}>Start: <b>{profile?.termStartDate ? new Date(profile.termStartDate + 'T00:00:00').toLocaleDateString('en-GB', {day:'numeric',month:'short',year:'numeric'}) : 'Set in Profile'}</b></div>
                 </div>
                 <div>
-                  <div style={{ fontSize: 11, color: 'var(--muted)', marginBottom: 3 }}>End Date <span style={{color:'var(--accent)'}}>or use slider</span></div>
+                  <div style={{ fontSize: 11, color: 'var(--muted)', marginBottom: 3 }}>Class End Date <span style={{color:'var(--accent)', fontSize:10}}>overrides slider</span></div>
                   <input
                     type="date"
                     value={roadmapConfig.classEndDate || ''}
