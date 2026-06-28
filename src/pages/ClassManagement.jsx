@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { CalendarDays, Clock3, Copy, Download, Users, X } from 'lucide-react';
-import { store, uid, getProfile, getCurrentTermKey } from '../store/store';
+import { store, uid, getProfile, getCurrentTermKey, periodToTime } from '../store/store';
 import { getAllCourses } from '../store/curriculumStore';
 import CourseTeacherDialog from '../components/CourseTeacherDialog';
 import {
@@ -77,7 +77,16 @@ export default function ClassManagement() {
       next[entry.day].push(entry);
     });
     ROUTINE_DAY_KEYS.forEach(day => {
-      next[day] = next[day].slice().sort((a, b) => String(a.slot || '').localeCompare(String(b.slot || '')));
+      next[day] = next[day].slice().sort((a, b) => {
+        const pa = a.period !== undefined && a.period !== 'unknown' ? a.period : null;
+        const pb = b.period !== undefined && b.period !== 'unknown' ? b.period : null;
+        if (pa !== null && pb !== null) {
+          const sa = String(pa).startsWith('L') ? 100 + Number(String(pa).slice(1)) : Number(pa);
+          const sb = String(pb).startsWith('L') ? 100 + Number(String(pb).slice(1)) : Number(pb);
+          return sa - sb;
+        }
+        return String(a.slot || '').localeCompare(String(b.slot || ''));
+      });
     });
     return next;
   }, [currentTermScheduleEntries]);
@@ -107,6 +116,15 @@ export default function ClassManagement() {
   }, [routineEntriesByDay, selectedRoutineDay, selectedRoutineEntries.length]);
 
   const formatRoutineSlot = (value) => String(value || '').replace(/\s+break\s*$/i, '').trim();
+  // Prefer recomputing the time from period + current model (so switching the
+  // 40min/50min model updates display instantly); fall back to the legacy slot string.
+  const getEntryTime = (entry) => {
+    if (entry?.period !== undefined && entry.period !== 'unknown') {
+      const time = periodToTime(entry.period, settings?.modelId);
+      if (time) return time;
+    }
+    return entry?.slot || entry?._legacySlot || '';
+  };
 
   const buildRoutineCopyText = (day, entries) => {
     if (!entries.length) {
@@ -119,7 +137,7 @@ export default function ClassManagement() {
       const course = courseMap.get(entry.courseId);
       const courseLabel = entry.displayName || course?.code || course?.name || 'Unknown Course';
       const teacherLabel = entry.teacherName || 'Teacher not set';
-      lines.push(`${index + 1}. *${formatRoutineSlot(entry.slot)}* — _${courseLabel} · ${teacherLabel}_`);
+      lines.push(`${index + 1}. *${formatRoutineSlot(getEntryTime(entry))}* — _${courseLabel} · ${teacherLabel}_`);
     });
 
     return lines.join('\n');
@@ -483,7 +501,7 @@ export default function ClassManagement() {
                           <div key={entry.id} style={{ display: 'flex', justifyContent: 'space-between', gap: 12, alignItems: 'flex-start', padding: 16, borderRadius: 14, border: '1px solid var(--border)', background: 'linear-gradient(180deg, var(--surface), var(--bg))' }}>
                             <div style={{ minWidth: 0, flex: 1 }}>
                               <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap', marginBottom: 8 }}>
-                                <div style={{ fontSize: 13, fontWeight: 900 }}>{formatRoutineSlot(entry.slot)}</div>
+                                <div style={{ fontSize: 13, fontWeight: 900 }}>{formatRoutineSlot(getEntryTime(entry))}</div>
                                 <span className="tag tag-blue">{course?.code || 'Unknown course'}</span>
                               </div>
                               <div style={{ fontSize: 14, fontWeight: 800, color: 'var(--text)' }}>{entry.displayName || course?.name || course?.code || 'Unknown Course'}</div>
@@ -793,7 +811,7 @@ export default function ClassManagement() {
                           <div style={{ minWidth: 0 }}>
                             <div style={{ fontSize: 13, fontWeight: 700 }}>{entry.teacherName || (course.type?.toLowerCase() === 'sessional' ? 'Sessional' : 'Teacher not set')}</div>
                             <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 6 }}>{formatDateTime(entry.loggedAt)}</div>
-                            <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 6 }}>{entry.day} · {entry.slot}</div>
+                            <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 6 }}>{entry.day} · {getEntryTime(entry)}</div>
                           </div>
                           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                             <button onClick={() => removeLogEntry(entry.id)} className="btn btn-ghost btn-xs" style={{ padding: '8px 10px', height: 'fit-content' }}>Undo</button>

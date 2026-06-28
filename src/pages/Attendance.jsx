@@ -3,7 +3,7 @@ import Modal from '../components/Modal';
 import { ChevronLeft, ChevronRight, AlertTriangle, CheckCircle, TrendingUp, Users, BookOpen, Award, CalendarDays, X } from 'lucide-react';
 import {
   store, getAttendanceMarks, MIN_ATTENDANCE_PERCENT, SCHOLARSHIP_ATTENDANCE_PCT,
-  getProfile, getRoutinePreviewDate, isRoutineHoliday
+  getProfile, getRoutinePreviewDate, isRoutineHoliday, periodToTime
 } from '../store/store';
 import { getAllCourses } from '../store/curriculumStore';
 import CourseTeacherDialog from '../components/CourseTeacherDialog';
@@ -115,7 +115,21 @@ function attBorder(pct, dark) {
   if (pct < SCHOLARSHIP_ATTENDANCE_PCT) return dark ? 'rgba(217,119,6,0.30)' : 'rgba(217,119,6,0.18)';
   return dark ? 'rgba(22,163,74,0.30)' : 'rgba(22,163,74,0.18)';
 }
-function getScheduleCoursesForDate(schedule, date) {
+// Prefer recomputing the time from period + current model (so switching the
+// 40min/50min model updates display instantly); fall back to the legacy slot string.
+function getEntryTime(entry, modelId) {
+  if (entry?.period !== undefined && entry.period !== 'unknown') {
+    const time = periodToTime(entry.period, modelId);
+    if (time) return time;
+  }
+  return entry?.slot || entry?._legacySlot || '';
+}
+const periodSortValue = (period) => {
+  if (period === undefined || period === 'unknown') return 999;
+  const s = String(period);
+  return s.startsWith('L') ? 100 + Number(s.slice(1)) : Number(s);
+};
+function getScheduleCoursesForDate(schedule, date, modelId) {
   const dayName = new Date(date + 'T00:00:00').toLocaleDateString('en-US', { weekday: 'long' });
   const byCourse = new Map();
   (schedule || []).filter(s => s.day === dayName).forEach(s => {
@@ -123,7 +137,7 @@ function getScheduleCoursesForDate(schedule, date) {
     byCourse.get(s.courseId).push(s);
   });
   return [...byCourse.entries()].map(([courseId, items]) => ({
-    courseId, items: items.slice().sort((a, b) => a.slot.localeCompare(b.slot)),
+    courseId, items: items.slice().sort((a, b) => periodSortValue(a.period) - periodSortValue(b.period)).map(item => ({ ...item, slot: getEntryTime(item, modelId) })),
   }));
 }
 
@@ -458,7 +472,7 @@ function DailyLog({ courses, logs, setLogs, schedule, settings, onEditTeachers }
   const dayLog = logs[date] || {};
   const isToday = date === todayStr();
   const isHoliday = isRoutineHoliday(date, settings?.holidayDates || []);
-  const scheduledCourses = getScheduleCoursesForDate(schedule, date);
+  const scheduledCourses = getScheduleCoursesForDate(schedule, date, settings?.modelId);
   const schIds = scheduledCourses.map(s => s.courseId);
 
   const pastDates = useMemo(() => {
@@ -912,7 +926,7 @@ export default function Attendance() {
   const previewDate = getRoutinePreviewDate(settings.holidayDates || []);
   const previewDayName = new Date(previewDate + 'T00:00:00').toLocaleDateString('en-US', { weekday: 'long' });
   const todaySchedule = (schedule || []).filter(s => s.day === previewDayName && courses.some(c => c.id === s.courseId))
-    .slice().sort((a, b) => a.slot.localeCompare(b.slot));
+    .slice().sort((a, b) => periodSortValue(a.period) - periodSortValue(b.period));
 
   const allTeachers = [...new Set(
     (schedule || [])
@@ -953,7 +967,7 @@ export default function Attendance() {
               const pal = dark ? PALETTE_D[idx % PALETTE_D.length] : PALETTE_L[idx % PALETTE_L.length];
               return (
                 <div key={item.id || idx} style={{ display: 'flex', gap: 9, padding: '7px 10px', background: pal.bg, border: `1px solid ${pal.bd}`, borderRadius: 9, alignItems: 'center' }}>
-                  <div style={{ fontWeight: 900, fontSize: 11, color: 'var(--accent)', minWidth: 30, flexShrink: 0 }}>{item.slot}</div>
+                  <div style={{ fontWeight: 900, fontSize: 11, color: 'var(--accent)', minWidth: 30, flexShrink: 0 }}>{getEntryTime(item, settings?.modelId)}</div>
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <div style={{ fontSize: 12, fontWeight: 700, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.displayName || getDisplayCourseName(c)}</div>
                     {item.teacherName && <div style={{ fontSize: 10, color: 'var(--muted)', marginTop: 1, display: 'flex', alignItems: 'center', gap: 3 }}><Users size={8} /> {item.teacherName}</div>}

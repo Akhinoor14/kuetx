@@ -16,7 +16,7 @@ import ModeSelectModal from './components/ModeSelectModal';
 import useFirebaseAuth from './hooks/useFirebaseAuth';
 import DataSafeToast from './components/DataSafeToast';
 import { isModeChosen } from './lib/modeFilter';
-import { store } from './store/store';
+import { store, migrateScheduleToPeriods } from './store/store';
 
 // Pages
 import Dashboard from './pages/Dashboard';
@@ -62,6 +62,11 @@ function Layout({ authState }) {
   const location = useLocation();
   const isMobileNav = useIsMobileNav();
   const isQuestionBankViewer = location.pathname === '/question-bank/view';
+
+  useEffect(() => {
+    // Run period migration once on app boot
+    migrateScheduleToPeriods();
+  }, []);
 
   useEffect(() => {
     try {

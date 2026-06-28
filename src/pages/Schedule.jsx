@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import Modal from '../components/Modal';
 import { Plus, Settings2, Clock3, PencilLine, Copy, CalendarDays, X, FileText, BookOpen } from 'lucide-react';
-import { store, uid, getProfile, getCurrentTermKey, getRoutinePreviewDate, isRoutineHoliday, getTermTimeline } from '../store/store';
+import { store, uid, getProfile, getCurrentTermKey, getRoutinePreviewDate, isRoutineHoliday, getTermTimeline, PERIOD_MODELS, ALL_PERIODS, ALL_LAB_PERIODS, periodToTime, timeToPeriod } from '../store/store';
 import { getAllCourses } from '../store/curriculumStore';
 import { useNavigate } from 'react-router-dom';
 import CourseTeacherDialog from '../components/CourseTeacherDialog';
@@ -10,64 +10,34 @@ import { notify } from '../lib/notify';
 const DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday'];
 const DAY_INDEX = { Sunday: 0, Monday: 1, Tuesday: 2, Wednesday: 3, Thursday: 4 };
 
-const TIME_MODELS = {
-  '50min': {
-    id: '50min',
-    name: '50 Minute Model',
-    note: '8:00 start, lunch gap, lab slots supported',
-    slots: [
-      '8:00 AM-8:50 AM',
-      '8:50 AM-9:40 AM',
-      '9:40 AM-10:30 AM',
-      '10:30 AM-10:40 AM break',
-      '10:40 AM-11:30 AM',
-      '11:30 AM-12:20 PM',
-      '12:20 PM-1:10 PM',
-      '1:10 PM-2:30 PM break',
-      '2:30 PM-3:20 PM',
-      '3:20 PM-4:10 PM',
-      '4:10 PM-5:00 PM',
-      '2:30 PM-5:00 PM',
-    ],
-  },
-  '40min': {
-    id: '40min',
-    name: '40 Minute Model',
-    note: '9:00 start, shorter class cycle, lab slots supported',
-    slots: [
-      '9:00 AM-9:40 AM',
-      '9:40 AM-10:20 AM',
-      '10:20 AM-11:00 AM',
-      '11:00 AM-11:40 AM',
-      '11:40 AM-12:20 PM',
-      '12:20 PM-1:00 PM',
-      '1:00 PM-2:00 PM break',
-      '2:00 PM-2:40 PM',
-      '2:40 PM-3:20 PM',
-      '3:20 PM-4:00 PM',
-      '2:00 PM-5:00 PM',
-    ],
-  },
+// Period helpers — all slot logic now goes through PERIOD_MODELS from store
+// periodToTime(period, modelId) → time string for display
+// timeToPeriod(timeStr, modelId) → period number/key for migration
+
+const getModelSlots = (modelId) => {
+  const model = PERIOD_MODELS[modelId] || PERIOD_MODELS['50min'];
+  // Regular periods as array (sorted by period number)
+  return ALL_PERIODS.map(p => ({ period: p, time: model.periods[p], isBreak: false }));
 };
 
-const DEFAULT_CUSTOM = [
-  '8:00 AM-8:50 AM',
-  '8:50 AM-9:40 AM',
-  '9:40 AM-10:30 AM',
-  '10:30 AM-10:40 AM break',
-  '10:40 AM-11:30 AM',
-  '11:30 AM-12:20 PM',
-  '12:20 PM-1:10 PM',
-  '1:10 PM-2:30 PM break',
-  '2:30 PM-3:20 PM',
-  '3:20 PM-4:10 PM',
-  '4:10 PM-5:00 PM',
-];
+const getModelLabSlots = (modelId) => {
+  const model = PERIOD_MODELS[modelId] || PERIOD_MODELS['50min'];
+  return ALL_LAB_PERIODS.map(l => ({ period: l, time: model.labs[l], isBreak: false }));
+};
+
+// For backward compat: get time string for a period/slot value
+const getTimeForPeriod = (periodOrSlot, modelId) => {
+  if (!periodOrSlot && periodOrSlot !== 0) return '';
+  const s = String(periodOrSlot);
+  // If it's already a time string (legacy or manual), return as-is
+  if (s === 'Manual') return 'Manual';
+  if (s.includes(':') || s.includes('AM') || s.includes('PM')) return s;
+  // It's a period number or L1/L2/L3
+  return periodToTime(s.startsWith('L') ? s : Number(s), modelId) || s;
+};
 
 const DEFAULT_SETTINGS = {
   modelId: '50min',
-  customSlots: DEFAULT_CUSTOM,
-  customLabel: '',
   messageFormat: 'whatsapp',
 };
 
@@ -99,7 +69,7 @@ const normalizeScheduleEntries = (entries) => {
 const normalizeSettings = (raw) => ({
   ...DEFAULT_SETTINGS,
   ...(raw || {}),
-  customSlots: Array.isArray(raw?.customSlots) && raw.customSlots.length ? raw.customSlots : DEFAULT_CUSTOM,
+  modelId: PERIOD_MODELS[raw?.modelId] ? raw.modelId : '50min',
   messageFormat: MESSAGE_FORMATS.some(f => f.id === raw?.messageFormat) ? raw.messageFormat : DEFAULT_SETTINGS.messageFormat,
   holidayDates: Array.isArray(raw?.holidayDates) ? [...new Set(raw.holidayDates)].filter(Boolean).sort() : [],
   courseTeacherMap: Object.entries(raw?.courseTeacherMap || {}).reduce((acc, [courseId, teachers]) => {
@@ -127,75 +97,22 @@ const getUniqueTeacherNames = (schedule) => {
   return Array.from(teachers).sort();
 };
 
-const normalizeSlotKey = (value) => {
-  // Normalize separators (→, ->, –, —, -) and whitespace so variants like
-  // "9:40 AM → 10:30 AM" and "9:40 AM - 10:30 AM" compare equal
-  return String(value || '')
-    .trim()
-    .replace(/\s*(→|->|–|—)\s*/g, ' - ')
-    .replace(/\s*-\s*/g, ' - ')
-    .replace(/\s+/g, ' ')
-    .trim();
+const isLabPeriod = (period) => String(period).startsWith('L');
+const isLongSessionalSlot = (period) => isLabPeriod(period);
+const getPresetSessionalPeriods = () => ALL_LAB_PERIODS;
+
+// For overlap check: two periods overlap only if they are the same (period system has no partial overlap)
+const isSlotOverlap = (a, b) => String(a) === String(b);
+
+// Sort periods: 1-9 then L1, L2, L3
+const periodSortValue = (period) => {
+  const s = String(period);
+  if (s.startsWith('L')) return 100 + Number(s.slice(1));
+  return Number(s) || 999;
 };
 
 const dateToDayName = (dateStr) => new Date(`${dateStr}T00:00:00`).toLocaleDateString('en-US', { weekday: 'long' });
 
-const parseTimeToMinutes = (value) => {
-  let cleanValue = String(value || '').trim().replace(/\s+break\s*$/i, '').trim();
-  const match = cleanValue.match(/^(\d{1,2}):(\d{2})\s*(AM|PM)?$/i);
-  if (!match) return null;
-  let hours = Number(match[1]);
-  const minutes = Number(match[2]);
-  const meridiem = match[3]?.toUpperCase();
-  if (meridiem === 'PM' && hours !== 12) hours += 12;
-  if (meridiem === 'AM' && hours === 12) hours = 0;
-  return hours * 60 + minutes;
-};
-
-const parseSlotRange = (slot) => {
-  const match = String(slot || '').match(/^(.+?)\s*(?:→|->|–|—|-)\s*(.+)$/);
-  if (!match) return null;
-  
-  let startStr = match[1].trim();
-  let endStr = match[2].trim();
-  
-  // Extract AM/PM from end time if present
-  const endMeridiem = endStr.match(/\s*(AM|PM)$/i)?.[1];
-  
-  // If end has AM/PM but start doesn't, apply the same meridiem to start
-  if (endMeridiem && !startStr.match(/\s*(AM|PM)$/i)) {
-    startStr = `${startStr} ${endMeridiem}`;
-  }
-  
-  const start = parseTimeToMinutes(startStr);
-  const end = parseTimeToMinutes(endStr);
-  if (start === null || end === null || end <= start) return null;
-  return { start, end };
-};
-
-const slotSortValue = (slot) => {
-  const range = parseSlotRange(slot);
-  return range ? range.start * 1000 + range.end : Number.MAX_SAFE_INTEGER;
-};
-
-const getSlotCatalog = (schedule, baseSlots) => {
-  const unique = new Map();
-  // baseSlots always take priority; schedule slots fill in extras
-  [...(baseSlots || []), ...((schedule || []).map(item => item.slot))].forEach(slot => {
-    const range = parseSlotRange(slot);
-    // Use time-based key so '9:40 AM → 10:30 AM' and '9:40 AM - 10:30 AM' map to same slot
-    const key = range ? `${range.start}-${range.end}` : normalizeSlotKey(slot);
-    if (key && !unique.has(key)) unique.set(key, slot); // keep first (baseSlot) spelling
-  });
-  return [...unique.values()].sort((a, b) => slotSortValue(a) - slotSortValue(b) || a.localeCompare(b));
-};
-
-const isSlotOverlap = (a, b) => {
-  const rangeA = parseSlotRange(a);
-  const rangeB = parseSlotRange(b);
-  if (!rangeA || !rangeB) return normalizeSlotKey(a) === normalizeSlotKey(b);
-  return rangeA.start < rangeB.end && rangeB.start < rangeA.end;
-};
 
 const formatDayShort = (day) => day.slice(0, 3);
 
@@ -210,29 +127,8 @@ const detectCourseType = (course) => {
   return lastDigit % 2 === 0 ? 'Sessional' : 'Theory';
 };
 
-const isLongSessionalSlot = (slot) => {
-  const range = parseSlotRange(slot);
-  if (!range) return false;
-  return (range.end - range.start) >= 120;
-};
 
-const getPresetSessionalSlots = (modelId) => {
-  if (modelId === '50min') {
-    return [
-      '8:00 AM-10:30 AM',
-      '10:40 AM-1:10 PM',
-      '2:30 PM-5:00 PM',
-    ];
-  }
-  if (modelId === '40min') {
-    return [
-      '9:00 AM-11:00 AM',
-      '11:00 AM-1:00 PM',
-      '2:00 PM-4:00 PM',
-    ];
-  }
-  return [];
-};
+
 
 const buildDailyText = (day, classes, getCourse, assignments = [], messageFormat = 'plain') => {
   const lines = [];
@@ -386,7 +282,7 @@ export default function Schedule() {
   const autoPreviewDayRef = useRef(dateToDayName(getRoutinePreviewDate((store.get('scheduleSettings')?.holidayDates) || [])));
   const [form, setForm] = useState({
     day: 'Sunday',
-    slot: TIME_MODELS['50min'].slots[0],
+    period: 1,
     courseId: '',
     displayName: '',
     room: '',
@@ -397,7 +293,7 @@ export default function Schedule() {
 
   // Quick cell form state (for double-click shortcut)
   const [quickFormOpen, setQuickFormOpen] = useState(false);
-  const [quickFormData, setQuickFormData] = useState({ day: '', slot: '', courseId: '', teacherName: '', displayName: '', room: '', note: '', type: 'Theory' });
+  const [quickFormData, setQuickFormData] = useState({ day: '', period: 1, courseId: '', teacherName: '', displayName: '', room: '', note: '', type: 'Theory' });
   const [quickFormEditingId, setQuickFormEditingId] = useState(null);
   const [courseTeacherDialogState, setCourseTeacherDialogState] = useState({ open: false, courseId: '', source: null });
   const [allKnownTeachers, setAllKnownTeachers] = useState(() => getUniqueTeacherNames(schedule));
@@ -416,16 +312,12 @@ export default function Schedule() {
     setCalendarSelectedDates(new Set());
   };
   
-  const openQuickAdd = (day, slot, courseId = '') => {
+  const openQuickAdd = (day, period, courseId = '') => {
     setQuickFormEditingId(null);
-    // Auto-detect type based on slot length
-    const range = parseSlotRange(slot);
-    const isLongSlot = range && (range.end - range.start) >= 120;
-    const autoType = isLongSlot ? 'Sessional' : 'Theory';
-    
+    const autoType = isLabPeriod(period) ? 'Sessional' : 'Theory';
     setQuickFormData({
       day: day || 'Sunday',
-      slot: slot || TIME_MODELS['50min'].slots[0],
+      period: period || 1,
       courseId: courseId || '',
       teacherName: '',
       displayName: '',
@@ -447,7 +339,7 @@ export default function Schedule() {
       teacherName: teachers[0] || '',
       displayName: courseShortNameMap[courseId] || prev.displayName || '',
       type: detectedType,
-      slot: allowed.includes(prev.slot) ? prev.slot : (allowed[0] || prev.slot),
+      period: allowed.includes(prev.period) ? prev.period : allowed[0],
     }));
   };
 
@@ -462,7 +354,7 @@ export default function Schedule() {
       teacherName: teachers[0] || '',
       displayName: courseShortNameMap[courseId] || prev.displayName || '',
       type: detectedType,
-      slot: allowed.includes(prev.slot) ? prev.slot : (allowed[0] || prev.slot),
+      period: allowed.includes(prev.period) ? prev.period : allowed[0],
     }));
   };
 
@@ -492,8 +384,10 @@ export default function Schedule() {
     }
   };
 
-  const activeTemplate = TIME_MODELS[settings.modelId] || TIME_MODELS['50min'];
-  const slotList = settings.modelId === 'custom' ? settings.customSlots : activeTemplate.slots;
+  const activeModel = PERIOD_MODELS[settings.modelId] || PERIOD_MODELS['50min'];
+  const modelId = activeModel.id;
+  // All available periods for current model: regular 1-9 + labs L1-L3
+  const allPeriods = [...ALL_PERIODS, ...ALL_LAB_PERIODS];
   const holidayDates = settings.holidayDates || [];
 
   useEffect(() => {
@@ -520,14 +414,8 @@ export default function Schedule() {
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
 
   const getAllowedSlotsForType = (type) => {
-    if (isSessionalType(type)) {
-      const presetSlots = getPresetSessionalSlots(settings.modelId);
-      if (presetSlots.length) return presetSlots;
-      const sessionalSlots = slotList.filter(isLongSessionalSlot);
-      return sessionalSlots.length ? sessionalSlots : slotList;
-    }
-    const regularSlots = slotList.filter(slot => !isLongSessionalSlot(slot));
-    return regularSlots.length ? regularSlots : slotList;
+    if (isSessionalType(type)) return getPresetSessionalPeriods(); // L1, L2, L3
+    return ALL_PERIODS; // 1-9
   };
 
   const handleFormTypeChange = (nextType) => {
@@ -535,7 +423,7 @@ export default function Schedule() {
     setForm(prev => ({
       ...prev,
       type: nextType,
-      slot: allowed.includes(prev.slot) ? prev.slot : (allowed[0] || prev.slot),
+      period: allowed.includes(prev.period) ? prev.period : allowed[0],
     }));
   };
 
@@ -544,8 +432,7 @@ export default function Schedule() {
     setQuickFormData(prev => ({
       ...prev,
       type: nextType,
-      slot: allowed.includes(prev.slot) ? prev.slot : (allowed[0] || prev.slot),
-      _extraSlot: null, // clear injected slot on type change
+      period: allowed.includes(prev.period) ? prev.period : allowed[0],
     }));
   };
 
@@ -612,7 +499,7 @@ export default function Schedule() {
 
   const resetForm = () => setForm({
     day: 'Sunday',
-    slot: TIME_MODELS['50min'].slots[0],
+    period: 1,
     courseId: '',
     displayName: '',
     room: '',
@@ -624,21 +511,17 @@ export default function Schedule() {
   const startEdit = (item) => {
     const courseTeachers = getCourseTeachers(item.courseId);
     const itemType = item.type || 'Theory';
-    const itemSlot = item.slot || '';
-    // Ensure the item's slot is included in allowed slots for its type
-    const allowedForType = getAllowedSlotsForType(itemType);
-    const slotInList = allowedForType.includes(itemSlot);
+    const itemPeriod = item.period !== undefined ? item.period : timeToPeriod(item.slot || item._legacySlot || '', modelId) || 1;
     setQuickFormEditingId(item.id);
     setQuickFormData({
       day: item.day || 'Sunday',
-      slot: itemSlot,
+      period: itemPeriod,
       courseId: item.courseId || '',
       teacherName: item.teacherName || courseTeachers[0] || '',
       displayName: item.displayName || courseShortNameMap[item.courseId] || '',
       room: item.room || '',
       note: item.note || '',
       type: itemType,
-      _extraSlot: slotInList ? null : itemSlot, // inject into select if missing
     });
     setQuickFormOpen(true);
   };
@@ -652,7 +535,7 @@ export default function Schedule() {
   const closeQuickForm = () => {
     setQuickFormOpen(false);
     setQuickFormEditingId(null);
-    setQuickFormData({ day: '', slot: '', courseId: '', teacherName: '', displayName: '', room: '', note: '', type: 'Theory', _extraSlot: null });
+    setQuickFormData({ day: '', period: 1, courseId: '', teacherName: '', displayName: '', room: '', note: '', type: 'Theory' });
   };
 
   const handleCourseTeacherDialogClose = () => {
@@ -717,19 +600,18 @@ export default function Schedule() {
   };
 
   const saveQuickForm = () => {
-    const { day, slot, courseId, teacherName, displayName, room, note, type } = quickFormData;
+    const { day, period, courseId, teacherName, displayName, room, note, type } = quickFormData;
     
-    if (!courseId || !slot) {
-      notify('Please select a course and time', 'error');
+    if (!courseId || period === undefined || period === null || period === '') {
+      notify('Please select a course and time period', 'error');
       return;
     }
 
-    const allowedSlots = getAllowedSlotsForType(type);
-    const isExtraSlot = quickFormData._extraSlot && slot === quickFormData._extraSlot;
-    if (!allowedSlots.includes(slot) && !isExtraSlot) {
+    const allowedPeriods = getAllowedSlotsForType(type);
+    if (!allowedPeriods.includes(period) && !allowedPeriods.includes(Number(period))) {
       notify(isSessionalType(type)
-        ? 'Sessional class must use a long lab slot (for example 2:30 PM-5:00 PM).'
-        : 'Theory/project/tutorial should use regular class slots.', 'error');
+        ? 'Sessional class must use a lab period (L1, L2, or L3).'
+        : 'Theory/project/tutorial should use regular periods (1-9).', 'error');
       return;
     }
 
@@ -746,11 +628,10 @@ export default function Schedule() {
       return;
     }
 
-    const nextSlot = normalizeSlotKey(slot);
-
     const newEntry = {
       day,
-      slot: nextSlot,
+      period,
+      slot: getTimeForPeriod(period, modelId), // computed time string for display
       courseId,
       displayName: String(displayName || '').trim() || courseShortNameMap[courseId] || autoDisplayName(courseId, selectedTeacher),
       room,
@@ -765,7 +646,7 @@ export default function Schedule() {
 
     const hasExactDuplicate = existingSchedule.some(item =>
       item.day === newEntry.day &&
-      normalizeSlotKey(item.slot) === nextSlot &&
+      String(item.period) === String(newEntry.period) &&
       item.courseId === newEntry.courseId &&
       (item.teacherName || '') === (newEntry.teacherName || '') &&
       (item.type || '') === (newEntry.type || '')
@@ -778,12 +659,12 @@ export default function Schedule() {
 
     const hasOverlap = existingSchedule.some(item => 
       item.day === newEntry.day && 
-      isSlotOverlap(item.slot, nextSlot) &&
+      isSlotOverlap(item.period, newEntry.period) &&
       item.courseId !== newEntry.courseId
     );
 
     if (hasOverlap) {
-      notify('That time overlaps with an existing class on the same day.', 'error');
+      notify('That period overlaps with an existing class on the same day.', 'error');
       return;
     }
 
@@ -799,13 +680,13 @@ export default function Schedule() {
   };
 
   const add = () => {
-    if (!form.courseId || !form.slot) return;
+    if (!form.courseId || form.period === undefined || form.period === null || form.period === '') return;
 
-    const allowedSlots = getAllowedSlotsForType(form.type);
-    if (!allowedSlots.includes(form.slot)) {
+    const allowedPeriods = getAllowedSlotsForType(form.type);
+    if (!allowedPeriods.includes(form.period) && !allowedPeriods.includes(Number(form.period))) {
       notify(isSessionalType(form.type)
-        ? 'Sessional class must use a long lab slot (for example 2:30 PM-5:00 PM).'
-        : 'Theory/project/tutorial should use regular class slots.', 'error');
+        ? 'Sessional class must use a lab period (L1, L2, or L3).'
+        : 'Theory/project/tutorial should use regular periods (1-9).', 'error');
       return;
     }
 
@@ -821,14 +702,13 @@ export default function Schedule() {
       return;
     }
 
-    const nextSlot = normalizeSlotKey(form.slot);
-
     const nextEntry = {
       ...form,
+      period: form.period,
+      slot: getTimeForPeriod(form.period, modelId),
       teacherName: selectedTeacher,
       teacherNames: availableTeachers,
       displayName: String(form.displayName || '').trim() || courseShortNameMap[form.courseId] || autoDisplayName(form.courseId, selectedTeacher),
-      slot: nextSlot,
       id: uid()
     };
 
@@ -836,25 +716,25 @@ export default function Schedule() {
 
     const hasExactDuplicate = existingSchedule.some(item =>
       item.day === nextEntry.day &&
-      normalizeSlotKey(item.slot) === nextSlot &&
+      String(item.period) === String(nextEntry.period) &&
       item.courseId === nextEntry.courseId &&
       (item.teacherName || '') === (nextEntry.teacherName || '') &&
       (item.type || '') === (nextEntry.type || '') &&
       (item.room || '') === (nextEntry.room || '')
     );
     if (hasExactDuplicate) {
-      notify(`This class is already saved for ${nextEntry.teacherName || 'this teacher'} in the same day and time.`, 'error');
+      notify(`This class is already saved for ${nextEntry.teacherName || 'this teacher'} in the same day and period.`, 'error');
       return;
     }
 
     const hasUserTimeConflict = existingSchedule.some(item => 
       item.id !== editingId && 
       item.day === nextEntry.day && 
-      isSlotOverlap(item.slot, nextSlot) &&
+      isSlotOverlap(item.period, nextEntry.period) &&
       item.courseId !== nextEntry.courseId
     );
     if (hasUserTimeConflict) {
-      notify('That time overlaps with an existing class on the same day.', 'error');
+      notify('That period overlaps with an existing class on the same day.', 'error');
       return;
     }
 
@@ -986,19 +866,19 @@ export default function Schedule() {
     const next = {};
     DAYS.forEach(d => {
       next[d] = {};
-      getSlotCatalog(schedule, slotList).forEach(slot => { next[d][slot] = []; });
+      allPeriods.forEach(p => { next[d][String(p)] = []; });
     });
     schedule.forEach(s => {
-      const key = normalizeSlotKey(s.slot);
-      if (next[s.day]?.[key]) next[s.day][key].push(s);
+      const key = String(s.period !== undefined ? s.period : timeToPeriod(s.slot || '', modelId) || s.slot);
+      if (next[s.day]?.[key] !== undefined) next[s.day][key].push(s);
     });
     return next;
-  }, [schedule, slotList]);
+  }, [schedule, modelId]);
 
   const tableSlots = useMemo(() => {
-    const slots = getSlotCatalog(schedule, slotList).filter(slot => !isLongSessionalSlot(slot));
-    return slots.length ? slots : getSlotCatalog(schedule, slotList);
-  }, [schedule, slotList]);
+    // Only regular periods 1-9 shown as rows; labs span multiple rows via rowSpan
+    return ALL_PERIODS;
+  }, []);
 
   const tableLayout = useMemo(() => {
     const starts = {};
@@ -1011,26 +891,27 @@ export default function Schedule() {
 
     schedule.forEach(item => {
       if (!starts[item.day]) return;
+      const itemPeriod = String(item.period !== undefined ? item.period : timeToPeriod(item.slot || '', modelId) || item.slot);
 
-      const overlappingSlots = tableSlots.filter(slot => !String(slot).toLowerCase().includes('break') && isSlotOverlap(slot, item.slot));
-      // Prefer exact match as anchor row; fall back to first overlapping slot
-      const exactMatch = overlappingSlots.find(slot => normalizeSlotKey(slot) === normalizeSlotKey(item.slot));
-      const firstSlot = exactMatch || overlappingSlots[0] || tableSlots.find(slot => normalizeSlotKey(slot) === normalizeSlotKey(item.slot));
-      if (!firstSlot) return;
-
-      if (!starts[item.day][firstSlot]) starts[item.day][firstSlot] = [];
-      // rowSpan: count slots from firstSlot onward that overlap
-      const slotsFromFirst = exactMatch
-        ? overlappingSlots.slice(overlappingSlots.indexOf(exactMatch))
-        : overlappingSlots;
-      const rowSpan = Math.max(1, slotsFromFirst.length || 1);
-      starts[item.day][firstSlot].push({ item, rowSpan });
-
-      slotsFromFirst.slice(1).forEach(slot => covered[item.day].add(slot));
+      if (isLabPeriod(itemPeriod)) {
+        // Lab: L1=P1-P3, L2=P4-P6, L3=P7-P9 → rowSpan=3, anchor at first period
+        const labMap = { L1: [1,2,3], L2: [4,5,6], L3: [7,8,9] };
+        const spanPeriods = labMap[itemPeriod] || [];
+        const firstPeriod = spanPeriods[0];
+        if (!firstPeriod) return;
+        const key = String(firstPeriod);
+        if (!starts[item.day][key]) starts[item.day][key] = [];
+        starts[item.day][key].push({ item, rowSpan: 3 });
+        spanPeriods.slice(1).forEach(p => covered[item.day].add(String(p)));
+      } else {
+        const key = itemPeriod;
+        if (!starts[item.day][key]) starts[item.day][key] = [];
+        starts[item.day][key].push({ item, rowSpan: 1 });
+      }
     });
 
     return { starts, covered };
-  }, [schedule, tableSlots]);
+  }, [schedule, modelId]);
 
   const todayIndex = new Date().getDay();
   const today = DAYS[todayIndex] || 'Sunday';
@@ -1167,24 +1048,25 @@ export default function Schedule() {
     store.set('roadmapConfig', next);
   };
 
-  const slotPreview = (slot) => {
-    const cleanSlot = String(slot).replace(/\s+break\s*$/i, '').trim();
-    const match = cleanSlot.match(/^(.+)-(.+)$/);
-    if (!match) return cleanSlot;
-    return `${match[1]} → ${match[2]}`;
+  const slotPreview = (period) => {
+    const time = getTimeForPeriod(period, modelId);
+    if (!time || time === 'Manual') return `P${period}`;
+    // Format: "8:00 AM → 8:50 AM"
+    return time.replace(/\s*-\s*/, ' → ');
   };
 
-  const isBreakSlot = (slot) => String(slot).toLowerCase().includes('break');
-
-  const editCustomSlots = (text) => {
-    const slots = text
-      .split('\n')
-      .map(line => line.trim())
-      .filter(Boolean);
-    persistSettings({ ...settings, modelId: 'custom', customSlots: slots.length ? slots : DEFAULT_CUSTOM });
+  const periodLabel = (period) => {
+    if (isLabPeriod(period)) return period; // L1, L2, L3
+    return `P${period}`;
   };
 
-  const currentSettingsText = slotList.join('\n');
+  const isBreakSlot = () => false; // Period system has no break rows in grid
+
+  const isBreakAfterPeriod = (period, mid) => {
+    const model = PERIOD_MODELS[mid] || PERIOD_MODELS['50min'];
+    return model.breakAfter === Number(period);
+  };
+
   const showSettingsPanel = editingSettings;
   const [fullScreenOpen, setFullScreenOpen] = useState(false);
   const isFullScreenForm = fullScreenOpen;
@@ -1219,13 +1101,16 @@ export default function Schedule() {
           </thead>
           <tbody>
             {tableSlots.map(p => {
-              const breakSlot = isBreakSlot(p);
+              const showBreakAfter = isBreakAfterPeriod(p, modelId);
               return (
                 <tr key={p}>
-                  <td style={{ padding: 'clamp(8px, 2vw, 12px) clamp(6px, 1.5vw, 12px)', borderBottom: '1px solid var(--border)', borderRight: '1px solid var(--border)', fontWeight: 700, fontSize: 'clamp(11px, 2.5vw, 13px)', color: 'var(--muted)', fontFamily: 'JetBrains Mono, monospace', whiteSpace: 'nowrap', background: breakSlot ? 'rgba(239,68,68,0.08)' : 'var(--bg)' }}>{slotPreview(p)}</td>
+                  <td style={{ padding: 'clamp(8px, 2vw, 12px) clamp(6px, 1.5vw, 12px)', borderBottom: showBreakAfter ? '3px solid rgba(239,68,68,0.25)' : '1px solid var(--border)', borderRight: '1px solid var(--border)', fontWeight: 700, fontSize: 'clamp(11px, 2.5vw, 13px)', color: 'var(--muted)', fontFamily: 'JetBrains Mono, monospace', whiteSpace: 'nowrap', background: 'var(--bg)' }}>
+                    <span style={{ fontSize: 10, color: 'var(--accent)', fontWeight: 800, display: 'block' }}>P{p}</span>
+                    {slotPreview(p)}
+                  </td>
                   {DAYS.map(d => {
-                    if (tableLayout.covered[d]?.has(p)) return null;
-                    const entries = tableLayout.starts[d]?.[p] || [];
+                    if (tableLayout.covered[d]?.has(String(p))) return null;
+                    const entries = tableLayout.starts[d]?.[String(p)] || [];
                     const dayItems = entries.map(entry => entry.item);
                     const rowSpan = entries.length === 1 ? entries[0].rowSpan : 1;
                     const isEmptyCell = dayItems.length === 0;
@@ -1384,13 +1269,13 @@ export default function Schedule() {
             <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, alignItems: 'center', flexWrap: 'wrap', marginBottom: 8 }}>
               <div>
                 <div style={{ fontWeight: 700, fontSize: 14, marginBottom: 1 }}>Routine Settings</div>
-                <div style={{ fontSize: 11, color: 'var(--muted)' }}>{activeTemplate.name} · {activeTemplate.note}</div>
+                <div style={{ fontSize: 11, color: 'var(--muted)' }}>{activeModel.name} · {activeModel.note}</div>
               </div>
-              <span className="tag tag-gray">{settings.modelId === 'custom' ? 'Custom' : activeTemplate.id}</span>
+              <span className="tag tag-gray">{activeModel.id}</span>
             </div>
 
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 8, marginBottom: 8 }}>
-              {Object.values(TIME_MODELS).map(model => (
+              {Object.values(PERIOD_MODELS).map(model => (
                 <button
                   key={model.id}
                   onClick={() => persistSettings({ ...settings, modelId: model.id })}
@@ -1410,23 +1295,6 @@ export default function Schedule() {
                   </div>
                 </button>
               ))}
-              <button
-                onClick={() => persistSettings({ ...settings, modelId: 'custom' })}
-                className="btn"
-                style={{
-                  justifyContent: 'flex-start',
-                  border: settings.modelId === 'custom' ? '1px solid var(--accent)' : '1px solid var(--border)',
-                  background: settings.modelId === 'custom' ? 'rgba(59,130,246,0.08)' : 'var(--card)',
-                  padding: '10px 12px',
-                }}
-              >
-                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 2 }}>
-                  <span style={{ fontWeight: 700, display: 'flex', alignItems: 'center', gap: 6 }}>
-                    <PencilLine size={13} /> Custom model
-                  </span>
-                  <span style={{ fontSize: 11, color: 'var(--muted)' }}>Paste one slot per line</span>
-                </div>
-              </button>
             </div>
 
             <div style={{ marginBottom: 8 }}>
@@ -1449,32 +1317,17 @@ export default function Schedule() {
               </div>
             </div>
 
-            {settings.modelId === 'custom' && (
+            <div style={{ display: 'flex', justifyContent: 'space-between', gap: 10, alignItems: 'center', flexWrap: 'wrap' }}>
               <div>
-                <label>Custom slots</label>
-                <textarea
-                  rows={6}
-                  value={currentSettingsText}
-                  onChange={e => editCustomSlots(e.target.value)}
-                  placeholder={DEFAULT_CUSTOM.join('\n')}
-                  style={{ width: '100%', resize: 'vertical', fontFamily: 'inherit' }}
-                />
+                <div style={{ fontSize: 13, fontWeight: 700 }}>Holiday Calendar</div>
+                <div style={{ fontSize: 11, color: 'var(--muted)' }}>Friday and Saturday are always holidays. Open the popup to add extra dates.</div>
               </div>
-            )}
-
-            <div style={{ marginTop: 10, padding: 12, border: '1px solid var(--border)', borderRadius: 10, background: 'var(--bg)' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', gap: 10, alignItems: 'center', flexWrap: 'wrap' }}>
-                <div>
-                  <div style={{ fontSize: 13, fontWeight: 700 }}>Holiday Calendar</div>
-                  <div style={{ fontSize: 11, color: 'var(--muted)' }}>Friday and Saturday are always holidays. Open the popup to add extra dates.</div>
-                </div>
-                <span
-                  onClick={openHolidaySetup}
-                  style={{ fontSize: 11, color: 'var(--accent)', cursor: 'pointer', textDecoration: 'underline', whiteSpace: 'nowrap' }}
-                >
-                  Manage ↗
-                </span>
-              </div>
+              <span
+                onClick={openHolidaySetup}
+                style={{ fontSize: 11, color: 'var(--accent)', cursor: 'pointer', textDecoration: 'underline', whiteSpace: 'nowrap' }}
+              >
+                Manage ↗
+              </span>
             </div>
           </div>
         )}
@@ -1674,7 +1527,7 @@ export default function Schedule() {
               </div>
               <div className="form-field" style={{ gridColumn: 'span 1' }}>
                 <label>Time</label>
-                <select value={form.slot} onChange={e => set('slot', e.target.value)}>
+                <select value={form.period} onChange={e => set('period', isLabPeriod(e.target.value) ? e.target.value : Number(e.target.value))}>
                   {getAllowedSlotsForType(form.type).map(p => <option key={p} value={p}>{slotPreview(p)}</option>)}
                 </select>
               </div>
@@ -2373,7 +2226,7 @@ export default function Schedule() {
           transformOrigin: 'center',
         }}>
           <div style={{ fontWeight: 700, fontSize: 15, marginBottom: 16 }}>
-            {quickFormEditingId ? 'Quick Edit' : 'Quick Add'} · {quickFormData.day} · {slotPreview(quickFormData.slot)}
+            {quickFormEditingId ? 'Quick Edit' : 'Quick Add'} · {quickFormData.day} · {slotPreview(quickFormData.period)}
           </div>
           
           <div style={{ display: 'grid', gap: 12, marginBottom: 16, gridTemplateColumns: isFullScreenForm ? 'repeat(3, minmax(0, 1fr))' : '1fr', columnGap: 16 }}>
@@ -2423,13 +2276,13 @@ export default function Schedule() {
             <div style={isFullScreenForm ? { gridColumn: 'span 1' } : undefined}>
               <label style={{ fontSize: 12, fontWeight: 600 }}>Time</label>
               <select
-                value={quickFormData.slot}
-                onChange={e => setQuickFormData(d => ({ ...d, slot: e.target.value }))}
+                value={quickFormData.period}
+                onChange={e => setQuickFormData(d => ({ ...d, period: isLabPeriod(e.target.value) ? e.target.value : Number(e.target.value) }))}
                 style={{ width: '100%', padding: '8px 10px', border: '1px solid var(--border)', borderRadius: 6, background: 'var(--bg)', color: 'var(--text)', fontSize: 13 }}
               >
                 {(() => {
                   const opts = getAllowedSlotsForType(quickFormData.type);
-                  const extra = quickFormData._extraSlot && !opts.includes(quickFormData._extraSlot) ? quickFormData._extraSlot : null;
+                  const extra = quickFormData._extraPeriod && !opts.includes(quickFormData._extraPeriod) ? quickFormData._extraPeriod : null;
                   return [...(extra ? [extra] : []), ...opts].map(p => <option key={p} value={p}>{slotPreview(p)}</option>);
                 })()}
               </select>
