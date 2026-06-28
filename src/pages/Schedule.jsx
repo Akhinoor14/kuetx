@@ -545,6 +545,7 @@ export default function Schedule() {
       ...prev,
       type: nextType,
       slot: allowed.includes(prev.slot) ? prev.slot : (allowed[0] || prev.slot),
+      _extraSlot: null, // clear injected slot on type change
     }));
   };
 
@@ -622,16 +623,22 @@ export default function Schedule() {
 
   const startEdit = (item) => {
     const courseTeachers = getCourseTeachers(item.courseId);
+    const itemType = item.type || 'Theory';
+    const itemSlot = item.slot || '';
+    // Ensure the item's slot is included in allowed slots for its type
+    const allowedForType = getAllowedSlotsForType(itemType);
+    const slotInList = allowedForType.includes(itemSlot);
     setQuickFormEditingId(item.id);
     setQuickFormData({
       day: item.day || 'Sunday',
-      slot: item.slot || TIME_MODELS['50min'].slots[0],
+      slot: itemSlot,
       courseId: item.courseId || '',
       teacherName: item.teacherName || courseTeachers[0] || '',
       displayName: item.displayName || courseShortNameMap[item.courseId] || '',
       room: item.room || '',
       note: item.note || '',
-      type: item.type || 'Theory',
+      type: itemType,
+      _extraSlot: slotInList ? null : itemSlot, // inject into select if missing
     });
     setQuickFormOpen(true);
   };
@@ -645,7 +652,7 @@ export default function Schedule() {
   const closeQuickForm = () => {
     setQuickFormOpen(false);
     setQuickFormEditingId(null);
-    setQuickFormData({ day: '', slot: '', courseId: '', teacherName: '', displayName: '', room: '', note: '', type: 'Theory' });
+    setQuickFormData({ day: '', slot: '', courseId: '', teacherName: '', displayName: '', room: '', note: '', type: 'Theory', _extraSlot: null });
   };
 
   const handleCourseTeacherDialogClose = () => {
@@ -718,7 +725,8 @@ export default function Schedule() {
     }
 
     const allowedSlots = getAllowedSlotsForType(type);
-    if (!allowedSlots.includes(slot)) {
+    const isExtraSlot = quickFormData._extraSlot && slot === quickFormData._extraSlot;
+    if (!allowedSlots.includes(slot) && !isExtraSlot) {
       notify(isSessionalType(type)
         ? 'Sessional class must use a long lab slot (for example 2:30 PM-5:00 PM).'
         : 'Theory/project/tutorial should use regular class slots.', 'error');
@@ -1221,6 +1229,7 @@ export default function Schedule() {
                     const dayItems = entries.map(entry => entry.item);
                     const rowSpan = entries.length === 1 ? entries[0].rowSpan : 1;
                     const isEmptyCell = dayItems.length === 0;
+                    const isLabCell = entries.length === 1 && isSessionalType(entries[0]?.item?.type) && rowSpan > 1;
                     return (
                       <td
                         key={d}
@@ -1230,14 +1239,17 @@ export default function Schedule() {
                         onDoubleClick={isEmptyCell ? () => openQuickAdd(d, p) : undefined}
                         title={isEmptyCell ? 'Double-click to add class' : undefined}
                         style={{
-                          padding: 'clamp(4px, 1.5vw, 6px)',
+                          padding: isLabCell ? 0 : 'clamp(4px, 1.5vw, 6px)',
                           borderBottom: '1px solid var(--border)',
                           borderRight: '1px solid var(--border)',
-                          verticalAlign: 'top',
+                          verticalAlign: isLabCell ? 'middle' : 'top',
                           minHeight: 'clamp(56px, 12vw, 72px)',
-                          background: breakSlot ? 'rgba(239,68,68,0.08)' : d === selectedDay ? 'rgba(59,130,246,0.035)' : 'transparent',
+                          background: isLabCell
+                            ? 'linear-gradient(180deg, rgba(34,197,94,0.15), rgba(34,197,94,0.08))'
+                            : breakSlot ? 'rgba(239,68,68,0.08)' : d === selectedDay ? 'rgba(59,130,246,0.035)' : 'transparent',
                           cursor: isEmptyCell ? 'pointer' : 'default',
                           touchAction: 'manipulation',
+                          textAlign: isLabCell ? 'center' : undefined,
                         }}
                       >
                         {dayItems.map(s => {
@@ -1250,18 +1262,46 @@ export default function Schedule() {
                               onClick={() => handleCellClick(s.id, s)}
                               onDoubleClick={() => startEdit(s)}
                               title="Double-click to edit"
-                              style={{
+                              style={isLabCell ? {
+                                padding: '8px 24px',
+                                fontSize: 13,
+                                lineHeight: 1.4,
+                                background: 'transparent',
+                                border: 'none',
+                                color: 'var(--text)',
+                                position: 'relative',
+                                cursor: 'pointer',
+                                userSelect: 'none',
+                                WebkitTouchCallout: 'none',
+                                WebkitUserSelect: 'none',
+                                touchAction: 'manipulation',
+                                width: '100%',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                              } : isSessional ? {
+                                padding: '6px 24px 6px 6px',
+                                fontSize: 12,
+                                lineHeight: 1.35,
+                                background: 'transparent',
+                                border: 'none',
+                                color: 'var(--text)',
+                                position: 'relative',
+                                cursor: 'pointer',
+                                userSelect: 'none',
+                                WebkitTouchCallout: 'none',
+                                WebkitUserSelect: 'none',
+                                touchAction: 'manipulation',
+                                width: '100%',
+                              } : {
                                 padding: '8px 9px',
                                 borderRadius: 11,
                                 fontSize: 12,
                                 lineHeight: 1.35,
                                 marginBottom: 4,
-                                background: isSessional 
-                                  ? 'linear-gradient(180deg, rgba(34,197,94,0.12), rgba(34,197,94,0.08))'
-                                  : 'linear-gradient(180deg, rgba(59,130,246,0.12), rgba(59,130,246,0.08))',
-                                border: isSessional
-                                  ? '1px solid rgba(34,197,94,0.25)'
-                                  : '1px solid rgba(59,130,246,0.18)',
+                                background: 'linear-gradient(180deg, rgba(59,130,246,0.12), rgba(59,130,246,0.08))',
+                                border: '1px solid rgba(59,130,246,0.18)',
                                 color: 'var(--text)',
                                 position: 'relative',
                                 cursor: 'pointer',
@@ -1271,7 +1311,7 @@ export default function Schedule() {
                                 touchAction: 'manipulation',
                               }}
                             >
-                              <div style={{ fontWeight: 800, fontSize: 'clamp(10px, 2.5vw, 12px)', lineHeight: 1.35, letterSpacing: '0.01em', display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden', flex: 1 }}>
+                              <div style={{ fontWeight: 800, fontSize: isSessional ? 'clamp(11px, 2.5vw, 13px)' : 'clamp(10px, 2.5vw, 12px)', lineHeight: 1.35, letterSpacing: '0.01em', display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden', flex: 1 }}>
                                 {s.displayName || c?.code || c?.name || '?'}
                               </div>
                               {!hideTeacherInGrid && (
@@ -1286,7 +1326,7 @@ export default function Schedule() {
                               }}>
                                 ✎
                               </button>
-                              <button onClick={(e) => { e.stopPropagation(); remove(s.id); }} style={{
+                              <button onClick={(e) => { e.stopPropagation(); if (window.confirm('এই class টা delete করবে?')) remove(s.id); }} style={{
                                 position: 'absolute', top: 2, right: 2, background: 'none', border: 'none',
                                 color: 'inherit', cursor: 'pointer', opacity: 0.55, padding: 0, lineHeight: 1,
                                 touchAction: 'manipulation',
@@ -1900,7 +1940,6 @@ export default function Schedule() {
                             {week.map((dayData, dayIdx) => {
                               const isSelected = dayData && calendarSelectedDates.has(dayData.dateStr);
                               const isInHolidays = dayData && holidayDates.includes(dayData.dateStr);
-                              const [, , dayNum] = calendarMonth.split('-').map(Number);
                               const isFridayOrSaturday = [5, 6].includes(dayData?.dateStr ? new Date(`${dayData.dateStr}T00:00:00`).getDay() : -1);
                               
                               return (
@@ -2039,7 +2078,7 @@ export default function Schedule() {
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 12, gap: 8, flexWrap: 'wrap' }}>
           <div>
             <div style={{ fontWeight: 700, fontSize: 14 }}>Term Roadmap</div>
-            <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 2 }}>Holiday-aware · Adjustable phases · Exam date override</div>
+            <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 2 }}>Date-based · Holiday calendar · Exam date override</div>
           </div>
           <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
             <button className="btn btn-ghost" style={{ fontSize: 12, padding: '6px 10px' }} onClick={openHolidaySetup}>
@@ -2051,13 +2090,13 @@ export default function Schedule() {
             <button className="btn btn-primary" style={{ fontSize: 12, padding: '6px 10px' }} onClick={() => {
               const termKey = getCurrentTermKey(profile);
               if (!profile?.termStartDate) return notify('Add term start date in Profile first', 'error');
-              if (!profile?.dept) return notify('Add your department in Profile first', 'error');
               if (!termKey) return notify('Set current term in Profile first', 'error');
-              const timeline = getTermTimeline(profile?.termStartDate, profile?.dept, termKey, roadmapConfig);
-              if (!timeline) return notify('Unable to build timeline — check term start date in Profile', 'error');
+              const count = Math.max(1, Math.min(12, Number(roadmapConfig.examCount) || 5));
               const overrides = (examOverrides && examOverrides[termKey]) || [];
-              const mapped = timeline.examPhases.map((p, i) => ({ course: p.course, examDate: (overrides[i]?.examDate) || p.examDate.toISOString().slice(0,10) }));
-              if (mapped.length === 0) return notify('No theory courses found for this term', 'error');
+              const mapped = Array.from({ length: count }, (_, i) => ({
+                course: i + 1,
+                examDate: overrides[i]?.examDate || '',
+              }));
               setLocalExamEdits(mapped);
               setEditingExams(true);
             }}>
@@ -2068,70 +2107,68 @@ export default function Schedule() {
 
         {/* Roadmap Config Panel */}
         {roadmapSettingsOpen && (
-          <div style={{ background: 'var(--card)', border: '1px solid var(--border)', borderRadius: 10, padding: 14, marginBottom: 12, display: 'grid', gap: 10 }}>
+          <div style={{ background: 'var(--card)', border: '1px solid var(--border)', borderRadius: 10, padding: 14, marginBottom: 12, display: 'grid', gap: 12 }}>
             <div style={{ fontWeight: 700, fontSize: 13, marginBottom: 2 }}>⚙️ Configure Roadmap</div>
-            {/* Class Days: date-based OR slider, side by side */}
-            <div>
-              <div style={{ fontSize: 12, fontWeight: 600, marginBottom: 6 }}>Class Days (working)</div>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginBottom: 4 }}>
-                <div>
-                  <div style={{ fontSize: 11, color: 'var(--muted)', marginBottom: 3 }}>Start: <b>{profile?.termStartDate ? new Date(profile.termStartDate + 'T00:00:00').toLocaleDateString('en-GB', {day:'numeric',month:'short',year:'numeric'}) : 'Set in Profile'}</b></div>
-                </div>
-                <div>
-                  <div style={{ fontSize: 11, color: 'var(--muted)', marginBottom: 3 }}>Class End Date <span style={{color:'var(--accent)', fontSize:10}}>overrides slider</span></div>
-                  <input
-                    type="date"
-                    value={roadmapConfig.classEndDate || ''}
-                    onChange={e => saveRoadmapConfig({ ...roadmapConfig, classEndDate: e.target.value })}
-                    style={{ width: '100%', padding: '6px 8px', borderRadius: 6, border: '1px solid var(--border)', background: 'var(--input)', color: 'var(--text)', fontSize: 12 }}
-                  />
+
+            {/* Class Period */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
+              <div>
+                <div style={{ fontSize: 11, fontWeight: 600, marginBottom: 4, color: 'var(--muted)' }}>📚 Class Start</div>
+                <div style={{ fontSize: 12, fontWeight: 700, padding: '7px 10px', border: '1px solid var(--border)', borderRadius: 6, background: 'var(--bg)', color: 'var(--text)' }}>
+                  {profile?.termStartDate ? new Date(profile.termStartDate + 'T00:00:00').toLocaleDateString('en-GB', {day:'numeric',month:'short',year:'numeric'}) : 'Set in Profile'}
                 </div>
               </div>
-              {/* Slider fallback: disabled when End Date is set */}
-              <div style={{ opacity: roadmapConfig.classEndDate ? 0.4 : 1, pointerEvents: roadmapConfig.classEndDate ? 'none' : 'auto', display: 'grid', gridTemplateColumns: '1fr auto', alignItems: 'center', gap: 8, marginTop: 4 }}>
-                <input
-                  type="range" min={30} max={120} step={1}
-                  value={roadmapConfig.classDays ?? 65}
-                  onChange={e => saveRoadmapConfig({ ...roadmapConfig, classDays: Number(e.target.value) })}
-                  style={{ width: '100%', accentColor: 'var(--accent)' }}
-                />
-                <div style={{ minWidth: 32, textAlign: 'center', fontWeight: 800, fontSize: 14, color: 'var(--accent)' }}>
-                  {roadmapConfig.classDays ?? 65}
-                </div>
+              <div>
+                <div style={{ fontSize: 11, fontWeight: 600, marginBottom: 4, color: 'var(--muted)' }}>📚 Class End</div>
+                <input type="date" value={roadmapConfig.classEndDate || ''}
+                  onChange={e => saveRoadmapConfig({ ...roadmapConfig, classEndDate: e.target.value })}
+                  style={{ width: '100%', padding: '6px 8px', borderRadius: 6, border: '1px solid var(--border)', background: 'var(--input)', color: 'var(--text)', fontSize: 12 }} />
               </div>
-              {roadmapConfig.classEndDate && (
-                <button className="btn btn-ghost" style={{ fontSize: 10, padding: '2px 8px', marginTop: 4 }}
-                  onClick={() => saveRoadmapConfig({ ...roadmapConfig, classEndDate: '', classStartDate: '' })}>
-                  Clear end date (use slider)
-                </button>
-              )}
             </div>
 
-            {/* Other sliders */}
-            {[
-              { key: 'prepLeaveDays', label: 'Prep Leave (days)',      min: 3,   max: 30,  step: 1 },
-              { key: 'examCount',     label: 'Theory Exams',           min: 1,   max: 12,  step: 1 },
-              { key: 'examGapDays',   label: 'Gap Between Exams (working days)', min: 1, max: 14, step: 1 },
-              { key: 'postBreakDays', label: 'Post-Exam Break (days)', min: 3,   max: 60,  step: 1 },
-            ].map(({ key, label, min, max, step }) => (
-              <div key={key} style={{ display: 'grid', gridTemplateColumns: '1fr auto', alignItems: 'center', gap: 10 }}>
-                <div>
-                  <div style={{ fontSize: 12, fontWeight: 600, marginBottom: 4 }}>{label}</div>
-                  <input
-                    type="range" min={min} max={max} step={step}
-                    value={roadmapConfig[key] ?? (key === 'prepLeaveDays' ? 10 : key === 'examCount' ? 5 : key === 'examGapDays' ? 4 : 9)}
-                    onChange={e => saveRoadmapConfig({ ...roadmapConfig, [key]: Number(e.target.value) })}
-                    style={{ width: '100%', accentColor: 'var(--accent)' }}
-                  />
-                </div>
-                <div style={{ minWidth: 32, textAlign: 'center', fontWeight: 800, fontSize: 14, color: 'var(--accent)' }}>
-                  {roadmapConfig[key] ?? (key === 'prepLeaveDays' ? 10 : key === 'examCount' ? 5 : key === 'examGapDays' ? 4 : 9)}
+            {/* Prep Leave */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
+              <div>
+                <div style={{ fontSize: 11, fontWeight: 600, marginBottom: 4, color: 'var(--muted)' }}>🎓 Prep Leave Start</div>
+                <div style={{ fontSize: 12, padding: '7px 10px', border: '1px solid var(--border)', borderRadius: 6, background: 'var(--bg)', color: 'var(--muted)' }}>
+                  {roadmapConfig.classEndDate
+                    ? new Date(new Date(roadmapConfig.classEndDate + 'T00:00:00').getTime() + 86400000).toLocaleDateString('en-GB', {day:'numeric',month:'short'})
+                    : 'Set class end first'}
                 </div>
               </div>
-            ))}
+              <div>
+                <div style={{ fontSize: 11, fontWeight: 600, marginBottom: 4, color: 'var(--muted)' }}>🎓 Prep Leave End</div>
+                <input type="date" value={roadmapConfig.prepLeaveEndDate || ''}
+                  min={roadmapConfig.classEndDate || ''}
+                  onChange={e => saveRoadmapConfig({ ...roadmapConfig, prepLeaveEndDate: e.target.value })}
+                  style={{ width: '100%', padding: '6px 8px', borderRadius: 6, border: '1px solid var(--border)', background: 'var(--input)', color: 'var(--text)', fontSize: 12 }} />
+              </div>
+            </div>
+
+            {/* Exam Count */}
+            <div>
+              <div style={{ fontSize: 11, fontWeight: 600, marginBottom: 6, color: 'var(--muted)' }}>✍️ Theory Exam Count</div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                <button className="btn btn-ghost" style={{ padding: '4px 12px', fontSize: 16, fontWeight: 700 }}
+                  onClick={() => saveRoadmapConfig({ ...roadmapConfig, examCount: Math.max(1, (roadmapConfig.examCount ?? 5) - 1) })}>−</button>
+                <span style={{ fontWeight: 800, fontSize: 18, minWidth: 28, textAlign: 'center', color: 'var(--accent)' }}>{roadmapConfig.examCount ?? 5}</span>
+                <button className="btn btn-ghost" style={{ padding: '4px 12px', fontSize: 16, fontWeight: 700 }}
+                  onClick={() => saveRoadmapConfig({ ...roadmapConfig, examCount: Math.min(12, (roadmapConfig.examCount ?? 5) + 1) })}>+</button>
+                <span style={{ fontSize: 11, color: 'var(--muted)' }}>Set individual dates via Edit Exams</span>
+              </div>
+            </div>
+
+            {/* Post-Exam Break */}
+            <div>
+              <div style={{ fontSize: 11, fontWeight: 600, marginBottom: 4, color: 'var(--muted)' }}>🌴 Post-Exam Break End</div>
+              <input type="date" value={roadmapConfig.postExamEndDate || ''}
+                onChange={e => saveRoadmapConfig({ ...roadmapConfig, postExamEndDate: e.target.value })}
+                style={{ width: '100%', padding: '6px 8px', borderRadius: 6, border: '1px solid var(--border)', background: 'var(--input)', color: 'var(--text)', fontSize: 12 }} />
+            </div>
+
             <button className="btn btn-ghost" style={{ fontSize: 11, alignSelf: 'flex-start', padding: '5px 10px' }}
-              onClick={() => saveRoadmapConfig({ classDays: 65, prepLeaveDays: 10, examCount: 5, examGapDays: 4, postBreakDays: 9, classStartDate: '', classEndDate: '' })}>
-              Reset to defaults
+              onClick={() => saveRoadmapConfig({ examCount: 5, classEndDate: '', prepLeaveEndDate: '', postExamEndDate: '' })}>
+              Reset
             </button>
           </div>
         )}
@@ -2151,26 +2188,33 @@ export default function Schedule() {
           const overrides = (examOverrides && examOverrides[termKey]) || [];
           const examPhases = timeline.examPhases.map((p, i) => {
             const o = overrides[i];
-            return { ...p, examDate: o && o.examDate ? new Date(o.examDate) : new Date(p.examDate) };
+            return { ...p, examDate: o && o.examDate ? new Date(o.examDate + 'T00:00:00') : null };
           });
-          const hasExamPhases = examPhases.length > 0;
-          const examEndDate = hasExamPhases ? examPhases[examPhases.length - 1].examDate : null;
-          const fmt = (d) => new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+          const filledExams = examPhases.filter(ep => ep.examDate);
+          const lastExamDate = filledExams.length > 0 ? filledExams[filledExams.length - 1].examDate : null;
+          const fmt = (d) => d ? new Date(d).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }) : '—';
 
-          // Duration tag: term start → last exam
           const durationTag = timeline.durationMonths != null
-            ? (timeline.durationMonths < 1.5
-                ? `${timeline.durationWeeks}w`
-                : `${timeline.durationMonths}mo`)
+            ? (timeline.durationMonths < 1.5 ? `${timeline.durationWeeks}w` : `${timeline.durationMonths}mo`)
             : null;
+
+          const nothingSet = !roadmapConfig.classEndDate && !roadmapConfig.prepLeaveEndDate && !roadmapConfig.postExamEndDate && filledExams.length === 0;
+
+          if (nothingSet) {
+            return (
+              <div style={{ fontSize: 12, color: 'var(--muted)', padding: '8px 0' }}>
+                Click <b>Configure</b> to set dates, then <b>Edit Exams</b> to add exam dates.
+              </div>
+            );
+          }
 
           return (
             <div style={{ display: 'grid', gap: 8 }}>
-              {/* Term label + duration tag */}
+              {/* Term label + duration */}
               <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                 <div style={{ fontWeight: 700, fontSize: 13 }}>{profile?.currentTerm || termKey}</div>
                 {durationTag && (
-                  <span style={{ fontSize: 10, fontWeight: 700, background: 'var(--accent)', color: '#fff', borderRadius: 99, padding: '2px 7px', letterSpacing: 0.3 }}>
+                  <span style={{ fontSize: 10, fontWeight: 700, background: 'var(--accent)', color: '#fff', borderRadius: 99, padding: '2px 7px' }}>
                     {durationTag} total
                   </span>
                 )}
@@ -2178,19 +2222,25 @@ export default function Schedule() {
 
               {/* Phase cards row 1 */}
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
-                <div style={{ padding: 10, borderRadius: 8, border: '1px solid var(--border)' }}>
+                <div style={{ padding: 10, borderRadius: 8, border: '1px solid var(--border)', opacity: roadmapConfig.classEndDate ? 1 : 0.45 }}>
                   <div style={{ fontWeight: 700, fontSize: 12 }}>📚 Classes</div>
                   <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 3 }}>
-                    {fmt(new Date(profile.termStartDate))} → {fmt(timeline.classEndDate)}
+                    {fmt(profile?.termStartDate ? new Date(profile.termStartDate + 'T00:00:00') : null)} → {fmt(timeline.classEndDate)}
                   </div>
-                  <div style={{ fontSize: 10, color: 'var(--accent)', marginTop: 2, fontWeight: 600 }}>{timeline.classDays} working days</div>
+                  {timeline.classDays != null && (
+                    <div style={{ fontSize: 10, color: 'var(--accent)', marginTop: 2, fontWeight: 600 }}>{timeline.classDays} working days</div>
+                  )}
+                  {!roadmapConfig.classEndDate && <div style={{ fontSize: 10, color: 'var(--muted)', marginTop: 2 }}>Set class end date ↑</div>}
                 </div>
-                <div style={{ padding: 10, borderRadius: 8, border: '1px solid var(--border)' }}>
+                <div style={{ padding: 10, borderRadius: 8, border: '1px solid var(--border)', opacity: roadmapConfig.prepLeaveEndDate ? 1 : 0.45 }}>
                   <div style={{ fontWeight: 700, fontSize: 12 }}>🎓 Prep Leave</div>
                   <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 3 }}>
                     {fmt(timeline.prepLeaveStart)} → {fmt(timeline.prepLeaveEnd)}
                   </div>
-                  <div style={{ fontSize: 10, color: 'var(--accent)', marginTop: 2, fontWeight: 600 }}>{timeline.prepLeaveDays} days</div>
+                  {timeline.prepLeaveDays != null && (
+                    <div style={{ fontSize: 10, color: 'var(--accent)', marginTop: 2, fontWeight: 600 }}>{timeline.prepLeaveDays} days</div>
+                  )}
+                  {!roadmapConfig.prepLeaveEndDate && <div style={{ fontSize: 10, color: 'var(--muted)', marginTop: 2 }}>Set prep leave end ↑</div>}
                 </div>
               </div>
 
@@ -2198,51 +2248,42 @@ export default function Schedule() {
               <div style={{ padding: 10, borderRadius: 8, border: '1px solid var(--border)' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 6 }}>
                   <div style={{ fontWeight: 700, fontSize: 12 }}>✍️ Exams</div>
-                  {hasExamPhases && (
-                    <span style={{ fontSize: 10, color: 'var(--muted)' }}>
-                      {examPhases.length} courses · gap: {timeline.examGapDays}d
+                  <span style={{ fontSize: 10, color: 'var(--muted)' }}>{timeline.theoryCourses} courses</span>
+                  {filledExams.length < timeline.theoryCourses && (
+                    <span style={{ fontSize: 10, color: '#F59E0B', fontWeight: 600 }}>
+                      {timeline.theoryCourses - filledExams.length} date{timeline.theoryCourses - filledExams.length > 1 ? 's' : ''} missing
                     </span>
                   )}
                 </div>
-                {hasExamPhases ? (
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(110px, 1fr))', gap: 6 }}>
-                    {examPhases.map((ep, idx) => (
-                      <div key={idx} style={{ padding: '7px 10px', borderRadius: 7, background: 'var(--bg)', border: '1px solid var(--border)', fontSize: 12 }}>
-                        <div style={{ fontWeight: 700 }}>Exam {ep.course}</div>
-                        <div style={{ color: 'var(--muted)', fontSize: 11, marginTop: 3 }}>{fmt(ep.examDate)}</div>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(110px, 1fr))', gap: 6 }}>
+                  {examPhases.map((ep, idx) => (
+                    <div key={idx} style={{ padding: '7px 10px', borderRadius: 7, background: 'var(--bg)', border: `1px solid ${ep.examDate ? 'var(--border)' : 'rgba(245,158,11,0.4)'}`, fontSize: 12 }}>
+                      <div style={{ fontWeight: 700 }}>Exam {ep.course}</div>
+                      <div style={{ color: ep.examDate ? 'var(--muted)' : '#F59E0B', fontSize: 11, marginTop: 3 }}>
+                        {ep.examDate ? fmt(ep.examDate) : 'Not set'}
                       </div>
-                    ))}
-                  </div>
-                ) : (
-                  <div style={{ fontSize: 11, color: 'var(--muted)' }}>No theory courses found — check dept & term in Profile.</div>
-                )}
-                {timeline.specialPeriods?.length > 0 && (
-                  <div style={{ marginTop: 8, fontSize: 11, color: '#F59E0B' }}>
-                    ⚠️ Holiday blocks during exams:
-                    {timeline.specialPeriods.map((sp, i) => (
-                      <div key={i}>• {sp.daysCount} days from {new Date(sp.startDate).toLocaleDateString()}</div>
-                    ))}
-                  </div>
-                )}
+                    </div>
+                  ))}
+                </div>
               </div>
 
               {/* Phase cards row 2 */}
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
-                <div style={{ padding: 10, borderRadius: 8, border: '1px solid var(--border)' }}>
+                <div style={{ padding: 10, borderRadius: 8, border: '1px solid var(--border)', opacity: roadmapConfig.postExamEndDate ? 1 : 0.45 }}>
                   <div style={{ fontWeight: 700, fontSize: 12 }}>🌴 Post-Exam Break</div>
                   <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 3 }}>
-                    {fmt(timeline.postExamBreakStart)} → {fmt(timeline.postExamBreakEnd)}
+                    {lastExamDate ? fmt(new Date(lastExamDate.getTime() + 86400000)) : '—'} → {fmt(timeline.postExamBreakEnd)}
                   </div>
-                  <div style={{ fontSize: 10, color: 'var(--accent)', marginTop: 2, fontWeight: 600 }}>{timeline.postBreakDays} days</div>
+                  {!roadmapConfig.postExamEndDate && <div style={{ fontSize: 10, color: 'var(--muted)', marginTop: 2 }}>Set break end date ↑</div>}
                 </div>
-                <div style={{ padding: 10, borderRadius: 8, border: '1px solid var(--border)' }}>
+                <div style={{ padding: 10, borderRadius: 8, border: '1px solid var(--border)', opacity: timeline.nextSemesterStart ? 1 : 0.45 }}>
                   <div style={{ fontWeight: 700, fontSize: 12 }}>🚀 Next Semester</div>
                   <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 3 }}>
-                    Starts {fmt(timeline.nextSemesterStart)}
+                    {timeline.nextSemesterStart ? `Starts ${fmt(timeline.nextSemesterStart)}` : '—'}
                   </div>
-                  {examEndDate && (
+                  {lastExamDate && (
                     <div style={{ fontSize: 10, color: 'var(--accent)', marginTop: 2, fontWeight: 600 }}>
-                      Last exam {fmt(examEndDate)}
+                      Last exam {fmt(lastExamDate)}
                     </div>
                   )}
                 </div>
@@ -2386,7 +2427,11 @@ export default function Schedule() {
                 onChange={e => setQuickFormData(d => ({ ...d, slot: e.target.value }))}
                 style={{ width: '100%', padding: '8px 10px', border: '1px solid var(--border)', borderRadius: 6, background: 'var(--bg)', color: 'var(--text)', fontSize: 13 }}
               >
-                {getAllowedSlotsForType(quickFormData.type).map(p => <option key={p} value={p}>{slotPreview(p)}</option>)}
+                {(() => {
+                  const opts = getAllowedSlotsForType(quickFormData.type);
+                  const extra = quickFormData._extraSlot && !opts.includes(quickFormData._extraSlot) ? quickFormData._extraSlot : null;
+                  return [...(extra ? [extra] : []), ...opts].map(p => <option key={p} value={p}>{slotPreview(p)}</option>);
+                })()}
               </select>
             </div>
 

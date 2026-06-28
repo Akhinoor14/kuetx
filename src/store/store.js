@@ -887,109 +887,91 @@ export const BATCH_START_DATES = {
 
 export const getTermTimeline = (termStartDate, deptCode, termKey, roadmapConfig = {}) => {
   if (!termStartDate) return null;
-  
+
   try {
-    const start = new Date(termStartDate);
-    
+    const start = new Date(termStartDate + 'T00:00:00');
+
     // Get holidays from scheduleSettings
     const scheduleSettings = store.get('scheduleSettings') || {};
     const holidayDates = scheduleSettings.holidayDates || [];
 
-    // Roadmap config — user-editable, with safe defaults
-    const prepLeaveDays = Math.max(3,  Math.min(30,  Number(roadmapConfig.prepLeaveDays) || 10));
-    const examCount     = Math.max(1,  Math.min(12,  Number(roadmapConfig.examCount)     || 5));
-    const examGapDays   = Math.max(2,  Math.min(14,  Number(roadmapConfig.examGapDays)   || 4));
-    const postBreakDays = Math.max(3,  Math.min(60,  Number(roadmapConfig.postBreakDays) || 9));
-    
-    // Helper: Check if date is a holiday (Friday, Saturday, or in holiday list)
     const isHoliday = (date) => {
       const dayOfWeek = date.getDay();
-      const dateStr = date.toISOString().split('T')[0];
+      const dateStr = localDateKey(date);
       return dayOfWeek === 5 || dayOfWeek === 6 || holidayDates.includes(dateStr);
     };
-    
-    // classDays: if user set classEndDate, count actual working days up to that date; else use slider
-    let classDays = Math.max(30, Math.min(120, Number(roadmapConfig.classDays) || 65));
-    if (roadmapConfig.classEndDate) {
-      const endOverride = new Date(roadmapConfig.classEndDate + 'T00:00:00');
-      let wd = 0;
-      let d = new Date(start);
-      while (d <= endOverride) { if (!isHoliday(d)) wd++; d.setDate(d.getDate() + 1); }
-      classDays = Math.max(1, wd);
-    }
-    
-    // Phase 1: Count N working days of classes (excluding Fri, Sat, and holidays)
-    let workingDays = 0;
-    let currentDate = new Date(start);
-    while (workingDays < classDays) {
-      if (!isHoliday(currentDate)) workingDays++;
-      currentDate.setDate(currentDate.getDate() + 1);
-    }
-    const classEndDate = new Date(currentDate);
-    classEndDate.setDate(classEndDate.getDate() - 1);
-    
-    // Phase 2: Preparation leave
-    const prepLeaveStart = new Date(classEndDate);
-    prepLeaveStart.setDate(prepLeaveStart.getDate() + 1);
-    const prepLeaveEnd = new Date(prepLeaveStart);
-    prepLeaveEnd.setDate(prepLeaveEnd.getDate() + prepLeaveDays - 1);
-    
-    // Phase 3: Exams with configurable gap (skip holidays)
-    let examDate = new Date(prepLeaveEnd);
-    examDate.setDate(examDate.getDate() + 1);
-    const examPhases = [];
-    const specialPeriods = [];
-    
-    for (let i = 0; i < examCount; i++) {
-      while (isHoliday(examDate)) {
-        examDate.setDate(examDate.getDate() + 1);
-      }
-      examPhases.push({ course: i + 1, examDate: new Date(examDate), type: 'exam' });
-      examDate.setDate(examDate.getDate() + 1);
-      if (i < examCount - 1) {
-        let gapDays = 0;
-        while (gapDays < examGapDays) {
-          if (!isHoliday(examDate)) gapDays++;
-          if (gapDays < examGapDays) examDate.setDate(examDate.getDate() + 1);
-        }
-        examDate.setDate(examDate.getDate() + 1);
-      }
-    }
-    
-    // Phase 4: Post-exam break
-    let postExamDate = new Date(examPhases[examPhases.length - 1].examDate);
-    postExamDate.setDate(postExamDate.getDate() + 1);
-    const postExamBreakEnd = new Date(postExamDate);
-    postExamBreakEnd.setDate(postExamBreakEnd.getDate() + postBreakDays - 1);
-    
-    // Next semester start
-    const nextSemesterStart = new Date(postExamBreakEnd);
-    nextSemesterStart.setDate(nextSemesterStart.getDate() + 1);
 
-    // Duration summary: term start → last exam (in weeks & months)
-    const lastExam = examPhases[examPhases.length - 1].examDate;
-    const diffMs = lastExam - start;
-    const diffDays = Math.round(diffMs / (1000 * 60 * 60 * 24));
-    const diffWeeks = Math.round(diffDays / 7);
-    const diffMonths = parseFloat((diffDays / 30.44).toFixed(1));
-    
+    // Count working days between two dates (inclusive)
+    const countWorkingDays = (from, to) => {
+      let count = 0;
+      const d = new Date(from);
+      while (d <= to) {
+        if (!isHoliday(d)) count++;
+        d.setDate(d.getDate() + 1);
+      }
+      return count;
+    };
+
+    // Phase 1: Class period — requires classEndDate (date picker)
+    let classEndDate = null;
+    let classDays = null;
+    if (roadmapConfig.classEndDate) {
+      classEndDate = new Date(roadmapConfig.classEndDate + 'T00:00:00');
+      classDays = countWorkingDays(start, classEndDate);
+    }
+
+    // Phase 2: Prep leave — requires prepLeaveEndDate (date picker)
+    let prepLeaveStart = classEndDate ? new Date(classEndDate.getTime() + 86400000) : null;
+    let prepLeaveEnd = null;
+    let prepLeaveDays = null;
+    if (roadmapConfig.prepLeaveEndDate) {
+      prepLeaveEnd = new Date(roadmapConfig.prepLeaveEndDate + 'T00:00:00');
+      if (prepLeaveStart) {
+        prepLeaveDays = Math.round((prepLeaveEnd - prepLeaveStart) / 86400000) + 1;
+      }
+    }
+
+    // Phase 3: Exams — examCount (number) only; dates come from examOverrides
+    const examCount = Math.max(1, Math.min(12, Number(roadmapConfig.examCount) || 5));
+    const examPhases = Array.from({ length: examCount }, (_, i) => ({
+      course: i + 1,
+      examDate: null, // filled in by examOverrides in the UI
+      type: 'exam',
+    }));
+
+    // Phase 4: Post-exam break — requires postExamEndDate (date picker)
+    let postExamBreakEnd = null;
+    let postExamBreakStart = null;
+    let nextSemesterStart = null;
+    if (roadmapConfig.postExamEndDate) {
+      postExamBreakEnd = new Date(roadmapConfig.postExamEndDate + 'T00:00:00');
+      nextSemesterStart = new Date(postExamBreakEnd.getTime() + 86400000);
+    }
+
+    // Duration: term start → post-exam end (if available), else class end
+    const durationEnd = postExamBreakEnd || classEndDate;
+    let durationDays = null, durationWeeks = null, durationMonths = null;
+    if (durationEnd) {
+      durationDays = Math.round((durationEnd - start) / 86400000);
+      durationWeeks = Math.round(durationDays / 7);
+      durationMonths = parseFloat((durationDays / 30.44).toFixed(1));
+    }
+
     return {
       classEndDate,
+      classDays,
       prepLeaveStart,
       prepLeaveEnd,
+      prepLeaveDays,
       examPhases,
-      specialPeriods,
-      postExamBreakStart: postExamDate,
+      specialPeriods: [],
+      postExamBreakStart,
       postExamBreakEnd,
       nextSemesterStart,
       theoryCourses: examCount,
-      classDays,
-      prepLeaveDays,
-      examGapDays,
-      postBreakDays,
-      durationDays: diffDays,
-      durationWeeks: diffWeeks,
-      durationMonths: diffMonths,
+      durationDays,
+      durationWeeks,
+      durationMonths,
     };
   } catch {
     return null;
