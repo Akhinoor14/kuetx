@@ -127,7 +127,16 @@ const getUniqueTeacherNames = (schedule) => {
   return Array.from(teachers).sort();
 };
 
-const normalizeSlotKey = (value) => String(value || '').trim();
+const normalizeSlotKey = (value) => {
+  // Normalize separators (→, ->, –, —, -) and whitespace so variants like
+  // "9:40 AM → 10:30 AM" and "9:40 AM - 10:30 AM" compare equal
+  return String(value || '')
+    .trim()
+    .replace(/\s*(→|->|–|—)\s*/g, ' - ')
+    .replace(/\s*-\s*/g, ' - ')
+    .replace(/\s+/g, ' ')
+    .trim();
+};
 
 const dateToDayName = (dateStr) => new Date(`${dateStr}T00:00:00`).toLocaleDateString('en-US', { weekday: 'long' });
 
@@ -993,14 +1002,20 @@ export default function Schedule() {
       if (!starts[item.day]) return;
 
       const overlappingSlots = tableSlots.filter(slot => !String(slot).toLowerCase().includes('break') && isSlotOverlap(slot, item.slot));
-      const firstSlot = overlappingSlots[0] || tableSlots.find(slot => normalizeSlotKey(slot) === normalizeSlotKey(item.slot));
+      // Prefer exact match as anchor row; fall back to first overlapping slot
+      const exactMatch = overlappingSlots.find(slot => normalizeSlotKey(slot) === normalizeSlotKey(item.slot));
+      const firstSlot = exactMatch || overlappingSlots[0] || tableSlots.find(slot => normalizeSlotKey(slot) === normalizeSlotKey(item.slot));
       if (!firstSlot) return;
 
       if (!starts[item.day][firstSlot]) starts[item.day][firstSlot] = [];
-      const rowSpan = Math.max(1, overlappingSlots.length || 1);
+      // rowSpan: count slots from firstSlot onward that overlap
+      const slotsFromFirst = exactMatch
+        ? overlappingSlots.slice(overlappingSlots.indexOf(exactMatch))
+        : overlappingSlots;
+      const rowSpan = Math.max(1, slotsFromFirst.length || 1);
       starts[item.day][firstSlot].push({ item, rowSpan });
 
-      overlappingSlots.slice(1).forEach(slot => covered[item.day].add(slot));
+      slotsFromFirst.slice(1).forEach(slot => covered[item.day].add(slot));
     });
 
     return { starts, covered };
@@ -1216,7 +1231,7 @@ export default function Schedule() {
                           borderBottom: '1px solid var(--border)',
                           borderRight: '1px solid var(--border)',
                           verticalAlign: 'top',
-                          minHeight: 'clamp(45px, 12vw, 54px)',
+                          minHeight: 'clamp(56px, 12vw, 72px)',
                           background: breakSlot ? 'rgba(239,68,68,0.08)' : d === selectedDay ? 'rgba(59,130,246,0.035)' : 'transparent',
                           cursor: isEmptyCell ? 'pointer' : 'default',
                           touchAction: 'manipulation',
@@ -1898,7 +1913,13 @@ export default function Schedule() {
                                 >
                                   {dayData ? (
                                     <button
-                                      onClick={() => toggleCalendarDate(dayData.dateStr)}
+                                      onClick={() => {
+                                        if (isInHolidays) {
+                                          removeHolidayDate(dayData.dateStr);
+                                        } else {
+                                          toggleCalendarDate(dayData.dateStr);
+                                        }
+                                      }}
                                       style={{
                                         width: '100%',
                                         minWidth: 44,
@@ -1919,7 +1940,7 @@ export default function Schedule() {
                                         color: isFridayOrSaturday ? 'rgba(239,68,68,0.8)' : 'var(--text)',
                                         transition: 'all 0.15s ease',
                                       }}
-                                      title={isFridayOrSaturday ? 'Always holiday' : isInHolidays ? 'Already added' : 'Click to select'}
+                                      title={isFridayOrSaturday ? 'Always holiday' : isInHolidays ? 'Click to remove holiday' : 'Click to select'}
                                     >
                                       {dayData.day}
                                     </button>
@@ -2046,8 +2067,51 @@ export default function Schedule() {
         {roadmapSettingsOpen && (
           <div style={{ background: 'var(--card)', border: '1px solid var(--border)', borderRadius: 10, padding: 14, marginBottom: 12, display: 'grid', gap: 10 }}>
             <div style={{ fontWeight: 700, fontSize: 13, marginBottom: 2 }}>⚙️ Configure Roadmap</div>
+            {/* Class Days: date-based OR slider, side by side */}
+            <div>
+              <div style={{ fontSize: 12, fontWeight: 600, marginBottom: 6 }}>Class Days (working)</div>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginBottom: 4 }}>
+                <div>
+                  <div style={{ fontSize: 11, color: 'var(--muted)', marginBottom: 3 }}>Start Date</div>
+                  <input
+                    type="date"
+                    value={roadmapConfig.classStartDate || profile?.termStartDate || ''}
+                    onChange={e => saveRoadmapConfig({ ...roadmapConfig, classStartDate: e.target.value })}
+                    style={{ width: '100%', padding: '6px 8px', borderRadius: 6, border: '1px solid var(--border)', background: 'var(--input)', color: 'var(--text)', fontSize: 12 }}
+                  />
+                </div>
+                <div>
+                  <div style={{ fontSize: 11, color: 'var(--muted)', marginBottom: 3 }}>End Date <span style={{color:'var(--accent)'}}>or use slider</span></div>
+                  <input
+                    type="date"
+                    value={roadmapConfig.classEndDate || ''}
+                    onChange={e => saveRoadmapConfig({ ...roadmapConfig, classEndDate: e.target.value })}
+                    style={{ width: '100%', padding: '6px 8px', borderRadius: 6, border: '1px solid var(--border)', background: 'var(--input)', color: 'var(--text)', fontSize: 12 }}
+                  />
+                </div>
+              </div>
+              {/* Slider fallback: disabled when End Date is set */}
+              <div style={{ opacity: roadmapConfig.classEndDate ? 0.4 : 1, pointerEvents: roadmapConfig.classEndDate ? 'none' : 'auto', display: 'grid', gridTemplateColumns: '1fr auto', alignItems: 'center', gap: 8, marginTop: 4 }}>
+                <input
+                  type="range" min={30} max={120} step={1}
+                  value={roadmapConfig.classDays ?? 65}
+                  onChange={e => saveRoadmapConfig({ ...roadmapConfig, classDays: Number(e.target.value) })}
+                  style={{ width: '100%', accentColor: 'var(--accent)' }}
+                />
+                <div style={{ minWidth: 32, textAlign: 'center', fontWeight: 800, fontSize: 14, color: 'var(--accent)' }}>
+                  {roadmapConfig.classDays ?? 65}
+                </div>
+              </div>
+              {roadmapConfig.classEndDate && (
+                <button className="btn btn-ghost" style={{ fontSize: 10, padding: '2px 8px', marginTop: 4 }}
+                  onClick={() => saveRoadmapConfig({ ...roadmapConfig, classEndDate: '', classStartDate: '' })}>
+                  Clear end date (use slider)
+                </button>
+              )}
+            </div>
+
+            {/* Other sliders */}
             {[
-              { key: 'classDays',     label: 'Class Days (working)',  min: 30,  max: 120, step: 1 },
               { key: 'prepLeaveDays', label: 'Prep Leave (days)',      min: 3,   max: 30,  step: 1 },
               { key: 'examCount',     label: 'Theory Exams',           min: 1,   max: 12,  step: 1 },
               { key: 'examGapDays',   label: 'Gap Between Exams (working days)', min: 1, max: 14, step: 1 },
@@ -2058,18 +2122,18 @@ export default function Schedule() {
                   <div style={{ fontSize: 12, fontWeight: 600, marginBottom: 4 }}>{label}</div>
                   <input
                     type="range" min={min} max={max} step={step}
-                    value={roadmapConfig[key] ?? (key === 'classDays' ? 65 : key === 'prepLeaveDays' ? 10 : key === 'examCount' ? 5 : key === 'examGapDays' ? 4 : 9)}
+                    value={roadmapConfig[key] ?? (key === 'prepLeaveDays' ? 10 : key === 'examCount' ? 5 : key === 'examGapDays' ? 4 : 9)}
                     onChange={e => saveRoadmapConfig({ ...roadmapConfig, [key]: Number(e.target.value) })}
                     style={{ width: '100%', accentColor: 'var(--accent)' }}
                   />
                 </div>
                 <div style={{ minWidth: 32, textAlign: 'center', fontWeight: 800, fontSize: 14, color: 'var(--accent)' }}>
-                  {roadmapConfig[key] ?? (key === 'classDays' ? 65 : key === 'prepLeaveDays' ? 10 : key === 'examCount' ? 5 : key === 'examGapDays' ? 4 : 9)}
+                  {roadmapConfig[key] ?? (key === 'prepLeaveDays' ? 10 : key === 'examCount' ? 5 : key === 'examGapDays' ? 4 : 9)}
                 </div>
               </div>
             ))}
             <button className="btn btn-ghost" style={{ fontSize: 11, alignSelf: 'flex-start', padding: '5px 10px' }}
-              onClick={() => saveRoadmapConfig({ classDays: 65, prepLeaveDays: 10, examCount: 5, examGapDays: 4, postBreakDays: 9 })}>
+              onClick={() => saveRoadmapConfig({ classDays: 65, prepLeaveDays: 10, examCount: 5, examGapDays: 4, postBreakDays: 9, classStartDate: '', classEndDate: '' })}>
               Reset to defaults
             </button>
           </div>

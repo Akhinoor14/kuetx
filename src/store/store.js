@@ -896,7 +896,6 @@ export const getTermTimeline = (termStartDate, deptCode, termKey, roadmapConfig 
     const holidayDates = scheduleSettings.holidayDates || [];
 
     // Roadmap config — user-editable, with safe defaults
-    const classDays     = Math.max(30, Math.min(120, Number(roadmapConfig.classDays)     || 65));
     const prepLeaveDays = Math.max(3,  Math.min(30,  Number(roadmapConfig.prepLeaveDays) || 10));
     const examCount     = Math.max(1,  Math.min(12,  Number(roadmapConfig.examCount)     || 5));
     const examGapDays   = Math.max(2,  Math.min(14,  Number(roadmapConfig.examGapDays)   || 4));
@@ -908,6 +907,16 @@ export const getTermTimeline = (termStartDate, deptCode, termKey, roadmapConfig 
       const dateStr = date.toISOString().split('T')[0];
       return dayOfWeek === 5 || dayOfWeek === 6 || holidayDates.includes(dateStr);
     };
+    
+    // classDays: if user set classEndDate, count actual working days up to that date; else use slider
+    let classDays = Math.max(30, Math.min(120, Number(roadmapConfig.classDays) || 65));
+    if (roadmapConfig.classEndDate) {
+      const endOverride = new Date(roadmapConfig.classEndDate + 'T00:00:00');
+      let wd = 0;
+      let d = new Date(start);
+      while (d <= endOverride) { if (!isHoliday(d)) wd++; d.setDate(d.getDate() + 1); }
+      classDays = Math.max(1, wd);
+    }
     
     // Phase 1: Count N working days of classes (excluding Fri, Sat, and holidays)
     let workingDays = 0;
