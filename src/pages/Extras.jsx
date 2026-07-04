@@ -1013,6 +1013,19 @@ function AddTaskInline({ onAdd }) {
 
 // ── Syllabus ──────────────────────────────────────────────────────────────────
 export function Syllabus() {
+  // IndexedDB preloads into an in-memory cache asynchronously on app boot.
+  // Before that finishes, store.get() falls back to raw localStorage, which
+  // can be stale (e.g. a leftover selectedSyllabusCourseid from a previous
+  // session, or an incomplete course list). This forces a re-render once
+  // the DB finishes loading, so the page self-corrects without needing a
+  // manual refresh.
+  const [, forceRerender] = useState(0);
+  useEffect(() => {
+    const onStoreUpdate = () => forceRerender((n) => n + 1);
+    window.addEventListener('kuetx:store-updated', onStoreUpdate);
+    return () => window.removeEventListener('kuetx:store-updated', onStoreUpdate);
+  }, []);
+
   const profile = getProfile();
   const currentTermKey = profile.currentTermKey || '';
   const termMatch = currentTermKey.match(/Y(\d)T(\d)/);

@@ -27,6 +27,7 @@ export async function ensureDBReady() {
       if (value !== null && value !== undefined) memoryCache.set(cacheKey, value);
     }
     dbReady = true;
+    try { clearAllCoursesCache(); } catch {}
     emitStoreUpdate();
   } catch (err) {
     console.error('[KUETx Store] Initialization error:', err);
