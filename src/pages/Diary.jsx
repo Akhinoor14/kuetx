@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Plus, Trash2, ChevronDown, ChevronUp, Copy } from 'lucide-react';
-import { store, uid, getProfile, periodToTime } from '../store/store';
+import { store, uid, getProfile } from '../store/store';
 import { getAllCourses, getDeptSyllabus } from '../store/curriculumStore';
 
 const todayStr = () => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; };
@@ -9,13 +9,9 @@ const todayStr = () => { const d = new Date(); return `${d.getFullYear()}-${Stri
 const getTodaySchedule = (courses) => {
   const today = new Date().toLocaleDateString('en-US', { weekday: 'long' });
   const schedule = store.get('schedule') || [];
-  const modelId = (store.get('scheduleSettings') || {}).modelId;
   return schedule.filter(item => item.day === today).map(item => {
     const course = courses.find(c => c.id === item.courseId);
-    const time = (item.period !== undefined && item.period !== 'unknown')
-      ? (periodToTime(item.period, modelId) || item.slot || item._legacySlot || '')
-      : (item.slot || item._legacySlot || '');
-    return { ...item, slot: time, courseObj: course };
+    return { ...item, courseObj: course };
   });
 };
 
