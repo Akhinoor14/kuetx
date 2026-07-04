@@ -1168,138 +1168,181 @@ export function Syllabus() {
         </div>
       )}
 
-      <div style={{ display: 'grid', gridTemplateColumns: courses.length === 1 ? '1fr' : 'repeat(auto-fit, minmax(380px, 1fr))', gap: 16, marginBottom: 20 }}>
-        {courses
-          .filter(c => {
-            if (selectedCourse) return true;
-            const q = searchQuery.toLowerCase();
-            if (c.name.toLowerCase().includes(q) || c.code.toLowerCase().includes(q)) return true;
-            const topics = syllabusCourseMap[c.code]?.topics || [];
-            return topics.some(t => t.toLowerCase().includes(q));
-          })
-          .map(course => {
-            const { sylData } = getCourseData(course.code);
-            const topics = sylData.topics || [];
-            const references = sylData.references || [];
-            const courseStudy = selfStudyData.filter(s => s.courseId === course.id);
-            const courseDiary = diaryData.filter(d => d.courseId === course.id);
-            const completedCount = courseStudy.filter(s => s.endDate).length;
-            const progressPercent = topics.length > 0 ? Math.round((completedCount / topics.length) * 100) : 0;
-            const diaryCoveredCount = topics.filter(t => topicCoveredInDiary(t, courseDiary)).length;
+      {(() => {
+        const visibleCourses = courses.filter(c => {
+          if (selectedCourse) return true;
+          const q = searchQuery.toLowerCase();
+          if (c.name.toLowerCase().includes(q) || c.code.toLowerCase().includes(q)) return true;
+          const topics = syllabusCourseMap[c.code]?.topics || [];
+          return topics.some(t => t.toLowerCase().includes(q));
+        });
 
-            return (
-              <div key={course.id} className="card" style={{ padding: 0, overflow: 'hidden', borderTop: '4px solid #8b5cf6', background: 'var(--card)', display: 'flex', flexDirection: 'column' }}>
-                <div style={{ padding: '14px', background: 'rgba(139,92,246,0.08)', borderBottom: '1px solid var(--border)' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 6 }}>
-                    <div>
-                      <div style={{ fontSize: 13, fontWeight: 700, color: '#8b5cf6', letterSpacing: '0.05em' }}>{course.code}</div>
-                      <div style={{ fontSize: 14, fontWeight: 600, marginTop: 2 }}>{course.name}</div>
-                    </div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                      <button
-                        onClick={() => copySyllabus(course, sylData)}
-                        title="Copy course name + full syllabus"
-                        style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 26, height: 26, border: '1px solid rgba(139,92,246,0.3)', borderRadius: 6, background: copiedCourseId === course.id ? 'rgba(16,185,129,0.15)' : 'transparent', cursor: 'pointer', color: copiedCourseId === course.id ? '#10b981' : '#8b5cf6' }}
-                      >
-                        {copiedCourseId === course.id ? <CheckCheck size={13} /> : <Copy size={13} />}
-                      </button>
-                      <div style={{ fontSize: 11, fontWeight: 600, padding: '4px 8px', background: '#8b5cf6', color: 'white', borderRadius: 4 }}>{course.credits} cr</div>
-                    </div>
-                  </div>
-                  <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 6 }}>⏱ {course.contactHour || 'N/A'} • {topics.length} topics</div>
-                </div>
+        const renderCourseCard = (course, accent) => {
+          const { sylData } = getCourseData(course.code);
+          const topics = sylData.topics || [];
+          const references = sylData.references || [];
+          const courseStudy = selfStudyData.filter(s => s.courseId === course.id);
+          const courseDiary = diaryData.filter(d => d.courseId === course.id);
+          const completedCount = courseStudy.filter(s => s.endDate).length;
+          const progressPercent = topics.length > 0 ? Math.round((completedCount / topics.length) * 100) : 0;
+          const diaryCoveredCount = topics.filter(t => topicCoveredInDiary(t, courseDiary)).length;
 
-                {topics.length > 0 && (
-                  <div style={{ padding: '10px 14px', background: 'rgba(16,185,129,0.04)', borderBottom: '1px solid var(--border)' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
-                      <div style={{ fontSize: 11, fontWeight: 600, color: 'var(--muted)' }}>Progress: {completedCount}/{topics.length}</div>
-                      <div style={{ fontSize: 11, fontWeight: 700, color: '#10b981' }}>{progressPercent}%</div>
-                    </div>
-                    <div style={{ height: 4, background: 'var(--border)', borderRadius: 2, overflow: 'hidden' }}>
-                      <div style={{ height: '100%', width: `${progressPercent}%`, background: '#10b981', transition: 'width 0.3s' }} />
-                    </div>
+          return (
+            <div key={course.id} className="card" style={{ padding: 0, overflow: 'hidden', borderTop: `4px solid ${accent}`, background: 'var(--card)', display: 'flex', flexDirection: 'column' }}>
+              <div style={{ padding: '14px', background: `color-mix(in srgb, ${accent} 8%, transparent)`, borderBottom: '1px solid var(--border)' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 6 }}>
+                  <div>
+                    <div style={{ fontSize: 13, fontWeight: 700, color: accent, letterSpacing: '0.05em' }}>{course.code}</div>
+                    <div style={{ fontSize: 14, fontWeight: 600, marginTop: 2 }}>{course.name}</div>
                   </div>
-                )}
-
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 6, padding: '10px 14px', borderBottom: '1px solid var(--border)' }}>
-                  <div className="card" style={{ margin: 0, padding: '8px', textAlign: 'center', border: '1px solid rgba(139,92,246,0.2)' }}>
-                    <div style={{ fontSize: 10, color: 'var(--muted)' }}>Official</div>
-                    <div style={{ fontSize: 13, fontWeight: 700, color: '#8b5cf6' }}>{topics.length}</div>
-                  </div>
-                  <div className="card" style={{ margin: 0, padding: '8px', textAlign: 'center', border: '1px solid rgba(59,130,246,0.2)' }}>
-                    <div style={{ fontSize: 10, color: 'var(--muted)' }}>Self Study</div>
-                    <div style={{ fontSize: 13, fontWeight: 700, color: '#3b82f6' }}>{courseStudy.length}</div>
-                  </div>
-                  <div className="card" style={{ margin: 0, padding: '8px', textAlign: 'center', border: '1px solid rgba(16,185,129,0.2)' }}>
-                    <div style={{ fontSize: 10, color: 'var(--muted)' }}>Diary Covered</div>
-                    <div style={{ fontSize: 13, fontWeight: 700, color: '#10b981' }}>{diaryCoveredCount}</div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                    <button
+                      onClick={() => copySyllabus(course, sylData)}
+                      title="Copy course name + full syllabus"
+                      style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 26, height: 26, border: `1px solid color-mix(in srgb, ${accent} 30%, transparent)`, borderRadius: 6, background: copiedCourseId === course.id ? 'rgba(16,185,129,0.15)' : 'transparent', cursor: 'pointer', color: copiedCourseId === course.id ? '#10b981' : accent }}
+                    >
+                      {copiedCourseId === course.id ? <CheckCheck size={13} /> : <Copy size={13} />}
+                    </button>
+                    <div style={{ fontSize: 11, fontWeight: 600, padding: '4px 8px', background: accent, color: 'white', borderRadius: 4 }}>{course.credits} cr</div>
                   </div>
                 </div>
-
-                {references.length > 0 && (
-                  <div style={{ padding: '10px 14px', background: 'rgba(59,130,246,0.04)', borderBottom: '1px solid var(--border)' }}>
-                    <div style={{ fontSize: 11, fontWeight: 600, color: '#3b82f6', marginBottom: 6 }}>📖 References</div>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-                      {references.slice(0, 3).map((ref, i) => (
-                        <div key={i} style={{ fontSize: 11, color: 'var(--text)', lineHeight: 1.4 }}>• {ref}</div>
-                      ))}
-                      {references.length > 3 && <div style={{ fontSize: 10, color: 'var(--muted)', fontStyle: 'italic' }}>+{references.length - 3} more</div>}
-                    </div>
-                  </div>
-                )}
-
-                {topics.length > 0 ? (
-                  <div style={{ flex: 1, overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
-                    <div style={{ padding: '10px 14px', borderBottom: '1px solid var(--border)', fontSize: 11, fontWeight: 600, color: 'var(--muted)' }}>
-                      <span>Topics ({topics.length})</span>
-                    </div>
-                    <div style={{ flex: 1, overflowY: 'auto', maxHeight: '400px' }}>
-                      {topics.map((topic, idx) => {
-                        const topicKey = `${course.code}-${idx}`;
-                        const isExpanded = expandedTopics[topicKey];
-                        const topicStudy = getTopicStudyInfo(course.id, topic);
-                        const isCompleted = topicStudy.some(s => s.endDate);
-                        return (
-                          <div key={idx} style={{ borderBottom: idx < topics.length - 1 ? '1px solid var(--border)' : 'none' }}>
-                            <button
-                              onClick={() => toggleTopic(course.code, idx)}
-                              style={{ width: '100%', padding: '10px 14px', background: isCompleted ? 'rgba(16,185,129,0.08)' : 'transparent', border: 'none', cursor: 'pointer', textAlign: 'left', display: 'flex', alignItems: 'flex-start', gap: 8, transition: 'background 0.2s' }}
-                              onMouseEnter={e => !isExpanded && (e.currentTarget.style.background = 'rgba(139,92,246,0.06)')}
-                              onMouseLeave={e => { e.currentTarget.style.background = isCompleted ? 'rgba(16,185,129,0.08)' : 'transparent'; }}
-                            >
-                              <div style={{ marginTop: 2, fontSize: 11, color: isCompleted ? '#10b981' : '#8b5cf6', fontWeight: 700 }}>{isExpanded ? '▼' : '▶'}</div>
-                              {isCompleted && <div style={{ fontSize: 12, color: '#10b981' }}>✓</div>}
-                              <div style={{ flex: 1 }}>
-                                <div style={{ fontSize: 12, fontWeight: 500, lineHeight: 1.4, color: 'var(--text)' }}>{topic.substring(0, 100)}{topic.length > 100 ? '...' : ''}</div>
-                                {topicStudy.length > 0 && <div style={{ fontSize: 10, color: '#3b82f6', marginTop: 3 }}>{topicStudy.length} session(s)</div>}
-                              </div>
-                            </button>
-                            {isExpanded && (
-                              <div style={{ padding: '10px 14px', background: 'var(--card)', borderTop: '1px solid var(--border)', fontSize: 12, color: 'var(--text)', lineHeight: 1.6 }}>
-                                <div style={{ marginBottom: 8 }}>{topic}</div>
-                                {topicStudy.length > 0 && (
-                                  <div style={{ fontSize: 11, color: 'var(--muted)', paddingTop: 8, borderTop: '1px solid var(--border)' }}>
-                                    <div style={{ fontWeight: 600, marginBottom: 4 }}>Studied:</div>
-                                    {topicStudy.map((s, j) => (
-                                      <div key={j} style={{ marginBottom: 2 }}>📚 {s.date}{s.hours ? ` (${s.hours}h)` : ''}</div>
-                                    ))}
-                                  </div>
-                                )}
-                                <div style={{ fontSize: 11, color: 'var(--muted)' }}>Track progress from Self Study.</div>
-                              </div>
-                            )}
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </div>
-                ) : (
-                  <div style={{ padding: '20px 14px', textAlign: 'center', color: 'var(--muted)', fontSize: 11 }}>⚠️ No syllabus data available</div>
-                )}
+                <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 6 }}>⏱ {course.contactHour || 'N/A'} • {topics.length} topics</div>
               </div>
-            );
-          })}
-      </div>
+
+              {topics.length > 0 && (
+                <div style={{ padding: '10px 14px', background: 'rgba(16,185,129,0.04)', borderBottom: '1px solid var(--border)' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
+                    <div style={{ fontSize: 11, fontWeight: 600, color: 'var(--muted)' }}>Progress: {completedCount}/{topics.length}</div>
+                    <div style={{ fontSize: 11, fontWeight: 700, color: '#10b981' }}>{progressPercent}%</div>
+                  </div>
+                  <div style={{ height: 4, background: 'var(--border)', borderRadius: 2, overflow: 'hidden' }}>
+                    <div style={{ height: '100%', width: `${progressPercent}%`, background: '#10b981', transition: 'width 0.3s' }} />
+                  </div>
+                </div>
+              )}
+
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 6, padding: '10px 14px', borderBottom: '1px solid var(--border)' }}>
+                <div className="card" style={{ margin: 0, padding: '8px', textAlign: 'center', border: `1px solid color-mix(in srgb, ${accent} 20%, transparent)` }}>
+                  <div style={{ fontSize: 10, color: 'var(--muted)' }}>Official</div>
+                  <div style={{ fontSize: 13, fontWeight: 700, color: accent }}>{topics.length}</div>
+                </div>
+                <div className="card" style={{ margin: 0, padding: '8px', textAlign: 'center', border: '1px solid rgba(59,130,246,0.2)' }}>
+                  <div style={{ fontSize: 10, color: 'var(--muted)' }}>Self Study</div>
+                  <div style={{ fontSize: 13, fontWeight: 700, color: '#3b82f6' }}>{courseStudy.length}</div>
+                </div>
+                <div className="card" style={{ margin: 0, padding: '8px', textAlign: 'center', border: '1px solid rgba(16,185,129,0.2)' }}>
+                  <div style={{ fontSize: 10, color: 'var(--muted)' }}>Diary Covered</div>
+                  <div style={{ fontSize: 13, fontWeight: 700, color: '#10b981' }}>{diaryCoveredCount}</div>
+                </div>
+              </div>
+
+              {references.length > 0 && (
+                <div style={{ padding: '10px 14px', background: 'rgba(59,130,246,0.04)', borderBottom: '1px solid var(--border)' }}>
+                  <div style={{ fontSize: 11, fontWeight: 600, color: '#3b82f6', marginBottom: 6 }}>📖 References</div>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+                    {references.slice(0, 3).map((ref, i) => (
+                      <div key={i} style={{ fontSize: 11, color: 'var(--text)', lineHeight: 1.4 }}>• {ref}</div>
+                    ))}
+                    {references.length > 3 && <div style={{ fontSize: 10, color: 'var(--muted)', fontStyle: 'italic' }}>+{references.length - 3} more</div>}
+                  </div>
+                </div>
+              )}
+
+              {topics.length > 0 ? (
+                <div style={{ flex: 1, overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+                  <div style={{ padding: '10px 14px', borderBottom: '1px solid var(--border)', fontSize: 11, fontWeight: 600, color: 'var(--muted)' }}>
+                    <span>Topics ({topics.length})</span>
+                  </div>
+                  <div style={{ flex: 1, overflowY: 'auto', maxHeight: '400px' }}>
+                    {topics.map((topic, idx) => {
+                      const topicKey = `${course.code}-${idx}`;
+                      const isExpanded = expandedTopics[topicKey];
+                      const topicStudy = getTopicStudyInfo(course.id, topic);
+                      const isCompleted = topicStudy.some(s => s.endDate);
+                      return (
+                        <div key={idx} style={{ borderBottom: idx < topics.length - 1 ? '1px solid var(--border)' : 'none' }}>
+                          <button
+                            onClick={() => toggleTopic(course.code, idx)}
+                            style={{ width: '100%', padding: '10px 14px', background: isCompleted ? 'rgba(16,185,129,0.08)' : 'transparent', border: 'none', cursor: 'pointer', textAlign: 'left', display: 'flex', alignItems: 'flex-start', gap: 8, transition: 'background 0.2s' }}
+                            onMouseEnter={e => !isExpanded && (e.currentTarget.style.background = `color-mix(in srgb, ${accent} 6%, transparent)`)}
+                            onMouseLeave={e => { e.currentTarget.style.background = isCompleted ? 'rgba(16,185,129,0.08)' : 'transparent'; }}
+                          >
+                            <div style={{ marginTop: 2, fontSize: 11, color: isCompleted ? '#10b981' : accent, fontWeight: 700 }}>{isExpanded ? '▼' : '▶'}</div>
+                            {isCompleted && <div style={{ fontSize: 12, color: '#10b981' }}>✓</div>}
+                            <div style={{ flex: 1 }}>
+                              <div style={{ fontSize: 12, fontWeight: 500, lineHeight: 1.4, color: 'var(--text)' }}>{topic.substring(0, 100)}{topic.length > 100 ? '...' : ''}</div>
+                              {topicStudy.length > 0 && <div style={{ fontSize: 10, color: '#3b82f6', marginTop: 3 }}>{topicStudy.length} session(s)</div>}
+                            </div>
+                          </button>
+                          {isExpanded && (
+                            <div style={{ padding: '10px 14px', background: 'var(--card)', borderTop: '1px solid var(--border)', fontSize: 12, color: 'var(--text)', lineHeight: 1.6 }}>
+                              <div style={{ marginBottom: 8 }}>{topic}</div>
+                              {topicStudy.length > 0 && (
+                                <div style={{ fontSize: 11, color: 'var(--muted)', paddingTop: 8, borderTop: '1px solid var(--border)' }}>
+                                  <div style={{ fontWeight: 600, marginBottom: 4 }}>Studied:</div>
+                                  {topicStudy.map((s, j) => (
+                                    <div key={j} style={{ marginBottom: 2 }}>📚 {s.date}{s.hours ? ` (${s.hours}h)` : ''}</div>
+                                  ))}
+                                </div>
+                              )}
+                              <div style={{ fontSize: 11, color: 'var(--muted)' }}>Track progress from Self Study.</div>
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              ) : (
+                <div style={{ padding: '20px 14px', textAlign: 'center', color: 'var(--muted)', fontSize: 11 }}>⚠️ No syllabus data available</div>
+              )}
+            </div>
+          );
+        };
+
+        // Split into Theory vs Sessional sections. When a single course is selected
+        // (via "View syllabus" from another page) we just show it alone, no split needed.
+        if (selectedCourse) {
+          return (
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 16, marginBottom: 20 }}>
+              {visibleCourses.map(course => renderCourseCard(course, course.type === 'Sessional' ? '#3b82f6' : '#8b5cf6'))}
+            </div>
+          );
+        }
+
+        const theoryCourses = visibleCourses.filter(c => c.type !== 'Sessional');
+        const sessionalCourses = visibleCourses.filter(c => c.type === 'Sessional');
+
+        return (
+          <>
+            {theoryCourses.length > 0 && (
+              <div style={{ marginBottom: 24 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
+                  <div style={{ width: 4, height: 18, borderRadius: 2, background: '#8b5cf6' }} />
+                  <h2 style={{ fontSize: 15, fontWeight: 700, margin: 0 }}>Theory</h2>
+                  <span style={{ fontSize: 12, color: 'var(--muted)' }}>({theoryCourses.length})</span>
+                </div>
+                <div style={{ display: 'grid', gridTemplateColumns: theoryCourses.length === 1 ? '1fr' : 'repeat(auto-fit, minmax(380px, 1fr))', gap: 16 }}>
+                  {theoryCourses.map(course => renderCourseCard(course, '#8b5cf6'))}
+                </div>
+              </div>
+            )}
+
+            {sessionalCourses.length > 0 && (
+              <div style={{ marginBottom: 20 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 12 }}>
+                  <div style={{ width: 4, height: 18, borderRadius: 2, background: '#3b82f6' }} />
+                  <h2 style={{ fontSize: 15, fontWeight: 700, margin: 0 }}>Sessional</h2>
+                  <span style={{ fontSize: 12, color: 'var(--muted)' }}>({sessionalCourses.length})</span>
+                </div>
+                <div style={{ display: 'grid', gridTemplateColumns: sessionalCourses.length === 1 ? '1fr' : 'repeat(auto-fit, minmax(380px, 1fr))', gap: 16 }}>
+                  {sessionalCourses.map(course => renderCourseCard(course, '#3b82f6'))}
+                </div>
+              </div>
+            )}
+          </>
+        );
+      })()}
 
       {courses.length === 0 && (
         <div className="card" style={{ textAlign: 'center', padding: 40 }}>
