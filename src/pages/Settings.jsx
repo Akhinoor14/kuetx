@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useTheme, THEMES } from '../hooks/useTheme';
 import { store } from '../store/store';
-import { Download, Upload, Trash2, HardDrive, Shield, Database, Wifi, WifiOff, Cloud, CloudOff, CheckCircle, LayoutDashboard, GraduationCap, LogOut, User, ExternalLink } from 'lucide-react';
-import { onAuthChange, logout, loginWithGoogle, loginWithEmail, registerWithEmail } from '../lib/firebaseAuth';
+import { Download, Upload, Trash2, HardDrive, Shield, Database, Wifi, WifiOff, Cloud, CloudOff, CheckCircle, LayoutDashboard, GraduationCap, LogOut, User, ExternalLink, Lock } from 'lucide-react';
+import { onAuthChange, logout, loginWithGoogle, loginWithEmail, registerWithEmail, resetPassword, getAuthErrorMessage } from '../lib/firebaseAuth';
 import { getAppMode, setAppMode } from '../lib/modeFilter';
 
 // ── Auto-backup to localStorage snapshot ─────────────────────────────────────
@@ -39,6 +39,7 @@ export default function Settings() {
   const [fbSyncStatus, setFbSyncStatus] = useState('idle');
   const [fbLastSynced, setFbLastSynced] = useState(null);
   const [loggingOut, setLoggingOut] = useState(false);
+  const [sendingReset, setSendingReset] = useState(false);
 
   const handleSignOut = async () => {
     if (!window.confirm('Sign out করবে? তোমার data এই device এ থাকবে, শুধু cloud sync বন্ধ হবে।')) return;
@@ -50,6 +51,19 @@ export default function Settings() {
       flash('✗ Sign out failed: ' + err.message, 'error');
     } finally {
       setLoggingOut(false);
+    }
+  };
+
+  const handleChangePassword = async () => {
+    if (!firebaseUser?.email) return;
+    setSendingReset(true);
+    try {
+      await resetPassword(firebaseUser.email);
+      flash(`✓ Password reset link পাঠানো হয়েছে ${firebaseUser.email} এ। Inbox চেক করো।`);
+    } catch (err) {
+      flash('✗ ' + getAuthErrorMessage(err.code), 'error');
+    } finally {
+      setSendingReset(false);
     }
   };
 
@@ -453,6 +467,18 @@ export default function Settings() {
                 💡 <strong>Easiest option:</strong> নিচে "Sign Out" করো — তোমার Firebase data automatically delete হবে না, শুধু sync বন্ধ হবে। Data পুরো মুছতে চাইলে নিচের Danger Zone ব্যবহার করো (local data মুছবে), আর Firebase এর data মুছতে হলে Console এ গিয়ে করতে হবে।
               </div>
             </div>
+
+            {/* Change password - only for email/password accounts, not Google-only */}
+            {firebaseUser.providerData?.some(p => p.providerId === 'password') && (
+              <button
+                className="btn btn-ghost"
+                onClick={handleChangePassword}
+                disabled={sendingReset}
+                style={{ justifyContent: 'flex-start', marginBottom: 8 }}
+              >
+                <Lock size={14} /> {sendingReset ? 'পাঠানো হচ্ছে...' : 'Password বদলাও'}
+              </button>
+            )}
 
             {/* Sign out */}
             <button

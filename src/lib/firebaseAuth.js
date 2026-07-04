@@ -14,6 +14,7 @@ import {
   signInWithPopup,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  sendPasswordResetEmail,
   linkWithPopup,
   linkWithCredential,
   EmailAuthProvider,
@@ -63,6 +64,14 @@ export const loginWithEmail = async (email, password) => {
   return result.user;
 };
 
+// ─── Password reset ───────────────────────────────────────────────────────────
+// Sends a reset link to the given email via Firebase's hosted reset flow.
+// Firebase handles the actual password change page - no custom UI needed for that part.
+
+export const resetPassword = async (email) => {
+  await sendPasswordResetEmail(auth, email);
+};
+
 // ─── Upgrade anonymous → real account ────────────────────────────────────────
 // Called when an anonymous user wants to "save" their data permanently.
 // All existing Firestore data (written under their anonymous uid) stays intact.
@@ -104,6 +113,7 @@ export const getAuthErrorMessage = (code) => {
     'auth/popup-closed-by-user': 'Login popup বন্ধ হয়ে গেছে।',
     'auth/credential-already-in-use': 'এই Google account অন্য একটা account এ already linked।',
     'auth/network-request-failed': 'Network error। Internet connection check করো।',
+    'auth/missing-email': 'Email address দাও।',
   };
   return messages[code] || `Login error: ${code}`;
 };

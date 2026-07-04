@@ -4,13 +4,14 @@
  */
 
 import { useState } from 'react';
-import { X, Mail, Lock, User, Chrome } from 'lucide-react';
+import { X, Mail, Lock, User, Chrome, CheckCircle } from 'lucide-react';
 import {
   loginWithGoogle,
   loginWithEmail,
   registerWithEmail,
   upgradeWithGoogle,
   upgradeWithEmail,
+  resetPassword,
   getAuthErrorMessage,
 } from '../lib/firebaseAuth';
 
@@ -75,6 +76,21 @@ export default function AuthModal({ mode = 'login', isUpgrade = false, onClose, 
   const [name, setName] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [resetSent, setResetSent] = useState(false);
+
+  const handleReset = async () => {
+    if (!email) { setError('আগে email address দাও, তারপর reset link পাঠানো হবে।'); return; }
+    setLoading(true);
+    setError('');
+    try {
+      await resetPassword(email);
+      setResetSent(true);
+    } catch (err) {
+      setError(getAuthErrorMessage(err.code));
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleGoogle = async () => {
     setLoading(true);
@@ -198,6 +214,21 @@ export default function AuthModal({ mode = 'login', isUpgrade = false, onClose, 
             <input style={{ ...inputStyle, paddingLeft: 32 }} type="password" placeholder="Password (কমপক্ষে ৬ characters)" value={password} onChange={e => setPassword(e.target.value)}
               onKeyDown={e => e.key === 'Enter' && handleEmail()} />
           </div>
+
+          {!isUpgrade && tab === 'login' && !resetSent && (
+            <div style={{ textAlign: 'right', marginTop: -4 }}>
+              <button style={{ ...btnGhost, fontSize: 12 }} onClick={() => { setError(''); handleReset(); }} disabled={loading}>
+                Password ভুলে গেছো?
+              </button>
+            </div>
+          )}
+
+          {resetSent && (
+            <div style={{ display: 'flex', alignItems: 'flex-start', gap: 8, fontSize: 12, color: 'var(--accent)', padding: '10px 12px', background: 'rgba(34,197,94,0.08)', borderRadius: 6 }}>
+              <CheckCircle size={15} style={{ flexShrink: 0, marginTop: 1 }} />
+              <span>Reset link পাঠানো হয়েছে {email} এ। Inbox (ও spam folder) চেক করো।</span>
+            </div>
+          )}
 
           {error && (
             <div style={{ fontSize: 12, color: 'var(--danger, #dc2626)', padding: '8px 10px', background: 'rgba(220,38,38,0.08)', borderRadius: 6 }}>
