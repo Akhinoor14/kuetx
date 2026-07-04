@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Plus, Trash2, Play, Pause, Square, RotateCcw, Save, ChevronDown, ChevronRight, Edit2, Check, X } from 'lucide-react';
+import { useLocation } from 'react-router-dom';
+import { Plus, Trash2, Play, Pause, Square, RotateCcw, Save, ChevronDown, ChevronRight, Edit2, Check, X, Copy, CheckCheck } from 'lucide-react';
 import {
   store,
   uid,
@@ -1037,7 +1038,17 @@ export function Syllabus() {
 
   const allCourses = getAllCourses(profile);
   const deptSyllabus = getDeptSyllabus(profile.dept);
-  const [selectedCourseId] = useState(() => store.get('selectedSyllabusCourseid'));
+  const location = useLocation();
+  // Re-read the "jump to this course" flag every time we land on /syllabus
+  // (location.key changes on every navigation, even to the same path),
+  // instead of only once on first mount. This fixes the bug where opening
+  // a course, then navigating back to Syllabus again, kept showing only
+  // the previously-selected course until a full page refresh.
+  const [selectedCourseId, setSelectedCourseId] = useState(() => store.get('selectedSyllabusCourseid'));
+  useEffect(() => {
+    setSelectedCourseId(store.get('selectedSyllabusCourseid') || null);
+  }, [location.key]);
+
   const selectedCourse = selectedCourseId ? allCourses.find(c => c.id === selectedCourseId) : null;
   const displayTermKey = selectedCourse ? `Y${selectedCourse.year}T${selectedCourse.term}` : currentTermKey;
   const courses = selectedCourse ? [selectedCourse] : allCourses.filter(c => c.year === termYear && c.term === termNo);
@@ -1046,6 +1057,7 @@ export function Syllabus() {
   const [openCourses, setOpenCourses] = useState({});
   const [searchQuery, setSearchQuery] = useState('');
   const [selfStudyData, setSelfStudyData] = useState(() => store.get('selfstudy_academic') || []);
+  const [copiedCourseId, setCopiedCourseId] = useState(null);
 
   useEffect(() => {
     if (selectedCourseId) store.remove('selectedSyllabusCourseid');
@@ -1110,6 +1122,22 @@ export function Syllabus() {
     window.location.href = '/self-study';
   };
 
+  const copySyllabus = (course, sylData) => {
+    const topics = sylData.topics || [];
+    const references = sylData.references || [];
+    let text = `${course.code} — ${course.name}\n${course.credits} credits\n\n`;
+    text += `Topics (${topics.length}):\n`;
+    topics.forEach((t, i) => { text += `${i + 1}. ${t}\n`; });
+    if (references.length > 0) {
+      text += `\nReferences:\n`;
+      references.forEach((r) => { text += `- ${r}\n`; });
+    }
+    navigator.clipboard.writeText(text.trim()).then(() => {
+      setCopiedCourseId(course.id);
+      setTimeout(() => setCopiedCourseId(null), 1800);
+    });
+  };
+
   return (
     <div className="page-enter page-container">
       <div style={{ marginBottom: 24 }}>
@@ -1154,7 +1182,16 @@ export function Syllabus() {
                       <div style={{ fontSize: 13, fontWeight: 700, color: '#8b5cf6', letterSpacing: '0.05em' }}>{course.code}</div>
                       <div style={{ fontSize: 14, fontWeight: 600, marginTop: 2 }}>{course.name}</div>
                     </div>
-                    <div style={{ fontSize: 11, fontWeight: 600, padding: '4px 8px', background: '#8b5cf6', color: 'white', borderRadius: 4 }}>{course.credits} cr</div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                      <button
+                        onClick={() => copySyllabus(course, sylData)}
+                        title="Copy course name + full syllabus"
+                        style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 26, height: 26, border: '1px solid rgba(139,92,246,0.3)', borderRadius: 6, background: copiedCourseId === course.id ? 'rgba(16,185,129,0.15)' : 'transparent', cursor: 'pointer', color: copiedCourseId === course.id ? '#10b981' : '#8b5cf6' }}
+                      >
+                        {copiedCourseId === course.id ? <CheckCheck size={13} /> : <Copy size={13} />}
+                      </button>
+                      <div style={{ fontSize: 11, fontWeight: 600, padding: '4px 8px', background: '#8b5cf6', color: 'white', borderRadius: 4 }}>{course.credits} cr</div>
+                    </div>
                   </div>
                   <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 6 }}>⏱ {course.contactHour || 'N/A'} • {topics.length} topics</div>
                 </div>
