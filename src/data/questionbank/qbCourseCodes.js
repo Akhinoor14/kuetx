@@ -1,0 +1,2153 @@
+/**
+ * Auto-generated Theory course code list, derived from src/data/curriculum.
+ * Used by the Question Bank drilldown UI and the Upload form dropdown.
+ * Structure: { DEPT: { TERM: [ { code, title } ] } }
+ *
+ * Coverage: BME, CE, ChE, ECE, EEE, ESE, IPE, LE, ME, MSE, MTE, URP (12 depts)
+ * NOT covered (no curriculum data in repo): ARCH, BECM, CSE, TE
+ * For depts not covered, the UI should fall back to a free-text Course Code field.
+ */
+export const QB_COURSE_CODES = {
+  "BME": {
+    "Y1T1": [
+      {
+        "code": "BME 1101",
+        "title": "Basic Biomedical Engineering"
+      },
+      {
+        "code": "EEE 1115",
+        "title": "Electrical Circuits"
+      },
+      {
+        "code": "Ph 1115",
+        "title": "Physics"
+      },
+      {
+        "code": "Ch 1115",
+        "title": "Chemistry"
+      },
+      {
+        "code": "Math 1115",
+        "title": "Differential and Integral Calculus"
+      }
+    ],
+    "Y1T2": [
+      {
+        "code": "BME 1201",
+        "title": "Biochemistry"
+      },
+      {
+        "code": "EEE 1215",
+        "title": "Analog Electronics"
+      },
+      {
+        "code": "CSE 1215",
+        "title": "Computer Programming"
+      },
+      {
+        "code": "Hum 1215",
+        "title": "Technical English"
+      },
+      {
+        "code": "Math 1215",
+        "title": "Coordinate Geometry and Differential Equations"
+      }
+    ],
+    "Y2T1": [
+      {
+        "code": "BME 2101",
+        "title": "Human Anatomy"
+      },
+      {
+        "code": "BME 2151",
+        "title": "Numerical Methods and Statistics"
+      },
+      {
+        "code": "ECE 2115",
+        "title": "Digital Electronics and Logic Design"
+      },
+      {
+        "code": "ME 2115",
+        "title": "Basic Mechanics and Thermodynamics"
+      },
+      {
+        "code": "Math 2115",
+        "title": "Transforms Analysis"
+      }
+    ],
+    "Y2T2": [
+      {
+        "code": "BME 2201",
+        "title": "Human Physiology"
+      },
+      {
+        "code": "BME 2211",
+        "title": "Signals and Systems"
+      },
+      {
+        "code": "BME 2231",
+        "title": "Biomedical Instrumentation"
+      },
+      {
+        "code": "Hum 2215",
+        "title": "Economics and Sociology"
+      },
+      {
+        "code": "Math 2215",
+        "title": "Linear Algebra, Complex Variable and Vector Analysis"
+      }
+    ],
+    "Y3T1": [
+      {
+        "code": "BME 3101",
+        "title": "Cell Biology"
+      },
+      {
+        "code": "BME 3103",
+        "title": "Bioelectricity"
+      },
+      {
+        "code": "BME 3111",
+        "title": "Biomedical Signal Processing"
+      },
+      {
+        "code": "BME 3141",
+        "title": "X-ray and Ultrasound Imaging"
+      },
+      {
+        "code": "CSE 3115",
+        "title": "Microprocessors and Microcontrollers"
+      }
+    ],
+    "Y3T2": [
+      {
+        "code": "BME 3211",
+        "title": "Biomaterials and Prosthetics"
+      },
+      {
+        "code": "BME 3213",
+        "title": "Biomechanics"
+      },
+      {
+        "code": "BME 3231",
+        "title": "Biomedical Devices and Control"
+      },
+      {
+        "code": "BME 3241",
+        "title": "Magnetic and Nuclear Imaging"
+      },
+      {
+        "code": "ECE 3215",
+        "title": "Body Sensor Networks"
+      }
+    ],
+    "Y4T1": [
+      {
+        "code": "BME 4111",
+        "title": "Biomedical Image Processing"
+      },
+      {
+        "code": "BME 4131",
+        "title": "Bio-optics"
+      },
+      {
+        "code": "BME 4141",
+        "title": "Brain and Neuroengineering"
+      },
+      {
+        "code": "BME 4151",
+        "title": "Clinical Engineering and Hospital Management"
+      },
+      {
+        "code": "BME 41**",
+        "title": "Optional I (placeholder)"
+      }
+    ],
+    "Y4T2": [
+      {
+        "code": "BME 4231",
+        "title": "Telemedicine and Health Care"
+      },
+      {
+        "code": "BME 4251",
+        "title": "Biomedical Ethics and Safety"
+      },
+      {
+        "code": "BME 4221",
+        "title": "Bioinformatics"
+      }
+    ]
+  },
+  "CE": {
+    "Y1T1": [
+      {
+        "code": "CE 1109",
+        "title": "Surveying"
+      },
+      {
+        "code": "Ch 1101",
+        "title": "Chemistry-I"
+      },
+      {
+        "code": "Math 1101",
+        "title": "Differential and Integral Calculus"
+      },
+      {
+        "code": "Ph 1101",
+        "title": "Physics-I"
+      },
+      {
+        "code": "Hum 1101",
+        "title": "English"
+      }
+    ],
+    "Y1T2": [
+      {
+        "code": "CE 1211",
+        "title": "Engineering Mechanics"
+      },
+      {
+        "code": "Ch 1201",
+        "title": "Chemistry-II"
+      },
+      {
+        "code": "Math 1201",
+        "title": "Differential Equation, Statistics and Special Functions"
+      },
+      {
+        "code": "Ph 1201",
+        "title": "Physics-II"
+      },
+      {
+        "code": "Hum 1201",
+        "title": "Economics & Accounting"
+      }
+    ],
+    "Y2T1": [
+      {
+        "code": "CE 2105",
+        "title": "Engineering Materials"
+      },
+      {
+        "code": "CE 2111",
+        "title": "Mechanics of Solids-I"
+      },
+      {
+        "code": "CE 2161",
+        "title": "Fluid Mechanics"
+      },
+      {
+        "code": "Math 2101",
+        "title": "Coordinate Geometry, Spherical Trigonometry & Vector Analysis"
+      },
+      {
+        "code": "Hum 2101",
+        "title": "Sociology & Government"
+      }
+    ],
+    "Y2T2": [
+      {
+        "code": "CE 2207",
+        "title": "Numerical Analysis and Computer Programming"
+      },
+      {
+        "code": "CE 2211",
+        "title": "Mechanics of Solids-II"
+      },
+      {
+        "code": "CE 2231",
+        "title": "Engineering Geology & Geomorphology"
+      },
+      {
+        "code": "CE 2261",
+        "title": "Hydrology"
+      },
+      {
+        "code": "Math 2201",
+        "title": "Matrices, Laplace Transform & Fourier Series"
+      }
+    ],
+    "Y3T1": [
+      {
+        "code": "CE 3111",
+        "title": "Structural Analysis and Design-I"
+      },
+      {
+        "code": "CE 3113",
+        "title": "Reinforced Concrete Structures-I"
+      },
+      {
+        "code": "CE 3131",
+        "title": "Geotechnical Engineering-I"
+      },
+      {
+        "code": "CE 3141",
+        "title": "Environmental Engineering-I"
+      },
+      {
+        "code": "CE 3161",
+        "title": "Engineering Hydraulics"
+      }
+    ],
+    "Y3T2": [
+      {
+        "code": "CE 3211",
+        "title": "Structural Analysis and Design-II"
+      },
+      {
+        "code": "CE 3213",
+        "title": "Reinforced Concrete Structures-II"
+      },
+      {
+        "code": "CE 3231",
+        "title": "Geotechnical Engineering-II"
+      },
+      {
+        "code": "CE 3241",
+        "title": "Environmental Engineering-II"
+      },
+      {
+        "code": "CE 3251",
+        "title": "Transportation Engineering-I"
+      }
+    ],
+    "Y4T1": [
+      {
+        "code": "CE 4111",
+        "title": "Structural Analysis and Design-III"
+      },
+      {
+        "code": "CE 4131",
+        "title": "Geotechnical Engineering-III"
+      },
+      {
+        "code": "CE 4151",
+        "title": "Transportation Engineering-II"
+      },
+      {
+        "code": "CE 4161",
+        "title": "Irrigation and Flood Control"
+      }
+    ]
+  },
+  "ChE": {
+    "Y1T1": [
+      {
+        "code": "Ch 1129",
+        "title": "Inorganic Chemistry"
+      },
+      {
+        "code": "ChE 1101",
+        "title": "Fundamentals of Chemical Engineering"
+      },
+      {
+        "code": "Hum 1129",
+        "title": "Technical and Communicative English"
+      },
+      {
+        "code": "Math 1129",
+        "title": "Differential Calculus and Geometry"
+      },
+      {
+        "code": "Ph 1129",
+        "title": "Physics I"
+      }
+    ],
+    "Y1T2": [
+      {
+        "code": "Ch 1229",
+        "title": "Physical Chemistry I"
+      },
+      {
+        "code": "EEE 1229",
+        "title": "Electrical Circuits and Machines"
+      },
+      {
+        "code": "Math 1229",
+        "title": "Integral Calculus and Differential Equations"
+      },
+      {
+        "code": "ME 1229",
+        "title": "Thermodynamics"
+      },
+      {
+        "code": "Ph 1229",
+        "title": "Physics II"
+      }
+    ],
+    "Y2T1": [
+      {
+        "code": "Ch 2129",
+        "title": "Physical Chemistry II"
+      },
+      {
+        "code": "ChE 2103",
+        "title": "Material and Energy Balance"
+      },
+      {
+        "code": "ME 2129",
+        "title": "Mechanics of Solid"
+      },
+      {
+        "code": "Math 2129",
+        "title": "Vector Analysis, Matrices, and Laplace Transform"
+      },
+      {
+        "code": "Hum 2129",
+        "title": "Sociology and Industrial environment"
+      }
+    ],
+    "Y2T2": [
+      {
+        "code": "Ch 2229",
+        "title": "Organic Chemistry"
+      },
+      {
+        "code": "ChE 2205",
+        "title": "Fluid Mechanics"
+      },
+      {
+        "code": "EE 2229",
+        "title": "Electronics"
+      },
+      {
+        "code": "Hum 2229",
+        "title": "Accounting and Economics"
+      },
+      {
+        "code": "Math 2229",
+        "title": "Numerical Methods and Statistics"
+      }
+    ],
+    "Y3T1": [
+      {
+        "code": "ChE 3107",
+        "title": "Chemical Engineering Thermodynamics"
+      },
+      {
+        "code": "ChE 3109",
+        "title": "Heat Transfer"
+      },
+      {
+        "code": "ChE 3111",
+        "title": "Mass Transfer I"
+      },
+      {
+        "code": "ChE 3113",
+        "title": "Environmental Science"
+      },
+      {
+        "code": "ChE 3117",
+        "title": "Unit Operation"
+      }
+    ],
+    "Y3T2": [
+      {
+        "code": "ChE 3211",
+        "title": "Mass Transfer II"
+      },
+      {
+        "code": "ChE 3215",
+        "title": "Particle Technology"
+      },
+      {
+        "code": "ChE 3219",
+        "title": "Corrosion Engineering"
+      },
+      {
+        "code": "ChE 3221",
+        "title": "Transport Phenomena"
+      },
+      {
+        "code": "ChE 3233",
+        "title": "Process Safety Management"
+      }
+    ],
+    "Y4T1": [
+      {
+        "code": "ChE 4123",
+        "title": "Process Control"
+      },
+      {
+        "code": "ChE 4125",
+        "title": "Process Design"
+      },
+      {
+        "code": "ChE 4127",
+        "title": "Reaction Engineering"
+      }
+    ],
+    "Y4T2": [
+      {
+        "code": "ChE 4200",
+        "title": "Process and Plant Design II"
+      },
+      {
+        "code": "ChE 4229",
+        "title": "Economics and Management of Chemical Process Industries"
+      },
+      {
+        "code": "ChE 4231",
+        "title": "Refinery Engineering"
+      }
+    ]
+  },
+  "ECE": {
+    "Y1T1": [
+      {
+        "code": "ECE 1109",
+        "title": "Introduction to Electronics and Communication Engineering"
+      },
+      {
+        "code": "EEE 1109",
+        "title": "Basic Electrical Engineering"
+      },
+      {
+        "code": "Ph 1109",
+        "title": "Physics"
+      },
+      {
+        "code": "Math 1109",
+        "title": "Differential and Integral Calculus"
+      },
+      {
+        "code": "Hum 1109",
+        "title": "Technical English"
+      }
+    ],
+    "Y1T2": [
+      {
+        "code": "ECE 1205",
+        "title": "Science of Engineering Materials"
+      },
+      {
+        "code": "ECE 1209",
+        "title": "Analog Electronics-I"
+      },
+      {
+        "code": "CSE 1209",
+        "title": "Computer Fundamentals and Programming"
+      },
+      {
+        "code": "Ch 1209",
+        "title": "Chemistry"
+      },
+      {
+        "code": "Math 1209",
+        "title": "Coordinate Geometry and Differential Equations"
+      }
+    ],
+    "Y2T1": [
+      {
+        "code": "ECE 2101",
+        "title": "Analog Electronics-II"
+      },
+      {
+        "code": "ECE 2103",
+        "title": "Digital Electronics and Logic Circuits"
+      },
+      {
+        "code": "ECE 2105",
+        "title": "Electromagnetic Fields and Waves"
+      },
+      {
+        "code": "ECE 2107",
+        "title": "Signals and Systems"
+      },
+      {
+        "code": "Math 2109",
+        "title": "Vector, Matrix and Transform"
+      }
+    ],
+    "Y2T2": [
+      {
+        "code": "ECE 2201",
+        "title": "Analog Communications"
+      },
+      {
+        "code": "ECE 2207",
+        "title": "Microprocessors and Microcomputers"
+      },
+      {
+        "code": "EEE 2209",
+        "title": "Electrical Drives and Instrumentation"
+      },
+      {
+        "code": "CSE 2209",
+        "title": "Data Structures and Algorithm"
+      },
+      {
+        "code": "Math 2209",
+        "title": "Complex Variables, Statistics and Special Functions"
+      }
+    ],
+    "Y3T1": [
+      {
+        "code": "ECE 3101",
+        "title": "Industrial Electronics"
+      },
+      {
+        "code": "ECE 3103",
+        "title": "Digital Communications"
+      },
+      {
+        "code": "ECE 3105",
+        "title": "Microwave Engineering and Radar"
+      },
+      {
+        "code": "ECE 3109",
+        "title": "Numerical Analysis"
+      },
+      {
+        "code": "Hum 3109",
+        "title": "Economics and Accounting"
+      }
+    ],
+    "Y3T2": [
+      {
+        "code": "ECE 3201",
+        "title": "Information Theory"
+      },
+      {
+        "code": "ECE 3203",
+        "title": "Digital Signal Processing"
+      },
+      {
+        "code": "ECE 3205",
+        "title": "Optical Fiber Communications"
+      },
+      {
+        "code": "ECE 3207",
+        "title": "Antenna Engineering"
+      },
+      {
+        "code": "CSE 3209",
+        "title": "Database System"
+      },
+      {
+        "code": "CSE 3219",
+        "title": "Computer Peripherals and Interfacing"
+      },
+      {
+        "code": "CSE 3239",
+        "title": "Mobile Computing"
+      }
+    ],
+    "Y4T1": [
+      {
+        "code": "ECE 4101",
+        "title": "VLSI Design and Nanotechnology"
+      },
+      {
+        "code": "ECE 4103",
+        "title": "Wireless Communications"
+      },
+      {
+        "code": "ECE 4105",
+        "title": "Engineers and Society"
+      },
+      {
+        "code": "ECE 4107",
+        "title": "Machine Learning"
+      },
+      {
+        "code": "ECE 4139",
+        "title": "TV Engineering"
+      },
+      {
+        "code": "ECE 4129",
+        "title": "Digital Image Processing"
+      },
+      {
+        "code": "ECE 4117",
+        "title": "Internet of Things"
+      }
+    ],
+    "Y4T2": [
+      {
+        "code": "ECE 4203",
+        "title": "Satellite and Telecommunication Engineering"
+      },
+      {
+        "code": "ECE 4205",
+        "title": "Computer Networks"
+      },
+      {
+        "code": "Hum 4209",
+        "title": "Project Management and Entrepreneurship"
+      },
+      {
+        "code": "ECE 4209",
+        "title": "Opto-Electronics Integrated Circuits"
+      },
+      {
+        "code": "ECE 4229",
+        "title": "Electronic Packaging and Materials"
+      },
+      {
+        "code": "ECE 4259",
+        "title": "Wireless Sensor Networks"
+      },
+      {
+        "code": "ECE 4237",
+        "title": "Power Supply System in Telecommunications"
+      },
+      {
+        "code": "ECE 4221",
+        "title": "Semiconductor Devices Theory"
+      },
+      {
+        "code": "ECE 4223",
+        "title": "Semiconductor Processing and Fabrication Technology"
+      },
+      {
+        "code": "ECE 4215",
+        "title": "Robotics and Machine Vision"
+      },
+      {
+        "code": "ECE 4207",
+        "title": "Control System Engineering"
+      },
+      {
+        "code": "ECE 4217",
+        "title": "Electronic Instrumentation"
+      },
+      {
+        "code": "ECE 4227",
+        "title": "Biomedical Engineering"
+      },
+      {
+        "code": "ECE 4269",
+        "title": "Embedded Systems"
+      }
+    ]
+  },
+  "EEE": {
+    "Y1T1": [
+      {
+        "code": "EEE 1101",
+        "title": "Electrical Circuits I"
+      },
+      {
+        "code": "CSE 1111",
+        "title": "Computer Programming"
+      },
+      {
+        "code": "Math 1101",
+        "title": "Engg. Mathematics I"
+      },
+      {
+        "code": "Phy 1111",
+        "title": "Physics"
+      },
+      {
+        "code": "Hum 1111",
+        "title": "Technical English"
+      }
+    ],
+    "Y1T2": [
+      {
+        "code": "EEE 1201",
+        "title": "Electrical Circuits II"
+      },
+      {
+        "code": "EEE 1203",
+        "title": "Electronics I"
+      },
+      {
+        "code": "Chem 1211",
+        "title": "Chemistry"
+      },
+      {
+        "code": "Hum 1211",
+        "title": "Financial Account and Economic Analysis"
+      },
+      {
+        "code": "Math 1201",
+        "title": "Engg. Mathematics II"
+      }
+    ],
+    "Y2T1": [
+      {
+        "code": "EEE 2103",
+        "title": "Electronics II"
+      },
+      {
+        "code": "EEE 2105",
+        "title": "Electrical Machine I"
+      },
+      {
+        "code": "Math 2101",
+        "title": "Engg. Mathematics III"
+      },
+      {
+        "code": "ME 2101",
+        "title": "Basic Mechanical Engineering"
+      },
+      {
+        "code": "IPE 2111",
+        "title": "Legal Issues and Management for Engineers"
+      }
+    ],
+    "Y2T2": [
+      {
+        "code": "Math 2201",
+        "title": "Engg. Mathematics IV"
+      },
+      {
+        "code": "EEE 2203",
+        "title": "Electronics III"
+      },
+      {
+        "code": "EEE 2205",
+        "title": "Electrical Machine II"
+      },
+      {
+        "code": "EEE 2211",
+        "title": "Measurement and Instrumentation"
+      },
+      {
+        "code": "EEE 2213",
+        "title": "Digital Electronics I"
+      }
+    ],
+    "Y3T1": [
+      {
+        "code": "EEE 3101",
+        "title": "Signals and Linear Systems"
+      },
+      {
+        "code": "EEE 3105",
+        "title": "Control Systems"
+      },
+      {
+        "code": "EEE 3107",
+        "title": "Electromagnetic Fields and Waves"
+      },
+      {
+        "code": "EEE 3109",
+        "title": "Computational Methods in Electrical Engineering"
+      },
+      {
+        "code": "EEE 3117",
+        "title": "Communication Engineering I"
+      }
+    ],
+    "Y3T2": [
+      {
+        "code": "EEE 3203",
+        "title": "Power Electronics"
+      },
+      {
+        "code": "EEE 3205",
+        "title": "Power Plant Engineering and Economy"
+      },
+      {
+        "code": "EEE 3209",
+        "title": "Microprocessor, Interfacing and System Design"
+      },
+      {
+        "code": "EEE 3211",
+        "title": "Power System I"
+      },
+      {
+        "code": "EEE 3217",
+        "title": "Communication Engineering II"
+      }
+    ],
+    "Y4T1": [
+      {
+        "code": "EEE 4107",
+        "title": "Digital Signal Processing"
+      },
+      {
+        "code": "EEE 4117",
+        "title": "Radio and TV Engineering"
+      },
+      {
+        "code": "IPE 4111",
+        "title": "Project and Operations Management"
+      },
+      {
+        "code": "EEE 4141",
+        "title": "Power System II"
+      },
+      {
+        "code": "EEE 4161",
+        "title": "Digital Electronics II"
+      },
+      {
+        "code": "EEE 4165",
+        "title": "Processing and Fabrication Technology"
+      },
+      {
+        "code": "EEE 4181",
+        "title": "Microwave Engineering"
+      },
+      {
+        "code": "EEE 4143",
+        "title": "High Voltage Engineering"
+      },
+      {
+        "code": "EEE 4163",
+        "title": "VLSI"
+      },
+      {
+        "code": "EEE 4183",
+        "title": "Digital Communication"
+      }
+    ],
+    "Y4T2": [
+      {
+        "code": "EEE 4209",
+        "title": "Embedded System Design"
+      },
+      {
+        "code": "EEE 4217",
+        "title": "Mobile Cellular Communication"
+      },
+      {
+        "code": "EEE 4241",
+        "title": "Power System Protection"
+      },
+      {
+        "code": "EEE 4261",
+        "title": "Biomedical Engineering"
+      },
+      {
+        "code": "EEE 4267",
+        "title": "Transducers and Instrumentation"
+      },
+      {
+        "code": "EEE 4281",
+        "title": "Antennas and Propagation"
+      },
+      {
+        "code": "EEE 4243",
+        "title": "Power System Operation and Control"
+      },
+      {
+        "code": "EEE 4263",
+        "title": "Optoelectronics"
+      },
+      {
+        "code": "EEE 4283",
+        "title": "Radar and Satellite Communication"
+      },
+      {
+        "code": "EEE 4245",
+        "title": "Electrical Machine III"
+      },
+      {
+        "code": "EEE 4247",
+        "title": "Renewable Energy"
+      },
+      {
+        "code": "EEE 4269",
+        "title": "Photovoltaic System"
+      },
+      {
+        "code": "EEE 4285",
+        "title": "Optical Fiber Communication"
+      }
+    ]
+  },
+  "ESE": {
+    "Y1T1": [
+      {
+        "code": "Ch 1113",
+        "title": "Chemistry I"
+      },
+      {
+        "code": "Hum 1113",
+        "title": "Sociology and Behavioral Science"
+      },
+      {
+        "code": "Math 1113",
+        "title": "Differential and Integral Calculus"
+      },
+      {
+        "code": "Ph 1113",
+        "title": "Physics"
+      },
+      {
+        "code": "ESE 1101",
+        "title": "Fundamentals of Energy Resources"
+      }
+    ],
+    "Y1T2": [
+      {
+        "code": "Ch 1213",
+        "title": "Chemistry II"
+      },
+      {
+        "code": "EE 1213",
+        "title": "Electrical Circuits and Electronics"
+      },
+      {
+        "code": "Hum 1213",
+        "title": "Technical English"
+      },
+      {
+        "code": "Math 1213",
+        "title": "Differential Equation and Co-ordinate Geometry"
+      },
+      {
+        "code": "ESE 1205",
+        "title": "Thermodynamics for Energy Engineering"
+      }
+    ],
+    "Y2T1": [
+      {
+        "code": "EE 2113",
+        "title": "Electrical Machines"
+      },
+      {
+        "code": "Math 2113",
+        "title": "Linear Algebra and Vector Analysis"
+      },
+      {
+        "code": "ME 2113",
+        "title": "Statics and Solid Mechanics"
+      },
+      {
+        "code": "ME 2115",
+        "title": "Fluid Mechanics"
+      },
+      {
+        "code": "CSE 2113",
+        "title": "Computer Programming"
+      }
+    ],
+    "Y2T2": [
+      {
+        "code": "EE 2213",
+        "title": "Power Electronics"
+      },
+      {
+        "code": "Hum 2213",
+        "title": "Economics and Accounting"
+      },
+      {
+        "code": "Math 2213",
+        "title": "Complex Variables and Fourier Analysis"
+      },
+      {
+        "code": "ME 2213",
+        "title": "Dynamics and Kinematics of Machineries"
+      },
+      {
+        "code": "ESE 2209",
+        "title": "Bio and Wind Energy Engineering"
+      }
+    ],
+    "Y3T1": [
+      {
+        "code": "Math 3113",
+        "title": "Statistics and Numerical Methods"
+      },
+      {
+        "code": "EE 3113",
+        "title": "Power System Engineering"
+      },
+      {
+        "code": "ESE 3105",
+        "title": "Heat Transfer and Mass Transfer"
+      },
+      {
+        "code": "ESE 3107",
+        "title": "Solar Thermal Engineering"
+      },
+      {
+        "code": "ESE 3123",
+        "title": "Thermo-fluid Devices"
+      }
+    ],
+    "Y3T2": [
+      {
+        "code": "ESE 3203",
+        "title": "Petroleum and Natural Gas Processing"
+      },
+      {
+        "code": "ESE 3207",
+        "title": "Solar Photovoltaic System"
+      },
+      {
+        "code": "ESE 3211",
+        "title": "Coal Power Generation"
+      },
+      {
+        "code": "ESE 3217",
+        "title": "Instrumentation and Control"
+      },
+      {
+        "code": "ESE 3221",
+        "title": "Energy Storage Systems"
+      }
+    ],
+    "Y4T1": [
+      {
+        "code": "ESE 4105",
+        "title": "Fuel Combustion and IC Engines"
+      },
+      {
+        "code": "ESE 4115",
+        "title": "Power Plant Engineering"
+      },
+      {
+        "code": "ESE 4125",
+        "title": "Safety and Environmental Aspects of Energy Projects"
+      }
+    ],
+    "Y4T2": [
+      {
+        "code": "ESE 4213",
+        "title": "Nuclear Power Engineering"
+      },
+      {
+        "code": "ESE 4219",
+        "title": "Energy Audit and Management"
+      }
+    ]
+  },
+  "IPE": {
+    "Y1T1": [
+      {
+        "code": "IPE 1101",
+        "title": "Manufacturing Process - I"
+      },
+      {
+        "code": "CHEM 1111",
+        "title": "Chemistry"
+      },
+      {
+        "code": "HUM 1111",
+        "title": "Economics"
+      },
+      {
+        "code": "MATH 1111",
+        "title": "Mathematics-1"
+      },
+      {
+        "code": "PHY 1111",
+        "title": "Modern and Solid State Physics"
+      }
+    ],
+    "Y1T2": [
+      {
+        "code": "IPE 1201",
+        "title": "Manufacturing Process - II"
+      },
+      {
+        "code": "IPE 1203",
+        "title": "Engineering Materials"
+      },
+      {
+        "code": "IPE 1209",
+        "title": "Computer Fundamentals & Programming Language"
+      },
+      {
+        "code": "HUM 1211",
+        "title": "Professional English"
+      },
+      {
+        "code": "MATH 1211",
+        "title": "Mathematics - II"
+      }
+    ],
+    "Y2T1": [
+      {
+        "code": "CSE 2111",
+        "title": "Data Structures and Algorithms"
+      },
+      {
+        "code": "EEE 2111",
+        "title": "Electrical Circuits and Machines"
+      },
+      {
+        "code": "HUM 2111",
+        "title": "Financial, Cost and Management Accounting"
+      },
+      {
+        "code": "MATH 2111",
+        "title": "Mathematics - III"
+      },
+      {
+        "code": "ME 2111",
+        "title": "Engineering Mechanics and Theory of Machines"
+      }
+    ],
+    "Y2T2": [
+      {
+        "code": "IPE 2207",
+        "title": "Probability and Statistical Analysis"
+      },
+      {
+        "code": "IPE 2229",
+        "title": "Industrial Psychology and Law"
+      },
+      {
+        "code": "EEE 2211",
+        "title": "Electronics"
+      },
+      {
+        "code": "ME 2213",
+        "title": "Mechanics of Solid"
+      },
+      {
+        "code": "ME 2215",
+        "title": "Thermal Engineering and Heat Transfer"
+      }
+    ],
+    "Y3T1": [
+      {
+        "code": "IPE 3103",
+        "title": "Engineering Metallurgy"
+      },
+      {
+        "code": "IPE 3105",
+        "title": "Product Design - I"
+      },
+      {
+        "code": "IPE 3115",
+        "title": "Engineering Economy"
+      },
+      {
+        "code": "IPE 3119",
+        "title": "Operations Management"
+      },
+      {
+        "code": "ME 3111",
+        "title": "Fluid Mechanics and Machinery"
+      }
+    ],
+    "Y3T2": [
+      {
+        "code": "IPE 3205",
+        "title": "Product Design - II"
+      },
+      {
+        "code": "IPE 3217",
+        "title": "Operations Research"
+      },
+      {
+        "code": "IPE 3219",
+        "title": "Production Systems Design"
+      },
+      {
+        "code": "IPE 3221",
+        "title": "Quality Management"
+      },
+      {
+        "code": "IPE 3223",
+        "title": "Material Handling and Maintenance Management"
+      }
+    ],
+    "Y4T1": [
+      {
+        "code": "IPE 4109",
+        "title": "Management Information System Analysis and Design"
+      },
+      {
+        "code": "IPE 4125",
+        "title": "Machine Tools"
+      },
+      {
+        "code": "IPE 4129",
+        "title": "Industrial Management and Entrepreneurship Development"
+      },
+      {
+        "code": "IPE 4009",
+        "title": "Systems Modeling and Simulations"
+      },
+      {
+        "code": "IPE 4019",
+        "title": "Logistics and Supply Chain Management"
+      }
+    ],
+    "Y4T2": [
+      {
+        "code": "IPE 4219",
+        "title": "Human Factors Engineering and Safety Management"
+      },
+      {
+        "code": "IPE 4225",
+        "title": "Tool Engineering"
+      },
+      {
+        "code": "IPE 4227",
+        "title": "CAM and Robotics"
+      },
+      {
+        "code": "IPE 4037",
+        "title": "Mechatronics"
+      },
+      {
+        "code": "IPE 4059",
+        "title": "Project Management"
+      }
+    ]
+  },
+  "LE": {
+    "Y1T1": [
+      {
+        "code": "Ch 1119",
+        "title": "Inorganic Chemistry"
+      },
+      {
+        "code": "EEE 1119",
+        "title": "Basic Electrical Engineering"
+      },
+      {
+        "code": "Hum 1119",
+        "title": "Economics & Sociology"
+      },
+      {
+        "code": "Math 1119",
+        "title": "Mathematics I"
+      },
+      {
+        "code": "LE 1101",
+        "title": "Leather Manufacturing Technology I"
+      }
+    ],
+    "Y1T2": [
+      {
+        "code": "Ch 1219",
+        "title": "Organic Chemistry"
+      },
+      {
+        "code": "CSE 1219",
+        "title": "Computer Fundamentals and Programming"
+      },
+      {
+        "code": "Hum 1219",
+        "title": "English"
+      },
+      {
+        "code": "Math 1219",
+        "title": "Mathematics II"
+      },
+      {
+        "code": "Ph 1219",
+        "title": "Physics"
+      }
+    ],
+    "Y2T1": [
+      {
+        "code": "Ch 2119",
+        "title": "Physical Chemistry"
+      },
+      {
+        "code": "Hum 2119",
+        "title": "Accounting and Industrial Law"
+      },
+      {
+        "code": "LE 2101",
+        "title": "Leather Manufacturing Technology II"
+      },
+      {
+        "code": "Math 2119",
+        "title": "Mathematics III"
+      },
+      {
+        "code": "ME 2119",
+        "title": "Basic Mechanical Engineering"
+      }
+    ],
+    "Y2T2": [
+      {
+        "code": "EEE 2219",
+        "title": "Electronics"
+      },
+      {
+        "code": "IPE 2219",
+        "title": "Statistics"
+      },
+      {
+        "code": "LE 2201",
+        "title": "Leather Manufacturing Technology III"
+      },
+      {
+        "code": "LE 2203",
+        "title": "Materials Science for Leather Engineering"
+      },
+      {
+        "code": "LE 2205",
+        "title": "Leather and Polymer Chemistry"
+      }
+    ],
+    "Y3T1": [
+      {
+        "code": "LE 3101",
+        "title": "Leather Manufacturing Technology IV"
+      },
+      {
+        "code": "LE 3107",
+        "title": "Dyeing and Finishing I"
+      },
+      {
+        "code": "LE 3109",
+        "title": "Leather Products Engineering I"
+      },
+      {
+        "code": "LE 3111",
+        "title": "Footwear Engineering I"
+      },
+      {
+        "code": "LE 3115",
+        "title": "Analytical Chemistry for Leather Manufacture"
+      }
+    ],
+    "Y3T2": [
+      {
+        "code": "LE 3209",
+        "title": "Leather Products Engineering II"
+      },
+      {
+        "code": "LE 3211",
+        "title": "Footwear Engineering II"
+      },
+      {
+        "code": "LE 3219",
+        "title": "Leather Microbiology"
+      },
+      {
+        "code": "ME 3219",
+        "title": "Fluid Mechanics & Machineries"
+      },
+      {
+        "code": "ME 3221",
+        "title": "Manufacturing Process"
+      }
+    ],
+    "Y4T1": [
+      {
+        "code": "LE 4109",
+        "title": "Leather Products Engineering III"
+      },
+      {
+        "code": "LE 4111",
+        "title": "Footwear Engineering III"
+      },
+      {
+        "code": "LE 4121",
+        "title": "Environmental Science & Engineering"
+      },
+      {
+        "code": "LE 4123",
+        "title": "Computer Integrated Manufacturing Systems (CIMS)"
+      }
+    ],
+    "Y4T2": [
+      {
+        "code": "LE 4207",
+        "title": "Dyeing and Finishing II"
+      },
+      {
+        "code": "LE 4213",
+        "title": "Testing of Leather & Allied Materials"
+      },
+      {
+        "code": "LE 4217",
+        "title": "Production & Quality Control"
+      },
+      {
+        "code": "IPE 4219",
+        "title": "Industrial Management & Entrepreneurship"
+      }
+    ]
+  },
+  "ME": {
+    "Y1T1": [
+      {
+        "code": "Ch 1105",
+        "title": "Engineering Chemistry"
+      },
+      {
+        "code": "Hum 1105",
+        "title": "English"
+      },
+      {
+        "code": "Math 1105",
+        "title": "Mathematics I"
+      },
+      {
+        "code": "ME 1105",
+        "title": "Thermal Engineering"
+      },
+      {
+        "code": "ME 1107",
+        "title": "Manufacturing Process"
+      }
+    ],
+    "Y1T2": [
+      {
+        "code": "Ph 1205",
+        "title": "Physics"
+      },
+      {
+        "code": "Hum 1205",
+        "title": "Economics and Accounting"
+      },
+      {
+        "code": "Math 1205",
+        "title": "Mathematics II"
+      },
+      {
+        "code": "EE 1205",
+        "title": "Electrical Engineering & Electrical Machines"
+      },
+      {
+        "code": "ME 1209",
+        "title": "Engineering Mechanics I"
+      }
+    ],
+    "Y2T1": [
+      {
+        "code": "Hum 2105",
+        "title": "Industrial Environment and Sociology"
+      },
+      {
+        "code": "Math 2105",
+        "title": "Mathematics III"
+      },
+      {
+        "code": "EE 2105",
+        "title": "Electronics"
+      },
+      {
+        "code": "ME 2105",
+        "title": "Thermodynamics"
+      },
+      {
+        "code": "ME 2113",
+        "title": "Fluid Mechanics I"
+      }
+    ],
+    "Y2T2": [
+      {
+        "code": "Math 2205",
+        "title": "Mathematics IV"
+      },
+      {
+        "code": "ME 2209",
+        "title": "Engineering Mechanics II"
+      },
+      {
+        "code": "ME 2211",
+        "title": "Mechanics of Solid"
+      },
+      {
+        "code": "ME 2213",
+        "title": "Fluid Mechanics II"
+      },
+      {
+        "code": "ME 2221",
+        "title": "Computer Programming"
+      }
+    ],
+    "Y3T1": [
+      {
+        "code": "ME 3105",
+        "title": "Heat Transfer I"
+      },
+      {
+        "code": "ME 3109",
+        "title": "Engineering Mechanics III"
+      },
+      {
+        "code": "ME 3117",
+        "title": "Machine Design I"
+      },
+      {
+        "code": "ME 3119",
+        "title": "Statistics & Quality Control"
+      },
+      {
+        "code": "ME 3121",
+        "title": "Numerical Computation for Mechanical Engineers"
+      }
+    ],
+    "Y3T2": [
+      {
+        "code": "ME 3205",
+        "title": "Heat Transfer II"
+      },
+      {
+        "code": "ME 3215",
+        "title": "Engineering Metallurgy"
+      },
+      {
+        "code": "ME 3217",
+        "title": "Machine Design II"
+      },
+      {
+        "code": "ME 3223",
+        "title": "Power Plant Engineering"
+      },
+      {
+        "code": "ME 3225",
+        "title": "Measurement and Industrial Instrumentation"
+      }
+    ],
+    "Y4T1": [
+      {
+        "code": "ME 4105",
+        "title": "Applied Thermodynamics"
+      },
+      {
+        "code": "ME 4113",
+        "title": "Fluid Machinery"
+      },
+      {
+        "code": "ME 4127",
+        "title": "Operations Management"
+      },
+      {
+        "code": "ME 4011",
+        "title": "Advanced Thermodynamics"
+      },
+      {
+        "code": "ME 4013",
+        "title": "Advanced Fluid Mechanics"
+      }
+    ],
+    "Y4T2": [
+      {
+        "code": "ME 4207",
+        "title": "Tool Engineering & Machine Tools"
+      },
+      {
+        "code": "ME 4229",
+        "title": "Industrial Management"
+      },
+      {
+        "code": "ME 4015",
+        "title": "Automobile Engineering"
+      },
+      {
+        "code": "ME 4017",
+        "title": "Refrigeration & Air Conditioning"
+      },
+      {
+        "code": "ME 4051",
+        "title": "Operations Research"
+      }
+    ]
+  },
+  "MSE": {
+    "Y1T1": [
+      {
+        "code": "MSE 1101",
+        "title": "Introduction to Materials Science and Engineering"
+      },
+      {
+        "code": "EEE 1127",
+        "title": "Electrical Engineering Fundamentals"
+      },
+      {
+        "code": "Math 1127",
+        "title": "Differential and Integral Calculus"
+      },
+      {
+        "code": "Ph 1127",
+        "title": "Optics and Waves"
+      },
+      {
+        "code": "Ch 1127",
+        "title": "Inorganic and Physical Chemistry"
+      }
+    ],
+    "Y1T2": [
+      {
+        "code": "ME 1227",
+        "title": "Engineering Mechanics"
+      },
+      {
+        "code": "Math 1227",
+        "title": "Differential Equations and Geometry"
+      },
+      {
+        "code": "Ph 1227",
+        "title": "Magnetism and Nuclear Physics"
+      },
+      {
+        "code": "Ch 1227",
+        "title": "Organic Chemistry"
+      },
+      {
+        "code": "Hum 1227",
+        "title": "Technical English"
+      }
+    ],
+    "Y2T1": [
+      {
+        "code": "MSE 2101",
+        "title": "Crystallography"
+      },
+      {
+        "code": "MSE 2103",
+        "title": "Thermodynamics of Materials"
+      },
+      {
+        "code": "ME 2127",
+        "title": "Solid Mechanics"
+      },
+      {
+        "code": "Math 2127",
+        "title": "Vector Analysis and Linear Algebra"
+      },
+      {
+        "code": "Hum 2127",
+        "title": "Accounting and Economics"
+      }
+    ],
+    "Y2T2": [
+      {
+        "code": "MSE 2201",
+        "title": "Phase Diagrams and Transformations"
+      },
+      {
+        "code": "MSE 2203",
+        "title": "Mechanical Behavior of Materials"
+      },
+      {
+        "code": "CSE 2227",
+        "title": "Programing Techniques"
+      },
+      {
+        "code": "Math 2227",
+        "title": "Statistics, Fourier Series and Numerical Analysis"
+      },
+      {
+        "code": "Ph 2227",
+        "title": "Basic Quantum Mechanics and Solid State Physics"
+      }
+    ],
+    "Y3T1": [
+      {
+        "code": "MSE 3101",
+        "title": "Transport Phenomena in Materials"
+      },
+      {
+        "code": "MSE 3103",
+        "title": "Materials Manufacturing Processes"
+      },
+      {
+        "code": "MSE 3105",
+        "title": "Welding and Materials Joining Processes"
+      },
+      {
+        "code": "MSE 3107",
+        "title": "Physical Metallurgy of Materials"
+      },
+      {
+        "code": "Hum 3127",
+        "title": "Government and Sociology"
+      }
+    ],
+    "Y3T2": [
+      {
+        "code": "MSE 3201",
+        "title": "Materials Characterization"
+      },
+      {
+        "code": "MSE 3203",
+        "title": "Ceramics and Glass Engineering"
+      },
+      {
+        "code": "MSE 3205",
+        "title": "Corrosion and Surface Engineering"
+      },
+      {
+        "code": "IEM 3227",
+        "title": "Industrial Management"
+      }
+    ],
+    "Y4T1": [
+      {
+        "code": "MSE 4101",
+        "title": "Modern Iron and Steel Making"
+      },
+      {
+        "code": "MSE 4103",
+        "title": "Engineering Alloys and Materials Selection"
+      },
+      {
+        "code": "MSE 4105",
+        "title": "Polymer and Composite Materials"
+      },
+      {
+        "code": "MSE 4107",
+        "title": "Computational Materials Science"
+      },
+      {
+        "code": "MSE 4109",
+        "title": "Electronic, Magnetic and Optical Properties of Materials"
+      }
+    ],
+    "Y4T2": [
+      {
+        "code": "MSE 4201",
+        "title": "Materials for Energy Conversion and Storage"
+      },
+      {
+        "code": "MSE 4211",
+        "title": "Professional Ethics"
+      },
+      {
+        "code": "EEE 4227",
+        "title": "Semiconductor Materials and Devices"
+      },
+      {
+        "code": "Hum 4227",
+        "title": "Project Management and Entrepreneurship"
+      }
+    ]
+  },
+  "MTE": {
+    "Y1T1": [
+      {
+        "code": "Ch 1131",
+        "title": "Chemistry"
+      },
+      {
+        "code": "Hum 1131",
+        "title": "Sociology and Engineering Ethics"
+      },
+      {
+        "code": "Math 1131",
+        "title": "Calculus and Geometry"
+      },
+      {
+        "code": "EE 1131",
+        "title": "Electrical Circuits"
+      },
+      {
+        "code": "MTE 1101",
+        "title": "Mechatronic Systems"
+      }
+    ],
+    "Y1T2": [
+      {
+        "code": "Hum 1231",
+        "title": "Technical and Communicative English"
+      },
+      {
+        "code": "Hum 1231_sessional",
+        "title": "Sessional on Technical and Communicative English"
+      },
+      {
+        "code": "Ph 1231",
+        "title": "Physics"
+      },
+      {
+        "code": "Math 1231",
+        "title": "Vector, Matrix and Ordinary Differential Equation"
+      },
+      {
+        "code": "CSE 1231",
+        "title": "Computer Programming"
+      },
+      {
+        "code": "ME 1231",
+        "title": "Manufacturing Processes"
+      }
+    ],
+    "Y2T1": [
+      {
+        "code": "Hum 2131",
+        "title": "Engineering Economics and Accounting"
+      },
+      {
+        "code": "Math 2131",
+        "title": "Fourier Analysis and Laplace Transform"
+      },
+      {
+        "code": "EE 2131",
+        "title": "Electronics"
+      },
+      {
+        "code": "ME 2131",
+        "title": "Engineering Mechanics"
+      },
+      {
+        "code": "MTE 2105",
+        "title": "Sensors and Instrumentation"
+      }
+    ],
+    "Y2T2": [
+      {
+        "code": "Math 2231",
+        "title": "Complex Variables and Harmonic Analysis"
+      },
+      {
+        "code": "EE2231",
+        "title": "Signals and Linear Systems"
+      },
+      {
+        "code": "ME 2231",
+        "title": "Thermodynamics and Heat Transfer"
+      },
+      {
+        "code": "MTE 2207",
+        "title": "Electro-Mechanical Systems"
+      },
+      {
+        "code": "MTE 2201",
+        "title": "Control Systems"
+      }
+    ],
+    "Y3T1": [
+      {
+        "code": "ME 3131",
+        "title": "Fluid Mechanics and Machinery"
+      },
+      {
+        "code": "MTE 3103",
+        "title": "Microprocessor, Microcontroller and Interfacing"
+      },
+      {
+        "code": "MTE 3105",
+        "title": "Linear Integrated Circuits and Digital Systems"
+      },
+      {
+        "code": "MTE 3107",
+        "title": "Data Structure and Algorithm"
+      },
+      {
+        "code": "MTE 3113",
+        "title": "Numerical Analysis and Statistics"
+      }
+    ],
+    "Y3T2": [
+      {
+        "code": "EEE 3231",
+        "title": "Network and Communication Systems"
+      },
+      {
+        "code": "ME 3231",
+        "title": "Solid Mechanics and Machine Design"
+      },
+      {
+        "code": "MTE 3201",
+        "title": "Power Electronics and Drives"
+      },
+      {
+        "code": "MTE 3203",
+        "title": "Hydraulic and Pneumatic Control"
+      },
+      {
+        "code": "MTE 3205",
+        "title": "Robotics"
+      }
+    ],
+    "Y4T1": [
+      {
+        "code": "MTE 4101",
+        "title": "Industrial Automation"
+      },
+      {
+        "code": "MTE 4103",
+        "title": "Digital Signal Processing and Machine Vision"
+      },
+      {
+        "code": "MTE 4107",
+        "title": "Design of Mechatronic Systems"
+      }
+    ],
+    "Y4T2": [
+      {
+        "code": "MTE 4203",
+        "title": "Embedded Systems and Internet of Things"
+      },
+      {
+        "code": "MTE 4207",
+        "title": "Computer Integrated Manufacturing"
+      },
+      {
+        "code": "IPE 4231",
+        "title": "Industrial Management"
+      }
+    ]
+  },
+  "URP": {
+    "Y1T1": [
+      {
+        "code": "URP 1111",
+        "title": "History/Evolution of Human Settlements"
+      },
+      {
+        "code": "URP 1113",
+        "title": "Fundamentals of Planning Process"
+      },
+      {
+        "code": "Ch 1117",
+        "title": "Environmental Chemistry"
+      },
+      {
+        "code": "Hum 1117",
+        "title": "Functional English"
+      },
+      {
+        "code": "Math 1117",
+        "title": "Mathematics-I"
+      }
+    ],
+    "Y1T2": [
+      {
+        "code": "URP 1211",
+        "title": "Urban Planning Principles"
+      },
+      {
+        "code": "URP 1251",
+        "title": "Introduction to Architectural History"
+      },
+      {
+        "code": "URP 1281",
+        "title": "Surveying and Cartography"
+      },
+      {
+        "code": "Hum 1217",
+        "title": "Principles of Economics"
+      },
+      {
+        "code": "Math 1217",
+        "title": "Mathematics-II"
+      }
+    ],
+    "Y2T1": [
+      {
+        "code": "URP 2113",
+        "title": "Site and Area Planning"
+      },
+      {
+        "code": "URP 2115",
+        "title": "Urban Planning Techniques"
+      },
+      {
+        "code": "CE 2107",
+        "title": "Construction Technology and Materials"
+      },
+      {
+        "code": "URP 2191",
+        "title": "Statistics for Planners-I"
+      },
+      {
+        "code": "Hum 2117",
+        "title": "Sociology for Planners"
+      }
+    ],
+    "Y2T2": [
+      {
+        "code": "URP 2251",
+        "title": "Landscape Planning and Design"
+      },
+      {
+        "code": "URP 2281",
+        "title": "GIS and Remote Sensing"
+      },
+      {
+        "code": "URP 2291",
+        "title": "Statistics for Planners-II"
+      },
+      {
+        "code": "CE 2241",
+        "title": "Principles of Environmental Engineering"
+      },
+      {
+        "code": "Hum 2217",
+        "title": "Public and Local Government Finance"
+      }
+    ],
+    "Y3T1": [
+      {
+        "code": "URP 3121",
+        "title": "Rural Development Planning-I"
+      },
+      {
+        "code": "URP 3161",
+        "title": "Housing and Real Estate Development Theory"
+      },
+      {
+        "code": "CE 3107",
+        "title": "Elements of Solid Mechanics"
+      },
+      {
+        "code": "CE 3151",
+        "title": "Fundamentals of Transportation Engineering"
+      },
+      {
+        "code": "Hum 3117",
+        "title": "Accounting and Auditing for Planners"
+      }
+    ],
+    "Y3T2": [
+      {
+        "code": "URP 3223",
+        "title": "Regional Development Planning"
+      },
+      {
+        "code": "URP 3231",
+        "title": "Transportation Planning"
+      },
+      {
+        "code": "URP 3291",
+        "title": "Operations Research and Systems Analysis"
+      },
+      {
+        "code": "CE 3207",
+        "title": "Elements of Civil Engineering Structures"
+      },
+      {
+        "code": "CE 3261",
+        "title": "Water Resources Planning"
+      }
+    ],
+    "Y4T1": [
+      {
+        "code": "URP 4111",
+        "title": "Utility Services and Infrastructure Planning"
+      },
+      {
+        "code": "URP 4141",
+        "title": "Environmental Planning and Management"
+      },
+      {
+        "code": "URP 4171",
+        "title": "Legal Basis of Planning"
+      },
+      {
+        "code": "URP 4161",
+        "title": "Project Planning and Management"
+      },
+      {
+        "code": "URP 4175",
+        "title": "Resettlement Planning"
+      }
+    ],
+    "Y4T2": [
+      {
+        "code": "URP 4217",
+        "title": "Coastal and Special Zones Planning"
+      },
+      {
+        "code": "URP 4223",
+        "title": "Urban and Regional Economics"
+      },
+      {
+        "code": "URP 4243",
+        "title": "Hazards and Disaster Management"
+      },
+      {
+        "code": "URP 4273",
+        "title": "Urban Governance"
+      },
+      {
+        "code": "URP 4275",
+        "title": "Development Planning"
+      }
+    ]
+  }
+};

@@ -10,6 +10,7 @@ import '../styles/questionbank.css';
 import { getProfile, getCurrentTermKey } from '../store/store';
 import { useTheme } from '../hooks/useTheme';
 import { QB_DEPARTMENTS, QB_DEPT_CODE_MAP } from '../data/questionbank/questionBankData';
+import UploadQuestionModal from '../components/UploadQuestionModal';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // SOLUTION BANK — Contribution / Community constants
@@ -1484,37 +1485,9 @@ export default function QuestionBankSolutions() {
       )}
 
       {showContribForm && (
-        <div className="qb2-modal-backdrop" role="presentation" onClick={closeContribForm}>
-          <div className="qb2-modal qb2-modal-wide" role="dialog" aria-modal="true" onClick={e => e.stopPropagation()}>
-            <div className="qb2-modal-top">
-              <div>
-                <div className="qb2-modal-kicker">Contribute a Solution</div>
-                <h2 className="qb2-modal-title">Share a solution without leaving the site</h2>
-              </div>
-              <button className="qb2-modal-close" type="button" onClick={closeContribForm} aria-label="Close">
-                <X size={16} />
-              </button>
-            </div>
-            <p className="qb2-modal-text">
-              Fill in the form below. If it doesn't load, use the open button as a fallback.
-            </p>
-            <div className="qb2-form-frame-wrap">
-              <iframe
-                title="Solution Bank contribution form"
-                src={SOLUTION_CONTRIBUTION_FORM_URL}
-                className="qb2-form-frame"
-                loading="lazy"
-              />
-            </div>
-            <div className="qb2-modal-actions qb2-modal-actions-between">
-              <a className="qb2-secondary-btn qb2-link-btn" href={SOLUTION_CONTRIBUTION_FALLBACK_URL} target="_blank" rel="noreferrer">
-                Open Google Form
-              </a>
-              <button className="qb2-primary-btn" type="button" onClick={closeContribForm}>Done</button>
-            </div>
-          </div>
-        </div>
+        <UploadQuestionModal onClose={closeContribForm} />
       )}
+
       <KatexStyle />
     </div>
   );
@@ -1630,37 +1603,9 @@ export default function QuestionBankSolutions() {
       )}
 
       {showContribForm && (
-        <div className="qb2-modal-backdrop" role="presentation" onClick={closeContribForm}>
-          <div className="qb2-modal qb2-modal-wide" role="dialog" aria-modal="true" onClick={e => e.stopPropagation()}>
-            <div className="qb2-modal-top">
-              <div>
-                <div className="qb2-modal-kicker">Contribute a Solution</div>
-                <h2 className="qb2-modal-title">Share a solution without leaving the site</h2>
-              </div>
-              <button className="qb2-modal-close" type="button" onClick={closeContribForm} aria-label="Close">
-                <X size={16} />
-              </button>
-            </div>
-            <p className="qb2-modal-text">
-              Fill in the form below. If it doesn't load, use the open button as a fallback.
-            </p>
-            <div className="qb2-form-frame-wrap">
-              <iframe
-                title="Solution Bank contribution form"
-                src={SOLUTION_CONTRIBUTION_FORM_URL}
-                className="qb2-form-frame"
-                loading="lazy"
-              />
-            </div>
-            <div className="qb2-modal-actions qb2-modal-actions-between">
-              <a className="qb2-secondary-btn qb2-link-btn" href={SOLUTION_CONTRIBUTION_FALLBACK_URL} target="_blank" rel="noreferrer">
-                Open Google Form
-              </a>
-              <button className="qb2-primary-btn" type="button" onClick={closeContribForm}>Done</button>
-            </div>
-          </div>
-        </div>
+        <UploadQuestionModal onClose={closeContribForm} />
       )}
+
       <KatexStyle />
     </div>
   );
@@ -1732,6 +1677,10 @@ export default function QuestionBankSolutions() {
           }
         </div>
       </div>
+      {showContribForm && (
+        <UploadQuestionModal onClose={closeContribForm} />
+      )}
+
       <KatexStyle />
     </div>
   );
@@ -1883,6 +1832,10 @@ export default function QuestionBankSolutions() {
           ↑ Top
         </button>
       )}
+      {showContribForm && (
+        <UploadQuestionModal onClose={closeContribForm} />
+      )}
+
       <KatexStyle />
     </div>
   );
@@ -1996,6 +1949,10 @@ export default function QuestionBankSolutions() {
           ↑ Top
         </button>
       )}
+      {showContribForm && (
+        <UploadQuestionModal onClose={closeContribForm} />
+      )}
+
       <KatexStyle />
     </div>
   );
