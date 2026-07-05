@@ -4,6 +4,10 @@ import { store, uid, getProfile, getCurrentTermKey } from '../store/store';
 import { getAllCourses } from '../store/curriculumStore';
 import CourseTeacherDialog from '../components/CourseTeacherDialog';
 import { notify } from '../lib/notify';
+import { getGroupId } from '../lib/groupUtils';
+import { subscribeCRStatus } from '../lib/groupSync';
+import { useCanEditGroup } from '../hooks/useCanEditGroup';
+import GroupAssignments from '../components/GroupAssignments';
 
 const normalizeTeacherName = (value) => {
   const clean = String(value || '').trim().replace(/\s+/g, ' ');
@@ -13,6 +17,18 @@ const normalizeTeacherName = (value) => {
 
 export default function Assignments() {
   const profile = getProfile();
+
+  // Same class-group takeover as Schedule.jsx — see that file's comment
+  // for the full reasoning. Personal assignments below are untouched
+  // either way.
+  const groupId = useMemo(() => getGroupId(profile), [profile.dept, profile.batch]);
+  const [groupHasCR, setGroupHasCR] = useState(null);
+  useEffect(() => {
+    if (!groupId) { setGroupHasCR(false); return; }
+    return subscribeCRStatus(groupId, (status) => setGroupHasCR(!!status?.hasCR));
+  }, [groupId]);
+  const { canEdit: canEditGroupAssignments } = useCanEditGroup(groupId);
+
   const courses = getAllCourses(profile);
   
   // Filter courses to show only current term courses
@@ -160,6 +176,16 @@ export default function Assignments() {
 
   const pendingCount = items.filter(a => a.status !== 'done').length;
   const doneCount = items.filter(a => a.status === 'done').length;
+
+  if (groupId && groupHasCR) {
+    return (
+      <div className="page-enter assignments-page">
+        <div className="page-container" style={{ paddingTop: 16 }}>
+          <GroupAssignments groupId={groupId} canEdit={canEditGroupAssignments} />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="page-enter assignments-page">

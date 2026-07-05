@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { getProfile } from '../store/store';
 import { computeAlerts, decorateAlerts, filterUnreadAlerts, getDismissedAlertIds, setAlertDismissed } from '../lib/alertUtils';
+import ClassNoticesPanel from '../components/ClassNoticesPanel';
 
 export default function Alerts() {
   const profile = getProfile();
@@ -238,6 +239,7 @@ export default function Alerts() {
           </div>
         </div>
       </div>
+      <ClassNoticesPanel />
       <div style={{ marginBottom: 16, padding: 16, borderRadius: 18, border: '1px solid var(--border)', background: 'linear-gradient(180deg, var(--surfaceGlassStrong), var(--surfaceGlass))', boxShadow: '0 10px 28px rgba(0,0,0,0.10)' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, alignItems: 'flex-start', flexWrap: 'wrap', marginBottom: 12 }}>
           <div>

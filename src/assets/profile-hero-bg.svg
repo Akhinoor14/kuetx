@@ -1,0 +1,31 @@
+<svg width="100%" viewBox="0 0 970 970" role="img" style="" xmlns="http://www.w3.org/2000/svg">
+  <title style="fill:rgb(0, 0, 0);stroke:none;color:rgb(0, 0, 0);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto">KUETx Background</title>
+  <desc style="fill:rgb(0, 0, 0);stroke:none;color:rgb(0, 0, 0);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto">Dark green grid background with radial glow, reusable for KUETx designs</desc>
+
+  <defs>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#1a3a1f" stroke-width="0.7"/>
+    </pattern>
+    <radialGradient id="g1" cx="28%" cy="38%" r="55%">
+      <stop offset="0%" stop-color="#1e6b30" stop-opacity="0.75"/>
+      <stop offset="100%" stop-color="#0a1f0f" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="g2" cx="72%" cy="68%" r="50%">
+      <stop offset="0%" stop-color="#0f3d1a" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="#0a1f0f" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="g3" cx="55%" cy="20%" r="35%">
+      <stop offset="0%" stop-color="#1a5228" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#0a1f0f" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  
+  <rect x="0" y="0" width="960" height="960" fill="#0a1f0f" style="fill:rgb(10, 31, 15);stroke:none;color:rgb(0, 0, 0);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+  
+  <rect x="0" y="0" width="960" height="960" fill="url(#grid)" style="stroke:none;color:rgb(0, 0, 0);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+  
+  <rect x="0" y="0" width="960" height="960" fill="url(#g1)" style="stroke:none;color:rgb(0, 0, 0);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+  <rect x="0" y="0" width="960" height="960" fill="url(#g2)" style="stroke:none;color:rgb(0, 0, 0);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+  <rect x="0" y="0" width="960" height="960" fill="url(#g3)" style="stroke:none;color:rgb(0, 0, 0);stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;opacity:1;font-family:&quot;Anthropic Sans&quot;, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, sans-serif;font-size:16px;font-weight:400;text-anchor:start;dominant-baseline:auto"/>
+</svg>

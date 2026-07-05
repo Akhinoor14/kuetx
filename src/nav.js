@@ -31,6 +31,8 @@ export const NAV = [
       { id: 'marks',       label: 'Term Planner',   icon: 'ClipboardList',path: '/marks' },
       { id: 'results',     label: 'Results & GPA',  icon: 'TrendingUp',   path: '/results' },
       { id: 'teachers',    label: 'Teachers',       icon: 'Users',        path: '/teachers' },
+      { id: 'classmates',  label: 'Classmates',     icon: 'Users2',       path: '/classmates' },
+      { id: 'resources',   label: 'Class Resources',icon: 'FolderOpen',   path: '/resources' },
     ]
   },
   {
@@ -76,6 +78,11 @@ export const NAV = [
       { id: 'reports',  label: 'Reports',    icon: 'BarChart2',path: '/reports', fullOnly: true },
       { id: 'settings', label: 'Settings',   icon: 'Settings', path: '/settings' },
       { id: 'about',    label: 'About KUETx',icon: 'Info',     path: '/about' },
+      // Both always visible — the pages themselves are the gate. Real
+      // authorization happens against Firestore (admins/{uid} or
+      // staff/{uid}/roles/*), never based on whether the link is shown.
+      { id: 'staff-panel', label: 'Staff Panel', icon: 'Briefcase', path: '/staff' },
+      { id: 'admin-login', label: 'Admin', icon: 'ShieldCheck', path: '/admin-login' },
     ]
   },
 ];

@@ -6,6 +6,10 @@ import { getAllCourses } from '../store/curriculumStore';
 import { useNavigate } from 'react-router-dom';
 import CourseTeacherDialog from '../components/CourseTeacherDialog';
 import { notify } from '../lib/notify';
+import { getGroupId } from '../lib/groupUtils';
+import { subscribeCRStatus } from '../lib/groupSync';
+import { useCanEditGroup } from '../hooks/useCanEditGroup';
+import GroupSchedule from '../components/GroupSchedule';
 
 const DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday'];
 const DAY_INDEX = { Sunday: 0, Monday: 1, Tuesday: 2, Wednesday: 3, Thursday: 4 };
@@ -350,6 +354,20 @@ const getRoutineLabel = (course, item) => {
 export default function Schedule() {
   const navigate = useNavigate();
   const profile = getProfile();
+
+  // Class-group mode: if this student's batch+dept group currently has an
+  // active CR, the shared routine takes over the view (read-only unless
+  // this user is CR/ACR/Campus Lead/Admin, or the group temporarily has no
+  // CR). Personal schedule below is completely untouched either way — it's
+  // never read from or written to in group mode, just not rendered.
+  const groupId = useMemo(() => getGroupId(profile), [profile.dept, profile.batch]);
+  const [groupHasCR, setGroupHasCR] = useState(null); // null = unknown yet
+  useEffect(() => {
+    if (!groupId) { setGroupHasCR(false); return; }
+    return subscribeCRStatus(groupId, (status) => setGroupHasCR(!!status?.hasCR));
+  }, [groupId]);
+  const { canEdit: canEditGroupSchedule } = useCanEditGroup(groupId);
+
   const courses = useMemo(() => getAllCourses(profile), [profile.dept, profile.currentTermKey]);
   
   // Filter courses to show only current term courses
@@ -1345,6 +1363,16 @@ export default function Schedule() {
       </div>
     );
   };
+
+  if (groupId && groupHasCR) {
+    return (
+      <div className="page-enter page-container" style={{ width: '100%', margin: '0 auto', paddingBottom: '20px', paddingLeft: '12px', paddingRight: '12px' }}>
+        <div className="card" style={{ marginBottom: 14, padding: '18px' }}>
+          <GroupSchedule groupId={groupId} canEdit={canEditGroupSchedule} />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="page-enter page-container" style={{ width: '100%', margin: '0 auto', paddingBottom: '20px', paddingLeft: '12px', paddingRight: '12px' }}>

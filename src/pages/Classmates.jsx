@@ -1,0 +1,77 @@
+import { useEffect, useState } from 'react';
+import { getProfile } from '../store/store';
+import { getGroupId, getGroupLabel } from '../lib/groupUtils';
+import { joinGroup, requestCR, subscribeCRStatus } from '../lib/groupSync';
+import { checkCLVacant, applyForCampusLead } from '../lib/staffSync';
+import { auth } from '../lib/firebase';
+import ClassmatesList from '../components/ClassmatesList';
+import KuetEmailVerifyBox from '../components/KuetEmailVerifyBox';
+
+export default function Classmates() {
+  const profile = getProfile();
+  const groupId = getGroupId(profile);
+  const groupLabel = getGroupLabel(profile);
+  const [crStatus, setCrStatus] = useState(null);
+  const [claimState, setClaimState] = useState('idle'); // idle | sending | sent | error
+  const [claimMsg, setClaimMsg] = useState('');
+
+  useEffect(() => {
+    if (!groupId) return;
+    joinGroup(groupId, profile).catch((e) => console.error('[Classmates] join failed', e));
+    return subscribeCRStatus(groupId, setCrStatus);
+  }, [groupId]);
+
+  const handleClaimCR = async () => {
+    setClaimState('sending');
+    try {
+      const clVacant = await checkCLVacant(groupId);
+      if (clVacant) {
+        // No Campus Lead yet for this dept+batch — bundle the CR claim
+        // into a Campus Lead application, routed to that department's
+        // Senior Campus Lead (or Head of Ops/Founder if that's vacant too).
+        await applyForCampusLead(groupId, profile, { bundledCRClaim: true });
+        setClaimMsg('No Campus Lead exists for your class yet, so your claim was sent as a combined Campus Lead + CR application to your department\'s Senior Campus Lead.');
+      } else {
+        await requestCR(groupId, profile);
+        setClaimMsg('Your request was sent to your class\'s Campus Lead for approval.');
+      }
+      setClaimState('sent');
+    } catch (e) {
+      console.error('[Classmates] claim CR failed', e);
+      setClaimMsg(e?.message || 'Something went wrong — try again.');
+      setClaimState('error');
+    }
+  };
+
+  return (
+    <div style={{ maxWidth: 640, margin: '0 auto', padding: '16px 14px' }}>
+      <h1 style={{ fontSize: 20, fontWeight: 700, marginBottom: 4 }}>Classmates</h1>
+      <p style={{ color: 'var(--muted)', fontSize: 13, marginBottom: 16 }}>
+        {groupId
+          ? <>Everyone from your class — <strong>{groupLabel}</strong> — who has joined KUETx.</>
+          : 'Add your department and batch in Profile to find your classmates.'}
+      </p>
+
+      {groupId && <KuetEmailVerifyBox />}
+
+      {groupId && crStatus && !crStatus.hasCR && claimState !== 'sent' && (
+        <div className="card" style={{ padding: 14, marginBottom: 16 }}>
+          <div style={{ fontSize: 13, fontWeight: 700, marginBottom: 4 }}>No CR yet for your class</div>
+          <p style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 10 }}>
+            Want to keep your class's routine and assignments up to date for everyone? Claim CR — it goes to
+            your Campus Lead for approval (or becomes a combined application if there isn't one yet).
+          </p>
+          <button className="btn btn-primary btn-sm" onClick={handleClaimCR} disabled={claimState === 'sending'}>
+            {claimState === 'sending' ? 'Sending…' : 'Claim CR'}
+          </button>
+          {claimState === 'error' && <div style={{ color: 'var(--danger)', fontSize: 12, marginTop: 6 }}>{claimMsg}</div>}
+        </div>
+      )}
+      {claimState === 'sent' && (
+        <div className="card" style={{ padding: 14, marginBottom: 16, fontSize: 12, color: 'var(--muted)' }}>{claimMsg}</div>
+      )}
+
+      <ClassmatesList groupId={groupId} currentUid={auth.currentUser?.uid} />
+    </div>
+  );
+}

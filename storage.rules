@@ -1,0 +1,28 @@
+rules_version = '2';
+
+// Deploy with:  firebase deploy --only storage
+
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    // Pre-existing profile picture path (unchanged).
+    match /profile-pics/{uid}/{fileName} {
+      allow read: if true; // avatars are shown publicly within the app
+      allow write: if request.auth != null && request.auth.uid == uid
+        && request.resource.size < 3 * 1024 * 1024
+        && request.resource.contentType.matches('image/.*');
+    }
+
+    // Group resource pool — verified members of the group may upload;
+    // 5MB cap matches the client-side check in groupSync.js (defense in
+    // depth — never trust the client-side limit alone).
+    match /resources/{groupId}/{fileName} {
+      allow read: if request.auth != null &&
+        firestore.exists(/databases/(default)/documents/groups/$(groupId)/members/$(request.auth.uid));
+      allow write: if request.auth != null &&
+        firestore.get(/databases/(default)/documents/groups/$(groupId)/members/$(request.auth.uid)).data.verified == true &&
+        request.resource.size < 5 * 1024 * 1024;
+      allow delete: if false; // soft-deleted in Firestore; storage cleanup is a manual admin task
+    }
+  }
+}

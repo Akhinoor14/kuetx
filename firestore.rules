@@ -1,0 +1,262 @@
+rules_version = '2';
+
+// Deploy with:  firebase deploy --only firestore:rules
+// Test first with the Firebase Emulator Suite.
+//
+// This file encodes the KUETx Manifesto v1.0 (July 2026) hierarchy:
+//   Founder (admins/{uid}) -> Head of Ops + 9 Core Team leads -> Senior
+//   Campus Lead (per dept) -> Campus Lead (per dept+batch) -> CR (a
+//   per-class student feature, NOT an official post).
+//
+// Deliberate design notes carried over from earlier decisions:
+// - Founder auth is a *separate* secondary Firebase app instance
+//   client-side (adminAuth.js) but the SAME Firestore project/rules.
+// - Removal authority is NOT symmetric with appointment authority
+//   (Manifesto Code of Conduct §6): Head of Ops removes Campus Leads;
+//   Founder removes Senior Campus Leads and Core Team leads. This is
+//   intentional accountability separation, not an oversight.
+// - Per the Data & Privacy Policy, only Founder has broad Firestore
+//   access; "Data & Systems Lead / Backend Engineer" access described in
+//   the manifesto is infrastructure/console-level, not additional
+//   client-app Firestore rule grants — so those two roles get NO extra
+//   read rules here beyond what every signed-in user already has.
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // -------------------------------------------------------------
+    // Helpers — identity & role checks
+    // -------------------------------------------------------------
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return isSignedIn() &&
+        exists(/databases/$(database)/documents/admins/$(request.auth.uid));
+    }
+
+    function hasGlobalRole(role) {
+      return isSignedIn() &&
+        exists(/databases/$(database)/documents/staff/$(request.auth.uid)/roles/$(role));
+    }
+    function isHeadOfOps()   { return hasGlobalRole('head_of_ops'); }
+    function isContentLead() { return hasGlobalRole('content_lead'); }
+    function isHeadOfGrowth(){ return hasGlobalRole('head_of_growth'); }
+
+    function isSCLFor(dept) {
+      return isSignedIn() &&
+        exists(/databases/$(database)/documents/staff/$(request.auth.uid)/roles/senior_campus_lead_$(dept));
+    }
+    function isCLFor(groupId) {
+      return isSignedIn() &&
+        exists(/databases/$(database)/documents/staff/$(request.auth.uid)/roles/campus_lead_$(groupId));
+    }
+    // A group id is always `${BATCH}_${DEPT}` (see groupUtils.js) — so the
+    // department for "is this person the SCL of this group's department"
+    // checks can be extracted without a second lookup.
+    function deptOfGroup(groupId) {
+      return groupId.split('_')[1];
+    }
+    function isSCLForGroup(groupId) {
+      return isSCLFor(deptOfGroup(groupId));
+    }
+
+    function isGroupMember(groupId) {
+      return isSignedIn() &&
+        exists(/databases/$(database)/documents/groups/$(groupId)/members/$(request.auth.uid));
+    }
+    function memberDoc(groupId) {
+      return get(/databases/$(database)/documents/groups/$(groupId)/members/$(request.auth.uid)).data;
+    }
+    function isVerifiedMember(groupId) {
+      return isGroupMember(groupId) && memberDoc(groupId).verified == true;
+    }
+    function isGroupCR(groupId)  { return isGroupMember(groupId) && memberDoc(groupId).role == 'cr'; }
+    function isGroupACR(groupId) { return isGroupMember(groupId) && memberDoc(groupId).role == 'acr'; }
+
+    function crCount(groupId) {
+      return exists(/databases/$(database)/documents/groups/$(groupId)/meta/crStatus)
+        ? get(/databases/$(database)/documents/groups/$(groupId)/meta/crStatus).data.count
+        : 0;
+    }
+    // Only CR/ACR/CL/Admin can edit once a CR exists; if the group
+    // currently has no CR, any *verified* member may (see conversation
+    // history for why this fallback window is intentionally narrow).
+    function isContentEditor(groupId) {
+      return isAdmin() || isCLFor(groupId) || isGroupCR(groupId) || isGroupACR(groupId) ||
+        (crCount(groupId) <= 0 && isVerifiedMember(groupId));
+    }
+
+    // Tier-1 institutional verification: a confirmed @stud.kuet.ac.bd
+    // email (Firebase's own emailVerified flag proves mailbox ownership)
+    // whose local-part contains this exact roll. No Cloud Function
+    // needed — request.auth.token is available directly in rules.
+    function emailVerifiedRoll(roll) {
+      return isSignedIn() &&
+        request.auth.token.email_verified == true &&
+        request.auth.token.email.matches('.*' + roll + '.*@stud[.]kuet[.]ac[.]bd$');
+    }
+
+    // -------------------------------------------------------------
+    // Pre-existing personal data (unchanged)
+    // -------------------------------------------------------------
+    match /users/{uid}/data/{key} {
+      allow read, write: if isSignedIn() && request.auth.uid == uid;
+    }
+    match /users/{uid}/meta/{docId} {
+      allow read, write: if isSignedIn() && request.auth.uid == uid;
+    }
+
+    // -------------------------------------------------------------
+    // Founder (single owner) — manually provisioned, never client-writable
+    // -------------------------------------------------------------
+    match /admins/{uid} {
+      allow read: if isSignedIn() && request.auth.uid == uid;
+      allow write: if false;
+    }
+
+    // -------------------------------------------------------------
+    // Official staff hierarchy (Head of Ops, Core Team leads, SCL, CL)
+    // -------------------------------------------------------------
+    match /staff/{targetUid}/roles/{roleId} {
+      allow read: if isAdmin() || isHeadOfOps() || request.auth.uid == targetUid;
+
+      // Appointment authority:
+      //  - Founder can assign anyone, anything.
+      //  - Head of Ops can appoint Senior Campus Leads and Campus Leads.
+      //  - A department's Senior Campus Lead can appoint that dept's Campus Leads.
+      allow create: if isAdmin()
+        || (isHeadOfOps() && request.resource.data.role in ['senior_campus_lead', 'campus_lead'])
+        || (request.resource.data.role == 'campus_lead'
+            && request.resource.data.scope.type == 'group'
+            && isSCLForGroup(request.resource.data.scope.groupId));
+
+      // Removal authority is intentionally asymmetric (Manifesto §6):
+      //  - Founder can remove anyone.
+      //  - Head of Ops can remove Campus Leads (even ones an SCL appointed —
+      //    accountability check on the SCL layer).
+      //  - Senior Campus Leads CANNOT remove Campus Leads themselves.
+      allow delete: if isAdmin()
+        || (isHeadOfOps() && resource.data.role in ['senior_campus_lead', 'campus_lead']);
+
+      allow update: if isAdmin(); // reassigning reportsTo etc. — Founder only, keep simple
+    }
+
+    // Denormalized vacancy markers so rules/clients can check "is this
+    // dept/group covered" without a collectionGroup scan.
+    match /depts/{dept}/meta/sclStatus {
+      allow read: if isSignedIn();
+      allow create, update: if isAdmin() || isHeadOfOps();
+      allow delete: if isAdmin();
+    }
+
+    // -------------------------------------------------------------
+    // Campus Lead applications — routes to that dept's SCL (or Head of
+    // Ops/Founder directly if the SCL post is vacant).
+    // -------------------------------------------------------------
+    match /clApplications/{applicationId} {
+      allow read: if isAdmin() || isHeadOfOps()
+        || (isSignedIn() && isSCLFor(resource.data.dept))
+        || (isSignedIn() && resource.data.uid == request.auth.uid);
+      allow create: if isSignedIn() && request.resource.data.uid == request.auth.uid;
+      allow update: if isAdmin() || isHeadOfOps() || isSCLFor(resource.data.dept);
+      allow delete: if false;
+    }
+
+    // -------------------------------------------------------------
+    // Global (Founder / Head of Ops) notices — flexible audience.
+    // -------------------------------------------------------------
+    match /notices/{noticeId} {
+      allow read: if isSignedIn();
+      allow create, update, delete: if isAdmin() || isHeadOfOps();
+    }
+
+    // -------------------------------------------------------------
+    // Groups — batch+dept "class" community
+    // -------------------------------------------------------------
+    match /groups/{groupId} {
+      allow read: if isAdmin() || isGroupMember(groupId) || isCLFor(groupId) || isSCLForGroup(groupId);
+      allow create, update: if isSignedIn();
+      allow delete: if isAdmin();
+
+      match /meta/clStatus {
+        allow read: if isSignedIn();
+        allow create: if isAdmin() || isHeadOfOps() || isSCLForGroup(groupId);
+        allow delete: if isAdmin() || isHeadOfOps(); // asymmetric, same as staff role removal above
+        allow update: if isAdmin() || isHeadOfOps();
+      }
+
+      match /meta/crStatus {
+        allow read: if isAdmin() || isGroupMember(groupId) || isCLFor(groupId);
+        allow write: if isAdmin() || isCLFor(groupId) || isSCLForGroup(groupId) || isHeadOfOps();
+      }
+
+      match /members/{memberUid} {
+        allow read: if isAdmin() || isGroupMember(groupId) || isCLFor(groupId) || isHeadOfOps() || isSCLForGroup(groupId);
+        allow create: if isSignedIn() && request.auth.uid == memberUid
+                        && request.resource.data.role == 'member'
+                        && (request.resource.data.verified == false
+                            || emailVerifiedRoll(request.resource.data.roll));
+        // Members edit only their own display fields. verified/role changes
+        // are gated to CL/Admin/Head of Ops/that dept's SCL (fallback chain
+        // — a request never gets stuck just because the immediate level is
+        // vacant or unresponsive), OR the group's own CR (for ACR
+        // appointment + CR succession handoff — see groupSync.js), never
+        // by the member self-approving.
+        allow update: if isAdmin() || isCLFor(groupId) || isHeadOfOps() || isSCLForGroup(groupId) || isGroupCR(groupId) ||
+          (isSignedIn() && request.auth.uid == memberUid
+            && request.resource.data.verified == resource.data.verified
+            && request.resource.data.role == resource.data.role);
+        allow delete: if isAdmin() || isCLFor(groupId) || isHeadOfOps();
+      }
+
+      match /crRequests/{requestUid} {
+        allow read: if isAdmin() || isCLFor(groupId) || isHeadOfOps() || isSCLForGroup(groupId)
+          || (isSignedIn() && request.auth.uid == requestUid);
+        allow create: if isSignedIn() && request.auth.uid == requestUid && isVerifiedMember(groupId);
+        allow update: if isAdmin() || isCLFor(groupId) || isHeadOfOps() || isSCLForGroup(groupId);
+        allow delete: if false;
+      }
+
+      match /routineEntries/{entryId} {
+        allow read: if isAdmin() || isGroupMember(groupId);
+        allow create, update: if isContentEditor(groupId)
+          && request.resource.data.updatedBy.uid == request.auth.uid;
+        allow delete: if false; // soft-delete only, via update
+      }
+
+      match /assignmentEntries/{entryId} {
+        allow read: if isAdmin() || isGroupMember(groupId);
+        allow create, update: if isContentEditor(groupId)
+          && request.resource.data.updatedBy.uid == request.auth.uid;
+        allow delete: if false; // soft-delete only, via update
+      }
+
+      match /auditLog/{logId} {
+        allow read: if isAdmin() || isCLFor(groupId) || isVerifiedMember(groupId);
+        allow create: if isContentEditor(groupId) && request.resource.data.by.uid == request.auth.uid;
+        allow update, delete: if false; // append-only
+      }
+
+      match /notices/{noticeId} {
+        allow read: if isAdmin() || isGroupMember(groupId);
+        allow create: if isGroupCR(groupId) || isGroupACR(groupId) || isCLFor(groupId) || isAdmin();
+        allow update, delete: if isCLFor(groupId) || isAdmin();
+      }
+
+      match /resources/{resourceId} {
+        allow read: if isAdmin() || isGroupMember(groupId) || isContentLead() || isCLFor(groupId);
+        allow create: if isVerifiedMember(groupId)
+          && request.resource.data.uploadedBy.uid == request.auth.uid
+          && request.resource.data.moderationStatus == 'pending';
+        // Uploader can edit their own metadata but can't self-approve;
+        // CL/Content Lead/Admin can change moderationStatus.
+        allow update: if isAdmin() || isCLFor(groupId) || isContentLead() ||
+          (isSignedIn() && resource.data.uploadedBy.uid == request.auth.uid
+            && request.resource.data.moderationStatus == resource.data.moderationStatus);
+        allow delete: if false; // soft-delete only, via update
+      }
+    }
+  }
+}

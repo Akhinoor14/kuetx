@@ -1,9 +1,12 @@
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
-import { getFirestore } from 'firebase/firestore';
+import { initializeFirestore, persistentLocalCache, persistentMultipleTabManager } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
 
-const firebaseConfig = {
+// Exported so adminAuth.js can spin up a *second*, independent Firebase app
+// instance (same project) for the admin login flow without touching the
+// main app/auth object used by the normal student session.
+export const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
   authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
   projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
@@ -15,7 +18,14 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
-export const db = getFirestore(app);
+
+// Persistent local cache so group real-time listeners (routine/assignments/
+// notices/resources) survive reloads and behave sanely offline, and so
+// multiple tabs of the app don't fight over the cache.
+export const db = initializeFirestore(app, {
+  localCache: persistentLocalCache({ tabManager: persistentMultipleTabManager() }),
+});
+
 export const storage = getStorage(app);
 
 // Analytics — lazy load so it doesn't block app startup

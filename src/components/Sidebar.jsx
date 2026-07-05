@@ -8,6 +8,9 @@ import { useNavConfig } from './nav-system/useNavConfig';
 import { useFavorites } from '../hooks/useFavorites';
 import { usePinnedPages } from '../hooks/usePinnedPages';
 import { getAppMode, filterNav, getJrCustomHidden, getJrCustomShown } from '../lib/modeFilter';
+import { getGroupId } from '../lib/groupUtils';
+import { subscribeMembers } from '../lib/groupSync';
+import { auth } from '../lib/firebase';
 
 const GROUP_ICONS = {
   'Overview':    'LayoutDashboard',
@@ -194,7 +197,17 @@ export function Sidebar({ open, onClose, mode = '2col', onCycleMode, authState }
   const [appMode, setAppMode] = useState(getAppMode);
   const compact = mode === 'compact';
   const [logoHovered, setLogoHovered] = useState(false);
-  const canSeeCrBoard = !!profile.isCR && navConfig.cr_board_enabled;
+  const [isRealCR, setIsRealCR] = useState(false);
+  const canSeeCrBoard = (!!profile.isCR || isRealCR) && navConfig.cr_board_enabled;
+
+  useEffect(() => {
+    const groupId = getGroupId(profile);
+    if (!groupId) { setIsRealCR(false); return; }
+    return subscribeMembers(groupId, (members) => {
+      const me = members.find((m) => m.id === auth.currentUser?.uid);
+      setIsRealCR(me?.role === 'cr' || me?.role === 'acr');
+    });
+  }, [profile.dept, profile.batch]);
 
   useEffect(() => {
     const handler = (e) => setAppMode(e.detail?.mode || getAppMode());

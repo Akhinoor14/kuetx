@@ -33,6 +33,15 @@ const MAX_BATCH_PUSH    = 20;      // max keys to push in one tick
 
 const EXCLUDED_KEYS = ['autoBackup', 'lastBackupTime', 'kuetx_guide_seen'];
 
+// NOTE: 'schedule' and 'assignments' are intentionally NOT excluded here.
+// Class-group routine/assignments (groupSync.js, groups/{groupId}/
+// routineEntries|assignmentEntries) are a completely separate data source
+// from this personal per-user store — joining a class group never pushes
+// or merges a student's personal schedule into it, and a CR's group
+// routine never overwrites anyone's personal copy. The Schedule/Assignments
+// pages simply *choose which source to render* (group data when the class
+// has an active CR-populated routine, personal otherwise) — the underlying
+// storage never mixes, so personal sync needs no special-casing.
 const shouldSync = (key) => !EXCLUDED_KEYS.some(ex => key.includes(ex));
 
 // ─── Module state ─────────────────────────────────────────────────────────────

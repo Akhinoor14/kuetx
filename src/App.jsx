@@ -15,6 +15,7 @@ import AuthModal from './components/AuthModal';
 import ModeSelectModal from './components/ModeSelectModal';
 import useFirebaseAuth from './hooks/useFirebaseAuth';
 import DataSafeToast from './components/DataSafeToast';
+import ClassJoinIntro from './components/ClassJoinIntro';
 import { isModeChosen } from './lib/modeFilter';
 import { store } from './store/store';
 
@@ -45,6 +46,11 @@ import Clubs from './pages/Clubs';
 import About from './pages/About';
 import ClassManagement from './pages/ClassManagement';
 import CTQuizPlanning from './pages/CTQuizPlanning';
+import Classmates from './pages/Classmates';
+import Resources from './pages/Resources';
+import AdminLogin from './pages/AdminLogin';
+import AdminDashboard from './pages/AdminDashboard';
+import StaffDashboard from './pages/StaffDashboard';
 import { Tours, Social, Projects, Syllabus, TimeTracker, Tuition, Food, Reports } from './pages/Extras';
 import QuickAccess from './pages/QuickAccess';
 
@@ -135,6 +141,11 @@ function Layout({ authState }) {
             <Route path="/about" element={<About />} />
             <Route path="/class-management" element={<ClassManagement />} />
             <Route path="/ct-quiz-planning" element={<CTQuizPlanning />} />
+            <Route path="/classmates" element={<Classmates />} />
+            <Route path="/resources" element={<Resources />} />
+            <Route path="/admin-login" element={<AdminLogin />} />
+            <Route path="/admin" element={<AdminDashboard />} />
+            <Route path="/staff" element={<StaffDashboard />} />
           </Routes>
         </div>
         {location.pathname !== '/about' && !isQuestionBankViewer && !isMobileNav && <Footer syncStatus={authState.syncStatus} isAnonymous={authState.isAnonymous} displayName={authState.displayName} />}
@@ -143,6 +154,7 @@ function Layout({ authState }) {
         {!isQuestionBankViewer && <BottomNav />}
         <GlobalToasts />
         <DataSafeToast />
+        <ClassJoinIntro />
 
         {/* Account upgrade modal (anonymous → real account) */}
         {showUpgradeModal && (
