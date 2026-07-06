@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState, useRef } from 'react';
 import Modal from './Modal';
 import KuetEmailVerifyWidget from './KuetEmailVerifyWidget';
-import { DEPARTMENTS, DEFAULT_PROFILE, TERM_KEYS, getTermLabelFromKey, BATCH_START_DATES } from '../store/store';
+import { DEPARTMENTS, DEFAULT_PROFILE, TERM_KEYS, getTermLabelFromKey, BATCH_START_DATES, extractBatchFromRoll } from '../store/store';
 
 // Map dept codes: roll middle 2 digits -> dept code
 const ROLL_DEPT_MAP = {
@@ -32,15 +32,6 @@ const HALL_OPTIONS = [
   'Amar Ekushey Hall',
   'Shaheed Smriti Hall',
 ];
-
-const extractBatchFromRoll = (roll) => {
-  const r = String(roll || '').trim();
-  if (r.length < 2) return '';
-  const firstTwoDigits = r.slice(0, 2);
-  const year = parseInt(firstTwoDigits, 10);
-  if (!Number.isFinite(year)) return '';
-  return `2k${firstTwoDigits}`;
-};
 
 const extractDeptCodeFromRoll = (roll) => {
   const r = String(roll || '').trim();

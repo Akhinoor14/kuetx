@@ -6,6 +6,7 @@ import { Sidebar } from './components/Sidebar';
 import { Navbar } from './components/Navbar';
 import { Footer } from './components/Footer';
 import AnnouncementModal from './components/DriveAnnouncementModal';
+import CommunityHiringModal from './components/CommunityHiringModal';
 import PWAInstallPrompt from './components/PWAInstallPrompt';
 import PWAUpdatePrompt from './components/PWAUpdatePrompt';
 import { BottomNav, useIsMobileNav } from './components/BottomNav';
@@ -192,11 +193,18 @@ function shouldShowBackup() {
   } catch { return false; }
 }
 
+function shouldShowCommunityHiring() {
+  try {
+    return !store.get('communityHiringPopupShown');
+  } catch { return false; }
+}
+
 function buildQueue(isAnonymous) {
   const q = [];
   if (!isModeChosen()) q.push('mode');
   if (isAnonymous) q.push('auth');
   if (shouldShowAnnouncement()) q.push('announcement');
+  if (shouldShowCommunityHiring()) q.push('communityHiring');
   if (shouldShowBackup()) q.push('backup');
   return q;
 }
@@ -241,6 +249,15 @@ export default function App() {
         {current === 'announcement' && (
           <AnnouncementModal open={true} onClose={advance} />
         )}
+        {current === 'communityHiring' && (
+          <CommunityHiringModal
+            open={true}
+            onClose={() => {
+              try { store.set('communityHiringPopupShown', true); } catch {}
+              advance();
+            }}
+          />
+        )}
         {current === 'backup' && (
           <BackupReminderGate open={true} onClose={advance} />
         )}
@@ -248,7 +265,7 @@ export default function App() {
         {/* Independent of the sequential onboarding queue above — this has
             its own internal 3-day snooze + "stop once verified" logic, so it
             doesn't need to block on / wait for the queue to finish. */}
-        {authState.authReady && !authState.isAnonymous && <VerifyReminderPopup />}
+        {authState.authReady && !authState.isAnonymous && queue.length === 0 && <VerifyReminderPopup />}
         {/* Global auth modal (triggered from anywhere via window.__kuetxShowAuth) */}
         {showAuthModal && (
           <AuthModal

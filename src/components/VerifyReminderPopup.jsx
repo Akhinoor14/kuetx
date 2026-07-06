@@ -20,6 +20,7 @@ export default function VerifyReminderPopup() {
 
   useEffect(() => {
     let cancelled = false;
+    let timer = null;
 
     async function check() {
       const profile = getProfile();
@@ -38,15 +39,15 @@ export default function VerifyReminderPopup() {
         if (elapsedDays < REMIND_DAYS) { setChecked(true); return; }
       }
 
-      const timer = window.setTimeout(() => {
+      timer = window.setTimeout(() => {
+        if (cancelled) return;
         setOpen(true);
         setChecked(true);
       }, 2500);
-      return () => window.clearTimeout(timer);
     }
 
     check();
-    return () => { cancelled = true; };
+    return () => { cancelled = true; if (timer) window.clearTimeout(timer); };
   }, []);
 
   const snooze = () => {

@@ -20,6 +20,7 @@ import { auth } from '../lib/firebase';
 import { pushAllToFirestore, startFirebaseSync } from '../lib/firebaseSync';
 import { uploadProfilePicture, getProfilePhotoURL, deleteProfilePicture } from '../lib/profilePicture';
 import { isRollInstitutionallyVerified } from '../lib/kuetEmailVerify';
+import ProfileVerifyBanner from '../components/ProfileVerifyBanner';
 import BlueTick from '../components/BlueTick';
 
 
@@ -795,6 +796,11 @@ export default function Profile() {
           <Icons.Pencil size={13} /> Edit
         </button>
       </div>
+
+      {/* ── KUET Email Verify Banner ── */}
+      {hasMinProfile && !isKuetVerified && (
+        <ProfileVerifyBanner onVerified={() => setIsKuetVerified(true)} />
+      )}
 
       {/* ── CR Banner ── */}
       {profile.isCR && (

@@ -871,7 +871,17 @@ export { inferCourseTypeFromCode, extractYearTermFromCode };
 export const getProfile = () => {
   const raw = store.get('profile') || {};
   const currentTermKey = raw.currentTermKey || getTermKeyFromLabel(raw.currentTerm) || '';
-  return { ...DEFAULT_PROFILE, ...raw, currentTermKey };
+  const merged = { ...DEFAULT_PROFILE, ...raw, currentTermKey };
+
+  // Force-override yearStarted with the fixed batch start date (derived from roll),
+  // overwriting any old/incorrect manually-entered value.
+  const batchKey = extractBatchFromRoll(merged.studentId);
+  const fixedStart = batchKey && BATCH_START_DATES[batchKey];
+  if (fixedStart) {
+    merged.yearStarted = fixedStart;
+  }
+
+  return merged;
 };
 
 export const getCurrentTermKey = (profile = {}) => {
@@ -884,6 +894,16 @@ export const BATCH_START_DATES = {
   '2k23': '2024-10-28',
   '2k24': '2025-09-17',
   '2k25': '2026-06-28',
+};
+
+// Derives batch (e.g. "2k23") from a student roll number's first two digits.
+export const extractBatchFromRoll = (roll) => {
+  const r = String(roll || '').trim();
+  if (r.length < 2) return '';
+  const firstTwoDigits = r.slice(0, 2);
+  const year = parseInt(firstTwoDigits, 10);
+  if (!Number.isFinite(year)) return '';
+  return `2k${firstTwoDigits}`;
 };
 
 export const getTermTimeline = (termStartDate, deptCode, termKey, roadmapConfig = {}) => {

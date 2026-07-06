@@ -1,20 +1,37 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import * as Icons from 'lucide-react';
 import { startKuetEmailVerification, checkKuetEmailVerified, isKuetEmailFormat } from '../lib/kuetEmailVerify';
 
 /**
- * Inline widget: enter KUET email -> send verification link -> click
- * "I've verified" to confirm. Skippable everywhere it's used (soft-required
- * design) — the caller decides what "skip" does (close modal / dismiss popup).
+ * Inline widget: enter KUET email -> send verification link -> app
+ * auto-polls in the background and confirms the moment the link is
+ * clicked, no manual "I've verified" button needed. Skippable everywhere
+ * it's used (soft-required design) — the caller decides what "skip" does
+ * (close modal / dismiss popup).
  *
- * onVerified() fires once checkKuetEmailVerified() confirms success.
+ * onVerified() fires automatically once polling detects success.
  */
 export default function KuetEmailVerifyWidget({ onVerified, onSkip, compact = false }) {
   const [email, setEmail] = useState('');
   const [password] = useState(() => Math.random().toString(36).slice(2) + 'Aa1!'); // throwaway, only protects this proof credential
-  const [stage, setStage] = useState('input'); // input -> sent -> checking
+  const [stage, setStage] = useState('input'); // input -> sent
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
+  const pollRef = useRef(null);
+
+  useEffect(() => () => { if (pollRef.current) clearInterval(pollRef.current); }, []);
+
+  const startPolling = () => {
+    if (pollRef.current) clearInterval(pollRef.current);
+    pollRef.current = setInterval(async () => {
+      const ok = await checkKuetEmailVerified().catch(() => false);
+      if (ok) {
+        clearInterval(pollRef.current);
+        pollRef.current = null;
+        if (onVerified) onVerified();
+      }
+    }, 4000);
+  };
 
   const handleSend = async (e) => {
     e.preventDefault();
@@ -27,22 +44,11 @@ export default function KuetEmailVerifyWidget({ onVerified, onSkip, compact = fa
     try {
       await startKuetEmailVerification(email.trim(), password);
       setStage('sent');
+      startPolling();
     } catch (err) {
       setError(err?.message || 'Verification পাঠাতে সমস্যা হয়েছে, আবার চেষ্টা করুন।');
     }
     setBusy(false);
-  };
-
-  const handleCheck = async () => {
-    setBusy(true);
-    setError('');
-    const ok = await checkKuetEmailVerified();
-    setBusy(false);
-    if (ok) {
-      if (onVerified) onVerified();
-    } else {
-      setError('এখনো verify হয়নি — email-এ পাঠানো লিংকে ক্লিক করে আবার চেষ্টা করুন।');
-    }
   };
 
   return (
@@ -92,19 +98,23 @@ export default function KuetEmailVerifyWidget({ onVerified, onSkip, compact = fa
       {stage === 'sent' && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
           <div style={{ fontSize: 12, color: 'var(--text)', lineHeight: 1.5 }}>
-            <strong>{email}</strong>-এ একটা verification link পাঠানো হয়েছে। ইনবক্স (বা spam folder) চেক করে লিংকে ক্লিক করো, তারপর নিচে বাটনে চাপো।
+            <strong>{email}</strong>-এ একটা verification link পাঠানো হয়েছে। <strong>Spam/Junk folder-ও চেক করো</strong> — Gmail মাঝে মাঝে ওখানে ফেলে দেয়। লিংকে ক্লিক করলেই এখানে আর কিছু না করে automatic verify হয়ে যাবে।
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 11.5, color: 'var(--muted)' }}>
+            <span className="spinner" style={{
+              width: 13, height: 13, borderRadius: '50%',
+              border: '2px solid var(--border)', borderTopColor: '#1d9bf0',
+              animation: 'kuetx-spin 0.8s linear infinite', flexShrink: 0,
+            }} />
+            লিংকে ক্লিক করার অপেক্ষায়…
           </div>
           {error && <div style={{ color: 'var(--danger)', fontSize: 11.5 }}>{error}</div>}
-          <div style={{ display: 'flex', gap: 8 }}>
-            <button type="button" className="btn btn-primary btn-sm" disabled={busy} onClick={handleCheck} style={{ flex: 1 }}>
-              {busy ? 'চেক করা হচ্ছে…' : 'লিংকে ক্লিক করেছি, verify করো'}
+          {onSkip && (
+            <button type="button" className="btn btn-secondary btn-sm" onClick={onSkip} style={{ alignSelf: 'flex-start' }}>
+              পরে করব
             </button>
-            {onSkip && (
-              <button type="button" className="btn btn-secondary btn-sm" onClick={onSkip}>
-                পরে করব
-              </button>
-            )}
-          </div>
+          )}
+          <style>{`@keyframes kuetx-spin { to { transform: rotate(360deg); } }`}</style>
         </div>
       )}
     </div>

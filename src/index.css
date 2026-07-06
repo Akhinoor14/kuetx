@@ -3961,7 +3961,7 @@ h3 { font-size: 15px; font-weight: 600; }
 .kuetx-dialog-backdrop {
   position: fixed;
   inset: 0;
-  z-index: 2500;
+  z-index: 4000;
   display: grid;
   place-items: center;
   padding: 16px;
@@ -3973,7 +3973,8 @@ h3 { font-size: 15px; font-weight: 600; }
   width: min(560px, 100%);
   max-height: 90vh;
   overflow-y: auto;
-  background: white;
+  background: var(--card);
+  border: 1px solid var(--border);
   border-radius: 14px;
   padding: 24px;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
@@ -3982,14 +3983,14 @@ h3 { font-size: 15px; font-weight: 600; }
 .kuetx-dialog-title {
   font-size: 18px;
   font-weight: 700;
-  color: #1e293b;
+  color: var(--text);
   margin-bottom: 12px;
 }
 
 .kuetx-dialog-body {
   font-size: 14px;
   line-height: 1.6;
-  color: #64748b;
+  color: var(--muted);
   margin-bottom: 20px;
   white-space: pre-wrap;
 }

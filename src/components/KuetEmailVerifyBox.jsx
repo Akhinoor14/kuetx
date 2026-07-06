@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import {
   startKuetEmailVerification, checkKuetEmailVerified, isKuetEmailFormat,
 } from '../lib/kuetEmailVerify';
@@ -10,8 +10,25 @@ const STORE_KEY = 'kuetEmailVerifiedRoll';
 export default function KuetEmailVerifyBox() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [stage, setStage] = useState(store.get(STORE_KEY) ? 'verified' : 'idle'); // idle|sending|sent|checking|verified|error
+  const [stage, setStage] = useState(store.get(STORE_KEY) ? 'verified' : 'idle'); // idle|sending|sent|verified|error
   const [msg, setMsg] = useState('');
+  const pollRef = useRef(null);
+
+  useEffect(() => () => { if (pollRef.current) clearInterval(pollRef.current); }, []);
+
+  const startPolling = () => {
+    if (pollRef.current) clearInterval(pollRef.current);
+    pollRef.current = setInterval(async () => {
+      const ok = await checkKuetEmailVerified().catch(() => false);
+      if (ok) {
+        clearInterval(pollRef.current);
+        pollRef.current = null;
+        store.set(STORE_KEY, true);
+        setStage('verified');
+        setMsg('');
+      }
+    }, 4000);
+  };
 
   if (stage === 'verified') {
     return (
@@ -33,23 +50,11 @@ export default function KuetEmailVerifyBox() {
     try {
       await startKuetEmailVerification(email.trim(), password);
       setStage('sent');
-      setMsg('Verification email sent — check your KUET inbox, then come back and tap "I\'ve verified."');
+      setMsg('Verification email sent — check your KUET inbox (and spam/junk folder). Click the link and this page will verify automatically, no need to come back and click anything.');
+      startPolling();
     } catch (err) {
       setMsg(getAuthErrorMessage?.(err?.code) || err?.message || 'Something went wrong.');
       setStage('error');
-    }
-  };
-
-  const handleCheck = async () => {
-    setStage('checking');
-    const ok = await checkKuetEmailVerified();
-    if (ok) {
-      store.set(STORE_KEY, true);
-      setStage('verified');
-      setMsg('');
-    } else {
-      setStage('sent');
-      setMsg('Not verified yet — click the link in your KUET inbox first.');
     }
   };
 
@@ -71,10 +76,16 @@ export default function KuetEmailVerifyBox() {
           </button>
         </form>
       )}
-      {(stage === 'sent' || stage === 'checking') && (
-        <button className="btn btn-primary btn-sm" onClick={handleCheck} disabled={stage === 'checking'}>
-          {stage === 'checking' ? 'Checking…' : "I've verified"}
-        </button>
+      {stage === 'sent' && (
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 12, color: 'var(--muted)' }}>
+          <span style={{
+            width: 13, height: 13, borderRadius: '50%',
+            border: '2px solid var(--border)', borderTopColor: '#1d9bf0',
+            animation: 'kuetx-spin-box 0.8s linear infinite', flexShrink: 0, display: 'inline-block',
+          }} />
+          Waiting for you to click the link…
+          <style>{`@keyframes kuetx-spin-box { to { transform: rotate(360deg); } }`}</style>
+        </div>
       )}
       {msg && <div style={{ fontSize: 12, color: stage === 'error' ? 'var(--danger)' : 'var(--muted)', marginTop: 6 }}>{msg}</div>}
     </div>
