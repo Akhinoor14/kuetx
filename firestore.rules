@@ -41,6 +41,9 @@ service cloud.firestore {
         exists(/databases/$(database)/documents/staff/$(request.auth.uid)/roles/$(role));
     }
     function isHeadOfOps()   { return hasGlobalRole('head_of_ops'); }
+    // Currently unused by any rule below — kept for the follow-up work of
+    // wiring Content Lead moderation into the existing Question Bank
+    // system (see groupSync.js's note on why there's no `resources` here).
     function isContentLead() { return hasGlobalRole('content_lead'); }
     function isHeadOfGrowth(){ return hasGlobalRole('head_of_growth'); }
 
@@ -88,14 +91,22 @@ service cloud.firestore {
         (crCount(groupId) <= 0 && isVerifiedMember(groupId));
     }
 
-    // Tier-1 institutional verification: a confirmed @stud.kuet.ac.bd
-    // email (Firebase's own emailVerified flag proves mailbox ownership)
-    // whose local-part contains this exact roll. No Cloud Function
-    // needed — request.auth.token is available directly in rules.
-    function emailVerifiedRoll(roll) {
-      return isSignedIn() &&
-        request.auth.token.email_verified == true &&
-        request.auth.token.email.matches('.*' + roll + '.*@stud[.]kuet[.]ac[.]bd$');
+    // Tier-1 institutional verification lives in a separate collection
+    // (verifiedRolls/{roll}), written only by the dedicated verification
+    // flow (kuetEmailVerify.js's secondary Firebase app session) — the
+    // visitor's own main session's auth token is never touched or
+    // inspected here, by design (see that file's header comment for why).
+    function rollIsInstitutionallyVerified(roll) {
+      return exists(/databases/$(database)/documents/verifiedRolls/$(roll));
+    }
+
+    // Tier-1 auto-verify also needs the claimed roll to actually
+    // correspond to THIS group's batch+dept, not just to *any* verified
+    // roll — otherwise a verified roll for one class could auto-verify
+    // someone into a different class.
+    function rollMatchesGroup(roll, groupId) {
+      return groupId.split('_')[1] == roll[2:4]
+        && groupId.split('_')[0].matches('.*' + roll[0:2] + '.*');
     }
 
     // -------------------------------------------------------------
@@ -106,6 +117,19 @@ service cloud.firestore {
     }
     match /users/{uid}/meta/{docId} {
       allow read, write: if isSignedIn() && request.auth.uid == uid;
+    }
+
+    // -------------------------------------------------------------
+    // Institutional verification facts — see kuetEmailVerify.js. Written
+    // only by the separate verification-app session whose OWN auth token
+    // genuinely carries a verified @stud.kuet.ac.bd email; the visitor's
+    // main session is never involved in this write.
+    // -------------------------------------------------------------
+    match /verifiedRolls/{roll} {
+      allow read: if isSignedIn();
+      allow create: if request.auth.token.email_verified == true &&
+        request.auth.token.email.matches('.*' + roll + '.*@stud[.]kuet[.]ac[.]bd$');
+      allow update, delete: if false; // create-once, permanent
     }
 
     // -------------------------------------------------------------
@@ -159,7 +183,16 @@ service cloud.firestore {
       allow read: if isAdmin() || isHeadOfOps()
         || (isSignedIn() && isSCLFor(resource.data.dept))
         || (isSignedIn() && resource.data.uid == request.auth.uid);
-      allow create: if isSignedIn() && request.resource.data.uid == request.auth.uid;
+      allow create: if isSignedIn() && request.resource.data.uid == request.auth.uid
+        // dept/batch/groupId must actually agree with each other — no
+        // claiming leadership of one class while citing another's dept.
+        && request.resource.data.groupId == (request.resource.data.batch + '_' + request.resource.data.dept)
+        // and the applicant must be a real, legitimate member of that
+        // exact class already (verified manually, or via a Tier-1
+        // matching KUET email) — not a total stranger to it.
+        && (isVerifiedMember(request.resource.data.groupId)
+            || (rollIsInstitutionallyVerified(request.resource.data.roll)
+                && rollMatchesGroup(request.resource.data.roll, request.resource.data.groupId)));
       allow update: if isAdmin() || isHeadOfOps() || isSCLFor(resource.data.dept);
       allow delete: if false;
     }
@@ -197,14 +230,18 @@ service cloud.firestore {
         allow create: if isSignedIn() && request.auth.uid == memberUid
                         && request.resource.data.role == 'member'
                         && (request.resource.data.verified == false
-                            || emailVerifiedRoll(request.resource.data.roll));
+                            || (rollIsInstitutionallyVerified(request.resource.data.roll)
+                                && rollMatchesGroup(request.resource.data.roll, groupId)));
         // Members edit only their own display fields. verified/role changes
         // are gated to CL/Admin/Head of Ops/that dept's SCL (fallback chain
         // — a request never gets stuck just because the immediate level is
         // vacant or unresponsive), OR the group's own CR (for ACR
         // appointment + CR succession handoff — see groupSync.js), never
-        // by the member self-approving.
-        allow update: if isAdmin() || isCLFor(groupId) || isHeadOfOps() || isSCLForGroup(groupId) || isGroupCR(groupId) ||
+        // by the member self-approving. The CR path is restricted to only
+        // the role/verified fields — a CR can promote/demote/verify, but
+        // can never rewrite someone else's name or roll.
+        allow update: if isAdmin() || isCLFor(groupId) || isHeadOfOps() || isSCLForGroup(groupId) ||
+          (isGroupCR(groupId) && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['role', 'verified'])) ||
           (isSignedIn() && request.auth.uid == memberUid
             && request.resource.data.verified == resource.data.verified
             && request.resource.data.role == resource.data.role);
@@ -245,18 +282,9 @@ service cloud.firestore {
         allow update, delete: if isCLFor(groupId) || isAdmin();
       }
 
-      match /resources/{resourceId} {
-        allow read: if isAdmin() || isGroupMember(groupId) || isContentLead() || isCLFor(groupId);
-        allow create: if isVerifiedMember(groupId)
-          && request.resource.data.uploadedBy.uid == request.auth.uid
-          && request.resource.data.moderationStatus == 'pending';
-        // Uploader can edit their own metadata but can't self-approve;
-        // CL/Content Lead/Admin can change moderationStatus.
-        allow update: if isAdmin() || isCLFor(groupId) || isContentLead() ||
-          (isSignedIn() && resource.data.uploadedBy.uid == request.auth.uid
-            && request.resource.data.moderationStatus == resource.data.moderationStatus);
-        allow delete: if false; // soft-delete only, via update
-      }
+      // NOTE: no `resources` subcollection here by design — see the
+      // comment in groupSync.js. Content moderation belongs in the
+      // existing Question Bank system, not a parallel one.
     }
   }
 }

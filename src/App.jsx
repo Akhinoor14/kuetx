@@ -47,10 +47,9 @@ import About from './pages/About';
 import ClassManagement from './pages/ClassManagement';
 import CTQuizPlanning from './pages/CTQuizPlanning';
 import Classmates from './pages/Classmates';
-import Resources from './pages/Resources';
 import AdminLogin from './pages/AdminLogin';
 import AdminDashboard from './pages/AdminDashboard';
-import StaffDashboard from './pages/StaffDashboard';
+import TeamDashboard from './pages/TeamDashboard';
 import { Tours, Social, Projects, Syllabus, TimeTracker, Tuition, Food, Reports } from './pages/Extras';
 import QuickAccess from './pages/QuickAccess';
 
@@ -142,10 +141,9 @@ function Layout({ authState }) {
             <Route path="/class-management" element={<ClassManagement />} />
             <Route path="/ct-quiz-planning" element={<CTQuizPlanning />} />
             <Route path="/classmates" element={<Classmates />} />
-            <Route path="/resources" element={<Resources />} />
             <Route path="/admin-login" element={<AdminLogin />} />
             <Route path="/admin" element={<AdminDashboard />} />
-            <Route path="/staff" element={<StaffDashboard />} />
+            <Route path="/team" element={<TeamDashboard />} />
           </Routes>
         </div>
         {location.pathname !== '/about' && !isQuestionBankViewer && !isMobileNav && <Footer syncStatus={authState.syncStatus} isAnonymous={authState.isAnonymous} displayName={authState.displayName} />}

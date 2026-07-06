@@ -1,5 +1,5 @@
 // KUETx Service Worker — offline cache + auto-update
-const CACHE_NAME = 'kuetx-v3.4';
+const CACHE_NAME = 'kuetx-v3.5'; // bumped for the class-community update — bump this on every future deploy too
 const STATIC_ASSETS = [
   '/',
   '/index.html',

@@ -16,6 +16,7 @@ import { getAllCourses } from '../store/curriculumStore';
 import ProfileSetupModal from '../components/ProfileSetupModal';
 import AuthModal from '../components/AuthModal';
 import { onAuthChange, logout } from '../lib/firebaseAuth';
+import { auth } from '../lib/firebase';
 import { pushAllToFirestore, startFirebaseSync } from '../lib/firebaseSync';
 import { uploadProfilePicture, getProfilePhotoURL, deleteProfilePicture } from '../lib/profilePicture';
 
@@ -115,6 +116,50 @@ const InfoRow = ({ label, value, accent }) => (
     <span style={{ fontSize: 14, color: accent ? 'var(--accent)' : 'var(--text)', fontWeight: accent ? 700 : 500, wordBreak: 'break-word' }}>{value || '—'}</span>
   </div>
 );
+
+// Lets a student hand their uid to whoever needs to assign them a KUETx
+// staff role (Head of Ops, Campus Lead, etc.) — those roles are just a
+// Firestore doc keyed by uid, no new account/password needed, so this is
+// the one piece of information that actually has to be shared manually.
+const CopyMyIdRow = () => {
+  const [copied, setCopied] = useState(false);
+  const uid = auth.currentUser?.uid;
+
+  const handleCopy = async () => {
+    if (!uid) return;
+    try {
+      await navigator.clipboard.writeText(uid);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      // Clipboard API can fail in some embedded/insecure contexts — the
+      // uid is still visible on screen for manual copy either way.
+    }
+  };
+
+  return (
+    <div style={{ display: 'grid', gridTemplateColumns: '110px 1fr', gap: 10, alignItems: 'flex-start' }}>
+      <span style={{ fontSize: 11, color: 'var(--muted)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: 0.5, paddingTop: 1 }}>My ID</span>
+      <div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
+          <span style={{ fontSize: 12, color: 'var(--muted)', fontFamily: 'monospace', wordBreak: 'break-all' }}>{uid || '—'}</span>
+          <button
+            onClick={handleCopy}
+            disabled={!uid}
+            className="btn btn-sm btn-secondary"
+            style={{ flexShrink: 0 }}
+          >
+            {copied ? 'Copied!' : 'Copy'}
+          </button>
+        </div>
+        <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 2 }}>
+          Share this with whoever needs to give you a KUETx staff role (Campus Lead, etc.) — it's not a
+          password, just an identifier.
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const Section = ({ title, icon, children }) => (
   <div style={{
@@ -815,6 +860,8 @@ export default function Profile() {
             <InfoRow label="Full Name" value={profile.name} />
             <div style={{ height: 1, background: 'var(--border)' }} />
             <InfoRow label="Student ID" value={profile.studentId} />
+            <div style={{ height: 1, background: 'var(--border)' }} />
+            <CopyMyIdRow />
             <div style={{ height: 1, background: 'var(--border)' }} />
             <InfoRow label="Year Started" value={profile.yearStarted} />
             {profile.termStartDate && (

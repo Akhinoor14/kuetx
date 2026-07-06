@@ -1,4 +1,4 @@
-import { Sun, Moon, Droplets, Bell, Download, ChevronRight, BookOpen, CloudOff, Cloud, LogOut, User, Settings, ExternalLink, X, Menu, RefreshCw } from 'lucide-react';
+import { Sun, Moon, Droplets, Bell, Download, ChevronRight, BookOpen, CloudOff, Cloud, LogOut, User, Settings, ExternalLink, X, Menu, RefreshCw, Briefcase } from 'lucide-react';
 import { useEffect, useMemo, useState, useRef } from 'react';
 import { useTheme, THEMES } from '../hooks/useTheme';
 import { useLocation, Link } from 'react-router-dom';
@@ -464,6 +464,24 @@ export function Navbar({ onMenuClick }) {
                   <BookOpen size={15} color="var(--text)" style={{ flexShrink: 0 }} />
                   <span style={{ fontSize: 13, color: 'var(--text)' }}>KUETx Guide</span>
                 </button>
+
+                {/* Team & Administration — unified entry point for every KUETx
+                    role (Head of Ops, Campus Lead, Founder, etc). The page
+                    itself gates what's shown; this link is always visible. */}
+                <Link
+                  to="/team"
+                  onClick={() => setDrawerOpen(false)}
+                  style={{
+                    width: '100%', padding: '9px 12px',
+                    border: 'none', borderTop: '1px solid var(--border)',
+                    background: 'transparent', cursor: 'pointer',
+                    display: 'flex', alignItems: 'center', gap: 10,
+                    textAlign: 'left', textDecoration: 'none',
+                  }}
+                >
+                  <Briefcase size={15} color="var(--text)" style={{ flexShrink: 0 }} />
+                  <span style={{ fontSize: 13, color: 'var(--text)' }}>Team &amp; Administration</span>
+                </Link>
 
                 {/* Settings */}
                 <Link

@@ -13,16 +13,8 @@ service firebase.storage {
         && request.resource.contentType.matches('image/.*');
     }
 
-    // Group resource pool — verified members of the group may upload;
-    // 5MB cap matches the client-side check in groupSync.js (defense in
-    // depth — never trust the client-side limit alone).
-    match /resources/{groupId}/{fileName} {
-      allow read: if request.auth != null &&
-        firestore.exists(/databases/(default)/documents/groups/$(groupId)/members/$(request.auth.uid));
-      allow write: if request.auth != null &&
-        firestore.get(/databases/(default)/documents/groups/$(groupId)/members/$(request.auth.uid)).data.verified == true &&
-        request.resource.size < 5 * 1024 * 1024;
-      allow delete: if false; // soft-deleted in Firestore; storage cleanup is a manual admin task
-    }
+    // NOTE: no group resource-pool path here by design — see groupSync.js's
+    // note. Question Bank uploads use Cloudflare R2, not Firebase Storage,
+    // so nothing else needs adding here for that.
   }
 }

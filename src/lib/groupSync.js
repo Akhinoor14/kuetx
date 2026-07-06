@@ -26,10 +26,7 @@ import {
   collection, collectionGroup, doc, getDoc, getDocs, setDoc, updateDoc, addDoc, onSnapshot,
   query, where, orderBy, serverTimestamp, writeBatch, increment, limit as fsLimit,
 } from 'firebase/firestore';
-import {
-  ref, uploadBytes, getDownloadURL, deleteObject,
-} from 'firebase/storage';
-import { db, auth, storage } from './firebase';
+import { db, auth } from './firebase';
 import { getIdentityStamp } from './groupUtils';
 import { emailMatchesGroup } from './kuetEmailVerify';
 
@@ -87,7 +84,7 @@ export async function joinGroup(groupId, profile) {
       // Tier 1: a confirmed @stud.kuet.ac.bd email whose embedded roll
       // matches this exact batch+dept auto-verifies instantly — no CL
       // approval needed. Everyone else starts at Tier 2 (manual, false).
-      verified: emailMatchesGroup(profile),
+      verified: await emailMatchesGroup(profile),
       role: 'member',
       joinedAt: serverTimestamp(),
       legacyCRClaim: !!profile?.isCR,
@@ -410,73 +407,14 @@ export function noticeAppliesTo(notice, profile, groupId) {
   return false;
 }
 
-// ---------------------------------------------------------------------
-// Resource pool (notes / links / small files)
-// ---------------------------------------------------------------------
-
-const MAX_RESOURCE_FILE_BYTES = 5 * 1024 * 1024; // 5MB — keep Spark-plan storage cheap
-
-export function subscribeResources(groupId, callback) {
-  if (!groupId) return () => {};
-  const key = `resources:${groupId}`;
-  return _subscribeSingleton(
-    key,
-    () => query(collection(db, 'groups', groupId, 'resources'), orderBy('uploadedAt', 'desc')),
-    (snap) => _snapToArray(snap).filter((r) => !r.deleted),
-    callback,
-  );
-}
-
-export async function addLinkResource(groupId, profile, { title, linkUrl, tags = [] }) {
-  const uid = auth.currentUser?.uid;
-  const stamp = getIdentityStamp(profile, uid);
-  await addDoc(collection(db, 'groups', groupId, 'resources'), {
-    title, type: 'link', linkUrl, tags, deleted: false,
-    moderationStatus: 'pending', // Content Lead / Campus Lead reviews before it's fully trusted
-    uploadedBy: stamp, uploadedAt: serverTimestamp(),
-  });
-}
-
-export async function uploadFileResource(groupId, profile, { title, file, tags = [] }) {
-  if (file.size > MAX_RESOURCE_FILE_BYTES) {
-    throw new Error('File too large — 5MB max per resource.');
-  }
-  const uid = auth.currentUser?.uid;
-  const stamp = getIdentityStamp(profile, uid);
-  const path = `resources/${groupId}/${Date.now()}_${file.name}`;
-  const storageRef = ref(storage, path);
-  await uploadBytes(storageRef, file);
-  const fileUrl = await getDownloadURL(storageRef);
-  await addDoc(collection(db, 'groups', groupId, 'resources'), {
-    title, type: 'file', fileUrl, storagePath: path, tags, deleted: false,
-    moderationStatus: 'pending',
-    uploadedBy: stamp, uploadedAt: serverTimestamp(),
-  });
-}
-
-export async function deleteResource(groupId, resourceId) {
-  // soft delete only — keeps the audit trail; storage object cleanup can
-  // be done separately by an admin if needed
-  await updateDoc(doc(db, 'groups', groupId, 'resources', resourceId), { deleted: true });
-}
-
-// Campus Lead first-line review, then Content Lead final review — both
-// just flip moderationStatus; the manifesto's "Campus Lead -> Content Lead"
-// content path is a *sequence of reviewers*, not a data-model distinction.
-export async function moderateResource(groupId, resourceId, status) {
-  await updateDoc(doc(db, 'groups', groupId, 'resources', resourceId), { moderationStatus: status });
-}
-
-/** Content Lead's global queue — every group's pending submissions in one place. */
-export function subscribeContentModerationQueue(callback) {
-  const key = 'contentModerationQueue';
-  return _subscribeSingleton(
-    key,
-    () => query(collectionGroup(db, 'resources'), where('moderationStatus', '==', 'pending'), orderBy('uploadedAt')),
-    (snap) => snap.docs.map((d) => ({ id: d.id, groupId: d.ref.parent.parent.id, ...d.data() })),
-    callback,
-  );
-}
+// NOTE: There is deliberately no group-scoped "Resources" feature here.
+// KUETx already has a dedicated, R2-backed Question Bank system
+// (QuestionBank.jsx, UploadQuestionModal.jsx, useQuestionBankData.js) that
+// covers exactly what the manifesto's "Content Lead reviews question
+// banks/notes" responsibility refers to. Wiring Content Lead moderation
+// into *that* existing system (rather than inventing a second, parallel
+// Firebase-Storage-based one) is a follow-up task that needs its own look
+// at how uploads currently work there.
 
 // ---------------------------------------------------------------------
 // Audit log (read-only view for CR/admin)

@@ -1,18 +1,23 @@
 import { useState } from 'react';
-import { auth } from '../lib/firebase';
-import { startKuetEmailVerification, checkKuetEmailVerified, isKuetEmailFormat } from '../lib/kuetEmailVerify';
+import {
+  startKuetEmailVerification, checkKuetEmailVerified, isKuetEmailFormat,
+} from '../lib/kuetEmailVerify';
 import { getAuthErrorMessage } from '../lib/firebaseAuth';
+import { store } from '../store/store';
+
+const STORE_KEY = 'kuetEmailVerifiedRoll';
 
 export default function KuetEmailVerifyBox() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [stage, setStage] = useState(auth.currentUser?.emailVerified ? 'verified' : 'idle'); // idle|sending|sent|checking|verified|error
+  const [stage, setStage] = useState(store.get(STORE_KEY) ? 'verified' : 'idle'); // idle|sending|sent|checking|verified|error
   const [msg, setMsg] = useState('');
 
-  if (stage === 'verified' || auth.currentUser?.emailVerified) {
+  if (stage === 'verified') {
     return (
       <div className="card" style={{ padding: 10, fontSize: 12, color: 'var(--success)', marginBottom: 12 }}>
-        ✓ KUET email verified ({auth.currentUser?.email}) — you auto-verify instantly in your own class group.
+        ✓ KUET email verified — you auto-verify instantly in your own class group. Your regular KUETx
+        account and login were not changed at all.
       </div>
     );
   }
@@ -39,6 +44,7 @@ export default function KuetEmailVerifyBox() {
     setStage('checking');
     const ok = await checkKuetEmailVerified();
     if (ok) {
+      store.set(STORE_KEY, true);
       setStage('verified');
       setMsg('');
     } else {
@@ -51,13 +57,14 @@ export default function KuetEmailVerifyBox() {
     <div className="card" style={{ padding: 12, marginBottom: 12 }}>
       <div style={{ fontSize: 13, fontWeight: 700, marginBottom: 6 }}>Verify with your KUET email (optional)</div>
       <p style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 8 }}>
-        Instantly verified in your class group, no waiting for CR/Campus Lead approval.
+        Instantly verified in your class group, no waiting for CR/Campus Lead approval. This is a
+        separate, one-time proof step — it never changes your regular KUETx login.
       </p>
-      {stage !== 'sent' && stage !== 'checking' && (
+      {(stage === 'idle' || stage === 'error' || stage === 'sending') && (
         <form onSubmit={handleStart} style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
           <input type="email" placeholder="name2313014@stud.kuet.ac.bd" value={email} onChange={(e) => setEmail(e.target.value)}
             style={{ padding: '7px 9px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--inputBg)' }} />
-          <input type="password" placeholder="Choose a password" value={password} onChange={(e) => setPassword(e.target.value)}
+          <input type="password" placeholder="Any password (just for this verification step)" value={password} onChange={(e) => setPassword(e.target.value)}
             style={{ padding: '7px 9px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--inputBg)' }} />
           <button type="submit" className="btn btn-primary btn-sm" disabled={stage === 'sending'}>
             {stage === 'sending' ? 'Sending…' : 'Send verification email'}

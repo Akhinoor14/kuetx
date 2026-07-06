@@ -114,6 +114,8 @@ export const getAuthErrorMessage = (code) => {
     'auth/credential-already-in-use': 'এই Google account অন্য একটা account এ already linked।',
     'auth/network-request-failed': 'Network error। Internet connection check করো।',
     'auth/missing-email': 'Email address দাও।',
+    'auth/provider-already-linked': 'তোমার account-এ আগে থেকেই একটা email linked আছে।',
+    'auth/requires-recent-login': 'নিরাপত্তার জন্য আবার login করে আসতে হবে।',
   };
   return messages[code] || `Login error: ${code}`;
 };

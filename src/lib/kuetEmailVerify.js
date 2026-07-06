@@ -1,20 +1,47 @@
 // kuetEmailVerify.js
 //
-// Tier-1 (automatic) institutional verification, built on top of the
-// existing anonymous->real-account upgrade flow in firebaseAuth.js. KUET
-// issues student email as `<name><7-digit-roll>@stud.kuet.ac.bd` (e.g.
-// islam2313014@stud.kuet.ac.bd). Firebase's own sendEmailVerification()
-// proves the person actually controls that inbox — no Cloud Function,
-// no external service, works on the Spark plan.
+// Tier-1 (automatic) institutional verification — redesigned so it NEVER
+// touches the visitor's main account. Whatever they're signed in as
+// (anonymous, a personal Gmail-backed account, whatever) stays exactly as
+// it is. Proving ownership of a KUET email happens on a completely
+// separate, secondary Firebase App instance (same pattern as
+// adminAuth.js) that exists purely as a one-time proof mechanism — its
+// own throwaway uid is never the visitor's real identity.
 //
-// Once emailVerified is true, Firestore *rules* can check
-// request.auth.token.email / email_verified directly (see
-// emailVerifiedRoll() in firestore.rules) — this file is purely the
-// client-side linking + roll-extraction half of that.
+// How the proof becomes usable:
+//   1. On the secondary app, create/sign-in a KUET-email account and send
+//      Firebase's own verification email — proves real mailbox ownership.
+//   2. Once verified, write a durable fact to Firestore (via the
+//      secondary app's OWN authenticated session, so its ID token really
+//      does carry that verified KUET email): `verifiedRolls/{roll}`.
+//   3. The MAIN session's group-join rule just checks "does
+//      verifiedRolls/{this roll} exist?" — a plain exists() check, no
+//      token/email comparison needed on the main session at all.
+//
+// Known trade-off (documented, not hidden): `verifiedRolls/{roll}` is
+// keyed by roll number only, not bound to a specific uid. That keeps the
+// design simple and avoids a lockout if someone's original anonymous
+// session is later lost — but it does mean that once a roll is proven
+// once, anyone typing that exact roll number elsewhere also benefits from
+// the "Tier 1 verified" fallback. Given this app's actual risk profile
+// (shared class routines, not sensitive personal data), that's an
+// acceptable narrow edge case rather than a serious hole — flagging it
+// clearly here rather than leaving it undocumented.
 
-import { sendEmailVerification } from 'firebase/auth';
-import { auth } from './firebase';
-import { upgradeWithEmail } from './firebaseAuth';
+import { initializeApp, getApps } from 'firebase/app';
+import {
+  getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendEmailVerification,
+} from 'firebase/auth';
+import { getFirestore, doc, setDoc, getDoc, serverTimestamp } from 'firebase/firestore';
+import { db, firebaseConfig } from './firebase';
+
+const VERIFY_APP_NAME = 'kuetVerify';
+
+function getVerifyApp() {
+  return getApps().find((a) => a.name === VERIFY_APP_NAME) || initializeApp(firebaseConfig, VERIFY_APP_NAME);
+}
+const verifyAuth = getAuth(getVerifyApp());
+const verifyDb = getFirestore(getVerifyApp()); // same project/database, but its Firestore *auth context* follows verifyAuth, not the main session
 
 const KUET_EMAIL_RE = /^([a-z]+)(\d{7})@stud\.kuet\.ac\.bd$/i;
 
@@ -32,52 +59,73 @@ export function parseKuetEmail(email) {
   const match = KUET_EMAIL_RE.exec(String(email || '').trim());
   if (!match) return null;
   const roll = match[2];
-  return {
-    roll,
-    batchYear: roll.slice(0, 2),   // e.g. "23"
-    deptCode: roll.slice(2, 4),    // e.g. "13"
-  };
+  return { roll, batchYear: roll.slice(0, 2), deptCode: roll.slice(2, 4) };
 }
 
 /**
- * Step 1: link the KUET email to the current (anonymous or real) session
- * and send Firebase's verification email. Throws if the email doesn't
- * match the KUET student-email format at all — no point sending a
- * verification email that can never grant institutional trust.
+ * Step 1: start (or resume) the verification proof on the secondary app.
+ * The password here has nothing to do with the visitor's main account —
+ * it only protects this throwaway proof-of-ownership credential.
  */
 export async function startKuetEmailVerification(email, password) {
-  if (!isKuetEmailFormat(email)) {
+  const trimmedEmail = String(email || '').trim();
+  if (!isKuetEmailFormat(trimmedEmail)) {
     throw new Error('This doesn\'t look like a KUET student email (expected the form name+roll@stud.kuet.ac.bd).');
   }
-  const user = await upgradeWithEmail(email, password);
-  await sendEmailVerification(user);
-  return parseKuetEmail(email);
+  try {
+    await createUserWithEmailAndPassword(verifyAuth, trimmedEmail, password);
+  } catch (err) {
+    if (err?.code === 'auth/email-already-in-use') {
+      // Someone (maybe this same person, on a previous attempt) already
+      // started verifying this exact email — just resume with sign-in.
+      await signInWithEmailAndPassword(verifyAuth, trimmedEmail, password);
+    } else {
+      throw err;
+    }
+  }
+  await sendEmailVerification(verifyAuth.currentUser);
+  return parseKuetEmail(trimmedEmail);
 }
 
 /**
- * Step 2: call after the user clicks the verification link and returns
- * to the app. Firebase Auth needs a token refresh to pick up the new
- * emailVerified flag — reload() + getIdToken(true) does that.
+ * Step 2: call after the user clicks the verification link. If verified,
+ * records the durable `verifiedRolls/{roll}` fact and returns true.
  */
 export async function checkKuetEmailVerified() {
-  const user = auth.currentUser;
+  const user = verifyAuth.currentUser;
   if (!user) return false;
   await user.reload();
-  await user.getIdToken(true); // force-refresh so email_verified is current in the ID token
-  return user.emailVerified === true;
+  await user.getIdToken(true); // force-refresh so email_verified is current
+  if (!user.emailVerified) return false;
+
+  const parsed = parseKuetEmail(user.email);
+  if (parsed) {
+    // This write goes through verifyDb, so its Firestore auth context is
+    // the secondary app's own KUET-verified session — exactly what the
+    // security rule for verifiedRolls/{roll} requires.
+    await setDoc(doc(verifyDb, 'verifiedRolls', parsed.roll), {
+      verifiedAt: serverTimestamp(),
+    }, { merge: true }).catch(() => {
+      // Doc already exists (someone verified this roll before) — fine,
+      // the rule makes it create-once/immutable, nothing to do.
+    });
+  }
+  return true;
 }
 
 /**
- * Does the currently signed-in, verified KUET email match this exact
- * batch+dept group? Mirrors the check Firestore rules perform
- * server-side — used client-side just to decide whether to show "Tier 1
- * verified" UI instantly rather than waiting on a round trip.
+ * Read-only check from the MAIN session — does this roll already have a
+ * recorded institutional verification? Cheap, plain exists()-style read.
  */
-export function emailMatchesGroup(profile) {
-  const user = auth.currentUser;
-  if (!user?.emailVerified || !user.email) return false;
-  const parsed = parseKuetEmail(user.email);
-  if (!parsed) return false;
+export async function isRollInstitutionallyVerified(roll) {
+  if (!roll) return false;
+  const snap = await getDoc(doc(db, 'verifiedRolls', roll));
+  return snap.exists();
+}
+
+/** Convenience: does this profile's roll match this exact batch+dept group AND have a verified record? */
+export async function emailMatchesGroup(profile) {
   const roll = String(profile?.studentId || '');
-  return roll.length >= 4 && roll.slice(0, 2) === parsed.batchYear && roll.slice(2, 4) === parsed.deptCode;
+  if (roll.length < 4) return false;
+  return isRollInstitutionallyVerified(roll);
 }

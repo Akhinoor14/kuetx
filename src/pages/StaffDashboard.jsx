@@ -9,7 +9,6 @@ import {
 } from '../lib/staffSync';
 import {
   subscribeCRRequests, clApproveCRRequest, clRejectCRRequest,
-  subscribeResources, moderateResource, subscribeContentModerationQueue,
   listAllGroups, getGroupMembersOnce,
 } from '../lib/groupSync';
 import ClassmatesList from '../components/ClassmatesList';
@@ -28,12 +27,8 @@ function Section({ title, children }) {
 // ---------------------------------------------------------------------
 function CampusLeadBlock({ groupId }) {
   const [crRequests, setCrRequests] = useState([]);
-  const [resources, setResources] = useState([]);
 
   useEffect(() => subscribeCRRequests(groupId, setCrRequests), [groupId]);
-  useEffect(() => subscribeResources(groupId, setResources), [groupId]);
-
-  const pendingResources = resources.filter((r) => r.moderationStatus === 'pending');
 
   return (
     <div style={{ marginBottom: 20, paddingBottom: 16, borderBottom: '1px solid var(--border)' }}>
@@ -54,22 +49,9 @@ function CampusLeadBlock({ groupId }) {
         </div>
       )}
 
-      {pendingResources.length > 0 && (
-        <div style={{ marginBottom: 12 }}>
-          <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 6 }}>Content pending your first-line review</div>
-          {pendingResources.map((r) => (
-            <div key={r.id} className="card" style={{ padding: 8, display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
-              <span style={{ fontSize: 13 }}>{r.title} — {r.uploadedBy?.name}</span>
-              <div style={{ display: 'flex', gap: 4 }}>
-                <button className="btn btn-sm btn-primary" onClick={() => moderateResource(groupId, r.id, 'cl_approved')}>Forward to Content Lead</button>
-                <button className="btn btn-sm btn-secondary" onClick={() => moderateResource(groupId, r.id, 'rejected')}>Reject</button>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
-
-      <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 6 }}>Roster</div>
+      <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 6 }}>
+        Roster <span style={{ fontWeight: 400, color: 'var(--muted)' }}>("Claims CR" badge = held CR before this system existed — review and confirm/promote if still accurate)</span>
+      </div>
       <ClassmatesList groupId={groupId} showActions currentUid={auth.currentUser?.uid} />
     </div>
   );
@@ -173,25 +155,17 @@ function HeadOfOpsSection() {
 }
 
 // ---------------------------------------------------------------------
-// Content Lead section — global moderation queue across every group
+// Content Lead section — stub, pending integration with the existing
+// Question Bank system (see groupSync.js's note on why there's no
+// separate "Resources" moderation queue)
 // ---------------------------------------------------------------------
 function ContentLeadSection() {
-  const [queue, setQueue] = useState([]);
-  useEffect(() => subscribeContentModerationQueue(setQueue), []);
-
   return (
-    <Section title="Content moderation queue">
-      {queue.length === 0 && <div style={{ fontSize: 12, color: 'var(--muted)' }}>Nothing pending review.</div>}
-      {queue.map((r) => (
-        <div key={`${r.groupId}-${r.id}`} className="card" style={{ padding: 8, marginBottom: 6 }}>
-          <div style={{ fontSize: 13, fontWeight: 600 }}>{r.title} <span style={{ color: 'var(--muted)', fontWeight: 400 }}>· {r.groupId}</span></div>
-          <div style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 6 }}>by {r.uploadedBy?.name} ({r.uploadedBy?.roll})</div>
-          <div style={{ display: 'flex', gap: 4 }}>
-            <button className="btn btn-sm btn-primary" onClick={() => moderateResource(r.groupId, r.id, 'approved')}>Publish</button>
-            <button className="btn btn-sm btn-secondary" onClick={() => moderateResource(r.groupId, r.id, 'rejected')}>Reject</button>
-          </div>
-        </div>
-      ))}
+    <Section title="Content moderation">
+      <p style={{ fontSize: 12, color: 'var(--muted)' }}>
+        Question bank/notes moderation lives in KUETx's existing Question Bank system, not a separate
+        queue here. Wiring your review step into that system is a follow-up task.
+      </p>
     </Section>
   );
 }
@@ -241,7 +215,7 @@ export default function StaffDashboard() {
   if (roles === null) return <div style={{ padding: 20, color: 'var(--muted)' }}>Loading…</div>;
   if (roles.length === 0) {
     return (
-      <div style={{ maxWidth: 640, margin: '0 auto', padding: '16px 14px', textAlign: 'center', color: 'var(--muted)' }}>
+      <div style={{ textAlign: 'center', color: 'var(--muted)', padding: '12px 0 20px' }}>
         You don't hold any KUETx staff role yet.
       </div>
     );
@@ -255,8 +229,7 @@ export default function StaffDashboard() {
   const otherRoles = roles.filter((r) => !['campus_lead', 'senior_campus_lead'].includes(r.role));
 
   return (
-    <div style={{ maxWidth: 720, margin: '0 auto', padding: '16px 14px' }}>
-      <h1 style={{ fontSize: 20, fontWeight: 700, marginBottom: 4 }}>Staff Panel</h1>
+    <div>
       <p style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 16 }}>
         Your roles: {roles.map((r) => ROLE_LABELS[r.role] || r.role).join(' · ')}
       </p>
