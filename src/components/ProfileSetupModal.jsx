@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState, useRef } from 'react';
 import Modal from './Modal';
 import KuetEmailVerifyWidget from './KuetEmailVerifyWidget';
+import { isRollInstitutionallyVerified } from '../lib/kuetEmailVerify';
 import { DEPARTMENTS, DEFAULT_PROFILE, TERM_KEYS, getTermLabelFromKey, BATCH_START_DATES, extractBatchFromRoll } from '../store/store';
 
 // Map dept codes: roll middle 2 digits -> dept code
@@ -140,6 +141,21 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
   const [errors, setErrors] = useState({});
   const [verifiedJustNow, setVerifiedJustNow] = useState(false);
   const [verifySkipped, setVerifySkipped] = useState(false);
+
+  // If this profile's roll was already verified in a past session (e.g.
+  // they clicked the email link while on a different page entirely), don't
+  // show the "verify now" form again just because this modal instance has
+  // never seen it happen — check the real record, same fix as Classmates.
+  useEffect(() => {
+    let cancelled = false;
+    const roll = String(form?.studentId || '').trim();
+    if (isOpen && roll) {
+      isRollInstitutionallyVerified(roll).then((ok) => {
+        if (!cancelled && ok) setVerifiedJustNow(true);
+      }).catch(() => {});
+    }
+    return () => { cancelled = true; };
+  }, [isOpen, form?.studentId]);
 
   useEffect(() => {
     if (!isOpen) return;

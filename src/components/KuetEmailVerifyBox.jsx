@@ -18,6 +18,26 @@ export default function KuetEmailVerifyBox() {
 
   useEffect(() => () => { if (pollRef.current) clearInterval(pollRef.current); }, []);
 
+  // The local STORE_KEY flag above only ever gets set by THIS component's
+  // own polling/event handling — if verification actually happened in a
+  // different page or an earlier session (e.g. clicking the emailed link
+  // while on Profile, then visiting Classmates later), that flag was never
+  // touched and this box would show the "verify" form forever even though
+  // Firestore already has the roll marked verified. Check the real source
+  // of truth once on mount, same as Profile.jsx does.
+  useEffect(() => {
+    let cancelled = false;
+    if (roll && stage !== 'verified') {
+      isRollInstitutionallyVerified(roll).then((ok) => {
+        if (!cancelled && ok) {
+          store.set(STORE_KEY, true);
+          setStage('verified');
+        }
+      }).catch(() => {});
+    }
+    return () => { cancelled = true; };
+  }, [roll]);
+
   useEffect(() => {
     const onVerified = (e) => {
       if (!roll || e.detail?.roll === roll) {
