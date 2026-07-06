@@ -11,6 +11,7 @@ import PWAUpdatePrompt from './components/PWAUpdatePrompt';
 import { BottomNav, useIsMobileNav } from './components/BottomNav';
 import GlobalToasts from './components/GlobalToasts';
 import BackupReminderGate from './components/BackupReminderGate';
+import VerifyReminderPopup from './components/VerifyReminderPopup';
 import AuthModal from './components/AuthModal';
 import ModeSelectModal from './components/ModeSelectModal';
 import useFirebaseAuth from './hooks/useFirebaseAuth';
@@ -47,7 +48,6 @@ import About from './pages/About';
 import ClassManagement from './pages/ClassManagement';
 import CTQuizPlanning from './pages/CTQuizPlanning';
 import Classmates from './pages/Classmates';
-import AdminLogin from './pages/AdminLogin';
 import AdminDashboard from './pages/AdminDashboard';
 import TeamDashboard from './pages/TeamDashboard';
 import { Tours, Social, Projects, Syllabus, TimeTracker, Tuition, Food, Reports } from './pages/Extras';
@@ -141,7 +141,6 @@ function Layout({ authState }) {
             <Route path="/class-management" element={<ClassManagement />} />
             <Route path="/ct-quiz-planning" element={<CTQuizPlanning />} />
             <Route path="/classmates" element={<Classmates />} />
-            <Route path="/admin-login" element={<AdminLogin />} />
             <Route path="/admin" element={<AdminDashboard />} />
             <Route path="/team" element={<TeamDashboard />} />
           </Routes>
@@ -246,6 +245,10 @@ export default function App() {
           <BackupReminderGate open={true} onClose={advance} />
         )}
         <Layout authState={authState} />
+        {/* Independent of the sequential onboarding queue above — this has
+            its own internal 3-day snooze + "stop once verified" logic, so it
+            doesn't need to block on / wait for the queue to finish. */}
+        {authState.authReady && !authState.isAnonymous && <VerifyReminderPopup />}
         {/* Global auth modal (triggered from anywhere via window.__kuetxShowAuth) */}
         {showAuthModal && (
           <AuthModal

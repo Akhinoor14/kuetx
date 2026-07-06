@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { subscribeMembers, verifyMember, revokeVerification, clAppointCR, clRevokeCR } from '../lib/groupSync';
+import BlueTick from './BlueTick';
 
 /**
  * groupId       - the batch+dept group to show
@@ -60,8 +61,10 @@ export default function ClassmatesList({ groupId, showActions = false, currentUi
                 {(m.name || '?').trim().charAt(0).toUpperCase()}
               </div>
               <div style={{ minWidth: 0 }}>
-                <div style={{ fontWeight: 600, fontSize: 14, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                  {m.name || 'Unnamed'} {m.id === currentUid && <span style={{ color: 'var(--muted)', fontWeight: 400 }}>(you)</span>}
+                <div style={{ fontWeight: 600, fontSize: 14, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', display: 'flex', alignItems: 'center', gap: 5 }}>
+                  <span style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>{m.name || 'Unnamed'}</span>
+                  {m.verified && <BlueTick size={13} />}
+                  {m.id === currentUid && <span style={{ color: 'var(--muted)', fontWeight: 400 }}>(you)</span>}
                 </div>
                 <div style={{ fontSize: 12, color: 'var(--muted)' }}>{m.roll || '—'}</div>
               </div>
@@ -88,13 +91,14 @@ export default function ClassmatesList({ groupId, showActions = false, currentUi
                   Claims CR
                 </span>
               )}
-              <span style={{
-                fontSize: 11, fontWeight: 600, padding: '2px 8px', borderRadius: 999,
-                color: m.verified ? 'var(--success)' : 'var(--muted)',
-                background: m.verified ? 'var(--successBg)' : 'var(--inputBg)',
-              }}>
-                {m.verified ? 'Verified' : 'Pending'}
-              </span>
+              {!m.verified && (
+                <span style={{
+                  fontSize: 11, fontWeight: 600, padding: '2px 8px', borderRadius: 999,
+                  color: 'var(--muted)', background: 'var(--inputBg)',
+                }}>
+                  Pending
+                </span>
+              )}
 
               {showActions && (
                 <div style={{ display: 'flex', gap: 4 }}>

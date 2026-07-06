@@ -49,11 +49,11 @@ service cloud.firestore {
 
     function isSCLFor(dept) {
       return isSignedIn() &&
-        exists(/databases/$(database)/documents/staff/$(request.auth.uid)/roles/senior_campus_lead_$(dept));
+        exists(/databases/$(database)/documents/staff/$(request.auth.uid)/roles/$('senior_campus_lead_' + dept));
     }
     function isCLFor(groupId) {
       return isSignedIn() &&
-        exists(/databases/$(database)/documents/staff/$(request.auth.uid)/roles/campus_lead_$(groupId));
+        exists(/databases/$(database)/documents/staff/$(request.auth.uid)/roles/$('campus_lead_' + groupId));
     }
     // A group id is always `${BATCH}_${DEPT}` (see groupUtils.js) — so the
     // department for "is this person the SCL of this group's department"

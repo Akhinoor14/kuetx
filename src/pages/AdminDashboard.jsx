@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../lib/firebase';
-import { adminAuth, checkIsAdmin, adminSignOut } from '../lib/adminAuth';
+import { auth } from '../lib/firebase';
+import { checkIsAdmin } from '../lib/adminAuth';
 import { listAllGroups } from '../lib/groupSync';
 import {
   assignRole, removeRole, listStaffByRole, subscribeAllCLApplications,
@@ -32,13 +33,14 @@ export default function AdminDashboard() {
   const [currentHolders, setCurrentHolders] = useState({});
 
   useEffect(() => {
-    const uid = adminAuth.currentUser?.uid;
-    if (!uid) { navigate('/admin-login'); return; }
-    checkIsAdmin(uid).then((ok) => {
+    const unsub = auth.onAuthStateChanged(async (user) => {
+      if (!user) { setChecking(false); navigate('/'); return; }
+      const ok = await checkIsAdmin(user.uid);
       setAuthorized(ok);
       setChecking(false);
-      if (!ok) navigate('/admin-login');
+      if (!ok) navigate('/');
     });
+    return () => unsub();
   }, [navigate]);
 
   useEffect(() => {
@@ -73,7 +75,7 @@ export default function AdminDashboard() {
     try {
       await addDoc(collection(db, 'notices'), {
         title: title.trim(), body: body.trim(), audience,
-        createdBy: { uid: adminAuth.currentUser.uid, name: 'Founder' },
+        createdBy: { uid: auth.currentUser.uid, name: 'Founder' },
         createdAt: serverTimestamp(),
       });
       setTitle(''); setBody(''); setSendMsg('Notice sent.');
@@ -91,7 +93,6 @@ export default function AdminDashboard() {
     <div style={{ maxWidth: 720, margin: '0 auto', padding: '16px 14px' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
         <h1 style={{ fontSize: 20, fontWeight: 700 }}>Founder Dashboard</h1>
-        <button className="btn btn-sm btn-secondary" onClick={async () => { await adminSignOut(); navigate('/'); }}>Log out</button>
       </div>
 
       <section className="card" style={{ padding: 14, marginBottom: 20 }}>

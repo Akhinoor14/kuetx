@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState, useRef } from 'react';
 import Modal from './Modal';
+import KuetEmailVerifyWidget from './KuetEmailVerifyWidget';
 import { DEPARTMENTS, DEFAULT_PROFILE, TERM_KEYS, getTermLabelFromKey, BATCH_START_DATES } from '../store/store';
 
 // Map dept codes: roll middle 2 digits -> dept code
@@ -146,6 +147,8 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
   const [form, setForm] = useState(initial);
   const [stepIndex, setStepIndex] = useState(0);
   const [errors, setErrors] = useState({});
+  const [verifiedJustNow, setVerifiedJustNow] = useState(false);
+  const [verifySkipped, setVerifySkipped] = useState(false);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -555,6 +558,22 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
                   ))}
                 </div>
               </div>
+
+              {!verifiedJustNow && !verifySkipped && (
+                <KuetEmailVerifyWidget
+                  onVerified={() => setVerifiedJustNow(true)}
+                  onSkip={() => setVerifySkipped(true)}
+                />
+              )}
+              {verifiedJustNow && (
+                <div style={{
+                  background: 'rgba(29,155,240,0.08)', border: '1px solid rgba(29,155,240,0.25)',
+                  borderRadius: 12, padding: 12, fontSize: 12.5, color: 'var(--text)', fontWeight: 600,
+                  display: 'flex', alignItems: 'center', gap: 8,
+                }}>
+                  ✅ KUET email verified হয়ে গেছে — তোমার নামের পাশে blue tick দেখাবে।
+                </div>
+              )}
 
               <div style={{
                 background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.08) 0%, rgba(168, 85, 247, 0.08) 100%)',

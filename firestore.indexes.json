@@ -1,20 +1,6 @@
 {
   "indexes": [
     {
-      "collectionGroup": "roles",
-      "queryScope": "COLLECTION_GROUP",
-      "fields": [
-        { "fieldPath": "role", "order": "ASCENDING" }
-      ]
-    },
-    {
-      "collectionGroup": "crRequests",
-      "queryScope": "COLLECTION",
-      "fields": [
-        { "fieldPath": "requestedAt", "order": "ASCENDING" }
-      ]
-    },
-    {
       "collectionGroup": "clApplications",
       "queryScope": "COLLECTION",
       "fields": [
@@ -32,4 +18,3 @@
     }
   ]
 }
-

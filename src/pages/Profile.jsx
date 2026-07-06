@@ -19,6 +19,8 @@ import { onAuthChange, logout } from '../lib/firebaseAuth';
 import { auth } from '../lib/firebase';
 import { pushAllToFirestore, startFirebaseSync } from '../lib/firebaseSync';
 import { uploadProfilePicture, getProfilePhotoURL, deleteProfilePicture } from '../lib/profilePicture';
+import { isRollInstitutionallyVerified } from '../lib/kuetEmailVerify';
+import BlueTick from '../components/BlueTick';
 
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
@@ -503,6 +505,19 @@ export default function Profile() {
   const getDeptName = code => (DEPARTMENTS.find(d => d.code === code)?.name || code);
   const hasMinProfile = !!(profile?.name && profile?.studentId && profile?.dept && profile?.session && profile?.currentTermKey);
 
+  const [isKuetVerified, setIsKuetVerified] = useState(false);
+  useEffect(() => {
+    let cancelled = false;
+    if (profile?.studentId) {
+      isRollInstitutionallyVerified(profile.studentId).then((ok) => {
+        if (!cancelled) setIsKuetVerified(ok);
+      });
+    } else {
+      setIsKuetVerified(false);
+    }
+    return () => { cancelled = true; };
+  }, [profile?.studentId]);
+
   useEffect(() => {
     if (!hasMinProfile && !autoOpenedRef.current) {
       setIsModalOpen(true);
@@ -750,8 +765,9 @@ export default function Profile() {
         {/* Info */}
         <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap', marginBottom: 4 }}>
-            <div style={{ fontSize: 'clamp(18px,4vw,26px)', fontWeight: 900, color: 'white', letterSpacing: '-0.02em', lineHeight: 1.2, fontFamily: "'Space Grotesk', 'Sora', 'Hind Siliguri', system-ui, sans-serif" }}>
+            <div style={{ fontSize: 'clamp(18px,4vw,26px)', fontWeight: 900, color: 'white', letterSpacing: '-0.02em', lineHeight: 1.2, fontFamily: "'Space Grotesk', 'Sora', 'Hind Siliguri', system-ui, sans-serif", display: 'flex', alignItems: 'center', gap: 8 }}>
               {profile.name}
+              {isKuetVerified && <BlueTick size={18} />}
             </div>
             {profile.isCR && <Badge label="👑 CR" color="#fff" bg="rgba(255,255,255,0.2)" />}
           </div>
