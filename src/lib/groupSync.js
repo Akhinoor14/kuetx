@@ -41,12 +41,31 @@ function _subscribeSingleton(key, buildQueryFn, mapDocsFn, callback) {
   if (!entry) {
     entry = { unsubscribe: null, refCount: 0, listeners: new Set(), lastValue: null };
     _registry.set(key, entry);
-    entry.unsubscribe = onSnapshot(buildQueryFn(), (snap) => {
-      entry.lastValue = mapDocsFn(snap);
-      entry.listeners.forEach((cb) => cb(entry.lastValue));
-    }, (err) => {
-      console.error(`[groupSync] listener error for ${key}:`, err);
-    });
+    const attach = (retriesLeft) => {
+      entry.unsubscribe = onSnapshot(buildQueryFn(), (snap) => {
+        entry.lastValue = mapDocsFn(snap);
+        entry.listeners.forEach((cb) => cb(entry.lastValue));
+      }, (err) => {
+        console.error(`[groupSync] listener error for ${key}:`, err);
+        // permission-denied here almost always means our own membership
+        // doc write (joinGroup) hadn't landed yet when this query's rules
+        // were evaluated — a startup race, not a real access problem.
+        // Retry a couple of times with backoff instead of leaving callers
+        // stuck on `null` (= infinite "Loading…") forever.
+        if (err?.code === 'permission-denied' && retriesLeft > 0) {
+          setTimeout(() => attach(retriesLeft - 1), 1200);
+          return;
+        }
+        // Out of retries (or a non-permission error): stop showing an
+        // infinite loading state — deliver an empty array so the UI can
+        // render its normal "no one yet" / empty state instead of hanging.
+        if (entry.lastValue === null) {
+          entry.lastValue = [];
+          entry.listeners.forEach((cb) => cb(entry.lastValue));
+        }
+      });
+    };
+    attach(3);
   }
   entry.refCount += 1;
   entry.listeners.add(callback);

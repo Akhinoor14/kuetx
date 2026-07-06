@@ -3,6 +3,7 @@ import { getProfile } from '../store/store';
 import { getGroupId, getGroupLabel } from '../lib/groupUtils';
 import { joinGroup, requestCR, subscribeCRStatus, syncOwnVerification } from '../lib/groupSync';
 import { checkCLVacant, applyForCampusLead } from '../lib/staffSync';
+import { isRollInstitutionallyVerified } from '../lib/kuetEmailVerify';
 import { auth } from '../lib/firebase';
 import ClassmatesList from '../components/ClassmatesList';
 import KuetEmailVerifyBox from '../components/KuetEmailVerifyBox';
@@ -14,6 +15,14 @@ export default function Classmates() {
   const [crStatus, setCrStatus] = useState(null);
   const [claimState, setClaimState] = useState('idle'); // idle | sending | sent | error
   const [claimMsg, setClaimMsg] = useState('');
+  // Tracks whether THIS user's own roll has a Tier-1 institutional
+  // verification on record. Gates the "Claim CR" button client-side —
+  // Firestore rules already reject an unverified claim server-side
+  // (isVerifiedMember/rollIsInstitutionallyVerified on crRequests/
+  // clApplications create), but without this the button was shown to
+  // everyone and an unverified click just died as a silent
+  // permission-denied with no useful message.
+  const [ownRollVerified, setOwnRollVerified] = useState(false);
 
   useEffect(() => {
     if (!groupId) return;
@@ -25,10 +34,16 @@ export default function Classmates() {
     // verification happens, so this mount-time check is what unsticks
     // anyone who was verified before this page ever saw it.
     syncOwnVerification(groupId, auth.currentUser?.uid).catch((e) => console.warn('[Classmates] syncOwnVerification failed', e));
+    isRollInstitutionallyVerified(profile?.studentId).then(setOwnRollVerified).catch(() => setOwnRollVerified(false));
     return subscribeCRStatus(groupId, setCrStatus);
   }, [groupId]);
 
   const handleClaimCR = async () => {
+    if (!ownRollVerified) {
+      setClaimMsg('CR claim korar age nijer KUET email verify koro — upore "KUET email verify" box e roll bosao.');
+      setClaimState('error');
+      return;
+    }
     setClaimState('sending');
     try {
       // Guard against the rare race where this page's mount-time joinGroup()
@@ -74,9 +89,19 @@ export default function Classmates() {
             Want to keep your class's routine and assignments up to date for everyone? Claim CR — it goes to
             your Campus Lead for approval (or becomes a combined application if there isn't one yet).
           </p>
-          <button className="btn btn-primary btn-sm" onClick={handleClaimCR} disabled={claimState === 'sending'}>
+          <button
+            className="btn btn-primary btn-sm"
+            onClick={handleClaimCR}
+            disabled={claimState === 'sending' || !ownRollVerified}
+            title={!ownRollVerified ? 'KUET email verify korar por CR claim kora jabe' : undefined}
+          >
             {claimState === 'sending' ? 'Sending…' : 'Claim CR'}
           </button>
+          {!ownRollVerified && claimState !== 'error' && (
+            <div style={{ color: 'var(--muted)', fontSize: 12, marginTop: 6 }}>
+              CR claim korte hole age tomar KUET email verify korte hobe.
+            </div>
+          )}
           {claimState === 'error' && <div style={{ color: 'var(--danger)', fontSize: 12, marginTop: 6 }}>{claimMsg}</div>}
         </div>
       )}
