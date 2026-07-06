@@ -18,6 +18,18 @@ export default function KuetEmailVerifyBox() {
 
   useEffect(() => () => { if (pollRef.current) clearInterval(pollRef.current); }, []);
 
+  useEffect(() => {
+    const onVerified = (e) => {
+      if (!roll || e.detail?.roll === roll) {
+        store.set(STORE_KEY, true);
+        setStage('verified');
+        setMsg('');
+      }
+    };
+    window.addEventListener('kuetx:kuet-email-verified', onVerified);
+    return () => window.removeEventListener('kuetx:kuet-email-verified', onVerified);
+  }, [roll]);
+
   const startPolling = () => {
     if (pollRef.current) clearInterval(pollRef.current);
     pollRef.current = setInterval(async () => {
@@ -58,6 +70,7 @@ export default function KuetEmailVerifyBox() {
     try {
       await sendKuetVerificationLink(email);
       setStage('sent');
+      startPolling();
       setMsg('Sign-in link sent — check your KUET inbox (and spam/junk folder). Click the link and this page will verify automatically. No password, no account to manage.');
     } catch (err) {
       setMsg(err?.message || 'Something went wrong.');
@@ -71,6 +84,7 @@ export default function KuetEmailVerifyBox() {
     try {
       await sendKuetVerificationLink(email);
       setStage('sent');
+      startPolling();
       setMsg('New link sent — check your inbox again.');
     } catch (err) {
       setMsg(err?.message || 'Something went wrong.');

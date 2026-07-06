@@ -64,8 +64,15 @@ export default function VerifyReminderPopup() {
   if (!checked || !open) return null;
 
   return (
-    <Modal open={open} onClose={snooze} title="KUET email verify করো">
+    <Modal
+      onClose={snooze}
+      contentStyle={{
+        width: 'min(420px, 100%)', background: 'var(--surface)',
+        borderRadius: 16, padding: 18, boxShadow: '0 20px 60px rgba(0,0,0,0.28)',
+      }}
+    >
       <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+        <div style={{ fontWeight: 700, fontSize: 15, color: 'var(--text)' }}>KUET email verify করো</div>
         <p style={{ fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.5, margin: 0 }}>
           তোমার account এখনো KUET-verified না। Verify করলে classmates দের কাছে তোমার নামের পাশে blue tick দেখাবে —
           এটা একবার করলেই যথেষ্ট, পরে আর জিজ্ঞেস করবে না।

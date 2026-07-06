@@ -18,8 +18,10 @@ import ModeSelectModal from './components/ModeSelectModal';
 import useFirebaseAuth from './hooks/useFirebaseAuth';
 import DataSafeToast from './components/DataSafeToast';
 import ClassJoinIntro from './components/ClassJoinIntro';
+import KuetVerifyEmailConfirmModal from './components/KuetVerifyEmailConfirmModal';
 import { isModeChosen } from './lib/modeFilter';
 import { store } from './store/store';
+import { notify } from './lib/notify';
 
 // Pages
 import Dashboard from './pages/Dashboard';
@@ -219,19 +221,55 @@ export default function App() {
   // Complete a KUET email verification link, if the current URL is one —
   // runs once at boot so clicking the emailed link works even in a fresh
   // tab/device that never opened the verify widget itself. No-op otherwise.
+  const [verifyEmailPrompt, setVerifyEmailPrompt] = useState(null); // { busy, error } | null
   useEffect(() => {
-    import('./lib/kuetEmailVerify').then(({ completeKuetVerificationLink }) => {
-      completeKuetVerificationLink().catch((err) => {
-        // Surface a clear, non-blocking toast-style alert rather than
-        // silently failing — the person needs to know their link expired
-        // rather than wondering why the blue tick never showed up.
-        if (err?.message) {
-          console.warn('[KUETx] KUET email verify link:', err.message);
-          window.alert(err.message);
-        }
-      });
-    });
+    let cancelled = false;
+
+    async function run(emailOverride = null) {
+      const { completeKuetVerificationLink } = await import('./lib/kuetEmailVerify');
+      const result = await completeKuetVerificationLink(window.location.href, emailOverride);
+      if (cancelled) return;
+
+      if (result.status === 'needs-email') {
+        // Cross-device/cross-profile click — ask nicely via the modal
+        // instead of a raw window.prompt(). The modal's onConfirm below
+        // re-runs this same function with the typed email.
+        setVerifyEmailPrompt({ busy: false, error: '' });
+        return;
+      }
+      if (result.status === 'success') {
+        setVerifyEmailPrompt(null);
+        notify('KUET email verify হয়ে গেছে! নামের পাশে blue tick দেখাবে।', 'success');
+        // Any already-mounted page (e.g. Profile, which only checks once
+        // on mount) needs to know this just happened rather than staying
+        // stuck showing "not verified" until a manual refresh.
+        window.dispatchEvent(new CustomEvent('kuetx:kuet-email-verified', { detail: { roll: result.roll } }));
+        return;
+      }
+      if (result.status === 'error') {
+        setVerifyEmailPrompt(null);
+        console.warn('[KUETx] KUET email verify link:', result.message);
+        notify(result.message, 'error', 6000);
+      }
+      // 'not-a-link' → nothing to do, most page loads hit this silently.
+    }
+
+    run();
+    return () => { cancelled = true; };
   }, []);
+
+  const handleVerifyEmailConfirm = async (typedEmail) => {
+    setVerifyEmailPrompt((p) => ({ ...p, busy: true, error: '' }));
+    const { completeKuetVerificationLink } = await import('./lib/kuetEmailVerify');
+    const result = await completeKuetVerificationLink(window.location.href, typedEmail);
+    if (result.status === 'success') {
+      setVerifyEmailPrompt(null);
+      notify('KUET email verify হয়ে গেছে! নামের পাশে blue tick দেখাবে।', 'success');
+      window.dispatchEvent(new CustomEvent('kuetx:kuet-email-verified', { detail: { roll: result.roll } }));
+    } else {
+      setVerifyEmailPrompt({ busy: false, error: result.message || 'Verify করতে সমস্যা হয়েছে, আবার চেষ্টা করো।' });
+    }
+  };
 
   // Build queue once auth is ready so we know isAnonymous
   useEffect(() => {
@@ -283,6 +321,14 @@ export default function App() {
             its own internal 3-day snooze + "stop once verified" logic, so it
             doesn't need to block on / wait for the queue to finish. */}
         {authState.authReady && !authState.isAnonymous && queue.length === 0 && <VerifyReminderPopup />}
+        {verifyEmailPrompt && (
+          <KuetVerifyEmailConfirmModal
+            busy={verifyEmailPrompt.busy}
+            error={verifyEmailPrompt.error}
+            onConfirm={handleVerifyEmailConfirm}
+            onCancel={() => setVerifyEmailPrompt(null)}
+          />
+        )}
         {/* Global auth modal (triggered from anywhere via window.__kuetxShowAuth) */}
         {showAuthModal && (
           <AuthModal

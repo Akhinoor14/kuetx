@@ -29,6 +29,14 @@ export default function KuetEmailVerifyWidget({ onVerified, onSkip, compact = fa
 
   useEffect(() => () => { if (pollRef.current) clearInterval(pollRef.current); }, []);
 
+  useEffect(() => {
+    const handleGlobalVerified = (e) => {
+      if (!roll || e.detail?.roll === roll) onVerified?.();
+    };
+    window.addEventListener('kuetx:kuet-email-verified', handleGlobalVerified);
+    return () => window.removeEventListener('kuetx:kuet-email-verified', handleGlobalVerified);
+  }, [roll, onVerified]);
+
   const startPolling = () => {
     if (pollRef.current) clearInterval(pollRef.current);
     pollRef.current = setInterval(async () => {

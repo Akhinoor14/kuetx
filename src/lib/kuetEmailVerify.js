@@ -132,56 +132,109 @@ export function isKuetVerifyLink(url = window.location.href) {
   return isSignInWithEmailLink(verifyAuth, url);
 }
 
+// Guards against processing the exact same link twice concurrently — e.g.
+// React.StrictMode double-invoking effects in dev, or two tabs/renders
+// racing on the same boot-time check. Without this, the *second* call for
+// an already-completing link would hit Firebase's "already used" error
+// and surface a confusing failure toast right after a real success.
+const inFlightOrDoneOobCodes = new Map(); // oobCode -> Promise<result>
+
+function extractOobCode(url) {
+  try {
+    return new URL(url).searchParams.get('oobCode');
+  } catch {
+    return null;
+  }
+}
+
 /**
  * Step 2: complete the sign-in using the link the person clicked. Safe to
  * call defensively at app boot — it's a no-op unless the current URL is
- * actually a valid sign-in link. Returns the verified roll on success, or
- * null if there was nothing to complete.
+ * actually a valid sign-in link.
+ *
+ * Returns a plain result object instead of prompting or throwing blindly,
+ * so the caller (App.jsx) can render a proper in-app UI instead of a raw
+ * `window.prompt`/`window.alert`:
+ *   - { status: 'not-a-link' }   — current URL isn't a sign-in link at all
+ *   - { status: 'needs-email' } — same link, but we don't know which email
+ *     it belongs to (cross-device/cross-browser-profile case — Firebase
+ *     can't recover the address from the link itself for security reasons)
+ *   - { status: 'success', roll, email }
+ *   - { status: 'error', message }
  *
  * On success this also records `verifiedRolls/{roll}` in Firestore and
  * cleans the magic-link query params out of the URL so a page refresh
  * doesn't try to "reuse" an already-consumed link (which is exactly the
  * "already used/expired" dead end the old flow could show).
+ *
+ * `emailOverride` lets the caller supply the address explicitly (e.g. typed
+ * into a modal) for the needs-email case — pass the *same* `url` again
+ * (it's left untouched on the URL bar until we actually resolve the link).
  */
-export async function completeKuetVerificationLink(url = window.location.href) {
-  if (!isSignInWithEmailLink(verifyAuth, url)) return null;
+export async function completeKuetVerificationLink(url = window.location.href, emailOverride = null) {
+  if (!isSignInWithEmailLink(verifyAuth, url)) return { status: 'not-a-link' };
 
-  let email = window.localStorage.getItem(PENDING_EMAIL_KEY);
+  const email = (emailOverride || window.localStorage.getItem(PENDING_EMAIL_KEY) || '').trim();
   if (!email) {
-    // Cross-device case (link opened somewhere other than where it was
-    // requested) — Firebase requires re-confirming the address here since
-    // it can't be read back out of the link itself for security reasons.
-    email = window.prompt('তোমার KUET email দিন verification confirm করতে (যেটাতে link পাঠানো হয়েছিল):') || '';
+    // Cross-device/cross-profile case — nothing stashed in this browser's
+    // localStorage to match the link against. Let the caller ask nicely
+    // instead of us reaching for window.prompt(). The link itself is left
+    // untouched in the URL so a retry with the right email still works.
+    return { status: 'needs-email' };
   }
-  if (!email) return null;
 
-  try {
-    const result = await signInWithEmailLink(verifyAuth, email, url);
-    window.localStorage.removeItem(PENDING_EMAIL_KEY);
-    // Strip the one-time link params so refreshing this page never replays
-    // an already-consumed link — there's nothing left to consume anyway.
-    window.history.replaceState(null, '', window.location.pathname);
-
-    const parsed = parseKuetEmail(result.user.email);
-    if (parsed) {
-      await setDoc(doc(verifyDb, 'verifiedRolls', parsed.roll), {
-        verifiedAt: serverTimestamp(),
-      }, { merge: true }).catch(() => {
-        // Doc already exists (someone verified this roll before) — fine,
-        // the rule makes it create-once/immutable, nothing to do.
-      });
-    }
-    return parsed;
-  } catch (err) {
-    window.history.replaceState(null, '', window.location.pathname);
-    if (err?.code === 'auth/invalid-action-code') {
-      // This exact link was already used once, or its ~1hr window expired.
-      // Since there's no persistent account/password behind this flow,
-      // recovery is simply: send a brand new link and use that instead.
-      throw new Error('এই verification link-টা আগে একবার ব্যবহার হয়ে গেছে অথবা মেয়াদ শেষ (Firebase links প্রায় ১ ঘণ্টা পর expire হয়)। চিন্তা নেই — নিচ থেকে একটা নতুন link পাঠাও, পুরনো কোনো account/password নিয়ে কিছু করা লাগবে না।');
-    }
-    throw err;
+  const oobCode = extractOobCode(url);
+  if (oobCode && inFlightOrDoneOobCodes.has(oobCode)) {
+    // Same link already being processed (or just finished) by another
+    // concurrent call — piggyback on that result instead of re-attempting
+    // a single-use link a second time.
+    return inFlightOrDoneOobCodes.get(oobCode);
   }
+
+  const attempt = (async () => {
+    try {
+      const result = await signInWithEmailLink(verifyAuth, email, url);
+      window.localStorage.removeItem(PENDING_EMAIL_KEY);
+      // Strip the one-time link params so refreshing this page never replays
+      // an already-consumed link — there's nothing left to consume anyway.
+      window.history.replaceState(null, '', window.location.pathname);
+
+      const parsed = parseKuetEmail(result.user.email);
+      if (parsed) {
+        try {
+          await setDoc(doc(verifyDb, 'verifiedRolls', parsed.roll), {
+            verifiedAt: serverTimestamp(),
+          }, { merge: true });
+        } catch (writeErr) {
+          // Only "already exists" is truly harmless (someone verified this
+          // roll before, rule makes the doc create-once/immutable). Anything
+          // else (e.g. a Firestore rules rejection) means sign-in succeeded
+          // but the roll never actually got recorded — that must NOT be
+          // reported back as success, or the person is stuck seeing "not
+          // verified" forever with no idea why.
+          if (writeErr?.code !== 'permission-denied') {
+            return { status: 'error', message: 'Sign-in সফল হয়েছে কিন্তু verification record সেভ করা যায়নি। আবার চেষ্টা করো, সমস্যা থাকলে dev-কে জানাও।' };
+          }
+        }
+      }
+      return { status: 'success', roll: parsed?.roll, email: result.user.email };
+    } catch (err) {
+      window.history.replaceState(null, '', window.location.pathname);
+      if (err?.code === 'auth/invalid-action-code') {
+        // This exact link was already used once, or its ~1hr window expired.
+        // Since there's no persistent account/password behind this flow,
+        // recovery is simply: send a brand new link and use that instead.
+        return { status: 'error', message: 'এই verification link-টা আগে একবার ব্যবহার হয়ে গেছে অথবা মেয়াদ শেষ (Firebase links প্রায় ১ ঘণ্টা পর expire হয়)। চিন্তা নেই — নিচ থেকে একটা নতুন link পাঠাও, পুরনো কোনো account/password নিয়ে কিছু করা লাগবে না।' };
+      }
+      if (err?.code === 'auth/invalid-email') {
+        return { status: 'error', message: 'এই email address-টা ঠিক মনে হচ্ছে না। যে email-এ link পাঠানো হয়েছিল ঠিক সেটাই লেখো।' };
+      }
+      return { status: 'error', message: err?.message || 'Verification complete করতে সমস্যা হয়েছে, আবার চেষ্টা করো।' };
+    }
+  })();
+
+  if (oobCode) inFlightOrDoneOobCodes.set(oobCode, attempt);
+  return attempt;
 }
 
 /**

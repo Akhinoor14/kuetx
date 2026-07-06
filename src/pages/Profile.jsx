@@ -519,6 +519,20 @@ export default function Profile() {
     return () => { cancelled = true; };
   }, [profile?.studentId]);
 
+  // Covers the case where the person clicked their verification link and
+  // App.jsx's boot-time completion finished slightly AFTER the one-shot
+  // check above already ran and cached "not verified" — without this,
+  // that race left the banner stuck forever even though verification had
+  // actually succeeded, with no way to notice short of a manual refresh.
+  useEffect(() => {
+    const onVerified = (e) => {
+      const roll = String(profile?.studentId || '').trim();
+      if (!roll || e.detail?.roll === roll) setIsKuetVerified(true);
+    };
+    window.addEventListener('kuetx:kuet-email-verified', onVerified);
+    return () => window.removeEventListener('kuetx:kuet-email-verified', onVerified);
+  }, [profile?.studentId]);
+
   useEffect(() => {
     if (!hasMinProfile && !autoOpenedRef.current) {
       setIsModalOpen(true);
