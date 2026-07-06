@@ -100,12 +100,24 @@ service cloud.firestore {
       return exists(/databases/$(database)/documents/verifiedRolls/$(roll));
     }
 
+    // Roll middle 2 digits -> dept code (must mirror ROLL_DEPT_MAP in
+    // ProfileSetupModal.jsx exactly — the roll digits are a numeric dept
+    // *code*, not the dept name itself, so they can't be compared to
+    // groupId's dept segment directly).
+    function deptCodeFromRoll(roll) {
+      return {
+        '25': 'ARCH', '23': 'BECM', '15': 'BME', '01': 'CE', '29': 'CHE',
+        '07': 'CSE', '09': 'ECE', '03': 'EEE', '13': 'ESE', '11': 'IPE',
+        '19': 'LE', '05': 'ME', '27': 'MSE', '31': 'MTE', '21': 'TE', '17': 'URP',
+      }[roll[2:4]];
+    }
+
     // Tier-1 auto-verify also needs the claimed roll to actually
     // correspond to THIS group's batch+dept, not just to *any* verified
     // roll — otherwise a verified roll for one class could auto-verify
     // someone into a different class.
     function rollMatchesGroup(roll, groupId) {
-      return groupId.split('_')[1] == roll[2:4]
+      return groupId.split('_')[1] == deptCodeFromRoll(roll)
         && groupId.split('_')[0].matches('.*' + roll[0:2] + '.*');
     }
 
@@ -227,11 +239,22 @@ service cloud.firestore {
 
       match /members/{memberUid} {
         allow read: if isAdmin() || isGroupMember(groupId) || isCLFor(groupId) || isHeadOfOps() || isSCLForGroup(groupId);
-        allow create: if isSignedIn() && request.auth.uid == memberUid
+        allow create: if (isSignedIn() && request.auth.uid == memberUid
                         && request.resource.data.role == 'member'
                         && (request.resource.data.verified == false
                             || (rollIsInstitutionallyVerified(request.resource.data.roll)
-                                && rollMatchesGroup(request.resource.data.roll, groupId)));
+                                && rollMatchesGroup(request.resource.data.roll, groupId))))
+                        // Fallback: approveCLApplication() bundles a CR
+                        // appointment into the member doc as a set(merge:true).
+                        // If the applicant's member doc somehow doesn't exist
+                        // yet (e.g. their own joinGroup() write raced/failed
+                        // before they clicked Claim CR), Firestore treats that
+                        // merge as a CREATE, not an update — so without this,
+                        // the whole approval would silently fail here even
+                        // though the SCL/Admin/Head of Ops clearly has the
+                        // authority to appoint CR (see the update rule below).
+                        || (request.resource.data.role == 'cr' && request.resource.data.verified == true
+                            && (isAdmin() || isHeadOfOps() || isSCLForGroup(groupId)));
         // Members edit only their own display fields. verified/role changes
         // are gated to CL/Admin/Head of Ops/that dept's SCL (fallback chain
         // — a request never gets stuck just because the immediate level is
@@ -244,7 +267,18 @@ service cloud.firestore {
           (isGroupCR(groupId) && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['role', 'verified'])) ||
           (isSignedIn() && request.auth.uid == memberUid
             && request.resource.data.verified == resource.data.verified
-            && request.resource.data.role == resource.data.role);
+            && request.resource.data.role == resource.data.role) ||
+          // Self-service Tier-1 catch-up: if someone joined the group
+          // BEFORE completing KUET email verification, their member doc
+          // was created with verified:false and nothing else ever
+          // revisits it. Let them flip verified false->true themselves,
+          // ONLY once their exact roll is institutionally verified AND
+          // matches this exact group — everything else must stay put.
+          (isSignedIn() && request.auth.uid == memberUid
+            && resource.data.verified == false && request.resource.data.verified == true
+            && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['verified'])
+            && rollIsInstitutionallyVerified(resource.data.roll)
+            && rollMatchesGroup(resource.data.roll, groupId));
         allow delete: if isAdmin() || isCLFor(groupId) || isHeadOfOps();
       }
 

@@ -132,6 +132,30 @@ export async function revokeVerification(groupId, memberUid) {
   await updateDoc(doc(db, 'groups', groupId, 'members', memberUid), { verified: false });
 }
 
+/**
+ * Self-service: after Tier-1 KUET email verification succeeds, flip THIS
+ * user's own membership doc (if one already exists) to verified: true.
+ *
+ * Why this is needed: joinGroup() only sets `verified` at doc-CREATION
+ * time. If someone joins their class group (Classmates page) BEFORE
+ * completing email verification, their member doc is created with
+ * verified: false — and nothing ever revisits it afterward, since
+ * joinGroup()'s "already exists" branch deliberately never touches
+ * verified/role (that's what stops a CL demotion from being silently
+ * undone by a routine re-join). Without this, a student who verifies
+ * their KUET email AFTER joining stays stuck on "Pending" forever,
+ * even though verifiedRolls/{roll} now correctly exists.
+ * Call this right after the 'kuetx:kuet-email-verified' event fires.
+ */
+export async function syncOwnVerification(groupId, uid) {
+  if (!groupId || !uid) return;
+  const ref_ = doc(db, 'groups', groupId, 'members', uid);
+  const snap = await getDoc(ref_);
+  if (snap.exists() && snap.data().verified !== true) {
+    await updateDoc(ref_, { verified: true });
+  }
+}
+
 // ---------------------------------------------------------------------
 // CR lifecycle
 // ---------------------------------------------------------------------

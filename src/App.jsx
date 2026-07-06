@@ -20,7 +20,10 @@ import DataSafeToast from './components/DataSafeToast';
 import ClassJoinIntro from './components/ClassJoinIntro';
 import KuetVerifyEmailConfirmModal from './components/KuetVerifyEmailConfirmModal';
 import { isModeChosen } from './lib/modeFilter';
-import { store } from './store/store';
+import { store, getProfile } from './store/store';
+import { getGroupId } from './lib/groupUtils';
+import { syncOwnVerification } from './lib/groupSync';
+import { auth } from './lib/firebase';
 import { notify } from './lib/notify';
 
 // Pages
@@ -244,6 +247,12 @@ export default function App() {
         // on mount) needs to know this just happened rather than staying
         // stuck showing "not verified" until a manual refresh.
         window.dispatchEvent(new CustomEvent('kuetx:kuet-email-verified', { detail: { roll: result.roll } }));
+        // If they'd already joined their class group before verifying,
+        // that member doc was created with verified:false and nothing
+        // else ever revisits it — fix it now so "Pending" doesn't get
+        // stuck forever.
+        const gid = getGroupId(getProfile());
+        syncOwnVerification(gid, auth.currentUser?.uid).catch((e) => console.warn('[App] syncOwnVerification failed', e));
         return;
       }
       if (result.status === 'error') {
@@ -266,6 +275,8 @@ export default function App() {
       setVerifyEmailPrompt(null);
       notify('KUET email verify হয়ে গেছে! নামের পাশে blue tick দেখাবে।', 'success');
       window.dispatchEvent(new CustomEvent('kuetx:kuet-email-verified', { detail: { roll: result.roll } }));
+      const gid = getGroupId(getProfile());
+      syncOwnVerification(gid, auth.currentUser?.uid).catch((e) => console.warn('[App] syncOwnVerification failed', e));
     } else {
       setVerifyEmailPrompt({ busy: false, error: result.message || 'Verify করতে সমস্যা হয়েছে, আবার চেষ্টা করো।' });
     }

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { getProfile } from '../store/store';
 import { getGroupId, getGroupLabel } from '../lib/groupUtils';
-import { joinGroup, requestCR, subscribeCRStatus } from '../lib/groupSync';
+import { joinGroup, requestCR, subscribeCRStatus, syncOwnVerification } from '../lib/groupSync';
 import { checkCLVacant, applyForCampusLead } from '../lib/staffSync';
 import { auth } from '../lib/firebase';
 import ClassmatesList from '../components/ClassmatesList';
@@ -18,12 +18,25 @@ export default function Classmates() {
   useEffect(() => {
     if (!groupId) return;
     joinGroup(groupId, profile).catch((e) => console.error('[Classmates] join failed', e));
+    // Catch-up for people who verified their KUET email in an earlier
+    // session/page and only later joined (or re-joined) this exact group
+    // — joinGroup() never re-touches an existing member's verified flag,
+    // and the 'kuetx:kuet-email-verified' event only fires at the moment
+    // verification happens, so this mount-time check is what unsticks
+    // anyone who was verified before this page ever saw it.
+    syncOwnVerification(groupId, auth.currentUser?.uid).catch((e) => console.warn('[Classmates] syncOwnVerification failed', e));
     return subscribeCRStatus(groupId, setCrStatus);
   }, [groupId]);
 
   const handleClaimCR = async () => {
     setClaimState('sending');
     try {
+      // Guard against the rare race where this page's mount-time joinGroup()
+      // write is still in flight (or failed) when the user clicks Claim CR —
+      // applyForCampusLead()'s Tier-1 path doesn't strictly need the member
+      // doc, but a bundled CR approval later does, so make sure it exists
+      // before proceeding.
+      await joinGroup(groupId, profile);
       const clVacant = await checkCLVacant(groupId);
       if (clVacant) {
         // No Campus Lead yet for this dept+batch — bundle the CR claim
