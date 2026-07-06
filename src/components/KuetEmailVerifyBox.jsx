@@ -1,18 +1,22 @@
 import { useState, useEffect, useRef } from 'react';
 import {
-  startKuetEmailVerification, checkKuetEmailVerified, isKuetEmailFormat,
+  startKuetEmailVerification, checkKuetEmailVerified, buildKuetEmailFromProfile,
 } from '../lib/kuetEmailVerify';
 import { getAuthErrorMessage } from '../lib/firebaseAuth';
-import { store } from '../store/store';
+import { store, getProfile } from '../store/store';
 
 const STORE_KEY = 'kuetEmailVerifiedRoll';
 
 export default function KuetEmailVerifyBox() {
-  const [email, setEmail] = useState('');
+  const profile = getProfile();
+  const roll = String(profile?.studentId || '').trim();
+  const [namePart, setNamePart] = useState('');
   const [password, setPassword] = useState('');
   const [stage, setStage] = useState(store.get(STORE_KEY) ? 'verified' : 'idle'); // idle|sending|sent|verified|error
   const [msg, setMsg] = useState('');
   const pollRef = useRef(null);
+
+  const email = buildKuetEmailFromProfile(namePart, profile);
 
   useEffect(() => () => { if (pollRef.current) clearInterval(pollRef.current); }, []);
 
@@ -41,14 +45,20 @@ export default function KuetEmailVerifyBox() {
 
   const handleStart = async (e) => {
     e.preventDefault();
-    if (!isKuetEmailFormat(email)) {
-      setMsg('Use your KUET student email, e.g. name2313014@stud.kuet.ac.bd');
+    if (!roll) {
+      setMsg('Your profile has no roll number set — set it in Profile Setup first.');
+      setStage('error');
+      return;
+    }
+    const clean = namePart.trim().toLowerCase();
+    if (!clean || !/^[a-z]+$/.test(clean)) {
+      setMsg('Type just the name part (e.g. islam), no numbers or symbols.');
       setStage('error');
       return;
     }
     setStage('sending');
     try {
-      await startKuetEmailVerification(email.trim(), password);
+      await startKuetEmailVerification(email, password);
       setStage('sent');
       setMsg('Verification email sent — check your KUET inbox (and spam/junk folder). Click the link and this page will verify automatically, no need to come back and click anything.');
       startPolling();
@@ -67,8 +77,22 @@ export default function KuetEmailVerifyBox() {
       </p>
       {(stage === 'idle' || stage === 'error' || stage === 'sending') && (
         <form onSubmit={handleStart} style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-          <input type="email" placeholder="name2313014@stud.kuet.ac.bd" value={email} onChange={(e) => setEmail(e.target.value)}
-            style={{ padding: '7px 9px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--inputBg)' }} />
+          <div style={{
+            display: 'flex', alignItems: 'center', borderRadius: 8,
+            border: '1px solid var(--border)', background: 'var(--inputBg)', overflow: 'hidden',
+          }}>
+            <input type="text" placeholder="islam" value={namePart} onChange={(e) => setNamePart(e.target.value)}
+              style={{ padding: '7px 9px', border: 'none', background: 'transparent', flex: 1, minWidth: 0, outline: 'none', color: 'var(--text)' }} />
+            <span style={{
+              padding: '7px 9px', fontSize: 13, color: 'var(--muted)', whiteSpace: 'nowrap',
+              userSelect: 'none', background: 'var(--border)',
+            }}>
+              {roll || '######'}@stud.kuet.ac.bd
+            </span>
+          </div>
+          <div style={{ fontSize: 11, color: 'var(--muted)' }}>
+            Roll number is auto-filled from your profile and can't be changed here — it can only ever match your own roll.
+          </div>
           <input type="password" placeholder="Any password (just for this verification step)" value={password} onChange={(e) => setPassword(e.target.value)}
             style={{ padding: '7px 9px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--inputBg)' }} />
           <button type="submit" className="btn btn-primary btn-sm" disabled={stage === 'sending'}>

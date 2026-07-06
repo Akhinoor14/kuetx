@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import * as Icons from 'lucide-react';
 import { NAV } from '../nav';
 import { Logo, Wordmark } from './Logo';
+import { APP_VERSION_SHORT } from '../version';
 import { store, DEFAULT_PROFILE } from '../store/store';
 import { useNavConfig } from './nav-system/useNavConfig';
 import { useFavorites } from '../hooks/useFavorites';
@@ -411,7 +412,7 @@ export function Sidebar({ open, onClose, mode = '2col', onCycleMode, authState }
                   <SyncBadge status={syncStatus} />
                 )}
               </div>
-              <div style={{ fontSize: 10, color: 'var(--muted)' }}>KUETx v3.4 · Firebase sync</div>
+              <div style={{ fontSize: 10, color: 'var(--muted)' }}>KUETx v{APP_VERSION_SHORT} · Firebase sync</div>
             </div>
           )}
         </div>

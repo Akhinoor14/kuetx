@@ -4,6 +4,7 @@ import { store } from '../store/store';
 import { Download, Upload, Trash2, HardDrive, Shield, Database, Wifi, WifiOff, Cloud, CloudOff, CheckCircle, LayoutDashboard, GraduationCap, LogOut, User, ExternalLink, Lock } from 'lucide-react';
 import { onAuthChange, logout, loginWithGoogle, loginWithEmail, registerWithEmail, resetPassword, getAuthErrorMessage } from '../lib/firebaseAuth';
 import { getAppMode, setAppMode } from '../lib/modeFilter';
+import { APP_VERSION } from '../version';
 
 // ── Auto-backup to localStorage snapshot ─────────────────────────────────────
 const BACKUP_KEY = 'kuetx_autobackup_';
@@ -669,7 +670,7 @@ export default function Settings() {
       <div className="card">
         <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 8 }}>About KUETx</div>
         <div style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.8 }}>
-          <div><strong>Version:</strong> 3.2.0</div>
+          <div><strong>Version:</strong> {APP_VERSION}</div>
           <div><strong>Ordinance:</strong> KUET Academic Ordinance — effective 2nd Term, Session 2011-12</div>
           <div><strong>Approved:</strong> 18th & 19th Academic Council meetings (2012)</div>
           <div><strong>Storage:</strong> 100% localStorage — offline, private, free forever</div>

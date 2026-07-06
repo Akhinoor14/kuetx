@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import * as Icons from 'lucide-react';
-import { startKuetEmailVerification, checkKuetEmailVerified, isKuetEmailFormat } from '../lib/kuetEmailVerify';
+import { startKuetEmailVerification, checkKuetEmailVerified, buildKuetEmailFromProfile } from '../lib/kuetEmailVerify';
+import { getProfile } from '../store/store';
 
 /**
  * Inline widget: enter KUET email -> send verification link -> app
@@ -12,12 +13,16 @@ import { startKuetEmailVerification, checkKuetEmailVerified, isKuetEmailFormat }
  * onVerified() fires automatically once polling detects success.
  */
 export default function KuetEmailVerifyWidget({ onVerified, onSkip, compact = false }) {
-  const [email, setEmail] = useState('');
+  const profile = getProfile();
+  const roll = String(profile?.studentId || '').trim();
+  const [namePart, setNamePart] = useState('');
   const [password] = useState(() => Math.random().toString(36).slice(2) + 'Aa1!'); // throwaway, only protects this proof credential
   const [stage, setStage] = useState('input'); // input -> sent
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
   const pollRef = useRef(null);
+
+  const email = buildKuetEmailFromProfile(namePart, profile);
 
   useEffect(() => () => { if (pollRef.current) clearInterval(pollRef.current); }, []);
 
@@ -36,13 +41,18 @@ export default function KuetEmailVerifyWidget({ onVerified, onSkip, compact = fa
   const handleSend = async (e) => {
     e.preventDefault();
     setError('');
-    if (!isKuetEmailFormat(email)) {
-      setError('KUET student email দিন (format: name1234567@stud.kuet.ac.bd)');
+    if (!roll) {
+      setError('তোমার profile-এ roll number সেট করা নেই — আগে Profile Setup থেকে roll number দাও।');
+      return;
+    }
+    const clean = namePart.trim().toLowerCase();
+    if (!clean || !/^[a-z]+$/.test(clean)) {
+      setError('শুধু নামের অংশটা লেখো (যেমন: islam) — সামনের অংশ, কোনো নাম্বার বা সিম্বল ছাড়া।');
       return;
     }
     setBusy(true);
     try {
-      await startKuetEmailVerification(email.trim(), password);
+      await startKuetEmailVerification(email, password);
       setStage('sent');
       startPolling();
     } catch (err) {
@@ -76,11 +86,28 @@ export default function KuetEmailVerifyWidget({ onVerified, onSkip, compact = fa
 
       {stage === 'input' && (
         <form onSubmit={handleSend} style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-          <input
-            type="email" placeholder="roll1234567@stud.kuet.ac.bd" value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            style={{ padding: '9px 10px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--inputBg)', fontSize: 13 }}
-          />
+          <div style={{
+            display: 'flex', alignItems: 'center', borderRadius: 8,
+            border: '1px solid var(--border)', background: 'var(--inputBg)', overflow: 'hidden',
+          }}>
+            <input
+              type="text" placeholder="islam" value={namePart}
+              onChange={(e) => setNamePart(e.target.value)}
+              style={{
+                padding: '9px 10px', border: 'none', background: 'transparent', fontSize: 13,
+                flex: 1, minWidth: 0, outline: 'none', color: 'var(--text)',
+              }}
+            />
+            <span style={{
+              padding: '9px 10px', fontSize: 13, color: 'var(--muted)', whiteSpace: 'nowrap',
+              userSelect: 'none', background: 'var(--border)',
+            }}>
+              {roll || '######'}@stud.kuet.ac.bd
+            </span>
+          </div>
+          <div style={{ fontSize: 11, color: 'var(--muted)' }}>
+            শুধু নামের অংশটা লেখো — roll number তোমার profile থেকে auto-fill হয়ে গেছে, এটা তোমার নিজের roll ছাড়া অন্য কিছু হতে পারবে না।
+          </div>
           {error && <div style={{ color: 'var(--danger)', fontSize: 11.5 }}>{error}</div>}
           <div style={{ display: 'flex', gap: 8 }}>
             <button type="submit" className="btn btn-primary btn-sm" disabled={busy} style={{ flex: 1 }}>

@@ -129,3 +129,27 @@ export async function emailMatchesGroup(profile) {
   if (roll.length < 4) return false;
   return isRollInstitutionallyVerified(roll);
 }
+
+/**
+ * Build the full KUET email from just the name-part the user types plus
+ * their own profile roll — the roll is never freely typed, it's pulled
+ * straight from the signed-in profile so it can only ever match itself.
+ */
+export function buildKuetEmailFromProfile(namePart, profile) {
+  const roll = String(profile?.studentId || '').trim();
+  const clean = String(namePart || '').trim().toLowerCase();
+  if (!roll || !clean) return '';
+  return `${clean}${roll}@stud.kuet.ac.bd`;
+}
+
+/**
+ * Guard used before sending: the roll encoded in the email the user is
+ * about to verify must match their own profile's roll number. This is
+ * what stops someone from proving a KUET email for a roll that isn't theirs.
+ */
+export function emailRollMatchesProfile(email, profile) {
+  const parsed = parseKuetEmail(email);
+  const profileRoll = String(profile?.studentId || '').trim();
+  if (!parsed || !profileRoll) return false;
+  return parsed.roll === profileRoll;
+}

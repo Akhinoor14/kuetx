@@ -3,6 +3,7 @@ import { Wordmark } from './Logo';
 import * as Icons from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { getStorageUsage } from '../store/indexeddb-store';
+import { APP_VERSION_SHORT } from '../version';
 
 export function Footer({ syncStatus, isAnonymous, displayName }) {
   const [activeModal, setActiveModal] = useState(null);
@@ -66,7 +67,7 @@ export function Footer({ syncStatus, isAnonymous, displayName }) {
             <Wordmark height={22} />
             <div>
               <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--text)', lineHeight: 1.1 }}>KUETx</div>
-              <div style={{ fontSize: 10, color: 'var(--muted)', lineHeight: 1.1 }}>Student Life OS · v3.4</div>
+              <div style={{ fontSize: 10, color: 'var(--muted)', lineHeight: 1.1 }}>Student Life OS · v{APP_VERSION_SHORT}</div>
             </div>
           </Link>
 
