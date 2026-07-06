@@ -216,6 +216,23 @@ export default function App() {
   const [queueBuilt, setQueueBuilt] = useState(false);
   const current = queue[0] || null;
 
+  // Complete a KUET email verification link, if the current URL is one —
+  // runs once at boot so clicking the emailed link works even in a fresh
+  // tab/device that never opened the verify widget itself. No-op otherwise.
+  useEffect(() => {
+    import('./lib/kuetEmailVerify').then(({ completeKuetVerificationLink }) => {
+      completeKuetVerificationLink().catch((err) => {
+        // Surface a clear, non-blocking toast-style alert rather than
+        // silently failing — the person needs to know their link expired
+        // rather than wondering why the blue tick never showed up.
+        if (err?.message) {
+          console.warn('[KUETx] KUET email verify link:', err.message);
+          window.alert(err.message);
+        }
+      });
+    });
+  }, []);
+
   // Build queue once auth is ready so we know isAnonymous
   useEffect(() => {
     if (!authState.authReady || queueBuilt) return;

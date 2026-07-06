@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import * as Icons from 'lucide-react';
-import { startKuetEmailVerification, checkKuetEmailVerified, isKuetEmailFormat } from '../lib/kuetEmailVerify';
+import { sendKuetVerificationLink, buildKuetEmailFromProfile, isRollInstitutionallyVerified } from '../lib/kuetEmailVerify';
+import { getProfile } from '../store/store';
 
 const COOLDOWN_SECONDS = 60;
 
@@ -11,19 +12,25 @@ const COOLDOWN_SECONDS = 60;
  * verifiedRolls/{roll}), the parent stops rendering this at all, so there's
  * nothing to manually hide here.
  *
- * Flow: tap "Verify Now" -> inline email field -> send -> cooldown timer on
- * resend -> auto-polls in the background so clicking the emailed link is
- * the only action needed, no "I've verified" button to press.
+ * Flow: tap "Verify Now" -> type just the name-part (roll is locked from
+ * your own profile) -> send a passwordless sign-in link -> cooldown timer
+ * on resend -> auto-polls in the background so clicking the emailed link
+ * is the only action needed. No account or password is ever created, so
+ * there's nothing that can go stale between attempts, and a used/expired
+ * link just means "send a new one" rather than a dead end.
  */
 export default function ProfileVerifyBanner({ onVerified }) {
+  const profile = getProfile();
+  const roll = String(profile?.studentId || '').trim();
   const [expanded, setExpanded] = useState(false);
-  const [email, setEmail] = useState('');
-  const [password] = useState(() => Math.random().toString(36).slice(2) + 'Aa1!');
+  const [namePart, setNamePart] = useState('');
   const [stage, setStage] = useState('idle'); // idle -> sending -> sent
   const [error, setError] = useState('');
   const [cooldown, setCooldown] = useState(0);
   const pollRef = useRef(null);
   const cooldownRef = useRef(null);
+
+  const email = buildKuetEmailFromProfile(namePart, profile);
 
   useEffect(() => () => {
     if (pollRef.current) clearInterval(pollRef.current);
@@ -44,7 +51,7 @@ export default function ProfileVerifyBanner({ onVerified }) {
   const startPolling = () => {
     if (pollRef.current) clearInterval(pollRef.current);
     pollRef.current = setInterval(async () => {
-      const ok = await checkKuetEmailVerified().catch(() => false);
+      const ok = await isRollInstitutionallyVerified(roll).catch(() => false);
       if (ok) {
         clearInterval(pollRef.current);
         pollRef.current = null;
@@ -56,14 +63,19 @@ export default function ProfileVerifyBanner({ onVerified }) {
   const handleSend = async (e) => {
     e.preventDefault();
     setError('');
-    if (!isKuetEmailFormat(email)) {
-      setError('KUET student email দিন (format: name1234567@stud.kuet.ac.bd)');
+    if (!roll) {
+      setError('তোমার profile-এ roll number সেট করা নেই — আগে Profile Setup থেকে roll number দাও।');
+      return;
+    }
+    const clean = namePart.trim().toLowerCase();
+    if (!clean || !/^[a-z]+$/.test(clean)) {
+      setError('শুধু নামের অংশটা লেখো (যেমন: islam) — সামনের অংশ, কোনো নাম্বার বা সিম্বল ছাড়া।');
       return;
     }
     if (cooldown > 0) return;
     setStage('sending');
     try {
-      await startKuetEmailVerification(email.trim(), password);
+      await sendKuetVerificationLink(email);
       setStage('sent');
       startCooldown();
       startPolling();
@@ -77,7 +89,7 @@ export default function ProfileVerifyBanner({ onVerified }) {
     if (cooldown > 0) return;
     setError('');
     try {
-      await startKuetEmailVerification(email.trim(), password);
+      await sendKuetVerificationLink(email);
       startCooldown();
     } catch (err) {
       setError(err?.message || 'আবার পাঠাতে সমস্যা হয়েছে, একটু পর চেষ্টা করো।');
@@ -100,7 +112,7 @@ export default function ProfileVerifyBanner({ onVerified }) {
         </div>
         <div style={{ flex: 1, minWidth: 160 }}>
           <div style={{ fontWeight: 700, fontSize: 13, color: 'var(--text)' }}>KUET email verify করা হয়নি</div>
-          <div style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 1 }}>নামের পাশে blue tick পেতে verify করো — একবার করলেই যথেষ্ট।</div>
+          <div style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 1 }}>নামের পাশে blue tick পেতে verify করো — একবার করলেই যথেষ্ট, password লাগবে না।</div>
         </div>
         <button
           onClick={() => setExpanded(true)}
@@ -130,7 +142,7 @@ export default function ProfileVerifyBanner({ onVerified }) {
         <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{ fontWeight: 700, fontSize: 13, color: 'var(--text)' }}>KUET email verify করো</div>
           <div style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 1, lineHeight: 1.5 }}>
-            তোমার regular login বদলাবে না — এটা শুধু institutional proof।
+            তোমার regular login বদলাবে না — এটা শুধু institutional proof, কোনো password লাগবে না।
           </div>
         </div>
         {stage === 'idle' && (
@@ -142,11 +154,28 @@ export default function ProfileVerifyBanner({ onVerified }) {
 
       {stage !== 'sent' && (
         <form onSubmit={handleSend} style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-          <input
-            type="email" placeholder="roll1234567@stud.kuet.ac.bd" value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            style={{ padding: '9px 10px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--inputBg)', fontSize: 13 }}
-          />
+          <div style={{
+            display: 'flex', alignItems: 'center', borderRadius: 8,
+            border: '1px solid var(--border)', background: 'var(--inputBg)', overflow: 'hidden',
+          }}>
+            <input
+              type="text" placeholder="islam" value={namePart}
+              onChange={(e) => setNamePart(e.target.value)}
+              style={{
+                padding: '9px 10px', border: 'none', background: 'transparent', fontSize: 13,
+                flex: 1, minWidth: 0, outline: 'none', color: 'var(--text)',
+              }}
+            />
+            <span style={{
+              padding: '9px 10px', fontSize: 13, color: 'var(--muted)', whiteSpace: 'nowrap',
+              userSelect: 'none', background: 'var(--border)',
+            }}>
+              {roll || '######'}@stud.kuet.ac.bd
+            </span>
+          </div>
+          <div style={{ fontSize: 11, color: 'var(--muted)' }}>
+            শুধু নামের অংশটা লেখো — roll number তোমার profile থেকে auto-fill হয়ে গেছে।
+          </div>
           {error && <div style={{ color: 'var(--danger)', fontSize: 11.5 }}>{error}</div>}
           <button type="submit" className="btn btn-primary btn-sm" disabled={stage === 'sending'} style={{ background: '#1d9bf0' }}>
             {stage === 'sending' ? 'পাঠানো হচ্ছে…' : 'Verification link পাঠাও'}
@@ -157,7 +186,7 @@ export default function ProfileVerifyBanner({ onVerified }) {
       {stage === 'sent' && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
           <div style={{ fontSize: 12, color: 'var(--text)', lineHeight: 1.5 }}>
-            <strong>{email}</strong>-এ verification link পাঠানো হয়েছে। <strong>Spam/Junk folder-ও চেক করো</strong> — Gmail মাঝে মাঝে ওখানে ফেলে দেয়। লিংকে ক্লিক করলেই automatic verify হয়ে যাবে, এখানে আর কিছু করতে হবে না।
+            <strong>{email}</strong>-এ sign-in link পাঠানো হয়েছে। <strong>Spam/Junk folder-ও চেক করো</strong> — Gmail মাঝে মাঝে ওখানে ফেলে দেয়। লিংকে ক্লিক করলেই automatic verify হয়ে যাবে, কোনো password লাগবে না।
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 11.5, color: 'var(--muted)' }}>
             <span style={{

@@ -1,36 +1,62 @@
 // kuetEmailVerify.js
 //
-// Tier-1 (automatic) institutional verification — redesigned so it NEVER
-// touches the visitor's main account. Whatever they're signed in as
-// (anonymous, a personal Gmail-backed account, whatever) stays exactly as
-// it is. Proving ownership of a KUET email happens on a completely
-// separate, secondary Firebase App instance (same pattern as
-// adminAuth.js) that exists purely as a one-time proof mechanism — its
-// own throwaway uid is never the visitor's real identity.
+// Tier-1 (automatic) institutional verification — passwordless design.
+// Whatever the visitor's main session is (anonymous, personal Gmail
+// account, whatever) is NEVER touched. Proving ownership of a KUET email
+// happens purely via Firebase's email-link ("magic link") sign-in on a
+// separate, secondary Firebase App instance — there is no password, no
+// account creation step for the person to manage, and nothing that can
+// go stale between attempts.
 //
-// How the proof becomes usable:
-//   1. On the secondary app, create/sign-in a KUET-email account and send
-//      Firebase's own verification email — proves real mailbox ownership.
-//   2. Once verified, write a durable fact to Firestore (via the
-//      secondary app's OWN authenticated session, so its ID token really
-//      does carry that verified KUET email): `verifiedRolls/{roll}`.
-//   3. The MAIN session's group-join rule just checks "does
+// Why the redesign (previous version used createUserWithEmailAndPassword +
+// a deterministic password): that scheme broke the moment someone had a
+// leftover account from the old fully-manual era with a *different*
+// (random, forgotten) password — retries then failed with
+// auth/invalid-credential, and recovering required a password-reset
+// detour. It also meant a used/expired verification link showed a scary
+// "already used / expired" page with no clean retry, since the identity
+// underneath was an actual persistent account. None of that complexity is
+// needed for what this feature actually requires: proof of mailbox
+// ownership, once, that expires cleanly.
+//
+// How it works now:
+//   1. sendKuetVerificationLink(email) calls Firebase's
+//      sendSignInLinkToEmail — no account is created up front. Firebase
+//      just emails a one-time sign-in link tied to that address.
+//   2. The link points back at this app's own origin. When the person
+//      clicks it (any device, any tab) and the app loads, completeLinkSignIn()
+//      detects the special URL, calls signInWithEmailLink, and Firebase
+//      creates/signs into a throwaway secondary-app account transparently
+//      — the person never sees or sets a password anywhere in this flow.
+//   3. Once signed in via the link, the code writes a durable fact to
+//      Firestore (via the secondary app's OWN authenticated session, so
+//      its ID token really does carry that verified KUET email):
+//      `verifiedRolls/{roll}`.
+//   4. The MAIN session's group-join rule just checks "does
 //      verifiedRolls/{this roll} exist?" — a plain exists() check, no
 //      token/email comparison needed on the main session at all.
 //
-// Known trade-off (documented, not hidden): `verifiedRolls/{roll}` is
-// keyed by roll number only, not bound to a specific uid. That keeps the
-// design simple and avoids a lockout if someone's original anonymous
-// session is later lost — but it does mean that once a roll is proven
-// once, anyone typing that exact roll number elsewhere also benefits from
-// the "Tier 1 verified" fallback. Given this app's actual risk profile
-// (shared class routines, not sensitive personal data), that's an
-// acceptable narrow edge case rather than a serious hole — flagging it
-// clearly here rather than leaving it undocumented.
+// Security notes:
+//   - Email-link sign-in is single-use and time-limited by Firebase itself
+//     (default ~1 hour, revoked immediately after first successful use) —
+//     there's no long-lived credential left lying around afterward that
+//     could be reused or leaked, unlike a password.
+//   - The link is only ever useful to whoever can read that specific KUET
+//     inbox, exactly like the old email-verification-link approach, but
+//     without a persistent account/password sitting behind it.
+//   - Known trade-off (documented, not hidden): `verifiedRolls/{roll}` is
+//     keyed by roll number only, not bound to a specific uid. That keeps
+//     the design simple and avoids a lockout if someone's original
+//     anonymous session is later lost — but it does mean that once a roll
+//     is proven once, anyone typing that exact roll number elsewhere also
+//     benefits from the "Tier 1 verified" fallback. Given this app's
+//     actual risk profile (shared class routines, not sensitive personal
+//     data), that's an acceptable narrow edge case rather than a serious
+//     hole.
 
 import { initializeApp, getApps } from 'firebase/app';
 import {
-  getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendEmailVerification,
+  getAuth, sendSignInLinkToEmail, isSignInWithEmailLink, signInWithEmailLink,
 } from 'firebase/auth';
 import { getFirestore, doc, setDoc, getDoc, serverTimestamp } from 'firebase/firestore';
 import { db, firebaseConfig } from './firebase';
@@ -44,6 +70,12 @@ const verifyAuth = getAuth(getVerifyApp());
 const verifyDb = getFirestore(getVerifyApp()); // same project/database, but its Firestore *auth context* follows verifyAuth, not the main session
 
 const KUET_EMAIL_RE = /^([a-z]+)(\d{7})@stud\.kuet\.ac\.bd$/i;
+
+// Where we stash the email between "link sent" and "link clicked" — Firebase
+// itself requires this on the completing side, since the sign-in link alone
+// doesn't carry the address back (for cross-device safety, it asks again if
+// this is missing, but same-device/same-browser this makes it seamless).
+const PENDING_EMAIL_KEY = 'kuetx_pending_verify_email';
 
 /** Does this look like a real KUET student email, syntactically? */
 export function isKuetEmailFormat(email) {
@@ -63,54 +95,93 @@ export function parseKuetEmail(email) {
 }
 
 /**
- * Step 1: start (or resume) the verification proof on the secondary app.
- * The password here has nothing to do with the visitor's main account —
- * it only protects this throwaway proof-of-ownership credential.
+ * Step 1: send the one-time sign-in link. No account, no password — just
+ * an email. Safe to call again for the same address; Firebase issues a
+ * fresh link each time and only the most recently issued one is valid.
  */
-export async function startKuetEmailVerification(email, password) {
+export async function sendKuetVerificationLink(email) {
   const trimmedEmail = String(email || '').trim();
   if (!isKuetEmailFormat(trimmedEmail)) {
     throw new Error('This doesn\'t look like a KUET student email (expected the form name+roll@stud.kuet.ac.bd).');
   }
+  const actionCodeSettings = {
+    url: window.location.origin + '/',
+    handleCodeInApp: true,
+  };
   try {
-    await createUserWithEmailAndPassword(verifyAuth, trimmedEmail, password);
+    await sendSignInLinkToEmail(verifyAuth, trimmedEmail, actionCodeSettings);
   } catch (err) {
-    if (err?.code === 'auth/email-already-in-use') {
-      // Someone (maybe this same person, on a previous attempt) already
-      // started verifying this exact email — just resume with sign-in.
-      await signInWithEmailAndPassword(verifyAuth, trimmedEmail, password);
-    } else {
-      throw err;
+    if (err?.code === 'auth/operation-not-allowed') {
+      // "Email link (passwordless sign-in)" isn't enabled for this Firebase
+      // project — a console configuration issue, not a code bug.
+      throw new Error('KUET email verification এখন enable করা নেই (Firebase Console-এ Email Link sign-in provider off আছে) — dev-কে জানাও, তোমার পাসওয়ার্ড বা account-এর সমস্যা না।');
     }
+    throw err;
   }
-  await sendEmailVerification(verifyAuth.currentUser);
+  window.localStorage.setItem(PENDING_EMAIL_KEY, trimmedEmail);
   return parseKuetEmail(trimmedEmail);
 }
 
 /**
- * Step 2: call after the user clicks the verification link. If verified,
- * records the durable `verifiedRolls/{roll}` fact and returns true.
+ * Is the current page URL itself a Firebase sign-in link? Call this once
+ * at app boot (before rendering the verify widget) so a click can be
+ * completed even if the person lands on a completely different page/tab
+ * than the one that sent the link.
  */
-export async function checkKuetEmailVerified() {
-  const user = verifyAuth.currentUser;
-  if (!user) return false;
-  await user.reload();
-  await user.getIdToken(true); // force-refresh so email_verified is current
-  if (!user.emailVerified) return false;
+export function isKuetVerifyLink(url = window.location.href) {
+  return isSignInWithEmailLink(verifyAuth, url);
+}
 
-  const parsed = parseKuetEmail(user.email);
-  if (parsed) {
-    // This write goes through verifyDb, so its Firestore auth context is
-    // the secondary app's own KUET-verified session — exactly what the
-    // security rule for verifiedRolls/{roll} requires.
-    await setDoc(doc(verifyDb, 'verifiedRolls', parsed.roll), {
-      verifiedAt: serverTimestamp(),
-    }, { merge: true }).catch(() => {
-      // Doc already exists (someone verified this roll before) — fine,
-      // the rule makes it create-once/immutable, nothing to do.
-    });
+/**
+ * Step 2: complete the sign-in using the link the person clicked. Safe to
+ * call defensively at app boot — it's a no-op unless the current URL is
+ * actually a valid sign-in link. Returns the verified roll on success, or
+ * null if there was nothing to complete.
+ *
+ * On success this also records `verifiedRolls/{roll}` in Firestore and
+ * cleans the magic-link query params out of the URL so a page refresh
+ * doesn't try to "reuse" an already-consumed link (which is exactly the
+ * "already used/expired" dead end the old flow could show).
+ */
+export async function completeKuetVerificationLink(url = window.location.href) {
+  if (!isSignInWithEmailLink(verifyAuth, url)) return null;
+
+  let email = window.localStorage.getItem(PENDING_EMAIL_KEY);
+  if (!email) {
+    // Cross-device case (link opened somewhere other than where it was
+    // requested) — Firebase requires re-confirming the address here since
+    // it can't be read back out of the link itself for security reasons.
+    email = window.prompt('তোমার KUET email দিন verification confirm করতে (যেটাতে link পাঠানো হয়েছিল):') || '';
   }
-  return true;
+  if (!email) return null;
+
+  try {
+    const result = await signInWithEmailLink(verifyAuth, email, url);
+    window.localStorage.removeItem(PENDING_EMAIL_KEY);
+    // Strip the one-time link params so refreshing this page never replays
+    // an already-consumed link — there's nothing left to consume anyway.
+    window.history.replaceState(null, '', window.location.pathname);
+
+    const parsed = parseKuetEmail(result.user.email);
+    if (parsed) {
+      await setDoc(doc(verifyDb, 'verifiedRolls', parsed.roll), {
+        verifiedAt: serverTimestamp(),
+      }, { merge: true }).catch(() => {
+        // Doc already exists (someone verified this roll before) — fine,
+        // the rule makes it create-once/immutable, nothing to do.
+      });
+    }
+    return parsed;
+  } catch (err) {
+    window.history.replaceState(null, '', window.location.pathname);
+    if (err?.code === 'auth/invalid-action-code') {
+      // This exact link was already used once, or its ~1hr window expired.
+      // Since there's no persistent account/password behind this flow,
+      // recovery is simply: send a brand new link and use that instead.
+      throw new Error('এই verification link-টা আগে একবার ব্যবহার হয়ে গেছে অথবা মেয়াদ শেষ (Firebase links প্রায় ১ ঘণ্টা পর expire হয়)। চিন্তা নেই — নিচ থেকে একটা নতুন link পাঠাও, পুরনো কোনো account/password নিয়ে কিছু করা লাগবে না।');
+    }
+    throw err;
+  }
 }
 
 /**

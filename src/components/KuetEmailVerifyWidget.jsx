@@ -1,22 +1,25 @@
 import { useState, useEffect, useRef } from 'react';
 import * as Icons from 'lucide-react';
-import { startKuetEmailVerification, checkKuetEmailVerified, buildKuetEmailFromProfile } from '../lib/kuetEmailVerify';
+import { sendKuetVerificationLink, buildKuetEmailFromProfile, isRollInstitutionallyVerified } from '../lib/kuetEmailVerify';
 import { getProfile } from '../store/store';
 
 /**
- * Inline widget: enter KUET email -> send verification link -> app
- * auto-polls in the background and confirms the moment the link is
- * clicked, no manual "I've verified" button needed. Skippable everywhere
- * it's used (soft-required design) — the caller decides what "skip" does
- * (close modal / dismiss popup).
+ * Inline widget: enter just the name-part of your KUET email -> send a
+ * passwordless sign-in link -> click it in your inbox -> done. No account,
+ * no password, nothing that can go stale or show a scary "already used"
+ * page tied to some leftover credential — the link itself is the entire
+ * proof and Firebase invalidates it the instant it's used once.
  *
- * onVerified() fires automatically once polling detects success.
+ * The actual "mark as verified" step happens app-wide at boot time (see
+ * completeKuetVerificationLink() called from App.jsx) the moment the
+ * clicked link lands back on the app, even in a brand new tab/device —
+ * this widget just polls the public verifiedRolls record as a lightweight
+ * way to notice that happened and fire onVerified().
  */
 export default function KuetEmailVerifyWidget({ onVerified, onSkip, compact = false }) {
   const profile = getProfile();
   const roll = String(profile?.studentId || '').trim();
   const [namePart, setNamePart] = useState('');
-  const [password] = useState(() => Math.random().toString(36).slice(2) + 'Aa1!'); // throwaway, only protects this proof credential
   const [stage, setStage] = useState('input'); // input -> sent
   const [error, setError] = useState('');
   const [busy, setBusy] = useState(false);
@@ -29,7 +32,7 @@ export default function KuetEmailVerifyWidget({ onVerified, onSkip, compact = fa
   const startPolling = () => {
     if (pollRef.current) clearInterval(pollRef.current);
     pollRef.current = setInterval(async () => {
-      const ok = await checkKuetEmailVerified().catch(() => false);
+      const ok = await isRollInstitutionallyVerified(roll).catch(() => false);
       if (ok) {
         clearInterval(pollRef.current);
         pollRef.current = null;
@@ -52,11 +55,22 @@ export default function KuetEmailVerifyWidget({ onVerified, onSkip, compact = fa
     }
     setBusy(true);
     try {
-      await startKuetEmailVerification(email, password);
+      await sendKuetVerificationLink(email);
       setStage('sent');
       startPolling();
     } catch (err) {
       setError(err?.message || 'Verification পাঠাতে সমস্যা হয়েছে, আবার চেষ্টা করুন।');
+    }
+    setBusy(false);
+  };
+
+  const handleResend = async () => {
+    setError('');
+    setBusy(true);
+    try {
+      await sendKuetVerificationLink(email);
+    } catch (err) {
+      setError(err?.message || 'আবার পাঠাতে সমস্যা হয়েছে, একটু পর আবার চেষ্টা করো।');
     }
     setBusy(false);
   };
@@ -79,7 +93,7 @@ export default function KuetEmailVerifyWidget({ onVerified, onSkip, compact = fa
             KUET email দিয়ে verify করো
           </div>
           <div style={{ fontSize: 11.5, color: 'var(--muted)', lineHeight: 1.5, marginTop: 2 }}>
-            Verified হলে তোমার নামের পাশে blue tick দেখাবে — classmates বুঝবে তুমি সত্যিই এই ক্লাসের ছাত্র।
+            Verified হলে তোমার নামের পাশে blue tick দেখাবে — classmates বুঝবে তুমি সত্যিই এই ক্লাসের ছাত্র। কোনো password লাগবে না।
           </div>
         </div>
       </div>
@@ -125,7 +139,7 @@ export default function KuetEmailVerifyWidget({ onVerified, onSkip, compact = fa
       {stage === 'sent' && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
           <div style={{ fontSize: 12, color: 'var(--text)', lineHeight: 1.5 }}>
-            <strong>{email}</strong>-এ একটা verification link পাঠানো হয়েছে। <strong>Spam/Junk folder-ও চেক করো</strong> — Gmail মাঝে মাঝে ওখানে ফেলে দেয়। লিংকে ক্লিক করলেই এখানে আর কিছু না করে automatic verify হয়ে যাবে।
+            <strong>{email}</strong>-এ একটা sign-in link পাঠানো হয়েছে। <strong>Spam/Junk folder-ও চেক করো</strong> — Gmail মাঝে মাঝে ওখানে ফেলে দেয়। লিংকে ক্লিক করলেই automatic verify হয়ে যাবে, কোনো password লাগবে না।
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 11.5, color: 'var(--muted)' }}>
             <span className="spinner" style={{
@@ -136,11 +150,16 @@ export default function KuetEmailVerifyWidget({ onVerified, onSkip, compact = fa
             লিংকে ক্লিক করার অপেক্ষায়…
           </div>
           {error && <div style={{ color: 'var(--danger)', fontSize: 11.5 }}>{error}</div>}
-          {onSkip && (
-            <button type="button" className="btn btn-secondary btn-sm" onClick={onSkip} style={{ alignSelf: 'flex-start' }}>
-              পরে করব
+          <div style={{ display: 'flex', gap: 8 }}>
+            <button type="button" className="btn btn-secondary btn-sm" onClick={handleResend} disabled={busy}>
+              {busy ? 'পাঠানো হচ্ছে…' : 'নতুন link পাঠাও'}
             </button>
-          )}
+            {onSkip && (
+              <button type="button" className="btn btn-secondary btn-sm" onClick={onSkip}>
+                পরে করব
+              </button>
+            )}
+          </div>
           <style>{`@keyframes kuetx-spin { to { transform: rotate(360deg); } }`}</style>
         </div>
       )}
