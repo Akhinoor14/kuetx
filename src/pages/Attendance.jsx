@@ -923,12 +923,17 @@ export default function Attendance() {
   const currentTeachers = selectedCourse ? getTeachersForCourse(settings, schedule, teacherDlg.courseId) : [];
 
   return (
-    <div className="page-enter page-container">
+    <div className="page-enter page-container content-page-bg">
       {/* Page header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 14, gap: 10 }}>
-        <div>
-          <h1>Attendance</h1>
-          <p className="text-muted" style={{ marginTop: 2, fontSize: 13 }}>Mark · Track · Improve</p>
+        <div className="content-page-hero" style={{ marginBottom: 0 }}>
+          <div className="content-page-hero-icon">
+            <CalendarDays size={18} color="var(--accent)" />
+          </div>
+          <div>
+            <h1 className="content-page-hero-title">Attendance</h1>
+            <p className="content-page-hero-subtitle">Mark · Track · Improve</p>
+          </div>
         </div>
         <button className="btn btn-ghost btn-sm" onClick={() => setHolidayOpen(true)} style={{ flexShrink: 0, display: 'flex', alignItems: 'center', gap: 4, fontSize: 11 }}>
           <CalendarDays size={12} /> Holidays

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Users2 } from 'lucide-react';
 import { getProfile } from '../store/store';
 import { getGroupId, getGroupLabel } from '../lib/groupUtils';
 import { joinGroup, requestCR, subscribeCRStatus, syncOwnVerification } from '../lib/groupSync';
@@ -72,8 +73,13 @@ export default function Classmates() {
   };
 
   return (
-    <div style={{ maxWidth: 640, margin: '0 auto', padding: '16px 14px' }}>
-      <h1 style={{ fontSize: 20, fontWeight: 700, marginBottom: 4 }}>Classmates</h1>
+    <div className="content-page-bg" style={{ maxWidth: 640, margin: '0 auto', padding: '16px 14px' }}>
+      <div className="content-page-hero">
+        <div className="content-page-hero-icon">
+          <Users2 size={18} color="var(--accent)" />
+        </div>
+        <h1 className="content-page-hero-title">Classmates</h1>
+      </div>
       <p style={{ color: 'var(--muted)', fontSize: 13, marginBottom: 16 }}>
         {groupId
           ? <>Everyone from your class — <strong>{groupLabel}</strong> — who has joined KUETx.</>

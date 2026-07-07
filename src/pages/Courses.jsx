@@ -471,11 +471,16 @@ export default function Courses() {
   const getStatusChipLabel = (status) => status ? `${status.charAt(0).toUpperCase()}${status.slice(1)}` : '';
 
   return (
-    <div className="page-enter page-container">
-      <div className="flex-between mb-4">
-        <div>
-          <h1>Courses</h1>
-          <p className="text-muted" style={{ marginTop: 4 }}>{courses.length} courses loaded</p>
+    <div className="page-enter page-container content-page-bg">
+      <div className="flex-between mb-4" style={{ alignItems: 'center' }}>
+        <div className="content-page-hero" style={{ marginBottom: 0 }}>
+          <div className="content-page-hero-icon">
+            <BookOpen size={18} color="var(--accent)" />
+          </div>
+          <div>
+            <h1 className="content-page-hero-title">Courses</h1>
+            <p className="content-page-hero-subtitle">{courses.length} courses loaded</p>
+          </div>
         </div>
         {!addingCustom && <button className="btn btn-primary" onClick={() => { setAddingCustom(true); setEditingCustom(null); }}><Plus size={14} /> Add Custom Course</button>}
       </div>

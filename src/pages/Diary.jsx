@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Plus, Trash2, ChevronDown, ChevronUp, Copy } from 'lucide-react';
+import { Plus, Trash2, ChevronDown, ChevronUp, Copy, BookOpen } from 'lucide-react';
 import { store, uid, getProfile } from '../store/store';
 import { getAllCourses, getDeptSyllabus } from '../store/curriculumStore';
 
@@ -72,11 +72,16 @@ export default function Diary() {
   const suggestedTopics = selectedCourse ? (deptSyllabus?.courses?.[selectedCourse.code]?.topics || []) : [];
 
   return (
-    <div className="page-enter page-container">
+    <div className="page-enter page-container content-page-bg">
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-        <div>
-          <h1 style={{ fontSize: 18, fontWeight: 700 }}>Class Diary</h1>
-          <p style={{ fontSize: 12, color: 'var(--muted)' }}>What was covered in each class</p>
+        <div className="content-page-hero" style={{ marginBottom: 0 }}>
+          <div className="content-page-hero-icon">
+            <BookOpen size={18} color="var(--accent)" />
+          </div>
+          <div>
+            <h1 className="content-page-hero-title">Class Diary</h1>
+            <p className="content-page-hero-subtitle">What was covered in each class</p>
+          </div>
         </div>
         <button className="btn btn-primary" onClick={() => setAdding(true)}>
           <Plus size={13} /> Log Class

@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { Calculator } from 'lucide-react';
 import { store, GRADE_SCALE, cgpaToPercent, addWorkingDays, getLegacyTermResults, getProfile, setLegacyTermResults } from '../store/store';
 import { getAllCourses } from '../store/curriculumStore';
 
@@ -374,10 +375,15 @@ const CALC_TABS = [
 
 export default function Calculators() {
   return (
-    <div className="page-enter page-container">
+    <div className="page-enter page-container content-page-bg">
       <div className="hero-banner" style={{ marginBottom: 16 }}>
-        <h1 style={{ fontSize: 18, fontWeight: 700 }}>Smart Calculators</h1>
-        <p style={{ fontSize: 12, color: 'var(--muted)' }}>Moved into Term Planner</p>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <div className="content-page-hero-icon">
+            <Calculator size={18} color="var(--accent)" />
+          </div>
+          <h1 style={{ fontSize: 18, fontWeight: 700, margin: 0 }}>Smart Calculators</h1>
+        </div>
+        <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 8 }}>Moved into Term Planner</p>
       </div>
 
       <div className="card">

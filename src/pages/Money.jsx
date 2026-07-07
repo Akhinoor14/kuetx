@@ -211,13 +211,18 @@ export default function Money() {
   const currentCats = form.type === 'income' ? INCOME_CATS : EXPENSE_CATS;
 
   return (
-    <div className="page-enter page-container">
+    <div className="page-enter page-container content-page-bg">
 
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-        <div>
-          <h1 style={{ fontSize: 18, fontWeight: 700 }}>Money</h1>
-          <p style={{ fontSize: 12, color: 'var(--muted)' }}>Track income, expenses & balance</p>
+        <div className="content-page-hero" style={{ marginBottom: 0 }}>
+          <div className="content-page-hero-icon">
+            <Wallet size={18} color="var(--accent)" />
+          </div>
+          <div>
+            <h1 className="content-page-hero-title">Money</h1>
+            <p className="content-page-hero-subtitle">Track income, expenses & balance</p>
+          </div>
         </div>
         <div style={{ display: 'flex', gap: 6 }}>
           <button className="btn btn-ghost" style={{ padding: '6px 10px' }} onClick={exportTxt} title="Export Report"><Download size={13} /></button>
@@ -227,7 +232,7 @@ export default function Money() {
       </div>
 
       {/* Net Worth Banner */}
-      <div className="card" style={{ marginBottom: 12, background: 'var(--accent)', color: '#fff', border: 'none' }}>
+      <div className="card" style={{ marginBottom: 12, background: 'var(--accent)', color: 'var(--card)', border: 'none' }}>
         <div style={{ fontSize: 11, opacity: 0.85, marginBottom: 4 }}>Net Balance</div>
         <div style={{ fontSize: 32, fontWeight: 800, letterSpacing: '-0.03em' }}>৳{netWorth.toLocaleString()}</div>
         {cashBalance > 0 && (

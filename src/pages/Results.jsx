@@ -361,7 +361,7 @@ export default function Results() {
   };
 
   return (
-    <div className="page-enter page-container">
+    <div className="page-enter page-container content-page-bg">
       {/* Current vs Max CGPA Banner */}
       {cgpa !== null && (
         <div className="hero-banner" style={{
@@ -469,8 +469,13 @@ export default function Results() {
 
       {!cgpa && (
         <div className="hero-banner" style={{ marginBottom: 16 }}>
-          <h1 style={{ fontSize: 18, fontWeight: 700 }}>Results & GPA</h1>
-          <p style={{ fontSize: 12, color: 'var(--muted)' }}>Auto-calculated from your marks and attendance</p>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            <div className="content-page-hero-icon">
+              <TrendingUp size={18} color="var(--accent)" />
+            </div>
+            <h1 style={{ fontSize: 18, fontWeight: 700, margin: 0 }}>Results & GPA</h1>
+          </div>
+          <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 8 }}>Auto-calculated from your marks and attendance</p>
         </div>
       )}
       {/* Chart */}

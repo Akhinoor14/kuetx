@@ -1,6 +1,6 @@
 // Notes page
 import { useState } from 'react';
-import { Plus, Trash2, Edit2, X, Check } from 'lucide-react';
+import { Plus, Trash2, Edit2, X, Check, FileText } from 'lucide-react';
 import { store, uid } from '../store/store';
 
 export function Notes() {
@@ -36,9 +36,14 @@ export function Notes() {
   const sorted = [...notes].sort((a, b) => (b.pinned ? 1 : 0) - (a.pinned ? 1 : 0));
 
   return (
-    <div className="page-enter page-container">
+    <div className="page-enter page-container content-page-bg">
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-        <h1 style={{ fontSize: 18, fontWeight: 700 }}>Notes</h1>
+        <div className="content-page-hero" style={{ marginBottom: 0 }}>
+          <div className="content-page-hero-icon">
+            <FileText size={18} color="var(--accent)" />
+          </div>
+          <h1 className="content-page-hero-title">Notes</h1>
+        </div>
         <button className="btn btn-primary" onClick={() => { setAdding(true); setEditing(null); }}><Plus size={13} /> New Note</button>
       </div>
 

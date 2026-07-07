@@ -1366,7 +1366,7 @@ export default function Schedule() {
 
   if (groupId && groupHasCR) {
     return (
-      <div className="page-enter page-container" style={{ width: '100%', margin: '0 auto', paddingBottom: '20px', paddingLeft: '12px', paddingRight: '12px' }}>
+      <div className="page-enter page-container content-page-bg" style={{ width: "100%", margin: "0 auto", paddingBottom: "20px", paddingLeft: "12px", paddingRight: "12px" }}>
         <div className="card" style={{ marginBottom: 14, padding: '18px' }}>
           <GroupSchedule groupId={groupId} canEdit={canEditGroupSchedule} />
         </div>
@@ -1375,7 +1375,7 @@ export default function Schedule() {
   }
 
   return (
-    <div className="page-enter page-container" style={{ width: '100%', margin: '0 auto', paddingBottom: '20px', paddingLeft: '12px', paddingRight: '12px' }}>
+    <div className="page-enter page-container content-page-bg" style={{ width: "100%", margin: "0 auto", paddingBottom: "20px", paddingLeft: "12px", paddingRight: "12px" }}>
       <div className="card" style={{ marginBottom: 14, padding: '18px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '12px', flexWrap: 'wrap', rowGap: '10px' }}>
           <div style={{ flex: 1, minWidth: 0 }}>

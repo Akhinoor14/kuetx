@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Plus, Trash2, Edit2, X, Check } from 'lucide-react';
+import { Plus, Trash2, Edit2, X, Check, Users } from 'lucide-react';
 import { store, uid } from '../store/store';
 import ConfirmDialog from '../components/ConfirmDialog';
 
@@ -34,11 +34,16 @@ export default function Teachers() {
   };
 
   return (
-    <div className="page-enter page-container">
+    <div className="page-enter page-container content-page-bg">
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-        <div>
-          <h1 style={{ fontSize: 18, fontWeight: 700 }}>Teachers</h1>
-          <p style={{ fontSize: 12, color: 'var(--muted)' }}>Contact info, courses, and notes</p>
+        <div className="content-page-hero" style={{ marginBottom: 0 }}>
+          <div className="content-page-hero-icon">
+            <Users size={18} color="var(--accent)" />
+          </div>
+          <div>
+            <h1 className="content-page-hero-title">Teachers</h1>
+            <p className="content-page-hero-subtitle">Contact info, courses, and notes</p>
+          </div>
         </div>
         <button className="btn btn-primary" onClick={() => { setAdding(true); setEditing(null); }}>
           <Plus size={13} /> Add Teacher

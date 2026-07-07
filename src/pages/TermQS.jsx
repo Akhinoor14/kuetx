@@ -145,7 +145,7 @@ export default function TermQS() {
   const doneCount = items.filter(a => a.status === 'done').length;
 
   return (
-    <div className="page-enter assignments-page">
+    <div className="page-enter assignments-page content-page-bg">
       <div className="assignments-hero">
         <div className="page-container assignments-hero-inner">
           <div className="assignments-hero-copy">

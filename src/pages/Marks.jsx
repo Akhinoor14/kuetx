@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { ClipboardList } from 'lucide-react';
 import { store, getGradeFromPct, getAttendanceMarks, computeEffectiveAttendance, GRADE_SCALE, getProfile, getCurrentTermKey, getTermTimeline, recordAudit } from '../store/store';
 import { getAllCourses } from '../store/curriculumStore';
 
@@ -304,7 +305,12 @@ export default function Marks() {
     return (
       <div className="page-enter page-container marks-page">
         <div className="hero-banner mb-4">
-          <h1>Term Planner</h1>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            <div className="content-page-hero-icon">
+              <ClipboardList size={18} color="var(--accent)" />
+            </div>
+            <h1 style={{ margin: 0 }}>Term Planner</h1>
+          </div>
           <p className="text-muted text-sm">Estimate and plan your final grades</p>
         </div>
         <div className="empty-state">
@@ -321,7 +327,12 @@ export default function Marks() {
       <div className="planner-page-header">
         <div className="planner-page-copy">
           <div className="planner-page-kicker">Academic planning</div>
-          <h1>Term Planner</h1>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            <div className="content-page-hero-icon">
+              <ClipboardList size={18} color="var(--accent)" />
+            </div>
+            <h1 style={{ margin: 0 }}>Term Planner</h1>
+          </div>
           <p>Track hall-needed targets in a compact, local-only workspace.</p>
           <button type="button" className="planner-hero-link" onClick={() => setMarkingHelpOpen(true)}>
             View marking system

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useTheme, THEMES } from '../hooks/useTheme';
 import { store } from '../store/store';
-import { Download, Upload, Trash2, HardDrive, Shield, Database, Wifi, WifiOff, Cloud, CloudOff, CheckCircle, LogOut, User, ExternalLink, Lock } from 'lucide-react';
+import { Download, Upload, Trash2, HardDrive, Shield, Database, Wifi, WifiOff, Cloud, CloudOff, CheckCircle, LogOut, User, ExternalLink, Lock, Settings as SettingsIcon } from 'lucide-react';
 import { onAuthChange, logout, loginWithGoogle, loginWithEmail, registerWithEmail, resetPassword, getAuthErrorMessage } from '../lib/firebaseAuth';
 import { APP_VERSION } from '../version';
 
@@ -228,9 +228,16 @@ export default function Settings() {
     : 'Never';
 
   return (
-    <div className="page-enter page-container">
-      <h1 style={{ fontSize: 18, fontWeight: 700, marginBottom: 4 }}>Settings</h1>
-      <p style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 20 }}>Theme, backup, and storage</p>
+    <div className="page-enter page-container content-page-bg">
+      <div className="content-page-hero">
+        <div className="content-page-hero-icon">
+          <SettingsIcon size={18} color="var(--accent)" />
+        </div>
+        <div>
+          <h1 className="content-page-hero-title">Settings</h1>
+          <p className="content-page-hero-subtitle">Theme, backup, and storage</p>
+        </div>
+      </div>
 
       {msg && (
         <div style={{

@@ -46,11 +46,12 @@ export default function Namaz() {
   const totalStreak = last7.filter(d => d.done === 5).length;
 
   return (
-    <div className="page-enter page-container">
+    <div className="page-enter page-container content-page-bg">
 
-      {/* Hero Header */}
+      {/* Hero Header — theme-tinted, matches every other content page */}
       <div style={{
-        background: 'linear-gradient(135deg, #064e3b 0%, #065f46 60%, #0f766e 100%)',
+        background: 'linear-gradient(135deg, rgba(var(--accentRGB), 0.16) 0%, rgba(var(--accentRGB), 0.06) 60%, var(--surface) 100%)',
+        border: '1px solid rgba(var(--accentRGB), 0.16)',
         borderRadius: 16,
         padding: '20px 20px 16px',
         marginBottom: 16,
@@ -60,53 +61,58 @@ export default function Namaz() {
         <div style={{
           position: 'absolute', top: -20, right: -20,
           width: 120, height: 120, borderRadius: '50%',
-          background: 'rgba(255,255,255,0.04)',
+          background: 'rgba(var(--accentRGB), 0.08)',
         }} />
         <div style={{
           position: 'absolute', bottom: -30, left: '40%',
           width: 100, height: 100, borderRadius: '50%',
-          background: 'rgba(255,255,255,0.03)',
+          background: 'rgba(var(--accentRGB), 0.06)',
         }} />
         <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', position: 'relative' }}>
-          <div>
-            <div style={{ fontSize: 11, fontWeight: 600, color: 'rgba(167,243,208,0.8)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 4 }}>
-              Daily Salah
+          <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12 }}>
+            <div className="content-page-hero-icon" style={{ marginTop: 2 }}>
+              <span style={{ fontSize: 18 }}>🌙</span>
             </div>
-            <h1 style={{ fontSize: 22, fontWeight: 800, color: '#fff', margin: 0, lineHeight: 1.1 }}>
-              Namaz Tracker
-            </h1>
-            <p style={{ fontSize: 12, color: 'rgba(167,243,208,0.7)', margin: '4px 0 0' }}>
-              {isToday ? "আজকের নামাজ" : selectedDate}
-            </p>
+            <div>
+              <div style={{ fontSize: 11, fontWeight: 600, color: 'var(--accent)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 4 }}>
+                Daily Salah
+              </div>
+              <h1 style={{ fontSize: 20, fontWeight: 800, color: 'var(--text)', margin: 0, lineHeight: 1.1 }}>
+                Namaz Tracker
+              </h1>
+              <p style={{ fontSize: 12, color: 'var(--muted)', margin: '4px 0 0' }}>
+                {isToday ? "আজকের নামাজ" : selectedDate}
+              </p>
+            </div>
           </div>
           <div style={{ textAlign: 'right' }}>
             <div style={{
-              fontSize: 32, fontWeight: 900, color: totalToday === 5 ? '#6ee7b7' : '#fff',
+              fontSize: 30, fontWeight: 900, color: totalToday === 5 ? 'var(--accent)' : 'var(--text)',
               lineHeight: 1,
-            }}>{totalToday}<span style={{ fontSize: 16, fontWeight: 600, color: 'rgba(255,255,255,0.5)' }}>/5</span></div>
-            <div style={{ fontSize: 10, color: 'rgba(167,243,208,0.7)', marginTop: 2 }}>
+            }}>{totalToday}<span style={{ fontSize: 16, fontWeight: 600, color: 'var(--muted)' }}>/5</span></div>
+            <div style={{ fontSize: 10, color: 'var(--muted)', marginTop: 2 }}>
               {totalToday === 5 ? '✓ আলহামদুলিল্লাহ' : `${5 - totalToday} remaining`}
             </div>
           </div>
         </div>
 
         {/* Progress bar */}
-        <div style={{ marginTop: 14, height: 4, background: 'rgba(255,255,255,0.12)', borderRadius: 99, overflow: 'hidden' }}>
+        <div style={{ marginTop: 14, height: 4, background: 'rgba(var(--accentRGB), 0.14)', borderRadius: 99, overflow: 'hidden' }}>
           <div style={{
             height: '100%', borderRadius: 99,
             width: `${(totalToday / 5) * 100}%`,
-            background: totalToday === 5 ? '#6ee7b7' : 'rgba(167,243,208,0.8)',
+            background: 'var(--accent)',
             transition: 'width 0.4s ease',
           }} />
         </div>
 
         {/* Stats row */}
         <div style={{ display: 'flex', gap: 16, marginTop: 12 }}>
-          <div style={{ fontSize: 11, color: 'rgba(167,243,208,0.75)' }}>
-            🕌 <span style={{ color: '#fff', fontWeight: 700 }}>{totalMasjid}</span> in Masjid
+          <div style={{ fontSize: 11, color: 'var(--muted)' }}>
+            🕌 <span style={{ color: 'var(--text)', fontWeight: 700 }}>{totalMasjid}</span> in Masjid
           </div>
-          <div style={{ fontSize: 11, color: 'rgba(167,243,208,0.75)' }}>
-            🔥 <span style={{ color: '#fff', fontWeight: 700 }}>{totalStreak}</span>/7 full days
+          <div style={{ fontSize: 11, color: 'var(--muted)' }}>
+            🔥 <span style={{ color: 'var(--text)', fontWeight: 700 }}>{totalStreak}</span>/7 full days
           </div>
         </div>
       </div>

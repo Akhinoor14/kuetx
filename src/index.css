@@ -4367,18 +4367,18 @@ input[type="checkbox"] {
 /* ── Hero banner ────────────────────────────────────────────────────────── */
 .hero-banner {
   background:
-    linear-gradient(115deg, rgba(22, 163, 74, 0.16), rgba(14, 165, 233, 0.14)),
+    linear-gradient(115deg, rgba(var(--accentRGB), 0.16), rgba(var(--accentRGB), 0.08)),
     var(--card);
-  border: 1px solid rgba(22, 163, 74, 0.25);
+  border: 1px solid rgba(var(--accentRGB), 0.25);
   border-radius: calc(var(--r) + 2px);
   padding: 14px 16px;
 }
 
 .dark .hero-banner {
   background:
-    linear-gradient(115deg, rgba(74, 222, 128, 0.10), rgba(14, 165, 233, 0.08)),
+    linear-gradient(115deg, rgba(var(--accentRGB), 0.12), rgba(var(--accentRGB), 0.06)),
     var(--card);
-  border-color: rgba(74, 222, 128, 0.20);
+  border-color: rgba(var(--accentRGB), 0.20);
 }
 
 .marks-page .marks-hero {
@@ -4528,7 +4528,7 @@ input[type="checkbox"] {
   padding: 16px 18px;
   border: 1px solid rgba(var(--accentRGB), 0.12);
   border-radius: 18px;
-  background: linear-gradient(135deg, rgba(var(--accentRGB), 0.06), rgba(14, 165, 233, 0.03));
+  background: linear-gradient(135deg, rgba(var(--accentRGB), 0.08), rgba(var(--accentRGB), 0.02));
   box-shadow: 0 12px 30px rgba(15, 23, 42, 0.05);
 }
 
@@ -5752,15 +5752,15 @@ input[type="range"]::-webkit-slider-thumb {
   gap: 12px;
   padding: 12px 14px;
   border-radius: 12px;
-  background: radial-gradient(circle at top right, rgba(59,130,246,0.06), transparent 50%), linear-gradient(135deg, rgba(255,255,255,0.92), rgba(248,250,252,0.88));
+  background: radial-gradient(circle at top right, rgba(var(--accentRGB), 0.06), transparent 50%), linear-gradient(135deg, var(--card), var(--card));
   border: 1px solid color-mix(in srgb, var(--accent) 10%, var(--border) 84%, transparent);
-  box-shadow: 0 4px 14px rgba(15,23,42,0.04), inset 0 1px 0 rgba(255,255,255,0.6);
+  box-shadow: 0 4px 14px rgba(var(--accentRGB), 0.04), inset 0 1px 0 var(--card);
   transition: all 0.2s ease;
   font-size: 13px;
 }
 .time-session-item:hover {
-  background: radial-gradient(circle at top right, rgba(59,130,246,0.08), transparent 50%), linear-gradient(135deg, rgba(255,255,255,0.96), rgba(248,250,252,0.94));
-  box-shadow: 0 8px 20px rgba(15,23,42,0.07), inset 0 1px 0 rgba(255,255,255,0.7);
+  background: radial-gradient(circle at top right, rgba(var(--accentRGB), 0.08), transparent 50%), linear-gradient(135deg, var(--card), var(--card));
+  box-shadow: 0 8px 20px rgba(var(--accentRGB), 0.07), inset 0 1px 0 var(--card);
   transform: translateY(-1px);
 }
 .time-session-left {
@@ -5795,7 +5795,7 @@ input[type="range"]::-webkit-slider-thumb {
   height: 28px;
   border-radius: 8px;
   font-size: 14px;
-  background: linear-gradient(135deg, rgba(59,130,246,0.1), rgba(34,197,94,0.05));
+  background: linear-gradient(135deg, rgba(var(--accentRGB), 0.1), rgba(var(--accentRGB), 0.05));
   border: 1px solid color-mix(in srgb, var(--accent) 18%, var(--border));
 }
 .time-session-mode-badge.countdown {
@@ -5803,7 +5803,7 @@ input[type="range"]::-webkit-slider-thumb {
   border-color: color-mix(in srgb, #f97316 20%, var(--border));
 }
 .time-session-mode-badge.countup {
-  background: linear-gradient(135deg, rgba(34,197,94,0.1), rgba(34,197,94,0.04));
+  background: linear-gradient(135deg, rgba(var(--accentRGB), 0.1), rgba(var(--accentRGB), 0.04));
   border-color: color-mix(in srgb, #22c55e 20%, var(--border));
 }
 .time-session-meta-block {
@@ -5892,14 +5892,14 @@ input[type="range"]::-webkit-slider-thumb {
 @keyframes ringPulse { 0% { transform: scale(1); } 50% { transform: scale(1.02); } 100% { transform: scale(1); } }
 
 .time-tracker-display { letter-spacing: 0.06em; color: var(--text); }
-.time-tracker-visual .time-tracker-ring { border-radius: 999px; padding: 8px; background: linear-gradient(180deg, rgba(255,255,255,0.85), rgba(248,250,252,0.85)); box-shadow: 0 8px 28px rgba(15,23,42,0.06); }
+.time-tracker-visual .time-tracker-ring { border-radius: 999px; padding: 8px; background: linear-gradient(180deg, var(--card), var(--card)); box-shadow: 0 8px 28px rgba(var(--accentRGB), 0.06); }
 .time-tracker-visual .btn-sm { border-radius: 999px; padding-inline: 10px; }
 .time-tracker-card {
   border-radius: 14px;
   padding: 12px;
-  background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(250,250,248,0.96));
+  background: linear-gradient(180deg, var(--card), var(--card));
   border: 1px solid color-mix(in srgb, var(--border) 86%, transparent);
-  box-shadow: 0 14px 40px rgba(15,23,42,0.06);
+  box-shadow: 0 14px 40px rgba(var(--accentRGB), 0.06);
 }
 
 .segmented-control { display:inline-flex; background: var(--surface); border-radius: 999px; padding: 4px; gap:4px; border:1px solid var(--border); }
@@ -5921,11 +5921,11 @@ input[type="range"]::-webkit-slider-thumb {
   padding: 22px 24px;
   text-align: center;
   border-radius: 24px;
-  border: 1px solid color-mix(in srgb, var(--accent) 18%, var(--border) 76%, transparent);
-  background: radial-gradient(circle at top right, rgba(59,130,246,0.18), transparent 40%),
-    radial-gradient(circle at bottom left, rgba(34,197,94,0.06), transparent 50%),
-    linear-gradient(135deg, rgba(255,255,255,0.99), rgba(248,250,252,0.95));
-  box-shadow: 0 8px 28px rgba(15,23,42,0.08), inset 0 1px 0 rgba(255,255,255,0.8);
+  border: 1px solid rgba(var(--accentRGB), 0.18);
+  background: radial-gradient(circle at top right, rgba(var(--accentRGB), 0.14), transparent 40%),
+    radial-gradient(circle at bottom left, rgba(var(--accentRGB), 0.06), transparent 50%),
+    var(--card);
+  box-shadow: 0 8px 28px rgba(var(--accentRGB), 0.10);
 }
 .time-tracker-kicker {
   font-size: 11px;
@@ -5943,9 +5943,9 @@ input[type="range"]::-webkit-slider-thumb {
 .time-tracker-main-column { display: flex; flex-direction: column; gap: 14px; width: min(100%, 980px); }
 .time-tracker-side-column { display: none; }
 
-.time-tracker-panel { border-radius: 18px; padding: 16px; border: 1px solid color-mix(in srgb, var(--accent) 12%, var(--border) 80%, transparent); background: radial-gradient(circle at top right, rgba(59,130,246,0.08), transparent 50%), radial-gradient(circle at bottom left, rgba(34,197,94,0.03), transparent 60%), linear-gradient(135deg, rgba(255,255,255,0.98), rgba(248,250,252,0.94)); box-shadow: 0 8px 28px rgba(15,23,42,0.06), inset 0 1px 0 rgba(255,255,255,0.8); }
+.time-tracker-panel { border-radius: 18px; padding: 16px; border: 1px solid color-mix(in srgb, var(--accent) 12%, var(--border) 80%, transparent); background: radial-gradient(circle at top right, rgba(var(--accentRGB), 0.08), transparent 50%), radial-gradient(circle at bottom left, rgba(var(--accentRGB), 0.03), transparent 60%), linear-gradient(135deg, var(--card), var(--card)); box-shadow: 0 8px 28px rgba(var(--accentRGB), 0.06), inset 0 1px 0 var(--card); }
 .time-tracker-panel--merged { padding: 0; border-radius: 24px; }
-.time-tracker-panel--merged .time-tracker-hero--merged { border: none; border-radius: 24px 24px 0 0; box-shadow: none; margin: 0; padding: 24px 24px 18px; border-bottom: 1px solid rgba(15,23,42,0.06); }
+.time-tracker-panel--merged .time-tracker-hero--merged { border: none; border-radius: 24px 24px 0 0; box-shadow: none; margin: 0; padding: 24px 24px 18px; border-bottom: 1px solid rgba(var(--accentRGB), 0.06); }
 .time-tracker-panel--merged .time-tracker-panel-body { padding: 20px 24px 24px; }
 .time-tracker-panel-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
 .time-tracker-panel-head h2 { font-size: 16px; font-weight: 800; margin-top: 4px; }
@@ -5959,7 +5959,7 @@ input[type="range"]::-webkit-slider-thumb {
 .time-tracker-page .time-tracker-card .time-tracker-mode-btn:hover { background: var(--surface); }
 .time-tracker-page .time-tracker-card .time-tracker-mode-btn.active { color: white; background: var(--accent); box-shadow: 0 4px 12px color-mix(in srgb, var(--accent) 32%, transparent); }
 
-.time-tracker-page .time-tracker-card .time-tracker-status-pill { display: inline-flex; flex-direction: column; gap: 2px; align-items: flex-end; padding: 10px 12px; border-radius: 12px; border: 1px solid color-mix(in srgb, var(--border) 78%, transparent); background: rgba(255,255,255,0.5); }
+.time-tracker-page .time-tracker-card .time-tracker-status-pill { display: inline-flex; flex-direction: column; gap: 2px; align-items: flex-end; padding: 10px 12px; border-radius: 12px; border: 1px solid color-mix(in srgb, var(--border) 78%, transparent); background: var(--card); }
 .time-tracker-status-pill span { font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; font-weight: 800; color: var(--muted); }
 .time-tracker-status-pill strong { font-size: 14px; font-weight: 700; color: var(--text); }
 .time-tracker-status-pill.is-running strong { color: var(--success); }
@@ -5968,13 +5968,13 @@ input[type="range"]::-webkit-slider-thumb {
 /* Display Section: Timer Ring */
 .time-tracker-display-section { display: flex; justify-content: center; padding: 10px 0 6px; margin-bottom: 6px; border-bottom: none; }
 .time-tracker-ring-row { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; width: 100%; max-width: 100%; }
-.time-tracker-ring { position: relative; display: grid; place-items: center; flex: 0 0 auto; width: clamp(74px, 16vw, 98px); aspect-ratio: 1; padding: 8px; border-radius: 999px; background: radial-gradient(circle at 50% 50%, rgba(96,165,250,0.12), transparent 58%), linear-gradient(180deg, rgba(255,255,255,0.96), rgba(248,250,252,0.9)); box-shadow: 0 8px 20px rgba(15,23,42,0.05), inset 0 1px 0 rgba(255,255,255,0.9); overflow: hidden; }
-.time-tracker-ring::after { content: ''; position: absolute; inset: 14%; border-radius: inherit; border: 1px solid rgba(59,130,246,0.12); pointer-events: none; }
-.time-tracker-ring.is-countdown { background: radial-gradient(circle at 50% 50%, rgba(59,130,246,0.16), transparent 58%), linear-gradient(180deg, rgba(255,255,255,0.98), rgba(247,250,255,0.92)); box-shadow: 0 10px 22px rgba(15,23,42,0.06), inset 0 1px 0 rgba(255,255,255,0.92); }
-.time-tracker-ring.is-countdown::before { content: ''; position: absolute; inset: -8px; border-radius: inherit; background: radial-gradient(circle at 50% 50%, rgba(59,130,246,0.22), transparent 68%); filter: blur(8px); opacity: 0.7; pointer-events: none; animation: ringBreath 3.6s ease-in-out infinite; }
+.time-tracker-ring { position: relative; display: grid; place-items: center; flex: 0 0 auto; width: clamp(74px, 16vw, 98px); aspect-ratio: 1; padding: 8px; border-radius: 999px; background: radial-gradient(circle at 50% 50%, rgba(var(--accentRGB), 0.12), transparent 58%), linear-gradient(180deg, var(--card), var(--card)); box-shadow: 0 8px 20px rgba(var(--accentRGB), 0.05), inset 0 1px 0 var(--card); overflow: hidden; }
+.time-tracker-ring::after { content: ''; position: absolute; inset: 14%; border-radius: inherit; border: 1px solid rgba(var(--accentRGB), 0.12); pointer-events: none; }
+.time-tracker-ring.is-countdown { background: radial-gradient(circle at 50% 50%, rgba(var(--accentRGB), 0.16), transparent 58%), linear-gradient(180deg, var(--card), var(--card)); box-shadow: 0 10px 22px rgba(var(--accentRGB), 0.06), inset 0 1px 0 var(--card); }
+.time-tracker-ring.is-countdown::before { content: ''; position: absolute; inset: -8px; border-radius: inherit; background: radial-gradient(circle at 50% 50%, rgba(var(--accentRGB), 0.22), transparent 68%); filter: blur(8px); opacity: 0.7; pointer-events: none; animation: ringBreath 3.6s ease-in-out infinite; }
 .time-tracker-ring svg { width: 100%; height: 100%; display: block; position: relative; z-index: 1; }
-.time-tracker-ring svg.running { animation: ringPulse 2.8s ease-in-out infinite; filter: drop-shadow(0 0 6px rgba(59,130,246,0.12)); }
-.time-tracker-ring.is-countdown svg.running { filter: drop-shadow(0 0 5px rgba(59,130,246,0.14)); }
+.time-tracker-ring svg.running { animation: ringPulse 2.8s ease-in-out infinite; filter: drop-shadow(0 0 6px rgba(var(--accentRGB), 0.12)); }
+.time-tracker-ring.is-countdown svg.running { filter: drop-shadow(0 0 5px rgba(var(--accentRGB), 0.14)); }
 .time-tracker-ring.is-countdown svg circle { stroke-linecap: round; }
 .time-tracker-ring-text { display: flex; flex-direction: column; align-items: center; justify-content: center; min-width: 0; text-align: center; pointer-events: none; padding: 0; max-width: 22ch; }
 .time-tracker-digits { font-size: clamp(2rem, 4vw, 3rem); font-weight: 900; line-height: 1; letter-spacing: 0.02em; color: var(--text); font-variant-numeric: tabular-nums; }
@@ -6001,7 +6001,7 @@ input[type="range"]::-webkit-slider-thumb {
 
 /* Stats Section */
 .time-tracker-stats-section { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; padding: 8px 0; margin-bottom: 6px; border-bottom: none; }
-.time-tracker-stat-item { display: flex; flex-direction: column; gap: 2px; padding: 10px 12px; border-radius: 12px; background: linear-gradient(135deg, rgba(59,130,246,0.08), rgba(34,197,94,0.05)); border: 1px solid color-mix(in srgb, var(--accent) 20%, var(--border) 72%, transparent); box-shadow: 0 2px 8px rgba(59,130,246,0.06), inset 0 1px 0 rgba(255,255,255,0.6); }
+.time-tracker-stat-item { display: flex; flex-direction: column; gap: 2px; padding: 10px 12px; border-radius: 12px; background: linear-gradient(135deg, rgba(var(--accentRGB), 0.08), rgba(var(--accentRGB), 0.05)); border: 1px solid color-mix(in srgb, var(--accent) 20%, var(--border) 72%, transparent); box-shadow: 0 2px 8px rgba(var(--accentRGB), 0.06), inset 0 1px 0 var(--card); }
 .stat-label { font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 700; color: color-mix(in srgb, var(--accent) 70%, var(--muted)); }
 .stat-value { font-size: 18px; font-weight: 850; color: var(--text); line-height: 1; margin-top: 2px; }
 
@@ -6032,7 +6032,7 @@ input[type="range"]::-webkit-slider-thumb {
   font-size: 12px;
   font-weight: 800;
   letter-spacing: -0.01em;
-  box-shadow: 0 12px 26px rgba(15, 23, 42, 0.08);
+  box-shadow: 0 12px 26px rgba(var(--accentRGB), 0.08);
 }
 .time-tracker-actions-section .time-tracker-action-btn svg {
   flex: 0 0 auto;
@@ -6056,13 +6056,13 @@ input[type="range"]::-webkit-slider-thumb {
 }
 .time-tracker-actions-section .time-tracker-action-btn-pause,
 .time-tracker-actions-section .time-tracker-action-btn-reset {
-  background: linear-gradient(180deg, rgba(255,255,255,0.96), rgba(248,250,252,0.96));
+  background: linear-gradient(180deg, var(--card), var(--card));
   border: 1px solid color-mix(in srgb, var(--border) 78%, transparent);
   color: var(--text);
 }
 .time-tracker-actions-section .time-tracker-action-btn-pause:hover,
 .time-tracker-actions-section .time-tracker-action-btn-reset:hover {
-  background: linear-gradient(180deg, rgba(255,255,255,1), rgba(245,247,250,0.98));
+  background: linear-gradient(180deg, var(--card), var(--card));
   border-color: color-mix(in srgb, var(--accent) 18%, var(--border));
   transform: translateY(-1px);
 }
@@ -6088,23 +6088,23 @@ input[type="range"]::-webkit-slider-thumb {
   min-height: 44px;
   border-radius: 14px;
   border: 1.5px solid color-mix(in srgb, var(--border) 82%, transparent);
-  background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(248,250,252,0.94));
+  background: linear-gradient(180deg, var(--card), var(--card));
   color: var(--text);
   font-size: 13px;
   font-weight: 600;
   line-height: 1.2;
-  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.04);
+  box-shadow: 0 8px 20px rgba(var(--accentRGB), 0.04);
   transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease, background 0.15s ease;
 }
 .time-tracker-select:hover {
   border-color: color-mix(in srgb, var(--accent) 20%, var(--border));
-  background: linear-gradient(180deg, rgba(255,255,255,1), rgba(247,249,251,0.96));
+  background: linear-gradient(180deg, var(--card), var(--card));
 }
 .time-tracker-select:focus {
   outline: none;
   border-color: var(--accent);
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 14%, transparent), 0 10px 24px rgba(15, 23, 42, 0.05);
-  background: white;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 14%, transparent), 0 10px 24px rgba(var(--accentRGB), 0.05);
+  background: var(--card);
 }
 .time-tracker-select-icon {
   position: absolute;
@@ -6131,12 +6131,12 @@ input[type="range"]::-webkit-slider-thumb {
   padding: 10px 12px;
   border-radius: 14px;
   border: 1.5px solid color-mix(in srgb, var(--border) 82%, transparent);
-  background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(248,250,252,0.94));
+  background: linear-gradient(180deg, var(--card), var(--card));
   color: var(--text);
   font-size: 13px;
   font-weight: 600;
   line-height: 1.2;
-  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.04);
+  box-shadow: 0 8px 20px rgba(var(--accentRGB), 0.04);
   cursor: pointer;
 }
 .time-tracker-category-toggle .time-tracker-select-icon {
@@ -6155,15 +6155,15 @@ input[type="range"]::-webkit-slider-thumb {
   padding: 10px;
   border-radius: 14px;
   border: 1px solid color-mix(in srgb, var(--border) 82%, transparent);
-  background: rgba(255,255,255,0.98);
-  box-shadow: 0 12px 28px rgba(15,23,42,0.08);
+  background: var(--card);
+  box-shadow: 0 12px 28px rgba(var(--accentRGB), 0.08);
 }
 .time-tracker-category-option {
   min-width: 0;
   padding: 9px 10px;
   border-radius: 10px;
   border: 1px solid color-mix(in srgb, var(--border) 84%, transparent);
-  background: linear-gradient(180deg, rgba(255,255,255,0.96), rgba(248,250,252,0.96));
+  background: linear-gradient(180deg, var(--card), var(--card));
   color: var(--text);
   font-size: 12px;
   font-weight: 600;
@@ -6186,7 +6186,7 @@ input[type="range"]::-webkit-slider-thumb {
 .time-tracker-empty-state { text-align: center; color: var(--muted); padding: 32px 24px; }
 
 .time-session-list { display: flex; flex-direction: column; gap: 8px; }
-.time-session-collapsible { border-radius: 14px; background: linear-gradient(180deg, rgba(255,255,255,0.97), rgba(248,250,252,0.94)); border: 1px solid color-mix(in srgb, var(--border) 84%, transparent); box-shadow: 0 6px 18px rgba(15,23,42,0.04); }
+.time-session-collapsible { border-radius: 14px; background: linear-gradient(180deg, var(--card), var(--card)); border: 1px solid color-mix(in srgb, var(--border) 84%, transparent); box-shadow: 0 6px 18px rgba(var(--accentRGB), 0.04); }
 .time-session-collapsible::before { width: 3px; }
 .time-session-collapsible .collapsible-head { padding: 12px 14px 12px 16px; }
 .time-session-collapsible .collapsible-title { font-size: 13px; }
@@ -6272,7 +6272,7 @@ input[type="range"]::-webkit-slider-thumb {
     padding: 10px;
     border-radius: 14px;
     border: 1px solid color-mix(in srgb, var(--border) 78%, transparent);
-    background: linear-gradient(180deg, rgba(255,255,255,0.96), rgba(248,250,252,0.92));
+    background: linear-gradient(180deg, var(--card), var(--card));
   }
   .time-tracker-actions-section {
     flex-wrap: wrap;
@@ -6294,7 +6294,7 @@ input[type="range"]::-webkit-slider-thumb {
     margin-bottom: 8px;
     border-radius: 14px;
     border: 1px solid color-mix(in srgb, var(--border) 78%, transparent);
-    background: linear-gradient(180deg, rgba(255,255,255,0.96), rgba(248,250,252,0.92));
+    background: linear-gradient(180deg, var(--card), var(--card));
   }
   .time-tracker-stat-item { padding: 7px 8px; }
   .stat-label { font-size: 8px; letter-spacing: 0.08em; }
@@ -6305,7 +6305,7 @@ input[type="range"]::-webkit-slider-thumb {
     margin-bottom: 8px;
     border-radius: 14px;
     border: 1px solid color-mix(in srgb, var(--border) 78%, transparent);
-    background: linear-gradient(180deg, rgba(255,255,255,0.96), rgba(248,250,252,0.92));
+    background: linear-gradient(180deg, var(--card), var(--card));
   }
   .time-tracker-countdown-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
 
@@ -6314,7 +6314,7 @@ input[type="range"]::-webkit-slider-thumb {
     margin-bottom: 6px;
     border-radius: 14px;
     border: 1px solid color-mix(in srgb, var(--border) 78%, transparent);
-    background: linear-gradient(180deg, rgba(255,255,255,0.96), rgba(248,250,252,0.92));
+    background: linear-gradient(180deg, var(--card), var(--card));
   }
   .time-tracker-card .time-tracker-info-grid,
   .time-tracker-card .time-tracker-manual-grid { grid-template-columns: 1fr; gap: 6px; }
@@ -6410,15 +6410,15 @@ input[type="range"]::-webkit-slider-thumb {
 }
 
 /* Class Rep card styles */
-.cr-card { background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(250,250,248,0.96)); border: 1px solid var(--border); }
+.cr-card { background: linear-gradient(180deg, var(--card), var(--card)); border: 1px solid var(--border); }
 .cr-chip { padding: 8px 10px; border-radius: 999px; background: rgba(0,0,0,0.02); border: 1px solid rgba(0,0,0,0.04); color: var(--text); text-decoration: none; }
 .cr-chip:hover { background: rgba(0,0,0,0.04); }
 
 .time-tracker-grid .form-field label { display: block; font-size: 11px; color: var(--muted); margin-bottom: 4px; font-weight: 600; letter-spacing: 0.05em; }
 .time-tracker-grid .form-field input,
-.time-tracker-grid .form-field select { width: 100%; padding: 9px 12px; border-radius: 10px; border: 1.5px solid color-mix(in srgb, var(--border) 82%, transparent); background: linear-gradient(180deg, rgba(255,255,255,0.92), rgba(248,250,252,0.94)); font-size: 13px; transition: all 0.15s; }
+.time-tracker-grid .form-field select { width: 100%; padding: 9px 12px; border-radius: 10px; border: 1.5px solid color-mix(in srgb, var(--border) 82%, transparent); background: linear-gradient(180deg, var(--card), var(--card)); font-size: 13px; transition: all 0.15s; }
 .time-tracker-grid .form-field input:focus,
-.time-tracker-grid .form-field select:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 12%, transparent); background: white; }
+.time-tracker-grid .form-field select:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 12%, transparent); background: var(--card); }
 
 .time-tracker-actions .btn { min-width: 92px; border-radius: 10px; }
 .time-tracker-actions .btn.btn-sm { padding: 6px 8px; font-size: 13px; }
@@ -6461,7 +6461,7 @@ input[type="range"]::-webkit-slider-thumb {
     left: 0;
     right: 0;
     padding: 10px 14px;
-    background: linear-gradient(180deg, rgba(255,255,255,0), var(--bg));
+    background: linear-gradient(180deg, var(--card), var(--bg));
     gap: 8px;
     justify-content: flex-end;
     display: flex;
@@ -8410,4 +8410,57 @@ input[type="range"]::-webkit-slider-thumb {
 @media (max-width: 380px) {
   .hub-page-hero-icon { width: 34px; height: 34px; }
   .hub-page-hero-title { font-size: 18px; }
+}
+
+/* ── Content pages — same visual language as hub pages ────────────────────
+   Every non-hub content page (Courses, Question Bank, Money, Settings, etc.)
+   uses this so the whole app — hub pages AND content pages — reads as one
+   consistent, theme-tinted system. Same accent-tinted wash + icon-in-a-box
+   hero as .hub-page-bg/.hub-page-hero, just under a distinct class name so
+   content pages (which have their own inner layout/padding already) can opt
+   in without inheriting hub-specific grid rules. Uses --accentRGB / --accent
+   so it automatically tracks the active theme (light/milky/dark) and accent
+   color — no page-specific hex codes anywhere. ─────────────────────────── */
+.content-page-bg {
+  background:
+    radial-gradient(ellipse 900px 420px at 15% 0%, rgba(var(--accentRGB), 0.10), transparent 60%),
+    linear-gradient(180deg, rgba(var(--accentRGB), 0.06) 0%, rgba(var(--accentRGB), 0.015) 320px, var(--bg) 560px);
+  min-height: 100vh;
+}
+
+.content-page-hero {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.content-page-hero-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--accent) 15%, var(--surface));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.content-page-hero-title {
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--text);
+  margin: 0;
+}
+
+.content-page-hero-subtitle {
+  font-size: 12.5px;
+  color: var(--muted);
+  margin: 2px 0 0;
+}
+
+@media (max-width: 380px) {
+  .content-page-hero-icon { width: 34px; height: 34px; }
+  .content-page-hero-title { font-size: 18px; }
 }

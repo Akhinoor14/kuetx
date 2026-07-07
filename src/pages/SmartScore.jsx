@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { Activity } from 'lucide-react';
 import { store, computeEffectiveAttendance, getProfile, getPublishedCGPA } from '../store/store';
 import { getAllCourses } from '../store/curriculumStore';
 
@@ -132,10 +133,15 @@ export default function SmartScore() {
   const totalLabel = total === null ? '—' : total >= 85 ? 'Excellent 🌟' : total >= 70 ? 'Good 👍' : total >= 50 ? 'Average' : 'Needs Work';
 
   return (
-    <div className="page-enter page-container">
-      <div style={{ marginBottom: 20 }}>
-        <h1 style={{ fontSize: 18, fontWeight: 700 }}>Smart Score</h1>
-        <p style={{ fontSize: 12, color: 'var(--muted)' }}>Holistic student life score — fixed, policy-driven, and balanced across academics + habits</p>
+    <div className="page-enter page-container content-page-bg">
+      <div className="content-page-hero">
+        <div className="content-page-hero-icon">
+          <Activity size={18} color="var(--accent)" />
+        </div>
+        <div>
+          <h1 className="content-page-hero-title">Smart Score</h1>
+          <p className="content-page-hero-subtitle">Holistic student life score — fixed, policy-driven, and balanced across academics + habits</p>
+        </div>
       </div>
 
       {/* Big score */}

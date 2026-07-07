@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { Plus, Trash2, Play, Pause, Square, RotateCcw, Save, ChevronDown, ChevronRight, Edit2, Check, X, Copy, CheckCheck } from 'lucide-react';
+import { Plus, Trash2, Play, Pause, Square, RotateCcw, Save, ChevronDown, ChevronRight, Edit2, Check, X, Copy, CheckCheck, MapPin, Cpu, List, Timer, Users, BarChart2 } from 'lucide-react';
 import {
   store,
   uid,
@@ -132,13 +132,18 @@ export function Tours() {
   const typeInfo = (type) => TOUR_TYPES.find(x => x.value === type) || { label: type, color: 'tag-gray' };
 
   return (
-    <div className="page-enter page-container">
+    <div className="page-enter page-container content-page-bg">
       {/* Hero Card */}
       <div className="card" style={{ marginBottom: 14, background: 'var(--card)' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 10 }}>
-          <div>
-            <h1 style={{ fontSize: 18, fontWeight: 700 }}>Tours</h1>
-            <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 2 }}>Plan, track and remember your trips</p>
+          <div className="content-page-hero" style={{ marginBottom: 0 }}>
+            <div className="content-page-hero-icon">
+              <MapPin size={18} color="var(--accent)" />
+            </div>
+            <div>
+              <h1 className="content-page-hero-title">Tours</h1>
+              <p className="content-page-hero-subtitle">Plan, track and remember your trips</p>
+            </div>
           </div>
           <button className="btn btn-primary" onClick={() => { setAdding(true); setEditingId(null); }}>
             <Plus size={13} /> Add Tour
@@ -650,13 +655,18 @@ export function Projects() {
   const groupOrder = PROJECT_TYPES.filter(t => grouped[t]);
 
   return (
-    <div className="page-enter page-container">
+    <div className="page-enter page-container content-page-bg">
       {/* Hero */}
       <div className="card" style={{ marginBottom: 14 }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 10 }}>
-          <div>
-            <h1 style={{ fontSize: 18, fontWeight: 700 }}>Projects</h1>
-            <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 2 }}>Track your builds — academic, personal, club & beyond</p>
+          <div className="content-page-hero" style={{ marginBottom: 0 }}>
+            <div className="content-page-hero-icon">
+              <Cpu size={18} color="var(--accent)" />
+            </div>
+            <div>
+              <h1 className="content-page-hero-title">Projects</h1>
+              <p className="content-page-hero-subtitle">Track your builds — academic, personal, club & beyond</p>
+            </div>
           </div>
           <button className="btn btn-primary" onClick={() => { setForm(EMPTY_FORM); setAdding(true); }}><Plus size={13} /> Add Project</button>
         </div>
@@ -862,10 +872,15 @@ export function Syllabus() {
 
   if (!profile.dept || !currentTermKey || termYear === null || termNo === null) {
     return (
-      <div className="page-enter page-container">
-        <div style={{ marginBottom: 24 }}>
-          <h1 style={{ fontSize: 24, fontWeight: 700, marginBottom: 4 }}>📚 Syllabus</h1>
-          <p style={{ fontSize: 13, color: 'var(--muted)' }}>Course syllabus and topics</p>
+      <div className="page-enter page-container content-page-bg">
+        <div className="content-page-hero">
+          <div className="content-page-hero-icon">
+            <List size={18} color="var(--accent)" />
+          </div>
+          <div>
+            <h1 className="content-page-hero-title">Syllabus</h1>
+            <p className="content-page-hero-subtitle">Course syllabus and topics</p>
+          </div>
         </div>
         <div className="card" style={{ textAlign: 'center', padding: 40 }}>
           <div style={{ fontSize: 40, marginBottom: 12 }}>⚙️</div>
@@ -980,11 +995,14 @@ export function Syllabus() {
   };
 
   return (
-    <div className="page-enter page-container">
-      <div style={{ marginBottom: 24 }}>
+    <div className="page-enter page-container content-page-bg">
+      <div className="content-page-hero">
+        <div className="content-page-hero-icon">
+          <List size={18} color="var(--accent)" />
+        </div>
         <div>
-          <h1 style={{ fontSize: 24, fontWeight: 700, marginBottom: 4 }}>📚 {getTermLabelFromKey(displayTermKey)} Syllabus</h1>
-          <p style={{ fontSize: 13, color: 'var(--muted)' }}>
+          <h1 className="content-page-hero-title">{getTermLabelFromKey(displayTermKey)} Syllabus</h1>
+          <p className="content-page-hero-subtitle">
             {courses.length} courses • {courses.reduce((sum, c) => sum + (c.credits || 0), 0).toFixed(1)} credits
           </p>
         </div>
@@ -1322,14 +1340,19 @@ export function TimeTracker() {
   const latestSession = sessions[0] || null;
 
   return (
-    <div className="page-container time-tracker-page">
+    <div className="page-container time-tracker-page content-page-bg">
       <div className="time-tracker-layout">
         <div className="time-tracker-main-column">
           <div className="card time-tracker-panel time-tracker-card time-tracker-panel--merged">
             <div className="time-tracker-hero time-tracker-hero--merged">
               <div className="time-tracker-hero-copy">
                 <div className="time-tracker-kicker">Focus by design</div>
-                <h1>Time Tracker</h1>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10, justifyContent: 'center' }}>
+                  <div className="content-page-hero-icon">
+                    <Timer size={18} color="var(--accent)" />
+                  </div>
+                  <h1 style={{ margin: 0 }}>Time Tracker</h1>
+                </div>
                 <p>Run a clean focus timer, log work fast, and review the day without visual clutter.</p>
               </div>
             </div>
@@ -1552,13 +1575,18 @@ export function Tuition() {
   const filteredSessions = filterStudent === 'all' ? sessions : sessions.filter(s => s.studentName === filterStudent);
 
   return (
-    <div className="page-enter page-container">
+    <div className="page-enter page-container content-page-bg">
       {/* Hero Card */}
       <div className="card" style={{ marginBottom: 14 }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 10 }}>
-          <div>
-            <h1 style={{ fontSize: 18, fontWeight: 700 }}>Tuition Tracker</h1>
-            <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 2 }}>Track sessions, income and travel costs</p>
+          <div className="content-page-hero" style={{ marginBottom: 0 }}>
+            <div className="content-page-hero-icon">
+              <Users size={18} color="var(--accent)" />
+            </div>
+            <div>
+              <h1 className="content-page-hero-title">Tuition Tracker</h1>
+              <p className="content-page-hero-subtitle">Track sessions, income and travel costs</p>
+            </div>
           </div>
           <button className="btn btn-primary" onClick={() => setAdding(v => !v)}><Plus size={13} /> Log Session</button>
         </div>
@@ -1888,10 +1916,15 @@ export function Reports() {
   ];
 
   return (
-    <div className="page-enter page-container">
-      <div style={{ marginBottom: 16 }}>
-        <h1 style={{ fontSize: 18, fontWeight: 700 }}>Reports</h1>
-        <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 2 }}>Export summaries of your student life · {label}</p>
+    <div className="page-enter page-container content-page-bg">
+      <div className="content-page-hero">
+        <div className="content-page-hero-icon">
+          <BarChart2 size={18} color="var(--accent)" />
+        </div>
+        <div>
+          <h1 className="content-page-hero-title">Reports</h1>
+          <p className="content-page-hero-subtitle">Export summaries of your student life · {label}</p>
+        </div>
       </div>
 
       {/* Period selector */}

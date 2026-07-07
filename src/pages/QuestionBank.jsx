@@ -107,7 +107,7 @@ export default function QuestionBank() {
   }
 
   return (
-    <div style={styles.page}>
+    <div className="content-page-bg" style={styles.page}>
       <div style={styles.header}>
         {screen !== 'depts' && (
           <button style={styles.backBtn} onClick={goBack}>
@@ -115,7 +115,9 @@ export default function QuestionBank() {
           </button>
         )}
         <div style={styles.headerTitleWrap}>
-          <BookOpen size={20} />
+          <div className="content-page-hero-icon" style={{ width: 34, height: 34 }}>
+            <BookOpen size={17} color="var(--accent)" />
+          </div>
           <h1 style={styles.headerTitle}>
             {screen === 'depts' && 'Question Bank'}
             {screen === 'terms' && QB_DEPARTMENTS[dept]}
@@ -277,7 +279,6 @@ const styles = {
     width: '100%',
     padding: '16px',
     minHeight: '100vh',
-    background: 'var(--bg)',
     color: 'var(--text)',
   },
   header: {
@@ -308,7 +309,9 @@ const styles = {
   },
   headerTitle: {
     fontSize: 18,
-    fontWeight: 700,
+    fontWeight: 800,
+    letterSpacing: '-0.02em',
+    color: 'var(--text)',
     margin: 0,
     overflow: 'hidden',
     textOverflow: 'ellipsis',
@@ -319,7 +322,7 @@ const styles = {
     alignItems: 'center',
     gap: 6,
     background: 'var(--accent)',
-    color: '#fff',
+    color: 'var(--card)',
     border: 'none',
     borderRadius: 8,
     padding: '8px 14px',

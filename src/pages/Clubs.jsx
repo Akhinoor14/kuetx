@@ -1,17 +1,21 @@
 import { useState } from 'react';
-import { Plus, Trash2, X, Check } from 'lucide-react';
+import { Plus, Trash2, X, Check, Layers } from 'lucide-react';
 import { store, uid } from '../store/store';
 import Modal from '../components/Modal';
 
 const ld = () => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; };
 
+// Small palette of theme-accent tints — every entry is built from
+// var(--accent)/var(--accent2), not a fixed hex, so club cards stay a
+// family of the active theme (and automatically match dark/light mode)
+// while still reading as visually distinct from each other.
 const CLUB_COLORS = [
-  { bg: '#dcfce7', accent: '#16a34a', text: '#14532d' },
-  { bg: '#dbeafe', accent: '#2563eb', text: '#1e3a8a' },
-  { bg: '#fef3c7', accent: '#d97706', text: '#78350f' },
-  { bg: '#fce7f3', accent: '#db2777', text: '#831843' },
-  { bg: '#ede9fe', accent: '#7c3aed', text: '#4c1d95' },
-  { bg: '#ffedd5', accent: '#ea580c', text: '#7c2d12' },
+  { bg: 'color-mix(in srgb, var(--accent) 14%, var(--surface))', accent: 'var(--accent)', text: 'var(--text)', border: 'color-mix(in srgb, var(--accent) 30%, var(--border))', glow: 'color-mix(in srgb, var(--accent) 12%, transparent)' },
+  { bg: 'color-mix(in srgb, var(--accent2, var(--accent)) 14%, var(--surface))', accent: 'var(--accent2, var(--accent))', text: 'var(--text)', border: 'color-mix(in srgb, var(--accent2, var(--accent)) 30%, var(--border))', glow: 'color-mix(in srgb, var(--accent2, var(--accent)) 12%, transparent)' },
+  { bg: 'color-mix(in srgb, var(--accent) 22%, var(--surface))', accent: 'color-mix(in srgb, var(--accent) 80%, var(--text))', text: 'var(--text)', border: 'color-mix(in srgb, var(--accent) 40%, var(--border))', glow: 'color-mix(in srgb, var(--accent) 18%, transparent)' },
+  { bg: 'color-mix(in srgb, var(--accent2, var(--accent)) 22%, var(--surface))', accent: 'color-mix(in srgb, var(--accent2, var(--accent)) 80%, var(--text))', text: 'var(--text)', border: 'color-mix(in srgb, var(--accent2, var(--accent)) 40%, var(--border))', glow: 'color-mix(in srgb, var(--accent2, var(--accent)) 18%, transparent)' },
+  { bg: 'color-mix(in srgb, var(--accent) 10%, var(--surface))', accent: 'color-mix(in srgb, var(--accent) 60%, var(--accent2, var(--accent)))', text: 'var(--text)', border: 'color-mix(in srgb, var(--accent) 26%, var(--border))', glow: 'color-mix(in srgb, var(--accent) 10%, transparent)' },
+  { bg: 'color-mix(in srgb, var(--accent2, var(--accent)) 10%, var(--surface))', accent: 'color-mix(in srgb, var(--accent2, var(--accent)) 60%, var(--accent))', text: 'var(--text)', border: 'color-mix(in srgb, var(--accent2, var(--accent)) 26%, var(--border))', glow: 'color-mix(in srgb, var(--accent2, var(--accent)) 10%, transparent)' },
 ];
 
 export default function Clubs() {
@@ -60,32 +64,38 @@ export default function Clubs() {
   };
 
   return (
-    <div className="page-enter page-container">
+    <div className="page-enter page-container content-page-bg">
 
-      {/* Hero */}
+      {/* Hero — theme-tinted, matches every other content page */}
       <div style={{
-        background: 'linear-gradient(135deg, #1e3a5f 0%, #1e40af 70%, #2563eb 100%)',
         borderRadius: 16, padding: '18px 20px 16px', marginBottom: 16, position: 'relative', overflow: 'hidden',
+        background: 'linear-gradient(135deg, rgba(var(--accentRGB), 0.14) 0%, rgba(var(--accentRGB), 0.05) 70%, var(--surface) 100%)',
+        border: '1px solid rgba(var(--accentRGB), 0.14)',
       }}>
-        <div style={{ position: 'absolute', top: -24, right: -24, width: 110, height: 110, borderRadius: '50%', background: 'rgba(255,255,255,0.05)' }} />
+        <div style={{ position: 'absolute', top: -24, right: -24, width: 110, height: 110, borderRadius: '50%', background: 'rgba(var(--accentRGB), 0.08)' }} />
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', position: 'relative' }}>
-          <div>
-            <div style={{ fontSize: 11, fontWeight: 600, color: 'rgba(147,197,253,0.85)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 4 }}>
-              Extracurricular
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <div className="content-page-hero-icon">
+              <Layers size={18} color="var(--accent)" />
             </div>
-            <h1 style={{ fontSize: 22, fontWeight: 800, color: '#fff', margin: 0 }}>Clubs & Activities</h1>
+            <div>
+              <div style={{ fontSize: 11, fontWeight: 600, color: 'var(--accent)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 4 }}>
+                Extracurricular
+              </div>
+              <h1 style={{ fontSize: 20, fontWeight: 800, color: 'var(--text)', margin: 0 }}>Clubs & Activities</h1>
+            </div>
           </div>
           <div style={{ textAlign: 'right' }}>
-            <div style={{ fontSize: 28, fontWeight: 900, color: '#fff', lineHeight: 1 }}>{clubs.length}</div>
-            <div style={{ fontSize: 10, color: 'rgba(147,197,253,0.8)' }}>clubs joined</div>
+            <div style={{ fontSize: 26, fontWeight: 900, color: 'var(--text)', lineHeight: 1 }}>{clubs.length}</div>
+            <div style={{ fontSize: 10, color: 'var(--muted)' }}>clubs joined</div>
           </div>
         </div>
         <div style={{ display: 'flex', gap: 20, marginTop: 14 }}>
-          <div style={{ fontSize: 12, color: 'rgba(147,197,253,0.85)' }}>
-            🎯 <span style={{ color: '#fff', fontWeight: 700 }}>{activities.length}</span> activities logged
+          <div style={{ fontSize: 12, color: 'var(--muted)' }}>
+            🎯 <span style={{ color: 'var(--text)', fontWeight: 700 }}>{activities.length}</span> activities logged
           </div>
-          <div style={{ fontSize: 12, color: 'rgba(147,197,253,0.85)' }}>
-            ⏱️ <span style={{ color: '#fff', fontWeight: 700 }}>{totalHoursAll.toFixed(1)}h</span> total
+          <div style={{ fontSize: 12, color: 'var(--muted)' }}>
+            ⏱️ <span style={{ color: 'var(--text)', fontWeight: 700 }}>{totalHoursAll.toFixed(1)}h</span> total
           </div>
         </div>
       </div>
@@ -114,24 +124,24 @@ export default function Clubs() {
               <div key={c.id} style={{
                 background: col.bg, borderRadius: 14,
                 padding: '14px 16px',
-                border: `1.5px solid ${col.accent}22`,
+                border: `1.5px solid ${col.border}`,
                 position: 'relative', overflow: 'hidden',
               }}>
-                <div style={{ position: 'absolute', top: -16, right: -16, width: 72, height: 72, borderRadius: '50%', background: `${col.accent}14` }} />
+                <div style={{ position: 'absolute', top: -16, right: -16, width: 72, height: 72, borderRadius: '50%', background: col.glow }} />
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', position: 'relative' }}>
                   <div style={{ flex: 1 }}>
                     <div style={{ fontWeight: 800, fontSize: 14, color: col.text }}>{c.name}</div>
                     {c.role && (
                       <div style={{
                         display: 'inline-block', marginTop: 4, fontSize: 10, fontWeight: 700,
-                        background: col.accent, color: '#fff', borderRadius: 99, padding: '2px 8px',
+                        background: col.accent, color: 'var(--card)', borderRadius: 99, padding: '2px 8px',
                       }}>{c.role}</div>
                     )}
                     {i === 0 && c.totalHours > 0 && (
                       <div style={{
                         display: 'inline-block', marginTop: 4, marginLeft: 4, fontSize: 10, fontWeight: 700,
-                        background: '#fff', color: col.accent, borderRadius: 99, padding: '2px 8px',
-                        border: `1px solid ${col.accent}44`,
+                        background: 'var(--card)', color: col.accent, borderRadius: 99, padding: '2px 8px',
+                        border: `1px solid ${col.border}`,
                       }}>⭐ Most Active</div>
                     )}
                   </div>

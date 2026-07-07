@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { FolderOpen } from 'lucide-react';
 import { getProfile } from '../store/store';
 import { getGroupId, getGroupLabel } from '../lib/groupUtils';
 import {
@@ -51,8 +52,13 @@ export default function Resources() {
   };
 
   return (
-    <div style={{ maxWidth: 640, margin: '0 auto', padding: '16px 14px' }}>
-      <h1 style={{ fontSize: 20, fontWeight: 700, marginBottom: 4 }}>Class Resources</h1>
+    <div className="content-page-bg" style={{ maxWidth: 640, margin: '0 auto', padding: '16px 14px' }}>
+      <div className="content-page-hero">
+        <div className="content-page-hero-icon">
+          <FolderOpen size={18} color="var(--accent)" />
+        </div>
+        <h1 className="content-page-hero-title">Class Resources</h1>
+      </div>
       <p style={{ color: 'var(--muted)', fontSize: 13, marginBottom: 16 }}>
         {groupId ? <>Notes, question banks, and links shared by <strong>{groupLabel}</strong>.</> : 'Set your department and batch in Profile to use shared resources.'}
       </p>

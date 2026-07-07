@@ -179,7 +179,7 @@ export default function Assignments() {
 
   if (groupId && groupHasCR) {
     return (
-      <div className="page-enter assignments-page">
+      <div className="page-enter assignments-page content-page-bg">
         <div className="page-container" style={{ paddingTop: 16 }}>
           <GroupAssignments groupId={groupId} canEdit={canEditGroupAssignments} />
         </div>
@@ -188,7 +188,7 @@ export default function Assignments() {
   }
 
   return (
-    <div className="page-enter assignments-page">
+    <div className="page-enter assignments-page content-page-bg">
       <div className="assignments-hero">
         <div className="page-container assignments-hero-inner">
           <div className="assignments-hero-copy">

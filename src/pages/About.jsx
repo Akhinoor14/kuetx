@@ -425,7 +425,7 @@ export default function About() {
       </div>
 
         {/* History Placeholder (to be filled later) */}
-        <div style={{ marginBottom: '3.5rem', padding: 'clamp(1.25rem, 3vw, 1.5rem)', border: '1px solid var(--border)', borderRadius: '16px', background: 'linear-gradient(135deg, rgba(59,130,246,0.08), rgba(14,165,233,0.04))' }}>
+        <div style={{ marginBottom: '3.5rem', padding: 'clamp(1.25rem, 3vw, 1.5rem)', border: '1px solid rgba(var(--accentRGB), 0.14)', borderRadius: '16px', background: 'linear-gradient(135deg, rgba(var(--accentRGB), 0.08), rgba(var(--accentRGB), 0.02))' }}>
           <h2 style={{ fontSize: 'clamp(1.2rem, 3vw, 1.5rem)', fontWeight: 800, marginBottom: '0.75rem', color: 'var(--text)', letterSpacing: '-0.02em', margin: 0 }}>Project History</h2>
           <p style={{ fontSize: '0.95rem', color: 'var(--muted)', lineHeight: 1.7, margin: 0 }}>
             Developer's personal story and reasons behind building KUETx will be added here when provided.

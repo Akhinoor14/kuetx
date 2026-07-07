@@ -19,16 +19,12 @@ export default function Notice() {
   const markRead = (id) => noticeApi.setNoticeRead(id, true);
 
   return (
-    <div style={{ padding: '20px 16px 40px', maxWidth: 720, margin: '0 auto' }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 6 }}>
-        <div style={{
-          width: 36, height: 36, borderRadius: 9,
-          background: 'color-mix(in srgb, var(--accent) 15%, var(--surface))',
-          display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
-        }}>
+    <div className="content-page-bg" style={{ padding: '20px 16px 40px', maxWidth: 720, margin: '0 auto' }}>
+      <div className="content-page-hero" style={{ marginBottom: 6 }}>
+        <div className="content-page-hero-icon">
           <Bell size={18} color="var(--accent)" />
         </div>
-        <h1 style={{ fontSize: 18, fontWeight: 700, color: 'var(--text)', margin: 0 }}>Notice</h1>
+        <h1 className="content-page-hero-title">Notice</h1>
       </div>
       <p style={{ fontSize: 13, color: 'var(--muted)', margin: '0 0 24px' }}>
         Announcements from Admin, CR/ACR, and Campus Lead land here.
