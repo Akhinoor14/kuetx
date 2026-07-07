@@ -18,9 +18,7 @@ const GROUP_ICONS = {
   'Class Rep':   'Shield',
   'Academics':   'GraduationCap',
   'Daily Life':  'Sunrise',
-  'Wellbeing':   'Heart',
-  'Activities':  'Layers',
-  'Finance':     'Wallet',
+  'Campus Life': 'Layers',
   'Tools':       'Wrench',
 };
 
@@ -29,9 +27,7 @@ const GROUP_COLORS = {
   'Class Rep':   '#a78bfa',
   'Academics':   '#3b82f6',
   'Daily Life':  '#f59e0b',
-  'Wellbeing':   '#ec4899',
-  'Activities':  '#f97316',
-  'Finance':     '#10b981',
+  'Campus Life': '#f97316',
   'Tools':       '#64748b',
 };
 
@@ -51,10 +47,6 @@ const SHORT_LABELS = {
   'Self Study':        'Study',
   'Time Tracker':      'Time',
   'Namaz Tracker':     'Namaz',
-  'Self Eval':         'Self Eval',
-  'Smart Score':       'Score',
-  'Social Time':       'Social',
-  'Food & Health':     'Food',
   'About KUETx':       'About',
 };
 
@@ -148,8 +140,8 @@ function NavCell({ item, groupColor, active, onClose, is3col }) {
 }
 
 // ── Group header ──────────────────────────────────────────────────────────────
-function GroupHeader({ group, groupColor, itemCount }) {
-  const GroupIcon = Icons[GROUP_ICONS[group]] || Icons.Circle;
+function GroupHeader({ group, groupColor, itemCount, hubIconOverride }) {
+  const GroupIcon = Icons[hubIconOverride] || Icons[GROUP_ICONS[group]] || Icons.Circle;
   return (
     <div style={{
       display: 'flex',
@@ -229,13 +221,23 @@ export function Sidebar({ open, onClose, mode = '2col', onCycleMode, authState }
 
   const filteredNav = filterNav(NAV, appMode, canSeeCrBoard, getJrCustomHidden(), getJrCustomShown());
 
+  const findNavItem = (path) => {
+    for (const s of NAV) {
+      const pools = s.subgroups ? s.subgroups.map(sub => sub.items) : [s.items];
+      for (const pool of pools) {
+        const i = pool.find(i => i.path === path);
+        if (i) return i;
+      }
+    }
+    return null;
+  };
   const getPageLabel = (path) => {
-    for (const s of NAV) { const i = s.items.find(i => i.path === path); if (i) return i.label; }
-    return path === '/' ? 'Dashboard' : path;
+    const i = findNavItem(path);
+    return i ? i.label : (path === '/' ? 'Dashboard' : path);
   };
   const getPageIcon = (path) => {
-    for (const s of NAV) { const i = s.items.find(i => i.path === path); if (i) return Icons[i.icon] || Icons.Circle; }
-    return Icons.Circle;
+    const i = findNavItem(path);
+    return i ? (Icons[i.icon] || Icons.Circle) : Icons.Circle;
   };
 
   const quickItems = [...new Set([...pinnedPages, ...favorites])].slice(0, 5);
@@ -324,9 +326,49 @@ export function Sidebar({ open, onClose, mode = '2col', onCycleMode, authState }
         <nav style={{ flex: 1, overflowY: 'auto', padding: compact ? '8px 6px 16px' : '6px 6px 16px' }}>
           {filteredNav.map((section, idx) => {
             const groupColor = GROUP_COLORS[section.group] || 'var(--muted)';
+            const isHub = section.isSubgroup && !section.subgroups;
 
             /* ── Compact mode: icon-only list ── */
             if (compact) {
+              // Whole-group hub (Class Rep, Campus Life, Daily Life): collapse to one icon
+              if (isHub) {
+                const HubIcon = Icons[section.hubIcon] || Icons[GROUP_ICONS[section.group]] || Icons.Circle;
+                const active = location.pathname === section.hubPath;
+                return (
+                  <div key={section.group}>
+                    {idx > 0 && <div style={{ height: 1, background: 'var(--border)', margin: '6px 10px', opacity: 0.5 }} />}
+                    <Link to={section.hubPath} onClick={onClose}
+                      className={`nav-item ${active ? 'active' : ''}`}
+                      title={section.group}
+                      style={{ justifyContent: 'center', padding: '9px 0' }}>
+                      <HubIcon size={16} strokeWidth={active ? 2.5 : 1.8} style={{ flexShrink: 0 }} />
+                    </Link>
+                  </div>
+                );
+              }
+
+              // Group split into subgroups (Academics): one icon per subgroup hub
+              if (section.subgroups) {
+                return (
+                  <div key={section.group}>
+                    {idx > 0 && <div style={{ height: 1, background: 'var(--border)', margin: '6px 10px', opacity: 0.5 }} />}
+                    {section.subgroups.map(sub => {
+                      const SubIcon = Icons[sub.hubIcon] || Icons.Circle;
+                      const active = location.pathname === sub.hubPath;
+                      return (
+                        <Link key={sub.name} to={sub.hubPath} onClick={onClose}
+                          className={`nav-item ${active ? 'active' : ''}`}
+                          title={sub.name}
+                          style={{ justifyContent: 'center', padding: '9px 0' }}>
+                          <SubIcon size={16} strokeWidth={active ? 2.5 : 1.8} style={{ flexShrink: 0 }} />
+                        </Link>
+                      );
+                    })}
+                  </div>
+                );
+              }
+
+              // Direct group (Overview, Tools): flat list as before
               return (
                 <div key={section.group}>
                   {idx > 0 && <div style={{ height: 1, background: 'var(--border)', margin: '6px 10px', opacity: 0.5 }} />}
@@ -346,7 +388,35 @@ export function Sidebar({ open, onClose, mode = '2col', onCycleMode, authState }
               );
             }
 
-            /* ── 2-col / 3-col grid with group header ── */
+            /* ── 2-col / 3-col grid ── */
+
+            // Whole-group hub: single clickable row (icon + name + item count), no header/grid
+            if (isHub) {
+              const HubIcon = Icons[section.hubIcon] || Icons[GROUP_ICONS[section.group]] || Icons.Circle;
+              const active = location.pathname === section.hubPath;
+              return (
+                <div key={section.group} style={{ marginBottom: 8 }}>
+                  <Link to={section.hubPath} onClick={onClose} style={{ textDecoration: 'none' }}>
+                    <GroupHeader group={section.group} groupColor={groupColor} itemCount={section.items.length} />
+                  </Link>
+                </div>
+              );
+            }
+
+            // Group split into subgroups: render each subgroup as its own hub row
+            if (section.subgroups) {
+              return (
+                <div key={section.group} style={{ marginBottom: 8 }}>
+                  {section.subgroups.map(sub => (
+                    <Link key={sub.name} to={sub.hubPath} onClick={onClose} style={{ textDecoration: 'none', display: 'block', marginBottom: 4 }}>
+                      <GroupHeader group={sub.name} groupColor={groupColor} itemCount={sub.items.length} hubIconOverride={sub.hubIcon} />
+                    </Link>
+                  ))}
+                </div>
+              );
+            }
+
+            /* ── Direct group: grid with group header (unchanged) ── */
             return (
               <div key={section.group} style={{ marginBottom: 8 }}>
                 <GroupHeader

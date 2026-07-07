@@ -20,10 +20,10 @@ export default function ModeSelectModal({ onDone }) {
       icon: 'LayoutDashboard',
       title: 'Full KUETx',
       subtitle: 'সব feature',
-      desc: 'Academics, Finance, Activities, Wellbeing — everything included.',
+      desc: 'Academics, Campus Life, Daily Life — everything included.',
       color: '#0f9b77',
       bg: 'rgba(15,155,119,0.10)',
-      tags: ['All pages', 'Finance', 'Activities', 'Wellbeing'],
+      tags: ['All pages', 'Campus Life'],
     },
     {
       id: 'jr',

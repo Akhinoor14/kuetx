@@ -30,24 +30,34 @@ export const markModeChosen = () => {
  * Filter NAV sections based on current mode + CR status.
  * Returns filtered NAV — same shape, sections/items removed where appropriate.
  */
+const filterItems = (items, section, mode, isCR) => items.filter(item => {
+  if (item.requiresCR && !isCR) return false;
+  if (mode === 'jr') {
+    if (section.fullOnly) return false;
+    if (item.fullOnly) return false;
+  }
+  return true;
+});
+
 export const filterNav = (nav, mode, isCR = false) => {
   return nav
     .map(section => {
       // CR-only sections
-      if (section.requiresCR && !isCR) return { ...section, items: [] };
+      if (section.requiresCR && !isCR) {
+        return section.subgroups ? { ...section, subgroups: [] } : { ...section, items: [] };
+      }
 
-      const items = section.items.filter(item => {
-        if (item.requiresCR && !isCR) return false;
-        if (mode === 'jr') {
-          if (section.fullOnly) return false;
-          if (item.fullOnly) return false;
-        }
-        return true;
-      });
+      if (section.subgroups) {
+        const subgroups = section.subgroups
+          .map(sub => ({ ...sub, items: filterItems(sub.items, section, mode, isCR) }))
+          .filter(sub => sub.items.length > 0);
+        return { ...section, subgroups };
+      }
 
+      const items = filterItems(section.items, section, mode, isCR);
       return { ...section, items };
     })
-    .filter(section => section.items.length > 0);
+    .filter(section => section.subgroups ? section.subgroups.length > 0 : section.items.length > 0);
 };
 
 // Kept for Sidebar backward compat (stubs)

@@ -26,8 +26,8 @@ const PANEL_SUBTITLES = {
 };
 
 const PANEL_SECTION_GROUPS = {
-  study: ['Academics', 'Daily Life', 'Wellbeing'],
-  money: ['Finance', 'Activities'],
+  study: ['Academics', 'Daily Life'],
+  money: ['Campus Life'],
   menu: ['Overview', 'Class Rep', 'Tools'],
 };
 
@@ -73,7 +73,10 @@ const saveUsageState = (next) => {
 
 const getVisibleSections = (profile) => filterNav(NAV, getAppMode(), !!profile?.isCR);
 
-const getAllNavItems = (profile) => getVisibleSections(profile).flatMap(section => section.items);
+const flattenSectionItems = (section) =>
+  section.subgroups ? section.subgroups.flatMap(sub => sub.items) : section.items;
+
+const getAllNavItems = (profile) => getVisibleSections(profile).flatMap(flattenSectionItems);
 
 const getItemMap = (profile) => new Map(getAllNavItems(profile).map(item => [item.id, item]));
 
@@ -102,7 +105,11 @@ const buildPanelSections = (profile, panel, itemMap, mostUsedItems) => {
     const sourceSection = NAV.find(candidate => candidate.group === groupName);
     if (!sourceSection) return;
 
-    const items = sourceSection.items
+    const rawItems = sourceSection.subgroups
+      ? sourceSection.subgroups.flatMap(sub => sub.items)
+      : sourceSection.items;
+
+    const items = rawItems
       .filter(item => !item.requiresCR || profile?.isCR)
       .filter(item => item.id !== 'dashboard')
       .map(item => itemMap.get(item.id) || item)
@@ -139,7 +146,6 @@ function NavGridItem({ item, onSelect }) {
   const SHORT_LABELS = {
     'dashboard': 'Dash',
     'profile': 'Profile',
-    'smart-score': 'Score',
     'notes': 'Notes',
     'class-management': 'Class Management',
     'courses': 'Courses',
@@ -156,14 +162,11 @@ function NavGridItem({ item, onSelect }) {
     'self-study': 'Self Study',
     'time': 'Time',
     'namaz': 'Namaz',
-    'self-eval': 'Self Eval',
     'money': 'Money',
     'tuition': 'Tuition',
-    'food': 'Food',
     'clubs': 'Clubs',
     'projects': 'Projects',
     'tours': 'Tours',
-    'social': 'Social',
     'warnings': 'Alerts',
     'reports': 'Reports',
     'settings': 'Settings',

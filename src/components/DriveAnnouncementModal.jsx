@@ -41,7 +41,7 @@ const UPDATES = [
     tag: 'New',
     tagColor: '#16a34a',
     title: 'JR Mode',
-    body: 'Academic-only view — hides Finance, Activities & Wellbeing for a cleaner experience.',
+    body: 'Academic-only view — hides Campus Life for a cleaner experience.',
   },
   {
     id: 6,

@@ -46,11 +46,9 @@ import QuestionBankViewer from './pages/QuestionBankViewer';
 import QuestionBankSolutions from './pages/QuestionBankSolutions';
 import SelfStudy from './pages/SelfStudy';
 import Namaz from './pages/Namaz';
-import SelfEval from './pages/SelfEval';
 import Money from './pages/Money';
 import Calculators from './pages/Calculators';
 import Alerts from './pages/Alerts';
-import SmartScore from './pages/SmartScore';
 import Settings from './pages/Settings';
 import { Notes } from './pages/Notes';
 import Clubs from './pages/Clubs';
@@ -60,8 +58,9 @@ import CTQuizPlanning from './pages/CTQuizPlanning';
 import Classmates from './pages/Classmates';
 import AdminDashboard from './pages/AdminDashboard';
 import TeamDashboard from './pages/TeamDashboard';
-import { Tours, Social, Projects, Syllabus, TimeTracker, Tuition, Food, Reports } from './pages/Extras';
+import { Tours, Projects, Syllabus, TimeTracker, Tuition, Reports } from './pages/Extras';
 import QuickAccess from './pages/QuickAccess';
+import SubgroupHub from './components/nav-system/SubgroupHub';
 
 function Layout({ authState, onboardingActive }) {
   usePageTracker();
@@ -133,17 +132,13 @@ function Layout({ authState, onboardingActive }) {
             <Route path="/self-study" element={<SelfStudy />} />
             <Route path="/time" element={<TimeTracker />} />
             <Route path="/namaz" element={<Namaz />} />
-            <Route path="/self-eval" element={<SelfEval />} />
             <Route path="/money" element={<Money />} />
             <Route path="/tuition" element={<Tuition />} />
-            <Route path="/food" element={<Food />} />
             <Route path="/clubs" element={<Clubs />} />
             <Route path="/projects" element={<Projects />} />
             <Route path="/tours" element={<Tours />} />
-            <Route path="/social" element={<Social />} />
             <Route path="/calculators" element={<Navigate to="/marks" replace />} />
             <Route path="/alerts" element={<Alerts />} />
-            <Route path="/smart-score" element={<SmartScore />} />
             <Route path="/reports" element={<Reports />} />
             <Route path="/notes" element={<Notes />} />
             <Route path="/settings" element={<Settings />} />
@@ -151,6 +146,11 @@ function Layout({ authState, onboardingActive }) {
             <Route path="/class-management" element={<RequireCR><ClassManagement /></RequireCR>} />
             <Route path="/ct-quiz-planning" element={<RequireCR><CTQuizPlanning /></RequireCR>} />
             <Route path="/classmates" element={<Classmates />} />
+            <Route path="/class-rep" element={<RequireCR><SubgroupHub group="Class Rep" /></RequireCR>} />
+            <Route path="/academic-core" element={<SubgroupHub group="Academics" subgroup="Academic Core" />} />
+            <Route path="/daily-academics" element={<SubgroupHub group="Academics" subgroup="Daily Academics" />} />
+            <Route path="/campus-life" element={<SubgroupHub group="Campus Life" />} />
+            <Route path="/daily-life" element={<SubgroupHub group="Daily Life" />} />
             <Route path="/admin" element={<AdminDashboard />} />
             <Route path="/team" element={<TeamDashboard />} />
           </Routes>

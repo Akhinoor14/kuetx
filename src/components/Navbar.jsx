@@ -11,18 +11,24 @@ import GuideModal from './GuideModal';
 
 function getPageMeta(pathname) {
   for (const section of NAV) {
-    for (const item of section.items) {
-      if (item.path === pathname || (item.path !== '/' && pathname.startsWith(item.path)))
-        return { label: item.label, group: section.group };
+    const pools = section.subgroups
+      ? section.subgroups.map(sub => ({ items: sub.items, groupLabel: sub.name }))
+      : [{ items: section.items, groupLabel: section.group }];
+
+    for (const pool of pools) {
+      for (const item of pool.items) {
+        if (item.path === pathname || (item.path !== '/' && pathname.startsWith(item.path)))
+          return { label: item.label, group: pool.groupLabel, siblings: pool.items };
+      }
     }
   }
-  return { label: 'KUETx', group: '' };
+  return { label: 'KUETx', group: '', siblings: [] };
 }
 
 export function Navbar({ onMenuClick }) {
   const { themeId, setTheme } = useTheme();
   const location = useLocation();
-  const { label, group } = getPageMeta(location.pathname);
+  const { label, group, siblings } = getPageMeta(location.pathname);
   const [notificationOpen, setNotificationOpen] = useState(false);
   const [refreshTick, setRefreshTick] = useState(0);
   const [guideOpen, setGuideOpen] = useState(false);
@@ -148,11 +154,27 @@ export function Navbar({ onMenuClick }) {
           {label !== 'KUETx' ? label : ''}
         </div>
 
-        {/* Desktop breadcrumb */}
-        <div className="hidden md:flex" style={{ alignItems: 'center', gap: 6, fontSize: 14 }}>
-          {group && <span style={{ color: 'var(--muted)' }}>{group}</span>}
-          {group && <ChevronRight size={14} color="var(--muted)" />}
-          <span style={{ fontWeight: 700, color: 'var(--text)' }}>{label}</span>
+        {/* Desktop breadcrumb + sibling pills */}
+        <div className="hidden md:flex" style={{ alignItems: 'center', gap: 12 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 14 }}>
+            {group && <span style={{ color: 'var(--muted)' }}>{group}</span>}
+            {group && <ChevronRight size={14} color="var(--muted)" />}
+            <span style={{ fontWeight: 700, color: 'var(--text)' }}>{label}</span>
+          </div>
+          {siblings && siblings.length > 1 && (
+            <div className="filter-tab-row" style={{ marginBottom: 0 }}>
+              {siblings.map(item => (
+                <Link
+                  key={item.id}
+                  to={item.path}
+                  className={`filter-tab ${location.pathname === item.path ? 'active' : ''}`}
+                  style={{ textDecoration: 'none' }}
+                >
+                  {item.label}
+                </Link>
+              ))}
+            </div>
+          )}
         </div>
 
         <div style={{ flex: 1 }} />

@@ -1280,7 +1280,7 @@ export default function Profile() {
           { href: '/assignments', icon: '✅', label: 'Assignments' },
           { href: '/diary', icon: '📖', label: 'Diary' },
           { href: '/money', icon: '💰', label: 'Money' },
-          { href: '/self-eval', icon: '🌟', label: 'Self Eval' },
+          { href: '/namaz', icon: '🌙', label: 'Namaz' },
           { href: '/notes', icon: '📌', label: 'Notes' },
         ].map(({ href, icon, label }) => (
           <a key={href} href={href} style={{

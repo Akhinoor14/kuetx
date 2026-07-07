@@ -246,7 +246,7 @@ export default function Settings() {
       {/* App Mode */}
       <div className="card" style={{ marginBottom: 14 }}>
         <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 4 }}>App Mode</div>
-        <div style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 12 }}>JR mode hides Finance, Activities & Wellbeing sections.</div>
+        <div style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 12 }}>JR mode hides Campus Life section.</div>
         <div style={{ display: 'flex', gap: 8 }}>
           {[
             { id: 'full', label: 'Full KUETx', Icon: LayoutDashboard, desc: 'সব কিছু' },

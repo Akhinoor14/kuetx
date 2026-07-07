@@ -12,24 +12,25 @@ import { subscribeMyRole } from '../lib/groupSync';
 import { auth } from '../lib/firebase';
 
 
-const CR_PATHS = NAV.flatMap(s => s.items || []).filter(i => i.requiresCR).map(i => i.path);
+// Flatten a NAV section's items, whether it's a direct group or split into subgroups
+const sectionItems = (s) => s.subgroups ? s.subgroups.flatMap(sub => sub.items) : (s.items || []);
+
+const CR_PATHS = NAV.flatMap(sectionItems).filter(i => i.requiresCR).map(i => i.path);
 const MOBILE_QUERY = '(max-width: 767.98px)';
 
 const GROUP_META = {
-  'Overview':   { icon: 'LayoutDashboard', color: '#0f9b77' },
-  'Class Rep':  { icon: 'Shield',          color: '#a78bfa' },
-  'Academics':  { icon: 'GraduationCap',   color: '#3b82f6' },
-  'Daily Life': { icon: 'Sunrise',         color: '#f59e0b' },
-  'Wellbeing':  { icon: 'Heart',           color: '#ec4899' },
-  'Finance':    { icon: 'Wallet',          color: '#10b981' },
-  'Activities': { icon: 'Layers',          color: '#f97316' },
-  'Tools':      { icon: 'Wrench',          color: '#64748b' },
+  'Overview':    { icon: 'LayoutDashboard', color: '#0f9b77' },
+  'Class Rep':   { icon: 'Shield',          color: '#a78bfa' },
+  'Academics':   { icon: 'GraduationCap',   color: '#3b82f6' },
+  'Daily Life':  { icon: 'Sunrise',         color: '#f59e0b' },
+  'Campus Life': { icon: 'Layers',          color: '#f97316' },
+  'Tools':       { icon: 'Wrench',          color: '#64748b' },
 };
 
 // Get the group meta for a given path
 function getPathMeta(path) {
   for (const s of NAV) {
-    if (s.items.find(i => i.path === path)) return GROUP_META[s.group] || null;
+    if (sectionItems(s).find(i => i.path === path)) return GROUP_META[s.group] || null;
   }
   return null;
 }
@@ -82,11 +83,11 @@ export function QuickAccessPanel({ inPanel = false, onNavigate } = {}) {
   const totalViews = allStats.reduce((sum, s) => sum + s.count, 0);
 
   const getPageLabel = (path) => {
-    for (const s of NAV) { const i = s.items.find(i => i.path === path); if (i) return i.label; }
+    for (const s of NAV) { const i = sectionItems(s).find(i => i.path === path); if (i) return i.label; }
     return path === '/' ? 'Dashboard' : path;
   };
   const getPageIcon = (path) => {
-    for (const s of NAV) { const i = s.items.find(i => i.path === path); if (i) return Icons[i.icon] || Icons.Circle; }
+    for (const s of NAV) { const i = sectionItems(s).find(i => i.path === path); if (i) return Icons[i.icon] || Icons.Circle; }
     return Icons.Circle;
   };
 
@@ -229,22 +230,28 @@ export function QuickAccessPanel({ inPanel = false, onNavigate } = {}) {
   const BrowseTab = () => (
     <div>
       <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(3, 1fr)', gap: 14 }}>
-        {filterNav(NAV, getAppMode(), isCR).map(section => {
+        {filterNav(NAV, getAppMode(), isCR).flatMap(section => {
           const meta = GROUP_META[section.group] || { icon: 'Circle', color: '#64748b' };
           const GroupIcon = Icons[meta.icon] || Icons.Circle;
-          return (
-            <div key={section.group} style={{ border: `1.5px solid ${meta.color}22`, borderRadius: 14, overflow: 'hidden', background: 'var(--surface)' }}>
+
+          // Groups split into subgroups (Academics) render as one box per subgroup
+          const boxes = section.subgroups
+            ? section.subgroups.map(sub => ({ key: sub.name, title: sub.name, items: sub.items }))
+            : [{ key: section.group, title: section.group, items: section.items }];
+
+          return boxes.map(box => (
+            <div key={box.key} style={{ border: `1.5px solid ${meta.color}22`, borderRadius: 14, overflow: 'hidden', background: 'var(--surface)' }}>
               {/* Group header */}
               <div style={{ display: 'flex', alignItems: 'center', gap: 9, padding: '9px 14px', background: `${meta.color}0d`, borderBottom: `1px solid ${meta.color}1a` }}>
                 <div style={{ width: 24, height: 24, borderRadius: 7, background: `${meta.color}20`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <GroupIcon size={12} color={meta.color} />
                 </div>
-                <span style={{ flex: 1, fontSize: 11, fontWeight: 800, color: meta.color, textTransform: 'uppercase', letterSpacing: '0.08em' }}>{section.group}</span>
-                <span style={{ fontSize: 10, fontWeight: 700, color: meta.color, background: `${meta.color}18`, border: `1px solid ${meta.color}28`, borderRadius: 20, padding: '1px 7px' }}>{section.items.length}</span>
+                <span style={{ flex: 1, fontSize: 11, fontWeight: 800, color: meta.color, textTransform: 'uppercase', letterSpacing: '0.08em' }}>{box.title}</span>
+                <span style={{ fontSize: 10, fontWeight: 700, color: meta.color, background: `${meta.color}18`, border: `1px solid ${meta.color}28`, borderRadius: 20, padding: '1px 7px' }}>{box.items.length}</span>
               </div>
               {/* Items */}
               <div style={{ padding: '10px', display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(82px, 1fr))', gap: 8 }}>
-                {section.items.map(item => {
+                {box.items.map(item => {
                   const stat = allStats.find(s => s.path === item.path);
                   return (
                     <PageTile key={item.id} path={item.path} count={stat?.count || 0} accent={meta.color} />
@@ -252,7 +259,7 @@ export function QuickAccessPanel({ inPanel = false, onNavigate } = {}) {
                 })}
               </div>
             </div>
-          );
+          ));
         })}
       </div>
     </div>
