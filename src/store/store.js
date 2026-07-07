@@ -1127,10 +1127,15 @@ export const DEFAULT_PROFILE = {
 // reports (Classmates match, roll-based verification, term dates).
 export const isProfileComplete = (profile) => {
   const p = profile || {};
-  return !!(String(p.name || '').trim()
-    && String(p.studentId || '').trim()
-    && String(p.dept || '').trim()
-    && String(p.session || '').trim());
+  // Deliberately minimal: this only gates the mandatory first-launch
+  // onboarding modal (see App.jsx buildQueue). dept auto-derives from the
+  // roll number (ProfileSetupModal.jsx's extractDeptCodeFromRoll), and
+  // session/currentTermKey/termStartDate are all used with graceful
+  // fallbacks elsewhere (Dashboard, Schedule, Courses, etc.) — requiring
+  // them here just added extra required fields to fill in before the
+  // person could use the app at all. They can still be filled in later
+  // from the Profile page whenever the person wants.
+  return !!(String(p.name || '').trim() && String(p.studentId || '').trim());
 };
 
 // ---------------- Audit & Snapshot helpers ----------------

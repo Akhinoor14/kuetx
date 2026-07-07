@@ -3,6 +3,7 @@ import Modal from './Modal';
 import KuetEmailVerifyWidget from './KuetEmailVerifyWidget';
 import { isRollInstitutionallyVerified } from '../lib/kuetEmailVerify';
 import { DEPARTMENTS, DEFAULT_PROFILE, TERM_KEYS, getTermLabelFromKey, BATCH_START_DATES, extractBatchFromRoll } from '../store/store';
+import { claimRoll } from '../lib/rollOwnership';
 
 // Map dept codes: roll middle 2 digits -> dept code
 const ROLL_DEPT_MAP = {
@@ -83,7 +84,13 @@ const stepTabs = [
 ];
 
 const requiredFieldMap = {
-  0: ['name', 'studentId', 'dept', 'session', 'currentTermKey'],
+  // Deliberately minimal: dept auto-derives from studentId (see
+  // extractDeptCodeFromRoll below), and session/currentTermKey are now
+  // optional here — they can be filled in later from the Profile page.
+  // This step used to require 5 fields before someone could even open
+  // the app; now it's just the two things that are actually load-bearing
+  // (identity + roll number, which everything else derives from).
+  0: ['name', 'studentId'],
 };
 
 const toDateInputValue = (value) => {
@@ -137,6 +144,7 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
   const [form, setForm] = useState(initial);
   const [stepIndex, setStepIndex] = useState(0);
   const [errors, setErrors] = useState({});
+  const [rollClaimBusy, setRollClaimBusy] = useState(false);
   const [verifiedJustNow, setVerifiedJustNow] = useState(false);
   const [verifySkipped, setVerifySkipped] = useState(false);
 
@@ -238,9 +246,12 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
       if (error) nextErrors[field] = error;
     });
 
-    if (index === 0 && !String(form.dept || autoCalculatedDept || '').trim()) {
-      nextErrors.dept = 'Department is required';
-    }
+    // dept is no longer a hard requirement to finish onboarding — it's
+    // auto-derived from the roll number in almost all cases, and the
+    // person can pick/fix it manually later from Profile if their roll
+    // doesn't map to a known dept code. Blocking here just added a wall
+    // in front of using the app at all for an edge case that's rare and
+    // self-correctable later.
 
     setErrors(nextErrors);
     return Object.keys(nextErrors).length === 0;
@@ -261,7 +272,7 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
     setErrors({});
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validateStep(0) || !validateStep(1)) {
       setStepIndex(0);
@@ -279,10 +290,36 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
       return;
     }
 
+    const studentIdTrimmed = String(form.studentId || '').trim();
+
+    // Block if this exact roll number is already claimed by a DIFFERENT
+    // Firebase account — stops the same student ending up with two
+    // separate accounts (e.g. one via Google, one via Email/Password).
+    setRollClaimBusy(true);
+    let claim;
+    try {
+      claim = await claimRoll(studentIdTrimmed);
+    } catch (err) {
+      setRollClaimBusy(false);
+      setErrors(prev => ({ ...prev, studentId: 'Roll check করতে সমস্যা হয়েছে, আবার চেষ্টা করো।' }));
+      setStepIndex(0);
+      return;
+    }
+    setRollClaimBusy(false);
+
+    if (!claim.ok) {
+      setErrors(prev => ({
+        ...prev,
+        studentId: 'এই roll number দিয়ে আগেই একটা account আছে। একই roll দিয়ে দুইটা account করা যাবে না — আগের account দিয়ে login করো।',
+      }));
+      setStepIndex(0);
+      return;
+    }
+
     const next = {
       ...DEFAULT_PROFILE,
       ...form,
-      studentId: String(form.studentId || '').trim(),
+      studentId: studentIdTrimmed,
       name: String(form.name || '').trim(),
       dept: String(form.dept || autoCalculatedDept || '').trim(),
       session: String(form.session || '').trim(),
@@ -581,10 +618,25 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
             {showOptionalSkip && (
               <button type="button" onClick={skipStep} style={{ padding: '12px 16px', borderRadius: 8, border: '1px dashed var(--border)', background: 'transparent', color: 'var(--muted)', fontWeight: 600 }}>Skip</button>
             )}
+            {/* Only name + studentId are actually required (see
+                requiredFieldMap) — everything past step 0 is optional and
+                can be added later from Profile. This lets someone land in
+                the app right after step 0 instead of clicking through
+                Residence and Review just to reach a "Finish" button. */}
+            {!canSubmit && stepIndex === 0 && (
+              <button
+                type="button"
+                onClick={() => { if (validateStep(0)) handleSubmit({ preventDefault: () => {} }); }}
+                disabled={rollClaimBusy}
+                style={{ padding: '12px 16px', borderRadius: 8, border: '1px dashed var(--border)', background: 'transparent', color: 'var(--muted)', fontWeight: 600 }}
+              >
+                {rollClaimBusy ? 'Checking…' : 'Finish now, add rest later'}
+              </button>
+            )}
             {!canSubmit ? (
               <button type="button" onClick={goNext} className="primary-action" style={{ padding: '12px 18px', background: 'var(--accent)', color: '#fff', border: 'none', borderRadius: 8, fontWeight: 700, minWidth: 100 }}>Next</button>
             ) : (
-              <button type="submit" className="primary-action" style={{ padding: '12px 18px', background: 'var(--accent)', color: '#fff', border: 'none', borderRadius: 8, fontWeight: 700, minWidth: 120 }}>Finish Setup</button>
+              <button type="submit" disabled={rollClaimBusy} className="primary-action" style={{ padding: '12px 18px', background: 'var(--accent)', color: '#fff', border: 'none', borderRadius: 8, fontWeight: 700, minWidth: 120, opacity: rollClaimBusy ? 0.7 : 1, cursor: rollClaimBusy ? 'wait' : 'pointer' }}>{rollClaimBusy ? 'Checking…' : 'Finish Setup'}</button>
             )}
           </div>
         </div>

@@ -97,8 +97,23 @@ export default function AuthModal({ mode = 'login', isUpgrade = false, onClose, 
     setError('');
     try {
       const user = isUpgrade ? await upgradeWithGoogle() : await loginWithGoogle();
-      onSuccess?.(user);
+      onSuccess?.(user, { linked: isUpgrade });
     } catch (err) {
+      if (isUpgrade && err.code === 'auth/credential-already-in-use') {
+        // This Google account already belongs to a real (non-anonymous)
+        // account from before — can't link it to a NEW anonymous uid.
+        // Fall back to logging into that existing account directly, so
+        // a returning user isn't stuck just because they're currently
+        // holding a fresh anonymous session on this device.
+        try {
+          const user = await loginWithGoogle();
+          onSuccess?.(user, { linked: false, fellBackToExistingAccount: true });
+          return;
+        } catch (err2) {
+          setError(getAuthErrorMessage(err2.code));
+          return;
+        }
+      }
       setError(getAuthErrorMessage(err.code));
     } finally {
       setLoading(false);
@@ -118,8 +133,21 @@ export default function AuthModal({ mode = 'login', isUpgrade = false, onClose, 
       } else {
         user = await loginWithEmail(email, password);
       }
-      onSuccess?.(user);
+      onSuccess?.(user, { linked: isUpgrade });
     } catch (err) {
+      if (isUpgrade && (err.code === 'auth/credential-already-in-use' || err.code === 'auth/email-already-in-use')) {
+        // Same fallback as Google above: this email already has a real
+        // account from before this device's current anonymous session —
+        // log into it directly instead of leaving the user stuck.
+        try {
+          const user = await loginWithEmail(email, password);
+          onSuccess?.(user, { linked: false, fellBackToExistingAccount: true });
+          return;
+        } catch (err2) {
+          setError(getAuthErrorMessage(err2.code));
+          return;
+        }
+      }
       setError(getAuthErrorMessage(err.code));
     } finally {
       setLoading(false);

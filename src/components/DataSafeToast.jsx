@@ -8,16 +8,17 @@ import { CheckCircle, X } from 'lucide-react';
 
 const TOAST_KEY = 'kuetx_data_safe_toast_seen';
 
-export default function DataSafeToast() {
+export default function DataSafeToast({ suppress = false }) {
   const [visible, setVisible] = useState(false);
   const [hiding, setHiding] = useState(false);
 
   useEffect(() => {
     if (localStorage.getItem(TOAST_KEY)) return;
+    if (suppress) return; // don't even start the timer while onboarding modals are up
     // Show after 2s (let app settle first)
     const t = setTimeout(() => setVisible(true), 2000);
     return () => clearTimeout(t);
-  }, []);
+  }, [suppress]);
 
   const dismiss = () => {
     setHiding(true);
@@ -31,6 +32,16 @@ export default function DataSafeToast() {
     const t = setTimeout(dismiss, 7000);
     return () => clearTimeout(t);
   }, [visible]);
+
+  // If an onboarding modal (mode select, auth, profile setup, etc.) opens
+  // AFTER this toast already started its 2s timer, hide it immediately
+  // instead of letting it sit on top — it was overlapping and visually
+  // clashing with "Choose your mode" and other queue steps.
+  useEffect(() => {
+    if (suppress && visible && !hiding) {
+      setVisible(false);
+    }
+  }, [suppress]);
 
   if (!visible) return null;
 

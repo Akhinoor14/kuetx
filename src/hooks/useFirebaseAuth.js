@@ -4,7 +4,7 @@
  */
 
 import { useState, useEffect } from 'react';
-import { onAuthChange, loginAnonymously } from '../lib/firebaseAuth';
+import { onAuthChange } from '../lib/firebaseAuth';
 import { startFirebaseSync, stopFirebaseSync, pushAllToFirestore, getLastPullCount } from '../lib/firebaseSync';
 
 export default function useFirebaseAuth() {
@@ -41,14 +41,11 @@ export default function useFirebaseAuth() {
           await pushAllToFirestore(firebaseUser.uid);
         }
       } else {
-        // Not logged in → login anonymously so data is always tied to a uid
+        // Not logged in — do NOT auto sign-in anonymously anymore.
+        // The 'auth' step in App.jsx's queue is now mandatory (no skip),
+        // so every real session ends up going through Login/Register
+        // instead of silently getting an anonymous uid first.
         setSyncStatus('idle');
-        try {
-          await loginAnonymously();
-          // onAuthChange will fire again with the anonymous user
-        } catch (err) {
-          console.warn('[KUETx] Anonymous login failed:', err.message);
-        }
       }
     });
 

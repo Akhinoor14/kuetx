@@ -24,7 +24,8 @@ import KuetVerifyEmailConfirmModal from './components/KuetVerifyEmailConfirmModa
 import { isModeChosen } from './lib/modeFilter';
 import { store, getProfile, isProfileComplete, DEFAULT_PROFILE } from './store/store';
 import { getGroupId } from './lib/groupUtils';
-import { syncOwnVerification } from './lib/groupSync';
+import { syncOwnVerification, joinGroup } from './lib/groupSync';
+import { claimRoll } from './lib/rollOwnership';
 import { auth } from './lib/firebase';
 import { notify } from './lib/notify';
 
@@ -61,7 +62,7 @@ import TeamDashboard from './pages/TeamDashboard';
 import { Tours, Social, Projects, Syllabus, TimeTracker, Tuition, Food, Reports } from './pages/Extras';
 import QuickAccess from './pages/QuickAccess';
 
-function Layout({ authState }) {
+function Layout({ authState, onboardingActive }) {
   usePageTracker();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [sidebarMode, setSidebarMode] = useState(() => {
@@ -158,7 +159,7 @@ function Layout({ authState }) {
         <PWAUpdatePrompt />
         {!isQuestionBankViewer && <BottomNav />}
         <GlobalToasts />
-        <DataSafeToast />
+        <DataSafeToast suppress={onboardingActive} />
         <ClassJoinIntro />
 
         {/* Account upgrade modal (anonymous → real account) */}
@@ -313,10 +314,83 @@ export default function App() {
     setQueueBuilt(true);
   }, [authState.authReady, authState.isAnonymous, queueBuilt]);
 
+  // Auto-join the class group as soon as we have a signed-in user with a
+  // complete profile — no need to ever open the Classmates page manually.
+  // This also self-heals EXISTING accounts: anyone who already has
+  // dept+batch saved from before this change gets backfilled into their
+  // group's members collection the very next time the app loads for them,
+  // with no action needed on their part.
+  //
+  // This ALSO backfills roll-number ownership (rollOwners/{roll}) for
+  // existing accounts — not just new profile saves in ProfileSetupModal.
+  // Without this, an account created before that check existed would
+  // never call claimRoll() again unless the person happened to re-open
+  // Edit Profile, so a pre-existing duplicate-roll pair could silently
+  // coexist forever.
+  //
+  // Deliberately scoped narrow: a losing account is blocked ONLY from
+  // joinGroup() — i.e. it can never show up in Classmates or write into
+  // shared class data under someone else's roll. Every personal-only
+  // feature (Notes, Diary, Money, Calculators, etc.) keeps working
+  // normally. This is intentionally NOT a full app lock: detection here
+  // is a first-loads-wins heuristic, not identity verification, so a
+  // hard lockout could trap a genuine student's account over nothing
+  // more than bad timing. The affected person sees a clear message and
+  // can reach out to get it manually resolved, instead of losing access
+  // to their whole account over a heuristic.
+  //
+  // Listens to 'kuetx:store-updated' (not just mount) because profile data
+  // loads asynchronously from IndexedDB and can also change later (e.g.
+  // roll number correction re-deriving dept/batch) — each of those should
+  // re-attempt the join/refresh with the latest values.
+  useEffect(() => {
+    let cancelled = false;
+    const tryJoin = async () => {
+      if (cancelled) return;
+      if (!authState.authReady || authState.isAnonymous) return;
+      const profile = getProfile();
+      if (!isProfileComplete(profile)) return;
+      const gid = getGroupId(profile);
+      if (!gid || !auth.currentUser?.uid) return;
+
+      let claim;
+      try {
+        claim = await claimRoll(profile.studentId);
+      } catch (e) {
+        console.warn('[App] auto claimRoll failed', e);
+        return; // network/permission hiccup — don't join with an unverified claim
+      }
+      if (cancelled) return;
+
+      if (!claim.ok) {
+        notify(
+          'তোমার roll number দিয়ে অন্য একটা account আগেই আছে, তাই এই account-টা Classmates/Class-এর shared তথ্যে যোগ হবে না। বাকি সব feature (Notes, Diary, Wallet, ইত্যাদি) normal ভাবে ব্যবহার করতে পারবে। ভুল মনে হলে Contact-এ জানাও, ঠিক করে দেওয়া হবে।',
+          'error',
+          8000
+        );
+        return; // do NOT joinGroup — this account doesn't own this roll
+      }
+
+      joinGroup(gid, profile).catch((e) => console.warn('[App] auto joinGroup failed', e));
+    };
+    tryJoin();
+    window.addEventListener('kuetx:store-updated', tryJoin);
+    return () => {
+      cancelled = true;
+      window.removeEventListener('kuetx:store-updated', tryJoin);
+    };
+  }, [authState.authReady, authState.isAnonymous]);
+
   const advance = () => setQueue(q => q.slice(1));
 
-  const handleAuthSuccess = async (user) => {
+  const handleAuthSuccess = async (user, info = {}) => {
     if (!user.isAnonymous) {
+      // onAccountUpgraded() calls pushAllToFirestore() unconditionally,
+      // which is correct both for a true link (brand-new real account,
+      // nothing to conflict with) and for the credential-already-in-use
+      // fallback (existing account — local anonymous-session data merges
+      // in via last-write-wins per document, same as any other
+      // multi-device sync in this app).
       await authState.onAccountUpgraded(user);
     }
     // Re-derive the remaining queue instead of a plain advance(): a
@@ -339,7 +413,17 @@ export default function App() {
           <AuthModal
             mode="login"
             queueMode={true}
-            onClose={advance}
+            // isUpgrade must reflect whether there's an existing anonymous
+            // session to preserve. If the current user is anonymous, this
+            // uses linkWithPopup/linkWithCredential (keeps the SAME uid,
+            // so all local IndexedDB + already-synced Firestore data stays
+            // attached automatically). If there's no user at all yet, this
+            // is a plain new sign-in instead.
+            isUpgrade={!!authState.user?.isAnonymous}
+            // No onClose — login/register is mandatory here, matching the
+            // 'profile' step below. AuthModal only renders the X button and
+            // the "Skip for now" link when onClose is truthy, so omitting
+            // it removes both without touching AuthModal.jsx.
             onSuccess={handleAuthSuccess}
           />
         )}
@@ -372,7 +456,7 @@ export default function App() {
         {current === 'backup' && (
           <BackupReminderGate open={true} onClose={advance} />
         )}
-        <Layout authState={authState} />
+        <Layout authState={authState} onboardingActive={!!current} />
         {/* Independent of the sequential onboarding queue above — this has
             its own internal 3-day snooze + "stop once verified" logic, so it
             doesn't need to block on / wait for the queue to finish. */}
