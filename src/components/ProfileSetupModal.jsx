@@ -389,24 +389,26 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
           </div>
         </div>
 
-        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 14 }}>
-          {stepTabs.map((step, idx) => (
-            <div
-              key={step.key}
-              style={{
-                padding: '8px 12px',
-                borderRadius: 999,
-                border: idx === stepIndex ? '1px solid var(--accent)' : '1px solid var(--border)',
-                background: idx === stepIndex ? 'rgba(34,197,94,0.12)' : 'var(--surfaceGlassSoft)',
-                color: 'var(--text)',
-                fontSize: 12,
-                fontWeight: 700,
-              }}
-            >
-              {step.title}
-            </div>
-          ))}
-        </div>
+        {!mandatory && (
+          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 14 }}>
+            {stepTabs.map((step, idx) => (
+              <div
+                key={step.key}
+                style={{
+                  padding: '8px 12px',
+                  borderRadius: 999,
+                  border: idx === stepIndex ? '1px solid var(--accent)' : '1px solid var(--border)',
+                  background: idx === stepIndex ? 'rgba(34,197,94,0.12)' : 'var(--surfaceGlassSoft)',
+                  color: 'var(--text)',
+                  fontSize: 12,
+                  fontWeight: 700,
+                }}
+              >
+                {step.title}
+              </div>
+            ))}
+          </div>
+        )}
 
         <div style={{ display: 'grid', gap: 12 }}>
           {stepIndex === 0 && (
@@ -459,27 +461,36 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
                   )}
                   {errors.dept && <div style={{ fontSize: 11, color: '#dc2626', marginTop: 5 }}>{errors.dept}</div>}
                 </div>
-                <div>
-                  <label style={labelStyle}>Academic Session</label>
-                  <input placeholder="e.g. 2023-24" value={form.session} onChange={handleChange('session')} style={fieldStyle} />
-                  {errors.session && <div style={{ fontSize: 11, color: '#dc2626', marginTop: 5 }}>{errors.session}</div>}
-                </div>
-                <div>
-                  <label style={labelStyle}>Current Term</label>
-                  <select value={form.currentTermKey || ''} onChange={handleChange('currentTermKey')} style={fieldStyle}>
-                    <option value="">Select current term</option>
-                    {TERM_KEYS.map(termKey => (
-                      <option key={termKey} value={termKey}>{termKey} - {getTermLabelFromKey(termKey)}</option>
-                    ))}
-                  </select>
-                  {errors.currentTermKey && <div style={{ fontSize: 11, color: '#dc2626', marginTop: 5 }}>{errors.currentTermKey}</div>}
-                </div>
-                <div>
-                  <label style={labelStyle}>Current Term Start Date</label>
-                  <input type="date" value={form.termStartDate || ''} onChange={handleChange('termStartDate')} style={fieldStyle} />
-                  {errors.termStartDate && <div style={{ fontSize: 11, color: '#dc2626', marginTop: 5 }}>{errors.termStartDate}</div>}
-                  {!errors.termStartDate && <div style={{ fontSize: 10, color: 'var(--muted)', marginTop: 4 }}>Used for timeline and alert calculations</div>}
-                </div>
+                {/* Session / Current Term / Term Start Date are optional —
+                    hidden entirely during mandatory first-launch onboarding
+                    so the very first thing a new user sees is just Name +
+                    Roll. They stay visible in the non-mandatory (Settings/
+                    "Complete Profile" reminder) version of this same modal. */}
+                {!mandatory && (
+                  <>
+                    <div>
+                      <label style={labelStyle}>Academic Session</label>
+                      <input placeholder="e.g. 2023-24" value={form.session} onChange={handleChange('session')} style={fieldStyle} />
+                      {errors.session && <div style={{ fontSize: 11, color: '#dc2626', marginTop: 5 }}>{errors.session}</div>}
+                    </div>
+                    <div>
+                      <label style={labelStyle}>Current Term</label>
+                      <select value={form.currentTermKey || ''} onChange={handleChange('currentTermKey')} style={fieldStyle}>
+                        <option value="">Select current term</option>
+                        {TERM_KEYS.map(termKey => (
+                          <option key={termKey} value={termKey}>{termKey} - {getTermLabelFromKey(termKey)}</option>
+                        ))}
+                      </select>
+                      {errors.currentTermKey && <div style={{ fontSize: 11, color: '#dc2626', marginTop: 5 }}>{errors.currentTermKey}</div>}
+                    </div>
+                    <div>
+                      <label style={labelStyle}>Current Term Start Date</label>
+                      <input type="date" value={form.termStartDate || ''} onChange={handleChange('termStartDate')} style={fieldStyle} />
+                      {errors.termStartDate && <div style={{ fontSize: 11, color: '#dc2626', marginTop: 5 }}>{errors.termStartDate}</div>}
+                      {!errors.termStartDate && <div style={{ fontSize: 10, color: 'var(--muted)', marginTop: 4 }}>Used for timeline and alert calculations</div>}
+                    </div>
+                  </>
+                )}
               </div>
               {autoCalculatedBatch && <div style={{ fontSize: 11, color: 'var(--accent)', marginTop: 10, fontWeight: 700 }}>✓ Batch auto-filled: {autoCalculatedBatch}</div>}
             </div>
@@ -623,7 +634,7 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
                 can be added later from Profile. This lets someone land in
                 the app right after step 0 instead of clicking through
                 Residence and Review just to reach a "Finish" button. */}
-            {!canSubmit && stepIndex === 0 && (
+            {!canSubmit && stepIndex === 0 && !mandatory && (
               <button
                 type="button"
                 onClick={() => { if (validateStep(0)) handleSubmit({ preventDefault: () => {} }); }}
@@ -633,8 +644,18 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
                 {rollClaimBusy ? 'Checking…' : 'Finish now, add rest later'}
               </button>
             )}
-            {!canSubmit ? (
+            {!canSubmit && !(mandatory && stepIndex === 0) ? (
               <button type="button" onClick={goNext} className="primary-action" style={{ padding: '12px 18px', background: 'var(--accent)', color: '#fff', border: 'none', borderRadius: 8, fontWeight: 700, minWidth: 100 }}>Next</button>
+            ) : (mandatory && stepIndex === 0) ? (
+              <button
+                type="button"
+                onClick={() => { if (validateStep(0)) handleSubmit({ preventDefault: () => {} }); }}
+                disabled={rollClaimBusy}
+                className="primary-action"
+                style={{ padding: '12px 18px', background: 'var(--accent)', color: '#fff', border: 'none', borderRadius: 8, fontWeight: 700, minWidth: 120, opacity: rollClaimBusy ? 0.7 : 1, cursor: rollClaimBusy ? 'wait' : 'pointer' }}
+              >
+                {rollClaimBusy ? 'Checking…' : 'Finish Setup'}
+              </button>
             ) : (
               <button type="submit" disabled={rollClaimBusy} className="primary-action" style={{ padding: '12px 18px', background: 'var(--accent)', color: '#fff', border: 'none', borderRadius: 8, fontWeight: 700, minWidth: 120, opacity: rollClaimBusy ? 0.7 : 1, cursor: rollClaimBusy ? 'wait' : 'pointer' }}>{rollClaimBusy ? 'Checking…' : 'Finish Setup'}</button>
             )}
