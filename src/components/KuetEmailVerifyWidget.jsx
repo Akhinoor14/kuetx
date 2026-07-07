@@ -98,7 +98,7 @@ export default function KuetEmailVerifyWidget({ onVerified, onSkip, compact = fa
         </div>
         <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)' }}>
-            KUET email দিয়ে verify করো
+            তোমার KUET-এর দেওয়া email দাও
           </div>
           <div style={{ fontSize: 11.5, color: 'var(--muted)', lineHeight: 1.5, marginTop: 2 }}>
             Verified হলে তোমার নামের পাশে blue tick দেখাবে — classmates বুঝবে তুমি সত্যিই এই ক্লাসের ছাত্র। কোনো password লাগবে না।

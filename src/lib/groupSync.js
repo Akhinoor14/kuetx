@@ -292,6 +292,26 @@ export async function revokeACR(groupId, targetUid) {
 }
 
 /** Read-only helper for UI — is there currently an active CR in this group? */
+/**
+ * Real, server-verified CR/ACR status for the CURRENT user — this reads
+ * their own members/{uid}.role field, which only ever becomes 'cr'/'acr'
+ * through clApproveCRRequest / clAppointCR / assignACR (Campus Lead or
+ * Admin action). This is deliberately separate from profile.isCR, which
+ * is just a self-ticked checkbox in Profile Setup with no verification
+ * behind it — profile.isCR must never be used to gate access to CR-only
+ * pages/tools.
+ */
+export function subscribeMyRole(groupId, uid, callback) {
+  if (!groupId || !uid) { callback('member'); return () => {}; }
+  const ref = doc(db, 'groups', groupId, 'members', uid);
+  return onSnapshot(ref, (snap) => {
+    callback(snap.exists() ? (snap.data().role || 'member') : 'member');
+  }, (err) => {
+    console.error('[groupSync] subscribeMyRole error:', err);
+    callback('member');
+  });
+}
+
 export function subscribeCRStatus(groupId, callback) {
   if (!groupId) return () => {};
   const key = `crStatus:${groupId}`;

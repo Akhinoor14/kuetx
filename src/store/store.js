@@ -1120,6 +1120,19 @@ export const DEFAULT_PROFILE = {
   termStartDate: null, // ISO date string: YYYY-MM-DD
 };
 
+// Minimum fields needed for the app (classmates matching, attendance
+// slabs, term roadmap, etc.) to work at all. Used to force first-run
+// users through ProfileSetupModal before anything else — half-filled
+// profiles were the root cause of several "why is X missing/broken"
+// reports (Classmates match, roll-based verification, term dates).
+export const isProfileComplete = (profile) => {
+  const p = profile || {};
+  return !!(String(p.name || '').trim()
+    && String(p.studentId || '').trim()
+    && String(p.dept || '').trim()
+    && String(p.session || '').trim());
+};
+
 // ---------------- Audit & Snapshot helpers ----------------
 export const recordAudit = (entry) => {
   try {

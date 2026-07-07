@@ -5,6 +5,9 @@ import * as Icons from 'lucide-react';
 import { NAV } from '../nav';
 import { getProfile, store } from '../store/store';
 import { filterNav, getAppMode } from '../lib/modeFilter';
+import { getGroupId } from '../lib/groupUtils';
+import { subscribeMyRole } from '../lib/groupSync';
+import { auth } from '../lib/firebase';
 
 const MOBILE_NAV_QUERY = '(max-width: 767.98px)';
 const USAGE_KEY = 'nav_usage_v1';
@@ -200,10 +203,30 @@ export function BottomNav() {
   const [profile, setProfile] = useState(() => getProfile() || {});
   const [usage, setUsage] = useState(() => getUsageState());
   const [activePanel, setActivePanel] = useState(null);
+  // profile.isCR is just a self-ticked checkbox from Profile Setup with no
+  // verification behind it. Real CR/ACR status only ever comes from the
+  // server (members/{uid}.role, set by a Campus Lead/Admin action) — see
+  // groupSync.js's subscribeMyRole. All nav visibility below is driven by
+  // this, never by profile.isCR, so a link never shows for someone who
+  // can't actually get past RequireCR on the page itself.
+  const [isRealCR, setIsRealCR] = useState(false);
+  // Downstream helpers (getAllNavItems/getItemMap/filterNav) key off
+  // `profile.isCR` internally — rather than threading a new parameter
+  // through all of them, pass them a profile view where isCR reflects
+  // the real, verified status.
+  const navProfile = useMemo(() => ({ ...profile, isCR: isRealCR }), [profile, isRealCR]);
 
-  const allItems = useMemo(() => getAllNavItems(profile), [profile]);
-  const itemMap = useMemo(() => getItemMap(profile), [profile]);
-  const mostUsedItems = useMemo(() => resolveMostUsedItems(profile, usage), [profile, usage]);
+  const allItems = useMemo(() => getAllNavItems(navProfile), [navProfile]);
+  const itemMap = useMemo(() => getItemMap(navProfile), [navProfile]);
+  const mostUsedItems = useMemo(() => resolveMostUsedItems(navProfile, usage), [navProfile, usage]);
+
+  useEffect(() => {
+    const groupId = getGroupId(profile);
+    if (!groupId || !auth.currentUser?.uid) { setIsRealCR(false); return; }
+    return subscribeMyRole(groupId, auth.currentUser.uid, (role) => {
+      setIsRealCR(role === 'cr' || role === 'acr');
+    });
+  }, [profile.dept, profile.batch, profile.studentId]);
 
   useEffect(() => {
     const syncProfile = () => {
@@ -254,19 +277,19 @@ export function BottomNav() {
   const pinnedButtons = useMemo(() => {
     const base = [
       { id: 'dashboard', label: 'Home', icon: 'Home', kind: 'route', path: '/' },
-      { id: 'quick-access', label: profile?.isCR ? 'CR' : 'Quick', icon: profile?.isCR ? 'Users' : 'Star', kind: 'route', path: '/quick-access' },
+      { id: 'quick-access', label: isRealCR ? 'CR' : 'Quick', icon: isRealCR ? 'Users' : 'Star', kind: 'route', path: '/quick-access' },
       { id: 'study', label: 'Study', icon: 'BookOpen', kind: 'panel', panel: 'study' },
       { id: 'money', label: 'Wallet', icon: 'Wallet', kind: 'panel', panel: 'money' },
       { id: 'menu', label: 'Menu', icon: 'Menu', kind: 'panel', panel: 'menu' },
     ];
 
     return base;
-  }, [profile]);
+  }, [profile, isRealCR]);
 
   const activeRoute = (item) => isActivePath(item.path, location.pathname);
-  const studySections = buildPanelSections(profile, 'study', itemMap, mostUsedItems);
-  const moneySections = buildPanelSections(profile, 'money', itemMap, mostUsedItems);
-  const menuSections = buildPanelSections(profile, 'menu', itemMap, mostUsedItems);
+  const studySections = buildPanelSections(navProfile, 'study', itemMap, mostUsedItems);
+  const moneySections = buildPanelSections(navProfile, 'money', itemMap, mostUsedItems);
+  const menuSections = buildPanelSections(navProfile, 'menu', itemMap, mostUsedItems);
 
   const isStudyActive = studySections.some(section => section.items.some(activeRoute));
   const isMoneyActive = moneySections.some(section => section.items.some(activeRoute));
@@ -283,7 +306,7 @@ export function BottomNav() {
   };
 
   const panelSections = activePanel
-    ? buildPanelSections(profile, activePanel, itemMap, mostUsedItems)
+    ? buildPanelSections(navProfile, activePanel, itemMap, mostUsedItems)
     : [];
 
   const panelLayer = activePanel ? createPortal(

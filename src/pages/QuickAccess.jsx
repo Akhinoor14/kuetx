@@ -7,6 +7,9 @@ import { usePinnedPages } from '../hooks/usePinnedPages';
 import { getPageStats, getAllPageStats } from '../hooks/usePageTracker';
 import { getProfile } from '../store/store';
 import { filterNav, getAppMode } from '../lib/modeFilter';
+import { getGroupId } from '../lib/groupUtils';
+import { subscribeMyRole } from '../lib/groupSync';
+import { auth } from '../lib/firebase';
 
 
 const CR_PATHS = NAV.flatMap(s => s.items || []).filter(i => i.requiresCR).map(i => i.path);
@@ -62,7 +65,19 @@ export function QuickAccessPanel({ inPanel = false, onNavigate } = {}) {
     };
   }, []);
 
-  const isCR = !!profile?.isCR;
+  // profile.isCR is a self-ticked checkbox from Profile Setup, not a
+  // verified status — real CR/ACR only comes from the server via
+  // members/{uid}.role (see groupSync.js / RequireCR.jsx).
+  const [isRealCR, setIsRealCR] = useState(false);
+  useEffect(() => {
+    const groupId = getGroupId(profile);
+    if (!groupId || !auth.currentUser?.uid) { setIsRealCR(false); return; }
+    return subscribeMyRole(groupId, auth.currentUser.uid, (role) => {
+      setIsRealCR(role === 'cr' || role === 'acr');
+    });
+  }, [profile.dept, profile.batch, profile.studentId]);
+
+  const isCR = isRealCR;
   const handleNavigate = () => { if (onNavigate) onNavigate(); };
   const totalViews = allStats.reduce((sum, s) => sum + s.count, 0);
 

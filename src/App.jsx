@@ -15,12 +15,14 @@ import BackupReminderGate from './components/BackupReminderGate';
 import VerifyReminderPopup from './components/VerifyReminderPopup';
 import AuthModal from './components/AuthModal';
 import ModeSelectModal from './components/ModeSelectModal';
+import ProfileSetupModal from './components/ProfileSetupModal';
+import RequireCR from './components/RequireCR';
 import useFirebaseAuth from './hooks/useFirebaseAuth';
 import DataSafeToast from './components/DataSafeToast';
 import ClassJoinIntro from './components/ClassJoinIntro';
 import KuetVerifyEmailConfirmModal from './components/KuetVerifyEmailConfirmModal';
 import { isModeChosen } from './lib/modeFilter';
-import { store, getProfile } from './store/store';
+import { store, getProfile, isProfileComplete, DEFAULT_PROFILE } from './store/store';
 import { getGroupId } from './lib/groupUtils';
 import { syncOwnVerification } from './lib/groupSync';
 import { auth } from './lib/firebase';
@@ -144,8 +146,8 @@ function Layout({ authState }) {
             <Route path="/notes" element={<Notes />} />
             <Route path="/settings" element={<Settings />} />
             <Route path="/about" element={<About />} />
-            <Route path="/class-management" element={<ClassManagement />} />
-            <Route path="/ct-quiz-planning" element={<CTQuizPlanning />} />
+            <Route path="/class-management" element={<RequireCR><ClassManagement /></RequireCR>} />
+            <Route path="/ct-quiz-planning" element={<RequireCR><CTQuizPlanning /></RequireCR>} />
             <Route path="/classmates" element={<Classmates />} />
             <Route path="/admin" element={<AdminDashboard />} />
             <Route path="/team" element={<TeamDashboard />} />
@@ -178,10 +180,17 @@ function Layout({ authState }) {
 // ── Startup queue — shows one popup at a time ─────────────────────────────
 function shouldShowAnnouncement() {
   try {
+    // Brand-new install: don't pile this on top of mode/auth/profile setup
+    // in the very first session — record it as "seen" silently and show it
+    // starting from the user's next visit instead.
     const lastShown = store.get('announcementV2LastShown');
+    if (!lastShown) {
+      store.set('announcementV2LastShown', new Date().toISOString());
+      return false;
+    }
     const showCount = store.get('announcementV2ShowCount') || 0;
     const interval = showCount >= 3 ? 604800000 : 259200000;
-    return !lastShown || Date.now() - new Date(lastShown).getTime() >= interval;
+    return Date.now() - new Date(lastShown).getTime() >= interval;
   } catch { return false; }
 }
 
@@ -200,7 +209,16 @@ function shouldShowBackup() {
 
 function shouldShowCommunityHiring() {
   try {
-    return !store.get('communityHiringPopupShown');
+    // Same first-session deferral as announcements — a brand-new user has
+    // already gone through mode/auth/profile-setup; don't stack a hiring
+    // popup right after. Mark it as "seen" the first time through so it
+    // naturally appears on a later visit instead.
+    const seen = store.get('communityHiringPopupShown');
+    if (seen === undefined || seen === null) {
+      store.set('communityHiringPopupShown', false); // "shown the queue once" sentinel, still false = eligible next visit
+      return false;
+    }
+    return !seen;
   } catch { return false; }
 }
 
@@ -208,6 +226,12 @@ function buildQueue(isAnonymous) {
   const q = [];
   if (!isModeChosen()) q.push('mode');
   if (isAnonymous) q.push('auth');
+  // Profile setup is mandatory before anything else — a half-filled
+  // profile (missing roll/dept/session) is the root cause of Classmates
+  // mismatch, roll-verification, and term-roadmap issues reported by
+  // users. This step has no skip; it only advances via ProfileSetupModal's
+  // onSave. The KUET email verify sub-step inside it keeps its own skip.
+  if (!isProfileComplete(getProfile())) q.push('profile');
   if (shouldShowAnnouncement()) q.push('announcement');
   if (shouldShowCommunityHiring()) q.push('communityHiring');
   if (shouldShowBackup()) q.push('backup');
@@ -292,10 +316,17 @@ export default function App() {
   const advance = () => setQueue(q => q.slice(1));
 
   const handleAuthSuccess = async (user) => {
-    advance();
     if (!user.isAnonymous) {
       await authState.onAccountUpgraded(user);
     }
+    // Re-derive the remaining queue instead of a plain advance(): a
+    // brand-new account has no profile yet, so 'profile' needs to be
+    // inserted now even though it wasn't in the queue built before login.
+    setQueue((q) => {
+      const rest = q.slice(1);
+      const needsProfile = !isProfileComplete(getProfile()) && !rest.includes('profile');
+      return needsProfile ? ['profile', ...rest] : rest;
+    });
   };
 
   return (
@@ -310,6 +341,20 @@ export default function App() {
             queueMode={true}
             onClose={advance}
             onSuccess={handleAuthSuccess}
+          />
+        )}
+        {current === 'profile' && (
+          <ProfileSetupModal
+            isOpen={true}
+            // No dismiss path — this step cannot be skipped without saving,
+            // by design (see buildQueue comment).
+            onClose={() => {}}
+            mandatory
+            onSave={(formData) => {
+              store.set('profile', { ...DEFAULT_PROFILE, ...formData });
+              advance();
+            }}
+            initialProfile={getProfile()}
           />
         )}
         {current === 'announcement' && (

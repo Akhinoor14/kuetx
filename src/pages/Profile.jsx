@@ -20,6 +20,8 @@ import { auth } from '../lib/firebase';
 import { pushAllToFirestore, startFirebaseSync } from '../lib/firebaseSync';
 import { uploadProfilePicture, getProfilePhotoURL, deleteProfilePicture } from '../lib/profilePicture';
 import { isRollInstitutionallyVerified } from '../lib/kuetEmailVerify';
+import { getGroupId } from '../lib/groupUtils';
+import { subscribeMyRole } from '../lib/groupSync';
 import ProfileVerifyBanner from '../components/ProfileVerifyBanner';
 import BlueTick from '../components/BlueTick';
 
@@ -519,6 +521,20 @@ export default function Profile() {
     return () => { cancelled = true; };
   }, [profile?.studentId]);
 
+  // Real, server-verified CR/ACR status — profile.isCR is just a
+  // self-ticked checkbox from Profile Setup with no verification behind
+  // it, so it must never be used to show a "CR" badge/banner on someone's
+  // own profile (which classmates can also see). This mirrors the same
+  // members/{uid}.role check used by RequireCR.jsx / Sidebar.jsx.
+  const [isRealCR, setIsRealCR] = useState(false);
+  useEffect(() => {
+    const groupId = getGroupId(profile);
+    if (!groupId || !auth.currentUser?.uid) { setIsRealCR(false); return; }
+    return subscribeMyRole(groupId, auth.currentUser.uid, (role) => {
+      setIsRealCR(role === 'cr' || role === 'acr');
+    });
+  }, [profile?.dept, profile?.batch, profile?.studentId]);
+
   // Covers the case where the person clicked their verification link and
   // App.jsx's boot-time completion finished slightly AFTER the one-shot
   // check above already ran and cached "not verified" — without this,
@@ -784,7 +800,7 @@ export default function Profile() {
               {profile.name}
               {isKuetVerified && <BlueTick size={18} />}
             </div>
-            {profile.isCR && <Badge label="👑 CR" color="#fff" bg="rgba(255,255,255,0.2)" />}
+            {isRealCR && <Badge label="👑 CR" color="#fff" bg="rgba(255,255,255,0.2)" />}
           </div>
           <div style={{ fontSize: 'clamp(12px,2.5vw,14px)', color: 'rgba(255,255,255,0.85)', lineHeight: 1.6, fontFamily: "'Space Grotesk', 'Sora', 'Hind Siliguri', system-ui, sans-serif" }}>
             {profile.studentId && <span>{profile.studentId}</span>}
@@ -817,7 +833,7 @@ export default function Profile() {
       )}
 
       {/* ── CR Banner ── */}
-      {profile.isCR && (
+      {isRealCR && (
         <div style={{
           padding: '13px 18px', borderRadius: 12,
           background: 'linear-gradient(135deg, rgba(59,130,246,0.1) 0%, rgba(139,92,246,0.1) 100%)',
@@ -1280,17 +1296,11 @@ export default function Profile() {
         ))}
       </div>
 
-      {/* ── CR Toggle ── */}
-      <div style={{ borderTop: '1px solid var(--border)', paddingTop: 16, display: 'flex', justifyContent: 'center' }}>
-        <button onClick={() => {
-          const next = { ...profile, isCR: !profile.isCR };
-          store.set('profile', next); setProfile(next);
-          setSaved(true); setTimeout(() => setSaved(false), 2200);
-        }} className={`profile-cr-pill ${profile.isCR ? 'active' : ''}`}>
-          <Icons.Users size={14} />
-          <span>{profile.isCR ? 'CR Mode ON' : 'Simulate CR Mode'}</span>
-        </button>
-      </div>
+      {/* "Simulate CR Mode" toggle removed — CR access is now decided
+          entirely by the server-verified role (members/{uid}.role via
+          RequireCR / isRealCR), so flipping profile.isCR here no longer
+          unlocks anything and was only confusing people into thinking
+          they had CR tools when they didn't. */}
 
       {/* Modals */}
       <ProfileSetupModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onSave={handleSave} initialProfile={profile} />

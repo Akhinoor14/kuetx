@@ -77,15 +77,13 @@ const sectionStyle = {
 };
 
 const stepTabs = [
-  { key: 'identity', title: 'Identity' },
-  { key: 'academic', title: 'Academics' },
+  { key: 'academic', title: 'Academic & Identity' },
   { key: 'residence', title: 'Residence' },
   { key: 'review', title: 'Review' },
 ];
 
 const requiredFieldMap = {
-  0: ['name', 'studentId', 'dept', 'session'],
-  1: ['currentTermKey'],
+  0: ['name', 'studentId', 'dept', 'session', 'currentTermKey'],
 };
 
 const toDateInputValue = (value) => {
@@ -134,7 +132,7 @@ const validateTermStartDate = (value) => {
   return null; // Invalid date
 };
 
-export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProfile = {} }) {
+export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProfile = {}, mandatory = false }) {
   const initial = useMemo(() => ({ ...DEFAULT_PROFILE, ...initialProfile }), [initialProfile]);
   const [form, setForm] = useState(initial);
   const [stepIndex, setStepIndex] = useState(0);
@@ -299,13 +297,13 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
       termStartDate: validatedTermStartDate || null,
       // Store full ISO date (YYYY-MM-DD) for kuetStart
       yearStarted: form.yearStarted || null,
-      totalCreditsRequired: Number(form.totalCreditsRequired) || DEFAULT_PROFILE.totalCreditsRequired,
+      totalCreditsRequired: DEFAULT_PROFILE.totalCreditsRequired,
     };
     if (onSave) onSave(next);
   };
 
   const progressPct = Math.round(((stepIndex + 1) / stepTabs.length) * 100);
-  const showOptionalSkip = stepIndex === 2;
+  const showOptionalSkip = stepIndex === 1;
   const canSubmit = stepIndex === stepTabs.length - 1;
 
   const modalCss = `
@@ -335,7 +333,7 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
   `;
 
   return (
-    <Modal onClose={onClose} contentClassName="kuetx-profile-modal" contentStyle={{ background: 'var(--surface)', padding: 'clamp(12px, 6vw, 20px)', borderRadius: 16, width: 'min(920px, 98vw)', maxWidth: '100%', maxHeight: '94vh', overflowY: 'auto', boxShadow: '0 14px 40px rgba(0,0,0,0.24)', pointerEvents: 'auto' }}>
+    <Modal onClose={mandatory ? () => {} : onClose} closeOnOverlayClick={!mandatory} contentClassName="kuetx-profile-modal" contentStyle={{ background: 'var(--surface)', padding: 'clamp(12px, 6vw, 20px)', borderRadius: 16, width: 'min(920px, 98vw)', maxWidth: '100%', maxHeight: '94vh', overflowY: 'auto', boxShadow: '0 14px 40px rgba(0,0,0,0.24)', pointerEvents: 'auto' }}>
       <style>{modalCss}</style>
       <form onSubmit={handleSubmit} style={{ width: '100%' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, alignItems: 'flex-start', marginBottom: 14, flexWrap: 'wrap' }}>
@@ -376,7 +374,7 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
         <div style={{ display: 'grid', gap: 12 }}>
           {stepIndex === 0 && (
             <div className="section" style={sectionStyle}>
-              <div style={{ fontSize: 12, fontWeight: 800, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 12 }}>Identity</div>
+              <div style={{ fontSize: 12, fontWeight: 800, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 12 }}>Academic & Identity</div>
               <div className="field-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 12 }}>
                 <div>
                   <label style={labelStyle}>Full Name</label>
@@ -429,15 +427,6 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
                   <input placeholder="e.g. 2023-24" value={form.session} onChange={handleChange('session')} style={fieldStyle} />
                   {errors.session && <div style={{ fontSize: 11, color: '#dc2626', marginTop: 5 }}>{errors.session}</div>}
                 </div>
-              </div>
-              {autoCalculatedBatch && <div style={{ fontSize: 11, color: 'var(--accent)', marginTop: 10, fontWeight: 700 }}>✓ Batch auto-filled: {autoCalculatedBatch}</div>}
-            </div>
-          )}
-
-          {stepIndex === 1 && (
-            <div className="section" style={sectionStyle}>
-              <div style={{ fontSize: 12, fontWeight: 800, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 12 }}>Academic essentials</div>
-              <div className="field-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 12 }}>
                 <div>
                   <label style={labelStyle}>Current Term</label>
                   <select value={form.currentTermKey || ''} onChange={handleChange('currentTermKey')} style={fieldStyle}>
@@ -454,53 +443,12 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
                   {errors.termStartDate && <div style={{ fontSize: 11, color: '#dc2626', marginTop: 5 }}>{errors.termStartDate}</div>}
                   {!errors.termStartDate && <div style={{ fontSize: 10, color: 'var(--muted)', marginTop: 4 }}>Used for timeline and alert calculations</div>}
                 </div>
-                <div>
-                  <label style={labelStyle}>When Did You Start KUET?</label>
-                  {(() => {
-                    const batch = extractBatchFromRoll(form.studentId);
-                    const batchStart = batch && BATCH_START_DATES[batch];
-                    const displayDate = batchStart
-                      ? new Date(batchStart).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })
-                      : null;
-                    if (batchStart) {
-                      return (
-                        <>
-                          <div style={{
-                            ...fieldStyle,
-                            background: 'var(--inputBg)',
-                            color: 'var(--text)',
-                            opacity: 0.75,
-                            cursor: 'not-allowed',
-                            display: 'flex', alignItems: 'center', gap: 6,
-                            userSelect: 'none',
-                          }}>
-                            <span style={{ fontSize: 13 }}>📅</span>
-                            <span style={{ fontWeight: 600 }}>{displayDate}</span>
-                          </div>
-                          <div style={{ fontSize: 10, color: 'var(--accent)', marginTop: 4, fontWeight: 700 }}>
-                            ✓ Fixed date for batch {batch} — not editable
-                          </div>
-                        </>
-                      );
-                    }
-                    return (
-                      <>
-                        <input type="date" value={form.yearStarted || ''} onChange={handleChange('yearStarted')} style={fieldStyle} />
-                        <div style={{ fontSize: 10, color: 'var(--muted)', marginTop: 4 }}>Enter your KUET joining date manually.</div>
-                      </>
-                    );
-                  })()}
-                </div>
-                <div>
-                  <label style={labelStyle}>Total Credits Required</label>
-                  <input type="number" placeholder="e.g. 160" value={form.totalCreditsRequired} onChange={handleChange('totalCreditsRequired')} min={1} max={300} style={fieldStyle} />
-                  <div style={{ fontSize: 10, color: 'var(--muted)', marginTop: 4 }}>Default graduation target if you leave it blank</div>
-                </div>
               </div>
+              {autoCalculatedBatch && <div style={{ fontSize: 11, color: 'var(--accent)', marginTop: 10, fontWeight: 700 }}>✓ Batch auto-filled: {autoCalculatedBatch}</div>}
             </div>
           )}
 
-          {stepIndex === 2 && (
+          {stepIndex === 1 && (
             <div className="section" style={sectionStyle}>
               <div style={{ fontSize: 12, fontWeight: 800, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 12 }}>Residence & advisor</div>
               <div className="field-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 12 }}>
@@ -526,21 +474,11 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
                   <label style={labelStyle}>Advisor Phone Number</label>
                   <input type="tel" placeholder="e.g. 01700000000" value={form.advisorContact} onChange={handleChange('advisorContact')} inputMode="numeric" pattern="[0-9]*" style={fieldStyle} />
                 </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '10px 12px', borderRadius: 10, border: '1px solid var(--border)', background: 'var(--surfaceGlassSoft)' }}>
-                  <div style={{ width: '100%' }}>
-                    <label style={{ display: 'flex', gap: 8, alignItems: 'center', fontSize: 14, color: 'var(--text)', margin: 0, textTransform: 'none', letterSpacing: 0 }}>
-                      <input type="checkbox" checked={!!form.isCR} onChange={handleChange('isCR')} /> Class Representative
-                    </label>
-                    <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 6, lineHeight: 1.5 }}>
-                      Optional. Turns on CR tools in the sidebar.
-                    </div>
-                  </div>
-                </div>
               </div>
             </div>
           )}
 
-          {stepIndex === 3 && (
+          {stepIndex === 2 && (
             <>
               <div className="section" style={sectionStyle}>
                 <div style={{ fontSize: 12, fontWeight: 800, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 12 }}>Review</div>
@@ -556,7 +494,6 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
                     ['Room', form.roomNo || '—'],
                     ['Advisor', form.advisorName || '—'],
                     ['Advisor Contact', form.advisorContact || '—'],
-                    ['Class Representative', form.isCR ? 'Yes' : 'No'],
                   ].map(([label, value]) => (
                     <div key={label} style={{ display: 'grid', gridTemplateColumns: 'clamp(100px, 25%, 140px) 1fr', gap: 10, paddingBottom: 8, borderBottom: '1px solid var(--border)', alignItems: 'start' }}>
                       <span style={{ fontSize: 11, color: 'var(--muted)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: 0.4 }}>{label}</span>
@@ -634,7 +571,9 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
         </div>
 
         <div className="actions" style={{ display: 'flex', justifyContent: 'space-between', gap: 12, marginTop: 16, flexWrap: 'wrap', alignItems: 'center' }}>
-          <button type="button" onClick={onClose} style={{ padding: '12px 16px', borderRadius: 8, border: '1px solid var(--border)', background: 'transparent', color: 'var(--text)', fontWeight: 600 }}>Cancel</button>
+          {mandatory ? <div /> : (
+            <button type="button" onClick={onClose} style={{ padding: '12px 16px', borderRadius: 8, border: '1px solid var(--border)', background: 'transparent', color: 'var(--text)', fontWeight: 600 }}>Cancel</button>
+          )}
           <div className="left" style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginLeft: 'auto' }}>
             {stepIndex > 0 && (
               <button type="button" onClick={goBack} style={{ padding: '12px 16px', borderRadius: 8, border: '1px solid var(--border)', background: 'transparent', color: 'var(--text)', fontWeight: 600 }}>Back</button>

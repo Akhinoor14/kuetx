@@ -199,7 +199,11 @@ export function Sidebar({ open, onClose, mode = '2col', onCycleMode, authState }
   const compact = mode === 'compact';
   const [logoHovered, setLogoHovered] = useState(false);
   const [isRealCR, setIsRealCR] = useState(false);
-  const canSeeCrBoard = (!!profile.isCR || isRealCR) && navConfig.cr_board_enabled;
+  // profile.isCR is just a self-ticked checkbox from Profile Setup with no
+  // verification behind it — showing the CR tools link based on it alone
+  // let anyone tick the box and see (and, before RequireCR existed, even
+  // open) CR-only pages. isRealCR is the only trustworthy signal here.
+  const canSeeCrBoard = isRealCR && navConfig.cr_board_enabled;
 
   useEffect(() => {
     const groupId = getGroupId(profile);
