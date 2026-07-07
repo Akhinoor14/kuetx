@@ -7,10 +7,8 @@ export const NAV = [
     hubPath: '/overview',
     hubIcon: 'LayoutDashboard',
     items: [
-      { id: 'dashboard',    label: 'Dashboard',    icon: 'Grid',     path: '/' },
-      { id: 'quick-access', label: 'Quick Access', icon: 'Zap',      path: '/quick-access' },
-      { id: 'profile',      label: 'Profile',      icon: 'User',     path: '/profile' },
-      { id: 'notes',        label: 'Notes',        icon: 'FileText', path: '/notes' },
+      { id: 'dashboard', label: 'Dashboard', icon: 'Grid', path: '/' },
+      { id: 'profile',   label: 'Profile',   icon: 'User', path: '/profile' },
     ]
   },
   {
@@ -38,6 +36,7 @@ export const NAV = [
           { id: 'solutions', label: 'Solution Bank', icon: 'BookOpen',      path: '/solutions' },
           { id: 'marks',     label: 'Term Planner',  icon: 'ClipboardList', path: '/marks' },
           { id: 'results',   label: 'Results & GPA', icon: 'TrendingUp',    path: '/results' },
+          { id: 'warnings',  label: 'Alerts',        icon: 'Bell',          path: '/alerts' },
         ]
       },
       {
@@ -50,6 +49,7 @@ export const NAV = [
           { id: 'assignments', label: 'Assignments',    icon: 'FileText',      path: '/assignments' },
           { id: 'teachers',    label: 'Teachers',       icon: 'Users',         path: '/teachers' },
           { id: 'classmates',  label: 'Classmates',     icon: 'Users2',        path: '/classmates' },
+          { id: 'diary',       label: 'Class Diary',    icon: 'BookOpen',      path: '/diary' },
         ]
       },
     ]
@@ -73,7 +73,7 @@ export const NAV = [
     hubPath: '/daily-life',
     hubIcon: 'Sunrise',
     items: [
-      { id: 'diary',      label: 'Class Diary',   icon: 'BookOpen', path: '/diary' },
+      { id: 'notes',      label: 'Notes',         icon: 'FileText', path: '/notes' },
       { id: 'self-study', label: 'Self Study',    icon: 'Activity', path: '/self-study' },
       { id: 'time',       label: 'Time Tracker',  icon: 'Timer',    path: '/time' },
       { id: 'namaz',      label: 'Namaz Tracker', icon: 'Moon',     path: '/namaz' },
@@ -85,7 +85,6 @@ export const NAV = [
     hubPath: '/tools',
     hubIcon: 'Wrench',
     items: [
-      { id: 'warnings', label: 'Alerts',      icon: 'Bell',      path: '/alerts' },
       { id: 'reports',  label: 'Reports',     icon: 'BarChart2', path: '/reports' },
       { id: 'settings', label: 'Settings',    icon: 'Settings',  path: '/settings' },
       { id: 'about',    label: 'About KUETx', icon: 'Info',      path: '/about' },

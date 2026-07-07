@@ -2,6 +2,7 @@ import { store, computeCourseGrade, computeCGPA, computeEffectiveAttendance, com
 import { getAllCourses } from '../store/curriculumStore';
 
 export const ALERT_DISMISSED_KEY = 'alertDismissedIds_v1';
+export const ALERT_FIRST_SEEN_KEY = 'alertFirstSeenAt_v1';
 
 const normalizeAlertPart = (value) => String(value || '')
   .trim()
@@ -50,6 +51,43 @@ export const decorateAlerts = (alerts, dismissedIds) => ({
   assignmentAlerts: alerts.assignmentAlerts.map((item, index) => ({ ...item, id: getAlertId('assignments', item, index) })),
   dismissedIds,
 });
+
+/**
+ * Alerts are computed live from current state each render — there's no
+ * inherent "created" event to timestamp. This gives each alert a real,
+ * durable "first seen" time: the first time a given alert id is observed,
+ * `Date.now()` is stamped and persisted; every later render of the same
+ * (still-active) alert reuses that stored stamp instead of re-stamping.
+ * So the timestamp reflects "since when has this been a problem," not
+ * "when did the page last render" — and it survives reloads.
+ *
+ * ids: array of alert ids present in the *current* computation.
+ * Returns a Map<id, epochMs>. Stale ids (alerts that no longer exist)
+ * are pruned from storage so this doesn't grow forever.
+ */
+export const getOrStampAlertFirstSeenAt = (ids) => {
+  const saved = store.get(ALERT_FIRST_SEEN_KEY);
+  const stamps = (saved && typeof saved === 'object' && !Array.isArray(saved)) ? { ...saved } : {};
+  const now = Date.now();
+  let changed = false;
+
+  const idSet = new Set(ids);
+  ids.forEach(id => {
+    if (!(id in stamps)) {
+      stamps[id] = now;
+      changed = true;
+    }
+  });
+  Object.keys(stamps).forEach(id => {
+    if (!idSet.has(id)) {
+      delete stamps[id];
+      changed = true;
+    }
+  });
+
+  if (changed) store.set(ALERT_FIRST_SEEN_KEY, stamps);
+  return new Map(Object.entries(stamps));
+};
 
 export const filterUnreadAlerts = (items, dismissedIds) => items.filter(item => !dismissedIds.has(item.id));
 

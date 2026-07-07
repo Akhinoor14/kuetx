@@ -5,91 +5,146 @@ import { NAV } from '../../nav';
 // Single synchronized accent color for every hub — no per-group hues.
 const HUB_COLOR = 'var(--accent)';
 
-// Resolve the { title, items, color, icon } for a hub route from NAV.
-// group: top-level group name (e.g. 'Campus Life', 'Class Rep', 'Daily Life')
+// Resolve one { title, items, icon } section (or array of sections, if the
+// group has multiple unnamed subgroups) from NAV.
+// group: top-level group name (e.g. 'Campus Life', 'Tools', 'Overview')
 // subgroup: optional subgroup name when the group has `subgroups` (e.g. 'Academic Core')
-function resolveHub(group, subgroup) {
+function resolveSection(group, subgroup, filterFn) {
   const section = NAV.find(s => s.group === group);
   if (!section) return null;
 
   if (subgroup) {
     const sub = (section.subgroups || []).find(s => s.name === subgroup);
     if (!sub) return null;
-    return {
-      title: sub.name,
-      items: sub.items,
-      color: HUB_COLOR,
-      icon: sub.hubIcon || 'Circle',
-    };
+    const items = filterFn ? sub.items.filter(filterFn) : sub.items;
+    if (!items.length) return null;
+    return { title: sub.name, items, icon: sub.hubIcon || 'Circle' };
   }
 
-  return {
-    title: section.group,
-    items: section.items || [],
-    color: HUB_COLOR,
-    icon: section.hubIcon || 'Circle',
-  };
+  if (section.subgroups) {
+    // Group has subgroups but none named — expand each subgroup as its own section.
+    return section.subgroups
+      .map(sub => {
+        const items = filterFn ? sub.items.filter(filterFn) : sub.items;
+        return items.length ? { title: sub.name, items, icon: sub.hubIcon || 'Circle' } : null;
+      })
+      .filter(Boolean);
+  }
+
+  const items = filterFn ? section.items.filter(filterFn) : section.items;
+  if (!items.length) return null;
+  return { title: section.group, items, icon: section.hubIcon || 'Circle' };
 }
 
-export default function SubgroupHub({ group, subgroup }) {
-  const hub = resolveHub(group, subgroup);
+function HubSection({ title, items, icon }) {
+  const HeaderIcon = Icons[icon] || Icons.Circle;
 
-  if (!hub) {
+  return (
+    <div style={{ marginBottom: 28 }}>
+      {title && (
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 14 }}>
+          <div style={{
+            width: 30, height: 30, borderRadius: 8,
+            background: `color-mix(in srgb, ${HUB_COLOR} 15%, var(--surface))`,
+            display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+          }}>
+            <HeaderIcon size={16} color={HUB_COLOR} />
+          </div>
+          <h2 style={{ fontSize: 15, fontWeight: 700, color: 'var(--text)', margin: 0 }}>{title}</h2>
+        </div>
+      )}
+
+      <div className="hub-grid">
+        {items.map(item => {
+          const Icon = Icons[item.icon] || Icons.Circle;
+          return (
+            <Link key={item.id} to={item.path} className="hub-grid-item">
+              <div style={{
+                width: 30, height: 30, borderRadius: 8,
+                background: `color-mix(in srgb, ${HUB_COLOR} 15%, var(--surface))`,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+              }}>
+                <Icon size={15} color={HUB_COLOR} />
+              </div>
+              <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--text)', textAlign: 'center' }}>{item.label}</span>
+            </Link>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+/**
+ * Renders one or more titled sections on a single hub page.
+ *
+ * Single-section usage (unchanged call shape):
+ *   <SubgroupHub group="Campus Life" />
+ *   <SubgroupHub group="Academics" subgroup="Academic Core" />
+ *
+ * Multi-section usage — pass `sections`, an array of { group, subgroup?, filterFn? }:
+ *   <SubgroupHub
+ *     pageTitle="Campus"
+ *     sections={[{ group: 'Daily Life' }, { group: 'Campus Life' }]}
+ *   />
+ *
+ * `extra` lets a caller inject a section that isn't backed by a plain
+ * NAV group/subgroup lookup (e.g. Menu page's CR + Alerts block) —
+ * pass { title, items, icon }, rendered first, above everything else.
+ *
+ * Every hub page gets a full-page, theme-tinted background (a very
+ * faint accent wash top-to-bottom, not just behind the content column)
+ * plus a small icon + title header — same visual language across all
+ * hub pages so the app reads as one consistent system, not per-page
+ * one-offs. Uses --accentRGB so it tracks light/dark theme automatically.
+ */
+export default function SubgroupHub({ group, subgroup, sections, pageTitle, extra, filterFn }) {
+  const resolvedSections = [];
+
+  if (extra) resolvedSections.push(extra);
+
+  if (sections && sections.length) {
+    sections.forEach(({ group: g, subgroup: sg, filterFn: fn }) => {
+      const result = resolveSection(g, sg, fn || filterFn);
+      if (Array.isArray(result)) resolvedSections.push(...result);
+      else if (result) resolvedSections.push(result);
+    });
+  } else if (group) {
+    const result = resolveSection(group, subgroup, filterFn);
+    if (Array.isArray(result)) resolvedSections.push(...result);
+    else if (result) resolvedSections.push(result);
+  }
+
+  if (!resolvedSections.length) {
     return (
-      <div style={{ padding: 24 }}>
-        <p style={{ color: 'var(--muted)' }}>This section isn't available.</p>
+      <div className="hub-page-bg" style={{ minHeight: '100vh' }}>
+        <div style={{ padding: 24 }}>
+          <p style={{ color: 'var(--muted)' }}>This section isn't available.</p>
+        </div>
       </div>
     );
   }
 
-  const { title, items, color, icon } = hub;
-  const HeaderIcon = Icons[icon] || Icons.Circle;
+  const title = pageTitle || resolvedSections[0].title;
+  const HeroIcon = Icons[resolvedSections[0].icon] || Icons.Circle;
 
   return (
-    <div style={{ padding: '20px 16px 40px', maxWidth: 880, margin: '0 auto' }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 20 }}>
-        <div style={{
-          width: 36, height: 36, borderRadius: 9,
-          background: `color-mix(in srgb, ${color} 15%, var(--surface))`,
-          display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
-        }}>
-          <HeaderIcon size={18} color={color} />
+    <div className="hub-page-bg" style={{ minHeight: '100vh' }}>
+      <div style={{ padding: '20px 16px 40px', maxWidth: 880, margin: '0 auto' }}>
+        <div className="hub-page-hero">
+          <div className="hub-page-hero-icon">
+            <HeroIcon size={20} color={HUB_COLOR} />
+          </div>
+          <h1 className="hub-page-hero-title">{title}</h1>
         </div>
-        <h1 style={{ fontSize: 18, fontWeight: 700, color: 'var(--text)', margin: 0 }}>{title}</h1>
-      </div>
-
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))',
-        gap: 10,
-      }}>
-        {items.map(item => {
-          const Icon = Icons[item.icon] || Icons.Circle;
-          return (
-            <Link
-              key={item.id}
-              to={item.path}
-              style={{
-                display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 10,
-                padding: '16px 14px',
-                borderRadius: 12,
-                border: '1px solid var(--border)',
-                background: 'var(--surface)',
-                textDecoration: 'none',
-                transition: 'border-color 0.15s, background 0.15s',
-              }}
-            >
-              <div style={{
-                width: 32, height: 32, borderRadius: 8,
-                background: `color-mix(in srgb, ${color} 15%, var(--surface))`,
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-              }}>
-                <Icon size={16} color={color} />
-              </div>
-              <span style={{ fontSize: 13, fontWeight: 600, color: 'var(--text)' }}>{item.label}</span>
-            </Link>
-          );
-        })}
+        {resolvedSections.map((section, i) => (
+          <HubSection
+            key={`${section.title}-${i}`}
+            title={section.title === title ? null : section.title}
+            items={section.items}
+            icon={section.icon}
+          />
+        ))}
       </div>
     </div>
   );

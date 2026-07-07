@@ -1317,9 +1317,12 @@ export default function QuestionBankSolutions() {
   );
 
   const DeptTermRow = () => (
-    <div className="dt-row qs-no-print">
+    <div className="filter-bar-row qs-no-print">
+      <div className="filter-bar-icon" style={{ background: t.accentBg || `color-mix(in srgb, ${t.accent} 12%, transparent)`, color: t.accent }}>
+        <Filter size={13} />
+      </div>
       <div className="dt-field">
-        <label className="dt-label" style={{ color: t.accent }}>Dept</label>
+        <label className="dt-label" style={{ color: t.textMut }}>Dept</label>
         <div className="dt-select-wrap">
           <select
             value={selectedDept}
@@ -1332,8 +1335,8 @@ export default function QuestionBankSolutions() {
           <ChevronDown size={12} color={t.textMut} className="dt-chevron" />
         </div>
       </div>
-      <div className="dt-field">
-        <label className="dt-label" style={{ color: t.accent }}>Term</label>
+      <div className="dt-field dt-field-narrow">
+        <label className="dt-label" style={{ color: t.textMut }}>Term</label>
         <div className="dt-select-wrap">
           <select
             value={selectedTerm}
@@ -1365,7 +1368,8 @@ export default function QuestionBankSolutions() {
               : `linear-gradient(135deg, color-mix(in srgb, ${t.accent} 7%, ${t.surface}), ${t.surface})`,
             border: `1px solid ${t.border}`,
             borderRadius: 16,
-            padding: '20px 22px',
+            padding: '18px 22px',
+            marginBottom: 20,
           }}
         >
           <div className="home-hero-inner">
@@ -1400,12 +1404,20 @@ export default function QuestionBankSolutions() {
 
         <DeptTermRow />
 
-        <div className="section-head" style={{ marginBottom: 14 }}>
-          <div className="section-title" style={{ color: t.text }}>Available Courses</div>
-          <div className="section-sub" style={{ color: t.textSub }}>{selectedDept} · {selectedTerm} · {courses.length} available</div>
+        <div className="section-head">
+          <div className="section-head-left">
+            <Layers size={14} color={t.textMut} />
+            <div>
+              <div className="section-title" style={{ color: t.text }}>Available Courses</div>
+              <div className="section-sub" style={{ color: t.textSub }}>{selectedDept} · {selectedTerm}</div>
+            </div>
+          </div>
+          <div className="section-count" style={{ background: t.card, border: `1px solid ${t.border}`, color: t.textSub }}>
+            {courses.length} {courses.length === 1 ? 'course' : 'courses'}
+          </div>
         </div>
 
-        <div className="course-grid">
+        <div className={`course-grid${courses.length > 0 && courses.length <= 4 ? ' course-grid-compact' : ''}`}>
           {courses.map(course => (
             <div
               key={course.code}
@@ -1415,7 +1427,9 @@ export default function QuestionBankSolutions() {
             >
               <div className="course-card-code" style={{ color: t.accent }}>{course.courseCode}</div>
               <div className="course-card-name" style={{ color: t.text }}>{course.name}</div>
-              <div className="course-card-hint" style={{ color: t.textMut }}>View past papers →</div>
+              <div className="course-card-hint" style={{ color: t.textMut }}>
+                View past papers <ChevronRight size={12} />
+              </div>
             </div>
           ))}
           {courses.length === 0 && (
@@ -1471,6 +1485,22 @@ export default function QuestionBankSolutions() {
             </div>
           )}
         </div>
+
+        {courses.length > 0 && courses.length <= 4 && (
+          <div className="course-grid-nudge" style={{ background: t.card, border: `1px dashed ${t.border}` }}>
+            <div className="course-grid-nudge-text">
+              <span style={{ color: t.text, fontWeight: 600 }}>Don't see your course?</span>{' '}
+              <span style={{ color: t.textSub }}>More solutions are added regularly — help us grow the bank faster.</span>
+            </div>
+            <button
+              onClick={openContribFlow}
+              className="course-grid-nudge-btn"
+              style={{ background: t.accent, color: '#fff' }}
+            >
+              Contribute 🤝
+            </button>
+          </div>
+        )}
       </div>
 
       {showContribIntro && (

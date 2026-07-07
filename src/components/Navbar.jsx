@@ -4,8 +4,10 @@ import { useTheme, THEMES } from '../hooks/useTheme';
 import { useLocation, Link } from 'react-router-dom';
 import { NAV } from '../nav';
 import { Wordmark } from './Logo';
-import { getProfile } from '../store/store';
+import * as noticeApi from '../lib/noticeUtils';
 import * as alertApi from '../lib/alertUtils';
+import { computeAlerts } from '../lib/alertUtils';
+import { getProfile } from '../store/store';
 import { NotificationPanel } from './NotificationPanel';
 import GuideModal from './GuideModal';
 
@@ -91,15 +93,22 @@ export function Navbar({ onMenuClick }) {
   const ThemeIcon = themeId === 'dark' ? Moon : themeId === 'milky' ? Droplets : Sun;
   const themeLabels = { light: '☀️ Light', milky: '🥛 Milky', dark: '🌙 Dark' };
 
-  const dismissedIds = useMemo(() => alertApi.getDismissedAlertIds(), [refreshTick]);
-  const alertCounts = useMemo(() => (
-    alertApi.decorateAlerts(alertApi.computeAlerts(getProfile()), dismissedIds)
-  ), [dismissedIds, refreshTick]);
-  const unreadCritical = alertApi.filterUnreadAlerts(alertCounts.critical, dismissedIds);
-  const unreadWarnings = alertApi.filterUnreadAlerts(alertCounts.warnings, dismissedIds);
-  const unreadPositives = alertApi.filterUnreadAlerts(alertCounts.positives, dismissedIds);
-  const unreadAssignments = alertApi.filterUnreadAlerts(alertCounts.assignmentAlerts, dismissedIds);
-  const alertCount = unreadCritical.length + unreadWarnings.length + unreadPositives.length + unreadAssignments.length;
+  const readNoticeIds = useMemo(() => noticeApi.getReadNoticeIds(), [refreshTick]);
+  const notices = useMemo(() => noticeApi.getNotices(), [refreshTick]);
+  const unreadNoticeCount = noticeApi.getUnreadNotices(notices, readNoticeIds).length;
+
+  // Badge reflects the same merged set shown in NotificationPanel:
+  // unread notices + actionable alerts (critical, warnings, assignments —
+  // positives excluded, same as the panel).
+  const dismissedAlertIds = useMemo(() => alertApi.getDismissedAlertIds(), [refreshTick]);
+  const unreadAlertCount = useMemo(() => {
+    const profile = getProfile() || {};
+    const decorated = alertApi.decorateAlerts(computeAlerts(profile), dismissedAlertIds);
+    return ['critical', 'warnings', 'assignmentAlerts']
+      .reduce((sum, group) => sum + decorated[group].filter(item => !dismissedAlertIds.has(item.id)).length, 0);
+  }, [dismissedAlertIds, refreshTick]);
+
+  const alertCount = unreadNoticeCount + unreadAlertCount;
 
   const closeGuide = () => {
     localStorage.setItem('kuetx_guide_seen', '1');
@@ -138,14 +147,11 @@ export function Navbar({ onMenuClick }) {
 
   const syncLabel = isAnon ? 'Offline' : syncStatus === 'synced' ? 'Synced' : syncStatus === 'syncing' ? 'Syncing…' : syncStatus === 'pending' ? 'Saving…' : syncStatus === 'error' ? 'Sync error' : 'Connecting…';
 
-  // Total badge count for hamburger
-  const totalBadge = alertCount;
-
   return (
     <>
       <header className="topbar">
         {/* Logo — mobile */}
-        <Link to="/quick-access" className="topbar-logo" style={{ alignItems: 'center', textDecoration: 'none' }}>
+        <Link to="/" className="topbar-logo" style={{ alignItems: 'center', textDecoration: 'none' }}>
           <Wordmark height={28} />
         </Link>
 
@@ -183,6 +189,38 @@ export function Navbar({ onMenuClick }) {
 
         <div style={{ flex: 1 }} />
 
+        {/* ── Notification bell — standalone, always visible ── */}
+        <button
+          onClick={() => setNotificationOpen(true)}
+          aria-label="Notice"
+          style={{
+            position: 'relative',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            width: 38, height: 38, borderRadius: 10,
+            border: '1.5px solid var(--border)',
+            background: 'transparent',
+            cursor: 'pointer', color: 'var(--text)',
+            transition: 'background 0.15s',
+            marginRight: 8,
+          }}
+        >
+          <Bell size={17} />
+          {alertCount > 0 && (
+            <span style={{
+              position: 'absolute', top: -4, right: -4,
+              minWidth: 14, height: 14, padding: '0 3px',
+              borderRadius: 999,
+              background: 'var(--danger)',
+              border: '2px solid var(--surface)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              fontSize: 8, fontWeight: 700, color: '#fff',
+              boxShadow: '0 0 6px var(--danger)88',
+            }}>
+              {alertCount > 9 ? '9+' : alertCount}
+            </span>
+          )}
+        </button>
+
         {/* ── Hamburger button ── */}
         <button
           onClick={() => setDrawerOpen(p => !p)}
@@ -198,20 +236,16 @@ export function Navbar({ onMenuClick }) {
           }}
         >
           {drawerOpen ? <X size={18} /> : <Menu size={18} />}
-          {/* Badge: sync dot + alert count */}
+          {/* Badge: sync-status dot only — alert count now lives on the bell */}
           {!drawerOpen && (
             <span style={{
               position: 'absolute', top: -4, right: -4,
-              width: 14, height: 14,
+              width: 10, height: 10,
               borderRadius: '50%',
-              background: totalBadge > 0 ? 'var(--danger)' : dotColor,
+              background: dotColor,
               border: '2px solid var(--surface)',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              fontSize: 8, fontWeight: 700, color: '#fff',
-              boxShadow: `0 0 6px ${totalBadge > 0 ? 'var(--danger)' : dotColor}88`,
-            }}>
-              {totalBadge > 0 ? (totalBadge > 9 ? '9+' : totalBadge) : ''}
-            </span>
+              boxShadow: `0 0 6px ${dotColor}88`,
+            }} />
           )}
         </button>
       </header>
@@ -255,7 +289,7 @@ export function Navbar({ onMenuClick }) {
               borderBottom: '1px solid var(--border)',
               flexShrink: 0,
             }}>
-              <Link to="/quick-access" onClick={() => setDrawerOpen(false)} style={{ textDecoration: "none" }}>
+              <Link to="/" onClick={() => setDrawerOpen(false)} style={{ textDecoration: "none" }}>
                 <Wordmark height={24} />
               </Link>
               <button onClick={() => setDrawerOpen(false)} style={{
@@ -449,44 +483,12 @@ export function Navbar({ onMenuClick }) {
               }}>
                 <div style={{ fontSize: 11, fontWeight: 600, color: 'var(--muted)', padding: '10px 12px 6px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Quick Actions</div>
 
-                {/* Notifications */}
-                <button
-                  onClick={() => { setDrawerOpen(false); setNotificationOpen(true); }}
-                  style={{
-                    width: '100%', padding: '9px 12px',
-                    border: 'none', borderTop: '1px solid var(--border)',
-                    background: 'transparent', cursor: 'pointer',
-                    display: 'flex', alignItems: 'center', gap: 10,
-                    textAlign: 'left',
-                  }}
-                >
-                  <div style={{ position: 'relative', flexShrink: 0 }}>
-                    <Bell size={15} color="var(--text)" />
-                    {alertCount > 0 && (
-                      <span style={{
-                        position: 'absolute', top: -5, right: -5,
-                        minWidth: 14, height: 14, padding: '0 3px',
-                        borderRadius: 999, background: 'var(--danger)', color: '#fff',
-                        fontSize: 8, fontWeight: 700,
-                        display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      }}>{alertCount}</span>
-                    )}
-                  </div>
-                  <span style={{ fontSize: 13, color: 'var(--text)', flex: 1 }}>Alerts</span>
-                  {alertCount > 0 && (
-                    <span style={{
-                      fontSize: 10, fontWeight: 700, color: '#fff',
-                      background: 'var(--danger)', borderRadius: 6, padding: '2px 6px',
-                    }}>{alertCount} new</span>
-                  )}
-                </button>
-
                 {/* Guide */}
                 <button
                   onClick={() => { setDrawerOpen(false); setGuideOpen(true); }}
                   style={{
                     width: '100%', padding: '9px 12px',
-                    border: 'none', borderTop: '1px solid var(--border)',
+                    border: 'none',
                     background: 'transparent', cursor: 'pointer',
                     display: 'flex', alignItems: 'center', gap: 10,
                     textAlign: 'left',

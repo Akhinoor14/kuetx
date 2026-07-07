@@ -47,6 +47,7 @@ import Namaz from './pages/Namaz';
 import Money from './pages/Money';
 import Calculators from './pages/Calculators';
 import Alerts from './pages/Alerts';
+import Notice from './pages/Notice';
 import Settings from './pages/Settings';
 import { Notes } from './pages/Notes';
 import Clubs from './pages/Clubs';
@@ -57,8 +58,8 @@ import Classmates from './pages/Classmates';
 import AdminDashboard from './pages/AdminDashboard';
 import TeamDashboard from './pages/TeamDashboard';
 import { Tours, Projects, Syllabus, TimeTracker, Tuition, Reports } from './pages/Extras';
-import QuickAccess from './pages/QuickAccess';
 import SubgroupHub from './components/nav-system/SubgroupHub';
+import CRHub from './components/nav-system/CRHub';
 
 function Layout({ authState, onboardingActive }) {
   usePageTracker();
@@ -98,7 +99,6 @@ function Layout({ authState, onboardingActive }) {
         <div style={{ flex: 1 }}>
           <Routes>
             <Route path="/" element={<Dashboard />} />
-            <Route path="/quick-access" element={<QuickAccess />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/courses" element={<Courses />} />
             <Route path="/attendance" element={<Attendance />} />
@@ -122,6 +122,7 @@ function Layout({ authState, onboardingActive }) {
             <Route path="/tours" element={<Tours />} />
             <Route path="/calculators" element={<Navigate to="/marks" replace />} />
             <Route path="/alerts" element={<Alerts />} />
+            <Route path="/notice" element={<Notice />} />
             <Route path="/reports" element={<Reports />} />
             <Route path="/notes" element={<Notes />} />
             <Route path="/settings" element={<Settings />} />
@@ -131,11 +132,27 @@ function Layout({ authState, onboardingActive }) {
             <Route path="/classmates" element={<Classmates />} />
             <Route path="/overview" element={<SubgroupHub group="Overview" />} />
             <Route path="/tools" element={<SubgroupHub group="Tools" />} />
-            <Route path="/class-rep" element={<RequireCR><SubgroupHub group="Class Rep" /></RequireCR>} />
+            {/* Class Rep hub is CR-only content, but doesn't need a hard page
+                gate here — non-CR users simply never see a link to it (see
+                nav.js requiresCR + modeFilter). RequireCR stays on the two
+                actual CR tool routes below, which is what needs real
+                protection against direct URL access. */}
+            <Route path="/class-rep" element={<SubgroupHub group="Class Rep" />} />
             <Route path="/academic-core" element={<SubgroupHub group="Academics" subgroup="Academic Core" />} />
             <Route path="/daily-academics" element={<SubgroupHub group="Academics" subgroup="Daily Academics" />} />
             <Route path="/campus-life" element={<SubgroupHub group="Campus Life" />} />
             <Route path="/daily-life" element={<SubgroupHub group="Daily Life" />} />
+            {/* Combined bottom-nav hub pages */}
+            <Route
+              path="/campus"
+              element={
+                <SubgroupHub
+                  pageTitle="Campus"
+                  sections={[{ group: 'Daily Life' }, { group: 'Campus Life' }]}
+                />
+              }
+            />
+            <Route path="/cr-hub" element={<CRHub />} />
             <Route path="/admin" element={<AdminDashboard />} />
             <Route path="/team" element={<TeamDashboard />} />
           </Routes>
