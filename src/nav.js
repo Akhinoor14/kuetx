@@ -3,6 +3,9 @@
 export const NAV = [
   {
     group: 'Overview',
+    isSubgroup: true,
+    hubPath: '/overview',
+    hubIcon: 'LayoutDashboard',
     items: [
       { id: 'dashboard',    label: 'Dashboard',    icon: 'Grid',     path: '/' },
       { id: 'quick-access', label: 'Quick Access', icon: 'Zap',      path: '/quick-access' },
@@ -79,6 +82,9 @@ export const NAV = [
   },
   {
     group: 'Tools',
+    isSubgroup: true,
+    hubPath: '/tools',
+    hubIcon: 'Wrench',
     items: [
       { id: 'warnings', label: 'Alerts',      icon: 'Bell',      path: '/alerts' },
       { id: 'reports',  label: 'Reports',     icon: 'BarChart2', path: '/reports', fullOnly: true },

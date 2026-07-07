@@ -65,23 +65,10 @@ import SubgroupHub from './components/nav-system/SubgroupHub';
 function Layout({ authState, onboardingActive }) {
   usePageTracker();
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [sidebarMode, setSidebarMode] = useState(() => {
-    try {
-      return localStorage.getItem('kuetx_sidebar_mode') || '2col';
-    } catch {
-      return '2col';
-    }
-  });
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
   const location = useLocation();
   const isMobileNav = useIsMobileNav();
   const isQuestionBankViewer = location.pathname === '/question-bank/view';
-
-  useEffect(() => {
-    try {
-      localStorage.setItem('kuetx_sidebar_mode', sidebarMode);
-    } catch {}
-  }, [sidebarMode]);
 
   // Expose upgrade modal trigger globally so Settings page can call it
   useEffect(() => {
@@ -94,14 +81,12 @@ function Layout({ authState, onboardingActive }) {
       {!isQuestionBankViewer && (
         <Sidebar
           open={sidebarOpen}
-          mode={sidebarMode}
-          onCycleMode={() => setSidebarMode(m => m === 'compact' ? '2col' : m === '2col' ? '3col' : 'compact')}
           onClose={() => setSidebarOpen(false)}
           authState={authState}
         />
       )}
       <div
-        className={`main-content ${!isQuestionBankViewer ? `mode-${sidebarMode}` : ''}`}
+        className={`main-content ${!isQuestionBankViewer ? 'mode-standard' : ''}`}
         style={isQuestionBankViewer ? { marginLeft: 0, width: '100%' } : undefined}
       >
         {!isQuestionBankViewer && (
@@ -146,6 +131,8 @@ function Layout({ authState, onboardingActive }) {
             <Route path="/class-management" element={<RequireCR><ClassManagement /></RequireCR>} />
             <Route path="/ct-quiz-planning" element={<RequireCR><CTQuizPlanning /></RequireCR>} />
             <Route path="/classmates" element={<Classmates />} />
+            <Route path="/overview" element={<SubgroupHub group="Overview" />} />
+            <Route path="/tools" element={<SubgroupHub group="Tools" />} />
             <Route path="/class-rep" element={<RequireCR><SubgroupHub group="Class Rep" /></RequireCR>} />
             <Route path="/academic-core" element={<SubgroupHub group="Academics" subgroup="Academic Core" />} />
             <Route path="/daily-academics" element={<SubgroupHub group="Academics" subgroup="Daily Academics" />} />

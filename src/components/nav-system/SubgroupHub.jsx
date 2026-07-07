@@ -2,14 +2,8 @@ import { Link } from 'react-router-dom';
 import * as Icons from 'lucide-react';
 import { NAV } from '../../nav';
 
-const GROUP_COLORS = {
-  'Overview':    'var(--accent)',
-  'Class Rep':   '#a78bfa',
-  'Academics':   '#3b82f6',
-  'Daily Life':  '#f59e0b',
-  'Campus Life': '#f97316',
-  'Tools':       '#64748b',
-};
+// Single synchronized accent color for every hub — no per-group hues.
+const HUB_COLOR = 'var(--accent)';
 
 // Resolve the { title, items, color, icon } for a hub route from NAV.
 // group: top-level group name (e.g. 'Campus Life', 'Class Rep', 'Daily Life')
@@ -24,7 +18,7 @@ function resolveHub(group, subgroup) {
     return {
       title: sub.name,
       items: sub.items,
-      color: GROUP_COLORS[group] || 'var(--muted)',
+      color: HUB_COLOR,
       icon: sub.hubIcon || 'Circle',
     };
   }
@@ -32,7 +26,7 @@ function resolveHub(group, subgroup) {
   return {
     title: section.group,
     items: section.items || [],
-    color: GROUP_COLORS[group] || 'var(--muted)',
+    color: HUB_COLOR,
     icon: section.hubIcon || 'Circle',
   };
 }
