@@ -25,7 +25,6 @@ import { store, getProfile } from '../store/store';
 import ProfileSetupModal from './ProfileSetupModal';
 
 const SNOOZE_KEY = 'kuetxProfileCompleteReminderSnoozed';
-const SESSION_MARKER_KEY = 'kuetxAppSessionStarted';
 
 function isExtrasEmpty(profile) {
   const p = profile || {};
@@ -39,29 +38,21 @@ function isExtrasEmpty(profile) {
 }
 
 // True only from the NEXT page load onward, relative to whenever profile
-// setup last completed. Uses store (IndexedDB/localStorage-backed,
-// persists across tab closes) rather than sessionStorage — the mandatory
-// queue's "Finish now" advance() happens WITHOUT a page reload, so a
-// sessionStorage marker set during that same load would already be
-// present by the time this component mounts a moment later, making it
-// impossible to tell "same load as onboarding" apart from "reopened the
-// app". A page-load counter comparison against a snapshot taken right
-// when profile setup completes solves that: this component only enables
-// itself once the CURRENT load's counter is higher than the one recorded
-// at save time.
-const LOAD_COUNTER_KEY = 'kuetxAppLoadCounter';
-
-function bumpAndGetLoadCounter() {
-  const current = (store.get(LOAD_COUNTER_KEY) || 0) + 1;
-  store.set(LOAD_COUNTER_KEY, current);
-  return current;
-}
-
+// setup last completed. The mandatory queue's "Finish now" advance()
+// happens WITHOUT a page reload, so telling "same load as onboarding"
+// apart from "reopened the app" needs a load counter rather than a
+// sessionStorage flag: main.jsx bumps window.__kuetxLoadCounter exactly
+// once per real page load (before this component ever mounts), and
+// App.jsx snapshots that counter into 'kuetxProfileFinishedAtLoad' at the
+// exact moment mandatory profile setup is saved. This component only
+// enables itself once the CURRENT load's counter is strictly higher than
+// the one recorded at save time — i.e. the page has been reloaded/reopened
+// since onboarding finished.
 function isFreshSessionSinceProfileSetup() {
   try {
     const savedAtLoad = store.get('kuetxProfileFinishedAtLoad');
     if (savedAtLoad == null) return true; // no record — profile predates this feature, fine to nudge
-    const thisLoad = window.__kuetxLoadCounter;
+    const thisLoad = window.__kuetxLoadCounter || 0;
     return thisLoad > savedAtLoad;
   } catch { return true; }
 }

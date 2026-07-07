@@ -7,6 +7,13 @@ import './index.css'
 import { store, ensureDBReady } from './store/store.js'
 import { getAllCourses } from './store/curriculumStore.js'
 
+// One-time-per-real-page-load counter used by ProfileCompleteReminder to
+// tell "still the same load onboarding finished on" apart from "app was
+// reopened/reloaded since". store.get/set is sync (localStorage-backed
+// cache) so this is safe to run before ensureDBReady() resolves.
+window.__kuetxLoadCounter = (store.get('kuetxAppLoadCounter') || 0) + 1;
+store.set('kuetxAppLoadCounter', window.__kuetxLoadCounter);
+
 // Initialize app after DB is ready
 async function initializeApp() {
   try {
@@ -50,4 +57,3 @@ async function initializeApp() {
 
 // Start initialization
 initializeApp();
-

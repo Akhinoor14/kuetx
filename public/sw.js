@@ -1,5 +1,5 @@
 // KUETx Service Worker — offline cache + auto-update
-const CACHE_NAME = 'kuetx-v4.1.2'; // bumped for the v4.1.2 auth-password-fix + KUET email verify update — bump this on every future deploy too
+const CACHE_NAME = 'kuetx-v4.1.5'; // bumped for the mode-select removal + deferred profile-completion reminder update — bump this on every future deploy too
 const STATIC_ASSETS = [
   '/',
   '/index.html',

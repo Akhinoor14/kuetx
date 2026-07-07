@@ -13,6 +13,7 @@ import { BottomNav, useIsMobileNav } from './components/BottomNav';
 import GlobalToasts from './components/GlobalToasts';
 import BackupReminderGate from './components/BackupReminderGate';
 import VerifyReminderPopup from './components/VerifyReminderPopup';
+import ProfileCompleteReminder from './components/ProfileCompleteReminder';
 import AuthModal from './components/AuthModal';
 import ModeSelectModal from './components/ModeSelectModal';
 import ProfileSetupModal from './components/ProfileSetupModal';
@@ -21,7 +22,7 @@ import useFirebaseAuth from './hooks/useFirebaseAuth';
 import DataSafeToast from './components/DataSafeToast';
 import ClassJoinIntro from './components/ClassJoinIntro';
 import KuetVerifyEmailConfirmModal from './components/KuetVerifyEmailConfirmModal';
-import { isModeChosen } from './lib/modeFilter';
+import { isModeChosen, markModeChosen } from './lib/modeFilter';
 import { store, getProfile, isProfileComplete, DEFAULT_PROFILE } from './store/store';
 import { getGroupId } from './lib/groupUtils';
 import { syncOwnVerification, joinGroup } from './lib/groupSync';
@@ -225,7 +226,13 @@ function shouldShowCommunityHiring() {
 
 function buildQueue(isAnonymous) {
   const q = [];
-  if (!isModeChosen()) q.push('mode');
+  // Mode-select is no longer a mandatory first-launch step — everyone
+  // starts on "Full KUETx" (getAppMode() already defaults to 'full') and
+  // can switch modes any time later from Settings. We still silently
+  // mark mode as "chosen" the first time buildQueue runs so isModeChosen()
+  // stays consistent for any other code that checks it, but we never push
+  // 'mode' into the mandatory queue.
+  if (!isModeChosen()) markModeChosen();
   if (isAnonymous) q.push('auth');
   // Profile setup is mandatory before anything else — a half-filled
   // profile (missing roll/dept/session) is the root cause of Classmates
@@ -406,9 +413,9 @@ export default function App() {
   return (
     <ThemeProvider>
       <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
-        {current === 'mode' && (
-          <ModeSelectModal onDone={advance} />
-        )}
+        {/* 'mode' is never in the queue anymore (see buildQueue) — ModeSelectModal
+            is kept imported/importable for a possible future "Change mode"
+            entry point in Settings, just not rendered as part of onboarding. */}
         {current === 'auth' && (
           <AuthModal
             mode="login"
@@ -436,6 +443,11 @@ export default function App() {
             mandatory
             onSave={(formData) => {
               store.set('profile', { ...DEFAULT_PROFILE, ...formData });
+              // Record which page-load onboarding finished on, so
+              // ProfileCompleteReminder can tell "still this same load"
+              // apart from "app reopened later" and never fire in the
+              // same session as onboarding itself.
+              try { store.set('kuetxProfileFinishedAtLoad', window.__kuetxLoadCounter); } catch {}
               advance();
             }}
             initialProfile={getProfile()}
@@ -461,6 +473,10 @@ export default function App() {
             its own internal 3-day snooze + "stop once verified" logic, so it
             doesn't need to block on / wait for the queue to finish. */}
         {authState.authReady && !authState.isAnonymous && queue.length === 0 && <VerifyReminderPopup />}
+        {/* Nudges anyone who used "Finish now, add rest later" to fill in the
+            full profile — but only from a later session, never right after
+            onboarding (see ProfileCompleteReminder.jsx's own session guard). */}
+        {authState.authReady && queue.length === 0 && <ProfileCompleteReminder />}
         {verifyEmailPrompt && (
           <KuetVerifyEmailConfirmModal
             busy={verifyEmailPrompt.busy}
