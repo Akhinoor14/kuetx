@@ -8,7 +8,7 @@ import { store, DEFAULT_PROFILE } from '../store/store';
 import { useNavConfig } from './nav-system/useNavConfig';
 import { useFavorites } from '../hooks/useFavorites';
 import { usePinnedPages } from '../hooks/usePinnedPages';
-import { getAppMode, filterNav, getJrCustomHidden, getJrCustomShown } from '../lib/modeFilter';
+import { filterNav } from '../lib/modeFilter';
 import { getGroupId } from '../lib/groupUtils';
 import { subscribeMembers } from '../lib/groupSync';
 import { auth } from '../lib/firebase';
@@ -45,7 +45,7 @@ function SyncBadge({ status }) {
 // ── Nav row: shared for both hub rows and leaf item rows ─────────────────────
 // Neutral/synchronized style: default state is muted gray for every group,
 // a single accent color takes over on hover/active. No per-group hues.
-function NavRow({ to, label, iconName, active, onClose, count }) {
+function NavRow({ to, label, iconName, active, onClose }) {
   const Icon = Icons[iconName] || Icons.Circle;
   const [hovered, setHovered] = useState(false);
 
@@ -59,11 +59,12 @@ function NavRow({ to, label, iconName, active, onClose, count }) {
         display: 'flex',
         alignItems: 'center',
         gap: 10,
-        padding: '8px 10px',
+        padding: '8px 10px 8px 8px',
         borderRadius: 8,
         textDecoration: 'none',
         marginBottom: 1,
-        transition: 'background 0.12s, color 0.12s',
+        borderLeft: active ? '3px solid var(--accent)' : '3px solid transparent',
+        transition: 'background 0.12s, color 0.12s, border-color 0.12s',
         background: active
           ? 'color-mix(in srgb, var(--accent) 10%, var(--surface))'
           : hovered
@@ -87,20 +88,6 @@ function NavRow({ to, label, iconName, active, onClose, count }) {
       }}>
         {label}
       </span>
-      {typeof count === 'number' && (
-        <span style={{
-          fontSize: 9, fontWeight: 600,
-          color: active ? 'var(--accent)' : 'var(--muted)',
-          background: active
-            ? 'color-mix(in srgb, var(--accent) 14%, var(--surface))'
-            : 'var(--inputBg)',
-          borderRadius: 4,
-          padding: '1px 5px',
-          flexShrink: 0,
-        }}>
-          {count}
-        </span>
-      )}
     </Link>
   );
 }
@@ -126,7 +113,6 @@ export function Sidebar({ open, onClose, authState }) {
   const [navConfig] = useNavConfig();
   const { favorites } = useFavorites();
   const { pinnedPages } = usePinnedPages();
-  const [appMode, setAppMode] = useState(getAppMode);
   const [isRealCR, setIsRealCR] = useState(false);
   // profile.isCR is just a self-ticked checkbox from Profile Setup with no
   // verification behind it — showing the CR tools link based on it alone
@@ -144,19 +130,13 @@ export function Sidebar({ open, onClose, authState }) {
   }, [profile.dept, profile.batch]);
 
   useEffect(() => {
-    const handler = (e) => setAppMode(e.detail?.mode || getAppMode());
-    window.addEventListener('kuetx:mode-changed', handler);
-    return () => window.removeEventListener('kuetx:mode-changed', handler);
-  }, []);
-
-  useEffect(() => {
     const syncProfile = () => setProfile(store.get('profile') || DEFAULT_PROFILE);
     window.addEventListener('kuetx:store-updated', syncProfile);
     syncProfile();
     return () => window.removeEventListener('kuetx:store-updated', syncProfile);
   }, []);
 
-  const filteredNav = filterNav(NAV, appMode, canSeeCrBoard, getJrCustomHidden(), getJrCustomShown());
+  const filteredNav = filterNav(NAV, canSeeCrBoard);
 
   const findNavItem = (path) => {
     for (const s of NAV) {
@@ -198,14 +178,11 @@ export function Sidebar({ open, onClose, authState }) {
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8 }}>
             <Link to="/" onClick={onClose}
               style={{ display: 'inline-flex', alignItems: 'center', gap: 6, textDecoration: 'none', color: 'inherit', minWidth: 0, overflow: 'hidden', flexShrink: 1 }}>
-              <Wordmark height={26} />
+              <Wordmark height={32} />
             </Link>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 4 }}>
             <div style={{ fontSize: 10, color: 'var(--muted)' }}>Student Life OS · KUET</div>
-            {appMode === 'jr' && (
-              <span style={{ fontSize: 9, fontWeight: 700, color: 'var(--accent)', background: 'color-mix(in srgb, var(--accent) 12%, var(--surface))', border: '1px solid color-mix(in srgb, var(--accent) 25%, transparent)', borderRadius: 4, padding: '1px 5px', textTransform: 'uppercase', letterSpacing: '0.05em' }}>JR</span>
-            )}
           </div>
         </div>
 
@@ -241,7 +218,9 @@ export function Sidebar({ open, onClose, authState }) {
 
             // Whole-group hub row (Overview, Class Rep, Campus Life, Daily Life, Tools)
             if (isHub) {
-              const active = location.pathname === section.hubPath;
+              const active = location.pathname === section.hubPath
+                || section.items.some(item => location.pathname === item.path
+                  || (item.path !== '/' && location.pathname.startsWith(item.path)));
               return (
                 <div key={section.group}>
                   {idx > 0 && <div style={{ height: 1, background: 'var(--border)', margin: '6px 4px', opacity: 0.6 }} />}
@@ -251,7 +230,6 @@ export function Sidebar({ open, onClose, authState }) {
                     iconName={section.hubIcon || GROUP_ICONS[section.group] || 'Circle'}
                     active={active}
                     onClose={onClose}
-                    count={section.items.length}
                   />
                 </div>
               );
@@ -263,17 +241,21 @@ export function Sidebar({ open, onClose, authState }) {
                 <div key={section.group}>
                   {idx > 0 && <div style={{ height: 1, background: 'var(--border)', margin: '6px 4px', opacity: 0.6 }} />}
                   <SectionLabel>{section.group}</SectionLabel>
-                  {section.subgroups.map(sub => (
-                    <NavRow
-                      key={sub.name}
-                      to={sub.hubPath}
-                      label={sub.name}
-                      iconName={sub.hubIcon || 'Circle'}
-                      active={location.pathname === sub.hubPath}
-                      onClose={onClose}
-                      count={sub.items.length}
-                    />
-                  ))}
+                  {section.subgroups.map(sub => {
+                    const subActive = location.pathname === sub.hubPath
+                      || sub.items.some(item => location.pathname === item.path
+                        || (item.path !== '/' && location.pathname.startsWith(item.path)));
+                    return (
+                      <NavRow
+                        key={sub.name}
+                        to={sub.hubPath}
+                        label={sub.name}
+                        iconName={sub.hubIcon || 'Circle'}
+                        active={subActive}
+                        onClose={onClose}
+                      />
+                    );
+                  })}
                 </div>
               );
             }

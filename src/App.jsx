@@ -15,14 +15,12 @@ import BackupReminderGate from './components/BackupReminderGate';
 import VerifyReminderPopup from './components/VerifyReminderPopup';
 import ProfileCompleteReminder from './components/ProfileCompleteReminder';
 import AuthModal from './components/AuthModal';
-import ModeSelectModal from './components/ModeSelectModal';
 import ProfileSetupModal from './components/ProfileSetupModal';
 import RequireCR from './components/RequireCR';
 import useFirebaseAuth from './hooks/useFirebaseAuth';
 import DataSafeToast from './components/DataSafeToast';
 import ClassJoinIntro from './components/ClassJoinIntro';
 import KuetVerifyEmailConfirmModal from './components/KuetVerifyEmailConfirmModal';
-import { isModeChosen, markModeChosen } from './lib/modeFilter';
 import { store, getProfile, isProfileComplete, DEFAULT_PROFILE } from './store/store';
 import { getGroupId } from './lib/groupUtils';
 import { syncOwnVerification, joinGroup } from './lib/groupSync';
@@ -142,7 +140,7 @@ function Layout({ authState, onboardingActive }) {
             <Route path="/team" element={<TeamDashboard />} />
           </Routes>
         </div>
-        {location.pathname !== '/about' && !isQuestionBankViewer && !isMobileNav && <Footer syncStatus={authState.syncStatus} isAnonymous={authState.isAnonymous} displayName={authState.displayName} />}
+        {location.pathname !== '/about' && !isQuestionBankViewer && !isMobileNav && <Footer />}
         {!isQuestionBankViewer && <PWAInstallPrompt />}
         <PWAUpdatePrompt />
         {!isQuestionBankViewer && <BottomNav />}
@@ -213,13 +211,6 @@ function shouldShowCommunityHiring() {
 
 function buildQueue(isAnonymous) {
   const q = [];
-  // Mode-select is no longer a mandatory first-launch step — everyone
-  // starts on "Full KUETx" (getAppMode() already defaults to 'full') and
-  // can switch modes any time later from Settings. We still silently
-  // mark mode as "chosen" the first time buildQueue runs so isModeChosen()
-  // stays consistent for any other code that checks it, but we never push
-  // 'mode' into the mandatory queue.
-  if (!isModeChosen()) markModeChosen();
   if (isAnonymous) q.push('auth');
   // Profile setup is mandatory before anything else — a half-filled
   // profile (missing roll/dept/session) is the root cause of Classmates
@@ -400,9 +391,6 @@ export default function App() {
   return (
     <ThemeProvider>
       <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
-        {/* 'mode' is never in the queue anymore (see buildQueue) — ModeSelectModal
-            is kept imported/importable for a possible future "Change mode"
-            entry point in Settings, just not rendered as part of onboarding. */}
         {current === 'auth' && (
           <AuthModal
             mode="login"

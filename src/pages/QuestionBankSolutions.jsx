@@ -28,41 +28,45 @@ const WA_NUMBER = '8801724812042';
 // Map central theme to solutions theme structure
 function mapCentralThemeToSolutions(themeId) {
   const isDark = themeId === 'dark';
-  
+
+  // bg/surface/card/border/text now mirror the app's real theme tokens
+  // (--bg/--surface/--card/--border/--text) instead of a hardcoded
+  // palette, so this page matches the rest of the app. Accent/content
+  // colors (blue, yellow, code blocks, etc.) keep their own tuned values.
   if (isDark) {
     return {
-      bg: '#0C1220', surface: '#131D2E', card: '#1A2740',
-      cardHov: '#1F3050', border: '#243451', borderSub: '#1A2B44',
+      bg: '#0a0a0c', surface: '#14141a', card: '#1a1a21',
+      cardHov: '#20202a', border: '#27272f', borderSub: '#1f1f27',
       accent: '#22C55E', accentDim: '#16A34A', accentGlow: 'rgba(34,197,94,0.12)',
       blue: '#60A5FA', blueDim: '#3B82F6', blueBg: 'rgba(96,165,250,0.08)',
       yellow: '#FBBF24', yellowBg: 'rgba(251,191,36,0.08)', yellowText: '#FDE68A',
-      text: '#E8F0FE', textSub: '#8BA3C4', textMut: '#4A6080',
-      eqBg: '#0E1A30', eqBord: '#3B82F6',
+      text: '#e5e5eb', textSub: '#9a9aab', textMut: '#7a7a8a',
+      eqBg: '#171720', eqBord: '#3B82F6',
       codeBgM: '#111827', codeBgP: '#060D17',
       numBg: '#0D2E1A', numText: '#4ADE80',
       shortBg: 'rgba(34,197,94,0.07)', shortBord: '#22C55E',
       bnBg: 'rgba(251,191,36,0.07)', bnBord: '#FBBF24',
       tagBg: 'rgba(96,165,250,0.12)', tagText: '#93C5FD', tagBord: 'rgba(96,165,250,0.3)',
-      divider: '#1A2B44',
-      selBg: '#1A2740', selBord: '#243451',
+      divider: '#27272f',
+      selBg: '#1a1a21', selBord: '#27272f',
       filterActiveBg: 'rgba(34,197,94,0.12)', filterActiveBord: '#22C55E', filterActiveText: '#4ADE80',
     };
   } else {
     return {
-      bg: '#F0F4FA', surface: '#FFFFFF', card: '#FFFFFF',
-      cardHov: '#F0FDF4', border: '#D1DCF0', borderSub: '#E2ECF8',
+      bg: '#f5f5f2', surface: '#ffffff', card: '#ffffff',
+      cardHov: '#F0FDF4', border: '#e2e0db', borderSub: '#ececE6',
       accent: '#16A34A', accentDim: '#15803D', accentGlow: 'rgba(22,163,74,0.1)',
       blue: '#2563EB', blueDim: '#1D4ED8', blueBg: 'rgba(37,99,235,0.06)',
       yellow: '#D97706', yellowBg: 'rgba(217,119,6,0.07)', yellowText: '#92400E',
-      text: '#0F1F3D', textSub: '#3D5A80', textMut: '#8BA3C4',
+      text: '#1c1c1a', textSub: '#6b6860', textMut: '#8c887f',
       eqBg: '#EEF4FF', eqBord: '#2563EB',
       codeBgM: '#1C2333', codeBgP: '#0D1117',
       numBg: '#DCFCE7', numText: '#15803D',
       shortBg: '#F0FDF4', shortBord: '#16A34A',
       bnBg: '#FFFBEB', bnBord: '#D97706',
       tagBg: 'rgba(37,99,235,0.06)', tagText: '#1D4ED8', tagBord: 'rgba(37,99,235,0.2)',
-      divider: '#E2ECF8',
-      selBg: '#FFFFFF', selBord: '#D1DCF0',
+      divider: '#e2e0db',
+      selBg: '#ffffff', selBord: '#e2e0db',
       filterActiveBg: 'rgba(22,163,74,0.08)', filterActiveBord: '#16A34A', filterActiveText: '#15803D',
     };
   }
@@ -1352,38 +1356,48 @@ export default function QuestionBankSolutions() {
   // ════════════════════════════════════════════════════════════════════════════
   if (view === 'home') return (
     <div style={page}>
-      <div className="home-hero" style={{ background: t.surface, borderBottom: `1px solid ${t.border}` }}>
-        <div className="wrap home-hero-inner">
-          <div className="home-hero-left">
-            <div className="home-hero-eyebrow" style={{ color: t.accent }}>
-              <BookOpen size={13} /> KUET Solution Bank
+      <div className="wrap" style={{ paddingTop: 20 }}>
+        <div
+          className="home-hero"
+          style={{
+            background: dark
+              ? `linear-gradient(135deg, color-mix(in srgb, ${t.accent} 10%, ${t.surface}), ${t.surface})`
+              : `linear-gradient(135deg, color-mix(in srgb, ${t.accent} 7%, ${t.surface}), ${t.surface})`,
+            border: `1px solid ${t.border}`,
+            borderRadius: 16,
+            padding: '20px 22px',
+          }}
+        >
+          <div className="home-hero-inner">
+            <div className="home-hero-left">
+              <div className="home-hero-eyebrow" style={{ color: t.accent }}>
+                <BookOpen size={13} /> KUET Solution Bank
+              </div>
+              <h1 className="home-hero-title" style={{ color: t.text }}>
+                Past Papers,<br />
+                <span style={{ color: t.accent }}>Solved.</span>
+              </h1>
+              <p className="home-hero-sub" style={{ color: t.textSub }}>
+                Step-by-step solutions for KUET exam questions — theory, numerical & code.
+              </p>
             </div>
-            <h1 className="home-hero-title" style={{ color: t.text }}>
-              Past Papers,<br />
-              <span style={{ color: t.accent }}>Solved.</span>
-            </h1>
-            <p className="home-hero-sub" style={{ color: t.textSub }}>
-              Step-by-step solutions for KUET exam questions — theory, numerical & code.
-            </p>
-          </div>
-          <div className="home-hero-stats">
-            <div className="home-stat" style={{ background: t.card, border: `1px solid ${t.border}` }}>
-              <div className="home-stat-n" style={{ color: t.accent }}>{courses.length}</div>
-              <div className="home-stat-l" style={{ color: t.textSub }}>Courses</div>
-            </div>
-            <div className="home-stat" style={{ background: t.card, border: `1px solid ${t.border}` }}>
-              <div className="home-stat-n" style={{ color: t.blue }}>{PROBE_YEARS.length}</div>
-              <div className="home-stat-l" style={{ color: t.textSub }}>Years</div>
-            </div>
-            <div className="home-stat" style={{ background: t.card, border: `1px solid ${t.border}` }}>
-              <div className="home-stat-n" style={{ color: t.yellow }}>3</div>
-              <div className="home-stat-l" style={{ color: t.textSub }}>Types</div>
+            <div className="home-hero-stats">
+              <div className="home-stat" style={{ background: t.card, border: `1px solid ${t.border}` }}>
+                <div className="home-stat-n" style={{ color: t.accent }}>{courses.length}</div>
+                <div className="home-stat-l" style={{ color: t.textSub }}>Courses</div>
+              </div>
+              <div className="home-stat" style={{ background: t.card, border: `1px solid ${t.border}` }}>
+                <div className="home-stat-n" style={{ color: t.blue }}>{PROBE_YEARS.length}</div>
+                <div className="home-stat-l" style={{ color: t.textSub }}>Years</div>
+              </div>
+              <div className="home-stat" style={{ background: t.card, border: `1px solid ${t.border}` }}>
+                <div className="home-stat-n" style={{ color: t.yellow }}>3</div>
+                <div className="home-stat-l" style={{ color: t.textSub }}>Types</div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <div className="wrap" style={{ paddingTop: 24 }}>
         <DeptTermRow />
 
         <div className="section-head" style={{ marginBottom: 14 }}>

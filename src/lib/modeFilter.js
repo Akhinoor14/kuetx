@@ -1,45 +1,16 @@
 /**
- * KUETx App Mode Filter
- * 'full' — all pages visible
- * 'jr'   — academic/campus focused only (hides fullOnly groups/items)
+ * KUETx NAV filter
+ * JR/Full app-mode was removed — every user now sees the full app.
+ * This module now only filters CR-only sections/items based on real
+ * CR/ACR status (see Sidebar.jsx / BottomNav.jsx for how isCR is derived).
  */
 
-const MODE_KEY          = 'kuetx_app_mode';
-const ONBOARDING_KEY    = 'kuetx_mode_chosen';
-
-export const getAppMode = () => {
-  try { return localStorage.getItem(MODE_KEY) || 'full'; } catch { return 'full'; }
-};
-
-export const setAppMode = (mode) => {
-  try {
-    localStorage.setItem(MODE_KEY, mode);
-    window.dispatchEvent(new CustomEvent('kuetx:mode-changed', { detail: { mode } }));
-  } catch {}
-};
-
-export const isModeChosen = () => {
-  try { return !!localStorage.getItem(ONBOARDING_KEY); } catch { return false; }
-};
-
-export const markModeChosen = () => {
-  try { localStorage.setItem(ONBOARDING_KEY, '1'); } catch {}
-};
-
-/**
- * Filter NAV sections based on current mode + CR status.
- * Returns filtered NAV — same shape, sections/items removed where appropriate.
- */
-const filterItems = (items, section, mode, isCR) => items.filter(item => {
+const filterItems = (items, isCR) => items.filter(item => {
   if (item.requiresCR && !isCR) return false;
-  if (mode === 'jr') {
-    if (section.fullOnly) return false;
-    if (item.fullOnly) return false;
-  }
   return true;
 });
 
-export const filterNav = (nav, mode, isCR = false) => {
+export const filterNav = (nav, isCR = false) => {
   return nav
     .map(section => {
       // CR-only sections
@@ -49,17 +20,13 @@ export const filterNav = (nav, mode, isCR = false) => {
 
       if (section.subgroups) {
         const subgroups = section.subgroups
-          .map(sub => ({ ...sub, items: filterItems(sub.items, section, mode, isCR) }))
+          .map(sub => ({ ...sub, items: filterItems(sub.items, isCR) }))
           .filter(sub => sub.items.length > 0);
         return { ...section, subgroups };
       }
 
-      const items = filterItems(section.items, section, mode, isCR);
+      const items = filterItems(section.items, isCR);
       return { ...section, items };
     })
     .filter(section => section.subgroups ? section.subgroups.length > 0 : section.items.length > 0);
 };
-
-// Kept for Sidebar backward compat (stubs)
-export const getJrCustomHidden = () => [];
-export const getJrCustomShown  = () => [];

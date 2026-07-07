@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react';
 import { getStorageUsage } from '../store/indexeddb-store';
 import { APP_VERSION_SHORT } from '../version';
 
-export function Footer({ syncStatus, isAnonymous, displayName }) {
+export function Footer() {
   const [activeModal, setActiveModal] = useState(null);
   const [storageKB, setStorageKB] = useState(null);
   const [now, setNow] = useState(() => new Date());
@@ -19,26 +19,6 @@ export function Footer({ syncStatus, isAnonymous, displayName }) {
   const storageDisplay = storageKB == null ? '…'
     : storageKB < 1024 ? `${storageKB.toFixed(0)} KB`
     : `${(storageKB / 1024).toFixed(1)} MB`;
-
-  const syncColor = {
-    synced:  '#10b981',
-    syncing: '#f59e0b',
-    pending: '#f59e0b',
-    error:   '#ef4444',
-    idle:    'var(--muted)',
-  }[syncStatus] || 'var(--muted)';
-
-  const syncLabel = {
-    synced:  'Synced',
-    syncing: 'Syncing…',
-    pending: 'Pending',
-    error:   'Sync error',
-    idle:    'Offline',
-  }[syncStatus] || 'Offline';
-
-  const SyncDot = () => (
-    <span style={{ display: 'inline-block', width: 7, height: 7, borderRadius: '50%', background: syncColor, marginRight: 5, flexShrink: 0, boxShadow: syncStatus === 'synced' ? `0 0 0 2px ${syncColor}30` : 'none' }} />
-  );
 
   const developerInfo = {
     name: 'Md Akhinoor Islam',
@@ -88,13 +68,9 @@ export function Footer({ syncStatus, isAnonymous, displayName }) {
             })}
           </div>
 
-          {/* Right: status chip */}
+          {/* Right: version tag */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '6px 12px', borderRadius: 99, background: 'var(--inputBg)', border: '1px solid var(--border)', fontSize: 11, color: 'var(--muted)', flexShrink: 0 }}>
-            <SyncDot />
-            <span style={{ color: syncColor, fontWeight: 600 }}>{syncLabel}</span>
-            {!isAnonymous && displayName && (
-              <><span style={{ color: 'var(--border)', margin: '0 2px' }}>·</span><span style={{ maxWidth: 80, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{displayName}</span></>
-            )}
+            KUETx v{APP_VERSION_SHORT}
           </div>
         </div>
 

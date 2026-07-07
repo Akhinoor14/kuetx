@@ -154,32 +154,31 @@ export function Navbar({ onMenuClick }) {
           {label !== 'KUETx' ? label : ''}
         </div>
 
-        {/* Desktop breadcrumb + sibling pills */}
-        <div className="hidden md:flex" style={{ alignItems: 'center', gap: 12, minWidth: 0, flex: 1, overflow: 'hidden' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 14, flexShrink: 0 }}>
-            {group && <span style={{ color: 'var(--muted)' }}>{group}</span>}
-            {group && <ChevronRight size={14} color="var(--muted)" />}
-            {/* Only show the page name here when there's no pill row —
-                otherwise the active (green) pill already shows it, so
-                printing it twice ("Attendance > Attendance") is redundant. */}
-            {!(siblings && siblings.length > 1) && (
-              <span style={{ fontWeight: 700, color: 'var(--text)' }}>{label}</span>
+        {/* Desktop: centered sibling pills (or page title if no siblings).
+            Sidebar already shows which group/subgroup is active, so we
+            don't repeat the group name here — just the current page tabs,
+            centered in the bar. */}
+        <div className="hidden md:flex" style={{ position: 'absolute', left: 0, right: 0, justifyContent: 'center', pointerEvents: 'none' }}>
+          <div style={{ pointerEvents: 'auto', minWidth: 0, maxWidth: 'min(70vw, 640px)' }}>
+            {siblings && siblings.length > 1 ? (
+              <div className="filter-tab-row topbar-tabs" style={{ marginBottom: 0, justifyContent: 'center' }}>
+                {siblings.map(item => (
+                  <Link
+                    key={item.id}
+                    to={item.path}
+                    className={`filter-tab ${location.pathname === item.path ? 'active' : ''}`}
+                    style={{ textDecoration: 'none' }}
+                  >
+                    {item.label}
+                  </Link>
+                ))}
+              </div>
+            ) : (
+              label !== 'KUETx' && (
+                <span style={{ fontWeight: 700, fontSize: 14, color: 'var(--text)' }}>{label}</span>
+              )
             )}
           </div>
-          {siblings && siblings.length > 1 && (
-            <div className="filter-tab-row topbar-tabs" style={{ marginBottom: 0, minWidth: 0 }}>
-              {siblings.map(item => (
-                <Link
-                  key={item.id}
-                  to={item.path}
-                  className={`filter-tab ${location.pathname === item.path ? 'active' : ''}`}
-                  style={{ textDecoration: 'none' }}
-                >
-                  {item.label}
-                </Link>
-              ))}
-            </div>
-          )}
         </div>
 
         <div style={{ flex: 1 }} />
@@ -223,7 +222,11 @@ export function Navbar({ onMenuClick }) {
           {/* Scrim */}
           <div
             onClick={() => setDrawerOpen(false)}
-            style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.32)', backdropFilter: 'blur(2px)' }}
+            style={{
+              position: 'absolute', inset: 0,
+              background: 'rgba(0,0,0,0.32)', backdropFilter: 'blur(2px)',
+              animation: 'drawerScrimIn 0.18s ease',
+            }}
           />
 
           {/* Panel */}
@@ -239,7 +242,8 @@ export function Navbar({ onMenuClick }) {
               display: 'flex', flexDirection: 'column',
               overflowY: 'auto',
               boxShadow: '-12px 0 48px rgba(0,0,0,0.18)',
-              animation: 'drawerSlideIn 0.22s cubic-bezier(0.22,1,0.36,1)',
+              transformOrigin: 'top right',
+              animation: 'drawerSlideIn 0.24s cubic-bezier(0.16,1,0.3,1)',
               /* bottom padding clears the floating BottomNav (~80px) + safe area */
               paddingBottom: 'calc(80px + env(safe-area-inset-bottom, 0px))',
             }}

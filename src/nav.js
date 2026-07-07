@@ -56,7 +56,6 @@ export const NAV = [
   },
   {
     group: 'Campus Life',
-    fullOnly: true,
     isSubgroup: true,
     hubPath: '/campus-life',
     hubIcon: 'Layers',
@@ -87,7 +86,7 @@ export const NAV = [
     hubIcon: 'Wrench',
     items: [
       { id: 'warnings', label: 'Alerts',      icon: 'Bell',      path: '/alerts' },
-      { id: 'reports',  label: 'Reports',     icon: 'BarChart2', path: '/reports', fullOnly: true },
+      { id: 'reports',  label: 'Reports',     icon: 'BarChart2', path: '/reports' },
       { id: 'settings', label: 'Settings',    icon: 'Settings',  path: '/settings' },
       { id: 'about',    label: 'About KUETx', icon: 'Info',      path: '/about' },
     ]

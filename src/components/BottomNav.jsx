@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from 'react';
 import * as Icons from 'lucide-react';
 import { NAV } from '../nav';
 import { getProfile, store } from '../store/store';
-import { filterNav, getAppMode } from '../lib/modeFilter';
+import { filterNav } from '../lib/modeFilter';
 import { getGroupId } from '../lib/groupUtils';
 import { subscribeMyRole } from '../lib/groupSync';
 import { auth } from '../lib/firebase';
@@ -15,19 +15,22 @@ const MAX_MOST_USED = 8;
 
 const PANEL_TITLES = {
   study: 'Study',
-  money: 'Wallet',
+  campus: 'Campus',
   menu: 'Menu',
 };
 
 const PANEL_SUBTITLES = {
-  study: 'Academics, daily tools & wellbeing',
-  money: 'Money & activities',
+  study: 'Courses, attendance & academics',
+  campus: 'Campus life & daily routine',
   menu: 'Tools, notes, settings, and more',
 };
 
+// Each panel lists the NAV group names it pulls from. For 'Academics' (which
+// is split into subgroups in nav.js), each subgroup renders as its own
+// titled section automatically — see buildPanelSections.
 const PANEL_SECTION_GROUPS = {
-  study: ['Academics', 'Daily Life'],
-  money: ['Campus Life'],
+  study: ['Academics'],
+  campus: ['Daily Life', 'Campus Life'],
   menu: ['Overview', 'Class Rep', 'Tools'],
 };
 
@@ -71,7 +74,7 @@ const saveUsageState = (next) => {
   } catch {}
 };
 
-const getVisibleSections = (profile) => filterNav(NAV, getAppMode(), !!profile?.isCR);
+const getVisibleSections = (profile) => filterNav(NAV, !!profile?.isCR);
 
 const flattenSectionItems = (section) =>
   section.subgroups ? section.subgroups.flatMap(sub => sub.items) : section.items;
@@ -105,11 +108,25 @@ const buildPanelSections = (profile, panel, itemMap, mostUsedItems) => {
     const sourceSection = NAV.find(candidate => candidate.group === groupName);
     if (!sourceSection) return;
 
-    const rawItems = sourceSection.subgroups
-      ? sourceSection.subgroups.flatMap(sub => sub.items)
-      : sourceSection.items;
+    // Sections with subgroups (e.g. Academics -> Academic Core / Daily
+    // Academics) render as one titled section per subgroup, instead of
+    // being flattened into a single block under the parent group name.
+    if (sourceSection.subgroups) {
+      sourceSection.subgroups.forEach(sub => {
+        const items = sub.items
+          .filter(item => !item.requiresCR || profile?.isCR)
+          .filter(item => item.id !== 'dashboard')
+          .map(item => itemMap.get(item.id) || item)
+          .filter(Boolean);
 
-    const items = rawItems
+        if (items.length > 0) {
+          sections.push({ group: sub.name, items });
+        }
+      });
+      return;
+    }
+
+    const items = sourceSection.items
       .filter(item => !item.requiresCR || profile?.isCR)
       .filter(item => item.id !== 'dashboard')
       .map(item => itemMap.get(item.id) || item)
@@ -282,7 +299,7 @@ export function BottomNav() {
       { id: 'dashboard', label: 'Home', icon: 'Home', kind: 'route', path: '/' },
       { id: 'quick-access', label: isRealCR ? 'CR' : 'Quick', icon: isRealCR ? 'Users' : 'Star', kind: 'route', path: '/quick-access' },
       { id: 'study', label: 'Study', icon: 'BookOpen', kind: 'panel', panel: 'study' },
-      { id: 'money', label: 'Wallet', icon: 'Wallet', kind: 'panel', panel: 'money' },
+      { id: 'campus', label: 'Campus', icon: 'Layers', kind: 'panel', panel: 'campus' },
       { id: 'menu', label: 'Menu', icon: 'Menu', kind: 'panel', panel: 'menu' },
     ];
 
@@ -291,11 +308,11 @@ export function BottomNav() {
 
   const activeRoute = (item) => isActivePath(item.path, location.pathname);
   const studySections = buildPanelSections(navProfile, 'study', itemMap, mostUsedItems);
-  const moneySections = buildPanelSections(navProfile, 'money', itemMap, mostUsedItems);
+  const campusSections = buildPanelSections(navProfile, 'campus', itemMap, mostUsedItems);
   const menuSections = buildPanelSections(navProfile, 'menu', itemMap, mostUsedItems);
 
   const isStudyActive = studySections.some(section => section.items.some(activeRoute));
-  const isMoneyActive = moneySections.some(section => section.items.some(activeRoute));
+  const isCampusActive = campusSections.some(section => section.items.some(activeRoute));
   const isMenuActive = menuSections.some(section => section.items.some(activeRoute));
 
   if (!isMobileNav) return null;
@@ -303,7 +320,7 @@ export function BottomNav() {
   const isButtonActive = (button) => {
     if (button.kind === 'route') return activeRoute(itemMap.get(button.id) || { path: button.path });
     if (button.panel === 'study') return activePanel === 'study' || isStudyActive;
-    if (button.panel === 'money') return activePanel === 'money' || isMoneyActive;
+    if (button.panel === 'campus') return activePanel === 'campus' || isCampusActive;
     if (button.panel === 'menu') return activePanel === 'menu' || isMenuActive;
     return false;
   };

@@ -6,7 +6,7 @@ import { useFavorites } from '../hooks/useFavorites';
 import { usePinnedPages } from '../hooks/usePinnedPages';
 import { getPageStats, getAllPageStats } from '../hooks/usePageTracker';
 import { getProfile } from '../store/store';
-import { filterNav, getAppMode } from '../lib/modeFilter';
+import { filterNav } from '../lib/modeFilter';
 import { getGroupId } from '../lib/groupUtils';
 import { subscribeMyRole } from '../lib/groupSync';
 import { auth } from '../lib/firebase';
@@ -92,11 +92,9 @@ export function QuickAccessPanel({ inPanel = false, onNavigate } = {}) {
   };
 
   // ── Page tile — icon on top, label below (bKash-style grid tile), used everywhere
-  const PageTile = ({ path, count, accent, showPin = true }) => {
+  const PageTile = ({ path, count, accent }) => {
     const Icon = getPageIcon(path);
     const label = getPageLabel(path);
-    const favorite = isFavorite(path);
-    const pinned = isPinned(path);
     const meta = getPathMeta(path);
     const color = accent || meta?.color || 'var(--accent)';
     return (
@@ -114,20 +112,6 @@ export function QuickAccessPanel({ inPanel = false, onNavigate } = {}) {
         onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = `0 6px 16px ${color}20`; e.currentTarget.style.borderColor = `${color}40`; }}
         onMouseLeave={e => { e.currentTarget.style.transform = ''; e.currentTarget.style.boxShadow = ''; e.currentTarget.style.borderColor = 'var(--border)'; }}
       >
-        {/* Top-right controls */}
-        <div style={{ position: 'absolute', top: 4, right: 4, display: 'flex', gap: 1 }}>
-          {showPin && (
-            <button onClick={e => { e.preventDefault(); e.stopPropagation(); togglePin(path); }}
-              style={{ width: 20, height: 20, borderRadius: 5, background: 'transparent', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: pinned ? color : 'var(--muted)', opacity: pinned ? 1 : 0.45 }}>
-              <Icons.Pin size={10} fill={pinned ? 'currentColor' : 'none'} />
-            </button>
-          )}
-          <button onClick={e => { e.preventDefault(); e.stopPropagation(); toggleFavorite(path); }}
-            style={{ width: 20, height: 20, borderRadius: 5, background: 'transparent', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: favorite ? '#fbbf24' : 'var(--muted)', opacity: favorite ? 1 : 0.45 }}>
-            <Icons.Star size={10} fill={favorite ? 'currentColor' : 'none'} />
-          </button>
-        </div>
-
         <div style={{ width: 40, height: 40, borderRadius: 12, background: `${color}18`, display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
           <Icon size={18} color={color} strokeWidth={1.8} />
           {count > 0 && (
@@ -230,7 +214,7 @@ export function QuickAccessPanel({ inPanel = false, onNavigate } = {}) {
   const BrowseTab = () => (
     <div>
       <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(3, 1fr)', gap: 14 }}>
-        {filterNav(NAV, getAppMode(), isCR).flatMap(section => {
+        {filterNav(NAV, isCR).flatMap(section => {
           const meta = GROUP_META[section.group] || { icon: 'Circle', color: '#64748b' };
           const GroupIcon = Icons[meta.icon] || Icons.Circle;
 

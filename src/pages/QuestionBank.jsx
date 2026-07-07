@@ -274,8 +274,7 @@ export default function QuestionBank() {
 
 const styles = {
   page: {
-    maxWidth: 720,
-    margin: '0 auto',
+    width: '100%',
     padding: '16px',
     minHeight: '100vh',
     background: 'var(--bg)',
