@@ -10,6 +10,32 @@ import { auth, db } from '../lib/firebase';
 import ClassmatesList from '../components/ClassmatesList';
 import KuetEmailVerifyBox from '../components/KuetEmailVerifyBox';
 
+function logClaimCRReport({ stage, error, details }) {
+  const message = error?.message || '';
+  const reason =
+    stage === 'membership-sync'
+      ? 'group membership doc is not yet visible to Firestore rules'
+      : stage === 'verification-sync'
+        ? 'verified flag is not yet visible on this class membership doc'
+        : stage === 'duplicate-request'
+          ? 'there is already a pending CR request for this uid'
+          : stage === 'campus-lead-application'
+            ? 'bundled CR + CL application path was rejected by Firestore rules'
+            : stage === 'cr-request'
+              ? 'plain CR request path was rejected by Firestore rules'
+              : 'unknown failure';
+
+  console.groupCollapsed('[Classmates] claim CR report');
+  console.log('stage:', stage);
+  console.log('reason:', reason);
+  console.log('error:', {
+    code: error?.code || null,
+    message,
+  });
+  console.log('details:', details);
+  console.groupEnd();
+}
+
 export default function Classmates() {
   const profile = getProfile();
   const groupId = getGroupId(profile);
@@ -97,7 +123,13 @@ export default function Classmates() {
       await joinGroup(groupId, profile);
       const membershipReady = await waitForOwnMembership(groupId);
       if (!membershipReady) {
-        throw new Error('Your class membership is still syncing. Try again in a moment.');
+        const error = new Error('Your class membership is still syncing. Try again in a moment.');
+        logClaimCRReport({
+          stage: 'membership-sync',
+          error,
+          details: { groupId, uid: auth.currentUser?.uid, ownRollVerified },
+        });
+        throw error;
       }
       // Belt-and-suspenders: re-sync this group's own members/{uid}.verified
       // field right before the write that actually needs it. The mount-time
@@ -109,7 +141,13 @@ export default function Classmates() {
       await waitForPendingWrites(db);
       const verifiedReady = await waitForOwnVerification(groupId);
       if (!verifiedReady) {
-        throw new Error('Your class membership is still syncing. Try again in a moment.');
+        const error = new Error('Your class membership is still syncing. Try again in a moment.');
+        logClaimCRReport({
+          stage: 'verification-sync',
+          error,
+          details: { groupId, uid: auth.currentUser?.uid, ownRollVerified, membershipReady },
+        });
+        throw error;
       }
       const clVacant = await checkCLVacant(groupId);
       if (clVacant) {
@@ -124,7 +162,24 @@ export default function Classmates() {
       }
       setClaimState('sent');
     } catch (e) {
-      console.error('[Classmates] claim CR failed', e);
+      const stage = e?.message?.includes('pending CR request')
+        ? 'duplicate-request'
+        : e?.message?.includes('Campus Lead + CR application')
+          ? 'campus-lead-application'
+          : 'cr-request';
+      logClaimCRReport({
+        stage,
+        error: e,
+        details: {
+          groupId,
+          uid: auth.currentUser?.uid,
+          ownRollVerified,
+          joined,
+          ownRole,
+          crStatus,
+          claimState,
+        },
+      });
       setClaimMsg(e?.message || 'Something went wrong — try again.');
       setClaimState('error');
     }

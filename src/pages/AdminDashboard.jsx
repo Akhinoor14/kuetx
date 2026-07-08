@@ -233,6 +233,27 @@ const ROLE_CATEGORY = {
 };
 const CATEGORY_ORDER = ['Leadership', 'Campus Leadership', 'Content & Growth', 'Engineering', 'Finance & Legal'];
 
+function reportStaffRoleHolders(holdersByRole, loadError = null) {
+  const rows = ALL_ASSIGNABLE_ROLES.map((role) => ({
+    role,
+    label: ROLE_LABELS[role],
+    count: holdersByRole[role]?.length || 0,
+  }));
+  const total = rows.reduce((sum, row) => sum + row.count, 0);
+  console.groupCollapsed(`[Founder] Staff role holders report${total ? ` (${total})` : ''}`);
+  console.table(rows.map(({ role, label, count }) => ({ role, label, count })));
+  if (loadError) {
+    console.warn('[Founder] staff-role load warning:', loadError);
+  }
+  if (total === 0) {
+    console.info('No role holders were returned. Possible reasons: no staff roles are assigned yet, or the current session cannot read staff role docs because deployed Firestore rules are not matching the expected Founder/admin access path.');
+  } else {
+    const populated = rows.filter((row) => row.count > 0).length;
+    console.info(`Loaded ${total} role assignments across ${populated}/${rows.length} roles.`);
+  }
+  console.groupEnd();
+}
+
 function StaffRolesView({ onBack, onSelectCategory, groups, countCtx }) {
   const [newUid, setNewUid] = useState('');
   const [newRole, setNewRole] = useState(ALL_ASSIGNABLE_ROLES[0]);
@@ -242,29 +263,56 @@ function StaffRolesView({ onBack, onSelectCategory, groups, countCtx }) {
   const [holdersLoading, setHoldersLoading] = useState(false);
 
   const refreshHolders = async (role) => {
-    return listStaffByRole(role)
-      .then((list) => setCurrentHolders((prev) => ({ ...prev, [role]: list })))
-      .catch((err) => {
-        // Only log unexpected failures. Permission-denied here usually
-        // means the current session is not allowed to inspect that role
-        // holder list yet, so keep the UI quiet instead of spamming the
-        // console on every mount.
-        if (err?.code !== 'permission-denied') {
-          console.error(`[StaffRolesView] failed to load holders for role "${role}":`, err);
-          setHoldersError(err?.message || 'Failed to load some staff roles.');
-        }
-      });
+    try {
+      const list = await listStaffByRole(role);
+      setCurrentHolders((prev) => ({ ...prev, [role]: list }));
+      return list;
+    } catch (err) {
+      setCurrentHolders((prev) => ({ ...prev, [role]: [] }));
+      if (err?.code !== 'permission-denied') {
+        console.error(`[Founder] failed to load holders for role "${role}":`, err);
+        setHoldersError(err?.message || 'Failed to load some staff roles.');
+      } else {
+        console.info(`[Founder] role "${role}" is not readable in the current rules/session; leaving this bucket empty.`);
+      }
+      return [];
+    }
   };
+
   useEffect(() => {
-    if (subTab !== 'holders') return;
     let cancelled = false;
     setHoldersLoading(true);
-    Promise.all(ALL_ASSIGNABLE_ROLES.map((role) => refreshHolders(role)))
-      .finally(() => {
-        if (!cancelled) setHoldersLoading(false);
-      });
+    const loadAllHolders = async () => {
+      const nextHolders = {};
+      let nextError = null;
+      for (const role of ALL_ASSIGNABLE_ROLES) {
+        try {
+          nextHolders[role] = await listStaffByRole(role);
+        } catch (err) {
+          nextHolders[role] = [];
+          if (err?.code !== 'permission-denied') {
+            console.error(`[Founder] failed to load holders for role "${role}":`, err);
+            nextError = err?.message || 'Failed to load some staff roles.';
+          } else {
+            console.info(`[Founder] role "${role}" is not readable in the current rules/session; leaving this bucket empty.`);
+          }
+        }
+      }
+      if (cancelled) return;
+      setCurrentHolders(nextHolders);
+      setHoldersError(nextError);
+      setHoldersLoading(false);
+      reportStaffRoleHolders(nextHolders, nextError);
+    };
+    loadAllHolders().catch((err) => {
+      if (cancelled) return;
+      setHoldersError(err?.message || 'Failed to load staff roles.');
+      setHoldersLoading(false);
+      console.error('[Founder] unexpected staff-role loader failure:', err);
+      reportStaffRoleHolders({}, err?.message || 'Failed to load staff roles.');
+    });
     return () => { cancelled = true; };
-  }, [subTab]);
+  }, []);
 
   const handleAssign = async () => {
     if (!newUid.trim()) return;
