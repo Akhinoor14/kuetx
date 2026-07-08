@@ -240,7 +240,6 @@ function StaffRolesView({ onBack, onSelectCategory, groups, countCtx }) {
   const [currentHolders, setCurrentHolders] = useState({});
   const [holdersError, setHoldersError] = useState(null);
   const [holdersLoading, setHoldersLoading] = useState(false);
-  const [subTab, setSubTab] = useState('assign');
 
   const refreshHolders = async (role) => {
     return listStaffByRole(role)
@@ -285,78 +284,74 @@ function StaffRolesView({ onBack, onSelectCategory, groups, countCtx }) {
   return (
     <CategoryShell view="staff" onSelect={onSelectCategory} onBack={onBack} countCtx={countCtx}>
       <h2 style={{ fontSize: 16, fontWeight: 700, margin: '0 0 12px' }}>Staff & Roles</h2>
-      <SubcategoryTabs subcategories={category.subcategories} activeKey={subTab} onSelect={setSubTab} countCtx={subCtx} />
+      <SubcategoryTabs subcategories={category.subcategories} activeKey="holders" onSelect={() => {}} countCtx={subCtx} />
 
-      {subTab === 'assign' && (
-        <Section title="Assign a staff role">
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 8, maxWidth: 420 }}>
-            <select value={newRole} onChange={(e) => { setNewRole(e.target.value); setNewScopeValue(''); }}
-              style={{ padding: '8px 10px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--inputBg)' }}>
-              {ALL_ASSIGNABLE_ROLES.map((r) => <option key={r} value={r}>{ROLE_LABELS[r]}</option>)}
-            </select>
-            <input type="text" placeholder="Their uid" value={newUid} onChange={(e) => setNewUid(e.target.value)}
+      <Section title="Assign a staff role">
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8, maxWidth: 420 }}>
+          <select value={newRole} onChange={(e) => { setNewRole(e.target.value); setNewScopeValue(''); }}
+            style={{ padding: '8px 10px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--inputBg)' }}>
+            {ALL_ASSIGNABLE_ROLES.map((r) => <option key={r} value={r}>{ROLE_LABELS[r]}</option>)}
+          </select>
+          <input type="text" placeholder="Their uid" value={newUid} onChange={(e) => setNewUid(e.target.value)}
+            style={{ padding: '8px 10px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--inputBg)' }} />
+          {ROLE_SCOPE_KIND[newRole] === 'dept' && (
+            <input type="text" placeholder="Department (e.g. CSE)" value={newScopeValue} onChange={(e) => setNewScopeValue(e.target.value)}
               style={{ padding: '8px 10px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--inputBg)' }} />
-            {ROLE_SCOPE_KIND[newRole] === 'dept' && (
-              <input type="text" placeholder="Department (e.g. CSE)" value={newScopeValue} onChange={(e) => setNewScopeValue(e.target.value)}
-                style={{ padding: '8px 10px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--inputBg)' }} />
-            )}
-            {ROLE_SCOPE_KIND[newRole] === 'group' && (
-              <select value={newScopeValue} onChange={(e) => setNewScopeValue(e.target.value)}
-                style={{ padding: '8px 10px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--inputBg)' }}>
-                <option value="">Choose a class…</option>
-                {groups?.map((g) => <option key={g.id} value={g.id}>{g.id}</option>)}
-              </select>
-            )}
-            <button className="btn btn-primary" onClick={handleAssign}>Assign</button>
-          </div>
-        </Section>
-      )}
-
-      {subTab === 'holders' && (
-        <Section title={`Current role holders${totalHolders ? ` (${totalHolders})` : ''}`}>
-          {holdersError && (
-            <div style={{ fontSize: 12, color: 'var(--danger)', marginBottom: 10 }}>{holdersError}</div>
           )}
-          {holdersLoading && <EmptyState>Loading current role holders…</EmptyState>}
-          {totalHolders === 0 && <EmptyState>No one holds a staff role yet.</EmptyState>}
-          <p style={{ fontSize: 11, color: 'var(--muted)', marginBottom: 12 }}>
-            Each role is shown separately. If one person holds multiple roles, they appear in every relevant role segment.
-            Founder can revoke or remove any holder from here.
-          </p>
-          {ALL_ASSIGNABLE_ROLES.map((r) => {
-            const holders = currentHolders[r] || [];
-            return (
-              <div key={r} style={{ marginBottom: 12, paddingBottom: 10, borderBottom: '1px solid var(--border)' }}>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, marginBottom: 6 }}>
-                  <div style={{ fontSize: 12, fontWeight: 800 }}>{ROLE_LABELS[r]}</div>
-                  <div style={{ fontSize: 11, color: 'var(--muted)' }}>{holders.length} holder{holders.length === 1 ? '' : 's'}</div>
-                </div>
-                {holders.length === 0 ? (
-                  <EmptyState>No one holds this role.</EmptyState>
-                ) : (
-                  holders.map((h) => (
-                    <div key={`${r}-${h.id}`} style={{ fontSize: 12, color: 'var(--muted)', display: 'flex', justifyContent: 'space-between', gap: 12, padding: '3px 0' }}>
-                      <span>
-                        {h.name || h.uid}{' '}
-                        <span style={{ color: 'var(--muted)' }}>
-                          {h.scope?.dept ? `— ${h.scope.dept}` : h.scope?.groupId ? `— ${h.scope.groupId}` : ''}
-                        </span>
-                      </span>
-                      <button
-                        className="btn btn-sm btn-secondary"
-                        title="Revoke this role from the holder"
-                        onClick={async () => { await removeRole(h.uid, h.role, h.scope); refreshHolders(r); }}
-                      >
-                        Revoke
-                      </button>
-                    </div>
-                  ))
-                )}
+          {ROLE_SCOPE_KIND[newRole] === 'group' && (
+            <select value={newScopeValue} onChange={(e) => setNewScopeValue(e.target.value)}
+              style={{ padding: '8px 10px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--inputBg)' }}>
+              <option value="">Choose a class…</option>
+              {groups?.map((g) => <option key={g.id} value={g.id}>{g.id}</option>)}
+            </select>
+          )}
+          <button className="btn btn-primary" onClick={handleAssign}>Assign</button>
+        </div>
+      </Section>
+
+      <Section title={`Current role holders${totalHolders ? ` (${totalHolders})` : ''}`}>
+        {holdersError && (
+          <div style={{ fontSize: 12, color: 'var(--danger)', marginBottom: 10 }}>{holdersError}</div>
+        )}
+        {holdersLoading && <EmptyState>Loading current role holders…</EmptyState>}
+        {totalHolders === 0 && <EmptyState>No one holds a staff role yet.</EmptyState>}
+        <p style={{ fontSize: 11, color: 'var(--muted)', marginBottom: 12 }}>
+          Each role is shown separately. If one person holds multiple roles, they appear in every relevant role segment.
+          Founder can revoke or remove any holder from here.
+        </p>
+        {ALL_ASSIGNABLE_ROLES.map((r) => {
+          const holders = currentHolders[r] || [];
+          return (
+            <div key={r} style={{ marginBottom: 12, paddingBottom: 10, borderBottom: '1px solid var(--border)' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, marginBottom: 6 }}>
+                <div style={{ fontSize: 12, fontWeight: 800 }}>{ROLE_LABELS[r]}</div>
+                <div style={{ fontSize: 11, color: 'var(--muted)' }}>{holders.length} holder{holders.length === 1 ? '' : 's'}</div>
               </div>
-            );
-          })}
-        </Section>
-      )}
+              {holders.length === 0 ? (
+                <EmptyState>No one holds this role.</EmptyState>
+              ) : (
+                holders.map((h) => (
+                  <div key={`${r}-${h.id}`} style={{ fontSize: 12, color: 'var(--muted)', display: 'flex', justifyContent: 'space-between', gap: 12, padding: '3px 0' }}>
+                    <span>
+                      {h.name || h.uid}{' '}
+                      <span style={{ color: 'var(--muted)' }}>
+                        {h.scope?.dept ? `— ${h.scope.dept}` : h.scope?.groupId ? `— ${h.scope.groupId}` : ''}
+                      </span>
+                    </span>
+                    <button
+                      className="btn btn-sm btn-secondary"
+                      title="Revoke this role from the holder"
+                      onClick={async () => { await removeRole(h.uid, h.role, h.scope); refreshHolders(r); }}
+                    >
+                      Revoke
+                    </button>
+                  </div>
+                ))
+              )}
+            </div>
+          );
+        })}
+      </Section>
     </CategoryShell>
   );
 }

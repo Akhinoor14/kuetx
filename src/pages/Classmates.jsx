@@ -95,7 +95,10 @@ export default function Classmates() {
       // doc, but a bundled CR approval later does, so make sure it exists
       // before proceeding.
       await joinGroup(groupId, profile);
-      await waitForOwnMembership(groupId);
+      const membershipReady = await waitForOwnMembership(groupId);
+      if (!membershipReady) {
+        throw new Error('Your class membership is still syncing. Try again in a moment.');
+      }
       // Belt-and-suspenders: re-sync this group's own members/{uid}.verified
       // field right before the write that actually needs it. The mount-time
       // effect already does this, but a user who clicks fast enough (or
