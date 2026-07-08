@@ -14,6 +14,7 @@ import {
   resetPassword,
   getAuthErrorMessage,
 } from '../lib/firebaseAuth';
+import { isObviouslyBadDomain, getTypoSuggestion } from '../lib/emailDomainCheck';
 
 const inputStyle = {
   width: '100%',
@@ -77,6 +78,22 @@ export default function AuthModal({ mode = 'login', isUpgrade = false, onClose, 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [resetSent, setResetSent] = useState(false);
+  const [showEmailForm, setShowEmailForm] = useState(false);
+  const [domainWarning, setDomainWarning] = useState(false);
+  const [typoSuggestion, setTypoSuggestion] = useState(null);
+
+  const handleEmailBlur = () => {
+    setDomainWarning(!!email && isObviouslyBadDomain(email));
+    setTypoSuggestion(email ? getTypoSuggestion(email) : null);
+  };
+
+  const applyTypoSuggestion = () => {
+    if (!typoSuggestion) return;
+    const at = email.lastIndexOf('@');
+    setEmail(email.slice(0, at + 1) + typoSuggestion);
+    setDomainWarning(false);
+    setTypoSuggestion(null);
+  };
 
   const handleReset = async () => {
     if (!email) { setError('আগে email address দাও, তারপর reset link পাঠানো হবে।'); return; }
@@ -122,6 +139,17 @@ export default function AuthModal({ mode = 'login', isUpgrade = false, onClose, 
 
   const handleEmail = async () => {
     if (!email || !password) { setError('Email আর password দাও।'); return; }
+
+    // Domain check itself lives in firebaseAuth.js (registerWithEmail /
+    // upgradeWithEmail) — that's the single enforcement point, so it
+    // can't be bypassed by any other caller of those functions. Here we
+    // just run it ONE extra time up front purely for UX: instant
+    // specific feedback (typo suggestion, disposable, etc) before
+    // showing a generic Firebase error, and a "checking..." button
+    // state. This used to duplicate the network call (once here, once
+    // inside firebaseAuth.js) — now it's skipped here and we just catch
+    // the domain-not-real error thrown by firebaseAuth.js below instead,
+    // so the MX lookup only ever runs once per submit.
     setLoading(true);
     setError('');
     try {
@@ -148,10 +176,28 @@ export default function AuthModal({ mode = 'login', isUpgrade = false, onClose, 
           return;
         }
       }
-      setError(getAuthErrorMessage(err.code));
+      setError(describeDomainError(err) || getAuthErrorMessage(err.code));
     } finally {
       setLoading(false);
     }
+  };
+
+  // Turns a thrown auth/domain-not-real error (see firebaseAuth.js) into
+  // the most specific Bengali message we can give — typo suggestion is
+  // the most actionable, so it takes priority over the generic message
+  // getAuthErrorMessage would otherwise show for that same error code.
+  const describeDomainError = (err) => {
+    if (err.code !== 'auth/domain-not-real') return null;
+    if (err.domainReason === 'typo' && err.domainSuggestion) {
+      return `এই email ঠিক আছে তো? "${err.domainSuggestion}" বলতে চাওনি তো?`;
+    }
+    if (err.domainReason === 'disposable') {
+      return 'এটা একটা temporary/disposable email service মনে হচ্ছে — সরাসরি একটা real email address ব্যবহার করো।';
+    }
+    if (err.domainReason === 'no-mx') {
+      return 'এই email address-এ মেইল পাঠানো যাচ্ছে না মনে হচ্ছে — বানান আরেকবার চেক করো, নাহলে অন্য একটা email দাও।';
+    }
+    return getAuthErrorMessage(err.code);
   };
 
   return (
@@ -177,24 +223,52 @@ export default function AuthModal({ mode = 'login', isUpgrade = false, onClose, 
         )}
 
         {/* Header */}
-        <div style={{ marginBottom: 20 }}>
-          <div style={{ fontWeight: 800, fontSize: 18, marginBottom: 4 }}>
-            {isUpgrade ? '🔒 Account তৈরি করো' : queueMode ? '☁️ Sync account connect করো' : tab === 'login' ? '👋 আবার স্বাগতম' : '🎉 নতুন Account'}
+        <div style={{ marginBottom: 18 }}>
+          <div style={{ fontWeight: 800, fontSize: 19, marginBottom: 4 }}>
+            {isUpgrade ? 'Account তৈরি করো' : queueMode ? 'Sync চালু করো' : tab === 'login' ? 'স্বাগতম' : 'Account বানাও'}
           </div>
-          <div style={{ fontSize: 12, color: 'var(--muted)' }}>
-            {isUpgrade
-              ? 'তোমার সব data সেভ থাকবে। যেকোনো device থেকে access করতে পারবে।'
-              : queueMode
-              ? 'Firebase sync চালু করতে account দরকার। সব device-এ data sync হবে, যেকোনো জায়গা থেকে access করতে পারবে।'
+          <div style={{ fontSize: 12.5, color: 'var(--muted)' }}>
+            {isUpgrade || queueMode
+              ? 'সব device-এ data sync হবে।'
               : tab === 'login'
-              ? 'Login করলে সব device এ data sync হবে।'
-              : 'Account বানাও — সব data cloud এ save হবে।'}
+              ? 'Login করে সব device-এ data sync করো।'
+              : 'সব data cloud-এ save হবে।'}
           </div>
         </div>
 
-        {/* Tab switcher (only for non-upgrade) */}
+        {/* Google button */}
+        <button style={btnGoogle} onClick={handleGoogle} disabled={loading}>
+          <svg width="18" height="18" viewBox="0 0 24 24">
+            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+          </svg>
+          {loading ? 'Loading...' : 'Google দিয়ে ' + (isUpgrade || tab === 'register' ? 'Register' : 'Login')}
+        </button>
+
+        {!showEmailForm ? (
+          <div style={{ textAlign: 'center', marginTop: 16 }}>
+            <button
+              onClick={() => setShowEmailForm(true)}
+              style={{
+                background: 'none', border: 'none', cursor: 'pointer',
+                color: 'var(--muted)', fontSize: 12.5, textDecoration: 'none',
+              }}
+            >
+              অথবা email দিয়ে {isUpgrade || tab === 'register' ? 'register' : 'login'} করো
+            </button>
+          </div>
+        ) : (
+        <>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, margin: '16px 0', color: 'var(--muted)', fontSize: 12 }}>
+          <div style={{ flex: 1, height: 1, background: 'var(--border)' }} />
+          email দিয়ে
+          <div style={{ flex: 1, height: 1, background: 'var(--border)' }} />
+        </div>
+
         {!isUpgrade && (
-          <div style={{ display: 'flex', gap: 0, marginBottom: 20, borderRadius: 8, overflow: 'hidden', border: '1px solid var(--border)' }}>
+          <div style={{ display: 'flex', gap: 0, marginBottom: 14, borderRadius: 8, overflow: 'hidden', border: '1px solid var(--border)' }}>
             {['login', 'register'].map(t => (
               <button key={t} onClick={() => { setTab(t); setError(''); }}
                 style={{
@@ -208,23 +282,6 @@ export default function AuthModal({ mode = 'login', isUpgrade = false, onClose, 
           </div>
         )}
 
-        {/* Google button */}
-        <button style={btnGoogle} onClick={handleGoogle} disabled={loading}>
-          <svg width="18" height="18" viewBox="0 0 24 24">
-            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-          </svg>
-          {loading ? 'Loading...' : 'Google দিয়ে ' + (isUpgrade || tab === 'register' ? 'Register' : 'Login')}
-        </button>
-
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10, margin: '16px 0', color: 'var(--muted)', fontSize: 12 }}>
-          <div style={{ flex: 1, height: 1, background: 'var(--border)' }} />
-          অথবা email দিয়ে
-          <div style={{ flex: 1, height: 1, background: 'var(--border)' }} />
-        </div>
-
         {/* Email form */}
         <div style={{ display: 'grid', gap: 10 }}>
           {(tab === 'register' || isUpgrade) && (
@@ -235,8 +292,22 @@ export default function AuthModal({ mode = 'login', isUpgrade = false, onClose, 
           )}
           <div style={{ position: 'relative' }}>
             <Mail size={15} style={{ position: 'absolute', left: 10, top: '50%', transform: 'translateY(-50%)', color: 'var(--muted)' }} />
-            <input style={{ ...inputStyle, paddingLeft: 32 }} type="email" placeholder="Email address" value={email} onChange={e => setEmail(e.target.value)} />
+            <input style={{ ...inputStyle, paddingLeft: 32 }} type="email" placeholder="Email address" value={email}
+              onChange={e => { setEmail(e.target.value); setDomainWarning(false); setTypoSuggestion(null); }} onBlur={handleEmailBlur} />
           </div>
+          {typoSuggestion && (tab === 'register' || isUpgrade) && (
+            <div style={{ fontSize: 12, color: 'var(--warning)', marginTop: -4 }}>
+              "{typoSuggestion}" বলতে চাওনি তো?{' '}
+              <button type="button" onClick={applyTypoSuggestion} style={{ ...btnGhost, fontSize: 12, padding: 0 }}>
+                হ্যাঁ, ঠিক করো
+              </button>
+            </div>
+          )}
+          {domainWarning && !typoSuggestion && (tab === 'register' || isUpgrade) && (
+            <div style={{ fontSize: 12, color: 'var(--warning)', marginTop: -4 }}>
+              Email address-টা একবার চেক করে দাও, ঠিক লিখেছো তো?
+            </div>
+          )}
           <div style={{ position: 'relative' }}>
             <Lock size={15} style={{ position: 'absolute', left: 10, top: '50%', transform: 'translateY(-50%)', color: 'var(--muted)' }} />
             <input style={{ ...inputStyle, paddingLeft: 32 }} type="password" placeholder="Password (কমপক্ষে ৬ characters)" value={password} onChange={e => setPassword(e.target.value)}
@@ -265,19 +336,12 @@ export default function AuthModal({ mode = 'login', isUpgrade = false, onClose, 
           )}
 
           <button style={btnPrimary} onClick={handleEmail} disabled={loading}>
-            {loading ? 'Loading...' : isUpgrade ? 'Account তৈরি করো' : tab === 'login' ? 'Login' : 'Register'}
+            {loading
+              ? ((isUpgrade || tab === 'register') ? 'Email চেক করে Account তৈরি হচ্ছে...' : 'Loading...')
+              : isUpgrade ? 'Account তৈরি করো' : tab === 'login' ? 'Login' : 'Register'}
           </button>
         </div>
-
-        {/* Footer links */}
-        {!isUpgrade && (
-          <div style={{ textAlign: 'center', marginTop: 14, fontSize: 12, color: 'var(--muted)' }}>
-            {tab === 'login' ? (
-              <>Account নেই? <button style={btnGhost} onClick={() => { setTab('register'); setError(''); }}>Register করো</button></>
-            ) : (
-              <>Already account আছে? <button style={btnGhost} onClick={() => { setTab('login'); setError(''); }}>Login করো</button></>
-            )}
-          </div>
+        </>
         )}
 
         {/* Anonymous skip (only on initial, not upgrade) */}

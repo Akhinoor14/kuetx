@@ -15,7 +15,8 @@ import {
 import { getAllCourses } from '../store/curriculumStore';
 import ProfileSetupModal from '../components/ProfileSetupModal';
 import AuthModal from '../components/AuthModal';
-import { onAuthChange, logout } from '../lib/firebaseAuth';
+import { onAuthChange, logout, isEmailVerified } from '../lib/firebaseAuth';
+import { subscribeMyEmailFlag } from '../lib/emailFlags';
 import { auth } from '../lib/firebase';
 import { pushAllToFirestore, startFirebaseSync } from '../lib/firebaseSync';
 import { uploadProfilePicture, getProfilePhotoURL, deleteProfilePicture } from '../lib/profilePicture';
@@ -26,6 +27,8 @@ import { subscribeMyRoles } from '../lib/staffSync';
 import { ROLE_LABELS } from '../lib/staffRoles';
 import { checkIsAdmin } from '../lib/adminAuth';
 import ProfileVerifyBanner from '../components/ProfileVerifyBanner';
+import EmailVerifyBanner from '../components/EmailVerifyBanner';
+import EmailFlagBanner from '../components/EmailFlagBanner';
 import BlueTick from '../components/BlueTick';
 
 
@@ -512,6 +515,17 @@ export default function Profile() {
   const hasMinProfile = !!(profile?.name && profile?.studentId && profile?.dept && profile?.session && profile?.currentTermKey);
 
   const [isKuetVerified, setIsKuetVerified] = useState(false);
+  const [emailVerified, setEmailVerified] = useState(true);
+  const [emailFlag, setEmailFlag] = useState(null);
+  useEffect(() => {
+    setEmailVerified(isEmailVerified());
+  }, [profile]);
+  useEffect(() => {
+    const unsub = subscribeMyEmailFlag((flag) => {
+      setEmailFlag(flag && flag.status === 'pending' ? flag : null);
+    });
+    return unsub;
+  }, []);
   useEffect(() => {
     let cancelled = false;
     if (profile?.studentId) {
@@ -862,6 +876,16 @@ export default function Profile() {
           <Icons.Pencil size={13} /> Edit
         </button>
       </div>
+
+      {/* ── Staff-flagged Email Banner (existing account, human-reviewed) ── */}
+      {emailFlag && (
+        <EmailFlagBanner flag={emailFlag} onGoToSettings={() => { window.location.href = '/settings'; }} />
+      )}
+
+      {/* ── Account Email Verify Banner (password-recovery reachability) ── */}
+      {!emailVerified && (
+        <EmailVerifyBanner onVerified={() => setEmailVerified(true)} />
+      )}
 
       {/* ── KUET Email Verify Banner ── */}
       {hasMinProfile && !isKuetVerified && (

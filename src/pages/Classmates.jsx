@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Users2 } from 'lucide-react';
 import { getProfile } from '../store/store';
 import { getGroupId, getGroupLabel } from '../lib/groupUtils';
-import { joinGroup, requestCR, subscribeCRStatus, syncOwnVerification, MAX_CR } from '../lib/groupSync';
+import { joinGroup, requestCR, subscribeCRStatus, subscribeMembers, syncOwnVerification, waitForOwnMembership, MAX_CR } from '../lib/groupSync';
 import { checkCLVacant, applyForCampusLead } from '../lib/staffSync';
 import { isRollInstitutionallyVerified } from '../lib/kuetEmailVerify';
 import { auth } from '../lib/firebase';
@@ -31,11 +31,18 @@ export default function Classmates() {
   // on every first-ever visit (self-healed after a few seconds via retry,
   // but showed a misleading empty "no classmates" list in the meantime).
   const [joined, setJoined] = useState(false);
+  // The current user's own role in this group (from the live members
+  // subscription, never self-reported) — gates the "Claim CR" card below.
+  // crStatus only tracks slot occupancy (0/2, 1/2, full), not who holds
+  // those slots, so without this a CR/ACR was shown "Claim CR" for their
+  // own already-filled slot instead of the card just disappearing.
+  const [ownRole, setOwnRole] = useState(null);
 
   useEffect(() => {
     if (!groupId) return;
     setJoined(false);
     joinGroup(groupId, profile)
+      .then(() => waitForOwnMembership(groupId))
       .then(() => setJoined(true))
       .catch((e) => { console.error('[Classmates] join failed', e); setJoined(true); });
     // Catch-up for people who verified their KUET email in an earlier
@@ -46,12 +53,17 @@ export default function Classmates() {
     // anyone who was verified before this page ever saw it.
     syncOwnVerification(groupId, auth.currentUser?.uid).catch((e) => console.warn('[Classmates] syncOwnVerification failed', e));
     isRollInstitutionallyVerified(profile?.studentId).then(setOwnRollVerified).catch(() => setOwnRollVerified(false));
-    return subscribeCRStatus(groupId, setCrStatus);
+    const unsubCrStatus = subscribeCRStatus(groupId, setCrStatus);
+    const unsubMembers = subscribeMembers(groupId, (members) => {
+      const me = members.find((m) => m.id === auth.currentUser?.uid);
+      setOwnRole(me?.role || null);
+    });
+    return () => { unsubCrStatus(); unsubMembers(); };
   }, [groupId]);
 
   const handleClaimCR = async () => {
     if (!ownRollVerified) {
-      setClaimMsg('CR claim korar age nijer KUET email verify koro — upore "KUET email verify" box e roll bosao.');
+      setClaimMsg('Verify your KUET email before claiming CR — enter your roll in the "KUET email verify" box above.');
       setClaimState('error');
       return;
     }
@@ -98,7 +110,7 @@ export default function Classmates() {
 
       {groupId && <KuetEmailVerifyBox />}
 
-      {groupId && crStatus && claimState !== 'sent' && (
+      {groupId && crStatus && claimState !== 'sent' && ownRole !== 'cr' && ownRole !== 'acr' && (
         <div className="card" style={{ padding: 14, marginBottom: 16 }}>
           <div style={{ fontSize: 13, fontWeight: 700, marginBottom: 4 }}>
             {crStatus.slotsFull ? 'CR slots are full for your class' : 'CR slot open for your class'}
@@ -112,13 +124,13 @@ export default function Classmates() {
             className="btn btn-primary btn-sm"
             onClick={handleClaimCR}
             disabled={claimState === 'sending' || !ownRollVerified}
-            title={!ownRollVerified ? 'KUET email verify korar por CR claim kora jabe' : undefined}
+            title={!ownRollVerified ? 'Verify your KUET email before you can claim CR' : undefined}
           >
             {claimState === 'sending' ? 'Sending…' : 'Claim CR'}
           </button>
           {!ownRollVerified && claimState !== 'error' && (
             <div style={{ color: 'var(--muted)', fontSize: 12, marginTop: 6 }}>
-              CR claim korte hole age tomar KUET email verify korte hobe.
+              You need to verify your KUET email before claiming CR.
             </div>
           )}
           {claimState === 'error' && <div style={{ color: 'var(--danger)', fontSize: 12, marginTop: 6 }}>{claimMsg}</div>}

@@ -30,6 +30,22 @@ service cloud.firestore {
     function isSignedIn() {
       return request.auth != null;
     }
+    // Real account = signed in AND not an anonymous session. Firebase
+    // Anonymous Auth still satisfies isSignedIn() (request.auth != null
+    // is true for anonymous users too), so anything meant to be limited
+    // to actual KUET students with a real Google/email account — most
+    // importantly, showing up in a class's shared Classmates/CR data —
+    // must check this, not just isSignedIn(). This is enforced here (not
+    // only client-side in App.jsx's auto-join guard) because a client
+    // guard can be bypassed by a modified/malicious client; the rule is
+    // the actual security boundary. Anonymous accounts keep full access
+    // to every personal-only feature (users/{uid}/data, Notes, Diary,
+    // Wallet, etc.) — this restriction is scoped narrowly to group
+    // membership only, same principle as the roll-ownership fallback
+    // documented in App.jsx.
+    function isRealAccount() {
+      return isSignedIn() && request.auth.token.firebase.sign_in_provider != 'anonymous';
+    }
 
     function isAdmin() {
       return isSignedIn() &&
@@ -71,6 +87,14 @@ service cloud.firestore {
     }
     function memberDoc(groupId) {
       return get(/databases/$(database)/documents/groups/$(groupId)/members/$(request.auth.uid)).data;
+    }
+    // Membership check for an arbitrary OTHER uid, not the requester
+    // themself — needed anywhere a CL/SCL/Admin is about to act on a
+    // specific target (e.g. flagging an email) and the rule must confirm
+    // that target is actually within the acting person's own scope, not
+    // just that the acting person HOLDS a CL/SCL role somewhere.
+    function targetIsGroupMember(uid, groupId) {
+      return exists(/databases/$(database)/documents/groups/$(groupId)/members/$(uid));
     }
     function isVerifiedMember(groupId) {
       return isGroupMember(groupId) && memberDoc(groupId).verified == true;
@@ -116,9 +140,20 @@ service cloud.firestore {
     // correspond to THIS group's batch+dept, not just to *any* verified
     // roll — otherwise a verified roll for one class could auto-verify
     // someone into a different class.
+    //
+    // Batch segment MUST be an EXACT match against the app's own
+    // canonical batch format (groupUtils.js/extractBatchFromRoll:
+    // "2K" + the roll's first two digits, e.g. roll 2107123 -> "2K21"),
+    // not a substring check. A substring check (groupId batch containing
+    // roll[0:2] ANYWHERE) would let a roll from batch 21 auto-verify
+    // into a maliciously-named group like "1221_CSE" or "9921_CSE" —
+    // group ids are freely creatable by any signed-in user (see
+    // `groups/{groupId}` create rule below, which has no shape
+    // validation), so this can't rely on groupId always being
+    // well-formed; the exactness has to be enforced right here.
     function rollMatchesGroup(roll, groupId) {
       return groupId.split('_')[1] == deptCodeFromRoll(roll)
-        && groupId.split('_')[0].matches('.*' + roll[0:2] + '.*');
+        && groupId.split('_')[0] == ('2K' + roll[0:2]);
     }
 
     // -------------------------------------------------------------
@@ -139,8 +174,24 @@ service cloud.firestore {
     // -------------------------------------------------------------
     match /verifiedRolls/{roll} {
       allow read: if isSignedIn();
+      // MUST be an exact match of the roll to the token's verified KUET
+      // email's local-part suffix — NOT a substring/contains check.
+      // A substring check here (e.g. '.*' + roll + '.*@stud...') would
+      // let one real mailbox like rakib2113014@stud.kuet.ac.bd satisfy
+      // this rule for /verifiedRolls/113014, /verifiedRolls/211301, or
+      // any other digit-substring of the real roll — none of which the
+      // official kuetEmailVerify.js client ever intentionally writes,
+      // but nothing stops a modified client, a stray script, or a future
+      // bug from writing to those doc paths directly, since Firestore
+      // rules — not client code — are the actual security boundary here.
+      // Requiring the LOCAL PART TO EQUAL exactly (lowercased letters)+
+      // roll, with roll itself constrained to exactly 7 digits, closes
+      // that: only the one true roll encoded in the verified email can
+      // ever be written, which is the guarantee rollMatchesGroup and
+      // every auto-join rule downstream actually depend on.
       allow create: if request.auth.token.email_verified == true &&
-        request.auth.token.email.matches('.*' + roll + '.*@stud[.]kuet[.]ac[.]bd$');
+        roll.matches('^[0-9]{7}$') &&
+        request.auth.token.email.lower().matches('^[a-z]+' + roll + '@stud[.]kuet[.]ac[.]bd$');
       allow update, delete: if false; // create-once, permanent
     }
 
@@ -248,6 +299,88 @@ service cloud.firestore {
     }
 
     // -------------------------------------------------------------
+    // Email flags — manual, human-reviewed flags on EXISTING accounts
+    // whose registered email looks fake/invalid (see emailFlags.js).
+    // NOT an automatic ban: this only lets the right person raise a flag;
+    // the account itself is untouched (no delete, no lockout) until the
+    // owner responds via the in-app banner.
+    //
+    // Authority (same hierarchy as staff roles):
+    //  - Campus Lead of the target's own group.
+    //  - Senior Campus Lead of the target's dept.
+    //  - Head of Ops / Founder — always, and this is also the fallback
+    //    used when a dept/group's SCL/CL post is vacant, since those two
+    //    roles pass the check unconditionally regardless of vacancy.
+    //  - The flagged user themself can always read their own flag (so
+    //    their banner can show it) but can never write/resolve it.
+    // -------------------------------------------------------------
+    // canFlagEmail checks the ACTOR's authority over a scope; it does
+    // NOT by itself confirm the TARGET actually belongs to that scope.
+    // Call sites must separately require targetIsGroupMember(targetUid,
+    // groupId) — see emailFlags/{targetUid} create below — otherwise
+    // any CL/SCL could flag an arbitrary uid outside their own class by
+    // simply claiming their own groupId/dept in the flag payload, since
+    // nothing here reads the target's actual membership.
+    function canFlagEmail(dept, groupId) {
+      return isAdmin() || isHeadOfOps()
+        || (groupId != null && isCLFor(groupId))
+        || (dept != null && isSCLFor(dept));
+    }
+    match /emailFlags/{targetUid} {
+      allow read: if isAdmin() || isHeadOfOps() || request.auth.uid == targetUid
+        || (resource.data.groupId != null && isCLFor(resource.data.groupId))
+        || (resource.data.dept != null && isSCLFor(resource.data.dept));
+      // create: must be shaped as a fresh, pending flag on the correct
+      // doc id, by someone with authority over the scope THEY claim in
+      // the doc (not a scope they'll later widen — update below can't
+      // touch dept/groupId, so this is the only place scope is ever
+      // set). request.resource.data.targetUid == targetUid stops
+      // writing a flag under one uid's doc while pointing it at
+      // another uid's data, which would let a flag "belong" to the
+      // wrong owner's read grant.
+      //
+      // targetIsGroupMember(...) closes a separate gap: without it, a
+      // CL/SCL genuinely holding authority over THEIR OWN group/dept
+      // could still flag any arbitrary uid in the whole app — nothing
+      // otherwise confirms the target is actually IN that group/dept.
+      // Admin/Head of Ops are exempt from this extra check since their
+      // authority is already global and not scope-claimed. When a
+      // groupId is present the target must be a member of exactly that
+      // group; the isAdmin()/isHeadOfOps() path is only skipped when
+      // groupId is actually null (a dept-only flag from an SCL that has
+      // no specific groupId to check against — dept-wide membership
+      // isn't a single list we can cheaply verify here, so that narrow
+      // case still relies on canFlagEmail's role check alone, same as
+      // before).
+      allow create: if isSignedIn() &&
+        request.resource.data.targetUid == targetUid &&
+        request.resource.data.status == 'pending' &&
+        request.resource.data.flaggedBy == request.auth.uid &&
+        canFlagEmail(request.resource.data.dept, request.resource.data.groupId) &&
+        (isAdmin() || isHeadOfOps()
+          || request.resource.data.groupId == null
+          || targetIsGroupMember(targetUid, request.resource.data.groupId));
+      // update: authority is checked against the EXISTING (resource)
+      // scope, same as before — but the write itself is now restricted
+      // to only status/resolvedBy/resolvedAt/reason. dept and groupId
+      // can never change after creation, which closes the scope-
+      // escalation gap where a CL could otherwise widen a flag's
+      // groupId/dept on update to one outside their own authority, or
+      // where status could be bounced back to 'pending' by anyone
+      // after a legitimate resolve. targetUid/flaggedBy/flaggedAt are
+      // likewise immutable history, not editable fields.
+      allow update: if (isAdmin() || isHeadOfOps()
+          || (resource.data.groupId != null && isCLFor(resource.data.groupId))
+          || (resource.data.dept != null && isSCLFor(resource.data.dept)))
+        && request.resource.data.diff(resource.data).affectedKeys()
+             .hasOnly(['status', 'resolvedBy', 'resolvedAt', 'reason'])
+        && (request.resource.data.status == 'pending'
+            || request.resource.data.status == 'resolved'
+            || request.resource.data.status == 'dismissed');
+      allow delete: if isAdmin() || isHeadOfOps();
+    }
+
+    // -------------------------------------------------------------
     // Global (Founder / Head of Ops) notices — flexible audience.
     // -------------------------------------------------------------
     match /notices/{noticeId} {
@@ -277,7 +410,7 @@ service cloud.firestore {
 
       match /members/{memberUid} {
         allow read: if isAdmin() || isGroupMember(groupId) || isCLFor(groupId) || isHeadOfOps() || isSCLForGroup(groupId);
-        allow create: if (isSignedIn() && request.auth.uid == memberUid
+        allow create: if (isRealAccount() && request.auth.uid == memberUid
                         && request.resource.data.role == 'member'
                         && (request.resource.data.verified == false
                             || (rollIsInstitutionallyVerified(request.resource.data.roll)
@@ -381,11 +514,21 @@ service cloud.firestore {
         // (non-pending) prior state, resetting straight back to pending,
         // so a requester can never flip someone else's live pending
         // request or self-approve.
+        //
+        // Self-cancel: a requester may also move their OWN still-pending
+        // request straight to 'revoked' (never 'approved' — that stays
+        // CL/Admin-only). Needed so handoffCR can clean up a CR's pending
+        // leave_{uid} request when they hand off directly instead of
+        // waiting for CL sign-off, and so a "cancel my request" UI is
+        // possible later without a rules change.
         allow update: if isAdmin() || isCLFor(groupId) || isHeadOfOps() || isSCLForGroup(groupId) ||
           (isSignedIn() && resource.data.status != 'pending' && request.resource.data.status == 'pending' &&
             ((request.auth.uid == requestUid && request.resource.data.type != 'leave')
              || (request.resource.data.type == 'leave' && request.resource.data.uid == request.auth.uid
-                 && requestUid == 'leave_' + request.auth.uid && isGroupCR(groupId))));
+                 && requestUid == 'leave_' + request.auth.uid && isGroupCR(groupId)))) ||
+          (isSignedIn() && resource.data.status == 'pending' && request.resource.data.status == 'revoked' &&
+            ((request.auth.uid == requestUid && resource.data.type != 'leave')
+             || (resource.data.type == 'leave' && resource.data.uid == request.auth.uid)));
         allow delete: if false;
       }
 

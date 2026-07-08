@@ -118,7 +118,17 @@ export function Sidebar({ open, onClose, authState }) {
   const [navConfig] = useNavConfig();
   const { favorites } = useFavorites();
   const { pinnedPages } = usePinnedPages();
-  const [isRealCR, setIsRealCR] = useState(false);
+  const [isRealCR, setIsRealCR] = useState(() => {
+    // Same same-tab paint optimization as useIsStaff.js — never a source
+    // of truth, just avoids the Class Rep row visibly popping in a beat
+    // after the sidebar's first paint on every page load. The effect
+    // below always re-verifies against the live members doc regardless.
+    try {
+      return sessionStorage.getItem('kuetx:lastKnownIsRealCR') === '1';
+    } catch {
+      return false;
+    }
+  });
   // profile.isCR is just a self-ticked checkbox from Profile Setup with no
   // verification behind it — showing the CR tools link based on it alone
   // let anyone tick the box and see (and, before RequireCR existed, even
@@ -138,7 +148,9 @@ export function Sidebar({ open, onClose, authState }) {
     if (!groupId) { setIsRealCR(false); return; }
     return subscribeMembers(groupId, (members) => {
       const me = members.find((m) => m.id === auth.currentUser?.uid);
-      setIsRealCR(me?.role === 'cr' || me?.role === 'acr');
+      const value = me?.role === 'cr' || me?.role === 'acr';
+      setIsRealCR(value);
+      try { sessionStorage.setItem('kuetx:lastKnownIsRealCR', value ? '1' : '0'); } catch { /* ignore */ }
     });
   }, [profile.dept, profile.batch]);
 
@@ -154,12 +166,6 @@ export function Sidebar({ open, onClose, authState }) {
       ? { ...section, group: adminLabel }
       : section
   );
-
-  // TEMP DEBUG — remove after confirming why Admin row is/isn't showing.
-  useEffect(() => {
-    console.log('[Sidebar debug] isRealAdmin:', isRealAdmin, 'adminLabel:', adminLabel);
-    console.log('[Sidebar debug] filteredNav groups:', filteredNav.map(s => s.group));
-  }, [isRealAdmin, adminLabel]);
 
   const findNavItem = (path) => {
     for (const s of NAV) {

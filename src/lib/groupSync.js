@@ -56,12 +56,25 @@ function _subscribeSingleton(key, buildQueryFn, mapDocsFn, callback) {
           setTimeout(() => attach(retriesLeft - 1), 1200);
           return;
         }
-        // Out of retries (or a non-permission error): stop showing an
-        // infinite loading state — deliver an empty array so the UI can
-        // render its normal "no one yet" / empty state instead of hanging.
+        // Out of retries on a permission error: deliver an empty array to
+        // any callers waiting RIGHT NOW so the UI doesn't hang forever on
+        // "Loading…" — but do NOT cache it as entry.lastValue. Caching it
+        // would make every future mount of this same group (a fresh page
+        // visit, a route re-entry) instantly replay a stale empty list
+        // from the singleton registry without ever attempting a real
+        // listener again, permanently hiding classmates that do exist
+        // once the underlying race (or connectivity blip) has cleared.
+        // Non-permission errors also fall through here, but those are
+        // real (not a startup race), so it's still correct not to cache.
         if (entry.lastValue === null) {
-          entry.lastValue = [];
-          entry.listeners.forEach((cb) => cb(entry.lastValue));
+          entry.listeners.forEach((cb) => cb([]));
+        }
+        // Keep retrying in the background at a slower cadence so the
+        // listener recovers on its own once the real membership doc
+        // write is visible server-side, instead of staying dead until a
+        // full page reload clears the registry.
+        if (err?.code === 'permission-denied') {
+          setTimeout(() => attach(3), 5000);
         }
       });
     };
@@ -94,8 +107,23 @@ export async function joinGroup(groupId, profile) {
   const ref_ = doc(db, 'groups', groupId, 'members', uid);
   const existing = await getDoc(ref_);
   if (existing.exists()) {
-    // just refresh display fields, never touch verified/role
-    await updateDoc(ref_, { name: profile?.name || '', roll: profile?.studentId || '' });
+    // just refresh display fields, never touch verified/role. Also
+    // backfills `isAnonymous` for pre-existing docs written before this
+    // field existed, so an account that upgrades from anonymous to a
+    // real Google/email login gets its member doc corrected the very
+    // next time joinGroup() runs for them (App.jsx's auto-join effect
+    // already re-runs this on every app open) — no manual fix needed.
+    await updateDoc(ref_, {
+      name: profile?.name || '',
+      roll: profile?.studentId || '',
+      isAnonymous: !!auth.currentUser?.isAnonymous,
+      // Login email, shown to CL/SCL/admin ONLY as a display field so
+      // they can judge if it looks fake (see emailFlags.js) — never used
+      // for auth or matched against verifiedRolls. Anonymous accounts
+      // have no email; leave it unset rather than writing an empty
+      // string so the UI can distinguish "no account email" from "empty".
+      ...(auth.currentUser?.email ? { accountEmail: auth.currentUser.email } : {}),
+    });
   } else {
     await setDoc(ref_, {
       name: profile?.name || '',
@@ -105,8 +133,17 @@ export async function joinGroup(groupId, profile) {
       // approval needed. Everyone else starts at Tier 2 (manual, false).
       verified: await emailMatchesGroup(profile),
       role: 'member',
+      // Recorded for display filtering (ClassmatesList hides anonymous
+      // entries). The Firestore create rule already blocks anonymous
+      // sessions from writing this doc at all now (isRealAccount()), so
+      // in practice this will only ever be false for anything created
+      // going forward — kept here mainly so the field always exists and
+      // an old pre-existing doc gets backfilled to false the moment its
+      // owner logs in for real (see the update branch above).
+      isAnonymous: !!auth.currentUser?.isAnonymous,
       joinedAt: serverTimestamp(),
       legacyCRClaim: !!profile?.isCR,
+      ...(auth.currentUser?.email ? { accountEmail: auth.currentUser.email } : {}),
     });
   }
   // Lightweight denormalized summary doc at groups/{groupId} itself, so
@@ -118,6 +155,32 @@ export async function joinGroup(groupId, profile) {
     dept: profile?.dept ? String(profile.dept).trim().toUpperCase() : '',
     lastActivityAt: serverTimestamp(),
   }, { merge: true });
+}
+
+/**
+ * Confirms the CURRENT user's own members/{uid} doc is actually readable
+ * (not just that joinGroup()'s write promise resolved — on a slow/offline-
+ * queued connection that promise can resolve before the write is visible
+ * server-side, so a listener started right after still hits a transient
+ * permission-denied). Callers that gate mounting a members-list subscriber
+ * on this (e.g. Classmates.jsx's `joined` flag) avoid ever hitting that
+ * race in the first place, instead of relying on _subscribeSingleton's
+ * retry-after-failure recovery. Gives up after a few short retries so a
+ * genuinely stuck join never blocks the page forever.
+ */
+export async function waitForOwnMembership(groupId, retries = 5, delayMs = 400) {
+  const uid = auth.currentUser?.uid;
+  if (!uid || !groupId) return false;
+  for (let i = 0; i < retries; i++) {
+    try {
+      const snap = await getDoc(doc(db, 'groups', groupId, 'members', uid));
+      if (snap.exists()) return true;
+    } catch (e) {
+      // permission-denied while the write is still propagating — retry
+    }
+    await new Promise((r) => setTimeout(r, delayMs));
+  }
+  return false;
 }
 
 /** Admin-only: list every group summary doc (batch/dept/lastActivityAt). */
@@ -307,9 +370,10 @@ export async function clRejectCRRequest(groupId, targetUid) {
  */
 export async function clAppointCR(groupId, targetUid) {
   const crStatusRef = doc(db, 'groups', groupId, 'meta', 'crStatus');
-  const [crStatusSnap, membersSnap] = await Promise.all([
+  const [crStatusSnap, membersSnap, requestsSnap] = await Promise.all([
     getDoc(crStatusRef),
     getDocs(collection(db, 'groups', groupId, 'members')),
+    getDocs(query(collection(db, 'groups', groupId, 'crRequests'), where('status', '==', 'pending'))),
   ]);
   const { cr: crCount } = _countRoles(membersSnap.docs);
   if (crCount >= MAX_CR) {
@@ -317,6 +381,14 @@ export async function clAppointCR(groupId, targetUid) {
   }
   const batch = writeBatch(db);
   batch.update(doc(db, 'groups', groupId, 'members', targetUid), { role: 'cr', verified: true });
+  // Same cleanup as clApproveCRRequest: a slot just filled outside the
+  // queue, so any still-pending "fresh CR" request for this group was
+  // queued for a slot that no longer exists. Leave requests (type ===
+  // 'leave') are untouched — they're a different person stepping down,
+  // unrelated to a slot opening up.
+  requestsSnap.docs.forEach((d) => {
+    if (d.data().type !== 'leave') batch.update(d.ref, { status: 'rejected' });
+  });
   const newCount = (crStatusSnap.exists() ? (crStatusSnap.data().count || 0) : 0) + 1;
   batch.set(crStatusRef, { count: newCount }, { merge: true });
   await batch.commit();
@@ -337,6 +409,18 @@ export async function clRevokeCR(groupId, targetUid) {
   const reqSnap = await getDoc(reqRef);
   if (reqSnap.exists()) {
     batch.update(reqRef, { status: 'revoked' });
+  }
+  // Also close out a pending "leave CR" request for this same person, if
+  // one exists. Without this, a CL revoking a CR who had ALSO already
+  // asked to step down leaves a stale pending leave_{uid} doc behind —
+  // it would keep showing up in the leave-requests queue forever, and if
+  // anyone later clicked Approve on it, clApproveLeaveCR would run
+  // crStatus.count: increment(-1) a SECOND time for a slot that was
+  // already freed here, silently corrupting the slot count.
+  const leaveReqRef = doc(db, 'groups', groupId, 'crRequests', `leave_${targetUid}`);
+  const leaveReqSnap = await getDoc(leaveReqRef);
+  if (leaveReqSnap.exists() && leaveReqSnap.data().status === 'pending') {
+    batch.update(leaveReqRef, { status: 'revoked' });
   }
   await batch.commit();
 }
@@ -360,6 +444,17 @@ export async function handoffCR(groupId, currentUid, successorUid, currentProfil
   const batch = writeBatch(db);
   batch.update(doc(db, 'groups', groupId, 'members', currentUid), { role: 'member' });
   batch.update(doc(db, 'groups', groupId, 'members', successorUid), { role: 'cr' });
+  // If the departing CR also had a pending "leave CR" request queued
+  // (asked to step down, then handed off directly before CL acted on it),
+  // close it out here. Otherwise it lingers as pending forever, and if a
+  // CL later approves it, clApproveLeaveCR would decrement crStatus.count
+  // for a slot that was never actually freed (the successor took it
+  // immediately) — silently corrupting the slot count.
+  const leaveReqRef = doc(db, 'groups', groupId, 'crRequests', `leave_${currentUid}`);
+  const leaveReqSnap = await getDoc(leaveReqRef);
+  if (leaveReqSnap.exists() && leaveReqSnap.data().status === 'pending') {
+    batch.update(leaveReqRef, { status: 'revoked' });
+  }
   await batch.commit();
   // Passive notification to the Campus Lead — not an approval gate.
   await addDoc(collection(db, 'groups', groupId, 'notices'), {
@@ -443,10 +538,6 @@ export function subscribeMyRole(groupId, uid, callback) {
   const ref = doc(db, 'groups', groupId, 'members', uid);
   return onSnapshot(ref, (snap) => {
     const role = snap.exists() ? (snap.data().role || 'member') : 'member';
-    // TEMP DIAGNOSTIC — remove once the CR-revoke visibility bug is confirmed
-    // fixed. Logs every live role update this listener receives, so a revoke
-    // can be watched end-to-end (server write -> this callback -> UI).
-    console.log('[groupSync] subscribeMyRole update', { groupId, uid, role, at: new Date().toISOString() });
     callback(role);
   }, (err) => {
     console.error('[groupSync] subscribeMyRole error:', err);

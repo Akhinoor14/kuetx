@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
 import { Users } from 'lucide-react';
 import { getProfile } from '../store/store';
-import { getGroupId, getGroupLabel } from '../lib/groupUtils';
+import { getGroupId, getGroupLabel, canonicalize } from '../lib/groupUtils';
 import { postGroupNotice, requestLeaveCR, subscribeMyRole } from '../lib/groupSync';
+import { subscribeMyRoles, hasRole } from '../lib/staffSync';
+import { checkIsAdmin } from '../lib/adminAuth';
 import { auth } from '../lib/firebase';
 import ClassmatesList from '../components/ClassmatesList';
 
@@ -46,10 +48,37 @@ export default function ClassRoster() {
   const [sendMsg, setSendMsg] = useState('');
   const [leaveState, setLeaveState] = useState('idle'); // idle | sending | sent | error
   const [leaveMsg, setLeaveMsg] = useState('');
+  // Is this CR ALSO the person (or one of the people) who'd approve their
+  // own leave request — Admin/Founder, Head of Ops, this group's Campus
+  // Lead, or this dept's Senior Campus Lead? None of that is a bug (the
+  // Founder/Head-of-Ops "All Classes" view exists specifically so a
+  // request never gets stuck with no eligible approver), but the CL-
+  // approval-gated flow reads confusingly if you never learn you're the
+  // one who has to go approve it. This just makes that visible.
+  const [canSelfApprove, setCanSelfApprove] = useState(false);
 
   useEffect(() => {
     if (!groupId || !uid) return;
     return subscribeMyRole(groupId, uid, setMyRole);
+  }, [groupId, uid]);
+
+  useEffect(() => {
+    if (!groupId || !uid) return;
+    let cancelled = false;
+    let unsubRoles = () => {};
+    checkIsAdmin(uid).then((isFounder) => {
+      if (cancelled) return;
+      if (isFounder) { setCanSelfApprove(true); return; }
+      unsubRoles = subscribeMyRoles((roles) => {
+        if (cancelled) return;
+        setCanSelfApprove(
+          hasRole(roles, 'head_of_ops', { type: 'global' }) ||
+          hasRole(roles, 'campus_lead', { type: 'group', groupId }) ||
+          (profile?.dept && hasRole(roles, 'senior_campus_lead', { type: 'dept', dept: canonicalize(profile.dept) }))
+        );
+      });
+    });
+    return () => { cancelled = true; unsubRoles(); };
   }, [groupId, uid]);
 
   const handleSendNotice = async (e) => {
@@ -61,7 +90,7 @@ export default function ClassRoster() {
       await postGroupNotice(groupId, profile, { title: title.trim(), body: body.trim() });
       setTitle('');
       setBody('');
-      setSendMsg('Notice pathano hoyeche.');
+      setSendMsg('Notice sent.');
     } catch (err) {
       setSendMsg(`Failed: ${err?.message || err}`);
     } finally {
@@ -70,12 +99,12 @@ export default function ClassRoster() {
   };
 
   const handleRequestLeave = async () => {
-    if (!window.confirm('CR thaka ceRe deyar request CL er kache pathate chao? Approve na howa porjonto tumi CR thakba.')) return;
+    if (!window.confirm('Send a request to your Class Lead to step down as CR? You\'ll remain CR until it\'s approved.')) return;
     setLeaveState('sending');
     setLeaveMsg('');
     try {
       await requestLeaveCR(groupId, profile);
-      setLeaveMsg('Request tomar Class Lead er kache pathano hoyeche. Approve korle tobe tumi ar CR thakba na.');
+      setLeaveMsg('Request sent to your Class Lead. You\'ll stop being CR once they approve it.');
       setLeaveState('sent');
     } catch (err) {
       setLeaveMsg(`Failed: ${err?.message || err}`);
@@ -109,11 +138,17 @@ export default function ClassRoster() {
 
           {myRole === 'cr' && (
             <div className="card" style={{ padding: 14, marginBottom: 16 }}>
-              <h2 style={{ fontSize: 14, fontWeight: 700, marginBottom: 6 }}>CR thaka ceRe deya</h2>
+              <h2 style={{ fontSize: 14, fontWeight: 700, marginBottom: 6 }}>Step down as CR</h2>
               <p style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 10 }}>
-                Kauke direct hand off na kore shudhu CR thaka bad dite chaile, ei request tomar Class Lead er
-                kache jabe. Approve na hoya porjonto tumi CR-e thakba.
+                Want to stop being CR without handing off to someone specific? This sends a request to your
+                Class Lead. You'll remain CR until they approve it.
               </p>
+              {canSelfApprove && (
+                <p style={{ fontSize: 12, color: 'var(--accent)', marginBottom: 10 }}>
+                  You also hold Campus Lead / Senior Campus Lead / Head of Ops / Founder access for this class,
+                  so you can approve this request yourself afterward from the Founder or Staff dashboard.
+                </p>
+              )}
               {leaveState === 'sent' ? (
                 <div style={{ fontSize: 12, color: 'var(--muted)' }}>{leaveMsg}</div>
               ) : (

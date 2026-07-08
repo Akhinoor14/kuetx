@@ -47,7 +47,20 @@ export default function ClassmatesList({ groupId, showActions = false, viewerRol
     return <div style={{ padding: 16, color: 'var(--muted)' }}>Loading classmates…</div>;
   }
 
-  if (members.length === 0) {
+  // Anonymous (guest) accounts are excluded from the shared class roster —
+  // Classmates/CR/notices are meant for people with a real, identifiable
+  // Google/email account, not throwaway guest sessions. The Firestore
+  // create rule (isRealAccount()) already stops any NEW anonymous join
+  // from happening at all; this filter additionally hides any older
+  // member doc written before that rule existed and that has since been
+  // flagged isAnonymous:true (joinGroup() backfills this field every time
+  // it runs for a given account, including on plain app-open auto-join —
+  // see App.jsx). A pre-existing doc that hasn't been touched since
+  // isAnonymous started being recorded has no such field yet and is left
+  // visible rather than guessed at.
+  const visibleMembers = members.filter((m) => m.isAnonymous !== true);
+
+  if (visibleMembers.length === 0) {
     return (
       <div className="card" style={{ padding: 16, color: 'var(--muted)', textAlign: 'center' }}>
         No one from your class has joined yet — be the first!
@@ -55,19 +68,19 @@ export default function ClassmatesList({ groupId, showActions = false, viewerRol
     );
   }
 
-  const verifiedCount = members.filter((m) => m.verified).length;
-  const crCount = members.filter((m) => m.role === 'cr').length;
-  const acrCount = members.filter((m) => m.role === 'acr').length;
+  const verifiedCount = visibleMembers.filter((m) => m.verified).length;
+  const crCount = visibleMembers.filter((m) => m.role === 'cr').length;
+  const acrCount = visibleMembers.filter((m) => m.role === 'acr').length;
   const crSlotsFull = crCount >= MAX_CR;
   const acrSlotsFull = acrCount >= MAX_ACR;
 
   return (
     <div>
       <div style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 10 }}>
-        {members.length} classmate{members.length === 1 ? '' : 's'} · {verifiedCount} verified · {crCount}/{MAX_CR} CR · {acrCount}/{MAX_ACR} ACR
+        {visibleMembers.length} classmate{visibleMembers.length === 1 ? '' : 's'} · {verifiedCount} verified · {crCount}/{MAX_CR} CR · {acrCount}/{MAX_ACR} ACR
       </div>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-        {members.map((m) => (
+        {visibleMembers.map((m) => (
           <div
             key={m.id}
             className="card"
@@ -163,7 +176,7 @@ export default function ClassmatesList({ groupId, showActions = false, viewerRol
                         <button
                           className="btn btn-sm btn-secondary"
                           onClick={() => {
-                            if (window.confirm(`${m.name || 'Eke'} ke CR hisebe hand off korte chao? Tumi ar CR thakba na.`)) {
+                            if (window.confirm(`Hand off CR to ${m.name || 'this classmate'}? You'll no longer be CR.`)) {
                               handoffCR(groupId, currentUid, m.id, null);
                             }
                           }}
@@ -192,7 +205,7 @@ export default function ClassmatesList({ groupId, showActions = false, viewerRol
                     <button
                       className="btn btn-sm btn-secondary"
                       onClick={() => {
-                        if (window.confirm(`${m.name || 'Eke'} ke class theke remove korte chao?`)) {
+                        if (window.confirm(`Remove ${m.name || 'this classmate'} from the class?`)) {
                           removeMember(groupId, m.id);
                         }
                       }}

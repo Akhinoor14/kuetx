@@ -14,6 +14,8 @@ import {
 } from '../lib/groupSync';
 import { subscribePendingRollUnlockRequests, resolveRollUnlockRequest, dismissRollUnlockRequest } from '../lib/rollOwnership';
 import { checkIsAdmin } from '../lib/adminAuth';
+import { flagSuspiciousEmail, unflagEmail, summarizeEmailHealth, listPendingFlags, resolveEmailFlag } from '../lib/emailFlags';
+import { isObviouslyBadDomain } from '../lib/emailDomainCheck';
 import ClassmatesList from '../components/ClassmatesList';
 
 // ---------------------------------------------------------------------
@@ -108,6 +110,71 @@ function AdminAllGroupsSection() {
 // ---------------------------------------------------------------------
 // Campus Lead section — one block per group this person leads
 // ---------------------------------------------------------------------
+// ---------------------------------------------------------------------
+// Email audit — per-group list of members whose account email looks
+// fake/suspicious, with a one-tap flag action. See emailFlags.js for the
+// full design rationale (manual review, never auto-delete/lock).
+//
+// accountEmail is a self-written display field on the member doc (see
+// joinGroup() in groupSync.js) — it's the person's own login email,
+// separate from any KUET institutional verification email. Anonymous
+// accounts have no accountEmail at all, so they're skipped here (nothing
+// to flag — they have no email-recovery risk to begin with).
+// ---------------------------------------------------------------------
+function EmailAuditBlock({ groupId, dept }) {
+  const [members, setMembers] = useState(null);
+  const [busyUid, setBusyUid] = useState(null);
+  const [err, setErr] = useState('');
+
+  useEffect(() => {
+    let cancelled = false;
+    getGroupMembersOnce(groupId).then((m) => { if (!cancelled) setMembers(m); });
+    return () => { cancelled = true; };
+  }, [groupId]);
+
+  if (members === null) return null;
+
+  const withEmail = members.filter((m) => m.accountEmail);
+  const health = summarizeEmailHealth(withEmail.map((m) => ({ email: m.accountEmail })));
+  const suspicious = withEmail.filter((m) => isObviouslyBadDomain(m.accountEmail));
+
+  if (suspicious.length === 0) return null;
+
+  const handleFlag = async (m) => {
+    setBusyUid(m.id);
+    setErr('');
+    try {
+      await flagSuspiciousEmail(m.id, m.accountEmail, { dept, groupId }, 'বিশ্বাসযোগ্য domain মনে হচ্ছে না');
+    } catch (e) {
+      setErr(e?.message || 'Flag করতে সমস্যা হয়েছে।');
+    } finally {
+      setBusyUid(null);
+    }
+  };
+
+  return (
+    <div style={{ marginBottom: 12 }}>
+      <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 4 }}>
+        Email Audit <span style={{ fontWeight: 400, color: 'var(--muted)' }}>
+          ({health.outsideIdeal}/{health.total} ideal domain-এর বাইরে, {health.obviouslyBad} obviously fake)
+        </span>
+      </div>
+      {err && <div style={{ fontSize: 11.5, color: 'var(--danger)', marginBottom: 6 }}>{err}</div>}
+      {suspicious.map((m) => (
+        <div key={m.id} className="card" style={{ padding: 8, display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
+          <div>
+            <div style={{ fontSize: 13 }}>{m.name} ({m.roll})</div>
+            <div style={{ fontSize: 11.5, color: 'var(--danger)' }}>{m.accountEmail}</div>
+          </div>
+          <button className="btn btn-sm btn-secondary" onClick={() => handleFlag(m)} disabled={busyUid === m.id}>
+            {busyUid === m.id ? 'Flagging…' : 'Flag করো'}
+          </button>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 function CampusLeadBlock({ groupId }) {
   const [crRequests, setCrRequests] = useState([]);
   const [leaveRequests, setLeaveRequests] = useState([]);
@@ -165,7 +232,7 @@ function CampusLeadBlock({ groupId }) {
           <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 6 }}>CR leave requests</div>
           {leaveRequests.map((r) => (
             <div key={r.id} className="card" style={{ padding: 8, display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
-              <span style={{ fontSize: 13 }}>{r.name} ({r.roll}) — CR thaka bad dite chay</span>
+              <span style={{ fontSize: 13 }}>{r.name} ({r.roll}) — wants to step down as CR</span>
               <div style={{ display: 'flex', gap: 4 }}>
                 <button className="btn btn-sm btn-primary" onClick={() => handleApproveLeave(r.id, r.uid)}>Approve</button>
                 <button className="btn btn-sm btn-secondary" onClick={() => clRejectLeaveCR(groupId, r.id)}>Reject</button>
@@ -174,6 +241,8 @@ function CampusLeadBlock({ groupId }) {
           ))}
         </div>
       )}
+
+      <EmailAuditBlock groupId={groupId} dept={groupId.split('_')[1]} />
 
       <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 6 }}>
         Roster <span style={{ fontWeight: 400, color: 'var(--muted)' }}>("Claims CR" badge = held CR before this system existed — review and confirm/promote if still accurate)</span>
@@ -211,11 +280,60 @@ function SeniorCampusLeadBlock({ dept }) {
         </div>
       ))}
 
+      <div style={{ fontSize: 12, fontWeight: 700, margin: '10px 0 6px' }}>Pending email flags in this department</div>
+      <EmailFlagReviewBlock dept={dept} />
+
       <div style={{ fontSize: 12, fontWeight: 700, margin: '10px 0 6px' }}>Campus Leads in this department</div>
       {cls === null && <div style={{ fontSize: 12, color: 'var(--muted)' }}>Loading…</div>}
       {cls?.length === 0 && <div style={{ fontSize: 12, color: 'var(--muted)' }}>None appointed yet.</div>}
       {cls?.map((c) => (
         <div key={c.id} style={{ fontSize: 13, padding: '4px 0' }}>{c.scope?.groupId}</div>
+      ))}
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------
+// Fallback flag review — Head of Ops/Founder sees EVERY pending email
+// flag regardless of dept/group, so a flag never gets stuck just because
+// a dept's SCL post happens to be vacant or unresponsive (same universal
+// fallback principle as the CL applications list above).
+// ---------------------------------------------------------------------
+function EmailFlagReviewBlock({ dept, groupId } = {}) {
+  const [flags, setFlags] = useState(null);
+  const [busyUid, setBusyUid] = useState(null);
+
+  const refresh = () => listPendingFlags({ dept, groupId }).then(setFlags);
+  useEffect(() => { refresh(); }, [dept, groupId]);
+
+  if (flags === null) return null;
+  if (flags.length === 0) {
+    return <div style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 12 }}>No pending email flags.</div>;
+  }
+
+  const handleResolve = async (f, status) => {
+    setBusyUid(f.id);
+    try {
+      await resolveEmailFlag(f.id, status);
+      await refresh();
+    } finally {
+      setBusyUid(null);
+    }
+  };
+
+  return (
+    <div style={{ marginBottom: 12 }}>
+      {flags.map((f) => (
+        <div key={f.id} className="card" style={{ padding: 8, display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
+          <div>
+            <div style={{ fontSize: 13 }}>{f.targetEmail || '(no email)'} — {f.dept || f.groupId || 'unscoped'}</div>
+            <div style={{ fontSize: 11, color: 'var(--muted)' }}>{f.reason}</div>
+          </div>
+          <div style={{ display: 'flex', gap: 4 }}>
+            <button className="btn btn-sm btn-primary" onClick={() => handleResolve(f, 'resolved')} disabled={busyUid === f.id}>Fixed</button>
+            <button className="btn btn-sm btn-secondary" onClick={() => handleResolve(f, 'dismissed')} disabled={busyUid === f.id}>Dismiss</button>
+          </div>
+        </div>
       ))}
     </div>
   );
@@ -242,6 +360,11 @@ function HeadOfOpsSection() {
 
   return (
     <Section title="Head of Operations">
+      <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 6 }}>
+        Pending email flags (fallback — covers depts with no SCL/CL, or any dept)
+      </div>
+      <EmailFlagReviewBlock />
+
       <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 6 }}>
         Every pending Campus Lead application (fallback — covers depts with no Senior Campus Lead yet)
       </div>
@@ -365,6 +488,11 @@ export default function StaffDashboard() {
       </p>
 
       {isAdminUser && <RollUnlockSection />}
+      {isAdminUser && !isHeadOfOps && (
+        <Section title="Pending Email Flags (Founder fallback)">
+          <EmailFlagReviewBlock />
+        </Section>
+      )}
       {isHeadOfOps && <HeadOfOpsSection />}
       {(isAdminUser || isHeadOfOps) && <AdminAllGroupsSection />}
 
