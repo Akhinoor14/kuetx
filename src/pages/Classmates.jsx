@@ -1,254 +1,148 @@
-import { useEffect, useMemo, useState } from 'react';
-import {
-  subscribeMembers, verifyMember, revokeVerification,
-  clAppointCR, clRevokeCR, assignACR, revokeACR, handoffCR, removeMember,
-  clDismissLegacyCRClaim,
-  MAX_CR, MAX_ACR,
-} from '../lib/groupSync';
-import BlueTick from '../components/BlueTick';
+import { useEffect, useState } from 'react';
+import { Users2 } from 'lucide-react';
 import { getProfile } from '../store/store';
-import { getGroupId } from '../lib/groupUtils';
+import { getGroupId, getGroupLabel } from '../lib/groupUtils';
+import { joinGroup, requestCR, subscribeCRStatus, subscribeMembers, syncOwnVerification, waitForOwnMembership, MAX_CR } from '../lib/groupSync';
+import { checkCLVacant, applyForCampusLead } from '../lib/staffSync';
+import { isRollInstitutionallyVerified } from '../lib/kuetEmailVerify';
+import { auth } from '../lib/firebase';
+import ClassmatesList from '../components/ClassmatesList';
+import KuetEmailVerifyBox from '../components/KuetEmailVerifyBox';
 
-/**
- * groupId       - the batch+dept group to show
- * showActions   - true for CL/CR views (verify / promote / revoke buttons)
- * viewerRole    - 'cl' (Campus Lead / SCL / Admin / Head of Ops view, from
- *                 StaffDashboard.jsx) or 'cr' (a group's own CR/ACR view,
- *                 from ClassRoster.jsx). Determines WHICH action set
- *                 renders, since CL and CR have genuinely different
- *                 authority (see groupSync.js's CR-lifecycle comment
- *                 block and the members/{memberUid} Firestore rule):
- *                   - CL can freely appoint/revoke a CR into either open
- *                     slot (clAppointCR/clRevokeCR) — up to MAX_CR.
- *                   - CR can only hand off THEIR OWN slot to a specific
- *                     successor (handoffCR) and appoint/revoke ACR
- *                     (assignACR/revokeACR) up to MAX_ACR — a CR can
- *                     never freely appoint a brand-new, unrelated second
- *                     CR into the other slot; that still needs CL
- *                     approval via a request (see ClassRoster.jsx).
- *                 Defaults to 'cl' for backward compatibility with the
- *                 existing StaffDashboard.jsx call site.
- * currentUid    - so we can badge "You" and disallow self-demotion by accident
- */
-export default function ClassmatesList({ groupId, showActions = false, viewerRole = 'cl', currentUid = null }) {
-  const [members, setMembers] = useState(null); // null = loading
-  const [refreshTick, setRefreshTick] = useState(0);
+export default function Classmates() {
+  const profile = getProfile();
+  const groupId = getGroupId(profile);
+  const groupLabel = getGroupLabel(profile);
+  const [crStatus, setCrStatus] = useState(null);
+  const [claimState, setClaimState] = useState('idle'); // idle | sending | sent | error
+  const [claimMsg, setClaimMsg] = useState('');
+  // Tracks whether THIS user's own roll has a Tier-1 institutional
+  // verification on record. Gates the "Claim CR" button client-side —
+  // Firestore rules already reject an unverified claim server-side
+  // (isVerifiedMember/rollIsInstitutionallyVerified on crRequests/
+  // clApplications create), but without this the button was shown to
+  // everyone and an unverified click just died as a silent
+  // permission-denied with no useful message.
+  const [ownRollVerified, setOwnRollVerified] = useState(false);
+  // Gates ClassmatesList from mounting its members subscription before this
+  // user's own membership doc exists. Firestore rules require an existing
+  // members/{uid} doc to read the members collection at all (isGroupMember),
+  // so subscribing in the same tick as joinGroup() raced a permission-denied
+  // on every first-ever visit (self-healed after a few seconds via retry,
+  // but showed a misleading empty "no classmates" list in the meantime).
+  const [joined, setJoined] = useState(false);
+  // The current user's own role in this group (from the live members
+  // subscription, never self-reported) — gates the "Claim CR" card below.
+  // crStatus only tracks slot occupancy (0/2, 1/2, full), not who holds
+  // those slots, so without this a CR/ACR was shown "Claim CR" for their
+  // own already-filled slot instead of the card just disappearing.
+  const [ownRole, setOwnRole] = useState(null);
 
   useEffect(() => {
-    const handleStoreUpdate = () => setRefreshTick((tick) => tick + 1);
-    window.addEventListener('kuetx:store-updated', handleStoreUpdate);
-    return () => window.removeEventListener('kuetx:store-updated', handleStoreUpdate);
-  }, []);
+    if (!groupId) return;
+    setJoined(false);
+    joinGroup(groupId, profile)
+      .then(() => waitForOwnMembership(groupId))
+      .then(() => setJoined(true))
+      .catch((e) => { console.error('[Classmates] join failed', e); setJoined(true); });
+    // Catch-up for people who verified their KUET email in an earlier
+    // session/page and only later joined (or re-joined) this exact group
+    // -- joinGroup() never re-touches an existing member's verified flag,
+    // and the 'kuetx:kuet-email-verified' event only fires at the moment
+    // verification happens, so this mount-time check is what unsticks
+    // anyone who was verified before this page ever saw it.
+    syncOwnVerification(groupId, auth.currentUser?.uid).catch((e) => console.warn('[Classmates] syncOwnVerification failed', e));
+    isRollInstitutionallyVerified(profile?.studentId).then(setOwnRollVerified).catch(() => setOwnRollVerified(false));
+    const unsubCrStatus = subscribeCRStatus(groupId, setCrStatus);
+    const unsubMembers = subscribeMembers(groupId, (members) => {
+      const me = members.find((m) => m.id === auth.currentUser?.uid);
+      setOwnRole(me?.role || null);
+    });
+    return () => { unsubCrStatus(); unsubMembers(); };
+  }, [groupId]);
 
-  const profile = useMemo(() => getProfile() || {}, [refreshTick]);
-  const resolvedGroupId = groupId || getGroupId(profile);
-
-  useEffect(() => {
-    if (!resolvedGroupId) { setMembers([]); return; }
-    return subscribeMembers(resolvedGroupId, setMembers);
-  }, [resolvedGroupId]);
-
-  if (!resolvedGroupId) {
-    return (
-      <div className="card" style={{ padding: 16, color: 'var(--muted)', textAlign: 'center' }}>
-        Set your department and batch in Profile to see your classmates.
-      </div>
-    );
-  }
-
-  if (members === null) {
-    return <div style={{ padding: 16, color: 'var(--muted)' }}>Loading classmates…</div>;
-  }
-
-  // Anonymous (guest) accounts are excluded from the shared class roster —
-  // Classmates/CR/notices are meant for people with a real, identifiable
-  // Google/email account, not throwaway guest sessions. The Firestore
-  // create rule (isRealAccount()) already stops any NEW anonymous join
-  // from happening at all; this filter additionally hides any older
-  // member doc written before that rule existed and that has since been
-  // flagged isAnonymous:true (joinGroup() backfills this field every time
-  // it runs for a given account, including on plain app-open auto-join —
-  // see App.jsx). A pre-existing doc that hasn't been touched since
-  // isAnonymous started being recorded has no such field yet and is left
-  // visible rather than guessed at.
-  const visibleMembers = members.filter((m) => m.isAnonymous !== true);
-
-  if (visibleMembers.length === 0) {
-    return (
-      <div className="card" style={{ padding: 16, color: 'var(--muted)', textAlign: 'center' }}>
-        No one from your class has joined yet — be the first!
-      </div>
-    );
-  }
-
-  const verifiedCount = visibleMembers.filter((m) => m.verified).length;
-  const crCount = visibleMembers.filter((m) => m.role === 'cr').length;
-  const acrCount = visibleMembers.filter((m) => m.role === 'acr').length;
-  const crSlotsFull = crCount >= MAX_CR;
-  const acrSlotsFull = acrCount >= MAX_ACR;
+  const handleClaimCR = async () => {
+    if (!ownRollVerified) {
+      setClaimMsg('Verify your KUET email before claiming CR — enter your roll in the "KUET email verify" box above.');
+      setClaimState('error');
+      return;
+    }
+    setClaimState('sending');
+    try {
+      // Guard against the rare race where this page's mount-time joinGroup()
+      // write is still in flight (or failed) when the user clicks Claim CR —
+      // applyForCampusLead()'s Tier-1 path doesn't strictly need the member
+      // doc, but a bundled CR approval later does, so make sure it exists
+      // before proceeding.
+      await joinGroup(groupId, profile);
+      const clVacant = await checkCLVacant(groupId);
+      if (clVacant) {
+        // No Campus Lead yet for this dept+batch — bundle the CR claim
+        // into a Campus Lead application, routed to that department's
+        // Senior Campus Lead (or Head of Ops/Founder if that's vacant too).
+        await applyForCampusLead(groupId, profile, { bundledCRClaim: true });
+        setClaimMsg('No Campus Lead exists for your class yet, so your claim was sent as a combined Campus Lead + CR application to your department\'s Senior Campus Lead.');
+      } else {
+        await requestCR(groupId, profile);
+        setClaimMsg('Your request was sent to your class\'s Campus Lead for approval.');
+      }
+      setClaimState('sent');
+    } catch (e) {
+      console.error('[Classmates] claim CR failed', e);
+      setClaimMsg(e?.message || 'Something went wrong — try again.');
+      setClaimState('error');
+    }
+  };
 
   return (
-    <div>
-      <div style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 10 }}>
-        {visibleMembers.length} classmate{visibleMembers.length === 1 ? '' : 's'} · {verifiedCount} verified · {crCount}/{MAX_CR} CR · {acrCount}/{MAX_ACR} ACR
+    <div className="page-enter content-page-bg" style={{ maxWidth: 640, margin: '0 auto', padding: '16px 14px' }}>
+      <div className="content-page-hero">
+        <div className="content-page-hero-icon">
+          <Users2 size={18} color="var(--accent)" />
+        </div>
+        <h1 className="content-page-hero-title">Classmates</h1>
       </div>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-        {visibleMembers.map((m) => (
-          <div
-            key={m.id}
-            className="card"
-            style={{
-              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-              padding: '10px 14px', gap: 10,
-            }}
-          >
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8, minWidth: 0 }}>
-              <div style={{
-                width: 32, height: 32, borderRadius: '50%', background: 'var(--accentSoft)',
-                color: 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontWeight: 700, fontSize: 13, flexShrink: 0,
-              }}>
-                {(m.name || '?').trim().charAt(0).toUpperCase()}
-              </div>
-              <div style={{ minWidth: 0 }}>
-                <div style={{ fontWeight: 600, fontSize: 14, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', display: 'flex', alignItems: 'center', gap: 5 }}>
-                  <span style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>{m.name || 'Unnamed'}</span>
-                  {m.verified && <BlueTick size={13} />}
-                  {m.id === currentUid && <span style={{ color: 'var(--muted)', fontWeight: 400 }}>(you)</span>}
-                </div>
-                <div style={{ fontSize: 12, color: 'var(--muted)' }}>{m.roll || '—'}</div>
-              </div>
-            </div>
+      <p style={{ color: 'var(--muted)', fontSize: 13, marginBottom: 16 }}>
+        {groupId
+          ? <>Everyone from your class — <strong>{groupLabel}</strong> — who has joined KUETx.</>
+          : 'Add your department and batch in Profile to find your classmates.'}
+      </p>
 
-            <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexShrink: 0 }}>
-              {m.role === 'cr' && (
-                <span style={{
-                  fontSize: 11, fontWeight: 700, color: 'var(--accent)', background: 'var(--accentSoft)',
-                  padding: '2px 8px', borderRadius: 999,
-                }}>CR</span>
-              )}
-              {m.role === 'acr' && (
-                <span style={{
-                  fontSize: 11, fontWeight: 700, color: 'var(--accent)', background: 'var(--accentSoft)',
-                  padding: '2px 8px', borderRadius: 999,
-                }}>ACR</span>
-              )}
-              {m.role !== 'cr' && m.legacyCRClaim && (
-                <span style={{
-                  fontSize: 11, fontWeight: 600, color: 'var(--warning)', background: 'var(--warningBg)',
-                  padding: '2px 8px', borderRadius: 999,
-                }} title="Claimed CR before this system existed — pending admin review">
-                  Claims CR
-                </span>
-              )}
-              {!m.verified && (
-                <span style={{
-                  fontSize: 11, fontWeight: 600, padding: '2px 8px', borderRadius: 999,
-                  color: 'var(--muted)', background: 'var(--inputBg)',
-                }}>
-                  Pending
-                </span>
-              )}
+      {groupId && <KuetEmailVerifyBox />}
 
-              {showActions && (
-                <div style={{ display: 'flex', gap: 4 }}>
-                  {m.id !== currentUid && !m.verified && (
-                    <button className="btn btn-sm btn-secondary" onClick={() => verifyMember(resolvedGroupId, m.id)}>Verify</button>
-                  )}
-                  {m.id !== currentUid && m.verified && (
-                    <button className="btn btn-sm btn-secondary" onClick={() => revokeVerification(resolvedGroupId, m.id)}>Revoke</button>
-                  )}
-
-                  {viewerRole === 'cl' && (
-                    m.role !== 'cr' ? (
-                      <>
-                        {m.id !== currentUid && (
-                          <button
-                            className="btn btn-sm btn-secondary"
-                            disabled={crSlotsFull}
-                            title={crSlotsFull ? `Both CR slots are full (max ${MAX_CR}) — revoke one first` : undefined}
-                            onClick={() => clAppointCR(resolvedGroupId, m.id)}
-                          >
-                            Make CR
-                          </button>
-                        )}
-                        {m.legacyCRClaim && (
-                          <button
-                            className="btn btn-sm btn-secondary"
-                            title="Dismiss this badge without appointing them CR — use if they already stepped down or the claim is outdated"
-                            onClick={() => {
-                              if (window.confirm(`Clear the "Claims CR" badge${m.id === currentUid ? ' for yourself' : ` for ${m.name || 'this classmate'}`}? This does NOT remove CR status — use "Remove CR" for that.`)) {
-                                clDismissLegacyCRClaim(resolvedGroupId, m.id);
-                              }
-                            }}
-                          >
-                            Clear claim
-                          </button>
-                        )}
-                      </>
-                    ) : (
-                      m.id !== currentUid && (
-                        <button className="btn btn-sm btn-secondary" onClick={() => clRevokeCR(resolvedGroupId, m.id)}>Remove CR</button>
-                      )
-                    )
-                  )}
-
-                  {viewerRole === 'cr' && (
-                    <>
-                      {/* Hand off MY OWN CR slot to this member — only shown on
-                          the viewer's own row, since handoffCR replaces the
-                          slot the departing CR themself holds, not any open
-                          slot in general. */}
-                      {m.id === currentUid && m.role === 'cr' && (
-                        <span style={{ fontSize: 11, color: 'var(--muted)' }}>Use "Hand off CR" on a classmate's row below</span>
-                      )}
-                      {m.id !== currentUid && m.verified && m.role !== 'cr' && (
-                        <button
-                          className="btn btn-sm btn-secondary"
-                          onClick={() => {
-                            if (window.confirm(`Hand off CR to ${m.name || 'this classmate'}? You'll no longer be CR.`)) {
-                              handoffCR(resolvedGroupId, currentUid, m.id, null);
-                            }
-                          }}
-                        >
-                          Hand off CR
-                        </button>
-                      )}
-                      {m.role === 'acr' ? (
-                        <button className="btn btn-sm btn-secondary" onClick={() => revokeACR(resolvedGroupId, m.id)}>Remove ACR</button>
-                      ) : (
-                        m.role !== 'cr' && (
-                          <button
-                            className="btn btn-sm btn-secondary"
-                            disabled={acrSlotsFull}
-                            title={acrSlotsFull ? `Both ACR slots are full (max ${MAX_ACR})` : undefined}
-                            onClick={() => assignACR(resolvedGroupId, m.id)}
-                          >
-                            Make ACR
-                          </button>
-                        )
-                      )}
-                    </>
-                  )}
-
-                  {m.role !== 'cr' && m.role !== 'acr' && m.id !== currentUid && (
-                    <button
-                      className="btn btn-sm btn-secondary"
-                      onClick={() => {
-                        if (window.confirm(`Remove ${m.name || 'this classmate'} from the class?`)) {
-                          removeMember(resolvedGroupId, m.id);
-                        }
-                      }}
-                    >
-                      Remove from class
-                    </button>
-                  )}
-                </div>
-              )}
-            </div>
+      {groupId && crStatus && claimState !== 'sent' && ownRole !== 'cr' && ownRole !== 'acr' && (
+        <div className="card" style={{ padding: 14, marginBottom: 16 }}>
+          <div style={{ fontSize: 13, fontWeight: 700, marginBottom: 4 }}>
+            {crStatus.slotsFull ? 'CR slots are full for your class' : 'CR slot open for your class'}
           </div>
-        ))}
-      </div>
+          <p style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 10 }}>
+            {crStatus.slotsFull
+              ? `Both CR slots (max ${MAX_CR}) are currently filled. You can still apply — your request queues and your Campus Lead can approve it the moment a slot opens up.`
+              : 'Want to keep your class\'s routine and assignments up to date for everyone? Claim CR — it goes to your Campus Lead for approval (or becomes a combined application if there isn\'t one yet).'}
+          </p>
+          <button
+            className="btn btn-primary btn-sm"
+            onClick={handleClaimCR}
+            disabled={claimState === 'sending' || !ownRollVerified}
+            title={!ownRollVerified ? 'Verify your KUET email before you can claim CR' : undefined}
+          >
+            {claimState === 'sending' ? 'Sending…' : 'Claim CR'}
+          </button>
+          {!ownRollVerified && claimState !== 'error' && (
+            <div style={{ color: 'var(--muted)', fontSize: 12, marginTop: 6 }}>
+              You need to verify your KUET email before claiming CR.
+            </div>
+          )}
+          {claimState === 'error' && <div style={{ color: 'var(--danger)', fontSize: 12, marginTop: 6 }}>{claimMsg}</div>}
+        </div>
+      )}
+      {claimState === 'sent' && (
+        <div className="card" style={{ padding: 14, marginBottom: 16, fontSize: 12, color: 'var(--muted)' }}>{claimMsg}</div>
+      )}
+
+      {joined
+        ? <ClassmatesList groupId={groupId} currentUid={auth.currentUser?.uid} />
+        : <div style={{ padding: 16, color: 'var(--muted)', fontSize: 13 }}>Loading classmates...</div>}
     </div>
   );
 }
