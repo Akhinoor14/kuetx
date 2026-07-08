@@ -970,36 +970,32 @@ export default function Profile() {
       {/* ── Hero: minimal — Avatar (top) + Name (below). Same layout on
            mobile and desktop now; Edit button moved into Personal Info,
            Sign Out lives in the hamburger menu. ── */}
-      <div className="hero-bg" style={{
+      <div className="profile-hero-plain" style={{
         borderRadius: 20, padding: 'clamp(28px,5vw,40px) clamp(20px,4vw,32px)',
         display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
         gap: 14,
-        boxShadow: '0 8px 32px color-mix(in srgb, var(--accent) 25%, transparent)',
         position: 'relative', overflow: 'hidden', textAlign: 'center',
       }}>
-        {/* Decorative orb */}
-        <div style={{ position: 'absolute', top: -60, right: -60, width: 200, height: 200, borderRadius: '50%', background: 'rgba(255,255,255,0.08)', pointerEvents: 'none' }} />
-
         {/* Avatar — clickable to upload, with glow ring + click-to-edit hint */}
         <div
           onClick={() => setShowAvatarModal(true)}
           title="Click to change profile picture"
+          className="profile-hero-avatar"
           style={{
-            width: 'clamp(84px,18vw,108px)', height: 'clamp(84px,18vw,108px)', borderRadius: '50%',
-            background: photoURL ? 'transparent' : 'rgba(255,255,255,0.25)',
-            border: '3px solid rgba(255,255,255,0.6)',
+            borderRadius: '50%',
+            background: photoURL ? 'transparent' : 'var(--accentSoft)',
+            border: '3px solid var(--border)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
-            fontSize: 'clamp(30px,7vw,44px)', fontWeight: 900, color: 'white',
-            boxShadow: '0 0 0 6px rgba(255,255,255,0.12), 0 8px 28px rgba(0,0,0,0.2)',
+            fontWeight: 900, color: 'var(--accent)',
             flexShrink: 0, cursor: 'pointer', overflow: 'hidden', position: 'relative',
             transition: 'transform 0.2s, box-shadow 0.2s',
           }}
-          onMouseEnter={e => { e.currentTarget.style.transform = 'scale(1.06)'; e.currentTarget.style.boxShadow = '0 0 0 6px rgba(255,255,255,0.2), 0 10px 32px rgba(0,0,0,0.3)'; }}
-          onMouseLeave={e => { e.currentTarget.style.transform = ''; e.currentTarget.style.boxShadow = '0 0 0 6px rgba(255,255,255,0.12), 0 8px 28px rgba(0,0,0,0.2)'; }}
+          onMouseEnter={e => { e.currentTarget.style.transform = 'scale(1.04)'; }}
+          onMouseLeave={e => { e.currentTarget.style.transform = ''; }}
         >
           {photoURL
             ? <img src={photoURL} alt="Profile" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-            : <span style={{ textShadow: '0 2px 8px rgba(0,0,0,0.2)' }}>{profile.name ? profile.name.trim().charAt(0).toUpperCase() : '🎓'}</span>
+            : <span>{profile.name ? profile.name.trim().charAt(0).toUpperCase() : '🎓'}</span>
           }
           {/* Camera overlay on hover */}
           <div style={{
@@ -1016,11 +1012,11 @@ export default function Profile() {
         {/* Name only — Student ID / Session / Term already shown in
              Academic Info / Personal Info cards below. Edit lives there too. */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap', justifyContent: 'center' }}>
-          <div style={{ fontSize: 'clamp(19px,4.5vw,28px)', fontWeight: 900, color: 'white', letterSpacing: '-0.02em', lineHeight: 1.2, fontFamily: "'Space Grotesk', 'Sora', 'Hind Siliguri', system-ui, sans-serif", display: 'flex', alignItems: 'center', gap: 8 }}>
+          <div style={{ fontSize: 'clamp(19px,4.5vw,28px)', fontWeight: 900, color: 'var(--text)', letterSpacing: '-0.02em', lineHeight: 1.2, fontFamily: "'Space Grotesk', 'Sora', 'Hind Siliguri', system-ui, sans-serif", display: 'flex', alignItems: 'center', gap: 8 }}>
             {profile.name}
             {isKuetVerified && <BlueTick size={18} />}
           </div>
-          {isRealCR && <Badge label="👑 CR" color="#fff" bg="rgba(255,255,255,0.2)" />}
+          {isRealCR && <Badge label="CR" color="var(--accent)" bg="var(--accentSoft)" />}
         </div>
       </div>
 

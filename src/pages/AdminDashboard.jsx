@@ -226,9 +226,20 @@ function StaffRolesView({ onBack, groups }) {
   const [newRole, setNewRole] = useState(ALL_ASSIGNABLE_ROLES[0]);
   const [newScopeValue, setNewScopeValue] = useState('');
   const [currentHolders, setCurrentHolders] = useState({});
+  const [holdersError, setHoldersError] = useState(null);
 
   const refreshHolders = (role) => {
-    listStaffByRole(role).then((list) => setCurrentHolders((prev) => ({ ...prev, [role]: list })));
+    listStaffByRole(role)
+      .then((list) => setCurrentHolders((prev) => ({ ...prev, [role]: list })))
+      .catch((err) => {
+        // Previously swallowed silently (no .catch at all) — a missing
+        // collectionGroup index or a permission issue on staff/*/roles/*
+        // rejected here and the role's entry in currentHolders just never
+        // got set, so the UI fell through to "No one holds a staff role
+        // yet" even when staff genuinely existed. Surface it instead.
+        console.error(`[StaffRolesView] failed to load holders for role "${role}":`, err);
+        setHoldersError(err?.message || 'Failed to load some staff roles — check the console for details.');
+      });
   };
   useEffect(() => { ALL_ASSIGNABLE_ROLES.forEach(refreshHolders); }, []);
 
@@ -273,6 +284,9 @@ function StaffRolesView({ onBack, groups }) {
       </Section>
 
       <Section title={`Current role holders${totalHolders ? ` (${totalHolders})` : ''}`}>
+        {holdersError && (
+          <div style={{ fontSize: 12, color: 'var(--danger)', marginBottom: 10 }}>{holdersError}</div>
+        )}
         {totalHolders === 0 && <EmptyState>No one holds a staff role yet.</EmptyState>}
         {CATEGORY_ORDER.map((cat) => {
           const rolesInCat = ALL_ASSIGNABLE_ROLES.filter((r) => ROLE_CATEGORY[r] === cat && currentHolders[r]?.length > 0);

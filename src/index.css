@@ -8417,6 +8417,31 @@ input[type="range"]::-webkit-slider-thumb {
   background-size: cover;
   background-position: center;
 }
+
+/* ── Profile page: plain, minimal hero (replaces the old colorful
+   gradient+noise-texture .hero-bg above for a cleaner, more
+   professional look). Just a flat card background — no color wash. ── */
+.profile-hero-plain {
+  background: var(--card);
+  border: 1px solid var(--border);
+  box-shadow: 0 8px 24px rgba(12, 34, 64, 0.05);
+}
+.dark .profile-hero-plain {
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.20);
+}
+.profile-hero-avatar {
+  width: clamp(84px, 18vw, 108px);
+  height: clamp(84px, 18vw, 108px);
+  font-size: clamp(30px, 7vw, 44px);
+}
+/* Desktop: noticeably larger avatar than the mobile clamp allows */
+@media (min-width: 720px) {
+  .profile-hero-avatar {
+    width: 140px;
+    height: 140px;
+    font-size: 52px;
+  }
+}
 /* ── Global toasts (GlobalToasts.jsx / lib/notify.js) ──────────────────── */
 .kuetx-toasts {
   position: fixed;

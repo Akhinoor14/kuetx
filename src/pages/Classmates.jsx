@@ -41,6 +41,7 @@ export default function Classmates() {
   useEffect(() => {
     if (!groupId) return;
     setJoined(false);
+    setOwnRollVerified(false);
     joinGroup(groupId, profile)
       .then(() => waitForOwnMembership(groupId))
       .then(() => setJoined(true))
@@ -51,8 +52,25 @@ export default function Classmates() {
     // and the 'kuetx:kuet-email-verified' event only fires at the moment
     // verification happens, so this mount-time check is what unsticks
     // anyone who was verified before this page ever saw it.
-    syncOwnVerification(groupId, auth.currentUser?.uid).catch((e) => console.warn('[Classmates] syncOwnVerification failed', e));
-    isRollInstitutionallyVerified(profile?.studentId).then(setOwnRollVerified).catch(() => setOwnRollVerified(false));
+    //
+    // IMPORTANT: this must resolve (and its Firestore write, if any, must
+    // actually land) BEFORE the "Claim CR" button can be enabled. The
+    // green "KUET email verified" banner reflects a *global*, roll-level
+    // fact (verifiedRolls/{roll} exists) — but the security rule that
+    // gates the crRequests write checks THIS group's own
+    // members/{uid}.verified field specifically, which is a separate
+    // write that syncOwnVerification() itself has to perform and which
+    // takes a moment to propagate server-side. Setting ownRollVerified
+    // from isRollInstitutionallyVerified() alone (as before) let the
+    // button go green and clickable before that group-doc write had
+    // actually landed, so a fast click raced ahead of it and got rejected
+    // with "Missing or insufficient permissions" even though the account
+    // really was verified moments later.
+    syncOwnVerification(groupId, auth.currentUser?.uid)
+      .catch((e) => console.warn('[Classmates] syncOwnVerification failed', e))
+      .then(() => isRollInstitutionallyVerified(profile?.studentId))
+      .then(setOwnRollVerified)
+      .catch(() => setOwnRollVerified(false));
     const unsubCrStatus = subscribeCRStatus(groupId, setCrStatus);
     const unsubMembers = subscribeMembers(groupId, (members) => {
       const me = members.find((m) => m.id === auth.currentUser?.uid);
@@ -75,6 +93,13 @@ export default function Classmates() {
       // doc, but a bundled CR approval later does, so make sure it exists
       // before proceeding.
       await joinGroup(groupId, profile);
+      // Belt-and-suspenders: re-sync this group's own members/{uid}.verified
+      // field right before the write that actually needs it. The mount-time
+      // effect already does this, but a user who clicks fast enough (or
+      // whose mount-time sync failed transiently) could otherwise still hit
+      // the exact same "Missing or insufficient permissions" race this was
+      // written to close.
+      await syncOwnVerification(groupId, auth.currentUser?.uid);
       const clVacant = await checkCLVacant(groupId);
       if (clVacant) {
         // No Campus Lead yet for this dept+batch — bundle the CR claim
