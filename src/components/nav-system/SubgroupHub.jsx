@@ -66,9 +66,9 @@ function HubSection({ title, items, icon }) {
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                 }}
               >
-                <Icon size={20} color={HUB_COLOR} />
+                <Icon size={17} color={HUB_COLOR} />
               </div>
-              <span className="hub-grid-item-label" style={{ fontWeight: 700, color: 'var(--text)' }}>{item.label}</span>
+              <span className="hub-grid-item-label" style={{ fontWeight: 600, color: '#5c5a54' }}>{item.label}</span>
             </Link>
           );
         })}

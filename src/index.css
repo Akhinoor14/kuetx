@@ -251,7 +251,11 @@
 }
 
 .dark .hub-page-hero-title {
-  color: #fafaf9;
+  color: #d8d4c9;
+}
+
+.dark .hub-grid-item-label {
+  color: #b8b4a8 !important;
 }
 
 /* ── Reset ───────────────────────────────────────────────────────────────── */
@@ -8519,22 +8523,18 @@ input[type="range"]::-webkit-slider-thumb {
 
 .hub-page-hero-title {
   font-size: 28px;
-  font-weight: 800;
-  letter-spacing: -0.01em;
-  color: #0a0a09;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  color: #4a4944;
   margin: 0;
 }
 
-/* auto-fill + a fixed ideal width (not 1fr) means cards grow to fill
-   the row on bigger screens but stop at a sensible ideal size instead
-   of stretching edge-to-edge forever — ratio stays consistent whether
-   there are 5 items or 7. justify-content centers any leftover space
-   in the last row instead of the last card awkwardly stretching wide. */
+/* Fixed 3-column layout keeps card size consistent and compact instead
+   of stretching to fill leftover row space. */
 .hub-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 190px));
-  justify-content: start;
-  gap: 14px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
 }
 
 .hub-grid-item {
@@ -8542,10 +8542,10 @@ input[type="range"]::-webkit-slider-thumb {
   flex-direction: column;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 18px;
-  min-height: 128px;
-  padding: 20px;
-  border-radius: 16px;
+  gap: 12px;
+  min-height: 96px;
+  padding: 14px 16px;
+  border-radius: 14px;
   background: var(--card);
   border: 1px solid var(--border);
   text-decoration: none;
@@ -8559,13 +8559,13 @@ input[type="range"]::-webkit-slider-thumb {
 }
 
 .hub-grid-item .hub-grid-item-icon {
-  width: 42px;
-  height: 42px;
-  border-radius: 11px;
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
 }
 
 .hub-grid-item .hub-grid-item-label {
-  font-size: 14px;
+  font-size: 13px;
   text-align: left;
 }
 
@@ -8573,16 +8573,13 @@ input[type="range"]::-webkit-slider-thumb {
   .hub-page-hero-icon { width: 34px; height: 34px; }
   .hub-page-hero-title { font-size: 18px; }
   .hub-grid { grid-template-columns: repeat(2, 1fr); }
-  .hub-grid-item { min-height: 108px; padding: 16px; }
-  .hub-grid-item .hub-grid-item-icon { width: 36px; height: 36px; }
+  .hub-grid-item { min-height: 92px; padding: 12px; }
+  .hub-grid-item .hub-grid-item-icon { width: 30px; height: 30px; }
 }
 
-/* Wide screens: cap how far the hub column stretches so cards don't
-   sprawl edge-to-edge on a desktop monitor, but allow a bit more room
-   than the old fixed 880px so bigger cards get real breathing space. */
 @media (min-width: 900px) {
-  .hub-grid-item .hub-grid-item-icon { width: 46px; height: 46px; }
-  .hub-grid-item .hub-grid-item-label { font-size: 15px; }
+  .hub-grid-item .hub-grid-item-icon { width: 36px; height: 36px; }
+  .hub-grid-item .hub-grid-item-label { font-size: 14px; }
 }
 
 /* ── Founder dashboard category / subcategory navigation ──────────────────
