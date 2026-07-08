@@ -615,20 +615,14 @@ export default function StaffDashboard({ onTabChange } = {}) {
 
       <RoleTabBar tabs={tabs} active={currentTab} onChange={handleTabChange} />
 
-      {show('founder') && isAdminUser && (
-        <>
-          <GroupHeading first>Founder</GroupHeading>
-          <div className="staff-dashboard-grid">
-            <RollUnlockSection />
-            {!isHeadOfOps && (
-              <Section wide title="Pending Email Flags (Founder fallback)">
-                <EmailFlagReviewBlock />
-              </Section>
-            )}
-            <AdminAllGroupsSection />
-          </div>
-        </>
-      )}
+      {/* Founder tab content: intentionally empty here. The Founder's
+          command center (Approvals, Staff & Roles, Classes & Students,
+          Trust & Safety, Communication — including roll unlocks and
+          email flags) lives entirely in AdminDashboard's card grid,
+          which TeamDashboard.jsx mounts below this component via
+          AdminEntryPoint when the Founder tab is active. Rendering the
+          old flat-scroll blocks here too was duplicate UI showing the
+          same data in two different, disconnected layouts — removed. */}
 
       {show('ops') && isHeadOfOps && (
         <>
