@@ -12,7 +12,59 @@ import {
   subscribeLeaveRequests, clApproveLeaveCR, clRejectLeaveCR,
   listAllGroups, getGroupMembersOnce,
 } from '../lib/groupSync';
+import { subscribePendingRollUnlockRequests, resolveRollUnlockRequest, dismissRollUnlockRequest } from '../lib/rollOwnership';
+import { checkIsAdmin } from '../lib/adminAuth';
 import ClassmatesList from '../components/ClassmatesList';
+
+// ---------------------------------------------------------------------
+// Founder-only: roll ownership unlock requests (see rollOwnership.js).
+// Not tied to the staff/{uid}/roles hierarchy since this is Founder-level
+// account-integrity work, same tier as the `admins/{uid}` doc itself.
+// ---------------------------------------------------------------------
+function RollUnlockSection() {
+  const [requests, setRequests] = useState([]);
+  const [busyId, setBusyId] = useState(null);
+
+  useEffect(() => subscribePendingRollUnlockRequests(setRequests), []);
+
+  if (requests.length === 0) return null;
+
+  const handleResolve = async (req) => {
+    setBusyId(req.id);
+    try {
+      await resolveRollUnlockRequest(req.id, req.roll);
+    } finally {
+      setBusyId(null);
+    }
+  };
+  const handleDismiss = async (req) => {
+    setBusyId(req.id);
+    try {
+      await dismissRollUnlockRequest(req.id);
+    } finally {
+      setBusyId(null);
+    }
+  };
+
+  return (
+    <Section title="Roll Unlock Requests">
+      {requests.map((r) => (
+        <div key={r.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 0', borderBottom: '1px solid var(--border)' }}>
+          <div>
+            <div style={{ fontSize: 13, fontWeight: 700 }}>Roll: {r.roll}</div>
+            <div style={{ fontSize: 11, color: 'var(--muted)' }}>{r.note}</div>
+          </div>
+          <div style={{ display: 'flex', gap: 8 }}>
+            <button className="btn btn-sm" onClick={() => handleResolve(r)} disabled={busyId === r.id}>
+              {busyId === r.id ? 'Working…' : 'Release roll'}
+            </button>
+            <button className="btn btn-sm btn-secondary" onClick={() => handleDismiss(r)} disabled={busyId === r.id}>Dismiss</button>
+          </div>
+        </div>
+      ))}
+    </Section>
+  );
+}
 
 function Section({ title, children }) {
   return (
@@ -20,6 +72,36 @@ function Section({ title, children }) {
       <h2 style={{ fontSize: 15, fontWeight: 700, marginBottom: 10 }}>{title}</h2>
       {children}
     </section>
+  );
+}
+
+// ---------------------------------------------------------------------
+// Founder/Head of Ops: cross-group view of pending CR claim + leave
+// requests. Without this, a group whose Campus Lead post is vacant, or
+// whose CL is unresponsive, has NO ONE who can see/act on its requests
+// in the UI — even though firestore.rules already permits Admin/Head
+// of Ops to approve/reject them. This closes that gap; it reuses the
+// exact same CampusLeadBlock UI, just fed every group instead of only
+// ones the viewer personally leads.
+// ---------------------------------------------------------------------
+function AdminAllGroupsSection() {
+  const [groupIds, setGroupIds] = useState(null);
+
+  useEffect(() => {
+    listAllGroups().then((groups) => setGroupIds(groups.map((g) => g.id)));
+  }, []);
+
+  if (groupIds === null) return null;
+  if (groupIds.length === 0) return null;
+
+  return (
+    <Section title="All Classes — CR & Leave Requests (Founder/Head of Ops view)">
+      <p style={{ fontSize: 11, color: 'var(--muted)', marginBottom: 10 }}>
+        Shows every class, including ones without an active Campus Lead — use this if a
+        request is stuck because the group's CL post is vacant or unresponsive.
+      </p>
+      {groupIds.map((g) => <CampusLeadBlock key={g} groupId={g} />)}
+    </Section>
   );
 }
 
@@ -253,11 +335,15 @@ function GrowthSection() {
 // ---------------------------------------------------------------------
 export default function StaffDashboard() {
   const [roles, setRoles] = useState(null);
+  const [isAdminUser, setIsAdminUser] = useState(false);
 
   useEffect(() => subscribeMyRoles(setRoles), []);
+  useEffect(() => {
+    checkIsAdmin(auth.currentUser?.uid).then(setIsAdminUser);
+  }, []);
 
   if (roles === null) return <div style={{ padding: 20, color: 'var(--muted)' }}>Loading…</div>;
-  if (roles.length === 0) {
+  if (roles.length === 0 && !isAdminUser) {
     return (
       <div style={{ textAlign: 'center', color: 'var(--muted)', padding: '12px 0 20px' }}>
         You don't hold any KUETx staff role yet.
@@ -275,10 +361,12 @@ export default function StaffDashboard() {
   return (
     <div>
       <p style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 16 }}>
-        Your roles: {roles.map((r) => ROLE_LABELS[r.role] || r.role).join(' · ')}
+        {roles.length > 0 ? `Your roles: ${roles.map((r) => ROLE_LABELS[r.role] || r.role).join(' · ')}` : 'Founder'}
       </p>
 
+      {isAdminUser && <RollUnlockSection />}
       {isHeadOfOps && <HeadOfOpsSection />}
+      {(isAdminUser || isHeadOfOps) && <AdminAllGroupsSection />}
 
       {sclDepts.length > 0 && (
         <Section title="Senior Campus Lead">

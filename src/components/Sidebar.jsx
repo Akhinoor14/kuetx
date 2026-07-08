@@ -15,9 +15,11 @@ import { subscribeMyRoles } from '../lib/staffSync';
 import { ROLE_LABELS } from '../lib/staffRoles';
 import { checkIsAdmin } from '../lib/adminAuth';
 import { auth } from '../lib/firebase';
+import { useIsStaff } from '../hooks/useIsStaff';
 
 const GROUP_ICONS = {
-  'Overview':    'LayoutDashboard',
+  'Dashboard':   'Grid',
+  'Profile':     'User',
   'Class Rep':   'Shield',
   'Academics':   'GraduationCap',
   'Daily Life':  'Sunrise',
@@ -129,39 +131,7 @@ export function Sidebar({ open, onClose, authState }) {
   // specific role name to show (e.g. "Founder", "Head of Operations",
   // "Campus Lead") so the sidebar entry reads as theirs, not a generic
   // "Admin" link shown to people with no actual role.
-  const [isRealAdmin, setIsRealAdmin] = useState(false);
-  const [adminLabel, setAdminLabel] = useState('Admin');
-  // Tracks whether the Founder check already resolved true, so the staff-
-  // roles listener (which can fire with an empty array on a Founder who
-  // simply holds no separate staff role doc) never flips isRealAdmin back off.
-  const isFounderRef = useRef(false);
-
-  useEffect(() => {
-    let cancelled = false;
-    const uid = auth.currentUser?.uid;
-    if (!uid) { setIsRealAdmin(false); return; }
-
-    checkIsAdmin(uid).then((isFounder) => {
-      if (cancelled) return;
-      if (isFounder) {
-        isFounderRef.current = true;
-        setIsRealAdmin(true);
-        setAdminLabel('Founder');
-      }
-    }).catch(() => {});
-
-    const unsub = subscribeMyRoles((roles) => {
-      if (cancelled) return;
-      if (roles.length > 0) {
-        setIsRealAdmin(true);
-        const first = roles[0];
-        setAdminLabel((prev) => (prev === 'Founder' ? prev : (ROLE_LABELS[first.role] || 'Staff')));
-      } else if (!isFounderRef.current) {
-        setIsRealAdmin(false);
-      }
-    });
-    return () => { cancelled = true; unsub?.(); };
-  }, []);
+  const { isRealAdmin, adminLabel } = useIsStaff();
 
   useEffect(() => {
     const groupId = getGroupId(profile);

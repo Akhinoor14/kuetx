@@ -3,7 +3,7 @@ import Modal from './Modal';
 import KuetEmailVerifyWidget from './KuetEmailVerifyWidget';
 import { isRollInstitutionallyVerified } from '../lib/kuetEmailVerify';
 import { DEPARTMENTS, DEFAULT_PROFILE, TERM_KEYS, getTermLabelFromKey, BATCH_START_DATES, extractBatchFromRoll } from '../store/store';
-import { claimRoll } from '../lib/rollOwnership';
+import { claimRoll, requestRollUnlock } from '../lib/rollOwnership';
 
 // Map dept codes: roll middle 2 digits -> dept code
 const ROLL_DEPT_MAP = {
@@ -145,6 +145,8 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
   const [stepIndex, setStepIndex] = useState(0);
   const [errors, setErrors] = useState({});
   const [rollClaimBusy, setRollClaimBusy] = useState(false);
+  const [rollLocked, setRollLocked] = useState(null); // { roll } when claim blocked by another account
+  const [unlockRequestState, setUnlockRequestState] = useState('idle'); // idle | sending | sent | error
   const [verifiedJustNow, setVerifiedJustNow] = useState(false);
   const [verifySkipped, setVerifySkipped] = useState(false);
 
@@ -272,6 +274,13 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
     setErrors({});
   };
 
+  const handleRequestUnlock = async () => {
+    if (!rollLocked?.roll) return;
+    setUnlockRequestState('sending');
+    const res = await requestRollUnlock(rollLocked.roll, `Profile setup: roll ${rollLocked.roll} already claimed by another account.`);
+    setUnlockRequestState(res.ok ? 'sent' : 'error');
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validateStep(0) || !validateStep(1)) {
@@ -308,13 +317,15 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
     setRollClaimBusy(false);
 
     if (!claim.ok) {
+      setRollLocked({ roll: studentIdTrimmed });
       setErrors(prev => ({
         ...prev,
-        studentId: 'এই roll number দিয়ে আগেই একটা account আছে। একই roll দিয়ে দুইটা account করা যাবে না — আগের account দিয়ে login করো।',
+        studentId: 'এই roll number দিয়ে আগেই একটা account আছে। নিচে KUET email verify করে নিজে নিজে reclaim করতে পারো, অথবা admin-কে request পাঠাতে পারো।',
       }));
       setStepIndex(0);
       return;
     }
+    setRollLocked(null);
 
     const next = {
       ...DEFAULT_PROFILE,
@@ -424,6 +435,40 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
                   <label style={labelStyle}>Student ID</label>
                   <input placeholder="e.g. 2313014" value={form.studentId} onChange={handleChange('studentId')} style={fieldStyle} />
                   {errors.studentId && <div style={{ fontSize: 11, color: '#dc2626', marginTop: 5 }}>{errors.studentId}</div>}
+                  {rollLocked?.roll === String(form.studentId || '').trim() && (
+                    <div style={{ marginTop: 10, padding: 10, border: '1px solid var(--border)', borderRadius: 8, background: 'var(--card-alt, #f9fafb)' }}>
+                      <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 6 }}>নিজে নিজে ঠিক করো</div>
+                      <div style={{ fontSize: 11, color: 'var(--muted)', marginBottom: 8 }}>
+                        তোমার KUET email (@stud.kuet.ac.bd) verify করলে এই roll number automatically তোমার account-এ চলে আসবে।
+                      </div>
+                      <KuetEmailVerifyWidget
+                        overrideRoll={rollLocked.roll}
+                        onVerified={() => {
+                          setRollLocked(null);
+                          setErrors(prev => ({ ...prev, studentId: '' }));
+                          handleSubmit({ preventDefault: () => {} });
+                        }}
+                      />
+                      <div style={{ fontSize: 11, color: 'var(--muted)', margin: '10px 0 6px' }}>
+                        KUET email verify করতে না পারলে, admin-কে সরাসরি request পাঠাও:
+                      </div>
+                      {unlockRequestState === 'sent' ? (
+                        <div style={{ fontSize: 11, color: 'var(--muted)' }}>Request পাঠানো হয়েছে। Admin দেখে resolve করবে।</div>
+                      ) : (
+                        <button
+                          type="button"
+                          className="btn btn-sm btn-secondary"
+                          onClick={handleRequestUnlock}
+                          disabled={unlockRequestState === 'sending'}
+                        >
+                          {unlockRequestState === 'sending' ? 'Sending…' : 'Admin-কে request পাঠাও'}
+                        </button>
+                      )}
+                      {unlockRequestState === 'error' && (
+                        <div style={{ color: 'var(--danger)', fontSize: 11, marginTop: 6 }}>Request পাঠাতে সমস্যা হয়েছে, আবার চেষ্টা করো।</div>
+                      )}
+                    </div>
+                  )}
                 </div>
                 <div>
                   <label style={labelStyle}>Department</label>

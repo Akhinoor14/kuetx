@@ -145,6 +145,44 @@ service cloud.firestore {
     }
 
     // -------------------------------------------------------------
+    // Roll unlock requests — fallback for when the requester has no
+    // verifiedRolls proof to auto-reclaim with (see rollOwnership.js
+    // requestRollUnlock()). Founder/admin resolves these directly from
+    // StaffDashboard; no outside contact channel needed.
+    // -------------------------------------------------------------
+    match /rollUnlockRequests/{requestId} {
+      allow read: if isAdmin() || isHeadOfOps()
+        || (isSignedIn() && resource.data.requestedBy == request.auth.uid);
+      allow create: if isSignedIn() && request.resource.data.requestedBy == request.auth.uid;
+      allow update: if isAdmin() || isHeadOfOps();
+      allow delete: if false;
+    }
+
+    // -------------------------------------------------------------
+    // Roll ownership lock — see rollOwnership.js. One durable doc per
+    // roll number so two different accounts can't both claim the same
+    // student roll. First account to save with that roll owns it.
+    // -------------------------------------------------------------
+    match /rollOwners/{roll} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn() && request.resource.data.uid == request.auth.uid;
+      // Normal update: owner refreshing their own claim.
+      // Reclaim update: a DIFFERENT account may take over this roll's
+      // ownership doc ONLY if it has already proven institutional
+      // ownership of the matching KUET email (verifiedRolls/{roll}
+      // exists) — see rollOwnership.js claimRoll() and
+      // kuetEmailVerify.js. That proof outranks a stale/mistaken prior
+      // claim by construction, since verifiedRolls itself is only ever
+      // written by a session that genuinely controlled that mailbox.
+      allow update: if isSignedIn() && request.resource.data.uid == request.auth.uid &&
+        (resource.data.uid == request.auth.uid ||
+         exists(/databases/$(database)/documents/verifiedRolls/$(roll)));
+      // Owner can release their own claim (e.g. switching accounts).
+      // Admin/Founder can also clear a stuck/duplicate claim manually.
+      allow delete: if isAdmin() || (isSignedIn() && resource.data.uid == request.auth.uid);
+    }
+
+    // -------------------------------------------------------------
     // Founder (single owner) — manually provisioned, never client-writable
     // -------------------------------------------------------------
     match /admins/{uid} {
@@ -335,7 +373,19 @@ service cloud.firestore {
           ((request.auth.uid == requestUid && request.resource.data.type != 'leave')
            || (request.resource.data.type == 'leave' && request.resource.data.uid == request.auth.uid
                && requestUid == 'leave_' + request.auth.uid && isGroupCR(groupId)));
-        allow update: if isAdmin() || isCLFor(groupId) || isHeadOfOps() || isSCLForGroup(groupId);
+        // Resubmission: setDoc() on an existing doc is an UPDATE to
+        // Firestore, not a create — so once a request has been
+        // approved/rejected, the requester needs their own update path
+        // to send a fresh one, or they'd be silently locked out forever
+        // after a single rejection. Only allowed from a resolved
+        // (non-pending) prior state, resetting straight back to pending,
+        // so a requester can never flip someone else's live pending
+        // request or self-approve.
+        allow update: if isAdmin() || isCLFor(groupId) || isHeadOfOps() || isSCLForGroup(groupId) ||
+          (isSignedIn() && resource.data.status != 'pending' && request.resource.data.status == 'pending' &&
+            ((request.auth.uid == requestUid && request.resource.data.type != 'leave')
+             || (request.resource.data.type == 'leave' && request.resource.data.uid == request.auth.uid
+                 && requestUid == 'leave_' + request.auth.uid && isGroupCR(groupId))));
         allow delete: if false;
       }
 

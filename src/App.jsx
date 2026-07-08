@@ -133,7 +133,6 @@ function Layout({ authState, onboardingActive }) {
             <Route path="/ct-quiz-planning" element={<RequireCR><CTQuizPlanning /></RequireCR>} />
             <Route path="/class-roster" element={<RequireCR><ClassRoster /></RequireCR>} />
             <Route path="/classmates" element={<Classmates />} />
-            <Route path="/overview" element={<SubgroupHub group="Overview" />} />
             <Route path="/tools" element={<SubgroupHub group="Tools" />} />
             {/* Class Rep hub is CR-only content, but doesn't need a hard page
                 gate here — non-CR users simply never see a link to it (see

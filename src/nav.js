@@ -2,13 +2,21 @@
 // Using only icons confirmed in lucide-react 0.383
 export const NAV = [
   {
-    group: 'Overview',
+    group: 'Dashboard',
     isSubgroup: true,
-    hubPath: '/overview',
-    hubIcon: 'LayoutDashboard',
+    hubPath: '/',
+    hubIcon: 'Grid',
     items: [
       { id: 'dashboard', label: 'Dashboard', icon: 'Grid', path: '/' },
-      { id: 'profile',   label: 'Profile',   icon: 'User', path: '/profile' },
+    ]
+  },
+  {
+    group: 'Profile',
+    isSubgroup: true,
+    hubPath: '/profile',
+    hubIcon: 'User',
+    items: [
+      { id: 'profile', label: 'Profile', icon: 'User', path: '/profile' },
     ]
   },
   {

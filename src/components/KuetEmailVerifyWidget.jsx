@@ -16,9 +16,9 @@ import { getProfile } from '../store/store';
  * this widget just polls the public verifiedRolls record as a lightweight
  * way to notice that happened and fire onVerified().
  */
-export default function KuetEmailVerifyWidget({ onVerified, onSkip, compact = false }) {
+export default function KuetEmailVerifyWidget({ onVerified, onSkip, compact = false, overrideRoll }) {
   const profile = getProfile();
-  const roll = String(profile?.studentId || '').trim();
+  const roll = String(overrideRoll || profile?.studentId || '').trim();
   const [namePart, setNamePart] = useState('');
   const [stage, setStage] = useState('input'); // input -> sent
   const [error, setError] = useState('');
