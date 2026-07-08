@@ -7,7 +7,7 @@ import { MTE_SYLLABUS_Y3T2 } from './Y3T2.js';
 import { MTE_SYLLABUS_Y4T1 } from './Y4T1.js';
 import { MTE_SYLLABUS_Y4T2 } from './Y4T2.js';
 
-export const MTE_SYLLABUS = {
+const TERM_SYLLABUS = {
   Y1T1: MTE_SYLLABUS_Y1T1,
   Y1T2: MTE_SYLLABUS_Y1T2,
   Y2T1: MTE_SYLLABUS_Y2T1,
@@ -16,6 +16,18 @@ export const MTE_SYLLABUS = {
   Y3T2: MTE_SYLLABUS_Y3T2,
   Y4T1: MTE_SYLLABUS_Y4T1,
   Y4T2: MTE_SYLLABUS_Y4T2,
+};
+
+const mergeCourses = () => {
+  const all = {};
+  Object.values(TERM_SYLLABUS).forEach(term => { Object.assign(all, term.courses); });
+  return all;
+};
+
+export const MTE_SYLLABUS = {
+  sourceFile: 'src/data/curriculum/departments/MTE/syllabus/index.js',
+  terms: TERM_SYLLABUS,
+  courses: mergeCourses(),
 };
 
 export default MTE_SYLLABUS;

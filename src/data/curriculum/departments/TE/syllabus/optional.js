@@ -1,0 +1,2 @@
+export const TE_SYLLABUS_OPTIONAL_GROUPS = {};
+export default TE_SYLLABUS_OPTIONAL_GROUPS;

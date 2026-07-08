@@ -1,0 +1,1016 @@
+{
+  "department": "Textile Engineering",
+  "acronym": "TE",
+  "university": "Khulna University of Engineering & Technology",
+  "effectiveFrom": "2015-2016",
+  "terms": {
+    "Y1T1": {
+      "termKey": "Y1T1",
+      "title": "First Year First Term",
+      "courses": {
+        "Ch 1121": {
+          "title": "Chemistry-1",
+          "credit": 3,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Colloids and Colloidal Solution: Classification, preparation and purification, properties, application of colloids.",
+            "Photochemistry: Law of photochemistry, quantum yield, decomposition of hydrogen halide, photosensitized reaction, fluorescence and phosphorescence, luminescence and chemiluminescence.",
+            "Acids, Bases and Salts: Modern theories of Acids and Bases, bleaching powder, H₂O, HOCI, NaCIO2, SO2, buffer solution, indicators; Effect of acids and bases on cellulose and protein fibers. Chemical bonding: Electronic theory of chemical bond, H-bond, Salt-linkage, Sulpher-linkage, nature of covalent bond, Valance Bond Theory (VBT), Molecular Orbital Theory (MOT), bond order or bond multiplicity, importance of lone pair electron in bonding.",
+            "Chemical Reaction: Hydrolysis; Aminolysis; Addition reaction; Pyrolysis; Chain reaction; Exothermic reaction; Endothermic reaction; Electrophilic and nucleophilic reactions; Catalytic and induced reactions; Redox reactions; Importance of pH, time, and temperature in chemical reactions.",
+            "Dilute Solutions: Osmotic pressure; Van't Hoff's theory of dilute solution; Raoult's law of vapour pressure lowering; Elevation of boiling point and depression of freezing point.",
+            "Complex Compound: Different theories, structure, Isomerism and applications.",
+            "Electrochemistry: Electrolytic Solution, Electrochemical Cells, Gibb's free energy and EMF, pH and its determination, Corrosion."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "Ch 1122": {
+          "title": "Sessional on Ch 1121",
+          "credit": 0.75,
+          "contactHour": "3/2 hrs/week",
+          "topics": ["Sessional based on Ch 1121."],
+          "sessionalNote": "Sessional",
+          "references": []
+        },
+        "Hum 1121": {
+          "title": "Sociology and Economics",
+          "credit": 4,
+          "contactHour": "4 hrs/week",
+          "topics": [
+            "Sociology: Introduction to Sociology: Definition, origin and development. Fundamental Concepts: Society and its evolution, community, group, socialization and personality development, social structure, social stratification. Culture: Definition, types of culture, cultural diffusion, enculturation; Ethnocentrism and cultural relativism; Subculture and counter culture; Culture and Biology; Cultural lag. Industrialization and Urbanization: Industrial revolution and its impact; Urbanization, urbanism and urban growth; Population environment and urbanization, urban ecology, urban social problems.",
+            "Economics: Basic Concepts in Economics: Utility of goods, wealth, value, price and want. Theory of utility of supply and demand; Elasticity of supply and demand; Problems of allocation and investment study capital. Theory of Demand: Demand schedule, demand curve, demand function, shift in demand, income effect and substitution effect, Elasticity of demand-types and measurement. Theory of Cost: Meaning and measurement of cost, cost function, long run and short run cost function, total, average and marginal cost. Price and Output Determination: Price and output determination under monopoly, Monopolistic competition and perfect competition: short run, long run price and output determination; Determination of optimum selling and promotion expenses, condition required for successful price determination. Objective/Goal of the firm: Definition of Profit, profit maximization objective, multiplicity of objectives, profit and non-profit objectives. Macro-Economic Analysis: Introduction to macro economics, aggregate supply and demand, national income determination; Macro economic policy, monetary policy, fiscal policy, inflation and banking policy. National Income: Definition of National Income, concepts of national income, Gross National Product (GNP); Net National Production (NNP), Gross Domestic Product (GDP); National income computation."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "Math 1121": {
+          "title": "Mathematics-1",
+          "credit": 4,
+          "contactHour": "4 hrs/week",
+          "topics": [
+            "Differential Calculus: Limit; Continuity and Differentiability of a function; Rate of change and its application; Successive differentiation of different types of function, Leibnitz's rule; Functions of several independent variables: Partial differentiation, differentials and total differentiation; Expansion of functions: Rolle's theorem, Cauchy's mean value theorem, Taylor's theorem and series, Maclauren's theorem and seires; Indeterminate forms and L'Hospital rule; Maxima and Minima of functions of single variable with physical applications; Tangents and normals to Cartesian curves; Curvature: Curvature and radius of curvature of different types of curves; Asymptotes parallel to axes.",
+            "Integral Calculus: Integration by the method of substitution; Standard integrals; Reduction formula simple types; Use of Integration to find infinite sum or product of terms; Properties of definite integrals; Walli's formula; Beta and gamma function; Differentiation under the sign of integration.",
+            "Matrices: Elementary transformations and Rank of a matrix; Linear dependence and independence of vectors and matrices; Inverse by elementary transformations; Solution of linear equation using matrix."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "ME 1120": {
+          "title": "Engineering Drawing",
+          "credit": 1.5,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Fundamental principles and applications of orthogonal projections; visibility, angle problem; oblique projection; isometric projection; auxiliary projection, orthographic and auxiliary projection from pictorial views; pictorial projection from orthographic views, development of objects. Working drawing of machine elements with sectional views, sub-assembly and assembly drawing."
+          ],
+          "sessionalNote": "Sessional",
+          "references": []
+        },
+        "ME 1121": {
+          "title": "Fundamentals of Mechanical Engineering",
+          "credit": 4,
+          "contactHour": "4 hrs/week",
+          "topics": [
+            "Thermodynamics: Fundamental concepts and definitions; Revision of gas laws; Properties of perfect gas and steam; Laws of thermodynamics; thermodynamic process and cycles; Heat Engine: Brief discussion of petrol engine, diesel engine, gas turbine, blower, compressor, and pump. Steam generation and its uses; Refrigeration cycle, vapor compression & vapor absorption systems, air conditioning system and its uses.",
+            "Heat Transfer: Modes of heat transfer, conduction heat transfer, 1-D heat conduction through plane wall and composite wall; Introduction to free and forced convection, boiling and condensation; Introduction to radiation, black and grey body concept."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "ME 1122": {
+          "title": "Sessional on ME 1121",
+          "credit": 0.75,
+          "contactHour": "3/2 hrs/week",
+          "topics": ["Sessional based on ME 1121."],
+          "sessionalNote": "Sessional",
+          "references": []
+        },
+        "TE 1123": {
+          "title": "Polymer Engineering",
+          "credit": 3,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Polymer science: Introduction, history, definition, criteria of fiber forming polymers.",
+            "Classification of Polymers: Based on the origin, Chemical nature, behavior towards heat, Chain Architecture, monomer or Chemical Microstructure, the side Chain Structure / Configuration of Polymer Chain/ Stereo regular Polymer.",
+            "Different types of chain polymerization: Free radical polymerization, Ionic polymerization, Co-ordination polymerization.",
+            "Different types of step polymerization: Poly condensation, Poly addition, Ring-opening etc.",
+            "Techniques of polymerization: Liquid, Gas and Solid phase.",
+            "Molecular Weight and Size: Number average molecular weight, Weight average molecular weight, Viscosity average molecular weight and their measurements, Distribution of molecular weight, Effect of molecular weight on mechanical properties.",
+            "Glass Transition Temperature: Transition and associated properties, melting temperature, Factors influencing the Glass transition temperature, Importance of glass transition temperature.",
+            "Crystallinity in Polymers: Crystalline solid and their behavior, Degree of Crystallinity, Polymer Crystallization, Structural regularity and crystalizability, Amorphous and their effect on Tg and Tm.",
+            "Kinetics of Polymerization: Introduction, Free radical chain polymerization, Ionic Polymerization etc.",
+            "Polymer degradation: Thermal degradation, Photo degradation, Mechanical Degradation, Oxidative degradation etc.",
+            "Polymer Processing: Introduction, Compounding, Processing Techniques."
+          ],
+          "sessionalNote": null,
+          "references": []
+        }
+      },
+      "optionalCourses": [],
+      "termNotes": []
+    },
+    "Y1T2": {
+      "termKey": "Y1T2",
+      "title": "First Year Second Term",
+      "courses": {
+        "Ch 1221": {
+          "title": "Chemistry-II",
+          "credit": 3,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Isomerism: Structural isomerism, Chain isomerism; Positional isomerism; Functional group isomerism; Stereoisomerism like geometrical isomerism and optical isomerism.",
+            "Derivatives of Aliphatic Hydrocarbons: General methods of preparation and important reactions of Alkylhalides; Mono, Di and Trihydric alcohol; Aldehydes- Structure, Nomenclature, isomerism, general methods of preparation and important reactions; Ketones- Structure, Nomenclature, general methods of preparation and important reactions; Amines-Classification, structure, Nomenclature, isomerism, general methods of preparation and reactions.",
+            "Aromatic Hydrocarbons: Kekule's structure of benzene; Orbital theory; Isomers and nomenclature; Orientation in benzene derivatives; Electrophilic Aryl substitution; Aromaticity.",
+            "Carbohydrates: Classification, nomenclature & stereo-chemistry and inter conversion of carbohydrate; Monosaccharides- D-Glucose & fructose; D-Glucose: Open structure, cyclic structure, physical properties and reactions; Disaccharides - Structure of sucrose, manufacturing process, reactions and uses; Polysaccharide Starch and cellulose; Cellulose Preparation, structure, derivative and uses; Starch Source, structure, derivatives and uses.",
+            "Amino Acids and Proteins: Amino Acids- Classification, nomenclature, optical activity, synthesis, properties and reactions; Proteins- Peptide linkage, composition of proteins, C-terminal and N-terminal residue, identification of C-terminal and N-terminal residue.",
+            "Colour, Dyes and Pigments: Colour Theories of colour, colour and conjugated system; Dye Nomenclature, classification, structure, raw materials for synthesis of dyes, dye intermediates."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "Ch 1222": {
+          "title": "Sessional on Ch 1221",
+          "credit": 0.75,
+          "contactHour": "3/2 hrs/week",
+          "topics": ["Sessional based on Ch 1221"],
+          "sessionalNote": "Sessional",
+          "references": []
+        },
+        "Hum 1221": {
+          "title": "Business and Communicative English",
+          "credit": 3,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Technical, scientific, and common vocabulary; Prefixes and suffixes; Synonyms and antonyms; Parts of speech; Phrases and Idioms; Clause; Sentence structure; Grammatical principles and structures; Correction of errors; Transformation of sentences; Usage of WH question; Different types of communicative language-notions and functions.",
+            "Precise Writing; Paragraph and its kinds, formation of a paragraph; Amplifications; Writing an essay and its kinds.",
+            "Letter Writing: Drafting private letters; Applications; Letters of complaint, letters to the press, apology and explanation, request letters; Business letters-Planning your letters, selecting formats, using short-cuts, evaluating letters. Characteristics of Business letters Kinds of letter, purposes of letter, functions of First, Middle and Last paragraph (s), characteristics and drafting process of positive letters, negative letters, persuasive letters, routine letters and memos.",
+            "Report Writing: Types of report, Characteristics and importance of different types- purpose and scope, different styles of writing reports: Industrial, thesis/project report, etc.",
+            "Proposals: For new equipment, increasing production, description of visits, experiments etc.",
+            "Explaining: Process explaining, complaining, reporting damage."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "Hum 1222": {
+          "title": "English Skill Practices",
+          "credit": 0.75,
+          "contactHour": "3/2 hrs/week",
+          "topics": [
+            "Writing- It's kinds, difference between Writing and Spoken languages, writing technical reports, note taking.",
+            "Reading- Kinds and purposes, reading of technical, literature, books, magazines and scientific journals.",
+            "Speaking and Listening- Effective communication between speaker and listener, Techniques of description; Use of listening and visual aids.",
+            "Definition of communication: Sender- Message + Encoding-Medium- Receiver + Decoding-Feed back",
+            "Different types of communication: Intrapersonal communication, interpersonal communication, small group communication, organizational communication, mass communication etc.",
+            "Organizational communication network: Vertical communications-down-ward communication and up-ward communication, horizontal communication.",
+            "Systems of communication: Stimulus to communication, communication components."
+          ],
+          "sessionalNote": "Sessional",
+          "references": []
+        },
+        "Math 1221": {
+          "title": "Mathematics-II",
+          "credit": 4,
+          "contactHour": "4 hrs/week",
+          "topics": [
+            "Co-Ordinate Geometry of two dimensions: Change of axis and invariants; Reduction of conics to their standard forms.",
+            "Co-Ordinate Geometry of three dimension: Cartesian, cylindrical and spherical coordinates; Resemblances between 2 and 3 dimensional Cartesian coordinates, distance between two points, section formula, projection, direction cosine and direction ratios, distance of a point from a line and right circular cylinder, angle between two lines and right circular cones; Planes: Different forms of the equations to a plane, distance of a point from a plane, equations of bisectors of planes; Straight line: Different forms of the equation of straight line, angle between a plane and a straight line, coplanar lines, shortest distance between two lines; Standard equations to sphere, cone and conicoid.",
+            "Vector: Vector valued functions of single variable, their differentiation and integration; Gradient, divergence and Curl; Line, Surface and Volume integrals related to vector functions.",
+            "Ordinary differential equations: Origin and formation of differential equations; Order and degree of a differential equation; Solution of 1st order and 1st degree differential equations by various methods; Solution of higher order linear ordinary differential equations with constant coefficients by general, variation of parameter and short methods, with or without initial and/or boundary conditions."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "Ph 1221": {
+          "title": "Physics",
+          "credit": 4,
+          "contactHour": "4 hrs/week",
+          "topics": [
+            "Optics: Wave theory, Huygen's principle of rectangular propagation of light, interpretation of law of reflection and refraction by Huygen's principle, interference, Young's experiment, Interference by bi-prism and thin film, colours of thin films determination of wavelength by bi-prism, Newton's ring, colours of Newton's ring; Diffraction, diffraction by single slit and double slit, diffraction grating and its uses; Polarization, polarization by reflection, Brewster's law, Malu's laws, double refraction, Nicol's prism, polarimeter; Introduction to optical instruments.",
+            "Modern Physics: Black body radiation; Planck's quantum theory; Photoelectric effect; Atomic model- Bohr atom model, nature of electron orbits, orbital energy, uncertainty principle and its application.",
+            "Solid State Physics: Crystal structure, Miller indices, vibration of crystal with monoatomic basis, Two atoms per primitive basis, Einstein's model of the lattice specific heat of solids, Debye's model of the lattice heat capacity, outstanding properties of metals, electrical conductivity and Ohm's law, thermal conductivity, quantum theory of free electron, importance of Hall effect, Hall voltage and Hall coefficient; Mobility, Hall angle and drift velocity.",
+            "LASER Physics: History of LASER, properties of LASER, spontaneous emission, absorption and stimulated emission, Liquid-Dye-and Chemical LASER, applications of LASER.",
+            "Radiation Energy and Visible Spectrum: IR, RF, UV rays; Concept on visible spectrum wave length, electromagnetic wave.",
+            "Colour Physics: Light source, colour theory, viewer.",
+            "Spectroscopy: Introduction, types and classification."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "Ph 1222": {
+          "title": "Sessional on Ph 1221",
+          "credit": 0.75,
+          "contactHour": "3/2 hrs/week",
+          "topics": ["Sessional based on Ph 1221"],
+          "sessionalNote": "Sessional",
+          "references": []
+        },
+        "TE 1221": {
+          "title": "Textile Fibers",
+          "credit": 4,
+          "contactHour": "4 hrs/week",
+          "topics": [
+            "Introduction to Textile and Fibers: Historical background of textiles, textiles and textiles fiber, classification of textile fibers with example.",
+            "Study of cellulosic fibers: Cotton: Cultivation and harvesting, growth, composition, physical and chemical structure and properties. ginning, grading and classification, end uses. Bast fibers: Cultivation and harvesting of different types of bast fibers with special reference to jute, composition, physical and chemical structure and properties, retting, sorting, grading and classification, end uses; Brief study of others fibers such as Pineapple, Banana, Bamboo.",
+            "Study of Protein fibers: Sources and types of animal hair fibers; Wool: Growth, composition, physical and chemical structure and properties, geographical distribution of main wool producing countries, classing and sorting, end uses; Silk: Growth, composition; physical and chemical structure and properties, sericulture and methods of production, geographical distribution, end uses.",
+            "Synthetic fibers: Principles of different spinning systems; Different fiber structures and their effects on fiber properties.; Technologies of formation of synthetic fibers, their properties and uses; Polyamides, polyesters, polyacrylics, polypropylenes, PVA, PVC and elastomeric fibers.",
+            "Regenerated fibers: Technologies of formation of regenerated fibers, their properties and uses; Different types of viscose and acetate rayons, derivatives of cellulose, different types of regenerated protein fibers."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "TE 1222": {
+          "title": "Sessional on TE 1221",
+          "credit": 0.75,
+          "contactHour": "3/2 hrs/week",
+          "topics": ["Sessional based on TE 1221."],
+          "sessionalNote": "Sessional",
+          "references": []
+        }
+      },
+      "optionalCourses": [],
+      "termNotes": []
+    },
+    "Y2T1": {
+      "termKey": "Y2T1",
+      "title": "Second Year First Term",
+      "courses": {
+        "CSE 2121": {
+          "title": "Computer Fundamentals and Programming",
+          "credit": 3,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Basic Computer Architecture: Types and Generation of Computers; Basic Organization and Functional Units, Review of Information system used in Computers, Hardware Components; Classification of computer memory.",
+            "Software and Its Applications: Types of Software and Concept of Operating Systems, System software, Algorithms and Flow Charts.",
+            "Programming in C: Programming concepts; Structured programming language, data types, variables, constants, operators, type of expressions, data input and output, conditional statements. Control structures; Functions and program structures: function basics, parameter passing conventions, iteration, recursion; Input and output: standard input and output, formatted input and output; Arrays, String and Pointers; User defined data type: structures, unions; file access: reading, writing text and binary files. Its applications."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "CSE 2122": {
+          "title": "Sessional on CSE 2121",
+          "credit": 1.5,
+          "contactHour": "3 hrs/week",
+          "topics": ["Sessional based on CSE 2121."],
+          "sessionalNote": "Sessional",
+          "references": []
+        },
+        "EE 2121": {
+          "title": "Electrical Circuits, Machines and Electronics",
+          "credit": 4,
+          "contactHour": "4 hrs/week",
+          "topics": [
+            "DC Circuits: Series & Parallel circuits, laws of electrical circuits, Networks and network theorems. AC Circuits: Instantaneous and rms values, impedance, single phase circuits, series and parallel circuits, introduction to polyphase circuits.",
+            "DC Machines: DC Generators, their construction and operation, characteristics. DC Motors, torque characteristics, starting and speed control.",
+            "Transformers: Construction, operation, characteristics, equivalent circuits, losses and efficiency, tests.",
+            "Induction Motors: Construction and operation, equivalent circuits, characteristics, torque output, starting and speed control, losses and efficiency.",
+            "Synchronous Generator: Construction and operation, voltage regulation, synchronization.",
+            "Wiring and Safety: Wiring of factory, illumination, earthing, cable selection, safety devices, fire protection.",
+            "Substation Equipments: Circuit breakers, relays, isolators, lightning arrestors, bus bar.",
+            "Semiconductor Devices and Circuits: Semiconductors, pn junction diodes, transistors, FETs and MOSFETS and their circuits."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "EE 2122": {
+          "title": "Sessional on EE 2121",
+          "credit": 1.5,
+          "contactHour": "3 hrs/week",
+          "topics": ["Sessional based on EE 2121."],
+          "sessionalNote": "Sessional",
+          "references": []
+        },
+        "ME 2121": {
+          "title": "Engineering Mechanics",
+          "credit": 2,
+          "contactHour": "2 hrs/week",
+          "topics": [
+            "Introduction: Fundamental concept and principles of mechanics; Resultant of several concurrent forces; Resolution of force into components.",
+            "Equilibrium: Free body Diagram; Equilibrium of particle; Moment; Couple; Equilibrium of rigid bodies.",
+            "Center of gravity and Centroid; Analysis of structures.",
+            "Law of Friction: Equilibrium under frictional resistance, sliding friction; Wedges and square threaded screw; Journal and thrust friction; Belt frictions."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "MES 2120": {
+          "title": "Workshop Practices",
+          "credit": 1.5,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Acquaintance with hand and machine tools used for carpentry and foundry shop. Study and identification machines in machine shop, introduction to use and practices on lathe, drill, shaper, grinder and milling machines.",
+            "Metal joining: Acquaintance with tools and machines used for metal joining; soldering, brazing, riveting, arc and gas welding practices."
+          ],
+          "sessionalNote": "Sessional",
+          "references": []
+        },
+        "TE 2101": {
+          "title": "Yarn Manufacturing Engineering-I",
+          "credit": 3,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Short Staple: Introduction: Important fiber properties considered for spinning; Flow chart for the production of carded and combed yarns; Mixing and blending; Scientific bale management; Different spinning systems; Effect of dust on spinning.",
+            "Blow Room: Principles of opening and cleaning; Detailed study of blow room machines for blending; Extraction and control of waste; Blow room lines for different purposes; Chute feed system; Safety, prevention of fires, methods of extraction of metal objects; Production calculation, performance assessment of blow room line; Faults of blow room and their remedies.",
+            "Carding: Principles and objects of carding; Detailed study of the revolving flat card and care of wire; Doffing mechanism; Extraction and control of waste and dust; Autoleveller in card; Control of nep and fiber damage; Latest developments; Production calculation, setting and gauging of different parts of carding machine; Faults and remedies.",
+            "Draw Frame: Objects; Drafting system; Principles of roller drafting; Effects of doubling and drafting; Mechanism of material condensing in drawing; Design and principle of auto leveler; Quality and Process parameters of draw frame department and its evaluation; Stop mechanism; Can coiling; Roller setting; Production calculation; Faults and remedies.",
+            "Long Staple: Introduction: Flow charts for production of yarns from bast fibers, woolen, worsted and silk; Processing of jute; Batching and batch selection; Emulsion preparation and application; Softening technique and machinery; Treatment of cuttings.",
+            "Carding: Principles and objects of jute card; Detailed study of carding systems and machinery; Methods of spreading; Pinning; Control of opening and waste; Settings, speeds and productions calculations."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "TE 2102": {
+          "title": "Sessional on TE 2101",
+          "credit": 0.75,
+          "contactHour": "3/2 hrs/week",
+          "topics": ["Sessional based on TE 2101."],
+          "sessionalNote": "Sessional",
+          "references": []
+        },
+        "TE 2111": {
+          "title": "Statistical Analysis and Quality Control",
+          "credit": 3,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Statistics: Overview on central tendency and dispersion for both grouped and ungrouped data; Frequency distribution: relative and cumulative. Moment, Skewness and Kurtosis: Definition, computation and uses. Probability: Concept on probability, Bayes Theorem, Discrete and continuous probability distribution, Concept about probability distribution, Binomial, Poisson distribution and Normal distribution and their practical applications. Correlation and Regression: Basic idea about correlation, Measure of correlation, Different methods of finding correlation coefficient. Concept of simple regression: Scatter diagram, Distinction between regression and correlation, Concept of dependent and independent variables, Practical exercises on the regression line, Concept of multiple regressions, Regression coefficients and their interpretations, calculation of R² value and its interpretation.",
+            "Test of Significance: Basic idea on test of significance, Different test statistics: Student's t, Chi- square, Paired t- test and variance ratio, Concept of test of hypothesis, Types of hypothesis, importance of test of hypothesis in statistics, Type-I and Type-II errors, confidence interval, the P- value, one way and two way of analyses of variance (ANOVA), analysis of variance table.",
+            "Quality Control: Sampling Fundamentals: Basic concept, Types of sampling and sample size determination, population, simple random sampling, stratified random sampling. Methods of Statistical Process Control: Pareto analysis, cause and effect diagram, Histogram, control charts. Statistical Basis of the Control Chart: basic principles, choice of control limits, CL, UCL, LCL. Control Charts for Attributes: The control chart for fraction nonconforming: Development and operation of the control chart; Variable sample size, Non-manufacturing applications: the operating characteristics function and average run length calculations. Control charts for nonconformities (defects): Procedures with constant sample size; Procedure with variable sample size; Demerit systems; Dealing with low defect levels. Control Charts for Variables: Control charts for X, R and σ, Statistical basis of the charts, Development and use of X and R charts, Charts based on standard values, Interpretation of X and R charts."
+          ],
+          "sessionalNote": null,
+          "references": []
+        }
+      },
+      "optionalCourses": [],
+      "termNotes": []
+    },
+    "Y2T2": {
+      "termKey": "Y2T2",
+      "title": "Second Year Second Term",
+      "courses": {
+        "EE 2221": {
+          "title": "Instrumentation and Electrical Control",
+          "credit": 3,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Instrumentation: Analog and digital instruments, ammeter, voltmeter, Ohmmeter and wattmeter, measurement of resistance, inductance and capacitance. Strain gauge, resistive, capacitive, inductive, thermal, smoke and photo voltaic transducers. Data acquisition and PC based process control systems.",
+            "Control System: Mathematical model, steady state and transient responses, block diagrams, poles and zeros, Routh's stability criterion, block diagram, transfer functions and signal flow graph, stability, P, PI, PID and Fuzzy controllers, Introduction to PLC, microprocessors and microcontrollers, distributed control systems, power electronic controlled drives."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "ME 2221": {
+          "title": "Solid Mechanics and Machine Design",
+          "credit": 4,
+          "contactHour": "4 hrs/week",
+          "topics": [
+            "Stress and Strain: Introduction, Analysis of internal forces; Tensile, compressive, bearing and shearing stresses; Stresses in thin-walled pressure vessel; Stress-strain diagram; Statically indeterminate members; Thermal stresses; Statically Determinate Beams: Introduction; Different types of loading and supports; Shear force and bending moment diagrams; Stresses in beams, flexure formula; Torsion: Introduction; Torsion formula; Angle of twist; Analysis and design of circular shaft.",
+            "Machine Design: Approach to design; Stress analysis; Tolerance and allowances; Variable loads and stress concentrations; Design of various types of springs; Shaft design; Design and selection of bearings; Journal and plane surface bearings; Ball and roller bearings; Design of spur, helical, bevel and worm gears; Design of clutches and brakes; Design and selection of flexible power transmission elements; Belts, ropes and chains."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "ME 2222": {
+          "title": "Sessional on ME 2221",
+          "credit": 0.75,
+          "contactHour": "3/2 hrs/week",
+          "topics": ["Sessional based on ME 2221"],
+          "sessionalNote": "Sessional",
+          "references": []
+        },
+        "TE 2203": {
+          "title": "Fabric Manufacturing Engineering-I",
+          "credit": 4,
+          "contactHour": "4 hrs/week",
+          "topics": [
+            "Weaving Preparation: Introduction and historical background of fabric manufacture; Flow chart for weaving; Introduction to yarn preparation. Winding: Introduction; Types of winding; Winding package; Yarn guide and tensioner; Winding parameters; Yarn Withdrawal; Balloon theory; Winding efficiency; Driving of winding packages; Winding fault and remedy; Relevant calculations. Warping: Introduction; Requirements; Warping machine; Creel; Control system in warping; Warping fault and remedy; Relevant calculations. Sizing: Introduction; Objects; Requirements; Types; Size ingredients; Sizing variables; Size take up percentage; Different techniques of sizing; Methods of size mixing or cooking; Sizing machines; Different types of drying System; Typical size recipe; Faults of sizing and there remedy, Substitution of sizing, relevant calculations.",
+            "Weaving Mechanism: Basic principle of weaving; Different types of motion; Classification of Loom; Different parts and their functions; Brief study of primitive, pit, frame fly shuttle, Chittaranjan and Hattersley looms; Relevant calculations; Types and procedure of drawing-in, Denting, Tying-in.",
+            "Knitting: Introduction and historical background of Knitting Technology; General terms and principles of knitting Technology; Basic elements of knitting, basic stitches of knitting; Knitting action of latch, bearded and compound needle, Basic mechanical principles of Knitting Technology, Elements of knitted loop structure, knitting action, cam system, sinker timing; Relevant calculations. Circular Rib machine; Description, knitting action, needle timing etc. Circular Interlock machine; Description, knitting action, interlock cam system, etc. Purl knitting machine; Description, knitting action, needle timing etc. Study on weft knitting machines; Fabric machine, Garment length machine."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "TE 2204": {
+          "title": "Sessional on TE 2203",
+          "credit": 0.75,
+          "contactHour": "3/2 hrs/week",
+          "topics": ["Sessional based on TE 2203."],
+          "sessionalNote": "Sessional",
+          "references": []
+        },
+        "TE 2213": {
+          "title": "Textile Testing-I",
+          "credit": 3,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Testing: Introduction, standard testing and conditioning atmosphere. Moisture: Moisture content and regain, standard moisture regain of different fibers, effects of moisture on textiles, importance of moisture regain for textile materials, methods of measurement of moisture in textiles; Relative humidity, measurements of relative humidity.",
+            "Yarn Testing: Measurement of linear density of sliver, roving and yarn, counting systems, different methods of measurement of yarn count, Twist in yarn, Measurement of twist.",
+            "Yarn Evenness: The nature of irregularity, periodic variation of irregularity (Short, medium and long term periodic variation), Visual examination of irregularity, Cut & weigh method, Uster evenness tester, U%, PMD, CV%, Index of irregularity, Addition and reduction of irregularity, limit irregularity, spectrogram, yarn hairiness, Shirley yarn hairiness tester.",
+            "Strength and Elongation Test: Units, Breaking strength, tensile strength, specific stress, tenacity, breaking length, elongation, strain, Different types of modulus, extension percentage, gauge length, CRL, CRT, CRE method, yield point, work of rupture, elastic recovery etc. Factors affecting tensile testing, Single yarn strength method, skein method, count strength product.",
+            "Fabric Handle: Fabric dimension, measurement of length, width, thickness; ends and picks per unit length in woven fabric, Courses and Wales per unit length in knitted fabric. Bending length, drape, crease recovery, stiffness (Shirley stiffness tester, Hanging loop method), shear, crimp of yarn in woven and knit fabric, cloth cover of woven and knit fabric."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "TE 2214": {
+          "title": "Sessional on TE 2213",
+          "credit": 0.75,
+          "contactHour": "3/2 hrs/week",
+          "topics": ["Sessional based on TE 2213"],
+          "sessionalNote": "Sessional",
+          "references": []
+        },
+        "TE 2227": {
+          "title": "Mechanics of Textile Structures",
+          "credit": 4,
+          "contactHour": "4 hrs/week",
+          "topics": [
+            "Physical structure of fibers: Basic concepts of methods for investigating fiber structure, X-ray diffraction, optical and electron microscopy infra-red absorption, relations between fiber properties and structure of fiber.",
+            "Detailed study of fiber properties: Effect of water on fiber, Importance in drafting experimental methods of measurement; Effect of lubricant and dyes; Relationship of frictional properties on knitting, stitching and sewing, Reflection, refraction, scattering, polarization, birefringence; Absorption and emission of radiation, Energy changes associated with changes of state including transition temperature of fibers; Moisture content and heat of wetting; Electronic properties of solids, conductors and insulators, capacitance, di-electric constant, effect of moisture, measurement of di-electric constants of fibers, yarns and fabrics.",
+            "Static electricity formation: Theories of static electrification, measurement of static charge, explanation of the phenomenon of static electrification in textile, its effect and remedies in textile processes.",
+            "Mechanics: Engineering approach to fiber structure, Mechanics of simple yarn structure, effects of fiber properties and yarn twist on torsion and flexural rigidity, Effect of fiber length, fineness, strength and moisture on yarn strength.",
+            "Yarn Geometry: Idealized helical yarn structure; yarn count and twist factors, twist contraction; packing of fibers in yarns; measurement of packing density and radial packing density of yarn, measurement of yarn diameter; ideal migration, tracer fiber technique, characterization of migration behavior, migration in blended yarns, mechanisms of migration, effect of various parameters on migration behavior.",
+            "Fabric geometry: Geometry of plain woven fabrics, calculation knowing crimp ratio and thread spacing, Geometry of jumped conditions, crimp interchange, effect of yarn flattening, deformation of fabric, application of cloth geometry, tensile testing, geometrical change during extension of fabrics.",
+            "Fabric buckling shear and drape: Geometry of plain knitted structure, engineering design of fabric to meet specific mechanical properties, Prediction of tensile properties of fabrics."
+          ],
+          "sessionalNote": null,
+          "references": []
+        }
+      },
+      "optionalCourses": [],
+      "termNotes": []
+    },
+    "Y3T1": {
+      "termKey": "Y3T1",
+      "title": "Third Year First Term",
+      "courses": {
+        "Hum 3121": {
+          "title": "Accounting and Industrial Law",
+          "credit": 4,
+          "contactHour": "4 hrs/week",
+          "topics": [
+            "Accounting: Principles and practice of accounting, double entry system; Journal, ledger, cash book, trial balance; Financial statement of Joint Stock Company: Manufacturing and trading, profit and loss accounts, balance sheet; Consignee proforma invoice; Bill of exchange. Function and advantage of costing, methods of cost accounting; Elements of cost accounting, direct and indirect expenditures, cost of overhead and cost accounts and financial accounts for firms; Standard cost account, break even analyses, store ledger; Payroll account/ wages and salary statements.",
+            "Industrial Law: Introduction to industrial law; Inspectors and certifying Surgeons, Health and hygiene, Safety, Welfare, Working hours of Adults, Employment of young persons, Leave and Holidays with wages, Penalties and Implementation procedure, Payment of wages Act, Shops and Establishment Act. Bangladesh Labour Act, 2006; EPZ Workers Association and Industrial Relations Act, 2004; Bangladesh Environment Conservation Act, 1995 and Rules, 1997; International Labour Organization (ILO)."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "TE 3101": {
+          "title": "Yarn Manufacturing Engineering-II",
+          "credit": 3,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Short Staple: Speed Frame: Introduction, necessity, functions. Description of the frame; Creeling, drafting systems, aprons, spindle and flyer; Twisting; Winding principle; Concept of bobbin drive; Cone drum transmission; Builder motion; Monitoring devices needed; Stop motions; Novel features of a modern roving frame and automation possibilities; Faults and remedies; Calculation of draft, twist and production; Performance assessment. Comber: Objects; Preparation for combing; Comparative assessment of web doubling and sliver doubling processes; Principles of comber; Cycle of operations; Comber waste, waste quality and waste control; Parameters influencing combing operation; Index wheel; Main comber settings, effect of change of settings on sliver quality; Maintenance of comber; Comber faults and remedies; Waste and production calculation; Automation possibilities and recent developments. Ring Frame: Function of ring spinning process; Description of fiber guiding devices, yarn guiding devices, drafting systems, spindle, ring and travellers, yarn tensions and forces acting on the traveler; Winding; Building mechanism; The machine drive; Settings; Optimum spinning conditions; Limitations of spindle speed; Ring Data System (RDS); General cost structure of a ring spinning factory; Faults and remedies; Recent developments; Production calculation of different machines and Spin plan of cotton yarn.",
+            "Long Staple: Drawing: Objects and functions of jute drawing; Detailed study of jute drawing frames; Drafting systems, suitable drafts and roller settings. Spinning: Spinning machines; Drafting systems; Twisting and winding; Yarn tension control; Bobbin building mechanisms; Amount of twist necessary in jute yarns; Modern jute spinning systems; Related calculations."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "TE 3102": {
+          "title": "Sessional on TE 3101",
+          "credit": 0.75,
+          "contactHour": "3/2 hrs/week",
+          "topics": ["Sessional based on TE 3101."],
+          "sessionalNote": "Sessional",
+          "references": []
+        },
+        "TE 3105": {
+          "title": "Wet Processing Engineering-I",
+          "credit": 3,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Applied Chemistry: Water and its importance in wet processing: Hydrogen bonding, cluster formation, heat of evaporation, dissolving ability; General concepts of soap; Classifications of detergent; Detergency: Mono molecular layer, middle formation, surface and interface tension, wetting and dispersing.",
+            "Pretreatment: Flow chart of wet processing; Chemistry of various impurities in fibers and their removals; Singeing: Desizing: Scouring, scouring of cotton, jute, wool and silk fibers; Bleaching, methods of bleaching of cotton, jute, wool and silk fibers.",
+            "Technology of Dyeing: Elementary concepts of color and constitution: Chromophore, Chromogen, Auxochrome, Antiauxochrome, Resonance theory; Definition of dyestuff, pigments and their classification; Commercial dyestuff preparations: Powder, Paste, Lump, Solution and Press Cake. Mechanism of Dyeing Process: Continuous, semi-continuous and discontinuous process; Dyeing machinery for different types of dyeing processes like fibers, yarns, packages and fabrics dyeing; History of dyeing; Structure and application of Direct, Acid, Basic and Vat dyes on different fibers.",
+            "Technology of Printing: Flow chart of printing; Thickeners: Types, rheology; Machinery used for printing: Methods of screen and roller preparation; Printing processes for different fibers with Direct, Acid, Basic and Vat dyes; Detailed study on screen printing."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "TE 3106": {
+          "title": "Sessional on TE 3105",
+          "credit": 0.75,
+          "contactHour": "3/2 hrs/week",
+          "topics": ["Sessional based on TE 3105."],
+          "sessionalNote": "Sessional",
+          "references": []
+        },
+        "TE 3107": {
+          "title": "Apparel Manufacturing Engineering-1",
+          "credit": 3,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Introduction: Historical development of apparel industry in Bangladesh and other countries of the world; Structure of apparel industry in Bangladesh; Apparel terms and definitions; Apparel manufacturing sequence; Anthropometrics; Garment sizing; Standard body measurement for gents, ladies and kids.",
+            "Pattern Making: General discussion on pattern making; Sample garments making, Components of shirt, trousers and their types; Principle of pattern making for shirt and trousers; Pattern grading; Pattern making and CAD.",
+            "Marker Planning: Definition, objectives, constraints; Marker efficiency; Influence of textile material properties on the marker making process; Automated marker making process; Wastage in marker making; Marker planning and CAD.",
+            "Fabric Spreading: Requirements; General characteristics of the spreading process; Fabric packages; Introduction to symmetrical and asymmetrical fabrics; Criteria of spreading; Methods of spreading; Spreading machines; Control features in the spreading process; Principles of lay plan; Fabric spreading modes and their application; Fabric quality issues during spreading.",
+            "Fabric Cutting: Requirements; Methods; Accuracy problems in the manual cutting process; Machines for fabric cutting; Placement of equipment in the textile cutting room; Quality in cutting.",
+            "Interlining: Definitions; General characteristics of interlinings; Fusible interlining: conditions of fusing properties, methods of coating, marker planning and cutting; Fusing machines; Fusing quality problems and their prevention."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "TE 3108": {
+          "title": "Sessional on TE 3107",
+          "credit": 0.75,
+          "contactHour": "3/2 hrs/week",
+          "topics": ["Sessional based on TE 3107."],
+          "sessionalNote": "Sessional",
+          "references": []
+        },
+        "TE 3109": {
+          "title": "Fabric Structure and Design",
+          "credit": 3,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Woven fabric structure: Introduction: Classification of woven fabrics, Plain weave fabric and its representation, Factors affecting the fabric structure; Drafts, denting and pegging plans. Plain Weave Fabrics: Derivatives of plain weave and their characteristic. Ornamentation of plain woven fabrics by varying set, yarn linear density, crimp, twist and others material. Twill weaves: Definition of the terms balanced, warp-faced and weft-faced twill weaves, developed twill weaves, waved, herringbone, diamond and elongated, relative firmness of twill weaves, large twills influence of the twist of the yarns, angle of inclination of twill weaves. Satin and sateen weave: Introduction, formula number, design. Fancy designs of fabrics: Characteristic, appearance and texture of simple fancy weaves (viz, mock leno including distorted thread effects), huckaback honeycomb, basic crepe weaves and bedford cord structures; Stripe and check effects using basic and simple fancy weaves. Figuring with Extra Thread: Designs of fabrics figured with extra weft and extra warp; Compound fabrics, Stitched double cloth. Color and Weave Effect: Color in combination with weave effects, i.e. pinstripe, crowfoot, dog's tooth, shepherds check.",
+            "Knitted Fabric Structure: Structure of 1x1 rib and 1x1 purl weft knitted fabrics and their representation on design paper; Comparison of the properties of plain, 1x1 purl weft knitted fabrics. Structures of simple, tuck and miss stitches and their representation using loop diagrams; Representation using conventional notation: 1x1 straight lock, 1x1 cross lock, half-cardigan, full-cardigan, 1x1 weft locknit and 2x1 weft locknit structures."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "TE 3110": {
+          "title": "Sessional on TE 3109",
+          "credit": 0.75,
+          "contactHour": "3/2 hrs/week",
+          "topics": ["Sessional based on TE 3109."],
+          "sessionalNote": "Sessional",
+          "references": []
+        }
+      },
+      "optionalCourses": [],
+      "termNotes": []
+    },
+    "Y3T2": {
+      "termKey": "Y3T2",
+      "title": "Third Year Second Term",
+      "courses": {
+        "IPE 3221": {
+          "title": "Industrial Management",
+          "credit": 3,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Management Fundamentals: Introduction to Management Concept, nature of management and purpose, development of management theories and principles of management, modern management thoughts; Management by Objectives (MBO); Forecasting; Decision making, decision making tools, steps of decision making; Basic concept of Management Information System (MIS); Organizing- Types of organizations; Organizational structure; Span of control; Authority; Centralization and decentralization of administration; Chain of command.",
+            "Business: Common features of business enterprises, Single ownership, partnership, Joint Stock Company, cooperative society, public sector, private sector.",
+            "Human Resource Management: Manpower planning; Recruitment and Training; Theories of motivation; Job evaluation; Merit rating; Leadership style and types; Morale and its importance; Salary and wages, wage incentive plans; Job rotation.",
+            "Management Tools: Total Quality Management (TQM); TPM; Quality circles; 5S principles; Kaizen concepts; Lean manufacturing.",
+            "Industrial and Research Association: Brief profile and role of Association of Industries, ISO series."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "TE 3203": {
+          "title": "Fabric Manufacturing Engineering-II",
+          "credit": 3,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Weaving: Chronological Development of looms; Loom drive and brakes; Different types of sheds; Factors involved in warp and weft strain and calculation of warp strain. Shedding: Tappet shedding; Construction of shedding Tappet. Dobby Shedding: Scope and classification, negative, positive and cross-border, peg-plan, timing and dwell of dobby. Jacquard Shedding: Scope, types and basic principle of jacquard shedding. Picking: Classification; Over picking and under picking mechanisms, Construction of picking tappet, picking faults. Beating: Principle of crank and crank arm beating; Effect of crank arm and crank length, Sley eccentricity and its effects, Forces involved in beating action. Take-up and Let-off Mechanisms: Calculation of take-up constant; Picks/cm and rate of let off Automation in weaving; Production of various stripe and check fabrics; necessary calculations.",
+            "Knitting: Stitches produced by varying the timing of the needles, loop intermeshing. Derivatives of single jersey and double jersey structures. Knitted fabric faults and their remedies. Hosiery Machines: Hosiery machine drive; Control mechanism and sequence; Hosiery yarns; Mechanism for welts, heel and toe production, Hosiery stitch control mechanism. Flat Bed Knitting Machine: Parameters, operations, knitting action and cam arrangement. Straight Bar Frame - Development; Fully fashioned article; knitting action of straight bar frame, rib to plain machines; Relevant calculations. Warp Knitting: Introduction, Classification, Basic principles; Study on Tricot and Raschel machine and their knitting action; Crochet machine and it's knitting action; Tricot two full set guide bar machine and its products and structure and design; Basic calculations."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "TE 3204": {
+          "title": "Sessional on TE 3203",
+          "credit": 0.75,
+          "contactHour": "3/2 hrs/week",
+          "topics": ["Sessional based on TE 3203."],
+          "sessionalNote": "Sessional",
+          "references": []
+        },
+        "TE 3205": {
+          "title": "Wet Processing Engineering-II",
+          "credit": 3,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Dyeing: Reactive Dyes: Structure and properties; Classification of reactive dyes; Reaction mechanism of reactive dyes with cellulose; Basic principles of dyeing with reactive dyes; Application methods of reactive dyes; Disadvantages, after treatment, fastness properties; Recent development in reactive dyeing; Faults and remedies. Disperse Dyes: Discovery and development; Properties and chemical structure; Classification; Fabric preparation for polyester fabric; Mechanism of dispersing action; Carrier, Application methods, after treatment; Fastness properties; Concept of rapid dyeing; Faults and remedies. Sulpher Dyes: History and development; Synthesis; Structure and properties; Classification of sulpher; Forms of sulpher dye; Vatting of sulpher dyes; Dyeing mechanism, application methods; Fastness properties; Risk for environment with sulpher dyes and the approach to solve the problems; Faults and remedies. Azoic Colors: General properties; Dyeing mechanism; Different naphthols and bases, Application methods; After-treatment; Role of bath additives; faults and remedies.",
+            "Printing: Reactive Printing: Fabric preparation; Thickener; Print paste preparation; All in one method with suitable recipe; Two stage method; Washing off reactive prints; Effect of chemical finishing. Printing with Disperse Dyes: Fabric preparation; Dye selection; Print paste formulation; Thickener; Fixation; After treatment. Printing with Sulpher Dyes: Fabric preparation; Dye selection; Thickener; All in one method; Two stage methods; Function of different ingredients; After treatment. Printing with Insoluble Azoic Colors: Fabric preparation; Base printing; Naphtholate printing; Rapid fast and rapidogen colors; Aftertreatment. Pigment Printing: Structure of pigment; Garment printing; Novelty printing effects; Economics of printing process.",
+            "Finishing: Introduction; Physical and mechanical finishing of cotton, jute and wool fabrics; Physical and chemical softening processes, selection of chemical and evaluation of softening; Detailed study on calendaring, raising, sanforizing, anti-crease finish on cotton, water repellent finishes on cotton, in finishing, mercerization, parchmentisation and flame retardant finish; Special finishing treatments: Rot-proofing, mildew proofing, insect and antimicrobial finishes, soil lease, anti-state finishes."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "TE 3206": {
+          "title": "Sessional on TE 3205",
+          "credit": 0.75,
+          "contactHour": "3/2 hrs/week",
+          "topics": ["Sessional based on TE 3205."],
+          "sessionalNote": "Sessional",
+          "references": []
+        },
+        "TE 3207": {
+          "title": "Apparel Manufacturing Engineering-II",
+          "credit": 3,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Sewing: Seam, Stitch, Principle of lock stitch and chain stitch formation; Sewing machine feed mechanism; Needles; Sewing thread; Sewing problem and remedies; Sewing machines; Work aids in sewing; Simple automatic machines.",
+            "Alternative Methods of Fabric Joining: Objects; Limitations; Methods: Welding, adhesive, fusing, moulding and their comparison.",
+            "Trimmings and Accessories: Label; Motif; Fabrics for support and insulation: Linings, interlinings, wadding, shoulder pads; Narrow fabric trims: Lace, braid, elastic, seam binding and tape; Fastenings: Hook and loop fastening, zip fasteners, buttons, eyelets and laces; International care labeling code; Performance of trimmings.",
+            "Pressing and Finishing: Objects; Types; Equipment and methods; Control of the pressing process; Non-iron garments; Folding, packing; Quality control in finishing; Inspection, brief discussion on AQL."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "TE 3208": {
+          "title": "Sessional on TE 3207",
+          "credit": 0.75,
+          "contactHour": "3/2 hrs/week",
+          "topics": ["Sessional based on TE 3207."],
+          "sessionalNote": "Sessional",
+          "references": []
+        },
+        "TE 3230": {
+          "title": "Computer Aided Design and Manufacturing in Textiles",
+          "credit": 0.75,
+          "contactHour": "3/2 hrs/week",
+          "topics": [
+            "Developments in computers and information technology; hardware and software; overview of CAD and CAM and their application in various fields of textiles; Weave patterns, printable designs - generation using computers, CAD/CAM in garment manufacturing; complete pattern design system in preparation for grading, marker making and pattern manipulation; AUTOCAD and its emulators; specific software for textile applications; CIE color system and the true color representation."
+          ],
+          "sessionalNote": "Sessional",
+          "references": []
+        },
+        "TE 3231": {
+          "title": "Merchandising and Marketing",
+          "credit": 4,
+          "contactHour": "4 hrs/week",
+          "topics": [
+            "Textile Merchandising: Introduction to merchandising- the activities involved; Role of merchandiser, qualities of a merchandiser, responsibility of the merchandiser; Visual merchandising and its advantages for the buyer and seller today; Fashion calendar, the planning cycle, merchandise planner; Trend prediction: forecasting, trend/ color forecasting, sales forecasting; Product selection and mix, distribution mix, distribution channels from producer to ultimate consumer; Supply chains: store retailing, non-store retailing; Buying calendar; Buying strategy; Customer identification; Supplier- retailer relationship; Sourcing & global sourcing; Range planning and range building.",
+            "Textile Marketing: Marketing: Definition and core concepts; The specificity of marketing for the textile and apparel market; Production concept, product concept, selling concept, marketing and societal marketing concept; Marketing strategies and the marketing mix for the textile and apparel market; Product: Levels of product, product hierarchy, stages in new product development, product life cycle and its stages, product mix, product line; Price: Factors to consider when setting price, pricing strategies; Channels of distribution; Promotion Mix: Advertising, sales promotion, personal selling and public relations, factors in setting the promotion mix with supporting examples from textile industry; Marketing information system; The essence of market segmentation: consumer and industrial market; Consumers' behavior, factors affecting CB, buyer's decision process and type of behavior; Corporate social responsibility and its importance to marketing of textile and clothing companies."
+          ],
+          "sessionalNote": null,
+          "references": []
+        }
+      },
+      "optionalCourses": [],
+      "termNotes": []
+    },
+    "Y4T1": {
+      "termKey": "Y4T1",
+      "title": "Fourth Year First Term",
+      "courses": {
+        "TE 4000": {
+          "title": "Project/Thesis",
+          "credit": 1.5,
+          "contactHour": "3 hrs/week",
+          "topics": [],
+          "sessionalNote": "Sessional",
+          "references": []
+        },
+        "TE 4113": {
+          "title": "Textile Testing-II",
+          "credit": 3,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Fabric Strength Test: Strip test, grab test and tear tests (Single rip tear test, wing rip tear test, Elmendorf tear test), bursting strength (Diaphragm and ball bearing tester).",
+            "Comfort: Measurement of air, water permeability/ retention.",
+            "Fastness Test: Factors and types of fastness; Measurement of fastness to light, washing and rubbing; Estimation of damage to materials caused by physical and chemical treatments, chlorine bleach.",
+            "Water Repellency: Wet ability of fabrics, spray rating test, hydrostatic head test.",
+            "Serviceability: Serviceability; Wear and abrasion tests; Piling of fabrics; Snagging; Crease recovery.",
+            "Carpet Testing: Testing related to carpet thickness, compression and durability.",
+            "Flammability Testing: Definitions, factors, available test methods, recent developments in flammability testing.",
+            "Testing related to Textile Wet Processing: Water testing; Methods of estimating available chlorine; Test for mercerization; Tests for determining types of size in the fabric.",
+            "Regulatory Organization: Oeko-Tex, REACH, GOTS, ECHA, WRAP, their legislation, certification process etc."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "TE 4114": {
+          "title": "Sessional on TE 4113",
+          "credit": 0.75,
+          "contactHour": "3/2 hrs/week",
+          "topics": ["Sessional based on TE 4113."],
+          "sessionalNote": "Sessional",
+          "references": []
+        },
+        "TE 4123": {
+          "title": "High Performance Fiber and Composites",
+          "credit": 4,
+          "contactHour": "4 hrs/week",
+          "topics": [
+            "Aramid Fiber: Spinning of aramid, high modulus-high tenacity polyethylene and other such fibers; their structure, properties and applications",
+            "Carbon Fiber: Manufacture of PAN-based, Pitch-based carbon fibers, physical properties and applications; carbon nanotubes and applications",
+            "Glass Fiber: Fiber manufacture; fiber properties; glass-fiber composites and other applications",
+            "Ceramic and other High Performance Fibers: Manufacture of ceramic fibers, production of chemically resistant fibers and thermally resistant fibers, Basalt Fiber.",
+            "Specialty Fibers: Hollow and profile fibers; blended and bi-component fibers, super absorbent fibers; film Fibers.",
+            "Polymer Composite: Introduction to different materials, definition of composite materials, history, applications. Major components of fiber reinforced composite materials: matrix, reinforcement, fillers and other additives, types of composites, matrices and reinforcement. Textile structure for composites, unidirectional, planar, 3D, net-shaped, woven, knitted, braided and nonwoven. The fiber-matrix interface; role of coupling agents. Composite manufacturing process, thermoset and thermoplastics. Testing of composite materials (mechanical). Mechanics of composite materials. Nanocomposites: introduction, process and applications."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "TE 4133": {
+          "title": "Technical Textiles",
+          "credit": 4,
+          "contactHour": "4 hrs/week",
+          "topics": [
+            "Introduction: Definition, classification, products, market overview and growth projections of technical textiles. Fibers used in technical textiles, yarns and fabric structures in technical textiles and their relevant properties.",
+            "Filtration Textiles: Textiles as filter media. Characteristics of filter material. Basic idea and theory of filtration. Characteristics of fibers to use in different filter media. Application of woven, nonwoven and knitted fabric in filter media. Separation membrane: micro porous membrane, hydrophilic membrane.",
+            "Geotextiles and Construction Textiles: Introduction, raw materials, classifications, essential properties of geotextiles; functions and applications in different areas. Fabrics for architectural and constructions, awnings and canopies, roofing material, storage vessels; Fiber reinforced concrete and cement; Acoustic and heat insulation textiles.",
+            "Medical Textiles: Definition, raw materials; classifications, fiber architecture and fabric constructions for different application in medical textiles, healthcare and hygiene textiles.",
+            "Protective Clothing: Brief idea about different type of protective clothing; Functional requirement of textiles in protective clothing, description of different protective clothing, parachute cloth.",
+            "Coated and Laminated Textiles: Coating, types, polymeric materials and fabric substrates for coating, methods of coating, micro porous coating, hydrophilic coating.",
+            "Sports and Recreation Textiles: Functional requirement of different type of product and their construction; Sports uniforms; Sports equipment; Skates; Bikes; Marine products.",
+            "Automotive Textiles: Application of textiles in automobiles; Requirement and design for different tyre, airbags and belts; Methods of production and properties of textiles used in these applications.",
+            "Smart Textiles: Introduction, types, materials used applications. Application of phase change material in smart textiles, brief discussion of smart shirt, smart suit and musical jacket."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "TE 4137": {
+          "title": "Waste Management and Pollution Control in Textile",
+          "credit": 3,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Pollution and Pollution Control: Introduction: The atmosphere and its structure; Pollution; Types of pollution; Greenhouse effect; Pollutants. Water Pollution: Sources and types of pollutants; Dissolved oxygen modeling; Industrial pollutions, heavy metal contamination, detergent pollution and eutrophication, ground water pollution, marine pollution; Pollution control measures, use of electro-chemical technology to remove color and other contaminants from textile mill effluents, water quality monitoring and management. Air Pollution: Sources and types of pollutants; Effects of various pollutants on human health; Materials and plants; Air pollution meteorology; Global warming; Air pollution monitoring and control measures. Noise Pollution: General consideration; Industrial noise sources evaluation; Methods and techniques to control and reduce noise level.",
+            "Textile Waste Water: Chemical nature of discharged bath after each process, contribution of chemicals to the waste water load. Concept of biological and chemical oxygen demand. Effect of waste-water on sewage and land.",
+            "Chemical Used in Textile Industry: Toxicity of various chemicals, viz alkalis, oxidizing and reducing agents, acids, carriers, resins and bleaching agents etc. Role of each chemical on waste water load.",
+            "Textile Effluents: Effluents and their characterization; Methods of effluent treatment, disposal of effluents, study of Effluent Treatment Plant (ETP) in textile processing; Effects of textile waste in environment pollution.",
+            "Waste Management: Composition of wastes, collection systems and alternatives for treatments and re-use, reduction of textile waste water using automatic process control; Recycle, filtration and waste water analysis; Determination for waste treatment costing."
+          ],
+          "sessionalNote": null,
+          "references": []
+        }
+      },
+      "optionalCourses": [
+        "TE 4101", "TE 4102", "TE 4103", "TE 4104",
+        "TE 4105", "TE 4106", "TE 4107", "TE 4108"
+      ],
+      "termNotes": []
+    },
+    "Y4T2": {
+      "termKey": "Y4T2",
+      "title": "Fourth Year Second Term",
+      "courses": {
+        "TE 4000": {
+          "title": "Project/Thesis",
+          "credit": 3,
+          "contactHour": "6 hrs/week",
+          "topics": [],
+          "sessionalNote": "Sessional",
+          "references": []
+        },
+        "TE 4200": {
+          "title": "Industrial Attachment",
+          "credit": 2,
+          "contactHour": "4 Weeks",
+          "topics": [],
+          "sessionalNote": "Sessional",
+          "references": []
+        },
+        "IPE 4223": {
+          "title": "Operations Management",
+          "credit": 3,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Introduction: Historical evolution of production and operations Management; Strategic role of operations, trends in operations management, process and control of operations strategies.",
+            "Work Study: Definition, objectives, techniques, purpose of work study, steps and different phases. Method Study: Definition, steps, selection of problems, collection of facts and consideration about objectives, recording techniques, elements of a process analysis, various types of associated chart. Motion Study: Operation analysis, motion analysis, motion economy, two handed process chart, micro motion study; Therbligs; Simo chart; Examples from Textile and Apparel industries. Work Measurement: Definition, uses, techniques; Time Study, measuring instruments and elements in time study, factors, alignment chart, performance rating methods, observed time and normal time, allowances, standard time; Work sampling; Predetermined motion time study, Motion time data for assembly operations; Work factor system, method of time measurement.",
+            "Factory Location and Plant Layout: Factors determining location of a factory, steps in finding plant location, plant layout nature, importance, factors influencing layout, types and problems of layout.",
+            "Inventory Management: Inventory concepts, classification, inventory models.",
+            "Line Balancing: Objectives, procedure, techniques, applications in Textile and Apparel industries.",
+            "Logistic and Supply Chain Management: Decision phases and process view of a supply chain, role of safety inventory in a supply chain; Lack of supply chain co-ordination and bullwhip effect; Supply chain strategies.",
+            "Operation Scheduling: Introduction, flow shop and job shop scheduling, project scheduling with CPM and PERT.",
+            "Operations Research: Introduction to optimization, linear programming, distribution methods, assignment models, decision analysis, queuing theory and game theory."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "TE 4225": {
+          "title": "Machine Maintenance, Materials Handling and Safety",
+          "credit": 3,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Maintenance and Maintenance Management: Type of maintenance, importance of maintenance, Planning and organizing maintenance; Repair cycle; Maintenance stages; Maintenance systems; Computerized Maintenance Management Systems; Reliability Centered Maintenance; Maintenance cost; Maintenance scheduling; Down time analysis and management; Maintenance and productivity; Maintenance management. Lubricants, properties, lubrication in textile equipments; Seals, leakage from textile equipments and its prevention. Wear and tear in bearing and other moving parts of textile equipments, Bearing and repair of bearing of textile equipments.",
+            "Materials Handling: Conveyors used in textile mill, belt conveyor, chain conveyer, hydraulic press and lift, truck hoist.",
+            "Ergonomics: Definition; Importance and application of ergonomics of work place and layout.",
+            "Safety Management: Concepts and techniques; Accident investigation and reporting; Safety performance monitoring; Safety education and training. Safety in Textile Mill: Physical, chemical, biological and ergonomic hazards of textile industry and their prevention; Industrial toxicology; Safety devices; Safety rules; Factory act about safety; Safety culture; First aid."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "TE 4226": {
+          "title": "Sessional on TE 4225",
+          "credit": 0.75,
+          "contactHour": "3/2 hrs/week",
+          "topics": ["Sessional based on TE 4225."],
+          "sessionalNote": "Sessional",
+          "references": []
+        },
+        "TE 4235": {
+          "title": "Green and Sustainable Textile",
+          "credit": 3,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Textile Sustainability: Introduction: Sustainability, necessity in textiles; Theory behind sustainable development; Corporate social responsibility (CSR) and ethical production of textiles; Life Cycle Assessment (LCA) and Ecological Key Figures (EKF); The limits of eco-efficiency.",
+            "Eco Fibers: Focused on natural fibers, man-made fibers, innovations linked with eco-friendly fibers, biodegradable and sustainable fibers.",
+            "Organic Cotton: necessity, production practices, Post-harvest handling/processing, limitation, obligatory standards for organic cotton and organic cotton certifiers.",
+            "Environmental Aspects of Textile Dyeing and Finishing: General considerations and problems regarding dyes, dyeing, eco-finishing and their impact on environment.",
+            "Green Textiles: Enzyme biotechnology; Plasma technology for textiles; Role of UV and Gamma radiation on textiles; Bio-degradation studies of textile and clothing products; Renewable textiles; eco-labeling for textiles and apparels.",
+            "Tools in Assessing the Sustainability: Sustainable Textile Production (STeP); The Higg Index; The sustainable apparel index; Standards and test methods for sustainability."
+          ],
+          "sessionalNote": null,
+          "references": []
+        },
+        "TE 4245": {
+          "title": "Nonwoven and Nanotechnology in Textiles",
+          "credit": 3,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Nonwoven: Introduction: Historical development, Definitions and Classification; Development of nonwoven industry and future perspective. Raw Materials: Natural and synthetic fibers; Bonding agents, types of bonding agents, basic structure of bonding agent formulation; Characteristic properties of polymer dispersions; Thermo sensibility; Cross linking; Adhesive fibers, soluble fibers. Web Formation Techniques: Polymer-laid, dry-laid, wet-laid. Web Bonding: Detail study of mechanical web bonding, chemical web bonding and thermal web bonding process. Finishing of Nonwoven Fabrics: Detailed study on shrinkage, calendering, pressing, splitting, grinding, washing, dyeing, printing, softening, coating and laminating. Applications: Medical and hygiene, apparel, household and Home Textiles; Applications in geotextiles, filtration textiles, automotive textiles, agriculture and leather industry. Testing: Standards and methods of testing nonwoven fabrics.",
+            "Nano Technology: Introduction: Definition of nanotechnology, understanding nanotechnology, nanotechnology and today's world, Importance of nanoscale science and technology, contribution of different scientist in nanotechnology, nanotechnology in different fields. Nanofibers: Genesis, history and terminology. Methods of producing nanofibers. Electrospinning of nanofibers. Influence of different parameters on electrospinning process. Polymers used for electrospinning. Methods of estimating of nanofiber properties. Directions of application of nanofibers. Interactive nanofibers. Nanocoatings: Types and material used for coating and surface modification, application process, properties and uses. Nonotechnology in Textile Finishing: Methods, properties of obtained fibers and textile products, the latest achievements and directions of development. Highly advanced textile processing techniques applying nanotechnology such as Nano-Care, Nano-Pel, Nano-Dry, Nano-Tough, Nano-Press their characteristic and received effects."
+          ],
+          "sessionalNote": null,
+          "references": []
+        }
+      },
+      "optionalCourses": [
+        "TE 4201", "TE 4202", "TE 4203", "TE 4204",
+        "TE 4205", "TE 4206", "TE 4207", "TE 4208"
+      ],
+      "termNotes": []
+    }
+  },
+  "optionalGroups": {
+    "Optional-I": [
+      {
+        "courseCode": "TE 4101",
+        "title": "Yarn Manufacturing Engineering-III",
+        "credit": 3,
+        "contactHour": "3 hrs/week",
+        "topics": [
+          "Short Staple: Assessment, calculation and control of mixing; Cost and Quality; Study of modern trends and development in a ring spinning mill from blow room to baling; Automation in all sector of spinning industry for Creeling, Doffing, Piecing, Cleaning, Materials handling and linking of machines; Data processing; Relationship of automation with quality and productivity and its relevance in the Bangladesh Textile Industry. Processing parameters such as hanks, speeds, settings, waste, cleaning efficiencies, nep content, productions and CV% for mass per unit length at all stages of processing; Setting of suitable values for the material processed and machine conditions. Waste control at all stages of manufacture, centralized waste collection; Dust filtration bags and setting chambers; Theoretical considerations of fiber disentanglement during carding and formation of fiber hooked ends; Reduction of fiber hooks during drafting. Theory of ring spinning and ballooning; Causes of end breaks; Evaluation of properties and characteristics of spun yarns; Processing of soft waste, hard waste and rags into condenser spin yarn; Comparison of methods of spinning waste yarns.",
+          "Long Staple: Study of modern trends and developments of batching, softening, carding, drawing, drafting systems and flyer spinning; Processing parameters of different qualities and counts of jute yarns; Yarn faults; Causes of end Breakages; Waste recovery, dust extraction and utilization of waste; Evaluation of properties and characteristics of jute yarns."
+        ],
+        "sessionalNote": null,
+        "references": []
+      },
+      {
+        "courseCode": "TE 4102",
+        "title": "Sessional on TE 4101",
+        "credit": 1.5,
+        "contactHour": "3 hrs/week",
+        "topics": ["Sessional based on TE 4101."],
+        "sessionalNote": "Sessional",
+        "references": []
+      },
+      {
+        "courseCode": "TE 4103",
+        "title": "Fabric Manufacturing Engineering-III",
+        "credit": 3,
+        "contactHour": "3 hrs/week",
+        "topics": [
+          "Weaving: Features of automatic looms; Stop motions: warp protection; warp stop and weft stop, Weft replenishment, Methods of weft patterning. Study of board (C.B.C.) loom; Time studies in weaving and calculation of weaver's load; Cloth costing; Causes of warp and weft breakage in weaving, weaving faults and their remedies, Factors controlling loom efficiency and means of increasing loom efficiency, Relevant calculations. Special Fabric Production: Production of label, braid, lappet swivel, velvets and velveteen carpet;",
+          "Knitting: Coloured stitch designs in weft knitting: Weft knitted Jacquard e.g. single jersey jacquard, Rib jacquard, pattern and selection devices; Butt length, butt position, multi step butt set-out, Element selection; Full Jacquard mechanical and electronic needle selection, Pattern wheel, Pattern area calculations; Double jersey inlay, Loop transfer stitches; plain loop, fancy lacing, rib loop; Welts; Garment sequences and knitting to shape calculation of fashioning frequencies; Aspects of knitting science; Loop shape and loop length control; Yarn let-off; Weft knitted fabric relaxation, Knitted fabric geometry, Tightness factor, Robbing back. Warp Knitting: Miss-Lapping; Laying-in in warp knitting; Fall plate patterning, Full width weft insertion, Cut presser and Miss-press structures."
+        ],
+        "sessionalNote": null,
+        "references": []
+      },
+      {
+        "courseCode": "TE 4104",
+        "title": "Sessional on TE 4103",
+        "credit": 1.5,
+        "contactHour": "3 hrs/week",
+        "topics": ["Sessional based on TE 4103."],
+        "sessionalNote": "Sessional",
+        "references": []
+      },
+      {
+        "courseCode": "TE 4105",
+        "title": "Wet Processing Engineering-III",
+        "credit": 3,
+        "contactHour": "3 hrs/week",
+        "topics": [
+          "Auxiliaries in Wet processing: Organic and commercial textile chemicals and their functions.",
+          "Dyeing: Dye Aggregation; Interaction of dyes and fibers; Dye fixation mechanism; Dyeing Kinetics: Diffusion, Pore Model, Free volume model; Thermodynamics of dyeing: Dyeing Isotherms, Affinity/Standard Chemical Potential difference. Dyeing of Blended fabrics: Classification of blends; Shades and methods for dyeing of blends; Suitability of each method for dyeing of specific blend. Special dyeing methods: Foam technology in wet processing: Foam generation, application, advantages and disadvantages; Solvent dyeing; Fluorescent dyeing; Dyeing under critical conditions; Structure and application of natural dyes, pigments and mineral colorants on different fibers; Recent development of knit fabric dyeing methods: Air flow dyeing method, Pad batch method.",
+          "Printing: Special types of thickeners: Synthetic Polymers, Emulsion thickeners; Methods of screen and role preparation; Detailed study on screen printing technology."
+        ],
+        "sessionalNote": null,
+        "references": []
+      },
+      {
+        "courseCode": "TE 4106",
+        "title": "Sessional on TE 4105",
+        "credit": 1.5,
+        "contactHour": "3 hrs/week",
+        "topics": ["Sessional based on TE 4105."],
+        "sessionalNote": "Sessional",
+        "references": []
+      },
+      {
+        "courseCode": "TE 4107",
+        "title": "Apparel Manufacturing Engineering-III",
+        "credit": 3,
+        "contactHour": "3 hrs/week",
+        "topics": [
+          "Garment Dry Processes: Detailed study on different common and feasible dry processes.",
+          "Garments Washing: Concept, requirements, types; Washing machine; Stages in washing process; Hydro-extraction; Drying; Detailed study on different wet washes; Problems associated with different wash and their remedies.",
+          "Garments Dyeing: Concept of swatch making and garments dyeing; Advantages and disadvantages of garments dyeing; Garments dyeing with direct, vat, sulpher and reactive dyes; Problems associated with garments dyeing.",
+          "Material Consumption Calculation: Determination of fabric consumption, thread consumption and trimmings consumption.",
+          "Garments Inspection and Quality Control: Raw material and finished garments inspection, in-process inspection, final inspection, product quality audit, comparability test; AQL, types of AQL; Types of defects; Importance, protocols and benchmarking of quality control in apparel.",
+          "Seam Strength and Sew ability: Factorial studies of seam strength, seam strength prediction, seam strength testing; Mechanism of seam slippage; Fabric sew ability assessment.",
+          "Clothing and Comfort: Human physiology and the role of clothing; Physiological process of maintaining constant 'core' temperature of human body; Heat balance, heat loss; Air permeability; Thermal manikins; Measurement of thermal conductivity, measurement of vapor permeability; Improving thermal comfort in apparel; Psychology and comfort, tactile aspect of clothing comfort.",
+          "Restricted Substances in Apparel: Review of restricted substances in apparel; Product safety requirements for children's apparel; Important test methods to evaluate restricted substances in apparel; Global regulatory requirements on harmful substances in apparel."
+        ],
+        "sessionalNote": null,
+        "references": []
+      },
+      {
+        "courseCode": "TE 4108",
+        "title": "Sessional on TE 4107",
+        "credit": 1.5,
+        "contactHour": "3 hrs/week",
+        "topics": ["Sessional based on TE 4107."],
+        "sessionalNote": "Sessional",
+        "references": []
+      }
+    ],
+    "Optional-II": [
+      {
+        "courseCode": "TE 4201",
+        "title": "Yarn Manufacturing Engineering-IV",
+        "credit": 3,
+        "contactHour": "3 hrs/week",
+        "topics": [
+          "Short Staple: Fiber blends and processing machineries; Differences in machine speeds, settings and productions; Properties of blended yarns; Analysis of blends. In depth study of rotor spinning and other modern short staple spinning method; Comparison of methods, yarn quality, productions and economics with ring spinning.",
+          "Long Staple: Manufacture of jute blended yarns using different spinning systems; Properties and end-uses of blended yarns. Detailed study of modern long staple spinning systems such as Repco, Spin-gard, Wrap spun, Core spun and Twist less spinning; Lectures on recently published Research and Development work in spinning industries in Bangladesh and in other counters for short and long staple materials.",
+          "High Performance Yarn: Study of two-fold, manifold, cabled and core yarns for particular end uses; Twisting and doubling machines including up-twisters and 2-for-1 twisters. Effects of amount and direction of twist at each twisting stage on strength, elongation, lustre and balanced twist; Twist setting; Manufacture of fancy yarns. Top-to-tow conversion manufacture. Methods of producing textured filament yarn; Effect of process variables on characteristics of textured yarns; Production of twines and ropes."
+        ],
+        "sessionalNote": null,
+        "references": []
+      },
+      {
+        "courseCode": "TE 4202",
+        "title": "Sessional on TE 4201",
+        "credit": 0.75,
+        "contactHour": "3/2 hrs/week",
+        "topics": ["Sessional based on TE 4201."],
+        "sessionalNote": "Sessional",
+        "references": []
+      },
+      {
+        "courseCode": "TE 4203",
+        "title": "Fabric Manufacturing Engineering-IV",
+        "credit": 3,
+        "contactHour": "3 hrs/week",
+        "topics": [
+          "Weaving: Selvedges; Calculation of weft waste percent. Detailed study of projectile, Rapier, Jet and Multiphase weaving machines. Standard commercial fabrics (Jute/Cotton/Synthetic); Fabric properties and comfortable clothing; Factors to be considered in choosing a fabric for particular end use condition; Current issues in weaving; Relevant calculations of weaving machinery allocation; Production management, project balancing and modernization. Special Fabric Production: Definition; structure; production; properties, end-uses etc of laminate, tape, belt, terry towel.",
+          "Knitting: Production of high quality cotton knit goods; Production of knit goods from yarns containing man-made fiber. Study on linear and non linear cams in weft knitting. Automation in knitting industry, Multi-axial knitted fabric construction. Recent Research and Development in Knitting. Maintenance and Management of knitting Machinery: Through understanding of different preparatory and fabric manufacturing machinery; To become familiar with various parts of the machines; To become familiar with the maintenance tools and their functions, Cleaning, Oiling/Lubricating and greasing of various machine parts. Understanding the basic principles of tightening and loosening of nut,-bolt, screw, belt, etc. Proper meshing of the gears, putting, on and putting off the belts etc; Locking / fixing, of cam, cone, pulley, toothed gear etc. Systems of dismantling and reassembling of machine parts."
+        ],
+        "sessionalNote": null,
+        "references": []
+      },
+      {
+        "courseCode": "TE 4204",
+        "title": "Sessional on TE 4203",
+        "credit": 0.75,
+        "contactHour": "3/2 hrs/week",
+        "topics": ["Sessional based on TE 4203."],
+        "sessionalNote": "Sessional",
+        "references": []
+      },
+      {
+        "courseCode": "TE 4205",
+        "title": "Wet Processing Engineering-IV",
+        "credit": 3,
+        "contactHour": "3 hrs/week",
+        "topics": [
+          "Color Theory: Computer assisted recipe calculations; Human color vision; Metamerism; Trichromatic theory of color vision and color matching equations.",
+          "Pre-treatments: Special scouring processes: Enzymatic scouring, Solvent scouring and Vapor-loc scouring.",
+          "Dyeing: Additive and subtractive color mixing; Color Measurements, CIE and lab Systems of Color Measurement, Spectrophotometers; Color fastness, assessment of color-fastness with grey scale; Dyeing of woven fabrics: Pad-dry-Pad steam, Pad-batch, Pad-steam, Pad-thermo sol; Faults in dyeing and their remedies.",
+          "Printing: Special printing methods: Transfer Printing, Ink Jet printing, High-density printing, Gel-printing, Puff printing, Flock printing, Burn-out printing; Faults in printing and their remedies.",
+          "Finishing: Removal of excess water and various drying systems in wet processing; Low-wet pick-up finishing and its importance; Application of optical brightening agents; Lectures on recently published research and developments in wet processing."
+        ],
+        "sessionalNote": null,
+        "references": []
+      },
+      {
+        "courseCode": "TE 4206",
+        "title": "Sessional on TE 4205",
+        "credit": 0.75,
+        "contactHour": "3/2 hrs/week",
+        "topics": ["Sessional based on TE 4205."],
+        "sessionalNote": "Sessional",
+        "references": []
+      },
+      {
+        "courseCode": "TE 4207",
+        "title": "Apparel Manufacturing Engineering-IV",
+        "credit": 3,
+        "contactHour": "3 hrs/week",
+        "topics": [
+          "Apparel Manufacturing Management: Concept of production and productivity; Production planning, production control and production management; Garments production layout; Line balancing in garments production; Production systems; Production engineering. Tools of Planning: Work measurements; Calculating SMV and setting target production in apparel manufacturing. Cutting Room Management: Material handling of garment components; Scheduling in cutting room; Cut order planning, necessity of effective cut order planning. Material Management in the Clothing Production: Marker utilization variation, fabric loss-outside marker, fabric utilization variation, control of material wastage, manufacturing resource planning.",
+          "Merchandising in the Garment Factory: Merchandising, merchandiser; Letter of credit: purpose, types; Samples: purpose, types; Procedures of material sourcing, follow up and shipment; Business and shipping terms, Incoterms; Quality control and various inspections, final inspection, AQL; Compliance.",
+          "Costing of Apparel: Costing basics; Comprehensive machine hour rate calculation; SMV calculation; Cost estimation and price quoting, price negotiation.",
+          "Fashion: History of fashion clothing; The conversion of fashion design to the readymade clothing industry; Fashion accessories; Fashion cycle; Theories of fashion movement; Fashion merchandising; Fashion buyers; Promotion and retailing of fashion apparel; Fashion forecasting; Fashion publications; Fashion world: Fashion houses in Europe and USA, global fashion leaders, business, major fashion weeks and shows; Components and styles of various fashion apparels.",
+          "High Performance Apparels: Breathable fabrics and garments, racing drivers' garments, firefighters' turnout gear, space suits."
+        ],
+        "sessionalNote": null,
+        "references": []
+      },
+      {
+        "courseCode": "TE 4208",
+        "title": "Sessional on TE 4207",
+        "credit": 0.75,
+        "contactHour": "3/2 hrs/week",
+        "topics": ["Sessional based on TE 4207."],
+        "sessionalNote": "Sessional",
+        "references": []
+      }
+    ]
+  }
+}
