@@ -250,6 +250,10 @@
   color-scheme: dark;
 }
 
+.dark .hub-page-hero-title {
+  color: #fafaf9;
+}
+
 /* ── Reset ───────────────────────────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
@@ -8498,14 +8502,14 @@ input[type="range"]::-webkit-slider-thumb {
 .hub-page-hero {
   display: flex;
   align-items: center;
-  gap: 12px;
-  margin-bottom: 24px;
+  gap: 14px;
+  margin: 12px 0 28px;
 }
 
 .hub-page-hero-icon {
-  width: 40px;
-  height: 40px;
-  border-radius: 10px;
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
   background: color-mix(in srgb, var(--accent) 15%, var(--surface));
   display: flex;
   align-items: center;
@@ -8514,21 +8518,22 @@ input[type="range"]::-webkit-slider-thumb {
 }
 
 .hub-page-hero-title {
-  font-size: 22px;
+  font-size: 28px;
   font-weight: 800;
-  letter-spacing: -0.02em;
-  color: var(--text);
+  letter-spacing: -0.01em;
+  color: #0a0a09;
   margin: 0;
 }
 
-/* auto-fit lets the grid pick however many columns actually fit the
-   available width, so a 5-item section and a 7-item section both fill
-   the row edge-to-edge instead of leaving a lonely half-empty last row.
-   minmax floor keeps cards from stretching absurdly wide on big screens
-   while still growing to use the space (1fr) rather than staying tiny. */
+/* auto-fill + a fixed ideal width (not 1fr) means cards grow to fill
+   the row on bigger screens but stop at a sensible ideal size instead
+   of stretching edge-to-edge forever — ratio stays consistent whether
+   there are 5 items or 7. justify-content centers any leftover space
+   in the last row instead of the last card awkwardly stretching wide. */
 .hub-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(150px, 190px));
+  justify-content: start;
   gap: 14px;
 }
 
@@ -8756,58 +8761,6 @@ input[type="range"]::-webkit-slider-thumb {
   font-size: 12.5px;
   color: var(--muted);
   margin: 2px 0 0;
-}
-
-.classmates-page-shell {
-  width: min(95vw, 1560px);
-}
-
-.classmates-list-stack {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.classmates-list-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 10px;
-}
-
-.classmates-list-card {
-  height: 100%;
-}
-
-.classmates-list-card-compact {
-  flex-direction: column;
-  align-items: stretch;
-  justify-content: flex-start;
-}
-
-.classmates-list-card-compact > div:first-child {
-  width: 100%;
-}
-
-.classmates-list-card-compact > div:last-child {
-  justify-content: flex-start;
-}
-
-@media (min-width: 720px) {
-  .classmates-list-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-}
-
-@media (min-width: 1080px) {
-  .classmates-list-grid {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
-}
-
-@media (min-width: 1320px) {
-  .classmates-list-grid {
-    grid-template-columns: repeat(5, minmax(0, 1fr));
-  }
 }
 
 @media (max-width: 380px) {
