@@ -93,6 +93,7 @@ export default function Classmates() {
       // doc, but a bundled CR approval later does, so make sure it exists
       // before proceeding.
       await joinGroup(groupId, profile);
+      await waitForOwnMembership(groupId);
       // Belt-and-suspenders: re-sync this group's own members/{uid}.verified
       // field right before the write that actually needs it. The mount-time
       // effect already does this, but a user who clicks fast enough (or
@@ -100,7 +101,10 @@ export default function Classmates() {
       // the exact same "Missing or insufficient permissions" race this was
       // written to close.
       await syncOwnVerification(groupId, auth.currentUser?.uid);
-      await waitForOwnVerification(groupId);
+      const verifiedReady = await waitForOwnVerification(groupId);
+      if (!verifiedReady) {
+        throw new Error('Your class membership is still syncing. Try again in a moment.');
+      }
       const clVacant = await checkCLVacant(groupId);
       if (clVacant) {
         // No Campus Lead yet for this dept+batch — bundle the CR claim
