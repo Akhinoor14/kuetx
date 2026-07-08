@@ -245,7 +245,14 @@ service cloud.firestore {
     // Official staff hierarchy (Head of Ops, Core Team leads, SCL, CL)
     // -------------------------------------------------------------
     match /staff/{targetUid}/roles/{roleId} {
-      allow read: if isAdmin() || isHeadOfOps() || request.auth.uid == targetUid;
+      allow read: if isAdmin() || isHeadOfOps() || request.auth.uid == targetUid
+        // Senior Campus Leads need to see the Campus Leads in their own
+        // department in StaffDashboard; this is a scoped read, not global
+        // staff visibility.
+        || (resource.data.role == 'campus_lead' && (
+          (resource.data.scope.type == 'dept' && isSCLFor(resource.data.scope.dept))
+          || (resource.data.scope.type == 'group' && isSCLForGroup(resource.data.scope.groupId))
+        ));
 
       // Appointment authority:
       //  - Founder can assign anyone, anything.

@@ -8514,26 +8514,33 @@ input[type="range"]::-webkit-slider-thumb {
 }
 
 .hub-page-hero-title {
-  font-size: 20px;
+  font-size: 22px;
   font-weight: 800;
   letter-spacing: -0.02em;
   color: var(--text);
   margin: 0;
 }
 
+/* auto-fit lets the grid pick however many columns actually fit the
+   available width, so a 5-item section and a 7-item section both fill
+   the row edge-to-edge instead of leaving a lonely half-empty last row.
+   minmax floor keeps cards from stretching absurdly wide on big screens
+   while still growing to use the space (1fr) rather than staying tiny. */
 .hub-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 14px;
 }
 
 .hub-grid-item {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 14px;
-  padding: 18px 16px;
-  border-radius: 14px;
+  justify-content: space-between;
+  gap: 18px;
+  min-height: 128px;
+  padding: 20px;
+  border-radius: 16px;
   background: var(--card);
   border: 1px solid var(--border);
   text-decoration: none;
@@ -8546,13 +8553,31 @@ input[type="range"]::-webkit-slider-thumb {
   border-color: color-mix(in srgb, var(--accent) 30%, var(--border));
 }
 
-@media (min-width: 560px) {
-  .hub-grid { grid-template-columns: repeat(3, 1fr); }
+.hub-grid-item .hub-grid-item-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 11px;
+}
+
+.hub-grid-item .hub-grid-item-label {
+  font-size: 14px;
+  text-align: left;
 }
 
 @media (max-width: 380px) {
   .hub-page-hero-icon { width: 34px; height: 34px; }
   .hub-page-hero-title { font-size: 18px; }
+  .hub-grid { grid-template-columns: repeat(2, 1fr); }
+  .hub-grid-item { min-height: 108px; padding: 16px; }
+  .hub-grid-item .hub-grid-item-icon { width: 36px; height: 36px; }
+}
+
+/* Wide screens: cap how far the hub column stretches so cards don't
+   sprawl edge-to-edge on a desktop monitor, but allow a bit more room
+   than the old fixed 880px so bigger cards get real breathing space. */
+@media (min-width: 900px) {
+  .hub-grid-item .hub-grid-item-icon { width: 46px; height: 46px; }
+  .hub-grid-item .hub-grid-item-label { font-size: 15px; }
 }
 
 /* ── Founder dashboard category / subcategory navigation ──────────────────
@@ -8731,6 +8756,70 @@ input[type="range"]::-webkit-slider-thumb {
   font-size: 12.5px;
   color: var(--muted);
   margin: 2px 0 0;
+}
+
+.classmates-page-shell {
+  width: min(95vw, 1560px);
+}
+
+.classmates-page-shell .content-page-hero {
+  margin-bottom: 12px;
+}
+
+.classmates-page-shell > p {
+  margin-bottom: 12px !important;
+}
+
+.classmates-page-shell .classmates-search-row {
+  margin-bottom: 10px;
+}
+
+.classmates-list-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.classmates-list-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.classmates-list-card {
+  height: 100%;
+}
+
+.classmates-list-card-compact {
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+}
+
+.classmates-list-card-compact > div:first-child {
+  width: 100%;
+}
+
+.classmates-list-card-compact > div:last-child {
+  justify-content: flex-start;
+}
+
+@media (min-width: 720px) {
+  .classmates-list-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1080px) {
+  .classmates-list-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1320px) {
+  .classmates-list-grid {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
 }
 
 @media (max-width: 380px) {

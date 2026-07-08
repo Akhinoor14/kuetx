@@ -50,6 +50,19 @@ export const NAV = [
     group: 'Academics',
     subgroups: [
       {
+        name: 'Daily Academics',
+        hubPath: '/daily-academics',
+        hubIcon: 'CalendarCheck',
+        items: [
+          { id: 'attendance',  label: 'Attendance',     icon: 'CalendarCheck', path: '/attendance' },
+          { id: 'schedule',    label: 'Class Schedule', icon: 'Clock',         path: '/schedule' },
+          { id: 'assignments', label: 'Assignments',    icon: 'FileText',      path: '/assignments' },
+          { id: 'teachers',    label: 'Teachers',       icon: 'Users',         path: '/teachers' },
+          { id: 'classmates',  label: 'Classmates',     icon: 'Users2',        path: '/classmates' },
+          { id: 'diary',       label: 'Class Diary',    icon: 'BookOpen',      path: '/diary' },
+        ]
+      },
+      {
         name: 'Academic Core',
         hubPath: '/academic-core',
         hubIcon: 'BookOpen',
@@ -61,19 +74,6 @@ export const NAV = [
           { id: 'marks',     label: 'Term Planner',  icon: 'ClipboardList', path: '/marks' },
           { id: 'results',   label: 'Results & GPA', icon: 'TrendingUp',    path: '/results' },
           { id: 'warnings',  label: 'Alerts',        icon: 'Bell',          path: '/alerts' },
-        ]
-      },
-      {
-        name: 'Daily Academics',
-        hubPath: '/daily-academics',
-        hubIcon: 'CalendarCheck',
-        items: [
-          { id: 'attendance',  label: 'Attendance',     icon: 'CalendarCheck', path: '/attendance' },
-          { id: 'schedule',    label: 'Class Schedule', icon: 'Clock',         path: '/schedule' },
-          { id: 'assignments', label: 'Assignments',    icon: 'FileText',      path: '/assignments' },
-          { id: 'teachers',    label: 'Teachers',       icon: 'Users',         path: '/teachers' },
-          { id: 'classmates',  label: 'Classmates',     icon: 'Users2',        path: '/classmates' },
-          { id: 'diary',       label: 'Class Diary',    icon: 'BookOpen',      path: '/diary' },
         ]
       },
     ]

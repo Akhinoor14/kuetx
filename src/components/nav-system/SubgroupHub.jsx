@@ -59,14 +59,16 @@ function HubSection({ title, items, icon }) {
           const Icon = Icons[item.icon] || Icons.Circle;
           return (
             <Link key={item.id} to={item.path} className="hub-grid-item">
-              <div style={{
-                width: 30, height: 30, borderRadius: 8,
-                background: `color-mix(in srgb, ${HUB_COLOR} 15%, var(--surface))`,
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-              }}>
-                <Icon size={15} color={HUB_COLOR} />
+              <div
+                className="hub-grid-item-icon"
+                style={{
+                  background: `color-mix(in srgb, ${HUB_COLOR} 15%, var(--surface))`,
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                }}
+              >
+                <Icon size={20} color={HUB_COLOR} />
               </div>
-              <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--text)', textAlign: 'center' }}>{item.label}</span>
+              <span className="hub-grid-item-label" style={{ fontWeight: 700, color: 'var(--text)' }}>{item.label}</span>
             </Link>
           );
         })}
@@ -133,7 +135,7 @@ export default function SubgroupHub({ group, subgroup, sections, pageTitle, extr
 
   return (
     <div className="hub-page-bg" style={{ minHeight: '100vh' }}>
-      <div style={{ padding: '20px 16px 40px', maxWidth: 880, margin: '0 auto' }}>
+      <div style={{ padding: '20px 24px 40px', maxWidth: 1040, margin: '0 auto' }}>
         <div className="hub-page-hero">
           <div className="hub-page-hero-icon">
             <HeroIcon size={20} color={HUB_COLOR} />

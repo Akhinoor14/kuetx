@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
 import { Users2 } from 'lucide-react';
+import { waitForPendingWrites } from 'firebase/firestore';
 import { getProfile } from '../store/store';
 import { getGroupId, getGroupLabel } from '../lib/groupUtils';
 import { joinGroup, requestCR, subscribeCRStatus, subscribeMembers, syncOwnVerification, waitForOwnMembership, waitForOwnVerification, MAX_CR } from '../lib/groupSync';
 import { checkCLVacant, applyForCampusLead } from '../lib/staffSync';
 import { isRollInstitutionallyVerified } from '../lib/kuetEmailVerify';
-import { auth } from '../lib/firebase';
+import { auth, db } from '../lib/firebase';
 import ClassmatesList from '../components/ClassmatesList';
 import KuetEmailVerifyBox from '../components/KuetEmailVerifyBox';
 
@@ -13,6 +14,7 @@ export default function Classmates() {
   const profile = getProfile();
   const groupId = getGroupId(profile);
   const groupLabel = getGroupLabel(profile);
+  const [searchText, setSearchText] = useState('');
   const [crStatus, setCrStatus] = useState(null);
   const [claimState, setClaimState] = useState('idle'); // idle | sending | sent | error
   const [claimMsg, setClaimMsg] = useState('');
@@ -101,6 +103,7 @@ export default function Classmates() {
       // the exact same "Missing or insufficient permissions" race this was
       // written to close.
       await syncOwnVerification(groupId, auth.currentUser?.uid);
+      await waitForPendingWrites(db);
       const verifiedReady = await waitForOwnVerification(groupId);
       if (!verifiedReady) {
         throw new Error('Your class membership is still syncing. Try again in a moment.');
@@ -125,7 +128,7 @@ export default function Classmates() {
   };
 
   return (
-    <div className="page-enter content-page-bg" style={{ maxWidth: 640, margin: '0 auto', padding: '16px 14px' }}>
+    <div className="page-enter content-page-bg classmates-page-shell" style={{ width: 'min(95vw, 1560px)', margin: '0 auto', padding: '16px 14px' }}>
       <div className="content-page-hero">
         <div className="content-page-hero-icon">
           <Users2 size={18} color="var(--accent)" />
@@ -137,6 +140,22 @@ export default function Classmates() {
           ? <>Everyone from your class — <strong>{groupLabel}</strong> — who has joined KUETx.</>
           : 'Add your department and batch in Profile to find your classmates.'}
       </p>
+
+      {groupId && (
+        <div className="classmates-search-row" style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) auto', gap: 10, alignItems: 'center', marginBottom: 14 }}>
+          <input
+            className="input"
+            type="text"
+            value={searchText}
+            onChange={(e) => setSearchText(e.target.value)}
+            placeholder="Search by name or roll"
+            style={{ width: '100%', minWidth: 0 }}
+          />
+          <div style={{ fontSize: 12, color: 'var(--muted)', whiteSpace: 'nowrap' }}>
+            Roll filter
+          </div>
+        </div>
+      )}
 
       {groupId && <KuetEmailVerifyBox />}
 
@@ -171,7 +190,7 @@ export default function Classmates() {
       )}
 
       {joined
-        ? <ClassmatesList groupId={groupId} currentUid={auth.currentUser?.uid} />
+        ? <ClassmatesList groupId={groupId} currentUid={auth.currentUser?.uid} searchText={searchText} />
         : <div style={{ padding: 16, color: 'var(--muted)', fontSize: 13 }}>Loading classmates...</div>}
     </div>
   );

@@ -28,7 +28,7 @@ import BlueTick from './BlueTick';
  *                 existing StaffDashboard.jsx call site.
  * currentUid    - so we can badge "You" and disallow self-demotion by accident
  */
-export default function ClassmatesList({ groupId, showActions = false, viewerRole = 'cl', currentUid = null }) {
+export default function ClassmatesList({ groupId, showActions = false, viewerRole = 'cl', currentUid = null, searchText = '' }) {
   const [members, setMembers] = useState(null); // null = loading
 
   useEffect(() => {
@@ -60,11 +60,28 @@ export default function ClassmatesList({ groupId, showActions = false, viewerRol
   // isAnonymous started being recorded has no such field yet and is left
   // visible rather than guessed at.
   const visibleMembers = members.filter((m) => m.isAnonymous !== true);
+  const normalizedSearch = searchText.trim().toLowerCase();
+  const filteredMembers = normalizedSearch
+    ? visibleMembers.filter((m) => {
+        const name = (m.name || '').toLowerCase();
+        const roll = (m.roll || '').toLowerCase();
+        const role = (m.role || '').toLowerCase();
+        return name.includes(normalizedSearch) || roll.includes(normalizedSearch) || role.includes(normalizedSearch);
+      })
+    : visibleMembers;
 
   if (visibleMembers.length === 0) {
     return (
       <div className="card" style={{ padding: 16, color: 'var(--muted)', textAlign: 'center' }}>
         No one from your class has joined yet — be the first!
+      </div>
+    );
+  }
+
+  if (filteredMembers.length === 0) {
+    return (
+      <div className="card" style={{ padding: 16, color: 'var(--muted)', textAlign: 'center' }}>
+        No classmates match this filter.
       </div>
     );
   }
@@ -78,19 +95,19 @@ export default function ClassmatesList({ groupId, showActions = false, viewerRol
   return (
     <div>
       <div style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 10 }}>
-        {visibleMembers.length} classmate{visibleMembers.length === 1 ? '' : 's'} · {verifiedCount} verified · {crCount}/{MAX_CR} CR · {acrCount}/{MAX_ACR} ACR
+        Showing {filteredMembers.length} of {visibleMembers.length} classmate{visibleMembers.length === 1 ? '' : 's'} · {verifiedCount} verified · {crCount}/{MAX_CR} CR · {acrCount}/{MAX_ACR} ACR
       </div>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-        {visibleMembers.map((m) => (
+      <div className={showActions ? 'classmates-list-stack' : 'classmates-list-grid'}>
+        {filteredMembers.map((m) => (
           <div
             key={m.id}
-            className="card"
+            className={showActions ? 'card classmates-list-card' : 'card classmates-list-card classmates-list-card-compact'}
             style={{
-              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-              padding: '10px 14px', gap: 10,
+              display: 'flex', alignItems: showActions ? 'center' : 'stretch', justifyContent: 'space-between',
+              padding: showActions ? '10px 14px' : '12px', gap: showActions ? 10 : 8,
             }}
           >
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8, minWidth: 0 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, minWidth: 0, flex: '1 1 auto' }}>
               <div style={{
                 width: 32, height: 32, borderRadius: '50%', background: 'var(--accentSoft)',
                 color: 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -98,7 +115,7 @@ export default function ClassmatesList({ groupId, showActions = false, viewerRol
               }}>
                 {(m.name || '?').trim().charAt(0).toUpperCase()}
               </div>
-              <div style={{ minWidth: 0 }}>
+              <div style={{ minWidth: 0, flex: '1 1 auto' }}>
                 <div style={{ fontWeight: 600, fontSize: 14, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', display: 'flex', alignItems: 'center', gap: 5 }}>
                   <span style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>{m.name || 'Unnamed'}</span>
                   {m.verified && <BlueTick size={13} />}
@@ -108,7 +125,7 @@ export default function ClassmatesList({ groupId, showActions = false, viewerRol
               </div>
             </div>
 
-            <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexShrink: 0 }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: 6, flexShrink: 0, flexWrap: 'wrap' }}>
               {m.role === 'cr' && (
                 <span style={{
                   fontSize: 11, fontWeight: 700, color: 'var(--accent)', background: 'var(--accentSoft)',
