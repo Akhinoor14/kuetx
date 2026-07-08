@@ -515,6 +515,39 @@ export default function StaffDashboard({ onTabChange } = {}) {
     checkIsAdmin(auth.currentUser?.uid).then(setIsAdminUser);
   }, []);
 
+  // NOTE: tabs/currentTab are recomputed below (after the early-return
+  // guards), but this useEffect itself MUST stay above any early return —
+  // otherwise the "loading" and "no roles" renders skip this hook entirely
+  // while the "roles loaded" render calls it, giving React a different
+  // hook count between renders and throwing invariant #310 (minified
+  // "Rendered more hooks than during the previous render"). We recompute
+  // currentTab inline here so the effect can stay unconditional; the
+  // second computation below (used for actual rendering) is intentionally
+  // kept in sync with this one.
+  useEffect(() => {
+    if (!roles) return;
+    const clGroups = roles.filter((r) => r.role === 'campus_lead').map((r) => r.scope?.groupId).filter(Boolean);
+    const sclDepts = roles.filter((r) => r.role === 'senior_campus_lead').map((r) => r.scope?.dept).filter(Boolean);
+    const isHeadOfOps = roles.some((r) => r.role === 'head_of_ops');
+    const isContentLead = roles.some((r) => r.role === 'content_lead');
+    const isHeadOfGrowth = roles.some((r) => r.role === 'head_of_growth');
+    const otherRoles = roles.filter((r) => !['campus_lead', 'senior_campus_lead'].includes(r.role));
+    const hasFinanceOrLegal = otherRoles.filter((r) => ['finance_lead', 'legal_partnerships'].includes(r.role)).length > 0;
+
+    const tabs = [];
+    if (isAdminUser) tabs.push({ key: 'founder' });
+    if (isHeadOfOps) tabs.push({ key: 'ops' });
+    if (sclDepts.length > 0) tabs.push({ key: 'scl' });
+    if (clGroups.length > 0) tabs.push({ key: 'cl' });
+    if (isContentLead) tabs.push({ key: 'content' });
+    if (isHeadOfGrowth) tabs.push({ key: 'growth' });
+    if (hasFinanceOrLegal) tabs.push({ key: 'finance' });
+
+    const nextTab = activeTab && tabs.some((t) => t.key === activeTab) ? activeTab : tabs[0]?.key;
+    onTabChange?.(nextTab);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [roles, isAdminUser, activeTab, onTabChange]);
+
   if (roles === null) return <div style={{ padding: 20, color: 'var(--muted)' }}>Loading…</div>;
   if (roles.length === 0 && !isAdminUser) {
     return (
@@ -545,13 +578,6 @@ export default function StaffDashboard({ onTabChange } = {}) {
 
   const currentTab = activeTab && tabs.some((t) => t.key === activeTab) ? activeTab : tabs[0]?.key;
   const show = (key) => tabs.length <= 1 || currentTab === key;
-
-  // Let the parent (TeamDashboard) know which tab is active so sibling
-  // components like AdminEntryPoint can stay in sync instead of always
-  // rendering regardless of the selected tab.
-  useEffect(() => {
-    onTabChange?.(currentTab);
-  }, [currentTab, onTabChange]);
 
   const handleTabChange = (key) => {
     setActiveTab(key);
