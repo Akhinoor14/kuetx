@@ -22,7 +22,7 @@ import { pushAllToFirestore, startFirebaseSync } from '../lib/firebaseSync';
 import { uploadProfilePicture, getProfilePhotoURL, deleteProfilePicture } from '../lib/profilePicture';
 import { isRollInstitutionallyVerified } from '../lib/kuetEmailVerify';
 import { getGroupId } from '../lib/groupUtils';
-import { subscribeMyRole } from '../lib/groupSync';
+import { subscribeMyRole, requestLeaveCR } from '../lib/groupSync';
 import ProfileVerifyBanner from '../components/ProfileVerifyBanner';
 import EmailVerifyBanner from '../components/EmailVerifyBanner';
 import EmailFlagBanner from '../components/EmailFlagBanner';
@@ -743,6 +743,7 @@ export default function Profile() {
   // own profile (which classmates can also see). This mirrors the same
   // members/{uid}.role check used by RequireCR.jsx / Sidebar.jsx.
   const [isRealCR, setIsRealCR] = useState(false);
+  const [leaveCRState, setLeaveCRState] = useState('idle'); // idle | sending | sent
   useEffect(() => {
     const groupId = getGroupId(profile);
     if (!groupId || !auth.currentUser?.uid) { setIsRealCR(false); return; }
@@ -1038,7 +1039,17 @@ export default function Profile() {
         <ProfileVerifyBanner onVerified={() => setIsKuetVerified(true)} />
       )}
 
-      {/* ── CR Banner ── */}
+      {/* ── CR Banner ──
+          NOTE: the old "Disable CR" button here only flipped the local,
+          dead `profile.isCR` flag — it never touched the server-verified
+          members/{uid}.role or legacyCRClaim fields. That let people think
+          they'd stepped down as CR while the server still had role: 'cr'
+          (or, after a real leave via a path that predates legacyCRClaim
+          cleanup, left a stale legacyCRClaim: true behind) — producing the
+          "Claims CR" ghost badge on Classmates/Team pages. Routing this
+          through requestLeaveCR (same CL-approved flow as ClassRoster.jsx)
+          ensures role and legacyCRClaim actually get cleared together via
+          clApproveLeaveCR once the CL approves. */}
       {isRealCR && (
         <div style={{
           padding: '13px 18px', borderRadius: 12,
@@ -1051,11 +1062,22 @@ export default function Profile() {
             <div style={{ fontWeight: 700, fontSize: 13, color: 'var(--text)' }}>Class Representative</div>
             <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 1 }}>Class Management tools available in the sidebar.</div>
           </div>
-          <button onClick={() => {
-            const next = { ...profile, isCR: false };
-            store.set('profile', next); setProfile(next);
-          }} style={{ marginLeft: 'auto', fontSize: 11, color: 'var(--muted)', background: 'none', border: 'none', cursor: 'pointer' }}>
-            Disable CR
+          <button
+            disabled={leaveCRState === 'sending' || leaveCRState === 'sent'}
+            onClick={async () => {
+              if (!window.confirm("Send a request to your Class Lead to step down as CR? You'll remain CR until it's approved.")) return;
+              setLeaveCRState('sending');
+              try {
+                const groupId = getGroupId(profile);
+                await requestLeaveCR(groupId, profile);
+                setLeaveCRState('sent');
+              } catch (err) {
+                alert(`Failed: ${err?.message || err}`);
+                setLeaveCRState('idle');
+              }
+            }}
+            style={{ marginLeft: 'auto', fontSize: 11, color: 'var(--muted)', background: 'none', border: 'none', cursor: 'pointer' }}>
+            {leaveCRState === 'sent' ? 'Request sent ✓' : leaveCRState === 'sending' ? 'Sending…' : 'Step down as CR'}
           </button>
         </div>
       )}

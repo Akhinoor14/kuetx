@@ -531,6 +531,21 @@ export async function clRejectLeaveCR(groupId, requestDocId) {
   await updateDoc(doc(db, 'groups', groupId, 'crRequests', requestDocId), { status: 'rejected' });
 }
 
+/**
+ * Campus Lead action: dismiss a stale "Claims CR" badge without appointing
+ * that person CR. Needed because legacyCRClaim is a one-time snapshot of
+ * profile.isCR taken when a member doc is first created (see joinGroup) —
+ * it does NOT auto-track later leave/revoke/handoff actions unless they go
+ * through clRevokeCR / handoffCR / clApproveLeaveCR specifically. Anyone
+ * who left CR through some other path (or had legacyCRClaim set from an
+ * old profile.isCR toggle unrelated to ever actually holding the role)
+ * would otherwise show this badge forever with no way to clear it besides
+ * temporarily making them CR just to revoke it again.
+ */
+export async function clDismissLegacyCRClaim(groupId, targetUid) {
+  await updateDoc(doc(db, 'groups', groupId, 'members', targetUid), { legacyCRClaim: false });
+}
+
 /** Read-only helper for UI — is there currently an active CR in this group? */
 /**
  * Real, server-verified CR/ACR status for the CURRENT user — this reads
