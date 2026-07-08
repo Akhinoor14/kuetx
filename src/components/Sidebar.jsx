@@ -155,6 +155,12 @@ export function Sidebar({ open, onClose, authState }) {
       : section
   );
 
+  // TEMP DEBUG — remove after confirming why Admin row is/isn't showing.
+  useEffect(() => {
+    console.log('[Sidebar debug] isRealAdmin:', isRealAdmin, 'adminLabel:', adminLabel);
+    console.log('[Sidebar debug] filteredNav groups:', filteredNav.map(s => s.group));
+  }, [isRealAdmin, adminLabel]);
+
   const findNavItem = (path) => {
     for (const s of NAV) {
       const pools = s.subgroups ? s.subgroups.map(sub => sub.items) : [s.items];
