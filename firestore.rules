@@ -404,7 +404,7 @@ service cloud.firestore {
       allow delete: if isAdmin();
 
       match /meta/clStatus {
-        allow read: if isSignedIn();
+        allow read: if isSignedIn() && (isAdmin() || isHeadOfOps() || isGroupMember(groupId) || isCLFor(groupId) || isSCLForGroup(groupId));
         allow create: if isAdmin() || isHeadOfOps() || isSCLForGroup(groupId);
         allow delete: if isAdmin() || isHeadOfOps(); // asymmetric, same as staff role removal above
         allow update: if isAdmin() || isHeadOfOps();

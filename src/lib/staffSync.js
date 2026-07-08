@@ -97,6 +97,17 @@ export async function listStaffByRole(role) {
   return snap.docs.map((d) => ({ id: d.id, uid: d.ref.parent.parent.id, ...d.data() }));
 }
 
+/** One-shot: Campus Lead holders for a single department, scoped through groups. */
+export async function listCampusLeadsForDept(dept) {
+  const groupsSnap = await getDocs(query(collection(db, 'groups'), where('dept', '==', String(dept || '').trim().toUpperCase())));
+  const rows = await Promise.all(groupsSnap.docs.map(async (groupDoc) => {
+    const clStatusSnap = await getDoc(doc(db, 'groups', groupDoc.id, 'meta', 'clStatus'));
+    if (!clStatusSnap.exists()) return null;
+    return { groupId: groupDoc.id, ...clStatusSnap.data() };
+  }));
+  return rows.filter(Boolean);
+}
+
 /** Is there currently a Senior Campus Lead for this department? */
 export async function checkSCLVacant(dept) {
   const snap = await getDoc(doc(db, 'depts', dept, 'meta', 'sclStatus'));

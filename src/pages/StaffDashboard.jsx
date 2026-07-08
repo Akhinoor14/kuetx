@@ -3,7 +3,7 @@ import { getProfile } from '../store/store';
 import { auth } from '../lib/firebase';
 import { ROLE_LABELS } from '../lib/staffRoles';
 import {
-  subscribeMyRoles, listStaffByRole, assignRole, removeRole,
+  subscribeMyRoles, listStaffByRole, listCampusLeadsForDept, assignRole, removeRole,
   subscribeCLApplications, subscribeAllCLApplications, approveCLApplication, rejectCLApplication,
   checkSCLVacant,
 } from '../lib/staffSync';
@@ -286,8 +286,8 @@ function SeniorCampusLeadBlock({ dept }) {
   useEffect(() => subscribeCLApplications(dept, setApplications), [dept]);
   useEffect(() => {
     setClsError(null);
-    listStaffByRole('campus_lead')
-      .then((all) => setCls(all.filter((r) => r.scope?.dept ? r.scope.dept === dept : r.scope?.groupId?.endsWith(`_${dept}`))))
+    listCampusLeadsForDept(dept)
+      .then(setCls)
       .catch((err) => setClsError(err?.message || 'Failed to load campus leads.'));
   }, [dept]);
 
@@ -317,7 +317,7 @@ function SeniorCampusLeadBlock({ dept }) {
       {!clsError && cls === null && <div style={{ fontSize: 12, color: 'var(--muted)' }}>Loading…</div>}
       {!clsError && cls?.length === 0 && <div style={{ fontSize: 12, color: 'var(--muted)' }}>None appointed yet.</div>}
       {cls?.map((c) => (
-        <div key={c.id} style={{ fontSize: 13, padding: '4px 0' }}>{c.scope?.groupId}</div>
+        <div key={c.groupId} style={{ fontSize: 13, padding: '4px 0' }}>{c.groupId}</div>
       ))}
     </div>
   );
