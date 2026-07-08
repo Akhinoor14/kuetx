@@ -465,7 +465,7 @@ function AvatarUploadModal({ currentURL, isAnon, onClose, onUploaded, onDeleted 
   const handleFile = (f) => {
     if (!f) return;
     if (!f.type.startsWith('image/')) { setError('Only image files allowed'); return; }
-    if (f.size > 1 * 1024 * 1024) { setError('Max 1 MB'); return; }
+    if (f.size > 10 * 1024 * 1024) { setError('Max 10 MB'); return; }
     setError('');
     setFile(f);
     setOffset({ x: 0, y: 0 });
@@ -586,7 +586,7 @@ function AvatarUploadModal({ currentURL, isAnon, onClose, onUploaded, onDeleted 
             }
             <div style={{ textAlign: 'center' }}>
               <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--text)' }}>Click or drag & drop</div>
-              <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 3 }}>JPG, PNG, WebP · Max 1 MB</div>
+              <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 3 }}>JPG, PNG, WebP · Max 10 MB</div>
             </div>
           </div>
         )}

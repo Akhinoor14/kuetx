@@ -16,7 +16,7 @@ const DB_NAME = 'kuetx-profile';
 const STORE_NAME = 'photos';
 const DB_VERSION = 1;
 const PHOTO_KEY = 'profile-photo';
-const MAX_BYTES = 1 * 1024 * 1024; // 1 MB max upload size
+const MAX_BYTES = 10 * 1024 * 1024; // 10 MB max upload size
 const OUTPUT_PX = 400; // final square avatar size
 
 function openDB() {
@@ -133,7 +133,7 @@ async function backupToFirebase(dataUrl) {
  */
 export const uploadProfilePicture = async (file, onProgress, offsetX = 0, offsetY = 0) => {
   if (!file.type.startsWith('image/')) throw new Error('Only image files allowed');
-  if (file.size > MAX_BYTES) throw new Error('File too large (max 1 MB)');
+  if (file.size > MAX_BYTES) throw new Error('File too large (max 10 MB)');
 
   onProgress?.(10);
   const dataUrl = await cropAndResize(file, offsetX, offsetY);
