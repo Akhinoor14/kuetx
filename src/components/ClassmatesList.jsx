@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import {
   subscribeMembers, verifyMember, revokeVerification,
   clAppointCR, clRevokeCR, assignACR, revokeACR, handoffCR, removeMember,
+  clDismissLegacyCRClaim,
   MAX_CR, MAX_ACR,
 } from '../lib/groupSync';
 import BlueTick from './BlueTick';
@@ -148,16 +149,31 @@ export default function ClassmatesList({ groupId, showActions = false, viewerRol
 
                   {viewerRole === 'cl' && (
                     m.role !== 'cr' ? (
-                      m.id !== currentUid && (
-                        <button
-                          className="btn btn-sm btn-secondary"
-                          disabled={crSlotsFull}
-                          title={crSlotsFull ? `Both CR slots are full (max ${MAX_CR}) — revoke one first` : undefined}
-                          onClick={() => clAppointCR(groupId, m.id)}
-                        >
-                          Make CR
-                        </button>
-                      )
+                      <>
+                        {m.id !== currentUid && (
+                          <button
+                            className="btn btn-sm btn-secondary"
+                            disabled={crSlotsFull}
+                            title={crSlotsFull ? `Both CR slots are full (max ${MAX_CR}) — revoke one first` : undefined}
+                            onClick={() => clAppointCR(groupId, m.id)}
+                          >
+                            Make CR
+                          </button>
+                        )}
+                        {m.legacyCRClaim && (
+                          <button
+                            className="btn btn-sm btn-secondary"
+                            title="Dismiss this badge without appointing them CR — use if they already stepped down or the claim is outdated"
+                            onClick={() => {
+                              if (window.confirm(`Clear the "Claims CR" badge${m.id === currentUid ? ' for yourself' : ` for ${m.name || 'this classmate'}`}? This does NOT remove CR status — use "Remove CR" for that.`)) {
+                                clDismissLegacyCRClaim(groupId, m.id);
+                              }
+                            }}
+                          >
+                            Clear claim
+                          </button>
+                        )}
+                      </>
                     ) : (
                       m.id !== currentUid && (
                         <button className="btn btn-sm btn-secondary" onClick={() => clRevokeCR(groupId, m.id)}>Remove CR</button>
