@@ -23,7 +23,7 @@ const path = require('path');
 const APPLY = process.argv.includes('--apply');
 
 admin.initializeApp({
-  credential: admin.credential.cert(path.join(__dirname, 'serviceAccountKey.json')),
+  credential: admin.cert(path.join(__dirname, 'serviceAccountKey.json')),
 });
 const db = admin.firestore();
 
