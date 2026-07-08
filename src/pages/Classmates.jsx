@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import {
   subscribeMembers, verifyMember, revokeVerification,
   clAppointCR, clRevokeCR, assignACR, revokeACR, handoffCR, removeMember,
@@ -6,6 +6,8 @@ import {
   MAX_CR, MAX_ACR,
 } from '../lib/groupSync';
 import BlueTick from '../components/BlueTick';
+import { getProfile } from '../store/store';
+import { getGroupId } from '../lib/groupUtils';
 
 /**
  * groupId       - the batch+dept group to show
@@ -30,13 +32,23 @@ import BlueTick from '../components/BlueTick';
  */
 export default function ClassmatesList({ groupId, showActions = false, viewerRole = 'cl', currentUid = null }) {
   const [members, setMembers] = useState(null); // null = loading
+  const [refreshTick, setRefreshTick] = useState(0);
 
   useEffect(() => {
-    if (!groupId) { setMembers([]); return; }
-    return subscribeMembers(groupId, setMembers);
-  }, [groupId]);
+    const handleStoreUpdate = () => setRefreshTick((tick) => tick + 1);
+    window.addEventListener('kuetx:store-updated', handleStoreUpdate);
+    return () => window.removeEventListener('kuetx:store-updated', handleStoreUpdate);
+  }, []);
 
-  if (!groupId) {
+  const profile = useMemo(() => getProfile() || {}, [refreshTick]);
+  const resolvedGroupId = groupId || getGroupId(profile);
+
+  useEffect(() => {
+    if (!resolvedGroupId) { setMembers([]); return; }
+    return subscribeMembers(resolvedGroupId, setMembers);
+  }, [resolvedGroupId]);
+
+  if (!resolvedGroupId) {
     return (
       <div className="card" style={{ padding: 16, color: 'var(--muted)', textAlign: 'center' }}>
         Set your department and batch in Profile to see your classmates.
@@ -141,10 +153,10 @@ export default function ClassmatesList({ groupId, showActions = false, viewerRol
               {showActions && (
                 <div style={{ display: 'flex', gap: 4 }}>
                   {m.id !== currentUid && !m.verified && (
-                    <button className="btn btn-sm btn-secondary" onClick={() => verifyMember(groupId, m.id)}>Verify</button>
+                    <button className="btn btn-sm btn-secondary" onClick={() => verifyMember(resolvedGroupId, m.id)}>Verify</button>
                   )}
                   {m.id !== currentUid && m.verified && (
-                    <button className="btn btn-sm btn-secondary" onClick={() => revokeVerification(groupId, m.id)}>Revoke</button>
+                    <button className="btn btn-sm btn-secondary" onClick={() => revokeVerification(resolvedGroupId, m.id)}>Revoke</button>
                   )}
 
                   {viewerRole === 'cl' && (
@@ -155,7 +167,7 @@ export default function ClassmatesList({ groupId, showActions = false, viewerRol
                             className="btn btn-sm btn-secondary"
                             disabled={crSlotsFull}
                             title={crSlotsFull ? `Both CR slots are full (max ${MAX_CR}) — revoke one first` : undefined}
-                            onClick={() => clAppointCR(groupId, m.id)}
+                            onClick={() => clAppointCR(resolvedGroupId, m.id)}
                           >
                             Make CR
                           </button>
@@ -166,7 +178,7 @@ export default function ClassmatesList({ groupId, showActions = false, viewerRol
                             title="Dismiss this badge without appointing them CR — use if they already stepped down or the claim is outdated"
                             onClick={() => {
                               if (window.confirm(`Clear the "Claims CR" badge${m.id === currentUid ? ' for yourself' : ` for ${m.name || 'this classmate'}`}? This does NOT remove CR status — use "Remove CR" for that.`)) {
-                                clDismissLegacyCRClaim(groupId, m.id);
+                                clDismissLegacyCRClaim(resolvedGroupId, m.id);
                               }
                             }}
                           >
@@ -176,7 +188,7 @@ export default function ClassmatesList({ groupId, showActions = false, viewerRol
                       </>
                     ) : (
                       m.id !== currentUid && (
-                        <button className="btn btn-sm btn-secondary" onClick={() => clRevokeCR(groupId, m.id)}>Remove CR</button>
+                        <button className="btn btn-sm btn-secondary" onClick={() => clRevokeCR(resolvedGroupId, m.id)}>Remove CR</button>
                       )
                     )
                   )}
@@ -195,7 +207,7 @@ export default function ClassmatesList({ groupId, showActions = false, viewerRol
                           className="btn btn-sm btn-secondary"
                           onClick={() => {
                             if (window.confirm(`Hand off CR to ${m.name || 'this classmate'}? You'll no longer be CR.`)) {
-                              handoffCR(groupId, currentUid, m.id, null);
+                              handoffCR(resolvedGroupId, currentUid, m.id, null);
                             }
                           }}
                         >
@@ -203,14 +215,14 @@ export default function ClassmatesList({ groupId, showActions = false, viewerRol
                         </button>
                       )}
                       {m.role === 'acr' ? (
-                        <button className="btn btn-sm btn-secondary" onClick={() => revokeACR(groupId, m.id)}>Remove ACR</button>
+                        <button className="btn btn-sm btn-secondary" onClick={() => revokeACR(resolvedGroupId, m.id)}>Remove ACR</button>
                       ) : (
                         m.role !== 'cr' && (
                           <button
                             className="btn btn-sm btn-secondary"
                             disabled={acrSlotsFull}
                             title={acrSlotsFull ? `Both ACR slots are full (max ${MAX_ACR})` : undefined}
-                            onClick={() => assignACR(groupId, m.id)}
+                            onClick={() => assignACR(resolvedGroupId, m.id)}
                           >
                             Make ACR
                           </button>
@@ -224,7 +236,7 @@ export default function ClassmatesList({ groupId, showActions = false, viewerRol
                       className="btn btn-sm btn-secondary"
                       onClick={() => {
                         if (window.confirm(`Remove ${m.name || 'this classmate'} from the class?`)) {
-                          removeMember(groupId, m.id);
+                          removeMember(resolvedGroupId, m.id);
                         }
                       }}
                     >
