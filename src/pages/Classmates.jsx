@@ -142,7 +142,7 @@ export default function Classmates() {
       </p>
 
       {groupId && (
-        <div className="classmates-search-row" style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) auto', gap: 10, alignItems: 'center', marginBottom: 14 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) auto', gap: 10, alignItems: 'center', marginBottom: 14 }}>
           <input
             className="input"
             type="text"

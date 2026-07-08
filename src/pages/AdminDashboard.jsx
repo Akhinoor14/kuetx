@@ -239,10 +239,11 @@ function StaffRolesView({ onBack, onSelectCategory, groups, countCtx }) {
   const [newScopeValue, setNewScopeValue] = useState('');
   const [currentHolders, setCurrentHolders] = useState({});
   const [holdersError, setHoldersError] = useState(null);
+  const [holdersLoading, setHoldersLoading] = useState(false);
   const [subTab, setSubTab] = useState('assign');
 
-  const refreshHolders = (role) => {
-    listStaffByRole(role)
+  const refreshHolders = async (role) => {
+    return listStaffByRole(role)
       .then((list) => setCurrentHolders((prev) => ({ ...prev, [role]: list })))
       .catch((err) => {
         // Only log unexpected failures. Permission-denied here usually
@@ -257,9 +258,13 @@ function StaffRolesView({ onBack, onSelectCategory, groups, countCtx }) {
   };
   useEffect(() => {
     if (subTab !== 'holders') return;
-    ALL_ASSIGNABLE_ROLES.forEach((role) => {
-      if (!currentHolders[role]) refreshHolders(role);
-    });
+    let cancelled = false;
+    setHoldersLoading(true);
+    Promise.all(ALL_ASSIGNABLE_ROLES.map((role) => refreshHolders(role)))
+      .finally(() => {
+        if (!cancelled) setHoldersLoading(false);
+      });
+    return () => { cancelled = true; };
   }, [subTab]);
 
   const handleAssign = async () => {
@@ -312,9 +317,11 @@ function StaffRolesView({ onBack, onSelectCategory, groups, countCtx }) {
           {holdersError && (
             <div style={{ fontSize: 12, color: 'var(--danger)', marginBottom: 10 }}>{holdersError}</div>
           )}
+          {holdersLoading && <EmptyState>Loading current role holders…</EmptyState>}
           {totalHolders === 0 && <EmptyState>No one holds a staff role yet.</EmptyState>}
           <p style={{ fontSize: 11, color: 'var(--muted)', marginBottom: 12 }}>
             Each role is shown separately. If one person holds multiple roles, they appear in every relevant role segment.
+            Founder can revoke or remove any holder from here.
           </p>
           {ALL_ASSIGNABLE_ROLES.map((r) => {
             const holders = currentHolders[r] || [];
@@ -335,7 +342,13 @@ function StaffRolesView({ onBack, onSelectCategory, groups, countCtx }) {
                           {h.scope?.dept ? `— ${h.scope.dept}` : h.scope?.groupId ? `— ${h.scope.groupId}` : ''}
                         </span>
                       </span>
-                      <button className="btn btn-sm btn-secondary" onClick={async () => { await removeRole(h.uid, h.role, h.scope); refreshHolders(r); }}>Remove</button>
+                      <button
+                        className="btn btn-sm btn-secondary"
+                        title="Revoke this role from the holder"
+                        onClick={async () => { await removeRole(h.uid, h.role, h.scope); refreshHolders(r); }}
+                      >
+                        Revoke
+                      </button>
                     </div>
                   ))
                 )}

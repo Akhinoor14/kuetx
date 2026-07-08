@@ -23,7 +23,7 @@
 // ClassManagement, Classmates teaser) never creates duplicate listeners.
 
 import {
-  collection, collectionGroup, doc, getDoc, getDocs, setDoc, updateDoc, deleteDoc, addDoc, onSnapshot,
+  collection, collectionGroup, doc, getDoc, getDocFromServer, getDocs, setDoc, updateDoc, deleteDoc, addDoc, onSnapshot,
   query, where, orderBy, serverTimestamp, writeBatch, increment, limit as fsLimit,
 } from 'firebase/firestore';
 import { db, auth } from './firebase';
@@ -173,7 +173,7 @@ export async function waitForOwnMembership(groupId, retries = 5, delayMs = 400) 
   if (!uid || !groupId) return false;
   for (let i = 0; i < retries; i++) {
     try {
-      const snap = await getDoc(doc(db, 'groups', groupId, 'members', uid));
+      const snap = await getDocFromServer(doc(db, 'groups', groupId, 'members', uid));
       if (snap.exists()) return true;
     } catch (e) {
       // permission-denied while the write is still propagating — retry
@@ -264,7 +264,7 @@ export async function waitForOwnVerification(groupId, retries = 5, delayMs = 400
   if (!uid || !groupId) return false;
   for (let i = 0; i < retries; i++) {
     try {
-      const snap = await getDoc(doc(db, 'groups', groupId, 'members', uid));
+      const snap = await getDocFromServer(doc(db, 'groups', groupId, 'members', uid));
       if (snap.exists() && snap.data().verified === true) return true;
     } catch (e) {
       // permission-denied while the verification write is still propagating — retry
@@ -331,7 +331,12 @@ function _countRoles(memberDocs) {
 export async function requestCR(groupId, profile) {
   const uid = auth.currentUser?.uid;
   if (!uid || !groupId) return;
-  await setDoc(doc(db, 'groups', groupId, 'crRequests', uid), {
+  const ref_ = doc(db, 'groups', groupId, 'crRequests', uid);
+  const existing = await getDocFromServer(ref_);
+  if (existing.exists() && existing.data()?.status === 'pending') {
+    throw new Error('You already have a pending CR request. Wait for your Campus Lead to act on it first.');
+  }
+  await setDoc(ref_, {
     name: profile?.name || '', roll: profile?.studentId || '',
     status: 'pending', requestedAt: serverTimestamp(),
   });
