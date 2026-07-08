@@ -18,6 +18,7 @@
 //   4. node scripts/fix_stale_legacyCRClaim.cjs --apply   # actually writes
 
 const admin = require('firebase-admin');
+const { getFirestore } = require('firebase-admin/firestore');
 const path = require('path');
 
 const APPLY = process.argv.includes('--apply');
@@ -25,7 +26,7 @@ const APPLY = process.argv.includes('--apply');
 admin.initializeApp({
   credential: admin.cert(path.join(__dirname, 'serviceAccountKey.json')),
 });
-const db = admin.firestore();
+const db = getFirestore();
 
 async function main() {
   const groupsSnap = await db.collection('groups').get();
