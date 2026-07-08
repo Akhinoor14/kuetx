@@ -1,4 +1,5 @@
 import { store } from '../store/store';
+import { subscribeGlobalNotices, subscribeGroupNotices, noticeAppliesTo } from './groupSync';
 
 /**
  * Notice system — separate from Alerts (lib/alertUtils.js).
@@ -12,32 +13,83 @@ import { store } from '../store/store';
  * messages, anything cross-cutting that isn't tied to one specific
  * academic module. Lives behind the top-bar bell icon.
  *
- * This file is intentionally a thin, empty-by-default shell for now —
- * there is no sender/broadcast mechanism wired up yet (no admin panel
- * action, no Firestore collection). getNotices() returns [] until a
- * real source is connected. The read/unread + storage plumbing below
- * mirrors alertUtils.js's dismissed-id pattern so wiring in a real
- * source later is a drop-in: replace getNotices()'s body with a fetch
- * from wherever notices end up being written (Firestore collection,
- * RTDB path, etc.) and everything else — read state, badge count,
- * NoticePanel/Notice page — keeps working unchanged.
+ * Two real sources feed this now, both live via Firestore onSnapshot:
+ *   (a) global admin broadcasts — root `notices` collection, filtered
+ *       per-user client-side via noticeAppliesTo(notice, profile, groupId)
+ *       (audience: {type:'all'|'batch'|'group'})
+ *   (b) group-level CR/ACR notices — groups/{groupId}/notices
+ * subscribeAllNotices() merges both into one live, sorted list. Use this
+ * instead of the old synchronous getNotices() wherever possible.
  *
- * Expected shape once wired, per notice:
+ * Expected shape, per notice:
  *   {
  *     id: string,          // stable unique id
  *     title: string,
  *     body: string,
- *     from: string,        // e.g. 'Admin', 'CR', 'Campus Lead'
+ *     from: string,        // 'Admin' or 'CR'
  *     link: string | null, // optional deep link
- *     createdAt: number,   // epoch ms
+ *     createdAt: number,   // epoch ms (converted from Firestore Timestamp)
  *   }
  */
 
 export const NOTICE_READ_KEY = 'noticeReadIds_v1';
 
-// TODO: wire to a real source (Firestore collection, RTDB path, etc.)
-// once admin/CR broadcast is built. Returns [] for now — the Notice
-// page will correctly show "All clear!" until then.
+function toMillis(createdAt) {
+  // Firestore Timestamp (serverTimestamp()) has .toMillis(); guard for the
+  // brief window right after a write where local cache may not have
+  // resolved the server value yet (serverTimestamp() placeholder is null).
+  if (!createdAt) return 0;
+  if (typeof createdAt.toMillis === 'function') return createdAt.toMillis();
+  if (typeof createdAt === 'number') return createdAt;
+  return 0;
+}
+
+/**
+ * Live/reactive notice feed. Subscribes to both global (admin) and
+ * group (CR/ACR) notices, merges, de-dupes by id, sorts newest-first,
+ * and calls back with the combined array on every change from either
+ * source. Returns a single combined unsubscribe function.
+ */
+export function subscribeAllNotices(profile, groupId, callback) {
+  let globalList = [];
+  let groupList = [];
+
+  const emit = () => {
+    const merged = [...globalList, ...groupList];
+    const seen = new Set();
+    const deduped = [];
+    for (const n of merged) {
+      if (seen.has(n.id)) continue;
+      seen.add(n.id);
+      deduped.push(n);
+    }
+    deduped.sort((a, b) => b.createdAt - a.createdAt);
+    callback(deduped);
+  };
+
+  const unsubGlobal = subscribeGlobalNotices((notices) => {
+    globalList = notices
+      .filter((n) => noticeAppliesTo(n, profile, groupId))
+      .map((n) => ({ ...n, from: 'Admin', createdAt: toMillis(n.createdAt) }));
+    emit();
+  });
+
+  const unsubGroup = groupId
+    ? subscribeGroupNotices(groupId, (notices) => {
+        groupList = notices.map((n) => ({ ...n, from: 'CR', createdAt: toMillis(n.createdAt) }));
+        emit();
+      })
+    : () => {};
+
+  return () => {
+    unsubGlobal();
+    unsubGroup();
+  };
+}
+
+// Kept for backward compatibility — old synchronous callers (none left
+// in this codebase as of this wiring) get an empty list rather than a
+// crash. Prefer subscribeAllNotices for anything new.
 export const getNotices = () => {
   return [];
 };

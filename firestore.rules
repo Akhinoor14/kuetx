@@ -258,13 +258,43 @@ service cloud.firestore {
         // Members edit only their own display fields. verified/role changes
         // are gated to CL/Admin/Head of Ops/that dept's SCL (fallback chain
         // — a request never gets stuck just because the immediate level is
-        // vacant or unresponsive), OR the group's own CR (for ACR
-        // appointment + CR succession handoff — see groupSync.js), never
-        // by the member self-approving. The CR path is restricted to only
-        // the role/verified fields — a CR can promote/demote/verify, but
-        // can never rewrite someone else's name or roll.
+        // vacant or unresponsive). The group's own CR/ACR also has a
+        // narrow, field-restricted role-write power (see groupSync.js for
+        // the exact app-level flows this backs):
+        //   - CR can freely set role 'acr'<->'member' on anyone (assignACR/
+        //     revokeACR) — no CL approval needed for that tier.
+        //   - CR can set role 'member' on their OWN doc (the self-demote
+        //     half of handoffCR) — always allowed, this only ever *frees*
+        //     a CR slot, never creates unauthorized access.
+        //   - CR can set role 'cr' on someone ELSE's doc — this is a
+        //     handoff (see handoffCR in groupSync.js), where the acting
+        //     CR replaces THEMSELF with a successor in the exact slot
+        //     they already occupy. isGroupCR(groupId) already proves the
+        //     acting user holds a CR slot, so this branch can never
+        //     increase total CR count above MAX_CR by itself — it's a
+        //     transfer, not a fresh appointment. (Firestore rules
+        //     evaluate each doc in a batch independently, so this can't
+        //     verify the acting CR ALSO demoted themself in the very same
+        //     batch — but even in the worst case where they didn't, the
+        //     result is one extra 'cr'-role doc that clRevokeCR/CL cleans
+        //     up, not a bypass of CL approval for genuinely NEW CRs, since
+        //     the target must already be an existing verified member, not
+        //     an outside student being fast-tracked past a crRequests
+        //     approval.)
+        //   - ACR has none of this power (isGroupACR is deliberately
+        //     absent from this branch).
         allow update: if isAdmin() || isCLFor(groupId) || isHeadOfOps() || isSCLForGroup(groupId) ||
-          (isGroupCR(groupId) && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['role', 'verified'])) ||
+          (isGroupCR(groupId) && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['role', 'verified']) &&
+            (request.resource.data.role == 'acr' || request.resource.data.role == 'member' ||
+             // A CR setting someone else to role 'cr' is a handoff — the
+             // acting CR (isGroupCR already confirms this) is handing
+             // over the exact slot they themself occupy. This never
+             // changes total CR count (one CR replaced by another in the
+             // same slot), so no extra capacity check is needed here —
+             // unlike clAppointCR (CL action, genuinely fills an OPEN
+             // slot), this branch is a same-slot transfer by definition
+             // of who's allowed to trigger it.
+             request.resource.data.role == 'cr')) ||
           (isSignedIn() && request.auth.uid == memberUid
             && request.resource.data.verified == resource.data.verified
             && request.resource.data.role == resource.data.role) ||
@@ -279,13 +309,32 @@ service cloud.firestore {
             && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['verified'])
             && rollIsInstitutionallyVerified(resource.data.roll)
             && rollMatchesGroup(resource.data.roll, groupId));
-        allow delete: if isAdmin() || isCLFor(groupId) || isHeadOfOps();
+        // Removal authority is asymmetric, same principle as the update
+        // rule above: CL/Admin/Head of Ops can remove anyone. A group's
+        // own CR/ACR can ALSO remove a plain member (kick from class) —
+        // but never another CR/ACR outright (that must go through
+        // clRevokeCR/CL escalation, not straight deletion) and never
+        // themself via this path.
+        allow delete: if isAdmin() || isCLFor(groupId) || isHeadOfOps() ||
+          ((isGroupCR(groupId) || isGroupACR(groupId)) &&
+            resource.data.role != 'cr' && resource.data.role != 'acr' &&
+            request.auth.uid != memberUid);
       }
 
       match /crRequests/{requestUid} {
+        // Two kinds of docs share this collection: a fresh CR claim (doc id
+        // == the requester's own uid, no `type` field) and a CR's own
+        // "let me step down" leave request (doc id == 'leave_' + their
+        // uid, type:'leave', with a `uid` field holding the real uid since
+        // the doc id itself is no longer the plain uid). Both need CL
+        // approval, so both share the same authority model below.
         allow read: if isAdmin() || isCLFor(groupId) || isHeadOfOps() || isSCLForGroup(groupId)
-          || (isSignedIn() && request.auth.uid == requestUid);
-        allow create: if isSignedIn() && request.auth.uid == requestUid && isVerifiedMember(groupId);
+          || (isSignedIn() && request.auth.uid == requestUid)
+          || (isSignedIn() && resource.data.uid == request.auth.uid);
+        allow create: if isSignedIn() && isVerifiedMember(groupId) &&
+          ((request.auth.uid == requestUid && request.resource.data.type != 'leave')
+           || (request.resource.data.type == 'leave' && request.resource.data.uid == request.auth.uid
+               && requestUid == 'leave_' + request.auth.uid && isGroupCR(groupId)));
         allow update: if isAdmin() || isCLFor(groupId) || isHeadOfOps() || isSCLForGroup(groupId);
         allow delete: if false;
       }

@@ -20,6 +20,22 @@ export const NAV = [
     items: [
       { id: 'class-management', label: 'Class Management',  icon: 'Users',         path: '/class-management', requiresCR: true },
       { id: 'ct-quiz-planning', label: 'CT & Quiz Planner', icon: 'CalendarCheck', path: '/ct-quiz-planning', requiresCR: true },
+      { id: 'class-roster',     label: 'Class Roster',      icon: 'Users',         path: '/class-roster',     requiresCR: true },
+    ]
+  },
+  {
+    group: 'Admin',
+    requiresAdmin: true,
+    isSubgroup: true,
+    hubPath: '/team',
+    hubIcon: 'Briefcase',
+    // Single destination — /team already renders the right content for
+    // whatever role(s) this uid actually holds (Founder / Head of Ops /
+    // Campus Lead / etc, see TeamDashboard.jsx + StaffDashboard.jsx). The
+    // visible label for this row is set dynamically per-user in Sidebar.jsx
+    // (their actual role name), not this static 'Admin' string.
+    items: [
+      { id: 'team', label: 'Team & Administration', icon: 'Briefcase', path: '/team', requiresAdmin: true },
     ]
   },
   {

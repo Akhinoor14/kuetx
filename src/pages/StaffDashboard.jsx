@@ -9,6 +9,7 @@ import {
 } from '../lib/staffSync';
 import {
   subscribeCRRequests, clApproveCRRequest, clRejectCRRequest,
+  subscribeLeaveRequests, clApproveLeaveCR, clRejectLeaveCR,
   listAllGroups, getGroupMembersOnce,
 } from '../lib/groupSync';
 import ClassmatesList from '../components/ClassmatesList';
@@ -27,12 +28,40 @@ function Section({ title, children }) {
 // ---------------------------------------------------------------------
 function CampusLeadBlock({ groupId }) {
   const [crRequests, setCrRequests] = useState([]);
+  const [leaveRequests, setLeaveRequests] = useState([]);
+  const [approveErr, setApproveErr] = useState('');
 
   useEffect(() => subscribeCRRequests(groupId, setCrRequests), [groupId]);
+  useEffect(() => subscribeLeaveRequests(groupId, setLeaveRequests), [groupId]);
+
+  const handleApprove = async (targetUid) => {
+    setApproveErr('');
+    try {
+      await clApproveCRRequest(groupId, targetUid);
+    } catch (e) {
+      // Most likely: both CR slots (max 2) are already full — surfaced
+      // clearly rather than a silent no-op, since this is the one case
+      // clApproveCRRequest can legitimately reject.
+      setApproveErr(e?.message || 'Approve failed — try again.');
+    }
+  };
+
+  const handleApproveLeave = async (requestDocId, targetUid) => {
+    setApproveErr('');
+    try {
+      await clApproveLeaveCR(groupId, requestDocId, targetUid);
+    } catch (e) {
+      setApproveErr(e?.message || 'Approve failed — try again.');
+    }
+  };
 
   return (
     <div style={{ marginBottom: 20, paddingBottom: 16, borderBottom: '1px solid var(--border)' }}>
       <div style={{ fontWeight: 700, fontSize: 14, marginBottom: 8 }}>{groupId}</div>
+
+      {approveErr && (
+        <div className="card" style={{ padding: 8, marginBottom: 8, fontSize: 12, color: 'var(--danger)' }}>{approveErr}</div>
+      )}
 
       {crRequests.length > 0 && (
         <div style={{ marginBottom: 12 }}>
@@ -41,8 +70,23 @@ function CampusLeadBlock({ groupId }) {
             <div key={r.id} className="card" style={{ padding: 8, display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
               <span style={{ fontSize: 13 }}>{r.name} ({r.roll})</span>
               <div style={{ display: 'flex', gap: 4 }}>
-                <button className="btn btn-sm btn-primary" onClick={() => clApproveCRRequest(groupId, r.id)}>Approve</button>
+                <button className="btn btn-sm btn-primary" onClick={() => handleApprove(r.id)}>Approve</button>
                 <button className="btn btn-sm btn-secondary" onClick={() => clRejectCRRequest(groupId, r.id)}>Reject</button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {leaveRequests.length > 0 && (
+        <div style={{ marginBottom: 12 }}>
+          <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 6 }}>CR leave requests</div>
+          {leaveRequests.map((r) => (
+            <div key={r.id} className="card" style={{ padding: 8, display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
+              <span style={{ fontSize: 13 }}>{r.name} ({r.roll}) — CR thaka bad dite chay</span>
+              <div style={{ display: 'flex', gap: 4 }}>
+                <button className="btn btn-sm btn-primary" onClick={() => handleApproveLeave(r.id, r.uid)}>Approve</button>
+                <button className="btn btn-sm btn-secondary" onClick={() => clRejectLeaveCR(groupId, r.id)}>Reject</button>
               </div>
             </div>
           ))}
@@ -52,7 +96,7 @@ function CampusLeadBlock({ groupId }) {
       <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 6 }}>
         Roster <span style={{ fontWeight: 400, color: 'var(--muted)' }}>("Claims CR" badge = held CR before this system existed — review and confirm/promote if still accurate)</span>
       </div>
-      <ClassmatesList groupId={groupId} showActions currentUid={auth.currentUser?.uid} />
+      <ClassmatesList groupId={groupId} showActions viewerRole="cl" currentUid={auth.currentUser?.uid} />
     </div>
   );
 }

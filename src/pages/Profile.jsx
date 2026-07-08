@@ -22,6 +22,9 @@ import { uploadProfilePicture, getProfilePhotoURL, deleteProfilePicture } from '
 import { isRollInstitutionallyVerified } from '../lib/kuetEmailVerify';
 import { getGroupId } from '../lib/groupUtils';
 import { subscribeMyRole } from '../lib/groupSync';
+import { subscribeMyRoles } from '../lib/staffSync';
+import { ROLE_LABELS } from '../lib/staffRoles';
+import { checkIsAdmin } from '../lib/adminAuth';
 import ProfileVerifyBanner from '../components/ProfileVerifyBanner';
 import BlueTick from '../components/BlueTick';
 
@@ -534,6 +537,39 @@ export default function Profile() {
       setIsRealCR(role === 'cr' || role === 'acr');
     });
   }, [profile?.dept, profile?.batch, profile?.studentId]);
+
+  // Real, server-verified admin/staff status for the "Team & Administration"
+  // card below — same principle as isRealCR above: only ever driven by
+  // admins/{uid} (Founder) or staff/{uid}/roles (everyone else), never a
+  // self-reported flag.
+  const [isRealAdmin, setIsRealAdmin] = useState(false);
+  const [adminRoleLabel, setAdminRoleLabel] = useState('');
+  const isFounderRef = useRef(false);
+  useEffect(() => {
+    let cancelled = false;
+    const uid = auth.currentUser?.uid;
+    if (!uid) { setIsRealAdmin(false); return; }
+
+    checkIsAdmin(uid).then((isFounder) => {
+      if (cancelled) return;
+      if (isFounder) {
+        isFounderRef.current = true;
+        setIsRealAdmin(true);
+        setAdminRoleLabel('Founder');
+      }
+    }).catch(() => {});
+
+    const unsub = subscribeMyRoles((roles) => {
+      if (cancelled) return;
+      if (roles.length > 0) {
+        setIsRealAdmin(true);
+        setAdminRoleLabel((prev) => (prev === 'Founder' ? prev : (ROLE_LABELS[roles[0].role] || 'Staff')));
+      } else if (!isFounderRef.current) {
+        setIsRealAdmin(false);
+      }
+    });
+    return () => { cancelled = true; unsub?.(); };
+  }, []);
 
   // Covers the case where the person clicked their verification link and
   // App.jsx's boot-time completion finished slightly AFTER the one-shot
@@ -1295,6 +1331,32 @@ export default function Profile() {
           </a>
         ))}
       </div>
+
+      {/* Admin/Staff card -- only rendered for verified admins/staff,
+          driven by isRealAdmin (server-verified, see effect above) */}
+      {isRealAdmin && (
+        <a href="/team" style={{
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10,
+          padding: '14px 16px', borderRadius: 12, textDecoration: 'none',
+          background: 'color-mix(in srgb, var(--accent) 8%, var(--surface))',
+          border: '1px solid color-mix(in srgb, var(--accent) 25%, transparent)',
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            <div style={{
+              width: 34, height: 34, borderRadius: 9,
+              background: 'color-mix(in srgb, var(--accent) 15%, var(--surface))',
+              display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+            }}>
+              <Icons.Briefcase size={16} color="var(--accent)" />
+            </div>
+            <div>
+              <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)' }}>You're {adminRoleLabel}</div>
+              <div style={{ fontSize: 11, color: 'var(--muted)' }}>Team & Administration</div>
+            </div>
+          </div>
+          <Icons.ChevronRight size={16} color="var(--muted)" />
+        </a>
+      )}
 
       {/* "Simulate CR Mode" toggle removed — CR access is now decided
           entirely by the server-verified role (members/{uid}.role via

@@ -23,7 +23,7 @@
 // ClassManagement, Classmates teaser) never creates duplicate listeners.
 
 import {
-  collection, collectionGroup, doc, getDoc, getDocs, setDoc, updateDoc, addDoc, onSnapshot,
+  collection, collectionGroup, doc, getDoc, getDocs, setDoc, updateDoc, deleteDoc, addDoc, onSnapshot,
   query, where, orderBy, serverTimestamp, writeBatch, increment, limit as fsLimit,
 } from 'firebase/firestore';
 import { db, auth } from './firebase';
@@ -152,6 +152,21 @@ export async function revokeVerification(groupId, memberUid) {
 }
 
 /**
+ * CR/ACR/CL/Admin: remove a member from the group entirely (deletes their
+ * members/{uid} doc, as opposed to verifyMember/revokeVerification which
+ * only flip a flag). Deliberately asymmetric like every other authority
+ * check in this file — a CR/ACR can remove a plain member, but can NOT
+ * remove another CR/ACR this way (that must go through clRevokeCR/CL
+ * escalation instead) and can't remove themself. Firestore rules enforce
+ * this same restriction server-side (see members/{memberUid} allow delete
+ * in firestore.rules) — this client guard just avoids a wasted round trip,
+ * never treat it as the actual security boundary.
+ */
+export async function removeMember(groupId, targetUid) {
+  await deleteDoc(doc(db, 'groups', groupId, 'members', targetUid));
+}
+
+/**
  * Self-service: after Tier-1 KUET email verification succeeds, flip THIS
  * user's own membership doc (if one already exists) to verified: true.
  *
@@ -179,13 +194,56 @@ export async function syncOwnVerification(groupId, uid) {
 // CR lifecycle
 // ---------------------------------------------------------------------
 // CR is NOT an official KUETx post — it's a per-class student feature.
-// It's granted by the Campus Lead of that exact dept+batch (never by
-// Admin directly, never by another group's CL). The group's `meta/crStatus`
-// counter is what Firestore rules check to decide whether routine/
-// assignment writes require CR/ACR, or fall back to "any verified member"
-// when the group currently has none.
+// Each class (batch+dept group) has two "sections" in practice, so this
+// system supports up to MAX_CR (2) simultaneous CR and MAX_ACR (2)
+// simultaneous ACR per group. There is no hard-coded "Section A / Section
+// B" label anywhere — CR/ACR are just independent slots, and which real
+// class-section a given CR actually covers is something they sort out
+// among themselves, not something this app tracks.
+//
+// Three distinct ways a slot changes hands, each with different authority:
+//   1. Fresh student -> CR, when NOT replacing a specific person: always
+//      goes through a request (requestCR) that only the group's Campus
+//      Lead (or SCL/HeadOfOps/Admin fallback) can approve
+//      (clApproveCRRequest). Never automatic, never CR-approved.
+//   2. Existing CR -> hands their OWN slot to a specific successor
+//      (handoffCR): no CL approval needed, by design (easy same-tier
+//      handoff) — the departing CR chooses their own replacement, and
+//      that replacement takes the exact slot vacated (not a new one).
+//   3. Existing CR -> appoints someone into an ACR slot (assignACR): no
+//      CL approval needed. CR and ACR are peer content-editing roles,
+//      the difference is only that ACR carries no succession/appoint
+//      power at all — an ACR can never appoint or hand off anything.
+//
+// The group's `meta/crStatus.count` is the CR-slot occupancy (0-2) that
+// Firestore rules check for the "no CR yet -> any verified member may
+// edit" fallback window (see isContentEditor). ACR occupancy isn't part
+// of that rule (isGroupACR is checked directly), so it's only tracked
+// client-side here for the "slots full" UI gate.
 
-/** Student self-service: ask this group's Campus Lead to become CR. */
+export const MAX_CR = 2;
+export const MAX_ACR = 2;
+
+/** Count current CR / ACR holders from a members snapshot's docs. */
+function _countRoles(memberDocs) {
+  let cr = 0, acr = 0;
+  memberDocs.forEach((d) => {
+    const role = d.data().role;
+    if (role === 'cr') cr += 1;
+    else if (role === 'acr') acr += 1;
+  });
+  return { cr, acr };
+}
+
+/**
+ * Student self-service: ask this group's Campus Lead to become CR.
+ * Always allowed to submit even when both CR slots are currently full —
+ * the request just queues. Multiple pending requests can coexist; the
+ * moment a CL approves one and a slot fills up, every other still-pending
+ * request for this group is auto-rejected in the same batch (see
+ * clApproveCRRequest) since the reason they were requesting (an open
+ * slot) no longer exists once CL has made a choice.
+ */
 export async function requestCR(groupId, profile) {
   const uid = auth.currentUser?.uid;
   if (!uid || !groupId) return;
@@ -206,22 +264,35 @@ export function subscribeCRRequests(groupId, callback) {
   );
 }
 
-/** Campus Lead action: approve a CR request — becomes the group's first/current CR. */
+/**
+ * Campus Lead action: approve a pending CR request into an open CR slot.
+ * Throws if both CR slots are already occupied — CL must clRevokeCR (or
+ * wait for a handoff/leave) to free a slot first, this never bumps an
+ * existing CR out. On success, every OTHER still-pending request for this
+ * group is auto-rejected in the same batch, since they were queued for
+ * "the next open slot" and that slot is now gone.
+ */
 export async function clApproveCRRequest(groupId, targetUid) {
   const crStatusRef = doc(db, 'groups', groupId, 'meta', 'crStatus');
-  const crStatusSnap = await getDoc(crStatusRef);
-  const hadCR = crStatusSnap.exists() && (crStatusSnap.data().count || 0) > 0;
-
-  const membersSnap = await getDocs(collection(db, 'groups', groupId, 'members'));
+  const [crStatusSnap, membersSnap, requestsSnap] = await Promise.all([
+    getDoc(crStatusRef),
+    getDocs(collection(db, 'groups', groupId, 'members')),
+    getDocs(query(collection(db, 'groups', groupId, 'crRequests'), where('status', '==', 'pending'))),
+  ]);
+  const { cr: crCount } = _countRoles(membersSnap.docs);
+  if (crCount >= MAX_CR) {
+    throw new Error(`Both CR slots for this class are already full (max ${MAX_CR}).`);
+  }
   const batch = writeBatch(db);
-  membersSnap.docs.forEach((d) => {
-    if (d.id !== targetUid && (d.data().role === 'cr' || d.data().role === 'acr')) {
-      batch.update(d.ref, { role: 'member' });
-    }
-  });
   batch.update(doc(db, 'groups', groupId, 'members', targetUid), { role: 'cr', verified: true });
   batch.update(doc(db, 'groups', groupId, 'crRequests', targetUid), { status: 'approved' });
-  if (!hadCR) batch.set(crStatusRef, { count: increment(1) }, { merge: true });
+  // Auto-reject every other pending request for this group — the slot
+  // they were queued for has just been taken.
+  requestsSnap.docs.forEach((d) => {
+    if (d.id !== targetUid) batch.update(d.ref, { status: 'rejected' });
+  });
+  const newCount = (crStatusSnap.exists() ? (crStatusSnap.data().count || 0) : 0) + 1;
+  batch.set(crStatusRef, { count: newCount }, { merge: true });
   await batch.commit();
 }
 
@@ -229,51 +300,65 @@ export async function clRejectCRRequest(groupId, targetUid) {
   await updateDoc(doc(db, 'groups', groupId, 'crRequests', targetUid), { status: 'rejected' });
 }
 
-/** Campus Lead action: appoint a CR directly (roster view), demoting any existing CR/ACR first. */
+/**
+ * Campus Lead action: appoint a CR directly into an open slot (roster
+ * view) without requiring a prior student-submitted request. Throws if
+ * both CR slots are already full.
+ */
 export async function clAppointCR(groupId, targetUid) {
   const crStatusRef = doc(db, 'groups', groupId, 'meta', 'crStatus');
-  const crStatusSnap = await getDoc(crStatusRef);
-  const hadCR = crStatusSnap.exists() && (crStatusSnap.data().count || 0) > 0;
-
-  const membersSnap = await getDocs(collection(db, 'groups', groupId, 'members'));
+  const [crStatusSnap, membersSnap] = await Promise.all([
+    getDoc(crStatusRef),
+    getDocs(collection(db, 'groups', groupId, 'members')),
+  ]);
+  const { cr: crCount } = _countRoles(membersSnap.docs);
+  if (crCount >= MAX_CR) {
+    throw new Error(`Both CR slots for this class are already full (max ${MAX_CR}).`);
+  }
   const batch = writeBatch(db);
-  membersSnap.docs.forEach((d) => {
-    if (d.id !== targetUid && (d.data().role === 'cr' || d.data().role === 'acr')) {
-      batch.update(d.ref, { role: 'member' });
-    }
-  });
   batch.update(doc(db, 'groups', groupId, 'members', targetUid), { role: 'cr', verified: true });
-  if (!hadCR) batch.set(crStatusRef, { count: increment(1) }, { merge: true });
+  const newCount = (crStatusSnap.exists() ? (crStatusSnap.data().count || 0) : 0) + 1;
+  batch.set(crStatusRef, { count: newCount }, { merge: true });
   await batch.commit();
 }
 
-/** Campus Lead action: force-remove a misbehaving CR. Reopens the "no CR" fallback window. */
+/** Campus Lead action: force-remove a misbehaving CR, freeing their slot. */
 export async function clRevokeCR(groupId, targetUid) {
   const batch = writeBatch(db);
   batch.update(doc(db, 'groups', groupId, 'members', targetUid), { role: 'member' });
   batch.set(doc(db, 'groups', groupId, 'meta', 'crStatus'), { count: increment(-1) }, { merge: true });
+  // Clean up any crRequests doc left over from when this person originally
+  // became CR — Firestore rules forbid deleting crRequests docs (audit
+  // trail), so we mark it 'revoked' instead. subscribeCRRequests already
+  // filters to status === 'pending', so a leftover 'approved' doc was never
+  // itself shown as pending — but this closes the loop cleanly so no doc
+  // tied to this uid can ever be mistaken for an active/pending claim.
+  const reqRef = doc(db, 'groups', groupId, 'crRequests', targetUid);
+  const reqSnap = await getDoc(reqRef);
+  if (reqSnap.exists()) {
+    batch.update(reqRef, { status: 'revoked' });
+  }
   await batch.commit();
 }
 
 /**
- * CR-initiated succession — no CL approval needed by design (easy handoff).
- * The successor MUST already be a verified member of this exact group.
- * This demotes the current CR *and* any ACR to plain member; only the new
- * CR remains in a leadership role. Net crStatus count stays the same (one
- * CR replaced by another), and the CL is passively notified, not asked.
+ * CR-initiated succession — no CL approval needed by design (easy
+ * handoff). The successor MUST already be a verified member of this
+ * exact group, and may already hold an ACR slot (an ACR being promoted
+ * to CR by the outgoing CR is allowed). This replaces the CURRENT CR
+ * (currentUid) specifically with the successor — it does NOT touch the
+ * other CR slot or any ACR slots besides the successor's own (if they
+ * held one, it's freed since they're moving into the CR slot instead).
+ * Net crStatus.count stays the same (one CR replaced by another in the
+ * same slot), and the CL is passively notified, not asked.
  */
 export async function handoffCR(groupId, currentUid, successorUid, currentProfile) {
   const successorSnap = await getDoc(doc(db, 'groups', groupId, 'members', successorUid));
   if (!successorSnap.exists() || !successorSnap.data().verified) {
     throw new Error('The new CR must already be a verified member of this class.');
   }
-  const membersSnap = await getDocs(collection(db, 'groups', groupId, 'members'));
   const batch = writeBatch(db);
-  membersSnap.docs.forEach((d) => {
-    if (d.id === currentUid || d.data().role === 'acr') {
-      batch.update(d.ref, { role: 'member' });
-    }
-  });
+  batch.update(doc(db, 'groups', groupId, 'members', currentUid), { role: 'member' });
   batch.update(doc(db, 'groups', groupId, 'members', successorUid), { role: 'cr' });
   await batch.commit();
   // Passive notification to the Campus Lead — not an approval gate.
@@ -283,12 +368,64 @@ export async function handoffCR(groupId, currentUid, successorUid, currentProfil
   });
 }
 
-/** CR action: appoint an Assistant CR — equal content-editing access, but no succession power. */
+/**
+ * CR action: appoint an Assistant CR into an open ACR slot — equal
+ * content-editing access, but no succession/appoint power at all. No CL
+ * approval needed. Throws if both ACR slots are already full.
+ */
 export async function assignACR(groupId, targetUid) {
+  const membersSnap = await getDocs(collection(db, 'groups', groupId, 'members'));
+  const { acr: acrCount } = _countRoles(membersSnap.docs);
+  if (acrCount >= MAX_ACR) {
+    throw new Error(`Both ACR slots for this class are already full (max ${MAX_ACR}).`);
+  }
   await updateDoc(doc(db, 'groups', groupId, 'members', targetUid), { role: 'acr' });
 }
 export async function revokeACR(groupId, targetUid) {
   await updateDoc(doc(db, 'groups', groupId, 'members', targetUid), { role: 'member' });
+}
+
+/**
+ * CR "leave without naming a successor" — the CL-approval leave-request
+ * flow. Reuses the same crRequests collection/rule as a fresh student's
+ * CR claim (type field distinguishes them), since the CL-side surface
+ * (subscribeCRRequests, approve/reject) and authority model are otherwise
+ * identical: an existing CR asking to step down still needs CL sign-off,
+ * exactly like a new student asking to step up.
+ */
+export async function requestLeaveCR(groupId, profile) {
+  const uid = auth.currentUser?.uid;
+  if (!uid || !groupId) return;
+  await setDoc(doc(db, 'groups', groupId, 'crRequests', `leave_${uid}`), {
+    type: 'leave',
+    uid,
+    name: profile?.name || '', roll: profile?.studentId || '',
+    status: 'pending', requestedAt: serverTimestamp(),
+  });
+}
+
+export function subscribeLeaveRequests(groupId, callback) {
+  if (!groupId) return () => {};
+  const key = `leaveRequests:${groupId}`;
+  return _subscribeSingleton(
+    key,
+    () => query(collection(db, 'groups', groupId, 'crRequests'), orderBy('requestedAt')),
+    (snap) => _snapToArray(snap).filter((r) => r.status === 'pending' && r.type === 'leave'),
+    callback,
+  );
+}
+
+/** Campus Lead action: approve a CR's own request to step down — frees their slot. */
+export async function clApproveLeaveCR(groupId, requestDocId, targetUid) {
+  const batch = writeBatch(db);
+  batch.update(doc(db, 'groups', groupId, 'members', targetUid), { role: 'member' });
+  batch.set(doc(db, 'groups', groupId, 'meta', 'crStatus'), { count: increment(-1) }, { merge: true });
+  batch.update(doc(db, 'groups', groupId, 'crRequests', requestDocId), { status: 'approved' });
+  await batch.commit();
+}
+
+export async function clRejectLeaveCR(groupId, requestDocId) {
+  await updateDoc(doc(db, 'groups', groupId, 'crRequests', requestDocId), { status: 'rejected' });
 }
 
 /** Read-only helper for UI — is there currently an active CR in this group? */
@@ -305,7 +442,12 @@ export function subscribeMyRole(groupId, uid, callback) {
   if (!groupId || !uid) { callback('member'); return () => {}; }
   const ref = doc(db, 'groups', groupId, 'members', uid);
   return onSnapshot(ref, (snap) => {
-    callback(snap.exists() ? (snap.data().role || 'member') : 'member');
+    const role = snap.exists() ? (snap.data().role || 'member') : 'member';
+    // TEMP DIAGNOSTIC — remove once the CR-revoke visibility bug is confirmed
+    // fixed. Logs every live role update this listener receives, so a revoke
+    // can be watched end-to-end (server write -> this callback -> UI).
+    console.log('[groupSync] subscribeMyRole update', { groupId, uid, role, at: new Date().toISOString() });
+    callback(role);
   }, (err) => {
     console.error('[groupSync] subscribeMyRole error:', err);
     callback('member');
@@ -321,7 +463,7 @@ export function subscribeCRStatus(groupId, callback) {
     _registry.set(key, entry);
     entry.unsubscribe = onSnapshot(doc(db, 'groups', groupId, 'meta', 'crStatus'), (snap) => {
       const count = snap.exists() ? (snap.data().count || 0) : 0;
-      entry.lastValue = { hasCR: count > 0, count };
+      entry.lastValue = { hasCR: count > 0, count, slotsFull: count >= MAX_CR };
       entry.listeners.forEach((cb) => cb(entry.lastValue));
     }, (err) => console.error('[groupSync] crStatus listener error:', err));
   }

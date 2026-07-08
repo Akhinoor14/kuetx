@@ -2,6 +2,8 @@ import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Bell } from 'lucide-react';
 import * as noticeApi from '../lib/noticeUtils';
+import { getProfile } from '../store/store';
+import { getGroupId } from '../lib/groupUtils';
 
 export default function Notice() {
   const [refreshTick, setRefreshTick] = useState(0);
@@ -12,8 +14,17 @@ export default function Notice() {
     return () => window.removeEventListener('kuetx:store-updated', handle);
   }, []);
 
+  const profile = useMemo(() => getProfile() || {}, [refreshTick]);
+  const groupId = useMemo(() => getGroupId(profile), [profile]);
+
   const readIds = useMemo(() => noticeApi.getReadNoticeIds(), [refreshTick]);
-  const notices = useMemo(() => noticeApi.getNotices(), [refreshTick]);
+
+  // Live notice feed (global admin broadcasts + group CR/ACR notices).
+  const [notices, setNotices] = useState([]);
+  useEffect(() => {
+    return noticeApi.subscribeAllNotices(profile, groupId, setNotices);
+  }, [profile, groupId]);
+
   const unread = noticeApi.getUnreadNotices(notices, readIds);
 
   const markRead = (id) => noticeApi.setNoticeRead(id, true);

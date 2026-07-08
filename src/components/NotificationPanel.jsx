@@ -5,6 +5,7 @@ import * as noticeApi from '../lib/noticeUtils';
 import * as alertApi from '../lib/alertUtils';
 import { computeAlerts } from '../lib/alertUtils';
 import { getProfile } from '../store/store';
+import { getGroupId } from '../lib/groupUtils';
 
 /**
  * Top-bar bell dropdown. Single time-sorted list (newest first) mixing:
@@ -28,8 +29,7 @@ const ALERT_TAGS = {
 };
 const NOTICE_TAG = { label: 'Notice', color: 'var(--accent)', bg: 'var(--accentBg)' };
 
-function buildMergedItems(profile, dismissedAlertIds, readNoticeIds, firstSeenMap) {
-  const notices = noticeApi.getNotices();
+function buildMergedItems(profile, notices, dismissedAlertIds, readNoticeIds, firstSeenMap) {
   const noticeItems = notices.map(n => ({
     id: `notice:${n.id}`,
     kind: 'notice',
@@ -90,8 +90,15 @@ export function NotificationPanel({ isOpen, onClose }) {
   }, [isOpen]);
 
   const profile = useMemo(() => getProfile() || {}, [refreshTick]);
+  const groupId = useMemo(() => getGroupId(profile), [profile]);
   const dismissedAlertIds = useMemo(() => alertApi.getDismissedAlertIds(), [refreshTick]);
   const readNoticeIds = useMemo(() => noticeApi.getReadNoticeIds(), [refreshTick]);
+
+  // Live notice feed (global admin broadcasts + group CR/ACR notices).
+  const [notices, setNotices] = useState([]);
+  useEffect(() => {
+    return noticeApi.subscribeAllNotices(profile, groupId, setNotices);
+  }, [profile, groupId]);
 
   // Stamping (a write) happens here, in an effect, not during the render-time
   // useMemo below — store.set() dispatches kuetx:store-updated, which this
@@ -107,8 +114,8 @@ export function NotificationPanel({ isOpen, onClose }) {
   }, [dismissedAlertIds, refreshTick]);
 
   const items = useMemo(
-    () => buildMergedItems(profile, dismissedAlertIds, readNoticeIds, firstSeenMap),
-    [profile, dismissedAlertIds, readNoticeIds, firstSeenMap]
+    () => buildMergedItems(profile, notices, dismissedAlertIds, readNoticeIds, firstSeenMap),
+    [profile, notices, dismissedAlertIds, readNoticeIds, firstSeenMap]
   );
 
   const visibleItems = filter === 'unread' ? items.filter(i => i.isUnread) : items;

@@ -54,8 +54,10 @@ import Clubs from './pages/Clubs';
 import About from './pages/About';
 import ClassManagement from './pages/ClassManagement';
 import CTQuizPlanning from './pages/CTQuizPlanning';
+import ClassRoster from './pages/ClassRoster';
 import Classmates from './pages/Classmates';
-import AdminDashboard from './pages/AdminDashboard';
+// AdminDashboard is no longer routed directly — it's rendered inside
+// TeamDashboard via AdminEntryPoint. See /team route below.
 import TeamDashboard from './pages/TeamDashboard';
 import { Tours, Projects, Syllabus, TimeTracker, Tuition, Reports } from './pages/Extras';
 import SubgroupHub from './components/nav-system/SubgroupHub';
@@ -129,6 +131,7 @@ function Layout({ authState, onboardingActive }) {
             <Route path="/about" element={<About />} />
             <Route path="/class-management" element={<RequireCR><ClassManagement /></RequireCR>} />
             <Route path="/ct-quiz-planning" element={<RequireCR><CTQuizPlanning /></RequireCR>} />
+            <Route path="/class-roster" element={<RequireCR><ClassRoster /></RequireCR>} />
             <Route path="/classmates" element={<Classmates />} />
             <Route path="/overview" element={<SubgroupHub group="Overview" />} />
             <Route path="/tools" element={<SubgroupHub group="Tools" />} />
@@ -153,7 +156,10 @@ function Layout({ authState, onboardingActive }) {
               }
             />
             <Route path="/cr-hub" element={<CRHub />} />
-            <Route path="/admin" element={<AdminDashboard />} />
+            {/* /admin kept only as a redirect for old links/bookmarks —
+                real destination is /team, which already embeds
+                AdminEntryPoint (Founder section) alongside the staff panel. */}
+            <Route path="/admin" element={<Navigate to="/team" replace />} />
             <Route path="/team" element={<TeamDashboard />} />
           </Routes>
         </div>

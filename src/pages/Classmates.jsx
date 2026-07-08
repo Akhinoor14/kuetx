@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Users2 } from 'lucide-react';
 import { getProfile } from '../store/store';
 import { getGroupId, getGroupLabel } from '../lib/groupUtils';
-import { joinGroup, requestCR, subscribeCRStatus, syncOwnVerification } from '../lib/groupSync';
+import { joinGroup, requestCR, subscribeCRStatus, syncOwnVerification, MAX_CR } from '../lib/groupSync';
 import { checkCLVacant, applyForCampusLead } from '../lib/staffSync';
 import { isRollInstitutionallyVerified } from '../lib/kuetEmailVerify';
 import { auth } from '../lib/firebase';
@@ -24,13 +24,23 @@ export default function Classmates() {
   // everyone and an unverified click just died as a silent
   // permission-denied with no useful message.
   const [ownRollVerified, setOwnRollVerified] = useState(false);
+  // Gates ClassmatesList from mounting its members subscription before this
+  // user's own membership doc exists. Firestore rules require an existing
+  // members/{uid} doc to read the members collection at all (isGroupMember),
+  // so subscribing in the same tick as joinGroup() raced a permission-denied
+  // on every first-ever visit (self-healed after a few seconds via retry,
+  // but showed a misleading empty "no classmates" list in the meantime).
+  const [joined, setJoined] = useState(false);
 
   useEffect(() => {
     if (!groupId) return;
-    joinGroup(groupId, profile).catch((e) => console.error('[Classmates] join failed', e));
+    setJoined(false);
+    joinGroup(groupId, profile)
+      .then(() => setJoined(true))
+      .catch((e) => { console.error('[Classmates] join failed', e); setJoined(true); });
     // Catch-up for people who verified their KUET email in an earlier
     // session/page and only later joined (or re-joined) this exact group
-    // — joinGroup() never re-touches an existing member's verified flag,
+    // -- joinGroup() never re-touches an existing member's verified flag,
     // and the 'kuetx:kuet-email-verified' event only fires at the moment
     // verification happens, so this mount-time check is what unsticks
     // anyone who was verified before this page ever saw it.
@@ -88,12 +98,15 @@ export default function Classmates() {
 
       {groupId && <KuetEmailVerifyBox />}
 
-      {groupId && crStatus && !crStatus.hasCR && claimState !== 'sent' && (
+      {groupId && crStatus && claimState !== 'sent' && (
         <div className="card" style={{ padding: 14, marginBottom: 16 }}>
-          <div style={{ fontSize: 13, fontWeight: 700, marginBottom: 4 }}>No CR yet for your class</div>
+          <div style={{ fontSize: 13, fontWeight: 700, marginBottom: 4 }}>
+            {crStatus.slotsFull ? 'CR slots are full for your class' : 'CR slot open for your class'}
+          </div>
           <p style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 10 }}>
-            Want to keep your class's routine and assignments up to date for everyone? Claim CR — it goes to
-            your Campus Lead for approval (or becomes a combined application if there isn't one yet).
+            {crStatus.slotsFull
+              ? `Both CR slots (max ${MAX_CR}) are currently filled. You can still apply — your request queues and your Campus Lead can approve it the moment a slot opens up.`
+              : 'Want to keep your class\'s routine and assignments up to date for everyone? Claim CR — it goes to your Campus Lead for approval (or becomes a combined application if there isn\'t one yet).'}
           </p>
           <button
             className="btn btn-primary btn-sm"
@@ -115,7 +128,9 @@ export default function Classmates() {
         <div className="card" style={{ padding: 14, marginBottom: 16, fontSize: 12, color: 'var(--muted)' }}>{claimMsg}</div>
       )}
 
-      <ClassmatesList groupId={groupId} currentUid={auth.currentUser?.uid} />
+      {joined
+        ? <ClassmatesList groupId={groupId} currentUid={auth.currentUser?.uid} />
+        : <div style={{ padding: 16, color: 'var(--muted)', fontSize: 13 }}>Loading classmates...</div>}
     </div>
   );
 }
