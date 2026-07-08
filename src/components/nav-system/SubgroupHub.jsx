@@ -101,7 +101,10 @@ function HubSection({ title, items, icon }) {
 export default function SubgroupHub({ group, subgroup, sections, pageTitle, extra, filterFn }) {
   const resolvedSections = [];
 
-  if (extra) resolvedSections.push(extra);
+  if (extra) {
+    if (Array.isArray(extra)) resolvedSections.push(...extra);
+    else resolvedSections.push(extra);
+  }
 
   if (sections && sections.length) {
     sections.forEach(({ group: g, subgroup: sg, filterFn: fn }) => {

@@ -6963,6 +6963,12 @@ input[type="range"]::-webkit-slider-thumb {
   }
 }
 
+/* Loading bar shimmer for the in-app KUET portal webview (Quick Accounts) */
+@keyframes profileWebviewLoad {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(350%); }
+}
+
 @keyframes tortoiseBreathe {
   0%, 100% {
     transform: scale(1);
@@ -8291,11 +8297,75 @@ input[type="range"]::-webkit-slider-thumb {
 
 .pwa-dialog-actions { display:flex; flex-direction:row; align-items:center; justify-content:center; gap:4px; flex-wrap:wrap; }
 .pwa-dialog-primary, .pwa-dialog-secondary, .pwa-dialog-ghost { width: auto; min-width: 60px; padding: 6px 10px; font-size: 11px; }
-/* ── Hero background (Profile + QuickAccess) ── */
+/* ── Profile page: mobile-priority reordering ──
+   On desktop, .profile-two-col is a real 2-column CSS grid (LEFT/RIGHT
+   columns declared in JSX). Below 768px it collapses to one column, but
+   without help the browser stacks the *entire* LEFT column above the
+   *entire* RIGHT column (plain DOM order) — which buried high-value cards
+   like Attendance under Academic/Personal Info. (Quick Accounts now lives
+   outside this grid entirely, as its own full-width card right under the
+   stats, so it's already first on every screen size without needing an
+   order rule here.)
+   Fix: on mobile, both column wrappers become `display:contents` so every
+   Section becomes a direct flex child of .profile-two-col itself, then we
+   assign each Section an explicit `order` so the mobile stack matches what
+   a student actually needs first, regardless of which JSX column it lives
+   in on desktop. Desktop layout (grid-template-columns) is untouched. */
+@media (max-width: 768px) {
+  .profile-two-col {
+    display: flex !important;
+    flex-direction: column;
+    gap: 18px !important;
+  }
+  .profile-col-left, .profile-col-right {
+    display: contents;
+  }
+  .ord-attendance      { order: 1; }
+  .ord-assignments     { order: 2; }
+  .ord-focus           { order: 3; }
+  .ord-academic        { order: 4; }
+  .ord-hall-advisor    { order: 5; }
+  .ord-personal        { order: 6; }
+  .ord-notes           { order: 7; }
+}
+
+/* ── Profile page: compact grid columns on phones ──
+   These grids use `auto-fit, minmax(Npx, 1fr)`, which is width-driven and
+   on narrow phones (~360-400px) can end up 1 column or an uneven split.
+   Locking an explicit column count on small screens keeps the page feeling
+   dense/organized instead of a long single-file list of tiles. */
+@media (max-width: 640px) {
+  /* Stats grid: CGPA · Assignments · Study Hours · Diary — 2x2 */
+  .profile-stats-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+  /* Quick Accounts: Hall · Academic — side by side even on small phones */
+  .profile-accounts-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+  /* Term Results History: one tile per past term — 3 per row */
+  .profile-terms-grid {
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 8px !important;
+  }
+}
+@media (max-width: 380px) {
+  /* Very narrow phones: ease Term Results back to 2 per row so GPA
+     numbers don't get cramped/truncated */
+  .profile-terms-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+
+/* ── Hero background (Profile + QuickAccess) ──
+   Uses the active theme's accent colors instead of a hardcoded green/blue,
+   so it matches whichever theme the user has selected. The grid/orb SVG
+   texture is kept (drawn in a neutral dark tone) and tinted by the gradient
+   above it via the browser's normal alpha compositing. */
 .hero-bg {
   background-image:
-    linear-gradient(135deg, rgba(22,163,74,0.6) 0%, rgba(14,165,233,0.45) 100%),
-    url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgdmlld0JveD0iMCAwIDk3MCA5NzAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CiAgPGRlZnM+CiAgICA8cGF0dGVybiBpZD0ia3gtZ3JpZCIgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiBwYXR0ZXJuVW5pdHM9InVzZXJTcGFjZU9uVXNlIj4KICAgICAgPHBhdGggZD0iTSA0MCAwIEwgMCAwIDAgNDAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzFhM2ExZiIgc3Ryb2tlLXdpZHRoPSIwLjciLz4KICAgIDwvcGF0dGVybj4KICAgIDxyYWRpYWxHcmFkaWVudCBpZD0ia3gtZzEiIGN4PSIyOCUiIGN5PSIzOCUiIHI9IjU1JSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiMxZTZiMzAiIHN0b3Atb3BhY2l0eT0iMC43NSIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMwYTFmMGYiIHN0b3Atb3BhY2l0eT0iMCIvPgogICAgPC9yYWRpYWxHcmFkaWVudD4KICAgIDxyYWRpYWxHcmFkaWVudCBpZD0ia3gtZzIiIGN4PSI3MiUiIGN5PSI2OCUiIHI9IjUwJSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiMwZjNkMWEiIHN0b3Atb3BhY2l0eT0iMC42Ii8+CiAgICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzBhMWYwZiIgc3RvcC1vcGFjaXR5PSIwIi8+CiAgICA8L3JhZGlhbEdyYWRpZW50PgogICAgPHJhZGlhbEdyYWRpZW50IGlkPSJreC1nMyIgY3g9IjU1JSIgY3k9IjIwJSIgcj0iMzUlIj4KICAgICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzFhNTIyOCIgc3RvcC1vcGFjaXR5PSIwLjMiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjMGExZjBmIiBzdG9wLW9wYWNpdHk9IjAiLz4KICAgIDwvcmFkaWFsR3JhZGllbnQ+CiAgPC9kZWZzPgogIDxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSI5NzAiIGhlaWdodD0iOTcwIiBmaWxsPSIjMGExZjBmIi8+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9Ijk3MCIgaGVpZ2h0PSI5NzAiIGZpbGw9InVybCgja3gtZ3JpZCkiLz4KICA8cmVjdCB4PSIwIiB5PSIwIiB3aWR0aD0iOTcwIiBoZWlnaHQ9Ijk3MCIgZmlsbD0idXJsKCNreC1nMSkiLz4KICA8cmVjdCB4PSIwIiB5PSIwIiB3aWR0aD0iOTcwIiBoZWlnaHQ9Ijk3MCIgZmlsbD0idXJsKCNreC1nMikiLz4KICA8cmVjdCB4PSIwIiB5PSIwIiB3aWR0aD0iOTcwIiBoZWlnaHQ9Ijk3MCIgZmlsbD0idXJsKCNreC1nMykiLz4KPC9zdmc+");
+    linear-gradient(135deg, color-mix(in srgb, var(--accent) 70%, transparent) 0%, color-mix(in srgb, var(--accent2) 55%, transparent) 100%),
+    url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwJSIgdmlld0JveD0iMCAwIDk3MCA5NzAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CiAgPGRlZnM+CiAgICA8cGF0dGVybiBpZD0ia3gtZ3JpZCIgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiBwYXR0ZXJuVW5pdHM9InVzZXJTcGFjZU9uVXNlIj4KICAgICAgPHBhdGggZD0iTSA0MCAwIEwgMCAwIDAgNDAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzFhMWExYSIgc3Ryb2tlLXdpZHRoPSIwLjciLz4KICAgIDwvcGF0dGVybj4KICAgIDxyYWRpYWxHcmFkaWVudCBpZD0ia3gtZzEiIGN4PSIyOCUiIGN5PSIzOCUiIHI9IjU1JSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiMzMzMzMzMiIHN0b3Atb3BhY2l0eT0iMC40NSIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMwYTBhMGEiIHN0b3Atb3BhY2l0eT0iMCIvPgogICAgPC9yYWRpYWxHcmFkaWVudD4KICAgIDxyYWRpYWxHcmFkaWVudCBpZD0ia3gtZzIiIGN4PSI3MiUiIGN5PSI2OCUiIHI9IjUwJSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiMyYTJhMmEiIHN0b3Atb3BhY2l0eT0iMC4zNSIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMwYTBhMGEiIHN0b3Atb3BhY2l0eT0iMCIvPgogICAgPC9yYWRpYWxHcmFkaWVudD4KICAgIDxyYWRpYWxHcmFkaWVudCBpZD0ia3gtZzMiIGN4PSI1NSUiIGN5PSIyMCUiIHI9IjM1JSI+CiAgICAgIDxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiMzYTNhM2EiIHN0b3Atb3BhY2l0eT0iMC4yIi8+CiAgICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iIzBhMGEwYSIgc3RvcC1vcGFjaXR5PSIwIi8+CiAgICA8L3JhZGlhbEdyYWRpZW50PgogIDwvZGVmcz4KICA8cmVjdCB4PSIwIiB5PSIwIiB3aWR0aD0iOTcwIiBoZWlnaHQ9Ijk3MCIgZmlsbD0iIzBhMGEwYSIvPgogIDxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSI5NzAiIGhlaWdodD0iOTcwIiBmaWxsPSJ1cmwoI2t4LWdyaWQpIi8+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9Ijk3MCIgaGVpZ2h0PSI5NzAiIGZpbGw9InVybCgja3gtZzEpIi8+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9Ijk3MCIgaGVpZ2h0PSI5NzAiIGZpbGw9InVybCgja3gtZzIpIi8+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9Ijk3MCIgaGVpZ2h0PSI5NzAiIGZpbGw9InVybCgja3gtZzMpIi8+Cjwvc3ZnPg==");
   background-size: cover;
   background-position: center;
 }
@@ -8463,4 +8533,42 @@ input[type="range"]::-webkit-slider-thumb {
 @media (max-width: 380px) {
   .content-page-hero-icon { width: 34px; height: 34px; }
   .content-page-hero-title { font-size: 18px; }
+}
+/* Team & Administration — full-width shell, centered content.
+   On mobile (<768px) stays a normal single-column block, same as every
+   other content page. On desktop the shell takes the full available
+   width instead of sitting in a fixed narrow column with empty space on
+   either side; the content itself is still capped at a comfortable
+   reading/working width and centered, and role-summary Section cards lay
+   out as a 2-column grid instead of one long stack. */
+.team-dashboard-shell {
+  width: 100%;
+}
+@media (min-width: 768px) {
+  .team-dashboard-shell .card {
+    break-inside: avoid;
+  }
+  .team-dashboard-shell .staff-dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+    align-items: start;
+  }
+  .team-dashboard-shell .staff-dashboard-grid > .card {
+    margin-bottom: 0 !important;
+  }
+}
+@media (min-width: 1400px) {
+  .team-dashboard-shell .staff-dashboard-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* All Classes / Founder-Ops fallback sections have per-class rosters and
+   forms inside — too content-dense for a grid cell, so they span every
+   column while lighter role-summary cards stay multi-up. */
+@media (min-width: 768px) {
+  .team-dashboard-shell .staff-dashboard-grid .staff-section-wide {
+    grid-column: 1 / -1;
+  }
 }

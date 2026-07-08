@@ -46,6 +46,12 @@ export function useIsStaff() {
   const initial = readCache();
   const [isRealAdmin, setIsRealAdmin] = useState(initial.isRealAdmin);
   const [adminLabel, setAdminLabel] = useState(initial.adminLabel);
+  // Tracks whether the live Firestore check has actually completed at
+  // least once this session — separate from isRealAdmin/adminLabel,
+  // which may already hold an optimistic cached value. Route guards
+  // (RequireStaff) need this to avoid flashing "denied" before the real
+  // check resolves; Sidebar/BottomNav don't need it and can ignore it.
+  const [isResolved, setIsResolved] = useState(false);
 
   useEffect(() => {
     let unsubRoles = () => {};
@@ -58,6 +64,7 @@ export function useIsStaff() {
         setIsRealAdmin(false);
         setAdminLabel(null);
         writeCache(false, null);
+        setIsResolved(true);
         return;
       }
 
@@ -66,6 +73,7 @@ export function useIsStaff() {
           setIsRealAdmin(true);
           setAdminLabel('Founder');
           writeCache(true, 'Founder');
+          setIsResolved(true);
           return; // Founder outranks/subsumes any other role label.
         }
 
@@ -74,6 +82,7 @@ export function useIsStaff() {
             setIsRealAdmin(false);
             setAdminLabel(null);
             writeCache(false, null);
+            setIsResolved(true);
             return;
           }
           const primary = roles[0];
@@ -81,6 +90,7 @@ export function useIsStaff() {
           setIsRealAdmin(true);
           setAdminLabel(label);
           writeCache(true, label);
+          setIsResolved(true);
         });
       });
     });
@@ -91,5 +101,5 @@ export function useIsStaff() {
     };
   }, []);
 
-  return { isRealAdmin, adminLabel };
+  return { isRealAdmin, adminLabel, isResolved };
 }

@@ -23,9 +23,6 @@ import { uploadProfilePicture, getProfilePhotoURL, deleteProfilePicture } from '
 import { isRollInstitutionallyVerified } from '../lib/kuetEmailVerify';
 import { getGroupId } from '../lib/groupUtils';
 import { subscribeMyRole } from '../lib/groupSync';
-import { subscribeMyRoles } from '../lib/staffSync';
-import { ROLE_LABELS } from '../lib/staffRoles';
-import { checkIsAdmin } from '../lib/adminAuth';
 import ProfileVerifyBanner from '../components/ProfileVerifyBanner';
 import EmailVerifyBanner from '../components/EmailVerifyBanner';
 import EmailFlagBanner from '../components/EmailFlagBanner';
@@ -35,6 +32,22 @@ import BlueTick from '../components/BlueTick';
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
 const todayStr = () => new Date().toISOString().split('T')[0];
+
+// KUET's 7 residential halls → their individual account/login portal URLs.
+// Keys must exactly match the values produced by HALL_OPTIONS in
+// ProfileSetupModal.jsx (profile.hallName is stored verbatim from there).
+const HALL_LINKS = {
+  'Rokeya Hall': 'https://hall.kuet.ac.bd/rkh',
+  'Lalan Shah Hall': 'https://hall.kuet.ac.bd/lsh',
+  'Shaheed Smriti Hall': 'https://hall.kuet.ac.bd/ssh',
+  'Amar Ekushey Hall': 'https://hall.kuet.ac.bd/aeh',
+  'Khan Jahan Ali Hall': 'https://hall.kuet.ac.bd/khaja',
+  'Fazlul Haque Hall': 'https://hall.kuet.ac.bd/fhh',
+  'Dr. M.A Rashid Hall': 'https://hall.kuet.ac.bd/marh',
+};
+
+// Academic system login — same for every student, no hall-specific variant.
+const ACADEMIC_SYSTEM_LINK = 'https://academic.kuet.ac.bd/';
 
 /** Compute overall attendance % from attLogs (daily mode) */
 const computeOverallAttendance = (logs = {}) => {
@@ -128,6 +141,194 @@ const InfoRow = ({ label, value, accent }) => (
   </div>
 );
 
+// Full-screen in-app overlay that shows an external KUET portal (Hall or
+// Academic system) inside an iframe, so it visually feels like a page
+// within KUETx rather than jumping out to a new browser tab.
+//
+// Back-button behaviour: when opened, we push a history entry. The device/
+// browser back gesture then fires `popstate`, which we catch to close the
+// overlay — so "back" returns to KUETx instead of closing the whole app or
+// browser tab. If the overlay is closed via the X button instead, we undo
+// that pushed history entry ourselves so back-stack stays clean.
+//
+// Google OAuth inside academic.kuet.ac.bd cannot load inside an iframe
+// (Google blocks it for security — "This browser or app may not be
+// secure"). Students log in there with Roll/Password instead, which works
+// fine in an iframe. As a safety net, if the iframe fails to load at all
+// (blocked by X-Frame-Options/CSP, or a dead network), we show a fallback
+// "Open in Browser" button rather than a stuck blank screen.
+const InAppWebView = ({ url, title, onClose }) => {
+  const [loaded, setLoaded] = useState(false);
+  const [failed, setFailed] = useState(false);
+  const pushedRef = useRef(false);
+
+  useEffect(() => {
+    window.history.pushState({ kuetxWebview: true }, '');
+    pushedRef.current = true;
+
+    const onPop = () => onClose();
+    window.addEventListener('popstate', onPop);
+
+    // If the portal takes too long (blocked frame, dead host), fall back
+    // to an "open externally" prompt instead of an endless blank screen.
+    const failSafe = setTimeout(() => { if (!loaded) setFailed(true); }, 9000);
+
+    return () => {
+      window.removeEventListener('popstate', onPop);
+      clearTimeout(failSafe);
+      // Closed via the X button rather than a real back gesture — undo the
+      // history entry we pushed so the back-stack doesn't grow forever.
+      if (pushedRef.current && window.history.state?.kuetxWebview) {
+        window.history.back();
+      }
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  return (
+    <div style={{
+      position: 'fixed', inset: 0, zIndex: 100060, background: 'var(--bg)',
+      display: 'flex', flexDirection: 'column',
+    }}>
+      {/* App-style top bar — this is what sells the "still inside KUETx"
+          feeling; without it an edge-to-edge iframe just looks like a
+          random website. */}
+      <div style={{
+        display: 'flex', alignItems: 'center', gap: 10,
+        padding: 'max(10px, env(safe-area-inset-top, 0px)) 14px 10px',
+        background: 'var(--surface)', borderBottom: '1px solid var(--border)',
+        flexShrink: 0,
+      }}>
+        <button
+          onClick={onClose}
+          aria-label="Back"
+          style={{
+            width: 34, height: 34, borderRadius: 10, flexShrink: 0,
+            background: 'var(--bg)', border: '1px solid var(--border)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer',
+          }}
+        >
+          <Icons.ArrowLeft size={18} color="var(--text)" />
+        </button>
+        <div style={{ minWidth: 0, flex: 1 }}>
+          <div style={{ fontSize: 13, fontWeight: 800, color: 'var(--text)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{title}</div>
+          <div style={{ fontSize: 10, color: 'var(--muted)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{url.replace(/^https?:\/\//, '')}</div>
+        </div>
+        <a
+          href={url} target="_blank" rel="noopener noreferrer"
+          aria-label="Open in browser"
+          style={{
+            width: 34, height: 34, borderRadius: 10, flexShrink: 0,
+            background: 'var(--bg)', border: '1px solid var(--border)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center', textDecoration: 'none',
+          }}
+        >
+          <Icons.ExternalLink size={15} color="var(--muted)" />
+        </a>
+      </div>
+
+      {/* Thin progress hint while the iframe is loading */}
+      {!loaded && !failed && (
+        <div style={{ height: 2, background: 'var(--border)', overflow: 'hidden', flexShrink: 0 }}>
+          <div style={{
+            height: '100%', width: '40%',
+            background: 'linear-gradient(90deg, var(--accent), var(--accent2))',
+            animation: 'profileWebviewLoad 1.1s ease-in-out infinite',
+          }} />
+        </div>
+      )}
+
+      <div style={{ flex: 1, position: 'relative' }}>
+        {failed ? (
+          <div style={{
+            position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column',
+            alignItems: 'center', justifyContent: 'center', gap: 14, padding: 24, textAlign: 'center',
+          }}>
+            <span style={{ fontSize: 40 }}>🔒</span>
+            <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)' }}>This page can't load here</div>
+            <div style={{ fontSize: 12, color: 'var(--muted)', maxWidth: 280 }}>Some KUET portals (and Google sign-in) don't allow embedding. Open it in your browser instead.</div>
+            <a href={url} target="_blank" rel="noopener noreferrer" style={{
+              padding: '10px 20px', borderRadius: 10, background: 'var(--accent)', color: 'var(--accentFg)',
+              fontSize: 13, fontWeight: 700, textDecoration: 'none',
+            }}>
+              Open in Browser →
+            </a>
+          </div>
+        ) : (
+          <iframe
+            src={url}
+            title={title}
+            onLoad={() => setLoaded(true)}
+            onError={() => setFailed(true)}
+            style={{ width: '100%', height: '100%', border: 'none', background: 'var(--bg)' }}
+            sandbox="allow-forms allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox allow-top-navigation-by-user-activation"
+          />
+        )}
+      </div>
+    </div>
+  );
+};
+
+// One tile inside the "Quick Accounts" card — either the student's specific
+// hall portal or the shared academic system, both external KUET logins.
+// Opens inside the full-screen InAppWebView (not a new tab) so it reads as
+// part of KUETx; the device back button closes it back into this page.
+// Themed with the accent gradient so the pair reads as a single cohesive
+// feature rather than a generic link list.
+const AccountLinkTile = ({ icon, title, subtitle, href, disabled, disabledHint }) => {
+  const [webviewOpen, setWebviewOpen] = useState(false);
+  const content = (
+    <>
+      <div style={{
+        width: 38, height: 38, borderRadius: 10, flexShrink: 0,
+        background: disabled ? 'var(--border)' : 'linear-gradient(135deg, var(--accent), var(--accent2))',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        boxShadow: disabled ? 'none' : '0 4px 12px color-mix(in srgb, var(--accent) 35%, transparent)',
+      }}>
+        <span style={{ fontSize: 18, filter: disabled ? 'grayscale(1) opacity(0.6)' : 'none' }}>{icon}</span>
+      </div>
+      <div style={{ minWidth: 0, flex: 1 }}>
+        <div style={{ fontSize: 13, fontWeight: 800, color: 'var(--text)' }}>{title}</div>
+        <div style={{
+          fontSize: 11, color: disabled ? '#f59e0b' : 'var(--muted)', fontWeight: disabled ? 600 : 500,
+          marginTop: 2, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
+        }}>
+          {disabled ? disabledHint : subtitle}
+        </div>
+      </div>
+      {!disabled && <Icons.ChevronRight size={15} color="var(--muted)" style={{ flexShrink: 0 }} />}
+    </>
+  );
+
+  const sharedStyle = {
+    display: 'flex', alignItems: 'center', gap: 10, padding: '13px 14px', borderRadius: 12,
+    background: 'var(--surface)', border: '1px solid var(--border)', textDecoration: 'none',
+    transition: 'transform 0.15s, box-shadow 0.15s, border-color 0.15s', minWidth: 0,
+    cursor: disabled ? 'default' : 'pointer', width: '100%', textAlign: 'left', font: 'inherit',
+  };
+
+  if (disabled) {
+    return <div style={{ ...sharedStyle, opacity: 0.85 }}>{content}</div>;
+  }
+
+  return (
+    <>
+      <button
+        type="button"
+        onClick={() => setWebviewOpen(true)}
+        style={sharedStyle}
+        onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 8px 20px rgba(0,0,0,0.08)'; e.currentTarget.style.borderColor = 'var(--accent)'; }}
+        onMouseLeave={e => { e.currentTarget.style.transform = ''; e.currentTarget.style.boxShadow = ''; e.currentTarget.style.borderColor = 'var(--border)'; }}
+      >
+        {content}
+      </button>
+      {webviewOpen && (
+        <InAppWebView url={href} title={title} onClose={() => setWebviewOpen(false)} />
+      )}
+    </>
+  );
+};
+
 // Lets a student hand their uid to whoever needs to assign them a KUETx
 // staff role (Head of Ops, Campus Lead, etc.) — those roles are just a
 // Firestore doc keyed by uid, no new account/password needed, so this is
@@ -172,8 +373,8 @@ const CopyMyIdRow = () => {
   );
 };
 
-const Section = ({ title, icon, children }) => (
-  <div style={{
+const Section = ({ title, icon, children, className }) => (
+  <div className={className} style={{
     background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 16,
     overflow: 'hidden', transition: 'border-color 0.2s, box-shadow 0.2s',
   }}
@@ -552,38 +753,9 @@ export default function Profile() {
     });
   }, [profile?.dept, profile?.batch, profile?.studentId]);
 
-  // Real, server-verified admin/staff status for the "Team & Administration"
-  // card below — same principle as isRealCR above: only ever driven by
-  // admins/{uid} (Founder) or staff/{uid}/roles (everyone else), never a
-  // self-reported flag.
-  const [isRealAdmin, setIsRealAdmin] = useState(false);
-  const [adminRoleLabel, setAdminRoleLabel] = useState('');
-  const isFounderRef = useRef(false);
-  useEffect(() => {
-    let cancelled = false;
-    const uid = auth.currentUser?.uid;
-    if (!uid) { setIsRealAdmin(false); return; }
-
-    checkIsAdmin(uid).then((isFounder) => {
-      if (cancelled) return;
-      if (isFounder) {
-        isFounderRef.current = true;
-        setIsRealAdmin(true);
-        setAdminRoleLabel('Founder');
-      }
-    }).catch(() => {});
-
-    const unsub = subscribeMyRoles((roles) => {
-      if (cancelled) return;
-      if (roles.length > 0) {
-        setIsRealAdmin(true);
-        setAdminRoleLabel((prev) => (prev === 'Founder' ? prev : (ROLE_LABELS[roles[0].role] || 'Staff')));
-      } else if (!isFounderRef.current) {
-        setIsRealAdmin(false);
-      }
-    });
-    return () => { cancelled = true; unsub?.(); };
-  }, []);
+  // Admin/staff status card removed from this page — Team & Administration
+  // access now lives solely in Sidebar/BottomNav (see useIsStaff.js), so
+  // this component no longer needs its own duplicate admin subscription.
 
   // Covers the case where the person clicked their verification link and
   // App.jsx's boot-time completion finished slightly AFTER the one-shot
@@ -646,7 +818,6 @@ export default function Profile() {
     const moneyEntries = store.get('money_entries') || [];
     const cashBalance = store.get('money_cash') ?? 0;
     const budget = store.get('money_budget') ?? 0;
-    const selfEval = store.get('selfeval') || {};
     const legacyTerms = getLegacyTermResults() || [];
     const courses = getAllCourses(profile) || [];
 
@@ -679,9 +850,6 @@ export default function Profile() {
     const currentTermCourses = courses.filter(c => `Y${c.year}T${c.term}` === profile.currentTermKey);
     const currentTermGPA = computeCurrentTermGPA(marks, currentTermCourses);
 
-    // Today's self-eval rating
-    const todayEval = selfEval[today];
-
     // Notes & Diary  
     const recentNotes = (Array.isArray(notes) ? notes : []).slice(0, 3);
     const recentDiary = (Array.isArray(diary) ? diary : []).slice(0, 3);
@@ -708,21 +876,12 @@ export default function Profile() {
     const todayNamaz = namazRecords[today] || {};
     const namazDone = ['Fajr','Dhuhr','Asr','Maghrib','Isha'].map(p => !!todayNamaz[p]?.done);
 
-    // Self eval streak
-    const evalDays = Object.keys(selfEval).sort().reverse();
-    let streak = 0;
-    const d = new Date();
-    for (let i = 0; i < 30; i++) {
-      const key = d.toISOString().split('T')[0];
-      if (selfEval[key]) { streak++; d.setDate(d.getDate() - 1); } else break;
-    }
-
     return {
       attData, upcomingAssignments, doneAssignments, totalAssignments,
       monthExpense, monthIncome, cashBalance, budget,
       cgpaData, currentTermGPA, currentTermCourses,
-      todayEval, recentNotes, recentDiary, studyHours,
-      streak, legacyTerms, diary, notes, marks, courses,
+      recentNotes, recentDiary, studyHours,
+      legacyTerms, diary, notes, marks, courses,
       studyStreak, namazDone,
     };
   }, [profile, namazTick]);
@@ -755,10 +914,10 @@ export default function Profile() {
         <AccountBanner user={firebaseUser} onLogin={() => setShowAuthModal(true)} onLogout={handleLogout} />
         <div style={{ height: 24 }} />
         <div style={{
-          background: 'linear-gradient(135deg, #16a34a 0%, #0ea5e9 60%, #a3e635 100%)',
+          background: 'linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%)',
           borderRadius: 20, padding: 'clamp(48px,10vw,100px) clamp(20px,5vw,56px)',
           textAlign: 'center', position: 'relative', overflow: 'hidden',
-          boxShadow: '0 24px 64px rgba(22,163,74,0.28)',
+          boxShadow: '0 24px 64px color-mix(in srgb, var(--accent) 28%, transparent)',
         }}>
           <div style={{ position: 'relative', zIndex: 2 }}>
             <div style={{ fontSize: 'clamp(80px,18vw,120px)', marginBottom: 20, display: 'inline-block', animation: 'profileFloat 6s ease-in-out infinite' }}>🐢</div>
@@ -767,7 +926,7 @@ export default function Profile() {
               Set up your profile for personalized GPA tracking, attendance insights, and more.
             </p>
             <button onClick={() => setIsModalOpen(true)} style={{
-              padding: '13px 38px', background: 'rgba(255,255,255,0.95)', color: '#16a34a',
+              padding: '13px 38px', background: 'rgba(255,255,255,0.95)', color: 'var(--accent)',
               border: '2px solid rgba(255,255,255,0.3)', borderRadius: 14,
               fontSize: 16, fontWeight: 800, cursor: 'pointer',
               boxShadow: '0 12px 36px rgba(0,0,0,0.2)',
@@ -804,7 +963,7 @@ export default function Profile() {
       <div className="hero-bg" style={{
         borderRadius: 20, padding: 'clamp(20px,4vw,32px) clamp(20px,4vw,32px)',
         display: 'flex', alignItems: 'center', gap: 'clamp(14px,3vw,24px)',
-        boxShadow: '0 8px 32px rgba(22,163,74,0.18)', flexWrap: 'wrap',
+        boxShadow: '0 8px 32px color-mix(in srgb, var(--accent) 25%, transparent)', flexWrap: 'wrap',
         position: 'relative', overflow: 'hidden',
       }}>
         {/* Decorative orb */}
@@ -914,8 +1073,13 @@ export default function Profile() {
         </div>
       )}
 
+      {/* Admin/Staff shortcut card removed — access to Team & Administration
+          is now solely via the Sidebar/BottomNav entries, which already
+          only render for verified staff/Founder. See useIsStaff.js. */}
+
+
       {/* ── Stats Grid ── */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(155px, 1fr))', gap: 12 }}>
+      <div className="profile-stats-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(155px, 1fr))', gap: 12 }}>
         {/* CGPA */}
         {liveData.cgpaData ? (
           <StatCard icon="🎓" label="CGPA" value={liveData.cgpaData.cgpa} sub={cgpaLabel} color={cgpaColor} />
@@ -938,19 +1102,57 @@ export default function Profile() {
 
         {/* Diary */}
         <StatCard icon="✍️" label="Diary Entries" value={Array.isArray(liveData.diary) ? liveData.diary.length : 0} color="#06b6d4" />
-
-        {/* Eval streak */}
-        <StatCard icon="🔥" label="Eval Streak" value={liveData.streak > 0 ? `${liveData.streak}d` : '—'} sub="Daily self-eval" color="#ef4444" />
       </div>
 
-      {/* ── Two-column layout below stats ── */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(290px, 1fr))', gap: 20, alignItems: 'start' }}>
+      {/* ── Quick Accounts — Hall & Academic system logins.
+          Placed right under the stats as a full-width standalone card so
+          it's one of the first things visible on every screen size (this
+          is the thing students reach for most — not buried mid-page).
+          These are external KUET portals (not part of this app), so each
+          tile opens in a new tab. Hall tile resolves from profile.hallName
+          via HALL_LINKS; Academic tile is the same for every student. */}
+      <Section title="Quick Accounts" icon="🔑">
+        <div className="profile-accounts-grid" style={{
+          display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: 10,
+        }}>
+          {profile.hallName && HALL_LINKS[profile.hallName] ? (
+            <AccountLinkTile
+              icon="🏠"
+              title="Hall Account"
+              subtitle={profile.hallName}
+              href={HALL_LINKS[profile.hallName]}
+            />
+          ) : (
+            <AccountLinkTile
+              icon="🏠"
+              title="Hall Account"
+              disabled
+              disabledHint="Set your hall in profile"
+            />
+          )}
+          <AccountLinkTile
+            icon="🎓"
+            title="Academic Account"
+            subtitle="academic.kuet.ac.bd"
+            href={ACADEMIC_SYSTEM_LINK}
+          />
+        </div>
+      </Section>
+
+      {/* ── Two-column layout below stats ──
+          On mobile this collapses to one column and stacks LEFT column
+          fully before RIGHT column (DOM order), which buried important
+          things like Attendance under Academic/Personal Info. The
+          profile-two-col / profile-col-left / profile-col-right classes
+          let CSS reorder children by priority on small screens without
+          touching the desktop layout at all. */}
+      <div className="profile-two-col" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(290px, 1fr))', gap: 20, alignItems: 'start' }}>
 
         {/* LEFT COLUMN */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
+        <div className="profile-col-left" style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
 
           {/* Academic Info */}
-          <Section title="Academic Info" icon="📚">
+          <Section className="ord-academic" title="Academic Info" icon="📚">
             <InfoRow label="Department" value={getDeptName(profile.dept)} />
             <div style={{ height: 1, background: 'var(--border)' }} />
             <InfoRow label="Session" value={profile.session} />
@@ -968,7 +1170,7 @@ export default function Profile() {
           </Section>
 
           {/* Personal Info */}
-          <Section title="Personal Info" icon="👤">
+          <Section className="ord-personal" title="Personal Info" icon="👤">
             <InfoRow label="Full Name" value={profile.name} />
             <div style={{ height: 1, background: 'var(--border)' }} />
             <InfoRow label="Student ID" value={profile.studentId} />
@@ -986,7 +1188,7 @@ export default function Profile() {
 
           {/* Accommodation + Advisor */}
           {(profile.hallName || profile.roomNo || profile.advisorName) && (
-            <Section title="Hall & Advisor" icon="🏠">
+            <Section className="ord-hall-advisor" title="Hall & Advisor" icon="🏠">
               {profile.hallName && <InfoRow label="Hall" value={profile.hallName} />}
               {profile.roomNo && (
                 <>
@@ -1011,11 +1213,11 @@ export default function Profile() {
         </div>
 
         {/* RIGHT COLUMN */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
+        <div className="profile-col-right" style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
 
           {/* Attendance Breakdown */}
           {liveData.attData && (
-            <Section title="Attendance" icon="📅">
+            <Section className="ord-attendance" title="Attendance" icon="📅">
               <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
                 <div style={{ position: 'relative', flexShrink: 0 }}>
                   <Ring pct={attPct} size={80} stroke={7} color={attColor} />
@@ -1039,7 +1241,7 @@ export default function Profile() {
 
           {/* Upcoming Assignments */}
           {liveData.upcomingAssignments.length > 0 && (
-            <Section title="Upcoming Assignments" icon="📝">
+            <Section className="ord-assignments" title="Upcoming Assignments" icon="📝">
               {liveData.upcomingAssignments.map((a, i) => {
                 const daysLeft = Math.ceil((new Date(a.dueDate) - new Date()) / 86400000);
                 const urgent = daysLeft <= 2;
@@ -1069,64 +1271,9 @@ export default function Profile() {
             </Section>
           )}
 
-          {/* Money Summary */}
-          {(liveData.monthExpense > 0 || liveData.cashBalance > 0) && (
-            <Section title="Money This Month" icon="💰">
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-                <div style={{ background: 'rgba(16,185,129,0.08)', border: '1px solid rgba(16,185,129,0.2)', borderRadius: 10, padding: '12px 14px' }}>
-                  <div style={{ fontSize: 11, color: '#10b981', fontWeight: 700, textTransform: 'uppercase', letterSpacing: 0.4 }}>Income</div>
-                  <div style={{ fontSize: 18, fontWeight: 800, color: '#10b981', marginTop: 4 }}>৳{liveData.monthIncome.toLocaleString()}</div>
-                </div>
-                <div style={{ background: 'rgba(239,68,68,0.06)', border: '1px solid rgba(239,68,68,0.15)', borderRadius: 10, padding: '12px 14px' }}>
-                  <div style={{ fontSize: 11, color: '#ef4444', fontWeight: 700, textTransform: 'uppercase', letterSpacing: 0.4 }}>Expense</div>
-                  <div style={{ fontSize: 18, fontWeight: 800, color: '#ef4444', marginTop: 4 }}>৳{liveData.monthExpense.toLocaleString()}</div>
-                </div>
-              </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 12px', background: 'var(--bg)', borderRadius: 8 }}>
-                <span style={{ fontSize: 12, color: 'var(--muted)' }}>Cash Balance</span>
-                <span style={{ fontSize: 15, fontWeight: 800, color: liveData.cashBalance >= 0 ? '#10b981' : '#ef4444' }}>৳{Number(liveData.cashBalance).toLocaleString()}</span>
-              </div>
-              {liveData.budget > 0 && (
-                <>
-                  <ProgressBar pct={(liveData.monthExpense / liveData.budget) * 100} color={liveData.monthExpense > liveData.budget ? '#ef4444' : '#f59e0b'} />
-                  <div style={{ fontSize: 11, color: 'var(--muted)', textAlign: 'right' }}>৳{liveData.monthExpense.toLocaleString()} / ৳{liveData.budget.toLocaleString()} budget</div>
-                </>
-              )}
-              <a href="/money" style={{ fontSize: 12, color: 'var(--accent)', fontWeight: 600, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 4 }}
-                onMouseEnter={e => e.currentTarget.style.gap = '8px'}
-                onMouseLeave={e => e.currentTarget.style.gap = '4px'}>
-                View Money Tracker →
-              </a>
-            </Section>
-          )}
-
-          {/* Today's Self-Eval */}
-          {liveData.todayEval && (
-            <Section title="Today's Self Eval" icon="🌟">
-              <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-                <div style={{ fontSize: 36 }}>
-                  {['', '😞', '😕', '😐', '😊', '🤩'][liveData.todayEval.rating || 3]}
-                </div>
-                <div>
-                  <div style={{ fontWeight: 700, fontSize: 15, color: 'var(--text)' }}>
-                    {['', 'খুব খারাপ', 'খারাপ', 'ঠিক আছে', 'ভালো', 'অসাধারণ'][liveData.todayEval.rating || 3]}
-                  </div>
-                  <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 2 }}>
-                    {liveData.streak > 0 && `🔥 ${liveData.streak} day streak`}
-                  </div>
-                </div>
-              </div>
-              {liveData.todayEval.note && (
-                <div style={{ fontSize: 13, color: 'var(--text)', background: 'var(--bg)', borderRadius: 8, padding: '10px 12px', fontStyle: 'italic', borderLeft: '3px solid var(--accent)' }}>
-                  "{liveData.todayEval.note}"
-                </div>
-              )}
-            </Section>
-          )}
-
           {/* Recent Notes */}
           {liveData.recentNotes.length > 0 && (
-            <Section title="Recent Notes" icon="📌">
+            <Section className="ord-notes" title="Recent Notes" icon="📌">
               {liveData.recentNotes.map((n, i) => (
                 <div key={n.id || i} style={{ padding: '10px 12px', background: 'var(--bg)', borderRadius: 9, borderLeft: '3px solid var(--accent2)' }}>
                   <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--text)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{n.title || 'Untitled'}</div>
@@ -1194,7 +1341,7 @@ export default function Profile() {
             return (
               <>
                 {/* Today's Focus */}
-                <Section title="Today's Focus" icon="✨">
+                <Section className="ord-focus" title="Today's Focus" icon="✨">
                   {/* ── Namaz tracker ── */}
                   <div>
                     <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 10 }}>🕌 নামাজ — আজকের</div>
@@ -1296,7 +1443,7 @@ export default function Profile() {
       {/* ── Legacy Term Results ── */}
       {liveData.legacyTerms.length > 0 && (
         <Section title="Term Results History" icon="📊">
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(120px, 1fr))', gap: 10 }}>
+          <div className="profile-terms-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(120px, 1fr))', gap: 10 }}>
             {liveData.legacyTerms.map((t, i) => {
               const gpa = parseFloat(t.gpa);
               const col = gpa >= 3.75 ? '#16a34a' : gpa >= 3.0 ? '#0ea5e9' : gpa >= 2.2 ? '#f59e0b' : '#ef4444';
@@ -1329,57 +1476,6 @@ export default function Profile() {
             Full Results & GPA →
           </a>
         </Section>
-      )}
-
-      {/* ── Quick Links ── */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(130px, 1fr))', gap: 10 }}>
-        {[
-          { href: '/attendance', icon: '📅', label: 'Attendance' },
-          { href: '/marks', icon: '📝', label: 'Marks' },
-          { href: '/results', icon: '🎓', label: 'Results' },
-          { href: '/assignments', icon: '✅', label: 'Assignments' },
-          { href: '/diary', icon: '📖', label: 'Diary' },
-          { href: '/money', icon: '💰', label: 'Money' },
-          { href: '/namaz', icon: '🌙', label: 'Namaz' },
-          { href: '/notes', icon: '📌', label: 'Notes' },
-        ].map(({ href, icon, label }) => (
-          <a key={href} href={href} style={{
-            padding: '14px 12px', background: 'var(--surface)', border: '1px solid var(--border)',
-            borderRadius: 12, textDecoration: 'none', textAlign: 'center',
-            transition: 'all 0.2s', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6,
-          }}
-          onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--accent)'; e.currentTarget.style.background = 'var(--accentSoft)'; e.currentTarget.style.transform = 'translateY(-2px)'; }}
-          onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.background = 'var(--surface)'; e.currentTarget.style.transform = ''; }}>
-            <span style={{ fontSize: 22 }}>{icon}</span>
-            <span style={{ fontSize: 11, fontWeight: 700, color: 'var(--text)', textTransform: 'uppercase', letterSpacing: 0.4 }}>{label}</span>
-          </a>
-        ))}
-      </div>
-
-      {/* Admin/Staff card -- only rendered for verified admins/staff,
-          driven by isRealAdmin (server-verified, see effect above) */}
-      {isRealAdmin && (
-        <a href="/team" style={{
-          display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10,
-          padding: '14px 16px', borderRadius: 12, textDecoration: 'none',
-          background: 'color-mix(in srgb, var(--accent) 8%, var(--surface))',
-          border: '1px solid color-mix(in srgb, var(--accent) 25%, transparent)',
-        }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            <div style={{
-              width: 34, height: 34, borderRadius: 9,
-              background: 'color-mix(in srgb, var(--accent) 15%, var(--surface))',
-              display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
-            }}>
-              <Icons.Briefcase size={16} color="var(--accent)" />
-            </div>
-            <div>
-              <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)' }}>You're {adminRoleLabel}</div>
-              <div style={{ fontSize: 11, color: 'var(--muted)' }}>Team & Administration</div>
-            </div>
-          </div>
-          <Icons.ChevronRight size={16} color="var(--muted)" />
-        </a>
       )}
 
       {/* "Simulate CR Mode" toggle removed — CR access is now decided

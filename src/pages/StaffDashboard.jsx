@@ -68,9 +68,9 @@ function RollUnlockSection() {
   );
 }
 
-function Section({ title, children }) {
+function Section({ title, children, wide }) {
   return (
-    <section className="card" style={{ padding: 14, marginBottom: 16 }}>
+    <section className={`card${wide ? ' staff-section-wide' : ''}`} style={{ padding: 14, marginBottom: 16 }}>
       <h2 style={{ fontSize: 15, fontWeight: 700, marginBottom: 10 }}>{title}</h2>
       {children}
     </section>
@@ -97,7 +97,7 @@ function AdminAllGroupsSection() {
   if (groupIds.length === 0) return null;
 
   return (
-    <Section title="All Classes — CR & Leave Requests (Founder/Head of Ops view)">
+    <Section wide title="All Classes — CR & Leave Requests (Founder/Head of Ops view)">
       <p style={{ fontSize: 11, color: 'var(--muted)', marginBottom: 10 }}>
         Shows every class, including ones without an active Campus Lead — use this if a
         request is stuck because the group's CL post is vacant or unresponsive.
@@ -359,7 +359,7 @@ function HeadOfOpsSection() {
   };
 
   return (
-    <Section title="Head of Operations">
+    <Section wide title="Head of Operations">
       <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 6 }}>
         Pending email flags (fallback — covers depts with no SCL/CL, or any dept)
       </div>
@@ -454,11 +454,43 @@ function GrowthSection() {
 }
 
 // ---------------------------------------------------------------------
+// Role tab bar — when a person holds more than one KUETx role, each
+// role gets its own tab instead of every section stacking into one long
+// flat page. A Founder who is also a CL/SCL, for example, would
+// otherwise see the Founder-wide fallback sections and their personal
+// CL/SCL sections all mixed together in one scroll.
+// ---------------------------------------------------------------------
+function RoleTabBar({ tabs, active, onChange }) {
+  if (tabs.length <= 1) return null;
+  return (
+    <div style={{ display: 'flex', gap: 6, overflowX: 'auto', paddingBottom: 8, marginBottom: 16, borderBottom: '1px solid var(--border)' }}>
+      {tabs.map((t) => (
+        <button
+          key={t.key}
+          onClick={() => onChange(t.key)}
+          className="btn btn-sm"
+          style={{
+            whiteSpace: 'nowrap',
+            background: active === t.key ? 'var(--accentBg, #eef2ff)' : 'transparent',
+            color: active === t.key ? 'var(--accent, #4f46e5)' : 'var(--muted)',
+            border: active === t.key ? '1px solid var(--accent, #4f46e5)' : '1px solid var(--border)',
+            fontWeight: active === t.key ? 700 : 500,
+          }}
+        >
+          {t.label}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------
 // Main dashboard
 // ---------------------------------------------------------------------
 export default function StaffDashboard() {
   const [roles, setRoles] = useState(null);
   const [isAdminUser, setIsAdminUser] = useState(false);
+  const [activeTab, setActiveTab] = useState(null);
 
   useEffect(() => subscribeMyRoles(setRoles), []);
   useEffect(() => {
@@ -480,6 +512,20 @@ export default function StaffDashboard() {
   const isContentLead = roles.some((r) => r.role === 'content_lead');
   const isHeadOfGrowth = roles.some((r) => r.role === 'head_of_growth');
   const otherRoles = roles.filter((r) => !['campus_lead', 'senior_campus_lead'].includes(r.role));
+  const hasFinanceOrLegal = otherRoles.filter((r) => ['finance_lead', 'legal_partnerships'].includes(r.role)).length > 0;
+
+  // Build the list of tabs this person actually has, in a fixed seniority order.
+  const tabs = [];
+  if (isAdminUser) tabs.push({ key: 'founder', label: 'Founder' });
+  if (isHeadOfOps) tabs.push({ key: 'ops', label: 'Head of ops' });
+  if (sclDepts.length > 0) tabs.push({ key: 'scl', label: 'Senior campus lead' });
+  if (clGroups.length > 0) tabs.push({ key: 'cl', label: 'Campus lead' });
+  if (isContentLead) tabs.push({ key: 'content', label: 'Content lead' });
+  if (isHeadOfGrowth) tabs.push({ key: 'growth', label: 'Growth' });
+  if (hasFinanceOrLegal) tabs.push({ key: 'finance', label: 'Finance & legal' });
+
+  const currentTab = activeTab && tabs.some((t) => t.key === activeTab) ? activeTab : tabs[0]?.key;
+  const show = (key) => tabs.length <= 1 || currentTab === key;
 
   return (
     <div>
@@ -487,38 +533,52 @@ export default function StaffDashboard() {
         {roles.length > 0 ? `Your roles: ${roles.map((r) => ROLE_LABELS[r.role] || r.role).join(' · ')}` : 'Founder'}
       </p>
 
-      {isAdminUser && <RollUnlockSection />}
-      {isAdminUser && !isHeadOfOps && (
-        <Section title="Pending Email Flags (Founder fallback)">
-          <EmailFlagReviewBlock />
-        </Section>
-      )}
-      {isHeadOfOps && <HeadOfOpsSection />}
-      {(isAdminUser || isHeadOfOps) && <AdminAllGroupsSection />}
+      <RoleTabBar tabs={tabs} active={currentTab} onChange={setActiveTab} />
 
-      {sclDepts.length > 0 && (
-        <Section title="Senior Campus Lead">
-          {sclDepts.map((d) => <SeniorCampusLeadBlock key={d} dept={d} />)}
-        </Section>
-      )}
+      <div className="staff-dashboard-grid">
+        {show('founder') && isAdminUser && (
+          <>
+            <RollUnlockSection />
+            {!isHeadOfOps && (
+              <Section title="Pending Email Flags (Founder fallback)">
+                <EmailFlagReviewBlock />
+              </Section>
+            )}
+            <AdminAllGroupsSection />
+          </>
+        )}
 
-      {clGroups.length > 0 && (
-        <Section title="Campus Lead">
-          {clGroups.map((g) => <CampusLeadBlock key={g} groupId={g} />)}
-        </Section>
-      )}
+        {show('ops') && isHeadOfOps && (
+          <>
+            <HeadOfOpsSection />
+            <AdminAllGroupsSection />
+          </>
+        )}
 
-      {isContentLead && <ContentLeadSection />}
-      {isHeadOfGrowth && <GrowthSection />}
+        {show('scl') && sclDepts.length > 0 && (
+          <Section wide title="Senior Campus Lead">
+            {sclDepts.map((d) => <SeniorCampusLeadBlock key={d} dept={d} />)}
+          </Section>
+        )}
 
-      {otherRoles.filter((r) => ['finance_lead', 'legal_partnerships'].includes(r.role)).length > 0 && (
-        <Section title="Finance & Legal">
-          <p style={{ fontSize: 12, color: 'var(--muted)' }}>
-            Sponsorship and compliance record-keeping tools are lightweight and mostly external
-            (spreadsheets, documents) per the manifesto — nothing app-specific needed here yet.
-          </p>
-        </Section>
-      )}
+        {show('cl') && clGroups.length > 0 && (
+          <Section wide title="Campus Lead">
+            {clGroups.map((g) => <CampusLeadBlock key={g} groupId={g} />)}
+          </Section>
+        )}
+
+        {show('content') && isContentLead && <ContentLeadSection />}
+        {show('growth') && isHeadOfGrowth && <GrowthSection />}
+
+        {show('finance') && hasFinanceOrLegal && (
+          <Section title="Finance & Legal">
+            <p style={{ fontSize: 12, color: 'var(--muted)' }}>
+              Sponsorship and compliance record-keeping tools are lightweight and mostly external
+              (spreadsheets, documents) per the manifesto — nothing app-specific needed here yet.
+            </p>
+          </Section>
+        )}
+      </div>
     </div>
   );
 }

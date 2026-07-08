@@ -17,6 +17,7 @@ import ProfileCompleteReminder from './components/ProfileCompleteReminder';
 import AuthModal from './components/AuthModal';
 import ProfileSetupModal from './components/ProfileSetupModal';
 import RequireCR from './components/RequireCR';
+import RequireStaff from './components/RequireStaff';
 import useFirebaseAuth from './hooks/useFirebaseAuth';
 import DataSafeToast from './components/DataSafeToast';
 import ClassJoinIntro from './components/ClassJoinIntro';
@@ -62,6 +63,7 @@ import TeamDashboard from './pages/TeamDashboard';
 import { Tours, Projects, Syllabus, TimeTracker, Tuition, Reports } from './pages/Extras';
 import SubgroupHub from './components/nav-system/SubgroupHub';
 import CRHub from './components/nav-system/CRHub';
+import AdminHub from './components/nav-system/AdminHub';
 
 function Layout({ authState, onboardingActive }) {
   usePageTracker();
@@ -155,11 +157,12 @@ function Layout({ authState, onboardingActive }) {
               }
             />
             <Route path="/cr-hub" element={<CRHub />} />
+            <Route path="/admin-hub" element={<RequireStaff><AdminHub /></RequireStaff>} />
             {/* /admin kept only as a redirect for old links/bookmarks —
                 real destination is /team, which already embeds
                 AdminEntryPoint (Founder section) alongside the staff panel. */}
             <Route path="/admin" element={<Navigate to="/team" replace />} />
-            <Route path="/team" element={<TeamDashboard />} />
+            <Route path="/team" element={<RequireStaff><TeamDashboard /></RequireStaff>} />
           </Routes>
         </div>
         {location.pathname !== '/about' && !isQuestionBankViewer && !isMobileNav && <Footer />}

@@ -5,6 +5,7 @@ import { getProfile } from '../store/store';
 import { getGroupId } from '../lib/groupUtils';
 import { subscribeMyRole } from '../lib/groupSync';
 import { auth } from '../lib/firebase';
+import { useIsStaff } from '../hooks/useIsStaff';
 
 const MOBILE_NAV_QUERY = '(max-width: 767.98px)';
 
@@ -46,9 +47,26 @@ const FIXED_BUTTONS = [
   { id: 'campus',    label: 'Campus',    icon: 'Layers',        path: '/campus',          match: (p) => p === '/campus' || p === '/daily-life' || p === '/campus-life' || ['/notes', '/self-study', '/time', '/namaz', '/clubs', '/projects', '/tours', '/money', '/tuition'].includes(p) },
 ];
 
-function ProfileButton({ isRealCR, roleLabel, active }) {
-  const path = isRealCR ? '/cr-hub' : '/profile';
-  const label = isRealCR ? roleLabel : 'Profile';
+// Priority for the 5th button's destination/label/icon:
+// 1. Staff role or Founder -> /admin-hub, label = adminLabel (Founder
+//    outranks/subsumes any other staff label per useIsStaff.js). Wins
+//    even if this person is also CR/ACR — the merged hub below still
+//    surfaces their CR tools, just under the Admin identity/label.
+// 2. Verified CR/ACR only  -> /cr-hub, label = 'CR'/'ACR'
+// 3. Everyone else         -> /profile
+function ProfileButton({ isRealCR, roleLabel, isStaff, adminLabel, active }) {
+  let path = '/profile';
+  let label = 'Profile';
+  let Icon = Icons.User;
+
+  if (isStaff) {
+    path = '/admin-hub';
+    label = adminLabel || 'Admin';
+    Icon = Icons.Briefcase;
+  } else if (isRealCR) {
+    path = '/cr-hub';
+    label = roleLabel;
+  }
 
   return (
     <Link
@@ -57,7 +75,7 @@ function ProfileButton({ isRealCR, roleLabel, active }) {
       aria-current={active ? 'page' : undefined}
     >
       <span className="mobile-bottom-nav-button-icon">
-        <Icons.User size={18} strokeWidth={2} />
+        <Icon size={18} strokeWidth={2} />
       </span>
       <span className="mobile-bottom-nav-button-label">{label}</span>
     </Link>
@@ -69,6 +87,7 @@ export function BottomNav() {
   const isMobileNav = useIsMobileNav();
   const [isRealCR, setIsRealCR] = useState(false);
   const [roleLabel, setRoleLabel] = useState('CR');
+  const { isRealAdmin: isStaff, adminLabel } = useIsStaff();
 
   useEffect(() => {
     const profile = getProfile() || {};
@@ -85,7 +104,9 @@ export function BottomNav() {
   const isProfileActive = location.pathname === '/profile'
     || location.pathname === '/cr-hub'
     || location.pathname === '/class-management'
-    || location.pathname === '/ct-quiz-planning';
+    || location.pathname === '/ct-quiz-planning'
+    || location.pathname === '/admin-hub'
+    || location.pathname === '/team';
 
   return (
     <nav className="mobile-bottom-nav" aria-label="Mobile navigation">
@@ -108,7 +129,13 @@ export function BottomNav() {
             </Link>
           );
         })}
-        <ProfileButton isRealCR={isRealCR} roleLabel={roleLabel} active={isProfileActive} />
+        <ProfileButton
+          isRealCR={isRealCR}
+          roleLabel={roleLabel}
+          isStaff={isStaff}
+          adminLabel={adminLabel}
+          active={isProfileActive}
+        />
       </div>
     </nav>
   );

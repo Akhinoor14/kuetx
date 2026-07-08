@@ -189,6 +189,29 @@ export function Navbar({ onMenuClick }) {
 
         <div style={{ flex: 1 }} />
 
+        {/* ── Theme toggle — standalone, desktop only. Cycles light → milky
+            → dark on each click, reusing the same cycleTheme/ThemeIcon
+            logic already used by the drawer's theme picker cards, so this
+            is just a second, always-visible entry point to the same
+            setTheme() call — not a separate theme system. ── */}
+        <button
+          onClick={cycleTheme}
+          aria-label={`Switch theme (current: ${THEMES[themeId]?.label || 'Light'})`}
+          title={`Theme: ${THEMES[themeId]?.label || 'Light'} — click to switch`}
+          className="hidden md:flex"
+          style={{
+            alignItems: 'center', justifyContent: 'center',
+            width: 38, height: 38, borderRadius: 10,
+            border: '1.5px solid var(--border)',
+            background: 'transparent',
+            cursor: 'pointer', color: 'var(--text)',
+            transition: 'background 0.15s',
+            marginRight: 8,
+          }}
+        >
+          <ThemeIcon size={17} />
+        </button>
+
         {/* ── Notification bell — standalone, always visible ── */}
         <button
           onClick={() => setNotificationOpen(true)}

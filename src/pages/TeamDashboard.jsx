@@ -15,16 +15,18 @@ import AdminEntryPoint from '../components/AdminEntryPoint';
  */
 export default function TeamDashboard() {
   return (
-    <div style={{ maxWidth: 720, margin: '0 auto', padding: '16px 14px' }}>
-      <h1 style={{ fontSize: 20, fontWeight: 700, marginBottom: 4 }}>Team &amp; Administration</h1>
-      <p style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 16 }}>
-        Everything here is scoped to whatever KUETx role(s) you actually hold.
-      </p>
+    <div className="team-dashboard-shell">
+      <div style={{ maxWidth: 1400, margin: '0 auto', padding: '20px 16px 40px' }}>
+        <h1 style={{ fontSize: 20, fontWeight: 700, marginBottom: 4 }}>Team &amp; Administration</h1>
+        <p style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 20 }}>
+          Everything here is scoped to whatever KUETx role(s) you actually hold.
+        </p>
 
-      <StaffDashboardContent />
+        <StaffDashboardContent />
 
-      <div style={{ marginTop: 20 }}>
-        <AdminEntryPoint />
+        <div style={{ marginTop: 20 }}>
+          <AdminEntryPoint />
+        </div>
       </div>
     </div>
   );
