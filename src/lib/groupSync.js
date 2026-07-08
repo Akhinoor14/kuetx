@@ -23,7 +23,7 @@
 // ClassManagement, Classmates teaser) never creates duplicate listeners.
 
 import {
-  collection, collectionGroup, doc, getDoc, getDocFromServer, getDocs, setDoc, updateDoc, deleteDoc, addDoc, onSnapshot,
+  collection, collectionGroup, doc, getDocFromServer, getDocs, setDoc, updateDoc, deleteDoc, addDoc, onSnapshot,
   query, where, orderBy, serverTimestamp, writeBatch, increment, limit as fsLimit,
 } from 'firebase/firestore';
 import { db, auth } from './firebase';
@@ -105,7 +105,23 @@ export async function joinGroup(groupId, profile) {
   const uid = auth.currentUser?.uid;
   if (!uid || !groupId) return;
   const ref_ = doc(db, 'groups', groupId, 'members', uid);
-  const existing = await getDoc(ref_);
+  // Must read from the server, not the local cache. On a brand-new
+  // device (right after the initial local->Firestore push) the cache has
+  // no entry for this doc at all, so a cache-first getDoc() can report
+  // exists():false for a member doc that has genuinely existed on the
+  // server since an earlier device/session. That sends this into the
+  // setDoc() "create" branch below, which resets role/verified/joinedAt/
+  // legacyCRClaim to fresh-join defaults. Firestore's rules engine
+  // evaluates this against server truth, so if the doc really does
+  // already exist it correctly treats the setDoc as an UPDATE, not a
+  // create — and the update rule has no branch permitting a member to
+  // reset their own role/verified this way, so the write is rejected
+  // with permission-denied on first load. Worse case: if the update rule
+  // ever did allow it, this would silently demote/unverify an already-
+  // verified member or CR/ACR back to a plain unverified 'member' purely
+  // because their new device's cache was empty. getDocFromServer avoids
+  // both outcomes by always checking real server state first.
+  const existing = await getDocFromServer(ref_);
   if (existing.exists()) {
     // just refresh display fields, never touch verified/role. Also
     // backfills `isAnonymous` for pre-existing docs written before this
@@ -247,7 +263,20 @@ export async function removeMember(groupId, targetUid) {
 export async function syncOwnVerification(groupId, uid) {
   if (!groupId || !uid) return;
   const ref_ = doc(db, 'groups', groupId, 'members', uid);
-  const snap = await getDoc(ref_);
+  // Must read from the server, not the local cache: getDoc() is
+  // cache-first and on a brand-new device (right after the initial bulk
+  // local->Firestore push) the cache can be stale or briefly empty. A
+  // stale/missing cache read here makes this silently no-op (or write
+  // stale data back), leaving members/{uid}.verified stuck at false even
+  // though the account really is verified — which then makes
+  // waitForOwnVerification() poll for up to 5*400ms and either time out,
+  // or (worse) appear to succeed against a doc that was never actually
+  // updated, only to have the real write (e.g. crRequests/{uid}) get
+  // rejected server-side by isVerifiedMember(groupId). Every other
+  // verification-critical read in this file (waitForOwnMembership,
+  // waitForOwnVerification, requestCR's dup-check) already uses
+  // getDocFromServer for this same reason — keep this one consistent.
+  const snap = await getDocFromServer(ref_);
   if (snap.exists() && snap.data().verified !== true) {
     await updateDoc(ref_, { verified: true });
   }
@@ -363,8 +392,7 @@ export function subscribeCRRequests(groupId, callback) {
  */
 export async function clApproveCRRequest(groupId, targetUid) {
   const crStatusRef = doc(db, 'groups', groupId, 'meta', 'crStatus');
-  const [crStatusSnap, membersSnap, requestsSnap] = await Promise.all([
-    getDoc(crStatusRef),
+  const [membersSnap, requestsSnap] = await Promise.all([
     getDocs(collection(db, 'groups', groupId, 'members')),
     getDocs(query(collection(db, 'groups', groupId, 'crRequests'), where('status', '==', 'pending'))),
   ]);
@@ -380,8 +408,15 @@ export async function clApproveCRRequest(groupId, targetUid) {
   requestsSnap.docs.forEach((d) => {
     if (d.id !== targetUid) batch.update(d.ref, { status: 'rejected' });
   });
-  const newCount = (crStatusSnap.exists() ? (crStatusSnap.data().count || 0) : 0) + 1;
-  batch.set(crStatusRef, { count: newCount }, { merge: true });
+  // Derive the new count from crCount (just computed from the actual
+  // members' role fields above), not from crStatusSnap's own stored
+  // count. crStatus.count is a denormalized cache that can drift from
+  // the real membership data (a missed decrement, a race between two
+  // concurrent CL actions, etc.) — basing the new value on crCount+1
+  // self-corrects any existing drift on every approval instead of
+  // reading a possibly-wrong number and writing an equally-wrong one
+  // right back.
+  batch.set(crStatusRef, { count: crCount + 1 }, { merge: true });
   await batch.commit();
 }
 
@@ -396,8 +431,7 @@ export async function clRejectCRRequest(groupId, targetUid) {
  */
 export async function clAppointCR(groupId, targetUid) {
   const crStatusRef = doc(db, 'groups', groupId, 'meta', 'crStatus');
-  const [crStatusSnap, membersSnap, requestsSnap] = await Promise.all([
-    getDoc(crStatusRef),
+  const [membersSnap, requestsSnap] = await Promise.all([
     getDocs(collection(db, 'groups', groupId, 'members')),
     getDocs(query(collection(db, 'groups', groupId, 'crRequests'), where('status', '==', 'pending'))),
   ]);
@@ -415,8 +449,10 @@ export async function clAppointCR(groupId, targetUid) {
   requestsSnap.docs.forEach((d) => {
     if (d.data().type !== 'leave') batch.update(d.ref, { status: 'rejected' });
   });
-  const newCount = (crStatusSnap.exists() ? (crStatusSnap.data().count || 0) : 0) + 1;
-  batch.set(crStatusRef, { count: newCount }, { merge: true });
+  // See clApproveCRRequest for why this is crCount + 1 (self-healing
+  // from the real members role count) rather than crStatusSnap's stored
+  // count + 1 (perpetuates any existing drift).
+  batch.set(crStatusRef, { count: crCount + 1 }, { merge: true });
   await batch.commit();
 }
 
@@ -434,7 +470,11 @@ export async function clRevokeCR(groupId, targetUid) {
   // itself shown as pending — but this closes the loop cleanly so no doc
   // tied to this uid can ever be mistaken for an active/pending claim.
   const reqRef = doc(db, 'groups', groupId, 'crRequests', targetUid);
-  const reqSnap = await getDoc(reqRef);
+  // getDocFromServer, not getDoc: a stale/cached "doesn't exist" read here
+  // would skip marking a genuinely-existing request 'revoked', leaving it
+  // in an ambiguous state (see the leave-request comment below for the
+  // concrete corruption this class of bug causes).
+  const reqSnap = await getDocFromServer(reqRef);
   if (reqSnap.exists()) {
     batch.update(reqRef, { status: 'revoked' });
   }
@@ -444,9 +484,11 @@ export async function clRevokeCR(groupId, targetUid) {
   // it would keep showing up in the leave-requests queue forever, and if
   // anyone later clicked Approve on it, clApproveLeaveCR would run
   // crStatus.count: increment(-1) a SECOND time for a slot that was
-  // already freed here, silently corrupting the slot count.
+  // already freed here, silently corrupting the slot count. Must read
+  // from the server (not cache): a stale cache miss on this exact check
+  // is what would let that double-decrement slip through.
   const leaveReqRef = doc(db, 'groups', groupId, 'crRequests', `leave_${targetUid}`);
-  const leaveReqSnap = await getDoc(leaveReqRef);
+  const leaveReqSnap = await getDocFromServer(leaveReqRef);
   if (leaveReqSnap.exists() && leaveReqSnap.data().status === 'pending') {
     batch.update(leaveReqRef, { status: 'revoked' });
   }
@@ -465,7 +507,11 @@ export async function clRevokeCR(groupId, targetUid) {
  * same slot), and the CL is passively notified, not asked.
  */
 export async function handoffCR(groupId, currentUid, successorUid, currentProfile) {
-  const successorSnap = await getDoc(doc(db, 'groups', groupId, 'members', successorUid));
+  // getDocFromServer, not getDoc: a stale local cache (e.g. the successor
+  // was verified moments ago and this device hasn't caught up) can report
+  // verified:false or exists():false for someone who genuinely already
+  // qualifies, wrongly blocking a legitimate handoff.
+  const successorSnap = await getDocFromServer(doc(db, 'groups', groupId, 'members', successorUid));
   if (!successorSnap.exists() || !successorSnap.data().verified) {
     throw new Error('The new CR must already be a verified member of this class.');
   }
@@ -479,9 +525,11 @@ export async function handoffCR(groupId, currentUid, successorUid, currentProfil
   // close it out here. Otherwise it lingers as pending forever, and if a
   // CL later approves it, clApproveLeaveCR would decrement crStatus.count
   // for a slot that was never actually freed (the successor took it
-  // immediately) — silently corrupting the slot count.
+  // immediately) — silently corrupting the slot count. Must read from the
+  // server, not cache, or a stale "no pending request" read lets that
+  // exact double-decrement through.
   const leaveReqRef = doc(db, 'groups', groupId, 'crRequests', `leave_${currentUid}`);
-  const leaveReqSnap = await getDoc(leaveReqRef);
+  const leaveReqSnap = await getDocFromServer(leaveReqRef);
   if (leaveReqSnap.exists() && leaveReqSnap.data().status === 'pending') {
     batch.update(leaveReqRef, { status: 'revoked' });
   }
@@ -498,6 +546,17 @@ export async function handoffCR(groupId, currentUid, successorUid, currentProfil
  * content-editing access, but no succession/appoint power at all. No CL
  * approval needed. Throws if both ACR slots are already full.
  */
+// KNOWN GAP: MAX_ACR is enforced HERE ONLY (client-side). Unlike CR — which
+// firestore.rules now independently checks via crCount(groupId) against the
+// real meta/crStatus doc — there is no meta/acrStatus doc for ACR occupancy
+// (see the "ACR occupancy isn't part of that rule" note above), so the rules
+// engine has nothing to count against and cannot enforce this cap. A
+// modified client (or a direct Firestore write) could still set more than
+// MAX_ACR members to role:'acr' in one group. Left as client-side-only
+// deliberately for now — closing it properly needs a real acrStatus doc
+// (mirroring crStatus) plus rule changes, not a quick patch here. ACR has
+// no succession/appoint power of its own, so the blast radius of this gap
+// is content-editing capacity only, not a privilege escalation.
 export async function assignACR(groupId, targetUid) {
   const membersSnap = await getDocs(collection(db, 'groups', groupId, 'members'));
   const { acr: acrCount } = _countRoles(membersSnap.docs);

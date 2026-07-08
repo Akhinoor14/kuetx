@@ -269,12 +269,10 @@ function StaffRolesView({ onBack, onSelectCategory, groups, countCtx }) {
       return list;
     } catch (err) {
       setCurrentHolders((prev) => ({ ...prev, [role]: [] }));
-      if (err?.code !== 'permission-denied') {
-        console.error(`[Founder] failed to load holders for role "${role}":`, err);
-        setHoldersError(err?.message || 'Failed to load some staff roles.');
-      } else {
-        console.info(`[Founder] role "${role}" is not readable in the current rules/session; leaving this bucket empty.`);
-      }
+      console.error(`[Founder] failed to load holders for role "${role}":`, err);
+      setHoldersError(err?.code === 'permission-denied'
+        ? 'Staff role data could not be read (permission denied) — this usually means a Firestore rules deploy is out of date. Check the console for details.'
+        : (err?.message || 'Failed to load some staff roles.'));
       return [];
     }
   };
@@ -290,12 +288,18 @@ function StaffRolesView({ onBack, onSelectCategory, groups, countCtx }) {
           nextHolders[role] = await listStaffByRole(role);
         } catch (err) {
           nextHolders[role] = [];
-          if (err?.code !== 'permission-denied') {
-            console.error(`[Founder] failed to load holders for role "${role}":`, err);
-            nextError = err?.message || 'Failed to load some staff roles.';
-          } else {
-            console.info(`[Founder] role "${role}" is not readable in the current rules/session; leaving this bucket empty.`);
-          }
+          // permission-denied here is NOT an expected/benign case for an
+          // Admin or Head of Ops session — it used to be silently
+          // swallowed on the (wrong) assumption that it just meant "this
+          // particular role's docs aren't readable", which hid a real
+          // Firestore rules bug (missing collectionGroup match for the
+          // 'roles' subcollection) behind a UI that quietly showed "0
+          // holders" for every role with no indication anything had
+          // failed. Surface it like any other load error instead.
+          console.error(`[Founder] failed to load holders for role "${role}":`, err);
+          nextError = err?.code === 'permission-denied'
+            ? 'Staff role data could not be read (permission denied) — this usually means a Firestore rules deploy is out of date. Check the console for details.'
+            : (err?.message || 'Failed to load some staff roles.');
         }
       }
       if (cancelled) return;

@@ -244,6 +244,23 @@ service cloud.firestore {
     // -------------------------------------------------------------
     // Official staff hierarchy (Head of Ops, Core Team leads, SCL, CL)
     // -------------------------------------------------------------
+    // Collection-group read for the 'roles' subcollection. Firestore
+    // requires this as a SEPARATE rule from the nested match below — a
+    // normal match /staff/{targetUid}/roles/{roleId} rule only covers
+    // direct-path reads, never a collectionGroup('roles') query, which
+    // is what listStaffByRole() in staffSync.js actually issues (used by
+    // both the Founder's "current role holders" view and Head of Ops's
+    // SCL list). Without this, every such query is rejected outright —
+    // regardless of who's asking — which is why the Founder dashboard
+    // was showing 0 holders for every role even with real CL/SCL data
+    // in the database. Scoped to the same two roles already granted
+    // unconditional per-document read access below (isAdmin/isHeadOfOps);
+    // this does not widen anyone's actual access, it only makes that
+    // already-intended access work for this query shape.
+    match /{path=**}/roles/{roleId} {
+      allow read: if isAdmin() || isHeadOfOps();
+    }
+
     match /staff/{targetUid}/roles/{roleId} {
       allow read: if isAdmin() || isHeadOfOps() || request.auth.uid == targetUid
         // Senior Campus Leads need to see the Campus Leads in their own
@@ -431,8 +448,16 @@ service cloud.firestore {
                         // the whole approval would silently fail here even
                         // though the SCL/Admin/Head of Ops clearly has the
                         // authority to appoint CR (see the update rule below).
+                        // crCount(groupId) < 2 (MAX_CR): server-side capacity
+                        // enforcement, mirroring the MAX_CR check groupSync.js
+                        // already does client-side. Without this, a modified
+                        // client (or any direct Firestore write bypassing the
+                        // app's own JS) could grant unlimited 'cr' roles in
+                        // one group, since nothing else in this rule file
+                        // counts existing CR holders before allowing another.
                         || (request.resource.data.role == 'cr' && request.resource.data.verified == true
-                            && (isAdmin() || isHeadOfOps() || isSCLForGroup(groupId)));
+                            && (isAdmin() || isHeadOfOps() || isSCLForGroup(groupId))
+                            && crCount(groupId) < 2);
         // Members edit only their own display fields. verified/role changes
         // are gated to CL/Admin/Head of Ops/that dept's SCL (fallback chain
         // — a request never gets stuck just because the immediate level is
@@ -462,7 +487,15 @@ service cloud.firestore {
         //   - ACR has none of this power (isGroupACR is deliberately
         //     absent from this branch).
         allow update: if isAdmin() ||
-          ((isCLFor(groupId) || isHeadOfOps() || isSCLForGroup(groupId)) && request.auth.uid != memberUid) ||
+          ((isCLFor(groupId) || isHeadOfOps() || isSCLForGroup(groupId)) && request.auth.uid != memberUid
+            // Capacity check, scoped narrowly: only applies when this
+            // write is actually granting a FRESH 'cr' role to someone who
+            // didn't already hold it (clAppointCR / clApproveCRRequest).
+            // Re-saving an existing CR's doc, or any update that doesn't
+            // touch role at all, is unaffected. Mirrors the client-side
+            // MAX_CR check in groupSync.js so a modified client (or a
+            // direct Firestore write) can't grant unlimited CR slots.
+            && (request.resource.data.role != 'cr' || resource.data.role == 'cr' || crCount(groupId) < 2)) ||
           (isGroupCR(groupId) && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['role', 'verified', 'legacyCRClaim']) &&
             // legacyCRClaim may only ever be cleared here, never (re)set —
             // this branch is a same-slot handoff/step-down path, not a way
