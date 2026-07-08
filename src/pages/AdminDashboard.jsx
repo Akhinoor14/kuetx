@@ -245,16 +245,22 @@ function StaffRolesView({ onBack, onSelectCategory, groups, countCtx }) {
     listStaffByRole(role)
       .then((list) => setCurrentHolders((prev) => ({ ...prev, [role]: list })))
       .catch((err) => {
-        // Previously swallowed silently (no .catch at all) — a missing
-        // collectionGroup index or a permission issue on staff/*/roles/*
-        // rejected here and the role's entry in currentHolders just never
-        // got set, so the UI fell through to "No one holds a staff role
-        // yet" even when staff genuinely existed. Surface it instead.
-        console.error(`[StaffRolesView] failed to load holders for role "${role}":`, err);
-        setHoldersError(err?.message || 'Failed to load some staff roles — check the console for details.');
+        // Only log unexpected failures. Permission-denied here usually
+        // means the current session is not allowed to inspect that role
+        // holder list yet, so keep the UI quiet instead of spamming the
+        // console on every mount.
+        if (err?.code !== 'permission-denied') {
+          console.error(`[StaffRolesView] failed to load holders for role "${role}":`, err);
+          setHoldersError(err?.message || 'Failed to load some staff roles.');
+        }
       });
   };
-  useEffect(() => { ALL_ASSIGNABLE_ROLES.forEach(refreshHolders); }, []);
+  useEffect(() => {
+    if (subTab !== 'holders') return;
+    ALL_ASSIGNABLE_ROLES.forEach((role) => {
+      if (!currentHolders[role]) refreshHolders(role);
+    });
+  }, [subTab]);
 
   const handleAssign = async () => {
     if (!newUid.trim()) return;

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Users2 } from 'lucide-react';
 import { getProfile } from '../store/store';
 import { getGroupId, getGroupLabel } from '../lib/groupUtils';
-import { joinGroup, requestCR, subscribeCRStatus, subscribeMembers, syncOwnVerification, waitForOwnMembership, MAX_CR } from '../lib/groupSync';
+import { joinGroup, requestCR, subscribeCRStatus, subscribeMembers, syncOwnVerification, waitForOwnMembership, waitForOwnVerification, MAX_CR } from '../lib/groupSync';
 import { checkCLVacant, applyForCampusLead } from '../lib/staffSync';
 import { isRollInstitutionallyVerified } from '../lib/kuetEmailVerify';
 import { auth } from '../lib/firebase';
@@ -100,6 +100,7 @@ export default function Classmates() {
       // the exact same "Missing or insufficient permissions" race this was
       // written to close.
       await syncOwnVerification(groupId, auth.currentUser?.uid);
+      await waitForOwnVerification(groupId);
       const clVacant = await checkCLVacant(groupId);
       if (clVacant) {
         // No Campus Lead yet for this dept+batch — bundle the CR claim

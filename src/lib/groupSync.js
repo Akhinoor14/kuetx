@@ -253,6 +253,27 @@ export async function syncOwnVerification(groupId, uid) {
   }
 }
 
+/**
+ * Wait until this user's own member doc is readable and verified:true.
+ * This is used after syncOwnVerification() before writes that Firestore
+ * rules gate on isVerifiedMember(groupId), so we don't race the server's
+ * view of the newly-updated member doc.
+ */
+export async function waitForOwnVerification(groupId, retries = 5, delayMs = 400) {
+  const uid = auth.currentUser?.uid;
+  if (!uid || !groupId) return false;
+  for (let i = 0; i < retries; i++) {
+    try {
+      const snap = await getDoc(doc(db, 'groups', groupId, 'members', uid));
+      if (snap.exists() && snap.data().verified === true) return true;
+    } catch (e) {
+      // permission-denied while the verification write is still propagating — retry
+    }
+    await new Promise((r) => setTimeout(r, delayMs));
+  }
+  return false;
+}
+
 // ---------------------------------------------------------------------
 // CR lifecycle
 // ---------------------------------------------------------------------

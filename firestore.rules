@@ -245,19 +245,7 @@ service cloud.firestore {
     // Official staff hierarchy (Head of Ops, Core Team leads, SCL, CL)
     // -------------------------------------------------------------
     match /staff/{targetUid}/roles/{roleId} {
-      allow read: if isAdmin() || isHeadOfOps() || request.auth.uid == targetUid
-        // A department's Senior Campus Lead may also read Campus Lead
-        // role docs scoped to that same department — needed for the
-        // "Campus Leads in this department" list in StaffDashboard.jsx's
-        // SeniorCampusLeadBlock (listStaffByRole('campus_lead') runs a
-        // collectionGroup query across every staff/*/roles/* doc, so
-        // Firestore evaluates this rule PER MATCHED DOC using that doc's
-        // own targetUid — without this branch, every doc in the scan
-        // failed request.auth.uid == targetUid and the whole query threw
-        // permission-denied for any SCL, even though the manifesto
-        // clearly gives an SCL authority over Campus Leads in their dept).
-        || (resource.data.role == 'campus_lead' && resource.data.scope.type == 'group'
-            && isSCLForGroup(resource.data.scope.groupId));
+      allow read: if isAdmin() || isHeadOfOps() || request.auth.uid == targetUid;
 
       // Appointment authority:
       //  - Founder can assign anyone, anything.
