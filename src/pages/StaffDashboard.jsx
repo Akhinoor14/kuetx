@@ -49,7 +49,7 @@ function RollUnlockSection() {
   };
 
   return (
-    <Section title="Roll Unlock Requests">
+    <Section wide title="Roll Unlock Requests">
       {requests.map((r) => (
         <div key={r.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 0', borderBottom: '1px solid var(--border)' }}>
           <div>
@@ -74,6 +74,29 @@ function Section({ title, children, wide }) {
       <h2 style={{ fontSize: 15, fontWeight: 700, marginBottom: 10 }}>{title}</h2>
       {children}
     </section>
+  );
+}
+
+// ---------------------------------------------------------------------
+// Labeled break between role-scoped groups of cards, so e.g. "Senior
+// Campus Lead" tools and "Campus Lead" tools don't visually blur into
+// one undifferentiated stack when someone holds more than one role.
+// Same treatment as AdminDashboard.jsx's GroupHeading, kept local here
+// since the two pages don't currently share a components file for this.
+// ---------------------------------------------------------------------
+function GroupHeading({ children, first }) {
+  return (
+    <div style={{
+      display: 'flex', alignItems: 'center', gap: 10,
+      margin: first ? '0 0 12px' : '20px 0 12px',
+    }}>
+      <span style={{
+        fontSize: 11, fontWeight: 800, letterSpacing: '0.06em',
+        textTransform: 'uppercase', color: 'var(--accent, #4f46e5)',
+        whiteSpace: 'nowrap',
+      }}>{children}</span>
+      <span style={{ flex: 1, height: 1, background: 'var(--border)' }} />
+    </div>
   );
 }
 
@@ -428,8 +451,8 @@ function HeadOfOpsSection() {
 // ---------------------------------------------------------------------
 function ContentLeadSection() {
   return (
-    <Section title="Content moderation">
-      <p style={{ fontSize: 12, color: 'var(--muted)' }}>
+    <Section wide title="Content moderation">
+      <p style={{ fontSize: 12, color: 'var(--muted)', maxWidth: 640 }}>
         Question bank/notes moderation lives in KUETx's existing Question Bank system, not a separate
         queue here. Wiring your review step into that system is a follow-up task.
       </p>
@@ -456,7 +479,7 @@ function GrowthSection() {
   }, []);
 
   return (
-    <Section title="Growth — class activity">
+    <Section wide title="Growth — class activity">
       {groups === null && <div style={{ fontSize: 12, color: 'var(--muted)' }}>Loading…</div>}
       {groups?.map((g) => (
         <div key={g.id} style={{ fontSize: 13, padding: '4px 0', display: 'flex', justifyContent: 'space-between' }}>
@@ -592,50 +615,84 @@ export default function StaffDashboard({ onTabChange } = {}) {
 
       <RoleTabBar tabs={tabs} active={currentTab} onChange={handleTabChange} />
 
-      <div className="staff-dashboard-grid">
-        {show('founder') && isAdminUser && (
-          <>
+      {show('founder') && isAdminUser && (
+        <>
+          <GroupHeading first>Founder</GroupHeading>
+          <div className="staff-dashboard-grid">
             <RollUnlockSection />
             {!isHeadOfOps && (
-              <Section title="Pending Email Flags (Founder fallback)">
+              <Section wide title="Pending Email Flags (Founder fallback)">
                 <EmailFlagReviewBlock />
               </Section>
             )}
             <AdminAllGroupsSection />
-          </>
-        )}
+          </div>
+        </>
+      )}
 
-        {show('ops') && isHeadOfOps && (
-          <>
+      {show('ops') && isHeadOfOps && (
+        <>
+          <GroupHeading first={!(show('founder') && isAdminUser)}>Head of Operations</GroupHeading>
+          <div className="staff-dashboard-grid">
             <HeadOfOpsSection />
             <AdminAllGroupsSection />
-          </>
-        )}
+          </div>
+        </>
+      )}
 
-        {show('scl') && sclDepts.length > 0 && (
-          <Section wide title="Senior Campus Lead">
-            {sclDepts.map((d) => <SeniorCampusLeadBlock key={d} dept={d} />)}
-          </Section>
-        )}
+      {show('scl') && sclDepts.length > 0 && (
+        <>
+          <GroupHeading>Senior Campus Lead</GroupHeading>
+          <div className="staff-dashboard-grid">
+            <Section wide title="Your departments">
+              {sclDepts.map((d) => <SeniorCampusLeadBlock key={d} dept={d} />)}
+            </Section>
+          </div>
+        </>
+      )}
 
-        {show('cl') && clGroups.length > 0 && (
-          <Section wide title="Campus Lead">
-            {clGroups.map((g) => <CampusLeadBlock key={g} groupId={g} />)}
-          </Section>
-        )}
+      {show('cl') && clGroups.length > 0 && (
+        <>
+          <GroupHeading>Campus Lead</GroupHeading>
+          <div className="staff-dashboard-grid">
+            <Section wide title="Your classes">
+              {clGroups.map((g) => <CampusLeadBlock key={g} groupId={g} />)}
+            </Section>
+          </div>
+        </>
+      )}
 
-        {show('content') && isContentLead && <ContentLeadSection />}
-        {show('growth') && isHeadOfGrowth && <GrowthSection />}
+      {show('content') && isContentLead && (
+        <>
+          <GroupHeading>Content Lead</GroupHeading>
+          <div className="staff-dashboard-grid">
+            <ContentLeadSection />
+          </div>
+        </>
+      )}
 
-        {show('finance') && hasFinanceOrLegal && (
-          <Section title="Finance & Legal">
-            <p style={{ fontSize: 12, color: 'var(--muted)' }}>
-              Sponsorship and compliance record-keeping tools are lightweight and mostly external
-              (spreadsheets, documents) per the manifesto — nothing app-specific needed here yet.
-            </p>
-          </Section>
-        )}
-      </div>
+      {show('growth') && isHeadOfGrowth && (
+        <>
+          <GroupHeading>Growth</GroupHeading>
+          <div className="staff-dashboard-grid">
+            <GrowthSection />
+          </div>
+        </>
+      )}
+
+      {show('finance') && hasFinanceOrLegal && (
+        <>
+          <GroupHeading>Finance &amp; Legal</GroupHeading>
+          <div className="staff-dashboard-grid">
+            <Section wide title="Finance & Legal">
+              <p style={{ fontSize: 12, color: 'var(--muted)', maxWidth: 640 }}>
+                Sponsorship and compliance record-keeping tools are lightweight and mostly external
+                (spreadsheets, documents) per the manifesto — nothing app-specific needed here yet.
+              </p>
+            </Section>
+          </div>
+        </>
+      )}
     </div>
   );
 }

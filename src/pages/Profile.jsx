@@ -352,28 +352,22 @@ const CopyMyIdRow = () => {
   return (
     <div style={{ display: 'grid', gridTemplateColumns: '110px 1fr', gap: 10, alignItems: 'flex-start' }}>
       <span style={{ fontSize: 11, color: 'var(--muted)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: 0.5, paddingTop: 1 }}>My ID</span>
-      <div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
-          <span style={{ fontSize: 12, color: 'var(--muted)', fontFamily: 'monospace', wordBreak: 'break-all' }}>{uid || '—'}</span>
-          <button
-            onClick={handleCopy}
-            disabled={!uid}
-            className="btn btn-sm btn-secondary"
-            style={{ flexShrink: 0 }}
-          >
-            {copied ? 'Copied!' : 'Copy'}
-          </button>
-        </div>
-        <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 2 }}>
-          Share this with whoever needs to give you a KUETx staff role (Campus Lead, etc.) — it's not a
-          password, just an identifier.
-        </div>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
+        <span style={{ fontSize: 12, color: 'var(--muted)', fontFamily: 'monospace', wordBreak: 'break-all' }}>{uid || '—'}</span>
+        <button
+          onClick={handleCopy}
+          disabled={!uid}
+          className="btn btn-sm btn-secondary"
+          style={{ flexShrink: 0 }}
+        >
+          {copied ? 'Copied!' : 'Copy'}
+        </button>
       </div>
     </div>
   );
 };
 
-const Section = ({ title, icon, children, className }) => (
+const Section = ({ title, icon, children, className, action }) => (
   <div className={className} style={{
     background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: 16,
     overflow: 'hidden', transition: 'border-color 0.2s, box-shadow 0.2s',
@@ -382,7 +376,8 @@ const Section = ({ title, icon, children, className }) => (
   onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.boxShadow = ''; }}>
     <div style={{ padding: '14px 20px', borderBottom: '1px solid var(--border)', background: 'var(--bg)', display: 'flex', alignItems: 'center', gap: 8 }}>
       <div style={{ width: 3, height: 16, borderRadius: 2, background: 'linear-gradient(var(--accent), var(--accent2))' }} />
-      <span style={{ fontSize: 12, fontWeight: 800, textTransform: 'uppercase', letterSpacing: 0.8, color: 'var(--text)' }}>{icon} {title}</span>
+      <span style={{ fontSize: 12, fontWeight: 800, textTransform: 'uppercase', letterSpacing: 0.8, color: 'var(--text)', flex: 1 }}>{icon} {title}</span>
+      {action}
     </div>
     <div style={{ padding: 20, display: 'flex', flexDirection: 'column', gap: 12 }}>
       {children}
@@ -956,8 +951,8 @@ export default function Profile() {
     <div className="page-enter page-container" style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
 
       {/* ── Account Banner — only shown for guest/anonymous accounts.
-           Signed-in users already see their name/email in the hero card
-           below, and Sign Out now lives there too, so this banner would
+           Signed-in users already see their name in the hero card below,
+           and Sign Out lives in the hamburger menu, so this banner would
            be pure redundant clutter for them. ── */}
       {(!firebaseUser || firebaseUser.isAnonymous) && (
         <AccountBanner user={firebaseUser} onLogin={() => setShowAuthModal(true)} onLogout={handleLogout} />
@@ -971,32 +966,35 @@ export default function Profile() {
         }}>✓ Profile updated!</div>
       )}
 
-      {/* ── Hero: Avatar + Name + Edit ── */}
+      {/* ── Hero: minimal — Avatar (top) + Name (below). Same layout on
+           mobile and desktop now; Edit button moved into Personal Info,
+           Sign Out lives in the hamburger menu. ── */}
       <div className="hero-bg" style={{
-        borderRadius: 20, padding: 'clamp(20px,4vw,32px) clamp(20px,4vw,32px)',
-        display: 'flex', alignItems: 'center', gap: 'clamp(14px,3vw,24px)',
-        boxShadow: '0 8px 32px color-mix(in srgb, var(--accent) 25%, transparent)', flexWrap: 'wrap',
-        position: 'relative', overflow: 'hidden',
+        borderRadius: 20, padding: 'clamp(28px,5vw,40px) clamp(20px,4vw,32px)',
+        display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+        gap: 14,
+        boxShadow: '0 8px 32px color-mix(in srgb, var(--accent) 25%, transparent)',
+        position: 'relative', overflow: 'hidden', textAlign: 'center',
       }}>
         {/* Decorative orb */}
         <div style={{ position: 'absolute', top: -60, right: -60, width: 200, height: 200, borderRadius: '50%', background: 'rgba(255,255,255,0.08)', pointerEvents: 'none' }} />
 
-        {/* Avatar — clickable to upload */}
+        {/* Avatar — clickable to upload, with glow ring + click-to-edit hint */}
         <div
           onClick={() => setShowAvatarModal(true)}
           title="Click to change profile picture"
           style={{
-            width: 'clamp(64px,12vw,88px)', height: 'clamp(64px,12vw,88px)', borderRadius: '50%',
+            width: 'clamp(84px,18vw,108px)', height: 'clamp(84px,18vw,108px)', borderRadius: '50%',
             background: photoURL ? 'transparent' : 'rgba(255,255,255,0.25)',
-            border: '3px solid rgba(255,255,255,0.5)',
+            border: '3px solid rgba(255,255,255,0.6)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
-            fontSize: 'clamp(26px,6vw,40px)', fontWeight: 900, color: 'white',
-            boxShadow: '0 4px 16px rgba(0,0,0,0.15)', flexShrink: 0,
-            cursor: 'pointer', overflow: 'hidden', position: 'relative',
+            fontSize: 'clamp(30px,7vw,44px)', fontWeight: 900, color: 'white',
+            boxShadow: '0 0 0 6px rgba(255,255,255,0.12), 0 8px 28px rgba(0,0,0,0.2)',
+            flexShrink: 0, cursor: 'pointer', overflow: 'hidden', position: 'relative',
             transition: 'transform 0.2s, box-shadow 0.2s',
           }}
-          onMouseEnter={e => { e.currentTarget.style.transform = 'scale(1.06)'; e.currentTarget.style.boxShadow = '0 8px 24px rgba(0,0,0,0.25)'; }}
-          onMouseLeave={e => { e.currentTarget.style.transform = ''; e.currentTarget.style.boxShadow = '0 4px 16px rgba(0,0,0,0.15)'; }}
+          onMouseEnter={e => { e.currentTarget.style.transform = 'scale(1.06)'; e.currentTarget.style.boxShadow = '0 0 0 6px rgba(255,255,255,0.2), 0 10px 32px rgba(0,0,0,0.3)'; }}
+          onMouseLeave={e => { e.currentTarget.style.transform = ''; e.currentTarget.style.boxShadow = '0 0 0 6px rgba(255,255,255,0.12), 0 8px 28px rgba(0,0,0,0.2)'; }}
         >
           {photoURL
             ? <img src={photoURL} alt="Profile" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
@@ -1010,57 +1008,18 @@ export default function Profile() {
           }}
           onMouseEnter={e => e.currentTarget.style.opacity = '1'}
           onMouseLeave={e => e.currentTarget.style.opacity = '0'}>
-            <Icons.Camera size={20} color="white" />
+            <Icons.Camera size={22} color="white" />
           </div>
         </div>
 
-        {/* Info */}
-        <div style={{ flex: 1, minWidth: 0 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap', marginBottom: 4 }}>
-            <div style={{ fontSize: 'clamp(18px,4vw,26px)', fontWeight: 900, color: 'white', letterSpacing: '-0.02em', lineHeight: 1.2, fontFamily: "'Space Grotesk', 'Sora', 'Hind Siliguri', system-ui, sans-serif", display: 'flex', alignItems: 'center', gap: 8 }}>
-              {profile.name}
-              {isKuetVerified && <BlueTick size={18} />}
-            </div>
-            {isRealCR && <Badge label="👑 CR" color="#fff" bg="rgba(255,255,255,0.2)" />}
+        {/* Name only — Student ID / Session / Term already shown in
+             Academic Info / Personal Info cards below. Edit lives there too. */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap', justifyContent: 'center' }}>
+          <div style={{ fontSize: 'clamp(19px,4.5vw,28px)', fontWeight: 900, color: 'white', letterSpacing: '-0.02em', lineHeight: 1.2, fontFamily: "'Space Grotesk', 'Sora', 'Hind Siliguri', system-ui, sans-serif", display: 'flex', alignItems: 'center', gap: 8 }}>
+            {profile.name}
+            {isKuetVerified && <BlueTick size={18} />}
           </div>
-          <div style={{ fontSize: 'clamp(12px,2.5vw,14px)', color: 'rgba(255,255,255,0.85)', lineHeight: 1.6, fontFamily: "'Space Grotesk', 'Sora', 'Hind Siliguri', system-ui, sans-serif" }}>
-            {profile.studentId && <span>{profile.studentId}</span>}
-            {profile.dept && <span> · {getDeptName(profile.dept)}</span>}
-          </div>
-          <div style={{ fontSize: 'clamp(11px,2vw,13px)', color: 'rgba(255,255,255,0.7)', marginTop: 2, fontFamily: "'Space Grotesk', 'Sora', 'Hind Siliguri', system-ui, sans-serif" }}>
-            {profile.session && <span>Session: {profile.session}</span>}
-            {profile.currentTerm && <span> · {profile.currentTerm}</span>}
-          </div>
-        </div>
-
-        {/* Edit + Sign Out */}
-        <div style={{ display: 'flex', gap: 8, flexShrink: 0 }}>
-          <button onClick={() => setIsModalOpen(true)} style={{
-            padding: 'clamp(8px,2vw,11px) clamp(14px,3vw,20px)',
-            background: 'rgba(255,255,255,0.15)', color: 'white',
-            border: '1.5px solid rgba(255,255,255,0.35)', borderRadius: 10,
-            fontSize: 13, fontWeight: 700, cursor: 'pointer',
-            transition: 'background 0.2s',
-            display: 'flex', alignItems: 'center', gap: 7,
-          }}
-          onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.25)'}
-          onMouseLeave={e => e.currentTarget.style.background = 'rgba(255,255,255,0.15)'}>
-            <Icons.Pencil size={13} /> Edit
-          </button>
-          {!(!firebaseUser || firebaseUser.isAnonymous) && (
-            <button onClick={handleLogout} title="Sign out" style={{
-              padding: 'clamp(8px,2vw,11px) clamp(10px,2vw,12px)',
-              background: 'rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.85)',
-              border: '1.5px solid rgba(255,255,255,0.25)', borderRadius: 10,
-              fontSize: 13, fontWeight: 700, cursor: 'pointer',
-              transition: 'background 0.2s, color 0.2s',
-              display: 'flex', alignItems: 'center', gap: 6,
-            }}
-            onMouseEnter={e => { e.currentTarget.style.background = 'rgba(239,68,68,0.25)'; e.currentTarget.style.color = 'white'; }}
-            onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.1)'; e.currentTarget.style.color = 'rgba(255,255,255,0.85)'; }}>
-              <Icons.LogOut size={13} />
-            </button>
-          )}
+          {isRealCR && <Badge label="👑 CR" color="#fff" bg="rgba(255,255,255,0.2)" />}
         </div>
       </div>
 
@@ -1147,6 +1106,35 @@ export default function Profile() {
         {/* LEFT COLUMN */}
         <div className="profile-col-left" style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
 
+          {/* Personal Info — Edit button lives here (moved off the
+              minimal hero card) */}
+          <Section className="ord-personal" title="Personal Info" icon="👤" action={
+            <button onClick={() => setIsModalOpen(true)} style={{
+              padding: '6px 12px', background: 'var(--bg)', color: 'var(--text)',
+              border: '1px solid var(--border)', borderRadius: 8,
+              fontSize: 12, fontWeight: 700, cursor: 'pointer',
+              display: 'flex', alignItems: 'center', gap: 6,
+            }}>
+              <Icons.Pencil size={12} /> Edit
+            </button>
+          }>
+            <InfoRow label="Full Name" value={profile.name} />
+            <div style={{ height: 1, background: 'var(--border)' }} />
+            <InfoRow label="Student ID" value={profile.studentId} />
+            <div className="mobile-only-uid-row">
+              <div style={{ height: 1, background: 'var(--border)' }} />
+              <CopyMyIdRow />
+            </div>
+            <div style={{ height: 1, background: 'var(--border)' }} />
+            <InfoRow label="Year Started" value={profile.yearStarted} />
+            {profile.termStartDate && (
+              <>
+                <div style={{ height: 1, background: 'var(--border)' }} />
+                <InfoRow label="Term Started" value={new Date(profile.termStartDate).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })} />
+              </>
+            )}
+          </Section>
+
           {/* Academic Info */}
           <Section className="ord-academic" title="Academic Info" icon="📚">
             <InfoRow label="Department" value={getDeptName(profile.dept)} />
@@ -1161,23 +1149,6 @@ export default function Profile() {
                 <div style={{ height: 1, background: 'var(--border)' }} />
                 <InfoRow label="Earned Credits" value={`${liveData.cgpaData.credits} / ${profile.totalCreditsRequired}`} accent />
                 <ProgressBar pct={(liveData.cgpaData.credits / profile.totalCreditsRequired) * 100} color="var(--accent)" />
-              </>
-            )}
-          </Section>
-
-          {/* Personal Info */}
-          <Section className="ord-personal" title="Personal Info" icon="👤">
-            <InfoRow label="Full Name" value={profile.name} />
-            <div style={{ height: 1, background: 'var(--border)' }} />
-            <InfoRow label="Student ID" value={profile.studentId} />
-            <div style={{ height: 1, background: 'var(--border)' }} />
-            <CopyMyIdRow />
-            <div style={{ height: 1, background: 'var(--border)' }} />
-            <InfoRow label="Year Started" value={profile.yearStarted} />
-            {profile.termStartDate && (
-              <>
-                <div style={{ height: 1, background: 'var(--border)' }} />
-                <InfoRow label="Term Started" value={new Date(profile.termStartDate).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })} />
               </>
             )}
           </Section>

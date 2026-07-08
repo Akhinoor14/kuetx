@@ -8299,18 +8299,17 @@ input[type="range"]::-webkit-slider-thumb {
 .pwa-dialog-primary, .pwa-dialog-secondary, .pwa-dialog-ghost { width: auto; min-width: 60px; padding: 6px 10px; font-size: 11px; }
 /* ── Profile page: mobile-priority reordering ──
    On desktop, .profile-two-col is a real 2-column CSS grid (LEFT/RIGHT
-   columns declared in JSX). Below 768px it collapses to one column, but
-   without help the browser stacks the *entire* LEFT column above the
-   *entire* RIGHT column (plain DOM order) — which buried high-value cards
-   like Attendance under Academic/Personal Info. Quick Accounts now lives
-   inside the RIGHT column (first item, next to Recent Notes on desktop),
-   so it gets an explicit order below to keep it the top priority item on
-   mobile too.
-   Fix: on mobile, both column wrappers become `display:contents` so every
-   Section becomes a direct flex child of .profile-two-col itself, then we
-   assign each Section an explicit `order` so the mobile stack matches what
-   a student actually needs first, regardless of which JSX column it lives
-   in on desktop. Desktop layout (grid-template-columns) is untouched. */
+   columns declared in JSX), fully untouched by this block.
+   On mobile, the hero card is now minimal (avatar + name only), and
+   several sections already live on Dashboard, so they're hidden here to
+   avoid duplication: Stats grid, Attendance, Upcoming Assignments,
+   Today's Focus, Recent Notes.
+   Mobile card order, high to low:
+     1. Hero (avatar + name)      - JSX-fixed, always first
+     2. Personal Info             - core identity, Edit button lives here
+     3. Quick Accounts            - Hall + Academic portal links
+     4. Academic Info             - Dept/Session/Term/Credits
+     5. Hall & Advisor            - reference, checked less often */
 @media (max-width: 768px) {
   .profile-two-col {
     display: flex !important;
@@ -8320,14 +8319,25 @@ input[type="range"]::-webkit-slider-thumb {
   .profile-col-left, .profile-col-right {
     display: contents;
   }
-  .ord-accounts        { order: 0; }
-  .ord-attendance      { order: 1; }
-  .ord-assignments     { order: 2; }
-  .ord-focus           { order: 3; }
-  .ord-academic        { order: 4; }
-  .ord-hall-advisor    { order: 5; }
-  .ord-personal        { order: 6; }
-  .ord-notes           { order: 7; }
+  .ord-personal        { order: 0; }
+  .ord-accounts        { order: 1; }
+  .ord-academic        { order: 2; }
+  .ord-hall-advisor    { order: 3; }
+
+  /* Already shown on Dashboard — hide here to avoid duplication */
+  .profile-stats-grid,
+  .ord-attendance,
+  .ord-assignments,
+  .ord-focus,
+  .ord-notes {
+    display: none !important;
+  }
+}
+
+/* UID row inside Personal Info: mobile-only per product decision (desktop
+   users manage staff-role assignment less often from this screen). */
+@media (min-width: 769px) {
+  .mobile-only-uid-row { display: none; }
 }
 
 /* ── Profile page: compact grid columns on phones ──

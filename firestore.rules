@@ -409,7 +409,7 @@ service cloud.firestore {
       }
 
       match /members/{memberUid} {
-        allow read: if isAdmin() || isGroupMember(groupId) || isCLFor(groupId) || isHeadOfOps() || isSCLForGroup(groupId);
+        allow read: if isAdmin() || request.auth.uid == memberUid || isGroupMember(groupId) || isCLFor(groupId) || isHeadOfOps() || isSCLForGroup(groupId);
         allow create: if (isRealAccount() && request.auth.uid == memberUid
                         && request.resource.data.role == 'member'
                         && (request.resource.data.verified == false
