@@ -881,6 +881,19 @@ export const getProfile = () => {
     merged.yearStarted = fixedStart;
   }
 
+  // Self-heal batch from roll the same way — some accounts ended up with
+  // a missing/stale profile.batch (e.g. onboarded through a path that
+  // skipped ProfileSetupModal's batch: autoCalculatedBatch write, or
+  // created before this field existed). Without this, getGroupId() keeps
+  // returning null forever for that account — breaking Classmates,
+  // ClassRoster, Notices, Assignments, Schedule, and every other
+  // group-scoped feature — even though dept/session both look filled in
+  // on the Profile page. Roll number is the single source of truth for
+  // batch, so always prefer it when derivable.
+  if (batchKey) {
+    merged.batch = batchKey;
+  }
+
   return merged;
 };
 
