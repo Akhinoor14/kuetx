@@ -313,23 +313,32 @@ function StaffRolesView({ onBack, onSelectCategory, groups, countCtx }) {
             <div style={{ fontSize: 12, color: 'var(--danger)', marginBottom: 10 }}>{holdersError}</div>
           )}
           {totalHolders === 0 && <EmptyState>No one holds a staff role yet.</EmptyState>}
-          {CATEGORY_ORDER.map((cat) => {
-            const rolesInCat = ALL_ASSIGNABLE_ROLES.filter((r) => ROLE_CATEGORY[r] === cat && currentHolders[r]?.length > 0);
-            if (rolesInCat.length === 0) return null;
+          <p style={{ fontSize: 11, color: 'var(--muted)', marginBottom: 12 }}>
+            Each role is shown separately. If one person holds multiple roles, they appear in every relevant role segment.
+          </p>
+          {ALL_ASSIGNABLE_ROLES.map((r) => {
+            const holders = currentHolders[r] || [];
             return (
-              <div key={cat} style={{ marginBottom: 14 }}>
-                <div style={{ fontSize: 11, fontWeight: 800, color: 'var(--accent)', textTransform: 'uppercase', letterSpacing: 0.5, marginBottom: 6 }}>{cat}</div>
-                {rolesInCat.map((r) => (
-                  <div key={r} style={{ marginBottom: 8 }}>
-                    <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 4 }}>{ROLE_LABELS[r]}</div>
-                    {currentHolders[r].map((h) => (
-                      <div key={h.id} style={{ fontSize: 12, color: 'var(--muted)', display: 'flex', justifyContent: 'space-between', padding: '3px 0' }}>
-                        <span>{h.scope?.dept || h.scope?.groupId || ''} — {h.uid}</span>
-                        <button className="btn btn-sm btn-secondary" onClick={async () => { await removeRole(h.uid, h.role, h.scope); refreshHolders(r); }}>Remove</button>
-                      </div>
-                    ))}
-                  </div>
-                ))}
+              <div key={r} style={{ marginBottom: 12, paddingBottom: 10, borderBottom: '1px solid var(--border)' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, marginBottom: 6 }}>
+                  <div style={{ fontSize: 12, fontWeight: 800 }}>{ROLE_LABELS[r]}</div>
+                  <div style={{ fontSize: 11, color: 'var(--muted)' }}>{holders.length} holder{holders.length === 1 ? '' : 's'}</div>
+                </div>
+                {holders.length === 0 ? (
+                  <EmptyState>No one holds this role.</EmptyState>
+                ) : (
+                  holders.map((h) => (
+                    <div key={`${r}-${h.id}`} style={{ fontSize: 12, color: 'var(--muted)', display: 'flex', justifyContent: 'space-between', gap: 12, padding: '3px 0' }}>
+                      <span>
+                        {h.name || h.uid}{' '}
+                        <span style={{ color: 'var(--muted)' }}>
+                          {h.scope?.dept ? `— ${h.scope.dept}` : h.scope?.groupId ? `— ${h.scope.groupId}` : ''}
+                        </span>
+                      </span>
+                      <button className="btn btn-sm btn-secondary" onClick={async () => { await removeRole(h.uid, h.role, h.scope); refreshHolders(r); }}>Remove</button>
+                    </div>
+                  ))
+                )}
               </div>
             );
           })}

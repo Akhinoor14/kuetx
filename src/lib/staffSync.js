@@ -103,7 +103,15 @@ export async function listCampusLeadsForDept(dept) {
   const rows = await Promise.all(groupsSnap.docs.map(async (groupDoc) => {
     const clStatusSnap = await getDoc(doc(db, 'groups', groupDoc.id, 'meta', 'clStatus'));
     if (!clStatusSnap.exists()) return null;
-    return { groupId: groupDoc.id, ...clStatusSnap.data() };
+    const clUid = clStatusSnap.data().uid || null;
+    const memberSnap = clUid ? await getDoc(doc(db, 'groups', groupDoc.id, 'members', clUid)) : null;
+    return {
+      groupId: groupDoc.id,
+      uid: clUid,
+      name: memberSnap?.exists() ? memberSnap.data().name || '' : '',
+      roll: memberSnap?.exists() ? memberSnap.data().roll || '' : '',
+      ...clStatusSnap.data(),
+    };
   }));
   return rows.filter(Boolean);
 }

@@ -317,7 +317,10 @@ function SeniorCampusLeadBlock({ dept }) {
       {!clsError && cls === null && <div style={{ fontSize: 12, color: 'var(--muted)' }}>Loading…</div>}
       {!clsError && cls?.length === 0 && <div style={{ fontSize: 12, color: 'var(--muted)' }}>None appointed yet.</div>}
       {cls?.map((c) => (
-        <div key={c.groupId} style={{ fontSize: 13, padding: '4px 0' }}>{c.groupId}</div>
+        <div key={c.groupId} style={{ fontSize: 13, padding: '4px 0' }}>
+          {c.name ? `${c.name}${c.roll ? ` (${c.roll})` : ''}` : c.uid || c.groupId}
+          <span style={{ color: 'var(--muted)' }}> — {c.groupId}</span>
+        </div>
       ))}
     </div>
   );
