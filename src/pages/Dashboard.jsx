@@ -8,6 +8,7 @@ import { store, cgpaToPercent, computeCGPA, computeTermGPAs, computeEffectiveAtt
 import { getAllCourses } from '../store/curriculumStore';
 import { NAV } from '../nav';
 import ticker from '../lib/ticker';
+import usePageMeta from '../hooks/usePageMeta';
 
 function StatCard({ label, value, sub, color, bgColor, icon: Icon, to }) {
   const inner = (
@@ -43,6 +44,10 @@ function StatCard({ label, value, sub, color, bgColor, icon: Icon, to }) {
 }
 
 export default function Dashboard() {
+  usePageMeta(
+    'KUETx — Student Life OS for KUET Students',
+    'Comprehensive student life tracker for KUET students — academics, attendance, GPA, finance, wellbeing and more. 100% offline.'
+  );
   const profile  = getProfile();
   const courses  = getAllCourses(profile);
   const [, setStoreRefreshTick] = useState(0);

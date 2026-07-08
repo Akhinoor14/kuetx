@@ -1,6 +1,7 @@
 import React from 'react';
 import { Wordmark } from '../components/Logo';
 import * as Icons from 'lucide-react';
+import usePageMeta from '../hooks/usePageMeta';
 
 function GuideBanner() {
   return (
@@ -27,6 +28,10 @@ function GuideBanner() {
 }
 
 export default function About() {
+  usePageMeta(
+    'About KUETx — Student Life OS for KUET Students',
+    'Learn about KUETx, the free student life app built for KUET — attendance tracker, GPA calculator, question bank, schedule, and more.'
+  );
   return (
     <div style={{ padding: '1.5rem 1rem', width: '100%', margin: '0 auto' }}>
       <GuideBanner />
@@ -62,6 +67,13 @@ export default function About() {
             <p style={{ maxWidth: '48rem', fontSize: '1.05rem', color: 'var(--muted)', lineHeight: 1.75, margin: 0, fontWeight: 500 }}>
               KUETX is an all-in-one student life platform for KUET, bringing academics, finance, wellbeing, events, and daily campus tasks into one focused experience.
             </p>
+
+            <div style={{ marginTop: '1.1rem' }}>
+              <a href="https://www.facebook.com/kuetx/" target="_blank" rel="noopener noreferrer" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.6rem', padding: '0.85rem 1.25rem', borderRadius: '14px', background: 'rgba(59,89,152,.14)', border: '1.5px solid rgba(59,89,152,.28)', color: 'var(--text)', textDecoration: 'none', fontSize: '0.98rem', fontWeight: 800 }}>
+                <Icons.Facebook size={18} style={{ color: '#3b5998' }} />
+                Follow KUETx — Official Facebook Page
+              </a>
+            </div>
 
             <div style={{ marginTop: '1.35rem', display: 'flex', flexWrap: 'wrap', gap: '0.75rem' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.7rem 1rem', borderRadius: '14px', background: 'rgba(22,163,74,0.08)', border: '1px solid rgba(22,163,74,0.12)', color: 'var(--text)', fontSize: '0.92rem', fontWeight: 600 }}>
