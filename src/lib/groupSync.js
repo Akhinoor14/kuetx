@@ -397,7 +397,9 @@ export async function clAppointCR(groupId, targetUid) {
 /** Campus Lead action: force-remove a misbehaving CR, freeing their slot. */
 export async function clRevokeCR(groupId, targetUid) {
   const batch = writeBatch(db);
-  batch.update(doc(db, 'groups', groupId, 'members', targetUid), { role: 'member' });
+  // legacyCRClaim cleared alongside role — see note in clApproveLeaveCR;
+  // same "Claims CR" badge bug applies to a CL-forced revoke too.
+  batch.update(doc(db, 'groups', groupId, 'members', targetUid), { role: 'member', legacyCRClaim: false });
   batch.set(doc(db, 'groups', groupId, 'meta', 'crStatus'), { count: increment(-1) }, { merge: true });
   // Clean up any crRequests doc left over from when this person originally
   // became CR — Firestore rules forbid deleting crRequests docs (audit
@@ -442,7 +444,9 @@ export async function handoffCR(groupId, currentUid, successorUid, currentProfil
     throw new Error('The new CR must already be a verified member of this class.');
   }
   const batch = writeBatch(db);
-  batch.update(doc(db, 'groups', groupId, 'members', currentUid), { role: 'member' });
+  // legacyCRClaim cleared alongside role — see note in clApproveLeaveCR;
+  // same "Claims CR" badge bug applies to a direct CR-to-CR handoff too.
+  batch.update(doc(db, 'groups', groupId, 'members', currentUid), { role: 'member', legacyCRClaim: false });
   batch.update(doc(db, 'groups', groupId, 'members', successorUid), { role: 'cr' });
   // If the departing CR also had a pending "leave CR" request queued
   // (asked to step down, then handed off directly before CL acted on it),
@@ -513,7 +517,11 @@ export function subscribeLeaveRequests(groupId, callback) {
 /** Campus Lead action: approve a CR's own request to step down — frees their slot. */
 export async function clApproveLeaveCR(groupId, requestDocId, targetUid) {
   const batch = writeBatch(db);
-  batch.update(doc(db, 'groups', groupId, 'members', targetUid), { role: 'member' });
+  // Clear legacyCRClaim too, not just role: this field is what
+  // ClassmatesList's "Claims CR" badge actually checks (role !== 'cr' &&
+  // legacyCRClaim), so leaving it untouched here left the badge stuck on
+  // ex-CRs forever even after their role correctly flipped to 'member'.
+  batch.update(doc(db, 'groups', groupId, 'members', targetUid), { role: 'member', legacyCRClaim: false });
   batch.set(doc(db, 'groups', groupId, 'meta', 'crStatus'), { count: increment(-1) }, { merge: true });
   batch.update(doc(db, 'groups', groupId, 'crRequests', requestDocId), { status: 'approved' });
   await batch.commit();

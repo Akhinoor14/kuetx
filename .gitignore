@@ -12,3 +12,6 @@ dist
 # Ignore exported/archived question PDFs stored under src data (if you keep some PDFs
 # in repo, remove or adjust this rule accordingly)
 /src/data/**/*.pdf
+
+# Firebase admin SDK key for one-off migration scripts — never commit
+scripts/serviceAccountKey.json

@@ -456,7 +456,12 @@ service cloud.firestore {
         //     absent from this branch).
         allow update: if isAdmin() ||
           ((isCLFor(groupId) || isHeadOfOps() || isSCLForGroup(groupId)) && request.auth.uid != memberUid) ||
-          (isGroupCR(groupId) && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['role', 'verified']) &&
+          (isGroupCR(groupId) && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['role', 'verified', 'legacyCRClaim']) &&
+            // legacyCRClaim may only ever be cleared here, never (re)set —
+            // this branch is a same-slot handoff/step-down path, not a way
+            // to grant the "Claims CR" flag to anyone.
+            (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['legacyCRClaim']) ||
+              request.resource.data.legacyCRClaim == false) &&
             (request.resource.data.role == 'acr' || request.resource.data.role == 'member' ||
              // A CR setting someone else to role 'cr' is a handoff — the
              // acting CR (isGroupCR already confirms this) is handing

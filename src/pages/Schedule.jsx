@@ -7,9 +7,8 @@ import { useNavigate } from 'react-router-dom';
 import CourseTeacherDialog from '../components/CourseTeacherDialog';
 import { notify } from '../lib/notify';
 import { getGroupId } from '../lib/groupUtils';
-import { subscribeCRStatus } from '../lib/groupSync';
+import { subscribeCRStatus, subscribeRoutine, addRoutineEntry, updateRoutineEntry, deleteRoutineEntry } from '../lib/groupSync';
 import { useCanEditGroup } from '../hooks/useCanEditGroup';
-import GroupSchedule from '../components/GroupSchedule';
 
 const DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday'];
 const DAY_INDEX = { Sunday: 0, Monday: 1, Tuesday: 2, Wednesday: 3, Thursday: 4 };
@@ -367,6 +366,19 @@ export default function Schedule() {
     return subscribeCRStatus(groupId, (status) => setGroupHasCR(!!status?.hasCR));
   }, [groupId]);
   const { canEdit: canEditGroupSchedule } = useCanEditGroup(groupId);
+  // Single source of truth for "are we in shared/group mode": avoids a
+  // flicker where groupId exists but groupHasCR hasn't resolved yet (null),
+  // which would otherwise let personal-mode render for a beat before
+  // flipping to group mode. isGroupMode is only true once we KNOW the
+  // group currently has an active CR; unknown/false both mean personal mode.
+  const groupModeLoading = !!groupId && groupHasCR === null;
+  const isGroupMode = !!groupId && groupHasCR === true;
+  // canEditSchedule: in group mode this is CR/ACR/CL/admin only (or a
+  // verified member while the group temporarily has no CR — see
+  // useCanEditGroup). In personal mode the user always owns their own data.
+  // Declared here (not just before the render return) so it's safely in
+  // scope for renderTimetable's closure regardless of where it's called.
+  const canEditSchedule = isGroupMode ? canEditGroupSchedule : true;
 
   const courses = useMemo(() => getAllCourses(profile), [profile.dept, profile.currentTermKey]);
   
@@ -383,7 +395,40 @@ export default function Schedule() {
   
   // Load assignments
   const assignments = useMemo(() => store.get('assignments') || [], []);
-  const [schedule, setSchedule] = useState(() => normalizeScheduleEntries(store.get('schedule') || []));
+  // schedule is either localStorage-backed (solo/personal, unchanged) or
+  // Firestore-backed (group mode). isGroupMode decides the source; writes
+  // in group mode go through groupSync's addRoutineEntry/updateRoutineEntry/
+  // deleteRoutineEntry and setSchedule is ONLY ever called here by the
+  // Firestore listener below — never manually alongside a Firestore write,
+  // so there's no double-write/loop risk.
+  const [schedule, setSchedule] = useState(() => (isGroupMode ? [] : normalizeScheduleEntries(store.get('schedule') || [])));
+  useEffect(() => {
+    if (!isGroupMode) {
+      // Falling back to / staying in personal mode: load from localStorage.
+      setSchedule(normalizeScheduleEntries(store.get('schedule') || []));
+      return;
+    }
+    // Group mode: subscribe to the shared Firestore routine and map each
+    // entry to the Grid's expected shape. displayName/courseCode/courseName
+    // are saved at write-time (see add/remove/quick-save below) so the
+    // Grid still shows a real label even if a viewer's local `courses`
+    // list doesn't contain the entry's courseId (e.g. CR used a custom
+    // course only they have locally).
+    return subscribeRoutine(groupId, (entries) => {
+      const mapped = (entries || []).map((e) => ({
+        id: e.id,
+        day: e.day || 'Sunday',
+        slot: e.slot || '',
+        courseId: e.courseId || '',
+        teacherName: e.teacherName || '',
+        displayName: e.displayName || e.courseCode || e.courseName || '',
+        room: e.room || '',
+        note: e.note || '',
+        type: e.type || 'Theory',
+      }));
+      setSchedule(normalizeScheduleEntries(mapped));
+    });
+  }, [isGroupMode, groupId]);
   const [settings, setSettings] = useState(() => normalizeSettings(store.get('scheduleSettings')));
   const [adding, setAdding] = useState(false);
   const [editingId, setEditingId] = useState(null);
@@ -750,27 +795,34 @@ export default function Schedule() {
     }
 
     const availableTeachers = getCourseTeachers(courseId);
-    if (availableTeachers.length < 2) {
+    // In group mode, a CR/ACR may be editing an entry whose courseId isn't
+    // in THEIR local teacher-map (e.g. another member's custom course).
+    // Don't block on the "2 teachers configured" gate there — fall back to
+    // whatever teacher name is already on the form/entry instead.
+    if (!isGroupMode && availableTeachers.length < 2) {
       notify('Please set both teachers for this course first.', 'error');
       ensureCourseTeacherSetup(courseId, 'quick');
       return;
     }
 
-    const selectedTeacher = normalizeTeacherName(teacherName);
+    const selectedTeacher = normalizeTeacherName(teacherName) || availableTeachers[0] || '';
     if (!selectedTeacher) {
       notify('Please select a teacher for this class', 'error');
       return;
     }
 
     const nextSlot = normalizeSlotKey(slot);
+    const courseObj = courses.find(c => c.id === courseId);
 
     const newEntry = {
       day,
       slot: nextSlot,
       courseId,
       displayName: String(displayName || '').trim() || courseShortNameMap[courseId] || autoDisplayName(courseId, selectedTeacher),
+      courseCode: courseObj?.code || '',
+      courseName: courseObj?.name || '',
       room,
-      teacherNames: availableTeachers,
+      teacherNames: availableTeachers.length ? availableTeachers : [selectedTeacher],
       teacherName: selectedTeacher,
       type,
       note,
@@ -805,6 +857,21 @@ export default function Schedule() {
 
     updateCourseShortName(courseId, displayName);
 
+    if (isGroupMode) {
+      if (!canEditGroupSchedule) { notify('তোমার এই routine edit করার permission নেই।', 'error'); return; }
+      const { id, teacherNames, ...entryData } = newEntry;
+      if (quickFormEditingId) {
+        updateRoutineEntry(groupId, quickFormEditingId, profile, entryData);
+      } else {
+        addRoutineEntry(groupId, profile, entryData);
+      }
+      // Do NOT call setSchedule here — the Firestore onSnapshot listener
+      // (see the effect near the schedule useState) is the only writer to
+      // schedule state in group mode. This avoids double-write races.
+      closeQuickForm();
+      return;
+    }
+
     const updated = quickFormEditingId
       ? normalizeScheduleEntries(schedule.map(item => item.id === quickFormEditingId ? newEntry : item))
       : normalizeScheduleEntries([...schedule, newEntry]);
@@ -826,24 +893,27 @@ export default function Schedule() {
     }
 
     const availableTeachers = getCourseTeachers(form.courseId);
-    if (availableTeachers.length < 2) {
+    if (!isGroupMode && availableTeachers.length < 2) {
       ensureCourseTeacherSetup(form.courseId, 'form');
       return;
     }
 
-    const selectedTeacher = normalizeTeacherName(form.teacherName);
+    const selectedTeacher = normalizeTeacherName(form.teacherName) || availableTeachers[0] || '';
     if (!selectedTeacher) {
       notify('Please select a teacher for this class', 'error');
       return;
     }
 
     const nextSlot = normalizeSlotKey(form.slot);
+    const courseObj = courses.find(c => c.id === form.courseId);
 
     const nextEntry = {
       ...form,
       teacherName: selectedTeacher,
-      teacherNames: availableTeachers,
+      teacherNames: availableTeachers.length ? availableTeachers : [selectedTeacher],
       displayName: String(form.displayName || '').trim() || courseShortNameMap[form.courseId] || autoDisplayName(form.courseId, selectedTeacher),
+      courseCode: courseObj?.code || '',
+      courseName: courseObj?.name || '',
       slot: nextSlot,
       id: uid()
     };
@@ -876,6 +946,19 @@ export default function Schedule() {
 
     updateCourseShortName(form.courseId, form.displayName);
 
+    if (isGroupMode) {
+      if (!canEditGroupSchedule) { notify('তোমার এই routine edit করার permission নেই।', 'error'); return; }
+      const { id, teacherNames, ...entryData } = nextEntry;
+      if (editingId) {
+        updateRoutineEntry(groupId, editingId, profile, entryData);
+      } else {
+        addRoutineEntry(groupId, profile, entryData);
+      }
+      // No manual setSchedule here — see note above on the Firestore listener.
+      cancelEdit();
+      return;
+    }
+
     const updated = editingId
       ? normalizeScheduleEntries(schedule.map(item => item.id === editingId ? { ...nextEntry, id: editingId } : item))
       : normalizeScheduleEntries([...schedule, nextEntry]);
@@ -886,6 +969,12 @@ export default function Schedule() {
   };
 
   const remove = (id) => {
+    if (isGroupMode) {
+      if (!canEditGroupSchedule) { notify('তোমার এই routine edit করার permission নেই।', 'error'); return; }
+      deleteRoutineEntry(groupId, id, profile);
+      if (editingId === id) cancelEdit();
+      return;
+    }
     const updated = normalizeScheduleEntries(schedule.filter(s => s.id !== id));
     setSchedule(updated);
     store.set('schedule', updated);
@@ -920,6 +1009,15 @@ export default function Schedule() {
 
   const importRoutine = async (file) => {
     if (!file) return;
+    if (isGroupMode) {
+      // Bulk-importing a personal backup file straight into shared Firestore
+      // schedule isn't supported yet — doing it via setSchedule() would only
+      // show the imported data locally for a moment before the next
+      // Firestore snapshot silently overwrote it with the real shared data,
+      // which is confusing. Block it clearly instead of half-working.
+      setImportMessage('Import করা এখনো group/shared schedule-এ support করে না। Import শুধু personal (non-group) routine-এর জন্য কাজ করে।');
+      return;
+    }
     try {
       const text = await file.text();
       const payload = JSON.parse(text);
@@ -1251,9 +1349,9 @@ export default function Schedule() {
                         key={d}
                         rowSpan={rowSpan > 1 ? rowSpan : undefined}
                         className={`timetable-day-col${d === selectedDay ? ' selected-day' : ''}`}
-                        onClick={isEmptyCell ? () => handleEmptyCellClick(d, p) : undefined}
-                        onDoubleClick={isEmptyCell ? () => openQuickAdd(d, p) : undefined}
-                        title={isEmptyCell ? 'Double-click to add class' : undefined}
+                        onClick={isEmptyCell && canEditSchedule ? () => handleEmptyCellClick(d, p) : undefined}
+                        onDoubleClick={isEmptyCell && canEditSchedule ? () => openQuickAdd(d, p) : undefined}
+                        title={isEmptyCell && canEditSchedule ? 'Double-click to add class' : undefined}
                         style={{
                           padding: isLabCell ? 0 : 'clamp(4px, 1.5vw, 6px)',
                           borderBottom: '1px solid var(--border)',
@@ -1275,9 +1373,9 @@ export default function Schedule() {
                           return (
                             <div
                               key={s.id}
-                              onClick={() => handleCellClick(s.id, s)}
-                              onDoubleClick={() => startEdit(s)}
-                              title="Double-click to edit"
+                              onClick={() => canEditSchedule && handleCellClick(s.id, s)}
+                              onDoubleClick={() => canEditSchedule && startEdit(s)}
+                              title={canEditSchedule ? "Double-click to edit" : undefined}
                               style={isLabCell ? {
                                 padding: '8px 24px',
                                 fontSize: 13,
@@ -1335,20 +1433,24 @@ export default function Schedule() {
                                   Teacher: {s.teacherName || 'Not set'}
                                 </div>
                               )}
-                              <button onClick={(e) => { e.stopPropagation(); startEdit(s); }} style={{
-                                position: 'absolute', top: 2, right: 16, background: 'none', border: 'none',
-                                color: 'inherit', cursor: 'pointer', opacity: 0.55, padding: 0, lineHeight: 1,
-                                touchAction: 'manipulation',
-                              }}>
-                                ✎
-                              </button>
-                              <button onClick={(e) => { e.stopPropagation(); if (window.confirm('এই class টা delete করবে?')) remove(s.id); }} style={{
-                                position: 'absolute', top: 2, right: 2, background: 'none', border: 'none',
-                                color: 'inherit', cursor: 'pointer', opacity: 0.55, padding: 0, lineHeight: 1,
-                                touchAction: 'manipulation',
-                              }}>
-                                ×
-                              </button>
+                              {canEditSchedule && (
+                                <button onClick={(e) => { e.stopPropagation(); startEdit(s); }} style={{
+                                  position: 'absolute', top: 2, right: 16, background: 'none', border: 'none',
+                                  color: 'inherit', cursor: 'pointer', opacity: 0.55, padding: 0, lineHeight: 1,
+                                  touchAction: 'manipulation',
+                                }}>
+                                  ✎
+                                </button>
+                              )}
+                              {canEditSchedule && (
+                                <button onClick={(e) => { e.stopPropagation(); if (window.confirm('এই class টা delete করবে?')) remove(s.id); }} style={{
+                                  position: 'absolute', top: 2, right: 2, background: 'none', border: 'none',
+                                  color: 'inherit', cursor: 'pointer', opacity: 0.55, padding: 0, lineHeight: 1,
+                                  touchAction: 'manipulation',
+                                }}>
+                                  ×
+                                </button>
+                              )}
                             </div>
                           );
                         })}
@@ -1364,12 +1466,13 @@ export default function Schedule() {
     );
   };
 
-  if (groupId && groupHasCR) {
+  // While we don't yet know if this group currently has an active CR,
+  // hold off rendering either mode — prevents a flash of personal-mode UI
+  // (or the wrong edit permissions) right before flipping to group mode.
+  if (groupModeLoading) {
     return (
-      <div className="page-enter page-container content-page-bg" style={{ width: "100%", margin: "0 auto", paddingBottom: "20px", paddingLeft: "12px", paddingRight: "12px" }}>
-        <div className="card" style={{ marginBottom: 14, padding: '18px' }}>
-          <GroupSchedule groupId={groupId} canEdit={canEditGroupSchedule} />
-        </div>
+      <div className="page-enter page-container content-page-bg" style={{ width: "100%", margin: "0 auto", padding: "40px 12px", textAlign: 'center', color: 'var(--muted)' }}>
+        Loading schedule…
       </div>
     );
   }
@@ -1382,24 +1485,36 @@ export default function Schedule() {
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap', marginBottom: '6px' }}>
               <h1 style={{ fontSize: '20px', fontWeight: '800', letterSpacing: '-0.03em', margin: '0' }}>Class Schedule</h1>
               <span className="tag tag-blue">5-day week</span>
+              {isGroupMode && <span className="tag tag-green">Shared · Class Group</span>}
+              {isGroupMode && !canEditSchedule && <span className="tag tag-gray">View only</span>}
             </div>
             <p style={{ fontSize: '13px', color: 'var(--muted)', margin: '0', maxWidth: '600px', lineHeight: 1.4 }}>
-              Clean Sun–Thu routine builder. Pick a share format, then copy or import/export the schedule as needed.
+              {isGroupMode
+                ? (canEditSchedule
+                  ? 'This schedule is shared with your class group. Changes you make here update for everyone.'
+                  : "This is your class group's shared schedule, set by your CR/ACR. Only they can edit it.")
+                : 'Clean Sun–Thu routine builder. Pick a share format, then copy or import/export the schedule as needed.'}
             </p>
-            <p style={{ fontSize: '12px', color: 'var(--muted)', margin: '6px 0 0', maxWidth: '600px', lineHeight: 1.4 }}>
-              Assign teachers first via <strong>Manage Course Teachers</strong> before adding schedule entries.
-            </p>
+            {!isGroupMode && (
+              <p style={{ fontSize: '12px', color: 'var(--muted)', margin: '6px 0 0', maxWidth: '600px', lineHeight: 1.4 }}>
+                Assign teachers first via <strong>Manage Course Teachers</strong> before adding schedule entries.
+              </p>
+            )}
           </div>
           <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', justifyContent: 'flex-end' }}>
             <button className="btn btn-ghost btn-sm" onClick={() => setEditingSettings(v => !v)} style={{ fontSize: '12px' }}>
               <Settings2 size={13} /> Settings
             </button>
-            <button className="btn btn-secondary btn-sm" onClick={() => navigate('/courses')} style={{ fontSize: '12px' }} title="Open the Courses page and assign teachers per course">
-              <BookOpen size={13} /> Manage Course Teachers
-            </button>
-            <button className="btn btn-primary btn-sm" onClick={() => { setEditingId(null); resetForm(); setAdding(true); }} style={{ fontSize: '12px' }} title="Add a new class slot to the schedule">
-              <Plus size={13} /> Add Class
-            </button>
+            {canEditSchedule && (
+              <button className="btn btn-secondary btn-sm" onClick={() => navigate('/courses')} style={{ fontSize: '12px' }} title="Open the Courses page and assign teachers per course">
+                <BookOpen size={13} /> Manage Course Teachers
+              </button>
+            )}
+            {canEditSchedule && (
+              <button className="btn btn-primary btn-sm" onClick={() => { setEditingId(null); resetForm(); setAdding(true); }} style={{ fontSize: '12px' }} title="Add a new class slot to the schedule">
+                <Plus size={13} /> Add Class
+              </button>
+            )}
           </div>
         </div>
       </div>
@@ -1764,7 +1879,7 @@ export default function Schedule() {
                 </div>
                 {form.courseId && getCourseTeachers(form.courseId).length < 2 && (
                   <div style={{ marginTop: 6, fontSize: 11, color: 'rgb(180,83,9)', gridColumn: 'span 1' }}>
-                    Please set two teachers for this course first.
+                    {isGroupMode ? 'This course has fewer than 2 teachers set up locally for you — you can still save using the teacher name above.' : 'Please set two teachers for this course first.'}
                   </div>
                 )}
                 {!form.courseId && (
@@ -1790,7 +1905,7 @@ export default function Schedule() {
         <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', alignItems: 'center', marginBottom: 12 }}>
           <div>
             <div style={{ fontWeight: 700, fontSize: 15 }}>Timetable Grid</div>
-            <div style={{ fontSize: 13, color: 'var(--muted)' }}>Double-click any entry to edit.</div>
+            <div style={{ fontSize: 13, color: 'var(--muted)' }}>{canEditSchedule ? 'Double-click any entry to edit.' : 'View only — your CR/ACR manages this schedule.'}</div>
           </div>
           <div style={{ display: 'flex', gap: 8, alignItems: 'center', fontSize: 12, color: 'var(--muted)' }}>
             {schedule.length > 0 && (
@@ -1847,7 +1962,7 @@ export default function Schedule() {
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 10, marginBottom: 12 }}>
               <div>
                 <div style={{ fontWeight: 700, fontSize: 16 }}>Timetable Full View</div>
-                <div style={{ fontSize: 12, color: 'var(--muted)' }}>Double-click any entry to edit.</div>
+                <div style={{ fontSize: 12, color: 'var(--muted)' }}>{canEditSchedule ? 'Double-click any entry to edit.' : 'View only.'}</div>
               </div>
               <button className="btn btn-ghost" onClick={() => setFullScreenOpen(false)}>Close</button>
             </div>
@@ -2322,19 +2437,21 @@ export default function Schedule() {
       <div className="card" style={{ marginTop: 14, padding: 16, display: 'flex', flexDirection: 'column', gap: 12 }}>
         <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
           <button className="btn btn-ghost" onClick={exportRoutine} style={{ justifyContent: 'center', minWidth: 140, padding: '10px 14px' }}>Export routine data</button>
-          <label className="btn btn-ghost" style={{ cursor: 'pointer', justifyContent: 'center', minWidth: 140, padding: '10px 14px' }}>
-            Import routine data
-            <input
-              type="file"
-              accept="application/json"
-              style={{ display: 'none' }}
-              onChange={e => {
-                const file = e.target.files?.[0];
-                importRoutine(file);
-                e.target.value = '';
-              }}
-            />
-          </label>
+          {!isGroupMode && (
+            <label className="btn btn-ghost" style={{ cursor: 'pointer', justifyContent: 'center', minWidth: 140, padding: '10px 14px' }}>
+              Import routine data
+              <input
+                type="file"
+                accept="application/json"
+                style={{ display: 'none' }}
+                onChange={e => {
+                  const file = e.target.files?.[0];
+                  importRoutine(file);
+                  e.target.value = '';
+                }}
+              />
+            </label>
+          )}
         </div>
         {importMessage && <div style={{ fontSize: 12, color: 'var(--muted)' }}>{importMessage}</div>}
       </div>
@@ -2495,7 +2612,7 @@ export default function Schedule() {
                 </div>
               ) : getCourseTeachers(quickFormData.courseId).length < 2 && (
                 <div style={{ marginTop: 6, fontSize: 11, color: 'rgb(180,83,9)' }}>
-                  This course needs two fixed teachers before adding class.
+                  {isGroupMode ? 'This course has fewer than 2 teachers set up locally for you — you can still save using the teacher name above.' : 'This course needs two fixed teachers before adding class.'}
                 </div>
               )}
             </div>
@@ -2536,7 +2653,7 @@ export default function Schedule() {
             <button
               onClick={saveQuickForm}
               className="btn btn-primary"
-              disabled={!!quickFormData.courseId && getCourseTeachers(quickFormData.courseId).length < 2}
+              disabled={!isGroupMode && !!quickFormData.courseId && getCourseTeachers(quickFormData.courseId).length < 2}
               style={{ padding: '8px 14px' }}
             >
               {quickFormEditingId ? 'Update' : 'Add'}
