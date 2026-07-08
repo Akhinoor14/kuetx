@@ -139,23 +139,25 @@ export default function ClassmatesList({ groupId, showActions = false, viewerRol
 
               {showActions && (
                 <div style={{ display: 'flex', gap: 4 }}>
-                  {!m.verified && (
+                  {m.id !== currentUid && !m.verified && (
                     <button className="btn btn-sm btn-secondary" onClick={() => verifyMember(groupId, m.id)}>Verify</button>
                   )}
-                  {m.verified && (
+                  {m.id !== currentUid && m.verified && (
                     <button className="btn btn-sm btn-secondary" onClick={() => revokeVerification(groupId, m.id)}>Revoke</button>
                   )}
 
                   {viewerRole === 'cl' && (
                     m.role !== 'cr' ? (
-                      <button
-                        className="btn btn-sm btn-secondary"
-                        disabled={crSlotsFull}
-                        title={crSlotsFull ? `Both CR slots are full (max ${MAX_CR}) — revoke one first` : undefined}
-                        onClick={() => clAppointCR(groupId, m.id)}
-                      >
-                        Make CR
-                      </button>
+                      m.id !== currentUid && (
+                        <button
+                          className="btn btn-sm btn-secondary"
+                          disabled={crSlotsFull}
+                          title={crSlotsFull ? `Both CR slots are full (max ${MAX_CR}) — revoke one first` : undefined}
+                          onClick={() => clAppointCR(groupId, m.id)}
+                        >
+                          Make CR
+                        </button>
+                      )
                     ) : (
                       m.id !== currentUid && (
                         <button className="btn btn-sm btn-secondary" onClick={() => clRevokeCR(groupId, m.id)}>Remove CR</button>

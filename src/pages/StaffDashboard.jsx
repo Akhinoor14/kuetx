@@ -258,9 +258,15 @@ function CampusLeadBlock({ groupId }) {
 function SeniorCampusLeadBlock({ dept }) {
   const [applications, setApplications] = useState([]);
   const [cls, setCls] = useState(null);
+  const [clsError, setClsError] = useState(null);
 
   useEffect(() => subscribeCLApplications(dept, setApplications), [dept]);
-  useEffect(() => { listStaffByRole('campus_lead').then((all) => setCls(all.filter((r) => r.scope?.dept ? r.scope.dept === dept : r.scope?.groupId?.endsWith(`_${dept}`)))); }, [dept]);
+  useEffect(() => {
+    setClsError(null);
+    listStaffByRole('campus_lead')
+      .then((all) => setCls(all.filter((r) => r.scope?.dept ? r.scope.dept === dept : r.scope?.groupId?.endsWith(`_${dept}`))))
+      .catch((err) => setClsError(err?.message || 'Failed to load campus leads.'));
+  }, [dept]);
 
   return (
     <div style={{ marginBottom: 20, paddingBottom: 16, borderBottom: '1px solid var(--border)' }}>
@@ -284,8 +290,9 @@ function SeniorCampusLeadBlock({ dept }) {
       <EmailFlagReviewBlock dept={dept} />
 
       <div style={{ fontSize: 12, fontWeight: 700, margin: '10px 0 6px' }}>Campus Leads in this department</div>
-      {cls === null && <div style={{ fontSize: 12, color: 'var(--muted)' }}>Loading…</div>}
-      {cls?.length === 0 && <div style={{ fontSize: 12, color: 'var(--muted)' }}>None appointed yet.</div>}
+      {clsError && <div style={{ fontSize: 12, color: 'var(--danger)' }}>{clsError}</div>}
+      {!clsError && cls === null && <div style={{ fontSize: 12, color: 'var(--muted)' }}>Loading…</div>}
+      {!clsError && cls?.length === 0 && <div style={{ fontSize: 12, color: 'var(--muted)' }}>None appointed yet.</div>}
       {cls?.map((c) => (
         <div key={c.id} style={{ fontSize: 13, padding: '4px 0' }}>{c.scope?.groupId}</div>
       ))}
@@ -301,12 +308,23 @@ function SeniorCampusLeadBlock({ dept }) {
 // ---------------------------------------------------------------------
 function EmailFlagReviewBlock({ dept, groupId } = {}) {
   const [flags, setFlags] = useState(null);
+  const [error, setError] = useState(null);
   const [busyUid, setBusyUid] = useState(null);
 
-  const refresh = () => listPendingFlags({ dept, groupId }).then(setFlags);
+  const refresh = () => {
+    setError(null);
+    listPendingFlags({ dept, groupId })
+      .then(setFlags)
+      .catch((err) => setError(err?.message || 'Failed to load email flags.'));
+  };
   useEffect(() => { refresh(); }, [dept, groupId]);
 
-  if (flags === null) return null;
+  if (error) {
+    return <div style={{ fontSize: 12, color: 'var(--danger)', marginBottom: 12 }}>{error}</div>;
+  }
+  if (flags === null) {
+    return <div style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 12 }}>Loading…</div>;
+  }
   if (flags.length === 0) {
     return <div style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 12 }}>No pending email flags.</div>;
   }
@@ -487,7 +505,7 @@ function RoleTabBar({ tabs, active, onChange }) {
 // ---------------------------------------------------------------------
 // Main dashboard
 // ---------------------------------------------------------------------
-export default function StaffDashboard() {
+export default function StaffDashboard({ onTabChange } = {}) {
   const [roles, setRoles] = useState(null);
   const [isAdminUser, setIsAdminUser] = useState(false);
   const [activeTab, setActiveTab] = useState(null);
@@ -505,6 +523,7 @@ export default function StaffDashboard() {
       </div>
     );
   }
+
 
   const clGroups = roles.filter((r) => r.role === 'campus_lead').map((r) => r.scope?.groupId).filter(Boolean);
   const sclDepts = roles.filter((r) => r.role === 'senior_campus_lead').map((r) => r.scope?.dept).filter(Boolean);
@@ -527,13 +546,25 @@ export default function StaffDashboard() {
   const currentTab = activeTab && tabs.some((t) => t.key === activeTab) ? activeTab : tabs[0]?.key;
   const show = (key) => tabs.length <= 1 || currentTab === key;
 
+  // Let the parent (TeamDashboard) know which tab is active so sibling
+  // components like AdminEntryPoint can stay in sync instead of always
+  // rendering regardless of the selected tab.
+  useEffect(() => {
+    onTabChange?.(currentTab);
+  }, [currentTab, onTabChange]);
+
+  const handleTabChange = (key) => {
+    setActiveTab(key);
+    onTabChange?.(key);
+  };
+
   return (
     <div>
       <p style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 16 }}>
         {roles.length > 0 ? `Your roles: ${roles.map((r) => ROLE_LABELS[r.role] || r.role).join(' · ')}` : 'Founder'}
       </p>
 
-      <RoleTabBar tabs={tabs} active={currentTab} onChange={setActiveTab} />
+      <RoleTabBar tabs={tabs} active={currentTab} onChange={handleTabChange} />
 
       <div className="staff-dashboard-grid">
         {show('founder') && isAdminUser && (

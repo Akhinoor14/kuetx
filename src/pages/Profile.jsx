@@ -715,7 +715,10 @@ export default function Profile() {
   const getDeptName = code => (DEPARTMENTS.find(d => d.code === code)?.name || code);
   const hasMinProfile = !!(profile?.name && profile?.studentId && profile?.dept && profile?.session && profile?.currentTermKey);
 
-  const [isKuetVerified, setIsKuetVerified] = useState(false);
+  // null = not yet checked (avoid flashing the "not verified" banner for
+  // already-verified users while the Firestore read is in flight);
+  // false = checked and confirmed not verified; true = verified.
+  const [isKuetVerified, setIsKuetVerified] = useState(null);
   const [emailVerified, setEmailVerified] = useState(true);
   const [emailFlag, setEmailFlag] = useState(null);
   useEffect(() => {
@@ -730,9 +733,9 @@ export default function Profile() {
   useEffect(() => {
     let cancelled = false;
     if (profile?.studentId) {
-      isRollInstitutionallyVerified(profile.studentId).then((ok) => {
-        if (!cancelled) setIsKuetVerified(ok);
-      });
+      isRollInstitutionallyVerified(profile.studentId)
+        .then((ok) => { if (!cancelled) setIsKuetVerified(ok); })
+        .catch(() => { if (!cancelled) setIsKuetVerified(false); });
     } else {
       setIsKuetVerified(false);
     }
@@ -911,8 +914,12 @@ export default function Profile() {
   if (!hasMinProfile) {
     return (
       <div className="page-enter page-container">
-        <AccountBanner user={firebaseUser} onLogin={() => setShowAuthModal(true)} onLogout={handleLogout} />
-        <div style={{ height: 24 }} />
+        {(!firebaseUser || firebaseUser.isAnonymous) && (
+          <>
+            <AccountBanner user={firebaseUser} onLogin={() => setShowAuthModal(true)} onLogout={handleLogout} />
+            <div style={{ height: 24 }} />
+          </>
+        )}
         <div style={{
           background: 'linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%)',
           borderRadius: 20, padding: 'clamp(48px,10vw,100px) clamp(20px,5vw,56px)',
@@ -948,8 +955,13 @@ export default function Profile() {
   return (
     <div className="page-enter page-container" style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
 
-      {/* ── Account Banner ── */}
-      <AccountBanner user={firebaseUser} onLogin={() => setShowAuthModal(true)} onLogout={handleLogout} />
+      {/* ── Account Banner — only shown for guest/anonymous accounts.
+           Signed-in users already see their name/email in the hero card
+           below, and Sign Out now lives there too, so this banner would
+           be pure redundant clutter for them. ── */}
+      {(!firebaseUser || firebaseUser.isAnonymous) && (
+        <AccountBanner user={firebaseUser} onLogin={() => setShowAuthModal(true)} onLogout={handleLogout} />
+      )}
 
       {/* ── Save toast ── */}
       {saved && (
@@ -1021,19 +1033,35 @@ export default function Profile() {
           </div>
         </div>
 
-        {/* Edit button */}
-        <button onClick={() => setIsModalOpen(true)} style={{
-          padding: 'clamp(8px,2vw,11px) clamp(14px,3vw,20px)',
-          background: 'rgba(255,255,255,0.15)', color: 'white',
-          border: '1.5px solid rgba(255,255,255,0.35)', borderRadius: 10,
-          fontSize: 13, fontWeight: 700, cursor: 'pointer',
-          transition: 'background 0.2s', flexShrink: 0,
-          display: 'flex', alignItems: 'center', gap: 7,
-        }}
-        onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.25)'}
-        onMouseLeave={e => e.currentTarget.style.background = 'rgba(255,255,255,0.15)'}>
-          <Icons.Pencil size={13} /> Edit
-        </button>
+        {/* Edit + Sign Out */}
+        <div style={{ display: 'flex', gap: 8, flexShrink: 0 }}>
+          <button onClick={() => setIsModalOpen(true)} style={{
+            padding: 'clamp(8px,2vw,11px) clamp(14px,3vw,20px)',
+            background: 'rgba(255,255,255,0.15)', color: 'white',
+            border: '1.5px solid rgba(255,255,255,0.35)', borderRadius: 10,
+            fontSize: 13, fontWeight: 700, cursor: 'pointer',
+            transition: 'background 0.2s',
+            display: 'flex', alignItems: 'center', gap: 7,
+          }}
+          onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,255,255,0.25)'}
+          onMouseLeave={e => e.currentTarget.style.background = 'rgba(255,255,255,0.15)'}>
+            <Icons.Pencil size={13} /> Edit
+          </button>
+          {!(!firebaseUser || firebaseUser.isAnonymous) && (
+            <button onClick={handleLogout} title="Sign out" style={{
+              padding: 'clamp(8px,2vw,11px) clamp(10px,2vw,12px)',
+              background: 'rgba(255,255,255,0.1)', color: 'rgba(255,255,255,0.85)',
+              border: '1.5px solid rgba(255,255,255,0.25)', borderRadius: 10,
+              fontSize: 13, fontWeight: 700, cursor: 'pointer',
+              transition: 'background 0.2s, color 0.2s',
+              display: 'flex', alignItems: 'center', gap: 6,
+            }}
+            onMouseEnter={e => { e.currentTarget.style.background = 'rgba(239,68,68,0.25)'; e.currentTarget.style.color = 'white'; }}
+            onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.1)'; e.currentTarget.style.color = 'rgba(255,255,255,0.85)'; }}>
+              <Icons.LogOut size={13} />
+            </button>
+          )}
+        </div>
       </div>
 
       {/* ── Staff-flagged Email Banner (existing account, human-reviewed) ── */}
@@ -1047,7 +1075,7 @@ export default function Profile() {
       )}
 
       {/* ── KUET Email Verify Banner ── */}
-      {hasMinProfile && !isKuetVerified && (
+      {hasMinProfile && isKuetVerified === false && (
         <ProfileVerifyBanner onVerified={() => setIsKuetVerified(true)} />
       )}
 
@@ -1104,40 +1132,8 @@ export default function Profile() {
         <StatCard icon="✍️" label="Diary Entries" value={Array.isArray(liveData.diary) ? liveData.diary.length : 0} color="#06b6d4" />
       </div>
 
-      {/* ── Quick Accounts — Hall & Academic system logins.
-          Placed right under the stats as a full-width standalone card so
-          it's one of the first things visible on every screen size (this
-          is the thing students reach for most — not buried mid-page).
-          These are external KUET portals (not part of this app), so each
-          tile opens in a new tab. Hall tile resolves from profile.hallName
-          via HALL_LINKS; Academic tile is the same for every student. */}
-      <Section title="Quick Accounts" icon="🔑">
-        <div className="profile-accounts-grid" style={{
-          display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: 10,
-        }}>
-          {profile.hallName && HALL_LINKS[profile.hallName] ? (
-            <AccountLinkTile
-              icon="🏠"
-              title="Hall Account"
-              subtitle={profile.hallName}
-              href={HALL_LINKS[profile.hallName]}
-            />
-          ) : (
-            <AccountLinkTile
-              icon="🏠"
-              title="Hall Account"
-              disabled
-              disabledHint="Set your hall in profile"
-            />
-          )}
-          <AccountLinkTile
-            icon="🎓"
-            title="Academic Account"
-            subtitle="academic.kuet.ac.bd"
-            href={ACADEMIC_SYSTEM_LINK}
-          />
-        </div>
-      </Section>
+      {/* Quick Accounts moved into the right column below, next to
+          Recent Notes — see profile-col-right. */}
 
       {/* ── Two-column layout below stats ──
           On mobile this collapses to one column and stacks LEFT column
@@ -1214,6 +1210,40 @@ export default function Profile() {
 
         {/* RIGHT COLUMN */}
         <div className="profile-col-right" style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
+
+          {/* Quick Accounts — Hall & Academic system logins. Placed first
+              in this column since it's the thing students reach for most.
+              These are external KUET portals (not part of this app), so
+              each tile opens in a new tab. Hall tile resolves from
+              profile.hallName via HALL_LINKS; Academic tile is the same
+              for every student. */}
+          <Section className="ord-accounts" title="Quick Accounts" icon="🔑">
+            <div className="profile-accounts-grid" style={{
+              display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: 10,
+            }}>
+              {profile.hallName && HALL_LINKS[profile.hallName] ? (
+                <AccountLinkTile
+                  icon="🏠"
+                  title="Hall Account"
+                  subtitle={profile.hallName}
+                  href={HALL_LINKS[profile.hallName]}
+                />
+              ) : (
+                <AccountLinkTile
+                  icon="🏠"
+                  title="Hall Account"
+                  disabled
+                  disabledHint="Set your hall in profile"
+                />
+              )}
+              <AccountLinkTile
+                icon="🎓"
+                title="Academic Account"
+                subtitle="academic.kuet.ac.bd"
+                href={ACADEMIC_SYSTEM_LINK}
+              />
+            </div>
+          </Section>
 
           {/* Attendance Breakdown */}
           {liveData.attData && (

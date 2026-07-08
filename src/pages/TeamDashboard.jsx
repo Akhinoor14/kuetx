@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import StaffDashboardContent from './StaffDashboard';
 import AdminEntryPoint from '../components/AdminEntryPoint';
 
@@ -14,6 +15,8 @@ import AdminEntryPoint from '../components/AdminEntryPoint';
  * purpose so it never collides with the visitor's regular session.
  */
 export default function TeamDashboard() {
+  const [activeTab, setActiveTab] = useState(null);
+
   return (
     <div className="team-dashboard-shell">
       <div style={{ maxWidth: 1400, margin: '0 auto', padding: '20px 16px 40px' }}>
@@ -22,11 +25,13 @@ export default function TeamDashboard() {
           Everything here is scoped to whatever KUETx role(s) you actually hold.
         </p>
 
-        <StaffDashboardContent />
+        <StaffDashboardContent onTabChange={setActiveTab} />
 
-        <div style={{ marginTop: 20 }}>
-          <AdminEntryPoint />
-        </div>
+        {activeTab === 'founder' && (
+          <div style={{ marginTop: 20 }}>
+            <AdminEntryPoint />
+          </div>
+        )}
       </div>
     </div>
   );

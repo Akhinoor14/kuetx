@@ -454,7 +454,8 @@ service cloud.firestore {
         //     approval.)
         //   - ACR has none of this power (isGroupACR is deliberately
         //     absent from this branch).
-        allow update: if isAdmin() || isCLFor(groupId) || isHeadOfOps() || isSCLForGroup(groupId) ||
+        allow update: if isAdmin() ||
+          ((isCLFor(groupId) || isHeadOfOps() || isSCLForGroup(groupId)) && request.auth.uid != memberUid) ||
           (isGroupCR(groupId) && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['role', 'verified']) &&
             (request.resource.data.role == 'acr' || request.resource.data.role == 'member' ||
              // A CR setting someone else to role 'cr' is a handoff — the

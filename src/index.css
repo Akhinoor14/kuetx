@@ -8302,10 +8302,10 @@ input[type="range"]::-webkit-slider-thumb {
    columns declared in JSX). Below 768px it collapses to one column, but
    without help the browser stacks the *entire* LEFT column above the
    *entire* RIGHT column (plain DOM order) — which buried high-value cards
-   like Attendance under Academic/Personal Info. (Quick Accounts now lives
-   outside this grid entirely, as its own full-width card right under the
-   stats, so it's already first on every screen size without needing an
-   order rule here.)
+   like Attendance under Academic/Personal Info. Quick Accounts now lives
+   inside the RIGHT column (first item, next to Recent Notes on desktop),
+   so it gets an explicit order below to keep it the top priority item on
+   mobile too.
    Fix: on mobile, both column wrappers become `display:contents` so every
    Section becomes a direct flex child of .profile-two-col itself, then we
    assign each Section an explicit `order` so the mobile stack matches what
@@ -8320,6 +8320,7 @@ input[type="range"]::-webkit-slider-thumb {
   .profile-col-left, .profile-col-right {
     display: contents;
   }
+  .ord-accounts        { order: 0; }
   .ord-attendance      { order: 1; }
   .ord-assignments     { order: 2; }
   .ord-focus           { order: 3; }
@@ -8543,6 +8544,9 @@ input[type="range"]::-webkit-slider-thumb {
    out as a 2-column grid instead of one long stack. */
 .team-dashboard-shell {
   width: 100%;
+}
+.team-dashboard-shell .staff-dashboard-grid > .card {
+  margin-bottom: 16px;
 }
 @media (min-width: 768px) {
   .team-dashboard-shell .card {

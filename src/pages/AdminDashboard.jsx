@@ -90,12 +90,8 @@ export default function AdminDashboard() {
   if (!authorized) return null;
 
   return (
-    <div style={{ maxWidth: 720, margin: '0 auto', padding: '16px 14px' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-        <h1 style={{ fontSize: 20, fontWeight: 700 }}>Founder Dashboard</h1>
-      </div>
-
-      <section className="card" style={{ padding: 14, marginBottom: 20 }}>
+    <div className="staff-dashboard-grid">
+      <section className="card" style={{ padding: 14 }}>
         <h2 style={{ fontSize: 15, fontWeight: 700, marginBottom: 10 }}>Assign a staff role</h2>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
           <select value={newRole} onChange={(e) => setNewRole(e.target.value)}
@@ -130,7 +126,7 @@ export default function AdminDashboard() {
         </div>
       </section>
 
-      <section className="card" style={{ padding: 14, marginBottom: 20 }}>
+      <section className="card staff-section-wide" style={{ padding: 14 }}>
         <h2 style={{ fontSize: 15, fontWeight: 700, marginBottom: 10 }}>
           Ultimate fallback — every pending Campus Lead application
         </h2>
@@ -150,7 +146,7 @@ export default function AdminDashboard() {
         ))}
       </section>
 
-      <section className="card" style={{ padding: 14, marginBottom: 20 }}>
+      <section className="card" style={{ padding: 14 }}>
         <h2 style={{ fontSize: 15, fontWeight: 700, marginBottom: 10 }}>Send a notice</h2>
         <form onSubmit={handleSendNotice} style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
           <input type="text" placeholder="Title" value={title} onChange={(e) => setTitle(e.target.value)}
@@ -178,7 +174,7 @@ export default function AdminDashboard() {
         </form>
       </section>
 
-      <section className="card" style={{ padding: 14 }}>
+      <section className="card staff-section-wide" style={{ padding: 14 }}>
         <h2 style={{ fontSize: 15, fontWeight: 700, marginBottom: 10 }}>Classes ({groups?.length ?? '…'})</h2>
         <p style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 10 }}>
           Read-only overview — day-to-day CR/member management belongs to each class's Campus Lead
