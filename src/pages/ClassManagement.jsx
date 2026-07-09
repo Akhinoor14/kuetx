@@ -304,6 +304,8 @@ export default function ClassManagement() {
     const manualLogs = groupId ? groupPlannerLogs : (schedule || []);
     return currentTermCourses.map(course => {
       const plan = currentTermPlans[course.id] || createDefaultCoursePlan({ course, termKey: currentTermKey, teachers: effectiveCourseTeacherMap?.[course.id] || [] });
+      const fallbackTeachers = Array.from(new Set((groupId ? groupRoutine : (schedule || [])).filter(e => e.courseId === course.id).map(e => String(e.teacherName || '').trim()).filter(Boolean)));
+      const planTeachers = (Array.isArray(plan?.teachers) && plan.teachers.length) ? plan.teachers : (effectiveCourseTeacherMap?.[course.id] || fallbackTeachers || []);
       const teacherCounts = viewMode === 'manual'
         ? getCourseTeacherCountsFromSchedule(manualLogs, course.id)
         : getCourseTeacherCountsFromSchedule(currentTermScheduleEntries, course.id);
@@ -312,7 +314,7 @@ export default function ClassManagement() {
         : currentTermScheduleEntries.filter(entry => entry.courseId === course.id).length;
       return {
         course,
-        plan,
+        plan: { ...plan, teachers: normalizeTeacherList(planTeachers) },
         teacherCounts,
         totalLogged,
       };
@@ -369,7 +371,11 @@ export default function ClassManagement() {
   const quickLogClass = (course, teacherName = '') => {
     if (!course?.id) return;
 
-    const assignedTeachers = normalizeTeacherList((effectiveCourseTeacherMap || {})[course.id] || []);
+    const getTeachersFromSchedule = (courseId) => {
+      return Array.from(new Set((groupId ? groupRoutine : (schedule || [])).filter(e => e.courseId === courseId).map(e => String(e.teacherName || '').trim()).filter(Boolean)));
+    };
+
+    const assignedTeachers = normalizeTeacherList((effectiveCourseTeacherMap || {})[course.id] || getTeachersFromSchedule(course.id) || []);
     const isTheory = String(course.type || 'Theory').toLowerCase() === 'theory';
 
     if (isTheory && assignedTeachers.length === 0) {

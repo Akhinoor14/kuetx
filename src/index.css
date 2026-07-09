@@ -2339,10 +2339,10 @@ h3 { font-size: 15px; font-weight: 600; }
   }
 
   .class-management-page .class-management-mode-button.is-active {
-    background: linear-gradient(135deg, #16a34a 0%, #22c55e 100%);
+    background: rgba(15,23,42,0.92);
     color: white;
     border-color: transparent;
-    box-shadow: 0 16px 40px rgba(22, 163, 74, 0.18);
+    box-shadow: 0 10px 24px rgba(2,6,23,0.18);
   }
 
   /* Planner mode switch (Automatic/Manual) is visually distinct from the
@@ -2634,8 +2634,8 @@ h3 { font-size: 15px; font-weight: 600; }
   border-color: var(--border);
 }
 .dark .class-management-page .class-management-mode-button.is-active {
-  background: linear-gradient(135deg, #16a34a 0%, #22c55e 100%);
-  color: #fff;
+  background: rgba(255,255,255,0.92);
+  color: rgba(15,23,42,0.96);
   border-color: transparent;
 }
 /* Planner mode switch (Automatic/Manual) — same non-green distinction as
