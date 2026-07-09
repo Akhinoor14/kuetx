@@ -1244,3 +1244,24 @@ export const getLatestSmartSnapshot = () => {
   const snaps = store.get('smartscoreSnapshots') || [];
   return snaps.length ? snaps[snaps.length - 1] : null;
 };
+
+// Validate a profile before saving. Returns { ok: boolean, errors: { field: message } }
+export const validateProfileForSave = (input = {}) => {
+  const normalized = normalizeProfileForSave(input);
+  const errors = {};
+  const studentId = String(normalized.studentId || '').trim();
+
+  if (!/^\d{7}$/.test(studentId)) {
+    errors.studentId = 'Student ID must be a 7-digit KUET roll number';
+  }
+
+  if (!String(normalized.batch || '').trim()) {
+    errors.batch = 'Batch could not be derived from the roll number; provide a valid roll';
+  }
+
+  if (!isAllowedDeptCode(normalized.dept)) {
+    errors.dept = 'Department must be one of KUET\'s 16 approved department codes';
+  }
+
+  return { ok: Object.keys(errors).length === 0, errors };
+};

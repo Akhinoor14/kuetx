@@ -792,6 +792,13 @@ export default function Profile() {
   }, [hasMinProfile]);
 
   const handleSave = formData => {
+    const { validateProfileForSave, normalizeProfileForSave } = require('../store/store');
+    const result = validateProfileForSave(formData);
+    if (!result.ok) {
+      const msgs = Object.values(result.errors).join('\n');
+      alert('Profile cannot be saved:\n' + msgs);
+      return;
+    }
     const next = normalizeProfileForSave(formData);
     store.set('profile', next);
     setProfile(next);

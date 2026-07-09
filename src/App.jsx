@@ -442,6 +442,13 @@ export default function App() {
             onClose={() => {}}
             mandatory
             onSave={(formData) => {
+              const { validateProfileForSave, normalizeProfileForSave } = require('./store/store');
+              const result = validateProfileForSave(formData);
+              if (!result.ok) {
+                const msgs = Object.values(result.errors).join('\n');
+                alert('Profile cannot be saved:\n' + msgs);
+                return;
+              }
               store.set('profile', normalizeProfileForSave(formData));
               // Record which page-load onboarding finished on, so
               // ProfileCompleteReminder can tell "still this same load"

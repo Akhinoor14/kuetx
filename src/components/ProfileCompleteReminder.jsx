@@ -97,6 +97,13 @@ export default function ProfileCompleteReminder() {
         isOpen={true}
         onClose={() => setModalOpen(false)}
         onSave={(formData) => {
+          const { validateProfileForSave, normalizeProfileForSave } = require('../store/store');
+          const result = validateProfileForSave(formData);
+          if (!result.ok) {
+            const msgs = Object.values(result.errors).join('\n');
+            alert('Profile cannot be saved:\n' + msgs);
+            return;
+          }
           store.set('profile', normalizeProfileForSave(formData));
           setModalOpen(false);
         }}
