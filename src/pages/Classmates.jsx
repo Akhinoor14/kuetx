@@ -36,6 +36,30 @@ function logClaimCRReport({ stage, error, details }) {
   console.groupEnd();
 }
 
+function getClaimCRFailureMessage(stage, error) {
+  const isPermissionDenied = error?.code === 'permission-denied' || /Missing or insufficient permissions/i.test(error?.message || '');
+  if (stage === 'membership-sync') {
+    return 'Your class membership is still syncing. Wait a few seconds and try again.';
+  }
+  if (stage === 'verification-sync') {
+    return 'Your KUET verification is not visible to Firestore yet. Wait a few seconds and try again.';
+  }
+  if (stage === 'duplicate-request') {
+    return 'You already have a pending CR request. Wait for your Campus Lead to act on it first.';
+  }
+  if (stage === 'campus-lead-application') {
+    return isPermissionDenied
+      ? 'Firestore rejected the bundled Campus Lead + CR application. The most likely reason is that your verified membership has not fully propagated yet.'
+      : 'The bundled Campus Lead + CR application could not be sent.';
+  }
+  if (stage === 'cr-request') {
+    return isPermissionDenied
+      ? 'Firestore rejected the CR request. The most likely reason is that your verified class membership has not fully propagated yet.'
+      : 'The CR request could not be sent.';
+  }
+  return error?.message || 'Something went wrong — try again.';
+}
+
 export default function Classmates() {
   const profile = getProfile();
   const groupId = getGroupId(profile);
@@ -114,6 +138,7 @@ export default function Classmates() {
       return;
     }
     setClaimState('sending');
+    let claimStage = 'cr-request';
     try {
       // Guard against the rare race where this page's mount-time joinGroup()
       // write is still in flight (or failed) when the user clicks Claim CR —
@@ -154,9 +179,11 @@ export default function Classmates() {
         // No Campus Lead yet for this dept+batch — bundle the CR claim
         // into a Campus Lead application, routed to that department's
         // Senior Campus Lead (or Head of Ops/Founder if that's vacant too).
+        claimStage = 'campus-lead-application';
         await applyForCampusLead(groupId, profile, { bundledCRClaim: true });
         setClaimMsg('No Campus Lead exists for your class yet, so your claim was sent as a combined Campus Lead + CR application to your department\'s Senior Campus Lead.');
       } else {
+        claimStage = 'cr-request';
         await requestCR(groupId, profile);
         setClaimMsg('Your request was sent to your class\'s Campus Lead for approval.');
       }
@@ -164,9 +191,7 @@ export default function Classmates() {
     } catch (e) {
       const stage = e?.message?.includes('pending CR request')
         ? 'duplicate-request'
-        : e?.message?.includes('Campus Lead + CR application')
-          ? 'campus-lead-application'
-          : 'cr-request';
+        : claimStage;
       logClaimCRReport({
         stage,
         error: e,
@@ -180,7 +205,7 @@ export default function Classmates() {
           claimState,
         },
       });
-      setClaimMsg(e?.message || 'Something went wrong — try again.');
+      setClaimMsg(getClaimCRFailureMessage(stage, e));
       setClaimState('error');
     }
   };

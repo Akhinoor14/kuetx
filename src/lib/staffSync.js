@@ -194,6 +194,22 @@ export async function approveCLApplication(applicationId) {
       name: app.name, roll: app.roll, verified: true, role: 'cr', joinedAt: serverTimestamp(),
     }, { merge: true });
     batch.set(doc(db, 'groups', app.groupId, 'meta', 'crStatus'), { count: increment(1) }, { merge: true });
+    // Clean up any stale CR request docs left over from previous CR tenure or
+    // leave requests. This gives a clean slate: if the user was previously CR
+    // (and left, and founder re-appointed them via bundled CL+CR), the old
+    // crRequests/{uid} and crRequests/leave_{uid} docs would otherwise linger
+    // and block future requestCR() calls. Firestore rules forbid DELETE on
+    // crRequests (audit trail), so mark them 'revoked' instead.
+    const freshReqRef = doc(db, 'groups', app.groupId, 'crRequests', app.uid);
+    const leaveReqRef = doc(db, 'groups', app.groupId, 'crRequests', `leave_${app.uid}`);
+    const freshSnap = await getDocFromServer(freshReqRef);
+    if (freshSnap.exists()) {
+      batch.update(freshReqRef, { status: 'revoked' });
+    }
+    const leaveSnap = await getDocFromServer(leaveReqRef);
+    if (leaveSnap.exists()) {
+      batch.update(leaveReqRef, { status: 'revoked' });
+    }
     await batch.commit();
   }
 }
