@@ -16,7 +16,7 @@ import {
 import { getAllCourses } from '../store/curriculumStore';
 import ProfileSetupModal from '../components/ProfileSetupModal';
 import AuthModal from '../components/AuthModal';
-import { onAuthChange, logout, isEmailVerified } from '../lib/firebaseAuth';
+import { onAuthChange, logout } from '../lib/firebaseAuth';
 import { subscribeMyEmailFlag } from '../lib/emailFlags';
 import { auth } from '../lib/firebase';
 import { pushAllToFirestore, startFirebaseSync } from '../lib/firebaseSync';
@@ -24,7 +24,7 @@ import { uploadProfilePicture, getProfilePhotoURL, deleteProfilePicture } from '
 import { isRollInstitutionallyVerified } from '../lib/kuetEmailVerify';
 import { getGroupId } from '../lib/groupUtils';
 import { subscribeMyRole, requestLeaveCR } from '../lib/groupSync';
-import ClaimCRCard from '../components/ClaimCRCard';
+import ClaimCRCard, { ClaimCRInlineButton } from '../components/ClaimCRCard';
 import ProfileVerifyBanner from '../components/ProfileVerifyBanner';
 import EmailVerifyBanner from '../components/EmailVerifyBanner';
 import EmailFlagBanner from '../components/EmailFlagBanner';
@@ -703,7 +703,14 @@ export default function Profile() {
   useEffect(() => {
     const unsub = onAuthChange(async u => {
       setFirebaseUser(u);
+      // Compute emailVerified here, from the resolved user object, instead
+      // of the [profile]-keyed effect below (removed) — that one called the
+      // synchronous isEmailVerified() (backed by auth.currentUser), which is
+      // still null on first paint before Firebase Auth restores the
+      // session, causing the "not verified" banner to flash for already-
+      // verified users. u is only non-null once auth state is known.
       if (u) {
+        setEmailVerified(!!u.emailVerified);
         const url = await getProfilePhotoURL();
         setPhotoURL(url);
       }
@@ -718,11 +725,10 @@ export default function Profile() {
   // already-verified users while the Firestore read is in flight);
   // false = checked and confirmed not verified; true = verified.
   const [isKuetVerified, setIsKuetVerified] = useState(null);
-  const [emailVerified, setEmailVerified] = useState(true);
+  // null = auth state not resolved yet (avoid flashing the "email not
+  // verified" banner before we know); true/false once onAuthChange fires.
+  const [emailVerified, setEmailVerified] = useState(null);
   const [emailFlag, setEmailFlag] = useState(null);
-  useEffect(() => {
-    setEmailVerified(isEmailVerified());
-  }, [profile]);
   useEffect(() => {
     const unsub = subscribeMyEmailFlag((flag) => {
       setEmailFlag(flag && flag.status === 'pending' ? flag : null);
@@ -746,7 +752,10 @@ export default function Profile() {
   // it, so it must never be used to show a "CR" badge/banner on someone's
   // own profile (which classmates can also see). This mirrors the same
   // members/{uid}.role check used by RequireCR.jsx / Sidebar.jsx.
-  const [isRealCR, setIsRealCR] = useState(false);
+  // null = not yet checked (avoid flashing the "Claim CR" card for
+  // already-CR/ACR users while the role subscription is still loading);
+  // false = checked and confirmed not CR/ACR; true = confirmed CR/ACR.
+  const [isRealCR, setIsRealCR] = useState(null);
   const [leaveCRState, setLeaveCRState] = useState('idle'); // idle | sending | sent
   useEffect(() => {
     const groupId = getGroupId(profile);
@@ -1037,7 +1046,7 @@ export default function Profile() {
       )}
 
       {/* ── Account Email Verify Banner (password-recovery reachability) ── */}
-      {!emailVerified && (
+      {emailVerified === false && (
         <EmailVerifyBanner onVerified={() => setEmailVerified(true)} />
       )}
 
@@ -1106,11 +1115,9 @@ export default function Profile() {
         </div>
       )}
 
-      {/* ── Claim CR (shown to plain members only — ClaimCRCard itself
-          hides for CR/ACR, no request, or ungrouped profiles) ── */}
-      {!isRealCR && hasMinProfile && (
-        <ClaimCRCard groupId={getGroupId(profile)} profile={profile} />
-      )}
+      {/* Claim CR now lives in profile-col-right, next to Quick Accounts
+          (desktop), plus a compact inline button next to Personal Info's
+          Edit button (mobile) — see profile-two-col below. */}
 
       {/* Admin/Staff shortcut card removed — access to Team & Administration
           is now solely via the Sidebar/BottomNav entries, which already
@@ -1161,14 +1168,21 @@ export default function Profile() {
           {/* Personal Info — Edit button lives here (moved off the
               minimal hero card) */}
           <Section className="ord-personal" title="Personal Info" icon={<Icons.User size={14} />} action={
-            <button onClick={() => setIsModalOpen(true)} style={{
-              padding: '6px 12px', background: 'var(--bg)', color: 'var(--text)',
-              border: '1px solid var(--border)', borderRadius: 8,
-              fontSize: 12, fontWeight: 700, cursor: 'pointer',
-              display: 'flex', alignItems: 'center', gap: 6,
-            }}>
-              <Icons.Pencil size={12} /> Edit
-            </button>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              {isRealCR === false && hasMinProfile && (
+                <div className="claim-cr-inline-mobile-only">
+                  <ClaimCRInlineButton groupId={getGroupId(profile)} profile={profile} />
+                </div>
+              )}
+              <button onClick={() => setIsModalOpen(true)} style={{
+                padding: '6px 12px', background: 'var(--bg)', color: 'var(--text)',
+                border: '1px solid var(--border)', borderRadius: 8,
+                fontSize: 12, fontWeight: 700, cursor: 'pointer',
+                display: 'flex', alignItems: 'center', gap: 6,
+              }}>
+                <Icons.Pencil size={12} /> Edit
+              </button>
+            </div>
           }>
             <InfoRow label="Full Name" value={profile.name} />
             <div style={{ height: 1, background: 'var(--border)' }} />
@@ -1233,6 +1247,16 @@ export default function Profile() {
 
         {/* RIGHT COLUMN */}
         <div className="profile-col-right" style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
+
+          {/* Claim CR — full card. Primary surface on desktop (sits next
+              to Quick Accounts); on mobile it's ordered further down since
+              the compact inline button next to Personal Info already
+              covers the immediate action there (see ord-claim-cr below). */}
+          {isRealCR === false && hasMinProfile && (
+            <div className="ord-claim-cr">
+              <ClaimCRCard groupId={getGroupId(profile)} profile={profile} />
+            </div>
+          )}
 
           {/* Quick Accounts — Hall & Academic system logins. Placed first
               in this column since it's the thing students reach for most.

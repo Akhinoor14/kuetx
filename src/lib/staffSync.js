@@ -14,7 +14,7 @@
 
 import {
   collection, collectionGroup, doc, getDoc, getDocs, setDoc, updateDoc, deleteDoc, addDoc,
-  onSnapshot, query, where, orderBy, serverTimestamp, writeBatch, increment,
+  onSnapshot, query, where, orderBy, serverTimestamp, writeBatch, increment, documentId,
 } from 'firebase/firestore';
 import { db, auth } from './firebase';
 import { getIdentityStamp } from './groupUtils';
@@ -95,6 +95,37 @@ export async function removeRole(targetUid, role, scope) {
 export async function listStaffByRole(role) {
   const snap = await getDocs(query(collectionGroup(db, 'roles'), where('role', '==', role)));
   return snap.docs.map((d) => ({ id: d.id, uid: d.ref.parent.parent.id, ...d.data() }));
+}
+
+// Resolves a uid to a display name/roll by checking that person's
+// membership doc in ANY class group (groups/*/members/{uid}) — global
+// staff roles (staff/{uid}/roles/{roleId}) store neither, since role
+// assignment is deliberately decoupled from class membership (e.g. a
+// Head of Ops may not even be a student). Uses documentId() so this is a
+// real indexed lookup, not a full collection scan. If the uid isn't a
+// member of any group (or the lookup fails), falls back to an empty
+// name/roll so the UI can show just the uid instead of breaking.
+export async function getStaffDisplayInfo(uid) {
+  if (!uid) return { name: '', roll: '' };
+  try {
+    const snap = await getDocs(query(collectionGroup(db, 'members'), where(documentId(), '==', uid)));
+    if (!snap.empty) {
+      const data = snap.docs[0].data();
+      return { name: data.name || '', roll: data.roll || '' };
+    }
+  } catch (e) {
+    console.warn('[staffSync] getStaffDisplayInfo lookup failed:', e);
+  }
+  return { name: '', roll: '' };
+}
+
+// Batched version for a list of uids (Staff & Roles view resolves many
+// holders at once) — runs the lookups in parallel and returns a
+// uid -> {name, roll} map, so callers don't need N sequential renders.
+export async function getStaffDisplayInfoBatch(uids) {
+  const uniqueUids = [...new Set((uids || []).filter(Boolean))];
+  const entries = await Promise.all(uniqueUids.map(async (uid) => [uid, await getStaffDisplayInfo(uid)]));
+  return Object.fromEntries(entries);
 }
 
 /** One-shot: Campus Lead holders for a single department, scoped through groups. */

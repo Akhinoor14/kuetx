@@ -10,17 +10,12 @@ import { isRollInstitutionallyVerified } from '../lib/kuetEmailVerify';
 import { auth, db } from '../lib/firebase';
 
 /**
- * Self-contained "Claim CR" card: shows the open-slot pitch + button when
- * the current user is a plain member with no pending request, a disabled
- * button with reason when slots are full, a "pending" state when they've
- * already got a request in flight, and renders nothing at all once they're
- * CR/ACR. All Firestore subscriptions/writes live here so any page can just
- * drop in <ClaimCRCard groupId={groupId} profile={profile} /> — this is the
- * same logic that used to live only in Classmates.jsx, now shared with
- * Profile.jsx and ProfileSetupModal.jsx so the entry point isn't hidden on
- * a single page.
+ * Shared logic behind both <ClaimCRCard> (full card) and
+ * <ClaimCRInlineButton> (compact, mobile Personal-Info-adjacent variant).
+ * Both render nothing until crStatus resolves, and nothing at all once the
+ * user is confirmed CR/ACR — see the null-return checks in each component.
  */
-export default function ClaimCRCard({ groupId, profile }) {
+function useClaimCRState(groupId, profile) {
   const [crStatus, setCrStatus] = useState(null);
   const [claimState, setClaimState] = useState('idle'); // idle | sending | sent | error
   const [claimMsg, setClaimMsg] = useState('');
@@ -93,6 +88,24 @@ export default function ClaimCRCard({ groupId, profile }) {
     }
   };
 
+  return { crStatus, claimState, claimMsg, ownRollVerified, ownRole, ownRequestStatus, handleClaimCR };
+}
+
+/**
+ * Self-contained "Claim CR" card: shows the open-slot pitch + button when
+ * the current user is a plain member with no pending request, a disabled
+ * button with reason when slots are full, a "pending" state when they've
+ * already got a request in flight, and renders nothing at all once they're
+ * CR/ACR. All Firestore subscriptions/writes live here so any page can just
+ * drop in <ClaimCRCard groupId={groupId} profile={profile} /> — this is the
+ * same logic that used to live only in Classmates.jsx, now shared with
+ * Profile.jsx and ProfileSetupModal.jsx so the entry point isn't hidden on
+ * a single page.
+ */
+export default function ClaimCRCard({ groupId, profile }) {
+  const { crStatus, claimState, claimMsg, ownRollVerified, ownRole, ownRequestStatus, handleClaimCR } =
+    useClaimCRState(groupId, profile);
+
   if (!groupId || !crStatus) return null;
   if (ownRole === 'cr' || ownRole === 'acr') return null;
 
@@ -143,5 +156,54 @@ export default function ClaimCRCard({ groupId, profile }) {
       )}
       {claimState === 'error' && <div style={{ color: 'var(--danger)', fontSize: 12, marginTop: 6 }}>{claimMsg}</div>}
     </div>
+  );
+}
+
+/**
+ * Compact variant for placement next to Personal Info's "Edit" button
+ * (mobile — see Profile.jsx). Shows only a slim text-button that mirrors
+ * the same three states as the full card (open / pending / slots full),
+ * without the pitch copy — the full <ClaimCRCard> further down still
+ * carries the explanation and remains the primary surface on desktop.
+ */
+export function ClaimCRInlineButton({ groupId, profile }) {
+  const { crStatus, claimState, ownRollVerified, ownRole, ownRequestStatus, handleClaimCR } =
+    useClaimCRState(groupId, profile);
+
+  if (!groupId || !crStatus) return null;
+  if (ownRole === 'cr' || ownRole === 'acr') return null;
+  if (ownRequestStatus === 'pending' || claimState === 'sent') {
+    return (
+      <span style={{
+        fontSize: 11, fontWeight: 700, color: 'var(--muted)',
+        padding: '6px 10px', border: '1px solid var(--border)', borderRadius: 8,
+        display: 'inline-flex', alignItems: 'center', gap: 4,
+      }}>
+        CR request pending
+      </span>
+    );
+  }
+
+  return (
+    <button
+      onClick={handleClaimCR}
+      disabled={claimState === 'sending' || !ownRollVerified || crStatus.slotsFull}
+      title={
+        crStatus.slotsFull
+          ? `Both CR slots (max ${MAX_CR}) are currently filled for this class`
+          : !ownRollVerified
+            ? 'Verify your KUET email before you can claim CR'
+            : undefined
+      }
+      style={{
+        padding: '6px 12px', background: 'var(--bg)', color: 'var(--accent)',
+        border: '1px solid var(--border)', borderRadius: 8,
+        fontSize: 12, fontWeight: 700, cursor: 'pointer',
+        display: 'flex', alignItems: 'center', gap: 6,
+        opacity: (claimState === 'sending' || !ownRollVerified || crStatus.slotsFull) ? 0.6 : 1,
+      }}
+    >
+      {claimState === 'sending' ? 'Sending…' : crStatus.slotsFull ? 'CR slots full' : 'Claim CR'}
+    </button>
   );
 }

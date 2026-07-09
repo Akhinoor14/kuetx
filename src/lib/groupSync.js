@@ -1009,6 +1009,54 @@ export const deleteAssignmentEntry = (groupId, entryId, profile) => softDeleteEn
 export const restoreAssignmentEntry = (groupId, entryId, profile) => restoreEntry(groupId, 'assignmentEntries', entryId, profile);
 
 // ---------------------------------------------------------------------
+// Class Planner (shared across CR/ACR of a group — NOT personal
+// bookkeeping). Manual "+1" logs live as one-doc-per-entry in
+// plannerLogEntries (same reasoning as routineEntries/assignmentEntries:
+// multiple CR/ACR could log at once, so an array-in-one-doc would
+// collide). courseTeacherMap + per-course plan targets (plannedTotalClasses,
+// perWeekTarget, teachers) live in the single meta/plannerSettings doc,
+// same pattern as meta/crStatus.
+// ---------------------------------------------------------------------
+
+export const subscribePlannerLogs = (groupId, cb) => subscribeEntries(groupId, 'plannerLogEntries', cb);
+export const addPlannerLogEntry = (groupId, profile, data) => addEntry(groupId, 'plannerLogEntries', profile, data);
+export const updatePlannerLogEntry = (groupId, entryId, profile, data) => updateEntry(groupId, 'plannerLogEntries', entryId, profile, data);
+export const deletePlannerLogEntry = (groupId, entryId, profile) => softDeleteEntry(groupId, 'plannerLogEntries', entryId, profile);
+export const restorePlannerLogEntry = (groupId, entryId, profile) => restoreEntry(groupId, 'plannerLogEntries', entryId, profile);
+
+export function subscribePlannerSettings(groupId, callback) {
+  if (!groupId) return () => {};
+  const key = `plannerSettings:${groupId}`;
+  let entry = _registry.get(key);
+  if (!entry) {
+    entry = { unsubscribe: null, refCount: 0, listeners: new Set(), lastValue: null };
+    _registry.set(key, entry);
+    entry.unsubscribe = onSnapshot(doc(db, 'groups', groupId, 'meta', 'plannerSettings'), (snap) => {
+      entry.lastValue = snap.exists() ? snap.data() : {};
+      entry.listeners.forEach((cb) => cb(entry.lastValue));
+    }, (err) => console.error('[groupSync] plannerSettings listener error:', err));
+  }
+  entry.refCount += 1;
+  entry.listeners.add(callback);
+  if (entry.lastValue !== null) callback(entry.lastValue);
+  return () => {
+    entry.listeners.delete(callback);
+    entry.refCount -= 1;
+    if (entry.refCount <= 0) { entry.unsubscribe?.(); _registry.delete(key); }
+  };
+}
+
+export async function updatePlannerSettings(groupId, profile, data) {
+  const uid = auth.currentUser?.uid;
+  const stamp = getIdentityStamp(profile, uid);
+  await setDoc(doc(db, 'groups', groupId, 'meta', 'plannerSettings'), {
+    ...data,
+    updatedBy: stamp,
+    updatedAt: serverTimestamp(),
+  }, { merge: true });
+}
+
+// ---------------------------------------------------------------------
 // Group (CR-level) notices
 // ---------------------------------------------------------------------
 

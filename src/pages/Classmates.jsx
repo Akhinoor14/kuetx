@@ -7,6 +7,7 @@ import { auth } from '../lib/firebase';
 import ClassmatesList from '../components/ClassmatesList';
 import KuetEmailVerifyBox from '../components/KuetEmailVerifyBox';
 import ClaimCRCard from '../components/ClaimCRCard';
+import ClassNoticeFeed from '../components/ClassNoticeFeed';
 
 export default function Classmates() {
   const profile = getProfile();
@@ -61,6 +62,8 @@ export default function Classmates() {
       )}
 
       {groupId && <KuetEmailVerifyBox />}
+
+      {groupId && <ClassNoticeFeed groupId={groupId} />}
 
       {groupId && <ClaimCRCard groupId={groupId} profile={profile} />}
 

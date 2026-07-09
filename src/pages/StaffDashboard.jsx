@@ -507,7 +507,7 @@ function GrowthSection() {
 function RoleTabBar({ tabs, active, onChange }) {
   if (tabs.length <= 1) return null;
   return (
-    <div style={{ display: 'flex', gap: 6, overflowX: 'auto', paddingBottom: 8, marginBottom: 16, borderBottom: '1px solid var(--border)' }}>
+    <div style={{ display: 'flex', gap: 6, overflowX: 'auto', paddingBottom: 6, marginBottom: 10, borderBottom: '1px solid var(--border)' }}>
       {tabs.map((t) => (
         <button
           key={t.key}
@@ -612,7 +612,7 @@ export default function StaffDashboard({ onTabChange } = {}) {
 
   return (
     <div>
-      <p style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 16 }}>
+      <p style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 10 }}>
         {roles.length > 0 ? `Your roles: ${roles.map((r) => ROLE_LABELS[r.role] || r.role).join(' · ')}` : 'Founder'}
       </p>
 

@@ -2343,6 +2343,39 @@ h3 { font-size: 15px; font-weight: 600; }
     box-shadow: 0 16px 40px rgba(22, 163, 74, 0.18);
   }
 
+  /* Planner mode switch (Automatic/Manual) is visually distinct from the
+     Routine/Class Planner tab switch above it — both used identical green
+     "is-active" styling, so on the Planner tab it read as "everything is
+     on" rather than showing which single mode was selected. This gives
+     the planner-mode toggle its own minimal, neutral-accent treatment:
+     unselected pill is plain/muted, selected pill gets a solid dark fill
+     (not green), so it never gets visually confused with the primary
+     Routine/Planner navigation directly above it. */
+  .class-management-page .class-management-planner-header .class-management-mode-switch {
+    background: rgba(15, 23, 42, 0.04);
+    box-shadow: none;
+    border: 1px solid rgba(15, 23, 42, 0.08);
+  }
+
+  .class-management-page .class-management-planner-header .class-management-mode-button {
+    min-height: 40px;
+    background: transparent;
+    border: none;
+    color: rgba(15, 23, 42, 0.55);
+    box-shadow: none;
+  }
+
+  .class-management-page .class-management-planner-header .class-management-mode-button:hover {
+    color: rgba(15, 23, 42, 0.8);
+    transform: none;
+  }
+
+  .class-management-page .class-management-planner-header .class-management-mode-button.is-active {
+    background: rgba(15, 23, 42, 0.92);
+    color: white;
+    box-shadow: 0 6px 14px rgba(15, 23, 42, 0.18);
+  }
+
   .class-management-page .class-management-stats-grid {
     display: grid;
     grid-template-columns: repeat(3, minmax(130px, 1fr));
@@ -2602,6 +2635,21 @@ h3 { font-size: 15px; font-weight: 600; }
   background: linear-gradient(135deg, #16a34a 0%, #22c55e 100%);
   color: #fff;
   border-color: transparent;
+}
+/* Planner mode switch (Automatic/Manual) — same non-green distinction as
+   light mode, so it never reads as identical to the tab switch above it. */
+.dark .class-management-page .class-management-planner-header .class-management-mode-switch {
+  background: rgba(255,255,255,0.02);
+  border-color: var(--border);
+}
+.dark .class-management-page .class-management-planner-header .class-management-mode-button {
+  background: transparent;
+  border-color: transparent;
+  color: rgba(255,255,255,0.55);
+}
+.dark .class-management-page .class-management-planner-header .class-management-mode-button.is-active {
+  background: rgba(255,255,255,0.92);
+  color: rgba(15,23,42,0.96);
 }
 .dark .class-management-page .class-management-day-button {
   background: rgba(255,255,255,0.04);
@@ -8351,10 +8399,12 @@ input[type="range"]::-webkit-slider-thumb {
    Today's Focus, Recent Notes.
    Mobile card order, high to low:
      1. Hero (avatar + name)      - JSX-fixed, always first
-     2. Personal Info             - core identity, Edit button lives here
+     2. Personal Info             - core identity, Edit + Claim CR inline
+                                     button (compact) live here
      3. Quick Accounts            - Hall + Academic portal links
-     4. Academic Info             - Dept/Session/Term/Credits
-     5. Hall & Advisor            - reference, checked less often */
+     4. Claim CR (full card)      - fuller pitch/status, once relevant
+     5. Academic Info             - Dept/Session/Term/Credits
+     6. Hall & Advisor            - reference, checked less often */
 @media (max-width: 768px) {
   .profile-two-col {
     display: flex !important;
@@ -8366,8 +8416,9 @@ input[type="range"]::-webkit-slider-thumb {
   }
   .ord-personal        { order: 0; }
   .ord-accounts        { order: 1; }
-  .ord-academic        { order: 2; }
-  .ord-hall-advisor    { order: 3; }
+  .ord-claim-cr         { order: 2; }
+  .ord-academic         { order: 3; }
+  .ord-hall-advisor    { order: 4; }
 
   /* Already shown on Dashboard — hide here to avoid duplication */
   .profile-stats-grid,
@@ -8377,6 +8428,13 @@ input[type="range"]::-webkit-slider-thumb {
   .ord-notes {
     display: none !important;
   }
+}
+
+/* Claim CR inline button next to Personal Info's Edit: mobile-only. On
+   desktop the full <ClaimCRCard> next to Quick Accounts already covers
+   this, so the inline chip would be redundant there. */
+@media (min-width: 769px) {
+  .claim-cr-inline-mobile-only { display: none; }
 }
 
 /* UID row inside Personal Info: mobile-only per product decision (desktop
@@ -8710,6 +8768,52 @@ input[type="range"]::-webkit-slider-thumb {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+/* Staff & Roles — "Current role holders" compact card grid. Replaces a
+   full-width stacked list (one row per holder spanning the whole panel
+   width, role headers repeated per section) with small cards that pack
+   multiple holders per row, so a Founder scanning "who has what role"
+   isn't scrolling through mostly-empty-looking full-width rows.
+   Cards are a FIXED width (not minmax(...,1fr)) so an incomplete last
+   row packs left and stays compact instead of stretching to fill the
+   remaining row width — that stretch is what made a half-full row look
+   like empty space with two oversized cards. auto-fill (not auto-fit)
+   keeps column count stable as content loads in. */
+.staff-holders-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 140px);
+  gap: 10px;
+  justify-content: flex-start;
+}
+.staff-holder-card {
+  padding: 10px 12px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: var(--surface, var(--card));
+}
+
+/* Classes & Students dept/batch drilldown — same "compact grid instead
+   of a full-width stacked list" treatment as staff-holders-grid above.
+   Fixed card width (see comment above) so a trailing partial row packs
+   left instead of its cards stretching to fill the row. Narrower than
+   before to fit more columns per row on desktop, since these cards hold
+   very little content (a dept/batch name + a count). */
+.classes-drilldown-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 150px);
+  gap: 10px;
+  justify-content: flex-start;
+}
+
+@media (max-width: 480px) {
+  .staff-holders-grid,
+  .classes-drilldown-grid {
+    /* On narrow phones, fixed-width columns can leave one lonely card
+       per row with a lot of dead space. Fall back to flexible columns
+       so the grid still fills the width sensibly on small screens. */
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  }
 }
 
 /* ── Content pages — same visual language as hub pages ────────────────────

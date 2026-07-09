@@ -12,21 +12,15 @@ import * as Icons from 'lucide-react';
  * `getCount` resolves > 0. Add a category to the registry and it shows
  * up here automatically — no changes needed in this file.
  *
- * `onBack` is optional; when provided a small "‹ All categories" link
- * sits above the pill row for jumping straight back to the grid.
+ * `onBack` is intentionally unused now — since every category is already
+ * one tap away via the pill row itself, a separate "‹ All categories"
+ * link back to the top-level grid was a redundant extra step, not a
+ * useful escape hatch. Kept as an accepted (ignored) prop so callers
+ * don't need updating.
  */
-export default function CategorySubNav({ categories, activeKey, onSelect, onBack, countCtx = {} }) {
+export default function CategorySubNav({ categories, activeKey, onSelect, countCtx = {} }) {
   return (
-    <div style={{ marginBottom: 20 }}>
-      {onBack && (
-        <button
-          onClick={onBack}
-          className="btn btn-sm btn-secondary"
-          style={{ display: 'inline-flex', alignItems: 'center', gap: 4, marginBottom: 12 }}
-        >
-          <Icons.ChevronLeft size={14} /> All categories
-        </button>
-      )}
+    <div style={{ marginBottom: 14 }}>
       <div className="category-subnav-row">
         {categories.map((cat) => {
           const Icon = Icons[cat.icon] || Icons.Circle;

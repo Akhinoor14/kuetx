@@ -3,6 +3,15 @@ import { Link } from 'react-router-dom';
 import { CalendarDays, Clock3, Copy, Download, Users, X } from 'lucide-react';
 import { store, uid, getProfile, getCurrentTermKey } from '../store/store';
 import { getAllCourses } from '../store/curriculumStore';
+import { getGroupId } from '../lib/groupUtils';
+import {
+  subscribeRoutine,
+  subscribePlannerLogs,
+  addPlannerLogEntry,
+  deletePlannerLogEntry,
+  subscribePlannerSettings,
+  updatePlannerSettings,
+} from '../lib/groupSync';
 import CourseTeacherDialog from '../components/CourseTeacherDialog';
 import {
   createDefaultCoursePlan,
@@ -31,9 +40,69 @@ export default function ClassManagement() {
     [allCourses, currentTermKey],
   );
 
+  // This page is only ever reached via RequireCR, so the viewer is always
+  // an approved CR/ACR of their class group — meaning the "Routine" tab
+  // must show the SAME shared/group routine as /schedule (Schedule.jsx),
+  // not a personal local copy. Without this, a CR who logs classes here
+  // sees their own old solo-schedule data instead of what they (or a
+  // co-CR/ACR) actually published to the class via /schedule.
+  const groupId = useMemo(() => getGroupId(profile), [profile.dept, profile.batch]);
+  const [groupRoutine, setGroupRoutine] = useState([]);
+  useEffect(() => {
+    if (!groupId) { setGroupRoutine([]); return; }
+    return subscribeRoutine(groupId, (entries) => {
+      setGroupRoutine((entries || []).map((e) => ({
+        id: e.id,
+        day: e.day || 'Sunday',
+        slot: e.slot || '',
+        courseId: e.courseId || '',
+        teacherName: e.teacherName || '',
+        displayName: e.displayName || e.courseCode || e.courseName || '',
+        room: e.room || '',
+        note: e.note || '',
+        type: e.type || 'Theory',
+      })));
+    });
+  }, [groupId]);
+
+  // The "Planner" tab (quickLogClass/resetPlan — which teacher took how
+  // many classes, targets, teacher assignments) is CR-work just like the
+  // Routine tab: it's class-wide fact, not personal bookkeeping, so any
+  // CR/ACR of the group must see and update the same shared data.
+  //
+  // - Automatic mode's counts come from the shared groupRoutine (the real
+  //   published schedule), same source the Routine tab uses.
+  // - Manual mode's "+1" logs live in the shared plannerLogEntries
+  //   subcollection (one doc per log, mirrors routineEntries/
+  //   assignmentEntries so simultaneous CR/ACR logging never collides).
+  // - courseTeacherMap + per-course targets (plannedTotalClasses,
+  //   perWeekTarget) live in the shared meta/plannerSettings doc.
+  //
+  // `schedule`/`settings`/`plannerState` (local store) remain only as an
+  // offline/no-group fallback for solo users with no class group yet.
   const [schedule, setSchedule] = useState(() => store.get('schedule') || []);
   const [settings, setSettings] = useState(() => store.get('scheduleSettings') || {});
   const [plannerState, setPlannerState] = useState(() => store.get('classManagementPlans') || {});
+
+  const [groupPlannerLogs, setGroupPlannerLogs] = useState([]);
+  useEffect(() => {
+    if (!groupId) { setGroupPlannerLogs([]); return; }
+    return subscribePlannerLogs(groupId, (entries) => setGroupPlannerLogs(entries || []));
+  }, [groupId]);
+
+  const [groupPlannerSettings, setGroupPlannerSettings] = useState(null);
+  useEffect(() => {
+    if (!groupId) { setGroupPlannerSettings(null); return; }
+    return subscribePlannerSettings(groupId, (data) => setGroupPlannerSettings(data || {}));
+  }, [groupId]);
+
+  // Effective sources: shared when in a group, local fallback otherwise.
+  const effectiveCourseTeacherMap = groupId
+    ? (groupPlannerSettings?.courseTeacherMap || {})
+    : (settings?.courseTeacherMap || {});
+  const effectivePlannerPlans = groupId
+    ? (groupPlannerSettings?.plans || {})
+    : null; // local plannerState (term-scoped) used below when no group
   const [activeTab, setActiveTab] = useState('routine');
   const [selectedRoutineDay, setSelectedRoutineDay] = useState(() => {
     const todayKey = ROUTINE_DAY_KEYS[new Date().getDay()];
@@ -62,13 +131,18 @@ export default function ClassManagement() {
     return state;
   };
 
-  const currentTermPlans = useMemo(() => getCurrentTermPlans(plannerState), [plannerState, currentTermKey]);
+  const localCurrentTermPlans = useMemo(() => getCurrentTermPlans(plannerState), [plannerState, currentTermKey]);
+  // Shared plans (groupPlannerSettings.plans) are stored flat by courseId
+  // (no term-scoping needed server-side — the client only ever asks for
+  // the current term's courses), matching the shape currentTermPlans has
+  // always had, so every downstream consumer below stays unchanged.
+  const currentTermPlans = groupId ? effectivePlannerPlans : localCurrentTermPlans;
   const courseMap = useMemo(() => new Map(allCourses.map(course => [course.id, course])), [allCourses]);
 
   const currentTermScheduleEntries = useMemo(() => {
     const currentCourseIds = new Set(currentTermCourses.map(course => course.id));
-    return (schedule || []).filter(entry => currentCourseIds.has(entry.courseId));
-  }, [schedule, currentTermCourses]);
+    return (groupId ? groupRoutine : (schedule || [])).filter(entry => currentCourseIds.has(entry.courseId));
+  }, [groupId, groupRoutine, schedule, currentTermCourses]);
 
   const routineEntriesByDay = useMemo(() => {
     const next = ROUTINE_DAY_KEYS.reduce((acc, day) => ({ ...acc, [day]: [] }), {});
@@ -87,13 +161,13 @@ export default function ClassManagement() {
   const assignedTeacherCount = useMemo(() => {
     const teacherNames = new Set();
     currentTermCourses.forEach(course => {
-      const teachers = currentTermPlans?.[course.id]?.teachers || settings?.courseTeacherMap?.[course.id] || [];
+      const teachers = currentTermPlans?.[course.id]?.teachers || effectiveCourseTeacherMap?.[course.id] || [];
       (teachers || []).forEach(teacher => {
         if (teacher) teacherNames.add(teacher);
       });
     });
     return teacherNames.size;
-  }, [currentTermCourses, currentTermPlans, settings?.courseTeacherMap]);
+  }, [currentTermCourses, currentTermPlans, effectiveCourseTeacherMap]);
   const currentTermScheduledCourseCount = useMemo(() => {
     return new Set(currentTermScheduleEntries.map(entry => entry.courseId)).size;
   }, [currentTermScheduleEntries]);
@@ -155,8 +229,9 @@ export default function ClassManagement() {
 
   // (removed) holiday sync via ctQuizStore — no-op
 
+  // Local (no-group) fallback: default-fill missing plans in the local store.
   useEffect(() => {
-    if (!currentTermKey) return;
+    if (!currentTermKey || groupId) return;
 
     setPlannerState(prev => {
       const baseState = prev && typeof prev === 'object' ? prev : {};
@@ -186,13 +261,55 @@ export default function ClassManagement() {
       if (!changed) return baseState;
       return { ...nextState, [currentTermKey]: currentPlans };
     });
-  }, [currentTermCourses, currentTermKey, settings?.courseTeacherMap]);
+  }, [currentTermCourses, currentTermKey, settings?.courseTeacherMap, groupId]);
 
+  // Group fallback: default-fill missing plans in the shared Firestore doc.
+  // Guarded by JSON comparison the same way, so it only writes when a
+  // course is genuinely missing/stale — avoids a write storm every render.
+  useEffect(() => {
+    if (!currentTermKey || !groupId || groupPlannerSettings === null) return;
+
+    const existingPlans = groupPlannerSettings?.plans || {};
+    const teacherMap = groupPlannerSettings?.courseTeacherMap || {};
+    const nextPlans = { ...existingPlans };
+    let changed = false;
+
+    currentTermCourses.forEach(course => {
+      const existing = existingPlans[course.id];
+      const defaultTeachers = normalizeTeacherList(existing?.teachers?.length ? existing.teachers : teacherMap[course.id] || []);
+      const defaultPlan = createDefaultCoursePlan({ course, termKey: currentTermKey, teachers: defaultTeachers });
+      const nextPlan = {
+        ...defaultPlan,
+        ...existing,
+        teachers: defaultTeachers,
+        plannedTotalClasses: existing?.plannedTotalClasses || defaultPlan.plannedTotalClasses,
+        perWeekTarget: existing?.perWeekTarget || defaultPlan.perWeekTarget,
+      };
+
+      if (!existing || JSON.stringify(existing) !== JSON.stringify(nextPlan)) {
+        nextPlans[course.id] = nextPlan;
+        changed = true;
+      }
+    });
+
+    if (!changed) return;
+    updatePlannerSettings(groupId, profile, { plans: nextPlans }).catch((e) => console.error('[ClassManagement] plan default-fill failed:', e));
+  }, [currentTermCourses, currentTermKey, groupId, groupPlannerSettings, profile]);
+
+  // Automatic mode counts real classes from the schedule (group routine
+  // when grouped, local schedule otherwise) — same "which teacher took how
+  // many classes" logic the Routine tab already uses. Manual mode counts
+  // the shared "+1" logs instead.
   const plannerRows = useMemo(() => {
+    const manualLogs = groupId ? groupPlannerLogs : (schedule || []);
     return currentTermCourses.map(course => {
-      const plan = currentTermPlans[course.id] || createDefaultCoursePlan({ course, termKey: currentTermKey, teachers: settings?.courseTeacherMap?.[course.id] || [] });
-      const teacherCounts = getCourseTeacherCountsFromSchedule(schedule, course.id);
-      const totalLogged = (schedule || []).filter(entry => entry.courseId === course.id).length;
+      const plan = currentTermPlans[course.id] || createDefaultCoursePlan({ course, termKey: currentTermKey, teachers: effectiveCourseTeacherMap?.[course.id] || [] });
+      const teacherCounts = viewMode === 'manual'
+        ? getCourseTeacherCountsFromSchedule(manualLogs, course.id)
+        : getCourseTeacherCountsFromSchedule(currentTermScheduleEntries, course.id);
+      const totalLogged = viewMode === 'manual'
+        ? manualLogs.filter(entry => entry.courseId === course.id).length
+        : currentTermScheduleEntries.filter(entry => entry.courseId === course.id).length;
       return {
         course,
         plan,
@@ -200,9 +317,19 @@ export default function ClassManagement() {
         totalLogged,
       };
     });
-  }, [currentTermCourses, currentTermPlans, currentTermKey, schedule, settings?.courseTeacherMap]);
+  }, [currentTermCourses, currentTermPlans, currentTermKey, schedule, effectiveCourseTeacherMap, groupId, groupPlannerLogs, viewMode, currentTermScheduleEntries]);
 
   const updateCurrentTermPlan = (courseId, updater) => {
+    if (groupId) {
+      const existingPlans = groupPlannerSettings?.plans || {};
+      const currentPlan = existingPlans[courseId] || null;
+      const nextPlan = updater(currentPlan);
+      if (!nextPlan) return;
+      updatePlannerSettings(groupId, profile, { plans: { ...existingPlans, [courseId]: nextPlan } })
+        .catch((e) => console.error('[ClassManagement] updateCurrentTermPlan failed:', e));
+      return;
+    }
+
     setPlannerState(prev => {
       const baseState = prev && typeof prev === 'object' ? prev : {};
       const nextState = isTermScopedPlanner(baseState) ? { ...baseState } : { [currentTermKey]: { ...baseState } };
@@ -232,13 +359,17 @@ export default function ClassManagement() {
   };
 
   const removeLogEntry = (logId) => {
+    if (groupId) {
+      deletePlannerLogEntry(groupId, logId, profile).catch((e) => console.error('[ClassManagement] removeLogEntry failed:', e));
+      return;
+    }
     setSchedule(prev => (prev || []).filter(entry => entry.id !== logId));
   };
 
   const quickLogClass = (course, teacherName = '') => {
     if (!course?.id) return;
 
-    const assignedTeachers = normalizeTeacherList((settings?.courseTeacherMap || {})[course.id] || []);
+    const assignedTeachers = normalizeTeacherList((effectiveCourseTeacherMap || {})[course.id] || []);
     const isTheory = String(course.type || 'Theory').toLowerCase() === 'theory';
 
     if (isTheory && assignedTeachers.length === 0) {
@@ -248,7 +379,6 @@ export default function ClassManagement() {
 
     const selectedTeacher = String(teacherName || assignedTeachers[0] || '').trim();
     const entry = {
-      id: uid(),
       courseId: course.id,
       displayName: course.code,
       type: course.type || 'Theory',
@@ -259,7 +389,12 @@ export default function ClassManagement() {
       note: 'Logged manually',
     };
 
-    setSchedule(prev => [...(prev || []), entry]);
+    if (groupId) {
+      addPlannerLogEntry(groupId, profile, entry).catch((e) => console.error('[ClassManagement] quickLogClass failed:', e));
+      return;
+    }
+
+    setSchedule(prev => [...(prev || []), { ...entry, id: uid() }]);
   };
 
   const loadRoutineFromStore = () => {
@@ -287,9 +422,9 @@ export default function ClassManagement() {
       exportedAt: new Date().toISOString(),
       data: buildExportPayload({
         termKey: currentTermKey,
-        plannerState,
-        settings,
-        schedule,
+        plannerState: groupId ? { [currentTermKey]: currentTermPlans } : plannerState,
+        settings: groupId ? { ...(settings || {}), courseTeacherMap: effectiveCourseTeacherMap } : settings,
+        schedule: groupId ? groupPlannerLogs : schedule,
       }),
     };
 
@@ -305,7 +440,8 @@ export default function ClassManagement() {
 
   const resetPlan = (course) => {
     if (!course?.id) return;
-    const existingLogs = (schedule || []).filter(entry => entry.courseId === course.id).length;
+    const manualLogs = groupId ? groupPlannerLogs : (schedule || []);
+    const existingLogs = manualLogs.filter(entry => entry.courseId === course.id).length;
     // open a non-blocking toast/inline confirm
     const timer = setTimeout(() => setResetState(prev => ({ ...(prev || {}), open: false, timer: null })), 9000);
     setResetState({ open: true, course, count: existingLogs, timer });
@@ -320,10 +456,16 @@ export default function ClassManagement() {
     }
 
     if (shouldRemoveLogs) {
-      setSchedule(prev => (prev || []).filter(entry => entry.courseId !== course.id));
+      if (groupId) {
+        groupPlannerLogs
+          .filter(entry => entry.courseId === course.id)
+          .forEach(entry => deletePlannerLogEntry(groupId, entry.id, profile).catch((e) => console.error('[ClassManagement] resetPlan log delete failed:', e)));
+      } else {
+        setSchedule(prev => (prev || []).filter(entry => entry.courseId !== course.id));
+      }
     }
 
-    updateCurrentTermPlan(course.id, () => createDefaultCoursePlan({ course, termKey: currentTermKey, teachers: settings?.courseTeacherMap?.[course.id] || [] }));
+    updateCurrentTermPlan(course.id, () => createDefaultCoursePlan({ course, termKey: currentTermKey, teachers: effectiveCourseTeacherMap?.[course.id] || [] }));
     if (resetState.timer) clearTimeout(resetState.timer);
     setResetState({ open: false, course: null, count: 0, timer: null });
   };
@@ -340,9 +482,18 @@ export default function ClassManagement() {
     const courseId = courseTeacherDialogState.courseId;
     if (!courseId) return;
     const normalizedTeachers = normalizeTeacherList(teachersList);
-    const next = { ...(settings.courseTeacherMap || {}) };
-    next[courseId] = normalizedTeachers;
-    setSettings({ ...(settings || {}), courseTeacherMap: next });
+
+    if (groupId) {
+      const next = { ...(groupPlannerSettings?.courseTeacherMap || {}) };
+      next[courseId] = normalizedTeachers;
+      updatePlannerSettings(groupId, profile, { courseTeacherMap: next })
+        .catch((e) => console.error('[ClassManagement] courseTeacherMap save failed:', e));
+    } else {
+      const next = { ...(settings.courseTeacherMap || {}) };
+      next[courseId] = normalizedTeachers;
+      setSettings({ ...(settings || {}), courseTeacherMap: next });
+    }
+
     updateCurrentTermPlan(courseId, (currentPlan) => ({
       ...currentPlan,
       teachers: normalizedTeachers,
@@ -671,7 +822,7 @@ export default function ClassManagement() {
         isOpen={courseTeacherDialogState.open}
         onClose={handleCourseTeacherDialogClose}
         course={allCourses.find(course => course.id === courseTeacherDialogState.courseId)}
-        currentTeachers={(settings.courseTeacherMap || {})[courseTeacherDialogState.courseId] || (currentTermPlans?.[courseTeacherDialogState.courseId]?.teachers || [])}
+        currentTeachers={(effectiveCourseTeacherMap || {})[courseTeacherDialogState.courseId] || (currentTermPlans?.[courseTeacherDialogState.courseId]?.teachers || [])}
         onSave={handleCourseTeacherDialogSave}
         allTeachers={[]}
         requireTwoTeachers={true}
@@ -698,9 +849,12 @@ export default function ClassManagement() {
 
       {detailState.open && (() => {
         const course = currentTermCourses.find(item => item.id === detailState.courseId) || allCourses.find(item => item.id === detailState.courseId);
-        const plan = currentTermPlans?.[detailState.courseId] || createDefaultCoursePlan({ course, termKey: currentTermKey, teachers: settings?.courseTeacherMap?.[detailState.courseId] || [] });
-        const teacherCounts = getCourseTeacherCountsFromSchedule(schedule, detailState.courseId);
-        const logs = (schedule || [])
+        const plan = currentTermPlans?.[detailState.courseId] || createDefaultCoursePlan({ course, termKey: currentTermKey, teachers: effectiveCourseTeacherMap?.[detailState.courseId] || [] });
+        const detailSourceEntries = viewMode === 'manual'
+          ? (groupId ? groupPlannerLogs : (schedule || []))
+          : currentTermScheduleEntries;
+        const teacherCounts = getCourseTeacherCountsFromSchedule(detailSourceEntries, detailState.courseId);
+        const logs = detailSourceEntries
           .filter(entry => entry && entry.courseId === detailState.courseId)
           .slice()
           .sort((a, b) => new Date(b.loggedAt || 0) - new Date(a.loggedAt || 0));
@@ -745,7 +899,7 @@ export default function ClassManagement() {
                   </div>
                   <div style={{ padding: 14, border: '1px solid var(--border)', borderRadius: 14 }}>
                     <div style={{ fontSize: 12, color: 'var(--muted)' }}>Completed</div>
-                    <div style={{ fontSize: 22, fontWeight: 800 }}>{(schedule || []).filter(entry => entry.courseId === detailState.courseId).length}</div>
+                    <div style={{ fontSize: 22, fontWeight: 800 }}>{logs.length}</div>
                   </div>
                   <div style={{ padding: 14, border: '1px solid var(--border)', borderRadius: 14 }}>
                     <div style={{ fontSize: 12, color: 'var(--muted)' }}>Weekly target</div>

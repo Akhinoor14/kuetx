@@ -261,6 +261,17 @@ service cloud.firestore {
       allow read: if isAdmin() || isHeadOfOps();
     }
 
+    // Collection-group read for 'members', scoped to Admin/Head of Ops
+    // only (narrower than the roles one above — member docs carry name/
+    // roll/email across every class, so this is real PII breadth, not
+    // just role metadata). Used by the Founder's "Staff & Roles" view to
+    // resolve a global staff-role holder's uid into a display name/roll,
+    // since staff/{uid}/roles/{roleId} itself stores neither (see
+    // getStaffDisplayInfo in staffSync.js).
+    match /{path=**}/members/{memberUid} {
+      allow read: if isAdmin() || isHeadOfOps();
+    }
+
     match /staff/{targetUid}/roles/{roleId} {
       allow read: if isAdmin() || isHeadOfOps() || request.auth.uid == targetUid
         // Senior Campus Leads need to see the Campus Leads in their own
@@ -432,6 +443,17 @@ service cloud.firestore {
         allow write: if isAdmin() || isCLFor(groupId) || isSCLForGroup(groupId) || isHeadOfOps();
       }
 
+      // Shared Class Planner settings (courseTeacherMap + per-course plan
+      // targets like plannedTotalClasses/perWeekTarget). Same authority as
+      // routineEntries/assignmentEntries — any CR/ACR of the group can
+      // read/write this single doc so co-CRs see the same targets instead
+      // of siloed personal copies.
+      match /meta/plannerSettings {
+        allow read: if isAdmin() || isGroupMember(groupId);
+        allow create, update: if isContentEditor(groupId);
+        allow delete: if false;
+      }
+
       match /members/{memberUid} {
         allow read: if isAdmin() || request.auth.uid == memberUid || isGroupMember(groupId) || isCLFor(groupId) || isHeadOfOps() || isSCLForGroup(groupId);
         allow create: if (isRealAccount() && request.auth.uid == memberUid
@@ -586,6 +608,17 @@ service cloud.firestore {
       }
 
       match /assignmentEntries/{entryId} {
+        allow read: if isAdmin() || isGroupMember(groupId);
+        allow create, update: if isContentEditor(groupId)
+          && request.resource.data.updatedBy.uid == request.auth.uid;
+        allow delete: if false; // soft-delete only, via update
+      }
+
+      // Manual "+1" class-log entries for the Class Planner. One doc per
+      // logged class (not an array-in-one-doc) so multiple CR/ACR logging
+      // at the same time never collide — mirrors routineEntries/
+      // assignmentEntries exactly.
+      match /plannerLogEntries/{entryId} {
         allow read: if isAdmin() || isGroupMember(groupId);
         allow create, update: if isContentEditor(groupId)
           && request.resource.data.updatedBy.uid == request.auth.uid;

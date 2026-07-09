@@ -8,10 +8,11 @@ import { checkIsAdmin } from '../lib/adminAuth';
 import {
   listAllGroups, subscribeCRRequests, subscribeLeaveRequests,
   clApproveCRRequest, clRejectCRRequest, clApproveLeaveCR, clRejectLeaveCR,
+  getGroupMembersOnce,
 } from '../lib/groupSync';
 import {
   assignRole, removeRole, listStaffByRole, subscribeAllCLApplications,
-  approveCLApplication, rejectCLApplication,
+  approveCLApplication, rejectCLApplication, getStaffDisplayInfoBatch,
 } from '../lib/staffSync';
 import { CORE_TEAM_LEAD_ROLES, ROLE_LABELS, ROLE_SCOPE_KIND, ROLES } from '../lib/staffRoles';
 import { subscribePendingRollUnlockRequests, resolveRollUnlockRequest, dismissRollUnlockRequest } from '../lib/rollOwnership';
@@ -79,14 +80,13 @@ function FounderCategoryCard({ category, count, subtitle, onClick }) {
 // grid. `view` is the current category key; `onSelect` swaps it;
 // `onBack` returns to the grid. `countCtx` feeds badge counts into both
 // this row and any SubcategoryTabs the category view renders itself.
-function CategoryShell({ view, onSelect, onBack, countCtx, children }) {
+function CategoryShell({ view, onSelect, countCtx, children }) {
   return (
     <div>
       <CategorySubNav
         categories={FOUNDER_CATEGORIES}
         activeKey={view}
         onSelect={onSelect}
-        onBack={onBack}
         countCtx={countCtx}
       />
       {children}
@@ -144,7 +144,7 @@ function ApprovalsView({ onBack, onSelectCategory, countCtx }) {
   const subCtx = { ...countCtx, clApplications: clApplications.length, crRequests: allCrRequests.length, leaveRequests: allLeaveRequests.length };
 
   return (
-    <CategoryShell view="approvals" onSelect={onSelectCategory} onBack={onBack} countCtx={countCtx}>
+    <CategoryShell view="approvals" onSelect={onSelectCategory} countCtx={countCtx}>
       <h2 style={{ fontSize: 16, fontWeight: 700, margin: '0 0 12px' }}>Approvals</h2>
       <SubcategoryTabs subcategories={category.subcategories} activeKey={subTab} onSelect={setSubTab} countCtx={subCtx} />
       {err && <div className="card" style={{ padding: 8, marginBottom: 12, fontSize: 12, color: 'var(--danger)' }}>{err}</div>}
@@ -261,11 +261,27 @@ function StaffRolesView({ onBack, onSelectCategory, groups, countCtx }) {
   const [currentHolders, setCurrentHolders] = useState({});
   const [holdersError, setHoldersError] = useState(null);
   const [holdersLoading, setHoldersLoading] = useState(false);
+  // 'all' or a specific role key — lets the Founder jump straight to one
+  // role's holders instead of always scrolling the full list. Only roles
+  // that currently HAVE holders show as chips (an empty-role chip would
+  // just be dead weight in a list that's meant to stay compact).
+  const [holderFilter, setHolderFilter] = useState('all');
+  // uid -> { name, roll }, resolved separately from the role docs
+  // themselves (which only ever store uid — see getStaffDisplayInfo in
+  // staffSync.js for why a second lookup is needed here).
+  const [displayInfo, setDisplayInfo] = useState({});
+
+  const resolveDisplayInfo = async (holdersByRole) => {
+    const allUids = Object.values(holdersByRole).flat().map((h) => h.uid);
+    const info = await getStaffDisplayInfoBatch(allUids);
+    setDisplayInfo((prev) => ({ ...prev, ...info }));
+  };
 
   const refreshHolders = async (role) => {
     try {
       const list = await listStaffByRole(role);
       setCurrentHolders((prev) => ({ ...prev, [role]: list }));
+      resolveDisplayInfo({ [role]: list });
       return list;
     } catch (err) {
       setCurrentHolders((prev) => ({ ...prev, [role]: [] }));
@@ -307,6 +323,7 @@ function StaffRolesView({ onBack, onSelectCategory, groups, countCtx }) {
       setHoldersError(nextError);
       setHoldersLoading(false);
       reportStaffRoleHolders(nextHolders, nextError);
+      resolveDisplayInfo(nextHolders);
     };
     loadAllHolders().catch((err) => {
       if (cancelled) return;
@@ -334,7 +351,7 @@ function StaffRolesView({ onBack, onSelectCategory, groups, countCtx }) {
   const subCtx = { ...countCtx, staffHolders: totalHolders };
 
   return (
-    <CategoryShell view="staff" onSelect={onSelectCategory} onBack={onBack} countCtx={countCtx}>
+    <CategoryShell view="staff" onSelect={onSelectCategory} countCtx={countCtx}>
       <h2 style={{ fontSize: 16, fontWeight: 700, margin: '0 0 12px' }}>Staff & Roles</h2>
       <SubcategoryTabs subcategories={category.subcategories} activeKey="holders" onSelect={() => {}} countCtx={subCtx} />
 
@@ -366,43 +383,78 @@ function StaffRolesView({ onBack, onSelectCategory, groups, countCtx }) {
           <div style={{ fontSize: 12, color: 'var(--danger)', marginBottom: 10 }}>{holdersError}</div>
         )}
         {holdersLoading && <EmptyState>Loading current role holders…</EmptyState>}
-        {totalHolders === 0 && <EmptyState>No one holds a staff role yet.</EmptyState>}
-        <p style={{ fontSize: 11, color: 'var(--muted)', marginBottom: 12 }}>
-          Each role is shown separately. If one person holds multiple roles, they appear in every relevant role segment.
-          Founder can revoke or remove any holder from here.
-        </p>
-        {ALL_ASSIGNABLE_ROLES.map((r) => {
-          const holders = currentHolders[r] || [];
-          return (
-            <div key={r} style={{ marginBottom: 12, paddingBottom: 10, borderBottom: '1px solid var(--border)' }}>
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, marginBottom: 6 }}>
-                <div style={{ fontSize: 12, fontWeight: 800 }}>{ROLE_LABELS[r]}</div>
-                <div style={{ fontSize: 11, color: 'var(--muted)' }}>{holders.length} holder{holders.length === 1 ? '' : 's'}</div>
-              </div>
-              {holders.length === 0 ? (
-                <EmptyState>No one holds this role.</EmptyState>
-              ) : (
-                holders.map((h) => (
-                  <div key={`${r}-${h.id}`} style={{ fontSize: 12, color: 'var(--muted)', display: 'flex', justifyContent: 'space-between', gap: 12, padding: '3px 0' }}>
-                    <span>
-                      {h.name || h.uid}{' '}
-                      <span style={{ color: 'var(--muted)' }}>
-                        {h.scope?.dept ? `— ${h.scope.dept}` : h.scope?.groupId ? `— ${h.scope.groupId}` : ''}
-                      </span>
-                    </span>
-                    <button
-                      className="btn btn-sm btn-secondary"
-                      title="Revoke this role from the holder"
-                      onClick={async () => { await removeRole(h.uid, h.role, h.scope); refreshHolders(r); }}
-                    >
-                      Revoke
-                    </button>
-                  </div>
-                ))
-              )}
+        {!holdersLoading && totalHolders === 0 && <EmptyState>No one holds a staff role yet.</EmptyState>}
+        {!holdersLoading && totalHolders > 0 && (
+          <>
+            <p style={{ fontSize: 11, color: 'var(--muted)', marginBottom: 10 }}>
+              Founder can revoke any holder below. A person holding multiple roles appears once per role.
+            </p>
+            <div style={{ display: 'flex', gap: 6, overflowX: 'auto', paddingBottom: 8, marginBottom: 12 }}>
+              <button
+                onClick={() => setHolderFilter('all')}
+                className="btn btn-sm"
+                style={{
+                  whiteSpace: 'nowrap',
+                  background: holderFilter === 'all' ? 'var(--accentBg, #eef2ff)' : 'transparent',
+                  color: holderFilter === 'all' ? 'var(--accent, #4f46e5)' : 'var(--muted)',
+                  border: holderFilter === 'all' ? '1px solid var(--accent, #4f46e5)' : '1px solid var(--border)',
+                  fontWeight: holderFilter === 'all' ? 700 : 500,
+                }}
+              >
+                All ({totalHolders})
+              </button>
+              {ALL_ASSIGNABLE_ROLES.filter((r) => (currentHolders[r]?.length || 0) > 0).map((r) => (
+                <button
+                  key={r}
+                  onClick={() => setHolderFilter(r)}
+                  className="btn btn-sm"
+                  style={{
+                    whiteSpace: 'nowrap',
+                    background: holderFilter === r ? 'var(--accentBg, #eef2ff)' : 'transparent',
+                    color: holderFilter === r ? 'var(--accent, #4f46e5)' : 'var(--muted)',
+                    border: holderFilter === r ? '1px solid var(--accent, #4f46e5)' : '1px solid var(--border)',
+                    fontWeight: holderFilter === r ? 700 : 500,
+                  }}
+                >
+                  {ROLE_LABELS[r]} ({currentHolders[r].length})
+                </button>
+              ))}
             </div>
-          );
-        })}
+
+            <div className="staff-holders-grid">
+              {ALL_ASSIGNABLE_ROLES
+                .filter((r) => holderFilter === 'all' || holderFilter === r)
+                .filter((r) => (currentHolders[r]?.length || 0) > 0)
+                .flatMap((r) => (currentHolders[r] || []).map((h) => {
+                  const info = displayInfo[h.uid];
+                  const label = info?.name
+                    ? `${info.name}${info.roll ? ` (${info.roll})` : ''}`
+                    : h.uid;
+                  return (
+                    <div key={`${r}-${h.id}`} className="staff-holder-card">
+                      <div style={{ fontSize: 10, fontWeight: 800, color: 'var(--accent)', textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: 4 }}>
+                        {ROLE_LABELS[r]}
+                      </div>
+                      <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', wordBreak: 'break-word' }}>{label}</div>
+                      {(h.scope?.dept || h.scope?.groupId) && (
+                        <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 2 }}>
+                          {h.scope?.dept || h.scope?.groupId}
+                        </div>
+                      )}
+                      <button
+                        className="btn btn-sm btn-secondary"
+                        title="Revoke this role from the holder"
+                        onClick={async () => { await removeRole(h.uid, h.role, h.scope); refreshHolders(r); }}
+                        style={{ marginTop: 8, width: '100%' }}
+                      >
+                        Revoke
+                      </button>
+                    </div>
+                  );
+                }))}
+            </div>
+          </>
+        )}
       </Section>
     </CategoryShell>
   );
@@ -459,8 +511,25 @@ function ClassesView({ onBack, onSelectCategory, countCtx }) {
   const [groups, setGroups] = useState(null);
   const [dept, setDept] = useState(null);
   const [batch, setBatch] = useState(null);
+  // Per-group member counts, fetched as a second async layer after `groups`
+  // resolves — so dept/batch cards render immediately with names/batch
+  // counts, and the student-count numbers pop in once available instead of
+  // blocking the whole view on N parallel roster fetches.
+  const [memberCounts, setMemberCounts] = useState(null);
 
   useEffect(() => { listAllGroups().then(setGroups); }, []);
+
+  useEffect(() => {
+    if (!groups) return;
+    let cancelled = false;
+    Promise.all(
+      groups.map(async (g) => ({ groupId: g.id, count: (await getGroupMembersOnce(g.id)).length })),
+    ).then((rows) => {
+      if (cancelled) return;
+      setMemberCounts(Object.fromEntries(rows.map((r) => [r.groupId, r.count])));
+    });
+    return () => { cancelled = true; };
+  }, [groups]);
 
   const byDept = useMemo(() => {
     if (!groups) return {};
@@ -478,6 +547,19 @@ function ClassesView({ onBack, onSelectCategory, countCtx }) {
     return map;
   }, [groups]);
 
+  // Student totals derived from memberCounts — undefined/null-safe so a
+  // dept/batch renders its count as soon as memberCounts is available,
+  // without waiting on every single group's fetch if one is still pending.
+  const studentTotalForGroupIds = (groupIds) => {
+    if (!memberCounts) return null;
+    return groupIds.reduce((sum, gid) => sum + (memberCounts[gid] ?? 0), 0);
+  };
+  const studentTotalForDept = (d) => {
+    if (!memberCounts) return null;
+    const groupIds = Object.values(byDept[d] || {}).flat();
+    return studentTotalForGroupIds(groupIds);
+  };
+
   const depts = Object.keys(byDept).sort();
   const subtitle = resolveSubtitle(getFounderCategory('classes'), { ...countCtx, classCount: groups?.length });
 
@@ -491,14 +573,19 @@ function ClassesView({ onBack, onSelectCategory, countCtx }) {
       // Rare: more than one group under the same dept+batch — let the
       // Founder pick which before showing a roster.
       return (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-          {groupIds.map((g) => (
-            <button key={g} onClick={() => setBatch(`${batch}::${g}`)}
-              className="card" style={{ padding: 12, textAlign: 'left', cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <span style={{ fontSize: 13, fontWeight: 600 }}>{g}</span>
-              <Icons.ChevronRight size={14} color="var(--muted)" />
-            </button>
-          ))}
+        <div className="classes-drilldown-grid">
+          {groupIds.map((g) => {
+            const count = memberCounts?.[g];
+            return (
+              <button key={g} onClick={() => setBatch(`${batch}::${g}`)}
+                className="card" style={{ padding: 12, textAlign: 'left', cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <span style={{ fontSize: 13, fontWeight: 600 }}>{g}</span>
+                <span style={{ fontSize: 11, color: 'var(--muted)', display: 'flex', alignItems: 'center', gap: 4 }}>
+                  {count != null && `${count} students`} <Icons.ChevronRight size={14} />
+                </span>
+              </button>
+            );
+          })}
         </div>
       );
     }
@@ -507,31 +594,38 @@ function ClassesView({ onBack, onSelectCategory, countCtx }) {
     if (dept) {
       const batches = Object.keys(byDept[dept] || {}).sort();
       return (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+        <div className="classes-drilldown-grid">
           {batches.length === 0 && <EmptyState>No batches in {dept} yet.</EmptyState>}
-          {batches.map((b) => (
-            <button key={b} onClick={() => setBatch(b)}
-              className="card" style={{ padding: 12, textAlign: 'left', cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <span style={{ fontSize: 14, fontWeight: 700 }}>{b}</span>
-              <Icons.ChevronRight size={14} color="var(--muted)" />
-            </button>
-          ))}
+          {batches.map((b) => {
+            const count = studentTotalForGroupIds(byDept[dept][b]);
+            return (
+              <button key={b} onClick={() => setBatch(b)}
+                className="card" style={{ padding: 12, textAlign: 'left', cursor: 'pointer', display: 'flex', flexDirection: 'column', gap: 2 }}>
+                <span style={{ fontSize: 14, fontWeight: 700 }}>{b}</span>
+                <span style={{ fontSize: 11, color: 'var(--muted)', display: 'flex', alignItems: 'center', gap: 4 }}>
+                  {count != null ? `${count} students` : '\u00A0'} <Icons.ChevronRight size={12} style={{ marginLeft: 'auto' }} />
+                </span>
+              </button>
+            );
+          })}
         </div>
       );
     }
 
     // Nothing selected -> departments.
     return (
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+      <div className="classes-drilldown-grid">
         {depts.length === 0 && <EmptyState>No classes yet.</EmptyState>}
         {depts.map((d) => {
           const batchCount = Object.keys(byDept[d]).length;
+          const studentCount = studentTotalForDept(d);
           return (
             <button key={d} onClick={() => setDept(d)}
-              className="card" style={{ padding: 12, textAlign: 'left', cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              className="card" style={{ padding: 12, textAlign: 'left', cursor: 'pointer', display: 'flex', flexDirection: 'column', gap: 2 }}>
               <span style={{ fontSize: 14, fontWeight: 700 }}>{d}</span>
-              <span style={{ fontSize: 12, color: 'var(--muted)', display: 'flex', alignItems: 'center', gap: 4 }}>
-                {batchCount} batch{batchCount > 1 ? 'es' : ''} <Icons.ChevronRight size={14} />
+              <span style={{ fontSize: 11, color: 'var(--muted)', display: 'flex', alignItems: 'center', gap: 4 }}>
+                {batchCount} batch{batchCount > 1 ? 'es' : ''}{studentCount != null ? ` · ${studentCount} students` : ''}
+                <Icons.ChevronRight size={12} style={{ marginLeft: 'auto' }} />
               </span>
             </button>
           );
@@ -541,7 +635,7 @@ function ClassesView({ onBack, onSelectCategory, countCtx }) {
   };
 
   return (
-    <CategoryShell view="classes" onSelect={onSelectCategory} onBack={onBack} countCtx={countCtx}>
+    <CategoryShell view="classes" onSelect={onSelectCategory} countCtx={countCtx}>
       <h2 style={{ fontSize: 16, fontWeight: 700, margin: '0 0 4px' }}>Classes & Students</h2>
       <p style={{ fontSize: 12, color: 'var(--muted)', margin: '0 0 14px' }}>{subtitle}</p>
       <ClassesBreadcrumb dept={dept} batch={batch} onDept={setDept} onBatch={setBatch} />
@@ -634,7 +728,7 @@ function TrustSafetyView({ onBack, onSelectCategory, countCtx }) {
   const subCtx = { ...countCtx, emailFlags: flags?.length || 0, rollRequests: rollRequests.length };
 
   return (
-    <CategoryShell view="trust" onSelect={onSelectCategory} onBack={onBack} countCtx={countCtx}>
+    <CategoryShell view="trust" onSelect={onSelectCategory} countCtx={countCtx}>
       <h2 style={{ fontSize: 16, fontWeight: 700, margin: '0 0 12px' }}>Trust & Safety</h2>
       <SubcategoryTabs subcategories={category.subcategories} activeKey={subTab} onSelect={setSubTab} countCtx={subCtx} />
 
@@ -716,19 +810,48 @@ function CommunicationView({ onBack, onSelectCategory, groups, countCtx }) {
   };
 
   return (
-    <CategoryShell view="comms" onSelect={onSelectCategory} onBack={onBack} countCtx={countCtx}>
+    <CategoryShell view="comms" onSelect={onSelectCategory} countCtx={countCtx}>
       <h2 style={{ fontSize: 16, fontWeight: 700, margin: '0 0 12px' }}>Communication</h2>
       <Section title="Send a notice">
-        <form onSubmit={handleSendNotice} style={{ display: 'flex', flexDirection: 'column', gap: 8, maxWidth: 480 }}>
-          <input type="text" placeholder="Title" value={title} onChange={(e) => setTitle(e.target.value)}
-            style={{ padding: '8px 10px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--inputBg)' }} />
-          <textarea placeholder="Message" value={body} onChange={(e) => setBody(e.target.value)} rows={3}
-            style={{ padding: '8px 10px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--inputBg)' }} />
-          <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
-            <label style={{ fontSize: 13 }}><input type="radio" checked={audienceType === 'all'} onChange={() => setAudienceType('all')} /> Everyone</label>
-            <label style={{ fontSize: 13 }}><input type="radio" checked={audienceType === 'batch'} onChange={() => setAudienceType('batch')} /> One batch</label>
-            <label style={{ fontSize: 13 }}><input type="radio" checked={audienceType === 'group'} onChange={() => setAudienceType('group')} /> One class</label>
+        <form onSubmit={handleSendNotice} style={{ display: 'flex', flexDirection: 'column', gap: 12, maxWidth: 480 }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+            <label style={{ fontSize: 11, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Title</label>
+            <input type="text" placeholder="e.g. Mid-term routine update" value={title} onChange={(e) => setTitle(e.target.value)}
+              style={{ padding: '8px 10px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--inputBg)' }} />
           </div>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+            <label style={{ fontSize: 11, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Message</label>
+            <textarea placeholder="What do you want to tell them?" value={body} onChange={(e) => setBody(e.target.value)} rows={3}
+              style={{ padding: '8px 10px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--inputBg)' }} />
+          </div>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+            <label style={{ fontSize: 11, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Audience</label>
+            <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+              {[
+                { key: 'all', label: 'Everyone' },
+                { key: 'batch', label: 'One batch' },
+                { key: 'group', label: 'One class' },
+              ].map((opt) => (
+                <button
+                  key={opt.key}
+                  type="button"
+                  onClick={() => setAudienceType(opt.key)}
+                  className="btn btn-sm"
+                  style={{
+                    background: audienceType === opt.key ? 'var(--accentBg, #eef2ff)' : 'transparent',
+                    color: audienceType === opt.key ? 'var(--accent, #4f46e5)' : 'var(--muted)',
+                    border: audienceType === opt.key ? '1px solid var(--accent, #4f46e5)' : '1px solid var(--border)',
+                    fontWeight: audienceType === opt.key ? 700 : 500,
+                  }}
+                >
+                  {opt.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
           {audienceType === 'batch' && (
             <input type="text" placeholder="Batch, e.g. 2K23" value={batchInput} onChange={(e) => setBatchInput(e.target.value)}
               style={{ padding: '8px 10px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--inputBg)' }} />

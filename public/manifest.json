@@ -1,7 +1,7 @@
 {
   "name": "KUETx — Student Life OS",
   "short_name": "KUETx",
-  "version": "4.1.2",
+  "version": "4.1.6",
   "description": "Comprehensive student life tracker for KUET students — academics, attendance, finance, wellbeing and more.",
   "start_url": "/",
   "display": "standalone",
