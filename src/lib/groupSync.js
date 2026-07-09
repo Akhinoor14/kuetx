@@ -447,8 +447,20 @@ export function subscribeCRRequests(groupId, callback) {
  * Returns { passed: bool, conditions: { check: bool, reason: string }[] }
  */
 export async function diagnosticCheckCRRequestsCreate(groupId, profile) {
+  return diagnosticCheckCRRequestsWrite(groupId, profile);
+}
+
+/**
+ * Mirror of Firestore rule: allow crRequests/create or crRequests/update
+ * Returns { passed: bool, conditions: { check: bool, reason: string }[] }
+ */
+export async function diagnosticCheckCRRequestsWrite(groupId, profile) {
   const uid = auth.currentUser?.uid;
   const conditions = [];
+  const requestRef = doc(db, 'groups', groupId, 'crRequests', uid);
+  const existingRequestSnap = await getDocFromServer(requestRef).catch(() => null);
+  const existingStatus = existingRequestSnap?.exists() ? existingRequestSnap.data()?.status : null;
+  const isUpdateBranch = existingRequestSnap?.exists() && existingStatus !== 'pending';
   
   // Rule condition 1: isSignedIn()
   const isSignedIn = uid != null;
@@ -488,6 +500,13 @@ export async function diagnosticCheckCRRequestsCreate(groupId, profile) {
     check: isVerified,
     reason: `isVerifiedMember: ${verifiedReason}`,
   });
+
+  conditions.push({
+    check: true,
+    reason: existingRequestSnap?.exists()
+      ? `existingRequest: ✓ YES - current status is ${String(existingStatus)}`
+      : 'existingRequest: ✗ NO - no prior request doc found',
+  });
   
   // Rule condition 3: request.auth.uid == requestUid (doc id matches uid)
   const uidMatches = true; // always true in our case
@@ -496,15 +515,25 @@ export async function diagnosticCheckCRRequestsCreate(groupId, profile) {
     reason: `uid==requestUid: ✓ YES - doc id matches requester`,
   });
   
-  // Rule condition 4: request.resource.data.type != 'leave'
-  const noLeaveType = true; // we never set type:'leave' in requestCR
-  conditions.push({
-    check: noLeaveType,
-    reason: `type != 'leave': ✓ YES - no type field in fresh request`,
-  });
+  if (isUpdateBranch) {
+    const updateAllowed = existingStatus !== 'pending';
+    conditions.push({
+      check: updateAllowed,
+      reason: updateAllowed
+        ? `update.status gate: ✓ YES - existing status is ${existingStatus}, so resubmission path is allowed`
+        : `update.status gate: ✗ NO - existing status is pending, so requestCR should not be taking the update branch`,
+    });
+  } else {
+    // Rule condition 4: request.resource.data.type != 'leave'
+    const noLeaveType = true; // we never set type:'leave' in requestCR
+    conditions.push({
+      check: noLeaveType,
+      reason: `type != 'leave': ✓ YES - no type field in fresh request`,
+    });
+  }
   
   const allPass = conditions.every(c => c.check);
-  return { passed: allPass, conditions, memberData };
+  return { passed: allPass, conditions, memberData, existingStatus, isUpdateBranch };
 }
 
 export function logCRRequestDiagnostics(groupId, profile, diagnos) {

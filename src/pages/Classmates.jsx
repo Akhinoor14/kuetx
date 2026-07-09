@@ -3,7 +3,7 @@ import { Users2 } from 'lucide-react';
 import { waitForPendingWrites } from 'firebase/firestore';
 import { getProfile } from '../store/store';
 import { getGroupId, getGroupLabel } from '../lib/groupUtils';
-import { joinGroup, requestCR, subscribeCRStatus, subscribeMembers, syncOwnVerification, waitForOwnMembership, waitForOwnVerification, MAX_CR, diagnosticCheckCRRequestsCreate, logCRRequestDiagnostics } from '../lib/groupSync';
+import { joinGroup, requestCR, subscribeCRStatus, subscribeMembers, syncOwnVerification, waitForOwnMembership, waitForOwnVerification, MAX_CR, diagnosticCheckCRRequestsWrite, logCRRequestDiagnostics } from '../lib/groupSync';
 import { checkCLVacant, applyForCampusLead } from '../lib/staffSync';
 import { isRollInstitutionallyVerified } from '../lib/kuetEmailVerify';
 import { auth, db } from '../lib/firebase';
@@ -211,7 +211,7 @@ export default function Classmates() {
         } catch (crError) {
           if (crError?.code === 'permission-denied' || /permission/i.test(crError?.message)) {
             // Run diagnostics to find which exact rule condition failed
-            const diagnos = await diagnosticCheckCRRequestsCreate(groupId, profile);
+            const diagnos = await diagnosticCheckCRRequestsWrite(groupId, profile);
             logCRRequestDiagnostics(groupId, profile, diagnos);
           }
           throw crError;
