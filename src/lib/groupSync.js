@@ -263,22 +263,31 @@ export async function removeMember(groupId, targetUid) {
 export async function syncOwnVerification(groupId, uid) {
   if (!groupId || !uid) return;
   const ref_ = doc(db, 'groups', groupId, 'members', uid);
-  // Must read from the server, not the local cache: getDoc() is
-  // cache-first and on a brand-new device (right after the initial bulk
-  // local->Firestore push) the cache can be stale or briefly empty. A
-  // stale/missing cache read here makes this silently no-op (or write
-  // stale data back), leaving members/{uid}.verified stuck at false even
-  // though the account really is verified — which then makes
-  // waitForOwnVerification() poll for up to 5*400ms and either time out,
-  // or (worse) appear to succeed against a doc that was never actually
-  // updated, only to have the real write (e.g. crRequests/{uid}) get
-  // rejected server-side by isVerifiedMember(groupId). Every other
-  // verification-critical read in this file (waitForOwnMembership,
-  // waitForOwnVerification, requestCR's dup-check) already uses
-  // getDocFromServer for this same reason — keep this one consistent.
-  const snap = await getDocFromServer(ref_);
-  if (snap.exists() && snap.data().verified !== true) {
-    await updateDoc(ref_, { verified: true });
+  
+  try {
+    // Must read from the server, not the local cache: getDoc() is
+    // cache-first and on a brand-new device (right after the initial bulk
+    // local->Firestore push) the cache can be stale or briefly empty. A
+    // stale/missing cache read here makes this silently no-op (or write
+    // stale data back), leaving members/{uid}.verified stuck at false even
+    // though the account really is verified — which then makes
+    // waitForOwnVerification() poll for up to 10*400ms and either time out,
+    // or (worse) appear to succeed against a doc that was never actually
+    // updated, only to have the real write (e.g. crRequests/{uid}) get
+    // rejected server-side by isVerifiedMember(groupId). Every other
+    // verification-critical read in this file (waitForOwnMembership,
+    // waitForOwnVerification, requestCR's dup-check) already uses
+    // getDocFromServer for this same reason — keep this one consistent.
+    const snap = await getDocFromServer(ref_);
+    if (snap.exists() && snap.data().verified !== true) {
+      await updateDoc(ref_, { verified: true });
+    }
+  } catch (syncErr) {
+    // Member doc read failed or update failed — log for diagnostics
+    console.warn('[Verification Sync] Failed to sync verification for', groupId, uid, ':', syncErr?.code, syncErr?.message);
+    if (syncErr?.code === 'permission-denied') {
+      console.warn('[Verification Sync] Permission denied — member doc may not exist yet or roll verification incomplete');
+    }
   }
 }
 
@@ -287,8 +296,10 @@ export async function syncOwnVerification(groupId, uid) {
  * This is used after syncOwnVerification() before writes that Firestore
  * rules gate on isVerifiedMember(groupId), so we don't race the server's
  * view of the newly-updated member doc.
+ * 
+ * Increased retries for new-device scenarios where initial sync takes longer.
  */
-export async function waitForOwnVerification(groupId, retries = 5, delayMs = 400) {
+export async function waitForOwnVerification(groupId, retries = 10, delayMs = 400) {
   const uid = auth.currentUser?.uid;
   if (!uid || !groupId) return false;
   for (let i = 0; i < retries; i++) {
@@ -297,9 +308,14 @@ export async function waitForOwnVerification(groupId, retries = 5, delayMs = 400
       if (snap.exists() && snap.data().verified === true) return true;
     } catch (e) {
       // permission-denied while the verification write is still propagating — retry
+      if (i === retries - 1) {
+        // Last attempt, log the error for debugging
+        console.warn('[Verification Sync] Final verification check failed:', e?.code, e?.message);
+      }
     }
     await new Promise((r) => setTimeout(r, delayMs));
   }
+  console.warn('[Verification Sync] Timed out waiting for verified:true after', retries * delayMs, 'ms');
   return false;
 }
 
@@ -362,7 +378,16 @@ export async function requestCR(groupId, profile) {
   if (!uid || !groupId) return;
   
   const ref_ = doc(db, 'groups', groupId, 'crRequests', uid);
-  const existing = await getDocFromServer(ref_);
+  
+  let existing;
+  try {
+    existing = await getDocFromServer(ref_);
+  } catch (e) {
+    // If read fails (e.g. permission-denied while doc propagating), 
+    // assume doc doesn't exist yet and try fresh request
+    console.warn('[CR REQUEST] Failed to check existing crRequests doc, treating as fresh request:', e?.code, e?.message);
+    existing = { exists: () => false };
+  }
   
   if (existing.exists()) {
     const status = existing.data()?.status;
