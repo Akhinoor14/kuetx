@@ -360,15 +360,30 @@ function _countRoles(memberDocs) {
 export async function requestCR(groupId, profile) {
   const uid = auth.currentUser?.uid;
   if (!uid || !groupId) return;
+  
   const ref_ = doc(db, 'groups', groupId, 'crRequests', uid);
   const existing = await getDocFromServer(ref_);
-  if (existing.exists() && existing.data()?.status === 'pending') {
-    throw new Error('You already have a pending CR request. Wait for your Campus Lead to act on it first.');
+  
+  if (existing.exists()) {
+    const status = existing.data()?.status;
+    // If pending already, user must wait
+    if (status === 'pending') {
+      throw new Error('You already have a pending CR request. Wait for your Campus Lead to act on it first.');
+    }
+    // If rejected/revoked/approved, this is a RESUBMISSION — update back to pending
+    // (matches Firestore rule's resubmission path: resource.status != 'pending' && 
+    // request.status == 'pending')
+    await updateDoc(ref_, {
+      status: 'pending',
+      requestedAt: serverTimestamp(),
+    });
+  } else {
+    // Fresh request — doc doesn't exist yet
+    await setDoc(ref_, {
+      name: profile?.name || '', roll: profile?.studentId || '',
+      status: 'pending', requestedAt: serverTimestamp(),
+    });
   }
-  await setDoc(ref_, {
-    name: profile?.name || '', roll: profile?.studentId || '',
-    status: 'pending', requestedAt: serverTimestamp(),
-  });
 }
 
 export function subscribeCRRequests(groupId, callback) {
@@ -450,27 +465,30 @@ export async function diagnosticCheckCRRequestsCreate(groupId, profile) {
 export function logCRRequestDiagnostics(groupId, profile, diagnos) {
   const failedCondition = diagnos.conditions.find(c => !c.check);
   
+  const failureReason = failedCondition 
+    ? failedCondition.reason 
+    : 'All rule conditions passed - write should succeed. If you still see permission-denied, check browser console network tab for exact error.';
+  
   console.log('%c━━━ [CR REQUEST FAILED] ━━━', 'color: #ff3333; font-size: 14px; font-weight: bold; background: #ffe6e6; padding: 4px 8px;');
-  console.log('%c→ Reason: ' + (failedCondition?.reason || 'Unknown'), 'color: #ff3333; font-size: 13px; font-weight: bold;');
+  console.log('%c→ Rule Violation: ' + failureReason, 'color: #ff3333; font-size: 13px; font-weight: bold;');
   console.log('');
   
-  console.group('[Full Firestore Rule Check]');
+  console.group('[Firestore crRequests/create Rule Analysis]');
   console.log('groupId:', groupId);
   console.log('uid:', auth.currentUser?.uid);
   console.log('');
   diagnos.conditions.forEach((c, i) => {
-    const style = c.check ? 'color: #00aa00; font-weight: normal' : 'color: #ff3333; font-weight: bold';
     console.log(`[${i + 1}] ${c.reason}`);
   });
   console.log('');
   
   if (diagnos.memberData) {
-    console.log('Member doc data:');
+    console.log('Member doc state:');
     console.table(diagnos.memberData);
     console.log('');
   }
   
-  console.log('%cResult: ' + (diagnos.passed ? 'PASS ✓' : 'FAIL ✗'), diagnos.passed ? 'color: #00aa00; font-weight: bold' : 'color: #ff3333; font-weight: bold');
+  console.log('%cResult: ' + (diagnos.passed ? 'PASS ✓ - should succeed' : 'FAIL ✗ - rule rejects'), diagnos.passed ? 'color: #00aa00; font-weight: bold' : 'color: #ff3333; font-weight: bold');
   console.groupEnd();
 }
 
