@@ -378,6 +378,13 @@ export async function requestCR(groupId, profile) {
   if (!uid || !groupId) return;
   
   const ref_ = doc(db, 'groups', groupId, 'crRequests', uid);
+  const requestData = {
+    uid,
+    name: profile?.name || '',
+    roll: profile?.studentId || '',
+    status: 'pending',
+    requestedAt: serverTimestamp(),
+  };
   
   let existing;
   try {
@@ -398,16 +405,29 @@ export async function requestCR(groupId, profile) {
     // If rejected/revoked/approved, this is a RESUBMISSION — update back to pending
     // (matches Firestore rule's resubmission path: resource.status != 'pending' && 
     // request.status == 'pending')
-    await updateDoc(ref_, {
-      status: 'pending',
-      requestedAt: serverTimestamp(),
-    });
+    try {
+      await updateDoc(ref_, requestData);
+    } catch (err) {
+      if (err?.code !== 'permission-denied') throw err;
+      // A brand-new device can still be catching up with the member-doc
+      // writes that make isVerifiedMember(groupId) true server-side.
+      // Retry once after a fresh server read instead of surfacing a false
+      // permanent failure when the rule conditions are already satisfied.
+      await waitForOwnVerification(groupId);
+      await waitForOwnMembership(groupId);
+      await updateDoc(ref_, requestData);
+    }
   } else {
     // Fresh request — doc doesn't exist yet
-    await setDoc(ref_, {
-      name: profile?.name || '', roll: profile?.studentId || '',
-      status: 'pending', requestedAt: serverTimestamp(),
-    });
+    try {
+      await setDoc(ref_, requestData);
+    } catch (err) {
+      if (err?.code !== 'permission-denied') throw err;
+      // Same first-login race as the resubmission path above.
+      await waitForOwnVerification(groupId);
+      await waitForOwnMembership(groupId);
+      await setDoc(ref_, requestData);
+    }
   }
 }
 
