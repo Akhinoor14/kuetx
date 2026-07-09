@@ -458,7 +458,7 @@ export default function App() {
             // by design (see buildQueue comment).
             onClose={() => {}}
             mandatory
-            minimal={isNewlyCreatedAccount()}
+            minimal={isNewlyCreatedAccount() && !isProfileComplete(getProfile())}
             onSave={(formData) => {
               const result = validateProfileForSave(formData);
               if (!result.ok) {

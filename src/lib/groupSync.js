@@ -1086,6 +1086,13 @@ export async function postGroupNotice(groupId, profile, { title, body }) {
 // ---------------------------------------------------------------------
 
 export function subscribeGlobalNotices(callback) {
+  // Avoid attaching a global notices listener for unsigned/anonymous
+  // visitors — many deployments lock down `notices` reads to real
+  // accounts, and mounting this listener immediately on every page
+  // load floods the console with permission-denied errors for guests.
+  // Callers should still call this freely; when no real user exists
+  // we return a no-op unsubscribe.
+  if (!auth.currentUser || auth.currentUser.isAnonymous) return () => {};
   const key = 'globalNotices';
   return _subscribeSingleton(
     key,

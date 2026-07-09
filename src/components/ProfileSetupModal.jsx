@@ -468,86 +468,149 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
             <div className="section" style={sectionStyle}>
               <div style={{ fontSize: 12, fontWeight: 800, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 12 }}>Academic & Identity</div>
               <div className="field-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 12 }}>
-                <div>
-                  <label style={labelStyle}>Full Name</label>
-                  <input placeholder="Your full name" value={form.name} onChange={handleChange('name')} style={fieldStyle} />
-                  {errors.name && <div style={{ fontSize: 11, color: '#dc2626', marginTop: 5 }}>{errors.name}</div>}
-                </div>
-                <div>
-                  <label style={labelStyle}>Student ID</label>
-                  <input placeholder="e.g. 2313014" value={form.studentId} onChange={handleChange('studentId')} style={fieldStyle} />
-                  {errors.studentId && <div style={{ fontSize: 11, color: '#dc2626', marginTop: 5 }}>{errors.studentId}</div>}
-                  {rollLocked?.roll === String(form.studentId || '').trim() && (
-                    <div style={{ marginTop: 10, padding: 10, border: '1px solid var(--border)', borderRadius: 8, background: 'var(--card-alt, #f9fafb)' }}>
-                      <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 6 }}>নিজে নিজে ঠিক করো</div>
-                      <div style={{ fontSize: 11, color: 'var(--muted)', marginBottom: 8 }}>
-                        তোমার KUET email (@stud.kuet.ac.bd) verify করলে এই roll number automatically তোমার account-এ চলে আসবে।
-                      </div>
-                      <KuetEmailVerifyWidget
-                        overrideRoll={rollLocked.roll}
-                        onVerified={() => {
-                          setRollLocked(null);
-                          setErrors(prev => ({ ...prev, studentId: '' }));
-                          handleSubmit({ preventDefault: () => {} });
-                        }}
-                      />
-                      <div style={{ fontSize: 11, color: 'var(--muted)', margin: '10px 0 6px' }}>
-                        KUET email verify করতে না পারলে, admin-কে সরাসরি request পাঠাও:
-                      </div>
-                      {unlockRequestState === 'sent' ? (
-                        <div style={{ fontSize: 11, color: 'var(--muted)' }}>Request পাঠানো হয়েছে। Admin দেখে resolve করবে।</div>
+                {minimal ? (
+                  <>
+                    <div>
+                      <label style={labelStyle}>Full Name</label>
+                      <input placeholder="Your full name" value={form.name} onChange={handleChange('name')} style={fieldStyle} />
+                      {errors.name && <div style={{ fontSize: 11, color: '#dc2626', marginTop: 5 }}>{errors.name}</div>}
+                    </div>
+                    <div>
+                      <label style={labelStyle}>Student ID</label>
+                      <input placeholder="e.g. 2313014" value={form.studentId} onChange={handleChange('studentId')} style={fieldStyle} />
+                      {errors.studentId && <div style={{ fontSize: 11, color: '#dc2626', marginTop: 5 }}>{errors.studentId}</div>}
+                      {rollLocked?.roll === String(form.studentId || '').trim() && (
+                        <div style={{ marginTop: 10, padding: 10, border: '1px solid var(--border)', borderRadius: 8, background: 'var(--card-alt, #f9fafb)' }}>
+                          <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 6 }}>নিজে নিজে ঠিক করো</div>
+                          <div style={{ fontSize: 11, color: 'var(--muted)', marginBottom: 8 }}>
+                            তোমার KUET email (@stud.kuet.ac.bd) verify করলে এই roll number automatically তোমার account-এ চলে আসবে।
+                          </div>
+                          <KuetEmailVerifyWidget
+                            overrideRoll={rollLocked.roll}
+                            onVerified={() => {
+                              setRollLocked(null);
+                              setErrors(prev => ({ ...prev, studentId: '' }));
+                              handleSubmit({ preventDefault: () => {} });
+                            }}
+                          />
+                          <div style={{ fontSize: 11, color: 'var(--muted)', margin: '10px 0 6px' }}>
+                            KUET email verify করতে না পারলে, admin-কে সরাসরি request পাঠাও:
+                          </div>
+                          {unlockRequestState === 'sent' ? (
+                            <div style={{ fontSize: 11, color: 'var(--muted)' }}>Request পাঠানো হয়েছে। Admin দেখে resolve করবে।</div>
+                          ) : (
+                            <button
+                              type="button"
+                              className="btn btn-sm btn-secondary"
+                              onClick={handleRequestUnlock}
+                              disabled={unlockRequestState === 'sending'}
+                            >
+                              {unlockRequestState === 'sending' ? 'Sending…' : 'Admin-কে request পাঠাও'}
+                            </button>
+                          )}
+                          {unlockRequestState === 'error' && (
+                            <div style={{ color: 'var(--danger)', fontSize: 11, marginTop: 6 }}>Request পাঠাতে সমস্যা হয়েছে, আবার চেষ্টা করো।</div>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                    <div style={{ gridColumn: '1 / -1', fontSize: 12, color: 'var(--muted)' }}>
+                      {autoCalculatedDept && isRollValid(form.studentId) ? (
+                        <div style={{ fontSize: 12, color: 'var(--accent)', fontWeight: 700 }}>✓ Auto-selected: {autoCalculatedDept}</div>
+                      ) : autoCalculatedDept ? (
+                        <div>Detected department: {autoCalculatedDept} — fix roll to auto-select.</div>
                       ) : (
-                        <button
-                          type="button"
-                          className="btn btn-sm btn-secondary"
-                          onClick={handleRequestUnlock}
-                          disabled={unlockRequestState === 'sending'}
-                        >
-                          {unlockRequestState === 'sending' ? 'Sending…' : 'Admin-কে request পাঠাও'}
-                        </button>
+                        <div>Enter a 7-digit roll number to auto-select department.</div>
                       )}
-                      {unlockRequestState === 'error' && (
-                        <div style={{ color: 'var(--danger)', fontSize: 11, marginTop: 6 }}>Request পাঠাতে সমস্যা হয়েছে, আবার চেষ্টা করো।</div>
+                      {autoCalculatedBatch ? (
+                        <div style={{ marginTop: 6 }}>✓ Batch auto-filled: {autoCalculatedBatch}</div>
+                      ) : null}
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div>
+                      <label style={labelStyle}>Full Name</label>
+                      <input placeholder="Your full name" value={form.name} onChange={handleChange('name')} style={fieldStyle} />
+                      {errors.name && <div style={{ fontSize: 11, color: '#dc2626', marginTop: 5 }}>{errors.name}</div>}
+                    </div>
+                    <div>
+                      <label style={labelStyle}>Student ID</label>
+                      <input placeholder="e.g. 2313014" value={form.studentId} onChange={handleChange('studentId')} style={fieldStyle} />
+                      {errors.studentId && <div style={{ fontSize: 11, color: '#dc2626', marginTop: 5 }}>{errors.studentId}</div>}
+                      {rollLocked?.roll === String(form.studentId || '').trim() && (
+                        <div style={{ marginTop: 10, padding: 10, border: '1px solid var(--border)', borderRadius: 8, background: 'var(--card-alt, #f9fafb)' }}>
+                          <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 6 }}>নিজে নিজে ঠিক করো</div>
+                          <div style={{ fontSize: 11, color: 'var(--muted)', marginBottom: 8 }}>
+                            তোমার KUET email (@stud.kuet.ac.bd) verify করলে এই roll number automatically তোমার account-এ চলে আসবে।
+                          </div>
+                          <KuetEmailVerifyWidget
+                            overrideRoll={rollLocked.roll}
+                            onVerified={() => {
+                              setRollLocked(null);
+                              setErrors(prev => ({ ...prev, studentId: '' }));
+                              handleSubmit({ preventDefault: () => {} });
+                            }}
+                          />
+                          <div style={{ fontSize: 11, color: 'var(--muted)', margin: '10px 0 6px' }}>
+                            KUET email verify করতে না পারলে, admin-কে সরাসরি request পাঠাও:
+                          </div>
+                          {unlockRequestState === 'sent' ? (
+                            <div style={{ fontSize: 11, color: 'var(--muted)' }}>Request পাঠানো হয়েছে। Admin দেখে resolve করবে।</div>
+                          ) : (
+                            <button
+                              type="button"
+                              className="btn btn-sm btn-secondary"
+                              onClick={handleRequestUnlock}
+                              disabled={unlockRequestState === 'sending'}
+                            >
+                              {unlockRequestState === 'sending' ? 'Sending…' : 'Admin-কে request পাঠাও'}
+                            </button>
+                          )}
+                          {unlockRequestState === 'error' && (
+                            <div style={{ color: 'var(--danger)', fontSize: 11, marginTop: 6 }}>Request পাঠাতে সমস্যা হয়েছে, আবার চেষ্টা করো।</div>
+                          )}
+                        </div>
                       )}
                     </div>
-                  )}
-                </div>
-                <div>
-                  <label style={labelStyle}>Department</label>
-                  <select
-                    value={form.dept || ''}
-                    onChange={(e) => setForm(prev => ({ ...prev, dept: e.target.value }))}
-                    disabled={isRollValid(form.studentId) && autoCalculatedDept ? true : false}
-                    style={{
-                      ...fieldStyle,
-                      opacity: isRollValid(form.studentId) && autoCalculatedDept ? 0.6 : 1,
-                      cursor: isRollValid(form.studentId) && autoCalculatedDept ? 'not-allowed' : 'pointer',
-                      transition: 'box-shadow 0.28s ease, transform 0.18s ease, border-color 0.18s ease, opacity 0.2s ease',
-                      boxShadow: deptHighlight ? '0 10px 30px rgba(59,130,246,0.14)' : 'none',
-                      transform: deptHighlight ? 'translateY(-3px)' : 'none',
-                      borderColor: deptHighlight ? 'rgba(59,130,246,0.9)' : undefined,
-                    }}
-                  >
-                    <option value="">Select department</option>
-                    {DEPARTMENTS.map(dept => (
-                      <option key={dept.code} value={dept.code}>{dept.code} - {dept.name}</option>
-                    ))}
-                  </select>
-                  {autoCalculatedDept && isRollValid(form.studentId) ? (
-                    <div style={{ fontSize: 11, color: 'var(--accent)', marginTop: 6, fontWeight: 700 }}>
-                      ✓ Auto-selected from roll: {autoCalculatedDept}
+                    <div>
+                      <label style={labelStyle}>Department</label>
+                      <select
+                        value={form.dept || ''}
+                        onChange={(e) => setForm(prev => ({ ...prev, dept: e.target.value }))}
+                        disabled={isRollValid(form.studentId) && autoCalculatedDept ? true : false}
+                        style={{
+                          ...fieldStyle,
+                          opacity: isRollValid(form.studentId) && autoCalculatedDept ? 0.6 : 1,
+                          cursor: isRollValid(form.studentId) && autoCalculatedDept ? 'not-allowed' : 'pointer',
+                          transition: 'box-shadow 0.28s ease, transform 0.18s ease, border-color 0.18s ease, opacity 0.2s ease',
+                          boxShadow: deptHighlight ? '0 10px 30px rgba(59,130,246,0.14)' : 'none',
+                          transform: deptHighlight ? 'translateY(-3px)' : 'none',
+                          borderColor: deptHighlight ? 'rgba(59,130,246,0.9)' : undefined,
+                        }}
+                      >
+                        <option value="">Select department</option>
+                        {DEPARTMENTS.map(dept => (
+                          <option key={dept.code} value={dept.code}>{dept.code} - {dept.name}</option>
+                        ))}
+                      </select>
+                      {autoCalculatedDept && isRollValid(form.studentId) ? (
+                        <div style={{ fontSize: 11, color: 'var(--accent)', marginTop: 6, fontWeight: 700 }}>
+                          ✓ Auto-selected from roll: {autoCalculatedDept}
+                        </div>
+                      ) : autoCalculatedDept ? (
+                        <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 6 }}>
+                          Detected: {autoCalculatedDept}. Please fix your roll number to auto-select.
+                        </div>
+                      ) : (
+                        <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 6 }}>
+                          Enter a 7-digit roll number to auto-select, or choose manually.
+                        </div>
+                      )}
+                      {errors.dept && <div style={{ fontSize: 11, color: '#dc2626', marginTop: 5 }}>{errors.dept}</div>}
                     </div>
-                  ) : autoCalculatedDept ? (
-                    <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 6 }}>
-                      Detected: {autoCalculatedDept}. Please fix your roll number to auto-select.
-                    </div>
-                  ) : (
-                    <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 6 }}>
-                      Enter a 7-digit roll number to auto-select, or choose manually.
-                    </div>
-                  )}
-                  {errors.dept && <div style={{ fontSize: 11, color: '#dc2626', marginTop: 5 }}>{errors.dept}</div>}
-                </div>
+                  </>
+                )}
                 {/* Session / Current Term / Term Start Date are optional —
                     hidden entirely during mandatory first-launch onboarding
                     so the very first thing a new user sees is just Name +
