@@ -360,19 +360,6 @@ function _countRoles(memberDocs) {
 export async function requestCR(groupId, profile) {
   const uid = auth.currentUser?.uid;
   if (!uid || !groupId) return;
-  
-  // Diagnostic: check member doc state before attempting write. If verified
-  // flag is false, the Firestore rule will reject the write with
-  // permission-denied, but we can give a better error message now.
-  const memberRef = doc(db, 'groups', groupId, 'members', uid);
-  const memberSnap = await getDocFromServer(memberRef);
-  if (!memberSnap.exists()) {
-    throw new Error('__MISSING_MEMBER_DOC__: member doc does not exist; call joinGroup() first');
-  }
-  if (memberSnap.data().verified !== true) {
-    throw new Error('__VERIFICATION_LOST__: member.verified is not true; re-sync verification');
-  }
-  
   const ref_ = doc(db, 'groups', groupId, 'crRequests', uid);
   const existing = await getDocFromServer(ref_);
   if (existing.exists() && existing.data()?.status === 'pending') {
@@ -393,6 +380,70 @@ export function subscribeCRRequests(groupId, callback) {
     (snap) => _snapToArray(snap).filter((r) => r.status === 'pending'),
     callback,
   );
+}
+
+/**
+ * Mirror of Firestore rule: allow crRequests/create
+ * Returns { passed: bool, conditions: { check: bool, reason: string }[] }
+ */
+export async function diagnosticCheckCRRequestsCreate(groupId, profile) {
+  const uid = auth.currentUser?.uid;
+  const conditions = [];
+  
+  // Rule condition 1: isSignedIn()
+  const isSignedIn = uid != null;
+  conditions.push({
+    check: isSignedIn,
+    reason: `isSignedIn: ${isSignedIn ? 'YES - logged in' : 'NO - not logged in!'}`,
+  });
+  
+  // Rule condition 2a: isGroupMember(groupId)
+  const memberRef = doc(db, 'groups', groupId, 'members', uid);
+  const memberSnap = await getDocFromServer(memberRef).catch(() => null);
+  const isGroupMember = memberSnap?.exists() || false;
+  conditions.push({
+    check: isGroupMember,
+    reason: `isGroupMember: ${isGroupMember ? 'YES - member doc exists' : 'NO - member doc missing!'}`,
+  });
+  
+  // Rule condition 2b: isVerifiedMember(groupId) — the verified flag
+  const isVerified = isGroupMember && memberSnap?.data()?.verified === true;
+  const verifiedValue = memberSnap?.data()?.verified;
+  conditions.push({
+    check: isVerified,
+    reason: `isVerifiedMember: ${isVerified ? 'YES - verified==true' : `NO - verified is ${verifiedValue} (not true)!`}`,
+  });
+  
+  // Rule condition 3: request.auth.uid == requestUid (doc id matches uid)
+  const uidMatches = true; // always true in our case
+  conditions.push({
+    check: uidMatches,
+    reason: `uid==requestUid: YES - doc id matches requester`,
+  });
+  
+  // Rule condition 4: request.resource.data.type != 'leave'
+  const noLeaveType = true; // we never set type:'leave' in requestCR
+  conditions.push({
+    check: noLeaveType,
+    reason: `type != 'leave': YES - no type field in fresh request`,
+  });
+  
+  const allPass = conditions.every(c => c.check);
+  return { passed: allPass, conditions };
+}
+
+export function logCRRequestDiagnostics(groupId, profile, diagnos) {
+  console.groupCollapsed('[CR Request Diagnostics]');
+  console.log('groupId:', groupId);
+  console.log('uid:', auth.currentUser?.uid);
+  console.log('');
+  diagnos.conditions.forEach((c, i) => {
+    const icon = c.check ? '✓' : '✗';
+    console.log(`${icon} [${i + 1}] ${c.reason}`);
+  });
+  console.log('');
+  console.log('Overall:', diagnos.passed ? 'PASS - rule should allow' : 'FAIL - rule will block!');
+  console.groupEnd();
 }
 
 /**

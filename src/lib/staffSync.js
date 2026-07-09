@@ -13,7 +13,7 @@
 // This is a deliberate accountability separation, not an oversight.
 
 import {
-  collection, collectionGroup, doc, getDoc, getDocs, getDocFromServer, setDoc, updateDoc, deleteDoc, addDoc,
+  collection, collectionGroup, doc, getDoc, getDocs, setDoc, updateDoc, deleteDoc, addDoc,
   onSnapshot, query, where, orderBy, serverTimestamp, writeBatch, increment,
 } from 'firebase/firestore';
 import { db, auth } from './firebase';
@@ -145,19 +145,6 @@ export function subscribeCLStatus(groupId, callback) {
 export async function applyForCampusLead(groupId, profile, { bundledCRClaim = false } = {}) {
   const uid = auth.currentUser?.uid;
   const stamp = getIdentityStamp(profile, uid);
-  
-  // If bundled with CR claim, do diagnostic checks for member doc state
-  if (bundledCRClaim) {
-    const memberRef = doc(db, 'groups', groupId, 'members', uid);
-    const memberSnap = await getDocFromServer(memberRef);
-    if (!memberSnap.exists()) {
-      throw new Error('__MISSING_MEMBER_DOC__: member doc does not exist for bundled CR claim; call joinGroup() first');
-    }
-    if (memberSnap.data().verified !== true) {
-      throw new Error('__VERIFICATION_LOST__: member.verified is not true for bundled CR claim; re-sync verification');
-    }
-  }
-  
   await addDoc(collection(db, 'clApplications'), {
     ...stamp,
     dept: String(profile?.dept || '').trim().toUpperCase(),
