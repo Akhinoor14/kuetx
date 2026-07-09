@@ -384,6 +384,13 @@ export async function requestCR(groupId, profile) {
     roll: profile?.studentId || '',
     status: 'pending',
     requestedAt: serverTimestamp(),
+    // IMPORTANT: must be present (even if null), not omitted. The
+    // Firestore rule checks `request.resource.data.type != 'leave'` —
+    // if `type` is absent from the written map entirely, that
+    // comparison evaluates to false (not true), which silently denies
+    // the whole `create`. Setting it explicitly to null keeps the key
+    // present so the != check actually passes.
+    type: null,
   };
   
   let existing;
