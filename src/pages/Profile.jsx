@@ -5,6 +5,7 @@
  */
 
 import { useEffect, useRef, useState, useMemo, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import * as Icons from 'lucide-react';
 import {
   store, getProfile, DEFAULT_PROFILE, DEPARTMENTS,
@@ -23,6 +24,7 @@ import { uploadProfilePicture, getProfilePhotoURL, deleteProfilePicture } from '
 import { isRollInstitutionallyVerified } from '../lib/kuetEmailVerify';
 import { getGroupId } from '../lib/groupUtils';
 import { subscribeMyRole, requestLeaveCR } from '../lib/groupSync';
+import ClaimCRCard from '../components/ClaimCRCard';
 import ProfileVerifyBanner from '../components/ProfileVerifyBanner';
 import EmailVerifyBanner from '../components/EmailVerifyBanner';
 import EmailFlagBanner from '../components/EmailFlagBanner';
@@ -661,6 +663,7 @@ function AvatarUploadModal({ currentURL, isAnon, onClose, onUploaded, onDeleted 
 // ─── Main ─────────────────────────────────────────────────────────────────────
 
 export default function Profile() {
+  const navigate = useNavigate();
   const [profile, setProfile] = useState(getProfile() || DEFAULT_PROFILE);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showAuthModal, setShowAuthModal] = useState(false);
@@ -1045,37 +1048,60 @@ export default function Profile() {
           "Claims CR" ghost badge on Classmates/Team pages. Routing this
           through requestLeaveCR (same CL-approved flow as ClassRoster.jsx)
           ensures role and legacyCRClaim actually get cleared together via
-          clApproveLeaveCR once the CL approves. */}
+          clApproveLeaveCR once the CL approves.
+
+          Two distinct exits are offered:
+            - "Leave CR" fires requestLeaveCR() directly from here — no CL
+              approval needed to SUBMIT the request (CL still has to
+              approve it to actually vacate the slot), so this is a single
+              click, no extra page.
+            - "Hand over CR" is NOT a direct action — picking a specific
+              successor requires seeing the class roster (handoffCR needs
+              a target uid), so this navigates to /class-roster where that
+              picker UI already lives, rather than duplicating it here. */}
       {isRealCR && (
         <div style={{
           padding: '13px 18px', borderRadius: 12,
           background: 'linear-gradient(135deg, rgba(59,130,246,0.1) 0%, rgba(139,92,246,0.1) 100%)',
           border: '1.5px solid rgba(59,130,246,0.3)',
-          display: 'flex', alignItems: 'center', gap: 12,
+          display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap',
         }}>
           <span style={{ fontSize: 22 }}>👑</span>
-          <div>
+          <div style={{ flex: '1 1 auto', minWidth: 160 }}>
             <div style={{ fontWeight: 700, fontSize: 13, color: 'var(--text)' }}>Class Representative</div>
             <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 1 }}>Class Management tools available in the sidebar.</div>
           </div>
-          <button
-            disabled={leaveCRState === 'sending' || leaveCRState === 'sent'}
-            onClick={async () => {
-              if (!window.confirm("Send a request to your Class Lead to step down as CR? You'll remain CR until it's approved.")) return;
-              setLeaveCRState('sending');
-              try {
-                const groupId = getGroupId(profile);
-                await requestLeaveCR(groupId, profile);
-                setLeaveCRState('sent');
-              } catch (err) {
-                alert(`Failed: ${err?.message || err}`);
-                setLeaveCRState('idle');
-              }
-            }}
-            style={{ marginLeft: 'auto', fontSize: 11, color: 'var(--muted)', background: 'none', border: 'none', cursor: 'pointer' }}>
-            {leaveCRState === 'sent' ? 'Request sent ✓' : leaveCRState === 'sending' ? 'Sending…' : 'Step down as CR'}
-          </button>
+          <div style={{ display: 'flex', gap: 14, alignItems: 'center', marginLeft: 'auto' }}>
+            <button
+              onClick={() => navigate('/class-roster', { state: { intent: 'handoff' } })}
+              style={{ fontSize: 11, color: 'var(--accent)', background: 'none', border: 'none', cursor: 'pointer', fontWeight: 600 }}>
+              Hand over CR
+            </button>
+            <button
+              disabled={leaveCRState === 'sending' || leaveCRState === 'sent'}
+              onClick={async () => {
+                if (!window.confirm("Send a request to your Class Lead to step down as CR? You'll remain CR until it's approved.")) return;
+                setLeaveCRState('sending');
+                try {
+                  const groupId = getGroupId(profile);
+                  await requestLeaveCR(groupId, profile);
+                  setLeaveCRState('sent');
+                } catch (err) {
+                  alert(`Failed: ${err?.message || err}`);
+                  setLeaveCRState('idle');
+                }
+              }}
+              style={{ fontSize: 11, color: 'var(--muted)', background: 'none', border: 'none', cursor: 'pointer' }}>
+              {leaveCRState === 'sent' ? 'Request sent ✓' : leaveCRState === 'sending' ? 'Sending…' : 'Leave CR'}
+            </button>
+          </div>
         </div>
+      )}
+
+      {/* ── Claim CR (shown to plain members only — ClaimCRCard itself
+          hides for CR/ACR, no request, or ungrouped profiles) ── */}
+      {!isRealCR && hasMinProfile && (
+        <ClaimCRCard groupId={getGroupId(profile)} profile={profile} />
       )}
 
       {/* Admin/Staff shortcut card removed — access to Team & Administration

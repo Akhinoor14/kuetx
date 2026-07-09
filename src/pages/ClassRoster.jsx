@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import { Users } from 'lucide-react';
 import { getProfile } from '../store/store';
 import { getGroupId, getGroupLabel, canonicalize } from '../lib/groupUtils';
@@ -40,6 +41,12 @@ export default function ClassRoster() {
   const groupId = getGroupId(profile);
   const groupLabel = getGroupLabel(profile);
   const uid = auth.currentUser?.uid;
+  // Profile's "Hand over CR" button links here with { state: { intent:
+  // 'handoff' } } — used only to surface a one-line hint above the roster
+  // pointing at the per-row "Hand off CR" button below, since that action
+  // lives inline in the roster rather than as its own separate flow.
+  const location = useLocation();
+  const handoffIntent = location.state?.intent === 'handoff';
 
   const [myRole, setMyRole] = useState('member');
   const [title, setTitle] = useState('');
@@ -113,7 +120,7 @@ export default function ClassRoster() {
   };
 
   return (
-    <div className="content-page-bg" style={{ maxWidth: 640, margin: '0 auto', padding: '16px 14px' }}>
+    <div className="content-page-bg" style={{ width: 'min(95vw, 1560px)', margin: '0 auto', padding: '16px 14px' }}>
       <div className="content-page-hero">
         <div className="content-page-hero-icon">
           <Users size={18} color="var(--accent)" />
@@ -130,6 +137,16 @@ export default function ClassRoster() {
           <p style={{ color: 'var(--muted)', fontSize: 13, marginBottom: 16 }}>
             Manage <strong>{groupLabel}</strong> — verify members, appoint ACR or hand off CR, remove members, and send notices to your class.
           </p>
+
+          {handoffIntent && myRole === 'cr' && (
+            <div style={{
+              padding: '10px 14px', borderRadius: 10, marginBottom: 14,
+              background: 'rgba(59,130,246,0.1)', border: '1px solid rgba(59,130,246,0.25)',
+              fontSize: 12.5, color: 'var(--text)',
+            }}>
+              Pick a classmate below and use their <strong>"Hand off CR"</strong> button to transfer your slot directly — no Campus Lead approval needed.
+            </div>
+          )}
 
           <div style={{ fontSize: 13, fontWeight: 700, marginBottom: 8 }}>Roster</div>
           <div style={{ marginBottom: 20 }}>

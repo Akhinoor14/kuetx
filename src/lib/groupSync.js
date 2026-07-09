@@ -471,9 +471,32 @@ export function subscribeCRRequests(groupId, callback) {
   return _subscribeSingleton(
     key,
     () => query(collection(db, 'groups', groupId, 'crRequests'), orderBy('requestedAt')),
-    (snap) => _snapToArray(snap).filter((r) => r.status === 'pending'),
+    // Exclude type === 'leave' docs — those are step-down requests and
+    // belong only in the CR Leave Requests tab (subscribeCRLeaveRequests
+    // below). Without this filter, a leave_{uid} doc (which also has
+    // status: 'pending') leaked into this "fresh CR" queue too, showing
+    // the SAME person in both "CR Requests" and "CR Leave Requests" even
+    // though they only ever filed one leave request, not a fresh claim.
+    (snap) => _snapToArray(snap).filter((r) => r.status === 'pending' && r.type !== 'leave'),
     callback,
   );
+}
+
+/**
+ * Live status of the CURRENT user's own fresh-claim crRequests/{uid} doc
+ * in this group — null if none exists, otherwise the doc's status
+ * ('pending' | 'approved' | 'rejected' | 'revoked'). Used to gate the
+ * "Claim CR" button: without this, a member with an already-pending
+ * request could click Claim CR again and get a confusing "already
+ * pending" error instead of the button simply reflecting their real
+ * state (e.g. "Request pending — waiting on your Campus Lead").
+ */
+export function subscribeOwnCRRequestStatus(groupId, uid, callback) {
+  if (!groupId || !uid) return () => {};
+  const ref_ = doc(db, 'groups', groupId, 'crRequests', uid);
+  return onSnapshot(ref_, (snap) => {
+    callback(snap.exists() ? snap.data().status : null);
+  }, () => callback(null));
 }
 
 /**

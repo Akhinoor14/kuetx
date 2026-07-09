@@ -659,6 +659,26 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
                   </a>
                 </div>
               </div>
+
+              <div style={{
+                background: 'linear-gradient(135deg, rgba(34,197,94,0.08) 0%, rgba(16,185,129,0.08) 100%)',
+                border: '1px solid rgba(34,197,94,0.25)',
+                borderRadius: 12,
+                padding: 14,
+                display: 'flex',
+                gap: 12,
+                alignItems: 'flex-start',
+              }}>
+                <div style={{ fontSize: 18, flexShrink: 0 }}>👑</div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 4, flex: 1 }}>
+                  <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--text)' }}>
+                    Want to be your Class Representative?
+                  </div>
+                  <div style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.5 }}>
+                    Once you finish setup, you can claim CR for your class from your Profile or Classmates page — it goes to your Campus Lead for approval.
+                  </div>
+                </div>
+              </div>
             </>
           )}
         </div>
