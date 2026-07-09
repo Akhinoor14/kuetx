@@ -2164,9 +2164,9 @@ h3 { font-size: 15px; font-weight: 600; }
     gap: 10px;
     padding: 6px;
     border-radius: 999px;
-    border: 1px solid rgba(15, 23, 42, 0.08);
+    border: 1px solid rgba(15,23,42,0.08);
     background: rgba(255,255,255,0.96);
-    box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
+    box-shadow: 0 16px 32px rgba(15,23,42,0.08);
   }
 
   .class-management-page .class-management-tab-group {
@@ -2310,15 +2310,6 @@ h3 { font-size: 15px; font-weight: 600; }
     box-shadow: 0 12px 28px rgba(59,130,246,0.10);
   }
 
-  .class-management-page .class-management-mode-switch {
-    display: inline-flex;
-    gap: 10px;
-    padding: 6px;
-    border-radius: 999px;
-    border: 1px solid rgba(15, 23, 42, 0.08);
-    background: rgba(255,255,255,0.96);
-    box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
-  }
 
   .class-management-page .class-management-mode-button {
     flex: 1 1 0;
@@ -2326,23 +2317,24 @@ h3 { font-size: 15px; font-weight: 600; }
     padding: 0 18px;
     border-radius: 999px;
     border: 1px solid rgba(15,23,42,0.08);
-    background: rgba(255,255,255,0.96);
-    color: rgba(15,23,42,0.86);
+    background: white;
+    color: rgba(15,23,42,0.88);
     font-size: 14px;
     font-weight: 800;
     box-shadow: inset 0 0 0 1px rgba(15,23,42,0.04);
-    transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+    transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease, color 0.18s ease;
   }
 
   .class-management-page .class-management-mode-button:hover {
     transform: translateY(-1px);
+    color: rgba(15,23,42,1);
   }
 
   .class-management-page .class-management-mode-button.is-active {
-    background: rgba(15,23,42,0.92);
+    background: rgba(15,23,42,0.96);
     color: white;
     border-color: transparent;
-    box-shadow: 0 10px 24px rgba(2,6,23,0.18);
+    box-shadow: 0 10px 24px rgba(15,23,42,0.22);
   }
 
   /* Planner mode switch (Automatic/Manual) is visually distinct from the
@@ -2523,43 +2515,6 @@ h3 { font-size: 15px; font-weight: 600; }
     }
   }
 
-  .class-management-page .class-management-mode-switch {
-    display: inline-flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    background: rgba(255, 255, 255, 0.5);
-    background: rgba(255, 255, 255, 0.04);
-    align-items: center;
-    border-radius: 11px;
-    font: inherit;
-
-    .pwa-dialog-card {
-      padding: 10px 10px 8px 10px;
-    }
-    background: linear-gradient(135deg, var(--accent), #22c55e);
-    .pwa-dialog-title {
-      font-size: 13px;
-    }
-    color: var(--accentFg);
-    .pwa-dialog-sub {
-      font-size: 10px;
-      line-height: 1.3;
-    }
-    box-shadow: 0 10px 24px rgba(var(--accentRGB), 0.18);
-    .pwa-dialog-point {
-      font-size: 10px;
-      gap: 3px;
-    }
-  }
-    .pwa-hint-step {
-      font-size: 10px;
-    }
-
-    .pwa-hint-num {
-      width: 20px;
-      height: 20px;
-      font-size: 8px;
-    }
   @media (max-width: 768px) {
     .pwa-dialog-primary,
     .pwa-dialog-secondary,
@@ -2629,13 +2584,13 @@ h3 { font-size: 15px; font-weight: 600; }
   border-color: var(--border);
 }
 .dark .class-management-page .class-management-mode-button {
-  background: rgba(255,255,255,0.04);
+  background: rgba(255,255,255,0.08);
   color: var(--text);
-  border-color: var(--border);
+  border-color: rgba(255,255,255,0.10);
 }
 .dark .class-management-page .class-management-mode-button.is-active {
-  background: rgba(255,255,255,0.92);
-  color: rgba(15,23,42,0.96);
+  background: #16a34a;
+  color: white;
   border-color: transparent;
 }
 /* Planner mode switch (Automatic/Manual) — same non-green distinction as
