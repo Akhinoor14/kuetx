@@ -12,6 +12,7 @@ import {
   getLegacyTermResults, TERM_KEYS, MIN_ATTENDANCE_PERCENT,
   SCHOLARSHIP_ATTENDANCE_PCT, HONORS_CGPA, MIN_CGPA_GRADUATION,
   computeCGPA,
+  normalizeProfileForSave,
 } from '../store/store';
 import { getAllCourses } from '../store/curriculumStore';
 import ProfileSetupModal from '../components/ProfileSetupModal';
@@ -791,7 +792,7 @@ export default function Profile() {
   }, [hasMinProfile]);
 
   const handleSave = formData => {
-    const next = { ...DEFAULT_PROFILE, ...formData };
+    const next = normalizeProfileForSave(formData);
     store.set('profile', next);
     setProfile(next);
     setIsModalOpen(false);

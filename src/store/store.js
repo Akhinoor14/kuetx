@@ -210,6 +210,38 @@ export const DEPARTMENTS = [
 ];
 export const DEPT_CODES = DEPARTMENTS.map(d => d.code);
 
+const ROLL_DEPT_MAP = {
+  '25': 'Arch',
+  '23': 'BECM',
+  '15': 'BME',
+  '01': 'CE',
+  '29': 'ChE',
+  '07': 'CSE',
+  '09': 'ECE',
+  '03': 'EEE',
+  '13': 'ESE',
+  '11': 'IPE',
+  '19': 'LE',
+  '05': 'ME',
+  '27': 'MSE',
+  '31': 'MTE',
+  '21': 'TE',
+  '17': 'URP',
+};
+
+export const getDeptCodeFromRoll = (roll) => {
+  const r = String(roll || '').trim();
+  if (!/^\d{7}$/.test(r)) return '';
+  const deptDigits = r.slice(2, 4);
+  return ROLL_DEPT_MAP[deptDigits] || '';
+};
+
+export const isAllowedDeptCode = (value) => {
+  const raw = String(value || '').trim();
+  if (!raw) return false;
+  return DEPT_CODES.some((code) => code.toLowerCase() === raw.toLowerCase());
+};
+
 // ─── Curriculum Term Helpers ─────────────────────────────────────────────
 export const TERM_KEYS = ['Y1T1', 'Y1T2', 'Y2T1', 'Y2T2', 'Y3T1', 'Y3T2', 'Y4T1', 'Y4T2'];
 
@@ -868,31 +900,50 @@ const inferCourseTypeFromCode = (code, currentType) => {
 
 export { inferCourseTypeFromCode, extractYearTermFromCode };
 
+export const normalizeProfileForSave = (input = {}) => {
+  const raw = input || {};
+  const studentId = String(raw.studentId || '').trim();
+  const derivedBatch = extractBatchFromRoll(studentId);
+  const derivedDept = getDeptCodeFromRoll(studentId);
+  const canonicalDept = getCanonicalDeptCode(raw.dept) || derivedDept;
+
+  return {
+    ...DEFAULT_PROFILE,
+    ...raw,
+    studentId,
+    dept: canonicalDept,
+    batch: derivedBatch || '',
+    currentTermKey: String(raw.currentTermKey || '').trim(),
+    currentTerm: String(raw.currentTerm || '').trim(),
+    hallName: String(raw.hallName || '').trim(),
+    roomNo: String(raw.roomNo || '').trim(),
+    advisorName: String(raw.advisorName || '').trim(),
+    advisorContact: String(raw.advisorContact || '').trim(),
+    termStartDate: raw.termStartDate || null,
+    yearStarted: raw.yearStarted || null,
+  };
+};
+
 export const getProfile = () => {
   const raw = store.get('profile') || {};
   const currentTermKey = raw.currentTermKey || getTermKeyFromLabel(raw.currentTerm) || '';
   const merged = { ...DEFAULT_PROFILE, ...raw, currentTermKey };
-
-  // Force-override yearStarted with the fixed batch start date (derived from roll),
-  // overwriting any old/incorrect manually-entered value.
-  const batchKey = extractBatchFromRoll(merged.studentId);
+  const studentId = String(merged.studentId || '').trim();
+  const batchKey = extractBatchFromRoll(studentId);
   const fixedStart = batchKey && BATCH_START_DATES[batchKey];
+
   if (fixedStart) {
     merged.yearStarted = fixedStart;
   }
 
-  // Self-heal batch from roll the same way — some accounts ended up with
-  // a missing/stale profile.batch (e.g. onboarded through a path that
-  // skipped ProfileSetupModal's batch: autoCalculatedBatch write, or
-  // created before this field existed). Without this, getGroupId() keeps
-  // returning null forever for that account — breaking Classmates,
-  // ClassRoster, Notices, Assignments, Schedule, and every other
-  // group-scoped feature — even though dept/session both look filled in
-  // on the Profile page. Roll number is the single source of truth for
-  // batch, so always prefer it when derivable.
   if (batchKey) {
     merged.batch = batchKey;
+  } else {
+    merged.batch = '';
   }
+
+  const canonicalDept = getCanonicalDeptCode(merged.dept) || getDeptCodeFromRoll(studentId);
+  merged.dept = canonicalDept;
 
   return merged;
 };
@@ -910,12 +961,15 @@ export const BATCH_START_DATES = {
 };
 
 // Derives batch (e.g. "2k23") from a student roll number's first two digits.
+// Rejects batches that are newer than the current year, since those are
+// invalid for KUET roll numbers in the present academic timeline.
 export const extractBatchFromRoll = (roll) => {
   const r = String(roll || '').trim();
   if (r.length < 2) return '';
   const firstTwoDigits = r.slice(0, 2);
   const year = parseInt(firstTwoDigits, 10);
-  if (!Number.isFinite(year)) return '';
+  const currentYearSuffix = Number(String(new Date().getFullYear()).slice(-2));
+  if (!Number.isFinite(year) || year > currentYearSuffix) return '';
   return `2k${firstTwoDigits}`;
 };
 
@@ -1140,15 +1194,12 @@ export const DEFAULT_PROFILE = {
 // reports (Classmates match, roll-based verification, term dates).
 export const isProfileComplete = (profile) => {
   const p = profile || {};
-  // Deliberately minimal: this only gates the mandatory first-launch
-  // onboarding modal (see App.jsx buildQueue). dept auto-derives from the
-  // roll number (ProfileSetupModal.jsx's extractDeptCodeFromRoll), and
-  // session/currentTermKey/termStartDate are all used with graceful
-  // fallbacks elsewhere (Dashboard, Schedule, Courses, etc.) — requiring
-  // them here just added extra required fields to fill in before the
-  // person could use the app at all. They can still be filled in later
-  // from the Profile page whenever the person wants.
-  return !!(String(p.name || '').trim() && String(p.studentId || '').trim());
+  const studentId = String(p.studentId || '').trim();
+  const hasName = !!String(p.name || '').trim();
+  const hasStudentId = /^\d{7}$/.test(studentId);
+  const hasValidDept = isAllowedDeptCode(p.dept) || isAllowedDeptCode(getDeptCodeFromRoll(studentId));
+  const hasValidBatch = Boolean(extractBatchFromRoll(studentId));
+  return hasName && hasStudentId && hasValidDept && hasValidBatch;
 };
 
 // ---------------- Audit & Snapshot helpers ----------------

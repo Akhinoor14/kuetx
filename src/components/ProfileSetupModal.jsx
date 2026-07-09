@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState, useRef } from 'react';
 import Modal from './Modal';
 import KuetEmailVerifyWidget from './KuetEmailVerifyWidget';
 import { isRollInstitutionallyVerified } from '../lib/kuetEmailVerify';
-import { DEPARTMENTS, DEPT_CODES, DEFAULT_PROFILE, TERM_KEYS, getTermLabelFromKey, BATCH_START_DATES, extractBatchFromRoll } from '../store/store';
+import { DEPARTMENTS, DEPT_CODES, DEFAULT_PROFILE, TERM_KEYS, getTermLabelFromKey, BATCH_START_DATES, extractBatchFromRoll, normalizeProfileForSave } from '../store/store';
 import { claimRoll, requestRollUnlock } from '../lib/rollOwnership';
 
 // Map dept codes: roll middle 2 digits -> dept code
@@ -38,13 +38,14 @@ const HALL_OPTIONS = [
 const extractDeptCodeFromRoll = (roll) => {
   const r = String(roll || '').trim();
   if (r.length < 5) return '';
+  if (!extractBatchFromRoll(r)) return '';
   const deptDigits = r.slice(2, 4);
   return ROLL_DEPT_MAP[deptDigits] || '';
 };
 
 const isRollValid = (roll) => {
   const r = String(roll || '').trim();
-  return /^\d{7}$/.test(r);
+  return /^\d{7}$/.test(r) && Boolean(extractBatchFromRoll(r));
 };
 
 const fieldStyle = {
@@ -116,6 +117,7 @@ const getFieldError = (key, form, autoCalculatedDept) => {
     const v = String(value || '').trim();
     if (!v) return 'Student ID is required';
     if (!/^\d{7}$/.test(v)) return 'Student ID must be a 7-digit number';
+    if (!extractBatchFromRoll(v)) return 'Student ID must be from a current or past batch (no future batch allowed)';
   }
   if (key === 'dept') {
     const normalized = getCanonicalDeptCode(value);
@@ -354,7 +356,7 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
     }
     setRollLocked(null);
 
-    const next = {
+    const next = normalizeProfileForSave({
       ...DEFAULT_PROFILE,
       ...form,
       studentId: studentIdTrimmed,
@@ -368,12 +370,10 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
       roomNo: String(form.roomNo || '').trim(),
       advisorName: String(form.advisorName || '').trim(),
       advisorContact: String(form.advisorContact || '').trim(),
-      // Ensure termStartDate is in ISO format (YYYY-MM-DD)
       termStartDate: validatedTermStartDate || null,
-      // Store full ISO date (YYYY-MM-DD) for kuetStart
       yearStarted: form.yearStarted || null,
       totalCreditsRequired: DEFAULT_PROFILE.totalCreditsRequired,
-    };
+    });
     if (onSave) onSave(next);
   };
 

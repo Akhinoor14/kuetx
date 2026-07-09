@@ -21,7 +21,7 @@
 // this reminder seconds after onboarding instead of on a later visit.
 
 import { useEffect, useState } from 'react';
-import { store, getProfile } from '../store/store';
+import { store, getProfile, normalizeProfileForSave } from '../store/store';
 import ProfileSetupModal from './ProfileSetupModal';
 
 const SNOOZE_KEY = 'kuetxProfileCompleteReminderSnoozed';
@@ -97,7 +97,7 @@ export default function ProfileCompleteReminder() {
         isOpen={true}
         onClose={() => setModalOpen(false)}
         onSave={(formData) => {
-          store.set('profile', formData);
+          store.set('profile', normalizeProfileForSave(formData));
           setModalOpen(false);
         }}
         initialProfile={getProfile()}

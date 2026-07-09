@@ -442,7 +442,7 @@ export default function App() {
             onClose={() => {}}
             mandatory
             onSave={(formData) => {
-              store.set('profile', { ...DEFAULT_PROFILE, ...formData });
+              store.set('profile', normalizeProfileForSave(formData));
               // Record which page-load onboarding finished on, so
               // ProfileCompleteReminder can tell "still this same load"
               // apart from "app reopened later" and never fire in the
