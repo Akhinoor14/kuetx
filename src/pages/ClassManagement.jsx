@@ -108,7 +108,7 @@ export default function ClassManagement() {
     const todayKey = ROUTINE_DAY_KEYS[new Date().getDay()];
     return todayKey || 'Sunday';
   });
-  const [viewMode, setViewMode] = useState(() => store.get('classManagementPlannerMode') || 'automatic');
+  const [viewMode, setViewMode] = useState('automatic');
   const [courseTeacherDialogState, setCourseTeacherDialogState] = useState({ open: false, courseId: '' });
   const [detailState, setDetailState] = useState({ open: false, courseId: '' });
   const [resetState, setResetState] = useState({ open: false, course: null, count: 0 });
@@ -666,7 +666,7 @@ export default function ClassManagement() {
                 <div className="class-management-section-label">Class Planner</div>
                 <div className="class-management-section-title">Current term overview</div>
                 <div className="class-management-section-copy">
-                  Auto counts from schedule. Manual mode enables +1 logging.
+                  Automatic counts from schedule by default. Manual mode enables +1 logging.
                 </div>
               </div>
               <div className="class-management-mode-switch" role="tablist" aria-label="Planner mode">
@@ -688,7 +688,7 @@ export default function ClassManagement() {
                 </button>
               </div>
               <div style={{ marginTop: 8, fontSize: 12, color: 'var(--muted)', lineHeight: 1.5, maxWidth: 420 }}>
-                Automatic uses live schedule counts. Manual keeps the same stored plans and only changes the quick +1 logging flow.
+                Automatic is the default and uses live schedule counts. Manual keeps the same stored plans and only changes the quick +1 logging flow.
               </div>
             </div>
 
