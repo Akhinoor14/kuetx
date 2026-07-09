@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState, useRef } from 'react';
 import Modal from './Modal';
 import KuetEmailVerifyWidget from './KuetEmailVerifyWidget';
 import { isRollInstitutionallyVerified } from '../lib/kuetEmailVerify';
-import { DEPARTMENTS, DEFAULT_PROFILE, TERM_KEYS, getTermLabelFromKey, BATCH_START_DATES, extractBatchFromRoll } from '../store/store';
+import { DEPARTMENTS, DEPT_CODES, DEFAULT_PROFILE, TERM_KEYS, getTermLabelFromKey, BATCH_START_DATES, extractBatchFromRoll } from '../store/store';
 import { claimRoll, requestRollUnlock } from '../lib/rollOwnership';
 
 // Map dept codes: roll middle 2 digits -> dept code
@@ -100,6 +100,15 @@ const toDateInputValue = (value) => {
   return Number.isFinite(year) ? `${year}-01-01` : '';
 };
 
+const getCanonicalDeptCode = (value) => {
+  const raw = String(value || '').trim();
+  if (!raw) return '';
+  const match = DEPT_CODES.find((code) => code.toLowerCase() === raw.toLowerCase());
+  return match || '';
+};
+
+const isAllowedDeptCode = (value) => Boolean(getCanonicalDeptCode(value));
+
 const getFieldError = (key, form, autoCalculatedDept) => {
   const value = key === 'dept' ? (form.dept || autoCalculatedDept) : form[key];
   if (key === 'name' && !String(value || '').trim()) return 'Name is required';
@@ -108,7 +117,10 @@ const getFieldError = (key, form, autoCalculatedDept) => {
     if (!v) return 'Student ID is required';
     if (!/^\d{7}$/.test(v)) return 'Student ID must be a 7-digit number';
   }
-  if (key === 'dept' && !String(value || '').trim()) return 'Department is required';
+  if (key === 'dept') {
+    const normalized = getCanonicalDeptCode(value);
+    if (!normalized) return 'Department must be one of KUET’s 16 approved department codes';
+  }
   if (key === 'session' && !String(value || '').trim()) return 'Academic session is required';
   if (key === 'currentTermKey' && !String(value || '').trim()) return 'Current term is required';
   return '';
@@ -248,12 +260,15 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
       if (error) nextErrors[field] = error;
     });
 
-    // dept is no longer a hard requirement to finish onboarding — it's
-    // auto-derived from the roll number in almost all cases, and the
-    // person can pick/fix it manually later from Profile if their roll
-    // doesn't map to a known dept code. Blocking here just added a wall
-    // in front of using the app at all for an edge case that's rare and
-    // self-correctable later.
+    const rollDept = getCanonicalDeptCode(autoCalculatedDept);
+    const selectedDept = getCanonicalDeptCode(form.dept);
+    const effectiveDept = selectedDept || rollDept;
+
+    if (!effectiveDept && String(form.studentId || '').trim()) {
+      nextErrors.dept = 'Department must be one of KUET’s 16 approved department codes';
+    } else if (form.dept && !selectedDept) {
+      nextErrors.dept = 'Department must be one of KUET’s 16 approved department codes';
+    }
 
     setErrors(nextErrors);
     return Object.keys(nextErrors).length === 0;
@@ -300,6 +315,18 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
     }
 
     const studentIdTrimmed = String(form.studentId || '').trim();
+    const rollDept = getCanonicalDeptCode(autoCalculatedDept);
+    const selectedDept = getCanonicalDeptCode(form.dept);
+    const effectiveDept = selectedDept || rollDept;
+
+    if (!effectiveDept) {
+      setErrors(prev => ({
+        ...prev,
+        dept: 'Only KUET’s 16 department codes are allowed. Please use a valid roll number or choose a listed department.',
+      }));
+      setStepIndex(0);
+      return;
+    }
 
     // Block if this exact roll number is already claimed by a DIFFERENT
     // Firebase account — stops the same student ending up with two
@@ -332,7 +359,7 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
       ...form,
       studentId: studentIdTrimmed,
       name: String(form.name || '').trim(),
-      dept: String(form.dept || autoCalculatedDept || '').trim(),
+      dept: effectiveDept,
       session: String(form.session || '').trim(),
       batch: autoCalculatedBatch,
       currentTermKey: String(form.currentTermKey || '').trim(),
