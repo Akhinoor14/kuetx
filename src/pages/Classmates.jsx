@@ -14,18 +14,18 @@ function logClaimCRReport({ stage, error, details }) {
   const message = error?.message || '';
   const reason =
     stage === 'membership-sync'
-      ? 'group membership doc is not yet visible to Firestore rules'
+      ? 'members/{uid} doc না দেখা যাচ্ছে'
       : stage === 'verification-sync'
-        ? 'verified flag is not yet visible on this class membership doc'
+        ? 'members/{uid}.verified flag propagate হয়নি'
         : stage === 'duplicate-request'
-          ? 'there is already a pending CR request for this uid'
+          ? 'crRequests/{uid} doc already pending'
           : stage === 'campus-lead-application'
-            ? 'bundled CR + CL application path was rejected by Firestore rules'
+            ? 'clApplications write reject হয়েছে'
             : stage === 'cr-request'
-              ? 'plain CR request path was rejected by Firestore rules'
+              ? 'crRequests write reject হয়েছে'
               : 'unknown failure';
 
-  console.groupCollapsed('[Classmates] claim CR report');
+  console.groupCollapsed('[Classmates] CR claim report');
   console.log('stage:', stage);
   console.log('reason:', reason);
   console.log('error:', {
@@ -36,28 +36,44 @@ function logClaimCRReport({ stage, error, details }) {
   console.groupEnd();
 }
 
-function getClaimCRFailureMessage(stage, error) {
+function getClaimCRFailureMessage(stage, error, context = {}) {
   const isPermissionDenied = error?.code === 'permission-denied' || /Missing or insufficient permissions/i.test(error?.message || '');
+  const { crStatus, ownRollVerified } = context;
+  
   if (stage === 'membership-sync') {
-    return 'Your class membership is still syncing. Wait a few seconds and try again.';
+    return 'ক্লাস membership এখনো sync হচ্ছে। ৫ সেকেন্ড অপেক্ষা করে আবার চেষ্টা করুন।';
   }
   if (stage === 'verification-sync') {
-    return 'Your KUET verification is not visible to Firestore yet. Wait a few seconds and try again.';
+    return 'KUET ভেরিফিকেশন এখনো sync হয়নি। ৫ সেকেন্ড অপেক্ষা করুন।';
   }
   if (stage === 'duplicate-request') {
-    return 'You already have a pending CR request. Wait for your Campus Lead to act on it first.';
+    return 'আপনার একটি pending CR request আছে। Campus Lead এর decision এর জন্য অপেক্ষা করুন।';
+  }
+  if (stage === 'slots-full') {
+    return 'এই ক্লাসের CR slots ভরে গেছে। কোনো CR step down করার পর retry করুন।';
   }
   if (stage === 'campus-lead-application') {
-    return isPermissionDenied
-      ? 'Firestore rejected the bundled Campus Lead + CR application. The most likely reason is that your verified membership has not fully propagated yet.'
-      : 'The bundled Campus Lead + CR application could not be sent.';
+    if (isPermissionDenied) {
+      if (crStatus?.slotsFull) {
+        return 'CR slots ভরে গেছে। CL কাউকে remove করার পর চেষ্টা করুন।';
+      }
+      return 'Firestore verification sync হয়নি। ৫ সেকেন্ড অপেক্ষা করুন।';
+    }
+    return 'Campus Lead application পাঠানো যায়নি। আবার চেষ্টা করুন।';
   }
   if (stage === 'cr-request') {
-    return isPermissionDenied
-      ? 'Firestore rejected the CR request. The most likely reason is that your verified class membership has not fully propagated yet.'
-      : 'The CR request could not be sent.';
+    if (isPermissionDenied) {
+      if (crStatus?.slotsFull) {
+        return 'CR slots ভরে গেছে। কোনো CR step down করার পর retry করুন।';
+      }
+      if (!ownRollVerified) {
+        return 'KUET email verify করো। উপরে verify box দেখ।';
+      }
+      return 'Firestore verification sync হয়নি। ৫ সেকেন্ড অপেক্ষা করুন।';
+    }
+    return 'CR request পাঠানো যায়নি। আবার চেষ্টা করুন।';
   }
-  return error?.message || 'Something went wrong — try again.';
+  return error?.message || 'কিছু ভুল হয়েছে। আবার চেষ্টা করুন।';
 }
 
 export default function Classmates() {
@@ -133,7 +149,12 @@ export default function Classmates() {
 
   const handleClaimCR = async () => {
     if (!ownRollVerified) {
-      setClaimMsg('Verify your KUET email before claiming CR — enter your roll in the "KUET email verify" box above.');
+      setClaimMsg('KUET email verify করো। উপরে verify box দেখ।');
+      setClaimState('error');
+      return;
+    }
+    if (crStatus?.slotsFull) {
+      setClaimMsg('এই ক্লাসের CR slots ভরে গেছে। কোনো CR step down করার পর retry করুন।');
       setClaimState('error');
       return;
     }
@@ -205,7 +226,7 @@ export default function Classmates() {
           claimState,
         },
       });
-      setClaimMsg(getClaimCRFailureMessage(stage, e));
+      setClaimMsg(getClaimCRFailureMessage(stage, e, { crStatus, ownRollVerified }));
       setClaimState('error');
     }
   };
