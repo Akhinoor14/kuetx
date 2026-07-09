@@ -37,8 +37,20 @@ function logClaimCRReport({ stage, error, details }) {
 }
 
 function getClaimCRFailureMessage(stage, error, context = {}) {
-  const isPermissionDenied = error?.code === 'permission-denied' || /Missing or insufficient permissions/i.test(error?.message || '');
+  const message = error?.message || '';
+  const isPermissionDenied = error?.code === 'permission-denied' || /Missing or insufficient permissions/i.test(message);
   const { crStatus, ownRollVerified } = context;
+  
+  // Diagnostic error codes from requestCR / applyForCampusLead
+  if (message.includes('__VERIFICATION_LOST__')) {
+    return 'আপনার verification আলাদা কোথাও হয়ে গেছে। Refresh করুন, তারপর পুনরায় KUET verify করুন।';
+  }
+  if (message.includes('__MISSING_MEMBER_DOC__')) {
+    return 'ক্লাস membership corrupted। Re-join ক্লাস থেকে, তারপর আবার চেষ্টা করুন।';
+  }
+  if (message.includes('__SLOTS_REACHED__')) {
+    return 'এই ক্লাসের CR slots ভরে গেছে। কোনো CR step down করার পর retry করুন।';
+  }
   
   if (stage === 'membership-sync') {
     return 'ক্লাস membership এখনো sync হচ্ছে। ৫ সেকেন্ড অপেক্ষা করে আবার চেষ্টা করুন।';
@@ -69,7 +81,7 @@ function getClaimCRFailureMessage(stage, error, context = {}) {
       if (!ownRollVerified) {
         return 'KUET email verify করো। উপরে verify box দেখ।';
       }
-      return 'Firestore verification sync হয়নি। ৫ সেকেন্ড অপেক্ষা করুন।';
+      return 'Unknown permission issue। Console check করুন বা admin contact করুন।';
     }
     return 'CR request পাঠানো যায়নি। আবার চেষ্টা করুন।';
   }

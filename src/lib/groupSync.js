@@ -360,6 +360,19 @@ function _countRoles(memberDocs) {
 export async function requestCR(groupId, profile) {
   const uid = auth.currentUser?.uid;
   if (!uid || !groupId) return;
+  
+  // Diagnostic: check member doc state before attempting write. If verified
+  // flag is false, the Firestore rule will reject the write with
+  // permission-denied, but we can give a better error message now.
+  const memberRef = doc(db, 'groups', groupId, 'members', uid);
+  const memberSnap = await getDocFromServer(memberRef);
+  if (!memberSnap.exists()) {
+    throw new Error('__MISSING_MEMBER_DOC__: member doc does not exist; call joinGroup() first');
+  }
+  if (memberSnap.data().verified !== true) {
+    throw new Error('__VERIFICATION_LOST__: member.verified is not true; re-sync verification');
+  }
+  
   const ref_ = doc(db, 'groups', groupId, 'crRequests', uid);
   const existing = await getDocFromServer(ref_);
   if (existing.exists() && existing.data()?.status === 'pending') {
