@@ -152,13 +152,14 @@ export default function Dashboard() {
   const criticalAlerts = alerts.filter(a => a.type === 'critical');
   const warningAlerts  = alerts.filter(a => a.type === 'warning');
 
-  const greeting = (() => {
+  const timeGreeting = (() => {
     const h = new Date().getHours();
     if (h < 5) return 'Welcome';
     if (h < 12) return 'Good morning';
-    if (h < 17) return 'Good afternoon';
+    if (h < 15) return 'Good noon';
+    if (h < 18) return 'Good afternoon';
     if (h < 20) return 'Good evening';
-    return 'Welcome';
+    return 'Good night';
   })();
 
   return (
@@ -171,7 +172,10 @@ export default function Dashboard() {
             {profile.name && (
               <div style={{ marginBottom: 4 }}>
                 <div style={{ fontSize: 13, fontWeight: 800, color: 'var(--muted)', marginBottom: 8, letterSpacing: '0.10em', textTransform: 'uppercase' }}>
-                  {greeting}
+                  Welcome
+                </div>
+                <div style={{ fontSize: 13, fontWeight: 800, color: 'var(--muted)', marginBottom: 8, letterSpacing: '0.10em', textTransform: 'uppercase' }}>
+                  {timeGreeting}
                 </div>
                 <h1 style={{ fontSize: 'clamp(28px, 6vw, 36px)', fontWeight: 800, letterSpacing: '-0.055em', lineHeight: 1.0, margin: 0 }}>
                   {profile.name}
