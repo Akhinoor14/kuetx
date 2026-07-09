@@ -395,6 +395,16 @@ export async function requestCR(groupId, profile) {
     console.warn('[CR REQUEST] Failed to check existing crRequests doc, treating as fresh request:', e?.code, e?.message);
     existing = { exists: () => false };
   }
+
+  const branch = existing.exists() ? 'update (resubmission)' : 'create (fresh)';
+  const existingStatus = existing.exists() ? existing.data()?.status : null;
+  console.group('[CR REQUEST WRITE]');
+  console.log('groupId:', groupId);
+  console.log('uid:', uid);
+  console.log('branch:', branch);
+  if (existingStatus != null) console.log('existingRequest.status:', existingStatus);
+  console.log('requestData:', requestData);
+  console.groupEnd();
   
   if (existing.exists()) {
     const status = existing.data()?.status;
@@ -409,6 +419,15 @@ export async function requestCR(groupId, profile) {
       await updateDoc(ref_, requestData);
     } catch (err) {
       if (err?.code !== 'permission-denied') throw err;
+      console.warn('[CR REQUEST] permission-denied while updating request, retrying after sync checks', {
+        groupId,
+        uid,
+        branch,
+        requestData,
+        existingStatus,
+        errorCode: err.code,
+        errorMessage: err.message,
+      });
       // A brand-new device can still be catching up with the member-doc
       // writes that make isVerifiedMember(groupId) true server-side.
       // Retry once after a fresh server read instead of surfacing a false
@@ -423,6 +442,14 @@ export async function requestCR(groupId, profile) {
       await setDoc(ref_, requestData);
     } catch (err) {
       if (err?.code !== 'permission-denied') throw err;
+      console.warn('[CR REQUEST] permission-denied while creating request, retrying after sync checks', {
+        groupId,
+        uid,
+        branch,
+        requestData,
+        errorCode: err.code,
+        errorMessage: err.message,
+      });
       // Same first-login race as the resubmission path above.
       await waitForOwnVerification(groupId);
       await waitForOwnMembership(groupId);
@@ -547,9 +574,14 @@ export function logCRRequestDiagnostics(groupId, profile, diagnos) {
   console.log('%c→ Rule Violation: ' + failureReason, 'color: #ff3333; font-size: 13px; font-weight: bold;');
   console.log('');
   
-  console.group('[Firestore crRequests/create Rule Analysis]');
+  const branchLabel = diagnos.isUpdateBranch ? 'update (resubmission)' : 'create (fresh)';
+  console.group('[Firestore crRequests/write Rule Analysis]');
+  console.log('branch:', branchLabel);
   console.log('groupId:', groupId);
   console.log('uid:', auth.currentUser?.uid);
+  if (diagnos.existingStatus != null) {
+    console.log('existing request status:', diagnos.existingStatus);
+  }
   console.log('');
   diagnos.conditions.forEach((c, i) => {
     console.log(`[${i + 1}] ${c.reason}`);
