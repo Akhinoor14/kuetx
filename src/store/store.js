@@ -236,11 +236,14 @@ export const getDeptCodeFromRoll = (roll) => {
   return ROLL_DEPT_MAP[deptDigits] || '';
 };
 
-export const isAllowedDeptCode = (value) => {
+export const getCanonicalDeptCode = (value) => {
   const raw = String(value || '').trim();
-  if (!raw) return false;
-  return DEPT_CODES.some((code) => code.toLowerCase() === raw.toLowerCase());
+  if (!raw) return '';
+  const match = DEPT_CODES.find((code) => code.toLowerCase() === raw.toLowerCase());
+  return match || '';
 };
+
+export const isAllowedDeptCode = (value) => Boolean(getCanonicalDeptCode(value));
 
 // ─── Curriculum Term Helpers ─────────────────────────────────────────────
 export const TERM_KEYS = ['Y1T1', 'Y1T2', 'Y2T1', 'Y2T2', 'Y3T1', 'Y3T2', 'Y4T1', 'Y4T2'];
