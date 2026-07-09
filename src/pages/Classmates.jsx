@@ -58,7 +58,7 @@ function getClaimCRFailureMessage(stage, error, context = {}) {
       if (crStatus?.slotsFull) {
         return 'CR slots ভরে গেছে। CL কাউকে remove করার পর চেষ্টা করুন।';
       }
-      return 'Permission denied। Console (F12) দেখে [CR Request Diagnostics] খুঁজুন।';
+      return 'পারমিশন ডিনাইড। F12 খুলে Console দেখুন - লাল "[CR REQUEST FAILED]" message খুঁজুন।';
     }
     return 'Campus Lead application পাঠানো যায়নি। আবার চেষ্টা করুন।';
   }
@@ -70,7 +70,7 @@ function getClaimCRFailureMessage(stage, error, context = {}) {
       if (!ownRollVerified) {
         return 'KUET email verify করো। উপরে verify box দেখ।';
       }
-      return 'Permission denied। Console (F12) দেখে [CR Request Diagnostics] খুঁজুন।';
+      return 'পারমিশন ডিনাইড। F12 খুলে Console দেখুন - লাল "[CR REQUEST FAILED]" message খুঁজুন, ✗ চিহ্ন দেখলে সেটাই সমস্যা।';
     }
     return 'CR request পাঠানো যায়নি। আবার চেষ্টা করুন।';
   }

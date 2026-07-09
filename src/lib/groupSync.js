@@ -394,7 +394,7 @@ export async function diagnosticCheckCRRequestsCreate(groupId, profile) {
   const isSignedIn = uid != null;
   conditions.push({
     check: isSignedIn,
-    reason: `isSignedIn: ${isSignedIn ? 'YES - logged in' : 'NO - not logged in!'}`,
+    reason: `isSignedIn: ${isSignedIn ? '✓ YES - logged in' : '✗ NO - not logged in!'}`,
   });
   
   // Rule condition 2a: isGroupMember(groupId)
@@ -403,46 +403,74 @@ export async function diagnosticCheckCRRequestsCreate(groupId, profile) {
   const isGroupMember = memberSnap?.exists() || false;
   conditions.push({
     check: isGroupMember,
-    reason: `isGroupMember: ${isGroupMember ? 'YES - member doc exists' : 'NO - member doc missing!'}`,
+    reason: `isGroupMember: ${isGroupMember ? '✓ YES - member doc exists' : '✗ NO - member doc missing!'}`,
   });
   
   // Rule condition 2b: isVerifiedMember(groupId) — the verified flag
   const isVerified = isGroupMember && memberSnap?.data()?.verified === true;
   const verifiedValue = memberSnap?.data()?.verified;
+  const memberData = memberSnap?.data();
+  
+  let verifiedReason = '';
+  if (!isGroupMember) {
+    verifiedReason = '✗ NO - member doc missing (can\'t check verified)';
+  } else if (verifiedValue === true) {
+    verifiedReason = '✓ YES - verified == true';
+  } else if (verifiedValue === false) {
+    verifiedReason = '✗ NO - verified == false (should be true!)';
+  } else if (verifiedValue === undefined || verifiedValue === null) {
+    verifiedReason = `✗ NO - verified is ${verifiedValue || 'undefined'} (missing field!)`;
+  } else {
+    verifiedReason = `✗ NO - verified is ${typeof verifiedValue} ${JSON.stringify(verifiedValue)} (not boolean true!)`;
+  }
+  
   conditions.push({
     check: isVerified,
-    reason: `isVerifiedMember: ${isVerified ? 'YES - verified==true' : `NO - verified is ${verifiedValue} (not true)!`}`,
+    reason: `isVerifiedMember: ${verifiedReason}`,
   });
   
   // Rule condition 3: request.auth.uid == requestUid (doc id matches uid)
   const uidMatches = true; // always true in our case
   conditions.push({
     check: uidMatches,
-    reason: `uid==requestUid: YES - doc id matches requester`,
+    reason: `uid==requestUid: ✓ YES - doc id matches requester`,
   });
   
   // Rule condition 4: request.resource.data.type != 'leave'
   const noLeaveType = true; // we never set type:'leave' in requestCR
   conditions.push({
     check: noLeaveType,
-    reason: `type != 'leave': YES - no type field in fresh request`,
+    reason: `type != 'leave': ✓ YES - no type field in fresh request`,
   });
   
   const allPass = conditions.every(c => c.check);
-  return { passed: allPass, conditions };
+  return { passed: allPass, conditions, memberData };
 }
 
 export function logCRRequestDiagnostics(groupId, profile, diagnos) {
-  console.groupCollapsed('[CR Request Diagnostics]');
+  const failedCondition = diagnos.conditions.find(c => !c.check);
+  
+  console.log('%c━━━ [CR REQUEST FAILED] ━━━', 'color: #ff3333; font-size: 14px; font-weight: bold; background: #ffe6e6; padding: 4px 8px;');
+  console.log('%c→ Reason: ' + (failedCondition?.reason || 'Unknown'), 'color: #ff3333; font-size: 13px; font-weight: bold;');
+  console.log('');
+  
+  console.group('[Full Firestore Rule Check]');
   console.log('groupId:', groupId);
   console.log('uid:', auth.currentUser?.uid);
   console.log('');
   diagnos.conditions.forEach((c, i) => {
-    const icon = c.check ? '✓' : '✗';
-    console.log(`${icon} [${i + 1}] ${c.reason}`);
+    const style = c.check ? 'color: #00aa00; font-weight: normal' : 'color: #ff3333; font-weight: bold';
+    console.log(`[${i + 1}] ${c.reason}`);
   });
   console.log('');
-  console.log('Overall:', diagnos.passed ? 'PASS - rule should allow' : 'FAIL - rule will block!');
+  
+  if (diagnos.memberData) {
+    console.log('Member doc data:');
+    console.table(diagnos.memberData);
+    console.log('');
+  }
+  
+  console.log('%cResult: ' + (diagnos.passed ? 'PASS ✓' : 'FAIL ✗'), diagnos.passed ? 'color: #00aa00; font-weight: bold' : 'color: #ff3333; font-weight: bold');
   console.groupEnd();
 }
 
