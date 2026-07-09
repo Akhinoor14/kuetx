@@ -124,8 +124,8 @@ const StatCard = ({ icon, label, value, sub, color = 'var(--accent)', ring }) =>
         </div>
       </div>
     ) : (
-      <div style={{ width: 44, height: 44, borderRadius: 11, background: `${color}18`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-        <span style={{ fontSize: 20 }}>{icon}</span>
+      <div style={{ width: 44, height: 44, borderRadius: 11, background: `${color}18`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, color }}>
+        {icon}
       </div>
     )}
     <div style={{ minWidth: 0 }}>
@@ -246,7 +246,7 @@ const InAppWebView = ({ url, title, onClose }) => {
             position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column',
             alignItems: 'center', justifyContent: 'center', gap: 14, padding: 24, textAlign: 'center',
           }}>
-            <span style={{ fontSize: 40 }}>🔒</span>
+            <Icons.Lock size={36} color="var(--muted)" />
             <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)' }}>This page can't load here</div>
             <div style={{ fontSize: 12, color: 'var(--muted)', maxWidth: 280 }}>Some KUET portals (and Google sign-in) don't allow embedding. Open it in your browser instead.</div>
             <a href={url} target="_blank" rel="noopener noreferrer" style={{
@@ -284,10 +284,10 @@ const AccountLinkTile = ({ icon, title, subtitle, href, disabled, disabledHint }
       <div style={{
         width: 38, height: 38, borderRadius: 10, flexShrink: 0,
         background: disabled ? 'var(--border)' : 'linear-gradient(135deg, var(--accent), var(--accent2))',
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white',
         boxShadow: disabled ? 'none' : '0 4px 12px color-mix(in srgb, var(--accent) 35%, transparent)',
       }}>
-        <span style={{ fontSize: 18, filter: disabled ? 'grayscale(1) opacity(0.6)' : 'none' }}>{icon}</span>
+        <span style={{ display: 'inline-flex', filter: disabled ? 'grayscale(1) opacity(0.6)' : 'none' }}>{icon}</span>
       </div>
       <div style={{ minWidth: 0, flex: 1 }}>
         <div style={{ fontSize: 13, fontWeight: 800, color: 'var(--text)' }}>{title}</div>
@@ -378,7 +378,8 @@ const Section = ({ title, icon, children, className, action }) => (
   onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.boxShadow = ''; }}>
     <div style={{ padding: '14px 20px', borderBottom: '1px solid var(--border)', background: 'var(--bg)', display: 'flex', alignItems: 'center', gap: 8 }}>
       <div style={{ width: 3, height: 16, borderRadius: 2, background: 'linear-gradient(var(--accent), var(--accent2))' }} />
-      <span style={{ fontSize: 12, fontWeight: 800, textTransform: 'uppercase', letterSpacing: 0.8, color: 'var(--text)', flex: 1 }}>{icon} {title}</span>
+      {icon && <span style={{ display: 'inline-flex', color: 'var(--muted)', flexShrink: 0 }}>{icon}</span>}
+      <span style={{ fontSize: 12, fontWeight: 800, textTransform: 'uppercase', letterSpacing: 0.8, color: 'var(--text)', flex: 1 }}>{title}</span>
       {action}
     </div>
     <div style={{ padding: 20, display: 'flex', flexDirection: 'column', gap: 12 }}>
@@ -415,7 +416,7 @@ const AccountBanner = ({ user, onLogin, onLogout }) => {
       borderRadius: 14, padding: '14px 18px',
       display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap',
     }}>
-      <span style={{ fontSize: 22 }}>{anon ? '🔓' : '🔐'}</span>
+      {anon ? <Icons.UserX size={20} color="#f59e0b" /> : <Icons.ShieldCheck size={20} color="#16a34a" />}
       <div style={{ flex: 1, minWidth: 160 }}>
         <div style={{ fontWeight: 700, fontSize: 13, color: 'var(--text)' }}>
           {anon ? 'Guest Mode — Data saved locally' : (user?.displayName || user?.email || 'Signed In')}
@@ -906,7 +907,7 @@ export default function Profile() {
     : cgpa >= MIN_CGPA_GRADUATION ? '#0ea5e9'
     : '#ef4444';
   const cgpaLabel = isNaN(cgpa) ? null
-    : cgpa >= HONORS_CGPA ? 'With Honors 🏅'
+    : cgpa >= HONORS_CGPA ? 'With Honors'
     : cgpa >= MIN_CGPA_GRADUATION ? 'Good Standing'
     : 'Below Minimum';
 
@@ -926,7 +927,14 @@ export default function Profile() {
           boxShadow: '0 24px 64px color-mix(in srgb, var(--accent) 28%, transparent)',
         }}>
           <div style={{ position: 'relative', zIndex: 2 }}>
-            <div style={{ fontSize: 'clamp(80px,18vw,120px)', marginBottom: 20, display: 'inline-block', animation: 'profileFloat 6s ease-in-out infinite' }}>🐢</div>
+            <div style={{
+              width: 'clamp(80px,18vw,120px)', height: 'clamp(80px,18vw,120px)', margin: '0 auto 20px',
+              borderRadius: '50%', background: 'rgba(255,255,255,0.15)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              animation: 'profileFloat 6s ease-in-out infinite',
+            }}>
+              <Icons.UserPlus size={48} color="white" strokeWidth={1.75} style={{ width: 'clamp(36px,8vw,56px)', height: 'clamp(36px,8vw,56px)' }} />
+            </div>
             <h2 style={{ fontSize: 'clamp(26px,7vw,46px)', fontWeight: 950, margin: '0 0 10px', color: 'white', letterSpacing: '-0.03em' }}>Welcome to KUETx</h2>
             <p style={{ fontSize: 'clamp(13px,3vw,16px)', color: 'rgba(255,255,255,0.9)', margin: '0 0 32px', maxWidth: 420, marginLeft: 'auto', marginRight: 'auto', lineHeight: 1.7 }}>
               Set up your profile for personalized GPA tracking, attendance insights, and more.
@@ -998,7 +1006,7 @@ export default function Profile() {
         >
           {photoURL
             ? <img src={photoURL} alt="Profile" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-            : <span>{profile.name ? profile.name.trim().charAt(0).toUpperCase() : '🎓'}</span>
+            : <span>{profile.name ? profile.name.trim().charAt(0).toUpperCase() : <Icons.User size={28} />}</span>
           }
           {/* Camera overlay on hover */}
           <div style={{
@@ -1066,7 +1074,7 @@ export default function Profile() {
           border: '1.5px solid rgba(59,130,246,0.3)',
           display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap',
         }}>
-          <span style={{ fontSize: 22 }}>👑</span>
+          <Icons.Crown size={22} color="var(--accent)" />
           <div style={{ flex: '1 1 auto', minWidth: 160 }}>
             <div style={{ fontWeight: 700, fontSize: 13, color: 'var(--text)' }}>Class Representative</div>
             <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 1 }}>Class Management tools available in the sidebar.</div>
@@ -1113,26 +1121,26 @@ export default function Profile() {
       <div className="profile-stats-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(155px, 1fr))', gap: 12 }}>
         {/* CGPA */}
         {liveData.cgpaData ? (
-          <StatCard icon="🎓" label="CGPA" value={liveData.cgpaData.cgpa} sub={cgpaLabel} color={cgpaColor} />
+          <StatCard icon={<Icons.GraduationCap size={20} />} label="CGPA" value={liveData.cgpaData.cgpa} sub={cgpaLabel} color={cgpaColor} />
         ) : liveData.currentTermGPA ? (
-          <StatCard icon="📊" label="Term GPA" value={liveData.currentTermGPA.gpa} sub={`${liveData.currentTermGPA.credits} credits`} color="#0ea5e9" />
+          <StatCard icon={<Icons.BarChart3 size={20} />} label="Term GPA" value={liveData.currentTermGPA.gpa} sub={`${liveData.currentTermGPA.credits} credits`} color="#0ea5e9" />
         ) : (
-          <StatCard icon="🎓" label="CGPA" value="No data" color="var(--muted)" />
+          <StatCard icon={<Icons.GraduationCap size={20} />} label="CGPA" value="No data" color="var(--muted)" />
         )}
 
         {/* Assignments */}
         <StatCard
-          icon="✅" label="Assignments"
+          icon={<Icons.CheckCircle2 size={20} />} label="Assignments"
           value={`${liveData.doneAssignments}/${liveData.totalAssignments}`}
           sub={liveData.totalAssignments > 0 ? `${Math.round((liveData.doneAssignments / liveData.totalAssignments) * 100)}% done` : null}
           color="#a855f7"
         />
 
         {/* Study hours */}
-        <StatCard icon="📖" label="Study Hours" value={liveData.studyHours ? `${liveData.studyHours}h` : '—'} sub="Self study logged" color="#f59e0b" />
+        <StatCard icon={<Icons.BookOpen size={20} />} label="Study Hours" value={liveData.studyHours ? `${liveData.studyHours}h` : '—'} sub="Self study logged" color="#f59e0b" />
 
         {/* Diary */}
-        <StatCard icon="✍️" label="Diary Entries" value={Array.isArray(liveData.diary) ? liveData.diary.length : 0} color="#06b6d4" />
+        <StatCard icon={<Icons.PenLine size={20} />} label="Diary Entries" value={Array.isArray(liveData.diary) ? liveData.diary.length : 0} color="#06b6d4" />
       </div>
 
       {/* Quick Accounts moved into the right column below, next to
@@ -1152,7 +1160,7 @@ export default function Profile() {
 
           {/* Personal Info — Edit button lives here (moved off the
               minimal hero card) */}
-          <Section className="ord-personal" title="Personal Info" icon="👤" action={
+          <Section className="ord-personal" title="Personal Info" icon={<Icons.User size={14} />} action={
             <button onClick={() => setIsModalOpen(true)} style={{
               padding: '6px 12px', background: 'var(--bg)', color: 'var(--text)',
               border: '1px solid var(--border)', borderRadius: 8,
@@ -1180,7 +1188,7 @@ export default function Profile() {
           </Section>
 
           {/* Academic Info */}
-          <Section className="ord-academic" title="Academic Info" icon="📚">
+          <Section className="ord-academic" title="Academic Info" icon={<Icons.BookMarked size={14} />}>
             <InfoRow label="Department" value={getDeptName(profile.dept)} />
             <div style={{ height: 1, background: 'var(--border)' }} />
             <InfoRow label="Session" value={profile.session} />
@@ -1199,7 +1207,7 @@ export default function Profile() {
 
           {/* Accommodation + Advisor */}
           {(profile.hallName || profile.roomNo || profile.advisorName) && (
-            <Section className="ord-hall-advisor" title="Hall & Advisor" icon="🏠">
+            <Section className="ord-hall-advisor" title="Hall & Advisor" icon={<Icons.Home size={14} />}>
               {profile.hallName && <InfoRow label="Hall" value={profile.hallName} />}
               {profile.roomNo && (
                 <>
@@ -1232,27 +1240,27 @@ export default function Profile() {
               each tile opens in a new tab. Hall tile resolves from
               profile.hallName via HALL_LINKS; Academic tile is the same
               for every student. */}
-          <Section className="ord-accounts" title="Quick Accounts" icon="🔑">
+          <Section className="ord-accounts" title="Quick Accounts" icon={<Icons.KeyRound size={14} />}>
             <div className="profile-accounts-grid" style={{
               display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: 10,
             }}>
               {profile.hallName && HALL_LINKS[profile.hallName] ? (
                 <AccountLinkTile
-                  icon="🏠"
+                  icon={<Icons.Home size={18} />}
                   title="Hall Account"
                   subtitle={profile.hallName}
                   href={HALL_LINKS[profile.hallName]}
                 />
               ) : (
                 <AccountLinkTile
-                  icon="🏠"
+                  icon={<Icons.Home size={18} />}
                   title="Hall Account"
                   disabled
                   disabledHint="Set your hall in profile"
                 />
               )}
               <AccountLinkTile
-                icon="🎓"
+                icon={<Icons.GraduationCap size={18} />}
                 title="Academic Account"
                 subtitle="academic.kuet.ac.bd"
                 href={ACADEMIC_SYSTEM_LINK}
@@ -1262,7 +1270,7 @@ export default function Profile() {
 
           {/* Attendance Breakdown */}
           {liveData.attData && (
-            <Section className="ord-attendance" title="Attendance" icon="📅">
+            <Section className="ord-attendance" title="Attendance" icon={<Icons.Calendar size={14} />}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
                 <div style={{ position: 'relative', flexShrink: 0 }}>
                   <Ring pct={attPct} size={80} stroke={7} color={attColor} />
@@ -1286,7 +1294,7 @@ export default function Profile() {
 
           {/* Upcoming Assignments */}
           {liveData.upcomingAssignments.length > 0 && (
-            <Section className="ord-assignments" title="Upcoming Assignments" icon="📝">
+            <Section className="ord-assignments" title="Upcoming Assignments" icon={<Icons.ClipboardList size={14} />}>
               {liveData.upcomingAssignments.map((a, i) => {
                 const daysLeft = Math.ceil((new Date(a.dueDate) - new Date()) / 86400000);
                 const urgent = daysLeft <= 2;
@@ -1297,7 +1305,10 @@ export default function Profile() {
                     background: urgent ? 'rgba(239,68,68,0.06)' : 'var(--bg)',
                     border: `1px solid ${urgent ? 'rgba(239,68,68,0.2)' : 'var(--border)'}`,
                   }}>
-                    <span style={{ fontSize: 16, flexShrink: 0 }}>{urgent ? '🔴' : '🟡'}</span>
+                    <span style={{
+                      width: 8, height: 8, borderRadius: '50%', flexShrink: 0, marginTop: 5,
+                      background: urgent ? '#ef4444' : '#eab308',
+                    }} />
                     <div style={{ flex: 1, minWidth: 0 }}>
                       <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--text)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{a.title || a.name}</div>
                       <div style={{ fontSize: 11, color: urgent ? '#ef4444' : 'var(--muted)', marginTop: 2 }}>
@@ -1318,7 +1329,7 @@ export default function Profile() {
 
           {/* Recent Notes */}
           {liveData.recentNotes.length > 0 && (
-            <Section className="ord-notes" title="Recent Notes" icon="📌">
+            <Section className="ord-notes" title="Recent Notes" icon={<Icons.StickyNote size={14} />}>
               {liveData.recentNotes.map((n, i) => (
                 <div key={n.id || i} style={{ padding: '10px 12px', background: 'var(--bg)', borderRadius: 9, borderLeft: '3px solid var(--accent2)' }}>
                   <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--text)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{n.title || 'Untitled'}</div>
@@ -1333,7 +1344,13 @@ export default function Profile() {
           {(() => {
             const PRAYERS_LIST = ['Fajr', 'Dhuhr', 'Asr', 'Maghrib', 'Isha'];
             const PRAYER_AR = { Fajr: 'ফজর', Dhuhr: 'যোহর', Asr: 'আসর', Maghrib: 'মাগরিব', Isha: 'ইশা' };
-            const PRAYER_ICON = { Fajr: '🌙', Dhuhr: '☀️', Asr: '🌤️', Maghrib: '🌅', Isha: '🌃' };
+            const PRAYER_ICON = {
+              Fajr: <Icons.Sunrise size={14} />,
+              Dhuhr: <Icons.Sun size={14} />,
+              Asr: <Icons.CloudSun size={14} />,
+              Maghrib: <Icons.Sunset size={14} />,
+              Isha: <Icons.Moon size={14} />,
+            };
 
             // Re-read namaz from store directly so it's always fresh (namazTick triggers useMemo)
             const freshNamaz = store.get('namaz') || {};
@@ -1386,10 +1403,12 @@ export default function Profile() {
             return (
               <>
                 {/* Today's Focus */}
-                <Section className="ord-focus" title="Today's Focus" icon="✨">
+                <Section className="ord-focus" title="Today's Focus" icon={<Icons.Target size={14} />}>
                   {/* ── Namaz tracker ── */}
                   <div>
-                    <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 10 }}>🕌 নামাজ — আজকের</div>
+                    <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 10, display: 'flex', alignItems: 'center', gap: 5 }}>
+                      <Icons.Landmark size={12} /> নামাজ — আজকের
+                    </div>
                     <div style={{ display: 'flex', gap: 6, alignItems: 'flex-end' }}>
                       {PRAYERS_LIST.map((p, i) => {
                         const s = namazStatus[i];
@@ -1406,9 +1425,9 @@ export default function Profile() {
                               boxShadow: (s.done || s.masjid) ? `0 2px 8px ${bgColor}60` : 'none',
                               minWidth: 40, maxWidth: 56,
                             }}>
-                              <span style={{ fontSize: 14 }}>{PRAYER_ICON[p]}</span>
+                              <span style={{ display: 'inline-flex' }}>{PRAYER_ICON[p]}</span>
                               {s.masjid && <span style={{ fontSize: 8, color: '#fff', fontWeight: 700, letterSpacing: 0.3 }}>মসজিদ</span>}
-                              {s.done && !s.masjid && <span style={{ fontSize: 10, color: textColor, fontWeight: 700 }}>✓</span>}
+                              {s.done && !s.masjid && <Icons.Check size={11} color={textColor} strokeWidth={3} />}
                             </div>
                             <span style={{ fontSize: 9, color: (s.done || s.masjid) ? 'var(--accent)' : 'var(--muted)', fontWeight: 700 }}>
                               {PRAYER_AR[p]}
@@ -1420,8 +1439,8 @@ export default function Profile() {
                         <div style={{ fontSize: 22, fontWeight: 900, color: namazCount === 5 ? '#16a34a' : 'var(--accent)', lineHeight: 1 }}>
                           {namazCount}<span style={{ fontSize: 13, color: 'var(--muted)', fontWeight: 500 }}>/5</span>
                         </div>
-                        <div style={{ fontSize: 9, color: 'var(--muted)', marginTop: 2 }}>
-                          {namazCount === 5 ? '✅ পূর্ণ' : `${5 - namazCount} বাকি`}
+                        <div style={{ fontSize: 9, color: 'var(--muted)', marginTop: 2, display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: 3 }}>
+                          {namazCount === 5 ? <><Icons.CheckCircle2 size={10} color="#16a34a" /> পূর্ণ</> : `${5 - namazCount} বাকি`}
                         </div>
                       </div>
                     </div>
@@ -1431,11 +1450,13 @@ export default function Profile() {
 
                   {/* ── Study streak ── */}
                   <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                    <div style={{ fontSize: 26 }}>📚</div>
+                    <div style={{ width: 26, height: 26, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#f59e0b' }}>
+                      <Icons.BookOpen size={22} />
+                    </div>
                     <div style={{ flex: 1 }}>
                       <div style={{ fontSize: 15, fontWeight: 800, color: 'var(--text)' }}>
                         {liveData.studyStreak > 0
-                          ? <>{liveData.studyStreak} day{liveData.studyStreak > 1 ? 's' : ''} <span style={{ fontSize: 13 }}>🔥</span></>
+                          ? <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}>{liveData.studyStreak} day{liveData.studyStreak > 1 ? 's' : ''} <Icons.Flame size={13} color="#f59e0b" /></span>
                           : <span style={{ color: 'var(--muted)', fontWeight: 600 }}>—</span>}
                       </div>
                       <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 2 }}>
@@ -1466,7 +1487,7 @@ export default function Profile() {
                     onMouseLeave={e => e.currentTarget.style.opacity = '1'}
                   >
                     <div style={{ fontSize: 10, fontWeight: 800, color: 'var(--accent)', marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.07em', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                      <span style={{ display: 'flex', alignItems: 'center', gap: 5 }}><span>📖</span> কুরআনের বাণী</span>
+                      <span style={{ display: 'flex', alignItems: 'center', gap: 5 }}><Icons.BookOpenText size={11} /> কুরআনের বাণী</span>
                       <span style={{ fontSize: 9, color: 'var(--muted)', fontWeight: 600, letterSpacing: 0 }}>tap for next ›</span>
                     </div>
                     <div style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.7, fontFamily: '"Amiri", serif', textAlign: 'right', direction: 'rtl', marginBottom: 6 }}>
@@ -1487,7 +1508,7 @@ export default function Profile() {
 
       {/* ── Legacy Term Results ── */}
       {liveData.legacyTerms.length > 0 && (
-        <Section title="Term Results History" icon="📊">
+        <Section title="Term Results History" icon={<Icons.BarChart3 size={14} />}>
           <div className="profile-terms-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(120px, 1fr))', gap: 10 }}>
             {liveData.legacyTerms.map((t, i) => {
               const gpa = parseFloat(t.gpa);
