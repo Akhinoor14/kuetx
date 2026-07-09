@@ -153,7 +153,7 @@ const validateTermStartDate = (value) => {
   return null; // Invalid date
 };
 
-export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProfile = {}, mandatory = false }) {
+export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProfile = {}, mandatory = false, minimal = false }) {
   const initial = useMemo(() => ({ ...DEFAULT_PROFILE, ...initialProfile }), [initialProfile]);
   const [form, setForm] = useState(initial);
   const [stepIndex, setStepIndex] = useState(0);
@@ -407,27 +407,42 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
   }
   `;
 
+  const modalContentStyle = minimal ? {
+    background: '#ffffff',
+    padding: '18px',
+    borderRadius: 12,
+    width: 'min(820px, 98vw)',
+    maxWidth: '100%',
+    maxHeight: '90vh',
+    overflowY: 'auto',
+    boxShadow: '0 6px 18px rgba(0,0,0,0.06)',
+    pointerEvents: 'auto',
+  } : { background: 'var(--surface)', padding: 'clamp(12px, 6vw, 20px)', borderRadius: 16, width: 'min(920px, 98vw)', maxWidth: '100%', maxHeight: '94vh', overflowY: 'auto', boxShadow: '0 14px 40px rgba(0,0,0,0.24)', pointerEvents: 'auto' };
+
   return (
-    <Modal onClose={mandatory ? () => {} : onClose} closeOnOverlayClick={!mandatory} contentClassName="kuetx-profile-modal" contentStyle={{ background: 'var(--surface)', padding: 'clamp(12px, 6vw, 20px)', borderRadius: 16, width: 'min(920px, 98vw)', maxWidth: '100%', maxHeight: '94vh', overflowY: 'auto', boxShadow: '0 14px 40px rgba(0,0,0,0.24)', pointerEvents: 'auto' }}>
+    <Modal onClose={mandatory ? () => {} : onClose} closeOnOverlayClick={!mandatory} contentClassName={minimal ? "kuetx-profile-modal minimal" : "kuetx-profile-modal"} contentStyle={modalContentStyle}>
       <style>{modalCss}</style>
       <form onSubmit={handleSubmit} style={{ width: '100%' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, alignItems: 'flex-start', marginBottom: 14, flexWrap: 'wrap' }}>
           <div>
-            <h3 style={{ margin: 0, fontSize: 20 }}>Profile Setup</h3>
-            <p style={{ margin: '6px 0 0', fontSize: 13, color: 'var(--muted)' }}>Set it up once. Required fields are kept minimal, and optional pages can be skipped.</p>
+            <h3 style={{ margin: 0, fontSize: minimal ? 18 : 20, color: minimal ? '#111' : undefined }}>Profile Setup</h3>
+            {!minimal && <p style={{ margin: '6px 0 0', fontSize: 13, color: 'var(--muted)' }}>Set it up once. Required fields are kept minimal, and optional pages can be skipped.</p>}
           </div>
-          <div style={{ minWidth: 180 }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, color: 'var(--muted)', fontWeight: 700, marginBottom: 8 }}>
-              <span>{stepIndex + 1}/{stepTabs.length}</span>
-              <span>{progressPct}%</span>
+          {!minimal && (
+            <div style={{ minWidth: 180 }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, color: 'var(--muted)', fontWeight: 700, marginBottom: 8 }}>
+                <span>{stepIndex + 1}/{stepTabs.length}</span>
+                <span>{progressPct}%</span>
+              </div>
+              <div style={{ height: 8, borderRadius: 999, background: 'rgba(148,163,184,0.18)', overflow: 'hidden' }}>
+                <div style={{ width: `${progressPct}%`, height: '100%', borderRadius: 999, background: 'linear-gradient(90deg, var(--accent), var(--accent2))', transition: 'width 0.25s ease' }} />
+              </div>
             </div>
-            <div style={{ height: 8, borderRadius: 999, background: 'rgba(148,163,184,0.18)', overflow: 'hidden' }}>
-              <div style={{ width: `${progressPct}%`, height: '100%', borderRadius: 999, background: 'linear-gradient(90deg, var(--accent), var(--accent2))', transition: 'width 0.25s ease' }} />
-            </div>
-          </div>
+          )}
+
         </div>
 
-        {!mandatory && (
+        {!mandatory && !minimal && (
           <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 14 }}>
             {stepTabs.map((step, idx) => (
               <div
@@ -711,14 +726,14 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
         </div>
 
         <div className="actions" style={{ display: 'flex', justifyContent: 'space-between', gap: 12, marginTop: 16, flexWrap: 'wrap', alignItems: 'center' }}>
-          {mandatory ? <div /> : (
+          {(!mandatory && !minimal) ? (
             <button type="button" onClick={onClose} style={{ padding: '12px 16px', borderRadius: 8, border: '1px solid var(--border)', background: 'transparent', color: 'var(--text)', fontWeight: 600 }}>Cancel</button>
-          )}
+          ) : <div />}
           <div className="left" style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginLeft: 'auto' }}>
-            {stepIndex > 0 && (
+            {!minimal && stepIndex > 0 && (
               <button type="button" onClick={goBack} style={{ padding: '12px 16px', borderRadius: 8, border: '1px solid var(--border)', background: 'transparent', color: 'var(--text)', fontWeight: 600 }}>Back</button>
             )}
-            {showOptionalSkip && (
+            {!minimal && showOptionalSkip && (
               <button type="button" onClick={skipStep} style={{ padding: '12px 16px', borderRadius: 8, border: '1px dashed var(--border)', background: 'transparent', color: 'var(--muted)', fontWeight: 600 }}>Skip</button>
             )}
             {/* Only name + studentId are actually required (see
@@ -726,7 +741,7 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
                 can be added later from Profile. This lets someone land in
                 the app right after step 0 instead of clicking through
                 Residence and Review just to reach a "Finish" button. */}
-            {!canSubmit && stepIndex === 0 && !mandatory && (
+            {!minimal && !canSubmit && stepIndex === 0 && !mandatory && (
               <button
                 type="button"
                 onClick={() => { if (validateStep(0)) handleSubmit({ preventDefault: () => {} }); }}
@@ -736,7 +751,7 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
                 {rollClaimBusy ? 'Checking…' : 'Finish now, add rest later'}
               </button>
             )}
-            {!canSubmit && !(mandatory && stepIndex === 0) ? (
+            {!minimal && (!canSubmit && !(mandatory && stepIndex === 0)) ? (
               <button type="button" onClick={goNext} className="primary-action" style={{ padding: '12px 18px', background: 'var(--accent)', color: '#fff', border: 'none', borderRadius: 8, fontWeight: 700, minWidth: 100 }}>Next</button>
             ) : (mandatory && stepIndex === 0) ? (
               <button

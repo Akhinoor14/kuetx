@@ -22,7 +22,7 @@ import useFirebaseAuth from './hooks/useFirebaseAuth';
 import DataSafeToast from './components/DataSafeToast';
 import ClassJoinIntro from './components/ClassJoinIntro';
 import KuetVerifyEmailConfirmModal from './components/KuetVerifyEmailConfirmModal';
-import { store, getProfile, isProfileComplete, DEFAULT_PROFILE } from './store/store';
+import { store, getProfile, isProfileComplete, DEFAULT_PROFILE, normalizeProfileForSave, validateProfileForSave } from './store/store';
 import { getGroupId } from './lib/groupUtils';
 import { syncOwnVerification, joinGroup } from './lib/groupSync';
 import { claimRoll } from './lib/rollOwnership';
@@ -391,6 +391,23 @@ export default function App() {
     };
   }, [authState.authReady, authState.isAnonymous]);
 
+  const isNewlyCreatedAccount = () => {
+    try {
+      const u = authState.user;
+      if (!u) return false;
+      const meta = u.metadata || {};
+      const creation = meta.creationTime || null;
+      const last = meta.lastSignInTime || null;
+      if (!creation) return false;
+      // If creation == lastSignInTime it's the first sign-in.
+      if (creation && last && creation === last) return true;
+      // Also treat very-recent creation (within 5 minutes) as new.
+      const createdAt = new Date(creation).getTime();
+      if (Date.now() - createdAt < 5 * 60 * 1000) return true;
+      return false;
+    } catch { return false; }
+  };
+
   const advance = () => setQueue(q => q.slice(1));
 
   const handleAuthSuccess = async (user, info = {}) => {
@@ -441,8 +458,8 @@ export default function App() {
             // by design (see buildQueue comment).
             onClose={() => {}}
             mandatory
+            minimal={isNewlyCreatedAccount()}
             onSave={(formData) => {
-              const { validateProfileForSave, normalizeProfileForSave } = require('./store/store');
               const result = validateProfileForSave(formData);
               if (!result.ok) {
                 const msgs = Object.values(result.errors).join('\n');

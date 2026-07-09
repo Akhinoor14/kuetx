@@ -13,6 +13,7 @@ import {
   SCHOLARSHIP_ATTENDANCE_PCT, HONORS_CGPA, MIN_CGPA_GRADUATION,
   computeCGPA,
   normalizeProfileForSave,
+  validateProfileForSave,
 } from '../store/store';
 import { getAllCourses } from '../store/curriculumStore';
 import ProfileSetupModal from '../components/ProfileSetupModal';
@@ -792,7 +793,6 @@ export default function Profile() {
   }, [hasMinProfile]);
 
   const handleSave = formData => {
-    const { validateProfileForSave, normalizeProfileForSave } = require('../store/store');
     const result = validateProfileForSave(formData);
     if (!result.ok) {
       const msgs = Object.values(result.errors).join('\n');
