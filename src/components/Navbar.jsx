@@ -8,6 +8,7 @@ import * as noticeApi from '../lib/noticeUtils';
 import * as alertApi from '../lib/alertUtils';
 import { computeAlerts } from '../lib/alertUtils';
 import { getProfile } from '../store/store';
+import { getGroupId } from '../lib/groupUtils';
 import { NotificationPanel } from './NotificationPanel';
 import GuideModal from './GuideModal';
 
@@ -93,8 +94,19 @@ export function Navbar({ onMenuClick }) {
   const ThemeIcon = themeId === 'dark' ? Moon : themeId === 'milky' ? Droplets : Sun;
   const themeLabels = { light: '☀️ Light', milky: '🥛 Milky', dark: '🌙 Dark' };
 
+  const profileForNotices = useMemo(() => getProfile() || {}, [refreshTick]);
+  const groupId = useMemo(() => getGroupId(profileForNotices), [profileForNotices]);
   const readNoticeIds = useMemo(() => noticeApi.getReadNoticeIds(), [refreshTick]);
-  const notices = useMemo(() => noticeApi.getNotices(), [refreshTick]);
+
+  // Live notice feed — was previously the dead getNotices() stub (always
+  // returned []), so the bell badge never reflected real notices. Now
+  // subscribes the same way NotificationPanel does, so a new notice
+  // updates the badge count immediately.
+  const [notices, setNotices] = useState([]);
+  useEffect(() => {
+    return noticeApi.subscribeAllNotices(profileForNotices, groupId, setNotices);
+  }, [profileForNotices, groupId]);
+
   const unreadNoticeCount = noticeApi.getUnreadNotices(notices, readNoticeIds).length;
 
   // Badge reflects the same merged set shown in NotificationPanel:
@@ -212,7 +224,11 @@ export function Navbar({ onMenuClick }) {
           <ThemeIcon size={17} />
         </button>
 
-        {/* ── Notification bell — standalone, always visible ── */}
+        {/* ── Notification bell — standalone, always visible.
+            Unread state is shown two ways: (1) the numeric badge, same
+            as before, and (2) the bell itself changes color + gets a
+            soft pulsing ring when there's anything unread, so it's
+            obvious at a glance even before you count the badge. ── */}
         <button
           onClick={() => setNotificationOpen(true)}
           aria-label="Notice"
@@ -220,14 +236,14 @@ export function Navbar({ onMenuClick }) {
             position: 'relative',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             width: 38, height: 38, borderRadius: 10,
-            border: '1.5px solid var(--border)',
-            background: 'transparent',
-            cursor: 'pointer', color: 'var(--text)',
-            transition: 'background 0.15s',
+            border: alertCount > 0 ? '1.5px solid var(--accent)' : '1.5px solid var(--border)',
+            background: alertCount > 0 ? 'color-mix(in srgb, var(--accent) 10%, transparent)' : 'transparent',
+            cursor: 'pointer', color: alertCount > 0 ? 'var(--accent)' : 'var(--text)',
+            transition: 'background 0.15s, border-color 0.15s, color 0.15s',
             marginRight: 8,
           }}
         >
-          <Bell size={17} />
+          <Bell size={17} fill={alertCount > 0 ? 'var(--accent)' : 'none'} style={{ animation: alertCount > 0 ? 'bellRing 2.4s ease-in-out infinite' : 'none' }} />
           {alertCount > 0 && (
             <span style={{
               position: 'absolute', top: -4, right: -4,
@@ -238,11 +254,24 @@ export function Navbar({ onMenuClick }) {
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               fontSize: 8, fontWeight: 700, color: '#fff',
               boxShadow: '0 0 6px var(--danger)88',
+              animation: 'bellBadgePulse 1.8s ease-in-out infinite',
             }}>
               {alertCount > 9 ? '9+' : alertCount}
             </span>
           )}
         </button>
+        <style>{`
+          @keyframes bellRing {
+            0%, 92%, 100% { transform: rotate(0deg); }
+            94% { transform: rotate(-12deg); }
+            96% { transform: rotate(10deg); }
+            98% { transform: rotate(-6deg); }
+          }
+          @keyframes bellBadgePulse {
+            0%, 100% { box-shadow: 0 0 6px var(--danger)88; }
+            50% { box-shadow: 0 0 12px var(--danger); }
+          }
+        `}</style>
 
         {/* ── Hamburger button ── */}
         <button

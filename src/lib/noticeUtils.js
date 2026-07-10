@@ -70,13 +70,28 @@ export function subscribeAllNotices(profile, groupId, callback) {
   const unsubGlobal = subscribeGlobalNotices((notices) => {
     globalList = notices
       .filter((n) => noticeAppliesTo(n, profile, groupId))
-      .map((n) => ({ ...n, from: 'Admin', createdAt: toMillis(n.createdAt) }));
+      .map((n) => {
+        const isFounder = n.createdBy?.name === 'Founder';
+        return {
+          ...n,
+          from: isFounder ? 'Founder' : (n.createdBy?.name || 'Admin'),
+          isFounder,
+          section: 'admin',
+          createdAt: toMillis(n.createdAt),
+        };
+      });
     emit();
   });
 
   const unsubGroup = groupId
     ? subscribeGroupNotices(groupId, (notices) => {
-        groupList = notices.map((n) => ({ ...n, from: 'CR', createdAt: toMillis(n.createdAt) }));
+        groupList = notices.map((n) => ({
+          ...n,
+          from: n.postedBy?.name || 'CR',
+          isFounder: false,
+          section: 'class',
+          createdAt: toMillis(n.createdAt),
+        }));
         emit();
       })
     : () => {};

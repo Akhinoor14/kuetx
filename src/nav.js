@@ -20,6 +20,15 @@ export const NAV = [
     ]
   },
   {
+    group: 'Notice',
+    isSubgroup: true,
+    hubPath: '/notice',
+    hubIcon: 'Bell',
+    items: [
+      { id: 'notice', label: 'Notice', icon: 'Bell', path: '/notice' },
+    ]
+  },
+  {
     group: 'Class Rep',
     requiresCR: true,
     isSubgroup: true,
