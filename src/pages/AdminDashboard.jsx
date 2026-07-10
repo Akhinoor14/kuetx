@@ -18,6 +18,7 @@ import { CORE_TEAM_LEAD_ROLES, ROLE_LABELS, ROLE_SCOPE_KIND, ROLES } from '../li
 import { subscribePendingRollUnlockRequests, resolveRollUnlockRequest, dismissRollUnlockRequest } from '../lib/rollOwnership';
 import { listPendingFlags, resolveEmailFlag } from '../lib/emailFlags';
 import ClassmatesList from '../components/ClassmatesList';
+import { renderFormattedNoticeBody } from '../lib/noticeFormat';
 import CategorySubNav from '../components/CategorySubNav';
 import SubcategoryTabs from '../components/SubcategoryTabs';
 import { FOUNDER_CATEGORIES, getFounderCategory, resolveCount, resolveSubtitle } from '../lib/founderCategories';
@@ -801,6 +802,7 @@ function TrustSafetyView({ onBack, onSelectCategory, countCtx }) {
 function CommunicationView({ onBack, onSelectCategory, groups, countCtx }) {
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
+  const [showPreview, setShowPreview] = useState(false);
   const [audienceType, setAudienceType] = useState('all');
   const [batchInput, setBatchInput] = useState('');
   const [groupInput, setGroupInput] = useState('');
@@ -821,7 +823,7 @@ function CommunicationView({ onBack, onSelectCategory, groups, countCtx }) {
         createdBy: { uid: auth.currentUser.uid, name: 'Founder' },
         createdAt: serverTimestamp(),
       });
-      setTitle(''); setBody(''); setSendMsg('Notice sent.');
+      setTitle(''); setBody(''); setShowPreview(false); setSendMsg('Notice sent.');
     } catch (err) {
       setSendMsg(`Failed: ${err?.message || err}`);
     } finally {
@@ -841,9 +843,41 @@ function CommunicationView({ onBack, onSelectCategory, groups, countCtx }) {
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-            <label style={{ fontSize: 11, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Message</label>
-            <textarea placeholder="What do you want to tell them?" value={body} onChange={(e) => setBody(e.target.value)} rows={3}
-              style={{ padding: '8px 10px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--inputBg)' }} />
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8 }}>
+              <label style={{ fontSize: 11, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Message</label>
+              <button
+                type="button"
+                onClick={() => setShowPreview((v) => !v)}
+                disabled={!title.trim() && !body.trim()}
+                style={{
+                  fontSize: 10.5, fontWeight: 700, color: 'var(--accent)', background: 'none', border: 'none',
+                  cursor: 'pointer', padding: 0, opacity: (!title.trim() && !body.trim()) ? 0.5 : 1,
+                }}
+              >
+                {showPreview ? 'Back to edit' : 'Preview'}
+              </button>
+            </div>
+
+            {!showPreview ? (
+              <>
+                <textarea placeholder={'What do you want to tell them?\n\nLeave a blank line to start a new paragraph.'} value={body} onChange={(e) => setBody(e.target.value)} rows={5}
+                  style={{ padding: '8px 10px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--inputBg)', lineHeight: 1.55, resize: 'vertical' }} />
+                <div style={{ fontSize: 10.5, color: 'var(--muted)', lineHeight: 1.4 }}>
+                  Blank line = new paragraph. It'll show up formatted and spaced for readers.
+                </div>
+              </>
+            ) : (
+              <div style={{
+                padding: '10px 12px', borderRadius: 8, border: '1px solid var(--border)',
+                background: 'var(--surface)', fontSize: 13, color: 'var(--text)', lineHeight: 1.55,
+                minHeight: 80,
+              }}>
+                <div style={{ fontWeight: 700, marginBottom: 6 }}>{title.trim() || <span style={{ color: 'var(--muted)' }}>(no title)</span>}</div>
+                {body.trim()
+                  ? renderFormattedNoticeBody(body)
+                  : <span style={{ color: 'var(--muted)' }}>(nothing written yet)</span>}
+              </div>
+            )}
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>

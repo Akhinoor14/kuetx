@@ -48,6 +48,7 @@ export default function AdminHub() {
     title: roleLabel,
     icon: 'Shield',
     items: [
+      { id: 'class-roster', label: 'Class Roster',       icon: 'Users',         path: '/class-roster' },
       { id: 'class-management', label: 'Class Management',  icon: 'Users',         path: '/class-management' },
       { id: 'ct-quiz-planning', label: 'CT & Quiz Planner',  icon: 'CalendarCheck', path: '/ct-quiz-planning' },
     ],

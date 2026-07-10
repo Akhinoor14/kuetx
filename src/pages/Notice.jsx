@@ -4,6 +4,7 @@ import { Bell, Crown, Megaphone, Users } from 'lucide-react';
 import * as noticeApi from '../lib/noticeUtils';
 import { getProfile } from '../store/store';
 import { getGroupId } from '../lib/groupUtils';
+import { renderFormattedNoticeBody } from '../lib/noticeFormat';
 
 function timeAgo(ms) {
   if (!ms) return '';
@@ -55,7 +56,9 @@ function NoticeCard({ n, isUnread, onOpen }) {
         }}>
           {n.title}
         </div>
-        <div style={{ fontSize: 12.5, color: 'var(--muted)', marginTop: 3, lineHeight: 1.45 }}>{n.body}</div>
+        <div style={{ fontSize: 12.5, color: 'var(--muted)', marginTop: 3, lineHeight: 1.45 }}>
+          {renderFormattedNoticeBody(n.body)}
+        </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 11, color: 'var(--muted)', marginTop: 8 }}>
           <span>{n.from}</span>
           <span>·</span>

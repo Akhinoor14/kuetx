@@ -77,7 +77,7 @@ export default function ClassNoticesPanel() {
                 {n._source === 'global' ? 'Admin' : 'Class'}
               </span>
             </div>
-            <div style={{ color: 'var(--muted)', marginTop: 4 }}>{n._body}</div>
+            <div style={{ color: 'var(--muted)', marginTop: 4, whiteSpace: 'pre-wrap' }}>{n._body}</div>
             <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 6 }}>
               — {n._by?.name || 'Unknown'}
             </div>

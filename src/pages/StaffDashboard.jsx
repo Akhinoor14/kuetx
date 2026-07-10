@@ -51,12 +51,12 @@ function RollUnlockSection() {
   return (
     <Section wide title="Roll Unlock Requests">
       {requests.map((r) => (
-        <div key={r.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 0', borderBottom: '1px solid var(--border)' }}>
-          <div>
+        <div key={r.id} style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', gap: 8, padding: '8px 0', borderBottom: '1px solid var(--border)' }}>
+          <div style={{ minWidth: 0, wordBreak: 'break-word' }}>
             <div style={{ fontSize: 13, fontWeight: 700 }}>Roll: {r.roll}</div>
             <div style={{ fontSize: 11, color: 'var(--muted)' }}>{r.note}</div>
           </div>
-          <div style={{ display: 'flex', gap: 8 }}>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
             <button className="btn btn-sm" onClick={() => handleResolve(r)} disabled={busyId === r.id}>
               {busyId === r.id ? 'Working…' : 'Release roll'}
             </button>
@@ -184,10 +184,10 @@ function EmailAuditBlock({ groupId, dept }) {
       </div>
       {err && <div style={{ fontSize: 11.5, color: 'var(--danger)', marginBottom: 6 }}>{err}</div>}
       {suspicious.map((m) => (
-        <div key={m.id} className="card" style={{ padding: 8, display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
-          <div>
+        <div key={m.id} className="card" style={{ padding: 8, display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', gap: 8, marginBottom: 4 }}>
+          <div style={{ minWidth: 0, wordBreak: 'break-word' }}>
             <div style={{ fontSize: 13 }}>{m.name} ({m.roll})</div>
-            <div style={{ fontSize: 11.5, color: 'var(--danger)' }}>{m.accountEmail}</div>
+            <div style={{ fontSize: 11.5, color: 'var(--danger)', wordBreak: 'break-all' }}>{m.accountEmail}</div>
           </div>
           <button className="btn btn-sm btn-secondary" onClick={() => handleFlag(m)} disabled={busyUid === m.id}>
             {busyUid === m.id ? 'Flagging…' : 'Flag করো'}
@@ -239,9 +239,9 @@ function CampusLeadBlock({ groupId }) {
         <div style={{ marginBottom: 12 }}>
           <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 6 }}>CR requests</div>
           {crRequests.map((r) => (
-            <div key={r.id} className="card" style={{ padding: 8, display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
-              <span style={{ fontSize: 13 }}>{r.name} ({r.roll})</span>
-              <div style={{ display: 'flex', gap: 4 }}>
+            <div key={r.id} className="card" style={{ padding: 8, display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', gap: 8, marginBottom: 4 }}>
+              <span style={{ fontSize: 13, minWidth: 0, wordBreak: 'break-word' }}>{r.name} ({r.roll})</span>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
                 <button className="btn btn-sm btn-primary" onClick={() => handleApprove(r.id)}>Approve</button>
                 <button className="btn btn-sm btn-secondary" onClick={() => clRejectCRRequest(groupId, r.id)}>Reject</button>
               </div>
@@ -254,9 +254,9 @@ function CampusLeadBlock({ groupId }) {
         <div style={{ marginBottom: 12 }}>
           <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 6 }}>CR leave requests</div>
           {leaveRequests.map((r) => (
-            <div key={r.id} className="card" style={{ padding: 8, display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
-              <span style={{ fontSize: 13 }}>{r.name} ({r.roll}) — wants to step down as CR</span>
-              <div style={{ display: 'flex', gap: 4 }}>
+            <div key={r.id} className="card" style={{ padding: 8, display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', gap: 8, marginBottom: 4 }}>
+              <span style={{ fontSize: 13, minWidth: 0, wordBreak: 'break-word' }}>{r.name} ({r.roll}) — wants to step down as CR</span>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
                 <button className="btn btn-sm btn-primary" onClick={() => handleApproveLeave(r.id, r.uid)}>Approve</button>
                 <button className="btn btn-sm btn-secondary" onClick={() => clRejectLeaveCR(groupId, r.id)}>Reject</button>
               </div>
@@ -298,11 +298,11 @@ function SeniorCampusLeadBlock({ dept }) {
       <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 6 }}>Pending Campus Lead applications</div>
       {applications.length === 0 && <div style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 10 }}>None right now.</div>}
       {applications.map((a) => (
-        <div key={a.id} className="card" style={{ padding: 8, display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
-          <span style={{ fontSize: 13 }}>
+        <div key={a.id} className="card" style={{ padding: 8, display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', gap: 8, marginBottom: 4 }}>
+          <span style={{ fontSize: 13, minWidth: 0, wordBreak: 'break-word' }}>
             {a.name} ({a.roll}) — {a.groupId} {a.bundledCRClaim && <em>(+ CR)</em>}
           </span>
-          <div style={{ display: 'flex', gap: 4 }}>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
             <button className="btn btn-sm btn-primary" onClick={() => approveCLApplication(a.id)}>Approve</button>
             <button className="btn btn-sm btn-secondary" onClick={() => rejectCLApplication(a.id)}>Reject</button>
           </div>
@@ -368,12 +368,12 @@ function EmailFlagReviewBlock({ dept, groupId } = {}) {
   return (
     <div style={{ marginBottom: 12 }}>
       {flags.map((f) => (
-        <div key={f.id} className="card" style={{ padding: 8, display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
-          <div>
+        <div key={f.id} className="card" style={{ padding: 8, display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', gap: 8, marginBottom: 4 }}>
+          <div style={{ minWidth: 0, wordBreak: 'break-word' }}>
             <div style={{ fontSize: 13 }}>{f.targetEmail || '(no email)'} — {f.dept || f.groupId || 'unscoped'}</div>
             <div style={{ fontSize: 11, color: 'var(--muted)' }}>{f.reason}</div>
           </div>
-          <div style={{ display: 'flex', gap: 4 }}>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
             <button className="btn btn-sm btn-primary" onClick={() => handleResolve(f, 'resolved')} disabled={busyUid === f.id}>Fixed</button>
             <button className="btn btn-sm btn-secondary" onClick={() => handleResolve(f, 'dismissed')} disabled={busyUid === f.id}>Dismiss</button>
           </div>
@@ -414,9 +414,9 @@ function HeadOfOpsSection() {
       </div>
       {allApplications.length === 0 && <div style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 12 }}>Nothing pending.</div>}
       {allApplications.map((a) => (
-        <div key={a.id} className="card" style={{ padding: 8, display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
-          <span style={{ fontSize: 13 }}>{a.name} ({a.roll}) — {a.groupId} {a.bundledCRClaim && <em>(+ CR)</em>}</span>
-          <div style={{ display: 'flex', gap: 4 }}>
+        <div key={a.id} className="card" style={{ padding: 8, display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', gap: 8, marginBottom: 4 }}>
+          <span style={{ fontSize: 13, minWidth: 0, wordBreak: 'break-word' }}>{a.name} ({a.roll}) — {a.groupId} {a.bundledCRClaim && <em>(+ CR)</em>}</span>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
             <button className="btn btn-sm btn-primary" onClick={() => approveCLApplication(a.id)}>Approve</button>
             <button className="btn btn-sm btn-secondary" onClick={() => rejectCLApplication(a.id)}>Reject</button>
           </div>
@@ -427,14 +427,14 @@ function HeadOfOpsSection() {
       {scls === null && <div style={{ fontSize: 12, color: 'var(--muted)' }}>Loading…</div>}
       {scls?.length === 0 && <div style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 10 }}>None appointed yet.</div>}
       {scls?.map((s) => (
-        <div key={s.id} style={{ fontSize: 13, padding: '4px 0', display: 'flex', justifyContent: 'space-between' }}>
-          <span>{s.scope?.dept} — uid: {s.uid}</span>
+        <div key={s.id} style={{ fontSize: 13, padding: '4px 0', display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', gap: 8 }}>
+          <span style={{ minWidth: 0, wordBreak: 'break-all' }}>{s.scope?.dept} — uid: {s.uid}</span>
           <button className="btn btn-sm btn-secondary" onClick={() => removeRole(s.uid, 'senior_campus_lead', s.scope)}>Remove</button>
         </div>
       ))}
-      <div style={{ marginTop: 10, display: 'flex', gap: 6 }}>
+      <div style={{ marginTop: 10, display: 'flex', flexWrap: 'wrap', gap: 6 }}>
         <input placeholder="New SCL's uid" value={newSclUid} onChange={(e) => setNewSclUid(e.target.value)}
-          style={{ flex: 1, padding: '6px 8px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--inputBg)' }} />
+          style={{ flex: '1 1 160px', minWidth: 0, padding: '6px 8px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--inputBg)' }} />
         <input placeholder="Dept (e.g. CSE)" value={newSclDept} onChange={(e) => setNewSclDept(e.target.value)}
           style={{ width: 100, padding: '6px 8px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--inputBg)' }} />
         <button className="btn btn-sm btn-primary" onClick={appoint}>Appoint</button>
@@ -485,8 +485,8 @@ function GrowthSection() {
     <Section wide title="Growth — class activity">
       {groups === null && <div style={{ fontSize: 12, color: 'var(--muted)' }}>Loading…</div>}
       {groups?.map((g) => (
-        <div key={g.id} style={{ fontSize: 13, padding: '4px 0', display: 'flex', justifyContent: 'space-between' }}>
-          <span>{g.id}</span>
+        <div key={g.id} style={{ fontSize: 13, padding: '4px 0', display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', gap: 8 }}>
+          <span style={{ minWidth: 0, wordBreak: 'break-word' }}>{g.id}</span>
           <span style={{ color: 'var(--muted)' }}>{counts[g.id] ?? '…'} joined</span>
         </div>
       ))}

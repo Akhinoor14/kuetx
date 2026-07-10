@@ -8,6 +8,7 @@ import { subscribeMyRoles, hasRole } from '../lib/staffSync';
 import { checkIsAdmin } from '../lib/adminAuth';
 import { auth } from '../lib/firebase';
 import ClassmatesList from '../components/ClassmatesList';
+import { renderFormattedNoticeBody } from '../lib/noticeFormat';
 
 /**
  * CR/ACR-only page (route-gated by <RequireCR> in App.jsx — the live,
@@ -51,6 +52,7 @@ export default function ClassRoster() {
   const [myRole, setMyRole] = useState('member');
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
+  const [showPreview, setShowPreview] = useState(false);
   const [sending, setSending] = useState(false);
   const [sendMsg, setSendMsg] = useState('');
   const [leaveState, setLeaveState] = useState('idle'); // idle | sending | sent | error
@@ -97,6 +99,7 @@ export default function ClassRoster() {
       await postGroupNotice(groupId, profile, { title: title.trim(), body: body.trim() });
       setTitle('');
       setBody('');
+      setShowPreview(false);
       setSendMsg('Notice sent.');
     } catch (err) {
       setSendMsg(`Failed: ${err?.message || err}`);
@@ -186,7 +189,10 @@ export default function ClassRoster() {
           )}
 
           <div className="card" style={{ padding: 14 }}>
-            <h2 style={{ fontSize: 14, fontWeight: 700, marginBottom: 10 }}>Send a notice to your class</h2>
+            <h2 style={{ fontSize: 14, fontWeight: 700, marginBottom: 4 }}>Send a notice to your class</h2>
+            <p style={{ fontSize: 11.5, color: 'var(--muted)', margin: '0 0 10px', lineHeight: 1.5 }}>
+              Tip: leave a blank line between points to start a new paragraph — it'll show up nicely spaced for your classmates.
+            </p>
             <form onSubmit={handleSendNotice} style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
               <input
                 type="text"
@@ -196,22 +202,46 @@ export default function ClassRoster() {
                 className="input"
                 style={{ width: '100%' }}
               />
-              <textarea
-                placeholder="Notice details..."
-                value={body}
-                onChange={(e) => setBody(e.target.value)}
-                className="input"
-                rows={4}
-                style={{ width: '100%', resize: 'vertical' }}
-              />
-              <button
-                type="submit"
-                className="btn btn-primary btn-sm"
-                disabled={sending || !title.trim() || !body.trim()}
-                style={{ alignSelf: 'flex-start' }}
-              >
-                {sending ? 'Sending...' : 'Send notice'}
-              </button>
+
+              {!showPreview ? (
+                <textarea
+                  placeholder={'Notice details...\n\nLeave a blank line to start a new paragraph.'}
+                  value={body}
+                  onChange={(e) => setBody(e.target.value)}
+                  className="input"
+                  rows={6}
+                  style={{ width: '100%', resize: 'vertical', lineHeight: 1.55 }}
+                />
+              ) : (
+                <div style={{
+                  padding: '10px 12px', borderRadius: 8, border: '1px solid var(--border)',
+                  background: 'var(--surface)', fontSize: 13, color: 'var(--text)', lineHeight: 1.55,
+                  minHeight: 96,
+                }}>
+                  <div style={{ fontWeight: 700, marginBottom: 6 }}>{title.trim() || <span style={{ color: 'var(--muted)' }}>(no title)</span>}</div>
+                  {body.trim()
+                    ? renderFormattedNoticeBody(body)
+                    : <span style={{ color: 'var(--muted)' }}>(nothing written yet)</span>}
+                </div>
+              )}
+
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                <button
+                  type="submit"
+                  className="btn btn-primary btn-sm"
+                  disabled={sending || !title.trim() || !body.trim()}
+                >
+                  {sending ? 'Sending...' : 'Send notice'}
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-sm btn-secondary"
+                  onClick={() => setShowPreview((v) => !v)}
+                  disabled={!title.trim() && !body.trim()}
+                >
+                  {showPreview ? 'Back to edit' : 'Preview'}
+                </button>
+              </div>
               {sendMsg && (
                 <div style={{ fontSize: 12, color: sendMsg.startsWith('Failed') ? 'var(--danger)' : 'var(--success)' }}>
                   {sendMsg}

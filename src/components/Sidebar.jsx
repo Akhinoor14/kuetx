@@ -16,6 +16,7 @@ import { ROLE_LABELS } from '../lib/staffRoles';
 import { checkIsAdmin } from '../lib/adminAuth';
 import { auth } from '../lib/firebase';
 import { useIsStaff } from '../hooks/useIsStaff';
+import * as noticeApi from '../lib/noticeUtils';
 
 const GROUP_ICONS = {
   'Dashboard':   'Grid',
@@ -50,9 +51,10 @@ function SyncBadge({ status }) {
 // ── Nav row: shared for both hub rows and leaf item rows ─────────────────────
 // Neutral/synchronized style: default state is muted gray for every group,
 // a single accent color takes over on hover/active. No per-group hues.
-function NavRow({ to, label, iconName, active, onClose }) {
+function NavRow({ to, label, iconName, active, onClose, unreadCount = 0 }) {
   const Icon = Icons[iconName] || Icons.Circle;
   const [hovered, setHovered] = useState(false);
+  const hasUnread = unreadCount > 0;
 
   return (
     <Link
@@ -77,11 +79,24 @@ function NavRow({ to, label, iconName, active, onClose }) {
           : 'transparent',
       }}
     >
-      <Icon
-        size={16}
-        strokeWidth={active ? 2.4 : 1.8}
-        style={{ flexShrink: 0, color: active ? 'var(--accent)' : 'var(--muted)' }}
-      />
+      <span style={{ position: 'relative', flexShrink: 0, display: 'inline-flex' }}>
+        <Icon
+          size={16}
+          strokeWidth={active ? 2.4 : 1.8}
+          style={{ color: active ? 'var(--accent)' : 'var(--muted)' }}
+        />
+        {hasUnread && (
+          <span
+            className="sidebar-notice-dot"
+            style={{
+              position: 'absolute', top: -3, right: -3,
+              width: 7, height: 7, borderRadius: '50%',
+              background: 'var(--accent)',
+              boxShadow: '0 0 0 2px var(--surface)',
+            }}
+          />
+        )}
+      </span>
       <span style={{
         flex: 1,
         fontSize: 13,
@@ -93,6 +108,16 @@ function NavRow({ to, label, iconName, active, onClose }) {
       }}>
         {label}
       </span>
+      {hasUnread && (
+        <span style={{
+          fontSize: 10, fontWeight: 800, color: '#fff', background: 'var(--accent)',
+          borderRadius: 999, minWidth: 16, height: 16, padding: '0 4px',
+          display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+          flexShrink: 0, lineHeight: 1,
+        }}>
+          {unreadCount > 9 ? '9+' : unreadCount}
+        </span>
+      )}
     </Link>
   );
 }
@@ -142,6 +167,33 @@ export function Sidebar({ open, onClose, authState }) {
   // "Campus Lead") so the sidebar entry reads as theirs, not a generic
   // "Admin" link shown to people with no actual role.
   const { isRealAdmin, adminLabel } = useIsStaff();
+
+  // Unread Notice count — drives the small pulsing dot on the Notice hub
+  // row below, so a new notice is visible in the sidebar itself and not
+  // only via the topbar bell (Navbar.jsx). Same live source
+  // (subscribeAllNotices) and same read-tracking (getReadNoticeIds) the
+  // Notice page and Navbar already use, so all three always agree.
+  const [unreadNoticeCount, setUnreadNoticeCount] = useState(0);
+  const latestNoticesRef = useRef([]);
+  useEffect(() => {
+    const groupId = getGroupId(profile);
+    const recompute = () => {
+      const readIds = noticeApi.getReadNoticeIds();
+      setUnreadNoticeCount(noticeApi.getUnreadNotices(latestNoticesRef.current, readIds).length);
+    };
+    const unsub = noticeApi.subscribeAllNotices(profile, groupId, (notices) => {
+      latestNoticesRef.current = notices;
+      recompute();
+    });
+    // A notice getting marked read elsewhere (Notice page, toast tap)
+    // dispatches this same event Navbar/Notice already rely on — just
+    // re-diff the last known live list against the fresh read-ids set.
+    window.addEventListener('kuetx:store-updated', recompute);
+    return () => {
+      unsub();
+      window.removeEventListener('kuetx:store-updated', recompute);
+    };
+  }, [profile.dept, profile.batch]);
 
   useEffect(() => {
     const groupId = getGroupId(profile);
@@ -259,6 +311,7 @@ export function Sidebar({ open, onClose, authState }) {
                     iconName={section.hubIcon || GROUP_ICONS[section.group] || 'Circle'}
                     active={active}
                     onClose={onClose}
+                    unreadCount={section.group === 'Notice' ? unreadNoticeCount : 0}
                   />
                 </div>
               );
@@ -344,7 +397,14 @@ export function Sidebar({ open, onClose, authState }) {
           </div>
         </div>
 
-        <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+        <style>{`
+          @keyframes spin { to { transform: rotate(360deg); } }
+          @keyframes sidebarNoticePulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.35); opacity: 0.65; }
+          }
+          .sidebar-notice-dot { animation: sidebarNoticePulse 1.8s ease-in-out infinite; }
+        `}</style>
       </aside>
     </>
   );

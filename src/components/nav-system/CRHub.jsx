@@ -33,6 +33,7 @@ export default function CRHub() {
     icon: 'Shield',
     items: [
       { id: 'profile',           label: 'Profile',            icon: 'User',          path: '/profile' },
+      { id: 'class-roster',      label: 'Class Roster',       icon: 'Users',         path: '/class-roster' },
       { id: 'class-management',  label: 'Class Management',   icon: 'Users',         path: '/class-management' },
       { id: 'ct-quiz-planning',  label: 'CT & Quiz Planner',  icon: 'CalendarCheck', path: '/ct-quiz-planning' },
     ],
