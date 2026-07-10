@@ -107,6 +107,13 @@ export default function ClaimCRCard({ groupId, profile }) {
     useClaimCRState(groupId, profile);
 
   if (!groupId || !crStatus) return null;
+  // ownRole starts as `null` until subscribeMyRole's first snapshot
+  // arrives. Previously only the 'cr'/'acr' check below gated on it, so
+  // a user who WAS already CR/ACR still rendered this full pitch card
+  // for one frame (ownRole === null passes neither branch) before
+  // vanishing once the real role came in — the flash reported here.
+  // Treat "not yet known" the same as "don't render anything yet".
+  if (ownRole === null) return null;
   if (ownRole === 'cr' || ownRole === 'acr') return null;
 
   if (ownRequestStatus === 'pending' || claimState === 'sent') {
@@ -171,6 +178,9 @@ export function ClaimCRInlineButton({ groupId, profile }) {
     useClaimCRState(groupId, profile);
 
   if (!groupId || !crStatus) return null;
+  // Same reasoning as ClaimCRCard above: don't render until ownRole's
+  // first snapshot has actually arrived.
+  if (ownRole === null) return null;
   if (ownRole === 'cr' || ownRole === 'acr') return null;
   if (ownRequestStatus === 'pending' || claimState === 'sent') {
     return (

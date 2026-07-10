@@ -106,10 +106,16 @@ function EmptyState({ children }) {
 // Approvals is what actually needs the Founder's attention right now.
 // =======================================================================
 function ApprovalsView({ onBack, onSelectCategory, countCtx }) {
-  const [clApplications, setClApplications] = useState([]);
+  // Each of these starts as `null` — meaning "not yet loaded" — instead
+  // of `[]`/`{}`. That distinguishes "still loading" from "loaded and
+  // genuinely empty", so EmptyState's "Nothing pending." text only ever
+  // shows once the real data has actually arrived. Previously these
+  // started as [] / {}, so the first render always looked empty and then
+  // popped once Firestore resolved — the flicker the Founder was seeing.
+  const [clApplications, setClApplications] = useState(null);
   const [groupIds, setGroupIds] = useState(null);
-  const [crRequestsByGroup, setCrRequestsByGroup] = useState({});
-  const [leaveRequestsByGroup, setLeaveRequestsByGroup] = useState({});
+  const [crRequestsByGroup, setCrRequestsByGroup] = useState(null);
+  const [leaveRequestsByGroup, setLeaveRequestsByGroup] = useState(null);
   const [err, setErr] = useState('');
   const [subTab, setSubTab] = useState('cl-apps');
 
@@ -118,22 +124,30 @@ function ApprovalsView({ onBack, onSelectCategory, countCtx }) {
 
   useEffect(() => {
     if (!groupIds) return;
+    setCrRequestsByGroup({});
     const unsubs = groupIds.map((g) => subscribeCRRequests(g, (reqs) => {
-      setCrRequestsByGroup((prev) => ({ ...prev, [g]: reqs }));
+      setCrRequestsByGroup((prev) => ({ ...(prev || {}), [g]: reqs }));
     }));
     return () => unsubs.forEach((u) => u());
   }, [groupIds]);
 
   useEffect(() => {
     if (!groupIds) return;
+    setLeaveRequestsByGroup({});
     const unsubs = groupIds.map((g) => subscribeLeaveRequests(g, (reqs) => {
-      setLeaveRequestsByGroup((prev) => ({ ...prev, [g]: reqs }));
+      setLeaveRequestsByGroup((prev) => ({ ...(prev || {}), [g]: reqs }));
     }));
     return () => unsubs.forEach((u) => u());
   }, [groupIds]);
 
-  const allCrRequests = Object.entries(crRequestsByGroup).flatMap(([g, reqs]) => reqs.map((r) => ({ ...r, groupId: g })));
-  const allLeaveRequests = Object.entries(leaveRequestsByGroup).flatMap(([g, reqs]) => reqs.map((r) => ({ ...r, groupId: g })));
+  // `null` while the relevant subscription hasn't resolved at all yet —
+  // used below to show a loading state instead of the empty state.
+  const clAppsLoading = clApplications === null;
+  const crReqLoading = crRequestsByGroup === null;
+  const leaveReqLoading = leaveRequestsByGroup === null;
+
+  const allCrRequests = Object.entries(crRequestsByGroup || {}).flatMap(([g, reqs]) => reqs.map((r) => ({ ...r, groupId: g })));
+  const allLeaveRequests = Object.entries(leaveRequestsByGroup || {}).flatMap(([g, reqs]) => reqs.map((r) => ({ ...r, groupId: g })));
 
   const handle = async (fn, ...args) => {
     setErr('');
@@ -141,7 +155,7 @@ function ApprovalsView({ onBack, onSelectCategory, countCtx }) {
   };
 
   const category = getFounderCategory('approvals');
-  const subCtx = { ...countCtx, clApplications: clApplications.length, crRequests: allCrRequests.length, leaveRequests: allLeaveRequests.length };
+  const subCtx = { ...countCtx, clApplications: clApplications?.length || 0, crRequests: allCrRequests.length, leaveRequests: allLeaveRequests.length };
 
   return (
     <CategoryShell view="approvals" onSelect={onSelectCategory} countCtx={countCtx}>
@@ -151,8 +165,9 @@ function ApprovalsView({ onBack, onSelectCategory, countCtx }) {
 
       {subTab === 'cl-apps' && (
         <Section title="Campus Lead applications">
-          {clApplications.length === 0 && <EmptyState>Nothing pending.</EmptyState>}
-          {clApplications.map((a) => (
+          {clAppsLoading && <EmptyState>Loading…</EmptyState>}
+          {!clAppsLoading && clApplications.length === 0 && <EmptyState>Nothing pending.</EmptyState>}
+          {(clApplications || []).map((a) => (
             <ApprovalRow key={a.id}
               label={`${a.name} (${a.roll}) — ${a.groupId}${a.bundledCRClaim ? ' (+ CR)' : ''}`}
               onApprove={() => handle(approveCLApplication, a.id)}
@@ -164,7 +179,8 @@ function ApprovalsView({ onBack, onSelectCategory, countCtx }) {
 
       {subTab === 'cr-req' && (
         <Section title="CR requests">
-          {allCrRequests.length === 0 && <EmptyState>Nothing pending.</EmptyState>}
+          {crReqLoading && <EmptyState>Loading…</EmptyState>}
+          {!crReqLoading && allCrRequests.length === 0 && <EmptyState>Nothing pending.</EmptyState>}
           {allCrRequests.map((r) => (
             <ApprovalRow key={`${r.groupId}-${r.id}`}
               label={`${r.name} (${r.roll}) — ${r.groupId}`}
@@ -177,7 +193,8 @@ function ApprovalsView({ onBack, onSelectCategory, countCtx }) {
 
       {subTab === 'cr-leave' && (
         <Section title="CR leave (step-down) requests">
-          {allLeaveRequests.length === 0 && <EmptyState>Nothing pending.</EmptyState>}
+          {leaveReqLoading && <EmptyState>Loading…</EmptyState>}
+          {!leaveReqLoading && allLeaveRequests.length === 0 && <EmptyState>Nothing pending.</EmptyState>}
           {allLeaveRequests.map((r) => (
             <ApprovalRow key={`${r.groupId}-${r.id}`}
               label={`${r.name} (${r.roll}) — ${r.groupId} — wants to step down as CR`}
@@ -701,7 +718,9 @@ function ClassBlock({ groupId }) {
 function TrustSafetyView({ onBack, onSelectCategory, countCtx }) {
   const [flags, setFlags] = useState(null);
   const [flagErr, setFlagErr] = useState(null);
-  const [rollRequests, setRollRequests] = useState([]);
+  // null = not yet loaded (same reasoning as `flags` above) — avoids
+  // flashing "Nothing pending." before the first subscription snapshot.
+  const [rollRequests, setRollRequests] = useState(null);
   const [busyId, setBusyId] = useState(null);
   const [subTab, setSubTab] = useState('flags');
 
@@ -725,7 +744,7 @@ function TrustSafetyView({ onBack, onSelectCategory, countCtx }) {
   };
 
   const category = getFounderCategory('trust');
-  const subCtx = { ...countCtx, emailFlags: flags?.length || 0, rollRequests: rollRequests.length };
+  const subCtx = { ...countCtx, emailFlags: flags?.length || 0, rollRequests: rollRequests?.length || 0 };
 
   return (
     <CategoryShell view="trust" onSelect={onSelectCategory} countCtx={countCtx}>
@@ -754,8 +773,9 @@ function TrustSafetyView({ onBack, onSelectCategory, countCtx }) {
 
       {subTab === 'roll' && (
         <Section title="Roll unlock requests">
-          {rollRequests.length === 0 && <EmptyState>Nothing pending.</EmptyState>}
-          {rollRequests.map((r) => (
+          {rollRequests === null && <EmptyState>Loading…</EmptyState>}
+          {rollRequests?.length === 0 && <EmptyState>Nothing pending.</EmptyState>}
+          {(rollRequests || []).map((r) => (
             <div key={r.id} className="card" style={{ padding: 8, display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
               <div>
                 <div style={{ fontSize: 13, fontWeight: 700 }}>Roll: {r.roll}</div>
