@@ -11,6 +11,8 @@ import PWAInstallPrompt from './components/PWAInstallPrompt';
 import PWAUpdatePrompt from './components/PWAUpdatePrompt';
 import { BottomNav, useIsMobileNav } from './components/BottomNav';
 import GlobalToasts from './components/GlobalToasts';
+import NoticeToast from './components/NoticeToast';
+import PushPermissionBanner from './components/PushPermissionBanner';
 import BackupReminderGate from './components/BackupReminderGate';
 import VerifyReminderPopup from './components/VerifyReminderPopup';
 import ProfileCompleteReminder from './components/ProfileCompleteReminder';
@@ -170,6 +172,7 @@ function Layout({ authState, onboardingActive }) {
         <PWAUpdatePrompt />
         {!isQuestionBankViewer && <BottomNav />}
         <GlobalToasts />
+        {!onboardingActive && <NoticeToast />}
         <DataSafeToast suppress={onboardingActive} />
         <ClassJoinIntro />
 
@@ -497,6 +500,7 @@ export default function App() {
             its own internal 3-day snooze + "stop once verified" logic, so it
             doesn't need to block on / wait for the queue to finish. */}
         {authState.authReady && !authState.isAnonymous && queue.length === 0 && <VerifyReminderPopup />}
+        {authState.authReady && !authState.isAnonymous && queue.length === 0 && <PushPermissionBanner />}
         {/* Nudges anyone who used "Finish now, add rest later" to fill in the
             full profile — but only from a later session, never right after
             onboarding (see ProfileCompleteReminder.jsx's own session guard). */}

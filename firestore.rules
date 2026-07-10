@@ -167,6 +167,24 @@ service cloud.firestore {
     }
 
     // -------------------------------------------------------------
+    // Root user doc — Phase E (push notifications). Only field ever
+    // written here client-side is fcmTokens (see src/lib/push.js
+    // saveTokenForCurrentUser/disablePush). Kept deliberately narrow
+    // (hasOnly(['fcmTokens'])) so this new rule can't be used to write
+    // any other field onto users/{uid} — all other personal data still
+    // lives under users/{uid}/data/{key} and users/{uid}/meta/{docId}
+    // above, untouched by this.
+    // -------------------------------------------------------------
+    match /users/{uid} {
+      allow read: if isSignedIn() && request.auth.uid == uid;
+      allow create: if isSignedIn() && request.auth.uid == uid
+        && request.resource.data.keys().hasOnly(['fcmTokens']);
+      allow update: if isSignedIn() && request.auth.uid == uid
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['fcmTokens']);
+      allow delete: if false;
+    }
+
+    // -------------------------------------------------------------
     // Institutional verification facts — see kuetEmailVerify.js. Written
     // only by the separate verification-app session whose OWN auth token
     // genuinely carries a verified @stud.kuet.ac.bd email; the visitor's
