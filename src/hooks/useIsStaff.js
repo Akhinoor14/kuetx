@@ -55,10 +55,39 @@ export function useIsStaff() {
 
   useEffect(() => {
     let unsubRoles = () => {};
+    // Tracks the two independent checks separately so whichever resolves
+    // first can be applied immediately, and so a late-arriving founder
+    // check can't clobber an already-applied role result with a stale
+    // "not admin" write. Previously checkIsAdmin was awaited BEFORE
+    // subscribeMyRoles even started, forcing every non-founder user
+    // (including CRs) to pay the founder-doc round-trip latency before
+    // their own role could resolve — this is what made the sidebar and
+    // Founder-hub cards feel slow to appear even for correctly-flagged
+    // CRs. Running them in parallel removes that artificial serial hop.
+    let founderResolved = false;
+    let isFounder = false;
+
+    const applyRoles = (roles) => {
+      if (founderResolved && isFounder) return; // Founder always wins.
+      if (!roles.length) {
+        setIsRealAdmin(false);
+        setAdminLabel(null);
+        writeCache(false, null);
+      } else {
+        const primary = roles[0];
+        const label = ROLE_LABELS[primary.role] || 'Staff';
+        setIsRealAdmin(true);
+        setAdminLabel(label);
+        writeCache(true, label);
+      }
+      setIsResolved(true);
+    };
 
     const unsubAuth = onAuthStateChanged(auth, (user) => {
       unsubRoles();
       unsubRoles = () => {};
+      founderResolved = false;
+      isFounder = false;
 
       if (!user) {
         setIsRealAdmin(false);
@@ -68,31 +97,21 @@ export function useIsStaff() {
         return;
       }
 
-      checkIsAdmin(user.uid).then((isFounder) => {
+      // Fire both checks at the same time — they're independent reads.
+      checkIsAdmin(user.uid).then((result) => {
+        founderResolved = true;
+        isFounder = result;
         if (isFounder) {
           setIsRealAdmin(true);
           setAdminLabel('Founder');
           writeCache(true, 'Founder');
           setIsResolved(true);
-          return; // Founder outranks/subsumes any other role label.
         }
-
-        unsubRoles = subscribeMyRoles((roles) => {
-          if (!roles.length) {
-            setIsRealAdmin(false);
-            setAdminLabel(null);
-            writeCache(false, null);
-            setIsResolved(true);
-            return;
-          }
-          const primary = roles[0];
-          const label = ROLE_LABELS[primary.role] || 'Staff';
-          setIsRealAdmin(true);
-          setAdminLabel(label);
-          writeCache(true, label);
-          setIsResolved(true);
-        });
+        // If not founder, whatever subscribeMyRoles already delivered (or
+        // will deliver) stands as-is — no need to re-apply here.
       });
+
+      unsubRoles = subscribeMyRoles(applyRoles);
     });
 
     return () => {

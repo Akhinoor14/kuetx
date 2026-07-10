@@ -898,32 +898,49 @@ export default function AdminDashboard() {
     return () => unsub();
   }, [navigate]);
 
+  // Previously these three effects (groups, CL applications, roll-unlock
+  // requests, email flags) were all gated behind `authorized`, and the
+  // two badge-count listener effects below were gated behind `groups` —
+  // meaning nothing started until checkIsAdmin resolved, and the ~2×N
+  // per-group listeners couldn't even begin until listAllGroups had
+  // *also* round-tripped after that. That's what made the grid feel
+  // slow even once the page had "loaded": the cards themselves paint
+  // instantly, but every badge count sat at 0 through a long serial
+  // chain of network legs.
+  //
+  // These reads don't actually depend on `authorized` being confirmed —
+  // Firestore rules are the real gate on whether they succeed — so we
+  // fire them immediately, in parallel with the admin check. If the
+  // user turns out not to be authorized, `if (!authorized) return null`
+  // below still prevents anything from rendering, and the listeners get
+  // torn down by their own cleanup on unmount.
   useEffect(() => {
-    if (!authorized) return;
     listAllGroups().then(setGroups).catch(() => setGroups([]));
     return subscribeAllCLApplications(setApplications);
-  }, [authorized]);
+  }, []);
 
-  useEffect(() => { if (authorized) subscribePendingRollUnlockRequests(setRollRequests); }, [authorized]);
-  useEffect(() => { if (authorized) listPendingFlags({}).then((f) => setEmailFlagCount(f.length)).catch(() => {}); }, [authorized]);
+  useEffect(() => subscribePendingRollUnlockRequests(setRollRequests), []);
+  useEffect(() => { listPendingFlags({}).then((f) => setEmailFlagCount(f.length)).catch(() => {}); }, []);
 
   // Badge counts for CR + leave requests across all classes, for the
   // Approvals card badge — one subscription per group, kept as a map so
   // updates to one group's count don't require refetching everything.
+  // Fires as soon as `groups` arrives, no longer waiting on `authorized`
+  // too (see note above).
   useEffect(() => {
-    if (!authorized || !groups) return;
+    if (!groups) return;
     const unsubs = groups.map((g) => subscribeCRRequests(g.id, (reqs) => {
       setCrCountMap((prev) => ({ ...prev, [g.id]: reqs.length }));
     }));
     return () => unsubs.forEach((u) => u());
-  }, [authorized, groups]);
+  }, [groups]);
   useEffect(() => {
-    if (!authorized || !groups) return;
+    if (!groups) return;
     const unsubs = groups.map((g) => subscribeLeaveRequests(g.id, (reqs) => {
       setLeaveCountMap((prev) => ({ ...prev, [g.id]: reqs.length }));
     }));
     return () => unsubs.forEach((u) => u());
-  }, [authorized, groups]);
+  }, [groups]);
 
   const totalCrReq = Object.values(crCountMap).reduce((a, b) => a + b, 0);
   const totalLeaveReq = Object.values(leaveCountMap).reduce((a, b) => a + b, 0);

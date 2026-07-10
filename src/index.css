@@ -306,8 +306,15 @@ body {
   transition: width 0.25s cubic-bezier(0.4,0,0.2,1), transform 0.25s ease;
   overflow-y: auto;
   overscroll-behavior: contain;
+  /* Own compositing layer: on some Android browsers/WebViews, fixed-position
+     elements desync from the visual viewport after a pinch-zoom gesture and
+     don't fully reposition/repaint until a forced reflow. Promoting this to
+     its own GPU layer makes the browser recomposite it independently instead
+     of relying on that (buggy) shared viewport recalculation. */
+  transform: translateZ(0);
+  will-change: transform;
 }
-.sidebar-collapsed { transform: translateX(-192px); }
+.sidebar-collapsed { transform: translateX(-192px) translateZ(0); }
 .main-content {
   margin-left: 192px;
   height: 100vh;
@@ -326,8 +333,8 @@ body {
   .main-content    { margin-left: 220px; width: calc(100% - 220px); }
 }
 @media (max-width: 768px) {
-  .sidebar { transform: translateX(-192px); }
-  .sidebar.open { transform: translateX(0); box-shadow: 4px 0 20px rgba(0,0,0,0.15); }
+  .sidebar { transform: translateX(-192px) translateZ(0); }
+  .sidebar.open { transform: translateX(0) translateZ(0); box-shadow: 4px 0 20px rgba(0,0,0,0.15); }
   .main-content { margin-left: 0; width: 100%; min-height: 100vh; height: auto; overflow-y: auto; padding-bottom: calc(84px + env(safe-area-inset-bottom, 0px)); }
 }
 
@@ -339,6 +346,9 @@ body {
   z-index: 3500;
   pointer-events: none;
   padding: 0 10px calc(10px + env(safe-area-inset-bottom, 0px));
+  /* See .sidebar comment above — same fixed-position zoom-desync fix. */
+  transform: translateZ(0);
+  will-change: transform;
 }
 
 .mobile-bottom-nav-shell {
@@ -1847,7 +1857,7 @@ h3 { font-size: 15px; font-weight: 600; }
 
 .dashboard-page::before {
   content: '';
-  position: fixed;
+  position: absolute;
   inset: 0;
   pointer-events: none;
   background:

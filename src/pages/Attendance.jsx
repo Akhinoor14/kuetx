@@ -7,6 +7,8 @@ import {
 } from '../store/store';
 import { getAllCourses } from '../store/curriculumStore';
 import CourseTeacherDialog from '../components/CourseTeacherDialog';
+import { getGroupId } from '../lib/groupUtils';
+import { subscribeCRStatus, subscribeRoutine } from '../lib/groupSync';
 
 // ── Utils ──────────────────────────────────────────────────────────────────
 const todayStr = () => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; };
@@ -851,9 +853,48 @@ function CombinedAtt({ courses, logs, schedule, settings, combinedMode, combined
 export default function Attendance() {
   const profile = getProfile();
   const courses = getAllCourses(profile).filter(c => c.status === 'active' || c.status === 'backlog');
+  // logs (present/absent marks) are ALWAYS personal — each student's own
+  // record, stored locally, never shared with classmates regardless of
+  // whether the schedule below is personal or group-shared.
   const [logs, setLogs] = useState(() => store.get('attLogs') || {});
   const [tab, setTab] = useState(() => store.get('attAttendanceSource') === 'combined' ? 'combined' : 'daily');
-  const [schedule, setSchedule] = useState(() => store.get('schedule') || []);
+
+  // Schedule/classlist source: mirrors Schedule.jsx's group-mode logic.
+  // If this student's batch+dept group currently has an active CR, the
+  // shared group routine is what attendance is tracked against — NOT this
+  // student's personal routine. This only affects which classes show up
+  // to mark attendance for; the attendance data itself (logs above) is
+  // still saved per-student and never shared.
+  const groupId = useMemo(() => getGroupId(profile), [profile.dept, profile.batch]);
+  const [groupHasCR, setGroupHasCR] = useState(null); // null = unknown yet
+  useEffect(() => {
+    if (!groupId) { setGroupHasCR(false); return; }
+    return subscribeCRStatus(groupId, (status) => setGroupHasCR(!!status?.hasCR));
+  }, [groupId]);
+  const isGroupMode = !!groupId && groupHasCR === true;
+
+  const [schedule, setSchedule] = useState(() => (isGroupMode ? [] : (store.get('schedule') || [])));
+  useEffect(() => {
+    if (!isGroupMode) {
+      setSchedule(store.get('schedule') || []);
+      return;
+    }
+    return subscribeRoutine(groupId, (entries) => {
+      const mapped = (entries || []).map((e) => ({
+        id: e.id,
+        day: e.day || 'Sunday',
+        slot: e.slot || '',
+        courseId: e.courseId || '',
+        teacherName: e.teacherName || '',
+        displayName: e.displayName || e.courseCode || e.courseName || '',
+        room: e.room || '',
+        note: e.note || '',
+        type: e.type || 'Theory',
+      }));
+      setSchedule(mapped);
+    });
+  }, [isGroupMode, groupId]);
+
   const [settings, setSettings] = useState(() => store.get('scheduleSettings') || {});
   const [combinedMode, setCombinedMode] = useState(() => !!store.get('attCombinedMode'));
   const [combinedData, setCombinedData] = useState(() => store.get('attCombinedData') || {});
@@ -864,14 +905,14 @@ export default function Attendance() {
   useEffect(() => {
     const refresh = () => {
       setLogs(store.get('attLogs') || {});
-      setSchedule(store.get('schedule') || []);
+      if (!isGroupMode) setSchedule(store.get('schedule') || []);
       setSettings(store.get('scheduleSettings') || {});
       setCombinedMode(!!store.get('attCombinedMode'));
       setCombinedData(store.get('attCombinedData') || {});
     };
     window.addEventListener('kuetx:store-updated', refresh);
     return () => window.removeEventListener('kuetx:store-updated', refresh);
-  }, []);
+  }, [isGroupMode]);
 
   const toggleCombined = () => {
     const next = !combinedMode;
