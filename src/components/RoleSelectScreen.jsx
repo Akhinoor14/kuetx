@@ -22,11 +22,10 @@ const cardStyle = {
   gap: 10,
   padding: '28px 16px',
   borderRadius: 16,
-  border: '1px solid rgba(0, 0, 0, 0.08)',
-  background: '#ffffff',
+  border: '1px solid var(--border)',
+  background: 'var(--card)',
   cursor: 'pointer',
   textAlign: 'center',
-  boxShadow: '0 18px 45px rgba(0, 0, 0, 0.08)',
 };
 
 export default function RoleSelectScreen({ onSelect }) {
@@ -37,21 +36,21 @@ export default function RoleSelectScreen({ onSelect }) {
 
   return (
     <div style={{
-      position: 'fixed', inset: 0, background: 'rgba(0, 0, 0, 0.74)',
+      position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)',
       display: 'flex', alignItems: 'center', justifyContent: 'center',
       zIndex: 9999, padding: 16,
     }}>
       <div style={{
-        background: '#ffffff', borderRadius: 18, padding: 24,
-        width: '100%', maxWidth: 520,
-        border: '1px solid rgba(0, 0, 0, 0.08)',
-        boxShadow: '0 32px 80px rgba(0, 0, 0, 0.16)',
+        background: 'var(--bg)', borderRadius: 18, padding: 24,
+        width: '100%', maxWidth: 480,
+        border: '1px solid var(--border)',
+        boxShadow: '0 32px 80px rgba(0,0,0,0.28)',
       }}>
         <div style={{ marginBottom: 20, textAlign: 'center' }}>
-          <div style={{ fontWeight: 800, fontSize: 18, marginBottom: 4, color: '#111111' }}>
+          <div style={{ fontWeight: 800, fontSize: 18, marginBottom: 4 }}>
             Join KUETx as...
           </div>
-          <div style={{ fontSize: 12.5, color: 'rgba(0, 0, 0, 0.64)' }}>
+          <div style={{ fontSize: 12.5, color: 'var(--muted)' }}>
             Choose the role that fits you. This is a one-time setup.
           </div>
         </div>
