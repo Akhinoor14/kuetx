@@ -48,10 +48,10 @@ export default function RoleSelectScreen({ onSelect }) {
       }}>
         <div style={{ marginBottom: 20, textAlign: 'center' }}>
           <div style={{ fontWeight: 800, fontSize: 18, marginBottom: 4 }}>
-            তুমি কি Student, নাকি Faculty Member?
+            Join KUETx as...
           </div>
           <div style={{ fontSize: 12.5, color: 'var(--muted)' }}>
-            এই বাছাই একবারই হবে — পরে আবার সাইন-ইন করলে জিজ্ঞেস করবে না।
+            Choose the role that fits you. This is a one-time setup.
           </div>
         </div>
 
@@ -60,7 +60,7 @@ export default function RoleSelectScreen({ onSelect }) {
             <User size={28} color="var(--accent)" />
             <div style={{ fontWeight: 700, fontSize: 14, color: 'var(--text)' }}>Student</div>
             <div style={{ fontSize: 11.5, color: 'var(--muted)' }}>
-              Schedule, Marks, Attendance, CR টুলস
+              Access schedule, attendance, marks, question bank, and student tools.
             </div>
           </div>
 
@@ -68,7 +68,7 @@ export default function RoleSelectScreen({ onSelect }) {
             <GraduationCap size={28} color="var(--accent)" />
             <div style={{ fontWeight: 700, fontSize: 14, color: 'var(--text)' }}>Faculty Member</div>
             <div style={{ fontSize: 11.5, color: 'var(--muted)' }}>
-              Class, Attendance ও Marks manage করার জন্য
+              Manage classes, attendance, marks, and academic activities.
             </div>
           </div>
         </div>
