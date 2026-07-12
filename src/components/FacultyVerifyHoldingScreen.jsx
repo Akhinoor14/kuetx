@@ -26,10 +26,21 @@
 // actually completed the link click.
 
 import { useEffect, useState } from 'react';
-import { Mail, RefreshCw } from 'lucide-react';
+import { Mail, RefreshCw, ExternalLink } from 'lucide-react';
 import { auth } from '../lib/firebase';
 import { getFacultyDoc, subscribeFacultyDoc } from '../lib/facultySync';
 import { sendFacultyVerificationLink } from '../lib/facultyEmailVerify';
+
+// Gmail's own "go straight to Spam" URL — since institutional/automated
+// sign-in-link emails land in Spam often enough that Anthropic-style
+// "check your spam folder" text alone isn't reliable, this jumps the
+// person directly to the #spam label instead of #inbox. Real, documented
+// Gmail label-URL pattern (mail.google.com/mail/u/0/#spam). Only
+// gmail.com/googlemail.com addresses get this button — anything else
+// (Yahoo, Outlook, institutional domains, etc.) doesn't share this URL
+// pattern, so we fall back to the plain instruction text for those.
+const isGmailAddress = (email) => /@(gmail|googlemail)\.com$/i.test(String(email || '').trim());
+const GMAIL_SPAM_URL = 'https://mail.google.com/mail/u/0/#spam';
 
 export default function FacultyVerifyHoldingScreen({ officialEmail, onVerified }) {
   const [status, setStatus] = useState('waiting'); // 'waiting' | 'resending' | 'resent' | 'error'
@@ -106,6 +117,23 @@ export default function FacultyVerifyHoldingScreen({ officialEmail, onVerified }
           <div style={{ fontSize: 12.5, color: 'var(--danger, #dc2626)', marginBottom: 14 }}>
             {error}
           </div>
+        )}
+
+        {isGmailAddress(officialEmail) && (
+          <a
+            href={GMAIL_SPAM_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
+              width: '100%', padding: '11px 16px', borderRadius: 8, border: 'none',
+              background: 'var(--accent)', color: '#fff', fontSize: 13.5, fontWeight: 700,
+              textDecoration: 'none', marginBottom: 10, boxSizing: 'border-box',
+            }}
+          >
+            <ExternalLink size={14} />
+            Open Gmail Spam Folder
+          </a>
         )}
 
         <button
