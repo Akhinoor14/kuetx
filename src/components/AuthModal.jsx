@@ -17,6 +17,7 @@ import {
 import { isObviouslyBadDomain, getTypoSuggestion } from '../lib/emailDomainCheck';
 import { isFacultyEmailFormat } from '../lib/facultyEmailVerify';
 import { createFacultyAccountDoc } from '../lib/facultySync';
+import { setAccountRole, persistAccountRoleToServer } from '../lib/accountRole';
 
 const inputStyle = {
   width: '100%',
@@ -127,6 +128,17 @@ export default function AuthModal({ mode = 'login', isUpgrade = false, onClose, 
     setError('');
     try {
       const user = isUpgrade ? await upgradeWithGoogle() : await loginWithGoogle();
+      // BUGFIX (see BUGFIX_SIGNUP_ROLE_ORDER.md): Google Sign-In is
+      // student-only (Deviation 3 — faculty always uses institutional
+      // email/password, never Google), and Firebase auto-creates the
+      // account on first use with no separate "register" step to hook
+      // into. Safe to always persist 'student' here regardless of
+      // new-vs-returning: for a genuinely new account this is the first
+      // (and only, permanent) role write; for a returning account,
+      // firestore.rules already rejects overwriting an existing
+      // users/{uid}.role, so this is a harmless no-op.
+      setAccountRole('student');
+      persistAccountRoleToServer('student').catch(() => {});
       onSuccess?.(user, { linked: isUpgrade });
     } catch (err) {
       if (isUpgrade && err.code === 'auth/credential-already-in-use') {
@@ -137,6 +149,8 @@ export default function AuthModal({ mode = 'login', isUpgrade = false, onClose, 
         // holding a fresh anonymous session on this device.
         try {
           const user = await loginWithGoogle();
+          setAccountRole('student');
+          persistAccountRoleToServer('student').catch(() => {});
           onSuccess?.(user, { linked: false, fellBackToExistingAccount: true });
           return;
         } catch (err2) {
@@ -184,6 +198,20 @@ export default function AuthModal({ mode = 'login', isUpgrade = false, onClose, 
         user = await (isUpgrade
           ? upgradeWithEmail(email, password, name)
           : registerWithEmail(email, password, name));
+        // BUGFIX (see BUGFIX_SIGNUP_ROLE_ORDER.md): role is now saved to
+        // the server at THIS exact point — right after the real account
+        // is created, before onSuccess even fires — matching the
+        // requested flow ("Create Account -> Save Role Permanently")
+        // instead of relying on App.jsx's handleAuthSuccess to back-fill
+        // it afterward. `isFaculty` here already reflects whichever role
+        // was chosen at Role Select (this AuthModal was rendered with
+        // variant="faculty" specifically because accountRole was already
+        // 'teacher' — see App.jsx's `current === 'auth'` branches), so
+        // this is simply persisting that same choice the moment there's
+        // finally a real uid to attach it to.
+        const role = isFaculty ? 'teacher' : 'student';
+        setAccountRole(role);
+        persistAccountRoleToServer(role).catch(() => {});
         // Faculty signup (not login): create faculty/{uid} with
         // verifiedAt: null right away — the caller (App.jsx) routes to
         // FacultyVerifyHoldingScreen next, which is where the magic-link

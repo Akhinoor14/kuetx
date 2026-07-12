@@ -194,12 +194,33 @@ service cloud.firestore {
     // lives under users/{uid}/data/{key} and users/{uid}/meta/{docId}
     // above, untouched by this.
     // -------------------------------------------------------------
+    // -------------------------------------------------------------
+    // Root user doc — Phase E (push notifications) + role persistence.
+    // Client-writable fields here are exactly: fcmTokens (push.js) and
+    // role (accountRole.js / RoleSelectScreen.jsx — the explicit,
+    // server-side, cross-device record of 'student' | 'teacher', set once
+    // at Role Select and never changed again by the client after that).
+    // `role` may only ever be set on CREATE or on an UPDATE where it
+    // didn't exist before (resource.data.role == null) — once set, it's
+    // immutable from the client, matching "Role Should Be Permanent."
+    // -------------------------------------------------------------
     match /users/{uid} {
       allow read: if isSignedIn() && request.auth.uid == uid;
       allow create: if isSignedIn() && request.auth.uid == uid
-        && request.resource.data.keys().hasOnly(['fcmTokens']);
+        && request.resource.data.keys().hasOnly(['fcmTokens', 'role'])
+        && (!('role' in request.resource.data)
+            || request.resource.data.role in ['student', 'teacher']);
       allow update: if isSignedIn() && request.auth.uid == uid
-        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['fcmTokens']);
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['fcmTokens', 'role'])
+        && (
+          !('role' in request.resource.data.diff(resource.data).affectedKeys())
+          || (
+            // role can only be WRITTEN if it wasn't already set —
+            // permanent once chosen, per "Role Should Be Permanent".
+            !('role' in resource.data)
+            && request.resource.data.role in ['student', 'teacher']
+          )
+        );
       allow delete: if false;
     }
 

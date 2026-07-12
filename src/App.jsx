@@ -27,8 +27,8 @@ import KuetVerifyEmailConfirmModal from './components/KuetVerifyEmailConfirmModa
 import FacultyVerifyEmailConfirmModal from './components/FacultyVerifyEmailConfirmModal';
 import RoleSelectScreen from './components/RoleSelectScreen';
 import FacultyVerifyHoldingScreen from './components/FacultyVerifyHoldingScreen';
-import { getAccountRole, setAccountRole } from './lib/accountRole';
-import { getFacultyDoc, isFacultyProfileComplete, markFacultyVerifiedIfEmailConfirmed } from './lib/facultySync';
+import { getAccountRole, setAccountRole, fetchServerAccountRole, persistAccountRoleToServer } from './lib/accountRole';
+import { getFacultyDoc, markFacultyVerifiedIfEmailConfirmed } from './lib/facultySync';
 import { store, getProfile, isProfileComplete, DEFAULT_PROFILE, normalizeProfileForSave, validateProfileForSave, ensureDBReady } from './store/store';
 import { getGroupId } from './lib/groupUtils';
 import { syncOwnVerification, joinGroup } from './lib/groupSync';
@@ -118,7 +118,14 @@ function Layout({ authState, onboardingActive }) {
         )}
         <div style={{ flex: 1 }}>
           <Routes>
-            <Route path="/" element={<Dashboard />} />
+            {/* BUGFIX: '/' used to unconditionally render the student
+                Dashboard for every signed-in account, teacher or not — so
+                a faculty account, even a fully verified one, landed on
+                the student home page after onboarding/login with no way
+                to reach /faculty except typing the URL directly. Now
+                routes by accountRole, same source of truth buildQueue()
+                uses. See BUGFIX_ROLE_SELECT_AND_FACULTY_ROUTING.md. */}
+            <Route path="/" element={getAccountRole() === 'teacher' ? <Navigate to="/faculty" replace /> : <Dashboard />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/courses" element={<Courses />} />
             <Route path="/attendance" element={<Attendance />} />
@@ -295,31 +302,78 @@ function shouldShowCommunityHiring() {
   } catch { return false; }
 }
 
-// §5 of the merged Faculty Module prompt: 'role-select' is always the very
-// first step, shown exactly once (accountRole unset). After that, the
-// existing 'auth'/'profile' steps branch on which role was chosen —
-// accountRole === 'teacher' checks isFacultyProfileComplete() instead of
-// the student isProfileComplete(), and Faculty Profile Setup itself
-// (FacultyProfileSetupModal) is a later phase (§8.3); for now a teacher
-// with an incomplete faculty doc simply stays queued on 'profile' with no
-// modal rendered yet (see the `current === 'profile'` render branch below,
-// which only renders ProfileSetupModal for the student case) — that's a
-// known, deliberately incomplete gap flagged in PROGRESS.md, not a silent
-// assumption: Phase 4 owns building FacultyProfileSetupModal itself.
+// §5 of the merged Faculty Module prompt: 'role-select' is shown once, at
+// SIGN-UP time only — never again afterward, on this device or any other.
 //
-// Async because accountRole === 'teacher' needs a Firestore read
-// (getFacultyDoc) to know whether the faculty profile is complete — every
-// other branch here is still synchronous/local, matching the original
-// function's cost profile as closely as possible.
+// BUGFIX (see BUGFIX_ROLE_SELECT_AND_FACULTY_ROUTING.md): accountRole used
+// to be trusted from localStorage alone. That's per-browser, so it broke
+// in exactly the ways reported: (1) a genuinely-registered faculty account
+// signing in on a new device / after clearing storage saw Role Select
+// again, even though their real role was already decided and provable —
+// faculty/{uid} already exists the moment they registered; (2) every
+// pre-existing account created before this feature existed has no
+// accountRole in localStorage either, so ALL of them hit Role Select on
+// their very next login, despite having used the app for months.
+//
+// Fix: before falling back to the local flag, check the one server-side
+// fact that's actually authoritative — does faculty/{uid} exist for this
+// uid? If yes, this is unambiguously a faculty account (only
+// createFacultyShell, called once at faculty sign-up, ever creates that
+// doc) — sync accountRole locally to 'teacher' and skip role-select
+// entirely. If no faculty/{uid} doc exists AND the account is not
+// anonymous, treat it as an already-decided student account (the
+// overwhelmingly common case, and exactly the safe default for every
+// pre-existing user) rather than re-asking. Role Select now only ever
+// appears for a genuinely brand-new, not-yet-decided sign-up.
+//
+// Async because both the teacher-profile check AND this new role
+// detection need a Firestore read (getFacultyDoc) — every other branch
+// here stays synchronous/local, matching the original function's cost
+// profile as closely as possible.
 async function buildQueue(isAnonymous) {
   const q = [];
-  const accountRole = getAccountRole();
+  let accountRole = getAccountRole();
+
+  if (!accountRole && !isAnonymous && auth.currentUser?.uid) {
+    // Not yet decided locally, but this is a real (non-anonymous) signed-in
+    // account — check server-side facts before ever showing role-select.
+    // Checked in order:
+    //   1. users/{uid}.role — the explicit, authoritative record, written
+    //      once at Role Select for EITHER role (see accountRole.js).
+    //   2. faculty/{uid} doc existing — a secondary signal that predates
+    //      (1) and still catches any account that somehow has a faculty
+    //      doc but never got a users/{uid}.role write (e.g. it was
+    //      created by an earlier build of this app, before role
+    //      persistence existed at all).
+    //   3. Otherwise: a genuine pre-existing student account, or a
+    //      brand-new student sign-up — default to 'student', the safe
+    //      and overwhelmingly common case, and back-fill the server
+        // record so this lookup is unnecessary next time.
+    const serverRole = await fetchServerAccountRole(auth.currentUser.uid);
+    if (serverRole) {
+      setAccountRole(serverRole);
+      accountRole = serverRole;
+    } else {
+      const fdoc = await getFacultyDoc(auth.currentUser.uid).catch(() => null);
+      if (fdoc) {
+        setAccountRole('teacher');
+        accountRole = 'teacher';
+        persistAccountRoleToServer('teacher');
+      } else {
+        setAccountRole('student');
+        accountRole = 'student';
+        persistAccountRoleToServer('student');
+      }
+    }
+  }
 
   if (!accountRole) {
     q.push('role-select');
     // Nothing else can be meaningfully decided yet — auth/profile steps
     // depend on which role gets picked, and role-select itself doesn't
-    // advance until a choice is made (§8.1, no dismiss path).
+    // advance until a choice is made (§8.1, no dismiss path). Only ever
+    // reached now by a fresh anonymous/guest session that hasn't signed
+    // up as either role yet.
     return q;
   }
 
@@ -340,9 +394,18 @@ async function buildQueue(isAnonymous) {
         // including profile setup, since an unverified account isn't
         // confirmed to be real faculty yet.
         q.push('faculty-verify');
-      } else if (!isFacultyProfileComplete(fdoc)) {
-        q.push('profile');
       }
+      // BUGFIX: the full FacultyProfileSetupModal (§8.3) doesn't exist
+      // yet — isFacultyProfileComplete() checks for name/title/dept
+      // fields that no UI currently writes, so it was ALWAYS false post-
+      // verification, and 'profile' got re-pushed onto the queue on every
+      // single reload forever. Clicking the placeholder's "Continue"
+      // button only shifted the LOCAL queue array for that one render;
+      // the underlying reason it got re-added (fdoc still incomplete)
+      // was never resolved, so it just came right back next load — this
+      // is what "Continue e click korle kichu hoy na" was. Until Phase 4
+      // ships the real form, a verified faculty account has nothing left
+      // to block on, so it's simply not queued at all.
     }
   } else {
     // Profile setup is mandatory before anything else — a half-filled
@@ -663,6 +726,20 @@ export default function App() {
       await authState.onAccountUpgraded(user);
     }
 
+    // BUGFIX: RoleSelectScreen's persistAccountRoleToServer() call happens
+    // BEFORE this — at that moment the person is still anonymous (or has
+    // no account at all yet) for the common new-visitor flow
+    // (role-select -> auth -> ...), so that write silently no-ops (no
+    // uid to attach it to). This is the first point where a real,
+    // non-anonymous auth.currentUser genuinely exists, so back-fill the
+    // server record here. persistAccountRoleToServer() is safe to call
+    // redundantly — it's a no-op once users/{uid}.role already exists,
+    // per the Firestore rules' "set once" enforcement.
+    if (!user.isAnonymous) {
+      const localRole = getAccountRole();
+      if (localRole) persistAccountRoleToServer(localRole);
+    }
+
     const accountRole = getAccountRole();
     if (accountRole === 'teacher') {
       // Re-derive for the teacher branch: a brand-new faculty account has
@@ -676,9 +753,10 @@ export default function App() {
         if (!fdoc?.verifiedAt && !rest.includes('faculty-verify')) {
           return ['faculty-verify', ...rest];
         }
-        if (fdoc?.verifiedAt && !isFacultyProfileComplete(fdoc) && !rest.includes('profile')) {
-          return ['profile', ...rest];
-        }
+        // BUGFIX: no longer ever inserts 'profile' here — see the matching
+        // buildQueue() comment. FacultyProfileSetupModal doesn't exist yet,
+        // so there was nothing for a teacher to actually do on that step
+        // besides watch it come back on every reload.
         return rest;
       });
       return;
@@ -743,18 +821,10 @@ export default function App() {
           <FacultyVerifyHoldingScreen
             officialEmail={authState.user?.email || ''}
             onVerified={() => {
-              // Re-derive (not a plain advance()) so 'profile' gets
-              // inserted now if the faculty profile itself isn't
-              // complete yet — mirrors handleAuthSuccess's teacher branch.
-              getFacultyDoc(authState.user?.uid).then((fdoc) => {
-                setQueue((q) => {
-                  const rest = q.slice(1); // drop 'faculty-verify'
-                  if (!isFacultyProfileComplete(fdoc) && !rest.includes('profile')) {
-                    return ['profile', ...rest];
-                  }
-                  return rest;
-                });
-              });
+              // BUGFIX: used to insert 'profile' here too — see the
+              // buildQueue() comment. There's no faculty profile form to
+              // send them to yet, so just drop 'faculty-verify' and move on.
+              setQueue((q) => q.slice(1));
             }}
           />
         )}
@@ -785,31 +855,12 @@ export default function App() {
           />
         )}
         {current === 'profile' && getAccountRole() === 'teacher' && (
-          // TEMPORARY placeholder — FacultyProfileSetupModal (§8.3) is Phase
-          // 4 work, not Phase 2. A verified faculty account with an
-          // incomplete profile lands here for now; it does nothing except
-          // let them continue, so it isn't a silent dead-end. Flagged in
-          // PROGRESS.md, not a silent assumption — do not remove this
-          // comment until Phase 4 replaces the whole branch.
-          <div style={{
-            position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 9999, padding: 16,
-          }}>
-            <div style={{ background: 'var(--card)', borderRadius: 18, padding: 28, maxWidth: 420, textAlign: 'center', border: '1px solid var(--border)' }}>
-              <div style={{ fontWeight: 800, fontSize: 16, marginBottom: 8, color: 'var(--text)' }}>
-                Faculty profile setup is coming soon
-              </div>
-              <div style={{ fontSize: 13, color: 'var(--muted)', marginBottom: 18, lineHeight: 1.6 }}>
-                Your email is verified. The full profile form isn't built yet — continue to the dashboard for now.
-              </div>
-              <button
-                onClick={advance}
-                style={{ padding: '10px 20px', borderRadius: 8, border: 'none', background: 'var(--accent)', color: '#fff', fontWeight: 700, fontSize: 13, cursor: 'pointer' }}
-              >
-                Continue
-              </button>
-            </div>
-          </div>
+          // Dead branch kept only as a defensive fallback — buildQueue()
+          // no longer ever pushes 'profile' for a teacher account (see the
+          // BUGFIX comment there), so this should never actually render.
+          // If it somehow does (e.g. stale queue state), don't trap the
+          // user behind a broken step: just advance past it immediately.
+          (() => { advance(); return null; })()
         )}
         {current === 'announcement' && (
           <AnnouncementModal open={true} onClose={advance} />
@@ -826,7 +877,35 @@ export default function App() {
         {current === 'backup' && (
           <BackupReminderGate open={true} onClose={advance} />
         )}
-        <Layout authState={authState} onboardingActive={!!current} />
+        {/* BUGFIX: Layout (which contains <Routes>/<Dashboard>) used to
+            render unconditionally here, regardless of `current` — so the
+            Dashboard was always fully mounted and rendering underneath
+            the role-select/auth overlays, just visually covered by them.
+            That's what "role select korar age dashboard render hoye jay"
+            was about: the opaque-background fix made it invisible, but it
+            was still there, still running its own effects/queries.
+            Now Layout doesn't mount at all until the queue has been built
+            AND the person isn't sitting on role-select or the mandatory
+            auth gate — the two steps where there's genuinely no account/
+            role context yet for a dashboard to make sense with. Once
+            role is decided and they're authenticated (even mid-profile-
+            setup or mid-faculty-verify), Layout mounts underneath those
+            steps same as before — those are per-account nudges, not a
+            "no dashboard exists yet" state, so there's nothing wrong with
+            it being mounted there. A plain loading state fills the gap
+            instead of nothing/a flash of a different screen. */}
+        {(!queueBuilt || current === 'role-select' || current === 'auth') ? (
+          <div style={{
+            position: 'fixed', inset: 0, display: 'flex', alignItems: 'center',
+            justifyContent: 'center', background: 'var(--bg)', zIndex: 1,
+          }}>
+            {!queueBuilt && (
+              <div style={{ color: 'var(--muted)', fontSize: 13 }}>Loading…</div>
+            )}
+          </div>
+        ) : (
+          <Layout authState={authState} onboardingActive={!!current} />
+        )}
         {/* Independent of the sequential onboarding queue above — this has
             its own internal 3-day snooze + "stop once verified" logic, so it
             doesn't need to block on / wait for the queue to finish. */}
