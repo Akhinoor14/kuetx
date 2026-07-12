@@ -14,12 +14,13 @@
 // just reflects that fact locally once it's true.
 
 import {
-  doc, getDoc, setDoc, updateDoc, onSnapshot, serverTimestamp,
+  collection, doc, getDoc, getDocs, setDoc, updateDoc, onSnapshot, serverTimestamp,
 } from 'firebase/firestore';
 import { db, auth } from './firebase';
 import { isFacultyEmailVerified } from './facultyEmailVerify';
 
 const facultyDocRef = (uid) => doc(db, 'faculty', uid);
+const facultyCollectionRef = () => collection(db, 'faculty');
 
 /**
  * Create the initial faculty/{uid} shell right after account creation
@@ -82,6 +83,26 @@ export async function saveFacultyProfile(uid, fields) {
     updatedAt: serverTimestamp(),
   });
 }
+
+export async function listAllFacultyAccounts() {
+  const snap = await getDocs(facultyCollectionRef());
+  return snap.docs.map((docSnap) => ({ uid: docSnap.id, ...docSnap.data() }));
+}
+
+export function isFacultyProfileComplete(fdoc) {
+  if (!fdoc) return false;
+  return Boolean(
+    fdoc.verifiedAt &&
+    String(fdoc.name || '').trim() &&
+    String(fdoc.title || '').trim() &&
+    String(fdoc.dept || '').trim()
+  );
+}
+
+export const getFacultyDoc = getFacultyProfile;
+export const subscribeFacultyDoc = subscribeFacultyProfile;
+export const createFacultyAccountDoc = createFacultyShell;
+export const markFacultyVerifiedIfEmailConfirmed = syncFacultyVerificationStatus;
 
 /**
  * Called from the magic-link completion screen (App.jsx onboarding queue,
