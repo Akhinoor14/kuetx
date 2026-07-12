@@ -70,11 +70,16 @@ export default function FacultyVerifyHoldingScreen({ officialEmail, onVerified }
 
   return (
     <div style={{
-      position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)',
+      position: 'fixed', inset: 0,
+      // BUGFIX: was a translucent rgba(0,0,0,0.5) overlay — combined with
+      // Layout mounting underneath (fixed separately in App.jsx), the
+      // half-set-up Dashboard was visibly showing through, dimmed, the
+      // entire time someone was waiting to verify their email. Opaque
+      // now, matching RoleSelectScreen's approach, as defense-in-depth.
+      background: 'var(--bg)',
       display: 'flex', alignItems: 'center', justifyContent: 'center',
       zIndex: 9999, padding: 16,
-    }}>
-      <div style={{
+    }}>      <div style={{
         background: 'var(--card)', borderRadius: 18, padding: 28,
         width: '100%', maxWidth: 440, textAlign: 'center',
         border: '1px solid var(--border)',

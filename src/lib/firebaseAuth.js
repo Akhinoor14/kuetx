@@ -183,11 +183,11 @@ export const logout = async () => {
 
 export const getAuthErrorMessage = (code) => {
   const messages = {
-    'auth/email-already-in-use': 'এই email দিয়ে আগেই account আছে।',
-    'auth/invalid-email': 'Email address টা valid না।',
-    'auth/weak-password': 'Password কমপক্ষে ৬ character হতে হবে।',
-    'auth/user-not-found': 'এই email দিয়ে কোনো account নেই।',
-    'auth/wrong-password': 'Password ভুল।',
+    'auth/email-already-in-use': 'This email address is already in use.',
+    'auth/invalid-email': 'The email address is invalid.',
+    'auth/weak-password': 'The password must be at least 6 characters long.',
+    'auth/user-not-found': 'There is no account with this email address.',
+    'auth/wrong-password': 'The password is incorrect.',
     // BUGFIX: modern Firebase (v9.6.0+) no longer returns the specific
     // auth/user-not-found / auth/wrong-password codes above for a failed
     // email+password sign-in — it merges both into one generic
@@ -196,18 +196,18 @@ export const getAuthErrorMessage = (code) => {
     // watching which error comes back would otherwise leak that). Neither
     // code above was actually being hit anymore, so every failed login
     // fell through to the raw `Login error: auth/invalid-credential`
-    // fallback instead of a real Bangla message. This covers both real
-    // causes (wrong password, or no account with this email) honestly in
-    // one line, without revealing which one it actually was.
-    'auth/invalid-credential': 'Email অথবা password ভুল, অথবা এই email দিয়ে কোনো account নেই। আবার চেক করে চেষ্টা করো।',
-    'auth/too-many-requests': 'অনেকবার চেষ্টা হয়েছে। কিছুক্ষণ পর আবার চেষ্টা করো।',
-    'auth/popup-closed-by-user': 'Login popup বন্ধ হয়ে গেছে।',
-    'auth/credential-already-in-use': 'এই Google account অন্য একটা account এ already linked।',
-    'auth/network-request-failed': 'Network error। Internet connection check করো।',
-    'auth/missing-email': 'Email address দাও।',
-    'auth/provider-already-linked': 'তোমার account-এ আগে থেকেই একটা email linked আছে।',
-    'auth/requires-recent-login': 'নিরাপত্তার জন্য আবার login করে আসতে হবে।',
-    'auth/domain-not-real': 'এই email address-এ mail পৌঁছাবে না মনে হচ্ছে। বানান চেক করো, বা Google দিয়ে login করো।',
+    // fallback instead of a helpful message. This covers both real causes
+    // (wrong password, or no account with this email) honestly in one line,
+    // without revealing which one it actually was.
+    'auth/invalid-credential': 'The email address or password is incorrect. Please check your details and try again.',
+    'auth/too-many-requests': 'Too many attempts were made. Please try again later.',
+    'auth/popup-closed-by-user': 'The sign-in popup was closed.',
+    'auth/credential-already-in-use': 'This Google account is already linked to another account.',
+    'auth/network-request-failed': 'Network error. Please check your internet connection.',
+    'auth/missing-email': 'Please enter an email address.',
+    'auth/provider-already-linked': 'This account already has an email linked to it.',
+    'auth/requires-recent-login': 'Please sign in again for security reasons.',
+    'auth/domain-not-real': 'This email address does not appear to be able to receive mail. Please check the spelling or use a different email address.',
   };
   return messages[code] || `Login error: ${code}`;
 };

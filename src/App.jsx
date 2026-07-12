@@ -26,9 +26,10 @@ import ClassJoinIntro from './components/ClassJoinIntro';
 import KuetVerifyEmailConfirmModal from './components/KuetVerifyEmailConfirmModal';
 import FacultyVerifyEmailConfirmModal from './components/FacultyVerifyEmailConfirmModal';
 import RoleSelectScreen from './components/RoleSelectScreen';
+import FacultyProfileSetupModal from './components/FacultyProfileSetupModal';
 import FacultyVerifyHoldingScreen from './components/FacultyVerifyHoldingScreen';
 import { getAccountRole, setAccountRole, fetchServerAccountRole, persistAccountRoleToServer } from './lib/accountRole';
-import { getFacultyDoc, markFacultyVerifiedIfEmailConfirmed } from './lib/facultySync';
+import { getFacultyDoc, markFacultyVerifiedIfEmailConfirmed, isFacultyProfileComplete } from './lib/facultySync';
 import { store, getProfile, isProfileComplete, DEFAULT_PROFILE, normalizeProfileForSave, validateProfileForSave, ensureDBReady } from './store/store';
 import { getGroupId } from './lib/groupUtils';
 import { syncOwnVerification, joinGroup } from './lib/groupSync';
@@ -408,18 +409,15 @@ async function buildQueue(isAnonymous) {
         // including profile setup, since an unverified account isn't
         // confirmed to be real faculty yet.
         q.push('faculty-verify');
+      } else if (!isFacultyProfileComplete(fdoc)) {
+        // FacultyProfileSetupModal now exists (mandatory, full-screen,
+        // faculty-shaped fields) — a verified-but-incomplete faculty
+        // account gets sent there instead of falling through to the
+        // student ProfileSetupModal (which asked for studentId/hall/
+        // advisor, none of which apply) or being left with nothing
+        // queued at all (the old placeholder-era behavior).
+        q.push('faculty-profile');
       }
-      // BUGFIX: the full FacultyProfileSetupModal (§8.3) doesn't exist
-      // yet — isFacultyProfileComplete() checks for name/title/dept
-      // fields that no UI currently writes, so it was ALWAYS false post-
-      // verification, and 'profile' got re-pushed onto the queue on every
-      // single reload forever. Clicking the placeholder's "Continue"
-      // button only shifted the LOCAL queue array for that one render;
-      // the underlying reason it got re-added (fdoc still incomplete)
-      // was never resolved, so it just came right back next load — this
-      // is what "Continue e click korle kichu hoy na" was. Until Phase 4
-      // ships the real form, a verified faculty account has nothing left
-      // to block on, so it's simply not queued at all.
     }
   } else {
     // Profile setup is mandatory before anything else — a half-filled
@@ -816,10 +814,19 @@ export default function App() {
           <FacultyVerifyHoldingScreen
             officialEmail={authState.user?.email || ''}
             onVerified={() => {
-              // BUGFIX: used to insert 'profile' here too — see the
-              // buildQueue() comment. There's no faculty profile form to
-              // send them to yet, so just drop 'faculty-verify' and move on.
-              setQueue((q) => q.slice(1));
+              // Rebuild rather than just slicing off this one step —
+              // buildQueue() now checks isFacultyProfileComplete() right
+              // after the verifiedAt check, so a freshly-verified but
+              // still-incomplete faculty account correctly lands on
+              // 'faculty-profile' next, instead of nothing.
+              buildQueue(authState.isAnonymous).then(setQueue);
+            }}
+          />
+        )}
+        {current === 'faculty-profile' && (
+          <FacultyProfileSetupModal
+            onSave={() => {
+              buildQueue(authState.isAnonymous).then(setQueue);
             }}
           />
         )}
@@ -880,16 +887,22 @@ export default function App() {
             was about: the opaque-background fix made it invisible, but it
             was still there, still running its own effects/queries.
             Now Layout doesn't mount at all until the queue has been built
-            AND the person isn't sitting on role-select or the mandatory
-            auth gate — the two steps where there's genuinely no account/
-            role context yet for a dashboard to make sense with. Once
-            role is decided and they're authenticated (even mid-profile-
-            setup or mid-faculty-verify), Layout mounts underneath those
-            steps same as before — those are per-account nudges, not a
-            "no dashboard exists yet" state, so there's nothing wrong with
-            it being mounted there. A plain loading state fills the gap
-            instead of nothing/a flash of a different screen. */}
-        {(!queueBuilt || current === 'role-select' || current === 'auth') ? (
+            AND the person isn't sitting on any of the mandatory pre-
+            dashboard gates — role-select, auth, faculty-verify, or
+            profile. Once ALL of those are cleared, Layout mounts.
+            BUGFIX: 'faculty-verify' and 'profile' used to be excluded
+            from this list on the theory that they're "per-account
+            nudges" rather than a genuine "no dashboard yet" state — but
+            that's wrong in practice: FacultyVerifyHoldingScreen (and
+            ProfileSetupModal, mandatory mode) use a translucent
+            rgba(0,0,0,0.5) overlay, not an opaque one like role-select/
+            auth, so the half-set-up Dashboard was genuinely visible
+            (dimmed) behind them the whole time someone was verifying
+            their email or filling in their profile — plain background
+            should stay solid white/var(--bg) the entire way through
+            onboarding, only turning into the real Dashboard once every
+            mandatory step is actually done. */}
+        {(!queueBuilt || current === 'role-select' || current === 'auth' || current === 'faculty-verify' || current === 'faculty-profile' || current === 'profile') ? (
           <div style={{
             position: 'fixed', inset: 0, display: 'flex', alignItems: 'center',
             justifyContent: 'center', background: 'var(--bg)', zIndex: 1,

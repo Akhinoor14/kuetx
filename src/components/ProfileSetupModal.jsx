@@ -420,7 +420,21 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
   } : { background: 'var(--surface)', padding: 'clamp(12px, 6vw, 20px)', borderRadius: 16, width: 'min(920px, 98vw)', maxWidth: '100%', maxHeight: '94vh', overflowY: 'auto', boxShadow: '0 14px 40px rgba(0,0,0,0.24)', pointerEvents: 'auto' };
 
   return (
-    <Modal onClose={mandatory ? () => {} : onClose} closeOnOverlayClick={!mandatory} contentClassName={minimal ? "kuetx-profile-modal minimal" : "kuetx-profile-modal"} contentStyle={modalContentStyle}>
+    <Modal
+      onClose={mandatory ? () => {} : onClose}
+      closeOnOverlayClick={!mandatory}
+      contentClassName={minimal ? "kuetx-profile-modal minimal" : "kuetx-profile-modal"}
+      contentStyle={modalContentStyle}
+      // BUGFIX: mandatory (onboarding, no-skip) mode now uses an opaque
+      // background instead of Modal's default translucent
+      // rgba(0,0,0,0.5) — same reasoning as RoleSelectScreen/
+      // FacultyVerifyHoldingScreen: this is a "no real dashboard yet"
+      // state, not a dismissable overlay on top of one, so nothing
+      // should show through, even dimmed. Optional/dismissable uses of
+      // this same component (editing profile later from Settings, etc.)
+      // are unaffected — they still get Modal's normal translucent look.
+      overlayStyle={mandatory ? { background: 'var(--bg)' } : undefined}
+    >
       <style>{modalCss}</style>
       <form onSubmit={handleSubmit} style={{ width: '100%' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, alignItems: 'flex-start', marginBottom: 14, flexWrap: 'wrap' }}>

@@ -15,10 +15,16 @@ import {
   getAuthErrorMessage,
 } from '../lib/firebaseAuth';
 import { isObviouslyBadDomain, getTypoSuggestion } from '../lib/emailDomainCheck';
-// RESTRUCTURE: isFacultyEmailFormat and createFacultyAccountDoc moved to
-// RoleSelectScreen.jsx — faculty-specific logic now runs at role-choice
-// time, not inside the generic auth step (see handleEmail comment below).
 import { setAccountRole, persistAccountRoleToServer } from '../lib/accountRole';
+// RESTRUCTURE v2: Register now asks Student/Faculty INLINE, right at the
+// top of the Register tab, before showing the form — not a day later at a
+// standalone 'role-select' step. That standalone step still exists as a
+// safety-net for accounts that somehow ended up with no role recorded
+// (see RoleSelectScreen.jsx), but the normal Register path never reaches
+// it anymore: role + account + (faculty) shell doc all happen in one
+// submit, right here.
+import { isFacultyEmailFormat } from '../lib/facultyEmailVerify';
+import { createFacultyAccountDoc } from '../lib/facultySync';
 
 const inputStyle = {
   width: '100%',
@@ -85,6 +91,13 @@ export default function AuthModal({ mode = 'login', isUpgrade = false, onClose, 
   // lives). No Google Sign-In, no register/login tab toggle, no student
   // Bengali copy — everything in this branch is English per Deviation 3.
   const isFaculty = variant === 'faculty';
+  // showAsFaculty: drives ALL faculty-styled copy/placeholders/behavior
+  // below (English text, institutional-email placeholder, no Google, no
+  // anonymous skip) — true either when a caller pre-forces variant=
+  // "faculty" (legacy path, still supported), OR when someone on the
+  // Register tab just picked Faculty inline. Login/Upgrade never set
+  // registerRole, so this only ever differs from isFaculty during a
+  // fresh Register.
   const [tab, setTab] = useState(mode); // 'login' | 'register'
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -93,6 +106,14 @@ export default function AuthModal({ mode = 'login', isUpgrade = false, onClose, 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [resetSent, setResetSent] = useState(false);
+  // Inline Register-tab role choice: null until picked, then 'student' |
+  // 'teacher'. Only meaningful on the Register tab — Login stays
+  // role-agnostic (existing accounts get routed by buildQueue's
+  // server-side role lookup, same as before). Resets whenever the tab
+  // changes back to Register from Login, so switching tabs never leaves
+  // a stale choice behind.
+  const [registerRole, setRegisterRole] = useState(null);
+  const showAsFaculty = isFaculty || registerRole === 'teacher';
   // BUGFIX: showEmailForm removed — email/password form is now always
   // shown expanded (no longer collapsed behind a "or use email" toggle),
   // since it's the primary path and Google is now the secondary option.
@@ -113,7 +134,7 @@ export default function AuthModal({ mode = 'login', isUpgrade = false, onClose, 
   };
 
   const handleReset = async () => {
-    if (!email) { setError('আগে email address দাও, তারপর reset link পাঠানো হবে।'); return; }
+    if (!email) { setError('Please enter your email address first, then a reset link will be sent.'); return; }
     setLoading(true);
     setError('');
     try {
@@ -172,16 +193,32 @@ export default function AuthModal({ mode = 'login', isUpgrade = false, onClose, 
 
   const handleEmail = async () => {
     if (!email || !password) {
-      setError(isFaculty ? 'Please enter both email and password.' : 'Email আর password দাও।');
+      setError('Please enter both your email address and password.');
       return;
     }
 
-    // RESTRUCTURE: the faculty email-format pre-check used to live here,
-    // gated on isFaculty. Post-restructure, 'auth' is always generic
-    // (role unknown), so isFaculty is never true at this point — that
-    // validation now happens in RoleSelectScreen.jsx instead, at the
-    // moment someone actually picks "Faculty Member" and their email is
-    // finally known to matter.
+    // Register (not Login, not Upgrade) now requires the inline role
+    // choice to have been made first — the role-styled fields below only
+    // render once registerRole is set, so this mainly guards against a
+    // stray Enter-key submit before a choice is picked.
+    if (!isUpgrade && tab === 'register' && !registerRole) {
+      setError('Please choose Student or Faculty first.');
+      return;
+    }
+
+    // Faculty institutional-email gate now runs HERE, at submit time,
+    // instead of later at RoleSelectScreen — role is already known (it's
+    // why the form looks the way it does), so this is the earliest point
+    // the format can actually be checked.
+    if (!isUpgrade && tab === 'register' && registerRole === 'teacher' && !isFacultyEmailFormat(email)) {
+      setError(
+        "This doesn't look like a valid KUET institutional email " +
+        '(a *.kuet.ac.bd address, not @stud.kuet.ac.bd). ' +
+        'Faculty accounts need an institutional email — if you have a ' +
+        'personal address, choose Student instead.'
+      );
+      return;
+    }
 
     // Domain check itself lives in firebaseAuth.js (registerWithEmail /
     // upgradeWithEmail) — that's the single enforcement point, so it
@@ -201,16 +238,21 @@ export default function AuthModal({ mode = 'login', isUpgrade = false, onClose, 
         user = await (isUpgrade
           ? upgradeWithEmail(email, password, name)
           : registerWithEmail(email, password, name));
-        // RESTRUCTURE: role is no longer set here. Previously this ran
-        // right after AuthModal was rendered with a pre-decided
-        // variant="faculty"/"student" (chosen by Role Select, which used
-        // to run BEFORE 'auth'). Now 'auth' runs first with no role
-        // decided at all — Register just creates a plain account with NO
-        // role, and the very next queue step is 'role-select', which is
-        // the one place role actually gets chosen and persisted
-        // (RoleSelectScreen.jsx). Faculty's verifiedAt:null doc creation
-        // has moved there too, since it can't happen before a role is
-        // even picked.
+        // RESTRUCTURE v2: role IS known here now (registerRole, chosen
+        // inline before this form even rendered) for a plain Register —
+        // save it immediately, and create the faculty shell doc in the
+        // same submit if Faculty was chosen. Account create + role save
+        // + (faculty) shell doc all happen in one Register click.
+        // 'role-select' (RoleSelectScreen.jsx) still exists purely as a
+        // safety-net for an existing account with no role recorded
+        // anywhere — this normal Register path never reaches it.
+        if (!isUpgrade && registerRole) {
+          setAccountRole(registerRole);
+          persistAccountRoleToServer(registerRole).catch(() => {});
+          if (registerRole === 'teacher') {
+            await createFacultyAccountDoc(user.uid, email);
+          }
+        }
       } else {
         user = await loginWithEmail(email, password);
       }
@@ -242,13 +284,13 @@ export default function AuthModal({ mode = 'login', isUpgrade = false, onClose, 
   const describeDomainError = (err) => {
     if (err.code !== 'auth/domain-not-real') return null;
     if (err.domainReason === 'typo' && err.domainSuggestion) {
-      return `এই email ঠিক আছে তো? "${err.domainSuggestion}" বলতে চাওনি তো?`;
+      return `Is this email address correct? Did you mean "${err.domainSuggestion}"?`;
     }
     if (err.domainReason === 'disposable') {
-      return 'এটা একটা temporary/disposable email service মনে হচ্ছে — সরাসরি একটা real email address ব্যবহার করো।';
+      return 'This appears to be a temporary or disposable email address. Please use a real email address.';
     }
     if (err.domainReason === 'no-mx') {
-      return 'এই email address-এ মেইল পাঠানো যাচ্ছে না মনে হচ্ছে — বানান আরেকবার চেক করো, নাহলে অন্য একটা email দাও।';
+      return 'This email address does not appear to be able to receive mail. Please check the spelling or use a different email address.';
     }
     return getAuthErrorMessage(err.code);
   };
@@ -278,12 +320,12 @@ export default function AuthModal({ mode = 'login', isUpgrade = false, onClose, 
         {/* Header */}
         <div style={{ marginBottom: 18 }}>
           <div style={{ fontWeight: 800, fontSize: 19, marginBottom: 4 }}>
-            {isFaculty
+            {showAsFaculty
               ? (tab === 'login' ? 'Faculty Sign In' : 'Faculty Sign Up')
               : (isUpgrade ? 'Account তৈরি করো' : queueMode ? 'Sync চালু করো' : tab === 'login' ? 'স্বাগতম' : 'Account বানাও')}
           </div>
           <div style={{ fontSize: 12.5, color: 'var(--muted)' }}>
-            {isFaculty
+            {showAsFaculty
               ? (tab === 'login'
                   ? 'Sign in with your KUET institutional email.'
                   : 'Sign up with your KUET institutional email (name@dept.kuet.ac.bd).')
@@ -302,7 +344,7 @@ export default function AuthModal({ mode = 'login', isUpgrade = false, onClose, 
         {!isUpgrade && (
           <div style={{ display: 'flex', gap: 0, marginBottom: 14, borderRadius: 8, overflow: 'hidden', border: '1px solid var(--border)' }}>
             {['login', 'register'].map(t => (
-              <button key={t} onClick={() => { setTab(t); setError(''); }}
+              <button key={t} onClick={() => { setTab(t); setError(''); setRegisterRole(null); }}
                 style={{
                   flex: 1, padding: '9px 0', border: 'none', cursor: 'pointer', fontSize: 13, fontWeight: 600,
                   background: tab === t ? 'var(--accent)' : 'var(--card)',
@@ -314,30 +356,73 @@ export default function AuthModal({ mode = 'login', isUpgrade = false, onClose, 
           </div>
         )}
 
-        {/* Email form */}
+        {/* Inline Register-tab role choice — shown first, before any form
+            field. Student/Faculty picks which field set + copy renders
+            below (student-style Bengali form vs faculty-style English
+            institutional-email form). Never shown on Login (role-
+            agnostic by design) or Upgrade (anonymous-session upgrade is
+            always student, same as Google). */}
+        {!isUpgrade && tab === 'register' && !isFaculty && !registerRole && (
+          <div style={{ display: 'grid', gap: 10, marginBottom: 4 }}>
+            <div style={{ fontSize: 12.5, color: 'var(--muted)' }}>তুমি কে হিসেবে join করছো?</div>
+            <div style={{ display: 'flex', gap: 10 }}>
+              <button
+                type="button"
+                onClick={() => setRegisterRole('student')}
+                style={{ ...btnGoogle, flexDirection: 'column', gap: 4, padding: '16px 10px' }}
+              >
+                <User size={18} />
+                Student
+              </button>
+              <button
+                type="button"
+                onClick={() => setRegisterRole('teacher')}
+                style={{ ...btnGoogle, flexDirection: 'column', gap: 4, padding: '16px 10px' }}
+              >
+                <Chrome size={18} />
+                Faculty
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Email form — for Register, only shows once a role is picked
+            above (or immediately, if isFaculty was pre-forced by a
+            caller, or if isUpgrade, both of which skip the role picker
+            entirely). Login always shows immediately, role-agnostic. */}
+        {(tab === 'login' || isUpgrade || isFaculty || registerRole) && (
         <div style={{ display: 'grid', gap: 10 }}>
+          {tab === 'register' && !isUpgrade && !isFaculty && (
+            <button
+              type="button"
+              onClick={() => setRegisterRole(null)}
+              style={{ ...btnGhost, fontSize: 12, marginBottom: -4 }}
+            >
+              ← {registerRole === 'teacher' ? 'Faculty' : 'Student'} বদলাও
+            </button>
+          )}
           {(tab === 'register' || isUpgrade) && (
             <div style={{ position: 'relative' }}>
               <User size={15} style={{ position: 'absolute', left: 10, top: '50%', transform: 'translateY(-50%)', color: 'var(--muted)' }} />
-              <input style={{ ...inputStyle, paddingLeft: 32 }} placeholder={isFaculty ? 'Your name (optional)' : 'তোমার নাম (optional)'} value={name} onChange={e => setName(e.target.value)} />
+              <input style={{ ...inputStyle, paddingLeft: 32 }} placeholder={showAsFaculty ? 'Your name (optional)' : 'তোমার নাম (optional)'} value={name} onChange={e => setName(e.target.value)} />
             </div>
           )}
           <div style={{ position: 'relative' }}>
             <Mail size={15} style={{ position: 'absolute', left: 10, top: '50%', transform: 'translateY(-50%)', color: 'var(--muted)' }} />
-            <input style={{ ...inputStyle, paddingLeft: 32 }} type="email" placeholder={isFaculty ? 'Institutional email (name@dept.kuet.ac.bd)' : 'Email address'} value={email}
+            <input style={{ ...inputStyle, paddingLeft: 32 }} type="email" placeholder={showAsFaculty ? 'Institutional email (name@dept.kuet.ac.bd)' : 'Email address'} value={email}
               onChange={e => { setEmail(e.target.value); setDomainWarning(false); setTypoSuggestion(null); }} onBlur={handleEmailBlur} />
           </div>
           {typoSuggestion && (tab === 'register' || isUpgrade) && (
             <div style={{ fontSize: 12, color: 'var(--warning)', marginTop: -4 }}>
-              {isFaculty ? `Did you mean "${typoSuggestion}"?` : `"${typoSuggestion}" বলতে চাওনি তো?`}{' '}
+              {showAsFaculty ? `Did you mean "${typoSuggestion}"?` : `"${typoSuggestion}" বলতে চাওনি তো?`}{' '}
               <button type="button" onClick={applyTypoSuggestion} style={{ ...btnGhost, fontSize: 12, padding: 0 }}>
-                {isFaculty ? 'Yes, fix it' : 'হ্যাঁ, ঠিক করো'}
+                {showAsFaculty ? 'Yes, fix it' : 'হ্যাঁ, ঠিক করো'}
               </button>
             </div>
           )}
           {domainWarning && !typoSuggestion && (tab === 'register' || isUpgrade) && (
             <div style={{ fontSize: 12, color: 'var(--warning)', marginTop: -4 }}>
-              {isFaculty ? 'Please double-check this email address.' : 'Email address-টা একবার চেক করে দাও, ঠিক লিখেছো তো?'}
+              {showAsFaculty ? 'Please double-check this email address.' : 'Email address-টা একবার চেক করে দাও, ঠিক লিখেছো তো?'}
             </div>
           )}
           <div style={{ position: 'relative' }}>
@@ -345,7 +430,7 @@ export default function AuthModal({ mode = 'login', isUpgrade = false, onClose, 
             <input
               style={{ ...inputStyle, paddingLeft: 32, paddingRight: 42 }}
               type={showPassword ? 'text' : 'password'}
-              placeholder={isFaculty ? 'Password (at least 6 characters)' : 'Password (কমপক্ষে ৬ characters)'}
+              placeholder={showAsFaculty ? 'Password (at least 6 characters)' : 'Password (কমপক্ষে ৬ characters)'}
               value={password}
               onChange={e => setPassword(e.target.value)}
               onKeyDown={e => e.key === 'Enter' && handleEmail()}
@@ -366,7 +451,7 @@ export default function AuthModal({ mode = 'login', isUpgrade = false, onClose, 
           {!isUpgrade && tab === 'login' && !resetSent && (
             <div style={{ textAlign: 'right', marginTop: -4 }}>
               <button style={{ ...btnGhost, fontSize: 12 }} onClick={() => { setError(''); handleReset(); }} disabled={loading}>
-                {isFaculty ? 'Forgot password?' : 'Password ভুলে গেছো?'}
+                {showAsFaculty ? 'Forgot password?' : 'Password ভুলে গেছো?'}
               </button>
             </div>
           )}
@@ -374,7 +459,7 @@ export default function AuthModal({ mode = 'login', isUpgrade = false, onClose, 
           {resetSent && (
             <div style={{ display: 'flex', alignItems: 'flex-start', gap: 8, fontSize: 12, color: 'var(--accent)', padding: '10px 12px', background: 'rgba(34,197,94,0.08)', borderRadius: 6 }}>
               <CheckCircle size={15} style={{ flexShrink: 0, marginTop: 1 }} />
-              <span>{isFaculty ? `A reset link has been sent to ${email}. Check your inbox (and spam folder).` : `Reset link পাঠানো হয়েছে ${email} এ। Inbox (ও spam folder) চেক করো।`}</span>
+              <span>{showAsFaculty ? `A reset link has been sent to ${email}. Check your inbox (and spam folder).` : `Reset link পাঠানো হয়েছে ${email} এ। Inbox (ও spam folder) চেক করো।`}</span>
             </div>
           )}
 
@@ -385,7 +470,7 @@ export default function AuthModal({ mode = 'login', isUpgrade = false, onClose, 
           )}
 
           <button style={btnPrimary} onClick={handleEmail} disabled={loading}>
-            {isFaculty
+            {showAsFaculty
               ? (loading
                   ? ((isUpgrade || tab === 'register') ? 'Verifying email and creating account…' : 'Loading…')
                   : (isUpgrade ? 'Create account' : tab === 'login' ? 'Sign In' : 'Sign Up'))
@@ -394,11 +479,17 @@ export default function AuthModal({ mode = 'login', isUpgrade = false, onClose, 
                   : isUpgrade ? 'Account তৈরি করো' : tab === 'login' ? 'Login' : 'Register')}
           </button>
         </div>
+        )}
 
         {/* Google button — never shown for faculty (Deviation: email+password
             only, no Google Sign-In, no per-department config toggle).
-            BUGFIX: moved below the email/password form (was above it). */}
-        {!isFaculty && (
+            BUGFIX: moved below the email/password form (was above it).
+            Now also hidden whenever showAsFaculty is true for any reason
+            (pre-forced variant OR just chosen inline on Register) — and,
+            on the Register tab specifically, hidden until a role has
+            actually been picked (registerRole), since there's no form to
+            attach it below yet during the inline role-choice screen. */}
+        {!showAsFaculty && (tab === 'login' || isUpgrade || registerRole) && (
           <>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, margin: '16px 0', color: 'var(--muted)', fontSize: 12 }}>
               <div style={{ flex: 1, height: 1, background: 'var(--border)' }} />
@@ -420,8 +511,10 @@ export default function AuthModal({ mode = 'login', isUpgrade = false, onClose, 
         {/* Anonymous skip (only on initial, not upgrade) — never shown for
             faculty: the merged prompt's Deviation 2 hard gate means there is
             no "skip for now" path once someone has chosen the Faculty Member
-            role, unlike the student flow's optional anonymous mode. */}
-        {!isUpgrade && !isFaculty && onClose && (
+            role, unlike the student flow's optional anonymous mode. Also
+            hidden while the Register tab is still on the inline role-choice
+            screen (registerRole === null) — nothing to skip past yet. */}
+        {!isUpgrade && !showAsFaculty && (tab === 'login' || registerRole) && onClose && (
           <div style={{ textAlign: 'center', marginTop: 10 }}>
             <button style={{ ...btnGhost, color: 'var(--muted)', textDecoration: 'none', fontSize: 12 }} onClick={onClose}>
               {queueMode ? 'Skip for now — continue without account →' : 'এখন না — login ছাড়াই ব্যবহার করব'}
