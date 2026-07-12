@@ -12,23 +12,33 @@
 // This is a HARD GATE (Deviation 2) — there is no skip/dismiss here, unlike
 // the optional nice-to-have verification banners elsewhere in the app.
 // All copy is English per Deviation 3.
+//
+// BUGFIX (see BUGFIX_FACULTY_VERIFY_CROSS_DEVICE.md): actually completing
+// the clicked magic-link now happens in a boot-level effect in App.jsx —
+// independent of the onboarding queue — not here. This screen previously
+// did that itself on mount, but it only ever mounted when accountRole was
+// already 'teacher' on that exact browser, so a link opened in a new tab,
+// a different browser, a phone's mail app, or after the original tab was
+// closed/refreshed silently did nothing: this screen never mounted, so the
+// link-completion code never ran. This screen's only job now is: (1) send/
+// resend the link, and (2) live-subscribe to faculty/{uid}.verifiedAt and
+// auto-advance the instant it flips true — regardless of which tab/device
+// actually completed the link click.
 
 import { useEffect, useState } from 'react';
 import { Mail, RefreshCw } from 'lucide-react';
 import { auth } from '../lib/firebase';
-import { getFacultyDoc, subscribeFacultyDoc, markFacultyVerifiedIfEmailConfirmed } from '../lib/facultySync';
-import {
-  sendFacultyVerificationLink,
-  isFacultyVerifyLink,
-  completeFacultyVerificationLink,
-} from '../lib/facultyEmailVerify';
+import { getFacultyDoc, subscribeFacultyDoc } from '../lib/facultySync';
+import { sendFacultyVerificationLink } from '../lib/facultyEmailVerify';
 
 export default function FacultyVerifyHoldingScreen({ officialEmail, onVerified }) {
   const [status, setStatus] = useState('waiting'); // 'waiting' | 'resending' | 'resent' | 'error'
   const [error, setError] = useState('');
 
   // Live-subscribe to our own faculty doc so this screen auto-advances the
-  // instant verifiedAt is set, without any manual "I've verified" click.
+  // instant verifiedAt is set, without any manual "I've verified" click —
+  // works whether the link was clicked in this same tab or a different one,
+  // since Firestore is the shared source of truth either way.
   const uid = auth.currentUser?.uid;
 
   useEffect(() => {
@@ -45,38 +55,6 @@ export default function FacultyVerifyHoldingScreen({ officialEmail, onVerified }
     });
     return unsub;
   }, [onVerified, uid]);
-
-  // Complete the link if the current page load IS the clicked link itself
-  // (same-device or a fresh tab opened from the emailed link), then confirm
-  // + write verifiedAt via facultySync.js. This runs once on mount.
-  useEffect(() => {
-    let cancelled = false;
-    async function run() {
-      if (!isFacultyVerifyLink()) return;
-      const result = await completeFacultyVerificationLink();
-      if (cancelled) return;
-      if (result.status === 'success') {
-        const uid = auth.currentUser?.uid;
-        if (uid) {
-          try {
-            await markFacultyVerifiedIfEmailConfirmed(uid, result.email);
-            onVerified?.();
-          } catch (e) {
-            setStatus('error');
-            setError(e.message || 'Could not confirm verification. Please try again.');
-          }
-        }
-      } else if (result.status === 'error') {
-        setStatus('error');
-        setError(result.message);
-      }
-      // 'not-a-link' / 'needs-email' — leave the waiting screen as-is;
-      // cross-device email-confirmation prompts are a later-phase nicety,
-      // not required for Phase 2.
-    }
-    run();
-    return () => { cancelled = true; };
-  }, [onVerified]);
 
   const resend = async () => {
     setStatus('resending');

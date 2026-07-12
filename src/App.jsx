@@ -24,10 +24,11 @@ import useFirebaseAuth from './hooks/useFirebaseAuth';
 import DataSafeToast from './components/DataSafeToast';
 import ClassJoinIntro from './components/ClassJoinIntro';
 import KuetVerifyEmailConfirmModal from './components/KuetVerifyEmailConfirmModal';
+import FacultyVerifyEmailConfirmModal from './components/FacultyVerifyEmailConfirmModal';
 import RoleSelectScreen from './components/RoleSelectScreen';
 import FacultyVerifyHoldingScreen from './components/FacultyVerifyHoldingScreen';
-import { getAccountRole } from './lib/accountRole';
-import { getFacultyDoc, isFacultyProfileComplete } from './lib/facultySync';
+import { getAccountRole, setAccountRole } from './lib/accountRole';
+import { getFacultyDoc, isFacultyProfileComplete, markFacultyVerifiedIfEmailConfirmed } from './lib/facultySync';
 import { store, getProfile, isProfileComplete, DEFAULT_PROFILE, normalizeProfileForSave, validateProfileForSave, ensureDBReady } from './store/store';
 import { getGroupId } from './lib/groupUtils';
 import { syncOwnVerification, joinGroup } from './lib/groupSync';
@@ -444,6 +445,93 @@ export default function App() {
     }
   };
 
+  // BUGFIX: faculty magic-link verification previously only ran INSIDE
+  // FacultyVerifyHoldingScreen, which only mounts when the onboarding
+  // queue's current step happens to be 'faculty-verify' — which itself
+  // only gets pushed when accountRole (a localStorage flag) is already
+  // 'teacher' on THIS browser. A teacher who opened the emailed link in a
+  // new tab, a different browser, their phone's mail app, or after
+  // closing/refreshing the original signup tab would land on a page where
+  // that condition was never true, so isFacultyVerifyLink()/
+  // completeFacultyVerificationLink() never ran at all — the click did
+  // nothing, verifiedFacultyEmails/{email} never got written, and
+  // faculty/{uid}.verifiedAt stayed null forever, even though the person
+  // genuinely clicked the right link. This mirrors the student
+  // KUET-email-verify handling above: a boot-level effect, independent of
+  // the onboarding queue, so the link works regardless of which tab/device/
+  // queue-state it's opened from. See BUGFIX_FACULTY_VERIFY_CROSS_DEVICE.md.
+  const [facultyVerifyPrompt, setFacultyVerifyPrompt] = useState(null); // { busy, error } | null
+  useEffect(() => {
+    let cancelled = false;
+
+    async function run(emailOverride = null) {
+      const { isFacultyVerifyLink, completeFacultyVerificationLink } = await import('./lib/facultyEmailVerify');
+      if (!emailOverride && !isFacultyVerifyLink(window.location.href)) return;
+      const result = await completeFacultyVerificationLink(window.location.href, emailOverride);
+      if (cancelled) return;
+
+      if (result.status === 'needs-email') {
+        // Cross-device/cross-tab click — this browser has no record of
+        // which email the link was sent to (localStorage-only, per-tab).
+        // Ask via the modal instead of silently doing nothing.
+        setFacultyVerifyPrompt({ busy: false, error: '' });
+        return;
+      }
+      if (result.status === 'success') {
+        setFacultyVerifyPrompt(null);
+        // This tab may not have accountRole === 'teacher' set yet (that's
+        // exactly the cross-device case) — set it now so the onboarding
+        // queue routes correctly on the next render instead of showing
+        // Role Select to someone who just proved they're faculty.
+        setAccountRole('teacher');
+        const uid = auth.currentUser?.uid;
+        if (uid) {
+          try {
+            await markFacultyVerifiedIfEmailConfirmed(uid, result.email);
+          } catch (e) {
+            console.warn('[App] markFacultyVerifiedIfEmailConfirmed failed', e);
+            notify('Verification succeeded but could not be saved. Please reopen the link or contact the developer.', 'error', 6000);
+            return;
+          }
+        }
+        notify('Faculty email verified! You now have full access.', 'success');
+        return;
+      }
+      if (result.status === 'error') {
+        setFacultyVerifyPrompt(null);
+        console.warn('[KUETx] Faculty email verify link:', result.message);
+        notify(result.message, 'error', 6000);
+      }
+      // 'not-a-link' → nothing to do, most page loads hit this silently.
+    }
+
+    run();
+    return () => { cancelled = true; };
+  }, []);
+
+  const handleFacultyVerifyConfirm = async (typedEmail) => {
+    setFacultyVerifyPrompt((p) => ({ ...p, busy: true, error: '' }));
+    const { completeFacultyVerificationLink } = await import('./lib/facultyEmailVerify');
+    const result = await completeFacultyVerificationLink(window.location.href, typedEmail);
+    if (result.status === 'success') {
+      setFacultyVerifyPrompt(null);
+      setAccountRole('teacher');
+      const uid = auth.currentUser?.uid;
+      if (uid) {
+        try {
+          await markFacultyVerifiedIfEmailConfirmed(uid, result.email);
+        } catch (e) {
+          console.warn('[App] markFacultyVerifiedIfEmailConfirmed failed', e);
+          setFacultyVerifyPrompt({ busy: false, error: 'Verification succeeded but could not be saved. Please try again.' });
+          return;
+        }
+      }
+      notify('Faculty email verified! You now have full access.', 'success');
+    } else {
+      setFacultyVerifyPrompt({ busy: false, error: result.message || 'Could not verify. Please try again.' });
+    }
+  };
+
   // Build queue once auth is ready so we know isAnonymous. buildQueue is now
   // async (accountRole === 'teacher' needs a Firestore read) — guarded with
   // `cancelled` so a fast unmount/re-auth during the read can't apply a
@@ -754,6 +842,14 @@ export default function App() {
             error={verifyEmailPrompt.error}
             onConfirm={handleVerifyEmailConfirm}
             onCancel={() => setVerifyEmailPrompt(null)}
+          />
+        )}
+        {facultyVerifyPrompt && (
+          <FacultyVerifyEmailConfirmModal
+            busy={facultyVerifyPrompt.busy}
+            error={facultyVerifyPrompt.error}
+            onConfirm={handleFacultyVerifyConfirm}
+            onCancel={() => setFacultyVerifyPrompt(null)}
           />
         )}
         {/* Global auth modal (triggered from anywhere via window.__kuetxShowAuth) */}
