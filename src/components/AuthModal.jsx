@@ -4,7 +4,7 @@
  */
 
 import { useState } from 'react';
-import { X, Mail, Lock, User, Chrome, CheckCircle } from 'lucide-react';
+import { X, Mail, Lock, User, Chrome, CheckCircle, Eye, EyeOff } from 'lucide-react';
 import {
   loginWithGoogle,
   loginWithEmail,
@@ -86,6 +86,7 @@ export default function AuthModal({ mode = 'login', isUpgrade = false, onClose, 
   const [tab, setTab] = useState(mode); // 'login' | 'register'
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [name, setName] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -356,8 +357,25 @@ export default function AuthModal({ mode = 'login', isUpgrade = false, onClose, 
           )}
           <div style={{ position: 'relative' }}>
             <Lock size={15} style={{ position: 'absolute', left: 10, top: '50%', transform: 'translateY(-50%)', color: 'var(--muted)' }} />
-            <input style={{ ...inputStyle, paddingLeft: 32 }} type="password" placeholder={isFaculty ? 'Password (at least 6 characters)' : 'Password (কমপক্ষে ৬ characters)'} value={password} onChange={e => setPassword(e.target.value)}
-              onKeyDown={e => e.key === 'Enter' && handleEmail()} />
+            <input
+              style={{ ...inputStyle, paddingLeft: 32, paddingRight: 42 }}
+              type={showPassword ? 'text' : 'password'}
+              placeholder={isFaculty ? 'Password (at least 6 characters)' : 'Password (কমপক্ষে ৬ characters)'}
+              value={password}
+              onChange={e => setPassword(e.target.value)}
+              onKeyDown={e => e.key === 'Enter' && handleEmail()}
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword((visible) => !visible)}
+              style={{
+                position: 'absolute', right: 10, top: '50%', transform: 'translateY(-50%)',
+                background: 'none', border: 'none', padding: 0, cursor: 'pointer', color: 'var(--muted)',
+              }}
+              aria-label={showPassword ? 'Hide password' : 'Show password'}
+            >
+              {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+            </button>
           </div>
 
           {!isUpgrade && tab === 'login' && !resetSent && (

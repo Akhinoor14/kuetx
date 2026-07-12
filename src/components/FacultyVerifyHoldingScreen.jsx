@@ -99,8 +99,11 @@ export default function FacultyVerifyHoldingScreen({ officialEmail, onVerified }
           Verify your email to continue
         </div>
         <div style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.6, marginBottom: 20 }}>
-          We've sent a sign-in link to <strong>{officialEmail}</strong>. Open it
-          from your inbox — this page will continue automatically once it's confirmed.
+          We've sent a sign-in link to <strong style={{ color: '#0f7d58' }}>{officialEmail}</strong>.
+          Open it from your inbox — this page will continue automatically once it's confirmed.
+          <div style={{ marginTop: 10, color: '#0f7d58', fontWeight: 600 }}>
+            If you don't see the email, please check your spam folder.
+          </div>
         </div>
 
         {status === 'resent' && (
