@@ -16,7 +16,7 @@
 import { useEffect, useState } from 'react';
 import { Mail, RefreshCw } from 'lucide-react';
 import { auth } from '../lib/firebase';
-import { subscribeFacultyDoc, markFacultyVerifiedIfEmailConfirmed } from '../lib/facultySync';
+import { getFacultyDoc, subscribeFacultyDoc, markFacultyVerifiedIfEmailConfirmed } from '../lib/facultySync';
 import {
   sendFacultyVerificationLink,
   isFacultyVerifyLink,
@@ -29,14 +29,22 @@ export default function FacultyVerifyHoldingScreen({ officialEmail, onVerified }
 
   // Live-subscribe to our own faculty doc so this screen auto-advances the
   // instant verifiedAt is set, without any manual "I've verified" click.
+  const uid = auth.currentUser?.uid;
+
   useEffect(() => {
-    const uid = auth.currentUser?.uid;
+    if (!uid) return;
+    getFacultyDoc(uid).then((fdoc) => {
+      if (fdoc?.verifiedAt) onVerified?.();
+    }).catch(() => {});
+  }, [uid, onVerified]);
+
+  useEffect(() => {
     if (!uid) return;
     const unsub = subscribeFacultyDoc(uid, (fdoc) => {
       if (fdoc?.verifiedAt) onVerified?.();
     });
     return unsub;
-  }, [onVerified]);
+  }, [onVerified, uid]);
 
   // Complete the link if the current page load IS the clicked link itself
   // (same-device or a fresh tab opened from the emailed link), then confirm
