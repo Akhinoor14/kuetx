@@ -296,26 +296,18 @@ export function Sidebar({ open, onClose, authState }) {
               {viewMode === 'teacher' ? 'Faculty Portal · KUET' : 'Student Life OS · KUET'}
             </div>
           </div>
-          {/* §7 — Founder-only instant switch. Never rendered for a real
-              faculty or real student account; those two always have
-              viewMode fully determined by their own role, with nothing to
-              toggle. Flipping this only touches localStorage — no
-              navigation/reload, no Firestore write. */}
-          {canSwitchView && (
-            <button
-              onClick={() => setViewModePref(viewMode === 'teacher' ? 'student' : 'teacher')}
-              style={{
-                marginTop: 8, width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
-                fontSize: 10.5, fontWeight: 700, color: 'var(--accent)',
-                background: 'color-mix(in srgb, var(--accent) 10%, var(--surface))',
-                border: '1px solid color-mix(in srgb, var(--accent) 30%, transparent)',
-                borderRadius: 7, padding: '5px 8px', cursor: 'pointer',
-              }}
-            >
-              <Icons.RefreshCw size={11} />
-              {viewMode === 'teacher' ? 'Switch to Student View' : 'Switch to Teacher View'}
-            </button>
-          )}
+          {/* §7 (revised) — the Founder switch button itself now lives on
+              the Admin/Founder dashboard (AdminDashboard.jsx top-level
+              grid), not scattered across the sidebar and Faculty
+              Dashboard. Rationale: this toggle is ONLY ever usable by the
+              Founder (isFounderBypass) for testing both shells — a real
+              faculty or real student account never sees it at all, so
+              placing it inside the everyday sidebar/Faculty Dashboard UI
+              was misleading real users into wondering what it was for.
+              The underlying viewModePref state below still lives here
+              (it's what Sidebar/BottomNav actually read to decide which
+              NAV renders), it's just no longer exposed as a button on
+              this screen. */}
         </div>
 
         {/* ── Quick strip ── */}

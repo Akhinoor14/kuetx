@@ -24,6 +24,7 @@ import SubcategoryTabs from '../components/SubcategoryTabs';
 import { FOUNDER_CATEGORIES, getFounderCategory, resolveCount, resolveSubtitle } from '../lib/founderCategories';
 import { listAllFacultyAccounts } from '../lib/facultySync';
 import { listAllActiveFacultyAssignments } from '../lib/facultyClassSync';
+import { useIsFaculty } from '../hooks/useIsFaculty';
 
 // Every role the Founder can hand out or take away from this screen —
 // literally everyone, per the manifesto: Founder has full add/revoke
@@ -75,6 +76,67 @@ function FounderCategoryCard({ category, count, subtitle, onClick }) {
       </div>
       <Icons.ChevronRight size={18} color="var(--muted)" style={{ flexShrink: 0 }} />
     </button>
+  );
+}
+
+// §7 (revised) — the Founder's Student View / Teacher View switch, now
+// living on the Admin/Founder dashboard's own landing page instead of
+// scattered inside the sidebar and Faculty Dashboard. This button is only
+// ever rendered for the Founder in the first place (this whole component
+// early-returns null for anyone else, see `authorized` below) so there's
+// no separate visibility check needed here beyond that.
+//
+// The actual viewMode state/localStorage key ('kuetx:viewMode') still
+// lives in Sidebar.jsx/BottomNav.jsx, since those are what actually read
+// it to decide which NAV config renders — this card is just a second,
+// better-placed way to flip the same localStorage value. Both places stay
+// in sync automatically since they both read the same key.
+function FounderViewSwitchCard() {
+  const [current, setCurrent] = useState(() => {
+    try { return localStorage.getItem('kuetx:viewMode') || 'student'; } catch { return 'student'; }
+  });
+
+  const flip = () => {
+    const next = current === 'teacher' ? 'student' : 'teacher';
+    try { localStorage.setItem('kuetx:viewMode', next); } catch { /* ignore */ }
+    setCurrent(next);
+  };
+
+  return (
+    <div className="card" style={{
+      padding: 16, marginBottom: 18, display: 'flex', alignItems: 'center',
+      justifyContent: 'space-between', flexWrap: 'wrap', gap: 12,
+    }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 10, minWidth: 0 }}>
+        <div style={{
+          width: 38, height: 38, borderRadius: 10, flexShrink: 0,
+          background: 'color-mix(in srgb, var(--accent) 12%, var(--surface))',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+        }}>
+          <Icons.Repeat size={18} color="var(--accent)" />
+        </div>
+        <div>
+          <div style={{ fontWeight: 700, fontSize: 13.5, color: 'var(--text)' }}>
+            Founder testing view
+          </div>
+          <div style={{ fontSize: 12, color: 'var(--muted)' }}>
+            Currently viewing as: <strong style={{ color: 'var(--text)' }}>{current === 'teacher' ? 'Teacher' : 'Student'}</strong>
+          </div>
+        </div>
+      </div>
+      <button
+        onClick={flip}
+        style={{
+          display: 'flex', alignItems: 'center', gap: 6, padding: '9px 14px', borderRadius: 8,
+          border: '1px solid color-mix(in srgb, var(--accent) 30%, transparent)',
+          background: 'color-mix(in srgb, var(--accent) 10%, var(--card))',
+          color: 'var(--accent)', fontWeight: 700, fontSize: 12.5, cursor: 'pointer', flexShrink: 0,
+        }}
+      >
+        <Icons.RefreshCw size={13} />
+        Switch to {current === 'teacher' ? 'Student' : 'Teacher'} View
+      </button>
+    </div>
   );
 }
 
@@ -830,6 +892,18 @@ function FacultyView({ onBack, onSelectCategory, countCtx }) {
   const pending = (facultyList || []).filter((f) => !f.verifiedAt);
   const facultyNameByUid = Object.fromEntries((facultyList || []).map((f) => [f.uid, f.name || f.officialEmail]));
 
+  // Total-teachers count grouped by department, for the "sundor kore" (see
+  // conversation) redesigned Directory tab — same shape as the student
+  // side's per-dept breakdown, just for faculty instead of students.
+  const deptCounts = useMemo(() => {
+    const map = {};
+    verified.forEach((f) => {
+      const d = f.dept || 'Unspecified';
+      map[d] = (map[d] || 0) + 1;
+    });
+    return map;
+  }, [verified]);
+
   const category = getFounderCategory('faculty');
   const subCtx = { ...countCtx, facultyCount: verified.length, facultyPending: pending.length };
 
@@ -839,18 +913,80 @@ function FacultyView({ onBack, onSelectCategory, countCtx }) {
       <SubcategoryTabs subcategories={category.subcategories} activeKey={subTab} onSelect={setSubTab} countCtx={subCtx} />
 
       {subTab === 'directory' && (
-        <Section title="Verified faculty accounts">
-          {loading && <EmptyState>Loading…</EmptyState>}
-          {!loading && verified.length === 0 && <EmptyState>No verified faculty accounts yet.</EmptyState>}
-          {verified.map((f) => (
-            <div key={f.uid} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 8, padding: '10px 12px', borderBottom: '1px solid var(--border)' }}>
-              <div style={{ minWidth: 0 }}>
-                <div style={{ fontWeight: 600, fontSize: 13 }}>{f.name || 'Unnamed'}</div>
-                <div style={{ fontSize: 11.5, color: 'var(--muted)' }}>{f.title || '—'} · {f.dept || '—'} · {f.officialEmail}</div>
-              </div>
+        <>
+          {/* Total Teachers overview — mirrors the per-dept student-count
+              breakdown on the Classes view, sized as prominent stat cards
+              rather than the old plain flat list. */}
+          <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginBottom: 16 }}>
+            <div style={{
+              flex: '1 1 160px', padding: 16, borderRadius: 14, border: '1px solid var(--border)', background: 'var(--card)',
+            }}>
+              <Icons.GraduationCap size={18} color="var(--accent)" style={{ marginBottom: 8 }} />
+              <div style={{ fontWeight: 800, fontSize: 22, color: 'var(--text)' }}>{loading ? '—' : verified.length}</div>
+              <div style={{ fontSize: 11.5, color: 'var(--muted)' }}>Total Teachers</div>
             </div>
-          ))}
-        </Section>
+            <div style={{
+              flex: '1 1 160px', padding: 16, borderRadius: 14, border: '1px solid var(--border)', background: 'var(--card)',
+            }}>
+              <Icons.Building2 size={18} color="var(--accent)" style={{ marginBottom: 8 }} />
+              <div style={{ fontWeight: 800, fontSize: 22, color: 'var(--text)' }}>{loading ? '—' : Object.keys(deptCounts).length}</div>
+              <div style={{ fontSize: 11.5, color: 'var(--muted)' }}>Departments Represented</div>
+            </div>
+            <div style={{
+              flex: '1 1 160px', padding: 16, borderRadius: 14, border: '1px solid var(--border)', background: 'var(--card)',
+            }}>
+              <Icons.Clock size={18} color="var(--accent)" style={{ marginBottom: 8 }} />
+              <div style={{ fontWeight: 800, fontSize: 22, color: 'var(--text)' }}>{loading ? '—' : pending.length}</div>
+              <div style={{ fontSize: 11.5, color: 'var(--muted)' }}>Awaiting Verification</div>
+            </div>
+          </div>
+
+          {!loading && verified.length > 0 && (
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 16 }}>
+              {Object.entries(deptCounts).sort((a, b) => b[1] - a[1]).map(([d, count]) => (
+                <span key={d} style={{
+                  fontSize: 11.5, fontWeight: 600, padding: '4px 10px', borderRadius: 999,
+                  background: 'color-mix(in srgb, var(--accent) 10%, var(--surface))',
+                  border: '1px solid color-mix(in srgb, var(--accent) 25%, transparent)', color: 'var(--text)',
+                }}>
+                  {d} · {count}
+                </span>
+              ))}
+            </div>
+          )}
+
+          <Section title="Teachers">
+            {loading && <EmptyState>Loading…</EmptyState>}
+            {!loading && verified.length === 0 && <EmptyState>No verified faculty accounts yet.</EmptyState>}
+            {verified.map((f) => (
+              <div key={f.uid} style={{
+                display: 'flex', alignItems: 'center', gap: 12, padding: '12px', borderBottom: '1px solid var(--border)',
+              }}>
+                <div style={{
+                  width: 38, height: 38, borderRadius: '50%', flexShrink: 0,
+                  background: 'color-mix(in srgb, var(--accent) 15%, var(--surface))',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  fontWeight: 800, fontSize: 14, color: 'var(--accent)',
+                }}>
+                  {(f.name || f.officialEmail || '?').trim().charAt(0).toUpperCase()}
+                </div>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ fontWeight: 700, fontSize: 13.5, color: 'var(--text)' }}>{f.name || 'Unnamed'}</div>
+                  <div style={{ fontSize: 11.5, color: 'var(--muted)', display: 'flex', flexWrap: 'wrap', gap: 6, alignItems: 'center', marginTop: 2 }}>
+                    {f.title && (
+                      <span style={{
+                        fontWeight: 600, padding: '1px 7px', borderRadius: 999,
+                        background: 'var(--surface)', border: '1px solid var(--border)', color: 'var(--text)',
+                      }}>{f.title}</span>
+                    )}
+                    {f.dept && <span>{f.dept}</span>}
+                  </div>
+                  <div style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 3, wordBreak: 'break-all' }}>{f.officialEmail}</div>
+                </div>
+              </div>
+            ))}
+          </Section>
+        </>
       )}
 
       {subTab === 'pending' && (
@@ -1135,6 +1271,7 @@ export default function AdminDashboard() {
   // category to that registry adds a card here automatically.
   return (
     <div>
+      <FounderViewSwitchCard />
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 14 }}>
         {FOUNDER_CATEGORIES.map((cat) => (
           <FounderCategoryCard

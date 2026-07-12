@@ -143,7 +143,7 @@ export default function FacultyDashboard() {
             border: '1px solid color-mix(in srgb, var(--accent) 25%, transparent)', fontSize: 12.5, color: 'var(--text)',
           }}>
             <Icons.Repeat size={14} color="var(--accent)" />
-            Viewing as: Teacher — use the switch in the sidebar to go back to Student view.
+            Viewing as: Teacher — switch back from the Admin dashboard.
           </div>
         )}
 

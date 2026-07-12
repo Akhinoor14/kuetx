@@ -19,7 +19,9 @@ import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import * as Icons from 'lucide-react';
 import { auth } from '../../lib/firebase';
-import { DEPARTMENTS, BATCH_START_DATES, TERM_KEYS } from '../../store/store';
+import {
+  DEPARTMENTS, BATCH_START_DATES, TERM_KEYS, getTermIndex,
+} from '../../store/store';
 import { getDeptTerms } from '../../store/curriculumStore';
 import { TIME_MODELS, DAYS } from '../../lib/timeModels';
 import {
@@ -34,6 +36,40 @@ const inputStyle = {
   background: 'var(--bg)', color: 'var(--text)', fontSize: 13.5, outline: 'none', boxSizing: 'border-box',
 };
 const labelStyle = { fontSize: 11.5, fontWeight: 700, color: 'var(--muted)', marginBottom: 4, display: 'block' };
+
+// BUGFIX: Batch, Term, and Course were previously three fully independent
+// dropdowns with zero cross-validation — a teacher could select, say,
+// batch 2k25 (started June 2026, barely into Y1T1) together with term
+// Y4T2, a combination that can't be real yet. This is a SOFT warning, not
+// a hard block: a teacher legitimately might backfill a class for a term
+// that already finished, or pre-create one slightly ahead of schedule —
+// so we surface the mismatch instead of silently allowing it with zero
+// feedback (which is what "everything is selectable" actually meant).
+// Roughly 6 months/term is KUET's typical cadence; this is intentionally
+// approximate since exact term calendars vary by roadmap config.
+function getBatchTermPlausibility(batch, term) {
+  if (!batch || !term) return null;
+  const startDate = BATCH_START_DATES[batch];
+  if (!startDate) return null;
+  const termIndex = getTermIndex(term); // 0-based: Y1T1=0, Y1T2=1, ...
+  if (termIndex < 0) return null;
+
+  const monthsElapsed = (Date.now() - new Date(startDate).getTime()) / (1000 * 60 * 60 * 24 * 30.44);
+  const expectedTermIndex = Math.floor(monthsElapsed / 6);
+
+  // One term of slack in either direction is normal (early/late starts,
+  // backfilling a just-finished term) — only warn once the gap is large
+  // enough that the combination looks like a mistake rather than a
+  // legitimate edge case.
+  const gap = termIndex - expectedTermIndex;
+  if (gap > 1) {
+    return `${batch.toUpperCase()} looks too early for ${term} — double check this is the batch you meant.`;
+  }
+  if (gap < -2) {
+    return `${term} looks like it's already well behind ${batch.toUpperCase()}'s current progress — double check this is the term you meant.`;
+  }
+  return null;
+}
 
 function AddClassModal({ onClose, onCreated }) {
   const [dept, setDept] = useState('');
@@ -53,6 +89,7 @@ function AddClassModal({ onClose, onCreated }) {
   }, [dept, term]);
 
   const selectedCourse = termCourses.find((c) => c.code === courseCode) || null;
+  const batchTermWarning = useMemo(() => getBatchTermPlausibility(batch, term), [batch, term]);
 
   // Best-effort join-instead-of-duplicate check (§4 item 2) — fires once
   // dept+batch+term+course are all picked, silently offers a join if an
@@ -153,6 +190,15 @@ function AddClassModal({ onClose, onCreated }) {
               {termCourses.map((c) => <option key={c.code} value={c.code}>{c.code} — {c.title} ({c.type})</option>)}
             </select>
           </div>
+
+          {batchTermWarning && (
+            <div style={{
+              padding: '10px 12px', borderRadius: 8, background: 'color-mix(in srgb, #f59e0b 10%, var(--card))',
+              border: '1px solid color-mix(in srgb, #f59e0b 35%, transparent)', fontSize: 12.5, color: 'var(--text)',
+            }}>
+              ⚠️ {batchTermWarning}
+            </div>
+          )}
 
           {joinOffer && (
             <div style={{

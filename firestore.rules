@@ -262,6 +262,29 @@ service cloud.firestore {
         )
       );
       allow delete: if isAdmin();
+
+      // BUGFIX: this subcollection previously had NO rules block at all.
+      // Firestore does not inherit a parent document's rules into its
+      // subcollections — each path needs its own explicit match. Without
+      // this, every read/write against faculty/{uid}/classIndex fell
+      // through to Firestore's default-deny, which silently broke both
+      // "My Classes" (FacultyClasses.jsx) and "My Schedule"
+      // (FacultySchedule.jsx): createFacultyAssignment()'s own setDoc into
+      // this collection failed, and subscribeMyClassIndex()'s onSnapshot
+      // error handler swallows the resulting permission-denied error and
+      // just calls back with an empty array — so both pages always looked
+      // empty with no visible error, exactly matching the reported "mone
+      // hocche kicchu nai" (looks like nothing's there) symptom.
+      //
+      // read: the owning faculty account only (this is their own private
+      // fan-out index, not something CR/students should be reading).
+      // write: only the owning faculty account, and only for their own
+      // uid — createFacultyAssignment/joinFacultyAssignment both write via
+      // the signed-in user's own session, never on someone else's behalf.
+      match /classIndex/{assignmentId} {
+        allow read: if isSignedIn() && request.auth.uid == uid;
+        allow write: if isSignedIn() && request.auth.uid == uid;
+      }
     }
 
     // -------------------------------------------------------------

@@ -38,8 +38,15 @@ export default function FacultySchedule() {
   const [assignments, setAssignments] = useState({}); // assignmentId -> full doc
   const [modelId, setModelId] = useState('50min');
   const [selectedDay, setSelectedDay] = useState(() => {
+    // BUGFIX: DAYS only covers the 5 teaching days (Sun-Thu) — Friday is
+    // KUET's weekly holiday and Saturday isn't a class day either. Raw
+    // new Date().getDay() returns 0-6, so on a real Friday (5) or
+    // Saturday (6) this used to silently fall through to the `|| 'Sunday'`
+    // fallback — harmless for selectedDay itself, but worth being
+    // explicit about here since a naive read of `DAYS[todayIndex]` looks
+    // like it should always work and quietly doesn't two days a week.
     const todayIndex = new Date().getDay();
-    return DAYS[todayIndex] || 'Sunday';
+    return DAYS[todayIndex] || DAYS[0];
   });
 
   useEffect(() => {

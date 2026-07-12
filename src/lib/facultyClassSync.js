@@ -132,7 +132,17 @@ export function subscribeMyClassIndex(uid, callback) {
   if (!uid) { callback([]); return () => {}; }
   return onSnapshot(classIndexCollection(uid), (snap) => {
     callback(snap.docs.map((d) => ({ id: d.id, ...d.data() })));
-  }, () => callback([]));
+  }, (err) => {
+    // BUGFIX CONTEXT: this error handler used to silently swallow every
+    // failure and call back with an empty array — which is exactly what
+    // made the missing firestore.rules block for this subcollection
+    // invisible (it looked identical to "genuinely has no classes yet").
+    // Keeping the empty-array callback (so the UI doesn't hard-crash) but
+    // logging the real error means a future rules regression shows up in
+    // the console instead of silently looking like empty state again.
+    console.error('subscribeMyClassIndex failed — check firestore.rules for faculty/{uid}/classIndex:', err);
+    callback([]);
+  });
 }
 
 /** Full assignment doc for Class Detail (§8.5) — needs groupId, which the

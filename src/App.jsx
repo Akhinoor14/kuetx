@@ -198,6 +198,14 @@ function Layout({ authState, onboardingActive }) {
             <Route path="/faculty/contact" element={<RequireFaculty><FacultyContact /></RequireFaculty>} />
             <Route path="/faculty/question-bank" element={<RequireFaculty><QuestionBank /></RequireFaculty>} />
             <Route path="/faculty/resources" element={<RequireFaculty><SubgroupHub navSource={NAV_FACULTY} group="Campus" subgroup="Resources" /></RequireFaculty>} />
+            {/* BUGFIX: nav-faculty.js's "Tools" group declares hubPath
+                '/faculty/tools' but no matching route ever existed —
+                clicking into Tools from the faculty sidebar hit React
+                Router's no-match (blank/fallback) since day one. Tools is
+                a plain group (not a subgroup), so it's just group="Tools",
+                same shape as the student side's <Route path="/tools" .../>
+                a few lines up. */}
+            <Route path="/faculty/tools" element={<RequireFaculty><SubgroupHub navSource={NAV_FACULTY} group="Tools" /></RequireFaculty>} />
           </Routes>
         </div>
         {location.pathname !== '/about' && !isQuestionBankViewer && !isMobileNav && <Footer />}
