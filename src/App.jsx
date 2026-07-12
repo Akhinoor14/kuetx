@@ -28,7 +28,7 @@ import RoleSelectScreen from './components/RoleSelectScreen';
 import FacultyVerifyHoldingScreen from './components/FacultyVerifyHoldingScreen';
 import { getAccountRole } from './lib/accountRole';
 import { getFacultyDoc, isFacultyProfileComplete } from './lib/facultySync';
-import { store, getProfile, isProfileComplete, DEFAULT_PROFILE, normalizeProfileForSave, validateProfileForSave } from './store/store';
+import { store, getProfile, isProfileComplete, DEFAULT_PROFILE, normalizeProfileForSave, validateProfileForSave, ensureDBReady } from './store/store';
 import { getGroupId } from './lib/groupUtils';
 import { syncOwnVerification, joinGroup } from './lib/groupSync';
 import { claimRoll } from './lib/rollOwnership';
@@ -265,16 +265,32 @@ function shouldShowBackup() {
 
 function shouldShowCommunityHiring() {
   try {
-    // Same first-session deferral as announcements — a brand-new user has
-    // already gone through mode/auth/profile-setup; don't stack a hiring
-    // popup right after. Mark it as "seen" the first time through so it
-    // naturally appears on a later visit instead.
+    // BUGFIX: this used to defer only until the "next visit" — with no
+    // minimum time gap, so reopening the app minutes after finishing
+    // onboarding (very common for a PWA — switching tabs, closing/
+    // reopening) would show this immediately, right on top of whatever
+    // else was already queued. Now requires the same kind of real elapsed
+    // time as the other two post-onboarding popups (announcement/backup),
+    // not just "not the very first session."
     const seen = store.get('communityHiringPopupShown');
     if (seen === undefined || seen === null) {
-      store.set('communityHiringPopupShown', false); // "shown the queue once" sentinel, still false = eligible next visit
+      // First time this is ever checked — record "now" as the reference
+      // point and defer to a later session, same first-session courtesy
+      // as shouldShowAnnouncement/shouldShowBackup.
+      store.set('communityHiringPopupShown', false);
+      store.set('communityHiringFirstEligibleAt', new Date().toISOString());
       return false;
     }
-    return !seen;
+    if (seen === true) return false; // already shown once, never again
+    const firstEligibleAt = store.get('communityHiringFirstEligibleAt');
+    if (!firstEligibleAt) {
+      // Pre-fix installs won't have this timestamp yet — set it now and
+      // defer one more session rather than firing immediately.
+      store.set('communityHiringFirstEligibleAt', new Date().toISOString());
+      return false;
+    }
+    const elapsedDays = (Date.now() - new Date(firstEligibleAt).getTime()) / 86400000;
+    return elapsedDays >= 2; // same-day reopen no longer triggers it
   } catch { return false; }
 }
 
@@ -336,9 +352,27 @@ async function buildQueue(isAnonymous) {
     if (!isProfileComplete(getProfile())) q.push('profile');
   }
 
-  if (shouldShowAnnouncement()) q.push('announcement');
-  if (shouldShowCommunityHiring()) q.push('communityHiring');
-  if (shouldShowBackup()) q.push('backup');
+  // BUGFIX (real, ongoing — not just first-session): staggering each
+  // popup's OWN delay (2/3-9/7 days) only prevented them from all becoming
+  // eligible on the very first later session. It did nothing to stop them
+  // recurring together — once a user has been active long enough, all
+  // three conditions independently go true on MANY sessions afterward,
+  // and every one of those sessions queued all three back-to-back: dismiss
+  // announcement, community-hiring appears immediately, dismiss that,
+  // backup appears immediately. That back-to-back stacking — not the
+  // first-time timing — is what "popup e onek shomossa" was about.
+  //
+  // Fix: only ever queue ONE of these three non-essential popups per
+  // session, in a fixed priority order. The others stay eligible and will
+  // simply be reconsidered next session instead of firing right after each
+  // other in the same one.
+  if (shouldShowAnnouncement()) {
+    q.push('announcement');
+  } else if (shouldShowCommunityHiring()) {
+    q.push('communityHiring');
+  } else if (shouldShowBackup()) {
+    q.push('backup');
+  }
   return q;
 }
 
@@ -414,13 +448,30 @@ export default function App() {
   // async (accountRole === 'teacher' needs a Firestore read) — guarded with
   // `cancelled` so a fast unmount/re-auth during the read can't apply a
   // stale queue.
+  //
+  // BUGFIX: this used to call buildQueue() the instant authState.authReady
+  // flipped, trusting main.jsx's initial `Promise.race([ensureDBReady(),
+  // 2000ms timeout])` to have already warmed the profile cache. On a slow
+  // first IndexedDB open (new device, storage pressure, first load) that
+  // race can lose — the app renders with an EMPTY memoryCache, buildQueue
+  // reads getProfile() before real data has loaded, sees an incomplete
+  // profile, and pushes 'profile' back onto the queue even though the real
+  // profile (already saved, including anything set after onboarding like a
+  // photo) is sitting safely in IndexedDB a moment away from loading. This
+  // is what caused "profile setup keeps reappearing even though I already
+  // filled it in." ensureDBReady() is idempotent — it no-ops instantly if
+  // main.jsx's race already won — so awaiting it again here is free in the
+  // common case and closes the gap in the slow case.
   useEffect(() => {
     if (!authState.authReady || queueBuilt) return;
     let cancelled = false;
-    buildQueue(authState.isAnonymous).then((q) => {
+    ensureDBReady().finally(() => {
       if (cancelled) return;
-      setQueue(q);
-      setQueueBuilt(true);
+      buildQueue(authState.isAnonymous).then((q) => {
+        if (cancelled) return;
+        setQueue(q);
+        setQueueBuilt(true);
+      });
     });
     return () => { cancelled = true; };
   }, [authState.authReady, authState.isAnonymous, queueBuilt]);

@@ -679,6 +679,21 @@ export default function Profile() {
   const [reminderTick, setReminderTick] = useState(0);
   const reminderTimerRef = useRef(null);
 
+  // BUGFIX: useState(getProfile() ...) above only ever runs its initializer
+  // ONCE, at the exact instant this component first mounts. If IndexedDB is
+  // still warming up at that moment (see store.js's ensureDBReady — can
+  // take longer than main.jsx's 2s race allows for), this page was
+  // permanently stuck showing whatever was in the empty/partial cache at
+  // that instant, never re-reading even after the real data finished
+  // loading a moment later. store.js already fires a 'kuetx:store-updated'
+  // event on every write AND once when ensureDBReady() itself resolves —
+  // this just needed a listener to actually use it.
+  useEffect(() => {
+    const onStoreUpdated = () => setProfile(getProfile() || DEFAULT_PROFILE);
+    window.addEventListener('kuetx:store-updated', onStoreUpdated);
+    return () => window.removeEventListener('kuetx:store-updated', onStoreUpdated);
+  }, []);
+
   const advanceReminder = useCallback(() => {
     setReminderTick(t => t + 1);
     // reset the hourly timer

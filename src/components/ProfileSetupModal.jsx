@@ -481,7 +481,7 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
                       {errors.studentId && <div style={{ fontSize: 11, color: '#dc2626', marginTop: 5 }}>{errors.studentId}</div>}
                       {rollLocked?.roll === String(form.studentId || '').trim() && (
                         <div style={{ marginTop: 10, padding: 10, border: '1px solid var(--border)', borderRadius: 8, background: 'var(--card-alt, #f9fafb)' }}>
-                          <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 6 }}>নিজে নিজে ঠিক করো</div>
+                          <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 6 }}>এই roll number অন্য একজন আগে থেকেই ব্যবহার করছে — নিজের বলে প্রমাণ করতে</div>
                           <div style={{ fontSize: 11, color: 'var(--muted)', marginBottom: 8 }}>
                             তোমার KUET email (@stud.kuet.ac.bd) verify করলে এই roll number automatically তোমার account-এ চলে আসবে।
                           </div>
@@ -540,7 +540,7 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
                       {errors.studentId && <div style={{ fontSize: 11, color: '#dc2626', marginTop: 5 }}>{errors.studentId}</div>}
                       {rollLocked?.roll === String(form.studentId || '').trim() && (
                         <div style={{ marginTop: 10, padding: 10, border: '1px solid var(--border)', borderRadius: 8, background: 'var(--card-alt, #f9fafb)' }}>
-                          <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 6 }}>নিজে নিজে ঠিক করো</div>
+                          <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 6 }}>এই roll number অন্য একজন আগে থেকেই ব্যবহার করছে — নিজের বলে প্রমাণ করতে</div>
                           <div style={{ fontSize: 11, color: 'var(--muted)', marginBottom: 8 }}>
                             তোমার KUET email (@stud.kuet.ac.bd) verify করলে এই roll number automatically তোমার account-এ চলে আসবে।
                           </div>

@@ -106,6 +106,23 @@ export default function KuetEmailVerifyWidget({ onVerified, onSkip, compact = fa
         </div>
       </div>
 
+      {/* UX FIX: this 3-step mini-guide is new — the widget previously
+          jumped straight to an input box with only one line of context
+          above it, which is exactly why people got confused about what
+          was being asked ("email lok je?"). Nothing about the actual
+          verification logic changed, only that it's now spelled out as
+          three concrete steps before the form appears. */}
+      {stage === 'input' && (
+        <div style={{
+          display: 'flex', flexDirection: 'column', gap: 4, fontSize: 11.5, color: 'var(--text)',
+          background: 'var(--surface)', borderRadius: 8, padding: '9px 11px', border: '1px solid var(--border)',
+        }}>
+          <div><strong>১.</strong> নিচের বক্সে শুধু তোমার নামের অংশটা লেখো (পুরো ইমেইল না)</div>
+          <div><strong>২.</strong> &quot;Verification link পাঠাও&quot;-এ চাপ দাও</div>
+          <div><strong>৩.</strong> তোমার Gmail/Inbox খুলে ওই লিংকে ক্লিক করো — সাথে সাথেই verify হয়ে যাবে</div>
+        </div>
+      )}
+
       {stage === 'input' && (
         <form onSubmit={handleSend} style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
           <div style={{

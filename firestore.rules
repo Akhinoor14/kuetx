@@ -559,7 +559,17 @@ service cloud.firestore {
       }
 
       match /members/{memberUid} {
-        allow read: if isAdmin() || request.auth.uid == memberUid || isGroupMember(groupId) || isCLFor(groupId) || isHeadOfOps() || isSCLForGroup(groupId);
+        // BUGFIX: verified faculty had NO read access here at all — a
+        // teacher opening "Students & CR" on their own class hit
+        // permission-denied every time, since none of isAdmin/self/
+        // isGroupMember(students only)/isCLFor/isHeadOfOps/
+        // isSCLForGroup cover a faculty account. Added isVerifiedFaculty()
+        // matching the exact same precedent already used for
+        // facultyAssignments' own read rule a few blocks down (broad
+        // "any verified faculty can read" rather than scoped to one
+        // specific assignment/group — same design choice, applied
+        // consistently here instead of being missed).
+        allow read: if isAdmin() || request.auth.uid == memberUid || isGroupMember(groupId) || isCLFor(groupId) || isHeadOfOps() || isSCLForGroup(groupId) || isVerifiedFaculty(request.auth.uid);
         allow create: if (isRealAccount() && request.auth.uid == memberUid
                         && request.resource.data.role == 'member'
                         && (request.resource.data.verified == false
