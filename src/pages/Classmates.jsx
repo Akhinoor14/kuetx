@@ -5,7 +5,7 @@ import {
   clDismissLegacyCRClaim,
   MAX_CR, MAX_ACR,
 } from '../lib/groupSync';
-import BlueTick from './BlueTick';
+import BlueTick from '../components/BlueTick';
 
 /**
  * groupId       - the batch+dept group to show
