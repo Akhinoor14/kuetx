@@ -188,6 +188,18 @@ export const getAuthErrorMessage = (code) => {
     'auth/weak-password': 'Password কমপক্ষে ৬ character হতে হবে।',
     'auth/user-not-found': 'এই email দিয়ে কোনো account নেই।',
     'auth/wrong-password': 'Password ভুল।',
+    // BUGFIX: modern Firebase (v9.6.0+) no longer returns the specific
+    // auth/user-not-found / auth/wrong-password codes above for a failed
+    // email+password sign-in — it merges both into one generic
+    // auth/invalid-credential, deliberately, so a client can't be used to
+    // enumerate which emails have accounts (typing random emails and
+    // watching which error comes back would otherwise leak that). Neither
+    // code above was actually being hit anymore, so every failed login
+    // fell through to the raw `Login error: auth/invalid-credential`
+    // fallback instead of a real Bangla message. This covers both real
+    // causes (wrong password, or no account with this email) honestly in
+    // one line, without revealing which one it actually was.
+    'auth/invalid-credential': 'Email অথবা password ভুল, অথবা এই email দিয়ে কোনো account নেই। আবার চেক করে চেষ্টা করো।',
     'auth/too-many-requests': 'অনেকবার চেষ্টা হয়েছে। কিছুক্ষণ পর আবার চেষ্টা করো।',
     'auth/popup-closed-by-user': 'Login popup বন্ধ হয়ে গেছে।',
     'auth/credential-already-in-use': 'এই Google account অন্য একটা account এ already linked।',
