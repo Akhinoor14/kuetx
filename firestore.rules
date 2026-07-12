@@ -115,6 +115,25 @@ service cloud.firestore {
         (crCount(groupId) <= 0 && isVerifiedMember(groupId));
     }
 
+    // ── Faculty Module (§10 of the merged Faculty Module prompt) ─────────
+    // isVerifiedFaculty checks the hard verification gate (Deviation 2):
+    // a faculty/{uid} doc existing is NOT enough on its own — verifiedAt
+    // must be set, which only happens after the magic-link flow confirms
+    // mailbox ownership (see facultyEmailVerify.js / facultySync.js).
+    // Without the verifiedAt check here, anyone who can create their own
+    // faculty/{uid} doc (allowed, see the `match /faculty/{uid}` block
+    // below) would bypass verification entirely.
+    function isVerifiedFaculty(uid) {
+      return exists(/databases/$(database)/documents/faculty/$(uid))
+        && get(/databases/$(database)/documents/faculty/$(uid)).data.verifiedAt != null;
+    }
+
+    function isVerifiedFacultyFor(groupId, assignmentId) {
+      return isVerifiedFaculty(request.auth.uid)
+        && request.auth.uid in
+           get(/databases/$(database)/documents/groups/$(groupId)/facultyAssignments/$(assignmentId)).data.teacherUids;
+    }
+
     // Tier-1 institutional verification lives in a separate collection
     // (verifiedRolls/{roll}), written only by the dedicated verification
     // flow (kuetEmailVerify.js's secondary Firebase app session) — the
@@ -211,6 +230,50 @@ service cloud.firestore {
         roll.matches('^[0-9]{7}$') &&
         request.auth.token.email.lower().matches('^[a-z]+' + roll + '@stud[.]kuet[.]ac[.]bd$');
       allow update, delete: if false; // create-once, permanent
+    }
+
+    // -------------------------------------------------------------
+    // Faculty Module (§10 of the merged Faculty Module prompt).
+    // faculty/{uid}: the account's own profile doc. Read is open to any
+    // signed-in user (student pages may need to display a teacher's name/
+    // title; officialEmail isn't secret, it's an institutional address).
+    // Create must start unverified (verifiedAt: null) — mirrors
+    // facultySync.js's createFacultyAccountDoc(), which always writes it
+    // that way. Update allows the account to edit its own profile fields
+    // freely, but verifiedAt can only ever transition null -> set, and
+    // ONLY if a matching verifiedFacultyEmails/{email} doc already exists
+    // — i.e. the magic-link flow (a SEPARATE Firebase app session, see
+    // facultyEmailVerify.js) already proved mailbox ownership. Without
+    // this exists() check, verifiedAt could be self-granted by any
+    // authenticated client, making Deviation 2's hard gate purely
+    // client-side theater instead of an actual enforced boundary.
+    // -------------------------------------------------------------
+    match /faculty/{uid} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn()
+        && request.auth.uid == uid
+        && request.resource.data.verifiedAt == null;
+      allow update: if isSignedIn() && request.auth.uid == uid && (
+        request.resource.data.verifiedAt == resource.data.verifiedAt
+        || (
+          resource.data.verifiedAt == null
+          && request.resource.data.verifiedAt != null
+          && exists(/databases/$(database)/documents/verifiedFacultyEmails/$(resource.data.officialEmail))
+        )
+      );
+      allow delete: if isAdmin();
+    }
+
+    // -------------------------------------------------------------
+    // Institutional verification facts for FACULTY emails — the direct
+    // counterpart to verifiedRolls above, same rationale: written only by
+    // the separate kuetFacultyVerify app session (facultyEmailVerify.js),
+    // never the visitor's main session. Consumed by faculty/{uid}'s update
+    // rule above as the actual hard-gate check.
+    // -------------------------------------------------------------
+    match /verifiedFacultyEmails/{email} {
+      allow read: if isSignedIn();
+      allow write: if isSignedIn(); // the secondary app's own authenticated session
     }
 
     // -------------------------------------------------------------
@@ -638,7 +701,14 @@ service cloud.firestore {
       // assignmentEntries exactly.
       match /plannerLogEntries/{entryId} {
         allow read: if isAdmin() || isGroupMember(groupId);
-        allow create, update: if isContentEditor(groupId)
+        // Widened for the Faculty Module (§8.8): a verified faculty
+        // account may also write session-count logs here (see
+        // facultySessionSync.js's logFacultySession, which stamps
+        // loggedBy: {uid, role:'faculty', name} on top of the same
+        // updatedBy convention every other write in this collection
+        // already uses) — the isContentEditor(groupId) branch (CR/ACR/
+        // CL/Admin) is unchanged from before.
+        allow create, update: if (isContentEditor(groupId) || isVerifiedFaculty(request.auth.uid))
           && request.resource.data.updatedBy.uid == request.auth.uid;
         allow delete: if false; // soft-delete only, via update
       }
@@ -651,8 +721,83 @@ service cloud.firestore {
 
       match /notices/{noticeId} {
         allow read: if isAdmin() || isGroupMember(groupId);
-        allow create: if isGroupCR(groupId) || isGroupACR(groupId) || isCLFor(groupId) || isAdmin();
+        // Widened for the Faculty Module (§8.10): a verified faculty
+        // account may also post into this same feed (facultyNoticeSync.js's
+        // postFacultyNotice, tagged from:'Teacher') — the CR/ACR/CL/Admin
+        // branch is unchanged.
+        allow create: if isGroupCR(groupId) || isGroupACR(groupId) || isCLFor(groupId) || isAdmin() || isVerifiedFaculty(request.auth.uid);
         allow update, delete: if isCLFor(groupId) || isAdmin();
+      }
+
+      // -----------------------------------------------------------
+      // Faculty Module (§10 of the merged Faculty Module prompt).
+      // -----------------------------------------------------------
+      match /facultyAssignments/{assignmentId} {
+        allow read: if isAdmin() || isGroupMember(groupId) || isVerifiedFaculty(request.auth.uid);
+
+        // Create: a verified faculty account creating/joining their own
+        // assignment (§4 item 1, the primary teacher-initiated on-ramp),
+        // or CR/ACR/CL/Admin (forward-compatible: the CR-initiated path,
+        // §4 item 2, only writes routineEntries from the client today, but
+        // this allowance means a future CR-facing "create the real
+        // assignment" action wouldn't need another rules edit).
+        allow create: if isVerifiedFaculty(request.auth.uid)
+          || isGroupCR(groupId) || isGroupACR(groupId) || isCLFor(groupId) || isAdmin();
+
+        // Update: either teacher already on the assignment (joining as
+        // the 2nd slot, editing day/time, ending/soft-deleting per §8.6),
+        // or the same CR/staff tier that can create one.
+        allow update: if isVerifiedFacultyFor(groupId, assignmentId)
+          || isGroupCR(groupId) || isGroupACR(groupId) || isCLFor(groupId) || isAdmin();
+
+        allow delete: if isAdmin(); // soft-delete via status flag is the normal path, not a real delete
+
+        match /sessions/{sessionId} {
+          allow read: if isVerifiedFacultyFor(groupId, assignmentId) || isGroupCR(groupId) || isGroupACR(groupId) || isAdmin();
+          allow write: if isVerifiedFacultyFor(groupId, assignmentId) || isAdmin();
+        }
+
+        match /studentRecords/{studentUid} {
+          // Read: the student themself, either assigned teacher, or the
+          // group's CR/staff tier.
+          allow read: if (isSignedIn() && request.auth.uid == studentUid)
+            || isVerifiedFacultyFor(groupId, assignmentId)
+            || isContentEditor(groupId) || isAdmin();
+
+          // Write: ONLY an assigned, verified teacher, and only their OWN
+          // quota slot (§9.2's independent-45-per-teacher rule enforced
+          // here, not just in the UI). Split into `create` (first-ever
+          // save for a student — the doc doesn't exist yet, so
+          // resource.data.diff(...) isn't usable, since `resource` is null
+          // on a genuine create) and `update` (every subsequent save,
+          // which safely diffs against the prior doc). Missing this split
+          // would break the very first marks save for any student, since
+          // saveStudentMarks() in facultyMarksSync.js always calls
+          // setDoc(..., {merge:true}), and Firestore treats a doc's very
+          // first write as `create` even when the calling code uses
+          // setDoc/merge rather than a literal .add()/create() call.
+          allow create: if isVerifiedFacultyFor(groupId, assignmentId) && (
+            (
+              get(/databases/$(database)/documents/groups/$(groupId)/facultyAssignments/$(assignmentId)).data.teacherUids[0] == request.auth.uid
+              && request.resource.data.keys().hasOnly(['teacher1Marks', 'status', 'lastSentAt', 'history'])
+            ) || (
+              get(/databases/$(database)/documents/groups/$(groupId)/facultyAssignments/$(assignmentId)).data.teacherUids[1] == request.auth.uid
+              && request.resource.data.keys().hasOnly(['teacher2Marks', 'status', 'lastSentAt', 'history'])
+            )
+          ) || isAdmin();
+
+          allow update: if isVerifiedFacultyFor(groupId, assignmentId) && (
+            (
+              get(/databases/$(database)/documents/groups/$(groupId)/facultyAssignments/$(assignmentId)).data.teacherUids[0] == request.auth.uid
+              && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['teacher1Marks', 'status', 'lastSentAt', 'history'])
+            ) || (
+              get(/databases/$(database)/documents/groups/$(groupId)/facultyAssignments/$(assignmentId)).data.teacherUids[1] == request.auth.uid
+              && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['teacher2Marks', 'status', 'lastSentAt', 'history'])
+            )
+          ) || isAdmin();
+
+          allow delete: if isAdmin();
+        }
       }
 
       // NOTE: no `resources` subcollection here by design — see the

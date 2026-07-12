@@ -19,6 +19,7 @@
     "date-fns": "^3.6.0",
     "firebase": "^10.14.1",
     "firebase-admin": "^14.1.0",
+    "html2canvas": "^1.4.1",
     "jspdf": "^4.2.1",
     "jspdf-autotable": "^5.0.8",
     "katex": "^0.17.0",

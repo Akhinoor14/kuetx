@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { ClipboardList } from 'lucide-react';
 import { store, getGradeFromPct, getAttendanceMarks, computeEffectiveAttendance, GRADE_SCALE, getProfile, getCurrentTermKey, getTermTimeline, recordAudit } from '../store/store';
 import { getAllCourses } from '../store/curriculumStore';
+import TeacherVerifiedCard from '../components/TeacherVerifiedCard';
 
 // ── Helper: Calculate required hall marks for a target grade ──────────────
 function calcHallNeeded(targetMinPct, continuousMarks) {
@@ -344,6 +345,12 @@ export default function Marks() {
           <span className={`planner-pill ${currentTermIsOngoing ? 'is-active' : ''}`}>{currentTermIsOngoing ? 'Ongoing' : 'Planning'}</span>
         </div>
       </div>
+
+      {/* §9.5 of the merged Faculty Module prompt — read-only card, only
+          renders anything if a real teacher has sent verified marks for
+          this student. Fully additive: does not read or modify any of
+          this page's own `marks` state above. */}
+      <TeacherVerifiedCard profile={profile} />
 
       {/* Content */}
       {theory.length === 0 ? (

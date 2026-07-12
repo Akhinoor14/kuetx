@@ -2,6 +2,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { useState, useEffect, useRef } from 'react';
 import * as Icons from 'lucide-react';
 import { NAV } from '../nav';
+import { NAV_FACULTY } from '../nav-faculty';
 import { Logo, Wordmark } from './Logo';
 import { APP_VERSION_SHORT } from '../version';
 import { store, DEFAULT_PROFILE } from '../store/store';
@@ -16,6 +17,7 @@ import { ROLE_LABELS } from '../lib/staffRoles';
 import { checkIsAdmin } from '../lib/adminAuth';
 import { auth } from '../lib/firebase';
 import { useIsStaff } from '../hooks/useIsStaff';
+import { useIsFaculty } from '../hooks/useIsFaculty';
 import * as noticeApi from '../lib/noticeUtils';
 
 const GROUP_ICONS = {
@@ -168,6 +170,31 @@ export function Sidebar({ open, onClose, authState }) {
   // "Admin" link shown to people with no actual role.
   const { isRealAdmin, adminLabel } = useIsStaff();
 
+  // §6.2/§7 of the merged Faculty Module prompt — viewMode decides whether
+  // this Sidebar renders NAV (student) or NAV_FACULTY (teacher). It is a
+  // device-local UI preference (localStorage), never account data:
+  //   - A real, verified faculty account (isRealFaculty from useIsFaculty)
+  //     is ALWAYS 'teacher' — no switch shown, nothing to toggle.
+  //   - A real student account is ALWAYS 'student' — same, no switch.
+  //   - Only the Founder (isFounderBypass) gets a visible switch, because
+  //     they're the only account that legitimately has both shells
+  //     available at once. Toggling it doesn't touch Firestore at all,
+  //     just flips which nav config + hub routes render.
+  const { isRealFaculty, isFounderBypass } = useIsFaculty();
+  const [viewModePref, setViewModePref] = useState(() => {
+    try { return localStorage.getItem('kuetx:viewMode') || 'student'; } catch { return 'student'; }
+  });
+  useEffect(() => {
+    try { localStorage.setItem('kuetx:viewMode', viewModePref); } catch { /* ignore */ }
+  }, [viewModePref]);
+
+  // Founder's choice (viewModePref) is the only case that actually matters
+  // — everyone else's viewMode is fully determined by their real role, so
+  // computing it fresh here (rather than trusting a stale localStorage
+  // value from before this session, e.g. after a role change) is safer.
+  const viewMode = isFounderBypass ? viewModePref : (isRealFaculty ? 'teacher' : 'student');
+  const canSwitchView = isFounderBypass;
+
   // Unread Notice count — drives the small pulsing dot on the Notice hub
   // row below, so a new notice is visible in the sidebar itself and not
   // only via the topbar bell (Navbar.jsx). Same live source
@@ -213,14 +240,16 @@ export function Sidebar({ open, onClose, authState }) {
     return () => window.removeEventListener('kuetx:store-updated', syncProfile);
   }, []);
 
-  const filteredNav = filterNav(NAV, canSeeCrBoard, isRealAdmin).map((section) =>
+  const activeNavSource = viewMode === 'teacher' ? NAV_FACULTY : NAV;
+
+  const filteredNav = filterNav(activeNavSource, canSeeCrBoard, isRealAdmin).map((section) =>
     section.group === 'Admin'
       ? { ...section, group: adminLabel }
       : section
   );
 
   const findNavItem = (path) => {
-    for (const s of NAV) {
+    for (const s of activeNavSource) {
       const pools = s.subgroups ? s.subgroups.map(sub => sub.items) : [s.items];
       for (const pool of pools) {
         const i = pool.find(i => i.path === path);
@@ -263,8 +292,30 @@ export function Sidebar({ open, onClose, authState }) {
             </Link>
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 4 }}>
-            <div style={{ fontSize: 10, color: 'var(--muted)' }}>Student Life OS · KUET</div>
+            <div style={{ fontSize: 10, color: 'var(--muted)' }}>
+              {viewMode === 'teacher' ? 'Faculty Portal · KUET' : 'Student Life OS · KUET'}
+            </div>
           </div>
+          {/* §7 — Founder-only instant switch. Never rendered for a real
+              faculty or real student account; those two always have
+              viewMode fully determined by their own role, with nothing to
+              toggle. Flipping this only touches localStorage — no
+              navigation/reload, no Firestore write. */}
+          {canSwitchView && (
+            <button
+              onClick={() => setViewModePref(viewMode === 'teacher' ? 'student' : 'teacher')}
+              style={{
+                marginTop: 8, width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
+                fontSize: 10.5, fontWeight: 700, color: 'var(--accent)',
+                background: 'color-mix(in srgb, var(--accent) 10%, var(--surface))',
+                border: '1px solid color-mix(in srgb, var(--accent) 30%, transparent)',
+                borderRadius: 7, padding: '5px 8px', cursor: 'pointer',
+              }}
+            >
+              <Icons.RefreshCw size={11} />
+              {viewMode === 'teacher' ? 'Switch to Student View' : 'Switch to Teacher View'}
+            </button>
+          )}
         </div>
 
         {/* ── Quick strip ── */}
@@ -311,7 +362,7 @@ export function Sidebar({ open, onClose, authState }) {
                     iconName={section.hubIcon || GROUP_ICONS[section.group] || 'Circle'}
                     active={active}
                     onClose={onClose}
-                    unreadCount={section.group === 'Notice' ? unreadNoticeCount : 0}
+                    unreadCount={(section.group === 'Notice' || section.group === 'Notices') ? unreadNoticeCount : 0}
                   />
                 </div>
               );

@@ -24,6 +24,10 @@ import useFirebaseAuth from './hooks/useFirebaseAuth';
 import DataSafeToast from './components/DataSafeToast';
 import ClassJoinIntro from './components/ClassJoinIntro';
 import KuetVerifyEmailConfirmModal from './components/KuetVerifyEmailConfirmModal';
+import RoleSelectScreen from './components/RoleSelectScreen';
+import FacultyVerifyHoldingScreen from './components/FacultyVerifyHoldingScreen';
+import { getAccountRole } from './lib/accountRole';
+import { getFacultyDoc, isFacultyProfileComplete } from './lib/facultySync';
 import { store, getProfile, isProfileComplete, DEFAULT_PROFILE, normalizeProfileForSave, validateProfileForSave } from './store/store';
 import { getGroupId } from './lib/groupUtils';
 import { syncOwnVerification, joinGroup } from './lib/groupSync';
@@ -66,6 +70,15 @@ import { Tours, Projects, Syllabus, TimeTracker, Tuition, Reports } from './page
 import SubgroupHub from './components/nav-system/SubgroupHub';
 import CRHub from './components/nav-system/CRHub';
 import AdminHub from './components/nav-system/AdminHub';
+import RequireFaculty from './components/RequireFaculty';
+import { NAV_FACULTY } from './nav-faculty';
+import FacultyDashboard from './pages/faculty/FacultyDashboard';
+import FacultyProfile from './pages/faculty/FacultyProfile';
+import FacultyClasses from './pages/faculty/FacultyClasses';
+import FacultyClassDetail from './pages/faculty/FacultyClassDetail';
+import FacultySchedule from './pages/faculty/FacultySchedule';
+import FacultyNotices from './pages/faculty/FacultyNotices';
+import FacultyContact from './pages/faculty/FacultyContact';
 
 function Layout({ authState, onboardingActive }) {
   usePageTracker();
@@ -165,6 +178,26 @@ function Layout({ authState, onboardingActive }) {
                 AdminEntryPoint (Founder section) alongside the staff panel. */}
             <Route path="/admin" element={<Navigate to="/team" replace />} />
             <Route path="/team" element={<RequireStaff><TeamDashboard /></RequireStaff>} />
+
+            {/* ── Faculty Module (/faculty/*) — §11 Phase 3/4/5 ────────────
+                Every real destination is wrapped in RequireFaculty (hard
+                gate — see that component + useIsFaculty.js). Hub pages
+                (/faculty/resources) reuse the same SubgroupHub component
+                the student side uses, pointed at NAV_FACULTY via its
+                navSource prop instead of a duplicate hub renderer.
+                Class Detail (§8.5) ships with 3 read-only tabs (Students &
+                CR, Syllabus, Schedule) as of Phase 5 — Sessions/Attendance/
+                Marks/Notices tabs are visible-but-disabled placeholders in
+                that page until Phases 6/7/8 build them. */}
+            <Route path="/faculty" element={<RequireFaculty><FacultyDashboard /></RequireFaculty>} />
+            <Route path="/faculty/profile" element={<RequireFaculty><FacultyProfile /></RequireFaculty>} />
+            <Route path="/faculty/classes" element={<RequireFaculty><FacultyClasses /></RequireFaculty>} />
+            <Route path="/faculty/classes/:assignmentId" element={<RequireFaculty><FacultyClassDetail /></RequireFaculty>} />
+            <Route path="/faculty/schedule" element={<RequireFaculty><FacultySchedule /></RequireFaculty>} />
+            <Route path="/faculty/notices" element={<RequireFaculty><FacultyNotices /></RequireFaculty>} />
+            <Route path="/faculty/contact" element={<RequireFaculty><FacultyContact /></RequireFaculty>} />
+            <Route path="/faculty/question-bank" element={<RequireFaculty><QuestionBank /></RequireFaculty>} />
+            <Route path="/faculty/resources" element={<RequireFaculty><SubgroupHub navSource={NAV_FACULTY} group="Campus" subgroup="Resources" /></RequireFaculty>} />
           </Routes>
         </div>
         {location.pathname !== '/about' && !isQuestionBankViewer && !isMobileNav && <Footer />}
@@ -237,15 +270,64 @@ function shouldShowCommunityHiring() {
   } catch { return false; }
 }
 
-function buildQueue(isAnonymous) {
+// §5 of the merged Faculty Module prompt: 'role-select' is always the very
+// first step, shown exactly once (accountRole unset). After that, the
+// existing 'auth'/'profile' steps branch on which role was chosen —
+// accountRole === 'teacher' checks isFacultyProfileComplete() instead of
+// the student isProfileComplete(), and Faculty Profile Setup itself
+// (FacultyProfileSetupModal) is a later phase (§8.3); for now a teacher
+// with an incomplete faculty doc simply stays queued on 'profile' with no
+// modal rendered yet (see the `current === 'profile'` render branch below,
+// which only renders ProfileSetupModal for the student case) — that's a
+// known, deliberately incomplete gap flagged in PROGRESS.md, not a silent
+// assumption: Phase 4 owns building FacultyProfileSetupModal itself.
+//
+// Async because accountRole === 'teacher' needs a Firestore read
+// (getFacultyDoc) to know whether the faculty profile is complete — every
+// other branch here is still synchronous/local, matching the original
+// function's cost profile as closely as possible.
+async function buildQueue(isAnonymous) {
   const q = [];
+  const accountRole = getAccountRole();
+
+  if (!accountRole) {
+    q.push('role-select');
+    // Nothing else can be meaningfully decided yet — auth/profile steps
+    // depend on which role gets picked, and role-select itself doesn't
+    // advance until a choice is made (§8.1, no dismiss path).
+    return q;
+  }
+
   if (isAnonymous) q.push('auth');
-  // Profile setup is mandatory before anything else — a half-filled
-  // profile (missing roll/dept/session) is the root cause of Classmates
-  // mismatch, roll-verification, and term-roadmap issues reported by
-  // users. This step has no skip; it only advances via ProfileSetupModal's
-  // onSave. The KUET email verify sub-step inside it keeps its own skip.
-  if (!isProfileComplete(getProfile())) q.push('profile');
+
+  if (accountRole === 'teacher') {
+    if (!isAnonymous) {
+      // Founder bypass and "faculty doc not created yet" both fall through
+      // to !isFacultyProfileComplete() being true here, which is correct:
+      // a founder never has a faculty/{uid} doc and isn't expected to —
+      // RequireFaculty.jsx's isFounderBypass check (not this queue) is
+      // what actually unlocks their shell, and Founder sessions skip
+      // role-select entirely per §7, so this branch is only ever reached
+      // by an account that genuinely chose "Faculty Member".
+      const fdoc = await getFacultyDoc(auth.currentUser?.uid).catch(() => null);
+      if (!fdoc?.verifiedAt) {
+        // Hard gate (Deviation 2) — verification blocks everything else,
+        // including profile setup, since an unverified account isn't
+        // confirmed to be real faculty yet.
+        q.push('faculty-verify');
+      } else if (!isFacultyProfileComplete(fdoc)) {
+        q.push('profile');
+      }
+    }
+  } else {
+    // Profile setup is mandatory before anything else — a half-filled
+    // profile (missing roll/dept/session) is the root cause of Classmates
+    // mismatch, roll-verification, and term-roadmap issues reported by
+    // users. This step has no skip; it only advances via ProfileSetupModal's
+    // onSave. The KUET email verify sub-step inside it keeps its own skip.
+    if (!isProfileComplete(getProfile())) q.push('profile');
+  }
+
   if (shouldShowAnnouncement()) q.push('announcement');
   if (shouldShowCommunityHiring()) q.push('communityHiring');
   if (shouldShowBackup()) q.push('backup');
@@ -320,11 +402,19 @@ export default function App() {
     }
   };
 
-  // Build queue once auth is ready so we know isAnonymous
+  // Build queue once auth is ready so we know isAnonymous. buildQueue is now
+  // async (accountRole === 'teacher' needs a Firestore read) — guarded with
+  // `cancelled` so a fast unmount/re-auth during the read can't apply a
+  // stale queue.
   useEffect(() => {
     if (!authState.authReady || queueBuilt) return;
-    setQueue(buildQueue(authState.isAnonymous));
-    setQueueBuilt(true);
+    let cancelled = false;
+    buildQueue(authState.isAnonymous).then((q) => {
+      if (cancelled) return;
+      setQueue(q);
+      setQueueBuilt(true);
+    });
+    return () => { cancelled = true; };
   }, [authState.authReady, authState.isAnonymous, queueBuilt]);
 
   // Auto-join the class group as soon as we have a signed-in user with a
@@ -420,9 +510,33 @@ export default function App() {
       // nothing to conflict with) and for the credential-already-in-use
       // fallback (existing account — local anonymous-session data merges
       // in via last-write-wins per document, same as any other
-      // multi-device sync in this app).
+      // multi-device sync in this app). Faculty accounts don't have any
+      // local IndexedDB student data to push, so this is a harmless no-op
+      // for them beyond marking the account non-anonymous.
       await authState.onAccountUpgraded(user);
     }
+
+    const accountRole = getAccountRole();
+    if (accountRole === 'teacher') {
+      // Re-derive for the teacher branch: a brand-new faculty account has
+      // verifiedAt: null (createFacultyAccountDoc in AuthModal's faculty
+      // variant already wrote that), so 'faculty-verify' needs to be
+      // inserted now — it wasn't in the queue built before this sign-up
+      // completed (this exact moment IS the sign-up completing).
+      const fdoc = await getFacultyDoc(user.uid).catch(() => null);
+      setQueue((q) => {
+        const rest = q.slice(1);
+        if (!fdoc?.verifiedAt && !rest.includes('faculty-verify')) {
+          return ['faculty-verify', ...rest];
+        }
+        if (fdoc?.verifiedAt && !isFacultyProfileComplete(fdoc) && !rest.includes('profile')) {
+          return ['profile', ...rest];
+        }
+        return rest;
+      });
+      return;
+    }
+
     // Re-derive the remaining queue instead of a plain advance(): a
     // brand-new account has no profile yet, so 'profile' needs to be
     // inserted now even though it wasn't in the queue built before login.
@@ -436,7 +550,31 @@ export default function App() {
   return (
     <ThemeProvider>
       <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
-        {current === 'auth' && (
+        {current === 'role-select' && (
+          <RoleSelectScreen
+            onSelect={() => {
+              // Re-derive rather than a plain advance(): picking a role
+              // changes which steps come next (teacher needs
+              // 'faculty-verify' before 'profile', student doesn't), so
+              // just rebuild the whole queue the same way the initial
+              // mount does.
+              buildQueue(authState.isAnonymous).then(setQueue);
+            }}
+          />
+        )}
+        {current === 'auth' && getAccountRole() === 'teacher' && (
+          <AuthModal
+            mode="register"
+            variant="faculty"
+            queueMode={true}
+            isUpgrade={false}
+            // No onClose — matches the student 'auth' step: mandatory,
+            // no skip (Deviation 2 hard gate has no anonymous/skip path
+            // for the Faculty Member role at all).
+            onSuccess={handleAuthSuccess}
+          />
+        )}
+        {current === 'auth' && getAccountRole() !== 'teacher' && (
           <AuthModal
             mode="login"
             queueMode={true}
@@ -454,7 +592,26 @@ export default function App() {
             onSuccess={handleAuthSuccess}
           />
         )}
-        {current === 'profile' && (
+        {current === 'faculty-verify' && (
+          <FacultyVerifyHoldingScreen
+            officialEmail={authState.user?.email || ''}
+            onVerified={() => {
+              // Re-derive (not a plain advance()) so 'profile' gets
+              // inserted now if the faculty profile itself isn't
+              // complete yet — mirrors handleAuthSuccess's teacher branch.
+              getFacultyDoc(authState.user?.uid).then((fdoc) => {
+                setQueue((q) => {
+                  const rest = q.slice(1); // drop 'faculty-verify'
+                  if (!isFacultyProfileComplete(fdoc) && !rest.includes('profile')) {
+                    return ['profile', ...rest];
+                  }
+                  return rest;
+                });
+              });
+            }}
+          />
+        )}
+        {current === 'profile' && getAccountRole() !== 'teacher' && (
           <ProfileSetupModal
             isOpen={true}
             // No dismiss path — this step cannot be skipped without saving,
@@ -479,6 +636,33 @@ export default function App() {
             }}
             initialProfile={getProfile()}
           />
+        )}
+        {current === 'profile' && getAccountRole() === 'teacher' && (
+          // TEMPORARY placeholder — FacultyProfileSetupModal (§8.3) is Phase
+          // 4 work, not Phase 2. A verified faculty account with an
+          // incomplete profile lands here for now; it does nothing except
+          // let them continue, so it isn't a silent dead-end. Flagged in
+          // PROGRESS.md, not a silent assumption — do not remove this
+          // comment until Phase 4 replaces the whole branch.
+          <div style={{
+            position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 9999, padding: 16,
+          }}>
+            <div style={{ background: 'var(--card)', borderRadius: 18, padding: 28, maxWidth: 420, textAlign: 'center', border: '1px solid var(--border)' }}>
+              <div style={{ fontWeight: 800, fontSize: 16, marginBottom: 8, color: 'var(--text)' }}>
+                Faculty profile setup is coming soon
+              </div>
+              <div style={{ fontSize: 13, color: 'var(--muted)', marginBottom: 18, lineHeight: 1.6 }}>
+                Your email is verified. The full profile form isn't built yet — continue to the dashboard for now.
+              </div>
+              <button
+                onClick={advance}
+                style={{ padding: '10px 20px', borderRadius: 8, border: 'none', background: 'var(--accent)', color: '#fff', fontWeight: 700, fontSize: 13, cursor: 'pointer' }}
+              >
+                Continue
+              </button>
+            </div>
+          </div>
         )}
         {current === 'announcement' && (
           <AnnouncementModal open={true} onClose={advance} />

@@ -72,6 +72,24 @@ export const FOUNDER_CATEGORIES = [
     // No subcategories — a single form. SubcategoryTabs renders nothing
     // for a category with no `subcategories`/`drilldown`, which is fine.
   },
+  {
+    key: 'faculty',
+    label: 'Faculty',
+    icon: 'GraduationCap',
+    subtitle: 'Directory, verification, and class assignments',
+    // §7 of the merged Faculty Module prompt. ctx.facultyCount/
+    // ctx.facultyPending are NOT yet wired into AdminDashboard.jsx's own
+    // buildCountCtx() as of this session — that's the one remaining edit
+    // needed before these badges show real numbers instead of silently
+    // resolving to 0 via resolveCount()'s try/catch fallback (safe, just
+    // not yet meaningful). Flagged in PROGRESS.md rather than guessed at,
+    // since buildCountCtx()'s exact shape wasn't re-read this session.
+    subcategories: [
+      { key: 'directory', label: 'Directory', getCount: (ctx) => ctx.facultyCount },
+      { key: 'pending', label: 'Signup Requests', getCount: (ctx) => ctx.facultyPending },
+      { key: 'assignments', label: 'Class Assignments' },
+    ],
+  },
 ];
 
 export function getFounderCategory(key) {

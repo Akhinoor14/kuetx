@@ -9,6 +9,7 @@ import { notify } from '../lib/notify';
 import { getGroupId } from '../lib/groupUtils';
 import { subscribeCRStatus, subscribeRoutine, addRoutineEntry, updateRoutineEntry, deleteRoutineEntry } from '../lib/groupSync';
 import { useCanEditGroup } from '../hooks/useCanEditGroup';
+import TeacherClaimBanner from '../components/TeacherClaimBanner';
 
 const DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday'];
 const DAY_INDEX = { Sunday: 0, Monday: 1, Tuesday: 2, Wednesday: 3, Thursday: 4 };
@@ -1518,6 +1519,14 @@ export default function Schedule() {
           </div>
         </div>
       </div>
+
+      {/* §8.7 of the merged Faculty Module prompt — read-only, informational
+          only. Renders nothing unless a routine entry's free-text
+          teacherName matches a verified faculty account for this group;
+          declining/dismissing changes nothing about how the schedule
+          itself works. Does not touch any of this file's own schedule/
+          teacher logic above. */}
+      {isGroupMode && <TeacherClaimBanner groupId={groupId} />}
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 14, marginBottom: 14 }}>
         {showSettingsPanel && (

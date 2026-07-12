@@ -9,8 +9,8 @@ const HUB_COLOR = 'var(--accent)';
 // group has multiple unnamed subgroups) from NAV.
 // group: top-level group name (e.g. 'Campus Life', 'Tools', 'Overview')
 // subgroup: optional subgroup name when the group has `subgroups` (e.g. 'Academic Core')
-function resolveSection(group, subgroup, filterFn) {
-  const section = NAV.find(s => s.group === group);
+function resolveSection(navSource, group, subgroup, filterFn) {
+  const section = navSource.find(s => s.group === group);
   if (!section) return null;
 
   if (subgroup) {
@@ -94,13 +94,18 @@ function HubSection({ title, items, icon }) {
  * NAV group/subgroup lookup (e.g. Menu page's CR + Alerts block) —
  * pass { title, items, icon }, rendered first, above everything else.
  *
+ * `navSource` (default: NAV) lets a caller point this at a different nav
+ * config entirely — e.g. NAV_FACULTY for /faculty/* hub pages — without
+ * duplicating this whole component. group/subgroup lookups above resolve
+ * against whichever array is passed in.
+ *
  * Every hub page gets a full-page, theme-tinted background (a very
  * faint accent wash top-to-bottom, not just behind the content column)
  * plus a small icon + title header — same visual language across all
  * hub pages so the app reads as one consistent system, not per-page
  * one-offs. Uses --accentRGB so it tracks light/dark theme automatically.
  */
-export default function SubgroupHub({ group, subgroup, sections, pageTitle, extra, filterFn }) {
+export default function SubgroupHub({ group, subgroup, sections, pageTitle, extra, filterFn, navSource = NAV }) {
   const resolvedSections = [];
 
   if (extra) {
@@ -110,12 +115,12 @@ export default function SubgroupHub({ group, subgroup, sections, pageTitle, extr
 
   if (sections && sections.length) {
     sections.forEach(({ group: g, subgroup: sg, filterFn: fn }) => {
-      const result = resolveSection(g, sg, fn || filterFn);
+      const result = resolveSection(navSource, g, sg, fn || filterFn);
       if (Array.isArray(result)) resolvedSections.push(...result);
       else if (result) resolvedSections.push(result);
     });
   } else if (group) {
-    const result = resolveSection(group, subgroup, filterFn);
+    const result = resolveSection(navSource, group, subgroup, filterFn);
     if (Array.isArray(result)) resolvedSections.push(...result);
     else if (result) resolvedSections.push(result);
   }

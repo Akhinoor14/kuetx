@@ -6,6 +6,7 @@ import { getGroupId } from '../lib/groupUtils';
 import { subscribeMyRole } from '../lib/groupSync';
 import { auth } from '../lib/firebase';
 import { useIsStaff } from '../hooks/useIsStaff';
+import { useIsFaculty } from '../hooks/useIsFaculty';
 
 const MOBILE_NAV_QUERY = '(max-width: 767.98px)';
 
@@ -40,30 +41,48 @@ export function useIsMobileNav() {
 // - CR/ACR      -> /cr-hub (Profile + Class Management + CT & Quiz Planner)
 // Icon/avatar and match-paths for the 5th button are computed at render
 // time since they depend on live auth + role state.
-const FIXED_BUTTONS = [
+const STUDENT_FIXED_BUTTONS = [
   { id: 'home',      label: 'Home',      icon: 'Home',         path: '/',                match: (p) => p === '/' },
   { id: 'academics', label: 'Academics', icon: 'BookOpen',      path: '/academic-core',   match: (p) => p === '/academic-core' || ['/courses', '/syllabus', '/question-bank', '/solutions', '/marks', '/results', '/alerts'].includes(p) },
   { id: 'daily',     label: 'Daily',     icon: 'CalendarCheck', path: '/daily-academics', match: (p) => p === '/daily-academics' || ['/attendance', '/schedule', '/assignments', '/teachers', '/classmates', '/diary'].includes(p) },
   { id: 'campus',    label: 'Campus',    icon: 'Layers',        path: '/campus',          match: (p) => p === '/campus' || p === '/daily-life' || p === '/campus-life' || ['/notes', '/self-study', '/time', '/namaz', '/clubs', '/projects', '/tours', '/money', '/tuition'].includes(p) },
 ];
 
+// §6.2 of the merged Faculty Module prompt: "the FIXED_BUTTONS swap as a
+// whole set, not appended" — Home → My Classes → Schedule → Campus (hub) →
+// Profile/Admin (role-aware, handled by ProfileButton below same as
+// student mode). Deliberately NOT reusing STUDENT_FIXED_BUTTONS ids/paths;
+// this is a fully separate 4-button set for the teacher shell.
+const FACULTY_FIXED_BUTTONS = [
+  { id: 'f-home',     label: 'Home',     icon: 'Home',     path: '/faculty',           match: (p) => p === '/faculty' },
+  { id: 'f-classes',  label: 'Classes',  icon: 'BookOpen', path: '/faculty/classes',   match: (p) => p === '/faculty/classes' || p.startsWith('/faculty/classes/') },
+  { id: 'f-schedule', label: 'Schedule', icon: 'Clock',    path: '/faculty/schedule',  match: (p) => p === '/faculty/schedule' },
+  { id: 'f-campus',   label: 'Campus',   icon: 'Layers',   path: '/faculty/resources', match: (p) => p === '/faculty/resources' || p === '/faculty/question-bank' },
+];
+
 // Priority for the 5th button's destination/label/icon:
-// 1. Staff role or Founder -> /admin-hub, label = adminLabel (Founder
+// 1. Staff role or Founder -> /admin-hub (student mode) or /team (faculty
+//    mode — the faculty shell has no separate /admin-hub, just the shared
+//    Admin destination per nav-faculty.js), label = adminLabel (Founder
 //    outranks/subsumes any other staff label per useIsStaff.js). Wins
 //    even if this person is also CR/ACR — the merged hub below still
 //    surfaces their CR tools, just under the Admin identity/label.
-// 2. Verified CR/ACR only  -> /cr-hub, label = 'CR'/'ACR'
-// 3. Everyone else         -> /profile
-function ProfileButton({ isRealCR, roleLabel, isStaff, adminLabel, active }) {
-  let path = '/profile';
+// 2. Verified CR/ACR only  -> /cr-hub, label = 'CR'/'ACR' (student mode only
+//    — faculty mode has no CR concept, isRealCR is never true there anyway
+//    since a real faculty account can't simultaneously hold a CR role)
+// 3. Everyone else         -> /profile (student mode) or /faculty/profile
+//    (faculty mode)
+function ProfileButton({ isRealCR, roleLabel, isStaff, adminLabel, active, viewMode }) {
+  const isFacultyMode = viewMode === 'teacher';
+  let path = isFacultyMode ? '/faculty/profile' : '/profile';
   let label = 'Profile';
   let Icon = Icons.User;
 
   if (isStaff) {
-    path = '/admin-hub';
+    path = isFacultyMode ? '/team' : '/admin-hub';
     label = adminLabel || 'Admin';
     Icon = Icons.Briefcase;
-  } else if (isRealCR) {
+  } else if (isRealCR && !isFacultyMode) {
     path = '/cr-hub';
     label = roleLabel;
   }
@@ -89,6 +108,30 @@ export function BottomNav() {
   const [roleLabel, setRoleLabel] = useState('CR');
   const { isRealAdmin: isStaff, adminLabel } = useIsStaff();
 
+  // Same viewMode derivation as Sidebar.jsx — real faculty always
+  // 'teacher', real student always 'student', only Founder's own
+  // localStorage preference matters. Kept as a literal duplicate of that
+  // logic rather than a shared hook for now: both components already read
+  // localStorage directly and there's no shared state to synchronize
+  // beyond the key itself, so introducing a new shared hook here isn't
+  // worth it unless a third consumer shows up.
+  const { isRealFaculty, isFounderBypass } = useIsFaculty();
+  const [viewModePref, setViewModePref] = useState(() => {
+    try { return localStorage.getItem('kuetx:viewMode') || 'student'; } catch { return 'student'; }
+  });
+  useEffect(() => {
+    // Stay in sync if the Founder flips the switch from the Sidebar while
+    // this component is also mounted (mobile bottom nav + desktop sidebar
+    // can't both be visible at once today, but this keeps it correct if
+    // that ever changes, e.g. a tablet breakpoint showing both).
+    const sync = () => {
+      try { setViewModePref(localStorage.getItem('kuetx:viewMode') || 'student'); } catch { /* ignore */ }
+    };
+    window.addEventListener('storage', sync);
+    return () => window.removeEventListener('storage', sync);
+  }, []);
+  const viewMode = isFounderBypass ? viewModePref : (isRealFaculty ? 'teacher' : 'student');
+
   useEffect(() => {
     const profile = getProfile() || {};
     const groupId = getGroupId(profile);
@@ -101,17 +144,22 @@ export function BottomNav() {
 
   if (!isMobileNav) return null;
 
-  const isProfileActive = location.pathname === '/profile'
-    || location.pathname === '/cr-hub'
-    || location.pathname === '/class-management'
-    || location.pathname === '/ct-quiz-planning'
-    || location.pathname === '/admin-hub'
-    || location.pathname === '/team';
+  const isFacultyMode = viewMode === 'teacher';
+  const fixedButtons = isFacultyMode ? FACULTY_FIXED_BUTTONS : STUDENT_FIXED_BUTTONS;
+
+  const isProfileActive = isFacultyMode
+    ? (location.pathname === '/faculty/profile' || location.pathname === '/team')
+    : (location.pathname === '/profile'
+        || location.pathname === '/cr-hub'
+        || location.pathname === '/class-management'
+        || location.pathname === '/ct-quiz-planning'
+        || location.pathname === '/admin-hub'
+        || location.pathname === '/team');
 
   return (
     <nav className="mobile-bottom-nav" aria-label="Mobile navigation">
       <div className="mobile-bottom-nav-shell">
-        {FIXED_BUTTONS.map(button => {
+        {fixedButtons.map(button => {
           const Icon = Icons[button.icon] || Icons.Circle;
           const active = button.match(location.pathname);
 
@@ -135,6 +183,7 @@ export function BottomNav() {
           isStaff={isStaff}
           adminLabel={adminLabel}
           active={isProfileActive}
+          viewMode={viewMode}
         />
       </div>
     </nav>

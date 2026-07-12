@@ -22,6 +22,8 @@ import { renderFormattedNoticeBody } from '../lib/noticeFormat';
 import CategorySubNav from '../components/CategorySubNav';
 import SubcategoryTabs from '../components/SubcategoryTabs';
 import { FOUNDER_CATEGORIES, getFounderCategory, resolveCount, resolveSubtitle } from '../lib/founderCategories';
+import { listAllFacultyAccounts } from '../lib/facultySync';
+import { listAllActiveFacultyAssignments } from '../lib/facultyClassSync';
 
 // Every role the Founder can hand out or take away from this screen —
 // literally everyone, per the manifesto: Founder has full add/revoke
@@ -799,6 +801,95 @@ function TrustSafetyView({ onBack, onSelectCategory, countCtx }) {
 // =======================================================================
 // COMMUNICATION — send a notice to everyone / one batch / one class.
 // =======================================================================
+// §7 of the merged Faculty Module prompt — Admin's "Faculty" category.
+// Follows the exact same "start with null, not [], to avoid the
+// Founder-page flicker" pattern established in ApprovalsView/TrustSafetyView
+// above (Phase A's fix) — genuinely reused, not just referenced.
+function FacultyView({ onBack, onSelectCategory, countCtx }) {
+  const [facultyList, setFacultyList] = useState(null);
+  const [assignments, setAssignments] = useState(null);
+  const [subTab, setSubTab] = useState('directory');
+
+  useEffect(() => {
+    listAllFacultyAccounts().then(setFacultyList).catch(() => setFacultyList([]));
+  }, []);
+
+  // Only fetched once the Assignments sub-tab is actually opened — this is
+  // a collectionGroup query (genuinely necessary here, see
+  // listAllActiveFacultyAssignments()'s own comment for why it's an
+  // exception to this module's usual avoid-collectionGroup rule), no
+  // reason to pay that cost for Admins who only ever look at Directory/
+  // Pending.
+  useEffect(() => {
+    if (subTab !== 'assignments' || assignments !== null) return;
+    listAllActiveFacultyAssignments().then(setAssignments).catch(() => setAssignments([]));
+  }, [subTab, assignments]);
+
+  const loading = facultyList === null;
+  const verified = (facultyList || []).filter((f) => f.verifiedAt);
+  const pending = (facultyList || []).filter((f) => !f.verifiedAt);
+  const facultyNameByUid = Object.fromEntries((facultyList || []).map((f) => [f.uid, f.name || f.officialEmail]));
+
+  const category = getFounderCategory('faculty');
+  const subCtx = { ...countCtx, facultyCount: verified.length, facultyPending: pending.length };
+
+  return (
+    <CategoryShell view="faculty" onSelect={onSelectCategory} countCtx={countCtx}>
+      <h2 style={{ fontSize: 16, fontWeight: 700, margin: '0 0 12px' }}>Faculty</h2>
+      <SubcategoryTabs subcategories={category.subcategories} activeKey={subTab} onSelect={setSubTab} countCtx={subCtx} />
+
+      {subTab === 'directory' && (
+        <Section title="Verified faculty accounts">
+          {loading && <EmptyState>Loading…</EmptyState>}
+          {!loading && verified.length === 0 && <EmptyState>No verified faculty accounts yet.</EmptyState>}
+          {verified.map((f) => (
+            <div key={f.uid} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 8, padding: '10px 12px', borderBottom: '1px solid var(--border)' }}>
+              <div style={{ minWidth: 0 }}>
+                <div style={{ fontWeight: 600, fontSize: 13 }}>{f.name || 'Unnamed'}</div>
+                <div style={{ fontSize: 11.5, color: 'var(--muted)' }}>{f.title || '—'} · {f.dept || '—'} · {f.officialEmail}</div>
+              </div>
+            </div>
+          ))}
+        </Section>
+      )}
+
+      {subTab === 'pending' && (
+        <Section title="Accounts awaiting email verification">
+          {loading && <EmptyState>Loading…</EmptyState>}
+          {!loading && pending.length === 0 && <EmptyState>Nothing pending.</EmptyState>}
+          {pending.map((f) => (
+            <div key={f.uid} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 8, padding: '10px 12px', borderBottom: '1px solid var(--border)' }}>
+              <div style={{ minWidth: 0 }}>
+                <div style={{ fontWeight: 600, fontSize: 13 }}>{f.officialEmail}</div>
+                <div style={{ fontSize: 11.5, color: 'var(--muted)' }}>Signed up, not yet verified</div>
+              </div>
+            </div>
+          ))}
+        </Section>
+      )}
+
+      {subTab === 'assignments' && (
+        <Section title="Class Assignments">
+          {assignments === null && <EmptyState>Loading…</EmptyState>}
+          {assignments !== null && assignments.length === 0 && <EmptyState>No active class assignments yet.</EmptyState>}
+          {(assignments || []).map((a) => (
+            <div key={`${a.groupId}-${a.id}`} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 8, padding: '10px 12px', borderBottom: '1px solid var(--border)' }}>
+              <div style={{ minWidth: 0 }}>
+                <div style={{ fontWeight: 600, fontSize: 13 }}>
+                  {a.courseCode}{a.courseTitle ? ` — ${a.courseTitle}` : ''}
+                </div>
+                <div style={{ fontSize: 11.5, color: 'var(--muted)' }}>
+                  {a.batch?.toUpperCase()} {a.dept} · {a.term} · {(a.teacherUids || []).map((uid) => facultyNameByUid[uid] || uid).join(', ') || 'No teacher yet'}
+                </div>
+              </div>
+            </div>
+          ))}
+        </Section>
+      )}
+    </CategoryShell>
+  );
+}
+
 function CommunicationView({ onBack, onSelectCategory, groups, countCtx }) {
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
@@ -996,6 +1087,15 @@ export default function AdminDashboard() {
     return () => unsubs.forEach((u) => u());
   }, [groups]);
 
+  // §7 of the merged Faculty Module prompt — fetched here (above the
+  // authorized-check early return below) rather than where it's used,
+  // since hooks in this component must all run unconditionally on every
+  // render, matching every other useState/useEffect above.
+  const [facultyList, setFacultyList] = useState(null);
+  useEffect(() => {
+    listAllFacultyAccounts().then(setFacultyList).catch(() => setFacultyList([]));
+  }, []);
+
   const totalCrReq = Object.values(crCountMap).reduce((a, b) => a + b, 0);
   const totalLeaveReq = Object.values(leaveCountMap).reduce((a, b) => a + b, 0);
 
@@ -1007,6 +1107,7 @@ export default function AdminDashboard() {
   // badges too. Keys here match what founderCategories.js's getCount
   // functions read — add a new metric here + reference it from the
   // registry, no component changes needed.
+
   const countCtx = {
     clApplications: applications.length,
     crRequests: totalCrReq,
@@ -1014,6 +1115,8 @@ export default function AdminDashboard() {
     emailFlags: emailFlagCount,
     rollRequests: rollRequests.length,
     classCount: groups?.length,
+    facultyCount: (facultyList || []).filter((f) => f.verifiedAt).length,
+    facultyPending: (facultyList || []).filter((f) => !f.verifiedAt).length,
   };
 
   const onSelectCategory = (key) => setView(key);
@@ -1026,6 +1129,7 @@ export default function AdminDashboard() {
   if (view === 'classes') return <ClassesView {...viewProps} />;
   if (view === 'trust') return <TrustSafetyView {...viewProps} />;
   if (view === 'comms') return <CommunicationView {...viewProps} />;
+  if (view === 'faculty') return <FacultyView {...viewProps} />;
 
   // Top-level grid — fully generated from FOUNDER_CATEGORIES. Adding a
   // category to that registry adds a card here automatically.
