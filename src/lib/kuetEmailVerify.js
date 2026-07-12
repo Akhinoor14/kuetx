@@ -57,6 +57,7 @@
 import { initializeApp, getApps } from 'firebase/app';
 import {
   getAuth, sendSignInLinkToEmail, isSignInWithEmailLink, signInWithEmailLink,
+  setPersistence, inMemoryPersistence, signOut,
 } from 'firebase/auth';
 import { getFirestore, doc, setDoc, getDoc, serverTimestamp } from 'firebase/firestore';
 import { db, firebaseConfig } from './firebase';
@@ -68,6 +69,19 @@ function getVerifyApp() {
 }
 const verifyAuth = getAuth(getVerifyApp());
 const verifyDb = getFirestore(getVerifyApp()); // same project/database, but its Firestore *auth context* follows verifyAuth, not the main session
+
+// BUGFIX: verifyAuth used to default to browserLocalPersistence, same as
+// any other Firebase Auth instance — so every completed verification left
+// a real, persistent second Firebase Auth user sitting in this browser's
+// storage indefinitely (visible in Firebase Console as a second account,
+// separate from the person's actual main-session account). The whole
+// point of this secondary-app pattern is a one-off, disposable proof of
+// mailbox ownership — nothing about it should outlive the single
+// verification moment. in-memory persistence means it never touches
+// localStorage/IndexedDB at all, and the explicit signOut() below (right
+// after the Firestore write that actually matters) means nothing lingers
+// even within the same page load either.
+setPersistence(verifyAuth, inMemoryPersistence).catch(() => {});
 
 const KUET_EMAIL_RE = /^([a-z]+)(\d{7})@stud\.kuet\.ac\.bd$/i;
 
@@ -213,10 +227,17 @@ export async function completeKuetVerificationLink(url = window.location.href, e
           // reported back as success, or the person is stuck seeing "not
           // verified" forever with no idea why.
           if (writeErr?.code !== 'permission-denied') {
+            await signOut(verifyAuth).catch(() => {});
             return { status: 'error', message: 'Sign-in সফল হয়েছে কিন্তু verification record সেভ করা যায়নি। আবার চেষ্টা করো, সমস্যা থাকলে dev-কে জানাও।' };
           }
         }
       }
+      // BUGFIX: sign out of the throwaway verify session the moment its
+      // job (the Firestore write above) is done — the main session
+      // (auth, from firebase.js) was never touched by any of this, so
+      // this is purely cleaning up the secondary app's temporary state,
+      // not affecting the person's actual logged-in account at all.
+      await signOut(verifyAuth).catch(() => {});
       return { status: 'success', roll: parsed?.roll, email: result.user.email };
     } catch (err) {
       window.history.replaceState(null, '', window.location.pathname);

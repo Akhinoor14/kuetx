@@ -334,7 +334,26 @@ async function buildQueue(isAnonymous) {
   const q = [];
   let accountRole = getAccountRole();
 
-  if (!accountRole && !isAnonymous && auth.currentUser?.uid) {
+  // RESTRUCTURE (Sign In/Up-first flow): Role Select used to be pushed
+  // BEFORE 'auth' for any session with no local accountRole — including a
+  // brand-new anonymous visitor who hasn't even chosen Login vs Register
+  // yet. That put Role Select in front of everyone on first load, whether
+  // they were about to sign in to an existing account or sign up fresh.
+  //
+  // Fix: 'auth' now comes first for anyone with no real (non-anonymous)
+  // account yet. AuthModal itself no longer needs a pre-decided role/
+  // variant to render Login/Register — Login is role-agnostic (server
+  // lookup below still resolves an existing account's role correctly),
+  // and Register creates the account with NO role yet. Role Select is
+  // only ever queued afterward, once a real uid exists and genuinely has
+  // no role recorded — i.e. it now lives strictly inside the Sign Up
+  // path, exactly where the spec puts it, instead of gating entry itself.
+  if (isAnonymous || !auth.currentUser?.uid) {
+    q.push('auth');
+    return q;
+  }
+
+  if (!accountRole) {
     // Not yet decided locally, but this is a real (non-anonymous) signed-in
     // account — check server-side facts before ever showing role-select.
     // Checked in order:
@@ -345,10 +364,9 @@ async function buildQueue(isAnonymous) {
     //      doc but never got a users/{uid}.role write (e.g. it was
     //      created by an earlier build of this app, before role
     //      persistence existed at all).
-    //   3. Otherwise: a genuine pre-existing student account, or a
-    //      brand-new student sign-up — default to 'student', the safe
-    //      and overwhelmingly common case, and back-fill the server
-        // record so this lookup is unnecessary next time.
+    //   3. Otherwise: genuinely nothing recorded yet — this is a brand-new
+    //      account that just came out of Register with no role chosen,
+    //      the ONLY case Role Select should ever actually show for.
     const serverRole = await fetchServerAccountRole(auth.currentUser.uid);
     if (serverRole) {
       setAccountRole(serverRole);
@@ -359,25 +377,21 @@ async function buildQueue(isAnonymous) {
         setAccountRole('teacher');
         accountRole = 'teacher';
         persistAccountRoleToServer('teacher');
-      } else {
-        setAccountRole('student');
-        accountRole = 'student';
-        persistAccountRoleToServer('student');
       }
     }
   }
 
   if (!accountRole) {
     q.push('role-select');
-    // Nothing else can be meaningfully decided yet — auth/profile steps
-    // depend on which role gets picked, and role-select itself doesn't
-    // advance until a choice is made (§8.1, no dismiss path). Only ever
-    // reached now by a fresh anonymous/guest session that hasn't signed
-    // up as either role yet.
+    // Nothing else can be meaningfully decided yet — profile/faculty-verify
+    // steps depend on which role gets picked, and role-select itself
+    // doesn't advance until a choice is made (§8.1, no dismiss path). Only
+    // ever reached now by a real, freshly-registered account with
+    // genuinely no role recorded anywhere — never by an anonymous visitor
+    // who hasn't signed in/up yet (that's 'auth', above), and never by an
+    // existing account (server lookup above already resolved it).
     return q;
   }
-
-  if (isAnonymous) q.push('auth');
 
   if (accountRole === 'teacher') {
     if (!isAnonymous) {
@@ -740,36 +754,17 @@ export default function App() {
       if (localRole) persistAccountRoleToServer(localRole);
     }
 
-    const accountRole = getAccountRole();
-    if (accountRole === 'teacher') {
-      // Re-derive for the teacher branch: a brand-new faculty account has
-      // verifiedAt: null (createFacultyAccountDoc in AuthModal's faculty
-      // variant already wrote that), so 'faculty-verify' needs to be
-      // inserted now — it wasn't in the queue built before this sign-up
-      // completed (this exact moment IS the sign-up completing).
-      const fdoc = await getFacultyDoc(user.uid).catch(() => null);
-      setQueue((q) => {
-        const rest = q.slice(1);
-        if (!fdoc?.verifiedAt && !rest.includes('faculty-verify')) {
-          return ['faculty-verify', ...rest];
-        }
-        // BUGFIX: no longer ever inserts 'profile' here — see the matching
-        // buildQueue() comment. FacultyProfileSetupModal doesn't exist yet,
-        // so there was nothing for a teacher to actually do on that step
-        // besides watch it come back on every reload.
-        return rest;
-      });
-      return;
-    }
-
-    // Re-derive the remaining queue instead of a plain advance(): a
-    // brand-new account has no profile yet, so 'profile' needs to be
-    // inserted now even though it wasn't in the queue built before login.
-    setQueue((q) => {
-      const rest = q.slice(1);
-      const needsProfile = !isProfileComplete(getProfile()) && !rest.includes('profile');
-      return needsProfile ? ['profile', ...rest] : rest;
-    });
+    // RESTRUCTURE: role is no longer known at this point for a fresh
+    // Register (Role Select now happens AFTER account creation, not
+    // before) — the old hand-rolled splicing here assumed getAccountRole()
+    // was already 'teacher' or 'student', which is only true for Login,
+    // not Register, post-restructure. buildQueue() already contains every
+    // rule needed (server-role lookup, faculty-doc fallback, role-select
+    // if genuinely nothing recorded, faculty-verify, profile) — simplest
+    // and most robust to just re-run it rather than duplicate that logic
+    // here by hand.
+    const q = await buildQueue(user.isAnonymous);
+    setQueue(q);
   };
 
   return (
@@ -787,19 +782,19 @@ export default function App() {
             }}
           />
         )}
-        {current === 'auth' && getAccountRole() === 'teacher' && (
-          <AuthModal
-            mode="register"
-            variant="faculty"
-            queueMode={true}
-            isUpgrade={false}
-            // No onClose — matches the student 'auth' step: mandatory,
-            // no skip (Deviation 2 hard gate has no anonymous/skip path
-            // for the Faculty Member role at all).
-            onSuccess={handleAuthSuccess}
-          />
-        )}
-        {current === 'auth' && getAccountRole() !== 'teacher' && (
+        {/* RESTRUCTURE: 'auth' is now the FIRST step for anyone without a
+            real account, generic — no pre-decided role/variant needed.
+            - Login: role-agnostic. buildQueue's server-side lookup (above)
+              correctly routes an existing student OR teacher account
+              afterward, regardless of which "variant" this modal rendered
+              as, since it never assumes one.
+            - Register: creates the account with NO role yet (AuthModal's
+              register path no longer forces isFaculty=true/false — role
+              simply isn't set until Role Select, right after this).
+              handleAuthSuccess below re-derives the queue once signed in,
+              which naturally lands on 'role-select' next for a fresh
+              account with nothing recorded server-side. */}
+        {current === 'auth' && (
           <AuthModal
             mode="login"
             queueMode={true}

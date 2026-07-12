@@ -1,15 +1,19 @@
 // RoleSelectScreen.jsx
 //
-// §5 Step 1 of the merged Faculty Module prompt — the very first onboarding
-// step, shown before 'auth'/'profile'. This is the ONE deliberate exception
-// to Deviation 3's "everything faculty-related is English-only" rule: role
-// hasn't been chosen yet when this renders, so both student and faculty
-// visitors see it, and it stays Bangla/bilingual like the rest of the
-// pre-existing student-facing onboarding.
+// RESTRUCTURE: this now runs AFTER account creation (Sign In/Up comes
+// first), not before it — it's the step that fires right after a
+// brand-new Register with no role decided yet. A real, non-anonymous
+// auth.currentUser always exists by the time this renders (buildQueue()
+// in App.jsx only ever pushes 'role-select' once that's true), so this
+// is also where faculty-specific setup that needs a real uid — the
+// institutional-email format check and the faculty/{uid} shell doc —
+// now happens, instead of inside AuthModal's generic Register path.
 //
-// Purely a local routing decision (accountRole.js) — writes nothing to
-// Firestore, grants no access on its own. Rendered full-screen and
-// non-dismissable from App.jsx's queue, same as the 'auth'/'profile' steps.
+// Purely local+server routing — writes users/{uid}.role (and, for
+// Faculty, faculty/{uid}) to Firestore, grants no dashboard access on its
+// own; 'faculty-verify' (the actual magic-link hard gate) still comes
+// next for Faculty. Rendered full-screen and non-dismissable from
+// App.jsx's queue, same as the 'auth'/'profile' steps.
 //
 // BUGFIX: this used to be a translucent rgba(0,0,0,0.5) overlay, so the
 // half-loaded dashboard underneath was visible (dimmed) through it — looks
@@ -17,8 +21,12 @@
 // content that isn't this account's yet. Now a fully opaque, branded
 // full-screen background — nothing behind it shows through at all.
 
+import { useState } from 'react';
 import { GraduationCap, User, Sparkles } from 'lucide-react';
 import { setAccountRole, persistAccountRoleToServer } from '../lib/accountRole';
+import { isFacultyEmailFormat } from '../lib/facultyEmailVerify';
+import { createFacultyAccountDoc } from '../lib/facultySync';
+import { auth } from '../lib/firebase';
 
 const cardStyle = {
   flex: 1,
@@ -36,10 +44,45 @@ const cardStyle = {
 };
 
 export default function RoleSelectScreen({ onSelect }) {
-  const choose = (role) => {
-    setAccountRole(role);
-    persistAccountRoleToServer(role);
-    onSelect?.(role);
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const choose = async (role) => {
+    setError('');
+
+    if (role === 'teacher') {
+      // Faculty-only gate (Deviation 1): checked here now instead of at
+      // Register, since role (and therefore "does this need to be a KUET
+      // institutional email") isn't known until this exact moment.
+      const email = auth.currentUser?.email || '';
+      if (!isFacultyEmailFormat(email)) {
+        setError(
+          "This doesn't look like a valid KUET institutional email " +
+          '(a *.kuet.ac.bd address, not @stud.kuet.ac.bd). ' +
+          'Faculty accounts need an institutional email — if you signed ' +
+          'up with a personal address, use Student instead.'
+        );
+        return;
+      }
+    }
+
+    setLoading(true);
+    try {
+      setAccountRole(role);
+      await persistAccountRoleToServer(role);
+      if (role === 'teacher') {
+        // Faculty doc creation (verifiedAt: null) moved here from
+        // AuthModal's old register path — App.jsx's queue routes to
+        // FacultyVerifyHoldingScreen next, which is where the magic-link
+        // hard gate (Deviation 2) actually happens.
+        await createFacultyAccountDoc(auth.currentUser.uid, auth.currentUser.email);
+      }
+      onSelect?.(role);
+    } catch (err) {
+      setError('Something went wrong saving your role. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -81,7 +124,7 @@ export default function RoleSelectScreen({ onSelect }) {
 
         <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap' }}>
           <div
-            style={cardStyle}
+            style={{ ...cardStyle, opacity: loading ? 0.6 : 1, pointerEvents: loading ? 'none' : 'auto' }}
             onClick={() => choose('student')}
             onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 12px 28px rgba(0,0,0,0.08)'; e.currentTarget.style.borderColor = 'var(--accent)'; }}
             onMouseLeave={(e) => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.borderColor = 'var(--border)'; }}
@@ -99,7 +142,7 @@ export default function RoleSelectScreen({ onSelect }) {
           </div>
 
           <div
-            style={cardStyle}
+            style={{ ...cardStyle, opacity: loading ? 0.6 : 1, pointerEvents: loading ? 'none' : 'auto' }}
             onClick={() => choose('teacher')}
             onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 12px 28px rgba(0,0,0,0.08)'; e.currentTarget.style.borderColor = 'var(--accent)'; }}
             onMouseLeave={(e) => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.borderColor = 'var(--border)'; }}
@@ -116,6 +159,16 @@ export default function RoleSelectScreen({ onSelect }) {
             </div>
           </div>
         </div>
+
+        {error && (
+          <div style={{
+            marginTop: 16, fontSize: 12.5, color: 'var(--danger, #dc2626)',
+            padding: '10px 12px', background: 'rgba(220,38,38,0.08)', borderRadius: 8,
+            lineHeight: 1.5,
+          }}>
+            {error}
+          </div>
+        )}
       </div>
     </div>
   );

@@ -15,8 +15,9 @@ import {
   getAuthErrorMessage,
 } from '../lib/firebaseAuth';
 import { isObviouslyBadDomain, getTypoSuggestion } from '../lib/emailDomainCheck';
-import { isFacultyEmailFormat } from '../lib/facultyEmailVerify';
-import { createFacultyAccountDoc } from '../lib/facultySync';
+// RESTRUCTURE: isFacultyEmailFormat and createFacultyAccountDoc moved to
+// RoleSelectScreen.jsx — faculty-specific logic now runs at role-choice
+// time, not inside the generic auth step (see handleEmail comment below).
 import { setAccountRole, persistAccountRoleToServer } from '../lib/accountRole';
 
 const inputStyle = {
@@ -92,7 +93,9 @@ export default function AuthModal({ mode = 'login', isUpgrade = false, onClose, 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [resetSent, setResetSent] = useState(false);
-  const [showEmailForm, setShowEmailForm] = useState(isFaculty);
+  // BUGFIX: showEmailForm removed — email/password form is now always
+  // shown expanded (no longer collapsed behind a "or use email" toggle),
+  // since it's the primary path and Google is now the secondary option.
   const [domainWarning, setDomainWarning] = useState(false);
   const [typoSuggestion, setTypoSuggestion] = useState(null);
 
@@ -137,6 +140,9 @@ export default function AuthModal({ mode = 'login', isUpgrade = false, onClose, 
       // (and only, permanent) role write; for a returning account,
       // firestore.rules already rejects overwriting an existing
       // users/{uid}.role, so this is a harmless no-op.
+      // RESTRUCTURE note: Google is unaffected by the auth/role-select
+      // reorder — since it's always student and never faculty, there's
+      // no ambiguous role to defer here, unlike email Register above.
       setAccountRole('student');
       persistAccountRoleToServer('student').catch(() => {});
       onSuccess?.(user, { linked: isUpgrade });
@@ -170,15 +176,12 @@ export default function AuthModal({ mode = 'login', isUpgrade = false, onClose, 
       return;
     }
 
-    // Faculty-only gate (Deviation 1): only checked on the register/signup
-    // path, not on login — a returning verified teacher's email suffix was
-    // already validated at signup time, so re-checking on every login
-    // would just be redundant friction (and would break if KUET ever adds
-    // a new department subdomain after someone already signed up under it).
-    if (isFaculty && !isUpgrade && tab === 'register' && !isFacultyEmailFormat(email)) {
-      setError('This doesn\'t look like a valid KUET institutional email (a *.kuet.ac.bd address, not @stud.kuet.ac.bd).');
-      return;
-    }
+    // RESTRUCTURE: the faculty email-format pre-check used to live here,
+    // gated on isFaculty. Post-restructure, 'auth' is always generic
+    // (role unknown), so isFaculty is never true at this point — that
+    // validation now happens in RoleSelectScreen.jsx instead, at the
+    // moment someone actually picks "Faculty Member" and their email is
+    // finally known to matter.
 
     // Domain check itself lives in firebaseAuth.js (registerWithEmail /
     // upgradeWithEmail) — that's the single enforcement point, so it
@@ -198,30 +201,16 @@ export default function AuthModal({ mode = 'login', isUpgrade = false, onClose, 
         user = await (isUpgrade
           ? upgradeWithEmail(email, password, name)
           : registerWithEmail(email, password, name));
-        // BUGFIX (see BUGFIX_SIGNUP_ROLE_ORDER.md): role is now saved to
-        // the server at THIS exact point — right after the real account
-        // is created, before onSuccess even fires — matching the
-        // requested flow ("Create Account -> Save Role Permanently")
-        // instead of relying on App.jsx's handleAuthSuccess to back-fill
-        // it afterward. `isFaculty` here already reflects whichever role
-        // was chosen at Role Select (this AuthModal was rendered with
-        // variant="faculty" specifically because accountRole was already
-        // 'teacher' — see App.jsx's `current === 'auth'` branches), so
-        // this is simply persisting that same choice the moment there's
-        // finally a real uid to attach it to.
-        const role = isFaculty ? 'teacher' : 'student';
-        setAccountRole(role);
-        persistAccountRoleToServer(role).catch(() => {});
-        // Faculty signup (not login): create faculty/{uid} with
-        // verifiedAt: null right away — the caller (App.jsx) routes to
-        // FacultyVerifyHoldingScreen next, which is where the magic-link
-        // hard gate (Deviation 2) actually happens. Firebase's own generic
-        // sendEmailVerification (fired inside registerWithEmail/
-        // upgradeWithEmail above) is harmless but not what gates anything
-        // here — our own verifiedFacultyEmails/{email} check is the gate.
-        if (isFaculty) {
-          await createFacultyAccountDoc(user.uid, email);
-        }
+        // RESTRUCTURE: role is no longer set here. Previously this ran
+        // right after AuthModal was rendered with a pre-decided
+        // variant="faculty"/"student" (chosen by Role Select, which used
+        // to run BEFORE 'auth'). Now 'auth' runs first with no role
+        // decided at all — Register just creates a plain account with NO
+        // role, and the very next queue step is 'role-select', which is
+        // the one place role actually gets chosen and persisted
+        // (RoleSelectScreen.jsx). Faculty's verifiedAt:null doc creation
+        // has moved there too, since it can't happen before a role is
+        // even picked.
       } else {
         user = await loginWithEmail(email, password);
       }
@@ -306,42 +295,10 @@ export default function AuthModal({ mode = 'login', isUpgrade = false, onClose, 
           </div>
         </div>
 
-        {/* Google button — never shown for faculty (Deviation: email+password
-            only, no Google Sign-In, no per-department config toggle) */}
-        {!isFaculty && (
-          <button style={btnGoogle} onClick={handleGoogle} disabled={loading}>
-            <svg width="18" height="18" viewBox="0 0 24 24">
-              <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-              <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-              <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
-              <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
-            </svg>
-            {loading ? 'Loading...' : 'Google দিয়ে ' + (isUpgrade || tab === 'register' ? 'Register' : 'Login')}
-          </button>
-        )}
-
-        {!showEmailForm ? (
-          <div style={{ textAlign: 'center', marginTop: 16 }}>
-            <button
-              onClick={() => setShowEmailForm(true)}
-              style={{
-                background: 'none', border: 'none', cursor: 'pointer',
-                color: 'var(--muted)', fontSize: 12.5, textDecoration: 'none',
-              }}
-            >
-              অথবা email দিয়ে {isUpgrade || tab === 'register' ? 'register' : 'login'} করো
-            </button>
-          </div>
-        ) : (
-        <>
-        {!isFaculty && (
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10, margin: '16px 0', color: 'var(--muted)', fontSize: 12 }}>
-            <div style={{ flex: 1, height: 1, background: 'var(--border)' }} />
-            email দিয়ে
-            <div style={{ flex: 1, height: 1, background: 'var(--border)' }} />
-          </div>
-        )}
-
+        {/* BUGFIX: Email/Password now shown first (expanded, not collapsed
+            behind a toggle) — Google Sign-In moved below as the secondary
+            option. Student-only reorder; faculty flow is unaffected since
+            it never shows Google at all. */}
         {!isUpgrade && (
           <div style={{ display: 'flex', gap: 0, marginBottom: 14, borderRadius: 8, overflow: 'hidden', border: '1px solid var(--border)' }}>
             {['login', 'register'].map(t => (
@@ -437,7 +394,27 @@ export default function AuthModal({ mode = 'login', isUpgrade = false, onClose, 
                   : isUpgrade ? 'Account তৈরি করো' : tab === 'login' ? 'Login' : 'Register')}
           </button>
         </div>
-        </>
+
+        {/* Google button — never shown for faculty (Deviation: email+password
+            only, no Google Sign-In, no per-department config toggle).
+            BUGFIX: moved below the email/password form (was above it). */}
+        {!isFaculty && (
+          <>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10, margin: '16px 0', color: 'var(--muted)', fontSize: 12 }}>
+              <div style={{ flex: 1, height: 1, background: 'var(--border)' }} />
+              অথবা
+              <div style={{ flex: 1, height: 1, background: 'var(--border)' }} />
+            </div>
+            <button style={btnGoogle} onClick={handleGoogle} disabled={loading}>
+              <svg width="18" height="18" viewBox="0 0 24 24">
+                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+              </svg>
+              {loading ? 'Loading...' : 'Google দিয়ে ' + (isUpgrade || tab === 'register' ? 'Register' : 'Login')}
+            </button>
+          </>
         )}
 
         {/* Anonymous skip (only on initial, not upgrade) — never shown for

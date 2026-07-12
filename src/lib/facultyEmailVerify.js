@@ -26,6 +26,7 @@ const TESTING_BYPASS_EMAILS = ['guluvai479@gmail.com'];
 import { initializeApp, getApps } from 'firebase/app';
 import {
   getAuth, sendSignInLinkToEmail, isSignInWithEmailLink, signInWithEmailLink,
+  setPersistence, inMemoryPersistence, signOut,
 } from 'firebase/auth';
 import { getFirestore, doc, setDoc, getDoc, serverTimestamp } from 'firebase/firestore';
 import { db, firebaseConfig } from './firebase';
@@ -37,6 +38,16 @@ function getVerifyApp() {
 }
 const verifyAuth = getAuth(getVerifyApp());
 const verifyDb = getFirestore(getVerifyApp()); // same project/database, Firestore auth context follows verifyAuth
+
+// BUGFIX: same fix as kuetEmailVerify.js — verifyAuth used to default to
+// browserLocalPersistence, leaving a real, persistent second Firebase Auth
+// user in this browser's storage after every completed verification
+// (visible in Firebase Console as a separate account from the teacher's
+// actual main-session account — this is what showed up as "signing in
+// connects two accounts/providers"). in-memory persistence plus the
+// explicit signOut() after the Firestore write below means nothing
+// outlives the single verification moment.
+setPersistence(verifyAuth, inMemoryPersistence).catch(() => {});
 
 // Any *.kuet.ac.bd subdomain matches (@ese.kuet.ac.bd, @me.kuet.ac.bd,
 // @cse.kuet.ac.bd, etc.) — which department doesn't matter, cross-dept
@@ -152,9 +163,15 @@ export async function completeFacultyVerificationLink(url = window.location.href
         }, { merge: true });
       } catch (writeErr) {
         if (writeErr?.code !== 'permission-denied') {
+          await signOut(verifyAuth).catch(() => {});
           return { status: 'error', message: 'Sign-in succeeded but the verification record could not be saved. Please try again, or contact the developer if this keeps happening.' };
         }
       }
+      // BUGFIX: sign out of the throwaway verify session the moment its
+      // job (the Firestore write above) is done — the main session
+      // (auth, from firebase.js, holding the teacher's actual account)
+      // was never touched by any of this.
+      await signOut(verifyAuth).catch(() => {});
       return { status: 'success', email: verifiedEmail };
     } catch (err) {
       window.history.replaceState(null, '', window.location.pathname);
