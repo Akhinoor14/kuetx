@@ -115,17 +115,31 @@ service cloud.firestore {
         (crCount(groupId) <= 0 && isVerifiedMember(groupId));
     }
 
-    // ── Faculty Module (§10 of the merged Faculty Module prompt) ─────────
-    // isVerifiedFaculty checks the hard verification gate (Deviation 2):
-    // a faculty/{uid} doc existing is NOT enough on its own — verifiedAt
-    // must be set, which only happens after the magic-link flow confirms
-    // mailbox ownership (see facultyEmailVerify.js / facultySync.js).
-    // Without the verifiedAt check here, anyone who can create their own
-    // faculty/{uid} doc (allowed, see the `match /faculty/{uid}` block
-    // below) would bypass verification entirely.
+    // ── Faculty Module — UPDATED for auto-approval policy ────────────────
+    // Faculty accounts are now auto-active on signup: any faculty/{uid}
+    // doc existing is enough for normal access (classes, sessions,
+    // schedules, roster reads, etc). isFaculty() is the new baseline check
+    // used everywhere that used to require full verification.
+    //
+    // isVerifiedFaculty() is now the narrower "Blue Tick" check — still
+    // verifiedAt != null, but verifiedAt is now only ever set by the
+    // Founder/Admin approving a (server-auto-created) manualVerifyRequests
+    // doc, not by the old email magic-link flow. Kept as a hard gate ONLY
+    // for the two things that need it: posting a graded/marked notice,
+    // and writing student marks. Everything else uses isFaculty().
+    function isFaculty(uid) {
+      return exists(/databases/$(database)/documents/faculty/$(uid));
+    }
+
     function isVerifiedFaculty(uid) {
       return exists(/databases/$(database)/documents/faculty/$(uid))
         && get(/databases/$(database)/documents/faculty/$(uid)).data.verifiedAt != null;
+    }
+
+    function isFacultyFor(groupId, assignmentId) {
+      return isFaculty(request.auth.uid)
+        && request.auth.uid in
+           get(/databases/$(database)/documents/groups/$(groupId)/facultyAssignments/$(assignmentId)).data.teacherUids;
     }
 
     function isVerifiedFacultyFor(groupId, assignmentId) {
@@ -277,28 +291,24 @@ service cloud.firestore {
     // title; officialEmail isn't secret, it's an institutional address).
     // Create must start unverified (verifiedAt: null) — mirrors
     // facultySync.js's createFacultyAccountDoc(), which always writes it
-    // that way. Update allows the account to edit its own profile fields
-    // freely, but verifiedAt can only ever transition null -> set, and
-    // ONLY if a matching verifiedFacultyEmails/{email} doc already exists
-    // — i.e. the magic-link flow (a SEPARATE Firebase app session, see
-    // facultyEmailVerify.js) already proved mailbox ownership. Without
-    // this exists() check, verifiedAt could be self-granted by any
-    // authenticated client, making Deviation 2's hard gate purely
-    // client-side theater instead of an actual enforced boundary.
+    // that way. Faculty accounts are auto-active the moment this doc
+    // exists (see isFaculty() above) — verifiedAt is now purely the
+    // "Blue Tick" flag, and it can ONLY ever be set by the Founder/Admin
+    // approving the account (AdminDashboard's Approvals tab), never by
+    // the faculty account itself. This closes the same self-grant risk
+    // the old exists(verifiedFacultyEmails/...) check closed, just
+    // against a different writer (Admin approval action, not a magic-link
+    // bridge).
     // -------------------------------------------------------------
     match /faculty/{uid} {
       allow read: if isSignedIn();
       allow create: if isSignedIn()
         && request.auth.uid == uid
         && request.resource.data.verifiedAt == null;
-      allow update: if isSignedIn() && request.auth.uid == uid && (
-        request.resource.data.verifiedAt == resource.data.verifiedAt
-        || (
-          resource.data.verifiedAt == null
-          && request.resource.data.verifiedAt != null
-          && exists(/databases/$(database)/documents/verifiedFacultyEmails/$(resource.data.officialEmail))
-        )
-      );
+      allow update: if (isSignedIn() && request.auth.uid == uid
+          && request.resource.data.verifiedAt == resource.data.verifiedAt)
+        || (isAdmin()
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['verifiedAt', 'verifiedBy']));
       allow delete: if isAdmin();
 
       // BUGFIX: this subcollection previously had NO rules block at all.
@@ -326,11 +336,11 @@ service cloud.firestore {
     }
 
     // -------------------------------------------------------------
-    // Institutional verification facts for FACULTY emails — the direct
-    // counterpart to verifiedRolls above, same rationale: written only by
-    // the separate kuetFacultyVerify app session (facultyEmailVerify.js),
-    // never the visitor's main session. Consumed by faculty/{uid}'s update
-    // rule above as the actual hard-gate check.
+    // LEGACY — the old email magic-link/OTP faculty-verify path wrote
+    // here; that flow is disabled under the auto-approval policy (Blue
+    // Tick is now Founder-approved via manualVerifyRequests instead, see
+    // faculty/{uid}'s update rule above). Left in place, unused, rather
+    // than deleted, in case anything downstream still reads it.
     // -------------------------------------------------------------
     match /verifiedFacultyEmails/{email} {
       allow read: if isSignedIn();
@@ -622,17 +632,10 @@ service cloud.firestore {
       }
 
       match /members/{memberUid} {
-        // BUGFIX: verified faculty had NO read access here at all — a
-        // teacher opening "Students & CR" on their own class hit
-        // permission-denied every time, since none of isAdmin/self/
-        // isGroupMember(students only)/isCLFor/isHeadOfOps/
-        // isSCLForGroup cover a faculty account. Added isVerifiedFaculty()
-        // matching the exact same precedent already used for
-        // facultyAssignments' own read rule a few blocks down (broad
-        // "any verified faculty can read" rather than scoped to one
-        // specific assignment/group — same design choice, applied
-        // consistently here instead of being missed).
-        allow read: if isAdmin() || request.auth.uid == memberUid || isGroupMember(groupId) || isCLFor(groupId) || isHeadOfOps() || isSCLForGroup(groupId) || isVerifiedFaculty(request.auth.uid);
+        // Any faculty account (verified or not — auto-approval policy)
+        // can read "Students & CR" for a class they're on, same as
+        // Admin/CL/HeadOfOps/SCL/self/group-member.
+        allow read: if isAdmin() || request.auth.uid == memberUid || isGroupMember(groupId) || isCLFor(groupId) || isHeadOfOps() || isSCLForGroup(groupId) || isFaculty(request.auth.uid);
         allow create: if (isRealAccount() && request.auth.uid == memberUid
                         && request.resource.data.role == 'member'
                         && (request.resource.data.verified == false
@@ -797,14 +800,13 @@ service cloud.firestore {
       // assignmentEntries exactly.
       match /plannerLogEntries/{entryId} {
         allow read: if isAdmin() || isGroupMember(groupId);
-        // Widened for the Faculty Module (§8.8): a verified faculty
-        // account may also write session-count logs here (see
+        // Any faculty account (auto-approval policy — see
         // facultySessionSync.js's logFacultySession, which stamps
         // loggedBy: {uid, role:'faculty', name} on top of the same
         // updatedBy convention every other write in this collection
         // already uses) — the isContentEditor(groupId) branch (CR/ACR/
         // CL/Admin) is unchanged from before.
-        allow create, update: if (isContentEditor(groupId) || isVerifiedFaculty(request.auth.uid))
+        allow create, update: if (isContentEditor(groupId) || isFaculty(request.auth.uid))
           && request.resource.data.updatedBy.uid == request.auth.uid;
         allow delete: if false; // soft-delete only, via update
       }
@@ -817,10 +819,12 @@ service cloud.firestore {
 
       match /notices/{noticeId} {
         allow read: if isAdmin() || isGroupMember(groupId);
-        // Widened for the Faculty Module (§8.10): a verified faculty
-        // account may also post into this same feed (facultyNoticeSync.js's
-        // postFacultyNotice, tagged from:'Teacher') — the CR/ACR/CL/Admin
-        // branch is unchanged.
+        // Faculty notices REQUIRE the Blue Tick (isVerifiedFaculty) —
+        // this is the one deliberate hard gate left in the auto-approval
+        // policy: any faculty account can teach/manage classes right
+        // away, but posting into the notice feed (which can carry
+        // marks/CT input) needs Founder-approved verification first. The
+        // CR/ACR/CL/Admin branch is unchanged.
         allow create: if isGroupCR(groupId) || isGroupACR(groupId) || isCLFor(groupId) || isAdmin() || isVerifiedFaculty(request.auth.uid);
         allow update, delete: if isCLFor(groupId) || isAdmin();
       }
@@ -829,41 +833,48 @@ service cloud.firestore {
       // Faculty Module (§10 of the merged Faculty Module prompt).
       // -----------------------------------------------------------
       match /facultyAssignments/{assignmentId} {
-        allow read: if isAdmin() || isGroupMember(groupId) || isVerifiedFaculty(request.auth.uid);
+        allow read: if isAdmin() || isGroupMember(groupId) || isFaculty(request.auth.uid);
 
-        // Create: a verified faculty account creating/joining their own
-        // assignment (§4 item 1, the primary teacher-initiated on-ramp),
-        // or CR/ACR/CL/Admin (forward-compatible: the CR-initiated path,
-        // §4 item 2, only writes routineEntries from the client today, but
-        // this allowance means a future CR-facing "create the real
-        // assignment" action wouldn't need another rules edit).
-        allow create: if isVerifiedFaculty(request.auth.uid)
+        // Create: any faculty account creating/joining their own
+        // assignment (§4 item 1, the primary teacher-initiated on-ramp —
+        // auto-approval policy, no verification needed just to start
+        // teaching a class), or CR/ACR/CL/Admin (forward-compatible: the
+        // CR-initiated path, §4 item 2, only writes routineEntries from
+        // the client today, but this allowance means a future CR-facing
+        // "create the real assignment" action wouldn't need another
+        // rules edit).
+        allow create: if isFaculty(request.auth.uid)
           || isGroupCR(groupId) || isGroupACR(groupId) || isCLFor(groupId) || isAdmin();
 
         // Update: either teacher already on the assignment (joining as
         // the 2nd slot, editing day/time, ending/soft-deleting per §8.6),
         // or the same CR/staff tier that can create one.
-        allow update: if isVerifiedFacultyFor(groupId, assignmentId)
+        allow update: if isFacultyFor(groupId, assignmentId)
           || isGroupCR(groupId) || isGroupACR(groupId) || isCLFor(groupId) || isAdmin();
 
         allow delete: if isAdmin(); // soft-delete via status flag is the normal path, not a real delete
 
         match /sessions/{sessionId} {
-          allow read: if isVerifiedFacultyFor(groupId, assignmentId) || isGroupCR(groupId) || isGroupACR(groupId) || isAdmin();
-          allow write: if isVerifiedFacultyFor(groupId, assignmentId) || isAdmin();
+          allow read: if isFacultyFor(groupId, assignmentId) || isGroupCR(groupId) || isGroupACR(groupId) || isAdmin();
+          allow write: if isFacultyFor(groupId, assignmentId) || isAdmin();
         }
 
         match /studentRecords/{studentUid} {
           // Read: the student themself, either assigned teacher, or the
           // group's CR/staff tier.
           allow read: if (isSignedIn() && request.auth.uid == studentUid)
-            || isVerifiedFacultyFor(groupId, assignmentId)
+            || isFacultyFor(groupId, assignmentId)
             || isContentEditor(groupId) || isAdmin();
 
-          // Write: ONLY an assigned, verified teacher, and only their OWN
-          // quota slot (§9.2's independent-45-per-teacher rule enforced
-          // here, not just in the UI). Split into `create` (first-ever
-          // save for a student — the doc doesn't exist yet, so
+          // Write: ONLY an assigned, VERIFIED (Blue Tick) teacher, and
+          // only their OWN quota slot (§9.2's independent-45-per-teacher
+          // rule enforced here, not just in the UI). This is the other
+          // deliberate hard gate in the auto-approval policy, alongside
+          // notices/{noticeId} above — marks are graded/consequential
+          // data, so writing them still requires Founder-approved
+          // verification even though everything else about teaching a
+          // class doesn't. Split into `create` (first-ever save for a
+          // student — the doc doesn't exist yet, so
           // resource.data.diff(...) isn't usable, since `resource` is null
           // on a genuine create) and `update` (every subsequent save,
           // which safely diffs against the prior doc). Missing this split

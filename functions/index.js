@@ -99,6 +99,59 @@ exports.onGroupNoticeCreate = onDocumentCreated('groups/{groupId}/notices/{notic
 });
 
 /**
+ * Auto-approval policy — student join notification (non-blocking).
+ *
+ * Students no longer need CR approval to join their department/batch
+ * group (see groups/{groupId}/members create rule in firestore.rules —
+ * that was already possible, this just removes the client-side UI gate
+ * that used to sit in front of it). CR/ACR still get told, via a small
+ * system-authored notice in the SAME group notices feed they already
+ * read (subscribeGroupNotices in groupSync.js) — this is server-side
+ * (Admin SDK), not a client write, so it can't be spoofed and doesn't
+ * need its own new firestore.rules allowance.
+ */
+exports.onMemberJoin = onDocumentCreated('groups/{groupId}/members/{memberUid}', async (event) => {
+  const member = event.data?.data();
+  if (!member || member.role !== 'member') return; // only plain joins, not CR/ACR appointments
+  const { groupId } = event.params;
+  const name = member.name || member.roll || 'A student';
+  await db.collection('groups').doc(groupId).collection('notices').add({
+    title: 'New student joined',
+    body: `${name} joined this class.`,
+    postedBy: { name: 'KUETx', role: 'system' },
+    system: true,
+    createdAt: FieldValue.serverTimestamp(),
+  });
+});
+
+/**
+ * Auto-approval policy — faculty signup notification (non-blocking).
+ *
+ * Faculty accounts are auto-active immediately (see faculty/{uid} create
+ * rule in firestore.rules) — no email verification needed to start
+ * teaching. This trigger auto-creates the manualVerifyRequests doc the
+ * Founder's existing Approvals tab already knows how to show/approve
+ * (see manualVerifyRequests.js — this reuses that exact pipeline rather
+ * than inventing a new one), so the Founder always gets pinged for Blue
+ * Tick review without the faculty member having to ask for it.
+ */
+exports.onFacultySignup = onDocumentCreated('faculty/{uid}', async (event) => {
+  const faculty = event.data?.data();
+  const { uid } = event.params;
+  if (!faculty) return;
+  await db.collection('manualVerifyRequests').add({
+    role: 'faculty',
+    name: faculty.name || '',
+    email: faculty.officialEmail || '',
+    roll: null,
+    dept: faculty.dept || null,
+    uid,
+    status: 'pending',
+    requestedAt: FieldValue.serverTimestamp(),
+  });
+});
+
+/**
  * OTP-code email verification (shared by student + faculty flows).
  *
  * "OTP main, magic link backup" — this doesn't replace the existing

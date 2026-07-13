@@ -3,17 +3,15 @@ import { useIsFaculty } from '../hooks/useIsFaculty';
 
 /**
  * Blocks access to /faculty/* routes unless the current user is either:
- *   - a real, verified faculty account (faculty/{uid}.verifiedAt != null), or
- *   - the Founder, via the pure UI bypass in useIsFaculty (Deviation 9 —
- *     admins/{uid} existing is enough, no faculty/{uid} doc or campus
- *     email required, no second account created).
+ *   - a real faculty account (faculty/{uid} doc exists — auto-approval
+ *     policy, verifiedAt/"Blue Tick" is NOT required just to use the
+ *     Teacher shell), or
+ *   - the Founder, via the pure UI bypass in useIsFaculty (admins/{uid}
+ *     existing is enough, no faculty/{uid} doc or campus email required).
  *
- * Deliberately does NOT accept an unverified faculty/{uid} doc as
- * sufficient — Deviation 2 makes verification a hard gate, not a soft
- * badge, since there's no curated whitelist behind the suffix-match
- * signup check (Deviation 1). Mirrors RequireCR.jsx's loading/denied
- * shape exactly; copy is English per Deviation 3 (faculty-side UI has no
- * Bangla except the pre-role-select screen).
+ * For the two actions that DO still require the Blue Tick — posting a
+ * notice and writing student marks — use RequireVerifiedFaculty.jsx
+ * instead, not this one.
  */
 export default function RequireFaculty({ children }) {
   const { isFaculty, isResolved } = useIsFaculty();

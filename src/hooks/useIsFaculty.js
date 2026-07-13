@@ -63,11 +63,16 @@ export function useIsFaculty() {
 
     const applyProfile = (profile) => {
       if (founderResolved && isFounder) return; // Founder bypass always wins.
-      const verified = !!profile?.verifiedAt;
-      setIsFaculty(verified);
+      // Auto-approval policy: any faculty/{uid} doc existing means the
+      // account is active — verifiedAt (Blue Tick) is no longer required
+      // for isFaculty. Downstream code that needs the Blue Tick
+      // specifically (posting notices/marks) reads facultyProfile.verifiedAt
+      // directly instead of gating on this hook's isFaculty flag.
+      const active = !!profile;
+      setIsFaculty(active);
       setIsFounderBypass(false);
       setFacultyProfile(profile);
-      writeCache(verified, false);
+      writeCache(active, false);
       setIsResolved(true);
     };
 

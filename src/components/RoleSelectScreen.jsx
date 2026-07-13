@@ -71,10 +71,11 @@ export default function RoleSelectScreen({ onSelect }) {
       setAccountRole(role);
       await persistAccountRoleToServer(role);
       if (role === 'teacher') {
-        // Faculty doc creation (verifiedAt: null) moved here from
-        // AuthModal's old register path — App.jsx's queue routes to
-        // FacultyVerifyHoldingScreen next, which is where the magic-link
-        // hard gate (Deviation 2) actually happens.
+        // Faculty doc creation (verifiedAt: null) happens here now.
+        // Under the auto-approval policy, faculty accounts are active as
+        // soon as this doc exists; Blue Tick approval is handled separately
+        // by the founder's manual verification queue, not by a client-side
+        // faculty-verify step.
         await createFacultyAccountDoc(auth.currentUser.uid, auth.currentUser.email);
       }
       onSelect?.(role);

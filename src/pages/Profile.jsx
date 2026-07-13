@@ -27,7 +27,6 @@ import { isRollInstitutionallyVerified } from '../lib/kuetEmailVerify';
 import { getGroupId } from '../lib/groupUtils';
 import { subscribeMyRole, requestLeaveCR } from '../lib/groupSync';
 import ClaimCRCard, { ClaimCRInlineButton } from '../components/ClaimCRCard';
-import ProfileVerifyBanner from '../components/ProfileVerifyBanner';
 import EmailVerifyBanner from '../components/EmailVerifyBanner';
 import EmailFlagBanner from '../components/EmailFlagBanner';
 import BlueTick from '../components/BlueTick';
@@ -1073,10 +1072,10 @@ export default function Profile() {
         <EmailVerifyBanner onVerified={() => setEmailVerified(true)} />
       )}
 
-      {/* ── KUET Email Verify Banner ── */}
-      {hasMinProfile && isKuetVerified === false && (
-        <ProfileVerifyBanner onVerified={() => setIsKuetVerified(true)} />
-      )}
+      {/* ── KUET Email Verify Banner removed — auto-approval policy,
+          students join fully verified/active immediately, nothing to
+          nag here. isKuetVerified/BlueTick badge above still reflects
+          the actual state, just no longer gates or prompts anything. ── */}
 
       {/* ── CR Banner ──
           NOTE: the old "Disable CR" button here only flipped the local,

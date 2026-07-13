@@ -30,6 +30,7 @@ import {
 import { exportStudentMarksPdf, exportClassSummaryPdf } from '../../lib/facultyPdfExport';
 import { logFacultySession } from '../../lib/facultySessionSync';
 import { getFacultyDoc } from '../../lib/facultySync';
+import { useIsFaculty } from '../../hooks/useIsFaculty';
 import { auth } from '../../lib/firebase';
 import { notify } from '../../lib/notify';
 import { TIME_MODELS } from '../../lib/timeModels';
@@ -409,6 +410,7 @@ function MarksSetupForm({ assignment, groupId, teacherSlot, onSaved }) {
 }
 
 function MarksTab({ assignment, groupId }) {
+  const { isFounderBypass, facultyProfile, isResolved: isFacultyResolved } = useIsFaculty();
   const [members, setMembers] = useState(null);
   const [sessions, setSessions] = useState(null);
   const [records, setRecords] = useState(null);
@@ -456,6 +458,25 @@ function MarksTab({ assignment, groupId }) {
     return (
       <div style={{ color: 'var(--muted)', fontSize: 13, padding: '16px 0' }}>
         You aren't one of the two teachers on record for this class assignment, so marks entry isn't available here.
+      </div>
+    );
+  }
+
+  // Blue Tick gate (auto-approval policy): everything else on this page
+  // (Syllabus/Schedule/Sessions/Attendance) is open to any faculty
+  // account, but marks are graded/consequential data — this mirrors the
+  // exact same isVerifiedFaculty hard gate firestore.rules enforces on
+  // the actual write (saveStudentMarks -> studentRecords create/update),
+  // it just also shows a clear message here instead of letting the
+  // Firestore write silently fail.
+  if (!isFacultyResolved) {
+    return <div style={{ color: 'var(--muted)', fontSize: 13, padding: '16px 0' }}>Checking verification status...</div>;
+  }
+  if (!isFounderBypass && !facultyProfile?.verifiedAt) {
+    return (
+      <div style={{ color: 'var(--muted)', fontSize: 13, padding: '16px 0', lineHeight: 1.6 }}>
+        🔒 Marks entry needs Blue Tick verification first. Your request is already in the
+        Founder&rsquo;s review queue — you&rsquo;ll get access here as soon as it&rsquo;s approved.
       </div>
     );
   }

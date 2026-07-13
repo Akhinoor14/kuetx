@@ -14,7 +14,6 @@ import GlobalToasts from './components/GlobalToasts';
 import NoticeToast from './components/NoticeToast';
 import PushPermissionBanner from './components/PushPermissionBanner';
 import BackupReminderGate from './components/BackupReminderGate';
-import VerifyReminderPopup from './components/VerifyReminderPopup';
 import ProfileCompleteReminder from './components/ProfileCompleteReminder';
 import AuthModal from './components/AuthModal';
 import ProfileSetupModal from './components/ProfileSetupModal';
@@ -23,11 +22,8 @@ import RequireStaff from './components/RequireStaff';
 import useFirebaseAuth from './hooks/useFirebaseAuth';
 import DataSafeToast from './components/DataSafeToast';
 import ClassJoinIntro from './components/ClassJoinIntro';
-import KuetVerifyEmailConfirmModal from './components/KuetVerifyEmailConfirmModal';
-import FacultyVerifyEmailConfirmModal from './components/FacultyVerifyEmailConfirmModal';
 import RoleSelectScreen from './components/RoleSelectScreen';
 import FacultyProfileSetupModal from './components/FacultyProfileSetupModal';
-import FacultyVerifyHoldingScreen from './components/FacultyVerifyHoldingScreen';
 import { getAccountRole, setAccountRole, fetchServerAccountRole, persistAccountRoleToServer } from './lib/accountRole';
 import { getFacultyDoc, markFacultyVerifiedIfEmailConfirmed, isFacultyProfileComplete } from './lib/facultySync';
 import { store, getProfile, isProfileComplete, DEFAULT_PROFILE, normalizeProfileForSave, validateProfileForSave, ensureDBReady, tagProfileOwner, isProfileStaleForUid } from './store/store';
@@ -73,6 +69,7 @@ import SubgroupHub from './components/nav-system/SubgroupHub';
 import CRHub from './components/nav-system/CRHub';
 import AdminHub from './components/nav-system/AdminHub';
 import RequireFaculty from './components/RequireFaculty';
+import RequireVerifiedFaculty from './components/RequireVerifiedFaculty';
 import { NAV_FACULTY } from './nav-faculty';
 import FacultyDashboard from './pages/faculty/FacultyDashboard';
 import FacultyProfile from './pages/faculty/FacultyProfile';
@@ -203,7 +200,16 @@ function Layout({ authState, onboardingActive }) {
             <Route path="/faculty/classes" element={<RequireFaculty><FacultyClasses /></RequireFaculty>} />
             <Route path="/faculty/classes/:assignmentId" element={<RequireFaculty><FacultyClassDetail /></RequireFaculty>} />
             <Route path="/faculty/schedule" element={<RequireFaculty><FacultySchedule /></RequireFaculty>} />
-            <Route path="/faculty/notices" element={<RequireFaculty><FacultyNotices /></RequireFaculty>} />
+            {/* Blue Tick gate: notices can carry marks/CT input, so this
+                route needs RequireVerifiedFaculty on top of RequireFaculty
+                (auto-approval policy — every other faculty route above
+                only needs a faculty account to exist, not the Blue Tick).
+                NOTE: FacultyClassDetail's marks-entry UI (facultyMarksSync.js
+                saveStudentMarks) also needs an equivalent inline
+                verified-check — that page isn't notice-only, so it can't
+                be route-gated the same way; gate the marks section inside
+                the component instead. */}
+            <Route path="/faculty/notices" element={<RequireFaculty><RequireVerifiedFaculty><FacultyNotices /></RequireVerifiedFaculty></RequireFaculty>} />
             <Route path="/faculty/contact" element={<RequireFaculty><FacultyContact /></RequireFaculty>} />
             <Route path="/faculty/question-bank" element={<RequireFaculty><QuestionBank /></RequireFaculty>} />
             <Route path="/faculty/resources" element={<RequireFaculty><SubgroupHub navSource={NAV_FACULTY} group="Campus" subgroup="Resources" /></RequireFaculty>} />
@@ -404,12 +410,14 @@ async function buildQueue(isAnonymous) {
       // role-select entirely per §7, so this branch is only ever reached
       // by an account that genuinely chose "Faculty Member".
       const fdoc = await getFacultyDoc(auth.currentUser?.uid).catch(() => null);
-      if (!fdoc?.verifiedAt) {
-        // Hard gate (Deviation 2) — verification blocks everything else,
-        // including profile setup, since an unverified account isn't
-        // confirmed to be real faculty yet.
-        q.push('faculty-verify');
-      } else if (!isFacultyProfileComplete(fdoc)) {
+      // Auto-approval policy: faculty accounts are active the moment
+      // faculty/{uid} exists — verifiedAt (Blue Tick) is no longer a
+      // blocking gate here, it only gates posting notices/marks
+      // downstream (see RequireVerifiedFaculty / firestore.rules). If
+      // the faculty doc doesn't exist yet for some reason, fall through
+      // the same as "profile incomplete" so profile setup still creates
+      // it rather than leaving the queue empty.
+      if (!isFacultyProfileComplete(fdoc)) {
         // FacultyProfileSetupModal now exists (mandatory, full-screen,
         // faculty-shaped fields) — a verified-but-incomplete faculty
         // account gets sent there instead of falling through to the
@@ -462,7 +470,6 @@ export default function App() {
   // Complete a KUET email verification link, if the current URL is one —
   // runs once at boot so clicking the emailed link works even in a fresh
   // tab/device that never opened the verify widget itself. No-op otherwise.
-  const [verifyEmailPrompt, setVerifyEmailPrompt] = useState(null); // { busy, error } | null
   useEffect(() => {
     let cancelled = false;
 
@@ -471,54 +478,23 @@ export default function App() {
       const result = await completeKuetVerificationLink(window.location.href, emailOverride);
       if (cancelled) return;
 
-      if (result.status === 'needs-email') {
-        // Cross-device/cross-profile click — ask nicely via the modal
-        // instead of a raw window.prompt(). The modal's onConfirm below
-        // re-runs this same function with the typed email.
-        setVerifyEmailPrompt({ busy: false, error: '' });
-        return;
-      }
       if (result.status === 'success') {
-        setVerifyEmailPrompt(null);
-        notify('KUET email verify হয়ে গেছে! নামের পাশে blue tick দেখাবে।', 'success');
-        // Any already-mounted page (e.g. Profile, which only checks once
-        // on mount) needs to know this just happened rather than staying
-        // stuck showing "not verified" until a manual refresh.
+        notify('KUET email verified! Your blue tick will appear next to your name.', 'success');
         window.dispatchEvent(new CustomEvent('kuetx:kuet-email-verified', { detail: { roll: result.roll } }));
-        // If they'd already joined their class group before verifying,
-        // that member doc was created with verified:false and nothing
-        // else ever revisits it — fix it now so "Pending" doesn't get
-        // stuck forever.
         const gid = getGroupId(getProfile());
         syncOwnVerification(gid, auth.currentUser?.uid).catch((e) => console.warn('[App] syncOwnVerification failed', e));
         return;
       }
       if (result.status === 'error') {
-        setVerifyEmailPrompt(null);
         console.warn('[KUETx] KUET email verify link:', result.message);
         notify(result.message, 'error', 6000);
       }
-      // 'not-a-link' → nothing to do, most page loads hit this silently.
+      // 'not-a-link' and 'needs-email' → nothing to do.
     }
 
     run();
     return () => { cancelled = true; };
   }, []);
-
-  const handleVerifyEmailConfirm = async (typedEmail) => {
-    setVerifyEmailPrompt((p) => ({ ...p, busy: true, error: '' }));
-    const { completeKuetVerificationLink } = await import('./lib/kuetEmailVerify');
-    const result = await completeKuetVerificationLink(window.location.href, typedEmail);
-    if (result.status === 'success') {
-      setVerifyEmailPrompt(null);
-      notify('KUET email verify হয়ে গেছে! নামের পাশে blue tick দেখাবে।', 'success');
-      window.dispatchEvent(new CustomEvent('kuetx:kuet-email-verified', { detail: { roll: result.roll } }));
-      const gid = getGroupId(getProfile());
-      syncOwnVerification(gid, auth.currentUser?.uid).catch((e) => console.warn('[App] syncOwnVerification failed', e));
-    } else {
-      setVerifyEmailPrompt({ busy: false, error: result.message || 'Verify করতে সমস্যা হয়েছে, আবার চেষ্টা করো।' });
-    }
-  };
 
   // BUGFIX: faculty magic-link verification previously only ran INSIDE
   // FacultyVerifyHoldingScreen, which only mounts when the onboarding
@@ -535,7 +511,6 @@ export default function App() {
   // KUET-email-verify handling above: a boot-level effect, independent of
   // the onboarding queue, so the link works regardless of which tab/device/
   // queue-state it's opened from. See BUGFIX_FACULTY_VERIFY_CROSS_DEVICE.md.
-  const [facultyVerifyPrompt, setFacultyVerifyPrompt] = useState(null); // { busy, error } | null
   useEffect(() => {
     let cancelled = false;
 
@@ -545,19 +520,7 @@ export default function App() {
       const result = await completeFacultyVerificationLink(window.location.href, emailOverride);
       if (cancelled) return;
 
-      if (result.status === 'needs-email') {
-        // Cross-device/cross-tab click — this browser has no record of
-        // which email the link was sent to (localStorage-only, per-tab).
-        // Ask via the modal instead of silently doing nothing.
-        setFacultyVerifyPrompt({ busy: false, error: '' });
-        return;
-      }
       if (result.status === 'success') {
-        setFacultyVerifyPrompt(null);
-        // This tab may not have accountRole === 'teacher' set yet (that's
-        // exactly the cross-device case) — set it now so the onboarding
-        // queue routes correctly on the next render instead of showing
-        // Role Select to someone who just proved they're faculty.
         setAccountRole('teacher');
         const uid = auth.currentUser?.uid;
         if (uid) {
@@ -573,39 +536,15 @@ export default function App() {
         return;
       }
       if (result.status === 'error') {
-        setFacultyVerifyPrompt(null);
         console.warn('[KUETx] Faculty email verify link:', result.message);
         notify(result.message, 'error', 6000);
       }
-      // 'not-a-link' → nothing to do, most page loads hit this silently.
+      // 'not-a-link' and 'needs-email' → nothing to do.
     }
 
     run();
     return () => { cancelled = true; };
   }, []);
-
-  const handleFacultyVerifyConfirm = async (typedEmail) => {
-    setFacultyVerifyPrompt((p) => ({ ...p, busy: true, error: '' }));
-    const { completeFacultyVerificationLink } = await import('./lib/facultyEmailVerify');
-    const result = await completeFacultyVerificationLink(window.location.href, typedEmail);
-    if (result.status === 'success') {
-      setFacultyVerifyPrompt(null);
-      setAccountRole('teacher');
-      const uid = auth.currentUser?.uid;
-      if (uid) {
-        try {
-          await markFacultyVerifiedIfEmailConfirmed(uid, result.email);
-        } catch (e) {
-          console.warn('[App] markFacultyVerifiedIfEmailConfirmed failed', e);
-          setFacultyVerifyPrompt({ busy: false, error: 'Verification succeeded but could not be saved. Please try again.' });
-          return;
-        }
-      }
-      notify('Faculty email verified! You now have full access.', 'success');
-    } else {
-      setFacultyVerifyPrompt({ busy: false, error: result.message || 'Could not verify. Please try again.' });
-    }
-  };
 
   // Build queue once auth is ready so we know isAnonymous. buildQueue is now
   // async (accountRole === 'teacher' needs a Firestore read) — guarded with
@@ -810,19 +749,9 @@ export default function App() {
             onSuccess={handleAuthSuccess}
           />
         )}
-        {current === 'faculty-verify' && (
-          <FacultyVerifyHoldingScreen
-            officialEmail={authState.user?.email || ''}
-            onVerified={() => {
-              // Rebuild rather than just slicing off this one step —
-              // buildQueue() now checks isFacultyProfileComplete() right
-              // after the verifiedAt check, so a freshly-verified but
-              // still-incomplete faculty account correctly lands on
-              // 'faculty-profile' next, instead of nothing.
-              buildQueue(authState.isAnonymous).then(setQueue);
-            }}
-          />
-        )}
+        {/* faculty-verify holding screen removed — auto-approval policy,
+            faculty accounts are active immediately, no blocking
+            verification step before profile setup. */}
         {current === 'faculty-profile' && (
           <FacultyProfileSetupModal
             onSave={() => {
@@ -921,7 +850,7 @@ export default function App() {
             should stay solid white/var(--bg) the entire way through
             onboarding, only turning into the real Dashboard once every
             mandatory step is actually done. */}
-        {(!queueBuilt || current === 'role-select' || current === 'auth' || current === 'faculty-verify' || current === 'faculty-profile' || current === 'profile') ? (
+        {(!queueBuilt || current === 'role-select' || current === 'auth' || current === 'faculty-profile' || current === 'profile') ? (
           <div style={{
             position: 'fixed', inset: 0, display: 'flex', alignItems: 'center',
             justifyContent: 'center', background: 'var(--bg)', zIndex: 1,
@@ -933,10 +862,9 @@ export default function App() {
         ) : (
           <Layout authState={authState} onboardingActive={!!current} />
         )}
-        {/* Independent of the sequential onboarding queue above — this has
-            its own internal 3-day snooze + "stop once verified" logic, so it
-            doesn't need to block on / wait for the queue to finish. */}
-        {authState.authReady && !authState.isAnonymous && queue.length === 0 && <VerifyReminderPopup />}
+        {/* VerifyReminderPopup removed — auto-approval policy, students
+            join fully verified/active immediately, nothing left to nag
+            them about. */}
         {authState.authReady && !authState.isAnonymous && queue.length === 0 && <PushPermissionBanner />}
         {/* Nudges anyone who used "Finish now, add rest later" to fill in the
             full profile — but only from a later session, never right after
@@ -960,22 +888,13 @@ export default function App() {
             is still non-empty when the prompt is captured, it simply waits
             here rendered-but-gated until the queue drains, then appears on
             its own, never layered on top of another modal. */}
-        {verifyEmailPrompt && queue.length === 0 && (
-          <KuetVerifyEmailConfirmModal
-            busy={verifyEmailPrompt.busy}
-            error={verifyEmailPrompt.error}
-            onConfirm={handleVerifyEmailConfirm}
-            onCancel={() => setVerifyEmailPrompt(null)}
-          />
-        )}
-        {facultyVerifyPrompt && queue.length === 0 && (
-          <FacultyVerifyEmailConfirmModal
-            busy={facultyVerifyPrompt.busy}
-            error={facultyVerifyPrompt.error}
-            onConfirm={handleFacultyVerifyConfirm}
-            onCancel={() => setFacultyVerifyPrompt(null)}
-          />
-        )}
+        {/* KuetVerifyEmailConfirmModal / FacultyVerifyEmailConfirmModal
+            removed from render — auto-approval policy, students and
+            faculty are active immediately, so the magic-link verify
+            flow (and its confirm prompts) is disabled. The boot-time
+            link-detection effects above are left in place but are inert:
+            they only ever set verifyEmailPrompt/facultyVerifyPrompt in
+            response to a link this app no longer generates or sends. */}
         {/* Global auth modal (triggered from anywhere via window.__kuetxShowAuth) */}
         {showAuthModal && (
           <AuthModal
