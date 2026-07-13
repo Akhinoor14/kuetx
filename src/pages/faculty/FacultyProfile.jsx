@@ -16,6 +16,8 @@ import { DEPARTMENTS, INSTITUTES, BASIC_SCIENCE_DEPTS } from '../../store/store'
 import { getFacultyDoc, saveFacultyProfile } from '../../lib/facultySync';
 import { guessDeptFromFacultyEmail } from '../../lib/facultyEmailVerify';
 import { notify } from '../../lib/notify';
+import { getProfilePhotoURL } from '../../lib/profilePicture';
+import { AvatarUploadModal } from '../../components/AvatarUploadModal';
 
 // ─── Shared field styles (used only inside the edit form) ─────────────────
 const inputStyle = {
@@ -95,6 +97,8 @@ export default function FacultyProfile() {
   const [form, setForm] = useState({ name: '', title: '', dept: '', phone: '', officeRoom: '', preferredName: '' });
   const [officialEmail, setOfficialEmail] = useState('');
   const [saved, setSaved] = useState(false);
+  const [photoURL, setPhotoURL] = useState(null);
+  const [showAvatarModal, setShowAvatarModal] = useState(false);
 
   useEffect(() => {
     const uid = auth.currentUser?.uid;
@@ -119,6 +123,12 @@ export default function FacultyProfile() {
       }
       setLoading(false);
     });
+  }, []);
+
+  // Load any previously-uploaded profile photo — same shared storage
+  // (keyed by Firebase uid) the student side uses.
+  useEffect(() => {
+    getProfilePhotoURL().then(setPhotoURL).catch(() => {});
   }, []);
 
   const handleSave = async () => {
@@ -173,16 +183,34 @@ export default function FacultyProfile() {
           gap: 14, position: 'relative', overflow: 'hidden', textAlign: 'center',
         }}>
           <div
+            onClick={() => setShowAvatarModal(true)}
+            title="Click to change profile picture"
             className="profile-hero-avatar"
             style={{
               borderRadius: '50%',
-              background: 'var(--accentSoft, color-mix(in srgb, var(--accent) 15%, var(--surface, var(--card))))',
+              background: photoURL ? 'transparent' : 'var(--accentSoft, color-mix(in srgb, var(--accent) 15%, var(--surface, var(--card))))',
               border: '3px solid var(--border)',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              fontWeight: 900, color: 'var(--accent)', flexShrink: 0, overflow: 'hidden',
+              fontWeight: 900, color: 'var(--accent)', flexShrink: 0, cursor: 'pointer', overflow: 'hidden', position: 'relative',
+              transition: 'transform 0.2s, box-shadow 0.2s',
             }}
+            onMouseEnter={e => { e.currentTarget.style.transform = 'scale(1.04)'; }}
+            onMouseLeave={e => { e.currentTarget.style.transform = ''; }}
           >
-            <span>{displayName.trim().charAt(0).toUpperCase() || <Icons.User size={28} />}</span>
+            {photoURL
+              ? <img src={photoURL} alt="Profile" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              : <span>{displayName.trim().charAt(0).toUpperCase() || <Icons.User size={28} />}</span>
+            }
+            {/* Camera overlay on hover */}
+            <div style={{
+              position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.4)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              opacity: 0, transition: 'opacity 0.2s', borderRadius: '50%',
+            }}
+            onMouseEnter={e => e.currentTarget.style.opacity = '1'}
+            onMouseLeave={e => e.currentTarget.style.opacity = '0'}>
+              <Icons.Camera size={22} color="white" />
+            </div>
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6 }}>
@@ -354,6 +382,16 @@ export default function FacultyProfile() {
           </div>
         </div>
       </div>
+
+      {showAvatarModal && (
+        <AvatarUploadModal
+          currentURL={photoURL}
+          isAnon={auth.currentUser?.isAnonymous}
+          onClose={() => setShowAvatarModal(false)}
+          onUploaded={(url) => setPhotoURL(url)}
+          onDeleted={() => setPhotoURL(null)}
+        />
+      )}
     </div>
   );
 }

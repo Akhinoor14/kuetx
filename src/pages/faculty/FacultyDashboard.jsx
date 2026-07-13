@@ -92,6 +92,57 @@ export default function FacultyDashboard() {
   const todayDayLine = today.toLocaleDateString('en-BD', { weekday: 'long' });
   const facultyDisplayName = facultyProfile?.preferredName || facultyProfile?.name || '';
 
+  // Short-form designation tag (e.g. "Professor" -> "Prof.") shown right next
+  // to the name in the hero — this is the one spot every faculty member sees
+  // on login, so it should reflect their title everywhere, not just on the
+  // profile page.
+  const TITLE_SHORT_MAP = [
+    // Academic ranks
+    [/^professor\s*emeritus$/i, 'Prof. Emeritus'],
+    [/^assistant\s*professor$/i, 'Asst. Prof.'],
+    [/^associate\s*professor$/i, 'Assoc. Prof.'],
+    [/^adjunct\s*professor$/i, 'Adj. Prof.'],
+    [/^visiting\s*professor$/i, 'Visiting Prof.'],
+    [/^professor$/i, 'Prof.'],
+    [/^senior\s*lecturer$/i, 'Sr. Lecturer'],
+    [/^junior\s*lecturer$/i, 'Jr. Lecturer'],
+    [/^lecturer$/i, 'Lecturer'],
+    [/^instructor$/i, 'Instructor'],
+    [/^teaching\s*assistant$/i, 'TA'],
+    [/^research\s*assistant$/i, 'RA'],
+    [/^post[\s-]?doctoral\s*fellow$/i, 'Postdoc'],
+    // Leadership / admin designations
+    [/^vice[\s-]?chancellor$/i, 'VC'],
+    [/^pro[\s-]?vice[\s-]?chancellor$/i, 'Pro-VC'],
+    [/^dean$/i, 'Dean'],
+    [/^chairman$/i, 'Chairman'],
+    [/^head\s*of\s*department$/i, 'HoD'],
+    [/^provost$/i, 'Provost'],
+    [/^registrar$/i, 'Registrar'],
+    [/^deputy\s*registrar$/i, 'Dy. Registrar'],
+    [/^assistant\s*registrar$/i, 'Asst. Registrar'],
+    [/^proctor$/i, 'Proctor'],
+    [/^director$/i, 'Director'],
+    [/^deputy\s*director$/i, 'Dy. Director'],
+    [/^coordinator$/i, 'Coordinator'],
+    [/^advisor$/i, 'Advisor'],
+    [/^principal$/i, 'Principal'],
+    [/^vice[\s-]?principal$/i, 'Vice Principal'],
+  ];
+  const shortTitle = (() => {
+    const t = (facultyProfile?.title || '').trim();
+    if (!t) return '';
+    for (const [re, short] of TITLE_SHORT_MAP) {
+      if (re.test(t)) return short;
+    }
+    // Fallback: abbreviate leading words to initials, keep the last word
+    // full (e.g. "Deputy Registrar" -> "D. Registrar") so something short
+    // always shows even for titles we don't explicitly recognize.
+    const words = t.split(/\s+/);
+    if (words.length === 1) return t;
+    return words.map((w, i) => (i === words.length - 1 ? w : `${w[0]}.`)).join(' ');
+  })();
+
   if (classIndex === null) {
     return (
       <div className="hub-page-bg" style={{ minHeight: '100vh' }}>
@@ -194,8 +245,22 @@ export default function FacultyDashboard() {
                 <div style={{ fontSize: 13, fontWeight: 800, color: 'var(--muted)', marginBottom: 8, letterSpacing: '0.10em', textTransform: 'uppercase' }}>
                   {timeGreeting}
                 </div>
-                <h1 style={{ fontSize: 'clamp(28px, 6vw, 36px)', fontWeight: 800, letterSpacing: '-0.055em', lineHeight: 1.0, margin: 0 }}>
-                  {facultyDisplayName || 'Faculty'}
+                <h1 style={{ fontSize: 'clamp(28px, 6vw, 36px)', fontWeight: 800, letterSpacing: '-0.055em', lineHeight: 1.0, margin: 0, display: 'flex', alignItems: 'baseline', gap: 10, flexWrap: 'wrap' }}>
+                  <span>{facultyDisplayName || 'Faculty'}</span>
+                  {shortTitle && (
+                    <span style={{
+                      fontSize: 'clamp(12px, 2.4vw, 14px)',
+                      fontWeight: 700,
+                      letterSpacing: '0',
+                      color: 'var(--accent)',
+                      background: 'rgba(var(--accentRGB), 0.10)',
+                      padding: '3px 10px',
+                      borderRadius: 999,
+                      whiteSpace: 'nowrap',
+                    }}>
+                      {shortTitle}
+                    </span>
+                  )}
                 </h1>
                 {facultyProfile?.title && (
                   <div style={{ fontSize: 13, color: 'var(--muted)', marginTop: 8, fontWeight: 600 }}>
@@ -237,11 +302,13 @@ export default function FacultyDashboard() {
           </div>
         )}
 
-        {/* ── Today's Classes — high-priority list right under the hero,
-             same idea as the student Dashboard/Attendance "Today's
-             Classes" strip: quick glance at what's happening today
-             before anything else. ── */}
-        <div className="card" style={{ marginBottom: 12, padding: '14px 16px', borderRadius: 14 }}>
+        {/* ── Today's Classes + My Classes — on large screens these used to
+             each stack full-width with a lot of empty space beside their
+             (usually short) content; side-by-side as two columns fixes
+             that, while still stacking on narrow/mobile screens. ── */}
+        <div className="dashboard-home-columns" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))', gap: 12, marginBottom: 12, alignItems: 'start' }}>
+
+        <div className="card" style={{ padding: '14px 16px', borderRadius: 14, margin: 0 }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
             <div style={{ fontSize: 11, fontWeight: 800, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.07em', display: 'flex', alignItems: 'center', gap: 6 }}>
               <Icons.CalendarClock size={13} /> Today's Classes
@@ -279,33 +346,9 @@ export default function FacultyDashboard() {
           )}
         </div>
 
-        {pendingToday.length > 0 && (
-          <div style={{ padding: '10px 14px', borderRadius: 10, marginBottom: 12, background: 'var(--dangerBg, rgba(217,119,6,0.08))', border: '1px solid color-mix(in srgb, #d97706 28%, var(--border))' }}>
-            <div style={{ fontWeight: 700, fontSize: 13, color: '#d97706', marginBottom: 6, display: 'flex', alignItems: 'center', gap: 6 }}>
-              <Icons.AlertTriangle size={14} /> Attendance pending for today
-            </div>
-            {pendingToday.map((c) => (
-              <Link
-                key={c.assignmentId}
-                to={`/faculty/classes/${c.assignmentId}?groupId=${encodeURIComponent(c.groupId)}`}
-                style={{ display: 'block', fontSize: 12, color: '#d97706', marginBottom: 2, textDecoration: 'none' }}
-              >
-                • {c.courseCode} — {c.batch?.toUpperCase()} {c.dept} <span style={{ fontWeight: 700 }}>Take attendance →</span>
-              </Link>
-            ))}
-          </div>
-        )}
-
-        {/* Stat cards */}
-        <div className="dashboard-stats-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8, marginBottom: 14 }}>
-          {statCard('BookOpen', 'Active Classes', activeAssignments.length, 'This term', '#3B82F6')}
-          {statCard('Users', 'Students Taught', uniqueStudentUids.size, 'Unique, all classes', '#10B981')}
-          {statCard('ListChecks', 'Classes Remaining', hasAnyPlannedTotal ? classesRemaining : '—', hasAnyPlannedTotal ? 'Across active classes' : 'Set a plan to track', '#F59E0B')}
-        </div>
-
         {/* Classes overview — mirrors the student dashboard's "Academic Journey" progress card */}
         {activeAssignments.length > 0 && (
-          <div className="card dashboard-roadmap" style={{ marginBottom: 12, padding: '18px 18px 16px', border: '1px solid rgba(var(--accentRGB), 0.10)', background: 'linear-gradient(180deg, rgba(var(--accentRGB), 0.04), var(--surfaceGlassStrong))' }}>
+          <div className="card dashboard-roadmap" style={{ padding: '18px 18px 16px', border: '1px solid rgba(var(--accentRGB), 0.10)', background: 'linear-gradient(180deg, rgba(var(--accentRGB), 0.04), var(--surfaceGlassStrong))', margin: 0 }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, alignItems: 'flex-start', marginBottom: 10, flexWrap: 'wrap' }}>
               <div>
                 <div style={{ fontSize: 12, fontWeight: 800, letterSpacing: '0.10em', textTransform: 'uppercase', color: 'var(--muted)' }}>My Classes</div>
@@ -344,6 +387,33 @@ export default function FacultyDashboard() {
             </div>
           </div>
         )}
+
+        </div>
+        {/* ── end dashboard-home-columns ── */}
+
+        {pendingToday.length > 0 && (
+          <div style={{ padding: '10px 14px', borderRadius: 10, marginBottom: 12, background: 'var(--dangerBg, rgba(217,119,6,0.08))', border: '1px solid color-mix(in srgb, #d97706 28%, var(--border))' }}>
+            <div style={{ fontWeight: 700, fontSize: 13, color: '#d97706', marginBottom: 6, display: 'flex', alignItems: 'center', gap: 6 }}>
+              <Icons.AlertTriangle size={14} /> Attendance pending for today
+            </div>
+            {pendingToday.map((c) => (
+              <Link
+                key={c.assignmentId}
+                to={`/faculty/classes/${c.assignmentId}?groupId=${encodeURIComponent(c.groupId)}`}
+                style={{ display: 'block', fontSize: 12, color: '#d97706', marginBottom: 2, textDecoration: 'none' }}
+              >
+                • {c.courseCode} — {c.batch?.toUpperCase()} {c.dept} <span style={{ fontWeight: 700 }}>Take attendance →</span>
+              </Link>
+            ))}
+          </div>
+        )}
+
+        {/* Stat cards */}
+        <div className="dashboard-stats-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8, marginBottom: 14 }}>
+          {statCard('BookOpen', 'Active Classes', activeAssignments.length, 'This term', '#3B82F6')}
+          {statCard('Users', 'Students Taught', uniqueStudentUids.size, 'Unique, all classes', '#10B981')}
+          {statCard('ListChecks', 'Classes Remaining', hasAnyPlannedTotal ? classesRemaining : '—', hasAnyPlannedTotal ? 'Across active classes' : 'Set a plan to track', '#F59E0B')}
+        </div>
 
         {activeAssignments.length === 0 && (
           <div className="card" style={{ marginTop: 16, textAlign: 'center', color: 'var(--muted)', padding: 30 }}>
