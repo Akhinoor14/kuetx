@@ -29,6 +29,17 @@ import { checkEmailDomain } from './emailDomainCheck';
 
 const googleProvider = new GoogleAuthProvider();
 
+// BUGFIX: email was never trimmed/lowercased anywhere before being sent to
+// Firebase. Firebase's own identitytoolkit backend treats a leading/trailing
+// space (very common from mobile keyboard autocomplete or copy-paste) or
+// mixed case as a DIFFERENT request from the same address typed cleanly —
+// register with " User@Gmail.com", then later login/reset with
+// "user@gmail.com" (no stray space), and it fails with auth/invalid-credential
+// even though it's obviously the same person/account. One normalization
+// helper here means every function below benefits automatically — no caller
+// can forget it.
+const normalizeEmail = (email) => String(email || '').trim().toLowerCase();
+
 // ─── Auth state listener ──────────────────────────────────────────────────────
 
 export const onAuthChange = (callback) => onAuthStateChanged(auth, callback);
@@ -54,6 +65,7 @@ export const loginWithGoogle = async () => {
 // ─── Email/Password ───────────────────────────────────────────────────────────
 
 export const registerWithEmail = async (email, password, displayName) => {
+  email = normalizeEmail(email);
   const domainCheck = await checkEmailDomain(email);
   if (!domainCheck.ok) {
     const err = new Error('Email domain rejected');
@@ -112,6 +124,7 @@ export const reloadUser = async () => {
 };
 
 export const loginWithEmail = async (email, password) => {
+  email = normalizeEmail(email);
   const result = await signInWithEmailAndPassword(auth, email, password);
   return result.user;
 };
@@ -135,6 +148,7 @@ export const loginWithEmail = async (email, password) => {
 // system (CL/SCL/Admin flags it, owner fixes it or exports a JSON
 // backup via the banner) — see emailFlags.js's file header.
 export const resetPassword = async (email) => {
+  email = normalizeEmail(email);
   await sendPasswordResetEmail(auth, email);
 };
 
@@ -150,6 +164,7 @@ export const upgradeWithGoogle = async () => {
 };
 
 export const upgradeWithEmail = async (email, password, displayName) => {
+  email = normalizeEmail(email);
   const user = auth.currentUser;
   if (!user) throw new Error('No user logged in');
   const domainCheck = await checkEmailDomain(email);
