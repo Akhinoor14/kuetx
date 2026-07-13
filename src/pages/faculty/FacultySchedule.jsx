@@ -92,6 +92,18 @@ export default function FacultySchedule() {
   const today = DAYS[new Date().getDay()] || 'Sunday';
   const loading = classIndex === null;
 
+  // Today's classes — flattened, sorted list, same "list on top" pattern
+  // as the student Attendance.jsx "Today's Classes" strip. Pulled from the
+  // same placedByDaySlot map the grid already builds, just re-shaped and
+  // sorted by slot for the day that matches `today`.
+  const todaysClasses = useMemo(() => {
+    const bySlot = placedByDaySlot[today] || {};
+    return Object.entries(bySlot)
+      .filter(([slot]) => !isBreakSlot(slot))
+      .flatMap(([slot, entries]) => entries.map((e) => ({ ...e, slot })))
+      .sort((a, b) => a.slot.localeCompare(b.slot));
+  }, [placedByDaySlot, today]);
+
   return (
     <div className="hub-page-bg" style={{ minHeight: '100vh' }}>
       <div style={{ padding: '20px 24px 40px', width: '97%', maxWidth: 'none', margin: '0 auto' }}>
@@ -122,6 +134,45 @@ export default function FacultySchedule() {
         </div>
 
         {loading && <div style={{ color: 'var(--muted)', fontSize: 13, padding: '20px 0' }}>Loading…</div>}
+
+        {/* ── Today's Classes — list on top, same pattern as the student
+             Attendance.jsx "Today's Classes" strip: colored left-accent
+             rows, slot time first, course + batch/dept below. ── */}
+        {!loading && (
+          <div className="card" style={{ marginTop: 16, marginBottom: 16, padding: '14px 16px', borderRadius: 14 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
+              <div style={{ fontSize: 11, fontWeight: 800, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.07em', display: 'flex', alignItems: 'center', gap: 6 }}>
+                <Icons.CalendarClock size={13} /> Today's Classes
+              </div>
+              <div style={{ fontSize: 11, color: 'var(--muted)' }}>
+                {new Date().toLocaleDateString('en-BD', { weekday: 'short', day: 'numeric', month: 'short' })}
+              </div>
+            </div>
+            {todaysClasses.length > 0 ? (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                {todaysClasses.map((c, idx) => (
+                  <div key={`${c.assignmentId}-${idx}`} style={{
+                    display: 'flex', gap: 10, padding: '9px 12px', borderRadius: 10, alignItems: 'center',
+                    background: 'linear-gradient(180deg, rgba(59,130,246,0.10), rgba(59,130,246,0.05))',
+                    border: '1px solid rgba(59,130,246,0.18)',
+                  }}>
+                    <div style={{ fontWeight: 900, fontSize: 11.5, color: 'var(--accent)', minWidth: 46, flexShrink: 0, fontFamily: 'JetBrains Mono, monospace' }}>
+                      {slotPreview(c.slot)}
+                    </div>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div style={{ fontSize: 13, fontWeight: 700, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{c.courseCode} — {c.courseTitle}</div>
+                      <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 1 }}>{c.batch?.toUpperCase()} {c.dept}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div style={{ fontSize: 12.5, color: 'var(--muted)', textAlign: 'center', padding: '10px 0' }}>
+                No scheduled classes today{today === 'Friday' ? ' — enjoy the weekly holiday 🎉' : ''}
+              </div>
+            )}
+          </div>
+        )}
 
         {!loading && (
           <div style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>

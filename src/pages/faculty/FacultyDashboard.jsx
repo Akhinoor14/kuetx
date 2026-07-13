@@ -135,6 +135,20 @@ export default function FacultyDashboard() {
     return !hasSessionToday;
   });
 
+  // Today's classes — flattened list across all active assignments whose
+  // dayTimeSlots include today, sorted by slot. Same "list on top" idea
+  // as the student Dashboard borrows from Attendance.jsx's Today's Classes
+  // strip — surfaced here with priority, right under the hero.
+  const todaysClasses = activeAssignments
+    .flatMap((c) => {
+      const a = assignments[c.assignmentId];
+      if (!a || !todayName) return [];
+      return (a.dayTimeSlots || [])
+        .filter((s) => s.day === todayName)
+        .map((s) => ({ assignmentId: c.assignmentId, groupId: c.groupId, slot: s.slot, courseCode: a.courseCode, courseTitle: a.courseTitle, batch: c.batch, dept: c.dept }));
+    })
+    .sort((a, b) => String(a.slot).localeCompare(String(b.slot)));
+
   const statCard = (icon, label, value, sub, color) => {
     const Icon = Icons[icon] || Icons.Circle;
     const c = color || 'var(--accent)';
@@ -222,6 +236,48 @@ export default function FacultyDashboard() {
             Viewing as: Teacher — switch back from the Admin dashboard.
           </div>
         )}
+
+        {/* ── Today's Classes — high-priority list right under the hero,
+             same idea as the student Dashboard/Attendance "Today's
+             Classes" strip: quick glance at what's happening today
+             before anything else. ── */}
+        <div className="card" style={{ marginBottom: 12, padding: '14px 16px', borderRadius: 14 }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.07em', display: 'flex', alignItems: 'center', gap: 6 }}>
+              <Icons.CalendarClock size={13} /> Today's Classes
+            </div>
+            <Link to="/faculty/schedule" style={{ fontSize: 11, color: 'var(--accent)', textDecoration: 'none', fontWeight: 700 }}>Full schedule →</Link>
+          </div>
+          {todaysClasses.length > 0 ? (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+              {todaysClasses.map((c, idx) => (
+                <Link
+                  key={`${c.assignmentId}-${idx}`}
+                  to={`/faculty/classes/${c.assignmentId}?groupId=${encodeURIComponent(c.groupId)}`}
+                  style={{ textDecoration: 'none', color: 'inherit' }}
+                >
+                  <div style={{
+                    display: 'flex', gap: 10, padding: '9px 12px', borderRadius: 10, alignItems: 'center',
+                    background: 'linear-gradient(180deg, rgba(59,130,246,0.10), rgba(59,130,246,0.05))',
+                    border: '1px solid rgba(59,130,246,0.18)',
+                  }}>
+                    <div style={{ fontWeight: 900, fontSize: 11.5, color: 'var(--accent)', minWidth: 46, flexShrink: 0, fontFamily: 'JetBrains Mono, monospace' }}>
+                      {String(c.slot).replace(/\s+break\s*$/i, '')}
+                    </div>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div style={{ fontSize: 13, fontWeight: 700, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{c.courseCode} — {c.courseTitle}</div>
+                      <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 1 }}>{c.batch?.toUpperCase()} {c.dept}</div>
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          ) : (
+            <div style={{ fontSize: 12.5, color: 'var(--muted)', textAlign: 'center', padding: '10px 0' }}>
+              No scheduled classes today
+            </div>
+          )}
+        </div>
 
         {pendingToday.length > 0 && (
           <div style={{ padding: '10px 14px', borderRadius: 10, marginBottom: 12, background: 'var(--dangerBg, rgba(217,119,6,0.08))', border: '1px solid color-mix(in srgb, #d97706 28%, var(--border))' }}>

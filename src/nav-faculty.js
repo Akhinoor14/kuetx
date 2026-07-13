@@ -52,6 +52,15 @@ export const NAV_FACULTY = [
     ],
   },
   {
+    group: 'Meetings',
+    isSubgroup: true,
+    hubPath: '/faculty/meetings',
+    hubIcon: 'Video',
+    items: [
+      { id: 'f-meetings', label: 'Meetings', icon: 'Video', path: '/faculty/meetings' },
+    ],
+  },
+  {
     group: 'Notices',
     isSubgroup: true,
     hubPath: '/faculty/notices',

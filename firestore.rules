@@ -333,6 +333,16 @@ service cloud.firestore {
         allow read: if isSignedIn() && request.auth.uid == uid;
         allow write: if isSignedIn() && request.auth.uid == uid;
       }
+
+      // Meetings — a faculty account's own list of scheduled meetings
+      // (class-related or otherwise: department meetings, viva boards,
+      // student consultations). Same owner-only shape as classIndex above
+      // — this is private to the faculty account, never read by students
+      // or other faculty.
+      match /meetings/{meetingId} {
+        allow read: if isSignedIn() && request.auth.uid == uid;
+        allow write: if isSignedIn() && request.auth.uid == uid;
+      }
     }
 
     // -------------------------------------------------------------

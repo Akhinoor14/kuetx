@@ -77,6 +77,7 @@ import FacultyProfile from './pages/faculty/FacultyProfile';
 import FacultyClasses from './pages/faculty/FacultyClasses';
 import FacultyClassDetail from './pages/faculty/FacultyClassDetail';
 import FacultySchedule from './pages/faculty/FacultySchedule';
+import FacultyMeetings from './pages/faculty/FacultyMeetings';
 import FacultyNotices from './pages/faculty/FacultyNotices';
 import FacultyContact from './pages/faculty/FacultyContact';
 
@@ -201,6 +202,7 @@ function Layout({ authState, onboardingActive }) {
             <Route path="/faculty/classes" element={<RequireFaculty><FacultyClasses /></RequireFaculty>} />
             <Route path="/faculty/classes/:assignmentId" element={<RequireFaculty><FacultyClassDetail /></RequireFaculty>} />
             <Route path="/faculty/schedule" element={<RequireFaculty><FacultySchedule /></RequireFaculty>} />
+            <Route path="/faculty/meetings" element={<RequireFaculty><FacultyMeetings /></RequireFaculty>} />
             {/* Blue Tick gate: notices can carry marks/CT input, so this
                 route needs RequireVerifiedFaculty on top of RequireFaculty
                 (auto-approval policy — every other faculty route above
