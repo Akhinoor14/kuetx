@@ -39,6 +39,7 @@ import {
   findConflictingAssignment,
 } from '../../lib/facultyClassSync';
 import { notify } from '../../lib/notify';
+import { useIsFaculty } from '../../hooks/useIsFaculty';
 
 const inputStyle = {
   width: '100%', padding: '9px 10px', borderRadius: 8, border: '1px solid var(--border)',
@@ -377,6 +378,13 @@ export default function FacultyClasses() {
   const [classes, setClasses] = useState(null); // null = loading, [] = loaded-empty
   const [showAdd, setShowAdd] = useState(false);
   const [batches, setBatches] = useState([]);
+  // Creating a class assignment is one of the handful of writes that
+  // still needs the Blue Tick (see firestore.rules' facultyAssignments
+  // create rule) — a fake/unverified account creating one would show up
+  // in the real batch+dept group and affect everyone reading it. This
+  // page itself (browsing existing classes, All CR) stays open either way.
+  const { isFounderBypass, facultyProfile } = useIsFaculty();
+  const isVerified = isFounderBypass || !!facultyProfile?.verifiedAt;
 
   useEffect(() => {
     const uid = auth.currentUser?.uid;
@@ -423,16 +431,44 @@ export default function FacultyClasses() {
             </div>
             <h1 className="hub-page-hero-title">My Classes</h1>
           </div>
-          <button
-            onClick={() => setShowAdd(true)}
-            style={{
-              display: 'flex', alignItems: 'center', gap: 6, padding: '9px 14px', borderRadius: 8,
-              border: 'none', background: 'var(--accent)', color: '#fff', fontWeight: 700, fontSize: 13, cursor: 'pointer',
-            }}
-          >
-            <Icons.Plus size={15} /> Add Class
-          </button>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <button
+              onClick={() => navigate('/faculty/all-cr')}
+              style={{
+                display: 'flex', alignItems: 'center', gap: 6, padding: '9px 14px', borderRadius: 8,
+                border: '1px solid var(--border)', background: 'var(--card)', color: 'var(--text)',
+                fontWeight: 700, fontSize: 13, cursor: 'pointer',
+              }}
+            >
+              <Icons.Users size={15} /> All CR
+            </button>
+            <button
+              onClick={() => setShowAdd(true)}
+              disabled={!isVerified}
+              title={!isVerified ? 'Blue Tick verification needed before you can add a class' : undefined}
+              style={{
+                display: 'flex', alignItems: 'center', gap: 6, padding: '9px 14px', borderRadius: 8,
+                border: 'none', background: 'var(--accent)', color: '#fff', fontWeight: 700, fontSize: 13,
+                cursor: isVerified ? 'pointer' : 'not-allowed', opacity: isVerified ? 1 : 0.5,
+              }}
+            >
+              <Icons.Plus size={15} /> Add Class
+            </button>
+          </div>
         </div>
+
+        {!isVerified && (
+          <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 8 }}>
+            🔒 Adding a new class needs Blue Tick verification. You can still browse everything here — visit{' '}
+            <span
+              onClick={() => navigate('/faculty/contact')}
+              style={{ color: 'var(--accent)', fontWeight: 700, cursor: 'pointer', textDecoration: 'underline' }}
+            >
+              Contact
+            </span>{' '}
+            if you need help getting verified.
+          </div>
+        )}
 
         {classes === null && (
           <div style={{ color: 'var(--muted)', fontSize: 13, padding: '20px 0' }}>Loading…</div>

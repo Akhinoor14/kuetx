@@ -29,6 +29,7 @@ import { syncBloodDonorEntry } from '../lib/bloodDonorSync';
 import { getGroupId } from '../lib/groupUtils';
 import { subscribeMyRole, requestLeaveCR } from '../lib/groupSync';
 import ClaimCRCard, { ClaimCRInlineButton } from '../components/ClaimCRCard';
+import CRMobileNumberBanner from '../components/CRMobileNumberBanner';
 import EmailVerifyBanner from '../components/EmailVerifyBanner';
 import EmailFlagBanner from '../components/EmailFlagBanner';
 import BlueTick from '../components/BlueTick';
@@ -561,12 +562,17 @@ export default function Profile() {
   // already-CR/ACR users while the role subscription is still loading);
   // false = checked and confirmed not CR/ACR; true = confirmed CR/ACR.
   const [isRealCR, setIsRealCR] = useState(null);
+  // Same subscription, kept as the raw role string too (not just the
+  // cr/acr boolean) so CRMobileNumberBanner below can tell "cr" from
+  // "acr" for its copy without a second subscribeMyRole listener.
+  const [ownRole, setOwnRole] = useState(null);
   const [leaveCRState, setLeaveCRState] = useState('idle'); // idle | sending | sent
   useEffect(() => {
     const groupId = getGroupId(profile);
-    if (!groupId || !auth.currentUser?.uid) { setIsRealCR(false); return; }
+    if (!groupId || !auth.currentUser?.uid) { setIsRealCR(false); setOwnRole(null); return; }
     return subscribeMyRole(groupId, auth.currentUser.uid, (role) => {
       setIsRealCR(role === 'cr' || role === 'acr');
+      setOwnRole(role);
     });
   }, [profile?.dept, profile?.batch, profile?.studentId]);
 
@@ -1064,6 +1070,10 @@ export default function Profile() {
 
         {/* RIGHT COLUMN */}
         <div className="profile-col-right" style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
+
+          {/* Migration nudge: existing CR/ACR (appointed before mobile
+              numbers were mandatory) get prompted once to add theirs. */}
+          <CRMobileNumberBanner groupId={getGroupId(profile)} ownRole={ownRole} />
 
           {/* Claim CR — full card. Primary surface on desktop (sits next
               to Quick Accounts); on mobile it's ordered further down since

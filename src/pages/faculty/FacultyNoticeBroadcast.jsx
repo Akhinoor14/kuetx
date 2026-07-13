@@ -23,6 +23,7 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import * as Icons from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { auth } from '../../lib/firebase';
 import { subscribeMyClassIndex } from '../../lib/facultyClassSync';
 import { getFacultyDoc } from '../../lib/facultySync';
@@ -30,10 +31,19 @@ import { getGroupMembersOnce } from '../../lib/groupSync';
 import * as noticeApi from '../../lib/noticeUtils';
 import { postFacultyNoticeMulti } from '../../lib/facultyNoticeSync';
 import { notify } from '../../lib/notify';
+import { useIsFaculty } from '../../hooks/useIsFaculty';
 
 export default function FacultyNoticeBroadcast() {
   const [classes, setClasses] = useState(null);
   const [facultyDoc, setFacultyDoc] = useState(null);
+  // Broadcasting a notice reaches every student in the selected classes —
+  // a fake/unverified account doing this is exactly the kind of damage
+  // the manual verification policy exists to prevent, and
+  // firestore.rules already independently requires isVerifiedFaculty()
+  // on the notices/{noticeId} create write. This UI gate just gives a
+  // clear message instead of a raw permission-denied.
+  const { isFounderBypass, facultyProfile } = useIsFaculty();
+  const isVerified = isFounderBypass || !!facultyProfile?.verifiedAt;
 
   // Multi-class selection
   const [selectedGroupIds, setSelectedGroupIds] = useState(new Set());
@@ -146,6 +156,10 @@ export default function FacultyNoticeBroadcast() {
   };
 
   const handleSend = async () => {
+    if (!isVerified) {
+      notify('Blue Tick verification is required before you can send notices.', 'error');
+      return;
+    }
     if (!title.trim() || !body.trim()) {
       notify('Please enter both a title and a message.', 'error');
       return;
@@ -302,11 +316,17 @@ export default function FacultyNoticeBroadcast() {
               />
               <button
                 onClick={handleSend}
-                disabled={sending}
-                style={{ padding: '10px 16px', borderRadius: 8, border: 'none', background: 'var(--accent)', color: '#fff', fontWeight: 700, fontSize: 13, cursor: 'pointer', opacity: sending ? 0.6 : 1 }}
+                disabled={sending || !isVerified}
+                title={!isVerified ? 'Blue Tick verification needed before you can send notices' : undefined}
+                style={{ padding: '10px 16px', borderRadius: 8, border: 'none', background: 'var(--accent)', color: '#fff', fontWeight: 700, fontSize: 13, cursor: (sending || !isVerified) ? 'not-allowed' : 'pointer', opacity: (sending || !isVerified) ? 0.5 : 1 }}
               >
                 {sending ? 'Sending…' : 'Send Notice'}
               </button>
+              {!isVerified && (
+                <div style={{ fontSize: 11.5, color: 'var(--muted)' }}>
+                  🔒 Needs Blue Tick verification. Visit <Link to="/faculty/contact">Contact</Link> if you need help getting verified.
+                </div>
+              )}
             </div>
 
             <div style={{ fontSize: 12.5, fontWeight: 700, color: 'var(--text)', marginBottom: 8 }}>

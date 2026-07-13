@@ -2,12 +2,13 @@ import { useEffect, useState } from 'react';
 import { waitForPendingWrites } from 'firebase/firestore';
 import {
   joinGroup, requestCR, subscribeCRStatus, subscribeMyRole, subscribeOwnCRRequestStatus,
-  syncOwnVerification, waitForOwnMembership, waitForOwnVerification, MAX_CR,
+  syncOwnVerification, waitForOwnMembership, waitForOwnVerification, updateOwnMobile, MAX_CR,
   diagnosticCheckCRRequestsWrite, logCRRequestDiagnostics,
 } from '../lib/groupSync';
 import { checkCLVacant, applyForCampusLead } from '../lib/staffSync';
 import { isRollInstitutionallyVerified } from '../lib/kuetEmailVerify';
 import { auth, db } from '../lib/firebase';
+import PromptDialog from './PromptDialog';
 
 /**
  * Shared logic behind both <ClaimCRCard> (full card) and
@@ -22,6 +23,11 @@ function useClaimCRState(groupId, profile) {
   const [ownRollVerified, setOwnRollVerified] = useState(false);
   const [ownRole, setOwnRole] = useState(null);
   const [ownRequestStatus, setOwnRequestStatus] = useState(null);
+  // CR/ACR mobile number is now mandatory (Faculty "All CR" page needs a
+  // real contact number for every CR/ACR). Captured here inline so the
+  // claim flow itself is the enforcement point — nobody can become CR
+  // without ever having supplied one.
+  const [mobile, setMobile] = useState('');
 
   useEffect(() => {
     if (!groupId) return;
@@ -38,7 +44,13 @@ function useClaimCRState(groupId, profile) {
     return () => { unsubCrStatus(); unsubRole(); unsubOwnRequest(); };
   }, [groupId]);
 
-  const handleClaimCR = async () => {
+  // Very light sanity check — not a strict Bangladeshi-number validator,
+  // just enough to stop an empty/obviously-junk value (a single digit, a
+  // stray letter) from being saved as someone's mandatory CR contact.
+  const isMobileLikelyValid = (v) => /^[0-9+\-\s]{7,}$/.test(String(v || '').trim());
+
+  const handleClaimCR = async (mobileOverride) => {
+    const mobileToUse = mobileOverride !== undefined ? mobileOverride : mobile;
     if (!ownRollVerified) {
       setClaimMsg('KUET email verify করো। উপরে verify box দেখ।');
       setClaimState('error');
@@ -49,9 +61,15 @@ function useClaimCRState(groupId, profile) {
       setClaimState('error');
       return;
     }
+    if (!isMobileLikelyValid(mobileToUse)) {
+      setClaimMsg('CR হওয়ার জন্য একটা সঠিক মোবাইল নম্বর দিতে হবে — Faculty এটা দেখতে পারবে।');
+      setClaimState('error');
+      return;
+    }
     setClaimState('sending');
     try {
       await joinGroup(groupId, profile);
+      await updateOwnMobile(groupId, mobileToUse);
       const membershipReady = await waitForOwnMembership(groupId);
       if (!membershipReady) throw new Error('Your class membership is still syncing. Try again in a moment.');
       await syncOwnVerification(groupId, auth.currentUser?.uid);
@@ -88,7 +106,7 @@ function useClaimCRState(groupId, profile) {
     }
   };
 
-  return { crStatus, claimState, claimMsg, ownRollVerified, ownRole, ownRequestStatus, handleClaimCR };
+  return { crStatus, claimState, claimMsg, ownRollVerified, ownRole, ownRequestStatus, mobile, setMobile, handleClaimCR };
 }
 
 /**
@@ -103,7 +121,7 @@ function useClaimCRState(groupId, profile) {
  * a single page.
  */
 export default function ClaimCRCard({ groupId, profile }) {
-  const { crStatus, claimState, claimMsg, ownRollVerified, ownRole, ownRequestStatus, handleClaimCR } =
+  const { crStatus, claimState, claimMsg, ownRollVerified, ownRole, ownRequestStatus, mobile, setMobile, handleClaimCR } =
     useClaimCRState(groupId, profile);
 
   if (!groupId || !crStatus) return null;
@@ -137,6 +155,23 @@ export default function ClaimCRCard({ groupId, profile }) {
           ? `Both CR slots (max ${MAX_CR}) are currently filled. You'll be able to request once a slot opens up.`
           : 'Want to keep your class\'s routine and assignments up to date for everyone? Claim CR — it goes to your Campus Lead for approval (or becomes a combined application if there isn\'t one yet).'}
       </p>
+      {!crStatus.slotsFull && (
+        <div style={{ marginBottom: 10 }}>
+          <label style={{ fontSize: 11.5, fontWeight: 700, color: 'var(--muted)', marginBottom: 4, display: 'block' }}>
+            Your mobile number (mandatory — Faculty will see this)
+          </label>
+          <input
+            type="tel"
+            value={mobile}
+            onChange={(e) => setMobile(e.target.value)}
+            placeholder="01XXXXXXXXX"
+            style={{
+              width: '100%', padding: '8px 10px', borderRadius: 8, border: '1px solid var(--border)',
+              background: 'var(--bg)', color: 'var(--text)', fontSize: 13, outline: 'none', boxSizing: 'border-box',
+            }}
+          />
+        </div>
+      )}
       <button
         className="btn btn-primary btn-sm"
         onClick={handleClaimCR}
@@ -174,8 +209,13 @@ export default function ClaimCRCard({ groupId, profile }) {
  * carries the explanation and remains the primary surface on desktop.
  */
 export function ClaimCRInlineButton({ groupId, profile }) {
-  const { crStatus, claimState, ownRollVerified, ownRole, ownRequestStatus, handleClaimCR } =
+  const { crStatus, claimState, ownRollVerified, ownRole, ownRequestStatus, mobile, setMobile, handleClaimCR } =
     useClaimCRState(groupId, profile);
+  // Compact variant has no room for an inline text field, so the
+  // mandatory mobile number is collected via a small dialog that pops up
+  // right before the actual claim submits — same enforcement as the full
+  // card, just a different input surface.
+  const [showMobileDialog, setShowMobileDialog] = useState(false);
 
   if (!groupId || !crStatus) return null;
   // Same reasoning as ClaimCRCard above: don't render until ownRole's
@@ -195,8 +235,9 @@ export function ClaimCRInlineButton({ groupId, profile }) {
   }
 
   return (
+    <>
     <button
-      onClick={handleClaimCR}
+      onClick={() => setShowMobileDialog(true)}
       disabled={claimState === 'sending' || !ownRollVerified || crStatus.slotsFull}
       title={
         crStatus.slotsFull
@@ -215,5 +256,20 @@ export function ClaimCRInlineButton({ groupId, profile }) {
     >
       {claimState === 'sending' ? 'Sending…' : crStatus.slotsFull ? 'CR slots full' : 'Claim CR'}
     </button>
+    <PromptDialog
+      open={showMobileDialog}
+      title="Mobile number (mandatory)"
+      message="CR হওয়ার জন্য একটা মোবাইল নম্বর দাও — Faculty এটা দেখতে পারবে।"
+      defaultValue={mobile}
+      placeholder="01XXXXXXXXX"
+      confirmLabel="Continue"
+      onCancel={() => setShowMobileDialog(false)}
+      onConfirm={(value) => {
+        setMobile(value);
+        setShowMobileDialog(false);
+        handleClaimCR(value);
+      }}
+    />
+    </>
   );
 }

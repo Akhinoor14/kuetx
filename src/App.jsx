@@ -75,6 +75,7 @@ import { NAV_FACULTY } from './nav-faculty';
 import FacultyDashboard from './pages/faculty/FacultyDashboard';
 import FacultyProfile from './pages/faculty/FacultyProfile';
 import FacultyClasses from './pages/faculty/FacultyClasses';
+import FacultyAllCR from './pages/faculty/FacultyAllCR';
 import FacultyClassDetail from './pages/faculty/FacultyClassDetail';
 import FacultySchedule from './pages/faculty/FacultySchedule';
 import FacultyMeetings from './pages/faculty/FacultyMeetings';
@@ -202,6 +203,7 @@ function Layout({ authState, onboardingActive }) {
             <Route path="/faculty" element={<RequireFaculty><FacultyDashboard /></RequireFaculty>} />
             <Route path="/faculty/profile" element={<RequireFaculty><FacultyProfile /></RequireFaculty>} />
             <Route path="/faculty/classes" element={<RequireFaculty><FacultyClasses /></RequireFaculty>} />
+            <Route path="/faculty/all-cr" element={<RequireFaculty><FacultyAllCR /></RequireFaculty>} />
             <Route path="/faculty/classes/:assignmentId" element={<RequireFaculty><FacultyClassDetail /></RequireFaculty>} />
             <Route path="/faculty/schedule" element={<RequireFaculty><FacultySchedule /></RequireFaculty>} />
             <Route path="/faculty/meetings" element={<RequireFaculty><FacultyMeetings /></RequireFaculty>} />

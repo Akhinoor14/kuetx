@@ -255,7 +255,7 @@ function EditDayTimeModal({ assignment, groupId, onClose, onSaved }) {
 // from the rest of the notice system:
 //   - 'broadcast' → every student in this class sees it ("Class only")
 //   - 'cr_only'   → only this class's CR/ACR see it ("CR only")
-function NoticesTab({ groupId }) {
+function NoticesTab({ groupId, isVerified }) {
   const [facultyDoc, setFacultyDoc] = useState(null);
   const [notices, setNotices] = useState([]);
   const [title, setTitle] = useState('');
@@ -275,6 +275,10 @@ function NoticesTab({ groupId }) {
   }, [groupId]);
 
   const handleSend = async () => {
+    if (!isVerified) {
+      notify('Blue Tick verification is required before you can send notices.', 'error');
+      return;
+    }
     if (!title.trim() || !body.trim()) {
       notify('Please enter both a title and a message.', 'error');
       return;
@@ -322,11 +326,17 @@ function NoticesTab({ groupId }) {
         </div>
         <button
           onClick={handleSend}
-          disabled={sending}
-          style={{ padding: '10px 16px', borderRadius: 8, border: 'none', background: 'var(--accent)', color: '#fff', fontWeight: 700, fontSize: 13, cursor: 'pointer', opacity: sending ? 0.6 : 1 }}
+          disabled={sending || !isVerified}
+          title={!isVerified ? 'Blue Tick verification needed before you can send notices' : undefined}
+          style={{ padding: '10px 16px', borderRadius: 8, border: 'none', background: 'var(--accent)', color: '#fff', fontWeight: 700, fontSize: 13, cursor: (sending || !isVerified) ? 'not-allowed' : 'pointer', opacity: (sending || !isVerified) ? 0.5 : 1 }}
         >
           {sending ? 'Sending…' : 'Send Notice'}
         </button>
+        {!isVerified && (
+          <div style={{ fontSize: 11.5, color: 'var(--muted)' }}>
+            🔒 Needs Blue Tick verification. Visit <Link to="/faculty/contact">Contact</Link> if you need help getting verified.
+          </div>
+        )}
       </div>
 
       <div style={{ display: 'grid', gap: 8 }}>
@@ -430,7 +440,7 @@ function SyllabusTab({ assignment }) {
   );
 }
 
-function ScheduleTab({ assignment, groupId, onEditDayTime }) {
+function ScheduleTab({ assignment, groupId, isVerified, onEditDayTime }) {
   const slots = assignment?.dayTimeSlots || [];
   return (
     <div>
@@ -439,10 +449,21 @@ function ScheduleTab({ assignment, groupId, onEditDayTime }) {
           <div style={{ color: 'var(--muted)', fontSize: 13, padding: '16px 0' }}>No day/time slot set for this class yet.</div>
           <button
             onClick={onEditDayTime}
-            style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 14px', borderRadius: 8, border: 'none', background: 'var(--accent)', color: '#fff', fontWeight: 700, fontSize: 12.5, cursor: 'pointer' }}
+            disabled={!isVerified}
+            title={!isVerified ? 'Blue Tick verification needed before you can set a class schedule' : undefined}
+            style={{
+              display: 'flex', alignItems: 'center', gap: 6, padding: '8px 14px', borderRadius: 8, border: 'none',
+              background: 'var(--accent)', color: '#fff', fontWeight: 700, fontSize: 12.5,
+              cursor: isVerified ? 'pointer' : 'not-allowed', opacity: isVerified ? 1 : 0.5,
+            }}
           >
             <Icons.Clock size={13} /> Set day &amp; time
           </button>
+          {!isVerified && (
+            <div style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 6 }}>
+              🔒 Needs Blue Tick verification. Visit <Link to="/faculty/contact">Contact</Link> if you need help getting verified.
+            </div>
+          )}
         </div>
       ) : (
         <div>
@@ -457,10 +478,21 @@ function ScheduleTab({ assignment, groupId, onEditDayTime }) {
           </div>
           <button
             onClick={onEditDayTime}
-            style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 14px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--card)', color: 'var(--text)', fontWeight: 700, fontSize: 12.5, cursor: 'pointer' }}
+            disabled={!isVerified}
+            title={!isVerified ? 'Blue Tick verification needed before you can edit the class schedule' : undefined}
+            style={{
+              display: 'flex', alignItems: 'center', gap: 6, padding: '8px 14px', borderRadius: 8,
+              border: '1px solid var(--border)', background: 'var(--card)', color: 'var(--text)', fontWeight: 700, fontSize: 12.5,
+              cursor: isVerified ? 'pointer' : 'not-allowed', opacity: isVerified ? 1 : 0.5,
+            }}
           >
             <Icons.Pencil size={13} /> Edit day &amp; time
           </button>
+          {!isVerified && (
+            <div style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 6 }}>
+              🔒 Needs Blue Tick verification. Visit <Link to="/faculty/contact">Contact</Link> if you need help getting verified.
+            </div>
+          )}
         </div>
       )}
 
@@ -1390,6 +1422,14 @@ export default function FacultyClassDetail() {
   const [assignment, setAssignment] = useState(null); // null = loading
   const [tab, setTab] = useState('students');
   const [editingDayTime, setEditingDayTime] = useState(false);
+  // Blue Tick status, needed here (not just inside MarksTab) to also gate
+  // the Schedule tab's "Edit/Set day & time" button — a fake/unverified
+  // account editing a real class's schedule affects everyone who reads
+  // it (students' Schedule.jsx grid), so that write stays blocked even
+  // though the rest of this page (Students, Syllabus, Sessions,
+  // Attendance, Question Bank, Notices tab's own read view) is browsable.
+  const { isFounderBypass, facultyProfile } = useIsFaculty();
+  const isVerified = isFounderBypass || !!facultyProfile?.verifiedAt;
   // Lazy-mount: a tab only mounts (and starts its Firestore subscription)
   // the first time it's opened, but once mounted it's kept alive for the
   // rest of this page visit — see the render block below.
@@ -1483,13 +1523,13 @@ export default function FacultyClassDetail() {
               {t.id === 'students' && <ClassmatesList groupId={groupId} showActions={false} viewerRole="faculty" />}
               {t.id === 'syllabus' && <SyllabusTab assignment={assignment} />}
               {t.id === 'schedule' && (
-                <ScheduleTab assignment={assignment} groupId={groupId} onEditDayTime={() => setEditingDayTime(true)} />
+                <ScheduleTab assignment={assignment} groupId={groupId} isVerified={isVerified} onEditDayTime={() => setEditingDayTime(true)} />
               )}
               {t.id === 'sessions' && <SessionsTab assignment={assignment} groupId={groupId} />}
               {t.id === 'attendance' && <AttendanceTab assignment={assignment} groupId={groupId} />}
               {t.id === 'marks' && <MarksTab assignment={assignment} groupId={groupId} />}
               {t.id === 'qbank' && <QuestionBankTab assignment={assignment} />}
-              {t.id === 'notices' && <NoticesTab groupId={groupId} />}
+              {t.id === 'notices' && <NoticesTab groupId={groupId} isVerified={isVerified} />}
             </div>
           );
         })}

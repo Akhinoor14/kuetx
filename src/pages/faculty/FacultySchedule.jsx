@@ -47,6 +47,7 @@ import { subscribeMyClassIndex, getFacultyAssignment } from '../../lib/facultyCl
 // — so this is a head start into the real form, not a true one-step
 // quick-add like the student Schedule.jsx grid has.
 import { AddClassModal } from '../faculty/FacultyClasses';
+import { useIsFaculty } from '../../hooks/useIsFaculty';
 
 const formatDayShort = (day) => day.slice(0, 3);
 
@@ -73,6 +74,13 @@ export default function FacultySchedule() {
   // onClick below) — clicking an already-occupied cell does nothing here,
   // since editing an existing class is My Classes' job, not this page's.
   const [addAt, setAddAt] = useState(null);
+  // Same Blue Tick gate as My Classes' own "+ Add Class" button — this
+  // grid's empty-cell click opens the exact same AddClassModal, so it
+  // needs the same guard (create write is server-gated on
+  // isVerifiedFaculty regardless, but the UI should say so clearly
+  // instead of clicking through into a form that will fail on submit).
+  const { isFounderBypass, facultyProfile } = useIsFaculty();
+  const isVerified = isFounderBypass || !!facultyProfile?.verifiedAt;
   const [selectedDay, setSelectedDay] = useState(() => {
     // BUGFIX: DAYS only covers the 5 teaching days (Sun-Thu) — Friday is
     // KUET's weekly holiday and Saturday isn't a class day either. Raw
@@ -321,12 +329,16 @@ export default function FacultySchedule() {
                           <td
                             key={d}
                             rowSpan={rowSpan > 1 ? rowSpan : undefined}
-                            onClick={isEmptyCell ? () => setAddAt({ day: d, slot }) : undefined}
-                            title={isEmptyCell ? 'Add a class in this slot' : undefined}
+                            onClick={isEmptyCell && isVerified ? () => setAddAt({ day: d, slot }) : undefined}
+                            title={
+                              isEmptyCell
+                                ? (isVerified ? 'Add a class in this slot' : 'Blue Tick verification needed before you can add a class')
+                                : undefined
+                            }
                             style={{
                               padding: 6, borderBottom: '1px solid var(--border)', borderRight: '1px solid var(--border)',
                               verticalAlign: 'top', minHeight: 64,
-                              cursor: isEmptyCell ? 'pointer' : 'default',
+                              cursor: isEmptyCell ? (isVerified ? 'pointer' : 'not-allowed') : 'default',
                               background: breakSlot ? 'rgba(239,68,68,0.08)' : d === selectedDay ? 'rgba(59,130,246,0.035)' : 'transparent',
                             }}
                           >

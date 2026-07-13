@@ -333,10 +333,16 @@ service cloud.firestore {
       // (class-related or otherwise: department meetings, viva boards,
       // student consultations). Same owner-only shape as classIndex above
       // — this is private to the faculty account, never read by students
-      // or other faculty.
+      // or other faculty. Write additionally requires the Blue Tick
+      // (isVerifiedFaculty) — scheduling a real meeting is a "fake
+      // teacher could cause damage" action per the manual verification
+      // policy (§ "Faculty Module"), same tier as facultyAssignments
+      // create/marks/notices above, so an unverified account can still
+      // read (e.g. see an empty list on their own dashboard) but not
+      // schedule one.
       match /meetings/{meetingId} {
         allow read: if isSignedIn() && request.auth.uid == uid;
-        allow write: if isSignedIn() && request.auth.uid == uid;
+        allow write: if isSignedIn() && request.auth.uid == uid && isVerifiedFaculty(uid);
       }
     }
 

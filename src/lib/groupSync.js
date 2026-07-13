@@ -199,6 +199,27 @@ export async function waitForOwnMembership(groupId, retries = 5, delayMs = 400) 
   return false;
 }
 
+/**
+ * Self-service: write the CURRENT user's own mobile number onto their
+ * members/{uid} doc for THIS group. Firestore rules already allow a
+ * member to self-update any field except verified/role (see the
+ * `request.auth.uid == memberUid` branch of the members update rule),
+ * so this needs no rules change.
+ *
+ * A student's mobile is per-group (member doc), not a single global
+ * profile field, because joinGroup() already writes a fresh member doc
+ * per class group — mirroring that shape keeps one write path instead
+ * of a second, parallel "global profile" one. In practice a student only
+ * has one active groupId at a time (their own batch+dept), so this reads
+ * like a single number in the UI even though it's stored per-group.
+ */
+export async function updateOwnMobile(groupId, mobile) {
+  const uid = auth.currentUser?.uid;
+  if (!uid || !groupId) return;
+  const trimmed = String(mobile || '').trim();
+  await updateDoc(doc(db, 'groups', groupId, 'members', uid), { mobile: trimmed });
+}
+
 /** Admin-only: list every group summary doc (batch/dept/lastActivityAt). */
 export async function listAllGroups() {
   const snap = await getDocs(collection(db, 'groups'));
