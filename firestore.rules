@@ -230,6 +230,23 @@ service cloud.firestore {
     // genuinely carries a verified @stud.kuet.ac.bd email; the visitor's
     // main session is never involved in this write.
     // -------------------------------------------------------------
+    // -------------------------------------------------------------
+    // OTP email verification (functions/index.js requestOtp/verifyOtp) —
+    // shared by student + faculty "code main, link backup" flow. Every
+    // read/write here happens ONLY via the Admin SDK inside those two
+    // Cloud Functions; the client calls them through httpsCallable, never
+    // touches these documents directly. Denying all client access is the
+    // actual security boundary — a client that could read otpCodes/{email}
+    // could read someone else's code, and a client that could write it
+    // could self-verify without ever proving mailbox ownership.
+    // -------------------------------------------------------------
+    match /otpCodes/{email} {
+      allow read, write: if false;
+    }
+    match /mail/{docId} {
+      allow read, write: if false;
+    }
+
     match /verifiedRolls/{roll} {
       allow read: if isSignedIn();
       // MUST be an exact match of the roll to the token's verified KUET

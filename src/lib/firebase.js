@@ -2,6 +2,7 @@ import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import { initializeFirestore, persistentLocalCache, persistentMultipleTabManager } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
+import { getFunctions } from 'firebase/functions';
 
 // Exported so adminAuth.js can spin up a *second*, independent Firebase app
 // instance (same project) for the admin login flow without touching the
@@ -27,6 +28,11 @@ export const db = initializeFirestore(app, {
 });
 
 export const storage = getStorage(app);
+
+// Used by otpVerify.js to call requestOtp / verifyOtp — region left as
+// default (us-central1) since Cloud Functions were deployed there
+// already for the push-notification triggers (see functions/index.js).
+export const functions = getFunctions(app);
 
 // Analytics — lazy load so it doesn't block app startup
 export const getFirebaseAnalytics = async () => {

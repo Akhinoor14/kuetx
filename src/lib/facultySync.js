@@ -34,7 +34,21 @@ export async function createFacultyShell(uid, officialEmail) {
   if (existing.exists()) return existing.data();
 
   const data = {
-    officialEmail: String(officialEmail || '').trim(),
+    // BUGFIX: was `.trim()` only, no `.toLowerCase()`. Firebase Auth
+    // always stores/returns emails lowercased (result.user.email from the
+    // magic-link/OTP verify session is always lowercase), and
+    // verifiedFacultyEmails/{email} is keyed by that same lowercase
+    // value. If someone typed their email with any uppercase at
+    // Register, officialEmail here kept the original casing — so
+    // firestore.rules' exists(verifiedFacultyEmails/$(officialEmail))
+    // check silently failed (case-sensitive doc-path lookup), verifiedAt
+    // could never flip, and every subsequent verify attempt (link OR
+    // code) looked successful but "didn't stick." This is what caused
+    // "link diye verify korar poreo website bole verified na" even
+    // though completeFacultyVerificationLink()/verifyOtp() both
+    // genuinely succeeded — the mismatch was one level up, in the
+    // update() this fact bridges into.
+    officialEmail: String(officialEmail || '').trim().toLowerCase(),
     name: '',
     title: '',
     dept: '',
@@ -115,12 +129,27 @@ export const markFacultyVerifiedIfEmailConfirmed = syncFacultyVerificationStatus
  * MERGED_FACULTY_MODULE_PROMPT.md §10).
  */
 export async function syncFacultyVerificationStatus(uid, officialEmail) {
-  const isVerified = await isFacultyEmailVerified(officialEmail);
+  // Defensive lowercase here too — protects existing faculty/{uid} docs
+  // created BEFORE the officialEmail-casing fix in createFacultyShell()
+  // above, which may still hold a mixed-case value. isFacultyEmailVerified
+  // reads verifiedFacultyEmails/{email} by exact doc ID, and that
+  // collection is always written lowercase (Firebase Auth's own casing),
+  // so normalizing the lookup key here is what actually matters — not
+  // relying on the caller (or an old stored doc) to already be lowercase.
+  const normalizedEmail = String(officialEmail || '').trim().toLowerCase();
+  const isVerified = await isFacultyEmailVerified(normalizedEmail);
   if (!isVerified) return false;
   const ref = facultyDocRef(uid);
   const snap = await getDoc(ref);
   if (snap.exists() && snap.data()?.verifiedAt) return true; // already synced
-  await updateDoc(ref, { verifiedAt: serverTimestamp() });
+  // Also self-heal the stored officialEmail if it was saved with the old
+  // (non-lowercased) logic — otherwise the *next* sync attempt would hit
+  // the exact same rules mismatch again via resource.data.officialEmail.
+  const updates = { verifiedAt: serverTimestamp() };
+  if (snap.exists() && snap.data()?.officialEmail !== normalizedEmail) {
+    updates.officialEmail = normalizedEmail;
+  }
+  await updateDoc(ref, updates);
   return true;
 }
 
