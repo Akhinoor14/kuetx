@@ -43,21 +43,21 @@ export const NAV_FACULTY = [
     ],
   },
   {
-    group: 'Schedule',
-    isSubgroup: true,
-    hubPath: '/faculty/schedule',
-    hubIcon: 'Clock',
-    items: [
-      { id: 'f-schedule', label: 'My Schedule', icon: 'Clock', path: '/faculty/schedule' },
-    ],
-  },
-  {
     group: 'Meetings',
     isSubgroup: true,
     hubPath: '/faculty/meetings',
     hubIcon: 'Video',
     items: [
       { id: 'f-meetings', label: 'Meetings', icon: 'Video', path: '/faculty/meetings' },
+    ],
+  },
+  {
+    group: 'Schedule',
+    isSubgroup: true,
+    hubPath: '/faculty/schedule',
+    hubIcon: 'Clock',
+    items: [
+      { id: 'f-schedule', label: 'My Schedule', icon: 'Clock', path: '/faculty/schedule' },
     ],
   },
   {

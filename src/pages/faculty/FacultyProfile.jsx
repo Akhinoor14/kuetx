@@ -99,6 +99,8 @@ export default function FacultyProfile() {
   const [saved, setSaved] = useState(false);
   const [photoURL, setPhotoURL] = useState(null);
   const [showAvatarModal, setShowAvatarModal] = useState(false);
+  const [verifiedAt, setVerifiedAt] = useState(null);
+  const [createdAt, setCreatedAt] = useState(null);
 
   useEffect(() => {
     const uid = auth.currentUser?.uid;
@@ -106,6 +108,8 @@ export default function FacultyProfile() {
     getFacultyDoc(uid).then((fdoc) => {
       if (fdoc) {
         setOfficialEmail(fdoc.officialEmail || '');
+        setVerifiedAt(fdoc.verifiedAt || null);
+        setCreatedAt(fdoc.createdAt || null);
         setForm({
           name: fdoc.name || '',
           title: fdoc.title || '',
@@ -336,12 +340,61 @@ export default function FacultyProfile() {
             {/* At a glance — small summary card, same visual weight as
                 the student page's stat-card language but simplified since
                 faculty has no GPA/attendance-style metrics here. */}
+            {/* At a glance — real account-level facts (verification status,
+                contact completeness, member-since date) instead of just
+                re-showing the Title/Department badges already visible in
+                the Identity section right above this. */}
             <Section title="At a Glance" icon={<Icons.Sparkles size={14} />}>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-                {form.title && <Badge label={form.title} />}
-                {unitName && <Badge label={unitName} color="#0ea5e9" />}
-                {!form.title && !unitName && (
-                  <span style={{ fontSize: 12.5, color: 'var(--muted)' }}>Fill in Identity to see badges here.</span>
+              <div style={{ display: 'grid', gap: 10 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                  {officialEmail ? (
+                    <>
+                      <Icons.BadgeCheck size={16} color="#10b981" style={{ flexShrink: 0 }} />
+                      <span style={{ fontSize: 13, color: 'var(--text)', fontWeight: 600 }}>Institutional email verified</span>
+                    </>
+                  ) : (
+                    <>
+                      <Icons.CircleAlert size={16} color="#f59e0b" style={{ flexShrink: 0 }} />
+                      <span style={{ fontSize: 13, color: 'var(--text)', fontWeight: 600 }}>Institutional email not linked</span>
+                    </>
+                  )}
+                </div>
+
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                  {form.name && form.title && form.dept ? (
+                    <>
+                      <Icons.CheckCircle2 size={16} color="#10b981" style={{ flexShrink: 0 }} />
+                      <span style={{ fontSize: 13, color: 'var(--text)', fontWeight: 600 }}>Profile complete</span>
+                    </>
+                  ) : (
+                    <>
+                      <Icons.CircleAlert size={16} color="#f59e0b" style={{ flexShrink: 0 }} />
+                      <span style={{ fontSize: 13, color: 'var(--text)', fontWeight: 600 }}>Profile incomplete — add Identity details</span>
+                    </>
+                  )}
+                </div>
+
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                  {form.phone || form.officeRoom ? (
+                    <>
+                      <Icons.CheckCircle2 size={16} color="#10b981" style={{ flexShrink: 0 }} />
+                      <span style={{ fontSize: 13, color: 'var(--text)', fontWeight: 600 }}>Reachable by students (phone/office set)</span>
+                    </>
+                  ) : (
+                    <>
+                      <Icons.CircleAlert size={16} color="var(--muted)" style={{ flexShrink: 0 }} />
+                      <span style={{ fontSize: 13, color: 'var(--muted)', fontWeight: 500 }}>No phone or office room added yet</span>
+                    </>
+                  )}
+                </div>
+
+                {createdAt?.toDate && (
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 10, paddingTop: 4, borderTop: '1px solid var(--border)', marginTop: 2 }}>
+                    <Icons.CalendarDays size={16} color="var(--muted)" style={{ flexShrink: 0 }} />
+                    <span style={{ fontSize: 12.5, color: 'var(--muted)' }}>
+                      Faculty member since {createdAt.toDate().toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
+                    </span>
+                  </div>
                 )}
               </div>
             </Section>
