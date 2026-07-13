@@ -23,6 +23,7 @@ import { subscribeMembers } from '../../lib/groupSync';
 import { subscribeSessionAttendance } from '../../lib/facultyMarksSync';
 import { DAYS } from '../../lib/timeModels';
 import { getFacultyDoc } from '../../lib/facultySync';
+import { getShortTitle } from '../../lib/facultyTitle';
 
 export default function FacultyDashboard() {
   const { isFounderBypass } = useIsFaculty();
@@ -111,52 +112,7 @@ export default function FacultyDashboard() {
   // to the name in the hero — this is the one spot every faculty member sees
   // on login, so it should reflect their title everywhere, not just on the
   // profile page.
-  const TITLE_SHORT_MAP = [
-    // Academic ranks
-    [/^professor\s*emeritus$/i, 'Prof. Emeritus'],
-    [/^assistant\s*professor$/i, 'Asst. Prof.'],
-    [/^associate\s*professor$/i, 'Assoc. Prof.'],
-    [/^adjunct\s*professor$/i, 'Adj. Prof.'],
-    [/^visiting\s*professor$/i, 'Visiting Prof.'],
-    [/^professor$/i, 'Prof.'],
-    [/^senior\s*lecturer$/i, 'Sr. Lecturer'],
-    [/^junior\s*lecturer$/i, 'Jr. Lecturer'],
-    [/^lecturer$/i, 'Lecturer'],
-    [/^instructor$/i, 'Instructor'],
-    [/^teaching\s*assistant$/i, 'TA'],
-    [/^research\s*assistant$/i, 'RA'],
-    [/^post[\s-]?doctoral\s*fellow$/i, 'Postdoc'],
-    // Leadership / admin designations
-    [/^vice[\s-]?chancellor$/i, 'VC'],
-    [/^pro[\s-]?vice[\s-]?chancellor$/i, 'Pro-VC'],
-    [/^dean$/i, 'Dean'],
-    [/^chairman$/i, 'Chairman'],
-    [/^head\s*of\s*department$/i, 'HoD'],
-    [/^provost$/i, 'Provost'],
-    [/^registrar$/i, 'Registrar'],
-    [/^deputy\s*registrar$/i, 'Dy. Registrar'],
-    [/^assistant\s*registrar$/i, 'Asst. Registrar'],
-    [/^proctor$/i, 'Proctor'],
-    [/^director$/i, 'Director'],
-    [/^deputy\s*director$/i, 'Dy. Director'],
-    [/^coordinator$/i, 'Coordinator'],
-    [/^advisor$/i, 'Advisor'],
-    [/^principal$/i, 'Principal'],
-    [/^vice[\s-]?principal$/i, 'Vice Principal'],
-  ];
-  const shortTitle = (() => {
-    const t = (facultyProfile?.title || '').trim();
-    if (!t) return '';
-    for (const [re, short] of TITLE_SHORT_MAP) {
-      if (re.test(t)) return short;
-    }
-    // Fallback: abbreviate leading words to initials, keep the last word
-    // full (e.g. "Deputy Registrar" -> "D. Registrar") so something short
-    // always shows even for titles we don't explicitly recognize.
-    const words = t.split(/\s+/);
-    if (words.length === 1) return t;
-    return words.map((w, i) => (i === words.length - 1 ? w : `${w[0]}.`)).join(' ');
-  })();
+  const shortTitle = getShortTitle(facultyProfile?.title);
 
   if (classIndex === null) {
     return (
@@ -387,27 +343,26 @@ export default function FacultyDashboard() {
                   {timeGreeting}
                 </div>
                 <h1 style={{ fontSize: 'clamp(28px, 6vw, 36px)', fontWeight: 800, letterSpacing: '-0.055em', lineHeight: 1.0, margin: 0, display: 'flex', alignItems: 'baseline', gap: 10, flexWrap: 'wrap' }}>
-                  <span>{facultyDisplayName || 'Faculty'}</span>
                   {shortTitle && (
                     <span style={{
-                      fontSize: 'clamp(12px, 2.4vw, 14px)',
+                      fontSize: 'clamp(14px, 3vw, 18px)',
                       fontWeight: 700,
+                      fontStyle: 'italic',
                       letterSpacing: '0',
                       color: 'var(--accent)',
-                      background: 'rgba(var(--accentRGB), 0.10)',
-                      padding: '3px 10px',
-                      borderRadius: 999,
                       whiteSpace: 'nowrap',
                     }}>
                       {shortTitle}
                     </span>
                   )}
+                  <span style={{
+                    fontFamily: "'Space Grotesk', 'Sora', 'Hind Siliguri', system-ui, sans-serif",
+                    background: 'linear-gradient(120deg, var(--text) 55%, var(--accent) 130%)',
+                    WebkitBackgroundClip: 'text',
+                    backgroundClip: 'text',
+                    color: 'transparent',
+                  }}>{facultyDisplayName || 'Faculty'}</span>
                 </h1>
-                {facultyProfile?.title && (
-                  <div style={{ fontSize: 13, color: 'var(--muted)', marginTop: 8, fontWeight: 600 }}>
-                    {facultyProfile.title}
-                  </div>
-                )}
               </div>
             </div>
 
@@ -448,17 +403,17 @@ export default function FacultyDashboard() {
         <div className="dashboard-stats-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 8, marginBottom: 12 }}>
           {statCard('BookOpen', 'Active Classes', activeAssignments.length, 'This term', '#3B82F6')}
           {statCard('Users', 'Students Taught', uniqueStudentUids.size, 'Unique, all classes', '#10B981')}
-          {statCard('CalendarCheck', 'This Week', scheduledThisWeek > 0 ? `${heldThisWeek}/${scheduledThisWeek}` : '—', scheduledThisWeek > 0 ? 'Classes held, across all courses' : 'No classes scheduled', '#F59E0B')}
           {rotatingHeldCard()}
+          {statCard('CalendarCheck', 'This Week', scheduledThisWeek > 0 ? `${heldThisWeek}/${scheduledThisWeek}` : '—', scheduledThisWeek > 0 ? 'Classes held, across all courses' : 'No classes scheduled', '#F59E0B')}
         </div>
 
         {/* ── Today's Classes + My Classes — on large screens these used to
              each stack full-width with a lot of empty space beside their
              (usually short) content; side-by-side as two columns fixes
              that, while still stacking on narrow/mobile screens. ── */}
-        <div className="dashboard-home-columns" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))', gap: 12, marginBottom: 12, alignItems: 'start' }}>
+        <div className="dashboard-home-columns" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))', gap: 12, marginBottom: 12, alignItems: 'stretch' }}>
 
-        <div className="card" style={{ padding: '14px 16px', borderRadius: 14, margin: 0 }}>
+        <div className="card" style={{ padding: '14px 16px', borderRadius: 14, margin: 0, height: '100%', display: 'flex', flexDirection: 'column' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
             <div style={{ fontSize: 11, fontWeight: 800, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.07em', display: 'flex', alignItems: 'center', gap: 6 }}>
               <Icons.CalendarClock size={13} /> Today's Classes
@@ -466,52 +421,65 @@ export default function FacultyDashboard() {
             <Link to="/faculty/schedule" style={{ fontSize: 11, color: 'var(--accent)', textDecoration: 'none', fontWeight: 700 }}>Full schedule →</Link>
           </div>
           {todaysClasses.length > 0 ? (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8, flex: 1 }}>
               {todaysClasses.map((c, idx) => (
                 <Link
                   key={`${c.assignmentId}-${idx}`}
                   to={`/faculty/classes/${c.assignmentId}?groupId=${encodeURIComponent(c.groupId)}`}
                   style={{ textDecoration: 'none', color: 'inherit' }}
                 >
-                  <div style={{
-                    display: 'flex', gap: 10, padding: '9px 12px', borderRadius: 10, alignItems: 'center',
-                    background: 'linear-gradient(180deg, rgba(59,130,246,0.10), rgba(59,130,246,0.05))',
-                    border: '1px solid rgba(59,130,246,0.18)',
-                  }}>
-                    <div style={{ fontWeight: 900, fontSize: 11.5, color: 'var(--accent)', minWidth: 46, flexShrink: 0, fontFamily: 'JetBrains Mono, monospace' }}>
-                      {String(c.slot).replace(/\s+break\s*$/i, '')}
+                  <div
+                    className="today-class-row"
+                    style={{
+                      display: 'flex', gap: 12, padding: '11px 14px', borderRadius: 12, alignItems: 'center',
+                      background: 'linear-gradient(135deg, rgba(59,130,246,0.09), rgba(59,130,246,0.03))',
+                      border: '1px solid rgba(59,130,246,0.16)',
+                      transition: 'transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease',
+                    }}
+                  >
+                    <div style={{
+                      display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+                      minWidth: 52, flexShrink: 0, padding: '6px 4px', borderRadius: 9,
+                      background: 'rgba(59,130,246,0.12)',
+                    }}>
+                      <div style={{ fontWeight: 800, fontSize: 11, color: 'var(--accent)', fontFamily: 'JetBrains Mono, monospace', letterSpacing: '-0.02em', lineHeight: 1.2, textAlign: 'center' }}>
+                        {String(c.slot).replace(/\s+break\s*$/i, '')}
+                      </div>
                     </div>
                     <div style={{ flex: 1, minWidth: 0 }}>
-                      <div style={{ fontSize: 13, fontWeight: 700, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{c.courseCode} — {c.courseTitle}</div>
-                      <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 1 }}>{c.batch?.toUpperCase()} {c.dept}</div>
+                      <div style={{ fontSize: 13.5, fontWeight: 700, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{c.courseCode} — {c.courseTitle}</div>
+                      <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 2, fontWeight: 600 }}>{c.batch?.toUpperCase()} {c.dept}</div>
                     </div>
+                    <Icons.ChevronRight size={16} color="rgba(59,130,246,0.5)" style={{ flexShrink: 0 }} />
                   </div>
                 </Link>
               ))}
             </div>
           ) : (
-            <div style={{ fontSize: 12.5, color: 'var(--muted)', textAlign: 'center', padding: '10px 0' }}>
+            <div style={{ fontSize: 12.5, color: 'var(--muted)', textAlign: 'center', padding: '18px 0', display: 'flex', flex: 1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
+              <Icons.CalendarOff size={20} color="var(--muted)" style={{ opacity: 0.5 }} />
               No scheduled classes today
             </div>
           )}
         </div>
 
         {/* Classes overview — mirrors the student dashboard's "Academic Journey" progress card */}
-        {activeAssignments.length > 0 && (
-          <div className="card dashboard-roadmap" style={{ padding: '18px 18px 16px', border: '1px solid rgba(var(--accentRGB), 0.10)', background: 'linear-gradient(180deg, rgba(var(--accentRGB), 0.04), var(--surfaceGlassStrong))', margin: 0 }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, alignItems: 'flex-start', marginBottom: 10, flexWrap: 'wrap' }}>
-              <div>
-                <div style={{ fontSize: 12, fontWeight: 800, letterSpacing: '0.10em', textTransform: 'uppercase', color: 'var(--muted)' }}>My Classes</div>
-                <div style={{ fontSize: 13, color: 'var(--muted)', marginTop: 4 }}>{activeAssignments.length} active class{activeAssignments.length !== 1 ? 'es' : ''} this term</div>
-              </div>
-              <Link to="/faculty/classes" style={{ fontSize: 12, color: 'var(--accent)', textDecoration: 'none', fontWeight: 600 }}>All classes →</Link>
+        <div className="card dashboard-roadmap" style={{ padding: '18px 18px 16px', border: '1px solid rgba(var(--accentRGB), 0.10)', background: 'linear-gradient(180deg, rgba(var(--accentRGB), 0.04), var(--surfaceGlassStrong))', margin: 0, height: '100%', display: 'flex', flexDirection: 'column' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, alignItems: 'flex-start', marginBottom: 10, flexWrap: 'wrap' }}>
+            <div>
+              <div style={{ fontSize: 12, fontWeight: 800, letterSpacing: '0.10em', textTransform: 'uppercase', color: 'var(--muted)' }}>My Classes</div>
+              <div style={{ fontSize: 13, color: 'var(--muted)', marginTop: 4 }}>{activeAssignments.length} active class{activeAssignments.length !== 1 ? 'es' : ''} this term</div>
             </div>
-            <div style={{ display: 'grid', gap: 8 }}>
+            <Link to="/faculty/classes" style={{ fontSize: 12, color: 'var(--accent)', textDecoration: 'none', fontWeight: 600 }}>All classes →</Link>
+          </div>
+          {activeAssignments.length > 0 ? (
+            <div style={{ display: 'grid', gap: 8, flex: 1, alignContent: 'start' }}>
               {activeAssignments.map((c) => {
                 const a = assignments[c.assignmentId];
                 const logged = (sessionsByAssignment[c.assignmentId] || []).length;
                 const planned = a?.plannedTotalClasses;
                 const pct = planned ? Math.min(100, Math.round((logged / planned) * 100)) : null;
+                const classDays = new Set((a?.dayTimeSlots || []).map((s) => s.day));
                 return (
                   <Link
                     key={c.assignmentId}
@@ -519,12 +487,36 @@ export default function FacultyDashboard() {
                     style={{ textDecoration: 'none', color: 'var(--text)' }}
                   >
                     <div style={{ padding: '10px 12px', borderRadius: 12, background: 'rgba(var(--accentRGB), 0.04)', border: '1px solid rgba(var(--accentRGB), 0.10)' }}>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 10, marginBottom: pct !== null ? 6 : 0 }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 10, marginBottom: 8 }}>
                         <div style={{ fontSize: 13, fontWeight: 800 }}>{c.courseCode} — {c.batch?.toUpperCase()} {c.dept}</div>
                         <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--muted)', whiteSpace: 'nowrap' }}>
                           {planned ? `${logged}/${planned} classes` : `${logged} logged`}
                         </div>
                       </div>
+
+                      {/* Weekly day-strip — which weekdays this course runs on,
+                          so this card shows something the stat cards above
+                          don't: the actual class-week pattern at a glance. */}
+                      <div style={{ display: 'flex', gap: 4, marginBottom: pct !== null ? 8 : 0 }}>
+                        {DAYS.map((d) => {
+                          const on = classDays.has(d);
+                          return (
+                            <div
+                              key={d}
+                              title={d}
+                              style={{
+                                flex: 1, textAlign: 'center', fontSize: 9.5, fontWeight: 800, padding: '4px 0', borderRadius: 6,
+                                color: on ? '#fff' : 'var(--muted)',
+                                background: on ? 'linear-gradient(135deg, #3B82F6, #10B981)' : 'rgba(var(--accentRGB), 0.06)',
+                                opacity: on ? 1 : 0.55,
+                              }}
+                            >
+                              {d.slice(0, 2)}
+                            </div>
+                          );
+                        })}
+                      </div>
+
                       {pct !== null && (
                         <div style={{ height: 8, borderRadius: 999, background: 'rgba(var(--accentRGB), 0.08)', overflow: 'hidden' }}>
                           <div style={{ width: `${pct}%`, height: '100%', borderRadius: 999, background: 'linear-gradient(90deg, #3B82F6, #10B981)', transition: 'width 0.3s ease' }} />
@@ -535,8 +527,13 @@ export default function FacultyDashboard() {
                 );
               })}
             </div>
-          </div>
-        )}
+          ) : (
+            <div style={{ fontSize: 12.5, color: 'var(--muted)', textAlign: 'center', padding: '18px 0', display: 'flex', flex: 1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
+              <Icons.BookOpen size={20} color="var(--muted)" style={{ opacity: 0.5 }} />
+              No active classes yet
+            </div>
+          )}
+        </div>
 
         </div>
         {/* ── end dashboard-home-columns ── */}

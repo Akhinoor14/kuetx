@@ -1884,6 +1884,12 @@ h3 { font-size: 15px; font-weight: 600; }
   box-shadow: 0 14px 34px rgba(0, 0, 0, 0.12);
 }
 
+.dashboard-page .today-class-row:hover {
+  transform: translateY(-1px);
+  border-color: rgba(59, 130, 246, 0.32);
+  box-shadow: 0 6px 16px rgba(59, 130, 246, 0.12);
+}
+
 .dashboard-page h1,
 .dashboard-page .section-title,
 .dashboard-page .tag {
@@ -8576,6 +8582,7 @@ input[type="range"]::-webkit-slider-thumb {
   overflow: hidden;
   display: -webkit-box;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
   -webkit-box-orient: vertical;
 }
 .kuetx-notice-toast-close {

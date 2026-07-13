@@ -18,6 +18,7 @@ import { guessDeptFromFacultyEmail } from '../../lib/facultyEmailVerify';
 import { notify } from '../../lib/notify';
 import { getProfilePhotoURL } from '../../lib/profilePicture';
 import { AvatarUploadModal } from '../../components/AvatarUploadModal';
+import { getShortTitle } from '../../lib/facultyTitle';
 
 // ─── Shared field styles (used only inside the edit form) ─────────────────
 const inputStyle = {
@@ -166,6 +167,7 @@ export default function FacultyProfile() {
 
   const displayName = form.preferredName || form.name || 'Faculty';
   const unitName = findUnitName(form.dept);
+  const shortTitle = getShortTitle(form.title);
 
   return (
     <div className="hub-page-bg page-enter dashboard-page" style={{ minHeight: '100vh' }}>
@@ -218,11 +220,21 @@ export default function FacultyProfile() {
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6 }}>
-            <div style={{ fontSize: 'clamp(19px,4.5vw,28px)', fontWeight: 900, color: 'var(--text)', letterSpacing: '-0.02em', lineHeight: 1.2, fontFamily: "'Space Grotesk', 'Sora', 'Hind Siliguri', system-ui, sans-serif" }}>
-              {displayName}
+            <div style={{ fontSize: 'clamp(19px,4.5vw,28px)', fontWeight: 900, letterSpacing: '-0.02em', lineHeight: 1.2, display: 'flex', alignItems: 'baseline', gap: 8, flexWrap: 'wrap', justifyContent: 'center' }}>
+              {shortTitle && (
+                <span style={{ fontSize: 'clamp(13px, 2.6vw, 16px)', fontWeight: 700, fontStyle: 'italic', color: 'var(--accent)', whiteSpace: 'nowrap' }}>
+                  {shortTitle}
+                </span>
+              )}
+              <span style={{
+                fontFamily: "'Space Grotesk', 'Sora', 'Hind Siliguri', system-ui, sans-serif",
+                background: 'linear-gradient(120deg, var(--text) 55%, var(--accent) 130%)',
+                WebkitBackgroundClip: 'text',
+                backgroundClip: 'text',
+                color: 'transparent',
+              }}>{displayName}</span>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap', justifyContent: 'center' }}>
-              {form.title && <Badge label={form.title} />}
               {unitName && <span style={{ fontSize: 12.5, color: 'var(--muted)', fontWeight: 600 }}>{unitName}</span>}
             </div>
             {officialEmail && <div style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 2 }}>{officialEmail}</div>}
