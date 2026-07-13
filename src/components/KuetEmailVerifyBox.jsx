@@ -3,6 +3,7 @@ import {
   sendKuetVerificationLink, buildKuetEmailFromProfile, isRollInstitutionallyVerified,
 } from '../lib/kuetEmailVerify';
 import { store, getProfile } from '../store/store';
+import ManualVerifyFallback from './ManualVerifyFallback';
 
 const STORE_KEY = 'kuetEmailVerifiedRoll';
 
@@ -93,8 +94,12 @@ export default function KuetEmailVerifyBox() {
       startPolling();
       setMsg('Sign-in link sent — check your KUET inbox (and spam/junk folder). Click the link and this page will verify automatically. No password, no account to manage.');
     } catch (err) {
-      setMsg(err?.message || 'Something went wrong.');
-      setStage('error');
+      if (err?.needsManualVerify) {
+        setStage('manual');
+      } else {
+        setMsg(err?.message || 'Something went wrong.');
+        setStage('error');
+      }
     }
   };
 
@@ -107,8 +112,12 @@ export default function KuetEmailVerifyBox() {
       startPolling();
       setMsg('New link sent — check your inbox again.');
     } catch (err) {
-      setMsg(err?.message || 'Something went wrong.');
-      setStage('error');
+      if (err?.needsManualVerify) {
+        setStage('manual');
+      } else {
+        setMsg(err?.message || 'Something went wrong.');
+        setStage('error');
+      }
     }
   };
 
@@ -158,6 +167,12 @@ export default function KuetEmailVerifyBox() {
             Send a new link
           </button>
         </div>
+      )}
+      {stage === 'manual' && (
+        <ManualVerifyFallback
+          role="student"
+          details={{ name: profile?.name, email, roll }}
+        />
       )}
       {msg && <div style={{ fontSize: 12, color: stage === 'error' ? 'var(--danger)' : 'var(--muted)', marginTop: 6 }}>{msg}</div>}
     </div>

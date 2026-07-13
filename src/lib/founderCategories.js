@@ -29,11 +29,12 @@ export const FOUNDER_CATEGORIES = [
     label: 'Approvals',
     icon: 'CheckCircle2',
     subtitle: 'Campus Lead applications, CR requests, CR leave requests',
-    getCount: (ctx) => ctx.clApplications + ctx.crRequests + ctx.leaveRequests,
+    getCount: (ctx) => ctx.clApplications + ctx.crRequests + ctx.leaveRequests + ctx.manualVerifyRequests,
     subcategories: [
       { key: 'cl-apps', label: 'CL Applications', getCount: (ctx) => ctx.clApplications },
       { key: 'cr-req', label: 'CR Requests', getCount: (ctx) => ctx.crRequests },
       { key: 'cr-leave', label: 'CR Leave Requests', getCount: (ctx) => ctx.leaveRequests },
+      { key: 'manual-verify', label: 'Manual Verification', getCount: (ctx) => ctx.manualVerifyRequests },
     ],
   },
   {

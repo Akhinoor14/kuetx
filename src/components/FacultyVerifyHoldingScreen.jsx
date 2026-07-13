@@ -31,6 +31,7 @@ import { getFacultyDoc, subscribeFacultyDoc, markFacultyVerifiedIfEmailConfirmed
 import { sendFacultyVerificationLink } from '../lib/facultyEmailVerify';
 import { requestOtpCode, verifyOtpCode } from '../lib/otpVerify';
 import OtpInput from './OtpInput';
+import ManualVerifyFallback from './ManualVerifyFallback';
 
 // Gmail's own "go straight to Spam" URL — institutional/automated
 // sign-in emails land in Spam often enough that text alone isn't
@@ -95,8 +96,12 @@ export default function FacultyVerifyHoldingScreen({ officialEmail, onVerified }
       await sendFacultyVerificationLink(email);
       setLinkStatus('resent');
     } catch (e) {
-      setLinkStatus('error');
-      setLinkError(e.message || 'Could not send the verification link. Please try again.');
+      if (e?.needsManualVerify) {
+        setLinkStatus('manual');
+      } else {
+        setLinkStatus('error');
+        setLinkError(e.message || 'Could not send the verification link. Please try again.');
+      }
     }
   };
 
@@ -145,8 +150,12 @@ export default function FacultyVerifyHoldingScreen({ officialEmail, onVerified }
       await sendFacultyVerificationLink(officialEmail);
       setLinkStatus('resent');
     } catch (e) {
-      setLinkStatus('error');
-      setLinkError(e.message || 'Could not send the verification link. Please try again.');
+      if (e?.needsManualVerify) {
+        setLinkStatus('manual');
+      } else {
+        setLinkStatus('error');
+        setLinkError(e.message || 'Could not send the verification link. Please try again.');
+      }
     }
   };
 
@@ -270,36 +279,47 @@ export default function FacultyVerifyHoldingScreen({ officialEmail, onVerified }
               </div>
             )}
 
-            {isGmailAddress(officialEmail) && (
-              <a
-                href={GMAIL_SPAM_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{
-                  display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
-                  width: '100%', padding: '11px 16px', borderRadius: 8, border: 'none',
-                  background: 'var(--accent)', color: '#fff', fontSize: 13.5, fontWeight: 700,
-                  textDecoration: 'none', marginBottom: 10, boxSizing: 'border-box',
-                }}
-              >
-                <ExternalLink size={14} />
-                Open Gmail Spam Folder
-              </a>
-            )}
+            {linkStatus === 'manual' ? (
+              <div style={{ marginBottom: 14 }}>
+                <ManualVerifyFallback
+                  role="faculty"
+                  details={{ email: officialEmail, uid }}
+                />
+              </div>
+            ) : (
+              <>
+                {isGmailAddress(officialEmail) && (
+                  <a
+                    href={GMAIL_SPAM_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{
+                      display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
+                      width: '100%', padding: '11px 16px', borderRadius: 8, border: 'none',
+                      background: 'var(--accent)', color: '#fff', fontSize: 13.5, fontWeight: 700,
+                      textDecoration: 'none', marginBottom: 10, boxSizing: 'border-box',
+                    }}
+                  >
+                    <ExternalLink size={14} />
+                    Open Gmail Spam Folder
+                  </a>
+                )}
 
-            <button
-              onClick={resendLink}
-              disabled={linkStatus === 'resending'}
-              style={{
-                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
-                width: '100%', padding: '10px 16px', borderRadius: 8, border: '1px solid var(--border)',
-                background: 'var(--bg)', color: 'var(--text)', fontSize: 13, fontWeight: 600, cursor: 'pointer',
-                marginBottom: 14,
-              }}
-            >
-              <RefreshCw size={14} />
-              {linkStatus === 'resending' ? 'Sending…' : 'Resend verification link'}
-            </button>
+                <button
+                  onClick={resendLink}
+                  disabled={linkStatus === 'resending'}
+                  style={{
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
+                    width: '100%', padding: '10px 16px', borderRadius: 8, border: '1px solid var(--border)',
+                    background: 'var(--bg)', color: 'var(--text)', fontSize: 13, fontWeight: 600, cursor: 'pointer',
+                    marginBottom: 14,
+                  }}
+                >
+                  <RefreshCw size={14} />
+                  {linkStatus === 'resending' ? 'Sending…' : 'Resend verification link'}
+                </button>
+              </>
+            )}
 
             <button
               onClick={() => setMethod('code')}

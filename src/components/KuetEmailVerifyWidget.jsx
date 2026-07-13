@@ -4,6 +4,7 @@ import { sendKuetVerificationLink, buildKuetEmailFromProfile, isRollInstitutiona
 import { requestOtpCode, verifyOtpCode } from '../lib/otpVerify';
 import { getProfile } from '../store/store';
 import OtpInput from './OtpInput';
+import ManualVerifyFallback from './ManualVerifyFallback';
 
 /**
  * Inline widget: enter just the name-part of your KUET email -> a 6-digit
@@ -28,6 +29,7 @@ export default function KuetEmailVerifyWidget({ onVerified, onSkip, compact = fa
   const [namePart, setNamePart] = useState('');
   const [stage, setStage] = useState('input'); // input -> code -> link
   const [error, setError] = useState('');
+  const [needsManualVerify, setNeedsManualVerify] = useState(false);
   const [busy, setBusy] = useState(false);
   const pollRef = useRef(null);
 
@@ -121,7 +123,12 @@ export default function KuetEmailVerifyWidget({ onVerified, onSkip, compact = fa
       setStage('link');
       startPolling();
     } catch (err) {
-      setError(err?.message || 'Verification পাঠাতে সমস্যা হয়েছে, আবার চেষ্টা করুন।');
+      if (err?.needsManualVerify) {
+        setNeedsManualVerify(true);
+        setStage('link');
+      } else {
+        setError(err?.message || 'Verification পাঠাতে সমস্যা হয়েছে, আবার চেষ্টা করুন।');
+      }
     }
     setBusy(false);
   };
@@ -132,7 +139,11 @@ export default function KuetEmailVerifyWidget({ onVerified, onSkip, compact = fa
     try {
       await sendKuetVerificationLink(email);
     } catch (err) {
-      setError(err?.message || 'আবার পাঠাতে সমস্যা হয়েছে, একটু পর আবার চেষ্টা করো।');
+      if (err?.needsManualVerify) {
+        setNeedsManualVerify(true);
+      } else {
+        setError(err?.message || 'আবার পাঠাতে সমস্যা হয়েছে, একটু পর আবার চেষ্টা করো।');
+      }
     }
     setBusy(false);
   };
@@ -241,7 +252,15 @@ export default function KuetEmailVerifyWidget({ onVerified, onSkip, compact = fa
         </div>
       )}
 
-      {stage === 'link' && (
+      {stage === 'link' && needsManualVerify && (
+        <ManualVerifyFallback
+          role="student"
+          details={{ name: profile?.name, email, roll }}
+          onDone={() => { if (onSkip) onSkip(); }}
+        />
+      )}
+
+      {stage === 'link' && !needsManualVerify && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
           <div style={{ fontSize: 12, color: 'var(--text)', lineHeight: 1.5 }}>
             <strong>{email}</strong>-এ একটা sign-in link পাঠানো হয়েছে। <strong>Spam/Junk folder-ও চেক করো</strong> — Gmail মাঝে মাঝে ওখানে ফেলে দেয়। লিংকে ক্লিক করলেই automatic verify হয়ে যাবে, কোনো password লাগবে না।

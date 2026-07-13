@@ -130,6 +130,15 @@ export async function sendKuetVerificationLink(email) {
       // project — a console configuration issue, not a code bug.
       throw new Error('KUET email verification এখন enable করা নেই (Firebase Console-এ Email Link sign-in provider off আছে) — dev-কে জানাও, তোমার পাসওয়ার্ড বা account-এর সমস্যা না।');
     }
+    if (err?.code === 'auth/quota-exceeded') {
+      // Daily send quota used up — not shown to the person as an internal
+      // limit/quota concept. The caller (UI) checks err.needsManualVerify
+      // and swaps in ManualVerifyFallback instead of surfacing this
+      // message at all.
+      const fallbackErr = new Error('Automatic verification isn\'t available right now.');
+      fallbackErr.needsManualVerify = true;
+      throw fallbackErr;
+    }
     throw err;
   }
   window.localStorage.setItem(PENDING_EMAIL_KEY, trimmedEmail);

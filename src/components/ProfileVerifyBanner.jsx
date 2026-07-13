@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import * as Icons from 'lucide-react';
 import { sendKuetVerificationLink, buildKuetEmailFromProfile, isRollInstitutionallyVerified } from '../lib/kuetEmailVerify';
 import { getProfile } from '../store/store';
+import ManualVerifyFallback from './ManualVerifyFallback';
 
 const COOLDOWN_SECONDS = 60;
 
@@ -24,7 +25,7 @@ export default function ProfileVerifyBanner({ onVerified }) {
   const roll = String(profile?.studentId || '').trim();
   const [expanded, setExpanded] = useState(false);
   const [namePart, setNamePart] = useState('');
-  const [stage, setStage] = useState('idle'); // idle -> sending -> sent
+  const [stage, setStage] = useState('idle'); // idle -> sending -> sent | manual
   const [error, setError] = useState('');
   const [cooldown, setCooldown] = useState(0);
   const pollRef = useRef(null);
@@ -88,8 +89,12 @@ export default function ProfileVerifyBanner({ onVerified }) {
       startCooldown();
       startPolling();
     } catch (err) {
-      setError(err?.message || 'Verification পাঠাতে সমস্যা হয়েছে, আবার চেষ্টা করুন।');
-      setStage('idle');
+      if (err?.needsManualVerify) {
+        setStage('manual');
+      } else {
+        setError(err?.message || 'Verification পাঠাতে সমস্যা হয়েছে, আবার চেষ্টা করুন।');
+        setStage('idle');
+      }
     }
   };
 
@@ -100,7 +105,11 @@ export default function ProfileVerifyBanner({ onVerified }) {
       await sendKuetVerificationLink(email);
       startCooldown();
     } catch (err) {
-      setError(err?.message || 'আবার পাঠাতে সমস্যা হয়েছে, একটু পর চেষ্টা করো।');
+      if (err?.needsManualVerify) {
+        setStage('manual');
+      } else {
+        setError(err?.message || 'আবার পাঠাতে সমস্যা হয়েছে, একটু পর চেষ্টা করো।');
+      }
     }
   };
 
@@ -189,6 +198,14 @@ export default function ProfileVerifyBanner({ onVerified }) {
             {stage === 'sending' ? 'পাঠানো হচ্ছে…' : 'Verification link পাঠাও'}
           </button>
         </form>
+      )}
+
+      {stage === 'manual' && (
+        <ManualVerifyFallback
+          role="student"
+          details={{ name: profile?.name, email, roll }}
+          onDone={() => setExpanded(false)}
+        />
       )}
 
       {stage === 'sent' && (

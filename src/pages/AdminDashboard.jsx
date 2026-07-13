@@ -25,6 +25,9 @@ import { FOUNDER_CATEGORIES, getFounderCategory, resolveCount, resolveSubtitle }
 import { listAllFacultyAccounts } from '../lib/facultySync';
 import { listAllActiveFacultyAssignments } from '../lib/facultyClassSync';
 import { useIsFaculty } from '../hooks/useIsFaculty';
+import {
+  subscribeManualVerifyRequests, approveManualVerifyRequest, rejectManualVerifyRequest,
+} from '../lib/manualVerifyRequests';
 
 // Every role the Founder can hand out or take away from this screen —
 // literally everyone, per the manifesto: Founder has full add/revoke
@@ -181,10 +184,12 @@ function ApprovalsView({ onBack, onSelectCategory, countCtx }) {
   const [groupIds, setGroupIds] = useState(null);
   const [crRequestsByGroup, setCrRequestsByGroup] = useState(null);
   const [leaveRequestsByGroup, setLeaveRequestsByGroup] = useState(null);
+  const [manualVerifyRequests, setManualVerifyRequests] = useState(null);
   const [err, setErr] = useState('');
   const [subTab, setSubTab] = useState('cl-apps');
 
   useEffect(() => subscribeAllCLApplications(setClApplications), []);
+  useEffect(() => subscribeManualVerifyRequests(setManualVerifyRequests), []);
   useEffect(() => { listAllGroups().then((gs) => setGroupIds(gs.map((g) => g.id))); }, []);
 
   useEffect(() => {
@@ -210,6 +215,7 @@ function ApprovalsView({ onBack, onSelectCategory, countCtx }) {
   const clAppsLoading = clApplications === null;
   const crReqLoading = crRequestsByGroup === null;
   const leaveReqLoading = leaveRequestsByGroup === null;
+  const manualVerifyLoading = manualVerifyRequests === null;
 
   const allCrRequests = Object.entries(crRequestsByGroup || {}).flatMap(([g, reqs]) => reqs.map((r) => ({ ...r, groupId: g })));
   const allLeaveRequests = Object.entries(leaveRequestsByGroup || {}).flatMap(([g, reqs]) => reqs.map((r) => ({ ...r, groupId: g })));
@@ -220,7 +226,7 @@ function ApprovalsView({ onBack, onSelectCategory, countCtx }) {
   };
 
   const category = getFounderCategory('approvals');
-  const subCtx = { ...countCtx, clApplications: clApplications?.length || 0, crRequests: allCrRequests.length, leaveRequests: allLeaveRequests.length };
+  const subCtx = { ...countCtx, clApplications: clApplications?.length || 0, crRequests: allCrRequests.length, leaveRequests: allLeaveRequests.length, manualVerifyRequests: manualVerifyRequests?.length || 0 };
 
   return (
     <CategoryShell view="approvals" onSelect={onSelectCategory} countCtx={countCtx}>
@@ -265,6 +271,20 @@ function ApprovalsView({ onBack, onSelectCategory, countCtx }) {
               label={`${r.name} (${r.roll}) — ${r.groupId} — wants to step down as CR`}
               onApprove={() => handle(clApproveLeaveCR, r.groupId, r.id, r.uid)}
               onReject={() => handle(clRejectLeaveCR, r.groupId, r.id)}
+            />
+          ))}
+        </Section>
+      )}
+
+      {subTab === 'manual-verify' && (
+        <Section title="Manual verification requests">
+          {manualVerifyLoading && <EmptyState>Loading…</EmptyState>}
+          {!manualVerifyLoading && manualVerifyRequests.length === 0 && <EmptyState>Nothing pending.</EmptyState>}
+          {(manualVerifyRequests || []).map((r) => (
+            <ApprovalRow key={r.id}
+              label={`${r.name || 'Unknown'} — ${r.email} — ${r.role === 'faculty' ? 'Faculty' : 'Student'}${r.roll ? ` (Roll: ${r.roll})` : ''}${r.dept ? ` — ${r.dept}` : ''}`}
+              onApprove={() => handle(approveManualVerifyRequest, r.id)}
+              onReject={() => handle(rejectManualVerifyRequest, r.id)}
             />
           ))}
         </Section>
@@ -1165,6 +1185,7 @@ export default function AdminDashboard() {
   const [applications, setApplications] = useState([]);
   const [rollRequests, setRollRequests] = useState([]);
   const [emailFlagCount, setEmailFlagCount] = useState(0);
+  const [manualVerifyCount, setManualVerifyCount] = useState(0);
   const [crCountMap, setCrCountMap] = useState({});
   const [leaveCountMap, setLeaveCountMap] = useState({});
 
@@ -1202,6 +1223,7 @@ export default function AdminDashboard() {
 
   useEffect(() => subscribePendingRollUnlockRequests(setRollRequests), []);
   useEffect(() => { listPendingFlags({}).then((f) => setEmailFlagCount(f.length)).catch(() => {}); }, []);
+  useEffect(() => subscribeManualVerifyRequests((reqs) => setManualVerifyCount(reqs.length)), []);
 
   // Badge counts for CR + leave requests across all classes, for the
   // Approvals card badge — one subscription per group, kept as a map so
@@ -1248,6 +1270,7 @@ export default function AdminDashboard() {
     clApplications: applications.length,
     crRequests: totalCrReq,
     leaveRequests: totalLeaveReq,
+    manualVerifyRequests: manualVerifyCount,
     emailFlags: emailFlagCount,
     rollRequests: rollRequests.length,
     classCount: groups?.length,

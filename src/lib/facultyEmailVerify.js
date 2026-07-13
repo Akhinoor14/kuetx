@@ -100,6 +100,13 @@ export async function sendFacultyVerificationLink(email) {
     if (err?.code === 'auth/operation-not-allowed') {
       throw new Error('Faculty email verification is not enabled yet (Email Link sign-in provider is off in Firebase Console) — this is a configuration issue, not a problem with your account.');
     }
+    if (err?.code === 'auth/quota-exceeded') {
+      // Same fallback signal as kuetEmailVerify.js — the UI swaps in
+      // ManualVerifyFallback rather than showing this message directly.
+      const fallbackErr = new Error('Automatic verification isn\'t available right now.');
+      fallbackErr.needsManualVerify = true;
+      throw fallbackErr;
+    }
     throw err;
   }
   window.localStorage.setItem(PENDING_EMAIL_KEY, trimmedEmail);
