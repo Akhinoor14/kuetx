@@ -210,6 +210,74 @@ export const DEPARTMENTS = [
 ];
 export const DEPT_CODES = DEPARTMENTS.map(d => d.code);
 
+// ─── Blood groups — used to validate/normalize profile.bloodGroup and by
+// the Founder Blood Bank search (BloodBankView in AdminDashboard.jsx). ───
+export const BLOOD_GROUP_VALUES = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
+
+// ─── Official KUET website links, per department (Art. 2's 16 depts) ─────
+// Kept as a separate map (not merged into DEPARTMENTS above) so nothing
+// that consumes DEPARTMENTS/DEPT_CODES for roll-parsing, seat counts, etc.
+// is affected — this is purely for places that want to link out to a
+// department's own site (e.g. the Faculty profile dept picker).
+export const DEPARTMENT_LINKS = {
+  CE:   'https://www.kuet.ac.bd/ce',
+  EEE:  'https://www.kuet.ac.bd/eee',
+  ME:   'https://www.kuet.ac.bd/me',
+  CSE:  'https://www.kuet.ac.bd/cse',
+  ECE:  'https://www.kuet.ac.bd/ece',
+  IPE:  'https://www.kuet.ac.bd/iem',
+  BECM: 'https://www.kuet.ac.bd/becm',
+  Arch: 'https://www.kuet.ac.bd/arch',
+  URP:  'https://www.kuet.ac.bd/urp',
+  LE:   'https://www.kuet.ac.bd/le',
+  TE:   'https://www.kuet.ac.bd/te',
+  BME:  'https://www.kuet.ac.bd/bme',
+  MSE:  'https://www.kuet.ac.bd/mse',
+  ESE:  'https://www.kuet.ac.bd/ese',
+  ChE:  'https://www.kuet.ac.bd/che',
+  MTE:  'https://www.kuet.ac.bd/mte',
+};
+
+// ─── KUET Institutes — separate from the 16 academic Departments above.
+// Institutes (IICT/IDM/IEPT) don't take undergrad rolls the way
+// Departments do, so they're deliberately NOT folded into DEPARTMENTS/
+// DEPT_CODES (that would break roll-parsing and seat-count logic
+// downstream). This exists so faculty who belong to an Institute rather
+// than a Department have a correct, linkable option in the dept picker.
+export const INSTITUTES = [
+  { code: 'IICT', name: 'Institute of Information and Communication Technology', link: 'https://iict.kuet.ac.bd/iict/' },
+  { code: 'IDM',  name: 'Institute of Disaster Management',                       link: 'https://www.kuet.ac.bd/idm' },
+  { code: 'IEPT', name: 'Institute of Environment and Power Technology',          link: 'https://www.kuet.ac.bd/iept' },
+];
+export const INSTITUTE_CODES = INSTITUTES.map(i => i.code);
+
+// ─── Basic Science & Humanities departments — MATH/CHEM/PHY/HUM. These
+// don't admit undergrads via a roll number the way the 16 engineering
+// Departments above do (no ROLL_DEPT_MAP entry, students aren't
+// admitted "into" them), so — same rationale as INSTITUTES above —
+// they're deliberately kept OUT of DEPARTMENTS/DEPT_CODES to avoid
+// touching roll-parsing/seat-count logic. Faculty do belong to these,
+// though, so they need a correct, linkable option in the dept picker
+// just like Institutes.
+export const BASIC_SCIENCE_DEPTS = [
+  { code: 'MATH', name: 'Department of Mathematics',              link: 'https://www.kuet.ac.bd/math' },
+  { code: 'CHEM', name: 'Department of Chemistry',                link: 'https://www.kuet.ac.bd/chem' },
+  { code: 'PHY',  name: 'Department of Physics',                  link: 'https://www.kuet.ac.bd/phy' },
+  { code: 'HUM',  name: 'Department of Humanities and Business',  link: 'https://www.kuet.ac.bd/hum' },
+];
+export const BASIC_SCIENCE_DEPT_CODES = BASIC_SCIENCE_DEPTS.map(d => d.code);
+
+// ─── Combined list for pickers that need to offer Departments,
+// Institutes, AND Basic Science/Humanities depts as one flat set of
+// selectable "academic unit" values (e.g. FacultyProfileSetupModal's
+// dept select) — each entry carries its own link so the UI can show/
+// display it without a second lookup table.
+export const ACADEMIC_UNITS = [
+  ...DEPARTMENTS.map(d => ({ code: d.code, name: d.name, link: DEPARTMENT_LINKS[d.code] || null, kind: 'department' })),
+  ...INSTITUTES.map(i => ({ code: i.code, name: i.name, link: i.link, kind: 'institute' })),
+  ...BASIC_SCIENCE_DEPTS.map(d => ({ code: d.code, name: d.name, link: d.link, kind: 'basic_science' })),
+];
+
 const ROLL_DEPT_MAP = {
   '25': 'Arch',
   '23': 'BECM',
@@ -922,6 +990,8 @@ export const normalizeProfileForSave = (input = {}) => {
     roomNo: String(raw.roomNo || '').trim(),
     advisorName: String(raw.advisorName || '').trim(),
     advisorContact: String(raw.advisorContact || '').trim(),
+    bloodGroup: BLOOD_GROUP_VALUES.includes(String(raw.bloodGroup || '').trim().toUpperCase())
+      ? String(raw.bloodGroup || '').trim().toUpperCase() : '',
     termStartDate: raw.termStartDate || null,
     yearStarted: raw.yearStarted || null,
   };
@@ -1230,6 +1300,7 @@ export const DEFAULT_PROFILE = {
   name: '', studentId: '', dept: '', session: '', batch: '', currentTerm: '', currentTermKey: '',
   totalCreditsRequired: MIN_CREDITS_GRADUATION, yearStarted: new Date().getFullYear(),
   isCR: false, hallName: '', roomNo: '', advisorName: '', advisorContact: '',
+  bloodGroup: '',
   termStartDate: null, // ISO date string: YYYY-MM-DD
 };
 

@@ -24,6 +24,7 @@ import { auth } from '../lib/firebase';
 import { pushAllToFirestore, startFirebaseSync } from '../lib/firebaseSync';
 import { uploadProfilePicture, getProfilePhotoURL, deleteProfilePicture } from '../lib/profilePicture';
 import { isRollInstitutionallyVerified } from '../lib/kuetEmailVerify';
+import { syncBloodDonorEntry } from '../lib/bloodDonorSync';
 import { getGroupId } from '../lib/groupUtils';
 import { subscribeMyRole, requestLeaveCR } from '../lib/groupSync';
 import ClaimCRCard, { ClaimCRInlineButton } from '../components/ClaimCRCard';
@@ -816,6 +817,11 @@ export default function Profile() {
     const next = normalizeProfileForSave(formData);
     store.set('profile', next);
     setProfile(next);
+    // Keep the Founder's Blood Bank directory in sync with later edits
+    // too, not just first-run onboarding — see bloodDonorSync.js.
+    if (auth.currentUser?.uid && !auth.currentUser.isAnonymous) {
+      syncBloodDonorEntry(auth.currentUser.uid, next).catch(() => {});
+    }
     setIsModalOpen(false);
     setSaved(true);
     setTimeout(() => setSaved(false), 2500);

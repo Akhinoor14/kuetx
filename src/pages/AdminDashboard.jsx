@@ -15,6 +15,7 @@ import {
   approveCLApplication, rejectCLApplication, getStaffDisplayInfoBatch,
 } from '../lib/staffSync';
 import { CORE_TEAM_LEAD_ROLES, ROLE_LABELS, ROLE_SCOPE_KIND, ROLES } from '../lib/staffRoles';
+import { BLOOD_GROUP_VALUES } from '../store/store';
 import { subscribePendingRollUnlockRequests, resolveRollUnlockRequest, dismissRollUnlockRequest } from '../lib/rollOwnership';
 import { listPendingFlags, resolveEmailFlag } from '../lib/emailFlags';
 import ClassmatesList from '../components/ClassmatesList';
@@ -23,6 +24,7 @@ import CategorySubNav from '../components/CategorySubNav';
 import SubcategoryTabs from '../components/SubcategoryTabs';
 import { FOUNDER_CATEGORIES, getFounderCategory, resolveCount, resolveSubtitle } from '../lib/founderCategories';
 import { listAllFacultyAccounts } from '../lib/facultySync';
+import { listAllBloodDonors, searchBloodDonorsByGroup } from '../lib/bloodDonorSync';
 import { listAllActiveFacultyAssignments } from '../lib/facultyClassSync';
 import { useIsFaculty } from '../hooks/useIsFaculty';
 import {
@@ -1046,6 +1048,95 @@ function FacultyView({ onBack, onSelectCategory, countCtx }) {
   );
 }
 
+// =======================================================================
+// BLOOD BANK — Founder searches by blood group; results show name, roll,
+// and department for every matching student. Backed by the separate
+// bloodDonors/{uid} collection (see bloodDonorSync.js) rather than the
+// personal per-user profile store, which isn't queryable across students.
+// =======================================================================
+function BloodBankView({ onBack, onSelectCategory, countCtx }) {
+  const [selectedGroup, setSelectedGroup] = useState('');
+  const [results, setResults] = useState(null); // null = no search run yet
+  const [searching, setSearching] = useState(false);
+  const [error, setError] = useState('');
+
+  const runSearch = async (bg) => {
+    setSelectedGroup(bg);
+    if (!bg) { setResults(null); return; }
+    setSearching(true);
+    setError('');
+    try {
+      const donors = await searchBloodDonorsByGroup(bg);
+      setResults(donors.sort((a, b) => (a.name || '').localeCompare(b.name || '')));
+    } catch (err) {
+      setError(err?.message || 'Search failed.');
+      setResults([]);
+    } finally {
+      setSearching(false);
+    }
+  };
+
+  return (
+    <CategoryShell view="blood" onSelect={onSelectCategory} countCtx={countCtx}>
+      <h2 style={{ fontSize: 16, fontWeight: 700, margin: '0 0 4px' }}>Blood Bank</h2>
+      <p style={{ fontSize: 12.5, color: 'var(--muted)', margin: '0 0 16px' }}>
+        {countCtx.bloodDonorCount ?? '…'} students have a blood group on file. Search one to see who's available.
+      </p>
+
+      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 18 }}>
+        {BLOOD_GROUP_VALUES.map((bg) => (
+          <button
+            key={bg}
+            type="button"
+            onClick={() => runSearch(bg)}
+            style={{
+              padding: '10px 18px', borderRadius: 10, fontWeight: 800, fontSize: 14, cursor: 'pointer',
+              border: selectedGroup === bg ? '1px solid var(--accent)' : '1px solid var(--border)',
+              background: selectedGroup === bg ? 'color-mix(in srgb, var(--accent) 14%, var(--surface))' : 'var(--card)',
+              color: selectedGroup === bg ? 'var(--accent)' : 'var(--text)',
+            }}
+          >
+            {bg}
+          </button>
+        ))}
+      </div>
+
+      {error && <div style={{ fontSize: 12.5, color: 'var(--danger)', marginBottom: 12 }}>{error}</div>}
+
+      {!selectedGroup && <EmptyState>Pick a blood group above to search.</EmptyState>}
+
+      {selectedGroup && (
+        <Section title={`${selectedGroup} · ${searching ? '…' : (results || []).length} found`}>
+          {searching && <EmptyState>Searching…</EmptyState>}
+          {!searching && (results || []).length === 0 && <EmptyState>No students with {selectedGroup} on file yet.</EmptyState>}
+          {!searching && (results || []).map((donor) => (
+            <div key={donor.uid} style={{
+              display: 'flex', alignItems: 'center', gap: 12, padding: '12px', borderBottom: '1px solid var(--border)',
+            }}>
+              <div style={{
+                width: 38, height: 38, borderRadius: '50%', flexShrink: 0,
+                background: 'color-mix(in srgb, var(--danger, #dc2626) 14%, var(--surface))',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                fontWeight: 800, fontSize: 13, color: 'var(--danger, #dc2626)',
+              }}>
+                {donor.bloodGroup}
+              </div>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div style={{ fontWeight: 700, fontSize: 13.5, color: 'var(--text)' }}>{donor.name || 'Unnamed'}</div>
+                <div style={{ fontSize: 11.5, color: 'var(--muted)', display: 'flex', flexWrap: 'wrap', gap: 6, marginTop: 2 }}>
+                  <span>Roll {donor.studentId || '—'}</span>
+                  <span>·</span>
+                  <span>{donor.dept || '—'}</span>
+                </div>
+              </div>
+            </div>
+          ))}
+        </Section>
+      )}
+    </CategoryShell>
+  );
+}
+
 function CommunicationView({ onBack, onSelectCategory, groups, countCtx }) {
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
@@ -1254,6 +1345,15 @@ export default function AdminDashboard() {
     listAllFacultyAccounts().then(setFacultyList).catch(() => setFacultyList([]));
   }, []);
 
+  // Blood Bank overview count — just the total on file, for the grid
+  // card's subtitle/badge. BloodBankView does its own fetch for the
+  // actual search results (a targeted where() query), this is only the
+  // cheap "how many total" number shown before drilling in.
+  const [bloodDonorCount, setBloodDonorCount] = useState(null);
+  useEffect(() => {
+    listAllBloodDonors().then((list) => setBloodDonorCount(list.length)).catch(() => setBloodDonorCount(0));
+  }, []);
+
   const totalCrReq = Object.values(crCountMap).reduce((a, b) => a + b, 0);
   const totalLeaveReq = Object.values(leaveCountMap).reduce((a, b) => a + b, 0);
 
@@ -1276,6 +1376,7 @@ export default function AdminDashboard() {
     classCount: groups?.length,
     facultyCount: (facultyList || []).filter((f) => f.verifiedAt).length,
     facultyPending: (facultyList || []).filter((f) => !f.verifiedAt).length,
+    bloodDonorCount,
   };
 
   const onSelectCategory = (key) => setView(key);
@@ -1289,6 +1390,7 @@ export default function AdminDashboard() {
   if (view === 'trust') return <TrustSafetyView {...viewProps} />;
   if (view === 'comms') return <CommunicationView {...viewProps} />;
   if (view === 'faculty') return <FacultyView {...viewProps} />;
+  if (view === 'blood') return <BloodBankView {...viewProps} />;
 
   // Top-level grid — fully generated from FOUNDER_CATEGORIES. Adding a
   // category to that registry adds a card here automatically.

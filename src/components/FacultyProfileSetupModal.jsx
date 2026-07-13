@@ -21,7 +21,7 @@
 import { useEffect, useState } from 'react';
 import { GraduationCap } from 'lucide-react';
 import { auth } from '../lib/firebase';
-import { DEPARTMENTS } from '../store/store';
+import { DEPARTMENTS, INSTITUTES, BASIC_SCIENCE_DEPTS } from '../store/store';
 import { getFacultyDoc, saveFacultyProfile } from '../lib/facultySync';
 import { guessDeptFromFacultyEmail } from '../lib/facultyEmailVerify';
 
@@ -172,8 +172,16 @@ export default function FacultyProfileSetupModal({ onSave }) {
             <div>
               <label style={labelStyle}>Department</label>
               <select style={fieldStyle} value={form.dept} onChange={handleChange('dept')}>
-                <option value="">Select department</option>
-                {DEPARTMENTS.map((d) => <option key={d.code} value={d.code}>{d.name} ({d.code})</option>)}
+                <option value="">Select department / institute</option>
+                <optgroup label="Departments">
+                  {DEPARTMENTS.map((d) => <option key={d.code} value={d.code}>{d.name} ({d.code})</option>)}
+                </optgroup>
+                <optgroup label="Institutes">
+                  {INSTITUTES.map((i) => <option key={i.code} value={i.code}>{i.name} ({i.code})</option>)}
+                </optgroup>
+                <optgroup label="Basic Science & Humanities">
+                  {BASIC_SCIENCE_DEPTS.map((d) => <option key={d.code} value={d.code}>{d.name} ({d.code})</option>)}
+                </optgroup>
               </select>
               {errors.dept && <div style={{ fontSize: 11, color: '#dc2626', marginTop: 5 }}>{errors.dept}</div>}
             </div>

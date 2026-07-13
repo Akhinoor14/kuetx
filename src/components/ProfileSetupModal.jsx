@@ -35,6 +35,11 @@ const HALL_OPTIONS = [
   'Shaheed Smriti Hall',
 ];
 
+// Optional, collected right at first-run onboarding (step 0, both minimal
+// and full mode) so the Founder's Blood Bank search has data from day
+// one instead of depending on students going back to fill it in later.
+const BLOOD_GROUPS = ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
+
 const extractDeptCodeFromRoll = (roll) => {
   const r = String(roll || '').trim();
   if (r.length < 5) return '';
@@ -362,6 +367,7 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
       studentId: studentIdTrimmed,
       name: String(form.name || '').trim(),
       dept: effectiveDept,
+      bloodGroup: String(form.bloodGroup || '').trim(),
       session: String(form.session || '').trim(),
       batch: autoCalculatedBatch,
       currentTermKey: String(form.currentTermKey || '').trim(),
@@ -528,6 +534,14 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
                         </div>
                       )}
                     </div>
+                    <div>
+                      <label style={labelStyle}>Blood Group (optional)</label>
+                      <select value={form.bloodGroup || ''} onChange={handleChange('bloodGroup')} style={fieldStyle}>
+                        <option value="">Select blood group</option>
+                        {BLOOD_GROUPS.map(bg => <option key={bg} value={bg}>{bg}</option>)}
+                      </select>
+                      <div style={{ fontSize: 10, color: 'var(--muted)', marginTop: 4 }}>Helps the Blood Bank directory find donors in an emergency</div>
+                    </div>
                     <div style={{ gridColumn: '1 / -1', fontSize: 12, color: 'var(--muted)' }}>
                       {autoCalculatedDept && isRollValid(form.studentId) ? (
                         <div style={{ fontSize: 12, color: 'var(--accent)', fontWeight: 700 }}>✓ Auto-selected: {autoCalculatedDept}</div>
@@ -623,6 +637,14 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
                       )}
                       {errors.dept && <div style={{ fontSize: 11, color: '#dc2626', marginTop: 5 }}>{errors.dept}</div>}
                     </div>
+                    <div>
+                      <label style={labelStyle}>Blood Group (optional)</label>
+                      <select value={form.bloodGroup || ''} onChange={handleChange('bloodGroup')} style={fieldStyle}>
+                        <option value="">Select blood group</option>
+                        {BLOOD_GROUPS.map(bg => <option key={bg} value={bg}>{bg}</option>)}
+                      </select>
+                      <div style={{ fontSize: 10, color: 'var(--muted)', marginTop: 4 }}>Helps the Blood Bank directory find donors in an emergency</div>
+                    </div>
                   </>
                 )}
                 {/* Session / Current Term / Term Start Date are optional —
@@ -699,6 +721,7 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
                     ['Name', form.name || '—'],
                     ['Student ID', form.studentId || '—'],
                     ['Department', form.dept || autoCalculatedDept || '—'],
+                    ['Blood Group', form.bloodGroup || '—'],
                     ['Session', form.session || '—'],
                     ['Current Term', form.currentTermKey ? `${form.currentTermKey} - ${getTermLabelFromKey(form.currentTermKey)}` : '—'],
                     ['Term Start Date', form.termStartDate || '—'],

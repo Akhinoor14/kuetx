@@ -26,6 +26,7 @@ import RoleSelectScreen from './components/RoleSelectScreen';
 import FacultyProfileSetupModal from './components/FacultyProfileSetupModal';
 import { getAccountRole, setAccountRole, fetchServerAccountRole, persistAccountRoleToServer } from './lib/accountRole';
 import { getFacultyDoc, markFacultyVerifiedIfEmailConfirmed, isFacultyProfileComplete } from './lib/facultySync';
+import { syncBloodDonorEntry } from './lib/bloodDonorSync';
 import { store, getProfile, isProfileComplete, DEFAULT_PROFILE, normalizeProfileForSave, validateProfileForSave, ensureDBReady, tagProfileOwner, isProfileStaleForUid } from './store/store';
 import { getGroupId } from './lib/groupUtils';
 import { syncOwnVerification, joinGroup } from './lib/groupSync';
@@ -781,6 +782,16 @@ export default function App() {
               // data from someone else" apart from "my own real profile"
               // instead of blindly trusting whatever's in localStorage.
               store.set('profile', tagProfileOwner(normalizeProfileForSave(formData), auth.currentUser?.uid));
+              // Fan the directory-relevant fields (name/roll/dept/
+              // bloodGroup) out to bloodDonors/{uid} so the Founder's
+              // Blood Bank search can find this student — the personal
+              // profile store above is owner-read-only in Firestore and
+              // isn't queryable across students. Fire-and-forget: never
+              // block onboarding on this, and a failure here shouldn't
+              // stop the local save that already succeeded.
+              if (auth.currentUser?.uid && !auth.currentUser.isAnonymous) {
+                syncBloodDonorEntry(auth.currentUser.uid, formData).catch(() => {});
+              }
               // Record which page-load onboarding finished on, so
               // ProfileCompleteReminder can tell "still this same load"
               // apart from "app reopened later" and never fire in the

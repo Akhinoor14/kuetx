@@ -72,11 +72,30 @@ export function isFacultyEmailFormat(email) {
   return FACULTY_DOMAIN_RE.test(trimmed);
 }
 
+// BUGFIX: this used to return the raw lowercase subdomain as-is (e.g.
+// "ese", "arch", "iem", "iict") and callers pre-filled the dept <select>
+// with that value directly. But DEPARTMENTS/INSTITUTES codes are
+// mixed-case ("ESE", "Arch", "IPE" — IPE's own subdomain is @iem, a
+// historical mismatch) and don't always match the subdomain 1:1, so the
+// raw subdomain never matched any <option value>, and the "pre-fill" was
+// silently a no-op every time — the dept field just showed "Select
+// department / institute" no matter what the verified email was. This
+// now maps the subdomain onto the actual ACADEMIC_UNITS code so the
+// guess can actually land in the dropdown.
+const SUBDOMAIN_TO_UNIT_CODE = {
+  ce: 'CE', eee: 'EEE', me: 'ME', cse: 'CSE', ece: 'ECE',
+  iem: 'IPE', becm: 'BECM', arch: 'Arch', urp: 'URP', le: 'LE',
+  te: 'TE', bme: 'BME', mse: 'MSE', ese: 'ESE', che: 'ChE', mte: 'MTE',
+  iict: 'IICT', idm: 'IDM', iept: 'IEPT',
+  math: 'MATH', chem: 'CHEM', phy: 'PHY', hum: 'HUM',
+};
+
 /** Best-guess department code from the subdomain, for profile pre-fill only — never trusted as a gate. */
 export function guessDeptFromFacultyEmail(email) {
   const trimmed = String(email || '').trim().toLowerCase();
   const match = /^[^@]+@([a-z0-9-]+)\.kuet\.ac\.bd$/i.exec(trimmed);
-  return match ? match[1] : null;
+  const subdomain = match ? match[1] : null;
+  return subdomain ? (SUBDOMAIN_TO_UNIT_CODE[subdomain] || null) : null;
 }
 
 /**

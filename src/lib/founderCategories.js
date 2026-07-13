@@ -91,6 +91,14 @@ export const FOUNDER_CATEGORIES = [
       { key: 'assignments', label: 'Class Assignments' },
     ],
   },
+  {
+    key: 'blood',
+    label: 'Blood Bank',
+    icon: 'Droplet',
+    subtitle: (ctx) => `${ctx.bloodDonorCount ?? '…'} students on file — search by blood group`,
+    getCount: (ctx) => ctx.bloodDonorCount,
+    // No subcategories — a single search screen (BloodBankView).
+  },
 ];
 
 export function getFounderCategory(key) {

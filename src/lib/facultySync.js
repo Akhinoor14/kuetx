@@ -105,8 +105,21 @@ export async function listAllFacultyAccounts() {
 
 export function isFacultyProfileComplete(fdoc) {
   if (!fdoc) return false;
+  // BUGFIX: this used to also require fdoc.verifiedAt to be truthy. Under
+  // the auto-approval policy, verifiedAt stays null until an Admin grants
+  // the Blue Tick (firestore.rules only lets Admin set it — a faculty
+  // account can never self-verify), so that condition was permanently
+  // false for every non-admin-approved account. buildQueue() re-checks
+  // this function right after FacultyProfileSetupModal's onSave fires;
+  // with verifiedAt in the check, saveFacultyProfile() would succeed
+  // (fields genuinely saved) but isFacultyProfileComplete() would still
+  // return false, so buildQueue() pushed 'faculty-profile' right back
+  // onto the queue and the modal reopened instantly — clicking "Finish
+  // Setup" looked like it did nothing ("click korle kono kaj hoy na"),
+  // even though the save itself worked. verifiedAt is purely the Blue
+  // Tick flag now (gates posting notices/marks downstream via
+  // RequireVerifiedFaculty), not a profile-completeness signal.
   return Boolean(
-    fdoc.verifiedAt &&
     String(fdoc.name || '').trim() &&
     String(fdoc.title || '').trim() &&
     String(fdoc.dept || '').trim()

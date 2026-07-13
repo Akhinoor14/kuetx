@@ -336,6 +336,30 @@ service cloud.firestore {
     }
 
     // -------------------------------------------------------------
+    // Blood Bank directory — bloodDonors/{uid}. Separate top-level
+    // collection (not part of users/{uid}/data, which is owner-read-only
+    // and therefore not queryable across all students) so the Founder can
+    // search "who has blood group X" via bloodDonorSync.js's
+    // searchBloodDonorsByGroup(). Mirrors the faculty/{uid} directory
+    // pattern: small doc (name/roll/dept/bloodGroup only, never the full
+    // profile), write restricted to the owning REAL account (anonymous
+    // sessions can't create a searchable directory entry — same
+    // rationale as isRealAccount()'s Classmates/CR restriction above),
+    // read open to any signed-in user since this is exactly the kind of
+    // info that's meant to be found by someone else in an emergency.
+    // Deletion is allowed by the owner too — bloodDonorSync.js removes
+    // the doc entirely if bloodGroup is cleared, rather than leaving a
+    // blank one behind.
+    // -------------------------------------------------------------
+    match /bloodDonors/{uid} {
+      allow read: if isSignedIn();
+      allow create, update: if isRealAccount() && request.auth.uid == uid
+        && request.resource.data.keys().hasOnly(['name', 'studentId', 'dept', 'bloodGroup'])
+        && request.resource.data.bloodGroup in ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'];
+      allow delete: if isRealAccount() && request.auth.uid == uid;
+    }
+
+    // -------------------------------------------------------------
     // LEGACY — the old email magic-link/OTP faculty-verify path wrote
     // here; that flow is disabled under the auto-approval policy (Blue
     // Tick is now Founder-approved via manualVerifyRequests instead, see
