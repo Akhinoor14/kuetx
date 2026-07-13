@@ -65,6 +65,7 @@ import Classmates from './pages/Classmates';
 // AdminDashboard is no longer routed directly — it's rendered inside
 // TeamDashboard via AdminEntryPoint. See /team route below.
 import TeamDashboard from './pages/TeamDashboard';
+import FounderBatchSettings from './pages/FounderBatchSettings';
 import { Tours, Projects, Syllabus, TimeTracker, Tuition, Reports } from './pages/Extras';
 import SubgroupHub from './components/nav-system/SubgroupHub';
 import CRHub from './components/nav-system/CRHub';
@@ -186,6 +187,7 @@ function Layout({ authState, onboardingActive }) {
                 AdminEntryPoint (Founder section) alongside the staff panel. */}
             <Route path="/admin" element={<Navigate to="/team" replace />} />
             <Route path="/team" element={<RequireStaff><TeamDashboard /></RequireStaff>} />
+            <Route path="/admin/batches" element={<RequireStaff><FounderBatchSettings /></RequireStaff>} />
 
             {/* ── Faculty Module (/faculty/*) — §11 Phase 3/4/5 ────────────
                 Every real destination is wrapped in RequireFaculty (hard

@@ -7,13 +7,20 @@
 // never a hard block per §4 item 2's "convenience, not a gate" note).
 //
 // Dept list: store.js's DEPARTMENTS (canonical 16-department array).
-// Batch list: store.js's BATCH_START_DATES keys.
+// Batch list: appConfigSync.js's live config/batches doc (Founder-editable
+// — see FounderBatchSettings.jsx), falling back to store.js's
+// BATCH_START_DATES keys until that doc exists.
 // Term list: store.js's TERM_KEYS (Y1T1..Y4T2).
 // Course list per dept+term: curriculumStore.js's getDeptTerms(deptCode) —
 // deliberately NOT getAllCourses(profile), which is keyed to a STUDENT's
 // own current term and can't list an arbitrary dept+term a teacher picks.
 // Day/time slots: lib/timeModels.js (duplicated from Schedule.jsx — see
 // that file's own header comment for why).
+// Sessional/Lab courses: offers a "Full sessional block (3 periods)" vs
+// "Single slot" choice once the selected course's type is Sessional/Lab —
+// same 3-period-wide slot strings (getPresetSessionalSlots) the student
+// Schedule.jsx grid already renders as one merged/rowspan cell, so a
+// teacher's own listing lines up with what students already see.
 
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -23,13 +30,14 @@ import {
   DEPARTMENTS, BATCH_START_DATES, TERM_KEYS, getTermIndex,
 } from '../../store/store';
 import { getDeptTerms } from '../../store/curriculumStore';
-import { TIME_MODELS, DAYS } from '../../lib/timeModels';
+import {
+  TIME_MODELS, DAYS, isSessionalType, getPresetSessionalSlots, getBatchColor,
+} from '../../lib/timeModels';
+import { getActiveBatches } from '../../lib/appConfigSync';
 import {
   subscribeMyClassIndex, createFacultyAssignment, findJoinableAssignment, joinFacultyAssignment,
 } from '../../lib/facultyClassSync';
 import { notify } from '../../lib/notify';
-
-const BATCHES = Object.keys(BATCH_START_DATES);
 
 const inputStyle = {
   width: '100%', padding: '9px 10px', borderRadius: 8, border: '1px solid var(--border)',
@@ -71,7 +79,7 @@ function getBatchTermPlausibility(batch, term) {
   return null;
 }
 
-function AddClassModal({ onClose, onCreated }) {
+function AddClassModal({ onClose, onCreated, batches }) {
   const [dept, setDept] = useState('');
   const [batch, setBatch] = useState('');
   const [term, setTerm] = useState('');
@@ -79,6 +87,15 @@ function AddClassModal({ onClose, onCreated }) {
   const [day, setDay] = useState(DAYS[0]);
   const [modelId, setModelId] = useState('50min');
   const [slot, setSlot] = useState(TIME_MODELS['50min'].slots[0]);
+  // Sessional block choice — only meaningful once the selected course is
+  // Sessional/Lab (see isSessionalCourse below). 'full' picks one of the
+  // 3-period-wide preset slots (getPresetSessionalSlots); 'single' keeps
+  // using the normal per-period TIME_MODELS slot list, for a teacher who
+  // only wants ONE period of what's otherwise a multi-period lab — e.g.
+  // co-teaching where each teacher covers a different single period of
+  // the same sessional, rather than one teacher owning the whole block.
+  const [sessionalMode, setSessionalMode] = useState('full');
+  const [sessionalSlot, setSessionalSlot] = useState(getPresetSessionalSlots('50min')[0] || '');
   const [saving, setSaving] = useState(false);
   const [joinOffer, setJoinOffer] = useState(null); // { id, groupId, ... } | null
 
@@ -89,7 +106,23 @@ function AddClassModal({ onClose, onCreated }) {
   }, [dept, term]);
 
   const selectedCourse = termCourses.find((c) => c.code === courseCode) || null;
+  const isSessionalCourse = isSessionalType(selectedCourse?.type);
   const batchTermWarning = useMemo(() => getBatchTermPlausibility(batch, term), [batch, term]);
+
+  // Keep the sessional-block slot options in sync with the chosen time
+  // model — a 50-min-model sessional's 3 preset ranges differ from the
+  // 40-min-model's, so switching models needs to reset the picked value
+  // back to a valid option rather than leaving a stale one selected.
+  useEffect(() => {
+    const presets = getPresetSessionalSlots(modelId);
+    if (presets.length) setSessionalSlot(presets[0]);
+  }, [modelId]);
+
+  // The actual slot value that gets saved — full sessional block preset
+  // when the course is Sessional/Lab AND the teacher picked 'full', the
+  // single-period slot otherwise (either a non-sessional course, or a
+  // sessional where the teacher explicitly wants just one period).
+  const effectiveSlot = (isSessionalCourse && sessionalMode === 'full') ? sessionalSlot : slot;
 
   // Best-effort join-instead-of-duplicate check (§4 item 2) — fires once
   // dept+batch+term+course are all picked, silently offers a join if an
@@ -131,7 +164,7 @@ function AddClassModal({ onClose, onCreated }) {
         courseCode,
         courseTitle: selectedCourse?.title || '',
         courseType: selectedCourse?.type || 'Theory',
-        dayTimeSlots: [{ day, slot, modelId }],
+        dayTimeSlots: [{ day, slot: effectiveSlot, modelId }],
       });
       notify('Class created.', 'success');
       onCreated();
@@ -171,7 +204,7 @@ function AddClassModal({ onClose, onCreated }) {
             <label style={labelStyle}>Batch</label>
             <select style={inputStyle} value={batch} onChange={(e) => setBatch(e.target.value)}>
               <option value="">Select batch</option>
-              {BATCHES.map((b) => <option key={b} value={b}>{b.toUpperCase()}</option>)}
+              {batches.map((b) => <option key={b} value={b}>{b.toUpperCase()}</option>)}
             </select>
           </div>
 
@@ -228,12 +261,58 @@ function AddClassModal({ onClose, onCreated }) {
             </div>
           </div>
 
-          <div>
-            <label style={labelStyle}>Time slot</label>
-            <select style={inputStyle} value={slot} onChange={(e) => setSlot(e.target.value)}>
-              {TIME_MODELS[modelId].slots.map((s) => <option key={s} value={s}>{s}</option>)}
-            </select>
-          </div>
+          {isSessionalCourse && (
+            <div>
+              <label style={labelStyle}>This is a Sessional/Lab course</label>
+              <div style={{ display: 'flex', gap: 8 }}>
+                <button
+                  type="button"
+                  onClick={() => setSessionalMode('full')}
+                  style={{
+                    flex: 1, padding: '9px 10px', borderRadius: 8, fontSize: 12.5, fontWeight: 700, cursor: 'pointer',
+                    border: sessionalMode === 'full' ? '1.5px solid var(--accent)' : '1px solid var(--border)',
+                    background: sessionalMode === 'full' ? 'rgba(59,130,246,0.10)' : 'var(--bg)',
+                    color: sessionalMode === 'full' ? 'var(--accent)' : 'var(--text)',
+                  }}
+                >
+                  Full sessional block (3 periods)
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setSessionalMode('single')}
+                  style={{
+                    flex: 1, padding: '9px 10px', borderRadius: 8, fontSize: 12.5, fontWeight: 700, cursor: 'pointer',
+                    border: sessionalMode === 'single' ? '1.5px solid var(--accent)' : '1px solid var(--border)',
+                    background: sessionalMode === 'single' ? 'rgba(59,130,246,0.10)' : 'var(--bg)',
+                    color: sessionalMode === 'single' ? 'var(--accent)' : 'var(--text)',
+                  }}
+                >
+                  Single period only
+                </button>
+              </div>
+              <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 6, lineHeight: 1.4 }}>
+                {sessionalMode === 'full'
+                  ? 'You teach the whole 3-period lab block yourself.'
+                  : 'You only teach one period of this lab (e.g. co-teaching with others covering the other periods).'}
+              </div>
+            </div>
+          )}
+
+          {isSessionalCourse && sessionalMode === 'full' ? (
+            <div>
+              <label style={labelStyle}>Sessional block</label>
+              <select style={inputStyle} value={sessionalSlot} onChange={(e) => setSessionalSlot(e.target.value)}>
+                {getPresetSessionalSlots(modelId).map((s) => <option key={s} value={s}>{s}</option>)}
+              </select>
+            </div>
+          ) : (
+            <div>
+              <label style={labelStyle}>Time slot</label>
+              <select style={inputStyle} value={slot} onChange={(e) => setSlot(e.target.value)}>
+                {TIME_MODELS[modelId].slots.map((s) => <option key={s} value={s}>{s}</option>)}
+              </select>
+            </div>
+          )}
 
           <button
             onClick={handleCreate}
@@ -256,6 +335,7 @@ export default function FacultyClasses() {
   const navigate = useNavigate();
   const [classes, setClasses] = useState(null); // null = loading, [] = loaded-empty
   const [showAdd, setShowAdd] = useState(false);
+  const [batches, setBatches] = useState([]);
 
   useEffect(() => {
     const uid = auth.currentUser?.uid;
@@ -263,7 +343,30 @@ export default function FacultyClasses() {
     return subscribeMyClassIndex(uid, setClasses);
   }, []);
 
+  useEffect(() => {
+    getActiveBatches().then(setBatches);
+  }, []);
+
   const activeClasses = (classes || []).filter((c) => c.status === 'active');
+
+  // Group by batch — a teacher's classes across different depts still
+  // belong to the same student cohort when the batch matches, so grouping
+  // this way (rather than by dept) makes it easy to see "everything I
+  // teach 2K23" at a glance. Each batch group gets a colored header using
+  // the same fixed batch->color mapping as everywhere else (My Classes
+  // dashboard card, schedule grid, Manage Batches settings).
+  const classesByBatch = useMemo(() => {
+    const groups = {};
+    activeClasses.forEach((c) => {
+      const key = c.batch || 'other';
+      if (!groups[key]) groups[key] = [];
+      groups[key].push(c);
+    });
+    // Batches in the configured order first, then any leftover/unknown
+    // batch keys (e.g. one not in the active list anymore) at the end.
+    const orderedKeys = [...batches.filter((b) => groups[b]), ...Object.keys(groups).filter((k) => !batches.includes(k))];
+    return orderedKeys.map((key) => ({ batch: key, items: groups[key] }));
+  }, [activeClasses, batches]);
 
   return (
     <div className="hub-page-bg" style={{ minHeight: '100vh' }}>
@@ -299,32 +402,50 @@ export default function FacultyClasses() {
           </div>
         )}
 
-        <div className="hub-grid">
-          {activeClasses.map((c) => (
-            <div
-              key={c.id}
-              className="hub-grid-item"
-              onClick={() => navigate(`/faculty/classes/${c.id}?groupId=${encodeURIComponent(c.groupId)}`)}
-              style={{ cursor: 'pointer' }}
-            >
-              <div className="hub-grid-item-icon" style={{
-                background: 'color-mix(in srgb, var(--accent) 15%, var(--surface))',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
+        {classesByBatch.map(({ batch, items }) => {
+          const color = getBatchColor(batch, batches);
+          return (
+            <div key={batch} style={{ marginTop: 18, marginBottom: 8 }}>
+              <div style={{
+                display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10, padding: '6px 12px',
+                borderRadius: 999, background: color.bg, border: `1px solid ${color.border}`, width: 'fit-content',
               }}>
-                <Icons.BookOpen size={17} color="var(--accent)" />
+                <div style={{ width: 8, height: 8, borderRadius: '50%', background: color.text }} />
+                <span style={{ fontSize: 12.5, fontWeight: 800, color: color.text }}>{batch.toUpperCase()}</span>
+                <span style={{ fontSize: 11.5, color: 'var(--muted)', fontWeight: 600 }}>
+                  {items.length} class{items.length !== 1 ? 'es' : ''}
+                </span>
               </div>
-              <span className="hub-grid-item-label" style={{ fontWeight: 600, color: '#5c5a54' }}>
-                {c.courseCode} · {c.batch?.toUpperCase()} {c.dept}
-              </span>
+              <div className="hub-grid">
+                {items.map((c) => (
+                  <div
+                    key={c.id}
+                    className="hub-grid-item"
+                    onClick={() => navigate(`/faculty/classes/${c.id}?groupId=${encodeURIComponent(c.groupId)}`)}
+                    style={{ cursor: 'pointer', border: `1px solid ${color.border}`, background: color.bg }}
+                  >
+                    <div className="hub-grid-item-icon" style={{
+                      background: 'color-mix(in srgb, var(--accent) 15%, var(--surface))',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    }}>
+                      <Icons.BookOpen size={17} color="var(--accent)" />
+                    </div>
+                    <span className="hub-grid-item-label" style={{ fontWeight: 600, color: '#5c5a54' }}>
+                      {c.courseCode} · {c.batch?.toUpperCase()} {c.dept}
+                    </span>
+                  </div>
+                ))}
+              </div>
             </div>
-          ))}
-        </div>
+          );
+        })}
       </div>
 
       {showAdd && (
         <AddClassModal
           onClose={() => setShowAdd(false)}
           onCreated={() => setShowAdd(false)}
+          batches={batches}
         />
       )}
     </div>

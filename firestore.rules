@@ -635,6 +635,19 @@ service cloud.firestore {
     }
 
     // -------------------------------------------------------------
+    // App-wide config singletons (config/batches, etc.) — e.g. the
+    // Founder-editable list of currently active batches shown in every
+    // "Select batch" dropdown. Readable by anyone signed in (every
+    // faculty Add Class flow needs it), writable only by Founder/Head of
+    // Ops so the batch list can't be tampered with by a regular teacher
+    // or student account.
+    // -------------------------------------------------------------
+    match /config/{configKey} {
+      allow read: if isSignedIn();
+      allow write: if isAdmin() || isHeadOfOps();
+    }
+
+    // -------------------------------------------------------------
     // Groups — batch+dept "class" community
     // -------------------------------------------------------------
     match /groups/{groupId} {

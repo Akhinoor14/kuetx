@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import * as Icons from 'lucide-react';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../lib/firebase';
@@ -1397,6 +1397,19 @@ export default function AdminDashboard() {
   return (
     <div>
       <FounderViewSwitchCard />
+      <Link
+        to="/admin/batches"
+        style={{
+          display: 'flex', alignItems: 'center', gap: 10, padding: '12px 16px', marginBottom: 18,
+          borderRadius: 12, border: '1px solid var(--border)', background: 'var(--card)',
+          textDecoration: 'none', color: 'var(--text)',
+        }}
+      >
+        <Icons.Users size={17} color="var(--accent)" />
+        <div style={{ flex: 1, fontWeight: 700, fontSize: 13.5 }}>Manage Batches</div>
+        <div style={{ fontSize: 12, color: 'var(--muted)' }}>Active batch list & colors</div>
+        <Icons.ChevronRight size={16} color="var(--muted)" />
+      </Link>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 14 }}>
         {FOUNDER_CATEGORIES.map((cat) => (
           <FounderCategoryCard
