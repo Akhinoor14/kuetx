@@ -94,7 +94,7 @@ export default function FacultySchedule() {
 
   return (
     <div className="hub-page-bg" style={{ minHeight: '100vh' }}>
-      <div style={{ padding: '20px 24px 40px', maxWidth: 1040, margin: '0 auto' }}>
+      <div style={{ padding: '20px 24px 40px', width: '97%', maxWidth: 'none', margin: '0 auto' }}>
         <div className="hub-page-hero" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 10 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
             <div className="hub-page-hero-icon">

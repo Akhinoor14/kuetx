@@ -18,7 +18,7 @@ import * as Icons from 'lucide-react';
 export default function FacultyContact() {
   return (
     <div className="hub-page-bg" style={{ minHeight: '100vh' }}>
-      <div style={{ padding: '20px 24px 40px', maxWidth: 480, margin: '0 auto' }}>
+      <div style={{ padding: '20px 24px 40px', width: '97%', maxWidth: 'none', margin: '0 auto' }}>
         <div className="hub-page-hero">
           <div className="hub-page-hero-icon">
             <Icons.Mail size={20} color="var(--accent)" />

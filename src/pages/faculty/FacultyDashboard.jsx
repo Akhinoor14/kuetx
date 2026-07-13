@@ -95,7 +95,7 @@ export default function FacultyDashboard() {
   if (classIndex === null) {
     return (
       <div className="hub-page-bg" style={{ minHeight: '100vh' }}>
-        <div style={{ padding: '20px 24px 40px', maxWidth: 1040, margin: '0 auto', color: 'var(--muted)', fontSize: 13 }}>
+        <div style={{ padding: '20px 24px 40px', width: '97%', maxWidth: 'none', margin: '0 auto', color: 'var(--muted)', fontSize: 13 }}>
           Loading…
         </div>
       </div>
@@ -135,22 +135,41 @@ export default function FacultyDashboard() {
     return !hasSessionToday;
   });
 
-  const statCard = (icon, label, value) => {
+  const statCard = (icon, label, value, sub, color) => {
     const Icon = Icons[icon] || Icons.Circle;
+    const c = color || 'var(--accent)';
     return (
-      <div style={{
-        flex: '1 1 160px', padding: 16, borderRadius: 14, border: '1px solid var(--border)', background: 'var(--card)',
+      <div className="card" style={{
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 6,
+        transition: 'all 0.2s',
+        padding: '14px 16px',
+        border: `1.5px solid ${c}20`,
+        background: `${c}08`,
+        boxShadow: `0 4px 12px ${c}12`,
+        position: 'relative',
+        overflow: 'hidden',
+        borderRadius: 12,
+        minHeight: 100,
+        flex: '1 1 160px',
       }}>
-        <Icon size={18} color="var(--accent)" style={{ marginBottom: 8 }} />
-        <div style={{ fontWeight: 800, fontSize: 22, color: 'var(--text)' }}>{value}</div>
-        <div style={{ fontSize: 11.5, color: 'var(--muted)' }}>{label}</div>
+        <div style={{ position: 'absolute', top: -30, right: -30, width: 100, height: 100, borderRadius: '50%', background: `${c}08` }} />
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', zIndex: 1 }}>
+          <span style={{ fontSize: 10, color: 'var(--muted)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em' }}>{label}</span>
+          <Icon size={20} color={c} strokeWidth={2.2} />
+        </div>
+        <div style={{ fontSize: 32, fontWeight: 900, color: c, letterSpacing: '-0.02em', lineHeight: 1, zIndex: 1 }}>
+          {value}
+        </div>
+        {sub && <div style={{ fontSize: 12, color: 'var(--muted)', fontWeight: 500, zIndex: 1, marginTop: 2 }}>{sub}</div>}
       </div>
     );
   };
 
   return (
-    <div className="hub-page-bg" style={{ minHeight: '100vh' }}>
-      <div style={{ padding: '20px 24px 40px', maxWidth: 1040, margin: '0 auto' }}>
+    <div className="hub-page-bg page-enter dashboard-page" style={{ minHeight: '100vh' }}>
+      <div style={{ padding: '20px 24px 40px', width: '97%', maxWidth: 'none', margin: '0 auto' }}>
         {/* Welcome hero — same warm greeting + today-date pattern as the
             student Dashboard's clickable hero card, adapted for faculty
             (name/title instead of dept/batch), linking to Faculty Profile. */}
@@ -204,38 +223,77 @@ export default function FacultyDashboard() {
           </div>
         )}
 
-        <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginBottom: 20 }}>
-          {statCard('BookOpen', 'Active classes', activeAssignments.length)}
-          {statCard('Users', 'Unique students taught', uniqueStudentUids.size)}
-          {statCard('ListChecks', hasAnyPlannedTotal ? 'Classes remaining' : 'Classes remaining (set a plan to track)', hasAnyPlannedTotal ? classesRemaining : '—')}
+        {pendingToday.length > 0 && (
+          <div style={{ padding: '10px 14px', borderRadius: 10, marginBottom: 12, background: 'var(--dangerBg, rgba(217,119,6,0.08))', border: '1px solid color-mix(in srgb, #d97706 28%, var(--border))' }}>
+            <div style={{ fontWeight: 700, fontSize: 13, color: '#d97706', marginBottom: 6, display: 'flex', alignItems: 'center', gap: 6 }}>
+              <Icons.AlertTriangle size={14} /> Attendance pending for today
+            </div>
+            {pendingToday.map((c) => (
+              <Link
+                key={c.assignmentId}
+                to={`/faculty/classes/${c.assignmentId}?groupId=${encodeURIComponent(c.groupId)}`}
+                style={{ display: 'block', fontSize: 12, color: '#d97706', marginBottom: 2, textDecoration: 'none' }}
+              >
+                • {c.courseCode} — {c.batch?.toUpperCase()} {c.dept} <span style={{ fontWeight: 700 }}>Take attendance →</span>
+              </Link>
+            ))}
+          </div>
+        )}
+
+        {/* Stat cards */}
+        <div className="dashboard-stats-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8, marginBottom: 14 }}>
+          {statCard('BookOpen', 'Active Classes', activeAssignments.length, 'This term', '#3B82F6')}
+          {statCard('Users', 'Students Taught', uniqueStudentUids.size, 'Unique, all classes', '#10B981')}
+          {statCard('ListChecks', 'Classes Remaining', hasAnyPlannedTotal ? classesRemaining : '—', hasAnyPlannedTotal ? 'Across active classes' : 'Set a plan to track', '#F59E0B')}
         </div>
 
-        {pendingToday.length > 0 && (
-          <div style={{
-            padding: 14, borderRadius: 12, border: '1px solid color-mix(in srgb, #d97706 30%, var(--border))',
-            background: 'color-mix(in srgb, #d97706 8%, var(--card))', marginBottom: 20,
-          }}>
-            <div style={{ fontWeight: 700, fontSize: 13, color: 'var(--text)', marginBottom: 6 }}>
-              Attendance pending for today
+        {/* Classes overview — mirrors the student dashboard's "Academic Journey" progress card */}
+        {activeAssignments.length > 0 && (
+          <div className="card dashboard-roadmap" style={{ marginBottom: 12, padding: '18px 18px 16px', border: '1px solid rgba(var(--accentRGB), 0.10)', background: 'linear-gradient(180deg, rgba(var(--accentRGB), 0.04), var(--surfaceGlassStrong))' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, alignItems: 'flex-start', marginBottom: 10, flexWrap: 'wrap' }}>
+              <div>
+                <div style={{ fontSize: 12, fontWeight: 800, letterSpacing: '0.10em', textTransform: 'uppercase', color: 'var(--muted)' }}>My Classes</div>
+                <div style={{ fontSize: 13, color: 'var(--muted)', marginTop: 4 }}>{activeAssignments.length} active class{activeAssignments.length !== 1 ? 'es' : ''} this term</div>
+              </div>
+              <Link to="/faculty/classes" style={{ fontSize: 12, color: 'var(--accent)', textDecoration: 'none', fontWeight: 600 }}>All classes →</Link>
             </div>
-            <div style={{ display: 'grid', gap: 6 }}>
-              {pendingToday.map((c) => (
-                <Link
-                  key={c.assignmentId}
-                  to={`/faculty/classes/${c.assignmentId}?groupId=${encodeURIComponent(c.groupId)}`}
-                  style={{ fontSize: 12.5, color: 'var(--text)', textDecoration: 'none' }}
-                >
-                  {c.courseCode} — {c.batch?.toUpperCase()} {c.dept} <span style={{ color: 'var(--accent)' }}>Take attendance →</span>
-                </Link>
-              ))}
+            <div style={{ display: 'grid', gap: 8 }}>
+              {activeAssignments.map((c) => {
+                const a = assignments[c.assignmentId];
+                const logged = (sessionsByAssignment[c.assignmentId] || []).length;
+                const planned = a?.plannedTotalClasses;
+                const pct = planned ? Math.min(100, Math.round((logged / planned) * 100)) : null;
+                return (
+                  <Link
+                    key={c.assignmentId}
+                    to={`/faculty/classes/${c.assignmentId}?groupId=${encodeURIComponent(c.groupId)}`}
+                    style={{ textDecoration: 'none', color: 'var(--text)' }}
+                  >
+                    <div style={{ padding: '10px 12px', borderRadius: 12, background: 'rgba(var(--accentRGB), 0.04)', border: '1px solid rgba(var(--accentRGB), 0.10)' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 10, marginBottom: pct !== null ? 6 : 0 }}>
+                        <div style={{ fontSize: 13, fontWeight: 800 }}>{c.courseCode} — {c.batch?.toUpperCase()} {c.dept}</div>
+                        <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--muted)', whiteSpace: 'nowrap' }}>
+                          {planned ? `${logged}/${planned} classes` : `${logged} logged`}
+                        </div>
+                      </div>
+                      {pct !== null && (
+                        <div style={{ height: 8, borderRadius: 999, background: 'rgba(var(--accentRGB), 0.08)', overflow: 'hidden' }}>
+                          <div style={{ width: `${pct}%`, height: '100%', borderRadius: 999, background: 'linear-gradient(90deg, #3B82F6, #10B981)', transition: 'width 0.3s ease' }} />
+                        </div>
+                      )}
+                    </div>
+                  </Link>
+                );
+              })}
             </div>
           </div>
         )}
 
         {activeAssignments.length === 0 && (
-          <div style={{ padding: 24, borderRadius: 14, border: '1px solid var(--border)', background: 'var(--card)', color: 'var(--muted)', fontSize: 13.5, textAlign: 'center' }}>
-            You haven't added any classes yet.{' '}
-            <Link to="/faculty/classes" style={{ color: 'var(--accent)' }}>Add your first class</Link>.
+          <div className="card" style={{ marginTop: 16, textAlign: 'center', color: 'var(--muted)', padding: 30 }}>
+            <div style={{ fontSize: 32, marginBottom: 8 }}>📚</div>
+            <p style={{ fontSize: 13, marginBottom: 12 }}>You haven't added any classes yet.</p>
+            <Link to="/faculty/classes" className="btn btn-primary">Add your first class →</Link>
           </div>
         )}
       </div>
