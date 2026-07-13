@@ -25,7 +25,7 @@
 // copy is English per Deviation 3.
 
 import { useEffect, useState } from 'react';
-import { Mail, RefreshCw, ExternalLink, KeyRound } from 'lucide-react';
+import { Mail, RefreshCw, ExternalLink, KeyRound, Link2 } from 'lucide-react';
 import { auth } from '../lib/firebase';
 import { getFacultyDoc, subscribeFacultyDoc, markFacultyVerifiedIfEmailConfirmed } from '../lib/facultySync';
 import { sendFacultyVerificationLink } from '../lib/facultyEmailVerify';
@@ -71,14 +71,34 @@ export default function FacultyVerifyHoldingScreen({ officialEmail, onVerified }
   }, [onVerified, uid]);
 
   // Send the first OTP automatically on mount — the person shouldn't
-  // have to click anything to get their first code.
+  // have to click anything to get their first code. If this fails (e.g.
+  // requestOtp/verifyOtp Cloud Functions not deployed yet, or the
+  // Trigger Email extension not configured yet), fall back to the
+  // magic-link method automatically instead of stranding the person on a
+  // code screen that can never succeed.
   useEffect(() => {
     if (!officialEmail) return;
     requestOtpCode(officialEmail, 'teacher')
       .then(() => setOtpStatus('sent'))
-      .catch((e) => { setOtpStatus('error'); setOtpError(e.message); });
+      .catch((e) => {
+        setOtpStatus('error');
+        setOtpError(e.message);
+        setMethod('link');
+        resendLinkOnMount(officialEmail);
+      });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [officialEmail]);
+
+  const resendLinkOnMount = async (email) => {
+    setLinkStatus('resending');
+    try {
+      await sendFacultyVerificationLink(email);
+      setLinkStatus('resent');
+    } catch (e) {
+      setLinkStatus('error');
+      setLinkError(e.message || 'Could not send the verification link. Please try again.');
+    }
+  };
 
   const resendOtp = async () => {
     setOtpStatus('resending');
@@ -215,10 +235,13 @@ export default function FacultyVerifyHoldingScreen({ officialEmail, onVerified }
             <button
               onClick={() => setMethod('link')}
               style={{
-                background: 'none', border: 'none', color: 'var(--muted)', fontSize: 12.5,
-                cursor: 'pointer', textDecoration: 'underline',
+                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
+                width: '100%', padding: '11px 16px', borderRadius: 8,
+                border: '1.5px solid var(--accent)', background: 'transparent',
+                color: 'var(--accent)', fontSize: 13.5, fontWeight: 700, cursor: 'pointer',
               }}
             >
+              <Link2 size={14} />
               Use email link instead
             </button>
           </>

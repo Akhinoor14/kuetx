@@ -33,6 +33,15 @@ export async function requestOtpCode(email, role) {
     await requestOtpFn({ email: trimmed, role });
     return { sent: true, email: trimmed };
   } catch (err) {
+    // Firebase's default client-side message for an undeployed/misconfigured
+    // Cloud Function is the bare word "internal" — not helpful to show
+    // directly. Translate it into something that actually tells the
+    // person (or the developer reading a bug report) what's going on:
+    // the requestOtp/verifyOtp functions haven't been deployed yet, or
+    // the Trigger Email extension isn't installed/configured.
+    if (err?.code === 'functions/internal' || err?.message === 'internal') {
+      throw new Error('Code verification isn\'t set up yet on the server — please use the email link instead for now.');
+    }
     throw new Error(err?.message || 'Could not send the verification code. Please try again.');
   }
 }
@@ -52,6 +61,9 @@ export async function verifyOtpCode(email, code, role) {
     const result = await verifyOtpFn({ email: trimmed, code: trimmedCode, role });
     return result.data; // { verified: true, email, role }
   } catch (err) {
+    if (err?.code === 'functions/internal' || err?.message === 'internal') {
+      throw new Error('Code verification isn\'t set up yet on the server — please use the email link instead for now.');
+    }
     throw new Error(err?.message || 'Could not verify the code. Please try again.');
   }
 }
