@@ -352,6 +352,31 @@ service cloud.firestore {
     }
 
     // -------------------------------------------------------------
+    // Manual verification requests — fallback path when automatic KUET
+    // email verification can't send (ManualVerifyFallback.jsx / see
+    // manualVerifyRequests.js header). Same shape/spirit as
+    // rollUnlockRequests just above: requester creates their own doc,
+    // Founder/admin resolves it from the Approvals tab.
+    //
+    // BUGFIX: this collection previously had NO rule block at all —
+    // Firestore rules are default-deny per collection, so every
+    // addDoc() here (the "Contact Founder on WhatsApp" button) was
+    // silently rejected with permission-denied for EVERY user, signed
+    // in or anonymous, not just in incognito. The WhatsApp deep-link
+    // itself never even opened, since ManualVerifyFallback only calls
+    // window.open() *after* the Firestore write succeeds (see its
+    // handleSend) — so the failed write silently blocked the WhatsApp
+    // fallback along with it, in every browser/mode, every time.
+    // -------------------------------------------------------------
+    match /manualVerifyRequests/{requestId} {
+      allow read: if isAdmin() || isHeadOfOps()
+        || (isSignedIn() && resource.data.uid == request.auth.uid);
+      allow create: if isSignedIn() && request.resource.data.uid == request.auth.uid;
+      allow update: if isAdmin() || isHeadOfOps();
+      allow delete: if false;
+    }
+
+    // -------------------------------------------------------------
     // Roll ownership lock — see rollOwnership.js. One durable doc per
     // roll number so two different accounts can't both claim the same
     // student roll. First account to save with that roll owns it.

@@ -91,6 +91,63 @@ const KUET_EMAIL_RE = /^([a-z]+)(\d{7})@stud\.kuet\.ac\.bd$/i;
 // this is missing, but same-device/same-browser this makes it seamless).
 const PENDING_EMAIL_KEY = 'kuetx_pending_verify_email';
 
+// BUGFIX (resumability): KuetEmailVerifyWidget/KuetEmailVerifyBox each kept
+// their "a link/code was just sent, waiting for it" stage in local
+// component state only — the instant either component unmounted (person
+// navigated to a different page, switched tabs, or the ProfileSetupModal
+// step that hosted the widget closed) that state was gone. Coming back
+// showed a blank "enter your name" form again, indistinguishable from
+// never having started, even though PENDING_EMAIL_KEY above already
+// proves a link genuinely is in flight. The person isn't blocked (this
+// verification is intentionally optional/skippable — see buildQueue's
+// comment on why it's NOT a hard gate the way faculty-verify is), but
+// with no visible memory of being mid-verification, "just try sending
+// again" isn't obvious, and re-sending a code invalidates the one they
+// may already have received.
+//
+// Fix: persist the UI-relevant slice of "verification in progress" here
+// (which roll it's for, which method, the OTP-visible email) — separate
+// from PENDING_EMAIL_KEY, which is Firebase's own link-completion
+// requirement and only ever holds the link path's email. Any component
+// that starts a send calls setPendingVerifyUI(); any component that
+// mounts calls getPendingVerifyUI() to decide whether to resume showing
+// "waiting…" instead of a blank form; completion (or an explicit
+// restart) calls clearPendingVerifyUI().
+const PENDING_VERIFY_UI_KEY = 'kuetx_pending_verify_ui';
+
+export function setPendingVerifyUI({ roll, method, email }) {
+  try {
+    window.localStorage.setItem(PENDING_VERIFY_UI_KEY, JSON.stringify({
+      roll: roll || '', method: method || 'link', email: email || '', at: Date.now(),
+    }));
+  } catch { /* best-effort — never block the actual send on this */ }
+}
+
+/**
+ * Returns the persisted in-progress state, but ONLY if it's still for
+ * THIS roll (a profile change/different account shouldn't resume someone
+ * else's pending verification) and isn't stale — Firebase's own link/OTP
+ * validity windows are much shorter than this, so anything older than a
+ * day is treated as abandoned rather than resumed into a guaranteed-dead
+ * link/code.
+ */
+export function getPendingVerifyUI(roll) {
+  try {
+    const raw = window.localStorage.getItem(PENDING_VERIFY_UI_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    if (!parsed?.roll || parsed.roll !== String(roll || '').trim()) return null;
+    if (Date.now() - (parsed.at || 0) > 24 * 60 * 60 * 1000) return null;
+    return parsed;
+  } catch {
+    return null;
+  }
+}
+
+export function clearPendingVerifyUI() {
+  try { window.localStorage.removeItem(PENDING_VERIFY_UI_KEY); } catch { /* no-op */ }
+}
+
 /** Does this look like a real KUET student email, syntactically? */
 export function isKuetEmailFormat(email) {
   return KUET_EMAIL_RE.test(String(email || '').trim());
@@ -218,6 +275,7 @@ export async function completeKuetVerificationLink(url = window.location.href, e
     try {
       const result = await signInWithEmailLink(verifyAuth, email, url);
       window.localStorage.removeItem(PENDING_EMAIL_KEY);
+      clearPendingVerifyUI();
       // Strip the one-time link params so refreshing this page never replays
       // an already-consumed link — there's nothing left to consume anyway.
       window.history.replaceState(null, '', window.location.pathname);

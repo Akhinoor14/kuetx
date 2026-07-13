@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import * as Icons from 'lucide-react';
-import { sendKuetVerificationLink, buildKuetEmailFromProfile, isRollInstitutionallyVerified } from '../lib/kuetEmailVerify';
+import { sendKuetVerificationLink, buildKuetEmailFromProfile, isRollInstitutionallyVerified, setPendingVerifyUI, getPendingVerifyUI, clearPendingVerifyUI } from '../lib/kuetEmailVerify';
 import { requestOtpCode, verifyOtpCode } from '../lib/otpVerify';
 import { getProfile } from '../store/store';
 import OtpInput from './OtpInput';
@@ -26,8 +26,17 @@ import ManualVerifyFallback from './ManualVerifyFallback';
 export default function KuetEmailVerifyWidget({ onVerified, onSkip, compact = false, overrideRoll }) {
   const profile = getProfile();
   const roll = String(overrideRoll || profile?.studentId || '').trim();
-  const [namePart, setNamePart] = useState('');
-  const [stage, setStage] = useState('input'); // input -> code -> link
+  // BUGFIX (resumability — see setPendingVerifyUI/getPendingVerifyUI in
+  // kuetEmailVerify.js): if a link/code was already sent for this exact
+  // roll and hasn't gone stale, resume showing the "waiting…" stage and
+  // the name-part that was used, instead of always starting blank at
+  // 'input' on every fresh mount (new page, new tab, app reopened).
+  // This does NOT make verification mandatory — onSkip is untouched and
+  // still works exactly as before; it only means "already in progress"
+  // is remembered instead of forgotten.
+  const pending = getPendingVerifyUI(roll);
+  const [namePart, setNamePart] = useState(pending?.email ? String(pending.email).split('@')[0].replace(/\d+$/, '') : '');
+  const [stage, setStage] = useState(pending ? pending.method : 'input'); // input -> code -> link
   const [error, setError] = useState('');
   const [needsManualVerify, setNeedsManualVerify] = useState(false);
   const [busy, setBusy] = useState(false);
@@ -41,9 +50,24 @@ export default function KuetEmailVerifyWidget({ onVerified, onSkip, compact = fa
 
   useEffect(() => () => { if (pollRef.current) clearInterval(pollRef.current); }, []);
 
+  // Resuming into 'link' stage needs the same polling handleSendLink
+  // would have started — otherwise a resumed session sits on "waiting
+  // for you to click the link" but never actually notices if/when it
+  // gets clicked, short of the global event listener below catching it
+  // (which only fires if the link is opened in THIS same tab/session).
+  useEffect(() => {
+    if (pending?.method === 'link' && roll) {
+      startPolling();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   useEffect(() => {
     const handleGlobalVerified = (e) => {
-      if (!roll || e.detail?.roll === roll) onVerified?.();
+      if (!roll || e.detail?.roll === roll) {
+        clearPendingVerifyUI();
+        onVerified?.();
+      }
     };
     window.addEventListener('kuetx:kuet-email-verified', handleGlobalVerified);
     return () => window.removeEventListener('kuetx:kuet-email-verified', handleGlobalVerified);
@@ -56,6 +80,7 @@ export default function KuetEmailVerifyWidget({ onVerified, onSkip, compact = fa
       if (ok) {
         clearInterval(pollRef.current);
         pollRef.current = null;
+        clearPendingVerifyUI();
         if (onVerified) onVerified();
       }
     }, 4000);
@@ -83,6 +108,7 @@ export default function KuetEmailVerifyWidget({ onVerified, onSkip, compact = fa
     try {
       await requestOtpCode(email, 'student');
       setStage('code');
+      setPendingVerifyUI({ roll, method: 'code', email });
     } catch (err) {
       setError(err?.message || 'Code পাঠাতে সমস্যা হয়েছে, আবার চেষ্টা করুন।');
     }
@@ -95,6 +121,7 @@ export default function KuetEmailVerifyWidget({ onVerified, onSkip, compact = fa
     setOtp('');
     try {
       await requestOtpCode(email, 'student');
+      setPendingVerifyUI({ roll, method: 'code', email });
     } catch (err) {
       setError(err?.message || 'আবার পাঠাতে সমস্যা হয়েছে, একটু পর আবার চেষ্টা করো।');
     }
@@ -107,6 +134,7 @@ export default function KuetEmailVerifyWidget({ onVerified, onSkip, compact = fa
     setOtpVerifying(true);
     try {
       await verifyOtpCode(email, otp, 'student');
+      clearPendingVerifyUI();
       onVerified?.();
     } catch (err) {
       setError(err?.message || 'Code মেলেনি, আবার চেষ্টা করো।');
@@ -121,6 +149,7 @@ export default function KuetEmailVerifyWidget({ onVerified, onSkip, compact = fa
     try {
       await sendKuetVerificationLink(email);
       setStage('link');
+      setPendingVerifyUI({ roll, method: 'link', email });
       startPolling();
     } catch (err) {
       if (err?.needsManualVerify) {
@@ -138,6 +167,7 @@ export default function KuetEmailVerifyWidget({ onVerified, onSkip, compact = fa
     setBusy(true);
     try {
       await sendKuetVerificationLink(email);
+      setPendingVerifyUI({ roll, method: 'link', email });
     } catch (err) {
       if (err?.needsManualVerify) {
         setNeedsManualVerify(true);

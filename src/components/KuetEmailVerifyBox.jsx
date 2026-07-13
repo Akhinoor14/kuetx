@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import {
   sendKuetVerificationLink, buildKuetEmailFromProfile, isRollInstitutionallyVerified,
+  setPendingVerifyUI, getPendingVerifyUI, clearPendingVerifyUI,
 } from '../lib/kuetEmailVerify';
 import { store, getProfile } from '../store/store';
 import ManualVerifyFallback from './ManualVerifyFallback';
@@ -10,14 +11,33 @@ const STORE_KEY = 'kuetEmailVerifiedRoll';
 export default function KuetEmailVerifyBox() {
   const profile = getProfile();
   const roll = String(profile?.studentId || '').trim();
-  const [namePart, setNamePart] = useState('');
-  const [stage, setStage] = useState(store.get(STORE_KEY) ? 'verified' : 'idle'); // idle|sending|sent|verified|error
-  const [msg, setMsg] = useState('');
+  // BUGFIX (resumability, same fix as KuetEmailVerifyWidget — see
+  // kuetEmailVerify.js's setPendingVerifyUI/getPendingVerifyUI): a link
+  // already sent for this roll resumes into 'sent' with the name-part
+  // that was used, instead of resetting to a blank 'idle' form every
+  // time this box remounts (leaving Profile, coming back, reopening the
+  // app). Still fully skippable/ignorable exactly as before — this only
+  // restores memory of "already in progress", nothing becomes mandatory.
+  const pending = getPendingVerifyUI(roll);
+  const alreadyVerified = !!store.get(STORE_KEY);
+  const [namePart, setNamePart] = useState(pending?.email ? String(pending.email).split('@')[0].replace(/\d+$/, '') : '');
+  const [stage, setStage] = useState(alreadyVerified ? 'verified' : (pending?.method === 'link' ? 'sent' : 'idle')); // idle|sending|sent|verified|error
+  const [msg, setMsg] = useState(pending?.method === 'link' ? 'Sign-in link পাঠানো হয়েছিল — এখনো valid থাকলে ইনবক্স থেকে ক্লিক করো, অথবা নিচ থেকে নতুন link পাঠাও।' : '');
   const pollRef = useRef(null);
 
   const email = buildKuetEmailFromProfile(namePart, profile);
 
   useEffect(() => () => { if (pollRef.current) clearInterval(pollRef.current); }, []);
+
+  // Resuming into 'sent' needs polling restarted too — otherwise this
+  // box would sit showing "waiting…" without ever checking whether the
+  // link was actually already clicked elsewhere.
+  useEffect(() => {
+    if (!alreadyVerified && pending?.method === 'link' && roll) {
+      startPolling();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // The local STORE_KEY flag above only ever gets set by THIS component's
   // own polling/event handling — if verification actually happened in a
@@ -32,6 +52,7 @@ export default function KuetEmailVerifyBox() {
       isRollInstitutionallyVerified(roll).then((ok) => {
         if (!cancelled && ok) {
           store.set(STORE_KEY, true);
+          clearPendingVerifyUI();
           setStage('verified');
         }
       }).catch(() => {});
@@ -43,6 +64,7 @@ export default function KuetEmailVerifyBox() {
     const onVerified = (e) => {
       if (!roll || e.detail?.roll === roll) {
         store.set(STORE_KEY, true);
+        clearPendingVerifyUI();
         setStage('verified');
         setMsg('');
       }
@@ -59,6 +81,7 @@ export default function KuetEmailVerifyBox() {
         clearInterval(pollRef.current);
         pollRef.current = null;
         store.set(STORE_KEY, true);
+        clearPendingVerifyUI();
         setStage('verified');
         setMsg('');
       }
@@ -91,6 +114,7 @@ export default function KuetEmailVerifyBox() {
     try {
       await sendKuetVerificationLink(email);
       setStage('sent');
+      setPendingVerifyUI({ roll, method: 'link', email });
       startPolling();
       setMsg('Sign-in link sent — check your KUET inbox (and spam/junk folder). Click the link and this page will verify automatically. No password, no account to manage.');
     } catch (err) {
@@ -109,6 +133,7 @@ export default function KuetEmailVerifyBox() {
     try {
       await sendKuetVerificationLink(email);
       setStage('sent');
+      setPendingVerifyUI({ roll, method: 'link', email });
       startPolling();
       setMsg('New link sent — check your inbox again.');
     } catch (err) {

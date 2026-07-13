@@ -119,6 +119,20 @@ export default function AuthModal({ mode = 'login', isUpgrade = false, onClose, 
   // since it's the primary path and Google is now the secondary option.
   const [domainWarning, setDomainWarning] = useState(false);
   const [typoSuggestion, setTypoSuggestion] = useState(null);
+  // BUGFIX (Register/Login dead-end): if an account exists but its
+  // verification (KUET email OTP/magic-link, faculty or student) never
+  // finished — network drop, closed tab, whatever — the person is left
+  // with nowhere to go: Register says "already in use" (no fallback,
+  // since that fallback previously only existed for the anonymous-
+  // upgrade path below), Login says "wrong password" (they may genuinely
+  // have forgotten it, mistyped it originally, or be on a device that
+  // never had it saved), and "Forgot password?" was only ever shown on
+  // the Login tab, invisible from the Register-tab error and from a
+  // failed Login attempt itself. Nothing connected the two failures to
+  // the one path that actually resolves both: Reset Password. This flag
+  // tracks "we're in that dead-end right now" so the UI can surface the
+  // reset option in-context instead of leaving a silent trap.
+  const [stuckOnExistingEmail, setStuckOnExistingEmail] = useState(false);
 
   const handleEmailBlur = () => {
     setDomainWarning(!!email && isObviouslyBadDomain(email));
@@ -232,6 +246,7 @@ export default function AuthModal({ mode = 'login', isUpgrade = false, onClose, 
     // so the MX lookup only ever runs once per submit.
     setLoading(true);
     setError('');
+    setStuckOnExistingEmail(false);
     try {
       let user;
       if (isUpgrade || tab === 'register') {
@@ -258,18 +273,44 @@ export default function AuthModal({ mode = 'login', isUpgrade = false, onClose, 
       }
       onSuccess?.(user, { linked: isUpgrade });
     } catch (err) {
-      if (isUpgrade && (err.code === 'auth/credential-already-in-use' || err.code === 'auth/email-already-in-use')) {
-        // Same fallback as Google above: this email already has a real
-        // account from before this device's current anonymous session —
-        // log into it directly instead of leaving the user stuck.
+      // BUGFIX (Register/Login dead-end): this used to only run for
+      // isUpgrade — a plain (non-upgrade) Register hitting
+      // auth/email-already-in-use had NO fallback at all, which is
+      // exactly the trap someone falls into if they registered once,
+      // never finished verification (network drop, closed tab), and
+      // came back later: Register now says "already in use" with no way
+      // forward, since the account genuinely already exists. Trying the
+      // typed password as a login first means the common case — they
+      // remember the password they just set — resolves silently and
+      // sends them straight back into their unfinished verification
+      // step, instead of dead-ending on an error screen.
+      if (
+        (err.code === 'auth/credential-already-in-use' || err.code === 'auth/email-already-in-use')
+      ) {
         try {
-          const user = await loginWithEmail(email, password);
-          onSuccess?.(user, { linked: false, fellBackToExistingAccount: true });
+          const existingUser = await loginWithEmail(email, password);
+          onSuccess?.(existingUser, { linked: false, fellBackToExistingAccount: true });
           return;
         } catch (err2) {
+          // Wrong/forgotten password on an account that DOES exist —
+          // this is the other half of the trap. Don't just show a raw
+          // error: flag it so the UI can surface "Forgot password?"
+          // right here, even though we're on the Register tab where
+          // that link normally doesn't appear at all.
+          setStuckOnExistingEmail(true);
           setError(getAuthErrorMessage(err2.code));
           return;
         }
+      }
+      // Plain Login (not Register/Upgrade) failing with invalid
+      // credentials is the same dead-end from the other direction — the
+      // account might exist with a different/forgotten password. Surface
+      // the same inline reset hint here too, since "Forgot password?"
+      // sitting a few pixels above the error isn't obviously connected
+      // to it, especially on a mobile-width screen where it can scroll
+      // out of view before the error even renders.
+      if (!isUpgrade && tab === 'login' && err.code === 'auth/invalid-credential') {
+        setStuckOnExistingEmail(true);
       }
       setError(describeDomainError(err) || getAuthErrorMessage(err.code));
     } finally {
@@ -344,7 +385,7 @@ export default function AuthModal({ mode = 'login', isUpgrade = false, onClose, 
         {!isUpgrade && (
           <div style={{ display: 'flex', gap: 0, marginBottom: 14, borderRadius: 8, overflow: 'hidden', border: '1px solid var(--border)' }}>
             {['login', 'register'].map(t => (
-              <button key={t} onClick={() => { setTab(t); setError(''); setRegisterRole(null); }}
+              <button key={t} onClick={() => { setTab(t); setError(''); setRegisterRole(null); setStuckOnExistingEmail(false); }}
                 style={{
                   flex: 1, padding: '9px 0', border: 'none', cursor: 'pointer', fontSize: 13, fontWeight: 600,
                   background: tab === t ? 'var(--accent)' : 'var(--card)',
@@ -448,9 +489,9 @@ export default function AuthModal({ mode = 'login', isUpgrade = false, onClose, 
             </button>
           </div>
 
-          {!isUpgrade && tab === 'login' && !resetSent && (
+          {!isUpgrade && (tab === 'login' || stuckOnExistingEmail) && !resetSent && (
             <div style={{ textAlign: 'right', marginTop: -4 }}>
-              <button style={{ ...btnGhost, fontSize: 12 }} onClick={() => { setError(''); handleReset(); }} disabled={loading}>
+              <button style={{ ...btnGhost, fontSize: 12 }} onClick={() => { setError(''); setStuckOnExistingEmail(false); handleReset(); }} disabled={loading}>
                 {showAsFaculty ? 'Forgot password?' : 'Password ভুলে গেছো?'}
               </button>
             </div>
@@ -466,6 +507,13 @@ export default function AuthModal({ mode = 'login', isUpgrade = false, onClose, 
           {error && (
             <div style={{ fontSize: 12, color: 'var(--danger, #dc2626)', padding: '8px 10px', background: 'rgba(220,38,38,0.08)', borderRadius: 6 }}>
               {error}
+              {stuckOnExistingEmail && (
+                <div style={{ marginTop: 6, color: 'var(--muted)', fontWeight: 400 }}>
+                  {showAsFaculty
+                    ? "An account with this email already exists — if you don't remember the password, use \"Forgot password?\" above to reset it and continue."
+                    : 'এই email দিয়ে account আগেই তৈরি হয়ে গেছে — password মনে না থাকলে উপরের "Password ভুলে গেছো?" দিয়ে reset করে চালিয়ে যাও।'}
+                </div>
+              )}
             </div>
           )}
 

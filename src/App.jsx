@@ -30,7 +30,7 @@ import FacultyProfileSetupModal from './components/FacultyProfileSetupModal';
 import FacultyVerifyHoldingScreen from './components/FacultyVerifyHoldingScreen';
 import { getAccountRole, setAccountRole, fetchServerAccountRole, persistAccountRoleToServer } from './lib/accountRole';
 import { getFacultyDoc, markFacultyVerifiedIfEmailConfirmed, isFacultyProfileComplete } from './lib/facultySync';
-import { store, getProfile, isProfileComplete, DEFAULT_PROFILE, normalizeProfileForSave, validateProfileForSave, ensureDBReady } from './store/store';
+import { store, getProfile, isProfileComplete, DEFAULT_PROFILE, normalizeProfileForSave, validateProfileForSave, ensureDBReady, tagProfileOwner, isProfileStaleForUid } from './store/store';
 import { getGroupId } from './lib/groupUtils';
 import { syncOwnVerification, joinGroup } from './lib/groupSync';
 import { claimRoll } from './lib/rollOwnership';
@@ -845,7 +845,13 @@ export default function App() {
                 alert('Profile cannot be saved:\n' + msgs);
                 return;
               }
-              store.set('profile', normalizeProfileForSave(formData));
+              // BUGFIX (stale profile prefill, part 2/2 — see
+              // isProfileStaleForUid in store.js): tag the saved profile
+              // with the uid that actually saved it, so a later fresh
+              // account on this same device/browser can tell "leftover
+              // data from someone else" apart from "my own real profile"
+              // instead of blindly trusting whatever's in localStorage.
+              store.set('profile', tagProfileOwner(normalizeProfileForSave(formData), auth.currentUser?.uid));
               // Record which page-load onboarding finished on, so
               // ProfileCompleteReminder can tell "still this same load"
               // apart from "app reopened later" and never fire in the
@@ -853,7 +859,20 @@ export default function App() {
               try { store.set('kuetxProfileFinishedAtLoad', window.__kuetxLoadCounter); } catch {}
               advance();
             }}
-            initialProfile={getProfile()}
+            // BUGFIX (stale profile prefill): don't hand the raw stored
+            // profile straight to the form. If it looks like leftover
+            // data from a DIFFERENT account (tagged with a different uid,
+            // and never actually completed) rather than this account's
+            // own real profile, prefill with a clean DEFAULT_PROFILE
+            // instead — a brand-new account should never see someone
+            // else's half-typed name/roll/dept/hall pre-filled in. An
+            // already-complete profile, or one genuinely tagged as this
+            // uid's own, is left untouched exactly as before.
+            initialProfile={
+              isProfileStaleForUid(getProfile(), auth.currentUser?.uid)
+                ? DEFAULT_PROFILE
+                : getProfile()
+            }
           />
         )}
         {current === 'profile' && getAccountRole() === 'teacher' && (
@@ -923,7 +942,25 @@ export default function App() {
             full profile — but only from a later session, never right after
             onboarding (see ProfileCompleteReminder.jsx's own session guard). */}
         {authState.authReady && queue.length === 0 && <ProfileCompleteReminder />}
-        {verifyEmailPrompt && (
+        {/* BUGFIX (modal overlap): verifyEmailPrompt/facultyVerifyPrompt are
+            set by a boot-time effect that runs independently of the
+            sequential onboarding `queue` — it never checked `current`
+            before showing, so a cross-device/cross-tab KUET-email-link
+            click could pop this modal directly on top of a mandatory,
+            un-dismissible step (most visibly ProfileSetupModal), with no
+            z-index/mutual-exclusion between them. The Firestore write +
+            signOut in completeKuetVerificationLink() already succeeded by
+            this point regardless — only the *prompt* itself needs to wait
+            its turn, not the verification. So: hold the prompt in state as
+            before (still captured immediately, nothing about detection or
+            the underlying link-completion logic changes), but only render
+            it once `queue.length === 0`, i.e. once every mandatory
+            pre-dashboard gate has actually cleared — same rule
+            VerifyReminderPopup already uses a few lines up. If the queue
+            is still non-empty when the prompt is captured, it simply waits
+            here rendered-but-gated until the queue drains, then appears on
+            its own, never layered on top of another modal. */}
+        {verifyEmailPrompt && queue.length === 0 && (
           <KuetVerifyEmailConfirmModal
             busy={verifyEmailPrompt.busy}
             error={verifyEmailPrompt.error}
@@ -931,7 +968,7 @@ export default function App() {
             onCancel={() => setVerifyEmailPrompt(null)}
           />
         )}
-        {facultyVerifyPrompt && (
+        {facultyVerifyPrompt && queue.length === 0 && (
           <FacultyVerifyEmailConfirmModal
             busy={facultyVerifyPrompt.busy}
             error={facultyVerifyPrompt.error}

@@ -927,6 +927,49 @@ export const normalizeProfileForSave = (input = {}) => {
   };
 };
 
+// BUGFIX (stale profile prefill): ProfileSetupModal's initialProfile used
+// to be fed straight from getProfile() with no ownership check at all —
+// so a genuinely NEW account (freshly signed in on a device/browser that
+// still has a previous account's or an earlier abandoned attempt's
+// half-filled profile sitting in localStorage under the same 'profile'
+// key) would see that old person's name/roll/dept/hall silently
+// pre-filled into their own onboarding form. isNewlyCreatedAccount() in
+// App.jsx already detects the "this account is brand new" half of this,
+// but had no way to also know "...and is this stored profile actually
+// mine?" — nothing previously recorded which account a saved profile
+// belonged to.
+//
+// Fix: tag the profile with its owner's uid at save time (below), and
+// give callers a cheap way to check that tag against the currently
+// signed-in uid before trusting the stored profile as a prefill source.
+// This only affects what App.jsx decides to pass into initialProfile —
+// getProfile() itself is unchanged and still returns the raw stored
+// profile for every other existing caller (Classmates matching,
+// attendance, term roadmap, etc.), so nothing downstream of a completed
+// profile is touched by this.
+export const tagProfileOwner = (profile, uid) => {
+  if (!uid) return profile;
+  return { ...profile, __ownerUid: uid };
+};
+
+/**
+ * True if `profile` was saved by a DIFFERENT uid than `uid` (or has no
+ * owner tag at all, e.g. from before this fix / a wiped-and-reused
+ * device) AND isn't actually complete yet — i.e. it's safe-looking
+ * leftover data, not a real finished profile, so it shouldn't be trusted
+ * as a prefill source for someone else's fresh onboarding. A COMPLETE
+ * profile with no tag (pre-existing users updating through this fix) is
+ * deliberately left alone here — this only guards the brand-new-account
+ * prefill case, not established profiles.
+ */
+export const isProfileStaleForUid = (profile, uid) => {
+  const p = profile || {};
+  if (isProfileComplete(p)) return false; // never second-guess a real, finished profile
+  if (!uid) return false;
+  const owner = p.__ownerUid;
+  return !!owner && owner !== uid;
+};
+
 export const getProfile = () => {
   const raw = store.get('profile') || {};
   const currentTermKey = raw.currentTermKey || getTermKeyFromLabel(raw.currentTerm) || '';
