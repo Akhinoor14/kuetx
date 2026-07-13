@@ -6,7 +6,9 @@ import { getGroupId } from '../lib/groupUtils';
 import { subscribeMyRole } from '../lib/groupSync';
 import { auth } from '../lib/firebase';
 import { useIsStaff } from '../hooks/useIsStaff';
-import { useIsFaculty } from '../hooks/useIsFaculty';
+import { useViewMode } from '../hooks/useViewMode';
+import { STUDENT_FIXED_BUTTONS } from './nav-system/BottomNavStudent';
+import { FACULTY_FIXED_BUTTONS } from './nav-system/BottomNavFaculty';
 
 const MOBILE_NAV_QUERY = '(max-width: 767.98px)';
 
@@ -35,30 +37,6 @@ export function useIsMobileNav() {
 
   return isMobileNav;
 }
-
-// First 4 buttons are fixed destinations. The 5th is role-aware:
-// - normal user -> /profile (Profile page)
-// - CR/ACR      -> /cr-hub (Profile + Class Management + CT & Quiz Planner)
-// Icon/avatar and match-paths for the 5th button are computed at render
-// time since they depend on live auth + role state.
-const STUDENT_FIXED_BUTTONS = [
-  { id: 'home',      label: 'Home',      icon: 'Home',         path: '/',                match: (p) => p === '/' },
-  { id: 'academics', label: 'Academics', icon: 'BookOpen',      path: '/academic-core',   match: (p) => p === '/academic-core' || ['/courses', '/syllabus', '/question-bank', '/solutions', '/marks', '/results', '/alerts'].includes(p) },
-  { id: 'daily',     label: 'Daily',     icon: 'CalendarCheck', path: '/daily-academics', match: (p) => p === '/daily-academics' || ['/attendance', '/schedule', '/assignments', '/teachers', '/classmates', '/diary'].includes(p) },
-  { id: 'campus',    label: 'Campus',    icon: 'Layers',        path: '/campus',          match: (p) => p === '/campus' || p === '/daily-life' || p === '/campus-life' || ['/notes', '/self-study', '/time', '/namaz', '/clubs', '/projects', '/tours', '/money', '/tuition'].includes(p) },
-];
-
-// §6.2 of the merged Faculty Module prompt: "the FIXED_BUTTONS swap as a
-// whole set, not appended" — Home → My Classes → Schedule → Campus (hub) →
-// Profile/Admin (role-aware, handled by ProfileButton below same as
-// student mode). Deliberately NOT reusing STUDENT_FIXED_BUTTONS ids/paths;
-// this is a fully separate 4-button set for the teacher shell.
-const FACULTY_FIXED_BUTTONS = [
-  { id: 'f-home',     label: 'Home',     icon: 'Home',     path: '/faculty',           match: (p) => p === '/faculty' },
-  { id: 'f-classes',  label: 'Classes',  icon: 'BookOpen', path: '/faculty/classes',   match: (p) => p === '/faculty/classes' || p.startsWith('/faculty/classes/') },
-  { id: 'f-schedule', label: 'Schedule', icon: 'Clock',    path: '/faculty/schedule',  match: (p) => p === '/faculty/schedule' },
-  { id: 'f-campus',   label: 'Campus',   icon: 'Layers',   path: '/faculty/resources', match: (p) => p === '/faculty/resources' || p === '/faculty/question-bank' },
-];
 
 // Priority for the 5th button's destination/label/icon:
 // 1. Staff role or Founder -> /admin-hub (student mode) or /team (faculty
@@ -108,29 +86,10 @@ export function BottomNav() {
   const [roleLabel, setRoleLabel] = useState('CR');
   const { isRealAdmin: isStaff, adminLabel } = useIsStaff();
 
-  // Same viewMode derivation as Sidebar.jsx — real faculty always
-  // 'teacher', real student always 'student', only Founder's own
-  // localStorage preference matters. Kept as a literal duplicate of that
-  // logic rather than a shared hook for now: both components already read
-  // localStorage directly and there's no shared state to synchronize
-  // beyond the key itself, so introducing a new shared hook here isn't
-  // worth it unless a third consumer shows up.
-  const { isRealFaculty, isFounderBypass } = useIsFaculty();
-  const [viewModePref, setViewModePref] = useState(() => {
-    try { return localStorage.getItem('kuetx:viewMode') || 'student'; } catch { return 'student'; }
-  });
-  useEffect(() => {
-    // Stay in sync if the Founder flips the switch from the Sidebar while
-    // this component is also mounted (mobile bottom nav + desktop sidebar
-    // can't both be visible at once today, but this keeps it correct if
-    // that ever changes, e.g. a tablet breakpoint showing both).
-    const sync = () => {
-      try { setViewModePref(localStorage.getItem('kuetx:viewMode') || 'student'); } catch { /* ignore */ }
-    };
-    window.addEventListener('storage', sync);
-    return () => window.removeEventListener('storage', sync);
-  }, []);
-  const viewMode = isFounderBypass ? viewModePref : (isRealFaculty ? 'teacher' : 'student');
+  // Single shared source of truth for student-vs-faculty shell — see
+  // hooks/useViewMode.js. Sidebar.jsx uses the exact same hook, so the two
+  // can never drift out of sync with each other again.
+  const { viewMode } = useViewMode();
 
   useEffect(() => {
     const profile = getProfile() || {};

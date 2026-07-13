@@ -1,34 +1,29 @@
+// Sidebar.jsx
+//
+// Thin shell only: decides student vs faculty via useViewMode() (the
+// single shared source of truth — see hooks/useViewMode.js) and renders
+// exactly one of SidebarNavStudent / SidebarNavFaculty. This file no
+// longer contains any nav-row rendering or NAV/NAV_FACULTY selection logic
+// itself, so there is no way for student and faculty nav code to end up
+// tangled in here again.
+
 import { Link, useLocation } from 'react-router-dom';
 import { useState, useEffect, useRef } from 'react';
 import * as Icons from 'lucide-react';
-import { NAV } from '../nav';
-import { NAV_FACULTY } from '../nav-faculty';
 import { Logo, Wordmark } from './Logo';
 import { APP_VERSION_SHORT } from '../version';
 import { store, DEFAULT_PROFILE } from '../store/store';
 import { useNavConfig } from './nav-system/useNavConfig';
 import { useFavorites } from '../hooks/useFavorites';
 import { usePinnedPages } from '../hooks/usePinnedPages';
-import { filterNav } from '../lib/modeFilter';
 import { getGroupId } from '../lib/groupUtils';
 import { subscribeMembers } from '../lib/groupSync';
-import { subscribeMyRoles } from '../lib/staffSync';
-import { ROLE_LABELS } from '../lib/staffRoles';
-import { checkIsAdmin } from '../lib/adminAuth';
 import { auth } from '../lib/firebase';
 import { useIsStaff } from '../hooks/useIsStaff';
-import { useIsFaculty } from '../hooks/useIsFaculty';
+import { useViewMode } from '../hooks/useViewMode';
 import * as noticeApi from '../lib/noticeUtils';
-
-const GROUP_ICONS = {
-  'Dashboard':   'Grid',
-  'Profile':     'User',
-  'Class Rep':   'Shield',
-  'Academics':   'GraduationCap',
-  'Daily Life':  'Sunrise',
-  'Campus Life': 'Layers',
-  'Tools':       'Wrench',
-};
+import SidebarNavStudent, { findStudentNavItem } from './nav-system/SidebarNavStudent';
+import SidebarNavFaculty, { findFacultyNavItem } from './nav-system/SidebarNavFaculty';
 
 // ── Firebase sync status pill ─────────────────────────────────────────────────
 function SyncBadge({ status }) {
@@ -50,95 +45,6 @@ function SyncBadge({ status }) {
   );
 }
 
-// ── Nav row: shared for both hub rows and leaf item rows ─────────────────────
-// Neutral/synchronized style: default state is muted gray for every group,
-// a single accent color takes over on hover/active. No per-group hues.
-function NavRow({ to, label, iconName, active, onClose, unreadCount = 0 }) {
-  const Icon = Icons[iconName] || Icons.Circle;
-  const [hovered, setHovered] = useState(false);
-  const hasUnread = unreadCount > 0;
-
-  return (
-    <Link
-      to={to}
-      onClick={onClose}
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      style={{
-        display: 'flex',
-        alignItems: 'center',
-        gap: 10,
-        padding: '8px 10px 8px 8px',
-        borderRadius: 8,
-        textDecoration: 'none',
-        marginBottom: 1,
-        borderLeft: active ? '3px solid var(--accent)' : '3px solid transparent',
-        transition: 'background 0.12s, color 0.12s, border-color 0.12s',
-        background: active
-          ? 'color-mix(in srgb, var(--accent) 10%, var(--surface))'
-          : hovered
-          ? 'var(--inputBg)'
-          : 'transparent',
-      }}
-    >
-      <span style={{ position: 'relative', flexShrink: 0, display: 'inline-flex' }}>
-        <Icon
-          size={16}
-          strokeWidth={active ? 2.4 : 1.8}
-          style={{ color: active ? 'var(--accent)' : 'var(--muted)' }}
-        />
-        {hasUnread && (
-          <span
-            className="sidebar-notice-dot"
-            style={{
-              position: 'absolute', top: -3, right: -3,
-              width: 7, height: 7, borderRadius: '50%',
-              background: 'var(--accent)',
-              boxShadow: '0 0 0 2px var(--surface)',
-            }}
-          />
-        )}
-      </span>
-      <span style={{
-        flex: 1,
-        fontSize: 13,
-        fontWeight: active ? 700 : 500,
-        color: active ? 'var(--accent)' : 'var(--text)',
-        overflow: 'hidden',
-        textOverflow: 'ellipsis',
-        whiteSpace: 'nowrap',
-      }}>
-        {label}
-      </span>
-      {hasUnread && (
-        <span style={{
-          fontSize: 10, fontWeight: 800, color: '#fff', background: 'var(--accent)',
-          borderRadius: 999, minWidth: 16, height: 16, padding: '0 4px',
-          display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-          flexShrink: 0, lineHeight: 1,
-        }}>
-          {unreadCount > 9 ? '9+' : unreadCount}
-        </span>
-      )}
-    </Link>
-  );
-}
-
-// ── Section label (small uppercase divider, no color-coding) ─────────────────
-function SectionLabel({ children }) {
-  return (
-    <div style={{
-      fontSize: 10, fontWeight: 700,
-      color: 'var(--muted)',
-      textTransform: 'uppercase',
-      letterSpacing: '0.07em',
-      padding: '10px 10px 4px',
-    }}>
-      {children}
-    </div>
-  );
-}
-
 export function Sidebar({ open, onClose, authState }) {
   const location = useLocation();
   const [profile, setProfile] = useState(() => store.get('profile') || DEFAULT_PROFILE);
@@ -146,60 +52,19 @@ export function Sidebar({ open, onClose, authState }) {
   const { favorites } = useFavorites();
   const { pinnedPages } = usePinnedPages();
   const [isRealCR, setIsRealCR] = useState(() => {
-    // Same same-tab paint optimization as useIsStaff.js — never a source
-    // of truth, just avoids the Class Rep row visibly popping in a beat
-    // after the sidebar's first paint on every page load. The effect
-    // below always re-verifies against the live members doc regardless.
     try {
       return sessionStorage.getItem('kuetx:lastKnownIsRealCR') === '1';
     } catch {
       return false;
     }
   });
-  // profile.isCR is just a self-ticked checkbox from Profile Setup with no
-  // verification behind it — showing the CR tools link based on it alone
-  // let anyone tick the box and see (and, before RequireCR existed, even
-  // open) CR-only pages. isRealCR is the only trustworthy signal here.
   const canSeeCrBoard = isRealCR && navConfig.cr_board_enabled;
-
-  // Same principle for the Admin/Staff row: only ever driven by a live,
-  // server-verified source (admins/{uid} doc for Founder, staff/{uid}/roles
-  // for everyone else) — never a self-reported flag. adminLabel holds the
-  // specific role name to show (e.g. "Founder", "Head of Operations",
-  // "Campus Lead") so the sidebar entry reads as theirs, not a generic
-  // "Admin" link shown to people with no actual role.
   const { isRealAdmin, adminLabel } = useIsStaff();
 
-  // §6.2/§7 of the merged Faculty Module prompt — viewMode decides whether
-  // this Sidebar renders NAV (student) or NAV_FACULTY (teacher). It is a
-  // device-local UI preference (localStorage), never account data:
-  //   - A real, verified faculty account (isRealFaculty from useIsFaculty)
-  //     is ALWAYS 'teacher' — no switch shown, nothing to toggle.
-  //   - A real student account is ALWAYS 'student' — same, no switch.
-  //   - Only the Founder (isFounderBypass) gets a visible switch, because
-  //     they're the only account that legitimately has both shells
-  //     available at once. Toggling it doesn't touch Firestore at all,
-  //     just flips which nav config + hub routes render.
-  const { isRealFaculty, isFounderBypass } = useIsFaculty();
-  const [viewModePref, setViewModePref] = useState(() => {
-    try { return localStorage.getItem('kuetx:viewMode') || 'student'; } catch { return 'student'; }
-  });
-  useEffect(() => {
-    try { localStorage.setItem('kuetx:viewMode', viewModePref); } catch { /* ignore */ }
-  }, [viewModePref]);
+  // Single shared source of truth for student-vs-faculty shell — see
+  // hooks/useViewMode.js. No inline viewMode derivation lives here anymore.
+  const { viewMode } = useViewMode();
 
-  // Founder's choice (viewModePref) is the only case that actually matters
-  // — everyone else's viewMode is fully determined by their real role, so
-  // computing it fresh here (rather than trusting a stale localStorage
-  // value from before this session, e.g. after a role change) is safer.
-  const viewMode = isFounderBypass ? viewModePref : (isRealFaculty ? 'teacher' : 'student');
-  const canSwitchView = isFounderBypass;
-
-  // Unread Notice count — drives the small pulsing dot on the Notice hub
-  // row below, so a new notice is visible in the sidebar itself and not
-  // only via the topbar bell (Navbar.jsx). Same live source
-  // (subscribeAllNotices) and same read-tracking (getReadNoticeIds) the
-  // Notice page and Navbar already use, so all three always agree.
   const [unreadNoticeCount, setUnreadNoticeCount] = useState(0);
   const latestNoticesRef = useRef([]);
   useEffect(() => {
@@ -212,9 +77,6 @@ export function Sidebar({ open, onClose, authState }) {
       latestNoticesRef.current = notices;
       recompute();
     });
-    // A notice getting marked read elsewhere (Notice page, toast tap)
-    // dispatches this same event Navbar/Notice already rely on — just
-    // re-diff the last known live list against the fresh read-ids set.
     window.addEventListener('kuetx:store-updated', recompute);
     return () => {
       unsub();
@@ -240,24 +102,9 @@ export function Sidebar({ open, onClose, authState }) {
     return () => window.removeEventListener('kuetx:store-updated', syncProfile);
   }, []);
 
-  const activeNavSource = viewMode === 'teacher' ? NAV_FACULTY : NAV;
-
-  const filteredNav = filterNav(activeNavSource, canSeeCrBoard, isRealAdmin).map((section) =>
-    section.group === 'Admin'
-      ? { ...section, group: adminLabel }
-      : section
-  );
-
-  const findNavItem = (path) => {
-    for (const s of activeNavSource) {
-      const pools = s.subgroups ? s.subgroups.map(sub => sub.items) : [s.items];
-      for (const pool of pools) {
-        const i = pool.find(i => i.path === path);
-        if (i) return i;
-      }
-    }
-    return null;
-  };
+  // Quick-strip lookups: resolve against whichever shell is active, using
+  // that shell's own (never the other's) nav-item finder.
+  const findNavItem = viewMode === 'teacher' ? findFacultyNavItem : findStudentNavItem;
   const getPageLabel = (path) => {
     const i = findNavItem(path);
     return i ? i.label : (path === '/' ? 'Dashboard' : path);
@@ -269,7 +116,6 @@ export function Sidebar({ open, onClose, authState }) {
 
   const quickItems = [...new Set([...pinnedPages, ...favorites])].slice(0, 5);
 
-  // Auth info from authState prop
   const isAnonymous = authState?.isAnonymous ?? true;
   const syncStatus = authState?.syncStatus ?? 'idle';
   const displayName = authState?.displayName || null;
@@ -296,18 +142,9 @@ export function Sidebar({ open, onClose, authState }) {
               {viewMode === 'teacher' ? 'Faculty Portal · KUET' : 'Student Life OS · KUET'}
             </div>
           </div>
-          {/* §7 (revised) — the Founder switch button itself now lives on
-              the Admin/Founder dashboard (AdminDashboard.jsx top-level
-              grid), not scattered across the sidebar and Faculty
-              Dashboard. Rationale: this toggle is ONLY ever usable by the
-              Founder (isFounderBypass) for testing both shells — a real
-              faculty or real student account never sees it at all, so
-              placing it inside the everyday sidebar/Faculty Dashboard UI
-              was misleading real users into wondering what it was for.
-              The underlying viewModePref state below still lives here
-              (it's what Sidebar/BottomNav actually read to decide which
-              NAV renders), it's just no longer exposed as a button on
-              this screen. */}
+          {/* The Founder's student/faculty switch button lives on the
+              Admin/Founder dashboard (AdminDashboard.jsx), not here — see
+              useViewMode.js for the toggle itself. */}
         </div>
 
         {/* ── Quick strip ── */}
@@ -335,76 +172,19 @@ export function Sidebar({ open, onClose, authState }) {
           </div>
         )}
 
-        {/* ── Nav: flat hub list — every group renders as one row ── */}
-        <nav style={{ flex: 1, overflowY: 'auto', padding: '6px 6px 16px' }}>
-          {filteredNav.map((section, idx) => {
-            const isHub = section.isSubgroup && !section.subgroups;
-
-            // Whole-group hub row (Overview, Class Rep, Campus Life, Daily Life, Tools)
-            if (isHub) {
-              const active = location.pathname === section.hubPath
-                || section.items.some(item => location.pathname === item.path
-                  || (item.path !== '/' && location.pathname.startsWith(item.path)));
-              return (
-                <div key={section.group}>
-                  {idx > 0 && <div style={{ height: 1, background: 'var(--border)', margin: '6px 4px', opacity: 0.6 }} />}
-                  <NavRow
-                    to={section.hubPath}
-                    label={section.group}
-                    iconName={section.hubIcon || GROUP_ICONS[section.group] || 'Circle'}
-                    active={active}
-                    onClose={onClose}
-                    unreadCount={(section.group === 'Notice' || section.group === 'Notices') ? unreadNoticeCount : 0}
-                  />
-                </div>
-              );
-            }
-
-            // Group split into subgroups (Academics): one row per subgroup hub
-            if (section.subgroups) {
-              return (
-                <div key={section.group}>
-                  {idx > 0 && <div style={{ height: 1, background: 'var(--border)', margin: '6px 4px', opacity: 0.6 }} />}
-                  <SectionLabel>{section.group}</SectionLabel>
-                  {section.subgroups.map(sub => {
-                    const subActive = location.pathname === sub.hubPath
-                      || sub.items.some(item => location.pathname === item.path
-                        || (item.path !== '/' && location.pathname.startsWith(item.path)));
-                    return (
-                      <NavRow
-                        key={sub.name}
-                        to={sub.hubPath}
-                        label={sub.name}
-                        iconName={sub.hubIcon || 'Circle'}
-                        active={subActive}
-                        onClose={onClose}
-                      />
-                    );
-                  })}
-                </div>
-              );
-            }
-
-            // Fallback: direct flat group (shouldn't normally hit since all
-            // groups are hubs/subgroups now, but keep for safety)
-            return (
-              <div key={section.group}>
-                {idx > 0 && <div style={{ height: 1, background: 'var(--border)', margin: '6px 4px', opacity: 0.6 }} />}
-                <SectionLabel>{section.group}</SectionLabel>
-                {section.items.map(item => (
-                  <NavRow
-                    key={item.id}
-                    to={item.path}
-                    label={item.label}
-                    iconName={item.icon}
-                    active={location.pathname === item.path}
-                    onClose={onClose}
-                  />
-                ))}
-              </div>
-            );
-          })}
-        </nav>
+        {/* ── Nav: exactly one of the two shells renders, never both ── */}
+        {viewMode === 'teacher' ? (
+          <SidebarNavFaculty location={location} onClose={onClose} />
+        ) : (
+          <SidebarNavStudent
+            location={location}
+            onClose={onClose}
+            canSeeCrBoard={canSeeCrBoard}
+            isRealAdmin={isRealAdmin}
+            adminLabel={adminLabel}
+            unreadNoticeCount={unreadNoticeCount}
+          />
+        )}
 
         {/* ── Bottom — Firebase status + account ── */}
         <div style={{ padding: '10px 14px', borderTop: '1px solid var(--border)', flexShrink: 0 }}>
