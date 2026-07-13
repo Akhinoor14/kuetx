@@ -832,19 +832,6 @@ export default function Schedule() {
 
     const existingSchedule = schedule.filter(item => item.id !== quickFormEditingId);
 
-    const hasExactDuplicate = existingSchedule.some(item =>
-      item.day === newEntry.day &&
-      normalizeSlotKey(item.slot) === nextSlot &&
-      item.courseId === newEntry.courseId &&
-      (item.teacherName || '') === (newEntry.teacherName || '') &&
-      (item.type || '') === (newEntry.type || '')
-    );
-
-    if (hasExactDuplicate && !quickFormEditingId) {
-      notify(`This class is already saved for ${newEntry.teacherName || 'this teacher'}.`, 'error');
-      return;
-    }
-
     const hasOverlap = existingSchedule.some(item => 
       item.day === newEntry.day && 
       isSlotOverlap(item.slot, nextSlot) &&
@@ -920,19 +907,6 @@ export default function Schedule() {
     };
 
     const existingSchedule = schedule.filter(item => item.id !== editingId);
-
-    const hasExactDuplicate = existingSchedule.some(item =>
-      item.day === nextEntry.day &&
-      normalizeSlotKey(item.slot) === nextSlot &&
-      item.courseId === nextEntry.courseId &&
-      (item.teacherName || '') === (nextEntry.teacherName || '') &&
-      (item.type || '') === (nextEntry.type || '') &&
-      (item.room || '') === (nextEntry.room || '')
-    );
-    if (hasExactDuplicate) {
-      notify(`This class is already saved for ${nextEntry.teacherName || 'this teacher'} in the same day and time.`, 'error');
-      return;
-    }
 
     const hasUserTimeConflict = existingSchedule.some(item => 
       item.id !== editingId && 
@@ -2569,6 +2543,17 @@ export default function Schedule() {
                 <option value="Sessional">Lab / Sessional</option>
                 <option value="Project">Project</option>
                 <option value="Tutorial">Tutorial / Section</option>
+              </select>
+            </div>
+
+            <div style={isFullScreenForm ? { gridColumn: 'span 1' } : undefined}>
+              <label style={{ fontSize: 12, fontWeight: 600 }}>Day</label>
+              <select
+                value={quickFormData.day}
+                onChange={e => setQuickFormData(d => ({ ...d, day: e.target.value }))}
+                style={{ width: '100%', padding: '8px 10px', border: '1px solid var(--border)', borderRadius: 6, background: 'var(--bg)', color: 'var(--text)', fontSize: 13 }}
+              >
+                {DAYS.map(d => <option key={d} value={d}>{d}</option>)}
               </select>
             </div>
 

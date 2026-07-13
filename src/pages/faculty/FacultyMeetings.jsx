@@ -54,44 +54,53 @@ function formatTimeLabel(timeStr) {
   return `${h12}:${String(m).padStart(2, '0')} ${ampm}`;
 }
 
-function MeetingRow({ meeting, onEdit, onDelete }) {
+function MeetingCard({ meeting, onEdit, onDelete, isToday }) {
   const meta = getMeetingTypeMeta(meeting.type);
   const Icon = Icons[meta.icon] || Icons.Calendar;
+  const cardStyle = {
+    '--meeting-color': meta.color,
+    '--meeting-color-bg': `${meta.color}20`,
+    '--meeting-color-border': `${meta.color}28`,
+  };
   return (
-    <div style={{
-      display: 'flex', gap: 12, padding: '12px 14px', borderRadius: 12,
-      background: `${meta.color}0c`, border: `1px solid ${meta.color}28`, alignItems: 'flex-start',
-    }}>
-      <div style={{
-        width: 34, height: 34, borderRadius: 10, background: `${meta.color}20`, color: meta.color,
-        display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: 1,
-      }}>
-        <Icon size={16} />
-      </div>
-      <div style={{ flex: 1, minWidth: 0 }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', gap: 8, alignItems: 'flex-start' }}>
-          <div style={{ fontSize: 13.5, fontWeight: 800, color: 'var(--text)' }}>{meeting.title}</div>
-          <div style={{ display: 'flex', gap: 4, flexShrink: 0 }}>
-            <button onClick={() => onEdit(meeting)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--muted)', padding: 4 }}>
-              <Icons.Pencil size={13} />
-            </button>
-            <button onClick={() => onDelete(meeting)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--danger, #ef4444)', padding: 4 }}>
-              <Icons.Trash2 size={13} />
-            </button>
+    <div className={`meeting-card${isToday ? ' meeting-card-today' : ''}`} style={cardStyle}>
+      <div className="meeting-card-top">
+        <div style={{ display: 'flex', gap: 10, alignItems: 'flex-start', minWidth: 0 }}>
+          <div className="meeting-card-icon"><Icon size={16} /></div>
+          <div style={{ minWidth: 0 }}>
+            <div className="meeting-card-type">{meta.label}</div>
+            <div className="meeting-card-title">{meeting.title}</div>
           </div>
         </div>
-        <div style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 3, display: 'flex', flexWrap: 'wrap', gap: 8, alignItems: 'center' }}>
-          <span style={{ fontWeight: 700, color: meta.color }}>{meta.label}</span>
-          <span>· {formatDateLabel(meeting.date)}{meeting.time ? ` · ${formatTimeLabel(meeting.time)}` : ''}</span>
-          {meeting.location && <span>· {meeting.location}</span>}
+        <div className="meeting-card-actions">
+          <button onClick={() => onEdit(meeting)} title="Edit"><Icons.Pencil size={13} /></button>
+          <button onClick={() => onDelete(meeting)} title="Delete" style={{ color: 'var(--danger, #ef4444)' }}><Icons.Trash2 size={13} /></button>
         </div>
-        {meeting.link && (
-          <a href={meeting.link} target="_blank" rel="noreferrer" style={{ fontSize: 11.5, color: meta.color, marginTop: 4, display: 'inline-flex', alignItems: 'center', gap: 4, textDecoration: 'none', fontWeight: 700 }}>
-            <Icons.Link size={11} /> Join / Open link
-          </a>
-        )}
-        {meeting.notes && <div style={{ fontSize: 12, color: 'var(--text)', marginTop: 4, opacity: 0.8 }}>{meeting.notes}</div>}
       </div>
+
+      <div className="meeting-card-meta">
+        <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+          <Icons.Calendar size={12} /> {formatDateLabel(meeting.date)}
+        </span>
+        {meeting.time && (
+          <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+            <Icons.Clock size={12} /> {formatTimeLabel(meeting.time)}
+          </span>
+        )}
+        {meeting.location && (
+          <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+            <Icons.MapPin size={12} /> {meeting.location}
+          </span>
+        )}
+      </div>
+
+      {meeting.notes && <div className="meeting-card-notes">{meeting.notes}</div>}
+
+      {meeting.link && (
+        <a href={meeting.link} target="_blank" rel="noreferrer" className="meeting-card-join">
+          <Icons.Video size={14} /> Join Meeting
+        </a>
+      )}
     </div>
   );
 }
@@ -109,12 +118,27 @@ export default function FacultyMeetings() {
     return subscribeMyMeetings(uid, setMeetings);
   }, []);
 
-  const { upcoming, past } = useMemo(() => {
+  const { today, upcoming, past } = useMemo(() => {
     const list = meetings || [];
-    const today = todayStr();
-    const upcoming = list.filter((m) => m.date >= today);
-    const past = list.filter((m) => m.date < today).slice().reverse();
-    return { upcoming, past };
+    const todayStrVal = todayStr();
+    // Sort by date, then time (meetings with no time sort before timed
+    // ones on the same date) — done client-side since the Firestore
+    // subscription no longer applies a compound orderBy (see
+    // facultyMeetingSync.js's subscribeMyMeetings for why).
+    const byDateTime = (a, b) => {
+      if (a.date !== b.date) return a.date < b.date ? -1 : 1;
+      const at = a.time || '';
+      const bt = b.time || '';
+      if (at !== bt) return at < bt ? -1 : 1;
+      return 0;
+    };
+    const todayList = list.filter((m) => m.date === todayStrVal).sort(byDateTime);
+    // "Latest first" for upcoming: soonest date/time at the top, so the
+    // very next meeting is always the first card seen.
+    const upcomingList = list.filter((m) => m.date > todayStrVal).sort(byDateTime);
+    // Past meetings: most recently happened first (reverse chronological).
+    const pastList = list.filter((m) => m.date < todayStrVal).sort(byDateTime).reverse();
+    return { today: todayList, upcoming: upcomingList, past: pastList };
   }, [meetings]);
 
   const openAdd = () => { setForm(emptyForm); setEditingId(null); setShowForm(true); };
@@ -184,11 +208,27 @@ export default function FacultyMeetings() {
         {/* ── Add / Edit form — inline card, same field styling as
              FacultyProfile.jsx's edit-mode fields ── */}
         {showForm && (
-          <div className="card" style={{ marginBottom: 16, padding: 18, borderRadius: 16, border: '1.5px solid var(--accent)' }}>
-            <div style={{ fontSize: 12, fontWeight: 800, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 14 }}>
-              {editingId ? 'Edit Meeting' : 'New Meeting'}
+          <div className="card" style={{
+            marginBottom: 16, padding: 0, borderRadius: 16, overflow: 'hidden',
+            border: `1.5px solid ${getMeetingTypeMeta(form.type).color}55`,
+          }}>
+            <div style={{
+              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+              padding: '14px 18px', background: `${getMeetingTypeMeta(form.type).color}14`,
+              borderBottom: `1px solid ${getMeetingTypeMeta(form.type).color}28`,
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 12.5, fontWeight: 800, color: getMeetingTypeMeta(form.type).color, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                {(() => { const I = Icons[getMeetingTypeMeta(form.type).icon] || Icons.Calendar; return <I size={15} />; })()}
+                {editingId ? 'Edit Meeting' : 'New Meeting'}
+              </div>
+              <button
+                onClick={() => { setShowForm(false); setEditingId(null); }}
+                style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--muted)', padding: 4, display: 'flex' }}
+              >
+                <Icons.X size={16} />
+              </button>
             </div>
-            <div style={{ display: 'grid', gap: 12 }}>
+            <div style={{ display: 'grid', gap: 12, padding: 18 }}>
               <div>
                 <label style={labelStyle}>Title</label>
                 <input style={inputStyle} value={form.title} onChange={(e) => setForm((f) => ({ ...f, title: e.target.value }))} placeholder="e.g. CSE-2201 Online Class" />
@@ -215,7 +255,9 @@ export default function FacultyMeetings() {
                   <input style={inputStyle} value={form.location} onChange={(e) => setForm((f) => ({ ...f, location: e.target.value }))} placeholder="e.g. Seminar Room 2 / Google Meet" />
                 </div>
                 <div>
-                  <label style={labelStyle}>Link (optional)</label>
+                  <label style={{ ...labelStyle, display: 'flex', alignItems: 'center', gap: 5 }}>
+                    <Icons.Video size={11} /> Online link (optional — enables Join button)
+                  </label>
                   <input style={inputStyle} value={form.link} onChange={(e) => setForm((f) => ({ ...f, link: e.target.value }))} placeholder="https://meet.google.com/..." />
                 </div>
               </div>
@@ -244,6 +286,19 @@ export default function FacultyMeetings() {
 
         {!loading && (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
+            {/* Today — its own section up top so today's meetings never get
+                lost inside a longer Upcoming list. */}
+            {today.length > 0 && (
+              <div>
+                <div className="meeting-today-banner">
+                  <Icons.Sparkles size={14} /> Today · {today.length} meeting{today.length !== 1 ? 's' : ''}
+                </div>
+                <div className="meeting-grid">
+                  {today.map((m) => <MeetingCard key={m.id} meeting={m} onEdit={openEdit} onDelete={handleDelete} isToday />)}
+                </div>
+              </div>
+            )}
+
             {/* Upcoming */}
             <div className="card" style={{ padding: 16, borderRadius: 16 }}>
               <div style={{ fontSize: 12, fontWeight: 800, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 12, display: 'flex', alignItems: 'center', gap: 6 }}>
@@ -254,8 +309,8 @@ export default function FacultyMeetings() {
                   No upcoming meetings. <button onClick={openAdd} style={{ background: 'none', border: 'none', color: 'var(--accent)', fontWeight: 700, cursor: 'pointer', fontSize: 12.5 }}>Add one →</button>
                 </div>
               ) : (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                  {upcoming.map((m) => <MeetingRow key={m.id} meeting={m} onEdit={openEdit} onDelete={handleDelete} />)}
+                <div className="meeting-grid">
+                  {upcoming.map((m) => <MeetingCard key={m.id} meeting={m} onEdit={openEdit} onDelete={handleDelete} />)}
                 </div>
               )}
             </div>
@@ -266,8 +321,8 @@ export default function FacultyMeetings() {
                 <div style={{ fontSize: 12, fontWeight: 800, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 12, display: 'flex', alignItems: 'center', gap: 6 }}>
                   <Icons.History size={14} /> Past
                 </div>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 8, opacity: 0.7 }}>
-                  {past.slice(0, 10).map((m) => <MeetingRow key={m.id} meeting={m} onEdit={openEdit} onDelete={handleDelete} />)}
+                <div className="meeting-grid" style={{ opacity: 0.7 }}>
+                  {past.slice(0, 12).map((m) => <MeetingCard key={m.id} meeting={m} onEdit={openEdit} onDelete={handleDelete} />)}
                 </div>
               </div>
             )}

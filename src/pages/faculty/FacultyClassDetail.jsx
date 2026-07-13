@@ -19,7 +19,7 @@ import { useParams, useSearchParams, Link } from 'react-router-dom';
 import * as Icons from 'lucide-react';
 import ClassmatesList from '../../components/ClassmatesList';
 import { getDeptSyllabus } from '../../store/curriculumStore';
-import { subscribeFacultyAssignment, setPlannedTotalClasses } from '../../lib/facultyClassSync';
+import { subscribeFacultyAssignment, setPlannedTotalClasses, updateAssignmentDayTimeSlots, findConflictingAssignment } from '../../lib/facultyClassSync';
 import { subscribeMembers, subscribePlannerLogs } from '../../lib/groupSync';
 import {
   createOrUpdateSessionAttendance, subscribeSessionAttendance,
@@ -33,7 +33,10 @@ import { getFacultyDoc } from '../../lib/facultySync';
 import { useIsFaculty } from '../../hooks/useIsFaculty';
 import { auth } from '../../lib/firebase';
 import { notify } from '../../lib/notify';
-import { TIME_MODELS } from '../../lib/timeModels';
+import {
+  TIME_MODELS, DAYS, isSessionalType, getPresetSessionalSlots,
+} from '../../lib/timeModels';
+import { useQuestionBankData, getR2FileUrl } from '../../hooks/useQuestionBankData';
 
 const TABS = [
   { id: 'students', label: 'Students & CR', icon: 'Users', enabled: true },
@@ -42,8 +45,196 @@ const TABS = [
   { id: 'sessions', label: 'Sessions & Count', icon: 'ListChecks', enabled: true },
   { id: 'attendance', label: 'Attendance', icon: 'CheckSquare', enabled: true },
   { id: 'marks', label: 'Marks', icon: 'GraduationCap', enabled: true },
+  { id: 'qbank', label: 'Question Bank', icon: 'FileText', enabled: true },
   { id: 'notices', label: 'Notices', icon: 'Bell', enabled: false },
 ];
+
+// Editing day/time only needs day+slot — unlike Add Class, dept/batch/
+// term/course are already fixed for an existing assignment, so this is a
+// small standalone modal rather than routing through AddClassModal's
+// bigger dept->batch->term->course flow. Mirrors AddClassModal's own
+// slot-conflict pattern (soft warning via findConflictingAssignment, never
+// a hard block) so editing behaves consistently with creating.
+function EditDayTimeModal({ assignment, groupId, onClose, onSaved }) {
+  const currentSlot = assignment.dayTimeSlots?.[0] || {};
+  const [modelId, setModelId] = useState(currentSlot.modelId || '50min');
+  const [day, setDay] = useState(currentSlot.day || DAYS[0]);
+  const isSessionalCourse = isSessionalType(assignment.courseType);
+  const currentIsFullBlock = isSessionalCourse
+    && getPresetSessionalSlots(currentSlot.modelId || '50min').includes(currentSlot.slot);
+  const [sessionalMode, setSessionalMode] = useState(currentIsFullBlock ? 'full' : 'single');
+  const [sessionalSlot, setSessionalSlot] = useState(
+    currentIsFullBlock ? currentSlot.slot : (getPresetSessionalSlots(modelId)[0] || ''),
+  );
+  const [slot, setSlot] = useState(currentSlot.slot || TIME_MODELS['50min'].slots[0]);
+  const [saving, setSaving] = useState(false);
+  const [slotConflict, setSlotConflict] = useState(null);
+
+  useEffect(() => {
+    const presets = getPresetSessionalSlots(modelId);
+    if (presets.length && !presets.includes(sessionalSlot)) setSessionalSlot(presets[0]);
+  }, [modelId]);
+
+  const effectiveSlot = (isSessionalCourse && sessionalMode === 'full') ? sessionalSlot : slot;
+
+  useEffect(() => {
+    setSlotConflict(null);
+    let cancelled = false;
+    findConflictingAssignment(groupId, {
+      courseCode: assignment.courseCode, term: assignment.term,
+      dayTimeSlots: [{ day, slot: effectiveSlot }],
+      excludeAssignmentId: assignment.id,
+    }).then((match) => { if (!cancelled) setSlotConflict(match); }).catch(() => {});
+    return () => { cancelled = true; };
+  }, [day, effectiveSlot, groupId, assignment.id, assignment.courseCode, assignment.term]);
+
+  const handleSave = async () => {
+    setSaving(true);
+    try {
+      await updateAssignmentDayTimeSlots(groupId, assignment.id, [{ day, slot: effectiveSlot, modelId }]);
+      notify('Class time updated.', 'success');
+      onSaved();
+    } catch (e) {
+      notify(e.message || 'Could not update the class time.', 'error');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  return (
+    <div style={{
+      position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)',
+      display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 9999, padding: 16,
+    }}>
+      <div style={{
+        background: 'var(--card)', borderRadius: 18, padding: 24, width: '100%', maxWidth: 420,
+        border: '1px solid var(--border)', boxShadow: '0 32px 80px rgba(0,0,0,0.28)',
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 18 }}>
+          <div style={{ fontWeight: 800, fontSize: 17, color: 'var(--text)' }}>Edit Class Time</div>
+          <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--muted)' }}>
+            <Icons.X size={18} />
+          </button>
+        </div>
+
+        <div style={{ display: 'grid', gap: 12 }}>
+          <div>
+            <label style={{ fontSize: 11.5, fontWeight: 700, color: 'var(--muted)', marginBottom: 4, display: 'block' }}>Day</label>
+            <select
+              value={day}
+              onChange={(e) => setDay(e.target.value)}
+              style={{ width: '100%', padding: '9px 10px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--bg)', color: 'var(--text)', fontSize: 13.5 }}
+            >
+              {DAYS.map((d) => <option key={d} value={d}>{d}</option>)}
+            </select>
+          </div>
+
+          <div>
+            <label style={{ fontSize: 11.5, fontWeight: 700, color: 'var(--muted)', marginBottom: 4, display: 'block' }}>Time model</label>
+            <div style={{ display: 'flex', gap: 6 }}>
+              {Object.values(TIME_MODELS).map((m) => (
+                <button
+                  key={m.id}
+                  onClick={() => setModelId(m.id)}
+                  style={{
+                    flex: 1, fontSize: 12, padding: '7px 8px',
+                    border: modelId === m.id ? '1px solid var(--accent)' : '1px solid var(--border)',
+                    background: modelId === m.id ? 'rgba(59,130,246,0.08)' : 'var(--bg)',
+                    color: 'var(--text)', borderRadius: 7, cursor: 'pointer',
+                  }}
+                >
+                  {m.name}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {isSessionalCourse && (
+            <div>
+              <label style={{ fontSize: 11.5, fontWeight: 700, color: 'var(--muted)', marginBottom: 4, display: 'block' }}>Slot type</label>
+              <div style={{ display: 'flex', gap: 6 }}>
+                <button
+                  onClick={() => setSessionalMode('full')}
+                  style={{
+                    flex: 1, fontSize: 12, padding: '7px 8px',
+                    border: sessionalMode === 'full' ? '1px solid var(--accent)' : '1px solid var(--border)',
+                    background: sessionalMode === 'full' ? 'rgba(59,130,246,0.08)' : 'var(--bg)',
+                    color: 'var(--text)', borderRadius: 7, cursor: 'pointer',
+                  }}
+                >
+                  Full sessional block
+                </button>
+                <button
+                  onClick={() => setSessionalMode('single')}
+                  style={{
+                    flex: 1, fontSize: 12, padding: '7px 8px',
+                    border: sessionalMode === 'single' ? '1px solid var(--accent)' : '1px solid var(--border)',
+                    background: sessionalMode === 'single' ? 'rgba(59,130,246,0.08)' : 'var(--bg)',
+                    color: 'var(--text)', borderRadius: 7, cursor: 'pointer',
+                  }}
+                >
+                  Single slot
+                </button>
+              </div>
+            </div>
+          )}
+
+          {isSessionalCourse && sessionalMode === 'full' ? (
+            <div>
+              <label style={{ fontSize: 11.5, fontWeight: 700, color: 'var(--muted)', marginBottom: 4, display: 'block' }}>Time slot</label>
+              <select
+                value={sessionalSlot}
+                onChange={(e) => setSessionalSlot(e.target.value)}
+                style={{ width: '100%', padding: '9px 10px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--bg)', color: 'var(--text)', fontSize: 13.5 }}
+              >
+                {getPresetSessionalSlots(modelId).map((s) => <option key={s} value={s}>{s}</option>)}
+              </select>
+            </div>
+          ) : (
+            <div>
+              <label style={{ fontSize: 11.5, fontWeight: 700, color: 'var(--muted)', marginBottom: 4, display: 'block' }}>Time slot</label>
+              <select
+                value={slot}
+                onChange={(e) => setSlot(e.target.value)}
+                style={{ width: '100%', padding: '9px 10px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--bg)', color: 'var(--text)', fontSize: 13.5 }}
+              >
+                {TIME_MODELS[modelId].slots.map((s) => <option key={s} value={s}>{s}</option>)}
+              </select>
+            </div>
+          )}
+
+          {slotConflict && (
+            <div style={{
+              padding: '10px 12px', borderRadius: 8, background: 'color-mix(in srgb, #dc2626 8%, var(--card))',
+              border: '1px solid color-mix(in srgb, #dc2626 35%, transparent)', fontSize: 12.5, color: 'var(--text)', lineHeight: 1.5,
+            }}>
+              ⚠️ <strong>{slotConflict.courseCode}</strong> ({slotConflict.courseTitle || 'another course'}) is already
+              scheduled for {assignment.batch?.toUpperCase()} {assignment.dept} on {day} at {slotConflict.conflictingSlot?.slot} — that
+              overlaps the time you picked. Double-check this is intentional before saving.
+            </div>
+          )}
+
+          <div style={{ display: 'flex', gap: 10, justifyContent: 'flex-end', marginTop: 6 }}>
+            <button
+              onClick={onClose}
+              disabled={saving}
+              style={{ padding: '9px 16px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--bg)', color: 'var(--text)', fontSize: 13, fontWeight: 600, cursor: 'pointer' }}
+            >
+              Cancel
+            </button>
+            <button
+              onClick={handleSave}
+              disabled={saving}
+              style={{ padding: '9px 16px', borderRadius: 8, border: 'none', background: 'var(--accent)', color: '#fff', fontSize: 13, fontWeight: 700, cursor: 'pointer' }}
+            >
+              {saving ? 'Saving…' : 'Save Changes'}
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 function SyllabusTab({ assignment }) {
   if (!assignment) return null;
@@ -60,18 +251,21 @@ function SyllabusTab({ assignment }) {
 
   return (
     <div>
-      <div style={{ marginBottom: 12 }}>
+      <div className="faculty-summary-card" style={{ marginBottom: 14 }}>
         <div style={{ fontWeight: 800, fontSize: 15, color: 'var(--text)' }}>{course.title}</div>
-        <div style={{ fontSize: 12, color: 'var(--muted)' }}>
+        <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 2 }}>
           {course.credit} credit{course.credit === 1 ? '' : 's'} · {course.contactHour}
         </div>
       </div>
       {course.topics?.length > 0 && (
-        <ol style={{ paddingLeft: 20, display: 'grid', gap: 8 }}>
+        <div style={{ display: 'grid', gap: 8 }}>
           {course.topics.map((t, i) => (
-            <li key={i} style={{ fontSize: 12.5, color: 'var(--text)', lineHeight: 1.6 }}>{t}</li>
+            <div key={i} className="faculty-syllabus-topic" style={{ display: 'flex', gap: 10 }}>
+              <span style={{ color: 'var(--accent)', fontWeight: 700, flexShrink: 0 }}>{i + 1}.</span>
+              <span>{t}</span>
+            </div>
           ))}
-        </ol>
+        </div>
       )}
       {(!course.topics || course.topics.length === 0) && (
         <div style={{ color: 'var(--muted)', fontSize: 13 }}>No detailed topics listed for this course.</div>
@@ -80,23 +274,38 @@ function SyllabusTab({ assignment }) {
   );
 }
 
-function ScheduleTab({ assignment }) {
+function ScheduleTab({ assignment, groupId, onEditDayTime }) {
   const slots = assignment?.dayTimeSlots || [];
   if (!slots.length) {
-    return <div style={{ color: 'var(--muted)', fontSize: 13, padding: '16px 0' }}>No day/time slot set for this class yet.</div>;
+    return (
+      <div>
+        <div style={{ color: 'var(--muted)', fontSize: 13, padding: '16px 0' }}>No day/time slot set for this class yet.</div>
+        <button
+          onClick={onEditDayTime}
+          style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 14px', borderRadius: 8, border: 'none', background: 'var(--accent)', color: '#fff', fontWeight: 700, fontSize: 12.5, cursor: 'pointer' }}
+        >
+          <Icons.Clock size={13} /> Set day &amp; time
+        </button>
+      </div>
+    );
   }
   return (
-    <div style={{ display: 'grid', gap: 8 }}>
-      {slots.map((s, i) => (
-        <div key={i} style={{
-          display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10,
-          padding: '12px 14px', borderRadius: 10, border: '1px solid var(--border)', background: 'var(--card)',
-        }}>
-          <div style={{ fontWeight: 700, fontSize: 13.5, color: 'var(--text)' }}>{s.day}</div>
-          <div style={{ fontSize: 12.5, color: 'var(--muted)' }}>{s.slot}</div>
-          {s.modelId && <span style={{ fontSize: 11, color: 'var(--muted)' }}>{TIME_MODELS[s.modelId]?.name || s.modelId}</span>}
-        </div>
-      ))}
+    <div>
+      <div style={{ display: 'grid', gap: 8, marginBottom: 12 }}>
+        {slots.map((s, i) => (
+          <div key={i} className="faculty-row">
+            <div style={{ fontWeight: 700, fontSize: 13.5, color: 'var(--text)' }}>{s.day}</div>
+            <div style={{ fontSize: 12.5, color: 'var(--muted)' }}>{s.slot}</div>
+            {s.modelId && <span style={{ fontSize: 11, color: 'var(--muted)' }}>{TIME_MODELS[s.modelId]?.name || s.modelId}</span>}
+          </div>
+        ))}
+      </div>
+      <button
+        onClick={onEditDayTime}
+        style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 14px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--card)', color: 'var(--text)', fontWeight: 700, fontSize: 12.5, cursor: 'pointer' }}
+      >
+        <Icons.Pencil size={13} /> Edit day &amp; time
+      </button>
     </div>
   );
 }
@@ -167,9 +376,9 @@ function SessionsTab({ assignment, groupId }) {
 
   return (
     <div>
-      <div style={{
+      <div className="faculty-summary-card" style={{
         display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12,
-        padding: '14px 16px', borderRadius: 12, border: '1px solid var(--border)', background: 'var(--card)', marginBottom: 14, flexWrap: 'wrap',
+        marginBottom: 14, flexWrap: 'wrap',
       }}>
         <div>
           <div style={{ fontWeight: 800, fontSize: 18, color: 'var(--text)' }}>{logsForCourse.length}</div>
@@ -231,10 +440,7 @@ function SessionsTab({ assignment, groupId }) {
       ) : (
         <div style={{ display: 'grid', gap: 6 }}>
           {[...logsForCourse].reverse().map((l) => (
-            <div key={l.id} style={{
-              display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10,
-              padding: '10px 12px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--card)', fontSize: 12.5,
-            }}>
+            <div key={l.id} className="faculty-row" style={{ fontSize: 12.5 }}>
               <span style={{ color: 'var(--text)' }}>
                 Class {l.sequenceNumber || '—'} · {l.teacherName || 'Unknown'}
               </span>
@@ -317,7 +523,7 @@ function AttendanceTab({ assignment, groupId }) {
 
   return (
     <div>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 14, flexWrap: 'wrap' }}>
+      <div className="faculty-summary-card" style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 14, flexWrap: 'wrap' }}>
         <input
           type="date"
           value={date}
@@ -327,18 +533,18 @@ function AttendanceTab({ assignment, groupId }) {
         <button
           onClick={handleSave}
           disabled={saving}
-          style={{ padding: '8px 16px', borderRadius: 8, border: 'none', background: 'var(--accent)', color: '#fff', fontWeight: 700, fontSize: 12.5, cursor: 'pointer', opacity: saving ? 0.6 : 1 }}
+          style={{ padding: '8px 16px', borderRadius: 8, border: 'none', background: 'var(--accent)', color: '#fff', fontWeight: 700, fontSize: 12.5, cursor: 'pointer', opacity: saving ? 0.6 : 1, transition: 'opacity 0.15s' }}
         >
           {saving ? 'Saving…' : existingSessionForDate ? 'Update Attendance' : 'Save Attendance'}
         </button>
+        {existingSessionForDate && (
+          <span style={{ fontSize: 11, color: 'var(--muted)' }}>Already recorded for this date — editing will update it.</span>
+        )}
       </div>
 
       <div style={{ display: 'grid', gap: 6 }}>
         {members.map((m) => (
-          <div key={m.id} style={{
-            display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, flexWrap: 'wrap',
-            padding: '10px 12px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--card)',
-          }}>
+          <div key={m.id} className="faculty-row">
             <div style={{ minWidth: 0 }}>
               <div style={{ fontWeight: 600, fontSize: 13, color: 'var(--text)' }}>{m.name || 'Unnamed'}</div>
               <div style={{ fontSize: 11.5, color: 'var(--muted)' }}>{m.roll || '—'}</div>
@@ -362,6 +568,93 @@ function AttendanceTab({ assignment, groupId }) {
           </div>
         ))}
       </div>
+    </div>
+  );
+}
+
+// QuestionBankTab — reuses the same live R2 tree the student-facing
+// QuestionBank page reads (useQuestionBankData/getR2FileUrl), scoped to
+// THIS class's own department only: a teacher assigned to ESE shouldn't
+// have to wade through 15 other departments to find their own course's
+// past papers. Opens straight to this assignment's own course+term (if
+// papers exist there) and lets the teacher switch to any other
+// term/course within the SAME dept — never cross-department.
+function QuestionBankTab({ assignment }) {
+  const { tree, loading, error } = useQuestionBankData();
+  const dept = assignment?.dept;
+  const [term, setTerm] = useState(assignment?.term || null);
+  const [courseCode, setCourseCode] = useState(assignment?.courseCode || null);
+
+  const deptTree = tree?.[dept] || {};
+  const termKeys = Object.keys(deptTree).sort();
+
+  const courseKeysForTerm = term ? Object.keys(deptTree[term] || {}) : [];
+  const activeCourseKey = courseCode?.replace(/\s+/g, '');
+  const papers = (term && activeCourseKey) ? (deptTree[term]?.[activeCourseKey] || []) : [];
+
+  if (loading) {
+    return <div style={{ color: 'var(--muted)', fontSize: 13, padding: '16px 0' }}>Loading question bank…</div>;
+  }
+  if (error) {
+    return <div style={{ color: 'var(--danger, #dc2626)', fontSize: 13, padding: '16px 0' }}>Could not load the question bank: {error}</div>;
+  }
+
+  return (
+    <div>
+      <div style={{ fontSize: 11.5, color: 'var(--muted)', marginBottom: 12 }}>
+        Showing past papers for <strong style={{ color: 'var(--text)' }}>{dept}</strong> only — this teacher's own department.
+      </div>
+
+      <div style={{ display: 'flex', gap: 8, marginBottom: 14, flexWrap: 'wrap' }}>
+        <select
+          value={term || ''}
+          onChange={(e) => { setTerm(e.target.value); setCourseCode(null); }}
+          style={{ padding: '7px 10px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--bg)', color: 'var(--text)', fontSize: 12.5 }}
+        >
+          <option value="" disabled>Select term</option>
+          {termKeys.map((t) => <option key={t} value={t}>{t}</option>)}
+        </select>
+
+        <select
+          value={activeCourseKey || ''}
+          onChange={(e) => setCourseCode(e.target.value)}
+          disabled={!term}
+          style={{ padding: '7px 10px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--bg)', color: 'var(--text)', fontSize: 12.5, opacity: term ? 1 : 0.5 }}
+        >
+          <option value="" disabled>Select course</option>
+          {courseKeysForTerm.map((c) => <option key={c} value={c}>{c}</option>)}
+        </select>
+      </div>
+
+      {!term && (
+        <div style={{ color: 'var(--muted)', fontSize: 13, padding: '8px 0' }}>Pick a term to see courses with uploaded papers.</div>
+      )}
+      {term && !courseCode && courseKeysForTerm.length === 0 && (
+        <div style={{ color: 'var(--muted)', fontSize: 13, padding: '8px 0' }}>No papers uploaded yet for {term} in {dept}.</div>
+      )}
+      {term && courseCode && papers.length === 0 && (
+        <div style={{ color: 'var(--muted)', fontSize: 13, padding: '8px 0' }}>No papers uploaded yet for {courseCode}.</div>
+      )}
+
+      {papers.length > 0 && (
+        <div style={{ display: 'grid', gap: 6 }}>
+          {papers.map((p) => (
+            <a
+              key={p.key}
+              href={getR2FileUrl(p.key)}
+              target="_blank"
+              rel="noreferrer"
+              className="faculty-row"
+              style={{ textDecoration: 'none' }}
+            >
+              <span style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 12.5, color: 'var(--text)', fontWeight: 600 }}>
+                <Icons.FileText size={14} color="var(--accent)" /> {p.label}
+              </span>
+              <Icons.ExternalLink size={13} color="var(--muted)" />
+            </a>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
@@ -715,6 +1008,16 @@ export default function FacultyClassDetail() {
   const groupId = searchParams.get('groupId') || '';
   const [assignment, setAssignment] = useState(null); // null = loading
   const [tab, setTab] = useState('students');
+  const [editingDayTime, setEditingDayTime] = useState(false);
+  // Lazy-mount: a tab only mounts (and starts its Firestore subscription)
+  // the first time it's opened, but once mounted it's kept alive for the
+  // rest of this page visit — see the render block below.
+  const [mountedTabs, setMountedTabs] = useState(() => new Set(['students']));
+
+  const selectTab = (id) => {
+    setTab(id);
+    setMountedTabs((prev) => (prev.has(id) ? prev : new Set(prev).add(id)));
+  };
 
   useEffect(() => {
     if (!groupId || !assignmentId) { setAssignment(null); return; }
@@ -728,17 +1031,22 @@ export default function FacultyClassDetail() {
           <Icons.ChevronLeft size={14} /> My Classes
         </Link>
 
-        <div className="hub-page-hero">
-          <div className="hub-page-hero-icon">
-            <Icons.BookOpen size={20} color="var(--accent)" />
+        <div className="faculty-class-hero">
+          <div className="faculty-class-hero-icon">
+            <Icons.BookOpen size={19} color="var(--accent)" />
           </div>
           <div>
-            <h1 className="hub-page-hero-title">
+            {assignment && (
+              <div className="faculty-class-hero-meta">
+                {assignment.batch?.toUpperCase()} {assignment.dept}
+              </div>
+            )}
+            <h1 className="faculty-class-hero-title">
               {assignment ? `${assignment.courseCode}${assignment.courseTitle ? ' — ' + assignment.courseTitle : ''}` : 'Class Detail'}
             </h1>
             {assignment && (
-              <div style={{ fontSize: 12, color: 'var(--muted)' }}>
-                {assignment.batch?.toUpperCase()} {assignment.dept} · {assignment.term} · {assignment.courseType}
+              <div className="faculty-class-hero-sub">
+                {assignment.term} · {assignment.courseType}
               </div>
             )}
           </div>
@@ -748,23 +1056,17 @@ export default function FacultyClassDetail() {
             title tooltip explaining why, rather than hidden entirely. This
             keeps the tab-bar layout stable across phases instead of tabs
             appearing/shifting as later phases land. */}
-        <div style={{ display: 'flex', gap: 4, overflowX: 'auto', borderBottom: '1px solid var(--border)', marginBottom: 16 }}>
+        <div className="faculty-tabs">
           {TABS.map((t) => {
             const Icon = Icons[t.icon] || Icons.Circle;
             const active = tab === t.id;
             return (
               <button
                 key={t.id}
-                onClick={() => t.enabled && setTab(t.id)}
+                onClick={() => t.enabled && selectTab(t.id)}
                 disabled={!t.enabled}
                 title={t.enabled ? undefined : 'Coming in a later phase'}
-                style={{
-                  display: 'flex', alignItems: 'center', gap: 6, padding: '10px 12px', whiteSpace: 'nowrap',
-                  border: 'none', borderBottom: active ? '2px solid var(--accent)' : '2px solid transparent',
-                  background: 'none', cursor: t.enabled ? 'pointer' : 'not-allowed',
-                  color: !t.enabled ? 'var(--muted)' : active ? 'var(--accent)' : 'var(--text)',
-                  opacity: t.enabled ? 1 : 0.45, fontSize: 12.5, fontWeight: active ? 700 : 500,
-                }}
+                className={`faculty-tab-btn${active ? ' active' : ''}`}
               >
                 <Icon size={14} /> {t.label}
               </button>
@@ -782,15 +1084,43 @@ export default function FacultyClassDetail() {
           <div style={{ color: 'var(--muted)', fontSize: 13, padding: '16px 0' }}>Loading…</div>
         )}
 
-        {groupId && assignment && tab === 'students' && (
-          <ClassmatesList groupId={groupId} showActions={false} viewerRole="faculty" />
-        )}
-        {groupId && assignment && tab === 'syllabus' && <SyllabusTab assignment={assignment} />}
-        {groupId && assignment && tab === 'schedule' && <ScheduleTab assignment={assignment} />}
-        {groupId && assignment && tab === 'sessions' && <SessionsTab assignment={assignment} groupId={groupId} />}
-        {groupId && assignment && tab === 'attendance' && <AttendanceTab assignment={assignment} groupId={groupId} />}
-        {groupId && assignment && tab === 'marks' && <MarksTab assignment={assignment} groupId={groupId} />}
+        {/* Each panel stays mounted once first opened (display:none when not
+            active) instead of being unmounted/remounted on every tab switch.
+            The Sessions/Attendance/Marks tabs each hold a live Firestore
+            subscription — remounting them on every switch tore that
+            subscription down and re-attached it from scratch each time,
+            which is what made switching back to a tab feel slow (a fresh
+            network round-trip + a "Loading…" flash even though the data
+            hadn't actually changed). Keeping them mounted means the
+            subscription — and whatever it already loaded — just stays
+            live in the background, so returning to a tab is instant. */}
+        {groupId && assignment && TABS.filter((t) => t.enabled).map((t) => {
+          const active = tab === t.id;
+          if (!mountedTabs.has(t.id)) return null;
+          return (
+            <div key={t.id} className="faculty-tab-panel" style={{ display: active ? 'block' : 'none' }}>
+              {t.id === 'students' && <ClassmatesList groupId={groupId} showActions={false} viewerRole="faculty" />}
+              {t.id === 'syllabus' && <SyllabusTab assignment={assignment} />}
+              {t.id === 'schedule' && (
+                <ScheduleTab assignment={assignment} groupId={groupId} onEditDayTime={() => setEditingDayTime(true)} />
+              )}
+              {t.id === 'sessions' && <SessionsTab assignment={assignment} groupId={groupId} />}
+              {t.id === 'attendance' && <AttendanceTab assignment={assignment} groupId={groupId} />}
+              {t.id === 'marks' && <MarksTab assignment={assignment} groupId={groupId} />}
+              {t.id === 'qbank' && <QuestionBankTab assignment={assignment} />}
+            </div>
+          );
+        })}
       </div>
+
+      {editingDayTime && assignment && (
+        <EditDayTimeModal
+          assignment={assignment}
+          groupId={groupId}
+          onClose={() => setEditingDayTime(false)}
+          onSaved={() => setEditingDayTime(false)}
+        />
+      )}
     </div>
   );
 }

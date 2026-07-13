@@ -39,6 +39,14 @@ import {
 } from '../../lib/timeModels';
 import { getActiveBatches } from '../../lib/appConfigSync';
 import { subscribeMyClassIndex, getFacultyAssignment } from '../../lib/facultyClassSync';
+// Reuse the exact same Add Class flow "My Classes" uses (dept -> batch ->
+// term -> course -> day/slot), rather than building a second one here. A
+// grid click can only ever pre-fill day+slot — dept/batch/term/course still
+// need picking, since (unlike the student routine) the same day+slot is
+// legitimately reused across many different batches/depts for one teacher
+// — so this is a head start into the real form, not a true one-step
+// quick-add like the student Schedule.jsx grid has.
+import { AddClassModal } from '../faculty/FacultyClasses';
 
 const formatDayShort = (day) => day.slice(0, 3);
 
@@ -60,6 +68,11 @@ export default function FacultySchedule() {
   // fetch is enough here (unlike Founder settings itself, this page
   // doesn't need live updates mid-session for a reorder to reflect).
   const [batches, setBatches] = useState([]);
+  // { day, slot } of the empty cell that was clicked, or null when the Add
+  // Class modal is closed. Only ever set for empty cells (see the td
+  // onClick below) — clicking an already-occupied cell does nothing here,
+  // since editing an existing class is My Classes' job, not this page's.
+  const [addAt, setAddAt] = useState(null);
   const [selectedDay, setSelectedDay] = useState(() => {
     // BUGFIX: DAYS only covers the 5 teaching days (Sun-Thu) — Friday is
     // KUET's weekly holiday and Saturday isn't a class day either. Raw
@@ -299,17 +312,29 @@ export default function FacultySchedule() {
                         // book the same day+slot — but .map stays defensive
                         // rather than assuming exactly one.
                         const rowSpan = anchored.length ? anchored[0].rowSpan : 1;
+                        const isEmptyCell = !breakSlot && anchored.length === 0;
 
                         return (
                           <td
                             key={d}
                             rowSpan={rowSpan > 1 ? rowSpan : undefined}
+                            onClick={isEmptyCell ? () => setAddAt({ day: d, slot }) : undefined}
+                            title={isEmptyCell ? 'Add a class in this slot' : undefined}
                             style={{
                               padding: 6, borderBottom: '1px solid var(--border)', borderRight: '1px solid var(--border)',
                               verticalAlign: 'top', minHeight: 64,
+                              cursor: isEmptyCell ? 'pointer' : 'default',
                               background: breakSlot ? 'rgba(239,68,68,0.08)' : d === selectedDay ? 'rgba(59,130,246,0.035)' : 'transparent',
                             }}
                           >
+                            {isEmptyCell && (
+                              <div style={{
+                                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                height: '100%', minHeight: 40, opacity: 0.28,
+                              }}>
+                                <Icons.Plus size={14} />
+                              </div>
+                            )}
                             {anchored.map(({ entry, rowSpan: rs }) => {
                               const color = getBatchColor(entry.batch, batches);
                               return (
@@ -349,6 +374,16 @@ export default function FacultySchedule() {
           </div>
         )}
       </div>
+
+      {addAt && (
+        <AddClassModal
+          initialDay={addAt.day}
+          initialSlot={addAt.slot}
+          batches={batches}
+          onClose={() => setAddAt(null)}
+          onCreated={() => setAddAt(null)}
+        />
+      )}
     </div>
   );
 }

@@ -8955,3 +8955,329 @@ input[type="range"]::-webkit-slider-thumb {
     grid-column: 1 / -1;
   }
 }
+
+/* ── Faculty class detail page (My Classes → EE 2113 etc.) ────────────────
+   Uses smaller, detail-page-appropriate proportions (this is a drilldown
+   page, not a hub landing page): a small dept/batch pill on top, the
+   course title as the dominant heading, term/type as a light trailing
+   note — inverse of the old layout where the meta line was as loud as
+   the title. */
+.faculty-class-hero {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 8px 0 18px;
+}
+
+.faculty-class-hero-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 11px;
+  background: color-mix(in srgb, var(--accent) 15%, var(--surface));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.faculty-class-hero-meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+  padding: 2px 8px;
+  border-radius: 999px;
+  margin-bottom: 5px;
+}
+
+.faculty-class-hero-title {
+  font-size: 21px;
+  font-weight: 800;
+  letter-spacing: -0.015em;
+  color: var(--text);
+  margin: 0;
+  line-height: 1.25;
+}
+
+.faculty-class-hero-sub {
+  font-size: 11.5px;
+  color: var(--muted);
+  margin: 3px 0 0;
+}
+
+@media (max-width: 380px) {
+  .faculty-class-hero-icon { width: 36px; height: 36px; }
+  .faculty-class-hero-title { font-size: 17px; }
+}
+
+/* ── Faculty class detail — tab bar + tab content polish ───────────────────
+   Replaces flat instant color-swap tabs with a sliding underline and a
+   subtle hover state, plus a gentle fade-in per tab panel so switching
+   doesn't feel like a hard cut. Also gives the plain bordered rows used
+   across Syllabus/Schedule/Sessions/Attendance a consistent hover lift. */
+.faculty-tabs {
+  display: flex;
+  gap: 2px;
+  overflow-x: auto;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 18px;
+  scrollbar-width: none;
+}
+.faculty-tabs::-webkit-scrollbar { display: none; }
+
+.faculty-tab-btn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 11px 14px;
+  white-space: nowrap;
+  border: none;
+  background: none;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--muted);
+  cursor: pointer;
+  transition: color 0.15s ease;
+}
+
+.faculty-tab-btn::after {
+  content: '';
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  bottom: -1px;
+  height: 2px;
+  border-radius: 2px 2px 0 0;
+  background: var(--accent);
+  transform: scaleX(0);
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.faculty-tab-btn:hover:not(:disabled) {
+  color: var(--text);
+}
+
+.faculty-tab-btn.active {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.faculty-tab-btn.active::after {
+  transform: scaleX(1);
+}
+
+.faculty-tab-btn:disabled {
+  color: var(--muted);
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.faculty-tab-panel {
+  animation: facultyTabFade 0.18s ease;
+}
+
+@keyframes facultyTabFade {
+  from { opacity: 0; transform: translateY(3px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.faculty-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 11px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
+}
+
+.faculty-row:hover {
+  border-color: color-mix(in srgb, var(--accent) 28%, var(--border));
+  box-shadow: 0 4px 14px rgba(var(--accentRGB), 0.08);
+  transform: translateY(-1px);
+}
+
+.faculty-summary-card {
+  padding: 15px 16px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--accent) 5%, var(--card)) 0%, var(--card) 70%);
+}
+
+.faculty-syllabus-topic {
+  font-size: 12.5px;
+  color: var(--text);
+  line-height: 1.65;
+  padding: 9px 12px;
+  border-radius: 8px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.faculty-syllabus-topic:hover {
+  border-color: color-mix(in srgb, var(--accent) 25%, var(--border));
+  background: color-mix(in srgb, var(--accent) 4%, var(--card));
+}
+
+/* ── Faculty Meetings — card grid ──────────────────────────────────────────
+   Meetings render as a responsive grid of bigger cards (not thin rows) so
+   there's room for a proper header, a colored type chip, and a real "Join"
+   button when an online link is present, instead of a small inline text
+   link buried at the bottom of a cramped row. */
+.meeting-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 12px;
+}
+
+.meeting-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 14px 15px 15px;
+  border-radius: 14px;
+  border: 1px solid var(--meeting-color-border, var(--border));
+  background: var(--card);
+  overflow: hidden;
+  transition: transform 0.16s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.16s ease;
+}
+
+.meeting-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: var(--meeting-color, var(--accent));
+}
+
+.meeting-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 26px rgba(var(--accentRGB), 0.13);
+}
+
+.meeting-card-today {
+  border-color: var(--meeting-color, var(--accent));
+  box-shadow: 0 0 0 1px var(--meeting-color, var(--accent)) inset;
+}
+
+.meeting-card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.meeting-card-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 9px;
+  background: var(--meeting-color-bg, color-mix(in srgb, var(--accent) 15%, var(--surface)));
+  color: var(--meeting-color, var(--accent));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.meeting-card-actions {
+  display: flex;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+.meeting-card-actions button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--muted);
+  padding: 5px;
+  border-radius: 6px;
+  transition: background 0.12s ease, color 0.12s ease;
+}
+
+.meeting-card-actions button:hover {
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
+  color: var(--text);
+}
+
+.meeting-card-title {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--text);
+  line-height: 1.35;
+}
+
+.meeting-card-type {
+  font-size: 10.5px;
+  font-weight: 700;
+  color: var(--meeting-color, var(--accent));
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.meeting-card-meta {
+  font-size: 12px;
+  color: var(--muted);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+}
+
+.meeting-card-notes {
+  font-size: 12px;
+  color: var(--text);
+  opacity: 0.78;
+  line-height: 1.45;
+}
+
+.meeting-card-join {
+  margin-top: auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border-radius: 9px;
+  background: var(--meeting-color, var(--accent));
+  color: #fff;
+  font-size: 12.5px;
+  font-weight: 700;
+  text-decoration: none;
+  transition: filter 0.12s ease;
+}
+
+.meeting-card-join:hover {
+  filter: brightness(1.08);
+}
+
+.meeting-today-banner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: 12px;
+  background: linear-gradient(90deg, color-mix(in srgb, var(--accent) 12%, transparent), transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 25%, var(--border));
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 12px;
+}
+
+@media (max-width: 480px) {
+  .meeting-grid { grid-template-columns: 1fr; }
+}

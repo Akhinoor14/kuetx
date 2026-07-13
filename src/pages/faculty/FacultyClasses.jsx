@@ -36,6 +36,7 @@ import {
 import { getActiveBatches } from '../../lib/appConfigSync';
 import {
   subscribeMyClassIndex, createFacultyAssignment, findJoinableAssignment, joinFacultyAssignment,
+  findConflictingAssignment,
 } from '../../lib/facultyClassSync';
 import { notify } from '../../lib/notify';
 
@@ -79,14 +80,20 @@ function getBatchTermPlausibility(batch, term) {
   return null;
 }
 
-function AddClassModal({ onClose, onCreated, batches }) {
+// Exported so other faculty pages (e.g. FacultySchedule.jsx's empty-grid-cell
+// click) can open the exact same Add Class flow instead of duplicating its
+// dept->batch->term->course->slot logic. initialDay/initialSlot let a caller
+// pre-fill the day/time picker (day+slot alone isn't enough to create a
+// class here — dept/batch/term/course still have to be picked — so this is
+// a head start, not a full quick-add).
+export function AddClassModal({ onClose, onCreated, batches, initialDay, initialSlot }) {
   const [dept, setDept] = useState('');
   const [batch, setBatch] = useState('');
   const [term, setTerm] = useState('');
   const [courseCode, setCourseCode] = useState('');
-  const [day, setDay] = useState(DAYS[0]);
+  const [day, setDay] = useState(initialDay || DAYS[0]);
   const [modelId, setModelId] = useState('50min');
-  const [slot, setSlot] = useState(TIME_MODELS['50min'].slots[0]);
+  const [slot, setSlot] = useState(initialSlot || TIME_MODELS['50min'].slots[0]);
   // Sessional block choice — only meaningful once the selected course is
   // Sessional/Lab (see isSessionalCourse below). 'full' picks one of the
   // 3-period-wide preset slots (getPresetSessionalSlots); 'single' keeps
@@ -98,6 +105,7 @@ function AddClassModal({ onClose, onCreated, batches }) {
   const [sessionalSlot, setSessionalSlot] = useState(getPresetSessionalSlots('50min')[0] || '');
   const [saving, setSaving] = useState(false);
   const [joinOffer, setJoinOffer] = useState(null); // { id, groupId, ... } | null
+  const [slotConflict, setSlotConflict] = useState(null); // { courseCode, courseTitle, ... } | null
 
   const termCourses = useMemo(() => {
     if (!dept || !term) return [];
@@ -151,6 +159,24 @@ function AddClassModal({ onClose, onCreated, batches }) {
       setSaving(false);
     }
   };
+
+  // Cross-teacher/cross-course day+time conflict check — fires whenever
+  // the picked day+slot changes (not just on the initial dept/batch/term/
+  // course selection, since a teacher tweaking the time slot after
+  // picking a course should re-check too). Soft warning only, per
+  // findConflictingAssignment's own doc comment — never blocks Create.
+  useEffect(() => {
+    setSlotConflict(null);
+    if (!dept || !batch || !term || !courseCode) return;
+    let cancelled = false;
+    const groupId = `${String(batch).toUpperCase()}_${String(dept).toUpperCase()}`;
+    findConflictingAssignment(groupId, {
+      courseCode, term, dayTimeSlots: [{ day, slot: effectiveSlot }],
+    }).then((match) => {
+      if (!cancelled) setSlotConflict(match);
+    }).catch(() => {});
+    return () => { cancelled = true; };
+  }, [dept, batch, term, courseCode, day, effectiveSlot]);
 
   const handleCreate = async () => {
     if (!dept || !batch || !term || !courseCode) {
@@ -311,6 +337,17 @@ function AddClassModal({ onClose, onCreated, batches }) {
               <select style={inputStyle} value={slot} onChange={(e) => setSlot(e.target.value)}>
                 {TIME_MODELS[modelId].slots.map((s) => <option key={s} value={s}>{s}</option>)}
               </select>
+            </div>
+          )}
+
+          {slotConflict && (
+            <div style={{
+              padding: '10px 12px', borderRadius: 8, background: 'color-mix(in srgb, #dc2626 8%, var(--card))',
+              border: '1px solid color-mix(in srgb, #dc2626 35%, transparent)', fontSize: 12.5, color: 'var(--text)', lineHeight: 1.5,
+            }}>
+              ⚠️ <strong>{slotConflict.courseCode}</strong> ({slotConflict.courseTitle || 'another course'}) is already
+              scheduled for {batch?.toUpperCase()} {dept} on {day} at {slotConflict.conflictingSlot?.slot} — that overlaps
+              the time you picked. Double-check this is intentional (e.g. a different teacher/section) before creating.
             </div>
           )}
 

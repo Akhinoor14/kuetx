@@ -15,7 +15,7 @@
 
 import {
   collection, doc, addDoc, updateDoc, deleteDoc, onSnapshot,
-  query, orderBy, serverTimestamp,
+  query, serverTimestamp,
 } from 'firebase/firestore';
 import { db } from './firebase';
 
@@ -42,10 +42,16 @@ export function getMeetingTypeMeta(typeId) {
 const meetingsRef = (uid) => collection(db, 'faculty', uid, 'meetings');
 const meetingDocRef = (uid, meetingId) => doc(db, 'faculty', uid, 'meetings', meetingId);
 
-/** Live subscription, ordered soonest-first by date then time. */
+/** Live subscription. No compound orderBy here on purpose — date+time
+ * orderBy needs a composite Firestore index that was never deployed for
+ * this subcollection, so that query was silently failing (onSnapshot's
+ * error handler falls back to an empty list) and meetings never showed up
+ * even though createMeeting() had already saved them. Sorting is instead
+ * done client-side in FacultyMeetings.jsx after this delivers the raw
+ * list, which needs no index at all. */
 export function subscribeMyMeetings(uid, callback) {
   if (!uid) { callback([]); return () => {}; }
-  const q = query(meetingsRef(uid), orderBy('date', 'asc'), orderBy('time', 'asc'));
+  const q = query(meetingsRef(uid));
   return onSnapshot(
     q,
     (snap) => callback(snap.docs.map((d) => ({ id: d.id, ...d.data() }))),

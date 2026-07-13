@@ -18,6 +18,7 @@ import {
 } from 'firebase/firestore';
 import { db } from './firebase';
 import { getGroupId } from './groupUtils';
+import { isSlotOverlap } from './timeModels';
 
 function assignmentsCollection(groupId) {
   return collection(db, 'groups', groupId, 'facultyAssignments');
@@ -133,6 +134,71 @@ export async function restoreFacultyAssignment(groupId, assignmentId) {
     deletedAt: null,
   });
 }
+
+/**
+ * §4 item 2 companion check — this one is a WARNING, not a join-offer.
+ * Looks in the same batch/dept group for any OTHER active, OTHER-course
+ * assignment whose day+slot time-overlaps the one being picked (real
+ * overlap via isSlotOverlap, not exact-string match — a 3-period
+ * sessional block and a single-period theory class an hour into it still
+ * count). This is about the batch's own timetable clashing (two different
+ * courses claiming the same students at once), not one teacher's personal
+ * schedule — that's why it's scoped to a single groupId and doesn't check
+ * courseCode against itself. excludeAssignmentId lets an in-place edit
+ * skip comparing an assignment's own current slot against itself.
+ *
+ * NOTE: this was imported by FacultyClasses.jsx from day one but never
+ * actually defined here, so the "⚠️ overlaps the time you picked" warning
+ * silently never fired (the caller wraps it in .catch(() => {}), so the
+ * missing export failed quietly instead of crashing). Implemented now.
+ *
+ * Best-effort only: never throws, returns null on any read failure so a
+ * transient permission/network hiccup can't block Create/Save.
+ */
+export async function findConflictingAssignment(groupId, { courseCode, term, dayTimeSlots, excludeAssignmentId }) {
+  try {
+    const q = query(
+      assignmentsCollection(groupId),
+      where('term', '==', term),
+      where('status', '==', 'active'),
+    );
+    const snap = await getDocs(q);
+    for (const d of snap.docs) {
+      if (d.id === excludeAssignmentId) continue;
+      const data = d.data();
+      if (data.courseCode === courseCode) continue; // same course, not a clash
+      const otherSlots = data.dayTimeSlots || [];
+      for (const wanted of (dayTimeSlots || [])) {
+        const hit = otherSlots.find((s) => s.day === wanted.day && isSlotOverlap(s.slot, wanted.slot));
+        if (hit) {
+          return {
+            assignmentId: d.id, courseCode: data.courseCode, courseTitle: data.courseTitle,
+            conflictingSlot: hit,
+          };
+        }
+      }
+    }
+    return null;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Edits an existing assignment's day/time (§8.6 "Edit day/time", called
+ * out in FacultyClassDetail.jsx's header comment as not-yet-built — this
+ * is that follow-up). Same collection/doc shape as createFacultyAssignment;
+ * only dayTimeSlots changes.
+ */
+export async function updateAssignmentDayTimeSlots(groupId, assignmentId, dayTimeSlots) {
+  if (!Array.isArray(dayTimeSlots) || dayTimeSlots.length === 0) {
+    throw new Error('Pick a day and time for this class.');
+  }
+  await updateDoc(doc(assignmentsCollection(groupId), assignmentId), {
+    dayTimeSlots,
+  });
+}
+
 
 /**
  * One-shot read of every classIndex pointer for "My Classes" — cheap,
