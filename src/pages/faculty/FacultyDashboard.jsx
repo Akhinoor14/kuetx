@@ -31,6 +31,7 @@ export default function FacultyDashboard() {
   const [rosters, setRosters] = useState({}); // groupId -> member uid array (for de-dup)
   const [sessionsByAssignment, setSessionsByAssignment] = useState({});
   const [facultyProfile, setFacultyProfile] = useState(null);
+  const [heldCardIndex, setHeldCardIndex] = useState(0);
 
   useEffect(() => {
     const uid = auth.currentUser?.uid;
@@ -77,6 +78,20 @@ export default function FacultyDashboard() {
     );
     return () => { cancelled = true; unsubs.forEach((u) => u()); };
   }, [classIndex]);
+
+  // Auto-rotate the "Classes Held" card through each active course every
+  // 5s, so a faculty teaching several courses sees all of them cycle
+  // through automatically instead of a single combined number. Tapping
+  // the card (see rotatingHeldCard below) advances it manually too, and
+  // resets this timer so a manual tap doesn't get immediately overridden.
+  const activeCount = (classIndex || []).filter((c) => c.status === 'active').length;
+  useEffect(() => {
+    if (activeCount <= 1) return;
+    const id = setInterval(() => {
+      setHeldCardIndex((i) => (i + 1) % activeCount);
+    }, 5000);
+    return () => clearInterval(id);
+  }, [activeCount, heldCardIndex]);
 
   const timeGreeting = (() => {
     const h = new Date().getHours();
@@ -161,16 +176,62 @@ export default function FacultyDashboard() {
     (rosters[c.groupId] || []).forEach((uid) => uniqueStudentUids.add(uid));
   });
 
-  // Classes remaining — only where plannedTotalClasses is actually set.
-  let classesRemaining = 0;
-  let hasAnyPlannedTotal = false;
+  // "This Week" — classes scheduled Sun–Sat (KUET's week) across every
+  // active class, vs how many of those have already been held. Chosen
+  // over the earlier aggregate "Classes Held" card because that number
+  // duplicated what the My Classes list below already shows per-course
+  // (e.g. "5 logged") — summing across different courses/depts into one
+  // lifetime total wasn't new information, just the same numbers added
+  // together. A faculty member juggling several courses across
+  // departments doesn't get anything from "14 total" that they don't
+  // already get, better, from the per-course list. This week-level count
+  // is genuinely new: it's the one number that answers "how busy is my
+  // week" across all classes combined — something no other card here
+  // currently shows, and needs zero manual setup since it's derived
+  // straight from dayTimeSlots + the same session logs.
+  const weekDatesISO = (() => {
+    const now = new Date();
+    const start = new Date(now);
+    start.setDate(now.getDate() - now.getDay()); // back to Sunday
+    return Array.from({ length: 7 }, (_, i) => {
+      const d = new Date(start);
+      d.setDate(start.getDate() + i);
+      return d.toISOString().slice(0, 10);
+    });
+  })();
+  let scheduledThisWeek = 0;
+  let heldThisWeek = 0;
   activeAssignments.forEach((c) => {
     const a = assignments[c.assignmentId];
-    if (a?.plannedTotalClasses) {
-      hasAnyPlannedTotal = true;
-      const logged = (sessionsByAssignment[c.assignmentId] || []).length;
-      classesRemaining += Math.max(0, a.plannedTotalClasses - logged);
-    }
+    if (!a) return;
+    const sessions = sessionsByAssignment[c.assignmentId] || [];
+    const heldDates = new Set(sessions.map((s) => s.date));
+    (a.dayTimeSlots || []).forEach((slot) => {
+      // How many times this weekday occurs in the current Sun–Sat week
+      // (always exactly once per class per week — one occurrence).
+      const dayIdx = DAYS.indexOf(slot.day);
+      if (dayIdx === -1) return;
+      scheduledThisWeek += 1;
+      if (heldDates.has(weekDatesISO[dayIdx])) heldThisWeek += 1;
+    });
+  });
+
+  // Per-course "Classes Held" — one entry per active class, each with its
+  // own logged-session count. Brought back per request, but course-scoped
+  // instead of one summed-up number, since a faculty teaching several
+  // courses across different departments can't act on a single combined
+  // total (whose course is behind? who knows). The 4th stat card cycles
+  // through this list automatically (and on tap), so each course still
+  // gets its own moment in that slot instead of forcing 4+ cards into the
+  // grid permanently.
+  const classesHeldByCourse = activeAssignments.map((c) => {
+    const a = assignments[c.assignmentId];
+    const logged = (sessionsByAssignment[c.assignmentId] || []).length;
+    return {
+      assignmentId: c.assignmentId,
+      label: a ? `${a.courseCode} — ${c.batch?.toUpperCase()} ${c.dept}` : c.courseCode,
+      logged,
+    };
   });
 
   // Pending-attendance reminder — active assignment scheduled for today's
@@ -228,6 +289,86 @@ export default function FacultyDashboard() {
           {value}
         </div>
         {sub && <div style={{ fontSize: 12, color: 'var(--muted)', fontWeight: 500, zIndex: 1, marginTop: 2 }}>{sub}</div>}
+      </div>
+    );
+  };
+
+  // 4th card: cycles through classesHeldByCourse — auto-advances every 5s
+  // (see the interval effect above) and also advances immediately on tap
+  // or swipe, so a faculty member doesn't have to wait to check a
+  // specific course out of turn.
+  const rotatingHeldCard = () => {
+    const c = '#8B5CF6';
+    const list = classesHeldByCourse;
+    if (list.length === 0) {
+      return (
+        <div className="card" style={{
+          display: 'flex', flexDirection: 'column', gap: 6, padding: '14px 16px',
+          border: `1.5px solid ${c}20`, background: `${c}08`, boxShadow: `0 4px 12px ${c}12`,
+          position: 'relative', overflow: 'hidden', borderRadius: 12, minHeight: 100, flex: '1 1 160px',
+        }}>
+          <div style={{ position: 'absolute', top: -30, right: -30, width: 100, height: 100, borderRadius: '50%', background: `${c}08` }} />
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', zIndex: 1 }}>
+            <span style={{ fontSize: 10, color: 'var(--muted)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em' }}>Classes Held</span>
+            <Icons.CheckCircle2 size={20} color={c} strokeWidth={2.2} />
+          </div>
+          <div style={{ fontSize: 32, fontWeight: 900, color: c, letterSpacing: '-0.02em', lineHeight: 1, zIndex: 1 }}>—</div>
+          <div style={{ fontSize: 12, color: 'var(--muted)', fontWeight: 500, zIndex: 1, marginTop: 2 }}>No active classes</div>
+        </div>
+      );
+    }
+    const idx = heldCardIndex % list.length;
+    const current = list[idx];
+    const advance = () => setHeldCardIndex((i) => (i + 1) % list.length);
+
+    // Simple swipe detection (touch) — a left/right swipe advances just
+    // like a tap does, since the direction doesn't matter with only one
+    // "next" action across a cycling list.
+    let touchStartX = null;
+    const onTouchStart = (e) => { touchStartX = e.touches[0].clientX; };
+    const onTouchEnd = (e) => {
+      if (touchStartX === null) return;
+      const dx = e.changedTouches[0].clientX - touchStartX;
+      if (Math.abs(dx) > 30) advance();
+      touchStartX = null;
+    };
+
+    return (
+      <div
+        className="card"
+        onClick={advance}
+        onTouchStart={onTouchStart}
+        onTouchEnd={onTouchEnd}
+        title="Tap to see another course"
+        style={{
+          display: 'flex', flexDirection: 'column', gap: 6, cursor: 'pointer',
+          transition: 'all 0.2s', padding: '14px 16px',
+          border: `1.5px solid ${c}20`, background: `${c}08`, boxShadow: `0 4px 12px ${c}12`,
+          position: 'relative', overflow: 'hidden', borderRadius: 12, minHeight: 100, flex: '1 1 160px',
+          userSelect: 'none', touchAction: 'pan-y',
+        }}
+      >
+        <div style={{ position: 'absolute', top: -30, right: -30, width: 100, height: 100, borderRadius: '50%', background: `${c}08` }} />
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', zIndex: 1 }}>
+          <span style={{ fontSize: 10, color: 'var(--muted)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em' }}>Classes Held</span>
+          <Icons.CheckCircle2 size={20} color={c} strokeWidth={2.2} />
+        </div>
+        <div style={{ fontSize: 32, fontWeight: 900, color: c, letterSpacing: '-0.02em', lineHeight: 1, zIndex: 1 }}>
+          {current.logged}
+        </div>
+        <div style={{ fontSize: 12, color: 'var(--muted)', fontWeight: 500, zIndex: 1, marginTop: 2, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+          {current.label}
+        </div>
+        {list.length > 1 && (
+          <div style={{ display: 'flex', gap: 3, zIndex: 1, marginTop: 2 }}>
+            {list.map((_, i) => (
+              <div key={i} style={{
+                width: i === idx ? 12 : 5, height: 3, borderRadius: 2,
+                background: i === idx ? c : `${c}30`, transition: 'all 0.25s',
+              }} />
+            ))}
+          </div>
+        )}
       </div>
     );
   };
@@ -301,6 +442,15 @@ export default function FacultyDashboard() {
             Viewing as: Teacher — switch back from the Admin dashboard.
           </div>
         )}
+
+        {/* Stat cards — moved above Today's Classes/My Classes per request,
+             so the quick-glance numbers sit right under the hero. ── */}
+        <div className="dashboard-stats-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 8, marginBottom: 12 }}>
+          {statCard('BookOpen', 'Active Classes', activeAssignments.length, 'This term', '#3B82F6')}
+          {statCard('Users', 'Students Taught', uniqueStudentUids.size, 'Unique, all classes', '#10B981')}
+          {statCard('CalendarCheck', 'This Week', scheduledThisWeek > 0 ? `${heldThisWeek}/${scheduledThisWeek}` : '—', scheduledThisWeek > 0 ? 'Classes held, across all courses' : 'No classes scheduled', '#F59E0B')}
+          {rotatingHeldCard()}
+        </div>
 
         {/* ── Today's Classes + My Classes — on large screens these used to
              each stack full-width with a lot of empty space beside their
@@ -407,13 +557,6 @@ export default function FacultyDashboard() {
             ))}
           </div>
         )}
-
-        {/* Stat cards */}
-        <div className="dashboard-stats-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8, marginBottom: 14 }}>
-          {statCard('BookOpen', 'Active Classes', activeAssignments.length, 'This term', '#3B82F6')}
-          {statCard('Users', 'Students Taught', uniqueStudentUids.size, 'Unique, all classes', '#10B981')}
-          {statCard('ListChecks', 'Classes Remaining', hasAnyPlannedTotal ? classesRemaining : '—', hasAnyPlannedTotal ? 'Across active classes' : 'Set a plan to track', '#F59E0B')}
-        </div>
 
         {activeAssignments.length === 0 && (
           <div className="card" style={{ marginTop: 16, textAlign: 'center', color: 'var(--muted)', padding: 30 }}>

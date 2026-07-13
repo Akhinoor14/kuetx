@@ -98,6 +98,24 @@ export async function endFacultyAssignment(groupId, assignmentId) {
   });
 }
 
+/**
+ * Sets (or clears) how many total classes a faculty member plans to hold
+ * for this course this term. This is what the Dashboard's "Classes
+ * Remaining" stat card and the Sessions tab's "X of Y planned" line read
+ * from — until this is called at least once, plannedTotalClasses stays
+ * null and both of those just show a "set a plan" placeholder instead of
+ * a number, since there's nothing to count down from.
+ */
+export async function setPlannedTotalClasses(groupId, assignmentId, total) {
+  const n = Number(total);
+  if (!Number.isFinite(n) || n <= 0) {
+    throw new Error('Enter a valid number of classes (greater than 0).');
+  }
+  await updateDoc(doc(assignmentsCollection(groupId), assignmentId), {
+    plannedTotalClasses: Math.round(n),
+  });
+}
+
 /** §8.6 "Delete" — soft-delete flag distinct from "ended" (an ended class
  * is still visible in history/filters; a deleted one is hidden everywhere
  * except an explicit restore path, mirroring groupSync.js's soft-delete

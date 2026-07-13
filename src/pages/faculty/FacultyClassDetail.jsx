@@ -19,7 +19,7 @@ import { useParams, useSearchParams, Link } from 'react-router-dom';
 import * as Icons from 'lucide-react';
 import ClassmatesList from '../../components/ClassmatesList';
 import { getDeptSyllabus } from '../../store/curriculumStore';
-import { subscribeFacultyAssignment } from '../../lib/facultyClassSync';
+import { subscribeFacultyAssignment, setPlannedTotalClasses } from '../../lib/facultyClassSync';
 import { subscribeMembers, subscribePlannerLogs } from '../../lib/groupSync';
 import {
   createOrUpdateSessionAttendance, subscribeSessionAttendance,
@@ -105,6 +105,9 @@ function SessionsTab({ assignment, groupId }) {
   const [logs, setLogs] = useState(null); // null = loading
   const [facultyName, setFacultyName] = useState('');
   const [logging, setLogging] = useState(false);
+  const [editingPlan, setEditingPlan] = useState(false);
+  const [planInput, setPlanInput] = useState('');
+  const [savingPlan, setSavingPlan] = useState(false);
 
   useEffect(() => {
     if (!groupId) { setLogs([]); return; }
@@ -140,6 +143,24 @@ function SessionsTab({ assignment, groupId }) {
     }
   };
 
+  const openPlanEditor = () => {
+    setPlanInput(plannedTotal ? String(plannedTotal) : '');
+    setEditingPlan(true);
+  };
+
+  const handleSavePlan = async () => {
+    setSavingPlan(true);
+    try {
+      await setPlannedTotalClasses(groupId, assignment.id, planInput);
+      notify('Plan saved.', 'success');
+      setEditingPlan(false);
+    } catch (e) {
+      notify(e.message || 'Could not save the plan.', 'error');
+    } finally {
+      setSavingPlan(false);
+    }
+  };
+
   if (logs === null) {
     return <div style={{ color: 'var(--muted)', fontSize: 13, padding: '16px 0' }}>Loading…</div>;
   }
@@ -148,13 +169,50 @@ function SessionsTab({ assignment, groupId }) {
     <div>
       <div style={{
         display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12,
-        padding: '14px 16px', borderRadius: 12, border: '1px solid var(--border)', background: 'var(--card)', marginBottom: 14,
+        padding: '14px 16px', borderRadius: 12, border: '1px solid var(--border)', background: 'var(--card)', marginBottom: 14, flexWrap: 'wrap',
       }}>
         <div>
           <div style={{ fontWeight: 800, fontSize: 18, color: 'var(--text)' }}>{logsForCourse.length}</div>
-          <div style={{ fontSize: 11.5, color: 'var(--muted)' }}>
-            classes logged{plannedTotal ? ` of ${plannedTotal} planned` : ''}
-          </div>
+          {!editingPlan ? (
+            <div style={{ fontSize: 11.5, color: 'var(--muted)', display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
+              <span>classes logged{plannedTotal ? ` of ${plannedTotal} planned` : ''}</span>
+              <button
+                onClick={openPlanEditor}
+                style={{ background: 'none', border: 'none', padding: 0, color: 'var(--accent)', fontSize: 11.5, fontWeight: 700, cursor: 'pointer', textDecoration: 'underline' }}
+              >
+                {plannedTotal ? 'Edit plan' : 'Set a plan'}
+              </button>
+            </div>
+          ) : (
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 4 }}>
+              <input
+                type="number"
+                min="1"
+                autoFocus
+                value={planInput}
+                onChange={(e) => setPlanInput(e.target.value)}
+                placeholder="e.g. 30"
+                style={{
+                  width: 70, padding: '5px 8px', borderRadius: 6, border: '1px solid var(--border)',
+                  background: 'var(--bg)', color: 'var(--text)', fontSize: 12.5,
+                }}
+              />
+              <span style={{ fontSize: 11.5, color: 'var(--muted)' }}>total classes planned</span>
+              <button
+                onClick={handleSavePlan}
+                disabled={savingPlan || !planInput}
+                style={{ padding: '5px 10px', borderRadius: 6, border: 'none', background: 'var(--accent)', color: '#fff', fontSize: 11.5, fontWeight: 700, cursor: savingPlan ? 'wait' : 'pointer', opacity: savingPlan || !planInput ? 0.6 : 1 }}
+              >
+                {savingPlan ? 'Saving…' : 'Save'}
+              </button>
+              <button
+                onClick={() => setEditingPlan(false)}
+                style={{ padding: '5px 8px', borderRadius: 6, border: '1px solid var(--border)', background: 'transparent', color: 'var(--muted)', fontSize: 11.5, cursor: 'pointer' }}
+              >
+                Cancel
+              </button>
+            </div>
+          )}
         </div>
         <button
           onClick={handleLog}
