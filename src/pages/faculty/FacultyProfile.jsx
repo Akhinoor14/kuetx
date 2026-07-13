@@ -26,6 +26,18 @@ const inputStyle = {
   background: 'var(--bg)', color: 'var(--text)', fontSize: 13.5, outline: 'none', boxSizing: 'border-box',
   height: 42, fontFamily: 'inherit',
 };
+// Same as inputStyle but strips native <select> chrome and adds a custom
+// chevron, so the CLOSED control matches the app's card language. Note:
+// the OPEN dropdown popup (the list itself) is rendered by the OS/browser
+// and can't be restyled with CSS in any browser — this is a platform
+// limitation, not something fixable from the app side.
+const selectStyle = {
+  ...inputStyle,
+  appearance: 'none', WebkitAppearance: 'none', MozAppearance: 'none',
+  backgroundImage: `url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'></polyline></svg>")`,
+  backgroundRepeat: 'no-repeat', backgroundPosition: 'right 12px center',
+  paddingRight: 34, cursor: 'pointer',
+};
 const labelStyle = {
   fontSize: 11, fontWeight: 700, color: 'var(--muted)', marginBottom: 6, display: 'block',
   textTransform: 'uppercase', letterSpacing: '0.04em',
@@ -157,7 +169,7 @@ export default function FacultyProfile() {
               </div>
               <div>
                 <label style={labelStyle}>Department / Institute</label>
-                <select style={inputStyle} value={form.dept} onChange={(e) => setForm((f) => ({ ...f, dept: e.target.value }))}>
+                <select style={selectStyle} value={form.dept} onChange={(e) => setForm((f) => ({ ...f, dept: e.target.value }))}>
                   <option value="">Select department / institute</option>
                   <optgroup label="Departments">
                     {DEPARTMENTS.map((d) => <option key={d.code} value={d.code}>{d.name} ({d.code})</option>)}

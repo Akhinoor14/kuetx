@@ -6,18 +6,20 @@
 // imported here. Sibling: SidebarNavStudent.jsx, the mirror image for the
 // main student shell.
 //
-// Faculty currently has no CR-board or admin-row concept, so filterNav's
-// cr/admin gates are intentionally not applied here (unlike the student
-// list) — keep it that way unless the faculty nav actually grows an
-// equivalent gated row.
+// The Admin/"Team & Administration" row carries requiresAdmin: true (see
+// nav-faculty.js), so it's gated here the same way the student list gates
+// its Admin row — via filterNav — rather than left to render for everyone.
 
 import { NAV_FACULTY } from '../../nav-faculty';
+import { filterNav } from '../../lib/modeFilter';
 import { NavList } from './SidebarNavShared';
 
-export default function SidebarNavFaculty({ location, onClose }) {
+export default function SidebarNavFaculty({ location, onClose, isRealAdmin = false }) {
+  const filteredNav = filterNav(NAV_FACULTY, false, isRealAdmin);
+
   return (
     <NavList
-      filteredNav={NAV_FACULTY}
+      filteredNav={filteredNav}
       location={location}
       onClose={onClose}
     />

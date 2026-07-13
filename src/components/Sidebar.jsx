@@ -174,7 +174,7 @@ export function Sidebar({ open, onClose, authState }) {
 
         {/* ── Nav: exactly one of the two shells renders, never both ── */}
         {viewMode === 'teacher' ? (
-          <SidebarNavFaculty location={location} onClose={onClose} />
+          <SidebarNavFaculty location={location} onClose={onClose} isRealAdmin={isRealAdmin} />
         ) : (
           <SidebarNavStudent
             location={location}

@@ -22,6 +22,7 @@ import { subscribeMyClassIndex, getFacultyAssignment } from '../../lib/facultyCl
 import { subscribeMembers } from '../../lib/groupSync';
 import { subscribeSessionAttendance } from '../../lib/facultyMarksSync';
 import { DAYS } from '../../lib/timeModels';
+import { getFacultyDoc } from '../../lib/facultySync';
 
 export default function FacultyDashboard() {
   const { isFounderBypass } = useIsFaculty();
@@ -29,6 +30,13 @@ export default function FacultyDashboard() {
   const [assignments, setAssignments] = useState({});
   const [rosters, setRosters] = useState({}); // groupId -> member uid array (for de-dup)
   const [sessionsByAssignment, setSessionsByAssignment] = useState({});
+  const [facultyProfile, setFacultyProfile] = useState(null);
+
+  useEffect(() => {
+    const uid = auth.currentUser?.uid;
+    if (!uid) return;
+    getFacultyDoc(uid).then(setFacultyProfile);
+  }, []);
 
   useEffect(() => {
     const uid = auth.currentUser?.uid;
@@ -69,6 +77,20 @@ export default function FacultyDashboard() {
     );
     return () => { cancelled = true; unsubs.forEach((u) => u()); };
   }, [classIndex]);
+
+  const timeGreeting = (() => {
+    const h = new Date().getHours();
+    if (h < 5) return 'Welcome';
+    if (h < 12) return 'Good morning';
+    if (h < 15) return 'Good noon';
+    if (h < 18) return 'Good afternoon';
+    if (h < 20) return 'Good evening';
+    return 'Good night';
+  })();
+  const today = new Date();
+  const todayDateLine = today.toLocaleDateString('en-BD', { day: 'numeric', month: 'long', year: 'numeric' });
+  const todayDayLine = today.toLocaleDateString('en-BD', { weekday: 'long' });
+  const facultyDisplayName = facultyProfile?.preferredName || facultyProfile?.name || '';
 
   if (classIndex === null) {
     return (
@@ -129,12 +151,47 @@ export default function FacultyDashboard() {
   return (
     <div className="hub-page-bg" style={{ minHeight: '100vh' }}>
       <div style={{ padding: '20px 24px 40px', maxWidth: 1040, margin: '0 auto' }}>
-        <div className="hub-page-hero">
-          <div className="hub-page-hero-icon">
-            <Icons.GraduationCap size={20} color="var(--accent)" />
+        {/* Welcome hero — same warm greeting + today-date pattern as the
+            student Dashboard's clickable hero card, adapted for faculty
+            (name/title instead of dept/batch), linking to Faculty Profile. */}
+        <Link to="/faculty/profile" style={{ textDecoration: 'none' }}>
+          <div className="card dashboard-hero" style={{ marginBottom: 22, padding: 'clamp(16px, 4vw, 30px)', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: 18, alignItems: 'stretch', minHeight: 'auto', cursor: 'pointer' }}>
+            <div className="dashboard-hero-main" style={{ minWidth: 0, display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: 18, paddingRight: 'clamp(0px, 2vw, 8px)' }}>
+              <div style={{ marginBottom: 4 }}>
+                <div style={{ fontSize: 13, fontWeight: 800, color: 'var(--muted)', marginBottom: 8, letterSpacing: '0.10em', textTransform: 'uppercase' }}>
+                  {timeGreeting}
+                </div>
+                <h1 style={{ fontSize: 'clamp(28px, 6vw, 36px)', fontWeight: 800, letterSpacing: '-0.055em', lineHeight: 1.0, margin: 0 }}>
+                  {facultyDisplayName || 'Faculty'}
+                </h1>
+                {facultyProfile?.title && (
+                  <div style={{ fontSize: 13, color: 'var(--muted)', marginTop: 8, fontWeight: 600 }}>
+                    {facultyProfile.title}
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div className="dashboard-hero-date" style={{ minWidth: 'clamp(200px, 90vw, 240px)', padding: 'clamp(16px, 3vw, 20px)', borderRadius: 16, border: '1px solid rgba(var(--accentRGB), 0.12)', background: 'linear-gradient(180deg, rgba(var(--accentRGB), 0.05), var(--surfaceGlassStrong))', whiteSpace: 'normal', alignSelf: 'stretch', boxShadow: '0 8px 22px rgba(12, 34, 64, 0.05)', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', gap: 10 }}>
+              <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: '0.10em', textTransform: 'uppercase', color: 'var(--muted)' }}>Today</div>
+              <div className="dashboard-hero-date-lines" style={{ fontSize: 'clamp(13px, 3vw, 15px)', fontWeight: 700, color: 'var(--text)', whiteSpace: 'normal', lineHeight: 1.35, display: 'grid', gap: 4 }}>
+                <div>{todayDateLine}</div>
+                <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--muted)' }}>{todayDayLine}</div>
+              </div>
+            </div>
           </div>
-          <h1 className="hub-page-hero-title">Faculty Dashboard</h1>
-        </div>
+        </Link>
+
+        {!facultyDisplayName && (
+          <div className="card" style={{ marginBottom: 14, borderColor: 'var(--accent)', display: 'flex', alignItems: 'center', gap: 12 }}>
+            <div style={{ fontSize: 28 }}>🎓</div>
+            <div style={{ flex: 1 }}>
+              <div style={{ fontWeight: 600, fontSize: 14 }}>Set Up Profile</div>
+              <div style={{ fontSize: 12, color: 'var(--muted)' }}>Add your name, title and department — it'll be used everywhere</div>
+            </div>
+            <Link to="/faculty/profile" className="btn btn-primary">Get started →</Link>
+          </div>
+        )}
 
         {isFounderBypass && (
           <div style={{
