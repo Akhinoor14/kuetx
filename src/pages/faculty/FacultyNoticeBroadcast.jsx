@@ -1,0 +1,336 @@
+// FacultyNoticeBroadcast.jsx
+//
+// Sidebar "Broadcast Notice" page — replaces the old FacultyNotices.jsx at
+// /faculty/notices. This is deliberately the ONLY place a teacher can send
+// to MULTIPLE classes at once (see postFacultyNoticeMulti in
+// facultyNoticeSync.js). The single-class notice tab living inside My
+// Classes -> Class Detail is a separate, always-single-class surface —
+// this page does not replace that one, only the old sidebar hub.
+//
+// Recipient model:
+//   - Pick one or more classes (checkboxes) the teacher currently teaches.
+//   - Choose "All Students" (every student in every selected class) or
+//     "Select CR/ACR" (pick specific CR/ACR people, pulled per-class from
+//     groups/{groupId}/members where role is 'cr' or 'acr').
+//   - Send fans out one notice doc per selected class via
+//     postFacultyNoticeMulti, tagged targetType 'broadcast' or 'cr_only'
+//     accordingly — same per-class semantics the rest of the app already
+//     understands, just applied across many classes in one action.
+//
+// This page shows the teacher's own SENT notices below the composer, using
+// subscribeAllNotices(..., 'faculty') — the audience filter that keeps
+// CR/ACR-authored class notices out of a teacher's own sent-history view.
+
+import { useEffect, useMemo, useState } from 'react';
+import * as Icons from 'lucide-react';
+import { auth } from '../../lib/firebase';
+import { subscribeMyClassIndex } from '../../lib/facultyClassSync';
+import { getFacultyDoc } from '../../lib/facultySync';
+import { getGroupMembersOnce } from '../../lib/groupSync';
+import * as noticeApi from '../../lib/noticeUtils';
+import { postFacultyNoticeMulti } from '../../lib/facultyNoticeSync';
+import { notify } from '../../lib/notify';
+
+export default function FacultyNoticeBroadcast() {
+  const [classes, setClasses] = useState(null);
+  const [facultyDoc, setFacultyDoc] = useState(null);
+
+  // Multi-class selection
+  const [selectedGroupIds, setSelectedGroupIds] = useState(new Set());
+
+  // Recipient mode: 'all' | 'cr'
+  const [recipientMode, setRecipientMode] = useState('all');
+  // CR/ACR roster per selected class, loaded on demand
+  const [crRoster, setCrRoster] = useState({}); // groupId -> [{uid, name, role, groupId, label}]
+  const [rosterLoading, setRosterLoading] = useState(false);
+  const [selectedCrUids, setSelectedCrUids] = useState(new Set());
+
+  const [title, setTitle] = useState('');
+  const [body, setBody] = useState('');
+  const [sending, setSending] = useState(false);
+
+  const [sentNotices, setSentNotices] = useState([]);
+
+  useEffect(() => {
+    const uid = auth.currentUser?.uid;
+    if (!uid) return;
+    getFacultyDoc(uid).then(setFacultyDoc);
+    return subscribeMyClassIndex(uid, setClasses);
+  }, []);
+
+  const activeClasses = useMemo(
+    () => (classes || []).filter((c) => c.status === 'active'),
+    [classes],
+  );
+  const groupOptions = useMemo(
+    () => [...new Map(activeClasses.map((c) => [c.groupId, c])).values()],
+    [activeClasses],
+  );
+
+  // Sent-history feed: merge each selected... actually we want ALL of the
+  // teacher's own sent notices across every class they teach, not just the
+  // ones currently checked in the composer — so subscribe per taught class
+  // and merge, filtered to 'from: Teacher' only.
+  useEffect(() => {
+    if (!groupOptions.length) { setSentNotices([]); return; }
+    const perGroup = {};
+    const unsubs = groupOptions.map((c) =>
+      noticeApi.subscribeAllNotices({}, c.groupId, (list) => {
+        perGroup[c.groupId] = list;
+        const merged = Object.values(perGroup).flat();
+        const seen = new Set();
+        const deduped = [];
+        for (const n of merged) {
+          if (seen.has(n.id)) continue;
+          seen.add(n.id);
+          deduped.push(n);
+        }
+        deduped.sort((a, b) => b.createdAt - a.createdAt);
+        setSentNotices(deduped);
+      }, 'faculty'),
+    );
+    return () => unsubs.forEach((u) => u());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [groupOptions.map((c) => c.groupId).join(',')]);
+
+  const toggleGroup = (groupId) => {
+    setSelectedGroupIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(groupId)) next.delete(groupId);
+      else next.add(groupId);
+      return next;
+    });
+  };
+
+  // Load CR/ACR roster for currently-selected classes when switching to
+  // "Select CR/ACR" mode, or when the class selection changes while in
+  // that mode.
+  useEffect(() => {
+    if (recipientMode !== 'cr' || selectedGroupIds.size === 0) return;
+    let cancelled = false;
+    setRosterLoading(true);
+    (async () => {
+      const entries = await Promise.all(
+        [...selectedGroupIds].map(async (groupId) => {
+          const cls = groupOptions.find((c) => c.groupId === groupId);
+          const members = await getGroupMembersOnce(groupId);
+          const crs = members.filter((m) => m.role === 'cr' || m.role === 'acr');
+          return [groupId, crs.map((m) => ({
+            uid: m.id,
+            name: m.name || m.roll || 'Unknown',
+            role: m.role,
+            groupId,
+            label: `${m.name || m.roll || 'Unknown'} — ${(cls?.batch || '').toUpperCase()} ${cls?.dept || ''} (${m.role.toUpperCase()})`,
+          }))];
+        }),
+      );
+      if (cancelled) return;
+      setCrRoster(Object.fromEntries(entries));
+      setRosterLoading(false);
+    })();
+    return () => { cancelled = true; };
+  }, [recipientMode, [...selectedGroupIds].join(','), groupOptions]);
+
+  const rosterFlat = useMemo(
+    () => [...selectedGroupIds].flatMap((gid) => crRoster[gid] || []),
+    [selectedGroupIds, crRoster],
+  );
+
+  const toggleCr = (uid) => {
+    setSelectedCrUids((prev) => {
+      const next = new Set(prev);
+      if (next.has(uid)) next.delete(uid);
+      else next.add(uid);
+      return next;
+    });
+  };
+
+  const handleSend = async () => {
+    if (!title.trim() || !body.trim()) {
+      notify('Please enter both a title and a message.', 'error');
+      return;
+    }
+    if (selectedGroupIds.size === 0) {
+      notify('Select at least one class.', 'error');
+      return;
+    }
+    if (recipientMode === 'cr' && selectedCrUids.size === 0) {
+      notify('Select at least one CR/ACR to notify.', 'error');
+      return;
+    }
+
+    // In CR mode, only send to classes that actually have a selected
+    // CR/ACR checked — a class with none checked is silently excluded
+    // rather than accidentally broadcasting to its whole roster.
+    const targetGroupIds = recipientMode === 'all'
+      ? [...selectedGroupIds]
+      : [...selectedGroupIds].filter((gid) => (crRoster[gid] || []).some((m) => selectedCrUids.has(m.uid)));
+
+    if (targetGroupIds.length === 0) {
+      notify('No selected CR/ACR belongs to the checked classes.', 'error');
+      return;
+    }
+
+    setSending(true);
+    try {
+      await postFacultyNoticeMulti(targetGroupIds, facultyDoc, auth.currentUser.uid, {
+        title: title.trim(),
+        body: body.trim(),
+        targetType: recipientMode === 'all' ? 'broadcast' : 'cr_only',
+      });
+      setTitle('');
+      setBody('');
+      notify(`Notice sent to ${targetGroupIds.length} class${targetGroupIds.length > 1 ? 'es' : ''}.`, 'success');
+    } catch (e) {
+      notify(e.message || 'Could not send this notice.', 'error');
+    } finally {
+      setSending(false);
+    }
+  };
+
+  return (
+    <div className="hub-page-bg" style={{ minHeight: '100vh' }}>
+      <div style={{ padding: '20px 24px 40px', width: '97%', maxWidth: 'none', margin: '0 auto' }}>
+        <div className="hub-page-hero">
+          <div className="hub-page-hero-icon">
+            <Icons.Bell size={20} color="var(--accent)" />
+          </div>
+          <h1 className="hub-page-hero-title">Broadcast Notice</h1>
+        </div>
+        <p style={{ fontSize: 12.5, color: 'var(--muted)', marginTop: -8, marginBottom: 18 }}>
+          Send one notice to several of your classes at once — pick classes, choose who should see it, then send.
+        </p>
+
+        {groupOptions.length === 0 && (
+          <div style={{ padding: 24, borderRadius: 14, border: '1px solid var(--border)', background: 'var(--card)', color: 'var(--muted)', fontSize: 13.5, textAlign: 'center' }}>
+            Add a class first to broadcast notices.
+          </div>
+        )}
+
+        {groupOptions.length > 0 && (
+          <>
+            <div style={{ padding: 16, borderRadius: 14, border: '1px solid var(--border)', background: 'var(--card)', marginBottom: 16 }}>
+              <div style={{ fontSize: 12.5, fontWeight: 700, color: 'var(--text)', marginBottom: 10 }}>
+                1. Select classes
+              </div>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+                {groupOptions.map((c) => {
+                  const checked = selectedGroupIds.has(c.groupId);
+                  return (
+                    <label
+                      key={c.groupId}
+                      style={{
+                        display: 'flex', alignItems: 'center', gap: 6, padding: '7px 12px', borderRadius: 999,
+                        border: `1px solid ${checked ? 'var(--accent)' : 'var(--border)'}`,
+                        background: checked ? 'color-mix(in srgb, var(--accent) 12%, var(--surface))' : 'var(--surface)',
+                        fontSize: 12.5, cursor: 'pointer', color: 'var(--text)',
+                      }}
+                    >
+                      <input type="checkbox" checked={checked} onChange={() => toggleGroup(c.groupId)} style={{ margin: 0 }} />
+                      {(c.batch || '').toUpperCase()} {c.dept}
+                    </label>
+                  );
+                })}
+              </div>
+            </div>
+
+            <div style={{ padding: 16, borderRadius: 14, border: '1px solid var(--border)', background: 'var(--card)', marginBottom: 16 }}>
+              <div style={{ fontSize: 12.5, fontWeight: 700, color: 'var(--text)', marginBottom: 10 }}>
+                2. Who should see this
+              </div>
+              <div style={{ display: 'flex', gap: 8, marginBottom: recipientMode === 'cr' ? 12 : 0 }}>
+                <label style={{ fontSize: 12.5, color: 'var(--muted)', display: 'flex', alignItems: 'center', gap: 6 }}>
+                  <input type="radio" checked={recipientMode === 'all'} onChange={() => setRecipientMode('all')} />
+                  All students (of selected classes)
+                </label>
+                <label style={{ fontSize: 12.5, color: 'var(--muted)', display: 'flex', alignItems: 'center', gap: 6 }}>
+                  <input type="radio" checked={recipientMode === 'cr'} onChange={() => setRecipientMode('cr')} />
+                  Select CR/ACR
+                </label>
+              </div>
+
+              {recipientMode === 'cr' && (
+                <div>
+                  {selectedGroupIds.size === 0 && (
+                    <div style={{ fontSize: 12, color: 'var(--muted)' }}>Select a class above first.</div>
+                  )}
+                  {selectedGroupIds.size > 0 && rosterLoading && (
+                    <div style={{ fontSize: 12, color: 'var(--muted)' }}>Loading CR/ACR…</div>
+                  )}
+                  {selectedGroupIds.size > 0 && !rosterLoading && rosterFlat.length === 0 && (
+                    <div style={{ fontSize: 12, color: 'var(--muted)' }}>No verified CR/ACR found for the selected class(es).</div>
+                  )}
+                  {!rosterLoading && rosterFlat.length > 0 && (
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                      {rosterFlat.map((m) => {
+                        const checked = selectedCrUids.has(m.uid);
+                        return (
+                          <label
+                            key={`${m.groupId}-${m.uid}`}
+                            style={{
+                              display: 'flex', alignItems: 'center', gap: 8, padding: '7px 10px', borderRadius: 8,
+                              border: `1px solid ${checked ? 'var(--accent)' : 'var(--border)'}`,
+                              background: checked ? 'color-mix(in srgb, var(--accent) 8%, var(--surface))' : 'var(--surface)',
+                              fontSize: 12.5, cursor: 'pointer', color: 'var(--text)',
+                            }}
+                          >
+                            <input type="checkbox" checked={checked} onChange={() => toggleCr(m.uid)} style={{ margin: 0 }} />
+                            {m.label}
+                          </label>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+
+            <div style={{ padding: 16, borderRadius: 14, border: '1px solid var(--border)', background: 'var(--card)', marginBottom: 20, display: 'grid', gap: 10 }}>
+              <div style={{ fontSize: 12.5, fontWeight: 700, color: 'var(--text)' }}>3. Message</div>
+              <input
+                placeholder="Title"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                style={{ padding: '9px 10px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--bg)', color: 'var(--text)', fontSize: 13.5 }}
+              />
+              <textarea
+                placeholder="Message"
+                rows={4}
+                value={body}
+                onChange={(e) => setBody(e.target.value)}
+                style={{ padding: '9px 10px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--bg)', color: 'var(--text)', fontSize: 13.5, resize: 'vertical' }}
+              />
+              <button
+                onClick={handleSend}
+                disabled={sending}
+                style={{ padding: '10px 16px', borderRadius: 8, border: 'none', background: 'var(--accent)', color: '#fff', fontWeight: 700, fontSize: 13, cursor: 'pointer', opacity: sending ? 0.6 : 1 }}
+              >
+                {sending ? 'Sending…' : 'Send Notice'}
+              </button>
+            </div>
+
+            <div style={{ fontSize: 12.5, fontWeight: 700, color: 'var(--text)', marginBottom: 8 }}>
+              Sent notices
+            </div>
+            <div style={{ display: 'grid', gap: 8 }}>
+              {sentNotices.length === 0 && (
+                <div style={{ fontSize: 12.5, color: 'var(--muted)' }}>No notices sent yet.</div>
+              )}
+              {sentNotices.map((n) => (
+                <div key={n.id} style={{ padding: '12px 14px', borderRadius: 10, border: '1px solid var(--border)', background: 'var(--card)' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', gap: 8 }}>
+                    <span style={{ fontWeight: 700, fontSize: 13.5, color: 'var(--text)' }}>{n.title}</span>
+                    <span style={{ fontSize: 10, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase' }}>
+                      {n.targetType === 'cr_only' ? 'CR/ACR only' : 'All students'}
+                    </span>
+                  </div>
+                  <div style={{ fontSize: 12.5, color: 'var(--muted)', marginTop: 2 }}>{n.body}</div>
+                </div>
+              ))}
+            </div>
+          </>
+        )}
+      </div>
+    </div>
+  );
+}

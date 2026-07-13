@@ -66,7 +66,7 @@ export const NAV_FACULTY = [
     hubPath: '/faculty/notices',
     hubIcon: 'Bell',
     items: [
-      { id: 'f-notices', label: 'Notices', icon: 'Bell', path: '/faculty/notices' },
+      { id: 'f-notices', label: 'Broadcast Notice', icon: 'Bell', path: '/faculty/notices' },
     ],
   },
   {

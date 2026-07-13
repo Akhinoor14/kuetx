@@ -106,19 +106,21 @@ export async function listAllFacultyAccounts() {
 export function isFacultyProfileComplete(fdoc) {
   if (!fdoc) return false;
   // BUGFIX: this used to also require fdoc.verifiedAt to be truthy. Under
-  // the auto-approval policy, verifiedAt stays null until an Admin grants
-  // the Blue Tick (firestore.rules only lets Admin set it — a faculty
-  // account can never self-verify), so that condition was permanently
-  // false for every non-admin-approved account. buildQueue() re-checks
-  // this function right after FacultyProfileSetupModal's onSave fires;
-  // with verifiedAt in the check, saveFacultyProfile() would succeed
-  // (fields genuinely saved) but isFacultyProfileComplete() would still
-  // return false, so buildQueue() pushed 'faculty-profile' right back
-  // onto the queue and the modal reopened instantly — clicking "Finish
-  // Setup" looked like it did nothing ("click korle kono kaj hoy na"),
-  // even though the save itself worked. verifiedAt is purely the Blue
-  // Tick flag now (gates posting notices/marks downstream via
-  // RequireVerifiedFaculty), not a profile-completeness signal.
+  // the manual verification policy, verifiedAt stays null until an Admin
+  // grants the Blue Tick (firestore.rules only lets Admin set it — a
+  // faculty account can never self-verify), so that condition was
+  // permanently false for every not-yet-approved account. buildQueue()
+  // re-checks this function right after FacultyProfileSetupModal's onSave
+  // fires; with verifiedAt in the check, saveFacultyProfile() would
+  // succeed (fields genuinely saved) but isFacultyProfileComplete() would
+  // still return false, so buildQueue() pushed 'faculty-profile' right
+  // back onto the queue and the modal reopened instantly — clicking
+  // "Finish Setup" looked like it did nothing ("click korle kono kaj hoy
+  // na"), even though the save itself worked. verifiedAt is purely the
+  // Blue Tick flag (gates actually teaching — creating class assignments,
+  // logging sessions, posting notices, entering marks — via RequireFaculty
+  // / firestore.rules' isVerifiedFaculty), not a profile-completeness
+  // signal, so it deliberately stays out of this check.
   return Boolean(
     String(fdoc.name || '').trim() &&
     String(fdoc.title || '').trim() &&
@@ -134,12 +136,23 @@ export const markFacultyVerifiedIfEmailConfirmed = syncFacultyVerificationStatus
 /**
  * Called from the magic-link completion screen (App.jsx onboarding queue,
  * §5 Step 2.3) once completeFacultyVerificationLink() returns
- * { status: 'success' }. Re-checks verifiedFacultyEmails/{email} itself
- * rather than trusting the caller blindly, then flips faculty/{uid}
- * .verifiedAt — this is the ONLY place in the client that ever sets
- * verifiedAt, and Firestore rules additionally restrict this field so a
- * client can't just set it directly out of band (see rules note in
- * MERGED_FACULTY_MODULE_PROMPT.md §10).
+ * { status: 'success' }.
+ *
+ * MANUAL VERIFICATION POLICY: this does NOT set faculty/{uid}.verifiedAt
+ * (the "Blue Tick") — Firestore rules only allow an Admin to do that (see
+ * firestore.rules' faculty/{uid} update rule), and rightly so: clicking a
+ * magic link only proves the person controls a *.kuet.ac.bd mailbox, not
+ * that Admin has reviewed/approved the account. An earlier version of
+ * this function tried to self-write verifiedAt here — that write was
+ * always silently rejected by the rules (a faculty account changing its
+ * own verifiedAt from null to non-null never matches the self-update
+ * branch), so it was dead code that looked like it worked but never did.
+ *
+ * All this does now is confirm verifiedFacultyEmails/{email} exists —
+ * i.e. the magic link really was completed — so the caller can show
+ * "email verified, waiting on Admin approval" instead of a false
+ * "verification failed" message. The actual Blue Tick is granted from
+ * AdminDashboard's Faculty → Pending tab.
  */
 export async function syncFacultyVerificationStatus(uid, officialEmail) {
   // Defensive lowercase here too — protects existing faculty/{uid} docs
@@ -152,21 +165,34 @@ export async function syncFacultyVerificationStatus(uid, officialEmail) {
   const normalizedEmail = String(officialEmail || '').trim().toLowerCase();
   const isVerified = await isFacultyEmailVerified(normalizedEmail);
   if (!isVerified) return false;
+  // Self-heal a stored officialEmail that was saved with the old
+  // (non-lowercased) logic — this write is allowed (it only touches
+  // officialEmail, not verifiedAt, and the self-update branch permits a
+  // faculty account editing its own non-verifiedAt fields).
   const ref = facultyDocRef(uid);
   const snap = await getDoc(ref);
-  if (snap.exists() && snap.data()?.verifiedAt) return true; // already synced
-  // Also self-heal the stored officialEmail if it was saved with the old
-  // (non-lowercased) logic — otherwise the *next* sync attempt would hit
-  // the exact same rules mismatch again via resource.data.officialEmail.
-  const updates = { verifiedAt: serverTimestamp() };
   if (snap.exists() && snap.data()?.officialEmail !== normalizedEmail) {
-    updates.officialEmail = normalizedEmail;
+    await updateDoc(ref, { officialEmail: normalizedEmail });
   }
-  await updateDoc(ref, updates);
   return true;
 }
 
 /** Convenience for the current signed-in user — most call sites don't have a uid handy otherwise. */
 export function getCurrentFacultyUid() {
   return auth.currentUser?.uid || null;
+}
+
+/**
+ * Admin-only: grant the Blue Tick directly from AdminDashboard's Faculty
+ * → Pending tab. This is THE way verifiedAt gets set now — Firestore
+ * rules (faculty/{uid} update rule) only allow an Admin to touch
+ * verifiedAt/verifiedBy, and only those two keys, so this call is safe to
+ * expose as a plain button click with no extra confirmation dance needed
+ * client-side (the rules are the real enforcement).
+ */
+export async function adminVerifyFaculty(uid) {
+  await updateDoc(facultyDocRef(uid), {
+    verifiedAt: serverTimestamp(),
+    verifiedBy: auth.currentUser?.uid || null,
+  });
 }

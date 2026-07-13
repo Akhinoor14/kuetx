@@ -1,9 +1,11 @@
 // FounderBatchSettings.jsx
 //
-// Founder/Head-of-Ops settings page for the active batch list used
-// everywhere a "Select batch" dropdown shows up (Faculty Add Class, My
-// Classes grouping, etc). Backed by appConfigSync.js's config/batches
-// Firestore singleton doc.
+// Founder/Head-of-Ops settings page for the active batch list AND each
+// batch's start date, used everywhere a "Select batch" dropdown shows up
+// (Faculty Add Class, My Classes grouping, etc) and everywhere a start
+// date matters (Profile yearStarted auto-fill, Add Class term-plausibility
+// warning). Backed by appConfigSync.js's config/batches Firestore
+// singleton doc (v2 shape: { active: [...], startDates: {...} }).
 //
 // Deliberately NOT automatic ("just calculate from current year + 4-year
 // program length") — per explicit decision, KUET's 4-year rule doesn't
@@ -11,34 +13,35 @@
 // remove stays a manual Founder action instead of a formula that could
 // silently produce a wrong list. This page is that manual control.
 //
-// Start dates (BATCH_START_DATES in store.js) stay as-is — a batch's
-// start date is fixed once set, so there's no ongoing reason to move
-// that part into Firestore. Only the ACTIVE LIST (which batches
-// currently show up) is Founder-editable here. Adding a batch key here
-// that has no matching BATCH_START_DATES entry still works everywhere
-// EXCEPT the batch/term plausibility warning in Add Class (which quietly
-// no-ops for unknown batches — see getBatchTermPlausibility in
-// FacultyClasses.jsx), so this page warns if you add one without a
-// matching start date.
+// Start date is now REQUIRED at add time (previously optional/code-only —
+// see appConfigSync.js's header for why that used to silently leave new
+// batches dateless). Existing batches can have their date corrected later
+// via the inline "Edit date" control on each row.
 
 import { useEffect, useState } from 'react';
 import * as Icons from 'lucide-react';
-import { BATCH_START_DATES } from '../store/store';
-import { getActiveBatches, setActiveBatches } from '../lib/appConfigSync';
+import { getActiveBatches, getBatchStartDates, setActiveBatches, setBatchStartDate } from '../lib/appConfigSync';
 import { getBatchColor } from '../lib/timeModels';
 import { notify } from '../lib/notify';
 
 export default function FounderBatchSettings() {
   const [batches, setBatches] = useState(null); // null = loading
+  const [startDates, setStartDates] = useState({});
   const [newBatch, setNewBatch] = useState('');
+  const [newBatchDate, setNewBatchDate] = useState('');
   const [saving, setSaving] = useState(false);
   // Arms the Remove button for one batch at a time — see the tap-to-confirm
   // comment on the button itself for why this exists (mobile touch-target
   // safety net next to the reorder buttons).
   const [confirmingRemove, setConfirmingRemove] = useState(null);
+  // Which batch row currently has its date input open for editing.
+  const [editingDateFor, setEditingDateFor] = useState(null);
+  const [editingDateValue, setEditingDateValue] = useState('');
+  const [savingDate, setSavingDate] = useState(false);
 
   useEffect(() => {
     getActiveBatches().then(setBatches);
+    getBatchStartDates().then(setStartDates);
   }, []);
 
   const save = async (next) => {
@@ -54,7 +57,7 @@ export default function FounderBatchSettings() {
     }
   };
 
-  const handleAdd = () => {
+  const handleAdd = async () => {
     const key = newBatch.trim().toLowerCase();
     if (!key) return;
     if (!/^2k\d{2}$/.test(key)) {
@@ -65,8 +68,23 @@ export default function FounderBatchSettings() {
       notify('That batch is already in the list.', 'error');
       return;
     }
-    save([...batches, key]);
-    setNewBatch('');
+    if (!newBatchDate) {
+      notify('Set the batch\'s university start date before adding it.', 'error');
+      return;
+    }
+    setSaving(true);
+    try {
+      const cleaned = await setActiveBatches([...batches, key], { [key]: newBatchDate });
+      setBatches(cleaned);
+      setStartDates((prev) => ({ ...prev, [key]: newBatchDate }));
+      notify('Batch added.', 'success');
+      setNewBatch('');
+      setNewBatchDate('');
+    } catch (e) {
+      notify(e.message || 'Could not add this batch.', 'error');
+    } finally {
+      setSaving(false);
+    }
   };
 
   const handleRemove = (key) => {
@@ -81,6 +99,29 @@ export default function FounderBatchSettings() {
     save(next);
   };
 
+  const openDateEdit = (b) => {
+    setEditingDateFor(b);
+    setEditingDateValue(startDates[b] || '');
+  };
+
+  const saveDateEdit = async (b) => {
+    if (!editingDateValue) {
+      notify('Pick a date first.', 'error');
+      return;
+    }
+    setSavingDate(true);
+    try {
+      await setBatchStartDate(b, editingDateValue);
+      setStartDates((prev) => ({ ...prev, [b]: editingDateValue }));
+      notify('Start date updated.', 'success');
+      setEditingDateFor(null);
+    } catch (e) {
+      notify(e.message || 'Could not save this date.', 'error');
+    } finally {
+      setSavingDate(false);
+    }
+  };
+
   return (
     <div className="hub-page-bg" style={{ minHeight: '100vh' }}>
       <div style={{ padding: '20px 24px 40px', width: '97%', maxWidth: 720, margin: '0 auto' }}>
@@ -93,7 +134,9 @@ export default function FounderBatchSettings() {
 
         <p style={{ fontSize: 13, color: 'var(--muted)', marginTop: 8, marginBottom: 20, lineHeight: 1.5 }}>
           Controls which batches show up in every "Select batch" dropdown app-wide
-          (faculty Add Class, My Classes grouping, etc). Order matters — each
+          (faculty Add Class, My Classes grouping, etc), and each batch's university
+          start date — used to auto-fill a student's Profile and to power the
+          batch/term plausibility check in Faculty Add Class. Order matters — each
           batch's color is assigned by its position in this list.
         </p>
 
@@ -101,49 +144,108 @@ export default function FounderBatchSettings() {
           <div style={{ color: 'var(--muted)', fontSize: 13 }}>Loading…</div>
         ) : (
           <>
-            <div style={{ display: 'flex', gap: 8, marginBottom: 18 }}>
-              <input
-                value={newBatch}
-                onChange={(e) => setNewBatch(e.target.value)}
-                onKeyDown={(e) => { if (e.key === 'Enter') handleAdd(); }}
-                placeholder="e.g. 2k26"
-                style={{
-                  flex: 1, padding: '10px 12px', borderRadius: 8, border: '1px solid var(--border)',
-                  background: 'var(--bg)', color: 'var(--text)', fontSize: 13.5, outline: 'none',
-                }}
-              />
-              <button
-                onClick={handleAdd}
-                disabled={saving}
-                className="btn btn-primary"
-                style={{ display: 'flex', alignItems: 'center', gap: 6, whiteSpace: 'nowrap' }}
-              >
-                <Icons.Plus size={15} /> Add Batch
-              </button>
+            <div style={{ padding: 14, borderRadius: 12, border: '1px solid var(--border)', background: 'var(--card)', marginBottom: 18 }}>
+              <div style={{ fontSize: 11.5, fontWeight: 700, color: 'var(--muted)', marginBottom: 8 }}>ADD A NEW BATCH</div>
+              <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                <input
+                  value={newBatch}
+                  onChange={(e) => setNewBatch(e.target.value)}
+                  placeholder="e.g. 2k26"
+                  style={{
+                    flex: '1 1 140px', padding: '10px 12px', borderRadius: 8, border: '1px solid var(--border)',
+                    background: 'var(--bg)', color: 'var(--text)', fontSize: 13.5, outline: 'none',
+                  }}
+                />
+                <input
+                  type="date"
+                  value={newBatchDate}
+                  onChange={(e) => setNewBatchDate(e.target.value)}
+                  style={{
+                    flex: '1 1 160px', padding: '10px 12px', borderRadius: 8, border: '1px solid var(--border)',
+                    background: 'var(--bg)', color: 'var(--text)', fontSize: 13.5, outline: 'none',
+                  }}
+                />
+                <button
+                  onClick={handleAdd}
+                  disabled={saving}
+                  className="btn btn-primary"
+                  style={{ display: 'flex', alignItems: 'center', gap: 6, whiteSpace: 'nowrap' }}
+                >
+                  <Icons.Plus size={15} /> Add Batch
+                </button>
+              </div>
+              <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 6 }}>
+                Start date is required — it's what makes this batch show up correctly on student profiles and the term-plausibility check.
+              </div>
             </div>
 
             <div style={{ display: 'grid', gap: 8 }}>
               {batches.map((b, idx) => {
                 const color = getBatchColor(b, batches);
-                const hasStartDate = !!BATCH_START_DATES[b];
+                const startDate = startDates[b];
+                const isEditingDate = editingDateFor === b;
                 return (
                   <div
                     key={b}
                     style={{
                       display: 'flex', alignItems: 'center', gap: 10, padding: '10px 12px', borderRadius: 12,
-                      background: color.bg, border: `1px solid ${color.border}`,
+                      background: color.bg, border: `1px solid ${color.border}`, flexWrap: 'wrap',
                     }}
                   >
                     <div style={{
                       width: 10, height: 10, borderRadius: '50%', background: color.text, flexShrink: 0,
                     }} />
-                    <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ flex: 1, minWidth: 160 }}>
                       <div style={{ fontWeight: 800, fontSize: 14, color: color.text }}>{b.toUpperCase()}</div>
-                      {hasStartDate ? (
-                        <div style={{ fontSize: 11, color: 'var(--muted)' }}>Starts {BATCH_START_DATES[b]}</div>
-                      ) : (
-                        <div style={{ fontSize: 11, color: '#d97706', display: 'flex', alignItems: 'center', gap: 4 }}>
-                          <Icons.AlertTriangle size={11} /> No start date set in code — term-plausibility check will be skipped for this batch.
+                      {!isEditingDate && (
+                        startDate ? (
+                          <button
+                            onClick={() => openDateEdit(b)}
+                            style={{
+                              background: 'none', border: 'none', padding: 0, cursor: 'pointer',
+                              fontSize: 11, color: 'var(--muted)', display: 'flex', alignItems: 'center', gap: 4,
+                            }}
+                          >
+                            Starts {startDate} <Icons.Pencil size={10} />
+                          </button>
+                        ) : (
+                          <button
+                            onClick={() => openDateEdit(b)}
+                            style={{
+                              background: 'none', border: 'none', padding: 0, cursor: 'pointer',
+                              fontSize: 11, color: '#d97706', display: 'flex', alignItems: 'center', gap: 4,
+                            }}
+                          >
+                            <Icons.AlertTriangle size={11} /> No start date set — tap to add one
+                          </button>
+                        )
+                      )}
+                      {isEditingDate && (
+                        <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 4 }}>
+                          <input
+                            type="date"
+                            value={editingDateValue}
+                            onChange={(e) => setEditingDateValue(e.target.value)}
+                            style={{
+                              padding: '5px 8px', borderRadius: 6, border: '1px solid var(--border)',
+                              background: 'var(--bg)', color: 'var(--text)', fontSize: 12.5,
+                            }}
+                          />
+                          <button
+                            onClick={() => saveDateEdit(b)}
+                            disabled={savingDate}
+                            style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--accent)' }}
+                            title="Save date"
+                          >
+                            <Icons.Check size={16} />
+                          </button>
+                          <button
+                            onClick={() => setEditingDateFor(null)}
+                            style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--muted)' }}
+                            title="Cancel"
+                          >
+                            <Icons.X size={16} />
+                          </button>
                         </div>
                       )}
                     </div>

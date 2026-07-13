@@ -29,3 +29,32 @@ export async function postFacultyNotice(groupId, facultyDoc, uid, { title, body,
     createdAt: serverTimestamp(),
   });
 }
+
+// Sidebar "Broadcast Notice" page — a teacher can pick several classes at
+// once (unlike the single-class notice tab inside My Classes -> Class
+// Detail, which is always scoped to whichever class you're already inside).
+// Firestore has no cross-collection multi-write primitive here (each class's
+// notices live in its own groups/{groupId}/notices subcollection), so this
+// fans out to one addDoc per selected group. targetType stays 'broadcast'
+// (all students of that group) or 'cr_only' (that group's CR/ACR only) —
+// same per-group semantics as the single-class notice, just applied to
+// every selected group in one action.
+export async function postFacultyNoticeMulti(groupIds, facultyDoc, uid, { title, body, targetType = 'broadcast', noticeType = 'general' }) {
+  if (!Array.isArray(groupIds) || groupIds.length === 0) {
+    throw new Error('Select at least one class to send this notice to.');
+  }
+  const postedBy = { uid, name: facultyDoc?.preferredName || facultyDoc?.name || 'Faculty', roll: '' };
+  await Promise.all(
+    groupIds.map((groupId) =>
+      addDoc(collection(db, 'groups', groupId, 'notices'), {
+        title,
+        body,
+        postedBy,
+        from: 'Teacher',
+        noticeType,
+        targetType,
+        createdAt: serverTimestamp(),
+      }),
+    ),
+  );
+}

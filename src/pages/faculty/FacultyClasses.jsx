@@ -7,9 +7,9 @@
 // never a hard block per §4 item 2's "convenience, not a gate" note).
 //
 // Dept list: store.js's DEPARTMENTS (canonical 16-department array).
-// Batch list: appConfigSync.js's live config/batches doc (Founder-editable
-// — see FounderBatchSettings.jsx), falling back to store.js's
-// BATCH_START_DATES keys until that doc exists.
+// Batch list + start dates: appConfigSync.js's live config/batches doc
+// (Founder-editable — see FounderBatchSettings.jsx), falling back to
+// store.js's BATCH_START_DATES seed until that doc exists.
 // Term list: store.js's TERM_KEYS (Y1T1..Y4T2).
 // Course list per dept+term: curriculumStore.js's getDeptTerms(deptCode) —
 // deliberately NOT getAllCourses(profile), which is keyed to a STUDENT's
@@ -27,13 +27,13 @@ import { useNavigate } from 'react-router-dom';
 import * as Icons from 'lucide-react';
 import { auth } from '../../lib/firebase';
 import {
-  DEPARTMENTS, BATCH_START_DATES, TERM_KEYS, getTermIndex,
+  DEPARTMENTS, TERM_KEYS, getTermIndex,
 } from '../../store/store';
 import { getDeptTerms } from '../../store/curriculumStore';
 import {
-  TIME_MODELS, DAYS, isSessionalType, getPresetSessionalSlots, getBatchColor,
+  TIME_MODELS, DAYS, isSessionalType, getPresetSessionalSlots, getBatchColor, sortBatches,
 } from '../../lib/timeModels';
-import { getActiveBatches } from '../../lib/appConfigSync';
+import { getActiveBatches, getBatchStartDates } from '../../lib/appConfigSync';
 import {
   subscribeMyClassIndex, createFacultyAssignment, findJoinableAssignment, joinFacultyAssignment,
   findConflictingAssignment,
@@ -56,9 +56,9 @@ const labelStyle = { fontSize: 11.5, fontWeight: 700, color: 'var(--muted)', mar
 // feedback (which is what "everything is selectable" actually meant).
 // Roughly 6 months/term is KUET's typical cadence; this is intentionally
 // approximate since exact term calendars vary by roadmap config.
-function getBatchTermPlausibility(batch, term) {
+function getBatchTermPlausibility(batch, term, startDates) {
   if (!batch || !term) return null;
-  const startDate = BATCH_START_DATES[batch];
+  const startDate = startDates?.[batch];
   if (!startDate) return null;
   const termIndex = getTermIndex(term); // 0-based: Y1T1=0, Y1T2=1, ...
   if (termIndex < 0) return null;
@@ -106,6 +106,10 @@ export function AddClassModal({ onClose, onCreated, batches, initialDay, initial
   const [saving, setSaving] = useState(false);
   const [joinOffer, setJoinOffer] = useState(null); // { id, groupId, ... } | null
   const [slotConflict, setSlotConflict] = useState(null); // { courseCode, courseTitle, ... } | null
+  const [batchStartDates, setBatchStartDates] = useState({});
+  useEffect(() => {
+    getBatchStartDates().then(setBatchStartDates);
+  }, []);
 
   const termCourses = useMemo(() => {
     if (!dept || !term) return [];
@@ -115,7 +119,7 @@ export function AddClassModal({ onClose, onCreated, batches, initialDay, initial
 
   const selectedCourse = termCourses.find((c) => c.code === courseCode) || null;
   const isSessionalCourse = isSessionalType(selectedCourse?.type);
-  const batchTermWarning = useMemo(() => getBatchTermPlausibility(batch, term), [batch, term]);
+  const batchTermWarning = useMemo(() => getBatchTermPlausibility(batch, term, batchStartDates), [batch, term, batchStartDates]);
 
   // Keep the sessional-block slot options in sync with the chosen time
   // model — a 50-min-model sessional's 3 preset ranges differ from the
@@ -381,7 +385,11 @@ export default function FacultyClasses() {
   }, []);
 
   useEffect(() => {
-    getActiveBatches().then(setBatches);
+    // Sorted ascending by batch year (2k22 -> 2k23 -> ...) so the batch
+    // dropdown and the "My Classes" grouping below both show smaller/older
+    // batches first. getBatchColor() is always called with this same
+    // sorted array, so color assignment stays consistent with what's shown.
+    getActiveBatches().then((list) => setBatches(sortBatches(list)));
   }, []);
 
   const activeClasses = (classes || []).filter((c) => c.status === 'active');
@@ -468,7 +476,7 @@ export default function FacultyClasses() {
                       <Icons.BookOpen size={17} color="var(--accent)" />
                     </div>
                     <span className="hub-grid-item-label" style={{ fontWeight: 600, color: '#5c5a54' }}>
-                      {c.courseCode} · {c.batch?.toUpperCase()} {c.dept}
+                      {c.batch?.toUpperCase()} {c.dept} · {c.courseCode}
                     </span>
                   </div>
                 ))}

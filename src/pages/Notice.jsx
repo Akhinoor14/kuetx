@@ -5,6 +5,8 @@ import * as noticeApi from '../lib/noticeUtils';
 import { getProfile } from '../store/store';
 import { getGroupId } from '../lib/groupUtils';
 import { renderFormattedNoticeBody } from '../lib/noticeFormat';
+import { auth } from '../lib/firebase';
+import { subscribeMyRole } from '../lib/groupSync';
 
 function timeAgo(ms) {
   if (!ms) return '';
@@ -113,11 +115,22 @@ export default function Notice() {
 
   const readIds = useMemo(() => noticeApi.getReadNoticeIds(), [refreshTick]);
 
+  // Whether the signed-in student is CR/ACR in their own group — gates
+  // whether a Teacher's cr_only notice shows up at all (see
+  // filterStudentFacingNotices in noticeUtils.js).
+  const [isViewerCR, setIsViewerCR] = useState(false);
+  useEffect(() => {
+    if (!groupId || !auth.currentUser?.uid) { setIsViewerCR(false); return; }
+    return subscribeMyRole(groupId, auth.currentUser.uid, (role) => {
+      setIsViewerCR(role === 'cr' || role === 'acr');
+    });
+  }, [groupId]);
+
   // Live notice feed (global admin broadcasts + group CR/ACR notices).
   const [notices, setNotices] = useState([]);
   useEffect(() => {
-    return noticeApi.subscribeAllNotices(profile, groupId, setNotices);
-  }, [profile, groupId]);
+    return noticeApi.subscribeAllNotices(profile, groupId, setNotices, 'student', { isViewerCR });
+  }, [profile, groupId, isViewerCR]);
 
   const unread = noticeApi.getUnreadNotices(notices, readIds);
   const isUnread = (id) => unread.some(u => u.id === id);

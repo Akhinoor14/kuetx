@@ -144,3 +144,19 @@ export function getBatchColor(batch, batchList) {
   const safeIdx = idx >= 0 ? idx : 0;
   return BATCH_COLOR_PALETTE[safeIdx % BATCH_COLOR_PALETTE.length];
 }
+
+export function sortBatches(batchList) {
+  const list = batchList && batchList.length ? [...batchList] : [];
+  const parse = (b) => {
+    const m = String(b).toLowerCase().match(/^(\d+)k(\d+)$/);
+    return m ? Number(m[1]) * 100 + Number(m[2]) : null;
+  };
+  return list.sort((a, b) => {
+    const pa = parse(a);
+    const pb = parse(b);
+    if (pa === null && pb === null) return String(a).localeCompare(String(b));
+    if (pa === null) return 1;
+    if (pb === null) return -1;
+    return pa - pb;
+  });
+}

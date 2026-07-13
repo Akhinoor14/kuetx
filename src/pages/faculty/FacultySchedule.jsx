@@ -35,7 +35,7 @@ import { useEffect, useMemo, useState } from 'react';
 import * as Icons from 'lucide-react';
 import { auth } from '../../lib/firebase';
 import {
-  TIME_MODELS, DAYS, isSlotOverlap, getBatchColor,
+  TIME_MODELS, DAYS, isSlotOverlap, getBatchColor, sortBatches,
 } from '../../lib/timeModels';
 import { getActiveBatches } from '../../lib/appConfigSync';
 import { subscribeMyClassIndex, getFacultyAssignment } from '../../lib/facultyClassSync';
@@ -92,7 +92,10 @@ export default function FacultySchedule() {
   }, []);
 
   useEffect(() => {
-    getActiveBatches().then(setBatches);
+    // Sorted ascending by batch year (2k22 -> 2k23 -> ...) so the Add Class
+    // batch dropdown shows smaller/older batches first. getBatchColor() is
+    // always called with this same sorted array, so colors stay consistent.
+    getActiveBatches().then((list) => setBatches(sortBatches(list)));
   }, []);
 
   useEffect(() => {
@@ -246,8 +249,8 @@ export default function FacultySchedule() {
                         {slotPreview(c.slot)}
                       </div>
                       <div style={{ flex: 1, minWidth: 0 }}>
-                        <div style={{ fontSize: 13, fontWeight: 700, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{c.courseCode} — {c.courseTitle}</div>
-                        <div style={{ fontSize: 11, color: color.text, marginTop: 1, fontWeight: 700 }}>{c.batch?.toUpperCase()} {c.dept}</div>
+                        <div style={{ fontSize: 13, fontWeight: 700, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{c.batch?.toUpperCase()} {c.dept}</div>
+                        <div style={{ fontSize: 11, color: color.text, marginTop: 1, fontWeight: 700 }}>{c.courseCode} — {c.courseTitle}</div>
                       </div>
                     </div>
                   );
@@ -347,8 +350,8 @@ export default function FacultySchedule() {
                                   background: `linear-gradient(180deg, ${color.bg}, ${color.bg})`,
                                   border: `1px solid ${color.border}`, color: 'var(--text)',
                                 }}>
-                                  <div style={{ fontWeight: 700 }}>{entry.courseCode}</div>
-                                  <div style={{ fontSize: 11, color: color.text, fontWeight: 700 }}>{entry.batch?.toUpperCase()} {entry.dept}</div>
+                                  <div style={{ fontWeight: 700 }}>{entry.batch?.toUpperCase()} {entry.dept}</div>
+                                  <div style={{ fontSize: 11, color: color.text, fontWeight: 700 }}>{entry.courseCode}</div>
                                   {rs > 1 && (
                                     <div style={{ fontSize: 10, color: 'var(--muted)', marginTop: 2, display: 'flex', alignItems: 'center', gap: 3 }}>
                                       <Icons.Layers size={10} /> Full sessional block

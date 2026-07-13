@@ -63,11 +63,12 @@ export function useIsFaculty() {
 
     const applyProfile = (profile) => {
       if (founderResolved && isFounder) return; // Founder bypass always wins.
-      // Auto-approval policy: any faculty/{uid} doc existing means the
-      // account is active — verifiedAt (Blue Tick) is no longer required
-      // for isFaculty. Downstream code that needs the Blue Tick
-      // specifically (posting notices/marks) reads facultyProfile.verifiedAt
-      // directly instead of gating on this hook's isFaculty flag.
+      // isFaculty here means "account exists" only (not verified) — this
+      // is the signal used by the onboarding queue and by places that
+      // only need to know "is this a faculty account at all" (e.g. App.jsx
+      // routing a returning faculty account back to 'teacher' role). The
+      // Blue Tick check (facultyProfile.verifiedAt) is separate and is
+      // what RequireFaculty.jsx actually gates real /faculty/* routes on.
       const active = !!profile;
       setIsFaculty(active);
       setIsFounderBypass(false);

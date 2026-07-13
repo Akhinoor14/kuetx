@@ -24,6 +24,7 @@ import { subscribeSessionAttendance } from '../../lib/facultyMarksSync';
 import { DAYS } from '../../lib/timeModels';
 import { getFacultyDoc } from '../../lib/facultySync';
 import { getShortTitle } from '../../lib/facultyTitle';
+import * as noticeApi from '../../lib/noticeUtils';
 
 export default function FacultyDashboard() {
   const { isFounderBypass } = useIsFaculty();
@@ -33,6 +34,9 @@ export default function FacultyDashboard() {
   const [sessionsByAssignment, setSessionsByAssignment] = useState({});
   const [facultyProfile, setFacultyProfile] = useState(null);
   const [heldCardIndex, setHeldCardIndex] = useState(0);
+  const [sentNotices, setSentNotices] = useState([]);
+  const [alertsExpanded, setAlertsExpanded] = useState(false);
+  const [classesViewMode, setClassesViewMode] = useState('list');
 
   useEffect(() => {
     const uid = auth.currentUser?.uid;
@@ -78,6 +82,36 @@ export default function FacultyDashboard() {
       })
     );
     return () => { cancelled = true; unsubs.forEach((u) => u()); };
+  }, [classIndex]);
+
+  // Sent-notice history — same multi-group subscribe-and-merge pattern as
+  // the sidebar's Broadcast Notice page (FacultyNoticeBroadcast.jsx):
+  // subscribe to groups/{groupId}/notices for every DISTINCT group this
+  // faculty currently teaches, filtered to 'from: Teacher' (their own
+  // posts only, via subscribeAllNotices(..., 'faculty')), then merge +
+  // de-dupe + sort newest-first. Shown on the dashboard so a teacher can
+  // see at a glance what they've broadcast recently without opening the
+  // dedicated Notices page.
+  useEffect(() => {
+    const distinctGroups = [...new Map((classIndex || []).filter((c) => c.status === 'active').map((c) => [c.groupId, c])).values()];
+    if (!distinctGroups.length) { setSentNotices([]); return; }
+    const perGroup = {};
+    const unsubs = distinctGroups.map((c) =>
+      noticeApi.subscribeAllNotices({}, c.groupId, (list) => {
+        perGroup[c.groupId] = list;
+        const merged = Object.values(perGroup).flat();
+        const seen = new Set();
+        const deduped = [];
+        for (const n of merged) {
+          if (seen.has(n.id)) continue;
+          seen.add(n.id);
+          deduped.push(n);
+        }
+        deduped.sort((a, b) => b.createdAt - a.createdAt);
+        setSentNotices(deduped);
+      }, 'faculty'),
+    );
+    return () => unsubs.forEach((u) => u());
   }, [classIndex]);
 
   // Auto-rotate the "Classes Held" card through each active course every
@@ -185,7 +219,7 @@ export default function FacultyDashboard() {
     const logged = (sessionsByAssignment[c.assignmentId] || []).length;
     return {
       assignmentId: c.assignmentId,
-      label: a ? `${a.courseCode} — ${c.batch?.toUpperCase()} ${c.dept}` : c.courseCode,
+      label: a ? `${c.batch?.toUpperCase()} ${c.dept} — ${a.courseCode}` : c.courseCode,
       logged,
     };
   });
@@ -407,10 +441,12 @@ export default function FacultyDashboard() {
           {statCard('CalendarCheck', 'This Week', scheduledThisWeek > 0 ? `${heldThisWeek}/${scheduledThisWeek}` : '—', scheduledThisWeek > 0 ? 'Classes held, across all courses' : 'No classes scheduled', '#F59E0B')}
         </div>
 
-        {/* ── Today's Classes + My Classes — on large screens these used to
-             each stack full-width with a lot of empty space beside their
-             (usually short) content; side-by-side as two columns fixes
-             that, while still stacking on narrow/mobile screens. ── */}
+        {/* ── Today's Classes + Alerts & Notices — side by side (same
+             reasoning as the old Today's/My Classes pairing: two usually-
+             short cards side by side reads better than each stretching
+             full-width with empty space). My Classes moved to its own
+             full-width row below, since a 4-class list needs more room
+             than a half-width column comfortably gives it. ── */}
         <div className="dashboard-home-columns" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))', gap: 12, marginBottom: 12, alignItems: 'stretch' }}>
 
         <div className="card" style={{ padding: '14px 16px', borderRadius: 14, margin: 0, height: '100%', display: 'flex', flexDirection: 'column' }}>
@@ -447,8 +483,8 @@ export default function FacultyDashboard() {
                       </div>
                     </div>
                     <div style={{ flex: 1, minWidth: 0 }}>
-                      <div style={{ fontSize: 13.5, fontWeight: 700, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{c.courseCode} — {c.courseTitle}</div>
-                      <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 2, fontWeight: 600 }}>{c.batch?.toUpperCase()} {c.dept}</div>
+                      <div style={{ fontSize: 13.5, fontWeight: 700, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{c.batch?.toUpperCase()} {c.dept}</div>
+                      <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 2, fontWeight: 600 }}>{c.courseCode} — {c.courseTitle}</div>
                     </div>
                     <Icons.ChevronRight size={16} color="rgba(59,130,246,0.5)" style={{ flexShrink: 0 }} />
                   </div>
@@ -463,17 +499,141 @@ export default function FacultyDashboard() {
           )}
         </div>
 
-        {/* Classes overview — mirrors the student dashboard's "Academic Journey" progress card */}
-        <div className="card dashboard-roadmap" style={{ padding: '18px 18px 16px', border: '1px solid rgba(var(--accentRGB), 0.10)', background: 'linear-gradient(180deg, rgba(var(--accentRGB), 0.04), var(--surfaceGlassStrong))', margin: 0, height: '100%', display: 'flex', flexDirection: 'column' }}>
+        {/* Alerts & Notices — unifies two things that used to live in
+            separate places: the "Attendance pending" reminder (was its
+            own standalone block below the two-column row) and this
+            teacher's own sent-notice history (previously only visible on
+            the dedicated Broadcast Notice page). Combined feed, newest
+            first, capped to 3 rows by default with "See more" to expand
+            the rest — since between pending-attendance alerts and a
+            term's worth of sent notices, showing everything at once
+            would make this card taller than Today's Classes/My Classes
+            almost every time. */}
+        <div className="card" style={{ padding: '14px 16px', borderRadius: 14, margin: 0, height: '100%', display: 'flex', flexDirection: 'column' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
+            <div style={{ fontSize: 11, fontWeight: 800, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.07em', display: 'flex', alignItems: 'center', gap: 6 }}>
+              <Icons.Bell size={13} /> Alerts &amp; Notices
+            </div>
+            <Link to="/faculty/notices" style={{ fontSize: 11, color: 'var(--accent)', textDecoration: 'none', fontWeight: 700 }}>Broadcast →</Link>
+          </div>
+          {(() => {
+            const pendingItems = pendingToday.map((c) => ({
+              kind: 'pending',
+              key: `pending-${c.assignmentId}`,
+              c,
+            }));
+            const noticeItems = sentNotices.map((n) => ({
+              kind: 'notice',
+              key: `notice-${n.id}`,
+              n,
+            }));
+            const allItems = [...pendingItems, ...noticeItems];
+            const visibleItems = alertsExpanded ? allItems : allItems.slice(0, 3);
+
+            if (allItems.length === 0) {
+              return (
+                <div style={{ fontSize: 12.5, color: 'var(--muted)', textAlign: 'center', padding: '18px 0', display: 'flex', flex: 1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
+                  <Icons.BellOff size={20} color="var(--muted)" style={{ opacity: 0.5 }} />
+                  No alerts or sent notices yet
+                </div>
+              );
+            }
+
+            return (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 6, flex: 1 }}>
+                {visibleItems.map((item) => {
+                  if (item.kind === 'pending') {
+                    const c = item.c;
+                    return (
+                      <Link
+                        key={item.key}
+                        to={`/faculty/classes/${c.assignmentId}?groupId=${encodeURIComponent(c.groupId)}`}
+                        style={{ textDecoration: 'none' }}
+                      >
+                        <div style={{ padding: '9px 12px', borderRadius: 10, background: 'var(--dangerBg, rgba(217,119,6,0.08))', border: '1px solid color-mix(in srgb, #d97706 28%, var(--border))', display: 'flex', alignItems: 'center', gap: 8 }}>
+                          <Icons.AlertTriangle size={14} color="#d97706" style={{ flexShrink: 0 }} />
+                          <div style={{ minWidth: 0, flex: 1 }}>
+                            <div style={{ fontSize: 11.5, fontWeight: 700, color: '#d97706' }}>Attendance pending</div>
+                            <div style={{ fontSize: 11, color: '#d97706', opacity: 0.85, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                              {c.batch?.toUpperCase()} {c.dept} — {c.courseCode} · Take attendance →
+                            </div>
+                          </div>
+                        </div>
+                      </Link>
+                    );
+                  }
+                  const n = item.n;
+                  return (
+                    <div key={item.key} style={{ padding: '9px 12px', borderRadius: 10, background: 'rgba(var(--accentRGB), 0.04)', border: '1px solid rgba(var(--accentRGB), 0.10)', display: 'flex', alignItems: 'flex-start', gap: 8 }}>
+                      <Icons.Send size={13} color="var(--accent)" style={{ flexShrink: 0, marginTop: 2 }} />
+                      <div style={{ minWidth: 0, flex: 1 }}>
+                        <div style={{ fontSize: 11.5, fontWeight: 700, color: 'var(--text)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{n.title || 'Notice'}</div>
+                        <div style={{ fontSize: 11, color: 'var(--muted)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{n.body}</div>
+                      </div>
+                      {n.targetType === 'cr_only' && (
+                        <span style={{ fontSize: 9.5, fontWeight: 700, color: 'var(--muted)', flexShrink: 0, padding: '2px 6px', borderRadius: 999, background: 'rgba(var(--accentRGB), 0.08)' }}>CR only</span>
+                      )}
+                    </div>
+                  );
+                })}
+                {allItems.length > 3 && (
+                  <button
+                    onClick={() => setAlertsExpanded((v) => !v)}
+                    style={{ marginTop: 2, padding: '6px 0', border: 'none', background: 'transparent', color: 'var(--accent)', fontWeight: 700, fontSize: 11.5, cursor: 'pointer', textAlign: 'center' }}
+                  >
+                    {alertsExpanded ? 'Show less ↑' : `See more (${allItems.length - 3}) ↓`}
+                  </button>
+                )}
+              </div>
+            );
+          })()}
+        </div>
+
+        </div>
+        {/* ── end dashboard-home-columns ── */}
+
+        {/* My Classes — moved to its own full-width row below Today's
+            Classes/Alerts, since a card listing every active class (each
+            with its own weekly day-strip + progress bar) reads much
+            better with the full page width than squeezed into one half
+            of the row above. viewMode lets the teacher pick whichever
+            reads better for them: a single-column list (more detail per
+            row, best on narrow/mobile screens) or a multi-column grid
+            (denser overview, better once there's real desktop width and
+            more than a couple of classes to scan). Defaults to grid on
+            wider screens via CSS auto-fit; the toggle just forces a
+            single column when picked, since auto-fit's own "grid" mode
+            already collapses to one column on narrow screens by itself. */}
+        <div className="card dashboard-roadmap" style={{ padding: '18px 18px 16px', border: '1px solid rgba(var(--accentRGB), 0.10)', background: 'linear-gradient(180deg, rgba(var(--accentRGB), 0.04), var(--surfaceGlassStrong))', marginBottom: 12 }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, alignItems: 'flex-start', marginBottom: 10, flexWrap: 'wrap' }}>
             <div>
               <div style={{ fontSize: 12, fontWeight: 800, letterSpacing: '0.10em', textTransform: 'uppercase', color: 'var(--muted)' }}>My Classes</div>
               <div style={{ fontSize: 13, color: 'var(--muted)', marginTop: 4 }}>{activeAssignments.length} active class{activeAssignments.length !== 1 ? 'es' : ''} this term</div>
             </div>
-            <Link to="/faculty/classes" style={{ fontSize: 12, color: 'var(--accent)', textDecoration: 'none', fontWeight: 600 }}>All classes →</Link>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+              {activeAssignments.length > 1 && (
+                <div style={{ display: 'flex', border: '1px solid var(--border)', borderRadius: 8, overflow: 'hidden' }}>
+                  <button
+                    onClick={() => setClassesViewMode('list')}
+                    title="Single column"
+                    style={{ padding: '5px 8px', border: 'none', cursor: 'pointer', background: classesViewMode === 'list' ? 'var(--accent)' : 'transparent', color: classesViewMode === 'list' ? '#fff' : 'var(--muted)', display: 'flex', alignItems: 'center' }}
+                  >
+                    <Icons.List size={13} />
+                  </button>
+                  <button
+                    onClick={() => setClassesViewMode('grid')}
+                    title="Grid columns"
+                    style={{ padding: '5px 8px', border: 'none', cursor: 'pointer', background: classesViewMode === 'grid' ? 'var(--accent)' : 'transparent', color: classesViewMode === 'grid' ? '#fff' : 'var(--muted)', display: 'flex', alignItems: 'center' }}
+                  >
+                    <Icons.LayoutGrid size={13} />
+                  </button>
+                </div>
+              )}
+              <Link to="/faculty/classes" style={{ fontSize: 12, color: 'var(--accent)', textDecoration: 'none', fontWeight: 600 }}>All classes →</Link>
+            </div>
           </div>
           {activeAssignments.length > 0 ? (
-            <div style={{ display: 'grid', gap: 8, flex: 1, alignContent: 'start' }}>
+            <div style={{ display: 'grid', gap: 8, gridTemplateColumns: classesViewMode === 'grid' ? 'repeat(auto-fit, minmax(280px, 1fr))' : '1fr' }}>
               {activeAssignments.map((c) => {
                 const a = assignments[c.assignmentId];
                 const logged = (sessionsByAssignment[c.assignmentId] || []).length;
@@ -488,7 +648,7 @@ export default function FacultyDashboard() {
                   >
                     <div style={{ padding: '10px 12px', borderRadius: 12, background: 'rgba(var(--accentRGB), 0.04)', border: '1px solid rgba(var(--accentRGB), 0.10)' }}>
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 10, marginBottom: 8 }}>
-                        <div style={{ fontSize: 13, fontWeight: 800 }}>{c.courseCode} — {c.batch?.toUpperCase()} {c.dept}</div>
+                        <div style={{ fontSize: 13, fontWeight: 800 }}>{c.batch?.toUpperCase()} {c.dept} — {c.courseCode}</div>
                         <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--muted)', whiteSpace: 'nowrap' }}>
                           {planned ? `${logged}/${planned} classes` : `${logged} logged`}
                         </div>
@@ -528,32 +688,12 @@ export default function FacultyDashboard() {
               })}
             </div>
           ) : (
-            <div style={{ fontSize: 12.5, color: 'var(--muted)', textAlign: 'center', padding: '18px 0', display: 'flex', flex: 1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
+            <div style={{ fontSize: 12.5, color: 'var(--muted)', textAlign: 'center', padding: '18px 0', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
               <Icons.BookOpen size={20} color="var(--muted)" style={{ opacity: 0.5 }} />
               No active classes yet
             </div>
           )}
         </div>
-
-        </div>
-        {/* ── end dashboard-home-columns ── */}
-
-        {pendingToday.length > 0 && (
-          <div style={{ padding: '10px 14px', borderRadius: 10, marginBottom: 12, background: 'var(--dangerBg, rgba(217,119,6,0.08))', border: '1px solid color-mix(in srgb, #d97706 28%, var(--border))' }}>
-            <div style={{ fontWeight: 700, fontSize: 13, color: '#d97706', marginBottom: 6, display: 'flex', alignItems: 'center', gap: 6 }}>
-              <Icons.AlertTriangle size={14} /> Attendance pending for today
-            </div>
-            {pendingToday.map((c) => (
-              <Link
-                key={c.assignmentId}
-                to={`/faculty/classes/${c.assignmentId}?groupId=${encodeURIComponent(c.groupId)}`}
-                style={{ display: 'block', fontSize: 12, color: '#d97706', marginBottom: 2, textDecoration: 'none' }}
-              >
-                • {c.courseCode} — {c.batch?.toUpperCase()} {c.dept} <span style={{ fontWeight: 700 }}>Take attendance →</span>
-              </Link>
-            ))}
-          </div>
-        )}
 
         {activeAssignments.length === 0 && (
           <div className="card" style={{ marginTop: 16, textAlign: 'center', color: 'var(--muted)', padding: 30 }}>

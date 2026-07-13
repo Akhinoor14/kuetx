@@ -34,6 +34,27 @@ import { subscribeGlobalNotices, subscribeGroupNotices, noticeAppliesTo } from '
 
 export const NOTICE_READ_KEY = 'noticeReadIds_v1';
 
+// Group-notice audience split. The SAME raw groups/{groupId}/notices
+// collection now holds both CR/ACR-authored notices and Teacher-authored
+// notices (from: 'Teacher', written by facultyNoticeSync.js). Student-side
+// surfaces see everything meant for students EXCEPT a Teacher's cr_only
+// notice, which is hidden entirely from any viewer who isn't CR/ACR in
+// this group — not just visually de-emphasized, genuinely filtered out,
+// since a cr_only notice is meant for the CR/ACR only. The Faculty
+// sent-history surface sees ONLY the signed-in teacher's own posted
+// notices (isViewerCR is irrelevant there).
+export function filterStudentFacingNotices(notices, isViewerCR = false) {
+  return notices.filter((n) => {
+    if (n.from !== 'Teacher') return true; // CR/ACR/Admin notices: always visible to students
+    if (n.targetType !== 'cr_only') return true; // Teacher broadcast: visible to all
+    return isViewerCR; // Teacher cr_only: visible only to CR/ACR viewers
+  });
+}
+
+export function filterFacultyFacingNotices(notices) {
+  return notices.filter((n) => n.from === 'Teacher');
+}
+
 function toMillis(createdAt) {
   // Firestore Timestamp (serverTimestamp()) has .toMillis(); guard for the
   // brief window right after a write where local cache may not have
@@ -49,13 +70,25 @@ function toMillis(createdAt) {
  * group (CR/ACR) notices, merges, de-dupes by id, sorts newest-first,
  * and calls back with the combined array on every change from either
  * source. Returns a single combined unsubscribe function.
+ *
+ * opts.isViewerCR (student audience only): whether the signed-in viewer
+ * holds 'cr'/'acr' role in this group — determines whether a Teacher's
+ * cr_only notice is included. Callers that already know this synchronously
+ * (e.g. a component with its own live role subscription) can pass it in
+ * directly; if omitted, cr_only notices are hidden by default (safer to
+ * under- than over-expose a CR-only notice).
  */
-export function subscribeAllNotices(profile, groupId, callback) {
+export function subscribeAllNotices(profile, groupId, callback, audience = 'student', opts = {}) {
   let globalList = [];
   let groupList = [];
+  const isViewerCR = !!opts.isViewerCR;
+
+  const applyAudienceFilter = (list) => (
+    audience === 'faculty' ? filterFacultyFacingNotices(list) : filterStudentFacingNotices(list, isViewerCR)
+  );
 
   const emit = () => {
-    const merged = [...globalList, ...groupList];
+    const merged = [...globalList, ...applyAudienceFilter(groupList)];
     const seen = new Set();
     const deduped = [];
     for (const n of merged) {
@@ -67,27 +100,30 @@ export function subscribeAllNotices(profile, groupId, callback) {
     callback(deduped);
   };
 
-  const unsubGlobal = subscribeGlobalNotices((notices) => {
-    globalList = notices
-      .filter((n) => noticeAppliesTo(n, profile, groupId))
-      .map((n) => {
-        const isFounder = n.createdBy?.name === 'Founder';
-        return {
-          ...n,
-          from: isFounder ? 'Founder' : (n.createdBy?.name || 'Admin'),
-          isFounder,
-          section: 'admin',
-          createdAt: toMillis(n.createdAt),
-        };
+  // Global (admin) broadcasts are a student-facing concept only.
+  const unsubGlobal = audience === 'faculty'
+    ? () => {}
+    : subscribeGlobalNotices((notices) => {
+        globalList = notices
+          .filter((n) => noticeAppliesTo(n, profile, groupId))
+          .map((n) => {
+            const isFounder = n.createdBy?.name === 'Founder';
+            return {
+              ...n,
+              from: isFounder ? 'Founder' : (n.createdBy?.name || 'Admin'),
+              isFounder,
+              section: 'admin',
+              createdAt: toMillis(n.createdAt),
+            };
+          });
+        emit();
       });
-    emit();
-  });
 
   const unsubGroup = groupId
     ? subscribeGroupNotices(groupId, (notices) => {
         groupList = notices.map((n) => ({
           ...n,
-          from: n.postedBy?.name || 'CR',
+          from: n.from || n.postedBy?.name || 'CR',
           isFounder: false,
           section: 'class',
           createdAt: toMillis(n.createdAt),

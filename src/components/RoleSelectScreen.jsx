@@ -72,10 +72,12 @@ export default function RoleSelectScreen({ onSelect }) {
       await persistAccountRoleToServer(role);
       if (role === 'teacher') {
         // Faculty doc creation (verifiedAt: null) happens here now.
-        // Under the auto-approval policy, faculty accounts are active as
-        // soon as this doc exists; Blue Tick approval is handled separately
-        // by the founder's manual verification queue, not by a client-side
-        // faculty-verify step.
+        // Under the manual verification policy, the account exists as
+        // soon as this doc is created (so profile setup can proceed
+        // right away), but Blue Tick approval — required for the real
+        // /faculty/* routes — is handled separately by the Founder's
+        // manual verification queue (AdminDashboard's Faculty → Pending
+        // tab), not by any client-side self-verify step.
         await createFacultyAccountDoc(auth.currentUser.uid, auth.currentUser.email);
       }
       onSelect?.(role);

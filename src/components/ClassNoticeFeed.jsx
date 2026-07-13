@@ -1,8 +1,9 @@
 import { useEffect, useMemo, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { Megaphone, X } from 'lucide-react';
-import { subscribeGroupNotices } from '../lib/groupSync';
-import { getReadNoticeIds, setNoticeRead } from '../lib/noticeUtils';
+import { subscribeGroupNotices, subscribeMyRole } from '../lib/groupSync';
+import { getReadNoticeIds, setNoticeRead, filterStudentFacingNotices } from '../lib/noticeUtils';
+import { auth } from '../lib/firebase';
 
 function toMillis(ts) {
   if (!ts) return 0;
@@ -56,6 +57,7 @@ function timeAgo(ts) {
  */
 export default function ClassNoticeFeed({ groupId }) {
   const [notices, setNotices] = useState([]);
+  const [isViewerCR, setIsViewerCR] = useState(false);
   const [openNotice, setOpenNotice] = useState(null);
   // Bumped whenever a notice gets marked read, purely to force a re-read
   // of getReadNoticeIds() (which itself reads localStorage synchronously,
@@ -67,6 +69,18 @@ export default function ClassNoticeFeed({ groupId }) {
     return subscribeGroupNotices(groupId, setNotices);
   }, [groupId]);
 
+  useEffect(() => {
+    if (!groupId || !auth.currentUser?.uid) { setIsViewerCR(false); return; }
+    return subscribeMyRole(groupId, auth.currentUser.uid, (role) => {
+      setIsViewerCR(role === 'cr' || role === 'acr');
+    });
+  }, [groupId]);
+
+  const visibleNotices = useMemo(
+    () => filterStudentFacingNotices(notices, isViewerCR),
+    [notices, isViewerCR],
+  );
+
   const readIds = useMemo(() => getReadNoticeIds(), [readTick]);
   const isUnread = (id) => !readIds.includes(id);
 
@@ -77,8 +91,8 @@ export default function ClassNoticeFeed({ groupId }) {
   };
 
   const sorted = useMemo(
-    () => (notices || []).slice().sort((a, b) => toMillis(b.createdAt) - toMillis(a.createdAt)),
-    [notices],
+    () => (visibleNotices || []).slice().sort((a, b) => toMillis(b.createdAt) - toMillis(a.createdAt)),
+    [visibleNotices],
   );
 
   if (sorted.length === 0) return null;

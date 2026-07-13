@@ -866,10 +866,11 @@ export default function Profile() {
         <EmailVerifyBanner onVerified={() => setEmailVerified(true)} />
       )}
 
-      {/* ── KUET Email Verify Banner removed — auto-approval policy,
-          students join fully verified/active immediately, nothing to
-          nag here. isKuetVerified/BlueTick badge above still reflects
-          the actual state, just no longer gates or prompts anything. ── */}
+      {/* ── KUET Email Verify Banner removed — this was just a nag banner
+          on the Profile page; the underlying Tier-1 self-verify flow
+          (KuetEmailVerifyWidget, inside ProfileSetupModal) is unaffected
+          and remains fully functional and optional. isKuetVerified/Blue
+          Tick badge above still reflects the actual state. ── */}
 
       {/* ── CR Banner ──
           NOTE: the old "Disable CR" button here only flipped the local,

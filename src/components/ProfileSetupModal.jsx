@@ -2,7 +2,8 @@ import React, { useEffect, useMemo, useState, useRef } from 'react';
 import Modal from './Modal';
 import KuetEmailVerifyWidget from './KuetEmailVerifyWidget';
 import { isRollInstitutionallyVerified } from '../lib/kuetEmailVerify';
-import { DEPARTMENTS, DEPT_CODES, DEFAULT_PROFILE, TERM_KEYS, getTermLabelFromKey, BATCH_START_DATES, extractBatchFromRoll, normalizeProfileForSave } from '../store/store';
+import { DEPARTMENTS, DEPT_CODES, DEFAULT_PROFILE, TERM_KEYS, getTermLabelFromKey, extractBatchFromRoll, normalizeProfileForSave } from '../store/store';
+import { getBatchStartDates } from '../lib/appConfigSync';
 import { claimRoll, requestRollUnlock } from '../lib/rollOwnership';
 
 // Map dept codes: roll middle 2 digits -> dept code
@@ -211,20 +212,29 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
     setErrors(prev => ({ ...prev, dept: '' }));
   }, [form.studentId]);
 
+  // Live batch start-date map (Firestore config/batches, merged over the
+  // static seed in store.js) — loaded once on mount. Founder-added batches
+  // (via Manage Batches) now carry their own date without a code deploy,
+  // so this can't stay a static import.
+  const [batchStartDates, setBatchStartDates] = useState({});
+  useEffect(() => {
+    getBatchStartDates().then(setBatchStartDates);
+  }, []);
+
   // Auto-fill university start date from batch (only if user hasn't manually set it)
   useEffect(() => {
     const batch = extractBatchFromRoll(form.studentId);
     if (!batch) return;
-    const batchStart = BATCH_START_DATES[batch];
+    const batchStart = batchStartDates[batch];
     if (!batchStart) return;
     setForm(prev => {
       // Don't overwrite if user already manually entered something different
-      const existingBatchDates = Object.values(BATCH_START_DATES);
+      const existingBatchDates = Object.values(batchStartDates);
       const alreadyManual = prev.yearStarted && !existingBatchDates.includes(prev.yearStarted);
       if (alreadyManual) return prev;
       return prev.yearStarted === batchStart ? prev : { ...prev, yearStarted: batchStart };
     });
-  }, [form.studentId]);
+  }, [form.studentId, batchStartDates]);
   const [deptHighlight, setDeptHighlight] = useState(false);
   const deptHighlightTimeout = useRef(null);
   useEffect(() => {

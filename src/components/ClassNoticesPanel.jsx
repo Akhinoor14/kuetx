@@ -1,7 +1,9 @@
 import { useEffect, useMemo, useState } from 'react';
 import { getProfile, store } from '../store/store';
 import { getGroupId, getGroupLabel } from '../lib/groupUtils';
-import { subscribeGroupNotices, subscribeGlobalNotices, noticeAppliesTo } from '../lib/groupSync';
+import { subscribeGroupNotices, subscribeGlobalNotices, noticeAppliesTo, subscribeMyRole } from '../lib/groupSync';
+import { filterStudentFacingNotices } from '../lib/noticeUtils';
+import { auth } from '../lib/firebase';
 
 function toMillis(ts) {
   if (!ts) return 0;
@@ -16,15 +18,27 @@ export default function ClassNoticesPanel() {
   const groupId = getGroupId(profile);
   const groupLabel = getGroupLabel(profile);
 
-  const [groupNotices, setGroupNotices] = useState([]);
+  const [groupNoticesRaw, setGroupNoticesRaw] = useState([]);
   const [globalNotices, setGlobalNotices] = useState([]);
   const [lastSeen, setLastSeen] = useState(() => store.get('lastSeenNoticeAt') || 0);
+  const [isViewerCR, setIsViewerCR] = useState(false);
 
   useEffect(() => subscribeGlobalNotices(setGlobalNotices), []);
   useEffect(() => {
     if (!groupId) return;
-    return subscribeGroupNotices(groupId, setGroupNotices);
+    return subscribeGroupNotices(groupId, setGroupNoticesRaw);
   }, [groupId]);
+  useEffect(() => {
+    if (!groupId || !auth.currentUser?.uid) { setIsViewerCR(false); return; }
+    return subscribeMyRole(groupId, auth.currentUser.uid, (role) => {
+      setIsViewerCR(role === 'cr' || role === 'acr');
+    });
+  }, [groupId]);
+
+  const groupNotices = useMemo(
+    () => filterStudentFacingNotices(groupNoticesRaw, isViewerCR),
+    [groupNoticesRaw, isViewerCR],
+  );
 
   const combined = useMemo(() => {
     const applicableGlobal = globalNotices.filter((n) => noticeAppliesTo(n, profile, groupId));

@@ -14,13 +14,24 @@
 // follow-up once Phase 6+ needs assignment mutation UI anyway, and this
 // page's header intentionally only shows read-only assignment info for now.
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useParams, useSearchParams, Link } from 'react-router-dom';
 import * as Icons from 'lucide-react';
 import ClassmatesList from '../../components/ClassmatesList';
+
+// Local calendar date as 'YYYY-MM-DD' — NOT toISOString(), which converts to
+// UTC first and can silently roll back to yesterday's date for anyone west
+// of UTC or, for KUET's UTC+6, roll forward past midnight-local a few hours
+// early depending on when the clock ticks over relative to render. Same
+// pattern used app-wide (Attendance.jsx, Diary.jsx, Extras.jsx, Money.jsx).
+const todayStr = () => {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+};
+
 import { getDeptSyllabus } from '../../store/curriculumStore';
 import { subscribeFacultyAssignment, setPlannedTotalClasses, updateAssignmentDayTimeSlots, findConflictingAssignment } from '../../lib/facultyClassSync';
-import { subscribeMembers, subscribePlannerLogs } from '../../lib/groupSync';
+import { subscribeMembers, subscribePlannerLogs, subscribeRoutine } from '../../lib/groupSync';
 import {
   createOrUpdateSessionAttendance, subscribeSessionAttendance,
   computeStudentAttendancePercent, computeAttendanceComponentScore,
@@ -33,8 +44,10 @@ import { getFacultyDoc } from '../../lib/facultySync';
 import { useIsFaculty } from '../../hooks/useIsFaculty';
 import { auth } from '../../lib/firebase';
 import { notify } from '../../lib/notify';
+import * as noticeApi from '../../lib/noticeUtils';
+import { postFacultyNotice } from '../../lib/facultyNoticeSync';
 import {
-  TIME_MODELS, DAYS, isSessionalType, getPresetSessionalSlots,
+  TIME_MODELS, DAYS, isSessionalType, getPresetSessionalSlots, isSlotOverlap,
 } from '../../lib/timeModels';
 import { useQuestionBankData, getR2FileUrl } from '../../hooks/useQuestionBankData';
 
@@ -46,7 +59,7 @@ const TABS = [
   { id: 'attendance', label: 'Attendance', icon: 'CheckSquare', enabled: true },
   { id: 'marks', label: 'Marks', icon: 'GraduationCap', enabled: true },
   { id: 'qbank', label: 'Question Bank', icon: 'FileText', enabled: true },
-  { id: 'notices', label: 'Notices', icon: 'Bell', enabled: false },
+  { id: 'notices', label: 'Notices', icon: 'Bell', enabled: true },
 ];
 
 // Editing day/time only needs day+slot — unlike Add Class, dept/batch/
@@ -236,10 +249,116 @@ function EditDayTimeModal({ assignment, groupId, onClose, onSaved }) {
   );
 }
 
+// Single-class notice composer + sent-history, always scoped to THIS
+// class only — unlike the sidebar Broadcast Notice page (multi-class).
+// Two targetType choices, matching what students/CR already understand
+// from the rest of the notice system:
+//   - 'broadcast' → every student in this class sees it ("Class only")
+//   - 'cr_only'   → only this class's CR/ACR see it ("CR only")
+function NoticesTab({ groupId }) {
+  const [facultyDoc, setFacultyDoc] = useState(null);
+  const [notices, setNotices] = useState([]);
+  const [title, setTitle] = useState('');
+  const [body, setBody] = useState('');
+  const [targetType, setTargetType] = useState('broadcast');
+  const [sending, setSending] = useState(false);
+
+  useEffect(() => {
+    const uid = auth.currentUser?.uid;
+    if (!uid) return;
+    getFacultyDoc(uid).then(setFacultyDoc);
+  }, []);
+
+  useEffect(() => {
+    if (!groupId) { setNotices([]); return; }
+    return noticeApi.subscribeAllNotices({}, groupId, setNotices, 'faculty');
+  }, [groupId]);
+
+  const handleSend = async () => {
+    if (!title.trim() || !body.trim()) {
+      notify('Please enter both a title and a message.', 'error');
+      return;
+    }
+    setSending(true);
+    try {
+      await postFacultyNotice(groupId, facultyDoc, auth.currentUser.uid, {
+        title: title.trim(), body: body.trim(), targetType,
+      });
+      setTitle('');
+      setBody('');
+      notify('Notice sent.', 'success');
+    } catch (e) {
+      notify(e.message || 'Could not send this notice.', 'error');
+    } finally {
+      setSending(false);
+    }
+  };
+
+  return (
+    <div>
+      <div style={{ padding: 16, borderRadius: 14, border: '1px solid var(--border)', background: 'var(--card)', marginBottom: 16, display: 'grid', gap: 10 }}>
+        <input
+          placeholder="Title"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          style={{ padding: '9px 10px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--bg)', color: 'var(--text)', fontSize: 13.5 }}
+        />
+        <textarea
+          placeholder="Message"
+          rows={4}
+          value={body}
+          onChange={(e) => setBody(e.target.value)}
+          style={{ padding: '9px 10px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--bg)', color: 'var(--text)', fontSize: 13.5, resize: 'vertical' }}
+        />
+        <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+          <label style={{ fontSize: 12, color: 'var(--muted)', display: 'flex', alignItems: 'center', gap: 6 }}>
+            <input type="radio" checked={targetType === 'broadcast'} onChange={() => setTargetType('broadcast')} />
+            Class only (all students)
+          </label>
+          <label style={{ fontSize: 12, color: 'var(--muted)', display: 'flex', alignItems: 'center', gap: 6 }}>
+            <input type="radio" checked={targetType === 'cr_only'} onChange={() => setTargetType('cr_only')} />
+            CR only
+          </label>
+        </div>
+        <button
+          onClick={handleSend}
+          disabled={sending}
+          style={{ padding: '10px 16px', borderRadius: 8, border: 'none', background: 'var(--accent)', color: '#fff', fontWeight: 700, fontSize: 13, cursor: 'pointer', opacity: sending ? 0.6 : 1 }}
+        >
+          {sending ? 'Sending…' : 'Send Notice'}
+        </button>
+      </div>
+
+      <div style={{ display: 'grid', gap: 8 }}>
+        {notices.length === 0 && (
+          <div style={{ fontSize: 12.5, color: 'var(--muted)' }}>No notices sent to this class yet.</div>
+        )}
+        {notices.map((n) => (
+          <div key={n.id} style={{ padding: '12px 14px', borderRadius: 10, border: '1px solid var(--border)', background: 'var(--card)' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', gap: 8 }}>
+              <span style={{ fontWeight: 700, fontSize: 13.5, color: 'var(--text)' }}>{n.title}</span>
+              <span style={{ fontSize: 10, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase' }}>
+                {n.targetType === 'cr_only' ? 'CR only' : 'Class only'}
+              </span>
+            </div>
+            <div style={{ fontSize: 12.5, color: 'var(--muted)', marginTop: 2 }}>{n.body}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function SyllabusTab({ assignment }) {
+  const [expandedTopics, setExpandedTopics] = useState({});
   if (!assignment) return null;
   const syllabus = getDeptSyllabus(assignment.dept);
   const course = syllabus?.courses?.[assignment.courseCode];
+  const accent = 'var(--accent)';
+
+  const toggleTopic = (idx) => {
+    setExpandedTopics((prev) => ({ ...prev, [idx]: !prev[idx] }));
+  };
 
   if (!course) {
     return (
@@ -249,26 +368,63 @@ function SyllabusTab({ assignment }) {
     );
   }
 
+  const topics = course.topics || [];
+  const references = course.references || [];
+
   return (
-    <div>
-      <div className="faculty-summary-card" style={{ marginBottom: 14 }}>
-        <div style={{ fontWeight: 800, fontSize: 15, color: 'var(--text)' }}>{course.title}</div>
-        <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 2 }}>
-          {course.credit} credit{course.credit === 1 ? '' : 's'} · {course.contactHour}
+    <div className="card" style={{ padding: 0, overflow: 'hidden', borderTop: `4px solid ${accent}`, background: 'var(--card)' }}>
+      <div style={{ padding: '14px', background: `color-mix(in srgb, ${accent} 8%, transparent)`, borderBottom: '1px solid var(--border)' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 6 }}>
+          <div>
+            <div style={{ fontSize: 13, fontWeight: 700, color: accent, letterSpacing: '0.05em' }}>{assignment.courseCode}</div>
+            <div style={{ fontSize: 15, fontWeight: 700, marginTop: 2 }}>{course.title}</div>
+          </div>
+          <div style={{ fontSize: 11, fontWeight: 600, padding: '4px 8px', background: accent, color: '#fff', borderRadius: 4, flexShrink: 0 }}>
+            {course.credit} cr
+          </div>
         </div>
+        <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 6 }}>⏱ {course.contactHour || 'N/A'} · {topics.length} topics</div>
       </div>
-      {course.topics?.length > 0 && (
-        <div style={{ display: 'grid', gap: 8 }}>
-          {course.topics.map((t, i) => (
-            <div key={i} className="faculty-syllabus-topic" style={{ display: 'flex', gap: 10 }}>
-              <span style={{ color: 'var(--accent)', fontWeight: 700, flexShrink: 0 }}>{i + 1}.</span>
-              <span>{t}</span>
-            </div>
-          ))}
+
+      {references.length > 0 && (
+        <div style={{ padding: '10px 14px', background: 'rgba(59,130,246,0.04)', borderBottom: '1px solid var(--border)' }}>
+          <div style={{ fontSize: 11, fontWeight: 600, color: '#3b82f6', marginBottom: 6 }}>📖 References</div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+            {references.map((ref, i) => (
+              <div key={i} style={{ fontSize: 11, color: 'var(--text)', lineHeight: 1.4 }}>• {ref}</div>
+            ))}
+          </div>
         </div>
       )}
-      {(!course.topics || course.topics.length === 0) && (
-        <div style={{ color: 'var(--muted)', fontSize: 13 }}>No detailed topics listed for this course.</div>
+
+      {topics.length > 0 ? (
+        <div>
+          <div style={{ padding: '10px 14px', borderBottom: '1px solid var(--border)', fontSize: 11, fontWeight: 600, color: 'var(--muted)' }}>
+            Topics ({topics.length})
+          </div>
+          <div>
+            {topics.map((topic, i) => {
+              const isExpanded = expandedTopics[i];
+              return (
+                <div key={i} style={{ borderBottom: i < topics.length - 1 ? '1px solid var(--border)' : 'none' }}>
+                  <button
+                    onClick={() => toggleTopic(i)}
+                    style={{ width: '100%', padding: '10px 14px', background: 'transparent', border: 'none', cursor: 'pointer', textAlign: 'left', display: 'flex', alignItems: 'flex-start', gap: 8 }}
+                    onMouseEnter={(e) => (e.currentTarget.style.background = `color-mix(in srgb, ${accent} 6%, transparent)`)}
+                    onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; }}
+                  >
+                    <span style={{ color: accent, fontWeight: 700, flexShrink: 0 }}>{isExpanded ? '▼' : i + 1 + '.'}</span>
+                    <span style={{ fontSize: 12.5, lineHeight: 1.4, color: 'var(--text)' }}>
+                      {isExpanded ? topic : `${topic.substring(0, 100)}${topic.length > 100 ? '...' : ''}`}
+                    </span>
+                  </button>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      ) : (
+        <div style={{ padding: '20px 14px', textAlign: 'center', color: 'var(--muted)', fontSize: 11 }}>⚠️ No detailed topics listed for this course.</div>
       )}
     </div>
   );
@@ -276,36 +432,207 @@ function SyllabusTab({ assignment }) {
 
 function ScheduleTab({ assignment, groupId, onEditDayTime }) {
   const slots = assignment?.dayTimeSlots || [];
-  if (!slots.length) {
-    return (
-      <div>
-        <div style={{ color: 'var(--muted)', fontSize: 13, padding: '16px 0' }}>No day/time slot set for this class yet.</div>
-        <button
-          onClick={onEditDayTime}
-          style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 14px', borderRadius: 8, border: 'none', background: 'var(--accent)', color: '#fff', fontWeight: 700, fontSize: 12.5, cursor: 'pointer' }}
-        >
-          <Icons.Clock size={13} /> Set day &amp; time
-        </button>
-      </div>
-    );
-  }
   return (
     <div>
-      <div style={{ display: 'grid', gap: 8, marginBottom: 12 }}>
-        {slots.map((s, i) => (
-          <div key={i} className="faculty-row">
-            <div style={{ fontWeight: 700, fontSize: 13.5, color: 'var(--text)' }}>{s.day}</div>
-            <div style={{ fontSize: 12.5, color: 'var(--muted)' }}>{s.slot}</div>
-            {s.modelId && <span style={{ fontSize: 11, color: 'var(--muted)' }}>{TIME_MODELS[s.modelId]?.name || s.modelId}</span>}
+      {!slots.length ? (
+        <div>
+          <div style={{ color: 'var(--muted)', fontSize: 13, padding: '16px 0' }}>No day/time slot set for this class yet.</div>
+          <button
+            onClick={onEditDayTime}
+            style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 14px', borderRadius: 8, border: 'none', background: 'var(--accent)', color: '#fff', fontWeight: 700, fontSize: 12.5, cursor: 'pointer' }}
+          >
+            <Icons.Clock size={13} /> Set day &amp; time
+          </button>
+        </div>
+      ) : (
+        <div>
+          <div style={{ display: 'grid', gap: 8, marginBottom: 12 }}>
+            {slots.map((s, i) => (
+              <div key={i} className="faculty-row">
+                <div style={{ fontWeight: 700, fontSize: 13.5, color: 'var(--text)' }}>{s.day}</div>
+                <div style={{ fontSize: 12.5, color: 'var(--muted)' }}>{s.slot}</div>
+                {s.modelId && <span style={{ fontSize: 11, color: 'var(--muted)' }}>{TIME_MODELS[s.modelId]?.name || s.modelId}</span>}
+              </div>
+            ))}
           </div>
-        ))}
+          <button
+            onClick={onEditDayTime}
+            style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 14px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--card)', color: 'var(--text)', fontWeight: 700, fontSize: 12.5, cursor: 'pointer' }}
+          >
+            <Icons.Pencil size={13} /> Edit day &amp; time
+          </button>
+        </div>
+      )}
+
+      {/* ── Full Batch Routine (read-only) ──────────────────────────────
+          Shows the whole batch+dept group's live routineEntries (the same
+          data CR/students maintain in Schedule.jsx), regardless of whether
+          this faculty has set their own day/time above — this section is
+          about the batch's routine, not this faculty's own slot, so it
+          renders in both the empty and non-empty branches above. */}
+      <BatchRoutineGrid assignment={assignment} groupId={groupId} />
+    </div>
+  );
+}
+
+const normCourseCode = (s) => String(s || '').trim().toUpperCase();
+
+function BatchRoutineGrid({ assignment, groupId }) {
+  // null = loading, [] = loaded-but-empty
+  const [entries, setEntries] = useState(null);
+
+  useEffect(() => {
+    if (!groupId) { setEntries([]); return; }
+    return subscribeRoutine(groupId, setEntries);
+  }, [groupId]);
+
+  const activeTemplate = TIME_MODELS['50min'];
+  const slotList = activeTemplate.slots;
+  const isBreakSlot = (slot) => String(slot).toLowerCase().includes('break');
+
+  // Anchor + rowSpan layout, mirrored from FacultySchedule.jsx's tableLayout
+  // (same isSlotOverlap-based merge so a wide "Full sessional block" slot
+  // string lands on one spanning cell instead of matching nothing). Unlike
+  // that file, a whole batch's routine can legitimately have MULTIPLE
+  // different courses anchored to the same day+slot (parallel
+  // sections/labs), so `starts[day][slot]` here is treated as a real list
+  // to render — not assumed to have at most one entry.
+  const tableLayout = useMemo(() => {
+    const starts = {};
+    const covered = {};
+    DAYS.forEach((day) => {
+      starts[day] = {};
+      covered[day] = new Set();
+    });
+
+    (entries || []).forEach((entry) => {
+      if (!starts[entry.day]) return;
+
+      const overlappingSlots = slotList.filter(
+        (s) => !isBreakSlot(s) && isSlotOverlap(s, entry.slot),
+      );
+      const exactMatch = overlappingSlots.find((s) => s === entry.slot);
+      const firstSlot = exactMatch || overlappingSlots[0];
+      if (!firstSlot) return; // no period in the 50min template overlaps this slot at all
+
+      const slotsFromFirst = exactMatch
+        ? overlappingSlots.slice(overlappingSlots.indexOf(exactMatch))
+        : overlappingSlots;
+      const rowSpan = Math.max(1, slotsFromFirst.length || 1);
+
+      if (!starts[entry.day][firstSlot]) starts[entry.day][firstSlot] = [];
+      starts[entry.day][firstSlot].push({ entry, rowSpan });
+      slotsFromFirst.slice(1).forEach((s) => covered[entry.day].add(s));
+    });
+
+    return { starts, covered };
+  }, [entries, slotList]);
+
+  const loading = entries === null;
+
+  return (
+    <div style={{ marginTop: 20, paddingTop: 16, borderTop: '1px solid var(--border)' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 8, marginBottom: 10 }}>
+        <div style={{ fontSize: 11, fontWeight: 800, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.07em', display: 'flex', alignItems: 'center', gap: 6 }}>
+          <Icons.CalendarClock size={13} /> Full Batch Routine (Read-only)
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12, fontSize: 11, color: 'var(--muted)' }}>
+          <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+            <span style={{ width: 9, height: 9, borderRadius: 3, background: 'rgba(59,130,246,0.18)', border: '1.5px solid var(--accent)', display: 'inline-block' }} />
+            Your class
+          </span>
+          <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
+            <span style={{ width: 9, height: 9, borderRadius: 3, background: 'var(--card)', border: '1px solid var(--border)', display: 'inline-block' }} />
+            Other classes
+          </span>
+        </div>
       </div>
-      <button
-        onClick={onEditDayTime}
-        style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '8px 14px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--card)', color: 'var(--text)', fontWeight: 700, fontSize: 12.5, cursor: 'pointer' }}
-      >
-        <Icons.Pencil size={13} /> Edit day &amp; time
-      </button>
+
+      {loading && <div style={{ color: 'var(--muted)', fontSize: 13, padding: '16px 0' }}>Loading…</div>}
+
+      {!loading && entries.length === 0 && (
+        <div style={{ color: 'var(--muted)', fontSize: 13, padding: '16px 0' }}>
+          This batch's group hasn't set up a routine yet.
+        </div>
+      )}
+
+      {!loading && entries.length > 0 && (
+        <div style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
+          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12.5 }}>
+            <thead>
+              <tr>
+                <th style={{ padding: '8px 8px', borderBottom: '1px solid var(--border)', background: 'var(--surface)', minWidth: 90, textAlign: 'left', fontSize: 11 }}>
+                  Time
+                </th>
+                {DAYS.map((d) => (
+                  <th key={d} style={{ padding: '8px 8px', borderBottom: '1px solid var(--border)', background: 'var(--surface)', minWidth: 120, fontSize: 11, fontWeight: 700, color: 'var(--text)' }}>
+                    {d.slice(0, 3)}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {slotList.map((slot) => {
+                const breakSlot = isBreakSlot(slot);
+                return (
+                  <tr key={slot}>
+                    <td style={{
+                      padding: '8px 8px', borderBottom: '1px solid var(--border)', borderRight: '1px solid var(--border)',
+                      fontWeight: 700, fontSize: 11, color: 'var(--muted)', fontFamily: 'JetBrains Mono, monospace',
+                      whiteSpace: 'nowrap', background: breakSlot ? 'rgba(239,68,68,0.08)' : 'var(--bg)',
+                    }}>
+                      {slot}
+                    </td>
+                    {DAYS.map((d) => {
+                      // A slot covered by an earlier anchor's rowSpan renders no
+                      // <td> at all — the anchor cell's rowSpan already occupies
+                      // that table position; emitting one here would break the
+                      // row's column count.
+                      if (!breakSlot && tableLayout.covered[d]?.has(slot)) return null;
+
+                      const anchored = tableLayout.starts[d]?.[slot] || [];
+                      const rowSpan = anchored.length
+                        ? Math.max(...anchored.map((a) => a.rowSpan))
+                        : 1;
+
+                      return (
+                        <td
+                          key={d}
+                          rowSpan={rowSpan > 1 ? rowSpan : undefined}
+                          style={{
+                            padding: 5, borderBottom: '1px solid var(--border)', borderRight: '1px solid var(--border)',
+                            verticalAlign: 'top', minHeight: 50,
+                            background: breakSlot ? 'rgba(239,68,68,0.08)' : 'transparent',
+                          }}
+                        >
+                          {anchored.map(({ entry, rowSpan: rs }) => {
+                            const own = normCourseCode(entry.courseCode) === normCourseCode(assignment?.courseCode);
+                            return (
+                              <div key={entry.id} style={{
+                                padding: '6px 8px', borderRadius: 9, fontSize: 11.5, lineHeight: 1.3, marginBottom: 4,
+                                height: rs > 1 ? '100%' : undefined,
+                                background: own ? 'rgba(59,130,246,0.10)' : 'var(--card)',
+                                border: own ? '1.5px solid var(--accent)' : '1px solid var(--border)',
+                                color: own ? 'var(--text)' : 'var(--muted)',
+                                fontWeight: own ? 700 : 500,
+                              }}>
+                                <div>{entry.courseCode || entry.displayName || 'Unknown course'}</div>
+                                <div style={{ fontSize: 10, marginTop: 1, opacity: 0.85 }}>
+                                  {entry.teacherName || 'Teacher not set'}
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </td>
+                      );
+                    })}
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   );
 }
@@ -459,9 +786,36 @@ function AttendanceTab({ assignment, groupId }) {
   const [members, setMembers] = useState(null);
   const [sessions, setSessions] = useState(null);
   const [facultyName, setFacultyName] = useState('');
-  const [date, setDate] = useState(() => new Date().toISOString().slice(0, 10));
+  const [date, setDate] = useState(() => todayStr());
+  // Tracks whether the current `date` value is just "whatever today was"
+  // (auto) vs. something the faculty deliberately picked (manual). This
+  // tab stays mounted forever once opened (see the comment on TABS render
+  // below), so a plain `useState(() => todayStr())` only ever computes
+  // "today" once at first mount — if the browser tab is left open across
+  // midnight, `date` silently stays frozen on yesterday. The visibility
+  // listener below re-derives today() whenever the tab/window regains
+  // focus, but only overwrites `date` while it's still in "auto" mode, so
+  // a faculty member reviewing an older date's attendance doesn't get
+  // yanked back to today mid-edit.
+  const isAutoDate = useRef(true);
   const [draftMarks, setDraftMarks] = useState({}); // { studentUid: 'present'|'absent'|'late'|'excused' }
   const [saving, setSaving] = useState(false);
+
+  useEffect(() => {
+    const resyncIfAuto = () => {
+      if (document.visibilityState !== 'visible') return;
+      if (!isAutoDate.current) return;
+      const now = todayStr();
+      setDate((prev) => (prev === now ? prev : now));
+    };
+    resyncIfAuto();
+    document.addEventListener('visibilitychange', resyncIfAuto);
+    window.addEventListener('focus', resyncIfAuto);
+    return () => {
+      document.removeEventListener('visibilitychange', resyncIfAuto);
+      window.removeEventListener('focus', resyncIfAuto);
+    };
+  }, []);
 
   useEffect(() => {
     if (!groupId) { setMembers([]); return; }
@@ -521,15 +875,76 @@ function AttendanceTab({ assignment, groupId }) {
   const markColors = { present: '#16a34a', absent: '#dc2626', late: '#d97706', excused: '#6b7280' };
   const markLabels = { present: 'P', absent: 'A', late: 'L', excused: 'E' };
 
+  // Attendance summary — counts a student as "present" for a session if
+  // marked present OR late (late still means they showed up), matching
+  // how the Marks tab's attendance% weighting treats it elsewhere in the
+  // Faculty Module. Sessions with no mark recorded for a student at all
+  // (they weren't on the roster yet, joined late in the term, etc.) don't
+  // count against them — the denominator is sessions held, not sessions
+  // where every single student was necessarily markable.
+  const totalClasses = sessions.length;
+  const attendanceSummary = totalClasses > 0
+    ? members.map((m) => {
+        const presentCount = sessions.filter((s) => {
+          const mark = s.attendance?.[m.id];
+          return mark === 'present' || mark === 'late';
+        }).length;
+        const markedCount = sessions.filter((s) => s.attendance?.[m.id]).length;
+        const pct = markedCount > 0 ? Math.round((presentCount / markedCount) * 100) : null;
+        return { id: m.id, name: m.name || 'Unnamed', roll: m.roll || '—', pct, markedCount };
+      }).filter((s) => s.pct !== null).sort((a, b) => b.pct - a.pct)
+    : [];
+  const mostRegular = attendanceSummary.slice(0, 3);
+  const mostAbsent = attendanceSummary.slice().sort((a, b) => a.pct - b.pct).slice(0, 3);
+
   return (
     <div>
+      {totalClasses > 0 && (
+        <div className="faculty-summary-card" style={{ marginBottom: 14 }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
+            <div style={{ fontWeight: 700, fontSize: 13.5 }}>Attendance Summary</div>
+            <div style={{ fontSize: 11.5, color: 'var(--muted)' }}>{totalClasses} class{totalClasses === 1 ? '' : 'es'} held</div>
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+            <div>
+              <div style={{ fontSize: 11, fontWeight: 700, color: '#16a34a', marginBottom: 6 }}>✓ Most Regular</div>
+              {mostRegular.length === 0 && <div style={{ fontSize: 11, color: 'var(--muted)' }}>No data yet.</div>}
+              {mostRegular.map((s) => (
+                <div key={s.id} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11.5, marginBottom: 3 }}>
+                  <span style={{ color: 'var(--text)' }}>{s.roll}</span>
+                  <span style={{ color: '#16a34a', fontWeight: 700 }}>{s.pct}%</span>
+                </div>
+              ))}
+            </div>
+            <div>
+              <div style={{ fontSize: 11, fontWeight: 700, color: '#dc2626', marginBottom: 6 }}>⚠ Most Absent</div>
+              {mostAbsent.length === 0 && <div style={{ fontSize: 11, color: 'var(--muted)' }}>No data yet.</div>}
+              {mostAbsent.map((s) => (
+                <div key={s.id} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11.5, marginBottom: 3 }}>
+                  <span style={{ color: 'var(--text)' }}>{s.roll}</span>
+                  <span style={{ color: '#dc2626', fontWeight: 700 }}>{s.pct}%</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="faculty-summary-card" style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 14, flexWrap: 'wrap' }}>
         <input
           type="date"
           value={date}
-          onChange={(e) => setDate(e.target.value)}
+          onChange={(e) => { isAutoDate.current = false; setDate(e.target.value); }}
           style={{ padding: '8px 10px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--bg)', color: 'var(--text)', fontSize: 13 }}
         />
+        {date !== todayStr() && (
+          <button
+            onClick={() => { isAutoDate.current = true; setDate(todayStr()); }}
+            style={{ padding: '6px 10px', borderRadius: 8, border: '1px solid var(--border)', background: 'transparent', color: 'var(--accent)', fontWeight: 600, fontSize: 11.5, cursor: 'pointer' }}
+          >
+            Today
+          </button>
+        )}
         <button
           onClick={handleSave}
           disabled={saving}
@@ -582,15 +997,11 @@ function AttendanceTab({ assignment, groupId }) {
 function QuestionBankTab({ assignment }) {
   const { tree, loading, error } = useQuestionBankData();
   const dept = assignment?.dept;
-  const [term, setTerm] = useState(assignment?.term || null);
-  const [courseCode, setCourseCode] = useState(assignment?.courseCode || null);
-
-  const deptTree = tree?.[dept] || {};
-  const termKeys = Object.keys(deptTree).sort();
-
-  const courseKeysForTerm = term ? Object.keys(deptTree[term] || {}) : [];
+  const term = assignment?.term;
+  const courseCode = assignment?.courseCode;
   const activeCourseKey = courseCode?.replace(/\s+/g, '');
-  const papers = (term && activeCourseKey) ? (deptTree[term]?.[activeCourseKey] || []) : [];
+
+  const papers = (dept && term && activeCourseKey) ? (tree?.[dept]?.[term]?.[activeCourseKey] || []) : [];
 
   if (loading) {
     return <div style={{ color: 'var(--muted)', fontSize: 13, padding: '16px 0' }}>Loading question bank…</div>;
@@ -602,41 +1013,12 @@ function QuestionBankTab({ assignment }) {
   return (
     <div>
       <div style={{ fontSize: 11.5, color: 'var(--muted)', marginBottom: 12 }}>
-        Showing past papers for <strong style={{ color: 'var(--text)' }}>{dept}</strong> only — this teacher's own department.
+        Showing past papers for <strong style={{ color: 'var(--text)' }}>{courseCode}</strong> — {dept} {term}.
       </div>
 
-      <div style={{ display: 'flex', gap: 8, marginBottom: 14, flexWrap: 'wrap' }}>
-        <select
-          value={term || ''}
-          onChange={(e) => { setTerm(e.target.value); setCourseCode(null); }}
-          style={{ padding: '7px 10px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--bg)', color: 'var(--text)', fontSize: 12.5 }}
-        >
-          <option value="" disabled>Select term</option>
-          {termKeys.map((t) => <option key={t} value={t}>{t}</option>)}
-        </select>
-
-        <select
-          value={activeCourseKey || ''}
-          onChange={(e) => setCourseCode(e.target.value)}
-          disabled={!term}
-          style={{ padding: '7px 10px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--bg)', color: 'var(--text)', fontSize: 12.5, opacity: term ? 1 : 0.5 }}
-        >
-          <option value="" disabled>Select course</option>
-          {courseKeysForTerm.map((c) => <option key={c} value={c}>{c}</option>)}
-        </select>
-      </div>
-
-      {!term && (
-        <div style={{ color: 'var(--muted)', fontSize: 13, padding: '8px 0' }}>Pick a term to see courses with uploaded papers.</div>
-      )}
-      {term && !courseCode && courseKeysForTerm.length === 0 && (
-        <div style={{ color: 'var(--muted)', fontSize: 13, padding: '8px 0' }}>No papers uploaded yet for {term} in {dept}.</div>
-      )}
-      {term && courseCode && papers.length === 0 && (
-        <div style={{ color: 'var(--muted)', fontSize: 13, padding: '8px 0' }}>No papers uploaded yet for {courseCode}.</div>
-      )}
-
-      {papers.length > 0 && (
+      {papers.length === 0 ? (
+        <div style={{ color: 'var(--muted)', fontSize: 13, padding: '16px 0' }}>Not found.</div>
+      ) : (
         <div style={{ display: 'grid', gap: 6 }}>
           {papers.map((p) => (
             <a
@@ -813,13 +1195,12 @@ function MarksTab({ assignment, groupId }) {
     );
   }
 
-  // Blue Tick gate (auto-approval policy): everything else on this page
-  // (Syllabus/Schedule/Sessions/Attendance) is open to any faculty
-  // account, but marks are graded/consequential data — this mirrors the
-  // exact same isVerifiedFaculty hard gate firestore.rules enforces on
-  // the actual write (saveStudentMarks -> studentRecords create/update),
-  // it just also shows a clear message here instead of letting the
-  // Firestore write silently fail.
+  // Blue Tick gate — this mirrors the exact same isVerifiedFaculty hard
+  // gate firestore.rules enforces on the actual write (saveStudentMarks
+  // -> studentRecords create/update). Now redundant with RequireFaculty's
+  // own route-level check (both require verifiedAt), but kept as
+  // defense-in-depth and because it shows a clearer, marks-specific
+  // message here instead of relying on the generic route-level one.
   if (!isFacultyResolved) {
     return <div style={{ color: 'var(--muted)', fontSize: 13, padding: '16px 0' }}>Checking verification status...</div>;
   }
@@ -1108,6 +1489,7 @@ export default function FacultyClassDetail() {
               {t.id === 'attendance' && <AttendanceTab assignment={assignment} groupId={groupId} />}
               {t.id === 'marks' && <MarksTab assignment={assignment} groupId={groupId} />}
               {t.id === 'qbank' && <QuestionBankTab assignment={assignment} />}
+              {t.id === 'notices' && <NoticesTab groupId={groupId} />}
             </div>
           );
         })}

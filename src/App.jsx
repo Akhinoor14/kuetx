@@ -71,7 +71,6 @@ import SubgroupHub from './components/nav-system/SubgroupHub';
 import CRHub from './components/nav-system/CRHub';
 import AdminHub from './components/nav-system/AdminHub';
 import RequireFaculty from './components/RequireFaculty';
-import RequireVerifiedFaculty from './components/RequireVerifiedFaculty';
 import { NAV_FACULTY } from './nav-faculty';
 import FacultyDashboard from './pages/faculty/FacultyDashboard';
 import FacultyProfile from './pages/faculty/FacultyProfile';
@@ -79,7 +78,7 @@ import FacultyClasses from './pages/faculty/FacultyClasses';
 import FacultyClassDetail from './pages/faculty/FacultyClassDetail';
 import FacultySchedule from './pages/faculty/FacultySchedule';
 import FacultyMeetings from './pages/faculty/FacultyMeetings';
-import FacultyNotices from './pages/faculty/FacultyNotices';
+import FacultyNoticeBroadcast from './pages/faculty/FacultyNoticeBroadcast';
 import FacultyContact from './pages/faculty/FacultyContact';
 
 function Layout({ authState, onboardingActive }) {
@@ -191,7 +190,8 @@ function Layout({ authState, onboardingActive }) {
 
             {/* ── Faculty Module (/faculty/*) — §11 Phase 3/4/5 ────────────
                 Every real destination is wrapped in RequireFaculty (hard
-                gate — see that component + useIsFaculty.js). Hub pages
+                gate, manual verification policy — requires the Blue Tick,
+                see that component + useIsFaculty.js). Hub pages
                 (/faculty/resources) reuse the same SubgroupHub component
                 the student side uses, pointed at NAV_FACULTY via its
                 navSource prop instead of a duplicate hub renderer.
@@ -205,16 +205,7 @@ function Layout({ authState, onboardingActive }) {
             <Route path="/faculty/classes/:assignmentId" element={<RequireFaculty><FacultyClassDetail /></RequireFaculty>} />
             <Route path="/faculty/schedule" element={<RequireFaculty><FacultySchedule /></RequireFaculty>} />
             <Route path="/faculty/meetings" element={<RequireFaculty><FacultyMeetings /></RequireFaculty>} />
-            {/* Blue Tick gate: notices can carry marks/CT input, so this
-                route needs RequireVerifiedFaculty on top of RequireFaculty
-                (auto-approval policy — every other faculty route above
-                only needs a faculty account to exist, not the Blue Tick).
-                NOTE: FacultyClassDetail's marks-entry UI (facultyMarksSync.js
-                saveStudentMarks) also needs an equivalent inline
-                verified-check — that page isn't notice-only, so it can't
-                be route-gated the same way; gate the marks section inside
-                the component instead. */}
-            <Route path="/faculty/notices" element={<RequireFaculty><RequireVerifiedFaculty><FacultyNotices /></RequireVerifiedFaculty></RequireFaculty>} />
+            <Route path="/faculty/notices" element={<RequireFaculty><FacultyNoticeBroadcast /></RequireFaculty>} />
             <Route path="/faculty/contact" element={<RequireFaculty><FacultyContact /></RequireFaculty>} />
             <Route path="/faculty/question-bank" element={<RequireFaculty><QuestionBank /></RequireFaculty>} />
             <Route path="/faculty/resources" element={<RequireFaculty><SubgroupHub navSource={NAV_FACULTY} group="Campus" subgroup="Resources" /></RequireFaculty>} />
@@ -415,13 +406,15 @@ async function buildQueue(isAnonymous) {
       // role-select entirely per §7, so this branch is only ever reached
       // by an account that genuinely chose "Faculty Member".
       const fdoc = await getFacultyDoc(auth.currentUser?.uid).catch(() => null);
-      // Auto-approval policy: faculty accounts are active the moment
-      // faculty/{uid} exists — verifiedAt (Blue Tick) is no longer a
-      // blocking gate here, it only gates posting notices/marks
-      // downstream (see RequireVerifiedFaculty / firestore.rules). If
-      // the faculty doc doesn't exist yet for some reason, fall through
-      // the same as "profile incomplete" so profile setup still creates
-      // it rather than leaving the queue empty.
+      // Manual verification policy: verifiedAt (Blue Tick) is NOT checked
+      // here — profile setup (name/title/dept) is unconditional and
+      // separate from Admin approval, so someone can finish their profile
+      // right away even before an Admin verifies them. RequireFaculty.jsx
+      // is what actually blocks the real /faculty/* routes afterward
+      // until an Admin grants the Blue Tick. If the faculty doc doesn't
+      // exist yet for some reason, fall through the same as "profile
+      // incomplete" so profile setup still creates it rather than
+      // leaving the queue empty.
       if (!isFacultyProfileComplete(fdoc)) {
         // FacultyProfileSetupModal now exists (mandatory, full-screen,
         // faculty-shaped fields) — a verified-but-incomplete faculty
@@ -754,9 +747,12 @@ export default function App() {
             onSuccess={handleAuthSuccess}
           />
         )}
-        {/* faculty-verify holding screen removed — auto-approval policy,
-            faculty accounts are active immediately, no blocking
-            verification step before profile setup. */}
+        {/* faculty-verify holding screen removed from the onboarding
+            queue — profile setup (name/title/dept) proceeds right away,
+            unconditionally, regardless of Blue Tick status. The
+            verification gate lives at the route level instead
+            (RequireFaculty.jsx blocks /faculty/* until an Admin approves
+            the account), not as a blocking step in this queue. */}
         {current === 'faculty-profile' && (
           <FacultyProfileSetupModal
             onSave={() => {
@@ -877,9 +873,11 @@ export default function App() {
         ) : (
           <Layout authState={authState} onboardingActive={!!current} />
         )}
-        {/* VerifyReminderPopup removed — auto-approval policy, students
-            join fully verified/active immediately, nothing left to nag
-            them about. */}
+        {/* VerifyReminderPopup component was removed entirely — this was
+            just a nag reminder to complete the (optional, non-blocking)
+            KUET-email Tier-1 verification; that verification itself
+            (KuetEmailVerifyWidget, inside ProfileSetupModal) is unaffected
+            and still fully self-service. */}
         {authState.authReady && !authState.isAnonymous && queue.length === 0 && <PushPermissionBanner />}
         {/* Nudges anyone who used "Finish now, add rest later" to fill in the
             full profile — but only from a later session, never right after
@@ -904,12 +902,18 @@ export default function App() {
             here rendered-but-gated until the queue drains, then appears on
             its own, never layered on top of another modal. */}
         {/* KuetVerifyEmailConfirmModal / FacultyVerifyEmailConfirmModal
-            removed from render — auto-approval policy, students and
-            faculty are active immediately, so the magic-link verify
-            flow (and its confirm prompts) is disabled. The boot-time
+            removed from render — this was a standalone "you just verified!"
+            confirm popup, redundant with the inline confirmation
+            KuetEmailVerifyWidget (inside ProfileSetupModal) and the
+            faculty magic-link completion screen already show at the
+            moment verification succeeds. Removing this popup does NOT
+            disable verification itself — sendKuetVerificationLink /
+            completeKuetVerificationLink (student) and the faculty email
+            magic-link flow are both still fully active; only this one
+            extra confirmation surface was cut. The boot-time
             link-detection effects above are left in place but are inert:
-            they only ever set verifyEmailPrompt/facultyVerifyPrompt in
-            response to a link this app no longer generates or sends. */}
+            they only ever set verifyEmailPrompt/facultyVerifyPrompt,
+            which nothing renders anymore now that this popup is gone. */}
         {/* Global auth modal (triggered from anywhere via window.__kuetxShowAuth) */}
         {showAuthModal && (
           <AuthModal

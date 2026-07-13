@@ -23,7 +23,7 @@ import { renderFormattedNoticeBody } from '../lib/noticeFormat';
 import CategorySubNav from '../components/CategorySubNav';
 import SubcategoryTabs from '../components/SubcategoryTabs';
 import { FOUNDER_CATEGORIES, getFounderCategory, resolveCount, resolveSubtitle } from '../lib/founderCategories';
-import { listAllFacultyAccounts } from '../lib/facultySync';
+import { listAllFacultyAccounts, adminVerifyFaculty } from '../lib/facultySync';
 import { listAllBloodDonors, searchBloodDonorsByGroup } from '../lib/bloodDonorSync';
 import { listAllActiveFacultyAssignments } from '../lib/facultyClassSync';
 import { useIsFaculty } from '../hooks/useIsFaculty';
@@ -893,9 +893,14 @@ function FacultyView({ onBack, onSelectCategory, countCtx }) {
   const [facultyList, setFacultyList] = useState(null);
   const [assignments, setAssignments] = useState(null);
   const [subTab, setSubTab] = useState('directory');
+  // uid -> true while an admin-verify click is in flight, so the button
+  // shows a spinner/disabled state and can't be double-clicked.
+  const [verifying, setVerifying] = useState({});
+
+  const reloadFaculty = () => listAllFacultyAccounts().then(setFacultyList).catch(() => setFacultyList([]));
 
   useEffect(() => {
-    listAllFacultyAccounts().then(setFacultyList).catch(() => setFacultyList([]));
+    reloadFaculty();
   }, []);
 
   // Only fetched once the Assignments sub-tab is actually opened — this is
@@ -913,6 +918,26 @@ function FacultyView({ onBack, onSelectCategory, countCtx }) {
   const verified = (facultyList || []).filter((f) => f.verifiedAt);
   const pending = (facultyList || []).filter((f) => !f.verifiedAt);
   const facultyNameByUid = Object.fromEntries((facultyList || []).map((f) => [f.uid, f.name || f.officialEmail]));
+
+  // listAllFacultyAccounts() is a plain one-shot read (not live), so a
+  // successful verify click won't move the account from Pending to
+  // Directory on its own — refetch right after so the list reflects the
+  // change immediately instead of looking like the click did nothing.
+  const handleVerify = async (uid) => {
+    setVerifying((prev) => ({ ...prev, [uid]: true }));
+    try {
+      await adminVerifyFaculty(uid);
+      await reloadFaculty();
+    } catch (e) {
+      alert(e?.message || 'Could not verify this account. Please try again.');
+    } finally {
+      setVerifying((prev) => {
+        const next = { ...prev };
+        delete next[uid];
+        return next;
+      });
+    }
+  };
 
   // Total-teachers count grouped by department, for the "sundor kore" (see
   // conversation) redesigned Directory tab — same shape as the student
@@ -1012,17 +1037,52 @@ function FacultyView({ onBack, onSelectCategory, countCtx }) {
       )}
 
       {subTab === 'pending' && (
-        <Section title="Accounts awaiting email verification">
+        <Section title="Accounts awaiting Blue Tick verification">
           {loading && <EmptyState>Loading…</EmptyState>}
           {!loading && pending.length === 0 && <EmptyState>Nothing pending.</EmptyState>}
-          {pending.map((f) => (
-            <div key={f.uid} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 8, padding: '10px 12px', borderBottom: '1px solid var(--border)' }}>
-              <div style={{ minWidth: 0 }}>
-                <div style={{ fontWeight: 600, fontSize: 13 }}>{f.officialEmail}</div>
-                <div style={{ fontSize: 11.5, color: 'var(--muted)' }}>Signed up, not yet verified</div>
+          {pending.map((f) => {
+            const hasProfile = String(f.name || '').trim() || String(f.title || '').trim() || String(f.dept || '').trim();
+            const isVerifying = !!verifying[f.uid];
+            return (
+              <div key={f.uid} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 10, padding: '12px', borderBottom: '1px solid var(--border)' }}>
+                <div style={{ minWidth: 0, flex: 1 }}>
+                  {/* Name/title/dept show up here once the account has
+                      completed FacultyProfileSetupModal — profile setup
+                      is unconditional (doesn't wait on Admin approval),
+                      so most Pending accounts already have this filled
+                      in by the time an Admin looks at this tab. Falls
+                      back to just the email for a brand-new account that
+                      hasn't reached profile setup yet. */}
+                  {hasProfile ? (
+                    <>
+                      <div style={{ fontWeight: 700, fontSize: 13.5, color: 'var(--text)' }}>
+                        {f.name || 'Unnamed'}
+                        {f.title && <span style={{ fontWeight: 500, color: 'var(--muted)' }}> · {f.title}</span>}
+                      </div>
+                      <div style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 2 }}>
+                        {f.dept && <span>{f.dept} · </span>}
+                        <span style={{ wordBreak: 'break-all' }}>{f.officialEmail}</span>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <div style={{ fontWeight: 600, fontSize: 13, wordBreak: 'break-all' }}>{f.officialEmail}</div>
+                      <div style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 2 }}>Account created, profile not filled in yet</div>
+                    </>
+                  )}
+                </div>
+                <button
+                  onClick={() => handleVerify(f.uid)}
+                  disabled={isVerifying}
+                  className="btn btn-primary btn-sm"
+                  style={{ display: 'flex', alignItems: 'center', gap: 6, flexShrink: 0, opacity: isVerifying ? 0.6 : 1 }}
+                >
+                  <Icons.CheckCircle size={14} />
+                  {isVerifying ? 'Verifying…' : 'Verify'}
+                </button>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </Section>
       )}
 
@@ -1047,6 +1107,7 @@ function FacultyView({ onBack, onSelectCategory, countCtx }) {
     </CategoryShell>
   );
 }
+
 
 // =======================================================================
 // BLOOD BANK — Founder searches by blood group; results show name, roll,
