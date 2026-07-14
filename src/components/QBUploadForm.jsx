@@ -19,6 +19,7 @@
 import { useState } from 'react';
 import { QB_DEPARTMENTS } from '../data/questionbank/questionBankData';
 import { submitQBUpload, toQBDeptCode, EXAM_TYPES } from '../lib/qbUploadRequests';
+import BatchQBUpload from './BatchQBUpload';
 
 const TERMS = ['Y1T1', 'Y1T2', 'Y2T1', 'Y2T2', 'Y3T1', 'Y3T2', 'Y4T1', 'Y4T2'];
 const CURRENT_YEAR = new Date().getFullYear();
@@ -34,6 +35,12 @@ const EXAM_YEARS = Array.from({ length: 8 }, (_, i) => String(CURRENT_YEAR - i))
 export default function QBUploadForm({ profile, groupId, isFounder = false, onUploaded }) {
   const lockedDeptCode = !isFounder ? toQBDeptCode(profile?.dept) : null;
   const lockedBatch = !isFounder ? (profile?.batch || '') : '';
+
+  // Batch (folder) upload is only offered in Founder mode — CL/SCL scope
+  // is locked to one dept+batch anyway so single-file is already fast
+  // enough there, and the R2/Firestore scope checks stay simplest when
+  // only the Founder path exercises the bulk loop.
+  const [mode, setMode] = useState('single'); // 'single' | 'batch'
 
   const [dept, setDept] = useState(lockedDeptCode || '');
   const [batch, setBatch] = useState(lockedBatch);
@@ -93,6 +100,31 @@ export default function QBUploadForm({ profile, groupId, isFounder = false, onUp
   const fieldWrap = { minWidth: 140, flex: '1 1 140px' };
 
   return (
+    <div>
+      {isFounder && (
+        <div style={{ display: 'flex', gap: 6, marginBottom: 10 }}>
+          <button
+            type="button"
+            onClick={() => setMode('single')}
+            className={`btn btn-sm ${mode === 'single' ? 'btn-primary' : ''}`}
+            style={mode !== 'single' ? { border: '1px solid var(--border)' } : undefined}
+          >
+            Single file
+          </button>
+          <button
+            type="button"
+            onClick={() => setMode('batch')}
+            className={`btn btn-sm ${mode === 'batch' ? 'btn-primary' : ''}`}
+            style={mode !== 'batch' ? { border: '1px solid var(--border)' } : undefined}
+          >
+            Batch (folder)
+          </button>
+        </div>
+      )}
+
+      {mode === 'batch' && isFounder ? (
+        <BatchQBUpload profile={profile} onUploaded={onUploaded} />
+      ) : (
     <form onSubmit={handleSubmit} className="card" style={{ padding: 12 }}>
       {isFounder && (
         <p style={{ fontSize: 11, color: 'var(--muted)', marginBottom: 10 }}>
@@ -182,5 +214,7 @@ export default function QBUploadForm({ profile, groupId, isFounder = false, onUp
         {busy ? 'Uploading…' : (isFounder ? 'Upload & publish' : 'Submit for review')}
       </button>
     </form>
+      )}
+    </div>
   );
 }

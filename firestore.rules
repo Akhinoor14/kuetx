@@ -459,6 +459,40 @@ service cloud.firestore {
     }
 
     // -------------------------------------------------------------
+    // Question Bank DELETE requests — a Campus Lead can never remove a
+    // LIVE public paper directly (see qbUploadRequests above for how it
+    // got published in the first place); they can only request removal.
+    // Only Founder or Head of Ops may action the request — deliberately
+    // narrower than qbUploadRequests' approve authority (no SCL here),
+    // matching the Worker's handleDeletePublicObject auth check.
+    //
+    // Each item in `items[]` carries the FULL R2 object key (not just a
+    // filename) so the Founder/Head-of-Ops review UI shows exactly which
+    // file is about to be deleted, with no ambiguity — this doc is only
+    // the review-queue record; the Worker's DELETE /public-object is what
+    // actually removes the R2 object once approved, same "Firestore doc
+    // is the record, Worker call is the effect" split as qbUploadRequests.
+    // -------------------------------------------------------------
+    match /deleteRequests/{requestId} {
+      allow read: if isAdmin() || isHeadOfOps()
+        || (isSignedIn() && resource.data.requestedBy == request.auth.uid);
+
+      // Only a Campus Lead of the group they claim may create a request,
+      // and it must start life as 'pending' — same shape as
+      // qbUploadRequests' create rule.
+      allow create: if isSignedIn() && request.resource.data.requestedBy == request.auth.uid
+        && request.resource.data.status == 'pending'
+        && isCLFor(request.resource.data.groupId);
+
+      // Only Founder/Head of Ops may action a request — the requesting CL
+      // has no update path here at all (mirrors "CL must NOT be able to
+      // update status themselves").
+      allow update: if isAdmin() || isHeadOfOps();
+
+      allow delete: if false; // audit trail — resolve via status, never delete
+    }
+
+    // -------------------------------------------------------------
     // Roll ownership lock — see rollOwnership.js. One durable doc per
     // roll number so two different accounts can't both claim the same
     // student roll. First account to save with that roll owns it.

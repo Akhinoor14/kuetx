@@ -50,7 +50,7 @@ function buildLabel(examType, examYear) {
  * @param {{name, roll}} uploaderInfo - for display in the review queue
  * @param {boolean} isFounderUpload - true only for the Founder's own-dept-agnostic upload panel
  */
-export async function submitQBUpload(file, meta, uploaderInfo, isFounderUpload = false) {
+export async function submitQBUpload(file, meta, uploaderInfo, isFounderUpload = false, allowOverwrite = false) {
   const uid = auth.currentUser?.uid;
   if (!uid) throw new Error('Not signed in');
   if (!file || file.type !== 'application/pdf') throw new Error('File must be a PDF');
@@ -68,10 +68,14 @@ export async function submitQBUpload(file, meta, uploaderInfo, isFounderUpload =
   // /approve endpoint re-checks this again server-side as the real
   // backstop (this client-side check is just to fail fast with a clear
   // message instead of silently sitting in the queue until an SCL
-  // discovers the conflict).
-  const dupe = await checkDuplicateExists(meta.dept, meta.term, cleanCourseCode, label);
-  if (dupe) {
-    throw new Error(`"${label}" already exists for ${cleanCourseCode} in ${meta.term} — rename and resubmit.`);
+  // discovers the conflict). Skipped entirely when the caller has already
+  // confirmed a replace (allowOverwrite) — in that case we WANT to proceed
+  // past the dupe and let the Worker's /approve overwrite=true path run.
+  if (!allowOverwrite) {
+    const dupe = await checkDuplicateExists(meta.dept, meta.term, cleanCourseCode, label);
+    if (dupe) {
+      throw new Error(`"${label}" already exists for ${cleanCourseCode} in ${meta.term} — rename and resubmit.`);
+    }
   }
 
   const docRef = await addDoc(collection(db, COLLECTION), {
@@ -106,7 +110,7 @@ export async function submitQBUpload(file, meta, uploaderInfo, isFounderUpload =
   // Founder uploads are pre-approved — immediately ask the Worker to
   // promote the file from staging straight to public, no human review step.
   if (isFounderUpload) {
-    await promoteApprovedUpload(docRef.id, meta.dept, meta.term, cleanCourseCode, label);
+    await promoteApprovedUpload(docRef.id, meta.dept, meta.term, cleanCourseCode, label, allowOverwrite);
   }
 
   return docRef.id;
@@ -133,16 +137,21 @@ async function stageFileInR2(requestId, file, meta) {
   return data;
 }
 
-async function promoteApprovedUpload(requestId, dept, term, courseCode, label) {
+async function promoteApprovedUpload(requestId, dept, term, courseCode, label, overwrite = false) {
   if (!WORKER_URL) throw new Error('VITE_QB_WORKER_URL is not configured');
   const idToken = await auth.currentUser.getIdToken();
   const res = await fetch(`${WORKER_URL}/approve`, {
     method: 'POST',
     headers: { Authorization: `Bearer ${idToken}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify({ requestId, dept, term, courseCode, label }),
+    body: JSON.stringify({ requestId, dept, term, courseCode, label, overwrite }),
   });
   const data = await res.json();
-  if (!res.ok) throw new Error(data.error || 'Failed to publish file');
+  if (!res.ok) {
+    const err = new Error(data.error || 'Failed to publish file');
+    err.code = data.code;
+    err.existing = data.existing;
+    throw err;
+  }
   return data;
 }
 
@@ -157,6 +166,37 @@ async function checkDuplicateExists(dept, term, courseCode, label) {
   } catch {
     return false; // offline/worker down — don't block submission on this soft check
   }
+}
+// Exposed for BatchQBUpload's single-file dupe check (e.g. re-checking one
+// row after an edit) — keeps the single-file submitQBUpload path above
+// using its own private call, this is just the same logic made reusable.
+export { checkDuplicateExists };
+
+/**
+ * Fetch the whole live tree ONCE. Used by batch upload to pre-check
+ * duplicate status for potentially hundreds of files without hitting the
+ * Worker once per file — `findExisting()` below then matches locally
+ * against this single snapshot.
+ */
+export async function fetchLiveTree() {
+  if (!WORKER_URL) return {};
+  try {
+    const res = await fetch(WORKER_URL, { cache: 'no-store' });
+    const data = await res.json();
+    return data?.tree || {};
+  } catch {
+    return {}; // offline/worker down — batch scan just shows everything as "ready"
+  }
+}
+
+/**
+ * Look up whether {dept/term/courseCode/label} already exists in a tree
+ * previously returned by fetchLiveTree(). Returns the existing paper's
+ * {label, key, size, uploaded} info (for "old vs new" display) or null.
+ */
+export function findExisting(tree, dept, term, courseCode, label) {
+  const papers = tree?.[dept]?.[term]?.[courseCode] || [];
+  return papers.find((p) => p.label === label) || null;
 }
 
 /** Live queue for a Senior Campus Lead's own dept (StaffDashboard review tab). */

@@ -19,6 +19,7 @@ import { isObviouslyBadDomain } from '../lib/emailDomainCheck';
 import ClassmatesList from '../components/ClassmatesList';
 import QBUploadForm from '../components/QBUploadForm';
 import QBReviewQueue from '../components/QBReviewQueue';
+import RequestDeleteButton from '../components/RequestDeleteButton';
 
 // ---------------------------------------------------------------------
 // Founder-only: roll ownership unlock requests (see rollOwnership.js).
@@ -275,6 +276,9 @@ function CampusLeadBlock({ groupId }) {
         groupId={groupId}
       />
 
+      <div style={{ fontSize: 12, fontWeight: 700, margin: '14px 0 6px' }}>Request removal of a live paper</div>
+      <RequestDeleteButton groupId={groupId} dept={groupId.split('_')[1]} />
+
       <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 6, marginTop: 14 }}>
         Roster <span style={{ fontWeight: 400, color: 'var(--muted)' }}>("Claims CR" badge = held CR before this system existed — review and confirm/promote if still accurate)</span>
       </div>
@@ -416,6 +420,11 @@ function HeadOfOpsSection() {
   return (
     <Section wide title="Head of Operations">
       <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 6 }}>
+        Pending Question Bank delete requests
+      </div>
+      <DeleteRequestQueue />
+
+      <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 6, marginTop: 14 }}>
         Pending email flags (fallback — covers depts with no SCL/CL, or any dept)
       </div>
       <EmailFlagReviewBlock />

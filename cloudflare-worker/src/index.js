@@ -241,7 +241,7 @@ async function handleApprove(request, env) {
   const uid = claims.sub || claims.user_id;
 
   const body = await request.json();
-  const { requestId, dept, term, courseCode, label } = body;
+  const { requestId, dept, term, courseCode, label, overwrite } = body;
 
   if (!DEPARTMENTS.has(dept)) return json({ error: `Unknown dept: ${dept}` }, env, 400);
   if (!TERM_RE.test(term)) return json({ error: `Invalid term: ${term}` }, env, 400);
@@ -263,9 +263,13 @@ async function handleApprove(request, env) {
   // exists -> don't take the input" rule, applied at the storage layer
   // (Firestore rules / UI also check this against the live tree before
   // ever letting a request reach this point, this is the hard backstop).
+  // `overwrite === true` is the one explicit escape hatch: only reachable
+  // by a caller that already passed the `scl` auth check above (Founder /
+  // Head of Ops / that dept's SCL), so a random uploader can never force
+  // a replace — they simply don't have a way to set this flag to true.
   const existing = await env.QB_BUCKET.head(destKey);
-  if (existing) {
-    return json({ error: 'A paper with this exact name already exists — rename and resubmit.' }, env, 409);
+  if (existing && !overwrite) {
+    return json({ error: 'A paper with this exact name already exists — rename and resubmit.', code: 'DUPLICATE', existing: { size: existing.size, uploaded: existing.uploaded } }, env, 409);
   }
 
   await env.QB_BUCKET.put(destKey, staged.body, {
@@ -299,6 +303,66 @@ async function handleReject(request, env) {
 }
 
 // ---------------------------------------------------------------------
+// DELETE /public-object — Founder/Head of Ops only: remove one or more
+// LIVE public papers. This is the second, independent gate behind the
+// deleteRequests Firestore rule (belt & suspenders — same pattern as
+// handleApprove's `scl` check above): a client that somehow got past the
+// Firestore rule still can't get R2 to actually delete anything without
+// also passing this server-side check.
+//   body: { keys: ["public/CSE/Y1T1/CSE101/Midterm_2023.pdf", ...] }
+// ---------------------------------------------------------------------
+async function handleDeletePublicObject(request, env) {
+  const authHeader = request.headers.get('Authorization') || '';
+  const idToken = authHeader.replace(/^Bearer\s+/i, '');
+  if (!idToken) return json({ error: 'Missing Authorization' }, env, 401);
+
+  let claims;
+  try {
+    claims = await verifyFirebaseToken(idToken, env);
+  } catch (e) {
+    return json({ error: `Invalid token: ${e.message}` }, env, 401);
+  }
+  const uid = claims.sub || claims.user_id;
+
+  const founder = await isFounder(env, uid);
+  const authorized = founder || (await isHeadOfOps(env, uid));
+  if (!authorized) return json({ error: 'Not authorized to delete public papers' }, env, 403);
+
+  const body = await request.json();
+  const { keys } = body;
+  if (!Array.isArray(keys) || keys.length === 0) {
+    return json({ error: 'keys must be a non-empty array' }, env, 400);
+  }
+  // Defense against path traversal / deleting arbitrary R2 keys — this
+  // route may only ever touch the live public/ prefix, never staging/
+  // or anything else in the bucket.
+  for (const key of keys) {
+    if (typeof key !== 'string' || !key.startsWith('public/')) {
+      return json({ error: `Invalid key (must start with "public/"): ${key}` }, env, 400);
+    }
+  }
+
+  const deleted = [];
+  const notFound = [];
+  for (const key of keys) {
+    // R2 delete() doesn't error on a missing key, so head() first to
+    // report which keys actually existed and were removed vs. were
+    // already gone (e.g. a duplicate delete-request, or a race with
+    // another Founder resolving the same item) — the frontend uses this
+    // to set each deleteRequests.items[] entry's status accurately.
+    const existing = await env.QB_BUCKET.head(key);
+    if (!existing) {
+      notFound.push(key);
+      continue;
+    }
+    await env.QB_BUCKET.delete(key);
+    deleted.push(key);
+  }
+
+  return json({ ok: true, deleted, notFound }, env);
+}
+
+// ---------------------------------------------------------------------
 export default {
   async fetch(request, env) {
     if (request.method === 'OPTIONS') {
@@ -310,6 +374,7 @@ export default {
       if (request.method === 'POST' && url.pathname === '/stage') return handleStage(request, env);
       if (request.method === 'POST' && url.pathname === '/approve') return handleApprove(request, env);
       if (request.method === 'POST' && url.pathname === '/reject') return handleReject(request, env);
+      if (request.method === 'DELETE' && url.pathname === '/public-object') return handleDeletePublicObject(request, env);
       return json({ error: 'Not found' }, env, 404);
     } catch (e) {
       return json({ error: e.message || 'Internal error' }, env, 500);

@@ -32,6 +32,7 @@ import {
 } from '../lib/manualVerifyRequests';
 import { subscribeAllQBUploadRequests, approveQBUpload, rejectQBUpload } from '../lib/qbUploadRequests';
 import QBReviewQueue from '../components/QBReviewQueue';
+import DeleteRequestQueue from '../components/DeleteRequestQueue';
 import QBUploadForm from '../components/QBUploadForm';
 
 // Every role the Founder can hand out or take away from this screen —
@@ -302,6 +303,9 @@ function ApprovalsView({ onBack, onSelectCategory, countCtx }) {
             <QBUploadForm isFounder onUploaded={() => {}} />
           </div>
           <QBReviewQueue all />
+
+          <div style={{ fontSize: 12, fontWeight: 700, margin: '18px 0 6px' }}>Pending delete requests</div>
+          <DeleteRequestQueue />
         </Section>
       )}
     </CategoryShell>
