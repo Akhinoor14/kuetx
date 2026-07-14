@@ -8734,7 +8734,7 @@ body.schedule-fullscreen-active .mobile-bottom-nav {
   display: flex;
   align-items: center;
   gap: 14px;
-  margin: 12px 0 28px;
+  margin: 8px 0 18px;
 }
 
 .hub-page-hero-icon {
@@ -8811,10 +8811,25 @@ body.schedule-fullscreen-active .mobile-bottom-nav {
    breakpoint app-wide, since other hub pages weren't reported as an
    issue and shouldn't shrink as a side effect. */
 @media (max-width: 480px) {
-  .broadcast-notice-hero { gap: 10px; margin: 8px 0 18px; }
-  .broadcast-notice-hero-icon { width: 34px; height: 34px; border-radius: 10px; }
-  .broadcast-notice-hero-icon svg { width: 17px; height: 17px; }
-  .broadcast-notice-hero .hub-page-hero-title { font-size: 19px; }
+  .broadcast-notice-page { padding: 12px 12px 24px !important; }
+  .broadcast-notice-hero { gap: 8px; margin: 4px 0 10px; }
+  .broadcast-notice-hero-icon { width: 30px; height: 30px; border-radius: 9px; }
+  .broadcast-notice-hero-icon svg { width: 15px; height: 15px; }
+  .broadcast-notice-hero .hub-page-hero-title { font-size: 17px; }
+}
+
+/* Faculty Schedule ("My Schedule") — same over-sized-header-on-mobile
+   issue as Broadcast Notice: big hero icon + large top/bottom margins
+   ate vertical space before the actually-useful content (Today's
+   Classes, the grid). Scoped to this page only via the wrapper class
+   set in FacultySchedule.jsx, so other hub pages using the shared
+   .hub-page-hero markup are unaffected. */
+@media (max-width: 480px) {
+  .faculty-schedule-page { padding: 12px 12px 28px !important; }
+  .faculty-schedule-hero { gap: 8px; margin: 2px 0 10px; }
+  .faculty-schedule-hero .hub-page-hero-icon { width: 30px; height: 30px; border-radius: 9px; }
+  .faculty-schedule-hero .hub-page-hero-icon svg { width: 15px; height: 15px; }
+  .faculty-schedule-hero .hub-page-hero-title { font-size: 17px; }
 }
 
 @media (min-width: 900px) {

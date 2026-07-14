@@ -229,7 +229,7 @@ export default function FacultySchedule() {
       <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: opts.fullView ? 14 : 13 }}>
         <thead style={{ position: 'sticky', top: 0, zIndex: 2 }}>
           <tr>
-            <th className="time-col" style={{ padding: '10px 10px', borderBottom: '1px solid var(--border)', background: 'var(--surface)', minWidth: opts.fullView ? 0 : 100, textAlign: 'left', fontSize: 12 }}>
+            <th className="time-col" style={{ padding: '7px 8px', borderBottom: '1px solid var(--border)', background: 'var(--surface)', minWidth: opts.fullView ? 0 : 100, textAlign: 'left', fontSize: 12 }}>
               Time
             </th>
             {DAYS.map((d) => (
@@ -237,7 +237,7 @@ export default function FacultySchedule() {
                 <button
                   onClick={() => setSelectedDay(d)}
                   style={{
-                    width: '100%', padding: '12px 12px', border: 'none', background: 'transparent', cursor: 'pointer',
+                    width: '100%', padding: '8px 10px', border: 'none', background: 'transparent', cursor: 'pointer',
                     fontWeight: d === selectedDay || d === today ? 700 : 500,
                     color: d === selectedDay || d === today ? 'var(--accent)' : 'var(--text)',
                   }}
@@ -254,8 +254,8 @@ export default function FacultySchedule() {
             return (
               <tr key={slot}>
                 <td style={{
-                  padding: '10px 10px', borderBottom: '1px solid var(--border)', borderRight: '1px solid var(--border)',
-                  fontWeight: 700, fontSize: 12, color: 'var(--muted)', fontFamily: 'JetBrains Mono, monospace',
+                  padding: '6px 8px', borderBottom: '1px solid var(--border)', borderRight: '1px solid var(--border)',
+                  fontWeight: 700, fontSize: 11.5, color: 'var(--muted)', fontFamily: 'JetBrains Mono, monospace',
                   whiteSpace: 'nowrap', background: breakSlot ? 'rgba(239,68,68,0.08)' : 'var(--bg)',
                 }}>
                   {slotPreview(slot)}
@@ -289,8 +289,8 @@ export default function FacultySchedule() {
                           : undefined
                       }
                       style={{
-                        padding: 6, borderBottom: '1px solid var(--border)', borderRight: '1px solid var(--border)',
-                        verticalAlign: 'top', minHeight: 64, overflow: 'hidden',
+                        padding: 4, borderBottom: '1px solid var(--border)', borderRight: '1px solid var(--border)',
+                        verticalAlign: 'top', minHeight: 44, overflow: 'hidden',
                         cursor: isEmptyCell ? (isVerified ? 'pointer' : 'not-allowed') : 'default',
                         background: breakSlot ? 'rgba(239,68,68,0.08)' : d === selectedDay ? 'rgba(59,130,246,0.035)' : 'transparent',
                       }}
@@ -298,7 +298,7 @@ export default function FacultySchedule() {
                       {isEmptyCell && (
                         <div style={{
                           display: 'flex', alignItems: 'center', justifyContent: 'center',
-                          height: '100%', minHeight: 40, opacity: 0.28,
+                          height: '100%', minHeight: 26, opacity: 0.28,
                         }}>
                           <Icons.Plus size={14} />
                         </div>
@@ -307,7 +307,7 @@ export default function FacultySchedule() {
                         const color = getBatchColor(entry.batch, batches);
                         return (
                           <div key={entry.assignmentId} style={{
-                            padding: '8px 9px', borderRadius: 11, fontSize: 12, lineHeight: 1.35, marginBottom: 4,
+                            padding: '6px 7px', borderRadius: 10, fontSize: 11.5, lineHeight: 1.3, marginBottom: 3,
                             // The td's own rowSpan attribute (set above) is what actually
                             // makes this cell visually span multiple periods — no height
                             // trick needed on the inner chip itself.
@@ -346,8 +346,8 @@ export default function FacultySchedule() {
 
   return (
     <div className="hub-page-bg" style={{ minHeight: '100vh' }}>
-      <div style={{ padding: '20px 24px 40px', width: '100%', maxWidth: 1040, boxSizing: 'border-box', margin: '0 auto' }}>
-        <div className="hub-page-hero" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 10 }}>
+      <div className="faculty-schedule-page" style={{ padding: '20px 24px 40px', width: '100%', maxWidth: 1040, boxSizing: 'border-box', margin: '0 auto' }}>
+        <div className="hub-page-hero faculty-schedule-hero" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 10 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
             <div className="hub-page-hero-icon">
               <Icons.Clock size={20} color="var(--accent)" />
@@ -408,8 +408,8 @@ export default function FacultySchedule() {
              Attendance.jsx "Today's Classes" strip: colored left-accent
              rows, slot time first, course + batch/dept below. ── */}
         {!loading && (
-          <div className="card" style={{ marginTop: 16, marginBottom: 16, padding: '14px 16px', borderRadius: 14 }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
+          <div className="card faculty-schedule-today-card" style={{ marginTop: 10, marginBottom: 12, padding: '12px 14px', borderRadius: 14 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
               <div style={{ fontSize: 11, fontWeight: 800, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.07em', display: 'flex', alignItems: 'center', gap: 6 }}>
                 <Icons.CalendarClock size={13} /> Today's Classes
               </div>
@@ -418,12 +418,12 @@ export default function FacultySchedule() {
               </div>
             </div>
             {todaysClasses.length > 0 ? (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
                 {todaysClasses.map((c, idx) => {
                   const color = getBatchColor(c.batch, batches);
                   return (
                     <div key={`${c.assignmentId}-${idx}`} style={{
-                      display: 'flex', gap: 10, padding: '9px 12px', borderRadius: 10, alignItems: 'center',
+                      display: 'flex', gap: 10, padding: '7px 10px', borderRadius: 10, alignItems: 'center',
                       background: `linear-gradient(180deg, ${color.bg}, ${color.bg})`,
                       border: `1px solid ${color.border}`,
                     }}>
@@ -454,7 +454,7 @@ export default function FacultySchedule() {
             Hidden on desktop (see .mobile-preview-controls in index.css). */}
         {!loading && (
           <div className="mobile-preview-controls">
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 12 }}>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 8 }}>
               {DAYS.map((day) => (
                 <button
                   key={day}
@@ -462,7 +462,7 @@ export default function FacultySchedule() {
                   className="btn day-chip"
                   title={day}
                   style={{
-                    padding: '6px 11px', fontSize: 12, fontWeight: 600, borderRadius: 8,
+                    padding: '5px 10px', fontSize: 12, fontWeight: 600, borderRadius: 8,
                     border: selectedDay === day ? '1px solid var(--accent)' : '1px solid var(--border)',
                     background: selectedDay === day ? 'rgba(59,130,246,0.08)' : 'var(--card)',
                     color: selectedDay === day ? 'var(--accent)' : 'var(--text)',
@@ -481,14 +481,14 @@ export default function FacultySchedule() {
             the right just before the table so it reads as "a control for
             what's below" rather than a header-level action. */}
         {!loading && (
-          <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 8 }}>
+          <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 6 }}>
             <button
               className="btn btn-ghost mobile-fullscreen-btn"
               onClick={() => setFullScreenOpen(true)}
               aria-label="Open schedule full screen"
               title="Full screen"
               style={{
-                display: 'flex', alignItems: 'center', gap: 6, padding: '6px 10px',
+                display: 'flex', alignItems: 'center', gap: 6, padding: '5px 9px',
                 border: '1px solid var(--border)', borderRadius: 8, background: 'var(--card)',
                 fontSize: 11.5, fontWeight: 600, color: 'var(--text)', cursor: 'pointer',
               }}

@@ -204,14 +204,14 @@ export default function FacultyNoticeBroadcast() {
 
   return (
     <div className="hub-page-bg" style={{ minHeight: '100vh' }}>
-      <div style={{ padding: '20px 24px 40px', width: '100%', maxWidth: 1040, boxSizing: 'border-box', margin: '0 auto' }}>
+      <div className="broadcast-notice-page" style={{ padding: '16px 20px 32px', width: '100%', maxWidth: 1040, boxSizing: 'border-box', margin: '0 auto' }}>
         <div className="hub-page-hero broadcast-notice-hero">
           <div className="hub-page-hero-icon broadcast-notice-hero-icon">
-            <Icons.Bell size={20} color="var(--accent)" />
+            <Icons.Bell size={18} color="var(--accent)" />
           </div>
           <h1 className="hub-page-hero-title">Broadcast Notice</h1>
         </div>
-        <p style={{ fontSize: 12.5, color: 'var(--muted)', marginTop: -8, marginBottom: 18 }}>
+        <p style={{ fontSize: 12.5, color: 'var(--muted)', marginTop: -6, marginBottom: 14 }}>
           Send one notice to several of your classes at once — pick classes, choose who should see it, then send.
         </p>
 
@@ -223,21 +223,21 @@ export default function FacultyNoticeBroadcast() {
 
         {groupOptions.length > 0 && (
           <>
-            <div style={{ padding: 16, borderRadius: 14, border: '1px solid var(--border)', background: 'var(--card)', marginBottom: 16 }}>
-              <div style={{ fontSize: 12.5, fontWeight: 700, color: 'var(--text)', marginBottom: 10 }}>
+            <div style={{ padding: 12, borderRadius: 12, border: '1px solid var(--border)', background: 'var(--card)', marginBottom: 12 }}>
+              <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--text)', marginBottom: 8 }}>
                 1. Select classes
               </div>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
                 {groupOptions.map((c) => {
                   const checked = selectedGroupIds.has(c.groupId);
                   return (
                     <label
                       key={c.groupId}
                       style={{
-                        display: 'flex', alignItems: 'center', gap: 6, padding: '7px 12px', borderRadius: 999,
+                        display: 'flex', alignItems: 'center', gap: 6, padding: '6px 10px', borderRadius: 999,
                         border: `1px solid ${checked ? 'var(--accent)' : 'var(--border)'}`,
                         background: checked ? 'color-mix(in srgb, var(--accent) 12%, var(--surface))' : 'var(--surface)',
-                        fontSize: 12.5, cursor: 'pointer', color: 'var(--text)',
+                        fontSize: 12, cursor: 'pointer', color: 'var(--text)',
                       }}
                     >
                       <input type="checkbox" checked={checked} onChange={() => toggleGroup(c.groupId)} style={{ margin: 0 }} />
@@ -248,16 +248,16 @@ export default function FacultyNoticeBroadcast() {
               </div>
             </div>
 
-            <div style={{ padding: 16, borderRadius: 14, border: '1px solid var(--border)', background: 'var(--card)', marginBottom: 16 }}>
-              <div style={{ fontSize: 12.5, fontWeight: 700, color: 'var(--text)', marginBottom: 10 }}>
+            <div style={{ padding: 12, borderRadius: 12, border: '1px solid var(--border)', background: 'var(--card)', marginBottom: 12 }}>
+              <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--text)', marginBottom: 8 }}>
                 2. Who should see this
               </div>
-              <div style={{ display: 'flex', gap: 8, marginBottom: recipientMode === 'cr' ? 12 : 0 }}>
-                <label style={{ fontSize: 12.5, color: 'var(--muted)', display: 'flex', alignItems: 'center', gap: 6 }}>
+              <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: recipientMode === 'cr' ? 10 : 0 }}>
+                <label style={{ fontSize: 12, color: 'var(--muted)', display: 'flex', alignItems: 'center', gap: 6 }}>
                   <input type="radio" checked={recipientMode === 'all'} onChange={() => setRecipientMode('all')} />
                   All students (of selected classes)
                 </label>
-                <label style={{ fontSize: 12.5, color: 'var(--muted)', display: 'flex', alignItems: 'center', gap: 6 }}>
+                <label style={{ fontSize: 12, color: 'var(--muted)', display: 'flex', alignItems: 'center', gap: 6 }}>
                   <input type="radio" checked={recipientMode === 'cr'} onChange={() => setRecipientMode('cr')} />
                   Select CR/ACR
                 </label>
@@ -299,26 +299,26 @@ export default function FacultyNoticeBroadcast() {
               )}
             </div>
 
-            <div style={{ padding: 16, borderRadius: 14, border: '1px solid var(--border)', background: 'var(--card)', marginBottom: 20, display: 'grid', gap: 10 }}>
-              <div style={{ fontSize: 12.5, fontWeight: 700, color: 'var(--text)' }}>3. Message</div>
+            <div style={{ padding: 12, borderRadius: 12, border: '1px solid var(--border)', background: 'var(--card)', marginBottom: 14, display: 'grid', gap: 8 }}>
+              <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--text)' }}>3. Message</div>
               <input
                 placeholder="Title"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                style={{ padding: '9px 10px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--bg)', color: 'var(--text)', fontSize: 13.5 }}
+                style={{ padding: '8px 10px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--bg)', color: 'var(--text)', fontSize: 13 }}
               />
               <textarea
                 placeholder="Message"
-                rows={4}
+                rows={3}
                 value={body}
                 onChange={(e) => setBody(e.target.value)}
-                style={{ padding: '9px 10px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--bg)', color: 'var(--text)', fontSize: 13.5, resize: 'vertical' }}
+                style={{ padding: '8px 10px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--bg)', color: 'var(--text)', fontSize: 13, resize: 'vertical' }}
               />
               <button
                 onClick={handleSend}
                 disabled={sending || !isVerified}
                 title={!isVerified ? 'Blue Tick verification needed before you can send notices' : undefined}
-                style={{ padding: '10px 16px', borderRadius: 8, border: 'none', background: 'var(--accent)', color: '#fff', fontWeight: 700, fontSize: 13, cursor: (sending || !isVerified) ? 'not-allowed' : 'pointer', opacity: (sending || !isVerified) ? 0.5 : 1 }}
+                style={{ padding: '9px 14px', borderRadius: 8, border: 'none', background: 'var(--accent)', color: '#fff', fontWeight: 700, fontSize: 13, cursor: (sending || !isVerified) ? 'not-allowed' : 'pointer', opacity: (sending || !isVerified) ? 0.5 : 1 }}
               >
                 {sending ? 'Sending…' : 'Send Notice'}
               </button>
