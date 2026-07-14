@@ -25,15 +25,27 @@ export default function QBReviewQueue({ dept, all = false }) {
   const [err, setErr] = useState('');
   const [rejectingId, setRejectingId] = useState(null);
   const [rejectReason, setRejectReason] = useState('');
+  const [loadError, setLoadError] = useState('');
 
   useEffect(() => {
+    setLoadError('');
+    const handleError = (e) => {
+      // Most common cause: Firestore composite index still building after a
+      // fresh deploy — resolves itself in a few minutes, no user action needed.
+      setLoadError(
+        e?.code === 'failed-precondition'
+          ? 'Queue is warming up (index building) — try again in a minute.'
+          : e?.message || 'Could not load the queue.'
+      );
+    };
     const sub = all
-      ? subscribeAllQBUploadRequests(setRequests)
-      : subscribeQBUploadRequestsForDept(dept, setRequests);
+      ? subscribeAllQBUploadRequests(setRequests, handleError)
+      : subscribeQBUploadRequestsForDept(dept, setRequests, handleError);
     return sub;
   }, [dept, all]);
 
   if (requests === null) return <div style={{ fontSize: 12, color: 'var(--muted)' }}>Loading…</div>;
+  if (loadError) return <div style={{ fontSize: 12, color: 'var(--danger, #dc2626)' }}>{loadError}</div>;
   if (requests.length === 0) return <div style={{ fontSize: 12, color: 'var(--muted)' }}>No pending uploads.</div>;
 
   const handleApprove = async (r) => {

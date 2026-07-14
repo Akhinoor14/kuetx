@@ -18,6 +18,7 @@ import { flagSuspiciousEmail, unflagEmail, summarizeEmailHealth, listPendingFlag
 import { isObviouslyBadDomain } from '../lib/emailDomainCheck';
 import ClassmatesList from '../components/ClassmatesList';
 import QBUploadForm from '../components/QBUploadForm';
+import { withTimeout } from '../lib/safeSnapshot';
 import QBReviewQueue from '../components/QBReviewQueue';
 import RequestDeleteButton from '../components/RequestDeleteButton';
 
@@ -30,7 +31,7 @@ function RollUnlockSection() {
   const [requests, setRequests] = useState([]);
   const [busyId, setBusyId] = useState(null);
 
-  useEffect(() => subscribePendingRollUnlockRequests(setRequests), []);
+  useEffect(() => withTimeout((cb) => subscribePendingRollUnlockRequests(cb), setRequests, { fallbackValue: [] }), []);
 
   if (requests.length === 0) return null;
 
@@ -408,7 +409,7 @@ function HeadOfOpsSection() {
   const [allApplications, setAllApplications] = useState([]);
 
   useEffect(() => { listStaffByRole('senior_campus_lead').then(setScls); }, []);
-  useEffect(() => subscribeAllCLApplications(setAllApplications), []);
+  useEffect(() => withTimeout((cb) => subscribeAllCLApplications(cb), setAllApplications, { fallbackValue: [] }), []);
 
   const appoint = async () => {
     if (!newSclUid.trim() || !newSclDept.trim()) return;
@@ -555,8 +556,13 @@ export default function StaffDashboard({ onTabChange } = {}) {
   const [roles, setRoles] = useState(null);
   const [isAdminUser, setIsAdminUser] = useState(false);
   const [activeTab, setActiveTab] = useState(null);
+  const [rolesLoadWarning, setRolesLoadWarning] = useState('');
 
-  useEffect(() => subscribeMyRoles(setRoles), []);
+  useEffect(() => withTimeout(
+    (cb) => subscribeMyRoles(cb),
+    setRoles,
+    { fallbackValue: [], onTimeout: () => setRolesLoadWarning('Taking longer than usual to load your roles — refresh in a minute if this stays empty.') }
+  ), []);
   useEffect(() => {
     checkIsAdmin(auth.currentUser?.uid).then(setIsAdminUser);
   }, []);
@@ -594,7 +600,7 @@ export default function StaffDashboard({ onTabChange } = {}) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [roles, isAdminUser, activeTab, onTabChange]);
 
-  if (roles === null) return <div style={{ padding: 20, color: 'var(--muted)' }}>Loading…</div>;
+  if (roles === null) return <div style={{ padding: 20, color: 'var(--muted)' }}>{rolesLoadWarning || 'Loading…'}</div>;
   if (roles.length === 0 && !isAdminUser) {
     return (
       <div style={{ textAlign: 'center', color: 'var(--muted)', padding: '12px 0 20px' }}>

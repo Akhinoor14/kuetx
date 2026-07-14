@@ -34,6 +34,7 @@ import { subscribeAllQBUploadRequests, approveQBUpload, rejectQBUpload } from '.
 import QBReviewQueue from '../components/QBReviewQueue';
 import DeleteRequestQueue from '../components/DeleteRequestQueue';
 import QBUploadForm from '../components/QBUploadForm';
+import { withTimeout } from '../lib/safeSnapshot';
 
 // Every role the Founder can hand out or take away from this screen —
 // literally everyone, per the manifesto: Founder has full add/revoke
@@ -194,27 +195,36 @@ function ApprovalsView({ onBack, onSelectCategory, countCtx }) {
   const [qbUploadRequests, setQbUploadRequests] = useState(null);
   const [err, setErr] = useState('');
   const [subTab, setSubTab] = useState('cl-apps');
+  const [loadWarning, setLoadWarning] = useState('');
 
-  useEffect(() => subscribeAllCLApplications(setClApplications), []);
-  useEffect(() => subscribeManualVerifyRequests(setManualVerifyRequests), []);
-  useEffect(() => subscribeAllQBUploadRequests(setQbUploadRequests), []);
+  const flagSlowLoad = () => setLoadWarning(
+    'Some data is taking longer than usual to load (often a Firestore index still building after a deploy). It will appear automatically once ready — try refreshing in a minute if it doesn\u2019t.'
+  );
+
+  useEffect(() => withTimeout((cb) => subscribeAllCLApplications(cb), setClApplications, { onTimeout: flagSlowLoad }), []);
+  useEffect(() => withTimeout((cb) => subscribeManualVerifyRequests(cb), setManualVerifyRequests, { onTimeout: flagSlowLoad }), []);
+  useEffect(() => withTimeout((cb) => subscribeAllQBUploadRequests(cb), setQbUploadRequests, { onTimeout: flagSlowLoad }), []);
   useEffect(() => { listAllGroups().then((gs) => setGroupIds(gs.map((g) => g.id))); }, []);
 
   useEffect(() => {
     if (!groupIds) return;
     setCrRequestsByGroup({});
-    const unsubs = groupIds.map((g) => subscribeCRRequests(g, (reqs) => {
-      setCrRequestsByGroup((prev) => ({ ...(prev || {}), [g]: reqs }));
-    }));
+    const unsubs = groupIds.map((g) => withTimeout(
+      (cb) => subscribeCRRequests(g, cb),
+      (reqs) => setCrRequestsByGroup((prev) => ({ ...(prev || {}), [g]: reqs })),
+      { onTimeout: flagSlowLoad }
+    ));
     return () => unsubs.forEach((u) => u());
   }, [groupIds]);
 
   useEffect(() => {
     if (!groupIds) return;
     setLeaveRequestsByGroup({});
-    const unsubs = groupIds.map((g) => subscribeLeaveRequests(g, (reqs) => {
-      setLeaveRequestsByGroup((prev) => ({ ...(prev || {}), [g]: reqs }));
-    }));
+    const unsubs = groupIds.map((g) => withTimeout(
+      (cb) => subscribeLeaveRequests(g, cb),
+      (reqs) => setLeaveRequestsByGroup((prev) => ({ ...(prev || {}), [g]: reqs })),
+      { onTimeout: flagSlowLoad }
+    ));
     return () => unsubs.forEach((u) => u());
   }, [groupIds]);
 
@@ -238,6 +248,11 @@ function ApprovalsView({ onBack, onSelectCategory, countCtx }) {
 
   return (
     <CategoryShell view="approvals" onSelect={onSelectCategory} countCtx={countCtx}>
+      {loadWarning && (
+        <div style={{ fontSize: 12, color: 'var(--warn, #b45309)', background: 'var(--warn-bg, #fef3c7)', padding: '8px 10px', borderRadius: 8, marginBottom: 10 }}>
+          {loadWarning}
+        </div>
+      )}
       <h2 style={{ fontSize: 16, fontWeight: 700, margin: '0 0 12px' }}>Approvals</h2>
       <SubcategoryTabs subcategories={category.subcategories} activeKey={subTab} onSelect={setSubTab} countCtx={subCtx} />
       {err && <div className="card" style={{ padding: 8, marginBottom: 12, fontSize: 12, color: 'var(--danger)' }}>{err}</div>}
@@ -299,9 +314,11 @@ function ApprovalsView({ onBack, onSelectCategory, countCtx }) {
       )}
       {subTab === 'qb-uploads' && (
         <Section title="Question Bank Uploads">
+          <div style={{ fontSize: 12, fontWeight: 700, margin: '0 0 6px' }}>Upload a paper (any department — auto-published, no review)</div>
           <div style={{ marginBottom: 14 }}>
             <QBUploadForm isFounder onUploaded={() => {}} />
           </div>
+          <div style={{ fontSize: 12, fontWeight: 700, margin: '18px 0 6px' }}>Pending review (Campus Lead submissions)</div>
           <QBReviewQueue all />
 
           <div style={{ fontSize: 12, fontWeight: 700, margin: '18px 0 6px' }}>Pending delete requests</div>

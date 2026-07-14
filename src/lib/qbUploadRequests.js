@@ -204,7 +204,7 @@ export function findExisting(tree, dept, term, courseCode, label) {
 }
 
 /** Live queue for a Senior Campus Lead's own dept (StaffDashboard review tab). */
-export function subscribeQBUploadRequestsForDept(dept, callback) {
+export function subscribeQBUploadRequestsForDept(dept, callback, onError) {
   return onSnapshot(
     query(
       collection(db, COLLECTION),
@@ -212,15 +212,25 @@ export function subscribeQBUploadRequestsForDept(dept, callback) {
       where('status', '==', 'pending'),
       orderBy('requestedAt')
     ),
-    (snap) => callback(snap.docs.map((d) => ({ id: d.id, ...d.data() })))
+    (snap) => callback(snap.docs.map((d) => ({ id: d.id, ...d.data() }))),
+    (err) => {
+      console.error('[qbUploadRequests] dept listener failed:', err.code, err.message);
+      callback([]);
+      onError?.(err);
+    }
   );
 }
 
 /** Founder/Head of Ops view — every pending request system-wide (fallback net). */
-export function subscribeAllQBUploadRequests(callback) {
+export function subscribeAllQBUploadRequests(callback, onError) {
   return onSnapshot(
     query(collection(db, COLLECTION), where('status', '==', 'pending'), orderBy('requestedAt')),
-    (snap) => callback(snap.docs.map((d) => ({ id: d.id, ...d.data() })))
+    (snap) => callback(snap.docs.map((d) => ({ id: d.id, ...d.data() }))),
+    (err) => {
+      console.error('[qbUploadRequests] all-requests listener failed:', err.code, err.message);
+      callback([]);
+      onError?.(err);
+    }
   );
 }
 
