@@ -41,11 +41,11 @@ export default function Settings() {
   const [sendingReset, setSendingReset] = useState(false);
 
   const handleSignOut = async () => {
-    if (!window.confirm('Sign out করবে? তোমার data এই device এ থাকবে, শুধু cloud sync বন্ধ হবে।')) return;
+    if (!window.confirm('Sign out? Your data will stay on this device; cloud sync will just stop.')) return;
     setLoggingOut(true);
     try {
       await logout();
-      flash('✓ Signed out। Data locally safe আছে।');
+      flash('✓ Signed out. Your data is still safe locally.');
     } catch (err) {
       flash('✗ Sign out failed: ' + err.message, 'error');
     } finally {
@@ -58,7 +58,7 @@ export default function Settings() {
     setSendingReset(true);
     try {
       await resetPassword(firebaseUser.email);
-      flash(`✓ Password reset link পাঠানো হয়েছে ${firebaseUser.email} এ। Inbox চেক করো।`);
+      flash(`✓ A password reset link was sent to ${firebaseUser.email}. Check your inbox.`);
     } catch (err) {
       flash('✗ ' + getAuthErrorMessage(err.code), 'error');
     } finally {
@@ -318,8 +318,8 @@ export default function Settings() {
         }}>
           <CheckCircle size={14} color="var(--success)" style={{ flexShrink: 0, marginTop: 1 }} />
           <div style={{ fontSize: 12, color: 'var(--text)', lineHeight: 1.6 }}>
-            <strong>তোমার সব data এই device এ locally safe আছে।</strong>
-            <span style={{ color: 'var(--muted)', display: 'block' }}>Internet ছাড়াও KUETx পুরোপুরি কাজ করে। Cloud sync হলো bonus — অন্য device এ data পাওয়ার জন্য।</span>
+            <strong>Your data is safely stored locally on this device.</strong>
+            <span style={{ color: 'var(--muted)', display: 'block' }}>KUETx works fully without internet. Cloud sync is a bonus for accessing data on other devices.</span>
           </div>
         </div>
 
@@ -328,10 +328,10 @@ export default function Settings() {
           <div style={{ padding: '10px 12px', borderRadius: 8, background: 'var(--bg)', border: '1px solid var(--border)', marginBottom: 10 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
               <CloudOff size={13} color="var(--muted)" />
-              <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--text)' }}>Cloud sync বন্ধ (Offline mode)</span>
+              <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--text)' }}>Cloud sync off (Offline mode)</span>
             </div>
             <div style={{ fontSize: 11, color: 'var(--muted)', lineHeight: 1.6 }}>
-              Google বা Email দিয়ে login করলে সব data Firestore এ backup হবে এবং যেকোনো device থেকে access করতে পারবে।
+              Sign in with Google or email to back up all data to Firestore and access it from any device.
             </div>
           </div>
         ) : (
@@ -356,9 +356,9 @@ export default function Settings() {
 
         {/* How it works */}
         <div style={{ fontSize: 11, color: 'var(--muted)', lineHeight: 1.8, padding: '8px 10px', background: 'var(--bg)', borderRadius: 7, border: '1px solid var(--border)' }}>
-          <div>📱 <strong>Same account → অন্য device</strong> — সব data automatically sync হয়</div>
-          <div>⚡ <strong>Real-time</strong> — একটা device এ change হলে ১-৩ সেকেন্ডে অন্যটায় আসে</div>
-          <div>🔒 <strong>Privacy</strong> — শুধু তুমি তোমার data দেখতে পাবে</div>
+          <div>📱 <strong>Same account → another device</strong> — all data syncs automatically</div>
+          <div>⚡ <strong>Real-time</strong> — changes usually appear on another device within 1-3 seconds</div>
+          <div>🔒 <strong>Privacy</strong> — only you can see your data</div>
         </div>
       </div>
 
@@ -371,13 +371,13 @@ export default function Settings() {
         {!firebaseUser || firebaseUser.isAnonymous ? (
           <div>
             <div style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 10, lineHeight: 1.6 }}>
-              এখন Offline mode এ আছো। Login করলে সব device এ sync হবে।
+              You are in Offline mode. Sign in to sync across devices.
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
               <button
                 className="btn btn-primary"
                 onClick={async () => {
-                  try { await loginWithGoogle(); flash('✓ Google দিয়ে login সফল!'); }
+                  try { await loginWithGoogle(); flash('✓ Signed in with Google successfully!'); }
                   catch (err) { flash('✗ ' + (err.message || 'Login failed'), 'error'); }
                 }}
                 style={{ justifyContent: 'flex-start' }}
@@ -388,7 +388,7 @@ export default function Settings() {
                   <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
                   <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
                 </svg>
-                Google দিয়ে Login
+                Sign in with Google
               </button>
             </div>
           </div>
@@ -415,7 +415,7 @@ export default function Settings() {
                 <div style={{ fontSize: 11, color: 'var(--muted)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                   {firebaseUser.email}
                 </div>
-                <div style={{ fontSize: 10, color: 'var(--success)', marginTop: 2 }}>● Cloud sync চালু</div>
+                <div style={{ fontSize: 10, color: 'var(--success)', marginTop: 2 }}>● Cloud sync on</div>
               </div>
             </div>
 
@@ -426,9 +426,9 @@ export default function Settings() {
               border: '1px solid color-mix(in srgb, var(--accent) 20%, var(--border))',
               marginBottom: 12, fontSize: 12, lineHeight: 1.7,
             }}>
-              <div style={{ fontWeight: 600, marginBottom: 6, color: 'var(--text)' }}>🔐 তোমার Firebase data control</div>
+              <div style={{ fontWeight: 600, marginBottom: 6, color: 'var(--text)' }}>🔐 Your Firebase data control</div>
               <div style={{ color: 'var(--muted)', marginBottom: 8 }}>
-                Firebase Console থেকে তুমি নিজের সব data দেখতে ও delete করতে পারবে:
+                You can view and delete all your data from Firebase Console:
               </div>
               <a
                 href="https://console.firebase.google.com"
@@ -443,7 +443,7 @@ export default function Settings() {
                 console.firebase.google.com <ExternalLink size={10} />
               </a>
               <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 8, lineHeight: 1.6 }}>
-                💡 <strong>Easiest option:</strong> নিচে "Sign Out" করো — তোমার Firebase data automatically delete হবে না, শুধু sync বন্ধ হবে। Data পুরো মুছতে চাইলে নিচের Danger Zone ব্যবহার করো (local data মুছবে), আর Firebase এর data মুছতে হলে Console এ গিয়ে করতে হবে।
+                💡 <strong>Easiest option:</strong> Sign out below — your Firebase data will not be deleted automatically, only sync will stop. If you want to remove all data, use the Danger Zone below (it clears local data). To delete Firebase data, do it in Console.
               </div>
             </div>
 
@@ -455,7 +455,7 @@ export default function Settings() {
                 disabled={sendingReset}
                 style={{ justifyContent: 'flex-start', marginBottom: 8 }}
               >
-                <Lock size={14} /> {sendingReset ? 'পাঠানো হচ্ছে...' : 'Password বদলাও'}
+                <Lock size={14} /> {sendingReset ? 'Sending...' : 'Change password'}
               </button>
             )}
 

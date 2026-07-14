@@ -64,7 +64,7 @@ export default function EmailVerifyBanner({ onVerified }) {
       setResent(true);
       startCooldown();
     } catch (err) {
-      setError('আবার পাঠাতে সমস্যা হয়েছে, একটু পর চেষ্টা করো।');
+      setError('There was a problem resending it. Try again in a moment.');
     }
   };
 
@@ -77,7 +77,7 @@ export default function EmailVerifyBanner({ onVerified }) {
         onVerified?.();
       } else {
         setFailedChecks((n) => n + 1);
-        setError('এখনো verify হয়নি — link-এ ক্লিক করে আসো, তারপর আবার try করো।');
+        setError('It is still not verified. Click the link first, then try again.');
       }
     } finally {
       setChecking(false);
@@ -99,13 +99,13 @@ export default function EmailVerifyBanner({ onVerified }) {
           <Icons.MailWarning size={16} color="white" />
         </div>
         <div style={{ flex: 1, minWidth: 160 }}>
-          <div style={{ fontWeight: 700, fontSize: 13, color: 'var(--text)' }}>Email verify করা হয়নি</div>
+          <div style={{ fontWeight: 700, fontSize: 13, color: 'var(--text)' }}>Email not verified</div>
           <div style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 1 }}>
-            Password ভুলে গেলে recovery email পাঠানোর জন্য এটা দরকার হবে।
+            You will need this to send a recovery email if you forget your password.
           </div>
         </div>
         <button onClick={() => setExpanded(true)} className="btn btn-primary btn-sm" style={{ flexShrink: 0, background: 'var(--warning)' }}>
-          Verify করো
+          Verify now
         </button>
       </div>
     );
@@ -128,14 +128,14 @@ export default function EmailVerifyBanner({ onVerified }) {
         <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{ fontWeight: 700, fontSize: 13, color: 'var(--text)' }}>{email}</div>
           <div style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 1, lineHeight: 1.5 }}>
-            আমরা একটা verification link পাঠিয়েছি — লিংকে ক্লিক করলে automatic verify হয়ে যাবে।
+            We sent a verification link. Click it to verify automatically.
           </div>
           <div style={{ fontSize: 11.5, color: 'var(--warning)', marginTop: 4, fontWeight: 600, lineHeight: 1.5 }}>
-            ⚠️ Inbox-এ না পেলে Spam/Junk folder চেক করো — বেশিরভাগ সময় ওখানেই চলে যায়।
+            ⚠️ If it is not in your inbox, check Spam/Junk — it often lands there.
           </div>
           {failedChecks >= 2 && (
             <div style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 4, lineHeight: 1.5 }}>
-              এখনো না পেলে: Gmail-এ "Promotions" ট্যাব বা "All Mail" চেক করো, sender ঠিকানা block/filter করা আছে কিনা দেখো, অথবা নিচে "Link আবার পাঠাও" চাপো।
+              Still not there? In Gmail, check the "Promotions" tab or "All Mail", make sure the sender is not blocked or filtered, or press "Resend link" below.
             </div>
           )}
         </div>
@@ -148,11 +148,11 @@ export default function EmailVerifyBanner({ onVerified }) {
 
       <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
         <button type="button" onClick={handleCheckNow} disabled={checking} className="btn btn-secondary btn-sm">
-          {checking ? 'চেক করা হচ্ছে…' : 'Verify হয়ে গেছি — Check করো'}
+          {checking ? 'Checking…' : 'I have verified it — check now'}
         </button>
         <button type="button" onClick={handleResend} disabled={cooldown > 0} className="btn btn-secondary btn-sm"
           style={{ opacity: cooldown > 0 ? 0.6 : 1, cursor: cooldown > 0 ? 'not-allowed' : 'pointer' }}>
-          {cooldown > 0 ? `আবার পাঠাও (${cooldown}s)` : resent ? 'আবার পাঠানো হলো ✓' : 'Link আবার পাঠাও'}
+          {cooldown > 0 ? `Resend (${cooldown}s)` : resent ? 'Link resent ✓' : 'Resend link'}
         </button>
       </div>
     </div>

@@ -109,7 +109,7 @@ export function AvatarUploadModal({ currentURL, isAnon, onClose, onUploaded, onD
   };
 
   const handleDelete = async () => {
-    if (!confirm('Profile picture মুছে ফেলবে?')) return;
+    if (!confirm('Delete the profile picture?')) return;
     try { await deleteProfilePicture(); onDeleted(); onClose(); } catch {}
   };
 
@@ -130,7 +130,7 @@ export function AvatarUploadModal({ currentURL, isAnon, onClose, onUploaded, onD
         {/* Info banner */}
         <div style={{ padding: '9px 12px', borderRadius: 10, background: 'rgba(22,163,74,0.08)', border: '1px solid rgba(22,163,74,0.2)', fontSize: 12, color: 'var(--text)', display: 'flex', alignItems: 'flex-start', gap: 7 }}>
           <Icons.HardDrive size={13} color="var(--accent)" style={{ flexShrink: 0, marginTop: 1 }} />
-          <span>Photo এই device-এ সেভ হবে (offline)।{!isAnon ? ' Firebase-এও backup হবে।' : ' Sign in করলে সব device-এ sync হবে।'}</span>
+          <span>Photos stay on this device for offline use.{!isAnon ? ' A Firebase backup is also saved.' : ' Sign in to sync across devices.'}</span>
         </div>
 
         {/* Drop zone (only when no file) */}

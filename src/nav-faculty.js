@@ -12,7 +12,7 @@
 //
 // Roster/Attendance/Marks/Syllabus deliberately have NO top-level row here
 // — those live as tabs inside Class Detail (§8.5), not as their own nav
-// destinations, per §6.1's "ইচ্ছাকৃতভাবে বাদ" note.
+// destinations, per §6.1's "intentionally omitted" note.
 
 export const NAV_FACULTY = [
   {

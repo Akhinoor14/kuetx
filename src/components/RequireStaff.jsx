@@ -33,12 +33,12 @@ export default function RequireStaff({ children }) {
       <div style={{ padding: '48px 20px', textAlign: 'center', maxWidth: 420, margin: '0 auto' }}>
         <div style={{ fontSize: 32, marginBottom: 12 }}>🔒</div>
         <div style={{ fontSize: 15, fontWeight: 700, color: 'var(--text)', marginBottom: 8 }}>
-          এই পেজটা শুধু KUETx টিম/স্টাফদের জন্য
+          This page is only for the KUETx team and staff
         </div>
         <div style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.6, marginBottom: 20 }}>
-          তোমার কোনো KUETx staff role নেই বলে এই পেজ দেখা যাবে না — লিংক থাকলেও না।
+          You can not view this page because you do not have a KUETx staff role, even if you have the link.
         </div>
-        <Link to="/" className="btn btn-primary btn-sm">হোমে ফিরে যাও</Link>
+        <Link to="/" className="btn btn-primary btn-sm">Go home</Link>
       </div>
     );
   }

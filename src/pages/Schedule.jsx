@@ -848,7 +848,7 @@ export default function Schedule() {
     updateCourseShortName(courseId, displayName);
 
     if (isGroupMode) {
-      if (!canEditGroupSchedule) { notify('তোমার এই routine edit করার permission নেই।', 'error'); return; }
+    if (!canEditGroupSchedule) { notify('You do not have permission to edit this routine.', 'error'); return; }
       const { id, teacherNames, ...entryData } = newEntry;
       if (quickFormEditingId) {
         updateRoutineEntry(groupId, quickFormEditingId, profile, entryData);
@@ -924,7 +924,7 @@ export default function Schedule() {
     updateCourseShortName(form.courseId, form.displayName);
 
     if (isGroupMode) {
-      if (!canEditGroupSchedule) { notify('তোমার এই routine edit করার permission নেই।', 'error'); return; }
+    if (!canEditGroupSchedule) { notify('You do not have permission to edit this routine.', 'error'); return; }
       const { id, teacherNames, ...entryData } = nextEntry;
       if (editingId) {
         updateRoutineEntry(groupId, editingId, profile, entryData);
@@ -947,7 +947,7 @@ export default function Schedule() {
 
   const remove = (id) => {
     if (isGroupMode) {
-      if (!canEditGroupSchedule) { notify('তোমার এই routine edit করার permission নেই।', 'error'); return; }
+    if (!canEditGroupSchedule) { notify('You do not have permission to edit this routine.', 'error'); return; }
       deleteRoutineEntry(groupId, id, profile);
       if (editingId === id) cancelEdit();
       return;
@@ -992,7 +992,7 @@ export default function Schedule() {
       // show the imported data locally for a moment before the next
       // Firestore snapshot silently overwrote it with the real shared data,
       // which is confusing. Block it clearly instead of half-working.
-      setImportMessage('Import করা এখনো group/shared schedule-এ support করে না। Import শুধু personal (non-group) routine-এর জন্য কাজ করে।');
+      setImportMessage('Import is not supported for group/shared schedules yet. Import only works for personal (non-group) routines.');
       return;
     }
     try {
@@ -1441,7 +1441,7 @@ export default function Schedule() {
                                 </button>
                               )}
                               {canEditSchedule && (
-                                <button onClick={(e) => { e.stopPropagation(); if (window.confirm('এই class টা delete করবে?')) remove(s.id); }} style={{
+                                <button onClick={(e) => { e.stopPropagation(); if (window.confirm('Delete this class?')) remove(s.id); }} style={{
                                   position: 'absolute', top: 2, right: 2, background: 'none', border: 'none',
                                   color: 'inherit', cursor: 'pointer', opacity: 0.55, padding: 0, lineHeight: 1,
                                   touchAction: 'manipulation',

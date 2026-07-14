@@ -52,17 +52,17 @@ function useClaimCRState(groupId, profile) {
   const handleClaimCR = async (mobileOverride) => {
     const mobileToUse = mobileOverride !== undefined ? mobileOverride : mobile;
     if (!ownRollVerified) {
-      setClaimMsg('KUET email verify করো। উপরে verify box দেখ।');
+      setClaimMsg('Verify your KUET email. Check the verify box above.');
       setClaimState('error');
       return;
     }
     if (crStatus?.slotsFull) {
-      setClaimMsg('এই ক্লাসের CR slots ভরে গেছে। কোনো CR step down করার পর retry করুন।');
+      setClaimMsg('This class has no open CR slots. Retry after a CR steps down.');
       setClaimState('error');
       return;
     }
     if (!isMobileLikelyValid(mobileToUse)) {
-      setClaimMsg('CR হওয়ার জন্য একটা সঠিক মোবাইল নম্বর দিতে হবে — Faculty এটা দেখতে পারবে।');
+      setClaimMsg('You need a valid mobile number to claim CR. Faculty will be able to see it.');
       setClaimState('error');
       return;
     }
@@ -259,7 +259,7 @@ export function ClaimCRInlineButton({ groupId, profile }) {
     <PromptDialog
       open={showMobileDialog}
       title="Mobile number (mandatory)"
-      message="CR হওয়ার জন্য একটা মোবাইল নম্বর দাও — Faculty এটা দেখতে পারবে।"
+      message="Enter a mobile number to claim CR. Faculty will be able to see it."
       defaultValue={mobile}
       placeholder="01XXXXXXXXX"
       confirmLabel="Continue"

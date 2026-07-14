@@ -53,26 +53,26 @@ export default function EmailFlagBanner({ flag, onGoToSettings }) {
           <Icons.AlertTriangle size={16} color="white" />
         </div>
         <div style={{ flex: 1, minWidth: 0 }}>
-          <div style={{ fontWeight: 700, fontSize: 13, color: 'var(--text)' }}>তোমার account email নিয়ে সমস্যা</div>
+          <div style={{ fontWeight: 700, fontSize: 13, color: 'var(--text)' }}>There is an issue with your account email</div>
           <div style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 1, lineHeight: 1.5 }}>
-            <strong>{email || '(email নেই)'}</strong> — এই address টা real/reachable মনে হচ্ছে না বলে ক্লাসের দায়িত্বশীল কেউ flag করেছে।
-            Settings-এ গিয়ে email ঠিক করো, নাহলে অন্তত একটা backup download করে রাখো — যাতে কোনো কিছু হারিয়ে না যায়।
+            <strong>{email || '(no email)'}</strong> — a class admin flagged this address because it does not look real or reachable.
+            Go to Settings and fix the email, or at least download a backup so nothing is lost.
           </div>
         </div>
       </div>
 
       {flag?.reason && (
         <div style={{ fontSize: 11.5, color: 'var(--muted)', paddingLeft: 40 }}>
-          কারণ: {flag.reason}
+          Reason: {flag.reason}
         </div>
       )}
 
       <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap', paddingLeft: 40 }}>
         <button type="button" onClick={onGoToSettings} className="btn btn-primary btn-sm" style={{ background: 'var(--danger)' }}>
-          Email ঠিক করো
+          Fix email
         </button>
         <button type="button" onClick={handleBackup} className="btn btn-secondary btn-sm">
-          {downloaded ? 'Backup downloaded ✓' : 'Backup JSON download করো'}
+          {downloaded ? 'Backup downloaded ✓' : 'Download backup JSON'}
         </button>
       </div>
     </div>

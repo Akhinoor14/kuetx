@@ -32,7 +32,7 @@ export default function FinalNeededCalc() {
     <div>
       <div style={{ fontSize: 14, fontWeight: 700, marginBottom: 4 }}>Final Exam Target Planner</div>
       <p style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 14 }}>
-        Theory course total 300: Hall 210 + Continuous 90. Target grade পেতে hall exam-এ minimum কত লাগবে দেখাবে।
+        Theory course total 300: Hall 210 + Continuous 90. This shows the minimum hall exam score needed for your target grade.
       </p>
 
       <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--muted)', marginBottom: 8 }}>Teacher-wise Continuous Input</div>
@@ -104,13 +104,13 @@ export default function FinalNeededCalc() {
         </div>
         {neededHall > 210 ? (
           <div style={{ color: 'var(--danger)', fontWeight: 700, fontSize: 18 }}>
-            Not possible — Hall exam-এ {neededHall.toFixed(1)}/210 লাগবে
+            Not possible — you would need {neededHall.toFixed(1)}/210 in the hall exam
           </div>
         ) : neededHall <= 0 ? (
           <div style={{ color: 'var(--success)', fontWeight: 700, fontSize: 18 }}>Already secured {targetGrade}!</div>
         ) : (
           <div>
-            <span style={{ fontSize: 12, color: 'var(--muted)' }}>Hall exam-এ minimum লাগবে: </span>
+            <span style={{ fontSize: 12, color: 'var(--muted)' }}>Minimum needed in the hall exam: </span>
             <span style={{ fontSize: 26, fontWeight: 800, color: 'var(--accent)' }}>{neededHall.toFixed(1)}/210</span>
             <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 4 }}>
               Average per teacher (if equal split): {neededPerTeacherAvg.toFixed(1)}/105

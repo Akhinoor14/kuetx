@@ -154,7 +154,7 @@ export default function AnnouncementModal({ open: openProp, onClose: onCloseProp
                 KUETx Guide
               </div>
               <div style={{ fontSize: 11, color: 'var(--muted)' }}>
-                প্রতিটা feature কীভাবে use করবে step-by-step
+                How to use every feature step by step
               </div>
             </div>
             <ArrowRight size={15} color="var(--accent)" style={{ flexShrink: 0 }} />

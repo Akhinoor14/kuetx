@@ -70,12 +70,12 @@ export default function RequireCR({ children }) {
       <div style={{ padding: '48px 20px', textAlign: 'center', maxWidth: 420, margin: '0 auto' }}>
         <div style={{ fontSize: 32, marginBottom: 12 }}>🔒</div>
         <div style={{ fontSize: 15, fontWeight: 700, color: 'var(--text)', marginBottom: 8 }}>
-          এই পেজটা শুধু CR/ACR-দের জন্য
+          This page is only for CR/ACR members
         </div>
         <div style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.6, marginBottom: 20 }}>
-          তোমার class-এর অ্যাপ্রুভড CR/ACR না হলে এই টুল ব্যবহার করা যাবে না — লিংক থাকলেও না। CR হতে হলে Classmates পেজ থেকে claim করো।
+          You can not use this tool unless you are the approved CR or ACR for your class, even if you have the link. To become CR, claim it from the Classmates page.
         </div>
-        <Link to="/classmates" className="btn btn-primary btn-sm">Classmates পেজে যাও</Link>
+        <Link to="/classmates" className="btn btn-primary btn-sm">Go to Classmates</Link>
       </div>
     );
   }

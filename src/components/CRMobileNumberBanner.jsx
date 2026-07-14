@@ -40,20 +40,20 @@ export default function CRMobileNumberBanner({ groupId, ownRole }) {
         background: 'var(--warningBg, rgba(245,158,11,0.08))',
       }}>
         <div style={{ fontSize: 13, fontWeight: 700, marginBottom: 4 }}>
-          মোবাইল নম্বর দরকার
+          Mobile number required
         </div>
         <p style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 10 }}>
-          তুমি {ownRole === 'cr' ? 'CR' : 'ACR'} হিসেবে যুক্ত আছো, কিন্তু তোমার মোবাইল নম্বর এখনো দেওয়া হয়নি।
-          Faculty-রা এখন CR/ACR-দের সাথে যোগাযোগের জন্য এই নম্বর দেখতে পারবে, তাই একটা যোগ করে দাও।
+          You are linked as {ownRole === 'cr' ? 'CR' : 'ACR'}, but you have not added a mobile number yet.
+          Faculty can now see this number to contact CR/ACR members, so please add one.
         </p>
         <button className="btn btn-primary btn-sm" onClick={() => setShowDialog(true)}>
-          মোবাইল নম্বর যোগ করো
+          Add mobile number
         </button>
       </div>
       <PromptDialog
         open={showDialog}
-        title="তোমার মোবাইল নম্বর"
-        message="এই নম্বরটা তোমার ক্লাসের Faculty-রা দেখতে পারবে।"
+        title="Your mobile number"
+        message="Faculty in your class will be able to see this number."
         placeholder="01XXXXXXXXX"
         confirmLabel={saving ? 'Saving…' : 'Save'}
         onCancel={() => setShowDialog(false)}

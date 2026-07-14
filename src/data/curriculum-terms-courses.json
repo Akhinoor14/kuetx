@@ -72,9 +72,9 @@
   },
   "notes": {
     "TODO_DEPARTMENTS": [
-      "BioMed - সব term/course info আসবে পরে",
-      "Textile - semester wise courses define হবে",
-      "Architecture - schedule finalize হলে add হবে"
+      "BioMed - term/course details will be added later",
+      "Textile - semester-wise courses will be defined",
+      "Architecture - schedule will be added after it is finalized"
     ]
   }
 }

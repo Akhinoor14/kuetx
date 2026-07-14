@@ -4,17 +4,17 @@ import campusLeadPoster from '../assets/campus_Lead_KUETx_Individual_Hiring_Post
 
 const WHATSAPP_NUMBER = '8801724812042'; // 01724812042 in intl format
 const WHATSAPP_MESSAGE =
-  "আসসালামু আলাইকুম। আমি KUETx-এর Campus Lead পদের জন্য Apply করতে চাই।\n\nনাম:\nডিপার্টমেন্ট:\nব্যাচ:\nকেন এই role-এর জন্য উপযুক্ত মনে করি:\n";
+  "Assalamu alaikum. I want to apply for the Campus Lead role on KUETx.\n\nName:\nDepartment:\nBatch:\nWhy I am suitable for this role:\n";
 
 function buildWhatsappLink() {
   return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(WHATSAPP_MESSAGE)}`;
 }
 
 const COMMUNITY_POINTS = [
-  { icon: '📅', title: 'একসাথে Routine', body: 'তোমার ব্যাচ+ডিপার্টমেন্টের সবাই একই routine দেখবে ও আপডেট থাকবে।' },
-  { icon: '📝', title: 'শেয়ারড Assignment', body: 'একজন আপডেট দিলে ক্লাসের সবাই সাথে সাথে দেখতে পাবে — কে, কখন আপডেট করলো তাও দেখাবে।' },
-  { icon: '📣', title: 'Notice Broadcast', body: 'CR/Campus Lead থেকে জরুরি নোটিশ সরাসরি তোমার ক্লাস গ্রুপে পৌঁছাবে।' },
-  { icon: '🤝', title: 'Class Community', body: 'তোমার ব্যাচ+ডিপার্টমেন্টের সবার সাথে একটামাত্র জায়গায় কানেক্টেড থাকবে।' },
+  { icon: '📅', title: 'Shared routine', body: 'Everyone in your batch and department will see the same routine and updates.' },
+  { icon: '📝', title: 'Shared assignments', body: 'When one person updates it, the whole class can see it immediately, including who updated it and when.' },
+  { icon: '📣', title: 'Notice Broadcast', body: 'Urgent notices from CR or Campus Lead will reach your class group directly.' },
+  { icon: '🤝', title: 'Class Community', body: 'Stay connected with everyone in your batch and department in one place.' },
 ];
 
 export default function CommunityHiringModal({ open: openProp, onClose } = {}) {
@@ -57,14 +57,14 @@ export default function CommunityHiringModal({ open: openProp, onClose } = {}) {
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
                   <Users size={15} color="rgba(255,255,255,0.85)" />
                   <span style={{ fontSize: 11, fontWeight: 700, color: 'rgba(255,255,255,0.8)', letterSpacing: '1.1px', textTransform: 'uppercase' }}>
-                    নতুন ফিচার
+                    New feature
                   </span>
                 </div>
                 <div style={{ fontSize: 21, fontWeight: 800, color: '#fff', fontFamily: 'Sora, sans-serif', marginBottom: 4 }}>
-                  Class Community আসছে! 🎉
+                  Class Community is coming! 🎉
                 </div>
                 <div style={{ fontSize: 12.5, color: 'rgba(255,255,255,0.75)', lineHeight: 1.5 }}>
-                  তোমার ব্যাচ ও ডিপার্টমেন্টের সবাই এখন একসাথে কানেক্টেড থাকতে পারবে।
+                  Everyone in your batch and department will now stay connected in one place.
                 </div>
               </div>
 
@@ -90,7 +90,7 @@ export default function CommunityHiringModal({ open: openProp, onClose } = {}) {
               {/* Footer */}
               <div style={{ padding: '14px 16px 16px', borderTop: '1px solid var(--border)', flexShrink: 0 }}>
                 <button className="btn btn-primary" onClick={next} style={{ width: '100%', justifyContent: 'center', fontSize: 13, display: 'flex', alignItems: 'center', gap: 6 }}>
-                  পরবর্তী <ArrowRight size={15} />
+                  Next <ArrowRight size={15} />
                 </button>
               </div>
             </>
@@ -115,8 +115,8 @@ export default function CommunityHiringModal({ open: openProp, onClose } = {}) {
                     KUETx is hiring
                   </span>
                 </div>
-                <div style={{ fontSize: 20, fontWeight: 800, color: '#fff', fontFamily: 'Sora, sans-serif' }}>
-                  Campus Lead হতে চাও? 🚀
+                  <div style={{ fontSize: 20, fontWeight: 800, color: '#fff', fontFamily: 'Sora, sans-serif' }}>
+                  Want to be a Campus Lead? 🚀
                 </div>
               </div>
 
@@ -135,14 +135,14 @@ export default function CommunityHiringModal({ open: openProp, onClose } = {}) {
                   display: 'flex', alignItems: 'flex-start', gap: 9, fontSize: 11.5, color: 'var(--muted)', lineHeight: 1.5,
                 }}>
                   <CheckCircle2 size={15} color="#25D366" style={{ flexShrink: 0, marginTop: 1 }} />
-                  <span>Apply বাটনে ক্লিক করলে সরাসরি WhatsApp-এ একটা ready-made মেসেজ ওপেন হবে — নাম, ডিপার্টমেন্ট, ব্যাচ বসিয়ে সেন্ড করে দিলেই আবেদন সম্পন্ন।</span>
+                  <span>Clicking Apply opens a ready-made WhatsApp message — fill in your name, department, and batch, then send it to complete the application.</span>
                 </div>
               </div>
 
               {/* Footer */}
               <div style={{ padding: '14px 16px 16px', borderTop: '1px solid var(--border)', flexShrink: 0, display: 'flex', gap: 8 }}>
                 <button onClick={dismiss} className="btn" style={{ flexShrink: 0, fontSize: 13 }}>
-                  পরে
+                  Later
                 </button>
                 <a
                   href={buildWhatsappLink()}
@@ -156,7 +156,7 @@ export default function CommunityHiringModal({ open: openProp, onClose } = {}) {
                     background: '#25D366', borderColor: '#25D366',
                   }}
                 >
-                  <MessageCircle size={15} /> Apply করো (WhatsApp)
+                  <MessageCircle size={15} /> Apply on WhatsApp
                 </a>
               </div>
             </>

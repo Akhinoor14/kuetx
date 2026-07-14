@@ -10,7 +10,7 @@ import ManualVerifyFallback from './ManualVerifyFallback';
  * Inline widget: enter just the name-part of your KUET email -> a 6-digit
  * code is sent (code-main) -> type it in below -> done. A magic sign-in
  * link (the ORIGINAL method, still fully working) is one click away as
- * "link-এ verify করব বরং" for anyone who'd rather just click a link.
+ * "I will verify by link instead" for anyone who would rather just click a link.
  *
  * RESTRUCTURE (code-main, link-backup): stages are now
  *   'input' (name-part entry) -> 'code' (OTP box, DEFAULT after send)
@@ -88,12 +88,12 @@ export default function KuetEmailVerifyWidget({ onVerified, onSkip, compact = fa
 
   const validateInputs = () => {
     if (!roll) {
-      setError('তোমার profile-এ roll number সেট করা নেই — আগে Profile Setup থেকে roll number দাও।');
+      setError('Your profile does not have a roll number yet. Set it in Profile Setup first.');
       return false;
     }
     const clean = namePart.trim().toLowerCase();
     if (!clean || !/^[a-z]+$/.test(clean)) {
-      setError('শুধু নামের অংশটা লেখো (যেমন: islam) — সামনের অংশ, কোনো নাম্বার বা সিম্বল ছাড়া।');
+      setError('Enter only the name part (for example: islam) with no numbers or symbols.');
       return false;
     }
     return true;
@@ -114,7 +114,7 @@ export default function KuetEmailVerifyWidget({ onVerified, onSkip, compact = fa
         setNeedsManualVerify(true);
         setStage('link');
       } else {
-        setError(err?.message || 'Code পাঠাতে সমস্যা হয়েছে, আবার চেষ্টা করুন।');
+        setError(err?.message || 'There was a problem sending the code. Try again.');
       }
     }
     setBusy(false);
@@ -132,7 +132,7 @@ export default function KuetEmailVerifyWidget({ onVerified, onSkip, compact = fa
         setNeedsManualVerify(true);
         setStage('link');
       } else {
-        setError(err?.message || 'আবার পাঠাতে সমস্যা হয়েছে, একটু পর আবার চেষ্টা করো।');
+        setError(err?.message || 'There was a problem resending it. Try again in a moment.');
       }
     }
     setBusy(false);
@@ -147,7 +147,7 @@ export default function KuetEmailVerifyWidget({ onVerified, onSkip, compact = fa
       clearPendingVerifyUI();
       onVerified?.();
     } catch (err) {
-      setError(err?.message || 'Code মেলেনি, আবার চেষ্টা করো।');
+      setError(err?.message || 'The code did not match. Try again.');
     }
     setOtpVerifying(false);
   };
@@ -166,7 +166,7 @@ export default function KuetEmailVerifyWidget({ onVerified, onSkip, compact = fa
         setNeedsManualVerify(true);
         setStage('link');
       } else {
-        setError(err?.message || 'Verification পাঠাতে সমস্যা হয়েছে, আবার চেষ্টা করুন।');
+        setError(err?.message || 'There was a problem sending the verification. Try again.');
       }
     }
     setBusy(false);
@@ -182,7 +182,7 @@ export default function KuetEmailVerifyWidget({ onVerified, onSkip, compact = fa
       if (err?.needsManualVerify) {
         setNeedsManualVerify(true);
       } else {
-        setError(err?.message || 'আবার পাঠাতে সমস্যা হয়েছে, একটু পর আবার চেষ্টা করো।');
+        setError(err?.message || 'There was a problem resending it. Try again in a moment.');
       }
     }
     setBusy(false);
@@ -203,10 +203,10 @@ export default function KuetEmailVerifyWidget({ onVerified, onSkip, compact = fa
         </div>
         <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)' }}>
-            তোমার KUET-এর দেওয়া email দাও
+            Enter the email KUET gave you
           </div>
           <div style={{ fontSize: 11.5, color: 'var(--muted)', lineHeight: 1.5, marginTop: 2 }}>
-            Verified হলে তোমার নামের পাশে blue tick দেখাবে — classmates বুঝবে তুমি সত্যিই এই ক্লাসের ছাত্র। কোনো password লাগবে না।
+            Once verified, a blue tick will appear next to your name so classmates know you are really in this class. No password is needed.
           </div>
         </div>
       </div>
@@ -216,9 +216,9 @@ export default function KuetEmailVerifyWidget({ onVerified, onSkip, compact = fa
           display: 'flex', flexDirection: 'column', gap: 4, fontSize: 11.5, color: 'var(--text)',
           background: 'var(--surface)', borderRadius: 8, padding: '9px 11px', border: '1px solid var(--border)',
         }}>
-          <div><strong>১.</strong> নিচের বক্সে শুধু তোমার নামের অংশটা লেখো (পুরো ইমেইল না)</div>
-          <div><strong>২.</strong> &quot;Code পাঠাও&quot;-এ চাপ দাও</div>
-          <div><strong>৩.</strong> তোমার Gmail/Inbox থেকে ৬-সংখ্যার code বসাও — সাথে সাথেই verify হয়ে যাবে</div>
+          <div><strong>1.</strong> Type only the name part in the box below, not the full email</div>
+          <div><strong>2.</strong> Click &quot;Send code&quot;</div>
+          <div><strong>3.</strong> Enter the 6-digit code from your Gmail or inbox and it will verify immediately</div>
         </div>
       )}
 
@@ -244,16 +244,16 @@ export default function KuetEmailVerifyWidget({ onVerified, onSkip, compact = fa
             </span>
           </div>
           <div style={{ fontSize: 11, color: 'var(--muted)' }}>
-            শুধু নামের অংশটা লেখো — roll number তোমার profile থেকে auto-fill হয়ে গেছে, এটা তোমার নিজের roll ছাড়া অন্য কিছু হতে পারবে না।
+            Enter only the name part — the roll number has been auto-filled from your profile, so it can not be anything other than your own roll.
           </div>
           {error && <div style={{ color: 'var(--danger)', fontSize: 11.5 }}>{error}</div>}
           <div style={{ display: 'flex', gap: 8 }}>
             <button type="submit" className="btn btn-primary btn-sm" disabled={busy} style={{ flex: 1 }}>
-              {busy ? 'পাঠানো হচ্ছে…' : 'Code পাঠাও'}
+              {busy ? 'Sending…' : 'Send code'}
             </button>
             {onSkip && (
               <button type="button" className="btn btn-secondary btn-sm" onClick={onSkip}>
-                পরে করব
+                I will do it later
               </button>
             )}
           </div>
@@ -263,7 +263,7 @@ export default function KuetEmailVerifyWidget({ onVerified, onSkip, compact = fa
       {stage === 'code' && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
           <div style={{ fontSize: 12, color: 'var(--text)', lineHeight: 1.5 }}>
-            <strong>{email}</strong>-এ একটা ৬-সংখ্যার code পাঠানো হয়েছে। <strong>Spam/Junk folder-ও চেক করো</strong> — Gmail মাঝে মাঝে ওখানে ফেলে দেয়। Code-টা ১০ মিনিট পর্যন্ত valid থাকবে।
+            A 6-digit code has been sent to <strong>{email}</strong>. <strong>Check Spam/Junk too</strong> — Gmail sometimes puts it there. The code stays valid for 10 minutes.
           </div>
           <OtpInput value={otp} onChange={setOtp} disabled={otpVerifying} />
           {error && <div style={{ color: 'var(--danger)', fontSize: 11.5 }}>{error}</div>}
@@ -271,15 +271,15 @@ export default function KuetEmailVerifyWidget({ onVerified, onSkip, compact = fa
             type="button" className="btn btn-primary btn-sm"
             onClick={handleVerifyCode} disabled={otp.length !== 6 || otpVerifying}
           >
-            {otpVerifying ? 'Verify হচ্ছে…' : 'Verify করো'}
+            {otpVerifying ? 'Verifying…' : 'Verify now'}
           </button>
           <div style={{ display: 'flex', gap: 8 }}>
             <button type="button" className="btn btn-secondary btn-sm" onClick={handleResendCode} disabled={busy}>
-              {busy ? 'পাঠানো হচ্ছে…' : 'নতুন code পাঠাও'}
+              {busy ? 'Sending…' : 'Send a new code'}
             </button>
             {onSkip && (
               <button type="button" className="btn btn-secondary btn-sm" onClick={onSkip}>
-                পরে করব
+                I will do it later
               </button>
             )}
           </div>
@@ -287,14 +287,14 @@ export default function KuetEmailVerifyWidget({ onVerified, onSkip, compact = fa
             type="button" onClick={handleSendLink} disabled={busy}
             style={{ background: 'none', border: 'none', color: 'var(--muted)', fontSize: 11.5, textDecoration: 'underline', cursor: 'pointer', textAlign: 'left', padding: 0 }}
           >
-            এর বদলে link-এ verify করব
+            I will verify by link instead
           </button>
           <button
             type="button"
             onClick={() => { setNeedsManualVerify(true); setStage('link'); }}
             style={{ background: 'none', border: 'none', color: 'var(--muted)', fontSize: 11.5, textDecoration: 'underline', cursor: 'pointer', textAlign: 'left', padding: 0 }}
           >
-            code/link কোনোটাই পাচ্ছি না — manually verify করতে চাই
+            I can not get either code or link, and I want to verify manually
           </button>
         </div>
       )}
@@ -310,7 +310,7 @@ export default function KuetEmailVerifyWidget({ onVerified, onSkip, compact = fa
       {stage === 'link' && !needsManualVerify && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
           <div style={{ fontSize: 12, color: 'var(--text)', lineHeight: 1.5 }}>
-            <strong>{email}</strong>-এ একটা sign-in link পাঠানো হয়েছে। <strong>Spam/Junk folder-ও চেক করো</strong> — Gmail মাঝে মাঝে ওখানে ফেলে দেয়। লিংকে ক্লিক করলেই automatic verify হয়ে যাবে, কোনো password লাগবে না।
+            A sign-in link has been sent to <strong>{email}</strong>. <strong>Check Spam/Junk too</strong> — Gmail sometimes puts it there. Click the link and it will verify automatically, with no password needed.
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 11.5, color: 'var(--muted)' }}>
             <span className="spinner" style={{
@@ -318,16 +318,16 @@ export default function KuetEmailVerifyWidget({ onVerified, onSkip, compact = fa
               border: '2px solid var(--border)', borderTopColor: '#1d9bf0',
               animation: 'kuetx-spin 0.8s linear infinite', flexShrink: 0,
             }} />
-            লিংকে ক্লিক করার অপেক্ষায়…
+            Waiting for you to click the link…
           </div>
           {error && <div style={{ color: 'var(--danger)', fontSize: 11.5 }}>{error}</div>}
           <div style={{ display: 'flex', gap: 8 }}>
             <button type="button" className="btn btn-secondary btn-sm" onClick={handleResendLink} disabled={busy}>
-              {busy ? 'পাঠানো হচ্ছে…' : 'নতুন link পাঠাও'}
+              {busy ? 'Sending…' : 'Send a new link'}
             </button>
             {onSkip && (
               <button type="button" className="btn btn-secondary btn-sm" onClick={onSkip}>
-                পরে করব
+                I will do it later
               </button>
             )}
           </div>
@@ -335,7 +335,7 @@ export default function KuetEmailVerifyWidget({ onVerified, onSkip, compact = fa
             type="button" onClick={() => setStage('code')}
             style={{ background: 'none', border: 'none', color: 'var(--muted)', fontSize: 11.5, textDecoration: 'underline', cursor: 'pointer', textAlign: 'left', padding: 0 }}
           >
-            এর বদলে code-এ verify করব
+            I will verify by code instead
           </button>
           <style>{`@keyframes kuetx-spin { to { transform: rotate(360deg); } }`}</style>
         </div>

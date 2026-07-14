@@ -354,7 +354,7 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
       claim = await claimRoll(studentIdTrimmed);
     } catch (err) {
       setRollClaimBusy(false);
-      setErrors(prev => ({ ...prev, studentId: 'Roll check করতে সমস্যা হয়েছে, আবার চেষ্টা করো।' }));
+      setErrors(prev => ({ ...prev, studentId: 'There was a problem checking the roll. Try again.' }));
       setStepIndex(0);
       return;
     }
@@ -364,7 +364,7 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
       setRollLocked({ roll: studentIdTrimmed });
       setErrors(prev => ({
         ...prev,
-        studentId: 'এই roll number দিয়ে আগেই একটা account আছে। নিচে KUET email verify করে নিজে নিজে reclaim করতে পারো, অথবা admin-কে request পাঠাতে পারো।',
+        studentId: 'An account already uses this roll number. Verify your KUET email below to reclaim it yourself, or send a request to admin.',
       }));
       setStepIndex(0);
       return;
@@ -511,9 +511,9 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
                       {errors.studentId && <div style={{ fontSize: 11, color: '#dc2626', marginTop: 5 }}>{errors.studentId}</div>}
                       {rollLocked?.roll === String(form.studentId || '').trim() && (
                         <div style={{ marginTop: 10, padding: 10, border: '1px solid var(--border)', borderRadius: 8, background: 'var(--card-alt, #f9fafb)' }}>
-                          <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 6 }}>এই roll number অন্য একজন আগে থেকেই ব্যবহার করছে — নিজের বলে প্রমাণ করতে</div>
+                          <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 6 }}>This roll number is already used by someone else. Prove it is yours by verifying your email.</div>
                           <div style={{ fontSize: 11, color: 'var(--muted)', marginBottom: 8 }}>
-                            তোমার KUET email (@stud.kuet.ac.bd) verify করলে এই roll number automatically তোমার account-এ চলে আসবে।
+                            If you verify your KUET email (@stud.kuet.ac.bd), this roll number will automatically move to your account.
                           </div>
                           <KuetEmailVerifyWidget
                             overrideRoll={rollLocked.roll}
@@ -524,10 +524,10 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
                             }}
                           />
                           <div style={{ fontSize: 11, color: 'var(--muted)', margin: '10px 0 6px' }}>
-                            KUET email verify করতে না পারলে, admin-কে সরাসরি request পাঠাও:
+                            If you can not verify your KUET email, send a direct request to admin:
                           </div>
                           {unlockRequestState === 'sent' ? (
-                            <div style={{ fontSize: 11, color: 'var(--muted)' }}>Request পাঠানো হয়েছে। Admin দেখে resolve করবে।</div>
+                            <div style={{ fontSize: 11, color: 'var(--muted)' }}>Request sent. Admin will review and resolve it.</div>
                           ) : (
                             <button
                               type="button"
@@ -535,11 +535,11 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
                               onClick={handleRequestUnlock}
                               disabled={unlockRequestState === 'sending'}
                             >
-                              {unlockRequestState === 'sending' ? 'Sending…' : 'Admin-কে request পাঠাও'}
+                              {unlockRequestState === 'sending' ? 'Sending…' : 'Send request to admin'}
                             </button>
                           )}
                           {unlockRequestState === 'error' && (
-                            <div style={{ color: 'var(--danger)', fontSize: 11, marginTop: 6 }}>Request পাঠাতে সমস্যা হয়েছে, আবার চেষ্টা করো।</div>
+                            <div style={{ color: 'var(--danger)', fontSize: 11, marginTop: 6 }}>There was a problem sending the request. Try again.</div>
                           )}
                         </div>
                       )}
@@ -578,9 +578,9 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
                       {errors.studentId && <div style={{ fontSize: 11, color: '#dc2626', marginTop: 5 }}>{errors.studentId}</div>}
                       {rollLocked?.roll === String(form.studentId || '').trim() && (
                         <div style={{ marginTop: 10, padding: 10, border: '1px solid var(--border)', borderRadius: 8, background: 'var(--card-alt, #f9fafb)' }}>
-                          <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 6 }}>এই roll number অন্য একজন আগে থেকেই ব্যবহার করছে — নিজের বলে প্রমাণ করতে</div>
+                          <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 6 }}>This roll number is already used by someone else. Prove it is yours by verifying your email.</div>
                           <div style={{ fontSize: 11, color: 'var(--muted)', marginBottom: 8 }}>
-                            তোমার KUET email (@stud.kuet.ac.bd) verify করলে এই roll number automatically তোমার account-এ চলে আসবে।
+                            If you verify your KUET email (@stud.kuet.ac.bd), this roll number will automatically move to your account.
                           </div>
                           <KuetEmailVerifyWidget
                             overrideRoll={rollLocked.roll}
@@ -591,10 +591,10 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
                             }}
                           />
                           <div style={{ fontSize: 11, color: 'var(--muted)', margin: '10px 0 6px' }}>
-                            KUET email verify করতে না পারলে, admin-কে সরাসরি request পাঠাও:
+                            If you can not verify your KUET email, send a direct request to admin:
                           </div>
                           {unlockRequestState === 'sent' ? (
-                            <div style={{ fontSize: 11, color: 'var(--muted)' }}>Request পাঠানো হয়েছে। Admin দেখে resolve করবে।</div>
+                            <div style={{ fontSize: 11, color: 'var(--muted)' }}>Request sent. Admin will review and resolve it.</div>
                           ) : (
                             <button
                               type="button"
@@ -602,11 +602,11 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
                               onClick={handleRequestUnlock}
                               disabled={unlockRequestState === 'sending'}
                             >
-                              {unlockRequestState === 'sending' ? 'Sending…' : 'Admin-কে request পাঠাও'}
+                              {unlockRequestState === 'sending' ? 'Sending…' : 'Send request to admin'}
                             </button>
                           )}
                           {unlockRequestState === 'error' && (
-                            <div style={{ color: 'var(--danger)', fontSize: 11, marginTop: 6 }}>Request পাঠাতে সমস্যা হয়েছে, আবার চেষ্টা করো।</div>
+                            <div style={{ color: 'var(--danger)', fontSize: 11, marginTop: 6 }}>There was a problem sending the request. Try again.</div>
                           )}
                         </div>
                       )}
@@ -760,7 +760,7 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
                   borderRadius: 12, padding: 12, fontSize: 12.5, color: 'var(--text)', fontWeight: 600,
                   display: 'flex', alignItems: 'center', gap: 8,
                 }}>
-                  ✅ KUET email verified হয়ে গেছে — তোমার নামের পাশে blue tick দেখাবে।
+                  ✅ KUET email verified — a blue tick will appear next to your name.
                 </div>
               )}
 

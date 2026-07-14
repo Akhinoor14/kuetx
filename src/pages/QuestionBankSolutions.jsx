@@ -869,7 +869,7 @@ function SolutionOverlay({ question: q, t, dark, bookmarks, toggleBookmark, cour
 
           {q.explanation_bn && (
             <div className="solpage-section" style={{ background: t.bnBg, border: `1px solid ${t.borderSub}` }}>
-              <div className="solpage-section-label" style={{ color: t.yellow }}>বাংলা ব্যাখ্যা</div>
+              <div className="solpage-section-label" style={{ color: t.yellow }}>Bangla explanation</div>
               <div className="solpage-section-body sol-bn-section"><AnswerBlock text={q.explanation_bn} t={t} /></div>
             </div>
           )}

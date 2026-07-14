@@ -19,8 +19,8 @@
 // other groups/{groupId}/* collection's audit trail, `loggedBy` as the
 // extra discrepancy-signal field §8.8 specifically asks for.
 //
-// Also computes an auto-incrementing sequence number per §8.8 ("প্রতি
-// logged session-এ auto-incrementing sequence number") — scoped per
+// Also computes an auto-incrementing sequence number per §8.8 ("per
+// logged session auto-incrementing sequence number") — scoped per
 // courseId within the assignment's group, computed from the live
 // subscription's current count rather than a stored counter doc, since
 // plannerLogEntries is already subscribed to elsewhere and this avoids a

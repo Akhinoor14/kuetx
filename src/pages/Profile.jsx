@@ -622,7 +622,7 @@ export default function Profile() {
   };
 
   const handleLogout = async () => {
-    if (!confirm('Sign out করবে? Local data ঠিকই থাকবে।')) return;
+    if (!confirm('Sign out? Your local data will stay intact.')) return;
     try { await logout(); } catch {}
   };
 
@@ -1194,7 +1194,7 @@ export default function Profile() {
           {/* ── Today's Focus (standalone — no profile.currentTermKey dependency) ── */}
           {(() => {
             const PRAYERS_LIST = ['Fajr', 'Dhuhr', 'Asr', 'Maghrib', 'Isha'];
-            const PRAYER_AR = { Fajr: 'ফজর', Dhuhr: 'যোহর', Asr: 'আসর', Maghrib: 'মাগরিব', Isha: 'ইশা' };
+            const PRAYER_AR = { Fajr: 'Fajr', Dhuhr: 'Dhuhr', Asr: 'Asr', Maghrib: 'Maghrib', Isha: 'Isha' };
             const PRAYER_ICON = {
               Fajr: <Icons.Sunrise size={14} />,
               Dhuhr: <Icons.Sun size={14} />,
@@ -1215,39 +1215,39 @@ export default function Profile() {
 
             // Quran / Islamic bani — hourly shuffle, click to advance
             const QURAN_BANIS = [
-              { text: 'وَمَن يَتَّقِ اللَّهَ يَجْعَل لَّهُ مَخْرَجًا', ref: 'সূরা তালাক ৬৫:২', bn: 'যে আল্লাহকে ভয় করে, তিনি তার জন্য পথ বের করে দেন।' },
-              { text: 'إِنَّ مَعَ الْعُسْرِ يُسْرًا', ref: 'সূরা ইনশিরাহ ৯৪:৬', bn: 'নিশ্চয়ই কষ্টের সাথেই রয়েছে স্বস্তি।' },
-              { text: 'وَقُل رَّبِّ زِدْنِي عِلْمًا', ref: 'সূরা ত্বহা ২০:১১৪', bn: 'বলো: হে আমার রব, আমার জ্ঞান বৃদ্ধি করো।' },
-              { text: 'فَاذْكُرُونِي أَذْكُرْكُمْ', ref: 'সূরা বাকারা ২:১৫২', bn: 'তোমরা আমাকে স্মরণ কোরো, আমি তোমাদের স্মরণ করব।' },
-              { text: 'إِنَّ اللَّهَ لَا يُضِيعُ أَجْرَ الْمُحْسِنِينَ', ref: 'সূরা তওবা ৯:১২০', bn: 'নিশ্চয়ই আল্লাহ সৎকর্মশীলদের পুরস্কার নষ্ট করেন না।' },
-              { text: 'وَتَوَكَّلْ عَلَى اللَّهِ ۚ وَكَفَىٰ بِاللَّهِ وَكِيلًا', ref: 'সূরা নিসা ৪:৮১', bn: 'আল্লাহর উপর ভরসা কোরো — তিনিই যথেষ্ট কর্মবিধায়ক।' },
-              { text: 'اقْرَأْ بِاسْمِ رَبِّكَ الَّذِي خَلَقَ', ref: 'সূরা আলাক ৯৬:১', bn: 'পড়ো তোমার রবের নামে, যিনি সৃষ্টি করেছেন।' },
-              { text: 'وَأَن لَّيْسَ لِلْإِنسَانِ إِلَّا مَا سَعَىٰ', ref: 'সূরা নাজম ৫৩:৩৯', bn: 'মানুষ শুধু তাই পায় যা সে চেষ্টা করে।' },
-              { text: 'يَرْفَعِ اللَّهُ الَّذِينَ آمَنُوا مِنكُمْ وَالَّذِينَ أُوتُوا الْعِلْمَ دَرَجَاتٍ', ref: 'সূরা মুজাদালা ৫৮:১১', bn: 'আল্লাহ মুমিনদের এবং যাদের জ্ঞান দেওয়া হয়েছে তাদের মর্যাদা উন্নত করবেন।' },
-              { text: 'وَبَشِّرِ الصَّابِرِينَ', ref: 'সূরা বাকারা ২:১৫৫', bn: 'আর ধৈর্যশীলদের সুসংবাদ দাও।' },
-              { text: 'حَسْبُنَا اللَّهُ وَنِعْمَ الْوَكِيلُ', ref: 'সূরা আলে ইমরান ৩:১৭৩', bn: 'আল্লাহই আমাদের জন্য যথেষ্ট — কত উত্তম কর্মবিধায়ক।' },
-              { text: 'وَعَسَىٰ أَن تَكْرَهُوا شَيْئًا وَهُوَ خَيْرٌ لَّكُمْ', ref: 'সূরা বাকারা ২:২১৬', bn: 'হয়তো কোনো কিছু তোমাদের কাছে অপছন্দের কিন্তু তা তোমাদের জন্য কল্যাণকর।' },
-              { text: 'إِنَّ اللَّهَ مَعَ الصَّابِرِينَ', ref: 'সূরা বাকারা ২:১৫৩', bn: 'নিশ্চয়ই আল্লাহ ধৈর্যশীলদের সাথে আছেন।' },
-              { text: 'فَإِذَا فَرَغْتَ فَانصَبْ', ref: 'সূরা ইনশিরাহ ৯৪:৭', bn: 'যখন তুমি ফুরসত পাবে, তখন পরিশ্রমে নিমগ্ন হও।' },
-              { text: 'وَاللَّهُ يُحِبُّ الْمُحْسِنِينَ', ref: 'সূরা আলে ইমরান ৩:১৩৪', bn: 'আর আল্লাহ সৎকর্মশীলদের ভালোবাসেন।' },
-              { text: 'إِنَّ اللَّهَ لَا يُغَيِّرُ مَا بِقَوْمٍ حَتَّىٰ يُغَيِّرُوا مَا بِأَنفُسِهِمْ', ref: 'সূরা রাদ ১৩:১১', bn: 'আল্লাহ কোনো জাতির অবস্থা পরিবর্তন করেন না, যতক্ষণ না তারা নিজেরা নিজেদের পরিবর্তন করে।' },
-              { text: 'وَقَالَ رَبُّكُمُ ادْعُونِي أَسْتَجِبْ لَكُمْ', ref: 'সূরা গাফির ৪০:৬০', bn: 'তোমাদের রব বলেছেন: আমাকে ডাকো, আমি তোমাদের সাড়া দেবো।' },
-              { text: 'وَمَن يَتَوَكَّلْ عَلَى اللَّهِ فَهُوَ حَسْبُهُ', ref: 'সূরা তালাক ৬৫:৩', bn: 'যে আল্লাহর উপর ভরসা করে, তিনিই তার জন্য যথেষ্ট।' },
-              { text: 'وَلَا تَهِنُوا وَلَا تَحْزَنُوا وَأَنتُمُ الْأَعْلَوْنَ', ref: 'সূরা আলে ইমরান ৩:১৩৯', bn: 'হতাশ হয়ো না, দুঃখ করো না — তোমরাই বিজয়ী হবে।' },
-              { text: 'سَنُرِيهِمْ آيَاتِنَا فِي الْآفَاقِ وَفِي أَنفُسِهِمْ', ref: 'সূরা ফুসসিলাত ৪১:৫৩', bn: 'আমি তাদের দেখাবো আমার নিদর্শন — মহাবিশ্বে এবং তাদের নিজেদের মধ্যে।' },
-              { text: 'وَفَوْقَ كُلِّ ذِي عِلْمٍ عَلِيمٌ', ref: 'সূরা ইউসুফ ১২:৭৬', bn: 'প্রতিটি জ্ঞানীর উপরে রয়েছে আরও জ্ঞানী।' },
-              { text: 'وَمَا أُوتِيتُم مِّنَ الْعِلْمِ إِلَّا قَلِيلًا', ref: 'সূরা ইসরা ১৭:৮৫', bn: 'তোমাদের জ্ঞান অতি সামান্যই দেওয়া হয়েছে।' },
-              { text: 'يُؤْتِي الْحِكْمَةَ مَن يَشَاءُ ۚ وَمَن يُؤْتَ الْحِكْمَةَ فَقَدْ أُوتِيَ خَيْرًا كَثِيرًا', ref: 'সূরা বাকারা ২:২৬৯', bn: 'তিনি যাকে চান প্রজ্ঞা দান করেন — আর যে প্রজ্ঞা পায়, সে বিশাল কল্যাণ পায়।' },
-              { text: 'أَفَلَا يَتَدَبَّرُونَ الْقُرْآنَ', ref: 'সূরা নিসা ৪:৮২', bn: 'তারা কি কুরআন নিয়ে চিন্তাভাবনা করে না?' },
-              { text: 'رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً وَفِي الْآخِرَةِ حَسَنَةً', ref: 'সূরা বাকারা ২:২০১', bn: 'হে আমাদের রব! আমাদের দুনিয়ায় কল্যাণ দাও এবং আখিরাতেও কল্যাণ দাও।' },
-              { text: 'إِنَّمَا يَخْشَى اللَّهَ مِنْ عِبَادِهِ الْعُلَمَاءُ', ref: 'সূরা ফাতির ৩৫:২৮', bn: 'আল্লাহর বান্দাদের মধ্যে কেবল জ্ঞানীরাই তাঁকে যথাযথ ভয় করে।' },
-              { text: 'وَاصْبِرْ وَمَا صَبْرُكَ إِلَّا بِاللَّهِ', ref: 'সূরা নাহল ১৬:১২৭', bn: 'ধৈর্য ধারণ করো — আর তোমার ধৈর্য একমাত্র আল্লাহর সাহায্যেই সম্ভব।' },
-              { text: 'وَمَن يَعْمَلْ مِثْقَالَ ذَرَّةٍ خَيْرًا يَرَهُ', ref: 'সূরা যিলযাল ৯৯:৭', bn: 'কেউ অণু পরিমাণ ভালো কাজ করলে সে তা দেখবে।' },
-              { text: 'خُذِ الْعَفْوَ وَأْمُرْ بِالْعُرْفِ وَأَعْرِضْ عَنِ الْجَاهِلِينَ', ref: 'সূরা আরাফ ৭:১৯৯', bn: 'ক্ষমাকে আঁকড়ে ধরো, ভালো কাজের আদেশ দাও, আর মূর্খদের এড়িয়ে চলো।' },
-              { text: 'وَلَا تَيْأَسُوا مِن رَّوْحِ اللَّهِ', ref: 'সূরা ইউসুফ ১২:৮৭', bn: 'আল্লাহর রহমত থেকে কখনো নিরাশ হয়ো না।' },
-              { text: 'وَاللَّهُ خَيْرُ الرَّازِقِينَ', ref: 'সূরা জুমুআ ৬২:১১', bn: 'আল্লাহই সর্বোত্তম রিজিকদাতা।' },
-              { text: 'هُوَ الَّذِي جَعَلَ لَكُمُ الْأَرْضَ ذَلُولًا فَامْشُوا فِي مَنَاكِبِهَا', ref: 'সূরা মুলক ৬৭:১৫', bn: 'তিনিই পৃথিবীকে তোমাদের জন্য সুগম করেছেন — তার পথে চলো।' },
-              { text: 'إِنَّ مَعَ الصَّبْرِ النَّصْرَ وَمَعَ الْكَرْبِ الْفَرَجَ', ref: 'হাদিস — তিরমিজি', bn: 'জেনে রাখো: ধৈর্যের সাথে বিজয় আসে, আর সংকটের সাথে মুক্তি আসে।' },
+              { text: 'وَمَن يَتَّقِ اللَّهَ يَجْعَل لَّهُ مَخْرَجًا', ref: 'Surah At-Talaq 65:2', bn: 'Whoever fears Allah, He will make a way out for them.' },
+              { text: 'إِنَّ مَعَ الْعُسْرِ يُسْرًا', ref: 'Surah Ash-Sharh 94:6', bn: 'Indeed, with hardship comes ease.' },
+              { text: 'وَقُل رَّبِّ زِدْنِي عِلْمًا', ref: 'Surah Taha 20:114', bn: 'Say: My Lord, increase me in knowledge.' },
+              { text: 'فَاذْكُرُونِي أَذْكُرْكُمْ', ref: 'Surah Al-Baqarah 2:152', bn: 'Remember Me, and I will remember you.' },
+              { text: 'إِنَّ اللَّهَ لَا يُضِيعُ أَجْرَ الْمُحْسِنِينَ', ref: 'Surah At-Tawbah 9:120', bn: 'Indeed, Allah does not let the reward of those who do good go to waste.' },
+              { text: 'وَتَوَكَّلْ عَلَى اللَّهِ ۚ وَكَفَىٰ بِاللَّهِ وَكِيلًا', ref: 'Surah An-Nisa 4:81', bn: 'Trust in Allah, and Allah is sufficient as a disposer of affairs.' },
+              { text: 'اقْرَأْ بِاسْمِ رَبِّكَ الَّذِي خَلَقَ', ref: 'Surah Al-Alaq 96:1', bn: 'Read in the name of your Lord who created.' },
+              { text: 'وَأَن لَّيْسَ لِلْإِنسَانِ إِلَّا مَا سَعَىٰ', ref: 'Surah An-Najm 53:39', bn: 'And that a person will have only what they strive for.' },
+              { text: 'يَرْفَعِ اللَّهُ الَّذِينَ آمَنُوا مِنكُمْ وَالَّذِينَ أُوتُوا الْعِلْمَ دَرَجَاتٍ', ref: 'Surah Al-Mujadila 58:11', bn: 'Allah raises the believers and those given knowledge in درجات.' },
+              { text: 'وَبَشِّرِ الصَّابِرِينَ', ref: 'Surah Al-Baqarah 2:155', bn: 'Give glad tidings to the patient.' },
+              { text: 'حَسْبُنَا اللَّهُ وَنِعْمَ الْوَكِيلُ', ref: 'Surah Aal-E-Imran 3:173', bn: 'Allah is sufficient for us, and He is the best disposer of affairs.' },
+              { text: 'وَعَسَىٰ أَن تَكْرَهُوا شَيْئًا وَهُوَ خَيْرٌ لَّكُمْ', ref: 'Surah Al-Baqarah 2:216', bn: 'Perhaps you dislike something while it is good for you.' },
+              { text: 'إِنَّ اللَّهَ مَعَ الصَّابِرِينَ', ref: 'Surah Al-Baqarah 2:153', bn: 'Indeed, Allah is with the patient.' },
+              { text: 'فَإِذَا فَرَغْتَ فَانصَبْ', ref: 'Surah Ash-Sharh 94:7', bn: 'When you are finished, keep striving.' },
+              { text: 'وَاللَّهُ يُحِبُّ الْمُحْسِنِينَ', ref: 'Surah Aal-E-Imran 3:134', bn: 'Allah loves those who do good.' },
+              { text: 'إِنَّ اللَّهَ لَا يُغَيِّرُ مَا بِقَوْمٍ حَتَّىٰ يُغَيِّرُوا مَا بِأَنفُسِهِمْ', ref: 'Surah Ar-Ra'd 13:11', bn: 'Allah does not change the condition of a people until they change what is in themselves.' },
+              { text: 'وَقَالَ رَبُّكُمُ ادْعُونِي أَسْتَجِبْ لَكُمْ', ref: 'Surah Ghafir 40:60', bn: 'Your Lord said: Call upon Me; I will respond to you.' },
+              { text: 'وَمَن يَتَوَكَّلْ عَلَى اللَّهِ فَهُوَ حَسْبُهُ', ref: 'Surah At-Talaq 65:3', bn: 'Whoever relies upon Allah, He is sufficient for them.' },
+              { text: 'وَلَا تَهِنُوا وَلَا تَحْزَنُوا وَأَنتُمُ الْأَعْلَوْنَ', ref: 'Surah Aal-E-Imran 3:139', bn: 'Do not lose heart or grieve; you will be victorious.' },
+              { text: 'سَنُرِيهِمْ آيَاتِنَا فِي الْآفَاقِ وَفِي أَنفُسِهِمْ', ref: 'Surah Fussilat 41:53', bn: 'We will show them Our signs in the horizons and within themselves.' },
+              { text: 'وَفَوْقَ كُلِّ ذِي عِلْمٍ عَلِيمٌ', ref: 'Surah Yusuf 12:76', bn: 'Above every person of knowledge is one who knows more.' },
+              { text: 'وَمَا أُوتِيتُم مِّنَ الْعِلْمِ إِلَّا قَلِيلًا', ref: 'Surah Al-Isra 17:85', bn: 'You have been given only a little knowledge.' },
+              { text: 'يُؤْتِي الْحِكْمَةَ مَن يَشَاءُ ۚ وَمَن يُؤْتَ الْحِكْمَةَ فَقَدْ أُوتِيَ خَيْرًا كَثِيرًا', ref: 'Surah Al-Baqarah 2:269', bn: 'He grants wisdom to whom He wills, and whoever is given wisdom has been given much الخير.' },
+              { text: 'أَفَلَا يَتَدَبَّرُونَ الْقُرْآنَ', ref: 'Surah An-Nisa 4:82', bn: 'Do they not reflect on the Quran?' },
+              { text: 'رَبَّنَا آتِنَا فِي الدُّنْيَا حَسَنَةً وَفِي الْأَخِرَةِ حَسَنَةً', ref: 'Surah Al-Baqarah 2:201', bn: 'Our Lord, give us good in this world and good in the Hereafter.' },
+              { text: 'إِنَّمَا يَخْشَى اللَّهَ مِنْ عِبَادِهِ الْعُلَمَاءُ', ref: 'Surah Fatir 35:28', bn: 'Only those of His servants who have knowledge truly fear Allah.' },
+              { text: 'وَاصْبِرْ وَمَا صَبْرُكَ إِلَّا بِاللَّهِ', ref: 'Surah An-Nahl 16:127', bn: 'Be patient, and your patience is only through Allah.' },
+              { text: 'وَمَن يَعْمَلْ مِثْقَالَ ذَرَّةٍ خَيْرًا يَرَهُ', ref: 'Surah Az-Zalzalah 99:7', bn: 'Whoever does even an atom's weight of good will see it.' },
+              { text: 'خُذِ الْعَفْوَ وَأْمُرْ بِالْعُرْفِ وَأَعْرِضْ عَنِ الْجَاهِلِينَ', ref: 'Surah Al-A'raf 7:199', bn: 'Take forgiveness, enjoin what is right, and turn away from the ignorant.' },
+              { text: 'وَلَا تَيْأَسُوا مِن رَّوْحِ اللَّهِ', ref: 'Surah Yusuf 12:87', bn: 'Never lose hope in Allah's mercy.' },
+              { text: 'وَاللَّهُ خَيْرُ الرَّازِقِينَ', ref: 'Surah Al-Jumu'ah 62:11', bn: 'Allah is the best Provider.' },
+              { text: 'هُوَ الَّذِي جَعَلَ لَكُمُ الْأَرْضَ ذَلُولًا فَامْشُوا فِي مَنَاكِبِهَا', ref: 'Surah Al-Mulk 67:15', bn: 'He made the earth easy for you, so walk its paths.' },
+              { text: 'إِنَّ مَعَ الصَّبْرِ النَّصْرَ وَمَعَ الْكَرْبِ الْفَرَجَ', ref: 'Hadith — Tirmidhi', bn: 'Victory comes with patience, and relief comes with hardship.' },
             ];
             const bani = QURAN_BANIS[reminderTick % QURAN_BANIS.length];
 
@@ -1258,7 +1258,7 @@ export default function Profile() {
                   {/* ── Namaz tracker ── */}
                   <div>
                     <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 10, display: 'flex', alignItems: 'center', gap: 5 }}>
-                      <Icons.Landmark size={12} /> নামাজ — আজকের
+                      <Icons.Landmark size={12} /> Salah - Today
                     </div>
                     <div style={{ display: 'flex', gap: 6, alignItems: 'flex-end' }}>
                       {PRAYERS_LIST.map((p, i) => {
@@ -1277,7 +1277,7 @@ export default function Profile() {
                               minWidth: 40, maxWidth: 56,
                             }}>
                               <span style={{ display: 'inline-flex' }}>{PRAYER_ICON[p]}</span>
-                              {s.masjid && <span style={{ fontSize: 8, color: '#fff', fontWeight: 700, letterSpacing: 0.3 }}>মসজিদ</span>}
+                              {s.masjid && <span style={{ fontSize: 8, color: '#fff', fontWeight: 700, letterSpacing: 0.3 }}>Mosque</span>}
                               {s.done && !s.masjid && <Icons.Check size={11} color={textColor} strokeWidth={3} />}
                             </div>
                             <span style={{ fontSize: 9, color: (s.done || s.masjid) ? 'var(--accent)' : 'var(--muted)', fontWeight: 700 }}>
@@ -1291,7 +1291,7 @@ export default function Profile() {
                           {namazCount}<span style={{ fontSize: 13, color: 'var(--muted)', fontWeight: 500 }}>/5</span>
                         </div>
                         <div style={{ fontSize: 9, color: 'var(--muted)', marginTop: 2, display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: 3 }}>
-                          {namazCount === 5 ? <><Icons.CheckCircle2 size={10} color="#16a34a" /> পূর্ণ</> : `${5 - namazCount} বাকি`}
+                          {namazCount === 5 ? <><Icons.CheckCircle2 size={10} color="#16a34a" /> Complete</> : `${5 - namazCount} left`}
                         </div>
                       </div>
                     </div>
@@ -1338,7 +1338,7 @@ export default function Profile() {
                     onMouseLeave={e => e.currentTarget.style.opacity = '1'}
                   >
                     <div style={{ fontSize: 10, fontWeight: 800, color: 'var(--accent)', marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.07em', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                      <span style={{ display: 'flex', alignItems: 'center', gap: 5 }}><Icons.BookOpenText size={11} /> কুরআনের বাণী</span>
+                      <span style={{ display: 'flex', alignItems: 'center', gap: 5 }}><Icons.BookOpenText size={11} /> Quran verse</span>
                       <span style={{ fontSize: 9, color: 'var(--muted)', fontWeight: 600, letterSpacing: 0 }}>tap for next ›</span>
                     </div>
                     <div style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.7, fontFamily: '"Amiri", serif', textAlign: 'right', direction: 'rtl', marginBottom: 6 }}>

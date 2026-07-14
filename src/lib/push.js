@@ -119,7 +119,7 @@ export async function disablePush() {
       }
     }
     store.set('pushEnabled', false);
-    notify('Push notification বন্ধ করা হয়েছে।', 'info');
+    notify('Push notifications have been turned off.', 'info');
   } catch (e) {
     console.warn('[push] disablePush failed', e);
   }

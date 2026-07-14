@@ -10,7 +10,7 @@ const SNOOZE_DAYS = 5;
 
 /**
  * Soft, dismissible in-app banner shown BEFORE the native browser
- * permission prompt — asks "Notice এলে notification পেতে চান?" with
+ * permission prompt — asks "Want notifications for new notices?" with
  * Allow/Not now. Only calling enablePush() (which triggers the real
  * browser popup) happens after an explicit tap on "Allow" here — the
  * app never cold-opens the native prompt on its own, matching the
@@ -58,7 +58,7 @@ export default function PushPermissionBanner() {
     setBusy(false);
     setVisible(false);
     if (result.ok) {
-      notify('Push notification চালু হয়েছে!', 'success');
+      notify('Push notifications are on!', 'success');
     } else if (result.reason === 'denied') {
       // Browser-level denial — snooze so we don't keep re-showing our
       // own banner when the native prompt will just get auto-blocked.
@@ -92,10 +92,10 @@ export default function PushPermissionBanner() {
       <Bell size={18} color="var(--accent)" style={{ flexShrink: 0, marginTop: 2 }} />
       <div style={{ flex: 1, minWidth: 0 }}>
         <div style={{ fontSize: 13, fontWeight: 800, color: 'var(--text)', marginBottom: 3 }}>
-          নতুন Notice এলে জানতে চাও?
+          Want to know when a new notice arrives?
         </div>
         <div style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.45, marginBottom: 10 }}>
-          App বন্ধ থাকলেও push notification পাঠাবো, যাতে জরুরি notice মিস না হয়।
+          We will send push notifications even when the app is closed, so you do not miss urgent notices.
         </div>
         <div style={{ display: 'flex', gap: 8 }}>
           <button
@@ -107,7 +107,7 @@ export default function PushPermissionBanner() {
               cursor: busy ? 'default' : 'pointer', opacity: busy ? 0.7 : 1,
             }}
           >
-            {busy ? 'অপেক্ষা করো…' : 'Allow'}
+            {busy ? 'Please wait…' : 'Allow'}
           </button>
           <button
             onClick={snooze}

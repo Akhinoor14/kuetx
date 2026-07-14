@@ -221,7 +221,7 @@ export default function Clubs() {
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
               <div>
                 <div style={{ fontSize: 16, fontWeight: 800 }}>Add Club</div>
-                <div style={{ fontSize: 12, color: 'var(--muted)' }}>নতুন club যোগ করুন</div>
+                <div style={{ fontSize: 12, color: 'var(--muted)' }}>Add a new club</div>
               </div>
               <button onClick={() => setModal(null)} style={{ background: 'var(--inputBg)', border: 'none', borderRadius: 8, padding: '6px 10px', cursor: 'pointer', fontSize: 18, color: 'var(--muted)' }}>×</button>
             </div>
@@ -251,7 +251,7 @@ export default function Clubs() {
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
               <div>
                 <div style={{ fontSize: 16, fontWeight: 800 }}>Log Activity</div>
-                <div style={{ fontSize: 12, color: 'var(--muted)' }}>Club activity track করুন</div>
+                <div style={{ fontSize: 12, color: 'var(--muted)' }}>Track club activity</div>
               </div>
               <button onClick={() => setModal(null)} style={{ background: 'var(--inputBg)', border: 'none', borderRadius: 8, padding: '6px 10px', cursor: 'pointer', fontSize: 18, color: 'var(--muted)' }}>×</button>
             </div>

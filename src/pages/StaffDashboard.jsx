@@ -171,9 +171,9 @@ function EmailAuditBlock({ groupId, dept }) {
     setBusyUid(m.id);
     setErr('');
     try {
-      await flagSuspiciousEmail(m.id, m.accountEmail, { dept, groupId }, 'বিশ্বাসযোগ্য domain মনে হচ্ছে না');
+      await flagSuspiciousEmail(m.id, m.accountEmail, { dept, groupId }, 'Domain does not look trustworthy');
     } catch (e) {
-      setErr(e?.message || 'Flag করতে সমস্যা হয়েছে।');
+      setErr(e?.message || 'Could not flag this entry.');
     } finally {
       setBusyUid(null);
     }
@@ -183,7 +183,7 @@ function EmailAuditBlock({ groupId, dept }) {
     <div style={{ marginBottom: 12 }}>
       <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 4 }}>
         Email Audit <span style={{ fontWeight: 400, color: 'var(--muted)' }}>
-          ({health.outsideIdeal}/{health.total} ideal domain-এর বাইরে, {health.obviouslyBad} obviously fake)
+          ({health.outsideIdeal}/{health.total} outside the ideal domain, {health.obviouslyBad} obviously fake)
         </span>
       </div>
       {err && <div style={{ fontSize: 11.5, color: 'var(--danger)', marginBottom: 6 }}>{err}</div>}
@@ -194,7 +194,7 @@ function EmailAuditBlock({ groupId, dept }) {
             <div style={{ fontSize: 11.5, color: 'var(--danger)', wordBreak: 'break-all' }}>{m.accountEmail}</div>
           </div>
           <button className="btn btn-sm btn-secondary" onClick={() => handleFlag(m)} disabled={busyUid === m.id}>
-            {busyUid === m.id ? 'Flagging…' : 'Flag করো'}
+            {busyUid === m.id ? 'Flagging…' : 'Flag'}
           </button>
         </div>
       ))}

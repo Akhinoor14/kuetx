@@ -299,7 +299,7 @@ export default function Alerts() {
         <div style={{ marginBottom: 16, padding: 16, borderRadius: 18, border: '1px solid var(--border)', background: 'linear-gradient(180deg, var(--surfaceGlassStrong), var(--surfaceGlass))', boxShadow: '0 10px 28px rgba(0,0,0,0.10)' }}>
           <div style={{ fontSize: 13, fontWeight: 800, color: 'var(--text)', marginBottom: 8 }}>Read notifications</div>
           <div style={{ fontSize: 12, color: 'var(--muted)' }}>
-            এগুলো badge count-এ আর আসবে না. Restore দিলে আবার unread হিসেবে ফিরবে.
+            These will no longer count toward the badge. Restore brings them back as unread.
           </div>
         </div>
       )}

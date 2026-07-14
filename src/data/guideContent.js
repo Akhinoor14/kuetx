@@ -1727,23 +1727,23 @@ export const GUIDE_SECTIONS = [
         ],
         "rows": [
           [
-            "ফজর  (Fajr)",
+            "Fajr",
             "Default: 5:10 AM — customizable in the Namaz settings gear"
           ],
           [
-            "যোহর  (Dhuhr)",
+            "Dhuhr",
             "Default: 12:30 PM"
           ],
           [
-            "আসর  (Asr)",
+            "Asr",
             "Default: 4:00 PM"
           ],
           [
-            "মাগরিব  (Maghrib)",
+            "Maghrib",
             "Default: 6:20 PM"
           ],
           [
-            "ইশা  (Isha)",
+            "Isha",
             "Default: 7:45 PM"
           ]
         ]
@@ -1839,11 +1839,11 @@ export const GUIDE_SECTIONS = [
         "rows": [
           [
             "Good Presets",
-            "কাউকে সাহায্য করা, ভালো পড়াশোনা, সময়মতো নামাজ, ব্যায়াম করা, বই পড়া, সৎ কাজ করা"
+            "Helping someone, studying well, praying on time, exercising, reading books, doing good deeds"
           ],
           [
             "Bad Presets",
-            "মিথ্যা কথা বলা, গালি দেওয়া, নামাজ মিস, সময় নষ্ট করা, অন্যকে কষ্ট দেওয়া"
+            "Lying, swearing, missing prayers, wasting time, hurting others"
           ]
         ]
       },

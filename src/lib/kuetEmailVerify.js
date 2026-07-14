@@ -185,7 +185,7 @@ export async function sendKuetVerificationLink(email) {
     if (err?.code === 'auth/operation-not-allowed') {
       // "Email link (passwordless sign-in)" isn't enabled for this Firebase
       // project — a console configuration issue, not a code bug.
-      throw new Error('KUET email verification এখন enable করা নেই (Firebase Console-এ Email Link sign-in provider off আছে) — dev-কে জানাও, তোমার পাসওয়ার্ড বা account-এর সমস্যা না।');
+      throw new Error('KUET email verification is not enabled right now (the Email Link sign-in provider is off in Firebase Console). This is not a problem with your password or account.');
     }
     if (err?.code === 'auth/quota-exceeded') {
       // Daily send quota used up — not shown to the person as an internal
@@ -295,7 +295,7 @@ export async function completeKuetVerificationLink(url = window.location.href, e
           // verified" forever with no idea why.
           if (writeErr?.code !== 'permission-denied') {
             await signOut(verifyAuth).catch(() => {});
-            return { status: 'error', message: 'Sign-in সফল হয়েছে কিন্তু verification record সেভ করা যায়নি। আবার চেষ্টা করো, সমস্যা থাকলে dev-কে জানাও।' };
+            return { status: 'error', message: 'Sign-in succeeded, but the verification record could not be saved. Try again, and contact the dev if it still fails.' };
           }
         }
       }
@@ -312,12 +312,12 @@ export async function completeKuetVerificationLink(url = window.location.href, e
         // This exact link was already used once, or its ~1hr window expired.
         // Since there's no persistent account/password behind this flow,
         // recovery is simply: send a brand new link and use that instead.
-        return { status: 'error', message: 'এই verification link-টা আগে একবার ব্যবহার হয়ে গেছে অথবা মেয়াদ শেষ (Firebase links প্রায় ১ ঘণ্টা পর expire হয়)। চিন্তা নেই — নিচ থেকে একটা নতুন link পাঠাও, পুরনো কোনো account/password নিয়ে কিছু করা লাগবে না।' };
+        return { status: 'error', message: 'This verification link has already been used or has expired (Firebase links usually expire after about 1 hour). Send a new link below; you do not need to do anything with an old account or password.' };
       }
       if (err?.code === 'auth/invalid-email') {
-        return { status: 'error', message: 'এই email address-টা ঠিক মনে হচ্ছে না। যে email-এ link পাঠানো হয়েছিল ঠিক সেটাই লেখো।' };
+        return { status: 'error', message: 'That email address does not look right. Enter the exact email that received the link.' };
       }
-      return { status: 'error', message: err?.message || 'Verification complete করতে সমস্যা হয়েছে, আবার চেষ্টা করো।' };
+      return { status: 'error', message: err?.message || 'There was a problem completing verification. Please try again.' };
     }
   })();
 

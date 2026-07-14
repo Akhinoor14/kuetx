@@ -20,7 +20,7 @@ function GuideBanner() {
       </div>
       <div style={{ flex: 1 }}>
         <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', marginBottom: 2 }}>KUETx Guide</div>
-        <div style={{ fontSize: 12, color: 'var(--muted)' }}>প্রতিটা feature কীভাবে use করবে — step-by-step</div>
+        <div style={{ fontSize: 12, color: 'var(--muted)' }}>How to use every feature, step by step</div>
       </div>
       <Icons.ArrowRight size={16} color="var(--accent)" />
     </div>

@@ -3,7 +3,7 @@ import { store } from '../store/store';
 
 const PRAYERS = ['Fajr', 'Dhuhr', 'Asr', 'Maghrib', 'Isha'];
 const PRAYER_ICONS = { Fajr: '🌙', Dhuhr: '☀️', Asr: '🌤️', Maghrib: '🌇', Isha: '🌙' };
-const PRAYER_ARABIC = { Fajr: 'ফজর', Dhuhr: 'যোহর', Asr: 'আসর', Maghrib: 'মাগরিব', Isha: 'ইশা' };
+const PRAYER_ARABIC = { Fajr: 'Fajr', Dhuhr: 'Dhuhr', Asr: 'Asr', Maghrib: 'Maghrib', Isha: 'Isha' };
 
 const DEFAULT_TIMES = {
   Fajr: '05:10', Dhuhr: '12:30', Asr: '16:00', Maghrib: '18:20', Isha: '19:45'
@@ -81,7 +81,7 @@ export default function Namaz() {
                 Namaz Tracker
               </h1>
               <p style={{ fontSize: 12, color: 'var(--muted)', margin: '4px 0 0' }}>
-                {isToday ? "আজকের নামাজ" : selectedDate}
+                {isToday ? 'Today\'s prayers' : selectedDate}
               </p>
             </div>
           </div>
@@ -91,7 +91,7 @@ export default function Namaz() {
               lineHeight: 1,
             }}>{totalToday}<span style={{ fontSize: 16, fontWeight: 600, color: 'var(--muted)' }}>/5</span></div>
             <div style={{ fontSize: 10, color: 'var(--muted)', marginTop: 2 }}>
-              {totalToday === 5 ? '✓ আলহামদুলিল্লাহ' : `${5 - totalToday} remaining`}
+              {totalToday === 5 ? '✓ Alhamdulillah' : `${5 - totalToday} remaining`}
             </div>
           </div>
         </div>
@@ -109,7 +109,7 @@ export default function Namaz() {
         {/* Stats row */}
         <div style={{ display: 'flex', gap: 16, marginTop: 12 }}>
           <div style={{ fontSize: 11, color: 'var(--muted)' }}>
-            🕌 <span style={{ color: 'var(--text)', fontWeight: 700 }}>{totalMasjid}</span> in Masjid
+            🕌 <span style={{ color: 'var(--text)', fontWeight: 700 }}>{totalMasjid}</span> in congregation
           </div>
           <div style={{ fontSize: 11, color: 'var(--muted)' }}>
             🔥 <span style={{ color: 'var(--text)', fontWeight: 700 }}>{totalStreak}</span>/7 full days
@@ -175,7 +175,7 @@ export default function Namaz() {
                     border: `1.5px solid ${r.masjid ? 'var(--accent)' : 'var(--border)'}`,
                     transition: 'all 0.15s ease',
                   }}
-                >🕌 Masjid</button>
+                >🕌 Congregation</button>
                 <button
                   onClick={() => toggle(selectedDate, prayer, 'done')}
                   style={{
@@ -218,7 +218,7 @@ export default function Namaz() {
       {/* Jamat Times — view */}
       <div className="card">
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-          <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)' }}>Jamat Times</div>
+          <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)' }}>Congregation Times</div>
           <button
             className="btn btn-ghost btn-sm"
             style={{ fontSize: 11, padding: '4px 10px' }}
@@ -263,8 +263,8 @@ export default function Namaz() {
           >
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
               <div>
-                <div style={{ fontSize: 16, fontWeight: 800, color: 'var(--text)' }}>Jamat Times</div>
-                <div style={{ fontSize: 12, color: 'var(--muted)' }}>নামাজের সময় আপডেট করুন</div>
+                <div style={{ fontSize: 16, fontWeight: 800, color: 'var(--text)' }}>Congregation Times</div>
+                <div style={{ fontSize: 12, color: 'var(--muted)' }}>Update prayer times</div>
               </div>
               <button
                 onClick={() => setEditTimes(false)}

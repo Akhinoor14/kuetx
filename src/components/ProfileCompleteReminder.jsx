@@ -124,23 +124,23 @@ export default function ProfileCompleteReminder() {
       fontFamily: 'Sora, sans-serif',
     }}>
       <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)' }}>
-        📋 Profile-টা পুরোপুরি সেট করবে?
+        📋 Finish setting up your profile?
       </div>
       <div style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.5 }}>
-        Session, current term, hall — এগুলো দিলে Schedule, CGPA আর term-timeline ঠিকমতো কাজ করবে। যেকোনো সময় করতে পারো, তাড়া নেই।
+        Add your session, current term, and hall so Schedule, CGPA, and the term timeline work properly. You can do it any time.
       </div>
       <div style={{ display: 'flex', gap: 8, marginTop: 4 }}>
         <button onClick={openFullSetup} style={{
           flex: 1, padding: '8px 12px', borderRadius: 8, border: 'none',
           background: 'var(--accent)', color: '#fff', fontSize: 12, fontWeight: 700, cursor: 'pointer',
         }}>
-          এখন করি
+          Do it now
         </button>
         <button onClick={snooze} style={{
           padding: '8px 12px', borderRadius: 8, border: '1px solid var(--border)',
           background: 'transparent', color: 'var(--muted)', fontSize: 12, fontWeight: 600, cursor: 'pointer',
         }}>
-          পরে
+          Later
         </button>
       </div>
     </div>

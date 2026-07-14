@@ -363,7 +363,7 @@ export default function AuthModal({ mode = 'login', isUpgrade = false, onClose, 
           <div style={{ fontWeight: 800, fontSize: 19, marginBottom: 4 }}>
             {showAsFaculty
               ? (tab === 'login' ? 'Faculty Sign In' : 'Faculty Sign Up')
-              : (isUpgrade ? 'Account তৈরি করো' : queueMode ? 'Sync চালু করো' : tab === 'login' ? 'স্বাগতম' : 'Account বানাও')}
+              : (isUpgrade ? 'Create account' : queueMode ? 'Enable sync' : tab === 'login' ? 'Welcome back' : 'Create your account')}
           </div>
           <div style={{ fontSize: 12.5, color: 'var(--muted)' }}>
             {showAsFaculty
@@ -371,10 +371,10 @@ export default function AuthModal({ mode = 'login', isUpgrade = false, onClose, 
                   ? 'Sign in with your KUET institutional email.'
                   : 'Sign up with your KUET institutional email (name@dept.kuet.ac.bd).')
               : (isUpgrade || queueMode
-                  ? 'সব device-এ data sync হবে।'
+                  ? 'Your data will sync across devices.'
                   : tab === 'login'
-                  ? 'Login করে সব device-এ data sync করো।'
-                  : 'সব data cloud-এ save হবে।')}
+                  ? 'Sign in to sync data across devices.'
+                  : 'Your data will be saved to the cloud.')}
           </div>
         </div>
 
@@ -405,7 +405,7 @@ export default function AuthModal({ mode = 'login', isUpgrade = false, onClose, 
             always student, same as Google). */}
         {!isUpgrade && tab === 'register' && !isFaculty && !registerRole && (
           <div style={{ display: 'grid', gap: 10, marginBottom: 4 }}>
-            <div style={{ fontSize: 12.5, color: 'var(--muted)' }}>তুমি কে হিসেবে join করছো?</div>
+            <div style={{ fontSize: 12.5, color: 'var(--muted)' }}>Which role are you joining as?</div>
             <div style={{ display: 'flex', gap: 10 }}>
               <button
                 type="button"
@@ -439,13 +439,13 @@ export default function AuthModal({ mode = 'login', isUpgrade = false, onClose, 
               onClick={() => setRegisterRole(null)}
               style={{ ...btnGhost, fontSize: 12, marginBottom: -4 }}
             >
-              ← {registerRole === 'teacher' ? 'Faculty' : 'Student'} বদলাও
+              ← Switch to {registerRole === 'teacher' ? 'Faculty' : 'Student'}
             </button>
           )}
           {(tab === 'register' || isUpgrade) && (
             <div style={{ position: 'relative' }}>
               <User size={15} style={{ position: 'absolute', left: 10, top: '50%', transform: 'translateY(-50%)', color: 'var(--muted)' }} />
-              <input style={{ ...inputStyle, paddingLeft: 32 }} placeholder={showAsFaculty ? 'Your name (optional)' : 'তোমার নাম (optional)'} value={name} onChange={e => setName(e.target.value)} />
+              <input style={{ ...inputStyle, paddingLeft: 32 }} placeholder="Your name (optional)" value={name} onChange={e => setName(e.target.value)} />
             </div>
           )}
           <div style={{ position: 'relative' }}>
@@ -455,15 +455,15 @@ export default function AuthModal({ mode = 'login', isUpgrade = false, onClose, 
           </div>
           {typoSuggestion && (tab === 'register' || isUpgrade) && (
             <div style={{ fontSize: 12, color: 'var(--warning)', marginTop: -4 }}>
-              {showAsFaculty ? `Did you mean "${typoSuggestion}"?` : `"${typoSuggestion}" বলতে চাওনি তো?`}{' '}
+              {showAsFaculty ? `Did you mean "${typoSuggestion}"?` : `Did you mean "${typoSuggestion}"?`}{' '}
               <button type="button" onClick={applyTypoSuggestion} style={{ ...btnGhost, fontSize: 12, padding: 0 }}>
-                {showAsFaculty ? 'Yes, fix it' : 'হ্যাঁ, ঠিক করো'}
+                {showAsFaculty ? 'Yes, fix it' : 'Yes, fix it'}
               </button>
             </div>
           )}
           {domainWarning && !typoSuggestion && (tab === 'register' || isUpgrade) && (
             <div style={{ fontSize: 12, color: 'var(--warning)', marginTop: -4 }}>
-              {showAsFaculty ? 'Please double-check this email address.' : 'Email address-টা একবার চেক করে দাও, ঠিক লিখেছো তো?'}
+              {showAsFaculty ? 'Please double-check this email address.' : 'Please double-check this email address.'}
             </div>
           )}
           <div style={{ position: 'relative' }}>
@@ -471,7 +471,7 @@ export default function AuthModal({ mode = 'login', isUpgrade = false, onClose, 
             <input
               style={{ ...inputStyle, paddingLeft: 32, paddingRight: 42 }}
               type={showPassword ? 'text' : 'password'}
-              placeholder={showAsFaculty ? 'Password (at least 6 characters)' : 'Password (কমপক্ষে ৬ characters)'}
+              placeholder="Password (at least 6 characters)"
               value={password}
               onChange={e => setPassword(e.target.value)}
               onKeyDown={e => e.key === 'Enter' && handleEmail()}
@@ -492,7 +492,7 @@ export default function AuthModal({ mode = 'login', isUpgrade = false, onClose, 
           {!isUpgrade && (tab === 'login' || stuckOnExistingEmail) && !resetSent && (
             <div style={{ textAlign: 'right', marginTop: -4 }}>
               <button style={{ ...btnGhost, fontSize: 12 }} onClick={() => { setError(''); setStuckOnExistingEmail(false); handleReset(); }} disabled={loading}>
-                {showAsFaculty ? 'Forgot password?' : 'Password ভুলে গেছো?'}
+                {showAsFaculty ? 'Forgot password?' : 'Forgot password?'}
               </button>
             </div>
           )}
@@ -500,7 +500,7 @@ export default function AuthModal({ mode = 'login', isUpgrade = false, onClose, 
           {resetSent && (
             <div style={{ display: 'flex', alignItems: 'flex-start', gap: 8, fontSize: 12, color: 'var(--accent)', padding: '10px 12px', background: 'rgba(34,197,94,0.08)', borderRadius: 6 }}>
               <CheckCircle size={15} style={{ flexShrink: 0, marginTop: 1 }} />
-              <span>{showAsFaculty ? `A reset link has been sent to ${email}. Check your inbox (and spam folder).` : `Reset link পাঠানো হয়েছে ${email} এ। Inbox (ও spam folder) চেক করো।`}</span>
+              <span>{showAsFaculty ? `A reset link has been sent to ${email}. Check your inbox (and spam folder).` : `A reset link has been sent to ${email}. Check your inbox (and spam folder).`}</span>
             </div>
           )}
 
@@ -511,7 +511,7 @@ export default function AuthModal({ mode = 'login', isUpgrade = false, onClose, 
                 <div style={{ marginTop: 6, color: 'var(--muted)', fontWeight: 400 }}>
                   {showAsFaculty
                     ? "An account with this email already exists — if you don't remember the password, use \"Forgot password?\" above to reset it and continue."
-                    : 'এই email দিয়ে account আগেই তৈরি হয়ে গেছে — password মনে না থাকলে উপরের "Password ভুলে গেছো?" দিয়ে reset করে চালিয়ে যাও।'}
+                    : 'An account with this email already exists — if you do not remember the password, use "Forgot password?" above to reset it and continue.'}
                 </div>
               )}
             </div>
@@ -523,8 +523,8 @@ export default function AuthModal({ mode = 'login', isUpgrade = false, onClose, 
                   ? ((isUpgrade || tab === 'register') ? 'Verifying email and creating account…' : 'Loading…')
                   : (isUpgrade ? 'Create account' : tab === 'login' ? 'Sign In' : 'Sign Up'))
               : (loading
-                  ? ((isUpgrade || tab === 'register') ? 'Email চেক করে Account তৈরি হচ্ছে...' : 'Loading...')
-                  : isUpgrade ? 'Account তৈরি করো' : tab === 'login' ? 'Login' : 'Register')}
+                  ? ((isUpgrade || tab === 'register') ? 'Verifying email and creating account...' : 'Loading...')
+                  : isUpgrade ? 'Create account' : tab === 'login' ? 'Sign in' : 'Create account')}
           </button>
         </div>
         )}
@@ -541,7 +541,7 @@ export default function AuthModal({ mode = 'login', isUpgrade = false, onClose, 
           <>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, margin: '16px 0', color: 'var(--muted)', fontSize: 12 }}>
               <div style={{ flex: 1, height: 1, background: 'var(--border)' }} />
-              অথবা
+              or
               <div style={{ flex: 1, height: 1, background: 'var(--border)' }} />
             </div>
             <button style={btnGoogle} onClick={handleGoogle} disabled={loading}>
@@ -551,7 +551,7 @@ export default function AuthModal({ mode = 'login', isUpgrade = false, onClose, 
                 <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
                 <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
               </svg>
-              {loading ? 'Loading...' : 'Google দিয়ে ' + (isUpgrade || tab === 'register' ? 'Register' : 'Login')}
+              {loading ? 'Loading...' : 'Continue with Google to ' + (isUpgrade || tab === 'register' ? 'sign up' : 'sign in')}
             </button>
           </>
         )}
@@ -565,7 +565,7 @@ export default function AuthModal({ mode = 'login', isUpgrade = false, onClose, 
         {!isUpgrade && !showAsFaculty && (tab === 'login' || registerRole) && onClose && (
           <div style={{ textAlign: 'center', marginTop: 10 }}>
             <button style={{ ...btnGhost, color: 'var(--muted)', textDecoration: 'none', fontSize: 12 }} onClick={onClose}>
-              {queueMode ? 'Skip for now — continue without account →' : 'এখন না — login ছাড়াই ব্যবহার করব'}
+              {queueMode ? 'Skip for now — continue without an account →' : 'Continue without signing in'}
             </button>
           </div>
         )}

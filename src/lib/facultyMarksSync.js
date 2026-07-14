@@ -57,7 +57,7 @@ function studentRecordsCollection(groupId, assignmentId) {
  * when taking attendance for a specific date (auto-suggested from the
  * assignment's dayTimeSlots + Sessions & Count's logged count, but the
  * teacher confirms/edits per §8.9's "auto-count ... manual override
- * possible, audit log সহ" note).
+ * possible, with an audit log" note).
  *
  * APPEND-ONLY / LOCK MODEL (owner-confirmed): once a session for a date is
  * first saved, it becomes `locked: true` and further plain re-saves are
@@ -219,7 +219,7 @@ export async function getTeacherMarkComponents(groupId, assignmentId, teacherSlo
  * reviewed, send) stay caller-driven per §9.1's UI-level distinction.
  *
  * FLAGGED GAP — §9.5's secondary notification channel ("existing Alerts
- * feed-এ noticeType: 'marks_release' distinct icon/color") is NOT wired up
+ * feed noticeType: 'marks_release' with its own distinct icon/color") is NOT wired up
  * here. Audited alertUtils.js's computeAlerts(profile): it's entirely
  * local-store-driven (no Firestore read at all), and the existing
  * groups/{groupId}/notices collection (postFacultyNotice, Phase 4) is
@@ -304,7 +304,7 @@ export async function getMyTeacherVerifiedRecords(groupId, studentUid) {
 }
 
 /** Live variant — used so the card appears the instant a teacher sends
- * marks, without the student needing to refresh (§9.5's "card নিজে appear,
+ * marks, without the student needing to refresh (§9.5's "card appears on its own,
  * pulse indicator" requirement). */
 export function subscribeMyTeacherVerifiedRecords(groupId, studentUid, callback) {
   if (!groupId || !studentUid) { callback([]); return () => {}; }

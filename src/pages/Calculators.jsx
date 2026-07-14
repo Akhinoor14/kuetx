@@ -63,8 +63,8 @@ function LegacyCGPACalc() {
     <div>
       <div style={{ fontSize: 14, fontWeight: 700, marginBottom: 4 }}>📚 Legacy CGPA Import & Future Planner</div>
       <p style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 14 }}>
-        পুরনো semester-এর GPA enter করো, ভবিষ্যতে কত CGPA পাওয়া সম্ভব তা দেখো।
-        KUET-এ 4 Year × 2 Term = 8 Semester।
+        Enter your previous semesters' GPA to see the maximum CGPA you can still reach.
+        KUET has 4 years × 2 terms = 8 semesters.
       </p>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: 6, marginBottom: 16 }}>
@@ -129,29 +129,29 @@ function LegacyCGPACalc() {
         <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 10 }}>🎯 Target CGPA Planner</div>
         <div style={{ display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap' }}>
           <div style={{ flex: 1 }}>
-            <label>আমার লক্ষ্য CGPA</label>
+            <label>My target CGPA</label>
             <input type="number" min={2} max={4} step={0.01} value={targetCGPA} onChange={e => setTargetCGPA(e.target.value)} style={{ fontSize: 14, fontWeight: 700 }} />
           </div>
           <div style={{ flex: 2 }}>
             {neededGPAs !== null ? (
               neededGPAs > 4.00 ? (
                 <div style={{ padding: '10px 14px', background: '#fee2e2', borderRadius: 8, fontSize: 13, color: 'var(--danger)' }}>
-                  ❌ এই CGPA আর সম্ভব না। Max achievable: {maxAchievable.toFixed(2)}
+                  ❌ This CGPA is no longer possible. Max achievable: {maxAchievable.toFixed(2)}
                 </div>
               ) : neededGPAs < 0 ? (
                 <div style={{ padding: '10px 14px', background: '#dcfce7', borderRadius: 8, fontSize: 13, color: 'var(--success)' }}>
-                  ✅ ইতিমধ্যে লক্ষ্য পূরণ হয়ে গেছে!
+                  ✅ You have already reached your target!
                 </div>
               ) : (
                 <div style={{ padding: '10px 14px', background: 'var(--bg)', borderRadius: 8, fontSize: 13 }}>
-                  বাকি প্রতি semester-এ গড়ে <strong style={{ color: 'var(--accent)', fontSize: 16 }}>{neededGPAs.toFixed(2)}</strong> GPA রাখতে হবে
+                  You need to average <strong style={{ color: 'var(--accent)', fontSize: 16 }}>{neededGPAs.toFixed(2)}</strong> GPA in each remaining semester
                   <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 4 }}>
-                    এটি {neededGPAs >= 3.75 ? 'A/A+ গ্রেড মানে — কঠিন কিন্তু সম্ভব' : neededGPAs >= 3.0 ? 'B+ থেকে A রেঞ্জ — achievable' : 'B থেকে B+ রেঞ্জ — realistic'}
+                    This means {neededGPAs >= 3.75 ? 'A/A+ range — difficult but possible' : neededGPAs >= 3.0 ? 'B+ to A range — achievable' : 'B to B+ range — realistic'}
                   </div>
                 </div>
               )
             ) : (
-              <div style={{ color: 'var(--muted)', fontSize: 12 }}>Completed semester-এর তথ্য দাও</div>
+              <div style={{ color: 'var(--muted)', fontSize: 12 }}>Enter the completed semester details</div>
             )}
           </div>
         </div>
@@ -190,9 +190,9 @@ function FinalNeededCalc() {
 
   return (
     <div>
-      <div style={{ fontSize: 14, fontWeight: 700, marginBottom: 4 }}>📝 Final-এ কত লাগবে?</div>
+      <div style={{ fontSize: 14, fontWeight: 700, marginBottom: 4 }}>📝 What do I need in the final?</div>
       <p style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 14 }}>
-        Theory course মোট 300: Hall 210 + Continuous 90। Target grade পেতে hall exam-এ minimum কত লাগবে দেখাবে।
+        Theory courses total 300: Hall 210 + Continuous 90. This shows the minimum hall exam score needed for your target grade.
       </p>
 
       <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--muted)', marginBottom: 8 }}>Teacher-wise Continuous Input</div>
@@ -264,13 +264,13 @@ function FinalNeededCalc() {
         </div>
         {neededHall > 210 ? (
           <div style={{ color: 'var(--danger)', fontWeight: 700, fontSize: 18 }}>
-            ❌ {targetGrade} আর সম্ভব না — Hall exam-এ {neededHall.toFixed(1)}/210 লাগবে
+            ❌ {targetGrade} is no longer possible — you would need {neededHall.toFixed(1)}/210 in the hall exam
           </div>
         ) : neededHall <= 0 ? (
           <div style={{ color: 'var(--success)', fontWeight: 700, fontSize: 18 }}>✅ Already secured {targetGrade}!</div>
         ) : (
           <div>
-            <span style={{ fontSize: 12, color: 'var(--muted)' }}>Hall exam-এ minimum লাগবে: </span>
+            <span style={{ fontSize: 12, color: 'var(--muted)' }}>Minimum needed in the hall exam: </span>
             <span style={{ fontSize: 26, fontWeight: 800, color: 'var(--accent)' }}>{neededHall.toFixed(1)}/210</span>
             <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 4 }}>
               Average per teacher (if equal split): {neededPerTeacherAvg.toFixed(1)}/105
@@ -305,8 +305,8 @@ function WhatIfCalc() {
   return (
     <div>
       <div style={{ fontSize: 14, fontWeight: 700, marginBottom: 4 }}>🔮 What If? Semester Simulator</div>
-      <p style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 14 }}>এই semester-এ প্রতিটা course-এ কোন grade পেলে GPA কত হবে simulate করো।</p>
-      {activeCourses.length === 0 && <p style={{ color: 'var(--muted)', fontSize: 13 }}>Active courses নেই।</p>}
+      <p style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 14 }}>Simulate what GPA you would get if you earned each grade in this semester.</p>
+      {activeCourses.length === 0 && <p style={{ color: 'var(--muted)', fontSize: 13 }}>No active courses.</p>}
       <div style={{ display: 'flex', flexDirection: 'column', gap: 6, marginBottom: 12 }}>
         {activeCourses.map(c => (
           <div key={c.id} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
@@ -348,7 +348,7 @@ function DeadlineCalc() {
   return (
     <div>
       <div style={{ fontSize: 14, fontWeight: 700, marginBottom: 4 }}>📅 Registration Deadline Calculator</div>
-      <p style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 14 }}>Term শুরুর তারিখ দাও — সব deadline বের হয়ে যাবে।</p>
+      <p style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 14 }}>Enter the term start date to calculate all deadlines.</p>
       <div style={{ marginBottom: 12 }}>
         <label>Term Start Date</label>
         <input type="date" value={start} onChange={e => setStart(e.target.value)} style={{ width: 'auto' }} />

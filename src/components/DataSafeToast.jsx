@@ -60,11 +60,11 @@ export default function DataSafeToast({ suppress = false }) {
       <CheckCircle size={16} color="var(--success)" style={{ flexShrink: 0, marginTop: 1 }} />
       <div style={{ flex: 1 }}>
         <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', marginBottom: 3 }}>
-          তোমার data safe আছে ✓
+          Your data is safe ✓
         </div>
         <div style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.5 }}>
-          সব কিছু এই device এ locally save হচ্ছে। Internet ছাড়াও কাজ করবে।
-          Login করলে সব device এ sync পাবে।
+          Everything is saved locally on this device. It will work without internet.
+          Sign in to sync across devices.
         </div>
       </div>
       <button onClick={dismiss} style={{

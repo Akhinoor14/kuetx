@@ -654,7 +654,7 @@ export default function App() {
 
       if (!claim.ok) {
         notify(
-          'তোমার roll number দিয়ে অন্য একটা account আগেই আছে, তাই এই account-টা Classmates/Class-এর shared তথ্যে যোগ হবে না। বাকি সব feature (Notes, Diary, Wallet, ইত্যাদি) normal ভাবে ব্যবহার করতে পারবে। ভুল মনে হলে Contact-এ জানাও, ঠিক করে দেওয়া হবে।',
+          'Another account already uses your roll number, so this account will not be added to the shared Classmates/Class data. You can still use the other features normally. If this looks wrong, contact us and we will fix it.',
           'error',
           8000
         );

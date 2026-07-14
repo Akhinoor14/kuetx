@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react';
 import { Plus, Trash2, ClipboardCheck } from 'lucide-react';
 import { store, uid } from '../store/store';
 
-const BAD_PRESETS = ['মিথ্যা কথা বলা', 'গালি দেওয়া', 'নামাজ মিস', 'সময় নষ্ট করা', 'অন্যকে কষ্ট দেওয়া', 'হিংসা করা'];
-const GOOD_PRESETS = ['কাউকে সাহায্য করা', 'ভালো পড়াশোনা', 'সময়মতো নামাজ', 'ব্যায়াম করা', 'বই পড়া', 'সৎ কাজ করা'];
+const BAD_PRESETS = ['Lying', 'Swearing', 'Missing prayers', 'Wasting time', 'Hurting others', 'Jealousy'];
+const GOOD_PRESETS = ['Helping someone', 'Studying well', 'Praying on time', 'Exercising', 'Reading books', 'Doing good deeds'];
 
 export default function SelfEval() {
   const _td = new Date(); const today = `${_td.getFullYear()}-${String(_td.getMonth()+1).padStart(2,'0')}-${String(_td.getDate()).padStart(2,'0')}`;
@@ -52,7 +52,7 @@ export default function SelfEval() {
 
   const setRatingVal = (v) => { setRating(v); update('rating', v); };
 
-  const ratingLabel = ['', 'খুব খারাপ', 'খারাপ', 'ঠিক আছে', 'ভালো', 'অসাধারণ'][rec.rating || 3];
+  const ratingLabel = ['', 'Very bad', 'Bad', 'Okay', 'Good', 'Excellent'][rec.rating || 3];
 
   return (
     <div className="page-enter page-container self-eval-page content-page-bg">
@@ -81,7 +81,7 @@ export default function SelfEval() {
 
       {/* Self Rating */}
       <div className="card selfeval-rating-card">
-        <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 10 }}>আজকের দিনটা কেমন ছিল?</div>
+        <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 10 }}>How was today?</div>
         <div style={{ display: 'flex', gap: 8, marginBottom: 6, alignItems: 'center', flexWrap: 'wrap' }}>
           {[1, 2, 3, 4, 5].map(v => (
             <button key={v} className="rating-btn" onClick={() => setRatingVal(v)} style={{
@@ -96,7 +96,7 @@ export default function SelfEval() {
         </div>
         <div style={{ marginTop: 10 }}>
           <label style={{ display: 'block', fontSize: 12, fontWeight: 600, marginBottom: 6, color: 'var(--muted)' }}>Note for today</label>
-          <input value={rec.note || ''} onChange={e => update('note', e.target.value)} placeholder="আজকের কোনো ভাবনা বা সংকল্প..." style={{ fontSize: 14, padding: '10px 12px', minHeight: '40px' }} />
+          <input value={rec.note || ''} onChange={e => update('note', e.target.value)} placeholder="Any thought or intention for today..." style={{ fontSize: 14, padding: '10px 12px', minHeight: '40px' }} />
         </div>
         <div style={{ marginTop: 10, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, flexWrap: 'wrap' }}>
           <div style={{ fontSize: 11, color: 'var(--muted)' }}>Auto-saves on every change, so SmartScore updates immediately.</div>
@@ -107,9 +107,9 @@ export default function SelfEval() {
       <div className="selfeval-columns">
         {/* Bad deeds */}
         <div className="card selfeval-panel selfeval-panel-bad">
-          <div className="selfeval-panel-title selfeval-panel-title-bad">⚠ খারাপ কাজ</div>
+          <div className="selfeval-panel-title selfeval-panel-title-bad">⚠ Bad habits</div>
           <div className="selfeval-add-row">
-            <input value={newBad} onChange={e => setNewBad(e.target.value)} onKeyDown={e => e.key === 'Enter' && addBad(newBad)} placeholder="যোগ করুন..." />
+            <input value={newBad} onChange={e => setNewBad(e.target.value)} onKeyDown={e => e.key === 'Enter' && addBad(newBad)} placeholder="Add one..." />
             <button className="btn btn-danger selfeval-add-btn" onClick={() => addBad(newBad)}><Plus size={14} /></button>
           </div>
           <div className="selfeval-preset-group">
@@ -124,15 +124,15 @@ export default function SelfEval() {
                 <button onClick={() => removeBad(b.id)} className="selfeval-remove-btn selfeval-remove-btn-bad"><Trash2 size={13} /></button>
               </div>
             ))}
-            {(rec.bad || []).length === 0 && <div className="selfeval-empty selfeval-empty-bad">কোনো খারাপ কাজ নেই ✓</div>}
+            {(rec.bad || []).length === 0 && <div className="selfeval-empty selfeval-empty-bad">No bad habits yet ✓</div>}
           </div>
         </div>
 
         {/* Good deeds */}
         <div className="card selfeval-panel selfeval-panel-good">
-          <div className="selfeval-panel-title selfeval-panel-title-good">✓ ভালো কাজ</div>
+          <div className="selfeval-panel-title selfeval-panel-title-good">✓ Good deeds</div>
           <div className="selfeval-add-row">
-            <input value={newGood} onChange={e => setNewGood(e.target.value)} onKeyDown={e => e.key === 'Enter' && addGood(newGood)} placeholder="যোগ করুন..." />
+            <input value={newGood} onChange={e => setNewGood(e.target.value)} onKeyDown={e => e.key === 'Enter' && addGood(newGood)} placeholder="Add one..." />
             <button className="btn btn-primary selfeval-add-btn" onClick={() => addGood(newGood)}><Plus size={14} /></button>
           </div>
           <div className="selfeval-preset-group">
@@ -147,7 +147,7 @@ export default function SelfEval() {
                 <button onClick={() => removeGood(g.id)} className="selfeval-remove-btn selfeval-remove-btn-good"><Trash2 size={13} /></button>
               </div>
             ))}
-            {(rec.good || []).length === 0 && <div className="selfeval-empty selfeval-empty-good">এখনো কিছু নেই</div>}
+            {(rec.good || []).length === 0 && <div className="selfeval-empty selfeval-empty-good">Nothing yet</div>}
           </div>
         </div>
       </div>

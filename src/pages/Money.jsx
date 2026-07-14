@@ -63,7 +63,7 @@ export default function Money() {
 
   const saveEntry = useCallback(() => {
     const amt = parseFloat(form.amount);
-    if (!form.amount || isNaN(amt) || amt <= 0) { setFormError('সঠিক amount দাও'); return; }
+    if (!form.amount || isNaN(amt) || amt <= 0) { setFormError('Enter a valid amount'); return; }
     let updated;
     if (modal === 'edit' && editId) {
       updated = entries.map(e => e.id === editId ? { ...e, ...form, amount: amt } : e);
@@ -323,7 +323,7 @@ export default function Money() {
           )}
           {view === 'list' && (
             <div style={{ fontSize: 12, color: 'var(--muted)', textAlign: 'center', padding: '12px 0' }}>
-              Category বা Daily view এ চাপো chart দেখতে
+              Tap Category or Daily view to see the chart
             </div>
           )}
         </div>
@@ -367,7 +367,7 @@ export default function Money() {
               </span>
               <button className="btn btn-ghost" style={{ padding: '4px 6px', flexShrink: 0 }} onClick={() => openEdit(e)}><Edit2 size={11} /></button>
               {deleteConfirm === e.id ? (
-                <button className="btn btn-danger" style={{ padding: '4px 8px', fontSize: 11, flexShrink: 0 }} onClick={() => del(e.id)}>নিশ্চিত?</button>
+                <button className="btn btn-danger" style={{ padding: '4px 8px', fontSize: 11, flexShrink: 0 }} onClick={() => del(e.id)}>Confirm?</button>
               ) : (
                 <button className="btn btn-ghost" style={{ padding: '4px 6px', flexShrink: 0 }} onClick={() => setDeleteConfirm(e.id)}><Trash2 size={11} color="var(--danger)" /></button>
               )}
@@ -378,7 +378,7 @@ export default function Money() {
 
       {displayEntries.length === 0 && (
         <div className="card" style={{ textAlign: 'center', color: 'var(--muted)', padding: 36 }}>
-          <p style={{ fontSize: 13 }}>এই মাসে কোনো entry নেই।</p>
+          <p style={{ fontSize: 13 }}>There are no entries this month.</p>
           <button className="btn btn-primary" style={{ marginTop: 10, fontSize: 12 }} onClick={openAdd}><Plus size={12} /> Add entry</button>
         </div>
       )}
@@ -397,7 +397,7 @@ export default function Money() {
               <div style={{ padding: '0 20px 4px' }}>
                 {/* Header */}
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-                  <span style={{ fontWeight: 700, fontSize: 16 }}>{modal === 'edit' ? 'Entry edit করো' : 'নতুন entry'}</span>
+                  <span style={{ fontWeight: 700, fontSize: 16 }}>{modal === 'edit' ? 'Edit entry' : 'New entry'}</span>
                   <button className="btn btn-ghost" style={{ padding: '4px 8px' }} onClick={() => setModal(null)}><X size={14} /></button>
                 </div>
 
@@ -484,12 +484,12 @@ export default function Money() {
                 <div className="form-field" style={{ marginBottom: 12 }}>
                   <label>Starting cash balance (৳)</label>
                   <input type="number" inputMode="decimal" value={setupForm.cash} onChange={e => setSetupForm(f => ({ ...f, cash: e.target.value }))} placeholder="e.g. 5000" />
-                  <p style={{ fontSize: 11, color: 'var(--muted)', marginTop: 4 }}>Tracking শুরুর আগে হাতে যত টাকা ছিল।</p>
+                  <p style={{ fontSize: 11, color: 'var(--muted)', marginTop: 4 }}>How much cash you had before tracking started.</p>
                 </div>
                 <div className="form-field" style={{ marginBottom: 16 }}>
                   <label>Monthly expense budget (৳)</label>
                   <input type="number" inputMode="decimal" value={setupForm.budget} onChange={e => setSetupForm(f => ({ ...f, budget: e.target.value }))} placeholder="e.g. 8000" />
-                  <p style={{ fontSize: 11, color: 'var(--muted)', marginTop: 4 }}>Limit কাছে আসলে warning দেখাবে।</p>
+                  <p style={{ fontSize: 11, color: 'var(--muted)', marginTop: 4 }}>You will get a warning as you near the limit.</p>
                 </div>
                 <button className="btn btn-primary" style={{ width: '100%', justifyContent: 'center', minHeight: 46, marginBottom: 4 }} onClick={saveSetup}><Check size={14} /> Save settings</button>
               </div>

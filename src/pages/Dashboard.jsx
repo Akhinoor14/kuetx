@@ -398,8 +398,8 @@ export default function Dashboard() {
       {courses.length === 0 && profile.name && (
         <div className="card" style={{ marginTop: 16, textAlign: 'center', color: 'var(--muted)', padding: 30 }}>
           <div style={{ fontSize: 32, marginBottom: 8 }}>📚</div>
-          <p style={{ fontSize: 13, marginBottom: 12 }}>কোনো course add করা হয়নি। প্রথমে courses যোগ করো।</p>
-          <Link to="/courses" className="btn btn-primary">Courses যোগ করো →</Link>
+          <p style={{ fontSize: 13, marginBottom: 12 }}>No courses have been added yet. Start by adding courses.</p>
+          <Link to="/courses" className="btn btn-primary">Add courses →</Link>
         </div>
       )}
     </div>
