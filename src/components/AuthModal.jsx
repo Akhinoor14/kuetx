@@ -433,14 +433,34 @@ export default function AuthModal({ mode = 'login', isUpgrade = false, onClose, 
             entirely). Login always shows immediately, role-agnostic. */}
         {(tab === 'login' || isUpgrade || isFaculty || registerRole) && (
         <div style={{ display: 'grid', gap: 10 }}>
-          {tab === 'register' && !isUpgrade && !isFaculty && (
-            <button
-              type="button"
-              onClick={() => setRegisterRole(null)}
-              style={{ ...btnGhost, fontSize: 12, marginBottom: -4 }}
-            >
-              ← Switch to {registerRole === 'teacher' ? 'Faculty' : 'Student'}
-            </button>
+          {/* BUGFIX: this row used to render even when registerRole was
+              still null (isFaculty-forced case), showing a "Switch to
+              Student" link that defaulted to a guessed label instead of
+              reflecting an actual choice — misleading, since no role had
+              been picked yet. Now split into two unambiguous states:
+              (1) a role was picked inline just now → show which one,
+              plus a real "switch" link back to the picker; (2) the
+              caller pre-forced variant="faculty" (no inline picker was
+              ever shown, so there's nothing to "switch" back to) → show
+              a plain, non-interactive "Faculty" indicator instead. */}
+          {tab === 'register' && !isUpgrade && registerRole && (
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: -4 }}>
+              <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--text)' }}>
+                Signing up as: {registerRole === 'teacher' ? 'Faculty' : 'Student'}
+              </span>
+              <button
+                type="button"
+                onClick={() => setRegisterRole(null)}
+                style={{ ...btnGhost, fontSize: 12, padding: 0 }}
+              >
+                ← Change
+              </button>
+            </div>
+          )}
+          {tab === 'register' && !isUpgrade && isFaculty && !registerRole && (
+            <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--text)', marginBottom: -4 }}>
+              Signing up as: Faculty
+            </div>
           )}
           {(tab === 'register' || isUpgrade) && (
             <div style={{ position: 'relative' }}>

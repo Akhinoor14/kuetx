@@ -91,13 +91,10 @@ const stepTabs = [
 ];
 
 const requiredFieldMap = {
-  // Deliberately minimal: dept auto-derives from studentId (see
-  // extractDeptCodeFromRoll below), and session/currentTermKey are now
-  // optional here — they can be filled in later from the Profile page.
-  // This step used to require 5 fields before someone could even open
-  // the app; now it's just the two things that are actually load-bearing
-  // (identity + roll number, which everything else derives from).
-  0: ['name', 'studentId'],
+  // BUGFIX: bloodGroup and currentTermKey are now required at first-run
+  // onboarding too (previously deferred as optional — see history below).
+  // Dept still auto-derives from studentId and stays out of this list.
+  0: ['name', 'studentId', 'currentTermKey', 'bloodGroup'],
 };
 
 const toDateInputValue = (value) => {
@@ -131,6 +128,7 @@ const getFieldError = (key, form, autoCalculatedDept) => {
   }
   if (key === 'session' && !String(value || '').trim()) return 'Academic session is required';
   if (key === 'currentTermKey' && !String(value || '').trim()) return 'Current term is required';
+  if (key === 'bloodGroup' && !String(value || '').trim()) return 'Blood group is required';
   return '';
 };
 
@@ -544,12 +542,37 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
                         </div>
                       )}
                     </div>
+                    {/* BUGFIX: Current Term used to be hidden entirely during
+                        first-run (minimal) onboarding — only shown later in
+                        the full Settings/"Complete Profile" version of this
+                        modal, or via ProfileCompleteReminder's later,
+                        snoozable nudge. But 16+ pages (Schedule, Dashboard,
+                        Marks, Courses, Results, etc.) read currentTermKey,
+                        and a student could go through their entire first
+                        session with it unset — courses not filtered by
+                        term, dashboard timeline unable to render, and no
+                        prompt to fix it until a later app reopen. Now
+                        mandatory and shown right after Student ID (3rd
+                        field). Session and Term Start Date stay deferred
+                        to the full form since those need more thought/
+                        typing and aren't blocking as many pages. */}
                     <div>
-                      <label style={labelStyle}>Blood Group (optional)</label>
+                      <label style={labelStyle}>Current Term</label>
+                      <select value={form.currentTermKey || ''} onChange={handleChange('currentTermKey')} style={fieldStyle}>
+                        <option value="">Select current term</option>
+                        {TERM_KEYS.map(termKey => (
+                          <option key={termKey} value={termKey}>{termKey} - {getTermLabelFromKey(termKey)}</option>
+                        ))}
+                      </select>
+                      {errors.currentTermKey && <div style={{ fontSize: 11, color: '#dc2626', marginTop: 5 }}>{errors.currentTermKey}</div>}
+                    </div>
+                    <div>
+                      <label style={labelStyle}>Blood Group</label>
                       <select value={form.bloodGroup || ''} onChange={handleChange('bloodGroup')} style={fieldStyle}>
                         <option value="">Select blood group</option>
                         {BLOOD_GROUPS.map(bg => <option key={bg} value={bg}>{bg}</option>)}
                       </select>
+                      {errors.bloodGroup && <div style={{ fontSize: 11, color: '#dc2626', marginTop: 5 }}>{errors.bloodGroup}</div>}
                       <div style={{ fontSize: 10, color: 'var(--muted)', marginTop: 4 }}>Helps the Blood Bank directory find donors in an emergency</div>
                     </div>
                     <div style={{ gridColumn: '1 / -1', fontSize: 12, color: 'var(--muted)' }}>

@@ -623,7 +623,15 @@ export default function Profile() {
 
   const handleLogout = async () => {
     if (!confirm('Sign out? Your local data will stay intact.')) return;
-    try { await logout(); } catch {}
+    try {
+      await logout();
+    } catch {}
+    // Full reload after sign-out clears any stale cached React state
+    // (roles, faculty/staff status, profile, etc.) that was loaded for
+    // the previous session — same pattern used in Settings.jsx and
+    // Navbar.jsx. Runs even if logout() throws, so a broken session never
+    // gets stuck showing signed-in UI.
+    setTimeout(() => window.location.reload(), 800);
   };
 
   // Called when user logs in from Profile page — push local data up then start sync

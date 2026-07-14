@@ -152,15 +152,22 @@ export function Navbar({ onMenuClick }) {
     finally { setPulling(false); }
   };
 
-  const handleSignOut = async () => {    setLoggingOut(true);
+  const handleSignOut = async () => {
+    if (!window.confirm('Sign out? Your data will stay on this device; cloud sync will just stop.')) return;
+    setLoggingOut(true);
     try {
       const { logout } = await import('../lib/firebaseAuth');
       await logout();
+      setDrawerOpen(false);
+      // Full reload after sign-out clears any stale cached React state
+      // (roles, faculty/staff status, profile, etc.) that was loaded for
+      // the previous session — same pattern used in Settings.jsx. Without
+      // this, a signed-out user keeps seeing faculty/staff-gated UI until
+      // they manually refresh.
+      setTimeout(() => window.location.reload(), 800);
     } catch (err) {
       console.error(err);
-    } finally {
       setLoggingOut(false);
-      setDrawerOpen(false);
     }
   };
 
