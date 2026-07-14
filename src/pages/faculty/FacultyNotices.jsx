@@ -75,7 +75,7 @@ export default function FacultyNotices() {
 
   return (
     <div className="hub-page-bg" style={{ minHeight: '100vh' }}>
-      <div style={{ padding: '20px 24px 40px', width: '100%', maxWidth: 1040, boxSizing: 'border-box', margin: '0 auto' }}>
+      <div className="page-container" style={{ padding: '20px 24px 40px' }}>
         <div className="hub-page-hero">
           <div className="hub-page-hero-icon">
             <Icons.Bell size={20} color="var(--accent)" />

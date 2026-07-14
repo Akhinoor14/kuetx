@@ -1716,7 +1716,7 @@ export default function FacultyClassDetail() {
 
   return (
     <div className="hub-page-bg" style={{ minHeight: '100vh' }}>
-      <div style={{ padding: '10px 24px 40px', width: '100%', maxWidth: 1040, boxSizing: 'border-box', margin: '0 auto' }}>
+      <div className="page-container" style={{ padding: '10px 24px 40px' }}>
         <div className="faculty-class-hero faculty-class-hero-compact">
           <div className="faculty-class-hero-icon">
             <Icons.GraduationCap size={20} color="var(--accent)" />

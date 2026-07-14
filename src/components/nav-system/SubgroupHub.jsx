@@ -140,7 +140,7 @@ export default function SubgroupHub({ group, subgroup, sections, pageTitle, extr
 
   return (
     <div className="hub-page-bg" style={{ minHeight: '100vh' }}>
-      <div style={{ padding: '20px 24px 40px', maxWidth: 1040, margin: '0 auto' }}>
+      <div className="page-container" style={{ padding: '20px 24px 40px' }}>
         <div className="hub-page-hero">
           <div className="hub-page-hero-icon">
             <HeroIcon size={20} color={HUB_COLOR} />

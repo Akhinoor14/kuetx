@@ -161,7 +161,7 @@ export default function FacultyProfile() {
   if (loading) {
     return (
       <div className="hub-page-bg" style={{ minHeight: '100vh' }}>
-        <div style={{ padding: '20px 24px 40px', width: '100%', maxWidth: 1040, boxSizing: 'border-box', margin: '0 auto', color: 'var(--muted)', fontSize: 13 }}>
+        <div className="page-container" style={{ padding: '20px 24px 40px', color: 'var(--muted)', fontSize: 13 }}>
           Loading…
         </div>
       </div>
@@ -175,7 +175,7 @@ export default function FacultyProfile() {
 
   return (
     <div className="hub-page-bg page-enter dashboard-page" style={{ minHeight: '100vh' }}>
-      <div style={{ padding: '20px 24px 40px', width: '100%', maxWidth: 1040, boxSizing: 'border-box', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: 20 }}>
+      <div className="page-container" style={{ padding: '20px 24px 40px', display: 'flex', flexDirection: 'column', gap: 20 }}>
 
         {/* ── Save toast — same pattern as student Profile.jsx ── */}
         {saved && (

@@ -15,8 +15,8 @@ import UploadQuestionModal from '../components/UploadQuestionModal';
 // ─────────────────────────────────────────────────────────────────────────────
 // SOLUTION BANK — Contribution / Community constants
 // ─────────────────────────────────────────────────────────────────────────────
-const SOLUTION_CONTRIBUTION_FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLScE5eujz_Vu5LFgkZkiGtWurliPsOiGLmUYTKftBZNSkYTPmg/viewform?embedded=true';
-const SOLUTION_CONTRIBUTION_FALLBACK_URL = 'https://forms.gle/9NahxuzSeeU6NTLw6';
+// (Google Form URL now lives in UploadQuestionModal.jsx — the component
+// that actually renders it — rather than duplicated here.)
 const SOLUTION_CONTRIBUTION_PROMPT_KEY = 'solutionBank_contribution_prompt_last_shown';
 const SOLUTION_CONTRIBUTION_COOLDOWN_MS = 2 * 60 * 60 * 1000; // 2 hours
 const WA_NUMBER = '8801724812042';

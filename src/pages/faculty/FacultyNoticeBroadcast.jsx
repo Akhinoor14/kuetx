@@ -204,7 +204,7 @@ export default function FacultyNoticeBroadcast() {
 
   return (
     <div className="hub-page-bg" style={{ minHeight: '100vh' }}>
-      <div className="broadcast-notice-page" style={{ padding: '16px 20px 32px', width: '100%', maxWidth: 1040, boxSizing: 'border-box', margin: '0 auto' }}>
+      <div className="broadcast-notice-page page-container" style={{ padding: '16px 20px 32px' }}>
         <div className="hub-page-hero broadcast-notice-hero">
           <div className="hub-page-hero-icon broadcast-notice-hero-icon">
             <Icons.Bell size={18} color="var(--accent)" />

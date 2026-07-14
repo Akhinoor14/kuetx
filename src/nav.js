@@ -89,15 +89,29 @@ export const NAV = [
   },
   {
     group: 'Campus Life',
-    isSubgroup: true,
-    hubPath: '/campus-life',
-    hubIcon: 'Layers',
-    items: [
-      { id: 'clubs',    label: 'Clubs',   icon: 'Layers', path: '/clubs' },
-      { id: 'projects', label: 'Projects',icon: 'Cpu',    path: '/projects' },
-      { id: 'tours',    label: 'Tours',   icon: 'MapPin', path: '/tours' },
-      { id: 'money',    label: 'Money',   icon: 'Wallet', path: '/money' },
-      { id: 'tuition',  label: 'Tuition', icon: 'Users',  path: '/tuition' },
+    subgroups: [
+      {
+        name: 'Campus Life',
+        hubPath: '/campus-life',
+        hubIcon: 'Layers',
+        items: [
+          { id: 'clubs',    label: 'Clubs',   icon: 'Layers', path: '/clubs' },
+          { id: 'projects', label: 'Projects',icon: 'Cpu',    path: '/projects' },
+          { id: 'tours',    label: 'Tours',   icon: 'MapPin', path: '/tours' },
+          { id: 'money',    label: 'Money',   icon: 'Wallet', path: '/money' },
+          { id: 'tuition',  label: 'Tuition', icon: 'Users',  path: '/tuition' },
+        ]
+      },
+      {
+        name: 'Daily Life',
+        hubPath: '/daily-life',
+        hubIcon: 'Sunrise',
+        items: [
+          { id: 'notes',      label: 'Notes',         icon: 'FileText', path: '/notes' },
+          { id: 'time',       label: 'Time Tracker',  icon: 'Timer',    path: '/time' },
+          { id: 'namaz',      label: 'Namaz Tracker', icon: 'Moon',     path: '/namaz' },
+        ]
+      },
     ]
   },
   {
@@ -108,17 +122,6 @@ export const NAV = [
     items: [
       { id: 'self-study-academic',   label: 'Academic',    icon: 'BookOpen', path: '/self-study/academic' },
       { id: 'self-study-deep-focus', label: 'Deep Focus',  icon: 'Zap',      path: '/self-study/deep-focus' },
-    ]
-  },
-  {
-    group: 'Daily Life',
-    isSubgroup: true,
-    hubPath: '/daily-life',
-    hubIcon: 'Sunrise',
-    items: [
-      { id: 'notes',      label: 'Notes',         icon: 'FileText', path: '/notes' },
-      { id: 'time',       label: 'Time Tracker',  icon: 'Timer',    path: '/time' },
-      { id: 'namaz',      label: 'Namaz Tracker', icon: 'Moon',     path: '/namaz' },
     ]
   },
   {
@@ -133,3 +136,31 @@ export const NAV = [
     ]
   },
 ];
+
+// ── Mobile variant ──────────────────────────────────────────────────────────
+// Same NAV, except 'Self Study' (desktop: standalone top-level group) is
+// nested as a third subgroup inside 'Academics' next to Daily Academics /
+// Academic Core. Everything else — including the Daily Life -> Campus Life
+// move above, which applies on BOTH desktop and mobile — is shared as-is.
+// Built by transformation (not hand-duplicated) so the two can never drift
+// out of sync when items are added/renamed in NAV later.
+const SELF_STUDY_SECTION = NAV.find((s) => s.group === 'Self Study');
+const SELF_STUDY_AS_SUBGROUP = {
+  name: 'Self Study',
+  hubPath: SELF_STUDY_SECTION.hubPath,
+  hubIcon: SELF_STUDY_SECTION.hubIcon,
+  items: SELF_STUDY_SECTION.items,
+};
+
+export const NAV_MOBILE = NAV
+  .filter((s) => s.group !== 'Self Study')
+  .map((s) =>
+    s.group === 'Academics'
+      ? { ...s, subgroups: [...s.subgroups, SELF_STUDY_AS_SUBGROUP] }
+      : s
+  );
+
+/** Pick the right NAV structure for the current viewport. */
+export function getStudentNav(isMobileNav) {
+  return isMobileNav ? NAV_MOBILE : NAV;
+}

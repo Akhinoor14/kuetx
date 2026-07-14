@@ -157,7 +157,7 @@ export default function FacultyDashboard() {
   if (classIndex === null) {
     return (
       <div className="hub-page-bg" style={{ minHeight: '100vh' }}>
-        <div style={{ padding: '20px 24px 40px', width: '100%', maxWidth: 1040, boxSizing: 'border-box', margin: '0 auto', color: 'var(--muted)', fontSize: 13 }}>
+        <div className="page-container" style={{ padding: '20px 24px 40px', color: 'var(--muted)', fontSize: 13 }}>
           Loading…
         </div>
       </div>
@@ -391,7 +391,7 @@ export default function FacultyDashboard() {
 
   return (
     <div className="hub-page-bg page-enter dashboard-page" style={{ minHeight: '100vh' }}>
-      <div style={{ padding: '20px 24px 40px', width: '100%', maxWidth: 1040, boxSizing: 'border-box', margin: '0 auto' }}>
+      <div className="page-container" style={{ padding: '20px 24px 40px' }}>
         {/* Welcome hero — same warm greeting + today-date pattern as the
             student Dashboard's clickable hero card, adapted for faculty
             (name/title instead of dept/batch), linking to Faculty Profile. */}
