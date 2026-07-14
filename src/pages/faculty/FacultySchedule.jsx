@@ -78,6 +78,13 @@ export default function FacultySchedule() {
   // Schedule.jsx's fullScreenOpen, added here since this page previously
   // had no escape hatch from the cramped 5-day-wide table on phones.
   const [fullScreenOpen, setFullScreenOpen] = useState(false);
+  // Small "gear" popover for choosing the time model (50min / other) —
+  // previously every model was its own always-visible button sitting in
+  // the page header permanently, which crowded the header on every visit
+  // even though 50-minute IS the default/most-used model and switching is
+  // a rare action. Tucked behind one compact toggle instead; closes on
+  // an outside click or after picking a model.
+  const [modelMenuOpen, setModelMenuOpen] = useState(false);
 
   // Hide the fixed bottom-nav while the rotated fullscreen timetable is
   // open — see matching effect in Schedule.jsx for details.
@@ -283,7 +290,7 @@ export default function FacultySchedule() {
                       }
                       style={{
                         padding: 6, borderBottom: '1px solid var(--border)', borderRight: '1px solid var(--border)',
-                        verticalAlign: 'top', minHeight: 64,
+                        verticalAlign: 'top', minHeight: 64, overflow: 'hidden',
                         cursor: isEmptyCell ? (isVerified ? 'pointer' : 'not-allowed') : 'default',
                         background: breakSlot ? 'rgba(239,68,68,0.08)' : d === selectedDay ? 'rgba(59,130,246,0.035)' : 'transparent',
                       }}
@@ -307,9 +314,17 @@ export default function FacultySchedule() {
                             height: rs > 1 ? '100%' : undefined,
                             background: `linear-gradient(180deg, ${color.bg}, ${color.bg})`,
                             border: `1px solid ${color.border}`, color: 'var(--text)',
+                            // BUGFIX: in fullscreen (6 columns: Time + 5 days sharing a
+                            // rotated viewport's width) a squeezed column's batch/dept/
+                            // course text had no clamp or overflow containment at all —
+                            // long text wrapped past the chip's own box and visually
+                            // bled into neighboring rows/columns, reading as "data
+                            // overwriting the next cell". Clamped + word-break here so
+                            // a narrow column shows fewer lines instead of overflowing.
+                            overflow: 'hidden', maxWidth: '100%', boxSizing: 'border-box', wordBreak: 'break-word',
                           }}>
-                            <div style={{ fontWeight: 700 }}>{entry.batch?.toUpperCase()} {entry.dept}</div>
-                            <div style={{ fontSize: 11, color: color.text, fontWeight: 700 }}>{entry.courseCode}</div>
+                            <div style={{ fontWeight: 700, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{entry.batch?.toUpperCase()} {entry.dept}</div>
+                            <div style={{ fontSize: 11, color: color.text, fontWeight: 700, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{entry.courseCode}</div>
                             {rs > 1 && (
                               <div style={{ fontSize: 10, color: 'var(--muted)', marginTop: 2, display: 'flex', alignItems: 'center', gap: 3 }}>
                                 <Icons.Layers size={10} /> Full sessional block
@@ -339,28 +354,51 @@ export default function FacultySchedule() {
             </div>
             <h1 className="hub-page-hero-title">My Schedule</h1>
           </div>
-          <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
-            {Object.values(TIME_MODELS).map((m) => (
-              <button
-                key={m.id}
-                onClick={() => setModelId(m.id)}
-                className="btn btn-sm"
-                style={{
-                  fontSize: 11.5, padding: '5px 10px',
-                  border: modelId === m.id ? '1px solid var(--accent)' : '1px solid var(--border)',
-                  background: modelId === m.id ? 'rgba(59,130,246,0.08)' : 'var(--card)',
-                  color: 'var(--text)', borderRadius: 7, cursor: 'pointer',
-                }}
-              >
-                {m.name}
-              </button>
-            ))}
-            <button className="btn btn-ghost mobile-fullscreen-btn" onClick={() => setFullScreenOpen(true)} aria-label="Open schedule full screen">
-              <span className="fs-icon" aria-hidden style={{ display: 'inline-block', lineHeight: 0 }}>
-                ⤢
-              </span>
-              <span className="fs-label" style={{ marginLeft: 8, fontWeight: 700 }}>Full Screen</span>
+          {/* Compact settings toggle — replaces the old always-visible row
+              of one button per time model. 50-minute stays the default;
+              this is only for the rare case a teacher needs a different
+              model. */}
+          <div style={{ position: 'relative' }}>
+            <button
+              className="btn btn-ghost"
+              onClick={() => setModelMenuOpen((v) => !v)}
+              aria-label="Schedule settings"
+              title="Schedule settings"
+              style={{
+                display: 'flex', alignItems: 'center', gap: 6, padding: '7px 11px',
+                border: '1px solid var(--border)', borderRadius: 8, background: 'var(--card)',
+                color: 'var(--text)', fontSize: 12, fontWeight: 600, cursor: 'pointer',
+              }}
+            >
+              <Icons.Settings2 size={14} />
+              <span>{activeTemplate.name}</span>
             </button>
+            {modelMenuOpen && (
+              <>
+                <div style={{ position: 'fixed', inset: 0, zIndex: 40 }} onClick={() => setModelMenuOpen(false)} />
+                <div style={{
+                  position: 'absolute', top: '110%', right: 0, zIndex: 41,
+                  background: 'var(--card)', border: '1px solid var(--border)', borderRadius: 10,
+                  padding: 6, minWidth: 140, boxShadow: '0 8px 24px rgba(0,0,0,0.12)',
+                  display: 'flex', flexDirection: 'column', gap: 4,
+                }}>
+                  {Object.values(TIME_MODELS).map((m) => (
+                    <button
+                      key={m.id}
+                      onClick={() => { setModelId(m.id); setModelMenuOpen(false); }}
+                      style={{
+                        textAlign: 'left', fontSize: 12, padding: '7px 9px', borderRadius: 7, border: 'none',
+                        background: modelId === m.id ? 'rgba(59,130,246,0.1)' : 'transparent',
+                        color: modelId === m.id ? 'var(--accent)' : 'var(--text)',
+                        fontWeight: modelId === m.id ? 700 : 500, cursor: 'pointer',
+                      }}
+                    >
+                      {m.name}
+                    </button>
+                  ))}
+                </div>
+              </>
+            )}
           </div>
         </div>
 
@@ -416,22 +454,48 @@ export default function FacultySchedule() {
             Hidden on desktop (see .mobile-preview-controls in index.css). */}
         {!loading && (
           <div className="mobile-preview-controls">
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 12 }}>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 12 }}>
               {DAYS.map((day) => (
                 <button
                   key={day}
                   onClick={() => setSelectedDay(day)}
                   className="btn day-chip"
+                  title={day}
                   style={{
-                    padding: '8px 12px',
+                    padding: '6px 11px', fontSize: 12, fontWeight: 600, borderRadius: 8,
                     border: selectedDay === day ? '1px solid var(--accent)' : '1px solid var(--border)',
                     background: selectedDay === day ? 'rgba(59,130,246,0.08)' : 'var(--card)',
+                    color: selectedDay === day ? 'var(--accent)' : 'var(--text)',
                   }}
                 >
-                  {day}
+                  {formatDayShort(day)}
                 </button>
               ))}
             </div>
+          </div>
+        )}
+
+        {/* Full Screen sits right above the grid it controls, instead of
+            up in the page header — compact icon-only button on mobile
+            (label shows on wider screens via .fs-label CSS), tucked to
+            the right just before the table so it reads as "a control for
+            what's below" rather than a header-level action. */}
+        {!loading && (
+          <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 8 }}>
+            <button
+              className="btn btn-ghost mobile-fullscreen-btn"
+              onClick={() => setFullScreenOpen(true)}
+              aria-label="Open schedule full screen"
+              title="Full screen"
+              style={{
+                display: 'flex', alignItems: 'center', gap: 6, padding: '6px 10px',
+                border: '1px solid var(--border)', borderRadius: 8, background: 'var(--card)',
+                fontSize: 11.5, fontWeight: 600, color: 'var(--text)', cursor: 'pointer',
+              }}
+            >
+              <span className="fs-icon" aria-hidden style={{ display: 'inline-block', lineHeight: 0 }}>⤢</span>
+              <span className="fs-label">Full Screen</span>
+            </button>
           </div>
         )}
 
@@ -445,7 +509,7 @@ export default function FacultySchedule() {
       </div>
 
       {fullScreenOpen && (
-        <div className="fullscreen-overlay" style={{ zIndex: 1100 }} onClick={() => setFullScreenOpen(false)}>
+        <div className="fullscreen-overlay" onClick={() => setFullScreenOpen(false)}>
           <div className="fullscreen-content fullscreen-rotated" onClick={(e) => e.stopPropagation()}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 10, marginBottom: 12 }}>
               <div>

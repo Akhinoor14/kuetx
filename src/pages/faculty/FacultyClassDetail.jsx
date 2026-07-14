@@ -29,6 +29,35 @@ const todayStr = () => {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 };
 
+// Roll-number-aware sort — groupSync.js's subscribeMembers() does a plain
+// Firestore `orderBy('roll')`, which is a STRING sort (roll is stored as
+// profile.studentId, a string). That silently produces wrong ordering
+// whenever roll numbers aren't all the same digit-length ("1900123" sorts
+// before "1900023" as text is not how you'd sort them numerically), and —
+// worse — anyone whose roll happens to start with a character that sorts
+// early/late (or is blank/non-numeric, which some CR/ACR-claimed or
+// manually-added members can have) lands out of place, which is what
+// produced the "CR/ACR at the top" symptom reported. This re-sorts the
+// already-fetched members array numerically client-side wherever a roll-
+// ordered roster is rendered (Marks tab, Attendance tab), without
+// touching the Firestore query itself. Falls back to a locale string
+// compare for any roll that isn't purely numeric, and pushes members with
+// no roll at all to the end (rather than letting '' sort first).
+function sortByRoll(members) {
+  const list = Array.isArray(members) ? members : [];
+  return [...list].sort((a, b) => {
+    const ra = String(a?.roll || '').trim();
+    const rb = String(b?.roll || '').trim();
+    if (!ra && !rb) return 0;
+    if (!ra) return 1;
+    if (!rb) return -1;
+    const na = Number(ra);
+    const nb = Number(rb);
+    if (Number.isFinite(na) && Number.isFinite(nb)) return na - nb;
+    return ra.localeCompare(rb, undefined, { numeric: true, sensitivity: 'base' });
+  });
+}
+
 import { getDeptSyllabus } from '../../store/curriculumStore';
 import { subscribeFacultyAssignment, setPlannedTotalClasses, updateAssignmentDayTimeSlots, findConflictingAssignment } from '../../lib/facultyClassSync';
 import { subscribeMembers, subscribePlannerLogs, subscribeRoutine } from '../../lib/groupSync';
@@ -695,6 +724,14 @@ function AttendanceTab({ assignment, groupId }) {
   const isAutoDate = useRef(true);
   const [draftMarks, setDraftMarks] = useState({}); // { studentUid: 'present'|'absent'|'late'|'excused' }
   const [saving, setSaving] = useState(false);
+  // Once a date's session is locked (already saved), the roster below is
+  // read-only by default — this flips true only after the teacher
+  // explicitly clicks "Edit this date", which is the one path allowed to
+  // touch a locked date (audited via editHistory, see
+  // createOrUpdateSessionAttendance). Resets to false on every date
+  // change so a teacher can't accidentally carry edit-mode from one
+  // locked date over to another.
+  const [unlockedForEdit, setUnlockedForEdit] = useState(false);
 
   useEffect(() => {
     const resyncIfAuto = () => {
@@ -785,6 +822,7 @@ function AttendanceTab({ assignment, groupId }) {
   useEffect(() => {
     const existing = (sessions || []).find((s) => s.date === date);
     setDraftMarks(existing?.attendance || {});
+    setUnlockedForEdit(false);
   }, [date, sessions]);
 
   const existingSessionForDate = (sessions || []).find((s) => s.date === date);
@@ -797,6 +835,7 @@ function AttendanceTab({ assignment, groupId }) {
     setSaving(true);
     try {
       const wasFirstSaveForDate = !existingSessionForDate;
+      const isCorrection = !!existingSessionForDate?.locked && unlockedForEdit;
       await createOrUpdateSessionAttendance(groupId, assignment.id, {
         sessionId: existingSessionForDate?.id || null,
         date,
@@ -804,7 +843,9 @@ function AttendanceTab({ assignment, groupId }) {
         slot: assignment.dayTimeSlots?.[0]?.slot || '',
         attendance: draftMarks,
         loggedBy: { uid: auth.currentUser.uid, role: 'faculty', name: facultyName },
+        isCorrection,
       });
+      setUnlockedForEdit(false);
 
       // Auto-link to Sessions & Count: taking attendance for a date IS
       // strong proof a class was actually held that day, so the first
@@ -876,6 +917,19 @@ function AttendanceTab({ assignment, groupId }) {
     : [];
   const mostRegular = attendanceSummary.slice(0, 3);
   const mostAbsent = attendanceSummary.slice().sort((a, b) => a.pct - b.pct).slice(0, 3);
+  // Class Performance — overall class attendance health in one number.
+  // Defined as the plain average of every markable student's own
+  // attendance % (attendanceSummary already excludes students with zero
+  // markable sessions, e.g. a brand-new joiner). This is the standard,
+  // easiest-to-defend definition (equivalent to total-present /
+  // total-possible across the whole roster when every student has the
+  // same number of held sessions, and still fair when a few students
+  // joined late and have fewer markable sessions than others — each
+  // student's own % counts equally rather than one late-joiner's small
+  // denominator skewing a pooled total/total ratio).
+  const classPerformancePct = attendanceSummary.length > 0
+    ? Math.round(attendanceSummary.reduce((sum, s) => sum + s.pct, 0) / attendanceSummary.length)
+    : null;
 
   return (
     <div>
@@ -986,26 +1040,70 @@ function AttendanceTab({ assignment, groupId }) {
               <div style={{ fontWeight: 700, fontSize: 13.5 }}>Attendance Summary</div>
               <div style={{ fontSize: 11.5, color: 'var(--muted)' }}>{totalClasses} class{totalClasses === 1 ? '' : 'es'} held</div>
             </div>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-              <div>
-                <div style={{ fontSize: 11, fontWeight: 700, color: '#16a34a', marginBottom: 6 }}>✓ Most Regular</div>
-                {mostRegular.length === 0 && <div style={{ fontSize: 11, color: 'var(--muted)' }}>No data yet.</div>}
-                {mostRegular.map((s) => (
-                  <div key={s.id} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11.5, marginBottom: 3 }}>
-                    <span style={{ color: 'var(--text)' }}>{s.roll}</span>
-                    <span style={{ color: '#16a34a', fontWeight: 700 }}>{s.pct}%</span>
-                  </div>
-                ))}
+
+            {classPerformancePct !== null && (
+              <div style={{
+                display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10,
+                padding: '12px 14px', borderRadius: 12, marginBottom: 12,
+                background: `linear-gradient(135deg, color-mix(in srgb, var(--accent) 10%, var(--card)), var(--card))`,
+                border: '1px solid var(--border)',
+              }}>
+                <div>
+                  <div style={{ fontSize: 10.5, fontWeight: 800, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Class Performance</div>
+                  <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 2 }}>Average attendance across {attendanceSummary.length} student{attendanceSummary.length === 1 ? '' : 's'}</div>
+                </div>
+                <div style={{
+                  fontSize: 22, fontWeight: 900, fontFamily: 'JetBrains Mono, monospace',
+                  color: classPerformancePct >= 75 ? '#16a34a' : classPerformancePct >= 60 ? '#d97706' : '#dc2626',
+                }}>
+                  {classPerformancePct}%
+                </div>
               </div>
-              <div>
-                <div style={{ fontSize: 11, fontWeight: 700, color: '#dc2626', marginBottom: 6 }}>⚠ Most Absent</div>
+            )}
+
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+              <div style={{
+                borderRadius: 12, border: '1px solid var(--border)', background: 'var(--card)',
+                padding: '11px 12px',
+              }}>
+                <div style={{ fontSize: 11, fontWeight: 800, color: '#16a34a', marginBottom: 8, display: 'flex', alignItems: 'center', gap: 5 }}>
+                  <span>✓</span> Most Regular
+                </div>
+                {mostRegular.length === 0 && <div style={{ fontSize: 11, color: 'var(--muted)' }}>No data yet.</div>}
+                <div style={{ display: 'grid', gap: 5 }}>
+                  {mostRegular.map((s, i) => (
+                    <div key={s.id} style={{
+                      display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: 11.5,
+                      padding: '5px 8px', borderRadius: 7,
+                      background: i === 0 ? 'color-mix(in srgb, #16a34a 10%, var(--surface))' : 'var(--surface)',
+                    }}>
+                      <span style={{ color: 'var(--text)', fontWeight: i === 0 ? 700 : 500 }}>{s.roll}</span>
+                      <span style={{ color: '#16a34a', fontWeight: 700, fontFamily: 'JetBrains Mono, monospace' }}>{s.pct}%</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div style={{
+                borderRadius: 12, border: '1px solid var(--border)', background: 'var(--card)',
+                padding: '11px 12px',
+              }}>
+                <div style={{ fontSize: 11, fontWeight: 800, color: '#dc2626', marginBottom: 8, display: 'flex', alignItems: 'center', gap: 5 }}>
+                  <span>⚠</span> Most Absent
+                </div>
                 {mostAbsent.length === 0 && <div style={{ fontSize: 11, color: 'var(--muted)' }}>No data yet.</div>}
-                {mostAbsent.map((s) => (
-                  <div key={s.id} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11.5, marginBottom: 3 }}>
-                    <span style={{ color: 'var(--text)' }}>{s.roll}</span>
-                    <span style={{ color: '#dc2626', fontWeight: 700 }}>{s.pct}%</span>
-                  </div>
-                ))}
+                <div style={{ display: 'grid', gap: 5 }}>
+                  {mostAbsent.map((s, i) => (
+                    <div key={s.id} style={{
+                      display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: 11.5,
+                      padding: '5px 8px', borderRadius: 7,
+                      background: i === 0 ? 'color-mix(in srgb, #dc2626 10%, var(--surface))' : 'var(--surface)',
+                    }}>
+                      <span style={{ color: 'var(--text)', fontWeight: i === 0 ? 700 : 500 }}>{s.roll}</span>
+                      <span style={{ color: '#dc2626', fontWeight: 700, fontFamily: 'JetBrains Mono, monospace' }}>{s.pct}%</span>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
@@ -1032,49 +1130,77 @@ function AttendanceTab({ assignment, groupId }) {
             Today
           </button>
         )}
-        {existingSessionForDate && (
+        {existingSessionForDate?.locked && !unlockedForEdit && (
+          <>
+            <span style={{ fontSize: 11, color: 'var(--muted)', display: 'flex', alignItems: 'center', gap: 4 }}>
+              🔒 Already saved for this date — locked.
+            </span>
+            <button
+              onClick={() => setUnlockedForEdit(true)}
+              style={{ padding: '5px 10px', borderRadius: 7, border: '1px solid var(--border)', background: 'var(--bg)', color: 'var(--accent)', fontWeight: 600, fontSize: 11, cursor: 'pointer' }}
+            >
+              Edit this date
+            </button>
+          </>
+        )}
+        {existingSessionForDate?.locked && unlockedForEdit && (
+          <span style={{ fontSize: 11, color: 'var(--muted)' }}>
+            Correcting a locked date — every change will be recorded in the audit trail.
+          </span>
+        )}
+        {existingSessionForDate && !existingSessionForDate.locked && (
           <span style={{ fontSize: 11, color: 'var(--muted)' }}>Already recorded for this date — editing will update it.</span>
         )}
       </div>
 
-      <div style={{ display: 'grid', gap: 6 }}>
-        {members.map((m) => (
-          <div key={m.id} className="faculty-row">
-            <div style={{ minWidth: 0 }}>
-              <div style={{ fontWeight: 600, fontSize: 13, color: 'var(--text)' }}>{m.name || 'Unnamed'}</div>
-              <div style={{ fontSize: 11.5, color: 'var(--muted)' }}>{m.roll || '—'}</div>
-            </div>
-            <div style={{ display: 'flex', gap: 4, flexShrink: 0 }}>
-              {marks.map((mark) => (
-                <button
-                  key={mark}
-                  onClick={() => setMark(m.id, mark)}
-                  style={{
-                    width: 30, height: 30, borderRadius: 7, fontSize: 11.5, fontWeight: 700, cursor: 'pointer',
-                    border: draftMarks[m.id] === mark ? `1px solid ${markColors[mark]}` : '1px solid var(--border)',
-                    background: draftMarks[m.id] === mark ? `${markColors[mark]}22` : 'var(--bg)',
-                    color: draftMarks[m.id] === mark ? markColors[mark] : 'var(--muted)',
-                  }}
-                >
-                  {markLabels[mark]}
-                </button>
-              ))}
-            </div>
+      {(() => {
+        const rosterLocked = !!existingSessionForDate?.locked && !unlockedForEdit;
+        return (
+          <div style={{ display: 'grid', gap: 6, opacity: rosterLocked ? 0.6 : 1 }}>
+            {sortByRoll(members).map((m) => (
+              <div key={m.id} className="faculty-row">
+                <div style={{ minWidth: 0 }}>
+                  <div style={{ fontWeight: 600, fontSize: 13, color: 'var(--text)' }}>{m.name || 'Unnamed'}</div>
+                  <div style={{ fontSize: 11.5, color: 'var(--muted)' }}>{m.roll || '—'}</div>
+                </div>
+                <div style={{ display: 'flex', gap: 4, flexShrink: 0 }}>
+                  {marks.map((mark) => (
+                    <button
+                      key={mark}
+                      onClick={() => !rosterLocked && setMark(m.id, mark)}
+                      disabled={rosterLocked}
+                      style={{
+                        width: 30, height: 30, borderRadius: 7, fontSize: 11.5, fontWeight: 700, cursor: rosterLocked ? 'not-allowed' : 'pointer',
+                        border: draftMarks[m.id] === mark ? `1px solid ${markColors[mark]}` : '1px solid var(--border)',
+                        background: draftMarks[m.id] === mark ? `${markColors[mark]}22` : 'var(--bg)',
+                        color: draftMarks[m.id] === mark ? markColors[mark] : 'var(--muted)',
+                      }}
+                    >
+                      {markLabels[mark]}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
+        );
+      })()}
 
       {/* Save/Update button lives here, right after the roster — a
           teacher marking a full class scrolls all the way down through
           the student list, so the save action should be waiting right
-          here instead of back up at the top of the tab. */}
+          here instead of back up at the top of the tab. Disabled entirely
+          while a locked date hasn't been explicitly unlocked for
+          correction — the real enforcement is server-side in
+          createOrUpdateSessionAttendance, this just avoids a wasted
+          click+error round trip for the common case. */}
       <div className="faculty-summary-card" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, marginTop: 14 }}>
         <button
           onClick={handleSave}
-          disabled={saving}
-          style={{ width: '100%', padding: '11px 16px', borderRadius: 8, border: 'none', background: 'var(--accent)', color: '#fff', fontWeight: 700, fontSize: 13.5, cursor: 'pointer', opacity: saving ? 0.6 : 1, transition: 'opacity 0.15s' }}
+          disabled={saving || (!!existingSessionForDate?.locked && !unlockedForEdit)}
+          style={{ width: '100%', padding: '11px 16px', borderRadius: 8, border: 'none', background: 'var(--accent)', color: '#fff', fontWeight: 700, fontSize: 13.5, cursor: 'pointer', opacity: (saving || (!!existingSessionForDate?.locked && !unlockedForEdit)) ? 0.5 : 1, transition: 'opacity 0.15s' }}
         >
-          {saving ? 'Saving…' : existingSessionForDate ? 'Update Attendance' : 'Save Attendance'}
+          {saving ? 'Saving…' : existingSessionForDate?.locked ? (unlockedForEdit ? 'Save Correction' : 'Locked — Edit to Change') : existingSessionForDate ? 'Update Attendance' : 'Save Attendance'}
         </button>
       </div>
     </div>
@@ -1500,7 +1626,7 @@ function MarksTab({ assignment, groupId }) {
       </div>
 
       <div style={{ display: 'grid', gap: 6 }}>
-        {members.map((m) => {
+        {sortByRoll(members).map((m) => {
           const rec = recordsByUid[m.id];
           const pct = attendancePctFor(m.id);
           return (

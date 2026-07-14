@@ -5498,8 +5498,12 @@ input[type="range"]::-webkit-slider-thumb {
 /* The rotated fullscreen timetable used to visually overlap the fixed
    bottom nav bar near the screen edge on mobile — simplest fix is to
    just hide the nav entirely while that view is open (Schedule.jsx /
-   FacultySchedule.jsx toggle this body class). */
-body.schedule-fullscreen-active .bottom-nav {
+   FacultySchedule.jsx toggle this body class). BUGFIX: this previously
+   targeted `.bottom-nav`, which doesn't exist anywhere in the app — the
+   actual component (BottomNav.jsx) renders `.mobile-bottom-nav`, so this
+   rule silently never matched and the nav kept showing through the
+   fullscreen overlay. */
+body.schedule-fullscreen-active .mobile-bottom-nav {
   display: none !important;
 }
 .fullscreen-content {
@@ -5574,27 +5578,36 @@ body.schedule-fullscreen-active .bottom-nav {
     box-sizing: border-box;
   }
 
-  /* The rotated/full-view timetable itself: force it to actually fill the
-     rotated box's width instead of keeping its natural min-content width.
-     Previously `.full-view` was referenced by JSX (renderTimetable adds
-     the class) and by the sibling ":not(.full-view)" rule below, but never
-     had its own styling — so in fullscreen the table just overflowed
-     sideways instead of stretching, and only THEN could you scroll down. */
+  /* The rotated/full-view timetable itself. BUGFIX: this previously
+     forced `table-layout: fixed` + `width: auto` day columns with NO
+     minimum width at all — on a narrow rotated viewport, 6 columns
+     (Time + 5 teaching days) got squeezed so thin that course/batch
+     text had nowhere to go and visually bled across cells (see the
+     inline-style clamp fix in FacultySchedule.jsx/Schedule.jsx for the
+     text-containment half of this fix). The other half is here: give
+     each column a real minimum width based on what it actually needs
+     (Time is short and fixed; a day column needs enough room for a
+     batch+dept line and a course code without wrapping into mush), and
+     let the table scroll horizontally if 6 real-minimum-width columns
+     genuinely don't fit the viewport — instead of forcing every column
+     to fit by shrinking them past readability. This matches "show as
+     much as fits, priority order, don't overwrite" rather than always
+     cramming all 6 into view no matter what. */
   .timetable-grid.full-view {
-    overflow-x: hidden !important;
+    overflow-x: auto !important;
     width: 100%;
   }
   .timetable-grid.full-view table {
     width: 100%;
-    table-layout: fixed;
+    table-layout: auto;
   }
   .timetable-grid.full-view .time-col {
-    width: 72px;
-    min-width: 72px;
+    width: 68px;
+    min-width: 68px;
   }
   .timetable-grid.full-view .timetable-day-col {
     width: auto;
-    min-width: 0;
+    min-width: 108px;
   }
 
   /* "Add Class Slot" modal (the full form opened from the header's
@@ -8789,6 +8802,19 @@ body.schedule-fullscreen-active .bottom-nav {
   .hub-grid { grid-template-columns: repeat(2, 1fr); }
   .hub-grid-item { min-height: 92px; padding: 12px; }
   .hub-grid-item .hub-grid-item-icon { width: 30px; height: 30px; }
+}
+
+/* Broadcast Notice's hero icon/title read oversized specifically on
+   typical phone widths (390-430px) that the generic .hub-page-hero-icon
+   rule above never reaches (it only shrinks below 380px). This page's
+   own hero is scoped separately here rather than lowering the shared
+   breakpoint app-wide, since other hub pages weren't reported as an
+   issue and shouldn't shrink as a side effect. */
+@media (max-width: 480px) {
+  .broadcast-notice-hero { gap: 10px; margin: 8px 0 18px; }
+  .broadcast-notice-hero-icon { width: 34px; height: 34px; border-radius: 10px; }
+  .broadcast-notice-hero-icon svg { width: 17px; height: 17px; }
+  .broadcast-notice-hero .hub-page-hero-title { font-size: 19px; }
 }
 
 @media (min-width: 900px) {

@@ -57,20 +57,66 @@ function studentRecordsCollection(groupId, assignmentId) {
  * when taking attendance for a specific date (auto-suggested from the
  * assignment's dayTimeSlots + Sessions & Count's logged count, but the
  * teacher confirms/edits per §8.9's "auto-count ... manual override
- * possible, audit log সহ" note). */
-export async function createOrUpdateSessionAttendance(groupId, assignmentId, { sessionId, date, dayName, slot, attendance, loggedBy }) {
+ * possible, audit log সহ" note).
+ *
+ * APPEND-ONLY / LOCK MODEL (owner-confirmed): once a session for a date is
+ * first saved, it becomes `locked: true` and further plain re-saves are
+ * rejected — a teacher can't silently overwrite an already-submitted
+ * date's marks by just reopening the date and re-clicking Save (that was
+ * the old behavior; createOrUpdateSessionAttendance did a full overwrite
+ * every time with no history at all). Free re-marking (P -> A -> P, etc.)
+ * is still allowed for the FIRST save of a date, since that's normal
+ * mistouch-correction before submission, not a correction of committed
+ * data. To change an already-locked date afterward, the caller must pass
+ * `isCorrection: true` explicitly (wired to a distinct "Edit this date"
+ * action in the UI, not the normal Save button) — that path stays
+ * allowed (teacher correction is a legitimate need) but every field that
+ * actually changes is appended to `editHistory` (who/when/old/new),
+ * mirroring the exact same never-overwritten audit-trail convention
+ * saveStudentMarks() already uses for marks (§9.1). editHistory itself is
+ * never rewritten or trimmed, only appended to. */
+export async function createOrUpdateSessionAttendance(groupId, assignmentId, { sessionId, date, dayName, slot, attendance, loggedBy, isCorrection = false }) {
+  const ref = sessionId ? doc(sessionsCollection(groupId, assignmentId), sessionId) : null;
+  const existingSnap = ref ? await getDoc(ref) : null;
+  const existing = existingSnap?.exists() ? existingSnap.data() : null;
+
+  if (existing?.locked && !isCorrection) {
+    // Refuse the silent-overwrite path. The UI should never actually hit
+    // this (it gates the normal Save button once a date is locked), but
+    // this is the real enforcement point, not just a UI nicety.
+    const err = new Error('This date is already saved and locked. Use "Edit this date" to make a correction.');
+    err.code = 'session_locked';
+    throw err;
+  }
+
+  const prevAttendance = existing?.attendance || {};
+  const nextAttendance = attendance || {};
+  const editEntries = isCorrection
+    ? Object.keys({ ...prevAttendance, ...nextAttendance })
+        .filter((uid) => prevAttendance[uid] !== nextAttendance[uid])
+        .map((uid) => ({
+          ts: new Date().toISOString(),
+          studentUid: uid,
+          oldValue: prevAttendance[uid] ?? null,
+          newValue: nextAttendance[uid] ?? null,
+          by: loggedBy || null,
+        }))
+    : [];
+
   const data = {
     date, dayName, slot,
-    attendance: attendance || {}, // { [studentUid]: 'present' | 'absent' | 'late' | 'excused' }
+    attendance: nextAttendance, // { [studentUid]: 'present' | 'absent' | 'late' | 'excused' }
     loggedBy, // { uid, role: 'faculty', name } — §8.8's discrepancy-signal shape, reused here
+    locked: true,
     updatedAt: serverTimestamp(),
+    ...(editEntries.length > 0 ? { editHistory: [...(existing?.editHistory || []), ...editEntries] } : {}),
   };
   if (sessionId) {
-    await updateDoc(doc(sessionsCollection(groupId, assignmentId), sessionId), data);
+    await updateDoc(ref, data);
     return sessionId;
   }
-  const ref = await addDoc(sessionsCollection(groupId, assignmentId), { ...data, createdAt: serverTimestamp() });
-  return ref.id;
+  const created = await addDoc(sessionsCollection(groupId, assignmentId), { ...data, createdAt: serverTimestamp() });
+  return created.id;
 }
 
 export function subscribeSessionAttendance(groupId, assignmentId, callback) {

@@ -12,6 +12,10 @@ import { useCanEditGroup } from '../hooks/useCanEditGroup';
 import TeacherClaimBanner from '../components/TeacherClaimBanner';
 
 const DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday'];
+// Compact 3-letter label for day-selector chips (Sun/Mon/Tue/Wed/Thu) —
+// same treatment applied to the faculty schedule page's day chips, kept
+// consistent here so both surfaces look/feel the same.
+const formatDayShort = (day) => day.slice(0, 3);
 const DAY_INDEX = { Sunday: 0, Monday: 1, Tuesday: 2, Wednesday: 3, Thursday: 4 };
 
 const TIME_MODELS = {
@@ -198,8 +202,6 @@ const isSlotOverlap = (a, b) => {
   if (!rangeA || !rangeB) return normalizeSlotKey(a) === normalizeSlotKey(b);
   return rangeA.start < rangeB.end && rangeB.start < rangeA.end;
 };
-
-const formatDayShort = (day) => day.slice(0, 3);
 
 const isSessionalType = (type) => /sessional|lab/i.test(String(type || ''));
 
@@ -1345,6 +1347,7 @@ export default function Schedule() {
                           borderRight: '1px solid var(--border)',
                           verticalAlign: isLabCell ? 'middle' : 'top',
                           minHeight: 'clamp(56px, 12vw, 72px)',
+                          overflow: 'hidden',
                           background: isLabCell
                             ? 'linear-gradient(180deg, rgba(34,197,94,0.15), rgba(34,197,94,0.08))'
                             : breakSlot ? 'rgba(239,68,68,0.08)' : d === selectedDay ? 'rgba(59,130,246,0.035)' : 'transparent',
@@ -1410,9 +1413,17 @@ export default function Schedule() {
                                 WebkitTouchCallout: 'none',
                                 WebkitUserSelect: 'none',
                                 touchAction: 'manipulation',
+                                // BUGFIX: in fullscreen (6 squeezed columns) this chip had
+                                // no overflow containment, so a narrow column let the
+                                // absolutely-positioned edit/delete icons visually collide
+                                // with the title text instead of the text reserving room
+                                // for them. overflow:hidden + boxSizing here, and the
+                                // title's own right-padding below, fix that.
+                                overflow: 'hidden',
+                                boxSizing: 'border-box',
                               }}
                             >
-                              <div style={{ fontWeight: 800, fontSize: isSessional ? 'clamp(11px, 2.5vw, 13px)' : 'clamp(10px, 2.5vw, 12px)', lineHeight: 1.35, letterSpacing: '0.01em', display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden', flex: 1 }}>
+                              <div style={{ fontWeight: 800, fontSize: isSessional ? 'clamp(11px, 2.5vw, 13px)' : 'clamp(10px, 2.5vw, 12px)', lineHeight: 1.35, letterSpacing: '0.01em', display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden', flex: 1, paddingRight: (!isLabCell && !isSessional && canEditSchedule) ? 28 : 0 }}>
                                 {s.displayName || c?.code || c?.name || '?'}
                               </div>
                               {!hideTeacherInGrid && (
@@ -1920,19 +1931,21 @@ export default function Schedule() {
             <span className="tag tag-green">Selected · {selectedDay}</span>
             <span className="tag tag-gray">Auto · {autoPreviewDay}</span>
           </div>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 12 }}>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 12 }}>
             {DAYS.map(day => (
               <button
                 key={day}
                 onClick={() => setSelectedDay(day)}
                 className="btn day-chip"
+                title={day}
                 style={{
-                  padding: '8px 12px',
+                  padding: '6px 11px', fontSize: 12, fontWeight: 600, borderRadius: 8,
                   border: selectedDay === day ? '1px solid var(--accent)' : '1px solid var(--border)',
                   background: selectedDay === day ? 'rgba(59,130,246,0.08)' : 'var(--card)',
+                  color: selectedDay === day ? 'var(--accent)' : 'var(--text)',
                 }}
               >
-                {day}
+                {formatDayShort(day)}
               </button>
             ))}
           </div>
@@ -1952,7 +1965,7 @@ export default function Schedule() {
         {renderTimetable()}
       </div>
       {fullScreenOpen && (
-        <div className="fullscreen-overlay" style={{ zIndex: 1100 }} onClick={() => setFullScreenOpen(false)}>
+        <div className="fullscreen-overlay" onClick={() => setFullScreenOpen(false)}>
           <div className="fullscreen-content fullscreen-rotated" onClick={e => e.stopPropagation()}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 10, marginBottom: 12 }}>
               <div>
