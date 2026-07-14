@@ -1,52 +1,36 @@
-KUETx — Updated files from this chat session
-==============================================
+KUETx — Worker auth fix (this session)
+========================================
 
-Copy each file below into the SAME path in your project
-(D:\Skill\Website\kuetx\...), overwriting the existing one.
+1. cloudflare-worker/src/index.js
+   -> D:\Skill\Website\kuetx\cloudflare-worker\src\index.js
 
-1. firestore.indexes.json
-   -> D:\Skill\Website\kuetx\firestore.indexes.json
-   - Added the "deleteRequests" composite index (status ASC,
-     requestedAt ASC) so it matches what's live and stops the
-     CLI delete-index prompt.
-   - REMOVED the "members" COLLECTION_GROUP composite index —
-     Firebase rejected it with "this index is not necessary,
-     configure using single field index controls" because a
-     single-field lookup (just "uid") must be a field override,
-     not a composite index.
-   - ADDED a fieldOverrides entry for members.uid enabling
-     COLLECTION_GROUP scope (same pattern as the existing
-     roles.role override). This is what actually fixes the
-     getStaffDisplayInfo lookup on /team.
+   Root cause fix for "Missing groupId" / Founder-not-recognized
+   errors during upload (single AND batch — same bug, same fix).
 
-2. src/nav.js
-   -> D:\Skill\Website\kuetx\src\nav.js
-   Reorganized the "Campus Life" group into two subgroups:
-     - "Campus Life": Clubs, Projects, Tours, Money, Tuition,
-       Notes, Time Tracker, Namaz Tracker
-     - "Self Study": Academic, Deep Focus
-   Removed the old standalone "Daily Life" and top-level "Self
-   Study" groups (fixes the "This section isn't available" bug
-   on /daily-life). Simplified NAV_MOBILE since desktop/mobile
-   nav is now identical.
+   isFounder / isSCLFor / isCLFor / isHeadOfOps were calling
+   Firestore's REST API with NO auth header. Your Firestore rules
+   require isSignedIn() (and an exact uid match for admins/{uid})
+   to read those docs, so the Worker's unauthenticated request was
+   always rejected -> every role check silently returned false for
+   everyone, regardless of actual role.
 
-3. src/App.jsx
-   -> D:\Skill\Website\kuetx\src\App.jsx
-   Removed the dead /daily-life hub route. Updated /self-study
-   route to point at the new Self Study subgroup inside Campus
-   Life. Leaf routes (/notes, /time, /namaz, /self-study/academic,
-   /self-study/deep-focus) are unchanged.
-
-4. src/components/nav-system/SidebarNavStudent.jsx
-   -> D:\Skill\Website\kuetx\src\components\nav-system\SidebarNavStudent.jsx
-   Comment-only fix (no logic change) — corrected a stale comment
-   that described the old desktop/mobile Self Study split.
+   Fix: the caller's Firebase ID token (already verified earlier in
+   each handler) is now passed as a Bearer header on every one of
+   these Firestore REST calls, so the rules see request.auth.uid
+   correctly and grant read access when it matches.
 
 --------------------------------------------------------------
-After copying, run again:
-  firebase deploy --only firestore:rules,firestore:indexes,functions
+After copying, redeploy the Worker:
 
-This time the members index goes through fieldOverrides, which
-Firebase accepts immediately (no build wait like composite
-indexes). Once deployed, /team should show real names/depts
-instead of raw UIDs.
+  cd /d D:\Skill\Website\kuetx\cloudflare-worker
+  npx wrangler deploy
+
+Then retry both single-file and batch-folder uploads.
+
+--------------------------------------------------------------
+Note on "pause during upload": checked the codebase — there is
+currently NO pause/resume control for uploads (single or batch).
+If a batch upload is interrupted (tab closed, navigation, lost
+connection), it simply stops with no way to resume from where it
+left off. This is a missing feature, not something broken by
+these changes — let me know if you want it built.

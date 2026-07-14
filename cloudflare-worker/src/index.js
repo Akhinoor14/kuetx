@@ -102,24 +102,32 @@ async function verifyFirebaseToken(idToken, env) {
 
 // ---------------------------------------------------------------------
 // Firestore REST helpers (checking staff/{uid}/roles/{roleId} existence)
+// idToken is REQUIRED here — Firestore rules for admins/{uid} and
+// staff/{uid}/roles/{role} both gate on isSignedIn() (request.auth.uid),
+// which only exists if this REST call itself carries the caller's
+// Firebase ID token as a Bearer credential. An unauthenticated fetch
+// always evaluates to "not signed in" and silently returns false for
+// every role check, no matter who's actually asking.
 // ---------------------------------------------------------------------
-async function firestoreDocExists(env, path) {
+async function firestoreDocExists(env, path, idToken) {
   const url = `https://firestore.googleapis.com/v1/projects/${env.FIREBASE_PROJECT_ID}/databases/(default)/documents/${path}`;
-  const res = await fetch(url);
+  const res = await fetch(url, {
+    headers: idToken ? { Authorization: `Bearer ${idToken}` } : {},
+  });
   return res.status === 200;
 }
 
-async function isFounder(env, uid) {
-  return firestoreDocExists(env, `admins/${uid}`);
+async function isFounder(env, uid, idToken) {
+  return firestoreDocExists(env, `admins/${uid}`, idToken);
 }
-async function isSCLFor(env, uid, dept) {
-  return firestoreDocExists(env, `staff/${uid}/roles/senior_campus_lead_${dept}`);
+async function isSCLFor(env, uid, dept, idToken) {
+  return firestoreDocExists(env, `staff/${uid}/roles/senior_campus_lead_${dept}`, idToken);
 }
-async function isCLFor(env, uid, groupId) {
-  return firestoreDocExists(env, `staff/${uid}/roles/campus_lead_${groupId}`);
+async function isCLFor(env, uid, groupId, idToken) {
+  return firestoreDocExists(env, `staff/${uid}/roles/campus_lead_${groupId}`, idToken);
 }
-async function isHeadOfOps(env, uid) {
-  return firestoreDocExists(env, `staff/${uid}/roles/head_of_ops`);
+async function isHeadOfOps(env, uid, idToken) {
+  return firestoreDocExists(env, `staff/${uid}/roles/head_of_ops`, idToken);
 }
 
 // ---------------------------------------------------------------------
@@ -202,12 +210,12 @@ async function handleStage(request, env) {
 
   // Scope check: Founder can stage for any dept. Otherwise the uploader
   // must be the Campus Lead of exactly the group they claim.
-  const founder = await isFounder(env, uid);
+  const founder = await isFounder(env, uid, idToken);
   if (!founder) {
     if (!groupId) return json({ error: 'Missing groupId' }, env, 400);
     const deptOfGroup = groupId.split('_')[1];
     if (deptOfGroup !== dept) return json({ error: 'groupId/dept mismatch' }, env, 400);
-    const cl = await isCLFor(env, uid, groupId);
+    const cl = await isCLFor(env, uid, groupId, idToken);
     if (!cl) return json({ error: 'Not the Campus Lead of this group' }, env, 403);
   }
 
@@ -247,9 +255,9 @@ async function handleApprove(request, env) {
   if (!TERM_RE.test(term)) return json({ error: `Invalid term: ${term}` }, env, 400);
   if (!requestId || !courseCode || !label) return json({ error: 'Missing fields' }, env, 400);
 
-  const founder = await isFounder(env, uid);
-  const headOfOps = founder || (await isHeadOfOps(env, uid));
-  const scl = headOfOps || (await isSCLFor(env, uid, dept));
+  const founder = await isFounder(env, uid, idToken);
+  const headOfOps = founder || (await isHeadOfOps(env, uid, idToken));
+  const scl = headOfOps || (await isSCLFor(env, uid, dept, idToken));
   if (!scl) return json({ error: 'Not authorized to approve for this dept' }, env, 403);
 
   const cleanCourse = String(courseCode).replace(/\s+/g, '');
@@ -324,8 +332,8 @@ async function handleDeletePublicObject(request, env) {
   }
   const uid = claims.sub || claims.user_id;
 
-  const founder = await isFounder(env, uid);
-  const authorized = founder || (await isHeadOfOps(env, uid));
+  const founder = await isFounder(env, uid, idToken);
+  const authorized = founder || (await isHeadOfOps(env, uid, idToken));
   if (!authorized) return json({ error: 'Not authorized to delete public papers' }, env, 403);
 
   const body = await request.json();
