@@ -185,8 +185,8 @@ function Layout({ authState, onboardingActive }) {
             <Route path="/academic-core" element={<SubgroupHub group="Academics" subgroup="Academic Core" />} />
             <Route path="/daily-academics" element={<SubgroupHub group="Academics" subgroup="Daily Academics" />} />
             <Route path="/campus-life" element={<SubgroupHub group="Campus Life" />} />
-            <Route path="/daily-life" element={<SubgroupHub group="Daily Life" />} />
-            <Route path="/self-study" element={<SubgroupHub group="Self Study" />} />
+            <Route path="/self-study" element={<SubgroupHub group="Campus Life" subgroup="Self Study" />} />
+
             {/* Combined bottom-nav hub pages */}
             <Route
               path="/campus"

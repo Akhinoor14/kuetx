@@ -13,11 +13,10 @@ import { useIsMobileNav } from '../BottomNav';
 export default function SidebarNavStudent({
   location, onClose, canSeeCrBoard, isRealAdmin, adminLabel, unreadNoticeCount,
 }) {
-  // Desktop keeps 'Self Study' as its own standalone group; on mobile it
-  // nests inside 'Academics' next to Daily Academics / Academic Core (see
-  // getStudentNav() in nav.js). Same breakpoint the sidebar's own overlay
-  // and BottomNav already use, so this switches at exactly the same width
-  // the layout itself switches to the mobile shell.
+  // Self Study and Daily Life are now merged into the Campus Life subgroup
+  // for both desktop and mobile (see nav.js) — getStudentNav() just returns
+  // NAV either way. Kept as a call (not a direct NAV reference) in case
+  // desktop/mobile ever need to diverge again.
   const isMobileNav = useIsMobileNav();
   const activeNav = getStudentNav(isMobileNav);
 

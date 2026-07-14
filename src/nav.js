@@ -100,28 +100,20 @@ export const NAV = [
           { id: 'tours',    label: 'Tours',   icon: 'MapPin', path: '/tours' },
           { id: 'money',    label: 'Money',   icon: 'Wallet', path: '/money' },
           { id: 'tuition',  label: 'Tuition', icon: 'Users',  path: '/tuition' },
+          { id: 'notes',    label: 'Notes',         icon: 'FileText', path: '/notes' },
+          { id: 'time',     label: 'Time Tracker',  icon: 'Timer',    path: '/time' },
+          { id: 'namaz',    label: 'Namaz Tracker', icon: 'Moon',     path: '/namaz' },
         ]
       },
       {
-        name: 'Daily Life',
-        hubPath: '/daily-life',
-        hubIcon: 'Sunrise',
+        name: 'Self Study',
+        hubPath: '/self-study',
+        hubIcon: 'Activity',
         items: [
-          { id: 'notes',      label: 'Notes',         icon: 'FileText', path: '/notes' },
-          { id: 'time',       label: 'Time Tracker',  icon: 'Timer',    path: '/time' },
-          { id: 'namaz',      label: 'Namaz Tracker', icon: 'Moon',     path: '/namaz' },
+          { id: 'self-study-academic',   label: 'Academic',    icon: 'BookOpen', path: '/self-study/academic' },
+          { id: 'self-study-deep-focus', label: 'Deep Focus',  icon: 'Zap',      path: '/self-study/deep-focus' },
         ]
       },
-    ]
-  },
-  {
-    group: 'Self Study',
-    isSubgroup: true,
-    hubPath: '/self-study',
-    hubIcon: 'Activity',
-    items: [
-      { id: 'self-study-academic',   label: 'Academic',    icon: 'BookOpen', path: '/self-study/academic' },
-      { id: 'self-study-deep-focus', label: 'Deep Focus',  icon: 'Zap',      path: '/self-study/deep-focus' },
     ]
   },
   {
@@ -138,27 +130,9 @@ export const NAV = [
 ];
 
 // ── Mobile variant ──────────────────────────────────────────────────────────
-// Same NAV, except 'Self Study' (desktop: standalone top-level group) is
-// nested as a third subgroup inside 'Academics' next to Daily Academics /
-// Academic Core. Everything else — including the Daily Life -> Campus Life
-// move above, which applies on BOTH desktop and mobile — is shared as-is.
-// Built by transformation (not hand-duplicated) so the two can never drift
-// out of sync when items are added/renamed in NAV later.
-const SELF_STUDY_SECTION = NAV.find((s) => s.group === 'Self Study');
-const SELF_STUDY_AS_SUBGROUP = {
-  name: 'Self Study',
-  hubPath: SELF_STUDY_SECTION.hubPath,
-  hubIcon: SELF_STUDY_SECTION.hubIcon,
-  items: SELF_STUDY_SECTION.items,
-};
-
-export const NAV_MOBILE = NAV
-  .filter((s) => s.group !== 'Self Study')
-  .map((s) =>
-    s.group === 'Academics'
-      ? { ...s, subgroups: [...s.subgroups, SELF_STUDY_AS_SUBGROUP] }
-      : s
-  );
+// Daily Life and Self Study were folded into the Campus Life subgroup above,
+// so mobile no longer needs a separate transform — it shares NAV as-is.
+export const NAV_MOBILE = NAV;
 
 /** Pick the right NAV structure for the current viewport. */
 export function getStudentNav(isMobileNav) {
