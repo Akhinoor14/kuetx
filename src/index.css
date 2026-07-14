@@ -9199,6 +9199,35 @@ body.schedule-fullscreen-active .mobile-bottom-nav {
   margin-bottom: 16px;
 }
 
+/* Shell wrapping the chip row + whatever tab content follows, as ONE
+   visually bounded card — see the comment above this element's JSX for
+   why (chips were floating on the bare page background with content
+   flush underneath, no boundary at all). Kept deliberately light —
+   this isn't meant to look like a second nested card system, just
+   enough of a soft edge + divider to read as one section. */
+.faculty-tabs-shell {
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  padding: 10px 12px 16px;
+}
+.faculty-tabs-shell .faculty-tabs-grid {
+  margin-bottom: 0;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+}
+.faculty-tabs-shell .faculty-tab-panel {
+  margin-top: 14px;
+}
+@media (min-width: 640px) {
+  .faculty-tabs-shell {
+    padding: 6px 16px 18px;
+  }
+  .faculty-tabs-shell .faculty-tabs-grid {
+    padding-bottom: 0;
+  }
+}
+
 .faculty-tab-chip {
   display: flex;
   align-items: center;

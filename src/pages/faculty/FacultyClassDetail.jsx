@@ -1718,6 +1718,9 @@ export default function FacultyClassDetail() {
     <div className="hub-page-bg" style={{ minHeight: '100vh' }}>
       <div style={{ padding: '10px 24px 40px', width: '100%', maxWidth: 1040, boxSizing: 'border-box', margin: '0 auto' }}>
         <div className="faculty-class-hero faculty-class-hero-compact">
+          <div className="faculty-class-hero-icon">
+            <Icons.GraduationCap size={20} color="var(--accent)" />
+          </div>
           <div>
             {assignment && (
               <div className="faculty-class-hero-meta">
@@ -1740,62 +1743,75 @@ export default function FacultyClassDetail() {
             >=640px rule in index.css). No JS breakpoint logic, no "More"
             sheet — the row/grid switch is CSS-only.
             Disabled tabs stay visible but non-interactive, with a title
-            tooltip explaining why, rather than being hidden entirely. */}
-        <div className="faculty-tabs-grid">
-          {TABS.map((t) => {
-            const Icon = Icons[t.icon] || Icons.Circle;
+            tooltip explaining why, rather than being hidden entirely.
+
+            The chip row + whatever tab content follows now live inside
+            ONE shell (.faculty-tabs-shell) instead of the chips floating
+            directly on the page background with the content flush right
+            underneath — previously there was no visual boundary at all
+            between "here are the tabs" and "here's the tab's content",
+            so it read as one flat, undifferentiated block (most visible
+            on mobile, where the chip grid itself has no card of its
+            own). The shell gives a single soft card with an internal
+            divider under the chips, so the section reads as one clearly
+            bounded unit while staying simple — no extra nesting per tab. */}
+        <div className="faculty-tabs-shell">
+          <div className="faculty-tabs-grid">
+            {TABS.map((t) => {
+              const Icon = Icons[t.icon] || Icons.Circle;
+              const active = tab === t.id;
+              return (
+                <button
+                  key={t.id}
+                  onClick={() => t.enabled && selectTab(t.id)}
+                  disabled={!t.enabled}
+                  title={t.enabled ? undefined : 'Coming in a later phase'}
+                  className={`faculty-tab-chip${active ? ' active' : ''}`}
+                >
+                  <Icon size={13} /> {t.label}
+                </button>
+              );
+            })}
+          </div>
+
+          {!groupId && (
+            <div style={{ color: 'var(--danger, #dc2626)', fontSize: 13, padding: '16px 0' }}>
+              Missing group reference for this class — please open it from My Classes.
+            </div>
+          )}
+
+          {groupId && assignment === null && (
+            <div style={{ color: 'var(--muted)', fontSize: 13, padding: '16px 0' }}>Loading…</div>
+          )}
+
+          {/* Each panel stays mounted once first opened (display:none when not
+              active) instead of being unmounted/remounted on every tab switch.
+              The Sessions/Attendance/Marks tabs each hold a live Firestore
+              subscription — remounting them on every switch tore that
+              subscription down and re-attached it from scratch each time,
+              which is what made switching back to a tab feel slow (a fresh
+              network round-trip + a "Loading…" flash even though the data
+              hadn't actually changed). Keeping them mounted means the
+              subscription — and whatever it already loaded — just stays
+              live in the background, so returning to a tab is instant. */}
+          {groupId && assignment && TABS.filter((t) => t.enabled).map((t) => {
             const active = tab === t.id;
+            if (!mountedTabs.has(t.id)) return null;
             return (
-              <button
-                key={t.id}
-                onClick={() => t.enabled && selectTab(t.id)}
-                disabled={!t.enabled}
-                title={t.enabled ? undefined : 'Coming in a later phase'}
-                className={`faculty-tab-chip${active ? ' active' : ''}`}
-              >
-                <Icon size={13} /> {t.label}
-              </button>
+              <div key={t.id} className="faculty-tab-panel" style={{ display: active ? 'block' : 'none' }}>
+                {t.id === 'students' && <ClassmatesList groupId={groupId} showActions={false} viewerRole="faculty" groupMeta={{ dept: assignment.dept, batch: assignment.batch, term: assignment.term }} />}
+                {t.id === 'syllabus' && <SyllabusTab assignment={assignment} />}
+                {t.id === 'schedule' && (
+                  <ScheduleTab assignment={assignment} groupId={groupId} isVerified={isVerified} onEditDayTime={() => setEditingDayTime(true)} />
+                )}
+                {t.id === 'attendance' && <AttendanceTab assignment={assignment} groupId={groupId} />}
+                {t.id === 'marks' && <MarksTab assignment={assignment} groupId={groupId} />}
+                {t.id === 'qbank' && <QuestionBankTab assignment={assignment} />}
+                {t.id === 'notices' && <NoticesTab groupId={groupId} isVerified={isVerified} assignment={assignment} />}
+              </div>
             );
           })}
         </div>
-
-        {!groupId && (
-          <div style={{ color: 'var(--danger, #dc2626)', fontSize: 13, padding: '16px 0' }}>
-            Missing group reference for this class — please open it from My Classes.
-          </div>
-        )}
-
-        {groupId && assignment === null && (
-          <div style={{ color: 'var(--muted)', fontSize: 13, padding: '16px 0' }}>Loading…</div>
-        )}
-
-        {/* Each panel stays mounted once first opened (display:none when not
-            active) instead of being unmounted/remounted on every tab switch.
-            The Sessions/Attendance/Marks tabs each hold a live Firestore
-            subscription — remounting them on every switch tore that
-            subscription down and re-attached it from scratch each time,
-            which is what made switching back to a tab feel slow (a fresh
-            network round-trip + a "Loading…" flash even though the data
-            hadn't actually changed). Keeping them mounted means the
-            subscription — and whatever it already loaded — just stays
-            live in the background, so returning to a tab is instant. */}
-        {groupId && assignment && TABS.filter((t) => t.enabled).map((t) => {
-          const active = tab === t.id;
-          if (!mountedTabs.has(t.id)) return null;
-          return (
-            <div key={t.id} className="faculty-tab-panel" style={{ display: active ? 'block' : 'none' }}>
-              {t.id === 'students' && <ClassmatesList groupId={groupId} showActions={false} viewerRole="faculty" groupMeta={{ dept: assignment.dept, batch: assignment.batch, term: assignment.term }} />}
-              {t.id === 'syllabus' && <SyllabusTab assignment={assignment} />}
-              {t.id === 'schedule' && (
-                <ScheduleTab assignment={assignment} groupId={groupId} isVerified={isVerified} onEditDayTime={() => setEditingDayTime(true)} />
-              )}
-              {t.id === 'attendance' && <AttendanceTab assignment={assignment} groupId={groupId} />}
-              {t.id === 'marks' && <MarksTab assignment={assignment} groupId={groupId} />}
-              {t.id === 'qbank' && <QuestionBankTab assignment={assignment} />}
-              {t.id === 'notices' && <NoticesTab groupId={groupId} isVerified={isVerified} assignment={assignment} />}
-            </div>
-          );
-        })}
       </div>
 
       {editingDayTime && assignment && (
