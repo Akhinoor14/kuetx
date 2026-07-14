@@ -90,6 +90,21 @@ function Layout({ authState, onboardingActive }) {
   const isMobileNav = useIsMobileNav();
   const isQuestionBankViewer = location.pathname === '/question-bank/view';
 
+  // BUGFIX: every page navigation used to land wherever the PREVIOUS
+  // page's scroll position happened to be, instead of at the top of the
+  // new page — confusing on both desktop and mobile since the actual
+  // scroll container here is .main-content (overflow-y: auto), not the
+  // window, so a plain `window.scrollTo` alone wouldn't have fixed it.
+  // Runs on every location.pathname change (not location.key, since a
+  // hash-only change within the same page shouldn't yank scroll back to
+  // top) and resets both the window and .main-content, covering every
+  // layout variant (desktop sidebar layout, mobile full-width layout,
+  // and the question-bank viewer which renders outside .main-content).
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    document.querySelector('.main-content')?.scrollTo(0, 0);
+  }, [location.pathname]);
+
   // Expose upgrade modal trigger globally so Settings page can call it
   useEffect(() => {
     window.__kuetxShowUpgrade = () => setShowUpgradeModal(true);
