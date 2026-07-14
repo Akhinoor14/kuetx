@@ -184,16 +184,23 @@ function Layout({ authState, onboardingActive }) {
             <Route path="/class-rep" element={<SubgroupHub group="Class Rep" />} />
             <Route path="/academic-core" element={<SubgroupHub group="Academics" subgroup="Academic Core" />} />
             <Route path="/daily-academics" element={<SubgroupHub group="Academics" subgroup="Daily Academics" />} />
-            <Route path="/campus-life" element={<SubgroupHub group="Campus Life" />} />
+            <Route path="/campus-life" element={<SubgroupHub group="Campus Life" subgroup="Campus Life" />} />
             <Route path="/self-study" element={<SubgroupHub group="Campus Life" subgroup="Self Study" />} />
 
-            {/* Combined bottom-nav hub pages */}
+            {/* Combined bottom-nav hub page. Daily Life doesn't exist as
+                a separate NAV group anymore (folded into Campus Life's
+                own "Campus Life" subgroup a while back) — the old
+                { group: 'Daily Life' } lookup here silently resolved to
+                nothing every render, dead weight kept alive by accident.
+                Scoped subgroup: 'Campus Life' here for the same reason
+                as the /campus-life route above — without it this page
+                pulled in Self Study's items too. */}
             <Route
               path="/campus"
               element={
                 <SubgroupHub
                   pageTitle="Campus"
-                  sections={[{ group: 'Daily Life' }, { group: 'Campus Life' }]}
+                  sections={[{ group: 'Campus Life', subgroup: 'Campus Life' }]}
                 />
               }
             />

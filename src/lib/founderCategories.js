@@ -98,6 +98,18 @@ export const FOUNDER_CATEGORIES = [
     ],
   },
   {
+    key: 'question-bank',
+    label: 'Question Bank',
+    icon: 'BookOpen',
+    subtitle: 'Founder upload, Campus Lead review queue, delete requests',
+    getCount: (ctx) => ctx.qbUploadRequests,
+    subcategories: [
+      { key: 'upload', label: 'Upload (any dept)' },
+      { key: 'review', label: 'Review Queue', getCount: (ctx) => ctx.qbUploadRequests },
+      { key: 'delete-requests', label: 'Delete Requests' },
+    ],
+  },
+  {
     key: 'blood',
     label: 'Blood Bank',
     icon: 'Droplet',

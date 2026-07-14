@@ -1827,25 +1827,24 @@ export default function AdminDashboard() {
   if (view === 'faculty') return <FacultyView {...viewProps} />;
   if (view === 'blood') return <BloodBankView {...viewProps} />;
 
-  // Top-level grid — fully generated from FOUNDER_CATEGORIES. Adding a
-  // category to that registry adds a card here automatically.
+  // Top-level grid — fully generated from FOUNDER_CATEGORIES, plus one
+  // router-linked card (Manage Batches — a real page route, not an
+  // internal `view`) styled to match so it doesn't stand out as a
+  // different kind of thing in the grid.
   return (
     <div>
       <FounderViewSwitchCard />
-      <Link
-        to="/admin/batches"
-        style={{
-          display: 'flex', alignItems: 'center', gap: 10, padding: '12px 16px', marginBottom: 18,
-          borderRadius: 12, border: '1px solid var(--border)', background: 'var(--card)',
-          textDecoration: 'none', color: 'var(--text)',
-        }}
-      >
-        <Icons.Users size={17} color="var(--accent)" />
-        <div style={{ flex: 1, fontWeight: 700, fontSize: 13.5 }}>Manage Batches</div>
-        <div style={{ fontSize: 12, color: 'var(--muted)' }}>Active batch list & colors</div>
-        <Icons.ChevronRight size={16} color="var(--muted)" />
-      </Link>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 14 }}>
+        <Link to="/admin/batches" className="founder-category-card" style={{ textDecoration: 'none' }}>
+          <div className="founder-category-card-icon">
+            <Icons.Users size={22} color="var(--accent)" />
+          </div>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div style={{ fontWeight: 700, fontSize: 14, color: 'var(--text)' }}>Manage Batches</div>
+            <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 2 }}>Active batch list & colors</div>
+          </div>
+          <Icons.ChevronRight size={18} color="var(--muted)" style={{ flexShrink: 0 }} />
+        </Link>
         {FOUNDER_CATEGORIES.filter((cat) => !cat.hidden).map((cat) => (
           <FounderCategoryCard
             key={cat.key}

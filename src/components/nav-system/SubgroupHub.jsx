@@ -87,7 +87,7 @@ function HubSection({ title, items, icon }) {
  * Multi-section usage — pass `sections`, an array of { group, subgroup?, filterFn? }:
  *   <SubgroupHub
  *     pageTitle="Campus"
- *     sections={[{ group: 'Daily Life' }, { group: 'Campus Life' }]}
+ *     sections={[{ group: 'Campus Life', subgroup: 'Campus Life' }]}
  *   />
  *
  * `extra` lets a caller inject a section that isn't backed by a plain
