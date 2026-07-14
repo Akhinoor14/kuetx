@@ -1,3 +1,4 @@
+import { useEffect, useRef } from 'react';
 import * as Icons from 'lucide-react';
 
 /**
@@ -19,9 +20,40 @@ import * as Icons from 'lucide-react';
  * don't need updating.
  */
 export default function CategorySubNav({ categories, activeKey, onSelect, countCtx = {} }) {
+  const rowRef = useRef(null);
+  const activePillRef = useRef(null);
+
+  // The pill row scrolls horizontally (.category-subnav-row is
+  // overflow-x:auto) and this component re-renders fresh every time the
+  // view changes, so without this the row silently resets to whatever
+  // scroll position it happened to be at — leaving the just-selected
+  // pill scrolled out of view instead of visible where the person
+  // clicked/tapped it.
+  //
+  // Deliberately NOT using scrollIntoView here: with block:'nearest' it
+  // can still nudge an ancestor's *vertical* scroll if the row isn't
+  // perfectly in view top-to-bottom, which would move the whole page
+  // out from under a mouse click — surprising on desktop and not what
+  // this needs. Computing scrollLeft by hand guarantees this only ever
+  // scrolls the pill row sideways, never the page, on mouse or touch.
+  useEffect(() => {
+    const row = rowRef.current;
+    const pill = activePillRef.current;
+    if (!row || !pill) return;
+    const rowRect = row.getBoundingClientRect();
+    const pillRect = pill.getBoundingClientRect();
+    const overflowLeft = pillRect.left - rowRect.left;
+    const overflowRight = pillRect.right - rowRect.right;
+    if (overflowLeft < 0) {
+      row.scrollBy({ left: overflowLeft, behavior: 'smooth' });
+    } else if (overflowRight > 0) {
+      row.scrollBy({ left: overflowRight, behavior: 'smooth' });
+    }
+  }, [activeKey]);
+
   return (
     <div style={{ marginBottom: 14 }}>
-      <div className="category-subnav-row">
+      <div className="category-subnav-row" ref={rowRef}>
         {categories.map((cat) => {
           const Icon = Icons[cat.icon] || Icons.Circle;
           const active = cat.key === activeKey;
@@ -29,6 +61,7 @@ export default function CategorySubNav({ categories, activeKey, onSelect, countC
           return (
             <button
               key={cat.key}
+              ref={active ? activePillRef : null}
               onClick={() => onSelect(cat.key)}
               className={`category-subnav-pill${active ? ' active' : ''}`}
             >

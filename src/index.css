@@ -2268,19 +2268,33 @@ h3 { font-size: 15px; font-weight: 600; }
     padding: 14px;
   }
 
-  .class-management-page .class-management-actions-card .class-management-actions-grid {
-    display: flex;
-    gap: 10px;
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    width: 100%;
-    padding-bottom: 2px;
-  }
+/* Base layout for the WhatsApp/Export/Open-Schedule action row — was
+   previously set to flex-wrap:nowrap + overflow-x:auto, which turns it
+   into a horizontally-scrollable strip; on narrow phones the scrollable
+   content visually spills past the card's rounded edge instead of
+   reading as an obvious scroller. Wrap instead so every button always
+   stays fully inside the card. */
+.class-management-page .class-management-actions-card .class-management-actions-grid {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  width: 100%;
+  padding-bottom: 2px;
+}
 
+.class-management-page .class-management-actions-card .class-management-actions-grid > * {
+  flex: 1 1 0;
+  min-width: 130px;
+}
+
+/* On narrow phones, 130px-min buttons can still be too tight for two per
+   row with comfortable spacing — let them go full-width in that case. */
+@media (max-width: 480px) {
   .class-management-page .class-management-actions-card .class-management-actions-grid > * {
-    flex: 1 1 0;
-    min-width: 130px;
+    flex: 1 1 calc(50% - 5px);
+    min-width: 0;
   }
+}
 
   .class-management-page .class-management-page .class-management-action-btn.btn-schedule,
   .class-management-page .class-management-action-btn.btn-schedule {
@@ -9065,12 +9079,15 @@ body.schedule-fullscreen-active .mobile-bottom-nav {
   justify-content: flex-start;
 }
 
-@media (max-width: 480px) {
+@media (max-width: 600px) {
   .staff-holders-grid,
   .classes-drilldown-grid {
     /* On narrow phones, fixed-width columns can leave one lonely card
-       per row with a lot of dead space. Fall back to flexible columns
-       so the grid still fills the width sensibly on small screens. */
+       per row with a lot of dead space — or, at ~140-150px per column
+       with gaps, overflow the card's own padding sideways on common
+       ~390-480px phone widths. Fall back to flexible columns so the
+       grid always fills the available width instead of spilling past
+       it. Raised from 480px so mid-size phones get this too. */
     grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
   }
 }
@@ -9678,6 +9695,7 @@ body.schedule-fullscreen-active .mobile-bottom-nav {
   .classmates-list-card {
     flex-wrap: wrap !important;
     align-items: flex-start !important;
+    overflow: hidden;
   }
   .classmates-list-card > div:first-child {
     flex: 1 1 100% !important;

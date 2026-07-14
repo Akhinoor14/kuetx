@@ -1,0 +1,673 @@
+{
+  "department": "Building Engineering & Construction Management",
+  "acronym": "BECM",
+  "university": "Khulna University of Engineering & Technology",
+  "effectiveFrom": "2015-2016",
+  "terms": {
+    "Y1T1": {
+      "termKey": "Y1T1",
+      "title": "First Year First Term",
+      "courses": {
+        "CE 1123": {
+          "title": "Surveying",
+          "credit": 4,
+          "contactHour": "",
+          "topics": [],
+          "sessionalNote": null,
+          "references": []
+        },
+        "Ch 1123": {
+          "title": "Chemistry",
+          "credit": 3,
+          "contactHour": "",
+          "topics": [],
+          "sessionalNote": null,
+          "references": []
+        },
+        "Math 1123": {
+          "title": "Mathematics-I",
+          "credit": 4,
+          "contactHour": "",
+          "topics": [],
+          "sessionalNote": null,
+          "references": []
+        },
+        "Ph 1123": {
+          "title": "Physics-I",
+          "credit": 3,
+          "contactHour": "",
+          "topics": [],
+          "sessionalNote": null,
+          "references": []
+        },
+        "Hum 1123": {
+          "title": "English",
+          "credit": 2,
+          "contactHour": "",
+          "topics": [],
+          "sessionalNote": null,
+          "references": []
+        },
+        "BECM 1152": {
+          "title": "Architectural Design-I",
+          "credit": 1.5,
+          "contactHour": "",
+          "topics": [],
+          "sessionalNote": "Sessional",
+          "references": []
+        },
+        "Ch 1124": {
+          "title": "Sessional on Chemistry",
+          "credit": 0.75,
+          "contactHour": "",
+          "topics": [],
+          "sessionalNote": "Sessional",
+          "references": []
+        },
+        "Ph 1124": {
+          "title": "Sessional on Physics",
+          "credit": 1.5,
+          "contactHour": "",
+          "topics": [],
+          "sessionalNote": "Sessional",
+          "references": []
+        },
+        "Hum 1124": {
+          "title": "English Skill Practices",
+          "credit": 0.75,
+          "contactHour": "",
+          "topics": [],
+          "sessionalNote": "Sessional",
+          "references": []
+        }
+      },
+      "optionalCourses": [],
+      "termNotes": []
+    },
+    "Y1T2": {
+      "termKey": "Y1T2",
+      "title": "First Year Second Term",
+      "courses": {
+        "CE 1201": {
+          "title": "Engineering Mechanics",
+          "credit": 3,
+          "contactHour": "",
+          "topics": [],
+          "sessionalNote": null,
+          "references": []
+        },
+        "CE 1213": {
+          "title": "Building & Construction Materials",
+          "credit": 4,
+          "contactHour": "",
+          "topics": [],
+          "sessionalNote": null,
+          "references": []
+        },
+        "Math 1223": {
+          "title": "Mathematics - II",
+          "credit": 3,
+          "contactHour": "",
+          "topics": [],
+          "sessionalNote": null,
+          "references": []
+        },
+        "Ph 1223": {
+          "title": "Physics - II",
+          "credit": 3,
+          "contactHour": "",
+          "topics": [],
+          "sessionalNote": null,
+          "references": []
+        },
+        "Hum 1223": {
+          "title": "Sociology",
+          "credit": 2,
+          "contactHour": "",
+          "topics": [],
+          "sessionalNote": null,
+          "references": []
+        },
+        "BECM 1252": {
+          "title": "Architectural Design-II",
+          "credit": 1.5,
+          "contactHour": "",
+          "topics": [],
+          "sessionalNote": "Sessional",
+          "references": []
+        },
+        "BECM 1254": {
+          "title": "Architectural Graphics and Engineering Drawing",
+          "credit": 1.5,
+          "contactHour": "",
+          "topics": [],
+          "sessionalNote": "Sessional",
+          "references": []
+        },
+        "CE 1212": {
+          "title": "Practical Surveying",
+          "credit": 1.5,
+          "contactHour": "",
+          "topics": [],
+          "sessionalNote": "Sessional",
+          "references": []
+        },
+        "CE 1214": {
+          "title": "Sessional on Building & Construction Materials",
+          "credit": 1.5,
+          "contactHour": "",
+          "topics": [],
+          "sessionalNote": "Sessional",
+          "references": []
+        },
+        "BECM 1251": {
+          "title": "Aesthetics and Design",
+          "credit": 3,
+          "contactHour": "",
+          "topics": [],
+          "sessionalNote": null,
+          "references": []
+        }
+      },
+      "optionalCourses": [],
+      "termNotes": []
+    },
+    "Y2T1": {
+      "termKey": "Y2T1",
+      "title": "Second Year First Term",
+      "courses": {
+        "BECM 2101": {
+          "title": "Building Engineering Systems",
+          "credit": 3,
+          "contactHour": "",
+          "topics": [],
+          "sessionalNote": null,
+          "references": []
+        },
+        "BECM 2151": {
+          "title": "Aesthetics and Design",
+          "credit": 3,
+          "contactHour": "",
+          "topics": [],
+          "sessionalNote": null,
+          "references": []
+        },
+        "CE 2111": {
+          "title": "Mechanics of Solids - I",
+          "credit": 3,
+          "contactHour": "",
+          "topics": [],
+          "sessionalNote": null,
+          "references": []
+        },
+        "Math 2123": {
+          "title": "Mathematics - III",
+          "credit": 3,
+          "contactHour": "",
+          "topics": [],
+          "sessionalNote": null,
+          "references": []
+        },
+        "Hum 2123": {
+          "title": "Engineering Economics and Financial Accounting",
+          "credit": 3,
+          "contactHour": "",
+          "topics": [],
+          "sessionalNote": null,
+          "references": []
+        },
+        "BECM 2102": {
+          "title": "Construction Estimating - I",
+          "credit": 0.75,
+          "contactHour": "",
+          "topics": [],
+          "sessionalNote": "Sessional",
+          "references": []
+        },
+        "BECM 2104": {
+          "title": "Construction Techniques and Equipments - I",
+          "credit": 1.5,
+          "contactHour": "",
+          "topics": [],
+          "sessionalNote": "Sessional",
+          "references": []
+        },
+        "BECM 2152": {
+          "title": "Architectural Design - III",
+          "credit": 1.5,
+          "contactHour": "",
+          "topics": [],
+          "sessionalNote": "Sessional",
+          "references": []
+        },
+        "CE 2112": {
+          "title": "Sessional on Mechanics of Solids",
+          "credit": 1.5,
+          "contactHour": "",
+          "topics": [],
+          "sessionalNote": "Sessional",
+          "references": []
+        }
+      },
+      "optionalCourses": [],
+      "termNotes": []
+    },
+    "Y2T2": {
+      "termKey": "Y2T2",
+      "title": "Second Year Second Term",
+      "courses": {
+        "BECM 2201": {
+          "title": "Engineering Construction Management",
+          "credit": 3,
+          "contactHour": "",
+          "topics": [],
+          "sessionalNote": null,
+          "references": []
+        },
+        "BECM 2213": {
+          "title": "Numerical Analysis and Computer Programming",
+          "credit": 3,
+          "contactHour": "",
+          "topics": [],
+          "sessionalNote": null,
+          "references": []
+        },
+        "CE 2211": {
+          "title": "Mechanics of Solids - II",
+          "credit": 3,
+          "contactHour": "",
+          "topics": [],
+          "sessionalNote": null,
+          "references": []
+        },
+        "EEE 2223": {
+          "title": "Basic Electrical Engineering",
+          "credit": 3,
+          "contactHour": "",
+          "topics": [],
+          "sessionalNote": null,
+          "references": []
+        },
+        "Math 2223": {
+          "title": "Mathematics - IV",
+          "credit": 3,
+          "contactHour": "",
+          "topics": [],
+          "sessionalNote": null,
+          "references": []
+        },
+        "BECM 2202": {
+          "title": "Construction Estimating - II",
+          "credit": 1.5,
+          "contactHour": "",
+          "topics": [],
+          "sessionalNote": "Sessional",
+          "references": []
+        },
+        "BECM 2214": {
+          "title": "Computer Applications and Programming",
+          "credit": 1.5,
+          "contactHour": "",
+          "topics": [],
+          "sessionalNote": "Sessional",
+          "references": []
+        },
+        "BECM 2252": {
+          "title": "Architectural Design - IV",
+          "credit": 1.5,
+          "contactHour": "",
+          "topics": [],
+          "sessionalNote": "Sessional",
+          "references": []
+        },
+        "EEE 2224": {
+          "title": "Sessional on Basic Electrical Engineering",
+          "credit": 0.75,
+          "contactHour": "",
+          "topics": [],
+          "sessionalNote": "Sessional",
+          "references": []
+        }
+      },
+      "optionalCourses": [],
+      "termNotes": []
+    },
+    "Y3T1": {
+      "termKey": "Y3T1",
+      "title": "Third Year First Term",
+      "courses": {
+        "BECM 3101": {
+          "title": "Construction and Project Management - I",
+          "credit": 3,
+          "contactHour": "",
+          "topics": [],
+          "sessionalNote": null,
+          "references": []
+        },
+        "BECM 3107": {
+          "title": "Construction Contract and Law",
+          "credit": 4,
+          "contactHour": "",
+          "topics": [],
+          "sessionalNote": null,
+          "references": []
+        },
+        "BECM 3115": {
+          "title": "Climate and Architectural Design",
+          "credit": 2,
+          "contactHour": "",
+          "topics": [],
+          "sessionalNote": null,
+          "references": []
+        },
+        "CE 3111": {
+          "title": "Structural Analysis and Design - I",
+          "credit": 3,
+          "contactHour": "",
+          "topics": [],
+          "sessionalNote": null,
+          "references": []
+        },
+        "CE 3113": {
+          "title": "Reinforced Concrete Structures - I",
+          "credit": 3,
+          "contactHour": "",
+          "topics": [],
+          "sessionalNote": null,
+          "references": []
+        },
+        "BECM 3112": {
+          "title": "Working Drawing",
+          "credit": 1.5,
+          "contactHour": "",
+          "topics": [],
+          "sessionalNote": "Sessional",
+          "references": []
+        },
+        "BECM 3116": {
+          "title": "Research Methodology",
+          "credit": 0.75,
+          "contactHour": "",
+          "topics": [],
+          "sessionalNote": "Sessional",
+          "references": []
+        },
+        "BECM 3124": {
+          "title": "Architectural Design of High Rise Building",
+          "credit": 0.75,
+          "contactHour": "",
+          "topics": [],
+          "sessionalNote": "Sessional",
+          "references": []
+        },
+        "CE 3114": {
+          "title": "Sessional on Reinforced Concrete Structures",
+          "credit": 1.5,
+          "contactHour": "",
+          "topics": [],
+          "sessionalNote": "Sessional",
+          "references": []
+        }
+      },
+      "optionalCourses": [],
+      "termNotes": []
+    },
+    "Y3T2": {
+      "termKey": "Y3T2",
+      "title": "Third Year Second Term",
+      "courses": {
+        "BECM 3201": {
+          "title": "Construction and Project Management - II",
+          "credit": 3,
+          "contactHour": "",
+          "topics": [],
+          "sessionalNote": null,
+          "references": []
+        },
+        "BECM 3205": {
+          "title": "Acoustics and Lighting",
+          "credit": 3,
+          "contactHour": "",
+          "topics": [],
+          "sessionalNote": null,
+          "references": []
+        },
+        "CE 3211": {
+          "title": "Structural Analysis and Design - II",
+          "credit": 3,
+          "contactHour": "",
+          "topics": [],
+          "sessionalNote": null,
+          "references": []
+        },
+        "CE 3213": {
+          "title": "Reinforced Concrete Structures - II",
+          "credit": 3,
+          "contactHour": "",
+          "topics": [],
+          "sessionalNote": null,
+          "references": []
+        },
+        "CE 3223": {
+          "title": "Soil Mechanics",
+          "credit": 3,
+          "contactHour": "",
+          "topics": [],
+          "sessionalNote": null,
+          "references": []
+        },
+        "BECM 3200": {
+          "title": "Project and Seminar",
+          "credit": 0.75,
+          "contactHour": "",
+          "topics": [],
+          "sessionalNote": "Sessional",
+          "references": []
+        },
+        "BECM 3204": {
+          "title": "Construction Techniques and Equipments - II",
+          "credit": 1.5,
+          "contactHour": "",
+          "topics": [],
+          "sessionalNote": "Sessional",
+          "references": []
+        },
+        "BECM 3208": {
+          "title": "Landscape Design",
+          "credit": 1.5,
+          "contactHour": "",
+          "topics": [],
+          "sessionalNote": "Sessional",
+          "references": []
+        },
+        "CE 3224": {
+          "title": "Sessional on Soil Mechanics",
+          "credit": 1.5,
+          "contactHour": "",
+          "topics": [],
+          "sessionalNote": "Sessional",
+          "references": []
+        }
+      },
+      "optionalCourses": [],
+      "termNotes": []
+    },
+    "Y4T1": {
+      "termKey": "Y4T1",
+      "title": "Fourth Year First Term",
+      "courses": {
+        "BECM 4101": {
+          "title": "Project Financing and Construction Marketing",
+          "credit": 3,
+          "contactHour": "",
+          "topics": [],
+          "sessionalNote": null,
+          "references": []
+        },
+        "BECM 4103": {
+          "title": "Construction Communications and Procurement Management",
+          "credit": 3,
+          "contactHour": "",
+          "topics": [],
+          "sessionalNote": null,
+          "references": []
+        },
+        "BECM 4105": {
+          "title": "Health and Safety in Construction",
+          "credit": 3,
+          "contactHour": "",
+          "topics": [],
+          "sessionalNote": null,
+          "references": []
+        },
+        "BECM 4109": {
+          "title": "Green Building and Environmental Technology",
+          "credit": 3,
+          "contactHour": "",
+          "topics": [],
+          "sessionalNote": null,
+          "references": []
+        },
+        "CE 4123": {
+          "title": "Foundation Engineering",
+          "credit": 3,
+          "contactHour": "",
+          "topics": [],
+          "sessionalNote": null,
+          "references": []
+        },
+        "BECM 4000": {
+          "title": "Project and Thesis",
+          "credit": 1.5,
+          "contactHour": "",
+          "topics": [],
+          "sessionalNote": "Sessional",
+          "references": []
+        },
+        "BECM 4110": {
+          "title": "Interior Design",
+          "credit": 1.5,
+          "contactHour": "",
+          "topics": [],
+          "sessionalNote": "Sessional",
+          "references": []
+        },
+        "BECM 4114": {
+          "title": "Study on Building Project Management",
+          "credit": 1.5,
+          "contactHour": "",
+          "topics": [],
+          "sessionalNote": "Sessional",
+          "references": []
+        },
+        "CE 4128": {
+          "title": "Analysis and Design of Tall Building",
+          "credit": 1.5,
+          "contactHour": "",
+          "topics": [],
+          "sessionalNote": "Sessional",
+          "references": []
+        }
+      },
+      "optionalCourses": [],
+      "termNotes": []
+    },
+    "Y4T2": {
+      "termKey": "Y4T2",
+      "title": "Fourth Year Second Term",
+      "courses": {
+        "BECM 4000": {
+          "title": "Project and Thesis",
+          "credit": 3,
+          "contactHour": "",
+          "topics": [],
+          "sessionalNote": "Sessional",
+          "references": []
+        },
+        "BECM 4200": {
+          "title": "Professional Practices",
+          "credit": 1.5,
+          "contactHour": "",
+          "topics": [],
+          "sessionalNote": "Sessional",
+          "references": []
+        },
+        "BECM 4201": {
+          "title": "Quality Management in Construction",
+          "credit": 3,
+          "contactHour": "",
+          "topics": [],
+          "sessionalNote": null,
+          "references": []
+        },
+        "BECM 4203": {
+          "title": "Information Technology in Construction",
+          "credit": 2,
+          "contactHour": "",
+          "topics": [],
+          "sessionalNote": null,
+          "references": []
+        },
+        "BECM 4204": {
+          "title": "Sessional on Building Information Modeling",
+          "credit": 1.5,
+          "contactHour": "",
+          "topics": [],
+          "sessionalNote": "Sessional",
+          "references": []
+        },
+        "BECM 4205": {
+          "title": "Real Estate Development",
+          "credit": 2,
+          "contactHour": "",
+          "topics": [],
+          "sessionalNote": null,
+          "references": []
+        },
+        "CE 4221": {
+          "title": "Design of Steel Structures",
+          "credit": 2,
+          "contactHour": "",
+          "topics": [],
+          "sessionalNote": null,
+          "references": []
+        },
+        "CE 4223": {
+          "title": "Precast and Prestressed Concrete",
+          "credit": 2,
+          "contactHour": "",
+          "topics": [],
+          "sessionalNote": null,
+          "references": []
+        },
+        "BECM 4230": {
+          "title": "Sessional on Structural Health Monitoring",
+          "credit": 1.5,
+          "contactHour": "",
+          "topics": [],
+          "sessionalNote": "Sessional",
+          "references": []
+        },
+        "BECM 4247": {
+          "title": "Contemporary Buildings Design",
+          "credit": 2,
+          "contactHour": "",
+          "topics": [],
+          "sessionalNote": null,
+          "references": []
+        },
+        "BECM 4250": {
+          "title": "Sessional on Sustainable",
+          "credit": 1.5,
+          "contactHour": "",
+          "topics": [],
+          "sessionalNote": "Sessional",
+          "references": []
+        }
+      },
+      "optionalCourses": [],
+      "termNotes": []
+    }
+  },
+  "optionalGroups": {}
+}

@@ -1,20 +1,21 @@
-const makeTerm = (termKey, title) => ({
-  termKey,
-  title,
-  courses: {},
-  optionalCourses: [],
-  termNotes: [],
-});
+import { Y1T1 } from './Y1T1.js';
+import { Y1T2 } from './Y1T2.js';
+import { Y2T1 } from './Y2T1.js';
+import { Y2T2 } from './Y2T2.js';
+import { Y3T1 } from './Y3T1.js';
+import { Y3T2 } from './Y3T2.js';
+import { Y4T1 } from './Y4T1.js';
+import { Y4T2 } from './Y4T2.js';
 
 export const BECM_TERMS = {
-  Y1T1: makeTerm('Y1T1', 'First Year First Term'),
-  Y1T2: makeTerm('Y1T2', 'First Year Second Term'),
-  Y2T1: makeTerm('Y2T1', 'Second Year First Term'),
-  Y2T2: makeTerm('Y2T2', 'Second Year Second Term'),
-  Y3T1: makeTerm('Y3T1', 'Third Year First Term'),
-  Y3T2: makeTerm('Y3T2', 'Third Year Second Term'),
-  Y4T1: makeTerm('Y4T1', 'Fourth Year First Term'),
-  Y4T2: makeTerm('Y4T2', 'Fourth Year Second Term'),
+  Y1T1,
+  Y1T2,
+  Y2T1,
+  Y2T2,
+  Y3T1,
+  Y3T2,
+  Y4T1,
+  Y4T2,
 };
 
 export default BECM_TERMS;
