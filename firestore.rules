@@ -590,6 +590,23 @@ service cloud.firestore {
       allow update: if isAdmin(); // reassigning reportsTo etc. — Founder only, keep simple
     }
 
+    // Append-only audit trail of staff role assign/revoke events (see
+    // logRoleHistoryEntry in staffSync.js). Read access mirrors the roles
+    // rule directly above: Admin/Head of Ops see everyone's, a person can
+    // see their own. Writes only ever come from assignRole/removeRole
+    // (both Admin/Head-of-Ops/SCL-gated by the roles rule above already),
+    // so create is scoped the same way — no update/delete, entries are
+    // permanent once written.
+    match /staffRoleHistory/{entryId} {
+      allow read: if isAdmin() || isHeadOfOps() || request.auth.uid == resource.data.uid;
+      allow create: if isAdmin()
+        || (isHeadOfOps() && request.resource.data.role in ['senior_campus_lead', 'campus_lead'])
+        || (request.resource.data.role == 'campus_lead'
+            && request.resource.data.scope.type == 'group'
+            && isSCLForGroup(request.resource.data.scope.groupId));
+      allow update, delete: if false;
+    }
+
     // Denormalized vacancy markers so rules/clients can check "is this
     // dept/group covered" without a collectionGroup scan.
     match /depts/{dept}/meta/sclStatus {

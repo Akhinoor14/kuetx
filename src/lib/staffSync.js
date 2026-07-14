@@ -61,6 +61,36 @@ function roleDocId(role, scope) {
 }
 
 /**
+ * Durable audit trail for staff role changes — assignments AND revokes.
+ * Unlike the `staff/{uid}/roles/{roleId}` doc (which is deleted outright
+ * on revoke, leaving no trace), each entry here is append-only under
+ * `staffRoleHistory`, so the Staff & Roles detail popup can show a real
+ * timeline (who was assigned what, when, by whom, and when/by whom it
+ * was later revoked) instead of only ever reflecting the current state.
+ * Fire-and-forget by design: a history-write failure should never block
+ * or roll back the actual role assign/revoke it's describing.
+ */
+async function logRoleHistoryEntry(uid, role, scope, event, actorUid) {
+  try {
+    await addDoc(collection(db, 'staffRoleHistory'), {
+      uid, role, scope: scope || null, event, actorUid: actorUid || null, at: serverTimestamp(),
+    });
+  } catch (e) {
+    console.warn('[staffSync] logRoleHistoryEntry failed:', e);
+  }
+}
+
+/** Live timeline of role history entries for one person, newest first — feeds the Staff & Roles detail popup. */
+export function subscribeStaffRoleHistory(uid, callback) {
+  if (!uid) { callback([]); return () => {}; }
+  return onSnapshot(
+    query(collection(db, 'staffRoleHistory'), where('uid', '==', uid), orderBy('at', 'desc')),
+    (snap) => callback(snap.docs.map((d) => ({ id: d.id, ...d.data() }))),
+    (err) => { console.error('[staffSync] role history listener error:', err); callback([]); },
+  );
+}
+
+/**
  * Assign a role to a target user. Firestore rules are the real
  * enforcement of who's allowed to call this for which role/scope.
  */
@@ -78,10 +108,12 @@ export async function assignRole(targetUid, role, scope, reportsTo = null) {
   if (role === 'campus_lead' && scope?.type === 'group') {
     await setDoc(doc(db, 'groups', scope.groupId, 'meta', 'clStatus'), { uid: targetUid, assignedAt: serverTimestamp() });
   }
+  logRoleHistoryEntry(targetUid, role, scope, 'assigned', uid);
   return id;
 }
 
 export async function removeRole(targetUid, role, scope) {
+  const actorUid = auth.currentUser?.uid;
   await deleteDoc(doc(db, 'staff', targetUid, 'roles', roleDocId(role, scope)));
   if (role === 'senior_campus_lead' && scope?.type === 'dept') {
     await deleteDoc(doc(db, 'depts', scope.dept, 'meta', 'sclStatus')).catch(() => {});
@@ -89,6 +121,7 @@ export async function removeRole(targetUid, role, scope) {
   if (role === 'campus_lead' && scope?.type === 'group') {
     await deleteDoc(doc(db, 'groups', scope.groupId, 'meta', 'clStatus')).catch(() => {});
   }
+  logRoleHistoryEntry(targetUid, role, scope, 'revoked', actorUid);
 }
 
 /** One-shot: everyone currently holding a given role (e.g. all Senior Campus Leads, for Head of Ops's view). */

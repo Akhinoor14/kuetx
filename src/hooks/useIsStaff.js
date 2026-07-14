@@ -8,7 +8,7 @@
 import { useEffect, useState } from 'react';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from '../lib/firebase';
-import { checkIsAdmin } from '../lib/adminAuth';
+import { checkIsAdmin, subscribeIsAdmin } from '../lib/adminAuth';
 import { subscribeMyRoles } from '../lib/staffSync';
 import { ROLE_LABELS } from '../lib/staffRoles';
 
@@ -55,15 +55,13 @@ export function useIsStaff() {
 
   useEffect(() => {
     let unsubRoles = () => {};
+    let unsubAdmin = () => {};
     // Tracks the two independent checks separately so whichever resolves
     // first can be applied immediately, and so a late-arriving founder
     // check can't clobber an already-applied role result with a stale
-    // "not admin" write. Previously checkIsAdmin was awaited BEFORE
-    // subscribeMyRoles even started, forcing every non-founder user
-    // (including CRs) to pay the founder-doc round-trip latency before
-    // their own role could resolve — this is what made the sidebar and
-    // Founder-hub cards feel slow to appear even for correctly-flagged
-    // CRs. Running them in parallel removes that artificial serial hop.
+    // "not admin" write. Both are now live onSnapshot subscriptions
+    // (cache-first, near-instant), so neither one artificially lags
+    // behind the other the way a one-shot getDoc used to.
     let founderResolved = false;
     let isFounder = false;
 
@@ -86,6 +84,8 @@ export function useIsStaff() {
     const unsubAuth = onAuthStateChanged(auth, (user) => {
       unsubRoles();
       unsubRoles = () => {};
+      unsubAdmin();
+      unsubAdmin = () => {};
       founderResolved = false;
       isFounder = false;
 
@@ -98,7 +98,7 @@ export function useIsStaff() {
       }
 
       // Fire both checks at the same time — they're independent reads.
-      checkIsAdmin(user.uid).then((result) => {
+      unsubAdmin = subscribeIsAdmin(user.uid, (result) => {
         founderResolved = true;
         isFounder = result;
         if (isFounder) {
@@ -117,6 +117,7 @@ export function useIsStaff() {
     return () => {
       unsubAuth();
       unsubRoles();
+      unsubAdmin();
     };
   }, []);
 

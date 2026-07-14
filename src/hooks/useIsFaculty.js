@@ -16,7 +16,7 @@
 import { useEffect, useState } from 'react';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from '../lib/firebase';
-import { checkIsAdmin } from '../lib/adminAuth';
+import { subscribeIsAdmin } from '../lib/adminAuth';
 import { subscribeFacultyProfile } from '../lib/facultySync';
 
 // Same rationale as useIsStaff.js's CACHE_KEY — a same-tab paint
@@ -55,6 +55,7 @@ export function useIsFaculty() {
 
   useEffect(() => {
     let unsubProfile = () => {};
+    let unsubAdmin = () => {};
     // Same independent-parallel-checks rationale as useIsStaff.js: don't
     // force every real faculty account to pay the founder-doc round-trip
     // latency before its own verifiedAt check can resolve.
@@ -80,6 +81,8 @@ export function useIsFaculty() {
     const unsubAuth = onAuthStateChanged(auth, (user) => {
       unsubProfile();
       unsubProfile = () => {};
+      unsubAdmin();
+      unsubAdmin = () => {};
       founderResolved = false;
       isFounder = false;
 
@@ -92,7 +95,7 @@ export function useIsFaculty() {
         return;
       }
 
-      checkIsAdmin(user.uid).then((result) => {
+      unsubAdmin = subscribeIsAdmin(user.uid, (result) => {
         founderResolved = true;
         isFounder = result;
         if (isFounder) {
@@ -111,6 +114,7 @@ export function useIsFaculty() {
     return () => {
       unsubAuth();
       unsubProfile();
+      unsubAdmin();
     };
   }, []);
 
