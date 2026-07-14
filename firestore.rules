@@ -422,6 +422,43 @@ service cloud.firestore {
     }
 
     // -------------------------------------------------------------
+    // Question Bank upload requests — Campus Lead uploads a paper for
+    // their OWN dept+batch group; routes to that dept's Senior Campus
+    // Lead for approval, same universal-fallback shape as clApplications
+    // (SCL vacant -> Head of Ops/Founder still sees & can act on it).
+    // The actual PDF bytes live in Cloudflare R2 (staging/ then public/),
+    // NOT in Firestore/Storage — this doc is only the review-queue record
+    // the Worker's /approve and /reject endpoints key off of.
+    // -------------------------------------------------------------
+    match /qbUploadRequests/{requestId} {
+      allow read: if isAdmin() || isHeadOfOps()
+        || (isSignedIn() && isSCLFor(resource.data.dept))
+        || (isSignedIn() && resource.data.uploadedBy == request.auth.uid);
+
+      // Founder can create for ANY dept (bypasses the group-scope check —
+      // matches isAdmin() short-circuiting everywhere else in this file).
+      // Everyone else: must be the Campus Lead of the exact group they're
+      // claiming to upload for, and dept/groupId must actually agree.
+      allow create: if isSignedIn() && request.resource.data.uploadedBy == request.auth.uid
+        && request.resource.data.status == 'pending'
+        && (
+          isAdmin()
+          || (
+            request.resource.data.groupId == (request.resource.data.batch + '_' + request.resource.data.dept)
+            && isCLFor(request.resource.data.groupId)
+          )
+        );
+
+      // Review authority: Founder, Head of Ops, or the SCL of this request's
+      // dept. Founder's own uploads are written pre-approved by the client
+      // (status: 'approved' at create time) so they never need a second
+      // reviewer to touch this path at all — see qbUploadRequests.js.
+      allow update: if isAdmin() || isHeadOfOps() || isSCLFor(resource.data.dept);
+
+      allow delete: if false; // audit trail — resolve via status, never delete
+    }
+
+    // -------------------------------------------------------------
     // Roll ownership lock — see rollOwnership.js. One durable doc per
     // roll number so two different accounts can't both claim the same
     // student roll. First account to save with that roll owns it.

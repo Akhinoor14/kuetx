@@ -17,6 +17,8 @@ import { checkIsAdmin } from '../lib/adminAuth';
 import { flagSuspiciousEmail, unflagEmail, summarizeEmailHealth, listPendingFlags, resolveEmailFlag } from '../lib/emailFlags';
 import { isObviouslyBadDomain } from '../lib/emailDomainCheck';
 import ClassmatesList from '../components/ClassmatesList';
+import QBUploadForm from '../components/QBUploadForm';
+import QBReviewQueue from '../components/QBReviewQueue';
 
 // ---------------------------------------------------------------------
 // Founder-only: roll ownership unlock requests (see rollOwnership.js).
@@ -267,7 +269,13 @@ function CampusLeadBlock({ groupId }) {
 
       <EmailAuditBlock groupId={groupId} dept={groupId.split('_')[1]} />
 
-      <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 6 }}>
+      <div style={{ fontSize: 12, fontWeight: 700, margin: '10px 0 6px' }}>Upload a Question Bank paper</div>
+      <QBUploadForm
+        profile={{ dept: groupId.split('_')[1], batch: groupId.split('_')[0] }}
+        groupId={groupId}
+      />
+
+      <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 6, marginTop: 14 }}>
         Roster <span style={{ fontWeight: 400, color: 'var(--muted)' }}>("Claims CR" badge = held CR before this system existed — review and confirm/promote if still accurate)</span>
       </div>
       <ClassmatesList groupId={groupId} showActions viewerRole="cl" currentUid={auth.currentUser?.uid} />
@@ -311,6 +319,9 @@ function SeniorCampusLeadBlock({ dept }) {
 
       <div style={{ fontSize: 12, fontWeight: 700, margin: '10px 0 6px' }}>Pending email flags in this department</div>
       <EmailFlagReviewBlock dept={dept} />
+
+      <div style={{ fontSize: 12, fontWeight: 700, margin: '10px 0 6px' }}>Pending Question Bank uploads</div>
+      <QBReviewQueue dept={dept} />
 
       <div style={{ fontSize: 12, fontWeight: 700, margin: '10px 0 6px' }}>Campus Leads in this department</div>
       {clsError && <div style={{ fontSize: 12, color: 'var(--danger)' }}>{clsError}</div>}

@@ -1,0 +1,210 @@
+// qbUploadRequests.js
+//
+// Question Bank upload pipeline: Campus Lead stages a PDF into R2 +
+// creates a qbUploadRequests/{id} review doc -> that dept's Senior
+// Campus Lead approves/rejects -> approve moves the file from R2
+// staging/ into public/ (live, browsable via useQuestionBankData()).
+// Founder uploads bypass review entirely (pre-approved at create time).
+//
+// Mirrors the shape of manualVerifyRequests.js / staffSync.js's CL
+// application flow on purpose — same submit -> subscribe -> approve/
+// reject lifecycle, same universal SCL-vacant-falls-to-Founder fallback.
+
+import {
+  collection, doc, addDoc, getDoc, updateDoc,
+  query, where, orderBy, onSnapshot, serverTimestamp,
+} from 'firebase/firestore';
+import { db, auth } from './firebase';
+import { QB_DEPARTMENTS } from '../data/questionbank/questionBankData';
+
+const COLLECTION = 'qbUploadRequests';
+const WORKER_URL = import.meta.env.VITE_QB_WORKER_URL;
+
+export const EXAM_TYPES = ['Regular', 'Backlog', 'Special_Backlog', 'Online'];
+
+// canonicalize() elsewhere in the app uppercases dept (profile.dept ==
+// 'CSE', 'CHE', etc.) but QB_DEPARTMENTS' keys are NOT uniformly
+// uppercase (e.g. 'ChE', 'BECM'). This resolves an uppercased profile
+// dept back to the exact QB_DEPARTMENTS casing the Worker/R2 keys need.
+const UPPER_TO_QB_DEPT = Object.fromEntries(
+  Object.keys(QB_DEPARTMENTS).map((code) => [code.toUpperCase(), code])
+);
+export function toQBDeptCode(profileDept) {
+  return UPPER_TO_QB_DEPT[String(profileDept || '').toUpperCase()] || null;
+}
+
+function buildLabel(examType, examYear) {
+  return `${examType}_${examYear}`;
+}
+
+/**
+ * Full upload flow for a Campus Lead (or Founder, any dept):
+ *   1. create the Firestore review doc (status: pending, or 'approved'
+ *      pre-set for Founder — rules enforce only Founder may do that)
+ *   2. stage the raw PDF bytes into R2 via the Worker's /stage endpoint
+ * Both steps use the SAME requestId so the Worker can later move
+ * staging/{requestId}.pdf into its final public/ location on approval.
+ *
+ * @param {File} file - the PDF File object from an <input type=file>
+ * @param {{dept, term, courseCode, courseTitle, examType, examYear, groupId, batch}} meta
+ * @param {{name, roll}} uploaderInfo - for display in the review queue
+ * @param {boolean} isFounderUpload - true only for the Founder's own-dept-agnostic upload panel
+ */
+export async function submitQBUpload(file, meta, uploaderInfo, isFounderUpload = false) {
+  const uid = auth.currentUser?.uid;
+  if (!uid) throw new Error('Not signed in');
+  if (!file || file.type !== 'application/pdf') throw new Error('File must be a PDF');
+  if (file.size > 25 * 1024 * 1024) throw new Error('File exceeds 25MB limit');
+  if (!QB_DEPARTMENTS[meta.dept]) throw new Error(`Unknown department: ${meta.dept}`);
+  if (!meta.term || !meta.courseCode || !meta.examType || !meta.examYear) {
+    throw new Error('Missing required fields');
+  }
+
+  const label = buildLabel(meta.examType, meta.examYear);
+  const cleanCourseCode = String(meta.courseCode).replace(/\s+/g, '');
+
+  // "already-existing file -> don't accept the input" check, done against
+  // the LIVE tree before we even touch R2/Firestore — the Worker's
+  // /approve endpoint re-checks this again server-side as the real
+  // backstop (this client-side check is just to fail fast with a clear
+  // message instead of silently sitting in the queue until an SCL
+  // discovers the conflict).
+  const dupe = await checkDuplicateExists(meta.dept, meta.term, cleanCourseCode, label);
+  if (dupe) {
+    throw new Error(`"${label}" already exists for ${cleanCourseCode} in ${meta.term} — rename and resubmit.`);
+  }
+
+  const docRef = await addDoc(collection(db, COLLECTION), {
+    uploadedBy: uid,
+    uploaderName: uploaderInfo?.name || '',
+    uploaderRoll: uploaderInfo?.roll || '',
+    dept: meta.dept,
+    term: meta.term,
+    batch: meta.batch || null,
+    groupId: meta.groupId || null,
+    courseCode: cleanCourseCode,
+    courseTitle: meta.courseTitle || '',
+    examType: meta.examType,
+    examYear: meta.examYear,
+    label,
+    fileSize: file.size,
+    fileName: file.name,
+    status: isFounderUpload ? 'approved' : 'pending',
+    requestedAt: serverTimestamp(),
+    ...(isFounderUpload ? { reviewedBy: uid, reviewedAt: serverTimestamp() } : {}),
+  });
+
+  try {
+    await stageFileInR2(docRef.id, file, meta);
+  } catch (e) {
+    // Firestore doc exists but R2 stage failed — mark it so the review
+    // queue doesn't show a phantom request with no actual file behind it.
+    await updateDoc(doc(db, COLLECTION, docRef.id), { status: 'stage_failed', error: String(e.message || e) });
+    throw e;
+  }
+
+  // Founder uploads are pre-approved — immediately ask the Worker to
+  // promote the file from staging straight to public, no human review step.
+  if (isFounderUpload) {
+    await promoteApprovedUpload(docRef.id, meta.dept, meta.term, cleanCourseCode, label);
+  }
+
+  return docRef.id;
+}
+
+async function stageFileInR2(requestId, file, meta) {
+  if (!WORKER_URL) throw new Error('VITE_QB_WORKER_URL is not configured');
+  const idToken = await auth.currentUser.getIdToken();
+  const form = new FormData();
+  form.append('file', file);
+  form.append('dept', meta.dept);
+  form.append('term', meta.term);
+  form.append('courseCode', meta.courseCode);
+  form.append('groupId', meta.groupId || '');
+  form.append('requestId', requestId);
+
+  const res = await fetch(`${WORKER_URL}/stage`, {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${idToken}` },
+    body: form,
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || 'Failed to stage file');
+  return data;
+}
+
+async function promoteApprovedUpload(requestId, dept, term, courseCode, label) {
+  if (!WORKER_URL) throw new Error('VITE_QB_WORKER_URL is not configured');
+  const idToken = await auth.currentUser.getIdToken();
+  const res = await fetch(`${WORKER_URL}/approve`, {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${idToken}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ requestId, dept, term, courseCode, label }),
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || 'Failed to publish file');
+  return data;
+}
+
+/** Check the LIVE R2 tree for a name collision before submitting. */
+async function checkDuplicateExists(dept, term, courseCode, label) {
+  if (!WORKER_URL) return false;
+  try {
+    const res = await fetch(WORKER_URL, { cache: 'no-store' });
+    const data = await res.json();
+    const papers = data?.tree?.[dept]?.[term]?.[courseCode] || [];
+    return papers.some((p) => p.label === label);
+  } catch {
+    return false; // offline/worker down — don't block submission on this soft check
+  }
+}
+
+/** Live queue for a Senior Campus Lead's own dept (StaffDashboard review tab). */
+export function subscribeQBUploadRequestsForDept(dept, callback) {
+  return onSnapshot(
+    query(
+      collection(db, COLLECTION),
+      where('dept', '==', dept),
+      where('status', '==', 'pending'),
+      orderBy('requestedAt')
+    ),
+    (snap) => callback(snap.docs.map((d) => ({ id: d.id, ...d.data() })))
+  );
+}
+
+/** Founder/Head of Ops view — every pending request system-wide (fallback net). */
+export function subscribeAllQBUploadRequests(callback) {
+  return onSnapshot(
+    query(collection(db, COLLECTION), where('status', '==', 'pending'), orderBy('requestedAt')),
+    (snap) => callback(snap.docs.map((d) => ({ id: d.id, ...d.data() })))
+  );
+}
+
+/** SCL (or Head of Ops/Founder override) approves — promotes R2 file + marks resolved. */
+export async function approveQBUpload(requestId) {
+  const snap = await getDoc(doc(db, COLLECTION, requestId));
+  if (!snap.exists()) return;
+  const reqData = snap.data();
+  const reviewerUid = auth.currentUser?.uid;
+
+  await promoteApprovedUpload(requestId, reqData.dept, reqData.term, reqData.courseCode, reqData.label);
+
+  await updateDoc(doc(db, COLLECTION, requestId), {
+    status: 'approved', reviewedBy: reviewerUid, reviewedAt: serverTimestamp(),
+  });
+}
+
+export async function rejectQBUpload(requestId, reason = '') {
+  const idToken = await auth.currentUser.getIdToken();
+  if (WORKER_URL) {
+    await fetch(`${WORKER_URL}/reject`, {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${idToken}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ requestId }),
+    }).catch(() => {}); // best-effort staging cleanup; Firestore status is the real record
+
+  }
+  await updateDoc(doc(db, COLLECTION, requestId), {
+    status: 'rejected', reviewedBy: auth.currentUser?.uid, reviewedAt: serverTimestamp(), rejectReason: reason,
+  });
+}

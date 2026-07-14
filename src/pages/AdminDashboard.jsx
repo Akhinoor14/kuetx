@@ -30,6 +30,9 @@ import { useIsFaculty } from '../hooks/useIsFaculty';
 import {
   subscribeManualVerifyRequests, approveManualVerifyRequest, rejectManualVerifyRequest,
 } from '../lib/manualVerifyRequests';
+import { subscribeAllQBUploadRequests, approveQBUpload, rejectQBUpload } from '../lib/qbUploadRequests';
+import QBReviewQueue from '../components/QBReviewQueue';
+import QBUploadForm from '../components/QBUploadForm';
 
 // Every role the Founder can hand out or take away from this screen —
 // literally everyone, per the manifesto: Founder has full add/revoke
@@ -187,11 +190,13 @@ function ApprovalsView({ onBack, onSelectCategory, countCtx }) {
   const [crRequestsByGroup, setCrRequestsByGroup] = useState(null);
   const [leaveRequestsByGroup, setLeaveRequestsByGroup] = useState(null);
   const [manualVerifyRequests, setManualVerifyRequests] = useState(null);
+  const [qbUploadRequests, setQbUploadRequests] = useState(null);
   const [err, setErr] = useState('');
   const [subTab, setSubTab] = useState('cl-apps');
 
   useEffect(() => subscribeAllCLApplications(setClApplications), []);
   useEffect(() => subscribeManualVerifyRequests(setManualVerifyRequests), []);
+  useEffect(() => subscribeAllQBUploadRequests(setQbUploadRequests), []);
   useEffect(() => { listAllGroups().then((gs) => setGroupIds(gs.map((g) => g.id))); }, []);
 
   useEffect(() => {
@@ -228,7 +233,7 @@ function ApprovalsView({ onBack, onSelectCategory, countCtx }) {
   };
 
   const category = getFounderCategory('approvals');
-  const subCtx = { ...countCtx, clApplications: clApplications?.length || 0, crRequests: allCrRequests.length, leaveRequests: allLeaveRequests.length, manualVerifyRequests: manualVerifyRequests?.length || 0 };
+  const subCtx = { ...countCtx, clApplications: clApplications?.length || 0, crRequests: allCrRequests.length, leaveRequests: allLeaveRequests.length, manualVerifyRequests: manualVerifyRequests?.length || 0, qbUploadRequests: qbUploadRequests?.length || 0 };
 
   return (
     <CategoryShell view="approvals" onSelect={onSelectCategory} countCtx={countCtx}>
@@ -289,6 +294,14 @@ function ApprovalsView({ onBack, onSelectCategory, countCtx }) {
               onReject={() => handle(rejectManualVerifyRequest, r.id)}
             />
           ))}
+        </Section>
+      )}
+      {subTab === 'qb-uploads' && (
+        <Section title="Question Bank Uploads">
+          <div style={{ marginBottom: 14 }}>
+            <QBUploadForm isFounder onUploaded={() => {}} />
+          </div>
+          <QBReviewQueue all />
         </Section>
       )}
     </CategoryShell>
@@ -1460,6 +1473,7 @@ export default function AdminDashboard() {
   const [rollRequests, setRollRequests] = useState([]);
   const [emailFlagCount, setEmailFlagCount] = useState(0);
   const [manualVerifyCount, setManualVerifyCount] = useState(0);
+  const [qbUploadCount, setQbUploadCount] = useState(0);
   const [crCountMap, setCrCountMap] = useState({});
   const [leaveCountMap, setLeaveCountMap] = useState({});
 
@@ -1498,6 +1512,7 @@ export default function AdminDashboard() {
   useEffect(() => subscribePendingRollUnlockRequests(setRollRequests), []);
   useEffect(() => { listPendingFlags({}).then((f) => setEmailFlagCount(f.length)).catch(() => {}); }, []);
   useEffect(() => subscribeManualVerifyRequests((reqs) => setManualVerifyCount(reqs.length)), []);
+  useEffect(() => subscribeAllQBUploadRequests((reqs) => setQbUploadCount(reqs.length)), []);
 
   // Badge counts for CR + leave requests across all classes, for the
   // Approvals card badge — one subscription per group, kept as a map so
@@ -1554,6 +1569,7 @@ export default function AdminDashboard() {
     crRequests: totalCrReq,
     leaveRequests: totalLeaveReq,
     manualVerifyRequests: manualVerifyCount,
+    qbUploadRequests: qbUploadCount,
     emailFlags: emailFlagCount,
     rollRequests: rollRequests.length,
     classCount: groups?.length,

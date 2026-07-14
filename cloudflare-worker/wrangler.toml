@@ -1,0 +1,22 @@
+name = "kuetx-question-bank-worker"
+main = "src/index.js"
+compatibility_date = "2024-11-01"
+
+[[r2_buckets]]
+binding = "QB_BUCKET"
+bucket_name = "kuetx-question-bank"
+
+# Private bucket for unreviewed uploads — public access OFF. Files land
+# here on /stage, get moved to QB_BUCKET's public/ prefix on /approve,
+# and get deleted here on /reject. Never exposed via any public URL.
+[[r2_buckets]]
+binding = "QB_STAGING_BUCKET"
+bucket_name = "kuetx-question-bank-staging"
+
+[vars]
+FIREBASE_PROJECT_ID = "your-firebase-project-id"
+ALLOWED_ORIGIN = "https://your-deployed-app-domain.com"
+
+# For local dev with `wrangler dev`, override with a second env or a
+# .dev.vars file (ALLOWED_ORIGIN=http://localhost:5173, etc.) — never
+# commit .dev.vars.
