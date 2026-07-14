@@ -43,15 +43,6 @@ export const NAV_FACULTY = [
     ],
   },
   {
-    group: 'Meetings',
-    isSubgroup: true,
-    hubPath: '/faculty/meetings',
-    hubIcon: 'Video',
-    items: [
-      { id: 'f-meetings', label: 'Meetings', icon: 'Video', path: '/faculty/meetings' },
-    ],
-  },
-  {
     group: 'Schedule',
     isSubgroup: true,
     hubPath: '/faculty/schedule',
@@ -61,38 +52,47 @@ export const NAV_FACULTY = [
     ],
   },
   {
-    group: 'Notices',
-    isSubgroup: true,
-    hubPath: '/faculty/notices',
-    hubIcon: 'Bell',
-    items: [
-      { id: 'f-notices', label: 'Broadcast Notice', icon: 'Bell', path: '/faculty/notices' },
-    ],
-  },
-  {
-    group: 'Campus',
+    // "More" — communication (Meetings, Broadcast Notice) and reference/
+    // settings pages (Question Bank, Contact, Settings, About) that don't
+    // need their own bottom-nav slot but were previously unreachable on
+    // mobile (only visible via the desktop sidebar's separate Meetings/
+    // Notices/Tools groups, which the 4-button mobile bottom nav has no
+    // room for). Grouped into two subgroups by type — communication tools
+    // together, resource/settings tools together — rather than one flat
+    // list, so Meetings and Broadcast Notice (frequent, time-sensitive)
+    // don't get visually buried under Settings/About (rare, set-once).
+    group: 'More',
     subgroups: [
       {
+        name: 'Communication',
+        hubPath: '/faculty/meetings',
+        hubIcon: 'Video',
+        items: [
+          { id: 'f-meetings', label: 'Meetings', icon: 'Video', path: '/faculty/meetings' },
+          { id: 'f-notices', label: 'Broadcast Notice', icon: 'Bell', path: '/faculty/notices' },
+        ],
+      },
+      {
+        // Short, no-symbol name to match nav.js's subgroup naming
+        // convention (e.g. 'Daily Academics', 'Academic Core') and avoid
+        // wrapping on narrow cards. Question Bank + Contact/Settings/About
+        // deliberately share one subgroup rather than splitting further —
+        // Question Bank alone in its own subgroup would leave a
+        // single-item section with awkward leftover space; grouped
+        // together they read as "everything else you reach for
+        // occasionally," which is accurate enough for both.
         name: 'Resources',
         hubPath: '/faculty/resources',
         hubIcon: 'BookMarked',
         items: [
           { id: 'f-qbank', label: 'Question Bank', icon: 'BookMarked', path: '/faculty/question-bank' },
+          { id: 'f-contact', label: 'Contact', icon: 'Mail', path: '/faculty/contact' },
+          // Settings/About are shared, role-agnostic routes — same
+          // destination as the student nav.js, not faculty-specific pages.
+          { id: 'f-settings', label: 'Settings', icon: 'Settings', path: '/settings' },
+          { id: 'f-about', label: 'About', icon: 'Info', path: '/about' },
         ],
       },
-    ],
-  },
-  {
-    group: 'Tools',
-    isSubgroup: true,
-    hubPath: '/faculty/tools',
-    hubIcon: 'Wrench',
-    items: [
-      { id: 'f-contact', label: 'Contact', icon: 'Mail', path: '/faculty/contact' },
-      // Settings/About are shared, role-agnostic routes — same destination
-      // as the student nav.js, not faculty-specific pages.
-      { id: 'f-settings', label: 'Settings', icon: 'Settings', path: '/settings' },
-      { id: 'f-about', label: 'About', icon: 'Info', path: '/about' },
     ],
   },
   {

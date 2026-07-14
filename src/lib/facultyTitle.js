@@ -51,3 +51,17 @@ export function getShortTitle(title) {
   if (words.length === 1) return t;
   return words.map((w, i) => (i === words.length - 1 ? w : `${w[0]}.`)).join(' ');
 }
+
+/**
+ * "Prof. Rahman" — same title-prefix + name composition FacultyDashboard.jsx
+ * and FacultyProfile.jsx already use in their hero display, pulled out here
+ * so every OTHER place a faculty member's name gets shown to someone else
+ * (notices, marks PDFs, class rosters, etc.) uses the identical format
+ * instead of a bare name with the title silently dropped.
+ * Falls back to the bare name if no title is set — title is optional.
+ */
+export function getFacultyDisplayName(name, title) {
+  const shortTitle = getShortTitle(title);
+  const cleanName = (name || '').trim() || 'Faculty';
+  return shortTitle ? `${shortTitle} ${cleanName}` : cleanName;
+}

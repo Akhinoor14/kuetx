@@ -1,68 +1,73 @@
-# Founder Dashboard — category system redesign
+# Faculty Class Detail — Tab Reorder + Mobile Layout (Phase D)
 
 ## যা করা হয়েছে
 
-### ১. Duplicate UI সরানো (`src/pages/StaffDashboard.jsx`)
-Founder tab-এ আগে দুটো UI stack হয়ে ছিল: `StaffDashboard.jsx`-এর পুরনো flat-scroll
-block ("Pending Email Flags", "All Classes — CR & Leave Requests") + তার নিচে
-`AdminDashboard.jsx`-এর card grid — দুটোই একই ডেটা আলাদা লেআউটে দেখাচ্ছিল।
-পুরনো flat block বাদ দেওয়া হয়েছে (কোড কমেন্টে ব্যাখ্যা আছে কেন)। `RollUnlockSection`,
-`AdminAllGroupsSection`, `EmailFlagReviewBlock` — এই তিনটা কম্পোনেন্ট Head of
-Ops আর SCL context-এ এখনও ব্যবহৃত হচ্ছে, তাই মুছে ফেলা হয়নি, শুধু Founder tab
-থেকে তাদের redundant কল সরানো হয়েছে।
+### ১. Sessions & Count মার্জ হয়ে গেছে Attendance-এ
+- আলাদা "Sessions & Count" ট্যাব রিমুভ করা হয়েছে — কারণ attendance save করলেই এখন auto-link হয়ে session count বেড়ে যায় (আগের ফিক্স অনুযায়ী)
+- Attendance ট্যাবের উপরে এখন একটা compact strip দেখাবে:
+  - কতগুলো ক্লাস logged হয়েছে (of planned total)
+  - Plan set/edit করার লিংক
+  - "View log" টগল — চাইলে পুরনো session log list দেখা যাবে (ডিফল্ট বন্ধ থাকে, ক্লিন লাগে)
+  - "+1 Log Class" বাটন এখন থাকবে শুধু fallback হিসেবে (attendance না নিয়ে ক্লাস হলে ম্যানুয়ালি log করতে), তাই বাটনটা এখন outline style — primary attendance-save বাটনের সাথে visual conflict না হয়
 
-### ২. Category registry (`src/lib/founderCategories.js` — নতুন ফাইল)
-সব category (Approvals, Staff & Roles, Classes & Students, Trust & Safety,
-Communication) আর তাদের subcategory একটাই array-তে define করা। Grid card,
-top-bar pill, badge count — সবকিছু এই registry থেকে জেনারেট হয়। নতুন category
-বা subcategory যোগ করতে হলে শুধু array-তে entry যোগ করলেই হবে, নতুন কম্পোনেন্ট
-লাগবে না।
+### ২. ট্যাব অর্ডার — দৈনন্দিন ব্যবহারের frequency অনুযায়ী
+আগের অর্ডার ছিল setup-checklist এর মতো (Students → Syllabus → Schedule → ...)। এখন real usage অনুযায়ী:
 
-দুই ধরনের subcategory সাপোর্ট করে:
-- `subcategories: [...]` — fixed sibling sections (যেমন Trust & Safety-এর
-  Email Flags vs Roll Unlock) → pill-tab row হিসেবে রেন্ডার হয়
-- `drilldown: true` — hierarchical path (Dept > Batch) → breadcrumb UI,
-  আলাদাভাবে হ্যান্ডল করা হয় কারণ এটা sibling না, path
+```
+১. Attendance (+ Sessions & Count merged)  ← প্রতি ক্লাস ডে
+২. Schedule                                 ← daily reference
+৩. Notices                                  ← time-sensitive
+৪. Marks                                    ← grading period-এ frequent
+৫. Syllabus                                 ← rare, reference
+৬. Question Bank                            ← exam season only
+৭. Students & CR                            ← rare
+```
 
-### ৩. দুইটা নতুন reusable কম্পোনেন্ট
-- `src/components/CategorySubNav.jsx` — category-এর ভেতরে ঢোকার পর top-bar-এ
-  সব sibling category-র pill দেখায়, এক ক্লিকে switch করা যায় (আগের `BackBar`-এর
-  replacement, যেটা শুধু grid-এ ফিরে যাওয়ার বাটন ছিল)
-- `src/components/SubcategoryTabs.jsx` — category-এর ভেতরে static sibling
-  sub-section থাকলে সেগুলোর জন্য দ্বিতীয়-স্তরের pill row
+৮টা ট্যাব থেকে কমে ৭টা হয়ে গেছে (merge-এর কারণে)।
 
-### ৪. `src/pages/AdminDashboard.jsx` — পুরো পুনর্গঠন
-- emoji icon (✅🧑‍🤝‍🧑🎓🚩📢) বাদ, `lucide-react` icon ব্যবহার — app-এর বাকি সব
-  জায়গায় (Sidebar, BottomNav, SubgroupHub) এই একই icon সিস্টেম already আছে
-- Card grid এখন `FOUNDER_CATEGORIES` registry থেকে জেনারেট হয় (hardcoded JSX না)
-- প্রতিটা category view (Approvals, Staff & Roles, Classes & Students,
-  Trust & Safety, Communication)-এ এখন `CategorySubNav` বসানো — এক category
-  থেকে আরেক category-তে এক ক্লিকে যাওয়া যায়, grid-এ ফিরতে হয় না
-- Approvals, Staff & Roles, Trust & Safety-এর ভেতরের sub-section গুলো এখন
-  `SubcategoryTabs`-এর পেছনে (আগে সব সবসময় stacked ছিল)
-- **Classes & Students flow flatten করা হয়েছে**: আগে Dept → Batch → Class
-  (৩ লেভেল) ছিল, এখন Dept → Batch (২ লেভেল, breadcrumb-সহ) — কারণ group id
-  ফরম্যাট `{BATCH}_{DEPT}` অনুযায়ী batch নিজেই class, আলাদা তৃতীয় লেয়ার লাগে না।
-  Batch ক্লিক করলে সরাসরি সেই ক্লাসের roster/CR-request ভিউ খোলে।
+### ৩. Mobile layout — top row + "More" sheet
+- **Desktop/tablet (>767px):** আগের মতোই পুরো horizontal bar, সব ৭টা ট্যাব একসাথে দেখা যাবে — কোনো পরিবর্তন নেই
+- **Mobile (≤767px):** উপরের ৪টা ট্যাব (Attendance, Schedule, Notices, Marks) সবসময় visible থাকবে একটা সমান-চওড়া row-এ, আর একটা "More" বাটন — তাতে tap করলে নিচের ৩টা (Syllabus, Question Bank, Students & CR) একটা ছোট grid sheet-এ খুলবে
+- কোনো label wrap/overlap হবে না — প্রতিটা primary বাটন flex-equal width নিয়ে বসে
 
-### ৫. CSS (`src/index.css`)
-নতুন `.category-subnav-*`, `.subcategory-tab*`, `.founder-category-card*`
-ক্লাস যোগ করা হয়েছে, বিদ্যমান hub-page ভিজ্যুয়াল ল্যাঙ্গুয়েজ (accent-tinted
-tile, `--accentRGB`, একই radius/spacing) অনুসরণ করে — যাতে পুরো app একই
-সিস্টেমের মতো লাগে।
+## যেসব ফাইল বদলেছে
+- `src/pages/faculty/FacultyClassDetail.jsx` — TABS order, SessionsTab merged into AttendanceTab, tab bar JSX split (primary row + More sheet)
+- `src/index.css` — নতুন CSS ব্লক `.faculty-tabs-wrap`, `.faculty-tabs-primary`, `.faculty-tabs-more-sheet` ইত্যাদি (পুরো ফাইলটাই দেওয়া হয়েছে যেহেতু CSS partial-patch করা রিস্কি, কিন্তু বাকি সব রুল অপরিবর্তিত আছে — নতুন ব্লকটা `.faculty-tabs` সেকশনের ঠিক আগে বসানো)
 
-## যা টেস্ট করা হয়েছে
-সব পরিবর্তিত/নতুন ফাইল `esbuild`-এর মাধ্যমে syntax-check করা হয়েছে (JSX
-parse error নেই)। `index.css`-এর brace balance ভেরিফাই করা হয়েছে (1720/1720)।
-পুরো project-এ node_modules ইনস্টল করা নেই বলে actual `npm run build`/Vite
-build চালানো সম্ভব হয়নি — deploy করার আগে once local-এ `npm run build` চালিয়ে
-নিশ্চিত হয়ে নিও।
+## যা টেস্ট করা দরকার আপনার পাশ থেকে
+- Attendance ট্যাবে save করলে session count ঠিকমতো বাড়ছে কিনা (আগের auto-link logic অক্ষত আছে, শুধু UI জায়গা বদলেছে)
+- Mobile-এ (browser resize করে ≤767px-এ) "More" বাটন tap করে Syllabus/QB/Students ঠিকমতো খুলছে কিনা
+- Plan set/edit flow attendance strip-এর ভেতর থেকে ঠিকমতো কাজ করছে কিনা
 
-## এই zip-এ কী আছে
-শুধু পরিবর্তিত/নতুন ফাইল, তাদের আসল `src/` পাথেই:
-- `src/pages/AdminDashboard.jsx` (পুনর্গঠিত)
-- `src/pages/StaffDashboard.jsx` (Founder tab থেকে duplicate সরানো)
-- `src/components/CategorySubNav.jsx` (নতুন)
-- `src/components/SubcategoryTabs.jsx` (নতুন)
-- `src/lib/founderCategories.js` (নতুন)
-- `src/index.css` (নতুন CSS ব্লক যোগ করা)
+## যা করা হয়নি (স্কোপের বাইরে)
+- Desktop tab bar-এ কোনো visual পরিবর্তন করা হয়নি, শুধু order + count কমেছে
+- Attendance tab-এর ভেতরের attendance-taking grid UI অপরিবর্তিত (শুধু উপরে session-count strip যোগ হয়েছে)
+
+## Update — manual "+1 Log Class" এখন fully background-এ
+আগে top strip-এ prominent বাটন হিসেবে ছিল, এখন সেটা "View log" খুললেই শুধু একটা ছোট text-link হিসেবে দেখা যাবে ("Class held but attendance missed? Log it manually")। Default view-এ শুধু count + plan progress + "View log" — কোনো action বাটন prominent থাকবে না, কারণ normal flow পুরোপুরি auto (attendance save করলেই count বেড়ে যায়)।
+
+---
+
+# Mobile Overflow Audit (Phase E)
+
+পুরো codebase খুঁজে ২টা real mobile overflow bug পাওয়া গেছে এবং ফিক্স করা হয়েছে। (App-এ global `overflow-x: hidden` আছে বলে এগুলো visible horizontal-scroll হিসেবে না, বরং **silent content clipping** হিসেবে ধরা পড়ত — মানে content ডান পাশে কেটে যেত, কোনো scrollbar বা error ছাড়াই।)
+
+## Bug ১: Calculators.jsx — Legacy CGPA term row
+- `gridTemplateColumns: '140px 80px 80px 1fr auto'` — ৪টা fixed-px column + gap মিলিয়ে ~340px+, যা ৩৬০-৩৮০px ফোন স্ক্রিনে ফিট করে না
+- ফলাফল: ডানদিকের "Done" checkbox ক্লিপ হয়ে যেত বা দেখা যেত না মোবাইলে
+- **Fix:** `.legacy-term-row` নামে CSS class করা হয়েছে — ডেস্কটপে আগের ৫-column grid, কিন্তু ≤480px-এ ২ সারিতে wrap করে (label+done উপরে, GPA/credits/points নিচে)
+
+## Bug ২: Courses.jsx — Notes chip popup (NoteChipEditor)
+- Notes popup (textarea) `width: 260` fixed, `position: absolute; right: 0` দিয়ে বসানো ছিল কোনো viewport clamp ছাড়া
+- Course card একটা wrapped flex row-এর ভেতর চিপ থাকে, তাই চিপের position স্ক্রিনে ভ্যারি করে — popup easily viewport-এর বাইরে চলে যেতে পারত, বিশেষ করে ছোট স্ক্রিনে
+- **Fix:** width `min(260px, calc(100vw - 32px))` করা হয়েছে + `maxWidth: calc(100vw - 32px)` — এখন popup কখনো viewport-এর চেয়ে চওড়া হতে পারবে না, তাই দুই পাশ থেকেই কাটা পড়া বন্ধ
+
+## যা চেক করা হয়েছে কিন্তু bug পাওয়া যায়নি (false positives, ঠিকই আছে)
+- GuideModal.jsx-এর ২৫০px sidebar — দেখতে risky লাগলেও এর নিজস্ব inline `<style>` block-এ ≤740px breakpoint-এ ঠিকমতো handle করা আছে (sidebar/content toggle + back button)
+- সব table (`Attendance.jsx`, `Results.jsx`, `Schedule.jsx`, `FacultyClassDetail.jsx` ইত্যাদি) — এদের প্রায় সবগুলোতেই আগে থেকেই `overflowX: auto` wrapper আছে
+- বাকি সব `minWidth`/fixed-width instance গুলো হয় flex-shrink-safe (`flex:1, minWidth:0` pattern), অথবা ছোট আইকন/badge সাইজ (২৬-৩৪px) — এগুলোতে কোনো overflow risk নেই
+
+## যা বদলেছে
+- `src/pages/Calculators.jsx` — legacy term row markup + className
+- `src/pages/Courses.jsx` — NoteChipEditor popup width clamp
+- `src/index.css` — নতুন `.legacy-term-row` responsive CSS ব্লক যোগ হয়েছে

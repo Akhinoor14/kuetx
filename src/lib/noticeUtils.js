@@ -111,6 +111,7 @@ export function subscribeAllNotices(profile, groupId, callback, audience = 'stud
             return {
               ...n,
               from: isFounder ? 'Founder' : (n.createdBy?.name || 'Admin'),
+              roleTag: isFounder ? 'Founder' : 'Admin',
               isFounder,
               section: 'admin',
               createdAt: toMillis(n.createdAt),
@@ -123,7 +124,18 @@ export function subscribeAllNotices(profile, groupId, callback, audience = 'stud
     ? subscribeGroupNotices(groupId, (notices) => {
         groupList = notices.map((n) => ({
           ...n,
-          from: n.from || n.postedBy?.name || 'CR',
+          // BUGFIX: this used to be `n.from || n.postedBy?.name || 'CR'` —
+          // since faculty notices always stamp the literal string
+          // from: 'Teacher', that check short-circuited BEFORE ever
+          // looking at postedBy.name, so the real teacher's name (already
+          // saved on every notice doc) never actually reached the UI.
+          // Prefer the real name first; fall back to the generic role tag
+          // only when no name was stored at all.
+          from: n.postedBy?.name || n.from || 'CR',
+          // Keep the raw role tag separately too — the notice card uses
+          // this to decide between a "Teacher" vs "CR" badge/icon without
+          // re-deriving it from the (now name-first) `from` field.
+          roleTag: n.from || 'CR',
           isFounder: false,
           section: 'class',
           createdAt: toMillis(n.createdAt),

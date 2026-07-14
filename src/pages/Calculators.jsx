@@ -69,20 +69,18 @@ function LegacyCGPACalc() {
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: 6, marginBottom: 16 }}>
         {terms.map((t, i) => (
-          <div key={t.id} style={{
-            display: 'grid', gridTemplateColumns: '140px 80px 80px 1fr auto',
-            gap: 8, alignItems: 'center',
+          <div key={t.id} className="legacy-term-row" style={{
             padding: '8px 12px',
             borderRadius: 8,
             background: t.done ? 'var(--bg)' : 'transparent',
             border: '1px solid var(--border)',
           }}>
-            <div style={{ fontSize: 12, fontWeight: 500, color: t.done ? 'var(--text)' : 'var(--muted)' }}>{t.label}</div>
+            <div className="legacy-term-row-label" style={{ fontSize: 12, fontWeight: 500, color: t.done ? 'var(--text)' : 'var(--muted)' }}>{t.label}</div>
             <div>
               <input
                 type="number" min={0} max={4} step={0.01}
                 value={t.gpa} onChange={e => updateTerm(i, 'gpa', e.target.value)}
-                placeholder="GPA" style={{ fontSize: 12, padding: '5px 8px' }}
+                placeholder="GPA" style={{ fontSize: 12, padding: '5px 8px', width: '100%' }}
                 disabled={!t.done}
               />
             </div>
@@ -90,11 +88,11 @@ function LegacyCGPACalc() {
               <input
                 type="number" min={0} max={30}
                 value={t.credits} onChange={e => updateTerm(i, 'credits', e.target.value)}
-                placeholder="Credits" style={{ fontSize: 12, padding: '5px 8px' }}
+                placeholder="Credits" style={{ fontSize: 12, padding: '5px 8px', width: '100%' }}
                 disabled={!t.done}
               />
             </div>
-            <div style={{ fontSize: 11, color: 'var(--muted)' }}>
+            <div className="legacy-term-row-points" style={{ fontSize: 11, color: 'var(--muted)' }}>
               {t.done && t.gpa && t.credits
                 ? `Points: ${(+t.gpa * +t.credits).toFixed(2)}`
                 : t.done ? 'Fill GPA & credits' : 'Not completed yet'}

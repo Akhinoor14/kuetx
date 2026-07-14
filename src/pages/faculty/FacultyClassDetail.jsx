@@ -41,6 +41,7 @@ import {
 import { exportStudentMarksPdf, exportClassSummaryPdf } from '../../lib/facultyPdfExport';
 import { logFacultySession } from '../../lib/facultySessionSync';
 import { getFacultyDoc } from '../../lib/facultySync';
+import { getFacultyDisplayName } from '../../lib/facultyTitle';
 import { useIsFaculty } from '../../hooks/useIsFaculty';
 import { auth } from '../../lib/firebase';
 import { notify } from '../../lib/notify';
@@ -51,16 +52,27 @@ import {
 } from '../../lib/timeModels';
 import { useQuestionBankData, getR2FileUrl } from '../../hooks/useQuestionBankData';
 
+// Order = real daily-use frequency (teacher's actual workflow), not a
+// setup checklist. Attendance is opened almost every class day — and now
+// carries Sessions & Count merged into it, since attendance auto-links
+// the session log already (see AttendanceTab), so a separate tab for it
+// was redundant. Mobile tab bar shows the first 4 as always-visible
+// buttons + a "More" popover for the rest — see .faculty-tabs CSS.
 const TABS = [
-  { id: 'students', label: 'Students & CR', icon: 'Users', enabled: true },
-  { id: 'syllabus', label: 'Syllabus', icon: 'BookMarked', enabled: true },
-  { id: 'schedule', label: 'Schedule', icon: 'Clock', enabled: true },
-  { id: 'sessions', label: 'Sessions & Count', icon: 'ListChecks', enabled: true },
   { id: 'attendance', label: 'Attendance', icon: 'CheckSquare', enabled: true },
-  { id: 'marks', label: 'Marks', icon: 'GraduationCap', enabled: true },
-  { id: 'qbank', label: 'Question Bank', icon: 'FileText', enabled: true },
+  { id: 'schedule', label: 'Schedule', icon: 'Clock', enabled: true },
   { id: 'notices', label: 'Notices', icon: 'Bell', enabled: true },
+  { id: 'marks', label: 'Marks', icon: 'GraduationCap', enabled: true },
+  { id: 'syllabus', label: 'Syllabus', icon: 'BookMarked', enabled: true },
+  { id: 'qbank', label: 'Question Bank', icon: 'FileText', enabled: true },
+  { id: 'students', label: 'Students & CR', icon: 'Users', enabled: true },
 ];
+
+// First N tabs shown as always-visible buttons on mobile; the rest live
+// behind "More". Kept in sync with the daily-use ordering above —
+// Attendance, Schedule, Notices, Marks are the ones a teacher actually
+// taps most days.
+const MOBILE_PRIMARY_COUNT = 4;
 
 // Editing day/time only needs day+slot — unlike Add Class, dept/batch/
 // term/course are already fixed for an existing assignment, so this is a
@@ -255,7 +267,7 @@ function EditDayTimeModal({ assignment, groupId, onClose, onSaved }) {
 // from the rest of the notice system:
 //   - 'broadcast' → every student in this class sees it ("Class only")
 //   - 'cr_only'   → only this class's CR/ACR see it ("CR only")
-function NoticesTab({ groupId, isVerified }) {
+function NoticesTab({ groupId, isVerified, assignment }) {
   const [facultyDoc, setFacultyDoc] = useState(null);
   const [notices, setNotices] = useState([]);
   const [title, setTitle] = useState('');
@@ -287,6 +299,7 @@ function NoticesTab({ groupId, isVerified }) {
     try {
       await postFacultyNotice(groupId, facultyDoc, auth.currentUser.uid, {
         title: title.trim(), body: body.trim(), targetType,
+        courseCode: assignment?.courseCode || '', courseTitle: assignment?.courseTitle || '',
       });
       setTitle('');
       setBody('');
@@ -669,157 +682,20 @@ function BatchRoutineGrid({ assignment, groupId }) {
   );
 }
 
-function SessionsTab({ assignment, groupId }) {
-  const [logs, setLogs] = useState(null); // null = loading
-  const [facultyName, setFacultyName] = useState('');
-  const [logging, setLogging] = useState(false);
-  const [editingPlan, setEditingPlan] = useState(false);
-  const [planInput, setPlanInput] = useState('');
-  const [savingPlan, setSavingPlan] = useState(false);
-
-  useEffect(() => {
-    if (!groupId) { setLogs([]); return; }
-    return subscribePlannerLogs(groupId, setLogs);
-  }, [groupId]);
-
-  useEffect(() => {
-    const uid = auth.currentUser?.uid;
-    if (!uid) return;
-    getFacultyDoc(uid).then((fdoc) => setFacultyName(fdoc?.preferredName || fdoc?.name || 'Faculty'));
-  }, []);
-
-  const courseId = assignment?.courseId;
-  const logsForCourse = (logs || []).filter((l) => l.courseId === courseId);
-  const plannedTotal = assignment?.plannedTotalClasses;
-
-  const handleLog = async () => {
-    setLogging(true);
-    try {
-      await logFacultySession(groupId, {
-        uid: auth.currentUser.uid,
-        name: facultyName,
-        courseId,
-        courseCode: assignment.courseCode,
-        courseType: assignment.courseType,
-        existingLogsForCourse: logsForCourse,
-      });
-      notify('Session logged.', 'success');
-    } catch (e) {
-      notify(e.message || 'Could not log this session.', 'error');
-    } finally {
-      setLogging(false);
-    }
-  };
-
-  const openPlanEditor = () => {
-    setPlanInput(plannedTotal ? String(plannedTotal) : '');
-    setEditingPlan(true);
-  };
-
-  const handleSavePlan = async () => {
-    setSavingPlan(true);
-    try {
-      await setPlannedTotalClasses(groupId, assignment.id, planInput);
-      notify('Plan saved.', 'success');
-      setEditingPlan(false);
-    } catch (e) {
-      notify(e.message || 'Could not save the plan.', 'error');
-    } finally {
-      setSavingPlan(false);
-    }
-  };
-
-  if (logs === null) {
-    return <div style={{ color: 'var(--muted)', fontSize: 13, padding: '16px 0' }}>Loading…</div>;
-  }
-
-  return (
-    <div>
-      <div className="faculty-summary-card" style={{
-        display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12,
-        marginBottom: 14, flexWrap: 'wrap',
-      }}>
-        <div>
-          <div style={{ fontWeight: 800, fontSize: 18, color: 'var(--text)' }}>{logsForCourse.length}</div>
-          {!editingPlan ? (
-            <div style={{ fontSize: 11.5, color: 'var(--muted)', display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
-              <span>classes logged{plannedTotal ? ` of ${plannedTotal} planned` : ''}</span>
-              <button
-                onClick={openPlanEditor}
-                style={{ background: 'none', border: 'none', padding: 0, color: 'var(--accent)', fontSize: 11.5, fontWeight: 700, cursor: 'pointer', textDecoration: 'underline' }}
-              >
-                {plannedTotal ? 'Edit plan' : 'Set a plan'}
-              </button>
-            </div>
-          ) : (
-            <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 4 }}>
-              <input
-                type="number"
-                min="1"
-                autoFocus
-                value={planInput}
-                onChange={(e) => setPlanInput(e.target.value)}
-                placeholder="e.g. 30"
-                style={{
-                  width: 70, padding: '5px 8px', borderRadius: 6, border: '1px solid var(--border)',
-                  background: 'var(--bg)', color: 'var(--text)', fontSize: 12.5,
-                }}
-              />
-              <span style={{ fontSize: 11.5, color: 'var(--muted)' }}>total classes planned</span>
-              <button
-                onClick={handleSavePlan}
-                disabled={savingPlan || !planInput}
-                style={{ padding: '5px 10px', borderRadius: 6, border: 'none', background: 'var(--accent)', color: '#fff', fontSize: 11.5, fontWeight: 700, cursor: savingPlan ? 'wait' : 'pointer', opacity: savingPlan || !planInput ? 0.6 : 1 }}
-              >
-                {savingPlan ? 'Saving…' : 'Save'}
-              </button>
-              <button
-                onClick={() => setEditingPlan(false)}
-                style={{ padding: '5px 8px', borderRadius: 6, border: '1px solid var(--border)', background: 'transparent', color: 'var(--muted)', fontSize: 11.5, cursor: 'pointer' }}
-              >
-                Cancel
-              </button>
-            </div>
-          )}
-        </div>
-        <button
-          onClick={handleLog}
-          disabled={logging}
-          style={{
-            padding: '9px 16px', borderRadius: 8, border: 'none', background: 'var(--accent)',
-            color: '#fff', fontWeight: 700, fontSize: 13, cursor: 'pointer', opacity: logging ? 0.6 : 1,
-          }}
-        >
-          {logging ? 'Logging…' : '+1 Log Class'}
-        </button>
-      </div>
-
-      {logsForCourse.length === 0 ? (
-        <div style={{ color: 'var(--muted)', fontSize: 13, padding: '8px 0' }}>No sessions logged yet for this course.</div>
-      ) : (
-        <div style={{ display: 'grid', gap: 6 }}>
-          {[...logsForCourse].reverse().map((l) => (
-            <div key={l.id} className="faculty-row" style={{ fontSize: 12.5 }}>
-              <span style={{ color: 'var(--text)' }}>
-                Class {l.sequenceNumber || '—'} · {l.teacherName || 'Unknown'}
-              </span>
-              <span style={{ color: 'var(--muted)', fontSize: 11 }}>
-                {l.loggedBy?.role === 'faculty' ? '👨‍🏫 Faculty' : l.loggedBy?.role === 'cr' ? 'CR' : '—'}
-              </span>
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
-  );
-}
-
 function AttendanceTab({ assignment, groupId }) {
   const [members, setMembers] = useState(null);
   const [sessions, setSessions] = useState(null);
   const [plannerLogs, setPlannerLogs] = useState(null);
   const [facultyName, setFacultyName] = useState('');
   const [date, setDate] = useState(() => todayStr());
+  // Sessions & Count, merged in — attendance-taking auto-logs a session
+  // (see handleSave's auto-link below), so manual "+1 Log Class" is now
+  // a rare fallback (e.g. a class held but attendance skipped that day).
+  const [logging, setLogging] = useState(false);
+  const [editingPlan, setEditingPlan] = useState(false);
+  const [planInput, setPlanInput] = useState('');
+  const [savingPlan, setSavingPlan] = useState(false);
+  const [showSessionLog, setShowSessionLog] = useState(false);
   // Tracks whether the current `date` value is just "whatever today was"
   // (auto) vs. something the faculty deliberately picked (manual). This
   // tab stays mounted forever once opened (see the comment on TABS render
@@ -872,10 +748,51 @@ function AttendanceTab({ assignment, groupId }) {
   useEffect(() => {
     const uid = auth.currentUser?.uid;
     if (!uid) return;
-    getFacultyDoc(uid).then((fdoc) => setFacultyName(fdoc?.preferredName || fdoc?.name || 'Faculty'));
+    getFacultyDoc(uid).then((fdoc) => setFacultyName(getFacultyDisplayName(fdoc?.preferredName || fdoc?.name, fdoc?.title)));
   }, []);
 
-  // Pre-fill draftMarks from an existing session for the selected date, if
+  const courseId = assignment?.courseId;
+  const logsForCourse = (plannerLogs || []).filter((l) => l.courseId === courseId);
+  const plannedTotal = assignment?.plannedTotalClasses;
+
+  const handleManualLog = async () => {
+    setLogging(true);
+    try {
+      await logFacultySession(groupId, {
+        uid: auth.currentUser.uid,
+        name: facultyName,
+        courseId,
+        courseCode: assignment.courseCode,
+        courseType: assignment.courseType,
+        existingLogsForCourse: logsForCourse,
+      });
+      notify('Session logged.', 'success');
+    } catch (e) {
+      notify(e.message || 'Could not log this session.', 'error');
+    } finally {
+      setLogging(false);
+    }
+  };
+
+  const openPlanEditor = () => {
+    setPlanInput(plannedTotal ? String(plannedTotal) : '');
+    setEditingPlan(true);
+  };
+
+  const handleSavePlan = async () => {
+    setSavingPlan(true);
+    try {
+      await setPlannedTotalClasses(groupId, assignment.id, planInput);
+      notify('Plan saved.', 'success');
+      setEditingPlan(false);
+    } catch (e) {
+      notify(e.message || 'Could not save the plan.', 'error');
+    } finally {
+      setSavingPlan(false);
+    }
+  };
+
+
   // one was already taken (so re-opening today's attendance doesn't blank
   // out what was already marked — §8.9's "manual override possible" note
   // implies edits should start from the existing state, not from scratch).
@@ -976,6 +893,100 @@ function AttendanceTab({ assignment, groupId }) {
 
   return (
     <div>
+      {/* Sessions & Count — merged into Attendance. Compact strip: count +
+          plan progress + manual "+1" fallback (attendance-taking already
+          auto-logs the common case, so this button is for edge cases like
+          a class held without attendance being taken that day). */}
+      <div className="faculty-summary-card" style={{
+        display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12,
+        marginBottom: 14, flexWrap: 'wrap',
+      }}>
+        <div>
+          <div style={{ fontWeight: 800, fontSize: 18, color: 'var(--text)' }}>{logsForCourse.length}</div>
+          {!editingPlan ? (
+            <div style={{ fontSize: 11.5, color: 'var(--muted)', display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
+              <span>classes logged{plannedTotal ? ` of ${plannedTotal} planned` : ''}</span>
+              <button
+                onClick={openPlanEditor}
+                style={{ background: 'none', border: 'none', padding: 0, color: 'var(--accent)', fontSize: 11.5, fontWeight: 700, cursor: 'pointer', textDecoration: 'underline' }}
+              >
+                {plannedTotal ? 'Edit plan' : 'Set a plan'}
+              </button>
+              <button
+                onClick={() => setShowSessionLog((v) => !v)}
+                style={{ background: 'none', border: 'none', padding: 0, color: 'var(--muted)', fontSize: 11.5, fontWeight: 600, cursor: 'pointer', textDecoration: 'underline' }}
+              >
+                {showSessionLog ? 'Hide log' : 'View log'}
+              </button>
+            </div>
+          ) : (
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 4 }}>
+              <input
+                type="number"
+                min="1"
+                autoFocus
+                value={planInput}
+                onChange={(e) => setPlanInput(e.target.value)}
+                placeholder="e.g. 30"
+                style={{
+                  width: 70, padding: '5px 8px', borderRadius: 6, border: '1px solid var(--border)',
+                  background: 'var(--bg)', color: 'var(--text)', fontSize: 12.5,
+                }}
+              />
+              <span style={{ fontSize: 11.5, color: 'var(--muted)' }}>total classes planned</span>
+              <button
+                onClick={handleSavePlan}
+                disabled={savingPlan || !planInput}
+                style={{ padding: '5px 10px', borderRadius: 6, border: 'none', background: 'var(--accent)', color: '#fff', fontSize: 11.5, fontWeight: 700, cursor: savingPlan ? 'wait' : 'pointer', opacity: savingPlan || !planInput ? 0.6 : 1 }}
+              >
+                {savingPlan ? 'Saving…' : 'Save'}
+              </button>
+              <button
+                onClick={() => setEditingPlan(false)}
+                style={{ padding: '5px 8px', borderRadius: 6, border: '1px solid var(--border)', background: 'transparent', color: 'var(--muted)', fontSize: 11.5, cursor: 'pointer' }}
+              >
+                Cancel
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {showSessionLog && (
+        <div style={{ marginBottom: 14 }}>
+          <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 8 }}>
+            <button
+              onClick={handleManualLog}
+              disabled={logging}
+              title="Class held but attendance wasn't taken for it — logs it manually"
+              style={{
+                background: 'none', border: 'none', padding: 0, color: 'var(--muted)',
+                fontSize: 11, fontWeight: 600, cursor: 'pointer', textDecoration: 'underline',
+                opacity: logging ? 0.6 : 1,
+              }}
+            >
+              {logging ? 'Logging…' : "Class held but attendance missed? Log it manually"}
+            </button>
+          </div>
+          <div style={{ display: 'grid', gap: 6 }}>
+          {logsForCourse.length === 0 ? (
+            <div style={{ color: 'var(--muted)', fontSize: 13, padding: '8px 0' }}>No sessions logged yet for this course.</div>
+          ) : (
+            [...logsForCourse].reverse().map((l) => (
+              <div key={l.id} className="faculty-row" style={{ fontSize: 12.5 }}>
+                <span style={{ color: 'var(--text)' }}>
+                  Class {l.sequenceNumber || '—'} · {l.teacherName || 'Unknown'}
+                </span>
+                <span style={{ color: 'var(--muted)', fontSize: 11 }}>
+                  {l.loggedBy?.role === 'faculty' ? '👨‍🏫 Faculty' : l.loggedBy?.role === 'cr' ? 'CR' : '—'}
+                </span>
+              </div>
+            ))
+          )}
+          </div>
+        </div>
+      )}
+
       {totalClasses > 0 && (
         <div className="faculty-summary-card" style={{ marginBottom: 14 }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
@@ -1266,8 +1277,8 @@ function MarksTab({ assignment, groupId }) {
     Promise.all(uids.slice(0, 2).map((uid) => (uid ? getFacultyDoc(uid) : null))).then(([t1doc, t2doc]) => {
       if (cancelled) return;
       setTeacherNames({
-        teacher1: t1doc?.preferredName || t1doc?.name || '',
-        teacher2: t2doc?.preferredName || t2doc?.name || '',
+        teacher1: t1doc ? getFacultyDisplayName(t1doc?.preferredName || t1doc?.name, t1doc?.title) : '',
+        teacher2: t2doc ? getFacultyDisplayName(t2doc?.preferredName || t2doc?.name, t2doc?.title) : '',
       });
     }).catch(() => { if (!cancelled) setTeacherNames({ teacher1: '', teacher2: '' }); });
     return () => { cancelled = true; };
@@ -1542,7 +1553,7 @@ export default function FacultyClassDetail() {
   const [searchParams] = useSearchParams();
   const groupId = searchParams.get('groupId') || '';
   const [assignment, setAssignment] = useState(null); // null = loading
-  const [tab, setTab] = useState('students');
+  const [tab, setTab] = useState('attendance');
   const [editingDayTime, setEditingDayTime] = useState(false);
   // Blue Tick status, needed here (not just inside MarksTab) to also gate
   // the Schedule tab's "Edit/Set day & time" button — a fake/unverified
@@ -1555,7 +1566,8 @@ export default function FacultyClassDetail() {
   // Lazy-mount: a tab only mounts (and starts its Firestore subscription)
   // the first time it's opened, but once mounted it's kept alive for the
   // rest of this page visit — see the render block below.
-  const [mountedTabs, setMountedTabs] = useState(() => new Set(['students']));
+  const [mountedTabs, setMountedTabs] = useState(() => new Set(['attendance']));
+  const [moreOpen, setMoreOpen] = useState(false);
 
   const selectTab = (id) => {
     setTab(id);
@@ -1598,23 +1610,82 @@ export default function FacultyClassDetail() {
         {/* Tab bar — disabled tabs are visible but non-interactive, with a
             title tooltip explaining why, rather than hidden entirely. This
             keeps the tab-bar layout stable across phases instead of tabs
-            appearing/shifting as later phases land. */}
-        <div className="faculty-tabs">
-          {TABS.map((t) => {
-            const Icon = Icons[t.icon] || Icons.Circle;
-            const active = tab === t.id;
-            return (
-              <button
-                key={t.id}
-                onClick={() => t.enabled && selectTab(t.id)}
-                disabled={!t.enabled}
-                title={t.enabled ? undefined : 'Coming in a later phase'}
-                className={`faculty-tab-btn${active ? ' active' : ''}`}
-              >
-                <Icon size={14} /> {t.label}
-              </button>
-            );
-          })}
+            appearing/shifting as later phases land.
+
+            Mobile (<=767px): only the first MOBILE_PRIMARY_COUNT tabs
+            (Attendance, Schedule, Notices, Marks — the daily/frequent
+            ones) show as always-visible buttons; the rest sit behind a
+            "More" button that opens a small grid. This is CSS-driven
+            (.faculty-tabs-primary / .faculty-tabs-more), not a JS media
+            query, so it doesn't fight the existing useIsMobileNav
+            breakpoint elsewhere and stays correct on resize without a
+            listener. Desktop shows the full bar unchanged. */}
+        <div className="faculty-tabs-wrap">
+          <div className="faculty-tabs faculty-tabs-full">
+            {TABS.map((t) => {
+              const Icon = Icons[t.icon] || Icons.Circle;
+              const active = tab === t.id;
+              return (
+                <button
+                  key={t.id}
+                  onClick={() => t.enabled && selectTab(t.id)}
+                  disabled={!t.enabled}
+                  title={t.enabled ? undefined : 'Coming in a later phase'}
+                  className={`faculty-tab-btn${active ? ' active' : ''}`}
+                >
+                  <Icon size={14} /> {t.label}
+                </button>
+              );
+            })}
+          </div>
+
+          <div className="faculty-tabs faculty-tabs-primary">
+            {TABS.slice(0, MOBILE_PRIMARY_COUNT).map((t) => {
+              const Icon = Icons[t.icon] || Icons.Circle;
+              const active = tab === t.id;
+              return (
+                <button
+                  key={t.id}
+                  onClick={() => t.enabled && selectTab(t.id)}
+                  disabled={!t.enabled}
+                  title={t.enabled ? undefined : 'Coming in a later phase'}
+                  className={`faculty-tab-btn${active ? ' active' : ''}`}
+                >
+                  <Icon size={14} /> {t.label}
+                </button>
+              );
+            })}
+            <button
+              onClick={() => setMoreOpen((v) => !v)}
+              className={`faculty-tab-btn faculty-tab-more-btn${moreOpen || TABS.slice(MOBILE_PRIMARY_COUNT).some((t) => t.id === tab) ? ' active' : ''}`}
+            >
+              <Icons.MoreHorizontal size={14} /> More
+            </button>
+          </div>
+
+          {moreOpen && (
+            <>
+              <div className="faculty-tabs-more-backdrop" onClick={() => setMoreOpen(false)} />
+              <div className="faculty-tabs-more-sheet">
+                {TABS.slice(MOBILE_PRIMARY_COUNT).map((t) => {
+                  const Icon = Icons[t.icon] || Icons.Circle;
+                  const active = tab === t.id;
+                  return (
+                    <button
+                      key={t.id}
+                      onClick={() => { if (t.enabled) { selectTab(t.id); setMoreOpen(false); } }}
+                      disabled={!t.enabled}
+                      title={t.enabled ? undefined : 'Coming in a later phase'}
+                      className={`faculty-tab-more-item${active ? ' active' : ''}`}
+                    >
+                      <Icon size={18} />
+                      <span>{t.label}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </>
+          )}
         </div>
 
         {!groupId && (
@@ -1647,11 +1718,10 @@ export default function FacultyClassDetail() {
               {t.id === 'schedule' && (
                 <ScheduleTab assignment={assignment} groupId={groupId} isVerified={isVerified} onEditDayTime={() => setEditingDayTime(true)} />
               )}
-              {t.id === 'sessions' && <SessionsTab assignment={assignment} groupId={groupId} />}
               {t.id === 'attendance' && <AttendanceTab assignment={assignment} groupId={groupId} />}
               {t.id === 'marks' && <MarksTab assignment={assignment} groupId={groupId} />}
               {t.id === 'qbank' && <QuestionBankTab assignment={assignment} />}
-              {t.id === 'notices' && <NoticesTab groupId={groupId} isVerified={isVerified} />}
+              {t.id === 'notices' && <NoticesTab groupId={groupId} isVerified={isVerified} assignment={assignment} />}
             </div>
           );
         })}

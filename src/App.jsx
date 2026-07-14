@@ -193,7 +193,7 @@ function Layout({ authState, onboardingActive }) {
                 Every real destination is wrapped in RequireFaculty (hard
                 gate, manual verification policy — requires the Blue Tick,
                 see that component + useIsFaculty.js). Hub pages
-                (/faculty/resources) reuse the same SubgroupHub component
+                (/faculty/more) reuse the same SubgroupHub component
                 the student side uses, pointed at NAV_FACULTY via its
                 navSource prop instead of a duplicate hub renderer.
                 Class Detail (§8.5) ships with 3 read-only tabs (Students &
@@ -210,15 +210,17 @@ function Layout({ authState, onboardingActive }) {
             <Route path="/faculty/notices" element={<RequireFaculty><FacultyNoticeBroadcast /></RequireFaculty>} />
             <Route path="/faculty/contact" element={<RequireFaculty><FacultyContact /></RequireFaculty>} />
             <Route path="/faculty/question-bank" element={<RequireFaculty><QuestionBank /></RequireFaculty>} />
-            <Route path="/faculty/resources" element={<RequireFaculty><SubgroupHub navSource={NAV_FACULTY} group="Campus" subgroup="Resources" /></RequireFaculty>} />
-            {/* BUGFIX: nav-faculty.js's "Tools" group declares hubPath
-                '/faculty/tools' but no matching route ever existed —
-                clicking into Tools from the faculty sidebar hit React
-                Router's no-match (blank/fallback) since day one. Tools is
-                a plain group (not a subgroup), so it's just group="Tools",
-                same shape as the student side's <Route path="/tools" .../>
-                a few lines up. */}
-            <Route path="/faculty/tools" element={<RequireFaculty><SubgroupHub navSource={NAV_FACULTY} group="Tools" /></RequireFaculty>} />
+            {/* Bottom-nav "More" destination — combines what used to be two
+                separate, mobile-unreachable sidebar groups (Campus →
+                Resources, and Tools) plus Meetings/Broadcast Notice into
+                one hub page, grouped into "Communication" and "Resources &
+                Settings" sections (see nav-faculty.js's "More" group for
+                why). /faculty/resources and /faculty/tools both now
+                redirect here rather than 404-ing for anyone with the old
+                links bookmarked. */}
+            <Route path="/faculty/more" element={<RequireFaculty><SubgroupHub navSource={NAV_FACULTY} group="More" pageTitle="More" /></RequireFaculty>} />
+            <Route path="/faculty/resources" element={<Navigate to="/faculty/more" replace />} />
+            <Route path="/faculty/tools" element={<Navigate to="/faculty/more" replace />} />
           </Routes>
         </div>
         {location.pathname !== '/about' && !isQuestionBankViewer && !isMobileNav && <Footer />}

@@ -58,7 +58,11 @@ export default function FacultyNotices() {
     }
     setSending(true);
     try {
-      await postFacultyNotice(selectedGroupId, facultyDoc, auth.currentUser.uid, { title: title.trim(), body: body.trim(), targetType });
+      const selectedClass = groupOptions.find((c) => c.groupId === selectedGroupId);
+      await postFacultyNotice(selectedGroupId, facultyDoc, auth.currentUser.uid, {
+        title: title.trim(), body: body.trim(), targetType,
+        courseCode: selectedClass?.courseCode || '',
+      });
       setTitle('');
       setBody('');
       notify('Notice sent.', 'success');

@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Bell, Crown, Megaphone, Users } from 'lucide-react';
+import { Bell, Crown, Megaphone, Users, GraduationCap, UserCircle2 } from 'lucide-react';
 import * as noticeApi from '../lib/noticeUtils';
 import { getProfile } from '../store/store';
 import { getGroupId } from '../lib/groupUtils';
@@ -61,10 +61,32 @@ function NoticeCard({ n, isUnread, onOpen }) {
         <div style={{ fontSize: 12.5, color: 'var(--muted)', marginTop: 3, lineHeight: 1.45 }}>
           {renderFormattedNoticeBody(n.body)}
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 11, color: 'var(--muted)', marginTop: 8 }}>
-          <span>{n.from}</span>
-          <span>·</span>
-          <span>{timeAgo(n.createdAt)}</span>
+        <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 6, marginTop: 9 }}>
+          <div style={{
+            display: 'inline-flex', alignItems: 'center', gap: 5,
+            fontSize: 11.5, fontWeight: 700, color: 'var(--text)',
+          }}>
+            {n.roleTag === 'Teacher' ? (
+              <GraduationCap size={13} color="var(--accent)" />
+            ) : n.roleTag === 'CR' ? (
+              <UserCircle2 size={13} color="var(--muted)" />
+            ) : (
+              <Megaphone size={13} color="var(--muted)" />
+            )}
+            {n.from}
+          </div>
+          {n.courseCode && (
+            <span style={{
+              fontSize: 10.5, fontWeight: 700, letterSpacing: 0.2,
+              color: 'var(--accent)',
+              background: 'color-mix(in srgb, var(--accent) 14%, transparent)',
+              borderRadius: 999, padding: '2px 8px',
+            }}>
+              {n.courseCode}
+            </span>
+          )}
+          <span style={{ fontSize: 11, color: 'var(--muted)' }}>·</span>
+          <span style={{ fontSize: 11, color: 'var(--muted)' }}>{timeAgo(n.createdAt)}</span>
         </div>
       </div>
     </div>

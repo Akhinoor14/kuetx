@@ -9052,6 +9052,112 @@ input[type="range"]::-webkit-slider-thumb {
    subtle hover state, plus a gentle fade-in per tab panel so switching
    doesn't feel like a hard cut. Also gives the plain bordered rows used
    across Syllabus/Schedule/Sessions/Attendance a consistent hover lift. */
+/* Legacy CGPA calculator — term row. Desktop: single-row 5-col grid.
+   Mobile (<=480px): the fixed-px columns (140+80+80) plus gaps exceeded a
+   360-380px viewport and got silently clipped (page has overflow-x:hidden
+   globally, so it wasn't a visible scrollbar — it just cut off the "Done"
+   checkbox on the right). Wraps into two rows instead: label+done on top,
+   GPA/credits/points below. */
+.legacy-term-row {
+  display: grid;
+  grid-template-columns: 140px 80px 80px 1fr auto;
+  gap: 8px;
+  align-items: center;
+}
+@media (max-width: 480px) {
+  .legacy-term-row {
+    grid-template-columns: 1fr auto;
+    grid-template-areas:
+      "label done"
+      "gpa   credits"
+      "points points";
+    row-gap: 6px;
+  }
+  .legacy-term-row-label { grid-area: label; }
+  .legacy-term-row-points { grid-area: points; }
+  .legacy-term-row > label { grid-area: done; justify-self: end; }
+  .legacy-term-row > div:nth-child(2) { grid-area: gpa; }
+  .legacy-term-row > div:nth-child(3) { grid-area: credits; }
+}
+
+.faculty-tabs-wrap {
+  position: relative;
+  margin-bottom: 18px;
+}
+.faculty-tabs-wrap .faculty-tabs { margin-bottom: 0; }
+
+/* Desktop/tablet (>767px): full horizontal bar, primary-row+More hidden. */
+.faculty-tabs-primary,
+.faculty-tabs-more-backdrop,
+.faculty-tabs-more-sheet {
+  display: none;
+}
+
+/* Mobile (<=767px): swap to primary row + More sheet, hide the full bar. */
+@media (max-width: 767.98px) {
+  .faculty-tabs-full { display: none; }
+
+  .faculty-tabs-primary {
+    display: flex;
+    gap: 2px;
+    border-bottom: 1px solid var(--border);
+  }
+  .faculty-tabs-primary .faculty-tab-btn {
+    flex: 1 1 0;
+    justify-content: center;
+    padding: 11px 6px;
+    font-size: 11.5px;
+  }
+  .faculty-tab-more-btn { color: var(--muted); }
+
+  .faculty-tabs-more-backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.35);
+    z-index: 40;
+  }
+  .faculty-tabs-more-sheet {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    position: absolute;
+    top: calc(100% + 6px);
+    right: 0;
+    left: 0;
+    background: var(--card-bg, var(--bg));
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+    z-index: 41;
+  }
+  .faculty-tab-more-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 12px 6px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--bg);
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: center;
+  }
+  .faculty-tab-more-item.active {
+    color: var(--accent);
+    border-color: var(--accent);
+    background: color-mix(in srgb, var(--accent) 10%, var(--bg));
+  }
+  .faculty-tab-more-item:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+}
+
 .faculty-tabs {
   display: flex;
   gap: 2px;
