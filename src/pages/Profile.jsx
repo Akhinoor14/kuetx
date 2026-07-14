@@ -525,7 +525,17 @@ export default function Profile() {
   }, []);
 
   const getDeptName = code => (DEPARTMENTS.find(d => d.code === code)?.name || code);
-  const hasMinProfile = !!(profile?.name && profile?.studentId && profile?.dept && profile?.session && profile?.currentTermKey);
+  // BUGFIX: this used to also require profile?.session — but Academic
+  // Session was never part of the mandatory first-run (minimal)
+  // ProfileSetupModal form; it's only asked in the full Settings/
+  // "Complete Profile" version, filled in later. That meant hasMinProfile
+  // stayed permanently false for anyone who only ever completed the
+  // mandatory onboarding (Name, Student ID, dept auto-derived, Current
+  // Term, Blood Group) — the "Welcome to KUETx / Setup Profile" screen
+  // kept reappearing forever, looking like nothing had saved, because it
+  // was checking a field structurally impossible to fill at that stage.
+  // Now matches exactly what onboarding actually collects and requires.
+  const hasMinProfile = !!(profile?.name && profile?.studentId && profile?.dept && profile?.currentTermKey && profile?.bloodGroup);
 
   // null = not yet checked (avoid flashing the "not verified" banner for
   // already-verified users while the Firestore read is in flight);
