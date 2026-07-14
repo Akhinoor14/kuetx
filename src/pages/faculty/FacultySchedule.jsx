@@ -78,6 +78,17 @@ export default function FacultySchedule() {
   // Schedule.jsx's fullScreenOpen, added here since this page previously
   // had no escape hatch from the cramped 5-day-wide table on phones.
   const [fullScreenOpen, setFullScreenOpen] = useState(false);
+
+  // Hide the fixed bottom-nav while the rotated fullscreen timetable is
+  // open — see matching effect in Schedule.jsx for details.
+  useEffect(() => {
+    if (fullScreenOpen) {
+      document.body.classList.add('schedule-fullscreen-active');
+    } else {
+      document.body.classList.remove('schedule-fullscreen-active');
+    }
+    return () => document.body.classList.remove('schedule-fullscreen-active');
+  }, [fullScreenOpen]);
   // Same Blue Tick gate as My Classes' own "+ Add Class" button — this
   // grid's empty-cell click opens the exact same AddClassModal, so it
   // needs the same guard (create write is server-gated on
@@ -215,7 +226,7 @@ export default function FacultySchedule() {
               Time
             </th>
             {DAYS.map((d) => (
-              <th key={d} className="timetable-day-col" style={{ padding: 0, borderBottom: '1px solid var(--border)', background: 'var(--surface)', minWidth: opts.fullView ? 0 : 140 }}>
+              <th key={d} className={`timetable-day-col${d === selectedDay ? ' selected-day' : ''}`} style={{ padding: 0, borderBottom: '1px solid var(--border)', background: 'var(--surface)', minWidth: opts.fullView ? 0 : 140 }}>
                 <button
                   onClick={() => setSelectedDay(d)}
                   style={{
@@ -262,6 +273,7 @@ export default function FacultySchedule() {
                   return (
                     <td
                       key={d}
+                      className={`timetable-day-col${d === selectedDay ? ' selected-day' : ''}`}
                       rowSpan={rowSpan > 1 ? rowSpan : undefined}
                       onClick={isEmptyCell && isVerified ? () => setAddAt({ day: d, slot }) : undefined}
                       title={
@@ -393,6 +405,33 @@ export default function FacultySchedule() {
                 No scheduled classes today{today === 'Friday' ? ' — enjoy the weekly holiday 🎉' : ''}
               </div>
             )}
+          </div>
+        )}
+
+        {/* Mobile-only day switcher — the CSS (.timetable-grid:not(.full-view)
+            .timetable-day-col { display: none }, .selected-day shown) hides
+            every day column except the selected one on narrow screens, so
+            without a way to change selectedDay a teacher on mobile would be
+            stuck looking at whichever day happened to be selected on load.
+            Hidden on desktop (see .mobile-preview-controls in index.css). */}
+        {!loading && (
+          <div className="mobile-preview-controls">
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 12 }}>
+              {DAYS.map((day) => (
+                <button
+                  key={day}
+                  onClick={() => setSelectedDay(day)}
+                  className="btn day-chip"
+                  style={{
+                    padding: '8px 12px',
+                    border: selectedDay === day ? '1px solid var(--accent)' : '1px solid var(--border)',
+                    background: selectedDay === day ? 'rgba(59,130,246,0.08)' : 'var(--card)',
+                  }}
+                >
+                  {day}
+                </button>
+              ))}
+            </div>
           </div>
         )}
 

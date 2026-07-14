@@ -1278,6 +1278,18 @@ export default function Schedule() {
   const [fullScreenOpen, setFullScreenOpen] = useState(false);
   const isFullScreenForm = fullScreenOpen;
 
+  // Hide the fixed bottom-nav while the rotated fullscreen timetable is
+  // open — on mobile the nav bar is a sibling fixed element that was
+  // showing through/overlapping the rotated schedule view near its edge.
+  useEffect(() => {
+    if (fullScreenOpen) {
+      document.body.classList.add('schedule-fullscreen-active');
+    } else {
+      document.body.classList.remove('schedule-fullscreen-active');
+    }
+    return () => document.body.classList.remove('schedule-fullscreen-active');
+  }, [fullScreenOpen]);
+
   const renderTimetable = (opts = {}) => {
     const tableStyle = { width: '100%', borderCollapse: 'collapse', fontSize: opts.large ? 15 : 13 };
     return (
@@ -1454,16 +1466,16 @@ export default function Schedule() {
 
   return (
     <div className="page-enter page-container content-page-bg" style={{ width: "100%", margin: "0 auto", paddingBottom: "20px", paddingLeft: "12px", paddingRight: "12px" }}>
-      <div className="card" style={{ marginBottom: 14, padding: '18px' }}>
+      <div className="card schedule-header-card" style={{ marginBottom: 14, padding: '18px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '12px', flexWrap: 'wrap', rowGap: '10px' }}>
           <div style={{ flex: 1, minWidth: 0 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap', marginBottom: '6px' }}>
-              <h1 style={{ fontSize: '20px', fontWeight: '800', letterSpacing: '-0.03em', margin: '0' }}>Class Schedule</h1>
+              <h1 className="schedule-header-title" style={{ fontSize: '20px', fontWeight: '800', letterSpacing: '-0.03em', margin: '0' }}>Class Schedule</h1>
               <span className="tag tag-blue">5-day week</span>
               {isGroupMode && <span className="tag tag-green">Shared · Class Group</span>}
               {isGroupMode && !canEditSchedule && <span className="tag tag-gray">View only</span>}
             </div>
-            <p style={{ fontSize: '13px', color: 'var(--muted)', margin: '0', maxWidth: '600px', lineHeight: 1.4 }}>
+            <p className="schedule-header-desc" style={{ fontSize: '13px', color: 'var(--muted)', margin: '0', maxWidth: '600px', lineHeight: 1.4 }}>
               {isGroupMode
                 ? (canEditSchedule
                   ? 'This schedule is shared with your class group. Changes you make here update for everyone.'
@@ -1471,12 +1483,12 @@ export default function Schedule() {
                 : 'Clean Sun–Thu routine builder. Pick a share format, then copy or import/export the schedule as needed.'}
             </p>
             {!isGroupMode && (
-              <p style={{ fontSize: '12px', color: 'var(--muted)', margin: '6px 0 0', maxWidth: '600px', lineHeight: 1.4 }}>
+              <p className="schedule-header-desc schedule-header-desc-secondary" style={{ fontSize: '12px', color: 'var(--muted)', margin: '6px 0 0', maxWidth: '600px', lineHeight: 1.4 }}>
                 Assign teachers first via <strong>Manage Course Teachers</strong> before adding schedule entries.
               </p>
             )}
           </div>
-          <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', justifyContent: 'flex-end' }}>
+          <div className="schedule-header-actions" style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', justifyContent: 'flex-end' }}>
             <button className="btn btn-ghost btn-sm" onClick={() => setEditingSettings(v => !v)} style={{ fontSize: '12px' }}>
               <Settings2 size={13} /> Settings
             </button>
@@ -1775,7 +1787,7 @@ export default function Schedule() {
       </div>
 
       {adding && (
-        <Modal onClose={cancelEdit} contentStyle={{ width: 'min(860px, 98vw)', maxHeight: '92vh', borderColor: 'var(--accent)', padding: 0, background: 'var(--bg)', overflow: 'hidden', display: 'flex', flexDirection: 'column', borderRadius: 24, boxShadow: '0 30px 80px rgba(0,0,0,0.16)' }}>
+        <Modal onClose={cancelEdit} contentClassName="add-class-modal-content" contentStyle={{ width: 'min(860px, 98vw)', maxHeight: '92vh', borderColor: 'var(--accent)', padding: 0, background: 'var(--bg)', overflow: 'hidden', display: 'flex', flexDirection: 'column', borderRadius: 24, boxShadow: '0 30px 80px rgba(0,0,0,0.16)' }}>
           <div style={{ padding: 24, borderBottom: '1px solid var(--border)', background: 'var(--bg)', position: 'sticky', top: 0, zIndex: 1 }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
               <div>
@@ -1913,7 +1925,7 @@ export default function Schedule() {
               <button
                 key={day}
                 onClick={() => setSelectedDay(day)}
-                className="btn"
+                className="btn day-chip"
                 style={{
                   padding: '8px 12px',
                   border: selectedDay === day ? '1px solid var(--accent)' : '1px solid var(--border)',

@@ -59,13 +59,13 @@ import { useQuestionBankData, getR2FileUrl } from '../../hooks/useQuestionBankDa
 // was redundant. Mobile tab bar shows the first 4 as always-visible
 // buttons + a "More" popover for the rest — see .faculty-tabs CSS.
 const TABS = [
-  { id: 'attendance', label: 'Attendance', icon: 'CheckSquare', enabled: true },
-  { id: 'schedule', label: 'Schedule', icon: 'Clock', enabled: true },
-  { id: 'notices', label: 'Notices', icon: 'Bell', enabled: true },
-  { id: 'marks', label: 'Marks', icon: 'GraduationCap', enabled: true },
   { id: 'syllabus', label: 'Syllabus', icon: 'BookMarked', enabled: true },
   { id: 'qbank', label: 'Question Bank', icon: 'FileText', enabled: true },
   { id: 'students', label: 'Students & CR', icon: 'Users', enabled: true },
+  { id: 'marks', label: 'Marks', icon: 'GraduationCap', enabled: true },
+  { id: 'attendance', label: 'Attendance', icon: 'CheckSquare', enabled: true },
+  { id: 'schedule', label: 'Schedule', icon: 'Clock', enabled: true },
+  { id: 'notices', label: 'Notices', icon: 'Bell', enabled: true },
 ];
 
 // (Previously used to split tabs into an always-visible "primary" row +

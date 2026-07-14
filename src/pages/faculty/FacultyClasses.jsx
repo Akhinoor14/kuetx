@@ -207,11 +207,11 @@ export function AddClassModal({ onClose, onCreated, batches, initialDay, initial
   };
 
   return (
-    <div style={{
+    <div className="faculty-add-class-overlay" style={{
       position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)',
       display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 9999, padding: 16,
     }}>
-      <div style={{
+      <div className="faculty-add-class-card" style={{
         background: 'var(--card)', borderRadius: 18, padding: 24, width: '100%', maxWidth: 480,
         maxHeight: '90vh', overflowY: 'auto', border: '1px solid var(--border)', boxShadow: '0 32px 80px rgba(0,0,0,0.28)',
       }}>
@@ -222,7 +222,7 @@ export function AddClassModal({ onClose, onCreated, batches, initialDay, initial
           </button>
         </div>
 
-        <div style={{ display: 'grid', gap: 12 }}>
+        <div className="faculty-add-class-fields" style={{ display: 'grid', gap: 12 }}>
           <div>
             <label style={labelStyle}>Department</label>
             <select style={inputStyle} value={dept} onChange={(e) => { setDept(e.target.value); setTerm(''); setCourseCode(''); }}>
@@ -256,7 +256,7 @@ export function AddClassModal({ onClose, onCreated, batches, initialDay, initial
           </div>
 
           {batchTermWarning && (
-            <div style={{
+            <div className="faculty-add-class-span2" style={{
               padding: '10px 12px', borderRadius: 8, background: 'color-mix(in srgb, #f59e0b 10%, var(--card))',
               border: '1px solid color-mix(in srgb, #f59e0b 35%, transparent)', fontSize: 12.5, color: 'var(--text)',
             }}>
@@ -265,7 +265,7 @@ export function AddClassModal({ onClose, onCreated, batches, initialDay, initial
           )}
 
           {joinOffer && (
-            <div style={{
+            <div className="faculty-add-class-span2" style={{
               padding: '10px 12px', borderRadius: 8, background: 'color-mix(in srgb, var(--accent) 8%, var(--card))',
               border: '1px solid color-mix(in srgb, var(--accent) 30%, transparent)', fontSize: 12.5, color: 'var(--text)',
             }}>
@@ -277,7 +277,7 @@ export function AddClassModal({ onClose, onCreated, batches, initialDay, initial
             </div>
           )}
 
-          <div style={{ display: 'flex', gap: 10 }}>
+          <div className="faculty-add-class-span2" style={{ display: 'flex', gap: 10 }}>
             <div style={{ flex: 1 }}>
               <label style={labelStyle}>Day</label>
               <select style={inputStyle} value={day} onChange={(e) => setDay(e.target.value)}>
@@ -293,7 +293,7 @@ export function AddClassModal({ onClose, onCreated, batches, initialDay, initial
           </div>
 
           {isSessionalCourse && (
-            <div>
+            <div className="faculty-add-class-span2">
               <label style={labelStyle}>This is a Sessional/Lab course</label>
               <div style={{ display: 'flex', gap: 8 }}>
                 <button
@@ -346,7 +346,7 @@ export function AddClassModal({ onClose, onCreated, batches, initialDay, initial
           )}
 
           {slotConflict && (
-            <div style={{
+            <div className="faculty-add-class-span2" style={{
               padding: '10px 12px', borderRadius: 8, background: 'color-mix(in srgb, #dc2626 8%, var(--card))',
               border: '1px solid color-mix(in srgb, #dc2626 35%, transparent)', fontSize: 12.5, color: 'var(--text)', lineHeight: 1.5,
             }}>
@@ -359,6 +359,7 @@ export function AddClassModal({ onClose, onCreated, batches, initialDay, initial
           <button
             onClick={handleCreate}
             disabled={saving || !dept || !batch || !term || !courseCode}
+            className="faculty-add-class-span2"
             style={{
               marginTop: 6, padding: '11px 16px', borderRadius: 8, border: 'none',
               background: 'var(--accent)', color: '#fff', fontWeight: 700, fontSize: 13.5,
