@@ -682,7 +682,6 @@ function StaffRolesView({ onBack, onSelectCategory, groups, countCtx }) {
       {selectedHolder && (
         <StaffHolderDetailModal holder={selectedHolder} onClose={() => setSelectedHolder(null)} />
       )}
-      </Section>
     </CategoryShell>
   );
 }
