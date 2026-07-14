@@ -49,6 +49,31 @@ export async function submitDeleteRequest(meta, items) {
   return docRef.id;
 }
 
+/**
+ * Founder direct-delete: same no-review-needed pattern as Founder QB
+ * uploads (see qbUploadRequests.js's isFounderUpload flag) — removes the
+ * live R2 object(s) immediately via the same Worker endpoint the review
+ * queue's approve step uses. No deleteRequests/{id} doc is created;
+ * Firestore rules must restrict this call path to Founder/Head of Ops.
+ *
+ * @param {string[]} keys - full R2 object keys to delete immediately
+ * @returns {Promise<{deleted: string[], notFound: string[]}>}
+ */
+export async function founderDeletePapers(keys) {
+  if (!WORKER_URL) throw new Error('VITE_QB_WORKER_URL is not configured');
+  if (!Array.isArray(keys) || keys.length === 0) throw new Error('No papers selected');
+
+  const idToken = await auth.currentUser.getIdToken();
+  const res = await fetch(`${WORKER_URL}/public-object`, {
+    method: 'DELETE',
+    headers: { Authorization: `Bearer ${idToken}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ keys }),
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.error || 'Failed to delete');
+  return { deleted: data.deleted || [], notFound: data.notFound || [] };
+}
+
 /** Founder/Head of Ops view — every pending delete request, oldest first. */
 export function subscribePendingDeleteRequests(callback) {
   return onSnapshot(

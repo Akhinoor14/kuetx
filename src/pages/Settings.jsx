@@ -46,6 +46,12 @@ export default function Settings() {
     try {
       await logout();
       flash('✓ Signed out. Your data is still safe locally.');
+      // Full reload after sign-out clears any stale cached React state
+      // (roles, staff/faculty status, profile, etc.) that was loaded for
+      // the previous session — same pattern already used elsewhere in
+      // this file after data-affecting actions (see the reload calls
+      // below in the import flow).
+      setTimeout(() => window.location.reload(), 800);
     } catch (err) {
       flash('✗ Sign out failed: ' + err.message, 'error');
     } finally {

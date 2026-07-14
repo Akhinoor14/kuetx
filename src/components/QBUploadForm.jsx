@@ -16,14 +16,26 @@
 // {ExamType}_{Year}.pdf) happens automatically — see buildLabel() in
 // qbUploadRequests.js. Nothing about that convention is typed by hand.
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { QB_DEPARTMENTS } from '../data/questionbank/questionBankData';
+import { QB_COURSE_CODES } from '../data/questionbank/qbCourseCodes';
 import { submitQBUpload, toQBDeptCode, EXAM_TYPES } from '../lib/qbUploadRequests';
 import BatchQBUpload from './BatchQBUpload';
 
 const TERMS = ['Y1T1', 'Y1T2', 'Y2T1', 'Y2T2', 'Y3T1', 'Y3T2', 'Y4T1', 'Y4T2'];
 const CURRENT_YEAR = new Date().getFullYear();
-const EXAM_YEARS = Array.from({ length: 8 }, (_, i) => String(CURRENT_YEAR - i));
+const MIN_EXAM_YEAR = 2010;
+const MAX_EXAM_YEAR = CURRENT_YEAR + 1;
+
+/** 4-digit year, MIN_EXAM_YEAR..MAX_EXAM_YEAR inclusive. */
+function validateExamYear(value) {
+  const trimmed = String(value || '').trim();
+  if (!trimmed) return 'Exam year is required';
+  if (!/^\d{4}$/.test(trimmed)) return 'Enter a 4-digit year';
+  const y = Number(trimmed);
+  if (y < MIN_EXAM_YEAR || y > MAX_EXAM_YEAR) return `Year must be between ${MIN_EXAM_YEAR} and ${MAX_EXAM_YEAR}`;
+  return '';
+}
 
 /**
  * @param {object} props
@@ -49,6 +61,7 @@ export default function QBUploadForm({ profile, groupId, isFounder = false, onUp
   const [courseTitle, setCourseTitle] = useState('');
   const [examType, setExamType] = useState('Regular');
   const [examYear, setExamYear] = useState(String(CURRENT_YEAR));
+  const [examYearTouched, setExamYearTouched] = useState(false);
   const [file, setFile] = useState(null);
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState('');
@@ -56,12 +69,29 @@ export default function QBUploadForm({ profile, groupId, isFounder = false, onUp
 
   const resolvedGroupId = isFounder ? null : (groupId || null);
 
-  const canSubmit = dept && (isFounder || batch) && term && courseCode.trim() && examType && examYear && file && !busy;
+  // Course dropdown: once dept + term are both picked, look up that
+  // dept+term's curriculum course list. QB_COURSE_CODES only covers 12 of
+  // 16 depts (see that file's header comment) — for the 4 uncovered
+  // depts, or any dept+term combo genuinely missing from the data, fall
+  // back to manual text entry rather than showing an empty, unusable
+  // dropdown. This never restricts Founder's free-dept-picker flexibility;
+  // it only changes how courseCode/courseTitle get filled in.
+  const courseOptions = useMemo(() => {
+    if (!dept || !term) return [];
+    return QB_COURSE_CODES[dept]?.[term] || [];
+  }, [dept, term]);
+  const hasCourseDropdown = dept && term && courseOptions.length > 0;
+
+  const examYearError = examYearTouched ? validateExamYear(examYear) : '';
+
+  const canSubmit = dept && (isFounder || batch) && term && courseCode.trim() && examType
+    && examYear && !validateExamYear(examYear) && file && !busy;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErr('');
     setOkMsg('');
+    setExamYearTouched(true);
     if (!canSubmit) return;
     setBusy(true);
     try {
@@ -84,6 +114,7 @@ export default function QBUploadForm({ profile, groupId, isFounder = false, onUp
         ? 'Uploaded and published live — no review needed for Founder uploads.'
         : 'Submitted — your department\'s Senior Campus Lead will review it next.');
       setCourseCode(''); setCourseTitle(''); setFile(null);
+      setExamYearTouched(false);
       onUploaded?.(id);
     } catch (e2) {
       setErr(e2?.message || 'Upload failed — try again.');
@@ -138,7 +169,11 @@ export default function QBUploadForm({ profile, groupId, isFounder = false, onUp
         <div style={fieldWrap}>
           <label style={labelStyle}>Department</label>
           {isFounder ? (
-            <select value={dept} onChange={(e) => setDept(e.target.value)} style={inputStyle}>
+            <select
+              value={dept}
+              onChange={(e) => { setDept(e.target.value); setCourseCode(''); setCourseTitle(''); }}
+              style={inputStyle}
+            >
               <option value="">Select…</option>
               {Object.keys(QB_DEPARTMENTS).map((code) => (
                 <option key={code} value={code}>{code} — {QB_DEPARTMENTS[code]}</option>
@@ -162,7 +197,11 @@ export default function QBUploadForm({ profile, groupId, isFounder = false, onUp
 
         <div style={fieldWrap}>
           <label style={labelStyle}>Term</label>
-          <select value={term} onChange={(e) => setTerm(e.target.value)} style={inputStyle}>
+          <select
+            value={term}
+            onChange={(e) => { setTerm(e.target.value); setCourseCode(''); setCourseTitle(''); }}
+            style={inputStyle}
+          >
             <option value="">Select…</option>
             {TERMS.map((t) => <option key={t} value={t}>{t}</option>)}
           </select>
@@ -170,15 +209,53 @@ export default function QBUploadForm({ profile, groupId, isFounder = false, onUp
       </div>
 
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, marginBottom: 10 }}>
-        <div style={fieldWrap}>
-          <label style={labelStyle}>Course code</label>
-          <input value={courseCode} onChange={(e) => setCourseCode(e.target.value)} placeholder="e.g. CSE 2109" style={inputStyle} />
-        </div>
-        <div style={{ ...fieldWrap, flex: '2 1 220px' }}>
-          <label style={labelStyle}>Course title (optional, for display)</label>
-          <input value={courseTitle} onChange={(e) => setCourseTitle(e.target.value)} placeholder="e.g. Data Structures" style={inputStyle} />
-        </div>
+        {hasCourseDropdown ? (
+          <div style={{ ...fieldWrap, flex: '2 1 260px' }}>
+            <label style={labelStyle}>Course</label>
+            <select
+              value={courseCode}
+              onChange={(e) => {
+                const code = e.target.value;
+                setCourseCode(code);
+                const match = courseOptions.find((c) => c.code === code);
+                setCourseTitle(match?.title || '');
+              }}
+              style={inputStyle}
+            >
+              <option value="">Select…</option>
+              {courseOptions.map((c) => (
+                <option key={c.code} value={c.code}>{c.code} — {c.title}</option>
+              ))}
+            </select>
+          </div>
+        ) : (
+          <>
+            <div style={fieldWrap}>
+              <label style={labelStyle}>Course code</label>
+              <input
+                value={courseCode}
+                onChange={(e) => setCourseCode(e.target.value)}
+                placeholder="e.g. CSE 2109"
+                style={inputStyle}
+              />
+            </div>
+            <div style={{ ...fieldWrap, flex: '2 1 220px' }}>
+              <label style={labelStyle}>Course title (optional, for display)</label>
+              <input
+                value={courseTitle}
+                onChange={(e) => setCourseTitle(e.target.value)}
+                placeholder="e.g. Data Structures"
+                style={inputStyle}
+              />
+            </div>
+          </>
+        )}
       </div>
+      {dept && term && !hasCourseDropdown && (
+        <p style={{ fontSize: 11, color: 'var(--muted)', marginTop: -6, marginBottom: 10 }}>
+          No curriculum course list on file for {dept} {term} — type the course code manually.
+        </p>
+      )}
 
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, marginBottom: 10 }}>
         <div style={fieldWrap}>
@@ -189,9 +266,20 @@ export default function QBUploadForm({ profile, groupId, isFounder = false, onUp
         </div>
         <div style={fieldWrap}>
           <label style={labelStyle}>Exam year</label>
-          <select value={examYear} onChange={(e) => setExamYear(e.target.value)} style={inputStyle}>
-            {EXAM_YEARS.map((y) => <option key={y} value={y}>{y}</option>)}
-          </select>
+          <input
+            type="number"
+            inputMode="numeric"
+            min={MIN_EXAM_YEAR}
+            max={MAX_EXAM_YEAR}
+            value={examYear}
+            onChange={(e) => setExamYear(e.target.value)}
+            onBlur={() => setExamYearTouched(true)}
+            placeholder={`e.g. ${CURRENT_YEAR}`}
+            style={{ ...inputStyle, borderColor: examYearError ? 'var(--danger)' : undefined }}
+          />
+          {examYearError && (
+            <div style={{ fontSize: 10.5, color: 'var(--danger)', marginTop: 3 }}>{examYearError}</div>
+          )}
         </div>
         <div style={{ ...fieldWrap, flex: '1 1 200px' }}>
           <label style={labelStyle}>PDF file (max 100MB)</label>

@@ -11,6 +11,7 @@ import PWAInstallPrompt from './components/PWAInstallPrompt';
 import PWAUpdatePrompt from './components/PWAUpdatePrompt';
 import { BottomNav, useIsMobileNav } from './components/BottomNav';
 import GlobalToasts from './components/GlobalToasts';
+import FloatingUploadBar from './components/FloatingUploadBar';
 import NoticeToast from './components/NoticeToast';
 import PushPermissionBanner from './components/PushPermissionBanner';
 import BackupReminderGate from './components/BackupReminderGate';
@@ -252,6 +253,7 @@ function Layout({ authState, onboardingActive }) {
         <PWAUpdatePrompt />
         {!isQuestionBankViewer && <BottomNav />}
         <GlobalToasts />
+        <FloatingUploadBar />
         {!onboardingActive && <NoticeToast />}
         <DataSafeToast suppress={onboardingActive} />
         <ClassJoinIntro />
