@@ -54,7 +54,11 @@ export async function submitQBUpload(file, meta, uploaderInfo, isFounderUpload =
   const uid = auth.currentUser?.uid;
   if (!uid) throw new Error('Not signed in');
   if (!file || file.type !== 'application/pdf') throw new Error('File must be a PDF');
-  if (file.size > 25 * 1024 * 1024) throw new Error('File exceeds 25MB limit');
+  // Cloudflare Workers cap request bodies well below "unlimited" in
+  // practice, so this stays a real ceiling rather than removed entirely
+  // — 100MB comfortably covers scanned question-bank PDFs while still
+  // failing fast instead of hanging on an accidental huge upload.
+  if (file.size > 100 * 1024 * 1024) throw new Error('File exceeds 100MB limit');
   if (!QB_DEPARTMENTS[meta.dept]) throw new Error(`Unknown department: ${meta.dept}`);
   if (!meta.term || !meta.courseCode || !meta.examType || !meta.examYear) {
     throw new Error('Missing required fields');

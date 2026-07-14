@@ -192,8 +192,8 @@ async function handleStage(request, env) {
   if (!file || file.type !== 'application/pdf') {
     return json({ error: 'File must be a PDF' }, env, 400);
   }
-  if (file.size > 25 * 1024 * 1024) {
-    return json({ error: 'File exceeds 25MB limit' }, env, 400);
+  if (file.size > 100 * 1024 * 1024) {
+    return json({ error: 'File exceeds 100MB limit' }, env, 400);
   }
   if (!DEPARTMENTS.has(dept)) return json({ error: `Unknown dept: ${dept}` }, env, 400);
   if (!TERM_RE.test(term)) return json({ error: `Invalid term: ${term}` }, env, 400);

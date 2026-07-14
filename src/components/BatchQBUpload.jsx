@@ -76,10 +76,10 @@ export default function BatchQBUpload({ profile, onUploaded }) {
           relPath,
           parsed: parsed.ok ? parsed : null,
           status: parsed.ok
-            ? (file.size > 25 * 1024 * 1024 ? 'error' : 'ready')
+            ? (file.size > 100 * 1024 * 1024 ? 'error' : 'ready')
             : 'error',
           error: parsed.ok
-            ? (file.size > 25 * 1024 * 1024 ? 'Exceeds 25MB limit' : '')
+            ? (file.size > 100 * 1024 * 1024 ? 'Exceeds 100MB limit' : '')
             : parsed.reason,
         };
       });

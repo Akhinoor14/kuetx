@@ -194,7 +194,7 @@ export default function QBUploadForm({ profile, groupId, isFounder = false, onUp
           </select>
         </div>
         <div style={{ ...fieldWrap, flex: '1 1 200px' }}>
-          <label style={labelStyle}>PDF file (max 25MB)</label>
+          <label style={labelStyle}>PDF file (max 100MB)</label>
           <input
             type="file"
             accept="application/pdf"

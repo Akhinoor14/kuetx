@@ -124,11 +124,18 @@ export default function ClassRoster() {
 
   return (
     <div className="content-page-bg" style={{ width: 'min(95vw, 1560px)', margin: '0 auto', padding: '16px 14px' }}>
-      <div className="content-page-hero">
+      <div className="roster-hero">
         <div className="content-page-hero-icon">
           <Users size={18} color="var(--accent)" />
         </div>
-        <h1 className="content-page-hero-title">Class Roster</h1>
+        <div style={{ minWidth: 0 }}>
+          <h1 className="content-page-hero-title">Class Roster</h1>
+          {groupId && (
+            <p className="content-page-hero-subtitle">
+              Manage <strong>{groupLabel}</strong> — verify members, appoint ACR or hand off CR, remove members, and send notices to your class.
+            </p>
+          )}
+        </div>
       </div>
 
       {!groupId ? (
@@ -137,10 +144,6 @@ export default function ClassRoster() {
         </p>
       ) : (
         <>
-          <p style={{ color: 'var(--muted)', fontSize: 13, marginBottom: 16 }}>
-            Manage <strong>{groupLabel}</strong> — verify members, appoint ACR or hand off CR, remove members, and send notices to your class.
-          </p>
-
           {handoffIntent && myRole === 'cr' && (
             <div style={{
               padding: '10px 14px', borderRadius: 10, marginBottom: 14,

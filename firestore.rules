@@ -436,15 +436,19 @@ service cloud.firestore {
         || (isSignedIn() && resource.data.uploadedBy == request.auth.uid);
 
       // Founder can create for ANY dept (bypasses the group-scope check —
-      // matches isAdmin() short-circuiting everywhere else in this file).
-      // Everyone else: must be the Campus Lead of the exact group they're
-      // claiming to upload for, and dept/groupId must actually agree.
+      // matches isAdmin() short-circuiting everywhere else in this file),
+      // AND writes the doc pre-approved (status: 'approved') since Founder
+      // uploads skip review entirely — see qbUploadRequests.js's
+      // isFounderUpload flag. Everyone else: must be the Campus Lead of
+      // the exact group they're claiming to upload for, dept/groupId must
+      // actually agree, and the doc must start life as 'pending' (only a
+      // reviewer's later update can move it to 'approved').
       allow create: if isSignedIn() && request.resource.data.uploadedBy == request.auth.uid
-        && request.resource.data.status == 'pending'
         && (
-          isAdmin()
+          (isAdmin() && request.resource.data.status == 'approved')
           || (
-            request.resource.data.groupId == (request.resource.data.batch + '_' + request.resource.data.dept)
+            request.resource.data.status == 'pending'
+            && request.resource.data.groupId == (request.resource.data.batch + '_' + request.resource.data.dept)
             && isCLFor(request.resource.data.groupId)
           )
         );
