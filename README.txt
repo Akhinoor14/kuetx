@@ -6,9 +6,18 @@ Copy each file below into the SAME path in your project
 
 1. firestore.indexes.json
    -> D:\Skill\Website\kuetx\firestore.indexes.json
-   Added the missing composite index for the "deleteRequests"
-   collection (status ASC, requestedAt ASC) so it matches what's
-   already live on Firebase and stops the CLI delete-index prompt.
+   - Added the "deleteRequests" composite index (status ASC,
+     requestedAt ASC) so it matches what's live and stops the
+     CLI delete-index prompt.
+   - REMOVED the "members" COLLECTION_GROUP composite index —
+     Firebase rejected it with "this index is not necessary,
+     configure using single field index controls" because a
+     single-field lookup (just "uid") must be a field override,
+     not a composite index.
+   - ADDED a fieldOverrides entry for members.uid enabling
+     COLLECTION_GROUP scope (same pattern as the existing
+     roles.role override). This is what actually fixes the
+     getStaffDisplayInfo lookup on /team.
 
 2. src/nav.js
    -> D:\Skill\Website\kuetx\src\nav.js
@@ -34,8 +43,10 @@ Copy each file below into the SAME path in your project
    that described the old desktop/mobile Self Study split.
 
 --------------------------------------------------------------
-Still needed on your end (not a code change):
-Re-run `firebase deploy --only firestore:indexes` and let it
-finish without interrupting, so the "members" COLLECTION_GROUP_ASC
-index actually builds. That's why staff cards on /team were
-showing raw UID instead of name/dept.
+After copying, run again:
+  firebase deploy --only firestore:rules,firestore:indexes,functions
+
+This time the members index goes through fieldOverrides, which
+Firebase accepts immediately (no build wait like composite
+indexes). Once deployed, /team should show real names/depts
+instead of raw UIDs.
