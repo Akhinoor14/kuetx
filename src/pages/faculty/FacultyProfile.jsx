@@ -19,6 +19,7 @@ import { notify } from '../../lib/notify';
 import { getProfilePhotoURL } from '../../lib/profilePicture';
 import { AvatarUploadModal } from '../../components/AvatarUploadModal';
 import { getShortTitle } from '../../lib/facultyTitle';
+import { useIsFaculty } from '../../hooks/useIsFaculty';
 
 // ─── Shared field styles (used only inside the edit form) ─────────────────
 const inputStyle = {
@@ -61,9 +62,9 @@ const Section = ({ title, icon, children, action }) => (
 );
 
 const InfoRow = ({ label, value, accent }) => (
-  <div style={{ display: 'grid', gridTemplateColumns: '130px 1fr', gap: 10, alignItems: 'flex-start' }}>
+  <div style={{ display: 'grid', gridTemplateColumns: 'minmax(70px, 130px) minmax(0, 1fr)', gap: 10, alignItems: 'flex-start' }}>
     <span style={{ fontSize: 11, color: 'var(--muted)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: 0.5, paddingTop: 1 }}>{label}</span>
-    <span style={{ fontSize: 14, color: accent ? 'var(--accent)' : 'var(--text)', fontWeight: accent ? 700 : 500, wordBreak: 'break-word' }}>{value || '—'}</span>
+    <span style={{ fontSize: 14, color: accent ? 'var(--accent)' : 'var(--text)', fontWeight: accent ? 700 : 500, wordBreak: 'break-word', minWidth: 0 }}>{value || '—'}</span>
   </div>
 );
 
@@ -92,6 +93,7 @@ function findUnitName(code) {
 }
 
 export default function FacultyProfile() {
+  const { isFounderBypass } = useIsFaculty();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
@@ -168,6 +170,7 @@ export default function FacultyProfile() {
   const displayName = form.preferredName || form.name || 'Faculty';
   const unitName = findUnitName(form.dept);
   const shortTitle = getShortTitle(form.title);
+  const isVerified = isFounderBypass || !!verifiedAt;
 
   return (
     <div className="hub-page-bg page-enter dashboard-page" style={{ minHeight: '100vh' }}>
@@ -233,6 +236,16 @@ export default function FacultyProfile() {
                 backgroundClip: 'text',
                 color: 'transparent',
               }}>{displayName}</span>
+              {isVerified && (
+                <Icons.BadgeCheck
+                  size={18}
+                  color="#3b82f6"
+                  fill="#3b82f6"
+                  strokeWidth={0}
+                  style={{ flexShrink: 0, alignSelf: 'center' }}
+                  title="Blue Tick verified faculty"
+                />
+              )}
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap', justifyContent: 'center' }}>
               {unitName && <span style={{ fontSize: 12.5, color: 'var(--muted)', fontWeight: 600 }}>{unitName}</span>}

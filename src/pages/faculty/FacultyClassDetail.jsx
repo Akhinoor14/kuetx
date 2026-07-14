@@ -121,7 +121,7 @@ function EditDayTimeModal({ assignment, groupId, onClose, onSaved }) {
     }}>
       <div style={{
         background: 'var(--card)', borderRadius: 18, padding: 24, width: '100%', maxWidth: 420,
-        border: '1px solid var(--border)', boxShadow: '0 32px 80px rgba(0,0,0,0.28)',
+        maxHeight: '90vh', overflowY: 'auto', border: '1px solid var(--border)', boxShadow: '0 32px 80px rgba(0,0,0,0.28)',
       }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 18 }}>
           <div style={{ fontWeight: 800, fontSize: 17, color: 'var(--text)' }}>Edit Class Time</div>
@@ -1073,9 +1073,11 @@ function QuestionBankTab({ assignment }) {
   );
 }
 
-function MarksSetupForm({ assignment, groupId, teacherSlot, onSaved }) {
-  const [attendanceWeight, setAttendanceWeight] = useState(15);
-  const [components, setComponents] = useState([{ key: 'ct', label: 'CT', max: 30 }]);
+function MarksSetupForm({ assignment, groupId, teacherSlot, onSaved, existingConfig, onCancel }) {
+  const [attendanceWeight, setAttendanceWeight] = useState(existingConfig?.attendanceWeight ?? 15);
+  const [components, setComponents] = useState(
+    existingConfig?.components?.length ? existingConfig.components.map((c) => ({ ...c })) : [{ key: 'ct', label: 'CT', max: 30 }]
+  );
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
 
@@ -1114,13 +1116,14 @@ function MarksSetupForm({ assignment, groupId, teacherSlot, onSaved }) {
   return (
     <div style={{ padding: 16, borderRadius: 12, border: '1px solid var(--border)', background: 'var(--card)' }}>
       <div style={{ fontWeight: 700, fontSize: 13.5, color: 'var(--text)', marginBottom: 6 }}>
-        Set up your marks breakdown
+        {existingConfig ? 'Edit your marks breakdown' : 'Set up your marks breakdown'}
       </div>
       <div style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 14, lineHeight: 1.5 }}>
         You have 45 marks total for this course. Attendance is always its own component
         (scored as a percentage of the weight you set here) -- everything else is entirely
         up to you: name your own components (CT, Assignment, Presentation, Quiz, whatever
         fits) and set each one's maximum. Everything must add up to exactly 45.
+        {existingConfig && ' Changing a component\'s max here does not retroactively rescale marks you\'ve already entered for it -- re-check any student whose max you shrink.'}
       </div>
 
       <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10 }}>
@@ -1163,13 +1166,24 @@ function MarksSetupForm({ assignment, groupId, teacherSlot, onSaved }) {
 
       {error && <div style={{ fontSize: 12, color: 'var(--danger, #dc2626)', marginBottom: 10 }}>{error}</div>}
 
-      <button
-        onClick={handleSave}
-        disabled={saving}
-        style={{ padding: '9px 16px', borderRadius: 8, border: 'none', background: 'var(--accent)', color: '#fff', fontWeight: 700, fontSize: 13, cursor: 'pointer', opacity: saving ? 0.6 : 1 }}
-      >
-        {saving ? 'Saving...' : 'Save Breakdown'}
-      </button>
+      <div style={{ display: 'flex', gap: 10 }}>
+        {existingConfig && (
+          <button
+            onClick={onCancel}
+            disabled={saving}
+            style={{ padding: '9px 16px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--bg)', color: 'var(--text)', fontWeight: 700, fontSize: 13, cursor: 'pointer' }}
+          >
+            Cancel
+          </button>
+        )}
+        <button
+          onClick={handleSave}
+          disabled={saving}
+          style={{ padding: '9px 16px', borderRadius: 8, border: 'none', background: 'var(--accent)', color: '#fff', fontWeight: 700, fontSize: 13, cursor: 'pointer', opacity: saving ? 0.6 : 1 }}
+        >
+          {saving ? 'Saving...' : existingConfig ? 'Save Changes' : 'Save Breakdown'}
+        </button>
+      </div>
     </div>
   );
 }
@@ -1186,6 +1200,33 @@ function MarksTab({ assignment, groupId }) {
   const [sendingAll, setSendingAll] = useState(false);
   const [exportingUid, setExportingUid] = useState(null);
   const [exportingClass, setExportingClass] = useState(false);
+  // Real names for "Teacher 1" / "Teacher 2" on the exported PDF — resolved
+  // from assignment.teacherUids (index 0 = teacher1, index 1 = teacher2)
+  // via each teacher's own faculty profile, same source FacultyProfile.jsx
+  // itself reads from. Falls back to the generic "Teacher 1"/"Teacher 2"
+  // label if a slot is empty (co-teacher not yet joined) or the profile
+  // has no name set yet.
+  const [teacherNames, setTeacherNames] = useState({ teacher1: '', teacher2: '' });
+  // Whether the "edit breakdown" form is showing over the normal marks
+  // grid. Previously there was NO way back into MarksSetupForm once
+  // markConfig existed — a teacher who wanted to change a component's max,
+  // rename something, or add/remove a component after the first save had
+  // no path to do so at all. This toggles that form back open on demand.
+  const [editingBreakdown, setEditingBreakdown] = useState(false);
+
+  useEffect(() => {
+    const uids = assignment?.teacherUids || [];
+    if (!uids.length) { setTeacherNames({ teacher1: '', teacher2: '' }); return; }
+    let cancelled = false;
+    Promise.all(uids.slice(0, 2).map((uid) => (uid ? getFacultyDoc(uid) : null))).then(([t1doc, t2doc]) => {
+      if (cancelled) return;
+      setTeacherNames({
+        teacher1: t1doc?.preferredName || t1doc?.name || '',
+        teacher2: t2doc?.preferredName || t2doc?.name || '',
+      });
+    }).catch(() => { if (!cancelled) setTeacherNames({ teacher1: '', teacher2: '' }); });
+    return () => { cancelled = true; };
+  }, [assignment?.teacherUids]);
 
   useEffect(() => {
     const uid = auth.currentUser?.uid;
@@ -1245,8 +1286,20 @@ function MarksTab({ assignment, groupId }) {
     );
   }
 
-  if (!markConfig) {
-    return <MarksSetupForm assignment={assignment} groupId={groupId} teacherSlot={teacherSlot} onSaved={() => getTeacherMarkComponents(groupId, assignment.id, teacherSlot).then(setMarkConfig)} />;
+  if (!markConfig || editingBreakdown) {
+    return (
+      <MarksSetupForm
+        assignment={assignment}
+        groupId={groupId}
+        teacherSlot={teacherSlot}
+        existingConfig={markConfig || null}
+        onCancel={() => setEditingBreakdown(false)}
+        onSaved={() => {
+          setEditingBreakdown(false);
+          getTeacherMarkComponents(groupId, assignment.id, teacherSlot).then(setMarkConfig);
+        }}
+      />
+    );
   }
 
   const recordsByUid = Object.fromEntries((records || []).map((r) => [r.studentUid, r]));
@@ -1301,7 +1354,7 @@ function MarksTab({ assignment, groupId }) {
   const handleExportStudent = async (student) => {
     setExportingUid(student.id);
     try {
-      await exportStudentMarksPdf(assignment, student, recordsByUid[student.id] || {});
+      await exportStudentMarksPdf(assignment, student, recordsByUid[student.id] || {}, teacherNames);
     } catch (e) {
       notify(e.message || 'Could not export PDF.', 'error');
     } finally {
@@ -1312,7 +1365,7 @@ function MarksTab({ assignment, groupId }) {
   const handleExportClass = async () => {
     setExportingClass(true);
     try {
-      await exportClassSummaryPdf(assignment, members, recordsByUid);
+      await exportClassSummaryPdf(assignment, members, recordsByUid, teacherNames);
     } catch (e) {
       notify(e.message || 'Could not export PDF.', 'error');
     } finally {
@@ -1343,13 +1396,21 @@ function MarksTab({ assignment, groupId }) {
         <div style={{ fontSize: 12, color: 'var(--muted)' }}>
           You are <strong style={{ color: 'var(--text)' }}>{teacherSlot === 'teacher1' ? 'Teacher 1' : 'Teacher 2'}</strong> -- your own 45-mark quota (attendance {markConfig.attendanceWeight} + {markConfig.components.map((c) => `${c.label} ${c.max}`).join(' + ')})
         </div>
-        <button
-          onClick={handleSendAllReviewed}
-          disabled={sendingAll}
-          style={{ padding: '7px 14px', borderRadius: 8, border: 'none', background: 'var(--accent)', color: '#fff', fontWeight: 700, fontSize: 12, cursor: 'pointer', opacity: sendingAll ? 0.6 : 1 }}
-        >
-          {sendingAll ? 'Sending...' : 'Send All Reviewed'}
-        </button>
+        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+          <button
+            onClick={() => setEditingBreakdown(true)}
+            style={{ padding: '7px 14px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--bg)', color: 'var(--text)', fontWeight: 700, fontSize: 12, cursor: 'pointer' }}
+          >
+            Edit Breakdown
+          </button>
+          <button
+            onClick={handleSendAllReviewed}
+            disabled={sendingAll}
+            style={{ padding: '7px 14px', borderRadius: 8, border: 'none', background: 'var(--accent)', color: '#fff', fontWeight: 700, fontSize: 12, cursor: 'pointer', opacity: sendingAll ? 0.6 : 1 }}
+          >
+            {sendingAll ? 'Sending...' : 'Send All Reviewed'}
+          </button>
+        </div>
       </div>
 
       <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 10 }}>
@@ -1546,4 +1607,3 @@ export default function FacultyClassDetail() {
     </div>
   );
 }
-

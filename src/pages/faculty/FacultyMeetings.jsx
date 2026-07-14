@@ -66,7 +66,7 @@ function MeetingCard({ meeting, onEdit, onDelete, isToday }) {
     <div className={`meeting-card${isToday ? ' meeting-card-today' : ''}`} style={cardStyle}>
       <div className="meeting-card-top">
         <div style={{ display: 'flex', gap: 10, alignItems: 'flex-start', minWidth: 0 }}>
-          <div className="meeting-card-icon"><Icon size={16} /></div>
+          <div className="meeting-card-icon"><Icon size={20} /></div>
           <div style={{ minWidth: 0 }}>
             <div className="meeting-card-type">{meta.label}</div>
             <div className="meeting-card-title">{meeting.title}</div>

@@ -728,14 +728,7 @@ export async function clRevokeCR(groupId, targetUid) {
   const batch = writeBatch(db);
   // legacyCRClaim cleared alongside role — see note in clApproveLeaveCR;
   // same "Claims CR" badge bug applies to a CL-forced revoke too.
-  batch.update(doc(db, 'groups', groupId, 'members', targetUid), { role: 'member', legacyCRClaim: false });
-  batch.set(doc(db, 'groups', groupId, 'meta', 'crStatus'), { count: increment(-1) }, { merge: true });
-  // Clean up any crRequests doc left over from when this person originally
-  // became CR — Firestore rules forbid deleting crRequests docs (audit
-  // trail), so we mark it 'revoked' instead. subscribeCRRequests already
-  // filters to status === 'pending', so a leftover 'approved' doc was never
-  // itself shown as pending — but this closes the loop cleanly so no doc
-  // tied to this uid can ever be mistaken for an active/pending claim.
+  batch.update(doc(db, 'groups', groupId, 'members', targetUid), { role: 'member', legacyCRClaim: false, mobile: '' });
   const reqRef = doc(db, 'groups', groupId, 'crRequests', targetUid);
   // getDocFromServer, not getDoc: a stale/cached "doesn't exist" read here
   // would skip marking a genuinely-existing request 'revoked', leaving it
@@ -785,7 +778,7 @@ export async function handoffCR(groupId, currentUid, successorUid, currentProfil
   const batch = writeBatch(db);
   // legacyCRClaim cleared alongside role — see note in clApproveLeaveCR;
   // same "Claims CR" badge bug applies to a direct CR-to-CR handoff too.
-  batch.update(doc(db, 'groups', groupId, 'members', currentUid), { role: 'member', legacyCRClaim: false });
+  batch.update(doc(db, 'groups', groupId, 'members', currentUid), { role: 'member', legacyCRClaim: false, mobile: '' });
   batch.update(doc(db, 'groups', groupId, 'members', successorUid), { role: 'cr' });
   // If the departing CR also had a pending "leave CR" request queued
   // (asked to step down, then handed off directly before CL acted on it),
@@ -873,9 +866,7 @@ export async function clApproveLeaveCR(groupId, requestDocId, targetUid) {
   // ClassmatesList's "Claims CR" badge actually checks (role !== 'cr' &&
   // legacyCRClaim), so leaving it untouched here left the badge stuck on
   // ex-CRs forever even after their role correctly flipped to 'member'.
-  batch.update(doc(db, 'groups', groupId, 'members', targetUid), { role: 'member', legacyCRClaim: false });
-  batch.set(doc(db, 'groups', groupId, 'meta', 'crStatus'), { count: increment(-1) }, { merge: true });
-  batch.update(doc(db, 'groups', groupId, 'crRequests', requestDocId), { status: 'approved' });
+  batch.update(doc(db, 'groups', groupId, 'members', targetUid), { role: 'member', legacyCRClaim: false, mobile: '' });
   await batch.commit();
 }
 

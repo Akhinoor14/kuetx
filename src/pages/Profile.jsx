@@ -141,9 +141,9 @@ const StatCard = ({ icon, label, value, sub, color = 'var(--accent)', ring }) =>
 );
 
 const InfoRow = ({ label, value, accent }) => (
-  <div style={{ display: 'grid', gridTemplateColumns: '110px 1fr', gap: 10, alignItems: 'flex-start' }}>
+  <div style={{ display: 'grid', gridTemplateColumns: 'minmax(60px, 110px) minmax(0, 1fr)', gap: 10, alignItems: 'flex-start' }}>
     <span style={{ fontSize: 11, color: 'var(--muted)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: 0.5, paddingTop: 1 }}>{label}</span>
-    <span style={{ fontSize: 14, color: accent ? 'var(--accent)' : 'var(--text)', fontWeight: accent ? 700 : 500, wordBreak: 'break-word' }}>{value || '—'}</span>
+    <span style={{ fontSize: 14, color: accent ? 'var(--accent)' : 'var(--text)', fontWeight: accent ? 700 : 500, wordBreak: 'break-word', minWidth: 0 }}>{value || '—'}</span>
   </div>
 );
 

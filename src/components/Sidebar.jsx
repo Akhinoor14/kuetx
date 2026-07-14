@@ -76,13 +76,13 @@ export function Sidebar({ open, onClose, authState }) {
     const unsub = noticeApi.subscribeAllNotices(profile, groupId, (notices) => {
       latestNoticesRef.current = notices;
       recompute();
-    });
+    }, 'student', { isViewerCR: isRealCR });
     window.addEventListener('kuetx:store-updated', recompute);
     return () => {
       unsub();
       window.removeEventListener('kuetx:store-updated', recompute);
     };
-  }, [profile.dept, profile.batch]);
+  }, [profile.dept, profile.batch, isRealCR]);
 
   useEffect(() => {
     const groupId = getGroupId(profile);

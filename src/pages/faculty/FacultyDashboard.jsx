@@ -36,7 +36,12 @@ export default function FacultyDashboard() {
   const [heldCardIndex, setHeldCardIndex] = useState(0);
   const [sentNotices, setSentNotices] = useState([]);
   const [alertsExpanded, setAlertsExpanded] = useState(false);
-  const [classesViewMode, setClassesViewMode] = useState('list');
+  const [classesViewMode, setClassesViewMode] = useState('grid');
+  // Blue Tick — same verification signal used to gate Add Class/Broadcast
+  // elsewhere (FacultyClasses.jsx, FacultyNoticeBroadcast.jsx): Founder
+  // bypass always counts as verified, otherwise a real verifiedAt timestamp
+  // on the faculty doc is required.
+  const isVerified = isFounderBypass || !!facultyProfile?.verifiedAt;
 
   useEffect(() => {
     const uid = auth.currentUser?.uid;
@@ -396,6 +401,16 @@ export default function FacultyDashboard() {
                     backgroundClip: 'text',
                     color: 'transparent',
                   }}>{facultyDisplayName || 'Faculty'}</span>
+                  {isVerified && (
+                    <Icons.BadgeCheck
+                      size={20}
+                      color="#3b82f6"
+                      fill="#3b82f6"
+                      strokeWidth={0}
+                      style={{ flexShrink: 0, alignSelf: 'center' }}
+                      title="Blue Tick verified faculty"
+                    />
+                  )}
                 </h1>
               </div>
             </div>
@@ -449,7 +464,7 @@ export default function FacultyDashboard() {
              than a half-width column comfortably gives it. ── */}
         <div className="dashboard-home-columns" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))', gap: 12, marginBottom: 12, alignItems: 'stretch' }}>
 
-        <div className="card" style={{ padding: '14px 16px', borderRadius: 14, margin: 0, height: '100%', display: 'flex', flexDirection: 'column' }}>
+        <div className="card" style={{ padding: '14px 16px', borderRadius: 14, margin: 0, height: '100%', minHeight: 260, display: 'flex', flexDirection: 'column' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
             <div style={{ fontSize: 11, fontWeight: 800, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.07em', display: 'flex', alignItems: 'center', gap: 6 }}>
               <Icons.CalendarClock size={13} /> Today's Classes
@@ -509,7 +524,7 @@ export default function FacultyDashboard() {
             term's worth of sent notices, showing everything at once
             would make this card taller than Today's Classes/My Classes
             almost every time. */}
-        <div className="card" style={{ padding: '14px 16px', borderRadius: 14, margin: 0, height: '100%', display: 'flex', flexDirection: 'column' }}>
+        <div className="card" style={{ padding: '14px 16px', borderRadius: 14, margin: 0, height: '100%', minHeight: 260, display: 'flex', flexDirection: 'column' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
             <div style={{ fontSize: 11, fontWeight: 800, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.07em', display: 'flex', alignItems: 'center', gap: 6 }}>
               <Icons.Bell size={13} /> Alerts &amp; Notices

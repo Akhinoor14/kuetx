@@ -6,6 +6,8 @@ import * as alertApi from '../lib/alertUtils';
 import { computeAlerts } from '../lib/alertUtils';
 import { getProfile } from '../store/store';
 import { getGroupId } from '../lib/groupUtils';
+import { subscribeMyRole } from '../lib/groupSync';
+import { auth } from '../lib/firebase';
 
 /**
  * Top-bar bell dropdown. Single time-sorted list (newest first) mixing:
@@ -94,11 +96,26 @@ export function NotificationPanel({ isOpen, onClose }) {
   const dismissedAlertIds = useMemo(() => alertApi.getDismissedAlertIds(), [refreshTick]);
   const readNoticeIds = useMemo(() => noticeApi.getReadNoticeIds(), [refreshTick]);
 
+  // Whether the signed-in student is CR/ACR in their own group — gates
+  // whether a Teacher's cr_only notice shows up here at all (see
+  // filterStudentFacingNotices in noticeUtils.js). Without this, a
+  // cr_only notice never appeared in this bell dropdown for ANYONE,
+  // including the CR/ACR it was actually sent to — subscribeAllNotices
+  // defaults isViewerCR to false when the caller doesn't resolve and pass
+  // it explicitly, same pattern Notice.jsx already uses for the full panel.
+  const [isViewerCR, setIsViewerCR] = useState(false);
+  useEffect(() => {
+    if (!groupId || !auth.currentUser?.uid) { setIsViewerCR(false); return; }
+    return subscribeMyRole(groupId, auth.currentUser.uid, (role) => {
+      setIsViewerCR(role === 'cr' || role === 'acr');
+    });
+  }, [groupId]);
+
   // Live notice feed (global admin broadcasts + group CR/ACR notices).
   const [notices, setNotices] = useState([]);
   useEffect(() => {
-    return noticeApi.subscribeAllNotices(profile, groupId, setNotices);
-  }, [profile, groupId]);
+    return noticeApi.subscribeAllNotices(profile, groupId, setNotices, 'student', { isViewerCR });
+  }, [profile, groupId, isViewerCR]);
 
   // Stamping (a write) happens here, in an effect, not during the render-time
   // useMemo below — store.set() dispatches kuetx:store-updated, which this

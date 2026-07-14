@@ -1281,13 +1281,13 @@ export default function Schedule() {
   const renderTimetable = (opts = {}) => {
     const tableStyle = { width: '100%', borderCollapse: 'collapse', fontSize: opts.large ? 15 : 13 };
     return (
-      <div className={`timetable-grid${opts.fullView ? ' full-view' : ''}`} style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch', scrollBehavior: 'smooth' }}>
+      <div className={`timetable-grid${opts.fullView ? ' full-view' : ''}`} style={{ overflowX: opts.fullView ? 'hidden' : 'auto', WebkitOverflowScrolling: 'touch', scrollBehavior: 'smooth' }}>
         <table style={tableStyle}>
           <thead style={{ position: 'sticky', top: 0, zIndex: 2 }}>
             <tr>
-              <th className="time-col" style={{ padding: 'clamp(8px, 2vw, 12px) clamp(6px, 1.5vw, 12px)', borderBottom: '1px solid var(--border)', background: 'var(--surface)', minWidth: 'clamp(85px, 15vw, 110px)', textAlign: 'left', fontSize: 'clamp(11px, 2.5vw, 13px)' }}>Time</th>
+              <th className="time-col" style={{ padding: 'clamp(8px, 2vw, 12px) clamp(6px, 1.5vw, 12px)', borderBottom: '1px solid var(--border)', background: 'var(--surface)', minWidth: opts.fullView ? 0 : 'clamp(85px, 15vw, 110px)', textAlign: 'left', fontSize: 'clamp(11px, 2.5vw, 13px)' }}>Time</th>
               {DAYS.map(d => (
-                <th key={d} className={`timetable-day-col${d === selectedDay ? ' selected-day' : ''}`} style={{ padding: 0, borderBottom: '1px solid var(--border)', background: 'var(--surface)', minWidth: 'clamp(120px, 20vw, 160px)' }}>
+                <th key={d} className={`timetable-day-col${d === selectedDay ? ' selected-day' : ''}`} style={{ padding: 0, borderBottom: '1px solid var(--border)', background: 'var(--surface)', minWidth: opts.fullView ? 0 : 'clamp(120px, 20vw, 160px)' }}>
                   <button
                     onClick={() => setSelectedDay(d)}
                     style={{

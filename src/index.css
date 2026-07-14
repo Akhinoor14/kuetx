@@ -5549,12 +5549,44 @@ input[type="range"]::-webkit-slider-thumb {
     left: 50%;
     transform: translate(-50%, -50%) rotate(90deg);
     transform-origin: center center;
-    width: 100vh;
-    height: 100vw;
+    /* dvh/dvw track the browser's actual visible viewport (address bar
+       show/hide, safe areas) instead of the old 100vh/100vw, which could
+       clip the rotated box at the edges on many phones. */
+    width: 100dvh;
+    height: 100dvw;
     max-width: none;
     max-height: none;
-    overflow: auto;
+    /* Only ever scroll vertically in here — horizontal scroll/drag used to
+       fight the intended "swipe down to see later periods" gesture because
+       the table inside never stretched to fill the rotated width (see the
+       .full-view rule below), so the box scrolled sideways too. */
+    overflow-x: hidden;
+    overflow-y: auto;
     padding: 14px;
+    box-sizing: border-box;
+  }
+
+  /* The rotated/full-view timetable itself: force it to actually fill the
+     rotated box's width instead of keeping its natural min-content width.
+     Previously `.full-view` was referenced by JSX (renderTimetable adds
+     the class) and by the sibling ":not(.full-view)" rule below, but never
+     had its own styling — so in fullscreen the table just overflowed
+     sideways instead of stretching, and only THEN could you scroll down. */
+  .timetable-grid.full-view {
+    overflow-x: hidden !important;
+    width: 100%;
+  }
+  .timetable-grid.full-view table {
+    width: 100%;
+    table-layout: fixed;
+  }
+  .timetable-grid.full-view .time-col {
+    width: 72px;
+    min-width: 72px;
+  }
+  .timetable-grid.full-view .timetable-day-col {
+    width: auto;
+    min-width: 0;
   }
 
   .day-preview-panel {
@@ -9136,20 +9168,21 @@ input[type="range"]::-webkit-slider-thumb {
    link buried at the bottom of a cramped row. */
 .meeting-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 12px;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
 }
 
 .meeting-card {
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  padding: 14px 15px 15px;
-  border-radius: 14px;
+  gap: 11px;
+  padding: 20px 22px 22px;
+  border-radius: 18px;
   border: 1px solid var(--meeting-color-border, var(--border));
   background: var(--card);
   overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.04);
   transition: transform 0.16s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.16s ease;
 }
 
@@ -9157,31 +9190,31 @@ input[type="range"]::-webkit-slider-thumb {
   content: '';
   position: absolute;
   top: 0; left: 0; right: 0;
-  height: 3px;
+  height: 4px;
   background: var(--meeting-color, var(--accent));
 }
 
 .meeting-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 26px rgba(var(--accentRGB), 0.13);
+  transform: translateY(-3px);
+  box-shadow: 0 14px 32px rgba(var(--accentRGB), 0.16);
 }
 
 .meeting-card-today {
   border-color: var(--meeting-color, var(--accent));
-  box-shadow: 0 0 0 1px var(--meeting-color, var(--accent)) inset;
+  box-shadow: 0 0 0 1.5px var(--meeting-color, var(--accent)) inset, 0 2px 10px rgba(0,0,0,0.04);
 }
 
 .meeting-card-top {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 8px;
+  gap: 10px;
 }
 
 .meeting-card-icon {
-  width: 32px;
-  height: 32px;
-  border-radius: 9px;
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
   background: var(--meeting-color-bg, color-mix(in srgb, var(--accent) 15%, var(--surface)));
   color: var(--meeting-color, var(--accent));
   display: flex;
@@ -9192,7 +9225,7 @@ input[type="range"]::-webkit-slider-thumb {
 
 .meeting-card-actions {
   display: flex;
-  gap: 2px;
+  gap: 3px;
   flex-shrink: 0;
 }
 
@@ -9201,8 +9234,8 @@ input[type="range"]::-webkit-slider-thumb {
   border: none;
   cursor: pointer;
   color: var(--muted);
-  padding: 5px;
-  border-radius: 6px;
+  padding: 7px;
+  border-radius: 8px;
   transition: background 0.12s ease, color 0.12s ease;
 }
 
@@ -9212,34 +9245,35 @@ input[type="range"]::-webkit-slider-thumb {
 }
 
 .meeting-card-title {
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 800;
   color: var(--text);
   line-height: 1.35;
 }
 
 .meeting-card-type {
-  font-size: 10.5px;
+  font-size: 11px;
   font-weight: 700;
   color: var(--meeting-color, var(--accent));
   text-transform: uppercase;
-  letter-spacing: 0.03em;
+  letter-spacing: 0.04em;
+  margin-top: 2px;
 }
 
 .meeting-card-meta {
-  font-size: 12px;
+  font-size: 12.5px;
   color: var(--muted);
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
+  gap: 8px;
   align-items: center;
 }
 
 .meeting-card-notes {
-  font-size: 12px;
+  font-size: 12.5px;
   color: var(--text);
   opacity: 0.78;
-  line-height: 1.45;
+  line-height: 1.5;
 }
 
 .meeting-card-join {
@@ -9247,12 +9281,12 @@ input[type="range"]::-webkit-slider-thumb {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
-  padding: 8px 12px;
-  border-radius: 9px;
+  gap: 7px;
+  padding: 10px 14px;
+  border-radius: 10px;
   background: var(--meeting-color, var(--accent));
   color: #fff;
-  font-size: 12.5px;
+  font-size: 13px;
   font-weight: 700;
   text-decoration: none;
   transition: filter 0.12s ease;

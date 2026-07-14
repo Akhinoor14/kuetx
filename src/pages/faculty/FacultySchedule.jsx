@@ -74,6 +74,10 @@ export default function FacultySchedule() {
   // onClick below) — clicking an already-occupied cell does nothing here,
   // since editing an existing class is My Classes' job, not this page's.
   const [addAt, setAddAt] = useState(null);
+  // Mobile "Full Screen" landscape view — same pattern as student
+  // Schedule.jsx's fullScreenOpen, added here since this page previously
+  // had no escape hatch from the cramped 5-day-wide table on phones.
+  const [fullScreenOpen, setFullScreenOpen] = useState(false);
   // Same Blue Tick gate as My Classes' own "+ Add Class" button — this
   // grid's empty-cell click opens the exact same AddClassModal, so it
   // needs the same guard (create write is server-gated on
@@ -199,6 +203,120 @@ export default function FacultySchedule() {
       .sort((a, b) => a.slot.localeCompare(b.slot));
   }, [flatEntries, today]);
 
+  const renderGrid = (opts = {}) => (
+    <div
+      className={`timetable-grid${opts.fullView ? ' full-view' : ''}`}
+      style={{ overflowX: opts.fullView ? 'hidden' : 'auto', WebkitOverflowScrolling: 'touch' }}
+    >
+      <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: opts.fullView ? 14 : 13 }}>
+        <thead style={{ position: 'sticky', top: 0, zIndex: 2 }}>
+          <tr>
+            <th className="time-col" style={{ padding: '10px 10px', borderBottom: '1px solid var(--border)', background: 'var(--surface)', minWidth: opts.fullView ? 0 : 100, textAlign: 'left', fontSize: 12 }}>
+              Time
+            </th>
+            {DAYS.map((d) => (
+              <th key={d} className="timetable-day-col" style={{ padding: 0, borderBottom: '1px solid var(--border)', background: 'var(--surface)', minWidth: opts.fullView ? 0 : 140 }}>
+                <button
+                  onClick={() => setSelectedDay(d)}
+                  style={{
+                    width: '100%', padding: '12px 12px', border: 'none', background: 'transparent', cursor: 'pointer',
+                    fontWeight: d === selectedDay || d === today ? 700 : 500,
+                    color: d === selectedDay || d === today ? 'var(--accent)' : 'var(--text)',
+                  }}
+                >
+                  {formatDayShort(d)}
+                </button>
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {slotList.map((slot) => {
+            const breakSlot = isBreakSlot(slot);
+            return (
+              <tr key={slot}>
+                <td style={{
+                  padding: '10px 10px', borderBottom: '1px solid var(--border)', borderRight: '1px solid var(--border)',
+                  fontWeight: 700, fontSize: 12, color: 'var(--muted)', fontFamily: 'JetBrains Mono, monospace',
+                  whiteSpace: 'nowrap', background: breakSlot ? 'rgba(239,68,68,0.08)' : 'var(--bg)',
+                }}>
+                  {slotPreview(slot)}
+                </td>
+                {DAYS.map((d) => {
+                  // A slot covered by an earlier anchor's rowSpan (e.g.
+                  // periods 2 and 3 of a Full Sessional block anchored
+                  // at period 1) renders NO <td> at all for this row —
+                  // the anchor cell's rowSpan already occupies that
+                  // table position. Emitting a <td> here too would
+                  // break the row's column count.
+                  if (!breakSlot && tableLayout.covered[d]?.has(slot)) return null;
+
+                  const anchored = tableLayout.starts[d]?.[slot] || [];
+                  // At most one anchor per day+slot (see comment above
+                  // tableLayout) — a teacher's own classes can't double
+                  // book the same day+slot — but .map stays defensive
+                  // rather than assuming exactly one.
+                  const rowSpan = anchored.length ? anchored[0].rowSpan : 1;
+                  const isEmptyCell = !breakSlot && anchored.length === 0;
+
+                  return (
+                    <td
+                      key={d}
+                      rowSpan={rowSpan > 1 ? rowSpan : undefined}
+                      onClick={isEmptyCell && isVerified ? () => setAddAt({ day: d, slot }) : undefined}
+                      title={
+                        isEmptyCell
+                          ? (isVerified ? 'Add a class in this slot' : 'Blue Tick verification needed before you can add a class')
+                          : undefined
+                      }
+                      style={{
+                        padding: 6, borderBottom: '1px solid var(--border)', borderRight: '1px solid var(--border)',
+                        verticalAlign: 'top', minHeight: 64,
+                        cursor: isEmptyCell ? (isVerified ? 'pointer' : 'not-allowed') : 'default',
+                        background: breakSlot ? 'rgba(239,68,68,0.08)' : d === selectedDay ? 'rgba(59,130,246,0.035)' : 'transparent',
+                      }}
+                    >
+                      {isEmptyCell && (
+                        <div style={{
+                          display: 'flex', alignItems: 'center', justifyContent: 'center',
+                          height: '100%', minHeight: 40, opacity: 0.28,
+                        }}>
+                          <Icons.Plus size={14} />
+                        </div>
+                      )}
+                      {anchored.map(({ entry, rowSpan: rs }) => {
+                        const color = getBatchColor(entry.batch, batches);
+                        return (
+                          <div key={entry.assignmentId} style={{
+                            padding: '8px 9px', borderRadius: 11, fontSize: 12, lineHeight: 1.35, marginBottom: 4,
+                            // The td's own rowSpan attribute (set above) is what actually
+                            // makes this cell visually span multiple periods — no height
+                            // trick needed on the inner chip itself.
+                            height: rs > 1 ? '100%' : undefined,
+                            background: `linear-gradient(180deg, ${color.bg}, ${color.bg})`,
+                            border: `1px solid ${color.border}`, color: 'var(--text)',
+                          }}>
+                            <div style={{ fontWeight: 700 }}>{entry.batch?.toUpperCase()} {entry.dept}</div>
+                            <div style={{ fontSize: 11, color: color.text, fontWeight: 700 }}>{entry.courseCode}</div>
+                            {rs > 1 && (
+                              <div style={{ fontSize: 10, color: 'var(--muted)', marginTop: 2, display: 'flex', alignItems: 'center', gap: 3 }}>
+                                <Icons.Layers size={10} /> Full sessional block
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </td>
+                  );
+                })}
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    </div>
+  );
+
   return (
     <div className="hub-page-bg" style={{ minHeight: '100vh' }}>
       <div style={{ padding: '20px 24px 40px', width: '97%', maxWidth: 'none', margin: '0 auto' }}>
@@ -209,7 +327,7 @@ export default function FacultySchedule() {
             </div>
             <h1 className="hub-page-hero-title">My Schedule</h1>
           </div>
-          <div style={{ display: 'flex', gap: 6 }}>
+          <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
             {Object.values(TIME_MODELS).map((m) => (
               <button
                 key={m.id}
@@ -225,6 +343,12 @@ export default function FacultySchedule() {
                 {m.name}
               </button>
             ))}
+            <button className="btn btn-ghost mobile-fullscreen-btn" onClick={() => setFullScreenOpen(true)} aria-label="Open schedule full screen">
+              <span className="fs-icon" aria-hidden style={{ display: 'inline-block', lineHeight: 0 }}>
+                ⤢
+              </span>
+              <span className="fs-label" style={{ marginLeft: 8, fontWeight: 700 }}>Full Screen</span>
+            </button>
           </div>
         </div>
 
@@ -272,116 +396,7 @@ export default function FacultySchedule() {
           </div>
         )}
 
-        {!loading && (
-          <div style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
-              <thead style={{ position: 'sticky', top: 0, zIndex: 2 }}>
-                <tr>
-                  <th style={{ padding: '10px 10px', borderBottom: '1px solid var(--border)', background: 'var(--surface)', minWidth: 100, textAlign: 'left', fontSize: 12 }}>
-                    Time
-                  </th>
-                  {DAYS.map((d) => (
-                    <th key={d} style={{ padding: 0, borderBottom: '1px solid var(--border)', background: 'var(--surface)', minWidth: 140 }}>
-                      <button
-                        onClick={() => setSelectedDay(d)}
-                        style={{
-                          width: '100%', padding: '12px 12px', border: 'none', background: 'transparent', cursor: 'pointer',
-                          fontWeight: d === selectedDay || d === today ? 700 : 500,
-                          color: d === selectedDay || d === today ? 'var(--accent)' : 'var(--text)',
-                        }}
-                      >
-                        {formatDayShort(d)}
-                      </button>
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {slotList.map((slot) => {
-                  const breakSlot = isBreakSlot(slot);
-                  return (
-                    <tr key={slot}>
-                      <td style={{
-                        padding: '10px 10px', borderBottom: '1px solid var(--border)', borderRight: '1px solid var(--border)',
-                        fontWeight: 700, fontSize: 12, color: 'var(--muted)', fontFamily: 'JetBrains Mono, monospace',
-                        whiteSpace: 'nowrap', background: breakSlot ? 'rgba(239,68,68,0.08)' : 'var(--bg)',
-                      }}>
-                        {slotPreview(slot)}
-                      </td>
-                      {DAYS.map((d) => {
-                        // A slot covered by an earlier anchor's rowSpan (e.g.
-                        // periods 2 and 3 of a Full Sessional block anchored
-                        // at period 1) renders NO <td> at all for this row —
-                        // the anchor cell's rowSpan already occupies that
-                        // table position. Emitting a <td> here too would
-                        // break the row's column count.
-                        if (!breakSlot && tableLayout.covered[d]?.has(slot)) return null;
-
-                        const anchored = tableLayout.starts[d]?.[slot] || [];
-                        // At most one anchor per day+slot (see comment above
-                        // tableLayout) — a teacher's own classes can't double
-                        // book the same day+slot — but .map stays defensive
-                        // rather than assuming exactly one.
-                        const rowSpan = anchored.length ? anchored[0].rowSpan : 1;
-                        const isEmptyCell = !breakSlot && anchored.length === 0;
-
-                        return (
-                          <td
-                            key={d}
-                            rowSpan={rowSpan > 1 ? rowSpan : undefined}
-                            onClick={isEmptyCell && isVerified ? () => setAddAt({ day: d, slot }) : undefined}
-                            title={
-                              isEmptyCell
-                                ? (isVerified ? 'Add a class in this slot' : 'Blue Tick verification needed before you can add a class')
-                                : undefined
-                            }
-                            style={{
-                              padding: 6, borderBottom: '1px solid var(--border)', borderRight: '1px solid var(--border)',
-                              verticalAlign: 'top', minHeight: 64,
-                              cursor: isEmptyCell ? (isVerified ? 'pointer' : 'not-allowed') : 'default',
-                              background: breakSlot ? 'rgba(239,68,68,0.08)' : d === selectedDay ? 'rgba(59,130,246,0.035)' : 'transparent',
-                            }}
-                          >
-                            {isEmptyCell && (
-                              <div style={{
-                                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                height: '100%', minHeight: 40, opacity: 0.28,
-                              }}>
-                                <Icons.Plus size={14} />
-                              </div>
-                            )}
-                            {anchored.map(({ entry, rowSpan: rs }) => {
-                              const color = getBatchColor(entry.batch, batches);
-                              return (
-                                <div key={entry.assignmentId} style={{
-                                  padding: '8px 9px', borderRadius: 11, fontSize: 12, lineHeight: 1.35, marginBottom: 4,
-                                  // The td's own rowSpan attribute (set above) is what actually
-                                  // makes this cell visually span multiple periods — no height
-                                  // trick needed on the inner chip itself.
-                                  height: rs > 1 ? '100%' : undefined,
-                                  background: `linear-gradient(180deg, ${color.bg}, ${color.bg})`,
-                                  border: `1px solid ${color.border}`, color: 'var(--text)',
-                                }}>
-                                  <div style={{ fontWeight: 700 }}>{entry.batch?.toUpperCase()} {entry.dept}</div>
-                                  <div style={{ fontSize: 11, color: color.text, fontWeight: 700 }}>{entry.courseCode}</div>
-                                  {rs > 1 && (
-                                    <div style={{ fontSize: 10, color: 'var(--muted)', marginTop: 2, display: 'flex', alignItems: 'center', gap: 3 }}>
-                                      <Icons.Layers size={10} /> Full sessional block
-                                    </div>
-                                  )}
-                                </div>
-                              );
-                            })}
-                          </td>
-                        );
-                      })}
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-        )}
+        {!loading && renderGrid()}
 
         {!loading && Object.keys(assignments).length === 0 && (
           <div style={{ marginTop: 16, padding: 24, borderRadius: 14, border: '1px solid var(--border)', background: 'var(--card)', color: 'var(--muted)', fontSize: 13.5, textAlign: 'center' }}>
@@ -389,6 +404,21 @@ export default function FacultySchedule() {
           </div>
         )}
       </div>
+
+      {fullScreenOpen && (
+        <div className="fullscreen-overlay" style={{ zIndex: 1100 }} onClick={() => setFullScreenOpen(false)}>
+          <div className="fullscreen-content fullscreen-rotated" onClick={(e) => e.stopPropagation()}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 10, marginBottom: 12 }}>
+              <div>
+                <div style={{ fontWeight: 700, fontSize: 16 }}>Schedule Full View</div>
+                <div style={{ fontSize: 12, color: 'var(--muted)' }}>Tap an empty slot to add a class.</div>
+              </div>
+              <button className="btn btn-ghost" onClick={() => setFullScreenOpen(false)}>Close</button>
+            </div>
+            {renderGrid({ fullView: true })}
+          </div>
+        </div>
+      )}
 
       {addAt && (
         <AddClassModal

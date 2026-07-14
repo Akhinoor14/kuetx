@@ -2,8 +2,10 @@ import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Bell, X } from 'lucide-react';
 import { subscribeAllNotices } from '../lib/noticeUtils';
+import { subscribeMyRole } from '../lib/groupSync';
 import { getProfile } from '../store/store';
 import { getGroupId } from '../lib/groupUtils';
+import { auth } from '../lib/firebase';
 
 // Popup (toast) for brand-new notices — separate from GlobalToasts.jsx
 // (which is a generic bottom-center action-feedback toast used by
@@ -47,9 +49,21 @@ export default function NoticeToast() {
   const bootedRef = useRef(false);
   const navigate = useNavigate();
 
+  const [isViewerCR, setIsViewerCR] = useState(false);
+  const profileRef = useRef(getProfile());
+  const groupIdRef = useRef(getGroupId(profileRef.current));
+
   useEffect(() => {
-    const profile = getProfile();
-    const gid = getGroupId(profile);
+    const gid = groupIdRef.current;
+    if (!gid || !auth.currentUser?.uid) { setIsViewerCR(false); return; }
+    return subscribeMyRole(gid, auth.currentUser.uid, (role) => {
+      setIsViewerCR(role === 'cr' || role === 'acr');
+    });
+  }, []);
+
+  useEffect(() => {
+    const profile = profileRef.current;
+    const gid = groupIdRef.current;
     const unsub = subscribeAllNotices(profile, gid, (notices) => {
       if (!bootedRef.current) {
         // First snapshot: baseline everything as "seen", no popups.
@@ -64,9 +78,9 @@ export default function NoticeToast() {
       saveSeen(seenRef.current);
       // Newest first into the queue.
       setQueue((q) => [...fresh.sort((a, b) => b.createdAt - a.createdAt), ...q]);
-    });
+    }, 'student', { isViewerCR });
     return unsub;
-  }, []);
+  }, [isViewerCR]);
 
   // Move queued items into the visible stack whenever there's room.
   useEffect(() => {

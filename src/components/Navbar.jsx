@@ -9,6 +9,8 @@ import * as alertApi from '../lib/alertUtils';
 import { computeAlerts } from '../lib/alertUtils';
 import { getProfile } from '../store/store';
 import { getGroupId } from '../lib/groupUtils';
+import { subscribeMyRole } from '../lib/groupSync';
+import { auth } from '../lib/firebase';
 import { NotificationPanel } from './NotificationPanel';
 import GuideModal from './GuideModal';
 
@@ -98,14 +100,27 @@ export function Navbar({ onMenuClick }) {
   const groupId = useMemo(() => getGroupId(profileForNotices), [profileForNotices]);
   const readNoticeIds = useMemo(() => noticeApi.getReadNoticeIds(), [refreshTick]);
 
+  // Whether the signed-in student is CR/ACR — gates whether a Teacher's
+  // cr_only notice counts toward the unread badge at all (see
+  // filterStudentFacingNotices in noticeUtils.js). Without this the badge
+  // undercounted for a CR/ACR: a cr_only notice sent specifically to them
+  // never incremented the number they see on the bell icon.
+  const [isViewerCR, setIsViewerCR] = useState(false);
+  useEffect(() => {
+    if (!groupId || !auth.currentUser?.uid) { setIsViewerCR(false); return; }
+    return subscribeMyRole(groupId, auth.currentUser.uid, (role) => {
+      setIsViewerCR(role === 'cr' || role === 'acr');
+    });
+  }, [groupId]);
+
   // Live notice feed — was previously the dead getNotices() stub (always
   // returned []), so the bell badge never reflected real notices. Now
   // subscribes the same way NotificationPanel does, so a new notice
   // updates the badge count immediately.
   const [notices, setNotices] = useState([]);
   useEffect(() => {
-    return noticeApi.subscribeAllNotices(profileForNotices, groupId, setNotices);
-  }, [profileForNotices, groupId]);
+    return noticeApi.subscribeAllNotices(profileForNotices, groupId, setNotices, 'student', { isViewerCR });
+  }, [profileForNotices, groupId, isViewerCR]);
 
   const unreadNoticeCount = noticeApi.getUnreadNotices(notices, readNoticeIds).length;
 

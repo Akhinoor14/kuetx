@@ -289,8 +289,15 @@ function CRDetailModal({ member, onClose }) {
               <div style={{ height: 1, background: 'var(--border)' }} />
               <DetailRow label="Mobile" value={member.mobile} href={`tel:${member.mobile}`} />
               <div style={{ height: 1, background: 'var(--border)' }} />
+              {/* Only one number is ever collected from a CR/ACR (see
+                  ClaimCRCard.jsx — "mobile number", mandatory). This
+                  WhatsApp link is a best-effort assumption that the same
+                  number is reachable on WhatsApp, NOT a separately
+                  confirmed contact channel — most Bangladeshi numbers are
+                  on WhatsApp, but it's not guaranteed. Labeled explicitly
+                  so a faculty member doesn't mistake it for verified data. */}
               <DetailRow
-                label="WhatsApp"
+                label="WhatsApp (same number)"
                 value={member.mobile}
                 href={`https://wa.me/${String(member.mobile).replace(/[^0-9]/g, '')}`}
               />
