@@ -21,9 +21,10 @@ import { useIsFaculty } from '../../hooks/useIsFaculty';
 import { subscribeMyClassIndex, getFacultyAssignment } from '../../lib/facultyClassSync';
 import { subscribeMembers } from '../../lib/groupSync';
 import { subscribeSessionAttendance } from '../../lib/facultyMarksSync';
-import { DAYS } from '../../lib/timeModels';
+import { DAYS, parseSlotRange } from '../../lib/timeModels';
 import { getFacultyDoc } from '../../lib/facultySync';
 import { getShortTitle } from '../../lib/facultyTitle';
+import BlueTick from '../../components/BlueTick';
 import * as noticeApi from '../../lib/noticeUtils';
 
 export default function FacultyDashboard() {
@@ -243,9 +244,15 @@ export default function FacultyDashboard() {
   });
 
   // Today's classes — flattened list across all active assignments whose
-  // dayTimeSlots include today, sorted by slot. Same "list on top" idea
-  // as the student Dashboard borrows from Attendance.jsx's Today's Classes
-  // strip — surfaced here with priority, right under the hero.
+  // dayTimeSlots include today. Previously sorted only by the slot STRING
+  // ("10:40 AM-11:30 AM" vs "2:00 PM-2:50 PM" etc. compared alphabetically),
+  // which doesn't track real clock time and never removes a class once its
+  // time has passed — a finished class just sat at the top all day.
+  // Now: classes still to come (or in progress) are ordered soonest-first,
+  // and any class whose end time has already passed today is dropped from
+  // the list entirely, so the next upcoming class naturally rises to the
+  // top as the day goes on.
+  const nowMinutes = new Date().getHours() * 60 + new Date().getMinutes();
   const todaysClasses = activeAssignments
     .flatMap((c) => {
       const a = assignments[c.assignmentId];
@@ -254,7 +261,21 @@ export default function FacultyDashboard() {
         .filter((s) => s.day === todayName)
         .map((s) => ({ assignmentId: c.assignmentId, groupId: c.groupId, slot: s.slot, courseCode: a.courseCode, courseTitle: a.courseTitle, batch: c.batch, dept: c.dept }));
     })
-    .sort((a, b) => String(a.slot).localeCompare(String(b.slot)));
+    .filter((c) => {
+      const range = parseSlotRange(c.slot);
+      // Unparseable slot strings (e.g. "Manual") are kept — safer to show
+      // an odd one than to silently drop a real class from the list.
+      if (!range) return true;
+      return range.end > nowMinutes;
+    })
+    .sort((a, b) => {
+      const rangeA = parseSlotRange(a.slot);
+      const rangeB = parseSlotRange(b.slot);
+      if (!rangeA && !rangeB) return String(a.slot).localeCompare(String(b.slot));
+      if (!rangeA) return 1;
+      if (!rangeB) return -1;
+      return rangeA.start - rangeB.start;
+    });
 
   const statCard = (icon, label, value, sub, color) => {
     const Icon = Icons[icon] || Icons.Circle;
@@ -402,14 +423,7 @@ export default function FacultyDashboard() {
                     color: 'transparent',
                   }}>{facultyDisplayName || 'Faculty'}</span>
                   {isVerified && (
-                    <Icons.BadgeCheck
-                      size={20}
-                      color="#3b82f6"
-                      fill="#3b82f6"
-                      strokeWidth={0}
-                      style={{ flexShrink: 0, alignSelf: 'center' }}
-                      title="Blue Tick verified faculty"
-                    />
+                    <BlueTick size={18} color="green" title="Verified faculty" />
                   )}
                 </h1>
               </div>

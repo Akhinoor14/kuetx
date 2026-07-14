@@ -817,6 +817,7 @@ function SessionsTab({ assignment, groupId }) {
 function AttendanceTab({ assignment, groupId }) {
   const [members, setMembers] = useState(null);
   const [sessions, setSessions] = useState(null);
+  const [plannerLogs, setPlannerLogs] = useState(null);
   const [facultyName, setFacultyName] = useState('');
   const [date, setDate] = useState(() => todayStr());
   // Tracks whether the current `date` value is just "whatever today was"
@@ -859,6 +860,15 @@ function AttendanceTab({ assignment, groupId }) {
     return subscribeSessionAttendance(groupId, assignment.id, setSessions);
   }, [groupId, assignment]);
 
+  // Feeds the auto-link to Sessions & Count below — needed to (a) dedup
+  // against a session that's already logged for this date (either by this
+  // same auto-link earlier, or manually by the teacher/CR) and (b) compute
+  // the right sequence number when we do create one.
+  useEffect(() => {
+    if (!groupId) { setPlannerLogs([]); return; }
+    return subscribePlannerLogs(groupId, setPlannerLogs);
+  }, [groupId]);
+
   useEffect(() => {
     const uid = auth.currentUser?.uid;
     if (!uid) return;
@@ -883,6 +893,7 @@ function AttendanceTab({ assignment, groupId }) {
   const handleSave = async () => {
     setSaving(true);
     try {
+      const wasFirstSaveForDate = !existingSessionForDate;
       await createOrUpdateSessionAttendance(groupId, assignment.id, {
         sessionId: existingSessionForDate?.id || null,
         date,
@@ -891,6 +902,40 @@ function AttendanceTab({ assignment, groupId }) {
         attendance: draftMarks,
         loggedBy: { uid: auth.currentUser.uid, role: 'faculty', name: facultyName },
       });
+
+      // Auto-link to Sessions & Count: taking attendance for a date IS
+      // strong proof a class was actually held that day, so the first
+      // attendance save for a given date also bumps the session count —
+      // no separate manual "+1" needed for the common case. Only on the
+      // FIRST save for this date (editing an already-taken date's marks
+      // shouldn't double-count), and only if nothing's already logged for
+      // this exact date (a teacher's own earlier manual "+1", or a CR's,
+      // both count — we never create a second entry for the same day).
+      if (wasFirstSaveForDate) {
+        const courseId = assignment?.courseId;
+        const logsForCourse = (plannerLogs || []).filter((l) => l.courseId === courseId);
+        const alreadyLoggedThisDate = logsForCourse.some((l) => String(l.loggedAt || '').slice(0, 10) === date);
+        if (!alreadyLoggedThisDate) {
+          try {
+            await logFacultySession(groupId, {
+              uid: auth.currentUser.uid,
+              name: facultyName,
+              courseId,
+              courseCode: assignment.courseCode,
+              courseType: assignment.courseType,
+              existingLogsForCourse: logsForCourse,
+              date,
+              source: 'attendance',
+            });
+          } catch (linkErr) {
+            // Attendance itself already saved successfully above — don't
+            // fail the whole save (or confuse the teacher) over the
+            // secondary Sessions & Count link failing.
+            console.error('Could not auto-log session count from attendance:', linkErr);
+          }
+        }
+      }
+
       notify('Attendance saved.', 'success');
     } catch (e) {
       notify(e.message || 'Could not save attendance.', 'error');
@@ -899,7 +944,7 @@ function AttendanceTab({ assignment, groupId }) {
     }
   };
 
-  if (members === null || sessions === null) {
+  if (members === null || sessions === null || plannerLogs === null) {
     return <div style={{ color: 'var(--muted)', fontSize: 13, padding: '16px 0' }}>Loading…</div>;
   }
 
@@ -1310,8 +1355,15 @@ function MarksTab({ assignment, groupId }) {
     return recordsByUid[studentUid]?.[`${teacherSlot}Marks`]?.[key] ?? '';
   };
 
-  const setField = (studentUid, key, value) => {
-    setDraft((prev) => ({ ...prev, [studentUid]: { ...prev[studentUid], [key]: value === '' ? '' : Number(value) } }));
+  const setField = (studentUid, key, value, max) => {
+    let v = value === '' ? '' : Number(value);
+    // The HTML `max` attribute on <input type="number"> is only a soft
+    // hint — it doesn't stop someone typing or pasting a bigger number.
+    // Clamp for real here so a component can never be saved above its
+    // own configured cap.
+    if (v !== '' && typeof max === 'number' && v > max) v = max;
+    if (v !== '' && v < 0) v = 0;
+    setDraft((prev) => ({ ...prev, [studentUid]: { ...prev[studentUid], [key]: v } }));
   };
 
   const buildFieldsForSave = (studentUid) => {
@@ -1320,7 +1372,16 @@ function MarksTab({ assignment, groupId }) {
     const pct = attendancePctFor(studentUid);
     const fields = { attendance: computeAttendanceComponentScore(pct, markConfig.attendanceWeight) };
     markConfig.components.forEach((c) => {
-      fields[c.key] = d[c.key] !== undefined ? d[c.key] : (existing[c.key] ?? 0);
+      // A component the teacher never touched (no draft edit, no existing
+      // saved value) stays genuinely UNSET here — not defaulted to 0.
+      // Writing a real 0 made every never-entered component look like an
+      // actually-scored zero on the student's PDF/record. null means
+      // "not entered yet"; the PDF/UI render null as "—".
+      const draftVal = d[c.key];
+      const existingVal = existing[c.key];
+      if (draftVal !== undefined) fields[c.key] = draftVal === '' ? null : draftVal;
+      else if (existingVal !== undefined) fields[c.key] = existingVal;
+      else fields[c.key] = null;
     });
     return fields;
   };
@@ -1385,7 +1446,7 @@ function MarksTab({ assignment, groupId }) {
       min={0}
       max={max}
       value={getFieldValue(studentUid, key)}
-      onChange={(e) => setField(studentUid, key, e.target.value)}
+      onChange={(e) => setField(studentUid, key, e.target.value, max)}
       style={{ width: 52, padding: '5px 6px', borderRadius: 6, border: '1px solid var(--border)', background: 'var(--bg)', color: 'var(--text)', fontSize: 12 }}
     />
   );
@@ -1607,3 +1668,4 @@ export default function FacultyClassDetail() {
     </div>
   );
 }
+

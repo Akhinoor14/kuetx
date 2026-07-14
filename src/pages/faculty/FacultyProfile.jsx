@@ -20,6 +20,7 @@ import { getProfilePhotoURL } from '../../lib/profilePicture';
 import { AvatarUploadModal } from '../../components/AvatarUploadModal';
 import { getShortTitle } from '../../lib/facultyTitle';
 import { useIsFaculty } from '../../hooks/useIsFaculty';
+import BlueTick from '../../components/BlueTick';
 
 // ─── Shared field styles (used only inside the edit form) ─────────────────
 const inputStyle = {
@@ -237,14 +238,7 @@ export default function FacultyProfile() {
                 color: 'transparent',
               }}>{displayName}</span>
               {isVerified && (
-                <Icons.BadgeCheck
-                  size={18}
-                  color="#3b82f6"
-                  fill="#3b82f6"
-                  strokeWidth={0}
-                  style={{ flexShrink: 0, alignSelf: 'center' }}
-                  title="Blue Tick verified faculty"
-                />
+                <BlueTick size={16} color="green" title="Verified faculty" />
               )}
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap', justifyContent: 'center' }}>

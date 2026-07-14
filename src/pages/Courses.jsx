@@ -131,20 +131,48 @@ function CustomCourseForm({ initial, onSave, onCancel }) {
   const blank = { code: '', name: '', type: 'Theory', credits: 3, year: defaultYear, term: defaultTerm, status: 'active', isCore: true, notes: '', chapters: [] };
   const [f, setF] = useState(initial || blank);
   const [newChapter, setNewChapter] = useState('');
-  const [expandedChapter, setExpandedChapter] = useState(null);
+  // Chapters used to default to collapsed (only one open at a time, via a
+  // single expandedChapter index) — it wasn't obvious there was anything
+  // to expand at all. Now every chapter starts open, and each can be
+  // toggled independently, so the syllabus reads as "all visible" by
+  // default instead of hiding content behind an unclear arrow.
+  const [expandedChapters, setExpandedChapters] = useState(() => {
+    const initialChapters = (initial || blank).chapters || [];
+    return new Set(initialChapters.map((_, i) => i));
+  });
   const [newSubtopic, setNewSubtopic] = useState({});
   const set = (k, v) => setF(p => ({ ...p, [k]: v }));
   
   const addChapter = () => {
     if (newChapter.trim()) {
-      setF(p => ({ ...p, chapters: [...(p.chapters || []), { chapter: newChapter, subtopics: [] }] }));
+      setF(p => {
+        const nextChapters = [...(p.chapters || []), { chapter: newChapter, subtopics: [] }];
+        // New chapter opens expanded too, matching the always-open default.
+        setExpandedChapters(prev => new Set(prev).add(nextChapters.length - 1));
+        return { ...p, chapters: nextChapters };
+      });
       setNewChapter('');
     }
   };
   
   const removeChapter = (idx) => {
     setF(p => ({ ...p, chapters: p.chapters.filter((_, i) => i !== idx) }));
-    setExpandedChapter(null);
+    setExpandedChapters(prev => {
+      const next = new Set();
+      prev.forEach(i => {
+        if (i < idx) next.add(i);
+        else if (i > idx) next.add(i - 1);
+      });
+      return next;
+    });
+  };
+
+  const toggleChapter = (idx) => {
+    setExpandedChapters(prev => {
+      const next = new Set(prev);
+      if (next.has(idx)) next.delete(idx); else next.add(idx);
+      return next;
+    });
   };
   
   const addSubtopic = (chapterIdx) => {
@@ -224,13 +252,13 @@ function CustomCourseForm({ initial, onSave, onCancel }) {
                 <div key={chapIdx}>
                   {/* Chapter Header */}
                   <div 
-                    onClick={() => setExpandedChapter(expandedChapter === chapIdx ? null : chapIdx)}
+                    onClick={() => toggleChapter(chapIdx)}
                     style={{ 
                       display: 'flex', 
                       justifyContent: 'space-between', 
                       alignItems: 'center',
                       padding: '10px 14px',
-                      background: expandedChapter === chapIdx ? 'rgba(139,92,246,0.08)' : 'var(--surface)',
+                      background: expandedChapters.has(chapIdx) ? 'rgba(139,92,246,0.08)' : 'var(--surface)',
                       borderBottom: '1px solid var(--border)',
                       cursor: 'pointer',
                       fontSize: 13,
@@ -238,7 +266,7 @@ function CustomCourseForm({ initial, onSave, onCancel }) {
                     }}
                   >
                     <div style={{ display: 'flex', alignItems: 'center', gap: 8, flex: 1, minWidth: 0 }}>
-                      <span>{expandedChapter === chapIdx ? '▼' : '▶'}</span>
+                      <span>{expandedChapters.has(chapIdx) ? '▼' : '▶'}</span>
                       <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{chap.chapter}</span>
                       <span style={{ fontSize: 10, color: 'var(--muted)', marginLeft: 'auto' }}>({chap.subtopics?.length || 0})</span>
                     </div>
@@ -253,7 +281,7 @@ function CustomCourseForm({ initial, onSave, onCancel }) {
                   </div>
                   
                   {/* Sub-topics */}
-                  {expandedChapter === chapIdx && (
+                  {expandedChapters.has(chapIdx) && (
                     <div style={{ background: 'var(--surface)', padding: '12px 14px', borderBottom: '1px solid var(--border)' }}>
                       {/* Add Sub-topic */}
                       <div style={{ display: 'flex', gap: 8, marginBottom: 10 }}>
