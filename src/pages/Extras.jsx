@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Plus, Trash2, Play, Pause, Square, RotateCcw, Save, ChevronDown, ChevronRight, Edit2, Check, X, Copy, CheckCheck, MapPin, Cpu, List, Timer, Users, BarChart2 } from 'lucide-react';
 import {
   store,
@@ -853,10 +853,9 @@ function AddTaskInline({ onAdd }) {
 export function Syllabus() {
   // IndexedDB preloads into an in-memory cache asynchronously on app boot.
   // Before that finishes, store.get() falls back to raw localStorage, which
-  // can be stale (e.g. a leftover selectedSyllabusCourseid from a previous
-  // session, or an incomplete course list). This forces a re-render once
-  // the DB finishes loading, so the page self-corrects without needing a
-  // manual refresh.
+  // can be stale (e.g. an incomplete course list right after login). This
+  // forces a re-render once the DB finishes loading, so the page
+  // self-corrects without needing a manual refresh.
   const [, forceRerender] = useState(0);
   useEffect(() => {
     const onStoreUpdate = () => forceRerender((n) => n + 1);
@@ -895,15 +894,26 @@ export function Syllabus() {
   const allCourses = getAllCourses(profile);
   const deptSyllabus = getDeptSyllabus(profile.dept);
   const location = useLocation();
-  // Re-read the "jump to this course" flag every time we land on /syllabus
-  // (location.key changes on every navigation, even to the same path),
-  // instead of only once on first mount. This fixes the bug where opening
-  // a course, then navigating back to Syllabus again, kept showing only
-  // the previously-selected course until a full page refresh.
-  const [selectedCourseId, setSelectedCourseId] = useState(() => store.get('selectedSyllabusCourseid'));
+  const navigate = useNavigate();
+  // "Jump to this course" comes in as route state (from Courses.jsx's
+  // viewCourseSyllabus), not persistent store. Route state used to be
+  // store.set('selectedSyllabusCourseid', id) + store.remove(...) here on
+  // mount — but that remove raced against an async, fire-and-forget
+  // IndexedDB delete, so a stale value could resurface after navigating
+  // away and back (the "stuck on one course" bug). location.state has no
+  // such race: it's tied to this exact history entry.
+  const selectedCourseId = location.state?.selectedSyllabusCourseId || null;
+
+  // Once we've used the incoming course id to render, strip it from this
+  // history entry so a plain back/forward or a re-render doesn't keep
+  // re-applying it, and a later direct nav to /syllabus (nav bar, etc.)
+  // starts clean with no filter.
   useEffect(() => {
-    setSelectedCourseId(store.get('selectedSyllabusCourseid') || null);
-  }, [location.key]);
+    if (selectedCourseId) {
+      navigate(location.pathname, { replace: true, state: {} });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedCourseId]);
 
   const selectedCourse = selectedCourseId ? allCourses.find(c => c.id === selectedCourseId) : null;
   const displayTermKey = selectedCourse ? `Y${selectedCourse.year}T${selectedCourse.term}` : currentTermKey;
@@ -914,10 +924,6 @@ export function Syllabus() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selfStudyData, setSelfStudyData] = useState(() => store.get('selfstudy_academic') || []);
   const [copiedCourseId, setCopiedCourseId] = useState(null);
-
-  useEffect(() => {
-    if (selectedCourseId) store.remove('selectedSyllabusCourseid');
-  }, [selectedCourseId]);
 
   useEffect(() => {
     if (selectedCourse?.id) {

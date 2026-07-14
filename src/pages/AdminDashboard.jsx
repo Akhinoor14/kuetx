@@ -358,7 +358,109 @@ function reportStaffRoleHolders(holdersByRole, loadError = null) {
   console.groupEnd();
 }
 
+// Shown when tapping a staff holder's name in "Current role holders" —
+// full detail instead of just a bare uid or "name (roll)" string. Pulls
+// from `info` (getStaffDisplayInfo's result: name/roll/dept/batch/
+// groupId/verified/memberRole, resolved via the member doc in whichever
+// class group this uid belongs to) plus the role-assignment fields
+// already on `holder` (role/scope/uid).
+//
+// Deliberately does NOT show a "log history" section — there's no
+// existing per-person activity log anywhere in the app (the only audit
+// trail is groups/{groupId}/auditLog, which records routine/assignment
+// edits, not staff-role changes) — so a history section here would have
+// to be invented rather than real. Add one for real once that data
+// exists somewhere.
+function StaffHolderDetailModal({ holder, onClose }) {
+  const info = holder.info || {};
+  const scopeLabel = holder.scope?.dept || holder.scope?.groupId
+    ? (holder.scope?.dept ? `Department: ${holder.scope.dept}` : `Class: ${holder.scope.groupId}`)
+    : 'Global (no department/class scope)';
+
+  return (
+    <div
+      onClick={onClose}
+      style={{
+        position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)',
+        display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 9999, padding: 16,
+      }}
+    >
+      <div
+        onClick={(e) => e.stopPropagation()}
+        style={{
+          background: 'var(--card)', borderRadius: 18, padding: 24, width: '100%', maxWidth: 400,
+          maxHeight: '85vh', overflowY: 'auto',
+          border: '1px solid var(--border)', boxShadow: '0 32px 80px rgba(0,0,0,0.28)',
+        }}
+      >
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
+          <div style={{ fontWeight: 800, fontSize: 16, color: 'var(--text)' }}>{info.name || 'Unnamed'}</div>
+          <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--muted)' }}>
+            <Icons.X size={18} />
+          </button>
+        </div>
+
+        <div style={{ borderTop: '1px solid var(--border)' }}>
+          <DetailRow label="Staff position" value={ROLE_LABELS[holder.role] || holder.role} />
+          <div style={{ height: 1, background: 'var(--border)' }} />
+          <DetailRow label="Scope" value={scopeLabel} />
+          {info.roll && (
+            <>
+              <div style={{ height: 1, background: 'var(--border)' }} />
+              <DetailRow label="Roll" value={info.roll} />
+            </>
+          )}
+          {info.dept && (
+            <>
+              <div style={{ height: 1, background: 'var(--border)' }} />
+              <DetailRow label="Department" value={info.dept} />
+            </>
+          )}
+          {info.batch && (
+            <>
+              <div style={{ height: 1, background: 'var(--border)' }} />
+              <DetailRow label="Batch" value={info.batch} />
+            </>
+          )}
+          {info.groupId && (
+            <>
+              <div style={{ height: 1, background: 'var(--border)' }} />
+              <DetailRow label="Class" value={info.groupId} />
+            </>
+          )}
+          {info.memberRole && (
+            <>
+              <div style={{ height: 1, background: 'var(--border)' }} />
+              <DetailRow label="Class role" value={info.memberRole === 'cr' ? 'Class Representative (CR)' : info.memberRole === 'acr' ? 'Assistant CR (ACR)' : 'Member'} />
+            </>
+          )}
+          <div style={{ height: 1, background: 'var(--border)' }} />
+          <DetailRow label="Verified" value={info.verified ? 'Yes' : 'No'} />
+          <div style={{ height: 1, background: 'var(--border)' }} />
+          <DetailRow label="UID" value={holder.uid} mono />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function DetailRow({ label, value, href, mono }) {
+  if (!value) return null;
+  const content = href
+    ? <a href={href} style={{ color: 'var(--accent)', textDecoration: 'none' }}>{value}</a>
+    : value;
+  return (
+    <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, padding: '10px 0', alignItems: 'flex-start' }}>
+      <div style={{ fontSize: 12, color: 'var(--muted)', flexShrink: 0 }}>{label}</div>
+      <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--text)', textAlign: 'right', wordBreak: 'break-word', fontFamily: mono ? 'monospace' : 'inherit' }}>
+        {content}
+      </div>
+    </div>
+  );
+}
+
 function StaffRolesView({ onBack, onSelectCategory, groups, countCtx }) {
+  const [subTab, setSubTab] = useState('assign');
   const [newUid, setNewUid] = useState('');
   const [newRole, setNewRole] = useState(ALL_ASSIGNABLE_ROLES[0]);
   const [newScopeValue, setNewScopeValue] = useState('');
@@ -374,6 +476,7 @@ function StaffRolesView({ onBack, onSelectCategory, groups, countCtx }) {
   // themselves (which only ever store uid — see getStaffDisplayInfo in
   // staffSync.js for why a second lookup is needed here).
   const [displayInfo, setDisplayInfo] = useState({});
+  const [selectedHolder, setSelectedHolder] = useState(null);
 
   const resolveDisplayInfo = async (holdersByRole) => {
     const allUids = Object.values(holdersByRole).flat().map((h) => h.uid);
@@ -457,8 +560,9 @@ function StaffRolesView({ onBack, onSelectCategory, groups, countCtx }) {
   return (
     <CategoryShell view="staff" onSelect={onSelectCategory} countCtx={countCtx}>
       <h2 style={{ fontSize: 16, fontWeight: 700, margin: '0 0 12px' }}>Staff & Roles</h2>
-      <SubcategoryTabs subcategories={category.subcategories} activeKey="holders" onSelect={() => {}} countCtx={subCtx} />
+      <SubcategoryTabs subcategories={category.subcategories} activeKey={subTab} onSelect={setSubTab} countCtx={subCtx} />
 
+      {subTab === 'assign' && (
       <Section title="Assign a staff role">
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8, maxWidth: 420 }}>
           <select value={newRole} onChange={(e) => { setNewRole(e.target.value); setNewScopeValue(''); }}
@@ -481,7 +585,9 @@ function StaffRolesView({ onBack, onSelectCategory, groups, countCtx }) {
           <button className="btn btn-primary" onClick={handleAssign}>Assign</button>
         </div>
       </Section>
+      )}
 
+      {subTab === 'holders' && (
       <Section title={`Current role holders${totalHolders ? ` (${totalHolders})` : ''}`}>
         {holdersError && (
           <div style={{ fontSize: 12, color: 'var(--danger)', marginBottom: 10 }}>{holdersError}</div>
@@ -491,7 +597,7 @@ function StaffRolesView({ onBack, onSelectCategory, groups, countCtx }) {
         {!holdersLoading && totalHolders > 0 && (
           <>
             <p style={{ fontSize: 11, color: 'var(--muted)', marginBottom: 10 }}>
-              Founder can revoke any holder below. A person holding multiple roles appears once per role.
+              Founder can revoke any holder below. A person holding multiple roles appears once per role. Tap a name for full details.
             </p>
             <div style={{ display: 'flex', gap: 6, overflowX: 'auto', paddingBottom: 8, marginBottom: 12 }}>
               <button
@@ -531,15 +637,26 @@ function StaffRolesView({ onBack, onSelectCategory, groups, countCtx }) {
                 .filter((r) => (currentHolders[r]?.length || 0) > 0)
                 .flatMap((r) => (currentHolders[r] || []).map((h) => {
                   const info = displayInfo[h.uid];
-                  const label = info?.name
-                    ? `${info.name}${info.roll ? ` (${info.roll})` : ''}`
-                    : h.uid;
+                  const label = info?.name || h.uid;
                   return (
                     <div key={`${r}-${h.id}`} className="staff-holder-card">
                       <div style={{ fontSize: 10, fontWeight: 800, color: 'var(--accent)', textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: 4 }}>
                         {ROLE_LABELS[r]}
                       </div>
-                      <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', wordBreak: 'break-word' }}>{label}</div>
+                      <button
+                        onClick={() => setSelectedHolder({ ...h, role: r, info })}
+                        title="View full details"
+                        style={{
+                          all: 'unset', cursor: 'pointer', display: 'block',
+                          fontSize: 13, fontWeight: 700, color: 'var(--accent)',
+                          wordBreak: 'break-word', textDecoration: 'underline', textDecorationStyle: 'dotted',
+                        }}
+                      >
+                        {label}
+                      </button>
+                      {info?.roll && (
+                        <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 2 }}>{info.roll}</div>
+                      )}
                       {(h.scope?.dept || h.scope?.groupId) && (
                         <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 2 }}>
                           {h.scope?.dept || h.scope?.groupId}
@@ -559,6 +676,12 @@ function StaffRolesView({ onBack, onSelectCategory, groups, countCtx }) {
             </div>
           </>
         )}
+      </Section>
+      )}
+
+      {selectedHolder && (
+        <StaffHolderDetailModal holder={selectedHolder} onClose={() => setSelectedHolder(null)} />
+      )}
       </Section>
     </CategoryShell>
   );

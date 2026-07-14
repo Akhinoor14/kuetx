@@ -14,7 +14,7 @@
 
 import {
   collection, collectionGroup, doc, getDoc, getDocs, setDoc, updateDoc, deleteDoc, addDoc,
-  onSnapshot, query, where, orderBy, serverTimestamp, writeBatch, increment, documentId,
+  onSnapshot, query, where, orderBy, serverTimestamp, writeBatch, increment,
 } from 'firebase/firestore';
 import { db, auth } from './firebase';
 import { getIdentityStamp } from './groupUtils';
@@ -97,26 +97,46 @@ export async function listStaffByRole(role) {
   return snap.docs.map((d) => ({ id: d.id, uid: d.ref.parent.parent.id, ...d.data() }));
 }
 
-// Resolves a uid to a display name/roll by checking that person's
-// membership doc in ANY class group (groups/*/members/{uid}) — global
-// staff roles (staff/{uid}/roles/{roleId}) store neither, since role
-// assignment is deliberately decoupled from class membership (e.g. a
-// Head of Ops may not even be a student). Uses documentId() so this is a
-// real indexed lookup, not a full collection scan. If the uid isn't a
-// member of any group (or the lookup fails), falls back to an empty
-// name/roll so the UI can show just the uid instead of breaking.
+// Resolves a uid to display info (name/roll/dept/batch/groupId/verified/
+// role) by checking that person's membership doc in ANY class group
+// (groups/*/members/{uid}) — global staff roles (staff/{uid}/roles/
+// {roleId}) store none of this, since role assignment is deliberately
+// decoupled from class membership (e.g. a Head of Ops may not even be a
+// student). Queries on a `uid` field (written by joinGroup on every
+// create/update) rather than documentId() — documentId() in a
+// collectionGroup query requires the full document path, which we have
+// no way to build from a bare uid without already knowing which group
+// they're in; that mismatch was silently failing 100% of lookups (see
+// the "odd number of segments" Firestore error) and is why the Staff &
+// Roles list only ever showed raw uids instead of names. If the uid
+// isn't a member of any group (or the lookup fails), falls back to
+// empty fields so the UI can show just the uid instead of breaking.
 export async function getStaffDisplayInfo(uid) {
-  if (!uid) return { name: '', roll: '' };
+  if (!uid) return { name: '', roll: '', dept: '', groupId: '', verified: false, memberRole: '' };
   try {
-    const snap = await getDocs(query(collectionGroup(db, 'members'), where(documentId(), '==', uid)));
+    const snap = await getDocs(query(collectionGroup(db, 'members'), where('uid', '==', uid)));
     if (!snap.empty) {
-      const data = snap.docs[0].data();
-      return { name: data.name || '', roll: data.roll || '' };
+      const memberDoc = snap.docs[0];
+      const data = memberDoc.data();
+      const groupId = memberDoc.ref.parent.parent?.id || '';
+      // groupId is BATCH_DEPT (see groupUtils.js's getGroupId) — split it
+      // back out so the Staff detail popup can show dept/batch without a
+      // second lookup.
+      const [batch, dept] = groupId.split('_');
+      return {
+        name: data.name || '',
+        roll: data.roll || '',
+        dept: dept || '',
+        batch: batch || '',
+        groupId,
+        verified: !!data.verified,
+        memberRole: data.role || 'member',
+      };
     }
   } catch (e) {
     console.warn('[staffSync] getStaffDisplayInfo lookup failed:', e);
   }
-  return { name: '', roll: '' };
+  return { name: '', roll: '', dept: '', groupId: '', verified: false, memberRole: '' };
 }
 
 // Batched version for a list of uids (Staff & Roles view resolves many

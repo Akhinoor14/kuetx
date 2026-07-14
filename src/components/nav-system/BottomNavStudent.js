@@ -13,5 +13,5 @@ export const STUDENT_FIXED_BUTTONS = [
   { id: 'home',      label: 'Home',      icon: 'Home',         path: '/',                match: (p) => p === '/' },
   { id: 'academics', label: 'Academics', icon: 'BookOpen',      path: '/academic-core',   match: (p) => p === '/academic-core' || ['/courses', '/syllabus', '/question-bank', '/solutions', '/marks', '/results', '/alerts'].includes(p) },
   { id: 'daily',     label: 'Daily',     icon: 'CalendarCheck', path: '/daily-academics', match: (p) => p === '/daily-academics' || ['/attendance', '/schedule', '/assignments', '/teachers', '/classmates', '/diary'].includes(p) },
-  { id: 'campus',    label: 'Campus',    icon: 'Layers',        path: '/campus',          match: (p) => p === '/campus' || p === '/daily-life' || p === '/campus-life' || ['/notes', '/self-study', '/time', '/namaz', '/clubs', '/projects', '/tours', '/money', '/tuition'].includes(p) },
+  { id: 'campus',    label: 'Campus',    icon: 'Layers',        path: '/campus',          match: (p) => p === '/campus' || p === '/daily-life' || p === '/campus-life' || p === '/self-study' || p.startsWith('/self-study/') || ['/notes', '/time', '/namaz', '/clubs', '/projects', '/tours', '/money', '/tuition'].includes(p) },
 ];

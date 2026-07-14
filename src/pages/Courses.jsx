@@ -418,8 +418,17 @@ export default function Courses() {
 
   const toggleTerm = (key) => setExpandedTerms(p => ({ ...p, [key]: !p[key] }));
   const viewCourseSyllabus = (id) => {
-    store.set('selectedSyllabusCourseid', id);
-    navigate('/syllabus');
+    // Passed as route state (not store.set) on purpose: this used to write
+    // to the persistent store, whose IndexedDB delete on the Syllabus page
+    // runs async/fire-and-forget (removeFromDB(...).catch(...) with no
+    // await). If the user navigated away again before that delete
+    // finished, the stale value could survive in IndexedDB and get
+    // reloaded into memoryCache on the next store init — reproducing the
+    // "still shows just one course" bug even after it looked cleared.
+    // Route state has no such race: React Router owns its lifecycle and
+    // it's gone the moment you leave the route by any means other than
+    // forward/back through this exact history entry.
+    navigate('/syllabus', { state: { selectedSyllabusCourseId: id } });
   };
   const updateOverride = (id, patch) => {
     setCourseOverride(id, patch);

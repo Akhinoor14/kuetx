@@ -1,4 +1,5 @@
 import { useState, useMemo, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Plus, Trash2, Clock3, Check } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import { store, uid, getProfile, getTermLabelFromKey } from '../store/store';
@@ -6,7 +7,24 @@ import { getAllCourses, getDeptSyllabus } from '../store/curriculumStore';
 
 const todayStr = () => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; };
 
+// Self Study used to be a single sidebar item with an in-page toggle
+// between "Academic" and "⚡ Deep Focus" — several people reported not
+// realizing Deep Focus existed at all, or not understanding what the
+// two tabs meant, since both hid behind one generic "Self Study" label
+// with no indication there were two different modes inside. Academic
+// and Deep Focus are now their own entry points under a "Self Study"
+// nav subgroup (see nav.js), each with its own URL
+// (/self-study/academic, /self-study/deep-focus) — so the tab a
+// student lands on always matches what they clicked, and each mode is
+// individually discoverable/bookmarkable instead of being a hidden
+// toggle. The two tabs still share one component (all the state/data
+// below is used by both), just driven by the URL instead of a bare
+// useState default.
+const tabFromPath = (pathname) => (pathname.endsWith('/deep-focus') ? 'extra' : 'academic');
+
 export default function SelfStudy() {
+  const navigate = useNavigate();
+  const location = useLocation();
   const profile = getProfile();
   const courses = getAllCourses(profile);
   const deptSyllabus = getDeptSyllabus(profile.dept);
@@ -21,7 +39,20 @@ export default function SelfStudy() {
 
   const [academicSessions, setAcademicSessions] = useState(() => store.get('selfstudy_academic') || []);
   const [extraReading, setExtraReading] = useState(() => store.get('selfstudy_extra') || []);
-  const [activeTab, setActiveTab] = useState('academic');
+  const [activeTab, setActiveTabState] = useState(() => tabFromPath(location.pathname));
+  // Keep the tab in sync with the URL (covers direct links, back/
+  // forward nav, and the sidebar's Academic/Deep Focus items), and keep
+  // the URL in sync when the tab changes some other way (defensive —
+  // every setActiveTab call in this file already goes through
+  // setActiveTab below, which navigates first).
+  useEffect(() => {
+    setActiveTabState(tabFromPath(location.pathname));
+  }, [location.pathname]);
+  const setActiveTab = (tab) => {
+    const target = tab === 'extra' ? '/self-study/deep-focus' : '/self-study/academic';
+    if (location.pathname !== target) navigate(target);
+    setActiveTabState(tab);
+  };
   const [adding, setAdding] = useState(false);
   const [addingAcademic, setAddingAcademic] = useState(false);
   const [editingId, setEditingId] = useState(null);

@@ -137,6 +137,14 @@ export async function joinGroup(groupId, profile) {
       name: profile?.name || '',
       roll: profile?.studentId || '',
       isAnonymous: !!auth.currentUser?.isAnonymous,
+      // Redundant with the doc id, but collectionGroup queries can't use
+      // documentId() with just a bare uid — it needs a full document path,
+      // which getStaffDisplayInfo (staffSync.js) has no way to construct
+      // without already knowing the groupId. Storing uid as a normal
+      // field makes it queryable with a plain where('uid', '==', ...)
+      // instead. Backfills on every join/profile-refresh, so existing
+      // docs written before this field existed self-heal over time.
+      uid,
       // Login email, shown to CL/SCL/admin ONLY as a display field so
       // they can judge if it looks fake (see emailFlags.js) — never used
       // for auth or matched against verifiedRolls. Anonymous accounts
@@ -148,6 +156,7 @@ export async function joinGroup(groupId, profile) {
     await setDoc(ref_, {
       name: profile?.name || '',
       roll: profile?.studentId || '',
+      uid,
       // Tier 1: a confirmed @stud.kuet.ac.bd email whose embedded roll
       // matches this exact batch+dept auto-verifies instantly — no CL
       // approval needed. Everyone else starts at Tier 2 (manual, false).

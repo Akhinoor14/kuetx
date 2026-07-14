@@ -5337,6 +5337,68 @@ input[type="checkbox"] {
   .marks-page .planner-teacher-inputs {
     grid-template-columns: 1fr 1fr;
   }
+
+  /* Term Planner ran full desktop-sized spacing on mobile too — large
+     header padding/margin, 26px title, 20px card-body padding — which
+     ate a lot of vertical space before any actually useful content
+     showed. Compacted specifically for phones; desktop (>900px) is
+     untouched. */
+  .marks-page .planner-page-header {
+    gap: 10px 14px;
+    margin-bottom: 12px;
+    padding: 12px 14px;
+    border-radius: 14px;
+  }
+  .marks-page .planner-page-kicker {
+    padding: 4px 9px;
+    margin-bottom: 6px;
+    font-size: 10px;
+  }
+  .marks-page .planner-page-header h1 {
+    font-size: 19px;
+  }
+  .marks-page .planner-page-header p {
+    font-size: 12px;
+    margin: 6px 0 0;
+  }
+  .marks-page .planner-hero-link {
+    margin-top: 6px;
+    font-size: 11.5px;
+  }
+  .marks-page .planner-pill {
+    min-height: 26px;
+    padding: 0 10px;
+    font-size: 11px;
+  }
+  .marks-page .planner-course-card {
+    margin-bottom: 10px;
+    border-radius: 12px;
+  }
+  .marks-page .planner-card-header {
+    padding: 11px 13px;
+  }
+  .marks-page .planner-card-title {
+    font-size: 14px;
+  }
+  .marks-page .planner-card-desc {
+    font-size: 12px;
+  }
+  .marks-page .planner-card-marks {
+    font-size: 15px;
+  }
+  .marks-page .planner-card-body {
+    padding: 13px;
+  }
+  .marks-page .planner-grid-2 {
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+  .marks-page .planner-tips {
+    padding: 13px;
+  }
+  .marks-page .planner-courses-grid {
+    margin-bottom: 16px;
+  }
 }
 
 
@@ -9065,6 +9127,28 @@ body.schedule-fullscreen-active .mobile-bottom-nav {
   .content-page-hero-icon { width: 34px; height: 34px; }
   .content-page-hero-title { font-size: 18px; }
 }
+
+/* Syllabus (Extras.jsx) course cards — the grid itself already uses
+   minmax(min(380px, 100%), 1fr) so columns can shrink below 380px
+   instead of forcing a fixed minimum that overflowed the viewport on
+   phones narrower than ~380px (very common: 360-375px). These rules
+   cover the remaining fixed-width bits inside each card that could
+   still overflow independently of the grid track width: long course
+   titles with no wrap guard, and the header row's title+buttons flex
+   pair squeezing awkwardly on very narrow cards. */
+.syllabus-course-grid {
+  min-width: 0;
+}
+.syllabus-course-grid > .card {
+  min-width: 0;
+  max-width: 100%;
+}
+@media (max-width: 480px) {
+  .syllabus-course-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
 /* Team & Administration — full-width shell, centered content.
    On mobile (<768px) stays a normal single-column block, same as every
    other content page. On desktop the shell takes the full available
@@ -9584,4 +9668,33 @@ body.schedule-fullscreen-active .mobile-bottom-nav {
 
 @media (max-width: 480px) {
   .meeting-grid { grid-template-columns: 1fr; }
+}
+/* Classmates / roster rows (ClassmatesList.jsx) — the row uses inline
+   flex styles (info block + action buttons side by side) which overflow
+   the viewport on mobile once 3-4 action buttons are shown (Verify/
+   Revoke/Make CR/Hand off CR/Make ACR/Remove from class). Force the row
+   to wrap onto two lines on narrow screens instead of clipping. */
+@media (max-width: 640px) {
+  .classmates-list-card {
+    flex-wrap: wrap !important;
+    align-items: flex-start !important;
+  }
+  .classmates-list-card > div:first-child {
+    flex: 1 1 100% !important;
+    min-width: 0 !important;
+    margin-bottom: 6px;
+  }
+  .classmates-list-card > div:last-child {
+    flex: 1 1 100% !important;
+    justify-content: flex-start !important;
+    flex-wrap: wrap !important;
+    row-gap: 6px;
+    margin-top: 2px;
+    padding-top: 6px;
+    border-top: 1px solid var(--border);
+  }
+  .classmates-list-card .btn.btn-sm {
+    font-size: 12px;
+    padding: 5px 9px;
+  }
 }

@@ -101,13 +101,22 @@ export const NAV = [
     ]
   },
   {
+    group: 'Self Study',
+    isSubgroup: true,
+    hubPath: '/self-study',
+    hubIcon: 'Activity',
+    items: [
+      { id: 'self-study-academic',   label: 'Academic',    icon: 'BookOpen', path: '/self-study/academic' },
+      { id: 'self-study-deep-focus', label: 'Deep Focus',  icon: 'Zap',      path: '/self-study/deep-focus' },
+    ]
+  },
+  {
     group: 'Daily Life',
     isSubgroup: true,
     hubPath: '/daily-life',
     hubIcon: 'Sunrise',
     items: [
       { id: 'notes',      label: 'Notes',         icon: 'FileText', path: '/notes' },
-      { id: 'self-study', label: 'Self Study',    icon: 'Activity', path: '/self-study' },
       { id: 'time',       label: 'Time Tracker',  icon: 'Timer',    path: '/time' },
       { id: 'namaz',      label: 'Namaz Tracker', icon: 'Moon',     path: '/namaz' },
     ]
