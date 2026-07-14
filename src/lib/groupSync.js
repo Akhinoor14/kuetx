@@ -41,7 +41,7 @@ function _subscribeSingleton(key, buildQueryFn, mapDocsFn, callback) {
   if (!entry) {
     entry = { unsubscribe: null, refCount: 0, listeners: new Set(), lastValue: null };
     _registry.set(key, entry);
-    const attach = (retriesLeft) => {
+    const attach = (retriesLeft, slowRetriesLeft) => {
       entry.unsubscribe = onSnapshot(buildQueryFn(), (snap) => {
         entry.lastValue = mapDocsFn(snap);
         entry.listeners.forEach((cb) => cb(entry.lastValue));
@@ -53,7 +53,7 @@ function _subscribeSingleton(key, buildQueryFn, mapDocsFn, callback) {
         // Retry a couple of times with backoff instead of leaving callers
         // stuck on `null` (= infinite "Loading…") forever.
         if (err?.code === 'permission-denied' && retriesLeft > 0) {
-          setTimeout(() => attach(retriesLeft - 1), 1200);
+          setTimeout(() => attach(retriesLeft - 1, slowRetriesLeft), 1200);
           return;
         }
         // Out of retries on a permission error: deliver an empty array to
@@ -72,13 +72,17 @@ function _subscribeSingleton(key, buildQueryFn, mapDocsFn, callback) {
         // Keep retrying in the background at a slower cadence so the
         // listener recovers on its own once the real membership doc
         // write is visible server-side, instead of staying dead until a
-        // full page reload clears the registry.
-        if (err?.code === 'permission-denied') {
-          setTimeout(() => attach(3), 5000);
+        // full page reload clears the registry. Capped at a handful of
+        // slow retries — if permission is still denied after this many
+        // attempts it's a real rules/membership problem, not a startup
+        // race, and retrying forever every 5s just spams the console and
+        // burns a live Firestore connection for nothing.
+        if (err?.code === 'permission-denied' && slowRetriesLeft > 0) {
+          setTimeout(() => attach(3, slowRetriesLeft - 1), 5000);
         }
       });
     };
-    attach(3);
+    attach(3, 5);
   }
   entry.refCount += 1;
   entry.listeners.add(callback);

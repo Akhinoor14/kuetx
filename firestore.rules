@@ -875,7 +875,17 @@ service cloud.firestore {
       }
 
       match /notices/{noticeId} {
-        allow read: if isAdmin() || isGroupMember(groupId);
+        // Faculty can already CREATE here (isVerifiedFaculty, below) but
+        // were missing from READ — isGroupMember(groupId) only recognizes
+        // the student-side `members/{uid}` doc, so a faculty account
+        // (verified or not — read-only visibility is harmless, same
+        // reasoning as the /members read rule above) got permission-
+        // denied on every notices listener for every class they teach.
+        // That's the real cause behind the repeated
+        // "[groupSync] listener error ... Missing or insufficient
+        // permissions" loop for faculty accounts — not a startup race,
+        // so the client-side retry backoff was never going to fix it.
+        allow read: if isAdmin() || isGroupMember(groupId) || isFaculty(request.auth.uid);
         // Faculty notices REQUIRE the Blue Tick (isVerifiedFaculty) —
         // consistent with the rest of the manual verification policy: an
         // unverified faculty account cannot post into the notice feed.
