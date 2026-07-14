@@ -41,7 +41,7 @@ const ContactAction = ({ icon, label, sub, href, color }) => (
 export default function FacultyContact() {
   return (
     <div className="hub-page-bg" style={{ minHeight: '100vh' }}>
-      <div style={{ padding: '20px 24px 40px', width: '97%', maxWidth: 560, margin: '0 auto' }}>
+      <div style={{ padding: '20px 24px 40px', width: '100%', boxSizing: 'border-box', maxWidth: 560, margin: '0 auto' }}>
         <div className="hub-page-hero">
           <div className="hub-page-hero-icon">
             <Icons.Mail size={20} color="var(--accent)" />

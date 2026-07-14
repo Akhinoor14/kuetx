@@ -9001,6 +9001,10 @@ input[type="range"]::-webkit-slider-thumb {
   margin: 8px 0 18px;
 }
 
+.faculty-class-hero-compact {
+  margin: 4px 0 14px;
+}
+
 .faculty-class-hero-icon {
   width: 42px;
   height: 42px;
@@ -9080,140 +9084,85 @@ input[type="range"]::-webkit-slider-thumb {
   .legacy-term-row > div:nth-child(3) { grid-area: credits; }
 }
 
-.faculty-tabs-wrap {
-  position: relative;
+/* Tab bar: mobile fits all 7 tabs into exactly 2 rows (4-column grid:
+   4 + 3). A 2-column grid would wrap 7 items into 4 rows instead of 2.
+   Desktop (>=640px) switches to the original single horizontal row —
+   see the media query further below. */
+.faculty-tabs-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
   margin-bottom: 18px;
 }
-.faculty-tabs-wrap .faculty-tabs { margin-bottom: 0; }
 
-/* Desktop/tablet (>767px): full horizontal bar, primary-row+More hidden. */
-.faculty-tabs-primary,
-.faculty-tabs-more-backdrop,
-.faculty-tabs-more-sheet {
-  display: none;
-}
-
-/* Mobile (<=767px): swap to primary row + More sheet, hide the full bar. */
-@media (max-width: 767.98px) {
-  .faculty-tabs-full { display: none; }
-
-  .faculty-tabs-primary {
-    display: flex;
-    gap: 2px;
-    border-bottom: 1px solid var(--border);
-  }
-  .faculty-tabs-primary .faculty-tab-btn {
-    flex: 1 1 0;
-    justify-content: center;
-    padding: 11px 6px;
-    font-size: 11.5px;
-  }
-  .faculty-tab-more-btn { color: var(--muted); }
-
-  .faculty-tabs-more-backdrop {
-    display: block;
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.35);
-    z-index: 40;
-  }
-  .faculty-tabs-more-sheet {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 8px;
-    position: absolute;
-    top: calc(100% + 6px);
-    right: 0;
-    left: 0;
-    background: var(--card-bg, var(--bg));
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 14px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
-    z-index: 41;
-  }
-  .faculty-tab-more-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 6px;
-    padding: 12px 6px;
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    background: var(--bg);
-    color: var(--muted);
-    font-size: 11px;
-    font-weight: 600;
-    cursor: pointer;
-    text-align: center;
-  }
-  .faculty-tab-more-item.active {
-    color: var(--accent);
-    border-color: var(--accent);
-    background: color-mix(in srgb, var(--accent) 10%, var(--bg));
-  }
-  .faculty-tab-more-item:disabled {
-    opacity: 0.4;
-    cursor: not-allowed;
-  }
-}
-
-.faculty-tabs {
-  display: flex;
-  gap: 2px;
-  overflow-x: auto;
-  border-bottom: 1px solid var(--border);
-  margin-bottom: 18px;
-  scrollbar-width: none;
-}
-.faculty-tabs::-webkit-scrollbar { display: none; }
-
-.faculty-tab-btn {
-  position: relative;
+.faculty-tab-chip {
   display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 11px 14px;
-  white-space: nowrap;
-  border: none;
-  background: none;
-  font-size: 12.5px;
+  justify-content: center;
+  gap: 5px;
+  padding: 9px 4px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--card);
+  font-size: 10.5px;
   font-weight: 600;
   color: var(--muted);
   cursor: pointer;
-  transition: color 0.15s ease;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease;
 }
 
-.faculty-tab-btn::after {
-  content: '';
-  position: absolute;
-  left: 10px;
-  right: 10px;
-  bottom: -1px;
-  height: 2px;
-  border-radius: 2px 2px 0 0;
-  background: var(--accent);
-  transform: scaleX(0);
-  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-.faculty-tab-btn:hover:not(:disabled) {
+.faculty-tab-chip:hover:not(:disabled) {
   color: var(--text);
 }
 
-.faculty-tab-btn.active {
+.faculty-tab-chip.active {
   color: var(--accent);
   font-weight: 700;
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 10%, var(--card));
 }
 
-.faculty-tab-btn.active::after {
-  transform: scaleX(1);
-}
-
-.faculty-tab-btn:disabled {
+.faculty-tab-chip:disabled {
   color: var(--muted);
   opacity: 0.4;
   cursor: not-allowed;
+}
+
+@media (min-width: 640px) {
+  .faculty-tabs-grid {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 2px;
+    border-bottom: 1px solid var(--border);
+  }
+  .faculty-tab-chip {
+    flex: 1 1 0;
+    min-width: 0;
+    border: none;
+    border-radius: 0;
+    background: none;
+    position: relative;
+    padding: 11px 10px;
+    font-size: 12.5px;
+    gap: 7px;
+  }
+  .faculty-tab-chip.active {
+    background: none;
+    border-color: transparent;
+  }
+  .faculty-tab-chip.active::after {
+    content: '';
+    position: absolute;
+    left: 8px;
+    right: 8px;
+    bottom: -1px;
+    height: 2px;
+    border-radius: 2px 2px 0 0;
+    background: var(--accent);
+  }
 }
 
 .faculty-tab-panel {
@@ -9223,6 +9172,67 @@ input[type="range"]::-webkit-slider-thumb {
 @keyframes facultyTabFade {
   from { opacity: 0; transform: translateY(3px); }
   to { opacity: 1; transform: translateY(0); }
+}
+
+/* Marks tab student card — desktop keeps everything on one row (name+
+   attendance, CT inputs, action buttons); mobile stacks each section full
+   width instead of flex-wrapping them into a squeezed row (the
+   name/inputs/Save/Send/PDF pile-up on narrow screens). */
+.faculty-marks-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--card);
+}
+.faculty-marks-card-student { min-width: 100px; }
+.faculty-marks-card-inputs {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.faculty-marks-card-input-label {
+  font-size: 10.5px;
+  color: var(--muted);
+}
+.faculty-marks-card-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.faculty-marks-card-btn {
+  padding: 5px 10px;
+  border-radius: 6px;
+  font-size: 11px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.faculty-marks-card-btn-icon { padding: 5px 8px; }
+
+@media (max-width: 480px) {
+  .faculty-marks-card {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+  .faculty-marks-card-inputs {
+    justify-content: flex-start;
+    border-top: 1px solid var(--border);
+    padding-top: 10px;
+  }
+  .faculty-marks-card-actions {
+    justify-content: stretch;
+  }
+  .faculty-marks-card-btn {
+    flex: 1 1 0;
+    text-align: center;
+    padding: 8px 6px;
+  }
 }
 
 .faculty-row {

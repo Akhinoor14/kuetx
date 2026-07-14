@@ -68,11 +68,9 @@ const TABS = [
   { id: 'students', label: 'Students & CR', icon: 'Users', enabled: true },
 ];
 
-// First N tabs shown as always-visible buttons on mobile; the rest live
-// behind "More". Kept in sync with the daily-use ordering above —
-// Attendance, Schedule, Notices, Marks are the ones a teacher actually
-// taps most days.
-const MOBILE_PRIMARY_COUNT = 4;
+// (Previously used to split tabs into an always-visible "primary" row +
+// a "More" sheet on mobile. Both breakpoints now share one 2-column tab
+// grid, so that split — and this constant — is no longer needed.)
 
 // Editing day/time only needs day+slot — unlike Add Class, dept/batch/
 // term/course are already fixed for an existing assignment, so this is a
@@ -1495,16 +1493,13 @@ function MarksTab({ assignment, groupId }) {
         </button>
       </div>
 
-      <div style={{ display: 'grid', gap: 6 }}>
+      <div style={{ display: 'grid', gap: 8 }}>
         {members.map((m) => {
           const rec = recordsByUid[m.id];
           const pct = attendancePctFor(m.id);
           return (
-            <div key={m.id} style={{
-              display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, flexWrap: 'wrap',
-              padding: '10px 12px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--card)',
-            }}>
-              <div style={{ minWidth: 100 }}>
+            <div key={m.id} className="faculty-marks-card">
+              <div className="faculty-marks-card-student">
                 <div style={{ fontWeight: 600, fontSize: 12.5, color: 'var(--text)' }}>
                   {statusDot(rec?.status)} {m.name || 'Unnamed'}
                 </div>
@@ -1513,28 +1508,34 @@ function MarksTab({ assignment, groupId }) {
                 </div>
               </div>
 
-              <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
+              <div className="faculty-marks-card-inputs">
                 {markConfig.components.map((c) => (
-                  <label key={c.key} style={{ fontSize: 10.5, color: 'var(--muted)' }}>{c.label} {numInput(m.id, c.key, c.max)}</label>
+                  <label key={c.key} className="faculty-marks-card-input-label">{c.label} {numInput(m.id, c.key, c.max)}</label>
                 ))}
+              </div>
+
+              <div className="faculty-marks-card-actions">
                 <button
                   onClick={() => handleSave(m.id, 'reviewed')}
                   disabled={savingUid === m.id}
-                  style={{ padding: '5px 10px', borderRadius: 6, border: '1px solid var(--border)', background: 'var(--bg)', color: 'var(--text)', fontSize: 11, cursor: 'pointer' }}
+                  className="faculty-marks-card-btn"
+                  style={{ border: '1px solid var(--border)', background: 'var(--bg)', color: 'var(--text)' }}
                 >
                   Save Draft
                 </button>
                 <button
                   onClick={() => handleSave(m.id, 'sent')}
                   disabled={savingUid === m.id}
-                  style={{ padding: '5px 10px', borderRadius: 6, border: 'none', background: 'var(--accent)', color: '#fff', fontWeight: 700, fontSize: 11, cursor: 'pointer' }}
+                  className="faculty-marks-card-btn"
+                  style={{ border: 'none', background: 'var(--accent)', color: '#fff', fontWeight: 700 }}
                 >
                   Send
                 </button>
                 <button
                   onClick={() => handleExportStudent(m)}
                   disabled={exportingUid === m.id}
-                  style={{ padding: '5px 8px', borderRadius: 6, border: '1px solid var(--border)', background: 'var(--bg)', color: 'var(--text)', fontSize: 11, cursor: 'pointer' }}
+                  className="faculty-marks-card-btn faculty-marks-card-btn-icon"
+                  style={{ border: '1px solid var(--border)', background: 'var(--bg)', color: 'var(--text)' }}
                   title="Export this student's marks as PDF"
                 >
                   PDF
@@ -1567,7 +1568,6 @@ export default function FacultyClassDetail() {
   // the first time it's opened, but once mounted it's kept alive for the
   // rest of this page visit — see the render block below.
   const [mountedTabs, setMountedTabs] = useState(() => new Set(['attendance']));
-  const [moreOpen, setMoreOpen] = useState(false);
 
   const selectTab = (id) => {
     setTab(id);
@@ -1581,15 +1581,8 @@ export default function FacultyClassDetail() {
 
   return (
     <div className="hub-page-bg" style={{ minHeight: '100vh' }}>
-      <div style={{ padding: '20px 24px 40px', width: '97%', maxWidth: 'none', margin: '0 auto' }}>
-        <Link to="/faculty/classes" style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 12.5, color: 'var(--muted)', textDecoration: 'none', marginBottom: 10 }}>
-          <Icons.ChevronLeft size={14} /> My Classes
-        </Link>
-
-        <div className="faculty-class-hero">
-          <div className="faculty-class-hero-icon">
-            <Icons.BookOpen size={19} color="var(--accent)" />
-          </div>
+      <div style={{ padding: '10px 24px 40px', width: '100%', maxWidth: 1040, boxSizing: 'border-box', margin: '0 auto' }}>
+        <div className="faculty-class-hero faculty-class-hero-compact">
           <div>
             {assignment && (
               <div className="faculty-class-hero-meta">
@@ -1607,85 +1600,28 @@ export default function FacultyClassDetail() {
           </div>
         </div>
 
-        {/* Tab bar — disabled tabs are visible but non-interactive, with a
-            title tooltip explaining why, rather than hidden entirely. This
-            keeps the tab-bar layout stable across phases instead of tabs
-            appearing/shifting as later phases land.
-
-            Mobile (<=767px): only the first MOBILE_PRIMARY_COUNT tabs
-            (Attendance, Schedule, Notices, Marks — the daily/frequent
-            ones) show as always-visible buttons; the rest sit behind a
-            "More" button that opens a small grid. This is CSS-driven
-            (.faculty-tabs-primary / .faculty-tabs-more), not a JS media
-            query, so it doesn't fight the existing useIsMobileNav
-            breakpoint elsewhere and stays correct on resize without a
-            listener. Desktop shows the full bar unchanged. */}
-        <div className="faculty-tabs-wrap">
-          <div className="faculty-tabs faculty-tabs-full">
-            {TABS.map((t) => {
-              const Icon = Icons[t.icon] || Icons.Circle;
-              const active = tab === t.id;
-              return (
-                <button
-                  key={t.id}
-                  onClick={() => t.enabled && selectTab(t.id)}
-                  disabled={!t.enabled}
-                  title={t.enabled ? undefined : 'Coming in a later phase'}
-                  className={`faculty-tab-btn${active ? ' active' : ''}`}
-                >
-                  <Icon size={14} /> {t.label}
-                </button>
-              );
-            })}
-          </div>
-
-          <div className="faculty-tabs faculty-tabs-primary">
-            {TABS.slice(0, MOBILE_PRIMARY_COUNT).map((t) => {
-              const Icon = Icons[t.icon] || Icons.Circle;
-              const active = tab === t.id;
-              return (
-                <button
-                  key={t.id}
-                  onClick={() => t.enabled && selectTab(t.id)}
-                  disabled={!t.enabled}
-                  title={t.enabled ? undefined : 'Coming in a later phase'}
-                  className={`faculty-tab-btn${active ? ' active' : ''}`}
-                >
-                  <Icon size={14} /> {t.label}
-                </button>
-              );
-            })}
-            <button
-              onClick={() => setMoreOpen((v) => !v)}
-              className={`faculty-tab-btn faculty-tab-more-btn${moreOpen || TABS.slice(MOBILE_PRIMARY_COUNT).some((t) => t.id === tab) ? ' active' : ''}`}
-            >
-              <Icons.MoreHorizontal size={14} /> More
-            </button>
-          </div>
-
-          {moreOpen && (
-            <>
-              <div className="faculty-tabs-more-backdrop" onClick={() => setMoreOpen(false)} />
-              <div className="faculty-tabs-more-sheet">
-                {TABS.slice(MOBILE_PRIMARY_COUNT).map((t) => {
-                  const Icon = Icons[t.icon] || Icons.Circle;
-                  const active = tab === t.id;
-                  return (
-                    <button
-                      key={t.id}
-                      onClick={() => { if (t.enabled) { selectTab(t.id); setMoreOpen(false); } }}
-                      disabled={!t.enabled}
-                      title={t.enabled ? undefined : 'Coming in a later phase'}
-                      className={`faculty-tab-more-item${active ? ' active' : ''}`}
-                    >
-                      <Icon size={18} />
-                      <span>{t.label}</span>
-                    </button>
-                  );
-                })}
-              </div>
-            </>
-          )}
+        {/* Tab bar — 2-column chip grid on mobile (wraps into rows), a
+            single horizontal row on desktop (see .faculty-tabs-grid's
+            >=640px rule in index.css). No JS breakpoint logic, no "More"
+            sheet — the row/grid switch is CSS-only.
+            Disabled tabs stay visible but non-interactive, with a title
+            tooltip explaining why, rather than being hidden entirely. */}
+        <div className="faculty-tabs-grid">
+          {TABS.map((t) => {
+            const Icon = Icons[t.icon] || Icons.Circle;
+            const active = tab === t.id;
+            return (
+              <button
+                key={t.id}
+                onClick={() => t.enabled && selectTab(t.id)}
+                disabled={!t.enabled}
+                title={t.enabled ? undefined : 'Coming in a later phase'}
+                className={`faculty-tab-chip${active ? ' active' : ''}`}
+              >
+                <Icon size={15} /> {t.label}
+              </button>
+            );
+          })}
         </div>
 
         {!groupId && (

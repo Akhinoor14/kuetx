@@ -124,7 +124,7 @@ export default function FounderBatchSettings() {
 
   return (
     <div className="hub-page-bg" style={{ minHeight: '100vh' }}>
-      <div style={{ padding: '20px 24px 40px', width: '97%', maxWidth: 720, margin: '0 auto' }}>
+      <div style={{ padding: '20px 24px 40px', width: '100%', boxSizing: 'border-box', maxWidth: 720, margin: '0 auto' }}>
         <div className="hub-page-hero" style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
           <div className="hub-page-hero-icon">
             <Icons.Users size={20} color="var(--accent)" />
