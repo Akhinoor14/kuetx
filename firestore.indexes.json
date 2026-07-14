@@ -17,6 +17,14 @@
       ]
     },
     {
+      "collectionGroup": "deleteRequests",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "status", "order": "ASCENDING" },
+        { "fieldPath": "requestedAt", "order": "ASCENDING" }
+      ]
+    },
+    {
       "collectionGroup": "emailFlags",
       "queryScope": "COLLECTION",
       "fields": [
