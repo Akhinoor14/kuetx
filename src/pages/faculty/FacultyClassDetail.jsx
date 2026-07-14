@@ -311,27 +311,27 @@ function NoticesTab({ groupId, isVerified, assignment }) {
 
   return (
     <div>
-      <div style={{ padding: 16, borderRadius: 14, border: '1px solid var(--border)', background: 'var(--card)', marginBottom: 16, display: 'grid', gap: 10 }}>
+      <div style={{ padding: 14, borderRadius: 12, border: '1px solid var(--border)', background: 'var(--card)', marginBottom: 14, display: 'grid', gap: 8 }}>
         <input
           placeholder="Title"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          style={{ padding: '9px 10px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--bg)', color: 'var(--text)', fontSize: 13.5 }}
+          style={{ padding: '8px 10px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--bg)', color: 'var(--text)', fontSize: 13 }}
         />
         <textarea
           placeholder="Message"
-          rows={4}
+          rows={3}
           value={body}
           onChange={(e) => setBody(e.target.value)}
-          style={{ padding: '9px 10px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--bg)', color: 'var(--text)', fontSize: 13.5, resize: 'vertical' }}
+          style={{ padding: '8px 10px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--bg)', color: 'var(--text)', fontSize: 13, resize: 'vertical' }}
         />
-        <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-          <label style={{ fontSize: 12, color: 'var(--muted)', display: 'flex', alignItems: 'center', gap: 6 }}>
-            <input type="radio" checked={targetType === 'broadcast'} onChange={() => setTargetType('broadcast')} />
+        <div style={{ display: 'flex', gap: 14, alignItems: 'center', flexWrap: 'wrap' }}>
+          <label style={{ fontSize: 11.5, color: 'var(--muted)', display: 'flex', alignItems: 'center', gap: 5 }}>
+            <input type="radio" checked={targetType === 'broadcast'} onChange={() => setTargetType('broadcast')} style={{ width: 13, height: 13 }} />
             Class only (all students)
           </label>
-          <label style={{ fontSize: 12, color: 'var(--muted)', display: 'flex', alignItems: 'center', gap: 6 }}>
-            <input type="radio" checked={targetType === 'cr_only'} onChange={() => setTargetType('cr_only')} />
+          <label style={{ fontSize: 11.5, color: 'var(--muted)', display: 'flex', alignItems: 'center', gap: 5 }}>
+            <input type="radio" checked={targetType === 'cr_only'} onChange={() => setTargetType('cr_only')} style={{ width: 13, height: 13 }} />
             CR only
           </label>
         </div>
@@ -339,30 +339,30 @@ function NoticesTab({ groupId, isVerified, assignment }) {
           onClick={handleSend}
           disabled={sending || !isVerified}
           title={!isVerified ? 'Blue Tick verification needed before you can send notices' : undefined}
-          style={{ padding: '10px 16px', borderRadius: 8, border: 'none', background: 'var(--accent)', color: '#fff', fontWeight: 700, fontSize: 13, cursor: (sending || !isVerified) ? 'not-allowed' : 'pointer', opacity: (sending || !isVerified) ? 0.5 : 1 }}
+          style={{ padding: '9px 16px', borderRadius: 8, border: 'none', background: 'var(--accent)', color: '#fff', fontWeight: 700, fontSize: 12.5, cursor: (sending || !isVerified) ? 'not-allowed' : 'pointer', opacity: (sending || !isVerified) ? 0.5 : 1 }}
         >
           {sending ? 'Sending…' : 'Send Notice'}
         </button>
         {!isVerified && (
-          <div style={{ fontSize: 11.5, color: 'var(--muted)' }}>
+          <div style={{ fontSize: 11, color: 'var(--muted)' }}>
             🔒 Needs Blue Tick verification. Visit <Link to="/faculty/contact">Contact</Link> if you need help getting verified.
           </div>
         )}
       </div>
 
-      <div style={{ display: 'grid', gap: 8 }}>
+      <div style={{ display: 'grid', gap: 6 }}>
         {notices.length === 0 && (
           <div style={{ fontSize: 12.5, color: 'var(--muted)' }}>No notices sent to this class yet.</div>
         )}
         {notices.map((n) => (
-          <div key={n.id} style={{ padding: '12px 14px', borderRadius: 10, border: '1px solid var(--border)', background: 'var(--card)' }}>
+          <div key={n.id} style={{ padding: '10px 12px', borderRadius: 9, border: '1px solid var(--border)', background: 'var(--card)' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', gap: 8 }}>
-              <span style={{ fontWeight: 700, fontSize: 13.5, color: 'var(--text)' }}>{n.title}</span>
-              <span style={{ fontSize: 10, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase' }}>
+              <span style={{ fontWeight: 700, fontSize: 13, color: 'var(--text)' }}>{n.title}</span>
+              <span style={{ fontSize: 9.5, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase' }}>
                 {n.targetType === 'cr_only' ? 'CR only' : 'Class only'}
               </span>
             </div>
-            <div style={{ fontSize: 12.5, color: 'var(--muted)', marginTop: 2 }}>{n.body}</div>
+            <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 2 }}>{n.body}</div>
           </div>
         ))}
       </div>
@@ -371,15 +371,10 @@ function NoticesTab({ groupId, isVerified, assignment }) {
 }
 
 function SyllabusTab({ assignment }) {
-  const [expandedTopics, setExpandedTopics] = useState({});
   if (!assignment) return null;
   const syllabus = getDeptSyllabus(assignment.dept);
   const course = syllabus?.courses?.[assignment.courseCode];
   const accent = 'var(--accent)';
-
-  const toggleTopic = (idx) => {
-    setExpandedTopics((prev) => ({ ...prev, [idx]: !prev[idx] }));
-  };
 
   if (!course) {
     return (
@@ -424,24 +419,17 @@ function SyllabusTab({ assignment }) {
             Topics ({topics.length})
           </div>
           <div>
-            {topics.map((topic, i) => {
-              const isExpanded = expandedTopics[i];
-              return (
-                <div key={i} style={{ borderBottom: i < topics.length - 1 ? '1px solid var(--border)' : 'none' }}>
-                  <button
-                    onClick={() => toggleTopic(i)}
-                    style={{ width: '100%', padding: '10px 14px', background: 'transparent', border: 'none', cursor: 'pointer', textAlign: 'left', display: 'flex', alignItems: 'flex-start', gap: 8 }}
-                    onMouseEnter={(e) => (e.currentTarget.style.background = `color-mix(in srgb, ${accent} 6%, transparent)`)}
-                    onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; }}
-                  >
-                    <span style={{ color: accent, fontWeight: 700, flexShrink: 0 }}>{isExpanded ? '▼' : i + 1 + '.'}</span>
-                    <span style={{ fontSize: 12.5, lineHeight: 1.4, color: 'var(--text)' }}>
-                      {isExpanded ? topic : `${topic.substring(0, 100)}${topic.length > 100 ? '...' : ''}`}
-                    </span>
-                  </button>
-                </div>
-              );
-            })}
+            {/* Topics are always shown in full — no click-to-expand toggle.
+                Previously each topic was truncated to 100 chars and needed
+                a tap to reveal the rest, on both mobile and desktop; that
+                extra step served no purpose since the teacher opens this
+                tab specifically to read the syllabus. */}
+            {topics.map((topic, i) => (
+              <div key={i} style={{ borderBottom: i < topics.length - 1 ? '1px solid var(--border)' : 'none', padding: '10px 14px', display: 'flex', alignItems: 'flex-start', gap: 8 }}>
+                <span style={{ color: accent, fontWeight: 700, flexShrink: 0 }}>{i + 1}.</span>
+                <span style={{ fontSize: 12.5, lineHeight: 1.5, color: 'var(--text)' }}>{topic}</span>
+              </div>
+            ))}
           </div>
         </div>
       ) : (
@@ -891,131 +879,144 @@ function AttendanceTab({ assignment, groupId }) {
 
   return (
     <div>
-      {/* Sessions & Count — merged into Attendance. Compact strip: count +
-          plan progress + manual "+1" fallback (attendance-taking already
-          auto-logs the common case, so this button is for edge cases like
-          a class held without attendance being taken that day). */}
-      <div className="faculty-summary-card" style={{
-        display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12,
-        marginBottom: 14, flexWrap: 'wrap',
-      }}>
-        <div>
-          <div style={{ fontWeight: 800, fontSize: 18, color: 'var(--text)' }}>{logsForCourse.length}</div>
-          {!editingPlan ? (
-            <div style={{ fontSize: 11.5, color: 'var(--muted)', display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
-              <span>classes logged{plannedTotal ? ` of ${plannedTotal} planned` : ''}</span>
-              <button
-                onClick={openPlanEditor}
-                style={{ background: 'none', border: 'none', padding: 0, color: 'var(--accent)', fontSize: 11.5, fontWeight: 700, cursor: 'pointer', textDecoration: 'underline' }}
-              >
-                {plannedTotal ? 'Edit plan' : 'Set a plan'}
-              </button>
-              <button
-                onClick={() => setShowSessionLog((v) => !v)}
-                style={{ background: 'none', border: 'none', padding: 0, color: 'var(--muted)', fontSize: 11.5, fontWeight: 600, cursor: 'pointer', textDecoration: 'underline' }}
-              >
-                {showSessionLog ? 'Hide log' : 'View log'}
-              </button>
-            </div>
-          ) : (
-            <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 4 }}>
-              <input
-                type="number"
-                min="1"
-                autoFocus
-                value={planInput}
-                onChange={(e) => setPlanInput(e.target.value)}
-                placeholder="e.g. 30"
-                style={{
-                  width: 70, padding: '5px 8px', borderRadius: 6, border: '1px solid var(--border)',
-                  background: 'var(--bg)', color: 'var(--text)', fontSize: 12.5,
-                }}
-              />
-              <span style={{ fontSize: 11.5, color: 'var(--muted)' }}>total classes planned</span>
-              <button
-                onClick={handleSavePlan}
-                disabled={savingPlan || !planInput}
-                style={{ padding: '5px 10px', borderRadius: 6, border: 'none', background: 'var(--accent)', color: '#fff', fontSize: 11.5, fontWeight: 700, cursor: savingPlan ? 'wait' : 'pointer', opacity: savingPlan || !planInput ? 0.6 : 1 }}
-              >
-                {savingPlan ? 'Saving…' : 'Save'}
-              </button>
-              <button
-                onClick={() => setEditingPlan(false)}
-                style={{ padding: '5px 8px', borderRadius: 6, border: '1px solid var(--border)', background: 'transparent', color: 'var(--muted)', fontSize: 11.5, cursor: 'pointer' }}
-              >
-                Cancel
-              </button>
-            </div>
-          )}
+      {/* Sessions & Count + Attendance Summary — merged into ONE seamless
+          card (was two separate .faculty-summary-card blocks stacked with
+          a gap, which read as disconnected). An internal divider separates
+          the count/plan/log section from the regularity summary instead. */}
+      <div className="faculty-summary-card" style={{ marginBottom: 14 }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap' }}>
+          <div>
+            <div style={{ fontWeight: 800, fontSize: 18, color: 'var(--text)' }}>{logsForCourse.length}</div>
+            {!editingPlan ? (
+              <div style={{ fontSize: 11.5, color: 'var(--muted)', display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
+                <span>classes logged{plannedTotal ? ` of ${plannedTotal} planned` : ''}</span>
+                <button
+                  onClick={openPlanEditor}
+                  style={{ background: 'none', border: 'none', padding: 0, color: 'var(--accent)', fontSize: 11.5, fontWeight: 700, cursor: 'pointer', textDecoration: 'underline' }}
+                >
+                  {plannedTotal ? 'Edit plan' : 'Set a plan'}
+                </button>
+                <button
+                  onClick={() => setShowSessionLog((v) => !v)}
+                  style={{ background: 'none', border: 'none', padding: 0, color: 'var(--muted)', fontSize: 11.5, fontWeight: 600, cursor: 'pointer', textDecoration: 'underline' }}
+                >
+                  {showSessionLog ? 'Hide log' : 'View log'}
+                </button>
+              </div>
+            ) : (
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 4, flexWrap: 'wrap' }}>
+                <input
+                  type="number"
+                  min="1"
+                  autoFocus
+                  value={planInput}
+                  onChange={(e) => setPlanInput(e.target.value)}
+                  placeholder="e.g. 30"
+                  style={{
+                    width: 70, padding: '5px 8px', borderRadius: 6, border: '1px solid var(--border)',
+                    background: 'var(--bg)', color: 'var(--text)', fontSize: 12.5,
+                  }}
+                />
+                <span style={{ fontSize: 11.5, color: 'var(--muted)' }}>total classes planned</span>
+                <button
+                  onClick={handleSavePlan}
+                  disabled={savingPlan || !planInput}
+                  style={{ padding: '5px 10px', borderRadius: 6, border: 'none', background: 'var(--accent)', color: '#fff', fontSize: 11.5, fontWeight: 700, cursor: savingPlan ? 'wait' : 'pointer', opacity: savingPlan || !planInput ? 0.6 : 1 }}
+                >
+                  {savingPlan ? 'Saving…' : 'Save'}
+                </button>
+                <button
+                  onClick={() => setEditingPlan(false)}
+                  style={{ padding: '5px 8px', borderRadius: 6, border: '1px solid var(--border)', background: 'transparent', color: 'var(--muted)', fontSize: 11.5, cursor: 'pointer' }}
+                >
+                  Cancel
+                </button>
+              </div>
+            )}
+          </div>
         </div>
+
+        {showSessionLog && (
+          <div style={{ marginTop: 12, paddingTop: 12, borderTop: '1px solid var(--border)' }}>
+            <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 8 }}>
+              <button
+                onClick={handleManualLog}
+                disabled={logging}
+                title="Class held but attendance wasn't taken for it — logs it manually"
+                style={{
+                  background: 'none', border: 'none', padding: 0, color: 'var(--muted)',
+                  fontSize: 11, fontWeight: 600, cursor: 'pointer', textDecoration: 'underline',
+                  opacity: logging ? 0.6 : 1,
+                }}
+              >
+                {logging ? 'Logging…' : "Class held but attendance missed? Log it manually"}
+              </button>
+            </div>
+            <div style={{ display: 'grid', gap: 6 }}>
+              {logsForCourse.length === 0 ? (
+                <div style={{ color: 'var(--muted)', fontSize: 13, padding: '8px 0' }}>No sessions logged yet for this course.</div>
+              ) : (
+                [...logsForCourse].reverse().map((l) => {
+                  const loggedDate = l.loggedAt ? new Date(l.loggedAt) : null;
+                  const dateLabel = loggedDate && !Number.isNaN(loggedDate.getTime())
+                    ? loggedDate.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })
+                    : '—';
+                  return (
+                    <div key={l.id} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, padding: '7px 0', borderBottom: '1px solid var(--border)', fontSize: 12.5 }}>
+                      <span style={{ color: 'var(--text)' }}>
+                        Class {l.sequenceNumber || '—'} · {l.teacherName || 'Unknown'}
+                      </span>
+                      <span style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }}>
+                        <span style={{ color: 'var(--muted)', fontSize: 11, fontFamily: 'JetBrains Mono, monospace' }}>{dateLabel}</span>
+                        <span style={{ color: 'var(--muted)', fontSize: 11 }}>
+                          {l.loggedBy?.role === 'faculty' ? '👨‍🏫 Faculty' : l.loggedBy?.role === 'cr' ? 'CR' : '—'}
+                        </span>
+                      </span>
+                    </div>
+                  );
+                })
+              )}
+            </div>
+          </div>
+        )}
+
+        {totalClasses > 0 && (
+          <div style={{ marginTop: 12, paddingTop: 12, borderTop: '1px solid var(--border)' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
+              <div style={{ fontWeight: 700, fontSize: 13.5 }}>Attendance Summary</div>
+              <div style={{ fontSize: 11.5, color: 'var(--muted)' }}>{totalClasses} class{totalClasses === 1 ? '' : 'es'} held</div>
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+              <div>
+                <div style={{ fontSize: 11, fontWeight: 700, color: '#16a34a', marginBottom: 6 }}>✓ Most Regular</div>
+                {mostRegular.length === 0 && <div style={{ fontSize: 11, color: 'var(--muted)' }}>No data yet.</div>}
+                {mostRegular.map((s) => (
+                  <div key={s.id} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11.5, marginBottom: 3 }}>
+                    <span style={{ color: 'var(--text)' }}>{s.roll}</span>
+                    <span style={{ color: '#16a34a', fontWeight: 700 }}>{s.pct}%</span>
+                  </div>
+                ))}
+              </div>
+              <div>
+                <div style={{ fontSize: 11, fontWeight: 700, color: '#dc2626', marginBottom: 6 }}>⚠ Most Absent</div>
+                {mostAbsent.length === 0 && <div style={{ fontSize: 11, color: 'var(--muted)' }}>No data yet.</div>}
+                {mostAbsent.map((s) => (
+                  <div key={s.id} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11.5, marginBottom: 3 }}>
+                    <span style={{ color: 'var(--text)' }}>{s.roll}</span>
+                    <span style={{ color: '#dc2626', fontWeight: 700 }}>{s.pct}%</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
       </div>
 
-      {showSessionLog && (
-        <div style={{ marginBottom: 14 }}>
-          <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 8 }}>
-            <button
-              onClick={handleManualLog}
-              disabled={logging}
-              title="Class held but attendance wasn't taken for it — logs it manually"
-              style={{
-                background: 'none', border: 'none', padding: 0, color: 'var(--muted)',
-                fontSize: 11, fontWeight: 600, cursor: 'pointer', textDecoration: 'underline',
-                opacity: logging ? 0.6 : 1,
-              }}
-            >
-              {logging ? 'Logging…' : "Class held but attendance missed? Log it manually"}
-            </button>
-          </div>
-          <div style={{ display: 'grid', gap: 6 }}>
-          {logsForCourse.length === 0 ? (
-            <div style={{ color: 'var(--muted)', fontSize: 13, padding: '8px 0' }}>No sessions logged yet for this course.</div>
-          ) : (
-            [...logsForCourse].reverse().map((l) => (
-              <div key={l.id} className="faculty-row" style={{ fontSize: 12.5 }}>
-                <span style={{ color: 'var(--text)' }}>
-                  Class {l.sequenceNumber || '—'} · {l.teacherName || 'Unknown'}
-                </span>
-                <span style={{ color: 'var(--muted)', fontSize: 11 }}>
-                  {l.loggedBy?.role === 'faculty' ? '👨‍🏫 Faculty' : l.loggedBy?.role === 'cr' ? 'CR' : '—'}
-                </span>
-              </div>
-            ))
-          )}
-          </div>
-        </div>
-      )}
-
-      {totalClasses > 0 && (
-        <div className="faculty-summary-card" style={{ marginBottom: 14 }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
-            <div style={{ fontWeight: 700, fontSize: 13.5 }}>Attendance Summary</div>
-            <div style={{ fontSize: 11.5, color: 'var(--muted)' }}>{totalClasses} class{totalClasses === 1 ? '' : 'es'} held</div>
-          </div>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-            <div>
-              <div style={{ fontSize: 11, fontWeight: 700, color: '#16a34a', marginBottom: 6 }}>✓ Most Regular</div>
-              {mostRegular.length === 0 && <div style={{ fontSize: 11, color: 'var(--muted)' }}>No data yet.</div>}
-              {mostRegular.map((s) => (
-                <div key={s.id} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11.5, marginBottom: 3 }}>
-                  <span style={{ color: 'var(--text)' }}>{s.roll}</span>
-                  <span style={{ color: '#16a34a', fontWeight: 700 }}>{s.pct}%</span>
-                </div>
-              ))}
-            </div>
-            <div>
-              <div style={{ fontSize: 11, fontWeight: 700, color: '#dc2626', marginBottom: 6 }}>⚠ Most Absent</div>
-              {mostAbsent.length === 0 && <div style={{ fontSize: 11, color: 'var(--muted)' }}>No data yet.</div>}
-              {mostAbsent.map((s) => (
-                <div key={s.id} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11.5, marginBottom: 3 }}>
-                  <span style={{ color: 'var(--text)' }}>{s.roll}</span>
-                  <span style={{ color: '#dc2626', fontWeight: 700 }}>{s.pct}%</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
-
+      {/* Date picker only here — the actual Save/Update button moved below
+          the student roster (see bottom of this tab), since a teacher
+          marking attendance scrolls down through the whole class list and
+          the button should be right there when they finish, not back up
+          at the top of the screen. */}
       <div className="faculty-summary-card" style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 14, flexWrap: 'wrap' }}>
         <input
           type="date"
@@ -1031,13 +1032,6 @@ function AttendanceTab({ assignment, groupId }) {
             Today
           </button>
         )}
-        <button
-          onClick={handleSave}
-          disabled={saving}
-          style={{ padding: '8px 16px', borderRadius: 8, border: 'none', background: 'var(--accent)', color: '#fff', fontWeight: 700, fontSize: 12.5, cursor: 'pointer', opacity: saving ? 0.6 : 1, transition: 'opacity 0.15s' }}
-        >
-          {saving ? 'Saving…' : existingSessionForDate ? 'Update Attendance' : 'Save Attendance'}
-        </button>
         {existingSessionForDate && (
           <span style={{ fontSize: 11, color: 'var(--muted)' }}>Already recorded for this date — editing will update it.</span>
         )}
@@ -1069,11 +1063,23 @@ function AttendanceTab({ assignment, groupId }) {
           </div>
         ))}
       </div>
+
+      {/* Save/Update button lives here, right after the roster — a
+          teacher marking a full class scrolls all the way down through
+          the student list, so the save action should be waiting right
+          here instead of back up at the top of the tab. */}
+      <div className="faculty-summary-card" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, marginTop: 14 }}>
+        <button
+          onClick={handleSave}
+          disabled={saving}
+          style={{ width: '100%', padding: '11px 16px', borderRadius: 8, border: 'none', background: 'var(--accent)', color: '#fff', fontWeight: 700, fontSize: 13.5, cursor: 'pointer', opacity: saving ? 0.6 : 1, transition: 'opacity 0.15s' }}
+        >
+          {saving ? 'Saving…' : existingSessionForDate ? 'Update Attendance' : 'Save Attendance'}
+        </button>
+      </div>
     </div>
   );
 }
-
-// QuestionBankTab — reuses the same live R2 tree the student-facing
 // QuestionBank page reads (useQuestionBankData/getR2FileUrl), scoped to
 // THIS class's own department only: a teacher assigned to ESE shouldn't
 // have to wade through 15 other departments to find their own course's
@@ -1456,44 +1462,44 @@ function MarksTab({ assignment, groupId }) {
       max={max}
       value={getFieldValue(studentUid, key)}
       onChange={(e) => setField(studentUid, key, e.target.value, max)}
-      style={{ width: 52, padding: '5px 6px', borderRadius: 6, border: '1px solid var(--border)', background: 'var(--bg)', color: 'var(--text)', fontSize: 12 }}
+      style={{ width: 40, padding: '4px 5px', borderRadius: 6, border: '1px solid var(--border)', background: 'var(--bg)', color: 'var(--text)', fontSize: 12, textAlign: 'center' }}
     />
   );
 
   return (
     <div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12, flexWrap: 'wrap', gap: 8 }}>
-        <div style={{ fontSize: 12, color: 'var(--muted)' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10, flexWrap: 'wrap', gap: 8 }}>
+        <div style={{ fontSize: 11.5, color: 'var(--muted)' }}>
           You are <strong style={{ color: 'var(--text)' }}>{teacherSlot === 'teacher1' ? 'Teacher 1' : 'Teacher 2'}</strong> -- your own 45-mark quota (attendance {markConfig.attendanceWeight} + {markConfig.components.map((c) => `${c.label} ${c.max}`).join(' + ')})
         </div>
-        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+        <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
           <button
             onClick={() => setEditingBreakdown(true)}
-            style={{ padding: '7px 14px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--bg)', color: 'var(--text)', fontWeight: 700, fontSize: 12, cursor: 'pointer' }}
+            style={{ padding: '6px 12px', borderRadius: 7, border: '1px solid var(--border)', background: 'var(--bg)', color: 'var(--text)', fontWeight: 700, fontSize: 11.5, cursor: 'pointer' }}
           >
             Edit Breakdown
           </button>
           <button
             onClick={handleSendAllReviewed}
             disabled={sendingAll}
-            style={{ padding: '7px 14px', borderRadius: 8, border: 'none', background: 'var(--accent)', color: '#fff', fontWeight: 700, fontSize: 12, cursor: 'pointer', opacity: sendingAll ? 0.6 : 1 }}
+            style={{ padding: '6px 12px', borderRadius: 7, border: 'none', background: 'var(--accent)', color: '#fff', fontWeight: 700, fontSize: 11.5, cursor: 'pointer', opacity: sendingAll ? 0.6 : 1 }}
           >
             {sendingAll ? 'Sending...' : 'Send All Reviewed'}
           </button>
         </div>
       </div>
 
-      <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 10 }}>
+      <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 8 }}>
         <button
           onClick={handleExportClass}
           disabled={exportingClass}
-          style={{ padding: '6px 12px', borderRadius: 7, border: '1px solid var(--border)', background: 'var(--card)', color: 'var(--text)', fontSize: 11.5, cursor: 'pointer' }}
+          style={{ padding: '5px 11px', borderRadius: 7, border: '1px solid var(--border)', background: 'var(--card)', color: 'var(--text)', fontSize: 11, cursor: 'pointer' }}
         >
           {exportingClass ? 'Exporting...' : 'Export Class Summary PDF'}
         </button>
       </div>
 
-      <div style={{ display: 'grid', gap: 8 }}>
+      <div style={{ display: 'grid', gap: 6 }}>
         {members.map((m) => {
           const rec = recordsByUid[m.id];
           const pct = attendancePctFor(m.id);
@@ -1510,7 +1516,10 @@ function MarksTab({ assignment, groupId }) {
 
               <div className="faculty-marks-card-inputs">
                 {markConfig.components.map((c) => (
-                  <label key={c.key} className="faculty-marks-card-input-label">{c.label} {numInput(m.id, c.key, c.max)}</label>
+                  <label key={c.key} className="faculty-marks-card-input-label">
+                    <span>{c.label}</span>
+                    {numInput(m.id, c.key, c.max)}
+                  </label>
                 ))}
               </div>
 
@@ -1618,7 +1627,7 @@ export default function FacultyClassDetail() {
                 title={t.enabled ? undefined : 'Coming in a later phase'}
                 className={`faculty-tab-chip${active ? ' active' : ''}`}
               >
-                <Icon size={15} /> {t.label}
+                <Icon size={13} /> {t.label}
               </button>
             );
           })}
@@ -1649,7 +1658,7 @@ export default function FacultyClassDetail() {
           if (!mountedTabs.has(t.id)) return null;
           return (
             <div key={t.id} className="faculty-tab-panel" style={{ display: active ? 'block' : 'none' }}>
-              {t.id === 'students' && <ClassmatesList groupId={groupId} showActions={false} viewerRole="faculty" />}
+              {t.id === 'students' && <ClassmatesList groupId={groupId} showActions={false} viewerRole="faculty" groupMeta={{ dept: assignment.dept, batch: assignment.batch, term: assignment.term }} />}
               {t.id === 'syllabus' && <SyllabusTab assignment={assignment} />}
               {t.id === 'schedule' && (
                 <ScheduleTab assignment={assignment} groupId={groupId} isVerified={isVerified} onEditDayTime={() => setEditingDayTime(true)} />

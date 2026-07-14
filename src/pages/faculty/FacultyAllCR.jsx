@@ -229,7 +229,7 @@ export default function FacultyAllCR() {
   );
 }
 
-function DetailRow({ label, value, href }) {
+export function DetailRow({ label, value, href }) {
   return (
     <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, padding: '8px 0' }}>
       <span style={{ fontSize: 12, color: 'var(--muted)' }}>{label}</span>
@@ -242,7 +242,7 @@ function DetailRow({ label, value, href }) {
   );
 }
 
-function CRDetailModal({ member, onClose }) {
+export function CRDetailModal({ member, onClose }) {
   return (
     <div
       onClick={onClose}

@@ -6,6 +6,7 @@ import {
   MAX_CR, MAX_ACR,
 } from '../lib/groupSync';
 import BlueTick from './BlueTick';
+import { CRDetailModal } from '../pages/faculty/FacultyAllCR';
 
 /**
  * groupId       - the batch+dept group to show
@@ -28,8 +29,9 @@ import BlueTick from './BlueTick';
  *                 existing StaffDashboard.jsx call site.
  * currentUid    - so we can badge "You" and disallow self-demotion by accident
  */
-export default function ClassmatesList({ groupId, showActions = false, viewerRole = 'cl', currentUid = null, searchText = '' }) {
+export default function ClassmatesList({ groupId, showActions = false, viewerRole = 'cl', currentUid = null, searchText = '', groupMeta = null }) {
   const [members, setMembers] = useState(null); // null = loading
+  const [selectedCR, setSelectedCR] = useState(null); // CR/ACR row picked for the detail panel
 
   useEffect(() => {
     if (!groupId) { setMembers([]); return; }
@@ -61,7 +63,7 @@ export default function ClassmatesList({ groupId, showActions = false, viewerRol
   // visible rather than guessed at.
   const visibleMembers = members.filter((m) => m.isAnonymous !== true);
   const normalizedSearch = searchText.trim().toLowerCase();
-  const filteredMembers = normalizedSearch
+  const filteredMembersUnsorted = normalizedSearch
     ? visibleMembers.filter((m) => {
         const name = (m.name || '').toLowerCase();
         const roll = (m.roll || '').toLowerCase();
@@ -69,6 +71,16 @@ export default function ClassmatesList({ groupId, showActions = false, viewerRol
         return name.includes(normalizedSearch) || roll.includes(normalizedSearch) || role.includes(normalizedSearch);
       })
     : visibleMembers;
+  // CR/ACR pinned to the top (CR before ACR), everyone else below sorted
+  // by roll number — makes the class rep(s) easy to spot at a glance
+  // instead of being scattered wherever Firestore happened to return them.
+  const rolePriority = (role) => (role === 'cr' ? 0 : role === 'acr' ? 1 : 2);
+  const filteredMembers = [...filteredMembersUnsorted].sort((a, b) => {
+    const pa = rolePriority(a.role);
+    const pb = rolePriority(b.role);
+    if (pa !== pb) return pa - pb;
+    return (a.roll || '').localeCompare(b.roll || '', undefined, { numeric: true });
+  });
 
   if (visibleMembers.length === 0) {
     return (
@@ -127,16 +139,24 @@ export default function ClassmatesList({ groupId, showActions = false, viewerRol
 
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: 6, flexShrink: 0, flexWrap: 'wrap' }}>
               {m.role === 'cr' && (
-                <span style={{
-                  fontSize: 11, fontWeight: 700, color: 'var(--accent)', background: 'var(--accentSoft)',
-                  padding: '2px 8px', borderRadius: 999,
-                }}>CR</span>
+                <span
+                  onClick={() => setSelectedCR(m)}
+                  style={{
+                    fontSize: 11, fontWeight: 700, color: 'var(--accent)', background: 'var(--accentSoft)',
+                    padding: '2px 8px', borderRadius: 999, cursor: 'pointer',
+                  }}
+                  title="View CR info"
+                >CR</span>
               )}
               {m.role === 'acr' && (
-                <span style={{
-                  fontSize: 11, fontWeight: 700, color: 'var(--accent)', background: 'var(--accentSoft)',
-                  padding: '2px 8px', borderRadius: 999,
-                }}>ACR</span>
+                <span
+                  onClick={() => setSelectedCR(m)}
+                  style={{
+                    fontSize: 11, fontWeight: 700, color: 'var(--accent)', background: 'var(--accentSoft)',
+                    padding: '2px 8px', borderRadius: 999, cursor: 'pointer',
+                  }}
+                  title="View ACR info"
+                >ACR</span>
               )}
               {m.role !== 'cr' && m.legacyCRClaim && (
                 <span style={{
@@ -254,6 +274,9 @@ export default function ClassmatesList({ groupId, showActions = false, viewerRol
           </div>
         ))}
       </div>
+      {selectedCR && (
+        <CRDetailModal member={{ ...selectedCR, ...(groupMeta || {}) }} onClose={() => setSelectedCR(null)} />
+      )}
     </div>
   );
 }
