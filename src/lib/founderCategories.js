@@ -59,6 +59,11 @@ export const FOUNDER_CATEGORIES = [
     key: 'trust',
     label: 'Trust & Safety',
     icon: 'Flag',
+    // Feature off for now (kept working, just hidden from the founder
+    // grid) — set hidden: false to bring the button back. Nothing here
+    // was deleted; TrustSafetyView and its data still work if linked to
+    // directly.
+    hidden: true,
     subtitle: 'Email flags and roll unlock requests',
     getCount: (ctx) => ctx.emailFlags + ctx.rollRequests,
     subcategories: [

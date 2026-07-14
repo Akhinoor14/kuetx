@@ -188,7 +188,14 @@ service cloud.firestore {
     // Pre-existing personal data (unchanged)
     // -------------------------------------------------------------
     match /users/{uid}/data/{key} {
-      allow read, write: if isSignedIn() && request.auth.uid == uid;
+      allow read: if isSignedIn() && (request.auth.uid == uid
+        // Staff & Roles "Current Holders" name-resolution fallback
+        // (getStaffDisplayInfo in staffSync.js) — only reached for a
+        // staff-role holder who isn't a member of any class group, so
+        // there's no groups/*/members doc to read a name from. Scoped to
+        // just the `profile` key, read-only, Admin/Head of Ops only.
+        || (key == 'profile' && (isAdmin() || isHeadOfOps())));
+      allow write: if isSignedIn() && request.auth.uid == uid;
     }
     match /users/{uid}/meta/{docId} {
       allow read, write: if isSignedIn() && request.auth.uid == uid;

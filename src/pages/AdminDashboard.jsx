@@ -13,6 +13,7 @@ import {
 import {
   assignRole, removeRole, listStaffByRole, subscribeAllCLApplications,
   approveCLApplication, rejectCLApplication, getStaffDisplayInfoBatch,
+  subscribeStaffRoleHistory,
 } from '../lib/staffSync';
 import { CORE_TEAM_LEAD_ROLES, ROLE_LABELS, ROLE_SCOPE_KIND, ROLES } from '../lib/staffRoles';
 import { BLOOD_GROUP_VALUES } from '../store/store';
@@ -23,7 +24,7 @@ import { renderFormattedNoticeBody } from '../lib/noticeFormat';
 import CategorySubNav from '../components/CategorySubNav';
 import SubcategoryTabs from '../components/SubcategoryTabs';
 import { FOUNDER_CATEGORIES, getFounderCategory, resolveCount, resolveSubtitle } from '../lib/founderCategories';
-import { listAllFacultyAccounts, adminVerifyFaculty } from '../lib/facultySync';
+import { listAllFacultyAccounts, adminVerifyFaculty, adminDeleteFaculty } from '../lib/facultySync';
 import { listAllBloodDonors, searchBloodDonorsByGroup } from '../lib/bloodDonorSync';
 import { listAllActiveFacultyAssignments } from '../lib/facultyClassSync';
 import { useIsFaculty } from '../hooks/useIsFaculty';
@@ -159,7 +160,7 @@ function CategoryShell({ view, onSelect, countCtx, children }) {
   return (
     <div>
       <CategorySubNav
-        categories={FOUNDER_CATEGORIES}
+        categories={FOUNDER_CATEGORIES.filter((cat) => !cat.hidden)}
         activeKey={view}
         onSelect={onSelect}
         countCtx={countCtx}
@@ -192,7 +193,6 @@ function ApprovalsView({ onBack, onSelectCategory, countCtx }) {
   const [crRequestsByGroup, setCrRequestsByGroup] = useState(null);
   const [leaveRequestsByGroup, setLeaveRequestsByGroup] = useState(null);
   const [manualVerifyRequests, setManualVerifyRequests] = useState(null);
-  const [qbUploadRequests, setQbUploadRequests] = useState(null);
   const [err, setErr] = useState('');
   const [subTab, setSubTab] = useState('cl-apps');
   const [loadWarning, setLoadWarning] = useState('');
@@ -203,7 +203,6 @@ function ApprovalsView({ onBack, onSelectCategory, countCtx }) {
 
   useEffect(() => withTimeout((cb) => subscribeAllCLApplications(cb), setClApplications, { onTimeout: flagSlowLoad }), []);
   useEffect(() => withTimeout((cb) => subscribeManualVerifyRequests(cb), setManualVerifyRequests, { onTimeout: flagSlowLoad }), []);
-  useEffect(() => withTimeout((cb) => subscribeAllQBUploadRequests(cb), setQbUploadRequests, { onTimeout: flagSlowLoad }), []);
   useEffect(() => { listAllGroups().then((gs) => setGroupIds(gs.map((g) => g.id))); }, []);
 
   useEffect(() => {
@@ -244,7 +243,7 @@ function ApprovalsView({ onBack, onSelectCategory, countCtx }) {
   };
 
   const category = getFounderCategory('approvals');
-  const subCtx = { ...countCtx, clApplications: clApplications?.length || 0, crRequests: allCrRequests.length, leaveRequests: allLeaveRequests.length, manualVerifyRequests: manualVerifyRequests?.length || 0, qbUploadRequests: qbUploadRequests?.length || 0 };
+  const subCtx = { ...countCtx, clApplications: clApplications?.length || 0, crRequests: allCrRequests.length, leaveRequests: allLeaveRequests.length, manualVerifyRequests: manualVerifyRequests?.length || 0 };
 
   return (
     <CategoryShell view="approvals" onSelect={onSelectCategory} countCtx={countCtx}>
@@ -310,19 +309,6 @@ function ApprovalsView({ onBack, onSelectCategory, countCtx }) {
               onReject={() => handle(rejectManualVerifyRequest, r.id)}
             />
           ))}
-        </Section>
-      )}
-      {subTab === 'qb-uploads' && (
-        <Section title="Question Bank Uploads">
-          <div style={{ fontSize: 12, fontWeight: 700, margin: '0 0 6px' }}>Upload a paper (any department — auto-published, no review)</div>
-          <div style={{ marginBottom: 14 }}>
-            <QBUploadForm isFounder onUploaded={() => {}} />
-          </div>
-          <div style={{ fontSize: 12, fontWeight: 700, margin: '18px 0 6px' }}>Pending review (Campus Lead submissions)</div>
-          <QBReviewQueue all />
-
-          <div style={{ fontSize: 12, fontWeight: 700, margin: '18px 0 6px' }}>Pending delete requests</div>
-          <DeleteRequestQueue />
         </Section>
       )}
     </CategoryShell>
@@ -393,86 +379,115 @@ function reportStaffRoleHolders(holdersByRole, loadError = null) {
 }
 
 // Shown when tapping a staff holder's name in "Current role holders" —
-// full detail instead of just a bare uid or "name (roll)" string. Pulls
-// from `info` (getStaffDisplayInfo's result: name/roll/dept/batch/
-// groupId/verified/memberRole, resolved via the member doc in whichever
-// class group this uid belongs to) plus the role-assignment fields
-// already on `holder` (role/scope/uid).
-//
-// Deliberately does NOT show a "log history" section — there's no
-// existing per-person activity log anywhere in the app (the only audit
-// trail is groups/{groupId}/auditLog, which records routine/assignment
-// edits, not staff-role changes) — so a history section here would have
-// to be invented rather than real. Add one for real once that data
-// exists somewhere.
-function StaffHolderDetailModal({ holder, onClose }) {
+// a full page (not a small popup) with their full detail plus a real
+// activity timeline. The timeline is `staffRoleHistory` (see
+// logRoleHistoryEntry/subscribeStaffRoleHistory in staffSync.js) — every
+// role assign/revoke event for this uid, across every role they've ever
+// held, newest first. That's the only genuine per-person audit trail
+// that exists anywhere in the app (there's no log of day-to-day staff
+// dashboard actions, e.g. approvals clicked or notices sent — inventing
+// one here would just be fake data, so this shows what's real: their
+// role history) — already being written on every assign/revoke, just
+// never surfaced anywhere until now.
+function StaffHolderDetailPage({ holder, onClose }) {
   const info = holder.info || {};
   const scopeLabel = holder.scope?.dept || holder.scope?.groupId
     ? (holder.scope?.dept ? `Department: ${holder.scope.dept}` : `Class: ${holder.scope.groupId}`)
     : 'Global (no department/class scope)';
 
+  const [history, setHistory] = useState(null);
+  useEffect(() => subscribeStaffRoleHistory(holder.uid, setHistory), [holder.uid]);
+
+  const formatWhen = (ts) => {
+    if (!ts?.toDate) return '—';
+    try {
+      return ts.toDate().toLocaleString('en-GB', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+    } catch { return '—'; }
+  };
+
   return (
     <div
-      onClick={onClose}
       style={{
-        position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)',
-        display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 9999, padding: 16,
+        position: 'fixed', inset: 0, background: 'var(--bg, var(--card))', zIndex: 9999,
+        overflowY: 'auto', display: 'flex', flexDirection: 'column',
       }}
     >
-      <div
-        onClick={(e) => e.stopPropagation()}
-        style={{
-          background: 'var(--card)', borderRadius: 18, padding: 24, width: '100%', maxWidth: 400,
-          maxHeight: '85vh', overflowY: 'auto',
-          border: '1px solid var(--border)', boxShadow: '0 32px 80px rgba(0,0,0,0.28)',
-        }}
-      >
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
-          <div style={{ fontWeight: 800, fontSize: 16, color: 'var(--text)' }}>{info.name || 'Unnamed'}</div>
-          <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--muted)' }}>
-            <Icons.X size={18} />
-          </button>
+      <div style={{
+        position: 'sticky', top: 0, zIndex: 1, background: 'var(--card)', borderBottom: '1px solid var(--border)',
+        display: 'flex', alignItems: 'center', gap: 12, padding: '14px 20px',
+      }}>
+        <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text)', display: 'flex', alignItems: 'center' }}>
+          <Icons.ArrowLeft size={20} />
+        </button>
+        <div style={{ fontWeight: 800, fontSize: 16, color: 'var(--text)' }}>{info.name || 'Unnamed holder'}</div>
+      </div>
+
+      <div style={{ maxWidth: 640, width: '100%', margin: '0 auto', padding: '20px 20px 60px' }}>
+        <div style={{
+          display: 'flex', alignItems: 'center', gap: 14, padding: 16, borderRadius: 14,
+          border: '1px solid var(--border)', background: 'var(--surface, var(--card))', marginBottom: 20,
+        }}>
+          <div style={{
+            width: 52, height: 52, borderRadius: '50%', flexShrink: 0,
+            background: 'color-mix(in srgb, var(--accent) 15%, var(--surface))',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            fontWeight: 800, fontSize: 20, color: 'var(--accent)',
+          }}>
+            {(info.name || '?').trim().charAt(0).toUpperCase()}
+          </div>
+          <div style={{ minWidth: 0 }}>
+            <div style={{ fontWeight: 800, fontSize: 17, color: 'var(--text)' }}>{info.name || 'Unnamed holder'}</div>
+            <div style={{ fontSize: 12.5, color: 'var(--muted)' }}>{ROLE_LABELS[holder.role] || holder.role}</div>
+          </div>
         </div>
 
-        <div style={{ borderTop: '1px solid var(--border)' }}>
-          <DetailRow label="Staff position" value={ROLE_LABELS[holder.role] || holder.role} />
-          <div style={{ height: 1, background: 'var(--border)' }} />
-          <DetailRow label="Scope" value={scopeLabel} />
-          {info.roll && (
-            <>
-              <div style={{ height: 1, background: 'var(--border)' }} />
-              <DetailRow label="Roll" value={info.roll} />
-            </>
-          )}
-          {info.dept && (
-            <>
-              <div style={{ height: 1, background: 'var(--border)' }} />
-              <DetailRow label="Department" value={info.dept} />
-            </>
-          )}
-          {info.batch && (
-            <>
-              <div style={{ height: 1, background: 'var(--border)' }} />
-              <DetailRow label="Batch" value={info.batch} />
-            </>
-          )}
-          {info.groupId && (
-            <>
-              <div style={{ height: 1, background: 'var(--border)' }} />
-              <DetailRow label="Class" value={info.groupId} />
-            </>
-          )}
-          {info.memberRole && (
-            <>
-              <div style={{ height: 1, background: 'var(--border)' }} />
-              <DetailRow label="Class role" value={info.memberRole === 'cr' ? 'Class Representative (CR)' : info.memberRole === 'acr' ? 'Assistant CR (ACR)' : 'Member'} />
-            </>
-          )}
-          <div style={{ height: 1, background: 'var(--border)' }} />
-          <DetailRow label="Verified" value={info.verified ? 'Yes' : 'No'} />
-          <div style={{ height: 1, background: 'var(--border)' }} />
-          <DetailRow label="UID" value={holder.uid} mono />
-        </div>
+        <Section title="Details">
+          <div style={{ border: '1px solid var(--border)', borderRadius: 12, overflow: 'hidden', padding: '0 12px' }}>
+            <DetailRow label="Staff position" value={ROLE_LABELS[holder.role] || holder.role} />
+            <div style={{ height: 1, background: 'var(--border)' }} />
+            <DetailRow label="Scope" value={scopeLabel} />
+            {info.roll && (<><div style={{ height: 1, background: 'var(--border)' }} /><DetailRow label="Roll" value={info.roll} /></>)}
+            {info.dept && (<><div style={{ height: 1, background: 'var(--border)' }} /><DetailRow label="Department" value={info.dept} /></>)}
+            {info.batch && (<><div style={{ height: 1, background: 'var(--border)' }} /><DetailRow label="Batch" value={info.batch} /></>)}
+            {info.groupId && (<><div style={{ height: 1, background: 'var(--border)' }} /><DetailRow label="Class" value={info.groupId} /></>)}
+            {info.memberRole && (
+              <>
+                <div style={{ height: 1, background: 'var(--border)' }} />
+                <DetailRow label="Class role" value={info.memberRole === 'cr' ? 'Class Representative (CR)' : info.memberRole === 'acr' ? 'Assistant CR (ACR)' : 'Member'} />
+              </>
+            )}
+            <div style={{ height: 1, background: 'var(--border)' }} />
+            <DetailRow label="Verified" value={info.verified ? 'Yes' : 'No'} />
+            <div style={{ height: 1, background: 'var(--border)' }} />
+            <DetailRow label="UID" value={holder.uid} mono />
+          </div>
+        </Section>
+
+        <div style={{ height: 20 }} />
+
+        <Section title="Role activity">
+          <p style={{ fontSize: 11.5, color: 'var(--muted)', margin: '0 0 10px' }}>
+            Every role assigned or revoked for this person, across every role they've ever held — newest first.
+          </p>
+          {history === null && <EmptyState>Loading…</EmptyState>}
+          {history?.length === 0 && <EmptyState>No role history recorded yet.</EmptyState>}
+          {history?.map((h) => (
+            <div key={h.id} style={{
+              display: 'flex', gap: 10, padding: '10px 0', borderBottom: '1px solid var(--border)',
+            }}>
+              <div style={{
+                width: 8, height: 8, borderRadius: '50%', marginTop: 5, flexShrink: 0,
+                background: h.event === 'revoked' ? 'var(--danger)' : 'var(--accent)',
+              }} />
+              <div style={{ minWidth: 0, flex: 1 }}>
+                <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--text)' }}>
+                  {h.event === 'revoked' ? 'Role revoked' : 'Role assigned'} — {ROLE_LABELS[h.role] || h.role}
+                </div>
+                <div style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 2 }}>{formatWhen(h.at)}</div>
+              </div>
+            </div>
+          ))}
+        </Section>
       </div>
     </div>
   );
@@ -490,6 +505,43 @@ function DetailRow({ label, value, href, mono }) {
         {content}
       </div>
     </div>
+  );
+}
+
+// =======================================================================
+// QUESTION BANK — Founder's own upload panel (any dept, auto-published),
+// the review queue for Campus Lead submissions, and pending delete
+// requests. Previously buried as a subtab inside Approvals; split out
+// into its own top-level category since it's a distinct, frequent
+// workflow, not an approvals inbox item.
+// =======================================================================
+function QuestionBankView({ onBack, onSelectCategory, countCtx }) {
+  const [subTab, setSubTab] = useState('upload');
+  const category = getFounderCategory('question-bank');
+
+  return (
+    <CategoryShell view="question-bank" onSelect={onSelectCategory} countCtx={countCtx}>
+      <h2 style={{ fontSize: 16, fontWeight: 700, margin: '0 0 12px' }}>Question Bank</h2>
+      <SubcategoryTabs subcategories={category.subcategories} activeKey={subTab} onSelect={setSubTab} countCtx={countCtx} />
+
+      {subTab === 'upload' && (
+        <Section title="Upload a paper (any department — auto-published, no review)">
+          <QBUploadForm isFounder onUploaded={() => {}} />
+        </Section>
+      )}
+
+      {subTab === 'review' && (
+        <Section title="Pending review (Campus Lead submissions)">
+          <QBReviewQueue all />
+        </Section>
+      )}
+
+      {subTab === 'delete-requests' && (
+        <Section title="Pending delete requests">
+          <DeleteRequestQueue />
+        </Section>
+      )}
+    </CategoryShell>
   );
 }
 
@@ -671,28 +723,47 @@ function StaffRolesView({ onBack, onSelectCategory, groups, countCtx }) {
                 .filter((r) => (currentHolders[r]?.length || 0) > 0)
                 .flatMap((r) => (currentHolders[r] || []).map((h) => {
                   const info = displayInfo[h.uid];
-                  const label = info?.name || h.uid;
+                  const resolvedName = info?.name;
+                  const label = resolvedName || 'Unnamed holder';
                   return (
                     <div key={`${r}-${h.id}`} className="staff-holder-card">
-                      <div style={{ fontSize: 10, fontWeight: 800, color: 'var(--accent)', textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: 4 }}>
+                      <div style={{ fontSize: 10, fontWeight: 800, color: 'var(--accent)', textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: 8 }}>
                         {ROLE_LABELS[r]}
                       </div>
                       <button
                         onClick={() => setSelectedHolder({ ...h, role: r, info })}
-                        title="View full details"
+                        title={resolvedName ? `View full details — ${resolvedName}` : `View full details — uid ${h.uid}`}
                         style={{
-                          all: 'unset', cursor: 'pointer', display: 'block',
-                          fontSize: 13, fontWeight: 700, color: 'var(--accent)',
-                          wordBreak: 'break-word', textDecoration: 'underline', textDecorationStyle: 'dotted',
+                          all: 'unset', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 8, width: '100%', minWidth: 0,
                         }}
                       >
-                        {label}
+                        <div style={{
+                          width: 30, height: 30, borderRadius: '50%', flexShrink: 0,
+                          background: 'color-mix(in srgb, var(--accent) 15%, var(--surface))',
+                          display: 'flex', alignItems: 'center', justifyContent: 'center',
+                          fontWeight: 800, fontSize: 12.5, color: 'var(--accent)',
+                        }}>
+                          {label.trim().charAt(0).toUpperCase()}
+                        </div>
+                        <div style={{ minWidth: 0, flex: 1 }}>
+                          <div style={{
+                            fontSize: 13, fontWeight: 700, color: resolvedName ? 'var(--text)' : 'var(--muted)',
+                            fontStyle: resolvedName ? 'normal' : 'italic',
+                            whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
+                          }}>
+                            {label}
+                          </div>
+                          {info?.roll && (
+                            <div style={{ fontSize: 11, color: 'var(--muted)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{info.roll}</div>
+                          )}
+                        </div>
                       </button>
-                      {info?.roll && (
-                        <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 2 }}>{info.roll}</div>
-                      )}
                       {(h.scope?.dept || h.scope?.groupId) && (
-                        <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 2 }}>
+                        <div style={{
+                          fontSize: 11, color: 'var(--muted)', marginTop: 8, padding: '3px 8px', borderRadius: 999,
+                          background: 'var(--surface)', border: '1px solid var(--border)', display: 'inline-block',
+                          whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '100%',
+                        }}>
                           {h.scope?.dept || h.scope?.groupId}
                         </div>
                       )}
@@ -700,7 +771,7 @@ function StaffRolesView({ onBack, onSelectCategory, groups, countCtx }) {
                         className="btn btn-sm btn-secondary"
                         title="Revoke this role from the holder"
                         onClick={async () => { await removeRole(h.uid, h.role, h.scope); refreshHolders(r); }}
-                        style={{ marginTop: 8, width: '100%' }}
+                        style={{ marginTop: 10, width: '100%' }}
                       >
                         Revoke
                       </button>
@@ -714,7 +785,7 @@ function StaffRolesView({ onBack, onSelectCategory, groups, countCtx }) {
       )}
 
       {selectedHolder && (
-        <StaffHolderDetailModal holder={selectedHolder} onClose={() => setSelectedHolder(null)} />
+        <StaffHolderDetailPage holder={selectedHolder} onClose={() => setSelectedHolder(null)} />
       )}
     </CategoryShell>
   );
@@ -823,6 +894,25 @@ function ClassesView({ onBack, onSelectCategory, countCtx }) {
   const depts = Object.keys(byDept).sort();
   const subtitle = resolveSubtitle(getFounderCategory('classes'), { ...countCtx, classCount: groups?.length });
 
+  // Summary stats for the top-of-page cards (only shown at the
+  // dept/batch-not-yet-selected root level, alongside the dept grid).
+  // "Total Class" = total groups/batches (each dept+batch pair is one
+  // class, e.g. CSE 2K23), same number the existing subtitle already
+  // uses. "Total Batch" is a DIFFERENT count — unique batch/year values
+  // only (e.g. 2K23, 2K24), collapsing across departments, so CSE 2K23
+  // and ECE 2K23 count once, not twice. "Total Student" sums every
+  // group's live member count once memberCounts has loaded.
+  const totalClasses = groups?.length ?? null;
+  const totalBatches = useMemo(() => {
+    if (!groups) return null;
+    const years = new Set(groups.map((g) => parseGroupId(g.id).batch));
+    return years.size;
+  }, [groups]);
+  const totalStudents = useMemo(() => {
+    if (!memberCounts) return null;
+    return Object.values(memberCounts).reduce((sum, c) => sum + (c || 0), 0);
+  }, [memberCounts]);
+
   const body = () => {
     if (groups === null) return <EmptyState>Loading…</EmptyState>;
 
@@ -899,6 +989,31 @@ function ClassesView({ onBack, onSelectCategory, countCtx }) {
       <h2 style={{ fontSize: 16, fontWeight: 700, margin: '0 0 4px' }}>Classes & Students</h2>
       <p style={{ fontSize: 12, color: 'var(--muted)', margin: '0 0 14px' }}>{subtitle}</p>
       <ClassesBreadcrumb dept={dept} batch={batch} onDept={setDept} onBatch={setBatch} />
+      {!dept && !batch && (
+        <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', marginBottom: 16 }}>
+          <div style={{
+            flex: '1 1 160px', padding: 16, borderRadius: 14, border: '1px solid var(--border)', background: 'var(--card)',
+          }}>
+            <Icons.LayoutGrid size={18} color="var(--accent)" style={{ marginBottom: 8 }} />
+            <div style={{ fontWeight: 800, fontSize: 22, color: 'var(--text)' }}>{totalClasses ?? '—'}</div>
+            <div style={{ fontSize: 11.5, color: 'var(--muted)' }}>Total Class</div>
+          </div>
+          <div style={{
+            flex: '1 1 160px', padding: 16, borderRadius: 14, border: '1px solid var(--border)', background: 'var(--card)',
+          }}>
+            <Icons.CalendarRange size={18} color="var(--accent)" style={{ marginBottom: 8 }} />
+            <div style={{ fontWeight: 800, fontSize: 22, color: 'var(--text)' }}>{totalBatches ?? '—'}</div>
+            <div style={{ fontSize: 11.5, color: 'var(--muted)' }}>Total Batch</div>
+          </div>
+          <div style={{
+            flex: '1 1 160px', padding: 16, borderRadius: 14, border: '1px solid var(--border)', background: 'var(--card)',
+          }}>
+            <Icons.Users size={18} color="var(--accent)" style={{ marginBottom: 8 }} />
+            <div style={{ fontWeight: 800, fontSize: 22, color: 'var(--text)' }}>{totalStudents ?? '—'}</div>
+            <div style={{ fontSize: 11.5, color: 'var(--muted)' }}>Total Student</div>
+          </div>
+        </div>
+      )}
       {body()}
     </CategoryShell>
   );
@@ -1052,6 +1167,19 @@ function FacultyView({ onBack, onSelectCategory, countCtx }) {
   // uid -> true while an admin-verify click is in flight, so the button
   // shows a spinner/disabled state and can't be double-clicked.
   const [verifying, setVerifying] = useState({});
+  // Separate from `verifying` — a row can only be doing one of these at
+  // once anyway, but keeping them as two maps avoids one action's button
+  // disabling based on the other's in-flight state by accident.
+  const [deleting, setDeleting] = useState({});
+  // Surfaces the real reason "Class Assignments" is empty — this query is
+  // a collectionGroup query with a composite index requirement (status +
+  // createdAt); if that index hasn't been deployed to the live Firebase
+  // project yet, Firestore throws instead of returning results, and the
+  // error carries a direct "create this index" console link. Silently
+  // swallowing that into an empty array (the old behavior) made a config
+  // problem look identical to "no teacher has added a class yet" — with
+  // real assignment data already existing, that's misleading, not benign.
+  const [assignmentsError, setAssignmentsError] = useState(null);
 
   const reloadFaculty = () => listAllFacultyAccounts().then(setFacultyList).catch(() => setFacultyList([]));
 
@@ -1067,7 +1195,14 @@ function FacultyView({ onBack, onSelectCategory, countCtx }) {
   // Pending.
   useEffect(() => {
     if (subTab !== 'assignments' || assignments !== null) return;
-    listAllActiveFacultyAssignments().then(setAssignments).catch(() => setAssignments([]));
+    setAssignmentsError(null);
+    listAllActiveFacultyAssignments()
+      .then(setAssignments)
+      .catch((err) => {
+        console.error('[Founder] failed to load faculty class assignments:', err);
+        setAssignments([]);
+        setAssignmentsError(err?.message || 'Failed to load class assignments.');
+      });
   }, [subTab, assignments]);
 
   const loading = facultyList === null;
@@ -1090,6 +1225,24 @@ function FacultyView({ onBack, onSelectCategory, countCtx }) {
       setVerifying((prev) => {
         const next = { ...prev };
         delete next[uid];
+        return next;
+      });
+    }
+  };
+
+  const handleDelete = async (f) => {
+    const label = f.name || f.officialEmail || 'this account';
+    if (!window.confirm(`Remove ${label} from Faculty? This can't be undone — they'd need to sign up and be verified again.`)) return;
+    setDeleting((prev) => ({ ...prev, [f.uid]: true }));
+    try {
+      await adminDeleteFaculty(f.uid);
+      await reloadFaculty();
+    } catch (e) {
+      alert(e?.message || 'Could not remove this account. Please try again.');
+    } finally {
+      setDeleting((prev) => {
+        const next = { ...prev };
+        delete next[f.uid];
         return next;
       });
     }
@@ -1161,7 +1314,9 @@ function FacultyView({ onBack, onSelectCategory, countCtx }) {
           <Section title="Teachers">
             {loading && <EmptyState>Loading…</EmptyState>}
             {!loading && verified.length === 0 && <EmptyState>No verified faculty accounts yet.</EmptyState>}
-            {verified.map((f) => (
+            {verified.map((f) => {
+              const isDeleting = !!deleting[f.uid];
+              return (
               <div key={f.uid} style={{
                 display: 'flex', alignItems: 'center', gap: 12, padding: '12px', borderBottom: '1px solid var(--border)',
               }}>
@@ -1186,8 +1341,19 @@ function FacultyView({ onBack, onSelectCategory, countCtx }) {
                   </div>
                   <div style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 3, wordBreak: 'break-all' }}>{f.officialEmail}</div>
                 </div>
+                <button
+                  onClick={() => handleDelete(f)}
+                  disabled={isDeleting}
+                  className="btn btn-sm btn-secondary"
+                  title="Remove this faculty account (e.g. mistakenly approved)"
+                  style={{ display: 'flex', alignItems: 'center', gap: 6, flexShrink: 0, opacity: isDeleting ? 0.6 : 1, color: 'var(--danger)' }}
+                >
+                  <Icons.Trash2 size={14} />
+                  {isDeleting ? 'Removing…' : 'Remove'}
+                </button>
               </div>
-            ))}
+              );
+            })}
           </Section>
         </>
       )}
@@ -1199,6 +1365,7 @@ function FacultyView({ onBack, onSelectCategory, countCtx }) {
           {pending.map((f) => {
             const hasProfile = String(f.name || '').trim() || String(f.title || '').trim() || String(f.dept || '').trim();
             const isVerifying = !!verifying[f.uid];
+            const isDeleting = !!deleting[f.uid];
             return (
               <div key={f.uid} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 10, padding: '12px', borderBottom: '1px solid var(--border)' }}>
                 <div style={{ minWidth: 0, flex: 1 }}>
@@ -1227,15 +1394,27 @@ function FacultyView({ onBack, onSelectCategory, countCtx }) {
                     </>
                   )}
                 </div>
-                <button
-                  onClick={() => handleVerify(f.uid)}
-                  disabled={isVerifying}
-                  className="btn btn-primary btn-sm"
-                  style={{ display: 'flex', alignItems: 'center', gap: 6, flexShrink: 0, opacity: isVerifying ? 0.6 : 1 }}
-                >
-                  <Icons.CheckCircle size={14} />
-                  {isVerifying ? 'Verifying…' : 'Verify'}
-                </button>
+                <div style={{ display: 'flex', gap: 6, flexShrink: 0 }}>
+                  <button
+                    onClick={() => handleVerify(f.uid)}
+                    disabled={isVerifying || isDeleting}
+                    className="btn btn-primary btn-sm"
+                    style={{ display: 'flex', alignItems: 'center', gap: 6, opacity: isVerifying ? 0.6 : 1 }}
+                  >
+                    <Icons.CheckCircle size={14} />
+                    {isVerifying ? 'Verifying…' : 'Verify'}
+                  </button>
+                  <button
+                    onClick={() => handleDelete(f)}
+                    disabled={isVerifying || isDeleting}
+                    className="btn btn-sm btn-secondary"
+                    title="Remove this signup request"
+                    style={{ display: 'flex', alignItems: 'center', gap: 6, opacity: isDeleting ? 0.6 : 1, color: 'var(--danger)' }}
+                  >
+                    <Icons.Trash2 size={14} />
+                    {isDeleting ? 'Removing…' : 'Remove'}
+                  </button>
+                </div>
               </div>
             );
           })}
@@ -1244,8 +1423,22 @@ function FacultyView({ onBack, onSelectCategory, countCtx }) {
 
       {subTab === 'assignments' && (
         <Section title="Class Assignments">
+          {assignmentsError && (
+            <div style={{ fontSize: 12, color: 'var(--danger)', marginBottom: 10, lineHeight: 1.5 }}>
+              {assignmentsError.includes('index')
+                ? <>Couldn't load class assignments — Firestore needs a composite index for this query that hasn't been created yet. {assignmentsError.includes('http') ? 'Check the browser console for a direct "create index" link from Firebase.' : ''}</>
+                : <>Couldn't load class assignments: {assignmentsError}</>}
+              <button
+                className="btn btn-sm btn-secondary"
+                style={{ display: 'block', marginTop: 8 }}
+                onClick={() => setAssignments(null)}
+              >
+                Retry
+              </button>
+            </div>
+          )}
           {assignments === null && <EmptyState>Loading…</EmptyState>}
-          {assignments !== null && assignments.length === 0 && <EmptyState>No active class assignments yet.</EmptyState>}
+          {assignments !== null && assignments.length === 0 && !assignmentsError && <EmptyState>No active class assignments yet.</EmptyState>}
           {(assignments || []).map((a) => (
             <div key={`${a.groupId}-${a.id}`} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 8, padding: '10px 12px', borderBottom: '1px solid var(--border)' }}>
               <div style={{ minWidth: 0 }}>
@@ -1276,6 +1469,23 @@ function BloodBankView({ onBack, onSelectCategory, countCtx }) {
   const [results, setResults] = useState(null); // null = no search run yet
   const [searching, setSearching] = useState(false);
   const [error, setError] = useState('');
+  // All donors fetched once (cheap — this collection is small, one doc
+  // per student with a blood group on file) so every group button can
+  // show its own live count without firing 8 separate queries.
+  const [allDonors, setAllDonors] = useState(null);
+
+  useEffect(() => {
+    listAllBloodDonors().then(setAllDonors).catch(() => setAllDonors([]));
+  }, []);
+
+  const countsByGroup = useMemo(() => {
+    const counts = {};
+    (allDonors || []).forEach((d) => {
+      const bg = String(d.bloodGroup || '').trim().toUpperCase();
+      if (bg) counts[bg] = (counts[bg] || 0) + 1;
+    });
+    return counts;
+  }, [allDonors]);
 
   const runSearch = async (bg) => {
     setSelectedGroup(bg);
@@ -1311,9 +1521,13 @@ function BloodBankView({ onBack, onSelectCategory, countCtx }) {
               border: selectedGroup === bg ? '1px solid var(--accent)' : '1px solid var(--border)',
               background: selectedGroup === bg ? 'color-mix(in srgb, var(--accent) 14%, var(--surface))' : 'var(--card)',
               color: selectedGroup === bg ? 'var(--accent)' : 'var(--text)',
+              display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2, minWidth: 64,
             }}
           >
-            {bg}
+            <span>{bg}</span>
+            <span style={{ fontSize: 10.5, fontWeight: 700, opacity: 0.7 }}>
+              {allDonors === null ? '…' : (countsByGroup[bg] || 0)}
+            </span>
           </button>
         ))}
       </div>
@@ -1605,6 +1819,7 @@ export default function AdminDashboard() {
   const viewProps = { groups, countCtx, onSelectCategory, onBack };
 
   if (view === 'approvals') return <ApprovalsView {...viewProps} />;
+  if (view === 'question-bank') return <QuestionBankView {...viewProps} />;
   if (view === 'staff') return <StaffRolesView {...viewProps} />;
   if (view === 'classes') return <ClassesView {...viewProps} />;
   if (view === 'trust') return <TrustSafetyView {...viewProps} />;
@@ -1631,7 +1846,7 @@ export default function AdminDashboard() {
         <Icons.ChevronRight size={16} color="var(--muted)" />
       </Link>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 14 }}>
-        {FOUNDER_CATEGORIES.map((cat) => (
+        {FOUNDER_CATEGORIES.filter((cat) => !cat.hidden).map((cat) => (
           <FounderCategoryCard
             key={cat.key}
             category={cat}

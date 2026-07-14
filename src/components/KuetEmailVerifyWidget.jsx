@@ -110,7 +110,12 @@ export default function KuetEmailVerifyWidget({ onVerified, onSkip, compact = fa
       setStage('code');
       setPendingVerifyUI({ roll, method: 'code', email });
     } catch (err) {
-      setError(err?.message || 'Code পাঠাতে সমস্যা হয়েছে, আবার চেষ্টা করুন।');
+      if (err?.needsManualVerify) {
+        setNeedsManualVerify(true);
+        setStage('link');
+      } else {
+        setError(err?.message || 'Code পাঠাতে সমস্যা হয়েছে, আবার চেষ্টা করুন।');
+      }
     }
     setBusy(false);
   };
@@ -123,7 +128,12 @@ export default function KuetEmailVerifyWidget({ onVerified, onSkip, compact = fa
       await requestOtpCode(email, 'student');
       setPendingVerifyUI({ roll, method: 'code', email });
     } catch (err) {
-      setError(err?.message || 'আবার পাঠাতে সমস্যা হয়েছে, একটু পর আবার চেষ্টা করো।');
+      if (err?.needsManualVerify) {
+        setNeedsManualVerify(true);
+        setStage('link');
+      } else {
+        setError(err?.message || 'আবার পাঠাতে সমস্যা হয়েছে, একটু পর আবার চেষ্টা করো।');
+      }
     }
     setBusy(false);
   };
@@ -278,6 +288,13 @@ export default function KuetEmailVerifyWidget({ onVerified, onSkip, compact = fa
             style={{ background: 'none', border: 'none', color: 'var(--muted)', fontSize: 11.5, textDecoration: 'underline', cursor: 'pointer', textAlign: 'left', padding: 0 }}
           >
             এর বদলে link-এ verify করব
+          </button>
+          <button
+            type="button"
+            onClick={() => { setNeedsManualVerify(true); setStage('link'); }}
+            style={{ background: 'none', border: 'none', color: 'var(--muted)', fontSize: 11.5, textDecoration: 'underline', cursor: 'pointer', textAlign: 'left', padding: 0 }}
+          >
+            code/link কোনোটাই পাচ্ছি না — manually verify করতে চাই
           </button>
         </div>
       )}

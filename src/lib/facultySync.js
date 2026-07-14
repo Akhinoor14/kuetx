@@ -14,7 +14,7 @@
 // just reflects that fact locally once it's true.
 
 import {
-  collection, doc, getDoc, getDocs, setDoc, updateDoc, onSnapshot, serverTimestamp,
+  collection, doc, getDoc, getDocs, setDoc, updateDoc, deleteDoc, onSnapshot, serverTimestamp,
 } from 'firebase/firestore';
 import { db, auth } from './firebase';
 import { isFacultyEmailVerified } from './facultyEmailVerify';
@@ -195,4 +195,19 @@ export async function adminVerifyFaculty(uid) {
     verifiedAt: serverTimestamp(),
     verifiedBy: auth.currentUser?.uid || null,
   });
+}
+
+/**
+ * Admin-only: remove a faculty account entirely — covers both a mistaken
+ * approval (Verified) and rejecting a bad Pending signup. Firestore rules
+ * (faculty/{uid} delete rule) restrict this to Admin already, so this is
+ * safe to expose as a plain button click, same as adminVerifyFaculty
+ * above. Does NOT touch the underlying Firebase Auth account or any
+ * facultyAssignments the teacher already joined — those are separate
+ * collections with their own lifecycle; this only removes the faculty
+ * directory entry itself. If the person signs back in afterward, they'll
+ * go through profile setup + verification again as if new.
+ */
+export async function adminDeleteFaculty(uid) {
+  await deleteDoc(facultyDocRef(uid));
 }

@@ -9055,15 +9055,17 @@ body.schedule-fullscreen-active .mobile-bottom-nav {
    keeps column count stable as content loads in. */
 .staff-holders-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, 140px);
+  grid-template-columns: repeat(auto-fill, 190px);
   gap: 10px;
   justify-content: flex-start;
 }
 .staff-holder-card {
-  padding: 10px 12px;
+  padding: 12px 14px;
   border-radius: 12px;
   border: 1px solid var(--border);
   background: var(--surface, var(--card));
+  display: flex;
+  flex-direction: column;
 }
 
 /* Classes & Students dept/batch drilldown — same "compact grid instead

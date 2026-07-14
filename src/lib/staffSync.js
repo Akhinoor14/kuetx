@@ -142,8 +142,14 @@ export async function listStaffByRole(role) {
 // they're in; that mismatch was silently failing 100% of lookups (see
 // the "odd number of segments" Firestore error) and is why the Staff &
 // Roles list only ever showed raw uids instead of names. If the uid
-// isn't a member of any group (or the lookup fails), falls back to
-// empty fields so the UI can show just the uid instead of breaking.
+// isn't a member of any group (or the lookup fails), falls back to the
+// person's own synced profile doc (users/{uid}/data/profile — written by
+// firebaseSync.js's per-key mirror, so it exists for any account that's
+// ever opened the app, independent of whether they've joined a class
+// group). Only if BOTH lookups come up empty does the UI fall back to
+// showing the bare uid — which used to be the ONLY outcome for anyone
+// not yet in a group, even though their account obviously has a name
+// (it's required at signup) sitting right there in their own profile.
 export async function getStaffDisplayInfo(uid) {
   if (!uid) return { name: '', roll: '', dept: '', groupId: '', verified: false, memberRole: '' };
   try {
@@ -168,6 +174,25 @@ export async function getStaffDisplayInfo(uid) {
     }
   } catch (e) {
     console.warn('[staffSync] getStaffDisplayInfo lookup failed:', e);
+  }
+  // Fallback: no group-membership doc found (or the query itself failed) —
+  // try the person's own synced profile instead of giving up on a name.
+  try {
+    const profileSnap = await getDoc(doc(db, 'users', uid, 'data', 'profile'));
+    if (profileSnap.exists()) {
+      const value = profileSnap.data()?.value || {};
+      return {
+        name: value.name || '',
+        roll: value.studentId || '',
+        dept: value.dept || '',
+        batch: value.batch || '',
+        groupId: '',
+        verified: false,
+        memberRole: '',
+      };
+    }
+  } catch (e) {
+    console.warn('[staffSync] getStaffDisplayInfo profile fallback failed:', e);
   }
   return { name: '', roll: '', dept: '', groupId: '', verified: false, memberRole: '' };
 }
