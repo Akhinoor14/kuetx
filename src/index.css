@@ -9715,6 +9715,16 @@ body.schedule-fullscreen-active .mobile-bottom-nav {
    no longer needs to force-wrap onto two lines to fit 3-4 buttons —
    name/roll can truncate and the menu button stays put on one line even
    on narrow screens. */
+.classmates-list-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.classmates-list-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
 .classmates-list-card {
   min-width: 0;
   box-sizing: border-box;
@@ -9725,5 +9735,5 @@ body.schedule-fullscreen-active .mobile-bottom-nav {
 }
 
 @media (max-width: 420px) {
-  .classmates-list-card { padding: 10px !important; }
+  .classmates-list-card { padding: 8px 10px !important; }
 }

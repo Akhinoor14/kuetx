@@ -154,18 +154,28 @@ export default function ClassmatesList({ groupId, showActions = false, viewerRol
 
   const clearSelection = () => setSelectedIds(new Set());
 
-  const runBulk = async (fn) => {
+  const verifiableSelectedIds = [...selectedIds].filter((id) => {
+    const m = filteredMembers.find((x) => x.id === id);
+    return m && !m.verified;
+  });
+  const revocableSelectedIds = [...selectedIds].filter((id) => {
+    const m = filteredMembers.find((x) => x.id === id);
+    return m && m.verified;
+  });
+
+  const runBulkOn = async (ids, fn) => {
+    if (ids.length === 0) return;
     setBulkBusy(true);
     try {
-      await Promise.all([...selectedIds].map((id) => fn(id).catch(() => {})));
+      await Promise.all(ids.map((id) => fn(id).catch(() => {})));
     } finally {
       setBulkBusy(false);
       clearSelection();
     }
   };
 
-  const handleBulkVerify = () => runBulk((id) => verifyMember(groupId, id));
-  const handleBulkRevoke = () => runBulk((id) => revokeVerification(groupId, id));
+  const handleBulkVerify = () => runBulkOn(verifiableSelectedIds, (id) => verifyMember(groupId, id));
+  const handleBulkRevoke = () => runBulkOn(revocableSelectedIds, (id) => revokeVerification(groupId, id));
   const handleBulkRemove = () => {
     if (removableSelectedIds.length === 0) return;
     if (!window.confirm(`Remove ${removableSelectedIds.length} selected classmate${removableSelectedIds.length === 1 ? '' : 's'} from the class?`)) return;
@@ -244,8 +254,8 @@ export default function ClassmatesList({ groupId, showActions = false, viewerRol
       </div>
 
       {showActions && selectableMembers.length > 0 && (
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap', marginBottom: 10 }}>
-          <label style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, color: 'var(--muted)', cursor: pendingSelectableIds.length ? 'pointer' : 'default' }}>
+        <div style={{ marginBottom: 10 }}>
+          <label style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, color: 'var(--muted)', cursor: pendingSelectableIds.length ? 'pointer' : 'default', width: 'fit-content' }}>
             <input
               type="checkbox"
               checked={allPendingSelected}
@@ -256,14 +266,22 @@ export default function ClassmatesList({ groupId, showActions = false, viewerRol
           </label>
 
           {selectedIds.size > 0 && (
-            <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
-              <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--text)' }}>{selectedIds.size} selected</span>
-              <button type="button" className="btn btn-sm btn-secondary" disabled={bulkBusy} onClick={handleBulkVerify}>
-                {bulkBusy ? '…' : 'Verify selected'}
-              </button>
-              <button type="button" className="btn btn-sm btn-secondary" disabled={bulkBusy} onClick={handleBulkRevoke}>
-                {bulkBusy ? '…' : 'Revoke selected'}
-              </button>
+            <div style={{
+              display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap',
+              marginTop: 8, padding: '8px 10px', borderRadius: 10,
+              background: 'var(--accentSoft)',
+            }}>
+              <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--text)', marginRight: 2 }}>{selectedIds.size} selected</span>
+              {verifiableSelectedIds.length > 0 && (
+                <button type="button" className="btn btn-sm btn-secondary" disabled={bulkBusy} onClick={handleBulkVerify}>
+                  {bulkBusy ? '…' : `Verify (${verifiableSelectedIds.length})`}
+                </button>
+              )}
+              {revocableSelectedIds.length > 0 && (
+                <button type="button" className="btn btn-sm btn-secondary" disabled={bulkBusy} onClick={handleBulkRevoke}>
+                  {bulkBusy ? '…' : `Revoke (${revocableSelectedIds.length})`}
+                </button>
+              )}
               {removableSelectedIds.length > 0 && (
                 <button
                   type="button"
@@ -272,10 +290,10 @@ export default function ClassmatesList({ groupId, showActions = false, viewerRol
                   onClick={handleBulkRemove}
                   style={{ color: 'var(--danger)' }}
                 >
-                  {bulkBusy ? '…' : `Remove selected (${removableSelectedIds.length})`}
+                  {bulkBusy ? '…' : `Remove (${removableSelectedIds.length})`}
                 </button>
               )}
-              <button type="button" className="btn btn-sm btn-secondary" disabled={bulkBusy} onClick={clearSelection}>
+              <button type="button" className="btn btn-sm btn-secondary" disabled={bulkBusy} onClick={clearSelection} style={{ marginLeft: 'auto' }}>
                 Clear
               </button>
             </div>
@@ -289,91 +307,82 @@ export default function ClassmatesList({ groupId, showActions = false, viewerRol
             key={m.id}
             className={showActions ? 'card classmates-list-card' : 'card classmates-list-card classmates-list-card-compact'}
             style={{
-              display: 'flex', alignItems: showActions ? 'center' : 'stretch', justifyContent: 'space-between',
-              padding: showActions ? '10px 14px' : '12px', gap: showActions ? 10 : 8,
+              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+              padding: showActions ? '8px 10px' : '12px', gap: 6,
             }}
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, minWidth: 0, flex: '1 1 auto' }}>
-              {showActions && m.id !== currentUid && (
-                <input
-                  type="checkbox"
-                  checked={selectedIds.has(m.id)}
-                  onChange={() => toggleSelected(m.id)}
-                  style={{ flexShrink: 0 }}
-                  aria-label={`Select ${m.name || 'classmate'}`}
-                />
+              {showActions && (
+                m.id !== currentUid ? (
+                  <input
+                    type="checkbox"
+                    checked={selectedIds.has(m.id)}
+                    onChange={() => toggleSelected(m.id)}
+                    style={{ flexShrink: 0, width: 15, height: 15 }}
+                    aria-label={`Select ${m.name || 'classmate'}`}
+                  />
+                ) : (
+                  <span style={{ width: 15, flexShrink: 0 }} />
+                )
               )}
               <div style={{
-                width: 32, height: 32, borderRadius: '50%', background: 'var(--accentSoft)',
+                width: 30, height: 30, borderRadius: '50%', background: 'var(--accentSoft)',
                 color: 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontWeight: 700, fontSize: 13, flexShrink: 0,
+                fontWeight: 700, fontSize: 12.5, flexShrink: 0,
               }}>
                 {(m.name || '?').trim().charAt(0).toUpperCase()}
               </div>
               <div style={{ minWidth: 0, flex: '1 1 auto' }}>
-                <div style={{ fontWeight: 600, fontSize: 14, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', display: 'flex', alignItems: 'center', gap: 5 }}>
+                <div style={{ fontWeight: 600, fontSize: 13.5, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', display: 'flex', alignItems: 'center', gap: 4 }}>
                   <span style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>{m.name || 'Unnamed'}</span>
-                  {m.verified && <BlueTick size={13} />}
-                  {m.id === currentUid && <span style={{ color: 'var(--muted)', fontWeight: 400 }}>(you)</span>}
+                  {m.verified && <BlueTick size={12} />}
+                  {m.id === currentUid && <span style={{ color: 'var(--muted)', fontWeight: 400, fontSize: 12 }}>(you)</span>}
                 </div>
-                <div style={{ fontSize: 12, color: 'var(--muted)' }}>{m.roll || '—'}</div>
+                <div style={{ fontSize: 11.5, color: 'var(--muted)' }}>{m.roll || '—'}</div>
               </div>
             </div>
 
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: 6, flexShrink: 0, flexWrap: 'wrap' }}>
-              {m.role === 'cr' && (
-                <span
-                  onClick={() => setSelectedCR(m)}
-                  style={{
-                    fontSize: 11, fontWeight: 700, color: 'var(--accent)', background: 'var(--accentSoft)',
-                    padding: '2px 8px', borderRadius: 999, cursor: 'pointer',
-                  }}
-                  title="View CR info"
-                >CR</span>
-              )}
-              {m.role === 'acr' && (
-                <span
-                  onClick={() => setSelectedCR(m)}
-                  style={{
-                    fontSize: 11, fontWeight: 700, color: 'var(--accent)', background: 'var(--accentSoft)',
-                    padding: '2px 8px', borderRadius: 999, cursor: 'pointer',
-                  }}
-                  title="View ACR info"
-                >ACR</span>
-              )}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: 5, flexShrink: 0 }}>
               {m.role !== 'cr' && m.legacyCRClaim && (
                 <span style={{
-                  fontSize: 11, fontWeight: 600, color: 'var(--warning)', background: 'var(--warningBg)',
-                  padding: '2px 8px', borderRadius: 999,
+                  fontSize: 10.5, fontWeight: 600, color: 'var(--warning)', background: 'var(--warningBg)',
+                  padding: '2px 7px', borderRadius: 999, whiteSpace: 'nowrap',
                 }} title="Claimed CR before this system existed — pending admin review">
                   Claims CR
                 </span>
               )}
-
-              {showActions && m.id !== currentUid && !m.verified && (
-                <button
-                  type="button"
-                  className="btn btn-sm btn-secondary"
-                  onClick={() => verifyMember(groupId, m.id)}
-                  style={{ display: 'flex', alignItems: 'center', gap: 4, color: 'var(--accent)' }}
-                >
-                  <Check size={13} /> Verify
-                </button>
+              {(m.role === 'cr' || m.role === 'acr') && (
+                <span
+                  onClick={() => setSelectedCR(m)}
+                  style={{
+                    fontSize: 10.5, fontWeight: 700, color: 'var(--accent)', background: 'var(--accentSoft)',
+                    padding: '2px 7px', borderRadius: 999, cursor: 'pointer',
+                  }}
+                  title={m.role === 'cr' ? 'View CR info' : 'View ACR info'}
+                >{m.role.toUpperCase()}</span>
               )}
-              {showActions && m.id !== currentUid && m.verified && (
+
+              {showActions && m.id !== currentUid && (
                 <button
                   type="button"
-                  className="btn btn-sm btn-secondary"
-                  onClick={() => revokeVerification(groupId, m.id)}
-                  style={{ display: 'flex', alignItems: 'center', gap: 4 }}
+                  onClick={() => (m.verified ? revokeVerification(groupId, m.id) : verifyMember(groupId, m.id))}
+                  title={m.verified ? 'Revoke verification' : 'Verify member'}
+                  aria-label={m.verified ? 'Revoke verification' : 'Verify member'}
+                  style={{
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    width: 28, height: 28, borderRadius: 8, flexShrink: 0, padding: 0,
+                    border: '1px solid var(--border)', cursor: 'pointer',
+                    background: m.verified ? 'var(--surface)' : 'var(--accentSoft)',
+                    color: m.verified ? 'var(--muted)' : 'var(--accent)',
+                  }}
                 >
-                  <RotateCcw size={13} /> Revoke
+                  {m.verified ? <RotateCcw size={14} /> : <Check size={15} />}
                 </button>
               )}
               {!showActions && !m.verified && (
                 <span style={{
-                  fontSize: 11, fontWeight: 600, padding: '2px 8px', borderRadius: 999,
-                  color: 'var(--muted)', background: 'var(--inputBg)',
+                  fontSize: 10.5, fontWeight: 600, padding: '2px 7px', borderRadius: 999,
+                  color: 'var(--muted)', background: 'var(--inputBg)', whiteSpace: 'nowrap',
                 }}>
                   Pending
                 </span>
