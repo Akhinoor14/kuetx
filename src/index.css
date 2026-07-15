@@ -333,8 +333,19 @@ body {
   .main-content    { margin-left: 220px; width: calc(100% - 220px); }
 }
 @media (max-width: 768px) {
-  .sidebar { transform: translateX(-192px) translateZ(0); }
-  .sidebar.open { transform: translateX(0) translateZ(0); box-shadow: 4px 0 20px rgba(0,0,0,0.15); }
+  /* BUGFIX: the sidebar stays in the DOM as position:fixed, height:100vh,
+     width:192px even when translated off-canvas on mobile — only its
+     paint position moves, its fixed-position box still occupies that
+     screen region for hit-testing on some Android/Chrome versions
+     (especially once promoted to its own GPU layer via translateZ/
+     will-change, see the .sidebar comment above). That let touch-drag
+     gestures near the left edge get captured by the invisible sidebar
+     box instead of reaching .main-content underneath, silently
+     swallowing vertical scroll on mobile-nav layouts. Explicitly
+     disabling pointer-events when closed removes it from hit-testing
+     entirely; .open restores it so the drawer stays usable when shown. */
+  .sidebar { transform: translateX(-192px) translateZ(0); pointer-events: none; }
+  .sidebar.open { transform: translateX(0) translateZ(0); box-shadow: 4px 0 20px rgba(0,0,0,0.15); pointer-events: auto; }
   .main-content { margin-left: 0; width: 100%; min-height: 100vh; height: auto; overflow-y: auto; padding-bottom: calc(84px + env(safe-area-inset-bottom, 0px)); }
 }
 
