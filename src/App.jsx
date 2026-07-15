@@ -31,6 +31,7 @@ import { syncBloodDonorEntry } from './lib/bloodDonorSync';
 import { store, getProfile, isProfileComplete, DEFAULT_PROFILE, normalizeProfileForSave, validateProfileForSave, ensureDBReady, tagProfileOwner, isProfileStaleForUid } from './store/store';
 import { getGroupId } from './lib/groupUtils';
 import { syncOwnVerification, joinGroup } from './lib/groupSync';
+import { subscribeGroupTermStartDate } from './lib/termStartDateSync';
 import { claimRoll } from './lib/rollOwnership';
 import { auth } from './lib/firebase';
 import { notify } from './lib/notify';
@@ -523,6 +524,28 @@ export default function App() {
     run();
     return () => { cancelled = true; };
   }, []);
+
+  // BUGFIX(F): Term Start Date is now CR/ACR-set once per dept+batch class
+  // (see src/lib/termStartDateSync.js and ClassManagement's new widget)
+  // instead of typed in by each student. Every existing read-site
+  // (Dashboard, Schedule, Results, Marks, Profile, alertUtils) reads
+  // profile.termStartDate directly and synchronously — rather than
+  // touching all of them to add their own live subscription, this single
+  // boot-level listener mirrors the CR-set date into the local profile
+  // store whenever it changes, so those reads stay correct for free.
+  // Falls back to leaving profile.termStartDate untouched if the group
+  // hasn't set one yet (backward compatible with profiles that already
+  // had a manually-entered value from before this feature existed).
+  useEffect(() => {
+    const gid = getGroupId(getProfile());
+    if (!gid) return;
+    return subscribeGroupTermStartDate(gid, (date) => {
+      if (!date) return; // group hasn't set one — keep whatever's already stored
+      const current = getProfile();
+      if (current.termStartDate === date) return;
+      store.set('profile', { ...current, termStartDate: date });
+    });
+  }, [getGroupId(getProfile())]);
 
   // BUGFIX: faculty magic-link verification previously only ran INSIDE
   // FacultyVerifyHoldingScreen, which only mounts when the onboarding

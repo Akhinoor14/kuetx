@@ -34,8 +34,9 @@ import { renderFormattedNoticeBody } from '../lib/noticeFormat';
  * A CR who wants to step down WITHOUT naming a specific successor uses
  * requestLeaveCR here (CL approval required, same as a fresh claim). A
  * CR who wants to hand their slot directly to someone does that from the
- * roster below instead (handoffCR via ClassmatesList's "Hand off CR"
- * button — no CL approval needed for that path).
+ * roster below instead — ClassmatesList's "Class Roles" section, via its
+ * "Hand off CR to them" action (handoffCR — no CL approval needed for
+ * that path).
  */
 export default function ClassRoster() {
   const profile = getProfile();
@@ -123,7 +124,7 @@ export default function ClassRoster() {
   };
 
   return (
-    <div className="content-page-bg" style={{ width: 'min(95vw, 1560px)', margin: '0 auto', padding: '16px 14px' }}>
+    <div className="content-page-bg" style={{ width: 'min(95vw, 1560px)', margin: '0 auto', padding: '16px 14px', paddingBottom: 'calc(32px + env(safe-area-inset-bottom, 0px))' }}>
       <div className="roster-hero">
         <div className="content-page-hero-icon">
           <Users size={18} color="var(--accent)" />
@@ -150,7 +151,7 @@ export default function ClassRoster() {
               background: 'rgba(59,130,246,0.1)', border: '1px solid rgba(59,130,246,0.25)',
               fontSize: 12.5, color: 'var(--text)',
             }}>
-              Pick a classmate below and use their <strong>"Hand off CR"</strong> button to transfer your slot directly — no Campus Lead approval needed.
+              Scroll to <strong>"Class Roles"</strong> below, pick a classmate from the dropdown, and use <strong>"Hand off CR to them"</strong> to transfer your slot directly — no Campus Lead approval needed.
             </div>
           )}
 

@@ -12,6 +12,7 @@ import {
   subscribePlannerSettings,
   updatePlannerSettings,
 } from '../lib/groupSync';
+import { subscribeGroupTermStartDate, setGroupTermStartDate } from '../lib/termStartDateSync';
 import CourseTeacherDialog from '../components/CourseTeacherDialog';
 import {
   createDefaultCoursePlan,
@@ -47,6 +48,35 @@ export default function ClassManagement() {
   // sees their own old solo-schedule data instead of what they (or a
   // co-CR/ACR) actually published to the class via /schedule.
   const groupId = useMemo(() => getGroupId(profile), [profile.dept, profile.batch]);
+
+  // BUGFIX(F): CR/ACR sets the term start date once for the whole class
+  // here; every student's ProfileSetupModal/Dashboard/Schedule/Results
+  // then reads it via subscribeGroupTermStartDate — see
+  // src/lib/termStartDateSync.js.
+  const [groupTermStartDate, setGroupTermStartDateState] = useState(null);
+  const [termDateDraft, setTermDateDraft] = useState('');
+  const [termDateSaving, setTermDateSaving] = useState(false);
+  const [termDateError, setTermDateError] = useState('');
+  useEffect(() => {
+    if (!groupId) { setGroupTermStartDateState(null); return; }
+    return subscribeGroupTermStartDate(groupId, (date) => {
+      setGroupTermStartDateState(date);
+      setTermDateDraft((prev) => (prev ? prev : date || ''));
+    });
+  }, [groupId]);
+  const handleSaveTermStartDate = async () => {
+    if (!groupId || !termDateDraft) return;
+    setTermDateSaving(true);
+    setTermDateError('');
+    try {
+      await setGroupTermStartDate(groupId, termDateDraft);
+    } catch (err) {
+      setTermDateError(err?.message || 'Could not save. Try again.');
+    } finally {
+      setTermDateSaving(false);
+    }
+  };
+
   const [groupRoutine, setGroupRoutine] = useState([]);
   useEffect(() => {
     if (!groupId) { setGroupRoutine([]); return; }
@@ -542,6 +572,34 @@ export default function ClassManagement() {
             </button>
           </div>
         </div>
+      </div>
+
+      <div className="card" style={{ padding: 14, borderRadius: 16, border: '1px solid rgba(15,23,42,0.08)', background: 'rgba(255,255,255,0.96)', marginBottom: 14, display: 'flex', flexWrap: 'wrap', gap: 12, alignItems: 'flex-end' }}>
+        <div style={{ flex: '1 1 220px' }}>
+          <div style={{ fontSize: 12, fontWeight: 800, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 6 }}>Term Start Date for your batch</div>
+          <div style={{ fontSize: 12, color: 'var(--muted)' }}>
+            {groupTermStartDate
+              ? `Currently set: ${new Date(groupTermStartDate + 'T00:00:00').toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}. Applies to every student in your class.`
+              : 'Not set yet — students in your class will see this once you set it.'}
+          </div>
+        </div>
+        <div>
+          <input
+            type="date"
+            value={termDateDraft}
+            onChange={(e) => { setTermDateDraft(e.target.value); setTermDateError(''); }}
+            style={{ padding: '10px 12px', borderRadius: 8, border: '1px solid var(--border)', fontSize: 14 }}
+          />
+        </div>
+        <button
+          type="button"
+          onClick={handleSaveTermStartDate}
+          disabled={!groupId || !termDateDraft || termDateSaving}
+          style={{ padding: '10px 16px', borderRadius: 8, border: 'none', background: 'var(--accent)', color: '#fff', fontWeight: 700, opacity: (!groupId || !termDateDraft || termDateSaving) ? 0.6 : 1, cursor: (!groupId || !termDateDraft || termDateSaving) ? 'not-allowed' : 'pointer' }}
+        >
+          {termDateSaving ? 'Saving…' : 'Save for class'}
+        </button>
+        {termDateError && <div style={{ width: '100%', fontSize: 12, color: '#dc2626' }}>{termDateError}</div>}
       </div>
 
       <div style={{ display: 'grid', gap: 14 }}>

@@ -748,6 +748,21 @@ service cloud.firestore {
     }
 
     // -------------------------------------------------------------
+    // Per-dept+batch class config (currently just termStartDate) —
+    // see src/lib/termStartDateSync.js. Doc id is the same
+    // `${batch}_${dept}` groupId used under /groups/{groupId}, kept as
+    // a separate top-level collection (not nested under groups/) so a
+    // student who isn't a verified group member yet can still read
+    // their class's term start date at first-run onboarding.
+    // Write restricted to that class's own CR/ACR (or Admin) — a CR in
+    // one class must not be able to set another class's date.
+    // -------------------------------------------------------------
+    match /deptBatchConfig/{groupId} {
+      allow read: if isSignedIn();
+      allow write: if isAdmin() || isGroupCR(groupId) || isGroupACR(groupId);
+    }
+
+    // -------------------------------------------------------------
     // Groups — batch+dept "class" community
     // -------------------------------------------------------------
     match /groups/{groupId} {

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Check, RotateCcw, ChevronDown } from 'lucide-react';
 import {
   subscribeMembers, verifyMember, revokeVerification,
   clAppointCR, clRevokeCR, assignACR, revokeACR, handoffCR, removeMember,
@@ -28,15 +29,49 @@ import { CRDetailModal } from '../pages/faculty/FacultyAllCR';
  *                 Defaults to 'cl' for backward compatibility with the
  *                 existing StaffDashboard.jsx call site.
  * currentUid    - so we can badge "You" and disallow self-demotion by accident
+ *
+ * LAYOUT (redesigned from the original 4-button-per-row + later 3-dot-menu
+ * versions — see git history):
+ *   - Verify/Revoke is the single most frequent action a CL/CR takes here,
+ *     so it stays a direct one-click toggle button on the row itself
+ *     (Pending -> "Verify"; verified -> "Revoke"), not buried in a menu.
+ *   - Role changes (Make CR / Hand off CR / Make ACR / Remove ACR / Remove
+ *     CR) are rare, higher-stakes actions — they live in a separate
+ *     "Class Roles" section below the roster instead of cluttering every
+ *     row, where you deliberately pick a member from a dropdown per
+ *     action instead of hunting for the right row.
+ *   - "Remove from class" is destructive and infrequent — it's handled
+ *     via the bulk-select action bar (checkbox each row you want, or
+ *     "Select all pending", then one confirm) rather than a per-row
+ *     button, since in practice a CL/CR removing people tends to be a
+ *     one-time cleanup of several stale/anonymous entries at once.
+ *
+ * NOTE: This component is shared between two very different pages:
+ *   - Classmates.jsx (student-facing /classmates) renders it with
+ *     showActions={false} — plain read-only browsing, no checkboxes, no
+ *     buttons, no Class Roles section. Nothing below the "showActions &&"
+ *     guards ever renders there.
+ *   - ClassRoster.jsx (CR/ACR-only /class-roster, gated by <RequireCR>)
+ *     and StaffDashboard.jsx (Campus Lead view) render it with
+ *     showActions={true} — this is the only place the redesigned
+ *     verify/revoke toggle, bulk-select bar, and Class Roles section
+ *     actually appear. Keep it that way: management UI belongs on the
+ *     management page, not the plain roster-browsing page.
  */
 export default function ClassmatesList({ groupId, showActions = false, viewerRole = 'cl', currentUid = null, searchText = '', groupMeta = null }) {
   const [members, setMembers] = useState(null); // null = loading
   const [selectedCR, setSelectedCR] = useState(null); // CR/ACR row picked for the detail panel
+  const [selectedIds, setSelectedIds] = useState(() => new Set());
+  const [bulkBusy, setBulkBusy] = useState(false);
+  const [rolesPickerId, setRolesPickerId] = useState('');
+  const [roleActionBusy, setRoleActionBusy] = useState(false);
 
   useEffect(() => {
     if (!groupId) { setMembers([]); return; }
     return subscribeMembers(groupId, setMembers);
   }, [groupId]);
+
+  useEffect(() => { setSelectedIds(new Set()); }, [groupId]);
 
   if (!groupId) {
     return (
@@ -50,17 +85,6 @@ export default function ClassmatesList({ groupId, showActions = false, viewerRol
     return <div style={{ padding: 16, color: 'var(--muted)' }}>Loading classmates…</div>;
   }
 
-  // Anonymous (guest) accounts are excluded from the shared class roster —
-  // Classmates/CR/notices are meant for people with a real, identifiable
-  // Google/email account, not throwaway guest sessions. The Firestore
-  // create rule (isRealAccount()) already stops any NEW anonymous join
-  // from happening at all; this filter additionally hides any older
-  // member doc written before that rule existed and that has since been
-  // flagged isAnonymous:true (joinGroup() backfills this field every time
-  // it runs for a given account, including on plain app-open auto-join —
-  // see App.jsx). A pre-existing doc that hasn't been touched since
-  // isAnonymous started being recorded has no such field yet and is left
-  // visible rather than guessed at.
   const visibleMembers = members.filter((m) => m.isAnonymous !== true);
   const normalizedSearch = searchText.trim().toLowerCase();
   const filteredMembersUnsorted = normalizedSearch
@@ -71,9 +95,6 @@ export default function ClassmatesList({ groupId, showActions = false, viewerRol
         return name.includes(normalizedSearch) || roll.includes(normalizedSearch) || role.includes(normalizedSearch);
       })
     : visibleMembers;
-  // CR/ACR pinned to the top (CR before ACR), everyone else below sorted
-  // by roll number — makes the class rep(s) easy to spot at a glance
-  // instead of being scattered wherever Firestore happened to return them.
   const rolePriority = (role) => (role === 'cr' ? 0 : role === 'acr' ? 1 : 2);
   const filteredMembers = [...filteredMembersUnsorted].sort((a, b) => {
     const pa = rolePriority(a.role);
@@ -104,11 +125,164 @@ export default function ClassmatesList({ groupId, showActions = false, viewerRol
   const crSlotsFull = crCount >= MAX_CR;
   const acrSlotsFull = acrCount >= MAX_ACR;
 
+  const selectableMembers = filteredMembers.filter((m) => m.id !== currentUid);
+  const removableSelectedIds = [...selectedIds].filter((id) => {
+    const m = filteredMembers.find((x) => x.id === id);
+    return m && m.role !== 'cr' && m.role !== 'acr';
+  });
+  const pendingSelectableIds = selectableMembers.filter((m) => !m.verified).map((m) => m.id);
+  const allPendingSelected = pendingSelectableIds.length > 0 && pendingSelectableIds.every((id) => selectedIds.has(id));
+
+  const toggleSelected = (id) => {
+    setSelectedIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id); else next.add(id);
+      return next;
+    });
+  };
+
+  const selectAllPending = () => {
+    setSelectedIds((prev) => {
+      if (allPendingSelected) {
+        const next = new Set(prev);
+        pendingSelectableIds.forEach((id) => next.delete(id));
+        return next;
+      }
+      return new Set([...prev, ...pendingSelectableIds]);
+    });
+  };
+
+  const clearSelection = () => setSelectedIds(new Set());
+
+  const runBulk = async (fn) => {
+    setBulkBusy(true);
+    try {
+      await Promise.all([...selectedIds].map((id) => fn(id).catch(() => {})));
+    } finally {
+      setBulkBusy(false);
+      clearSelection();
+    }
+  };
+
+  const handleBulkVerify = () => runBulk((id) => verifyMember(groupId, id));
+  const handleBulkRevoke = () => runBulk((id) => revokeVerification(groupId, id));
+  const handleBulkRemove = () => {
+    if (removableSelectedIds.length === 0) return;
+    if (!window.confirm(`Remove ${removableSelectedIds.length} selected classmate${removableSelectedIds.length === 1 ? '' : 's'} from the class?`)) return;
+    setBulkBusy(true);
+    Promise.all(removableSelectedIds.map((id) => removeMember(groupId, id).catch(() => {})))
+      .finally(() => { setBulkBusy(false); clearSelection(); });
+  };
+
+  const rolesPickerMember = filteredMembers.find((m) => m.id === rolesPickerId) || null;
+  const roleActionsForPicked = (() => {
+    const m = rolesPickerMember;
+    if (!m) return [];
+    const actions = [];
+    if (viewerRole === 'cl') {
+      if (m.role !== 'cr') {
+        if (m.id !== currentUid) {
+          actions.push({
+            key: 'make-cr', label: 'Make CR', disabled: crSlotsFull,
+            title: crSlotsFull ? `Both CR slots are full (max ${MAX_CR}) — revoke one first` : undefined,
+            run: () => clAppointCR(groupId, m.id),
+          });
+        }
+        if (m.legacyCRClaim) {
+          actions.push({
+            key: 'clear-claim', label: 'Clear "Claims CR" badge',
+            title: 'Dismiss this badge without appointing them CR — use if they already stepped down or the claim is outdated',
+            run: () => {
+              if (window.confirm(`Clear the "Claims CR" badge${m.id === currentUid ? ' for yourself' : ` for ${m.name || 'this classmate'}`}? This does NOT remove CR status — use "Remove CR" for that.`)) {
+                return clDismissLegacyCRClaim(groupId, m.id);
+              }
+            },
+          });
+        }
+      } else if (m.id !== currentUid) {
+        actions.push({ key: 'remove-cr', label: 'Remove CR', danger: true, run: () => clRevokeCR(groupId, m.id) });
+      }
+    }
+    if (viewerRole === 'cr') {
+      if (m.id !== currentUid && m.verified && m.role !== 'cr') {
+        actions.push({
+          key: 'handoff-cr', label: 'Hand off CR to them',
+          run: () => {
+            if (window.confirm(`Hand off CR to ${m.name || 'this classmate'}? You'll no longer be CR.`)) {
+              return handoffCR(groupId, currentUid, m.id, null);
+            }
+          },
+        });
+      }
+      if (m.role === 'acr') {
+        actions.push({ key: 'remove-acr', label: 'Remove ACR', danger: true, run: () => revokeACR(groupId, m.id) });
+      } else if (m.role !== 'cr') {
+        actions.push({
+          key: 'make-acr', label: 'Make ACR', disabled: acrSlotsFull,
+          title: acrSlotsFull ? `Both ACR slots are full (max ${MAX_ACR})` : undefined,
+          run: () => assignACR(groupId, m.id),
+        });
+      }
+    }
+    return actions;
+  })();
+
+  const runRoleAction = async (action) => {
+    if (action.disabled) return;
+    setRoleActionBusy(true);
+    try {
+      await action.run();
+    } finally {
+      setRoleActionBusy(false);
+    }
+  };
+
   return (
     <div>
       <div style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 10 }}>
         Showing {filteredMembers.length} of {visibleMembers.length} classmate{visibleMembers.length === 1 ? '' : 's'} · {verifiedCount} verified · {crCount}/{MAX_CR} CR · {acrCount}/{MAX_ACR} ACR
       </div>
+
+      {showActions && selectableMembers.length > 0 && (
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap', marginBottom: 10 }}>
+          <label style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, color: 'var(--muted)', cursor: pendingSelectableIds.length ? 'pointer' : 'default' }}>
+            <input
+              type="checkbox"
+              checked={allPendingSelected}
+              disabled={pendingSelectableIds.length === 0}
+              onChange={selectAllPending}
+            />
+            Select all pending
+          </label>
+
+          {selectedIds.size > 0 && (
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
+              <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--text)' }}>{selectedIds.size} selected</span>
+              <button type="button" className="btn btn-sm btn-secondary" disabled={bulkBusy} onClick={handleBulkVerify}>
+                {bulkBusy ? '…' : 'Verify selected'}
+              </button>
+              <button type="button" className="btn btn-sm btn-secondary" disabled={bulkBusy} onClick={handleBulkRevoke}>
+                {bulkBusy ? '…' : 'Revoke selected'}
+              </button>
+              {removableSelectedIds.length > 0 && (
+                <button
+                  type="button"
+                  className="btn btn-sm btn-secondary"
+                  disabled={bulkBusy}
+                  onClick={handleBulkRemove}
+                  style={{ color: 'var(--danger)' }}
+                >
+                  {bulkBusy ? '…' : `Remove selected (${removableSelectedIds.length})`}
+                </button>
+              )}
+              <button type="button" className="btn btn-sm btn-secondary" disabled={bulkBusy} onClick={clearSelection}>
+                Clear
+              </button>
+            </div>
+          )}
+        </div>
+      )}
+
       <div className={showActions ? 'classmates-list-stack' : 'classmates-list-grid'}>
         {filteredMembers.map((m) => (
           <div
@@ -120,6 +294,15 @@ export default function ClassmatesList({ groupId, showActions = false, viewerRol
             }}
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, minWidth: 0, flex: '1 1 auto' }}>
+              {showActions && m.id !== currentUid && (
+                <input
+                  type="checkbox"
+                  checked={selectedIds.has(m.id)}
+                  onChange={() => toggleSelected(m.id)}
+                  style={{ flexShrink: 0 }}
+                  aria-label={`Select ${m.name || 'classmate'}`}
+                />
+              )}
               <div style={{
                 width: 32, height: 32, borderRadius: '50%', background: 'var(--accentSoft)',
                 color: 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -166,7 +349,28 @@ export default function ClassmatesList({ groupId, showActions = false, viewerRol
                   Claims CR
                 </span>
               )}
-              {!m.verified && (
+
+              {showActions && m.id !== currentUid && !m.verified && (
+                <button
+                  type="button"
+                  className="btn btn-sm btn-secondary"
+                  onClick={() => verifyMember(groupId, m.id)}
+                  style={{ display: 'flex', alignItems: 'center', gap: 4, color: 'var(--accent)' }}
+                >
+                  <Check size={13} /> Verify
+                </button>
+              )}
+              {showActions && m.id !== currentUid && m.verified && (
+                <button
+                  type="button"
+                  className="btn btn-sm btn-secondary"
+                  onClick={() => revokeVerification(groupId, m.id)}
+                  style={{ display: 'flex', alignItems: 'center', gap: 4 }}
+                >
+                  <RotateCcw size={13} /> Revoke
+                </button>
+              )}
+              {!showActions && !m.verified && (
                 <span style={{
                   fontSize: 11, fontWeight: 600, padding: '2px 8px', borderRadius: 999,
                   color: 'var(--muted)', background: 'var(--inputBg)',
@@ -174,106 +378,55 @@ export default function ClassmatesList({ groupId, showActions = false, viewerRol
                   Pending
                 </span>
               )}
-
-              {showActions && (
-                <div style={{ display: 'flex', gap: 4 }}>
-                  {m.id !== currentUid && !m.verified && (
-                    <button className="btn btn-sm btn-secondary" onClick={() => verifyMember(groupId, m.id)}>Verify</button>
-                  )}
-                  {m.id !== currentUid && m.verified && (
-                    <button className="btn btn-sm btn-secondary" onClick={() => revokeVerification(groupId, m.id)}>Revoke</button>
-                  )}
-
-                  {viewerRole === 'cl' && (
-                    m.role !== 'cr' ? (
-                      <>
-                        {m.id !== currentUid && (
-                          <button
-                            className="btn btn-sm btn-secondary"
-                            disabled={crSlotsFull}
-                            title={crSlotsFull ? `Both CR slots are full (max ${MAX_CR}) — revoke one first` : undefined}
-                            onClick={() => clAppointCR(groupId, m.id)}
-                          >
-                            Make CR
-                          </button>
-                        )}
-                        {m.legacyCRClaim && (
-                          <button
-                            className="btn btn-sm btn-secondary"
-                            title="Dismiss this badge without appointing them CR — use if they already stepped down or the claim is outdated"
-                            onClick={() => {
-                              if (window.confirm(`Clear the "Claims CR" badge${m.id === currentUid ? ' for yourself' : ` for ${m.name || 'this classmate'}`}? This does NOT remove CR status — use "Remove CR" for that.`)) {
-                                clDismissLegacyCRClaim(groupId, m.id);
-                              }
-                            }}
-                          >
-                            Clear claim
-                          </button>
-                        )}
-                      </>
-                    ) : (
-                      m.id !== currentUid && (
-                        <button className="btn btn-sm btn-secondary" onClick={() => clRevokeCR(groupId, m.id)}>Remove CR</button>
-                      )
-                    )
-                  )}
-
-                  {viewerRole === 'cr' && (
-                    <>
-                      {/* Hand off MY OWN CR slot to this member — only shown on
-                          the viewer's own row, since handoffCR replaces the
-                          slot the departing CR themself holds, not any open
-                          slot in general. */}
-                      {m.id === currentUid && m.role === 'cr' && (
-                        <span style={{ fontSize: 11, color: 'var(--muted)' }}>Use "Hand off CR" on a classmate's row below</span>
-                      )}
-                      {m.id !== currentUid && m.verified && m.role !== 'cr' && (
-                        <button
-                          className="btn btn-sm btn-secondary"
-                          onClick={() => {
-                            if (window.confirm(`Hand off CR to ${m.name || 'this classmate'}? You'll no longer be CR.`)) {
-                              handoffCR(groupId, currentUid, m.id, null);
-                            }
-                          }}
-                        >
-                          Hand off CR
-                        </button>
-                      )}
-                      {m.role === 'acr' ? (
-                        <button className="btn btn-sm btn-secondary" onClick={() => revokeACR(groupId, m.id)}>Remove ACR</button>
-                      ) : (
-                        m.role !== 'cr' && (
-                          <button
-                            className="btn btn-sm btn-secondary"
-                            disabled={acrSlotsFull}
-                            title={acrSlotsFull ? `Both ACR slots are full (max ${MAX_ACR})` : undefined}
-                            onClick={() => assignACR(groupId, m.id)}
-                          >
-                            Make ACR
-                          </button>
-                        )
-                      )}
-                    </>
-                  )}
-
-                  {m.role !== 'cr' && m.role !== 'acr' && m.id !== currentUid && (
-                    <button
-                      className="btn btn-sm btn-secondary"
-                      onClick={() => {
-                        if (window.confirm(`Remove ${m.name || 'this classmate'} from the class?`)) {
-                          removeMember(groupId, m.id);
-                        }
-                      }}
-                    >
-                      Remove from class
-                    </button>
-                  )}
-                </div>
-              )}
             </div>
           </div>
         ))}
       </div>
+
+      {showActions && (
+        <div className="card" style={{ padding: 14, marginTop: 16 }}>
+          <div style={{ fontSize: 13, fontWeight: 700, marginBottom: 4 }}>Class Roles</div>
+          <div style={{ fontSize: 11.5, color: 'var(--muted)', marginBottom: 10 }}>
+            Appoint or change CR/ACR. Pick a classmate, then choose an action.
+          </div>
+          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
+            <div style={{ position: 'relative', flex: '1 1 220px', minWidth: 180 }}>
+              <select
+                value={rolesPickerId}
+                onChange={(e) => setRolesPickerId(e.target.value)}
+                className="input"
+                style={{ width: '100%', appearance: 'none', paddingRight: 30 }}
+              >
+                <option value="">Select a classmate…</option>
+                {filteredMembers.filter((m) => m.id !== currentUid || viewerRole !== 'cr').map((m) => (
+                  <option key={m.id} value={m.id}>
+                    {m.name || 'Unnamed'} {m.roll ? `(${m.roll})` : ''}{m.role === 'cr' ? ' — CR' : m.role === 'acr' ? ' — ACR' : ''}
+                  </option>
+                ))}
+              </select>
+              <ChevronDown size={14} style={{ position: 'absolute', right: 10, top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none', color: 'var(--muted)' }} />
+            </div>
+
+            {rolesPickerMember && roleActionsForPicked.length === 0 && (
+              <span style={{ fontSize: 12, color: 'var(--muted)' }}>No role actions available for this member.</span>
+            )}
+            {rolesPickerMember && roleActionsForPicked.map((action) => (
+              <button
+                key={action.key}
+                type="button"
+                className="btn btn-sm btn-secondary"
+                disabled={action.disabled || roleActionBusy}
+                title={action.title}
+                onClick={() => runRoleAction(action)}
+                style={{ color: action.danger ? 'var(--danger)' : undefined }}
+              >
+                {roleActionBusy ? '…' : action.label}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
       {selectedCR && (
         <CRDetailModal member={{ ...selectedCR, ...(groupMeta || {}) }} onClose={() => setSelectedCR(null)} />
       )}

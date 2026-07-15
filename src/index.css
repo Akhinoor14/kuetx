@@ -9709,47 +9709,19 @@ body.schedule-fullscreen-active .mobile-bottom-nav {
 @media (max-width: 480px) {
   .meeting-grid { grid-template-columns: 1fr; }
 }
-/* Classmates / roster rows (ClassmatesList.jsx) — the row uses inline
-   flex styles (info block + action buttons side by side) which overflow
-   the viewport on mobile once 3-4 action buttons are shown (Verify/
-   Revoke/Make CR/Hand off CR/Make ACR/Remove from class). Force the row
-   to wrap onto two lines on narrow screens instead of clipping. */
+/* Classmates / roster rows (ClassmatesList.jsx) — row uses inline flex
+   (info block + right-side badges/menu). Row actions live behind a
+   single 3-dot menu now (see ClassmatesList.jsx), so unlike before this
+   no longer needs to force-wrap onto two lines to fit 3-4 buttons —
+   name/roll can truncate and the menu button stays put on one line even
+   on narrow screens. */
 .classmates-list-card {
-  /* Without this, a flex row with no explicit basis on its children
-     refuses to shrink below its content's natural width — the row (and
-     the .card wrapping it) grows wider than the viewport instead of
-     wrapping, which is what caused the roster cards to bleed off-screen
-     on mobile even with flex-wrap set below. */
   min-width: 0;
   box-sizing: border-box;
 }
 .classmates-list-card > div {
   min-width: 0;
   box-sizing: border-box;
-}
-
-@media (max-width: 640px) {
-  .classmates-list-card {
-    flex-wrap: wrap !important;
-    align-items: flex-start !important;
-  }
-  .classmates-list-card > div:first-child {
-    flex: 1 1 100% !important;
-    margin-bottom: 6px;
-  }
-  .classmates-list-card > div:last-child {
-    flex: 1 1 100% !important;
-    justify-content: flex-start !important;
-    flex-wrap: wrap !important;
-    row-gap: 6px;
-    margin-top: 2px;
-    padding-top: 6px;
-    border-top: 1px solid var(--border);
-  }
-  .classmates-list-card .btn.btn-sm {
-    font-size: 12px;
-    padding: 5px 9px;
-  }
 }
 
 @media (max-width: 420px) {

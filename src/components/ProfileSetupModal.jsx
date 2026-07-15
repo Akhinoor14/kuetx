@@ -5,6 +5,8 @@ import { isRollInstitutionallyVerified } from '../lib/kuetEmailVerify';
 import { DEPARTMENTS, DEPT_CODES, DEFAULT_PROFILE, TERM_KEYS, getTermLabelFromKey, extractBatchFromRoll, normalizeProfileForSave } from '../store/store';
 import { getBatchStartDates } from '../lib/appConfigSync';
 import { claimRoll, requestRollUnlock } from '../lib/rollOwnership';
+import { subscribeGroupTermStartDate } from '../lib/termStartDateSync';
+import { getGroupId } from '../lib/groupUtils';
 
 // Map dept codes: roll middle 2 digits -> dept code
 const ROLL_DEPT_MAP = {
@@ -167,6 +169,11 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
   const [unlockRequestState, setUnlockRequestState] = useState('idle'); // idle | sending | sent | error
   const [verifiedJustNow, setVerifiedJustNow] = useState(false);
   const [verifySkipped, setVerifySkipped] = useState(false);
+  // BUGFIX(B): map of field key -> DOM node, so a failed validateStep()
+  // can scrollIntoView + focus the first invalid field instead of relying
+  // on the user spotting a small red error string on their own.
+  const fieldRefs = useRef({});
+  const registerFieldRef = (key) => (el) => { fieldRefs.current[key] = el; };
 
   // If this profile's roll was already verified in a past session (e.g.
   // they clicked the email link while on a different page entirely), don't
@@ -218,6 +225,28 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
   useEffect(() => {
     getBatchStartDates().then(setBatchStartDates);
   }, []);
+
+  // BUGFIX(F): Term Start Date is now CR/ACR-set once per dept+batch
+  // class rather than typed in by each student — see
+  // src/lib/termStartDateSync.js. Derive the group id from roll+dept as
+  // they're typed (same as autoCalculatedBatch/autoCalculatedDept below)
+  // so this works even before the profile itself has ever been saved.
+  const liveBatch = extractBatchFromRoll(form.studentId);
+  const liveDept = form.dept || extractDeptCodeFromRoll(form.studentId);
+  const liveGroupId = liveBatch && liveDept ? getGroupId({ batch: liveBatch, dept: liveDept }) : null;
+  const [groupTermStartDate, setGroupTermStartDate] = useState(null);
+  useEffect(() => {
+    return subscribeGroupTermStartDate(liveGroupId, setGroupTermStartDate);
+  }, [liveGroupId]);
+
+  // Keep form.termStartDate mirroring the CR-set date once it arrives, so
+  // Review and normalizeProfileForSave both see the current shared value
+  // without the student ever having to touch this field themselves.
+  useEffect(() => {
+    if (groupTermStartDate) {
+      setForm(prev => (prev.termStartDate === groupTermStartDate ? prev : { ...prev, termStartDate: groupTermStartDate }));
+    }
+  }, [groupTermStartDate]);
 
   // Auto-fill university start date from batch (only if user hasn't manually set it)
   useEffect(() => {
@@ -286,7 +315,22 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
     }
 
     setErrors(nextErrors);
-    return Object.keys(nextErrors).length === 0;
+
+    const errorKeys = Object.keys(nextErrors);
+    if (errorKeys.length) {
+      // Prefer the field order the step actually renders in
+      // (stepFields first, then 'dept' which isn't in requiredFieldMap).
+      const firstKey = stepFields.find((k) => nextErrors[k]) || errorKeys[0];
+      const node = fieldRefs.current[firstKey];
+      if (node) {
+        node.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        // Focus after the scroll starts so the browser doesn't jump
+        // straight there without the smooth animation.
+        setTimeout(() => node.focus?.(), 150);
+      }
+    }
+
+    return errorKeys.length === 0;
   };
 
   const goNext = () => {
@@ -313,6 +357,19 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    // BUGFIX: the whole modal is one <form>, and browsers submit a form on
+    // Enter-in-a-text-input even when no type="submit" button is present
+    // in the DOM yet (that only renders on the Review step). Without this
+    // guard, pressing Enter while typing e.g. Room Number or Advisor Name
+    // on the Residence step called handleSubmit directly — which re-runs
+    // validateStep(0)+validateStep(1) (already valid, since you can't have
+    // reached step 1 otherwise) and finishes the ENTIRE setup right there,
+    // silently skipping past Review. Enter should behave like clicking
+    // Next: advance one step, same validation as goNext().
+    if (!minimal && stepIndex < stepTabs.length - 1) {
+      goNext();
+      return;
+    }
     if (!validateStep(0) || !validateStep(1)) {
       setStepIndex(0);
       return;
@@ -407,9 +464,22 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
 
   @media (max-width: 768px) {
     .kuetx-profile-modal .actions { flex-direction: column; }
-    .kuetx-profile-modal .actions .left { width: 100%; margin-left: 0; }
+    .kuetx-profile-modal .actions .left {
+      width: 100%;
+      margin-left: 0;
+      /* BUGFIX(D): was flex-wrap, giving each button its own full-width
+         row (up to 4 rows: Cancel/Back/Skip/Next stacked). Grid with
+         auto-fit collapses secondary buttons (Back/Skip/"Finish now,
+         add rest later") two-to-a-row, with the primary action
+         (Next/Finish Setup) spanning the full width on its own row via
+         .primary-action below — 2 rows total in the common case instead
+         of up to 4. */
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
     .kuetx-profile-modal .actions button { width: 100%; }
-    .kuetx-profile-modal .actions .primary-action { order: -1; }
+    .kuetx-profile-modal .actions .primary-action { order: -1; grid-column: 1 / -1; }
   }
 
   @media (max-width: 640px) {
@@ -473,8 +543,21 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
         {!mandatory && !minimal && (
           <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 14 }}>
             {stepTabs.map((step, idx) => (
-              <div
+              <button
                 key={step.key}
+                type="button"
+                onClick={() => {
+                  // Going backward (or clicking the current step) is always
+                  // allowed. Going forward re-runs the same validateStep()
+                  // used by "Next" — same error UI, same scroll/focus — so
+                  // jumping ahead can't skip required fields.
+                  if (idx <= stepIndex) {
+                    setStepIndex(idx);
+                    setErrors({});
+                    return;
+                  }
+                  if (validateStep(stepIndex)) setStepIndex(idx);
+                }}
                 style={{
                   padding: '8px 12px',
                   borderRadius: 999,
@@ -483,10 +566,11 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
                   color: 'var(--text)',
                   fontSize: 12,
                   fontWeight: 700,
+                  cursor: 'pointer',
                 }}
               >
                 {step.title}
-              </div>
+              </button>
             ))}
           </div>
         )}
@@ -500,12 +584,12 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
                   <>
                     <div>
                       <label style={labelStyle}>Full Name</label>
-                      <input placeholder="Your full name" value={form.name} onChange={handleChange('name')} style={fieldStyle} />
+                      <input ref={registerFieldRef('name')} placeholder="Your full name" value={form.name} onChange={handleChange('name')} style={fieldStyle} />
                       {errors.name && <div style={{ fontSize: 11, color: '#dc2626', marginTop: 5 }}>{errors.name}</div>}
                     </div>
                     <div>
                       <label style={labelStyle}>Student ID</label>
-                      <input placeholder="e.g. 2313014" value={form.studentId} onChange={handleChange('studentId')} style={fieldStyle} />
+                      <input ref={registerFieldRef('studentId')} placeholder="e.g. 2313014" value={form.studentId} onChange={handleChange('studentId')} style={fieldStyle} />
                       {errors.studentId && <div style={{ fontSize: 11, color: '#dc2626', marginTop: 5 }}>{errors.studentId}</div>}
                       {rollLocked?.roll === String(form.studentId || '').trim() && (
                         <div style={{ marginTop: 10, padding: 10, border: '1px solid var(--border)', borderRadius: 8, background: 'var(--card-alt, #f9fafb)' }}>
@@ -558,7 +642,7 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
                         typing and aren't blocking as many pages. */}
                     <div>
                       <label style={labelStyle}>Current Term</label>
-                      <select value={form.currentTermKey || ''} onChange={handleChange('currentTermKey')} style={fieldStyle}>
+                      <select ref={registerFieldRef('currentTermKey')} value={form.currentTermKey || ''} onChange={handleChange('currentTermKey')} style={fieldStyle}>
                         <option value="">Select current term</option>
                         {TERM_KEYS.map(termKey => (
                           <option key={termKey} value={termKey}>{termKey} - {getTermLabelFromKey(termKey)}</option>
@@ -568,7 +652,7 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
                     </div>
                     <div>
                       <label style={labelStyle}>Blood Group</label>
-                      <select value={form.bloodGroup || ''} onChange={handleChange('bloodGroup')} style={fieldStyle}>
+                      <select ref={registerFieldRef('bloodGroup')} value={form.bloodGroup || ''} onChange={handleChange('bloodGroup')} style={fieldStyle}>
                         <option value="">Select blood group</option>
                         {BLOOD_GROUPS.map(bg => <option key={bg} value={bg}>{bg}</option>)}
                       </select>
@@ -592,12 +676,12 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
                   <>
                     <div>
                       <label style={labelStyle}>Full Name</label>
-                      <input placeholder="Your full name" value={form.name} onChange={handleChange('name')} style={fieldStyle} />
+                      <input ref={registerFieldRef('name')} placeholder="Your full name" value={form.name} onChange={handleChange('name')} style={fieldStyle} />
                       {errors.name && <div style={{ fontSize: 11, color: '#dc2626', marginTop: 5 }}>{errors.name}</div>}
                     </div>
                     <div>
                       <label style={labelStyle}>Student ID</label>
-                      <input placeholder="e.g. 2313014" value={form.studentId} onChange={handleChange('studentId')} style={fieldStyle} />
+                      <input ref={registerFieldRef('studentId')} placeholder="e.g. 2313014" value={form.studentId} onChange={handleChange('studentId')} style={fieldStyle} />
                       {errors.studentId && <div style={{ fontSize: 11, color: '#dc2626', marginTop: 5 }}>{errors.studentId}</div>}
                       {rollLocked?.roll === String(form.studentId || '').trim() && (
                         <div style={{ marginTop: 10, padding: 10, border: '1px solid var(--border)', borderRadius: 8, background: 'var(--card-alt, #f9fafb)' }}>
@@ -637,6 +721,7 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
                     <div>
                       <label style={labelStyle}>Department</label>
                       <select
+                        ref={registerFieldRef('dept')}
                         value={form.dept || ''}
                         onChange={(e) => setForm(prev => ({ ...prev, dept: e.target.value }))}
                         disabled={isRollValid(form.studentId) && autoCalculatedDept ? true : false}
@@ -671,8 +756,8 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
                       {errors.dept && <div style={{ fontSize: 11, color: '#dc2626', marginTop: 5 }}>{errors.dept}</div>}
                     </div>
                     <div>
-                      <label style={labelStyle}>Blood Group (optional)</label>
-                      <select value={form.bloodGroup || ''} onChange={handleChange('bloodGroup')} style={fieldStyle}>
+                      <label style={labelStyle}>Blood Group</label>
+                      <select ref={registerFieldRef('bloodGroup')} value={form.bloodGroup || ''} onChange={handleChange('bloodGroup')} style={fieldStyle}>
                         <option value="">Select blood group</option>
                         {BLOOD_GROUPS.map(bg => <option key={bg} value={bg}>{bg}</option>)}
                       </select>
@@ -694,7 +779,7 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
                     </div>
                     <div>
                       <label style={labelStyle}>Current Term</label>
-                      <select value={form.currentTermKey || ''} onChange={handleChange('currentTermKey')} style={fieldStyle}>
+                      <select ref={registerFieldRef('currentTermKey')} value={form.currentTermKey || ''} onChange={handleChange('currentTermKey')} style={fieldStyle}>
                         <option value="">Select current term</option>
                         {TERM_KEYS.map(termKey => (
                           <option key={termKey} value={termKey}>{termKey} - {getTermLabelFromKey(termKey)}</option>
@@ -704,9 +789,17 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
                     </div>
                     <div>
                       <label style={labelStyle}>Current Term Start Date</label>
-                      <input type="date" value={form.termStartDate || ''} onChange={handleChange('termStartDate')} style={fieldStyle} />
-                      {errors.termStartDate && <div style={{ fontSize: 11, color: '#dc2626', marginTop: 5 }}>{errors.termStartDate}</div>}
-                      {!errors.termStartDate && <div style={{ fontSize: 10, color: 'var(--muted)', marginTop: 4 }}>Used for timeline and alert calculations</div>}
+                      {/* BUGFIX(F): no longer a free-typed input — this is
+                          now set once by the CR/ACR for the whole
+                          dept+batch class and just displayed here. */}
+                      <div style={{ ...fieldStyle, display: 'flex', alignItems: 'center', color: form.termStartDate ? 'var(--text)' : 'var(--muted)' }}>
+                        {form.termStartDate
+                          ? new Date(form.termStartDate + 'T00:00:00').toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
+                          : 'Your CR hasn\u2019t set a term start date yet'}
+                      </div>
+                      <div style={{ fontSize: 10, color: 'var(--muted)', marginTop: 4 }}>
+                        {form.termStartDate ? 'Set by your CR for your whole class' : 'Optional — used for timeline and alert calculations once set'}
+                      </div>
                     </div>
                   </>
                 )}
@@ -762,7 +855,16 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
                     ['Room', form.roomNo || '—'],
                     ['Advisor', form.advisorName || '—'],
                     ['Advisor Contact', form.advisorContact || '—'],
-                  ].map(([label, value]) => (
+                  ]
+                    // BUGFIX(E): mandatory first-run onboarding hides Session/
+                    // Current Term/Term Start Date/Hall/Room/Advisor fields
+                    // entirely (see `!mandatory &&` guards on stepIndex 0/1
+                    // above), so they always render as "—" here and take up
+                    // review-step height for nothing the user could have
+                    // filled in yet. Skip empty rows so review only shows
+                    // what's actually been entered; padding/gap unchanged.
+                    .filter(([, value]) => value !== '—')
+                    .map(([label, value]) => (
                     <div key={label} style={{ display: 'grid', gridTemplateColumns: 'clamp(100px, 25%, 140px) 1fr', gap: 10, paddingBottom: 8, borderBottom: '1px solid var(--border)', alignItems: 'start' }}>
                       <span style={{ fontSize: 11, color: 'var(--muted)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: 0.4 }}>{label}</span>
                       <span style={{ fontSize: 13, color: 'var(--text)', fontWeight: 500, wordBreak: 'break-word' }}>{value}</span>
@@ -787,6 +889,13 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
                 </div>
               )}
 
+              {/* BUGFIX(E): "Import Previous Terms" and "Want to be CR?"
+                  cards point at pages (Results, Classmates/Profile) the
+                  user hasn't seen yet during mandatory first-run onboarding
+                  — they're shown once dashboard exists, i.e. only in the
+                  non-mandatory (Settings/"Complete Profile") version of
+                  this modal, to keep first-run review compact. */}
+              {!mandatory && (
               <div style={{
                 background: 'linear-gradient(135deg, rgba(59, 130, 246, 0.08) 0%, rgba(168, 85, 247, 0.08) 100%)',
                 border: '1px solid rgba(59, 130, 246, 0.25)',
@@ -834,7 +943,9 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
                   </a>
                 </div>
               </div>
+              )}
 
+              {!mandatory && (
               <div style={{
                 background: 'linear-gradient(135deg, rgba(34,197,94,0.08) 0%, rgba(16,185,129,0.08) 100%)',
                 border: '1px solid rgba(34,197,94,0.25)',
@@ -854,6 +965,7 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
                   </div>
                 </div>
               </div>
+              )}
             </>
           )}
         </div>
