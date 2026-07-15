@@ -640,6 +640,16 @@ export default function App() {
     const tryJoin = async () => {
       if (cancelled) return;
       if (!authState.authReady || authState.isAnonymous) return;
+      // BUGFIX: this effect (and its roll-collision toast) is entirely
+      // student-shaped — Classmates/Class data, roll ownership, group
+      // join — none of it applies to a faculty account. It had no role
+      // guard at all, so a faculty account with any stray studentId left
+      // in local profile storage (e.g. from an earlier student session
+      // on the same browser, or a test/switched-role account) could
+      // trigger the "Another account already uses your roll number..."
+      // toast, which is meaningless and confusing outside the student
+      // Classmates context.
+      if (getAccountRole() === 'teacher') return;
       const profile = getProfile();
       if (!isProfileComplete(profile)) return;
       const gid = getGroupId(profile);
