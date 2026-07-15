@@ -310,7 +310,7 @@ function NoticesTab({ groupId, isVerified, assignment }) {
 
   useEffect(() => {
     if (!groupId) { setNotices([]); return; }
-    return noticeApi.subscribeAllNotices({}, groupId, setNotices, 'faculty');
+    return noticeApi.subscribeAllNotices({}, groupId, setNotices, 'faculty', { viewerUid: auth.currentUser?.uid });
   }, [groupId]);
 
   const handleSend = async () => {

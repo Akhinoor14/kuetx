@@ -115,7 +115,7 @@ export default function FacultyDashboard() {
         }
         deduped.sort((a, b) => b.createdAt - a.createdAt);
         setSentNotices(deduped);
-      }, 'faculty'),
+      }, 'faculty', { viewerUid: auth.currentUser?.uid }),
     );
     return () => unsubs.forEach((u) => u());
   }, [classIndex]);

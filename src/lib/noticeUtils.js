@@ -51,8 +51,17 @@ export function filterStudentFacingNotices(notices, isViewerCR = false) {
   });
 }
 
-export function filterFacultyFacingNotices(notices) {
-  return notices.filter((n) => n.from === 'Teacher');
+// BUGFIX: this used to only check `n.from === 'Teacher'` — meaning ANY
+// faculty subscribed to a group's notices (which happens for every
+// teacher who has an active class assignment to that dept+batch, since
+// groupId is derived from dept+batch alone, not per-course/per-teacher —
+// see facultyClassSync.js's getGroupId) saw every OTHER teacher's
+// Teacher-authored notices in that same group too, including cr_only
+// ones meant for a different teacher's specific CR/ACR pick. Now also
+// requires the notice's postedBy.uid to match the viewing faculty's own
+// uid — each teacher only ever sees their own sent notices in this feed.
+export function filterFacultyFacingNotices(notices, viewerUid = null) {
+  return notices.filter((n) => n.from === 'Teacher' && (!viewerUid || n.postedBy?.uid === viewerUid));
 }
 
 function toMillis(createdAt) {
@@ -84,7 +93,7 @@ export function subscribeAllNotices(profile, groupId, callback, audience = 'stud
   const isViewerCR = !!opts.isViewerCR;
 
   const applyAudienceFilter = (list) => (
-    audience === 'faculty' ? filterFacultyFacingNotices(list) : filterStudentFacingNotices(list, isViewerCR)
+    audience === 'faculty' ? filterFacultyFacingNotices(list, opts.viewerUid) : filterStudentFacingNotices(list, isViewerCR)
   );
 
   const emit = () => {
