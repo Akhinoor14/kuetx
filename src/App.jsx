@@ -113,7 +113,7 @@ function Layout({ authState, onboardingActive }) {
   }, []);
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh' }}>
+    <div style={{ display: 'flex', minHeight: '100vh', alignItems: 'flex-start' }}>
       {!isQuestionBankViewer && (
         <Sidebar
           open={sidebarOpen}
