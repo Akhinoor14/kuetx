@@ -25,6 +25,19 @@ import { DEPARTMENTS, INSTITUTES, BASIC_SCIENCE_DEPTS } from '../store/store';
 import { getFacultyDoc, saveFacultyProfile } from '../lib/facultySync';
 import { guessDeptFromFacultyEmail } from '../lib/facultyEmailVerify';
 
+// Common KUET faculty designations. Kept as a dropdown for consistency
+// across profiles (search/sort/display all rely on a small set of known
+// values), but always paired with an "Other" escape hatch below — a
+// closed list must never block someone whose actual designation isn't
+// one of these (e.g. Adjunct Faculty, Professor Emeritus, Dean, etc.).
+const FACULTY_TITLES = [
+  'Lecturer',
+  'Assistant Professor',
+  'Associate Professor',
+  'Professor',
+];
+const OTHER_TITLE = '__other__';
+
 const fieldStyle = {
   width: '100%',
   padding: '10px 12px',
@@ -54,6 +67,10 @@ export default function FacultyProfileSetupModal({ onSave }) {
   const [form, setForm] = useState({ name: '', title: '', dept: '', phone: '', officeRoom: '', preferredName: '' });
   const [officialEmail, setOfficialEmail] = useState('');
   const [errors, setErrors] = useState({});
+  // Whether the Title dropdown is showing the free-text "Other" field —
+  // true if the stored title doesn't match one of the known FACULTY_TITLES
+  // (so we never silently discard/overwrite someone's actual title on load).
+  const [titleIsOther, setTitleIsOther] = useState(false);
 
   useEffect(() => {
     const uid = auth.currentUser?.uid;
@@ -61,6 +78,7 @@ export default function FacultyProfileSetupModal({ onSave }) {
     getFacultyDoc(uid).then((fdoc) => {
       if (fdoc) {
         setOfficialEmail(fdoc.officialEmail || '');
+        setTitleIsOther(Boolean(fdoc.title) && !FACULTY_TITLES.includes(fdoc.title));
         setForm({
           name: fdoc.name || '',
           title: fdoc.title || '',
@@ -99,7 +117,26 @@ export default function FacultyProfileSetupModal({ onSave }) {
       await saveFacultyProfile(auth.currentUser.uid, form);
       onSave?.();
     } catch (err) {
-      setErrors((prev) => ({ ...prev, _general: err.message || 'Could not save profile. Please try again.' }));
+      // Firestore's SDK surfaces both "genuinely denied by rules" and
+      // "the write couldn't reach the server at all" (blocked by an
+      // ad-blocker / privacy extension killing the Firestore channel,
+      // offline, flaky connection, etc.) as the same generic
+      // 'permission-denied' code, because the client can't tell the two
+      // apart — it never got a real response either way. Showing the raw
+      // Firestore message here ("Missing or insufficient permissions")
+      // reads as an account/access problem and sends people down the
+      // wrong troubleshooting path when the actual cause, in the vast
+      // majority of real cases, is a blocked network request. We give the
+      // network explanation first since it's by far the more common and
+      // more fixable case for a signed-in user completing their own profile.
+      const code = err?.code || '';
+      const isLikelyBlocked = code === 'permission-denied' || code === 'unavailable' || /network|blocked|failed to fetch/i.test(err?.message || '');
+      setErrors((prev) => ({
+        ...prev,
+        _general: isLikelyBlocked
+          ? 'Could not save — this looks like a network/ad-blocker issue, not an account problem. Please disable any ad-blocker or privacy extension for this site (or add an exception for firestore.googleapis.com) and try again.'
+          : (err.message || 'Could not save profile. Please try again.'),
+      }));
     } finally {
       setSaving(false);
     }
@@ -165,7 +202,35 @@ export default function FacultyProfileSetupModal({ onSave }) {
 
             <div>
               <label style={labelStyle}>Title / Designation</label>
-              <input style={fieldStyle} value={form.title} onChange={handleChange('title')} placeholder="e.g. Assistant Professor" />
+              <select
+                style={fieldStyle}
+                value={titleIsOther ? OTHER_TITLE : (FACULTY_TITLES.includes(form.title) ? form.title : '')}
+                onChange={(e) => {
+                  const v = e.target.value;
+                  if (v === OTHER_TITLE) {
+                    setTitleIsOther(true);
+                    // Don't clear an existing custom title when switching into Other.
+                    setForm((f) => ({ ...f, title: FACULTY_TITLES.includes(f.title) ? '' : f.title }));
+                  } else {
+                    setTitleIsOther(false);
+                    setForm((f) => ({ ...f, title: v }));
+                  }
+                  setErrors((prev) => ({ ...prev, title: '' }));
+                }}
+              >
+                <option value="">Select title / designation</option>
+                {FACULTY_TITLES.map((t) => <option key={t} value={t}>{t}</option>)}
+                <option value={OTHER_TITLE}>Other…</option>
+              </select>
+              {titleIsOther && (
+                <input
+                  style={{ ...fieldStyle, marginTop: 8 }}
+                  value={form.title}
+                  onChange={handleChange('title')}
+                  placeholder="Enter your title / designation"
+                  autoFocus
+                />
+              )}
               {errors.title && <div style={{ fontSize: 11, color: '#dc2626', marginTop: 5 }}>{errors.title}</div>}
             </div>
 
