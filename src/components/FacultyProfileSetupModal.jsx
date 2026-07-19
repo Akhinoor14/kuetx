@@ -30,12 +30,38 @@ import { guessDeptFromFacultyEmail } from '../lib/facultyEmailVerify';
 // values), but always paired with an "Other" escape hatch below — a
 // closed list must never block someone whose actual designation isn't
 // one of these (e.g. Adjunct Faculty, Professor Emeritus, Dean, etc.).
-const FACULTY_TITLES = [
-  'Lecturer',
-  'Assistant Professor',
-  'Associate Professor',
-  'Professor',
+// Common KUET faculty designations, grouped for a cleaner dropdown.
+// Always paired with an "Other" escape hatch below — a closed list must
+// never block someone whose actual designation isn't one of these.
+const FACULTY_TITLE_GROUPS = [
+  {
+    label: 'Academic',
+    options: [
+      'Lecturer',
+      'Part-time Lecturer',
+      'Assistant Professor',
+      'Associate Professor',
+      'Professor',
+      'Adjunct Professor',
+      'Visiting Professor',
+      'Instructor',
+      'Teaching Assistant',
+      'Research Assistant',
+      'Post-Doctoral Fellow',
+    ],
+  },
+  {
+    label: 'Institutional Office',
+    options: [
+      'Vice-Chancellor',
+      'Pro-Vice-Chancellor',
+      'Registrar',
+      'Deputy Registrar',
+      'Assistant Registrar',
+    ],
+  },
 ];
+const FACULTY_TITLES = FACULTY_TITLE_GROUPS.flatMap((g) => g.options);
 const OTHER_TITLE = '__other__';
 
 const fieldStyle = {
@@ -219,7 +245,11 @@ export default function FacultyProfileSetupModal({ onSave }) {
                 }}
               >
                 <option value="">Select title / designation</option>
-                {FACULTY_TITLES.map((t) => <option key={t} value={t}>{t}</option>)}
+                {FACULTY_TITLE_GROUPS.map((g) => (
+                  <optgroup key={g.label} label={g.label}>
+                    {g.options.map((t) => <option key={t} value={t}>{t}</option>)}
+                  </optgroup>
+                ))}
                 <option value={OTHER_TITLE}>Other…</option>
               </select>
               {titleIsOther && (
