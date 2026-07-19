@@ -86,7 +86,8 @@ export async function saveFacultyProfile(uid, fields) {
   const {
     name, title, dept, phone, officeRoom, photoUrl, preferredName,
   } = fields || {};
-  await updateDoc(facultyDocRef(uid), {
+  const ref = facultyDocRef(uid);
+  const payload = {
     ...(name !== undefined ? { name } : {}),
     ...(title !== undefined ? { title } : {}),
     ...(dept !== undefined ? { dept } : {}),
@@ -95,7 +96,37 @@ export async function saveFacultyProfile(uid, fields) {
     ...(photoUrl !== undefined ? { photoUrl } : {}),
     ...(preferredName !== undefined ? { preferredName } : {}),
     updatedAt: serverTimestamp(),
-  });
+  };
+  try {
+    await updateDoc(ref, payload);
+  } catch (err) {
+    // BUGFIX: updateDoc() throws 'permission-denied' — indistinguishable
+    // client-side from a genuine rules rejection — when the target
+    // document doesn't exist at all, not just when the write is actually
+    // disallowed. buildQueue() in App.jsx deliberately routes an account
+    // with no faculty/{uid} shell yet (e.g. createFacultyAccountDoc()
+    // failed or was interrupted at Role Select — network blip, ad-blocker,
+    // tab closed mid-request, etc.) into this same Profile Setup screen
+    // rather than leaving it stuck with nothing queued — see that file's
+    // buildQueue() comment. So this save path has to be able to complete
+    // even when the shell was never created, not just update an existing
+    // one. We only self-heal on 'not-found'-shaped denial (i.e. no doc
+    // exists yet); a real rules rejection on an EXISTING doc — someone
+    // else's uid, or verifiedAt tampering — must still surface as an
+    // error rather than being papered over here.
+    const snap = await getDoc(ref).catch(() => null);
+    if (snap && !snap.exists()) {
+      await setDoc(ref, {
+        officialEmail: String(auth.currentUser?.email || '').trim().toLowerCase(),
+        verifiedAt: null,
+        careerStats: { uniqueStudentsTaught: 0, classesCompleted: 0 },
+        createdAt: serverTimestamp(),
+        ...payload,
+      });
+      return;
+    }
+    throw err;
+  }
 }
 
 export async function listAllFacultyAccounts() {
