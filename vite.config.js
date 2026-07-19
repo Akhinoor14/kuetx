@@ -38,6 +38,22 @@ export default defineConfig({
           const normalizedId = id.split(path.win32.sep).join('/');
           if (normalizedId.includes('/node_modules/recharts/')) return 'vendor-recharts';
           if (normalizedId.includes('/node_modules/lucide-react/')) return 'vendor-lucide';
+          // PERFORMANCE FIX: these used to fall through to the single
+          // catch-all 'vendor' chunk below along with everything else in
+          // node_modules, so firebase (auth+firestore, sizeable on its
+          // own), jspdf/jspdf-autotable/html2canvas (only used by the few
+          // pages that export PDFs), and @fullcalendar/* (only used by
+          // Schedule) were all downloaded on every single first visit —
+          // including before login, when none of them are needed yet.
+          // Splitting them into their own chunks means the browser only
+          // fetches each one the first time a route that actually uses it
+          // is visited, same idea as the page-level React.lazy() split in
+          // App.jsx above it.
+          if (normalizedId.includes('/node_modules/firebase/') || normalizedId.includes('/node_modules/@firebase/')) return 'vendor-firebase';
+          if (normalizedId.includes('/node_modules/jspdf') || normalizedId.includes('/node_modules/html2canvas/')) return 'vendor-pdf';
+          if (normalizedId.includes('/node_modules/@fullcalendar/')) return 'vendor-fullcalendar';
+          if (normalizedId.includes('/node_modules/katex/')) return 'vendor-katex';
+          if (normalizedId.includes('/node_modules/date-fns/')) return 'vendor-date-fns';
           return 'vendor';
         }
       }

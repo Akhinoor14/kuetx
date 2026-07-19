@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { ThemeProvider } from './hooks/useTheme';
 import { usePageTracker } from './hooks/usePageTracker';
@@ -36,53 +36,91 @@ import { claimRoll } from './lib/rollOwnership';
 import { auth } from './lib/firebase';
 import { notify } from './lib/notify';
 
-// Pages
-import Dashboard from './pages/Dashboard';
-import Profile from './pages/Profile';
-import Courses from './pages/Courses';
-import Attendance from './pages/Attendance';
-import Marks from './pages/Marks';
-import Results from './pages/Results';
-import Schedule from './pages/Schedule';
-import Teachers from './pages/Teachers';
-import Diary from './pages/Diary';
-import Assignments from './pages/Assignments';
-import QuestionBank from './pages/QuestionBank';
-import QuestionBankViewer from './pages/QuestionBankViewer';
-import QuestionBankSolutions from './pages/QuestionBankSolutions';
-import SelfStudy from './pages/SelfStudy';
-import Namaz from './pages/Namaz';
-import Money from './pages/Money';
-import Calculators from './pages/Calculators';
-import Alerts from './pages/Alerts';
-import Notice from './pages/Notice';
-import Settings from './pages/Settings';
-import { Notes } from './pages/Notes';
-import Clubs from './pages/Clubs';
-import About from './pages/About';
-import ClassManagement from './pages/ClassManagement';
-import CTQuizPlanning from './pages/CTQuizPlanning';
-import ClassRoster from './pages/ClassRoster';
-import Classmates from './pages/Classmates';
+// Pages — lazy-loaded (route-level code splitting).
+//
+// PERFORMANCE FIX: every one of these ~38 page components (plus the
+// ~12 faculty-side pages below) used to be a plain top-level import, so
+// Vite/Rollup had no choice but to bundle every single page's code into
+// the SAME chunk(s) the app needs just to render the very first screen —
+// login/onboarding, before a signed-in user has even picked a role, let
+// alone visited Marks or QuestionBank or TeamDashboard. That meant a
+// brand-new visitor's browser had to download and parse the JS for
+// literally every page in the app (including staff-only and faculty-only
+// ones they may never open) before anything appeared at all — the exact
+// "website shurute dhuktei chay na, abar dhukte onek time ney" symptom.
+// Wrapping each import in lazy() defers that page's chunk to the moment
+// its route is actually visited, so first paint only needs the shell
+// (Sidebar/Navbar/routing) + whichever single page the URL points to.
+// The <Suspense> boundary around <Routes> below (with a lightweight
+// inline fallback, not a fresh spinner import) shows briefly on each
+// FIRST visit to a given route; subsequent visits to that route are
+// instant since the browser has already cached that chunk.
+const Dashboard = lazy(() => import('./pages/Dashboard'));
+const Profile = lazy(() => import('./pages/Profile'));
+const Courses = lazy(() => import('./pages/Courses'));
+const Attendance = lazy(() => import('./pages/Attendance'));
+const Marks = lazy(() => import('./pages/Marks'));
+const Results = lazy(() => import('./pages/Results'));
+const Schedule = lazy(() => import('./pages/Schedule'));
+const Teachers = lazy(() => import('./pages/Teachers'));
+const Diary = lazy(() => import('./pages/Diary'));
+const Assignments = lazy(() => import('./pages/Assignments'));
+const QuestionBank = lazy(() => import('./pages/QuestionBank'));
+const QuestionBankViewer = lazy(() => import('./pages/QuestionBankViewer'));
+const QuestionBankSolutions = lazy(() => import('./pages/QuestionBankSolutions'));
+const SelfStudy = lazy(() => import('./pages/SelfStudy'));
+const Namaz = lazy(() => import('./pages/Namaz'));
+const Money = lazy(() => import('./pages/Money'));
+const Calculators = lazy(() => import('./pages/Calculators'));
+const Alerts = lazy(() => import('./pages/Alerts'));
+const Notice = lazy(() => import('./pages/Notice'));
+const Settings = lazy(() => import('./pages/Settings'));
+const Notes = lazy(() => import('./pages/Notes').then((m) => ({ default: m.Notes })));
+const Clubs = lazy(() => import('./pages/Clubs'));
+const About = lazy(() => import('./pages/About'));
+const ClassManagement = lazy(() => import('./pages/ClassManagement'));
+const CTQuizPlanning = lazy(() => import('./pages/CTQuizPlanning'));
+const ClassRoster = lazy(() => import('./pages/ClassRoster'));
+const Classmates = lazy(() => import('./pages/Classmates'));
 // AdminDashboard is no longer routed directly — it's rendered inside
 // TeamDashboard via AdminEntryPoint. See /team route below.
-import TeamDashboard from './pages/TeamDashboard';
-import FounderBatchSettings from './pages/FounderBatchSettings';
-import { Tours, Projects, Syllabus, TimeTracker, Tuition, Reports } from './pages/Extras';
+const TeamDashboard = lazy(() => import('./pages/TeamDashboard'));
+const FounderBatchSettings = lazy(() => import('./pages/FounderBatchSettings'));
+// Extras.jsx exports several named page components from one file — each
+// needs its own .then() re-export as { default } for lazy() to accept it,
+// since lazy() only ever resolves a module's default export.
+const Tours = lazy(() => import('./pages/Extras').then((m) => ({ default: m.Tours })));
+const Projects = lazy(() => import('./pages/Extras').then((m) => ({ default: m.Projects })));
+const Syllabus = lazy(() => import('./pages/Extras').then((m) => ({ default: m.Syllabus })));
+const TimeTracker = lazy(() => import('./pages/Extras').then((m) => ({ default: m.TimeTracker })));
+const Tuition = lazy(() => import('./pages/Extras').then((m) => ({ default: m.Tuition })));
+const Reports = lazy(() => import('./pages/Extras').then((m) => ({ default: m.Reports })));
 import SubgroupHub from './components/nav-system/SubgroupHub';
 import CRHub from './components/nav-system/CRHub';
 import AdminHub from './components/nav-system/AdminHub';
 import RequireFaculty from './components/RequireFaculty';
 import { NAV_FACULTY } from './nav-faculty';
-import FacultyDashboard from './pages/faculty/FacultyDashboard';
-import FacultyProfile from './pages/faculty/FacultyProfile';
-import FacultyClasses from './pages/faculty/FacultyClasses';
-import FacultyAllCR from './pages/faculty/FacultyAllCR';
-import FacultyClassDetail from './pages/faculty/FacultyClassDetail';
-import FacultySchedule from './pages/faculty/FacultySchedule';
-import FacultyMeetings from './pages/faculty/FacultyMeetings';
-import FacultyNoticeBroadcast from './pages/faculty/FacultyNoticeBroadcast';
-import FacultyContact from './pages/faculty/FacultyContact';
+const FacultyDashboard = lazy(() => import('./pages/faculty/FacultyDashboard'));
+const FacultyProfile = lazy(() => import('./pages/faculty/FacultyProfile'));
+const FacultyClasses = lazy(() => import('./pages/faculty/FacultyClasses'));
+const FacultyAllCR = lazy(() => import('./pages/faculty/FacultyAllCR'));
+const FacultyClassDetail = lazy(() => import('./pages/faculty/FacultyClassDetail'));
+const FacultySchedule = lazy(() => import('./pages/faculty/FacultySchedule'));
+const FacultyMeetings = lazy(() => import('./pages/faculty/FacultyMeetings'));
+const FacultyNoticeBroadcast = lazy(() => import('./pages/faculty/FacultyNoticeBroadcast'));
+const FacultyContact = lazy(() => import('./pages/faculty/FacultyContact'));
+
+// Minimal inline fallback for page-chunk loading — deliberately not a
+// separate component/import (would defeat the point: needs to be part of
+// the initial shell bundle, always available instantly, never itself
+// something the user waits on).
+function PageLoadingFallback() {
+  return (
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '40vh', color: 'var(--muted)', fontSize: 14 }}>
+      Loading…
+    </div>
+  );
+}
 
 function Layout({ authState, onboardingActive }) {
   usePageTracker();
@@ -135,6 +173,7 @@ function Layout({ authState, onboardingActive }) {
           />
         )}
         <div style={{ flex: 1 }}>
+          <Suspense fallback={<PageLoadingFallback />}>
           <Routes>
             {/* BUGFIX: '/' used to unconditionally render the student
                 Dashboard for every signed-in account, teacher or not — so
@@ -248,6 +287,7 @@ function Layout({ authState, onboardingActive }) {
             <Route path="/faculty/resources" element={<Navigate to="/faculty/more" replace />} />
             <Route path="/faculty/tools" element={<Navigate to="/faculty/more" replace />} />
           </Routes>
+          </Suspense>
         </div>
         {location.pathname !== '/about' && !isQuestionBankViewer && !isMobileNav && <Footer />}
         {!isQuestionBankViewer && <PWAInstallPrompt />}
