@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react';
-import { Circle } from 'lucide-react';
+import * as Icons from 'lucide-react';
 
 /**
  * Sub-navigation bar shown at the top of a category's own view (e.g.
@@ -55,7 +55,7 @@ export default function CategorySubNav({ categories, activeKey, onSelect, countC
     <div style={{ marginBottom: 14 }}>
       <div className="category-subnav-row" ref={rowRef}>
         {categories.map((cat) => {
-          const Icon = Icons[cat.icon] || Circle;
+          const Icon = Icons[cat.icon] || Icons.Circle;
           const active = cat.key === activeKey;
           const count = cat.getCount ? safeCount(cat, countCtx) : 0;
           return (

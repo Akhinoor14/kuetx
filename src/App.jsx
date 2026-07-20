@@ -6,6 +6,7 @@ import { Sidebar } from './components/Sidebar';
 import { Navbar } from './components/Navbar';
 import { Footer } from './components/Footer';
 import AnnouncementModal from './components/DriveAnnouncementModal';
+import CommunityHiringModal from './components/CommunityHiringModal';
 import PWAInstallPrompt from './components/PWAInstallPrompt';
 import PWAUpdatePrompt from './components/PWAUpdatePrompt';
 import { BottomNav, useIsMobileNav } from './components/BottomNav';
@@ -54,15 +55,6 @@ import { notify } from './lib/notify';
 // inline fallback, not a fresh spinner import) shows briefly on each
 // FIRST visit to a given route; subsequent visits to that route are
 // instant since the browser has already cached that chunk.
-// PERFORMANCE FIX: this used to be a regular top-of-file import.
-// CommunityHiringModal bundles a 1.47MB poster JPG (campus_Lead_KUETx_
-// Individual_Hiring_Posters.jpg) — that image was getting pulled into the
-// eager main entry chunk for EVERY visitor, even the vast majority who
-// never see this modal (it's a one-time, conditionally-queued popup, same
-// tier as AnnouncementModal/BackupReminderGate below it in the JSX). Lazy-
-// loading it means that 1.47MB only downloads for someone who actually
-// reaches the 'communityHiring' queue step, not on every single first load.
-const CommunityHiringModal = lazy(() => import('./components/CommunityHiringModal'));
 const Dashboard = lazy(() => import('./pages/Dashboard'));
 const Profile = lazy(() => import('./pages/Profile'));
 const Courses = lazy(() => import('./pages/Courses'));
@@ -989,21 +981,13 @@ export default function App() {
           <AnnouncementModal open={true} onClose={advance} />
         )}
         {current === 'communityHiring' && (
-          // Suspense boundary needed here specifically: this block sits
-          // directly under <BrowserRouter>, not inside the <Routes>-level
-          // Suspense further down (that one only wraps page navigation).
-          // CommunityHiringModal is now lazy() (see the PERFORMANCE FIX
-          // comment near its declaration above) so its own chunk load
-          // needs a fallback while it downloads.
-          <Suspense fallback={null}>
-            <CommunityHiringModal
-              open={true}
-              onClose={() => {
-                try { store.set('communityHiringPopupShown', true); } catch {}
-                advance();
-              }}
-            />
-          </Suspense>
+          <CommunityHiringModal
+            open={true}
+            onClose={() => {
+              try { store.set('communityHiringPopupShown', true); } catch {}
+              advance();
+            }}
+          />
         )}
         {current === 'backup' && (
           <BackupReminderGate open={true} onClose={advance} />

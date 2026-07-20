@@ -9,7 +9,7 @@
 
 import { Link, useLocation } from 'react-router-dom';
 import { useState, useEffect, useRef } from 'react';
-import { CheckCircle2, Circle, Clock, Cloud, RefreshCw, User, UserX, WifiOff, Zap } from 'lucide-react';
+import * as Icons from 'lucide-react';
 import { Logo, Wordmark } from './Logo';
 import { APP_VERSION_SHORT } from '../version';
 import { store, DEFAULT_PROFILE } from '../store/store';
@@ -28,12 +28,12 @@ import SidebarNavFaculty, { findFacultyNavItem } from './nav-system/SidebarNavFa
 // ── Firebase sync status pill ─────────────────────────────────────────────────
 function SyncBadge({ status }) {
   const cfg = {
-    synced:   { color: '#10b981', label: 'Synced',   icon: <CheckCircle2 size={11} /> },
-    syncing:  { color: '#f59e0b', label: 'Syncing…', icon: <RefreshCw size={11} style={{ animation: 'spin 1s linear infinite' }} /> },
-    pending:  { color: '#f59e0b', label: 'Pending',  icon: <Clock size={11} /> },
-    error:    { color: '#ef4444', label: 'Error',    icon: <WifiOff size={11} /> },
-    idle:     { color: 'var(--muted)', label: 'Idle', icon: <Cloud size={11} /> },
-  }[status] || { color: 'var(--muted)', label: status, icon: <Cloud size={11} /> };
+    synced:   { color: '#10b981', label: 'Synced',   icon: <Icons.CheckCircle2 size={11} /> },
+    syncing:  { color: '#f59e0b', label: 'Syncing…', icon: <Icons.RefreshCw size={11} style={{ animation: 'spin 1s linear infinite' }} /> },
+    pending:  { color: '#f59e0b', label: 'Pending',  icon: <Icons.Clock size={11} /> },
+    error:    { color: '#ef4444', label: 'Error',    icon: <Icons.WifiOff size={11} /> },
+    idle:     { color: 'var(--muted)', label: 'Idle', icon: <Icons.Cloud size={11} /> },
+  }[status] || { color: 'var(--muted)', label: status, icon: <Icons.Cloud size={11} /> };
 
   return (
     <span style={{
@@ -111,7 +111,7 @@ export function Sidebar({ open, onClose, authState }) {
   };
   const getPageIcon = (path) => {
     const i = findNavItem(path);
-    return i ? (Icons[i.icon] || Circle) : Circle;
+    return i ? (Icons[i.icon] || Icons.Circle) : Icons.Circle;
   };
 
   const quickItems = [...new Set([...pinnedPages, ...favorites])].slice(0, 5);
@@ -151,7 +151,7 @@ export function Sidebar({ open, onClose, authState }) {
         {quickItems.length > 0 && (
           <div style={{ padding: '8px 10px', borderBottom: '1px solid var(--border)', flexShrink: 0 }}>
             <div style={{ fontSize: 10, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 5, display: 'flex', alignItems: 'center', gap: 5 }}>
-              <Zap size={10} color="var(--accent)" /> Quick
+              <Icons.Zap size={10} color="var(--accent)" /> Quick
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
               {quickItems.map(path => {
@@ -198,8 +198,8 @@ export function Sidebar({ open, onClose, authState }) {
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                 }}>
                   {isAnonymous
-                    ? <UserX size={11} color="var(--muted)" />
-                    : <User size={11} color="var(--accent)" />}
+                    ? <Icons.UserX size={11} color="var(--muted)" />
+                    : <Icons.User size={11} color="var(--accent)" />}
                 </div>
                 <span style={{ fontSize: 11, color: 'var(--text)', fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', maxWidth: 100 }}>
                   {isAnonymous ? 'No account' : (displayName || 'Signed in')}

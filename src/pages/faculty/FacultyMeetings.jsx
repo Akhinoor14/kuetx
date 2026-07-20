@@ -12,7 +12,7 @@
 // / the student Attendance.jsx "Today's Classes" strip.
 
 import { useEffect, useMemo, useState } from 'react';
-import { Calendar, CalendarClock, Check, Clock, History, MapPin, Pencil, Plus, Sparkles, Trash2, Video, X } from 'lucide-react';
+import * as Icons from 'lucide-react';
 import { auth } from '../../lib/firebase';
 import {
   subscribeMyMeetings, createMeeting, updateMeeting, deleteMeeting,
@@ -56,7 +56,7 @@ function formatTimeLabel(timeStr) {
 
 function MeetingCard({ meeting, onEdit, onDelete, isToday }) {
   const meta = getMeetingTypeMeta(meeting.type);
-  const Icon = Icons[meta.icon] || Calendar;
+  const Icon = Icons[meta.icon] || Icons.Calendar;
   const cardStyle = {
     '--meeting-color': meta.color,
     '--meeting-color-bg': `${meta.color}20`,
@@ -73,23 +73,23 @@ function MeetingCard({ meeting, onEdit, onDelete, isToday }) {
           </div>
         </div>
         <div className="meeting-card-actions">
-          <button onClick={() => onEdit(meeting)} title="Edit"><Pencil size={13} /></button>
-          <button onClick={() => onDelete(meeting)} title="Delete" style={{ color: 'var(--danger, #ef4444)' }}><Trash2 size={13} /></button>
+          <button onClick={() => onEdit(meeting)} title="Edit"><Icons.Pencil size={13} /></button>
+          <button onClick={() => onDelete(meeting)} title="Delete" style={{ color: 'var(--danger, #ef4444)' }}><Icons.Trash2 size={13} /></button>
         </div>
       </div>
 
       <div className="meeting-card-meta">
         <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}>
-          <Calendar size={12} /> {formatDateLabel(meeting.date)}
+          <Icons.Calendar size={12} /> {formatDateLabel(meeting.date)}
         </span>
         {meeting.time && (
           <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}>
-            <Clock size={12} /> {formatTimeLabel(meeting.time)}
+            <Icons.Clock size={12} /> {formatTimeLabel(meeting.time)}
           </span>
         )}
         {meeting.location && (
           <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}>
-            <MapPin size={12} /> {meeting.location}
+            <Icons.MapPin size={12} /> {meeting.location}
           </span>
         )}
       </div>
@@ -98,7 +98,7 @@ function MeetingCard({ meeting, onEdit, onDelete, isToday }) {
 
       {meeting.link && (
         <a href={meeting.link} target="_blank" rel="noreferrer" className="meeting-card-join">
-          <Video size={14} /> Join Meeting
+          <Icons.Video size={14} /> Join Meeting
         </a>
       )}
     </div>
@@ -190,7 +190,7 @@ export default function FacultyMeetings() {
         <div className="hub-page-hero" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 10 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
             <div className="hub-page-hero-icon">
-              <Video size={20} color="var(--accent)" />
+              <Icons.Video size={20} color="var(--accent)" />
             </div>
             <h1 className="hub-page-hero-title">Meetings</h1>
           </div>
@@ -199,7 +199,7 @@ export default function FacultyMeetings() {
             className="btn btn-primary"
             style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 13, fontWeight: 700, padding: '9px 16px', borderRadius: 10 }}
           >
-            <Plus size={15} /> Add Meeting
+            <Icons.Plus size={15} /> Add Meeting
           </button>
         </div>
 
@@ -218,14 +218,14 @@ export default function FacultyMeetings() {
               borderBottom: `1px solid ${getMeetingTypeMeta(form.type).color}28`,
             }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 12.5, fontWeight: 800, color: getMeetingTypeMeta(form.type).color, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                {(() => { const I = Icons[getMeetingTypeMeta(form.type).icon] || Calendar; return <I size={15} />; })()}
+                {(() => { const I = Icons[getMeetingTypeMeta(form.type).icon] || Icons.Calendar; return <I size={15} />; })()}
                 {editingId ? 'Edit Meeting' : 'New Meeting'}
               </div>
               <button
                 onClick={() => { setShowForm(false); setEditingId(null); }}
                 style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--muted)', padding: 4, display: 'flex' }}
               >
-                <X size={16} />
+                <Icons.X size={16} />
               </button>
             </div>
             <div style={{ display: 'grid', gap: 12, padding: 18 }}>
@@ -256,7 +256,7 @@ export default function FacultyMeetings() {
                 </div>
                 <div>
                   <label style={{ ...labelStyle, display: 'flex', alignItems: 'center', gap: 5 }}>
-                    <Video size={11} /> Online link (optional — enables Join button)
+                    <Icons.Video size={11} /> Online link (optional — enables Join button)
                   </label>
                   <input style={inputStyle} value={form.link} onChange={(e) => setForm((f) => ({ ...f, link: e.target.value }))} placeholder="https://meet.google.com/..." />
                 </div>
@@ -277,7 +277,7 @@ export default function FacultyMeetings() {
                   disabled={saving}
                   style={{ flex: 1, padding: '11px 16px', borderRadius: 10, border: 'none', background: 'var(--accent)', color: '#fff', fontWeight: 700, fontSize: 13.5, cursor: saving ? 'wait' : 'pointer', opacity: saving ? 0.6 : 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}
                 >
-                  {saving ? 'Saving…' : (<><Check size={15} /> {editingId ? 'Save Changes' : 'Add Meeting'}</>)}
+                  {saving ? 'Saving…' : (<><Icons.Check size={15} /> {editingId ? 'Save Changes' : 'Add Meeting'}</>)}
                 </button>
               </div>
             </div>
@@ -291,7 +291,7 @@ export default function FacultyMeetings() {
             {today.length > 0 && (
               <div>
                 <div className="meeting-today-banner">
-                  <Sparkles size={14} /> Today · {today.length} meeting{today.length !== 1 ? 's' : ''}
+                  <Icons.Sparkles size={14} /> Today · {today.length} meeting{today.length !== 1 ? 's' : ''}
                 </div>
                 <div className="meeting-grid">
                   {today.map((m) => <MeetingCard key={m.id} meeting={m} onEdit={openEdit} onDelete={handleDelete} isToday />)}
@@ -302,7 +302,7 @@ export default function FacultyMeetings() {
             {/* Upcoming */}
             <div className="card" style={{ padding: 16, borderRadius: 16 }}>
               <div style={{ fontSize: 12, fontWeight: 800, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 12, display: 'flex', alignItems: 'center', gap: 6 }}>
-                <CalendarClock size={14} /> Upcoming
+                <Icons.CalendarClock size={14} /> Upcoming
               </div>
               {upcoming.length === 0 ? (
                 <div style={{ fontSize: 12.5, color: 'var(--muted)', textAlign: 'center', padding: '20px 0' }}>
@@ -319,7 +319,7 @@ export default function FacultyMeetings() {
             {past.length > 0 && (
               <div className="card" style={{ padding: 16, borderRadius: 16 }}>
                 <div style={{ fontSize: 12, fontWeight: 800, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 12, display: 'flex', alignItems: 'center', gap: 6 }}>
-                  <History size={14} /> Past
+                  <Icons.History size={14} /> Past
                 </div>
                 <div className="meeting-grid" style={{ opacity: 0.7 }}>
                   {past.slice(0, 12).map((m) => <MeetingCard key={m.id} meeting={m} onEdit={openEdit} onDelete={handleDelete} />)}

@@ -9,7 +9,7 @@
 // student's own).
 
 import { useEffect, useState } from 'react';
-import { Bell } from 'lucide-react';
+import * as Icons from 'lucide-react';
 import { auth } from '../../lib/firebase';
 import { subscribeMyClassIndex } from '../../lib/facultyClassSync';
 import { getFacultyDoc } from '../../lib/facultySync';
@@ -78,7 +78,7 @@ export default function FacultyNotices() {
       <div className="page-container" style={{ padding: '20px 24px 40px' }}>
         <div className="hub-page-hero">
           <div className="hub-page-hero-icon">
-            <Bell size={20} color="var(--accent)" />
+            <Icons.Bell size={20} color="var(--accent)" />
           </div>
           <h1 className="hub-page-hero-title">Notices</h1>
         </div>

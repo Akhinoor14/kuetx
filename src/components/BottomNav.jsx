@@ -1,6 +1,6 @@
 import { Link, useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { Briefcase, Circle, User } from 'lucide-react';
+import * as Icons from 'lucide-react';
 import { getProfile } from '../store/store';
 import { getGroupId } from '../lib/groupUtils';
 import { subscribeMyRole } from '../lib/groupSync';
@@ -54,12 +54,12 @@ function ProfileButton({ isRealCR, roleLabel, isStaff, adminLabel, active, viewM
   const isFacultyMode = viewMode === 'teacher';
   let path = isFacultyMode ? '/faculty/profile' : '/profile';
   let label = 'Profile';
-  let Icon = User;
+  let Icon = Icons.User;
 
   if (isStaff) {
     path = isFacultyMode ? '/team' : '/admin-hub';
     label = adminLabel || 'Admin';
-    Icon = Briefcase;
+    Icon = Icons.Briefcase;
   } else if (isRealCR && !isFacultyMode) {
     path = '/cr-hub';
     label = roleLabel;
@@ -119,7 +119,7 @@ export function BottomNav() {
     <nav className="mobile-bottom-nav" aria-label="Mobile navigation">
       <div className="mobile-bottom-nav-shell">
         {fixedButtons.map(button => {
-          const Icon = Icons[button.icon] || Circle;
+          const Icon = Icons[button.icon] || Icons.Circle;
           const active = button.match(location.pathname);
 
           return (

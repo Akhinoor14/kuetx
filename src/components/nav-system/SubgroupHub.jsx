@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Circle } from 'lucide-react';
+import * as Icons from 'lucide-react';
 import { NAV } from '../../nav';
 
 // Single synchronized accent color for every hub — no per-group hues.
@@ -37,7 +37,7 @@ function resolveSection(navSource, group, subgroup, filterFn) {
 }
 
 function HubSection({ title, items, icon }) {
-  const HeaderIcon = Icons[icon] || Circle;
+  const HeaderIcon = Icons[icon] || Icons.Circle;
 
   return (
     <div style={{ marginBottom: 28 }}>
@@ -56,7 +56,7 @@ function HubSection({ title, items, icon }) {
 
       <div className="hub-grid">
         {items.map(item => {
-          const Icon = Icons[item.icon] || Circle;
+          const Icon = Icons[item.icon] || Icons.Circle;
           return (
             <Link key={item.id} to={item.path} className="hub-grid-item">
               <div
@@ -136,7 +136,7 @@ export default function SubgroupHub({ group, subgroup, sections, pageTitle, extr
   }
 
   const title = pageTitle || resolvedSections[0].title;
-  const HeroIcon = Icons[resolvedSections[0].icon] || Circle;
+  const HeroIcon = Icons[resolvedSections[0].icon] || Icons.Circle;
 
   return (
     <div className="hub-page-bg" style={{ minHeight: '100vh' }}>

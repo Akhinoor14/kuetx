@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import LazyRechartsArea from '../components/LazyRechartsArea';
 import { TrendingUp, Award, AlertTriangle, BookOpen, CalendarCheck, Clock, Wallet, Star } from 'lucide-react';
+import * as Icons from 'lucide-react';
 import { store, cgpaToPercent, computeCGPA, computeTermGPAs, computeEffectiveAttendance, MIN_ATTENDANCE_PERCENT, SCHOLARSHIP_ATTENDANCE_PCT, computeCourseGrade, deriveAcademicMetaFromCourses, syncProfileAcademicMeta, getProfile, getTermLabelFromKey, getCurrentTermKey, getTermProgress, getTermTimeline, getTermIndex, TERM_KEYS, getTimerActiveState, formatDurationMs, PRODUCTIVE_TIME_CATEGORIES } from '../store/store';
 import { getAllCourses } from '../store/curriculumStore';
 import { NAV } from '../nav';

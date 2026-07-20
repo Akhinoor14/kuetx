@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Wordmark } from './Logo';
-import { BookOpen, Briefcase, Database, HardDrive, Info, Mail, MessageCircle, Users, X } from 'lucide-react';
+import * as Icons from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { getStorageUsage } from '../store/indexeddb-store';
 import { APP_VERSION_SHORT } from '../version';
@@ -54,10 +54,10 @@ export function Footer() {
           {/* Center: nav */}
           <div style={{ display: 'flex', gap: 4, alignItems: 'center', flexWrap: 'wrap' }}>
             {[
-              { label: 'Guide',     icon: BookOpen, onClick: () => window.dispatchEvent(new CustomEvent('kuetx:openGuide')) },
-              { label: 'Community', icon: Users,    href: 'https://www.facebook.com/kuetx' },
-              { label: 'About',     icon: Info,     to: '/about' },
-              { label: 'Contact',   icon: Mail,     onClick: () => setActiveModal('contact') },
+              { label: 'Guide',     icon: Icons.BookOpen, onClick: () => window.dispatchEvent(new CustomEvent('kuetx:openGuide')) },
+              { label: 'Community', icon: Icons.Users,    href: 'https://www.facebook.com/kuetx' },
+              { label: 'About',     icon: Icons.Info,     to: '/about' },
+              { label: 'Contact',   icon: Icons.Mail,     onClick: () => setActiveModal('contact') },
             ].map(({ label, icon: Ic, onClick, href, to }) => {
               const style = { display: 'inline-flex', alignItems: 'center', gap: 5, padding: '5px 11px', borderRadius: 8, background: 'transparent', color: 'var(--muted)', fontSize: 12, fontWeight: 500, border: '1px solid var(--border)', cursor: 'pointer', textDecoration: 'none', transition: 'all 0.12s' };
               const hoverIn  = e => { e.currentTarget.style.background = 'var(--inputBg)'; e.currentTarget.style.color = 'var(--text)'; e.currentTarget.style.borderColor = 'color-mix(in srgb, var(--muted) 50%, var(--border))'; };
@@ -85,11 +85,11 @@ export function Footer() {
           {/* Center: storage + data info */}
           <div style={{ display: 'flex', gap: 14, alignItems: 'center' }}>
             <span style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 11, color: 'var(--muted)' }}>
-              <Database size={11} style={{ opacity: 0.5 }} />
+              <Icons.Database size={11} style={{ opacity: 0.5 }} />
               {storageDisplay} stored
             </span>
             <span style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 11, color: 'var(--muted)' }}>
-              <HardDrive size={11} style={{ opacity: 0.5 }} />
+              <Icons.HardDrive size={11} style={{ opacity: 0.5 }} />
               Local · IndexedDB
             </span>
           </div>
@@ -120,7 +120,7 @@ export function Footer() {
             onClick={e => e.stopPropagation()}>
             <button onClick={() => setActiveModal(null)}
               style={{ position: 'absolute', top: 12, right: 12, background: 'var(--inputBg)', border: 'none', borderRadius: '50%', width: 28, height: 28, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: 'var(--muted)' }}>
-              <X size={14} />
+              <Icons.X size={14} />
             </button>
             <div style={{ textAlign: 'center', marginBottom: 16 }}>
               <img src="/pp1.jpg" alt={developerInfo.name} style={{ width: 72, height: 72, borderRadius: 12, objectFit: 'cover', border: '2px solid var(--accent)', margin: '0 auto 10px' }} />
@@ -130,8 +130,8 @@ export function Footer() {
             </div>
             <div style={{ display: 'grid', gap: 8, marginBottom: 10 }}>
               {[
-                { href: `mailto:${developerInfo.email}`, icon: Mail, label: 'Email', color: '#ef4444', rgb: '239,68,68' },
-                { href: `https://wa.me/${developerInfo.whatsapp}`, icon: MessageCircle, label: 'WhatsApp', color: '#16a34a', rgb: '22,163,74', blank: true },
+                { href: `mailto:${developerInfo.email}`, icon: Icons.Mail, label: 'Email', color: '#ef4444', rgb: '239,68,68' },
+                { href: `https://wa.me/${developerInfo.whatsapp}`, icon: Icons.MessageCircle, label: 'WhatsApp', color: '#16a34a', rgb: '22,163,74', blank: true },
               ].map(({ href, icon: Ic, label, color, rgb, blank }) => (
                 <a key={label} href={href} {...(blank ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
                   style={{ padding: '9px 12px', borderRadius: 10, background: `rgba(${rgb},0.10)`, border: `1px solid rgba(${rgb},0.22)`, color, textDecoration: 'none', fontSize: 13, fontWeight: 700, display: 'flex', alignItems: 'center', gap: 8, transition: 'all 0.15s' }}
@@ -147,7 +147,7 @@ export function Footer() {
                 style={{ padding: '8px 10px', borderRadius: 10, border: '1px solid rgba(14,165,233,0.22)', background: 'rgba(14,165,233,0.08)', color: '#0284C7', textDecoration: 'none', fontSize: 12, fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 5, transition: 'all 0.15s' }}
                 onMouseEnter={e => e.currentTarget.style.background = 'rgba(14,165,233,0.16)'}
                 onMouseLeave={e => e.currentTarget.style.background = 'rgba(14,165,233,0.08)'}
-              ><Briefcase size={13} /> Portfolio</a>
+              ><Icons.Briefcase size={13} /> Portfolio</a>
               {developerInfo.social.map(({ icon, url, label, color, rgb }) => {
                 const Ic = Icons[icon];
                 return (

@@ -6,7 +6,7 @@
 // plain static avatar with no upload option.
 
 import { useState, useRef } from 'react';
-import { Camera, HardDrive, Move, X } from 'lucide-react';
+import * as Icons from 'lucide-react';
 import { uploadProfilePicture, deleteProfilePicture } from '../lib/profilePicture';
 
 export function AvatarUploadModal({ currentURL, isAnon, onClose, onUploaded, onDeleted }) {
@@ -124,12 +124,12 @@ export function AvatarUploadModal({ currentURL, isAnon, onClose, onUploaded, onD
         {/* Header */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <div style={{ fontWeight: 800, fontSize: 16, color: 'var(--text)' }}>Profile Picture</div>
-          <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--muted)', padding: 4 }}><X size={18} /></button>
+          <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--muted)', padding: 4 }}><Icons.X size={18} /></button>
         </div>
 
         {/* Info banner */}
         <div style={{ padding: '9px 12px', borderRadius: 10, background: 'rgba(22,163,74,0.08)', border: '1px solid rgba(22,163,74,0.2)', fontSize: 12, color: 'var(--text)', display: 'flex', alignItems: 'flex-start', gap: 7 }}>
-          <HardDrive size={13} color="var(--accent)" style={{ flexShrink: 0, marginTop: 1 }} />
+          <Icons.HardDrive size={13} color="var(--accent)" style={{ flexShrink: 0, marginTop: 1 }} />
           <span>Photos stay on this device for offline use.{!isAnon ? ' A Firebase backup is also saved.' : ' Sign in to sync across devices.'}</span>
         </div>
 
@@ -144,7 +144,7 @@ export function AvatarUploadModal({ currentURL, isAnon, onClose, onUploaded, onD
           >
             {currentURL
               ? <img src={currentURL} alt="Current" style={{ width: 80, height: 80, borderRadius: '50%', objectFit: 'cover', border: '3px solid var(--accent)' }} />
-              : <div style={{ width: 80, height: 80, borderRadius: '50%', background: 'linear-gradient(135deg, var(--accent), var(--accent2))', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Camera size={32} color="white" /></div>
+              : <div style={{ width: 80, height: 80, borderRadius: '50%', background: 'linear-gradient(135deg, var(--accent), var(--accent2))', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Icons.Camera size={32} color="white" /></div>
             }
             <div style={{ textAlign: 'center' }}>
               <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--text)' }}>Click or drag & drop</div>
@@ -176,7 +176,7 @@ export function AvatarUploadModal({ currentURL, isAnon, onClose, onUploaded, onD
               }}
             />
             <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, color: 'var(--muted)' }}>
-              <Move size={13} />
+              <Icons.Move size={13} />
               Drag to reposition
             </div>
             {/* Change photo button */}

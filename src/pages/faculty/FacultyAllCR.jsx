@@ -19,7 +19,7 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowLeft, Users, X } from 'lucide-react';
+import * as Icons from 'lucide-react';
 import { auth } from '../../lib/firebase';
 import { DEPARTMENTS } from '../../store/store';
 import { getBatchColor, sortBatches } from '../../lib/timeModels';
@@ -132,10 +132,10 @@ export default function FacultyAllCR() {
               }}
               title="Back to My Classes"
             >
-              <ArrowLeft size={16} color="var(--text)" />
+              <Icons.ArrowLeft size={16} color="var(--text)" />
             </button>
             <div className="hub-page-hero-icon">
-              <Users size={20} color="var(--accent)" />
+              <Icons.Users size={20} color="var(--accent)" />
             </div>
             <div>
               <h1 className="hub-page-hero-title">All CR</h1>
@@ -261,7 +261,7 @@ export function CRDetailModal({ member, onClose }) {
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
           <div style={{ fontWeight: 800, fontSize: 16, color: 'var(--text)' }}>{member.name || 'Unnamed'}</div>
           <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--muted)' }}>
-            <X size={18} />
+            <Icons.X size={18} />
           </button>
         </div>
         <div style={{ borderTop: '1px solid var(--border)' }}>

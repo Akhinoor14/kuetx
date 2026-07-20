@@ -30,10 +30,6 @@ export default defineConfig({
     include: ['react', 'react-dom', 'react/jsx-runtime', 'react/jsx-dev-runtime'],
   },
   build: {
-    modulePreload: {
-      resolveDependencies: (filename, deps) =>
-        deps.filter((d) => !d.includes('vendor-pdf') && !d.includes('vendor-fullcalendar')),
-    },
     rollupOptions: {
       output: {
         manualChunks(id) {
