@@ -32,7 +32,7 @@
 // grouping.
 
 import { useEffect, useMemo, useState } from 'react';
-import * as Icons from 'lucide-react';
+import { CalendarClock, Clock, Layers, Plus, Settings2 } from 'lucide-react';
 import { auth } from '../../lib/firebase';
 import {
   TIME_MODELS, DAYS, isSlotOverlap, getBatchColor, sortBatches,
@@ -300,7 +300,7 @@ export default function FacultySchedule() {
                           display: 'flex', alignItems: 'center', justifyContent: 'center',
                           height: '100%', minHeight: 26, opacity: 0.28,
                         }}>
-                          <Icons.Plus size={14} />
+                          <Plus size={14} />
                         </div>
                       )}
                       {anchored.map(({ entry, rowSpan: rs }) => {
@@ -327,7 +327,7 @@ export default function FacultySchedule() {
                             <div style={{ fontSize: 11, color: color.text, fontWeight: 700, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{entry.courseCode}</div>
                             {rs > 1 && (
                               <div style={{ fontSize: 10, color: 'var(--muted)', marginTop: 2, display: 'flex', alignItems: 'center', gap: 3 }}>
-                                <Icons.Layers size={10} /> Full sessional block
+                                <Layers size={10} /> Full sessional block
                               </div>
                             )}
                           </div>
@@ -350,7 +350,7 @@ export default function FacultySchedule() {
         <div className="hub-page-hero faculty-schedule-hero" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 10 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
             <div className="hub-page-hero-icon">
-              <Icons.Clock size={20} color="var(--accent)" />
+              <Clock size={20} color="var(--accent)" />
             </div>
             <h1 className="hub-page-hero-title">My Schedule</h1>
           </div>
@@ -370,7 +370,7 @@ export default function FacultySchedule() {
                 color: 'var(--text)', fontSize: 12, fontWeight: 600, cursor: 'pointer',
               }}
             >
-              <Icons.Settings2 size={14} />
+              <Settings2 size={14} />
               <span>{activeTemplate.name}</span>
             </button>
             {modelMenuOpen && (
@@ -411,7 +411,7 @@ export default function FacultySchedule() {
           <div className="card faculty-schedule-today-card" style={{ marginTop: 10, marginBottom: 12, padding: '12px 14px', borderRadius: 14 }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
               <div style={{ fontSize: 11, fontWeight: 800, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.07em', display: 'flex', alignItems: 'center', gap: 6 }}>
-                <Icons.CalendarClock size={13} /> Today's Classes
+                <CalendarClock size={13} /> Today's Classes
               </div>
               <div style={{ fontSize: 11, color: 'var(--muted)' }}>
                 {new Date().toLocaleDateString('en-BD', { weekday: 'short', day: 'numeric', month: 'short' })}

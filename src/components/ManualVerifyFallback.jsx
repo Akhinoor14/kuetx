@@ -11,7 +11,7 @@
 // a faster, more direct nudge alongside that.
 
 import { useState } from 'react';
-import * as Icons from 'lucide-react';
+import { CheckCircle2, MessageCircle, ShieldCheck } from 'lucide-react';
 import { submitManualVerifyRequest } from '../lib/manualVerifyRequests';
 
 const FOUNDER_WHATSAPP_NUMBER = '8801724812042';
@@ -69,7 +69,7 @@ export default function ManualVerifyFallback({ role, details, onDone }) {
       }}
     >
       <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
-        <Icons.ShieldCheck size={18} color="var(--accent)" />
+        <ShieldCheck size={18} color="var(--accent)" />
         <span style={{ fontWeight: 700, fontSize: 14 }}>Verify manually</span>
       </div>
 
@@ -80,7 +80,7 @@ export default function ManualVerifyFallback({ role, details, onDone }) {
 
       {submitted ? (
         <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, color: 'var(--accent)', fontWeight: 600 }}>
-          <Icons.CheckCircle2 size={16} />
+          <CheckCircle2 size={16} />
           Request sent — you'll be verified shortly.
         </div>
       ) : (
@@ -91,7 +91,7 @@ export default function ManualVerifyFallback({ role, details, onDone }) {
             disabled={submitting}
             style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}
           >
-            <Icons.MessageCircle size={16} />
+            <MessageCircle size={16} />
             {submitting ? 'Sending…' : 'Contact Founder on WhatsApp'}
           </button>
           {error && (

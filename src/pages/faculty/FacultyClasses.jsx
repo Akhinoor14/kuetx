@@ -24,7 +24,7 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import * as Icons from 'lucide-react';
+import { BookOpen, Plus, Users, X } from 'lucide-react';
 import { auth } from '../../lib/firebase';
 import {
   DEPARTMENTS, TERM_KEYS, getTermIndex,
@@ -218,7 +218,7 @@ export function AddClassModal({ onClose, onCreated, batches, initialDay, initial
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 18 }}>
           <div style={{ fontWeight: 800, fontSize: 17, color: 'var(--text)' }}>Add Class</div>
           <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--muted)' }}>
-            <Icons.X size={18} />
+            <X size={18} />
           </button>
         </div>
 
@@ -428,7 +428,7 @@ export default function FacultyClasses() {
         <div className="hub-page-hero" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 10 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
             <div className="hub-page-hero-icon">
-              <Icons.BookOpen size={20} color="var(--accent)" />
+              <BookOpen size={20} color="var(--accent)" />
             </div>
             <h1 className="hub-page-hero-title">My Classes</h1>
           </div>
@@ -441,7 +441,7 @@ export default function FacultyClasses() {
                 fontWeight: 700, fontSize: 13, cursor: 'pointer',
               }}
             >
-              <Icons.Users size={15} /> All CR
+              <Users size={15} /> All CR
             </button>
             <button
               onClick={() => setShowAdd(true)}
@@ -453,7 +453,7 @@ export default function FacultyClasses() {
                 cursor: isVerified ? 'pointer' : 'not-allowed', opacity: isVerified ? 1 : 0.5,
               }}
             >
-              <Icons.Plus size={15} /> Add Class
+              <Plus size={15} /> Add Class
             </button>
           </div>
         </div>
@@ -510,7 +510,7 @@ export default function FacultyClasses() {
                       background: 'color-mix(in srgb, var(--accent) 15%, var(--surface))',
                       display: 'flex', alignItems: 'center', justifyContent: 'center',
                     }}>
-                      <Icons.BookOpen size={17} color="var(--accent)" />
+                      <BookOpen size={17} color="var(--accent)" />
                     </div>
                     <span className="hub-grid-item-label" style={{ fontWeight: 600, color: '#5c5a54' }}>
                       {c.batch?.toUpperCase()} {c.dept} · {c.courseCode}

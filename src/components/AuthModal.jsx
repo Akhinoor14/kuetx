@@ -15,7 +15,8 @@ import {
   getAuthErrorMessage,
 } from '../lib/firebaseAuth';
 import { isObviouslyBadDomain, getTypoSuggestion } from '../lib/emailDomainCheck';
-import { setAccountRole, persistAccountRoleToServer } from '../lib/accountRole';
+import { setAccountRole, persistAccountRoleToServer, fetchServerAccountRole } from '../lib/accountRole';
+import { getFacultyDoc } from '../lib/facultySync';
 // RESTRUCTURE v2: Register now asks Student/Faculty INLINE, right at the
 // top of the Register tab, before showing the form — not a day later at a
 // standalone 'role-select' step. That standalone step still exists as a
@@ -178,8 +179,39 @@ export default function AuthModal({ mode = 'login', isUpgrade = false, onClose, 
       // RESTRUCTURE note: Google is unaffected by the auth/role-select
       // reorder — since it's always student and never faculty, there's
       // no ambiguous role to defer here, unlike email Register above.
-      setAccountRole('student');
-      persistAccountRoleToServer('student').catch(() => {});
+      // BUGFIX (student/faculty routing mixup): this used to
+      // unconditionally call setAccountRole('student') for every Google
+      // sign-in, new or returning. Google is indeed always student-only
+      // for a genuinely NEW account, but buildQueue() in App.jsx trusts
+      // ANY truthy local accountRole over its own server-side lookup
+      // (`if (!accountRole) { ...check users/{uid}.role and faculty/{uid}...
+      // }`) — so force-writing 'student' here, before buildQueue ever
+      // runs, skipped that authoritative check entirely. If this uid ever
+      // actually had a faculty/{uid} doc or a server-recorded 'teacher'
+      // role for any reason (e.g. an account that had briefly gone through
+      // Faculty setup, or any future path that links Google to an
+      // existing account), this silently overrode it back to 'student'
+      // and routed a faculty account into the student shell.
+      //
+      // Fix: check the same authoritative server-side facts buildQueue()
+      // does — users/{uid}.role first, then the faculty/{uid} doc as a
+      // fallback — and only default to 'student' when genuinely nothing
+      // is recorded (a real brand-new Google sign-up, the only case this
+      // was ever meant to cover). A confirmed 'teacher' record is left
+      // untouched rather than being clobbered.
+      const existingRole = await fetchServerAccountRole(user.uid);
+      if (existingRole) {
+        setAccountRole(existingRole);
+      } else {
+        const fdoc = await getFacultyDoc(user.uid).catch(() => null);
+        if (fdoc) {
+          setAccountRole('teacher');
+          persistAccountRoleToServer('teacher').catch(() => {});
+        } else {
+          setAccountRole('student');
+          persistAccountRoleToServer('student').catch(() => {});
+        }
+      }
       onSuccess?.(user, { linked: isUpgrade });
     } catch (err) {
       if (isUpgrade && err.code === 'auth/credential-already-in-use') {
@@ -190,8 +222,22 @@ export default function AuthModal({ mode = 'login', isUpgrade = false, onClose, 
         // holding a fresh anonymous session on this device.
         try {
           const user = await loginWithGoogle();
-          setAccountRole('student');
-          persistAccountRoleToServer('student').catch(() => {});
+          // Same authoritative-check fix as above — this is a returning
+          // account too, so its real role (if any) must never be
+          // silently overwritten with a hardcoded 'student'.
+          const existingRole2 = await fetchServerAccountRole(user.uid);
+          if (existingRole2) {
+            setAccountRole(existingRole2);
+          } else {
+            const fdoc2 = await getFacultyDoc(user.uid).catch(() => null);
+            if (fdoc2) {
+              setAccountRole('teacher');
+              persistAccountRoleToServer('teacher').catch(() => {});
+            } else {
+              setAccountRole('student');
+              persistAccountRoleToServer('student').catch(() => {});
+            }
+          }
           onSuccess?.(user, { linked: false, fellBackToExistingAccount: true });
           return;
         } catch (err2) {

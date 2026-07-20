@@ -6,6 +6,7 @@
 import { useState, useEffect } from 'react';
 import { onAuthChange } from '../lib/firebaseAuth';
 import { startFirebaseSync, stopFirebaseSync, pushAllToFirestore, getLastPullCount } from '../lib/firebaseSync';
+import { getProfile, isProfileComplete, isProfileStaleForUid } from '../store/store';
 
 export default function useFirebaseAuth() {
   const [user, setUser] = useState(null);           // Firebase user object
@@ -33,12 +34,37 @@ export default function useFirebaseAuth() {
           onSyncStatus: (status) => setSyncStatus(status),
         });
 
-        // If this is a real (non-anonymous) account and Firestore had NO data,
-        // it means this is their first login on this device — push local data up.
-        // This handles: "used anonymously on phone → Google login on PC"
+        // BUGFIX (stale/foreign localStorage auto-populating a new
+        // account): `getLastPullCount() === 0` is true both for the
+        // intended case (an anonymous session that just linked/signed in
+        // to a real account for the first time on this device — "used
+        // anonymously on phone → Google login on PC") AND for a
+        // brand-new account that has never had ANY server data yet,
+        // full stop. Firestore is empty either way, so this couldn't
+        // tell the two apart — every fresh Register (or Login into an
+        // account with no synced data yet) silently uploaded whatever
+        // kuetx_* keys happened to already be sitting in this browser's
+        // storage (a previous account's leftovers on a shared/reused
+        // device, an abandoned earlier attempt, etc.) as if the new user
+        // had entered it themselves.
+        //
+        // Fix: only auto-push if the local data actually looks like it
+        // belongs to THIS account — a complete profile that isn't
+        // flagged as stale for this uid (isProfileStaleForUid already
+        // treats an untagged-but-complete profile as ambiguous rather
+        // than auto-trusting it). A genuinely fresh account with nothing
+        // real typed in yet (the common case) no longer pushes anything;
+        // ProfileSetupModal's own mandatory 'profile' onboarding step is
+        // what populates their real data instead.
         if (!firebaseUser.isAnonymous && getLastPullCount() === 0) {
-          console.log('[KUETx] New device first login — pushing local data to Firestore');
-          await pushAllToFirestore(firebaseUser.uid);
+          const localProfile = getProfile();
+          const looksOwnedByThisAccount =
+            isProfileComplete(localProfile) &&
+            !isProfileStaleForUid(localProfile, firebaseUser.uid);
+          if (looksOwnedByThisAccount) {
+            console.log('[KUETx] New device first login — pushing local data to Firestore');
+            await pushAllToFirestore(firebaseUser.uid);
+          }
         }
       } else {
         // Not logged in — do NOT auto sign-in anonymously anymore.

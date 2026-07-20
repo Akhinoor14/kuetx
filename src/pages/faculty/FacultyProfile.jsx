@@ -10,7 +10,7 @@
 // under <optgroup>s, sourced from store.js's ACADEMIC_UNITS-backing lists.
 
 import { useEffect, useState } from 'react';
-import * as Icons from 'lucide-react';
+import { BadgeCheck, CalendarDays, Camera, Check, CheckCircle2, CircleAlert, Contact, IdCard, Pencil, Sparkles, User } from 'lucide-react';
 import { auth } from '../../lib/firebase';
 import { DEPARTMENTS, INSTITUTES, BASIC_SCIENCE_DEPTS } from '../../store/store';
 import { getFacultyDoc, saveFacultyProfile } from '../../lib/facultySync';
@@ -209,7 +209,7 @@ export default function FacultyProfile() {
           >
             {photoURL
               ? <img src={photoURL} alt="Profile" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-              : <span>{displayName.trim().charAt(0).toUpperCase() || <Icons.User size={28} />}</span>
+              : <span>{displayName.trim().charAt(0).toUpperCase() || <User size={28} />}</span>
             }
             {/* Camera overlay on hover */}
             <div style={{
@@ -219,7 +219,7 @@ export default function FacultyProfile() {
             }}
             onMouseEnter={e => e.currentTarget.style.opacity = '1'}
             onMouseLeave={e => e.currentTarget.style.opacity = '0'}>
-              <Icons.Camera size={22} color="white" />
+              <Camera size={22} color="white" />
             </div>
           </div>
 
@@ -273,7 +273,7 @@ export default function FacultyProfile() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
 
             {/* Identity */}
-            <Section title="Identity" icon={<Icons.IdCard size={14} />} action={
+            <Section title="Identity" icon={<IdCard size={14} />} action={
               !isEditing && (
                 <button onClick={() => setIsEditing(true)} style={{
                   padding: '6px 12px', background: 'var(--bg)', color: 'var(--text)',
@@ -281,7 +281,7 @@ export default function FacultyProfile() {
                   fontSize: 12, fontWeight: 700, cursor: 'pointer',
                   display: 'flex', alignItems: 'center', gap: 6,
                 }}>
-                  <Icons.Pencil size={12} /> Edit
+                  <Pencil size={12} /> Edit
                 </button>
               )
             }>
@@ -323,7 +323,7 @@ export default function FacultyProfile() {
             </Section>
 
             {/* Contact & Display */}
-            <Section title="Contact & Display" icon={<Icons.Contact size={14} />}>
+            <Section title="Contact & Display" icon={<Contact size={14} />}>
               {!isEditing ? (
                 <>
                   <InfoRow label="Phone" value={form.phone} />
@@ -363,17 +363,17 @@ export default function FacultyProfile() {
                 contact completeness, member-since date) instead of just
                 re-showing the Title/Department badges already visible in
                 the Identity section right above this. */}
-            <Section title="At a Glance" icon={<Icons.Sparkles size={14} />}>
+            <Section title="At a Glance" icon={<Sparkles size={14} />}>
               <div style={{ display: 'grid', gap: 10 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                   {officialEmail ? (
                     <>
-                      <Icons.BadgeCheck size={16} color="#10b981" style={{ flexShrink: 0 }} />
+                      <BadgeCheck size={16} color="#10b981" style={{ flexShrink: 0 }} />
                       <span style={{ fontSize: 13, color: 'var(--text)', fontWeight: 600 }}>Institutional email verified</span>
                     </>
                   ) : (
                     <>
-                      <Icons.CircleAlert size={16} color="#f59e0b" style={{ flexShrink: 0 }} />
+                      <CircleAlert size={16} color="#f59e0b" style={{ flexShrink: 0 }} />
                       <span style={{ fontSize: 13, color: 'var(--text)', fontWeight: 600 }}>Institutional email not linked</span>
                     </>
                   )}
@@ -382,12 +382,12 @@ export default function FacultyProfile() {
                 <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                   {form.name && form.title && form.dept ? (
                     <>
-                      <Icons.CheckCircle2 size={16} color="#10b981" style={{ flexShrink: 0 }} />
+                      <CheckCircle2 size={16} color="#10b981" style={{ flexShrink: 0 }} />
                       <span style={{ fontSize: 13, color: 'var(--text)', fontWeight: 600 }}>Profile complete</span>
                     </>
                   ) : (
                     <>
-                      <Icons.CircleAlert size={16} color="#f59e0b" style={{ flexShrink: 0 }} />
+                      <CircleAlert size={16} color="#f59e0b" style={{ flexShrink: 0 }} />
                       <span style={{ fontSize: 13, color: 'var(--text)', fontWeight: 600 }}>Profile incomplete — add Identity details</span>
                     </>
                   )}
@@ -396,12 +396,12 @@ export default function FacultyProfile() {
                 <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                   {form.phone || form.officeRoom ? (
                     <>
-                      <Icons.CheckCircle2 size={16} color="#10b981" style={{ flexShrink: 0 }} />
+                      <CheckCircle2 size={16} color="#10b981" style={{ flexShrink: 0 }} />
                       <span style={{ fontSize: 13, color: 'var(--text)', fontWeight: 600 }}>Reachable by students (phone/office set)</span>
                     </>
                   ) : (
                     <>
-                      <Icons.CircleAlert size={16} color="var(--muted)" style={{ flexShrink: 0 }} />
+                      <CircleAlert size={16} color="var(--muted)" style={{ flexShrink: 0 }} />
                       <span style={{ fontSize: 13, color: 'var(--muted)', fontWeight: 500 }}>No phone or office room added yet</span>
                     </>
                   )}
@@ -409,7 +409,7 @@ export default function FacultyProfile() {
 
                 {createdAt?.toDate && (
                   <div style={{ display: 'flex', alignItems: 'center', gap: 10, paddingTop: 4, borderTop: '1px solid var(--border)', marginTop: 2 }}>
-                    <Icons.CalendarDays size={16} color="var(--muted)" style={{ flexShrink: 0 }} />
+                    <CalendarDays size={16} color="var(--muted)" style={{ flexShrink: 0 }} />
                     <span style={{ fontSize: 12.5, color: 'var(--muted)' }}>
                       Faculty member since {createdAt.toDate().toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
                     </span>
@@ -421,7 +421,7 @@ export default function FacultyProfile() {
             {/* Save action — sits in its own card on the right, out of
                 the way of read-mode browsing, only meaningfully "active"
                 while editing. */}
-            <Section title="Save Changes" icon={<Icons.Check size={14} />}>
+            <Section title="Save Changes" icon={<Check size={14} />}>
               <div style={{ fontSize: 12.5, color: 'var(--muted)', marginBottom: 4 }}>
                 {isEditing ? 'Review your details, then save.' : 'Click Edit on Identity to make changes.'}
               </div>
@@ -447,7 +447,7 @@ export default function FacultyProfile() {
                     display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
                   }}
                 >
-                  {saving ? 'Saving…' : isEditing ? (<><Icons.Check size={15} /> Save Profile</>) : (<><Icons.Pencil size={13} /> Edit Profile</>)}
+                  {saving ? 'Saving…' : isEditing ? (<><Check size={15} /> Save Profile</>) : (<><Pencil size={13} /> Edit Profile</>)}
                 </button>
               </div>
             </Section>

@@ -6,7 +6,6 @@ import { Sidebar } from './components/Sidebar';
 import { Navbar } from './components/Navbar';
 import { Footer } from './components/Footer';
 import AnnouncementModal from './components/DriveAnnouncementModal';
-import CommunityHiringModal from './components/CommunityHiringModal';
 import PWAInstallPrompt from './components/PWAInstallPrompt';
 import PWAUpdatePrompt from './components/PWAUpdatePrompt';
 import { BottomNav, useIsMobileNav } from './components/BottomNav';
@@ -25,7 +24,7 @@ import DataSafeToast from './components/DataSafeToast';
 import ClassJoinIntro from './components/ClassJoinIntro';
 import RoleSelectScreen from './components/RoleSelectScreen';
 import FacultyProfileSetupModal from './components/FacultyProfileSetupModal';
-import { getAccountRole, setAccountRole, fetchServerAccountRole, persistAccountRoleToServer } from './lib/accountRole';
+import { getAccountRole, setAccountRole, clearAccountRole, fetchServerAccountRole, persistAccountRoleToServer } from './lib/accountRole';
 import { getFacultyDoc, markFacultyVerifiedIfEmailConfirmed, isFacultyProfileComplete } from './lib/facultySync';
 import { syncBloodDonorEntry } from './lib/bloodDonorSync';
 import { store, getProfile, isProfileComplete, DEFAULT_PROFILE, normalizeProfileForSave, validateProfileForSave, ensureDBReady, tagProfileOwner, isProfileStaleForUid } from './store/store';
@@ -55,6 +54,15 @@ import { notify } from './lib/notify';
 // inline fallback, not a fresh spinner import) shows briefly on each
 // FIRST visit to a given route; subsequent visits to that route are
 // instant since the browser has already cached that chunk.
+// PERFORMANCE FIX: this used to be a regular top-of-file import.
+// CommunityHiringModal bundles a 1.47MB poster JPG (campus_Lead_KUETx_
+// Individual_Hiring_Posters.jpg) — that image was getting pulled into the
+// eager main entry chunk for EVERY visitor, even the vast majority who
+// never see this modal (it's a one-time, conditionally-queued popup, same
+// tier as AnnouncementModal/BackupReminderGate below it in the JSX). Lazy-
+// loading it means that 1.47MB only downloads for someone who actually
+// reaches the 'communityHiring' queue step, not on every single first load.
+const CommunityHiringModal = lazy(() => import('./components/CommunityHiringModal'));
 const Dashboard = lazy(() => import('./pages/Dashboard'));
 const Profile = lazy(() => import('./pages/Profile'));
 const Courses = lazy(() => import('./pages/Courses'));
@@ -766,28 +774,56 @@ export default function App() {
   const advance = () => setQueue(q => q.slice(1));
 
   const handleAuthSuccess = async (user, info = {}) => {
-    if (!user.isAnonymous) {
-      // onAccountUpgraded() calls pushAllToFirestore() unconditionally,
-      // which is correct both for a true link (brand-new real account,
-      // nothing to conflict with) and for the credential-already-in-use
-      // fallback (existing account — local anonymous-session data merges
-      // in via last-write-wins per document, same as any other
-      // multi-device sync in this app). Faculty accounts don't have any
-      // local IndexedDB student data to push, so this is a harmless no-op
-      // for them beyond marking the account non-anonymous.
+    // BUGFIX (stale/foreign localStorage auto-populating a new account):
+    // this used to call authState.onAccountUpgraded(user) — which pushes
+    // EVERY local kuetx_* key (profile, roll, dept, hall, question-bank
+    // bookmarks, etc. — see store.exportAll()/pushAllToFirestore()) to
+    // Firestore under the new uid — for ANY non-anonymous success,
+    // including a plain fresh Register or a plain Login. That's only
+    // correct for a genuine anonymous-session upgrade (info.linked), where
+    // the local data really was created by the same person in the same
+    // browser session moments earlier. For a plain Register/Login, any
+    // leftover kuetx_* data already sitting in this browser's storage
+    // (a previous account's session on a shared/reused device, or an
+    // earlier abandoned attempt) got silently uploaded and effectively
+    // auto-created that person's account content for them — no explicit
+    // save, no confirmation, and none of the onboarding form's own
+    // isProfileStaleForUid() ownership check ever got consulted, since
+    // that check only guards the form's prefill display, not this push.
+    //
+    // Fix: only push local data through on a genuine upgrade
+    // (info.linked === true, set by AuthModal for isUpgrade calls).
+    // A plain Register/Login instead starts the onboarding queue clean —
+    // buildQueue()/ProfileSetupModal already require a real profile to be
+    // typed in before advancing, so nothing is lost, only stale/foreign
+    // leftovers stop being trusted as if the user had entered them.
+    if (!user.isAnonymous && info.linked) {
       await authState.onAccountUpgraded(user);
     }
 
-    // BUGFIX: RoleSelectScreen's persistAccountRoleToServer() call happens
-    // BEFORE this — at that moment the person is still anonymous (or has
-    // no account at all yet) for the common new-visitor flow
-    // (role-select -> auth -> ...), so that write silently no-ops (no
-    // uid to attach it to). This is the first point where a real,
-    // non-anonymous auth.currentUser genuinely exists, so back-fill the
-    // server record here. persistAccountRoleToServer() is safe to call
-    // redundantly — it's a no-op once users/{uid}.role already exists,
-    // per the Firestore rules' "set once" enforcement.
-    if (!user.isAnonymous) {
+    // BUGFIX (routing mixup): this used to unconditionally trust
+    // getAccountRole() — a plain localStorage flag with no ownership tag
+    // at all (see accountRole.js) — and persist it to users/{uid}.role
+    // for ANY non-anonymous success. On a device that previously had a
+    // different account signed in (shared computer, or the same person's
+    // earlier faculty/student account before switching), that stale local
+    // flag would get written as this brand-new account's permanent
+    // server-side role — e.g. a student registering on a device that last
+    // had a teacher signed in could get silently persisted as 'teacher'.
+    // Combined with buildQueue() below preferring the local flag over the
+    // server lookup (`let accountRole = getAccountRole()`), this is also
+    // what let student vs faculty routing cross over instead of staying
+    // strictly separate.
+    //
+    // Fix: only back-fill the local flag to the server on a genuine
+    // upgrade (same reasoning as above — that local data legitimately
+    // belongs to this session). A plain Register/Login instead lets
+    // buildQueue()'s own server-side lookup (users/{uid}.role, then the
+    // faculty/{uid} doc fallback) be the sole source of truth, falling
+    // through to Role Select only when the server genuinely has nothing
+    // recorded — exactly the "student route and faculty route can never
+    // cross" behavior this should have had from the start.
+    if (!user.isAnonymous && info.linked) {
       const localRole = getAccountRole();
       if (localRole) persistAccountRoleToServer(localRole);
     }
@@ -801,6 +837,29 @@ export default function App() {
     // if genuinely nothing recorded, faculty-verify, profile) — simplest
     // and most robust to just re-run it rather than duplicate that logic
     // here by hand.
+    //
+    // BUGFIX: for a plain (non-upgrade) Register/Login, also clear
+    // whatever local accountRole/profile flags might be leftover from a
+    // previous account on this device BEFORE rebuilding the queue, so
+    // buildQueue()'s `let accountRole = getAccountRole()` can't pick up
+    // stale data and skip its own server-side check.
+    //
+    // This also covers a gap isProfileStaleForUid() couldn't close on its
+    // own: that check only guards the onboarding FORM's prefill display
+    // (initialProfile below), and deliberately leaves a COMPLETE stored
+    // profile untouched since it can't otherwise tell "genuinely mine" from
+    // "someone else's, coincidentally finished". Left alone, a complete
+    // leftover profile from a previous account would make buildQueue()'s
+    // `isProfileComplete(getProfile())` check (a few lines up) true for a
+    // brand-new account too — skipping the mandatory profile step entirely
+    // and silently inheriting that other person's roll/dept/hall data.
+    // Wiping the local profile here, for a genuinely fresh sign-in only,
+    // removes that gap without touching isProfileStaleForUid()'s own
+    // narrower job.
+    if (!user.isAnonymous && !info.linked) {
+      clearAccountRole();
+      store.remove('profile');
+    }
     const q = await buildQueue(user.isAnonymous);
     setQueue(q);
   };
@@ -930,13 +989,21 @@ export default function App() {
           <AnnouncementModal open={true} onClose={advance} />
         )}
         {current === 'communityHiring' && (
-          <CommunityHiringModal
-            open={true}
-            onClose={() => {
-              try { store.set('communityHiringPopupShown', true); } catch {}
-              advance();
-            }}
-          />
+          // Suspense boundary needed here specifically: this block sits
+          // directly under <BrowserRouter>, not inside the <Routes>-level
+          // Suspense further down (that one only wraps page navigation).
+          // CommunityHiringModal is now lazy() (see the PERFORMANCE FIX
+          // comment near its declaration above) so its own chunk load
+          // needs a fallback while it downloads.
+          <Suspense fallback={null}>
+            <CommunityHiringModal
+              open={true}
+              onClose={() => {
+                try { store.set('communityHiringPopupShown', true); } catch {}
+                advance();
+              }}
+            />
+          </Suspense>
         )}
         {current === 'backup' && (
           <BackupReminderGate open={true} onClose={advance} />

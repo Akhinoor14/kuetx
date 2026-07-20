@@ -67,9 +67,16 @@ export function useIsFaculty() {
       // isFaculty here means "account exists" only (not verified) — this
       // is the signal used by the onboarding queue and by places that
       // only need to know "is this a faculty account at all" (e.g. App.jsx
-      // routing a returning faculty account back to 'teacher' role). The
-      // Blue Tick check (facultyProfile.verifiedAt) is separate and is
-      // what RequireFaculty.jsx actually gates real /faculty/* routes on.
+      // routing a returning faculty account back to 'teacher' role), and
+      // it's also what RequireFaculty.jsx gates /faculty/* routes on, by
+      // design: an unverified faculty account is still allowed to browse
+      // (see RequireFaculty.jsx's own "MANUAL VERIFICATION POLICY" doc
+      // comment) — the four real WRITE actions are what's blocked, both
+      // in the UI (via facultyProfile.verifiedAt) and, as the actual
+      // boundary, in Firestore rules regardless of what the client sends.
+      // The real access-control bug was never here — see accountRole.js /
+      // App.jsx's buildQueue()/handleAuthSuccess() for the fix that
+      // stops a Student-role account from ever reaching this at all.
       const active = !!profile;
       setIsFaculty(active);
       setIsFounderBypass(false);

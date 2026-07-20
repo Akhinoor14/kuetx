@@ -22,7 +22,7 @@
 // CR/ACR-authored class notices out of a teacher's own sent-history view.
 
 import { useEffect, useMemo, useState } from 'react';
-import * as Icons from 'lucide-react';
+import { Bell } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { auth } from '../../lib/firebase';
 import { subscribeMyClassIndex } from '../../lib/facultyClassSync';
@@ -207,7 +207,7 @@ export default function FacultyNoticeBroadcast() {
       <div className="broadcast-notice-page page-container" style={{ padding: '16px 20px 32px' }}>
         <div className="hub-page-hero broadcast-notice-hero">
           <div className="hub-page-hero-icon broadcast-notice-hero-icon">
-            <Icons.Bell size={18} color="var(--accent)" />
+            <Bell size={18} color="var(--accent)" />
           </div>
           <h1 className="hub-page-hero-title">Broadcast Notice</h1>
         </div>

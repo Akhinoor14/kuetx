@@ -4,7 +4,7 @@
 // phone call, and email, so a faculty member with an issue always has a
 // real way to reach the developer instead of a generic placeholder.
 
-import * as Icons from 'lucide-react';
+import { ChevronRight, Mail, MessageCircle, Phone } from 'lucide-react';
 
 const WHATSAPP_NUMBER = '01724812042';
 const WHATSAPP_INTL = '8801724812042';
@@ -34,7 +34,7 @@ const ContactAction = ({ icon, label, sub, href, color }) => (
       <div style={{ fontSize: 14.5, fontWeight: 800, color: 'var(--text)' }}>{label}</div>
       <div style={{ fontSize: 12.5, color: 'var(--muted)', marginTop: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{sub}</div>
     </div>
-    <Icons.ChevronRight size={16} color="var(--muted)" style={{ marginLeft: 'auto', flexShrink: 0 }} />
+    <ChevronRight size={16} color="var(--muted)" style={{ marginLeft: 'auto', flexShrink: 0 }} />
   </a>
 );
 
@@ -44,7 +44,7 @@ export default function FacultyContact() {
       <div style={{ padding: '20px 24px 40px', width: '100%', boxSizing: 'border-box', maxWidth: 560, margin: '0 auto' }}>
         <div className="hub-page-hero">
           <div className="hub-page-hero-icon">
-            <Icons.Mail size={20} color="var(--accent)" />
+            <Mail size={20} color="var(--accent)" />
           </div>
           <h1 className="hub-page-hero-title">Contact</h1>
         </div>
@@ -57,21 +57,21 @@ export default function FacultyContact() {
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
             <ContactAction
-              icon={<Icons.MessageCircle size={20} color="#22c55e" />}
+              icon={<MessageCircle size={20} color="#22c55e" />}
               label="WhatsApp"
               sub={WHATSAPP_NUMBER}
               href={`https://wa.me/${WHATSAPP_INTL}`}
               color="#22c55e"
             />
             <ContactAction
-              icon={<Icons.Phone size={19} color="#3b82f6" />}
+              icon={<Phone size={19} color="#3b82f6" />}
               label="Phone Call"
               sub={WHATSAPP_NUMBER}
               href={`tel:+${WHATSAPP_INTL}`}
               color="#3b82f6"
             />
             <ContactAction
-              icon={<Icons.Mail size={19} color="var(--accent)" />}
+              icon={<Mail size={19} color="var(--accent)" />}
               label="Email"
               sub={EMAIL}
               href={`mailto:${EMAIL}`}

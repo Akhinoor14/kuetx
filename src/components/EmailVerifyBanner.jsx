@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import * as Icons from 'lucide-react';
+import { MailWarning, X } from 'lucide-react';
 import { auth } from '../lib/firebase';
 import { isEmailVerified, resendVerificationEmail, reloadUser } from '../lib/firebaseAuth';
 
@@ -96,7 +96,7 @@ export default function EmailVerifyBanner({ onVerified }) {
           width: 30, height: 30, borderRadius: '50%', background: 'var(--warning)',
           display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
         }}>
-          <Icons.MailWarning size={16} color="white" />
+          <MailWarning size={16} color="white" />
         </div>
         <div style={{ flex: 1, minWidth: 160 }}>
           <div style={{ fontWeight: 700, fontSize: 13, color: 'var(--text)' }}>Email not verified</div>
@@ -123,7 +123,7 @@ export default function EmailVerifyBanner({ onVerified }) {
           width: 30, height: 30, borderRadius: '50%', background: 'var(--warning)',
           display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: 1,
         }}>
-          <Icons.MailWarning size={16} color="white" />
+          <MailWarning size={16} color="white" />
         </div>
         <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{ fontWeight: 700, fontSize: 13, color: 'var(--text)' }}>{email}</div>
@@ -140,7 +140,7 @@ export default function EmailVerifyBanner({ onVerified }) {
           )}
         </div>
         <button onClick={() => setExpanded(false)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--muted)', flexShrink: 0 }}>
-          <Icons.X size={16} />
+          <X size={16} />
         </button>
       </div>
 

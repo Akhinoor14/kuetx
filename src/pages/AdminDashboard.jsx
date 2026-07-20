@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import * as Icons from 'lucide-react';
+import { ArrowLeft, Building2, CalendarRange, CheckCircle, ChevronRight, Circle, Clock, GraduationCap, LayoutGrid, RefreshCw, Repeat, Trash2, Users } from 'lucide-react';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../lib/firebase';
 import { auth } from '../lib/firebase';
@@ -67,7 +67,7 @@ const ALL_ASSIGNABLE_ROLES = [...CORE_TEAM_LEAD_ROLES, ROLES.SENIOR_CAMPUS_LEAD,
 // registry (lucide-react name, not an emoji), same tinted-tile language
 // as SubgroupHub's hub-grid-item elsewhere in the app.
 function FounderCategoryCard({ category, count, subtitle, onClick }) {
-  const Icon = Icons[category.icon] || Icons.Circle;
+  const Icon = Icons[category.icon] || Circle;
   return (
     <button onClick={onClick} className="founder-category-card">
       <div className="founder-category-card-icon">
@@ -85,7 +85,7 @@ function FounderCategoryCard({ category, count, subtitle, onClick }) {
         </div>
         <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 2 }}>{subtitle}</div>
       </div>
-      <Icons.ChevronRight size={18} color="var(--muted)" style={{ flexShrink: 0 }} />
+      <ChevronRight size={18} color="var(--muted)" style={{ flexShrink: 0 }} />
     </button>
   );
 }
@@ -124,7 +124,7 @@ function FounderViewSwitchCard() {
           background: 'color-mix(in srgb, var(--accent) 12%, var(--surface))',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
         }}>
-          <Icons.Repeat size={18} color="var(--accent)" />
+          <Repeat size={18} color="var(--accent)" />
         </div>
         <div>
           <div style={{ fontWeight: 700, fontSize: 13.5, color: 'var(--text)' }}>
@@ -144,7 +144,7 @@ function FounderViewSwitchCard() {
           color: 'var(--accent)', fontWeight: 700, fontSize: 12.5, cursor: 'pointer', flexShrink: 0,
         }}
       >
-        <Icons.RefreshCw size={13} />
+        <RefreshCw size={13} />
         Switch to {current === 'teacher' ? 'Student' : 'Teacher'} View
       </button>
     </div>
@@ -417,7 +417,7 @@ function StaffHolderDetailPage({ holder, onClose }) {
         display: 'flex', alignItems: 'center', gap: 12, padding: '14px 20px',
       }}>
         <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text)', display: 'flex', alignItems: 'center' }}>
-          <Icons.ArrowLeft size={20} />
+          <ArrowLeft size={20} />
         </button>
         <div style={{ fontWeight: 800, fontSize: 16, color: 'var(--text)' }}>{info.name || 'Unnamed holder'}</div>
       </div>
@@ -821,7 +821,7 @@ function ClassesBreadcrumb({ dept, batch, onDept, onBatch }) {
       </button>
       {dept && (
         <>
-          <Icons.ChevronRight size={13} color="var(--muted)" />
+          <ChevronRight size={13} color="var(--muted)" />
           <button onClick={() => onBatch(null)}
             style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer', color: batch ? 'var(--muted)' : 'var(--text)', fontWeight: batch ? 500 : 700 }}>
             {dept}
@@ -830,7 +830,7 @@ function ClassesBreadcrumb({ dept, batch, onDept, onBatch }) {
       )}
       {batch && (
         <>
-          <Icons.ChevronRight size={13} color="var(--muted)" />
+          <ChevronRight size={13} color="var(--muted)" />
           <span style={{ fontWeight: 700 }}>{batch}</span>
         </>
       )}
@@ -931,7 +931,7 @@ function ClassesView({ onBack, onSelectCategory, countCtx }) {
                 className="card" style={{ padding: 12, textAlign: 'left', cursor: 'pointer', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <span style={{ fontSize: 13, fontWeight: 600 }}>{g}</span>
                 <span style={{ fontSize: 11, color: 'var(--muted)', display: 'flex', alignItems: 'center', gap: 4 }}>
-                  {count != null && `${count} students`} <Icons.ChevronRight size={14} />
+                  {count != null && `${count} students`} <ChevronRight size={14} />
                 </span>
               </button>
             );
@@ -953,7 +953,7 @@ function ClassesView({ onBack, onSelectCategory, countCtx }) {
                 className="card" style={{ padding: 12, textAlign: 'left', cursor: 'pointer', display: 'flex', flexDirection: 'column', gap: 2 }}>
                 <span style={{ fontSize: 14, fontWeight: 700 }}>{b}</span>
                 <span style={{ fontSize: 11, color: 'var(--muted)', display: 'flex', alignItems: 'center', gap: 4 }}>
-                  {count != null ? `${count} students` : '\u00A0'} <Icons.ChevronRight size={12} style={{ marginLeft: 'auto' }} />
+                  {count != null ? `${count} students` : '\u00A0'} <ChevronRight size={12} style={{ marginLeft: 'auto' }} />
                 </span>
               </button>
             );
@@ -975,7 +975,7 @@ function ClassesView({ onBack, onSelectCategory, countCtx }) {
               <span style={{ fontSize: 14, fontWeight: 700 }}>{d}</span>
               <span style={{ fontSize: 11, color: 'var(--muted)', display: 'flex', alignItems: 'center', gap: 4 }}>
                 {batchCount} batch{batchCount > 1 ? 'es' : ''}{studentCount != null ? ` · ${studentCount} students` : ''}
-                <Icons.ChevronRight size={12} style={{ marginLeft: 'auto' }} />
+                <ChevronRight size={12} style={{ marginLeft: 'auto' }} />
               </span>
             </button>
           );
@@ -994,21 +994,21 @@ function ClassesView({ onBack, onSelectCategory, countCtx }) {
           <div style={{
             flex: '1 1 160px', padding: 16, borderRadius: 14, border: '1px solid var(--border)', background: 'var(--card)',
           }}>
-            <Icons.LayoutGrid size={18} color="var(--accent)" style={{ marginBottom: 8 }} />
+            <LayoutGrid size={18} color="var(--accent)" style={{ marginBottom: 8 }} />
             <div style={{ fontWeight: 800, fontSize: 22, color: 'var(--text)' }}>{totalClasses ?? '—'}</div>
             <div style={{ fontSize: 11.5, color: 'var(--muted)' }}>Total Class</div>
           </div>
           <div style={{
             flex: '1 1 160px', padding: 16, borderRadius: 14, border: '1px solid var(--border)', background: 'var(--card)',
           }}>
-            <Icons.CalendarRange size={18} color="var(--accent)" style={{ marginBottom: 8 }} />
+            <CalendarRange size={18} color="var(--accent)" style={{ marginBottom: 8 }} />
             <div style={{ fontWeight: 800, fontSize: 22, color: 'var(--text)' }}>{totalBatches ?? '—'}</div>
             <div style={{ fontSize: 11.5, color: 'var(--muted)' }}>Total Batch</div>
           </div>
           <div style={{
             flex: '1 1 160px', padding: 16, borderRadius: 14, border: '1px solid var(--border)', background: 'var(--card)',
           }}>
-            <Icons.Users size={18} color="var(--accent)" style={{ marginBottom: 8 }} />
+            <Users size={18} color="var(--accent)" style={{ marginBottom: 8 }} />
             <div style={{ fontWeight: 800, fontSize: 22, color: 'var(--text)' }}>{totalStudents ?? '—'}</div>
             <div style={{ fontSize: 11.5, color: 'var(--muted)' }}>Total Student</div>
           </div>
@@ -1277,21 +1277,21 @@ function FacultyView({ onBack, onSelectCategory, countCtx }) {
             <div style={{
               flex: '1 1 160px', padding: 16, borderRadius: 14, border: '1px solid var(--border)', background: 'var(--card)',
             }}>
-              <Icons.GraduationCap size={18} color="var(--accent)" style={{ marginBottom: 8 }} />
+              <GraduationCap size={18} color="var(--accent)" style={{ marginBottom: 8 }} />
               <div style={{ fontWeight: 800, fontSize: 22, color: 'var(--text)' }}>{loading ? '—' : verified.length}</div>
               <div style={{ fontSize: 11.5, color: 'var(--muted)' }}>Total Teachers</div>
             </div>
             <div style={{
               flex: '1 1 160px', padding: 16, borderRadius: 14, border: '1px solid var(--border)', background: 'var(--card)',
             }}>
-              <Icons.Building2 size={18} color="var(--accent)" style={{ marginBottom: 8 }} />
+              <Building2 size={18} color="var(--accent)" style={{ marginBottom: 8 }} />
               <div style={{ fontWeight: 800, fontSize: 22, color: 'var(--text)' }}>{loading ? '—' : Object.keys(deptCounts).length}</div>
               <div style={{ fontSize: 11.5, color: 'var(--muted)' }}>Departments Represented</div>
             </div>
             <div style={{
               flex: '1 1 160px', padding: 16, borderRadius: 14, border: '1px solid var(--border)', background: 'var(--card)',
             }}>
-              <Icons.Clock size={18} color="var(--accent)" style={{ marginBottom: 8 }} />
+              <Clock size={18} color="var(--accent)" style={{ marginBottom: 8 }} />
               <div style={{ fontWeight: 800, fontSize: 22, color: 'var(--text)' }}>{loading ? '—' : pending.length}</div>
               <div style={{ fontSize: 11.5, color: 'var(--muted)' }}>Awaiting Verification</div>
             </div>
@@ -1348,7 +1348,7 @@ function FacultyView({ onBack, onSelectCategory, countCtx }) {
                   title="Remove this faculty account (e.g. mistakenly approved)"
                   style={{ display: 'flex', alignItems: 'center', gap: 6, flexShrink: 0, opacity: isDeleting ? 0.6 : 1, color: 'var(--danger)' }}
                 >
-                  <Icons.Trash2 size={14} />
+                  <Trash2 size={14} />
                   {isDeleting ? 'Removing…' : 'Remove'}
                 </button>
               </div>
@@ -1401,7 +1401,7 @@ function FacultyView({ onBack, onSelectCategory, countCtx }) {
                     className="btn btn-primary btn-sm"
                     style={{ display: 'flex', alignItems: 'center', gap: 6, opacity: isVerifying ? 0.6 : 1 }}
                   >
-                    <Icons.CheckCircle size={14} />
+                    <CheckCircle size={14} />
                     {isVerifying ? 'Verifying…' : 'Verify'}
                   </button>
                   <button
@@ -1411,7 +1411,7 @@ function FacultyView({ onBack, onSelectCategory, countCtx }) {
                     title="Remove this signup request"
                     style={{ display: 'flex', alignItems: 'center', gap: 6, opacity: isDeleting ? 0.6 : 1, color: 'var(--danger)' }}
                   >
-                    <Icons.Trash2 size={14} />
+                    <Trash2 size={14} />
                     {isDeleting ? 'Removing…' : 'Remove'}
                   </button>
                 </div>
@@ -1837,13 +1837,13 @@ export default function AdminDashboard() {
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 14 }}>
         <Link to="/admin/batches" className="founder-category-card" style={{ textDecoration: 'none' }}>
           <div className="founder-category-card-icon">
-            <Icons.Users size={22} color="var(--accent)" />
+            <Users size={22} color="var(--accent)" />
           </div>
           <div style={{ flex: 1, minWidth: 0 }}>
             <div style={{ fontWeight: 700, fontSize: 14, color: 'var(--text)' }}>Manage Batches</div>
             <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 2 }}>Active batch list & colors</div>
           </div>
-          <Icons.ChevronRight size={18} color="var(--muted)" style={{ flexShrink: 0 }} />
+          <ChevronRight size={18} color="var(--muted)" style={{ flexShrink: 0 }} />
         </Link>
         {FOUNDER_CATEGORIES.filter((cat) => !cat.hidden).map((cat) => (
           <FounderCategoryCard

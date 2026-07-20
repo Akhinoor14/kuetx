@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import * as Icons from 'lucide-react';
+import { AlertTriangle } from 'lucide-react';
 import { auth } from '../lib/firebase';
 import { resolveEmailFlag } from '../lib/emailFlags';
 import { store } from '../store/store';
@@ -50,7 +50,7 @@ export default function EmailFlagBanner({ flag, onGoToSettings }) {
           width: 30, height: 30, borderRadius: '50%', background: 'var(--danger)',
           display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: 1,
         }}>
-          <Icons.AlertTriangle size={16} color="white" />
+          <AlertTriangle size={16} color="white" />
         </div>
         <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{ fontWeight: 700, fontSize: 13, color: 'var(--text)' }}>There is an issue with your account email</div>

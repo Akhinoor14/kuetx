@@ -19,7 +19,7 @@
 // via the inline "Edit date" control on each row.
 
 import { useEffect, useState } from 'react';
-import * as Icons from 'lucide-react';
+import { AlertTriangle, Check, ChevronDown, ChevronUp, Pencil, Plus, Trash2, Users, X } from 'lucide-react';
 import { getActiveBatches, getBatchStartDates, setActiveBatches, setBatchStartDate } from '../lib/appConfigSync';
 import { getBatchColor } from '../lib/timeModels';
 import { notify } from '../lib/notify';
@@ -127,7 +127,7 @@ export default function FounderBatchSettings() {
       <div style={{ padding: '20px 24px 40px', width: '100%', boxSizing: 'border-box', maxWidth: 720, margin: '0 auto' }}>
         <div className="hub-page-hero" style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
           <div className="hub-page-hero-icon">
-            <Icons.Users size={20} color="var(--accent)" />
+            <Users size={20} color="var(--accent)" />
           </div>
           <h1 className="hub-page-hero-title">Manage Batches</h1>
         </div>
@@ -171,7 +171,7 @@ export default function FounderBatchSettings() {
                   className="btn btn-primary"
                   style={{ display: 'flex', alignItems: 'center', gap: 6, whiteSpace: 'nowrap' }}
                 >
-                  <Icons.Plus size={15} /> Add Batch
+                  <Plus size={15} /> Add Batch
                 </button>
               </div>
               <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 6 }}>
@@ -206,7 +206,7 @@ export default function FounderBatchSettings() {
                               fontSize: 11, color: 'var(--muted)', display: 'flex', alignItems: 'center', gap: 4,
                             }}
                           >
-                            Starts {startDate} <Icons.Pencil size={10} />
+                            Starts {startDate} <Pencil size={10} />
                           </button>
                         ) : (
                           <button
@@ -216,7 +216,7 @@ export default function FounderBatchSettings() {
                               fontSize: 11, color: '#d97706', display: 'flex', alignItems: 'center', gap: 4,
                             }}
                           >
-                            <Icons.AlertTriangle size={11} /> No start date set — tap to add one
+                            <AlertTriangle size={11} /> No start date set — tap to add one
                           </button>
                         )
                       )}
@@ -237,14 +237,14 @@ export default function FounderBatchSettings() {
                             style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--accent)' }}
                             title="Save date"
                           >
-                            <Icons.Check size={16} />
+                            <Check size={16} />
                           </button>
                           <button
                             onClick={() => setEditingDateFor(null)}
                             style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--muted)' }}
                             title="Cancel"
                           >
-                            <Icons.X size={16} />
+                            <X size={16} />
                           </button>
                         </div>
                       )}
@@ -259,7 +259,7 @@ export default function FounderBatchSettings() {
                         width: 44, height: 44, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
                       }}
                     >
-                      <Icons.ChevronUp size={18} />
+                      <ChevronUp size={18} />
                     </button>
                     <button
                       onClick={() => moveBatch(idx, 1)}
@@ -271,7 +271,7 @@ export default function FounderBatchSettings() {
                         width: 44, height: 44, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
                       }}
                     >
-                      <Icons.ChevronDown size={18} />
+                      <ChevronDown size={18} />
                     </button>
                     <button
                       onClick={() => {
@@ -305,7 +305,7 @@ export default function FounderBatchSettings() {
                         padding: confirmingRemove === b ? '0 10px' : 0, flexShrink: 0,
                       }}
                     >
-                      <Icons.Trash2 size={18} />
+                      <Trash2 size={18} />
                       {confirmingRemove === b && <span style={{ fontSize: 12, fontWeight: 700 }}>Confirm</span>}
                     </button>
                   </div>

@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import * as Icons from 'lucide-react';
+import { Check } from 'lucide-react';
 import { sendKuetVerificationLink, buildKuetEmailFromProfile, isRollInstitutionallyVerified, setPendingVerifyUI, getPendingVerifyUI, clearPendingVerifyUI } from '../lib/kuetEmailVerify';
 import { requestOtpCode, verifyOtpCode } from '../lib/otpVerify';
 import { getProfile } from '../store/store';
@@ -199,7 +199,7 @@ export default function KuetEmailVerifyWidget({ onVerified, onSkip, compact = fa
           width: 22, height: 22, borderRadius: '50%', background: '#1d9bf0',
           display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: 1,
         }}>
-          <Icons.Check size={14} color="white" strokeWidth={3.5} />
+          <Check size={14} color="white" strokeWidth={3.5} />
         </div>
         <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)' }}>
