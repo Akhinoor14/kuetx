@@ -934,7 +934,8 @@ const AVAILABLE_SOLUTIONS = {
   },
 };
 
-const PROBE_YEARS = [2018, 2019, 2020, 2021, 2022, 2023];
+const currentYear = new Date().getFullYear();
+const PROBE_YEARS = Array.from({ length: currentYear - 2017 }, (_, index) => 2018 + index);
 
 const FORMULA_SHEETS = {
   ME2115: [
