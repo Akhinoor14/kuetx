@@ -8,7 +8,8 @@
 // look without either one importing the other's data or logic.
 
 import { Link } from 'react-router-dom';
-import * as Icons from 'lucide-react';
+import { Circle } from 'lucide-react';
+import { ICONS } from '../../lib/iconRegistry';
 import { useState } from 'react';
 
 export const GROUP_ICONS = {
@@ -22,7 +23,7 @@ export const GROUP_ICONS = {
 };
 
 export function NavRow({ to, label, iconName, active, onClose, unreadCount = 0 }) {
-  const Icon = Icons[iconName] || Icons.Circle;
+  const Icon = ICONS[iconName] || Circle;
   const [hovered, setHovered] = useState(false);
   const hasUnread = unreadCount > 0;
 

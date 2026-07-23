@@ -15,7 +15,8 @@
 
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import * as Icons from 'lucide-react';
+import { AlertTriangle, Bell, BellOff, BookOpen, CalendarClock, CalendarOff, CheckCircle2, ChevronRight, Circle, LayoutGrid, List, Repeat, Send } from 'lucide-react';
+import { ICONS } from '../../lib/iconRegistry';
 import { auth } from '../../lib/firebase';
 import { useIsFaculty } from '../../hooks/useIsFaculty';
 import { subscribeMyClassIndex, getFacultyAssignment } from '../../lib/facultyClassSync';
@@ -278,7 +279,7 @@ export default function FacultyDashboard() {
     });
 
   const statCard = (icon, label, value, sub, color) => {
-    const Icon = Icons[icon] || Icons.Circle;
+    const Icon = ICONS[icon] || Circle;
     const c = color || 'var(--accent)';
     return (
       <div className="card" style={{
@@ -326,7 +327,7 @@ export default function FacultyDashboard() {
           <div style={{ position: 'absolute', top: -30, right: -30, width: 100, height: 100, borderRadius: '50%', background: `${c}08` }} />
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', zIndex: 1 }}>
             <span style={{ fontSize: 10, color: 'var(--muted)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em' }}>Classes Held</span>
-            <Icons.CheckCircle2 size={20} color={c} strokeWidth={2.2} />
+            <CheckCircle2 size={20} color={c} strokeWidth={2.2} />
           </div>
           <div style={{ fontSize: 32, fontWeight: 900, color: c, letterSpacing: '-0.02em', lineHeight: 1, zIndex: 1 }}>—</div>
           <div style={{ fontSize: 12, color: 'var(--muted)', fontWeight: 500, zIndex: 1, marginTop: 2 }}>No active classes</div>
@@ -367,7 +368,7 @@ export default function FacultyDashboard() {
         <div style={{ position: 'absolute', top: -30, right: -30, width: 100, height: 100, borderRadius: '50%', background: `${c}08` }} />
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', zIndex: 1 }}>
           <span style={{ fontSize: 10, color: 'var(--muted)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em' }}>Classes Held</span>
-          <Icons.CheckCircle2 size={20} color={c} strokeWidth={2.2} />
+          <CheckCircle2 size={20} color={c} strokeWidth={2.2} />
         </div>
         <div style={{ fontSize: 32, fontWeight: 900, color: c, letterSpacing: '-0.02em', lineHeight: 1, zIndex: 1 }}>
           {current.logged}
@@ -456,7 +457,7 @@ export default function FacultyDashboard() {
             borderRadius: 10, background: 'color-mix(in srgb, var(--accent) 8%, var(--card))',
             border: '1px solid color-mix(in srgb, var(--accent) 25%, transparent)', fontSize: 12.5, color: 'var(--text)',
           }}>
-            <Icons.Repeat size={14} color="var(--accent)" />
+            <Repeat size={14} color="var(--accent)" />
             Viewing as: Teacher — switch back from the Admin dashboard.
           </div>
         )}
@@ -481,7 +482,7 @@ export default function FacultyDashboard() {
         <div className="card" style={{ padding: '14px 16px', borderRadius: 14, margin: 0, height: '100%', minHeight: 260, display: 'flex', flexDirection: 'column' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
             <div style={{ fontSize: 11, fontWeight: 800, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.07em', display: 'flex', alignItems: 'center', gap: 6 }}>
-              <Icons.CalendarClock size={13} /> Today's Classes
+              <CalendarClock size={13} /> Today's Classes
             </div>
             <Link to="/faculty/schedule" style={{ fontSize: 11, color: 'var(--accent)', textDecoration: 'none', fontWeight: 700 }}>Full schedule →</Link>
           </div>
@@ -515,14 +516,14 @@ export default function FacultyDashboard() {
                       <div style={{ fontSize: 13.5, fontWeight: 700, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{c.batch?.toUpperCase()} {c.dept}</div>
                       <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 2, fontWeight: 600 }}>{c.courseCode} — {c.courseTitle}</div>
                     </div>
-                    <Icons.ChevronRight size={16} color="rgba(59,130,246,0.5)" style={{ flexShrink: 0 }} />
+                    <ChevronRight size={16} color="rgba(59,130,246,0.5)" style={{ flexShrink: 0 }} />
                   </div>
                 </Link>
               ))}
             </div>
           ) : (
             <div style={{ fontSize: 12.5, color: 'var(--muted)', textAlign: 'center', padding: '18px 0', display: 'flex', flex: 1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
-              <Icons.CalendarOff size={20} color="var(--muted)" style={{ opacity: 0.5 }} />
+              <CalendarOff size={20} color="var(--muted)" style={{ opacity: 0.5 }} />
               No scheduled classes today
             </div>
           )}
@@ -541,7 +542,7 @@ export default function FacultyDashboard() {
         <div className="card" style={{ padding: '14px 16px', borderRadius: 14, margin: 0, height: '100%', minHeight: 260, display: 'flex', flexDirection: 'column' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
             <div style={{ fontSize: 11, fontWeight: 800, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.07em', display: 'flex', alignItems: 'center', gap: 6 }}>
-              <Icons.Bell size={13} /> Alerts &amp; Notices
+              <Bell size={13} /> Alerts &amp; Notices
             </div>
             <Link to="/faculty/notices" style={{ fontSize: 11, color: 'var(--accent)', textDecoration: 'none', fontWeight: 700 }}>Broadcast →</Link>
           </div>
@@ -562,7 +563,7 @@ export default function FacultyDashboard() {
             if (allItems.length === 0) {
               return (
                 <div style={{ fontSize: 12.5, color: 'var(--muted)', textAlign: 'center', padding: '18px 0', display: 'flex', flex: 1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
-                  <Icons.BellOff size={20} color="var(--muted)" style={{ opacity: 0.5 }} />
+                  <BellOff size={20} color="var(--muted)" style={{ opacity: 0.5 }} />
                   No alerts or sent notices yet
                 </div>
               );
@@ -580,7 +581,7 @@ export default function FacultyDashboard() {
                         style={{ textDecoration: 'none' }}
                       >
                         <div style={{ padding: '9px 12px', borderRadius: 10, background: 'var(--dangerBg, rgba(217,119,6,0.08))', border: '1px solid color-mix(in srgb, #d97706 28%, var(--border))', display: 'flex', alignItems: 'center', gap: 8 }}>
-                          <Icons.AlertTriangle size={14} color="#d97706" style={{ flexShrink: 0 }} />
+                          <AlertTriangle size={14} color="#d97706" style={{ flexShrink: 0 }} />
                           <div style={{ minWidth: 0, flex: 1 }}>
                             <div style={{ fontSize: 11.5, fontWeight: 700, color: '#d97706' }}>Attendance pending</div>
                             <div style={{ fontSize: 11, color: '#d97706', opacity: 0.85, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
@@ -594,7 +595,7 @@ export default function FacultyDashboard() {
                   const n = item.n;
                   return (
                     <div key={item.key} style={{ padding: '9px 12px', borderRadius: 10, background: 'rgba(var(--accentRGB), 0.04)', border: '1px solid rgba(var(--accentRGB), 0.10)', display: 'flex', alignItems: 'flex-start', gap: 8 }}>
-                      <Icons.Send size={13} color="var(--accent)" style={{ flexShrink: 0, marginTop: 2 }} />
+                      <Send size={13} color="var(--accent)" style={{ flexShrink: 0, marginTop: 2 }} />
                       <div style={{ minWidth: 0, flex: 1 }}>
                         <div style={{ fontSize: 11.5, fontWeight: 700, color: 'var(--text)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{n.title || 'Notice'}</div>
                         <div style={{ fontSize: 11, color: 'var(--muted)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{n.body}</div>
@@ -647,14 +648,14 @@ export default function FacultyDashboard() {
                     title="Single column"
                     style={{ padding: '5px 8px', border: 'none', cursor: 'pointer', background: classesViewMode === 'list' ? 'var(--accent)' : 'transparent', color: classesViewMode === 'list' ? '#fff' : 'var(--muted)', display: 'flex', alignItems: 'center' }}
                   >
-                    <Icons.List size={13} />
+                    <List size={13} />
                   </button>
                   <button
                     onClick={() => setClassesViewMode('grid')}
                     title="Grid columns"
                     style={{ padding: '5px 8px', border: 'none', cursor: 'pointer', background: classesViewMode === 'grid' ? 'var(--accent)' : 'transparent', color: classesViewMode === 'grid' ? '#fff' : 'var(--muted)', display: 'flex', alignItems: 'center' }}
                   >
-                    <Icons.LayoutGrid size={13} />
+                    <LayoutGrid size={13} />
                   </button>
                 </div>
               )}
@@ -718,7 +719,7 @@ export default function FacultyDashboard() {
             </div>
           ) : (
             <div style={{ fontSize: 12.5, color: 'var(--muted)', textAlign: 'center', padding: '18px 0', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
-              <Icons.BookOpen size={20} color="var(--muted)" style={{ opacity: 0.5 }} />
+              <BookOpen size={20} color="var(--muted)" style={{ opacity: 0.5 }} />
               No active classes yet
             </div>
           )}

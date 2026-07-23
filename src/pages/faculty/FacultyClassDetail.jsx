@@ -16,7 +16,8 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useParams, useSearchParams, Link } from 'react-router-dom';
-import * as Icons from 'lucide-react';
+import { CalendarClock, Circle, Clock, ExternalLink, FileText, GraduationCap, Pencil, Plus, X } from 'lucide-react';
+import { ICONS } from '../../lib/iconRegistry';
 import ClassmatesList from '../../components/ClassmatesList';
 
 // Local calendar date as 'YYYY-MM-DD' — NOT toISOString(), which converts to
@@ -165,7 +166,7 @@ function EditDayTimeModal({ assignment, groupId, onClose, onSaved }) {
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 18 }}>
           <div style={{ fontWeight: 800, fontSize: 17, color: 'var(--text)' }}>Edit Class Time</div>
           <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--muted)' }}>
-            <Icons.X size={18} />
+            <X size={18} />
           </button>
         </div>
 
@@ -485,7 +486,7 @@ function ScheduleTab({ assignment, groupId, isVerified, onEditDayTime }) {
               cursor: isVerified ? 'pointer' : 'not-allowed', opacity: isVerified ? 1 : 0.5,
             }}
           >
-            <Icons.Clock size={13} /> Set day &amp; time
+            <Clock size={13} /> Set day &amp; time
           </button>
           {!isVerified && (
             <div style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 6 }}>
@@ -514,7 +515,7 @@ function ScheduleTab({ assignment, groupId, isVerified, onEditDayTime }) {
               cursor: isVerified ? 'pointer' : 'not-allowed', opacity: isVerified ? 1 : 0.5,
             }}
           >
-            <Icons.Pencil size={13} /> Edit day &amp; time
+            <Pencil size={13} /> Edit day &amp; time
           </button>
           {!isVerified && (
             <div style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 6 }}>
@@ -594,7 +595,7 @@ function BatchRoutineGrid({ assignment, groupId }) {
     <div style={{ marginTop: 20, paddingTop: 16, borderTop: '1px solid var(--border)' }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 8, marginBottom: 10 }}>
         <div style={{ fontSize: 11, fontWeight: 800, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.07em', display: 'flex', alignItems: 'center', gap: 6 }}>
-          <Icons.CalendarClock size={13} /> Full Batch Routine (Read-only)
+          <CalendarClock size={13} /> Full Batch Routine (Read-only)
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, fontSize: 11, color: 'var(--muted)' }}>
           <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
@@ -1248,9 +1249,9 @@ function QuestionBankTab({ assignment }) {
               style={{ textDecoration: 'none' }}
             >
               <span style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 12.5, color: 'var(--text)', fontWeight: 600 }}>
-                <Icons.FileText size={14} color="var(--accent)" /> {p.label}
+                <FileText size={14} color="var(--accent)" /> {p.label}
               </span>
-              <Icons.ExternalLink size={13} color="var(--muted)" />
+              <ExternalLink size={13} color="var(--muted)" />
             </a>
           ))}
         </div>
@@ -1334,7 +1335,7 @@ function MarksSetupForm({ assignment, groupId, teacherSlot, onSaved, existingCon
             style={{ width: 64, padding: '6px 8px', borderRadius: 7, border: '1px solid var(--border)', background: 'var(--bg)', color: 'var(--text)', fontSize: 13 }}
           />
           <button onClick={() => removeComponent(idx)} style={{ background: 'none', border: 'none', color: 'var(--muted)', cursor: 'pointer', padding: 4 }}>
-            <Icons.X size={15} />
+            <X size={15} />
           </button>
         </div>
       ))}
@@ -1343,7 +1344,7 @@ function MarksSetupForm({ assignment, groupId, teacherSlot, onSaved, existingCon
         onClick={addComponent}
         style={{ display: 'flex', alignItems: 'center', gap: 5, background: 'none', border: '1px dashed var(--border)', borderRadius: 7, padding: '6px 10px', color: 'var(--muted)', fontSize: 12, cursor: 'pointer', marginBottom: 12 }}
       >
-        <Icons.Plus size={13} /> Add component
+        <Plus size={13} /> Add component
       </button>
 
       <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 10, color: total === 45 ? 'var(--accent)' : 'var(--danger, #dc2626)' }}>
@@ -1719,7 +1720,7 @@ export default function FacultyClassDetail() {
       <div className="page-container" style={{ padding: '10px 24px 40px' }}>
         <div className="faculty-class-hero faculty-class-hero-compact">
           <div className="faculty-class-hero-icon">
-            <Icons.GraduationCap size={20} color="var(--accent)" />
+            <GraduationCap size={20} color="var(--accent)" />
           </div>
           <div>
             {assignment && (
@@ -1758,7 +1759,7 @@ export default function FacultyClassDetail() {
         <div className="faculty-tabs-shell">
           <div className="faculty-tabs-grid">
             {TABS.map((t) => {
-              const Icon = Icons[t.icon] || Icons.Circle;
+              const Icon = ICONS[t.icon] || Circle;
               const active = tab === t.id;
               return (
                 <button

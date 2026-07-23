@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import * as Icons from 'lucide-react';
+import { Circle } from 'lucide-react';
+import { ICONS } from '../lib/iconRegistry';
 import { GUIDE_CATEGORIES, GUIDE_SECTIONS } from '../data/guideContent';
 
 const CALLOUT_STYLE = {
@@ -12,7 +13,7 @@ const CALLOUT_STYLE = {
 };
 
 function Icon({ name, ...props }) {
-  const C = Icons[name] || Icons.Circle;
+  const C = ICONS[name] || Circle;
   return <C {...props} />;
 }
 

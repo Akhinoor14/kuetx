@@ -1,6 +1,7 @@
 import React from 'react';
 import { Wordmark } from '../components/Logo';
-import * as Icons from 'lucide-react';
+import { ArrowRight, BookOpen, Building2, CheckCircle, Facebook, ShieldCheck, Sparkles, Users, Zap } from 'lucide-react';
+import { ICONS } from '../lib/iconRegistry';
 import usePageMeta from '../hooks/usePageMeta';
 
 function GuideBanner() {
@@ -16,13 +17,13 @@ function GuideBanner() {
       onMouseLeave={e => e.currentTarget.style.background = 'color-mix(in srgb, var(--accent) 7%, var(--surface))'}
     >
       <div style={{ width: 40, height: 40, borderRadius: 11, background: 'color-mix(in srgb, var(--accent) 15%, var(--card))', border: '1px solid color-mix(in srgb, var(--accent) 25%, var(--border))', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-        <Icons.BookOpen size={18} color="var(--accent)" />
+        <BookOpen size={18} color="var(--accent)" />
       </div>
       <div style={{ flex: 1 }}>
         <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', marginBottom: 2 }}>KUETx Guide</div>
         <div style={{ fontSize: 12, color: 'var(--muted)' }}>How to use every feature, step by step</div>
       </div>
-      <Icons.ArrowRight size={16} color="var(--accent)" />
+      <ArrowRight size={16} color="var(--accent)" />
     </div>
   );
 }
@@ -70,22 +71,22 @@ export default function About() {
 
             <div style={{ marginTop: '1.1rem' }}>
               <a href="https://www.facebook.com/kuetx/" target="_blank" rel="noopener noreferrer" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.6rem', padding: '0.85rem 1.25rem', borderRadius: '14px', background: 'rgba(59,89,152,.14)', border: '1.5px solid rgba(59,89,152,.28)', color: 'var(--text)', textDecoration: 'none', fontSize: '0.98rem', fontWeight: 800 }}>
-                <Icons.Facebook size={18} style={{ color: '#3b5998' }} />
+                <Facebook size={18} style={{ color: '#3b5998' }} />
                 Follow KUETx — Official Facebook Page
               </a>
             </div>
 
             <div style={{ marginTop: '1.35rem', display: 'flex', flexWrap: 'wrap', gap: '0.75rem' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.7rem 1rem', borderRadius: '14px', background: 'rgba(22,163,74,0.08)', border: '1px solid rgba(22,163,74,0.12)', color: 'var(--text)', fontSize: '0.92rem', fontWeight: 600 }}>
-                <Icons.Users size={16} style={{ color: 'var(--accent)' }} />
+                <Users size={16} style={{ color: 'var(--accent)' }} />
                 Built for KUET students
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.7rem 1rem', borderRadius: '14px', background: 'rgba(14,165,233,0.08)', border: '1px solid rgba(14,165,233,0.12)', color: 'var(--text)', fontSize: '0.92rem', fontWeight: 600 }}>
-                <Icons.Building2 size={16} style={{ color: 'var(--accent)' }} />
+                <Building2 size={16} style={{ color: 'var(--accent)' }} />
                 Department-aware design
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.7rem 1rem', borderRadius: '14px', background: 'rgba(15,23,42,0.06)', border: '1px solid rgba(15,23,42,0.08)', color: 'var(--text)', fontSize: '0.92rem', fontWeight: 600 }}>
-                <Icons.ShieldCheck size={16} style={{ color: 'var(--accent)' }} />
+                <ShieldCheck size={16} style={{ color: 'var(--accent)' }} />
                 Privacy-first by default
               </div>
             </div>
@@ -107,7 +108,7 @@ export default function About() {
                   <div style={{ fontSize: '0.78rem', fontWeight: 800, letterSpacing: '0.10em', textTransform: 'uppercase', color: 'var(--muted)', marginBottom: '0.25rem' }}>Focus</div>
                   <div style={{ fontSize: '0.98rem', fontWeight: 700, color: 'var(--text)' }}>Student productivity and clarity</div>
                 </div>
-                <Icons.Sparkles size={20} style={{ color: 'var(--accent)' }} />
+                <Sparkles size={20} style={{ color: 'var(--accent)' }} />
               </div>
 
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: '0.75rem' }}>
@@ -158,11 +159,11 @@ export default function About() {
           {/* Mobile Hero - Trust Badges */}
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.6rem' }}>
             <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.4rem', padding: '0.6rem 0.75rem', borderRadius: '12px', background: 'rgba(22,163,74,0.06)', border: '1px solid rgba(22,163,74,0.10)' }}>
-              <Icons.Users size={14} style={{ color: 'var(--accent)', marginTop: '0.1rem', flexShrink: 0 }} />
+              <Users size={14} style={{ color: 'var(--accent)', marginTop: '0.1rem', flexShrink: 0 }} />
               <div style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--text)', lineHeight: 1.3 }}>Built for KUET</div>
             </div>
             <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.4rem', padding: '0.6rem 0.75rem', borderRadius: '12px', background: 'rgba(14,165,233,0.06)', border: '1px solid rgba(14,165,233,0.10)' }}>
-              <Icons.ShieldCheck size={14} style={{ color: 'var(--accent)', marginTop: '0.1rem', flexShrink: 0 }} />
+              <ShieldCheck size={14} style={{ color: 'var(--accent)', marginTop: '0.1rem', flexShrink: 0 }} />
               <div style={{ fontSize: '0.8rem', fontWeight: 600, color: 'var(--text)', lineHeight: 1.3 }}>Privacy-first</div>
             </div>
           </div>
@@ -192,7 +193,7 @@ export default function About() {
             { icon: 'Database', title: 'Powerful Storage', desc: 'Browser localStorage for persistent data management' },
             { icon: 'Palette', title: 'Beautiful Design', desc: 'Dark/light themes with stunning UI components' },
           ].map((item, i) => {
-            const Icon = Icons[item.icon] || Icons.Zap;
+            const Icon = ICONS[item.icon] || Zap;
             return (
               <div key={i} style={{
                 padding: 'clamp(1.25rem, 3vw, 1.5rem)',
@@ -260,7 +261,7 @@ export default function About() {
               <ul style={{ listStyle: 'none', display: 'grid', gap: '0.65rem', margin: 0, padding: 0 }}>
                 {section.items.map((item, j) => (
                   <li key={j} style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', fontSize: '0.92rem', color: 'var(--muted)', fontWeight: 500 }}>
-                    <Icons.CheckCircle size={16} style={{ color: 'var(--accent)', flexShrink: 0, marginTop: '0.05rem' }} />
+                    <CheckCircle size={16} style={{ color: 'var(--accent)', flexShrink: 0, marginTop: '0.05rem' }} />
                     <span>{item}</span>
                   </li>
                 ))}
