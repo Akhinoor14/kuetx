@@ -333,17 +333,29 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
     return errorKeys.length === 0;
   };
 
-  const goNext = () => {
+  const goNext = (e) => {
+    // HARDENING: explicitly stop this click/keypress from ever being able
+    // to bubble into a native form submit. This button is type="button"
+    // so it shouldn't submit anyway, but stopping propagation here removes
+    // any possibility of a parent handler (or a future refactor that
+    // accidentally changes this to type="submit") turning "Next" into
+    // "Finish Setup" and saving before Review is ever shown.
+    e?.preventDefault?.();
+    e?.stopPropagation?.();
     if (!validateStep(stepIndex)) return;
     setStepIndex(prev => Math.min(prev + 1, stepTabs.length - 1));
   };
 
-  const goBack = () => {
+  const goBack = (e) => {
+    e?.preventDefault?.();
+    e?.stopPropagation?.();
     setStepIndex(prev => Math.max(prev - 1, 0));
     setErrors({});
   };
 
-  const skipStep = () => {
+  const skipStep = (e) => {
+    e?.preventDefault?.();
+    e?.stopPropagation?.();
     setStepIndex(prev => Math.min(prev + 1, stepTabs.length - 1));
     setErrors({});
   };
@@ -370,6 +382,19 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
       goNext();
       return;
     }
+
+    // HARDENING (final gate): no matter how handleSubmit got invoked
+    // (Next click, Enter key, Skip, a future code change), it must never
+    // actually persist the profile unless we are truly on the last step
+    // (Review) — or minimal mode, which has no step tabs at all. This is
+    // a redundant check on top of the guard above, on purpose: if the
+    // guard above is ever bypassed for any reason, this stops the save
+    // from happening instead of silently finishing setup early.
+    if (!minimal && stepIndex !== stepTabs.length - 1) {
+      setStepIndex(stepTabs.length - 1);
+      return;
+    }
+
     if (!validateStep(0) || !validateStep(1)) {
       setStepIndex(0);
       return;
