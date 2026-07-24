@@ -5,8 +5,8 @@
 
 import { useState, useEffect } from 'react';
 import { onAuthChange } from '../lib/firebaseAuth';
-import { startFirebaseSync, stopFirebaseSync, pushAllToFirestore, getLastPullCount } from '../lib/firebaseSync';
-import { getProfile, isProfileComplete, isProfileStaleForUid } from '../store/store';
+import { startFirebaseSync, stopFirebaseSync, pushAllToFirestore } from '../lib/firebaseSync';
+import { syncLocalDataOnAuth, isSafeToTrustLocalData } from '../lib/accountLifecycle';
 
 export default function useFirebaseAuth() {
   const [user, setUser] = useState(null);           // Firebase user object
@@ -26,47 +26,35 @@ export default function useFirebaseAuth() {
       prevUid = newUid;
 
       setUser(firebaseUser);
-      setAuthReady(true);
 
       if (firebaseUser) {
+        // BUGFIX (race condition): setAuthReady(true) used to fire here,
+        // immediately after setUser() and before syncLocalDataOnAuth()
+        // below. That's exactly the bug it looks like it isn't — React
+        // treats setAuthReady(true) as a signal to re-render, and
+        // App.jsx's own authReady-gated useEffect (the one that calls
+        // buildQueue()) would fire right then, reading store.get(...) /
+        // getProfile() while a brand-new account's local-storage clear
+        // was still in progress a few lines below. Half-cleared reads —
+        // some keys already gone, others not yet reached — could leak
+        // through to the UI for one render, or worse, get picked back up
+        // by whatever reads them.
+        //
+        // Fix: hold off setAuthReady(true) until AFTER
+        // syncLocalDataOnAuth() (the clear-or-push decision) has fully
+        // settled. Nothing that gates on authReady can now observe the
+        // in-between state — by the time anything downstream sees
+        // authReady flip to true, local storage is already in its final,
+        // correct shape for this account.
+        await syncLocalDataOnAuth(firebaseUser);
+        setAuthReady(true);
+
         // Start real-time sync for this user
         await startFirebaseSync(firebaseUser.uid, {
           onSyncStatus: (status) => setSyncStatus(status),
         });
-
-        // BUGFIX (stale/foreign localStorage auto-populating a new
-        // account): `getLastPullCount() === 0` is true both for the
-        // intended case (an anonymous session that just linked/signed in
-        // to a real account for the first time on this device — "used
-        // anonymously on phone → Google login on PC") AND for a
-        // brand-new account that has never had ANY server data yet,
-        // full stop. Firestore is empty either way, so this couldn't
-        // tell the two apart — every fresh Register (or Login into an
-        // account with no synced data yet) silently uploaded whatever
-        // kuetx_* keys happened to already be sitting in this browser's
-        // storage (a previous account's leftovers on a shared/reused
-        // device, an abandoned earlier attempt, etc.) as if the new user
-        // had entered it themselves.
-        //
-        // Fix: only auto-push if the local data actually looks like it
-        // belongs to THIS account — a complete profile that isn't
-        // flagged as stale for this uid (isProfileStaleForUid already
-        // treats an untagged-but-complete profile as ambiguous rather
-        // than auto-trusting it). A genuinely fresh account with nothing
-        // real typed in yet (the common case) no longer pushes anything;
-        // ProfileSetupModal's own mandatory 'profile' onboarding step is
-        // what populates their real data instead.
-        if (!firebaseUser.isAnonymous && getLastPullCount() === 0) {
-          const localProfile = getProfile();
-          const looksOwnedByThisAccount =
-            isProfileComplete(localProfile) &&
-            !isProfileStaleForUid(localProfile, firebaseUser.uid);
-          if (looksOwnedByThisAccount) {
-            console.log('[KUETx] New device first login — pushing local data to Firestore');
-            await pushAllToFirestore(firebaseUser.uid);
-          }
-        }
       } else {
+        setAuthReady(true);
         // Not logged in — do NOT auto sign-in anonymously anymore.
         // The 'auth' step in App.jsx's queue is now mandatory (no skip),
         // so every real session ends up going through Login/Register
@@ -86,11 +74,21 @@ export default function useFirebaseAuth() {
     };
   }, []);
 
-  // Called after upgrading anonymous → real account
-  // Pushes all local data up so nothing is lost
+  // Called after upgrading anonymous → real account. Currently unreachable
+  // in practice — see App.jsx's showUpgradeModal (never set to true) and
+  // the window.__kuetxShowAuth global auth modal (that global is never
+  // defined anywhere, so setShowAuthModal(true) never fires from it
+  // either) — the anonymous-session flow this was built for is fully
+  // dead code elsewhere in the app now. Kept guarded anyway, routed
+  // through the same shared isSafeToTrustLocalData() check as everywhere
+  // else, as defense in depth: if either dead call site is ever wired
+  // back up, this won't silently reintroduce the "push whatever's in
+  // local storage, no ownership check" bug this session was about.
   const onAccountUpgraded = async (newUser) => {
     setUser(newUser);
-    await pushAllToFirestore(newUser.uid);
+    if (!newUser.isAnonymous && isSafeToTrustLocalData(newUser.uid)) {
+      await pushAllToFirestore(newUser.uid);
+    }
     await startFirebaseSync(newUser.uid, {
       onSyncStatus: (status) => setSyncStatus(status),
     });

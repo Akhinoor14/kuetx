@@ -6,7 +6,7 @@
 
 import { useEffect, useRef, useState, useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import * as Icons from 'lucide-react';
+import { ArrowLeft, BarChart3, BookMarked, BookOpen, BookOpenText, Calendar, Camera, Check, CheckCircle2, ChevronRight, ClipboardList, CloudSun, Crown, ExternalLink, Flame, GraduationCap, Home, KeyRound, Landmark, Lock, Moon, PenLine, Pencil, ShieldCheck, StickyNote, Sun, Sunrise, Sunset, Target, User, UserPlus, UserX } from 'lucide-react';
 import {
   store, getProfile, DEFAULT_PROFILE, DEPARTMENTS,
   getLegacyTermResults, TERM_KEYS, MIN_ATTENDANCE_PERCENT,
@@ -21,7 +21,8 @@ import AuthModal from '../components/AuthModal';
 import { onAuthChange, logout } from '../lib/firebaseAuth';
 import { subscribeMyEmailFlag } from '../lib/emailFlags';
 import { auth } from '../lib/firebase';
-import { pushAllToFirestore, startFirebaseSync } from '../lib/firebaseSync';
+import { startFirebaseSync } from '../lib/firebaseSync';
+import { syncLocalDataOnAuth, clearLocalDataOnLogout } from '../lib/accountLifecycle';
 import { uploadProfilePicture, getProfilePhotoURL, deleteProfilePicture } from '../lib/profilePicture';
 import { AvatarUploadModal } from '../components/AvatarUploadModal';
 import { isRollInstitutionallyVerified } from '../lib/kuetEmailVerify';
@@ -214,7 +215,7 @@ const InAppWebView = ({ url, title, onClose }) => {
             display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer',
           }}
         >
-          <Icons.ArrowLeft size={18} color="var(--text)" />
+          <ArrowLeft size={18} color="var(--text)" />
         </button>
         <div style={{ minWidth: 0, flex: 1 }}>
           <div style={{ fontSize: 13, fontWeight: 800, color: 'var(--text)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{title}</div>
@@ -229,7 +230,7 @@ const InAppWebView = ({ url, title, onClose }) => {
             display: 'flex', alignItems: 'center', justifyContent: 'center', textDecoration: 'none',
           }}
         >
-          <Icons.ExternalLink size={15} color="var(--muted)" />
+          <ExternalLink size={15} color="var(--muted)" />
         </a>
       </div>
 
@@ -250,7 +251,7 @@ const InAppWebView = ({ url, title, onClose }) => {
             position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column',
             alignItems: 'center', justifyContent: 'center', gap: 14, padding: 24, textAlign: 'center',
           }}>
-            <Icons.Lock size={36} color="var(--muted)" />
+            <Lock size={36} color="var(--muted)" />
             <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)' }}>This page can't load here</div>
             <div style={{ fontSize: 12, color: 'var(--muted)', maxWidth: 280 }}>Some KUET portals (and Google sign-in) don't allow embedding. Open it in your browser instead.</div>
             <a href={url} target="_blank" rel="noopener noreferrer" style={{
@@ -302,7 +303,7 @@ const AccountLinkTile = ({ icon, title, subtitle, href, disabled, disabledHint }
           {disabled ? disabledHint : subtitle}
         </div>
       </div>
-      {!disabled && <Icons.ChevronRight size={15} color="var(--muted)" style={{ flexShrink: 0 }} />}
+      {!disabled && <ChevronRight size={15} color="var(--muted)" style={{ flexShrink: 0 }} />}
     </>
   );
 
@@ -420,7 +421,7 @@ const AccountBanner = ({ user, onLogin, onLogout }) => {
       borderRadius: 14, padding: '14px 18px',
       display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap',
     }}>
-      {anon ? <Icons.UserX size={20} color="#f59e0b" /> : <Icons.ShieldCheck size={20} color="#16a34a" />}
+      {anon ? <UserX size={20} color="#f59e0b" /> : <ShieldCheck size={20} color="#16a34a" />}
       <div style={{ flex: 1, minWidth: 160 }}>
         <div style={{ fontWeight: 700, fontSize: 13, color: 'var(--text)' }}>
           {anon ? 'Guest Mode — Data saved locally' : (user?.displayName || user?.email || 'Signed In')}
@@ -632,10 +633,21 @@ export default function Profile() {
   };
 
   const handleLogout = async () => {
-    if (!confirm('Sign out? Your local data will stay intact.')) return;
+    if (!confirm('Sign out? This device will be cleared — log back in anytime and everything comes right back from the cloud.')) return;
     try {
       await logout();
     } catch {}
+    // BUGFIX (design change after review): logout used to leave local
+    // data untouched ("stays on this device"), which directly worked
+    // against this whole session's fix — a DIFFERENT person registering
+    // a brand-new account on the same device afterward would still
+    // trigger the clear anyway (syncLocalDataOnAuth's isBrandNewAccount
+    // check), silently breaking the promise this dialog made. Since this
+    // app is cloud-based and a returning account's data comes right back
+    // via startFirebaseSync()'s pull in well under a second, there was no
+    // real benefit to keeping it around locally after logout — only risk.
+    // Clearing here makes the promise simple and always true instead.
+    await clearLocalDataOnLogout();
     // Full reload after sign-out clears any stale cached React state
     // (roles, faculty/staff status, profile, etc.) that was loaded for
     // the previous session — same pattern used in Settings.jsx and
@@ -644,16 +656,40 @@ export default function Profile() {
     setTimeout(() => window.location.reload(), 800);
   };
 
-  // Called when user logs in from Profile page — push local data up then start sync
+  // Called when user logs in from Profile page.
+  //
+  // BUGFIX (logic gap found on review — same class of bug as App.jsx's
+  // handleAuthSuccess and useFirebaseAuth.js's onAuthChange, but in a
+  // COMPLETELY SEPARATE handler that neither of those fixes touched,
+  // since this one is wired directly to AccountBanner's onLogin here on
+  // the Profile page rather than going through App.jsx at all).
+  //
+  // This used to unconditionally call pushAllToFirestore(user.uid) for
+  // ANY non-anonymous login/register success from this page — no
+  // isBrandNewAccount check, no isProfileStaleForUid check, nothing. A
+  // brand-new account created via this exact modal (Profile page's own
+  // AccountBanner "Login"/"Sign up" button) would immediately have
+  // whatever local kuetx_* data happened to be sitting in this browser
+  // (a previous account's leftovers on a shared/reused device) pushed
+  // straight to its Firestore doc — the same "new account inherits old
+  // data" bug this whole session has been about, just reachable through
+  // a different door than App.jsx's own AuthModal instances.
+  //
+  // Fix: route through accountLifecycle.js's syncLocalDataOnAuth(), the
+  // same single source of truth every other auth-success call site in
+  // the app now uses — see that file for the full new-vs-returning
+  // account reasoning. Three copies of this same logic (here, App.jsx,
+  // useFirebaseAuth.js) were exactly how this bug slipped through
+  // review the first time; there is now exactly one copy.
   const handleAuthSuccess = async (user) => {
     setShowAuthModal(false);
-    if (user && !user.isAnonymous) {
-      try {
-        await pushAllToFirestore(user.uid);
-        await startFirebaseSync(user.uid, {});
-      } catch (err) {
-        console.warn('[KUETx Profile] Post-login sync failed:', err.message);
-      }
+    if (!user || user.isAnonymous) return;
+
+    try {
+      await syncLocalDataOnAuth(user);
+      await startFirebaseSync(user.uid, {});
+    } catch (err) {
+      console.warn('[KUETx Profile] Post-login sync failed:', err.message);
     }
   };
 
@@ -782,7 +818,7 @@ export default function Profile() {
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               animation: 'profileFloat 6s ease-in-out infinite',
             }}>
-              <Icons.UserPlus size={48} color="white" strokeWidth={1.75} style={{ width: 'clamp(36px,8vw,56px)', height: 'clamp(36px,8vw,56px)' }} />
+              <UserPlus size={48} color="white" strokeWidth={1.75} style={{ width: 'clamp(36px,8vw,56px)', height: 'clamp(36px,8vw,56px)' }} />
             </div>
             <h2 style={{ fontSize: 'clamp(26px,7vw,46px)', fontWeight: 950, margin: '0 0 10px', color: 'white', letterSpacing: '-0.03em' }}>Welcome to KUETx</h2>
             <p style={{ fontSize: 'clamp(13px,3vw,16px)', color: 'rgba(255,255,255,0.9)', margin: '0 0 32px', maxWidth: 420, marginLeft: 'auto', marginRight: 'auto', lineHeight: 1.7 }}>
@@ -855,7 +891,7 @@ export default function Profile() {
         >
           {photoURL
             ? <img src={photoURL} alt="Profile" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-            : <span>{profile.name ? profile.name.trim().charAt(0).toUpperCase() : <Icons.User size={28} />}</span>
+            : <span>{profile.name ? profile.name.trim().charAt(0).toUpperCase() : <User size={28} />}</span>
           }
           {/* Camera overlay on hover */}
           <div style={{
@@ -865,7 +901,7 @@ export default function Profile() {
           }}
           onMouseEnter={e => e.currentTarget.style.opacity = '1'}
           onMouseLeave={e => e.currentTarget.style.opacity = '0'}>
-            <Icons.Camera size={22} color="white" />
+            <Camera size={22} color="white" />
           </div>
         </div>
 
@@ -924,7 +960,7 @@ export default function Profile() {
           border: '1.5px solid rgba(59,130,246,0.3)',
           display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap',
         }}>
-          <Icons.Crown size={22} color="var(--accent)" />
+          <Crown size={22} color="var(--accent)" />
           <div style={{ flex: '1 1 auto', minWidth: 160 }}>
             <div style={{ fontWeight: 700, fontSize: 13, color: 'var(--text)' }}>Class Representative</div>
             <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 1 }}>Class Management tools available in the sidebar.</div>
@@ -969,26 +1005,26 @@ export default function Profile() {
       <div className="profile-stats-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(155px, 1fr))', gap: 12 }}>
         {/* CGPA */}
         {liveData.cgpaData ? (
-          <StatCard icon={<Icons.GraduationCap size={20} />} label="CGPA" value={liveData.cgpaData.cgpa} sub={cgpaLabel} color={cgpaColor} />
+          <StatCard icon={<GraduationCap size={20} />} label="CGPA" value={liveData.cgpaData.cgpa} sub={cgpaLabel} color={cgpaColor} />
         ) : liveData.currentTermGPA ? (
-          <StatCard icon={<Icons.BarChart3 size={20} />} label="Term GPA" value={liveData.currentTermGPA.gpa} sub={`${liveData.currentTermGPA.credits} credits`} color="#0ea5e9" />
+          <StatCard icon={<BarChart3 size={20} />} label="Term GPA" value={liveData.currentTermGPA.gpa} sub={`${liveData.currentTermGPA.credits} credits`} color="#0ea5e9" />
         ) : (
-          <StatCard icon={<Icons.GraduationCap size={20} />} label="CGPA" value="No data" color="var(--muted)" />
+          <StatCard icon={<GraduationCap size={20} />} label="CGPA" value="No data" color="var(--muted)" />
         )}
 
         {/* Assignments */}
         <StatCard
-          icon={<Icons.CheckCircle2 size={20} />} label="Assignments"
+          icon={<CheckCircle2 size={20} />} label="Assignments"
           value={`${liveData.doneAssignments}/${liveData.totalAssignments}`}
           sub={liveData.totalAssignments > 0 ? `${Math.round((liveData.doneAssignments / liveData.totalAssignments) * 100)}% done` : null}
           color="#a855f7"
         />
 
         {/* Study hours */}
-        <StatCard icon={<Icons.BookOpen size={20} />} label="Study Hours" value={liveData.studyHours ? `${liveData.studyHours}h` : '—'} sub="Self study logged" color="#f59e0b" />
+        <StatCard icon={<BookOpen size={20} />} label="Study Hours" value={liveData.studyHours ? `${liveData.studyHours}h` : '—'} sub="Self study logged" color="#f59e0b" />
 
         {/* Diary */}
-        <StatCard icon={<Icons.PenLine size={20} />} label="Diary Entries" value={Array.isArray(liveData.diary) ? liveData.diary.length : 0} color="#06b6d4" />
+        <StatCard icon={<PenLine size={20} />} label="Diary Entries" value={Array.isArray(liveData.diary) ? liveData.diary.length : 0} color="#06b6d4" />
       </div>
 
       {/* Quick Accounts moved into the right column below, next to
@@ -1008,7 +1044,7 @@ export default function Profile() {
 
           {/* Personal Info — Edit button lives here (moved off the
               minimal hero card) */}
-          <Section className="ord-personal" title="Personal Info" icon={<Icons.User size={14} />} action={
+          <Section className="ord-personal" title="Personal Info" icon={<User size={14} />} action={
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
               {isRealCR === false && hasMinProfile && (
                 <div className="claim-cr-inline-mobile-only">
@@ -1021,7 +1057,7 @@ export default function Profile() {
                 fontSize: 12, fontWeight: 700, cursor: 'pointer',
                 display: 'flex', alignItems: 'center', gap: 6,
               }}>
-                <Icons.Pencil size={12} /> Edit
+                <Pencil size={12} /> Edit
               </button>
             </div>
           }>
@@ -1043,7 +1079,7 @@ export default function Profile() {
           </Section>
 
           {/* Academic Info */}
-          <Section className="ord-academic" title="Academic Info" icon={<Icons.BookMarked size={14} />}>
+          <Section className="ord-academic" title="Academic Info" icon={<BookMarked size={14} />}>
             <InfoRow label="Department" value={getDeptName(profile.dept)} />
             <div style={{ height: 1, background: 'var(--border)' }} />
             <InfoRow label="Session" value={profile.session} />
@@ -1062,7 +1098,7 @@ export default function Profile() {
 
           {/* Accommodation + Advisor */}
           {(profile.hallName || profile.roomNo || profile.advisorName) && (
-            <Section className="ord-hall-advisor" title="Hall & Advisor" icon={<Icons.Home size={14} />}>
+            <Section className="ord-hall-advisor" title="Hall & Advisor" icon={<Home size={14} />}>
               {profile.hallName && <InfoRow label="Hall" value={profile.hallName} />}
               {profile.roomNo && (
                 <>
@@ -1109,27 +1145,27 @@ export default function Profile() {
               each tile opens in a new tab. Hall tile resolves from
               profile.hallName via HALL_LINKS; Academic tile is the same
               for every student. */}
-          <Section className="ord-accounts" title="Quick Accounts" icon={<Icons.KeyRound size={14} />}>
+          <Section className="ord-accounts" title="Quick Accounts" icon={<KeyRound size={14} />}>
             <div className="profile-accounts-grid" style={{
               display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: 10,
             }}>
               {profile.hallName && HALL_LINKS[profile.hallName] ? (
                 <AccountLinkTile
-                  icon={<Icons.Home size={18} />}
+                  icon={<Home size={18} />}
                   title="Hall Account"
                   subtitle={profile.hallName}
                   href={HALL_LINKS[profile.hallName]}
                 />
               ) : (
                 <AccountLinkTile
-                  icon={<Icons.Home size={18} />}
+                  icon={<Home size={18} />}
                   title="Hall Account"
                   disabled
                   disabledHint="Set your hall in profile"
                 />
               )}
               <AccountLinkTile
-                icon={<Icons.GraduationCap size={18} />}
+                icon={<GraduationCap size={18} />}
                 title="Academic Account"
                 subtitle="academic.kuet.ac.bd"
                 href={ACADEMIC_SYSTEM_LINK}
@@ -1139,7 +1175,7 @@ export default function Profile() {
 
           {/* Attendance Breakdown */}
           {liveData.attData && (
-            <Section className="ord-attendance" title="Attendance" icon={<Icons.Calendar size={14} />}>
+            <Section className="ord-attendance" title="Attendance" icon={<Calendar size={14} />}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
                 <div style={{ position: 'relative', flexShrink: 0 }}>
                   <Ring pct={attPct} size={80} stroke={7} color={attColor} />
@@ -1163,7 +1199,7 @@ export default function Profile() {
 
           {/* Upcoming Assignments */}
           {liveData.upcomingAssignments.length > 0 && (
-            <Section className="ord-assignments" title="Upcoming Assignments" icon={<Icons.ClipboardList size={14} />}>
+            <Section className="ord-assignments" title="Upcoming Assignments" icon={<ClipboardList size={14} />}>
               {liveData.upcomingAssignments.map((a, i) => {
                 const daysLeft = Math.ceil((new Date(a.dueDate) - new Date()) / 86400000);
                 const urgent = daysLeft <= 2;
@@ -1198,7 +1234,7 @@ export default function Profile() {
 
           {/* Recent Notes */}
           {liveData.recentNotes.length > 0 && (
-            <Section className="ord-notes" title="Recent Notes" icon={<Icons.StickyNote size={14} />}>
+            <Section className="ord-notes" title="Recent Notes" icon={<StickyNote size={14} />}>
               {liveData.recentNotes.map((n, i) => (
                 <div key={n.id || i} style={{ padding: '10px 12px', background: 'var(--bg)', borderRadius: 9, borderLeft: '3px solid var(--accent2)' }}>
                   <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--text)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{n.title || 'Untitled'}</div>
@@ -1214,11 +1250,11 @@ export default function Profile() {
             const PRAYERS_LIST = ['Fajr', 'Dhuhr', 'Asr', 'Maghrib', 'Isha'];
             const PRAYER_AR = { Fajr: 'Fajr', Dhuhr: 'Dhuhr', Asr: 'Asr', Maghrib: 'Maghrib', Isha: 'Isha' };
             const PRAYER_ICON = {
-              Fajr: <Icons.Sunrise size={14} />,
-              Dhuhr: <Icons.Sun size={14} />,
-              Asr: <Icons.CloudSun size={14} />,
-              Maghrib: <Icons.Sunset size={14} />,
-              Isha: <Icons.Moon size={14} />,
+              Fajr: <Sunrise size={14} />,
+              Dhuhr: <Sun size={14} />,
+              Asr: <CloudSun size={14} />,
+              Maghrib: <Sunset size={14} />,
+              Isha: <Moon size={14} />,
             };
 
             // Re-read namaz from store directly so it's always fresh (namazTick triggers useMemo)
@@ -1272,11 +1308,11 @@ export default function Profile() {
             return (
               <>
                 {/* Today's Focus */}
-                <Section className="ord-focus" title="Today's Focus" icon={<Icons.Target size={14} />}>
+                <Section className="ord-focus" title="Today's Focus" icon={<Target size={14} />}>
                   {/* ── Namaz tracker ── */}
                   <div>
                     <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 10, display: 'flex', alignItems: 'center', gap: 5 }}>
-                      <Icons.Landmark size={12} /> Salah - Today
+                      <Landmark size={12} /> Salah - Today
                     </div>
                     <div style={{ display: 'flex', gap: 6, alignItems: 'flex-end' }}>
                       {PRAYERS_LIST.map((p, i) => {
@@ -1296,7 +1332,7 @@ export default function Profile() {
                             }}>
                               <span style={{ display: 'inline-flex' }}>{PRAYER_ICON[p]}</span>
                               {s.masjid && <span style={{ fontSize: 8, color: '#fff', fontWeight: 700, letterSpacing: 0.3 }}>Mosque</span>}
-                              {s.done && !s.masjid && <Icons.Check size={11} color={textColor} strokeWidth={3} />}
+                              {s.done && !s.masjid && <Check size={11} color={textColor} strokeWidth={3} />}
                             </div>
                             <span style={{ fontSize: 9, color: (s.done || s.masjid) ? 'var(--accent)' : 'var(--muted)', fontWeight: 700 }}>
                               {PRAYER_AR[p]}
@@ -1309,7 +1345,7 @@ export default function Profile() {
                           {namazCount}<span style={{ fontSize: 13, color: 'var(--muted)', fontWeight: 500 }}>/5</span>
                         </div>
                         <div style={{ fontSize: 9, color: 'var(--muted)', marginTop: 2, display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: 3 }}>
-                          {namazCount === 5 ? <><Icons.CheckCircle2 size={10} color="#16a34a" /> Complete</> : `${5 - namazCount} left`}
+                          {namazCount === 5 ? <><CheckCircle2 size={10} color="#16a34a" /> Complete</> : `${5 - namazCount} left`}
                         </div>
                       </div>
                     </div>
@@ -1320,12 +1356,12 @@ export default function Profile() {
                   {/* ── Study streak ── */}
                   <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                     <div style={{ width: 26, height: 26, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#f59e0b' }}>
-                      <Icons.BookOpen size={22} />
+                      <BookOpen size={22} />
                     </div>
                     <div style={{ flex: 1 }}>
                       <div style={{ fontSize: 15, fontWeight: 800, color: 'var(--text)' }}>
                         {liveData.studyStreak > 0
-                          ? <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}>{liveData.studyStreak} day{liveData.studyStreak > 1 ? 's' : ''} <Icons.Flame size={13} color="#f59e0b" /></span>
+                          ? <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}>{liveData.studyStreak} day{liveData.studyStreak > 1 ? 's' : ''} <Flame size={13} color="#f59e0b" /></span>
                           : <span style={{ color: 'var(--muted)', fontWeight: 600 }}>—</span>}
                       </div>
                       <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 2 }}>
@@ -1356,7 +1392,7 @@ export default function Profile() {
                     onMouseLeave={e => e.currentTarget.style.opacity = '1'}
                   >
                     <div style={{ fontSize: 10, fontWeight: 800, color: 'var(--accent)', marginBottom: 6, textTransform: 'uppercase', letterSpacing: '0.07em', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                      <span style={{ display: 'flex', alignItems: 'center', gap: 5 }}><Icons.BookOpenText size={11} /> Quran verse</span>
+                      <span style={{ display: 'flex', alignItems: 'center', gap: 5 }}><BookOpenText size={11} /> Quran verse</span>
                       <span style={{ fontSize: 9, color: 'var(--muted)', fontWeight: 600, letterSpacing: 0 }}>tap for next ›</span>
                     </div>
                     <div style={{ fontSize: 15, color: 'var(--text)', lineHeight: 1.7, fontFamily: '"Amiri", serif', textAlign: 'right', direction: 'rtl', marginBottom: 6 }}>
@@ -1377,7 +1413,7 @@ export default function Profile() {
 
       {/* ── Legacy Term Results ── */}
       {liveData.legacyTerms.length > 0 && (
-        <Section title="Term Results History" icon={<Icons.BarChart3 size={14} />}>
+        <Section title="Term Results History" icon={<BarChart3 size={14} />}>
           <div className="profile-terms-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(120px, 1fr))', gap: 10 }}>
             {liveData.legacyTerms.map((t, i) => {
               const gpa = parseFloat(t.gpa);

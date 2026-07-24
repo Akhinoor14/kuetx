@@ -95,7 +95,137 @@ export const store = {
     }
     return data;
   },
-  
+
+  // BUGFIX (stale localStorage bleeding into a brand-new account): the
+  // earlier fix in App.jsx's handleAuthSuccess() only did
+  // store.remove('profile') before a fresh Register/Login — but
+  // pushAllToFirestore()/exportAll() sync EVERY kuetx_* key, not just
+  // profile (courses, attendance, marks, notes, schedule, question-bank
+  // bookmarks, timer state, etc. — anything a previous account on this
+  // same browser/device left behind in localStorage/IndexedDB). Clearing
+  // only 'profile' left all of those other keys still sitting there,
+  // still readable by every page as if they belonged to the new account,
+  // and still eligible to sync up the moment anything touched
+  // pushAllToFirestore() again.
+  //
+  // This mirrors exportAll()'s own "every kuetx_* key" scope, minus a
+  // short excludeKeys list of things that are legitimately per-device
+  // rather than per-account (matches EXCLUDED_KEYS in firebaseSync.js —
+  // theme/UI preference, the "have you seen the guide" flag, and backup
+  // timestamps have no per-account meaning and resetting them on every
+  // fresh sign-in would just be annoying, not a privacy/correctness fix).
+  //
+  // BUGFIX (2nd pass): this originally iterated memoryCache.keys() only.
+  // memoryCache is LAZILY populated — get(key) only adds a key to it the
+  // first time something actually calls store.get(key) (see get() above,
+  // "Sync fallback for instant reads" reading from localStorage on a
+  // cache miss). At the exact moment this runs (inside onAuthChange,
+  // right after a fresh sign-in, before most pages have mounted and
+  // called store.get() for their own data), most kuetx_* keys from a
+  // previous account — courses, attendance, marks, notes, schedule,
+  // timer state, anything no component happened to have already read —
+  // were NEVER in memoryCache yet, so the old memoryCache-only scan
+  // silently skipped them. Only keys something had already touched (like
+  // 'profile', which App.jsx's own queue logic reads early) reliably got
+  // cleared; everything else leaked through untouched.
+  //
+  // Fix: scan localStorage directly (it always has every persisted key,
+  // regardless of whether memoryCache has caught up to it yet) instead of
+  // memoryCache. store.remove() below still clears memoryCache too, so
+  // this is a strict superset of the old behavior, not a replacement of
+  // a different kind — it just no longer misses keys memoryCache hadn't
+  // been warmed up with yet.
+  clearAllForFreshAccount: (excludeKeys = ['autoBackup', 'lastBackupTime', 'guide_seen', 'theme']) => {
+    const keysToRemove = new Set();
+    // Anything already read into memoryCache (covers keys set/read this
+    // session even before they'd have shown up in localStorage, e.g. via
+    // set() calls that haven't finished their async IDB write yet).
+    for (const k of memoryCache.keys()) {
+      if (k.startsWith(PREFIX)) keysToRemove.add(k.slice(PREFIX.length));
+    }
+    // Everything actually persisted in localStorage — the authoritative
+    // list, since it's synchronous and doesn't depend on what's already
+    // been lazily loaded into memoryCache this session.
+    try {
+      for (let i = 0; i < localStorage.length; i++) {
+        const k = localStorage.key(i);
+        if (k && k.startsWith(PREFIX)) keysToRemove.add(k.slice(PREFIX.length));
+      }
+    } catch {}
+    for (const bareKey of keysToRemove) {
+      if (excludeKeys.some(ex => bareKey.includes(ex))) continue;
+      store.remove(bareKey);
+    }
+  },
+
+  // Async, more thorough sibling of clearAllForFreshAccount() above: also
+  // scans IndexedDB directly via getAllKeysFromDB(), closing the gap the
+  // synchronous version can't — a key that exists ONLY in IndexedDB (e.g.
+  // localStorage hit its quota and a write silently fell back to
+  // IDB-only, or a value was large enough that some earlier code path
+  // stored it there without mirroring to localStorage) would be invisible
+  // to a memoryCache/localStorage-only scan.
+  //
+  // BUGFIX (found on architecture review): this used to call store.remove()
+  // per key, same as the sync version — but store.remove() only clears
+  // memoryCache and localStorage SYNCHRONOUSLY; its IndexedDB deletion
+  // (removeFromDB(key).catch(...)) is fire-and-forget, not awaited inside
+  // store.remove() itself. That meant this function's own `await` did
+  // nothing for the IndexedDB layer specifically — it could resolve while
+  // IndexedDB deletes for a previous account's data were still in flight
+  // in the background, silently defeating the entire point of being the
+  // "thorough, awaitable" version that callers (accountLifecycle.js's
+  // syncLocalDataOnAuth, awaited before startFirebaseSync attaches its
+  // store-change listener) rely on to have FULLY finished before moving
+  // on.
+  //
+  // Fix: clear memoryCache/localStorage directly here (synchronous,
+  // instant, no reason to route through store.remove() for those two
+  // layers) and explicitly await every IndexedDB removeFromDB() call via
+  // Promise.all — so the promise this function returns only resolves once
+  // every layer, including IndexedDB, is actually done.
+  clearAllForFreshAccountThorough: async (excludeKeys = ['autoBackup', 'lastBackupTime', 'guide_seen', 'theme']) => {
+    const keysToRemove = new Set();
+    for (const k of memoryCache.keys()) {
+      if (k.startsWith(PREFIX)) keysToRemove.add(k.slice(PREFIX.length));
+    }
+    try {
+      for (let i = 0; i < localStorage.length; i++) {
+        const k = localStorage.key(i);
+        if (k && k.startsWith(PREFIX)) keysToRemove.add(k.slice(PREFIX.length));
+      }
+    } catch {}
+    try {
+      const idbKeys = await getAllKeysFromDB();
+      idbKeys.forEach((k) => keysToRemove.add(k.slice(PREFIX.length)));
+    } catch (err) {
+      console.error('[KUETx Store] clearAllForFreshAccountThorough IDB scan error:', err);
+    }
+
+    const finalKeys = [...keysToRemove].filter(
+      (bareKey) => !excludeKeys.some((ex) => bareKey.includes(ex))
+    );
+
+    // Synchronous layers first — instant, and gives the UI the fastest
+    // possible "nothing stale left to read" state even before IndexedDB
+    // (which can legitimately take a few ms per key) finishes.
+    for (const bareKey of finalKeys) {
+      const cacheKey = PREFIX + bareKey;
+      memoryCache.delete(cacheKey);
+      try { localStorage.removeItem(cacheKey); } catch {}
+    }
+
+    // IndexedDB layer — actually awaited this time, in parallel, so the
+    // returned promise is a true "everything is gone" signal.
+    await Promise.all(
+      finalKeys.map((bareKey) =>
+        removeFromDB(bareKey).catch((err) =>
+          console.error(`[KUETx Store] clearAllForFreshAccountThorough IDB remove error for "${bareKey}":`, err)
+        )
+      )
+    );
+  },
+
   importAll: (data) => {
     try {
       Object.entries(data).forEach(([k, v]) => {

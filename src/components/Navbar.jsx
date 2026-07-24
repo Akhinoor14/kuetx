@@ -153,11 +153,19 @@ export function Navbar({ onMenuClick }) {
   };
 
   const handleSignOut = async () => {
-    if (!window.confirm('Sign out? Your data will stay on this device; cloud sync will just stop.')) return;
+    if (!window.confirm('Sign out? This device will be cleared — log back in anytime and everything comes right back from the cloud.')) return;
     setLoggingOut(true);
     try {
       const { logout } = await import('../lib/firebaseAuth');
       await logout();
+      // BUGFIX (design change after review): see accountLifecycle.js's
+      // clearLocalDataOnLogout() doc comment — logout used to leave
+      // local data untouched, which a different person's brand-new
+      // account on this same device would silently clear anyway,
+      // breaking the promise made above. Clearing here instead makes it
+      // simple and always true.
+      const { clearLocalDataOnLogout } = await import('../lib/accountLifecycle');
+      await clearLocalDataOnLogout();
       setDrawerOpen(false);
       // Full reload after sign-out clears any stale cached React state
       // (roles, faculty/staff status, profile, etc.) that was loaded for

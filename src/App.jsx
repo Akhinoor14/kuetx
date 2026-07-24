@@ -24,7 +24,8 @@ import DataSafeToast from './components/DataSafeToast';
 import ClassJoinIntro from './components/ClassJoinIntro';
 import RoleSelectScreen from './components/RoleSelectScreen';
 import FacultyProfileSetupModal from './components/FacultyProfileSetupModal';
-import { getAccountRole, setAccountRole, clearAccountRole, fetchServerAccountRole, persistAccountRoleToServer } from './lib/accountRole';
+import { getAccountRole, setAccountRole, fetchServerAccountRole, persistAccountRoleToServer } from './lib/accountRole';
+import { syncLocalDataOnAuth } from './lib/accountLifecycle';
 import { getFacultyDoc, markFacultyVerifiedIfEmailConfirmed, isFacultyProfileComplete } from './lib/facultySync';
 import { syncBloodDonorEntry } from './lib/bloodDonorSync';
 import { store, getProfile, isProfileComplete, DEFAULT_PROFILE, normalizeProfileForSave, validateProfileForSave, ensureDBReady, tagProfileOwner, isProfileStaleForUid } from './store/store';
@@ -774,56 +775,41 @@ export default function App() {
   const advance = () => setQueue(q => q.slice(1));
 
   const handleAuthSuccess = async (user, info = {}) => {
-    // BUGFIX (stale/foreign localStorage auto-populating a new account):
-    // this used to call authState.onAccountUpgraded(user) — which pushes
-    // EVERY local kuetx_* key (profile, roll, dept, hall, question-bank
-    // bookmarks, etc. — see store.exportAll()/pushAllToFirestore()) to
-    // Firestore under the new uid — for ANY non-anonymous success,
-    // including a plain fresh Register or a plain Login. That's only
-    // correct for a genuine anonymous-session upgrade (info.linked), where
-    // the local data really was created by the same person in the same
-    // browser session moments earlier. For a plain Register/Login, any
-    // leftover kuetx_* data already sitting in this browser's storage
-    // (a previous account's session on a shared/reused device, or an
-    // earlier abandoned attempt) got silently uploaded and effectively
-    // auto-created that person's account content for them — no explicit
-    // save, no confirmation, and none of the onboarding form's own
-    // isProfileStaleForUid() ownership check ever got consulted, since
-    // that check only guards the form's prefill display, not this push.
+    // BUGFIX (logic gap found on review): this function used to branch on
+    // info.linked (set by AuthModal from its isUpgrade prop) to decide
+    // "genuine upgrade, keep local data" vs "fresh sign-in, clear it".
+    // That distinction is DEAD — the anonymous-session flow this was
+    // built for no longer runs anywhere in the app (loginAnonymously() is
+    // defined but never called; both isUpgrade={...} call sites are gated
+    // behind conditions — showUpgradeModal, authState.user?.isAnonymous —
+    // that can now never be true). info.linked was therefore permanently
+    // false for every real auth event, which meant EVERY plain Login (not
+    // just Register) fell into "clear everything," wiping a genuinely
+    // RETURNING user's own local data on every single login.
     //
-    // Fix: only push local data through on a genuine upgrade
-    // (info.linked === true, set by AuthModal for isUpgrade calls).
-    // A plain Register/Login instead starts the onboarding queue clean —
-    // buildQueue()/ProfileSetupModal already require a real profile to be
-    // typed in before advancing, so nothing is lost, only stale/foreign
-    // leftovers stop being trusted as if the user had entered them.
-    if (!user.isAnonymous && info.linked) {
-      await authState.onAccountUpgraded(user);
-    }
+    // Fix: await accountLifecycle.js's syncLocalDataOnAuth() before doing
+    // anything else in this function. This function reads
+    // getAccountRole() and calls buildQueue() right after — both need to
+    // see local storage in its FINAL state for this user (fully cleared,
+    // for a brand-new account), not whatever was there before Firebase's
+    // own onAuthChange listener (which independently calls this same
+    // function) gets around to clearing it. useFirebaseAuth.js's
+    // onAuthChange fires for the same auth event and will call
+    // syncLocalDataOnAuth() too — syncLocalDataOnAuth() itself now
+    // de-duplicates concurrent calls for the same uid via an in-flight
+    // promise cache (see accountLifecycle.js), so calling it from both
+    // places runs the actual clear/push work exactly once, with both
+    // callers correctly awaiting its completion — not a redundant
+    // parallel sweep, and not an unguarded race either.
+    await syncLocalDataOnAuth(user);
 
-    // BUGFIX (routing mixup): this used to unconditionally trust
-    // getAccountRole() — a plain localStorage flag with no ownership tag
-    // at all (see accountRole.js) — and persist it to users/{uid}.role
-    // for ANY non-anonymous success. On a device that previously had a
-    // different account signed in (shared computer, or the same person's
-    // earlier faculty/student account before switching), that stale local
-    // flag would get written as this brand-new account's permanent
-    // server-side role — e.g. a student registering on a device that last
-    // had a teacher signed in could get silently persisted as 'teacher'.
-    // Combined with buildQueue() below preferring the local flag over the
-    // server lookup (`let accountRole = getAccountRole()`), this is also
-    // what let student vs faculty routing cross over instead of staying
-    // strictly separate.
-    //
-    // Fix: only back-fill the local flag to the server on a genuine
-    // upgrade (same reasoning as above — that local data legitimately
-    // belongs to this session). A plain Register/Login instead lets
-    // buildQueue()'s own server-side lookup (users/{uid}.role, then the
-    // faculty/{uid} doc fallback) be the sole source of truth, falling
-    // through to Role Select only when the server genuinely has nothing
-    // recorded — exactly the "student route and faculty route can never
-    // cross" behavior this should have had from the start.
-    if (!user.isAnonymous && info.linked) {
+    // A returning account may have a locally-set accountRole flag (e.g.
+    // chosen at Role Select on a previous visit to this device) that
+    // hasn't been backed up to the server yet — back-fill it. A brand-new
+    // account has nothing here (the await above guarantees the clear has
+    // already happened), so getAccountRole() returns null and this is a
+    // no-op for it.
+    if (!user.isAnonymous) {
       const localRole = getAccountRole();
       if (localRole) persistAccountRoleToServer(localRole);
     }
@@ -837,29 +823,6 @@ export default function App() {
     // if genuinely nothing recorded, faculty-verify, profile) — simplest
     // and most robust to just re-run it rather than duplicate that logic
     // here by hand.
-    //
-    // BUGFIX: for a plain (non-upgrade) Register/Login, also clear
-    // whatever local accountRole/profile flags might be leftover from a
-    // previous account on this device BEFORE rebuilding the queue, so
-    // buildQueue()'s `let accountRole = getAccountRole()` can't pick up
-    // stale data and skip its own server-side check.
-    //
-    // This also covers a gap isProfileStaleForUid() couldn't close on its
-    // own: that check only guards the onboarding FORM's prefill display
-    // (initialProfile below), and deliberately leaves a COMPLETE stored
-    // profile untouched since it can't otherwise tell "genuinely mine" from
-    // "someone else's, coincidentally finished". Left alone, a complete
-    // leftover profile from a previous account would make buildQueue()'s
-    // `isProfileComplete(getProfile())` check (a few lines up) true for a
-    // brand-new account too — skipping the mandatory profile step entirely
-    // and silently inheriting that other person's roll/dept/hall data.
-    // Wiping the local profile here, for a genuinely fresh sign-in only,
-    // removes that gap without touching isProfileStaleForUid()'s own
-    // narrower job.
-    if (!user.isAnonymous && !info.linked) {
-      clearAccountRole();
-      store.remove('profile');
-    }
     const q = await buildQueue(user.isAnonymous);
     setQueue(q);
   };
