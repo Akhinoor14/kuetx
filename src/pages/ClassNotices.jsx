@@ -21,7 +21,7 @@ export default function ClassNotices() {
             <div className="content-page-hero-icon">
               <Bell size={24} color="var(--accent)" />
             </div>
-            <h1 className="content-page-hero-title">Notices</h1>
+            <h1 className="content-page-hero-title">Class Announcements</h1>
           </div>
           {s.groupId && (
             <p className="content-page-hero-subtitle">

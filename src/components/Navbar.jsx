@@ -17,13 +17,19 @@ import GuideModal from './GuideModal';
 function getPageMeta(pathname) {
   for (const section of NAV) {
     const pools = section.subgroups
-      ? section.subgroups.map(sub => ({ items: sub.items, groupLabel: sub.name }))
-      : [{ items: section.items, groupLabel: section.group }];
+      ? section.subgroups.map(sub => ({ items: sub.items, groupLabel: sub.name, hubPath: sub.hubPath, hubIcon: sub.hubIcon }))
+      : [{ items: section.items, groupLabel: section.group, hubPath: section.hubPath, hubIcon: section.hubIcon }];
 
     for (const pool of pools) {
       for (const item of pool.items) {
         if (item.path === pathname || (item.path !== '/' && pathname.startsWith(item.path)))
           return { label: item.label, group: pool.groupLabel, siblings: section.noSiblingPills ? [] : pool.items };
+      }
+      // Hub landing page itself (e.g. /class-rep) — no single item matches
+      // it directly since it's the multi-card index, not a leaf page. Show
+      // the group name as the title instead of falling through to blank.
+      if (pool.hubPath && pool.hubPath === pathname) {
+        return { label: pool.groupLabel, group: pool.groupLabel, siblings: [] };
       }
     }
   }
@@ -222,7 +228,11 @@ export function Navbar({ onMenuClick }) {
               </div>
             ) : (
               label !== 'KUETx' && (
-                <span style={{ fontWeight: 700, fontSize: 14, color: 'var(--text)' }}>{label}</span>
+                <div className="filter-tab-row topbar-tabs" style={{ marginBottom: 0, justifyContent: 'center' }}>
+                  <span className="filter-tab active" style={{ cursor: 'default' }}>
+                    {label}
+                  </span>
+                </div>
               )
             )}
           </div>

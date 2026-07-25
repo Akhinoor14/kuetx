@@ -1040,6 +1040,35 @@ body {
 }
 .btn:hover  { opacity: 0.94; }
 .btn:active { transform: translateY(1px) scale(0.98); }
+/* Without this, a disabled <button> falls back to the browser's default
+   faded/gray rendering and completely loses its custom background,
+   gradient, and text color — buttons read as blank or unreadable boxes
+   (e.g. "Send notice" before typing a title/body). Keep the button's own
+   look, just dimmed and non-interactive, so the label stays legible. */
+/* Global safety net: ANY disabled <button> anywhere in the app — even
+   ones using inline styles instead of the .btn class (login modal,
+   profile setup, upload modals, etc.) — keeps its own background/color
+   and just dims, instead of the browser's default flat gray fallback.
+   The more specific .btn:disabled rule above still wins wherever both
+   apply, so this only fills the gap for non-.btn buttons. */
+button:disabled,
+button[disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+  filter: saturate(0.75);
+}
+
+.btn:disabled,
+.btn[disabled] {
+  opacity: 0.45;
+  cursor: not-allowed;
+  filter: saturate(0.7);
+  transform: none;
+}
+.btn:disabled:hover,
+.btn[disabled]:hover {
+  opacity: 0.45;
+}
 .btn-primary {
   background: linear-gradient(155deg, color-mix(in srgb, var(--accent) 108%, white 6%) 0%, var(--accent) 55%, color-mix(in srgb, var(--accent) 85%, black 12%) 100%);
   color: var(--accentFg);
@@ -2337,25 +2366,25 @@ h3 { font-size: 15px; font-weight: 600; }
   }
 
   .class-management-page .class-management-action-btn.btn-whatsapp {
-    background: linear-gradient(135deg, rgba(52,211,153,0.18), rgba(16,185,129,0.12));
-    color: rgba(15,23,42,0.96);
-    border: 1px solid rgba(16,185,129,0.18);
-    box-shadow: 0 14px 28px rgba(16,185,129,0.08);
+    background: linear-gradient(135deg, rgba(52,211,153,0.32), rgba(16,185,129,0.22));
+    color: #065f46;
+    border: 1.5px solid rgba(16,185,129,0.45);
+    box-shadow: 0 14px 28px rgba(16,185,129,0.1);
   }
 
   .class-management-page .class-management-action-btn.btn-export {
-    background: linear-gradient(135deg, rgba(129,140,248,0.18), rgba(196,181,253,0.14));
-    color: rgba(15,23,42,0.96);
-    border: 1px solid rgba(129,140,248,0.18);
-    box-shadow: 0 14px 28px rgba(99,102,241,0.08);
+    background: linear-gradient(135deg, rgba(129,140,248,0.32), rgba(196,181,253,0.24));
+    color: #3730a3;
+    border: 1.5px solid rgba(129,140,248,0.45);
+    box-shadow: 0 14px 28px rgba(99,102,241,0.1);
   }
 
   .class-management-page .class-management-action-btn.btn-schedule {
     grid-column: 1 / -1;
-    background: linear-gradient(135deg, rgba(59,130,246,0.16), rgba(59,130,246,0.08));
-    color: rgba(15,23,42,0.96);
-    border: 1px solid rgba(59,130,246,0.18);
-    box-shadow: 0 12px 28px rgba(59,130,246,0.10);
+    background: linear-gradient(135deg, rgba(59,130,246,0.3), rgba(59,130,246,0.18));
+    color: #1e40af;
+    border: 1.5px solid rgba(59,130,246,0.45);
+    box-shadow: 0 12px 28px rgba(59,130,246,0.12);
   }
 
 

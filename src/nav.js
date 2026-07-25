@@ -56,7 +56,7 @@ export const NAV = [
       { id: 'class-planner',     label: 'Class Planner',     icon: 'CalendarCheck', path: '/class-planner',    requiresCR: true },
       { id: 'ct-quiz-planning',  label: 'CT & Quiz Planner', icon: 'CalendarCheck', path: '/ct-quiz-planning', requiresCR: true },
       { id: 'class-roster',      label: 'Roster',            icon: 'Users',         path: '/class-roster',     requiresCR: true },
-      { id: 'class-notices',     label: 'Notices',           icon: 'Bell',          path: '/class-notices',    requiresCR: true },
+      { id: 'class-notices',     label: 'Class Announcements', icon: 'Bell',        path: '/class-notices',    requiresCR: true },
       { id: 'class-my-role',     label: 'My Role',           icon: 'Shield',        path: '/class-my-role',    requiresCR: true },
     ]
   },

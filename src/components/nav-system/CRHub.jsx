@@ -6,15 +6,10 @@ import { subscribeMyRole } from '../../lib/groupSync';
 import { auth } from '../../lib/firebase';
 
 /**
- * Bottom-nav 5th-button destination for verified CR/ACR users.
- * Shows Profile alongside their CR tools as one hub page — Profile isn't
- * dropped just because the button is now role-specific, it's still one
- * tap away here.
- *
- * If role verification hasn't resolved yet or turns out false (e.g. the
- * user navigated here directly by URL without being CR/ACR), falls back
- * to a plain Profile-only view rather than blocking the page — mirrors
- * how RequireCR still guards the two actual tool routes themselves.
+ * Bottom-nav 5th-button destination for verified CR/ACR users, and the
+ * /class-rep sidebar hub target. Shows only the 6 CR tool pages — no
+ * Profile card here, Profile has its own dedicated nav entry/button
+ * elsewhere so it doesn't need to be duplicated on this hub too.
  */
 export default function CRHub() {
   const [roleLabel, setRoleLabel] = useState('CR');
@@ -32,12 +27,11 @@ export default function CRHub() {
     title: roleLabel,
     icon: 'Shield',
     items: [
-      { id: 'profile',           label: 'Profile',            icon: 'User',          path: '/profile' },
       { id: 'class-routine',     label: 'Routine',            icon: 'CalendarDays',  path: '/class-routine' },
       { id: 'class-planner',     label: 'Class Planner',      icon: 'CalendarCheck', path: '/class-planner' },
       { id: 'ct-quiz-planning',  label: 'CT & Quiz Planner',  icon: 'CalendarCheck', path: '/ct-quiz-planning' },
       { id: 'class-roster',      label: 'Roster',             icon: 'Users',         path: '/class-roster' },
-      { id: 'class-notices',     label: 'Notices',            icon: 'Bell',          path: '/class-notices' },
+      { id: 'class-notices',     label: 'Class Announcements', icon: 'Bell',         path: '/class-notices' },
       { id: 'class-my-role',     label: 'My Role',            icon: 'Shield',        path: '/class-my-role' },
     ],
   };

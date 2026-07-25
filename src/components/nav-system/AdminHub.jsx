@@ -52,7 +52,7 @@ export default function AdminHub() {
       { id: 'class-planner',    label: 'Class Planner',      icon: 'CalendarCheck', path: '/class-planner' },
       { id: 'ct-quiz-planning', label: 'CT & Quiz Planner',  icon: 'CalendarCheck', path: '/ct-quiz-planning' },
       { id: 'class-roster',     label: 'Roster',             icon: 'Users',         path: '/class-roster' },
-      { id: 'class-notices',    label: 'Notices',            icon: 'Bell',          path: '/class-notices' },
+      { id: 'class-notices',    label: 'Class Announcements', icon: 'Bell',         path: '/class-notices' },
       { id: 'class-my-role',    label: 'My Role',            icon: 'Shield',        path: '/class-my-role' },
     ],
   };

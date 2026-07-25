@@ -264,7 +264,7 @@ export const GUIDE_SECTIONS = [
           ],
           [
             "CR Only",
-            "Routine, Class Planner, CT & Quiz Planner, Roster, Notices, My Role (visible only when CR Mode is on)"
+            "Routine, Class Planner, CT & Quiz Planner, Roster, Class Announcements, My Role (visible only when CR Mode is on)"
           ]
         ]
       }
@@ -2431,7 +2431,7 @@ export const GUIDE_SECTIONS = [
             "Manage class members, verify join requests, and assign roles"
           ],
           [
-            "Notices",
+            "Class Announcements",
             "Send notices to the class and see reach/read stats"
           ],
           [
@@ -2993,7 +2993,7 @@ export const GUIDE_SECTIONS = [
           ],
           [
             "Class Rep",
-            "🟟 Routine, Class Planner, CT & Quiz Planner, Roster, Notices, My Role (visible only in CR Mode)"
+            "🟟 Routine, Class Planner, CT & Quiz Planner, Roster, Class Announcements, My Role (visible only in CR Mode)"
           ],
           [
             "Academics",
