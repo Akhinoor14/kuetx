@@ -73,6 +73,23 @@ export default function ClassmatesList({ groupId, showActions = false, viewerRol
 
   useEffect(() => { setSelectedIds(new Set()); }, [groupId]);
 
+  // Moved above the early returns below — hooks must run in the same order
+  // on every render, and this was previously declared after two `if`
+  // early-returns (no groupId / still loading), which meant it simply
+  // wasn't called on those renders at all, changing the hook count between
+  // renders and tripping React error #310 ("Rendered more hooks than
+  // during the previous render"). Guards internally for members === null.
+  useEffect(() => {
+    if (!onCounts) return;
+    const visible = (members || []).filter((m) => m.isAnonymous !== true);
+    onCounts({
+      total: visible.length,
+      verified: visible.filter((m) => m.verified).length,
+      cr: visible.filter((m) => m.role === 'cr' || m.role === 'acr').length,
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [members]);
+
   if (!groupId) {
     return (
       <div className="card" style={{ padding: 16, color: 'var(--muted)', textAlign: 'center' }}>
@@ -86,16 +103,6 @@ export default function ClassmatesList({ groupId, showActions = false, viewerRol
   }
 
   const visibleMembers = members.filter((m) => m.isAnonymous !== true);
-
-  useEffect(() => {
-    if (!onCounts) return;
-    onCounts({
-      total: visibleMembers.length,
-      verified: visibleMembers.filter((m) => m.verified).length,
-      cr: visibleMembers.filter((m) => m.role === 'cr' || m.role === 'acr').length,
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [members]);
 
   const normalizedSearch = searchText.trim().toLowerCase();
   const filteredMembersUnsorted = normalizedSearch
