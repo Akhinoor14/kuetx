@@ -1,6 +1,6 @@
 // Notes page
 import { useState } from 'react';
-import { Plus, Trash2, Edit2, X, Check, FileText } from 'lucide-react';
+import { Plus, Trash2, Edit2, X, Check, FileText, Pin } from 'lucide-react';
 import { store, uid } from '../store/store';
 
 export function Notes() {
@@ -81,12 +81,14 @@ export function Notes() {
           <div key={n.id} className="card" style={{ borderTop: n.pinned ? '3px solid var(--accent)' : undefined }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 6 }}>
               <div style={{ display: 'flex', gap: 6, alignItems: 'center', flex: 1, minWidth: 0 }}>
-                {n.pinned && <span style={{ fontSize: 12 }}>📌</span>}
+                {n.pinned && <Pin size={12} color="var(--accent)" fill="var(--accent)" />}
                 <span style={{ fontWeight: 600, fontSize: 13, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{n.title || 'Untitled'}</span>
                 <span className={`tag ${tagColor[n.tag] || 'tag-gray'}`}>{n.tag}</span>
               </div>
               <div style={{ display: 'flex', gap: 4, flexShrink: 0 }}>
-                <button className="btn btn-ghost" style={{ padding: '3px 6px' }} onClick={() => togglePin(n.id)}>📌</button>
+                <button className="btn btn-ghost" style={{ padding: '3px 6px' }} onClick={() => togglePin(n.id)}>
+                  <Pin size={11} color={n.pinned ? 'var(--accent)' : 'currentColor'} fill={n.pinned ? 'var(--accent)' : 'none'} />
+                </button>
                 <button className="btn btn-ghost" style={{ padding: '3px 6px' }} onClick={() => startEdit(n)}><Edit2 size={11} /></button>
                 <button className="btn btn-ghost" style={{ padding: '3px 6px' }} onClick={() => del(n.id)}><Trash2 size={11} color="var(--danger)" /></button>
               </div>

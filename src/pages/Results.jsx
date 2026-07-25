@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, ReferenceLine, LabelList } from 'recharts';
-import { Sparkles, Target, TrendingUp, ArrowRight } from 'lucide-react';
+import { Sparkles, Target, TrendingUp, ArrowRight, AlertTriangle, CheckCircle2, GraduationCap, ClipboardList, Medal } from 'lucide-react';
 import { store, GRADE_SCALE, cgpaToPercent, computeCourseGrade, getLegacyTermResults, getProfile, setLegacyTermResults, TERM_KEYS, getCurrentTermKey, getTermTimeline, recordAudit } from '../store/store';
 import { getAllCourses, getTermCreditsFromCurriculum } from '../store/curriculumStore';
 import Collapsible from '../components/Collapsible';
@@ -369,6 +369,16 @@ export default function Results() {
 
   return (
     <div className="page-enter page-container content-page-bg">
+      <div className="content-page-hero" style={{ marginBottom: 16 }}>
+        <div className="content-page-hero-icon">
+          <TrendingUp size={18} color="var(--accent)" />
+        </div>
+        <div>
+          <h1 className="content-page-hero-title">Results & GPA</h1>
+          <p className="content-page-hero-subtitle">Auto-calculated from your marks and attendance</p>
+        </div>
+      </div>
+
       {/* Current vs Max CGPA Banner */}
       {cgpa !== null && (
         <div className="hero-banner" style={{
@@ -474,17 +484,6 @@ export default function Results() {
         </div>
       )}
 
-      {!cgpa && (
-        <div className="hero-banner" style={{ marginBottom: 16 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            <div className="content-page-hero-icon">
-              <TrendingUp size={18} color="var(--accent)" />
-            </div>
-            <h1 style={{ fontSize: 18, fontWeight: 700, margin: 0 }}>Results & GPA</h1>
-          </div>
-          <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 8 }}>Auto-calculated from your marks and attendance</p>
-        </div>
-      )}
       {/* Chart */}
       {chartData.length > 0 && (
         <div className="card" style={{ marginBottom: 14, padding: 18, background: 'linear-gradient(180deg, var(--surfaceGlassStrong), rgba(var(--accentRGB), 0.02))', border: '1px solid rgba(var(--accentRGB), 0.10)' }}>
@@ -803,7 +802,7 @@ export default function Results() {
                 {/* Conflict warning if GPA mismatch */}
                 {hasMismatch && (
                   <div style={{ padding: 12, marginBottom: 12, background: 'rgba(239, 68, 68, 0.1)', border: '1px solid rgba(239, 68, 68, 0.3)', borderRadius: 4 }}>
-                    <div style={{ fontSize: 11, fontWeight: 700, color: '#ef4444', marginBottom: 6 }}>⚠️ GPA Mismatch Detected</div>
+                    <div style={{ fontSize: 11, fontWeight: 700, color: '#ef4444', marginBottom: 6, display: 'flex', alignItems: 'center', gap: 4 }}><AlertTriangle size={12} /> GPA Mismatch Detected</div>
                     <div style={{ fontSize: 11, color: '#991b1b', lineHeight: 1.5 }}>
                       Imported GPA (<strong>{termLegacy.gpa}</strong>) differs from calculated GPA from courses (<strong>{courseGpaNum.toFixed(2)}</strong>). 
                       <div style={{ marginTop: 8, display: 'flex', gap: 6 }}>
@@ -828,7 +827,7 @@ export default function Results() {
                 
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
                   <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--text)' }}>Import Past Result for {term.key}</div>
-                  {termLegacy && <span className="tag tag-green">✓ Imported</span>}
+                  {termLegacy && <span className="tag tag-green" style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}><CheckCircle2 size={12} /> Imported</span>}
                 </div>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', gap: 10, alignItems: 'end' }}>
                   <div>
@@ -903,11 +902,11 @@ export default function Results() {
           </div>
           <div style={{ width: 1, height: 48, background: 'var(--border)' }} />
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
-            {cgpa >= 3.75 && <span className="tag tag-green">🎓 Honors</span>}
-            {cgpa >= 3.75 && <span className="tag tag-blue">📋 Dean's List</span>}
-            {cgpa >= 3.75 && <span className="tag tag-yellow">🏅 Gold Medal</span>}
-            {cgpa >= 2.20 && cgpa < 3.75 && <span className="tag tag-green">✓ Good Standing</span>}
-            {cgpa < 2.20  && <span className="tag tag-red">⚠ Probation Risk</span>}
+            {cgpa >= 3.75 && <span className="tag tag-green" style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}><GraduationCap size={12} /> Honors</span>}
+            {cgpa >= 3.75 && <span className="tag tag-blue" style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}><ClipboardList size={12} /> Dean's List</span>}
+            {cgpa >= 3.75 && <span className="tag tag-yellow" style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}><Medal size={12} /> Gold Medal</span>}
+            {cgpa >= 2.20 && cgpa < 3.75 && <span className="tag tag-green" style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}><CheckCircle2 size={12} /> Good Standing</span>}
+            {cgpa < 2.20  && <span className="tag tag-red" style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}><AlertTriangle size={12} /> Probation Risk</span>}
           </div>
         </div>
       )}

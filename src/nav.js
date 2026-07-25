@@ -35,9 +35,9 @@ export const NAV = [
     hubPath: '/class-rep',
     hubIcon: 'Shield',
     items: [
-      { id: 'class-management', label: 'Class Management',  icon: 'Users',         path: '/class-management', requiresCR: true },
-      { id: 'ct-quiz-planning', label: 'CT & Quiz Planner', icon: 'CalendarCheck', path: '/ct-quiz-planning', requiresCR: true },
-      { id: 'class-roster',     label: 'Class Roster',      icon: 'Users',         path: '/class-roster',     requiresCR: true },
+      { id: 'class-management', label: 'Class Management',  shortLabel: 'Management', icon: 'Users',         path: '/class-management', requiresCR: true },
+      { id: 'ct-quiz-planning', label: 'CT & Quiz Planner', shortLabel: 'CT & Quiz',  icon: 'CalendarCheck', path: '/ct-quiz-planning', requiresCR: true },
+      { id: 'class-roster',     label: 'Class Roster',      shortLabel: 'Roster',     icon: 'Users',         path: '/class-roster',     requiresCR: true },
     ]
   },
   {
@@ -63,12 +63,12 @@ export const NAV = [
         hubPath: '/daily-academics',
         hubIcon: 'CalendarCheck',
         items: [
-          { id: 'attendance',  label: 'Attendance',     icon: 'CalendarCheck', path: '/attendance' },
-          { id: 'schedule',    label: 'Class Schedule', icon: 'Clock',         path: '/schedule' },
-          { id: 'assignments', label: 'Assignments',    icon: 'FileText',      path: '/assignments' },
-          { id: 'teachers',    label: 'Teachers',       icon: 'Users',         path: '/teachers' },
-          { id: 'classmates',  label: 'Classmates',     icon: 'Users2',        path: '/classmates' },
-          { id: 'diary',       label: 'Class Diary',    icon: 'BookOpen',      path: '/diary' },
+          { id: 'attendance',  label: 'Attendance',     shortLabel: 'Attendance', icon: 'CalendarCheck', path: '/attendance' },
+          { id: 'schedule',    label: 'Class Schedule', shortLabel: 'Schedule',   icon: 'Clock',         path: '/schedule' },
+          { id: 'assignments', label: 'Assignments',    shortLabel: 'Assignments',icon: 'FileText',      path: '/assignments' },
+          { id: 'teachers',    label: 'Teachers',       shortLabel: 'Teachers',   icon: 'Users',         path: '/teachers' },
+          { id: 'classmates',  label: 'Classmates',     shortLabel: 'Classmates', icon: 'Users2',        path: '/classmates' },
+          { id: 'diary',       label: 'Class Diary',    shortLabel: 'Diary',      icon: 'BookOpen',      path: '/diary' },
         ]
       },
       {
@@ -76,13 +76,13 @@ export const NAV = [
         hubPath: '/academic-core',
         hubIcon: 'BookOpen',
         items: [
-          { id: 'courses',   label: 'Courses',       icon: 'BookOpen',      path: '/courses' },
-          { id: 'syllabus',  label: 'Syllabus',      icon: 'List',          path: '/syllabus' },
-          { id: 'qbank',     label: 'Question Bank', icon: 'BookMarked',    path: '/question-bank' },
-          { id: 'solutions', label: 'Solution Bank', icon: 'BookOpen',      path: '/solutions' },
-          { id: 'marks',     label: 'Term Planner',  icon: 'ClipboardList', path: '/marks' },
-          { id: 'results',   label: 'Results & GPA', icon: 'TrendingUp',    path: '/results' },
-          { id: 'warnings',  label: 'Alerts',        icon: 'Bell',          path: '/alerts' },
+          { id: 'courses',   label: 'Courses',       shortLabel: 'Courses',   icon: 'BookOpen',      path: '/courses' },
+          { id: 'syllabus',  label: 'Syllabus',      shortLabel: 'Syllabus',  icon: 'List',          path: '/syllabus' },
+          { id: 'qbank',     label: 'Question Bank', shortLabel: 'Questions', icon: 'BookMarked',    path: '/question-bank' },
+          { id: 'solutions', label: 'Solution Bank', shortLabel: 'Solutions', icon: 'BookOpen',      path: '/solutions' },
+          { id: 'marks',     label: 'Term Planner',  shortLabel: 'Planner',   icon: 'ClipboardList', path: '/marks' },
+          { id: 'results',   label: 'Results & GPA', shortLabel: 'Results',   icon: 'TrendingUp',    path: '/results' },
+          { id: 'warnings',  label: 'Alerts',        shortLabel: 'Alerts',    icon: 'Bell',          path: '/alerts' },
         ]
       },
     ]
@@ -95,14 +95,14 @@ export const NAV = [
         hubPath: '/campus-life',
         hubIcon: 'Layers',
         items: [
-          { id: 'clubs',    label: 'Clubs',   icon: 'Layers', path: '/clubs' },
-          { id: 'projects', label: 'Projects',icon: 'Cpu',    path: '/projects' },
-          { id: 'tours',    label: 'Tours',   icon: 'MapPin', path: '/tours' },
-          { id: 'money',    label: 'Money',   icon: 'Wallet', path: '/money' },
-          { id: 'tuition',  label: 'Tuition', icon: 'Users',  path: '/tuition' },
-          { id: 'notes',    label: 'Notes',         icon: 'FileText', path: '/notes' },
-          { id: 'time',     label: 'Time Tracker',  icon: 'Timer',    path: '/time' },
-          { id: 'namaz',    label: 'Namaz Tracker', icon: 'Moon',     path: '/namaz' },
+          { id: 'clubs',    label: 'Clubs',   shortLabel: 'Clubs',   icon: 'Layers', path: '/clubs' },
+          { id: 'projects', label: 'Projects',shortLabel: 'Projects',icon: 'Cpu',    path: '/projects' },
+          { id: 'tours',    label: 'Tours',   shortLabel: 'Tours',   icon: 'MapPin', path: '/tours' },
+          { id: 'money',    label: 'Money',   shortLabel: 'Money',   icon: 'Wallet', path: '/money' },
+          { id: 'tuition',  label: 'Tuition', shortLabel: 'Tuition', icon: 'Users',  path: '/tuition' },
+          { id: 'notes',    label: 'Notes',         shortLabel: 'Notes',  icon: 'FileText', path: '/notes' },
+          { id: 'time',     label: 'Time Tracker',  shortLabel: 'Timer',  icon: 'Timer',    path: '/time' },
+          { id: 'namaz',    label: 'Namaz Tracker', shortLabel: 'Namaz',  icon: 'Moon',     path: '/namaz' },
         ]
       },
       {
@@ -110,8 +110,8 @@ export const NAV = [
         hubPath: '/self-study',
         hubIcon: 'Activity',
         items: [
-          { id: 'self-study-academic',   label: 'Academic',    icon: 'BookOpen', path: '/self-study/academic' },
-          { id: 'self-study-deep-focus', label: 'Deep Focus',  icon: 'Zap',      path: '/self-study/deep-focus' },
+          { id: 'self-study-academic',   label: 'Academic',    shortLabel: 'Academic',  icon: 'BookOpen', path: '/self-study/academic' },
+          { id: 'self-study-deep-focus', label: 'Deep Focus',  shortLabel: 'Focus',     icon: 'Zap',      path: '/self-study/deep-focus' },
         ]
       },
     ]
@@ -122,9 +122,9 @@ export const NAV = [
     hubPath: '/tools',
     hubIcon: 'Wrench',
     items: [
-      { id: 'reports',  label: 'Reports',     icon: 'BarChart2', path: '/reports' },
-      { id: 'settings', label: 'Settings',    icon: 'Settings',  path: '/settings' },
-      { id: 'about',    label: 'About KUETx', icon: 'Info',      path: '/about' },
+      { id: 'reports',  label: 'Reports',     shortLabel: 'Reports',  icon: 'BarChart2', path: '/reports' },
+      { id: 'settings', label: 'Settings',    shortLabel: 'Settings', icon: 'Settings',  path: '/settings' },
+      { id: 'about',    label: 'About KUETx', shortLabel: 'About',    icon: 'Info',      path: '/about' },
     ]
   },
 ];

@@ -131,7 +131,7 @@ export default function EmailVerifyBanner({ onVerified }) {
             We sent a verification link. Click it to verify automatically.
           </div>
           <div style={{ fontSize: 11.5, color: 'var(--warning)', marginTop: 4, fontWeight: 600, lineHeight: 1.5 }}>
-            ⚠️ If it is not in your inbox, check Spam/Junk — it often lands there.
+            If it is not in your inbox, check Spam/Junk — it often lands there.
           </div>
           {failedChecks >= 2 && (
             <div style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 4, lineHeight: 1.5 }}>

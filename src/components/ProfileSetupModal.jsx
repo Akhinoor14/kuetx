@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState, useRef } from 'react';
+import { Lightbulb, Crown, Gem } from 'lucide-react';
 import Modal from './Modal';
 import ManualVerifyFallback from './ManualVerifyFallback';
 import { isKuetEmailFormat, emailRollMatchesProfile } from '../lib/kuetEmailVerify';
@@ -915,7 +916,7 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
                 gap: 12,
                 alignItems: 'flex-start',
               }}>
-                <div style={{ fontSize: 18, flexShrink: 0 }}>💡</div>
+                <div style={{ flexShrink: 0 }}><Lightbulb size={18} color="#3b82f6" /></div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 8, flex: 1 }}>
                   <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--text)' }}>
                     Next: Import Previous Terms
@@ -965,7 +966,7 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
                 gap: 12,
                 alignItems: 'flex-start',
               }}>
-                <div style={{ fontSize: 18, flexShrink: 0 }}>👑</div>
+                <div style={{ flexShrink: 0 }}><Crown size={18} color="#22c55e" /></div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 4, flex: 1 }}>
                   <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--text)' }}>
                     Want to be your Class Representative?
@@ -987,7 +988,7 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
                 gap: 10,
               }}>
                 <div style={{ display: 'flex', gap: 12, alignItems: 'flex-start' }}>
-                  <div style={{ fontSize: 18, flexShrink: 0 }}>🔷</div>
+                  <div style={{ flexShrink: 0 }}><Gem size={18} color="#1d9bf0" /></div>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 4, flex: 1 }}>
                     <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--text)' }}>
                       Verify your KUET roll with the Founder

@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { Lock } from 'lucide-react';
 import { useIsFaculty } from '../hooks/useIsFaculty';
 
 /**
@@ -39,7 +40,7 @@ export default function RequireFaculty({ children }) {
   if (!hasAccess) {
     return (
       <div style={{ padding: '48px 20px', textAlign: 'center', maxWidth: 420, margin: '0 auto' }}>
-        <div style={{ fontSize: 32, marginBottom: 12 }}>🔒</div>
+        <div style={{ marginBottom: 12 }}><Lock size={32} color="var(--muted)" /></div>
         <div style={{ fontSize: 15, fontWeight: 700, color: 'var(--text)', marginBottom: 8 }}>
           Faculty access required
         </div>

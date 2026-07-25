@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Bell } from 'lucide-react';
+import { Bell, Pin } from 'lucide-react';
 import { getProfile } from '../store/store';
 import { computeAlerts, decorateAlerts, filterUnreadAlerts, getDismissedAlertIds, setAlertDismissed } from '../lib/alertUtils';
 import TeacherVerifiedCard from '../components/TeacherVerifiedCard';
@@ -215,16 +215,15 @@ export default function Alerts() {
 
   return (
     <div className="page-enter page-container content-page-bg">
-      <div className="hero-banner" style={{ marginBottom: 18, padding: 18, border: '1px solid rgba(var(--accentRGB), 0.14)', background: 'radial-gradient(circle at top left, rgba(var(--accentRGB), 0.12), transparent 34%), linear-gradient(180deg, var(--surfaceGlassStrong), var(--surfaceGlass))' }}>
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 14, alignItems: 'center', justifyContent: 'space-between' }}>
-          <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12 }}>
-            <div className="content-page-hero-icon" style={{ marginTop: 2 }}>
+      <div style={{ marginBottom: 16 }}>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 14, alignItems: 'flex-start', justifyContent: 'space-between' }}>
+          <div className="content-page-hero" style={{ marginBottom: 0 }}>
+            <div className="content-page-hero-icon">
               <Bell size={18} color="var(--accent)" />
             </div>
             <div>
-              <div style={{ fontSize: 11, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.10em', color: 'var(--muted)', marginBottom: 6 }}>Notifications</div>
-              <h1 style={{ fontSize: 22, fontWeight: 800, letterSpacing: '-0.04em', marginBottom: 4 }}>Alerts & Suggestions</h1>
-              <p style={{ fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.6, margin: 0 }}>
+              <h1 className="content-page-hero-title">Alerts & Suggestions</h1>
+              <p className="content-page-hero-subtitle">
                 {totalCount} unread signals · {unreadCritical.length} critical · {unreadWarnings.length} warnings · {unreadPositives.length} good news · {unreadAssignments.length} assignments
               </p>
             </div>
@@ -254,7 +253,7 @@ export default function Alerts() {
       <div style={{ marginBottom: 16, padding: 16, borderRadius: 18, border: '1px solid var(--border)', background: 'linear-gradient(180deg, var(--surfaceGlassStrong), var(--surfaceGlass))', boxShadow: '0 10px 28px rgba(0,0,0,0.10)' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, alignItems: 'flex-start', flexWrap: 'wrap', marginBottom: 12 }}>
           <div>
-            <div style={{ fontSize: 13, fontWeight: 800, color: 'var(--text)' }}>📌 Assignment Alerts</div>
+            <div style={{ fontSize: 13, fontWeight: 800, color: 'var(--text)', display: 'flex', alignItems: 'center', gap: 6 }}><Pin size={14} color="var(--accent)" /> Assignment Alerts</div>
             <div style={{ fontSize: 12, color: 'var(--muted)' }}>Grouped by urgency: overdue, today, and next 3 days</div>
           </div>
           <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>

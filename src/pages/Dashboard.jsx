@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import LazyRechartsArea from '../components/LazyRechartsArea';
-import { TrendingUp, Award, AlertTriangle, BookOpen, CalendarCheck, Clock, Wallet, Star } from 'lucide-react';
+import { TrendingUp, Award, AlertTriangle, BookOpen, CalendarCheck, Clock, Wallet, Star, UserCircle, GraduationCap, ClipboardList, Medal, CheckCircle2 } from 'lucide-react';
 import * as Icons from 'lucide-react';
 import { store, cgpaToPercent, computeCGPA, computeTermGPAs, computeEffectiveAttendance, MIN_ATTENDANCE_PERCENT, SCHOLARSHIP_ATTENDANCE_PCT, computeCourseGrade, deriveAcademicMetaFromCourses, syncProfileAcademicMeta, getProfile, getTermLabelFromKey, getCurrentTermKey, getTermProgress, getTermTimeline, getTermIndex, TERM_KEYS, getTimerActiveState, formatDurationMs, PRODUCTIVE_TIME_CATEGORIES } from '../store/store';
 import { getAllCourses } from '../store/curriculumStore';
@@ -198,7 +198,7 @@ export default function Dashboard() {
       {/* Setup prompt */}
       {!profile.name && (
         <div className="card" style={{ marginBottom: 14, borderColor: 'var(--accent)', display: 'flex', alignItems: 'center', gap: 12 }}>
-          <div style={{ fontSize: 28 }}>🐢</div>
+          <UserCircle size={28} color="var(--accent)" />
           <div style={{ flex: 1 }}>
             <div style={{ fontWeight: 600, fontSize: 14 }}>Set Up Profile</div>
             <div style={{ fontSize: 12, color: 'var(--muted)' }}>Add your name and department — it'll be used everywhere</div>
@@ -386,18 +386,18 @@ export default function Dashboard() {
         <div className="card" style={{ marginBottom: 12 }}>
           <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 8 }}>Academic Standing</div>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
-            {cgpa >= 3.75 && <span className="tag tag-green">🎓 Honors Eligible (CGPA ≥ 3.75)</span>}
-            {cgpa >= 3.75 && <span className="tag tag-blue">📋 Dean's List Track</span>}
-            {cgpa >= 3.75 && <span className="tag tag-yellow">🏅 Gold Medal Track</span>}
-            {cgpa >= 2.20 && cgpa < 3.75 && <span className="tag tag-green">✓ Good Standing</span>}
-            {cgpa < 2.20 && <span className="tag tag-red">⚠ Below Minimum — Risk of Probation</span>}
+            {cgpa >= 3.75 && <span className="tag tag-green" style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}><GraduationCap size={12} /> Honors Eligible (CGPA ≥ 3.75)</span>}
+            {cgpa >= 3.75 && <span className="tag tag-blue" style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}><ClipboardList size={12} /> Dean's List Track</span>}
+            {cgpa >= 3.75 && <span className="tag tag-yellow" style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}><Medal size={12} /> Gold Medal Track</span>}
+            {cgpa >= 2.20 && cgpa < 3.75 && <span className="tag tag-green" style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}><CheckCircle2 size={12} /> Good Standing</span>}
+            {cgpa < 2.20 && <span className="tag tag-red" style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}><AlertTriangle size={12} /> Below Minimum — Risk of Probation</span>}
           </div>
         </div>
       )}
 
       {courses.length === 0 && profile.name && (
         <div className="card" style={{ marginTop: 16, textAlign: 'center', color: 'var(--muted)', padding: 30 }}>
-          <div style={{ fontSize: 32, marginBottom: 8 }}>📚</div>
+          <div style={{ marginBottom: 8, display: 'flex', justifyContent: 'center' }}><BookOpen size={32} color="var(--muted)" /></div>
           <p style={{ fontSize: 13, marginBottom: 12 }}>No courses have been added yet. Start by adding courses.</p>
           <Link to="/courses" className="btn btn-primary">Add courses →</Link>
         </div>

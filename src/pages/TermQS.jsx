@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Plus, Trash2, Check } from 'lucide-react';
+import { Plus, Trash2, Check, FileQuestion, CalendarDays, GraduationCap, HelpCircle, ExternalLink } from 'lucide-react';
 import { store, uid, getProfile, getCurrentTermKey } from '../store/store';
 import { getAllCourses } from '../store/curriculumStore';
 import CourseTeacherDialog from '../components/CourseTeacherDialog';
@@ -149,20 +149,27 @@ export default function TermQS() {
       <div className="assignments-hero">
         <div className="page-container assignments-hero-inner">
           <div className="assignments-hero-copy">
-            <div className="assignments-kicker">Exam Preparation</div>
-            <h1 className="assignments-title">Term Question & Solution</h1>
+            <div className="content-page-hero" style={{ marginBottom: 8 }}>
+              <div className="content-page-hero-icon">
+                <FileQuestion size={18} color="var(--accent)" />
+              </div>
+              <div>
+                <div className="assignments-kicker">Exam Preparation</div>
+                <h1 className="content-page-hero-title" style={{ fontSize: 24 }}>Term Question & Solution</h1>
+              </div>
+            </div>
             <p className="assignments-subtitle">Collect and organize term questions and solutions for each course.</p>
 
             <div className="assignments-stats">
               <div className="assignments-stat assignments-stat-pending">
-                <span className="assignments-stat-icon">📝</span>
+                <span className="assignments-stat-icon"><FileQuestion size={18} /></span>
                 <div>
                   <div className="assignments-stat-label">Total Items</div>
                   <div className="assignments-stat-value">{items.length}</div>
                 </div>
               </div>
               <div className="assignments-stat assignments-stat-done">
-                <span className="assignments-stat-icon">✓</span>
+                <span className="assignments-stat-icon"><Check size={18} /></span>
                 <div>
                   <div className="assignments-stat-label">Reviewed</div>
                   <div className="assignments-stat-value">{doneCount}</div>
@@ -186,7 +193,7 @@ export default function TermQS() {
           <div className="card" style={{ marginBottom: 20, borderColor: 'var(--accent)', borderWidth: 2, boxShadow: '0 4px 16px rgba(22,163,74,0.1)' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 10, marginBottom: 18 }}>
               <div style={{ fontWeight: 700, fontSize: 16, display: 'flex', alignItems: 'center', gap: 8 }}>
-                <span style={{ fontSize: 20 }}>➕</span>
+                <Plus size={20} />
                 Add New Q&S Set
               </div>
               <button className="btn btn-ghost" onClick={() => { setAdding(false); setForm({ courseId: '', teacherName: '', title: '', desc: '', year: '', status: 'pending', priority: 'medium', questionCount: '', link: '' }); }} style={{ padding: '7px 12px', fontSize: 12, fontWeight: 600 }}>Cancel</button>
@@ -259,7 +266,7 @@ export default function TermQS() {
               transition: 'all 0.25s ease',
               boxShadow: filter === f ? '0 4px 12px rgba(22,163,74,0.25)' : 'none',
             }}>
-              {f === 'all' ? '📝 All' : f === 'pending' ? '⏳ Pending' : '✅ Reviewed'}
+              {f === 'all' ? 'All' : f === 'pending' ? 'Pending' : 'Reviewed'}
             </button>
           ))}
         </div>
@@ -324,9 +331,9 @@ export default function TermQS() {
 
                   {/* Metadata */}
                   <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', fontSize: 12, color: 'var(--muted)' }}>
-                    <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>📅 {item.year}</span>
-                    <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>👨‍🏫 {teacherLabel}</span>
-                    {item.questionCount && <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}>❓ {item.questionCount} questions</span>}
+                    <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}><CalendarDays size={13} /> {item.year}</span>
+                    <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}><GraduationCap size={13} /> {teacherLabel}</span>
+                    {item.questionCount && <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}><HelpCircle size={13} /> {item.questionCount} questions</span>}
                   </div>
 
                   {/* Description */}
@@ -347,7 +354,7 @@ export default function TermQS() {
                       onMouseEnter={(e) => e.target.style.background = 'rgba(22,163,74,0.2)'}
                       onMouseLeave={(e) => e.target.style.background = 'rgba(22,163,74,0.1)'}
                       >
-                        🔗 Open link
+                        <ExternalLink size={12} style={{ display: 'inline', verticalAlign: -2, marginRight: 4 }} />Open link
                       </a>
                     </div>
                   )}

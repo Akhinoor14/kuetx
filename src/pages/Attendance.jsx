@@ -1,6 +1,6 @@
 import { useState, useMemo, useEffect, useCallback, useRef } from 'react';
 import Modal from '../components/Modal';
-import { ChevronLeft, ChevronRight, AlertTriangle, CheckCircle, TrendingUp, Users, BookOpen, Award, CalendarDays, X } from 'lucide-react';
+import { ChevronLeft, ChevronRight, AlertTriangle, CheckCircle, TrendingUp, Users, BookOpen, Award, CalendarDays, X, PartyPopper, ClipboardX } from 'lucide-react';
 import {
   store, getAttendanceMarks, MIN_ATTENDANCE_PERCENT, SCHOLARSHIP_ATTENDANCE_PCT,
   getProfile, getRoutinePreviewDate, isRoutineHoliday
@@ -244,7 +244,7 @@ function HolidayModal({ isOpen, onClose, scheduleSettings, onSave }) {
           </button>
         </div>
         <div style={{ display: 'flex', gap: 4, marginBottom: 'clamp(12px, 3vw, 14px)', borderBottom: '1px solid var(--border)', paddingBottom: 10, flexWrap: 'wrap' }}>
-          {[['calendar', '📅 Calendar'], ['single', '📆 Single Date']].map(([id, label]) => (
+          {[['calendar', 'Calendar'], ['single', 'Single Date']].map(([id, label]) => (
             <button key={id} onClick={() => setMode(id)} style={{
               padding: '7px 12px', borderRadius: 8, border: 'none', cursor: 'pointer', fontSize: 'clamp(11px, 2vw, 12px)', fontWeight: mode === id ? 800 : 500,
               background: mode === id ? 'var(--accent)' : 'transparent', color: mode === id ? 'white' : 'var(--muted)',
@@ -562,7 +562,7 @@ function DailyLog({ courses, logs, setLogs, schedule, settings, onEditTeachers }
       {/* Holiday */}
       {isHoliday && (
         <div className="card" style={{ padding: '16px 14px', textAlign: 'center', marginBottom: 10 }}>
-          <div style={{ fontSize: 24, marginBottom: 5 }}>🎉</div>
+          <div style={{ marginBottom: 5, display: 'flex', justifyContent: 'center' }}><PartyPopper size={24} color="var(--accent)" /></div>
           <div style={{ fontWeight: 700, fontSize: 14 }}>{holidayLabel(date)}</div>
           <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 2 }}>No classes today</div>
         </div>
@@ -571,7 +571,7 @@ function DailyLog({ courses, logs, setLogs, schedule, settings, onEditTeachers }
       {/* No schedule notice */}
       {!isHoliday && schIds.length === 0 && !isToday && (
         <div style={{ marginBottom: 10, padding: '9px 12px', background: dark ? 'rgba(251,191,36,0.06)' : 'rgba(251,191,36,0.07)', border: dark ? '1px solid rgba(251,191,36,0.15)' : '1px solid rgba(251,191,36,0.18)', borderRadius: 10, display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 8 }}>
-          <span style={{ fontSize: 12, color: 'var(--muted)' }}>📅 No scheduled classes</span>
+          <span style={{ fontSize: 12, color: 'var(--muted)' }}>No scheduled classes</span>
           <button onClick={() => setShowGive(s => !s)} style={{ padding: '5px 11px', borderRadius: 8, cursor: 'pointer', fontWeight: 700, fontSize: 11, background: 'var(--accent)', color: 'white', border: 'none' }}>
             {showGive ? 'Hide' : 'Give Attendance'}
           </button>
@@ -596,7 +596,7 @@ function DailyLog({ courses, logs, setLogs, schedule, settings, onEditTeachers }
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
           {cardData.length === 0 && (
             <div className="card" style={{ padding: '18px 14px', textAlign: 'center', color: 'var(--muted)' }}>
-              <div style={{ fontSize: 20, marginBottom: 6, opacity: 0.4 }}>📋</div>
+              <div style={{ marginBottom: 6, opacity: 0.4, display: 'flex', justifyContent: 'center' }}><ClipboardX size={20} /></div>
               <div style={{ fontSize: 13, fontWeight: 600 }}>No classes to mark</div>
               <div style={{ fontSize: 11, marginTop: 3 }}>
                 {isToday ? 'No scheduled classes today.' : 'Use Give Attendance for unscheduled days.'}
@@ -742,7 +742,7 @@ function CombinedAtt({ courses, logs, schedule, settings, combinedMode, combined
             </div>
           </div>
           <button className={`btn ${combinedMode ? 'btn-primary' : 'btn-ghost'}`} onClick={toggleCombined} style={{ fontSize: 11, whiteSpace: 'nowrap', flexShrink: 0 }}>
-            {combinedMode ? '⚡ Manual ON' : 'Switch to Manual'}
+            {combinedMode ? 'Manual ON' : 'Switch to Manual'}
           </button>
         </div>
       </div>
@@ -1013,13 +1013,13 @@ export default function Attendance() {
       )}
       {todaySchedule.length === 0 && (
         <div className="card" style={{ marginBottom: 13, padding: '10px 13px', fontSize: 12, color: 'var(--muted)', textAlign: 'center' }}>
-          {isTodayHoliday ? '🎉 Holiday today — enjoy!' : 'No scheduled classes today'}
+          {isTodayHoliday ? 'Holiday today — enjoy!' : 'No scheduled classes today'}
         </div>
       )}
 
       {/* Tabs */}
       <div className="tabs" style={{ marginBottom: 12 }}>
-        {[['daily', '📅 Daily Log'], ['combined', '📊 Combined']].map(([id, label]) => (
+        {[['daily', 'Daily Log'], ['combined', 'Combined']].map(([id, label]) => (
           <button key={id} className={`tab-btn${tab === id ? ' active' : ''}`} onClick={() => setTab(id)}>{label}</button>
         ))}
       </div>

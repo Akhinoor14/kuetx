@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import Modal from '../components/Modal';
-import { Plus, Settings2, Clock3, PencilLine, Copy, CalendarDays, X, FileText, BookOpen } from 'lucide-react';
+import { Plus, Settings2, Clock3, PencilLine, Copy, CalendarDays, X, FileText, BookOpen, Pencil, ClipboardList, Lightbulb, Sprout, GraduationCap, Rocket } from 'lucide-react';
 import { store, uid, getProfile, getCurrentTermKey, getRoutinePreviewDate, isRoutineHoliday, getTermTimeline } from '../store/store';
 import { getAllCourses } from '../store/curriculumStore';
 import { useNavigate } from 'react-router-dom';
@@ -1437,7 +1437,7 @@ export default function Schedule() {
                                   color: 'inherit', cursor: 'pointer', opacity: 0.55, padding: 0, lineHeight: 1,
                                   touchAction: 'manipulation',
                                 }}>
-                                  ✎
+                                  <Pencil size={12} style={{ display: 'block' }} />
                                 </button>
                               )}
                               {canEditSchedule && (
@@ -1480,7 +1480,10 @@ export default function Schedule() {
       <div className="card schedule-header-card" style={{ marginBottom: 14, padding: '18px' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '12px', flexWrap: 'wrap', rowGap: '10px' }}>
           <div style={{ flex: 1, minWidth: 0 }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap', marginBottom: '6px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap', marginBottom: '6px' }}>
+              <div className="content-page-hero-icon" style={{ width: 32, height: 32, borderRadius: 8 }}>
+                <CalendarDays size={16} color="var(--accent)" />
+              </div>
               <h1 className="schedule-header-title" style={{ fontSize: '20px', fontWeight: '800', letterSpacing: '-0.03em', margin: '0' }}>Class Schedule</h1>
               <span className="tag tag-blue">5-day week</span>
               {isGroupMode && <span className="tag tag-green">Shared · Class Group</span>}
@@ -1718,7 +1721,7 @@ export default function Schedule() {
           return (
             <div style={{ padding: 12, border: '1px solid var(--border)', borderRadius: 12, background: 'var(--bg)', marginTop: 12 }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
-                <div style={{ fontWeight: 700, fontSize: 13 }}>📋 Assignments</div>
+                <div style={{ fontWeight: 700, fontSize: 13, display: 'flex', alignItems: 'center', gap: 6 }}><ClipboardList size={14} /> Assignments</div>
                 <button
                   onClick={() => navigate('/assignments')}
                   className="btn btn-ghost"
@@ -1770,8 +1773,8 @@ export default function Schedule() {
                             {assignment.title}
                           </div>
                           <div style={{ display: 'flex', gap: 8, alignItems: 'center', fontSize: 11 }}>
-                            <span style={{ color: assignment.isToday ? 'rgb(239,68,68)' : 'var(--muted)' }}>
-                              📅 {assignment.isToday ? 'Due today' : `${assignment.daysLeft} day${assignment.daysLeft !== 1 ? 's' : ''} left`}
+                            <span style={{ color: assignment.isToday ? 'rgb(239,68,68)' : 'var(--muted)', display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+                              <CalendarDays size={11} /> {assignment.isToday ? 'Due today' : `${assignment.daysLeft} day${assignment.daysLeft !== 1 ? 's' : ''} left`}
                             </span>
                             <span
                               style={{
@@ -1810,7 +1813,7 @@ export default function Schedule() {
           </div>
           <div style={{ padding: 24, overflowY: 'auto' }}>
             <div style={{ fontSize: 13, color: 'var(--muted)', marginBottom: 16, padding: '12px 14px', background: 'rgba(59,130,246,0.08)', borderRadius: 14, borderLeft: '4px solid var(--accent)' }}>
-              💡 <strong>Course teacher setup:</strong> Every course needs two fixed teachers. If missing, a popup will ask for both teachers first.
+              <Lightbulb size={13} style={{ display: 'inline', verticalAlign: -2, marginRight: 4 }} /><strong>Course teacher setup:</strong> Every course needs two fixed teachers. If missing, a popup will ask for both teachers first.
             </div>
             <div className="schedule-add-form-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: 16, marginBottom: 18, alignItems: 'end' }}>
               <div className="form-field" style={{ gridColumn: 'span 1' }}>
@@ -2017,7 +2020,7 @@ export default function Schedule() {
                   fontSize: 13,
                 }}
               >
-                📅 Calendar Picker
+                <CalendarDays size={13} style={{ display: 'inline', verticalAlign: -2, marginRight: 4 }} />Calendar Picker
               </button>
               <button
                 onClick={() => setHolidayMode('single')}
@@ -2032,7 +2035,7 @@ export default function Schedule() {
                   fontSize: 13,
                 }}
               >
-                📆 Single Date
+                <CalendarDays size={13} style={{ display: 'inline', verticalAlign: -2, marginRight: 4 }} />Single Date
               </button>
             </div>
 
@@ -2257,18 +2260,18 @@ export default function Schedule() {
         {/* Roadmap Config Panel */}
         {roadmapSettingsOpen && (
           <div style={{ background: 'var(--card)', border: '1px solid var(--border)', borderRadius: 10, padding: 14, marginBottom: 12, display: 'grid', gap: 12 }}>
-            <div style={{ fontWeight: 700, fontSize: 13, marginBottom: 2 }}>⚙️ Configure Roadmap</div>
+            <div style={{ fontWeight: 700, fontSize: 13, marginBottom: 2, display: "flex", alignItems: "center", gap: 6 }}><Settings2 size={14} /> Configure Roadmap</div>
 
             {/* Class Period */}
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
               <div>
-                <div style={{ fontSize: 11, fontWeight: 600, marginBottom: 4, color: 'var(--muted)' }}>📚 Class Start</div>
+                <div style={{ fontSize: 11, fontWeight: 600, marginBottom: 4, color: 'var(--muted)', display: "flex", alignItems: "center", gap: 4 }}><BookOpen size={11} /> Class Start</div>
                 <div style={{ fontSize: 12, fontWeight: 700, padding: '7px 10px', border: '1px solid var(--border)', borderRadius: 6, background: 'var(--bg)', color: 'var(--text)' }}>
                   {profile?.termStartDate ? new Date(profile.termStartDate + 'T00:00:00').toLocaleDateString('en-GB', {day:'numeric',month:'short',year:'numeric'}) : 'Set in Profile'}
                 </div>
               </div>
               <div>
-                <div style={{ fontSize: 11, fontWeight: 600, marginBottom: 4, color: 'var(--muted)' }}>📚 Class End</div>
+                <div style={{ fontSize: 11, fontWeight: 600, marginBottom: 4, color: 'var(--muted)', display: "flex", alignItems: "center", gap: 4 }}><BookOpen size={11} /> Class End</div>
                 <input type="date" value={roadmapConfig.classEndDate || ''}
                   onChange={e => saveRoadmapConfig({ ...roadmapConfig, classEndDate: e.target.value })}
                   style={{ width: '100%', padding: '6px 8px', borderRadius: 6, border: '1px solid var(--border)', background: 'var(--input)', color: 'var(--text)', fontSize: 12 }} />
@@ -2278,7 +2281,7 @@ export default function Schedule() {
             {/* Prep Leave */}
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
               <div>
-                <div style={{ fontSize: 11, fontWeight: 600, marginBottom: 4, color: 'var(--muted)' }}>🎓 Prep Leave Start</div>
+                <div style={{ fontSize: 11, fontWeight: 600, marginBottom: 4, color: 'var(--muted)', display: "flex", alignItems: "center", gap: 4 }}><GraduationCap size={11} /> Prep Leave Start</div>
                 <div style={{ fontSize: 12, padding: '7px 10px', border: '1px solid var(--border)', borderRadius: 6, background: 'var(--bg)', color: 'var(--muted)' }}>
                   {roadmapConfig.classEndDate
                     ? new Date(new Date(roadmapConfig.classEndDate + 'T00:00:00').getTime() + 86400000).toLocaleDateString('en-GB', {day:'numeric',month:'short'})
@@ -2286,7 +2289,7 @@ export default function Schedule() {
                 </div>
               </div>
               <div>
-                <div style={{ fontSize: 11, fontWeight: 600, marginBottom: 4, color: 'var(--muted)' }}>🎓 Prep Leave End</div>
+                <div style={{ fontSize: 11, fontWeight: 600, marginBottom: 4, color: 'var(--muted)', display: "flex", alignItems: "center", gap: 4 }}><GraduationCap size={11} /> Prep Leave End</div>
                 <input type="date" value={roadmapConfig.prepLeaveEndDate || ''}
                   min={roadmapConfig.classEndDate || ''}
                   onChange={e => saveRoadmapConfig({ ...roadmapConfig, prepLeaveEndDate: e.target.value })}
@@ -2296,7 +2299,7 @@ export default function Schedule() {
 
             {/* Exam Count */}
             <div>
-              <div style={{ fontSize: 11, fontWeight: 600, marginBottom: 6, color: 'var(--muted)' }}>✍️ Theory Exam Count</div>
+              <div style={{ fontSize: 11, fontWeight: 600, marginBottom: 6, color: 'var(--muted)', display: "flex", alignItems: "center", gap: 4 }}><PencilLine size={11} /> Theory Exam Count</div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                 <button className="btn btn-ghost" style={{ padding: '4px 12px', fontSize: 16, fontWeight: 700 }}
                   onClick={() => saveRoadmapConfig({ ...roadmapConfig, examCount: Math.max(1, (roadmapConfig.examCount ?? 5) - 1) })}>−</button>
@@ -2309,7 +2312,7 @@ export default function Schedule() {
 
             {/* Post-Exam Break */}
             <div>
-              <div style={{ fontSize: 11, fontWeight: 600, marginBottom: 4, color: 'var(--muted)' }}>🌴 Post-Exam Break End</div>
+              <div style={{ fontSize: 11, fontWeight: 600, marginBottom: 4, color: 'var(--muted)', display: "flex", alignItems: "center", gap: 4 }}><Sprout size={11} /> Post-Exam Break End</div>
               <input type="date" value={roadmapConfig.postExamEndDate || ''}
                 onChange={e => saveRoadmapConfig({ ...roadmapConfig, postExamEndDate: e.target.value })}
                 style={{ width: '100%', padding: '6px 8px', borderRadius: 6, border: '1px solid var(--border)', background: 'var(--input)', color: 'var(--text)', fontSize: 12 }} />
@@ -2372,7 +2375,7 @@ export default function Schedule() {
               {/* Phase cards row 1 */}
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
                 <div style={{ padding: 10, borderRadius: 8, border: '1px solid var(--border)', opacity: roadmapConfig.classEndDate ? 1 : 0.45 }}>
-                  <div style={{ fontWeight: 700, fontSize: 12 }}>📚 Classes</div>
+                  <div style={{ fontWeight: 700, fontSize: 12, display: "flex", alignItems: "center", gap: 5 }}><BookOpen size={12} /> Classes</div>
                   <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 3 }}>
                     {fmt(profile?.termStartDate ? new Date(profile.termStartDate + 'T00:00:00') : null)} → {fmt(timeline.classEndDate)}
                   </div>
@@ -2382,7 +2385,7 @@ export default function Schedule() {
                   {!roadmapConfig.classEndDate && <div style={{ fontSize: 10, color: 'var(--muted)', marginTop: 2 }}>Set class end date ↑</div>}
                 </div>
                 <div style={{ padding: 10, borderRadius: 8, border: '1px solid var(--border)', opacity: roadmapConfig.prepLeaveEndDate ? 1 : 0.45 }}>
-                  <div style={{ fontWeight: 700, fontSize: 12 }}>🎓 Prep Leave</div>
+                  <div style={{ fontWeight: 700, fontSize: 12, display: "flex", alignItems: "center", gap: 5 }}><GraduationCap size={12} /> Prep Leave</div>
                   <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 3 }}>
                     {fmt(timeline.prepLeaveStart)} → {fmt(timeline.prepLeaveEnd)}
                   </div>
@@ -2396,7 +2399,7 @@ export default function Schedule() {
               {/* Exams */}
               <div style={{ padding: 10, borderRadius: 8, border: '1px solid var(--border)' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 6 }}>
-                  <div style={{ fontWeight: 700, fontSize: 12 }}>✍️ Exams</div>
+                  <div style={{ fontWeight: 700, fontSize: 12, display: "flex", alignItems: "center", gap: 5 }}><PencilLine size={12} /> Exams</div>
                   <span style={{ fontSize: 10, color: 'var(--muted)' }}>{timeline.theoryCourses} courses</span>
                   {filledExams.length < timeline.theoryCourses && (
                     <span style={{ fontSize: 10, color: '#F59E0B', fontWeight: 600 }}>
@@ -2419,14 +2422,14 @@ export default function Schedule() {
               {/* Phase cards row 2 */}
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
                 <div style={{ padding: 10, borderRadius: 8, border: '1px solid var(--border)', opacity: roadmapConfig.postExamEndDate ? 1 : 0.45 }}>
-                  <div style={{ fontWeight: 700, fontSize: 12 }}>🌴 Post-Exam Break</div>
+                  <div style={{ fontWeight: 700, fontSize: 12, display: "flex", alignItems: "center", gap: 5 }}><Sprout size={12} /> Post-Exam Break</div>
                   <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 3 }}>
                     {lastExamDate ? fmt(new Date(lastExamDate.getTime() + 86400000)) : '—'} → {fmt(timeline.postExamBreakEnd)}
                   </div>
                   {!roadmapConfig.postExamEndDate && <div style={{ fontSize: 10, color: 'var(--muted)', marginTop: 2 }}>Set break end date ↑</div>}
                 </div>
                 <div style={{ padding: 10, borderRadius: 8, border: '1px solid var(--border)', opacity: timeline.nextSemesterStart ? 1 : 0.45 }}>
-                  <div style={{ fontWeight: 700, fontSize: 12 }}>🚀 Next Semester</div>
+                  <div style={{ fontWeight: 700, fontSize: 12, display: "flex", alignItems: "center", gap: 5 }}><Rocket size={12} /> Next Semester</div>
                   <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 3 }}>
                     {timeline.nextSemesterStart ? `Starts ${fmt(timeline.nextSemesterStart)}` : '—'}
                   </div>

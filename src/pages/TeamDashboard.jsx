@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Users } from 'lucide-react';
 import StaffDashboardContent from './StaffDashboard';
 import AdminEntryPoint from '../components/AdminEntryPoint';
 
@@ -18,12 +19,17 @@ export default function TeamDashboard() {
   const [activeTab, setActiveTab] = useState(null);
 
   return (
-    <div className="team-dashboard-shell">
+    <div className="page-enter team-dashboard-shell content-page-bg">
       <div style={{ maxWidth: 1400, margin: '0 auto', padding: '12px 16px 32px' }}>
-        <h1 style={{ fontSize: 18, fontWeight: 700, marginBottom: 2 }}>Team &amp; Administration</h1>
-        <p style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 14 }}>
-          Everything here is scoped to whatever KUETx role(s) you actually hold.
-        </p>
+        <div className="content-page-hero" style={{ marginBottom: 16 }}>
+          <div className="content-page-hero-icon">
+            <Users size={18} color="var(--accent)" />
+          </div>
+          <div>
+            <h1 className="content-page-hero-title">Team & Administration</h1>
+            <p className="content-page-hero-subtitle">Everything here is scoped to whatever KUETx role(s) you actually hold.</p>
+          </div>
+        </div>
 
         <StaffDashboardContent onTabChange={setActiveTab} />
 

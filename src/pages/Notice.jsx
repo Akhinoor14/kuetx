@@ -379,16 +379,16 @@ export default function Notice() {
   const isFiltering = activeTab !== 'all' || searchQuery.trim() !== '';
 
   return (
-    <div className="content-page-bg" style={{ padding: '20px 20px 48px', width: '100%', boxSizing: 'border-box' }}>
-      <div className="content-page-hero" style={{ marginBottom: 6 }}>
+    <div className="page-enter page-container content-page-bg" style={{ paddingBottom: 48 }}>
+      <div className="content-page-hero" style={{ marginBottom: 16 }}>
         <div className="content-page-hero-icon">
           <Bell size={18} color="var(--accent)" />
         </div>
-        <h1 className="content-page-hero-title">Notice</h1>
+        <div>
+          <h1 className="content-page-hero-title">Notice</h1>
+          <p className="content-page-hero-subtitle">Announcements from Founder/Admin, and CR/ACR land here.</p>
+        </div>
       </div>
-      <p style={{ fontSize: 13, color: 'var(--muted)', margin: '0 0 18px' }}>
-        Announcements from Founder/Admin, and CR/ACR land here.
-      </p>
 
       {pinnedNotices.length > 0 && (
         <div style={{

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Plus, Trash2, ClipboardCheck } from 'lucide-react';
+import { Plus, Trash2, ClipboardCheck, AlertTriangle, CheckCircle2 } from 'lucide-react';
 import { store, uid } from '../store/store';
 
 const BAD_PRESETS = ['Lying', 'Swearing', 'Missing prayers', 'Wasting time', 'Hurting others', 'Jealousy'];
@@ -58,7 +58,7 @@ export default function SelfEval() {
     <div className="page-enter page-container self-eval-page content-page-bg">
       {showSavedToast && (
         <div className="selfeval-toast">
-          ✓ Self Evaluation {saveStatus}
+          <ClipboardCheck size={16} style={{ display: 'inline', verticalAlign: -3, marginRight: 6 }} />Self Evaluation {saveStatus}
         </div>
       )}
       <div className="selfeval-header">
@@ -107,7 +107,7 @@ export default function SelfEval() {
       <div className="selfeval-columns">
         {/* Bad deeds */}
         <div className="card selfeval-panel selfeval-panel-bad">
-          <div className="selfeval-panel-title selfeval-panel-title-bad">⚠ Bad habits</div>
+          <div className="selfeval-panel-title selfeval-panel-title-bad" style={{ display: 'flex', alignItems: 'center', gap: 6 }}><AlertTriangle size={15} /> Bad habits</div>
           <div className="selfeval-add-row">
             <input value={newBad} onChange={e => setNewBad(e.target.value)} onKeyDown={e => e.key === 'Enter' && addBad(newBad)} placeholder="Add one..." />
             <button className="btn btn-danger selfeval-add-btn" onClick={() => addBad(newBad)}><Plus size={14} /></button>
@@ -130,7 +130,7 @@ export default function SelfEval() {
 
         {/* Good deeds */}
         <div className="card selfeval-panel selfeval-panel-good">
-          <div className="selfeval-panel-title selfeval-panel-title-good">✓ Good deeds</div>
+          <div className="selfeval-panel-title selfeval-panel-title-good" style={{ display: 'flex', alignItems: 'center', gap: 6 }}><CheckCircle2 size={15} /> Good deeds</div>
           <div className="selfeval-add-row">
             <input value={newGood} onChange={e => setNewGood(e.target.value)} onKeyDown={e => e.key === 'Enter' && addGood(newGood)} placeholder="Add one..." />
             <button className="btn btn-primary selfeval-add-btn" onClick={() => addGood(newGood)}><Plus size={14} /></button>

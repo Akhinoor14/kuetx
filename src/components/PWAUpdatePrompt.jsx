@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback } from 'react';
+import { RefreshCw, X } from 'lucide-react';
 
 /**
  * PWAUpdatePrompt
@@ -121,7 +122,7 @@ export default function PWAUpdatePrompt() {
       `}</style>
 
       {/* Icon */}
-      <span style={{ flexShrink: 0, fontSize: '1.1rem' }}>🔄</span>
+      <span style={{ flexShrink: 0, display: 'flex' }}><RefreshCw size={18} /></span>
 
       {/* Text */}
       <span style={{ flex: 1 }}>
@@ -157,13 +158,13 @@ export default function PWAUpdatePrompt() {
           border: 'none',
           color: 'var(--color-text-muted, #94a3b8)',
           cursor: 'pointer',
-          fontSize: '1rem',
           padding: '0.2rem',
           flexShrink: 0,
           lineHeight: 1,
+          display: 'flex',
         }}
       >
-        ✕
+        <X size={16} />
       </button>
     </div>
   );

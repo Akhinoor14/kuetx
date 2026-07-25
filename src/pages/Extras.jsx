@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Plus, Trash2, Play, Pause, Square, RotateCcw, Save, ChevronDown, ChevronRight, Edit2, Check, X, Copy, CheckCheck, MapPin, Cpu, List, Timer, Users, BarChart2 } from 'lucide-react';
+import { Plus, Trash2, Play, Pause, Square, RotateCcw, Save, ChevronDown, ChevronRight, Edit2, Check, X, Copy, CheckCheck, MapPin, Cpu, List, Timer, Users, BarChart2, Volume2, VolumeX, Vibrate, Bell, BellOff, Github, Globe, Calendar, Settings, Search, BookOpen, AlertTriangle } from 'lucide-react';
 import {
   store,
   uid,
@@ -193,7 +193,7 @@ export function Tours() {
             {/* Modal header */}
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 20px 12px', borderBottom: '1px solid var(--border)', flexShrink: 0 }}>
               <div>
-                <div style={{ fontWeight: 700, fontSize: 15 }}>✈️ Add Tour</div>
+                <div style={{ fontWeight: 700, fontSize: 15 }}>Add Tour</div>
                 <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 2 }}>Log a trip, plan the route, track spending</div>
               </div>
               <button onClick={() => { setAdding(false); setOutlineOpen(false); }} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--muted)', padding: 4, borderRadius: 6 }}><X size={16} /></button>
@@ -202,18 +202,18 @@ export function Tours() {
 
               {/* Destination — full width prominent */}
               <div style={{ marginBottom: 14 }}>
-                <label style={{ fontSize: 11, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.06em', display: 'block', marginBottom: 6 }}>📍 Destination / Tour Name *</label>
+                <label style={{ fontSize: 11, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.06em', display: 'block', marginBottom: 6 }}>Destination / Tour Name *</label>
                 <input value={form.name} onChange={e => set('name', e.target.value)} placeholder="e.g. Cox's Bazar trip, Rangamati 2-day tour..." style={{ width: '100%', fontSize: 15, fontWeight: 600, padding: '10px 12px', borderRadius: 10, border: '1.5px solid var(--border)', background: 'var(--inputBg)', color: 'var(--text)', outline: 'none', boxSizing: 'border-box' }} />
               </div>
 
               {/* Date + Type row */}
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 14 }}>
                 <div>
-                  <label style={{ fontSize: 11, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.06em', display: 'block', marginBottom: 6 }}>📅 Date</label>
+                  <label style={{ fontSize: 11, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.06em', display: 'block', marginBottom: 6 }}>Date</label>
                   <input type="date" value={form.date} onChange={e => set('date', e.target.value)} style={{ width: '100%', padding: '9px 10px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--inputBg)', color: 'var(--text)', fontSize: 13, boxSizing: 'border-box' }} />
                 </div>
                 <div>
-                  <label style={{ fontSize: 11, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.06em', display: 'block', marginBottom: 6 }}>🏷️ Type</label>
+                  <label style={{ fontSize: 11, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.06em', display: 'block', marginBottom: 6 }}>Type</label>
                   <select value={form.type} onChange={e => set('type', e.target.value)} style={{ width: '100%', padding: '9px 10px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--inputBg)', color: 'var(--text)', fontSize: 13, boxSizing: 'border-box' }}>
                     {TOUR_TYPES.map(tt => <option key={tt.value} value={tt.value}>{tt.label}</option>)}
                   </select>
@@ -222,25 +222,25 @@ export function Tours() {
 
               {/* Companions */}
               <div style={{ marginBottom: 14 }}>
-                <label style={{ fontSize: 11, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.06em', display: 'block', marginBottom: 6 }}>👥 Companions</label>
+                <label style={{ fontSize: 11, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.06em', display: 'block', marginBottom: 6 }}>Companions</label>
                 <input value={form.companions} onChange={e => set('companions', e.target.value)} placeholder="Rahim, Karim, Jamal..." style={{ width: '100%', padding: '9px 10px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--inputBg)', color: 'var(--text)', fontSize: 13, boxSizing: 'border-box' }} />
               </div>
 
               {/* Budget + Spent row */}
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 14 }}>
                 <div>
-                  <label style={{ fontSize: 11, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.06em', display: 'block', marginBottom: 6 }}>💰 Budget (৳)</label>
+                  <label style={{ fontSize: 11, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.06em', display: 'block', marginBottom: 6 }}>Budget (৳)</label>
                   <input type="number" value={form.budget} onChange={e => set('budget', e.target.value)} placeholder="5000" style={{ width: '100%', padding: '9px 10px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--inputBg)', color: 'var(--text)', fontSize: 13, boxSizing: 'border-box' }} />
                 </div>
                 <div>
-                  <label style={{ fontSize: 11, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.06em', display: 'block', marginBottom: 6 }}>🧾 Actual Spent (৳)</label>
+                  <label style={{ fontSize: 11, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.06em', display: 'block', marginBottom: 6 }}>Actual Spent (৳)</label>
                   <input type="number" value={form.spent} onChange={e => set('spent', e.target.value)} placeholder="4800" style={{ width: '100%', padding: '9px 10px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--inputBg)', color: 'var(--text)', fontSize: 13, boxSizing: 'border-box' }} />
                 </div>
               </div>
 
               {/* Notes */}
               <div style={{ marginBottom: 14 }}>
-                <label style={{ fontSize: 11, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.06em', display: 'block', marginBottom: 6 }}>📝 Notes / Highlights</label>
+                <label style={{ fontSize: 11, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.06em', display: 'block', marginBottom: 6 }}>Notes / Highlights</label>
                 <textarea value={form.notes} onChange={e => set('notes', e.target.value)} rows={3} placeholder="Best moments, tips, what to eat, hidden gems..." style={{ width: '100%', padding: '9px 10px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--inputBg)', color: 'var(--text)', fontSize: 13, resize: 'vertical', boxSizing: 'border-box', fontFamily: 'inherit' }} />
               </div>
 
@@ -275,7 +275,7 @@ export function Tours() {
                           style={{ flexShrink: 0, padding: '4px 6px', borderRadius: 6, border: '1px solid var(--border)', background: 'transparent', cursor: 'pointer', color: 'var(--danger)', fontSize: 14, lineHeight: 1 }}
                           onClick={() => removeOutlineSection(si)}
                           title="Remove section"
-                        >✕</button>
+                        ><X size={12} /></button>
                       </div>
                       {section.topics.map((topic, ti) => (
                         <div key={ti} className="tours-outline-item-row" style={{ display: 'flex', alignItems: 'center', gap: 5, marginBottom: 5 }}>
@@ -384,7 +384,7 @@ export function Tours() {
                         style={{ flexShrink: 0, padding: '4px 6px', borderRadius: 6, border: '1px solid var(--border)', background: 'transparent', cursor: 'pointer', color: 'var(--danger)', fontSize: 14, lineHeight: 1 }}
                         onClick={() => editRemoveSection(si)}
                         title="Remove section"
-                      >✕</button>
+                      ><X size={12} /></button>
                     </div>
                     {section.topics.map((topic, ti) => (
                       <div key={ti} style={{ display: 'flex', alignItems: 'center', gap: 5, marginBottom: 5 }}>
@@ -427,7 +427,7 @@ export function Tours() {
                   {isOverBudget && <span className="tag tag-red">Over budget</span>}
                 </div>
                 <div style={{ fontSize: 12, color: 'var(--muted)' }}>{t.date}</div>
-                {t.companions && <div style={{ fontSize: 12, marginTop: 4 }}>👥 {t.companions}</div>}
+                {t.companions && <div style={{ fontSize: 12, marginTop: 4, display: 'flex', alignItems: 'center', gap: 4 }}><Users size={12} color="var(--muted)" /> {t.companions}</div>}
                 {t.notes && <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 4 }}>{t.notes}</div>}
 
                 {/* Budget progress bar */}
@@ -561,25 +561,25 @@ function ProjectFormModal({ title, form, set, onSave, onClose }) {
 
           {/* Tech Stack */}
           <div style={{ marginBottom: 14 }}>
-            <label style={{ fontSize: 11, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.06em', display: 'block', marginBottom: 6 }}>🛠️ Tech Stack <span style={{ fontWeight: 400, textTransform: 'none' }}>(comma separated)</span></label>
+            <label style={{ fontSize: 11, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.06em', display: 'block', marginBottom: 6 }}>Tech Stack <span style={{ fontWeight: 400, textTransform: 'none' }}>(comma separated)</span></label>
             <input value={form.techStack || ''} onChange={e => set('techStack', e.target.value)} placeholder="React, Firebase, Arduino, Python..." style={{ width: '100%', padding: '9px 10px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--inputBg)', color: 'var(--text)', fontSize: 13, boxSizing: 'border-box' }} />
           </div>
 
           {/* GitHub + Live URL */}
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 14 }}>
             <div>
-              <label style={{ fontSize: 11, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.06em', display: 'block', marginBottom: 6 }}>🐙 GitHub Repo</label>
+              <label style={{ fontSize: 11, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.06em', display: 'block', marginBottom: 6 }}>GitHub Repo</label>
               <input value={form.github || ''} onChange={e => set('github', e.target.value)} placeholder="https://github.com/..." style={{ width: '100%', padding: '9px 10px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--inputBg)', color: 'var(--text)', fontSize: 12, boxSizing: 'border-box' }} />
             </div>
             <div>
-              <label style={{ fontSize: 11, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.06em', display: 'block', marginBottom: 6 }}>🌐 Live / Demo URL</label>
+              <label style={{ fontSize: 11, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.06em', display: 'block', marginBottom: 6 }}>Live / Demo URL</label>
               <input value={form.liveUrl || ''} onChange={e => set('liveUrl', e.target.value)} placeholder="https://myproject.vercel.app" style={{ width: '100%', padding: '9px 10px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--inputBg)', color: 'var(--text)', fontSize: 12, boxSizing: 'border-box' }} />
             </div>
           </div>
 
           {/* Deadline */}
           <div style={{ marginBottom: 4 }}>
-            <label style={{ fontSize: 11, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.06em', display: 'block', marginBottom: 6 }}>📅 Deadline</label>
+            <label style={{ fontSize: 11, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.06em', display: 'block', marginBottom: 6 }}>Deadline</label>
             <input type="date" value={form.deadline || ''} onChange={e => set('deadline', e.target.value)} style={{ width: '100%', padding: '9px 10px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--inputBg)', color: 'var(--text)', fontSize: 13, boxSizing: 'border-box' }} />
           </div>
         </div>
@@ -691,12 +691,12 @@ export function Projects() {
       </div>
 
       {/* Add Modal */}
-      {adding && <ProjectFormModal title="✨ New Project" form={form} set={set} onSave={saveProject} onClose={() => setAdding(false)} />}
-      {editingId && editForm && <ProjectFormModal title="✏️ Edit Project" form={editForm} set={setEdit} onSave={saveEdit} onClose={() => { setEditingId(null); setEditForm(null); }} />}
+      {adding && <ProjectFormModal title="New Project" form={form} set={set} onSave={saveProject} onClose={() => setAdding(false)} />}
+      {editingId && editForm && <ProjectFormModal title="Edit Project" form={editForm} set={setEdit} onSave={saveEdit} onClose={() => { setEditingId(null); setEditForm(null); }} />}
 
       {filtered.length === 0 && (
         <div className="card" style={{ textAlign: 'center', color: 'var(--muted)', padding: 40 }}>
-          <div style={{ fontSize: 32, marginBottom: 8 }}>🚀</div>
+          <Cpu size={28} color="var(--muted)" style={{ marginBottom: 8 }} />
           <p>{projects.length === 0 ? 'Add your first project — GitHub repo, Arduino build, research, anything.' : 'No projects match this filter.'}</p>
         </div>
       )}
@@ -740,7 +740,7 @@ export function Projects() {
                           <span style={{ fontWeight: 700, fontSize: 14, color: 'var(--text)' }}>{p.name}</span>
                           <span style={{ fontSize: 11, fontWeight: 700, color: sm.color, background: sm.bg, borderRadius: 20, padding: '2px 8px' }}>{sm.emoji} {sm.label}</span>
                           <span style={{ fontSize: 10, color: pm.color }}>{pm.emoji}</span>
-                          {overdue && <span className="tag tag-red">⚠️ Overdue</span>}
+                          {overdue && <span className="tag tag-red">Overdue</span>}
                         </div>
                         {p.desc && <div style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 6, lineHeight: 1.4 }}>{p.desc}</div>}
 
@@ -760,14 +760,14 @@ export function Projects() {
                               <a href={p.github} target="_blank" rel="noopener noreferrer"
                                 onClick={e => e.stopPropagation()}
                                 style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 11, fontWeight: 700, color: '#1f2937', background: '#f3f4f6', border: '1px solid #e5e7eb', borderRadius: 6, padding: '3px 8px', textDecoration: 'none' }}>
-                                🐙 GitHub
+                                <Github size={11} /> GitHub
                               </a>
                             )}
                             {p.liveUrl && (
                               <a href={p.liveUrl} target="_blank" rel="noopener noreferrer"
                                 onClick={e => e.stopPropagation()}
                                 style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 11, fontWeight: 700, color: '#fff', background: 'var(--accent)', border: 'none', borderRadius: 6, padding: '3px 8px', textDecoration: 'none' }}>
-                                🌐 Live
+                                <Globe size={11} /> Live
                               </a>
                             )}
                           </div>
@@ -776,13 +776,13 @@ export function Projects() {
                         {/* Deadline + task progress */}
                         <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
                           {p.deadline && (
-                            <span style={{ fontSize: 11, color: overdue ? 'var(--danger)' : 'var(--muted)' }}>
-                              📅 {new Date(p.deadline).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
+                            <span style={{ fontSize: 11, color: overdue ? 'var(--danger)' : 'var(--muted)', display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+                              <Calendar size={11} /> {new Date(p.deadline).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}
                             </span>
                           )}
                           {tasks.length > 0 && (
-                            <span style={{ fontSize: 11, color: 'var(--muted)' }}>
-                              ✅ {doneTasks}/{tasks.length} tasks · {progress}%
+                            <span style={{ fontSize: 11, color: 'var(--muted)', display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+                              <CheckCheck size={11} /> {doneTasks}/{tasks.length} tasks · {progress}%
                             </span>
                           )}
                         </div>
@@ -882,7 +882,7 @@ export function Syllabus() {
           </div>
         </div>
         <div className="card" style={{ textAlign: 'center', padding: 40 }}>
-          <div style={{ fontSize: 40, marginBottom: 12 }}>⚙️</div>
+          <div style={{ marginBottom: 12, display: 'flex', justifyContent: 'center' }}><Settings size={28} color="var(--muted)" /></div>
           <p style={{ fontSize: 14, fontWeight: 600, marginBottom: 8 }}>Profile Incomplete</p>
           <p style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 16 }}>Please set your department and term in Profile first.</p>
           <a href="/profile" className="btn btn-primary" style={{ display: 'inline-block' }}>Go to Profile</a>
@@ -1016,7 +1016,7 @@ export function Syllabus() {
 
       {!selectedCourse && (
         <div style={{ marginBottom: 16 }}>
-          <input type="text" placeholder="🔍 Search courses or topics..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)} style={{ width: '100%' }} />
+          <input type="text" placeholder="Search courses or topics..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)} style={{ width: '100%' }} />
         </div>
       )}
 
@@ -1090,7 +1090,7 @@ export function Syllabus() {
 
               {references.length > 0 && (
                 <div style={{ padding: '10px 14px', background: 'rgba(59,130,246,0.04)', borderBottom: '1px solid var(--border)' }}>
-                  <div style={{ fontSize: 11, fontWeight: 600, color: '#3b82f6', marginBottom: 6 }}>📖 References</div>
+                  <div style={{ fontSize: 11, fontWeight: 600, color: '#3b82f6', marginBottom: 6, display: 'flex', alignItems: 'center', gap: 4 }}><BookOpen size={12} /> References</div>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
                     {references.slice(0, 3).map((ref, i) => (
                       <div key={i} style={{ fontSize: 11, color: 'var(--text)', lineHeight: 1.4 }}>• {ref}</div>
@@ -1133,7 +1133,7 @@ export function Syllabus() {
                                 <div style={{ fontSize: 11, color: 'var(--muted)', paddingTop: 8, borderTop: '1px solid var(--border)' }}>
                                   <div style={{ fontWeight: 600, marginBottom: 4 }}>Studied:</div>
                                   {topicStudy.map((s, j) => (
-                                    <div key={j} style={{ marginBottom: 2 }}>📚 {s.date}{s.hours ? ` (${s.hours}h)` : ''}</div>
+                                    <div key={j} style={{ marginBottom: 2, display: 'flex', alignItems: 'center', gap: 4 }}><BookOpen size={11} /> {s.date}{s.hours ? ` (${s.hours}h)` : ''}</div>
                                   ))}
                                 </div>
                               )}
@@ -1146,7 +1146,7 @@ export function Syllabus() {
                   </div>
                 </div>
               ) : (
-                <div style={{ padding: '20px 14px', textAlign: 'center', color: 'var(--muted)', fontSize: 11 }}>⚠️ No syllabus data available</div>
+                <div style={{ padding: '20px 14px', textAlign: 'center', color: 'var(--muted)', fontSize: 11, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4 }}><AlertTriangle size={12} /> No syllabus data available</div>
               )}
             </div>
           );
@@ -1198,7 +1198,7 @@ export function Syllabus() {
 
       {courses.length === 0 && (
         <div className="card" style={{ textAlign: 'center', padding: 40 }}>
-          <div style={{ fontSize: 40, marginBottom: 12 }}>📚</div>
+          <div style={{ marginBottom: 12, display: 'flex', justifyContent: 'center' }}><BookOpen size={28} color="var(--muted)" /></div>
           <p>No courses in {getTermLabelFromKey(displayTermKey)}. Check your Profile settings.</p>
         </div>
       )}
@@ -1347,21 +1347,18 @@ export function TimeTracker() {
 
   return (
     <div className="page-container time-tracker-page content-page-bg">
+      <div className="content-page-hero" style={{ marginBottom: 16 }}>
+        <div className="content-page-hero-icon">
+          <Timer size={18} color="var(--accent)" />
+        </div>
+        <div>
+          <h1 className="content-page-hero-title">Time Tracker</h1>
+          <p className="content-page-hero-subtitle">Run a clean focus timer, log work fast, and review the day without visual clutter.</p>
+        </div>
+      </div>
       <div className="time-tracker-layout">
         <div className="time-tracker-main-column">
-          <div className="card time-tracker-panel time-tracker-card time-tracker-panel--merged">
-            <div className="time-tracker-hero time-tracker-hero--merged">
-              <div className="time-tracker-hero-copy">
-                <div className="time-tracker-kicker">Focus by design</div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 10, justifyContent: 'center' }}>
-                  <div className="content-page-hero-icon">
-                    <Timer size={18} color="var(--accent)" />
-                  </div>
-                  <h1 style={{ margin: 0 }}>Time Tracker</h1>
-                </div>
-                <p>Run a clean focus timer, log work fast, and review the day without visual clutter.</p>
-              </div>
-            </div>
+          <div className="card time-tracker-panel time-tracker-card">
             <div className="time-tracker-panel-body">
               <div className="time-tracker-header-section">
                 <div className="time-tracker-mode-switch" role="tablist" aria-label="Timer mode">
@@ -1401,9 +1398,9 @@ export function TimeTracker() {
                 <div className="time-tracker-prefs-group">
                   <div className="time-tracker-section-label">Preferences</div>
                   <div className="time-tracker-preferences-row">
-                    <button className="time-tracker-pref-btn-compact" title="Toggle sound" onClick={() => { const next = { ...timerPrefs, sound: !timerPrefs.sound }; setTimerPrefsState(next); store.set('timer_prefs_v1', next); }}>{timerPrefs.sound ? '🔊' : '🔈'}</button>
-                    <button className="time-tracker-pref-btn-compact" title="Toggle vibrate" onClick={() => { const next = { ...timerPrefs, vibrate: !timerPrefs.vibrate }; setTimerPrefsState(next); store.set('timer_prefs_v1', next); }}>{timerPrefs.vibrate ? '📳' : '📴'}</button>
-                    <button className="time-tracker-pref-btn-compact" title="Toggle notify" onClick={() => { const next = { ...timerPrefs, notify: !timerPrefs.notify }; setTimerPrefsState(next); store.set('timer_prefs_v1', next); }}>{timerPrefs.notify ? '🔔' : '🔕'}</button>
+                    <button className="time-tracker-pref-btn-compact" title="Toggle sound" onClick={() => { const next = { ...timerPrefs, sound: !timerPrefs.sound }; setTimerPrefsState(next); store.set('timer_prefs_v1', next); }}>{timerPrefs.sound ? <Volume2 size={14} /> : <VolumeX size={14} />}</button>
+                    <button className="time-tracker-pref-btn-compact" title="Toggle vibrate" onClick={() => { const next = { ...timerPrefs, vibrate: !timerPrefs.vibrate }; setTimerPrefsState(next); store.set('timer_prefs_v1', next); }}><Vibrate size={14} style={{ opacity: timerPrefs.vibrate ? 1 : 0.4 }} /></button>
+                    <button className="time-tracker-pref-btn-compact" title="Toggle notify" onClick={() => { const next = { ...timerPrefs, notify: !timerPrefs.notify }; setTimerPrefsState(next); store.set('timer_prefs_v1', next); }}>{timerPrefs.notify ? <Bell size={14} /> : <BellOff size={14} />}</button>
                   </div>
                 </div>
                 {(timer.isRunning || timer.isPaused) && (

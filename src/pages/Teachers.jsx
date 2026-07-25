@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Plus, Trash2, Edit2, X, Check, Users } from 'lucide-react';
+import { Plus, Trash2, Edit2, X, Check, Users, Phone, Mail, Building2 } from 'lucide-react';
 import { store, uid } from '../store/store';
 import ConfirmDialog from '../components/ConfirmDialog';
 
@@ -97,9 +97,9 @@ export default function Teachers() {
                   )}
                 </div>
                 <div style={{ display: 'flex', gap: 12, marginTop: 6, flexWrap: 'wrap', fontSize: 12, color: 'var(--muted)' }}>
-                  {t.phone && <span>📞 {t.phone}</span>}
-                  {t.email && <span>✉ {t.email}</span>}
-                  {t.officeRoom && <span>🏢 {t.officeRoom}</span>}
+                  {t.phone && <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}><Phone size={12} />{t.phone}</span>}
+                  {t.email && <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}><Mail size={12} />{t.email}</span>}
+                  {t.officeRoom && <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}><Building2 size={12} />{t.officeRoom}</span>}
                 </div>
                 {t.courses && <div style={{ fontSize: 12, marginTop: 4 }}>Courses: <span style={{ fontFamily: 'JetBrains Mono, monospace', color: 'var(--accent)' }}>{t.courses}</span></div>}
                 {t.notes && <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 4 }}>{t.notes}</div>}

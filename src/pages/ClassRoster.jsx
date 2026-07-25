@@ -12,6 +12,7 @@ import JoinRequestsPanel from '../components/JoinRequestsPanel';
 import NoticeInsightsPanel from '../components/NoticeInsightsPanel';
 import NoticeComposerToolbar from '../components/NoticeComposerToolbar';
 import NoticePrioritySelector from '../components/NoticePrioritySelector';
+import SectionTabs from '../components/SectionTabs';
 import { renderFormattedNoticeBody } from '../lib/noticeFormat';
 import { deleteNoticeSoft } from '../lib/noticeUtils';
 
@@ -86,6 +87,14 @@ export default function ClassRoster() {
   // feed — see Notice.jsx for that).
   const [sentNotices, setSentNotices] = useState([]);
   const [deletingId, setDeletingId] = useState(null);
+
+  // Tabs replace the old single-scroll layout (Roster / Notices / My
+  // Role). Defaults to the roster since that's what a CR/ACR checks most
+  // often — except when arriving via the Profile page's "Hand over CR"
+  // link (handoffIntent), where jumping straight to "My Role" means the
+  // handoff hint is immediately visible instead of buried in a tab the
+  // person has to think to open.
+  const [activeTab, setActiveTab] = useState(handoffIntent ? 'myrole' : 'roster');
 
   useEffect(() => {
     if (!groupId) { setSentNotices([]); return; }
@@ -173,7 +182,7 @@ export default function ClassRoster() {
   };
 
   return (
-    <div className="content-page-bg" style={{ width: 'min(95vw, 1560px)', margin: '0 auto', padding: '16px 14px', paddingBottom: 'calc(32px + env(safe-area-inset-bottom, 0px))' }}>
+    <div className="page-enter content-page-bg" style={{ width: 'min(95vw, 1560px)', margin: '0 auto', padding: '16px 14px', paddingBottom: 'calc(32px + env(safe-area-inset-bottom, 0px))' }}>
       <div className="roster-hero">
         <div className="content-page-hero-icon">
           <Users size={18} color="var(--accent)" />
@@ -194,179 +203,207 @@ export default function ClassRoster() {
         </p>
       ) : (
         <>
-          {handoffIntent && myRole === 'cr' && (
-            <div style={{
-              padding: '10px 14px', borderRadius: 10, marginBottom: 14,
-              background: 'rgba(59,130,246,0.1)', border: '1px solid rgba(59,130,246,0.25)',
-              fontSize: 12.5, color: 'var(--text)',
-            }}>
-              Scroll to <strong>"Class Roles"</strong> below, pick a classmate from the dropdown, and use <strong>"Hand off CR to them"</strong> to transfer your slot directly — no Campus Lead approval needed.
-            </div>
+          <SectionTabs
+            tabs={[
+              { key: 'roster', label: 'Roster' },
+              { key: 'notices', label: 'Notices' },
+              { key: 'myrole', label: 'My Role' },
+            ]}
+            active={activeTab}
+            onChange={setActiveTab}
+          />
+
+          {activeTab === 'roster' && (
+            <>
+              {(myRole === 'cr' || myRole === 'acr') && (
+                <JoinRequestsPanel groupId={groupId} />
+              )}
+              <div style={{ marginBottom: 20 }}>
+                <ClassmatesList groupId={groupId} showActions viewerRole="cr" currentUid={uid} />
+              </div>
+            </>
           )}
 
-          {(myRole === 'cr' || myRole === 'acr') && (
-            <JoinRequestsPanel groupId={groupId} />
-          )}
+          {activeTab === 'myrole' && (
+            <>
+              {handoffIntent && myRole === 'cr' && (
+                <div style={{
+                  padding: '10px 14px', borderRadius: 10, marginBottom: 14,
+                  background: 'rgba(59,130,246,0.1)', border: '1px solid rgba(59,130,246,0.25)',
+                  fontSize: 12.5, color: 'var(--text)',
+                }}>
+                  Go to the <strong>Roster</strong> tab, pick a classmate from the dropdown under <strong>"Class Roles"</strong>, and use <strong>"Hand off CR to them"</strong> to transfer your slot directly — no Campus Lead approval needed.
+                </div>
+              )}
 
-          <div style={{ fontSize: 13, fontWeight: 700, marginBottom: 8 }}>Roster</div>
-          <div style={{ marginBottom: 20 }}>
-            <ClassmatesList groupId={groupId} showActions viewerRole="cr" currentUid={uid} />
-          </div>
-
-          {myRole === 'cr' && (
-            <div className="card" style={{ padding: 14, marginBottom: 16 }}>
-              <h2 style={{ fontSize: 14, fontWeight: 700, marginBottom: 6 }}>Step down as CR</h2>
-              <p style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 10 }}>
-                Want to stop being CR without handing off to someone specific? This sends a request to your
-                Class Lead. You'll remain CR until they approve it.
-              </p>
-              {canSelfApprove && (
-                <p style={{ fontSize: 12, color: 'var(--accent)', marginBottom: 10 }}>
-                  You also hold Campus Lead / Senior Campus Lead / Head of Ops / Founder access for this class,
-                  so you can approve this request yourself afterward from the Founder or Staff dashboard.
+              {myRole === 'cr' ? (
+                <div className="card" style={{ padding: 14, marginBottom: 16 }}>
+                  <h2 style={{ fontSize: 14, fontWeight: 700, marginBottom: 6 }}>Step down as CR</h2>
+                  <p style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 10 }}>
+                    Want to stop being CR without handing off to someone specific? This sends a request to your
+                    Class Lead. You'll remain CR until they approve it.
+                  </p>
+                  {canSelfApprove && (
+                    <p style={{ fontSize: 12, color: 'var(--accent)', marginBottom: 10 }}>
+                      You also hold Campus Lead / Senior Campus Lead / Head of Ops / Founder access for this class,
+                      so you can approve this request yourself afterward from the Founder or Staff dashboard.
+                    </p>
+                  )}
+                  {leaveState === 'sent' ? (
+                    <div style={{ fontSize: 12, color: 'var(--muted)' }}>{leaveMsg}</div>
+                  ) : (
+                    <>
+                      <button
+                        className="btn btn-sm btn-secondary"
+                        onClick={handleRequestLeave}
+                        disabled={leaveState === 'sending'}
+                      >
+                        {leaveState === 'sending' ? 'Sending…' : 'Request to leave CR'}
+                      </button>
+                      {leaveState === 'error' && (
+                        <div style={{ color: 'var(--danger)', fontSize: 12, marginTop: 6 }}>{leaveMsg}</div>
+                      )}
+                    </>
+                  )}
+                </div>
+              ) : (
+                <p style={{ color: 'var(--muted)', fontSize: 13 }}>
+                  Role-specific actions (like stepping down as CR) show up here once you hold that role.
                 </p>
               )}
-              {leaveState === 'sent' ? (
-                <div style={{ fontSize: 12, color: 'var(--muted)' }}>{leaveMsg}</div>
-              ) : (
-                <>
-                  <button
-                    className="btn btn-sm btn-secondary"
-                    onClick={handleRequestLeave}
-                    disabled={leaveState === 'sending'}
-                  >
-                    {leaveState === 'sending' ? 'Sending…' : 'Request to leave CR'}
-                  </button>
-                  {leaveState === 'error' && (
-                    <div style={{ color: 'var(--danger)', fontSize: 12, marginTop: 6 }}>{leaveMsg}</div>
+            </>
+          )}
+
+          {activeTab === 'notices' && (myRole === 'cr' || myRole === 'acr') && (
+            <>
+              <div className="card" style={{ padding: 14, marginBottom: 16 }}>
+                <h2 style={{ fontSize: 14, fontWeight: 700, marginBottom: 4 }}>Send a notice to your class</h2>
+                <p style={{ fontSize: 11.5, color: 'var(--muted)', margin: '0 0 10px', lineHeight: 1.5 }}>
+                  Tip: leave a blank line between points to start a new paragraph — it'll show up nicely spaced for your classmates.
+                </p>
+                <form onSubmit={handleSendNotice} style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                  <input
+                    type="text"
+                    placeholder="Title"
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                    className="input"
+                    style={{ width: '100%' }}
+                  />
+
+                  <NoticePrioritySelector value={priority} onChange={setPriority} />
+
+                  {!showPreview ? (
+                    <>
+                      <NoticeComposerToolbar
+                        textareaRef={noticeTextareaRef}
+                        value={body}
+                        onChange={setBody}
+                      />
+                      <textarea
+                        ref={noticeTextareaRef}
+                        placeholder={'Notice details...\n\nLeave a blank line to start a new paragraph.'}
+                        value={body}
+                        onChange={(e) => setBody(e.target.value)}
+                        className="input"
+                        rows={6}
+                        style={{ width: '100%', resize: 'vertical', lineHeight: 1.55 }}
+                      />
+                    </>
+                  ) : (
+                    <div style={{
+                      padding: '10px 12px', borderRadius: 8, border: '1px solid var(--border)',
+                      background: 'var(--surface)', fontSize: 13, color: 'var(--text)', lineHeight: 1.55,
+                      minHeight: 96,
+                    }}>
+                      <div style={{ fontWeight: 700, marginBottom: 6 }}>{title.trim() || <span style={{ color: 'var(--muted)' }}>(no title)</span>}</div>
+                      {body.trim()
+                        ? renderFormattedNoticeBody(body)
+                        : <span style={{ color: 'var(--muted)' }}>(nothing written yet)</span>}
+                    </div>
                   )}
-                </>
-              )}
-            </div>
-          )}
 
-          {(myRole === 'cr' || myRole === 'acr') && (
-            <div className="card" style={{ padding: 14 }}>
-              <h2 style={{ fontSize: 14, fontWeight: 700, marginBottom: 4 }}>Send a notice to your class</h2>
-              <p style={{ fontSize: 11.5, color: 'var(--muted)', margin: '0 0 10px', lineHeight: 1.5 }}>
-                Tip: leave a blank line between points to start a new paragraph — it'll show up nicely spaced for your classmates.
-              </p>
-              <form onSubmit={handleSendNotice} style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                <input
-                  type="text"
-                  placeholder="Title"
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)}
-                  className="input"
-                  style={{ width: '100%' }}
-                />
-
-                <NoticePrioritySelector value={priority} onChange={setPriority} />
-
-                {!showPreview ? (
-                  <>
-                    <NoticeComposerToolbar
-                      textareaRef={noticeTextareaRef}
-                      value={body}
-                      onChange={setBody}
-                    />
-                    <textarea
-                      ref={noticeTextareaRef}
-                      placeholder={'Notice details...\n\nLeave a blank line to start a new paragraph.'}
-                      value={body}
-                      onChange={(e) => setBody(e.target.value)}
-                      className="input"
-                      rows={6}
-                      style={{ width: '100%', resize: 'vertical', lineHeight: 1.55 }}
-                    />
-                  </>
-                ) : (
-                  <div style={{
-                    padding: '10px 12px', borderRadius: 8, border: '1px solid var(--border)',
-                    background: 'var(--surface)', fontSize: 13, color: 'var(--text)', lineHeight: 1.55,
-                    minHeight: 96,
-                  }}>
-                    <div style={{ fontWeight: 700, marginBottom: 6 }}>{title.trim() || <span style={{ color: 'var(--muted)' }}>(no title)</span>}</div>
-                    {body.trim()
-                      ? renderFormattedNoticeBody(body)
-                      : <span style={{ color: 'var(--muted)' }}>(nothing written yet)</span>}
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                    <button
+                      type="submit"
+                      className="btn btn-primary btn-sm"
+                      disabled={sending || !title.trim() || !body.trim()}
+                    >
+                      {sending ? 'Sending...' : 'Send notice'}
+                    </button>
+                    <button
+                      type="button"
+                      className="btn btn-sm btn-secondary"
+                      onClick={() => setShowPreview((v) => !v)}
+                      disabled={!title.trim() && !body.trim()}
+                    >
+                      {showPreview ? 'Back to edit' : 'Preview'}
+                    </button>
                   </div>
-                )}
-
-                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                  <button
-                    type="submit"
-                    className="btn btn-primary btn-sm"
-                    disabled={sending || !title.trim() || !body.trim()}
-                  >
-                    {sending ? 'Sending...' : 'Send notice'}
-                  </button>
-                  <button
-                    type="button"
-                    className="btn btn-sm btn-secondary"
-                    onClick={() => setShowPreview((v) => !v)}
-                    disabled={!title.trim() && !body.trim()}
-                  >
-                    {showPreview ? 'Back to edit' : 'Preview'}
-                  </button>
-                </div>
-                {sendMsg && (
-                  <div style={{ fontSize: 12, color: sendMsg.startsWith('Failed') ? 'var(--danger)' : 'var(--success)' }}>
-                    {sendMsg}
-                  </div>
-                )}
-              </form>
-            </div>
-          )}
-
-          {sentNotices.length > 0 && (
-            <div style={{ marginTop: 16 }}>
-              <div style={{ fontSize: 13, fontWeight: 700, marginBottom: 8 }}>Sent notices</div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                {sentNotices.map((n) => (
-                  <div key={n.id} className="card" style={{ padding: '10px 12px' }}>
-                    <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 8 }}>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                        <div style={{ fontWeight: 700, fontSize: 13, color: 'var(--text)' }}>{n.title}</div>
-                        {n.deleted && (
-                          <span style={{
-                            fontSize: 9.5, fontWeight: 700, color: 'var(--danger)', textTransform: 'uppercase',
-                            border: '1px solid var(--danger)', borderRadius: 4, padding: '1px 5px', flexShrink: 0,
-                          }}>
-                            Deleted
-                          </span>
-                        )}
-                      </div>
-                      {!n.deleted && (
-                        <button
-                          type="button"
-                          onClick={() => handleDeleteNotice(n.id)}
-                          disabled={deletingId === n.id}
-                          aria-label={`Delete notice: ${n.title}`}
-                          style={{
-                            display: 'flex', alignItems: 'center', gap: 4, flexShrink: 0,
-                            fontSize: 11, fontWeight: 700, color: 'var(--danger)',
-                            background: 'none', border: 'none', cursor: deletingId === n.id ? 'not-allowed' : 'pointer',
-                            padding: 0, opacity: deletingId === n.id ? 0.5 : 1,
-                          }}
-                        >
-                          <Trash2 size={13} />
-                        </button>
-                      )}
+                  {sendMsg && (
+                    <div style={{ fontSize: 12, color: sendMsg.startsWith('Failed') ? 'var(--danger)' : 'var(--success)' }}>
+                      {sendMsg}
                     </div>
-                    <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 2, opacity: n.deleted ? 0.6 : 1 }}>
-                      {renderFormattedNoticeBody(n.body)}
-                    </div>
-                    <NoticeInsightsPanel
-                      noticeId={n.id}
-                      groupId={groupId}
-                      audienceSize={n.audienceSize}
-                      title={n.title}
-                    />
-                  </div>
-                ))}
+                  )}
+                </form>
               </div>
-            </div>
+
+              {sentNotices.length > 0 && (
+                <div style={{ marginTop: 16 }}>
+                  <div style={{ fontSize: 13, fontWeight: 700, marginBottom: 8 }}>Sent notices</div>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                    {sentNotices.map((n) => (
+                      <div key={n.id} className="card" style={{ padding: '10px 12px' }}>
+                        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 8 }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                            <div style={{ fontWeight: 700, fontSize: 13, color: 'var(--text)' }}>{n.title}</div>
+                            {n.deleted && (
+                              <span style={{
+                                fontSize: 9.5, fontWeight: 700, color: 'var(--danger)', textTransform: 'uppercase',
+                                border: '1px solid var(--danger)', borderRadius: 4, padding: '1px 5px', flexShrink: 0,
+                              }}>
+                                Deleted
+                              </span>
+                            )}
+                          </div>
+                          {!n.deleted && (
+                            <button
+                              type="button"
+                              onClick={() => handleDeleteNotice(n.id)}
+                              disabled={deletingId === n.id}
+                              aria-label={`Delete notice: ${n.title}`}
+                              style={{
+                                display: 'flex', alignItems: 'center', gap: 4, flexShrink: 0,
+                                fontSize: 11, fontWeight: 700, color: 'var(--danger)',
+                                background: 'none', border: 'none', cursor: deletingId === n.id ? 'not-allowed' : 'pointer',
+                                padding: 0, opacity: deletingId === n.id ? 0.5 : 1,
+                              }}
+                            >
+                              <Trash2 size={13} />
+                            </button>
+                          )}
+                        </div>
+                        <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 2, opacity: n.deleted ? 0.6 : 1 }}>
+                          {renderFormattedNoticeBody(n.body)}
+                        </div>
+                        <NoticeInsightsPanel
+                          noticeId={n.id}
+                          groupId={groupId}
+                          audienceSize={n.audienceSize}
+                          title={n.title}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </>
+          )}
+
+          {activeTab === 'notices' && myRole !== 'cr' && myRole !== 'acr' && (
+            <p style={{ color: 'var(--muted)', fontSize: 13 }}>
+              Only CR/ACR can send notices to the class.
+            </p>
           )}
         </>
       )}

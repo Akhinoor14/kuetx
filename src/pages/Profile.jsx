@@ -846,7 +846,7 @@ export default function Profile() {
   }
 
   return (
-    <div className="page-enter page-container" style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+    <div className="page-enter page-container content-page-bg" style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
 
       {/* ── Account Banner — only shown for guest/anonymous accounts.
            Signed-in users already see their name in the hero card below,
@@ -861,7 +861,7 @@ export default function Profile() {
         <div style={{
           padding: '12px 18px', borderRadius: 10, background: '#dcfce7', color: '#166534',
           fontSize: 14, border: '1px solid #bbf7d0', display: 'flex', alignItems: 'center', gap: 10, fontWeight: 600,
-        }}>✓ Profile updated!</div>
+        }}><CheckCircle2 size={16} /> Profile updated!</div>
       )}
 
       {/* ── Hero: minimal — Avatar (top) + Name (below). Same layout on

@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { store } from '../store/store';
-import { BookOpen, ArrowRight, X, Sparkles } from 'lucide-react';
+import { BookOpen, ArrowRight, X, Sparkles, Flame, RefreshCw, GraduationCap, BarChart2, Compass, Moon } from 'lucide-react';
 
 const UPDATES = [
   {
     id: 1,
-    icon: '🔥',
+    icon: Flame,
     tag: 'New',
     tagColor: '#16a34a',
     title: 'Firebase Sync',
@@ -13,7 +13,7 @@ const UPDATES = [
   },
   {
     id: 2,
-    icon: '🔄',
+    icon: RefreshCw,
     tag: 'New',
     tagColor: '#16a34a',
     title: 'Auto Update',
@@ -21,7 +21,7 @@ const UPDATES = [
   },
   {
     id: 3,
-    icon: '🎓',
+    icon: GraduationCap,
     tag: 'Rebuilt',
     tagColor: '#2563eb',
     title: 'Attendance',
@@ -29,7 +29,7 @@ const UPDATES = [
   },
   {
     id: 4,
-    icon: '📊',
+    icon: BarChart2,
     tag: 'Fixed',
     tagColor: '#d97706',
     title: 'Results & GPA',
@@ -37,7 +37,7 @@ const UPDATES = [
   },
   {
     id: 5,
-    icon: '🧭',
+    icon: Compass,
     tag: 'New',
     tagColor: '#16a34a',
     title: 'JR Mode',
@@ -45,7 +45,7 @@ const UPDATES = [
   },
   {
     id: 6,
-    icon: '🌙',
+    icon: Moon,
     tag: 'Fixed',
     tagColor: '#7c3aed',
     title: 'Dark Mode',
@@ -163,13 +163,15 @@ export default function AnnouncementModal({ open: openProp, onClose: onCloseProp
           {/* Update list */}
           <div style={{ flex: 1, overflowY: 'auto', padding: '12px 14px' }}>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 7 }}>
-              {UPDATES.map(u => (
+              {UPDATES.map(u => {
+                const Icon = u.icon;
+                return (
                 <div key={u.id} style={{
                   display: 'flex', gap: 11, padding: '10px 12px',
                   borderRadius: 10, border: '1px solid var(--border)',
                   background: 'var(--surface)', alignItems: 'flex-start',
                 }}>
-                  <div style={{ fontSize: 18, flexShrink: 0, marginTop: 1 }}>{u.icon}</div>
+                  <div style={{ width: 18, flexShrink: 0, marginTop: 1, display: 'flex', justifyContent: 'center' }}><Icon size={16} color="var(--accent)" /></div>
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap', marginBottom: 2 }}>
                       <span style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)' }}>{u.title}</span>
@@ -182,12 +184,13 @@ export default function AnnouncementModal({ open: openProp, onClose: onCloseProp
                     <div style={{ fontSize: 11, color: 'var(--muted)', lineHeight: 1.5 }}>{u.body}</div>
                   </div>
                 </div>
-              ))}
+                );
+              })}
             </div>
 
             {/* Facebook community */}
             <div style={{ marginTop: 10, padding: '11px 13px', borderRadius: 10, border: '1px solid rgba(24,119,242,0.2)', background: 'rgba(24,119,242,0.06)', display: 'flex', alignItems: 'center', gap: 10 }}>
-              <span style={{ fontSize: 18 }}>📘</span>
+              <span style={{ fontSize: 18 }}><BookOpen size={16} color="#1877F2" /></span>
               <div style={{ flex: 1 }}>
                 <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--text)', marginBottom: 1 }}>KUETx Community</div>
                 <div style={{ fontSize: 11, color: 'var(--muted)' }}>Updates, tips, announcements</div>
@@ -207,7 +210,7 @@ export default function AnnouncementModal({ open: openProp, onClose: onCloseProp
           {/* Footer */}
           <div style={{ padding: '11px 14px 14px', borderTop: '1px solid var(--border)', flexShrink: 0 }}>
             <button className="btn btn-primary" onClick={dismiss} style={{ width: '100%', justifyContent: 'center', fontSize: 13 }}>
-              Got it — let's go 🚀
+              Got it — let's go
             </button>
           </div>
 

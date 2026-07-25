@@ -1,9 +1,8 @@
 import { useState } from 'react';
+import { Moon, Clock, Pencil, Check, Flame } from 'lucide-react';
 import { store } from '../store/store';
 
 const PRAYERS = ['Fajr', 'Dhuhr', 'Asr', 'Maghrib', 'Isha'];
-const PRAYER_ICONS = { Fajr: '🌙', Dhuhr: '☀️', Asr: '🌤️', Maghrib: '🌇', Isha: '🌙' };
-const PRAYER_ARABIC = { Fajr: 'Fajr', Dhuhr: 'Dhuhr', Asr: 'Asr', Maghrib: 'Maghrib', Isha: 'Isha' };
 
 const DEFAULT_TIMES = {
   Fajr: '05:10', Dhuhr: '12:30', Asr: '16:00', Maghrib: '18:20', Isha: '19:45'
@@ -19,10 +18,10 @@ export default function Namaz() {
 
   const getRec = (date) => records[date] || {};
 
-  const toggle = (date, prayer, field) => {
+  const toggle = (date, prayer) => {
     const rec = getRec(date);
     const prev = rec[prayer] || {};
-    const updated = { ...records, [date]: { ...rec, [prayer]: { ...prev, [field]: !prev[field] } } };
+    const updated = { ...records, [date]: { ...rec, [prayer]: { ...prev, done: !prev.done } } };
     setRecords(updated); store.set('namaz', updated);
   };
 
@@ -33,7 +32,6 @@ export default function Namaz() {
 
   const rec = getRec(selectedDate);
   const totalToday = PRAYERS.filter(p => rec[p]?.done).length;
-  const totalMasjid = PRAYERS.filter(p => rec[p]?.masjid).length;
   const isToday = selectedDate === today;
 
   const last7 = Array.from({ length: 7 }, (_, i) => {
@@ -48,71 +46,28 @@ export default function Namaz() {
   return (
     <div className="page-enter page-container content-page-bg">
 
-      {/* Hero Header — theme-tinted, matches every other content page */}
-      <div style={{
-        background: 'linear-gradient(135deg, rgba(var(--accentRGB), 0.16) 0%, rgba(var(--accentRGB), 0.06) 60%, var(--surface) 100%)',
-        border: '1px solid rgba(var(--accentRGB), 0.16)',
-        borderRadius: 16,
-        padding: '20px 20px 16px',
-        marginBottom: 16,
-        position: 'relative',
-        overflow: 'hidden',
-      }}>
-        <div style={{
-          position: 'absolute', top: -20, right: -20,
-          width: 120, height: 120, borderRadius: '50%',
-          background: 'rgba(var(--accentRGB), 0.08)',
-        }} />
-        <div style={{
-          position: 'absolute', bottom: -30, left: '40%',
-          width: 100, height: 100, borderRadius: '50%',
-          background: 'rgba(var(--accentRGB), 0.06)',
-        }} />
-        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', position: 'relative' }}>
-          <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12 }}>
-            <div className="content-page-hero-icon" style={{ marginTop: 2 }}>
-              <span style={{ fontSize: 18 }}>🌙</span>
-            </div>
-            <div>
-              <div style={{ fontSize: 11, fontWeight: 600, color: 'var(--accent)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 4 }}>
-                Daily Salah
-              </div>
-              <h1 style={{ fontSize: 20, fontWeight: 800, color: 'var(--text)', margin: 0, lineHeight: 1.1 }}>
-                Namaz Tracker
-              </h1>
-              <p style={{ fontSize: 12, color: 'var(--muted)', margin: '4px 0 0' }}>
-                {isToday ? 'Today\'s prayers' : selectedDate}
-              </p>
-            </div>
-          </div>
-          <div style={{ textAlign: 'right' }}>
-            <div style={{
-              fontSize: 30, fontWeight: 900, color: totalToday === 5 ? 'var(--accent)' : 'var(--text)',
-              lineHeight: 1,
-            }}>{totalToday}<span style={{ fontSize: 16, fontWeight: 600, color: 'var(--muted)' }}>/5</span></div>
-            <div style={{ fontSize: 10, color: 'var(--muted)', marginTop: 2 }}>
-              {totalToday === 5 ? '✓ Alhamdulillah' : `${5 - totalToday} remaining`}
-            </div>
-          </div>
+      {/* Hero — reuses the same shared hero classes every other content
+          page uses (content-page-hero / hero-icon / hero-title /
+          hero-subtitle), instead of a hand-rolled gradient card, so the
+          accent wash reads consistently across pages instead of jumping
+          in hue/intensity page to page. */}
+      <div className="content-page-hero" style={{ marginBottom: 16 }}>
+        <div className="content-page-hero-icon">
+          <Moon size={18} color="var(--accent)" />
         </div>
-
-        {/* Progress bar */}
-        <div style={{ marginTop: 14, height: 4, background: 'rgba(var(--accentRGB), 0.14)', borderRadius: 99, overflow: 'hidden' }}>
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <h1 className="content-page-hero-title">Namaz Tracker</h1>
+          <p className="content-page-hero-subtitle">
+            {isToday ? "Today's prayers" : selectedDate}
+          </p>
+        </div>
+        <div style={{ textAlign: 'right' }}>
           <div style={{
-            height: '100%', borderRadius: 99,
-            width: `${(totalToday / 5) * 100}%`,
-            background: 'var(--accent)',
-            transition: 'width 0.4s ease',
-          }} />
-        </div>
-
-        {/* Stats row */}
-        <div style={{ display: 'flex', gap: 16, marginTop: 12 }}>
-          <div style={{ fontSize: 11, color: 'var(--muted)' }}>
-            🕌 <span style={{ color: 'var(--text)', fontWeight: 700 }}>{totalMasjid}</span> in congregation
-          </div>
-          <div style={{ fontSize: 11, color: 'var(--muted)' }}>
-            🔥 <span style={{ color: 'var(--text)', fontWeight: 700 }}>{totalStreak}</span>/7 full days
+            fontSize: 26, fontWeight: 900, color: totalToday === 5 ? 'var(--accent)' : 'var(--text)',
+            lineHeight: 1,
+          }}>{totalToday}<span style={{ fontSize: 14, fontWeight: 600, color: 'var(--muted)' }}>/5</span></div>
+          <div style={{ fontSize: 10, color: 'var(--muted)', marginTop: 2 }}>
+            {totalToday === 5 ? 'Alhamdulillah' : `${5 - totalToday} left`}
           </div>
         </div>
       </div>
@@ -132,71 +87,56 @@ export default function Namaz() {
         )}
       </div>
 
-      {/* Prayer cards */}
+      {/* Prayer checklist — one clear action per row (tap the row/checkbox
+          to mark done), no separate "Jamaat" tracking and no second
+          button whose purpose wasn't obvious next to "Mark Done". */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 16 }}>
         {PRAYERS.map(prayer => {
-          const r = rec[prayer] || {};
-          const bothDone = r.done && r.masjid;
-          const anyDone = r.done || r.masjid;
+          const done = !!rec[prayer]?.done;
           return (
-            <div key={prayer} style={{
-              background: anyDone ? 'var(--successBg)' : 'var(--card)',
-              border: `1px solid ${anyDone ? 'rgba(22,163,74,0.18)' : 'var(--border)'}`,
-              borderRadius: 12,
-              padding: '12px 14px',
-              transition: 'all 0.2s ease',
-            }}>
-              {/* Top row: icon + name + time */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10 }}>
-                <span style={{ fontSize: 20 }}>{PRAYER_ICONS[prayer]}</span>
-                <div style={{ flex: 1 }}>
-                  <div style={{ fontWeight: 700, fontSize: 14, color: 'var(--text)', lineHeight: 1.1 }}>
-                    {prayer}
-                    <span style={{ fontSize: 11, fontWeight: 400, color: 'var(--muted)', marginLeft: 6 }}>
-                      {PRAYER_ARABIC[prayer]}
-                    </span>
-                  </div>
-                  <div style={{ fontSize: 12, color: 'var(--accent)', fontWeight: 600, marginTop: 1 }}>
-                    🕐 {times[prayer]}
-                  </div>
-                </div>
-                {bothDone && <span style={{ fontSize: 16 }}>✅</span>}
+            <button
+              key={prayer}
+              onClick={() => toggle(selectedDate, prayer)}
+              style={{
+                display: 'flex', alignItems: 'center', gap: 12,
+                background: done ? 'var(--successBg)' : 'var(--card)',
+                border: `1px solid ${done ? 'rgba(22,163,74,0.18)' : 'var(--border)'}`,
+                borderRadius: 12,
+                padding: '12px 14px',
+                cursor: 'pointer',
+                textAlign: 'left',
+                fontFamily: 'Sora, sans-serif',
+                transition: 'all 0.15s ease',
+              }}
+            >
+              <div style={{
+                width: 22, height: 22, borderRadius: 6, flexShrink: 0,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                background: done ? 'var(--success)' : 'var(--inputBg)',
+                border: `1.5px solid ${done ? 'var(--success)' : 'var(--border)'}`,
+              }}>
+                {done && <Check size={14} color="#fff" strokeWidth={3} />}
               </div>
 
-              {/* Bottom row: buttons */}
-              <div style={{ display: 'flex', gap: 8 }}>
-                <button
-                  onClick={() => toggle(selectedDate, prayer, 'masjid')}
-                  style={{
-                    flex: 1, padding: '7px 10px', borderRadius: 8, fontSize: 12,
-                    fontWeight: 600, cursor: 'pointer', fontFamily: 'Sora, sans-serif',
-                    background: r.masjid ? 'var(--accent)' : 'var(--inputBg)',
-                    color: r.masjid ? '#fff' : 'var(--muted)',
-                    border: `1.5px solid ${r.masjid ? 'var(--accent)' : 'var(--border)'}`,
-                    transition: 'all 0.15s ease',
-                  }}
-                >🕌 Congregation</button>
-                <button
-                  onClick={() => toggle(selectedDate, prayer, 'done')}
-                  style={{
-                    flex: 1, padding: '7px 10px', borderRadius: 8, fontSize: 12,
-                    fontWeight: 600, cursor: 'pointer', fontFamily: 'Sora, sans-serif',
-                    background: r.done ? 'var(--success)' : 'var(--inputBg)',
-                    color: r.done ? '#fff' : 'var(--muted)',
-                    border: `1.5px solid ${r.done ? 'var(--success)' : 'var(--border)'}`,
-                    transition: 'all 0.15s ease',
-                  }}
-                >{r.done ? '✓ Done' : 'Mark Done'}</button>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div style={{ fontWeight: 700, fontSize: 14, color: 'var(--text)', lineHeight: 1.1 }}>
+                  {prayer}
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 12, color: 'var(--muted)', marginTop: 2 }}>
+                  <Clock size={11} />
+                  {times[prayer]}
+                </div>
               </div>
-            </div>
+            </button>
           );
         })}
       </div>
 
       {/* 7-day streak */}
       <div className="card" style={{ marginBottom: 14 }}>
-        <div style={{ fontSize: 13, fontWeight: 700, marginBottom: 12, color: 'var(--text)' }}>
-          Last 7 Days
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 13, fontWeight: 700, marginBottom: 12, color: 'var(--text)' }}>
+          <Flame size={14} color="var(--muted)" />
+          Last 7 Days · {totalStreak}/7 full days
         </div>
         <div style={{ display: 'flex', gap: 4, justifyContent: 'space-between' }}>
           {last7.map(d => (
@@ -215,15 +155,15 @@ export default function Namaz() {
         </div>
       </div>
 
-      {/* Jamat Times — view */}
+      {/* Prayer Times — view */}
       <div className="card">
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
-          <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)' }}>Congregation Times</div>
+          <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)' }}>Prayer Times</div>
           <button
             className="btn btn-ghost btn-sm"
-            style={{ fontSize: 11, padding: '4px 10px' }}
+            style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 11, padding: '4px 10px' }}
             onClick={openEdit}
-          >✏️ Edit</button>
+          ><Pencil size={11} /> Edit</button>
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
           {PRAYERS.map(p => (
@@ -231,11 +171,7 @@ export default function Namaz() {
               display: 'flex', alignItems: 'center', justifyContent: 'space-between',
               padding: '8px 10px', borderRadius: 8, background: 'var(--inputBg)',
             }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                <span style={{ fontSize: 15 }}>{PRAYER_ICONS[p]}</span>
-                <span style={{ fontSize: 13, fontWeight: 600, color: 'var(--text)' }}>{p}</span>
-                <span style={{ fontSize: 11, color: 'var(--muted)' }}>{PRAYER_ARABIC[p]}</span>
-              </div>
+              <span style={{ fontSize: 13, fontWeight: 600, color: 'var(--text)' }}>{p}</span>
               <span style={{ fontSize: 14, fontWeight: 700, color: 'var(--accent)', fontVariantNumeric: 'tabular-nums' }}>
                 {times[p]}
               </span>
@@ -263,7 +199,7 @@ export default function Namaz() {
           >
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
               <div>
-                <div style={{ fontSize: 16, fontWeight: 800, color: 'var(--text)' }}>Congregation Times</div>
+                <div style={{ fontSize: 16, fontWeight: 800, color: 'var(--text)' }}>Prayer Times</div>
                 <div style={{ fontSize: 12, color: 'var(--muted)' }}>Update prayer times</div>
               </div>
               <button
@@ -279,10 +215,8 @@ export default function Namaz() {
                   background: 'var(--inputBg)', borderRadius: 10, padding: '10px 14px',
                   border: '1px solid var(--border)',
                 }}>
-                  <span style={{ fontSize: 18, marginRight: 10 }}>{PRAYER_ICONS[p]}</span>
                   <div style={{ flex: 1 }}>
                     <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)' }}>{p}</div>
-                    <div style={{ fontSize: 11, color: 'var(--muted)' }}>{PRAYER_ARABIC[p]}</div>
                   </div>
                   <input
                     type="time"
@@ -302,7 +236,7 @@ export default function Namaz() {
               <button
                 onClick={saveEdit}
                 style={{ flex: 2, padding: '11px', borderRadius: 10, border: 'none', background: 'var(--accent)', color: '#fff', fontWeight: 700, fontSize: 13, cursor: 'pointer', fontFamily: 'Sora, sans-serif' }}
-              >✓ Save Times</button>
+              >Save Times</button>
             </div>
           </div>
         </div>

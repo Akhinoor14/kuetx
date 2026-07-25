@@ -192,7 +192,7 @@ export default function QuestionBank() {
   }
 
   return (
-    <div className="content-page-bg" style={styles.page}>
+    <div className="page-enter content-page-bg" style={styles.page}>
       <div style={styles.header}>
         {screen !== 'depts' && (
           <button style={styles.backBtn} onClick={goBack}>
@@ -200,8 +200,8 @@ export default function QuestionBank() {
           </button>
         )}
         <div style={styles.headerTitleWrap}>
-          <div className="content-page-hero-icon" style={{ width: 34, height: 34 }}>
-            <BookOpen size={17} color="var(--accent)" />
+          <div className="content-page-hero-icon" style={{ width: 40, height: 40 }}>
+            <BookOpen size={18} color="var(--accent)" />
           </div>
           <h1 style={styles.headerTitle}>
             {screen === 'depts' && 'Question Bank'}
@@ -405,7 +405,7 @@ export default function QuestionBank() {
 const styles = {
   page: {
     width: '100%',
-    padding: '16px',
+    padding: '20px',
     minHeight: '100vh',
     color: 'var(--text)',
   },
@@ -436,7 +436,7 @@ const styles = {
     minWidth: 0,
   },
   headerTitle: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: 800,
     letterSpacing: '-0.02em',
     color: 'var(--text)',

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, Users, MessageCircle, ArrowRight, ClipboardList, CheckCircle2 } from 'lucide-react';
+import { X, Users, MessageCircle, ArrowRight, ClipboardList, CheckCircle2, CalendarCheck, FileText, Megaphone } from 'lucide-react';
 import campusLeadPoster from '../assets/campus_Lead_KUETx_Individual_Hiring_Posters.jpg';
 
 const WHATSAPP_NUMBER = '8801724812042'; // 01724812042 in intl format
@@ -11,10 +11,10 @@ function buildWhatsappLink() {
 }
 
 const COMMUNITY_POINTS = [
-  { icon: '📅', title: 'Shared routine', body: 'Everyone in your batch and department will see the same routine and updates.' },
-  { icon: '📝', title: 'Shared assignments', body: 'When one person updates it, the whole class can see it immediately, including who updated it and when.' },
-  { icon: '📣', title: 'Notice Broadcast', body: 'Urgent notices from CR or Campus Lead will reach your class group directly.' },
-  { icon: '🤝', title: 'Class Community', body: 'Stay connected with everyone in your batch and department in one place.' },
+  { icon: CalendarCheck, title: 'Shared routine', body: 'Everyone in your batch and department will see the same routine and updates.' },
+  { icon: FileText, title: 'Shared assignments', body: 'When one person updates it, the whole class can see it immediately, including who updated it and when.' },
+  { icon: Megaphone, title: 'Notice Broadcast', body: 'Urgent notices from CR or Campus Lead will reach your class group directly.' },
+  { icon: Users, title: 'Class Community', body: 'Stay connected with everyone in your batch and department in one place.' },
 ];
 
 export default function CommunityHiringModal({ open: openProp, onClose } = {}) {
@@ -61,7 +61,7 @@ export default function CommunityHiringModal({ open: openProp, onClose } = {}) {
                   </span>
                 </div>
                 <div style={{ fontSize: 21, fontWeight: 800, color: '#fff', fontFamily: 'Sora, sans-serif', marginBottom: 4 }}>
-                  Class Community is coming! 🎉
+                  Class Community is coming!
                 </div>
                 <div style={{ fontSize: 12.5, color: 'rgba(255,255,255,0.75)', lineHeight: 1.5 }}>
                   Everyone in your batch and department will now stay connected in one place.
@@ -71,19 +71,22 @@ export default function CommunityHiringModal({ open: openProp, onClose } = {}) {
               {/* Points */}
               <div style={{ flex: 1, overflowY: 'auto', padding: '16px 16px 6px' }}>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-                  {COMMUNITY_POINTS.map((p, i) => (
+                  {COMMUNITY_POINTS.map((p, i) => {
+                    const Icon = p.icon;
+                    return (
                     <div key={i} style={{
                       display: 'flex', gap: 11, padding: '11px 12px',
                       borderRadius: 12, border: '1px solid var(--border)',
                       background: 'var(--surface)', alignItems: 'flex-start',
                     }}>
-                      <div style={{ fontSize: 19, flexShrink: 0, marginTop: 1 }}>{p.icon}</div>
+                      <div style={{ width: 19, flexShrink: 0, marginTop: 1, display: 'flex', justifyContent: 'center' }}><Icon size={17} color="var(--accent)" /></div>
                       <div style={{ flex: 1, minWidth: 0 }}>
                         <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', marginBottom: 2 }}>{p.title}</div>
                         <div style={{ fontSize: 11.5, color: 'var(--muted)', lineHeight: 1.5 }}>{p.body}</div>
                       </div>
                     </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
 
@@ -116,7 +119,7 @@ export default function CommunityHiringModal({ open: openProp, onClose } = {}) {
                   </span>
                 </div>
                   <div style={{ fontSize: 20, fontWeight: 800, color: '#fff', fontFamily: 'Sora, sans-serif' }}>
-                  Want to be a Campus Lead? 🚀
+                  Want to be a Campus Lead?
                 </div>
               </div>
 

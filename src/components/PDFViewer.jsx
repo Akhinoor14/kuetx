@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect, useCallback, useMemo } from "react";
+import { FileText, Search, Microscope } from "lucide-react";
 
 // ─── CONFIG ──────────────────────────────────────────────────────────────────
 const IMGBB_KEYS = [
@@ -1214,7 +1215,7 @@ export default function PDFViewer({ initialUrl, initialName, onTextExtracted, on
       } catch {}
 
       setLoadPct(100);
-      toast(`✓ Opened: ${name}`, "ok", 2500);
+      toast(`Opened: ${name}`, "ok", 2500);
     } catch (e) {
       toast("Cannot open PDF: " + e.message, "err", 5000);
     }
@@ -1342,12 +1343,12 @@ export default function PDFViewer({ initialUrl, initialName, onTextExtracted, on
       setOcrPages(prev => {
         const n = [...prev]; n[idx] = { ...n[idx], status: "ready", remoteUrl: url }; return n;
       });
-      toast(`☁ Page ${idx + 1} uploaded`, "ok", 2000);
+      toast(`Page ${idx + 1} uploaded`, "ok", 2000);
     } catch (e) {
       setOcrPages(prev => {
         const n = [...prev]; n[idx] = { ...n[idx], status: "error" }; return n;
       });
-      toast(`✗ Page ${idx + 1}: ${e.message}`, "err", 4000);
+      toast(`Page ${idx + 1}: ${e.message}`, "err", 4000);
     }
   }, [ocrPages, toast]);
 
@@ -1363,7 +1364,7 @@ export default function PDFViewer({ initialUrl, initialName, onTextExtracted, on
       await uploadPage(i);
     }
     setUploadProg({ show: false, pct: 0, label: "" });
-    toast("✓ All pages uploaded! Open Google Lens for each.", "ok", 4000);
+    toast("All pages uploaded! Open Google Lens for each.", "ok", 4000);
   }, [pdfDoc, ocrPages, uploadPage, toast]);
 
   // ── OCR: Open Lens ──
@@ -1373,7 +1374,7 @@ export default function PDFViewer({ initialUrl, initialName, onTextExtracted, on
     const url = `https://lens.google.com/uploadbyurl?url=${encodeURIComponent(pg.remoteUrl)}`;
     const w = window.open(url, `lens_pg${idx}`, "width=1200,height=860,scrollbars=yes,toolbar=yes");
     if (!w) toast("Popup blocked — please allow popups", "err", 5000);
-    else toast(`🔍 Page ${idx + 1} opened in Google Lens`, "ok", 2500);
+    else toast(`Page ${idx + 1} opened in Google Lens`, "ok", 2500);
   }, [ocrPages, toast]);
 
   // ── OCR: Open in Textriva ──
@@ -1611,7 +1612,7 @@ export default function PDFViewer({ initialUrl, initialName, onTextExtracted, on
               title="OCR mode"
               aria-label="OCR mode"
             >
-              OCR {donePgs > 0 ? `(${donePgs}✓)` : ""}
+              OCR {donePgs > 0 ? `(${donePgs} done)` : ""}
             </button>
           </div>
         </div>
@@ -1722,7 +1723,7 @@ export default function PDFViewer({ initialUrl, initialName, onTextExtracted, on
           {!pdfDoc && !loading && (
             <div className="drop-zone">
               <div className={`drop-inner ${drag ? "drag" : ""}`} onClick={() => fileInputRef.current?.click()}>
-                <div className="drop-emoji">📄</div>
+                <div className="drop-emoji"><FileText size={28} color="var(--muted)" /></div>
                 <div className="drop-title">Open a PDF</div>
                 <div className="drop-sub">Drag & drop your PDF here<br />or click to browse files</div>
                 <button className="drop-btn" onClick={e => { e.stopPropagation(); fileInputRef.current?.click(); }}>
@@ -1754,7 +1755,7 @@ export default function PDFViewer({ initialUrl, initialName, onTextExtracted, on
                     }} />
                     {ocrPg && ["ready", "done", "uploading"].includes(ocrPg.status) && (
                       <div className={`page-ocr-badge ${ocrPg.status}`}>
-                        {ocrPg.status === "done" ? "OCR ✓" : ocrPg.status === "ready" ? "Uploaded" : "↑ …"}
+                        {ocrPg.status === "done" ? "OCR done" : ocrPg.status === "ready" ? "Uploaded" : "Uploading…"}
                       </div>
                     )}
                     <div className="page-lbl">
@@ -1818,7 +1819,7 @@ export default function PDFViewer({ initialUrl, initialName, onTextExtracted, on
 
           {/* Textriva redirect button */}
           <div className="textriva-btn" onClick={openInTextriva}>
-            <div className="textriva-btn-icon">🔬</div>
+            <div className="textriva-btn-icon"><Microscope size={20} color="var(--accent)" /></div>
             <div className="textriva-btn-content">
               <div className="textriva-btn-title">Open in Textriva</div>
               <div className="textriva-btn-sub">Advanced OCR workspace — auto-uploads current page</div>
@@ -1831,7 +1832,7 @@ export default function PDFViewer({ initialUrl, initialName, onTextExtracted, on
             {!pdfDoc && (
               <>
                 <div className="ocr-empty">
-                  <div className="ocr-empty-icon">🔍</div>
+                  <div className="ocr-empty-icon"><Search size={28} color="var(--muted)" /></div>
                   Open a PDF to start OCR workflow
                 </div>
                 <div className="ocr-workflow-steps">
@@ -1839,7 +1840,7 @@ export default function PDFViewer({ initialUrl, initialName, onTextExtracted, on
                   {[
                     ["1", "Open a PDF file above"],
                     ["2", "Click Upload All to send pages to cloud"],
-                    ["3", "Click 🔍 Open in Google Lens for each page"],
+                    ["3", "Click Open in Google Lens for each page"],
                     ["4", "Copy text from Lens and paste here"],
                     ["5", "Save each page, then Export all text"],
                   ].map(([n, t]) => (
@@ -1862,7 +1863,7 @@ export default function PDFViewer({ initialUrl, initialName, onTextExtracted, on
                     {pg.status === "pending" ? "Pending"
                       : pg.status === "uploading" ? "Uploading…"
                         : pg.status === "ready" ? "Uploaded"
-                          : pg.status === "done" ? "Done ✓"
+                          : pg.status === "done" ? "Done"
                             : "Error"}
                   </span>
                   <span className="ocr-card-go" onClick={() => goToPage(pg.pageNum)}>→ Go</span>
@@ -1872,7 +1873,7 @@ export default function PDFViewer({ initialUrl, initialName, onTextExtracted, on
                 <button className={`lens-btn ${pg.status === "done" ? "done" : pg.status === "ready" ? "active" : ""}`}
                   disabled={pg.status !== "ready" && pg.status !== "done"}
                   onClick={() => openLens(idx)}>
-                  {pg.status === "done" ? "✓ Done — Open Lens Again" : "🔍 Open in Google Lens"}
+                  {pg.status === "done" ? "Done — Open Lens Again" : "Open in Google Lens"}
                 </button>
 
                 {/* Text area */}
@@ -1984,7 +1985,7 @@ export default function PDFViewer({ initialUrl, initialName, onTextExtracted, on
         )}
         {searchResults.length > 0 && (
           <div className="status-item">
-            <span>🔍 {searchResults.length} results</span>
+            <span style={{ display: "inline-flex", alignItems: "center", gap: 4 }}><Search size={12} />{searchResults.length} results</span>
           </div>
         )}
         <div className="status-item" style={{ marginLeft: "auto" }}>

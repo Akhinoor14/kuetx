@@ -61,7 +61,7 @@ function LegacyCGPACalc() {
 
   return (
     <div>
-      <div style={{ fontSize: 14, fontWeight: 700, marginBottom: 4 }}>📚 Legacy CGPA Import & Future Planner</div>
+      <div style={{ fontSize: 14, fontWeight: 700, marginBottom: 4 }}>Legacy CGPA Import & Future Planner</div>
       <p style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 14 }}>
         Enter your previous semesters' GPA to see the maximum CGPA you can still reach.
         KUET has 4 years × 2 terms = 8 semesters.
@@ -126,7 +126,7 @@ function LegacyCGPACalc() {
 
       {/* Target planner */}
       <div className="card" style={{ borderColor: 'var(--accent)' }}>
-        <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 10 }}>🎯 Target CGPA Planner</div>
+        <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 10 }}>Target CGPA Planner</div>
         <div style={{ display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap' }}>
           <div style={{ flex: 1 }}>
             <label>My target CGPA</label>
@@ -136,11 +136,11 @@ function LegacyCGPACalc() {
             {neededGPAs !== null ? (
               neededGPAs > 4.00 ? (
                 <div style={{ padding: '10px 14px', background: '#fee2e2', borderRadius: 8, fontSize: 13, color: 'var(--danger)' }}>
-                  ❌ This CGPA is no longer possible. Max achievable: {maxAchievable.toFixed(2)}
+                  This CGPA is no longer possible. Max achievable: {maxAchievable.toFixed(2)}
                 </div>
               ) : neededGPAs < 0 ? (
                 <div style={{ padding: '10px 14px', background: '#dcfce7', borderRadius: 8, fontSize: 13, color: 'var(--success)' }}>
-                  ✅ You have already reached your target!
+                  You have already reached your target!
                 </div>
               ) : (
                 <div style={{ padding: '10px 14px', background: 'var(--bg)', borderRadius: 8, fontSize: 13 }}>
@@ -190,7 +190,7 @@ function FinalNeededCalc() {
 
   return (
     <div>
-      <div style={{ fontSize: 14, fontWeight: 700, marginBottom: 4 }}>📝 What do I need in the final?</div>
+      <div style={{ fontSize: 14, fontWeight: 700, marginBottom: 4 }}>What do I need in the final?</div>
       <p style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 14 }}>
         Theory courses total 300: Hall 210 + Continuous 90. This shows the minimum hall exam score needed for your target grade.
       </p>
@@ -264,10 +264,10 @@ function FinalNeededCalc() {
         </div>
         {neededHall > 210 ? (
           <div style={{ color: 'var(--danger)', fontWeight: 700, fontSize: 18 }}>
-            ❌ {targetGrade} is no longer possible — you would need {neededHall.toFixed(1)}/210 in the hall exam
+            {targetGrade} is no longer possible — you would need {neededHall.toFixed(1)}/210 in the hall exam
           </div>
         ) : neededHall <= 0 ? (
-          <div style={{ color: 'var(--success)', fontWeight: 700, fontSize: 18 }}>✅ Already secured {targetGrade}!</div>
+          <div style={{ color: 'var(--success)', fontWeight: 700, fontSize: 18 }}>Already secured {targetGrade}!</div>
         ) : (
           <div>
             <span style={{ fontSize: 12, color: 'var(--muted)' }}>Minimum needed in the hall exam: </span>
@@ -304,7 +304,7 @@ function WhatIfCalc() {
 
   return (
     <div>
-      <div style={{ fontSize: 14, fontWeight: 700, marginBottom: 4 }}>🔮 What If? Semester Simulator</div>
+      <div style={{ fontSize: 14, fontWeight: 700, marginBottom: 4 }}>What If? Semester Simulator</div>
       <p style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 14 }}>Simulate what GPA you would get if you earned each grade in this semester.</p>
       {activeCourses.length === 0 && <p style={{ color: 'var(--muted)', fontSize: 13 }}>No active courses.</p>}
       <div style={{ display: 'flex', flexDirection: 'column', gap: 6, marginBottom: 12 }}>
@@ -347,7 +347,7 @@ function DeadlineCalc() {
 
   return (
     <div>
-      <div style={{ fontSize: 14, fontWeight: 700, marginBottom: 4 }}>📅 Registration Deadline Calculator</div>
+      <div style={{ fontSize: 14, fontWeight: 700, marginBottom: 4 }}>Registration Deadline Calculator</div>
       <p style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 14 }}>Enter the term start date to calculate all deadlines.</p>
       <div style={{ marginBottom: 12 }}>
         <label>Term Start Date</label>
@@ -365,23 +365,23 @@ function DeadlineCalc() {
 
 // ─── Main Calculators Page ─────────────────────────────────────────────────
 const CALC_TABS = [
-  { id: 'legacy', label: '📚 Legacy CGPA', comp: LegacyCGPACalc },
-  { id: 'final', label: '📝 Final Needed', comp: FinalNeededCalc },
-  { id: 'whatif', label: '🔮 What If?', comp: WhatIfCalc },
-  { id: 'deadline', label: '📅 Deadlines', comp: DeadlineCalc },
+  { id: 'legacy', label: 'Legacy CGPA', comp: LegacyCGPACalc },
+  { id: 'final', label: 'Final Needed', comp: FinalNeededCalc },
+  { id: 'whatif', label: 'What If?', comp: WhatIfCalc },
+  { id: 'deadline', label: 'Deadlines', comp: DeadlineCalc },
 ];
 
 export default function Calculators() {
   return (
     <div className="page-enter page-container content-page-bg">
-      <div className="hero-banner" style={{ marginBottom: 16 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <div className="content-page-hero-icon">
-            <Calculator size={18} color="var(--accent)" />
-          </div>
-          <h1 style={{ fontSize: 18, fontWeight: 700, margin: 0 }}>Smart Calculators</h1>
+      <div className="content-page-hero" style={{ marginBottom: 16 }}>
+        <div className="content-page-hero-icon">
+          <Calculator size={18} color="var(--accent)" />
         </div>
-        <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 8 }}>Moved into Term Planner</p>
+        <div>
+          <h1 className="content-page-hero-title">Smart Calculators</h1>
+          <p className="content-page-hero-subtitle">Moved into Term Planner</p>
+        </div>
       </div>
 
       <div className="card">

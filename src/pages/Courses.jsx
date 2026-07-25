@@ -1,5 +1,5 @@
 ﻿import { useMemo, useState, useRef, useEffect } from 'react';
-import { Plus, Trash2, X, Check, BookOpen } from 'lucide-react';
+import { Plus, Trash2, X, Check, BookOpen, Pencil } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { COURSE_STATUSES, COURSE_TYPES, getCustomCourses, getProfile, getTermLabelFromKey, setCourseOverride, setCustomCourses, uid, store } from '../store/store';
 import { getAllCourses, getDeptOptionalCourses, setOptionalSelection } from '../store/curriculumStore';
@@ -218,7 +218,7 @@ function CustomCourseForm({ initial, onSave, onCancel }) {
       
       {/* Chapters/Syllabus */}
       <div style={{ marginTop: 16, paddingTop: 12, borderTop: '1px solid var(--border)' }}>
-        <label style={{ fontWeight: 600, fontSize: 13 }}>📚 Course Syllabus (Optional)</label>
+        <label style={{ fontWeight: 600, fontSize: 13 }}>Course Syllabus (Optional)</label>
         <p style={{ fontSize: 11, color: 'var(--muted)', marginTop: 4, marginBottom: 10 }}>Organize your course into chapters with sub-topics</p>
         
         {/* Add Chapter */}
@@ -720,7 +720,7 @@ export default function Courses() {
                         <span className="tag tag-gray" style={CHIP_STYLE}>{c.credits} cr</span>
                       </div>
                     </div>
-                    <button className="btn btn-ghost btn-sm" onClick={() => setEditingCustom(c.id)} title="Edit">✎</button>
+                    <button className="btn btn-ghost btn-sm" onClick={() => setEditingCustom(c.id)} title="Edit"><Pencil size={14} color="var(--muted)" /></button>
                     <button className="btn btn-ghost btn-sm" onClick={() => setDeleteTarget(c.id)} title="Delete"><Trash2 size={14} color="var(--danger)" /></button>
                   </div>
                 )}
@@ -756,7 +756,7 @@ export default function Courses() {
 
       {courses.length === 0 && !addingCustom && (
         <div className="empty-state">
-          <div className="icon">📚</div>
+          <div className="icon"><BookOpen size={28} color="var(--muted)" /></div>
           <p style={{ marginBottom: 16 }}>Select department and term in Profile to load courses.</p>
         </div>
       )}

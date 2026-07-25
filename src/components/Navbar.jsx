@@ -1,4 +1,4 @@
-import { Sun, Moon, Droplets, Bell, Download, ChevronRight, BookOpen, CloudOff, Cloud, LogOut, User, Settings, ExternalLink, X, Menu, RefreshCw } from 'lucide-react';
+import { Sun, Moon, Droplets, Bell, Download, ChevronRight, BookOpen, CloudOff, Cloud, LogOut, User, Settings, ExternalLink, X, Menu, RefreshCw, Save } from 'lucide-react';
 import { useEffect, useMemo, useState, useRef } from 'react';
 import { useTheme, THEMES } from '../hooks/useTheme';
 import { useLocation, Link } from 'react-router-dom';
@@ -94,7 +94,6 @@ export function Navbar({ onMenuClick }) {
   };
 
   const ThemeIcon = themeId === 'dark' ? Moon : themeId === 'milky' ? Droplets : Sun;
-  const themeLabels = { light: '☀️ Light', milky: '🥛 Milky', dark: '🌙 Dark' };
 
   const profileForNotices = useMemo(() => getProfile() || {}, [refreshTick]);
   const groupId = useMemo(() => getGroupId(profileForNotices), [profileForNotices]);
@@ -206,8 +205,8 @@ export function Navbar({ onMenuClick }) {
             Sidebar already shows which group/subgroup is active, so we
             don't repeat the group name here — just the current page tabs,
             centered in the bar. */}
-        <div className="hidden md:flex" style={{ position: 'absolute', left: 0, right: 0, justifyContent: 'center', pointerEvents: 'none' }}>
-          <div style={{ pointerEvents: 'auto', minWidth: 0, maxWidth: 'min(70vw, 640px)' }}>
+        <div className="hidden md:flex" style={{ position: 'absolute', left: 96, right: 160, justifyContent: 'center', pointerEvents: 'none' }}>
+          <div style={{ pointerEvents: 'auto', minWidth: 0, maxWidth: '100%' }}>
             {siblings && siblings.length > 1 ? (
               <div className="filter-tab-row topbar-tabs" style={{ marginBottom: 0, justifyContent: 'center' }}>
                 {siblings.map(item => (
@@ -217,7 +216,7 @@ export function Navbar({ onMenuClick }) {
                     className={`filter-tab ${location.pathname === item.path ? 'active' : ''}`}
                     style={{ textDecoration: 'none' }}
                   >
-                    {item.label}
+                    {item.shortLabel || item.label}
                   </Link>
                 ))}
               </div>
@@ -551,7 +550,7 @@ export function Navbar({ onMenuClick }) {
                         transition: 'all 0.15s',
                       }}
                     >
-                      {t.id === 'light' ? '☀️' : t.id === 'milky' ? '🥛' : '🌙'}
+                      {t.id === 'light' ? <Sun size={16} /> : t.id === 'milky' ? <Droplets size={16} /> : <Moon size={16} />}
                       <div style={{ fontSize: 10, marginTop: 2 }}>{t.label}</div>
                     </button>
                   ))}
@@ -611,7 +610,7 @@ export function Navbar({ onMenuClick }) {
                 border: '1px solid color-mix(in srgb, var(--success) 20%, var(--border))',
                 fontSize: 11, color: 'var(--muted)', lineHeight: 1.6,
               }}>
-                💾 Data is always <strong style={{ color: 'var(--text)' }}>locally safe</strong> — it works without internet.
+                <Save size={12} style={{ display: 'inline', verticalAlign: -1, marginRight: 3 }} /> Data is always <strong style={{ color: 'var(--text)' }}>locally safe</strong> — it works without internet.
                 {!isAnon && <span style={{ color: 'var(--success)' }}> Firestore real-time backup is on.</span>}
               </div>
 

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Plus, Trash2, Check } from 'lucide-react';
+import { Plus, Trash2, Check, ClipboardList, CalendarClock, Bell, PartyPopper, ListTodo, Clock3, GraduationCap, BookOpen, Hourglass } from 'lucide-react';
 import { store, uid, getProfile, getCurrentTermKey } from '../store/store';
 import { getAllCourses } from '../store/curriculumStore';
 import CourseTeacherDialog from '../components/CourseTeacherDialog';
@@ -192,20 +192,27 @@ export default function Assignments() {
       <div className="assignments-hero">
         <div className="page-container assignments-hero-inner">
           <div className="assignments-hero-copy">
-            <div className="assignments-kicker">Academic planner</div>
-            <h1 className="assignments-title">Assignments</h1>
+            <div className="content-page-hero" style={{ marginBottom: 8 }}>
+              <div className="content-page-hero-icon">
+                <ClipboardList size={18} color="var(--accent)" />
+              </div>
+              <div>
+                <div className="assignments-kicker">Academic planner</div>
+                <h1 className="content-page-hero-title" style={{ fontSize: 24 }}>Assignments</h1>
+              </div>
+            </div>
             <p className="assignments-subtitle">Track coursework, deadlines, and completion status in one clean view.</p>
 
             <div className="assignments-stats">
               <div className="assignments-stat assignments-stat-pending">
-                <span className="assignments-stat-icon">📋</span>
+                <span className="assignments-stat-icon"><ClipboardList size={18} /></span>
                 <div>
                   <div className="assignments-stat-label">Pending</div>
                   <div className="assignments-stat-value">{pendingCount}</div>
                 </div>
               </div>
               <div className="assignments-stat assignments-stat-done">
-                <span className="assignments-stat-icon">✓</span>
+                <span className="assignments-stat-icon"><Check size={18} /></span>
                 <div>
                   <div className="assignments-stat-label">Completed</div>
                   <div className="assignments-stat-value">{doneCount}</div>
@@ -229,7 +236,7 @@ export default function Assignments() {
           <div className="card" style={{ marginBottom: 20, borderColor: 'var(--accent)', borderWidth: 2, boxShadow: '0 4px 16px rgba(22,163,74,0.1)' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 10, marginBottom: 18 }}>
               <div style={{ fontWeight: 700, fontSize: 16, display: 'flex', alignItems: 'center', gap: 8 }}>
-                <span style={{ fontSize: 20 }}>➕</span>
+                <Plus size={20} />
                 Add New Assignment
               </div>
               <button className="btn btn-ghost" onClick={() => { setAdding(false); setForm({ courseId: '', teacherName: '', titles: [''], title: '', desc: '', due: '', status: 'pending', priority: 'medium' }); }} style={{ padding: '7px 12px', fontSize: 12, fontWeight: 600 }}>Cancel</button>
@@ -304,7 +311,7 @@ export default function Assignments() {
               transition: 'all 0.25s ease',
               boxShadow: filter === f ? '0 4px 12px rgba(22,163,74,0.25)' : 'none',
             }}>
-              {f === 'all' ? '📋 All' : f === 'pending' ? '⏳ Pending' : '✅ Done'}
+              {f === 'all' ? 'All' : f === 'pending' ? 'Pending' : 'Done'}
             </button>
           ))}
         </div>
@@ -330,12 +337,12 @@ export default function Assignments() {
             // Due date indicator
             let dueBadgeText = '';
             let dueBadgeColor = '';
-            if (overdue) { dueBadgeText = '⚠️ Overdue'; dueBadgeColor = '#dc2626'; }
-            else if (daysLeft === 0) { dueBadgeText = '🔔 Due today'; dueBadgeColor = '#ea580c'; }
-            else if (daysLeft === 1) { dueBadgeText = '⏰ Due tomorrow'; dueBadgeColor = '#ea580c'; }
-            else if (daysLeft <= 3) { dueBadgeText = `⏳ ${daysLeft} days left`; dueBadgeColor = '#f59e0b'; }
-            else if (daysLeft <= 7) { dueBadgeText = `📅 ${daysLeft} days left`; dueBadgeColor = '#10b981'; }
-            else { dueBadgeText = `📆 ${a.due}`; dueBadgeColor = 'var(--muted)'; }
+            if (overdue) { dueBadgeText = 'Overdue'; dueBadgeColor = '#dc2626'; }
+            else if (daysLeft === 0) { dueBadgeText = 'Due today'; dueBadgeColor = '#ea580c'; }
+            else if (daysLeft === 1) { dueBadgeText = 'Due tomorrow'; dueBadgeColor = '#ea580c'; }
+            else if (daysLeft <= 3) { dueBadgeText = `${daysLeft} days left`; dueBadgeColor = '#f59e0b'; }
+            else if (daysLeft <= 7) { dueBadgeText = `${daysLeft} days left`; dueBadgeColor = '#10b981'; }
+            else { dueBadgeText = `${a.due}`; dueBadgeColor = 'var(--muted)'; }
             
             return (
               <div key={a.id} style={{
@@ -402,7 +409,7 @@ export default function Assignments() {
 
                     {/* Teacher Label */}
                     <span style={{ color: 'var(--muted)', display: 'flex', alignItems: 'center', gap: 5, fontSize: 12 }}>
-                      👨‍🏫 {teacherLabel}
+                      <GraduationCap size={13} /> {teacherLabel}
                     </span>
 
                     {/* Due Date Badge */}
@@ -432,9 +439,11 @@ export default function Assignments() {
         {/* Empty State */}
         {filtered.length === 0 && !adding && (
           <div style={{ padding: 60, textAlign: 'center', color: 'var(--muted)' }}>
-            <div style={{ fontSize: 48, marginBottom: 14 }}>{filter === 'done' ? '✅' : filter === 'pending' ? '⏳' : '📚'}</div>
+            <div style={{ marginBottom: 14, display: 'flex', justifyContent: 'center' }}>
+              {filter === 'done' ? <Check size={40} /> : filter === 'pending' ? <Hourglass size={40} /> : <BookOpen size={40} />}
+            </div>
             <p style={{ fontSize: 15, fontWeight: 700, marginBottom: 6, color: 'var(--text)' }}>
-              {filter === 'done' ? 'No completed assignments yet' : filter === 'pending' ? 'All assignments done! 🎉' : 'No assignments yet'}
+              {filter === 'done' ? 'No completed assignments yet' : filter === 'pending' ? 'All assignments done!' : 'No assignments yet'}
             </p>
             <p style={{ fontSize: 13, color: 'var(--muted)' }}>
               {filter !== 'all' && `Try viewing "${['all', 'pending', 'done'][['all', 'pending', 'done'].indexOf(filter)]}" tab`}

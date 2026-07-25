@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { FolderOpen } from 'lucide-react';
+import { FolderOpen, Paperclip, Link2 } from 'lucide-react';
 import { getProfile } from '../store/store';
 import { getGroupId, getGroupLabel } from '../lib/groupUtils';
 import {
@@ -52,16 +52,18 @@ export default function Resources() {
   };
 
   return (
-    <div className="content-page-bg" style={{ maxWidth: 640, margin: '0 auto', padding: '16px 14px' }}>
-      <div className="content-page-hero">
+    <div className="page-enter content-page-bg" style={{ maxWidth: 640, margin: '0 auto', padding: '16px 14px' }}>
+      <div className="content-page-hero" style={{ marginBottom: 16 }}>
         <div className="content-page-hero-icon">
           <FolderOpen size={18} color="var(--accent)" />
         </div>
-        <h1 className="content-page-hero-title">Class Resources</h1>
+        <div>
+          <h1 className="content-page-hero-title">Class Resources</h1>
+          <p className="content-page-hero-subtitle">
+            {groupId ? <>Notes, question banks, and links shared by <strong>{groupLabel}</strong>.</> : 'Set your department and batch in Profile to use shared resources.'}
+          </p>
+        </div>
       </div>
-      <p style={{ color: 'var(--muted)', fontSize: 13, marginBottom: 16 }}>
-        {groupId ? <>Notes, question banks, and links shared by <strong>{groupLabel}</strong>.</> : 'Set your department and batch in Profile to use shared resources.'}
-      </p>
 
       {groupId && (
         <form onSubmit={handleSubmit} className="card" style={{ padding: 14, marginBottom: 16, display: 'flex', flexDirection: 'column', gap: 8 }}>
@@ -107,8 +109,8 @@ export default function Resources() {
                 <a href={r.linkUrl || r.fileUrl} target="_blank" rel="noreferrer" style={{ fontWeight: 600, fontSize: 14 }}>
                   {r.title}
                 </a>
-                <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 2 }}>
-                  {r.type === 'file' ? '📎 File' : '🔗 Link'} · shared by {r.uploadedBy?.name} ({r.uploadedBy?.roll})
+                <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 2, display: 'flex', alignItems: 'center', gap: 4 }}>
+                  {r.type === 'file' ? <Paperclip size={12} /> : <Link2 size={12} />} {r.type === 'file' ? 'File' : 'Link'} · shared by {r.uploadedBy?.name} ({r.uploadedBy?.roll})
                 </div>
                 {r.tags?.length > 0 && (
                   <div style={{ display: 'flex', gap: 4, marginTop: 6, flexWrap: 'wrap' }}>

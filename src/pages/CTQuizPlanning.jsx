@@ -274,7 +274,7 @@ export default function CTQuizPlanning() {
 
   if (underConstruction) {
     return (
-      <div className="page-container" style={{ width: '100%', margin: '28px auto', padding: 20, minHeight: 'calc(100vh - 120px)', background: `var(--bg)` }}>
+      <div className="page-container content-page-bg" style={{ width: '100%', margin: '28px auto', padding: 20, minHeight: 'calc(100vh - 120px)' }}>
         <div style={{ display: 'grid', gap: 24 }}>
           <section style={{ overflow: 'hidden', borderRadius: 28, padding: '36px 28px', background: `linear-gradient(135deg, var(--accent), var(--accent2))`, color: 'white', boxShadow: '0 30px 80px rgba(15,23,42,0.15)' }}>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 16, alignItems: 'center' }}>
@@ -337,14 +337,16 @@ export default function CTQuizPlanning() {
   }
 
   return (
-    <div className="page-container" style={{ width: '100%', margin: '28px auto', padding: 20 }}>
-      <div style={{ display: 'flex', gap: 16, alignItems: 'center', marginBottom: 18 }}>
-        <div style={{ background: `linear-gradient(135deg, var(--accent), var(--accent2))`, padding: 12, borderRadius: 12, color: 'white' }}>
-          <CalendarIcon size={34} />
-        </div>
-        <div style={{ flex: 1 }}>
-          <h1 style={{ margin: 0, fontSize: 26, fontWeight: 800, color: 'var(--text)' }}>CT & Quiz Planner</h1>
-          <div style={{ color: 'var(--muted)', fontSize: 14 }}>A lightweight demo planner — click a date to view or add events. Smart hints will show below.</div>
+    <div className="page-container content-page-bg" style={{ width: '100%', margin: '28px auto', padding: 20 }}>
+      <div className="content-page-hero" style={{ marginBottom: 16, justifyContent: 'space-between' }}>
+        <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
+          <div className="content-page-hero-icon">
+            <CalendarIcon size={18} color="var(--accent)" />
+          </div>
+          <div>
+            <h1 className="content-page-hero-title">CT & Quiz Planner</h1>
+            <p className="content-page-hero-subtitle">A lightweight demo planner — click a date to view or add events. Smart hints will show below.</p>
+          </div>
         </div>
         <div style={{ textAlign: 'right' }}>
           <div style={{ fontSize: 12, color: 'var(--muted)' }}>Demo Mode</div>

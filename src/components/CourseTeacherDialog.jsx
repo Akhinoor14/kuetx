@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
-import { X, Book, CheckCircle2 } from 'lucide-react';
+import { X, Book, CheckCircle2, AlertTriangle } from 'lucide-react';
 
 const normalizeTeacherName = (value) => {
   const clean = String(value || '').trim().replace(/\s+/g, ' ');
@@ -70,7 +70,7 @@ export default function CourseTeacherDialog({
     onSave(teachers);
     
     // Show success message
-    setSuccessMessage(`✓ Teachers assigned for ${activeCourse.code}`);
+    setSuccessMessage(`Teachers assigned for ${activeCourse.code}`);
     
     // Reset form after a moment (form source closes, courses source resets for next)
     setTimeout(() => {
@@ -194,7 +194,7 @@ export default function CourseTeacherDialog({
               fontWeight: 600,
             }}
           >
-            ⚠ {error}
+            <AlertTriangle size={14} style={{ display: 'inline', verticalAlign: -2, marginRight: 4 }} /> {error}
           </div>
         )}
 

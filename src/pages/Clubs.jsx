@@ -66,37 +66,20 @@ export default function Clubs() {
   return (
     <div className="page-enter page-container content-page-bg">
 
-      {/* Hero — theme-tinted, matches every other content page */}
-      <div style={{
-        borderRadius: 16, padding: '18px 20px 16px', marginBottom: 16, position: 'relative', overflow: 'hidden',
-        background: 'linear-gradient(135deg, rgba(var(--accentRGB), 0.14) 0%, rgba(var(--accentRGB), 0.05) 70%, var(--surface) 100%)',
-        border: '1px solid rgba(var(--accentRGB), 0.14)',
-      }}>
-        <div style={{ position: 'absolute', top: -24, right: -24, width: 110, height: 110, borderRadius: '50%', background: 'rgba(var(--accentRGB), 0.08)' }} />
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', position: 'relative' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-            <div className="content-page-hero-icon">
-              <Layers size={18} color="var(--accent)" />
-            </div>
-            <div>
-              <div style={{ fontSize: 11, fontWeight: 600, color: 'var(--accent)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 4 }}>
-                Extracurricular
-              </div>
-              <h1 style={{ fontSize: 20, fontWeight: 800, color: 'var(--text)', margin: 0 }}>Clubs & Activities</h1>
-            </div>
-          </div>
-          <div style={{ textAlign: 'right' }}>
-            <div style={{ fontSize: 26, fontWeight: 900, color: 'var(--text)', lineHeight: 1 }}>{clubs.length}</div>
-            <div style={{ fontSize: 10, color: 'var(--muted)' }}>clubs joined</div>
-          </div>
+      {/* Hero — shared classes, consistent with every other page */}
+      <div className="content-page-hero" style={{ marginBottom: 16 }}>
+        <div className="content-page-hero-icon">
+          <Layers size={18} color="var(--accent)" />
         </div>
-        <div style={{ display: 'flex', gap: 20, marginTop: 14 }}>
-          <div style={{ fontSize: 12, color: 'var(--muted)' }}>
-            🎯 <span style={{ color: 'var(--text)', fontWeight: 700 }}>{activities.length}</span> activities logged
-          </div>
-          <div style={{ fontSize: 12, color: 'var(--muted)' }}>
-            ⏱️ <span style={{ color: 'var(--text)', fontWeight: 700 }}>{totalHoursAll.toFixed(1)}h</span> total
-          </div>
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <h1 className="content-page-hero-title">Clubs & Activities</h1>
+          <p className="content-page-hero-subtitle">
+            {activities.length} activities logged · {totalHoursAll.toFixed(1)}h total
+          </p>
+        </div>
+        <div style={{ textAlign: 'right' }}>
+          <div style={{ fontSize: 26, fontWeight: 900, color: 'var(--text)', lineHeight: 1 }}>{clubs.length}</div>
+          <div style={{ fontSize: 10, color: 'var(--muted)' }}>clubs joined</div>
         </div>
       </div>
 
@@ -113,7 +96,7 @@ export default function Clubs() {
       {/* Club cards */}
       {clubStats.length === 0 ? (
         <div className="card" style={{ textAlign: 'center', color: 'var(--muted)', padding: 40 }}>
-          <div style={{ fontSize: 32, marginBottom: 8 }}>🎓</div>
+          <Layers size={28} color="var(--muted)" style={{ marginBottom: 8 }} />
           <p style={{ fontSize: 13 }}>Add your first club to start tracking activities.</p>
         </div>
       ) : (
@@ -232,7 +215,7 @@ export default function Clubs() {
             </div>
             <div style={{ display: 'flex', gap: 8 }}>
               <button onClick={() => setModal(null)} style={{ flex: 1, padding: 11, borderRadius: 10, border: '1.5px solid var(--border)', background: 'var(--inputBg)', color: 'var(--muted)', fontWeight: 600, fontSize: 13, cursor: 'pointer', fontFamily: 'Sora, sans-serif' }}>Cancel</button>
-              <button onClick={saveClub} style={{ flex: 2, padding: 11, borderRadius: 10, border: 'none', background: 'var(--accent)', color: '#fff', fontWeight: 700, fontSize: 13, cursor: 'pointer', fontFamily: 'Sora, sans-serif' }}>✓ Save Club</button>
+              <button onClick={saveClub} style={{ flex: 2, padding: 11, borderRadius: 10, border: 'none', background: 'var(--accent)', color: '#fff', fontWeight: 700, fontSize: 13, cursor: 'pointer', fontFamily: 'Sora, sans-serif' }}>Save Club</button>
             </div>
         </Modal>
       )}
@@ -272,7 +255,7 @@ export default function Clubs() {
             </div>
             <div style={{ display: 'flex', gap: 8 }}>
               <button onClick={() => setModal(null)} style={{ flex: 1, padding: 11, borderRadius: 10, border: '1.5px solid var(--border)', background: 'var(--inputBg)', color: 'var(--muted)', fontWeight: 600, fontSize: 13, cursor: 'pointer', fontFamily: 'Sora, sans-serif' }}>Cancel</button>
-              <button onClick={saveAct} style={{ flex: 2, padding: 11, borderRadius: 10, border: 'none', background: 'var(--accent)', color: '#fff', fontWeight: 700, fontSize: 13, cursor: 'pointer', fontFamily: 'Sora, sans-serif' }}>✓ Save Activity</button>
+              <button onClick={saveAct} style={{ flex: 2, padding: 11, borderRadius: 10, border: 'none', background: 'var(--accent)', color: '#fff', fontWeight: 700, fontSize: 13, cursor: 'pointer', fontFamily: 'Sora, sans-serif' }}>Save Activity</button>
             </div>
         </Modal>
       )}

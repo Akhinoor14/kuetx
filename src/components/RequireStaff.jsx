@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { Lock } from 'lucide-react';
 import { useIsStaff } from '../hooks/useIsStaff';
 
 /**
@@ -31,7 +32,7 @@ export default function RequireStaff({ children }) {
   if (!isStaff) {
     return (
       <div style={{ padding: '48px 20px', textAlign: 'center', maxWidth: 420, margin: '0 auto' }}>
-        <div style={{ fontSize: 32, marginBottom: 12 }}>🔒</div>
+        <div style={{ marginBottom: 12 }}><Lock size={32} color="var(--muted)" /></div>
         <div style={{ fontSize: 15, fontWeight: 700, color: 'var(--text)', marginBottom: 8 }}>
           This page is only for the KUETx team and staff
         </div>

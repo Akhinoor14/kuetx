@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { CalendarDays, Clock3, Copy, Download, Users, X } from 'lucide-react';
+import { CalendarDays, Clock3, Copy, Download, Users, X, BookOpen, Pencil, Settings } from 'lucide-react';
 import { store, uid, getProfile, getCurrentTermKey } from '../store/store';
 import { getAllCourses } from '../store/curriculumStore';
 import { getGroupId } from '../lib/groupUtils';
@@ -538,13 +538,19 @@ export default function ClassManagement() {
   };
 
   return (
-    <div className="page-enter page-container class-management-page" style={{ width: '100%' }}>
-      <div className="class-management-hero">
+    <div className="page-enter page-container class-management-page content-page-bg" style={{ width: '100%' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 16, marginBottom: 16 }}>
         <div className="class-management-hero-copy">
-          <div className="class-management-kicker">Class Management</div>
-          <h2>Routine control for CR work</h2>
-          <div className="class-management-subtitle">
-            Profile: {profile.name || '—'} {profile.isCR ? '· Class Rep' : ''} · Term: {currentTermKey || 'Unknown'}
+          <div className="content-page-hero" style={{ marginBottom: 0 }}>
+            <div className="content-page-hero-icon">
+              <CalendarDays size={18} color="var(--accent)" />
+            </div>
+            <div>
+              <h1 className="content-page-hero-title">Class Management</h1>
+              <p className="content-page-hero-subtitle">
+                Routine control for CR work · {profile.name || '—'} {profile.isCR ? '· Class Rep' : ''} · Term: {currentTermKey || 'Unknown'}
+              </p>
+            </div>
           </div>
           <div className="class-management-meta-row" style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 10 }}>
             <div className="class-management-meta-chip">Routine</div>
@@ -574,7 +580,7 @@ export default function ClassManagement() {
         </div>
       </div>
 
-      <div className="card" style={{ padding: 14, borderRadius: 16, border: '1px solid rgba(15,23,42,0.08)', background: 'rgba(255,255,255,0.96)', marginBottom: 14, display: 'flex', flexWrap: 'wrap', gap: 12, alignItems: 'flex-end' }}>
+      <div className="card" style={{ padding: 14, borderRadius: 16, marginBottom: 14, display: 'flex', flexWrap: 'wrap', gap: 12, alignItems: 'flex-end' }}>
         <div style={{ flex: '1 1 220px' }}>
           <div style={{ fontSize: 12, fontWeight: 800, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 6 }}>Term Start Date for your batch</div>
           <div style={{ fontSize: 12, color: 'var(--muted)' }}>
@@ -605,7 +611,7 @@ export default function ClassManagement() {
       <div style={{ display: 'grid', gap: 14 }}>
         {activeTab === 'routine' && (
           <div>
-            <div className="card class-management-actions-card" style={{ padding: 14, borderRadius: 22, border: '1px solid rgba(15,23,42,0.08)', background: 'linear-gradient(180deg, rgba(248,250,252,0.98), rgba(255,255,255,0.96))', boxShadow: '0 18px 40px rgba(15,23,42,0.06)', marginBottom: 16 }}>
+            <div className="card class-management-actions-card" style={{ padding: 14, borderRadius: 22, border: '1px solid var(--border)', background: 'linear-gradient(180deg, color-mix(in srgb, var(--card) 98%, transparent), var(--card))', boxShadow: '0 18px 40px rgba(15,23,42,0.06)', marginBottom: 16 }}>
               <div className="class-management-actions-grid" style={{ display: 'flex', gap: 10, flexWrap: 'nowrap', overflowX: 'auto', width: '100%' }}>
                 <button type="button" title="Copy WhatsApp routine" className="btn class-management-action-btn btn-whatsapp" onClick={copyRoutineForSelectedDay}>
                   <Copy size={14} /> WhatsApp
@@ -760,7 +766,7 @@ export default function ClassManagement() {
               {/* Theory Courses Section */}
               {plannerRows.filter(r => String(r.course.type || 'Theory').toLowerCase() === 'theory').length > 0 && (
                 <div style={{ display: 'grid', gap: 12 }}>
-                  <div style={{ fontSize: 13, fontWeight: 800, color: 'var(--text)', padding: '0 4px' }}>📚 Theory Courses</div>
+                  <div style={{ fontSize: 13, fontWeight: 800, color: 'var(--text)', padding: '0 4px', display: 'flex', alignItems: 'center', gap: 6 }}><BookOpen size={14} color="var(--accent)" /> Theory Courses</div>
                   {plannerRows
                     .filter(r => String(r.course.type || 'Theory').toLowerCase() === 'theory')
                     .map(({ course, plan, teacherCounts, totalLogged }) => {
@@ -808,8 +814,8 @@ export default function ClassManagement() {
                             </div>
                           ) : (
                             <div style={{ marginTop: 10 }}>
-                              <button onClick={() => openTeacherDialog(course.id)} className="btn btn-secondary btn-sm" style={{ padding: '8px 12px', fontSize: 12, fontWeight: 600 }}>
-                                📝 Assign Teachers
+                              <button onClick={() => openTeacherDialog(course.id)} className="btn btn-secondary btn-sm" style={{ padding: '8px 12px', fontSize: 12, fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+                                <Pencil size={12} /> Assign Teachers
                               </button>
                             </div>
                           )}
@@ -829,7 +835,7 @@ export default function ClassManagement() {
               {/* Sessional Courses Section (restyled) */}
               {plannerRows.filter(r => String(r.course.type || 'Theory').toLowerCase() === 'sessional').length > 0 && (
                 <div style={{ display: 'grid', gap: 12 }}>
-                  <div style={{ fontSize: 13, fontWeight: 800, color: 'var(--text)', padding: '0 4px' }}>⚙️ Sessional Courses</div>
+                  <div style={{ fontSize: 13, fontWeight: 800, color: 'var(--text)', padding: '0 4px', display: 'flex', alignItems: 'center', gap: 6 }}><Settings size={14} color="var(--accent)" /> Sessional Courses</div>
                   {plannerRows
                     .filter(r => String(r.course.type || 'Theory').toLowerCase() === 'sessional')
                     .map(({ course, plan, totalLogged }) => {

@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { Megaphone } from 'lucide-react';
 import { getProfile, store } from '../store/store';
 import { getGroupId, getGroupLabel } from '../lib/groupUtils';
 import { subscribeGroupNotices, subscribeGlobalNotices, noticeAppliesTo, subscribeMyRole, subscribeIsOwnMember } from '../lib/groupSync';
@@ -84,8 +85,8 @@ export default function ClassNoticesPanel() {
     }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12, marginBottom: 12 }}>
         <div>
-          <div style={{ fontSize: 13, fontWeight: 800, color: 'var(--text)' }}>
-            📢 Notices {unreadCount > 0 && <span style={{ color: 'var(--accent)' }}>({unreadCount} new)</span>}
+          <div style={{ fontSize: 13, fontWeight: 800, color: 'var(--text)', display: 'flex', alignItems: 'center', gap: 6 }}>
+            <Megaphone size={14} color="var(--accent)" /> Notices {unreadCount > 0 && <span style={{ color: 'var(--accent)' }}>({unreadCount} new)</span>}
           </div>
           <div style={{ fontSize: 12, color: 'var(--muted)' }}>
             Admin announcements{groupId ? <> and updates from {groupLabel}</> : ''}

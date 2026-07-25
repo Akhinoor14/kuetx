@@ -21,6 +21,7 @@ import QBUploadForm from '../components/QBUploadForm';
 import { withTimeout } from '../lib/safeSnapshot';
 import QBReviewQueue from '../components/QBReviewQueue';
 import RequestDeleteButton from '../components/RequestDeleteButton';
+import SectionTabs from '../components/SectionTabs';
 
 // ---------------------------------------------------------------------
 // Founder-only: roll ownership unlock requests (see rollOwnership.js).
@@ -206,6 +207,12 @@ function CampusLeadBlock({ groupId }) {
   const [crRequests, setCrRequests] = useState([]);
   const [leaveRequests, setLeaveRequests] = useState([]);
   const [approveErr, setApproveErr] = useState('');
+  // Each CampusLeadBlock instance owns its own tab state — a Campus Lead
+  // leading multiple classes gets one block per class (see the .map() call
+  // site below), so this must stay local to the component, not hoisted to
+  // a shared/module-level variable, or switching tabs on one class's card
+  // would wrongly switch every other class's card too.
+  const [activeTab, setActiveTab] = useState('approvals');
 
   useEffect(() => subscribeCRRequests(groupId, setCrRequests), [groupId]);
   useEffect(() => subscribeLeaveRequests(groupId, setLeaveRequests), [groupId]);
@@ -231,6 +238,8 @@ function CampusLeadBlock({ groupId }) {
     }
   };
 
+  const pendingCount = crRequests.length + leaveRequests.length;
+
   return (
     <div style={{ marginBottom: 20, paddingBottom: 16, borderBottom: '1px solid var(--border)' }}>
       <div style={{ fontWeight: 700, fontSize: 14, marginBottom: 8 }}>{groupId}</div>
@@ -239,51 +248,78 @@ function CampusLeadBlock({ groupId }) {
         <div className="card" style={{ padding: 8, marginBottom: 8, fontSize: 12, color: 'var(--danger)' }}>{approveErr}</div>
       )}
 
-      {crRequests.length > 0 && (
-        <div style={{ marginBottom: 12 }}>
-          <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 6 }}>CR requests</div>
-          {crRequests.map((r) => (
-            <div key={r.id} className="card" style={{ padding: 8, display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', gap: 8, marginBottom: 4 }}>
-              <span style={{ fontSize: 13, minWidth: 0, wordBreak: 'break-word' }}>{r.name} ({r.roll})</span>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
-                <button className="btn btn-sm btn-primary" onClick={() => handleApprove(r.id)}>Approve</button>
-                <button className="btn btn-sm btn-secondary" onClick={() => clRejectCRRequest(groupId, r.id)}>Reject</button>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
-
-      {leaveRequests.length > 0 && (
-        <div style={{ marginBottom: 12 }}>
-          <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 6 }}>CR leave requests</div>
-          {leaveRequests.map((r) => (
-            <div key={r.id} className="card" style={{ padding: 8, display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', gap: 8, marginBottom: 4 }}>
-              <span style={{ fontSize: 13, minWidth: 0, wordBreak: 'break-word' }}>{r.name} ({r.roll}) — wants to step down as CR</span>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
-                <button className="btn btn-sm btn-primary" onClick={() => handleApproveLeave(r.id, r.uid)}>Approve</button>
-                <button className="btn btn-sm btn-secondary" onClick={() => clRejectLeaveCR(groupId, r.id)}>Reject</button>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
-
-      <EmailAuditBlock groupId={groupId} dept={groupId.split('_')[1]} />
-
-      <div style={{ fontSize: 12, fontWeight: 700, margin: '10px 0 6px' }}>Upload a Question Bank paper</div>
-      <QBUploadForm
-        profile={{ dept: groupId.split('_')[1], batch: groupId.split('_')[0] }}
-        groupId={groupId}
+      <SectionTabs
+        tabs={[
+          { key: 'approvals', label: 'Approvals', badge: pendingCount },
+          { key: 'roster', label: 'Roster' },
+          { key: 'qb', label: 'Question Bank' },
+        ]}
+        active={activeTab}
+        onChange={setActiveTab}
       />
 
-      <div style={{ fontSize: 12, fontWeight: 700, margin: '14px 0 6px' }}>Request removal of a live paper</div>
-      <RequestDeleteButton groupId={groupId} dept={groupId.split('_')[1]} />
+      {activeTab === 'approvals' && (
+        <>
+          {crRequests.length > 0 && (
+            <div style={{ marginBottom: 12 }}>
+              <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 6 }}>CR requests</div>
+              {crRequests.map((r) => (
+                <div key={r.id} className="card" style={{ padding: 8, display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', gap: 8, marginBottom: 4 }}>
+                  <span style={{ fontSize: 13, minWidth: 0, wordBreak: 'break-word' }}>{r.name} ({r.roll})</span>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
+                    <button className="btn btn-sm btn-primary" onClick={() => handleApprove(r.id)}>Approve</button>
+                    <button className="btn btn-sm btn-secondary" onClick={() => clRejectCRRequest(groupId, r.id)}>Reject</button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
 
-      <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 6, marginTop: 14 }}>
-        Roster <span style={{ fontWeight: 400, color: 'var(--muted)' }}>("Claims CR" badge = held CR before this system existed — review and confirm/promote if still accurate)</span>
-      </div>
-      <ClassmatesList groupId={groupId} showActions viewerRole="cl" currentUid={auth.currentUser?.uid} />
+          {leaveRequests.length > 0 && (
+            <div style={{ marginBottom: 12 }}>
+              <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 6 }}>CR leave requests</div>
+              {leaveRequests.map((r) => (
+                <div key={r.id} className="card" style={{ padding: 8, display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', gap: 8, marginBottom: 4 }}>
+                  <span style={{ fontSize: 13, minWidth: 0, wordBreak: 'break-word' }}>{r.name} ({r.roll}) — wants to step down as CR</span>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
+                    <button className="btn btn-sm btn-primary" onClick={() => handleApproveLeave(r.id, r.uid)}>Approve</button>
+                    <button className="btn btn-sm btn-secondary" onClick={() => clRejectLeaveCR(groupId, r.id)}>Reject</button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {pendingCount === 0 && (
+            <p style={{ fontSize: 12.5, color: 'var(--muted)' }}>Nothing pending — all caught up.</p>
+          )}
+        </>
+      )}
+
+      {activeTab === 'roster' && (
+        <>
+          <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 6 }}>
+            Roster <span style={{ fontWeight: 400, color: 'var(--muted)' }}>("Claims CR" badge = held CR before this system existed — review and confirm/promote if still accurate)</span>
+          </div>
+          <ClassmatesList groupId={groupId} showActions viewerRole="cl" currentUid={auth.currentUser?.uid} />
+          <div style={{ marginTop: 14 }}>
+            <EmailAuditBlock groupId={groupId} dept={groupId.split('_')[1]} />
+          </div>
+        </>
+      )}
+
+      {activeTab === 'qb' && (
+        <>
+          <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 6 }}>Upload a Question Bank paper</div>
+          <QBUploadForm
+            profile={{ dept: groupId.split('_')[1], batch: groupId.split('_')[0] }}
+            groupId={groupId}
+          />
+
+          <div style={{ fontSize: 12, fontWeight: 700, margin: '14px 0 6px' }}>Request removal of a live paper</div>
+          <RequestDeleteButton groupId={groupId} dept={groupId.split('_')[1]} />
+        </>
+      )}
     </div>
   );
 }

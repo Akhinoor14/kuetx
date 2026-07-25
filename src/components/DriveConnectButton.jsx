@@ -5,7 +5,7 @@
  */
 
 import { useState, useEffect, useCallback } from 'react';
-import { Cloud, CloudOff, CloudUpload, RotateCcw, LogOut, RefreshCw } from 'lucide-react';
+import { Cloud, CloudOff, CloudUpload, RotateCcw, LogOut, RefreshCw, Lock } from 'lucide-react';
 import {
   isDriveConnected,
   getDriveToken,
@@ -76,14 +76,14 @@ export default function DriveConnectButton({ variant = 'full', onConnected }) {
       await signInWithGoogle();
       syncState();
       emitUpdate();
-      notify('✅ Google Drive connected!', 'success');
+      notify('Google Drive connected!', 'success');
 
       // Trigger first backup immediately
       try {
         const data = store.exportAll();
         await uploadToDrive(data);
         syncState();
-        notify('☁️ First backup uploaded to Drive', 'success');
+        notify('First backup uploaded to Drive', 'success');
       } catch (e) {
         notify('Connected but first backup failed — try manually', 'error');
       }
@@ -110,7 +110,7 @@ export default function DriveConnectButton({ variant = 'full', onConnected }) {
     try {
       await syncNow();
       syncState();
-      notify('🔄 Synced with Google Drive!', 'success');
+      notify('Synced with Google Drive!', 'success');
     } catch (err) {
       notify(`Sync failed: ${err.message}`, 'error');
     }
@@ -132,7 +132,7 @@ export default function DriveConnectButton({ variant = 'full', onConnected }) {
       await uploadToDrive(data);
       syncState();
       emitUpdate();
-      notify('☁️ Backup uploaded to Drive!', 'success');
+      notify('Backup uploaded to Drive!', 'success');
     } catch (err) {
       notify(`Backup failed: ${err.message}`, 'error');
     } finally {
@@ -152,7 +152,7 @@ export default function DriveConnectButton({ variant = 'full', onConnected }) {
       await store.importAllReport(
         Object.fromEntries(keys.map(k => [k, data[k]]))
       );
-      notify('✅ Data restored from Drive! Reloading...', 'success');
+      notify('Data restored from Drive! Reloading...', 'success');
       setTimeout(() => window.location.reload(), 1400);
     } catch (err) {
       notify(`Restore failed: ${err.message}`, 'error');
@@ -241,7 +241,7 @@ export default function DriveConnectButton({ variant = 'full', onConnected }) {
         border: '1px solid var(--border)',
         background: 'var(--bg)',
       }}>
-        <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 4 }}>☁️ Backup to Google Drive <span style={{ fontWeight: 400, color: 'var(--muted)' }}>(optional)</span></div>
+        <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 4 }}>Backup to Google Drive <span style={{ fontWeight: 400, color: 'var(--muted)' }}>(optional)</span></div>
         <div style={{ fontSize: 11, color: 'var(--muted)', marginBottom: 10, lineHeight: 1.5 }}>
           Your data stays in your own Drive. No server. You can set this up later in Settings.
         </div>
@@ -358,16 +358,16 @@ export default function DriveConnectButton({ variant = 'full', onConnected }) {
       {/* Live auto-sync status */}
       {connected && (
         <div style={{ marginTop: 10, fontSize: 11, color: 'var(--muted)' }}>
-          {syncStatus === 'syncing' && '🔄 Syncing with Drive…'}
-          {syncStatus === 'pending' && '✏️ Changes detected — will sync shortly…'}
-          {(syncStatus === 'synced' || syncStatus === 'idle') && '✅ Auto real-time sync is active for this device.'}
-          {syncStatus === 'error' && '⚠️ Last sync attempt failed.'}
+          {syncStatus === 'syncing' && 'Syncing with Drive…'}
+          {syncStatus === 'pending' && 'Changes detected — will sync shortly…'}
+          {(syncStatus === 'synced' || syncStatus === 'idle') && 'Auto real-time sync is active for this device.'}
+          {syncStatus === 'error' && 'Last sync attempt failed.'}
         </div>
       )}
 
       {/* Info note */}
       <div style={{ marginTop: 12, padding: '8px 12px', borderRadius: 7, background: 'var(--bg)', fontSize: 11, color: 'var(--muted)', lineHeight: 1.6 }}>
-        🔒 <strong>Privacy:</strong> Data goes directly to <em>your</em> Google Drive under "KUETx Backups/kuetx-backup.json".
+        <Lock size={11} style={{ display: 'inline', verticalAlign: -1, marginRight: 3 }} /> <strong>Privacy:</strong> Data goes directly to <em>your</em> Google Drive under "KUETx Backups/kuetx-backup.json".
         KUETx has no server access. Only you can see it.
       </div>
     </div>

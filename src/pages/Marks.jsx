@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ClipboardList } from 'lucide-react';
+import { ClipboardList, Target, BookOpen, Lightbulb } from 'lucide-react';
 import { store, getGradeFromPct, getAttendanceMarks, computeEffectiveAttendance, GRADE_SCALE, getProfile, getCurrentTermKey, getTermTimeline, recordAudit } from '../store/store';
 import { getAllCourses } from '../store/curriculumStore';
 import TeacherVerifiedCard from '../components/TeacherVerifiedCard';
@@ -245,7 +245,7 @@ function CourseCard({ course, marks, onChange, onClearCourse, onOpenMarkingHelp,
         {/* Grade Selector */}
         <div className="planner-target-section">
           <div className="planner-target-head">
-            <label className="planner-target-label">🎯 Target Grade</label>
+            <label className="planner-target-label" style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}><Target size={14} color="var(--accent)" /> Target Grade</label>
             <button type="button" className="planner-help-link" onClick={onOpenMarkingHelp}>
               How marking works
             </button>
@@ -336,18 +336,18 @@ export default function Marks() {
 
   if (allCourses.length === 0) {
     return (
-      <div className="page-enter page-container marks-page">
-        <div className="hero-banner mb-4">
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            <div className="content-page-hero-icon">
-              <ClipboardList size={18} color="var(--accent)" />
-            </div>
-            <h1 style={{ margin: 0 }}>Term Planner</h1>
+      <div className="page-enter page-container marks-page content-page-bg">
+        <div className="content-page-hero" style={{ marginBottom: 16 }}>
+          <div className="content-page-hero-icon">
+            <ClipboardList size={18} color="var(--accent)" />
           </div>
-          <p className="text-muted text-sm">Estimate and plan your final grades</p>
+          <div>
+            <h1 className="content-page-hero-title">Term Planner</h1>
+            <p className="content-page-hero-subtitle">Estimate and plan your final grades</p>
+          </div>
         </div>
         <div className="empty-state">
-          <div className="icon">📚</div>
+          <div className="icon"><BookOpen size={28} color="var(--muted)" /></div>
           <p>No curriculum data is loaded for {deptLabel} yet. Open Courses to confirm the department setup or switch to a department with course data.</p>
         </div>
       </div>
@@ -355,18 +355,20 @@ export default function Marks() {
   }
 
   return (
-    <div className="page-enter page-container marks-page">
+    <div className="page-enter page-container marks-page content-page-bg">
       {/* Header Section */}
-      <div className="planner-page-header">
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 16, marginBottom: 16 }}>
         <div className="planner-page-copy">
           <div className="planner-page-kicker">Academic planning</div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <div className="content-page-hero" style={{ marginBottom: 0 }}>
             <div className="content-page-hero-icon">
               <ClipboardList size={18} color="var(--accent)" />
             </div>
-            <h1 style={{ margin: 0 }}>Term Planner</h1>
+            <div>
+              <h1 className="content-page-hero-title">Term Planner</h1>
+              <p className="content-page-hero-subtitle">Track hall-needed targets in a compact, local-only workspace.</p>
+            </div>
           </div>
-          <p>Track hall-needed targets in a compact, local-only workspace.</p>
           <button type="button" className="planner-hero-link" onClick={() => setMarkingHelpOpen(true)}>
             View marking system
           </button>
@@ -387,7 +389,7 @@ export default function Marks() {
       {/* Content */}
       {theory.length === 0 ? (
         <div className="empty-state">
-          <div className="icon">📚</div>
+          <div className="icon"><BookOpen size={28} color="var(--muted)" /></div>
           <p>No active theory courses to plan. Add courses from the Courses section.</p>
         </div>
       ) : (
@@ -409,7 +411,7 @@ export default function Marks() {
 
           {/* Tips Section */}
           <div className="planner-tips">
-            <h3>💡 How It Works</h3>
+            <h3 style={{ display: "flex", alignItems: "center", gap: 6 }}><Lightbulb size={16} color="var(--accent)" /> How It Works</h3>
             <ul>
               <li>Enter hall marks (0–210) and your continuous assessment marks per teacher (CT + Attendance).</li>
               <li>Pick a target grade to instantly see how much hall you need to achieve it.</li>

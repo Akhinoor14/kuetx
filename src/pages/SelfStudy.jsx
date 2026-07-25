@@ -1,6 +1,6 @@
 import { useState, useMemo, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Plus, Trash2, Clock3, Check } from 'lucide-react';
+import { Plus, Trash2, Clock3, Check, Zap, BookOpen, CheckCircle2, Timer, AlarmClock, FileText, GraduationCap, Film, Paperclip } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import { store, uid, getProfile, getTermLabelFromKey } from '../store/store';
 import { getAllCourses, getDeptSyllabus } from '../store/curriculumStore';
@@ -464,18 +464,23 @@ export default function SelfStudy() {
   const weeklyMaxHours = Math.max(1, ...weeklyHeatmap.map(day => day.hours || 0));
 
   return (
-    <div className="page-enter page-container">
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12, gap: 12 }}>
-        <div>
-          <h1 style={{ fontSize: 18, fontWeight: 800, marginBottom: 2 }}>Self Study</h1>
-          <p style={{ fontSize: 12, color: 'var(--muted)' }}>Track what you learn, topic by topic</p>
+    <div className="page-enter page-container content-page-bg">
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 10, marginBottom: 16 }}>
+        <div className="content-page-hero" style={{ marginBottom: 0 }}>
+          <div className="content-page-hero-icon">
+            <BookOpen size={18} color="var(--accent)" />
+          </div>
+          <div>
+            <h1 className="content-page-hero-title">Self Study</h1>
+            <p className="content-page-hero-subtitle">Track what you learn, topic by topic</p>
+          </div>
         </div>
         <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', justifyContent: 'flex-end' }}>
           <button className={`btn ${activeTab === 'academic' ? 'btn-primary' : 'btn-ghost'} btn-sm`} onClick={() => setActiveTab('academic')}>
             Academic ({currentTermCourseStats.length})
           </button>
           <button className={`btn ${activeTab === 'extra' ? 'btn-primary' : 'btn-ghost'} btn-sm`} onClick={() => setActiveTab('extra')}>
-            ⚡ Deep Focus ({extraReading.length})
+            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}><Zap size={13} /> Deep Focus ({extraReading.length})</span>
           </button>
         </div>
       </div>
@@ -498,17 +503,18 @@ export default function SelfStudy() {
                 <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 4 }}>Tap a topic name to toggle done/undone.</div>
               </div>
               <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-                <span style={{ fontSize: 12, color: 'var(--muted)' }}>Quick Topic Toggle ⚡</span>
+                <span style={{ fontSize: 12, color: 'var(--muted)', display: 'inline-flex', alignItems: 'center', gap: 4 }}>Quick Topic Toggle <Zap size={12} /></span>
               </div>
             </div>
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))', gap: 12, marginBottom: 12 }}>
             {activeSummary.map((card, idx) => {
-              const icons = ['📚', '✅', '⏱️', '⏰'];
+              const icons = [BookOpen, CheckCircle2, Timer, AlarmClock];
               const colors = ['rgba(139,92,246,0.12)', 'rgba(34,197,94,0.12)', 'rgba(249,115,22,0.12)', 'rgba(14,165,233,0.12)'];
+              const Icon = icons[idx];
               return (
                 <div key={card.label} className="card" style={{ padding: 12, background: `linear-gradient(135deg, ${colors[idx]}, transparent)`, position: 'relative', overflow: 'hidden' }}>
-                  <div style={{ fontSize: 20, marginBottom: 6 }}>{icons[idx]}</div>
+                  <div style={{ marginBottom: 6 }}><Icon size={20} color="var(--accent)" /></div>
                   <div style={{ fontSize: 22, fontWeight: 800, lineHeight: 1.1, marginBottom: 2 }}>{card.value}</div>
                   <div style={{ fontSize: 10, color: 'var(--muted)', fontWeight: 500 }}>{card.label}</div>
                   <div style={{ fontSize: 10, color: 'var(--muted)', marginTop: 4 }}>{card.note}</div>
@@ -528,9 +534,9 @@ export default function SelfStudy() {
                   <div style={{ width: `${(coveredTopics / totalOfficialTopics) * 100}%`, height: '100%', borderRadius: 999, background: 'linear-gradient(90deg, #8b5cf6, #10b981)' }} />
                 </div>
                 <div style={{ display: 'flex', gap: 12, fontSize: 11, color: 'var(--muted)' }}>
-                  <span>📚 {totalOfficialTopics} topics total</span>
-                  <span>⏱️ {coveredTopics} touched</span>
-                  <span>✅ {completedTopics} done</span>
+                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}><BookOpen size={11} /> {totalOfficialTopics} topics total</span>
+                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}><Timer size={11} /> {coveredTopics} touched</span>
+                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}><CheckCircle2 size={11} /> {completedTopics} done</span>
                 </div>
               </div>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8, marginTop: 10, paddingTop: 10, borderTop: '1px solid var(--border)' }}>
@@ -602,7 +608,7 @@ export default function SelfStudy() {
             <div className="card" style={{ padding: 12, borderColor: 'var(--accent)', background: addingAcademic ? 'linear-gradient(135deg, rgba(139,92,246,0.08), transparent)' : 'transparent' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12, marginBottom: addingAcademic ? 12 : 0 }}>
                 <div>
-                  <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 2 }}>📝 Log Study</div>
+                  <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 2, display: 'flex', alignItems: 'center', gap: 4 }}><FileText size={13} /> Log Study</div>
                   <div style={{ fontSize: 11, color: 'var(--muted)' }}>Manual entry for any study session</div>
                 </div>
                 <button className={`btn btn-sm ${addingAcademic ? 'btn-primary' : 'btn-ghost'}`} onClick={() => setAddingAcademic(v => !v)}>
@@ -668,9 +674,9 @@ export default function SelfStudy() {
                         </div>
                       </div>
                       <div style={{ display: 'flex', justifyContent: 'space-between', gap: 10, marginBottom: 10, fontSize: 11, color: 'var(--muted)', flexWrap: 'wrap' }}>
-                        <span>📚 {course.coveredTopics}/{course.totalTopics}</span>
-                        <span>✅ {course.completedTopics} done</span>
-                        {course.runningTopics > 0 && <span>⏱️ {course.runningTopics} active</span>}
+                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}><BookOpen size={11} /> {course.coveredTopics}/{course.totalTopics}</span>
+                        <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}><CheckCircle2 size={11} /> {course.completedTopics} done</span>
+                        {course.runningTopics > 0 && <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}><Timer size={11} /> {course.runningTopics} active</span>}
                       </div>
                       <div style={{ marginTop: 0, height: 7, borderRadius: 999, background: 'rgba(148,163,184,0.18)', overflow: 'hidden' }}>
                         <div style={{ width: `${progressWidth}%`, height: '100%', borderRadius: 999, background: 'linear-gradient(90deg, #8b5cf6, #10b981)', transition: 'width 0.4s ease' }} />
@@ -698,8 +704,8 @@ export default function SelfStudy() {
                                   {!compactView && topicRow.runningDays && (
                                     <div style={{ fontSize: 10, color: '#f59e0b', marginTop: 2 }}>Running {topicRow.runningDays} days</div>
                                   )}
-                                  <div style={{ marginTop: compactView ? 2 : 6, fontSize: 10, fontWeight: 500, color: topicRow.status === 'done' ? '#10b981' : topicRow.status === 'running' ? '#f59e0b' : 'var(--muted)' }}>
-                                    {topicRow.status === 'done' ? '✅ Completed' : topicRow.status === 'running' ? '⏱️ In progress' : '⚪ Not started'}
+                                  <div style={{ marginTop: compactView ? 2 : 6, fontSize: 10, fontWeight: 500, color: topicRow.status === 'done' ? '#10b981' : topicRow.status === 'running' ? '#f59e0b' : 'var(--muted)', display: 'flex', alignItems: 'center', gap: 4 }}>
+                                    {topicRow.status === 'done' ? <><CheckCircle2 size={11} /> Completed</> : topicRow.status === 'running' ? <><Timer size={11} /> In progress</> : 'Not started'}
                                   </div>
                                 </div>
                                 <div style={{ display: 'flex', gap: 6, flexShrink: 0, alignItems: 'center' }}>
@@ -901,7 +907,7 @@ export default function SelfStudy() {
             <div className="card" style={{ padding: 12 }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, alignItems: 'flex-start' }}>
                 <div>
-                  <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 2 }}>⚡ Deep Focus</div>
+                  <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 2, display: 'flex', alignItems: 'center', gap: 4 }}><Zap size={13} /> Deep Focus</div>
                   <div style={{ fontSize: 11, color: 'var(--muted)' }}>Books, courses, tutorials, papers, and anything outside the syllabus</div>
                 </div>
                 <button className="btn btn-primary btn-sm" onClick={() => setAdding(true)}><Plus size={13} /> Add</button>
@@ -915,11 +921,11 @@ export default function SelfStudy() {
                   <div>
                     <label>Type</label>
                     <select value={extraForm.category} onChange={e => setExtraForm({ ...extraForm, category: e.target.value })}>
-                      <option value="book">📕 Book</option>
-                      <option value="course">🎓 Course</option>
-                      <option value="tutorial">🎬 Tutorial</option>
-                      <option value="paper">📄 Research Paper</option>
-                      <option value="other">📌 Other</option>
+                      <option value="book">Book</option>
+                      <option value="course">Course</option>
+                      <option value="tutorial">Tutorial</option>
+                      <option value="paper">Research Paper</option>
+                      <option value="other">Other</option>
                     </select>
                   </div>
                   <div><label>Start Date</label><input type="date" value={extraForm.startDate} onChange={e => setExtraForm({ ...extraForm, startDate: e.target.value })} /></div>
@@ -942,18 +948,18 @@ export default function SelfStudy() {
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 10 }}>
                       <div style={{ flex: 1, minWidth: 0 }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 6, flexWrap: 'wrap' }}>
-                          <span style={{ fontSize: 13, fontWeight: 700 }}>
-                            {item.category === 'book' && '📕'}
-                            {item.category === 'course' && '🎓'}
-                            {item.category === 'tutorial' && '🎬'}
-                            {item.category === 'paper' && '📄'}
-                            {item.category === 'other' && '📌'}
-                            {' '}{item.title}
+                          <span style={{ fontSize: 13, fontWeight: 700, display: 'inline-flex', alignItems: 'center', gap: 5 }}>
+                            {item.category === 'book' && <FileText size={13} color="var(--accent)" />}
+                            {item.category === 'course' && <GraduationCap size={13} color="var(--accent)" />}
+                            {item.category === 'tutorial' && <Film size={13} color="var(--accent)" />}
+                            {item.category === 'paper' && <FileText size={13} color="var(--accent)" />}
+                            {item.category === 'other' && <Paperclip size={13} color="var(--accent)" />}
+                            {item.title}
                           </span>
                           {item.endDate && <span className="tag tag-green" style={{ fontSize: 10 }}>✓ Done</span>}
                         </div>
                         <div style={{ fontSize: 11, color: 'var(--muted)', marginBottom: 6 }}>Start: {item.startDate || '—'}{item.endDate ? ` · End: ${item.endDate}` : ''}</div>
-                        {item.attachment && <div style={{ fontSize: 11, color: 'var(--muted)', marginBottom: 6 }}>📎 {item.attachment}</div>}
+                        {item.attachment && <div style={{ fontSize: 11, color: 'var(--muted)', marginBottom: 6, display: 'flex', alignItems: 'center', gap: 4 }}><Paperclip size={11} /> {item.attachment}</div>}
                         {item.notes && <div style={{ fontSize: 12, color: 'var(--muted)' }}>{item.notes}</div>}
                       </div>
                       <div style={{ display: 'flex', gap: 4, flexShrink: 0 }}>

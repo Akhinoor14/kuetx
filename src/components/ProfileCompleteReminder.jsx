@@ -21,6 +21,7 @@
 // this reminder seconds after onboarding instead of on a later visit.
 
 import { useEffect, useState } from 'react';
+import { ClipboardList } from 'lucide-react';
 import { store, getProfile, normalizeProfileForSave, validateProfileForSave } from '../store/store';
 import ProfileSetupModal from './ProfileSetupModal';
 
@@ -123,8 +124,8 @@ export default function ProfileCompleteReminder() {
       display: 'flex', flexDirection: 'column', gap: 8,
       fontFamily: 'Sora, sans-serif',
     }}>
-      <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)' }}>
-        📋 Finish setting up your profile?
+      <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', display: 'flex', alignItems: 'center', gap: 6 }}>
+        <ClipboardList size={15} color="var(--accent)" /> Finish setting up your profile?
       </div>
       <div style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.5 }}>
         Add your session, current term, and hall so Schedule, CGPA, and the term timeline work properly. You can do it any time.

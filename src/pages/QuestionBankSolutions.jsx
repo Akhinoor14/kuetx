@@ -4,6 +4,7 @@ import {
   BookOpen, ChevronRight, Search, ArrowLeft, Calendar,
   Layers, Filter, X, Hash, ChevronDown,
   Bookmark, BookmarkCheck, Copy, Check, Sun, Moon,
+  Sigma, Printer, BarChart2, FileText,
 } from 'lucide-react';
 import 'katex/dist/katex.min.css';
 import '../styles/questionbank.css';
@@ -29,88 +30,52 @@ const WA_NUMBER = '8801724812042';
 function mapCentralThemeToSolutions(themeId) {
   const isDark = themeId === 'dark';
 
-  // bg/surface/card/border/text now mirror the app's real theme tokens
-  // (--bg/--surface/--card/--border/--text) instead of a hardcoded
-  // palette, so this page matches the rest of the app. Accent/content
-  // colors (blue, yellow, code blocks, etc.) keep their own tuned values.
+  // bg/surface/card/border/text/textSub/textMut/accent now read the live
+  // CSS variables (--bg/--surface/--card/--border/--text/--muted/--accent)
+  // instead of a hardcoded light/dark-only palette, so this page correctly
+  // tracks whichever theme (light/milky/dark) and accent color is active —
+  // previously "Milky" silently fell back to the light palette here since
+  // this function only ever branched on isDark. Content-specific tuned
+  // colors (code blocks, tag/badge colors, etc.) keep their own values
+  // since they're not page chrome and don't need to track the theme.
   if (isDark) {
     return {
-      bg: '#0a0a0c', surface: '#14141a', card: '#1a1a21',
-      cardHov: '#20202a', border: '#27272f', borderSub: '#1f1f27',
-      accent: '#22C55E', accentDim: '#16A34A', accentGlow: 'rgba(34,197,94,0.12)',
+      bg: 'var(--bg)', surface: 'var(--surface)', card: 'var(--card)',
+      cardHov: '#20202a', border: 'var(--border)', borderSub: '#1f1f27',
+      accent: 'var(--accent)', accentDim: '#16A34A', accentGlow: 'rgba(var(--accentRGB), 0.12)',
       blue: '#60A5FA', blueDim: '#3B82F6', blueBg: 'rgba(96,165,250,0.08)',
       yellow: '#FBBF24', yellowBg: 'rgba(251,191,36,0.08)', yellowText: '#FDE68A',
-      text: '#e5e5eb', textSub: '#9a9aab', textMut: '#7a7a8a',
+      text: 'var(--text)', textSub: 'var(--muted)', textMut: 'var(--muted)',
       eqBg: '#171720', eqBord: '#3B82F6',
       codeBgM: '#111827', codeBgP: '#060D17',
       numBg: '#0D2E1A', numText: '#4ADE80',
-      shortBg: 'rgba(34,197,94,0.07)', shortBord: '#22C55E',
+      shortBg: 'rgba(var(--accentRGB), 0.07)', shortBord: 'var(--accent)',
       bnBg: 'rgba(251,191,36,0.07)', bnBord: '#FBBF24',
       tagBg: 'rgba(96,165,250,0.12)', tagText: '#93C5FD', tagBord: 'rgba(96,165,250,0.3)',
-      divider: '#27272f',
-      selBg: '#1a1a21', selBord: '#27272f',
-      filterActiveBg: 'rgba(34,197,94,0.12)', filterActiveBord: '#22C55E', filterActiveText: '#4ADE80',
+      divider: 'var(--border)',
+      selBg: 'var(--card)', selBord: 'var(--border)',
+      filterActiveBg: 'rgba(var(--accentRGB), 0.12)', filterActiveBord: 'var(--accent)', filterActiveText: '#4ADE80',
     };
   } else {
     return {
-      bg: '#f5f5f2', surface: '#ffffff', card: '#ffffff',
-      cardHov: '#F0FDF4', border: '#e2e0db', borderSub: '#ececE6',
-      accent: '#16A34A', accentDim: '#15803D', accentGlow: 'rgba(22,163,74,0.1)',
+      bg: 'var(--bg)', surface: 'var(--surface)', card: 'var(--card)',
+      cardHov: '#F0FDF4', border: 'var(--border)', borderSub: '#ececE6',
+      accent: 'var(--accent)', accentDim: '#15803D', accentGlow: 'rgba(var(--accentRGB), 0.1)',
       blue: '#2563EB', blueDim: '#1D4ED8', blueBg: 'rgba(37,99,235,0.06)',
       yellow: '#D97706', yellowBg: 'rgba(217,119,6,0.07)', yellowText: '#92400E',
-      text: '#1c1c1a', textSub: '#6b6860', textMut: '#8c887f',
+      text: 'var(--text)', textSub: 'var(--muted)', textMut: 'var(--muted)',
       eqBg: '#EEF4FF', eqBord: '#2563EB',
       codeBgM: '#1C2333', codeBgP: '#0D1117',
       numBg: '#DCFCE7', numText: '#15803D',
-      shortBg: '#F0FDF4', shortBord: '#16A34A',
+      shortBg: 'rgba(var(--accentRGB), 0.08)', shortBord: 'var(--accent)',
       bnBg: '#FFFBEB', bnBord: '#D97706',
       tagBg: 'rgba(37,99,235,0.06)', tagText: '#1D4ED8', tagBord: 'rgba(37,99,235,0.2)',
-      divider: '#e2e0db',
-      selBg: '#ffffff', selBord: '#e2e0db',
-      filterActiveBg: 'rgba(22,163,74,0.08)', filterActiveBord: '#16A34A', filterActiveText: '#15803D',
+      divider: 'var(--border)',
+      selBg: 'var(--card)', selBord: 'var(--border)',
+      filterActiveBg: 'rgba(var(--accentRGB), 0.08)', filterActiveBord: 'var(--accent)', filterActiveText: '#15803D',
     };
   }
 }
-
-// ─────────────────────────────────────────────────────────────────────────────
-// THEME — dark / light with system preference
-// ─────────────────────────────────────────────────────────────────────────────
-const T = {
-  dark: {
-    bg: '#0C1220', surface: '#131D2E', card: '#1A2740',
-    cardHov: '#1F3050', border: '#243451', borderSub: '#1A2B44',
-    accent: '#22C55E', accentDim: '#16A34A', accentGlow: 'rgba(34,197,94,0.12)',
-    blue: '#60A5FA', blueDim: '#3B82F6', blueBg: 'rgba(96,165,250,0.08)',
-    yellow: '#FBBF24', yellowBg: 'rgba(251,191,36,0.08)', yellowText: '#FDE68A',
-    text: '#E8F0FE', textSub: '#8BA3C4', textMut: '#4A6080',
-    eqBg: '#0E1A30', eqBord: '#3B82F6',
-    codeBgM: '#111827', codeBgP: '#060D17',
-    numBg: '#0D2E1A', numText: '#4ADE80',
-    shortBg: 'rgba(34,197,94,0.07)', shortBord: '#22C55E',
-    bnBg: 'rgba(251,191,36,0.07)', bnBord: '#FBBF24',
-    tagBg: 'rgba(96,165,250,0.12)', tagText: '#93C5FD', tagBord: 'rgba(96,165,250,0.3)',
-    divider: '#1A2B44',
-    selBg: '#1A2740', selBord: '#243451',
-    filterActiveBg: 'rgba(34,197,94,0.12)', filterActiveBord: '#22C55E', filterActiveText: '#4ADE80',
-  },
-  light: {
-    bg: '#F0F4FA', surface: '#FFFFFF', card: '#FFFFFF',
-    cardHov: '#F0FDF4', border: '#D1DCF0', borderSub: '#E2ECF8',
-    accent: '#16A34A', accentDim: '#15803D', accentGlow: 'rgba(22,163,74,0.1)',
-    blue: '#2563EB', blueDim: '#1D4ED8', blueBg: 'rgba(37,99,235,0.06)',
-    yellow: '#D97706', yellowBg: 'rgba(217,119,6,0.07)', yellowText: '#92400E',
-    text: '#0F1F3D', textSub: '#3D5A80', textMut: '#8BA3C4',
-    eqBg: '#EEF4FF', eqBord: '#2563EB',
-    codeBgM: '#1C2333', codeBgP: '#0D1117',
-    numBg: '#DCFCE7', numText: '#15803D',
-    shortBg: '#F0FDF4', shortBord: '#16A34A',
-    bnBg: '#FFFBEB', bnBord: '#D97706',
-    tagBg: 'rgba(37,99,235,0.06)', tagText: '#1D4ED8', tagBord: 'rgba(37,99,235,0.2)',
-    divider: '#E2ECF8',
-    selBg: '#FFFFFF', selBord: '#D1DCF0',
-    filterActiveBg: 'rgba(22,163,74,0.08)', filterActiveBord: '#16A34A', filterActiveText: '#15803D',
-  },
-};
 
 function useSolutionsTheme() {
   const { themeId } = useTheme();
@@ -507,7 +472,7 @@ function FormulaPanel({ courseCode, t, onClose }) {
   return (
     <div className="formula-panel">
       <div className="formula-panel-header">
-        <span className="formula-panel-title">📐 Formula Sheet — {courseCode}</span>
+        <span className="formula-panel-title" style={{ display: "inline-flex", alignItems: "center", gap: 6 }}><Sigma size={14} /> Formula Sheet — {courseCode}</span>
         <button onClick={onClose} className="formula-panel-close">×</button>
       </div>
       <div className="formula-grid">
@@ -635,7 +600,7 @@ function CodeBlock({ matlab, python, t }) {
             borderBottom: `2px solid ${tab === id ? (id === 'matlab' ? '#FFD700' : '#86EFAC') : 'transparent'}`,
             transition: 'all .12s',
           }}>
-            {id === 'matlab' ? '⬡ MATLAB' : '🐍 Python'}
+            {id === 'matlab' ? '⬡ MATLAB' : 'Python'}
           </button>
         ))}
         <button onClick={handleCopy} style={{
@@ -883,7 +848,7 @@ function SolutionOverlay({ question: q, t, dark, bookmarks, toggleBookmark, cour
 
           {!q.short_answer && !q.detailed_answer && !q.explanation_bn && !hasCode && (
             <div style={{ textAlign: 'center', padding: '48px 0', color: t.textMut }}>
-              <div style={{ fontSize: 32, marginBottom: 12 }}>📝</div>
+              <div style={{ marginBottom: 12, display: 'flex', justifyContent: 'center' }}><FileText size={32} color={t.textMut} /></div>
               <div style={{ fontSize: 14, fontWeight: 500 }}>Solution not available yet for this question.</div>
             </div>
           )}
@@ -1353,24 +1318,18 @@ export default function QuestionBankSolutions() {
     </div>
   );
 
-  const page = { minHeight: '100vh', background: t.bg, color: t.text, fontFamily: "'Inter',sans-serif", paddingBottom: 60 };
+  const page = { minHeight: '100vh', color: t.text, fontFamily: "'Inter',sans-serif", paddingBottom: 60 };
 
   // ════════════════════════════════════════════════════════════════════════════
   // VIEW: HOME
   // ════════════════════════════════════════════════════════════════════════════
   if (view === 'home') return (
-    <div style={page}>
+    <div className="content-page-bg" style={page}>
       <div className="wrap" style={{ paddingTop: 20 }}>
         <div
           className="home-hero"
           style={{
-            background: dark
-              ? `linear-gradient(135deg, color-mix(in srgb, ${t.accent} 10%, ${t.surface}), ${t.surface})`
-              : `linear-gradient(135deg, color-mix(in srgb, ${t.accent} 7%, ${t.surface}), ${t.surface})`,
-            border: `1px solid ${t.border}`,
-            borderRadius: 16,
-            padding: '18px 22px',
-            marginBottom: 20,
+            marginBottom: 16,
           }}
         >
           <div className="home-hero-inner">
@@ -1440,7 +1399,7 @@ export default function QuestionBankSolutions() {
                 background: t.card, border: `1px solid ${t.border}`,
                 borderRadius: 12, padding: '36px 28px',
               }}>
-                <div style={{ fontSize: 32, marginBottom: 12 }}>📚</div>
+                <div style={{ marginBottom: 12, display: "flex", justifyContent: "center" }}><BookOpen size={32} color={t.textMut} /></div>
                 <div style={{ fontWeight: 700, fontSize: 17, color: t.text, marginBottom: 8 }}>
                   No solutions available yet
                 </div>
@@ -1449,7 +1408,7 @@ export default function QuestionBankSolutions() {
                   Questions are available, but solutions take time and community effort to build.
                   <br /><br />
                   We'd love your help! With better community participation, we can grow this into
-                  a complete resource for every KUET student. 🌱
+                  a complete resource for every KUET student.
                 </div>
                 <div style={{ display: 'flex', gap: 10, justifyContent: 'center', flexWrap: 'wrap' }}>
                   <button
@@ -1461,7 +1420,7 @@ export default function QuestionBankSolutions() {
                       cursor: 'pointer',
                     }}
                   >
-                    Help us grow 🤝
+                    Help us grow
                   </button>
                   <a
                     href={`https://wa.me/${WA_NUMBER}`}
@@ -1498,7 +1457,7 @@ export default function QuestionBankSolutions() {
               className="course-grid-nudge-btn"
               style={{ background: t.accent, color: '#fff' }}
             >
-              Contribute 🤝
+              Contribute
             </button>
           </div>
         )}
@@ -1519,7 +1478,7 @@ export default function QuestionBankSolutions() {
             <p className="qb2-modal-text">
               We're building a community-powered solution database for KUET students.
               If you have solved past papers or partial solutions, your contribution can make
-              a real difference for hundreds of students. Every bit helps. 🙏
+              a real difference for hundreds of students. Every bit helps.
             </p>
             <div className="qb2-modal-actions">
               <button className="qb2-secondary-btn" type="button" onClick={closeContribIntro}>Not now</button>
@@ -1541,7 +1500,7 @@ export default function QuestionBankSolutions() {
   // VIEW: COURSES
   // ════════════════════════════════════════════════════════════════════════════
   if (view === 'courses') return (
-    <div style={page}>
+    <div className="content-page-bg" style={page}>
       <TopNav />
       <div className="wrap" style={{ paddingTop: 20 }}>
         <DeptTermRow />
@@ -1574,7 +1533,7 @@ export default function QuestionBankSolutions() {
                 background: t.card, border: `1px solid ${t.border}`,
                 borderRadius: 12, padding: '36px 28px',
               }}>
-                <div style={{ fontSize: 32, marginBottom: 12 }}>📚</div>
+                <div style={{ marginBottom: 12, display: "flex", justifyContent: "center" }}><BookOpen size={32} color={t.textMut} /></div>
                 <div style={{ fontWeight: 700, fontSize: 17, color: t.text, marginBottom: 8 }}>
                   No solutions available yet
                 </div>
@@ -1583,7 +1542,7 @@ export default function QuestionBankSolutions() {
                   Questions are available, but solutions take time and community effort to build.
                   <br /><br />
                   We'd love your help! With better community participation, we can grow this into
-                  a complete resource for every KUET student. 🌱
+                  a complete resource for every KUET student.
                 </div>
                 <div style={{ display: 'flex', gap: 10, justifyContent: 'center', flexWrap: 'wrap' }}>
                   <button
@@ -1595,7 +1554,7 @@ export default function QuestionBankSolutions() {
                       cursor: 'pointer',
                     }}
                   >
-                    Help us grow 🤝
+                    Help us grow
                   </button>
                   <a
                     href={`https://wa.me/${WA_NUMBER}`}
@@ -1637,7 +1596,7 @@ export default function QuestionBankSolutions() {
             <p className="qb2-modal-text">
               We're building a community-powered solution database for KUET students.
               If you have solved past papers or partial solutions, your contribution can make
-              a real difference for hundreds of students. Every bit helps. 🙏
+              a real difference for hundreds of students. Every bit helps.
             </p>
             <div className="qb2-modal-actions">
               <button className="qb2-secondary-btn" type="button" onClick={closeContribIntro}>Not now</button>
@@ -1659,7 +1618,7 @@ export default function QuestionBankSolutions() {
   // VIEW: YEARS
   // ════════════════════════════════════════════════════════════════════════════
   if (view === 'years') return (
-    <div style={page}>
+    <div className="content-page-bg" style={page}>
       <TopNav />
       <div className="wrap" style={{ paddingTop: 20 }}>
         {courseInfo && (
@@ -1675,7 +1634,7 @@ export default function QuestionBankSolutions() {
                   className="icon-btn"
                   style={{ color: showFormulas ? t.accent : t.textMut, background: showFormulas ? t.accentGlow : 'transparent', border: `1px solid ${showFormulas ? t.accent + '40' : t.border}` }}
                 >
-                  📐
+                  <Sigma size={16} />
                 </button>
               )}
               {availableYears.length > 0 && (
@@ -1734,7 +1693,7 @@ export default function QuestionBankSolutions() {
   // VIEW: ALL YEARS
   // ════════════════════════════════════════════════════════════════════════════
   if (view === 'all') return (
-    <div style={page}>
+    <div className="content-page-bg" style={page}>
       <div className="qs-print-area">
         <TopNav />
         <div className="wrap" style={{ paddingTop: 16 }}>
@@ -1746,7 +1705,7 @@ export default function QuestionBankSolutions() {
               </div>
               {FORMULA_SHEETS[selectedCourse] && (
                 <button onClick={() => setShowFormulas(v => !v)} className="icon-btn" style={{ color: showFormulas ? t.accent : t.textMut, background: showFormulas ? t.accentGlow : 'transparent', border: `1px solid ${showFormulas ? t.accent + '40' : t.border}` }}>
-                  📐
+                  <Sigma size={16} />
                 </button>
               )}
             </div>
@@ -1766,7 +1725,7 @@ export default function QuestionBankSolutions() {
               <div className="tab-bar qs-no-print" style={{ borderBottom: `1px solid ${t.border}` }}>
                 {[
                   { id: 'questions', label: `Questions (${allMergedQuestions.length})` },
-                  { id: 'analysis', label: '📊 Analysis' },
+                  { id: 'analysis', label: 'Analysis' },
                 ].map(tab => (
                   <button
                     key={tab.id}
@@ -1889,7 +1848,7 @@ export default function QuestionBankSolutions() {
   // VIEW: SOLUTIONS — single year
   // ════════════════════════════════════════════════════════════════════════════
   return (
-    <div style={page}>
+    <div className="content-page-bg" style={page}>
       <div className="qs-print-area">
         <TopNav />
         <div className="wrap" style={{ paddingTop: 16 }}>
@@ -1923,11 +1882,11 @@ export default function QuestionBankSolutions() {
                 <div className="meta-bar-actions">
                   {FORMULA_SHEETS[selectedCourse] && (
                     <button onClick={() => setShowFormulas(v => !v)} className="icon-btn" style={{ color: showFormulas ? t.accent : t.textMut, background: showFormulas ? t.accentGlow : 'transparent', border: `1px solid ${showFormulas ? t.accent + '40' : t.border}` }}>
-                      📐
+                      <Sigma size={16} />
                     </button>
                   )}
                   <button onClick={() => window.print()} className="icon-btn" style={{ color: t.textMut, background: 'transparent', border: `1px solid ${t.border}` }}>
-                    🖨️
+                    <Printer size={16} />
                   </button>
                   <button onClick={goAll} className="btn-secondary" style={{ color: t.blue, background: t.blueBg, border: `1px solid ${t.blue}35` }}>
                     <Hash size={12} /> All years

@@ -1,5 +1,5 @@
 import { useState, useMemo, useRef, useEffect, useCallback } from 'react';
-import { Plus, Trash2, ChevronLeft, ChevronRight, Download, Edit2, X, Check, TrendingUp, TrendingDown, Wallet } from 'lucide-react';
+import { Plus, Trash2, ChevronLeft, ChevronRight, Download, Edit2, X, Check, TrendingUp, TrendingDown, Wallet, AlertTriangle } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, LineChart, Line, CartesianGrid } from 'recharts';
 import { store, uid } from '../store/store';
 import Modal from '../components/Modal';
@@ -285,7 +285,7 @@ export default function Money() {
           <div style={{ height: 6, borderRadius: 99, background: 'var(--border)', overflow: 'hidden' }}>
             <div style={{ height: '100%', width: `${budgetPct}%`, background: budgetColor, borderRadius: 99, transition: 'width 0.3s' }} />
           </div>
-          {budgetPct >= 90 && <div style={{ fontSize: 11, color: 'var(--danger)', marginTop: 5 }}>⚠️ Budget almost used up!</div>}
+          {budgetPct >= 90 && <div style={{ fontSize: 11, color: 'var(--danger)', marginTop: 5, display: 'flex', alignItems: 'center', gap: 4 }}><AlertTriangle size={12} />Budget almost used up!</div>}
         </div>
       )}
 
