@@ -26,7 +26,7 @@ import { syncLocalDataOnAuth, clearLocalDataOnLogout } from '../lib/accountLifec
 import { uploadProfilePicture, getProfilePhotoURL, deleteProfilePicture } from '../lib/profilePicture';
 import { AvatarUploadModal } from '../components/AvatarUploadModal';
 import { syncBloodDonorEntry } from '../lib/bloodDonorSync';
-import { getGroupId } from '../lib/groupUtils';
+import { getGroupId, isMultiSectionDept } from '../lib/groupUtils';
 import { subscribeMyRole, subscribeIsOwnMember, subscribeOwnMemberVerified, requestLeaveCR, leaveGroup } from '../lib/groupSync';
 import ClaimCRCard, { ClaimCRInlineButton } from '../components/ClaimCRCard';
 import JoinStatusCard from '../components/JoinStatusCard';
@@ -864,69 +864,146 @@ export default function Profile() {
         }}><CheckCircle2 size={16} /> Profile updated!</div>
       )}
 
-      {/* ── Hero: minimal — Avatar (top) + Name (below). Same layout on
-           mobile and desktop now; Edit button moved into Personal Info,
-           Sign Out lives in the hamburger menu. ── */}
+      {/* ── Hero: Facebook-cover-style layout. A short flat cover strip
+           sits behind the top of the avatar; the avatar overlaps its
+           bottom edge (half in the cover, half on the card background
+           below) via a negative top margin. This replaces the old
+           tall, avatar-centered-in-a-plain-card hero, cutting hero
+           height from ~400px to ~180-200px. Pure layout/CSS change —
+           every conditional below (isKuetVerified, isRealCR, etc.) is
+           unchanged from before. ── */}
       <div className="profile-hero-plain" style={{
-        borderRadius: 20, padding: 'clamp(28px,5vw,40px) clamp(20px,4vw,32px)',
-        display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-        gap: 14,
-        position: 'relative', overflow: 'hidden', textAlign: 'center',
+        borderRadius: 20, overflow: 'hidden', position: 'relative',
       }}>
-        {/* Avatar — clickable to upload, with glow ring + click-to-edit hint */}
-        <div
-          onClick={() => setShowAvatarModal(true)}
-          title="Click to change profile picture"
-          className="profile-hero-avatar"
-          style={{
-            borderRadius: '50%',
-            background: photoURL ? 'transparent' : 'var(--accentSoft)',
-            border: '3px solid var(--border)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            fontWeight: 900, color: 'var(--accent)',
-            flexShrink: 0, cursor: 'pointer', overflow: 'hidden', position: 'relative',
-            transition: 'transform 0.2s, box-shadow 0.2s',
-          }}
-          onMouseEnter={e => { e.currentTarget.style.transform = 'scale(1.04)'; }}
-          onMouseLeave={e => { e.currentTarget.style.transform = ''; }}
-        >
-          {photoURL
-            ? <img src={photoURL} alt="Profile" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-            : <span>{profile.name ? profile.name.trim().charAt(0).toUpperCase() : <User size={28} />}</span>
-          }
-          {/* Camera overlay on hover — desktop affordance, kept as-is */}
-          <div style={{
-            position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.4)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            opacity: 0, transition: 'opacity 0.2s', borderRadius: '50%',
-          }}
-          onMouseEnter={e => e.currentTarget.style.opacity = '1'}
-          onMouseLeave={e => e.currentTarget.style.opacity = '0'}>
-            <Camera size={22} color="white" />
-          </div>
-          {/* Always-visible camera badge — hover-only affordances are invisible
-              on touch devices, so users had no way of knowing the avatar was
-              tappable. This badge sits in the corner permanently. */}
-          <div style={{
-            position: 'absolute', bottom: 0, right: 0,
-            width: '30%', height: '30%', minWidth: 26, minHeight: 26,
-            borderRadius: '50%', background: 'var(--accent)',
-            border: '2.5px solid var(--card, #fff)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            boxShadow: '0 1px 4px rgba(0,0,0,0.25)',
-          }}>
-            <Camera size={14} color="#fff" style={{ width: '46%', height: '46%' }} />
-          </div>
-        </div>
+        {/* Cover strip — flat accent wash, short and fixed-height */}
+        <div style={{
+          height: 130,
+          background: 'linear-gradient(135deg, rgba(59,130,246,0.16) 0%, rgba(139,92,246,0.16) 100%)',
+        }} />
 
-        {/* Name only — Student ID / Session / Term already shown in
-             Academic Info / Personal Info cards below. Edit lives there too. */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap', justifyContent: 'center' }}>
-          <div style={{ fontSize: 'clamp(19px,4.5vw,28px)', fontWeight: 900, color: 'var(--text)', letterSpacing: '-0.02em', lineHeight: 1.2, fontFamily: "'Space Grotesk', 'Sora', 'Hind Siliguri', system-ui, sans-serif", display: 'flex', alignItems: 'center', gap: 8 }}>
-            {profile.name}
-            {isKuetVerified && <BlueTick size={18} />}
+        <div style={{
+          padding: '0 clamp(20px,4vw,32px) clamp(16px,3vw,22px)',
+          display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center',
+        }}>
+          {/* Avatar — clickable to upload, with glow ring + click-to-edit hint.
+              Negative margin pulls it up so it overlaps the cover strip. */}
+          <div
+            onClick={() => setShowAvatarModal(true)}
+            title="Click to change profile picture"
+            className="profile-hero-avatar"
+            style={{
+              marginTop: -46, // half the avatar sits inside the cover above
+              borderRadius: '50%',
+              background: photoURL ? 'transparent' : 'var(--accentSoft)',
+              border: '4px solid var(--card, #fff)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              fontWeight: 900, color: 'var(--accent)',
+              flexShrink: 0, cursor: 'pointer', overflow: 'hidden', position: 'relative',
+              transition: 'transform 0.2s, box-shadow 0.2s',
+            }}
+            onMouseEnter={e => { e.currentTarget.style.transform = 'scale(1.04)'; }}
+            onMouseLeave={e => { e.currentTarget.style.transform = ''; }}
+          >
+            {photoURL
+              ? <img src={photoURL} alt="Profile" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              : <span>{profile.name ? profile.name.trim().charAt(0).toUpperCase() : <User size={28} />}</span>
+            }
+            {/* Camera overlay on hover — desktop affordance, kept as-is */}
+            <div style={{
+              position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.4)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              opacity: 0, transition: 'opacity 0.2s', borderRadius: '50%',
+            }}
+            onMouseEnter={e => e.currentTarget.style.opacity = '1'}
+            onMouseLeave={e => e.currentTarget.style.opacity = '0'}>
+              <Camera size={22} color="white" />
+            </div>
+            {/* Always-visible camera badge — hover-only affordances are invisible
+                on touch devices, so users had no way of knowing the avatar was
+                tappable. This badge sits in the corner permanently. */}
+            <div style={{
+              position: 'absolute', bottom: 0, right: 0,
+              width: '30%', height: '30%', minWidth: 26, minHeight: 26,
+              borderRadius: '50%', background: 'var(--accent)',
+              border: '2.5px solid var(--card, #fff)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              boxShadow: '0 1px 4px rgba(0,0,0,0.25)',
+            }}>
+              <Camera size={14} color="#fff" style={{ width: '46%', height: '46%' }} />
+            </div>
           </div>
-          {isRealCR && <Badge label="CR" color="var(--accent)" bg="var(--accentSoft)" />}
+
+          {/* Name + verified tick + CR badge, compact, right under the
+              overlapping avatar. Student ID / Session / Term already shown
+              in Academic Info / Personal Info cards below. Edit lives there too. */}
+          <div style={{ marginTop: 8, display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap', justifyContent: 'center' }}>
+            <div style={{ fontSize: 'clamp(17px,4vw,22px)', fontWeight: 900, color: 'var(--text)', letterSpacing: '-0.02em', lineHeight: 1.2, fontFamily: "'Space Grotesk', 'Sora', 'Hind Siliguri', system-ui, sans-serif", display: 'flex', alignItems: 'center', gap: 8 }}>
+              {profile.name}
+              {isKuetVerified && <BlueTick size={18} />}
+            </div>
+            {isRealCR && <Badge label="CR" color="var(--accent)" bg="var(--accentSoft)" />}
+          </div>
+
+          {/* CR handover/leave — now a compact inline chip instead of a
+              separate large banner card (moved from its own block below
+              into the hero itself, right under the name). Same
+              requestLeaveCR action as before; "Hand over CR" now points
+              at /class-my-role (the split-out "My Role" page) instead of
+              /class-roster, since /class-roster is now the Roster-only
+              page and the handoff hint/action lives on My Role. */}
+          {isRealCR && (
+            <div style={{
+              marginTop: 8, display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap', justifyContent: 'center',
+              fontSize: 11, padding: '4px 10px', borderRadius: 20,
+              background: 'var(--accentSoft)', border: '1px solid rgba(59,130,246,0.25)',
+            }}>
+              <button
+                onClick={() => navigate('/class-my-role', { state: { intent: 'handoff' } })}
+                style={{ fontSize: 11, color: 'var(--accent)', background: 'none', border: 'none', cursor: 'pointer', fontWeight: 600, padding: 0 }}>
+                Hand over CR
+              </button>
+              <span style={{ color: 'var(--muted)' }}>·</span>
+              <button
+                disabled={leaveCRState === 'sending' || leaveCRState === 'sent'}
+                onClick={async () => {
+                  if (!window.confirm("Send a request to your Class Lead to step down as CR? You'll remain CR until it's approved.")) return;
+                  setLeaveCRState('sending');
+                  try {
+                    const groupId = getGroupId(profile);
+                    await requestLeaveCR(groupId, profile);
+                    setLeaveCRState('sent');
+                  } catch (err) {
+                    alert(`Failed: ${err?.message || err}`);
+                    setLeaveCRState('idle');
+                  }
+                }}
+                style={{ fontSize: 11, color: 'var(--muted)', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>
+                {leaveCRState === 'sent' ? 'Request sent ✓' : leaveCRState === 'sending' ? 'Sending…' : 'Leave CR'}
+              </button>
+            </div>
+          )}
+
+          {/* Section-missing nudge — only for the 4 multi-section depts
+              (CE/EEE/ME/CSE) when the student hasn't picked A/B yet
+              (pre-migration or profile predates the section field).
+              Without this, getGroupId() returns null and all class
+              features (CR claim, roster, routine, notices) stay disabled
+              for them silently — this makes the reason visible and
+              actionable right where they'd look. */}
+          {isMultiSectionDept(profile.dept) && !profile.section && (
+            <div style={{
+              marginTop: 10, fontSize: 12, padding: '8px 14px', borderRadius: 10,
+              background: 'rgba(234,179,8,0.12)', border: '1px solid rgba(234,179,8,0.35)', color: 'var(--text)',
+              display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap', justifyContent: 'center',
+            }}>
+              <span>Your department runs two sections — set yours to unlock class features.</span>
+              <button
+                onClick={() => setIsModalOpen(true)}
+                style={{ fontSize: 12, color: 'var(--accent)', background: 'none', border: 'none', cursor: 'pointer', fontWeight: 700, padding: 0 }}>
+                Select section
+              </button>
+            </div>
+          )}
         </div>
       </div>
 
@@ -946,65 +1023,9 @@ export default function Profile() {
           subscribeOwnMemberVerified, same source of truth ClassmatesList.jsx
           uses. ── */}
 
-      {/* ── CR Banner ──
-          NOTE: the old "Disable CR" button here only flipped the local,
-          dead `profile.isCR` flag — it never touched the server-verified
-          members/{uid}.role or legacyCRClaim fields. That let people think
-          they'd stepped down as CR while the server still had role: 'cr'
-          (or, after a real leave via a path that predates legacyCRClaim
-          cleanup, left a stale legacyCRClaim: true behind) — producing the
-          "Claims CR" ghost badge on Classmates/Team pages. Routing this
-          through requestLeaveCR (same CL-approved flow as ClassRoster.jsx)
-          ensures role and legacyCRClaim actually get cleared together via
-          clApproveLeaveCR once the CL approves.
-
-          Two distinct exits are offered:
-            - "Leave CR" fires requestLeaveCR() directly from here — no CL
-              approval needed to SUBMIT the request (CL still has to
-              approve it to actually vacate the slot), so this is a single
-              click, no extra page.
-            - "Hand over CR" is NOT a direct action — picking a specific
-              successor requires seeing the class roster (handoffCR needs
-              a target uid), so this navigates to /class-roster where that
-              picker UI already lives, rather than duplicating it here. */}
-      {isRealCR && (
-        <div style={{
-          padding: '13px 18px', borderRadius: 12,
-          background: 'linear-gradient(135deg, rgba(59,130,246,0.1) 0%, rgba(139,92,246,0.1) 100%)',
-          border: '1.5px solid rgba(59,130,246,0.3)',
-          display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap',
-        }}>
-          <Crown size={22} color="var(--accent)" />
-          <div style={{ flex: '1 1 auto', minWidth: 160 }}>
-            <div style={{ fontWeight: 700, fontSize: 13, color: 'var(--text)' }}>Class Representative</div>
-            <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 1 }}>Class Management tools available in the sidebar.</div>
-          </div>
-          <div style={{ display: 'flex', gap: 14, alignItems: 'center', marginLeft: 'auto' }}>
-            <button
-              onClick={() => navigate('/class-roster', { state: { intent: 'handoff' } })}
-              style={{ fontSize: 11, color: 'var(--accent)', background: 'none', border: 'none', cursor: 'pointer', fontWeight: 600 }}>
-              Hand over CR
-            </button>
-            <button
-              disabled={leaveCRState === 'sending' || leaveCRState === 'sent'}
-              onClick={async () => {
-                if (!window.confirm("Send a request to your Class Lead to step down as CR? You'll remain CR until it's approved.")) return;
-                setLeaveCRState('sending');
-                try {
-                  const groupId = getGroupId(profile);
-                  await requestLeaveCR(groupId, profile);
-                  setLeaveCRState('sent');
-                } catch (err) {
-                  alert(`Failed: ${err?.message || err}`);
-                  setLeaveCRState('idle');
-                }
-              }}
-              style={{ fontSize: 11, color: 'var(--muted)', background: 'none', border: 'none', cursor: 'pointer' }}>
-              {leaveCRState === 'sent' ? 'Request sent ✓' : leaveCRState === 'sending' ? 'Sending…' : 'Leave CR'}
-            </button>
-          </div>
-        </div>
-      )}
+      {/* CR handover/leave chip now lives inline in the hero above (compact,
+          under the name) instead of this standalone banner. Same actions,
+          same requestLeaveCR/navigate('/class-roster') flow — just moved. */}
 
       {/* Claim CR now lives in profile-col-right, next to Quick Accounts
           (desktop), plus a compact inline button next to Personal Info's

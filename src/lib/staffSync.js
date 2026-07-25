@@ -158,9 +158,12 @@ export async function getStaffDisplayInfo(uid) {
       const memberDoc = snap.docs[0];
       const data = memberDoc.data();
       const groupId = memberDoc.ref.parent.parent?.id || '';
-      // groupId is BATCH_DEPT (see groupUtils.js's getGroupId) — split it
+      // groupId is BATCH_DEPT, or BATCH_DEPT_SECTION for the 4
+      // multi-section depts (see groupUtils.js's getGroupId) — split it
       // back out so the Staff detail popup can show dept/batch without a
-      // second lookup.
+      // second lookup. Destructuring only the first 2 parts is safe even
+      // for the 3-part case: dept still lands correctly at index 1, the
+      // trailing section segment is just dropped (not needed here).
       const [batch, dept] = groupId.split('_');
       return {
         name: data.name || '',

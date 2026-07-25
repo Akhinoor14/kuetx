@@ -222,7 +222,7 @@ function CampusLeadBlock({ groupId }) {
     try {
       await clApproveCRRequest(groupId, targetUid);
     } catch (e) {
-      // Most likely: both CR slots (max 2) are already full — surfaced
+      // Most likely: the CR slot (max 1) is already full — surfaced
       // clearly rather than a silent no-op, since this is the one case
       // clApproveCRRequest can legitimately reject.
       setApproveErr(e?.message || 'Approve failed — try again.');

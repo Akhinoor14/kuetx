@@ -33,9 +33,12 @@ export default function CRHub() {
     icon: 'Shield',
     items: [
       { id: 'profile',           label: 'Profile',            icon: 'User',          path: '/profile' },
-      { id: 'class-roster',      label: 'Class Roster',       icon: 'Users',         path: '/class-roster' },
-      { id: 'class-management',  label: 'Class Management',   icon: 'Users',         path: '/class-management' },
+      { id: 'class-routine',     label: 'Routine',            icon: 'CalendarDays',  path: '/class-routine' },
+      { id: 'class-planner',     label: 'Class Planner',      icon: 'CalendarCheck', path: '/class-planner' },
       { id: 'ct-quiz-planning',  label: 'CT & Quiz Planner',  icon: 'CalendarCheck', path: '/ct-quiz-planning' },
+      { id: 'class-roster',      label: 'Roster',             icon: 'Users',         path: '/class-roster' },
+      { id: 'class-notices',     label: 'Notices',            icon: 'Bell',          path: '/class-notices' },
+      { id: 'class-my-role',     label: 'My Role',            icon: 'Shield',        path: '/class-my-role' },
     ],
   };
 

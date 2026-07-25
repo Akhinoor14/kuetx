@@ -28,16 +28,36 @@ export const NAV = [
       { id: 'notice', label: 'Notice', icon: 'Bell', path: '/notice' },
     ]
   },
+  // Class Rep hub — ONE sidebar row (hubPath /class-rep, same convention
+  // as Dashboard/Profile/Notice), but its `items` list now has 6 entries
+  // instead of 3 because Class Management and Class Roster (each of
+  // which used to be one page with an internal tab-switch) are now 6
+  // real standalone pages. Kept as a single group (not split into 6
+  // single-item groups) so the Sidebar still shows exactly one "Class
+  // Rep" row linking to the /class-rep hub, matching every other
+  // isSubgroup entry.
+  //
+  // `noSiblingPills: true` tells Navbar.jsx's getPageMeta() to skip
+  // building the top "sibling pill" row for any page in this group —
+  // that pill row (Management / CT & Quiz / Roster) was the old
+  // in-page switch-tabs and the whole point of this refactor is that
+  // it goes away now that each item is its own full standalone page,
+  // not a tab of a shared page. Without this flag, having 6 items in
+  // one group would just recreate a 6-way pill row instead of 3.
   {
     group: 'Class Rep',
     requiresCR: true,
     isSubgroup: true,
+    noSiblingPills: true,
     hubPath: '/class-rep',
     hubIcon: 'Shield',
     items: [
-      { id: 'class-management', label: 'Class Management',  shortLabel: 'Management', icon: 'Users',         path: '/class-management', requiresCR: true },
-      { id: 'ct-quiz-planning', label: 'CT & Quiz Planner', shortLabel: 'CT & Quiz',  icon: 'CalendarCheck', path: '/ct-quiz-planning', requiresCR: true },
-      { id: 'class-roster',     label: 'Class Roster',      shortLabel: 'Roster',     icon: 'Users',         path: '/class-roster',     requiresCR: true },
+      { id: 'class-routine',     label: 'Routine',           icon: 'CalendarDays',  path: '/class-routine',    requiresCR: true },
+      { id: 'class-planner',     label: 'Class Planner',     icon: 'CalendarCheck', path: '/class-planner',    requiresCR: true },
+      { id: 'ct-quiz-planning',  label: 'CT & Quiz Planner', icon: 'CalendarCheck', path: '/ct-quiz-planning', requiresCR: true },
+      { id: 'class-roster',      label: 'Roster',            icon: 'Users',         path: '/class-roster',     requiresCR: true },
+      { id: 'class-notices',     label: 'Notices',           icon: 'Bell',          path: '/class-notices',    requiresCR: true },
+      { id: 'class-my-role',     label: 'My Role',           icon: 'Shield',        path: '/class-my-role',    requiresCR: true },
     ]
   },
   {

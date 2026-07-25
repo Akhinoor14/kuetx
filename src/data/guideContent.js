@@ -264,7 +264,7 @@ export const GUIDE_SECTIONS = [
           ],
           [
             "CR Only",
-            "Class Management, CT & Quiz Planner (visible only when CR Mode is on)"
+            "Routine, Class Planner, CT & Quiz Planner, Roster, Notices, My Role (visible only when CR Mode is on)"
           ]
         ]
       }
@@ -2394,41 +2394,49 @@ export const GUIDE_SECTIONS = [
     "num": "24",
     "id": "class-management",
     "title": "CR Tools",
-    "route": "/class-management",
+    "route": "/class-rep",
     "icon": "Users",
     "category": "Class Rep",
     "desc": "A dedicated workspace for Class Representatives. Only visible when CR Mode is enabled in Profile.…",
     "blocks": [
       {
         "type": "text",
-        "text": "A dedicated workspace for Class Representatives. Only visible when CR Mode is enabled in Profile. Helps CRs manage class routines, track class counts, and share updates with their batch."
+        "text": "A dedicated workspace for Class Representatives. Only visible when CR Mode is enabled in Profile. Helps CRs manage class routines, track class counts, and share updates with their batch. Each tool below is now its own page — open them from the Class Rep hub."
       },
       {
         "type": "subhead",
-        "text": "Tabs in Class Management"
+        "text": "Pages in the Class Rep hub"
       },
       {
         "type": "table",
         "headers": [
-          "Tab",
+          "Page",
           "What it does"
         ],
         "rows": [
           [
             "Routine",
-            "View today's class schedule — which course is happening at which time slot right now"
+            "View the class schedule — which course is happening at which time slot, day by day"
           ],
           [
-            "CT Planner",
-            "Schedule and track Class Tests — see the CT timeline and total count per course"
+            "Class Planner",
+            "Track how many classes have been held per course for the term, automatic or manual +1 logging"
           ],
           [
-            "Class Count",
-            "Track how many classes have been held per course for the entire term so far"
+            "CT & Quiz Planner",
+            "Schedule and track Class Tests and Quizzes — see the timeline and total count per course"
           ],
           [
-            "Copy & Share",
-            "Generate a formatted text summary of today's schedule to share on WhatsApp/Messenger"
+            "Roster",
+            "Manage class members, verify join requests, and assign roles"
+          ],
+          [
+            "Notices",
+            "Send notices to the class and see reach/read stats"
+          ],
+          [
+            "My Role",
+            "See your CR/ACR status and step down or hand off the role"
           ]
         ]
       },
@@ -2444,31 +2452,31 @@ export const GUIDE_SECTIONS = [
       {
         "type": "step",
         "num": 2,
-        "text": "Open Class Management from the navigation — it appears after CR Mode is enabled"
+        "text": "Open the Class Rep hub from the navigation — it appears after CR Mode is enabled"
       },
       {
         "type": "step",
         "num": 3,
-        "text": "Routine tab: verify today's class flow at a glance"
+        "text": "Routine: verify the class flow at a glance, day by day"
       },
       {
         "type": "step",
         "num": 4,
-        "text": "After each class, update the class count for that course"
+        "text": "Class Planner: after each class, update the class count for that course"
       },
       {
         "type": "step",
         "num": 5,
-        "text": "CT Planner: schedule upcoming CTs per course to keep the class informed"
+        "text": "CT & Quiz Planner: schedule upcoming CTs/quizzes per course to keep the class informed"
       },
       {
         "type": "step",
         "num": 6,
-        "text": "Copy & Share: tap to generate a formatted message, then paste into your class group"
+        "text": "Routine: use WhatsApp/Export/Open Schedule to share the day's routine with your class group"
       },
       {
         "type": "callout",
-        "text": "CR Mode must be enabled in Profile to unlock Class Management and CT & Quiz Planner in the navigation. Toggle it in Profile → Edit Profile.",
+        "text": "CR Mode must be enabled in Profile to unlock the Class Rep hub and its tools in the navigation. Toggle it in Profile → Edit Profile.",
         "variant": "warning"
       }
     ]
@@ -2985,7 +2993,7 @@ export const GUIDE_SECTIONS = [
           ],
           [
             "Class Rep",
-            "🟟 Class Management, CT & Quiz Planner (visible only in CR Mode)"
+            "🟟 Routine, Class Planner, CT & Quiz Planner, Roster, Notices, My Role (visible only in CR Mode)"
           ],
           [
             "Academics",

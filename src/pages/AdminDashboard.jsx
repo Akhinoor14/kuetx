@@ -812,10 +812,19 @@ function StaffRolesView({ onBack, onSelectCategory, groups, countCtx }) {
 // `drilldown: true` note for the general distinction.
 // =======================================================================
 function parseGroupId(id) {
-  // Group ids are `{BATCH}_{DEPT}`, e.g. "2K23_ESE"
-  const idx = id.indexOf('_');
-  if (idx === -1) return { batch: id, dept: '' };
-  return { batch: id.slice(0, idx), dept: id.slice(idx + 1) };
+  // Group ids are `{BATCH}_{DEPT}` for single-section depts, or
+  // `{BATCH}_{DEPT}_{SECTION}` for the 4 multi-section depts (CE/EEE/ME/
+  // CSE — see groupUtils.js's MULTI_SECTION_DEPTS/getGroupId). Splitting
+  // only on the FIRST underscore (old behavior) put the section into the
+  // dept slot for those 4 depts (e.g. "2K23_CSE_A" -> dept "CSE_A"),
+  // which fragmented the Admin dashboard's dept grouping into bogus
+  // per-section "departments" instead of one CSE entry with sections
+  // nested under it. Splitting into exactly 2 or 3 parts and reading the
+  // dept from index 1 always gets the real dept code regardless of a
+  // trailing section segment.
+  const parts = id.split('_');
+  if (parts.length === 1) return { batch: parts[0], dept: '', section: '' };
+  return { batch: parts[0], dept: parts[1], section: parts[2] || '' };
 }
 
 function ClassesBreadcrumb({ dept, batch, onDept, onBatch }) {
@@ -1628,29 +1637,39 @@ function CommunicationView({ onBack, onSelectCategory, groups, countCtx }) {
     });
   }, []);
 
-  // Dept -> batch options derived from the groups prop (same parseGroupId
-  // pattern ClassesView already uses above) — feeds the individual-student
-  // picker's dept select, then that dept's batch select.
+  // Dept -> batch -> groupId[] derived from the groups prop (same
+  // parseGroupId pattern ClassesView's byDept above uses). Storing the
+  // real groupIds per batch — not just the batch label — matters for the
+  // 4 multi-section depts (CE/EEE/ME/CSE): a single batch there maps to
+  // 2 real groups ("2K23_CSE_A", "2K23_CSE_B"), so rebuilding the id
+  // later as `${batch}_${dept}` would point at a group that doesn't
+  // exist. Keeping the actual ids here means the picker never has to
+  // reconstruct anything.
   const deptBatchMap = useMemo(() => {
     const map = {};
     (groups || []).forEach((g) => {
       const { batch: b, dept: d } = parseGroupId(g.id);
       if (!d) return;
-      if (!map[d]) map[d] = new Set();
-      map[d].add(b);
+      if (!map[d]) map[d] = {};
+      if (!map[d][b]) map[d][b] = [];
+      map[d][b].push(g.id);
     });
     const out = {};
-    Object.keys(map).sort().forEach((d) => { out[d] = [...map[d]].sort(); });
+    Object.keys(map).sort().forEach((d) => {
+      out[d] = {};
+      Object.keys(map[d]).sort().forEach((b) => { out[d][b] = map[d][b].sort(); });
+    });
     return out;
   }, [groups]);
   const pickerDepts = Object.keys(deptBatchMap);
-  const pickerBatches = pickerDept ? (deptBatchMap[pickerDept] || []) : [];
+  const pickerBatches = pickerDept ? Object.keys(deptBatchMap[pickerDept] || {}) : [];
 
   // Individual-student picker: fetch this dept+batch's member list once
-  // both dept and batch are chosen. Reuses getGroupMembersOnce the same
-  // way computeAudienceSize does above — groupId is `${batch}_${dept}`
-  // (see parseGroupId's reverse). Roll-sorted via the shared sortByRoll
-  // (groupUtils.js), same sorter FacultyClassDetail.jsx's roster tabs use.
+  // both dept and batch are chosen. For multi-section depts a dept+batch
+  // resolves to multiple real groupIds (one per section) — fetch and
+  // merge members across all of them, rather than guessing a single
+  // groupId string. Roll-sorted via the shared sortByRoll (groupUtils.js),
+  // same sorter FacultyClassDetail.jsx's roster tabs use.
   useEffect(() => {
     if (audienceType !== 'students' || studentPickMode !== 'individuals' || !pickerDept || !pickerBatch) {
       setPickerMembers(null);
@@ -1658,12 +1677,15 @@ function CommunicationView({ onBack, onSelectCategory, groups, countCtx }) {
     }
     let cancelled = false;
     setPickerMembers(null);
-    getGroupMembersOnce(`${pickerBatch}_${pickerDept}`).then((members) => {
-      if (cancelled) return;
-      setPickerMembers(sortByRoll(members));
-    }).catch(() => { if (!cancelled) setPickerMembers([]); });
+    const groupIds = deptBatchMap[pickerDept]?.[pickerBatch] || [];
+    Promise.all(groupIds.map((gid) => getGroupMembersOnce(gid)))
+      .then((lists) => {
+        if (cancelled) return;
+        setPickerMembers(sortByRoll(lists.flat()));
+      })
+      .catch(() => { if (!cancelled) setPickerMembers([]); });
     return () => { cancelled = true; };
-  }, [audienceType, studentPickMode, pickerDept, pickerBatch]);
+  }, [audienceType, studentPickMode, pickerDept, pickerBatch, deptBatchMap]);
 
   // Individual-faculty picker: fetch the full faculty/{uid} collection
   // once, only when the faculty-individuals mode is actually selected —

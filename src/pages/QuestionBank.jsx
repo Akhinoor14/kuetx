@@ -9,6 +9,7 @@ import { QB_COURSE_CODES } from '../data/questionbank/qbCourseCodes';
 import { useQuestionBankData, getR2FileUrl } from '../hooks/useQuestionBankData';
 import UploadQuestionModal from '../components/UploadQuestionModal';
 import { getProfile } from '../store/store';
+import { isMultiSectionDept, getGroupId } from '../lib/groupUtils';
 import { auth } from '../lib/firebase';
 import { checkIsAdmin } from '../lib/adminAuth';
 import { subscribeMyRoles } from '../lib/staffSync';
@@ -63,16 +64,41 @@ export default function QuestionBank() {
   // holds one — used both to show "Request deletion" and to fill in the
   // groupId submitDeleteRequest() needs.
   function myGroupIdForDept(paperDept) {
-    const cl = myRoles.find((r) => r.role === 'campus_lead' && r.scope?.groupId?.endsWith(`_${paperDept}`));
+    // A CL's scope.groupId is `${batch}_${dept}` for single-section depts,
+    // or `${batch}_${dept}_${section}` for the 4 multi-section depts (see
+    // groupUtils.js). QB papers are organized by dept only (no section),
+    // so any CL of ANY section of this dept can manage/request-delete its
+    // papers — matching must compare the dept SEGMENT, not the tail of
+    // the string (`.endsWith('_' + paperDept)` would wrongly reject every
+    // multi-section CL, since their groupId ends in `_A`/`_B`, not the
+    // dept code).
+    const cl = myRoles.find((r) => {
+      if (r.role !== 'campus_lead' || !r.scope?.groupId) return false;
+      const parts = r.scope.groupId.split('_');
+      return parts[1] === paperDept;
+    });
     if (cl) return cl.scope.groupId;
     const scl = myRoles.find((r) => r.role === 'senior_campus_lead' && r.scope?.dept === paperDept);
     if (scl) {
-      // SCL scope is dept-only (no single groupId) — fall back to the
-      // signed-in user's own profile groupId if it happens to match this
-      // dept, otherwise use a dept-level placeholder groupId so the
-      // request doc still records which dept it's for.
+      // SCL scope is dept-only (no single groupId, and no section either
+      // — an SCL oversees the whole dept across all sections). Fall back
+      // to the signed-in user's own profile groupId if it happens to
+      // match this dept, otherwise build a dept-level placeholder via
+      // getGroupId so the request doc still records which dept it's for.
+      // For multi-section depts this placeholder groupId legitimately
+      // has no real `groups/{groupId}` doc behind it (it's SCL-level, not
+      // tied to one section) — deleteRequests.js/firestore.rules only
+      // need it to identify the dept, not to resolve to a real group.
       const myProfile = getProfile();
-      if (myProfile?.dept && QB_DEPARTMENTS[paperDept]) return `${myProfile.batch || 'scl'}_${paperDept}`;
+      if (myProfile?.dept && QB_DEPARTMENTS[paperDept]) {
+        if (myProfile.dept === paperDept) {
+          const mine = getGroupId(myProfile);
+          if (mine) return mine;
+        }
+        return isMultiSectionDept(paperDept)
+          ? `${myProfile.batch || 'scl'}_${paperDept}_A`
+          : `${myProfile.batch || 'scl'}_${paperDept}`;
+      }
     }
     return null;
   }

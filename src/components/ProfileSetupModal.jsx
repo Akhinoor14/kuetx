@@ -7,7 +7,7 @@ import { DEPARTMENTS, DEPT_CODES, DEFAULT_PROFILE, TERM_KEYS, getTermLabelFromKe
 import { getBatchStartDates } from '../lib/appConfigSync';
 import { claimRoll, requestRollUnlock } from '../lib/rollOwnership';
 import { subscribeGroupTermStartDate } from '../lib/termStartDateSync';
-import { getGroupId } from '../lib/groupUtils';
+import { getGroupId, isMultiSectionDept } from '../lib/groupUtils';
 
 // Map dept codes: roll middle 2 digits -> dept code
 const ROLL_DEPT_MAP = {
@@ -310,6 +310,10 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
       nextErrors.dept = 'Department must be one of KUET’s 16 approved department codes';
     }
 
+    if (isMultiSectionDept(effectiveDept) && !String(form.section || '').trim()) {
+      nextErrors.section = 'Your department has two sections — please select yours (A or B)';
+    }
+
     setErrors(nextErrors);
 
     const errorKeys = Object.keys(nextErrors);
@@ -421,6 +425,15 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
       return;
     }
 
+    if (isMultiSectionDept(effectiveDept) && !String(form.section || '').trim()) {
+      setErrors(prev => ({
+        ...prev,
+        section: 'Your department has two sections — please select yours (A or B)',
+      }));
+      setStepIndex(0);
+      return;
+    }
+
     // Block if this exact roll number is already claimed by a DIFFERENT
     // Firebase account — stops the same student ending up with two
     // separate accounts (e.g. one via Google, one via Email/Password).
@@ -454,6 +467,7 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
       kuetEmail: String(form.kuetEmail || '').trim(),
       name: String(form.name || '').trim(),
       dept: effectiveDept,
+      section: isMultiSectionDept(effectiveDept) ? String(form.section || '').trim().toUpperCase() : '',
       bloodGroup: String(form.bloodGroup || '').trim(),
       session: String(form.session || '').trim(),
       batch: autoCalculatedBatch,
@@ -781,6 +795,33 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
                       )}
                       {errors.dept && <div style={{ fontSize: 11, color: '#dc2626', marginTop: 5 }}>{errors.dept}</div>}
                     </div>
+                    {/* Section — only shown for the 4 multi-section depts
+                        (CE/EEE/ME/CSE, 120 seats/batch, split into ~60-
+                        student Section A / B by the department itself).
+                        Not derivable from the roll number — KUET rolls
+                        encode batch + dept + roll-in-dept only, no section
+                        — so this has to be a manual pick. Required for
+                        these depts because getGroupId() returns null
+                        without it, disabling all class features. */}
+                    {isMultiSectionDept(form.dept || autoCalculatedDept) && (
+                      <div>
+                        <label style={labelStyle}>Section</label>
+                        <select
+                          ref={registerFieldRef('section')}
+                          value={form.section || ''}
+                          onChange={(e) => setForm(prev => ({ ...prev, section: e.target.value }))}
+                          style={fieldStyle}
+                        >
+                          <option value="">Select section</option>
+                          <option value="A">Section A</option>
+                          <option value="B">Section B</option>
+                        </select>
+                        <div style={{ fontSize: 10, color: 'var(--muted)', marginTop: 4 }}>
+                          Your department runs two sections. This determines your class group, CR/routine, and roster.
+                        </div>
+                        {errors.section && <div style={{ fontSize: 11, color: '#dc2626', marginTop: 5 }}>{errors.section}</div>}
+                      </div>
+                    )}
                     <div>
                       <label style={labelStyle}>Blood Group</label>
                       <select ref={registerFieldRef('bloodGroup')} value={form.bloodGroup || ''} onChange={handleChange('bloodGroup')} style={fieldStyle}>

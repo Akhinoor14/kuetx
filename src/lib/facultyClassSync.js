@@ -36,10 +36,14 @@ function classIndexCollection(uid) {
  * group in the app.
  */
 export async function createFacultyAssignment(uid, {
-  dept, batch, term, courseCode, courseTitle, courseType, dayTimeSlots, gridAlias,
+  dept, batch, term, courseCode, courseTitle, courseType, dayTimeSlots, gridAlias, section,
 }) {
-  const groupId = getGroupId({ dept, batch });
-  if (!groupId) throw new Error('Department and batch are required to create a class.');
+  // section is required for the 4 multi-section depts (CE/EEE/ME/CSE) —
+  // getGroupId() returns null without it for those depts, same as it does
+  // for a missing dept/batch. Single-section depts pass section as
+  // undefined/null and are unaffected.
+  const groupId = getGroupId({ dept, batch, section });
+  if (!groupId) throw new Error('Department, batch, and (for multi-section departments) section are required to create a class.');
 
   const docRef = await addDoc(assignmentsCollection(groupId), {
     teacherUids: [uid],
@@ -52,6 +56,7 @@ export async function createFacultyAssignment(uid, {
     term,
     dept,
     batch,
+    section: section || null,
     dayTimeSlots: dayTimeSlots || [],
     plannedTotalClasses: null,
     status: 'active',
@@ -61,7 +66,7 @@ export async function createFacultyAssignment(uid, {
   });
 
   await setDoc(doc(classIndexCollection(uid), docRef.id), {
-    groupId, assignmentId: docRef.id, courseCode, dept, batch, term, status: 'active',
+    groupId, assignmentId: docRef.id, courseCode, dept, batch, section: section || null, term, status: 'active',
   });
 
   return docRef.id;

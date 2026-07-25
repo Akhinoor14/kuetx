@@ -212,7 +212,7 @@ export default function ClassmatesList({ groupId, showActions = false, viewerRol
         if (m.id !== currentUid) {
           actions.push({
             key: 'make-cr', label: 'Make CR', disabled: crSlotsFull,
-            title: crSlotsFull ? `Both CR slots are full (max ${MAX_CR}) — revoke one first` : undefined,
+            title: crSlotsFull ? `The CR slot is full (max ${MAX_CR}) — revoke it first` : undefined,
             run: () => clAppointCR(groupId, m.id),
           });
         }
@@ -247,7 +247,7 @@ export default function ClassmatesList({ groupId, showActions = false, viewerRol
       } else if (m.role !== 'cr') {
         actions.push({
           key: 'make-acr', label: 'Make ACR', disabled: acrSlotsFull,
-          title: acrSlotsFull ? `Both ACR slots are full (max ${MAX_ACR})` : undefined,
+          title: acrSlotsFull ? `The ACR slot is full (max ${MAX_ACR})` : undefined,
           run: () => assignACR(groupId, m.id),
         });
       }

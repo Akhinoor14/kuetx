@@ -47,7 +47,7 @@ function useClaimCRState(groupId, profile) {
   const handleClaimCR = async (mobileOverride) => {
     const mobileToUse = mobileOverride !== undefined ? mobileOverride : mobile;
     if (crStatus?.slotsFull) {
-      setClaimMsg('This class has no open CR slots. Retry after a CR steps down.');
+      setClaimMsg('This class has no open CR slot. Retry after the CR steps down.');
       setClaimState('error');
       return;
     }
@@ -170,11 +170,11 @@ export default function ClaimCRCard({ groupId, profile }) {
   return (
     <div className="card" style={{ padding: 14, marginBottom: 16 }}>
       <div style={{ fontSize: 13, fontWeight: 700, marginBottom: 4 }}>
-        {crStatus.slotsFull ? 'CR slots are full for your class' : 'CR slot open for your class'}
+        {crStatus.slotsFull ? 'CR slot is full for your class' : 'CR slot open for your class'}
       </div>
       <p style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 10 }}>
         {crStatus.slotsFull
-          ? `Both CR slots (max ${MAX_CR}) are currently filled. You'll be able to request once a slot opens up.`
+          ? `The CR slot (max ${MAX_CR}) is currently filled. You'll be able to request once it opens up.`
           : 'Want to keep your class\'s routine and assignments up to date for everyone? Claim CR — it goes to your Campus Lead for approval (or becomes a combined application if there isn\'t one yet).'}
       </p>
       {!crStatus.slotsFull && (
@@ -200,7 +200,7 @@ export default function ClaimCRCard({ groupId, profile }) {
         disabled={claimState === 'sending' || crStatus.slotsFull}
         title={
           crStatus.slotsFull
-            ? `Both CR slots (max ${MAX_CR}) are currently filled for this class`
+            ? `The CR slot (max ${MAX_CR}) is currently filled for this class`
             : undefined
         }
       >
@@ -208,7 +208,7 @@ export default function ClaimCRCard({ groupId, profile }) {
       </button>
       {crStatus.slotsFull && (
         <div style={{ color: 'var(--muted)', fontSize: 12, marginTop: 6 }}>
-          Both CR slots (max {MAX_CR}) are already filled — you can't request right now. Try again once a slot opens up.
+          The CR slot (max {MAX_CR}) is already filled — you can't request right now. Try again once it opens up.
         </div>
       )}
       {claimState === 'error' && <div style={{ color: 'var(--danger)', fontSize: 12, marginTop: 6 }}>{claimMsg}</div>}
@@ -267,7 +267,7 @@ export function ClaimCRInlineButton({ groupId, profile }) {
       disabled={claimState === 'sending' || crStatus.slotsFull}
       title={
         crStatus.slotsFull
-          ? `Both CR slots (max ${MAX_CR}) are currently filled for this class`
+          ? `The CR slot (max ${MAX_CR}) is currently filled for this class`
           : undefined
       }
       style={{
@@ -278,7 +278,7 @@ export function ClaimCRInlineButton({ groupId, profile }) {
         opacity: (claimState === 'sending' || crStatus.slotsFull) ? 0.6 : 1,
       }}
     >
-      {claimState === 'sending' ? 'Sending…' : crStatus.slotsFull ? 'CR slots full' : 'Claim CR'}
+      {claimState === 'sending' ? 'Sending…' : crStatus.slotsFull ? 'CR slot full' : 'Claim CR'}
     </button>
     <PromptDialog
       open={showMobileDialog}

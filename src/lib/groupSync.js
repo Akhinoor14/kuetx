@@ -363,13 +363,16 @@ export async function waitForOwnVerification(groupId, retries = 10, delayMs = 40
 // ---------------------------------------------------------------------
 // CR lifecycle
 // ---------------------------------------------------------------------
-// CR is NOT an official KUETx post — it's a per-class student feature.
-// Each class (batch+dept group) has two "sections" in practice, so this
-// system supports up to MAX_CR (2) simultaneous CR and MAX_ACR (2)
-// simultaneous ACR per group. There is no hard-coded "Section A / Section
-// B" label anywhere — CR/ACR are just independent slots, and which real
-// class-section a given CR actually covers is something they sort out
-// among themselves, not something this app tracks.
+// CR is NOT an official KUETx post -- it's a per-class student feature.
+// Each groupId now represents exactly ONE real class-section: for the 4
+// multi-section depts (CE/EEE/ME/CSE, 120 seats/batch) groupId is
+// batch_dept_section (Section A and B are separate groups), and for every
+// other dept (single-section regardless of seat count) groupId stays
+// batch_dept as before. Because of that, MAX_CR (1) and MAX_ACR (1) apply
+// PER GROUP -- one CR + one ACR per real section. A multi-section dept's
+// batch therefore still ends up with 2 CR + 2 ACR overall, but each pair
+// now comes from a distinct, correctly-scoped section group instead of
+// being lumped into one 120-student pool.
 //
 // Three distinct ways a slot changes hands, each with different authority:
 //   1. Fresh student -> CR, when NOT replacing a specific person: always
@@ -385,14 +388,14 @@ export async function waitForOwnVerification(groupId, retries = 10, delayMs = 40
 //      the difference is only that ACR carries no succession/appoint
 //      power at all — an ACR can never appoint or hand off anything.
 //
-// The group's `meta/crStatus.count` is the CR-slot occupancy (0-2) that
+// The group's `meta/crStatus.count` is the CR-slot occupancy (0-1) that
 // Firestore rules check for the "no CR yet -> any verified member may
 // edit" fallback window (see isContentEditor). ACR occupancy isn't part
 // of that rule (isGroupACR is checked directly), so it's only tracked
 // client-side here for the "slots full" UI gate.
 
-export const MAX_CR = 2;
-export const MAX_ACR = 2;
+export const MAX_CR = 1;
+export const MAX_ACR = 1;
 
 /** Count current CR / ACR holders from a members snapshot's docs. */
 function _countRoles(memberDocs) {
@@ -685,7 +688,7 @@ export async function clApproveCRRequest(groupId, targetUid) {
   ]);
   const { cr: crCount } = _countRoles(membersSnap.docs);
   if (crCount >= MAX_CR) {
-    throw new Error(`Both CR slots for this class are already full (max ${MAX_CR}).`);
+    throw new Error(`The CR slot for this class is already full (max ${MAX_CR}).`);
   }
   const batch = writeBatch(db);
   batch.update(doc(db, 'groups', groupId, 'members', targetUid), { role: 'cr', verified: true });
@@ -714,7 +717,7 @@ export async function clRejectCRRequest(groupId, targetUid) {
 /**
  * Campus Lead action: appoint a CR directly into an open slot (roster
  * view) without requiring a prior student-submitted request. Throws if
- * both CR slots are already full.
+ * the CR slot is already full.
  */
 export async function clAppointCR(groupId, targetUid) {
   const crStatusRef = doc(db, 'groups', groupId, 'meta', 'crStatus');
@@ -724,7 +727,7 @@ export async function clAppointCR(groupId, targetUid) {
   ]);
   const { cr: crCount } = _countRoles(membersSnap.docs);
   if (crCount >= MAX_CR) {
-    throw new Error(`Both CR slots for this class are already full (max ${MAX_CR}).`);
+    throw new Error(`The CR slot for this class is already full (max ${MAX_CR}).`);
   }
   const batch = writeBatch(db);
   batch.update(doc(db, 'groups', groupId, 'members', targetUid), { role: 'cr', verified: true });
@@ -824,7 +827,7 @@ export async function handoffCR(groupId, currentUid, successorUid, currentProfil
 /**
  * CR action: appoint an Assistant CR into an open ACR slot — equal
  * content-editing access, but no succession/appoint power at all. No CL
- * approval needed. Throws if both ACR slots are already full.
+ * approval needed. Throws if the ACR slot is already full.
  */
 // KNOWN GAP: MAX_ACR is enforced HERE ONLY (client-side). Unlike CR — which
 // firestore.rules now independently checks via crCount(groupId) against the
@@ -841,7 +844,7 @@ export async function assignACR(groupId, targetUid) {
   const membersSnap = await getDocs(collection(db, 'groups', groupId, 'members'));
   const { acr: acrCount } = _countRoles(membersSnap.docs);
   if (acrCount >= MAX_ACR) {
-    throw new Error(`Both ACR slots for this class are already full (max ${MAX_ACR}).`);
+    throw new Error(`The ACR slot for this class is already full (max ${MAX_ACR}).`);
   }
   await updateDoc(doc(db, 'groups', groupId, 'members', targetUid), { role: 'acr' });
 }

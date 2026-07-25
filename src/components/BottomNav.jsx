@@ -111,8 +111,13 @@ export function BottomNav() {
     ? (location.pathname === '/faculty/profile' || location.pathname === '/team')
     : (location.pathname === '/profile'
         || location.pathname === '/cr-hub'
-        || location.pathname === '/class-management'
+        || location.pathname === '/class-rep'
+        || location.pathname === '/class-routine'
+        || location.pathname === '/class-planner'
         || location.pathname === '/ct-quiz-planning'
+        || location.pathname === '/class-roster'
+        || location.pathname === '/class-notices'
+        || location.pathname === '/class-my-role'
         || location.pathname === '/admin-hub'
         || location.pathname === '/team');
 

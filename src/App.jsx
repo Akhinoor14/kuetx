@@ -89,9 +89,12 @@ const Settings = lazy(() => import('./pages/Settings'));
 const Notes = lazy(() => import('./pages/Notes').then((m) => ({ default: m.Notes })));
 const Clubs = lazy(() => import('./pages/Clubs'));
 const About = lazy(() => import('./pages/About'));
-const ClassManagement = lazy(() => import('./pages/ClassManagement'));
+const ClassRoutine = lazy(() => import('./pages/ClassRoutine'));
+const ClassPlanner = lazy(() => import('./pages/ClassPlanner'));
 const CTQuizPlanning = lazy(() => import('./pages/CTQuizPlanning'));
-const ClassRoster = lazy(() => import('./pages/ClassRoster'));
+const ClassRosterPage = lazy(() => import('./pages/ClassRosterPage'));
+const ClassNotices = lazy(() => import('./pages/ClassNotices'));
+const ClassMyRole = lazy(() => import('./pages/ClassMyRole'));
 const Classmates = lazy(() => import('./pages/Classmates'));
 // AdminDashboard is no longer routed directly — it's rendered inside
 // TeamDashboard via AdminEntryPoint. See /team route below.
@@ -223,17 +226,26 @@ function Layout({ authState, onboardingActive }) {
             <Route path="/notes" element={<Notes />} />
             <Route path="/settings" element={<Settings />} />
             <Route path="/about" element={<About />} />
-            <Route path="/class-management" element={<RequireCR><ClassManagement /></RequireCR>} />
+            <Route path="/class-routine" element={<RequireCR><ClassRoutine /></RequireCR>} />
+            <Route path="/class-planner" element={<RequireCR><ClassPlanner /></RequireCR>} />
             <Route path="/ct-quiz-planning" element={<RequireCR><CTQuizPlanning /></RequireCR>} />
-            <Route path="/class-roster" element={<RequireCR><ClassRoster /></RequireCR>} />
+            <Route path="/class-roster" element={<RequireCR><ClassRosterPage /></RequireCR>} />
+            <Route path="/class-notices" element={<RequireCR><ClassNotices /></RequireCR>} />
+            <Route path="/class-my-role" element={<RequireCR><ClassMyRole /></RequireCR>} />
             <Route path="/classmates" element={<Classmates />} />
             <Route path="/tools" element={<SubgroupHub group="Tools" />} />
             {/* Class Rep hub is CR-only content, but doesn't need a hard page
                 gate here — non-CR users simply never see a link to it (see
-                nav.js requiresCR + modeFilter). RequireCR stays on the two
-                actual CR tool routes below, which is what needs real
-                protection against direct URL access. */}
-            <Route path="/class-rep" element={<SubgroupHub group="Class Rep" />} />
+                nav.js requiresCR + modeFilter). RequireCR stays on the
+                actual CR tool routes above, which is what needs real
+                protection against direct URL access.
+                Points at CRHub (manual hub: Profile + Routine, Class
+                Planner, CT & Quiz Planner, Roster, Notices, My Role) so
+                Profile stays one tap away here too, same as before this
+                refactor — nav.js's 'Class Rep' group (used by the Sidebar
+                and Navbar) is kept separate from this hub's exact card
+                list, same relationship as before the split. */}
+            <Route path="/class-rep" element={<CRHub />} />
             <Route path="/academic-core" element={<SubgroupHub group="Academics" subgroup="Academic Core" />} />
             <Route path="/daily-academics" element={<SubgroupHub group="Academics" subgroup="Daily Academics" />} />
             <Route path="/campus-life" element={<SubgroupHub group="Campus Life" subgroup="Campus Life" />} />
@@ -549,7 +561,7 @@ export default function App() {
   const current = queue[0] || null;
 
   // BUGFIX(F): Term Start Date is now CR/ACR-set once per dept+batch class
-  // (see src/lib/termStartDateSync.js and ClassManagement's new widget)
+  // (see src/lib/termStartDateSync.js and ClassRoutine's term-date widget)
   // instead of typed in by each student. Every existing read-site
   // (Dashboard, Schedule, Results, Marks, Profile, alertUtils) reads
   // profile.termStartDate directly and synchronously — rather than

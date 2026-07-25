@@ -23,7 +23,7 @@ function getPageMeta(pathname) {
     for (const pool of pools) {
       for (const item of pool.items) {
         if (item.path === pathname || (item.path !== '/' && pathname.startsWith(item.path)))
-          return { label: item.label, group: pool.groupLabel, siblings: pool.items };
+          return { label: item.label, group: pool.groupLabel, siblings: section.noSiblingPills ? [] : pool.items };
       }
     }
   }

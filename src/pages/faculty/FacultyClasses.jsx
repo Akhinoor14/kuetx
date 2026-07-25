@@ -40,6 +40,7 @@ import {
 } from '../../lib/facultyClassSync';
 import { notify } from '../../lib/notify';
 import { useIsFaculty } from '../../hooks/useIsFaculty';
+import { getGroupId, isMultiSectionDept } from '../../lib/groupUtils';
 
 const inputStyle = {
   width: '100%', padding: '9px 10px', borderRadius: 8, border: '1px solid var(--border)',
@@ -90,6 +91,11 @@ function getBatchTermPlausibility(batch, term, startDates) {
 export function AddClassModal({ onClose, onCreated, batches, initialDay, initialSlot }) {
   const [dept, setDept] = useState('');
   const [batch, setBatch] = useState('');
+  // Section — required only for the 4 multi-section depts (CE/EEE/ME/CSE,
+  // 120 seats/batch). 'A' | 'B' | 'BOTH'. 'BOTH' creates two separate
+  // assignments (one per section-group) since Section A and B meet at
+  // different times in reality, even for the same course/teacher.
+  const [section, setSection] = useState('');
   const [term, setTerm] = useState('');
   const [courseCode, setCourseCode] = useState('');
   const [day, setDay] = useState(initialDay || DAYS[0]);
@@ -143,13 +149,18 @@ export function AddClassModal({ onClose, onCreated, batches, initialDay, initial
   useEffect(() => {
     setJoinOffer(null);
     if (!dept || !batch || !term || !courseCode) return;
+    // For multi-section depts, a specific section (not 'BOTH', not empty)
+    // is needed to resolve one real group — skip the join-offer check
+    // until the teacher has picked which section this is for.
+    if (isMultiSectionDept(dept) && (!section || section === 'BOTH')) return;
+    const groupId = getGroupId({ dept, batch, section });
+    if (!groupId) return;
     let cancelled = false;
-    const groupId = `${String(batch).toUpperCase()}_${String(dept).toUpperCase()}`;
     findJoinableAssignment(groupId, courseCode, term).then((match) => {
       if (!cancelled && match) setJoinOffer(match);
     }).catch(() => {});
     return () => { cancelled = true; };
-  }, [dept, batch, term, courseCode]);
+  }, [dept, batch, section, term, courseCode]);
 
   const handleJoin = async () => {
     if (!joinOffer) return;
@@ -173,31 +184,52 @@ export function AddClassModal({ onClose, onCreated, batches, initialDay, initial
   useEffect(() => {
     setSlotConflict(null);
     if (!dept || !batch || !term || !courseCode) return;
+    if (isMultiSectionDept(dept) && (!section || section === 'BOTH')) return;
+    const groupId = getGroupId({ dept, batch, section });
+    if (!groupId) return;
     let cancelled = false;
-    const groupId = `${String(batch).toUpperCase()}_${String(dept).toUpperCase()}`;
     findConflictingAssignment(groupId, {
       courseCode, term, dayTimeSlots: [{ day, slot: effectiveSlot }],
     }).then((match) => {
       if (!cancelled) setSlotConflict(match);
     }).catch(() => {});
     return () => { cancelled = true; };
-  }, [dept, batch, term, courseCode, day, effectiveSlot]);
+  }, [dept, batch, section, term, courseCode, day, effectiveSlot]);
 
   const handleCreate = async () => {
     if (!dept || !batch || !term || !courseCode) {
       notify('Please select department, batch, term, and course.', 'error');
       return;
     }
+    if (isMultiSectionDept(dept) && !section) {
+      notify('This department has two sections — please select Section A, B, or Both.', 'error');
+      return;
+    }
     setSaving(true);
     try {
-      await createFacultyAssignment(auth.currentUser.uid, {
+      const basePayload = {
         dept, batch, term,
         courseCode,
         courseTitle: selectedCourse?.title || '',
         courseType: selectedCourse?.type || 'Theory',
         dayTimeSlots: [{ day, slot: effectiveSlot, modelId }],
-      });
-      notify('Class created.', 'success');
+      };
+      if (isMultiSectionDept(dept) && section === 'BOTH') {
+        // Section A and B meet at different times in reality even for the
+        // same course/teacher, so 'Both' creates two independent
+        // assignments — one per section-group — rather than one shared
+        // assignment. The teacher can adjust each section's time
+        // separately afterward if needed.
+        await createFacultyAssignment(auth.currentUser.uid, { ...basePayload, section: 'A' });
+        await createFacultyAssignment(auth.currentUser.uid, { ...basePayload, section: 'B' });
+        notify('Classes created for both sections.', 'success');
+      } else {
+        await createFacultyAssignment(auth.currentUser.uid, {
+          ...basePayload,
+          section: isMultiSectionDept(dept) ? section : undefined,
+        });
+        notify('Class created.', 'success');
+      }
       onCreated();
     } catch (e) {
       notify(e.message || 'Could not create this class.', 'error');
@@ -225,7 +257,7 @@ export function AddClassModal({ onClose, onCreated, batches, initialDay, initial
         <div className="faculty-add-class-fields" style={{ display: 'grid', gap: 12 }}>
           <div>
             <label style={labelStyle}>Department</label>
-            <select style={inputStyle} value={dept} onChange={(e) => { setDept(e.target.value); setTerm(''); setCourseCode(''); }}>
+            <select style={inputStyle} value={dept} onChange={(e) => { setDept(e.target.value); setSection(''); setTerm(''); setCourseCode(''); }}>
               <option value="">Select department</option>
               {DEPARTMENTS.map((d) => <option key={d.code} value={d.code}>{d.name} ({d.code})</option>)}
             </select>
@@ -238,6 +270,26 @@ export function AddClassModal({ onClose, onCreated, batches, initialDay, initial
               {batches.map((b) => <option key={b} value={b}>{b.toUpperCase()}</option>)}
             </select>
           </div>
+
+          {/* Section — only for CE/EEE/ME/CSE (120 seats/batch, split into
+              ~60-student Section A / B). 'Both' schedules the same course
+              for both sections as two separate assignments, since A and B
+              meet at different times in reality even with the same
+              teacher/course. */}
+          {isMultiSectionDept(dept) && (
+            <div>
+              <label style={labelStyle}>Section</label>
+              <select style={inputStyle} value={section} onChange={(e) => setSection(e.target.value)}>
+                <option value="">Select section</option>
+                <option value="A">Section A</option>
+                <option value="B">Section B</option>
+                <option value="BOTH">Both (creates two classes)</option>
+              </select>
+              <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 4 }}>
+                This department runs two sections with separate routines. Pick the one this class is for.
+              </div>
+            </div>
+          )}
 
           <div>
             <label style={labelStyle}>Term</label>
@@ -358,12 +410,12 @@ export function AddClassModal({ onClose, onCreated, batches, initialDay, initial
 
           <button
             onClick={handleCreate}
-            disabled={saving || !dept || !batch || !term || !courseCode}
+            disabled={saving || !dept || !batch || !term || !courseCode || (isMultiSectionDept(dept) && !section)}
             className="faculty-add-class-span2 accent-fill-glass"
             style={{
               marginTop: 6, padding: '11px 16px', borderRadius: 8,
               color: '#fff', fontWeight: 700, fontSize: 13.5,
-              cursor: 'pointer', opacity: (saving || !dept || !batch || !term || !courseCode) ? 0.6 : 1,
+              cursor: 'pointer', opacity: (saving || !dept || !batch || !term || !courseCode || (isMultiSectionDept(dept) && !section)) ? 0.6 : 1,
             }}
           >
             {saving ? 'Creating…' : 'Create Class'}

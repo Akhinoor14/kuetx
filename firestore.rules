@@ -71,11 +71,33 @@ service cloud.firestore {
       return isSignedIn() &&
         exists(/databases/$(database)/documents/staff/$(request.auth.uid)/roles/$('campus_lead_' + groupId));
     }
-    // A group id is always `${BATCH}_${DEPT}` (see groupUtils.js) — so the
-    // department for "is this person the SCL of this group's department"
-    // checks can be extracted without a second lookup.
+    // A group id is `${BATCH}_${DEPT}` for single-section depts, or
+    // `${BATCH}_${DEPT}_${SECTION}` for the 4 multi-section depts (see
+    // groupUtils.js: MULTI_SECTION_DEPTS/getGroupId) — so the department
+    // for "is this person the SCL of this group's department" checks can
+    // always be extracted from index 1, regardless of a trailing section
+    // segment.
     function deptOfGroup(groupId) {
       return groupId.split('_')[1];
+    }
+    // Mirrors groupUtils.js's MULTI_SECTION_DEPTS. Must be kept in sync
+    // by hand — rules can't import JS, so this hardcodes the same 4 dept
+    // codes (the 120-seat depts: CE, EEE, ME, CSE) that groupUtils.js
+    // derives from DEPARTMENTS' seats field.
+    function isMultiSectionDept(dept) {
+      return dept in ['CE', 'EEE', 'ME', 'CSE'];
+    }
+    // Reconstructs the expected groupId from a write payload's own
+    // batch/dept/section fields, mirroring groupUtils.js's getGroupId.
+    // Used anywhere a rule needs to confirm groupId actually agrees with
+    // the batch/dept (/section) the request also claims — without this,
+    // any equality check written as `groupId == batch + '_' + dept` would
+    // incorrectly reject every write from a multi-section dept, since
+    // those groupIds carry a 3rd `_SECTION` segment.
+    function expectedGroupId(data) {
+      return isMultiSectionDept(data.dept)
+        ? data.batch + '_' + data.dept + '_' + data.section
+        : data.batch + '_' + data.dept;
     }
     function isSCLForGroup(groupId) {
       return isSCLFor(deptOfGroup(groupId));
@@ -533,7 +555,7 @@ service cloud.firestore {
           (isAdmin() && request.resource.data.status == 'approved')
           || (
             request.resource.data.status == 'pending'
-            && request.resource.data.groupId == (request.resource.data.batch + '_' + request.resource.data.dept)
+            && request.resource.data.groupId == expectedGroupId(request.resource.data)
             && isCLFor(request.resource.data.groupId)
           )
         );
@@ -569,9 +591,16 @@ service cloud.firestore {
       // Only a Campus Lead of the group they claim may create a request,
       // and it must start life as 'pending' — same shape as
       // qbUploadRequests' create rule.
+      // Allows either the CL of the exact group, OR the SCL of that
+      // dept — an SCL oversees the whole dept (all sections) and may
+      // have no personal CL role of their own (see QuestionBank.jsx's
+      // canManageDept/myGroupIdForDept, which already lets an SCL-only
+      // user see and use the "Request deletion" action; without this
+      // isSCLFor() branch that UI path would be rejected here every
+      // time).
       allow create: if isSignedIn() && request.resource.data.requestedBy == request.auth.uid
         && request.resource.data.status == 'pending'
-        && isCLFor(request.resource.data.groupId);
+        && (isCLFor(request.resource.data.groupId) || isSCLFor(request.resource.data.dept));
 
       // Only Founder/Head of Ops may action a request — the requesting CL
       // has no update path here at all (mirrors "CL must NOT be able to
@@ -711,7 +740,7 @@ service cloud.firestore {
       allow create: if isSignedIn() && request.resource.data.uid == request.auth.uid
         // dept/batch/groupId must actually agree with each other — no
         // claiming leadership of one class while citing another's dept.
-        && request.resource.data.groupId == (request.resource.data.batch + '_' + request.resource.data.dept)
+        && request.resource.data.groupId == expectedGroupId(request.resource.data)
         // and the applicant must be a real, legitimate member of that
         // exact class already (verified manually, or via a Tier-1
         // matching KUET email) — not a total stranger to it.
@@ -1053,7 +1082,7 @@ service cloud.firestore {
                         // holders before allowing another.
                         || (request.resource.data.role == 'cr' && request.resource.data.verified == true
                             && (isAdmin() || isHeadOfOps() || isSCLForGroup(groupId))
-                            && crCount(groupId) < 2);
+                            && crCount(groupId) < 1);
         // Members edit only their own display fields. verified/role changes
         // are gated to CL/Admin/Head of Ops/that dept's SCL (fallback chain
         // — a request never gets stuck just because the immediate level is
@@ -1091,7 +1120,7 @@ service cloud.firestore {
             // touch role at all, is unaffected. Mirrors the client-side
             // MAX_CR check in groupSync.js so a modified client (or a
             // direct Firestore write) can't grant unlimited CR slots.
-            && (request.resource.data.role != 'cr' || resource.data.role == 'cr' || crCount(groupId) < 2)) ||
+            && (request.resource.data.role != 'cr' || resource.data.role == 'cr' || crCount(groupId) < 1)) ||
           (isGroupCR(groupId) && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['role', 'verified', 'legacyCRClaim']) &&
             // legacyCRClaim may only ever be cleared here, never (re)set —
             // this branch is a same-slot handoff/step-down path, not a way

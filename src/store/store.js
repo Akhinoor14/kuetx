@@ -1128,12 +1128,21 @@ export const normalizeProfileForSave = (input = {}) => {
   const derivedBatch = extractBatchFromRoll(studentId);
   const derivedDept = getDeptCodeFromRoll(studentId);
   const canonicalDept = getCanonicalDeptCode(raw.dept) || derivedDept;
+  // Section only makes sense for the 4 multi-section depts (120 seats/
+  // batch: CE/EEE/ME/CSE) — if the dept isn't one of those, or the dept
+  // changed since section was picked, drop it rather than saving a stale
+  // value that no longer corresponds to a real class split.
+  const deptSeats = (DEPARTMENTS.find((d) => d.code === canonicalDept) || {}).seats;
+  const sectionValue = deptSeats === 120
+    ? String(raw.section || '').trim().toUpperCase()
+    : '';
 
   return {
     ...DEFAULT_PROFILE,
     ...raw,
     studentId,
     dept: canonicalDept,
+    section: sectionValue,
     batch: derivedBatch || '',
     currentTermKey: String(raw.currentTermKey || '').trim(),
     currentTerm: String(raw.currentTerm || '').trim(),
@@ -1467,7 +1476,18 @@ export const isProfileComplete = (profile) => {
   const hasStudentId = /^\d{7}$/.test(studentId);
   const hasValidDept = isAllowedDeptCode(p.dept) || isAllowedDeptCode(getDeptCodeFromRoll(studentId));
   const hasValidBatch = Boolean(extractBatchFromRoll(studentId));
-  return hasName && hasStudentId && hasValidDept && hasValidBatch;
+  // Migration gate: the 4 multi-section depts (CE/EEE/ME/CSE, 120 seats/
+  // batch) additionally require profile.section — without it getGroupId()
+  // returns null and every class feature (CR, roster, routine, notices)
+  // silently stops working. Routing this through isProfileComplete means
+  // existing pre-migration profiles (saved before the section field
+  // existed) get the same "please complete your profile" force-reopen
+  // that App.jsx already uses for any other incomplete profile — no
+  // separate migration-prompt code path needed.
+  const effectiveDept = isAllowedDeptCode(p.dept) ? p.dept : getDeptCodeFromRoll(studentId);
+  const deptSeats = (DEPARTMENTS.find((d) => d.code === effectiveDept) || {}).seats;
+  const hasValidSection = deptSeats === 120 ? ['A', 'B'].includes(String(p.section || '').trim().toUpperCase()) : true;
+  return hasName && hasStudentId && hasValidDept && hasValidBatch && hasValidSection;
 };
 
 // ---------------- Audit & Snapshot helpers ----------------

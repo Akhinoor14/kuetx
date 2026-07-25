@@ -14,10 +14,34 @@ export function canonicalize(value) {
   return String(value || '').trim().toUpperCase();
 }
 
+// ─── Multi-section departments ──────────────────────────────────────────
+// The 4 depts with 120 seats/batch (CE, EEE, ME, CSE — confirmed against
+// KUET's official seat-vacancy table) are administratively split into
+// Section A / Section B (~60 students each) by the department itself.
+// This is NOT encoded anywhere in the roll number (roll = batch + dept
+// code + roll-in-dept only), so it cannot be auto-derived — it must be
+// collected as an explicit profile.section field.
+//
+// Every other dept (any seat count — 30/40/60) runs as a single section,
+// so its groupId is unaffected and stays exactly as before.
+//
+// Derived from DEPARTMENTS' `seats` field (store.js) rather than a second
+// hardcoded list, so the two can never drift apart.
+import { DEPARTMENTS } from '../store/store';
+
+export const MULTI_SECTION_DEPTS = DEPARTMENTS
+  .filter((d) => d.seats === 120)
+  .map((d) => canonicalize(d.code));
+
+export function isMultiSectionDept(deptCode) {
+  return MULTI_SECTION_DEPTS.includes(canonicalize(deptCode));
+}
+
 /**
  * Derive the group id for a profile. Returns null if the profile doesn't
- * have enough info yet (dept/batch not set) — callers should treat null
- * as "group features are unavailable, fall back to personal-only mode".
+ * have enough info yet (dept/batch not set, or — for a multi-section
+ * dept — section not set) — callers should treat null as "group features
+ * are unavailable, fall back to personal-only mode".
  */
 export function getGroupId(profile) {
   if (!profile) return null;
@@ -26,17 +50,27 @@ export function getGroupId(profile) {
   if (!batch || !dept) return null;
   // Firestore doc ids can't contain '/', and we avoid whitespace so this
   // is safe as a single path segment.
+  if (isMultiSectionDept(dept)) {
+    const section = canonicalize(profile.section);
+    if (!section) return null; // profile incomplete — section required
+    return `${batch}_${dept}_${section}`;
+  }
   return `${batch}_${dept}`;
 }
 
 /**
- * Human-readable label for UI, e.g. "2K23 · CSE"
+ * Human-readable label for UI, e.g. "2K23 · CSE" or "2K23 · CSE · Section A"
  */
 export function getGroupLabel(profile) {
   if (!profile) return '';
   const batch = canonicalize(profile.batch);
   const dept = canonicalize(profile.dept);
   if (!batch || !dept) return '';
+  if (isMultiSectionDept(dept)) {
+    const section = canonicalize(profile.section);
+    if (!section) return '';
+    return `${batch} · ${dept} · Section ${section}`;
+  }
   return `${batch} · ${dept}`;
 }
 
