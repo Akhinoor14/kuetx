@@ -2,8 +2,8 @@ export const Y1T1 = [
   {
     "code": "CE 1123",
     "title": "Surveying",
-    "credits": 4,
-    "contactHours": null,
+    "credits": 3,
+    "contactHours": "3 hrs/week",
     "type": "Theory",
     "isOptional": false
   },
@@ -11,7 +11,7 @@ export const Y1T1 = [
     "code": "Ch 1123",
     "title": "Chemistry",
     "credits": 3,
-    "contactHours": null,
+    "contactHours": "3 hrs/week",
     "type": "Theory",
     "isOptional": false
   },
@@ -19,7 +19,7 @@ export const Y1T1 = [
     "code": "Math 1123",
     "title": "Mathematics-I",
     "credits": 4,
-    "contactHours": null,
+    "contactHours": "4 hrs/week",
     "type": "Theory",
     "isOptional": false
   },
@@ -27,7 +27,7 @@ export const Y1T1 = [
     "code": "Ph 1123",
     "title": "Physics-I",
     "credits": 3,
-    "contactHours": null,
+    "contactHours": "3 hrs/week",
     "type": "Theory",
     "isOptional": false
   },
@@ -35,7 +35,7 @@ export const Y1T1 = [
     "code": "Hum 1123",
     "title": "English",
     "credits": 2,
-    "contactHours": null,
+    "contactHours": "2 hrs/week",
     "type": "Theory",
     "isOptional": false
   },
@@ -43,7 +43,7 @@ export const Y1T1 = [
     "code": "BECM 1152",
     "title": "Architectural Design-I",
     "credits": 1.5,
-    "contactHours": null,
+    "contactHours": "3 hrs/week",
     "type": "Sessional",
     "isOptional": false
   },
@@ -51,7 +51,7 @@ export const Y1T1 = [
     "code": "Ch 1124",
     "title": "Sessional on Chemistry",
     "credits": 0.75,
-    "contactHours": null,
+    "contactHours": "3/2 hrs/week",
     "type": "Sessional",
     "isOptional": false
   },
@@ -59,7 +59,7 @@ export const Y1T1 = [
     "code": "Ph 1124",
     "title": "Sessional on Physics",
     "credits": 1.5,
-    "contactHours": null,
+    "contactHours": "3 hrs/week",
     "type": "Sessional",
     "isOptional": false
   },
@@ -67,7 +67,7 @@ export const Y1T1 = [
     "code": "Hum 1124",
     "title": "English Skill Practices",
     "credits": 0.75,
-    "contactHours": null,
+    "contactHours": "3/2 hrs/week",
     "type": "Sessional",
     "isOptional": false
   }

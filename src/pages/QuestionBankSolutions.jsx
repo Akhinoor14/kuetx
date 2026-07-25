@@ -1326,38 +1326,30 @@ export default function QuestionBankSolutions() {
   if (view === 'home') return (
     <div className="content-page-bg" style={page}>
       <div className="wrap" style={{ paddingTop: 20 }}>
-        <div
-          className="home-hero"
-          style={{
-            marginBottom: 16,
-          }}
-        >
-          <div className="home-hero-inner">
-            <div className="home-hero-left">
-              <div className="home-hero-eyebrow" style={{ color: t.accent }}>
-                <BookOpen size={13} /> KUET Solution Bank
+        <div className="content-page-hero">
+          <div className="content-page-hero-main">
+            <div className="content-page-hero-head">
+              <div className="content-page-hero-icon">
+                <BookOpen size={24} color="var(--accent)" />
               </div>
-              <h1 className="home-hero-title" style={{ color: t.text }}>
-                Past Papers,<br />
-                <span style={{ color: t.accent }}>Solved.</span>
-              </h1>
-              <p className="home-hero-sub" style={{ color: t.textSub }}>
-                Step-by-step solutions for KUET exam questions — theory, numerical & code.
-              </p>
+              <h1 className="content-page-hero-title">Past Papers, Solved.</h1>
             </div>
-            <div className="home-hero-stats">
-              <div className="home-stat" style={{ background: t.card, border: `1px solid ${t.border}` }}>
-                <div className="home-stat-n" style={{ color: t.accent }}>{courses.length}</div>
-                <div className="home-stat-l" style={{ color: t.textSub }}>Courses</div>
-              </div>
-              <div className="home-stat" style={{ background: t.card, border: `1px solid ${t.border}` }}>
-                <div className="home-stat-n" style={{ color: t.blue }}>{PROBE_YEARS.length}</div>
-                <div className="home-stat-l" style={{ color: t.textSub }}>Years</div>
-              </div>
-              <div className="home-stat" style={{ background: t.card, border: `1px solid ${t.border}` }}>
-                <div className="home-stat-n" style={{ color: t.yellow }}>3</div>
-                <div className="home-stat-l" style={{ color: t.textSub }}>Types</div>
-              </div>
+            <p className="content-page-hero-subtitle">
+              Step-by-step solutions for KUET exam questions — theory, numerical &amp; code
+            </p>
+          </div>
+          <div className="content-page-hero-stats">
+            <div className="content-page-hero-stat">
+              <div className="content-page-hero-stat-n">{courses.length}</div>
+              <div className="content-page-hero-stat-label">courses</div>
+            </div>
+            <div className="content-page-hero-stat">
+              <div className="content-page-hero-stat-n">{PROBE_YEARS.length}</div>
+              <div className="content-page-hero-stat-label">years</div>
+            </div>
+            <div className="content-page-hero-stat">
+              <div className="content-page-hero-stat-n">3</div>
+              <div className="content-page-hero-stat-label">types</div>
             </div>
           </div>
         </div>

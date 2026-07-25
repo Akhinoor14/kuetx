@@ -10,73 +10,91 @@
       "courses": {
         "CE 1123": {
           "title": "Surveying",
-          "credit": 4,
-          "contactHour": "",
-          "topics": [],
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Reconnaissance survey; Linear measurements; Traverse survey; Plane table survey; Levelling & contouring; Calculation of areas and volumes; Tachometry: Introduction, principles and problems on tachometry; Astronomical surveying: Definition, instruments, astronomical corrections, systems of time; Introduction of terrestrial photography, aerial photography, reading of photo mosaic, scale Project surveying; Errors in surveying; remote sensing; Introduction and application of global positioning system (GPS) and geographical information system (GIS), House setting."
+          ],
           "sessionalNote": null,
           "references": []
         },
         "Ch 1123": {
           "title": "Chemistry",
-          "credit": 3,
-          "contactHour": "",
-          "topics": [],
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Chemistry of cement, silicates and limes, Chemistry of polymerization; Different types of polymers and their properties. Introduction to paint and varnishes; Pretreatment of surface, metallic, non-metallic and organic protective coating, types of paints and their uses. Physical and Chemical properties of liquid. Chemical Corrosion: Introduction to chemical corrosion, corrosion of metals and alloys in dry and wet environments, mechanism of corrosion, atmospheric, under water and soil corrosion and their protective measures. Electro Chemistry: Electrolytes, sources of EMF, electrochemical series pH value and determination. Surface Chemistry: adsorption, desorption and absorption, nature of absorption, absorption isotherms, application of adsorption."
+          ],
           "sessionalNote": null,
           "references": []
         },
         "Math 1123": {
           "title": "Mathematics-I",
-          "credit": 4,
-          "contactHour": "",
-          "topics": [],
+          "credit": 4.0,
+          "contactHour": "4 hrs/week",
+          "topics": [
+            "Differential Calculus: Limit; Continuity; Differentiability, differentiation; Successive differentiation, Leibnitz theorem; Partial differentiation; Maximum and minimum of two independent variables; Rolle's theorem, Lagrange's, Cauchy's and generalized mean value theorem; Taylor's and McLaurin's series; Indeterminate form. Integral Calculus: Indefinite integrals, method of substitution, method of partial fraction, integration by parts and special integrals; Reduction formula; Definite integrals, limit of the sum, properties of definite integrals; Improper integrals, (differentiation and integration under sign of integration) Bata Function, Gamma Function length of plane curves; Area under plane curves; Volume of solid of revolution of plane curves. Spherical Trigonometry: Spherical triangle; Relations between sides and angles of a spherical triangle; Solution of spherical triangle (right and oblique). Fourier Series; Fourier series. Dirichlet condition; Fourier series representation of a Periodic function; Fourier series for even and odd function; Half range Fourier series."
+          ],
           "sessionalNote": null,
           "references": []
         },
         "Ph 1123": {
           "title": "Physics-I",
-          "credit": 3,
-          "contactHour": "",
-          "topics": [],
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Heat and Thermodynamics: Thermometry: Measurement of low and high temperature; Constant volume thermometers; Resistance thermometer and thermocouple & radiation parameters. Transmission of Heat: Thermal conductivity of solids and liquids; Thermodynamics: First law of thermodynamics and its application; Adiabatic and isothermal transformation; Work done by a gas; Second law of thermodynamics; Reversible and irreversible; Carnot cycle; Efficiency of heat engines; Entropy and its physical concept; Entropy changes in reversible and an irreversible process, entropy of a perfect gas. Elasticity: Young and Bulk and Modulus; Bending moment; Cantilever; Surface Tension: Surface energy and surface tension; Excess pressure; Capillarity; viscocity: Stoke's law; Poiseuille's equation; Waves and Oscillations: Simple harmonic motion; Superposition principle; Lissajous figures; Free, damped and forced vibrations; Wave motion: Transverse and longitudinal nature of waves; Progressive and stationary waves; Power and intensity of wave motion; Energy of progressive and stationary wave; Interference of sound waves; Wave velocity, group velocity and phase velocity; Reflection, Refraction, Diffraction and Scattering: Reflection, refraction and transmission of sound waves and their applications; Transmission in two and three media; Acoustics of enclosed Spaces: Intensity of sound, Bel, acoustic intensity, architectural acoustics, noise insulation and reduction, sound distribution, sabine's formula; Room acoustics; Design of concert halls, opera house and auditorium; Acoustic energy density and directivity."
+          ],
           "sessionalNote": null,
           "references": []
         },
         "Hum 1123": {
           "title": "English",
-          "credit": 2,
-          "contactHour": "",
-          "topics": [],
+          "credit": 2.0,
+          "contactHour": "2 hrs/week",
+          "topics": [
+            "General Discussion: Introduction, Mastering Various Approaches to Learning English. Grammatical Problem: Construction of Words and Sentences, Grammatical Problems, Sentence variety and style, Conditionals, Grammar and Usages, Vocabulary and Diction, Clauses, Prefixes & Suffixes, Synonyms and Antonyms. English phonetics: The phonetics, systems and Correct English pronunciation. Reading Skill: Discussing Readability, Scan and skim Reading, Generating Ideas through Purposive Reading, The reading of selected Stories. Writing Skill: Principles of Effective Writing, Organization in writing, Planning and Development, Composition, Precise writing, Paragraph writing, Amplification, Free Composition. General Strategies for the writing process: Generating Ideas, Identifying Audiences and Purposes, Constructing Arguments, Stating Problems, Drafting and finalizing. Approaches to Communication: Communication Today, Business Communication, Organization and organizational Behavior, Developing Intra-personal Interpersonal Relationship, Introducing Dialogue. Specific Applications of Tenders and Quotations, Resumes and job Letters, journal Articles, Technical and Scientific Presentation."
+          ],
           "sessionalNote": null,
           "references": []
         },
         "BECM 1152": {
           "title": "Architectural Design-I",
           "credit": 1.5,
-          "contactHour": "",
-          "topics": [],
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Introduction: Line drawing quality, study of scale, lettering, numbering and heading; Plane geometry: Pentagon, hexagon, octagon, ellipse, parabola, hyperbola. Projection (Solid Geometry): Cube, triangular prism, square prism, pentagonal prism, hexagonal prism, cone, and cylinder; Development: Cube, pyramid, cone, prism; Section and true shape: cube, pyramid, cone, prism; Interpretation of solids."
+          ],
           "sessionalNote": "Sessional",
           "references": []
         },
         "Ch 1124": {
           "title": "Sessional on Chemistry",
           "credit": 0.75,
-          "contactHour": "",
-          "topics": [],
+          "contactHour": "3/2 hrs/week",
+          "topics": [
+            "Salts analysis (qualitative): acid-base titration, oxidation-reduction titration, iodometric titration; Determination of pH of a solution."
+          ],
           "sessionalNote": "Sessional",
           "references": []
         },
         "Ph 1124": {
           "title": "Sessional on Physics",
           "credit": 1.5,
-          "contactHour": "",
-          "topics": [],
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "To draw a graph showing the sensitivity of a balance with load; Determination of Young's modulus of a short wire by Searle's dynamic method; Determination of surface tension of water by capillary tube method; Determination of specific heat of liquid by method of cooling; Determination of thermal conductivity of a bad conductor by Lee's and Chartlon's method; Determination of frequency of a tuning fork by Melde's experiment; Determination of focal length of a concave lens by an auxiliary convex lens. Determination of angle of prism & refractive index of the material of a prism by rotation of telescope of a spectrometer; Determination of wave length of sodium light by plane diffraction grating; Determination of resolving power of a plane diffraction grating; Determination of wave length of sodium light by measuring the diameter of Newton's ring; Determination of specific rotation of sugar solution by a polarimeter; Determination of the value of unknown resistance & to verify the laws of series and parallel resistance by means of P.O. Box; Comparison of the E.M.F's of two cells with the help of a potentiometer; Determination of the specific resistance per cm of the wire of Cary Foster's bridge."
+          ],
           "sessionalNote": "Sessional",
           "references": []
         },
         "Hum 1124": {
           "title": "English Skill Practices",
           "credit": 0.75,
-          "contactHour": "",
-          "topics": [],
+          "contactHour": "3/2 hrs/week",
+          "topics": [
+            "Grammar: Tense, article, preposition, subject verb agreement, clause, conditional and sentence structure. Vocabulary Building: Correct and precise diction, affixes, level of appropriateness; colloquial and standard, informal and formal. Developing Reading Skill: Strategies of reading - skimming, scanning prediction, inference; analyzing and interpreting variety of texts; practicing comprehension from literary and non-literary texts. Developing Writing Skill: Sentences, sentence variety, generation sentences; clarity and correctness of sentences; linking sentences to form paragraphs. Writing paragraph, essays, and reports, formal and informal letters. Listening Skill and Note Taking: Listening -to recorded texts and class lectures and learning to take useful notes based on listening. Developing Speaking Skill: Oral skills including communicative expressions for personal identification, life at home, giving advice and opinion, instructions and directions, requests, complaints, apologies, describing peoples and places, narrating events."
+          ],
           "sessionalNote": "Sessional",
           "references": []
         }
@@ -90,82 +108,92 @@
       "courses": {
         "CE 1201": {
           "title": "Engineering Mechanics",
-          "credit": 3,
-          "contactHour": "",
-          "topics": [],
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Introduction; Coplanar concurrent forces; moments and parallel coplanar forces; Non-concurrent non-parallel coplanar forces; Non-coplanar forces; Centroids; Moment of inertia of areas; Moment of inertia of masses; Friction; Flexible cords; Plane motion; Force systems that produce rectilinear motion; Work, kinetic energy & power; Impulse and momentum."
+          ],
           "sessionalNote": null,
           "references": []
         },
         "CE 1213": {
           "title": "Building & Construction Materials",
-          "credit": 4,
-          "contactHour": "",
-          "topics": [],
+          "credit": 4.0,
+          "contactHour": "4 hrs/week",
+          "topics": [
+            "Introduction and importance of Engineering materials. Bricks: Constituents of brick clay, harmful ingredients of brick clay. Manufacture, characteristics, test and specification, classification and use; Different types of bricks (hollow, perforated, angular, mud etc.), sand cement block, ceramic products, different types of tiles. Aggregate: Classification and properties of aggregate, bulking of aggregate, grading of aggregate, testing of aggregate; Classification, properties, test and function of sand. Cement and Lime: Properties, uses and classification of lime; Difference between cement and lime; Manufacture of cement, types of cement, composition of cement, Functions of various ingredients of cement, physical properties of Portland cement, testing of cement. Mortar and Plaster: Types of mortar, function of sand and surki in mortars, uses of mortar, preparation of cement mortar, precautions in using mortars, special mortars; Plastering; Pointing. Paints & Varnishes: White and color washing, distempering, plastic and cement paint, water repellent paints, epoxy coating. Concrete: Function of aggregate and water in concrete, segregation, bleeding, properties of concrete, strength and workability of concrete, factors influencing the properties of concrete, creep of concrete, chemical attack of concrete; Design of concrete mixes; Use of admixtures in concrete and their properties. Other materials: Introduction to ply wood, plastic wood, and their properties, Geo-textiles, FRP, Synthetic fiber, Ferrocement etc; Properties and uses of rubber, timber, plastics, glass and aluminum. Corrosion of metals."
+          ],
           "sessionalNote": null,
           "references": []
         },
         "Math 1223": {
           "title": "Mathematics - II",
-          "credit": 3,
-          "contactHour": "",
-          "topics": [],
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Ordinary Differential Equation: Differential equations, order and degree of differential equation; equations of 1st order and 1st degree, separation of variable, homogeneous, exact, linear and related forms; higher order linear homogeneous and nonhomogeneous differential equation; cauchy and legendre linear differential equation. Partial Differential Equations: Method of separation of variables; transverse vibrations of a stretching string (vibration of beams. Geometry: Cartesian, cylindrical and spherical-coordinates in three dimensions; direction-cosine and direction ratios; angle between two lines; distance of a point from a line; plane; straight line, shortest distance between skew lines; sphere; tangent plane to sphere, circle."
+          ],
           "sessionalNote": null,
           "references": []
         },
         "Ph 1223": {
           "title": "Physics - II",
-          "credit": 3,
-          "contactHour": "",
-          "topics": [],
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Particle Properties of Waves: Photoelectric effect, quantum theory of light, Compton Effect; Wave Properties of Particles: De Broglie waves, phase velocity and group velocity; Atom Model: Bohr's atom model, nature of electron orbits, orbital energy, origin of spectral lines, different series of spectral lines of hydrogen, orbital energy level diagram of hydrogen atom, vector atom model, orbital states, space quantization, spin quantization, magnetic moment of orbital electron, quantization of magnetic moment, electron shell; Magnetism: Classification of magnetic materials; Magnetic intensity, induction and susceptibility; Magnetization; comparison of electric and magnetic circuit; Crystal Structure: Crystal; polycrystalline and amorphous solids; Miller indices; Bragg's law. Interference: Theories of light, Huygen's principle and construction, interference of light, Young's double slit experiment, interference due to multiple reflections, Newton's rings. Diffraction: Fresnel and Fraunhoffer diffraction; Polarization: Production and analysis of polarized light, optical activity, optics of crystals. Photometry and Colorimetry: Lumonisity, Reflectance and Transmittance, Spectral power distribution; Additive color mixture; Matching spectrum colors; Chromaticity coordinates; Spectrophotometry; Dominant wavelength and purity. Nuclear Physics: Nuclear constituents, nuclear properties, binding energy; packing fraction, nuclear force, Radioactivity: laws of radioactive disintegration, half-life, mean life, laws of successive disintegration, practical application of radioactivity; nuclear fission and fusion processes."
+          ],
           "sessionalNote": null,
           "references": []
         },
         "Hum 1223": {
           "title": "Sociology",
-          "credit": 2,
-          "contactHour": "",
-          "topics": [],
+          "credit": 2.0,
+          "contactHour": "2 hrs/week",
+          "topics": [
+            "Introduction to sociology and sociological perspective. The modern interdisciplinary relation between sociology and development. Basic concept of sociology: society and its evolution, community, association, institution, groups, customs, culture, and civilization. Socialization process and formation of personality. Marriage and Family: Types of Family and Future structure of family. Social and Environmental issues. Social structure and its components. Social control and deviance art and architecture as an agency of social control, social stratification and mobility evolutionary forms of social change and agencies for social change. Social structure and change of Bangladesh in urban and rural context. Industrialization and urbanization in Bangladesh and its pattern and impact on society."
+          ],
           "sessionalNote": null,
           "references": []
         },
         "BECM 1252": {
           "title": "Architectural Design-II",
           "credit": 1.5,
-          "contactHour": "",
-          "topics": [],
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Basic Composition with primary elements of form; Point, line, plane and volume; Form and space relationship. Exercises with the ordering principles of composition; Rhythm, harmony, balance, proportions, axis, symmetry, asymmetry, hierarchy, datum etc. in various media Understanding of form-space relationship in basic compositions with special emphasis on space, its definition and qualities. Study with the primary elements of architectural forms; Study of a simple architectural space. Introduction of color to the basic compositions; Introduction of shades, shadows and reflections."
+          ],
           "sessionalNote": "Sessional",
           "references": []
         },
         "BECM 1254": {
           "title": "Architectural Graphics and Engineering Drawing",
           "credit": 1.5,
-          "contactHour": "",
-          "topics": [],
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Masonry and frame structures; Location map; Plan, elevations and cross-sections of multi-storied building; Excavation layout; Column center line layout; Beam column layout; Reinforcement details of beams, columns, foundations, slabs, septic tank etc; Detail drawing of roof trusses; Building services drawing; Introduction to Computer Aided Drafting. Architectural Graphics: Isometric drawing; Execution of oblique, isometric and diametric drawings; Presentation and rendering."
+          ],
           "sessionalNote": "Sessional",
           "references": []
         },
         "CE 1212": {
           "title": "Practical Surveying",
           "credit": 1.5,
-          "contactHour": "",
-          "topics": [],
+          "contactHour": "3 weeks in field",
+          "topics": [
+            "Practice on handling of instruments; Chain survey; Plane table survey; Traverse survey by theodolite; Leveling; Contouring; Route project; House setting; Curve setting; Stadia surveying; Height and distance problem."
+          ],
           "sessionalNote": "Sessional",
           "references": []
         },
         "CE 1214": {
           "title": "Sessional on Building & Construction Materials",
           "credit": 1.5,
-          "contactHour": "",
-          "topics": [],
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Test for specific gravity, unit weight, moisture content and absorption of aggregates; Gradation of coarse and fine aggregates; Abrasion test of coarse aggregates; Normal consistency, setting time, fineness, soundness, specific gravity test of cement; Tensile and compressive strength test of cement mortar; Tests on bricks and tiles; Design of Concrete Mix."
+          ],
           "sessionalNote": "Sessional",
-          "references": []
-        },
-        "BECM 1251": {
-          "title": "Aesthetics and Design",
-          "credit": 3,
-          "contactHour": "",
-          "topics": [],
-          "sessionalNote": null,
           "references": []
         }
       },
@@ -178,73 +206,91 @@
       "courses": {
         "BECM 2101": {
           "title": "Building Engineering Systems",
-          "credit": 3,
-          "contactHour": "",
-          "topics": [],
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Introduction to Building Control System, types of control and applications, human comfort, relative humidity and psychrometric chart, HVAC fundamentals. heating systems, modes of heat transfer, ventilation and air conditioning, air conditioning load calculations, ducting system and duct design, cooling system, refrigeration system and cycle, control loop, HVAC performance testing, adjusting and balancing (TAB), Cleanroom Performance Testing (CPT), standards, facilities management and maintenance. plumbing and sanitary systems, drainage system design and construction, water supply design, plumbing fixtures, plumbing testing, MEP coordination, MEP sustainability implications."
+          ],
           "sessionalNote": null,
           "references": []
         },
         "BECM 2151": {
           "title": "Aesthetics and Design",
-          "credit": 3,
-          "contactHour": "",
-          "topics": [],
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Introduction to the subject matter and purpose of aesthetics; The relationship of aesthetics to the architects and the public/community. Aesthetics and the act of creation; Methods of aesthetics; Aesthetic activity; Relationship between Art and Design. Essence and principal forms of aesthetics; Theoretical models of Aesthetics, Aesthetics as metacategory. Style; Psychology of perception and creation; Creation as an object of perception. Developments of ideas and their trends in the field of aesthetic activity. Theory of criticism. Introduction; Definition of design; Architectural design; Design methods; Design in nature; Man and design; Principles of Design; Elements of design, Architectural form, space, scale and proportioning system in relation to human perception and experiences. Definition of art; Relationship between art & science; Art as social phenomenon; Function of art; The method of art. Branches of art; Relationship between music and architecture; Musical sound; Scale and from of Eastern and western music. Historical conception of music; Modern theories of music; Methodology of musical criticism. Context; The ideology of planning and design; Evolution of design (analysis, form, process); Social production of architecture; Influence of geo-climatic factors in design; Analysis and synthesis - aesthetics, structure and analogy. The properties of space, meaning, from etc. Ideology and its reflection in form & space. The basic methodologies of architectural criticism."
+          ],
           "sessionalNote": null,
           "references": []
         },
         "CE 2111": {
           "title": "Mechanics of Solids - I",
-          "credit": 3,
-          "contactHour": "",
-          "topics": [],
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Fundamental concepts of stress and strain; Mechanical properties of materials; Strain energy; Stresses and strains in members subjected to tension, compression, shear and temperature changes; Bending moment and shear force diagrams of beams and frames; Flexural and shearing stresses in beams; Shear center; Thin walled pressure containers; Riveted and welded joints."
+          ],
           "sessionalNote": null,
           "references": []
         },
         "Math 2123": {
           "title": "Mathematics - III",
-          "credit": 3,
-          "contactHour": "",
-          "topics": [],
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Vector: Product of three and more vectors; Linear dependence and independence of vectors; Differentiation and integration of vectors together with elementary applications; Gradient, divergence and curl of point functions and related forms; Line, surface and volume integrals of vector functions. Matrix: Symmetric, Diagonal and other special types of matrices with their properties, Elementary transformations and equivalent matrices, Rank, Inverse of a square matrix by elementary row operation. Systems of Linear Equations: Solutions of systems of homogeneous linear equations, existence of non-trivial solutions of set of linear equations, consistency of linear equations, solution of non-homogenous equations using matrix; Eigen Systems: Eigen values and Eigenvectors. Laplace Transforms: Definition; Sufficient conditions for existence of Laplace transforms; Laplace transforms of some elementary functions; Properties of Laplace transforms, Multiplication and division effect, Laplace transforms of derivatives, unit step function, Periodic function; Inverse Laplace transforms; Solutions of differential equations by Laplace transforms; Evaluation of improper integrals through Laplace transform."
+          ],
           "sessionalNote": null,
           "references": []
         },
         "Hum 2123": {
           "title": "Engineering Economics and Financial Accounting",
-          "credit": 3,
-          "contactHour": "",
-          "topics": [],
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Introduction: Economics, Managerial Economics-Relationship with other disciplines- Firms: Types, objectives and goals-Managerial decisions-Decision analysis. The role of engineers in business, what makes engineering economics decisions difficult? Strategic decisions, the fundamental principles in engineering economics. Demand & Supply Analysis: Demand- Types of demand-Determinants of demand- Demand function- Demand elasticity- Demand forecasting Supply Determinants of supply Supply function- Supply elasticity. Production and Cost Analysis: Production function-Returns to scale-Isoquants-Managerial uses of Production optimization-Least cost input production function. Cost Concepts - Cost function - Determinants of cost- Short run and Long run cost curves Cost Output Decision- Estimation of Cost. Pricing: Determinants of Price - Pricing under different objectives and different market structures - Price discrimination - Pricing methods in practice. Financial Accounting (Elementary Treatment): Business and Financial transactions, Recording Process, Journal, Ledger, Trial Balance, Adjusting Entries, Balance Sheet and related concepts Profit & Loss Statement and related concepts-Financial Ratio Analysis Funds flow analysis-Cash flow analysis Comparative financial statements Analysis & Interpretation of financial statements. Payroll Account: Definition, Elements, Objectives, Recording the payoll/wages and salary statement. Statement of cost, Material cost account. Capital Budgeting (Elementary Treatment): Investment Risks and return evaluation of investment decision - Average rate of return Payback Period -Net Present Value - Internal rate of return."
+          ],
           "sessionalNote": null,
           "references": []
         },
         "BECM 2102": {
           "title": "Construction Estimating - I",
           "credit": 0.75,
-          "contactHour": "",
-          "topics": [],
+          "contactHour": "3/2 hrs/week",
+          "topics": [
+            "Types of estimates; Organization of cost estimates; Estimating and costing for residential buildings: Estimation of slab, beam, column, footing; analysis of rates, specifications, costing of residential building."
+          ],
           "sessionalNote": "Sessional",
           "references": []
         },
         "BECM 2104": {
           "title": "Construction Techniques and Equipments - I",
           "credit": 1.5,
-          "contactHour": "",
-          "topics": [],
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Types of building, components of a building, design loads, framed structure and load bearing wall structure; Foundations: Shallow foundation and deep foundation, site exploration, bearing capacity of soil, standard penetration test; Brick masonry: types of brick, bonds in brickwork, supervision of brickwork, brick laying tools, defects and strength on brick masonry, typical structures in brickwork, load bearing and non-load bearing walls, cavity walls, partition walls; Lintels and arches: different types of lintels and arches, loading on lintels, construction of arches; Stairs: different types of stairs, Floors: ground floors and upper floors; Roofs and roof coverings; Formwork; Plastering and interior finishing; Pointing, painting; Distempering and white washing."
+          ],
           "sessionalNote": "Sessional",
           "references": []
         },
         "BECM 2152": {
           "title": "Architectural Design - III",
           "credit": 1.5,
-          "contactHour": "",
-          "topics": [],
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Study on anthropomorphic proportions and scale, in relation to human perception and activities. Organization of simple architectural spaces with emphasis on spatial relationship. Simple building designs with simple functions; Layout of different built forms with emphasis on circulation with an attention to the building approach, entrance, path-configuration, path-space relationship, from of the circulation."
+          ],
           "sessionalNote": "Sessional",
           "references": []
         },
         "CE 2112": {
           "title": "Sessional on Mechanics of Solids",
           "credit": 1.5,
-          "contactHour": "",
-          "topics": [],
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Tension, direct shear and impact tests of mild steel specimen; Compression test of timber specimen; Hardness test of metals; Determination of shear center; Helical spring test; Static bending test; Load-deflection behavior of simple beam; Slender column test."
+          ],
           "sessionalNote": "Sessional",
           "references": []
         }
@@ -258,73 +304,91 @@
       "courses": {
         "BECM 2201": {
           "title": "Engineering Construction Management",
-          "credit": 3,
-          "contactHour": "",
-          "topics": [],
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Principles of management; Construction management: Principles, project organization, methods and practices, technology, management of materials and equipments, site management, contracts and specifications, inspection and quality control, safety, economy. Project planning and evaluation; feasibility reports; cash flows, payback period, internal rate of return; benefit-cost ratio; cost-benefit analysis case studies; planning and scheduling, resource scheduling, decision making and simulation; linear programming and applications. Demand forecasting; Inventory control; stores management; Procurement; Legal issues in construction; Environmental regulations."
+          ],
           "sessionalNote": null,
           "references": []
         },
         "BECM 2213": {
           "title": "Numerical Analysis and Computer Programming",
-          "credit": 3,
-          "contactHour": "",
-          "topics": [],
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Introduction: Introduction to computer (fundamental terms and terminology, hardware, software and their applications) and operating system fundamentals. Solutions of algebraic and transcendental equations: Bisection method, Regular falsi method, Newton-Raphson method, Iteration method; Rate of convergence; Order of errors; Interpolation: Simple differences, difference tables, differences of a polynomial, Newton's formula for interpolation, central difference interpolation formula, divided differences, tables of divided differences, Newton's general interpolation formula, Lagrange's interpolation formula, inverse interpolation by Lagrange's formula and by successive approximation; Solutions of system of linear equations: matrices, Gaussian elimination method, Gauss-Seidal iteration method; Numerical differentiation and integration; Finite differences; Curve fitting by least squares; Solution of differential equations: Picard's method, Euler's method and Runge-Kutta method. Computer Programming: Introduction to programming language C and solution of numerical problems."
+          ],
           "sessionalNote": null,
           "references": []
         },
         "CE 2211": {
           "title": "Mechanics of Solids - II",
-          "credit": 3,
-          "contactHour": "",
-          "topics": [],
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Torsional stresses in shafts and tubes; Combined stresses; Helical springs; Transformation of stresses; Deflection of beams by direct integration and moment area methods; Buckling of columns."
+          ],
           "sessionalNote": null,
           "references": []
         },
         "EEE 2223": {
           "title": "Basic Electrical Engineering",
-          "credit": 3,
-          "contactHour": "",
-          "topics": [],
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Fundamental concepts and units, variables and parameters: current, power, energy, resistance; Basic Lows: Ohm's law, Kirchhoff's current and voltage laws, Joule's law; Resistive Circuit: Series & parallel circuit, wye-Delta transformation; Circuit Analysis: Nodal & mesh analysis, Network theorems-thevenin's Norton's Superposition & Maximum power transfer theorems and applications; Measuring instrument: Ammeter, voltmeter, wattmeter, ohmmeter, multimeter & energymeter; Ac Circuit: Introduction to alternating current circuits, impedance and phasor algebra, power & energy calculation, power factor improvement. Generators: Description of different parts of DC generators, EMF equation, principle of DC generators, construction, theory of operation of alternators. Motors: Principle of operation and classification of DC Motor, general principles and construction of single phase and three phases Induction Motor, Introduction to Universal motor, stepping motors, Brushless DC motor, Servomotors, Permanent magnet motors, IPM motors and PMSM. Transformers: Working principle, Construction and cooling."
+          ],
           "sessionalNote": null,
           "references": []
         },
         "Math 2223": {
           "title": "Mathematics - IV",
-          "credit": 3,
-          "contactHour": "",
-          "topics": [],
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Statistics: Data handling and representation (tabular and graphical); Mean, Median, Mode and other measures of central tendencies; Variance and other measures of dispersion; Moment, Skewness and Kurtosis; Probability and basic theorems for probability; Random variables, Probability mass functions and probability density functions; Expectation: Expected value and variance with their properties; Discrete Probability distributions: The Bernoulli and Poisson process, Binomial and Poisson probability distributions and their properties; Continuous probability distributions: Normal variate and normal distribution, properties of normal distribution, standard normal variate and standard normal distribution, properties of standard normal distribution; Fitting of data to certain distribution and goodness of fit; Regression: Least square fitting of data to straight line; Correlation. Special functions: Series solution of differential equations; Bessel's differential equations and its solutions, recurrence relations, values for half integer orders and orthogonality of Bessel's function of Ist kind, Fourier-Bessel series; Legendre's differential equations and its solutions, representation of polynomials by Legendre polynomials, generating function of Legendre polynomials and Legendre coefficients, orthogonality of Legendre polynomials and Fourier-Legendre series. Boundary value problems: Oscillations of a hanging chain; Vibration of a rectangular membrane; Vibration of a circular membrane; Solution of laplace equation in 2D cartesian, polar, 3D cartesian, cylindrical and spherical polar coordinates."
+          ],
           "sessionalNote": null,
           "references": []
         },
         "BECM 2202": {
           "title": "Construction Estimating - II",
           "credit": 1.5,
-          "contactHour": "",
-          "topics": [],
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Detailed estimate and specification of all major items of work of a building; Estimation and costing of septic tank; Estimation and costing of retaining wall; Computer aided quantity estimation; Site survey and estimation; Fundamentals of costing and estimating of electrical and mechanical works related to building engineering; construction cost adjustments with and without indices; Tendering."
+          ],
           "sessionalNote": "Sessional",
           "references": []
         },
         "BECM 2214": {
           "title": "Computer Applications and Programming",
           "credit": 1.5,
-          "contactHour": "",
-          "topics": [],
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Introduction to computer; Introduction to C & FORTRAN for the solution of Building Engineering and Construction Management problems; Applications of different software packages; List of Software/Tools Requirements: MS Office: Prepare all types of documents and spreadsheet for official corresponding and recording of the Construction project; AutoCAD: Make all types of 2D Design and drafting or understanding the softcopy of the construction project for information; Sketchup: Make all types of 3D Design and massing of any part of construction project for better understanding and demonstration."
+          ],
           "sessionalNote": "Sessional",
           "references": []
         },
         "BECM 2252": {
           "title": "Architectural Design - IV",
           "credit": 1.5,
-          "contactHour": "",
-          "topics": [],
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Building design to create sensibility regarding relationship between built form, structural systems, material use and environmental conditions with that of the ordering principles. Architectural working drawing as construction documents: Plan, section, elevation, site plan, key plan, etc. and details working drawing: Kitchen, toilet, stair, door, window, wall section, critical roof section etc."
+          ],
           "sessionalNote": "Sessional",
           "references": []
         },
         "EEE 2224": {
           "title": "Sessional on Basic Electrical Engineering",
           "credit": 0.75,
-          "contactHour": "",
-          "topics": [],
+          "contactHour": "3/2 hrs/week",
+          "topics": [
+            "Experiments based on fundamental concepts of AC Circuit: Introduction to alternating current circuits, impedance and phasor algebra, power & energy calculation, power factor improvement; Illumination: Illumination & its calculation of a room, lux & meter, lumen power, candle power; Building Wiring: Electrical wiring for building, wiring methods, total load calculation of a building, modern building wiring, estimating & costing."
+          ],
           "sessionalNote": "Sessional",
           "references": []
         }
@@ -338,73 +402,91 @@
       "courses": {
         "BECM 3101": {
           "title": "Construction and Project Management - I",
-          "credit": 3,
-          "contactHour": "",
-          "topics": [],
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Structure and organization construction industry; Company and project organizational concepts; Construction contracts and professional issues in construction management; Management of the construction process including costing, estimating and tendering; Technology and application; Value Engineering; Phycology in administrations. Project organization: Organizational structures, PDTs, Distributed PDTs and Design Structure Matrix; Project Planning: CPM, PDM, PERT, GERT, Q-GERT, SLAM, DPM, Resource loading."
+          ],
           "sessionalNote": null,
           "references": []
         },
         "BECM 3107": {
           "title": "Construction Contract and Law",
-          "credit": 4,
-          "contactHour": "",
-          "topics": [],
+          "credit": 4.0,
+          "contactHour": "4 hrs/week",
+          "topics": [
+            "Uses of Introduction to working drawings, specifications, and other documents required to prepare contract, Emphasis on the organization and architectural/engineering drawings and specifications in the construction process. Sequence of contract activities, prepare bidding and contract documents, prepare technical and building specification, prepare documents for inspections, submittals and changes in a contract, procedures for early contract termination, prepare documents for close-out and commissioning. Insurance and construction bonding, liability insurance, indemnity agreements, surety bonds, bid bonds, performance bonds, labour and material payment bonds, lien bonds, warranty bonds and letters of credit. Construction management contracts and customs contracts. Legal system concepts in the areas of laws, morals, ethics, civil law, common law and statute law. Torts law and remedies for torts committed. Construction contract law, acceptance of contracts, tenders, capacity to contract, void/illegal contracts, privity of contract, effect of breach of contract, failure of performance, misrepresentation and torts (as applied to contracts) and the Statute of Frauds. Litigation and alternative dispute resolution examines the pre-trial phase, the trial phase, the judgment phase, negotiation, mediation and arbitration. Liquidated damages & penalties, warranties and guarantees."
+          ],
           "sessionalNote": null,
           "references": []
         },
         "BECM 3115": {
           "title": "Climate and Architectural Design",
-          "credit": 2,
-          "contactHour": "",
-          "topics": [],
+          "credit": 2.0,
+          "contactHour": "2 hrs/week",
+          "topics": [
+            "Introduction to Global climatic factors; Geography and Geological factors; Elements of climate; Measuring the elements and recording the data; Classification of climates; Tropical climate; Site climate; Principles of thermal design and means of thermal control. Micro-climatic factors; Ecological considerations. Study of external and internal climatic condition of buildings; Behavior and performance of a building and its components as a climatic modifier to provide comfort and energy savings through climatic passive control and design; human comfort criteria and ranges."
+          ],
           "sessionalNote": null,
           "references": []
         },
         "CE 3111": {
           "title": "Structural Analysis and Design - I",
-          "credit": 3,
-          "contactHour": "",
-          "topics": [],
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Stability and determinacy of structures; Analysis of structurally determinate trusses and arches; Shear force and bending moment diagram of statically determinant structures; Influence line diagram; Suspension systems; Analysis of wind and earthquake loads on structures; Deflection of statically determinant frames and trusses by different methods: Unit load, elastic load, conjugate beam etc; Analysis of space trusses; Analysis of statically determinate beams by three moment equation; Approximate analysis of indeterminate structures; Portal frame, Mill bents, braced trusses and multi storied building."
+          ],
           "sessionalNote": null,
           "references": []
         },
         "CE 3113": {
           "title": "Reinforced Concrete Structures - I",
-          "credit": 3,
-          "contactHour": "",
-          "topics": [],
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Fundamental behavior of reinforced concrete members; Introduction to WSD and USD methods; Analysis and design of singly & Doubly reinforced beams, T-beams; One way and two ways slab according to WSD and USD methods; Design of lintels and sunshades; Diagonal tension, bond and anchorage to WSD and USD methods."
+          ],
           "sessionalNote": null,
           "references": []
         },
         "BECM 3112": {
           "title": "Working Drawing",
           "credit": 1.5,
-          "contactHour": "",
-          "topics": [],
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Architectural working drawings as construction document; Plan, section, elevation, site plan, key plan etc. Large scale detail Architectural working drawing as construction document; Kitchen, Toilet, Stair, Door, Window, Wall section, Critical roof section, etc."
+          ],
           "sessionalNote": "Sessional",
           "references": []
         },
         "BECM 3116": {
           "title": "Research Methodology",
           "credit": 0.75,
-          "contactHour": "",
-          "topics": [],
+          "contactHour": "3/2 hrs/week",
+          "topics": [
+            "Introduction, research design, variables and hypothesis, measurement and its levels, reliability and validity, index construction, scales, social indicators, random assignments, design logic, internal and external validity, sampling, survey methods, analyzing quantitative data."
+          ],
           "sessionalNote": "Sessional",
           "references": []
         },
         "BECM 3124": {
           "title": "Architectural Design of High Rise Building",
           "credit": 0.75,
-          "contactHour": "",
-          "topics": [],
+          "contactHour": "3/2 hrs/week",
+          "topics": [
+            "Thematic approach to architectural design; Design exercises on vertically extended complex building problems emphasizing innovative ideas; Incorporation of formal and functional expressions, environmental qualities, structural issues, circulation and linkages and organization into the realm of Architecture. Services, maintenances, fire protection standards. Ideas, materials and technologies of Architecture; Formal and functional expression with Technical integration; Earthquake resilience in tall structure design."
+          ],
           "sessionalNote": "Sessional",
           "references": []
         },
         "CE 3114": {
           "title": "Sessional on Reinforced Concrete Structures",
           "credit": 1.5,
-          "contactHour": "",
-          "topics": [],
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Design of members and connections of a roof truss; Design of a retaining wall; Design of large span plate girder building beams."
+          ],
           "sessionalNote": "Sessional",
           "references": []
         }
@@ -418,73 +500,91 @@
       "courses": {
         "BECM 3201": {
           "title": "Construction and Project Management - II",
-          "credit": 3,
-          "contactHour": "",
-          "topics": [],
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Project life cycle &characteristics of modern project management; Strategic management of projects; Schedule resources: Time constrained and resource constrained project. Managing project risks: Risk identification, risk assessment, risk response development, risk response control, changes and business continuity; Managing project team, partnering-managing international relations and out sourcing, international project management. Project monitoring: Earned value analysis; quality assurance, conflict management; Project control: project crashing; critical chain; project termination; Project Learning: System dynamics, project reviews, project audits, project closeout."
+          ],
           "sessionalNote": null,
           "references": []
         },
         "BECM 3205": {
           "title": "Acoustics and Lighting",
-          "credit": 3,
-          "contactHour": "",
-          "topics": [],
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "General introduction to the audio and visual environment. The physiology of sound; Perception, generation and propagations of sound; Behavior of sound in closed spaces; Auditorium acoustics; Noise measurements and control in space. The hearing mechanism. Introduction to Architectural lighting; Effects of luminous environment on human being; Visual perception. Photometry, brightness, luminance, and illumination. Concept of natural lighting in building. Artificial lighting; Light sources; Luminaries. Design criteria and designing for natural and artificial lighting. Calorimetry. Calculation methods for artificial lighting."
+          ],
           "sessionalNote": null,
           "references": []
         },
         "CE 3211": {
           "title": "Structural Analysis and Design - II",
-          "credit": 3,
-          "contactHour": "",
-          "topics": [],
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Analysis of Statically Determinant structures (Beams, Frames, Trusses) by Slope Deflection, Moment Distribution, Force Methods; Analysis of Composite Structures by Strain Energy Method; Influence Line Diagram for Statically Indeterminate Beams, Frames, Arches and Grids; Stiffness and Flexibility Matrix Methods for Beams, Frames and Plane Trusses; Basic Concept of Shell Structures; Structural Forms and Applications; Basic Finite Element Methods: Spring and Solid Elements; Rigid Body Motion; Mode Shapes; Analysis of Building Frame Structures by: Equivalent Lateral Force, Time History and Response Spectrum Methods."
+          ],
           "sessionalNote": null,
           "references": []
         },
         "CE 3213": {
           "title": "Reinforced Concrete Structures - II",
-          "credit": 3,
-          "contactHour": "",
-          "topics": [],
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Staircases; Columns; Reinforced concrete floor and roof systems; Flat slabs and flat plates; Plastic hinge idea and collapse mechanism; Yield line method; Design of shear wall; Introduction to design of timber members."
+          ],
           "sessionalNote": null,
           "references": []
         },
         "CE 3223": {
           "title": "Soil Mechanics",
-          "credit": 3,
-          "contactHour": "",
-          "topics": [],
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Introduction to soil mechanics; Index properties of soils; Identification and classification of soils; Phase relationships; Soil compaction; Principles of total and effective stresses; Permeability and seepage; Shear strength; Stress distribution in soil; Compressibility and settlement; Bearing capacity; Lateral earth pressure and slope stability."
+          ],
           "sessionalNote": null,
           "references": []
         },
         "BECM 3200": {
           "title": "Project and Seminar",
           "credit": 0.75,
-          "contactHour": "",
-          "topics": [],
+          "contactHour": "3/2 hrs/week",
+          "topics": [
+            "Introduction to technical writing and presentation techniques; assignment on technical writing for a specific topic; presentation and submission of report."
+          ],
           "sessionalNote": "Sessional",
           "references": []
         },
         "BECM 3204": {
           "title": "Construction Techniques and Equipments - II",
           "credit": 1.5,
-          "contactHour": "",
-          "topics": [],
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Building construction and management equipment: Equipment Economics; Fundamentals of Moving Earth; Loading and hauling equipment; Conveying equipment; Pumping equipment; Compacting equipment; Pile Driving Equipment; Vibrators; Crushers and other Equipment; Excavations machinery; Earth moving vehicles; Earth moving machinery; Basement construction; Foundation systems. Construction: Shoring; Underpinning; Scaffolding and formwork; Plastering and interior finishing; Pointing, painting; Distempering and white washing; Cement concrete construction; Sound insulation: Acoustics; Thermal insulation; House plumbing: Water supply and wastewater drainage, Detection, alarm & firefighting system; Lift, escalator."
+          ],
           "sessionalNote": "Sessional",
           "references": []
         },
         "BECM 3208": {
           "title": "Landscape Design",
           "credit": 1.5,
-          "contactHour": "",
-          "topics": [],
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Introduction to different elements of landscape. Site Planning, design and landscaping, landscape planning and sesign exercises; A study of site selection, plane surveying, site development, topography, soils, grading, drainage, site utilities, landscaping, and planting will be used towards the assessment of buildings, site and campus design."
+          ],
           "sessionalNote": "Sessional",
           "references": []
         },
         "CE 3224": {
           "title": "Sessional on Soil Mechanics",
           "credit": 1.5,
-          "contactHour": "",
-          "topics": [],
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Field identification of soil samples; Specific gravity test; Atterberg limits tests; Grain size analysis by sieve and hydrometer, Standard Proctor compaction test; Modified Proctor compaction test; Permeability test; Field compaction test; Unconfined compression test; Direct shear test; Tri-axial compression test; Consolidation test."
+          ],
           "sessionalNote": "Sessional",
           "references": []
         }
@@ -498,73 +598,91 @@
       "courses": {
         "BECM 4101": {
           "title": "Project Financing and Construction Marketing",
-          "credit": 3,
-          "contactHour": "",
-          "topics": [],
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Introduction to Public-Private-Partnership (PPP) and Build-Operate-Transfer (BOT) infrastructure and construction projects as well as organizations; Management of financial risks and taxation relevant to overseas contract. International construction market; Market planning and business development; Strategic planning and management techniques; Construction joint ventures, partnering and strategic alliances; Developing competitive strategies for international construction; Management of international projects."
+          ],
           "sessionalNote": null,
           "references": []
         },
         "BECM 4103": {
           "title": "Construction Communications and Procurement Management",
-          "credit": 3,
-          "contactHour": "",
-          "topics": [],
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Develop managerial communication skills in the context of the construction industry. Understanding the communication process and communication systems, preparing a business plan, identifying sources and management of conflict, resolving people problems and giving feedback, managing group communication dynamics, fostering teamwork and generating consensus, reading non-verbal communication, developing communication skills, interpersonal mentoring/coaching, utilizing negotiating skills, and delivering oral presentations. Applies business writing to the construction industry. Focuses on planning, writing, and editing documents most critical to a construction manager's professional success. Fundamental concepts and techniques for project acquisition and procurement. Study of the different methods used in the procurement and delivery of projects in the construction industry including lump sum, unit price, cost plus, design-build, and construction management contracts. Four-step procurement process, understanding of project evaluation, planning, financing, contracting, negotiation, and procurement execution. Methods, principles, and practices in infrastructure project procurement, including Public-Private Partnerships."
+          ],
           "sessionalNote": null,
           "references": []
         },
         "BECM 4105": {
           "title": "Health and Safety in Construction",
-          "credit": 3,
-          "contactHour": "",
-          "topics": [],
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Introduction to construction safety, major causes of incident in construction work, work injury compensation and insurance programs, substance abuse programs for construction sites, pre-construction planning, personal protection equipment (PPE), pre-construction hazard analysis, daily safe work permit, job safety analysis, accident investigation and reporting, emergency response procedure and responsibility, health and safety training, Legal aspects: multi-employer worksite issues, managing subcontractor liability and regulatory requirements. site specific safety plan. Safety issues in construction: fall protection, steel erection, scaffolding safety, crane safety, electrical Safety, excavation, trenching, & shoring, management of environmental impacts, demolition, confined spaces. Work zone safety/traffic control, construction safety certifications. Principles of fire and explosion, Building design for fire safety, Legal Aspects of Fire Safety, Building fire safety measure, Fire protection in buildings, Human behavior and risk assessment, Environmental impact of fire."
+          ],
           "sessionalNote": null,
           "references": []
         },
         "BECM 4109": {
           "title": "Green Building and Environmental Technology",
-          "credit": 3,
-          "contactHour": "",
-          "topics": [],
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Introduction to green building; building science fundamentals; Green building rating; Renewable natural resources in buildings; Energy consumption, energy audit, energy efficiency in buildings; Optimum selection of energy sources; micro-climate controlling (active and passive ventilations); O&M of green building; Utilization of local materials in green building; Sustainable sites; Sustainable materials; Life cycle assessment of buildings and materials; Indoor air quality, environmental issues in green construction; Water, wastewater and solid waste technologies in green building; Introduction to environmental impact assessment."
+          ],
           "sessionalNote": null,
           "references": []
         },
         "CE 4123": {
           "title": "Foundation Engineering",
-          "credit": 3,
-          "contactHour": "",
-          "topics": [],
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Sub-soil investigation and foundation engineering report; Types and selection of foundations; Design of footings, mat foundation, single and group pile foundation; Soil improvement techniques; Dewatering and slurry wall construction; Introduction to shoring and under pinning, caissons, sheet piling wall, cofferdam and machine foundation."
+          ],
           "sessionalNote": null,
           "references": []
         },
         "BECM 4000": {
           "title": "Project and Thesis",
           "credit": 1.5,
-          "contactHour": "",
-          "topics": [],
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Experimental and theoretical investigation of various topics in structural engineering, foundation engineering and construction management; Individual or group study of one or more topics from any of the above fields; The students will be required to submit thesis/project report at the end of the work."
+          ],
           "sessionalNote": "Sessional",
           "references": []
         },
         "BECM 4110": {
           "title": "Interior Design",
           "credit": 1.5,
-          "contactHour": "",
-          "topics": [],
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Basic introduction to interior design, history of interiors, interior design elements (line, shape, size, pattern, rhythm and order), color and texture theory and application, human factors, technical factors (acoustics and lighting), environmental factors, materials and applications, use of non-structural materials, functional separation of spaces and interior furniture, interior plantation."
+          ],
           "sessionalNote": "Sessional",
           "references": []
         },
         "BECM 4114": {
           "title": "Study on Building Project Management",
           "credit": 1.5,
-          "contactHour": "",
-          "topics": [],
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Work on building project, investigation of working procession and reporting, Project cost estimating. Exercise a construction project model from planning to implementation stages including conceptual estimating; Procurement challenges; Construction schedule and delay analysis; Management skills and applications; Budget tracking; And forced interruptions to keep the project on track. This exercise will help students to gain better understanding of the real construction environment and how to apply their acquired construction management skills to handle the involved complexities and interdependencies."
+          ],
           "sessionalNote": "Sessional",
           "references": []
         },
         "CE 4128": {
           "title": "Analysis and Design of Tall Building",
           "credit": 1.5,
-          "contactHour": "",
-          "topics": [],
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Introduction to tall buildings in different countries of the world; Analysis and design of a high rise office/residential building by both manual and software techniques."
+          ],
           "sessionalNote": "Sessional",
           "references": []
         }
@@ -578,8 +696,8 @@
       "courses": {
         "BECM 4000": {
           "title": "Project and Thesis",
-          "credit": 3,
-          "contactHour": "",
+          "credit": 3.0,
+          "contactHour": "6 hrs/week",
           "topics": [],
           "sessionalNote": "Sessional",
           "references": []
@@ -587,87 +705,249 @@
         "BECM 4200": {
           "title": "Professional Practices",
           "credit": 1.5,
-          "contactHour": "",
-          "topics": [],
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Introduction to the permit process, life safety requirements, and environmental regulations for designs and construction of buildings as established by the national and local jurisdictions. Case Study on BNBC and ACI code. Development of a portfolio demonstrating a high level of skill and a personal style, the ability to discuss the work in formal and conceptual terms is the primary focus, Additionally, the student will be introduced to a variety of professional practices and develop a familiarity with the local, regional and national scenes."
+          ],
           "sessionalNote": "Sessional",
           "references": []
         },
         "BECM 4201": {
           "title": "Quality Management in Construction",
-          "credit": 3,
-          "contactHour": "",
-          "topics": [],
+          "credit": 3.0,
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "The Quality Management Philosophy, Overview of Quality: Quality inspection, quality control, quality assurance, quality management. Principles of total quality management. Value Methodology: Value engineering. Integrated Quality Management: Quality standards, standards organizations, international organization for standardization (ISO), ISO quality management system, ISO certification. Quality in Construction Projects: Quality in construction projects; conceptual design; preliminary design; detailed design; quality manuals; quality plans; construction monitoring and control, and quality control and inspection. Facility management, assessment of quality, contractor's quality control plan. Quality audits, quality assurance and the contract, contracts and system standards. Concepts of network techniques, resources and cost planning; operations research methods."
+          ],
           "sessionalNote": null,
           "references": []
         },
         "BECM 4203": {
           "title": "Information Technology in Construction",
-          "credit": 2,
-          "contactHour": "",
-          "topics": [],
+          "credit": 2.0,
+          "contactHour": "2 hrs/week",
+          "topics": [
+            "Information system: Information-based theories of management, information technology, cost and value information, analysis, design and implementation of a network based control system. Fundamentals of Building Information Modelling (BIM), BIM tools for construction documentation system, architectural modelling, structural analysis, precast and prefabrications, sustainability and energy analysis & quantity surveying. Typical construction process & site Planning; Computer based project management."
+          ],
           "sessionalNote": null,
           "references": []
         },
         "BECM 4204": {
           "title": "Sessional on Building Information Modeling",
           "credit": 1.5,
-          "contactHour": "",
-          "topics": [],
+          "contactHour": "3 hrs/week",
+          "topics": [
+            "Introduces concepts and features of BIM. Includes software structure and features, modeling and editing techniques, and sheet creation and organization. Focuses on applying BIM software to develop a set of construction documents. Simulates project development and documentation. Collection and study of tender notices, tender documents of contract document associated with Building Engineering works; Hands-on Building Information Modeling (BIM) tools."
+          ],
           "sessionalNote": "Sessional",
           "references": []
         },
         "BECM 4205": {
           "title": "Real Estate Development",
-          "credit": 2,
-          "contactHour": "",
-          "topics": [],
+          "credit": 2.0,
+          "contactHour": "2 hrs/week",
+          "topics": [
+            "A study of the technical issues involved in developing real estate projects. Tracks project development from initial conception through closing of the sale. Emphasizes the steps and processes involved in pursuing, analyzing, and closing a real estate purchase. Study of the financial, technical, and management activities and environmental impact regulations and studies associated with the development of residential projects, including business and construction practices and marketing strategies for continued profitable operation of a residential construction firm."
+          ],
           "sessionalNote": null,
-          "references": []
-        },
-        "CE 4221": {
-          "title": "Design of Steel Structures",
-          "credit": 2,
-          "contactHour": "",
-          "topics": [],
-          "sessionalNote": null,
-          "references": []
-        },
-        "CE 4223": {
-          "title": "Precast and Prestressed Concrete",
-          "credit": 2,
-          "contactHour": "",
-          "topics": [],
-          "sessionalNote": null,
-          "references": []
-        },
-        "BECM 4230": {
-          "title": "Sessional on Structural Health Monitoring",
-          "credit": 1.5,
-          "contactHour": "",
-          "topics": [],
-          "sessionalNote": "Sessional",
-          "references": []
-        },
-        "BECM 4247": {
-          "title": "Contemporary Buildings Design",
-          "credit": 2,
-          "contactHour": "",
-          "topics": [],
-          "sessionalNote": null,
-          "references": []
-        },
-        "BECM 4250": {
-          "title": "Sessional on Sustainable",
-          "credit": 1.5,
-          "contactHour": "",
-          "topics": [],
-          "sessionalNote": "Sessional",
           "references": []
         }
       },
-      "optionalCourses": [],
-      "termNotes": []
+      "optionalCourses": [
+        "BECM 4207", "BECM 4209", "BECM 4220",
+        "CE 4221", "CE 4223", "BECM 4225",
+        "BECM 4227", "BECM 4229", "BECM 4230",
+        "BECM 4231", "BECM 4241", "BECM 4243",
+        "BECM 4245", "BECM 4247", "BECM 4249",
+        "BECM 4250"
+      ],
+      "termNotes": [
+        "Students must take three theory courses and one sessional course from the optional categories (I, II, III). At least one theory course must be from the thesis-related optional category."
+      ]
     }
   },
-  "optionalGroups": {}
+  "optionalGroups": {
+    "Category I (Thesis related)": {
+      "CE 4221": {
+        "courseCode": "CE 4221",
+        "title": "Design of Steel Structures",
+        "credit": 2.0,
+        "contactHour": "2 hrs/week",
+        "topics": [
+          "Introduction & behavior of steel structures, designing beams for flexural yielding with local & global buckling, designing tension members, designing compression member or columns with local & global buckling by AISC & LRFD, design of bolted & welded connections, column beam connections, design of steel concrete composite beams & slabs."
+        ],
+        "sessionalNote": null,
+        "references": []
+      },
+      "CE 4223": {
+        "courseCode": "CE 4223",
+        "title": "Precast & Prestressed Concrete",
+        "credit": 2.0,
+        "contactHour": "2 hrs/week",
+        "topics": [
+          "Introduction to prestressed concrete: Prefabrication & prestressing concepts, Full & partial prestress material, Methods of prestressing; Special problems in prestressing: losses, effect of creep & shrinkage and end block design-bursting; Designing beams & girders for flexural & shear; Design for serviceability: Serviceability criteria, cable profiles; Design of post-tensioned slab."
+        ],
+        "sessionalNote": null,
+        "references": []
+      },
+      "BECM 4225": {
+        "courseCode": "BECM 4225",
+        "title": "Advanced Foundation Engineering",
+        "credit": 2.0,
+        "contactHour": "2 hrs/week",
+        "topics": [
+          "Retaining walls, cofferdams, Piles subjected to lateral loads; Machine foundation; Dewatering & slurry wall construction; Ground improvement techniques."
+        ],
+        "sessionalNote": null,
+        "references": []
+      }
+    },
+    "Category II": {
+      "BECM 4227": {
+        "courseCode": "BECM 4227",
+        "title": "Structural Fire Safety Engineering",
+        "credit": 2.0,
+        "contactHour": "2 hrs/week",
+        "topics": [
+          "Technical basis, heat release rate of materials & items of furniture, temperature in post-flashover fires, failure mechanism in tall concrete building, equivalent fire severity, performance-based fire safety design of structure, high temperature material properties for wood, steel & concrete, load bearing capacity of fire of beams, columns, walls & whole structures, Single floor initiated by fire: Mechanism & design methodology."
+        ],
+        "sessionalNote": null,
+        "references": []
+      },
+      "BECM 4229": {
+        "courseCode": "BECM 4229",
+        "title": "Structural Health Monitoring",
+        "credit": 2.0,
+        "contactHour": "2 hrs/week",
+        "topics": [
+          "Introduction (scope of health monitoring, necessities, importance), describe a systematic approach to SHM process, basic measurement sensor types, data acquisition systems & their working principles & with various available and emerging monitoring technologies, Vibration measurement & Non-destructive test principles, analytical modeling & simulation of test loads, fundamental criteria for application infrastructures such as bridges, buildings, geo-structures & large structures, noise effect on measured data, minimization of noise."
+        ],
+        "sessionalNote": null,
+        "references": []
+      },
+      "BECM 4230": {
+        "courseCode": "BECM 4230",
+        "title": "Sessional on Structural Health Monitoring",
+        "credit": 1.5,
+        "contactHour": "3 hrs/week",
+        "topics": [
+          "Commonly used measurement techniques & instrumentation types, basics measurement sensor types & their working principles, non-destructive test evaluation, data acquisition systems, measurement set up, installation and working principles of SHM, development of a SHM system in group work, noise effect on measured data, minimization of noise, short term field testing."
+        ],
+        "sessionalNote": "Sessional",
+        "references": []
+      },
+      "BECM 4231": {
+        "courseCode": "BECM 4231",
+        "title": "Finite Element Analysis of Structures",
+        "credit": 2.0,
+        "contactHour": "2 hrs/week",
+        "topics": [
+          "Fundamentals of finite element analysis applied to building engineering, Non-linear analysis, theory of the finite element method, buckling, meshing, heat transfer analysis, dynamic analysis, acoustics, one dimensional stress deformation & time dependent flow problem."
+        ],
+        "sessionalNote": null,
+        "references": []
+      }
+    },
+    "Category III": {
+      "BECM 4207": {
+        "courseCode": "BECM 4207",
+        "title": "Fundamentals of Facilities Management",
+        "credit": 2.0,
+        "contactHour": "2 hrs/week",
+        "topics": [
+          "System approach to planning, organization and implementation of a facility, including space allocation, leasing and marketing, operation, maintenance, and renovation over the life of the building. Forecast of budget requirements for effective operation, maintenance, and renovation. Correlation between the operation of the building and health risks, comfort, productivity, and costs. Integrated approach to the planning, analysis, evaluation, and optimization of physical systems of facilities. Case studies."
+        ],
+        "sessionalNote": null,
+        "references": []
+      },
+      "BECM 4209": {
+        "courseCode": "BECM 4209",
+        "title": "Environmental Management",
+        "credit": 2.0,
+        "contactHour": "2 hrs/week",
+        "topics": [
+          "Environmental and sustainable development; Global and regional approach to environmental management; Environmental policies, legislation and act; Environmental quality standard (EQS); Environmental issues and priorities; Environmental management at project level; Environmental resource management and conservation strategies; Economics of environmental management."
+        ],
+        "sessionalNote": null,
+        "references": []
+      },
+      "BECM 4220": {
+        "courseCode": "BECM 4220",
+        "title": "Applications of Project Planning Software",
+        "credit": 1.5,
+        "contactHour": "3 hrs/week",
+        "topics": [
+          "Study of project planning techniques, Computer application on project planning & scheduling tools such as MS project, Primavera P6."
+        ],
+        "sessionalNote": "Sessional",
+        "references": []
+      },
+      "BECM 4241": {
+        "courseCode": "BECM 4241",
+        "title": "Intelligent Buildings",
+        "credit": 2.0,
+        "contactHour": "2 hrs/week",
+        "topics": [
+          "Issues related to the intelligent building; Automation, communication & security, mechanical, electrical, electronic sub systems & their integration within the building; Configuration and operational characteristics; Performance specifications; Analytical models; design methods; Case studies."
+        ],
+        "sessionalNote": null,
+        "references": []
+      },
+      "BECM 4243": {
+        "courseCode": "BECM 4243",
+        "title": "Building Environment",
+        "credit": 2.0,
+        "contactHour": "2 hrs/week",
+        "topics": [
+          "Design criteria of indoor environment, assessment of thermal comfort & sensation, Mathematical models of thermal comfort: Predictive models & adaptive models. Verification of compliance with standards. Visual comfort. Standard for quality of visual environment. Calculation of photometric parameters. Preliminary design of the indoor lighting system. Evaluation of luminance level. Acoustical considerations in buildings."
+        ],
+        "sessionalNote": null,
+        "references": []
+      },
+      "BECM 4245": {
+        "courseCode": "BECM 4245",
+        "title": "Energy Management in Building",
+        "credit": 2.0,
+        "contactHour": "2 hrs/week",
+        "topics": [
+          "Energy related standards, codes & by-laws. Methods of assessment of the actual energy performance. Conventional & innovative measurement & analysis techniques. Energy orientated renovation or replacement of building sub-systems (e.g. HVAC & lighting systems). Prediction of energy & cost savings using commercially available software packages; Verification of compliance with standards. Life cycle analysis."
+        ],
+        "sessionalNote": null,
+        "references": []
+      },
+      "BECM 4247": {
+        "courseCode": "BECM 4247",
+        "title": "Contemporary Building Design",
+        "credit": 2.0,
+        "contactHour": "2 hrs/week",
+        "topics": [
+          "Contemporary building design practice in current times, architectural theory for contemporary building design, contemporary building form analysis, contemporary building material & their applications, analysis of contemporary building structure through form, functions & context, practical design solutions for contemporary building structures, integrate design & structural elements into complete structural systems in modern buildings, the evolution, range & appropriate application of contemporary building structural systems, Distinguish significant developments in construction & design: Concepts & movements that shaped architecture into what it is today and how their ideas affect current design."
+        ],
+        "sessionalNote": null,
+        "references": []
+      },
+      "BECM 4249": {
+        "courseCode": "BECM 4249",
+        "title": "Climate Resilient Buildings",
+        "credit": 2.0,
+        "contactHour": "2 hrs/week",
+        "topics": [
+          "Introduction: Resilient approach to building planning; Define & set appropriate boundaries, targets & matrices; Climate Change; Risk & Vulnerability Patterns in low income settlements; Resilience in theory & Practice: Urban ecosystem services; Barriers in the adaption process; Planning & decision making analysis for climate change; Building planning for rising extreme climate events & rising sea levels; Solar for passive survivability; Urban ecology, design opportunities & bio filtration; Sustainability for a portfolio building."
+        ],
+        "sessionalNote": null,
+        "references": []
+      },
+      "BECM 4250": {
+        "courseCode": "BECM 4250",
+        "title": "Sessional on Sustainable Building Design",
+        "credit": 1.5,
+        "contactHour": "3 hrs/week",
+        "topics": [
+          "Understanding the concept of energy efficient architecture, sustainable architecture - design tools, sustainable building form- analysis & design, building geometry and material properties, new buildings- sustainable building models."
+        ],
+        "sessionalNote": "Sessional",
+        "references": []
+      }
+    }
+  }
 }

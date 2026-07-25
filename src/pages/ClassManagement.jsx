@@ -539,44 +539,40 @@ export default function ClassManagement() {
 
   return (
     <div className="page-enter page-container class-management-page content-page-bg" style={{ width: '100%' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 16, marginBottom: 16 }}>
-        <div className="class-management-hero-copy">
-          <div className="content-page-hero" style={{ marginBottom: 0 }}>
+      <div className="content-page-hero">
+        <div className="content-page-hero-main">
+          <div className="content-page-hero-head">
             <div className="content-page-hero-icon">
-              <CalendarDays size={18} color="var(--accent)" />
+              <CalendarDays size={24} color="var(--accent)" />
             </div>
-            <div>
-              <h1 className="content-page-hero-title">Class Management</h1>
-              <p className="content-page-hero-subtitle">
-                Routine control for CR work · {profile.name || '—'} {profile.isCR ? '· Class Rep' : ''} · Term: {currentTermKey || 'Unknown'}
-              </p>
-            </div>
+            <h1 className="content-page-hero-title">Class Management</h1>
           </div>
-          <div className="class-management-meta-row" style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 10 }}>
+          <p className="content-page-hero-subtitle">
+            Routine control for CR work · {profile.name || '—'} {profile.isCR ? '· Class Rep' : ''} · Term: {currentTermKey || 'Unknown'}
+          </p>
+          <div className="class-management-meta-row" style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 10, paddingLeft: 36 }}>
             <div className="class-management-meta-chip">Routine</div>
             <div className="class-management-meta-chip">Planner</div>
             <div className="class-management-meta-chip">Export / Copy</div>
           </div>
         </div>
-        <div className="class-management-hero-actions">
-          <div className="class-management-mode-switch" role="tablist" aria-label="Class management views">
-            <button
-              type="button"
-              onClick={loadRoutineFromStore}
-              className={activeTab === 'routine' ? 'class-management-mode-button is-active' : 'class-management-mode-button'}
-              aria-pressed={activeTab === 'routine'}
-            >
-              Routine
-            </button>
-            <button
-              type="button"
-              onClick={loadPlannerFromStore}
-              className={activeTab === 'planner' ? 'class-management-mode-button is-active' : 'class-management-mode-button'}
-              aria-pressed={activeTab === 'planner'}
-            >
-              Class Planner
-            </button>
-          </div>
+        <div className="class-management-mode-switch" role="tablist" aria-label="Class management views">
+          <button
+            type="button"
+            onClick={loadRoutineFromStore}
+            className={activeTab === 'routine' ? 'class-management-mode-button is-active' : 'class-management-mode-button'}
+            aria-pressed={activeTab === 'routine'}
+          >
+            Routine
+          </button>
+          <button
+            type="button"
+            onClick={loadPlannerFromStore}
+            className={activeTab === 'planner' ? 'class-management-mode-button is-active' : 'class-management-mode-button'}
+            aria-pressed={activeTab === 'planner'}
+          >
+            Class Planner
+          </button>
         </div>
       </div>
 

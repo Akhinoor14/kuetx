@@ -77,10 +77,23 @@ export default function FacultyNotices() {
     <div className="hub-page-bg" style={{ minHeight: '100vh' }}>
       <div className="page-container" style={{ padding: '20px 24px 40px' }}>
         <div className="hub-page-hero">
-          <div className="hub-page-hero-icon">
-            <Icons.Bell size={20} color="var(--accent)" />
+          <div className="hub-page-hero-main">
+            <div className="hub-page-hero-head">
+              <div className="hub-page-hero-icon">
+                <Icons.Bell size={24} color="var(--accent)" />
+              </div>
+              <h1 className="hub-page-hero-title">Notices</h1>
+            </div>
+            <div className="hub-page-hero-subtitle">Post announcements to your classes</div>
           </div>
-          <h1 className="hub-page-hero-title">Notices</h1>
+          {selectedGroupId && (
+            <div className="hub-page-hero-stats">
+              <div className="hub-page-hero-stat">
+                <div className="hub-page-hero-stat-n">{notices.length}</div>
+                <div className="hub-page-hero-stat-label">notices</div>
+              </div>
+            </div>
+          )}
         </div>
 
         {groupOptions.length > 1 && (

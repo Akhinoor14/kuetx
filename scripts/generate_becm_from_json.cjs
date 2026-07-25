@@ -67,16 +67,43 @@ const makeTermCourses = courses => Object.entries(courses || {}).map(([code, cou
 const makeSyllabusCourses = courses => {
   const result = {};
   Object.entries(courses || {}).forEach(([code, course]) => {
+    const topics = Array.isArray(course.topics) && course.topics.length > 0
+      ? course.topics
+      : [PLACEHOLDER];
+
     result[code] = {
       title: course.title,
       credit: normalizeCredit(course.credit),
       contactHour: normalizeContactHours(course.contactHour),
-      topics: [PLACEHOLDER],
+      topics,
       sessionalNote: course.sessionalNote ?? null,
-      references: [],
+      references: Array.isArray(course.references) ? course.references : [],
     };
   });
   return result;
+};
+
+const makeOptionalCourses = data => {
+  const groups = data.optionalGroups || {};
+  const optionalCourses = [];
+
+  Object.values(groups).forEach(group => {
+    Object.values(group || {}).forEach(course => {
+      if (!course || typeof course !== 'object') {
+        return;
+      }
+      optionalCourses.push({
+        code: course.courseCode || course.code || '',
+        title: course.title || '',
+        credits: normalizeCredit(course.credit),
+        contactHours: normalizeContactHours(course.contactHour),
+        type: course.sessionalNote ? 'Sessional' : 'Theory',
+        isOptional: true,
+      });
+    });
+  });
+
+  return optionalCourses;
 };
 
 const makeTermsIndex = termKeys => {
@@ -116,7 +143,7 @@ const main = () => {
 
   const meta = makeMeta(data);
   const notes = makeNotes(data);
-  const optionalCourses = [];
+  const optionalCourses = makeOptionalCourses(data);
 
   writeFile(path.join(outputRoot, 'meta.js'), `export const BECM_META = ${JSON.stringify(meta, null, 2)};\nexport default BECM_META;\n`);
   writeFile(path.join(outputRoot, 'notes.js'), `export const BECM_NOTES = ${JSON.stringify(notes, null, 2)};\nexport default BECM_NOTES;\n`);

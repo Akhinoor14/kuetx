@@ -347,18 +347,21 @@ export default function FacultySchedule() {
   return (
     <div className="hub-page-bg" style={{ minHeight: '100vh' }}>
       <div className="faculty-schedule-page page-container" style={{ padding: '20px 24px 40px' }}>
-        <div className="hub-page-hero faculty-schedule-hero" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 10 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            <div className="hub-page-hero-icon">
-              <Icons.Clock size={20} color="var(--accent)" />
+        <div className="hub-page-hero faculty-schedule-hero">
+          <div className="hub-page-hero-main">
+            <div className="hub-page-hero-head">
+              <div className="hub-page-hero-icon">
+                <Icons.Clock size={24} color="var(--accent)" />
+              </div>
+              <h1 className="hub-page-hero-title">My Schedule</h1>
             </div>
-            <h1 className="hub-page-hero-title">My Schedule</h1>
+            <div className="hub-page-hero-subtitle">Weekly class timetable across your batches</div>
           </div>
           {/* Compact settings toggle — replaces the old always-visible row
               of one button per time model. 50-minute stays the default;
               this is only for the rare case a teacher needs a different
               model. */}
-          <div style={{ position: 'relative' }}>
+          <div className="hub-page-hero-actions" style={{ position: 'relative' }}>
             <button
               className="btn btn-ghost"
               onClick={() => setModelMenuOpen((v) => !v)}

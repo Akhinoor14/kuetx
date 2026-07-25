@@ -250,10 +250,6 @@
   color-scheme: dark;
 }
 
-.dark .hub-page-hero-title {
-  color: #d8d4c9;
-}
-
 .dark .hub-grid-item-label {
   color: #b8b4a8 !important;
 }
@@ -1383,7 +1379,7 @@ h3 { font-size: 15px; font-weight: 600; }
 }
 
 .assignments-hero {
-  padding: 18px 0 8px;
+  padding: 0 0 8px;
 }
 
 .assignments-hero-inner {
@@ -1391,7 +1387,13 @@ h3 { font-size: 15px; font-weight: 600; }
   align-items: flex-start;
   justify-content: space-between;
   gap: 18px;
-  padding: 24px 20px;
+  padding: 24px 24px;
+  border-radius: 18px;
+  border: 1px solid color-mix(in srgb, var(--accent) 14%, var(--border));
+  background:
+    radial-gradient(circle at 0% 0%, color-mix(in srgb, var(--accent) 10%, transparent), transparent 55%),
+    var(--surface);
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
 }
 
 .assignments-hero-copy {
@@ -8797,31 +8799,9 @@ body.schedule-fullscreen-active .mobile-bottom-nav {
     linear-gradient(180deg, rgba(var(--accentRGB), 0.06) 0%, rgba(var(--accentRGB), 0.015) 320px, var(--bg) 560px);
 }
 
-.hub-page-hero {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  margin: 8px 0 18px;
-}
-
-.hub-page-hero-icon {
-  width: 48px;
-  height: 48px;
-  border-radius: 12px;
-  background: color-mix(in srgb, var(--accent) 15%, var(--surface));
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.hub-page-hero-title {
-  font-size: 28px;
-  font-weight: 700;
-  letter-spacing: -0.015em;
-  color: #4a4944;
-  margin: 0;
-}
+/* .hub-page-hero / .hub-page-hero-icon / .hub-page-hero-title now share the
+   standardized hero rules defined further below alongside .content-page-hero
+   and .faculty-class-hero (search "Standardized page hero"). */
 
 /* Fixed 3-column layout keeps card size consistent and compact instead
    of stretching to fill leftover row space. */
@@ -8864,39 +8844,17 @@ body.schedule-fullscreen-active .mobile-bottom-nav {
 }
 
 @media (max-width: 380px) {
-  .hub-page-hero-icon { width: 34px; height: 34px; }
-  .hub-page-hero-title { font-size: 18px; }
   .hub-grid { grid-template-columns: repeat(2, 1fr); }
   .hub-grid-item { min-height: 92px; padding: 12px; }
   .hub-grid-item .hub-grid-item-icon { width: 30px; height: 30px; }
 }
 
-/* Broadcast Notice's hero icon/title read oversized specifically on
-   typical phone widths (390-430px) that the generic .hub-page-hero-icon
-   rule above never reaches (it only shrinks below 380px). This page's
-   own hero is scoped separately here rather than lowering the shared
-   breakpoint app-wide, since other hub pages weren't reported as an
-   issue and shouldn't shrink as a side effect. */
+/* Broadcast Notice / Faculty Schedule page padding — hero sizing itself is
+   now handled by the shared standardized hero rules (see "Standardized page
+   hero" further below), so only page-level padding tweaks remain here. */
 @media (max-width: 480px) {
   .broadcast-notice-page { padding: 12px 12px 24px !important; }
-  .broadcast-notice-hero { gap: 8px; margin: 4px 0 10px; }
-  .broadcast-notice-hero-icon { width: 30px; height: 30px; border-radius: 9px; }
-  .broadcast-notice-hero-icon svg { width: 15px; height: 15px; }
-  .broadcast-notice-hero .hub-page-hero-title { font-size: 17px; }
-}
-
-/* Faculty Schedule ("My Schedule") — same over-sized-header-on-mobile
-   issue as Broadcast Notice: big hero icon + large top/bottom margins
-   ate vertical space before the actually-useful content (Today's
-   Classes, the grid). Scoped to this page only via the wrapper class
-   set in FacultySchedule.jsx, so other hub pages using the shared
-   .hub-page-hero markup are unaffected. */
-@media (max-width: 480px) {
   .faculty-schedule-page { padding: 12px 12px 28px !important; }
-  .faculty-schedule-hero { gap: 8px; margin: 2px 0 10px; }
-  .faculty-schedule-hero .hub-page-hero-icon { width: 30px; height: 30px; border-radius: 9px; }
-  .faculty-schedule-hero .hub-page-hero-icon svg { width: 15px; height: 15px; }
-  .faculty-schedule-hero .hub-page-hero-title { font-size: 17px; }
 }
 
 @media (min-width: 900px) {
@@ -9101,55 +9059,263 @@ body.schedule-fullscreen-active .mobile-bottom-nav {
   min-height: 100vh;
 }
 
-.content-page-hero {
+/* ── Standardized page hero (approved redesign) ────────────────────────────
+   Single shared pattern used by ALL page heroes across the app:
+     - System 1: .content-page-hero (student/CR/founder content pages)
+     - System 2: .hub-page-hero (faculty hub pages + SubgroupHub.jsx)
+     - System 3: .faculty-class-hero (FacultyClassDetail.jsx)
+   All three alias the same base rules below so they can never drift back
+   apart — icon+title/subtitle on the page wash (no card/border of its own),
+   a full-width 2px accent underline as the only "frame", and an optional
+   stat-pill cluster on the right (stacked below on mobile). ─────────────── */
+.content-page-hero,
+.hub-page-hero,
+.faculty-class-hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin: 8px 0 28px;
+  padding: 20px 4px 18px;
+  border-bottom: 2px solid var(--accent);
+}
+
+.content-page-hero-main,
+.hub-page-hero-main,
+.faculty-class-hero-main {
+  min-width: 0;
+}
+
+.content-page-hero-head,
+.hub-page-hero-head,
+.faculty-class-hero-head {
   display: flex;
   align-items: center;
   gap: 12px;
-  margin-bottom: 20px;
+  margin-bottom: 6px;
 }
 
-.content-page-hero-icon {
-  width: 40px;
-  height: 40px;
-  border-radius: 10px;
-  background: color-mix(in srgb, var(--accent) 15%, var(--surface));
+.content-page-hero-icon,
+.hub-page-hero-icon,
+.faculty-class-hero-icon {
+  width: 24px;
+  height: 24px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  color: var(--accent);
+  background: none;
+  border-radius: 0;
+  box-shadow: none;
 }
 
-.content-page-hero-title {
-  font-size: 20px;
-  font-weight: 800;
+.content-page-hero-icon svg,
+.hub-page-hero-icon svg,
+.faculty-class-hero-icon svg {
+  width: 24px;
+  height: 24px;
+  color: var(--accent);
+}
+
+.content-page-hero-title,
+.hub-page-hero-title,
+.faculty-class-hero-title {
+  font-size: 28px;
+  font-weight: 500;
   letter-spacing: -0.02em;
+  line-height: 1.2;
   color: var(--text);
   margin: 0;
 }
 
-.content-page-hero-subtitle {
-  font-size: 12.5px;
+.content-page-hero-subtitle,
+.hub-page-hero-subtitle,
+.faculty-class-hero-sub {
+  font-size: 13.5px;
   color: var(--muted);
-  margin: 2px 0 0;
+  line-height: 1.45;
+  margin: 4px 0 0;
+}
+
+/* Only indent the subtitle under the title when it sits inside the same
+   head row (icon + title + subtitle stacked as one column via
+   .content-page-hero-head), matching the approved reference where the
+   subtitle aligns under the title, not the icon. Pages using the simpler
+   icon + textblock sibling markup already get correct alignment for free
+   from the flex gap, so no extra padding-left is applied globally here. */
+.content-page-hero-head + .content-page-hero-subtitle,
+.hub-page-hero-head + .hub-page-hero-subtitle,
+.faculty-class-hero-head + .faculty-class-hero-sub {
+  padding-left: 36px;
+}
+
+/* Optional trailing meta pill (e.g. faculty-class-hero dept/batch tag) —
+   kept as a small uppercase label above the title if a page supplies one. */
+.content-page-hero-meta,
+.hub-page-hero-meta,
+.faculty-class-hero-meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+  padding: 2px 8px;
+  border-radius: 999px;
+  margin: 0 0 6px 36px;
+}
+
+/* Stat-pill cluster — generic, reusable by any page with 1–3 numeric stats */
+.content-page-hero-stats,
+.hub-page-hero-stats,
+.faculty-class-hero-stats {
+  display: flex;
+  gap: 0;
+  align-items: stretch;
+  background: color-mix(in srgb, var(--accent) 8%, var(--surface));
+  border: 1px solid color-mix(in srgb, var(--accent) 22%, transparent);
+  border-radius: 12px;
+  padding: 10px 4px;
+  flex-shrink: 0;
+}
+
+.content-page-hero-stat,
+.hub-page-hero-stat,
+.faculty-class-hero-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0 16px;
+  text-align: center;
+}
+
+.content-page-hero-stat + .content-page-hero-stat,
+.hub-page-hero-stat + .hub-page-hero-stat,
+.faculty-class-hero-stat + .faculty-class-hero-stat {
+  border-left: 1px solid color-mix(in srgb, var(--accent) 14%, transparent);
+}
+
+.content-page-hero-stat-n,
+.hub-page-hero-stat-n,
+.faculty-class-hero-stat-n {
+  font-size: 19px;
+  font-weight: 500;
+  color: color-mix(in srgb, var(--accent) 55%, black 25%);
+  line-height: 1.2;
+}
+
+.content-page-hero-stat-label,
+.hub-page-hero-stat-label,
+.faculty-class-hero-stat-label {
+  font-size: 11px;
+  color: color-mix(in srgb, var(--accent) 40%, var(--muted));
+  line-height: 1.3;
+}
+
+/* Action buttons slot (used where a page needs buttons instead of/alongside
+   a stat cluster, e.g. QuestionBank.jsx back/upload buttons). */
+.content-page-hero-actions,
+.hub-page-hero-actions,
+.faculty-class-hero-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+}
+
+/* Desktop gets extra presence: bigger icon/title, more breathing room */
+@media (min-width: 900px) {
+  .content-page-hero,
+  .hub-page-hero,
+  .faculty-class-hero {
+    flex-wrap: nowrap;
+  }
+}
+
+/* Mobile: shrink title/icon and stack the stat cluster below the
+   title/subtitle block (full width) instead of beside it. */
+@media (max-width: 600px) {
+  .content-page-hero,
+  .hub-page-hero,
+  .faculty-class-hero {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 14px 4px 14px;
+    margin: 6px 0 20px;
+  }
+  .content-page-hero-icon,
+  .hub-page-hero-icon,
+  .faculty-class-hero-icon {
+    width: 20px;
+    height: 20px;
+  }
+  .content-page-hero-icon svg,
+  .hub-page-hero-icon svg,
+  .faculty-class-hero-icon svg {
+    width: 20px;
+    height: 20px;
+  }
+  .content-page-hero-title,
+  .hub-page-hero-title,
+  .faculty-class-hero-title {
+    font-size: 20px;
+  }
+  .content-page-hero-subtitle,
+  .hub-page-hero-subtitle,
+  .faculty-class-hero-sub {
+    padding-left: 32px;
+  }
+  .content-page-hero-stats,
+  .hub-page-hero-stats,
+  .faculty-class-hero-stats,
+  .content-page-hero-actions,
+  .hub-page-hero-actions,
+  .faculty-class-hero-actions {
+    width: 100%;
+    justify-content: center;
+  }
 }
 
 @media (max-width: 380px) {
-  .content-page-hero-icon { width: 34px; height: 34px; }
-  .content-page-hero-title { font-size: 18px; }
+  .content-page-hero-title,
+  .hub-page-hero-title,
+  .faculty-class-hero-title {
+    font-size: 18px;
+  }
 }
 
-/* ClassRoster.jsx hero — unlike the plain icon+title .content-page-hero,
-   this page needs a subtitle sitting right under the title (the group
-   label + action summary), so it gets its own boxed treatment instead of
-   reading as a flat, undifferentiated strip against the page wash. */
-.roster-hero {
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-  margin-bottom: 16px;
+.dark .content-page-hero-stat-n,
+.dark .hub-page-hero-stat-n,
+.dark .faculty-class-hero-stat-n {
+  color: color-mix(in srgb, var(--accent) 70%, white 15%);
 }
-.roster-hero .content-page-hero-icon { margin-top: 1px; }
-.roster-hero .content-page-hero-subtitle { line-height: 1.5; }
+
+.dark .content-page-hero-stat-label,
+.dark .hub-page-hero-stat-label,
+.dark .faculty-class-hero-stat-label {
+  color: color-mix(in srgb, var(--accent) 55%, var(--muted));
+}
+
+.dark .content-page-hero-stats,
+.dark .hub-page-hero-stats,
+.dark .faculty-class-hero-stats {
+  background: color-mix(in srgb, var(--accent) 14%, var(--surface));
+  border-color: color-mix(in srgb, var(--accent) 32%, transparent);
+}
+
+/* Legacy compact modifier (FacultyClassDetail) — no longer needs special
+   margin now that the shared hero handles spacing, kept as a no-op alias
+   so existing className references don't break. */
+.faculty-class-hero-compact {
+  margin: 8px 0 28px;
+}
 
 /* Syllabus (Extras.jsx) course cards — the grid itself already uses
    minmax(min(380px, 100%), 1fr) so columns can shrink below 380px
@@ -9220,62 +9386,9 @@ body.schedule-fullscreen-active .mobile-bottom-nav {
    course title as the dominant heading, term/type as a light trailing
    note — inverse of the old layout where the meta line was as loud as
    the title. */
-.faculty-class-hero {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin: 8px 0 18px;
-}
-
-.faculty-class-hero-compact {
-  margin: 4px 0 14px;
-}
-
-.faculty-class-hero-icon {
-  width: 42px;
-  height: 42px;
-  border-radius: 11px;
-  background: color-mix(in srgb, var(--accent) 15%, var(--surface));
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.faculty-class-hero-meta {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 10.5px;
-  font-weight: 700;
-  letter-spacing: 0.03em;
-  text-transform: uppercase;
-  color: var(--accent);
-  background: color-mix(in srgb, var(--accent) 12%, transparent);
-  padding: 2px 8px;
-  border-radius: 999px;
-  margin-bottom: 5px;
-}
-
-.faculty-class-hero-title {
-  font-size: 21px;
-  font-weight: 800;
-  letter-spacing: -0.015em;
-  color: var(--text);
-  margin: 0;
-  line-height: 1.25;
-}
-
-.faculty-class-hero-sub {
-  font-size: 11.5px;
-  color: var(--muted);
-  margin: 3px 0 0;
-}
-
-@media (max-width: 380px) {
-  .faculty-class-hero-icon { width: 36px; height: 36px; }
-  .faculty-class-hero-title { font-size: 17px; }
-}
+/* .faculty-class-hero and sub-classes now share the standardized hero rules
+   defined earlier alongside .content-page-hero and .hub-page-hero (search
+   "Standardized page hero"). */
 
 /* ── Faculty class detail — tab bar + tab content polish ───────────────────
    Replaces flat instant color-swap tabs with a sliding underline and a

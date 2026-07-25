@@ -146,39 +146,28 @@ export default function TermQS() {
 
   return (
     <div className="page-enter assignments-page content-page-bg">
-      <div className="assignments-hero">
-        <div className="page-container assignments-hero-inner">
-          <div className="assignments-hero-copy">
-            <div className="content-page-hero" style={{ marginBottom: 8 }}>
+      <div className="page-container" style={{ paddingTop: 16 }}>
+        <div className="content-page-hero">
+          <div className="content-page-hero-main">
+            <div className="content-page-hero-head">
               <div className="content-page-hero-icon">
-                <FileQuestion size={18} color="var(--accent)" />
+                <FileQuestion size={24} color="var(--accent)" />
               </div>
-              <div>
-                <div className="assignments-kicker">Exam Preparation</div>
-                <h1 className="content-page-hero-title" style={{ fontSize: 24 }}>Term Question & Solution</h1>
-              </div>
+              <h1 className="content-page-hero-title">Term Question &amp; Solution</h1>
             </div>
-            <p className="assignments-subtitle">Collect and organize term questions and solutions for each course.</p>
-
-            <div className="assignments-stats">
-              <div className="assignments-stat assignments-stat-pending">
-                <span className="assignments-stat-icon"><FileQuestion size={18} /></span>
-                <div>
-                  <div className="assignments-stat-label">Total Items</div>
-                  <div className="assignments-stat-value">{items.length}</div>
-                </div>
-              </div>
-              <div className="assignments-stat assignments-stat-done">
-                <span className="assignments-stat-icon"><Check size={18} /></span>
-                <div>
-                  <div className="assignments-stat-label">Reviewed</div>
-                  <div className="assignments-stat-value">{doneCount}</div>
-                </div>
-              </div>
-            </div>
+            <p className="content-page-hero-subtitle">Collect and organize term questions and solutions for each course</p>
           </div>
-
-          <div className="assignments-hero-actions">
+          <div className="content-page-hero-actions">
+            <div className="content-page-hero-stats" style={{ marginRight: 4 }}>
+              <div className="content-page-hero-stat">
+                <div className="content-page-hero-stat-n">{items.length}</div>
+                <div className="content-page-hero-stat-label">total</div>
+              </div>
+              <div className="content-page-hero-stat">
+                <div className="content-page-hero-stat-n">{doneCount}</div>
+                <div className="content-page-hero-stat-label">reviewed</div>
+              </div>
+            </div>
             <button className="btn btn-primary assignments-add-btn" onClick={() => setAdding(true)}>
               <Plus size={16} />
               Add Q&S

@@ -125,19 +125,23 @@ export default function FounderBatchSettings() {
   return (
     <div className="hub-page-bg" style={{ minHeight: '100vh' }}>
       <div style={{ padding: '20px 24px 40px', width: '100%', boxSizing: 'border-box', maxWidth: 720, margin: '0 auto' }}>
-        <div className="hub-page-hero" style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <div className="hub-page-hero-icon">
-            <Icons.Users size={20} color="var(--accent)" />
+        <div className="content-page-hero">
+          <div className="content-page-hero-main">
+            <div className="content-page-hero-head">
+              <div className="content-page-hero-icon">
+                <Icons.Users size={24} color="var(--accent)" />
+              </div>
+              <h1 className="content-page-hero-title">Manage Batches</h1>
+            </div>
+            <p className="content-page-hero-subtitle">
+              Controls batches shown in every "Select batch" dropdown app-wide and each batch's university start date
+            </p>
           </div>
-          <h1 className="hub-page-hero-title">Manage Batches</h1>
         </div>
 
-        <p style={{ fontSize: 13, color: 'var(--muted)', marginTop: 8, marginBottom: 20, lineHeight: 1.5 }}>
-          Controls which batches show up in every "Select batch" dropdown app-wide
-          (faculty Add Class, My Classes grouping, etc), and each batch's university
-          start date — used to auto-fill a student's Profile and to power the
-          batch/term plausibility check in Faculty Add Class. Order matters — each
-          batch's color is assigned by its position in this list.
+        <p style={{ fontSize: 12.5, color: 'var(--muted)', marginTop: 10, marginBottom: 20, lineHeight: 1.5 }}>
+          Used to auto-fill a student's Profile and to power the batch/term plausibility check in Faculty Add Class.
+          Order matters — each batch's color is assigned by its position in this list.
         </p>
 
         {batches === null ? (

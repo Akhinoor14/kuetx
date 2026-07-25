@@ -894,7 +894,7 @@ export default function Profile() {
             ? <img src={photoURL} alt="Profile" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
             : <span>{profile.name ? profile.name.trim().charAt(0).toUpperCase() : <User size={28} />}</span>
           }
-          {/* Camera overlay on hover */}
+          {/* Camera overlay on hover — desktop affordance, kept as-is */}
           <div style={{
             position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.4)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -903,6 +903,19 @@ export default function Profile() {
           onMouseEnter={e => e.currentTarget.style.opacity = '1'}
           onMouseLeave={e => e.currentTarget.style.opacity = '0'}>
             <Camera size={22} color="white" />
+          </div>
+          {/* Always-visible camera badge — hover-only affordances are invisible
+              on touch devices, so users had no way of knowing the avatar was
+              tappable. This badge sits in the corner permanently. */}
+          <div style={{
+            position: 'absolute', bottom: 0, right: 0,
+            width: '30%', height: '30%', minWidth: 26, minHeight: 26,
+            borderRadius: '50%', background: 'var(--accent)',
+            border: '2.5px solid var(--card, #fff)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            boxShadow: '0 1px 4px rgba(0,0,0,0.25)',
+          }}>
+            <Camera size={14} color="#fff" style={{ width: '46%', height: '46%' }} />
           </div>
         </div>
 

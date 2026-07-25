@@ -43,10 +43,15 @@ export default function FacultyContact() {
     <div className="hub-page-bg" style={{ minHeight: '100vh' }}>
       <div style={{ padding: '20px 24px 40px', width: '100%', boxSizing: 'border-box', maxWidth: 560, margin: '0 auto' }}>
         <div className="hub-page-hero">
-          <div className="hub-page-hero-icon">
-            <Icons.Mail size={20} color="var(--accent)" />
+          <div className="hub-page-hero-main">
+            <div className="hub-page-hero-head">
+              <div className="hub-page-hero-icon">
+                <Icons.Mail size={24} color="var(--accent)" />
+              </div>
+              <h1 className="hub-page-hero-title">Contact</h1>
+            </div>
+            <div className="hub-page-hero-subtitle">Reach the Faculty Portal team</div>
           </div>
-          <h1 className="hub-page-hero-title">Contact</h1>
         </div>
 
         <div style={{ padding: 20, borderRadius: 14, border: '1px solid var(--border)', background: 'var(--card)' }}>

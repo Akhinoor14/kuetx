@@ -122,30 +122,36 @@ export default function FacultyAllCR() {
   return (
     <div className="hub-page-bg" style={{ minHeight: '100vh' }}>
       <div className="page-container" style={{ padding: '20px 24px 40px' }}>
-        <div className="hub-page-hero" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            <button
-              onClick={() => navigate('/faculty/classes')}
-              style={{
-                display: 'flex', alignItems: 'center', justifyContent: 'center', width: 34, height: 34,
-                borderRadius: 8, border: '1px solid var(--border)', background: 'var(--card)', cursor: 'pointer',
-              }}
-              title="Back to My Classes"
-            >
-              <Icons.ArrowLeft size={16} color="var(--text)" />
-            </button>
-            <div className="hub-page-hero-icon">
-              <Icons.Users size={20} color="var(--accent)" />
-            </div>
-            <div>
+        <div className="hub-page-hero">
+          <div className="hub-page-hero-main">
+            <div className="hub-page-hero-head">
+              <button
+                onClick={() => navigate('/faculty/classes')}
+                style={{
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', width: 34, height: 34,
+                  borderRadius: 8, border: '1px solid var(--border)', background: 'var(--card)', cursor: 'pointer', flexShrink: 0,
+                }}
+                title="Back to My Classes"
+              >
+                <Icons.ArrowLeft size={16} color="var(--text)" />
+              </button>
+              <div className="hub-page-hero-icon">
+                <Icons.Users size={24} color="var(--accent)" />
+              </div>
               <h1 className="hub-page-hero-title">All CR</h1>
-              {!isLoading && (
-                <div style={{ fontSize: 12.5, color: 'var(--muted)', marginTop: 2 }}>
-                  {totalCount} CR/ACR across your active classes
-                </div>
-              )}
+            </div>
+            <div className="hub-page-hero-subtitle">
+              {isLoading ? 'Loading CR/ACR list…' : 'CR and ACR across your active classes'}
             </div>
           </div>
+          {!isLoading && (
+            <div className="hub-page-hero-stats">
+              <div className="hub-page-hero-stat">
+                <div className="hub-page-hero-stat-n">{totalCount}</div>
+                <div className="hub-page-hero-stat-label">total</div>
+              </div>
+            </div>
+          )}
         </div>
 
         {isLoading && (

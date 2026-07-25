@@ -188,20 +188,33 @@ export default function FacultyMeetings() {
   return (
     <div className="hub-page-bg page-enter dashboard-page" style={{ minHeight: '100vh' }}>
       <div className="page-container" style={{ padding: '20px 24px 40px' }}>
-        <div className="hub-page-hero" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 10 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            <div className="hub-page-hero-icon">
-              <Video size={20} color="var(--accent)" />
+        <div className="hub-page-hero">
+          <div className="hub-page-hero-main">
+            <div className="hub-page-hero-head">
+              <div className="hub-page-hero-icon">
+                <Video size={24} color="var(--accent)" />
+              </div>
+              <h1 className="hub-page-hero-title">Meetings</h1>
             </div>
-            <h1 className="hub-page-hero-title">Meetings</h1>
+            <div className="hub-page-hero-subtitle">Schedule and share meeting links with your classes</div>
           </div>
-          <button
-            onClick={openAdd}
-            className="btn btn-primary"
-            style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 13, fontWeight: 700, padding: '9px 16px', borderRadius: 10 }}
-          >
-            <Plus size={15} /> Add Meeting
-          </button>
+          <div className="hub-page-hero-actions">
+            {!loading && (
+              <div className="hub-page-hero-stats" style={{ marginRight: 4 }}>
+                <div className="hub-page-hero-stat">
+                  <div className="hub-page-hero-stat-n">{(meetings || []).length}</div>
+                  <div className="hub-page-hero-stat-label">total</div>
+                </div>
+              </div>
+            )}
+            <button
+              onClick={openAdd}
+              className="btn btn-primary"
+              style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 13, fontWeight: 700, padding: '9px 16px', borderRadius: 10 }}
+            >
+              <Plus size={15} /> Add Meeting
+            </button>
+          </div>
         </div>
 
         {loading && <div style={{ color: 'var(--muted)', fontSize: 13, padding: '20px 0' }}>Loading…</div>}

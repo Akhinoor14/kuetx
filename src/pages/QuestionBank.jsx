@@ -193,26 +193,31 @@ export default function QuestionBank() {
 
   return (
     <div className="page-enter content-page-bg" style={styles.page}>
-      <div style={styles.header}>
-        {screen !== 'depts' && (
-          <button style={styles.backBtn} onClick={goBack}>
-            <ChevronLeft size={18} /> Back
-          </button>
-        )}
-        <div style={styles.headerTitleWrap}>
-          <div className="content-page-hero-icon" style={{ width: 40, height: 40 }}>
-            <BookOpen size={18} color="var(--accent)" />
+      <div className="content-page-hero">
+        <div className="content-page-hero-main">
+          <div className="content-page-hero-head">
+            <div className="content-page-hero-icon">
+              <BookOpen size={24} color="var(--accent)" />
+            </div>
+            <h1 className="content-page-hero-title" style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+              {screen === 'depts' && 'Question Bank'}
+              {screen === 'terms' && QB_DEPARTMENTS[dept]}
+              {screen === 'courses' && `${dept} — ${termLabel(term)}`}
+              {screen === 'papers' && `${course.code} — ${course.title}`}
+            </h1>
           </div>
-          <h1 style={styles.headerTitle}>
-            {screen === 'depts' && 'Question Bank'}
-            {screen === 'terms' && QB_DEPARTMENTS[dept]}
-            {screen === 'courses' && `${dept} — ${termLabel(term)}`}
-            {screen === 'papers' && `${course.code} — ${course.title}`}
-          </h1>
+          <p className="content-page-hero-subtitle">Browse and upload past papers by department, term and course</p>
         </div>
-        <button style={styles.uploadBtn} onClick={() => setShowUpload(true)}>
-          <Upload size={16} /> Upload
-        </button>
+        <div className="content-page-hero-actions">
+          {screen !== 'depts' && (
+            <button style={styles.backBtn} onClick={goBack}>
+              <ChevronLeft size={18} /> Back
+            </button>
+          )}
+          <button style={styles.uploadBtn} onClick={() => setShowUpload(true)}>
+            <Upload size={16} /> Upload
+          </button>
+        </div>
       </div>
 
       {error && (

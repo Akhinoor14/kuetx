@@ -143,10 +143,14 @@ export default function SubgroupHub({ group, subgroup, sections, pageTitle, extr
     <div className="hub-page-bg" style={{ minHeight: '100vh' }}>
       <div className="page-container" style={{ padding: '20px 24px 40px' }}>
         <div className="hub-page-hero">
-          <div className="hub-page-hero-icon">
-            <HeroIcon size={20} color={HUB_COLOR} />
+          <div className="hub-page-hero-main">
+            <div className="hub-page-hero-head">
+              <div className="hub-page-hero-icon">
+                <HeroIcon size={24} color={HUB_COLOR} />
+              </div>
+              <h1 className="hub-page-hero-title">{title}</h1>
+            </div>
           </div>
-          <h1 className="hub-page-hero-title">{title}</h1>
         </div>
         {resolvedSections.map((section, i) => (
           <HubSection

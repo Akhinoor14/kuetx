@@ -234,15 +234,19 @@ export default function FacultyNoticeBroadcast() {
   return (
     <div className="hub-page-bg" style={{ minHeight: '100vh' }}>
       <div className="broadcast-notice-page page-container" style={{ padding: '16px 20px 32px' }}>
-        <div className="hub-page-hero broadcast-notice-hero">
-          <div className="hub-page-hero-icon broadcast-notice-hero-icon">
-            <Icons.Bell size={18} color="var(--accent)" />
+        <div className="hub-page-hero">
+          <div className="hub-page-hero-main">
+            <div className="hub-page-hero-head">
+              <div className="hub-page-hero-icon">
+                <Icons.Bell size={24} color="var(--accent)" />
+              </div>
+              <h1 className="hub-page-hero-title">Broadcast Notice</h1>
+            </div>
+            <div className="hub-page-hero-subtitle">
+              Send one notice to several of your classes at once — pick classes, choose who should see it, then send
+            </div>
           </div>
-          <h1 className="hub-page-hero-title">Broadcast Notice</h1>
         </div>
-        <p style={{ fontSize: 12.5, color: 'var(--muted)', marginTop: -6, marginBottom: 14 }}>
-          Send one notice to several of your classes at once — pick classes, choose who should see it, then send.
-        </p>
 
         {groupOptions.length === 0 && (
           <div style={{ padding: 24, borderRadius: 14, border: '1px solid var(--border)', background: 'var(--card)', color: 'var(--muted)', fontSize: 13.5, textAlign: 'center' }}>

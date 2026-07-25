@@ -58,7 +58,7 @@ import { CRDetailModal } from '../pages/faculty/FacultyAllCR';
  *     actually appear. Keep it that way: management UI belongs on the
  *     management page, not the plain roster-browsing page.
  */
-export default function ClassmatesList({ groupId, showActions = false, viewerRole = 'cl', currentUid = null, searchText = '', groupMeta = null }) {
+export default function ClassmatesList({ groupId, showActions = false, viewerRole = 'cl', currentUid = null, searchText = '', groupMeta = null, onCounts = null }) {
   const [members, setMembers] = useState(null); // null = loading
   const [selectedCR, setSelectedCR] = useState(null); // CR/ACR row picked for the detail panel
   const [selectedIds, setSelectedIds] = useState(() => new Set());
@@ -86,6 +86,17 @@ export default function ClassmatesList({ groupId, showActions = false, viewerRol
   }
 
   const visibleMembers = members.filter((m) => m.isAnonymous !== true);
+
+  useEffect(() => {
+    if (!onCounts) return;
+    onCounts({
+      total: visibleMembers.length,
+      verified: visibleMembers.filter((m) => m.verified).length,
+      cr: visibleMembers.filter((m) => m.role === 'cr' || m.role === 'acr').length,
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [members]);
+
   const normalizedSearch = searchText.trim().toLowerCase();
   const filteredMembersUnsorted = normalizedSearch
     ? visibleMembers.filter((m) => {

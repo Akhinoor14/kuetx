@@ -3,7 +3,7 @@ export const Y2T2 = [
     "code": "BECM 2201",
     "title": "Engineering Construction Management",
     "credits": 3,
-    "contactHours": null,
+    "contactHours": "3 hrs/week",
     "type": "Theory",
     "isOptional": false
   },
@@ -11,7 +11,7 @@ export const Y2T2 = [
     "code": "BECM 2213",
     "title": "Numerical Analysis and Computer Programming",
     "credits": 3,
-    "contactHours": null,
+    "contactHours": "3 hrs/week",
     "type": "Theory",
     "isOptional": false
   },
@@ -19,7 +19,7 @@ export const Y2T2 = [
     "code": "CE 2211",
     "title": "Mechanics of Solids - II",
     "credits": 3,
-    "contactHours": null,
+    "contactHours": "3 hrs/week",
     "type": "Theory",
     "isOptional": false
   },
@@ -27,7 +27,7 @@ export const Y2T2 = [
     "code": "EEE 2223",
     "title": "Basic Electrical Engineering",
     "credits": 3,
-    "contactHours": null,
+    "contactHours": "3 hrs/week",
     "type": "Theory",
     "isOptional": false
   },
@@ -35,7 +35,7 @@ export const Y2T2 = [
     "code": "Math 2223",
     "title": "Mathematics - IV",
     "credits": 3,
-    "contactHours": null,
+    "contactHours": "3 hrs/week",
     "type": "Theory",
     "isOptional": false
   },
@@ -43,7 +43,7 @@ export const Y2T2 = [
     "code": "BECM 2202",
     "title": "Construction Estimating - II",
     "credits": 1.5,
-    "contactHours": null,
+    "contactHours": "3 hrs/week",
     "type": "Sessional",
     "isOptional": false
   },
@@ -51,7 +51,7 @@ export const Y2T2 = [
     "code": "BECM 2214",
     "title": "Computer Applications and Programming",
     "credits": 1.5,
-    "contactHours": null,
+    "contactHours": "3 hrs/week",
     "type": "Sessional",
     "isOptional": false
   },
@@ -59,7 +59,7 @@ export const Y2T2 = [
     "code": "BECM 2252",
     "title": "Architectural Design - IV",
     "credits": 1.5,
-    "contactHours": null,
+    "contactHours": "3 hrs/week",
     "type": "Sessional",
     "isOptional": false
   },
@@ -67,7 +67,7 @@ export const Y2T2 = [
     "code": "EEE 2224",
     "title": "Sessional on Basic Electrical Engineering",
     "credits": 0.75,
-    "contactHours": null,
+    "contactHours": "3/2 hrs/week",
     "type": "Sessional",
     "isOptional": false
   }

@@ -1790,18 +1790,20 @@ export default function FacultyClassDetail() {
     <div className="hub-page-bg" style={{ minHeight: '100vh' }}>
       <div className="page-container" style={{ padding: '10px 24px 40px' }}>
         <div className="faculty-class-hero faculty-class-hero-compact">
-          <div className="faculty-class-hero-icon">
-            <GraduationCap size={20} color="var(--accent)" />
-          </div>
-          <div>
+          <div className="faculty-class-hero-main">
             {assignment && (
               <div className="faculty-class-hero-meta">
                 {assignment.batch?.toUpperCase()} {assignment.dept}
               </div>
             )}
-            <h1 className="faculty-class-hero-title">
-              {assignment ? `${assignment.courseCode}${assignment.courseTitle ? ' — ' + assignment.courseTitle : ''}` : 'Class Detail'}
-            </h1>
+            <div className="faculty-class-hero-head">
+              <div className="faculty-class-hero-icon">
+                <GraduationCap size={24} color="var(--accent)" />
+              </div>
+              <h1 className="faculty-class-hero-title">
+                {assignment ? `${assignment.courseCode}${assignment.courseTitle ? ' — ' + assignment.courseTitle : ''}` : 'Class Detail'}
+              </h1>
+            </div>
             {assignment && (
               <div className="faculty-class-hero-sub">
                 {assignment.term} · {assignment.courseType}

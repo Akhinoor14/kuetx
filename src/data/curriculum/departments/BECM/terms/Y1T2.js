@@ -3,7 +3,7 @@ export const Y1T2 = [
     "code": "CE 1201",
     "title": "Engineering Mechanics",
     "credits": 3,
-    "contactHours": null,
+    "contactHours": "3 hrs/week",
     "type": "Theory",
     "isOptional": false
   },
@@ -11,7 +11,7 @@ export const Y1T2 = [
     "code": "CE 1213",
     "title": "Building & Construction Materials",
     "credits": 4,
-    "contactHours": null,
+    "contactHours": "4 hrs/week",
     "type": "Theory",
     "isOptional": false
   },
@@ -19,7 +19,7 @@ export const Y1T2 = [
     "code": "Math 1223",
     "title": "Mathematics - II",
     "credits": 3,
-    "contactHours": null,
+    "contactHours": "3 hrs/week",
     "type": "Theory",
     "isOptional": false
   },
@@ -27,7 +27,7 @@ export const Y1T2 = [
     "code": "Ph 1223",
     "title": "Physics - II",
     "credits": 3,
-    "contactHours": null,
+    "contactHours": "3 hrs/week",
     "type": "Theory",
     "isOptional": false
   },
@@ -35,7 +35,7 @@ export const Y1T2 = [
     "code": "Hum 1223",
     "title": "Sociology",
     "credits": 2,
-    "contactHours": null,
+    "contactHours": "2 hrs/week",
     "type": "Theory",
     "isOptional": false
   },
@@ -43,7 +43,7 @@ export const Y1T2 = [
     "code": "BECM 1252",
     "title": "Architectural Design-II",
     "credits": 1.5,
-    "contactHours": null,
+    "contactHours": "3 hrs/week",
     "type": "Sessional",
     "isOptional": false
   },
@@ -51,7 +51,7 @@ export const Y1T2 = [
     "code": "BECM 1254",
     "title": "Architectural Graphics and Engineering Drawing",
     "credits": 1.5,
-    "contactHours": null,
+    "contactHours": "3 hrs/week",
     "type": "Sessional",
     "isOptional": false
   },
@@ -59,7 +59,7 @@ export const Y1T2 = [
     "code": "CE 1212",
     "title": "Practical Surveying",
     "credits": 1.5,
-    "contactHours": null,
+    "contactHours": "3 weeks in field",
     "type": "Sessional",
     "isOptional": false
   },
@@ -67,16 +67,8 @@ export const Y1T2 = [
     "code": "CE 1214",
     "title": "Sessional on Building & Construction Materials",
     "credits": 1.5,
-    "contactHours": null,
+    "contactHours": "3 hrs/week",
     "type": "Sessional",
-    "isOptional": false
-  },
-  {
-    "code": "BECM 1251",
-    "title": "Aesthetics and Design",
-    "credits": 3,
-    "contactHours": null,
-    "type": "Theory",
     "isOptional": false
   }
 ];

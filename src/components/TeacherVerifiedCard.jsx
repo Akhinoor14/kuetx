@@ -15,6 +15,7 @@ import { useEffect, useState } from 'react';
 import { GraduationCap } from 'lucide-react';
 import { auth } from '../lib/firebase';
 import { getGroupId } from '../lib/groupUtils';
+import { getCurrentTermKey } from '../store/store';
 import { subscribeMyTeacherVerifiedRecords } from '../lib/facultyMarksSync';
 
 export default function TeacherVerifiedCard({ profile }) {
@@ -24,7 +25,8 @@ export default function TeacherVerifiedCard({ profile }) {
     const uid = auth.currentUser?.uid;
     const groupId = getGroupId(profile);
     if (!uid || !groupId) { setRecords([]); return; }
-    return subscribeMyTeacherVerifiedRecords(groupId, uid, setRecords);
+    const currentTermKey = getCurrentTermKey(profile);
+    return subscribeMyTeacherVerifiedRecords(groupId, uid, setRecords, currentTermKey);
   }, [profile]);
 
   if (!records.length) return null;

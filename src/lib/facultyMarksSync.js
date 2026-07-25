@@ -291,10 +291,21 @@ export async function sendAllReviewed(groupId, assignmentId, studentUids) {
  * Deliberately does NOT touch/read local store.js marks/attendance state —
  * this is a fully separate, additive data source per §2 item 6.
  */
-export async function getMyTeacherVerifiedRecords(groupId, studentUid) {
+export async function getMyTeacherVerifiedRecords(groupId, studentUid, currentTermKey = null) {
   if (!groupId || !studentUid) return [];
   const assignmentsSnap = await getDocs(collection(db, 'groups', groupId, 'facultyAssignments'));
-  const active = assignmentsSnap.docs.filter((d) => d.data().status === 'active');
+  // Belt-and-suspenders term scoping: a teacher forgetting to "End Class"
+  // when a term wraps up would otherwise leave last term's sent marks
+  // permanently stuck on the student's Alerts card. Filtering on the
+  // student's own currentTermKey (in addition to status === 'active')
+  // means the card self-clears the moment the student's term rolls over,
+  // regardless of whether the teacher ever ends the old assignment.
+  const active = assignmentsSnap.docs.filter((d) => {
+    const data = d.data();
+    if (data.status !== 'active') return false;
+    if (currentTermKey && data.term && data.term !== currentTermKey) return false;
+    return true;
+  });
   const results = await Promise.all(active.map(async (a) => {
     const recSnap = await getDoc(doc(db, 'groups', groupId, 'facultyAssignments', a.id, 'studentRecords', studentUid));
     if (!recSnap.exists() || recSnap.data().status !== 'sent') return null;
@@ -306,14 +317,19 @@ export async function getMyTeacherVerifiedRecords(groupId, studentUid) {
 /** Live variant — used so the card appears the instant a teacher sends
  * marks, without the student needing to refresh (§9.5's "card appears on its own,
  * pulse indicator" requirement). */
-export function subscribeMyTeacherVerifiedRecords(groupId, studentUid, callback) {
+export function subscribeMyTeacherVerifiedRecords(groupId, studentUid, callback, currentTermKey = null) {
   if (!groupId || !studentUid) { callback([]); return () => {}; }
   // onSnapshot on a collection-of-subcollections isn't a single query —
   // subscribe to the assignments list, then fan out one-shot reads on
   // each record whenever that list changes. Good enough for a handful of
   // courses per term; not built for hundreds of assignments.
   return onSnapshot(collection(db, 'groups', groupId, 'facultyAssignments'), async (snap) => {
-    const active = snap.docs.filter((d) => d.data().status === 'active');
+    const active = snap.docs.filter((d) => {
+      const data = d.data();
+      if (data.status !== 'active') return false;
+      if (currentTermKey && data.term && data.term !== currentTermKey) return false;
+      return true;
+    });
     const results = await Promise.all(active.map(async (a) => {
       const recSnap = await getDoc(doc(db, 'groups', groupId, 'facultyAssignments', a.id, 'studentRecords', studentUid));
       if (!recSnap.exists() || recSnap.data().status !== 'sent') return null;

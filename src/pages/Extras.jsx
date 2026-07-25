@@ -133,23 +133,40 @@ export function Tours() {
 
   return (
     <div className="page-enter page-container content-page-bg">
-      {/* Hero Card */}
-      <div className="card" style={{ marginBottom: 14, background: 'var(--card)' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 10 }}>
-          <div className="content-page-hero" style={{ marginBottom: 0 }}>
+      {/* Hero */}
+      <div className="content-page-hero">
+        <div className="content-page-hero-main">
+          <div className="content-page-hero-head">
             <div className="content-page-hero-icon">
-              <MapPin size={18} color="var(--accent)" />
+              <MapPin size={24} color="var(--accent)" />
             </div>
-            <div>
-              <h1 className="content-page-hero-title">Tours</h1>
-              <p className="content-page-hero-subtitle">Plan, track and remember your trips</p>
+            <h1 className="content-page-hero-title">Tours</h1>
+          </div>
+          <p className="content-page-hero-subtitle">Plan, track and remember your trips</p>
+        </div>
+        <div className="content-page-hero-actions">
+          <div className="content-page-hero-stats" style={{ marginRight: 4 }}>
+            <div className="content-page-hero-stat">
+              <div className="content-page-hero-stat-n">{tours.length}</div>
+              <div className="content-page-hero-stat-label">trips</div>
             </div>
+            {overBudgetCount > 0 && (
+              <div className="content-page-hero-stat">
+                <div className="content-page-hero-stat-n" style={{ color: 'var(--danger)' }}>{overBudgetCount}</div>
+                <div className="content-page-hero-stat-label">over budget</div>
+              </div>
+            )}
           </div>
           <button className="btn btn-primary" onClick={() => { setAdding(true); setEditingId(null); }}>
             <Plus size={13} /> Add Tour
           </button>
         </div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(100px, 1fr))', gap: 8, marginTop: 14 }}>
+      </div>
+
+      {/* Spend summary — kept as its own row below the hero since ৳ amounts
+          don't fit the compact stat-pill format used for simple counts. */}
+      <div className="card" style={{ marginBottom: 14, padding: 12 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(100px, 1fr))', gap: 8 }}>
           <div className="stat-mini">
             <div className="stat-mini-val">৳{totalSpent.toLocaleString()}</div>
             <div className="stat-mini-lbl">Total spent</div>
@@ -158,16 +175,6 @@ export function Tours() {
             <div className="stat-mini-val">৳{totalBudget.toLocaleString()}</div>
             <div className="stat-mini-lbl">Total budget</div>
           </div>
-          <div className="stat-mini">
-            <div className="stat-mini-val">{tours.length}</div>
-            <div className="stat-mini-lbl">Trips logged</div>
-          </div>
-          {overBudgetCount > 0 && (
-            <div className="stat-mini stat-mini-danger">
-              <div className="stat-mini-val">{overBudgetCount}</div>
-              <div className="stat-mini-lbl">Over budget</div>
-            </div>
-          )}
         </div>
       </div>
 
@@ -657,24 +664,38 @@ export function Projects() {
   return (
     <div className="page-enter page-container content-page-bg">
       {/* Hero */}
-      <div className="card" style={{ marginBottom: 14 }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 10 }}>
-          <div className="content-page-hero" style={{ marginBottom: 0 }}>
+      <div className="content-page-hero">
+        <div className="content-page-hero-main">
+          <div className="content-page-hero-head">
             <div className="content-page-hero-icon">
-              <Cpu size={18} color="var(--accent)" />
+              <Cpu size={24} color="var(--accent)" />
             </div>
-            <div>
-              <h1 className="content-page-hero-title">Projects</h1>
-              <p className="content-page-hero-subtitle">Track your builds — academic, personal, club & beyond</p>
+            <h1 className="content-page-hero-title">Projects</h1>
+          </div>
+          <p className="content-page-hero-subtitle">Track your builds — academic, personal, club & beyond</p>
+        </div>
+        <div className="content-page-hero-actions">
+          <div className="content-page-hero-stats" style={{ marginRight: 4 }}>
+            <div className="content-page-hero-stat">
+              <div className="content-page-hero-stat-n">{counts.active}</div>
+              <div className="content-page-hero-stat-label">active</div>
             </div>
+            <div className="content-page-hero-stat">
+              <div className="content-page-hero-stat-n">{counts.done}</div>
+              <div className="content-page-hero-stat-label">done</div>
+            </div>
+            <div className="content-page-hero-stat">
+              <div className="content-page-hero-stat-n">{counts.paused}</div>
+              <div className="content-page-hero-stat-label">paused</div>
+            </div>
+            {overdueCount > 0 && (
+              <div className="content-page-hero-stat">
+                <div className="content-page-hero-stat-n" style={{ color: 'var(--danger)' }}>{overdueCount}</div>
+                <div className="content-page-hero-stat-label">overdue</div>
+              </div>
+            )}
           </div>
           <button className="btn btn-primary" onClick={() => { setForm(EMPTY_FORM); setAdding(true); }}><Plus size={13} /> Add Project</button>
-        </div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(80px, 1fr))', gap: 8, marginTop: 14 }}>
-          <div className="stat-mini"><div className="stat-mini-val">{counts.active}</div><div className="stat-mini-lbl">Active</div></div>
-          <div className="stat-mini"><div className="stat-mini-val">{counts.done}</div><div className="stat-mini-lbl">Done</div></div>
-          <div className="stat-mini"><div className="stat-mini-val">{counts.paused}</div><div className="stat-mini-lbl">Paused</div></div>
-          {overdueCount > 0 && <div className="stat-mini stat-mini-danger"><div className="stat-mini-val">{overdueCount}</div><div className="stat-mini-lbl">Overdue</div></div>}
         </div>
       </div>
 
@@ -1579,21 +1600,26 @@ export function Tuition() {
 
   return (
     <div className="page-enter page-container content-page-bg">
-      {/* Hero Card */}
-      <div className="card" style={{ marginBottom: 14 }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 10 }}>
-          <div className="content-page-hero" style={{ marginBottom: 0 }}>
+      {/* Hero */}
+      <div className="content-page-hero">
+        <div className="content-page-hero-main">
+          <div className="content-page-hero-head">
             <div className="content-page-hero-icon">
               <Users size={18} color="var(--accent)" />
             </div>
-            <div>
-              <h1 className="content-page-hero-title">Tuition Tracker</h1>
-              <p className="content-page-hero-subtitle">Track sessions, income and travel costs</p>
-            </div>
+            <h1 className="content-page-hero-title">Tuition Tracker</h1>
           </div>
+          <p className="content-page-hero-subtitle">Track sessions, income and travel costs</p>
+        </div>
+        <div className="content-page-hero-actions">
           <button className="btn btn-primary" onClick={() => setAdding(v => !v)}><Plus size={13} /> Log Session</button>
         </div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(90px, 1fr))', gap: 8, marginTop: 14 }}>
+      </div>
+
+      {/* Money stats — kept as a separate card since amounts (৳ + large numbers)
+          don't fit the hero's narrow stat-cluster columns. */}
+      <div className="card" style={{ marginBottom: 14 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(90px, 1fr))', gap: 8 }}>
           <div className="stat-mini stat-mini-success">
             <div className="stat-mini-val">৳{net.toLocaleString()}</div>
             <div className="stat-mini-lbl">Net income</div>

@@ -3,7 +3,7 @@ export const Y2T1 = [
     "code": "BECM 2101",
     "title": "Building Engineering Systems",
     "credits": 3,
-    "contactHours": null,
+    "contactHours": "3 hrs/week",
     "type": "Theory",
     "isOptional": false
   },
@@ -11,7 +11,7 @@ export const Y2T1 = [
     "code": "BECM 2151",
     "title": "Aesthetics and Design",
     "credits": 3,
-    "contactHours": null,
+    "contactHours": "3 hrs/week",
     "type": "Theory",
     "isOptional": false
   },
@@ -19,7 +19,7 @@ export const Y2T1 = [
     "code": "CE 2111",
     "title": "Mechanics of Solids - I",
     "credits": 3,
-    "contactHours": null,
+    "contactHours": "3 hrs/week",
     "type": "Theory",
     "isOptional": false
   },
@@ -27,7 +27,7 @@ export const Y2T1 = [
     "code": "Math 2123",
     "title": "Mathematics - III",
     "credits": 3,
-    "contactHours": null,
+    "contactHours": "3 hrs/week",
     "type": "Theory",
     "isOptional": false
   },
@@ -35,7 +35,7 @@ export const Y2T1 = [
     "code": "Hum 2123",
     "title": "Engineering Economics and Financial Accounting",
     "credits": 3,
-    "contactHours": null,
+    "contactHours": "3 hrs/week",
     "type": "Theory",
     "isOptional": false
   },
@@ -43,7 +43,7 @@ export const Y2T1 = [
     "code": "BECM 2102",
     "title": "Construction Estimating - I",
     "credits": 0.75,
-    "contactHours": null,
+    "contactHours": "3/2 hrs/week",
     "type": "Sessional",
     "isOptional": false
   },
@@ -51,7 +51,7 @@ export const Y2T1 = [
     "code": "BECM 2104",
     "title": "Construction Techniques and Equipments - I",
     "credits": 1.5,
-    "contactHours": null,
+    "contactHours": "3 hrs/week",
     "type": "Sessional",
     "isOptional": false
   },
@@ -59,7 +59,7 @@ export const Y2T1 = [
     "code": "BECM 2152",
     "title": "Architectural Design - III",
     "credits": 1.5,
-    "contactHours": null,
+    "contactHours": "3 hrs/week",
     "type": "Sessional",
     "isOptional": false
   },
@@ -67,7 +67,7 @@ export const Y2T1 = [
     "code": "CE 2112",
     "title": "Sessional on Mechanics of Solids",
     "credits": 1.5,
-    "contactHours": null,
+    "contactHours": "3 hrs/week",
     "type": "Sessional",
     "isOptional": false
   }

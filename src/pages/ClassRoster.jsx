@@ -58,6 +58,7 @@ export default function ClassRoster() {
 
   const [myRole, setMyRole] = useState('member');
   const [title, setTitle] = useState('');
+  const [rosterCounts, setRosterCounts] = useState(null);
   const [body, setBody] = useState('');
   const [showPreview, setShowPreview] = useState(false);
   const noticeTextareaRef = useRef(null);
@@ -183,18 +184,36 @@ export default function ClassRoster() {
 
   return (
     <div className="page-enter content-page-bg" style={{ width: 'min(95vw, 1560px)', margin: '0 auto', padding: '16px 14px', paddingBottom: 'calc(32px + env(safe-area-inset-bottom, 0px))' }}>
-      <div className="roster-hero">
-        <div className="content-page-hero-icon">
-          <Users size={18} color="var(--accent)" />
-        </div>
-        <div style={{ minWidth: 0 }}>
-          <h1 className="content-page-hero-title">Class Roster</h1>
+      <div className="content-page-hero">
+        <div className="content-page-hero-main">
+          <div className="content-page-hero-head">
+            <div className="content-page-hero-icon">
+              <Users size={24} color="var(--accent)" />
+            </div>
+            <h1 className="content-page-hero-title">Class Roster</h1>
+          </div>
           {groupId && (
             <p className="content-page-hero-subtitle">
-              Manage <strong>{groupLabel}</strong> — verify members, appoint ACR or hand off CR, remove members, and send notices to your class.
+              Manage <strong>{groupLabel}</strong> members, roles, and join requests
             </p>
           )}
         </div>
+        {groupId && rosterCounts && (
+          <div className="content-page-hero-stats">
+            <div className="content-page-hero-stat">
+              <div className="content-page-hero-stat-n">{rosterCounts.total}</div>
+              <div className="content-page-hero-stat-label">total</div>
+            </div>
+            <div className="content-page-hero-stat">
+              <div className="content-page-hero-stat-n">{rosterCounts.verified}</div>
+              <div className="content-page-hero-stat-label">verified</div>
+            </div>
+            <div className="content-page-hero-stat">
+              <div className="content-page-hero-stat-n">{rosterCounts.cr}</div>
+              <div className="content-page-hero-stat-label">CR</div>
+            </div>
+          </div>
+        )}
       </div>
 
       {!groupId ? (
@@ -219,7 +238,7 @@ export default function ClassRoster() {
                 <JoinRequestsPanel groupId={groupId} />
               )}
               <div style={{ marginBottom: 20 }}>
-                <ClassmatesList groupId={groupId} showActions viewerRole="cr" currentUid={uid} />
+                <ClassmatesList groupId={groupId} showActions viewerRole="cr" currentUid={uid} onCounts={setRosterCounts} />
               </div>
             </>
           )}

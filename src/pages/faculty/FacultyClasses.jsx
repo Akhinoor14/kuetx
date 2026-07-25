@@ -425,14 +425,23 @@ export default function FacultyClasses() {
   return (
     <div className="hub-page-bg" style={{ minHeight: '100vh' }}>
       <div className="page-container" style={{ padding: '20px 24px 40px' }}>
-        <div className="hub-page-hero" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 10 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            <div className="hub-page-hero-icon">
-              <Icons.BookOpen size={20} color="var(--accent)" />
+        <div className="hub-page-hero">
+          <div className="hub-page-hero-main">
+            <div className="hub-page-hero-head">
+              <div className="hub-page-hero-icon">
+                <Icons.BookOpen size={24} color="var(--accent)" />
+              </div>
+              <h1 className="hub-page-hero-title">My Classes</h1>
             </div>
-            <h1 className="hub-page-hero-title">My Classes</h1>
+            <div className="hub-page-hero-subtitle">Classes you actively teach this term</div>
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <div className="hub-page-hero-actions">
+            <div className="hub-page-hero-stats" style={{ marginRight: 4 }}>
+              <div className="hub-page-hero-stat">
+                <div className="hub-page-hero-stat-n">{activeClasses.length}</div>
+                <div className="hub-page-hero-stat-label">classes</div>
+              </div>
+            </div>
             <button
               onClick={() => navigate('/faculty/all-cr')}
               style={{

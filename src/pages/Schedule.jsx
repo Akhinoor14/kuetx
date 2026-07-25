@@ -1477,46 +1477,46 @@ export default function Schedule() {
 
   return (
     <div className="page-enter page-container content-page-bg" style={{ width: "100%", margin: "0 auto", paddingBottom: "20px", paddingLeft: "12px", paddingRight: "12px" }}>
-      <div className="card schedule-header-card" style={{ marginBottom: 14, padding: '18px' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '12px', flexWrap: 'wrap', rowGap: '10px' }}>
-          <div style={{ flex: 1, minWidth: 0 }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap', marginBottom: '6px' }}>
-              <div className="content-page-hero-icon" style={{ width: 32, height: 32, borderRadius: 8 }}>
-                <CalendarDays size={16} color="var(--accent)" />
-              </div>
-              <h1 className="schedule-header-title" style={{ fontSize: '20px', fontWeight: '800', letterSpacing: '-0.03em', margin: '0' }}>Class Schedule</h1>
-              <span className="tag tag-blue">5-day week</span>
-              {isGroupMode && <span className="tag tag-green">Shared · Class Group</span>}
-              {isGroupMode && !canEditSchedule && <span className="tag tag-gray">View only</span>}
+      <div className="content-page-hero">
+        <div className="content-page-hero-main">
+          <div className="content-page-hero-head">
+            <div className="content-page-hero-icon">
+              <CalendarDays size={24} color="var(--accent)" />
             </div>
-            <p className="schedule-header-desc" style={{ fontSize: '13px', color: 'var(--muted)', margin: '0', maxWidth: '600px', lineHeight: 1.4 }}>
-              {isGroupMode
-                ? (canEditSchedule
-                  ? 'This schedule is shared with your class group. Changes you make here update for everyone.'
-                  : "This is your class group's shared schedule, set by your CR/ACR. Only they can edit it.")
-                : 'Clean Sun–Thu routine builder. Pick a share format, then copy or import/export the schedule as needed.'}
+            <h1 className="content-page-hero-title">Class Schedule</h1>
+          </div>
+          <p className="content-page-hero-subtitle" style={{ maxWidth: 600 }}>
+            {isGroupMode
+              ? (canEditSchedule
+                ? 'This schedule is shared with your class group. Changes you make here update for everyone.'
+                : "This is your class group's shared schedule, set by your CR/ACR. Only they can edit it.")
+              : 'Clean Sun–Thu routine builder. Pick a share format, then copy or import/export the schedule as needed.'}
+          </p>
+          <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginTop: 8, paddingLeft: 36 }}>
+            <span className="tag tag-blue">5-day week</span>
+            {isGroupMode && <span className="tag tag-green">Shared · Class Group</span>}
+            {isGroupMode && !canEditSchedule && <span className="tag tag-gray">View only</span>}
+          </div>
+          {!isGroupMode && (
+            <p className="schedule-header-desc-secondary" style={{ fontSize: '12px', color: 'var(--muted)', margin: '8px 0 0', maxWidth: 600, lineHeight: 1.4, paddingLeft: 36 }}>
+              Assign teachers first via <strong>Manage Course Teachers</strong> before adding schedule entries.
             </p>
-            {!isGroupMode && (
-              <p className="schedule-header-desc schedule-header-desc-secondary" style={{ fontSize: '12px', color: 'var(--muted)', margin: '6px 0 0', maxWidth: '600px', lineHeight: 1.4 }}>
-                Assign teachers first via <strong>Manage Course Teachers</strong> before adding schedule entries.
-              </p>
-            )}
-          </div>
-          <div className="schedule-header-actions" style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', justifyContent: 'flex-end' }}>
-            <button className="btn btn-ghost btn-sm" onClick={() => setEditingSettings(v => !v)} style={{ fontSize: '12px' }}>
-              <Settings2 size={13} /> Settings
+          )}
+        </div>
+        <div className="content-page-hero-actions">
+          <button className="btn btn-ghost btn-sm" onClick={() => setEditingSettings(v => !v)} style={{ fontSize: '12px' }}>
+            <Settings2 size={13} /> Settings
+          </button>
+          {canEditSchedule && (
+            <button className="btn btn-secondary btn-sm" onClick={() => navigate('/courses')} style={{ fontSize: '12px' }} title="Open the Courses page and assign teachers per course">
+              <BookOpen size={13} /> Manage Course Teachers
             </button>
-            {canEditSchedule && (
-              <button className="btn btn-secondary btn-sm" onClick={() => navigate('/courses')} style={{ fontSize: '12px' }} title="Open the Courses page and assign teachers per course">
-                <BookOpen size={13} /> Manage Course Teachers
-              </button>
-            )}
-            {canEditSchedule && (
-              <button className="btn btn-primary btn-sm" onClick={() => { setEditingId(null); resetForm(); setAdding(true); }} style={{ fontSize: '12px' }} title="Add a new class slot to the schedule">
-                <Plus size={13} /> Add Class
-              </button>
-            )}
-          </div>
+          )}
+          {canEditSchedule && (
+            <button className="btn btn-primary btn-sm" onClick={() => { setEditingId(null); resetForm(); setAdding(true); }} style={{ fontSize: '12px' }} title="Add a new class slot to the schedule">
+              <Plus size={13} /> Add Class
+            </button>
+          )}
         </div>
       </div>
 
