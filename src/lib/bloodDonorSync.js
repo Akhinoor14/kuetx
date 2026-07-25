@@ -3,9 +3,10 @@
 // Blood Bank directory — Founder-facing search by blood group (see
 // AdminDashboard.jsx's BloodBankView / founderCategories.js's 'blood'
 // entry). This is deliberately a SEPARATE top-level collection from the
-// student's personal profile store (users/{uid}/data/profile), which is
-// owner-read-only (see firestore.rules match /users/{uid}/data/{key}) and
-// therefore not something the Founder can query across all students.
+// student's personal profile store (students/{dept}/{batch}/{uid} as of
+// the Phase 5 migration — previously users/{uid}/data/profile), which is
+// owner-read-only (see firestore.rules match /students/{dept}/{batch}/{uid})
+// and therefore not something the Founder can query across all students.
 //
 // bloodDonors/{uid} mirrors the faculty/{uid} pattern: one small doc per
 // student, containing only what the Blood Bank search actually needs

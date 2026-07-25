@@ -1,14 +1,19 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { Users } from 'lucide-react';
+import { Users, Trash2 } from 'lucide-react';
 import { getProfile } from '../store/store';
 import { getGroupId, getGroupLabel, canonicalize } from '../lib/groupUtils';
-import { postGroupNotice, requestLeaveCR, subscribeMyRole } from '../lib/groupSync';
+import { postGroupNotice, requestLeaveCR, subscribeMyRole, subscribeGroupNotices } from '../lib/groupSync';
 import { subscribeMyRoles, hasRole } from '../lib/staffSync';
 import { checkIsAdmin } from '../lib/adminAuth';
 import { auth } from '../lib/firebase';
 import ClassmatesList from '../components/ClassmatesList';
+import JoinRequestsPanel from '../components/JoinRequestsPanel';
+import NoticeInsightsPanel from '../components/NoticeInsightsPanel';
+import NoticeComposerToolbar from '../components/NoticeComposerToolbar';
+import NoticePrioritySelector from '../components/NoticePrioritySelector';
 import { renderFormattedNoticeBody } from '../lib/noticeFormat';
+import { deleteNoticeSoft } from '../lib/noticeUtils';
 
 /**
  * CR/ACR-only page (route-gated by <RequireCR> in App.jsx — the live,
@@ -54,6 +59,8 @@ export default function ClassRoster() {
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
   const [showPreview, setShowPreview] = useState(false);
+  const noticeTextareaRef = useRef(null);
+  const [priority, setPriority] = useState('normal');
   const [sending, setSending] = useState(false);
   const [sendMsg, setSendMsg] = useState('');
   const [leaveState, setLeaveState] = useState('idle'); // idle | sending | sent | error
@@ -66,6 +73,47 @@ export default function ClassRoster() {
   // approval-gated flow reads confusingly if you never learn you're the
   // one who has to go approve it. This just makes that visible.
   const [canSelfApprove, setCanSelfApprove] = useState(false);
+
+  // Phase 2 of the Notice upgrade: this CR/ACR's own sent notices (from
+  // this group's notices subcollection), so they can see reach/read
+  // stats and delete a notice they posted. Deliberately NOT filtered to
+  // "posted by me only" here — any CR/ACR who can send to this class can
+  // also see/manage the class's full notice history, matching the
+  // firestore.rules update in Phase 2 (isCLFor/isAdmin can update ANY
+  // notice in the group; only a plain non-CR sender is restricted to
+  // their own postedBy.uid). Teacher-authored notices are excluded (this
+  // is the CR/ACR's own management surface, not the class's full notice
+  // feed — see Notice.jsx for that).
+  const [sentNotices, setSentNotices] = useState([]);
+  const [deletingId, setDeletingId] = useState(null);
+
+  useEffect(() => {
+    if (!groupId) { setSentNotices([]); return; }
+    return subscribeGroupNotices(groupId, (notices) => {
+      setSentNotices(
+        notices
+          // Phase 2 follow-up: keep the sender's own soft-deleted notices
+          // visible here (as an audit trail, with a "Deleted" tag in the
+          // render below) rather than filtering them out — only the
+          // student-facing merged feed (subscribeAllNotices's emit())
+          // hides deleted:true notices.
+          .filter((n) => n.from !== 'Teacher')
+          .sort((a, b) => (b.createdAt?.toMillis?.() || 0) - (a.createdAt?.toMillis?.() || 0)),
+      );
+    });
+  }, [groupId]);
+
+  const handleDeleteNotice = async (noticeId) => {
+    if (!window.confirm('Delete this notice? It will be removed from your class\'s feed.')) return;
+    setDeletingId(noticeId);
+    try {
+      await deleteNoticeSoft(noticeId, groupId);
+    } catch (err) {
+      window.alert(`Failed to delete: ${err?.message || err}`);
+    } finally {
+      setDeletingId(null);
+    }
+  };
 
   useEffect(() => {
     if (!groupId || !uid) return;
@@ -97,10 +145,11 @@ export default function ClassRoster() {
     setSending(true);
     setSendMsg('');
     try {
-      await postGroupNotice(groupId, profile, { title: title.trim(), body: body.trim() });
+      await postGroupNotice(groupId, profile, { title: title.trim(), body: body.trim(), priority });
       setTitle('');
       setBody('');
       setShowPreview(false);
+      setPriority('normal');
       setSendMsg('Notice sent.');
     } catch (err) {
       setSendMsg(`Failed: ${err?.message || err}`);
@@ -155,6 +204,10 @@ export default function ClassRoster() {
             </div>
           )}
 
+          {(myRole === 'cr' || myRole === 'acr') && (
+            <JoinRequestsPanel groupId={groupId} />
+          )}
+
           <div style={{ fontSize: 13, fontWeight: 700, marginBottom: 8 }}>Roster</div>
           <div style={{ marginBottom: 20 }}>
             <ClassmatesList groupId={groupId} showActions viewerRole="cr" currentUid={uid} />
@@ -192,67 +245,129 @@ export default function ClassRoster() {
             </div>
           )}
 
-          <div className="card" style={{ padding: 14 }}>
-            <h2 style={{ fontSize: 14, fontWeight: 700, marginBottom: 4 }}>Send a notice to your class</h2>
-            <p style={{ fontSize: 11.5, color: 'var(--muted)', margin: '0 0 10px', lineHeight: 1.5 }}>
-              Tip: leave a blank line between points to start a new paragraph — it'll show up nicely spaced for your classmates.
-            </p>
-            <form onSubmit={handleSendNotice} style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-              <input
-                type="text"
-                placeholder="Title"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                className="input"
-                style={{ width: '100%' }}
-              />
-
-              {!showPreview ? (
-                <textarea
-                  placeholder={'Notice details...\n\nLeave a blank line to start a new paragraph.'}
-                  value={body}
-                  onChange={(e) => setBody(e.target.value)}
+          {(myRole === 'cr' || myRole === 'acr') && (
+            <div className="card" style={{ padding: 14 }}>
+              <h2 style={{ fontSize: 14, fontWeight: 700, marginBottom: 4 }}>Send a notice to your class</h2>
+              <p style={{ fontSize: 11.5, color: 'var(--muted)', margin: '0 0 10px', lineHeight: 1.5 }}>
+                Tip: leave a blank line between points to start a new paragraph — it'll show up nicely spaced for your classmates.
+              </p>
+              <form onSubmit={handleSendNotice} style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                <input
+                  type="text"
+                  placeholder="Title"
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
                   className="input"
-                  rows={6}
-                  style={{ width: '100%', resize: 'vertical', lineHeight: 1.55 }}
+                  style={{ width: '100%' }}
                 />
-              ) : (
-                <div style={{
-                  padding: '10px 12px', borderRadius: 8, border: '1px solid var(--border)',
-                  background: 'var(--surface)', fontSize: 13, color: 'var(--text)', lineHeight: 1.55,
-                  minHeight: 96,
-                }}>
-                  <div style={{ fontWeight: 700, marginBottom: 6 }}>{title.trim() || <span style={{ color: 'var(--muted)' }}>(no title)</span>}</div>
-                  {body.trim()
-                    ? renderFormattedNoticeBody(body)
-                    : <span style={{ color: 'var(--muted)' }}>(nothing written yet)</span>}
-                </div>
-              )}
 
-              <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                <button
-                  type="submit"
-                  className="btn btn-primary btn-sm"
-                  disabled={sending || !title.trim() || !body.trim()}
-                >
-                  {sending ? 'Sending...' : 'Send notice'}
-                </button>
-                <button
-                  type="button"
-                  className="btn btn-sm btn-secondary"
-                  onClick={() => setShowPreview((v) => !v)}
-                  disabled={!title.trim() && !body.trim()}
-                >
-                  {showPreview ? 'Back to edit' : 'Preview'}
-                </button>
-              </div>
-              {sendMsg && (
-                <div style={{ fontSize: 12, color: sendMsg.startsWith('Failed') ? 'var(--danger)' : 'var(--success)' }}>
-                  {sendMsg}
+                <NoticePrioritySelector value={priority} onChange={setPriority} />
+
+                {!showPreview ? (
+                  <>
+                    <NoticeComposerToolbar
+                      textareaRef={noticeTextareaRef}
+                      value={body}
+                      onChange={setBody}
+                    />
+                    <textarea
+                      ref={noticeTextareaRef}
+                      placeholder={'Notice details...\n\nLeave a blank line to start a new paragraph.'}
+                      value={body}
+                      onChange={(e) => setBody(e.target.value)}
+                      className="input"
+                      rows={6}
+                      style={{ width: '100%', resize: 'vertical', lineHeight: 1.55 }}
+                    />
+                  </>
+                ) : (
+                  <div style={{
+                    padding: '10px 12px', borderRadius: 8, border: '1px solid var(--border)',
+                    background: 'var(--surface)', fontSize: 13, color: 'var(--text)', lineHeight: 1.55,
+                    minHeight: 96,
+                  }}>
+                    <div style={{ fontWeight: 700, marginBottom: 6 }}>{title.trim() || <span style={{ color: 'var(--muted)' }}>(no title)</span>}</div>
+                    {body.trim()
+                      ? renderFormattedNoticeBody(body)
+                      : <span style={{ color: 'var(--muted)' }}>(nothing written yet)</span>}
+                  </div>
+                )}
+
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                  <button
+                    type="submit"
+                    className="btn btn-primary btn-sm"
+                    disabled={sending || !title.trim() || !body.trim()}
+                  >
+                    {sending ? 'Sending...' : 'Send notice'}
+                  </button>
+                  <button
+                    type="button"
+                    className="btn btn-sm btn-secondary"
+                    onClick={() => setShowPreview((v) => !v)}
+                    disabled={!title.trim() && !body.trim()}
+                  >
+                    {showPreview ? 'Back to edit' : 'Preview'}
+                  </button>
                 </div>
-              )}
-            </form>
-          </div>
+                {sendMsg && (
+                  <div style={{ fontSize: 12, color: sendMsg.startsWith('Failed') ? 'var(--danger)' : 'var(--success)' }}>
+                    {sendMsg}
+                  </div>
+                )}
+              </form>
+            </div>
+          )}
+
+          {sentNotices.length > 0 && (
+            <div style={{ marginTop: 16 }}>
+              <div style={{ fontSize: 13, fontWeight: 700, marginBottom: 8 }}>Sent notices</div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                {sentNotices.map((n) => (
+                  <div key={n.id} className="card" style={{ padding: '10px 12px' }}>
+                    <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 8 }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                        <div style={{ fontWeight: 700, fontSize: 13, color: 'var(--text)' }}>{n.title}</div>
+                        {n.deleted && (
+                          <span style={{
+                            fontSize: 9.5, fontWeight: 700, color: 'var(--danger)', textTransform: 'uppercase',
+                            border: '1px solid var(--danger)', borderRadius: 4, padding: '1px 5px', flexShrink: 0,
+                          }}>
+                            Deleted
+                          </span>
+                        )}
+                      </div>
+                      {!n.deleted && (
+                        <button
+                          type="button"
+                          onClick={() => handleDeleteNotice(n.id)}
+                          disabled={deletingId === n.id}
+                          aria-label={`Delete notice: ${n.title}`}
+                          style={{
+                            display: 'flex', alignItems: 'center', gap: 4, flexShrink: 0,
+                            fontSize: 11, fontWeight: 700, color: 'var(--danger)',
+                            background: 'none', border: 'none', cursor: deletingId === n.id ? 'not-allowed' : 'pointer',
+                            padding: 0, opacity: deletingId === n.id ? 0.5 : 1,
+                          }}
+                        >
+                          <Trash2 size={13} />
+                        </button>
+                      )}
+                    </div>
+                    <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 2, opacity: n.deleted ? 0.6 : 1 }}>
+                      {renderFormattedNoticeBody(n.body)}
+                    </div>
+                    <NoticeInsightsPanel
+                      noticeId={n.id}
+                      groupId={groupId}
+                      audienceSize={n.audienceSize}
+                      title={n.title}
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </>
       )}
     </div>

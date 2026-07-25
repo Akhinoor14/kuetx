@@ -177,6 +177,33 @@ export async function getStaffDisplayInfo(uid) {
   }
   // Fallback: no group-membership doc found (or the query itself failed) —
   // try the person's own synced profile instead of giving up on a name.
+  //
+  // Phase 5 migration: profile now lives at students/{dept}/{batch}/{uid},
+  // not users/{uid}/data/profile — same collectionGroup-by-uid-field
+  // pattern as firebaseSync.js's pullProfile fallback (doc id alone isn't
+  // filterable across a collectionGroup spanning many parent paths).
+  try {
+    const snap = await getDocs(query(collectionGroup(db, 'students'), where('uid', '==', uid)));
+    if (!snap.empty) {
+      const value = snap.docs[0].data() || {};
+      return {
+        name: value.name || '',
+        roll: value.studentId || '',
+        dept: value.dept || '',
+        batch: value.batch || '',
+        groupId: '',
+        verified: false,
+        memberRole: '',
+      };
+    }
+  } catch (e) {
+    console.warn('[staffSync] getStaffDisplayInfo profile fallback failed:', e);
+  }
+  // Legacy fallback: accounts that synced a profile before this migration
+  // and haven't re-saved it since (so no students/{dept}/{batch}/{uid} doc
+  // exists for them yet) may still have the old flat doc sitting here —
+  // see the matching note kept in firestore.rules' users/{uid}/data/{key}
+  // block for why this path is intentionally still readable.
   try {
     const profileSnap = await getDoc(doc(db, 'users', uid, 'data', 'profile'));
     if (profileSnap.exists()) {
@@ -192,7 +219,7 @@ export async function getStaffDisplayInfo(uid) {
       };
     }
   } catch (e) {
-    console.warn('[staffSync] getStaffDisplayInfo profile fallback failed:', e);
+    console.warn('[staffSync] getStaffDisplayInfo legacy profile fallback failed:', e);
   }
   return { name: '', roll: '', dept: '', groupId: '', verified: false, memberRole: '' };
 }

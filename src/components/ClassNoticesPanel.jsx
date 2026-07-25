@@ -1,8 +1,9 @@
 import { useEffect, useMemo, useState } from 'react';
 import { getProfile, store } from '../store/store';
 import { getGroupId, getGroupLabel } from '../lib/groupUtils';
-import { subscribeGroupNotices, subscribeGlobalNotices, noticeAppliesTo, subscribeMyRole } from '../lib/groupSync';
+import { subscribeGroupNotices, subscribeGlobalNotices, noticeAppliesTo, subscribeMyRole, subscribeIsOwnMember } from '../lib/groupSync';
 import { filterStudentFacingNotices } from '../lib/noticeUtils';
+import { renderFormattedNoticeBody } from '../lib/noticeFormat';
 import { auth } from '../lib/firebase';
 
 function toMillis(ts) {
@@ -22,12 +23,24 @@ export default function ClassNoticesPanel() {
   const [globalNotices, setGlobalNotices] = useState([]);
   const [lastSeen, setLastSeen] = useState(() => store.get('lastSeenNoticeAt') || 0);
   const [isViewerCR, setIsViewerCR] = useState(false);
+  // Class notices (groups/{groupId}/notices) are Firestore-rule-gated to
+  // isVerifiedMember(groupId) — a pending join request is NOT enough.
+  // subscribeIsOwnMember reports a real boolean (doc exists or not),
+  // unlike subscribeMyRole which defaults to the string 'member' even
+  // for a non-member — so this never even attempts the class-notices
+  // subscription for someone still waiting on CR/ACR approval, instead
+  // of relying on the listener's permission-denied retry/backoff path.
+  const [isOwnMember, setIsOwnMember] = useState(false);
 
   useEffect(() => subscribeGlobalNotices(setGlobalNotices), []);
   useEffect(() => {
-    if (!groupId) return;
-    return subscribeGroupNotices(groupId, setGroupNoticesRaw);
+    if (!groupId || !auth.currentUser?.uid) { setIsOwnMember(false); return; }
+    return subscribeIsOwnMember(groupId, auth.currentUser.uid, setIsOwnMember);
   }, [groupId]);
+  useEffect(() => {
+    if (!groupId || !isOwnMember) { setGroupNoticesRaw([]); return; }
+    return subscribeGroupNotices(groupId, setGroupNoticesRaw);
+  }, [groupId, isOwnMember]);
   useEffect(() => {
     if (!groupId || !auth.currentUser?.uid) { setIsViewerCR(false); return; }
     return subscribeMyRole(groupId, auth.currentUser.uid, (role) => {
@@ -41,7 +54,10 @@ export default function ClassNoticesPanel() {
   );
 
   const combined = useMemo(() => {
-    const applicableGlobal = globalNotices.filter((n) => noticeAppliesTo(n, profile, groupId));
+    // Handoff item 2: pass the current uid so a student_uids-targeted
+    // notice actually shows up here for its target (see noticeUtils.js's
+    // subscribeAllNotices for the fuller explanation of why this was missing).
+    const applicableGlobal = globalNotices.filter((n) => noticeAppliesTo(n, profile, groupId, auth.currentUser?.uid));
     const merged = [
       ...groupNotices.map((n) => ({ ...n, _source: 'class', _title: n.title, _body: n.body, _by: n.postedBy, _at: n.createdAt })),
       ...applicableGlobal.map((n) => ({ ...n, _source: 'global', _title: n.title, _body: n.body, _by: n.createdBy, _at: n.createdAt })),
@@ -91,7 +107,7 @@ export default function ClassNoticesPanel() {
                 {n._source === 'global' ? 'Admin' : 'Class'}
               </span>
             </div>
-            <div style={{ color: 'var(--muted)', marginTop: 4, whiteSpace: 'pre-wrap' }}>{n._body}</div>
+            <div style={{ color: 'var(--muted)', marginTop: 4 }}>{renderFormattedNoticeBody(n._body)}</div>
             <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 6 }}>
               — {n._by?.name || 'Unknown'}
             </div>

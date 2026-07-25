@@ -22,6 +22,7 @@ import RequireStaff from './components/RequireStaff';
 import useFirebaseAuth from './hooks/useFirebaseAuth';
 import DataSafeToast from './components/DataSafeToast';
 import ClassJoinIntro from './components/ClassJoinIntro';
+import NoCRBanner from './components/NoCRBanner';
 import RoleSelectScreen from './components/RoleSelectScreen';
 import FacultyProfileSetupModal from './components/FacultyProfileSetupModal';
 import { getAccountRole, setAccountRole, fetchServerAccountRole, persistAccountRoleToServer } from './lib/accountRole';
@@ -30,11 +31,12 @@ import { getFacultyDoc, markFacultyVerifiedIfEmailConfirmed, isFacultyProfileCom
 import { syncBloodDonorEntry } from './lib/bloodDonorSync';
 import { store, getProfile, isProfileComplete, DEFAULT_PROFILE, normalizeProfileForSave, validateProfileForSave, ensureDBReady, tagProfileOwner, isProfileStaleForUid } from './store/store';
 import { getGroupId } from './lib/groupUtils';
-import { syncOwnVerification, joinGroup } from './lib/groupSync';
+import { syncGroupMembership } from './lib/groupSync';
 import { subscribeGroupTermStartDate } from './lib/termStartDateSync';
 import { claimRoll } from './lib/rollOwnership';
 import { auth } from './lib/firebase';
 import { notify } from './lib/notify';
+import { pushProfile } from './lib/firebaseSync';
 
 // Pages — lazy-loaded (route-level code splitting).
 //
@@ -307,6 +309,7 @@ function Layout({ authState, onboardingActive }) {
         {!onboardingActive && <NoticeToast />}
         <DataSafeToast suppress={onboardingActive} />
         <ClassJoinIntro />
+        <NoCRBanner />
 
         {/* Account upgrade modal (anonymous → real account) */}
         {showUpgradeModal && (
@@ -545,35 +548,6 @@ export default function App() {
   const [queueBuilt, setQueueBuilt] = useState(false);
   const current = queue[0] || null;
 
-  // Complete a KUET email verification link, if the current URL is one —
-  // runs once at boot so clicking the emailed link works even in a fresh
-  // tab/device that never opened the verify widget itself. No-op otherwise.
-  useEffect(() => {
-    let cancelled = false;
-
-    async function run(emailOverride = null) {
-      const { completeKuetVerificationLink } = await import('./lib/kuetEmailVerify');
-      const result = await completeKuetVerificationLink(window.location.href, emailOverride);
-      if (cancelled) return;
-
-      if (result.status === 'success') {
-        notify('KUET email verified! Your blue tick will appear next to your name.', 'success');
-        window.dispatchEvent(new CustomEvent('kuetx:kuet-email-verified', { detail: { roll: result.roll } }));
-        const gid = getGroupId(getProfile());
-        syncOwnVerification(gid, auth.currentUser?.uid).catch((e) => console.warn('[App] syncOwnVerification failed', e));
-        return;
-      }
-      if (result.status === 'error') {
-        console.warn('[KUETx] KUET email verify link:', result.message);
-        notify(result.message, 'error', 6000);
-      }
-      // 'not-a-link' and 'needs-email' → nothing to do.
-    }
-
-    run();
-    return () => { cancelled = true; };
-  }, []);
-
   // BUGFIX(F): Term Start Date is now CR/ACR-set once per dept+batch class
   // (see src/lib/termStartDateSync.js and ClassManagement's new widget)
   // instead of typed in by each student. Every existing read-site
@@ -693,8 +667,9 @@ export default function App() {
   // coexist forever.
   //
   // Deliberately scoped narrow: a losing account is blocked ONLY from
-  // joinGroup() — i.e. it can never show up in Classmates or write into
-  // shared class data under someone else's roll. Every personal-only
+  // syncGroupMembership() — i.e. it can never file a join request, so it
+  // can never show up in Classmates or write into shared class data
+  // under someone else's roll. Every personal-only
   // feature (Notes, Diary, Money, Calculators, etc.) keeps working
   // normally. This is intentionally NOT a full app lock: detection here
   // is a first-loads-wins heuristic, not identity verification, so a
@@ -742,10 +717,10 @@ export default function App() {
           'error',
           8000
         );
-        return; // do NOT joinGroup — this account doesn't own this roll
+        return; // do NOT syncGroupMembership — this account doesn't own this roll
       }
 
-      joinGroup(gid, profile).catch((e) => console.warn('[App] auto joinGroup failed', e));
+      syncGroupMembership(gid, profile).catch((e) => console.warn('[App] auto syncGroupMembership failed', e));
     };
     tryJoin();
     window.addEventListener('kuetx:store-updated', tryJoin);
@@ -906,7 +881,23 @@ export default function App() {
               // account on this same device/browser can tell "leftover
               // data from someone else" apart from "my own real profile"
               // instead of blindly trusting whatever's in localStorage.
-              store.set('profile', tagProfileOwner(normalizeProfileForSave(formData), auth.currentUser?.uid));
+              const savedProfile = tagProfileOwner(normalizeProfileForSave(formData), auth.currentUser?.uid);
+              store.set('profile', savedProfile);
+              // Phase 5: 'profile' is excluded from the generic per-key
+              // sync loop (see EXCLUDED_KEYS in firebaseSync.js) — it now
+              // lives at its own students/{dept}/{batch}/{uid} path, so it
+              // must be pushed explicitly here. This is the first-run
+              // onboarding save path, so getting this right matters even
+              // more than the Settings-page edit path (Profile.jsx) —
+              // without this, a brand-new account's profile would never
+              // reach Firestore at all. Fire-and-forget: local save +
+              // queue advance already happened, a slow/failed push
+              // shouldn't block onboarding.
+              if (auth.currentUser?.uid && !auth.currentUser.isAnonymous) {
+                pushProfile(auth.currentUser.uid, savedProfile).catch(err => {
+                  console.warn('[KUETx Onboarding] pushProfile failed:', err.message);
+                });
+              }
               // Fan the directory-relevant fields (name/roll/dept/
               // bloodGroup) out to bloodDonors/{uid} so the Founder's
               // Blood Bank search can find this student — the personal
@@ -1006,47 +997,11 @@ export default function App() {
         ) : (
           <Layout authState={authState} onboardingActive={!!current} />
         )}
-        {/* VerifyReminderPopup component was removed entirely — this was
-            just a nag reminder to complete the (optional, non-blocking)
-            KUET-email Tier-1 verification; that verification itself
-            (KuetEmailVerifyWidget, inside ProfileSetupModal) is unaffected
-            and still fully self-service. */}
         {authState.authReady && !authState.isAnonymous && queue.length === 0 && <PushPermissionBanner />}
         {/* Nudges anyone who used "Finish now, add rest later" to fill in the
             full profile — but only from a later session, never right after
             onboarding (see ProfileCompleteReminder.jsx's own session guard). */}
         {authState.authReady && queue.length === 0 && <ProfileCompleteReminder />}
-        {/* BUGFIX (modal overlap): verifyEmailPrompt/facultyVerifyPrompt are
-            set by a boot-time effect that runs independently of the
-            sequential onboarding `queue` — it never checked `current`
-            before showing, so a cross-device/cross-tab KUET-email-link
-            click could pop this modal directly on top of a mandatory,
-            un-dismissible step (most visibly ProfileSetupModal), with no
-            z-index/mutual-exclusion between them. The Firestore write +
-            signOut in completeKuetVerificationLink() already succeeded by
-            this point regardless — only the *prompt* itself needs to wait
-            its turn, not the verification. So: hold the prompt in state as
-            before (still captured immediately, nothing about detection or
-            the underlying link-completion logic changes), but only render
-            it once `queue.length === 0`, i.e. once every mandatory
-            pre-dashboard gate has actually cleared — same rule
-            VerifyReminderPopup already uses a few lines up. If the queue
-            is still non-empty when the prompt is captured, it simply waits
-            here rendered-but-gated until the queue drains, then appears on
-            its own, never layered on top of another modal. */}
-        {/* KuetVerifyEmailConfirmModal / FacultyVerifyEmailConfirmModal
-            removed from render — this was a standalone "you just verified!"
-            confirm popup, redundant with the inline confirmation
-            KuetEmailVerifyWidget (inside ProfileSetupModal) and the
-            faculty magic-link completion screen already show at the
-            moment verification succeeds. Removing this popup does NOT
-            disable verification itself — sendKuetVerificationLink /
-            completeKuetVerificationLink (student) and the faculty email
-            magic-link flow are both still fully active; only this one
-            extra confirmation surface was cut. The boot-time
-            link-detection effects above are left in place but are inert:
-            they only ever set verifyEmailPrompt/facultyVerifyPrompt,
-            which nothing renders anymore now that this popup is gone. */}
         {/* Global auth modal (triggered from anywhere via window.__kuetxShowAuth) */}
         {showAuthModal && (
           <AuthModal

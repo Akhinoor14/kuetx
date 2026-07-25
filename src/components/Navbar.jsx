@@ -119,7 +119,7 @@ export function Navbar({ onMenuClick }) {
   // updates the badge count immediately.
   const [notices, setNotices] = useState([]);
   useEffect(() => {
-    return noticeApi.subscribeAllNotices(profileForNotices, groupId, setNotices, 'student', { isViewerCR });
+    return noticeApi.subscribeAllNotices(profileForNotices, groupId, setNotices, 'student', { isViewerCR, uid: auth.currentUser?.uid });
   }, [profileForNotices, groupId, isViewerCR]);
 
   const unreadNoticeCount = noticeApi.getUnreadNotices(notices, readNoticeIds).length;

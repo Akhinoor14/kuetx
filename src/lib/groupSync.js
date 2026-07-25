@@ -28,7 +28,6 @@ import {
 } from 'firebase/firestore';
 import { db, auth } from './firebase';
 import { getIdentityStamp } from './groupUtils';
-import { emailMatchesGroup } from './kuetEmailVerify';
 
 // ---------------------------------------------------------------------
 // Singleton listener registry
@@ -157,10 +156,13 @@ export async function joinGroup(groupId, profile) {
       name: profile?.name || '',
       roll: profile?.studentId || '',
       uid,
-      // Tier 1: a confirmed @stud.kuet.ac.bd email whose embedded roll
-      // matches this exact batch+dept auto-verifies instantly — no CL
-      // approval needed. Everyone else starts at Tier 2 (manual, false).
-      verified: await emailMatchesGroup(profile),
+      // No auto-verify tier — every member's `verified` flag is only ever
+      // set by a human reviewer (approveJoinRequest, or the CL-vacant
+      // bootstrap merge in approveCLApplication). This branch of
+      // joinGroup() is unreachable in practice (see the function's own
+      // comment above), but defaults to false rather than true for safety
+      // if it's ever hit.
+      verified: false,
       role: 'member',
       // Recorded for display filtering (ClassmatesList hides anonymous
       // entries). The Firestore create rule already blocks anonymous
@@ -184,6 +186,49 @@ export async function joinGroup(groupId, profile) {
     dept: profile?.dept ? String(profile.dept).trim().toUpperCase() : '',
     lastActivityAt: serverTimestamp(),
   }, { merge: true });
+}
+
+/**
+ * Auto-run version of joinGroup, called from App.jsx on every profile
+ * change. Since class membership now requires CR/ACR approval (see
+ * "Join requests" section below), this NEVER creates a fresh
+ * members/{uid} doc itself — that would defeat the whole approval gate.
+ * It only:
+ *   - refreshes an ALREADY-member's display fields, exactly like
+ *     joinGroup's own update branch (delegates straight to joinGroup,
+ *     which is a no-op create-wise once the doc exists — see the
+ *     getDocFromServer existence check inside it), and
+ *   - otherwise makes sure a joinRequests/{uid} doc exists so the
+ *     person shows up in their CR/ACR's review queue, without spamming
+ *     a fresh request on every single store-updated tick (only creates
+ *     one if none exists yet at all; a pending/approved/rejected doc is
+ *     left alone — resubmission after rejection is a deliberate user
+ *     action via requestToJoinGroup, not automatic).
+ */
+export async function syncGroupMembership(groupId, profile) {
+  const uid = auth.currentUser?.uid;
+  if (!uid || !groupId) return;
+  const memberRef = doc(db, 'groups', groupId, 'members', uid);
+  const existingMember = await getDocFromServer(memberRef);
+  if (existingMember.exists()) {
+    await joinGroup(groupId, profile);
+    return;
+  }
+  const reqRef = doc(db, 'groups', groupId, 'joinRequests', uid);
+  let existingReq;
+  try {
+    existingReq = await getDocFromServer(reqRef);
+  } catch (e) {
+    console.warn('[syncGroupMembership] Failed to check existing joinRequests doc:', e?.code, e?.message);
+    return;
+  }
+  if (!existingReq.exists()) {
+    try {
+      await requestToJoinGroup(groupId, profile, '');
+    } catch (e) {
+      console.warn('[syncGroupMembership] auto requestToJoinGroup failed:', e?.code, e?.message);
+    }
+  }
 }
 
 /**
@@ -279,58 +324,20 @@ export async function removeMember(groupId, targetUid) {
   await deleteDoc(doc(db, 'groups', groupId, 'members', targetUid));
 }
 
-/**
- * Self-service: after Tier-1 KUET email verification succeeds, flip THIS
- * user's own membership doc (if one already exists) to verified: true.
- *
- * Why this is needed: joinGroup() only sets `verified` at doc-CREATION
- * time. If someone joins their class group (Classmates page) BEFORE
- * completing email verification, their member doc is created with
- * verified: false — and nothing ever revisits it afterward, since
- * joinGroup()'s "already exists" branch deliberately never touches
- * verified/role (that's what stops a CL demotion from being silently
- * undone by a routine re-join). Without this, a student who verifies
- * their KUET email AFTER joining stays stuck on "Pending" forever,
- * even though verifiedRolls/{roll} now correctly exists.
- * Call this right after the 'kuetx:kuet-email-verified' event fires.
- */
-export async function syncOwnVerification(groupId, uid) {
-  if (!groupId || !uid) return;
-  const ref_ = doc(db, 'groups', groupId, 'members', uid);
-  
-  try {
-    // Must read from the server, not the local cache: getDoc() is
-    // cache-first and on a brand-new device (right after the initial bulk
-    // local->Firestore push) the cache can be stale or briefly empty. A
-    // stale/missing cache read here makes this silently no-op (or write
-    // stale data back), leaving members/{uid}.verified stuck at false even
-    // though the account really is verified — which then makes
-    // waitForOwnVerification() poll for up to 10*400ms and either time out,
-    // or (worse) appear to succeed against a doc that was never actually
-    // updated, only to have the real write (e.g. crRequests/{uid}) get
-    // rejected server-side by isVerifiedMember(groupId). Every other
-    // verification-critical read in this file (waitForOwnMembership,
-    // waitForOwnVerification, requestCR's dup-check) already uses
-    // getDocFromServer for this same reason — keep this one consistent.
-    const snap = await getDocFromServer(ref_);
-    if (snap.exists() && snap.data().verified !== true) {
-      await updateDoc(ref_, { verified: true });
-    }
-  } catch (syncErr) {
-    // Member doc read failed or update failed — log for diagnostics
-    console.warn('[Verification Sync] Failed to sync verification for', groupId, uid, ':', syncErr?.code, syncErr?.message);
-    if (syncErr?.code === 'permission-denied') {
-      console.warn('[Verification Sync] Permission denied — member doc may not exist yet or roll verification incomplete');
-    }
-  }
-}
+// (Removed: syncOwnVerification(). It flipped members/{uid}.verified from
+// false->true as a catch-up for the old Tier-1 KUET-email-OTP flow. Now
+// dead: every members/{uid} create path sets verified:true immediately
+// (approveJoinRequest, approveCLApplication's bootstrap merge), and
+// verified is otherwise only ever set by a human CL/Faculty approval. Its
+// last two call sites (App.jsx's boot effect, ClaimCRCard.jsx) and the
+// matching Firestore rules "Tier-1 catch-up" branch were removed together.)
 
 /**
- * Wait until this user's own member doc is readable and verified:true.
- * This is used after syncOwnVerification() before writes that Firestore
- * rules gate on isVerifiedMember(groupId), so we don't race the server's
- * view of the newly-updated member doc.
- * 
+ * Wait until this user's own member doc is readable and verified:true —
+ * used before writes that Firestore rules gate on isVerifiedMember(groupId)
+ * (e.g. right after approveJoinRequest/updateOwnMobile), so we don't race
+ * the server's view of a just-approved member doc.
+ *
  * Increased retries for new-device scenarios where initial sync takes longer.
  */
 export async function waitForOwnVerification(groupId, retries = 10, delayMs = 400) {
@@ -902,6 +909,166 @@ export async function clDismissLegacyCRClaim(groupId, targetUid) {
   await updateDoc(doc(db, 'groups', groupId, 'members', targetUid), { legacyCRClaim: false });
 }
 
+// ---------------------------------------------------------------------
+// Join requests — class-membership gate
+// ---------------------------------------------------------------------
+// A brand-new student does NOT get to self-join a class directly. They
+// submit a joinRequests/{uid} doc (their own name/roll + a self-typed
+// contact email, no OTP), and the group's CR/ACR (or CL/Admin/HeadOfOps
+// as a fallback) reviews it and either approves it — which is the ONLY
+// path that creates the actual groups/{groupId}/members/{uid} doc — or
+// rejects it. This mirrors the existing crRequests pattern exactly, just
+// one authority tier earlier (before you're even a member, not before
+// you're CR).
+//
+// Roll-middle-digits -> dept code map, kept in sync by hand with
+// ROLL_DEPT_MAP in ProfileSetupModal.jsx and deptCodeFromRoll() in
+// firestore.rules. Needed here only for the client-side "does this roll
+// plausibly belong to this class" auto-suggest hint shown to the
+// reviewing CR — it is never trusted as a security boundary (the
+// reviewer's own judgement + Firestore's own create rule are what
+// actually gate the members doc), so a map that drifts slightly out of
+// date would just make the suggestion badge wrong, not open a hole.
+const _JOIN_REQUEST_DEPT_MAP = {
+  '25': 'ARCH', '23': 'BECM', '15': 'BME', '01': 'CE', '29': 'CHE',
+  '07': 'CSE', '09': 'ECE', '03': 'EEE', '13': 'ESE', '11': 'IPE',
+  '19': 'LE', '05': 'ME', '27': 'MSE', '31': 'MTE', '21': 'TE', '17': 'URP',
+};
+
+/**
+ * Best-effort, client-side-only hint for the reviewing CR: does this
+ * roll's batch+dept look like it actually belongs to groupId? Returned
+ * alongside the request so the approval UI can show a "✓ matches this
+ * class" / "⚠ doesn't look right" badge — the CR still makes the final
+ * call either way, this never blocks or auto-approves anything.
+ */
+export function suggestedJoinMatch(roll, groupId) {
+  const cleanRoll = String(roll || '').trim();
+  const [wantBatch, wantDept] = String(groupId || '').split('_');
+  if (!/^\d{7}$/.test(cleanRoll) || !wantBatch || !wantDept) {
+    return { batchMatches: false, rollInRange: false };
+  }
+  const rollBatch = `2K${cleanRoll.slice(0, 2)}`;
+  const rollDept = _JOIN_REQUEST_DEPT_MAP[cleanRoll.slice(2, 4)] || '';
+  return {
+    batchMatches: rollBatch === wantBatch,
+    rollInRange: rollDept === wantDept,
+  };
+}
+
+/**
+ * Student self-service: ask to join a class. Creates (or, after a
+ * rejection, resubmits) a joinRequests/{uid} doc — never touches
+ * members/{uid} directly. contactEmail is shown to the reviewer only,
+ * never checked by any code; it exists purely so the CR can eyeball it.
+ */
+export async function requestToJoinGroup(groupId, profile, contactEmail) {
+  const uid = auth.currentUser?.uid;
+  if (!uid || !groupId) return;
+
+  const ref_ = doc(db, 'groups', groupId, 'joinRequests', uid);
+  const requestData = {
+    uid,
+    name: profile?.name || '',
+    roll: profile?.studentId || '',
+    contactEmail: String(contactEmail || '').trim(),
+    status: 'pending',
+    requestedAt: serverTimestamp(),
+    ...suggestedJoinMatch(profile?.studentId, groupId),
+  };
+
+  let existing;
+  try {
+    existing = await getDocFromServer(ref_);
+  } catch (e) {
+    console.warn('[JOIN REQUEST] Failed to check existing joinRequests doc, treating as fresh request:', e?.code, e?.message);
+    existing = { exists: () => false };
+  }
+
+  if (existing.exists()) {
+    const status = existing.data()?.status;
+    if (status === 'pending') {
+      throw new Error('You already have a pending join request. Wait for your CR to act on it first.');
+    }
+    await updateDoc(ref_, requestData);
+  } else {
+    await setDoc(ref_, requestData);
+  }
+}
+
+/** Live list of this group's pending join requests, for the CR/ACR review panel. */
+export function subscribeJoinRequests(groupId, callback) {
+  if (!groupId) return () => {};
+  const key = `joinRequests:${groupId}`;
+  return _subscribeSingleton(
+    key,
+    () => query(collection(db, 'groups', groupId, 'joinRequests'), orderBy('requestedAt')),
+    (snap) => _snapToArray(snap).filter((r) => r.status === 'pending'),
+    callback,
+  );
+}
+
+/**
+ * Live status of the CURRENT user's own joinRequests/{uid} doc for this
+ * group — null if none exists yet. Drives the "waiting for approval" /
+ * "rejected, try again" states on the dashboard join-status card.
+ */
+export function subscribeOwnJoinRequestStatus(groupId, uid, callback) {
+  if (!groupId || !uid) return () => {};
+  const ref_ = doc(db, 'groups', groupId, 'joinRequests', uid);
+  return onSnapshot(ref_, (snap) => callback(snap.exists() ? snap.data() : null));
+}
+
+/**
+ * CR/ACR (or CL/Admin/HeadOfOps) action: approve a pending join request.
+ * This is the ONLY path (besides direct roster appointment by staff)
+ * that creates the actual members/{uid} doc going forward — plain
+ * self-join is no longer how a student ends up with class access.
+ */
+export async function approveJoinRequest(groupId, targetUid) {
+  const reqRef = doc(db, 'groups', groupId, 'joinRequests', targetUid);
+  const reqSnap = await getDocFromServer(reqRef);
+  if (!reqSnap.exists()) throw new Error('This join request no longer exists.');
+  const req = reqSnap.data();
+
+  const batch = writeBatch(db);
+  batch.set(doc(db, 'groups', groupId, 'members', targetUid), {
+    name: req.name || '',
+    roll: req.roll || '',
+    uid: targetUid,
+    // Approval by a human reviewer IS the verification here — there is
+    // no separate OTP tier in this flow, so an approved join request
+    // always lands as verified: true.
+    verified: true,
+    role: 'member',
+    isAnonymous: false,
+    joinedAt: serverTimestamp(),
+    legacyCRClaim: false,
+  });
+  batch.update(reqRef, { status: 'approved', decidedAt: serverTimestamp(), decidedBy: auth.currentUser?.uid || null });
+  await batch.commit();
+}
+
+export async function rejectJoinRequest(groupId, targetUid) {
+  await updateDoc(doc(db, 'groups', groupId, 'joinRequests', targetUid), {
+    status: 'rejected', decidedAt: serverTimestamp(), decidedBy: auth.currentUser?.uid || null,
+  });
+}
+
+/**
+ * Self-service: leave a class the CURRENT user is a member of. Removes
+ * their own members/{uid} doc. Re-joining afterward always requires a
+ * brand-new joinRequests approval — being previously verified/approved
+ * does not grant an automatic re-join, by design (see conversation
+ * history: leaving and rejoining should go through the CR again, not
+ * silently restore old access).
+ */
+export async function leaveGroup(groupId) {
+  const uid = auth.currentUser?.uid;
+  if (!uid || !groupId) return;
+  await deleteDoc(doc(db, 'groups', groupId, 'members', uid));
+}
+
 /** Read-only helper for UI — is there currently an active CR in this group? */
 /**
  * Real, server-verified CR/ACR status for the CURRENT user — this reads
@@ -912,6 +1079,26 @@ export async function clDismissLegacyCRClaim(groupId, targetUid) {
  * behind it — profile.isCR must never be used to gate access to CR-only
  * pages/tools.
  */
+/**
+ * Live "is the CURRENT user actually an approved member of this group"
+ * check — unlike subscribeMyRole (which defaults to the STRING 'member'
+ * for both a real member AND someone with no members/{uid} doc at all,
+ * since 'member' also happens to be the lowest real role), this reports
+ * a genuine boolean based on the doc's existence. Needed anywhere that
+ * must distinguish "really in this class" from "not in it yet, still
+ * pending/no request" — e.g. gating the class-notices subscription so
+ * it's never even attempted (and never hits permission-denied) for
+ * someone still waiting on CR/ACR approval.
+ */
+export function subscribeIsOwnMember(groupId, uid, callback) {
+  if (!groupId || !uid) { callback(false); return () => {}; }
+  const ref = doc(db, 'groups', groupId, 'members', uid);
+  return onSnapshot(ref, (snap) => callback(snap.exists()), (err) => {
+    console.error('[groupSync] subscribeIsOwnMember error:', err);
+    callback(false);
+  });
+}
+
 export function subscribeMyRole(groupId, uid, callback) {
   if (!groupId || !uid) { callback('member'); return () => {}; }
   const ref = doc(db, 'groups', groupId, 'members', uid);
@@ -921,6 +1108,24 @@ export function subscribeMyRole(groupId, uid, callback) {
   }, (err) => {
     console.error('[groupSync] subscribeMyRole error:', err);
     callback('member');
+  });
+}
+
+/**
+ * Current user's own members/{uid}.verified flag — this is a human-approval
+ * fact (set by approveJoinRequest / CL bootstrap), not an email-OTP result;
+ * there is no OTP tier anymore. Used for the Blue Tick badge on Profile.jsx,
+ * mirroring the same `m.verified` source ClassmatesList.jsx already uses
+ * for every OTHER member's tick.
+ */
+export function subscribeOwnMemberVerified(groupId, uid, callback) {
+  if (!groupId || !uid) { callback(false); return () => {}; }
+  const ref = doc(db, 'groups', groupId, 'members', uid);
+  return onSnapshot(ref, (snap) => {
+    callback(snap.exists() && snap.data().verified === true);
+  }, (err) => {
+    console.error('[groupSync] subscribeOwnMemberVerified error:', err);
+    callback(false);
   });
 }
 
@@ -1096,11 +1301,33 @@ export function subscribeGroupNotices(groupId, callback) {
   );
 }
 
-export async function postGroupNotice(groupId, profile, { title, body }) {
+export async function postGroupNotice(groupId, profile, { title, body, priority = 'normal' }) {
   const uid = auth.currentUser?.uid;
   const stamp = getIdentityStamp(profile, uid);
+  // Phase 1 of the Notice upgrade: capture the audience size AT SEND TIME
+  // (not retroactively) — this group's current member count, i.e. every
+  // student who will see this notice on the class feed. Counted from a
+  // one-shot members read right before the write, same pattern already
+  // used elsewhere for member counts (see getGroupMembersOnce/listAllGroups
+  // in AdminDashboard.jsx).
+  let audienceSize = null;
+  try {
+    const membersSnap = await getDocs(collection(db, 'groups', groupId, 'members'));
+    audienceSize = membersSnap.size;
+  } catch {
+    // Best-effort — a failed count here should never block sending the
+    // notice itself; the UI falls back to "Reach data not available"
+    // when audienceSize is missing/null (see NoticeInsightsPanel, Phase 2).
+  }
   await addDoc(collection(db, 'groups', groupId, 'notices'), {
     title, body, postedBy: stamp, createdAt: serverTimestamp(),
+    // Phase 4 of the Notice upgrade: optional priority, defaults to
+    // 'normal' so old notices (and any caller that doesn't pass one)
+    // behave exactly as before. Only 'urgent' | 'normal' | 'info' are
+    // meaningful — no validation here since composers are the only
+    // callers and already constrain the value via a dropdown.
+    priority,
+    ...(audienceSize !== null ? { audienceSize } : {}),
   });
 }
 
@@ -1127,13 +1354,106 @@ export function subscribeGlobalNotices(callback) {
   );
 }
 
-/** Client-side filter: does this notice apply to this profile/groupId? */
-export function noticeAppliesTo(notice, profile, groupId) {
+/**
+ * Client-side filter: does this notice apply to this profile/groupId/uid?
+ *
+ * Kept even after the firestore.rules audit fix (see /notices/{noticeId}'s
+ * read rule) — the rules change stops anyone OUTSIDE the intended
+ * audience from reading a targeted notice's doc at all (the real privacy
+ * boundary), but this function is still what decides SHOW/HIDE for a
+ * reader who legitimately CAN read the doc (e.g. every signed-in user
+ * can technically read an 'all' notice — this is what narrows a 'batch'/
+ * 'group' notice down to the right people within that already-readable
+ * set). For 'student_uids'/'faculty_uids', the rule already guarantees
+ * only an included uid ever receives the doc via onSnapshot in the first
+ * place, so this check is redundant-but-harmless defense in depth.
+ */
+/**
+ * Faculty-side counterpart to noticeAppliesTo — does this root notice
+ * apply to this signed-in faculty uid? Only 'faculty_all'/'faculty_uids'
+ * ever match; every student-audience type ('all'/'batch'/'group'/
+ * 'student_uids') is deliberately excluded here, same reasoning in
+ * reverse: a faculty account should never see a student-addressed
+ * broadcast just because 'all' sounds like it should mean everyone —
+ * "all" in this notice system has always meant "all students" (see
+ * Notice.jsx's own subtitle: "Announcements from Founder/Admin, and
+ * CR/ACR"), and faculty notices are a new, separate channel opened by
+ * this audit fix, not a widening of the existing 'all'.
+ */
+export function noticeAppliesToFaculty(notice, uid) {
+  const a = notice?.audience;
+  if (!a || !uid) return false;
+  if (a.type === 'faculty_all') return true;
+  if (a.type === 'faculty_uids') return Array.isArray(a.uids) && a.uids.includes(uid);
+  return false;
+}
+
+/**
+ * Faculty-facing global (Admin/Founder) notices — the counterpart to
+ * subscribeAllNotices's student-side global branch in noticeUtils.js, but
+ * meant to be called ONCE PER FACULTY SESSION (e.g. from
+ * useFacultyGlobalNotices, mounted once per faculty page), not once per
+ * taught class.
+ *
+ * Handoff item 1 (option a): subscribeAllNotices() is called once PER
+ * groupId (once per class a faculty teaches) from 3 different pages
+ * (FacultyDashboard.jsx, FacultyClassDetail.jsx, FacultyNoticeBroadcast.jsx).
+ * If the faculty-facing global-notices subscription lived inside that
+ * per-group function, a teacher with 5 classes would get 5 duplicate
+ * listeners and 5 duplicate emissions of the same Admin→Faculty broadcast.
+ * This function is deliberately separate and keyed off nothing but the
+ * signed-in uid, so a page mounts it exactly once regardless of how many
+ * classes that faculty teaches.
+ *
+ * Reuses subscribeGlobalNotices() under the hood, which is itself a
+ * `_subscribeSingleton` — multiple mounts across pages during navigation
+ * still share one underlying Firestore listener; this wrapper's job is
+ * just the faculty-specific filter + shape, not listener management.
+ *
+ * @param {string} uid - current signed-in faculty uid (required — returns
+ *   a no-op unsubscribe if missing, same guard style as subscribeGlobalNotices)
+ * @param {(notices: Array) => void} callback
+ * @returns {() => void} unsubscribe
+ */
+export function subscribeFacultyGlobalNotices(uid, callback) {
+  if (!uid) return () => {};
+  return subscribeGlobalNotices((notices) => {
+    const applicable = notices
+      .filter((n) => noticeAppliesToFaculty(n, uid))
+      .map((n) => {
+        const isFounder = n.createdBy?.name === 'Founder';
+        return {
+          ...n,
+          from: isFounder ? 'Founder' : (n.createdBy?.name || 'Admin'),
+          roleTag: isFounder ? 'Founder' : 'Admin',
+          isFounder,
+          section: 'admin',
+          createdAt: n.createdAt && typeof n.createdAt.toMillis === 'function'
+            ? n.createdAt.toMillis()
+            : (typeof n.createdAt === 'number' ? n.createdAt : 0),
+          // "Just for you" tag — mirrors the student-side isPersonal flag
+          // in noticeUtils.js. Only faculty_uids is "personal"; faculty_all
+          // is population-level (every faculty account), not individual.
+          isPersonal: n.audience?.type === 'faculty_uids',
+        };
+      })
+      .filter((n) => !n.deleted);
+    callback(applicable);
+  });
+}
+
+export function noticeAppliesTo(notice, profile, groupId, uid = null) {
   const a = notice?.audience;
   if (!a) return false;
   if (a.type === 'all') return true;
   if (a.type === 'batch') return !!profile?.batch && a.batch === profile.batch.trim().toUpperCase();
   if (a.type === 'group') return !!groupId && a.groupId === groupId;
+  if (a.type === 'student_uids') return !!uid && Array.isArray(a.uids) && a.uids.includes(uid);
+  // 'faculty_all'/'faculty_uids' are handled entirely by the faculty-side
+  // subscription path (see subscribeAllNotices's audience === 'faculty'
+  // branch below) rather than here — this function is only ever called
+  // from the student-facing branch, so a faculty-only audience type
+  // should never match a student reader regardless of anything else.
   return false;
 }
 

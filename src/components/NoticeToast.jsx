@@ -78,7 +78,7 @@ export default function NoticeToast() {
       saveSeen(seenRef.current);
       // Newest first into the queue.
       setQueue((q) => [...fresh.sort((a, b) => b.createdAt - a.createdAt), ...q]);
-    }, 'student', { isViewerCR });
+    }, 'student', { isViewerCR, uid: auth.currentUser?.uid });
     return unsub;
   }, [isViewerCR]);
 
@@ -117,7 +117,18 @@ export default function NoticeToast() {
         >
           <Bell size={15} className="kuetx-notice-toast-icon" />
           <div className="kuetx-notice-toast-body">
-            <div className="kuetx-notice-toast-title">{n.title}</div>
+            <div className="kuetx-notice-toast-title">
+              {n.isPersonal && (
+                <span style={{
+                  fontSize: 9, fontWeight: 800, letterSpacing: 0.3, textTransform: 'uppercase',
+                  color: '#0891b2', background: 'rgba(8,145,178,0.14)',
+                  borderRadius: 5, padding: '1px 5px', marginRight: 5, verticalAlign: 'middle',
+                }}>
+                  Just for you
+                </span>
+              )}
+              {n.title}
+            </div>
             <div className="kuetx-notice-toast-preview">{n.body}</div>
           </div>
           <button

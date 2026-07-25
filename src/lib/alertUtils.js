@@ -215,8 +215,12 @@ export function computeAlerts(profile) {
     if (termCourses.length === 0) return;
     const allNoEntry = termCourses.every(c => {
       const courseMarks = marks[c.id] || {};
-      const hasAnyEntry = Object.values(courseMarks).some(v => v !== '' && v !== null && v !== undefined);
-      return !hasAnyEntry;
+      // Only an official Results-page entry (publishedGrade/resultGrade)
+      // counts here — Term Planner scratch fields (hall, ctTeacher1/2,
+      // etc.) must not silently suppress the "please enter your result"
+      // nudge just because the student once used the planner calculator.
+      const hasOfficialEntry = !!String(courseMarks.publishedGrade || courseMarks.resultGrade || '').trim();
+      return !hasOfficialEntry;
     });
     if (allNoEntry) {
       termsWithNoEntry[termKey] = true;

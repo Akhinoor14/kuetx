@@ -795,17 +795,38 @@ export const computeCourseGrade = (course) => {
   } catch (e) {}
   const marks = store.get('marks') || {};
   const m = marks[course.id] || {};
-  const hasAnyEntry = Object.entries(m).some(([key, value]) => key !== '__termMarkedNotPublished' && value !== '' && value !== null && value !== undefined);
+  // Official entry = only what the student explicitly submitted via the
+  // Results page's own "Upload grade" dropdown (publishedGrade for
+  // Theory/Project, resultGrade for Sessional). Term Planner (Marks.jsx)
+  // fields — hall, ctTeacher1/2, attTeacher1/2, manualTeacher1/2, etc. —
+  // are scratch calculator inputs for the student's own GPA planning and
+  // must NEVER be treated as an official result, no matter how many of
+  // them are filled in. Mixing the two used to mean: touch the Term
+  // Planner's calculator, never open Results at all, and Results would
+  // still show a grade computed from those scratch numbers (including a
+  // stray F when a field like `hall` picked up an accidental 0) — as if
+  // the student had actually submitted a result. hasOfficialEntry below
+  // is the one and only gate for whether this course has a REAL entry.
+  // hasOfficialEntry checks the field this specific course TYPE actually
+  // uses for its official entry (resultGrade for Sessional via Results.jsx,
+  // publishedGrade for everything else) — not just "either field is set" —
+  // since a Sessional course's resultGrade being present should never make
+  // a Theory course elsewhere look like it has an official entry, and
+  // vice versa (they're keyed per-course, but this keeps the check exact
+  // rather than accidentally permissive).
+  const hasOfficialEntry = course.type === 'Sessional'
+    ? !!String(m.resultGrade || '').trim()
+    : !!String(m.publishedGrade || '').trim();
 
   const termKey = `Y${course.year}T${course.term}`;
   const nyp = store.get('notYetPublishedTerms');
   const termMarkedNotPublished = Array.isArray(nyp) && nyp.includes(termKey);
 
-  if (termMarkedNotPublished && !hasAnyEntry) {
+  if (termMarkedNotPublished && !hasOfficialEntry) {
     return { grade: 'NOT YET PUBLISHED', point: null, total: null, isNotPublished: true };
   }
 
-  if (!hasAnyEntry && course.type !== 'NonCredit') {
+  if (!hasOfficialEntry && course.type !== 'NonCredit') {
     return { grade: '—', point: null, total: null, isNoEntry: true };
   }
 

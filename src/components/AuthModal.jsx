@@ -3,7 +3,7 @@
  * Handles: Anonymous skip, Google login, Email/Password, Account upgrade
  */
 
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { X, Mail, Lock, User, Chrome, CheckCircle, Eye, EyeOff } from 'lucide-react';
 import {
   loginWithGoogle,
@@ -14,6 +14,18 @@ import {
   resetPassword,
   getAuthErrorMessage,
 } from '../lib/firebaseAuth';
+// Phase 2: student signup/login now goes through the new username+password
+// module (Phase 1) instead of firebaseAuth.js's email-based
+// registerWithEmail/loginWithEmail. Faculty is completely untouched — it
+// still uses registerWithEmail/upgradeWithEmail/loginWithEmail above,
+// exactly as before.
+import {
+  isValidUsername,
+  isValidPassword,
+  checkUsernameAvailable,
+  signupWithUsername,
+  loginWithUsername,
+} from '../lib/studentUsernameAuth';
 import { isObviouslyBadDomain, getTypoSuggestion } from '../lib/emailDomainCheck';
 import { setAccountRole, persistAccountRoleToServer, fetchServerAccountRole } from '../lib/accountRole';
 import { getFacultyDoc } from '../lib/facultySync';
@@ -135,6 +147,67 @@ export default function AuthModal({ mode = 'login', isUpgrade = false, onClose, 
   // reset option in-context instead of leaving a silent trap.
   const [stuckOnExistingEmail, setStuckOnExistingEmail] = useState(false);
 
+  // ─── Student username+password (Phase 2, NEW) ──────────────────────────────
+  // Faculty never touches any of this — it's only rendered/used when
+  // showAsFaculty is false, alongside the existing email/password form
+  // which faculty continues to use unchanged below.
+  const [username, setUsername] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  // availability: null (untouched/unknown), 'checking', 'available', 'taken', 'invalid'
+  const [usernameAvailability, setUsernameAvailability] = useState(null);
+  const [usernameAvailabilityReason, setUsernameAvailabilityReason] = useState('');
+  const usernameCheckTimer = useRef(null);
+  const usernameCheckToken = useRef(0);
+
+  // Debounced live availability check — only meaningful on the student
+  // Register tab. Skips entirely for Login (existing username, no need to
+  // check availability) and for Faculty (this field doesn't exist there).
+  useEffect(() => {
+    if (showAsFaculty || tab !== 'register' || isUpgrade) return undefined;
+    if (usernameCheckTimer.current) clearTimeout(usernameCheckTimer.current);
+    if (!username) {
+      setUsernameAvailability(null);
+      setUsernameAvailabilityReason('');
+      return undefined;
+    }
+    const validation = isValidUsername(username);
+    if (!validation.ok) {
+      setUsernameAvailability('invalid');
+      setUsernameAvailabilityReason(validation.reason);
+      return undefined;
+    }
+    setUsernameAvailability('checking');
+    setUsernameAvailabilityReason('');
+    const myToken = ++usernameCheckToken.current;
+    usernameCheckTimer.current = setTimeout(async () => {
+      try {
+        const result = await checkUsernameAvailable(username);
+        // Ignore stale responses from an earlier keystroke that resolved
+        // after a newer one already started.
+        if (myToken !== usernameCheckToken.current) return;
+        if (result.available) {
+          setUsernameAvailability('available');
+          setUsernameAvailabilityReason('');
+        } else {
+          setUsernameAvailability(result.reason ? 'invalid' : 'taken');
+          setUsernameAvailabilityReason(result.reason || 'This username is already taken.');
+        }
+      } catch {
+        if (myToken !== usernameCheckToken.current) return;
+        // Network hiccup — don't block typing or show a scary error for a
+        // background check; just go back to unknown and let submit-time
+        // validation catch it for real.
+        setUsernameAvailability(null);
+        setUsernameAvailabilityReason('');
+      }
+    }, 450);
+    return () => {
+      if (usernameCheckTimer.current) clearTimeout(usernameCheckTimer.current);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [username, tab, showAsFaculty, isUpgrade]);
+
   const handleEmailBlur = () => {
     setDomainWarning(!!email && isObviouslyBadDomain(email));
     setTypoSuggestion(email ? getTypoSuggestion(email) : null);
@@ -246,6 +319,69 @@ export default function AuthModal({ mode = 'login', isUpgrade = false, onClose, 
         }
       }
       setError(getAuthErrorMessage(err.code));
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Phase 2: student (non-faculty, non-upgrade) signup/login now goes
+  // through studentUsernameAuth.js entirely, bypassing the shared
+  // email/password branch below. This is a completely separate function
+  // from handleEmail rather than a branch inside it, because the student
+  // path no longer has an "email" at all — reusing handleEmail's shape
+  // would mean threading username through a variable named `email`, which
+  // is exactly the kind of confusion the Phase 0 investigation flagged.
+  // Faculty and Upgrade are entirely untouched — they still call
+  // handleEmail below, unchanged.
+  const handleStudentUsernameAuth = async () => {
+    if (!username || !password) {
+      setError('Please enter both your username and password.');
+      return;
+    }
+    if (tab === 'register' && password !== confirmPassword) {
+      setError('Passwords do not match.');
+      return;
+    }
+    if (tab === 'register') {
+      const usernameCheck = isValidUsername(username);
+      if (!usernameCheck.ok) {
+        setError(usernameCheck.reason);
+        return;
+      }
+      const passwordCheck = isValidPassword(password);
+      if (!passwordCheck.ok) {
+        setError(passwordCheck.reason);
+        return;
+      }
+    }
+
+    setLoading(true);
+    setError('');
+    try {
+      let user;
+      if (tab === 'register') {
+        user = await signupWithUsername(username, password);
+        // Student registration via this new path is always 'student' —
+        // there's no role picker on this branch at all (username+password
+        // signup only ever applies to students; faculty keeps the
+        // existing inline role-choice + email/password flow below,
+        // completely separate from this function).
+        setAccountRole('student');
+        persistAccountRoleToServer('student').catch(() => {});
+      } else {
+        user = await loginWithUsername(username, password);
+      }
+      onSuccess?.(user, { linked: false });
+    } catch (err) {
+      if (err.code === 'username/taken') {
+        setError('This username is already taken. Please choose another.');
+      } else if (err.code === 'username/not-found') {
+        setError('No account found with this username.');
+      } else if (err.code === 'username/invalid' || err.code === 'password/invalid') {
+        setError(err.message);
+      } else {
+        setError(getAuthErrorMessage(err.code));
+      }
     } finally {
       setLoading(false);
     }
@@ -473,11 +609,123 @@ export default function AuthModal({ mode = 'login', isUpgrade = false, onClose, 
           </div>
         )}
 
-        {/* Email form — for Register, only shows once a role is picked
-            above (or immediately, if isFaculty was pre-forced by a
-            caller, or if isUpgrade, both of which skip the role picker
-            entirely). Login always shows immediately, role-agnostic. */}
-        {(tab === 'login' || isUpgrade || isFaculty || registerRole) && (
+        {/* Phase 2: student username+password form (NEW). Renders instead
+            of the email/password form below whenever this is the plain
+            student path — i.e. not faculty and not an anonymous-session
+            upgrade (upgrade keeps its existing email/password behavior
+            unchanged, since Phase 2's scope is student signup/login only,
+            not the upgrade flow). Faculty branch further down is
+            byte-for-byte the same JSX as before this edit. */}
+        {!showAsFaculty && !isUpgrade && (tab === 'login' || registerRole) && (
+          <div style={{ display: 'grid', gap: 10 }}>
+            {tab === 'register' && registerRole && (
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: -4 }}>
+                <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--text)' }}>
+                  Signing up as: Student
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setRegisterRole(null)}
+                  style={{ ...btnGhost, fontSize: 12, padding: 0 }}
+                >
+                  ← Change
+                </button>
+              </div>
+            )}
+            {tab === 'register' && (
+              <div style={{ position: 'relative' }}>
+                <User size={15} style={{ position: 'absolute', left: 10, top: '50%', transform: 'translateY(-50%)', color: 'var(--muted)' }} />
+                <input style={{ ...inputStyle, paddingLeft: 32 }} placeholder="Your name (optional)" value={name} onChange={e => setName(e.target.value)} />
+              </div>
+            )}
+            <div style={{ position: 'relative' }}>
+              <User size={15} style={{ position: 'absolute', left: 10, top: '50%', transform: 'translateY(-50%)', color: 'var(--muted)' }} />
+              <input
+                style={{ ...inputStyle, paddingLeft: 32 }}
+                placeholder="Username"
+                value={username}
+                onChange={e => setUsername(e.target.value)}
+              />
+            </div>
+            {tab === 'register' && username && usernameAvailability && (
+              <div style={{
+                fontSize: 12, marginTop: -4,
+                color: usernameAvailability === 'available' ? 'var(--accent)'
+                  : usernameAvailability === 'checking' ? 'var(--muted)'
+                  : 'var(--danger, #dc2626)',
+              }}>
+                {usernameAvailability === 'checking' && 'Checking availability…'}
+                {usernameAvailability === 'available' && 'Username is available.'}
+                {usernameAvailability === 'taken' && (usernameAvailabilityReason || 'This username is already taken.')}
+                {usernameAvailability === 'invalid' && usernameAvailabilityReason}
+              </div>
+            )}
+            <div style={{ position: 'relative' }}>
+              <Lock size={15} style={{ position: 'absolute', left: 10, top: '50%', transform: 'translateY(-50%)', color: 'var(--muted)' }} />
+              <input
+                style={{ ...inputStyle, paddingLeft: 32, paddingRight: 42 }}
+                type={showPassword ? 'text' : 'password'}
+                placeholder={tab === 'register' ? 'Password (at least 8 characters)' : 'Password'}
+                value={password}
+                onChange={e => setPassword(e.target.value)}
+                onKeyDown={e => e.key === 'Enter' && !confirmPassword && tab === 'login' && handleStudentUsernameAuth()}
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword((visible) => !visible)}
+                style={{
+                  position: 'absolute', right: 10, top: '50%', transform: 'translateY(-50%)',
+                  background: 'none', border: 'none', padding: 0, cursor: 'pointer', color: 'var(--muted)',
+                }}
+                aria-label={showPassword ? 'Hide password' : 'Show password'}
+              >
+                {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+              </button>
+            </div>
+            {tab === 'register' && (
+              <div style={{ position: 'relative' }}>
+                <Lock size={15} style={{ position: 'absolute', left: 10, top: '50%', transform: 'translateY(-50%)', color: 'var(--muted)' }} />
+                <input
+                  style={{ ...inputStyle, paddingLeft: 32, paddingRight: 42 }}
+                  type={showConfirmPassword ? 'text' : 'password'}
+                  placeholder="Confirm password"
+                  value={confirmPassword}
+                  onChange={e => setConfirmPassword(e.target.value)}
+                  onKeyDown={e => e.key === 'Enter' && handleStudentUsernameAuth()}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowConfirmPassword((visible) => !visible)}
+                  style={{
+                    position: 'absolute', right: 10, top: '50%', transform: 'translateY(-50%)',
+                    background: 'none', border: 'none', padding: 0, cursor: 'pointer', color: 'var(--muted)',
+                  }}
+                  aria-label={showConfirmPassword ? 'Hide password' : 'Show password'}
+                >
+                  {showConfirmPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                </button>
+              </div>
+            )}
+
+            {error && (
+              <div style={{ fontSize: 12, color: 'var(--danger, #dc2626)', padding: '8px 10px', background: 'rgba(220,38,38,0.08)', borderRadius: 6 }}>
+                {error}
+              </div>
+            )}
+
+            <button style={btnPrimary} onClick={handleStudentUsernameAuth} disabled={loading}>
+              {loading
+                ? (tab === 'register' ? 'Creating account…' : 'Loading…')
+                : (tab === 'login' ? 'Sign in' : 'Create account')}
+            </button>
+          </div>
+        )}
+
+        {/* Existing email/password form — now used ONLY by Faculty and by
+            the anonymous-session Upgrade flow. Plain student login/
+            register uses the new username+password form above instead.
+            Unchanged from before Phase 2 other than this gating condition. */}
+        {(isUpgrade || isFaculty || (showAsFaculty && (tab === 'login' || registerRole))) && (
         <div style={{ display: 'grid', gap: 10 }}>
           {/* BUGFIX: this row used to render even when registerRole was
               still null (isFaculty-forced case), showing a "Switch to
@@ -597,13 +845,13 @@ export default function AuthModal({ mode = 'login', isUpgrade = false, onClose, 
 
         {/* Google button — never shown for faculty (Deviation: email+password
             only, no Google Sign-In, no per-department config toggle).
-            BUGFIX: moved below the email/password form (was above it).
-            Now also hidden whenever showAsFaculty is true for any reason
-            (pre-forced variant OR just chosen inline on Register) — and,
-            on the Register tab specifically, hidden until a role has
-            actually been picked (registerRole), since there's no form to
-            attach it below yet during the inline role-choice screen. */}
-        {!showAsFaculty && (tab === 'login' || isUpgrade || registerRole) && (
+            Phase 2: also never shown for plain student login/register
+            anymore — student signup/login is username+password only now
+            (studentUsernameAuth.js). Google is left in place ONLY for the
+            anonymous-session Upgrade flow (isUpgrade), which is always
+            student but out of this phase's scope; Upgrade's behavior is
+            deliberately unchanged here. */}
+        {!showAsFaculty && isUpgrade && (
           <>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, margin: '16px 0', color: 'var(--muted)', fontSize: 12 }}>
               <div style={{ flex: 1, height: 1, background: 'var(--border)' }} />

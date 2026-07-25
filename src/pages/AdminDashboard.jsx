@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { ArrowLeft, Building2, CalendarRange, CheckCircle, ChevronRight, Circle, Clock, GraduationCap, LayoutGrid, RefreshCw, Repeat, Trash2, Users } from 'lucide-react';
 import { ICONS } from '../lib/iconRegistry';
@@ -9,8 +9,13 @@ import { checkIsAdmin } from '../lib/adminAuth';
 import {
   listAllGroups, subscribeCRRequests, subscribeLeaveRequests,
   clApproveCRRequest, clRejectCRRequest, clApproveLeaveCR, clRejectLeaveCR,
-  getGroupMembersOnce,
+  getGroupMembersOnce, subscribeGlobalNotices,
 } from '../lib/groupSync';
+import { sortByRoll } from '../lib/groupUtils';
+import { deleteNoticeSoft } from '../lib/noticeUtils';
+import NoticeInsightsPanel from '../components/NoticeInsightsPanel';
+import NoticeComposerToolbar from '../components/NoticeComposerToolbar';
+import NoticePrioritySelector from '../components/NoticePrioritySelector';
 import {
   assignRole, removeRole, listStaffByRole, subscribeAllCLApplications,
   approveCLApplication, rejectCLApplication, getStaffDisplayInfoBatch,
@@ -1573,27 +1578,226 @@ function CommunicationView({ onBack, onSelectCategory, groups, countCtx }) {
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
   const [showPreview, setShowPreview] = useState(false);
+  const noticeTextareaRef = useRef(null);
+  const [priority, setPriority] = useState('normal');
   const [audienceType, setAudienceType] = useState('all');
   const [batchInput, setBatchInput] = useState('');
   const [groupInput, setGroupInput] = useState('');
+  // Individual/role-based targeting (handoff item 3). audienceType stays
+  // the top-level pill row ('all' | 'batch' | 'group' | 'students' |
+  // 'faculty'); studentPickMode/facultyPickMode are the sub-choices under
+  // 'students'/'faculty' respectively.
+  const [studentPickMode, setStudentPickMode] = useState('batch'); // 'batch' | 'individuals'
+  const [facultyPickMode, setFacultyPickMode] = useState('all'); // 'all' | 'individuals'
+  const [pickerDept, setPickerDept] = useState('');
+  const [pickerBatch, setPickerBatch] = useState('');
+  const [pickerMembers, setPickerMembers] = useState(null); // null = not loaded, [] = loaded empty
+  const [studentSearch, setStudentSearch] = useState('');
+  const [selectedStudentUids, setSelectedStudentUids] = useState(() => new Set());
+  const [facultyAccounts, setFacultyAccounts] = useState(null);
+  const [facultySearch, setFacultySearch] = useState('');
+  const [selectedFacultyUids, setSelectedFacultyUids] = useState(() => new Set());
   const [sending, setSending] = useState(false);
   const [sendMsg, setSendMsg] = useState('');
+
+  // Phase 2 of the Notice upgrade: this Founder/Admin's own sent root
+  // notices, for the Manage/Delete + Insights UI below. subscribeGlobalNotices
+  // returns every root notice (not scoped to a group), so filter to
+  // createdBy.uid === the signed-in admin — matches the same self-only
+  // scoping firestore.rules' new reads/{uid} READ rule already applies
+  // (a non-sender Admin/HeadOfOps CAN read another admin's stats via
+  // isAdmin()/isHeadOfOps(), but this list only shows "MY sent notices"
+  // for a focused Manage view, same as the CR/ACR and Teacher surfaces).
+  const [sentNotices, setSentNotices] = useState([]);
+  const [deletingId, setDeletingId] = useState(null);
+
+  useEffect(() => {
+    const uid = auth.currentUser?.uid;
+    if (!uid) { setSentNotices([]); return; }
+    return subscribeGlobalNotices((notices) => {
+      setSentNotices(
+        notices
+          // Phase 2 follow-up: keep the admin's own soft-deleted notices
+          // visible here (as an audit trail, with a "Deleted" tag in the
+          // render below) rather than filtering them out — only the
+          // student-facing merged feed (subscribeAllNotices's emit())
+          // hides deleted:true notices.
+          .filter((n) => n.createdBy?.uid === uid)
+          .sort((a, b) => (b.createdAt?.toMillis?.() || 0) - (a.createdAt?.toMillis?.() || 0)),
+      );
+    });
+  }, []);
+
+  // Dept -> batch options derived from the groups prop (same parseGroupId
+  // pattern ClassesView already uses above) — feeds the individual-student
+  // picker's dept select, then that dept's batch select.
+  const deptBatchMap = useMemo(() => {
+    const map = {};
+    (groups || []).forEach((g) => {
+      const { batch: b, dept: d } = parseGroupId(g.id);
+      if (!d) return;
+      if (!map[d]) map[d] = new Set();
+      map[d].add(b);
+    });
+    const out = {};
+    Object.keys(map).sort().forEach((d) => { out[d] = [...map[d]].sort(); });
+    return out;
+  }, [groups]);
+  const pickerDepts = Object.keys(deptBatchMap);
+  const pickerBatches = pickerDept ? (deptBatchMap[pickerDept] || []) : [];
+
+  // Individual-student picker: fetch this dept+batch's member list once
+  // both dept and batch are chosen. Reuses getGroupMembersOnce the same
+  // way computeAudienceSize does above — groupId is `${batch}_${dept}`
+  // (see parseGroupId's reverse). Roll-sorted via the shared sortByRoll
+  // (groupUtils.js), same sorter FacultyClassDetail.jsx's roster tabs use.
+  useEffect(() => {
+    if (audienceType !== 'students' || studentPickMode !== 'individuals' || !pickerDept || !pickerBatch) {
+      setPickerMembers(null);
+      return;
+    }
+    let cancelled = false;
+    setPickerMembers(null);
+    getGroupMembersOnce(`${pickerBatch}_${pickerDept}`).then((members) => {
+      if (cancelled) return;
+      setPickerMembers(sortByRoll(members));
+    }).catch(() => { if (!cancelled) setPickerMembers([]); });
+    return () => { cancelled = true; };
+  }, [audienceType, studentPickMode, pickerDept, pickerBatch]);
+
+  // Individual-faculty picker: fetch the full faculty/{uid} collection
+  // once, only when the faculty-individuals mode is actually selected —
+  // no reason to pay this query on every CommunicationView mount.
+  useEffect(() => {
+    if (audienceType !== 'faculty' || facultyPickMode !== 'individuals') return;
+    if (facultyAccounts !== null) return; // already loaded once this mount
+    let cancelled = false;
+    listAllFacultyAccounts().then((accounts) => {
+      if (cancelled) return;
+      setFacultyAccounts(accounts.sort((a, b) => (a.name || '').localeCompare(b.name || '')));
+    }).catch(() => { if (!cancelled) setFacultyAccounts([]); });
+    return () => { cancelled = true; };
+  }, [audienceType, facultyPickMode, facultyAccounts]);
+
+  const toggleStudentUid = (uid) => {
+    setSelectedStudentUids((prev) => {
+      const next = new Set(prev);
+      if (next.has(uid)) next.delete(uid); else next.add(uid);
+      return next;
+    });
+  };
+  const toggleFacultyUid = (uid) => {
+    setSelectedFacultyUids((prev) => {
+      const next = new Set(prev);
+      if (next.has(uid)) next.delete(uid); else next.add(uid);
+      return next;
+    });
+  };
+
+  const handleDeleteNotice = async (noticeId) => {
+    if (!window.confirm('Delete this notice? It will be removed from everyone\'s feed.')) return;
+    setDeletingId(noticeId);
+    try {
+      await deleteNoticeSoft(noticeId, null);
+    } catch (err) {
+      setSendMsg(`Failed to delete: ${err?.message || err}`);
+    } finally {
+      setDeletingId(null);
+    }
+  };
+
+  // Phase 1 of the Notice upgrade: audienceSize at send time, so the
+  // Insights panel (Phase 2) never has to retroactively guess reach for
+  // an already-sent notice. Reuses listAllGroups/getGroupMembersOnce —
+  // the same functions ClassesView already uses for its "Total Student"
+  // card above — rather than scanning the whole `users` collection,
+  // since group membership (verified: true) IS the real notice-reach
+  // population for every audience type here.
+  //
+  // 'all' -> every verified member across every group.
+  // 'batch' -> every verified member across every group in that batch
+  //   (a batch can span >1 group/dept, so this is NOT just one group's
+  //   member count — see byDept/parseGroupId above for why one batch can
+  //   map to several dept groups).
+  // 'group' -> that one group's verified member count.
+  // 'student_uids' / 'faculty_uids' -> just uids.length, no query needed —
+  //   the uids array IS the exact audience, unlike the population-level
+  //   types above where we have to count group membership.
+  // 'faculty_all' -> handoff item 3 didn't ask for a Reach count for this
+  //   one specifically (a verified-faculty count would need a query over
+  //   the faculty/{uid} collection filtering verifiedAt != null); left as
+  //   null (Insights panel already handles null gracefully) rather than
+  //   guessing at a definition of "reach" for this audience.
+  //
+  // Best-effort: any failure here must never block sending the notice —
+  // falls back to omitting audienceSize entirely, and the UI shows
+  // "Reach data not available" for notices missing this field.
+  const computeAudienceSize = async (aud) => {
+    if (aud.type === 'student_uids' || aud.type === 'faculty_uids') {
+      return Array.isArray(aud.uids) ? aud.uids.length : null;
+    }
+    if (aud.type === 'faculty_all') return null;
+    try {
+      const allGroups = await listAllGroups();
+      if (aud.type === 'group') {
+        const members = await getGroupMembersOnce(aud.groupId);
+        return members.filter((m) => m.verified === true).length;
+      }
+      const targetGroups = aud.type === 'batch'
+        ? allGroups.filter((g) => parseGroupId(g.id).batch === aud.batch)
+        : allGroups;
+      const counts = await Promise.all(
+        targetGroups.map(async (g) => (await getGroupMembersOnce(g.id)).filter((m) => m.verified === true).length),
+      );
+      return counts.reduce((sum, c) => sum + c, 0);
+    } catch {
+      return null;
+    }
+  };
 
   const handleSendNotice = async (e) => {
     e.preventDefault();
     if (!title.trim() || !body.trim()) return;
-    setSending(true);
-    setSendMsg('');
     let audience = { type: 'all' };
     if (audienceType === 'batch') audience = { type: 'batch', batch: batchInput.trim().toUpperCase() };
     if (audienceType === 'group') audience = { type: 'group', groupId: groupInput.trim().toUpperCase() };
+    if (audienceType === 'students') {
+      if (studentPickMode === 'batch') {
+        audience = { type: 'batch', batch: batchInput.trim().toUpperCase() };
+      } else {
+        const uids = [...selectedStudentUids];
+        if (uids.length === 0) { setSendMsg('Pick at least one student first.'); return; }
+        if (uids.length > 300) { setSendMsg(`Too many students selected (${uids.length}). Individual targeting is capped at 300 — use "A whole batch" instead for larger groups.`); return; }
+        audience = { type: 'student_uids', uids };
+      }
+    }
+    if (audienceType === 'faculty') {
+      if (facultyPickMode === 'all') {
+        audience = { type: 'faculty_all' };
+      } else {
+        const uids = [...selectedFacultyUids];
+        if (uids.length === 0) { setSendMsg('Pick at least one faculty member first.'); return; }
+        if (uids.length > 300) { setSendMsg(`Too many faculty selected (${uids.length}). Individual targeting is capped at 300 — use "All faculty" instead for larger groups.`); return; }
+        audience = { type: 'faculty_uids', uids };
+      }
+    }
+    setSending(true);
+    setSendMsg('');
     try {
+      const audienceSize = await computeAudienceSize(audience);
       await addDoc(collection(db, 'notices'), {
         title: title.trim(), body: body.trim(), audience,
         createdBy: { uid: auth.currentUser.uid, name: 'Founder' },
         createdAt: serverTimestamp(),
+        // Phase 4 of the Notice upgrade: optional priority, defaults to
+        // 'normal' — see postGroupNotice in groupSync.js for the same
+        // pattern/reasoning.
+        priority,
+        ...(audienceSize !== null ? { audienceSize } : {}),
       });
-      setTitle(''); setBody(''); setShowPreview(false); setSendMsg('Notice sent.');
+      setTitle(''); setBody(''); setShowPreview(false); setPriority('normal'); setSendMsg('Notice sent.');
+      setSelectedStudentUids(new Set());
+      setSelectedFacultyUids(new Set());
     } catch (err) {
       setSendMsg(`Failed: ${err?.message || err}`);
     } finally {
@@ -1610,6 +1814,11 @@ function CommunicationView({ onBack, onSelectCategory, groups, countCtx }) {
             <label style={{ fontSize: 11, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Title</label>
             <input type="text" placeholder="e.g. Mid-term routine update" value={title} onChange={(e) => setTitle(e.target.value)}
               style={{ padding: '8px 10px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--inputBg)' }} />
+          </div>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+            <label style={{ fontSize: 11, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>Priority</label>
+            <NoticePrioritySelector value={priority} onChange={setPriority} />
           </div>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
@@ -1630,7 +1839,12 @@ function CommunicationView({ onBack, onSelectCategory, groups, countCtx }) {
 
             {!showPreview ? (
               <>
-                <textarea placeholder={'What do you want to tell them?\n\nLeave a blank line to start a new paragraph.'} value={body} onChange={(e) => setBody(e.target.value)} rows={5}
+                <NoticeComposerToolbar
+                  textareaRef={noticeTextareaRef}
+                  value={body}
+                  onChange={setBody}
+                />
+                <textarea ref={noticeTextareaRef} placeholder={'What do you want to tell them?\n\nLeave a blank line to start a new paragraph.'} value={body} onChange={(e) => setBody(e.target.value)} rows={5}
                   style={{ padding: '8px 10px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--inputBg)', lineHeight: 1.55, resize: 'vertical' }} />
                 <div style={{ fontSize: 10.5, color: 'var(--muted)', lineHeight: 1.4 }}>
                   Blank line = new paragraph. It'll show up formatted and spaced for readers.
@@ -1657,6 +1871,8 @@ function CommunicationView({ onBack, onSelectCategory, groups, countCtx }) {
                 { key: 'all', label: 'Everyone' },
                 { key: 'batch', label: 'One batch' },
                 { key: 'group', label: 'One class' },
+                { key: 'students', label: 'Specific students' },
+                { key: 'faculty', label: 'Faculty' },
               ].map((opt) => (
                 <button
                   key={opt.key}
@@ -1687,10 +1903,248 @@ function CommunicationView({ onBack, onSelectCategory, groups, countCtx }) {
               {groups?.map((g) => <option key={g.id} value={g.id}>{g.id}</option>)}
             </select>
           )}
+
+          {audienceType === 'students' && (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+              <div style={{ display: 'flex', gap: 6 }}>
+                {[
+                  { key: 'batch', label: 'A whole batch' },
+                  { key: 'individuals', label: 'Pick individuals' },
+                ].map((opt) => (
+                  <button
+                    key={opt.key}
+                    type="button"
+                    onClick={() => setStudentPickMode(opt.key)}
+                    className="btn btn-sm"
+                    style={{
+                      background: studentPickMode === opt.key ? 'var(--accentBg, #eef2ff)' : 'transparent',
+                      color: studentPickMode === opt.key ? 'var(--accent, #4f46e5)' : 'var(--muted)',
+                      border: studentPickMode === opt.key ? '1px solid var(--accent, #4f46e5)' : '1px solid var(--border)',
+                      fontWeight: studentPickMode === opt.key ? 700 : 500,
+                    }}
+                  >
+                    {opt.label}
+                  </button>
+                ))}
+              </div>
+
+              {studentPickMode === 'batch' && (
+                <input type="text" placeholder="Batch, e.g. 2K23" value={batchInput} onChange={(e) => setBatchInput(e.target.value)}
+                  style={{ padding: '8px 10px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--inputBg)' }} />
+              )}
+
+              {studentPickMode === 'individuals' && (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                  <div style={{ display: 'flex', gap: 6 }}>
+                    <select
+                      value={pickerDept}
+                      onChange={(e) => { setPickerDept(e.target.value); setPickerBatch(''); setSelectedStudentUids(new Set()); setStudentSearch(''); }}
+                      style={{ flex: 1, padding: '8px 10px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--inputBg)' }}
+                    >
+                      <option value="">Department…</option>
+                      {pickerDepts.map((d) => <option key={d} value={d}>{d}</option>)}
+                    </select>
+                    <select
+                      value={pickerBatch}
+                      onChange={(e) => { setPickerBatch(e.target.value); setSelectedStudentUids(new Set()); setStudentSearch(''); }}
+                      disabled={!pickerDept}
+                      style={{ flex: 1, padding: '8px 10px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--inputBg)', opacity: pickerDept ? 1 : 0.6 }}
+                    >
+                      <option value="">Batch…</option>
+                      {pickerBatches.map((b) => <option key={b} value={b}>{b}</option>)}
+                    </select>
+                  </div>
+
+                  {pickerDept && pickerBatch && pickerMembers !== null && pickerMembers.length > 0 && (
+                    <input
+                      type="text"
+                      placeholder="Search by name or roll…"
+                      value={studentSearch}
+                      onChange={(e) => setStudentSearch(e.target.value)}
+                      style={{ padding: '8px 10px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--inputBg)' }}
+                    />
+                  )}
+
+                  {pickerDept && pickerBatch && (
+                    <div style={{ border: '1px solid var(--border)', borderRadius: 8, maxHeight: 260, overflowY: 'auto' }}>
+                      {pickerMembers === null && (
+                        <div style={{ padding: 12, fontSize: 12, color: 'var(--muted)', textAlign: 'center' }}>Loading students…</div>
+                      )}
+                      {pickerMembers !== null && pickerMembers.length === 0 && (
+                        <div style={{ padding: 12, fontSize: 12, color: 'var(--muted)', textAlign: 'center' }}>No students in this batch yet.</div>
+                      )}
+                      {pickerMembers !== null && pickerMembers.length > 0
+                        && pickerMembers.filter((m) => {
+                          const q = studentSearch.trim().toLowerCase();
+                          if (!q) return true;
+                          return (m.name || '').toLowerCase().includes(q) || (m.roll || '').toLowerCase().includes(q);
+                        }).length === 0 && (
+                        <div style={{ padding: 12, fontSize: 12, color: 'var(--muted)', textAlign: 'center' }}>No matches.</div>
+                      )}
+                      {pickerMembers
+                        ?.filter((m) => {
+                          const q = studentSearch.trim().toLowerCase();
+                          if (!q) return true;
+                          return (m.name || '').toLowerCase().includes(q) || (m.roll || '').toLowerCase().includes(q);
+                        })
+                        .map((m) => (
+                        <label
+                          key={m.id}
+                          style={{
+                            display: 'flex', alignItems: 'center', gap: 8, padding: '7px 10px',
+                            borderBottom: '1px solid var(--border)', cursor: 'pointer', fontSize: 12.5,
+                          }}
+                        >
+                          <input
+                            type="checkbox"
+                            checked={selectedStudentUids.has(m.id)}
+                            onChange={() => toggleStudentUid(m.id)}
+                          />
+                          <span style={{ color: 'var(--muted)', minWidth: 56, flexShrink: 0 }}>{m.roll || '—'}</span>
+                          <span style={{ color: 'var(--text)', flex: 1 }}>{m.name || 'Unnamed'}</span>
+                          {!m.verified && (
+                            <span style={{ fontSize: 9.5, fontWeight: 700, color: 'var(--muted)', padding: '1px 5px', borderRadius: 4, border: '1px solid var(--border)' }}>Unverified</span>
+                          )}
+                        </label>
+                      ))}
+                    </div>
+                  )}
+                  {selectedStudentUids.size > 0 && (
+                    <div style={{ fontSize: 11.5, color: selectedStudentUids.size > 300 ? '#dc2626' : 'var(--accent)', fontWeight: 700 }}>
+                      {selectedStudentUids.size} student{selectedStudentUids.size === 1 ? '' : 's'} selected
+                      {selectedStudentUids.size > 300 ? ' — over the 300 limit, use "A whole batch" instead' : ''}
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          )}
+
+          {audienceType === 'faculty' && (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+              <div style={{ display: 'flex', gap: 6 }}>
+                {[
+                  { key: 'all', label: 'All faculty' },
+                  { key: 'individuals', label: 'Pick individuals' },
+                ].map((opt) => (
+                  <button
+                    key={opt.key}
+                    type="button"
+                    onClick={() => setFacultyPickMode(opt.key)}
+                    className="btn btn-sm"
+                    style={{
+                      background: facultyPickMode === opt.key ? 'var(--accentBg, #eef2ff)' : 'transparent',
+                      color: facultyPickMode === opt.key ? 'var(--accent, #4f46e5)' : 'var(--muted)',
+                      border: facultyPickMode === opt.key ? '1px solid var(--accent, #4f46e5)' : '1px solid var(--border)',
+                      fontWeight: facultyPickMode === opt.key ? 700 : 500,
+                    }}
+                  >
+                    {opt.label}
+                  </button>
+                ))}
+              </div>
+
+              {facultyPickMode === 'individuals' && (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                  <input
+                    type="text"
+                    placeholder="Search by name…"
+                    value={facultySearch}
+                    onChange={(e) => setFacultySearch(e.target.value)}
+                    style={{ padding: '8px 10px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--inputBg)' }}
+                  />
+                  <div style={{ border: '1px solid var(--border)', borderRadius: 8, maxHeight: 260, overflowY: 'auto' }}>
+                    {facultyAccounts === null && (
+                      <div style={{ padding: 12, fontSize: 12, color: 'var(--muted)', textAlign: 'center' }}>Loading faculty…</div>
+                    )}
+                    {facultyAccounts !== null && facultyAccounts.length === 0 && (
+                      <div style={{ padding: 12, fontSize: 12, color: 'var(--muted)', textAlign: 'center' }}>No faculty accounts yet.</div>
+                    )}
+                    {facultyAccounts
+                      ?.filter((f) => !facultySearch.trim() || (f.name || '').toLowerCase().includes(facultySearch.trim().toLowerCase()))
+                      .map((f) => (
+                        <label
+                          key={f.uid}
+                          style={{
+                            display: 'flex', alignItems: 'center', gap: 8, padding: '7px 10px',
+                            borderBottom: '1px solid var(--border)', cursor: 'pointer', fontSize: 12.5,
+                          }}
+                        >
+                          <input
+                            type="checkbox"
+                            checked={selectedFacultyUids.has(f.uid)}
+                            onChange={() => toggleFacultyUid(f.uid)}
+                          />
+                          <span style={{ color: 'var(--text)', flex: 1 }}>{f.name || 'Unnamed'}</span>
+                          <span style={{ color: 'var(--muted)', fontSize: 11 }}>{f.dept || ''}</span>
+                          {!f.verifiedAt && (
+                            <span style={{ fontSize: 9.5, fontWeight: 700, color: 'var(--muted)', padding: '1px 5px', borderRadius: 4, border: '1px solid var(--border)' }}>Unverified</span>
+                          )}
+                        </label>
+                      ))}
+                  </div>
+                  {selectedFacultyUids.size > 0 && (
+                    <div style={{ fontSize: 11.5, color: selectedFacultyUids.size > 300 ? '#dc2626' : 'var(--accent)', fontWeight: 700 }}>
+                      {selectedFacultyUids.size} faculty selected
+                      {selectedFacultyUids.size > 300 ? ' — over the 300 limit, use "All faculty" instead' : ''}
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          )}
           {sendMsg && <div style={{ fontSize: 12, color: sendMsg.startsWith('Failed') ? 'var(--danger)' : 'var(--success)' }}>{sendMsg}</div>}
           <button type="submit" className="btn btn-primary" disabled={sending}>{sending ? 'Sending…' : 'Send notice'}</button>
         </form>
       </Section>
+
+      {sentNotices.length > 0 && (
+        <Section title="Sent notices">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 8, maxWidth: 480 }}>
+            {sentNotices.map((n) => (
+              <div key={n.id} style={{ padding: '10px 12px', borderRadius: 10, border: '1px solid var(--border)', background: 'var(--surface)' }}>
+                <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 8 }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                    <div style={{ fontWeight: 700, fontSize: 13, color: 'var(--text)' }}>{n.title}</div>
+                    {n.deleted && (
+                      <span style={{
+                        fontSize: 9.5, fontWeight: 700, color: 'var(--danger)', textTransform: 'uppercase',
+                        border: '1px solid var(--danger)', borderRadius: 4, padding: '1px 5px', flexShrink: 0,
+                      }}>
+                        Deleted
+                      </span>
+                    )}
+                  </div>
+                  {!n.deleted && (
+                    <button
+                      type="button"
+                      onClick={() => handleDeleteNotice(n.id)}
+                      disabled={deletingId === n.id}
+                      aria-label={`Delete notice: ${n.title}`}
+                      style={{
+                        display: 'flex', alignItems: 'center', flexShrink: 0, color: 'var(--danger)',
+                        background: 'none', border: 'none', cursor: deletingId === n.id ? 'not-allowed' : 'pointer',
+                        padding: 0, opacity: deletingId === n.id ? 0.5 : 1,
+                      }}
+                    >
+                      <Trash2 size={13} />
+                    </button>
+                  )}
+                </div>
+                <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 2, opacity: n.deleted ? 0.6 : 1 }}>
+                  {renderFormattedNoticeBody(n.body)}
+                </div>
+                <NoticeInsightsPanel
+                  noticeId={n.id}
+                  groupId={null}
+                  audienceSize={n.audienceSize}
+                  title={n.title}
+                />
+              </div>
+            ))}
+          </div>
+        </Section>
+      )}
     </CategoryShell>
   );
 }

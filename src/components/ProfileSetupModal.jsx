@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState, useRef } from 'react';
 import Modal from './Modal';
-import KuetEmailVerifyWidget from './KuetEmailVerifyWidget';
-import { isRollInstitutionallyVerified } from '../lib/kuetEmailVerify';
+import ManualVerifyFallback from './ManualVerifyFallback';
+import { isKuetEmailFormat, emailRollMatchesProfile } from '../lib/kuetEmailVerify';
 import { DEPARTMENTS, DEPT_CODES, DEFAULT_PROFILE, TERM_KEYS, getTermLabelFromKey, extractBatchFromRoll, normalizeProfileForSave } from '../store/store';
 import { getBatchStartDates } from '../lib/appConfigSync';
 import { claimRoll, requestRollUnlock } from '../lib/rollOwnership';
@@ -96,7 +96,7 @@ const requiredFieldMap = {
   // BUGFIX: bloodGroup and currentTermKey are now required at first-run
   // onboarding too (previously deferred as optional — see history below).
   // Dept still auto-derives from studentId and stays out of this list.
-  0: ['name', 'studentId', 'currentTermKey', 'bloodGroup'],
+  0: ['name', 'studentId', 'kuetEmail', 'currentTermKey', 'bloodGroup'],
 };
 
 const toDateInputValue = (value) => {
@@ -127,6 +127,12 @@ const getFieldError = (key, form, autoCalculatedDept) => {
   if (key === 'dept') {
     const normalized = getCanonicalDeptCode(value);
     if (!normalized) return 'Department must be one of KUET’s 16 approved department codes';
+  }
+  if (key === 'kuetEmail') {
+    const v = String(value || '').trim();
+    if (!v) return 'KUET email is required';
+    if (!isKuetEmailFormat(v)) return 'Must be a valid KUET student email (e.g. john2313014@stud.kuet.ac.bd)';
+    if (!emailRollMatchesProfile(v, form)) return 'This KUET email\u2019s roll number doesn\u2019t match your Student ID above';
   }
   if (key === 'session' && !String(value || '').trim()) return 'Academic session is required';
   if (key === 'currentTermKey' && !String(value || '').trim()) return 'Current term is required';
@@ -167,28 +173,17 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
   const [rollClaimBusy, setRollClaimBusy] = useState(false);
   const [rollLocked, setRollLocked] = useState(null); // { roll } when claim blocked by another account
   const [unlockRequestState, setUnlockRequestState] = useState('idle'); // idle | sending | sent | error
-  const [verifiedJustNow, setVerifiedJustNow] = useState(false);
-  const [verifySkipped, setVerifySkipped] = useState(false);
+  // Founder-WhatsApp manual verify — a simple opt-in button on Review,
+  // separate from the (removed) automatic OTP/link flow. Nothing gates
+  // on this; it's purely a self-service option for anyone who wants their
+  // Blue Tick sooner than waiting on their CL/CR to approve a join/CR
+  // request (which is what actually sets member.verified).
+  const [showManualVerify, setShowManualVerify] = useState(false);
   // BUGFIX(B): map of field key -> DOM node, so a failed validateStep()
   // can scrollIntoView + focus the first invalid field instead of relying
   // on the user spotting a small red error string on their own.
   const fieldRefs = useRef({});
   const registerFieldRef = (key) => (el) => { fieldRefs.current[key] = el; };
-
-  // If this profile's roll was already verified in a past session (e.g.
-  // they clicked the email link while on a different page entirely), don't
-  // show the "verify now" form again just because this modal instance has
-  // never seen it happen — check the real record, same fix as Classmates.
-  useEffect(() => {
-    let cancelled = false;
-    const roll = String(form?.studentId || '').trim();
-    if (isOpen && roll) {
-      isRollInstitutionallyVerified(roll).then((ok) => {
-        if (!cancelled && ok) setVerifiedJustNow(true);
-      }).catch(() => {});
-    }
-    return () => { cancelled = true; };
-  }, [isOpen, form?.studentId]);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -455,6 +450,7 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
       ...DEFAULT_PROFILE,
       ...form,
       studentId: studentIdTrimmed,
+      kuetEmail: String(form.kuetEmail || '').trim(),
       name: String(form.name || '').trim(),
       dept: effectiveDept,
       bloodGroup: String(form.bloodGroup || '').trim(),
@@ -618,20 +614,9 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
                       {errors.studentId && <div style={{ fontSize: 11, color: '#dc2626', marginTop: 5 }}>{errors.studentId}</div>}
                       {rollLocked?.roll === String(form.studentId || '').trim() && (
                         <div style={{ marginTop: 10, padding: 10, border: '1px solid var(--border)', borderRadius: 8, background: 'var(--card-alt, #f9fafb)' }}>
-                          <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 6 }}>This roll number is already used by someone else. Prove it is yours by verifying your email.</div>
+                          <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 6 }}>This roll number is already used by someone else.</div>
                           <div style={{ fontSize: 11, color: 'var(--muted)', marginBottom: 8 }}>
-                            If you verify your KUET email (@stud.kuet.ac.bd), this roll number will automatically move to your account.
-                          </div>
-                          <KuetEmailVerifyWidget
-                            overrideRoll={rollLocked.roll}
-                            onVerified={() => {
-                              setRollLocked(null);
-                              setErrors(prev => ({ ...prev, studentId: '' }));
-                              handleSubmit({ preventDefault: () => {} });
-                            }}
-                          />
-                          <div style={{ fontSize: 11, color: 'var(--muted)', margin: '10px 0 6px' }}>
-                            If you can not verify your KUET email, send a direct request to admin:
+                            Send a direct request to admin and they'll review and resolve it manually.
                           </div>
                           {unlockRequestState === 'sent' ? (
                             <div style={{ fontSize: 11, color: 'var(--muted)' }}>Request sent. Admin will review and resolve it.</div>
@@ -650,6 +635,19 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
                           )}
                         </div>
                       )}
+                    </div>
+                    <div>
+                      <label style={labelStyle}>KUET Email</label>
+                      <input
+                        ref={registerFieldRef('kuetEmail')}
+                        type="email"
+                        placeholder="e.g. john2313014@stud.kuet.ac.bd"
+                        value={form.kuetEmail || ''}
+                        onChange={handleChange('kuetEmail')}
+                        style={fieldStyle}
+                      />
+                      {errors.kuetEmail && <div style={{ fontSize: 11, color: '#dc2626', marginTop: 5 }}>{errors.kuetEmail}</div>}
+                      <div style={{ fontSize: 10, color: 'var(--muted)', marginTop: 4 }}>Must be your @stud.kuet.ac.bd address with a roll matching Student ID above</div>
                     </div>
                     {/* BUGFIX: Current Term used to be hidden entirely during
                         first-run (minimal) onboarding — only shown later in
@@ -710,20 +708,9 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
                       {errors.studentId && <div style={{ fontSize: 11, color: '#dc2626', marginTop: 5 }}>{errors.studentId}</div>}
                       {rollLocked?.roll === String(form.studentId || '').trim() && (
                         <div style={{ marginTop: 10, padding: 10, border: '1px solid var(--border)', borderRadius: 8, background: 'var(--card-alt, #f9fafb)' }}>
-                          <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 6 }}>This roll number is already used by someone else. Prove it is yours by verifying your email.</div>
+                          <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 6 }}>This roll number is already used by someone else.</div>
                           <div style={{ fontSize: 11, color: 'var(--muted)', marginBottom: 8 }}>
-                            If you verify your KUET email (@stud.kuet.ac.bd), this roll number will automatically move to your account.
-                          </div>
-                          <KuetEmailVerifyWidget
-                            overrideRoll={rollLocked.roll}
-                            onVerified={() => {
-                              setRollLocked(null);
-                              setErrors(prev => ({ ...prev, studentId: '' }));
-                              handleSubmit({ preventDefault: () => {} });
-                            }}
-                          />
-                          <div style={{ fontSize: 11, color: 'var(--muted)', margin: '10px 0 6px' }}>
-                            If you can not verify your KUET email, send a direct request to admin:
+                            Send a direct request to admin and they'll review and resolve it manually.
                           </div>
                           {unlockRequestState === 'sent' ? (
                             <div style={{ fontSize: 11, color: 'var(--muted)' }}>Request sent. Admin will review and resolve it.</div>
@@ -742,6 +729,19 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
                           )}
                         </div>
                       )}
+                    </div>
+                    <div>
+                      <label style={labelStyle}>KUET Email</label>
+                      <input
+                        ref={registerFieldRef('kuetEmail')}
+                        type="email"
+                        placeholder="e.g. john2313014@stud.kuet.ac.bd"
+                        value={form.kuetEmail || ''}
+                        onChange={handleChange('kuetEmail')}
+                        style={fieldStyle}
+                      />
+                      {errors.kuetEmail && <div style={{ fontSize: 11, color: '#dc2626', marginTop: 5 }}>{errors.kuetEmail}</div>}
+                      <div style={{ fontSize: 10, color: 'var(--muted)', marginTop: 4 }}>Must be your @stud.kuet.ac.bd address with a roll matching Student ID above</div>
                     </div>
                     <div>
                       <label style={labelStyle}>Department</label>
@@ -871,6 +871,7 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
                   {[
                     ['Name', form.name || '—'],
                     ['Student ID', form.studentId || '—'],
+                    ['KUET Email', form.kuetEmail || '—'],
                     ['Department', form.dept || autoCalculatedDept || '—'],
                     ['Blood Group', form.bloodGroup || '—'],
                     ['Session', form.session || '—'],
@@ -897,22 +898,6 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
                   ))}
                 </div>
               </div>
-
-              {!verifiedJustNow && !verifySkipped && (
-                <KuetEmailVerifyWidget
-                  onVerified={() => setVerifiedJustNow(true)}
-                  onSkip={() => setVerifySkipped(true)}
-                />
-              )}
-              {verifiedJustNow && (
-                <div style={{
-                  background: 'rgba(29,155,240,0.08)', border: '1px solid rgba(29,155,240,0.25)',
-                  borderRadius: 12, padding: 12, fontSize: 12.5, color: 'var(--text)', fontWeight: 600,
-                  display: 'flex', alignItems: 'center', gap: 8,
-                }}>
-                  ✅ KUET email verified — a blue tick will appear next to your name.
-                </div>
-              )}
 
               {/* BUGFIX(E): "Import Previous Terms" and "Want to be CR?"
                   cards point at pages (Results, Classmates/Profile) the
@@ -989,6 +974,45 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
                     Once you finish setup, you can claim CR for your class from your Profile or Classmates page — it goes to your Campus Lead for approval.
                   </div>
                 </div>
+              </div>
+              )}
+              {!mandatory && (
+              <div style={{
+                background: 'linear-gradient(135deg, rgba(29,155,240,0.08) 0%, rgba(59,130,246,0.08) 100%)',
+                border: '1px solid rgba(29,155,240,0.25)',
+                borderRadius: 12,
+                padding: 14,
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 10,
+              }}>
+                <div style={{ display: 'flex', gap: 12, alignItems: 'flex-start' }}>
+                  <div style={{ fontSize: 18, flexShrink: 0 }}>🔷</div>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 4, flex: 1 }}>
+                    <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--text)' }}>
+                      Verify your KUET roll with the Founder
+                    </div>
+                    <div style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.5 }}>
+                      Optional — your Blue Tick already comes from your CL/CR approving you into your class. This is a separate, faster manual check if you want it sooner: send your info to the Founder over WhatsApp and they'll confirm it by hand.
+                    </div>
+                  </div>
+                </div>
+                {!showManualVerify ? (
+                  <button
+                    type="button"
+                    className="btn btn-secondary btn-sm"
+                    onClick={() => setShowManualVerify(true)}
+                    style={{ alignSelf: 'flex-start' }}
+                  >
+                    Verify manually
+                  </button>
+                ) : (
+                  <ManualVerifyFallback
+                    role="student"
+                    details={{ name: form.name, email: form.kuetEmail, roll: form.studentId }}
+                    onDone={() => {}}
+                  />
+                )}
               </div>
               )}
             </>

@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import { Bell } from 'lucide-react';
 import { getProfile } from '../store/store';
 import { computeAlerts, decorateAlerts, filterUnreadAlerts, getDismissedAlertIds, setAlertDismissed } from '../lib/alertUtils';
-import ClassNoticesPanel from '../components/ClassNoticesPanel';
 import TeacherVerifiedCard from '../components/TeacherVerifiedCard';
 
 export default function Alerts() {
@@ -246,18 +245,11 @@ export default function Alerts() {
           </div>
         </div>
       </div>
-      <ClassNoticesPanel />
-      {/* §9.5 of the merged Faculty Module prompt — "existing Alerts feed"
-          secondary channel. Rather than inventing a new per-student
-          server-side alert subsystem (audited and confirmed unnecessary:
-          this component is already a live Firestore subscription, scoped
-          to the student's own group, and already renders nothing until a
-          real 'sent' record exists — mounting it here means a newly-sent
-          mark surfaces on this page within moments, satisfying the same
-          underlying need without a second notification pathway to keep in
-          sync with the first). Does not touch computeAlerts()/
-          alertUtils.js at all — fully additive, same pattern as
-          ClassNoticesPanel above. */}
+      {/* Notice.jsx is already the single dedicated surface for notices
+          (both class and global, via subscribeAllNotices). ClassNoticesPanel
+          used to also be mounted here, which duplicated Notice content on
+          the Alerts/Suggestions page — removed; this page should only show
+          alerts (attendance, GPA, deadlines, assignments), not notices. */}
       <TeacherVerifiedCard profile={profile} />
       <div style={{ marginBottom: 16, padding: 16, borderRadius: 18, border: '1px solid var(--border)', background: 'linear-gradient(180deg, var(--surfaceGlassStrong), var(--surfaceGlass))', boxShadow: '0 10px 28px rgba(0,0,0,0.10)' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, alignItems: 'flex-start', flexWrap: 'wrap', marginBottom: 12 }}>

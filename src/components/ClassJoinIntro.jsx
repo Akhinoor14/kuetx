@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
 import { store, getProfile } from '../store/store';
 import { getGroupId, getGroupLabel } from '../lib/groupUtils';
-import { joinGroup } from '../lib/groupSync';
+import { requestToJoinGroup } from '../lib/groupSync';
 
 // Mounted once in App.jsx's Layout. Purely informational — it does NOT
-// touch local schedule/assignments data in any way. Joining a class group
-// only adds a roster entry (groupSync.joinGroup); the group's own routine
-// only ever comes from its CR. This dialog just explains that once, so
-// students aren't confused about why their view might change.
+// touch local schedule/assignments data in any way. Class membership now
+// requires the group's CR/ACR to approve a join request (see groupSync.js
+// "Join requests" section) — dismissing this dialog sends that request,
+// it does NOT add the person to the roster immediately.
 export default function ClassJoinIntro() {
   const [visible, setVisible] = useState(false);
   const [groupId, setGroupId] = useState(null);
@@ -34,9 +34,9 @@ export default function ClassJoinIntro() {
   const dismiss = async () => {
     const seen = store.get('classSyncIntroSeen') || {};
     store.set('classSyncIntroSeen', { ...seen, [groupId]: true });
-    // Joining just adds a roster entry (verified:false) — never touches
-    // schedule/assignments data, personal or shared.
-    try { await joinGroup(groupId, getProfile()); } catch (e) { console.error('[ClassJoinIntro] join failed', e); }
+    // Sends a join request only — does NOT add a roster entry directly.
+    // The group's CR/ACR must approve it first (see JoinRequestsPanel).
+    try { await requestToJoinGroup(groupId, getProfile(), String(getProfile()?.kuetEmail || '').trim()); } catch (e) { console.error('[ClassJoinIntro] request failed', e); }
     setVisible(false);
   };
 
@@ -48,19 +48,21 @@ export default function ClassJoinIntro() {
       display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16,
     }}>
       <div className="card" style={{ maxWidth: 420, width: '100%', padding: 20 }}>
-        <h2 style={{ fontSize: 17, fontWeight: 700, marginBottom: 8 }}>You're part of a class now</h2>
+        <h2 style={{ fontSize: 17, fontWeight: 700, marginBottom: 8 }}>Join your class</h2>
         <p style={{ fontSize: 13, color: 'var(--muted)', marginBottom: 12 }}>
-          You've been added to <strong>{getGroupLabel(getProfile())}</strong>'s roster in Classmates. Your
-          personal schedule and assignments stay exactly as they are — nothing is shared automatically.
+          We'll send a request to join <strong>{getGroupLabel(getProfile())}</strong>. Your class's CR or ACR
+          reviews your name, roll, and KUET email, then approves it — you won't show up on the roster or see
+          shared class content until that happens. If it's still pending, that just means it hasn't been
+          reviewed yet, not that it's been rejected.
         </p>
         <p style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 16 }}>
-          Once your class's CR sets up a shared routine, you'll see it on the Schedule page instead of your
-          personal one — and you can always switch back by leaving the class group.
+          Your personal schedule and assignments stay exactly as they are either way — nothing is shared automatically.
         </p>
         <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-          <button className="btn btn-primary" onClick={dismiss}>Got it</button>
+          <button className="btn btn-primary" onClick={dismiss}>Send request</button>
         </div>
       </div>
     </div>
   );
 }
+

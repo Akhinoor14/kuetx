@@ -1,8 +1,9 @@
 import { useEffect, useMemo, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { Megaphone, X } from 'lucide-react';
-import { subscribeGroupNotices, subscribeMyRole } from '../lib/groupSync';
+import { subscribeGroupNotices, subscribeMyRole, subscribeIsOwnMember } from '../lib/groupSync';
 import { getReadNoticeIds, setNoticeRead, filterStudentFacingNotices } from '../lib/noticeUtils';
+import { renderFormattedNoticeBody, flattenNoticePreview } from '../lib/noticeFormat';
 import { auth } from '../lib/firebase';
 
 function toMillis(ts) {
@@ -63,11 +64,23 @@ export default function ClassNoticeFeed({ groupId }) {
   // of getReadNoticeIds() (which itself reads localStorage synchronously,
   // so there's nothing async to await here).
   const [readTick, setReadTick] = useState(0);
+  // groups/{groupId}/notices reads require isVerifiedMember(groupId) at
+  // the Firestore rules level — a pending join request is NOT enough.
+  // Gate the subscription on real membership (subscribeIsOwnMember,
+  // doc-existence based) rather than just having a groupId, so this
+  // never even attempts the read (and never hits permission-denied) for
+  // someone still waiting on CR/ACR approval.
+  const [isOwnMember, setIsOwnMember] = useState(false);
 
   useEffect(() => {
-    if (!groupId) return;
-    return subscribeGroupNotices(groupId, setNotices);
+    if (!groupId || !auth.currentUser?.uid) { setIsOwnMember(false); return; }
+    return subscribeIsOwnMember(groupId, auth.currentUser.uid, setIsOwnMember);
   }, [groupId]);
+
+  useEffect(() => {
+    if (!groupId || !isOwnMember) { setNotices([]); return; }
+    return subscribeGroupNotices(groupId, setNotices);
+  }, [groupId, isOwnMember]);
 
   useEffect(() => {
     if (!groupId || !auth.currentUser?.uid) { setIsViewerCR(false); return; }
@@ -130,8 +143,8 @@ export default function ClassNoticeFeed({ groupId }) {
             <X size={18} />
           </button>
         </div>
-        <div style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.65, whiteSpace: 'pre-wrap', marginBottom: 16 }}>
-          {openNotice.body}
+        <div style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.65, marginBottom: 16 }}>
+          {renderFormattedNoticeBody(openNotice.body)}
         </div>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 8, flexWrap: 'wrap', paddingTop: 12, borderTop: '1px solid var(--border)' }}>
           <span style={{ fontSize: 12, color: 'var(--muted)' }}>— {openNotice.postedBy?.name || 'Unknown'}</span>
@@ -173,7 +186,7 @@ export default function ClassNoticeFeed({ groupId }) {
             fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.45, overflow: 'hidden', textOverflow: 'ellipsis',
             whiteSpace: 'nowrap',
           }}>
-            {latest.body}
+            {flattenNoticePreview(latest.body)}
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 11, color: 'var(--muted)', marginTop: 8 }}>
             <span>{latest.postedBy?.name || 'Unknown'}</span>

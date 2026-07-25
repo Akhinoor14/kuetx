@@ -27,6 +27,7 @@ import { getFacultyDoc } from '../../lib/facultySync';
 import { getShortTitle } from '../../lib/facultyTitle';
 import BlueTick from '../../components/BlueTick';
 import * as noticeApi from '../../lib/noticeUtils';
+import { useFacultyGlobalNotices } from '../../hooks/useFacultyGlobalNotices';
 
 export default function FacultyDashboard() {
   const { isFounderBypass } = useIsFaculty();
@@ -38,6 +39,10 @@ export default function FacultyDashboard() {
   const [heldCardIndex, setHeldCardIndex] = useState(0);
   const [sentNotices, setSentNotices] = useState([]);
   const [alertsExpanded, setAlertsExpanded] = useState(false);
+  // Handoff item 1: Admin/Founder → Faculty broadcasts. Mounted ONCE via
+  // the shared hook (not once per taught class like sentNotices above) —
+  // see useFacultyGlobalNotices.js for why that distinction matters.
+  const receivedNotices = useFacultyGlobalNotices();
   const [classesViewMode, setClassesViewMode] = useState('grid');
   // Blue Tick — same verification signal used to gate Add Class/Broadcast
   // elsewhere (FacultyClasses.jsx, FacultyNoticeBroadcast.jsx): Founder
@@ -557,7 +562,26 @@ export default function FacultyDashboard() {
               key: `notice-${n.id}`,
               n,
             }));
-            const allItems = [...pendingItems, ...noticeItems];
+            // Handoff item 1: Admin/Founder broadcasts addressed to this
+            // faculty (faculty_all/faculty_uids) — a genuinely NEW item
+            // kind, since before this fix faculty never received root
+            // notices at all. Sorted in alongside pending/sent below by
+            // recency rather than bucketed separately, so an urgent Admin
+            // notice doesn't get buried under a term's worth of sent history.
+            const receivedItems = receivedNotices.map((n) => ({
+              kind: 'received',
+              key: `received-${n.id}`,
+              n,
+            }));
+            const allItems = [...pendingItems, ...noticeItems, ...receivedItems]
+              .sort((a, b) => {
+                // pending items have no createdAt — keep them pinned first,
+                // same as before this change; notice/received sort by recency.
+                if (a.kind === 'pending' && b.kind === 'pending') return 0;
+                if (a.kind === 'pending') return -1;
+                if (b.kind === 'pending') return 1;
+                return (b.n.createdAt || 0) - (a.n.createdAt || 0);
+              });
             const visibleItems = alertsExpanded ? allItems : allItems.slice(0, 3);
 
             if (allItems.length === 0) {
@@ -593,6 +617,27 @@ export default function FacultyDashboard() {
                     );
                   }
                   const n = item.n;
+                  if (item.kind === 'received') {
+                    // Admin/Founder → Faculty broadcast (handoff item 1) —
+                    // Bell icon distinguishes it from this teacher's own
+                    // sent history (Send icon below), same card, no separate
+                    // section since both are chronologically merged above.
+                    return (
+                      <div key={item.key} style={{ padding: '9px 12px', borderRadius: 10, background: 'rgba(var(--accentRGB), 0.04)', border: '1px solid rgba(var(--accentRGB), 0.10)', display: 'flex', alignItems: 'flex-start', gap: 8 }}>
+                        <Bell size={13} color="var(--accent)" style={{ flexShrink: 0, marginTop: 2 }} />
+                        <div style={{ minWidth: 0, flex: 1 }}>
+                          <div style={{ fontSize: 11.5, fontWeight: 700, color: 'var(--text)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{n.title || 'Notice'}</div>
+                          <div style={{ fontSize: 11, color: 'var(--muted)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{n.body}</div>
+                        </div>
+                        <span style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 3, flexShrink: 0 }}>
+                          {n.isPersonal && (
+                            <span style={{ fontSize: 9, fontWeight: 800, letterSpacing: 0.3, textTransform: 'uppercase', color: '#0891b2', background: 'rgba(8,145,178,0.14)', padding: '1px 6px', borderRadius: 999 }}>Just for you</span>
+                          )}
+                          <span style={{ fontSize: 9.5, fontWeight: 700, color: 'var(--accent)', padding: '2px 6px', borderRadius: 999, background: 'rgba(var(--accentRGB), 0.08)' }}>{n.roleTag || 'Admin'}</span>
+                        </span>
+                      </div>
+                    );
+                  }
                   return (
                     <div key={item.key} style={{ padding: '9px 12px', borderRadius: 10, background: 'rgba(var(--accentRGB), 0.04)', border: '1px solid rgba(var(--accentRGB), 0.10)', display: 'flex', alignItems: 'flex-start', gap: 8 }}>
                       <Send size={13} color="var(--accent)" style={{ flexShrink: 0, marginTop: 2 }} />

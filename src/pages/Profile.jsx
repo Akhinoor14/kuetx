@@ -21,15 +21,15 @@ import AuthModal from '../components/AuthModal';
 import { onAuthChange, logout } from '../lib/firebaseAuth';
 import { subscribeMyEmailFlag } from '../lib/emailFlags';
 import { auth } from '../lib/firebase';
-import { startFirebaseSync } from '../lib/firebaseSync';
+import { startFirebaseSync, pushProfile } from '../lib/firebaseSync';
 import { syncLocalDataOnAuth, clearLocalDataOnLogout } from '../lib/accountLifecycle';
 import { uploadProfilePicture, getProfilePhotoURL, deleteProfilePicture } from '../lib/profilePicture';
 import { AvatarUploadModal } from '../components/AvatarUploadModal';
-import { isRollInstitutionallyVerified } from '../lib/kuetEmailVerify';
 import { syncBloodDonorEntry } from '../lib/bloodDonorSync';
 import { getGroupId } from '../lib/groupUtils';
-import { subscribeMyRole, requestLeaveCR } from '../lib/groupSync';
+import { subscribeMyRole, subscribeIsOwnMember, subscribeOwnMemberVerified, requestLeaveCR, leaveGroup } from '../lib/groupSync';
 import ClaimCRCard, { ClaimCRInlineButton } from '../components/ClaimCRCard';
+import JoinStatusCard from '../components/JoinStatusCard';
 import CRMobileNumberBanner from '../components/CRMobileNumberBanner';
 import EmailVerifyBanner from '../components/EmailVerifyBanner';
 import EmailFlagBanner from '../components/EmailFlagBanner';
@@ -538,10 +538,11 @@ export default function Profile() {
   // Now matches exactly what onboarding actually collects and requires.
   const hasMinProfile = !!(profile?.name && profile?.studentId && profile?.dept && profile?.currentTermKey && profile?.bloodGroup);
 
-  // null = not yet checked (avoid flashing the "not verified" banner for
-  // already-verified users while the Firestore read is in flight);
-  // false = checked and confirmed not verified; true = verified.
-  const [isKuetVerified, setIsKuetVerified] = useState(null);
+  // Blue Tick reflects members/{uid}.verified — a human-approval fact
+  // (set by approveJoinRequest / CL bootstrap), same source
+  // ClassmatesList.jsx already uses for every other member's tick. There
+  // is no email-OTP tier anymore.
+  const [isKuetVerified, setIsKuetVerified] = useState(false);
   // null = auth state not resolved yet (avoid flashing the "email not
   // verified" banner before we know); true/false once onAuthChange fires.
   const [emailVerified, setEmailVerified] = useState(null);
@@ -553,16 +554,10 @@ export default function Profile() {
     return unsub;
   }, []);
   useEffect(() => {
-    let cancelled = false;
-    if (profile?.studentId) {
-      isRollInstitutionallyVerified(profile.studentId)
-        .then((ok) => { if (!cancelled) setIsKuetVerified(ok); })
-        .catch(() => { if (!cancelled) setIsKuetVerified(false); });
-    } else {
-      setIsKuetVerified(false);
-    }
-    return () => { cancelled = true; };
-  }, [profile?.studentId]);
+    const groupId = getGroupId(profile);
+    if (!groupId || !auth.currentUser?.uid) { setIsKuetVerified(false); return; }
+    return subscribeOwnMemberVerified(groupId, auth.currentUser.uid, setIsKuetVerified);
+  }, [profile?.dept, profile?.batch, profile?.studentId]);
 
   // Real, server-verified CR/ACR status — profile.isCR is just a
   // self-ticked checkbox from Profile Setup with no verification behind
@@ -577,33 +572,29 @@ export default function Profile() {
   // cr/acr boolean) so CRMobileNumberBanner below can tell "cr" from
   // "acr" for its copy without a second subscribeMyRole listener.
   const [ownRole, setOwnRole] = useState(null);
+  // Accurate "actually an approved member" boolean — subscribeMyRole
+  // alone can't distinguish a real plain member from someone with no
+  // members/{uid} doc at all (both report the string 'member'), which
+  // matters here specifically because a non-member must NOT see a
+  // "Leave Class" button that would try to delete a doc that doesn't
+  // exist. See subscribeIsOwnMember's own doc-comment in groupSync.js.
+  const [isOwnMember, setIsOwnMember] = useState(null);
   const [leaveCRState, setLeaveCRState] = useState('idle'); // idle | sending | sent
+  const [leaveClassState, setLeaveClassState] = useState('idle'); // idle | leaving
   useEffect(() => {
     const groupId = getGroupId(profile);
-    if (!groupId || !auth.currentUser?.uid) { setIsRealCR(false); setOwnRole(null); return; }
-    return subscribeMyRole(groupId, auth.currentUser.uid, (role) => {
+    if (!groupId || !auth.currentUser?.uid) { setIsRealCR(false); setOwnRole(null); setIsOwnMember(null); return; }
+    const unsubRole = subscribeMyRole(groupId, auth.currentUser.uid, (role) => {
       setIsRealCR(role === 'cr' || role === 'acr');
       setOwnRole(role);
     });
+    const unsubMember = subscribeIsOwnMember(groupId, auth.currentUser.uid, setIsOwnMember);
+    return () => { unsubRole(); unsubMember(); };
   }, [profile?.dept, profile?.batch, profile?.studentId]);
 
   // Admin/staff status card removed from this page — Team & Administration
   // access now lives solely in Sidebar/BottomNav (see useIsStaff.js), so
   // this component no longer needs its own duplicate admin subscription.
-
-  // Covers the case where the person clicked their verification link and
-  // App.jsx's boot-time completion finished slightly AFTER the one-shot
-  // check above already ran and cached "not verified" — without this,
-  // that race left the banner stuck forever even though verification had
-  // actually succeeded, with no way to notice short of a manual refresh.
-  useEffect(() => {
-    const onVerified = (e) => {
-      const roll = String(profile?.studentId || '').trim();
-      if (!roll || e.detail?.roll === roll) setIsKuetVerified(true);
-    };
-    window.addEventListener('kuetx:kuet-email-verified', onVerified);
-    return () => window.removeEventListener('kuetx:kuet-email-verified', onVerified);
-  }, [profile?.studentId]);
 
   useEffect(() => {
     if (!hasMinProfile && !autoOpenedRef.current) {
@@ -626,6 +617,16 @@ export default function Profile() {
     // too, not just first-run onboarding — see bloodDonorSync.js.
     if (auth.currentUser?.uid && !auth.currentUser.isAnonymous) {
       syncBloodDonorEntry(auth.currentUser.uid, next).catch(() => {});
+      // Phase 5: 'profile' is excluded from the generic per-key sync loop
+      // (see EXCLUDED_KEYS in firebaseSync.js) — it now lives at its own
+      // students/{dept}/{batch}/{uid} path, so it must be pushed
+      // explicitly here rather than relying on the generic store-change
+      // listener to pick it up. Fire-and-forget: local store + UI state
+      // are already updated above, so a slow/failed network push doesn't
+      // block the save from completing for the user.
+      pushProfile(auth.currentUser.uid, next).catch(err => {
+        console.warn('[KUETx Profile] pushProfile failed:', err.message);
+      });
     }
     setIsModalOpen(false);
     setSaved(true);
@@ -926,11 +927,11 @@ export default function Profile() {
         <EmailVerifyBanner onVerified={() => setEmailVerified(true)} />
       )}
 
-      {/* ── KUET Email Verify Banner removed — this was just a nag banner
-          on the Profile page; the underlying Tier-1 self-verify flow
-          (KuetEmailVerifyWidget, inside ProfileSetupModal) is unaffected
-          and remains fully functional and optional. isKuetVerified/Blue
-          Tick badge above still reflects the actual state. ── */}
+      {/* ── KUET Email OTP/magic-link verify flow removed entirely (no
+          Tier-1 self-verify anymore). Blue Tick above now reflects
+          member.verified — set only by a human CL/Faculty approval — via
+          subscribeOwnMemberVerified, same source of truth ClassmatesList.jsx
+          uses. ── */}
 
       {/* ── CR Banner ──
           NOTE: the old "Disable CR" button here only flipped the local,
@@ -995,6 +996,43 @@ export default function Profile() {
       {/* Claim CR now lives in profile-col-right, next to Quick Accounts
           (desktop), plus a compact inline button next to Personal Info's
           Edit button (mobile) — see profile-two-col below. */}
+
+      {/* ── Leave Class ──
+          Plain-member-only exit (never shown to CR/ACR — they must step
+          down via "Hand over CR"/"Leave CR" above first, matching the
+          rules' self-leave restriction to role=='member'; a CR/ACR who
+          wants out has to vacate their slot before this becomes an
+          option, so a class is never left CR-less by this button).
+          Deliberately understated (small text link, not a big red
+          button) since this isn't a frequent action, but a real
+          confirmation dialog is still required since leaveGroup() is
+          immediate and re-joining afterward always needs a fresh CR
+          approval — no silent auto-rejoin even if previously verified. */}
+      {isOwnMember === true && !isRealCR && (
+        <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+          <button
+            disabled={leaveClassState === 'leaving'}
+            onClick={async () => {
+              if (!window.confirm(
+                "Leave this class? You'll lose access to class notices, roster, and shared content. " +
+                'Rejoining later will require a fresh approval from the CR/ACR — being previously ' +
+                'approved does not let you back in automatically.'
+              )) return;
+              setLeaveClassState('leaving');
+              try {
+                const groupId = getGroupId(profile);
+                await leaveGroup(groupId);
+              } catch (err) {
+                alert(`Failed: ${err?.message || err}`);
+              } finally {
+                setLeaveClassState('idle');
+              }
+            }}
+            style={{ fontSize: 11, color: 'var(--muted)', background: 'none', border: 'none', cursor: 'pointer' }}>
+            {leaveClassState === 'leaving' ? 'Leaving…' : 'Leave class'}
+          </button>
+        </div>
+      )}
 
       {/* Admin/Staff shortcut card removed — access to Team & Administration
           is now solely via the Sidebar/BottomNav entries, which already
@@ -1124,6 +1162,11 @@ export default function Profile() {
 
         {/* RIGHT COLUMN */}
         <div className="profile-col-right" style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
+
+          {/* Join-request status: not-requested / pending / declined states
+              for a user who isn't an approved member of their class group
+              yet. Renders nothing once they're an approved member. */}
+          {hasMinProfile && <JoinStatusCard groupId={getGroupId(profile)} profile={profile} />}
 
           {/* Migration nudge: existing CR/ACR (appointed before mobile
               numbers were mandatory) get prompted once to add theirs. */}

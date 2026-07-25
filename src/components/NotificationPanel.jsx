@@ -40,6 +40,7 @@ function buildMergedItems(profile, notices, dismissedAlertIds, readNoticeIds, fi
     link: n.link || '/notice',
     isUnread: !readNoticeIds.has(n.id),
     at: n.createdAt || 0,
+    isPersonal: !!n.isPersonal,
     markRead: () => noticeApi.setNoticeRead(n.id, true),
   }));
 
@@ -114,7 +115,7 @@ export function NotificationPanel({ isOpen, onClose }) {
   // Live notice feed (global admin broadcasts + group CR/ACR notices).
   const [notices, setNotices] = useState([]);
   useEffect(() => {
-    return noticeApi.subscribeAllNotices(profile, groupId, setNotices, 'student', { isViewerCR });
+    return noticeApi.subscribeAllNotices(profile, groupId, setNotices, 'student', { isViewerCR, uid: auth.currentUser?.uid });
   }, [profile, groupId, isViewerCR]);
 
   // Stamping (a write) happens here, in an effect, not during the render-time
@@ -232,16 +233,28 @@ export function NotificationPanel({ isOpen, onClose }) {
                   >
                     {item.isUnread && <div style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--accent)', flexShrink: 0, marginTop: 5 }} />}
                     <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 4 }}>
-                      <span
-                        style={{
-                          alignSelf: 'flex-start',
-                          fontSize: isNotice ? 10 : 9,
-                          fontWeight: 800, letterSpacing: 0.3,
-                          textTransform: 'uppercase', color: item.tag.color, background: item.tag.bg,
-                          borderRadius: 6, padding: isNotice ? '2px 8px' : '2px 6px',
-                        }}
-                      >
-                        {item.tag.label}
+                      <span style={{ alignSelf: 'flex-start', display: 'flex', gap: 4, flexWrap: 'wrap' }}>
+                        <span
+                          style={{
+                            fontSize: isNotice ? 10 : 9,
+                            fontWeight: 800, letterSpacing: 0.3,
+                            textTransform: 'uppercase', color: item.tag.color, background: item.tag.bg,
+                            borderRadius: 6, padding: isNotice ? '2px 8px' : '2px 6px',
+                          }}
+                        >
+                          {item.tag.label}
+                        </span>
+                        {item.isPersonal && (
+                          <span
+                            style={{
+                              fontSize: 10, fontWeight: 800, letterSpacing: 0.3, textTransform: 'uppercase',
+                              color: '#0891b2', background: 'rgba(8,145,178,0.12)',
+                              borderRadius: 6, padding: '2px 8px',
+                            }}
+                          >
+                            Just for you
+                          </span>
+                        )}
                       </span>
                       <span style={{ fontWeight: isNotice ? 600 : 400 }}>{item.title}</span>
                     </div>

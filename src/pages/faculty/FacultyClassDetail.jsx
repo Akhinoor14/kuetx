@@ -16,9 +16,12 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useParams, useSearchParams, Link } from 'react-router-dom';
-import { CalendarClock, Circle, Clock, ExternalLink, FileText, GraduationCap, Pencil, Plus, X } from 'lucide-react';
+import { CalendarClock, Circle, Clock, ExternalLink, FileText, GraduationCap, Pencil, Plus, Trash2, X } from 'lucide-react';
 import { ICONS } from '../../lib/iconRegistry';
 import ClassmatesList from '../../components/ClassmatesList';
+import NoticeComposerToolbar from '../../components/NoticeComposerToolbar';
+import NoticePrioritySelector from '../../components/NoticePrioritySelector';
+import NoticeInsightsPanel from '../../components/NoticeInsightsPanel';
 
 // Local calendar date as 'YYYY-MM-DD' — NOT toISOString(), which converts to
 // UTC first and can silently roll back to yesterday's date for anyone west
@@ -44,20 +47,11 @@ const todayStr = () => {
 // touching the Firestore query itself. Falls back to a locale string
 // compare for any roll that isn't purely numeric, and pushes members with
 // no roll at all to the end (rather than letting '' sort first).
-function sortByRoll(members) {
-  const list = Array.isArray(members) ? members : [];
-  return [...list].sort((a, b) => {
-    const ra = String(a?.roll || '').trim();
-    const rb = String(b?.roll || '').trim();
-    if (!ra && !rb) return 0;
-    if (!ra) return 1;
-    if (!rb) return -1;
-    const na = Number(ra);
-    const nb = Number(rb);
-    if (Number.isFinite(na) && Number.isFinite(nb)) return na - nb;
-    return ra.localeCompare(rb, undefined, { numeric: true, sensitivity: 'base' });
-  });
-}
+//
+// Extracted to groupUtils.js — this is now its 2nd call site (Admin's
+// individual-student notice-targeting picker in AdminDashboard.jsx needs
+// the exact same roll-sort over the exact same dept+batch member shape).
+import { sortByRoll } from '../../lib/groupUtils';
 
 import { getDeptSyllabus } from '../../store/curriculumStore';
 import { subscribeFacultyAssignment, setPlannedTotalClasses, updateAssignmentDayTimeSlots, findConflictingAssignment } from '../../lib/facultyClassSync';
@@ -76,6 +70,8 @@ import { useIsFaculty } from '../../hooks/useIsFaculty';
 import { auth } from '../../lib/firebase';
 import { notify } from '../../lib/notify';
 import * as noticeApi from '../../lib/noticeUtils';
+import { deleteNoticeSoft } from '../../lib/noticeUtils';
+import { renderFormattedNoticeBody } from '../../lib/noticeFormat';
 import { postFacultyNotice } from '../../lib/facultyNoticeSync';
 import {
   TIME_MODELS, DAYS, isSessionalType, getPresetSessionalSlots, isSlotOverlap,
@@ -295,13 +291,24 @@ function EditDayTimeModal({ assignment, groupId, onClose, onSaved }) {
 // from the rest of the notice system:
 //   - 'broadcast' → every student in this class sees it ("Class only")
 //   - 'cr_only'   → only this class's CR/ACR see it ("CR only")
+//
+// Audit fix: this composer was the one surface never migrated through
+// Phases 2/3/4 of the Notice upgrade (the plan's "wire into all 3
+// composers" language undercounted — this class-page composer is a 4th).
+// Brought up to parity here: markdown toolbar (Phase 3), priority
+// selector (Phase 4), delete + Insights panel (Phase 2), and the sent-
+// notices list now renders via the shared formatter instead of raw text.
 function NoticesTab({ groupId, isVerified, assignment }) {
   const [facultyDoc, setFacultyDoc] = useState(null);
   const [notices, setNotices] = useState([]);
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
   const [targetType, setTargetType] = useState('broadcast');
+  const [priority, setPriority] = useState('normal');
+  const [showPreview, setShowPreview] = useState(false);
+  const noticeTextareaRef = useRef(null);
   const [sending, setSending] = useState(false);
+  const [deletingId, setDeletingId] = useState(null);
 
   useEffect(() => {
     const uid = auth.currentUser?.uid;
@@ -326,16 +333,30 @@ function NoticesTab({ groupId, isVerified, assignment }) {
     setSending(true);
     try {
       await postFacultyNotice(groupId, facultyDoc, auth.currentUser.uid, {
-        title: title.trim(), body: body.trim(), targetType,
+        title: title.trim(), body: body.trim(), targetType, priority,
         courseCode: assignment?.courseCode || '', courseTitle: assignment?.courseTitle || '',
       });
       setTitle('');
       setBody('');
+      setPriority('normal');
+      setShowPreview(false);
       notify('Notice sent.', 'success');
     } catch (e) {
       notify(e.message || 'Could not send this notice.', 'error');
     } finally {
       setSending(false);
+    }
+  };
+
+  const handleDeleteNotice = async (noticeId) => {
+    if (!window.confirm('Delete this notice? It will be removed from your class\'s feed.')) return;
+    setDeletingId(noticeId);
+    try {
+      await deleteNoticeSoft(noticeId, groupId);
+    } catch (err) {
+      window.alert(`Failed to delete: ${err?.message || err}`);
+    } finally {
+      setDeletingId(null);
     }
   };
 
@@ -348,13 +369,34 @@ function NoticesTab({ groupId, isVerified, assignment }) {
           onChange={(e) => setTitle(e.target.value)}
           style={{ padding: '8px 10px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--bg)', color: 'var(--text)', fontSize: 13 }}
         />
-        <textarea
-          placeholder="Message"
-          rows={3}
-          value={body}
-          onChange={(e) => setBody(e.target.value)}
-          style={{ padding: '8px 10px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--bg)', color: 'var(--text)', fontSize: 13, resize: 'vertical' }}
-        />
+        {!showPreview ? (
+          <>
+            <NoticeComposerToolbar textareaRef={noticeTextareaRef} value={body} onChange={setBody} disabled={!isVerified} />
+            <textarea
+              ref={noticeTextareaRef}
+              placeholder="Message"
+              rows={3}
+              value={body}
+              onChange={(e) => setBody(e.target.value)}
+              style={{ padding: '8px 10px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--bg)', color: 'var(--text)', fontSize: 13, resize: 'vertical' }}
+            />
+          </>
+        ) : (
+          <div style={{ padding: '8px 10px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--bg)', minHeight: 60, fontSize: 13, color: 'var(--text)' }}>
+            {body ? renderFormattedNoticeBody(body) : <span style={{ color: 'var(--muted)' }}>Nothing to preview yet.</span>}
+          </div>
+        )}
+        <button
+          type="button"
+          onClick={() => setShowPreview((v) => !v)}
+          disabled={!isVerified}
+          style={{
+            alignSelf: 'flex-start', fontSize: 11, fontWeight: 700, color: 'var(--accent)',
+            background: 'none', border: 'none', padding: 0, cursor: isVerified ? 'pointer' : 'not-allowed',
+          }}
+        >
+          {showPreview ? 'Back to edit' : 'Preview'}
+        </button>
         <div style={{ display: 'flex', gap: 14, alignItems: 'center', flexWrap: 'wrap' }}>
           <label style={{ fontSize: 11.5, color: 'var(--muted)', display: 'flex', alignItems: 'center', gap: 5 }}>
             <input type="radio" checked={targetType === 'broadcast'} onChange={() => setTargetType('broadcast')} style={{ width: 13, height: 13 }} />
@@ -365,6 +407,7 @@ function NoticesTab({ groupId, isVerified, assignment }) {
             CR only
           </label>
         </div>
+        <NoticePrioritySelector value={priority} onChange={setPriority} disabled={!isVerified} />
         <button
           onClick={handleSend}
           disabled={sending || !isVerified}
@@ -385,14 +428,42 @@ function NoticesTab({ groupId, isVerified, assignment }) {
           <div style={{ fontSize: 12.5, color: 'var(--muted)' }}>No notices sent to this class yet.</div>
         )}
         {notices.map((n) => (
-          <div key={n.id} style={{ padding: '10px 12px', borderRadius: 9, border: '1px solid var(--border)', background: 'var(--card)' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', gap: 8 }}>
-              <span style={{ fontWeight: 700, fontSize: 13, color: 'var(--text)' }}>{n.title}</span>
-              <span style={{ fontSize: 9.5, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase' }}>
-                {n.targetType === 'cr_only' ? 'CR only' : 'Class only'}
-              </span>
+          <div key={n.id} style={{ padding: '10px 12px', borderRadius: 9, border: '1px solid var(--border)', background: 'var(--card)', opacity: n.deleted ? 0.6 : 1 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 8 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                <span style={{ fontWeight: 700, fontSize: 13, color: 'var(--text)' }}>{n.title}</span>
+                {n.deleted && (
+                  <span style={{
+                    fontSize: 9.5, fontWeight: 700, color: 'var(--danger)', textTransform: 'uppercase',
+                    border: '1px solid var(--danger)', borderRadius: 4, padding: '1px 5px', flexShrink: 0,
+                  }}>
+                    Deleted
+                  </span>
+                )}
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }}>
+                <span style={{ fontSize: 9.5, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase' }}>
+                  {n.targetType === 'cr_only' ? 'CR only' : 'Class only'}
+                </span>
+                {!n.deleted && (
+                  <button
+                    type="button"
+                    onClick={() => handleDeleteNotice(n.id)}
+                    disabled={deletingId === n.id}
+                    aria-label={`Delete notice: ${n.title}`}
+                    style={{
+                      display: 'flex', alignItems: 'center', color: 'var(--danger)',
+                      background: 'none', border: 'none', cursor: deletingId === n.id ? 'not-allowed' : 'pointer',
+                      padding: 0, opacity: deletingId === n.id ? 0.5 : 1,
+                    }}
+                  >
+                    <Trash2 size={13} />
+                  </button>
+                )}
+              </div>
             </div>
-            <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 2 }}>{n.body}</div>
+            <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 2 }}>{renderFormattedNoticeBody(n.body)}</div>
+            <NoticeInsightsPanel noticeId={n.id} groupId={groupId} audienceSize={n.audienceSize} title={n.title} />
           </div>
         ))}
       </div>

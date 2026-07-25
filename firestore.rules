@@ -188,17 +188,79 @@ service cloud.firestore {
     // Pre-existing personal data (unchanged)
     // -------------------------------------------------------------
     match /users/{uid}/data/{key} {
+      // NOTE (Phase 5 migration): the 'profile' key is being moved OUT of
+      // this generic per-key bucket into the dedicated
+      // students/{dept}/{batch}/{uid} collection below — see that match
+      // block's comment for why. This rule is intentionally left open to
+      // ANY key here (including a stray/legacy 'profile' doc some already-
+      // synced accounts may still have sitting here from before this
+      // migration) because firebaseSync.js's generic push/pull loop still
+      // owns every other personal key (Notes, Diary, Wallet, Settings,
+      // Schedule, Assignments, etc. — ~30 keys/user) and nothing about
+      // that generic mechanism changes in this phase. Do not narrow this
+      // rule to exclude 'profile' — that would break pullAllFromFirestore
+      // for any account with a leftover legacy profile doc still present.
       allow read: if isSignedIn() && (request.auth.uid == uid
         // Staff & Roles "Current Holders" name-resolution fallback
         // (getStaffDisplayInfo in staffSync.js) — only reached for a
         // staff-role holder who isn't a member of any class group, so
         // there's no groups/*/members doc to read a name from. Scoped to
         // just the `profile` key, read-only, Admin/Head of Ops only.
+        // Kept even though staffSync.js's primary path now reads from
+        // students/{dept}/{batch}/{uid} — this remains as the fallback
+        // for legacy/leftover docs (see note above).
         || (key == 'profile' && (isAdmin() || isHeadOfOps())));
       allow write: if isSignedIn() && request.auth.uid == uid;
     }
     match /users/{uid}/meta/{docId} {
       allow read, write: if isSignedIn() && request.auth.uid == uid;
+    }
+
+    // -------------------------------------------------------------
+    // Student profile — Phase 5 migration target. Moved OUT of the
+    // generic users/{uid}/data/{key} key-value bucket (above) into its
+    // own nested-by-value path, dept/batch taken from the profile's own
+    // claimed roll so the doc's location itself encodes department and
+    // batch (needed for cheap collectionGroup('students') dept/batch-
+    // scoped queries without a full scan+filter).
+    //
+    // {dept} and {batch} in the PATH must match the roll embedded in the
+    // profile's own studentId field — otherwise a client could write its
+    // profile doc under a dept/batch that doesn't correspond to its own
+    // roll (e.g. to appear in a different dept's roster), which the old
+    // flat users/{uid}/data/profile shape had no way to prevent since
+    // there was no dept/batch in the *path* at all. deptCodeFromRoll(...)
+    // reuses the exact same 2-digit->dept-code map that rollMatchesGroup
+    // already relies on above (kept as one source of truth), and batch
+    // must equal the canonical "2K"+roll[0:2] format used everywhere else
+    // in this file (extractBatchFromRoll in the client, rollMatchesGroup
+    // above).
+    //
+    // studentId itself is immutable once set (matches "Role Should Be
+    // Permanent"-style reasoning used for users/{uid}.role above) — a
+    // student cannot silently swap rolls after the fact by editing their
+    // own profile doc, since that would also require re-locating the doc
+    // to a new dept/batch path, which is exactly what rollOwnership.js's
+    // claim/unlock flow is supposed to gate, not a plain profile edit.
+    match /students/{dept}/{batch}/{uid} {
+      allow read: if isSignedIn() && (
+        request.auth.uid == uid
+        || isAdmin() || isHeadOfOps()
+        // Same "resolve a name for a staff-role holder" fallback as the
+        // legacy path above, now against the real target location.
+      );
+      allow create: if isSignedIn() && request.auth.uid == uid
+        && request.resource.data.studentId is string
+        && dept == deptCodeFromRoll(request.resource.data.studentId)
+        && batch == ('2K' + request.resource.data.studentId[0:2]);
+      allow update: if isSignedIn() && request.auth.uid == uid
+        // studentId (and therefore dept/batch, since they're derived from
+        // it) is immutable after create — path already pins dept/batch,
+        // this additionally pins the studentId field inside the doc so a
+        // client can't rewrite studentId to a DIFFERENT roll that still
+        // happens to hash to the same dept/batch path segments.
+        && request.resource.data.studentId == resource.data.studentId;
+      allow delete: if false;
     }
 
     // -------------------------------------------------------------
@@ -280,9 +342,25 @@ service cloud.firestore {
       // that: only the one true roll encoded in the verified email can
       // ever be written, which is the guarantee rollMatchesGroup and
       // every auto-join rule downstream actually depend on.
-      allow create: if request.auth.token.email_verified == true &&
+      // Two ways to create this doc:
+      //  1. The original OTP/magic-link path's own condition — token
+      //     belongs to a session that itself just proved ownership of
+      //     exactly this roll's KUET email. (Kept for the still-live
+      //     Cloud Functions requestOtp/verifyOtp path, even though no
+      //     client currently calls them — Admin SDK writes bypass rules
+      //     entirely anyway, so this branch only ever matters if a
+      //     client-side caller is reintroduced later.)
+      //  2. Founder/Admin manual approval (manualVerifyRequests.js's
+      //     approveManualVerifyRequest()) — the Founder's own signed-in
+      //     session writes this directly on behalf of a student whose
+      //     request they reviewed by hand. Their token was never a KUET
+      //     student email, so condition 1 alone would always reject this
+      //     write — this is the actual fix that makes the kept
+      //     Founder-WhatsApp fallback path work at all.
+      allow create: if (request.auth.token.email_verified == true &&
         roll.matches('^[0-9]{7}$') &&
-        request.auth.token.email.lower().matches('^[a-z]+' + roll + '@stud[.]kuet[.]ac[.]bd$');
+        request.auth.token.email.lower().matches('^[a-z]+' + roll + '@stud[.]kuet[.]ac[.]bd$'))
+        || isAdmin() || isHeadOfOps();
       allow update, delete: if false; // create-once, permanent
     }
 
@@ -730,8 +808,93 @@ service cloud.firestore {
     // Global (Founder / Head of Ops) notices — flexible audience.
     // -------------------------------------------------------------
     match /notices/{noticeId} {
-      allow read: if isSignedIn();
-      allow create, update, delete: if isAdmin() || isHeadOfOps();
+      // TODO (Phase 5 item 5, deferred): pure Firestore rules can't do
+      // time-window rate limiting (rules are stateless — there's no way
+      // to count "how many notices has this uid created in the last 5
+      // minutes" from within a rule). If notice spam becomes a real
+      // problem, the fix is a Cloud Function onCreate trigger on this
+      // collection (and on groups/{groupId}/notices) that maintains a
+      // per-sender rolling counter (e.g. in a separate rateLimits/{uid}
+      // doc) and rejects/flags a create past some max-N-per-5-min
+      // threshold. Not implemented — the length cap below and the UI
+      // role-gates (see ClassRoster.jsx) are the urgent items for now.
+      // Audit fix — privacy-critical: this used to be a blanket
+      // `allow read: if isSignedIn()` for EVERY root notice, regardless
+      // of its `audience` field — the exact same "client-side filtering
+      // isn't a security boundary" gap Phase 5 already fixed for group
+      // notices' targetType, just never fixed here. It was survivable
+      // while `audience` only ever meant 'all' | 'batch' | 'group'
+      // (nothing in those was individually sensitive — knowing "this
+      // notice went to CSE 2K23" isn't a privacy leak). It stops being
+      // survivable the moment individual targeting exists: a notice
+      // addressed to one specific student or a specific set of faculty
+      // (audience.type == 'student_uids' | 'faculty_uids') MUST NOT be
+      // readable by anyone outside that uids list via a raw SDK query,
+      // even though noticeAppliesTo() in groupSync.js already hides it
+      // from them client-side. Gated per audience.type:
+      //   - 'all'                    → anyone signed in (unchanged)
+      //   - 'batch' | 'group'        → anyone signed in — population-
+      //     level targeting only, not individually sensitive; the
+      //     student-side UI already narrows by noticeAppliesTo(), same
+      //     as before this fix (batch/group membership isn't secret)
+      //   - 'faculty_all'            → any verified faculty account
+      //   - 'faculty_uids'           → only a faculty account whose OWN
+      //     uid is in the notice's own uids array
+      //   - 'student_uids'           → only a signed-in user whose OWN
+      //     uid is in the notice's own uids array
+      //   - anything else/missing    → Admin/HeadOfOps only (fail closed,
+      //     not open — an audience shape this rule doesn't recognize
+      //     should never default to "everyone can read it")
+      allow read: if isAdmin() || isHeadOfOps() || (isSignedIn() && (
+        resource.data.audience.type == 'all'
+        || resource.data.audience.type == 'batch'
+        || resource.data.audience.type == 'group'
+        || (resource.data.audience.type == 'faculty_all' && isFaculty(request.auth.uid))
+        || (resource.data.audience.type == 'faculty_uids' && isFaculty(request.auth.uid)
+            && request.auth.uid in resource.data.audience.uids)
+        || (resource.data.audience.type == 'student_uids'
+            && request.auth.uid in resource.data.audience.uids)
+      ));
+      // Phase 5 of the Notice upgrade (Security Hardening): create is
+      // now split out from update/delete so the length cap below only
+      // applies when a NEW notice is being written — an update (e.g. the
+      // Phase 2 soft-delete, which merge-writes only { deleted: true })
+      // doesn't necessarily carry title/body in its own resource.data in
+      // every SDK code path, so gating update on those fields too could
+      // wrongly break soft-delete. Admin/HeadOfOps keep unconditional
+      // access to all three operations, same as before.
+      allow create: if (isAdmin() || isHeadOfOps())
+        && request.resource.data.title is string && request.resource.data.title.size() < 200
+        && request.resource.data.body is string && request.resource.data.body.size() < 5000
+        // Individual/small-group targeting (audience.type in
+        // 'student_uids'/'faculty_uids'): the uids array IS the access
+        // list the read rule above checks against, so it's validated at
+        // write time too — must actually be a list of strings, and
+        // capped at 300 (a single Firestore array-membership check like
+        // `auth.uid in audience.uids` is cheap regardless of length, but
+        // there's no product reason for a "specific people" notice to
+        // ever address hundreds at once — that's what 'batch'/'group'/
+        // 'all' are for; a huge uids array is almost certainly a UI bug,
+        // not a real targeted send).
+        && (!('audience' in request.resource.data)
+            || !(request.resource.data.audience.type in ['student_uids', 'faculty_uids'])
+            || (request.resource.data.audience.uids is list
+                && request.resource.data.audience.uids.size() > 0
+                && request.resource.data.audience.uids.size() <= 300));
+      allow update, delete: if isAdmin() || isHeadOfOps();
+
+      // Read-receipts (Phase 0 of the Notice upgrade). Each signed-in
+      // user marks their OWN read doc only (doc id == their own uid) —
+      // never someone else's. Only the sender (createdBy.uid) or an
+      // Admin/HeadOfOps can read the full reads list back, so students
+      // can never see each other's read status (privacy).
+      match /reads/{uid} {
+        allow create, update: if isSignedIn() && request.auth.uid == uid
+          && request.auth.uid == request.resource.data.uid;
+        allow read: if isAdmin() || isHeadOfOps()
+          || (isSignedIn() && get(/databases/$(database)/documents/notices/$(noticeId)).data.createdBy.uid == request.auth.uid);
+        allow delete: if false;
+      }
     }
 
     // -------------------------------------------------------------
@@ -771,14 +934,42 @@ service cloud.firestore {
       allow delete: if isAdmin();
 
       match /meta/clStatus {
-        allow read: if isSignedIn() && (isAdmin() || isHeadOfOps() || isGroupMember(groupId) || isCLFor(groupId) || isSCLForGroup(groupId));
+        // BUGFIX: was isSignedIn() && (isAdmin() || isHeadOfOps() ||
+        // isGroupMember(groupId) || isCLFor(groupId) || isSCLForGroup(groupId))
+        // — that silently permission-denied checkCLVacant(groupId)
+        // (staffSync.js) for the exact audience it exists to serve: a
+        // non-member trying to bootstrap-claim CR on a brand-new class
+        // with no CL/CR yet (ClaimCRCard.jsx's handleClaimCR). Since
+        // checkCLVacant does a plain getDoc() (not onSnapshot), the
+        // failure wasn't silent exactly — it surfaced as a generic
+        // "Permission denied, try again" error to the user — but it was
+        // NOT a transient race like that message implies; it would have
+        // failed identically on every retry, permanently blocking the
+        // one bootstrap path this whole CR-approval migration depends on
+        // for a class that has nobody in authority yet. Read access to
+        // "does a CL exist" is not sensitive — open it to any signed-in
+        // user, same reasoning as the matching meta/crStatus fix above.
+        allow read: if isSignedIn();
         allow create: if isAdmin() || isHeadOfOps() || isSCLForGroup(groupId);
         allow delete: if isAdmin() || isHeadOfOps(); // asymmetric, same as staff role removal above
         allow update: if isAdmin() || isHeadOfOps();
       }
 
       match /meta/crStatus {
-        allow read: if isAdmin() || isGroupMember(groupId) || isCLFor(groupId);
+        // BUGFIX: was isAdmin() || isGroupMember(groupId) || isCLFor(groupId)
+        // — that silently permission-denied for anyone who ISN'T already a
+        // member, which is exactly the audience that most needs to read
+        // this (ClaimCRCard.jsx is shown to non-members precisely so they
+        // can claim a vacant CR slot, and NoCRBanner.jsx needs this to
+        // warn a non-member their class has no CR at all). Since
+        // subscribeCRStatus's onSnapshot error callback only logs and
+        // never calls back (see groupSync.js), that permission-denied
+        // wasn't a visible error either — crStatus just silently stayed
+        // null forever and both components rendered nothing, for every
+        // signed-in non-member. This is just a count (hasCR/count/
+        // slotsFull), not remotely sensitive — open it to any signed-in
+        // user rather than gating read access at all.
+        allow read: if isSignedIn();
         allow write: if isAdmin() || isCLFor(groupId) || isSCLForGroup(groupId) || isHeadOfOps();
       }
 
@@ -799,28 +990,67 @@ service cloud.firestore {
         // manual verification gate is about actually teaching/writing
         // (creating an assignment, logging sessions, posting notices,
         // entering marks), not about read-only visibility.
-        allow read: if isAdmin() || request.auth.uid == memberUid || isGroupMember(groupId) || isCLFor(groupId) || isHeadOfOps() || isSCLForGroup(groupId) || isFaculty(request.auth.uid);
-        allow create: if (isRealAccount() && request.auth.uid == memberUid
-                        && request.resource.data.role == 'member'
-                        && (request.resource.data.verified == false
-                            || (rollIsInstitutionallyVerified(request.resource.data.roll)
-                                && rollMatchesGroup(request.resource.data.roll, groupId))))
+        //
+        // hasOwnJoinRequest(groupId): someone who has FILED a join
+        // request (pending, approved, or rejected — any status) for this
+        // group can also read the roster read-only. This is specifically
+        // so a still-pending applicant can see who the current CR/ACR is
+        // (JoinStatusCard.jsx's "who to bug" contact display) — without
+        // this, subscribeMembers() permission-denies for exactly the
+        // people who most need to know who to follow up with, and
+        // _subscribeSingleton's retry-then-silently-empty fallback (see
+        // groupSync.js) means that failure is invisible, not a visible
+        // error, which is worse. Harmless to grant: same read-only roster
+        // exposure isGroupMember already gets, just extended to "applied
+        // but not yet approved" instead of requiring approval first.
+        allow read: if isAdmin() || request.auth.uid == memberUid || isGroupMember(groupId) || isCLFor(groupId) || isHeadOfOps() || isSCLForGroup(groupId) || isFaculty(request.auth.uid)
+          || (isSignedIn() && exists(/databases/$(database)/documents/groups/$(groupId)/joinRequests/$(request.auth.uid)));
+        allow create:
+                        // CR-join-request approval (approveJoinRequest in
+                        // groupSync.js): CR/ACR/CL/Admin/HeadOfOps/SCL
+                        // creates a brand-new member doc for SOMEONE ELSE,
+                        // not a self-write. The old plain self-join branch
+                        // (any real account writing role:'member' to their
+                        // own uid) has been removed entirely — join is now
+                        // request+approve only. This branch requires a
+                        // matching joinRequests/{memberUid} doc that is
+                        // currently 'pending' (still pending because this
+                        // get() sees pre-batch state — approveJoinRequest's
+                        // batch.update() to 'approved' hasn't landed yet
+                        // when this create is evaluated) so this can't be
+                        // used to add an arbitrary member with no request
+                        // trail. isGroupCR/isGroupACR already prove the
+                        // actor is an existing member of THIS group, same
+                        // authority tier as the update rule's CR/ACR branch
+                        // below.
+                        if (isRealAccount()
+                            && request.auth.uid != memberUid
+                            && (isAdmin() || isCLFor(groupId) || isHeadOfOps() || isSCLForGroup(groupId)
+                                || isGroupCR(groupId) || isGroupACR(groupId))
+                            && request.resource.data.role == 'member'
+                            && request.resource.data.verified == true
+                            && exists(/databases/$(database)/documents/groups/$(groupId)/joinRequests/$(memberUid))
+                            && get(/databases/$(database)/documents/groups/$(groupId)/joinRequests/$(memberUid)).data.status == 'pending')
                         // Fallback: approveCLApplication() bundles a CR
                         // appointment into the member doc as a set(merge:true).
                         // If the applicant's member doc somehow doesn't exist
-                        // yet (e.g. their own joinGroup() write raced/failed
-                        // before they clicked Claim CR), Firestore treats that
+                        // yet (e.g. no prior joinRequests approval, since
+                        // there was nobody around to approve one — this is
+                        // the CL-vacant bootstrap case), Firestore treats that
                         // merge as a CREATE, not an update — so without this,
                         // the whole approval would silently fail here even
                         // though the SCL/Admin/Head of Ops clearly has the
                         // authority to appoint CR (see the update rule below).
-                        // crCount(groupId) < 2 (MAX_CR): server-side capacity
-                        // enforcement, mirroring the MAX_CR check groupSync.js
-                        // already does client-side. Without this, a modified
-                        // client (or any direct Firestore write bypassing the
-                        // app's own JS) could grant unlimited 'cr' roles in
-                        // one group, since nothing else in this rule file
-                        // counts existing CR holders before allowing another.
+                        // Deliberately has NO joinRequests check — by
+                        // definition there is no CR/ACR/CL yet to have
+                        // received one. crCount(groupId) < 2 (MAX_CR):
+                        // server-side capacity enforcement, mirroring the
+                        // MAX_CR check groupSync.js already does client-side.
+                        // Without this, a modified client (or any direct
+                        // Firestore write bypassing the app's own JS) could
+                        // grant unlimited 'cr' roles in one group, since
+                        // nothing else in this rule file counts existing CR
+                        // holders before allowing another.
                         || (request.resource.data.role == 'cr' && request.resource.data.verified == true
                             && (isAdmin() || isHeadOfOps() || isSCLForGroup(groupId))
                             && crCount(groupId) < 2);
@@ -880,28 +1110,31 @@ service cloud.firestore {
              request.resource.data.role == 'cr')) ||
           (isSignedIn() && request.auth.uid == memberUid
             && request.resource.data.verified == resource.data.verified
-            && request.resource.data.role == resource.data.role) ||
-          // Self-service Tier-1 catch-up: if someone joined the group
-          // BEFORE completing KUET email verification, their member doc
-          // was created with verified:false and nothing else ever
-          // revisits it. Let them flip verified false->true themselves,
-          // ONLY once their exact roll is institutionally verified AND
-          // matches this exact group — everything else must stay put.
-          (isSignedIn() && request.auth.uid == memberUid
-            && resource.data.verified == false && request.resource.data.verified == true
-            && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['verified'])
-            && rollIsInstitutionallyVerified(resource.data.roll)
-            && rollMatchesGroup(resource.data.roll, groupId));
+            && request.resource.data.role == resource.data.role);
+          // (Removed: the Tier-1 self-service "flip verified false->true"
+          // catch-up branch. It was already unreachable in practice —
+          // every members/{uid} create path sets verified:true immediately
+          // — and both its client call sites (App.jsx, ClaimCRCard.jsx's
+          // syncOwnVerification()) have been removed. verified is now only
+          // ever set by a human CL/Faculty approval.)
         // Removal authority is asymmetric, same principle as the update
         // rule above: CL/Admin/Head of Ops can remove anyone. A group's
         // own CR/ACR can ALSO remove a plain member (kick from class) —
         // but never another CR/ACR outright (that must go through
         // clRevokeCR/CL escalation, not straight deletion) and never
         // themself via this path.
+        //
+        // Self-leave: a plain member (never a CR/ACR — they must step
+        // down via handoffCR/requestLeaveCR first, so a class is never
+        // left CR-less by a stray self-delete) may remove their OWN doc
+        // at any time (leaveGroup in groupSync.js). Re-joining afterward
+        // always requires a brand-new joinRequests approval — there is
+        // no fast-path back in.
         allow delete: if isAdmin() || isCLFor(groupId) || isHeadOfOps() ||
           ((isGroupCR(groupId) || isGroupACR(groupId)) &&
             resource.data.role != 'cr' && resource.data.role != 'acr' &&
-            request.auth.uid != memberUid);
+            request.auth.uid != memberUid) ||
+          (isSignedIn() && request.auth.uid == memberUid && resource.data.role == 'member');
       }
 
       match /crRequests/{requestUid} {
@@ -941,6 +1174,42 @@ service cloud.firestore {
           (isSignedIn() && resource.data.status == 'pending' && request.resource.data.status == 'revoked' &&
             ((request.auth.uid == requestUid && resource.data.type != 'leave')
              || (resource.data.type == 'leave' && resource.data.uid == request.auth.uid)));
+        allow delete: if false;
+      }
+
+      // -------------------------------------------------------------
+      // Join requests — NEW class-membership gate (replaces plain
+      // self-join). Doc id == requester's own uid, one per group.
+      // Unlike crRequests (which requires already being a verified
+      // member), a joinRequests doc is created by someone who is NOT
+      // a member yet — that's the whole point, so it deliberately does
+      // NOT call isGroupMember/isVerifiedMember as a precondition.
+      //
+      // contactEmail is a plain self-reported string field, shown only
+      // to the CR/ACR/CL reviewing the request so THEY can eyeball
+      // whether it looks like a real KUET address for that roll — it is
+      // never verified by Firestore rules or any backend function.
+      // There is no OTP/email-link step in this flow at all; the human
+      // reviewer is the verifier, same trust model as a CR approving a
+      // crRequests claim.
+      match /joinRequests/{requestUid} {
+        allow read: if isAdmin() || isCLFor(groupId) || isHeadOfOps() || isSCLForGroup(groupId)
+          || isGroupCR(groupId) || isGroupACR(groupId)
+          || (isSignedIn() && request.auth.uid == requestUid);
+        allow create: if isRealAccount() && request.auth.uid == requestUid
+          && request.resource.data.status == 'pending'
+          && request.resource.data.uid == request.auth.uid
+          && !isGroupMember(groupId);
+        // Resubmission after a rejection: same shape as crRequests —
+        // only the original requester can move their own resolved
+        // (non-pending) doc back to pending, and only if they still
+        // aren't a member (a rejected-then-approved-elsewhere edge case
+        // shouldn't be reopenable here).
+        allow update: if isAdmin() || isCLFor(groupId) || isHeadOfOps() || isSCLForGroup(groupId)
+          || isGroupCR(groupId) || isGroupACR(groupId)
+          || (isSignedIn() && request.auth.uid == requestUid
+              && resource.data.status != 'pending' && request.resource.data.status == 'pending'
+              && !isGroupMember(groupId));
         allow delete: if false;
       }
 
@@ -999,13 +1268,62 @@ service cloud.firestore {
         // "[groupSync] listener error ... Missing or insufficient
         // permissions" loop for faculty accounts — not a startup race,
         // so the client-side retry backoff was never going to fix it.
-        allow read: if isAdmin() || isGroupMember(groupId) || isFaculty(request.auth.uid);
+        // Phase 5 of the Notice upgrade (Security Hardening): this used
+        // to be a blanket isGroupMember(groupId) grant — any signed-in
+        // member of the class could read every notice doc in this
+        // subcollection directly via the Firestore SDK, including a
+        // Teacher's cr_only notice, even though the CLIENT already hides
+        // cr_only notices from non-CR/ACR viewers (see
+        // filterStudentFacingNotices in noticeUtils.js). Client-side
+        // filtering is a UI convenience, not a security boundary — a
+        // student could always bypass it with a direct SDK query, since
+        // the rule itself never checked targetType. Closed here: a
+        // regular group member can read any notice EXCEPT one with
+        // targetType == 'cr_only', which additionally requires being
+        // CR/ACR in this group (or CL/Admin/Faculty, who already have
+        // their own unconditional grant below).
+        allow read: if isAdmin() || isFaculty(request.auth.uid) ||
+          (isGroupMember(groupId) &&
+           (resource.data.targetType != 'cr_only' ||
+            isGroupCR(groupId) || isGroupACR(groupId) || isCLFor(groupId)));
         // Faculty notices REQUIRE the Blue Tick (isVerifiedFaculty) —
         // consistent with the rest of the manual verification policy: an
         // unverified faculty account cannot post into the notice feed.
-        // The CR/ACR/CL/Admin branch is unchanged.
-        allow create: if isGroupCR(groupId) || isGroupACR(groupId) || isCLFor(groupId) || isAdmin() || isVerifiedFaculty(request.auth.uid);
-        allow update, delete: if isCLFor(groupId) || isAdmin();
+        // The CR/ACR/CL/Admin branch is unchanged. Phase 5 of the Notice
+        // upgrade added the title/body length cap — same limits as the
+        // root /notices/{noticeId} create rule above, kept identical so
+        // a sender doesn't hit a different cap depending on which of the
+        // three composers they're using.
+        allow create: if (isGroupCR(groupId) || isGroupACR(groupId) || isCLFor(groupId) || isAdmin() || isVerifiedFaculty(request.auth.uid))
+          && request.resource.data.title is string && request.resource.data.title.size() < 200
+          && request.resource.data.body is string && request.resource.data.body.size() < 5000;
+        // Phase 2 of the Notice upgrade (Manage/Delete): a CR/ACR or
+        // Teacher can now also soft-delete (or otherwise update) their
+        // OWN notice — resource.data.postedBy.uid == request.auth.uid —
+        // matching the sender-side "Delete" button in ClassRoster.jsx /
+        // FacultyNoticeBroadcast.jsx. isCLFor(groupId)/isAdmin() keep
+        // their existing unrestricted access (a CL/Admin can update or
+        // soft-delete ANY notice in the group, not just their own).
+        // Hard delete is still denied everywhere — soft-delete only, via
+        // update (deleted: true), same pattern this file already uses
+        // for resources/{resourceId} above.
+        allow update: if isCLFor(groupId) || isAdmin()
+          || (isSignedIn() && resource.data.postedBy.uid == request.auth.uid);
+        allow delete: if false;
+
+        // Read-receipts (Phase 0 of the Notice upgrade). Same shape and
+        // same privacy rule as the root /notices/{noticeId}/reads above:
+        // a member marks only their own read doc; only the notice's
+        // sender (postedBy.uid), the group's CL, or Admin can read the
+        // full list back.
+        match /reads/{uid} {
+          allow create, update: if isSignedIn() && request.auth.uid == uid
+            && request.auth.uid == request.resource.data.uid;
+          allow read: if isAdmin() || isCLFor(groupId)
+            || (isSignedIn()
+                && get(/databases/$(database)/documents/groups/$(groupId)/notices/$(noticeId)).data.postedBy.uid == request.auth.uid);
+          allow delete: if false;
+        }
       }
 
       // -----------------------------------------------------------

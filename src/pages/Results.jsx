@@ -163,18 +163,25 @@ export default function Results() {
       const computed = computeCourseGrade(c);
       const m = marks[c.id] || {};
       const hasPublishedResult = !!String(m.publishedGrade || m.resultGrade || '').trim();
-      const hasAnyEntry = Object.values(m).some(v => v !== '' && v !== null && v !== undefined);
+      // hasOfficialEntry mirrors computeCourseGrade's own gate (store.js):
+      // only the Results page's own "Upload grade" dropdown counts as a
+      // real entry — publishedGrade for Theory/Project, resultGrade for
+      // Sessional. Term Planner (Marks.jsx) scratch fields (hall,
+      // ctTeacher1/2, attTeacher1/2, etc.) must never make this page claim
+      // "Draft marks only" or show a computed grade — that was scratch
+      // calculator work, not something the student submitted here.
+      const hasOfficialEntry = hasPublishedResult;
       const termKey = `Y${c.year}T${c.term}`;
       const isCurrentTerm = termKey === currentTermKey;
       const isOngoingCurrentTerm = isCurrentTerm && currentTermIsOngoing;
       const isTermMarkedNotYetPublished = notYetPublishedSet.has(termKey) && isNotPublishedEligibleTerm(termKey);
 
       if (hasPublishedResult) {
-        return { ...c, grade: computed.grade, gradePoint: computed.point, total: computed.total, isX: computed.isX, hasAnyEntry, displayStatus: 'completed', resultState: 'published', resultNote: '' };
+        return { ...c, grade: computed.grade, gradePoint: computed.point, total: computed.total, isX: computed.isX, hasAnyEntry: hasOfficialEntry, displayStatus: 'completed', resultState: 'published', resultNote: '' };
       }
 
       if (isOngoingCurrentTerm) {
-        return { ...c, grade: 'ONGOING', gradePoint: null, total: null, isX: false, hasAnyEntry, displayStatus: 'ongoing', resultState: 'ongoing', resultNote: 'Result is still ongoing' };
+        return { ...c, grade: 'ONGOING', gradePoint: null, total: null, isX: false, hasAnyEntry: hasOfficialEntry, displayStatus: 'ongoing', resultState: 'ongoing', resultNote: 'Result is still ongoing' };
       }
 
       if (isTermMarkedNotYetPublished) {
@@ -182,9 +189,9 @@ export default function Results() {
           ...c,
           grade: 'NOT YET PUBLISHED',
           gradePoint: null,
-          total: hasAnyEntry ? computed.total : null,
+          total: hasOfficialEntry ? computed.total : null,
           isX: false,
-          hasAnyEntry,
+          hasAnyEntry: hasOfficialEntry,
           displayStatus: 'not_published',
           resultState: 'not_published',
           resultNote: 'Official result not published yet',
@@ -193,14 +200,14 @@ export default function Results() {
 
       return {
         ...c,
-        grade: hasAnyEntry ? computed.grade : '—',
-        gradePoint: hasAnyEntry ? computed.point : null,
-        total: hasAnyEntry ? computed.total : null,
+        grade: hasOfficialEntry ? computed.grade : '—',
+        gradePoint: hasOfficialEntry ? computed.point : null,
+        total: hasOfficialEntry ? computed.total : null,
         isX: computed.isX,
-        hasAnyEntry,
+        hasAnyEntry: hasOfficialEntry,
         displayStatus: 'pending',
         resultState: 'pending',
-        resultNote: hasAnyEntry ? 'Draft marks only (unpublished)' : 'No marks entered',
+        resultNote: hasOfficialEntry ? 'Draft marks only (unpublished)' : 'No marks entered',
       };
     });
 

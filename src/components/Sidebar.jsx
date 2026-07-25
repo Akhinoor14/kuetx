@@ -77,7 +77,7 @@ export function Sidebar({ open, onClose, authState }) {
     const unsub = noticeApi.subscribeAllNotices(profile, groupId, (notices) => {
       latestNoticesRef.current = notices;
       recompute();
-    }, 'student', { isViewerCR: isRealCR });
+    }, 'student', { isViewerCR: isRealCR, uid: auth.currentUser?.uid });
     window.addEventListener('kuetx:store-updated', recompute);
     return () => {
       unsub();

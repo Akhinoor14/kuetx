@@ -29,9 +29,9 @@ export const db = initializeFirestore(app, {
 
 export const storage = getStorage(app);
 
-// Used by otpVerify.js to call requestOtp / verifyOtp — region left as
-// default (us-central1) since Cloud Functions were deployed there
-// already for the push-notification triggers (see functions/index.js).
+// Used for callable Cloud Functions (push notifications, etc.) — region
+// left as default (us-central1) since functions were deployed there
+// already (see functions/index.js).
 export const functions = getFunctions(app);
 
 // Analytics — lazy load so it doesn't block app startup

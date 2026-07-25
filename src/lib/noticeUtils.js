@@ -1,4 +1,6 @@
+import { doc, setDoc, collection, onSnapshot, serverTimestamp } from 'firebase/firestore';
 import { store } from '../store/store';
+import { db } from './firebase';
 import { subscribeGlobalNotices, subscribeGroupNotices, noticeAppliesTo } from './groupSync';
 
 /**
@@ -102,6 +104,14 @@ export function subscribeAllNotices(profile, groupId, callback, audience = 'stud
     const deduped = [];
     for (const n of merged) {
       if (seen.has(n.id)) continue;
+      // Phase 2 of the Notice upgrade: soft-deleted notices (deleted:
+      // true) are hidden from every feed that goes through here — the
+      // sender's OWN "sent notices" list uses subscribeGroupNotices/
+      // subscribeGlobalNotices directly (not this merged feed) so it can
+      // still show a "Deleted" tag as an audit trail; see
+      // NoticeInsightsPanel / ClassRoster / FacultyNoticeBroadcast /
+      // AdminDashboard's sent-notices sections.
+      if (n.deleted) continue;
       seen.add(n.id);
       deduped.push(n);
     }
@@ -113,8 +123,15 @@ export function subscribeAllNotices(profile, groupId, callback, audience = 'stud
   const unsubGlobal = audience === 'faculty'
     ? () => {}
     : subscribeGlobalNotices((notices) => {
+        // Handoff item 2: opts.uid (current signed-in student's uid) is
+        // threaded through to noticeAppliesTo so a student_uids-targeted
+        // notice is actually SHOWN to its target — the firestore.rules
+        // fix already makes it READABLE (the real privacy boundary), but
+        // without this the client-side filter here would silently drop it
+        // for everyone, target included, since noticeAppliesTo's default
+        // uid=null never matches a student_uids audience.
         globalList = notices
-          .filter((n) => noticeAppliesTo(n, profile, groupId))
+          .filter((n) => noticeAppliesTo(n, profile, groupId, opts.uid))
           .map((n) => {
             const isFounder = n.createdBy?.name === 'Founder';
             return {
@@ -124,6 +141,15 @@ export function subscribeAllNotices(profile, groupId, callback, audience = 'stud
               isFounder,
               section: 'admin',
               createdAt: toMillis(n.createdAt),
+              // "Just for you" tag: only meaningful on the student-facing
+              // branch, and only for the individually-targeted audience
+              // type (student_uids) — 'batch'/'group'/'all' are
+              // population-level, not personal, even though they're also
+              // narrowed client-side by noticeAppliesTo(). Faculty-side
+              // personal tagging (faculty_uids) is handled separately in
+              // subscribeFacultyGlobalNotices (groupSync.js), since that's
+              // a different code path entirely.
+              isPersonal: n.audience?.type === 'student_uids',
             };
           });
         emit();
@@ -148,6 +174,17 @@ export function subscribeAllNotices(profile, groupId, callback, audience = 'stud
           isFounder: false,
           section: 'class',
           createdAt: toMillis(n.createdAt),
+          // Phase 2 of the Notice upgrade: stamp the owning groupId onto
+          // every group notice item. subscribeGroupNotices() is already
+          // scoped to one groupId, but that id was never attached to the
+          // mapped object itself — callers that merge notices from
+          // several groups at once (e.g. FacultyNoticeBroadcast.jsx,
+          // which subscribes per taught-class and flattens the results)
+          // had no way to tell which group a given notice belonged to
+          // afterward. Needed for building the reads-subcollection path
+          // (subscribeNoticeReadStats) and the soft-delete call
+          // (deleteNoticeSoft) from a flat, already-merged notice list.
+          groupId,
         }));
         emit();
       })
@@ -186,3 +223,212 @@ export const setNoticeRead = (id, read = true) => {
 
 export const getUnreadNotices = (notices, readIds) =>
   notices.filter(n => !readIds.has(n.id));
+
+// Phase 6 of the Notice upgrade: PER-DEVICE local "have I acknowledged
+// this" tracking, same localStorage pattern as NOTICE_READ_KEY above —
+// needed because a reader has no read access to their OWN reads/{uid}
+// doc back out of Firestore (see the reads/{uid} rules: only the
+// notice's sender/CL/Admin can READ that subcollection; a reader can
+// only WRITE their own doc, never read it back). Without this local
+// mirror, NoticeCard's "✅ Got it" button would have no way to know
+// whether IT should currently render as pressed after a page reload.
+export const ACKNOWLEDGED_NOTICE_KEY = 'noticeAckIds_v1';
+
+export const getAcknowledgedNoticeIds = () => {
+  const saved = store.get(ACKNOWLEDGED_NOTICE_KEY);
+  return new Set(Array.isArray(saved) ? saved : []);
+};
+
+export const setNoticeAcknowledgedLocal = (id, acknowledged = true) => {
+  if (!id) return;
+  const saved = store.get(ACKNOWLEDGED_NOTICE_KEY);
+  const next = new Set(Array.isArray(saved) ? saved : []);
+  if (acknowledged) next.add(id);
+  else next.delete(id);
+  store.set(ACKNOWLEDGED_NOTICE_KEY, [...next]);
+
+  try {
+    window.dispatchEvent(new Event('kuetx:store-updated'));
+  } catch {}
+};
+
+// ---------------------------------------------------------------------
+// Read-receipts (Phase 0 of the Notice upgrade — Firestore migration)
+// ---------------------------------------------------------------------
+//
+// getReadNoticeIds()/setNoticeRead() above are PER-DEVICE (localStorage
+// key noticeReadIds_v1) and never sync to the cloud — a sender can never
+// know who actually read a notice, because that state is stuck on each
+// reader's own device. The functions below add a real Firestore
+// read-receipt doc per (notice, reader), so a sender-side "who has read
+// this" view becomes possible (see NoticeInsightsPanel, Phase 2).
+//
+// Doc path:
+//   global notice:  notices/{noticeId}/reads/{uid}
+//   group notice:   groups/{groupId}/notices/{noticeId}/reads/{uid}
+// Doc id is the reader's own uid — a person reads a notice once, so a
+// second call just re-sets (merge:true) the same doc rather than
+// creating a duplicate.
+//
+// This is ADDITIVE, not a replacement: callers should keep calling the
+// existing setNoticeRead() too (see Notice.jsx's markRead()), so the
+// unread-dot / localStorage-based UI keeps working exactly as before,
+// offline included. markNoticeReadInFirestore() below is best-effort —
+// if it fails (e.g. offline, or a permission edge case), the read is
+// still recorded locally by the existing local call and the UI does not
+// break.
+
+/**
+ * Build the Firestore doc ref for a notice's reads/{uid} subcollection
+ * doc. Pass groupId for a group (CR/ACR/Teacher) notice, or null/undefined
+ * for a root/global (Admin/Founder) notice.
+ */
+export function getNoticeReadsCollection(noticeId, groupId = null) {
+  return groupId
+    ? collection(db, 'groups', groupId, 'notices', noticeId, 'reads')
+    : collection(db, 'notices', noticeId, 'reads');
+}
+
+/**
+ * Mark a notice as read for the current user in Firestore (in addition
+ * to, not instead of, the existing local setNoticeRead() call). Safe to
+ * call every time a notice is opened — merge:true means re-marking an
+ * already-read notice just refreshes readAt rather than erroring or
+ * duplicating.
+ *
+ * @param {string} noticeId
+ * @param {string|null} groupId - null/undefined for a global notice
+ * @param {{name?: string, studentId?: string}} profile - used for the
+ *   reader's display name/roll shown in the sender's Insights panel
+ * @param {string} uid - current user's uid
+ */
+export async function markNoticeReadInFirestore(noticeId, groupId, profile, uid) {
+  if (!noticeId || !uid) return;
+  try {
+    const readsCollection = getNoticeReadsCollection(noticeId, groupId);
+    await setDoc(doc(readsCollection, uid), {
+      uid,
+      name: profile?.name || 'Unknown',
+      roll: profile?.studentId || '',
+      readAt: serverTimestamp(),
+    }, { merge: true });
+  } catch {
+    // Best-effort — local read state (setNoticeRead) already covers the
+    // unread-dot UI even if this write fails (offline, rules edge case).
+  }
+}
+
+/**
+ * Live-subscribe to a single notice's read receipts. Only useful for the
+ * SENDER of the notice (or Admin/CL) — Firestore rules restrict read
+ * access on reads/{uid} accordingly, so calling this as a non-sender
+ * will error/return nothing.
+ *
+ * callback is called with { count, acknowledgedCount, readers } on every
+ * change, where readers is [{ uid, name, roll, readAt, acknowledged,
+ * acknowledgedAt }], readAt/acknowledgedAt as epoch ms (acknowledgedAt is
+ * 0 if never acknowledged).
+ *
+ * Phase 6 of the Notice upgrade: acknowledgedCount is a SUBSET of count,
+ * not a separate population — a reader can only acknowledge a notice
+ * they've already read (see acknowledgeNoticeInFirestore below, which
+ * merge-writes onto the same reads/{uid} doc rather than a new
+ * sub-collection, extending Phase 0's shape rather than replacing it).
+ *
+ * @param {string} noticeId
+ * @param {string|null} groupId - null/undefined for a global notice
+ * @param {(stats: {count: number, acknowledgedCount: number, readers: Array}) => void} callback
+ * @returns {() => void} unsubscribe
+ */
+export function subscribeNoticeReadStats(noticeId, groupId, callback) {
+  if (!noticeId) return () => {};
+  const readsCollection = getNoticeReadsCollection(noticeId, groupId);
+  return onSnapshot(readsCollection, (snap) => {
+    const readers = snap.docs.map((d) => {
+      const data = d.data();
+      return {
+        uid: data.uid || d.id,
+        name: data.name || 'Unknown',
+        roll: data.roll || '',
+        readAt: toMillis(data.readAt),
+        acknowledged: data.acknowledged === true,
+        acknowledgedAt: toMillis(data.acknowledgedAt),
+      };
+    });
+    readers.sort((a, b) => b.readAt - a.readAt);
+    const acknowledgedCount = readers.filter((r) => r.acknowledged).length;
+    callback({ count: readers.length, acknowledgedCount, readers });
+  }, () => {
+    // Permission-denied (non-sender) or offline — fail quietly, same
+    // spirit as the rest of this file's best-effort error handling.
+    callback({ count: 0, acknowledgedCount: 0, readers: [] });
+  });
+}
+
+/**
+ * Mark a notice as acknowledged ("✅ Got it") for the current user in
+ * Firestore. Phase 6 of the Notice upgrade — extends the SAME reads/{uid}
+ * doc Phase 0 already writes (markNoticeReadInFirestore), rather than a
+ * new sub-collection: a person can only acknowledge a notice after
+ * they've opened it, so the read doc already exists (or this call's own
+ * merge:true creates it) by the time this fires. Safe to call more than
+ * once — merge:true just refreshes acknowledgedAt.
+ *
+ * Callers should already gate WHEN this button is shown (CR/Teacher
+ * class notices only, not Admin broadcasts — see the spec's reasoning:
+ * Admin audience is much bigger, acknowledge is less useful there); this
+ * function itself doesn't enforce that, it just performs the write.
+ *
+ * @param {string} noticeId
+ * @param {string|null} groupId - null/undefined for a global notice
+ * @param {{name?: string, studentId?: string}} profile
+ * @param {string} uid
+ */
+export async function acknowledgeNoticeInFirestore(noticeId, groupId, profile, uid) {
+  if (!noticeId || !uid) return;
+  try {
+    const readsCollection = getNoticeReadsCollection(noticeId, groupId);
+    await setDoc(doc(readsCollection, uid), {
+      uid,
+      name: profile?.name || 'Unknown',
+      roll: profile?.studentId || '',
+      acknowledged: true,
+      acknowledgedAt: serverTimestamp(),
+    }, { merge: true });
+  } catch {
+    // Best-effort, same spirit as markNoticeReadInFirestore — a failed
+    // write here shouldn't crash the "Got it" button; the UI can retry
+    // on next click since this is idempotent (merge:true).
+  }
+}
+
+// ---------------------------------------------------------------------
+// Manage / soft-delete (Phase 2 of the Notice upgrade)
+// ---------------------------------------------------------------------
+
+/**
+ * Soft-delete a notice. Merge-updates `deleted: true` on the notice doc
+ * rather than a hard delete — keeps the doc (and its reads/{uid}
+ * subcollection, any audit-log references) intact, so a sender's own
+ * "Sent notices" list can still show a "Deleted" tag as an audit trail
+ * (see ClassRoster.jsx / FacultyNoticeBroadcast.jsx / AdminDashboard.jsx).
+ * subscribeAllNotices()'s emit() filters deleted:true out of every
+ * OTHER feed (the student-facing view), so a soft-deleted notice
+ * disappears from the normal inbox immediately.
+ *
+ * Callers should already have confirmed the signed-in user is allowed to
+ * do this in the UI — firestore.rules independently enforces the real
+ * permission check regardless (CR/ACR/CL/Admin for a group notice,
+ * matching postedBy.uid for a Teacher notice, Admin/HeadOfOps for a
+ * root/global notice), so this call simply fails if the rule denies it.
+ *
+ * @param {string} noticeId
+ * @param {string|null} groupId - null/undefined for a global/root notice
+ */
+export async function deleteNoticeSoft(noticeId, groupId = null) {
+  if (!noticeId) return;
+  const ref = groupId
+    ? doc(db, 'groups', groupId, 'notices', noticeId)
+    : doc(db, 'notices', noticeId);
+  await setDoc(ref, { deleted: true }, { merge: true });
+}

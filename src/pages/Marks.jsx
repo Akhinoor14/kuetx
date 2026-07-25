@@ -36,7 +36,7 @@ function getTeachersForCourse(courseId) {
 }
 
 // ── Course card: Modern grid-based layout ──────────────────────────────────
-function CourseCard({ course, marks, onChange, onOpenMarkingHelp, isCurrentOngoingTerm }) {
+function CourseCard({ course, marks, onChange, onClearCourse, onOpenMarkingHelp, isCurrentOngoingTerm }) {
   const m = marks[course.id] || {};
   const { pct: attPct, source: attSource } = computeEffectiveAttendance(course.id);
   const inputDisabled = false;
@@ -109,6 +109,21 @@ function CourseCard({ course, marks, onChange, onOpenMarkingHelp, isCurrentOngoi
           <h3 className="planner-card-title">{course.code}</h3>
           <p className="planner-card-desc">{course.name}</p>
         </div>
+        {Object.keys(m).length > 0 && (
+          <button
+            type="button"
+            onClick={() => onClearCourse(course.id)}
+            disabled={inputDisabled}
+            title="Clear all entered marks for this course"
+            style={{
+              border: '1px solid var(--border)', background: 'var(--surface)', color: 'var(--muted)',
+              borderRadius: 8, padding: '5px 10px', fontSize: 10.5, fontWeight: 700, cursor: 'pointer',
+              whiteSpace: 'nowrap',
+            }}
+          >
+            Clear entry
+          </button>
+        )}
       </div>
 
       {/* Planner is purely local; no remote mark entry/status shown here */}
@@ -120,7 +135,7 @@ function CourseCard({ course, marks, onChange, onOpenMarkingHelp, isCurrentOngoi
           <div className="planner-input-field planner-hall-field">
             <label>Hall Exam</label>
             <div className="planner-input-wrapper planner-input-wrapper-hall">
-              <input type="number" min={0} max={210} value={m.hall ?? ''} onChange={e => onChange(course.id, 'hall', Math.min(210, Math.max(0, +e.target.value || 0)))} disabled={inputDisabled} placeholder="0" />
+              <input type="number" min={0} max={210} value={m.hall ?? ''} onChange={e => onChange(course.id, 'hall', e.target.value === '' ? null : Math.min(210, Math.max(0, +e.target.value)))} disabled={inputDisabled} placeholder="0" />
               <span className="planner-input-unit">/210</span>
             </div>
           </div>
@@ -164,8 +179,8 @@ function CourseCard({ course, marks, onChange, onOpenMarkingHelp, isCurrentOngoi
 
               {attMode === 'manual_marks' && (
                 <div className="planner-attendance-marks">
-                  <input type="number" min={0} max={15} value={m.attTeacher1 ?? ''} onChange={e => onChange(course.id, 'attTeacher1', Math.min(15, Math.max(0, +e.target.value || 0)))} placeholder="T1" disabled={inputDisabled} />
-                  <input type="number" min={0} max={15} value={m.attTeacher2 ?? ''} onChange={e => onChange(course.id, 'attTeacher2', Math.min(15, Math.max(0, +e.target.value || 0)))} placeholder="T2" disabled={inputDisabled} />
+                  <input type="number" min={0} max={15} value={m.attTeacher1 ?? ''} onChange={e => onChange(course.id, 'attTeacher1', e.target.value === '' ? null : Math.min(15, Math.max(0, +e.target.value)))} placeholder="T1" disabled={inputDisabled} />
+                  <input type="number" min={0} max={15} value={m.attTeacher2 ?? ''} onChange={e => onChange(course.id, 'attTeacher2', e.target.value === '' ? null : Math.min(15, Math.max(0, +e.target.value)))} placeholder="T2" disabled={inputDisabled} />
                 </div>
               )}
             </div>
@@ -179,17 +194,17 @@ function CourseCard({ course, marks, onChange, onOpenMarkingHelp, isCurrentOngoi
             {useManual1 ? (
               <div className="planner-input-field">
                 <label style={{ fontSize: 11 }}>Marks (0-45)</label>
-                <input type="number" min={0} max={45} value={m.manualTeacher1 ?? ''} onChange={e => onChange(course.id, 'manualTeacher1', Math.min(45, Math.max(0, +e.target.value || 0)))} disabled={inputDisabled} placeholder="0" />
+                <input type="number" min={0} max={45} value={m.manualTeacher1 ?? ''} onChange={e => onChange(course.id, 'manualTeacher1', e.target.value === '' ? null : Math.min(45, Math.max(0, +e.target.value)))} disabled={inputDisabled} placeholder="0" />
               </div>
             ) : (
               <div className="planner-teacher-inputs">
                 <div className="planner-input-field">
                   <label style={{ fontSize: 11 }}>CT (0-30)</label>
-                  <input type="number" min={0} max={30} value={m.ctTeacher1 ?? ''} onChange={e => onChange(course.id, 'ctTeacher1', Math.min(30, Math.max(0, +e.target.value || 0)))} disabled={inputDisabled} placeholder="0" />
+                  <input type="number" min={0} max={30} value={m.ctTeacher1 ?? ''} onChange={e => onChange(course.id, 'ctTeacher1', e.target.value === '' ? null : Math.min(30, Math.max(0, +e.target.value)))} disabled={inputDisabled} placeholder="0" />
                 </div>
                 <div className="planner-input-field">
                   <label style={{ fontSize: 11 }}>Att (0-15)</label>
-                  <input type="number" min={0} max={15} value={attMode === 'manual_marks' ? (m.attTeacher1 ?? '') : attendanceAuto1} onChange={e => onChange(course.id, 'attTeacher1', Math.min(15, Math.max(0, +e.target.value || 0)))} placeholder="auto" style={{ opacity: attMode !== 'manual_marks' ? 0.6 : 1 }} disabled={attMode !== 'manual_marks'} />
+                  <input type="number" min={0} max={15} value={attMode === 'manual_marks' ? (m.attTeacher1 ?? '') : attendanceAuto1} onChange={e => onChange(course.id, 'attTeacher1', e.target.value === '' ? null : Math.min(15, Math.max(0, +e.target.value)))} placeholder="auto" style={{ opacity: attMode !== 'manual_marks' ? 0.6 : 1 }} disabled={attMode !== 'manual_marks'} />
                 </div>
               </div>
             )}
@@ -204,17 +219,17 @@ function CourseCard({ course, marks, onChange, onOpenMarkingHelp, isCurrentOngoi
             {useManual2 ? (
               <div className="planner-input-field">
                 <label style={{ fontSize: 11 }}>Marks (0-45)</label>
-                <input type="number" min={0} max={45} value={m.manualTeacher2 ?? ''} onChange={e => onChange(course.id, 'manualTeacher2', Math.min(45, Math.max(0, +e.target.value || 0)))} disabled={inputDisabled} placeholder="0" />
+                <input type="number" min={0} max={45} value={m.manualTeacher2 ?? ''} onChange={e => onChange(course.id, 'manualTeacher2', e.target.value === '' ? null : Math.min(45, Math.max(0, +e.target.value)))} disabled={inputDisabled} placeholder="0" />
               </div>
             ) : (
               <div className="planner-teacher-inputs">
                 <div className="planner-input-field">
                   <label style={{ fontSize: 11 }}>CT (0-30)</label>
-                  <input type="number" min={0} max={30} value={m.ctTeacher2 ?? ''} onChange={e => onChange(course.id, 'ctTeacher2', Math.min(30, Math.max(0, +e.target.value || 0)))} disabled={inputDisabled} placeholder="0" />
+                  <input type="number" min={0} max={30} value={m.ctTeacher2 ?? ''} onChange={e => onChange(course.id, 'ctTeacher2', e.target.value === '' ? null : Math.min(30, Math.max(0, +e.target.value)))} disabled={inputDisabled} placeholder="0" />
                 </div>
                 <div className="planner-input-field">
                   <label style={{ fontSize: 11 }}>Att (0-15)</label>
-                  <input type="number" min={0} max={15} value={attMode === 'manual_marks' ? (m.attTeacher2 ?? '') : attendanceAuto2} onChange={e => onChange(course.id, 'attTeacher2', Math.min(15, Math.max(0, +e.target.value || 0)))} placeholder="auto" style={{ opacity: attMode !== 'manual_marks' ? 0.6 : 1 }} disabled={attMode !== 'manual_marks'} />
+                  <input type="number" min={0} max={15} value={attMode === 'manual_marks' ? (m.attTeacher2 ?? '') : attendanceAuto2} onChange={e => onChange(course.id, 'attTeacher2', e.target.value === '' ? null : Math.min(15, Math.max(0, +e.target.value)))} placeholder="auto" style={{ opacity: attMode !== 'manual_marks' ? 0.6 : 1 }} disabled={attMode !== 'manual_marks'} />
                 </div>
               </div>
             )}
@@ -299,6 +314,23 @@ export default function Marks() {
     } catch {}
   };
 
+  // Wipes a course's entire marks record. Mainly a recovery tool for
+  // records that picked up a stray 0 (e.g. a hall/CT/attendance field
+  // written before number inputs correctly distinguished "cleared" from
+  // "entered 0") — resetting is simpler and safer than trying to guess
+  // which individual field was the accidental one.
+  const onClearCourse = (id) => {
+    if (!marks[id]) return;
+    if (!window.confirm('Clear all entered marks for this course? This cannot be undone.')) return;
+    const updated = { ...marks };
+    delete updated[id];
+    setMarks(updated);
+    store.set('marks', updated);
+    try {
+      recordAudit({ action: 'marks_clear', courseId: id, before: marks[id] || null, after: null });
+    } catch {}
+  };
+
   const active = allCourses.filter(c => c.status === 'active' || c.status === 'backlog');
   const theory = active.filter(c => c.type === 'Theory');
 
@@ -368,6 +400,7 @@ export default function Marks() {
                 course={c}
                 marks={marks}
                 onChange={onChange}
+                onClearCourse={onClearCourse}
                 onOpenMarkingHelp={() => setMarkingHelpOpen(true)}
                 isCurrentOngoingTerm={currentTermIsOngoing && currentTermKey === `Y${c.year}T${c.term}`}
               />

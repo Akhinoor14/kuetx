@@ -21,7 +21,7 @@
 // subscribeAllNotices(..., 'faculty') — the audience filter that keeps
 // CR/ACR-authored class notices out of a teacher's own sent-history view.
 
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import * as Icons from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { auth } from '../../lib/firebase';
@@ -32,6 +32,10 @@ import * as noticeApi from '../../lib/noticeUtils';
 import { postFacultyNoticeMulti } from '../../lib/facultyNoticeSync';
 import { notify } from '../../lib/notify';
 import { useIsFaculty } from '../../hooks/useIsFaculty';
+import NoticeInsightsPanel from '../../components/NoticeInsightsPanel';
+import NoticeComposerToolbar from '../../components/NoticeComposerToolbar';
+import NoticePrioritySelector from '../../components/NoticePrioritySelector';
+import { renderFormattedNoticeBody } from '../../lib/noticeFormat';
 
 export default function FacultyNoticeBroadcast() {
   const [classes, setClasses] = useState(null);
@@ -57,9 +61,14 @@ export default function FacultyNoticeBroadcast() {
 
   const [title, setTitle] = useState('');
   const [body, setBody] = useState('');
+  const [showPreview, setShowPreview] = useState(false);
+  const noticeTextareaRef = useRef(null);
+  const [priority, setPriority] = useState('normal');
   const [sending, setSending] = useState(false);
 
   const [sentNotices, setSentNotices] = useState([]);
+  // Phase 2 of the Notice upgrade (Manage/Delete).
+  const [deletingId, setDeletingId] = useState(null);
 
   useEffect(() => {
     const uid = auth.currentUser?.uid;
@@ -191,14 +200,34 @@ export default function FacultyNoticeBroadcast() {
         title: title.trim(),
         body: body.trim(),
         targetType: recipientMode === 'all' ? 'broadcast' : 'cr_only',
+        priority,
       });
       setTitle('');
       setBody('');
+      setShowPreview(false);
+      setPriority('normal');
       notify(`Notice sent to ${targetGroupIds.length} class${targetGroupIds.length > 1 ? 'es' : ''}.`, 'success');
     } catch (e) {
       notify(e.message || 'Could not send this notice.', 'error');
     } finally {
       setSending(false);
+    }
+  };
+
+  // Phase 2 of the Notice upgrade (Manage/Delete). Each sentNotices item
+  // already carries its own groupId (see noticeUtils.js's subscribeAllNotices
+  // — group notices are now stamped with groupId as of Phase 2), so a
+  // single delete handler works even though this feed merges notices
+  // across several different classes.
+  const handleDeleteNotice = async (notice) => {
+    if (!window.confirm('Delete this notice? It will be removed from that class\'s feed.')) return;
+    setDeletingId(notice.id);
+    try {
+      await noticeApi.deleteNoticeSoft(notice.id, notice.groupId);
+    } catch (err) {
+      notify(err?.message || 'Could not delete this notice.', 'error');
+    } finally {
+      setDeletingId(null);
     }
   };
 
@@ -300,20 +329,55 @@ export default function FacultyNoticeBroadcast() {
             </div>
 
             <div style={{ padding: 12, borderRadius: 12, border: '1px solid var(--border)', background: 'var(--card)', marginBottom: 14, display: 'grid', gap: 8 }}>
-              <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--text)' }}>3. Message</div>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8 }}>
+                <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--text)' }}>3. Message</div>
+                <button
+                  type="button"
+                  onClick={() => setShowPreview((v) => !v)}
+                  disabled={!title.trim() && !body.trim()}
+                  style={{
+                    fontSize: 10.5, fontWeight: 700, color: 'var(--accent)', background: 'none', border: 'none',
+                    cursor: 'pointer', padding: 0, opacity: (!title.trim() && !body.trim()) ? 0.5 : 1,
+                  }}
+                >
+                  {showPreview ? 'Back to edit' : 'Preview'}
+                </button>
+              </div>
               <input
                 placeholder="Title"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 style={{ padding: '8px 10px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--bg)', color: 'var(--text)', fontSize: 13 }}
               />
-              <textarea
-                placeholder="Message"
-                rows={3}
-                value={body}
-                onChange={(e) => setBody(e.target.value)}
-                style={{ padding: '8px 10px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--bg)', color: 'var(--text)', fontSize: 13, resize: 'vertical' }}
-              />
+              <NoticePrioritySelector value={priority} onChange={setPriority} />
+              {!showPreview ? (
+                <>
+                  <NoticeComposerToolbar
+                    textareaRef={noticeTextareaRef}
+                    value={body}
+                    onChange={setBody}
+                  />
+                  <textarea
+                    ref={noticeTextareaRef}
+                    placeholder="Message"
+                    rows={3}
+                    value={body}
+                    onChange={(e) => setBody(e.target.value)}
+                    style={{ padding: '8px 10px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--bg)', color: 'var(--text)', fontSize: 13, resize: 'vertical' }}
+                  />
+                </>
+              ) : (
+                <div style={{
+                  padding: '10px 12px', borderRadius: 8, border: '1px solid var(--border)',
+                  background: 'var(--surface)', fontSize: 13, color: 'var(--text)', lineHeight: 1.55,
+                  minHeight: 80,
+                }}>
+                  <div style={{ fontWeight: 700, marginBottom: 6 }}>{title.trim() || <span style={{ color: 'var(--muted)' }}>(no title)</span>}</div>
+                  {body.trim()
+                    ? renderFormattedNoticeBody(body)
+                    : <span style={{ color: 'var(--muted)' }}>(nothing written yet)</span>}
+                </div>
+              )}
               <button
                 onClick={handleSend}
                 disabled={sending || !isVerified}
@@ -339,12 +403,45 @@ export default function FacultyNoticeBroadcast() {
               {sentNotices.map((n) => (
                 <div key={n.id} style={{ padding: '12px 14px', borderRadius: 10, border: '1px solid var(--border)', background: 'var(--card)' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', gap: 8 }}>
-                    <span style={{ fontWeight: 700, fontSize: 13.5, color: 'var(--text)' }}>{n.title}</span>
-                    <span style={{ fontSize: 10, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase' }}>
-                      {n.targetType === 'cr_only' ? 'CR/ACR only' : 'All students'}
-                    </span>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                      <span style={{ fontWeight: 700, fontSize: 13.5, color: 'var(--text)' }}>{n.title}</span>
+                      {n.deleted && (
+                        <span style={{
+                          fontSize: 9.5, fontWeight: 700, color: 'var(--danger)', textTransform: 'uppercase',
+                          border: '1px solid var(--danger)', borderRadius: 4, padding: '1px 5px', flexShrink: 0,
+                        }}>
+                          Deleted
+                        </span>
+                      )}
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexShrink: 0 }}>
+                      <span style={{ fontSize: 10, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase' }}>
+                        {n.targetType === 'cr_only' ? 'CR/ACR only' : 'All students'}
+                      </span>
+                      {!n.deleted && (
+                        <button
+                          type="button"
+                          onClick={() => handleDeleteNotice(n)}
+                          disabled={deletingId === n.id}
+                          aria-label={`Delete notice: ${n.title}`}
+                          style={{
+                            display: 'flex', alignItems: 'center', color: 'var(--danger)',
+                            background: 'none', border: 'none', cursor: deletingId === n.id ? 'not-allowed' : 'pointer',
+                            padding: 0, opacity: deletingId === n.id ? 0.5 : 1,
+                          }}
+                        >
+                          <Icons.Trash2 size={13} />
+                        </button>
+                      )}
+                    </div>
                   </div>
-                  <div style={{ fontSize: 12.5, color: 'var(--muted)', marginTop: 2 }}>{n.body}</div>
+                  <div style={{ fontSize: 12.5, color: 'var(--muted)', marginTop: 2, opacity: n.deleted ? 0.6 : 1 }}>{renderFormattedNoticeBody(n.body)}</div>
+                  <NoticeInsightsPanel
+                    noticeId={n.id}
+                    groupId={n.groupId}
+                    audienceSize={n.audienceSize}
+                    title={n.title}
+                  />
                 </div>
               ))}
             </div>

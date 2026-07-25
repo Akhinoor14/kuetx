@@ -21,7 +21,7 @@
  * ─────────────────────────────────────────────────────────────────────────────
  */
 
-import { doc, setDoc, getDocs, collection, serverTimestamp } from 'firebase/firestore';
+import { doc, setDoc, getDoc, getDocs, collection, collectionGroup, query, where, serverTimestamp } from 'firebase/firestore';
 import { db } from './firebase';
 import { store } from '../store/store';
 
@@ -31,7 +31,31 @@ const PUSH_DEBOUNCE_MS  = 4_000;   // wait 4s after last change before writing
 const PULL_INTERVAL_MS  = 15 * 60 * 1000; // pull every 15 min (background)
 const MAX_BATCH_PUSH    = 20;      // max keys to push in one tick
 
-const EXCLUDED_KEYS = ['autoBackup', 'lastBackupTime', 'kuetx_guide_seen'];
+// 'profile' added here for Phase 5 migration: it now lives at its own
+// dedicated path (students/{dept}/{batch}/{uid} — see pushProfile/
+// pullProfile below), not in the generic users/{uid}/data/{key} bucket.
+// Every other personal key (Notes, Diary, Wallet, Settings, Schedule,
+// Assignments, etc.) is completely unaffected and still flows through the
+// generic mechanism below exactly as before.
+const EXCLUDED_KEYS = ['autoBackup', 'lastBackupTime', 'kuetx_guide_seen', 'profile'];
+
+// Same 2-digit roll-prefix -> dept-code map as ProfileSetupModal.jsx's
+// extractDeptCodeFromRoll and firestore.rules' deptCodeFromRoll — kept in
+// sync manually (three copies: client validation, this sync path, and the
+// rules' own authoritative check) since rules can't be imported client-side.
+const ROLL_DEPT_MAP = {
+  '25': 'ARCH', '23': 'BECM', '15': 'BME', '01': 'CE', '29': 'CHE',
+  '07': 'CSE', '09': 'ECE', '03': 'EEE', '13': 'ESE', '11': 'IPE',
+  '19': 'LE', '05': 'ME', '27': 'MSE', '31': 'MTE', '21': 'TE', '17': 'URP',
+};
+
+const deptBatchFromRoll = (roll) => {
+  const r = String(roll || '').trim();
+  if (!/^\d{7}$/.test(r)) return null;
+  const dept = ROLL_DEPT_MAP[r.slice(2, 4)];
+  if (!dept) return null;
+  return { dept, batch: '2K' + r.slice(0, 2) };
+};
 
 // NOTE: 'schedule' and 'assignments' are intentionally NOT excluded here.
 // Class-group routine/assignments (groupSync.js, groups/{groupId}/
@@ -190,14 +214,41 @@ export const startFirebaseSync = async (uid, { onSyncStatus } = {}) => {
 
   _uid = uid;
 
-  // Pull once on start (replaces the initial onSnapshot burst)
+  // Pull once on start (replaces the initial onSnapshot burst).
+  // NOTE: this generic pull no longer returns 'profile' (excluded — see
+  // EXCLUDED_KEYS), so it's pulled separately below from its own
+  // students/{dept}/{batch}/{uid} path and merged into the local store the
+  // same way pullAllFromFirestore does for every other key. Every caller
+  // of startFirebaseSync (Profile.jsx, useFirebaseAuth.js) gets this for
+  // free with no changes needed on their end.
   await pullAllFromFirestore(uid);
+  await hydrateProfileFromFirestore(uid);
 
   // Listen for local changes and push them up
   startStoreListener();
 
   // Periodically re-pull from Firestore (15 min)
   startPeriodicPull();
+};
+
+// Pulls the remote profile and writes it into the local store under the
+// same 'kuetx_profile' key the rest of the app already reads via
+// store.get('profile') / getProfile() — mirrors what pullAllFromFirestore
+// does for generic keys, just for this one dedicated-path key. Passes the
+// last-known local profile (if any) as the dept/batch hint so returning
+// users on the same device skip the (more expensive) collectionGroup
+// fallback and go straight to the direct doc path.
+const hydrateProfileFromFirestore = async (uid) => {
+  try {
+    const localProfile = store.get('profile');
+    const knownDeptBatch = (localProfile && localProfile.dept && localProfile.batch)
+      ? { dept: localProfile.dept, batch: localProfile.batch }
+      : null;
+    const remote = await pullProfile(uid, knownDeptBatch);
+    if (remote) await store.importAllReport({ kuetx_profile: remote });
+  } catch (err) {
+    console.warn('[KUETx Sync] Profile hydrate failed:', err.message);
+  }
 };
 
 export const stopFirebaseSync = () => {
@@ -223,3 +274,75 @@ export const stopFirebaseSync = () => {
 export const isFirebaseSyncing = () => _isSyncing;
 export const getFirebaseUid    = () => _uid;
 export const getLastPullCount  = () => 0; // kept for API compat
+
+// ─── Profile — dedicated path (Phase 5 migration) ──────────────────────────
+// 'profile' is deliberately NOT part of the generic key-value loop above
+// (see EXCLUDED_KEYS). It now lives at students/{dept}/{batch}/{uid},
+// dept/batch derived from the profile's own studentId (roll) — this must
+// match firestore.rules' students/{dept}/{batch}/{uid} create/update rule
+// exactly, or every profile write will be permission-denied. Called
+// explicitly by ProfileSetupModal.jsx on save/update, not by the generic
+// store-change listener.
+
+/**
+ * Push the local profile object to its dedicated Firestore location.
+ * Requires profile.studentId to already be a valid 7-digit roll (the
+ * caller — ProfileSetupModal.jsx — validates this before calling; this
+ * function trusts the caller but will throw rather than write to a
+ * garbage path if studentId can't be resolved to a dept/batch).
+ */
+export const pushProfile = async (uid, profile) => {
+  if (!uid || !profile) return;
+  const loc = deptBatchFromRoll(profile.studentId);
+  if (!loc) {
+    console.warn('[KUETx Sync] pushProfile: cannot resolve dept/batch from studentId, not writing', profile.studentId);
+    return;
+  }
+  try {
+    const docRef = doc(db, 'students', loc.dept, loc.batch, uid);
+    // uid is stored explicitly on the doc (in addition to being the doc's
+    // own id) because pullProfile's collectionGroup fallback (new client,
+    // no known dept/batch) can only filter by a field value, not by doc id,
+    // across a collectionGroup spanning many parent paths.
+    await setDoc(docRef, { ...profile, uid, updatedAt: serverTimestamp() }, { merge: true });
+  } catch (err) {
+    console.warn('[KUETx Sync] pushProfile failed:', err.message);
+    emit('error', { message: err.message });
+    throw err;
+  }
+};
+
+/**
+ * Pull the remote profile for uid back into the local store. Since the
+ * doc's path now depends on dept/batch (which come FROM the roll that's
+ * IN the profile), a fresh/unknown client can't locate the doc from uid
+ * alone without already knowing dept/batch — callers should pass the
+ * last-known local profile (if any) to supply that, or fall back to
+ * collectionGroup('students') filtered by uid if no local copy exists at
+ * all (e.g. first login on a new device).
+ */
+export const pullProfile = async (uid, knownDeptBatch = null) => {
+  if (!uid) return null;
+  try {
+    let dept = knownDeptBatch?.dept;
+    let batch = knownDeptBatch?.batch;
+    if (!dept || !batch) {
+      // No known dept/batch (e.g. first login on a new device) — can't
+      // build the direct doc path, so fall back to a collectionGroup query
+      // filtered by the explicit 'uid' field that pushProfile now stores
+      // on every profile doc (doc id alone isn't filterable across a
+      // collectionGroup spanning many different parent paths).
+      const snap = await getDocs(query(collectionGroup(db, 'students'), where('uid', '==', uid)));
+      if (!snap.empty) {
+        return snap.docs[0].data();
+      }
+      return null;
+    }
+    const docRef = doc(db, 'students', dept, batch, uid);
+    const snap = await getDoc(docRef);
+    return snap.exists() ? snap.data() : null;
+  } catch (err) {
+    console.warn('[KUETx Sync] pullProfile failed:', err.message);
+    return null;
+  }
+};

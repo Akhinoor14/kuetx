@@ -106,7 +106,7 @@ export default function ClassmatesList({ groupId, showActions = false, viewerRol
   if (visibleMembers.length === 0) {
     return (
       <div className="card" style={{ padding: 16, color: 'var(--muted)', textAlign: 'center' }}>
-        No one from your class has joined yet — be the first!
+        No one from your class has joined yet.
       </div>
     );
   }

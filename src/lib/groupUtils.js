@@ -52,3 +52,31 @@ export function getIdentityStamp(profile, uid) {
     roll: profile?.studentId || '',
   };
 }
+
+/**
+ * Numeric-aware roll sort. Originally a local copy inside
+ * FacultyClassDetail.jsx (Marks/Attendance tabs) — extracted here since
+ * the Admin individual-student notice-targeting picker
+ * (AdminDashboard.jsx's CommunicationView) is now a 2nd call site with the
+ * exact same need (dept+batch member list, roll-number-sorted).
+ *
+ * A plain string sort puts "10" before "2" (lexicographic, not numeric)
+ * and pushes any member with a blank/non-numeric roll out of place. This
+ * sorts numerically wherever both sides parse as numbers, falls back to a
+ * locale-aware string compare otherwise, and always pushes members with no
+ * roll at all to the end (rather than letting '' sort first).
+ */
+export function sortByRoll(members) {
+  const list = Array.isArray(members) ? members : [];
+  return [...list].sort((a, b) => {
+    const ra = String(a?.roll || '').trim();
+    const rb = String(b?.roll || '').trim();
+    if (!ra && !rb) return 0;
+    if (!ra) return 1;
+    if (!rb) return -1;
+    const na = Number(ra);
+    const nb = Number(rb);
+    if (Number.isFinite(na) && Number.isFinite(nb)) return na - nb;
+    return ra.localeCompare(rb, undefined, { numeric: true, sensitivity: 'base' });
+  });
+}
