@@ -21,7 +21,7 @@ export default function TeamDashboard() {
   return (
     <div className="page-enter team-dashboard-shell content-page-bg">
       <div style={{ maxWidth: 1400, margin: '0 auto', padding: '12px 16px 32px' }}>
-        <div className="content-page-hero" style={{ marginBottom: 16 }}>
+        <div className="content-page-hero">
           <div className="content-page-hero-icon">
             <Users size={18} color="var(--accent)" />
           </div>

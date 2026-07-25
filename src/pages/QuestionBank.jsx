@@ -214,7 +214,7 @@ export default function QuestionBank() {
               <ChevronLeft size={18} /> Back
             </button>
           )}
-          <button style={styles.uploadBtn} onClick={() => setShowUpload(true)}>
+          <button className="accent-fill-glass" style={styles.uploadBtn} onClick={() => setShowUpload(true)}>
             <Upload size={16} /> Upload
           </button>
         </div>
@@ -232,7 +232,7 @@ export default function QuestionBank() {
       {screen === 'depts' && (
         <>
           {myDept && myTerm && (
-            <button style={styles.jumpCard} onClick={jumpToMyTerm}>
+            <button className="accent-fill-glass" style={styles.jumpCard} onClick={jumpToMyTerm}>
               <Sparkles size={18} />
               <div style={{ textAlign: 'left', flex: 1 }}>
                 <div style={{ fontWeight: 700, fontSize: 14 }}>Jump to my term</div>

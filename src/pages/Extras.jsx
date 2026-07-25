@@ -1368,7 +1368,7 @@ export function TimeTracker() {
 
   return (
     <div className="page-container time-tracker-page content-page-bg">
-      <div className="content-page-hero" style={{ marginBottom: 16 }}>
+      <div className="content-page-hero">
         <div className="content-page-hero-icon">
           <Timer size={18} color="var(--accent)" />
         </div>

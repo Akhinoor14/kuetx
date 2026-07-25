@@ -1040,7 +1040,33 @@ body {
 }
 .btn:hover  { opacity: 0.94; }
 .btn:active { transform: translateY(1px) scale(0.98); }
-.btn-primary { background: var(--accent); color: var(--accentFg); box-shadow: 0 10px 24px rgba(59, 130, 246, 0.14); }
+.btn-primary {
+  background: linear-gradient(155deg, color-mix(in srgb, var(--accent) 108%, white 6%) 0%, var(--accent) 55%, color-mix(in srgb, var(--accent) 85%, black 12%) 100%);
+  color: var(--accentFg);
+  border: 1px solid color-mix(in srgb, var(--accent) 60%, black 8%);
+  box-shadow: 0 10px 24px rgba(var(--accentRGB), 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+.btn-primary:hover {
+  box-shadow: 0 12px 28px rgba(var(--accentRGB), 0.32), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+/* Reusable glassy accent fill — for the many inline-styled solid-accent
+   buttons scattered across pages (Save/Send/Add actions etc). Add this
+   className alongside the element's existing inline style block; it
+   overrides just background/border/shadow, existing padding/radius/font
+   inline styles are untouched. */
+.accent-fill-glass {
+  background: linear-gradient(155deg, color-mix(in srgb, var(--accent) 108%, white 6%) 0%, var(--accent) 55%, color-mix(in srgb, var(--accent) 85%, black 12%) 100%) !important;
+  border: 1px solid color-mix(in srgb, var(--accent) 60%, black 8%) !important;
+  box-shadow: 0 8px 20px rgba(var(--accentRGB), 0.24), inset 0 1px 0 rgba(255, 255, 255, 0.35) !important;
+  transition: box-shadow 0.15s ease, transform 0.12s ease;
+}
+.accent-fill-glass:hover {
+  box-shadow: 0 10px 24px rgba(var(--accentRGB), 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.4) !important;
+}
+.accent-fill-glass:active {
+  transform: translateY(1px) scale(0.98);
+}
 .btn-secondary {
     background: rgba(59, 130, 246, 0.12);
     color: var(--accent);
@@ -8795,8 +8821,9 @@ body.schedule-fullscreen-active .mobile-bottom-nav {
    rule needed here. ────────────────────────────────────────────────────── */
 .hub-page-bg {
   background:
-    radial-gradient(ellipse 900px 420px at 15% 0%, rgba(var(--accentRGB), 0.10), transparent 60%),
-    linear-gradient(180deg, rgba(var(--accentRGB), 0.06) 0%, rgba(var(--accentRGB), 0.015) 320px, var(--bg) 560px);
+    radial-gradient(ellipse 900px 420px at 15% 0%, rgba(var(--accentRGB), 0.14), transparent 62%),
+    radial-gradient(ellipse 640px 360px at 100% 8%, rgba(var(--accentRGB), 0.07), transparent 55%),
+    linear-gradient(180deg, rgba(var(--accentRGB), 0.08) 0%, rgba(var(--accentRGB), 0.02) 360px, var(--bg) 620px);
 }
 
 /* .hub-page-hero / .hub-page-hero-icon / .hub-page-hero-title now share the
@@ -9054,8 +9081,9 @@ body.schedule-fullscreen-active .mobile-bottom-nav {
    color — no page-specific hex codes anywhere. ─────────────────────────── */
 .content-page-bg {
   background:
-    radial-gradient(ellipse 900px 420px at 15% 0%, rgba(var(--accentRGB), 0.10), transparent 60%),
-    linear-gradient(180deg, rgba(var(--accentRGB), 0.06) 0%, rgba(var(--accentRGB), 0.015) 320px, var(--bg) 560px);
+    radial-gradient(ellipse 900px 420px at 15% 0%, rgba(var(--accentRGB), 0.14), transparent 62%),
+    radial-gradient(ellipse 640px 360px at 100% 8%, rgba(var(--accentRGB), 0.07), transparent 55%),
+    linear-gradient(180deg, rgba(var(--accentRGB), 0.08) 0%, rgba(var(--accentRGB), 0.02) 360px, var(--bg) 620px);
   min-height: 100vh;
 }
 
@@ -9073,12 +9101,28 @@ body.schedule-fullscreen-active .mobile-bottom-nav {
 .faculty-class-hero {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
   gap: 16px;
   flex-wrap: wrap;
   margin: 8px 0 28px;
   padding: 20px 4px 18px;
   border-bottom: 2px solid var(--accent);
+}
+
+/* Push the trailing stat-cluster / actions slot to the right, instead of
+   relying on justify-content: space-between (which broke pages where the
+   icon and title/subtitle aren't wrapped in a single .content-page-hero-main
+   — those pages have the icon as a standalone flex child, so space-between
+   was shoving the icon and the text block apart on the same row instead of
+   keeping them grouped on the left). This works with either markup shape:
+   pages using .content-page-hero-main and pages using a bare icon + div. */
+.content-page-hero-stats,
+.hub-page-hero-stats,
+.faculty-class-hero-stats,
+.content-page-hero-actions,
+.hub-page-hero-actions,
+.faculty-class-hero-actions {
+  margin-left: auto;
 }
 
 .content-page-hero-main,
@@ -9123,7 +9167,8 @@ body.schedule-fullscreen-active .mobile-bottom-nav {
 .hub-page-hero-title,
 .faculty-class-hero-title {
   font-size: 28px;
-  font-weight: 500;
+  font-weight: 700;
+  font-family: 'Space Grotesk', 'Sora', 'Hind Siliguri', system-ui, sans-serif;
   letter-spacing: -0.02em;
   line-height: 1.2;
   color: var(--text);

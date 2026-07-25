@@ -369,7 +369,7 @@ export default function Results() {
 
   return (
     <div className="page-enter page-container content-page-bg">
-      <div className="content-page-hero" style={{ marginBottom: 16 }}>
+      <div className="content-page-hero">
         <div className="content-page-hero-icon">
           <TrendingUp size={18} color="var(--accent)" />
         </div>

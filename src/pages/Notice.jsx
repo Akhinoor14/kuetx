@@ -380,7 +380,7 @@ export default function Notice() {
 
   return (
     <div className="page-enter page-container content-page-bg" style={{ paddingBottom: 48 }}>
-      <div className="content-page-hero" style={{ marginBottom: 16 }}>
+      <div className="content-page-hero">
         <div className="content-page-hero-icon">
           <Bell size={18} color="var(--accent)" />
         </div>

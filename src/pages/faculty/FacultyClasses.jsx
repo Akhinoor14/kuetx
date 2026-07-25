@@ -359,10 +359,10 @@ export function AddClassModal({ onClose, onCreated, batches, initialDay, initial
           <button
             onClick={handleCreate}
             disabled={saving || !dept || !batch || !term || !courseCode}
-            className="faculty-add-class-span2"
+            className="faculty-add-class-span2 accent-fill-glass"
             style={{
-              marginTop: 6, padding: '11px 16px', borderRadius: 8, border: 'none',
-              background: 'var(--accent)', color: '#fff', fontWeight: 700, fontSize: 13.5,
+              marginTop: 6, padding: '11px 16px', borderRadius: 8,
+              color: '#fff', fontWeight: 700, fontSize: 13.5,
               cursor: 'pointer', opacity: (saving || !dept || !batch || !term || !courseCode) ? 0.6 : 1,
             }}
           >
@@ -453,12 +453,13 @@ export default function FacultyClasses() {
               <Icons.Users size={15} /> All CR
             </button>
             <button
+              className="accent-fill-glass"
               onClick={() => setShowAdd(true)}
               disabled={!isVerified}
               title={!isVerified ? 'Blue Tick verification needed before you can add a class' : undefined}
               style={{
                 display: 'flex', alignItems: 'center', gap: 6, padding: '9px 14px', borderRadius: 8,
-                border: 'none', background: 'var(--accent)', color: '#fff', fontWeight: 700, fontSize: 13,
+                color: '#fff', fontWeight: 700, fontSize: 13,
                 cursor: isVerified ? 'pointer' : 'not-allowed', opacity: isVerified ? 1 : 0.5,
               }}
             >

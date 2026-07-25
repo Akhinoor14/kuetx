@@ -51,7 +51,7 @@ export default function Namaz() {
           hero-subtitle), instead of a hand-rolled gradient card, so the
           accent wash reads consistently across pages instead of jumping
           in hue/intensity page to page. */}
-      <div className="content-page-hero" style={{ marginBottom: 16 }}>
+      <div className="content-page-hero">
         <div className="content-page-hero-icon">
           <Moon size={18} color="var(--accent)" />
         </div>
@@ -234,8 +234,9 @@ export default function Namaz() {
                 style={{ flex: 1, padding: '11px', borderRadius: 10, border: '1.5px solid var(--border)', background: 'var(--inputBg)', color: 'var(--muted)', fontWeight: 600, fontSize: 13, cursor: 'pointer', fontFamily: 'Sora, sans-serif' }}
               >Cancel</button>
               <button
+                className="accent-fill-glass"
                 onClick={saveEdit}
-                style={{ flex: 2, padding: '11px', borderRadius: 10, border: 'none', background: 'var(--accent)', color: '#fff', fontWeight: 700, fontSize: 13, cursor: 'pointer', fontFamily: 'Sora, sans-serif' }}
+                style={{ flex: 2, padding: '11px', borderRadius: 10, color: '#fff', fontWeight: 700, fontSize: 13, cursor: 'pointer', fontFamily: 'Sora, sans-serif' }}
               >Save Times</button>
             </div>
           </div>

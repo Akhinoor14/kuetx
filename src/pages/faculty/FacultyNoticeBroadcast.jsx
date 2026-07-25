@@ -383,10 +383,11 @@ export default function FacultyNoticeBroadcast() {
                 </div>
               )}
               <button
+                className="accent-fill-glass"
                 onClick={handleSend}
                 disabled={sending || !isVerified}
                 title={!isVerified ? 'Blue Tick verification needed before you can send notices' : undefined}
-                style={{ padding: '9px 14px', borderRadius: 8, border: 'none', background: 'var(--accent)', color: '#fff', fontWeight: 700, fontSize: 13, cursor: (sending || !isVerified) ? 'not-allowed' : 'pointer', opacity: (sending || !isVerified) ? 0.5 : 1 }}
+                style={{ padding: '9px 14px', borderRadius: 8, color: '#fff', fontWeight: 700, fontSize: 13, cursor: (sending || !isVerified) ? 'not-allowed' : 'pointer', opacity: (sending || !isVerified) ? 0.5 : 1 }}
               >
                 {sending ? 'Sending…' : 'Send Notice'}
               </button>

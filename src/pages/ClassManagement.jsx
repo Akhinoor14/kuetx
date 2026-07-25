@@ -595,9 +595,10 @@ export default function ClassManagement() {
         </div>
         <button
           type="button"
+          className="accent-fill-glass"
           onClick={handleSaveTermStartDate}
           disabled={!groupId || !termDateDraft || termDateSaving}
-          style={{ padding: '10px 16px', borderRadius: 8, border: 'none', background: 'var(--accent)', color: '#fff', fontWeight: 700, opacity: (!groupId || !termDateDraft || termDateSaving) ? 0.6 : 1, cursor: (!groupId || !termDateDraft || termDateSaving) ? 'not-allowed' : 'pointer' }}
+          style={{ padding: '10px 16px', borderRadius: 8, color: '#fff', fontWeight: 700, opacity: (!groupId || !termDateDraft || termDateSaving) ? 0.6 : 1, cursor: (!groupId || !termDateDraft || termDateSaving) ? 'not-allowed' : 'pointer' }}
         >
           {termDateSaving ? 'Saving…' : 'Save for class'}
         </button>

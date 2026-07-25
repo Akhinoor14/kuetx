@@ -254,8 +254,8 @@ const InAppWebView = ({ url, title, onClose }) => {
             <Lock size={36} color="var(--muted)" />
             <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)' }}>This page can't load here</div>
             <div style={{ fontSize: 12, color: 'var(--muted)', maxWidth: 280 }}>Some KUET portals (and Google sign-in) don't allow embedding. Open it in your browser instead.</div>
-            <a href={url} target="_blank" rel="noopener noreferrer" style={{
-              padding: '10px 20px', borderRadius: 10, background: 'var(--accent)', color: 'var(--accentFg)',
+            <a href={url} target="_blank" rel="noopener noreferrer" className="accent-fill-glass" style={{
+              padding: '10px 20px', borderRadius: 10, color: 'var(--accentFg)',
               fontSize: 13, fontWeight: 700, textDecoration: 'none',
             }}>
               Open in Browser →
@@ -434,9 +434,9 @@ const AccountBanner = ({ user, onLogin, onLogout }) => {
       </div>
       <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
         {anon ? (
-          <button onClick={onLogin} style={{
-            padding: '7px 16px', background: 'var(--accent)', color: '#fff',
-            border: 'none', borderRadius: 8, fontSize: 12, fontWeight: 700, cursor: 'pointer',
+          <button onClick={onLogin} className="accent-fill-glass" style={{
+            padding: '7px 16px', color: '#fff',
+            borderRadius: 8, fontSize: 12, fontWeight: 700, cursor: 'pointer',
           }}>Sign In</button>
         ) : (
           <button onClick={onLogout} style={{

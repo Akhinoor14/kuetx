@@ -67,7 +67,7 @@ export default function Clubs() {
     <div className="page-enter page-container content-page-bg">
 
       {/* Hero — shared classes, consistent with every other page */}
-      <div className="content-page-hero" style={{ marginBottom: 16 }}>
+      <div className="content-page-hero">
         <div className="content-page-hero-icon">
           <Layers size={18} color="var(--accent)" />
         </div>
@@ -215,7 +215,7 @@ export default function Clubs() {
             </div>
             <div style={{ display: 'flex', gap: 8 }}>
               <button onClick={() => setModal(null)} style={{ flex: 1, padding: 11, borderRadius: 10, border: '1.5px solid var(--border)', background: 'var(--inputBg)', color: 'var(--muted)', fontWeight: 600, fontSize: 13, cursor: 'pointer', fontFamily: 'Sora, sans-serif' }}>Cancel</button>
-              <button onClick={saveClub} style={{ flex: 2, padding: 11, borderRadius: 10, border: 'none', background: 'var(--accent)', color: '#fff', fontWeight: 700, fontSize: 13, cursor: 'pointer', fontFamily: 'Sora, sans-serif' }}>Save Club</button>
+              <button className="accent-fill-glass" onClick={saveClub} style={{ flex: 2, padding: 11, borderRadius: 10, color: '#fff', fontWeight: 700, fontSize: 13, cursor: 'pointer', fontFamily: 'Sora, sans-serif' }}>Save Club</button>
             </div>
         </Modal>
       )}
@@ -255,7 +255,7 @@ export default function Clubs() {
             </div>
             <div style={{ display: 'flex', gap: 8 }}>
               <button onClick={() => setModal(null)} style={{ flex: 1, padding: 11, borderRadius: 10, border: '1.5px solid var(--border)', background: 'var(--inputBg)', color: 'var(--muted)', fontWeight: 600, fontSize: 13, cursor: 'pointer', fontFamily: 'Sora, sans-serif' }}>Cancel</button>
-              <button onClick={saveAct} style={{ flex: 2, padding: 11, borderRadius: 10, border: 'none', background: 'var(--accent)', color: '#fff', fontWeight: 700, fontSize: 13, cursor: 'pointer', fontFamily: 'Sora, sans-serif' }}>Save Activity</button>
+              <button className="accent-fill-glass" onClick={saveAct} style={{ flex: 2, padding: 11, borderRadius: 10, color: '#fff', fontWeight: 700, fontSize: 13, cursor: 'pointer', fontFamily: 'Sora, sans-serif' }}>Save Activity</button>
             </div>
         </Modal>
       )}

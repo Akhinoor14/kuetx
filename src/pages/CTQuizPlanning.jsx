@@ -338,7 +338,7 @@ export default function CTQuizPlanning() {
 
   return (
     <div className="page-container content-page-bg" style={{ width: '100%', margin: '28px auto', padding: 20 }}>
-      <div className="content-page-hero" style={{ marginBottom: 16, justifyContent: 'space-between' }}>
+      <div className="content-page-hero" style={{ justifyContent: 'space-between' }}>
         <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
           <div className="content-page-hero-icon">
             <CalendarIcon size={18} color="var(--accent)" />

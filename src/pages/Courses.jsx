@@ -511,7 +511,7 @@ export default function Courses() {
   return (
     <div className="page-enter page-container content-page-bg">
       <div className="flex-between mb-4" style={{ alignItems: 'center' }}>
-        <div className="content-page-hero" style={{ marginBottom: 0 }}>
+        <div className="content-page-hero">
           <div className="content-page-hero-icon">
             <BookOpen size={18} color="var(--accent)" />
           </div>

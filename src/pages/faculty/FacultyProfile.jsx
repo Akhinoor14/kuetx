@@ -256,8 +256,8 @@ export default function FacultyProfile() {
               <div style={{ fontWeight: 700, fontSize: 14 }}>Set Up Profile</div>
               <div style={{ fontSize: 12, color: 'var(--muted)' }}>Add your name, title and department — it'll be used everywhere</div>
             </div>
-            <button onClick={() => setIsEditing(true)} style={{
-              padding: '8px 14px', background: 'var(--accent)', color: '#fff', border: 'none',
+            <button onClick={() => setIsEditing(true)} className="accent-fill-glass" style={{
+              padding: '8px 14px', color: '#fff',
               borderRadius: 8, fontSize: 12.5, fontWeight: 700, cursor: 'pointer',
             }}>Get started →</button>
           </div>
@@ -438,11 +438,12 @@ export default function FacultyProfile() {
                   </button>
                 )}
                 <button
+                  className="accent-fill-glass"
                   onClick={isEditing ? handleSave : () => setIsEditing(true)}
                   disabled={saving}
                   style={{
-                    flex: 1, padding: '11px 16px', borderRadius: 10, border: 'none',
-                    background: 'var(--accent)', color: '#fff', fontWeight: 700, fontSize: 13.5,
+                    flex: 1, padding: '11px 16px', borderRadius: 10,
+                    color: '#fff', fontWeight: 700, fontSize: 13.5,
                     cursor: saving ? 'wait' : 'pointer', opacity: saving ? 0.6 : 1,
                     display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
                   }}

@@ -272,9 +272,10 @@ function EditDayTimeModal({ assignment, groupId, onClose, onSaved }) {
               Cancel
             </button>
             <button
+              className="accent-fill-glass"
               onClick={handleSave}
               disabled={saving}
-              style={{ padding: '9px 16px', borderRadius: 8, border: 'none', background: 'var(--accent)', color: '#fff', fontSize: 13, fontWeight: 700, cursor: 'pointer' }}
+              style={{ padding: '9px 16px', borderRadius: 8, color: '#fff', fontSize: 13, fontWeight: 700, cursor: 'pointer' }}
             >
               {saving ? 'Saving…' : 'Save Changes'}
             </button>
@@ -409,10 +410,11 @@ function NoticesTab({ groupId, isVerified, assignment }) {
         </div>
         <NoticePrioritySelector value={priority} onChange={setPriority} disabled={!isVerified} />
         <button
+          className="accent-fill-glass"
           onClick={handleSend}
           disabled={sending || !isVerified}
           title={!isVerified ? 'Blue Tick verification needed before you can send notices' : undefined}
-          style={{ padding: '9px 16px', borderRadius: 8, border: 'none', background: 'var(--accent)', color: '#fff', fontWeight: 700, fontSize: 12.5, cursor: (sending || !isVerified) ? 'not-allowed' : 'pointer', opacity: (sending || !isVerified) ? 0.5 : 1 }}
+          style={{ padding: '9px 16px', borderRadius: 8, color: '#fff', fontWeight: 700, fontSize: 12.5, cursor: (sending || !isVerified) ? 'not-allowed' : 'pointer', opacity: (sending || !isVerified) ? 0.5 : 1 }}
         >
           {sending ? 'Sending…' : 'Send Notice'}
         </button>
@@ -548,12 +550,13 @@ function ScheduleTab({ assignment, groupId, isVerified, onEditDayTime }) {
         <div>
           <div style={{ color: 'var(--muted)', fontSize: 13, padding: '16px 0' }}>No day/time slot set for this class yet.</div>
           <button
+            className="accent-fill-glass"
             onClick={onEditDayTime}
             disabled={!isVerified}
             title={!isVerified ? 'Blue Tick verification needed before you can set a class schedule' : undefined}
             style={{
-              display: 'flex', alignItems: 'center', gap: 6, padding: '8px 14px', borderRadius: 8, border: 'none',
-              background: 'var(--accent)', color: '#fff', fontWeight: 700, fontSize: 12.5,
+              display: 'flex', alignItems: 'center', gap: 6, padding: '8px 14px', borderRadius: 8,
+              color: '#fff', fontWeight: 700, fontSize: 12.5,
               cursor: isVerified ? 'pointer' : 'not-allowed', opacity: isVerified ? 1 : 0.5,
             }}
           >
@@ -1045,9 +1048,10 @@ function AttendanceTab({ assignment, groupId }) {
                 />
                 <span style={{ fontSize: 11.5, color: 'var(--muted)' }}>total classes planned</span>
                 <button
+                  className="accent-fill-glass"
                   onClick={handleSavePlan}
                   disabled={savingPlan || !planInput}
-                  style={{ padding: '5px 10px', borderRadius: 6, border: 'none', background: 'var(--accent)', color: '#fff', fontSize: 11.5, fontWeight: 700, cursor: savingPlan ? 'wait' : 'pointer', opacity: savingPlan || !planInput ? 0.6 : 1 }}
+                  style={{ padding: '5px 10px', borderRadius: 6, color: '#fff', fontSize: 11.5, fontWeight: 700, cursor: savingPlan ? 'wait' : 'pointer', opacity: savingPlan || !planInput ? 0.6 : 1 }}
                 >
                   {savingPlan ? 'Saving…' : 'Save'}
                 </button>
@@ -1268,9 +1272,10 @@ function AttendanceTab({ assignment, groupId }) {
           click+error round trip for the common case. */}
       <div className="faculty-summary-card" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, marginTop: 14 }}>
         <button
+          className="accent-fill-glass"
           onClick={handleSave}
           disabled={saving || (!!existingSessionForDate?.locked && !unlockedForEdit)}
-          style={{ width: '100%', padding: '11px 16px', borderRadius: 8, border: 'none', background: 'var(--accent)', color: '#fff', fontWeight: 700, fontSize: 13.5, cursor: 'pointer', opacity: (saving || (!!existingSessionForDate?.locked && !unlockedForEdit)) ? 0.5 : 1, transition: 'opacity 0.15s' }}
+          style={{ width: '100%', padding: '11px 16px', borderRadius: 8, color: '#fff', fontWeight: 700, fontSize: 13.5, cursor: 'pointer', opacity: (saving || (!!existingSessionForDate?.locked && !unlockedForEdit)) ? 0.5 : 1, transition: 'opacity 0.15s' }}
         >
           {saving ? 'Saving…' : existingSessionForDate?.locked ? (unlockedForEdit ? 'Save Correction' : 'Locked — Edit to Change') : existingSessionForDate ? 'Update Attendance' : 'Save Attendance'}
         </button>
@@ -1435,9 +1440,10 @@ function MarksSetupForm({ assignment, groupId, teacherSlot, onSaved, existingCon
           </button>
         )}
         <button
+          className="accent-fill-glass"
           onClick={handleSave}
           disabled={saving}
-          style={{ padding: '9px 16px', borderRadius: 8, border: 'none', background: 'var(--accent)', color: '#fff', fontWeight: 700, fontSize: 13, cursor: 'pointer', opacity: saving ? 0.6 : 1 }}
+          style={{ padding: '9px 16px', borderRadius: 8, color: '#fff', fontWeight: 700, fontSize: 13, cursor: 'pointer', opacity: saving ? 0.6 : 1 }}
         >
           {saving ? 'Saving...' : existingConfig ? 'Save Changes' : 'Save Breakdown'}
         </button>
@@ -1678,9 +1684,10 @@ function MarksTab({ assignment, groupId }) {
             Edit Breakdown
           </button>
           <button
+            className="accent-fill-glass"
             onClick={handleSendAllReviewed}
             disabled={sendingAll}
-            style={{ padding: '6px 12px', borderRadius: 7, border: 'none', background: 'var(--accent)', color: '#fff', fontWeight: 700, fontSize: 11.5, cursor: 'pointer', opacity: sendingAll ? 0.6 : 1 }}
+            style={{ padding: '6px 12px', borderRadius: 7, color: '#fff', fontWeight: 700, fontSize: 11.5, cursor: 'pointer', opacity: sendingAll ? 0.6 : 1 }}
           >
             {sendingAll ? 'Sending...' : 'Send All Reviewed'}
           </button>
@@ -1733,8 +1740,8 @@ function MarksTab({ assignment, groupId }) {
                 <button
                   onClick={() => handleSave(m.id, 'sent')}
                   disabled={savingUid === m.id}
-                  className="faculty-marks-card-btn"
-                  style={{ border: 'none', background: 'var(--accent)', color: '#fff', fontWeight: 700 }}
+                  className="faculty-marks-card-btn accent-fill-glass"
+                  style={{ color: '#fff', fontWeight: 700 }}
                 >
                   Send
                 </button>

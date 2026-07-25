@@ -572,7 +572,7 @@ function DailyLog({ courses, logs, setLogs, schedule, settings, onEditTeachers }
       {!isHoliday && schIds.length === 0 && !isToday && (
         <div style={{ marginBottom: 10, padding: '9px 12px', background: dark ? 'rgba(251,191,36,0.06)' : 'rgba(251,191,36,0.07)', border: dark ? '1px solid rgba(251,191,36,0.15)' : '1px solid rgba(251,191,36,0.18)', borderRadius: 10, display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 8 }}>
           <span style={{ fontSize: 12, color: 'var(--muted)' }}>No scheduled classes</span>
-          <button onClick={() => setShowGive(s => !s)} style={{ padding: '5px 11px', borderRadius: 8, cursor: 'pointer', fontWeight: 700, fontSize: 11, background: 'var(--accent)', color: 'white', border: 'none' }}>
+          <button className="accent-fill-glass" onClick={() => setShowGive(s => !s)} style={{ padding: '5px 11px', borderRadius: 8, cursor: 'pointer', fontWeight: 700, fontSize: 11, color: 'white' }}>
             {showGive ? 'Hide' : 'Give Attendance'}
           </button>
         </div>
@@ -967,7 +967,7 @@ export default function Attendance() {
     <div className="page-enter page-container content-page-bg">
       {/* Page header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 14, gap: 10 }}>
-        <div className="content-page-hero" style={{ marginBottom: 0 }}>
+        <div className="content-page-hero">
           <div className="content-page-hero-icon">
             <CalendarDays size={18} color="var(--accent)" />
           </div>

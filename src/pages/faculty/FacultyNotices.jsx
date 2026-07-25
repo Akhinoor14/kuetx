@@ -139,9 +139,10 @@ export default function FacultyNotices() {
                 </label>
               </div>
               <button
+                className="accent-fill-glass"
                 onClick={handleSend}
                 disabled={sending}
-                style={{ padding: '10px 16px', borderRadius: 8, border: 'none', background: 'var(--accent)', color: '#fff', fontWeight: 700, fontSize: 13, cursor: 'pointer', opacity: sending ? 0.6 : 1 }}
+                style={{ padding: '10px 16px', borderRadius: 8, color: '#fff', fontWeight: 700, fontSize: 13, cursor: 'pointer', opacity: sending ? 0.6 : 1 }}
               >
                 {sending ? 'Sending…' : 'Send Notice'}
               </button>

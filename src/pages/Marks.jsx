@@ -337,7 +337,7 @@ export default function Marks() {
   if (allCourses.length === 0) {
     return (
       <div className="page-enter page-container marks-page content-page-bg">
-        <div className="content-page-hero" style={{ marginBottom: 16 }}>
+        <div className="content-page-hero">
           <div className="content-page-hero-icon">
             <ClipboardList size={18} color="var(--accent)" />
           </div>

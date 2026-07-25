@@ -287,9 +287,10 @@ export default function FacultyMeetings() {
                   Cancel
                 </button>
                 <button
+                  className="accent-fill-glass"
                   onClick={handleSave}
                   disabled={saving}
-                  style={{ flex: 1, padding: '11px 16px', borderRadius: 10, border: 'none', background: 'var(--accent)', color: '#fff', fontWeight: 700, fontSize: 13.5, cursor: saving ? 'wait' : 'pointer', opacity: saving ? 0.6 : 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}
+                  style={{ flex: 1, padding: '11px 16px', borderRadius: 10, color: '#fff', fontWeight: 700, fontSize: 13.5, cursor: saving ? 'wait' : 'pointer', opacity: saving ? 0.6 : 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}
                 >
                   {saving ? 'Saving…' : (<><Check size={15} /> {editingId ? 'Save Changes' : 'Add Meeting'}</>)}
                 </button>

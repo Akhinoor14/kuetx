@@ -217,7 +217,7 @@ export default function Alerts() {
     <div className="page-enter page-container content-page-bg">
       <div style={{ marginBottom: 16 }}>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 14, alignItems: 'flex-start', justifyContent: 'space-between' }}>
-          <div className="content-page-hero" style={{ marginBottom: 0 }}>
+          <div className="content-page-hero">
             <div className="content-page-hero-icon">
               <Bell size={18} color="var(--accent)" />
             </div>

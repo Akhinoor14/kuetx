@@ -215,7 +215,7 @@ export default function Money() {
 
       {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-        <div className="content-page-hero" style={{ marginBottom: 0 }}>
+        <div className="content-page-hero">
           <div className="content-page-hero-icon">
             <Wallet size={18} color="var(--accent)" />
           </div>
@@ -232,7 +232,13 @@ export default function Money() {
       </div>
 
       {/* Net Worth Banner */}
-      <div className="card" style={{ marginBottom: 12, background: 'var(--accent)', color: 'var(--card)', border: 'none' }}>
+      <div className="card" style={{
+        marginBottom: 12,
+        background: 'linear-gradient(135deg, var(--accent) 0%, color-mix(in srgb, var(--accent) 78%, #0a3d24) 100%)',
+        color: '#fff',
+        border: '1px solid color-mix(in srgb, var(--accent) 55%, black 15%)',
+        boxShadow: '0 10px 28px rgba(var(--accentRGB), 0.28)',
+      }}>
         <div style={{ fontSize: 11, opacity: 0.85, marginBottom: 4 }}>Net Balance</div>
         <div style={{ fontSize: 32, fontWeight: 800, letterSpacing: '-0.03em' }}>৳{netWorth.toLocaleString()}</div>
         {cashBalance > 0 && (

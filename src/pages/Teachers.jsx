@@ -36,7 +36,7 @@ export default function Teachers() {
   return (
     <div className="page-enter page-container content-page-bg">
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-        <div className="content-page-hero" style={{ marginBottom: 0 }}>
+        <div className="content-page-hero">
           <div className="content-page-hero-icon">
             <Users size={18} color="var(--accent)" />
           </div>

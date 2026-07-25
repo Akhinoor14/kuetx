@@ -241,7 +241,7 @@ export default function Settings() {
 
   return (
     <div className="page-enter page-container content-page-bg">
-      <div className="content-page-hero" style={{ marginBottom: 16 }}>
+      <div className="content-page-hero">
         <div className="content-page-hero-icon">
           <SettingsIcon size={18} color="var(--accent)" />
         </div>

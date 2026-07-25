@@ -53,7 +53,7 @@ export default function Resources() {
 
   return (
     <div className="page-enter content-page-bg" style={{ maxWidth: 640, margin: '0 auto', padding: '16px 14px' }}>
-      <div className="content-page-hero" style={{ marginBottom: 16 }}>
+      <div className="content-page-hero">
         <div className="content-page-hero-icon">
           <FolderOpen size={18} color="var(--accent)" />
         </div>
