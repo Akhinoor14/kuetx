@@ -98,8 +98,13 @@ export function useAdaptiveNav(allItems, usageData) {
 
 const buildAdaptiveScore = (item, counts, activePath, defaultTabIds, defaultOrder) => {
   const count = counts[item.id] || 0;
+  // Segment-boundary match, not raw string prefix — plain startsWith would
+  // wrongly count e.g. '/faculty/profile' as "active" for the '/faculty'
+  // Dashboard item too, since it's a literal string prefix. Same bug/fix
+  // as SidebarNavShared.jsx's isActiveItem.
   const isActive = activePath
-    && (activePath === item.path || (item.path !== '/' && activePath.startsWith(item.path)));
+    && (activePath === item.path
+      || (item.path !== '/' && activePath.startsWith(item.path.endsWith('/') ? item.path : `${item.path}/`)));
   const isDefault = defaultOrder.has(item.id);
 
   return (count * 100)

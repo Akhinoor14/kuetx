@@ -34,11 +34,13 @@ export default function Classmates() {
   return (
     <div className="page-enter page-container content-page-bg">
       <div className="content-page-hero">
-        <div className="content-page-hero-icon">
-          <Users size={18} color="var(--accent)" />
-        </div>
-        <div>
-          <h1 className="content-page-hero-title">Classmates</h1>
+        <div className="content-page-hero-main">
+          <div className="content-page-hero-head">
+            <div className="content-page-hero-icon">
+              <Users size={24} color="var(--accent)" />
+            </div>
+            <h1 className="content-page-hero-title">Classmates</h1>
+          </div>
           <p className="content-page-hero-subtitle">
             {groupLabel ? `${groupLabel} · your batch & department` : 'See who else is in your class'}
           </p>

@@ -902,6 +902,17 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
                   <input type="tel" placeholder="e.g. 01700000000" value={form.advisorContact} onChange={handleChange('advisorContact')} inputMode="numeric" pattern="[0-9]*" style={fieldStyle} />
                 </div>
               </div>
+              <div style={{ marginTop: 16 }}>
+                <label style={labelStyle}>Short Bio <span style={{ fontWeight: 400, color: 'var(--muted)' }}>(optional)</span></label>
+                <textarea
+                  placeholder="A short line about yourself… shown on your Profile page"
+                  value={form.bio || ''}
+                  onChange={e => handleChange('bio')({ target: { value: e.target.value.slice(0, 160) } })}
+                  rows={2}
+                  style={{ ...fieldStyle, resize: 'none', fontFamily: 'inherit' }}
+                />
+                <div style={{ fontSize: 10, color: 'var(--muted)', marginTop: 4 }}>{(form.bio || '').length}/160</div>
+              </div>
             </div>
           )}
 

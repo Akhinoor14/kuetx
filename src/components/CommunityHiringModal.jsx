@@ -57,14 +57,14 @@ export default function CommunityHiringModal({ open: openProp, onClose } = {}) {
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
                   <Users size={15} color="rgba(255,255,255,0.85)" />
                   <span style={{ fontSize: 11, fontWeight: 700, color: 'rgba(255,255,255,0.8)', letterSpacing: '1.1px', textTransform: 'uppercase' }}>
-                    New feature
+                    Class Community
                   </span>
                 </div>
                 <div style={{ fontSize: 21, fontWeight: 800, color: '#fff', fontFamily: 'Sora, sans-serif', marginBottom: 4 }}>
-                  Class Community is coming!
+                  Stay connected with your class
                 </div>
                 <div style={{ fontSize: 12.5, color: 'rgba(255,255,255,0.75)', lineHeight: 1.5 }}>
-                  Everyone in your batch and department will now stay connected in one place.
+                  Everyone in your batch and department stays connected in one place.
                 </div>
               </div>
 

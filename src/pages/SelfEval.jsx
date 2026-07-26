@@ -63,11 +63,13 @@ export default function SelfEval() {
       )}
       <div className="selfeval-header">
         <div className="content-page-hero">
-          <div className="content-page-hero-icon">
-            <ClipboardCheck size={18} color="var(--accent)" />
-          </div>
-          <div>
-            <h1 className="content-page-hero-title">Self Evaluation</h1>
+          <div className="content-page-hero-main">
+            <div className="content-page-hero-head">
+              <div className="content-page-hero-icon">
+                <ClipboardCheck size={24} color="var(--accent)" />
+              </div>
+              <h1 className="content-page-hero-title">Self Evaluation</h1>
+            </div>
             <p className="content-page-hero-subtitle">Daily accountability — good deeds, bad habits, self rating</p>
           </div>
         </div>

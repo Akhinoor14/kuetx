@@ -510,17 +510,21 @@ export default function Courses() {
 
   return (
     <div className="page-enter page-container content-page-bg">
-      <div className="flex-between mb-4" style={{ alignItems: 'center' }}>
-        <div className="content-page-hero">
-          <div className="content-page-hero-icon">
-            <BookOpen size={18} color="var(--accent)" />
-          </div>
-          <div>
+      <div className="content-page-hero">
+        <div className="content-page-hero-main">
+          <div className="content-page-hero-head">
+            <div className="content-page-hero-icon">
+              <BookOpen size={24} color="var(--accent)" />
+            </div>
             <h1 className="content-page-hero-title">Courses</h1>
-            <p className="content-page-hero-subtitle">{courses.length} courses loaded</p>
           </div>
+          <p className="content-page-hero-subtitle">{courses.length} courses loaded</p>
         </div>
-        {!addingCustom && <button className="btn btn-primary" onClick={() => { setAddingCustom(true); setEditingCustom(null); }}><Plus size={14} /> Add Custom Course</button>}
+        {!addingCustom && (
+          <div className="content-page-hero-actions">
+            <button className="btn btn-primary" onClick={() => { setAddingCustom(true); setEditingCustom(null); }}><Plus size={14} /> Add Custom Course</button>
+          </div>
+        )}
       </div>
 
       {courses.length === 0 && (

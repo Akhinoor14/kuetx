@@ -9,6 +9,7 @@
  * Routes:
  *   GET  /                 -> live public tree (what useQuestionBankData() fetches)
  *   POST /stage            -> Campus Lead uploads a PDF into staging/ (auth required)
+ *   GET  /stage-preview    -> stream a staged (not-yet-approved) PDF back for review (auth: SCL/Founder/HeadOfOps of that dept)
  *   POST /approve          -> moves staging/{requestId}.pdf -> public/{key}.pdf (auth: SCL/Founder, checked server-side too)
  *   POST /reject            -> deletes staging/{requestId}.pdf
  *   DELETE /public-object   -> Founder-only: remove a live paper
@@ -231,6 +232,50 @@ async function handleStage(request, env) {
 }
 
 // ---------------------------------------------------------------------
+// GET /stage-preview?requestId=&dept=&token= — lets a reviewer (Founder,
+// Head of Ops, or the SCL of `dept`) view a staged-but-not-yet-approved
+// PDF before deciding to approve/reject. Same authorization shape as
+// /approve on purpose — if you're allowed to approve it, you're allowed
+// to look at it first. Token is a query param (not an Authorization
+// header) since this URL is loaded directly by <iframe>/PDF.js as a
+// plain GET, not fetched with custom headers by our own code.
+// ---------------------------------------------------------------------
+async function handleStagePreview(request, env) {
+  const url = new URL(request.url);
+  const idToken = url.searchParams.get('token') || '';
+  const requestId = url.searchParams.get('requestId') || '';
+  const dept = url.searchParams.get('dept') || '';
+  if (!idToken) return json({ error: 'Missing token' }, env, 401);
+  if (!requestId) return json({ error: 'Missing requestId' }, env, 400);
+  if (!DEPARTMENTS.has(dept)) return json({ error: `Unknown dept: ${dept}` }, env, 400);
+
+  let claims;
+  try {
+    claims = await verifyFirebaseToken(idToken, env);
+  } catch (e) {
+    return json({ error: `Invalid token: ${e.message}` }, env, 401);
+  }
+  const uid = claims.sub || claims.user_id;
+
+  const founder = await isFounder(env, uid, idToken);
+  const headOfOps = founder || (await isHeadOfOps(env, uid, idToken));
+  const scl = headOfOps || (await isSCLFor(env, uid, dept, idToken));
+  if (!scl) return json({ error: "Not authorized to view this dept's queue" }, env, 403);
+
+  const staged = await env.QB_STAGING_BUCKET.get(`${requestId}.pdf`);
+  if (!staged) return json({ error: 'Staged file not found (already processed?)' }, env, 404);
+
+  return new Response(staged.body, {
+    status: 200,
+    headers: {
+      'Content-Type': 'application/pdf',
+      'Cache-Control': 'private, no-store',
+      ...cors(env),
+    },
+  });
+}
+
+// ---------------------------------------------------------------------
 // POST /approve — moves staging/{requestId}.pdf -> public/{key}.pdf
 //   body: { requestId, dept, term, courseCode, label, dept, groupDept }
 // Auth: Founder, Head of Ops, or the SCL of `dept`.
@@ -380,6 +425,7 @@ export default {
     try {
       if (request.method === 'GET' && url.pathname === '/') return handleList(env);
       if (request.method === 'POST' && url.pathname === '/stage') return handleStage(request, env);
+      if (request.method === 'GET' && url.pathname === '/stage-preview') return handleStagePreview(request, env);
       if (request.method === 'POST' && url.pathname === '/approve') return handleApprove(request, env);
       if (request.method === 'POST' && url.pathname === '/reject') return handleReject(request, env);
       if (request.method === 'DELETE' && url.pathname === '/public-object') return handleDeletePublicObject(request, env);

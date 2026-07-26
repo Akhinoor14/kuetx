@@ -338,17 +338,17 @@ export default function CTQuizPlanning() {
 
   return (
     <div className="page-container content-page-bg" style={{ width: '100%', margin: '28px auto', padding: 20 }}>
-      <div className="content-page-hero" style={{ justifyContent: 'space-between' }}>
-        <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
-          <div className="content-page-hero-icon">
-            <CalendarIcon size={18} color="var(--accent)" />
-          </div>
-          <div>
+      <div className="content-page-hero">
+        <div className="content-page-hero-main">
+          <div className="content-page-hero-head">
+            <div className="content-page-hero-icon">
+              <CalendarIcon size={24} color="var(--accent)" />
+            </div>
             <h1 className="content-page-hero-title">CT & Quiz Planner</h1>
-            <p className="content-page-hero-subtitle">A lightweight demo planner — click a date to view or add events. Smart hints will show below.</p>
           </div>
+          <p className="content-page-hero-subtitle">A lightweight demo planner — click a date to view or add events. Smart hints will show below.</p>
         </div>
-        <div style={{ textAlign: 'right' }}>
+        <div className="content-page-hero-actions">
           <div style={{ fontSize: 12, color: 'var(--muted)' }}>Demo Mode</div>
         </div>
       </div>

@@ -465,17 +465,17 @@ export default function SelfStudy() {
 
   return (
     <div className="page-enter page-container content-page-bg">
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 10, marginBottom: 16 }}>
-        <div className="content-page-hero">
-          <div className="content-page-hero-icon">
-            <BookOpen size={18} color="var(--accent)" />
-          </div>
-          <div>
+      <div className="content-page-hero">
+        <div className="content-page-hero-main">
+          <div className="content-page-hero-head">
+            <div className="content-page-hero-icon">
+              <BookOpen size={24} color="var(--accent)" />
+            </div>
             <h1 className="content-page-hero-title">Self Study</h1>
-            <p className="content-page-hero-subtitle">Track what you learn, topic by topic</p>
           </div>
+          <p className="content-page-hero-subtitle">Track what you learn, topic by topic</p>
         </div>
-        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', justifyContent: 'flex-end' }}>
+        <div className="content-page-hero-actions">
           <button className={`btn ${activeTab === 'academic' ? 'btn-primary' : 'btn-ghost'} btn-sm`} onClick={() => setActiveTab('academic')}>
             Academic ({currentTermCourseStats.length})
           </button>

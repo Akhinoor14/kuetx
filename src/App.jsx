@@ -2,6 +2,8 @@ import { useEffect, useState, lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { ThemeProvider } from './hooks/useTheme';
 import { usePageTracker } from './hooks/usePageTracker';
+import { useModuleUsageTracker } from './hooks/useModuleUsageTracker';
+import { startActivityTracking, stopActivityTracking } from './lib/activityTracking';
 import { Sidebar } from './components/Sidebar';
 import { Navbar } from './components/Navbar';
 import { Footer } from './components/Footer';
@@ -138,6 +140,7 @@ function PageLoadingFallback() {
 
 function Layout({ authState, onboardingActive }) {
   usePageTracker();
+  useModuleUsageTracker();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
   const location = useLocation();
@@ -741,6 +744,19 @@ export default function App() {
       window.removeEventListener('kuetx:store-updated', tryJoin);
     };
   }, [authState.authReady, authState.isAnonymous]);
+
+  // Analytics heartbeat (DAU/WAU/MAU + retention) — see activityTracking.js.
+  // Only for real, signed-in accounts; anonymous sessions and the pre-auth
+  // window are deliberately excluded so the active-user count reflects
+  // actual KUET students/faculty, not every device that opened the app.
+  useEffect(() => {
+    if (!authState.authReady || authState.isAnonymous) return;
+    const stop = startActivityTracking();
+    return () => {
+      stop();
+      stopActivityTracking();
+    };
+  }, [authState.authReady, authState.isAnonymous, authState.uid]);
 
   const isNewlyCreatedAccount = () => {
     try {

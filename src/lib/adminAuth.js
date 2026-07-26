@@ -23,12 +23,47 @@ export async function checkIsAdmin(uid) {
  * reconciles with the server in the background. This is what
  * useIsStaff.js should call so Founder resolves just as fast as
  * CR/staff roles instead of lagging behind them.
+ *
+ * BUGFIX (excessive live listeners): called from both useIsStaff.js and
+ * useIsFaculty.js — both mounted broadly via Sidebar/BottomNav — and each
+ * used to open its own fresh onSnapshot() on the exact same admins/{uid}
+ * doc, meaning 2 identical live Firestore connections per signed-in user
+ * on every page. This ref-counted registry (same pattern as
+ * subscribeMyRoles in staffSync.js) means only ONE real listener is ever
+ * open per uid, shared across every caller.
  */
+const _isAdminRegistry = new Map(); // uid -> { unsubscribe, refCount, listeners:Set, lastValue }
+
 export function subscribeIsAdmin(uid, callback) {
   if (!uid) { callback(false); return () => {}; }
-  return onSnapshot(
-    doc(db, 'admins', uid),
-    (snap) => callback(snap.exists()),
-    (err) => { console.error('[adminAuth] admin listener error:', err); callback(false); },
-  );
+
+  let entry = _isAdminRegistry.get(uid);
+  if (!entry) {
+    entry = { unsubscribe: null, refCount: 0, listeners: new Set(), lastValue: null };
+    _isAdminRegistry.set(uid, entry);
+    entry.unsubscribe = onSnapshot(
+      doc(db, 'admins', uid),
+      (snap) => {
+        entry.lastValue = snap.exists();
+        entry.listeners.forEach((cb) => cb(entry.lastValue));
+      },
+      (err) => {
+        console.error('[adminAuth] admin listener error:', err);
+        entry.lastValue = false;
+        entry.listeners.forEach((cb) => cb(false));
+      },
+    );
+  }
+  entry.refCount += 1;
+  entry.listeners.add(callback);
+  if (entry.lastValue !== null) callback(entry.lastValue);
+
+  return () => {
+    entry.listeners.delete(callback);
+    entry.refCount -= 1;
+    if (entry.refCount <= 0) {
+      entry.unsubscribe?.();
+      _isAdminRegistry.delete(uid);
+    }
+  };
 }

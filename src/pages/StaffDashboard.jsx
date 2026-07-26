@@ -20,6 +20,7 @@ import ClassmatesList from '../components/ClassmatesList';
 import QBUploadForm from '../components/QBUploadForm';
 import { withTimeout } from '../lib/safeSnapshot';
 import QBReviewQueue from '../components/QBReviewQueue';
+import AnalyticsDashboard from '../components/AnalyticsDashboard';
 import RequestDeleteButton from '../components/RequestDeleteButton';
 import SectionTabs from '../components/SectionTabs';
 
@@ -364,6 +365,9 @@ function SeniorCampusLeadBlock({ dept }) {
       <div style={{ fontSize: 12, fontWeight: 700, margin: '10px 0 6px' }}>Pending Question Bank uploads</div>
       <QBReviewQueue dept={dept} />
 
+      <div style={{ fontSize: 12, fontWeight: 700, margin: '10px 0 6px' }}>Department Analytics</div>
+      <AnalyticsDashboard dept={dept} />
+
       <div style={{ fontSize: 12, fontWeight: 700, margin: '10px 0 6px' }}>Campus Leads in this department</div>
       {clsError && <div style={{ fontSize: 12, color: 'var(--danger)' }}>{clsError}</div>}
       {!clsError && cls === null && <div style={{ fontSize: 12, color: 'var(--muted)' }}>Loading…</div>}
@@ -588,10 +592,17 @@ function RoleTabBar({ tabs, active, onChange }) {
 // ---------------------------------------------------------------------
 // Main dashboard
 // ---------------------------------------------------------------------
-export default function StaffDashboard({ onTabChange } = {}) {
+export default function StaffDashboard({ activeTab: activeTabProp, onTabChange } = {}) {
   const [roles, setRoles] = useState(null);
   const [isAdminUser, setIsAdminUser] = useState(false);
-  const [activeTab, setActiveTab] = useState(null);
+  // BUGFIX (back-button skips whole page): activeTab is now a controlled
+  // prop driven by TeamDashboard's ?tab= URL param (falls back to local
+  // state only if this component is ever used standalone without the
+  // prop). Previously this owned its own useState, so tab switches never
+  // became real history entries — Back from inside a tab left the whole
+  // /team page instead of returning to the tab list.
+  const [localActiveTab, setLocalActiveTab] = useState(null);
+  const activeTab = activeTabProp !== undefined ? activeTabProp : localActiveTab;
   const [rolesLoadWarning, setRolesLoadWarning] = useState('');
 
   useEffect(() => withTimeout(
@@ -668,7 +679,7 @@ export default function StaffDashboard({ onTabChange } = {}) {
   const show = (key) => tabs.length <= 1 || currentTab === key;
 
   const handleTabChange = (key) => {
-    setActiveTab(key);
+    if (activeTabProp === undefined) setLocalActiveTab(key);
     onTabChange?.(key);
   };
 

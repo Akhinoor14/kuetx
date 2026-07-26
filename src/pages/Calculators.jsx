@@ -375,11 +375,13 @@ export default function Calculators() {
   return (
     <div className="page-enter page-container content-page-bg">
       <div className="content-page-hero">
-        <div className="content-page-hero-icon">
-          <Calculator size={18} color="var(--accent)" />
-        </div>
-        <div>
-          <h1 className="content-page-hero-title">Smart Calculators</h1>
+        <div className="content-page-hero-main">
+          <div className="content-page-hero-head">
+            <div className="content-page-hero-icon">
+              <Calculator size={24} color="var(--accent)" />
+            </div>
+            <h1 className="content-page-hero-title">Smart Calculators</h1>
+          </div>
           <p className="content-page-hero-subtitle">Moved into Term Planner</p>
         </div>
       </div>

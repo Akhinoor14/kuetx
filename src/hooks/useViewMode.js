@@ -22,26 +22,45 @@ import { useEffect, useState } from 'react';
 import { useIsFaculty } from './useIsFaculty';
 
 const VIEW_MODE_KEY = 'kuetx:viewMode';
+// Same-tab counterpart to the browser's native 'storage' event, which only
+// fires in OTHER tabs/windows — never the tab that made the change. Every
+// writer of VIEW_MODE_KEY (this hook's own setViewModePref, plus
+// AdminDashboard's FounderViewSwitchCard) dispatches this after writing, so
+// every mounted useViewMode() instance (desktop Sidebar + mobile BottomNav
+// at once) re-reads and re-renders immediately — no manual refresh needed.
+const VIEW_MODE_EVENT = 'kuetx:viewModeChanged';
+
+export function setViewMode(next) {
+  try { localStorage.setItem(VIEW_MODE_KEY, next); } catch { /* ignore */ }
+  try { window.dispatchEvent(new CustomEvent(VIEW_MODE_EVENT, { detail: next })); } catch { /* ignore */ }
+}
 
 export function useViewMode() {
   const { isFaculty, isFounderBypass, isResolved } = useIsFaculty();
 
-  const [viewModePref, setViewModePref] = useState(() => {
+  const [viewModePref, setViewModePrefState] = useState(() => {
     try { return localStorage.getItem(VIEW_MODE_KEY) || 'student'; } catch { return 'student'; }
   });
 
-  useEffect(() => {
-    try { localStorage.setItem(VIEW_MODE_KEY, viewModePref); } catch { /* ignore */ }
-  }, [viewModePref]);
+  const setViewModePref = (next) => {
+    setViewModePrefState(next);
+    setViewMode(next);
+  };
 
-  // Stay in sync if the Founder flips the switch in another mounted
-  // instance (e.g. desktop Sidebar + mobile BottomNav both present).
+  // Stay in sync with any writer — same-tab (via the custom event above)
+  // or another mounted instance in a different tab/window (native
+  // 'storage' event, browser-provided, cross-tab only).
   useEffect(() => {
-    const sync = () => {
-      try { setViewModePref(localStorage.getItem(VIEW_MODE_KEY) || 'student'); } catch { /* ignore */ }
+    const syncFromEvent = (e) => setViewModePrefState(e.detail);
+    const syncFromStorage = () => {
+      try { setViewModePrefState(localStorage.getItem(VIEW_MODE_KEY) || 'student'); } catch { /* ignore */ }
     };
-    window.addEventListener('storage', sync);
-    return () => window.removeEventListener('storage', sync);
+    window.addEventListener(VIEW_MODE_EVENT, syncFromEvent);
+    window.addEventListener('storage', syncFromStorage);
+    return () => {
+      window.removeEventListener(VIEW_MODE_EVENT, syncFromEvent);
+      window.removeEventListener('storage', syncFromStorage);
+    };
   }, []);
 
   // Founder's own choice is the only case that actually matters —

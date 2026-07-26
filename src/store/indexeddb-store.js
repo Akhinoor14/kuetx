@@ -95,6 +95,41 @@ export async function removeFromDB(key) {
 }
 
 /**
+ * Get all keys AND values from IndexedDB in a single transaction/request
+ * pair — used by store.js's ensureDBReady() to preload the memory cache
+ * without opening one transaction per key (see that function's comment
+ * for why the old approach was slow).
+ */
+export async function getAllEntriesFromDB() {
+  try {
+    if (!db) await initDB();
+    return new Promise((resolve, reject) => {
+      const transaction = db.transaction(STORE_NAME, 'readonly');
+      const store = transaction.objectStore(STORE_NAME);
+      const keysRequest = store.getAllKeys();
+      const valuesRequest = store.getAll();
+      let keys = null;
+      let values = null;
+      const tryResolve = () => {
+        if (keys === null || values === null) return;
+        const entries = [];
+        for (let i = 0; i < keys.length; i++) {
+          if (String(keys[i]).startsWith(PREFIX)) entries.push([keys[i], values[i]]);
+        }
+        resolve(entries);
+      };
+      keysRequest.onerror = () => reject(keysRequest.error);
+      valuesRequest.onerror = () => reject(valuesRequest.error);
+      keysRequest.onsuccess = () => { keys = keysRequest.result; tryResolve(); };
+      valuesRequest.onsuccess = () => { values = valuesRequest.result; tryResolve(); };
+    });
+  } catch (err) {
+    console.error('[IndexedDB] GetAllEntries error:', err);
+    return [];
+  }
+}
+
+/**
  * Get all keys from IndexedDB
  */
 export async function getAllKeysFromDB() {
@@ -165,8 +200,17 @@ export async function clearDB() {
 export async function migrateFromLocalStorage() {
   try {
     await initDB();
-    const migrated = sessionStorage.getItem('kuetx_migrated_to_idb');
-    if (migrated === 'true') return; // Already migrated in this session
+    // BUGFIX: this used to be a sessionStorage flag, which is scoped to
+    // ONE TAB SESSION — so every fresh tab, and every full page reload in
+    // a browser that clears sessionStorage on close, re-ran this entire
+    // scan-and-await-write loop even though the migration had already
+    // completed permanently in IndexedDB long ago. That's one of the
+    // biggest contributors to "refresh takes forever" across the whole
+    // app. A real localStorage flag persists across reloads/tabs the same
+    // way the migrated data itself does, so this now only ever runs once
+    // per browser profile, not once per page load.
+    const migrated = localStorage.getItem('kuetx_migrated_to_idb');
+    if (migrated === 'true') return;
 
     const localStorageData = {};
     for (let i = 0; i < localStorage.length; i++) {
@@ -179,12 +223,25 @@ export async function migrateFromLocalStorage() {
     }
 
     if (Object.keys(localStorageData).length > 0) {
-      for (const [key, value] of Object.entries(localStorageData)) {
-        await setInDB(key.replace(PREFIX, ''), value);
-      }
+      // Write all keys in ONE transaction instead of one transaction per
+      // key via sequential `await setInDB()` — each setInDB() call opens
+      // its own readwrite transaction and waits for it to fully commit
+      // before starting the next, which serializes N round-trips to the
+      // browser's storage engine one at a time. A single shared
+      // transaction still writes every key but only pays that commit
+      // cost once.
+      await new Promise((resolve, reject) => {
+        const transaction = db.transaction(STORE_NAME, 'readwrite');
+        transaction.oncomplete = () => resolve();
+        transaction.onerror = () => reject(transaction.error);
+        const objectStore = transaction.objectStore(STORE_NAME);
+        for (const [key, value] of Object.entries(localStorageData)) {
+          objectStore.put(value, key);
+        }
+      });
       console.log('[IndexedDB] Migrated', Object.keys(localStorageData).length, 'items from localStorage');
-      sessionStorage.setItem('kuetx_migrated_to_idb', 'true');
     }
+    localStorage.setItem('kuetx_migrated_to_idb', 'true');
   } catch (err) {
     console.error('[IndexedDB] Migration error:', err);
   }

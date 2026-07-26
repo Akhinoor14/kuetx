@@ -33,6 +33,40 @@
   --course-color-1: #e9d5ff; /* light purple */
   --course-color-2: #d1fae5; /* light green */
   --course-color-3: #bbf7d0; /* another light green */
+
+  /* Notice "campus letters" — premium paper tone */
+  --letter-paper:       #faf7f0;
+  --letter-paperBorder: #e0d9c8;
+  --letter-paperDashed: #d8cfba;
+  --letter-gold:        #b8925a;
+  --letter-goldBg:      #f0e6d2;
+  --letter-goldIcon:    #9c7a3f;
+  --letter-ink:         #2b2418;
+  --letter-inkBody:     #3a3226;
+  --letter-inkMuted:    #6b6047;
+  --letter-inkFaint:    #9c9282;
+  --letter-roleFounder: var(--accent);
+  --letter-roleAdmin:   var(--letter-gold);
+  --letter-roleCR:      #5b7a9c;
+  --letter-roleFaculty: #8a6b8f;
+}
+
+/* Dark-mode "campus letters" — warm near-black, not the app's cool default dark */
+.dark {
+  --letter-paper:       #201c16;
+  --letter-paperBorder: #3a3327;
+  --letter-paperDashed: #453d2f;
+  --letter-gold:        #d4ac78;
+  --letter-goldBg:      #3a3020;
+  --letter-goldIcon:    #e0be8c;
+  --letter-ink:         #f0ebe0;
+  --letter-inkBody:     #ddd5c4;
+  --letter-inkMuted:    #a89c85;
+  --letter-inkFaint:    #7d735f;
+  --letter-roleFounder: var(--accentLight, var(--accent));
+  --letter-roleAdmin:   var(--letter-gold);
+  --letter-roleCR:      #7fa3c9;
+  --letter-roleFaculty: #b08fb6;
 }
 
 /* Self Evaluation page visual improvements */
@@ -254,6 +288,44 @@
 
 .dark .hub-grid-item-label {
   color: #b8b4a8 !important;
+}
+
+/* ── Notice "campus letters" ────────────────────────────────────────────── */
+/* App is offline-first (no external font requests) — use a serif system
+   stack instead of a webfont import, scoped only to the letter body/heading. */
+.letter-serif {
+  font-family: 'Source Serif 4', 'Lora', Georgia, 'Noto Serif', 'Times New Roman', serif;
+}
+
+.letter-scroll-hint {
+  height: 13px;
+  background: linear-gradient(180deg, var(--letter-paper), color-mix(in srgb, var(--letter-paper) 70%, var(--letter-ink) 12%));
+  position: relative;
+}
+.letter-scroll-hint::after {
+  content: '';
+  position: absolute;
+  left: 14%;
+  right: 14%;
+  top: 50%;
+  height: 1px;
+  background: var(--letter-paperDashed);
+  opacity: 0.7;
+}
+
+@keyframes noticeSheetRise {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+@keyframes noticeSheetBackdropIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.notice-sheet-backdrop {
+  animation: noticeSheetBackdropIn 260ms ease both;
+}
+.notice-sheet-container {
+  animation: noticeSheetRise 380ms cubic-bezier(0.22, 0.9, 0.24, 1) both;
 }
 
 /* ── Reset ───────────────────────────────────────────────────────────────── */

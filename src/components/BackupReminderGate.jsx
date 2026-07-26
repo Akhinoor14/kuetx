@@ -52,7 +52,7 @@ export default function BackupReminderGate({ open: openProp, onClose: onClosePro
     <ConfirmDialog
       open={open}
       title="KUETx Backup Reminder"
-      message={`It's been ${daysSince} days since your last backup. Your data is stored only in this browser, so a lost device or cleared cache means lost data. Go to Settings to download a backup now?`}
+      message={`It's been ${daysSince} days since your last backup. Firebase Sync keeps your data safe in the cloud, but a local backup is still a good extra safety net. Go to Settings to download one now?`}
       confirmLabel="Go to Settings"
       cancelLabel="Later"
       confirmTone="primary"

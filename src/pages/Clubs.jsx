@@ -68,18 +68,22 @@ export default function Clubs() {
 
       {/* Hero — shared classes, consistent with every other page */}
       <div className="content-page-hero">
-        <div className="content-page-hero-icon">
-          <Layers size={18} color="var(--accent)" />
-        </div>
-        <div style={{ flex: 1, minWidth: 0 }}>
-          <h1 className="content-page-hero-title">Clubs & Activities</h1>
+        <div className="content-page-hero-main">
+          <div className="content-page-hero-head">
+            <div className="content-page-hero-icon">
+              <Layers size={24} color="var(--accent)" />
+            </div>
+            <h1 className="content-page-hero-title">Clubs & Activities</h1>
+          </div>
           <p className="content-page-hero-subtitle">
             {activities.length} activities logged · {totalHoursAll.toFixed(1)}h total
           </p>
         </div>
-        <div style={{ textAlign: 'right' }}>
-          <div style={{ fontSize: 26, fontWeight: 900, color: 'var(--text)', lineHeight: 1 }}>{clubs.length}</div>
-          <div style={{ fontSize: 10, color: 'var(--muted)' }}>clubs joined</div>
+        <div className="content-page-hero-stats">
+          <div className="content-page-hero-stat">
+            <div className="content-page-hero-stat-n">{clubs.length}</div>
+            <div className="content-page-hero-stat-label">clubs joined</div>
+          </div>
         </div>
       </div>
 

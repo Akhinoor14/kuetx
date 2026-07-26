@@ -3,7 +3,7 @@
 // Approved: 18th & 19th Academic Council meetings (2012)
 // Storage: IndexedDB (50MB+) with automatic migration from localStorage
 
-import { initDB, getFromDB, setInDB, removeFromDB, getAllKeysFromDB, getAllFromDB, clearDB, migrateFromLocalStorage, getStorageUsage } from './indexeddb-store.js';
+import { initDB, getFromDB, setInDB, removeFromDB, getAllKeysFromDB, getAllFromDB, getAllEntriesFromDB, clearDB, migrateFromLocalStorage, getStorageUsage } from './indexeddb-store.js';
 import { clearAllCoursesCache } from './curriculumStore.js';
 
 const PREFIX = 'kuetx_';
@@ -18,12 +18,18 @@ export async function ensureDBReady() {
   try {
     await initDB();
     await migrateFromLocalStorage();
-    // Pre-load all data into memory cache
-    const allKeys = await getAllKeysFromDB();
-    for (const key of allKeys) {
-      const cacheKey = key;
+    // BUGFIX: this used to call getAllKeysFromDB() and then loop through
+    // every key with an individually-awaited getFromDB() call — each one
+    // opening and committing its OWN IndexedDB transaction, one at a time,
+    // fully sequentially. With the number of keys this app accumulates
+    // (per-class assignments, notices, marks, diary entries, etc.), that's
+    // dozens-to-hundreds of serialized storage round-trips on every single
+    // page load/refresh — the main cause of the app-wide slow-loading
+    // reports. getAllEntriesFromDB() reads every key AND value in exactly
+    // one transaction instead.
+    const entries = await getAllEntriesFromDB();
+    for (const [cacheKey, value] of entries) {
       if (memoryCache.has(cacheKey)) continue;
-      const value = await getFromDB(key.replace(PREFIX, ''));
       if (value !== null && value !== undefined) memoryCache.set(cacheKey, value);
     }
     dbReady = true;
@@ -1150,6 +1156,7 @@ export const normalizeProfileForSave = (input = {}) => {
     roomNo: String(raw.roomNo || '').trim(),
     advisorName: String(raw.advisorName || '').trim(),
     advisorContact: String(raw.advisorContact || '').trim(),
+    bio: String(raw.bio || '').trim().slice(0, 160),
     bloodGroup: BLOOD_GROUP_VALUES.includes(String(raw.bloodGroup || '').trim().toUpperCase())
       ? String(raw.bloodGroup || '').trim().toUpperCase() : '',
     termStartDate: raw.termStartDate || null,
@@ -1460,7 +1467,7 @@ export const DEFAULT_PROFILE = {
   name: '', studentId: '', dept: '', session: '', batch: '', currentTerm: '', currentTermKey: '',
   totalCreditsRequired: MIN_CREDITS_GRADUATION, yearStarted: new Date().getFullYear(),
   isCR: false, hallName: '', roomNo: '', advisorName: '', advisorContact: '',
-  bloodGroup: '',
+  bloodGroup: '', bio: '',
   termStartDate: null, // ISO date string: YYYY-MM-DD
 };
 

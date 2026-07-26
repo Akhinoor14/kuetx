@@ -107,6 +107,45 @@ export function SectionLabel({ children }) {
   );
 }
 
+// A path is only a genuine PARENT of another if it's followed by a '/'
+// boundary — plain string prefix matching (location.pathname.startsWith
+// (item.path)) wrongly treats e.g. '/faculty' as a match for
+// '/faculty/profile', '/faculty/classes', etc. too, since they all
+// literally start with the string '/faculty'. That made the Faculty
+// Dashboard row (hubPath/path === '/faculty') stay highlighted on every
+// other faculty page. Requiring the next character to be '/' (or an exact
+// match) fixes this without needing a special-cased '/' exclusion like the
+// student Dashboard row already had.
+function isPathOrDescendant(pathname, itemPath) {
+  if (pathname === itemPath) return true;
+  return pathname.startsWith(itemPath.endsWith('/') ? itemPath : `${itemPath}/`);
+}
+
+// A path is only a genuine PARENT of another if it's followed by a '/'
+// boundary — plain string prefix matching (pathname.startsWith(itemPath))
+// wrongly treats e.g. '/faculty' as matching '/faculty/profile',
+// '/faculty/classes', etc. too, since they all literally start with the
+// string '/faculty'. Requiring a '/' boundary avoids that, while still
+// correctly matching genuine descendant routes like
+// '/faculty/classes/:assignmentId' under '/faculty/classes'.
+function isPathDescendant(pathname, itemPath) {
+  return pathname.startsWith(itemPath.endsWith('/') ? itemPath : `${itemPath}/`);
+}
+
+// Hub active-state matching: exact match always counts; descendant
+// matching only applies when item.path is a genuine sub-page root
+// (different from the section/subgroup's own hubPath) — a hub's
+// self-referencing root item (e.g. the Faculty Dashboard row, whose single
+// item.path === '/faculty' === its own hubPath) must NOT swallow every
+// sibling faculty route just because they share that string prefix. See
+// the Profile page screenshot report this fixed.
+function isActiveItem(pathname, itemPath, hubPath) {
+  if (pathname === itemPath) return true;
+  if (itemPath === hubPath) return false; // self-referencing root — exact match only
+  if (itemPath === '/') return false; // '/' would prefix-match everything
+  return isPathDescendant(pathname, itemPath);
+}
+
 // Shared row-list renderer: takes an already-filtered nav source and draws
 // it. Both SidebarNavStudent and SidebarNavFaculty call this with their own
 // (never each other's) filtered nav array.
@@ -118,8 +157,7 @@ export function NavList({ filteredNav, location, onClose, unreadNoticeCount = 0 
 
         if (isHub) {
           const active = location.pathname === section.hubPath
-            || section.items.some(item => location.pathname === item.path
-              || (item.path !== '/' && location.pathname.startsWith(item.path)));
+            || section.items.some(item => isActiveItem(location.pathname, item.path, section.hubPath));
           return (
             <div key={section.group}>
               {idx > 0 && <div style={{ height: 1, background: 'var(--border)', margin: '6px 4px', opacity: 0.6 }} />}
@@ -142,8 +180,7 @@ export function NavList({ filteredNav, location, onClose, unreadNoticeCount = 0 
               <SectionLabel>{section.group}</SectionLabel>
               {section.subgroups.map(sub => {
                 const subActive = location.pathname === sub.hubPath
-                  || sub.items.some(item => location.pathname === item.path
-                    || (item.path !== '/' && location.pathname.startsWith(item.path)));
+                  || sub.items.some(item => isActiveItem(location.pathname, item.path, sub.hubPath));
                 return (
                   <NavRow
                     key={sub.name}

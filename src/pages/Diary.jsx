@@ -73,19 +73,21 @@ export default function Diary() {
 
   return (
     <div className="page-enter page-container content-page-bg">
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-        <div className="content-page-hero">
-          <div className="content-page-hero-icon">
-            <BookOpen size={18} color="var(--accent)" />
-          </div>
-          <div>
+      <div className="content-page-hero">
+        <div className="content-page-hero-main">
+          <div className="content-page-hero-head">
+            <div className="content-page-hero-icon">
+              <BookOpen size={24} color="var(--accent)" />
+            </div>
             <h1 className="content-page-hero-title">Class Diary</h1>
-            <p className="content-page-hero-subtitle">What was covered in each class</p>
           </div>
+          <p className="content-page-hero-subtitle">What was covered in each class</p>
         </div>
-        <button className="btn btn-primary" onClick={() => setAdding(true)}>
-          <Plus size={13} /> Log Class
-        </button>
+        <div className="content-page-hero-actions">
+          <button className="btn btn-primary" onClick={() => setAdding(true)}>
+            <Plus size={13} /> Log Class
+          </button>
+        </div>
       </div>
 
       {adding && (

@@ -58,7 +58,7 @@ export const GUIDE_SECTIONS = [
           ],
           [
             "No cross-device backup",
-            "Google Drive auto-sync + Firebase real-time sync built in"
+            "Firebase real-time sync built in"
           ],
           [
             "Tracking prayers and habits separately",
@@ -378,7 +378,7 @@ export const GUIDE_SECTIONS = [
     "blocks": [
       {
         "type": "text",
-        "text": "Your full student profile dashboard — shows a live overview of all academic metrics. Also manages your Google account, Drive sync, and Firebase real-time sync."
+        "text": "Your full student profile dashboard — shows a live overview of all academic metrics. Also manages your Google account and Firebase real-time sync."
       },
       {
         "type": "subhead",
@@ -410,11 +410,6 @@ export const GUIDE_SECTIONS = [
         "sub": false
       },
       {
-        "type": "bullet",
-        "text": "Google Drive sync status: connected, last backup time, Sync Now button",
-        "sub": false
-      },
-      {
         "type": "subhead",
         "text": "How to Use"
       },
@@ -436,11 +431,6 @@ export const GUIDE_SECTIONS = [
       {
         "type": "step",
         "num": 4,
-        "text": "Tap \"Connect Google Drive\" to enable auto-backup to your own Google Drive"
-      },
-      {
-        "type": "step",
-        "num": 5,
         "text": "Guest mode users see a prompt — sync is optional, the app works fully without it"
       },
       {
@@ -2192,10 +2182,6 @@ export const GUIDE_SECTIONS = [
           [
             "Assignment overdue",
             "Any assignment past its due date still marked as Pending."
-          ],
-          [
-            "Drive sync warning",
-            "Drive connection expired or sync failed for more than 24 hours."
           ]
         ]
       },
@@ -2647,7 +2633,7 @@ export const GUIDE_SECTIONS = [
     "blocks": [
       {
         "type": "text",
-        "text": "Data management, app preferences, backup and restore. All KUETx data lives on your device (IndexedDB) — nothing is sent to any server unless you explicitly enable Drive or Firebase sync."
+        "text": "Data management, app preferences, backup and restore. All KUETx data lives on your device (IndexedDB) — nothing is sent to any server unless you explicitly sign in with Google to enable Firebase sync."
       },
       {
         "type": "subhead",
@@ -2710,7 +2696,7 @@ export const GUIDE_SECTIONS = [
           ],
           [
             "Server data",
-            "Nothing sent to any external server (except Drive/Firebase if you enabled them)"
+            "Nothing sent to any external server (except Firebase if you signed in)"
           ],
           [
             "Login required",
@@ -2768,89 +2754,6 @@ export const GUIDE_SECTIONS = [
   },
   {
     "num": "28",
-    "id": "drive-sync",
-    "title": "Google Drive Sync",
-    "route": "/settings",
-    "icon": "Cloud",
-    "category": "Tools",
-    "desc": "KUETx can automatically back up your data to your own personal Google Drive — no KUETx server, no…",
-    "blocks": [
-      {
-        "type": "text",
-        "text": "KUETx can automatically back up your data to your own personal Google Drive — no KUETx server, no shared cloud. Your data goes only to your own Google account. Uses the most restricted OAuth scope available."
-      },
-      {
-        "type": "subhead",
-        "text": "How It Works"
-      },
-      {
-        "type": "bullet",
-        "text": "OAuth 2.0 via Google Identity Services — you authorize from a popup in your browser",
-        "sub": false
-      },
-      {
-        "type": "bullet",
-        "text": "Scope: drive.file — KUETx can ONLY access files it itself created. Nothing else in your Drive is touched.",
-        "sub": false
-      },
-      {
-        "type": "bullet",
-        "text": "Your data goes to a \"KUETx Backups\" folder inside your own Google Drive",
-        "sub": false
-      },
-      {
-        "type": "bullet",
-        "text": "Auto-push: any change in the app triggers a backup upload (with a 4-second debounce)",
-        "sub": false
-      },
-      {
-        "type": "bullet",
-        "text": "Auto-pull: app checks Drive every 20 seconds for changes from other devices",
-        "sub": false
-      },
-      {
-        "type": "bullet",
-        "text": "\"Sync Now\" button: forces an immediate manual push+pull",
-        "sub": false
-      },
-      {
-        "type": "subhead",
-        "text": "How to Connect"
-      },
-      {
-        "type": "step",
-        "num": 1,
-        "text": "Open Profile page or Settings page"
-      },
-      {
-        "type": "step",
-        "num": 2,
-        "text": "Tap \"Connect Google Drive\""
-      },
-      {
-        "type": "step",
-        "num": 3,
-        "text": "A Google OAuth popup opens — sign in with your Google account and tap Allow"
-      },
-      {
-        "type": "step",
-        "num": 4,
-        "text": "The app immediately pushes your current data to Drive (first backup)"
-      },
-      {
-        "type": "step",
-        "num": 5,
-        "text": "From now on, every change auto-syncs within 4 seconds automatically"
-      },
-      {
-        "type": "callout",
-        "text": "Google Drive sync uses drive.file scope — the most restricted scope possible. KUETx literally cannot read or access any other file in your Google Drive. Zero risk to your other data.",
-        "variant": "success"
-      }
-    ]
-  },
-  {
-    "num": "29",
     "id": "firebase-sync",
     "title": "Firebase Sync",
     "route": "/profile",
@@ -2861,47 +2764,6 @@ export const GUIDE_SECTIONS = [
       {
         "type": "text",
         "text": "For real-time cross-device sync, KUETx supports Google Sign-In via Firebase. Data pushes to Firestore within 1.5 seconds of any change and pulls changes from other devices in real-time via onSnapshot listeners."
-      },
-      {
-        "type": "subhead",
-        "text": "Drive vs Firebase — Which to Use?"
-      },
-      {
-        "type": "table",
-        "headers": [
-          "Google Drive Sync",
-          "Firebase Sync (Google Login)"
-        ],
-        "rows": [
-          [
-            "No login required — just authorize Drive",
-            "Requires Google Sign-In (creates account)"
-          ],
-          [
-            "Data stored in YOUR personal Google Drive",
-            "Data stored in KUETx Firebase (encrypted cloud)"
-          ],
-          [
-            "Near-real-time (checks every 20 seconds)",
-            "Instant real-time via Firestore onSnapshot listeners"
-          ],
-          [
-            "Best for: regular automatic backups + peace of mind",
-            "Best for: always-online multi-device use"
-          ],
-          [
-            "No profile photo sync",
-            "Profile photo syncs via Firebase Storage"
-          ],
-          [
-            "drive.file scope — no access to your other files",
-            "KUETx holds your encrypted academic data"
-          ]
-        ]
-      },
-      {
-        "type": "text",
-        "text": "Recommendation: Use both. Enable Firebase Sign-In for real-time sync, and also connect Google Drive for an extra layer of backup. They work independently and complement each other."
       },
       {
         "type": "subhead",
@@ -2958,7 +2820,7 @@ export const GUIDE_SECTIONS = [
       },
       {
         "type": "callout",
-        "text": "Guest mode = data on this device only, no backup unless Drive is connected. Google Sign-In = data syncs across all your devices in real-time. You can switch between modes anytime without losing local data.",
+        "text": "Guest mode = data stays on this device only, with no cloud backup. Google Sign-In = data syncs across all your devices in real-time. You can switch between modes anytime without losing local data.",
         "variant": "info"
       }
     ]
@@ -2970,7 +2832,7 @@ export const GUIDE_SECTIONS = [
     "route": "/quick-access",
     "icon": "Zap",
     "category": "Overview",
-    "desc": "Quick Access is a personal page launcher — shows your pinned pages, favorited pages, and…",
+    "desc": "Quick Access is a personal page launcher and a map of every page in KUETx, grouped by…",
     "blocks": [
       {
         "type": "text",
@@ -3074,54 +2936,6 @@ export const GUIDE_SECTIONS = [
     ]
   },
   {
-    "num": "31",
-    "id": "mind-map",
-    "title": "Feature Mind Map",
-    "route": null,
-    "icon": "GitBranch",
-    "category": "Overview",
-    "desc": "All 33 features at a glance, grouped by category",
-    "blocks": [
-      {
-        "type": "text",
-        "text": "All 33 features organized by category. Every feature connects back to your student life at KUET."
-      },
-      {
-        "type": "table",
-        "headers": [
-          "Group",
-          "Pages"
-        ],
-        "rows": [
-          [
-            "🎓 Academics",
-            "Courses · Attendance · Schedule · Assignments · Marks · Results · Syllabus · Question Bank · Solution Bank · Teachers"
-          ],
-          [
-            "🌙 Daily Life",
-            "Diary · Self Study · Time Tracker · Namaz"
-          ],
-          [
-            "💚 Wellbeing",
-            "Self Eval · Smart Score"
-          ],
-          [
-            "💰 Finance",
-            "Money · Tuition · Food"
-          ],
-          [
-            "🔧 Tools",
-            "Alerts · Drive Sync · Firebase Sync · Settings · Reports · About"
-          ],
-          [
-            "🏅 Activities",
-            "Clubs · Tours · Social · Projects · CR Tools · CT Planner"
-          ]
-        ]
-      }
-    ]
-  },
-  {
     "num": "32",
     "id": "quick-tips",
     "title": "Quick Tips & Troubleshooting",
@@ -3174,10 +2988,6 @@ export const GUIDE_SECTIONS = [
             "Enable CR Mode in Profile → Edit Profile → check \"I am a CR\". CR tools are hidden for non-CR students to keep navigation clean."
           ],
           [
-            "Drive sync not working?",
-            "The OAuth token may have expired. Disconnect Drive from Profile page and reconnect. You'll re-authorize with Google."
-          ],
-          [
             "Grade not calculating?",
             "Make sure CT marks are entered in Term Planner. Attendance marks need \"Auto\" mode active (or enter manually). Hall marks also needed for final grade."
           ],
@@ -3195,11 +3005,7 @@ export const GUIDE_SECTIONS = [
           ],
           [
             "Can I use the app without internet?",
-            "Yes — after first load, KUETx works fully offline. The PWA caches everything. Only Drive/Firebase sync needs internet."
-          ],
-          [
-            "Firebase Sync vs Drive — which is better?",
-            "Use both. Firebase = real-time instant sync between devices. Drive = personal encrypted backup in your own Google account."
+            "Yes — after first load, KUETx works fully offline. The PWA caches everything. Only Firebase sync needs internet."
           ],
           [
             "How to copy data to a new device?",

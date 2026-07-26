@@ -469,6 +469,23 @@ export default function Profile() {
   const [reminderTick, setReminderTick] = useState(0);
   const reminderTimerRef = useRef(null);
 
+  // Short bio/quote shown under the name in the hero — inline click-to-edit
+  // right there, plus editable from the Personal Info modal and initial
+  // ProfileSetupModal (all three write the same profile.bio field).
+  const [isEditingBio, setIsEditingBio] = useState(false);
+  const [bioDraft, setBioDraft] = useState('');
+  const MAX_BIO_LEN = 160;
+  const saveBio = (value) => {
+    const clean = String(value || '').trim().slice(0, MAX_BIO_LEN);
+    const next = { ...profile, bio: clean };
+    store.set('profile', next);
+    setProfile(next);
+    if (auth.currentUser?.uid && !auth.currentUser.isAnonymous) {
+      pushProfile(auth.currentUser.uid, next).catch(() => {});
+    }
+    setIsEditingBio(false);
+  };
+
   // BUGFIX: useState(getProfile() ...) above only ever runs its initializer
   // ONCE, at the exact instant this component first mounts. If IndexedDB is
   // still warming up at that moment (see store.js's ensureDBReady — can
@@ -864,63 +881,55 @@ export default function Profile() {
         }}><CheckCircle2 size={16} /> Profile updated!</div>
       )}
 
-      {/* ── Hero: Facebook-cover-style layout. A short flat cover strip
-           sits behind the top of the avatar; the avatar overlaps its
-           bottom edge (half in the cover, half on the card background
-           below) via a negative top margin. This replaces the old
-           tall, avatar-centered-in-a-plain-card hero, cutting hero
-           height from ~400px to ~180-200px. Pure layout/CSS change —
-           every conditional below (isKuetVerified, isRealCR, etc.) is
-           unchanged from before. ── */}
-      <div className="profile-hero-plain" style={{
+      {/* ── Hero: same accent-wash background language as every other content
+           page (.content-page-bg — radial+linear accent gradient, no
+           separate card/cover-strip of its own). Avatar, name, and a short
+           inline-editable bio sit directly on that wash. Hand over/Leave CR
+           moved out of the hero entirely — it now lives next to Personal
+           Info's Edit button / Claim CR, further down (see ord-claim-cr /
+           claim-cr-inline-mobile-only). ── */}
+      <div className="content-page-bg" style={{
         borderRadius: 20, overflow: 'hidden', position: 'relative',
+        padding: 'clamp(24px,5vw,36px) clamp(20px,4vw,32px)',
+        display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center',
       }}>
-        {/* Cover strip — flat accent wash, short and fixed-height */}
-        <div style={{
-          height: 130,
-          background: 'linear-gradient(135deg, rgba(59,130,246,0.16) 0%, rgba(139,92,246,0.16) 100%)',
-        }} />
-
-        <div style={{
-          padding: '0 clamp(20px,4vw,32px) clamp(16px,3vw,22px)',
-          display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center',
-        }}>
-          {/* Avatar — clickable to upload, with glow ring + click-to-edit hint.
-              Negative margin pulls it up so it overlaps the cover strip. */}
-          <div
-            onClick={() => setShowAvatarModal(true)}
-            title="Click to change profile picture"
-            className="profile-hero-avatar"
-            style={{
-              marginTop: -46, // half the avatar sits inside the cover above
-              borderRadius: '50%',
-              background: photoURL ? 'transparent' : 'var(--accentSoft)',
-              border: '4px solid var(--card, #fff)',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              fontWeight: 900, color: 'var(--accent)',
-              flexShrink: 0, cursor: 'pointer', overflow: 'hidden', position: 'relative',
-              transition: 'transform 0.2s, box-shadow 0.2s',
-            }}
-            onMouseEnter={e => { e.currentTarget.style.transform = 'scale(1.04)'; }}
-            onMouseLeave={e => { e.currentTarget.style.transform = ''; }}
-          >
-            {photoURL
-              ? <img src={photoURL} alt="Profile" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-              : <span>{profile.name ? profile.name.trim().charAt(0).toUpperCase() : <User size={28} />}</span>
-            }
-            {/* Camera overlay on hover — desktop affordance, kept as-is */}
-            <div style={{
-              position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.4)',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              opacity: 0, transition: 'opacity 0.2s', borderRadius: '50%',
-            }}
-            onMouseEnter={e => e.currentTarget.style.opacity = '1'}
-            onMouseLeave={e => e.currentTarget.style.opacity = '0'}>
-              <Camera size={22} color="white" />
-            </div>
-            {/* Always-visible camera badge — hover-only affordances are invisible
-                on touch devices, so users had no way of knowing the avatar was
-                tappable. This badge sits in the corner permanently. */}
+        {/* Avatar — clickable to upload, with glow ring + click-to-edit hint. */}
+        <div
+          onClick={() => setShowAvatarModal(true)}
+          title="Click to change profile picture"
+          className="profile-hero-avatar"
+          style={{
+            borderRadius: '50%',
+            background: photoURL ? 'transparent' : 'var(--accentSoft)',
+            border: '4px solid var(--card, #fff)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            fontWeight: 900, color: 'var(--accent)',
+            flexShrink: 0, cursor: 'pointer', overflow: 'hidden', position: 'relative',
+            transition: 'transform 0.2s, box-shadow 0.2s',
+          }}
+          onMouseEnter={e => { e.currentTarget.style.transform = 'scale(1.04)'; }}
+          onMouseLeave={e => { e.currentTarget.style.transform = ''; }}
+        >
+          {photoURL
+            ? <img src={photoURL} alt="Profile" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            : <span>{profile.name ? profile.name.trim().charAt(0).toUpperCase() : <User size={28} />}</span>
+          }
+          {/* Camera overlay on hover — desktop affordance, kept as-is */}
+          <div style={{
+            position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.4)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            opacity: 0, transition: 'opacity 0.2s', borderRadius: '50%',
+          }}
+          onMouseEnter={e => e.currentTarget.style.opacity = '1'}
+          onMouseLeave={e => e.currentTarget.style.opacity = '0'}>
+            <Camera size={22} color="white" />
+          </div>
+          {/* Always-visible camera badge — hover-only affordances are invisible
+              on touch devices, so users had no way of knowing the avatar was
+              tappable. Only shown when there's no photo yet (placeholder
+              initial) — once a real photo is set, the hover overlay above
+              is enough and a permanent badge just clutters the photo. */}
+          {!photoURL && (
             <div style={{
               position: 'absolute', bottom: 0, right: 0,
               width: '30%', height: '30%', minWidth: 26, minHeight: 26,
@@ -931,81 +940,99 @@ export default function Profile() {
             }}>
               <Camera size={14} color="#fff" style={{ width: '46%', height: '46%' }} />
             </div>
-          </div>
-
-          {/* Name + verified tick + CR badge, compact, right under the
-              overlapping avatar. Student ID / Session / Term already shown
-              in Academic Info / Personal Info cards below. Edit lives there too. */}
-          <div style={{ marginTop: 8, display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap', justifyContent: 'center' }}>
-            <div style={{ fontSize: 'clamp(17px,4vw,22px)', fontWeight: 900, color: 'var(--text)', letterSpacing: '-0.02em', lineHeight: 1.2, fontFamily: "'Space Grotesk', 'Sora', 'Hind Siliguri', system-ui, sans-serif", display: 'flex', alignItems: 'center', gap: 8 }}>
-              {profile.name}
-              {isKuetVerified && <BlueTick size={18} />}
-            </div>
-            {isRealCR && <Badge label="CR" color="var(--accent)" bg="var(--accentSoft)" />}
-          </div>
-
-          {/* CR handover/leave — now a compact inline chip instead of a
-              separate large banner card (moved from its own block below
-              into the hero itself, right under the name). Same
-              requestLeaveCR action as before; "Hand over CR" now points
-              at /class-my-role (the split-out "My Role" page) instead of
-              /class-roster, since /class-roster is now the Roster-only
-              page and the handoff hint/action lives on My Role. */}
-          {isRealCR && (
-            <div style={{
-              marginTop: 8, display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap', justifyContent: 'center',
-              fontSize: 11, padding: '4px 10px', borderRadius: 20,
-              background: 'var(--accentSoft)', border: '1px solid rgba(59,130,246,0.25)',
-            }}>
-              <button
-                onClick={() => navigate('/class-my-role', { state: { intent: 'handoff' } })}
-                style={{ fontSize: 11, color: 'var(--accent)', background: 'none', border: 'none', cursor: 'pointer', fontWeight: 600, padding: 0 }}>
-                Hand over CR
-              </button>
-              <span style={{ color: 'var(--muted)' }}>·</span>
-              <button
-                disabled={leaveCRState === 'sending' || leaveCRState === 'sent'}
-                onClick={async () => {
-                  if (!window.confirm("Send a request to your Class Lead to step down as CR? You'll remain CR until it's approved.")) return;
-                  setLeaveCRState('sending');
-                  try {
-                    const groupId = getGroupId(profile);
-                    await requestLeaveCR(groupId, profile);
-                    setLeaveCRState('sent');
-                  } catch (err) {
-                    alert(`Failed: ${err?.message || err}`);
-                    setLeaveCRState('idle');
-                  }
-                }}
-                style={{ fontSize: 11, color: 'var(--muted)', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>
-                {leaveCRState === 'sent' ? 'Request sent ✓' : leaveCRState === 'sending' ? 'Sending…' : 'Leave CR'}
-              </button>
-            </div>
-          )}
-
-          {/* Section-missing nudge — only for the 4 multi-section depts
-              (CE/EEE/ME/CSE) when the student hasn't picked A/B yet
-              (pre-migration or profile predates the section field).
-              Without this, getGroupId() returns null and all class
-              features (CR claim, roster, routine, notices) stay disabled
-              for them silently — this makes the reason visible and
-              actionable right where they'd look. */}
-          {isMultiSectionDept(profile.dept) && !profile.section && (
-            <div style={{
-              marginTop: 10, fontSize: 12, padding: '8px 14px', borderRadius: 10,
-              background: 'rgba(234,179,8,0.12)', border: '1px solid rgba(234,179,8,0.35)', color: 'var(--text)',
-              display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap', justifyContent: 'center',
-            }}>
-              <span>Your department runs two sections — set yours to unlock class features.</span>
-              <button
-                onClick={() => setIsModalOpen(true)}
-                style={{ fontSize: 12, color: 'var(--accent)', background: 'none', border: 'none', cursor: 'pointer', fontWeight: 700, padding: 0 }}>
-                Select section
-              </button>
-            </div>
           )}
         </div>
+
+        {/* Name + verified tick + CR badge */}
+        <div style={{ marginTop: 12, display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap', justifyContent: 'center' }}>
+          <div style={{ fontSize: 'clamp(17px,4vw,22px)', fontWeight: 900, color: 'var(--text)', letterSpacing: '-0.02em', lineHeight: 1.2, fontFamily: "'Space Grotesk', 'Sora', 'Hind Siliguri', system-ui, sans-serif", display: 'flex', alignItems: 'center', gap: 8 }}>
+            {profile.name}
+            {isKuetVerified && <BlueTick size={18} />}
+          </div>
+          {isRealCR && <Badge label="CR" color="var(--accent)" bg="var(--accentSoft)" />}
+        </div>
+
+        {/* Short bio/quote — inline click-to-edit right here. Also
+            editable from Personal Info's Edit modal and first-run
+            ProfileSetupModal (all three write profile.bio). */}
+        {isEditingBio ? (
+          <div style={{ marginTop: 10, width: '100%', maxWidth: 420, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6 }}>
+            <textarea
+              autoFocus
+              value={bioDraft}
+              onChange={e => setBioDraft(e.target.value.slice(0, MAX_BIO_LEN))}
+              placeholder="A short line about yourself… (max 160 characters)"
+              rows={2}
+              style={{
+                width: '100%', resize: 'none', textAlign: 'center',
+                fontSize: 13, fontStyle: 'italic', color: 'var(--text)',
+                background: 'var(--card, #fff)', border: '1px solid var(--border)',
+                borderRadius: 12, padding: '10px 14px', fontFamily: 'inherit',
+              }}
+            />
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+              <span style={{ fontSize: 11, color: 'var(--muted)' }}>{bioDraft.length}/{MAX_BIO_LEN}</span>
+              <button
+                onClick={() => saveBio(bioDraft)}
+                style={{ fontSize: 12, fontWeight: 700, color: 'var(--accent)', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>
+                Save
+              </button>
+              <button
+                onClick={() => setIsEditingBio(false)}
+                style={{ fontSize: 12, color: 'var(--muted)', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>
+                Cancel
+              </button>
+            </div>
+          </div>
+        ) : (
+          <div
+            onClick={() => { setBioDraft(profile.bio || ''); setIsEditingBio(true); }}
+            title="Click to edit your bio"
+            style={{
+              marginTop: 8, maxWidth: 420, cursor: 'pointer',
+              display: 'flex', alignItems: 'center', gap: 6, justifyContent: 'center',
+            }}>
+            <span style={{
+              fontSize: 13, fontStyle: 'italic', color: profile.bio ? 'var(--muted)' : 'var(--muted)',
+              opacity: profile.bio ? 1 : 0.65,
+            }}>
+              {profile.bio ? `“${profile.bio}”` : 'Add a short bio…'}
+            </span>
+            <Pencil size={11} color="var(--muted)" style={{ flexShrink: 0, opacity: 0.6 }} />
+          </div>
+        )}
+
+        {/* Section-missing nudge — only for the 4 multi-section depts
+            (CE/EEE/ME/CSE) when the student hasn't picked A/B yet
+            (pre-migration or profile predates the section field).
+            Without this, getGroupId() returns null and all class
+            features (CR claim, roster, routine, notices) stay disabled
+            for them silently — this makes the reason visible and
+            actionable right where they'd look. */}
+        {isMultiSectionDept(profile.dept) && !profile.section && (
+          <div style={{
+            marginTop: 14, fontSize: 12, padding: '8px 14px', borderRadius: 10,
+            background: 'rgba(234,179,8,0.12)', border: '1px solid rgba(234,179,8,0.35)', color: 'var(--text)',
+            display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap', justifyContent: 'center',
+          }}>
+            <span>Your department runs two sections — set yours to unlock class features.</span>
+            <button
+              onClick={() => setIsModalOpen(true)}
+              style={{ fontSize: 12, color: 'var(--accent)', background: 'none', border: 'none', cursor: 'pointer', fontWeight: 700, padding: 0 }}>
+              Select section
+            </button>
+          </div>
+        )}
       </div>
+
+      {/* ── Hand over CR / Leave CR — moved out of the hero. Lives right
+          next to Personal Info's Edit button (mobile-visible inline chip)
+          and as its own compact card in profile-col-right next to Quick
+          Accounts (desktop) — the exact same spots Claim CR uses when the
+          user ISN'T CR, so the two states (claim vs. step-down) always
+          show up in one consistent place regardless of role. See
+          ord-claim-cr / claim-cr-inline-mobile-only below for the other
+          half of this pairing. */}
 
       {/* ── Staff-flagged Email Banner (existing account, human-reviewed) ── */}
       {emailFlag && (
@@ -1123,6 +1150,40 @@ export default function Profile() {
                   <ClaimCRInlineButton groupId={getGroupId(profile)} profile={profile} />
                 </div>
               )}
+              {/* Hand over / Leave CR — mobile-visible inline chip, same spot
+                  as ClaimCRInlineButton above (mutually exclusive: only one
+                  of the two ever renders, since a user is either CR or not). */}
+              {isRealCR && (
+                <div className="claim-cr-inline-mobile-only" style={{
+                  display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap',
+                  fontSize: 11, padding: '4px 10px', borderRadius: 20,
+                  background: 'var(--accentSoft)', border: '1px solid rgba(59,130,246,0.25)',
+                }}>
+                  <button
+                    onClick={() => navigate('/class-my-role', { state: { intent: 'handoff' } })}
+                    style={{ fontSize: 11, color: 'var(--accent)', background: 'none', border: 'none', cursor: 'pointer', fontWeight: 600, padding: 0 }}>
+                    Hand over CR
+                  </button>
+                  <span style={{ color: 'var(--muted)' }}>·</span>
+                  <button
+                    disabled={leaveCRState === 'sending' || leaveCRState === 'sent'}
+                    onClick={async () => {
+                      if (!window.confirm("Send a request to your Class Lead to step down as CR? You'll remain CR until it's approved.")) return;
+                      setLeaveCRState('sending');
+                      try {
+                        const groupId = getGroupId(profile);
+                        await requestLeaveCR(groupId, profile);
+                        setLeaveCRState('sent');
+                      } catch (err) {
+                        alert(`Failed: ${err?.message || err}`);
+                        setLeaveCRState('idle');
+                      }
+                    }}
+                    style={{ fontSize: 11, color: 'var(--muted)', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>
+                    {leaveCRState === 'sent' ? 'Request sent ✓' : leaveCRState === 'sending' ? 'Sending…' : 'Leave CR'}
+                  </button>
+                </div>
+              )}
               <button onClick={() => setIsModalOpen(true)} style={{
                 padding: '6px 12px', background: 'var(--bg)', color: 'var(--text)',
                 border: '1px solid var(--border)', borderRadius: 8,
@@ -1214,6 +1275,49 @@ export default function Profile() {
             <div className="ord-claim-cr">
               <ClaimCRCard groupId={getGroupId(profile)} profile={profile} />
             </div>
+          )}
+
+          {/* Hand over / Leave CR — the CR-side counterpart to Claim CR
+              above (mutually exclusive with it). Same actions as the
+              mobile inline chip next to Personal Info's Edit button. */}
+          {isRealCR && (
+            <Section className="ord-claim-cr" title="Class Rep" icon={<ShieldCheck size={14} />}>
+              <div style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.5 }}>
+                You're the current CR for your class. Hand over to someone else, or step down if you no longer want the role.
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
+                <button
+                  onClick={() => navigate('/class-my-role', { state: { intent: 'handoff' } })}
+                  style={{
+                    padding: '6px 12px', background: 'var(--accentSoft)', color: 'var(--accent)',
+                    border: '1px solid rgba(59,130,246,0.25)', borderRadius: 8,
+                    fontSize: 12, fontWeight: 700, cursor: 'pointer',
+                  }}>
+                  Hand over CR
+                </button>
+                <button
+                  disabled={leaveCRState === 'sending' || leaveCRState === 'sent'}
+                  onClick={async () => {
+                    if (!window.confirm("Send a request to your Class Lead to step down as CR? You'll remain CR until it's approved.")) return;
+                    setLeaveCRState('sending');
+                    try {
+                      const groupId = getGroupId(profile);
+                      await requestLeaveCR(groupId, profile);
+                      setLeaveCRState('sent');
+                    } catch (err) {
+                      alert(`Failed: ${err?.message || err}`);
+                      setLeaveCRState('idle');
+                    }
+                  }}
+                  style={{
+                    padding: '6px 12px', background: 'var(--bg)', color: 'var(--text)',
+                    border: '1px solid var(--border)', borderRadius: 8,
+                    fontSize: 12, fontWeight: 700, cursor: 'pointer',
+                  }}>
+                  {leaveCRState === 'sent' ? 'Request sent ✓' : leaveCRState === 'sending' ? 'Sending…' : 'Leave CR'}
+                </button>
+              </div>
+            </Section>
           )}
 
           {/* Quick Accounts — Hall & Academic system logins. Placed first

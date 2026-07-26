@@ -16,8 +16,9 @@
 // requests already work everywhere else in this file.
 
 import { useState } from 'react';
-import { subscribeQBUploadRequestsForDept, subscribeAllQBUploadRequests, approveQBUpload, rejectQBUpload } from '../lib/qbUploadRequests';
+import { subscribeQBUploadRequestsForDept, subscribeAllQBUploadRequests, approveQBUpload, rejectQBUpload, fetchStagedPreviewUrl } from '../lib/qbUploadRequests';
 import { useEffect } from 'react';
+import PDFViewer from './PDFViewer';
 
 export default function QBReviewQueue({ dept, all = false }) {
   const [requests, setRequests] = useState(null);
@@ -26,6 +27,10 @@ export default function QBReviewQueue({ dept, all = false }) {
   const [rejectingId, setRejectingId] = useState(null);
   const [rejectReason, setRejectReason] = useState('');
   const [loadError, setLoadError] = useState('');
+  const [previewingId, setPreviewingId] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState(null);
+  const [previewName, setPreviewName] = useState('');
+  const [previewErr, setPreviewErr] = useState('');
 
   useEffect(() => {
     setLoadError('');
@@ -60,6 +65,25 @@ export default function QBReviewQueue({ dept, all = false }) {
     }
   };
 
+  const openPreview = async (r) => {
+    setPreviewErr('');
+    setPreviewingId(r.id);
+    setPreviewName(`${r.courseCode} — ${r.label}`);
+    try {
+      const url = await fetchStagedPreviewUrl(r.id, r.dept);
+      setPreviewUrl(url);
+    } catch (e) {
+      setPreviewErr(e?.message || 'Could not load PDF for preview.');
+    }
+  };
+
+  const closePreview = () => {
+    if (previewUrl) URL.revokeObjectURL(previewUrl);
+    setPreviewUrl(null);
+    setPreviewingId(null);
+    setPreviewErr('');
+  };
+
   const openReject = (r) => { setRejectingId(r.id); setRejectReason(''); };
 
   const confirmReject = async (r) => {
@@ -91,6 +115,7 @@ export default function QBReviewQueue({ dept, all = false }) {
               </div>
             </div>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+              <button className="btn btn-sm btn-secondary" onClick={() => openPreview(r)} disabled={busyId === r.id}>View</button>
               <button className="btn btn-sm btn-primary" onClick={() => handleApprove(r)} disabled={busyId === r.id}>
                 {busyId === r.id ? 'Working…' : 'Approve'}
               </button>
@@ -112,6 +137,25 @@ export default function QBReviewQueue({ dept, all = false }) {
           )}
         </div>
       ))}
+
+      {previewingId && (
+        <div style={{ position: 'fixed', inset: 0, zIndex: 1000, background: 'var(--bg)' }}>
+          {previewUrl ? (
+            <PDFViewer initialUrl={previewUrl} initialName={previewName} onClose={closePreview} />
+          ) : (
+            <div style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 12 }}>
+              {previewErr ? (
+                <>
+                  <div style={{ fontSize: 13, color: 'var(--danger, #dc2626)' }}>{previewErr}</div>
+                  <button className="btn btn-sm btn-secondary" onClick={closePreview}>Close</button>
+                </>
+              ) : (
+                <div style={{ fontSize: 13, color: 'var(--muted)' }}>Loading PDF…</div>
+              )}
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }

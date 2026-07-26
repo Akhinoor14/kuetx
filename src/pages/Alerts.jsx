@@ -217,12 +217,14 @@ export default function Alerts() {
     <div className="page-enter page-container content-page-bg">
       <div style={{ marginBottom: 16 }}>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 14, alignItems: 'flex-start', justifyContent: 'space-between' }}>
-          <div className="content-page-hero">
-            <div className="content-page-hero-icon">
-              <Bell size={18} color="var(--accent)" />
-            </div>
-            <div>
-              <h1 className="content-page-hero-title">Alerts & Suggestions</h1>
+          <div className="content-page-hero" style={{ marginBottom: 0, flex: '1 1 auto' }}>
+            <div className="content-page-hero-main">
+              <div className="content-page-hero-head">
+                <div className="content-page-hero-icon">
+                  <Bell size={24} color="var(--accent)" />
+                </div>
+                <h1 className="content-page-hero-title">Alerts & Suggestions</h1>
+              </div>
               <p className="content-page-hero-subtitle">
                 {totalCount} unread signals · {unreadCritical.length} critical · {unreadWarnings.length} warnings · {unreadPositives.length} good news · {unreadAssignments.length} assignments
               </p>

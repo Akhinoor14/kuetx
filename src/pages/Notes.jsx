@@ -37,14 +37,18 @@ export function Notes() {
 
   return (
     <div className="page-enter page-container content-page-bg">
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-        <div className="content-page-hero">
-          <div className="content-page-hero-icon">
-            <FileText size={18} color="var(--accent)" />
+      <div className="content-page-hero">
+        <div className="content-page-hero-main">
+          <div className="content-page-hero-head">
+            <div className="content-page-hero-icon">
+              <FileText size={24} color="var(--accent)" />
+            </div>
+            <h1 className="content-page-hero-title">Notes</h1>
           </div>
-          <h1 className="content-page-hero-title">Notes</h1>
         </div>
-        <button className="btn btn-primary" onClick={() => { setAdding(true); setEditing(null); }}><Plus size={13} /> New Note</button>
+        <div className="content-page-hero-actions">
+          <button className="btn btn-primary" onClick={() => { setAdding(true); setEditing(null); }}><Plus size={13} /> New Note</button>
+        </div>
       </div>
 
       {(adding || editing) && (

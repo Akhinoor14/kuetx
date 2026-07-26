@@ -1093,24 +1093,32 @@ export async function leaveGroup(groupId) {
  * it's never even attempted (and never hits permission-denied) for
  * someone still waiting on CR/ACR approval.
  */
+// BUGFIX (excessive live listeners): same fix as subscribeMyRole/
+// subscribeOwnMemberVerified above — this was a 4th separate onSnapshot()
+// on the same groups/{groupId}/members/{uid} doc. Derives existence from
+// the shared subscribeMembers() stream instead.
 export function subscribeIsOwnMember(groupId, uid, callback) {
   if (!groupId || !uid) { callback(false); return () => {}; }
-  const ref = doc(db, 'groups', groupId, 'members', uid);
-  return onSnapshot(ref, (snap) => callback(snap.exists()), (err) => {
-    console.error('[groupSync] subscribeIsOwnMember error:', err);
-    callback(false);
+  return subscribeMembers(groupId, (members) => {
+    callback(members.some((m) => m.id === uid));
   });
 }
 
+// BUGFIX (excessive live listeners): this used to open its own raw
+// onSnapshot() directly on groups/{groupId}/members/{uid} — a SECOND live
+// Firestore connection watching data that subscribeMembers() (used by
+// Sidebar.jsx, mounted on every page alongside this — used by BottomNav.jsx,
+// also mounted on every page) already watches via the deduped
+// _subscribeSingleton registry above. Two separate always-on listeners for
+// overlapping group-membership data, on every single page load, was a real
+// contributor to "too much Firebase sync" — this now derives the same
+// answer from subscribeMembers' already-shared stream instead of opening
+// its own connection at all.
 export function subscribeMyRole(groupId, uid, callback) {
   if (!groupId || !uid) { callback('member'); return () => {}; }
-  const ref = doc(db, 'groups', groupId, 'members', uid);
-  return onSnapshot(ref, (snap) => {
-    const role = snap.exists() ? (snap.data().role || 'member') : 'member';
-    callback(role);
-  }, (err) => {
-    console.error('[groupSync] subscribeMyRole error:', err);
-    callback('member');
+  return subscribeMembers(groupId, (members) => {
+    const me = members.find((m) => m.id === uid);
+    callback(me?.role || 'member');
   });
 }
 
@@ -1121,14 +1129,16 @@ export function subscribeMyRole(groupId, uid, callback) {
  * mirroring the same `m.verified` source ClassmatesList.jsx already uses
  * for every OTHER member's tick.
  */
+// BUGFIX (excessive live listeners): same fix as subscribeMyRole just
+// above — this used to open its own separate onSnapshot() on
+// groups/{groupId}/members/{uid}, a third live connection watching data
+// subscribeMembers() already streams via the shared singleton registry.
+// Derives the same verified flag from that shared stream instead.
 export function subscribeOwnMemberVerified(groupId, uid, callback) {
   if (!groupId || !uid) { callback(false); return () => {}; }
-  const ref = doc(db, 'groups', groupId, 'members', uid);
-  return onSnapshot(ref, (snap) => {
-    callback(snap.exists() && snap.data().verified === true);
-  }, (err) => {
-    console.error('[groupSync] subscribeOwnMemberVerified error:', err);
-    callback(false);
+  return subscribeMembers(groupId, (members) => {
+    const me = members.find((m) => m.id === uid);
+    callback(me?.verified === true);
   });
 }
 

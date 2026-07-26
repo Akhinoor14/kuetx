@@ -1,55 +1,28 @@
 import React, { useEffect, useState } from 'react';
 import { store } from '../store/store';
-import { BookOpen, ArrowRight, X, Sparkles, Flame, RefreshCw, GraduationCap, BarChart2, Compass, Moon } from 'lucide-react';
+import { BookOpen, ArrowRight, X, Sparkles, Flame, RefreshCw, GraduationCap } from 'lucide-react';
 
-const UPDATES = [
+// Fresh-launch welcome highlights — kept short on purpose. Not a
+// changelog: these are the handful of things a brand-new user should
+// know KUETx does, not a running list of "New/Fixed/Rebuilt" updates.
+const HIGHLIGHTS = [
   {
     id: 1,
-    icon: Flame,
-    tag: 'New',
-    tagColor: '#16a34a',
-    title: 'Firebase Sync',
-    body: 'Real-time cloud sync across all your devices. Sign in once — data follows you everywhere.',
+    icon: GraduationCap,
+    title: 'Attendance & Results',
+    body: 'KUET marking-slab attendance tracking plus a real GPA/CGPA calculator, built around KUET\'s own grading rules.',
   },
   {
     id: 2,
-    icon: RefreshCw,
-    tag: 'New',
-    tagColor: '#16a34a',
-    title: 'Auto Update',
-    body: 'App updates automatically in the background. You get a toast when a new version is ready.',
+    icon: Flame,
+    title: 'Question Bank',
+    body: 'Browse and upload previous-semester questions by course, department, and batch.',
   },
   {
     id: 3,
-    icon: GraduationCap,
-    tag: 'Rebuilt',
-    tagColor: '#2563eb',
-    title: 'Attendance',
-    body: 'KUET marking slab logic, hero cards, daily log with merged teacher cards.',
-  },
-  {
-    id: 4,
-    icon: BarChart2,
-    tag: 'Fixed',
-    tagColor: '#d97706',
-    title: 'Results & GPA',
-    body: 'Grade Points now shows real achieved vs max (credit-weighted). CGPA card fixed.',
-  },
-  {
-    id: 5,
-    icon: Compass,
-    tag: 'New',
-    tagColor: '#16a34a',
-    title: 'JR Mode',
-    body: 'Academic-only view — hides Campus Life for a cleaner experience.',
-  },
-  {
-    id: 6,
-    icon: Moon,
-    tag: 'Fixed',
-    tagColor: '#7c3aed',
-    title: 'Dark Mode',
-    body: 'Overrides across Attendance, Question Bank, Time Tracker, Self Eval, CT Planner.',
+    icon: RefreshCw,
+    title: 'Synced Everywhere',
+    body: 'Sign in once — your data follows you across every device automatically.',
   },
 ];
 
@@ -114,14 +87,14 @@ export default function AnnouncementModal({ open: openProp, onClose: onCloseProp
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
               <Sparkles size={15} color="rgba(255,255,255,0.8)" />
               <span style={{ fontSize: 11, fontWeight: 700, color: 'rgba(255,255,255,0.75)', letterSpacing: '1.1px', textTransform: 'uppercase' }}>
-                What's New
+                Welcome
               </span>
             </div>
             <div style={{ fontSize: 20, fontWeight: 800, color: '#fff', fontFamily: 'Sora, sans-serif', marginBottom: 3 }}>
-              KUETx Updates
+              Welcome to KUETx
             </div>
             <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.7)' }}>
-              {UPDATES.length} updates in this release
+              Everything you need for KUET academic life, in one place
             </div>
           </div>
 
@@ -160,10 +133,11 @@ export default function AnnouncementModal({ open: openProp, onClose: onCloseProp
             <ArrowRight size={15} color="var(--accent)" style={{ flexShrink: 0 }} />
           </div>
 
-          {/* Update list */}
+          {/* Highlights — kept short: 3-4 things a new user should know,
+              not a changelog. */}
           <div style={{ flex: 1, overflowY: 'auto', padding: '12px 14px' }}>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 7 }}>
-              {UPDATES.map(u => {
+              {HIGHLIGHTS.map(u => {
                 const Icon = u.icon;
                 return (
                 <div key={u.id} style={{
@@ -173,14 +147,7 @@ export default function AnnouncementModal({ open: openProp, onClose: onCloseProp
                 }}>
                   <div style={{ width: 18, flexShrink: 0, marginTop: 1, display: 'flex', justifyContent: 'center' }}><Icon size={16} color="var(--accent)" /></div>
                   <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap', marginBottom: 2 }}>
-                      <span style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)' }}>{u.title}</span>
-                      <span style={{
-                        fontSize: 9, fontWeight: 700, padding: '1px 6px', borderRadius: 4,
-                        background: u.tagColor + '18', color: u.tagColor,
-                        letterSpacing: '0.06em', textTransform: 'uppercase',
-                      }}>{u.tag}</span>
-                    </div>
+                    <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', marginBottom: 2 }}>{u.title}</div>
                     <div style={{ fontSize: 11, color: 'var(--muted)', lineHeight: 1.5 }}>{u.body}</div>
                   </div>
                 </div>
@@ -188,19 +155,22 @@ export default function AnnouncementModal({ open: openProp, onClose: onCloseProp
               })}
             </div>
 
-            {/* Facebook community */}
-            <div style={{ marginTop: 10, padding: '11px 13px', borderRadius: 10, border: '1px solid rgba(24,119,242,0.2)', background: 'rgba(24,119,242,0.06)', display: 'flex', alignItems: 'center', gap: 10 }}>
-              <span style={{ fontSize: 18 }}><BookOpen size={16} color="#1877F2" /></span>
-              <div style={{ flex: 1 }}>
-                <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--text)', marginBottom: 1 }}>KUETx Community</div>
-                <div style={{ fontSize: 11, color: 'var(--muted)' }}>Updates, tips, announcements</div>
+            {/* Facebook community — single-line mention, theme-matched
+                (not the standalone blue-branded card the old changelog
+                modal used), so it doesn't compete with the highlights. */}
+            <div style={{
+              marginTop: 10, padding: '9px 12px', borderRadius: 10,
+              border: '1px solid var(--border)', background: 'var(--surface)',
+              display: 'flex', alignItems: 'center', gap: 9,
+            }}>
+              <BookOpen size={15} color="var(--accent)" style={{ flexShrink: 0 }} />
+              <div style={{ flex: 1, fontSize: 11, color: 'var(--muted)' }}>
+                Join the <span style={{ color: 'var(--text)', fontWeight: 600 }}>KUETx Community</span> on Facebook for updates and tips
               </div>
               <a href="https://www.facebook.com/kuetx" target="_blank" rel="noopener noreferrer"
                 style={{
-                  display: 'inline-flex', alignItems: 'center', gap: 5,
-                  padding: '6px 12px', borderRadius: 7, textDecoration: 'none',
-                  background: 'rgba(24,119,242,0.12)', border: '1px solid rgba(24,119,242,0.25)',
-                  color: '#1877F2', fontSize: 12, fontWeight: 700, flexShrink: 0,
+                  fontSize: 11, fontWeight: 700, color: 'var(--accent)',
+                  textDecoration: 'none', flexShrink: 0,
                 }}>
                 Follow
               </a>

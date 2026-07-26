@@ -17,7 +17,7 @@ export default function Money() {
   const [budget, setBudget] = useState(() => store.get('money_budget') ?? 0);
 
   const [tab, setTab] = useState('all');
-  const [view, setView] = useState('list');
+  const [view, setView] = useState('cat');
   const [filterCat, setFilterCat] = useState('All');
   const now = new Date();
   const [viewYear, setViewYear] = useState(now.getFullYear());
@@ -214,17 +214,31 @@ export default function Money() {
     <div className="page-enter page-container content-page-bg">
 
       {/* Header */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-        <div className="content-page-hero">
-          <div className="content-page-hero-icon">
-            <Wallet size={18} color="var(--accent)" />
-          </div>
-          <div>
+      <div className="content-page-hero">
+        <div className="content-page-hero-main">
+          <div className="content-page-hero-head">
+            <div className="content-page-hero-icon">
+              <Wallet size={24} color="var(--accent)" />
+            </div>
             <h1 className="content-page-hero-title">Money</h1>
-            <p className="content-page-hero-subtitle">Track income, expenses & balance</p>
+          </div>
+          <p className="content-page-hero-subtitle">Track income, expenses & balance</p>
+        </div>
+        <div className="content-page-hero-stats">
+          <div className="content-page-hero-stat">
+            <div className="content-page-hero-stat-n">৳{monthIncome.toLocaleString()}</div>
+            <div className="content-page-hero-stat-label">income</div>
+          </div>
+          <div className="content-page-hero-stat">
+            <div className="content-page-hero-stat-n">৳{monthExpense.toLocaleString()}</div>
+            <div className="content-page-hero-stat-label">expense</div>
+          </div>
+          <div className="content-page-hero-stat">
+            <div className="content-page-hero-stat-n">৳{netWorth.toLocaleString()}</div>
+            <div className="content-page-hero-stat-label">net</div>
           </div>
         </div>
-        <div style={{ display: 'flex', gap: 6 }}>
+        <div className="content-page-hero-actions">
           <button className="btn btn-ghost" style={{ padding: '6px 10px' }} onClick={exportTxt} title="Export Report"><Download size={13} /></button>
           <button className="btn btn-ghost" style={{ padding: '6px 10px' }} onClick={() => { setSetupForm({ cash: String(cashBalance), budget: String(budget) }); setModal('setup'); }}><Wallet size={13} /></button>
           <button className="btn btn-primary" onClick={openAdd}><Plus size={13} /> Add</button>
@@ -299,7 +313,7 @@ export default function Money() {
       {(byCat.length > 0 || dailyData.length > 0) && (
         <div className="card" style={{ marginBottom: 14 }}>
           <div style={{ display: 'flex', gap: 6, marginBottom: 10 }}>
-            {['list', 'cat', 'daily'].map(v => (
+            {['cat', 'daily', 'list'].map(v => (
               <button key={v} className={`btn ${view === v ? 'btn-primary' : 'btn-ghost'}`} style={{ fontSize: 11, padding: '4px 10px' }} onClick={() => setView(v)}>
                 {v === 'list' ? 'List' : v === 'cat' ? 'Category' : 'Daily'}
               </button>

@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { useUrlTabState } from '../hooks/useUrlTabState';
+import { setViewMode } from '../hooks/useViewMode';
 import { ArrowLeft, Building2, CalendarRange, CheckCircle, ChevronRight, Circle, Clock, GraduationCap, LayoutGrid, RefreshCw, Repeat, Trash2, Users } from 'lucide-react';
 import { ICONS } from '../lib/iconRegistry';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
@@ -33,6 +35,7 @@ import { FOUNDER_CATEGORIES, getFounderCategory, resolveCount, resolveSubtitle }
 import { listAllFacultyAccounts, adminVerifyFaculty, adminDeleteFaculty } from '../lib/facultySync';
 import { listAllBloodDonors, searchBloodDonorsByGroup } from '../lib/bloodDonorSync';
 import { listAllActiveFacultyAssignments } from '../lib/facultyClassSync';
+import AnalyticsDashboard from '../components/AnalyticsDashboard';
 import { useIsFaculty } from '../hooks/useIsFaculty';
 import {
   subscribeManualVerifyRequests, approveManualVerifyRequest, rejectManualVerifyRequest,
@@ -109,14 +112,23 @@ function FounderCategoryCard({ category, count, subtitle, onClick }) {
 // better-placed way to flip the same localStorage value. Both places stay
 // in sync automatically since they both read the same key.
 function FounderViewSwitchCard() {
+  const navigate = useNavigate();
   const [current, setCurrent] = useState(() => {
     try { return localStorage.getItem('kuetx:viewMode') || 'student'; } catch { return 'student'; }
   });
 
   const flip = () => {
     const next = current === 'teacher' ? 'student' : 'teacher';
-    try { localStorage.setItem('kuetx:viewMode', next); } catch { /* ignore */ }
+    setViewMode(next);
     setCurrent(next);
+    // Jump straight into the shell being switched to — no manual refresh
+    // needed. setViewMode() (useViewMode.js) writes localStorage AND fires
+    // a same-tab custom event so Sidebar/BottomNav re-render immediately;
+    // navigate() then lands on a route that's actually valid for the new
+    // view (Faculty routes are gated by RequireFaculty, so jumping to e.g.
+    // /faculty/classes while still flagged 'student' would just bounce
+    // back) — replace: true so this swap doesn't clutter back-button history.
+    navigate(next === 'teacher' ? '/faculty' : '/', { replace: true });
   };
 
   return (
@@ -170,6 +182,7 @@ function CategoryShell({ view, onSelect, countCtx, children }) {
         activeKey={view}
         onSelect={onSelect}
         countCtx={countCtx}
+        extraLink={{ to: '/admin/batches', label: 'Manage Batches', icon: Users }}
       />
       {children}
     </div>
@@ -200,7 +213,7 @@ function ApprovalsView({ onBack, onSelectCategory, countCtx }) {
   const [leaveRequestsByGroup, setLeaveRequestsByGroup] = useState(null);
   const [manualVerifyRequests, setManualVerifyRequests] = useState(null);
   const [err, setErr] = useState('');
-  const [subTab, setSubTab] = useState('cl-apps');
+  const [subTab, setSubTab] = useUrlTabState('approvalsTab', 'cl-apps');
   const [loadWarning, setLoadWarning] = useState('');
 
   const flagSlowLoad = () => setLoadWarning(
@@ -522,7 +535,7 @@ function DetailRow({ label, value, href, mono }) {
 // workflow, not an approvals inbox item.
 // =======================================================================
 function QuestionBankView({ onBack, onSelectCategory, countCtx }) {
-  const [subTab, setSubTab] = useState('upload');
+  const [subTab, setSubTab] = useUrlTabState('qbTab', 'upload');
   const category = getFounderCategory('question-bank');
 
   return (
@@ -552,7 +565,7 @@ function QuestionBankView({ onBack, onSelectCategory, countCtx }) {
 }
 
 function StaffRolesView({ onBack, onSelectCategory, groups, countCtx }) {
-  const [subTab, setSubTab] = useState('assign');
+  const [subTab, setSubTab] = useUrlTabState('staffTab', 'assign');
   const [newUid, setNewUid] = useState('');
   const [newRole, setNewRole] = useState(ALL_ASSIGNABLE_ROLES[0]);
   const [newScopeValue, setNewScopeValue] = useState('');
@@ -1095,7 +1108,7 @@ function TrustSafetyView({ onBack, onSelectCategory, countCtx }) {
   // flashing "Nothing pending." before the first subscription snapshot.
   const [rollRequests, setRollRequests] = useState(null);
   const [busyId, setBusyId] = useState(null);
-  const [subTab, setSubTab] = useState('flags');
+  const [subTab, setSubTab] = useUrlTabState('trustTab', 'flags');
 
   const refreshFlags = () => {
     listPendingFlags({}).then(setFlags).catch((e) => setFlagErr(e?.message || 'Failed to load email flags.'));
@@ -1178,7 +1191,7 @@ function TrustSafetyView({ onBack, onSelectCategory, countCtx }) {
 function FacultyView({ onBack, onSelectCategory, countCtx }) {
   const [facultyList, setFacultyList] = useState(null);
   const [assignments, setAssignments] = useState(null);
-  const [subTab, setSubTab] = useState('directory');
+  const [subTab, setSubTab] = useUrlTabState('facultyTab', 'directory');
   // uid -> true while an admin-verify click is in flight, so the button
   // shows a spinner/disabled state and can't be double-clicked.
   const [verifying, setVerifying] = useState({});
@@ -1579,6 +1592,23 @@ function BloodBankView({ onBack, onSelectCategory, countCtx }) {
           ))}
         </Section>
       )}
+    </CategoryShell>
+  );
+}
+
+// Founder-only usage analytics — dept=null means AnalyticsDashboard fetches
+// EVERY department's activity docs (see analyticsEngine.js). The SCL
+// equivalent (own-dept only) lives directly in StaffDashboard.jsx's SCL
+// tab, not here — that one passes a real dept and has no CategoryShell nav
+// since it's a small panel next to the QB review queue, not a full page.
+function AnalyticsView({ onBack, onSelectCategory, countCtx }) {
+  return (
+    <CategoryShell view="analytics" onSelect={onSelectCategory} countCtx={countCtx}>
+      <Section title="Usage Analytics — All Departments">
+        <div style={{ padding: 14 }}>
+          <AnalyticsDashboard dept={null} />
+        </div>
+      </Section>
     </CategoryShell>
   );
 }
@@ -2178,7 +2208,17 @@ export default function AdminDashboard() {
   const navigate = useNavigate();
   const [checking, setChecking] = useState(true);
   const [authorized, setAuthorized] = useState(false);
-  const [view, setView] = useState(null); // null = grid, else category key
+  // BUGFIX (back-button skips whole page): `view` used to be plain
+  // useState (null = grid, else category key like 'approvals'/'staff').
+  // Drilling into a category never touched browser history, so pressing
+  // Back from inside e.g. Approvals didn't return to the category grid —
+  // it left /team entirely, jumping straight to whatever page was open
+  // before /team. Mirroring it into the ?founderView= URL param (kept
+  // distinct from TeamDashboard's own ?tab= param, since both can be
+  // present at once) makes each drill-in a real history entry, so Back
+  // walks out one level at a time, and a direct link to a specific
+  // category (e.g. /team?tab=founder&founderView=approvals) works too.
+  const [view, setView] = useUrlTabState('founderView', null);
 
   const [groups, setGroups] = useState(null);
   const [applications, setApplications] = useState([]);
@@ -2303,6 +2343,7 @@ export default function AdminDashboard() {
   if (view === 'comms') return <CommunicationView {...viewProps} />;
   if (view === 'faculty') return <FacultyView {...viewProps} />;
   if (view === 'blood') return <BloodBankView {...viewProps} />;
+  if (view === 'analytics') return <AnalyticsView {...viewProps} />;
 
   // Top-level grid — fully generated from FOUNDER_CATEGORIES, plus one
   // router-linked card (Manage Batches — a real page route, not an

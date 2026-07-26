@@ -117,6 +117,16 @@ export const FOUNDER_CATEGORIES = [
     getCount: (ctx) => ctx.bloodDonorCount,
     // No subcategories — a single search screen (BloodBankView).
   },
+  {
+    key: 'analytics',
+    label: 'Analytics',
+    icon: 'BarChart2',
+    subtitle: 'DAU/WAU/MAU, retention, and feature adoption across all departments',
+    // No subcategories — a single AnalyticsDashboard (dept=null, sees
+    // every department). Founder-only, per the Data & Privacy Policy note
+    // at the top of firestore.rules — no badge count, this isn't an
+    // approval queue.
+  },
 ];
 
 export function getFounderCategory(key) {

@@ -1438,5 +1438,45 @@ service cloud.firestore {
       // comment in groupSync.js. Content moderation belongs in the
       // existing Question Bank system, not a parallel one.
     }
+
+    // -------------------------------------------------------------
+    // Analytics — DAU/WAU/MAU + retention + feature adoption. See
+    // src/lib/activityTracking.js (writer) and src/lib/analyticsEngine.js
+    // (Founder/SCL dashboard reader).
+    //
+    // activity/{uid} is a single heartbeat doc per user: lastActiveAt,
+    // firstSeenAt, dept, batch, role. Every signed-in real (non-anonymous)
+    // account may write ONLY its own doc, and may only ever narrow what
+    // it writes to that fixed field set — this is a diagnostic/telemetry
+    // doc, not a place a client should be able to smuggle arbitrary data
+    // through. Read access is the actual access-control surface this
+    // whole feature is about: Founder sees everyone, an SCL sees only
+    // docs whose `dept` matches a dept they lead (enforced server-side by
+    // isSCLFor(resource.data.dept), so an SCL can never read another
+    // dept's activity doc even if they somehow knew the uid) — no one
+    // else (Head of Ops, Content Lead, CL, faculty, students) gets read
+    // access here at all, matching the explicit decision that only
+    // Founder + each dept's own SCL should see usage analytics.
+    match /activity/{uid} {
+      allow read: if isAdmin() || (isSignedIn() && isSCLFor(resource.data.dept));
+      allow create: if isRealAccount() && request.auth.uid == uid
+        && request.resource.data.keys().hasOnly(['lastActiveAt', 'firstSeenAt', 'dept', 'batch', 'role']);
+      allow update: if isRealAccount() && request.auth.uid == uid
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['lastActiveAt', 'dept', 'batch', 'role']);
+      allow delete: if isAdmin();
+
+      // moduleUsage/{moduleKey} — running useCount + lastUsedAt per
+      // feature module (see moduleMap.js for the fixed set of keys).
+      // Same access shape as the parent heartbeat doc: owner writes their
+      // own, Founder/that dept's SCL read for the adoption breakdown.
+      // Reads here resolve dept via the PARENT activity/{uid} doc (get()),
+      // since moduleUsage docs themselves don't carry a dept field.
+      match /moduleUsage/{moduleKey} {
+        allow read: if isAdmin() || (isSignedIn()
+          && isSCLFor(get(/databases/$(database)/documents/activity/$(uid)).data.dept));
+        allow write: if isRealAccount() && request.auth.uid == uid
+          && request.resource.data.keys().hasOnly(['lastUsedAt', 'useCount']);
+      }
+    }
   }
 }

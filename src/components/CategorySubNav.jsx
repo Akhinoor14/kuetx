@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
 import { Circle } from 'lucide-react';
 import { ICONS } from '../lib/iconRegistry';
 
@@ -20,7 +21,7 @@ import { ICONS } from '../lib/iconRegistry';
  * useful escape hatch. Kept as an accepted (ignored) prop so callers
  * don't need updating.
  */
-export default function CategorySubNav({ categories, activeKey, onSelect, countCtx = {} }) {
+export default function CategorySubNav({ categories, activeKey, onSelect, countCtx = {}, extraLink }) {
   const rowRef = useRef(null);
   const activePillRef = useRef(null);
 
@@ -72,6 +73,12 @@ export default function CategorySubNav({ categories, activeKey, onSelect, countC
             </button>
           );
         })}
+        {extraLink && (
+          <Link to={extraLink.to} className="category-subnav-pill">
+            <extraLink.icon size={14} />
+            <span>{extraLink.label}</span>
+          </Link>
+        )}
       </div>
     </div>
   );

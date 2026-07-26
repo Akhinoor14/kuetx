@@ -52,22 +52,25 @@ export default function Namaz() {
           accent wash reads consistently across pages instead of jumping
           in hue/intensity page to page. */}
       <div className="content-page-hero">
-        <div className="content-page-hero-icon">
-          <Moon size={18} color="var(--accent)" />
-        </div>
-        <div style={{ flex: 1, minWidth: 0 }}>
-          <h1 className="content-page-hero-title">Namaz Tracker</h1>
+        <div className="content-page-hero-main">
+          <div className="content-page-hero-head">
+            <div className="content-page-hero-icon">
+              <Moon size={24} color="var(--accent)" />
+            </div>
+            <h1 className="content-page-hero-title">Namaz Tracker</h1>
+          </div>
           <p className="content-page-hero-subtitle">
             {isToday ? "Today's prayers" : selectedDate}
           </p>
         </div>
-        <div style={{ textAlign: 'right' }}>
-          <div style={{
-            fontSize: 26, fontWeight: 900, color: totalToday === 5 ? 'var(--accent)' : 'var(--text)',
-            lineHeight: 1,
-          }}>{totalToday}<span style={{ fontSize: 14, fontWeight: 600, color: 'var(--muted)' }}>/5</span></div>
-          <div style={{ fontSize: 10, color: 'var(--muted)', marginTop: 2 }}>
-            {totalToday === 5 ? 'Alhamdulillah' : `${5 - totalToday} left`}
+        <div className="content-page-hero-stats">
+          <div className="content-page-hero-stat">
+            <div className="content-page-hero-stat-n" style={{ color: totalToday === 5 ? 'var(--accent)' : 'var(--text)' }}>
+              {totalToday}<span style={{ fontSize: 14, fontWeight: 600, color: 'var(--muted)' }}>/5</span>
+            </div>
+            <div className="content-page-hero-stat-label">
+              {totalToday === 5 ? 'Alhamdulillah' : `${5 - totalToday} left`}
+            </div>
           </div>
         </div>
       </div>

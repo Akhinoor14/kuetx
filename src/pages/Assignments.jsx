@@ -181,6 +181,20 @@ export default function Assignments() {
     return (
       <div className="page-enter assignments-page content-page-bg">
         <div className="page-container" style={{ paddingTop: 16 }}>
+          <div className="content-page-hero">
+            <div className="content-page-hero-main">
+              <div className="content-page-hero-head">
+                <div className="content-page-hero-icon">
+                  <ClipboardList size={24} color="var(--accent)" />
+                </div>
+                <h1 className="content-page-hero-title">Assignments</h1>
+              </div>
+              <p className="content-page-hero-subtitle">Track coursework, deadlines, and completion status in one clean view</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="page-container" style={{ paddingTop: 16 }}>
           <GroupAssignments groupId={groupId} canEdit={canEditGroupAssignments} />
         </div>
       </div>

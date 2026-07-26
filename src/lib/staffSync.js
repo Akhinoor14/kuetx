@@ -23,14 +23,49 @@ import { getIdentityStamp } from './groupUtils';
 // My own roles (drives which Staff Panel sections render)
 // ---------------------------------------------------------------------
 
+// BUGFIX (excessive live listeners): subscribeMyRoles() is called from 4
+// separate places (useIsStaff.js, QuestionBank.jsx, StaffDashboard.jsx,
+// useClassRosterState.js) — useIsStaff.js alone means this effectively
+// runs on every page via Sidebar/BottomNav. Each call used to open its
+// own fresh onSnapshot() on the exact same staff/{uid}/roles collection,
+// so up to 4 identical live Firestore connections could be open
+// simultaneously for one signed-in user. This small ref-counted registry
+// (same pattern as groupSync.js's _subscribeSingleton) means only ONE
+// real listener is ever open per uid, shared across every caller.
+const _myRolesRegistry = new Map(); // uid -> { unsubscribe, refCount, listeners:Set, lastValue }
+
 export function subscribeMyRoles(callback) {
   const uid = auth.currentUser?.uid;
   if (!uid) { callback([]); return () => {}; }
-  return onSnapshot(
-    collection(db, 'staff', uid, 'roles'),
-    (snap) => callback(snap.docs.map((d) => ({ id: d.id, ...d.data() }))),
-    (err) => { console.error('[staffSync] roles listener error:', err); callback([]); },
-  );
+
+  let entry = _myRolesRegistry.get(uid);
+  if (!entry) {
+    entry = { unsubscribe: null, refCount: 0, listeners: new Set(), lastValue: null };
+    _myRolesRegistry.set(uid, entry);
+    entry.unsubscribe = onSnapshot(
+      collection(db, 'staff', uid, 'roles'),
+      (snap) => {
+        entry.lastValue = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+        entry.listeners.forEach((cb) => cb(entry.lastValue));
+      },
+      (err) => {
+        console.error('[staffSync] roles listener error:', err);
+        entry.listeners.forEach((cb) => cb([]));
+      },
+    );
+  }
+  entry.refCount += 1;
+  entry.listeners.add(callback);
+  if (entry.lastValue !== null) callback(entry.lastValue);
+
+  return () => {
+    entry.listeners.delete(callback);
+    entry.refCount -= 1;
+    if (entry.refCount <= 0) {
+      entry.unsubscribe?.();
+      _myRolesRegistry.delete(uid);
+    }
+  };
 }
 
 export function hasRole(roles, role, scopeMatch) {

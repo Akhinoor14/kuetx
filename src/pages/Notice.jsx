@@ -1,237 +1,13 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Bell, Crown, Megaphone, Users, GraduationCap, UserCircle2, AlertTriangle, Info, Search, Pin, CheckCircle2 } from 'lucide-react';
+import { Bell, Search, X } from 'lucide-react';
 import * as noticeApi from '../lib/noticeUtils';
 import { getProfile } from '../store/store';
 import { getGroupId } from '../lib/groupUtils';
-import { renderFormattedNoticeBody, flattenNoticePreview } from '../lib/noticeFormat';
+import { flattenNoticePreview } from '../lib/noticeFormat';
 import { auth } from '../lib/firebase';
 import { subscribeMyRole } from '../lib/groupSync';
-
-function timeAgo(ms) {
-  if (!ms) return '';
-  const diff = Date.now() - ms;
-  const min = Math.floor(diff / 60000);
-  if (min < 1) return 'just now';
-  if (min < 60) return `${min}m ago`;
-  const hr = Math.floor(min / 60);
-  if (hr < 24) return `${hr}h ago`;
-  const day = Math.floor(hr / 24);
-  if (day < 7) return `${day}d ago`;
-  return new Date(ms).toLocaleDateString();
-}
-
-// Phase 4 of the Notice upgrade: notices have an optional `priority`
-// field ('urgent' | 'normal' | 'info'), stamped at send time by all 3
-// composers (see NoticePrioritySelector.jsx). Old notices written before
-// this phase have no `priority` field at all — treated as 'normal',
-// matching the exact pre-Phase-4 visual, so nothing already in the
-// database changes appearance.
-const PRIORITY_META = {
-  urgent: { color: 'var(--danger)', label: 'Urgent', Icon: AlertTriangle },
-  info: { color: 'var(--muted)', label: 'Info', Icon: Info },
-};
-
-// A notice body renders as one <div> per paragraph (see
-// renderFormattedNoticeBody in noticeFormat.jsx) — used to decide
-// whether a card's body should start collapsed behind "Read more".
-function countParagraphs(text) {
-  if (!text) return 0;
-  return String(text).replace(/\r\n/g, '\n').trim().split(/\n{2,}/).filter((p) => p.trim()).length;
-}
-
-const READ_MORE_PARAGRAPH_THRESHOLD = 3;
-
-function NoticeCard({ n, isUnread, onOpen, isAcknowledged, onAcknowledge }) {
-  const [expanded, setExpanded] = useState(false);
-  const isFounder = n.isFounder;
-  const priority = n.priority || 'normal';
-  const priorityMeta = PRIORITY_META[priority];
-  const isUrgent = priority === 'urgent';
-  const isInfo = priority === 'info';
-
-  const paragraphCount = countParagraphs(n.body);
-  const isLong = paragraphCount > READ_MORE_PARAGRAPH_THRESHOLD;
-
-  // Founder styling still wins visually over priority (Founder notices
-  // are rare and already maximally emphasized) — priority styling applies
-  // to every other card, urgent taking precedence over the founder-less
-  // default border/background treatment.
-  const borderColor = isFounder
-    ? 'color-mix(in srgb, var(--accent) 55%, var(--border))'
-    : isUrgent
-      ? 'color-mix(in srgb, var(--danger) 55%, var(--border))'
-      : isUnread ? 'color-mix(in srgb, var(--accent) 30%, var(--border))' : 'var(--border)';
-
-  const background = isFounder
-    ? 'linear-gradient(135deg, color-mix(in srgb, var(--accent) 12%, var(--surface)), var(--surface))'
-    : isUrgent
-      ? 'color-mix(in srgb, var(--danger) 7%, var(--surface))'
-      : isUnread ? 'color-mix(in srgb, var(--accent) 6%, var(--surface))' : 'var(--surface)';
-
-  const content = (
-    <div style={{
-      display: 'flex', alignItems: 'flex-start', gap: 12,
-      padding: isFounder ? '16px 16px' : '13px 14px',
-      borderRadius: 14,
-      position: 'relative',
-      borderLeft: isUrgent && !isFounder ? '3.5px solid var(--danger)' : undefined,
-      border: isFounder
-        ? '1.5px solid ' + borderColor
-        : isUrgent
-          ? `1px solid ${borderColor}`
-          : `1px solid ${borderColor}`,
-      background,
-      boxShadow: isFounder ? '0 2px 10px color-mix(in srgb, var(--accent) 18%, transparent)' : 'none',
-      opacity: isInfo && !isUnread ? 0.85 : 1,
-    }}>
-      {isUnread && (
-        <div style={{ width: 7, height: 7, borderRadius: '50%', background: isUrgent ? 'var(--danger)' : 'var(--accent)', flexShrink: 0, marginTop: 6 }} />
-      )}
-      <div style={{ flex: 1, minWidth: 0 }}>
-        {isFounder && (
-          <div style={{
-            display: 'inline-flex', alignItems: 'center', gap: 4,
-            fontSize: 10, fontWeight: 800, letterSpacing: 0.4, textTransform: 'uppercase',
-            color: '#fff', background: 'var(--accent)',
-            borderRadius: 999, padding: '2px 8px', marginBottom: 6,
-          }}>
-            <Crown size={11} /> Founder
-          </div>
-        )}
-        {!isFounder && priorityMeta && (
-          <div style={{
-            display: 'inline-flex', alignItems: 'center', gap: 4,
-            fontSize: 10, fontWeight: 800, letterSpacing: 0.4, textTransform: 'uppercase',
-            color: isUrgent ? '#fff' : priorityMeta.color,
-            background: isUrgent ? priorityMeta.color : 'color-mix(in srgb, ' + priorityMeta.color + ' 16%, transparent)',
-            borderRadius: 999, padding: '2px 8px', marginBottom: 6,
-          }}>
-            <priorityMeta.Icon size={11} /> {priorityMeta.label}
-          </div>
-        )}
-        {n.isPersonal && (
-          <div style={{
-            display: 'inline-flex', alignItems: 'center', gap: 4,
-            fontSize: 10, fontWeight: 800, letterSpacing: 0.4, textTransform: 'uppercase',
-            color: '#0891b2', background: 'rgba(8,145,178,0.14)',
-            borderRadius: 999, padding: '2px 8px', marginBottom: 6, marginLeft: (isFounder || (!isFounder && priorityMeta)) ? 6 : 0,
-          }}>
-            Just for you
-          </div>
-        )}
-        <div style={{
-          fontSize: isFounder ? 15 : 13,
-          fontWeight: isFounder ? 800 : 700,
-          color: isFounder ? 'var(--accent)' : isUrgent ? 'var(--danger)' : 'var(--text)',
-        }}>
-          {n.title}
-        </div>
-        <div
-          style={{
-            fontSize: 12.5, color: 'var(--muted)', marginTop: 3, lineHeight: 1.45,
-            ...(isLong && !expanded ? {
-              maxHeight: '4.5em', overflow: 'hidden',
-              maskImage: 'linear-gradient(to bottom, black 60%, transparent 100%)',
-              WebkitMaskImage: 'linear-gradient(to bottom, black 60%, transparent 100%)',
-            } : {}),
-          }}
-        >
-          {renderFormattedNoticeBody(n.body)}
-        </div>
-        {isLong && (
-          <button
-            type="button"
-            onClick={(e) => { e.preventDefault(); e.stopPropagation(); setExpanded((v) => !v); }}
-            style={{
-              fontSize: 11, fontWeight: 700, color: 'var(--accent)', background: 'none', border: 'none',
-              padding: 0, marginTop: 4, cursor: 'pointer',
-            }}
-          >
-            {expanded ? 'Show less' : 'Read more'}
-          </button>
-        )}
-        <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 6, marginTop: 9 }}>
-          <div style={{
-            display: 'inline-flex', alignItems: 'center', gap: 5,
-            fontSize: 11.5, fontWeight: 700, color: 'var(--text)',
-          }}>
-            {n.roleTag === 'Teacher' ? (
-              <GraduationCap size={13} color="var(--accent)" />
-            ) : n.roleTag === 'CR' ? (
-              <UserCircle2 size={13} color="var(--muted)" />
-            ) : (
-              <Megaphone size={13} color="var(--muted)" />
-            )}
-            {n.from}
-          </div>
-          {n.courseCode && (
-            <span style={{
-              fontSize: 10.5, fontWeight: 700, letterSpacing: 0.2,
-              color: 'var(--accent)',
-              background: 'color-mix(in srgb, var(--accent) 14%, transparent)',
-              borderRadius: 999, padding: '2px 8px',
-            }}>
-              {n.courseCode}
-            </span>
-          )}
-          <span style={{ fontSize: 11, color: 'var(--muted)' }}>·</span>
-          <span style={{ fontSize: 11, color: 'var(--muted)' }}>{timeAgo(n.createdAt)}</span>
-        </div>
-        {n.section === 'class' && (
-          <div style={{ marginTop: 8 }}>
-            <button
-              type="button"
-              onClick={(e) => { e.preventDefault(); e.stopPropagation(); onAcknowledge(); }}
-              disabled={isAcknowledged}
-              style={{
-                display: 'inline-flex', alignItems: 'center', gap: 5,
-                fontSize: 11, fontWeight: 700, padding: '4px 10px', borderRadius: 999,
-                border: `1px solid ${isAcknowledged ? 'var(--accent)' : 'var(--border)'}`,
-                background: isAcknowledged ? 'color-mix(in srgb, var(--accent) 14%, transparent)' : 'var(--surface)',
-                color: isAcknowledged ? 'var(--accent)' : 'var(--muted)',
-                cursor: isAcknowledged ? 'default' : 'pointer',
-              }}
-            >
-              <CheckCircle2 size={12} />
-              {isAcknowledged ? 'Got it' : 'Mark as Got it'}
-            </button>
-          </div>
-        )}
-      </div>
-    </div>
-  );
-
-  return n.link ? (
-    <Link to={n.link} onClick={onOpen} style={{ textDecoration: 'none', display: 'block' }}>
-      {content}
-    </Link>
-  ) : (
-    <div onClick={onOpen} style={{ cursor: 'pointer' }}>
-      {content}
-    </div>
-  );
-}
-
-function Section({ icon: Icon, title, count, children }) {
-  if (!children || (Array.isArray(children) && children.length === 0)) return null;
-  return (
-    <div style={{ marginBottom: 22 }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 8, padding: '0 2px' }}>
-        <Icon size={14} color="var(--muted)" />
-        <span style={{ fontSize: 11, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.06em', color: 'var(--muted)' }}>
-          {title}
-        </span>
-        {count > 0 && (
-          <span style={{ fontSize: 10, fontWeight: 700, color: 'var(--muted)' }}>({count})</span>
-        )}
-      </div>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-        {children}
-      </div>
-    </div>
-  );
-}
+import NoticeTimeline from '../components/NoticeTimeline';
+import NoticeReader from '../components/NoticeReader';
 
 // Phase 4: "All | Founder | Admin | My Class | Unread" — client-side
 // filter over the already-fetched notices array (no new Firestore
@@ -265,6 +41,28 @@ function applySearch(notices, query) {
   });
 }
 
+// Merges Founder → Admin → Class into one newest-first "Recent" timeline
+// (the redesign intentionally drops the old tabbed-by-role sections in
+// favor of a single mixed feed — role is now conveyed per-item via the
+// left-edge color bar instead of a section header).
+function mergeRecent(notices) {
+  return [...notices].sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+}
+
+function useIsMobile(breakpoint = 860) {
+  const [isMobile, setIsMobile] = useState(
+    () => typeof window !== 'undefined' && window.innerWidth < breakpoint
+  );
+  useEffect(() => {
+    const mq = window.matchMedia(`(max-width: ${breakpoint - 1}px)`);
+    const handle = () => setIsMobile(mq.matches);
+    handle();
+    mq.addEventListener('change', handle);
+    return () => mq.removeEventListener('change', handle);
+  }, [breakpoint]);
+  return isMobile;
+}
+
 export default function Notice() {
   const [refreshTick, setRefreshTick] = useState(0);
 
@@ -287,6 +85,10 @@ export default function Notice() {
   const acknowledgedIds = useMemo(() => noticeApi.getAcknowledgedNoticeIds(), [refreshTick]);
   const isAcknowledged = (id) => acknowledgedIds.has(id);
 
+  // This route is student-only (see NOTICE_BELL_ROUTING_PLAN.md — faculty
+  // and Founder are routed elsewhere by the bell/NotificationPanel before
+  // they ever land here).
+  //
   // Whether the signed-in student is CR/ACR in their own group — gates
   // whether a Teacher's cr_only notice shows up at all (see
   // filterStudentFacingNotices in noticeUtils.js).
@@ -298,7 +100,7 @@ export default function Notice() {
     });
   }, [groupId]);
 
-  // Live notice feed (global admin broadcasts + group CR/ACR notices).
+  // Live notice feed: global admin broadcasts + group CR/ACR notices.
   const [notices, setNotices] = useState([]);
   useEffect(() => {
     return noticeApi.subscribeAllNotices(profile, groupId, setNotices, 'student', { isViewerCR, uid: auth.currentUser?.uid });
@@ -345,13 +147,6 @@ export default function Notice() {
     }
   };
 
-  // Founder notices always float to the top of the Admin section, then
-  // remaining admin notices, then class (CR/ACR) notices — each section
-  // keeps its own newest-first order.
-  const founderNotices = notices.filter(n => n.section === 'admin' && n.isFounder);
-  const adminNotices = notices.filter(n => n.section === 'admin' && !n.isFounder);
-  const classNotices = notices.filter(n => n.section === 'class');
-
   const [activeTab, setActiveTab] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -362,55 +157,55 @@ export default function Notice() {
   // ("find X" then "only show me unread X").
   const searched = applySearch(notices, searchQuery);
   const filtered = applyFilterTab(searched, activeTab, isUnread);
+  const recent = mergeRecent(filtered);
 
-  // BUGFIX (audit finding): this used to filter from the raw `notices`
-  // array instead of `filtered` — meaning an urgent notice stayed pinned
-  // at the top regardless of the active search query or filter tab (e.g.
-  // searching "exam" still pinned an unrelated urgent library notice, or
-  // selecting the "My Class" tab still pinned an urgent Admin notice).
-  // "Cross-cutting" in the original spec meant across sections (shown
-  // above Founder too), not exempt from search/filter — every other
-  // section already respects both, so the pinned strip should too.
-  const pinnedNotices = filtered.filter((n) => n.priority === 'urgent' && !n.expired);
+  const isMobile = useIsMobile();
 
-  const founderFiltered = filtered.filter(n => n.section === 'admin' && n.isFounder);
-  const adminFiltered = filtered.filter(n => n.section === 'admin' && !n.isFounder);
-  const classFiltered = filtered.filter(n => n.section === 'class');
-  const isFiltering = activeTab !== 'all' || searchQuery.trim() !== '';
+  // Selected notice for the reading pane / bottom sheet. Newest notice
+  // open by default on desktop; nothing selected (list-only) on mobile
+  // until tapped.
+  const [selectedId, setSelectedId] = useState(null);
+  useEffect(() => {
+    // Reset selection if it fell out of the filtered set, or seed it
+    // with the newest item on desktop.
+    if (selectedId && !recent.some((n) => n.id === selectedId)) {
+      setSelectedId(isMobile ? null : (recent[0]?.id ?? null));
+    } else if (!isMobile && !selectedId && recent.length > 0) {
+      setSelectedId(recent[0].id);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [recent, isMobile]);
+
+  const selected = recent.find((n) => n.id === selectedId) || null;
+  const sheetOpen = isMobile && !!selected;
+
+  const handleSelect = (n) => {
+    setSelectedId(n.id);
+    markRead(n.id);
+  };
+
+  const closeSheet = () => setSelectedId(null);
+
+  const refCodeFor = (n) => (n?.id ? String(n.id).slice(-3).padStart(3, '0') : '');
 
   return (
     <div className="page-enter page-container content-page-bg" style={{ paddingBottom: 48 }}>
       <div className="content-page-hero">
-        <div className="content-page-hero-icon">
-          <Bell size={18} color="var(--accent)" />
-        </div>
-        <div>
-          <h1 className="content-page-hero-title">Notice</h1>
-          <p className="content-page-hero-subtitle">Announcements from Founder/Admin, and CR/ACR land here.</p>
+        <div className="content-page-hero-main">
+          <div className="content-page-hero-head">
+            <div className="content-page-hero-icon">
+              <Bell size={24} color="var(--accent)" />
+            </div>
+            <h1 className="content-page-hero-title">Notice</h1>
+          </div>
+          <p className="content-page-hero-subtitle">
+            Announcements from Founder/Admin, and CR/ACR land here.
+          </p>
         </div>
       </div>
 
-      {pinnedNotices.length > 0 && (
-        <div style={{
-          marginBottom: 18, padding: 12, borderRadius: 14, maxWidth: 1400,
-          border: '1.5px solid var(--danger)',
-          background: 'color-mix(in srgb, var(--danger) 8%, var(--surface))',
-        }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 8, padding: '0 2px' }}>
-            <Pin size={13} color="var(--danger)" />
-            <span style={{ fontSize: 11, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.06em', color: 'var(--danger)' }}>
-              Pinned — Urgent
-            </span>
-          </div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-            {pinnedNotices.map((n) => (
-              <NoticeCard key={`pinned-${n.id}`} n={n} isUnread={isUnread(n.id)} onOpen={() => markRead(n.id)} isAcknowledged={isAcknowledged(n.id)} onAcknowledge={() => handleAcknowledge(n.id)} />
-            ))}
-          </div>
-        </div>
-      )}
-
-      <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 8, marginBottom: 18, maxWidth: 1400 }}>
+      {/* Search + filter chips */}
+      <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 8, marginBottom: 16 }}>
         <div style={{
           display: 'flex', alignItems: 'center', gap: 6, flex: '1 1 220px', minWidth: 180, maxWidth: 320,
           padding: '7px 10px', borderRadius: 10, border: '1px solid var(--border)', background: 'var(--surface)',
@@ -458,42 +253,107 @@ export default function Notice() {
           <div style={{ fontSize: 15, fontWeight: 700, color: 'var(--text)', marginBottom: 6 }}>All clear!</div>
           <div style={{ fontSize: 13, color: 'var(--muted)' }}>No notices yet.</div>
         </div>
-      ) : filtered.length === 0 ? (
+      ) : recent.length === 0 ? (
         <div style={{
           padding: '48px 20px', textAlign: 'center',
           border: '1px solid var(--border)', borderRadius: 14, background: 'var(--surface)',
         }}>
           <div style={{ fontSize: 15, fontWeight: 700, color: 'var(--text)', marginBottom: 6 }}>No matches.</div>
-          <div style={{ fontSize: 13, color: 'var(--muted)' }}>
-            {isFiltering ? 'Try a different search term or filter.' : 'No notices yet.'}
-          </div>
+          <div style={{ fontSize: 13, color: 'var(--muted)' }}>Try a different search term or filter.</div>
         </div>
       ) : (
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
-          gap: '0 24px',
-          maxWidth: 1400,
-        }}>
-          <div>
-            <Section icon={Crown} title="Founder" count={founderFiltered.length}>
-              {founderFiltered.map(n => (
-                <NoticeCard key={n.id} n={n} isUnread={isUnread(n.id)} onOpen={() => markRead(n.id)} isAcknowledged={isAcknowledged(n.id)} onAcknowledge={() => handleAcknowledge(n.id)} />
-              ))}
-            </Section>
-
-            <Section icon={Megaphone} title="Admin" count={adminFiltered.length}>
-              {adminFiltered.map(n => (
-                <NoticeCard key={n.id} n={n} isUnread={isUnread(n.id)} onOpen={() => markRead(n.id)} isAcknowledged={isAcknowledged(n.id)} onAcknowledge={() => handleAcknowledge(n.id)} />
-              ))}
-            </Section>
+        <div style={{ display: 'flex', gap: 20, alignItems: 'flex-start' }}>
+          {/* Left: mixed "Recent" timeline, independently scrollable on desktop */}
+          <div style={{ width: isMobile ? '100%' : 280, flexShrink: 0 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 8, padding: '0 2px' }}>
+              <span style={{ fontSize: 11, fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.06em', color: 'var(--muted)' }}>
+                Recent
+              </span>
+              <span style={{ fontSize: 10, fontWeight: 700, color: 'var(--muted)' }}>({recent.length})</span>
+            </div>
+            <div
+              style={!isMobile ? { maxHeight: 'calc(100vh - 260px)', overflowY: 'auto', paddingRight: 4 } : undefined}
+            >
+              <NoticeTimeline
+                notices={recent}
+                activeId={isMobile ? null : selectedId}
+                isUnread={isUnread}
+                onSelect={handleSelect}
+              />
+            </div>
           </div>
 
-          <Section icon={Users} title="Class (CR / ACR)" count={classFiltered.length}>
-            {classFiltered.map(n => (
-              <NoticeCard key={n.id} n={n} isUnread={isUnread(n.id)} onOpen={() => markRead(n.id)} isAcknowledged={isAcknowledged(n.id)} onAcknowledge={() => handleAcknowledge(n.id)} />
-            ))}
-          </Section>
+          {/* Right: reading pane — desktop only, fills remaining width */}
+          {!isMobile && (
+            <div style={{ flex: 1, minWidth: 0 }}>
+              {selected ? (
+                <NoticeReader
+                  notice={selected}
+                  isAcknowledged={isAcknowledged(selected.id)}
+                  onAcknowledge={() => handleAcknowledge(selected.id)}
+                  refCode={refCodeFor(selected)}
+                />
+              ) : (
+                <div style={{
+                  padding: '48px 20px', textAlign: 'center',
+                  border: '1px dashed var(--letter-paperBorder)', borderRadius: 16,
+                }}>
+                  <div style={{ fontSize: 13, color: 'var(--muted)' }}>Select a notice to read it here.</div>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Mobile bottom sheet */}
+      {sheetOpen && (
+        <div
+          className="notice-sheet-backdrop"
+          onClick={closeSheet}
+          style={{ position: 'fixed', inset: 0, zIndex: 1000, background: 'rgba(0,0,0,0.45)' }}
+        >
+          <div
+            className="notice-sheet-container"
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              position: 'absolute', left: 0, right: 0, bottom: 0,
+              maxHeight: '86vh',
+              display: 'flex', flexDirection: 'column',
+              borderTopLeftRadius: 20, borderTopRightRadius: 20,
+              overflow: 'hidden',
+              background: 'var(--letter-paper)',
+              boxShadow: '0 -12px 40px rgba(0,0,0,0.25)',
+            }}
+          >
+            {/* Subtle rolled-scroll hint — mobile-sheet-only */}
+            <div className="letter-scroll-hint" />
+            <div style={{ display: 'flex', justifyContent: 'center', padding: '8px 0 4px' }}>
+              <div style={{ width: 36, height: 4, borderRadius: 999, background: 'var(--letter-paperDashed)' }} />
+            </div>
+            <button
+              type="button"
+              onClick={closeSheet}
+              aria-label="Close"
+              style={{
+                position: 'absolute', top: 14, right: 14,
+                width: 28, height: 28, borderRadius: '50%', border: 'none',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                background: 'color-mix(in srgb, var(--letter-ink) 8%, transparent)',
+                color: 'var(--letter-inkMuted)', cursor: 'pointer',
+              }}
+            >
+              <X size={15} />
+            </button>
+            <div style={{ overflowY: 'auto', padding: '4px 14px 24px' }}>
+              <NoticeReader
+                notice={selected}
+                isAcknowledged={isAcknowledged(selected.id)}
+                onAcknowledge={() => handleAcknowledge(selected.id)}
+                refCode={refCodeFor(selected)}
+              />
+            </div>
+          </div>
         </div>
       )}
     </div>

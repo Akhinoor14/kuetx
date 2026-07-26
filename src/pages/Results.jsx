@@ -370,11 +370,13 @@ export default function Results() {
   return (
     <div className="page-enter page-container content-page-bg">
       <div className="content-page-hero">
-        <div className="content-page-hero-icon">
-          <TrendingUp size={18} color="var(--accent)" />
-        </div>
-        <div>
-          <h1 className="content-page-hero-title">Results & GPA</h1>
+        <div className="content-page-hero-main">
+          <div className="content-page-hero-head">
+            <div className="content-page-hero-icon">
+              <TrendingUp size={24} color="var(--accent)" />
+            </div>
+            <h1 className="content-page-hero-title">Results & GPA</h1>
+          </div>
           <p className="content-page-hero-subtitle">Auto-calculated from your marks and attendance</p>
         </div>
       </div>

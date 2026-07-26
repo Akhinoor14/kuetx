@@ -35,19 +35,21 @@ export default function Teachers() {
 
   return (
     <div className="page-enter page-container content-page-bg">
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-        <div className="content-page-hero">
-          <div className="content-page-hero-icon">
-            <Users size={18} color="var(--accent)" />
-          </div>
-          <div>
+      <div className="content-page-hero">
+        <div className="content-page-hero-main">
+          <div className="content-page-hero-head">
+            <div className="content-page-hero-icon">
+              <Users size={24} color="var(--accent)" />
+            </div>
             <h1 className="content-page-hero-title">Teachers</h1>
-            <p className="content-page-hero-subtitle">Contact info, courses, and notes</p>
           </div>
+          <p className="content-page-hero-subtitle">Contact info, courses, and notes</p>
         </div>
-        <button className="btn btn-primary" onClick={() => { setAdding(true); setEditing(null); }}>
-          <Plus size={13} /> Add Teacher
-        </button>
+        <div className="content-page-hero-actions">
+          <button className="btn btn-primary" onClick={() => { setAdding(true); setEditing(null); }}>
+            <Plus size={13} /> Add Teacher
+          </button>
+        </div>
       </div>
 
       {(adding || editing) && (

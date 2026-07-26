@@ -5,11 +5,11 @@ import { ICONS } from '../lib/iconRegistry';
 import { GUIDE_CATEGORIES, GUIDE_SECTIONS } from '../data/guideContent';
 
 const CALLOUT_STYLE = {
-  tip:     { icon: 'Lightbulb',     color: 'var(--accent)',  bg: 'color-mix(in srgb, var(--accent) 10%, transparent)' },
-  info:    { icon: 'Info',          color: 'var(--accent)',  bg: 'color-mix(in srgb, var(--accent) 10%, transparent)' },
-  success: { icon: 'CheckCircle2',  color: 'var(--success)', bg: 'var(--successBg)' },
-  warning: { icon: 'AlertTriangle', color: 'var(--warning)', bg: 'var(--warningBg)' },
-  danger:  { icon: 'AlertOctagon',  color: 'var(--danger)',  bg: 'var(--dangerBg)' },
+  tip:     { icon: 'Lightbulb',     color: 'var(--accent)' },
+  info:    { icon: 'Info',          color: 'var(--accent)' },
+  success: { icon: 'CheckCircle2',  color: 'var(--success)' },
+  warning: { icon: 'AlertTriangle', color: 'var(--warning)' },
+  danger:  { icon: 'AlertOctagon',  color: 'var(--danger)' },
 };
 
 function Icon({ name, ...props }) {
@@ -52,10 +52,10 @@ function Block({ block }) {
       const s = CALLOUT_STYLE[block.variant] || CALLOUT_STYLE.tip;
       return (
         <div style={{
-          display: 'flex', gap: 10, padding: '11px 13px', borderRadius: 11, marginBottom: 14,
-          background: s.bg, borderLeft: `3px solid ${s.color}`,
+          display: 'flex', gap: 10, padding: '10px 13px', borderRadius: 10, marginBottom: 14,
+          background: 'var(--surface)', borderLeft: `2px solid ${s.color}`,
         }}>
-          <Icon name={s.icon} size={16} color={s.color} style={{ flexShrink: 0, marginTop: 2 }} />
+          <Icon name={s.icon} size={15} color={s.color} style={{ flexShrink: 0, marginTop: 2 }} />
           <span style={{ fontSize: 13.5, lineHeight: 1.6, color: 'var(--text)' }}>{block.text}</span>
         </div>
       );
@@ -79,8 +79,9 @@ function GuideTable({ block }) {
               {headers.map((h, i) => (
                 <th key={i} style={{
                   textAlign: i === 1 && headers.length === 3 ? 'center' : 'left',
-                  padding: '9px 12px', background: 'var(--accent)', color: 'var(--accentFg)',
-                  fontWeight: 700, fontSize: 12.5,
+                  padding: '9px 12px', background: 'var(--surface)', color: 'var(--muted)',
+                  fontWeight: 700, fontSize: 11.5, textTransform: 'uppercase', letterSpacing: '0.03em',
+                  borderBottom: '2px solid var(--border)',
                 }}>{h}</th>
               ))}
             </tr>
@@ -166,8 +167,8 @@ export default function GuideModal({ open, onClose }) {
       <div style={{ position: 'fixed', inset: 0, zIndex: 9401, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 14 }}>
         <div className="guide-modal-shell" onClick={e => e.stopPropagation()} style={{
           width: '100%', maxWidth: 980, height: 'min(86vh, 760px)',
-          background: 'var(--card)', border: '1px solid var(--border)', borderRadius: 20,
-          boxShadow: '0 40px 90px rgba(0,0,0,0.35)', display: 'flex', flexDirection: 'column', overflow: 'hidden',
+          background: 'var(--card)', border: '1px solid var(--border)', borderRadius: 16,
+          boxShadow: '0 24px 60px rgba(0,0,0,0.25)', display: 'flex', flexDirection: 'column', overflow: 'hidden',
         }}>
           {/* Header */}
           <div style={{

@@ -338,11 +338,13 @@ export default function Marks() {
     return (
       <div className="page-enter page-container marks-page content-page-bg">
         <div className="content-page-hero">
-          <div className="content-page-hero-icon">
-            <ClipboardList size={18} color="var(--accent)" />
-          </div>
-          <div>
-            <h1 className="content-page-hero-title">Term Planner</h1>
+          <div className="content-page-hero-main">
+            <div className="content-page-hero-head">
+              <div className="content-page-hero-icon">
+                <ClipboardList size={24} color="var(--accent)" />
+              </div>
+              <h1 className="content-page-hero-title">Term Planner</h1>
+            </div>
             <p className="content-page-hero-subtitle">Estimate and plan your final grades</p>
           </div>
         </div>
@@ -361,11 +363,13 @@ export default function Marks() {
         <div className="planner-page-copy">
           <div className="planner-page-kicker">Academic planning</div>
           <div className="content-page-hero" style={{ marginBottom: 0 }}>
-            <div className="content-page-hero-icon">
-              <ClipboardList size={18} color="var(--accent)" />
-            </div>
-            <div>
-              <h1 className="content-page-hero-title">Term Planner</h1>
+            <div className="content-page-hero-main">
+              <div className="content-page-hero-head">
+                <div className="content-page-hero-icon">
+                  <ClipboardList size={24} color="var(--accent)" />
+                </div>
+                <h1 className="content-page-hero-title">Term Planner</h1>
+              </div>
               <p className="content-page-hero-subtitle">Track hall-needed targets in a compact, local-only workspace.</p>
             </div>
           </div>

@@ -248,6 +248,25 @@ export async function approveQBUpload(requestId) {
   });
 }
 
+/**
+ * Fetch a staged (not-yet-approved) upload's PDF bytes so a reviewer
+ * (SCL/Founder/Head of Ops) can preview it before approving/rejecting —
+ * reuses the same PDFViewer already used for live, approved papers.
+ * Returns a blob: URL the caller must revokeObjectURL() when done.
+ */
+export async function fetchStagedPreviewUrl(requestId, dept) {
+  if (!WORKER_URL) throw new Error('VITE_QB_WORKER_URL is not configured');
+  const idToken = await auth.currentUser.getIdToken();
+  const url = `${WORKER_URL}/stage-preview?requestId=${encodeURIComponent(requestId)}&dept=${encodeURIComponent(dept)}&token=${encodeURIComponent(idToken)}`;
+  const res = await fetch(url);
+  if (!res.ok) {
+    const data = await res.json().catch(() => ({}));
+    throw new Error(data.error || 'Could not load PDF for preview');
+  }
+  const blob = await res.blob();
+  return URL.createObjectURL(blob);
+}
+
 export async function rejectQBUpload(requestId, reason = '') {
   const idToken = await auth.currentUser.getIdToken();
   if (WORKER_URL) {

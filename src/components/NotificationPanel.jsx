@@ -8,6 +8,8 @@ import { getProfile } from '../store/store';
 import { getGroupId } from '../lib/groupUtils';
 import { subscribeMyRole } from '../lib/groupSync';
 import { auth } from '../lib/firebase';
+import { useIsFaculty } from '../hooks/useIsFaculty';
+import { useViewMode } from '../hooks/useViewMode';
 
 /**
  * Top-bar bell dropdown. Single time-sorted list (newest first) mixing:
@@ -22,6 +24,37 @@ import { auth } from '../lib/firebase';
  * time sort, and its rows get a slightly bolder visual treatment (accent
  * left border, larger tag, semi-bold title) so it reads as more
  * important even inside a fully mixed, time-ordered list.
+ *
+ * ROLE ROUTING (see NOTICE_BELL_ROUTING_PLAN.md):
+ * This panel's own notice-item list, and the "Notice →" link at the
+ * bottom, are student-shaped (subscribeAllNotices(..., 'student', ...) +
+ * '/notice', the student page). That's correct for a student, but wrong
+ * for faculty and Founder accounts, whose real "home" for notices is a
+ * card/view on a different dashboard entirely (see below) — not a
+ * second copy of the student feed inside this dropdown.
+ *
+ * Rather than inlining a third copy of the faculty-notices merge logic
+ * (FacultyDashboard's "Alerts & Notices" card and Notice.jsx's faculty
+ * branch — since reverted — would make this the third), this panel:
+ *   - Student: unchanged. Notice items load as before; "Notice →" goes
+ *     to /notice.
+ *   - Verified faculty (non-founder) and Founder currently in
+ *     Teacher-mode (useViewMode() === 'teacher'): notice items are left
+ *     out of this dropdown (only Alert items show, if any); "Notice →"
+ *     is instead a direct shortcut to /faculty, where the "Alerts &
+ *     Notices" card already lives and already does this merge.
+ *   - Founder currently in Admin-mode (useViewMode() === 'student' —
+ *     the hook's non-founder default; a Founder who hasn't flipped the
+ *     switch is Admin-context by default per the routing plan's "safer
+ *     default" call): notice items are left out; "Notice →" instead
+ *     goes to /team?tab=founder&founderView=comms, which lands directly
+ *     in AdminDashboard's CommunicationView (the Founder's actual
+ *     notice-ownership surface) — NOT /faculty/notices, which is the
+ *     faculty course-broadcast composer and is the wrong destination
+ *     for a Founder.
+ *   - A non-founder, unverified-or-no faculty doc, non-student edge
+ *     case shouldn't occur in practice; useIsFaculty()/useViewMode()
+ *     resolve every real account to one of the branches above.
  */
 
 const ALERT_TAGS = {
@@ -97,26 +130,50 @@ export function NotificationPanel({ isOpen, onClose }) {
   const dismissedAlertIds = useMemo(() => alertApi.getDismissedAlertIds(), [refreshTick]);
   const readNoticeIds = useMemo(() => noticeApi.getReadNoticeIds(), [refreshTick]);
 
+  // Role/view-mode: gates whether this panel is student-shaped (notice
+  // items + /notice link) or routes faculty/Founder straight to their
+  // own real notice surface instead of rendering a second notice list
+  // here. See the file-level comment above for the full decision.
+  const { isFaculty, isFounderBypass } = useIsFaculty();
+  const { viewMode } = useViewMode();
+  const isFacultyViewer = isFaculty || isFounderBypass;
+  // Founder in Teacher-mode is routed the same as real faculty (point 2
+  // in the routing plan); Founder in Admin-mode (or any non-founder
+  // faculty, whose viewMode is always 'teacher' — see useViewMode.js) is
+  // routed to Admin's CommunicationView. A plain student never hits
+  // either branch below.
+  const isFounderInAdminMode = isFounderBypass && viewMode !== 'teacher';
+
+  const noticeLinkTo = !isFacultyViewer
+    ? '/notice'
+    : isFounderInAdminMode
+      ? '/team?tab=founder&founderView=comms'
+      : '/faculty';
+
   // Whether the signed-in student is CR/ACR in their own group — gates
-  // whether a Teacher's cr_only notice shows up here at all (see
-  // filterStudentFacingNotices in noticeUtils.js). Without this, a
-  // cr_only notice never appeared in this bell dropdown for ANYONE,
-  // including the CR/ACR it was actually sent to — subscribeAllNotices
-  // defaults isViewerCR to false when the caller doesn't resolve and pass
-  // it explicitly, same pattern Notice.jsx already uses for the full panel.
+  // whether a Teacher's cr_only notice shows up in here at all (see
+  // filterStudentFacingNotices in noticeUtils.js). Not relevant for a
+  // faculty/Founder viewer, who never subscribes to the student feed
+  // below in the first place.
   const [isViewerCR, setIsViewerCR] = useState(false);
   useEffect(() => {
-    if (!groupId || !auth.currentUser?.uid) { setIsViewerCR(false); return; }
+    if (isFacultyViewer || !groupId || !auth.currentUser?.uid) { setIsViewerCR(false); return; }
     return subscribeMyRole(groupId, auth.currentUser.uid, (role) => {
       setIsViewerCR(role === 'cr' || role === 'acr');
     });
-  }, [groupId]);
+  }, [groupId, isFacultyViewer]);
 
-  // Live notice feed (global admin broadcasts + group CR/ACR notices).
+  // Live notice feed (global admin broadcasts + group CR/ACR notices) —
+  // student viewers only. Faculty/Founder viewers get an empty notice
+  // list here (Alert items, if any, still show) and use the "Notice →"
+  // link above to reach their real notice surface instead — see the
+  // file-level comment for why this dropdown doesn't inline a second
+  // (or third) copy of the faculty-notices merge.
   const [notices, setNotices] = useState([]);
   useEffect(() => {
+    if (isFacultyViewer) { setNotices([]); return; }
     return noticeApi.subscribeAllNotices(profile, groupId, setNotices, 'student', { isViewerCR, uid: auth.currentUser?.uid });
-  }, [profile, groupId, isViewerCR]);
+  }, [profile, groupId, isViewerCR, isFacultyViewer]);
 
   // Stamping (a write) happens here, in an effect, not during the render-time
   // useMemo below — store.set() dispatches kuetx:store-updated, which this
@@ -273,7 +330,7 @@ export function NotificationPanel({ isOpen, onClose }) {
         </div>
 
         <div style={{ borderTop: '1px solid var(--border)', padding: 10 }}>
-          <Link to="/notice" onClick={onClose} style={{ display: 'block', textAlign: 'center', fontSize: 12, color: 'var(--accent)', textDecoration: 'none', padding: '8px 12px', borderRadius: 8, cursor: 'pointer' }} onMouseEnter={(e)=>e.currentTarget.style.background='var(--accentBg)'} onMouseLeave={(e)=>e.currentTarget.style.background='transparent'}>
+          <Link to={noticeLinkTo} onClick={onClose} style={{ display: 'block', textAlign: 'center', fontSize: 12, color: 'var(--accent)', textDecoration: 'none', padding: '8px 12px', borderRadius: 8, cursor: 'pointer' }} onMouseEnter={(e)=>e.currentTarget.style.background='var(--accentBg)'} onMouseLeave={(e)=>e.currentTarget.style.background='transparent'}>
             View all notices
           </Link>
         </div>
