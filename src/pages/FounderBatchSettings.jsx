@@ -24,7 +24,7 @@ import { getActiveBatches, getBatchStartDates, setActiveBatches, setBatchStartDa
 import { getBatchColor } from '../lib/timeModels';
 import { notify } from '../lib/notify';
 
-export default function FounderBatchSettings() {
+export function BatchesContent() {
   const [batches, setBatches] = useState(null); // null = loading
   const [startDates, setStartDates] = useState({});
   const [newBatch, setNewBatch] = useState('');
@@ -123,6 +123,203 @@ export default function FounderBatchSettings() {
   };
 
   return (
+    <div style={{ padding: '20px 24px 40px', width: '100%', boxSizing: 'border-box', maxWidth: 720, margin: '0 auto' }}>
+      <p style={{ fontSize: 12.5, color: 'var(--muted)', marginTop: 0, marginBottom: 20, lineHeight: 1.5 }}>
+        Used to auto-fill a student's Profile and to power the batch/term plausibility check in Faculty Add Class.
+        Order matters — each batch's color is assigned by its position in this list.
+      </p>
+
+      {batches === null ? (
+        <div style={{ color: 'var(--muted)', fontSize: 13 }}>Loading…</div>
+      ) : (
+        <>
+          <div style={{ padding: 14, borderRadius: 12, border: '1px solid var(--border)', background: 'var(--card)', marginBottom: 18 }}>
+            <div style={{ fontSize: 11.5, fontWeight: 700, color: 'var(--muted)', marginBottom: 8 }}>ADD A NEW BATCH</div>
+            <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+              <input
+                value={newBatch}
+                onChange={(e) => setNewBatch(e.target.value)}
+                placeholder="e.g. 2k26"
+                style={{
+                  flex: '1 1 140px', padding: '10px 12px', borderRadius: 8, border: '1px solid var(--border)',
+                  background: 'var(--bg)', color: 'var(--text)', fontSize: 13.5, outline: 'none',
+                }}
+              />
+              <input
+                type="date"
+                value={newBatchDate}
+                onChange={(e) => setNewBatchDate(e.target.value)}
+                style={{
+                  flex: '1 1 160px', padding: '10px 12px', borderRadius: 8, border: '1px solid var(--border)',
+                  background: 'var(--bg)', color: 'var(--text)', fontSize: 13.5, outline: 'none',
+                }}
+              />
+              <button
+                onClick={handleAdd}
+                disabled={saving}
+                className="btn btn-primary"
+                style={{ display: 'flex', alignItems: 'center', gap: 6, whiteSpace: 'nowrap' }}
+              >
+                <Icons.Plus size={15} /> Add Batch
+              </button>
+            </div>
+            <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 6 }}>
+              Start date is required — it's what makes this batch show up correctly on student profiles and the term-plausibility check.
+            </div>
+          </div>
+
+          <div style={{ display: 'grid', gap: 8 }}>
+            {batches.map((b, idx) => {
+              const color = getBatchColor(b, batches);
+              const startDate = startDates[b];
+              const isEditingDate = editingDateFor === b;
+              return (
+                <div
+                  key={b}
+                  style={{
+                    display: 'flex', alignItems: 'center', gap: 10, padding: '10px 12px', borderRadius: 12,
+                    background: color.bg, border: `1px solid ${color.border}`, flexWrap: 'wrap',
+                  }}
+                >
+                  <div style={{
+                    width: 10, height: 10, borderRadius: '50%', background: color.text, flexShrink: 0,
+                  }} />
+                  <div style={{ flex: 1, minWidth: 160 }}>
+                    <div style={{ fontWeight: 800, fontSize: 14, color: color.text }}>{b.toUpperCase()}</div>
+                    {!isEditingDate && (
+                      startDate ? (
+                        <button
+                          onClick={() => openDateEdit(b)}
+                          style={{
+                            background: 'none', border: 'none', padding: 0, cursor: 'pointer',
+                            fontSize: 11, color: 'var(--muted)', display: 'flex', alignItems: 'center', gap: 4,
+                          }}
+                        >
+                          Starts {startDate} <Icons.Pencil size={10} />
+                        </button>
+                      ) : (
+                        <button
+                          onClick={() => openDateEdit(b)}
+                          style={{
+                            background: 'none', border: 'none', padding: 0, cursor: 'pointer',
+                            fontSize: 11, color: '#d97706', display: 'flex', alignItems: 'center', gap: 4,
+                          }}
+                        >
+                          <Icons.AlertTriangle size={11} /> No start date set — tap to add one
+                        </button>
+                      )
+                    )}
+                    {isEditingDate && (
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 4 }}>
+                        <input
+                          type="date"
+                          value={editingDateValue}
+                          onChange={(e) => setEditingDateValue(e.target.value)}
+                          style={{
+                            padding: '5px 8px', borderRadius: 6, border: '1px solid var(--border)',
+                            background: 'var(--bg)', color: 'var(--text)', fontSize: 12.5,
+                          }}
+                        />
+                        <button
+                          onClick={() => saveDateEdit(b)}
+                          disabled={savingDate}
+                          style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--accent)' }}
+                          title="Save date"
+                        >
+                          <Icons.Check size={16} />
+                        </button>
+                        <button
+                          onClick={() => setEditingDateFor(null)}
+                          style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--muted)' }}
+                          title="Cancel"
+                        >
+                          <Icons.X size={16} />
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                  <button
+                    onClick={() => moveBatch(idx, -1)}
+                    disabled={idx === 0 || saving}
+                    title="Move up"
+                    style={{
+                      background: 'none', border: 'none', cursor: idx === 0 ? 'default' : 'pointer',
+                      opacity: idx === 0 ? 0.3 : 1, color: 'var(--text)',
+                      width: 44, height: 44, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+                    }}
+                  >
+                    <Icons.ChevronUp size={18} />
+                  </button>
+                  <button
+                    onClick={() => moveBatch(idx, 1)}
+                    disabled={idx === batches.length - 1 || saving}
+                    title="Move down"
+                    style={{
+                      background: 'none', border: 'none', cursor: idx === batches.length - 1 ? 'default' : 'pointer',
+                      opacity: idx === batches.length - 1 ? 0.3 : 1, color: 'var(--text)',
+                      width: 44, height: 44, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+                    }}
+                  >
+                    <Icons.ChevronDown size={18} />
+                  </button>
+                  <button
+                    onClick={() => {
+                      // Destructive action sitting right next to two harmless
+                      // reorder buttons at a similar tap-target size — on a
+                      // touch screen a slightly mis-aimed tap can land on the
+                      // wrong one. Rather than shrinking the row further to
+                      // fit a full confirm dialog, first tap just arms the
+                      // button (turns solid + relabels "Confirm"); the actual
+                      // removal only fires on a second, deliberate tap. Arms
+                      // for 3s then quietly resets so a stray tap elsewhere
+                      // doesn't leave it primed.
+                      if (confirmingRemove === b) {
+                        setConfirmingRemove(null);
+                        handleRemove(b);
+                      } else {
+                        setConfirmingRemove(b);
+                        setTimeout(() => {
+                          setConfirmingRemove((cur) => (cur === b ? null : cur));
+                        }, 3000);
+                      }
+                    }}
+                    disabled={saving}
+                    title={confirmingRemove === b ? 'Tap again to confirm removal' : 'Remove batch'}
+                    style={{
+                      background: confirmingRemove === b ? 'rgba(239,68,68,0.12)' : 'none',
+                      border: confirmingRemove === b ? '1px solid #ef4444' : 'none',
+                      borderRadius: 8, cursor: 'pointer', color: '#ef4444',
+                      width: confirmingRemove === b ? 'auto' : 44, height: 44,
+                      display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4,
+                      padding: confirmingRemove === b ? '0 10px' : 0, flexShrink: 0,
+                    }}
+                  >
+                    <Icons.Trash2 size={18} />
+                    {confirmingRemove === b && <span style={{ fontSize: 12, fontWeight: 700 }}>Confirm</span>}
+                  </button>
+                </div>
+              );
+            })}
+            {batches.length === 0 && (
+              <div style={{ textAlign: 'center', color: 'var(--muted)', fontSize: 13, padding: 24 }}>
+                No batches configured — add one above.
+              </div>
+            )}
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
+
+// Standalone page wrapper for the direct /admin/batches route (kept working
+// for any existing bookmarks/links). The embedded copy used inside
+// AdminDashboard's Founder shell (see AdminDashboard.jsx's 'batches' view)
+// renders the same BatchesContent without this outer hero/page-bg, since
+// TeamDashboard/CategoryShell already provide that chrome — this avoids a
+// doubled-up header and keeps the Founder role-tab chips visible there.
+export default function FounderBatchSettings() {
+  return (
     <div className="hub-page-bg" style={{ minHeight: '100vh' }}>
       <div style={{ padding: '20px 24px 40px', width: '100%', boxSizing: 'border-box', maxWidth: 720, margin: '0 auto' }}>
         <div className="content-page-hero">
@@ -138,191 +335,7 @@ export default function FounderBatchSettings() {
             </p>
           </div>
         </div>
-
-        <p style={{ fontSize: 12.5, color: 'var(--muted)', marginTop: 10, marginBottom: 20, lineHeight: 1.5 }}>
-          Used to auto-fill a student's Profile and to power the batch/term plausibility check in Faculty Add Class.
-          Order matters — each batch's color is assigned by its position in this list.
-        </p>
-
-        {batches === null ? (
-          <div style={{ color: 'var(--muted)', fontSize: 13 }}>Loading…</div>
-        ) : (
-          <>
-            <div style={{ padding: 14, borderRadius: 12, border: '1px solid var(--border)', background: 'var(--card)', marginBottom: 18 }}>
-              <div style={{ fontSize: 11.5, fontWeight: 700, color: 'var(--muted)', marginBottom: 8 }}>ADD A NEW BATCH</div>
-              <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-                <input
-                  value={newBatch}
-                  onChange={(e) => setNewBatch(e.target.value)}
-                  placeholder="e.g. 2k26"
-                  style={{
-                    flex: '1 1 140px', padding: '10px 12px', borderRadius: 8, border: '1px solid var(--border)',
-                    background: 'var(--bg)', color: 'var(--text)', fontSize: 13.5, outline: 'none',
-                  }}
-                />
-                <input
-                  type="date"
-                  value={newBatchDate}
-                  onChange={(e) => setNewBatchDate(e.target.value)}
-                  style={{
-                    flex: '1 1 160px', padding: '10px 12px', borderRadius: 8, border: '1px solid var(--border)',
-                    background: 'var(--bg)', color: 'var(--text)', fontSize: 13.5, outline: 'none',
-                  }}
-                />
-                <button
-                  onClick={handleAdd}
-                  disabled={saving}
-                  className="btn btn-primary"
-                  style={{ display: 'flex', alignItems: 'center', gap: 6, whiteSpace: 'nowrap' }}
-                >
-                  <Icons.Plus size={15} /> Add Batch
-                </button>
-              </div>
-              <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 6 }}>
-                Start date is required — it's what makes this batch show up correctly on student profiles and the term-plausibility check.
-              </div>
-            </div>
-
-            <div style={{ display: 'grid', gap: 8 }}>
-              {batches.map((b, idx) => {
-                const color = getBatchColor(b, batches);
-                const startDate = startDates[b];
-                const isEditingDate = editingDateFor === b;
-                return (
-                  <div
-                    key={b}
-                    style={{
-                      display: 'flex', alignItems: 'center', gap: 10, padding: '10px 12px', borderRadius: 12,
-                      background: color.bg, border: `1px solid ${color.border}`, flexWrap: 'wrap',
-                    }}
-                  >
-                    <div style={{
-                      width: 10, height: 10, borderRadius: '50%', background: color.text, flexShrink: 0,
-                    }} />
-                    <div style={{ flex: 1, minWidth: 160 }}>
-                      <div style={{ fontWeight: 800, fontSize: 14, color: color.text }}>{b.toUpperCase()}</div>
-                      {!isEditingDate && (
-                        startDate ? (
-                          <button
-                            onClick={() => openDateEdit(b)}
-                            style={{
-                              background: 'none', border: 'none', padding: 0, cursor: 'pointer',
-                              fontSize: 11, color: 'var(--muted)', display: 'flex', alignItems: 'center', gap: 4,
-                            }}
-                          >
-                            Starts {startDate} <Icons.Pencil size={10} />
-                          </button>
-                        ) : (
-                          <button
-                            onClick={() => openDateEdit(b)}
-                            style={{
-                              background: 'none', border: 'none', padding: 0, cursor: 'pointer',
-                              fontSize: 11, color: '#d97706', display: 'flex', alignItems: 'center', gap: 4,
-                            }}
-                          >
-                            <Icons.AlertTriangle size={11} /> No start date set — tap to add one
-                          </button>
-                        )
-                      )}
-                      {isEditingDate && (
-                        <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 4 }}>
-                          <input
-                            type="date"
-                            value={editingDateValue}
-                            onChange={(e) => setEditingDateValue(e.target.value)}
-                            style={{
-                              padding: '5px 8px', borderRadius: 6, border: '1px solid var(--border)',
-                              background: 'var(--bg)', color: 'var(--text)', fontSize: 12.5,
-                            }}
-                          />
-                          <button
-                            onClick={() => saveDateEdit(b)}
-                            disabled={savingDate}
-                            style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--accent)' }}
-                            title="Save date"
-                          >
-                            <Icons.Check size={16} />
-                          </button>
-                          <button
-                            onClick={() => setEditingDateFor(null)}
-                            style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--muted)' }}
-                            title="Cancel"
-                          >
-                            <Icons.X size={16} />
-                          </button>
-                        </div>
-                      )}
-                    </div>
-                    <button
-                      onClick={() => moveBatch(idx, -1)}
-                      disabled={idx === 0 || saving}
-                      title="Move up"
-                      style={{
-                        background: 'none', border: 'none', cursor: idx === 0 ? 'default' : 'pointer',
-                        opacity: idx === 0 ? 0.3 : 1, color: 'var(--text)',
-                        width: 44, height: 44, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
-                      }}
-                    >
-                      <Icons.ChevronUp size={18} />
-                    </button>
-                    <button
-                      onClick={() => moveBatch(idx, 1)}
-                      disabled={idx === batches.length - 1 || saving}
-                      title="Move down"
-                      style={{
-                        background: 'none', border: 'none', cursor: idx === batches.length - 1 ? 'default' : 'pointer',
-                        opacity: idx === batches.length - 1 ? 0.3 : 1, color: 'var(--text)',
-                        width: 44, height: 44, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
-                      }}
-                    >
-                      <Icons.ChevronDown size={18} />
-                    </button>
-                    <button
-                      onClick={() => {
-                        // Destructive action sitting right next to two harmless
-                        // reorder buttons at a similar tap-target size — on a
-                        // touch screen a slightly mis-aimed tap can land on the
-                        // wrong one. Rather than shrinking the row further to
-                        // fit a full confirm dialog, first tap just arms the
-                        // button (turns solid + relabels "Confirm"); the actual
-                        // removal only fires on a second, deliberate tap. Arms
-                        // for 3s then quietly resets so a stray tap elsewhere
-                        // doesn't leave it primed.
-                        if (confirmingRemove === b) {
-                          setConfirmingRemove(null);
-                          handleRemove(b);
-                        } else {
-                          setConfirmingRemove(b);
-                          setTimeout(() => {
-                            setConfirmingRemove((cur) => (cur === b ? null : cur));
-                          }, 3000);
-                        }
-                      }}
-                      disabled={saving}
-                      title={confirmingRemove === b ? 'Tap again to confirm removal' : 'Remove batch'}
-                      style={{
-                        background: confirmingRemove === b ? 'rgba(239,68,68,0.12)' : 'none',
-                        border: confirmingRemove === b ? '1px solid #ef4444' : 'none',
-                        borderRadius: 8, cursor: 'pointer', color: '#ef4444',
-                        width: confirmingRemove === b ? 'auto' : 44, height: 44,
-                        display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4,
-                        padding: confirmingRemove === b ? '0 10px' : 0, flexShrink: 0,
-                      }}
-                    >
-                      <Icons.Trash2 size={18} />
-                      {confirmingRemove === b && <span style={{ fontSize: 12, fontWeight: 700 }}>Confirm</span>}
-                    </button>
-                  </div>
-                );
-              })}
-              {batches.length === 0 && (
-                <div style={{ textAlign: 'center', color: 'var(--muted)', fontSize: 13, padding: 24 }}>
-                  No batches configured — add one above.
-                </div>
-              )}
-            </div>
-          </>
-        )}
+        <BatchesContent />
       </div>
     </div>
   );

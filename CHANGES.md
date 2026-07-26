@@ -1,30 +1,38 @@
-# KUETx Fixes
+# KUETx Fix — Manage Batches now stays inside the Founder shell
 
-## 1. src/pages/Profile.jsx — Blank space below name/bio on Profile page
+## Problem
+"Manage Batches" was the only Founder section implemented as a real
+route (`<Link to="/admin/batches">`), instead of an internal `view`
+inside `AdminDashboard`. So clicking it left the `TeamDashboard` shell
+entirely — losing the "Founder / Senior campus lead / Campus lead"
+role-tab chips and the "Team & Administration" hero, and it wasn't in
+the category pill row (`CategorySubNav`) either — it hung off to the
+side as an `extraLink`.
 
-The inner hero card (avatar + name + bio) reused the `content-page-bg`
-class, which was also applied to the outer page wrapper. That class sets
-`min-height: 100vh`, so the hero card itself was being forced to be at
-least full-viewport-tall, even though its actual content only filled the
-top portion — leaving a large empty green area below the bio.
+## Fix
+- `src/pages/FounderBatchSettings.jsx` — split into:
+  - `export function BatchesContent()` — all the state/logic/JSX, minus
+    the outer page hero/background. Reusable.
+  - `export default function FounderBatchSettings()` — thin wrapper that
+    adds back the standalone page hero, so the direct `/admin/batches`
+    route still works exactly as before (any existing links/bookmarks
+    keep working).
+- `src/lib/founderCategories.js` — added `batches` as a normal entry in
+  `FOUNDER_CATEGORIES` (icon: Users, no subcategories — same shape as
+  `comms`), so it's auto-generated into the grid and the pill row like
+  every other section.
+- `src/pages/AdminDashboard.jsx`:
+  - Imports `BatchesContent`.
+  - Added `BatchesView`, which wraps `<BatchesContent />` in the same
+    `CategoryShell` every other section uses (role-tab chips stay
+    visible, pill subnav shown, in-shell back button).
+  - Wired `view === 'batches'` into the view switch.
+  - Removed the special-cased `<Link>` grid card and the `extraLink`
+    prop on `CategorySubNav` — Manage Batches is now just another
+    `FOUNDER_CATEGORIES` entry, rendered the same way as Approvals,
+    Communication, etc.
 
-Fix: added `minHeight: 0` inline on the hero card to override the
-inherited `min-height: 100vh`, so it sizes to its content instead.
-
-## 2. src/pages/StaffDashboard.jsx — Slow/unresponsive tab switching, navigation throttling
-
-The `useEffect` that syncs the resolved active tab back to the parent
-(`onTabChange?.(nextTab)`) had `onTabChange` in its dependency array.
-`onTabChange` is `setActiveTab` from `useUrlTabState`, which is backed by
-react-router-dom's `setSearchParams` — a function that gets a new
-identity on every render. This caused the effect to re-run on essentially
-every render, each time pushing a new `?tab=` history entry, which
-triggered Chrome's "Throttling navigation to prevent the browser from
-hanging" protection. Once throttled, real clicks (switching tabs, or
-navigating to other pages) got delayed/dropped, making the whole
-dashboard feel slow or unresponsive.
-
-Fix: removed `onTabChange` from the effect's dependency array and only
-call `onTabChange(nextTab)` when the resolved tab actually differs from
-the current `activeTab`, so the effect no longer fires (and pushes
-history) on every render.
+## Result
+Manage Batches now opens inside the Founder tab shell — same header,
+same role-tab chips, same category pill row as Approvals/Communication/
+etc — instead of navigating away to a bare standalone page.

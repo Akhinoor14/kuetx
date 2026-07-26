@@ -25,6 +25,13 @@
 
 export const FOUNDER_CATEGORIES = [
   {
+    key: 'batches',
+    label: 'Manage Batches',
+    icon: 'Users',
+    subtitle: 'Active batch list & colors',
+    // No subcategories — a single list+form (BatchesContent).
+  },
+  {
     key: 'approvals',
     label: 'Approvals',
     icon: 'CheckCircle2',

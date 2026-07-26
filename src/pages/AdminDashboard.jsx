@@ -32,6 +32,7 @@ import { renderFormattedNoticeBody } from '../lib/noticeFormat';
 import CategorySubNav from '../components/CategorySubNav';
 import SubcategoryTabs from '../components/SubcategoryTabs';
 import { FOUNDER_CATEGORIES, getFounderCategory, resolveCount, resolveSubtitle } from '../lib/founderCategories';
+import { BatchesContent } from './FounderBatchSettings';
 import { listAllFacultyAccounts, adminVerifyFaculty, adminDeleteFaculty } from '../lib/facultySync';
 import { listAllBloodDonors, searchBloodDonorsByGroup } from '../lib/bloodDonorSync';
 import { listAllActiveFacultyAssignments } from '../lib/facultyClassSync';
@@ -182,7 +183,6 @@ function CategoryShell({ view, onSelect, countCtx, children }) {
         activeKey={view}
         onSelect={onSelect}
         countCtx={countCtx}
-        extraLink={{ to: '/admin/batches', label: 'Manage Batches', icon: Users }}
       />
       {children}
     </div>
@@ -191,6 +191,23 @@ function CategoryShell({ view, onSelect, countCtx, children }) {
 
 function EmptyState({ children }) {
   return <div style={{ fontSize: 13, color: 'var(--muted)', padding: '8px 0' }}>{children}</div>;
+}
+
+// =======================================================================
+// MANAGE BATCHES — active batch list + each batch's university start
+// date. Was previously a standalone /admin/batches route (a plain
+// <Link> out of this shell), which meant it lost the Founder/Senior
+// Campus Lead/Campus Lead role-tab chips and the category pill row that
+// every other section gets. Now embedded like everything else — same
+// BatchesContent used by the standalone route (kept for direct links),
+// just wrapped in CategoryShell here instead of its own page hero.
+// =======================================================================
+function BatchesView({ onBack, onSelectCategory, countCtx }) {
+  return (
+    <CategoryShell view="batches" onSelect={onSelectCategory} countCtx={countCtx}>
+      <BatchesContent />
+    </CategoryShell>
+  );
 }
 
 // =======================================================================
@@ -2336,6 +2353,7 @@ export default function AdminDashboard() {
   const viewProps = { groups, countCtx, onSelectCategory, onBack };
 
   if (view === 'approvals') return <ApprovalsView {...viewProps} />;
+  if (view === 'batches') return <BatchesView {...viewProps} />;
   if (view === 'question-bank') return <QuestionBankView {...viewProps} />;
   if (view === 'staff') return <StaffRolesView {...viewProps} />;
   if (view === 'classes') return <ClassesView {...viewProps} />;
@@ -2345,24 +2363,12 @@ export default function AdminDashboard() {
   if (view === 'blood') return <BloodBankView {...viewProps} />;
   if (view === 'analytics') return <AnalyticsView {...viewProps} />;
 
-  // Top-level grid — fully generated from FOUNDER_CATEGORIES, plus one
-  // router-linked card (Manage Batches — a real page route, not an
-  // internal `view`) styled to match so it doesn't stand out as a
-  // different kind of thing in the grid.
+  // Top-level grid — fully generated from FOUNDER_CATEGORIES (Manage
+  // Batches included, no more special-cased route-linked card here).
   return (
     <div>
       <FounderViewSwitchCard />
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 14 }}>
-        <Link to="/admin/batches" className="founder-category-card" style={{ textDecoration: 'none' }}>
-          <div className="founder-category-card-icon">
-            <Users size={22} color="var(--accent)" />
-          </div>
-          <div style={{ flex: 1, minWidth: 0 }}>
-            <div style={{ fontWeight: 700, fontSize: 14, color: 'var(--text)' }}>Manage Batches</div>
-            <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 2 }}>Active batch list & colors</div>
-          </div>
-          <ChevronRight size={18} color="var(--muted)" style={{ flexShrink: 0 }} />
-        </Link>
         {FOUNDER_CATEGORIES.filter((cat) => !cat.hidden).map((cat) => (
           <FounderCategoryCard
             key={cat.key}
