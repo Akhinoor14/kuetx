@@ -643,9 +643,14 @@ export default function StaffDashboard({ activeTab: activeTabProp, onTabChange }
     if (hasFinanceOrLegal) tabs.push({ key: 'finance' });
 
     const nextTab = activeTab && tabs.some((t) => t.key === activeTab) ? activeTab : tabs[0]?.key;
-    onTabChange?.(nextTab);
+    // Only notify the parent when the resolved tab actually differs from
+    // what it already has — otherwise this fires on every render where
+    // onTabChange gets a new identity (useSearchParams's setter isn't
+    // stable across renders), which pushes a new ?tab= history entry each
+    // time and triggers Chrome's "Throttling navigation" protection.
+    if (nextTab !== activeTab) onTabChange?.(nextTab);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [roles, isAdminUser, activeTab, onTabChange]);
+  }, [roles, isAdminUser, activeTab]);
 
   if (roles === null) return <div style={{ padding: 20, color: 'var(--muted)' }}>{rolesLoadWarning || 'Loading…'}</div>;
   if (roles.length === 0 && !isAdminUser) {

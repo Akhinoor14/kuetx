@@ -892,6 +892,7 @@ export default function Profile() {
         borderRadius: 20, overflow: 'hidden', position: 'relative',
         padding: 'clamp(24px,5vw,36px) clamp(20px,4vw,32px)',
         display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center',
+        minHeight: 0,
       }}>
         {/* Avatar — clickable to upload, with glow ring + click-to-edit hint. */}
         <div
