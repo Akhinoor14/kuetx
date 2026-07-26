@@ -5918,6 +5918,38 @@ body.schedule-fullscreen-active .mobile-bottom-nav {
     min-height: 32px;
   }
 
+  /* Timetable Grid card header — collapse to just title + Full Screen
+     button on one line on mobile; subtitle and saved-slot count are
+     redundant with the day-chip row / interaction pattern below, so
+     drop both instead of letting them wrap onto extra lines. */
+  .timetable-header-card .timetable-card-title {
+    font-size: 13px !important;
+  }
+  .timetable-header-card .timetable-card-subtitle {
+    display: none !important;
+  }
+  .timetable-header-card .timetable-saved-slot-count {
+    display: none !important;
+  }
+  .timetable-header-card > div:first-child {
+    margin-bottom: 8px !important;
+  }
+
+  /* Status tags (Today/Selected/Auto) — shrink padding/font and drop
+     the "Auto" tag, which just repeats what the Selected tag + the
+     highlighted day-chip below already show, to save a line of height. */
+  .schedule-status-tags {
+    gap: 6px !important;
+    margin-bottom: 8px !important;
+  }
+  .schedule-status-tags .tag {
+    padding: 2px 7px !important;
+    font-size: 11px !important;
+  }
+  .schedule-status-tag-auto {
+    display: none !important;
+  }
+
   .timetable-grid:not(.full-view) .timetable-day-col {
     display: none;
   }

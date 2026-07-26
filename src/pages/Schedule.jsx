@@ -1910,15 +1910,15 @@ export default function Schedule() {
         </Modal>
       )}
 
-      <div className="card" style={{ padding: 16 }}>
+      <div className="card timetable-header-card" style={{ padding: 16 }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap', alignItems: 'center', marginBottom: 12 }}>
           <div>
-            <div style={{ fontWeight: 700, fontSize: 15 }}>Timetable Grid</div>
-            <div style={{ fontSize: 13, color: 'var(--muted)' }}>{canEditSchedule ? 'Double-click any entry to edit.' : 'View only — your CR/ACR manages this schedule.'}</div>
+            <div className="timetable-card-title" style={{ fontWeight: 700, fontSize: 15 }}>Timetable Grid</div>
+            <div className="timetable-card-subtitle" style={{ fontSize: 13, color: 'var(--muted)' }}>{canEditSchedule ? 'Double-click any entry to edit.' : 'View only — your CR/ACR manages this schedule.'}</div>
           </div>
           <div style={{ display: 'flex', gap: 8, alignItems: 'center', fontSize: 12, color: 'var(--muted)' }}>
             {schedule.length > 0 && (
-              <div style={{ fontSize: 12, color: 'var(--muted)' }}>{schedule.length} saved slot{schedule.length === 1 ? '' : 's'}</div>
+              <div className="timetable-saved-slot-count" style={{ fontSize: 12, color: 'var(--muted)' }}>{schedule.length} saved slot{schedule.length === 1 ? '' : 's'}</div>
             )}
             <button className="btn btn-ghost mobile-fullscreen-btn" onClick={() => setFullScreenOpen(true)} aria-label="Open timetable full screen">
               <span className="fs-icon" aria-hidden style={{ display: 'inline-block', lineHeight: 0 }}>
@@ -1929,10 +1929,10 @@ export default function Schedule() {
           </div>
         </div>
         <div className="mobile-preview-controls">
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, alignItems: 'center', marginBottom: 12 }}>
+          <div className="schedule-status-tags" style={{ display: 'flex', flexWrap: 'wrap', gap: 8, alignItems: 'center', marginBottom: 12 }}>
             <span className="tag tag-blue">Today · {currentCalendarDay}</span>
             <span className="tag tag-green">Selected · {selectedDay}</span>
-            <span className="tag tag-gray">Auto · {autoPreviewDay}</span>
+            <span className="tag tag-gray schedule-status-tag-auto">Auto · {autoPreviewDay}</span>
           </div>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 12 }}>
             {DAYS.map(day => (

@@ -605,6 +605,7 @@ export default function App() {
   // hasn't set one yet (backward compatible with profiles that already
   // had a manually-entered value from before this feature existed).
   useEffect(() => {
+    if (!authState.authReady) return;
     const gid = getGroupId(getProfile());
     if (!gid) return;
     return subscribeGroupTermStartDate(gid, (date) => {
@@ -613,7 +614,7 @@ export default function App() {
       if (current.termStartDate === date) return;
       store.set('profile', { ...current, termStartDate: date });
     });
-  }, [getGroupId(getProfile())]);
+  }, [authState.authReady, getGroupId(getProfile())]);
 
   // BUGFIX: faculty magic-link verification previously only ran INSIDE
   // FacultyVerifyHoldingScreen, which only mounts when the onboarding
