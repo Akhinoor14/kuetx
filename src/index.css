@@ -12,6 +12,8 @@
   --muted:    #6b6860;
   --accentRGB: 22, 163, 74;
   --accent:   #16a34a;
+  --accentLight: #22c55e;
+  --accentDark:  #15803d;
   --accent2:  #0ea5e9;
   --accentSoft: #dcfce7;
   --accentFg: #ffffff;
@@ -1049,30 +1051,42 @@ body {
    ones using inline styles instead of the .btn class (login modal,
    profile setup, upload modals, etc.) — keeps its own background/color
    and just dims, instead of the browser's default flat gray fallback.
-   The more specific .btn:disabled rule above still wins wherever both
-   apply, so this only fills the gap for non-.btn buttons. */
+
+   IMPORTANT: this must NOT use `opacity` on the button itself. Opacity
+   fades the whole element — background AND text — toward the page's
+   backdrop at the same rate. For a colored-background/white-text button
+   (e.g. accent-fill-glass, btn-primary) sitting on a white page, that
+   makes both the background and the text converge toward white as they
+   fade, collapsing text/background contrast to ~1 (confirmed via
+   DevTools: a white-text green button read Color #FFFFFF with
+   Contrast 1 once dimmed to opacity 0.6 — text became invisible against
+   its own fading background, not just "faint"). Desaturating instead of
+   fading keeps the background a solid (if muted) color that white text
+   stays readable against. */
 button:disabled,
 button[disabled] {
-  opacity: 0.5;
   cursor: not-allowed;
-  filter: saturate(0.75);
+  filter: grayscale(0.55) brightness(0.92) contrast(0.85);
+  /* Many buttons across the app set an inline `opacity: 0.5/0.6` on
+     disabled state (React style prop). Opacity fades background AND
+     text toward the page backdrop at the same rate, which is exactly
+     what caused the invisible-text bug this rule exists to prevent —
+     so it must be neutralized here regardless of where it's set. The
+     dimmed look is fully handled by the filter above instead. */
+  opacity: 1 !important;
 }
 
 .btn:disabled,
 .btn[disabled] {
-  opacity: 0.45;
   cursor: not-allowed;
-  filter: saturate(0.7);
+  filter: grayscale(0.55) brightness(0.92) contrast(0.85);
   transform: none;
-}
-.btn:disabled:hover,
-.btn[disabled]:hover {
-  opacity: 0.45;
+  opacity: 1 !important;
 }
 .btn-primary {
-  background: linear-gradient(155deg, color-mix(in srgb, var(--accent) 108%, white 6%) 0%, var(--accent) 55%, color-mix(in srgb, var(--accent) 85%, black 12%) 100%);
+  background: linear-gradient(155deg, var(--accent, #16a34a) 0%, var(--accentDark, #15803d) 100%);
   color: var(--accentFg);
-  border: 1px solid color-mix(in srgb, var(--accent) 60%, black 8%);
+  border: 1px solid var(--accentDark, #15803d);
   box-shadow: 0 10px 24px rgba(var(--accentRGB), 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.35);
 }
 .btn-primary:hover {
@@ -1085,8 +1099,8 @@ button[disabled] {
    overrides just background/border/shadow, existing padding/radius/font
    inline styles are untouched. */
 .accent-fill-glass {
-  background: linear-gradient(155deg, color-mix(in srgb, var(--accent) 108%, white 6%) 0%, var(--accent) 55%, color-mix(in srgb, var(--accent) 85%, black 12%) 100%) !important;
-  border: 1px solid color-mix(in srgb, var(--accent) 60%, black 8%) !important;
+  background: linear-gradient(155deg, var(--accent, #16a34a) 0%, var(--accentDark, #15803d) 100%) !important;
+  border: 1px solid var(--accentDark, #15803d) !important;
   box-shadow: 0 8px 20px rgba(var(--accentRGB), 0.24), inset 0 1px 0 rgba(255, 255, 255, 0.35) !important;
   transition: box-shadow 0.15s ease, transform 0.12s ease;
 }
@@ -1109,16 +1123,16 @@ button[disabled] {
 .btn-sm      { padding: 8px 14px; font-size: 12px; border-radius: 999px; }
 .btn svg { display: inline-block; }
 .btn-whatsapp {
-  background: linear-gradient(180deg, rgba(37,211,102,0.18), rgba(37,211,102,0.08));
-  color: white;
-  border: 1px solid rgba(37,211,102,0.12);
-  box-shadow: 0 8px 20px rgba(37,211,102,0.10);
+  background: linear-gradient(180deg, #16964f, #146c34);
+  color: #ffffff;
+  border: 1px solid #146c34;
+  box-shadow: 0 8px 20px rgba(37,211,102,0.22);
 }
 .btn-export {
-  background: linear-gradient(135deg, rgba(102,126,234,0.20), rgba(118,75,162,0.16));
-  color: white;
-  border: 1px solid rgba(102,126,234,0.12);
-  box-shadow: 0 8px 20px rgba(102,126,234,0.10);
+  background: linear-gradient(135deg, rgba(102,126,234,0.92), rgba(118,75,162,0.92));
+  color: #ffffff;
+  border: 1px solid rgba(102,126,234,0.5);
+  box-shadow: 0 8px 20px rgba(102,126,234,0.22);
 }
 .btn-ghost {
   background: rgba(255,255,255,0.06);
@@ -3195,7 +3209,7 @@ h3 { font-size: 15px; font-weight: 600; }
 .qb-min-stats .lbl{color:#64748b;font-size:.78rem;margin-top:4px}
 .qb-min-actions{display:flex;gap:12px;justify-content:flex-end;align-items:center;min-width:0}
 .kb-btn{padding:10px 14px;border-radius:12px;border:0;font-weight:700;cursor:pointer;min-width:130px}
-.kb-btn.primary{background:#14b8a6;color:#fff}
+.kb-btn.primary{background:#0f8a7d;color:#fff}
 .kb-btn.subtle{background:transparent;border:1px solid rgba(71, 85, 105, 0.15);color:#475569}
 
 @media (max-width:860px){
@@ -3842,7 +3856,7 @@ h3 { font-size: 15px; font-weight: 600; }
 }
 
 .qb2-dl-btn.ready {
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  background: linear-gradient(135deg, #059669 0%, #047857 100%);
   color: white;
   border: none;
   box-shadow: 0 2px 6px rgba(16, 185, 129, 0.2);
@@ -4012,7 +4026,7 @@ h3 { font-size: 15px; font-weight: 600; }
 }
 
 .qb2-primary-btn {
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  background: linear-gradient(135deg, #059669 0%, #047857 100%);
   color: white;
 }
 

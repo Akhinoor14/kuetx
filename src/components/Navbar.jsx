@@ -23,7 +23,7 @@ function getPageMeta(pathname) {
     for (const pool of pools) {
       for (const item of pool.items) {
         if (item.path === pathname || (item.path !== '/' && pathname.startsWith(item.path)))
-          return { label: item.label, group: pool.groupLabel, siblings: section.noSiblingPills ? [] : pool.items };
+          return { label: item.label, group: pool.groupLabel, siblings: pool.items };
       }
       // Hub landing page itself (e.g. /class-rep) — no single item matches
       // it directly since it's the multi-card index, not a leaf page. Show
