@@ -114,6 +114,10 @@ export const NAV = [
           { id: 'tours',    label: 'Tours',   shortLabel: 'Tours',   icon: 'MapPin', path: '/tours' },
           { id: 'money',    label: 'Money',   shortLabel: 'Money',   icon: 'Wallet', path: '/money' },
           { id: 'tuition',  label: 'Tuition', shortLabel: 'Tuition', icon: 'Users',  path: '/tuition' },
+          // Services/Provider marketplace — SERVICES_PROVIDER_PLAN.md §1.
+          // Phase 1: routes to a placeholder empty-state page (Services.jsx).
+          // Phase 2 fills in the real service list.
+          { id: 'services', label: 'Services', shortLabel: 'Services', icon: 'Store', path: '/services' },
           { id: 'notes',    label: 'Notes',         shortLabel: 'Notes',  icon: 'FileText', path: '/notes' },
           { id: 'time',     label: 'Time Tracker',  shortLabel: 'Timer',  icon: 'Timer',    path: '/time' },
           { id: 'namaz',    label: 'Namaz Tracker', shortLabel: 'Namaz',  icon: 'Moon',     path: '/namaz' },

@@ -42,6 +42,9 @@ import {
   subscribeManualVerifyRequests, approveManualVerifyRequest, rejectManualVerifyRequest,
 } from '../lib/manualVerifyRequests';
 import { subscribeAllQBUploadRequests, approveQBUpload, rejectQBUpload } from '../lib/qbUploadRequests';
+import {
+  subscribeProviderVerifyRequests, adminVerifyProvider, adminRejectProvider,
+} from '../lib/providerSync';
 import QBReviewQueue from '../components/QBReviewQueue';
 import DeleteRequestQueue from '../components/DeleteRequestQueue';
 import QBUploadForm from '../components/QBUploadForm';
@@ -229,6 +232,7 @@ function ApprovalsView({ onBack, onSelectCategory, countCtx }) {
   const [crRequestsByGroup, setCrRequestsByGroup] = useState(null);
   const [leaveRequestsByGroup, setLeaveRequestsByGroup] = useState(null);
   const [manualVerifyRequests, setManualVerifyRequests] = useState(null);
+  const [providerVerifyRequests, setProviderVerifyRequests] = useState(null);
   const [err, setErr] = useState('');
   const [subTab, setSubTab] = useUrlTabState('approvalsTab', 'cl-apps');
   const [loadWarning, setLoadWarning] = useState('');
@@ -239,6 +243,7 @@ function ApprovalsView({ onBack, onSelectCategory, countCtx }) {
 
   useEffect(() => withTimeout((cb) => subscribeAllCLApplications(cb), setClApplications, { onTimeout: flagSlowLoad }), []);
   useEffect(() => withTimeout((cb) => subscribeManualVerifyRequests(cb), setManualVerifyRequests, { onTimeout: flagSlowLoad }), []);
+  useEffect(() => withTimeout((cb) => subscribeProviderVerifyRequests(cb), setProviderVerifyRequests, { onTimeout: flagSlowLoad }), []);
   useEffect(() => { listAllGroups().then((gs) => setGroupIds(gs.map((g) => g.id))); }, []);
 
   useEffect(() => {
@@ -269,6 +274,7 @@ function ApprovalsView({ onBack, onSelectCategory, countCtx }) {
   const crReqLoading = crRequestsByGroup === null;
   const leaveReqLoading = leaveRequestsByGroup === null;
   const manualVerifyLoading = manualVerifyRequests === null;
+  const providerVerifyLoading = providerVerifyRequests === null;
 
   const allCrRequests = Object.entries(crRequestsByGroup || {}).flatMap(([g, reqs]) => reqs.map((r) => ({ ...r, groupId: g })));
   const allLeaveRequests = Object.entries(leaveRequestsByGroup || {}).flatMap(([g, reqs]) => reqs.map((r) => ({ ...r, groupId: g })));
@@ -279,7 +285,7 @@ function ApprovalsView({ onBack, onSelectCategory, countCtx }) {
   };
 
   const category = getFounderCategory('approvals');
-  const subCtx = { ...countCtx, clApplications: clApplications?.length || 0, crRequests: allCrRequests.length, leaveRequests: allLeaveRequests.length, manualVerifyRequests: manualVerifyRequests?.length || 0 };
+  const subCtx = { ...countCtx, clApplications: clApplications?.length || 0, crRequests: allCrRequests.length, leaveRequests: allLeaveRequests.length, manualVerifyRequests: manualVerifyRequests?.length || 0, providerVerifyRequests: providerVerifyRequests?.length || 0 };
 
   return (
     <CategoryShell view="approvals" onSelect={onSelectCategory} countCtx={countCtx}>
@@ -343,6 +349,30 @@ function ApprovalsView({ onBack, onSelectCategory, countCtx }) {
               label={`${r.name || 'Unknown'} — ${r.email} — ${r.role === 'faculty' ? 'Faculty' : 'Student'}${r.roll ? ` (Roll: ${r.roll})` : ''}${r.dept ? ` — ${r.dept}` : ''}`}
               onApprove={() => handle(approveManualVerifyRequest, r.id)}
               onReject={() => handle(rejectManualVerifyRequest, r.id)}
+            />
+          ))}
+        </Section>
+      )}
+
+      {subTab === 'provider-verify' && (
+        <Section title="Service provider verification (Salon etc.)">
+          {providerVerifyLoading && <EmptyState>Loading…</EmptyState>}
+          {!providerVerifyLoading && providerVerifyRequests.length === 0 && <EmptyState>Nothing pending.</EmptyState>}
+          {(providerVerifyRequests || []).map((r) => (
+            <ApprovalRow key={r.uid}
+              label={`${r.displayName || 'Unknown'} — ${r.phone || 'no phone'} — ${r.serviceType || 'salon'}`}
+              onApprove={() => handle(adminVerifyProvider, r.uid)}
+              onReject={() => {
+                // Reject needs a reason (shown back to the provider on
+                // ProviderVerificationPending — Gap 6), unlike the other
+                // reject actions above which don't carry one. A plain
+                // prompt() is enough for Phase 1's manual, one-at-a-time
+                // review flow — no bulk UI needed yet (SERVICES_PROVIDER_
+                // PLAN.md §4 Step 4).
+                const reason = window.prompt(`Reason for rejecting ${r.displayName || 'this request'}?`, '');
+                if (reason === null) return; // cancelled
+                handle(adminRejectProvider, r.uid, reason);
+              }}
             />
           ))}
         </Section>
@@ -2243,6 +2273,7 @@ export default function AdminDashboard() {
   const [emailFlagCount, setEmailFlagCount] = useState(0);
   const [manualVerifyCount, setManualVerifyCount] = useState(0);
   const [qbUploadCount, setQbUploadCount] = useState(0);
+  const [providerVerifyCount, setProviderVerifyCount] = useState(0);
   const [crCountMap, setCrCountMap] = useState({});
   const [leaveCountMap, setLeaveCountMap] = useState({});
 
@@ -2282,6 +2313,7 @@ export default function AdminDashboard() {
   useEffect(() => { listPendingFlags({}).then((f) => setEmailFlagCount(f.length)).catch(() => {}); }, []);
   useEffect(() => subscribeManualVerifyRequests((reqs) => setManualVerifyCount(reqs.length)), []);
   useEffect(() => subscribeAllQBUploadRequests((reqs) => setQbUploadCount(reqs.length)), []);
+  useEffect(() => subscribeProviderVerifyRequests((reqs) => setProviderVerifyCount(reqs.length)), []);
 
   // Badge counts for CR + leave requests across all classes, for the
   // Approvals card badge — one subscription per group, kept as a map so
@@ -2339,6 +2371,7 @@ export default function AdminDashboard() {
     leaveRequests: totalLeaveReq,
     manualVerifyRequests: manualVerifyCount,
     qbUploadRequests: qbUploadCount,
+    providerVerifyRequests: providerVerifyCount,
     emailFlags: emailFlagCount,
     rollRequests: rollRequests.length,
     classCount: groups?.length,

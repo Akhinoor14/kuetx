@@ -21,6 +21,8 @@ import AuthModal from './components/AuthModal';
 import ProfileSetupModal from './components/ProfileSetupModal';
 import RequireCR from './components/RequireCR';
 import RequireStaff from './components/RequireStaff';
+import RequireProvider from './components/RequireProvider';
+import { useIsProvider } from './hooks/useIsProvider';
 import useFirebaseAuth from './hooks/useFirebaseAuth';
 import DataSafeToast from './components/DataSafeToast';
 import ClassJoinIntro from './components/ClassJoinIntro';
@@ -90,6 +92,9 @@ const Notice = lazy(() => import('./pages/Notice'));
 const Settings = lazy(() => import('./pages/Settings'));
 const Notes = lazy(() => import('./pages/Notes').then((m) => ({ default: m.Notes })));
 const Clubs = lazy(() => import('./pages/Clubs'));
+const Services = lazy(() => import('./pages/Services'));
+const ServiceDetail = lazy(() => import('./pages/ServiceDetail'));
+const ProviderDashboardPage = lazy(() => import('./pages/provider/ProviderDashboard'));
 const About = lazy(() => import('./pages/About'));
 const ClassRoutine = lazy(() => import('./pages/ClassRoutine'));
 const ClassPlanner = lazy(() => import('./pages/ClassPlanner'));
@@ -220,6 +225,8 @@ function Layout({ authState, onboardingActive }) {
             <Route path="/money" element={<Money />} />
             <Route path="/tuition" element={<Tuition />} />
             <Route path="/clubs" element={<Clubs />} />
+            <Route path="/services" element={<Services />} />
+            <Route path="/services/:serviceId" element={<ServiceDetail />} />
             <Route path="/projects" element={<Projects />} />
             <Route path="/tours" element={<Tours />} />
             <Route path="/calculators" element={<Navigate to="/marks" replace />} />
@@ -291,6 +298,7 @@ function Layout({ authState, onboardingActive }) {
                 CR, Syllabus, Schedule) as of Phase 5 — Sessions/Attendance/
                 Marks/Notices tabs are visible-but-disabled placeholders in
                 that page until Phases 6/7/8 build them. */}
+            <Route path="/provider" element={<RequireProvider><ProviderDashboardRoute /></RequireProvider>} />
             <Route path="/faculty" element={<RequireFaculty><FacultyDashboard /></RequireFaculty>} />
             <Route path="/faculty/profile" element={<RequireFaculty><FacultyProfile /></RequireFaculty>} />
             <Route path="/faculty/classes" element={<RequireFaculty><FacultyClasses /></RequireFaculty>} />
@@ -523,6 +531,17 @@ async function buildQueue(isAnonymous) {
         q.push('faculty-profile');
       }
     }
+  } else if (accountRole === 'provider') {
+    // Provider (SERVICES_PROVIDER_PLAN.md §3): no onboarding queue step
+    // needed here at all, unlike teacher's 'faculty-profile'. The full
+    // detail form (name, phone) is already collected inline at Role
+    // Select (see RoleSelectScreen.jsx's provider-form step) before
+    // providers/{uid} is even created, so there's nothing left to
+    // complete afterward. The actual gate — pending vs verified — is a
+    // LIVE Firestore check done by RequireProvider on every visit to
+    // /provider/*, not a one-time queue step; a provider account can
+    // browse the rest of the app (Dashboard, Notice, etc.) exactly like
+    // any other account while their verification is pending.
   } else {
     // Profile setup is mandatory before anything else — a half-filled
     // profile (missing roll/dept/session) is the root cause of Classmates
@@ -554,6 +573,17 @@ async function buildQueue(isAnonymous) {
     q.push('backup');
   }
   return q;
+}
+
+// Small wrapper so ProviderDashboard (Phase 1 shell) can display the
+// account's own displayName without re-subscribing itself — RequireProvider
+// already resolved providerProfile via useIsProvider by the time children
+// render, but that hook's result isn't otherwise threaded through
+// `children` props, so this just re-reads it once, cheaply (same
+// onSnapshot cache, not an extra network read).
+function ProviderDashboardRoute() {
+  const { providerProfile } = useIsProvider();
+  return <ProviderDashboardPage providerProfile={providerProfile} />;
 }
 
 export default function App() {

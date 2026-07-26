@@ -36,13 +36,14 @@ export const FOUNDER_CATEGORIES = [
     label: 'Approvals',
     icon: 'CheckCircle2',
     subtitle: 'Campus Lead applications, CR requests, CR leave requests',
-    getCount: (ctx) => ctx.clApplications + ctx.crRequests + ctx.leaveRequests + ctx.manualVerifyRequests + ctx.qbUploadRequests,
+    getCount: (ctx) => ctx.clApplications + ctx.crRequests + ctx.leaveRequests + ctx.manualVerifyRequests + ctx.qbUploadRequests + ctx.providerVerifyRequests,
     subcategories: [
       { key: 'cl-apps', label: 'CL Applications', getCount: (ctx) => ctx.clApplications },
       { key: 'cr-req', label: 'CR Requests', getCount: (ctx) => ctx.crRequests },
       { key: 'cr-leave', label: 'CR Leave Requests', getCount: (ctx) => ctx.leaveRequests },
       { key: 'manual-verify', label: 'Faculty Blue Tick / Manual Verification', getCount: (ctx) => ctx.manualVerifyRequests },
       { key: 'qb-uploads', label: 'Question Bank (Upload / Review)', getCount: (ctx) => ctx.qbUploadRequests },
+      { key: 'provider-verify', label: 'Service Provider Verification', getCount: (ctx) => ctx.providerVerifyRequests },
     ],
   },
   {

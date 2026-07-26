@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from 'react';
 import * as noticeApi from '../lib/noticeUtils';
 import * as alertApi from '../lib/alertUtils';
 import { computeAlerts } from '../lib/alertUtils';
+import { subscribeBookingAlerts, markBookingAlertRead } from '../lib/bookingAlerts';
 import { getProfile } from '../store/store';
 import { getGroupId } from '../lib/groupUtils';
 import { subscribeMyRole } from '../lib/groupSync';
@@ -19,11 +20,19 @@ import { useViewMode } from '../hooks/useViewMode';
  *    stamped once per alert id and persisted (see
  *    alertUtils.getOrStampAlertFirstSeenAt), since alerts are computed
  *    live from current state and have no inherent event timestamp.
+ *  - Booking items (Phase 3 Part 2, §9 — services/provider marketplace:
+ *    booking confirmed/cancelled/shop-closed-expiry) — real createdAt,
+ *    read live from bookingAlerts/{uid}/items via subscribeBookingAlerts.
+ *    Shown for any signed-in user regardless of role/view-mode (a student
+ *    with a salon booking and a verified provider both read their own
+ *    bookingAlerts the same way), unlike the Notice channel below which
+ *    is role-routed.
  *
  * Notice is the higher-priority channel: it wins ties/near-ties in the
  * time sort, and its rows get a slightly bolder visual treatment (accent
  * left border, larger tag, semi-bold title) so it reads as more
- * important even inside a fully mixed, time-ordered list.
+ * important even inside a fully mixed, time-ordered list. Booking items
+ * sort purely on real timestamp like Alert items do.
  *
  * ROLE ROUTING (see NOTICE_BELL_ROUTING_PLAN.md):
  * This panel's own notice-item list, and the "Notice →" link at the
@@ -63,8 +72,9 @@ const ALERT_TAGS = {
   assignmentAlerts: { label: 'Assignment', color: '#7c3aed', bg: 'rgba(124,58,237,0.12)' },
 };
 const NOTICE_TAG = { label: 'Notice', color: 'var(--accent)', bg: 'var(--accentBg)' };
+const BOOKING_TAG = { label: 'Booking', color: '#0891b2', bg: 'rgba(8,145,178,0.12)' };
 
-function buildMergedItems(profile, notices, dismissedAlertIds, readNoticeIds, firstSeenMap) {
+function buildMergedItems(profile, notices, dismissedAlertIds, readNoticeIds, firstSeenMap, bookingAlerts, uid) {
   const noticeItems = notices.map(n => ({
     id: `notice:${n.id}`,
     kind: 'notice',
@@ -93,12 +103,33 @@ function buildMergedItems(profile, notices, dismissedAlertIds, readNoticeIds, fi
     markRead: () => alertApi.setAlertDismissed(item.id, true),
   }));
 
-  // Single time-sorted list (newest first) using real timestamps for both:
-  // Notice uses its real createdAt, Alert uses its real first-seen-at
-  // (stamped once, persisted, reused on later renders). On a tie or when
-  // timestamps land close together, Notice wins — it's the higher-priority
-  // channel (admin/CR/CL broadcasts vs. auto-computed academic flags).
-  return [...noticeItems, ...alertItems].sort((a, b) => {
+  const bookingItems = (bookingAlerts || []).map((a) => ({
+    id: `booking:${a.id}`,
+    kind: 'booking',
+    tag: BOOKING_TAG,
+    title: a.message,
+    link: '/services',
+    isUnread: !a.read,
+    // createdAt is a Firestore Timestamp on a live doc, but can briefly be
+    // null right after an optimistic local write resolves before the
+    // server timestamp round-trips — falls back to "now" only for sort
+    // stability in that brief window, same defensive pattern Notice items
+    // already use via `n.createdAt || 0` above (though Notice's fallback
+    // is 0/oldest since a notice's real createdAt is essentially never
+    // absent in practice, unlike a booking alert immediately after write).
+    at: a.createdAt?.toMillis ? a.createdAt.toMillis() : Date.now(),
+    markRead: () => uid && markBookingAlertRead(uid, a.id),
+  }));
+
+  // Single time-sorted list (newest first) using real timestamps
+  // throughout: Notice uses its real createdAt, Alert uses its real
+  // first-seen-at (stamped once, persisted, reused on later renders,
+  // since alerts are computed live from current state and have no
+  // inherent event timestamp), Booking uses its real createdAt. On a tie
+  // or when timestamps land close together, Notice wins — it's the
+  // highest-priority channel (admin/CR/CL broadcasts vs. auto-computed
+  // academic flags or a single booking event).
+  return [...noticeItems, ...alertItems, ...bookingItems].sort((a, b) => {
     if (b.at !== a.at) return b.at - a.at;
     if (a.kind !== b.kind) return a.kind === 'notice' ? -1 : 1;
     return 0;
@@ -188,9 +219,20 @@ export function NotificationPanel({ isOpen, onClose }) {
     setFirstSeenMap(alertApi.getOrStampAlertFirstSeenAt(ids));
   }, [dismissedAlertIds, refreshTick]);
 
+  // Booking alerts (§9) — same for every signed-in user regardless of
+  // role/view-mode, unlike the Notice channel's role routing above; a
+  // student and a verified provider both just read their own
+  // bookingAlerts/{uid}/items.
+  const [bookingAlerts, setBookingAlerts] = useState(null);
+  const uid = auth.currentUser?.uid;
+  useEffect(() => {
+    if (!uid) { setBookingAlerts(null); return undefined; }
+    return subscribeBookingAlerts(uid, setBookingAlerts);
+  }, [uid]);
+
   const items = useMemo(
-    () => buildMergedItems(profile, notices, dismissedAlertIds, readNoticeIds, firstSeenMap),
-    [profile, notices, dismissedAlertIds, readNoticeIds, firstSeenMap]
+    () => buildMergedItems(profile, notices, dismissedAlertIds, readNoticeIds, firstSeenMap, bookingAlerts, uid),
+    [profile, notices, dismissedAlertIds, readNoticeIds, firstSeenMap, bookingAlerts, uid]
   );
 
   const visibleItems = filter === 'unread' ? items.filter(i => i.isUnread) : items;

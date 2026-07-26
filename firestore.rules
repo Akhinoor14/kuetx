@@ -454,6 +454,423 @@ service cloud.firestore {
     }
 
     // -------------------------------------------------------------
+    // Services / Provider marketplace — Phase 1 (see
+    // SERVICES_PROVIDER_PLAN.md §2, §4, §10). providers/{uid}: the
+    // account's own profile+status doc, same top-level pattern as
+    // faculty/{uid} above.
+    //
+    // Unlike faculty/{uid} (verifiedAt is a soft browse-but-don't-write
+    // gate), status here is a HARD GATE at the app level (RequireProvider
+    // in App.jsx) — but the RULES enforcement is the same shape: status
+    // can only ever be set to 'pending' by the provider themselves (at
+    // create, and again at re-submit after a rejection), and can ONLY be
+    // moved to 'verified'/'rejected'/'deactivated' by the Founder
+    // (isAdmin()). A provider can never self-verify, exactly like a
+    // faculty account can never self-grant its own Blue Tick.
+    //
+    // read: split in two. Everything EXCEPT phone is open to any
+    // signed-in user (displayName/status/serviceType etc. — the
+    // student-facing Services list and dashboard headers need these, and
+    // none of it is sensitive). `phone` is gated separately: §10 of the
+    // plan is explicit that the OWNER's phone number should only be
+    // readable by a student once they have a confirmed (or later-stage)
+    // booking with that provider — not by every signed-in student
+    // unconditionally, and not before confirmation. (An earlier version
+    // of this comment argued the owner's own submitted contact info was
+    // exempt from §10 since that section's "student's phone" clause is
+    // literally about booking documents — that reading doesn't survive a
+    // second look: §10 has its own separate sentence specifically about
+    // the OWNER's number, gated to confirmed bookings. Firestore field-
+    // level security doesn't exist, so the field itself can't be
+    // selectively hidden within a single doc read — the phone had to
+    // move to its own sub-document instead, gated by its own rule below.)
+    match /providers/{uid} {
+      allow read: if isSignedIn();
+
+      // Create: only the owning account, and only ever as 'pending' with
+      // verifiedAt null — mirrors faculty/{uid}'s create rule exactly.
+      // `phone` is intentionally NOT part of the main providers/{uid} doc
+      // (see providers/{uid}/contact/phone below) — this create only
+      // allows the public fields.
+      allow create: if isSignedIn()
+        && request.auth.uid == uid
+        && request.resource.data.status == 'pending'
+        && request.resource.data.verifiedAt == null
+        && !('phone' in request.resource.data);
+
+      // Update: two disjoint cases.
+      //  1. The owning account re-submitting after a rejection (Gap 6) —
+      //     may only move status FROM 'rejected' back TO 'pending', and
+      //     may only touch the fields the re-submit form actually edits
+      //     on this doc (status, rejectedReason, displayName, serviceType,
+      //     requestedAt) — phone re-submission goes through the
+      //     contact/phone sub-document's own rule instead. It can never
+      //     touch verifiedAt, verifiedBy, or serviceIds itself — those
+      //     stay exactly as before.
+      //  2. Founder review action (verify / reject / deactivate) — may
+      //     only touch {status, verifiedAt, verifiedBy, rejectedReason},
+      //     and status must land on one of the three valid outcomes.
+      allow update: if (isSignedIn() && request.auth.uid == uid
+          && resource.data.status == 'rejected'
+          && request.resource.data.status == 'pending'
+          && request.resource.data.verifiedAt == null
+          && request.resource.data.diff(resource.data).affectedKeys()
+               .hasOnly(['status', 'rejectedReason', 'displayName', 'serviceType', 'requestedAt']))
+        || (isAdmin()
+          && request.resource.data.diff(resource.data).affectedKeys()
+               .hasOnly(['status', 'verifiedAt', 'verifiedBy', 'rejectedReason'])
+          && request.resource.data.status in ['verified', 'rejected', 'deactivated']);
+
+      allow delete: if isAdmin();
+
+      // -----------------------------------------------------------
+      // providers/{uid}/contact/phone — the owner's phone number,
+      // split out of the parent doc specifically so it can have its own
+      // read rule (§10). A single Firestore document can't selectively
+      // hide one field from some readers and not others, so the ONLY way
+      // to gate just the phone (while leaving displayName/status/etc.
+      // openly readable above) is to give it its own sub-document.
+      //
+      // Readable by: the owning provider themselves (so their own
+      // dashboard can show what they submitted), the Founder (isAdmin —
+      // needed for manual verification contact, §4), or a student who
+      // has at least one booking with status 'confirmed' or 'done' on
+      // ANY of this provider's services (§10: "once confirmed"; 'done'
+      // is included since a completed booking's student legitimately
+      // still has standing to have had the number, e.g. for a follow-up).
+      // Checking this requires knowing which serviceIds belong to this
+      // provider, which is why the check reads providers/{uid} itself
+      // (serviceIds) then queries nothing further — a get() per
+      // serviceId list entry isn't needed because hasConfirmedBookingWithProvider
+      // below only needs to prove ONE match exists, not enumerate.
+      //
+      // NOTE: a full "does this student have a confirmed booking with
+      // ANY service under this provider" check would ideally use a
+      // collectionGroup query inside the rule, but Firestore rules can't
+      // run arbitrary queries — only exists()/get() on a known path. So
+      // this is scoped to a single serviceId, passed as a query param
+      // equivalent: the client reads providers/{uid}/contact/phone only
+      // from ServiceDetail.jsx, which already knows serviceId from the
+      // route, and the rule below checks that ONE specific service's
+      // bookings for a confirmed/done match — not every service the
+      // provider might own. (In Phase 2's data model each provider has
+      // exactly one service in practice, per providerSync.js's Phase 1
+      // comment, so this isn't a real limitation yet; flagging it for
+      // whoever adds true multi-service providers later.)
+      // -----------------------------------------------------------
+      match /contact/phone {
+        allow read: if isSignedIn() && (
+          request.auth.uid == uid
+          || isAdmin()
+          || hasConfirmedBookingWithProvider(uid)
+        );
+        // Write: the owning provider only — same standing that used to
+        // write `phone` on the parent doc (at create, or re-submit after
+        // rejection). Founder never writes this, only reads it.
+        allow write: if isSignedIn() && request.auth.uid == uid
+          && request.resource.data.keys().hasOnly(['value']);
+      }
+    }
+
+    // Helper for providers/{uid}/contact/phone's read rule (§10): true if
+    // the signed-in student has at least one confirmed-or-done booking on
+    // this provider's service.
+    //
+    // Scoped to serviceIds[0] — Phase 2's data model gives every provider
+    // exactly one service in practice (providerSync.js's own Phase 1
+    // comment confirms this), so this covers the real case. A true
+    // multi-service provider would need this to loop over serviceIds,
+    // which rules language can't do with a dynamic list; flagging for
+    // whoever adds real multi-service providers later (likely fix:
+    // denormalize a per-student "has confirmed booking with this
+    // provider" flag onto a small owner-writable doc at confirm time,
+    // rather than trying to query bookings live from inside a rule).
+    //
+    // The actual existence check queries this student's OWN bookings via
+    // the same collection-group-free path shape used elsewhere in this
+    // file: myActiveBookingId, a small per-student pointer doc written by
+    // confirmBooking()/finishBooking() at the same time status changes,
+    // living at services/{serviceId}/confirmedStudents/{uid} — see that
+    // match block below. This keeps the phone-gate rule a cheap single
+    // exists() check instead of an unsupported live query.
+    function hasConfirmedBookingWithProvider(providerUid) {
+      let provider = get(/databases/$(database)/documents/providers/$(providerUid)).data;
+      return provider.serviceIds.size() > 0
+        && exists(/databases/$(database)/documents/services/$(provider.serviceIds[0])/confirmedStudents/$(request.auth.uid));
+    }
+
+
+    // -------------------------------------------------------------
+    // Services / Provider marketplace — Phase 2 (see
+    // SERVICES_PROVIDER_PLAN.md §2, §5-§7, §10). services/{serviceId}:
+    // the operational, frequently-updated sibling of providers/{uid}
+    // (Phase 1's identity+verification doc).
+    // -------------------------------------------------------------
+
+    function isVerifiedProviderUid(uid) {
+      return exists(/databases/$(database)/documents/providers/$(uid))
+        && get(/databases/$(database)/documents/providers/$(uid)).data.status == 'verified';
+    }
+
+    function ownsService(serviceId) {
+      return isSignedIn()
+        && get(/databases/$(database)/documents/services/$(serviceId)).data.providerUid == request.auth.uid;
+    }
+
+    // Gap 5 (server-side): true if the offering being booked is both
+    // present on the service and currently isAvailable. Previously this
+    // was client-side only (createBooking() in serviceSync.js) — a
+    // modified client could still hit `create` below and slip a booking
+    // onto a closed offering, since the rule had no way to see the
+    // parent service's offerings array. get() on the sibling service doc
+    // closes that: the booking create rule now re-derives the same
+    // check the client already does, so a forged client can no longer
+    // bypass it.
+    function offeringIsBookable(serviceId, offeringId) {
+      let svc = get(/databases/$(database)/documents/services/$(serviceId)).data;
+      return svc.isOpen == true
+        && svc.offerings.filter(o => o.id == offeringId && o.isAvailable == true).size() > 0;
+    }
+
+    // Gap 7 (server-side): true if the student has NO existing
+    // pending/confirmed booking on this service. Firestore rules can't
+    // run a where()-filtered query against the bookings subcollection
+    // directly, so — same technique as confirmedStudents/{uid} below —
+    // this is backed by a small denormalized marker doc,
+    // services/{serviceId}/activeBooking/{studentUid}, written/cleared
+    // by serviceSync.js at the same time a booking becomes/stops being
+    // active. A missing marker means "no active booking"; its mere
+    // existence (not its contents) is the signal, mirroring
+    // confirmedStudents' own existence-only shape.
+    function hasNoActiveBooking(serviceId, studentUid) {
+      return !exists(/databases/$(database)/documents/services/$(serviceId)/activeBooking/$(studentUid));
+    }
+
+    match /services/{serviceId} {
+      // read: open to any signed-in user — the student-facing Services
+      // list (§6) needs to read isOpen/offerings/etc for every service,
+      // and there's nothing sensitive in a service's own listing itself
+      // (no customer data lives here, only the provider's own catalog).
+      allow read: if isSignedIn();
+
+      // Create: only a VERIFIED provider, and only for themselves
+      // (providerUid must equal their own uid) — an unverified or
+      // rejected provider account can never create a service doc, which
+      // is the actual hard-gate enforcement point (RequireProvider in
+      // App.jsx is a UI convenience; this rule is what actually matters).
+      allow create: if isSignedIn()
+        && isVerifiedProviderUid(request.auth.uid)
+        && request.resource.data.providerUid == request.auth.uid
+        && request.resource.data.isOpen == false
+        && request.resource.data.revenueTotal == 0;
+
+      // Update: the owning provider can edit their own service (details,
+      // isOpen toggle, offerings) — Founder can also edit/deactivate
+      // (e.g. force isOpen: false alongside providers/{uid}.status ->
+      // 'deactivated', Gap 9). providerUid and revenueTotal are
+      // deliberately excluded from what a plain provider update can
+      // touch: providerUid must never change hands, and revenueTotal
+      // must only ever move via the transaction in finishBooking()
+      // touching a booking + the service together — a provider directly
+      // rewriting their own revenueTotal upward is exactly the kind of
+      // self-reported number this app never trusts elsewhere either.
+      allow update: if (isSignedIn() && resource.data.providerUid == request.auth.uid
+          && request.resource.data.providerUid == resource.data.providerUid
+          && request.resource.data.revenueTotal == resource.data.revenueTotal)
+        || isAdmin();
+
+      allow delete: if isAdmin();
+
+      // -----------------------------------------------------------
+      // bookings/{bookingId} — the state machine itself (§7). Every
+      // transition below is enforced here, not just trusted from the
+      // client, since a booking's status directly gates whether the
+      // provider's phone/customer details are meaningful and whether
+      // revenue gets counted.
+      // -----------------------------------------------------------
+      match /bookings/{bookingId} {
+        // read: the booking's own student, or the service's owning
+        // provider, or the Founder. Students can never read each other's
+        // bookings (§10) — this is the enforcement point for that.
+        allow read: if isSignedIn()
+          && (resource.data.studentUid == request.auth.uid || ownsService(serviceId) || isAdmin());
+
+        // Create: any signed-in student, for themselves only, always
+        // starting in 'pending' with every other terminal/derived field
+        // at its zero value. Gap 5 (offering must be open+available) and
+        // Gap 7 (one active booking per service) used to be client-side
+        // only in serviceSync.js's createBooking() — now re-verified
+        // here too via offeringIsBookable()/hasNoActiveBooking(), so a
+        // modified client can no longer slip a booking past a closed
+        // shop, a disabled offering, or a second active booking on the
+        // same service. This closes the gap PROGRESS.md flagged at the
+        // end of Phase 2.
+        allow create: if isSignedIn()
+          && request.resource.data.studentUid == request.auth.uid
+          && request.resource.data.status == 'pending'
+          && request.resource.data.cancelledBy == null
+          && request.resource.data.confirmedSlot == null
+          && offeringIsBookable(serviceId, request.resource.data.offeringId)
+          && hasNoActiveBooking(serviceId, request.auth.uid);
+
+        // Update: exactly the transitions in §7, nothing else.
+        allow update: if isSignedIn() && (
+          // pending -> confirmed (owner only) — status + confirmedSlot only.
+          (ownsService(serviceId)
+            && resource.data.status == 'pending'
+            && request.resource.data.status == 'confirmed'
+            && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'confirmedSlot']))
+
+          // pending -> expired_shop_closed (owner only, via the shop-close
+          // auto-expire batch in setServiceOpen()) — status only.
+          || (ownsService(serviceId)
+            && resource.data.status == 'pending'
+            && request.resource.data.status == 'expired_shop_closed'
+            && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status']))
+
+          // pending/confirmed -> cancelled (Gap 1, Gap 3) — either the
+          // booking's own student OR the owning provider, each only
+          // ever stamping their OWN identity into cancelledBy (a student
+          // can't cancel and blame it on 'owner', and vice versa).
+          || (resource.data.studentUid == request.auth.uid
+            && (resource.data.status == 'pending' || resource.data.status == 'confirmed')
+            && request.resource.data.status == 'cancelled'
+            && request.resource.data.cancelledBy == 'student'
+            && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'cancelledBy']))
+          || (ownsService(serviceId)
+            && (resource.data.status == 'pending' || resource.data.status == 'confirmed')
+            && request.resource.data.status == 'cancelled'
+            && request.resource.data.cancelledBy == 'owner'
+            && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'cancelledBy']))
+
+          // confirmed -> done (owner only) — status only; revenueTotal
+          // moves on the SIBLING services/{serviceId} doc in the same
+          // transaction, not on the booking itself.
+          || (ownsService(serviceId)
+            && resource.data.status == 'confirmed'
+            && request.resource.data.status == 'done'
+            && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status']))
+        );
+
+        // Terminal states (done/cancelled/expired_shop_closed) have no
+        // further transitions — the update rule above already excludes
+        // them implicitly (none of its five branches match a resource
+        // whose current status isn't 'pending' or 'confirmed'), so no
+        // separate denial clause is needed.
+
+        allow delete: if isAdmin();
+      }
+
+      // -----------------------------------------------------------
+      // confirmedStudents/{uid} — Phase 3 Part 2 addition (§10). A tiny
+      // existence-only marker doc ({exists} — no fields needed) written
+      // by confirmBooking() the moment a booking reaches 'confirmed',
+      // and left in place through 'done' (never removed on finish —
+      // §10's "once confirmed" reveal is a one-way gate, a student who
+      // legitimately saw the number for a completed booking doesn't lose
+      // that standing retroactively). Removed only if the booking is
+      // later cancelled with no other confirmed/done booking from the
+      // same student remaining (see removeConfirmedStudentMarkerIfNoneLeft
+      // in serviceSync.js).
+      //
+      // Exists purely so providers/{uid}/contact/phone's read rule
+      // (hasConfirmedBookingWithProvider, above) has a cheap, single
+      // exists() check to gate on — Firestore rules can't run a
+      // where()-filtered query to ask "does this student have ANY
+      // confirmed booking on this service" directly, so this marker doc
+      // is the denormalized answer to exactly that question.
+      match /confirmedStudents/{studentUid} {
+        allow read: if isSignedIn()
+          && (request.auth.uid == studentUid || ownsService(serviceId) || isAdmin());
+        // Write: only the owning provider (confirmBooking/cancelBooking
+        // both run as the owner's action when they cause this marker to
+        // appear/disappear) — a student can never write their own
+        // "I have a confirmed booking" marker, which would defeat the
+        // entire point of gating the phone number on it.
+        allow write: if ownsService(serviceId);
+      }
+
+      // -----------------------------------------------------------
+      // activeBooking/{studentUid} — existence-only marker backing
+      // Gap 7's server-side enforcement (hasNoActiveBooking() above).
+      // Written by the STUDENT themselves at the same moment their
+      // booking create succeeds (same batch, so the two can never go
+      // out of sync from the student's own action), and cleared by
+      // whichever party causes the booking to leave the
+      // pending/confirmed state (student cancel, owner cancel, owner
+      // confirm->done, or the shop-close auto-expire batch) — see
+      // serviceSync.js's createBooking/cancelBooking/finishBooking/
+      // expirePendingBookingsForClosedShop for the write sites.
+      //
+      // Unlike confirmedStudents (owner-only write, since it gates a
+      // privacy-sensitive reveal), this marker's create is student-
+      // written — it has to be, since createBooking() itself is a
+      // student action and the whole point is blocking that SAME
+      // create from happening twice. The security property that
+      // matters isn't "who can write this marker" but "can a student
+      // create a second active booking while the marker exists" — and
+      // hasNoActiveBooking() already blocks that regardless of who
+      // holds write access to the marker itself.
+      match /activeBooking/{studentUid} {
+        allow read: if isSignedIn()
+          && (request.auth.uid == studentUid || ownsService(serviceId) || isAdmin());
+        allow create: if isSignedIn() && request.auth.uid == studentUid;
+        allow delete: if isSignedIn()
+          && (request.auth.uid == studentUid || ownsService(serviceId) || isAdmin());
+        allow update: if false; // existence-only — never modified, only created/deleted
+      }
+    }
+
+    // -------------------------------------------------------------
+    // bookingAlerts/{uid}/items/{alertId} — Phase 3 Part 2 (§9). Per-
+    // recipient booking notifications (confirmed / cancelled / shop-closed
+    // expiry), read by NotificationPanel.jsx alongside notices/alerts.
+    //
+    // Mirrors users/{uid}/data/{key}'s ownership shape (owner-only
+    // read/write) but as its own top-level collection instead of living
+    // in that generic bucket, since these are system-generated events
+    // written by serviceSync.js on the OTHER party's behalf (a student
+    // cancelling writes an alert into the PROVIDER's bookingAlerts, and
+    // vice versa) — not user-authored key/value data the owner writes for
+    // themselves. That's why write here is scoped to "whoever legitimately
+    // has standing to report a booking event about this uid" rather than
+    // "the uid itself", the same way bookings/{bookingId}'s own update
+    // rule above scopes each transition to the specific party who is
+    // allowed to cause it.
+    // -------------------------------------------------------------
+    match /bookingAlerts/{uid}/items/{alertId} {
+      // Read: owner only — this is that person's own notification inbox.
+      allow read: if isSignedIn() && request.auth.uid == uid;
+
+      // Update: owner only, and only to flip read:true (marking as seen
+      // from NotificationPanel.jsx) — no other field may change once
+      // written.
+      allow update: if isSignedIn() && request.auth.uid == uid
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['read']);
+
+      // Create: the alert's recipient (uid) must be either the booking's
+      // own student or the owning provider of the referenced service —
+      // i.e. exactly the two parties who could legitimately know about
+      // and report this booking event, same pairing bookings/{bookingId}'s
+      // cancel rule already enforces. This still allows a student to
+      // write into a PROVIDER's bookingAlerts (cancelling their own
+      // booking alerts the provider) and vice versa — that cross-write is
+      // the whole point (§9: alert the *other* party) — but blocks a
+      // request faking an alert for an uninvolved third uid, or claiming
+      // an event on a booking/service that doesn't exist or doesn't match.
+      allow create: if isSignedIn()
+        && request.resource.data.kind in ['booking_confirmed', 'booking_cancelled', 'booking_expired']
+        && request.resource.data.read == false
+        && exists(/databases/$(database)/documents/services/$(request.resource.data.serviceId)/bookings/$(request.resource.data.bookingId))
+        && (
+          get(/databases/$(database)/documents/services/$(request.resource.data.serviceId)/bookings/$(request.resource.data.bookingId)).data.studentUid == uid
+          || get(/databases/$(database)/documents/services/$(request.resource.data.serviceId)).data.providerUid == uid
+        );
+
+      allow delete: if isSignedIn() && request.auth.uid == uid;
+    }
+
+    // -------------------------------------------------------------
     // Blood Bank directory — bloodDonors/{uid}. Separate top-level
     // collection (not part of users/{uid}/data, which is owner-read-only
     // and therefore not queryable across all students) so the Founder can

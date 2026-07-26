@@ -31,12 +31,18 @@ import { store } from '../store/store';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { db, auth } from './firebase';
 
+// PHASE 1 (Services/Provider marketplace, see SERVICES_PROVIDER_PLAN.md
+// §3): 'provider' added as a third accountRole alongside student/teacher.
+// Same "local UI-routing hint only, never a security boundary" caveat
+// applies — providers/{uid}.status is the real server-verified gate
+// (see useIsProvider.js / RequireProvider.jsx), same relationship
+// accountRole has to faculty/{uid}.verifiedAt for teachers.
 export function getAccountRole() {
-  return store.get('accountRole') || null; // null | 'student' | 'teacher'
+  return store.get('accountRole') || null; // null | 'student' | 'teacher' | 'provider'
 }
 
 export function setAccountRole(role) {
-  if (role !== 'student' && role !== 'teacher') {
+  if (role !== 'student' && role !== 'teacher' && role !== 'provider') {
     throw new Error(`Invalid accountRole: ${role}`);
   }
   store.set('accountRole', role);
@@ -61,7 +67,7 @@ export async function fetchServerAccountRole(uid) {
   try {
     const snap = await getDoc(doc(db, 'users', uid));
     const role = snap.exists() ? snap.data()?.role : null;
-    return role === 'student' || role === 'teacher' ? role : null;
+    return role === 'student' || role === 'teacher' || role === 'provider' ? role : null;
   } catch {
     return null;
   }
@@ -77,7 +83,7 @@ export async function fetchServerAccountRole(uid) {
  */
 export async function persistAccountRoleToServer(role) {
   const uid = auth.currentUser?.uid;
-  if (!uid || (role !== 'student' && role !== 'teacher')) return;
+  if (!uid || (role !== 'student' && role !== 'teacher' && role !== 'provider')) return;
   try {
     await setDoc(doc(db, 'users', uid), { role }, { merge: true });
   } catch (e) {
