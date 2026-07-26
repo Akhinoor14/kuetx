@@ -227,7 +227,7 @@ export default function Assignments() {
             </div>
             <button className="btn btn-primary assignments-add-btn" onClick={() => setAdding(true)}>
               <Plus size={16} />
-              Add Assignment
+              <span className="btn-txt">Add Assignment</span>
             </button>
           </div>
         </div>

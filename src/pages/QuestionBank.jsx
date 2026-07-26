@@ -241,7 +241,7 @@ export default function QuestionBank() {
             </button>
           )}
           <button className="accent-fill-glass" style={styles.uploadBtn} onClick={() => setShowUpload(true)}>
-            <Upload size={16} /> Upload
+            <Upload size={16} /> <span className="btn-txt">Upload</span>
           </button>
         </div>
       </div>

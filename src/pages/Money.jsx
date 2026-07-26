@@ -241,7 +241,7 @@ export default function Money() {
         <div className="content-page-hero-actions">
           <button className="btn btn-ghost" style={{ padding: '6px 10px' }} onClick={exportTxt} title="Export Report"><Download size={13} /></button>
           <button className="btn btn-ghost" style={{ padding: '6px 10px' }} onClick={() => { setSetupForm({ cash: String(cashBalance), budget: String(budget) }); setModal('setup'); }}><Wallet size={13} /></button>
-          <button className="btn btn-primary" onClick={openAdd}><Plus size={13} /> Add</button>
+          <button className="btn btn-primary" onClick={openAdd}><Plus size={13} /> <span className="btn-txt">Add</span></button>
         </div>
       </div>
 

@@ -47,7 +47,7 @@ export default function Teachers() {
         </div>
         <div className="content-page-hero-actions">
           <button className="btn btn-primary" onClick={() => { setAdding(true); setEditing(null); }}>
-            <Plus size={13} /> Add Teacher
+            <Plus size={13} /> <span className="btn-txt">Add Teacher</span>
           </button>
         </div>
       </div>

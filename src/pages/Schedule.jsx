@@ -1505,16 +1505,16 @@ export default function Schedule() {
         </div>
         <div className="content-page-hero-actions">
           <button className="btn btn-ghost btn-sm" onClick={() => setEditingSettings(v => !v)} style={{ fontSize: '12px' }}>
-            <Settings2 size={13} /> Settings
+            <Settings2 size={13} /> <span className="btn-txt">Settings</span>
           </button>
           {canEditSchedule && (
             <button className="btn btn-secondary btn-sm" onClick={() => navigate('/courses')} style={{ fontSize: '12px' }} title="Open the Courses page and assign teachers per course">
-              <BookOpen size={13} /> Manage Course Teachers
+              <BookOpen size={13} /> <span className="btn-txt btn-txt-long">Manage Course Teachers</span><span className="btn-txt-short">Teachers</span>
             </button>
           )}
           {canEditSchedule && (
             <button className="btn btn-primary btn-sm" onClick={() => { setEditingId(null); resetForm(); setAdding(true); }} style={{ fontSize: '12px' }} title="Add a new class slot to the schedule">
-              <Plus size={13} /> Add Class
+              <Plus size={13} /> <span className="btn-txt">Add Class</span>
             </button>
           )}
         </div>

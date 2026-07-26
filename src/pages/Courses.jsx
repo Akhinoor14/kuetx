@@ -522,7 +522,7 @@ export default function Courses() {
         </div>
         {!addingCustom && (
           <div className="content-page-hero-actions">
-            <button className="btn btn-primary" onClick={() => { setAddingCustom(true); setEditingCustom(null); }}><Plus size={14} /> Add Custom Course</button>
+            <button className="btn btn-primary" onClick={() => { setAddingCustom(true); setEditingCustom(null); }}><Plus size={14} /> <span className="btn-txt">Add Custom Course</span></button>
           </div>
         )}
       </div>

@@ -85,7 +85,7 @@ export default function Diary() {
         </div>
         <div className="content-page-hero-actions">
           <button className="btn btn-primary" onClick={() => setAdding(true)}>
-            <Plus size={13} /> Log Class
+            <Plus size={13} /> <span className="btn-txt">Log Class</span>
           </button>
         </div>
       </div>

@@ -3069,6 +3069,27 @@ h3 { font-size: 15px; font-weight: 600; }
   .topbar-page-title { display: none; }
 }
 
+/* Mobile sibling-swap chip row — sits directly beneath the 56px topbar
+   as its own sticky strip. Hidden on desktop (siblings render inside
+   the topbar there instead, via the `hidden md:flex` block in
+   Navbar.jsx). Only rendered when the current page has siblings to
+   swap between (see Navbar.jsx), so pages without siblings incur zero
+   extra height. */
+.topbar-mobile-tabs {
+  position: sticky;
+  top: 56px;
+  z-index: 59;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 8px 12px;
+}
+.topbar-mobile-tabs .filter-tab-row.topbar-tabs {
+  justify-content: flex-start;
+}
+@media (min-width: 769px) {
+  .topbar-mobile-tabs { display: none; }
+}
+
 /* ── Question Bank (enhanced) ──────────────────────────────────────────── */
 /* ── Question Bank Page ─────────────────────────────────────────────────────── */
 .qb2-page {
@@ -9390,6 +9411,13 @@ body.schedule-fullscreen-active .mobile-bottom-nav {
   flex-wrap: wrap;
 }
 
+/* Short/alt label for mobile (e.g. "Teachers" instead of "Manage Course
+   Teachers") — hidden by default, swapped in only under the mobile
+   breakpoint further below. */
+.btn-txt-short {
+  display: none;
+}
+
 /* Desktop gets extra presence: bigger icon/title, more breathing room */
 @media (min-width: 900px) {
   .content-page-hero,
@@ -9399,47 +9427,125 @@ body.schedule-fullscreen-active .mobile-bottom-nav {
   }
 }
 
-/* Mobile: shrink title/icon and stack the stat cluster below the
-   title/subtitle block (full width) instead of beside it. */
+/* Mobile: compact single-block hero. Icon+title stay on one row, subtitle
+   directly under, and the stat cluster / action buttons sit inline on the
+   right of the head row (wrapping only if they truly don't fit) instead of
+   being forced to a separate full-width centered row below — that's what
+   was causing the hero to balloon into 2 extra stacked lines on phones. */
 @media (max-width: 600px) {
   .content-page-hero,
   .hub-page-hero,
   .faculty-class-hero {
-    flex-direction: column;
-    align-items: stretch;
-    padding: 14px 4px 14px;
-    margin: 6px 0 20px;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    padding: 10px 2px 10px;
+    margin: 4px 0 14px;
+    gap: 8px;
+    row-gap: 4px;
+  }
+  .content-page-hero-main,
+  .hub-page-hero-main,
+  .faculty-class-hero-main {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+  .content-page-hero-head,
+  .hub-page-hero-head,
+  .faculty-class-hero-head {
+    gap: 8px;
+    margin-bottom: 2px;
   }
   .content-page-hero-icon,
   .hub-page-hero-icon,
   .faculty-class-hero-icon {
-    width: 20px;
-    height: 20px;
+    width: 18px;
+    height: 18px;
   }
   .content-page-hero-icon svg,
   .hub-page-hero-icon svg,
   .faculty-class-hero-icon svg {
-    width: 20px;
-    height: 20px;
+    width: 18px;
+    height: 18px;
   }
   .content-page-hero-title,
   .hub-page-hero-title,
   .faculty-class-hero-title {
-    font-size: 20px;
+    font-size: 17px;
+    line-height: 1.15;
   }
   .content-page-hero-subtitle,
   .hub-page-hero-subtitle,
   .faculty-class-hero-sub {
-    padding-left: 32px;
+    font-size: 11.5px;
+    padding-left: 26px;
+    margin-top: 2px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    line-clamp: 1;
+    -webkit-box-orient: vertical;
   }
   .content-page-hero-stats,
   .hub-page-hero-stats,
-  .faculty-class-hero-stats,
+  .faculty-class-hero-stats {
+    width: auto;
+    justify-content: center;
+    padding: 6px 2px;
+    flex-shrink: 0;
+  }
+  .content-page-hero-stat,
+  .hub-page-hero-stat,
+  .faculty-class-hero-stat {
+    padding: 0 10px;
+  }
+  .content-page-hero-stat-n,
+  .hub-page-hero-stat-n,
+  .faculty-class-hero-stat-n {
+    font-size: 15px;
+  }
+  .content-page-hero-stat-label,
+  .hub-page-hero-stat-label,
+  .faculty-class-hero-stat-label {
+    font-size: 9px;
+  }
   .content-page-hero-actions,
   .hub-page-hero-actions,
   .faculty-class-hero-actions {
-    width: 100%;
-    justify-content: center;
+    width: auto;
+    justify-content: flex-end;
+    flex-shrink: 0;
+    gap: 6px;
+  }
+  .content-page-hero-actions button,
+  .hub-page-hero-actions button,
+  .faculty-class-hero-actions button {
+    padding: 6px 8px !important;
+    font-size: 12px !important;
+    white-space: nowrap;
+  }
+  /* Hide button text labels on mobile, keep only the icon — icons already
+     carry enough meaning (Plus, Upload, Settings, etc.) and dropping the
+     label is what keeps the hero action row on one compact line instead of
+     forcing buttons to wrap or balloon the hero's height. */
+  .content-page-hero-actions .btn-txt,
+  .hub-page-hero-actions .btn-txt,
+  .faculty-class-hero-actions .btn-txt {
+    display: none;
+  }
+  /* Long/short label swap (e.g. "Manage Course Teachers" → "Teachers") for
+     buttons that still need a visible label on mobile but the full desktop
+     text is too wide. */
+  .content-page-hero-actions .btn-txt-long,
+  .hub-page-hero-actions .btn-txt-long,
+  .faculty-class-hero-actions .btn-txt-long {
+    display: none;
+  }
+  .content-page-hero-actions .btn-txt-short,
+  .hub-page-hero-actions .btn-txt-short,
+  .faculty-class-hero-actions .btn-txt-short {
+    display: inline;
   }
 }
 
@@ -9447,7 +9553,19 @@ body.schedule-fullscreen-active .mobile-bottom-nav {
   .content-page-hero-title,
   .hub-page-hero-title,
   .faculty-class-hero-title {
-    font-size: 18px;
+    font-size: 15.5px;
+  }
+  .content-page-hero-subtitle,
+  .hub-page-hero-subtitle,
+  .faculty-class-hero-sub {
+    font-size: 10.5px;
+    padding-left: 24px;
+  }
+  .content-page-hero-actions button,
+  .hub-page-hero-actions button,
+  .faculty-class-hero-actions button {
+    padding: 5px 8px !important;
+    font-size: 11px !important;
   }
 }
 

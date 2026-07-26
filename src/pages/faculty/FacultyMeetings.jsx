@@ -212,7 +212,7 @@ export default function FacultyMeetings() {
               className="btn btn-primary"
               style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 13, fontWeight: 700, padding: '9px 16px', borderRadius: 10 }}
             >
-              <Plus size={15} /> Add Meeting
+              <Plus size={15} /> <span className="btn-txt">Add Meeting</span>
             </button>
           </div>
         </div>

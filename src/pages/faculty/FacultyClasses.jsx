@@ -502,7 +502,7 @@ export default function FacultyClasses() {
                 fontWeight: 700, fontSize: 13, cursor: 'pointer',
               }}
             >
-              <Icons.Users size={15} /> All CR
+              <Icons.Users size={15} /> <span className="btn-txt">All CR</span>
             </button>
             <button
               className="accent-fill-glass"
@@ -515,7 +515,7 @@ export default function FacultyClasses() {
                 cursor: isVerified ? 'pointer' : 'not-allowed', opacity: isVerified ? 1 : 0.5,
               }}
             >
-              <Icons.Plus size={15} /> Add Class
+              <Icons.Plus size={15} /> <span className="btn-txt">Add Class</span>
             </button>
           </div>
         </div>

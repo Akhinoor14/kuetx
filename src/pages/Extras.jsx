@@ -1612,7 +1612,7 @@ export function Tuition() {
           <p className="content-page-hero-subtitle">Track sessions, income and travel costs</p>
         </div>
         <div className="content-page-hero-actions">
-          <button className="btn btn-primary" onClick={() => setAdding(v => !v)}><Plus size={13} /> Log Session</button>
+          <button className="btn btn-primary" onClick={() => setAdding(v => !v)}><Plus size={13} /> <span className="btn-txt">Log Session</span></button>
         </div>
       </div>
 

@@ -978,7 +978,7 @@ export default function Attendance() {
         </div>
         <div className="content-page-hero-actions">
           <button className="btn btn-ghost btn-sm" onClick={() => setHolidayOpen(true)} style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 11 }}>
-            <CalendarDays size={12} /> Holidays
+            <CalendarDays size={12} /> <span className="btn-txt">Holidays</span>
           </button>
         </div>
       </div>

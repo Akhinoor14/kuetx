@@ -47,7 +47,7 @@ export function Notes() {
           </div>
         </div>
         <div className="content-page-hero-actions">
-          <button className="btn btn-primary" onClick={() => { setAdding(true); setEditing(null); }}><Plus size={13} /> New Note</button>
+          <button className="btn btn-primary" onClick={() => { setAdding(true); setEditing(null); }}><Plus size={13} /> <span className="btn-txt">New Note</span></button>
         </div>
       </div>
 

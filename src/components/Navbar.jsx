@@ -341,6 +341,28 @@ export function Navbar({ onMenuClick }) {
         </button>
       </header>
 
+      {/* Mobile sub-navigation tab strip — lets mobile users swap between
+          sibling pages in the same nav group, since the desktop version
+          (centered pills inside the topbar) has no room on mobile. Own
+          sticky strip below the topbar, not merged into it. Renders only
+          when siblings.length > 1 for the current page. */}
+      {siblings && siblings.length > 1 && (
+        <div className="topbar-mobile-tabs md:hidden">
+          <div className="filter-tab-row topbar-tabs">
+            {siblings.map(item => (
+              <Link
+                key={item.id}
+                to={item.path}
+                className={`filter-tab ${location.pathname === item.path ? 'active' : ''}`}
+                style={{ textDecoration: 'none' }}
+              >
+                {item.shortLabel || item.label}
+              </Link>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* ── Slide-in Drawer ── */}
       {drawerOpen && (
         <div style={{ position: 'fixed', inset: 0, zIndex: 3600 }}>
