@@ -80,6 +80,7 @@ let _isSyncing      = false;
 
 const emit = (status, detail = {}) => {
   try {
+    console.log('[KUETx DIAG] emit(', status, ') from:', new Error().stack?.split('\n')[2]?.trim());
     window.dispatchEvent(new CustomEvent('kuetx:firebase-sync', {
       detail: { status, ...detail },
     }));

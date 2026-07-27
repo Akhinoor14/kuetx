@@ -58,8 +58,10 @@ export function subscribeGroupTermStartDate(groupId, callback) {
     return () => {};
   }
   return onSnapshot(configDoc(groupId), (snap) => {
+    console.log('[KUETx DIAG] termStartDate snapshot fired, t=', performance.now());
     callback(snap.exists() && isValidIsoDate(snap.data().termStartDate) ? snap.data().termStartDate : null);
-  }, () => {
+  }, (err) => {
+    console.log('[KUETx DIAG] termStartDate ERROR fired:', err?.code, 't=', performance.now());
     callback(null);
   });
 }

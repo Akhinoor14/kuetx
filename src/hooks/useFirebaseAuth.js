@@ -51,7 +51,10 @@ export default function useFirebaseAuth() {
 
         // Start real-time sync for this user
         await startFirebaseSync(firebaseUser.uid, {
-          onSyncStatus: (status) => setSyncStatus(status),
+          onSyncStatus: (status) => {
+            console.log('[KUETx DIAG] syncStatus ->', status, 'at t=', performance.now());
+            setSyncStatus(status);
+          },
         });
       } else {
         setAuthReady(true);
