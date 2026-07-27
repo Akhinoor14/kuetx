@@ -588,6 +588,7 @@ function ProviderDashboardRoute() {
 
 export default function App() {
   const authState = useFirebaseAuth();
+  console.log('[KUETx DIAG] App() rendering, authReady =', authState.authReady, 'isAnonymous =', authState.isAnonymous);
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [queue, setQueue] = useState([]);
   const [queueBuilt, setQueueBuilt] = useState(false);
@@ -686,11 +687,14 @@ export default function App() {
   // common case and closes the gap in the slow case.
   useEffect(() => {
     if (!authState.authReady || queueBuilt) return;
+    console.log('[KUETx DIAG] authReady=true, starting ensureDBReady()...');
     let cancelled = false;
     ensureDBReady().finally(() => {
       if (cancelled) return;
+      console.log('[KUETx DIAG] ensureDBReady() done, calling buildQueue()...');
       buildQueue(authState.isAnonymous).then((q) => {
         if (cancelled) return;
+        console.log('[KUETx DIAG] buildQueue() done, queue =', q);
         setQueue(q);
         setQueueBuilt(true);
       });

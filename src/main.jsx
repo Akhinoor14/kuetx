@@ -16,21 +16,18 @@ store.set('kuetxAppLoadCounter', window.__kuetxLoadCounter);
 
 // Initialize app after DB is ready
 async function initializeApp() {
+  console.log('[KUETx DIAG] initializeApp() start, t =', performance.now());
   try {
-    // Await DB initialization but don't block the UI for too long.
-    // If the user's IndexedDB is very large, waiting indefinitely causes a blank page.
-    // Race the DB init against a short timeout so the app renders quickly.
     const dbInit = ensureDBReady();
     const timeout = new Promise((resolve) => setTimeout(resolve, 2000));
     await Promise.race([dbInit, timeout]);
-    // Allow any later DB init errors to be logged without blocking render
+    console.log('[KUETx DIAG] pre-render race resolved (either DB ready or 2s timeout), t =', performance.now());
     dbInit.catch(err => console.error('[KUETx] ensureDBReady error:', err));
   } catch (err) {
     console.error('[KUETx] Initialization error:', err);
-    // Continue even if DB fails - app can still work with localStorage only
   }
 
-  // Now render the app with populated cache
+  console.log('[KUETx DIAG] about to call ReactDOM.render, t =', performance.now());
   ReactDOM.createRoot(document.getElementById('root')).render(
     <React.StrictMode>
       <ErrorBoundary>
@@ -38,6 +35,7 @@ async function initializeApp() {
       </ErrorBoundary>
     </React.StrictMode>,
   );
+  console.log('[KUETx DIAG] ReactDOM.render call returned (sync render done), t =', performance.now());
 
   // Pre-warm heavy selectors in idle time to keep page transitions instant
   const warmup = () => {
