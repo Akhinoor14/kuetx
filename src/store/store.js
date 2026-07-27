@@ -71,6 +71,23 @@ export const store = {
   set: (key, val) => {
     try {
       const cacheKey = PREFIX + key;
+      // BUGFIX (store-updated feedback loop): store.set() used to
+      // unconditionally dispatch 'kuetx:store-updated' even when `val`
+      // was deep-equal to what's already cached. Any effect that reads
+      // the store, derives a value, and writes it back on every render
+      // (e.g. alertUtils.getOrStampAlertFirstSeenAt via
+      // NotificationPanel) could therefore loop forever: write → event →
+      // re-render → recompute → "changed" → write again. A cheap
+      // JSON deep-equal short-circuit here breaks that class of loop at
+      // the source, for every caller, without each call site needing
+      // its own guard.
+      let prevSerialized;
+      try { prevSerialized = JSON.stringify(memoryCache.get(cacheKey)); } catch { prevSerialized = undefined; }
+      let nextSerialized;
+      try { nextSerialized = JSON.stringify(val); } catch { nextSerialized = undefined; }
+      if (prevSerialized !== undefined && nextSerialized !== undefined && prevSerialized === nextSerialized) {
+        return; // no-op write — value unchanged, don't re-dispatch
+      }
       memoryCache.set(cacheKey, val);
       try { localStorage.setItem(cacheKey, JSON.stringify(val)); } catch {}
       emitStoreUpdate(key);

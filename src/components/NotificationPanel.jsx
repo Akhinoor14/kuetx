@@ -142,7 +142,18 @@ export function NotificationPanel({ isOpen, onClose }) {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    const handle = () => setRefreshTick(t => t + 1);
+    // BUGFIX (self-triggering refresh loop): getOrStampAlertFirstSeenAt
+    // (called below) writes ALERT_FIRST_SEEN_KEY back to the store,
+    // which dispatches this very 'kuetx:store-updated' event. Without
+    // this guard, that write bumped refreshTick, which re-ran the
+    // useMemos and the stamping effect, which could write again —
+    // store.set()'s new no-op dedup (see store.js) already closes most
+    // of this, but skipping our own key here means this panel never
+    // even asks for a re-render over its own bookkeeping write.
+    const handle = (e) => {
+      if (e.detail?.key === alertApi.ALERT_FIRST_SEEN_KEY) return;
+      setRefreshTick(t => t + 1);
+    };
     window.addEventListener('kuetx:store-updated', handle);
     return () => window.removeEventListener('kuetx:store-updated', handle);
   }, []);
