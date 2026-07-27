@@ -152,23 +152,26 @@ export async function syncLocalDataOnAuth(user) {
     }
 
     if (isSafeToTrustLocalData(uid)) {
-      try {
-        await pushAllToFirestore(uid);
-      } catch (err) {
-        // BUGFIX (found on architecture review): pushAllToFirestore is a
-        // network call that can genuinely fail (offline, transient
-        // Firestore/permission error). This function used to let that
-        // exception propagate straight up to the caller — and since
-        // useFirebaseAuth.js's setAuthReady(true) only runs AFTER this
-        // whole function's await resolves, an uncaught failure here would
-        // leave the entire app stuck on its "Loading…" screen forever,
-        // for something as ordinary as a flaky connection during login.
-        // A failed push just means this session's local data doesn't
-        // reach Firestore yet — startFirebaseSync's own periodic pull/
-        // push-on-change layer, or simply using the app normally, will
-        // pick it up later. Not worth blocking the whole app over.
+      // PERF FIX: this used to be `await pushAllToFirestore(uid)` right
+      // here — meaning every single refresh for an ordinary returning,
+      // already-logged-in account sat on a real Firestore network write
+      // before setAuthReady(true) could ever fire in useFirebaseAuth.js,
+      // which in turn is what App.jsx's buildQueue()/Layout mount waits
+      // on. That's a full backend round-trip blocking first paint on
+      // EVERY refresh, not just cold/new-account logins — exactly the
+      // "backend loading before frontend shows" symptom.
+      //
+      // This push was already documented above as not worth blocking the
+      // app over (see the catch-and-warn comment this replaces) — the
+      // fix is to actually treat it that way: fire it and let it resolve
+      // in the background, don't await it here. startFirebaseSync's own
+      // periodic pull/push-on-change layer (started right after this
+      // function returns) still keeps data in sync either way; this is
+      // purely about not gating the FIRST paint on a network write whose
+      // own failure path already does nothing but log a warning.
+      pushAllToFirestore(uid).catch((err) => {
         console.warn('[KUETx] pushAllToFirestore failed for returning account:', err);
-      }
+      });
     }
   })();
 

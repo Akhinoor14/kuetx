@@ -1045,14 +1045,29 @@ export default function App() {
             onboarding, only turning into the real Dashboard once every
             mandatory step is actually done. */}
         {(!queueBuilt || current === 'role-select' || current === 'auth' || current === 'faculty-profile' || current === 'profile') ? (
-          <div style={{
-            position: 'fixed', inset: 0, display: 'flex', alignItems: 'center',
-            justifyContent: 'center', background: 'var(--bg)', zIndex: 1,
-          }}>
-            {!queueBuilt && (
-              <div style={{ color: 'var(--muted)', fontSize: 13 }}>Loading…</div>
-            )}
-          </div>
+          // Same visual shape as index.html's pre-React #app-shell-skeleton
+          // (sidebar + topbar bars, no text) — kept consistent so there's
+          // no visible "swap" between the pre-React skeleton and this one;
+          // it just looks like a single continuous app shell the whole
+          // time, right up until Layout's first real render replaces it.
+          // Text/spinner deliberately omitted for the same reason: a
+          // "Loading…" label here is the exact thing that made this feel
+          // like a stuck loading screen rather than an app that's already
+          // open.
+          !queueBuilt ? (
+            <div style={{ position: 'fixed', inset: 0, zIndex: 1, display: 'flex', background: 'var(--bg)' }}>
+              <div style={{ width: 192, flexShrink: 0, height: '100vh', background: 'var(--surface)', borderRight: '1px solid var(--border)' }} className="hidden md:block" />
+              <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column' }}>
+                <div style={{ height: 56, flexShrink: 0, background: 'var(--surface)', borderBottom: '1px solid var(--border)' }} />
+              </div>
+            </div>
+          ) : (
+            // role-select / auth / faculty-profile / profile: a genuine
+            // step the person needs to complete, not a loading wait — a
+            // blank shell with no content underneath is correct here,
+            // AuthModal/RoleSelectScreen/etc render their own UI on top.
+            <div style={{ position: 'fixed', inset: 0, zIndex: 1, background: 'var(--bg)' }} />
+          )
         ) : (
           <Layout authState={authState} onboardingActive={!!current} />
         )}

@@ -13,6 +13,7 @@ import { subscribeMyRole } from '../lib/groupSync';
 import { auth } from '../lib/firebase';
 import { NotificationPanel } from './NotificationPanel';
 import GuideModal from './GuideModal';
+import { preloadRoute, preloadSiblings } from '../routePreload';
 
 function getPageMeta(pathname) {
   for (const section of NAV) {
@@ -40,6 +41,51 @@ export function Navbar({ onMenuClick }) {
   const { themeId, setTheme } = useTheme();
   const location = useLocation();
   const { label, group, siblings } = getPageMeta(location.pathname);
+
+  // Warm the JS chunk for every sibling page (Attendance/Schedule/etc, or
+  // whichever group is active) the moment this bar renders for a page that
+  // has siblings — by the time the user actually taps a chip, its chunk is
+  // usually already cached, so <Suspense>'s "Loading…" fallback (the
+  // visible pause on first switch) rarely shows. Re-runs (cheaply — see
+  // routePreload.js's dedup) whenever the sibling group changes.
+  useEffect(() => {
+    preloadSiblings(siblings);
+  }, [siblings]);
+
+  // Mobile auto-hide topbar: only relevant when the sub-nav chip strip is
+  // also showing (siblings.length > 1) — that's the only mode where the
+  // topbar competes with the chip strip for vertical space, per the
+  // design ask: scroll down hides the topbar (chip strip pins to the very
+  // top), scroll up smoothly brings the topbar back with the chip strip
+  // sitting right below it again. Pages without a chip strip keep the
+  // topbar always visible, same as before.
+  const hasChipStrip = siblings && siblings.length > 1;
+  const [topbarHidden, setTopbarHidden] = useState(false);
+  const lastScrollYRef = useRef(0);
+  useEffect(() => {
+    if (!hasChipStrip) {
+      setTopbarHidden(false);
+      return;
+    }
+    lastScrollYRef.current = window.scrollY;
+    const HIDE_THRESHOLD = 8; // px of scroll movement before reacting, so tiny/jittery scrolls don't flicker the topbar
+    const REVEAL_NEAR_TOP = 56; // always show the topbar once back within one topbar-height of the very top
+    const onScroll = () => {
+      const y = window.scrollY;
+      const delta = y - lastScrollYRef.current;
+      if (y <= REVEAL_NEAR_TOP) {
+        setTopbarHidden(false);
+      } else if (delta > HIDE_THRESHOLD) {
+        setTopbarHidden(true);
+      } else if (delta < -HIDE_THRESHOLD) {
+        setTopbarHidden(false);
+      }
+      lastScrollYRef.current = y;
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, [hasChipStrip]);
+
   const [notificationOpen, setNotificationOpen] = useState(false);
   const [refreshTick, setRefreshTick] = useState(0);
   const [guideOpen, setGuideOpen] = useState(false);
@@ -196,16 +242,23 @@ export function Navbar({ onMenuClick }) {
 
   return (
     <>
-      <header className="topbar">
+      <header className={`topbar${hasChipStrip && topbarHidden ? ' topbar-hidden' : ''}`}>
         {/* Logo — mobile */}
         <Link to="/" className="topbar-logo" style={{ alignItems: 'center', textDecoration: 'none' }}>
           <Wordmark height={28} />
         </Link>
 
-        {/* Page title — mobile center */}
-        <div className="topbar-page-title">
-          {label !== 'KUETx' ? label : ''}
-        </div>
+        {/* Page title — mobile center. Hidden when the mobile sub-nav chip
+            strip below is showing (siblings.length > 1), since that strip
+            already highlights the active page — showing both would be a
+            redundant "current page name" in two places. Pages with no
+            siblings (chip strip absent) still need this as their only
+            mobile page indicator, so it stays for those. */}
+        {!(siblings && siblings.length > 1) && (
+          <div className="topbar-page-title">
+            {label !== 'KUETx' ? label : ''}
+          </div>
+        )}
 
         {/* Desktop: centered sibling pills (or page title if no siblings).
             Sidebar already shows which group/subgroup is active, so we
@@ -221,6 +274,8 @@ export function Navbar({ onMenuClick }) {
                     to={item.path}
                     className={`filter-tab ${location.pathname === item.path ? 'active' : ''}`}
                     style={{ textDecoration: 'none' }}
+                    onMouseEnter={() => preloadRoute(item.path)}
+                    onTouchStart={() => preloadRoute(item.path)}
                   >
                     {item.shortLabel || item.label}
                   </Link>
@@ -347,7 +402,7 @@ export function Navbar({ onMenuClick }) {
           sticky strip below the topbar, not merged into it. Renders only
           when siblings.length > 1 for the current page. */}
       {siblings && siblings.length > 1 && (
-        <div className="topbar-mobile-tabs md:hidden">
+        <div className={`topbar-mobile-tabs md:hidden${topbarHidden ? ' topbar-mobile-tabs-pinned' : ''}`}>
           <div className="filter-tab-row topbar-tabs">
             {siblings.map(item => (
               <Link
@@ -355,6 +410,7 @@ export function Navbar({ onMenuClick }) {
                 to={item.path}
                 className={`filter-tab ${location.pathname === item.path ? 'active' : ''}`}
                 style={{ textDecoration: 'none' }}
+                onTouchStart={() => preloadRoute(item.path)}
               >
                 {item.shortLabel || item.label}
               </Link>
