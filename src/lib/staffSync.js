@@ -306,6 +306,9 @@ export function subscribeCLStatus(groupId, callback) {
   if (!groupId) return () => {};
   return onSnapshot(doc(db, 'groups', groupId, 'meta', 'clStatus'), (snap) => {
     callback(snap.exists() ? snap.data() : null);
+  }, (err) => {
+    console.error('[staffSync] subscribeCLStatus error:', err);
+    callback(null);
   });
 }
 
@@ -334,6 +337,10 @@ export function subscribeCLApplications(dept, callback) {
   return onSnapshot(
     query(collection(db, 'clApplications'), where('dept', '==', dept), where('status', '==', 'pending')),
     (snap) => callback(snap.docs.map((d) => ({ id: d.id, ...d.data() }))),
+    (err) => {
+      console.error('[staffSync] subscribeCLApplications error:', err);
+      callback([]);
+    },
   );
 }
 
@@ -347,6 +354,10 @@ export function subscribeAllCLApplications(callback) {
   return onSnapshot(
     query(collection(db, 'clApplications'), where('status', '==', 'pending'), orderBy('appliedAt')),
     (snap) => callback(snap.docs.map((d) => ({ id: d.id, ...d.data() }))),
+    (err) => {
+      console.error('[staffSync] subscribeAllCLApplications error:', err);
+      callback([]);
+    },
   );
 }
 

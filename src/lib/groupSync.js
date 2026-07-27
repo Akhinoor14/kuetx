@@ -1019,7 +1019,10 @@ export function subscribeJoinRequests(groupId, callback) {
 export function subscribeOwnJoinRequestStatus(groupId, uid, callback) {
   if (!groupId || !uid) return () => {};
   const ref_ = doc(db, 'groups', groupId, 'joinRequests', uid);
-  return onSnapshot(ref_, (snap) => callback(snap.exists() ? snap.data() : null));
+  return onSnapshot(ref_, (snap) => callback(snap.exists() ? snap.data() : null), (err) => {
+    console.error('[groupSync] subscribeOwnJoinRequestStatus error:', err);
+    callback(null);
+  });
 }
 
 /**

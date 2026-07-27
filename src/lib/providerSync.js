@@ -77,6 +77,9 @@ export function subscribeProviderProfile(uid, callback) {
   if (!uid) return () => {};
   return onSnapshot(providerDocRef(uid), (snap) => {
     callback(snap.exists() ? { uid, ...snap.data() } : null);
+  }, (err) => {
+    console.error('[providerSync] subscribeProviderProfile error:', err);
+    callback(null);
   });
 }
 
@@ -136,6 +139,10 @@ export function subscribeProviderVerifyRequests(callback) {
   return onSnapshot(
     query(providerCollectionRef(), where('status', '==', 'pending')),
     (snap) => callback(snap.docs.map((d) => ({ uid: d.id, ...d.data() }))),
+    (err) => {
+      console.error('[providerSync] subscribeProviderVerifyRequests error:', err);
+      callback([]);
+    },
   );
 }
 

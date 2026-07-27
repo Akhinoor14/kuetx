@@ -27,7 +27,10 @@ export function useCanEditGroup(groupId) {
     });
     const unsubCR = subscribeCRStatus(groupId, (status) => setHasCR(!!status?.hasCR));
     const unsubCL = uid
-      ? onSnapshot(doc(db, 'staff', uid, 'roles', `campus_lead_${groupId}`), (snap) => setIsCL(snap.exists()))
+      ? onSnapshot(doc(db, 'staff', uid, 'roles', `campus_lead_${groupId}`), (snap) => setIsCL(snap.exists()), (err) => {
+          console.error('[useCanEditGroup] campus_lead role listener error:', err);
+          setIsCL(false);
+        })
       : () => {};
     if (uid) getDoc(doc(db, 'admins', uid)).then((snap) => setIsAdmin(snap.exists())).catch(() => {});
 

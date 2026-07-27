@@ -90,6 +90,9 @@ export async function getService(serviceId) {
 export function subscribeService(serviceId, callback) {
   return onSnapshot(serviceDocRef(serviceId), (snap) => {
     callback(snap.exists() ? { id: serviceId, ...snap.data() } : null);
+  }, (err) => {
+    console.error('[serviceSync] subscribeService error:', err);
+    callback(null);
   });
 }
 
@@ -104,6 +107,15 @@ export function subscribeService(serviceId, callback) {
 export function subscribeAllServices(callback) {
   return onSnapshot(servicesCollectionRef(), (snap) => {
     callback(snap.docs.map((d) => ({ id: d.id, ...d.data() })));
+  }, (err) => {
+    // permission-denied here is almost always a startup race (this
+    // listener attaching while auth is still anonymous/settling) rather
+    // than a real access problem, since firestore.rules already allows
+    // read to any isSignedIn() user. Log and fall back to an empty list
+    // instead of leaving this uncaught — the Services page's own
+    // loading state already handles an empty array gracefully.
+    console.error('[serviceSync] subscribeAllServices error:', err);
+    callback([]);
   });
 }
 
@@ -112,6 +124,10 @@ export function subscribeProviderServices(providerUid, callback) {
   return onSnapshot(
     query(servicesCollectionRef(), where('providerUid', '==', providerUid)),
     (snap) => callback(snap.docs.map((d) => ({ id: d.id, ...d.data() }))),
+    (err) => {
+      console.error('[serviceSync] subscribeProviderServices error:', err);
+      callback([]);
+    },
   );
 }
 
@@ -368,6 +384,10 @@ export function subscribePendingBookings(serviceId, callback) {
       orderBy('requestedAt', 'asc'),
     ),
     (snap) => callback(snap.docs.map((d) => ({ id: d.id, ...d.data() }))),
+    (err) => {
+      console.error('[serviceSync] subscribePendingBookings error:', err);
+      callback([]);
+    },
   );
 }
 
@@ -380,6 +400,10 @@ export function subscribeConfirmedBookings(serviceId, callback) {
       orderBy('requestedAt', 'asc'),
     ),
     (snap) => callback(snap.docs.map((d) => ({ id: d.id, ...d.data() }))),
+    (err) => {
+      console.error('[serviceSync] subscribeConfirmedBookings error:', err);
+      callback([]);
+    },
   );
 }
 
@@ -388,6 +412,10 @@ export function subscribeMyBookingsForService(serviceId, studentUid, callback) {
   return onSnapshot(
     query(bookingsCollectionRef(serviceId), where('studentUid', '==', studentUid)),
     (snap) => callback(snap.docs.map((d) => ({ id: d.id, ...d.data() }))),
+    (err) => {
+      console.error('[serviceSync] subscribeMyBookingsForService error:', err);
+      callback([]);
+    },
   );
 }
 

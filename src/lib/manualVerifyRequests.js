@@ -46,6 +46,10 @@ export function subscribeManualVerifyRequests(callback) {
   return onSnapshot(
     query(collection(db, COLLECTION), where('status', '==', 'pending'), orderBy('requestedAt')),
     (snap) => callback(snap.docs.map((d) => ({ id: d.id, ...d.data() }))),
+    (err) => {
+      console.error('[manualVerifyRequests] subscribeManualVerifyRequests error:', err);
+      callback([]);
+    },
   );
 }
 

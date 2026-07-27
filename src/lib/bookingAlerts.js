@@ -74,6 +74,16 @@ export function subscribeBookingAlerts(uid, callback) {
   return onSnapshot(
     query(itemsRef(uid), orderBy('createdAt', 'desc')),
     (snap) => callback(snap.docs.map((d) => ({ id: d.id, ...d.data() }))),
+    (err) => {
+      // This listener is mounted via NotificationPanel inside Navbar, so
+      // it's alive on essentially every page for every signed-in user.
+      // An uncaught permission-denied here (e.g. during the anonymous ->
+      // real-user auth transition on first load) was surfacing as a raw
+      // Firestore console error with no user-visible symptom otherwise —
+      // log it and fall back to an empty list instead of throwing.
+      console.error('[bookingAlerts] subscribeBookingAlerts error:', err);
+      callback([]);
+    },
   );
 }
 

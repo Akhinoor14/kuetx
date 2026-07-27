@@ -73,6 +73,9 @@ export function subscribeFacultyProfile(uid, callback) {
   if (!uid) return () => {};
   return onSnapshot(facultyDocRef(uid), (snap) => {
     callback(snap.exists() ? { uid, ...snap.data() } : null);
+  }, (err) => {
+    console.error('[facultySync] subscribeFacultyProfile error:', err);
+    callback(null);
   });
 }
 
