@@ -52,38 +52,18 @@ export function Navbar({ onMenuClick }) {
     preloadSiblings(siblings);
   }, [siblings]);
 
-  // Mobile auto-hide topbar: only relevant when the sub-nav chip strip is
-  // also showing (siblings.length > 1) — that's the only mode where the
-  // topbar competes with the chip strip for vertical space, per the
-  // design ask: scroll down hides the topbar (chip strip pins to the very
-  // top), scroll up smoothly brings the topbar back with the chip strip
-  // sitting right below it again. Pages without a chip strip keep the
-  // topbar always visible, same as before.
+  // Mobile chip-strip pages: the topbar scrolls away naturally with the
+  // page (position: static, see index.css's body.has-mobile-chip-strip
+  // rule) instead of staying pinned, and the chip strip below it
+  // (always position: sticky; top: 0) catches itself at the very top
+  // the moment the topbar has scrolled past. Scrolling back up reverses
+  // for free once the page nears its own top again. This is plain CSS
+  // sticky-positioning behavior — the only thing JS needs to do is flag
+  // which pages are in this mode, via a body class the CSS can key off.
   const hasChipStrip = siblings && siblings.length > 1;
-  const [topbarHidden, setTopbarHidden] = useState(false);
-  const lastScrollYRef = useRef(0);
   useEffect(() => {
-    if (!hasChipStrip) {
-      setTopbarHidden(false);
-      return;
-    }
-    lastScrollYRef.current = window.scrollY;
-    const HIDE_THRESHOLD = 8; // px of scroll movement before reacting, so tiny/jittery scrolls don't flicker the topbar
-    const REVEAL_NEAR_TOP = 56; // always show the topbar once back within one topbar-height of the very top
-    const onScroll = () => {
-      const y = window.scrollY;
-      const delta = y - lastScrollYRef.current;
-      if (y <= REVEAL_NEAR_TOP) {
-        setTopbarHidden(false);
-      } else if (delta > HIDE_THRESHOLD) {
-        setTopbarHidden(true);
-      } else if (delta < -HIDE_THRESHOLD) {
-        setTopbarHidden(false);
-      }
-      lastScrollYRef.current = y;
-    };
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
+    document.body.classList.toggle('has-mobile-chip-strip', !!hasChipStrip);
+    return () => document.body.classList.remove('has-mobile-chip-strip');
   }, [hasChipStrip]);
 
   const [notificationOpen, setNotificationOpen] = useState(false);
@@ -242,7 +222,7 @@ export function Navbar({ onMenuClick }) {
 
   return (
     <>
-      <header className={`topbar${hasChipStrip && topbarHidden ? ' topbar-hidden' : ''}`}>
+      <header className="topbar">
         {/* Logo — mobile */}
         <Link to="/" className="topbar-logo" style={{ alignItems: 'center', textDecoration: 'none' }}>
           <Wordmark height={28} />
@@ -402,7 +382,7 @@ export function Navbar({ onMenuClick }) {
           sticky strip below the topbar, not merged into it. Renders only
           when siblings.length > 1 for the current page. */}
       {siblings && siblings.length > 1 && (
-        <div className={`topbar-mobile-tabs md:hidden${topbarHidden ? ' topbar-mobile-tabs-pinned' : ''}`}>
+        <div className="topbar-mobile-tabs md:hidden">
           <div className="filter-tab-row topbar-tabs">
             {siblings.map(item => (
               <Link

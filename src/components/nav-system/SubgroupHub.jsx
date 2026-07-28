@@ -3,8 +3,22 @@ import { Circle } from 'lucide-react';
 import { ICONS } from '../../lib/iconRegistry';
 import { NAV } from '../../nav';
 
-// Single synchronized accent color for every hub — no per-group hues.
+// Single synchronized accent color for hub headers/hero icon — no per-group hues.
 const HUB_COLOR = 'var(--accent)';
+
+// Per-item accent hues (same sat/lightness range, so colorful but not harsh).
+// Falls back to HUB_COLOR if an item has no `accent` key.
+const ACCENT_COLORS = {
+  blue:   '#3b82f6',
+  green:  '#22c55e',
+  amber:  '#f59e0b',
+  red:    '#ef4444',
+  purple: '#a855f7',
+};
+
+function resolveAccent(key) {
+  return ACCENT_COLORS[key] || HUB_COLOR;
+}
 
 // Resolve one { title, items, icon } section (or array of sections, if the
 // group has multiple unnamed subgroups) from NAV.
@@ -55,25 +69,66 @@ function HubSection({ title, items, icon }) {
         </div>
       )}
 
-      <div className="hub-grid">
-        {items.map(item => {
-          const Icon = ICONS[item.icon] || Circle;
-          return (
-            <Link key={item.id} to={item.path} className="hub-grid-item">
+      {items.length > 0 && (() => {
+        const [first, ...rest] = items;
+        const firstAccent = resolveAccent(first.accent);
+        const FirstIcon = ICONS[first.icon] || Circle;
+        return (
+          <>
+            {/* Most-used item gets a full-width hero card — visual anchor,
+                same pattern the approved mockups use for Courses/Attendance. */}
+            <Link
+              key={first.id}
+              to={first.path}
+              className="hub-grid-item hub-grid-item-hero"
+              style={{
+                display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 12,
+                marginBottom: 10,
+              }}
+            >
               <div
                 className="hub-grid-item-icon"
                 style={{
-                  background: `color-mix(in srgb, ${HUB_COLOR} 15%, var(--surface))`,
+                  width: 40, height: 40, flexShrink: 0,
+                  background: `color-mix(in srgb, ${firstAccent} 15%, var(--surface))`,
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                 }}
               >
-                <Icon size={17} color={HUB_COLOR} />
+                <FirstIcon size={20} color={firstAccent} />
               </div>
-              <span className="hub-grid-item-label" style={{ fontWeight: 600, color: '#5c5a54' }}>{item.label}</span>
+              <div>
+                <div className="hub-grid-item-label" style={{ fontWeight: 600, color: '#5c5a54', fontSize: 14 }}>
+                  {first.label}
+                </div>
+                {first.subtitle && (
+                  <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 2 }}>{first.subtitle}</div>
+                )}
+              </div>
             </Link>
-          );
-        })}
-      </div>
+
+            <div className="hub-grid">
+              {rest.map(item => {
+                const accent = resolveAccent(item.accent);
+                const Icon = ICONS[item.icon] || Circle;
+                return (
+                  <Link key={item.id} to={item.path} className="hub-grid-item">
+                    <div
+                      className="hub-grid-item-icon"
+                      style={{
+                        background: `color-mix(in srgb, ${accent} 15%, var(--surface))`,
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      }}
+                    >
+                      <Icon size={17} color={accent} />
+                    </div>
+                    <span className="hub-grid-item-label" style={{ fontWeight: 600, color: '#5c5a54' }}>{item.label}</span>
+                  </Link>
+                );
+              })}
+            </div>
+          </>
+        );
+      })()}
     </div>
   );
 }

@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { ClipboardList, Target, BookOpen, Lightbulb } from 'lucide-react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { ClipboardList, Target, BookOpen, Lightbulb, ChevronRight, ChevronLeft } from 'lucide-react';
 import { store, getGradeFromPct, getAttendanceMarks, computeEffectiveAttendance, GRADE_SCALE, getProfile, getCurrentTermKey, getTermTimeline, recordAudit } from '../store/store';
 import { getAllCourses } from '../store/curriculumStore';
 import TeacherVerifiedCard from '../components/TeacherVerifiedCard';
@@ -20,6 +21,39 @@ const normalizeTeacherName = (value) => {
   if (!clean) return '';
   return /\bsir\.?$/i.test(clean) ? clean.replace(/\.$/, '') : `${clean} Sir`;
 };
+
+// ── Shared calc: quick summary for a course's current marks (used by list rows) ──
+function getCourseSummary(course, marks) {
+  const m = marks[course.id] || {};
+  const { pct: attPct } = computeEffectiveAttendance(course.id);
+  const clamp = (value, min, max) => Math.min(max, Math.max(min, Number.isFinite(+value) ? +value : 0));
+
+  const hallTotal = clamp(m.hall, 0, 210);
+  const ctTeacher1 = clamp(m.ctTeacher1, 0, 30);
+  const ctTeacher2 = clamp(m.ctTeacher2, 0, 30);
+  const useManual1 = !!m.useManualTeacher1;
+  const useManual2 = !!m.useManualTeacher2;
+  const manualMarks1 = clamp(m.manualTeacher1, 0, 45);
+  const manualMarks2 = clamp(m.manualTeacher2, 0, 45);
+
+  const attMode = m.attMode || 'auto';
+  const manualAttPct = m.attPctManual === undefined || m.attPctManual === null ? null : Number(m.attPctManual);
+  const attendanceSourcePct = attMode === 'auto' ? attPct : (attMode === 'manual_percent' ? manualAttPct : null);
+  const attendancePerTeacherFromPct = attendanceSourcePct !== null && attendanceSourcePct !== undefined ? (getAttendanceMarks(attendanceSourcePct) / 10) * 15 : 0;
+  const attendanceAuto = Math.min(attendancePerTeacherFromPct, 15);
+  const attTeacher1 = attMode === 'manual_marks' ? clamp(m.attTeacher1, 0, 15) : attendanceAuto;
+  const attTeacher2 = attMode === 'manual_marks' ? clamp(m.attTeacher2, 0, 15) : attendanceAuto;
+
+  const teacher1Continuous = useManual1 ? manualMarks1 : Math.min(45, ctTeacher1 + attTeacher1);
+  const teacher2Continuous = useManual2 ? manualMarks2 : Math.min(45, ctTeacher2 + attTeacher2);
+  const currentContinuous = Math.min(90, teacher1Continuous + teacher2Continuous);
+  const currentTotal = Math.min(300, hallTotal + currentContinuous);
+  const currentGrade = getGradeFromPct(currentTotal);
+  const hasAnyEntry = Object.keys(m).length > 0;
+  const targetGrade = m.targetGrade || null;
+
+  return { currentTotal, currentGrade, hasAnyEntry, targetGrade };
+}
 
 // ── Get teacher names from schedule ────────────────────────────────────────
 function getTeachersForCourse(courseId) {
@@ -291,8 +325,38 @@ function CourseCard({ course, marks, onChange, onClearCourse, onOpenMarkingHelp,
   );
 }
 
+// ── Course list row: compact tap target that opens the full planner ────────
+function CourseListRow({ course, marks, onOpen }) {
+  const { currentTotal, currentGrade, hasAnyEntry, targetGrade } = getCourseSummary(course, marks);
+  const pct = hasAnyEntry ? Math.round((currentTotal / 300) * 100) : null;
+
+  return (
+    <button type="button" className="planner-list-row" onClick={() => onOpen(course.id)}>
+      <div className="planner-list-row-main">
+        <div className="planner-list-row-code">{course.code}</div>
+        <div className="planner-list-row-name">{course.name}</div>
+      </div>
+      <div className="planner-list-row-meta">
+        {hasAnyEntry ? (
+          <>
+            <span className="planner-list-row-grade">{currentGrade || '—'}</span>
+            <span className="planner-list-row-pct">{pct}%</span>
+          </>
+        ) : targetGrade ? (
+          <span className="planner-list-row-target">Target {targetGrade}</span>
+        ) : (
+          <span className="planner-list-row-empty">Not started</span>
+        )}
+        <ChevronRight size={16} className="planner-list-row-chevron" />
+      </div>
+    </button>
+  );
+}
+
 // ── Main Marks Page ───────────────────────────────────────────────────────
 export default function Marks() {
+  const navigate = useNavigate();
+  const { courseId } = useParams();
   const profile = getProfile();
   const allCourses = getAllCourses(profile);
   const currentTermKey = getCurrentTermKey(profile);
@@ -356,6 +420,47 @@ export default function Marks() {
     );
   }
 
+  const selectedCourse = courseId ? theory.find(c => c.id === courseId) : null;
+
+  // ── Detail view: single course's full planner ──────────────────────────
+  if (courseId) {
+    if (!selectedCourse) {
+      return (
+        <div className="page-enter page-container marks-page content-page-bg">
+          <button type="button" className="planner-back-link" onClick={() => navigate('/marks')}>
+            <ChevronLeft size={16} /> Back to Term Planner
+          </button>
+          <div className="empty-state">
+            <div className="icon"><BookOpen size={28} color="var(--muted)" /></div>
+            <p>This course isn't in your active list anymore.</p>
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <div className="page-enter page-container marks-page content-page-bg">
+        <button type="button" className="planner-back-link" onClick={() => navigate('/marks')}>
+          <ChevronLeft size={16} /> Back to Term Planner
+        </button>
+
+        <CourseCard
+          course={selectedCourse}
+          marks={marks}
+          onChange={onChange}
+          onClearCourse={onClearCourse}
+          onOpenMarkingHelp={() => setMarkingHelpOpen(true)}
+          isCurrentOngoingTerm={currentTermIsOngoing && currentTermKey === `Y${selectedCourse.year}T${selectedCourse.term}`}
+        />
+
+        {markingHelpOpen && (
+          <MarkingHelpModal onClose={() => setMarkingHelpOpen(false)} />
+        )}
+      </div>
+    );
+  }
+
+  // ── List view: pick a course ────────────────────────────────────────────
   return (
     <div className="page-enter page-container marks-page content-page-bg">
       {/* Header Section */}
@@ -370,7 +475,7 @@ export default function Marks() {
                 </div>
                 <h1 className="content-page-hero-title">Term Planner</h1>
               </div>
-              <p className="content-page-hero-subtitle">Track hall-needed targets in a compact, local-only workspace.</p>
+              <p className="content-page-hero-subtitle">Pick a course to enter marks and plan your target grade.</p>
             </div>
           </div>
           <button type="button" className="planner-hero-link" onClick={() => setMarkingHelpOpen(true)}>
@@ -398,17 +503,14 @@ export default function Marks() {
         </div>
       ) : (
         <>
-          {/* Courses Grid */}
-          <div className="planner-courses-grid">
+          {/* Course List */}
+          <div className="planner-course-list">
             {theory.map(c => (
-              <CourseCard
+              <CourseListRow
                 key={c.id}
                 course={c}
                 marks={marks}
-                onChange={onChange}
-                onClearCourse={onClearCourse}
-                onOpenMarkingHelp={() => setMarkingHelpOpen(true)}
-                isCurrentOngoingTerm={currentTermIsOngoing && currentTermKey === `Y${c.year}T${c.term}`}
+                onOpen={(id) => navigate(`/marks/${id}`)}
               />
             ))}
           </div>
@@ -417,7 +519,7 @@ export default function Marks() {
           <div className="planner-tips">
             <h3 style={{ display: "flex", alignItems: "center", gap: 6 }}><Lightbulb size={16} color="var(--accent)" /> How It Works</h3>
             <ul>
-              <li>Enter hall marks (0–210) and your continuous assessment marks per teacher (CT + Attendance).</li>
+              <li>Tap a course to enter hall marks and continuous assessment marks per teacher (CT + Attendance).</li>
               <li>Pick a target grade to instantly see how much hall you need to achieve it.</li>
               <li>Attendance syncs from the Attendance page, or enter it manually as % or marks.</li>
             </ul>
@@ -426,65 +528,72 @@ export default function Marks() {
       )}
 
       {markingHelpOpen && (
-        <div className="planner-help-backdrop" onClick={() => setMarkingHelpOpen(false)}>
-          <div className="planner-help-modal" onClick={(e) => e.stopPropagation()}>
-            <div className="planner-help-header">
-              <div>
-                <div className="planner-help-kicker">Marking system</div>
-                <h3>How this calculator works</h3>
-              </div>
-              <button type="button" className="planner-help-close" onClick={() => setMarkingHelpOpen(false)}>×</button>
-            </div>
+        <MarkingHelpModal onClose={() => setMarkingHelpOpen(false)} />
+      )}
+    </div>
+  );
+}
 
-            <div className="planner-help-layout" style={{ gridTemplateColumns: '1fr', gap: 14 }}>
-              {/* Top Row: 3-column cards */}
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10 }}>
-                <div className="planner-help-card">
-                  <strong>Each teacher</strong>
-                  <div className="planner-help-mini-list">
-                    <div>CT: 0-30</div>
-                    <div>Attendance: 0-15</div>
-                    <div>Total per teacher: 45</div>
-                  </div>
-                </div>
+// ── Marking system help modal (shared by list and detail views) ────────────
+function MarkingHelpModal({ onClose }) {
+  return (
+    <div className="planner-help-backdrop" onClick={onClose}>
+      <div className="planner-help-modal" onClick={(e) => e.stopPropagation()}>
+        <div className="planner-help-header">
+          <div>
+            <div className="planner-help-kicker">Marking system</div>
+            <h3>How this calculator works</h3>
+          </div>
+          <button type="button" className="planner-help-close" onClick={onClose}>×</button>
+        </div>
 
-                <div className="planner-help-card">
-                  <strong>Custom marks</strong>
-                  <p>If needed, check 'Custom 0-45 marks' and enter the full marks directly.</p>
-                </div>
-
-                <div className="planner-help-card">
-                  <strong>Hall exam (0-210)</strong>
-                  <p>Use the target grade buttons to see how much hall you need. Total = Hall (0-210) + Continuous (0-90).</p>
-                </div>
-              </div>
-
-              {/* Bottom: Full-width attendance table */}
-              <div className="planner-help-card planner-help-card-auto">
-                <strong>Auto attendance</strong>
-                <div className="planner-help-scale" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 6, fontSize: 12, marginTop: 10 }}>
-                  <div style={{ textAlign: 'center', fontWeight: 600, borderBottom: '1px solid rgba(var(--accentRGB), 0.2)', paddingBottom: 6 }}>Attendance %</div>
-                  <div style={{ textAlign: 'center', fontWeight: 600, borderBottom: '1px solid rgba(var(--accentRGB), 0.2)', paddingBottom: 6 }}>Per Teacher (0-15)</div>
-                  <div style={{ textAlign: 'center', fontWeight: 600, borderBottom: '1px solid rgba(var(--accentRGB), 0.2)', paddingBottom: 6 }}>Full Course (0-30)</div>
-                  
-                  <div style={{ textAlign: 'center' }}>90%+</div><div style={{ textAlign: 'center' }}>15</div><div style={{ textAlign: 'center' }}>30</div>
-                  <div style={{ textAlign: 'center' }}>85-89</div><div style={{ textAlign: 'center' }}>13.5</div><div style={{ textAlign: 'center' }}>27</div>
-                  <div style={{ textAlign: 'center' }}>80-84</div><div style={{ textAlign: 'center' }}>12</div><div style={{ textAlign: 'center' }}>24</div>
-                  <div style={{ textAlign: 'center' }}>75-79</div><div style={{ textAlign: 'center' }}>10.5</div><div style={{ textAlign: 'center' }}>21</div>
-                  <div style={{ textAlign: 'center' }}>70-74</div><div style={{ textAlign: 'center' }}>9</div><div style={{ textAlign: 'center' }}>18</div>
-                  <div style={{ textAlign: 'center' }}>65-69</div><div style={{ textAlign: 'center' }}>7.5</div><div style={{ textAlign: 'center' }}>15</div>
-                  <div style={{ textAlign: 'center' }}>60-64</div><div style={{ textAlign: 'center' }}>6</div><div style={{ textAlign: 'center' }}>12</div>
-                  <div style={{ textAlign: 'center' }}>Below 60</div><div style={{ textAlign: 'center' }}>0</div><div style={{ textAlign: 'center' }}>0</div>
-                </div>
+        <div className="planner-help-layout" style={{ gridTemplateColumns: '1fr', gap: 14 }}>
+          {/* Top Row: 3-column cards */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10 }}>
+            <div className="planner-help-card">
+              <strong>Each teacher</strong>
+              <div className="planner-help-mini-list">
+                <div>CT: 0-30</div>
+                <div>Attendance: 0-15</div>
+                <div>Total per teacher: 45</div>
               </div>
             </div>
 
-            <div className="planner-help-footer">
-              <button type="button" className="btn btn-primary" onClick={() => setMarkingHelpOpen(false)}>Got it</button>
+            <div className="planner-help-card">
+              <strong>Custom marks</strong>
+              <p>If needed, check 'Custom 0-45 marks' and enter the full marks directly.</p>
+            </div>
+
+            <div className="planner-help-card">
+              <strong>Hall exam (0-210)</strong>
+              <p>Use the target grade buttons to see how much hall you need. Total = Hall (0-210) + Continuous (0-90).</p>
+            </div>
+          </div>
+
+          {/* Bottom: Full-width attendance table */}
+          <div className="planner-help-card planner-help-card-auto">
+            <strong>Auto attendance</strong>
+            <div className="planner-help-scale" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 6, fontSize: 12, marginTop: 10 }}>
+              <div style={{ textAlign: 'center', fontWeight: 600, borderBottom: '1px solid rgba(var(--accentRGB), 0.2)', paddingBottom: 6 }}>Attendance %</div>
+              <div style={{ textAlign: 'center', fontWeight: 600, borderBottom: '1px solid rgba(var(--accentRGB), 0.2)', paddingBottom: 6 }}>Per Teacher (0-15)</div>
+              <div style={{ textAlign: 'center', fontWeight: 600, borderBottom: '1px solid rgba(var(--accentRGB), 0.2)', paddingBottom: 6 }}>Full Course (0-30)</div>
+
+              <div style={{ textAlign: 'center' }}>90%+</div><div style={{ textAlign: 'center' }}>15</div><div style={{ textAlign: 'center' }}>30</div>
+              <div style={{ textAlign: 'center' }}>85-89</div><div style={{ textAlign: 'center' }}>13.5</div><div style={{ textAlign: 'center' }}>27</div>
+              <div style={{ textAlign: 'center' }}>80-84</div><div style={{ textAlign: 'center' }}>12</div><div style={{ textAlign: 'center' }}>24</div>
+              <div style={{ textAlign: 'center' }}>75-79</div><div style={{ textAlign: 'center' }}>10.5</div><div style={{ textAlign: 'center' }}>21</div>
+              <div style={{ textAlign: 'center' }}>70-74</div><div style={{ textAlign: 'center' }}>9</div><div style={{ textAlign: 'center' }}>18</div>
+              <div style={{ textAlign: 'center' }}>65-69</div><div style={{ textAlign: 'center' }}>7.5</div><div style={{ textAlign: 'center' }}>15</div>
+              <div style={{ textAlign: 'center' }}>60-64</div><div style={{ textAlign: 'center' }}>6</div><div style={{ textAlign: 'center' }}>12</div>
+              <div style={{ textAlign: 'center' }}>Below 60</div><div style={{ textAlign: 'center' }}>0</div><div style={{ textAlign: 'center' }}>0</div>
             </div>
           </div>
         </div>
-      )}
+
+        <div className="planner-help-footer">
+          <button type="button" className="btn btn-primary" onClick={onClose}>Got it</button>
+        </div>
+      </div>
     </div>
   );
 }

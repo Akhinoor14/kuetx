@@ -48,9 +48,9 @@ export const NAV = [
     items: [
       { id: 'class-routine',     label: 'Routine',           shortLabel: 'Routine',      icon: 'CalendarDays',  path: '/class-routine',    requiresCR: true },
       { id: 'class-planner',     label: 'Class Planner',     shortLabel: 'Planner',      icon: 'CalendarCheck', path: '/class-planner',    requiresCR: true },
-      { id: 'ct-quiz-planning',  label: 'CT & Quiz Planner', shortLabel: 'CT & Quiz',    icon: 'CalendarCheck', path: '/ct-quiz-planning', requiresCR: true },
+      { id: 'ct-quiz-planning',  label: 'CT & Quiz Planner', shortLabel: 'CT & Quiz',    icon: 'CalendarClock', path: '/ct-quiz-planning', requiresCR: true },
       { id: 'class-roster',      label: 'Roster',            shortLabel: 'Roster',       icon: 'Users',         path: '/class-roster',     requiresCR: true },
-      { id: 'class-notices',     label: 'Class Announcements', shortLabel: 'Announcements', icon: 'Bell',      path: '/class-notices',    requiresCR: true },
+      { id: 'class-notices',     label: 'Class Announcements', shortLabel: 'Announcements', icon: 'Megaphone', path: '/class-notices',    requiresCR: true },
       { id: 'class-my-role',     label: 'My Role',           shortLabel: 'My Role',      icon: 'Shield',        path: '/class-my-role',    requiresCR: true },
     ]
   },
@@ -77,12 +77,12 @@ export const NAV = [
         hubPath: '/daily-academics',
         hubIcon: 'CalendarCheck',
         items: [
-          { id: 'attendance',  label: 'Attendance',     shortLabel: 'Attendance', icon: 'CalendarCheck', path: '/attendance' },
-          { id: 'schedule',    label: 'Class Schedule', shortLabel: 'Schedule',   icon: 'Clock',         path: '/schedule' },
-          { id: 'assignments', label: 'Assignments',    shortLabel: 'Assignments',icon: 'FileText',      path: '/assignments' },
-          { id: 'teachers',    label: 'Teachers',       shortLabel: 'Teachers',   icon: 'Users',         path: '/teachers' },
-          { id: 'classmates',  label: 'Classmates',     shortLabel: 'Classmates', icon: 'Users2',        path: '/classmates' },
-          { id: 'diary',       label: 'Class Diary',    shortLabel: 'Diary',      icon: 'BookOpen',      path: '/diary' },
+          { id: 'attendance',  label: 'Attendance',     shortLabel: 'Attendance', icon: 'CheckSquare',   accent: 'blue',   path: '/attendance' },
+          { id: 'schedule',    label: 'Class Schedule', shortLabel: 'Schedule',   icon: 'Clock',         accent: 'amber',  path: '/schedule' },
+          { id: 'assignments', label: 'Assignments',    shortLabel: 'Assignments',icon: 'FileText',      accent: 'red',    path: '/assignments' },
+          { id: 'teachers',    label: 'Teachers',       shortLabel: 'Teachers',   icon: 'GraduationCap', accent: 'purple', path: '/teachers' },
+          { id: 'classmates',  label: 'Classmates',     shortLabel: 'Classmates', icon: 'Users2',        accent: 'green',  path: '/classmates' },
+          { id: 'diary',       label: 'Class Diary',    shortLabel: 'Diary',      icon: 'BookOpenCheck', accent: 'blue',   path: '/diary' },
         ]
       },
       {
@@ -90,13 +90,13 @@ export const NAV = [
         hubPath: '/academic-core',
         hubIcon: 'BookOpen',
         items: [
-          { id: 'courses',   label: 'Courses',       shortLabel: 'Courses',   icon: 'BookOpen',      path: '/courses' },
-          { id: 'syllabus',  label: 'Syllabus',      shortLabel: 'Syllabus',  icon: 'List',          path: '/syllabus' },
-          { id: 'qbank',     label: 'Question Bank', shortLabel: 'Questions', icon: 'BookMarked',    path: '/question-bank' },
-          { id: 'solutions', label: 'Solution Bank', shortLabel: 'Solutions', icon: 'BookOpen',      path: '/solutions' },
-          { id: 'marks',     label: 'Term Planner',  shortLabel: 'Planner',   icon: 'ClipboardList', path: '/marks' },
-          { id: 'results',   label: 'Results & GPA', shortLabel: 'Results',   icon: 'TrendingUp',    path: '/results' },
-          { id: 'warnings',  label: 'Alerts',        shortLabel: 'Alerts',    icon: 'Bell',          path: '/alerts' },
+          { id: 'courses',   label: 'Courses',       shortLabel: 'Courses',   icon: 'BookOpen',      accent: 'blue',   path: '/courses' },
+          { id: 'syllabus',  label: 'Syllabus',      shortLabel: 'Syllabus',  icon: 'List',          accent: 'green',  path: '/syllabus' },
+          { id: 'qbank',     label: 'Question Bank', shortLabel: 'Questions', icon: 'BookMarked',    accent: 'amber',  path: '/question-bank' },
+          { id: 'solutions', label: 'Solution Bank', shortLabel: 'Solutions', icon: 'Lightbulb',     accent: 'purple', path: '/solutions' },
+          { id: 'marks',     label: 'Term Planner',  shortLabel: 'Planner',   icon: 'ClipboardList', accent: 'red',    path: '/marks' },
+          { id: 'results',   label: 'Results & GPA', shortLabel: 'Results',   icon: 'TrendingUp',    accent: 'blue',   path: '/results' },
+          { id: 'warnings',  label: 'Alerts',        shortLabel: 'Alerts',    icon: 'BellRing',      accent: 'amber',  path: '/alerts' },
         ]
       },
     ]
@@ -109,18 +109,18 @@ export const NAV = [
         hubPath: '/campus-life',
         hubIcon: 'Layers',
         items: [
-          { id: 'clubs',    label: 'Clubs',   shortLabel: 'Clubs',   icon: 'Layers', path: '/clubs' },
-          { id: 'projects', label: 'Projects',shortLabel: 'Projects',icon: 'Cpu',    path: '/projects' },
-          { id: 'tours',    label: 'Tours',   shortLabel: 'Tours',   icon: 'MapPin', path: '/tours' },
-          { id: 'money',    label: 'Money',   shortLabel: 'Money',   icon: 'Wallet', path: '/money' },
-          { id: 'tuition',  label: 'Tuition', shortLabel: 'Tuition', icon: 'Users',  path: '/tuition' },
+          { id: 'clubs',    label: 'Clubs',   shortLabel: 'Clubs',   icon: 'Star',     accent: 'blue',   path: '/clubs' },
+          { id: 'projects', label: 'Projects',shortLabel: 'Projects',icon: 'Cpu',      accent: 'purple', path: '/projects' },
+          { id: 'tours',    label: 'Tours',   shortLabel: 'Tours',   icon: 'MapPin',   accent: 'green',  path: '/tours' },
+          { id: 'money',    label: 'Money',   shortLabel: 'Money',   icon: 'Wallet',   accent: 'amber',  path: '/money' },
+          { id: 'tuition',  label: 'Tuition', shortLabel: 'Tuition', icon: 'UserCog',  accent: 'red',    path: '/tuition' },
           // Services/Provider marketplace — SERVICES_PROVIDER_PLAN.md §1.
           // Phase 1: routes to a placeholder empty-state page (Services.jsx).
           // Phase 2 fills in the real service list.
-          { id: 'services', label: 'Services', shortLabel: 'Services', icon: 'Store', path: '/services' },
-          { id: 'notes',    label: 'Notes',         shortLabel: 'Notes',  icon: 'FileText', path: '/notes' },
-          { id: 'time',     label: 'Time Tracker',  shortLabel: 'Timer',  icon: 'Timer',    path: '/time' },
-          { id: 'namaz',    label: 'Namaz Tracker', shortLabel: 'Namaz',  icon: 'Moon',     path: '/namaz' },
+          { id: 'services', label: 'Services', shortLabel: 'Services', icon: 'Store',    accent: 'blue',   path: '/services' },
+          { id: 'notes',    label: 'Notes',         shortLabel: 'Notes',  icon: 'StickyNote', accent: 'green',  path: '/notes' },
+          { id: 'time',     label: 'Time Tracker',  shortLabel: 'Timer',  icon: 'Timer',    accent: 'amber',  path: '/time' },
+          { id: 'namaz',    label: 'Namaz Tracker', shortLabel: 'Namaz',  icon: 'Moon',     accent: 'purple', path: '/namaz' },
         ]
       },
       {
@@ -128,7 +128,7 @@ export const NAV = [
         hubPath: '/self-study',
         hubIcon: 'Activity',
         items: [
-          { id: 'self-study-academic',   label: 'Academic',    shortLabel: 'Academic',  icon: 'BookOpen', path: '/self-study/academic' },
+          { id: 'self-study-academic',   label: 'Academic',    shortLabel: 'Academic',  icon: 'NotebookText', path: '/self-study/academic' },
           { id: 'self-study-deep-focus', label: 'Deep Focus',  shortLabel: 'Focus',     icon: 'Zap',      path: '/self-study/deep-focus' },
         ]
       },

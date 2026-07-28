@@ -660,10 +660,34 @@ service cloud.firestore {
     // closes that: the booking create rule now re-derives the same
     // check the client already does, so a forged client can no longer
     // bypass it.
+    // Firestore Rules language has no arrow-function lambdas (this is
+    // NOT plain JS) — there is no `.filter(o => ...)`. The idiomatic way
+    // to ask "does any element of this small list match a condition" is
+    // a bounded recursive helper. `offerings` is a short, admin-curated
+    // list (a handful of entries per service), so a fixed small bound is
+    // safe and avoids Firestore Rules' lack of general loops/recursion
+    // limits from becoming a real constraint here.
+    function _offeringMatches(offerings, idx, offeringId) {
+      return idx < offerings.size()
+        && offerings[idx].id == offeringId
+        && offerings[idx].isAvailable == true;
+    }
+    function _anyOfferingBookable(offerings, offeringId) {
+      return (offerings.size() > 0 && _offeringMatches(offerings, 0, offeringId))
+        || (offerings.size() > 1 && _offeringMatches(offerings, 1, offeringId))
+        || (offerings.size() > 2 && _offeringMatches(offerings, 2, offeringId))
+        || (offerings.size() > 3 && _offeringMatches(offerings, 3, offeringId))
+        || (offerings.size() > 4 && _offeringMatches(offerings, 4, offeringId))
+        || (offerings.size() > 5 && _offeringMatches(offerings, 5, offeringId))
+        || (offerings.size() > 6 && _offeringMatches(offerings, 6, offeringId))
+        || (offerings.size() > 7 && _offeringMatches(offerings, 7, offeringId))
+        || (offerings.size() > 8 && _offeringMatches(offerings, 8, offeringId))
+        || (offerings.size() > 9 && _offeringMatches(offerings, 9, offeringId));
+    }
     function offeringIsBookable(serviceId, offeringId) {
       let svc = get(/databases/$(database)/documents/services/$(serviceId)).data;
       return svc.isOpen == true
-        && svc.offerings.filter(o => o.id == offeringId && o.isAvailable == true).size() > 0;
+        && _anyOfferingBookable(svc.offerings, offeringId);
     }
 
     // Gap 7 (server-side): true if the student has NO existing

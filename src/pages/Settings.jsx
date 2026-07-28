@@ -2,25 +2,12 @@ import { useState, useEffect } from 'react';
 import { useTheme, THEMES } from '../hooks/useTheme';
 import { store } from '../store/store';
 import {
-  Download, Upload, Trash2, Shield,
+  Trash2,
   LogOut, User, ExternalLink, Lock, Settings as SettingsIcon, Sun, Droplets, Moon,
 } from 'lucide-react';
 import { onAuthChange, logout, loginWithGoogle, resetPassword, getAuthErrorMessage } from '../lib/firebaseAuth';
 import { clearLocalDataOnLogout } from '../lib/accountLifecycle';
 import { APP_VERSION } from '../version';
-
-// ── Auto-backup to localStorage snapshot ─────────────────────────────────────
-function downloadJSON(data, filename) {
-  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
-}
 
 const THEME_ICON = { light: Sun, milky: Droplets, dark: Moon };
 
@@ -44,13 +31,7 @@ export default function Settings() {
   const [confirmText, setConfirmText] = useState('');
   const CONFIRM_PHRASE = 'delete all my data';
   const [isOnline, setIsOnline] = useState(navigator.onLine);
-  const [autoBackup, setAutoBackupState] = useState(() => store.get('autoBackup') ?? true);
-  const [lastBackup, setLastBackup] = useState(() => store.get('lastBackupTime') || null);
   const [storageInfo, setStorageInfo] = useState(null);
-  const [previewOpen, setPreviewOpen] = useState(false);
-  const [previewInfo, setPreviewInfo] = useState(null);
-  const [importReport, setImportReport] = useState(null);
-  const [selectedKeys, setSelectedKeys] = useState(null);
   const [firebaseUser, setFbUser] = useState(null);
   const [fbSyncStatus, setFbSyncStatus] = useState('idle');
   const [fbLastSynced, setFbLastSynced] = useState(null);
@@ -121,98 +102,6 @@ export default function Settings() {
 
   const flash = (m, type = 'success') => { setMsg(m); setMsgType(type); setTimeout(() => setMsg(''), 3000); };
 
-  async function sha256Hex(str) {
-    const buf = new TextEncoder().encode(str);
-    const hash = await crypto.subtle.digest('SHA-256', buf);
-    return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2, '0')).join('');
-  }
-
-  const exportData = async () => {
-    const data = store.exportAll();
-    const payload = { ...data, _exportedAt: new Date().toISOString(), _version: '1.0' };
-    try {
-      const json = JSON.stringify(payload);
-      const checksum = await sha256Hex(json);
-      payload._checksum = checksum;
-    } catch (err) {
-      console.warn('Could not compute checksum', err);
-    }
-    const _td = new Date();
-    const ts = `${_td.getFullYear()}-${String(_td.getMonth() + 1).padStart(2, '0')}-${String(_td.getDate()).padStart(2, '0')}`;
-    downloadJSON(payload, `kuetx-backup-${ts}.json`);
-    store.set('lastBackupTime', new Date().toISOString());
-    setLastBackup(new Date().toISOString());
-    flash('✓ Backup downloaded! Keep it safe.');
-  };
-
-  const importData = (e) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    if (!file.name.endsWith('.json')) { flash('✗ Please select a .json backup file', 'error'); return; }
-    const reader = new FileReader();
-    reader.onload = (ev) => {
-      try {
-        const data = JSON.parse(ev.target.result);
-        const keys = Object.keys(data || {});
-        const kuetxKeys = keys.filter(k => k.startsWith('kuetx_'));
-        if (kuetxKeys.length === 0) { flash('✗ This doesn\'t look like a KUETx backup file', 'error'); return; }
-
-        const items = kuetxKeys.map(k => {
-          const raw = JSON.stringify(data[k]);
-          return { key: k, sizeKB: (new Blob([raw]).size / 1024).toFixed(2) };
-        }).sort((a, b) => b.sizeKB - a.sizeKB);
-        const totalKB = items.reduce((s, it) => s + parseFloat(it.sizeKB), 0).toFixed(2);
-
-        setPreviewInfo({ fileName: file.name, ts: data._exportedAt || null, version: data._version || null, items, totalKB, rawData: data });
-        setSelectedKeys(items.map(i => i.key));
-        setPreviewOpen(true);
-      } catch (err) { console.error(err); flash('✗ Could not read backup file', 'error'); }
-    };
-    reader.readAsText(file);
-    e.target.value = '';
-  };
-
-  const confirmImport = async () => {
-    if (!previewInfo) return;
-    setPreviewOpen(false);
-    const data = previewInfo.rawData;
-    if (data._version && data._version !== '1.0') {
-      flash('⚠️ Backup version mismatch — proceeding may cause issues', 'error');
-    }
-    const keysToImport = Array.isArray(selectedKeys) && selectedKeys.length > 0 ? selectedKeys : Object.keys(data).filter(k => k.startsWith('kuetx_'));
-    const payload = {};
-    for (const k of keysToImport) payload[k] = data[k];
-
-    if (data._checksum && keysToImport.length === Object.keys(data).filter(k => k.startsWith('kuetx_')).length) {
-      try {
-        const copy = { ...data };
-        delete copy._checksum;
-        const json = JSON.stringify(copy);
-        const c = await sha256Hex(json);
-        if (c !== data._checksum) {
-          flash('✗ Backup integrity check failed (checksum mismatch)', 'error');
-          return;
-        }
-      } catch (err) {
-        console.warn('Checksum verify failed', err);
-      }
-    }
-
-    try {
-      const report = await store.importAllReport(payload);
-      setImportReport(report);
-      if (report.failed.length === 0) {
-        flash('✓ Data restored! Reloading...');
-        setTimeout(() => window.location.reload(), 1200);
-      } else {
-        flash(`⚠️ Some keys failed to restore (${report.failed.length})`, 'error');
-      }
-    } catch (err) {
-      console.error(err);
-      flash('✗ Import failed', 'error');
-    }
-  };
-
   const resetAll = () => {
     store.clearAll();
     flash('✓ All data cleared. Reloading...');
@@ -220,21 +109,6 @@ export default function Settings() {
     setConfirmText('');
     setTimeout(() => window.location.reload(), 1200);
   };
-
-  const toggleAutoBackup = (v) => {
-    setAutoBackupState(v);
-    store.set('autoBackup', v);
-    flash(v ? '✓ Auto-backup reminders enabled' : 'Auto-backup reminders off');
-  };
-
-  const lastBackupAgo = lastBackup
-    ? (() => {
-        const diff = (Date.now() - new Date(lastBackup)) / 86400000;
-        if (diff < 1) return 'today';
-        if (diff < 2) return 'yesterday';
-        return `${Math.floor(diff)} days ago`;
-      })()
-    : 'Never';
 
   const isSignedIn = firebaseUser && !firebaseUser.isAnonymous;
   const canChangePassword = isSignedIn && firebaseUser.providerData?.some(p => p.providerId === 'password');
@@ -249,7 +123,7 @@ export default function Settings() {
             </div>
             <h1 className="content-page-hero-title">Settings</h1>
           </div>
-          <p className="content-page-hero-subtitle">Theme, backup, and storage</p>
+          <p className="content-page-hero-subtitle">Theme, account, and storage</p>
         </div>
       </div>
 
@@ -404,14 +278,10 @@ export default function Settings() {
       </div>
 
       <div className="card" style={{ marginBottom: 12 }}>
-        <SectionLabel>Data & Backup</SectionLabel>
-
-        <div style={{ fontSize: 12.5, color: 'var(--muted)', marginBottom: 14 }}>
-          Last backup: <strong style={{ color: 'var(--text)' }}>{lastBackupAgo}</strong>
-        </div>
+        <SectionLabel>Storage</SectionLabel>
 
         {storageInfo && (
-          <div style={{ marginBottom: 14 }}>
+          <div>
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4, fontSize: 12, color: 'var(--muted)' }}>
               <span>Storage used</span>
               <span style={{ fontWeight: 600, color: 'var(--text)' }}>{storageInfo.used} KB / ~{storageInfo.max} KB</span>
@@ -421,104 +291,7 @@ export default function Settings() {
             </div>
           </div>
         )}
-
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '10px 12px', background: 'var(--bg)', borderRadius: 8, border: '1px solid var(--border)', marginBottom: 14 }}>
-          <Shield size={14} color="var(--accent)" />
-          <div style={{ flex: 1 }}>
-            <div style={{ fontSize: 12.5, fontWeight: 600 }}>Weekly backup reminder</div>
-            <div style={{ fontSize: 11, color: 'var(--muted)' }}>Notify me to download a backup once a week</div>
-          </div>
-          <button onClick={() => toggleAutoBackup(!autoBackup)} style={{
-            width: 40, height: 22, borderRadius: 11, border: 'none', cursor: 'pointer',
-            background: autoBackup ? 'var(--accent)' : 'var(--border)',
-            position: 'relative', transition: 'background 0.2s', flexShrink: 0,
-          }}>
-            <span style={{
-              position: 'absolute', top: 3, left: autoBackup ? 20 : 3,
-              width: 16, height: 16, borderRadius: '50%', background: '#fff',
-              transition: 'left 0.2s',
-            }} />
-          </button>
-        </div>
-
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-          <button className="btn btn-primary" onClick={exportData}>
-            <Download size={14} /> Download Backup
-          </button>
-          <label className="btn btn-ghost" style={{ cursor: 'pointer' }}>
-            <Upload size={14} /> Restore from file
-            <input type="file" accept=".json" onChange={importData} style={{ display: 'none' }} />
-          </label>
-        </div>
       </div>
-
-      {previewOpen && previewInfo && (
-        <div className="settings-modal-backdrop">
-          <div className="settings-modal-panel">
-            <div className="settings-modal-header">
-              <div>
-                <div style={{ fontWeight: 700 }}>Restore preview</div>
-                <div style={{ fontSize: 12, color: 'var(--muted)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', minWidth: 0 }}>
-                  <span title={previewInfo.fileName}>{previewInfo.fileName}</span> • {previewInfo.items.length} keys • ~{previewInfo.totalKB} KB
-                </div>
-                {previewInfo.version && <div style={{ fontSize: 12, color: 'var(--muted)' }}>Backup version: {previewInfo.version}</div>}
-              </div>
-              <div className="settings-modal-actions">
-                <button className="btn btn-ghost" onClick={() => { setPreviewOpen(false); setPreviewInfo(null); }}>Cancel</button>
-                <button className="btn btn-primary" onClick={confirmImport}>Confirm Restore</button>
-              </div>
-            </div>
-
-            <div style={{ marginTop: 12 }}>
-              <div className="settings-modal-subheader">
-                <div style={{ fontSize: 13, fontWeight: 600 }}>Keys (largest first)</div>
-                <div style={{ fontSize: 12 }}>
-                  <label style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
-                    <input type="checkbox" checked={selectedKeys?.length === previewInfo.items.length} onChange={(e) => {
-                      if (e.target.checked) setSelectedKeys(previewInfo.items.map(i => i.key)); else setSelectedKeys([]);
-                    }} />
-                    Select all
-                  </label>
-                </div>
-              </div>
-              <div className="settings-restore-grid">
-                {previewInfo.items.map(it => (
-                  <div key={it.key} style={{ display: 'contents' }}>
-                    <div className="settings-restore-key">
-                      <input type="checkbox" checked={selectedKeys?.includes(it.key)} onChange={(e) => {
-                        setSelectedKeys(s => {
-                          const next = new Set(s || []);
-                          if (e.target.checked) next.add(it.key); else next.delete(it.key);
-                          return Array.from(next);
-                        });
-                      }} />
-                      <div style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{it.key}</div>
-                    </div>
-                    <div className="settings-restore-size">{it.sizeKB} KB</div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {importReport && (
-        <div className="card" style={{ marginBottom: 12 }}>
-          <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 8 }}>Restore report</div>
-          <div style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 8 }}>
-            Imported: <strong>{importReport.imported.length}</strong> keys. Failed: <strong>{importReport.failed.length}</strong> keys.
-          </div>
-          {importReport.failed.length > 0 && (
-            <div style={{ fontSize: 12 }}>
-              <div style={{ fontWeight: 600, marginBottom: 6 }}>Failures</div>
-              <ul style={{ marginLeft: 16 }}>
-                {importReport.failed.map(f => <li key={f.key}><strong>{f.key}</strong>: {f.error}</li>)}
-              </ul>
-            </div>
-          )}
-        </div>
-      )}
 
       {isSignedIn && (
         <div className="card" style={{ marginBottom: 12 }}>
@@ -549,7 +322,7 @@ export default function Settings() {
         ) : (
           <div>
             <p style={{ fontSize: 13, color: 'var(--danger)', marginBottom: 12 }}>
-              This will <strong>permanently erase everything</strong>. Download a backup first!
+              This will <strong>permanently erase everything</strong>.
             </p>
             <div style={{ marginBottom: 12, padding: '10px 12px', background: 'rgba(239, 68, 68, 0.05)', borderRadius: 8, border: '1px solid rgba(239, 68, 68, 0.15)' }}>
               <div style={{ fontSize: 12, fontWeight: 600, marginBottom: 8, color: 'var(--danger)' }}>Type to confirm:</div>

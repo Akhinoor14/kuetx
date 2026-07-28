@@ -38,31 +38,31 @@
 // config anywhere, grep this file first to confirm the name is present.
 import {
   Activity, AlertOctagon, AlertTriangle, ArrowUpRight, BarChart2, Bell,
-  BookMarked, BookOpen, BookOpenCheck, Briefcase, Calendar, CalendarCheck,
-  CheckCircle2, CheckSquare, ChevronLeft, ChevronRight, ClipboardCheck, ClipboardList,
+  BellRing, BookMarked, BookOpen, BookOpenCheck, Briefcase, Calendar, CalendarCheck,
+  CalendarDays, CalendarClock, CheckCircle2, CheckSquare, ChevronLeft, ChevronRight, ClipboardCheck, ClipboardList,
   Clock, Cloud, CloudCog, Cpu, Database, Droplet,
   Facebook, FileSearch, FileText, Flag, FlaskConical, FolderKanban,
   GitBranch, Github, GraduationCap, Grid, Heart, HelpCircle,
   Home, Info, Landmark, Layers, LayoutGrid, Lightbulb,
   Linkedin, List, Lock, Mail, MapPin, Megaphone,
-  MessageCircle, Moon, Palette, Presentation, Rocket, Search,
-  Settings, Shield, Sparkles, Star, Sunrise, Timer,
-  TrendingUp, User, Users, Users2, Video, Wallet,
+  MessageCircle, Moon, NotebookText, Palette, Presentation, Rocket, Search,
+  Settings, Shield, Sparkles, Star, StickyNote, Store, Sunrise, Timer,
+  TrendingUp, User, UserCog, Users, Users2, Video, Wallet,
   Wrench, X, Zap,
 } from 'lucide-react';
 
 export const ICONS = {
   Activity, AlertOctagon, AlertTriangle, ArrowUpRight, BarChart2, Bell,
-  BookMarked, BookOpen, BookOpenCheck, Briefcase, Calendar, CalendarCheck,
-  CheckCircle2, CheckSquare, ChevronLeft, ChevronRight, ClipboardCheck, ClipboardList,
+  BellRing, BookMarked, BookOpen, BookOpenCheck, Briefcase, Calendar, CalendarCheck,
+  CalendarDays, CalendarClock, CheckCircle2, CheckSquare, ChevronLeft, ChevronRight, ClipboardCheck, ClipboardList,
   Clock, Cloud, CloudCog, Cpu, Database, Droplet,
   Facebook, FileSearch, FileText, Flag, FlaskConical, FolderKanban,
   GitBranch, Github, GraduationCap, Grid, Heart, HelpCircle,
   Home, Info, Landmark, Layers, LayoutGrid, Lightbulb,
   Linkedin, List, Lock, Mail, MapPin, Megaphone,
-  MessageCircle, Moon, Palette, Presentation, Rocket, Search,
-  Settings, Shield, Sparkles, Star, Sunrise, Timer,
-  TrendingUp, User, Users, Users2, Video, Wallet,
+  MessageCircle, Moon, NotebookText, Palette, Presentation, Rocket, Search,
+  Settings, Shield, Sparkles, Star, StickyNote, Store, Sunrise, Timer,
+  TrendingUp, User, UserCog, Users, Users2, Video, Wallet,
   Wrench, X, Zap,
 };
 

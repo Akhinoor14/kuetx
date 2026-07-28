@@ -3039,17 +3039,24 @@ h3 { font-size: 15px; font-weight: 600; }
   /* raise above typical page cards and overlays so the header never gets covered */
   z-index: 60;
 }
-/* Mobile auto-hide: on scroll-down the topbar slides up out of view (see
-   Navbar.jsx's scroll-direction listener, which toggles this class); on
-   scroll-up it slides back down. Desktop keeps the topbar always visible —
-   only mobile has the sub-nav chip strip competing for vertical space, so
-   only mobile bothers auto-hiding the topbar to make room for it. */
+/* Mobile + chip-strip pages only: the topbar is no longer sticky here —
+   it scrolls away naturally with the page content, the same way any
+   other element would. The chip strip below (.topbar-mobile-tabs,
+   always `position: sticky; top: 0`) catches itself at the very top the
+   instant the topbar has scrolled past, and stays pinned there while
+   the rest of the page keeps scrolling underneath it. Scrolling back up
+   reverses the same way for free — once the page is back near its own
+   top, the topbar (now back in normal flow) reappears above the chip
+   strip and pushes it back down to sit just beneath it again. This is
+   plain CSS sticky-positioning behavior, so no scroll listener/JS is
+   needed to drive it — see Navbar.jsx, hasChipStrip pages no longer run
+   a scroll effect at all on mobile.
+   Desktop, and mobile pages WITHOUT a chip strip, keep the topbar
+   sticky as before (this only applies when body.has-mobile-chip-strip
+   is set — see Navbar.jsx). */
 @media (max-width: 768px) {
-  .topbar {
-    transition: transform 0.25s ease;
-  }
-  .topbar.topbar-hidden {
-    transform: translateY(-100%);
+  body.has-mobile-chip-strip .topbar {
+    position: static;
   }
 }
 
@@ -3082,15 +3089,22 @@ h3 { font-size: 15px; font-weight: 600; }
   .topbar-page-title { display: none; }
 }
 
-/* Mobile sibling-swap chip row — sits directly beneath the 56px topbar
-   as its own sticky strip. Hidden on desktop (siblings render inside
-   the topbar there instead, via the `hidden md:flex` block in
+/* Mobile sibling-swap chip row. Hidden on desktop (siblings render
+   inside the topbar there instead, via the `hidden md:flex` block in
    Navbar.jsx). Only rendered when the current page has siblings to
    swap between (see Navbar.jsx), so pages without siblings incur zero
-   extra height. */
+   extra height.
+   Always sticky at top:0 — on chip-strip pages the topbar above it is
+   now `position: static` (see .topbar's mobile override), so this strip
+   naturally scrolls along with the topbar while both are still in view,
+   then catches and pins itself at the very top the moment the topbar
+   has scrolled fully past. Scrolling back up reverses for free: once
+   the page nears its own top again, the topbar (back in normal flow)
+   pushes this strip back down beneath it. Plain CSS sticky behavior —
+   no scroll listener needed. */
 .topbar-mobile-tabs {
   position: sticky;
-  top: 56px;
+  top: 0;
   z-index: 59;
   background: var(--surface);
   border-bottom: 1px solid var(--border);
@@ -3102,19 +3116,7 @@ h3 { font-size: 15px; font-weight: 600; }
 @media (min-width: 769px) {
   .topbar-mobile-tabs { display: none; }
 }
-/* When Navbar.jsx's scroll listener hides the topbar above (see
-   .topbar.topbar-hidden), this strip has nothing left above it to sit
-   below — slide its own sticky offset from 56px up to 0 so it takes over
-   the very top of the screen instead of leaving a blank 56px gap where
-   the hidden topbar used to be. */
-@media (max-width: 768px) {
-  .topbar-mobile-tabs {
-    transition: top 0.25s ease;
-  }
-  .topbar-mobile-tabs.topbar-mobile-tabs-pinned {
-    top: 0;
-  }
-}
+
 
 /* ── Question Bank (enhanced) ──────────────────────────────────────────── */
 /* ── Question Bank Page ─────────────────────────────────────────────────────── */
@@ -4986,6 +4988,119 @@ input[type="checkbox"] {
   .marks-page .planner-attendance-inline-input {
     max-width: none;
   }
+
+  /* ── Compact mobile pass — tighten spacing across the whole planner card ── */
+  .marks-page .planner-card-header {
+    padding: 12px 14px;
+  }
+
+  .marks-page .planner-card-title {
+    font-size: 14px;
+    margin-bottom: 2px;
+  }
+
+  .marks-page .planner-card-desc {
+    font-size: 11.5px;
+  }
+
+  .marks-page .planner-card-body {
+    padding: 14px;
+  }
+
+  .marks-page .planner-grid-2 {
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+
+  .marks-page .planner-attendance-shell {
+    padding: 10px;
+    gap: 8px;
+  }
+
+  .marks-page .planner-attendance-modes label {
+    padding: 5px 8px;
+    font-size: 11px;
+  }
+
+  .marks-page .planner-input-field label {
+    font-size: 11.5px;
+    margin-bottom: 5px;
+  }
+
+  .marks-page .planner-input-field input {
+    padding: 8px 10px;
+    font-size: 14px;
+  }
+
+  .marks-page .planner-sync-note {
+    margin-top: 6px;
+    padding: 7px 10px;
+    font-size: 11px;
+  }
+
+  .marks-page .planner-teachers-section {
+    padding: 10px;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+
+  .marks-page .planner-teacher-name {
+    font-size: 12.5px;
+    margin-bottom: 8px;
+    padding-bottom: 6px;
+  }
+
+  .marks-page .planner-teacher-inputs {
+    gap: 6px;
+  }
+
+  .marks-page .planner-teacher-inputs .planner-input-field input {
+    padding: 7px 8px;
+    font-size: 13px;
+  }
+
+  .marks-page .planner-target-section {
+    margin-bottom: 12px;
+  }
+
+  .marks-page .planner-grade-buttons {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+  }
+
+  .marks-page .planner-grade-btn {
+    padding: 7px 4px;
+    font-size: 12px;
+    gap: 2px;
+  }
+
+  .marks-page .planner-grade-btn span:last-child {
+    font-size: 9px;
+  }
+
+  .marks-page .planner-result-box {
+    padding: 10px;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+
+  .marks-page .planner-needed-box {
+    padding: 10px;
+  }
+
+  .marks-page .planner-course-card {
+    border-radius: 12px;
+    margin-bottom: 12px;
+  }
+
+  .marks-page .planner-courses-grid {
+    margin-bottom: 20px;
+  }
+
+  .marks-page .planner-tips {
+    padding: 12px;
+    border-radius: 12px;
+  }
 }
 
 .marks-page .planner-input-field {
@@ -5244,6 +5359,142 @@ input[type="checkbox"] {
 /* Courses Grid */
 .marks-page .planner-courses-grid {
   margin-bottom: 32px;
+}
+
+/* Course List (picker view) — grid on desktop, single column on mobile */
+.marks-page .planner-course-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 10px;
+  margin-bottom: 28px;
+}
+
+.marks-page .planner-list-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+  cursor: pointer;
+  text-align: left;
+  font: inherit;
+  color: inherit;
+  transition: border-color 0.15s, box-shadow 0.15s, transform 0.1s;
+}
+
+.marks-page .planner-list-row:hover {
+  border-color: rgba(var(--accentRGB), 0.35);
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.08);
+}
+
+.marks-page .planner-list-row:active {
+  transform: scale(0.99);
+}
+
+.marks-page .planner-list-row-main {
+  min-width: 0;
+  flex: 1;
+}
+
+.marks-page .planner-list-row-code {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--text);
+  letter-spacing: 0.01em;
+}
+
+.marks-page .planner-list-row-name {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 2px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.marks-page .planner-list-row-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.marks-page .planner-list-row-grade {
+  min-width: 30px;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: rgba(var(--accentRGB), 0.12);
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 800;
+  text-align: center;
+}
+
+.marks-page .planner-list-row-pct {
+  font-size: 11.5px;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.marks-page .planner-list-row-target {
+  font-size: 11.5px;
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.marks-page .planner-list-row-empty {
+  font-size: 11.5px;
+  color: var(--muted);
+}
+
+.marks-page .planner-list-row-chevron {
+  color: var(--muted);
+  flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+  .marks-page .planner-course-list {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .marks-page .planner-list-row {
+    padding: 12px 14px;
+    border-radius: 12px;
+  }
+
+  .marks-page .planner-list-row-code {
+    font-size: 13px;
+  }
+
+  .marks-page .planner-list-row-name {
+    font-size: 11px;
+  }
+}
+
+/* Back link (detail view) */
+.marks-page .planner-back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 14px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--accent);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.marks-page .planner-back-link:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
 /* Tips Section */
@@ -9064,10 +9315,19 @@ body.schedule-fullscreen-active .mobile-bottom-nav {
   text-align: left;
 }
 
+/* Full-width hero card for the most-used item in a hub section — visual
+   anchor so the eye lands somewhere first, instead of every card reading
+   as equal weight. */
+.hub-grid-item-hero {
+  min-height: unset;
+  width: 100%;
+}
+
 @media (max-width: 380px) {
   .hub-grid { grid-template-columns: repeat(2, 1fr); }
   .hub-grid-item { min-height: 92px; padding: 12px; }
   .hub-grid-item .hub-grid-item-icon { width: 30px; height: 30px; }
+  .hub-grid-item-hero { min-height: unset; }
 }
 
 /* Broadcast Notice / Faculty Schedule page padding — hero sizing itself is

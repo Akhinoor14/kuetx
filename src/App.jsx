@@ -15,7 +15,6 @@ import GlobalToasts from './components/GlobalToasts';
 import FloatingUploadBar from './components/FloatingUploadBar';
 import NoticeToast from './components/NoticeToast';
 import PushPermissionBanner from './components/PushPermissionBanner';
-import BackupReminderGate from './components/BackupReminderGate';
 import ProfileCompleteReminder from './components/ProfileCompleteReminder';
 import AuthModal from './components/AuthModal';
 import ProfileSetupModal from './components/ProfileSetupModal';
@@ -209,6 +208,7 @@ function Layout({ authState, onboardingActive }) {
             <Route path="/courses" element={<Courses />} />
             <Route path="/attendance" element={<Attendance />} />
             <Route path="/marks" element={<Marks />} />
+            <Route path="/marks/:courseId" element={<Marks />} />
             <Route path="/results" element={<Results />} />
             <Route path="/schedule" element={<Schedule />} />
             <Route path="/teachers" element={<Teachers />} />
@@ -364,19 +364,6 @@ function shouldShowAnnouncement() {
     const showCount = store.get('announcementV2ShowCount') || 0;
     const interval = showCount >= 3 ? 604800000 : 259200000;
     return Date.now() - new Date(lastShown).getTime() >= interval;
-  } catch { return false; }
-}
-
-function shouldShowBackup() {
-  try {
-    const autoBackup = store.get('autoBackup') ?? true;
-    if (!autoBackup) return false;
-    const last = store.get('lastBackupTime');
-    if (!last) { store.set('lastBackupTime', new Date().toISOString()); return false; }
-    const elapsedDays = (Date.now() - new Date(last)) / 86400000;
-    if (elapsedDays < 7) return false;
-    if (store.get('backupReminderSnoozed') === new Date().toDateString()) return false;
-    return true;
   } catch { return false; }
 }
 
@@ -569,8 +556,6 @@ async function buildQueue(isAnonymous) {
     q.push('announcement');
   } else if (shouldShowCommunityHiring()) {
     q.push('communityHiring');
-  } else if (shouldShowBackup()) {
-    q.push('backup');
   }
   return q;
 }
@@ -605,9 +590,10 @@ export default function App() {
   // Falls back to leaving profile.termStartDate untouched if the group
   // hasn't set one yet (backward compatible with profiles that already
   // had a manually-entered value from before this feature existed).
+  const currentGroupId = getGroupId(getProfile());
   useEffect(() => {
     if (!authState.authReady) return;
-    const gid = getGroupId(getProfile());
+    const gid = currentGroupId;
     if (!gid) return;
     return subscribeGroupTermStartDate(gid, (date) => {
       if (!date) return; // group hasn't set one — keep whatever's already stored
@@ -615,7 +601,7 @@ export default function App() {
       if (current.termStartDate === date) return;
       store.set('profile', { ...current, termStartDate: date });
     });
-  }, [authState.authReady, getGroupId(getProfile())]);
+  }, [authState.authReady, currentGroupId]);
 
   // BUGFIX: faculty magic-link verification previously only ran INSIDE
   // FacultyVerifyHoldingScreen, which only mounts when the onboarding
@@ -1021,9 +1007,6 @@ export default function App() {
               }}
             />
           </Suspense>
-        )}
-        {current === 'backup' && (
-          <BackupReminderGate open={true} onClose={advance} />
         )}
         {/* BUGFIX: Layout (which contains <Routes>/<Dashboard>) used to
             render unconditionally here, regardless of `current` — so the
