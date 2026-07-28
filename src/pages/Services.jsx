@@ -51,6 +51,19 @@ function usePendingCounts(serviceIds) {
     const unsubs = serviceIds.map((id) => onSnapshot(
       query(collection(db, 'services', id, 'bookings'), where('status', '==', 'pending')),
       (snap) => setCounts((prev) => ({ ...prev, [id]: snap.size })),
+      () => {
+        // A student who isn't the service's own provider/admin can't read
+        // other students' booking docs (firestore.rules bookings/read is
+        // per-document, scoped to studentUid==self || ownsService || admin).
+        // A collection query over "all pending bookings" therefore gets
+        // rejected outright for every visiting student — this isn't a bug
+        // in the rule, it's this query being the wrong shape for a
+        // student-facing view. Fail quietly to 0 rather than crashing the
+        // whole page; the real fix is a denormalized pendingCount field on
+        // the service doc itself, written by the provider/booking-status
+        // transition, not a live cross-student query from here.
+        setCounts((prev) => ({ ...prev, [id]: 0 }));
+      },
     ));
     return () => unsubs.forEach((u) => u());
   }, [serviceIds?.join(',')]); // eslint-disable-line react-hooks/exhaustive-deps

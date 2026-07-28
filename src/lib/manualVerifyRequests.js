@@ -16,6 +16,7 @@ import {
 } from 'firebase/firestore';
 import { db, auth } from './firebase';
 import { syncFacultyVerificationStatus } from './facultySync';
+import { retryableOnSnapshot } from './safeSnapshot';
 
 const COLLECTION = 'manualVerifyRequests';
 
@@ -43,7 +44,7 @@ export async function submitManualVerifyRequest(role, details) {
 
 /** Live list of pending manual verification requests, for the Founder's Approvals tab. */
 export function subscribeManualVerifyRequests(callback) {
-  return onSnapshot(
+  return retryableOnSnapshot(
     query(collection(db, COLLECTION), where('status', '==', 'pending'), orderBy('requestedAt')),
     (snap) => callback(snap.docs.map((d) => ({ id: d.id, ...d.data() }))),
     (err) => {

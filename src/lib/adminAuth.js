@@ -41,18 +41,29 @@ export function subscribeIsAdmin(uid, callback) {
   if (!entry) {
     entry = { unsubscribe: null, refCount: 0, listeners: new Set(), lastValue: null };
     _isAdminRegistry.set(uid, entry);
-    entry.unsubscribe = onSnapshot(
-      doc(db, 'admins', uid),
-      (snap) => {
-        entry.lastValue = snap.exists();
-        entry.listeners.forEach((cb) => cb(entry.lastValue));
-      },
-      (err) => {
-        console.error('[adminAuth] admin listener error:', err);
-        entry.lastValue = false;
-        entry.listeners.forEach((cb) => cb(false));
-      },
-    );
+    const attach = (retriesLeft) => {
+      entry.unsubscribe = onSnapshot(
+        doc(db, 'admins', uid),
+        (snap) => {
+          entry.lastValue = snap.exists();
+          entry.listeners.forEach((cb) => cb(entry.lastValue));
+        },
+        (err) => {
+          // Same startup race as subscribeMyRoles below — this listener
+          // is also mounted via useIsStaff on essentially every page, so
+          // retry permission-denied a few times before treating it as a
+          // real "not admin" result.
+          if (err?.code === 'permission-denied' && retriesLeft > 0) {
+            setTimeout(() => attach(retriesLeft - 1), 1200);
+            return;
+          }
+          console.error('[adminAuth] admin listener error:', err);
+          entry.lastValue = false;
+          entry.listeners.forEach((cb) => cb(false));
+        },
+      );
+    };
+    attach(3);
   }
   entry.refCount += 1;
   entry.listeners.add(callback);

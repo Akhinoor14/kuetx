@@ -325,6 +325,40 @@ service cloud.firestore {
     }
 
     // -------------------------------------------------------------
+    // Username -> uid lookup for the username+password student auth flow
+    // (studentUsernameAuth.js). This collection previously had NO rule at
+    // all here — every read/write was silently denied by Firestore's
+    // default-deny, meaning username signup/login never actually worked
+    // client-side, regardless of the code's own logic being correct
+    // (see studentUsernameAuth.js's own "TODO(Phase 5)" comment, which
+    // flagged this exact gap in advance).
+    //
+    // Read must stay OPEN to signed-OUT visitors: resolveUsernameToUid()
+    // (login) and checkUsernameAvailable() (signup) both need to read
+    // this doc BEFORE the visitor has a Firebase Auth session — that's
+    // the entire point of a username-based login (you don't have a
+    // session yet, that's what you're trying to get). There's nothing
+    // sensitive in the doc itself (just a uid + createdAt), so an open
+    // read is the same privacy shape as "is this username taken" on any
+    // ordinary signup form.
+    //
+    // Create/update: only the claiming uid may write their OWN uid into
+    // the doc, and only while doing so doesn't steal someone else's
+    // already-claimed name — mirrors claimUsernameForUid()'s own
+    // transaction check (resource.data.uid must be absent or already
+    // equal to the caller) so the client-side transaction is actually
+    // backed by a server-side guarantee, not just client good faith.
+    // Delete: only the claiming uid, for releaseUsernameClaim()'s
+    // best-effort cleanup after a failed signup.
+    match /usernames/{username} {
+      allow read: if true;
+      allow create, update: if isSignedIn()
+        && request.resource.data.uid == request.auth.uid
+        && (resource == null || resource.data.uid == request.auth.uid);
+      allow delete: if isSignedIn() && resource.data.uid == request.auth.uid;
+    }
+
+    // -------------------------------------------------------------
     // Institutional verification facts — see kuetEmailVerify.js. Written
     // only by the separate verification-app session whose OWN auth token
     // genuinely carries a verified @stud.kuet.ac.bd email; the visitor's

@@ -22,6 +22,7 @@ import {
   collection, doc, getDoc, getDocs, setDoc, updateDoc, onSnapshot, query, where, serverTimestamp,
 } from 'firebase/firestore';
 import { db, auth } from './firebase';
+import { retryableOnSnapshot } from './safeSnapshot';
 
 const providerDocRef = (uid) => doc(db, 'providers', uid);
 const providerCollectionRef = () => collection(db, 'providers');
@@ -75,7 +76,7 @@ export async function getProviderProfile(uid) {
 /** Live subscription to the current user's provider doc — used by useIsProvider and the pending/dashboard screens. */
 export function subscribeProviderProfile(uid, callback) {
   if (!uid) return () => {};
-  return onSnapshot(providerDocRef(uid), (snap) => {
+  return retryableOnSnapshot(providerDocRef(uid), (snap) => {
     callback(snap.exists() ? { uid, ...snap.data() } : null);
   }, (err) => {
     console.error('[providerSync] subscribeProviderProfile error:', err);
@@ -136,7 +137,7 @@ export async function listAllProviderAccounts() {
  * accounts have already been actioned and don't need to keep appearing.
  */
 export function subscribeProviderVerifyRequests(callback) {
-  return onSnapshot(
+  return retryableOnSnapshot(
     query(providerCollectionRef(), where('status', '==', 'pending')),
     (snap) => callback(snap.docs.map((d) => ({ uid: d.id, ...d.data() }))),
     (err) => {

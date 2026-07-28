@@ -22,25 +22,47 @@
 import { onSnapshot } from 'firebase/firestore';
 
 /**
- * Drop-in replacement for onSnapshot(query, successCb) that also handles
- * the error case instead of silently going quiet.
+ * Drop-in replacement for onSnapshot(query, successCb, errorCb) that
+ * retries a few times with backoff specifically on permission-denied —
+ * the near-universal "startup race" where a listener attaches a beat
+ * before the Firestore stream has picked up a just-resolved auth token
+ * (see onAuthStateChanged firing in useFirebaseAuth.js vs. the
+ * underlying gRPC/Listen channel's token refresh). Same race already
+ * documented and handled ad hoc in groupSync.js's _subscribeSingleton;
+ * this is the same fix factored out for callers that aren't behind that
+ * registry (bookingAlerts.js, providerSync.js, manualVerifyRequests.js,
+ * staffSync.js's CL application listeners, etc).
  *
- * @param {import('firebase/firestore').Query} q
- * @param {(data: any) => void} onData
- * @param {(err: Error) => void} [onError] - defaults to console.error only
- * @param {any} fallbackValue - value passed to onData when the listener errors
- *   (default: [] — matches the "no data yet" shape every caller already expects)
+ * Non-permission-denied errors are NOT retried — those are real errors
+ * (offline, bad query shape, missing index) and retrying them just
+ * delays the same failure.
+ *
+ * @param {import('firebase/firestore').Query | import('firebase/firestore').DocumentReference} ref
+ * @param {(snap: any) => void} onData
+ * @param {(err: Error) => void} onFinalError - called once retries are exhausted (or on a non-permission error immediately)
+ * @param {{retries?: number, delayMs?: number}} [opts]
+ * @returns {() => void} unsubscribe
  */
-export function safeOnSnapshot(q, onData, onError, fallbackValue = []) {
-  return onSnapshot(
-    q,
-    (snap) => onData(snap),
-    (err) => {
-      console.error('[safeOnSnapshot] listener failed:', err?.code, err?.message);
-      onData(fallbackValue);
-      onError?.(err);
-    }
-  );
+export function retryableOnSnapshot(ref, onData, onFinalError, opts = {}) {
+  const { retries = 3, delayMs = 1200 } = opts;
+  let unsub = null;
+  let cancelled = false;
+
+  const attach = (retriesLeft) => {
+    unsub = onSnapshot(ref, onData, (err) => {
+      if (err?.code === 'permission-denied' && retriesLeft > 0 && !cancelled) {
+        setTimeout(() => attach(retriesLeft - 1), delayMs);
+        return;
+      }
+      onFinalError(err);
+    });
+  };
+  attach(retries);
+
+  return () => {
+    cancelled = true;
+    unsub?.();
+  };
 }
 
 /**

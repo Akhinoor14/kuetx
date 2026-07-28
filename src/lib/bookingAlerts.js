@@ -33,9 +33,10 @@
 //   read: boolean
 
 import {
-  collection, doc, addDoc, updateDoc, onSnapshot, query, orderBy, serverTimestamp,
+  collection, doc, addDoc, updateDoc, query, orderBy, serverTimestamp,
 } from 'firebase/firestore';
 import { db } from './firebase';
+import { retryableOnSnapshot } from './safeSnapshot';
 
 const itemsRef = (uid) => collection(db, 'bookingAlerts', uid, 'items');
 const itemRef = (uid, alertId) => doc(db, 'bookingAlerts', uid, 'items', alertId);
@@ -71,16 +72,10 @@ export function queueBookingAlertWrite(batchOrTx, uid, {
 /** Live list of a user's booking alerts, newest first — for NotificationPanel. */
 export function subscribeBookingAlerts(uid, callback) {
   if (!uid) return () => {};
-  return onSnapshot(
+  return retryableOnSnapshot(
     query(itemsRef(uid), orderBy('createdAt', 'desc')),
     (snap) => callback(snap.docs.map((d) => ({ id: d.id, ...d.data() }))),
     (err) => {
-      // This listener is mounted via NotificationPanel inside Navbar, so
-      // it's alive on essentially every page for every signed-in user.
-      // An uncaught permission-denied here (e.g. during the anonymous ->
-      // real-user auth transition on first load) was surfacing as a raw
-      // Firestore console error with no user-visible symptom otherwise —
-      // log it and fall back to an empty list instead of throwing.
       console.error('[bookingAlerts] subscribeBookingAlerts error:', err);
       callback([]);
     },

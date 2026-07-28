@@ -18,6 +18,7 @@ import {
 } from 'firebase/firestore';
 import { db, auth } from './firebase';
 import { getIdentityStamp } from './groupUtils';
+import { retryableOnSnapshot } from './safeSnapshot';
 
 // ---------------------------------------------------------------------
 // My own roles (drives which Staff Panel sections render)
@@ -42,17 +43,29 @@ export function subscribeMyRoles(callback) {
   if (!entry) {
     entry = { unsubscribe: null, refCount: 0, listeners: new Set(), lastValue: null };
     _myRolesRegistry.set(uid, entry);
-    entry.unsubscribe = onSnapshot(
-      collection(db, 'staff', uid, 'roles'),
-      (snap) => {
-        entry.lastValue = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
-        entry.listeners.forEach((cb) => cb(entry.lastValue));
-      },
-      (err) => {
-        console.error('[staffSync] roles listener error:', err);
-        entry.listeners.forEach((cb) => cb([]));
-      },
-    );
+    const attach = (retriesLeft) => {
+      entry.unsubscribe = onSnapshot(
+        collection(db, 'staff', uid, 'roles'),
+        (snap) => {
+          entry.lastValue = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+          entry.listeners.forEach((cb) => cb(entry.lastValue));
+        },
+        (err) => {
+          // permission-denied right after sign-in is almost always the
+          // startup race — this listener runs via useIsStaff on
+          // essentially every page, so it's the first thing hit on any
+          // fresh load. Retry a few times with backoff before giving up
+          // (same pattern as groupSync.js's _subscribeSingleton).
+          if (err?.code === 'permission-denied' && retriesLeft > 0) {
+            setTimeout(() => attach(retriesLeft - 1), 1200);
+            return;
+          }
+          console.error('[staffSync] roles listener error:', err);
+          entry.listeners.forEach((cb) => cb([]));
+        },
+      );
+    };
+    attach(3);
   }
   entry.refCount += 1;
   entry.listeners.add(callback);
@@ -304,7 +317,7 @@ export async function checkCLVacant(groupId) {
 
 export function subscribeCLStatus(groupId, callback) {
   if (!groupId) return () => {};
-  return onSnapshot(doc(db, 'groups', groupId, 'meta', 'clStatus'), (snap) => {
+  return retryableOnSnapshot(doc(db, 'groups', groupId, 'meta', 'clStatus'), (snap) => {
     callback(snap.exists() ? snap.data() : null);
   }, (err) => {
     console.error('[staffSync] subscribeCLStatus error:', err);
@@ -334,7 +347,7 @@ export async function applyForCampusLead(groupId, profile, { bundledCRClaim = fa
 }
 
 export function subscribeCLApplications(dept, callback) {
-  return onSnapshot(
+  return retryableOnSnapshot(
     query(collection(db, 'clApplications'), where('dept', '==', dept), where('status', '==', 'pending')),
     (snap) => callback(snap.docs.map((d) => ({ id: d.id, ...d.data() }))),
     (err) => {
@@ -351,7 +364,7 @@ export function subscribeCLApplications(dept, callback) {
  * disappear — they're simply also visible here, one level up.
  */
 export function subscribeAllCLApplications(callback) {
-  return onSnapshot(
+  return retryableOnSnapshot(
     query(collection(db, 'clApplications'), where('status', '==', 'pending'), orderBy('appliedAt')),
     (snap) => callback(snap.docs.map((d) => ({ id: d.id, ...d.data() }))),
     (err) => {
