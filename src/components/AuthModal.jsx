@@ -4,7 +4,7 @@
  */
 
 import { useState, useEffect, useRef } from 'react';
-import { X, Mail, Lock, User, Chrome, CheckCircle, Eye, EyeOff } from 'lucide-react';
+import { X, Mail, Lock, User, Chrome, Store, CheckCircle, Eye, EyeOff } from 'lucide-react';
 import {
   loginWithGoogle,
   loginWithEmail,
@@ -38,6 +38,33 @@ import { getFacultyDoc } from '../lib/facultySync';
 // submit, right here.
 import { isFacultyEmailFormat } from '../lib/facultyEmailVerify';
 import { createFacultyAccountDoc } from '../lib/facultySync';
+// Service Provider signup (SERVICES_PROVIDER_PLAN.md §3/§4) — added here
+// because this inline Register flow (not RoleSelectScreen.jsx) is the
+// actual live entry point users reach; RoleSelectScreen already had this
+// wired but is only a safety-net that a normal Register never reaches.
+// Providers log in with their 11-digit phone number (01XXXXXXXXX) as their
+// identity, not email — same shape as the student username module, see
+// providerPhoneAuth.js.
+import { createProviderShell } from '../lib/providerSync';
+import {
+  isValidProviderPhone,
+  isValidProviderPassword,
+  signupWithProviderPhone,
+  loginWithProviderPhone,
+} from '../lib/providerPhoneAuth';
+
+// Service categories a provider can register under (SERVICES_PROVIDER_PLAN.md
+// §1 — "salon প্রথম service... ভবিষ্যতে medicine shop ইত্যাদি একই কাঠামোতে
+// যোগ হবে"). Keeping this list here (UI-only) rather than in providerSync.js
+// since it's presentation concern — the stored serviceType is just the
+// `value` string, unconstrained on the backend.
+const PROVIDER_SERVICE_TYPES = [
+  { value: 'salon', label: 'সেলুন' },
+  { value: 'medicine', label: 'ফার্মেসি / মেডিসিন শপ' },
+  { value: 'hotel', label: 'হোটেল / খাবার' },
+  { value: 'bookstore', label: 'বই / স্টেশনারি / ফটোকপি' },
+  { value: 'other', label: 'অন্যান্য' },
+];
 
 const inputStyle = {
   width: '100%',
@@ -127,6 +154,16 @@ export default function AuthModal({ mode = 'login', isUpgrade = false, onClose, 
   // a stale choice behind.
   const [registerRole, setRegisterRole] = useState(null);
   const showAsFaculty = isFaculty || registerRole === 'teacher';
+  // Provider gets its OWN form entirely — not email/password like Faculty,
+  // not username like Student. providerPhone (11-digit 01XXXXXXXXX) IS the
+  // login identity, via providerPhoneAuth.js's phone+password module —
+  // same number the Founder calls to verify them, nothing extra to
+  // remember. isProviderChoice keeps this fully separate from
+  // showAsFaculty so faculty behavior stays byte-for-byte unchanged.
+  const isProviderChoice = registerRole === 'provider';
+  const [providerName, setProviderName] = useState('');
+  const [providerPhone, setProviderPhone] = useState('');
+  const [providerServiceType, setProviderServiceType] = useState('salon');
   // BUGFIX: showEmailForm removed — email/password form is now always
   // shown expanded (no longer collapsed behind a "or use email" toggle),
   // since it's the primary path and Google is now the secondary option.
@@ -387,6 +424,62 @@ export default function AuthModal({ mode = 'login', isUpgrade = false, onClose, 
     }
   };
 
+  const handleProviderPhone = async () => {
+    if (!providerPhone.trim() || !password || (tab === 'register' && !providerName.trim())) {
+      setError(
+        tab === 'register'
+          ? 'নাম, ফোন নাম্বার এবং পাসওয়ার্ড — তিনটাই দিতে হবে।'
+          : 'ফোন নাম্বার এবং পাসওয়ার্ড দিতে হবে।'
+      );
+      return;
+    }
+    const phoneCheck = isValidProviderPhone(providerPhone);
+    if (!phoneCheck.ok) {
+      setError(phoneCheck.reason);
+      return;
+    }
+    if (tab === 'register') {
+      const passwordCheck = isValidProviderPassword(password);
+      if (!passwordCheck.ok) {
+        setError(passwordCheck.reason);
+        return;
+      }
+    }
+    setLoading(true);
+    setError('');
+    try {
+      let user;
+      if (tab === 'register') {
+        user = await signupWithProviderPhone(providerPhone, password);
+        setAccountRole('provider');
+        persistAccountRoleToServer('provider').catch(() => {});
+        // Provider shell doc — status: 'pending' at creation (§2, §4 Step
+        // 2); Founder verifies manually afterward via AdminDashboard's
+        // provider-verify tab (already built).
+        await createProviderShell(user.uid, {
+          displayName: providerName,
+          phone: providerPhone,
+          serviceType: providerServiceType,
+        });
+      } else {
+        user = await loginWithProviderPhone(providerPhone, password);
+      }
+      onSuccess?.(user, { linked: false });
+    } catch (err) {
+      if (err.code === 'providerPhone/taken') {
+        setError('এই ফোন নাম্বার দিয়ে ইতিমধ্যে একটা account আছে। লগইন করুন, অথবা অন্য নাম্বার দিন।');
+      } else if (err.code === 'providerPhone/not-found') {
+        setError('এই ফোন নাম্বার দিয়ে কোনো account পাওয়া যায়নি।');
+      } else if (err.code === 'providerPhone/invalid' || err.code === 'password/invalid') {
+        setError(err.message);
+      } else {
+        setError(getAuthErrorMessage(err.code));
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleEmail = async () => {
     if (!email || !password) {
       setError('Please enter both your email address and password.');
@@ -398,7 +491,7 @@ export default function AuthModal({ mode = 'login', isUpgrade = false, onClose, 
     // render once registerRole is set, so this mainly guards against a
     // stray Enter-key submit before a choice is picked.
     if (!isUpgrade && tab === 'register' && !registerRole) {
-      setError('Please choose Student or Faculty first.');
+      setError('Please choose Student, Faculty, or Service Provider first.');
       return;
     }
 
@@ -415,6 +508,10 @@ export default function AuthModal({ mode = 'login', isUpgrade = false, onClose, 
       );
       return;
     }
+
+    // Provider no longer goes through handleEmail at all — it has its own
+    // handleProviderPhone above, with its own name/phone/password
+    // validation. Nothing provider-specific needed here anymore.
 
     // Domain check itself lives in firebaseAuth.js (registerWithEmail /
     // upgradeWithEmail) — that's the single enforcement point, so it
@@ -449,6 +546,10 @@ export default function AuthModal({ mode = 'login', isUpgrade = false, onClose, 
           if (registerRole === 'teacher') {
             await createFacultyAccountDoc(user.uid, email);
           }
+          // Note: registerRole === 'provider' never reaches this function —
+          // provider signup goes through handleProviderPhone above, which
+          // has its own createProviderShell call. handleEmail only ever
+          // sees 'teacher' here in practice.
         }
       } else {
         user = await loginWithEmail(email, password);
@@ -579,6 +680,42 @@ export default function AuthModal({ mode = 'login', isUpgrade = false, onClose, 
           </div>
         )}
 
+        {/* Login is normally role-agnostic (student username vs faculty
+            email are different enough shapes that a single Login form
+            can't serve both — see the student/faculty split below), but
+            provider login uses a THIRD identity shape (phone number, not
+            username or institutional email), so Login needs one explicit
+            toggle to know which form to resolve against. Kept minimal —
+            two options, not a full role card set like Register's. */}
+        {!isUpgrade && tab === 'login' && (
+          <div style={{ display: 'flex', gap: 8, marginBottom: 4 }}>
+            <button
+              type="button"
+              onClick={() => setRegisterRole(null)}
+              style={{
+                flex: 1, padding: '8px 0', borderRadius: 8, fontSize: 12.5, fontWeight: 600, cursor: 'pointer',
+                border: `1px solid ${!isProviderChoice ? 'var(--accent)' : 'var(--border)'}`,
+                background: !isProviderChoice ? 'var(--accentSoft, rgba(0,0,0,0.04))' : 'var(--card)',
+                color: 'var(--text)',
+              }}
+            >
+              Student / Faculty
+            </button>
+            <button
+              type="button"
+              onClick={() => setRegisterRole('provider')}
+              style={{
+                flex: 1, padding: '8px 0', borderRadius: 8, fontSize: 12.5, fontWeight: 600, cursor: 'pointer',
+                border: `1px solid ${isProviderChoice ? 'var(--accent)' : 'var(--border)'}`,
+                background: isProviderChoice ? 'var(--accentSoft, rgba(0,0,0,0.04))' : 'var(--card)',
+                color: 'var(--text)',
+              }}
+            >
+              Service Provider
+            </button>
+          </div>
+        )}
+
         {/* Inline Register-tab role choice — shown first, before any form
             field. Student/Faculty picks which field set + copy renders
             below (student-style Bengali form vs faculty-style English
@@ -605,7 +742,98 @@ export default function AuthModal({ mode = 'login', isUpgrade = false, onClose, 
                 <Chrome size={18} />
                 Faculty
               </button>
+              <button
+                type="button"
+                onClick={() => setRegisterRole('provider')}
+                style={{ ...btnGoogle, flexDirection: 'column', gap: 4, padding: '16px 10px' }}
+              >
+                <Store size={18} />
+                Service Provider
+              </button>
             </div>
+          </div>
+        )}
+
+        {/* Provider detail + login form — phone number (11-digit,
+            01XXXXXXXXX) IS the login identity here, not a separate email.
+            Also collects which service category this provider is (salon,
+            medicine shop, hotel, book store, photocopy/stationery, etc. —
+            SERVICES_PROVIDER_PLAN.md §1's "ভবিষ্যতে medicine shop ইত্যাদি
+            একই কাঠামোতে যোগ হবে" — the dropdown is what actually lets a
+            provider pick one instead of everything defaulting to salon). */}
+        {!isUpgrade && isProviderChoice && (tab === 'login' || registerRole) && (
+          <div style={{ display: 'grid', gap: 10, marginBottom: 4 }}>
+            {tab === 'register' && (
+              <>
+                <div>
+                  <label style={{ fontSize: 12, color: 'var(--muted)', fontWeight: 600 }}>নাম / দোকানের নাম</label>
+                  <input
+                    value={providerName}
+                    onChange={(e) => setProviderName(e.target.value)}
+                    placeholder="যেমন: Rafiq's Salon"
+                    style={{ ...inputStyle, marginTop: 6 }}
+                  />
+                </div>
+                <div>
+                  <label style={{ fontSize: 12, color: 'var(--muted)', fontWeight: 600 }}>সেবার ধরন</label>
+                  <select
+                    value={providerServiceType}
+                    onChange={(e) => setProviderServiceType(e.target.value)}
+                    style={{ ...inputStyle, marginTop: 6 }}
+                  >
+                    {PROVIDER_SERVICE_TYPES.map((opt) => (
+                      <option key={opt.value} value={opt.value}>{opt.label}</option>
+                    ))}
+                  </select>
+                </div>
+              </>
+            )}
+            <div>
+              <label style={{ fontSize: 12, color: 'var(--muted)', fontWeight: 600 }}>
+                ফোন নাম্বার{tab === 'register' ? ' — এটাই আপনার লগইন আইডি হবে' : ''}
+              </label>
+              <input
+                value={providerPhone}
+                onChange={(e) => setProviderPhone(e.target.value.replace(/[^0-9]/g, '').slice(0, 11))}
+                placeholder="01XXXXXXXXX (১১ ডিজিট)"
+                inputMode="numeric"
+                style={{ ...inputStyle, marginTop: 6 }}
+              />
+              {tab === 'register' && (
+                <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 4 }}>
+                  পরবর্তীতে এই একই নাম্বার আর পাসওয়ার্ড দিয়ে লগইন করবেন — আলাদা কোনো ইমেইল বা ইউজারনেম লাগবে না।
+                </div>
+              )}
+            </div>
+            <div>
+              <label style={{ fontSize: 12, color: 'var(--muted)', fontWeight: 600 }}>পাসওয়ার্ড</label>
+              <div style={{ position: 'relative' }}>
+                <input
+                  type={showPassword ? 'text' : 'password'}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  onKeyDown={(e) => e.key === 'Enter' && handleProviderPhone()}
+                  placeholder={tab === 'register' ? 'কমপক্ষে ৮ ক্যারেক্টার (অক্ষর + সংখ্যা)' : 'পাসওয়ার্ড'}
+                  style={{ ...inputStyle, marginTop: 6, paddingRight: 36 }}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword((v) => !v)}
+                  style={{ position: 'absolute', right: 8, top: 14, background: 'none', border: 'none', cursor: 'pointer', color: 'var(--muted)' }}
+                  aria-label={showPassword ? 'Hide password' : 'Show password'}
+                >
+                  {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                </button>
+              </div>
+            </div>
+            {error && (
+              <div style={{ fontSize: 12.5, color: 'var(--danger, #dc2626)', padding: '8px 10px', background: 'rgba(220,38,38,0.08)', borderRadius: 8 }}>
+                {error}
+              </div>
+            )}
+            <button style={btnPrimary} onClick={handleProviderPhone} disabled={loading}>
+              {loading ? 'অপেক্ষা করুন…' : tab === 'register' ? 'Register করুন' : 'লগইন করুন'}
+            </button>
           </div>
         )}
 
@@ -616,7 +844,7 @@ export default function AuthModal({ mode = 'login', isUpgrade = false, onClose, 
             unchanged, since Phase 2's scope is student signup/login only,
             not the upgrade flow). Faculty branch further down is
             byte-for-byte the same JSX as before this edit. */}
-        {!showAsFaculty && !isUpgrade && (tab === 'login' || registerRole) && (
+        {!showAsFaculty && !isProviderChoice && !isUpgrade && (tab === 'login' || registerRole) && (
           <div style={{ display: 'grid', gap: 10 }}>
             {tab === 'register' && registerRole && (
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: -4 }}>
@@ -740,7 +968,7 @@ export default function AuthModal({ mode = 'login', isUpgrade = false, onClose, 
           {tab === 'register' && !isUpgrade && registerRole && (
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: -4 }}>
               <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--text)' }}>
-                Signing up as: {registerRole === 'teacher' ? 'Faculty' : 'Student'}
+                Signing up as: {registerRole === 'teacher' ? 'Faculty' : registerRole === 'provider' ? 'Service Provider' : 'Student'}
               </span>
               <button
                 type="button"

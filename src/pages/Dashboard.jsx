@@ -1,13 +1,15 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import LazyRechartsArea from '../components/LazyRechartsArea';
-import { TrendingUp, Award, AlertTriangle, BookOpen, CalendarCheck, Clock, Wallet, Star, UserCircle, GraduationCap, ClipboardList, Medal, CheckCircle2 } from 'lucide-react';
+import { TrendingUp, Award, AlertTriangle, BookOpen, CalendarCheck, Clock, Wallet, Star, UserCircle, GraduationCap, ClipboardList, Medal, CheckCircle2, Store } from 'lucide-react';
 import * as Icons from 'lucide-react';
 import { store, cgpaToPercent, computeCGPA, computeTermGPAs, computeEffectiveAttendance, MIN_ATTENDANCE_PERCENT, SCHOLARSHIP_ATTENDANCE_PCT, computeCourseGrade, deriveAcademicMetaFromCourses, syncProfileAcademicMeta, getProfile, getTermLabelFromKey, getCurrentTermKey, getTermProgress, getTermTimeline, getTermIndex, TERM_KEYS, getTimerActiveState, formatDurationMs, PRODUCTIVE_TIME_CATEGORIES } from '../store/store';
 import { getAllCourses } from '../store/curriculumStore';
 import { NAV } from '../nav';
 import ticker from '../lib/ticker';
 import usePageMeta from '../hooks/usePageMeta';
+import { subscribeAllServices, SERVICE_TYPE_LABELS, SERVICE_TYPES, withServiceDefaults } from '../lib/serviceSync';
+import { CATEGORY_ICONS } from './Services';
 
 function StatCard({ label, value, sub, color, bgColor, icon: Icon, to }) {
   const inner = (
@@ -41,6 +43,58 @@ function StatCard({ label, value, sub, color, bgColor, icon: Icon, to }) {
   );
   return to ? <Link to={to} style={{ textDecoration: 'none' }}>{inner}</Link> : inner;
 }
+
+// MULTI_CATEGORY_SERVICES_PLAN.md Phase 6: compact 5-category preview
+// row for the Home page, linking to the full category grid at
+// /services. Deliberately a lightweight one-shot-ish subscription (not
+// wired into any of Dashboard's academic state) — this is a self-
+// contained widget, same spirit as the Focus Timer card below it.
+function ServicesPreviewRow() {
+  const [services, setServices] = useState(null);
+
+  useEffect(() => subscribeAllServices(setServices), []);
+
+  const activeCountByType = {};
+  SERVICE_TYPES.forEach((t) => { activeCountByType[t] = 0; });
+  (services || []).forEach((raw) => {
+    const s = withServiceDefaults(raw);
+    if (s.status !== 'dormant' && activeCountByType[s.type] !== undefined) {
+      activeCountByType[s.type] += 1;
+    }
+  });
+
+  return (
+    <div className="card" style={{ marginBottom: 12, padding: '16px 16px 14px' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+        <div style={{ fontSize: 12, fontWeight: 800, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--muted)' }}>Services</div>
+        <Link to="/services" style={{ fontSize: 12, fontWeight: 700, color: 'var(--accent)', textDecoration: 'none' }}>
+          সব দেখুন →
+        </Link>
+      </div>
+      <div style={{ display: 'grid', gridTemplateColumns: `repeat(${SERVICE_TYPES.length}, 1fr)`, gap: 8 }}>
+        {SERVICE_TYPES.map((type) => {
+          const Icon = CATEGORY_ICONS[type] || Store;
+          return (
+            <Link
+              key={type}
+              to={`/services/category/${type}`}
+              style={{
+                display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6,
+                padding: '10px 6px', borderRadius: 12, background: 'rgba(var(--accentRGB), 0.04)',
+                border: '1px solid rgba(var(--accentRGB), 0.10)', textDecoration: 'none', textAlign: 'center',
+              }}
+            >
+              <Icon size={18} color="var(--accent)" />
+              <span style={{ fontSize: 10, fontWeight: 700, color: 'var(--text)', lineHeight: 1.2 }}>{SERVICE_TYPE_LABELS[type]}</span>
+              <span style={{ fontSize: 9.5, color: 'var(--muted)' }}>{activeCountByType[type]} সক্রিয়</span>
+            </Link>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
 
 export default function Dashboard() {
   usePageMeta(
@@ -402,6 +456,9 @@ export default function Dashboard() {
           <Link to="/courses" className="btn btn-primary">Add courses →</Link>
         </div>
       )}
+
+      {/* MULTI_CATEGORY_SERVICES_PLAN.md Phase 6: Home page preview row */}
+      <ServicesPreviewRow />
     </div>
   );
 }

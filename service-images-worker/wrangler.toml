@@ -1,0 +1,28 @@
+name = "kuetx-service-images-worker"
+main = "src/index.js"
+compatibility_date = "2024-11-01"
+
+# MULTI_CATEGORY_SERVICES_PLAN.md Phase 0 decision: this is a NEW bucket
+# and NEW worker, separate from the existing kuetx-question-bank-worker —
+# that one is PDF-specific (QB_BUCKET/QB_STAGING_BUCKET bindings, PDF-only
+# routes), not a generic image-upload service, so it isn't reused here.
+# Only the token-verification approach (pure fetch + WebCrypto, no
+# firebase-admin dependency) is copied from it — see src/index.js's header
+# comment.
+[[r2_buckets]]
+binding = "SERVICE_IMAGES_BUCKET"
+bucket_name = "kuetx-service-images"
+
+[vars]
+FIREBASE_PROJECT_ID = "kuetx-8a184"
+ALLOWED_ORIGIN = "https://kuetx.vercel.app"
+
+# For local dev with `wrangler dev`, override with a second env or a
+# .dev.vars file (ALLOWED_ORIGIN=http://localhost:5173, etc.) — never
+# commit .dev.vars.
+#
+# Values above copied verbatim from cloudflare-worker/wrangler.toml —
+# same project, same deployed origin, and per that file's own comment
+# these aren't secrets (project id and CORS origin are public-facing
+# values anyway), so they're filled in directly here rather than left as
+# placeholders.

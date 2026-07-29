@@ -17,9 +17,10 @@
 // and letting the owner enter a real price when finishing a booking
 // (previously hardcoded to 0, so revenueTotal never actually moved).
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   Store, Check, X as XIcon, Clock, Wallet, Plus, Trash2,
+  MapPin, Truck, Image as ImageIcon, Pause, Play, Power, MessageCircle,
 } from 'lucide-react';
 import Collapsible from '../../components/Collapsible';
 import {
@@ -27,8 +28,13 @@ import {
   setServiceOfferings, addOfferingId, updateServiceDetails,
   subscribePendingBookings, subscribeConfirmedBookings,
   confirmBooking, cancelBooking, finishBooking, hasConflictingConfirmedSlot,
-  countStudentNoShowsOnService,
+  countStudentNoShowsOnService, withServiceDefaults,
+  SERVICE_TYPE_LABELS, SERVICE_TYPES, setServiceStatus,
+  subscribePendingInquiries, answerInquiry,
 } from '../../lib/serviceSync';
+import {
+  uploadServiceImage, deleteServiceImage, MAX_IMAGE_BYTES,
+} from '../../lib/serviceImageUpload';
 
 function formatWhen(ts) {
   if (!ts) return '';
@@ -94,6 +100,12 @@ export default function ProviderDashboard({ providerProfile }) {
 // form that creates it.
 // ---------------------------------------------------------------------
 function ServiceSetupForm({ providerUid }) {
+  // MULTI_CATEGORY_SERVICES_PLAN.md Phase 3 (explicit, mandatory gap from
+  // Phase 0.5): this form previously sent type: 'salon' hardcoded, with
+  // no category-select UI at all. Now the provider picks one of the five
+  // plan-approved categories at signup; createService() derives
+  // interactionMode from that choice (Phase 1 logic, unchanged here).
+  const [type, setType] = useState('salon');
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [priceNote, setPriceNote] = useState('');
@@ -109,7 +121,7 @@ function ServiceSetupForm({ providerUid }) {
     setSubmitting(true);
     try {
       await createService(providerUid, {
-        type: 'salon', name, description, priceNote,
+        type, name, description, priceNote,
       });
     } catch (e) {
       setError('সেভ করতে সমস্যা হয়েছে — আবার চেষ্টা করুন।');
@@ -128,6 +140,27 @@ function ServiceSetupForm({ providerUid }) {
       </div>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+        <div>
+          <label style={{ fontSize: 12, color: 'var(--muted)', fontWeight: 600 }}>ক্যাটাগরি</label>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginTop: 6 }}>
+            {SERVICE_TYPES.map((t) => (
+              <button
+                key={t}
+                type="button"
+                onClick={() => setType(t)}
+                style={{
+                  padding: '12px 10px', borderRadius: 10, fontSize: 13, fontWeight: 700,
+                  border: `1.5px solid ${type === t ? 'var(--accent)' : 'var(--border)'}`,
+                  background: type === t ? 'var(--accentSoft)' : 'var(--card)',
+                  color: type === t ? 'var(--accent)' : 'var(--text)',
+                  cursor: 'pointer', textAlign: 'center',
+                }}
+              >
+                {SERVICE_TYPE_LABELS[t]}
+              </button>
+            ))}
+          </div>
+        </div>
         <Field label="সার্ভিসের নাম" value={name} onChange={setName} placeholder="যেমন: Rafiq's Salon" />
         <Field label="বর্ণনা (ঐচ্ছিক)" value={description} onChange={setDescription} placeholder="সংক্ষিপ্ত বিবরণ" textarea />
         <Field label="মূল্য নোট (ঐচ্ছিক)" value={priceNote} onChange={setPriceNote} placeholder="যেমন: ৳50 - ৳300" />
@@ -165,13 +198,34 @@ function Field({
 // ---------------------------------------------------------------------
 // Main manager — shown once a service exists.
 // ---------------------------------------------------------------------
-function ServiceManager({ service }) {
+function ServiceManager({ service: rawService }) {
+  // MULTI_CATEGORY_SERVICES_PLAN.md Phase 1 migration note: run every
+  // service doc through withServiceDefaults() before use, so a
+  // pre-Phase-1 service (no interactionMode/status field yet) still
+  // renders correctly here instead of showing "undefined".
+  const service = withServiceDefaults(rawService);
+  const isInquiryMode = service.interactionMode === 'inquiry';
   const [pending, setPending] = useState(null);
   const [confirmed, setConfirmed] = useState(null);
+  const [pendingInquiries, setPendingInquiries] = useState(null);
   const [toggling, setToggling] = useState(false);
 
-  useEffect(() => subscribePendingBookings(service.id, setPending), [service.id]);
-  useEffect(() => subscribeConfirmedBookings(service.id, setConfirmed), [service.id]);
+  // Phase 5: booking-mode subscribes to the pending/confirmed queues as
+  // before; inquiry-mode subscribes to the new pending-inquiries stream
+  // instead. Only one pair is ever active per service, matching the
+  // mutually-exclusive rendering below.
+  useEffect(() => {
+    if (isInquiryMode) return undefined;
+    return subscribePendingBookings(service.id, setPending);
+  }, [service.id, isInquiryMode]);
+  useEffect(() => {
+    if (isInquiryMode) return undefined;
+    return subscribeConfirmedBookings(service.id, setConfirmed);
+  }, [service.id, isInquiryMode]);
+  useEffect(() => {
+    if (!isInquiryMode) return undefined;
+    return subscribePendingInquiries(service.id, setPendingInquiries);
+  }, [service.id, isInquiryMode]);
 
   const toggleOpen = async () => {
     setToggling(true);
@@ -182,9 +236,15 @@ function ServiceManager({ service }) {
     }
   };
 
+  const isDormant = service.status === 'dormant';
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-      {/* Open/Closed — biggest, most important, one tap (§5.2) */}
+      {isDormant && <DormantBanner service={service} />}
+
+      {/* Open/Closed — biggest, most important, one tap (§5.2). Left
+          exactly as-is even while dormant — plan's note: "owner dormant
+          অবস্থায়ও চাইলে isOpen টগল করতে পারবে". */}
       <button
         onClick={toggleOpen}
         disabled={toggling}
@@ -199,11 +259,21 @@ function ServiceManager({ service }) {
         {service.isOpen ? 'দোকান এখন খোলা — ট্যাপ করে বন্ধ করুন' : 'দোকান এখন বন্ধ — ট্যাপ করে খুলুন'}
       </button>
 
-      {/* Pending bookings queue — first screen priority (§5.1) */}
-      <PendingQueue serviceId={service.id} bookings={pending} offerings={service.offerings || []} />
+      {/* MULTI_CATEGORY_SERVICES_PLAN.md Phase 5: mutually exclusive
+          by interactionMode — booking keeps PendingQueue + ConfirmedList
+          + revenue exactly as before; inquiry gets the new
+          PendingInquiries list instead, no confirm/finish/revenue. */}
+      {isInquiryMode ? (
+        <PendingInquiries serviceId={service.id} inquiries={pendingInquiries} offerings={service.offerings || []} />
+      ) : (
+        <>
+          {/* Pending bookings queue — first screen priority (§5.1) */}
+          <PendingQueue serviceId={service.id} bookings={pending} offerings={service.offerings || []} />
 
-      {/* Confirmed bookings — finish or cancel-as-no-show */}
-      <ConfirmedList serviceId={service.id} bookings={confirmed} offerings={service.offerings || []} />
+          {/* Confirmed bookings — finish or cancel-as-no-show */}
+          <ConfirmedList serviceId={service.id} bookings={confirmed} offerings={service.offerings || []} />
+        </>
+      )}
 
       {/*
         Mobile scroll-depth pass (§5 closing note): PendingQueue and
@@ -218,20 +288,346 @@ function ServiceManager({ service }) {
         <OfferingsManager service={service} />
       </Collapsible>
 
+      {/* Phase 5: revenue tracker is booking-mode only — inquiry mode has
+          no confirm/finish/price-taking flow to feed it (plan's explicit
+          "কোনো revenue tracking নেই inquiry-তে"). */}
+      {!isInquiryMode && (
+        <Collapsible
+          title="মোট আয়"
+          subtitle="Done বুকিং থেকে"
+          rightCollapsed={<span style={{ fontSize: 14, fontWeight: 800, color: 'var(--text)' }}>৳{service.revenueTotal || 0}</span>}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <Wallet size={22} color="var(--accent)" />
+            <div style={{ fontSize: 18, fontWeight: 800, color: 'var(--text)' }}>৳{service.revenueTotal || 0}</div>
+          </div>
+        </Collapsible>
+      )}
+
+      {/* MULTI_CATEGORY_SERVICES_PLAN.md Phase 3: cover image, location,
+          delivery — same Collapsible pattern as Offerings/revenue/details
+          above, since these are also low-frequency edits. */}
+      <Collapsible title="ছবি, লোকেশন ও ডেলিভারি" subtitle={service.locationText || 'সেট করা হয়নি'}>
+        <ShopMetaEditor service={service} />
+      </Collapsible>
+
+      {/* MULTI_CATEGORY_SERVICES_PLAN.md Phase 3: manual pause/permanent-
+          close/reactivate control. */}
       <Collapsible
-        title="মোট আয়"
-        subtitle="Done বুকিং থেকে"
-        rightCollapsed={<span style={{ fontSize: 14, fontWeight: 800, color: 'var(--text)' }}>৳{service.revenueTotal || 0}</span>}
+        title="শপ স্ট্যাটাস"
+        subtitle={isDormant ? 'নিষ্ক্রিয় (Dormant)' : 'সক্রিয়'}
       >
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-          <Wallet size={22} color="var(--accent)" />
-          <div style={{ fontSize: 18, fontWeight: 800, color: 'var(--text)' }}>৳{service.revenueTotal || 0}</div>
-        </div>
+        <ShopStatusControl service={service} />
       </Collapsible>
 
       <Collapsible title="সার্ভিস বিবরণ এডিট করুন" subtitle={service.name}>
         <ServiceDetailsEditor service={service} />
       </Collapsible>
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------
+// MULTI_CATEGORY_SERVICES_PLAN.md Phase 3 additions below: dormant
+// banner, cover/offering image upload + location/delivery editor, and
+// the manual pause/permanent-close/reactivate control.
+// ---------------------------------------------------------------------
+
+function DormantBanner({ service }) {
+  const isPermanent = service.dormantReason === 'manual_permanent';
+  return (
+    <div
+      className="card"
+      style={{
+        padding: 14, borderRadius: 14, background: 'rgba(234,88,12,0.10)',
+        border: '1px solid rgba(234,88,12,0.35)',
+      }}
+    >
+      <div style={{ fontSize: 13.5, fontWeight: 700, color: '#c2410c' }}>
+        এই শপ এখন নিষ্ক্রিয় (Dormant)
+      </div>
+      <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 4, lineHeight: 1.6 }}>
+        {service.dormantReason === 'auto' && 'সব অফারিং দীর্ঘদিন ধরে আনঅ্যাভেইলেবল থাকায় সিস্টেম স্বয়ংক্রিয়ভাবে এটা নিষ্ক্রিয় করেছে।'}
+        {service.dormantReason === 'manual_temporary' && 'আপনি এই শপ সাময়িকভাবে বন্ধ রেখেছেন — নিচের "শপ স্ট্যাটাস" থেকে যেকোনো সময় আবার সক্রিয় করতে পারবেন।'}
+        {isPermanent && 'আপনি এই শপ স্থায়ীভাবে বন্ধ করেছেন — নিজে থেকে আর সক্রিয় করা যাবে না, Founder-এর সাথে যোগাযোগ করতে হবে।'}
+      </div>
+      <div style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 6 }}>
+        ছাত্রদের কাছে এখনো তালিকায় দেখাবে, কিন্তু আলাদা "বর্তমানে নিষ্ক্রিয়" অংশে, কম-প্রাধান্যে।
+      </div>
+    </div>
+  );
+}
+
+function ShopStatusControl({ service }) {
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState('');
+  const [confirming, setConfirming] = useState(null); // 'pause' | 'permanent_close' | null
+
+  const isDormant = service.status === 'dormant';
+  const isPermanent = service.dormantReason === 'manual_permanent';
+  const canReactivate = isDormant && !isPermanent;
+
+  const run = async (action) => {
+    setBusy(true);
+    setError('');
+    try {
+      await setServiceStatus(service.id, action);
+      setConfirming(null);
+    } catch (e) {
+      setError('আপডেট করতে সমস্যা হয়েছে — আবার চেষ্টা করুন।');
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  if (isDormant) {
+    return (
+      <div>
+        {error && <div style={{ fontSize: 12.5, color: 'var(--danger, #dc2626)', marginBottom: 8 }}>{error}</div>}
+        {canReactivate ? (
+          <button
+            onClick={() => run('reactivate')}
+            disabled={busy}
+            className="btn btn-primary"
+            style={{ width: '100%', minHeight: 46, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}
+          >
+            <Play size={16} /> {busy ? 'হচ্ছে…' : 'Reactivate — আবার সক্রিয় করুন'}
+          </button>
+        ) : (
+          <div style={{ fontSize: 12.5, color: 'var(--muted)' }}>
+            এই শপ স্থায়ীভাবে বন্ধ — নিজে থেকে reactivate করা যাবে না।
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  return (
+    <div>
+      <div style={{ fontSize: 12.5, color: 'var(--muted)', marginBottom: 12, lineHeight: 1.6 }}>
+        Deactivate করলে শপ "নিষ্ক্রিয়" তালিকায় চলে যাবে — কিন্তু ডেটা/offerings
+        সব অক্ষত থাকবে। কী ধরনের deactivate করবেন বেছে নিন:
+      </div>
+
+      {error && <div style={{ fontSize: 12.5, color: 'var(--danger, #dc2626)', marginBottom: 8 }}>{error}</div>}
+
+      {confirming === null && (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+          <button
+            onClick={() => setConfirming('pause')}
+            className="btn btn-secondary"
+            style={{ minHeight: 46, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}
+          >
+            <Pause size={16} /> সাময়িক বিরতি (Temporary pause)
+          </button>
+          <button
+            onClick={() => setConfirming('permanent_close')}
+            className="btn btn-secondary"
+            style={{ minHeight: 46, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, color: '#dc2626' }}
+          >
+            <Power size={16} /> স্থায়ীভাবে বন্ধ (Permanent close)
+          </button>
+        </div>
+      )}
+
+      {confirming === 'pause' && (
+        <ConfirmBlock
+          text="Temporary pause করলে শপ নিষ্ক্রিয় তালিকায় যাবে, কিন্তু আপনি যেকোনো সময় নিজে থেকে আবার Reactivate করে ফিরিয়ে আনতে পারবেন। কোনো ডেটা মুছে যাবে না।"
+          busy={busy}
+          onCancel={() => setConfirming(null)}
+          onConfirm={() => run('pause')}
+          confirmLabel="নিশ্চিত — Pause করুন"
+        />
+      )}
+
+      {confirming === 'permanent_close' && (
+        <ConfirmBlock
+          text="Permanent close করলে শপ নিষ্ক্রিয় তালিকায় যাবে এবং আপনি নিজে থেকে আর reactivate করতে পারবেন না — শুধু Founder-level review-এর মাধ্যমে আবার খোলা যাবে।"
+          busy={busy}
+          onCancel={() => setConfirming(null)}
+          onConfirm={() => run('permanent_close')}
+          confirmLabel="নিশ্চিত — স্থায়ীভাবে বন্ধ করুন"
+          danger
+        />
+      )}
+    </div>
+  );
+}
+
+function ConfirmBlock({
+  text, busy, onCancel, onConfirm, confirmLabel, danger,
+}) {
+  return (
+    <div style={{ padding: 12, borderRadius: 12, border: '1px solid var(--border)', background: 'var(--surface, var(--card))' }}>
+      <div style={{ fontSize: 12.5, color: 'var(--text)', lineHeight: 1.6, marginBottom: 12 }}>{text}</div>
+      <div style={{ display: 'flex', gap: 8 }}>
+        <button onClick={onCancel} disabled={busy} className="btn btn-secondary" style={{ flex: 1, minHeight: 44 }}>
+          বাতিল
+        </button>
+        <button
+          onClick={onConfirm}
+          disabled={busy}
+          className="btn btn-primary"
+          style={{ flex: 1, minHeight: 44, background: danger ? '#dc2626' : undefined }}
+        >
+          {busy ? 'হচ্ছে…' : confirmLabel}
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function ShopMetaEditor({ service }) {
+  const [locationText, setLocationText] = useState(service.locationText || '');
+  const [hasDelivery, setHasDelivery] = useState(Boolean(service.hasDelivery));
+  const [saving, setSaving] = useState(false);
+  const [saved, setSaved] = useState(false);
+  const [error, setError] = useState('');
+  const [uploadingCover, setUploadingCover] = useState(false);
+  const coverInputRef = useRef(null);
+
+  useEffect(() => {
+    setLocationText(service.locationText || '');
+    setHasDelivery(Boolean(service.hasDelivery));
+  }, [service.id, service.locationText, service.hasDelivery]);
+
+  const save = async () => {
+    setSaving(true);
+    setSaved(false);
+    setError('');
+    try {
+      await updateServiceDetails(service.id, { locationText, hasDelivery });
+      setSaved(true);
+    } catch (e) {
+      setError('সেভ করতে সমস্যা হয়েছে।');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const onPickCover = async (e) => {
+    const file = e.target.files?.[0];
+    e.target.value = '';
+    if (!file) return;
+    setError('');
+    setUploadingCover(true);
+    try {
+      const oldUrl = service.coverImageUrl;
+      const url = await uploadServiceImage(service.id, file);
+      await updateServiceDetails(service.id, { coverImageUrl: url });
+      if (oldUrl) deleteServiceImage(oldUrl); // best-effort, not awaited
+    } catch (e) {
+      setError(e.message || 'ছবি আপলোড করতে সমস্যা হয়েছে।');
+    } finally {
+      setUploadingCover(false);
+    }
+  };
+
+  const removeCover = async () => {
+    setError('');
+    try {
+      const oldUrl = service.coverImageUrl;
+      await updateServiceDetails(service.id, { coverImageUrl: null });
+      if (oldUrl) deleteServiceImage(oldUrl);
+    } catch (e) {
+      setError('মুছতে সমস্যা হয়েছে।');
+    }
+  };
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+      {/* Cover image */}
+      <div>
+        <label style={{ fontSize: 12, color: 'var(--muted)', fontWeight: 600 }}>কভার ছবি (সর্বোচ্চ 1MB)</label>
+        <div style={{ marginTop: 8, display: 'flex', alignItems: 'center', gap: 12 }}>
+          {service.coverImageUrl ? (
+            <img
+              src={service.coverImageUrl}
+              alt="cover"
+              style={{ width: 72, height: 72, borderRadius: 12, objectFit: 'cover', border: '1px solid var(--border)' }}
+            />
+          ) : (
+            <div style={{
+              width: 72, height: 72, borderRadius: 12, background: 'var(--accentSoft)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+            }}
+            >
+              <ImageIcon size={24} color="var(--accent)" />
+            </div>
+          )}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+            <button
+              onClick={() => coverInputRef.current?.click()}
+              disabled={uploadingCover}
+              className="btn btn-secondary"
+              style={{ minHeight: 40, fontSize: 13 }}
+            >
+              {uploadingCover ? 'আপলোড হচ্ছে…' : service.coverImageUrl ? 'পরিবর্তন করুন' : 'ছবি আপলোড করুন'}
+            </button>
+            {service.coverImageUrl && (
+              <button onClick={removeCover} className="btn btn-secondary" style={{ minHeight: 36, fontSize: 12, color: '#dc2626' }}>
+                মুছুন
+              </button>
+            )}
+          </div>
+          <input
+            ref={coverInputRef}
+            type="file"
+            accept="image/jpeg,image/png,image/webp,image/gif"
+            style={{ display: 'none' }}
+            onChange={onPickCover}
+          />
+        </div>
+      </div>
+
+      <div>
+        <label style={{ fontSize: 12, color: 'var(--muted)', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 6 }}>
+          <MapPin size={13} /> লোকেশন (ঐচ্ছিক, ফ্রি-টেক্সট)
+        </label>
+        <input
+          value={locationText}
+          onChange={(e) => setLocationText(e.target.value)}
+          placeholder="যেমন: Hall-3 Gate, Fazlul Haque Hall market"
+          style={{
+            width: '100%', marginTop: 6, padding: '10px 12px', borderRadius: 10,
+            border: '1px solid var(--border)', background: 'var(--card)',
+            color: 'var(--text)', fontSize: 14, fontFamily: 'inherit',
+          }}
+        />
+      </div>
+
+      <button
+        onClick={() => setHasDelivery((v) => !v)}
+        style={{
+          display: 'flex', alignItems: 'center', gap: 10, padding: '10px 12px',
+          borderRadius: 10, border: '1px solid var(--border)',
+          background: hasDelivery ? 'var(--accentSoft)' : 'var(--card)', cursor: 'pointer',
+        }}
+      >
+        <Truck size={18} color={hasDelivery ? 'var(--accent)' : 'var(--muted)'} />
+        <span style={{ fontSize: 13.5, fontWeight: 600, color: 'var(--text)', flex: 1, textAlign: 'left' }}>
+          হোম ডেলিভারি আছে
+        </span>
+        <span
+          style={{
+            width: 40, height: 22, borderRadius: 11, position: 'relative',
+            background: hasDelivery ? '#16a34a' : '#9ca3af', flexShrink: 0, transition: 'background 0.15s',
+          }}
+        >
+          <span style={{
+            position: 'absolute', top: 2, left: hasDelivery ? 20 : 2, width: 18, height: 18,
+            borderRadius: '50%', background: '#fff', transition: 'left 0.15s',
+          }}
+          />
+        </span>
+      </button>
+
+      {error && <div style={{ fontSize: 12.5, color: 'var(--danger, #dc2626)' }}>{error}</div>}
+
+      <button onClick={save} disabled={saving} className="btn btn-primary" style={{ minHeight: 44 }}>
+        {saving ? 'সেভ হচ্ছে…' : 'সেভ করুন'}
+      </button>
+      {saved && <span style={{ fontSize: 12, color: '#16a34a' }}>সেভ হয়েছে ✓</span>}
     </div>
   );
 }
@@ -382,6 +778,121 @@ function PendingBookingCard({
   );
 }
 
+// ---------------------------------------------------------------------
+// MULTI_CATEGORY_SERVICES_PLAN.md Phase 5 additions below: the
+// inquiry-mode equivalent of PendingQueue/PendingBookingCard above —
+// no confirm/finish/revenue, just item+quantity display and a
+// reply-and-answer action per inquiry.
+// ---------------------------------------------------------------------
+
+function PendingInquiries({ serviceId, inquiries, offerings }) {
+  const [busyId, setBusyId] = useState(null);
+  const [error, setError] = useState('');
+
+  const doAnswer = async (bookingId, replyText) => {
+    setBusyId(bookingId);
+    setError('');
+    try {
+      await answerInquiry(serviceId, bookingId, replyText);
+    } catch (e) {
+      setError(e.message || 'উত্তর পাঠাতে সমস্যা হয়েছে।');
+    } finally {
+      setBusyId(null);
+    }
+  };
+
+  return (
+    <div className="card" style={{ padding: 16 }}>
+      <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', marginBottom: 10, display: 'flex', alignItems: 'center', gap: 8 }}>
+        <MessageCircle size={16} /> Pending Inquiries {inquiries ? `(${inquiries.length})` : ''}
+      </div>
+
+      {inquiries === null && <div style={{ fontSize: 13, color: 'var(--muted)' }}>Loading…</div>}
+      {inquiries && inquiries.length === 0 && <div style={{ fontSize: 13, color: 'var(--muted)' }}>কোনো নতুন প্রশ্ন/অনুরোধ নেই।</div>}
+
+      {error && <div style={{ fontSize: 12.5, color: 'var(--danger, #dc2626)', marginBottom: 8 }}>{error}</div>}
+
+      {(inquiries || []).map((inq) => (
+        <InquiryQueueCard
+          key={inq.id}
+          inquiry={inq}
+          busy={busyId === inq.id}
+          onAnswer={(replyText) => doAnswer(inq.id, replyText)}
+        />
+      ))}
+    </div>
+  );
+}
+
+function InquiryQueueCard({ inquiry: inq, busy, onAnswer }) {
+  const [replyText, setReplyText] = useState('');
+
+  const total = (inq.items || []).reduce(
+    (sum, item) => (typeof item.price === 'number' ? sum + item.price * item.quantity : sum),
+    0,
+  );
+  const hasAnyPrice = (inq.items || []).some((item) => typeof item.price === 'number');
+
+  return (
+    <div
+      style={{
+        padding: 12, borderRadius: 12, marginBottom: 8,
+        background: 'var(--surface, var(--card))', border: '1px solid var(--border)',
+      }}
+    >
+      <div style={{ fontSize: 13.5, fontWeight: 700, color: 'var(--text)' }}>{inq.studentName || 'Student'}</div>
+      <div style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 2 }}>Requested: {formatWhen(inq.requestedAt)}</div>
+      {inq.studentPhone && (
+        <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 2 }}>{inq.studentPhone}</div>
+      )}
+
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 4, marginTop: 8 }}>
+        {(inq.items || []).map((item) => (
+          <div key={item.offeringId} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13 }}>
+            <span style={{ color: 'var(--text)' }}>{item.label} × {item.quantity}</span>
+            {typeof item.price === 'number' && (
+              <span style={{ color: 'var(--muted)' }}>৳{item.price * item.quantity}</span>
+            )}
+          </div>
+        ))}
+      </div>
+
+      {hasAnyPrice && (
+        <div style={{ fontSize: 12.5, fontWeight: 700, color: 'var(--accent)', marginTop: 6 }}>
+          মোট (আনুমানিক): ৳{total}
+        </div>
+      )}
+
+      {inq.question && (
+        <div style={{ fontSize: 12.5, color: 'var(--muted)', marginTop: 6, fontStyle: 'italic' }}>
+          &ldquo;{inq.question}&rdquo;
+        </div>
+      )}
+
+      <textarea
+        value={replyText}
+        onChange={(e) => setReplyText(e.target.value)}
+        placeholder="উত্তর লিখুন…"
+        rows={2}
+        style={{
+          width: '100%', marginTop: 10, padding: '8px 10px', borderRadius: 10,
+          border: '1px solid var(--border)', background: 'var(--card)', color: 'var(--text)', fontSize: 13.5,
+          resize: 'vertical', fontFamily: 'inherit',
+        }}
+      />
+
+      <button
+        onClick={() => onAnswer(replyText)}
+        disabled={busy || !replyText.trim()}
+        className="btn btn-primary"
+        style={{ width: '100%', marginTop: 8, minHeight: 44, fontSize: 14, fontWeight: 700 }}
+      >
+        {busy ? 'পাঠানো হচ্ছে…' : 'উত্তর দিন'}
+      </button>
+    </div>
+  );
+}
+
 function ConfirmedList({ serviceId, bookings, offerings }) {
   const [busyId, setBusyId] = useState(null);
   const [error, setError] = useState('');
@@ -496,18 +1007,31 @@ function ConfirmedList({ serviceId, bookings, offerings }) {
   );
 }
 
+const MAX_OFFERING_IMAGES = 3;
+
 function OfferingsManager({ service }) {
   const [offerings, setOfferings] = useState(service.offerings || []);
   const [newLabel, setNewLabel] = useState('');
+  const [newPrice, setNewPrice] = useState('');
   const [saving, setSaving] = useState(false);
+  const [error, setError] = useState('');
+  const [uploadingFor, setUploadingFor] = useState(null); // offering id currently uploading
+  const fileInputsRef = useRef({});
 
   useEffect(() => setOfferings(service.offerings || []), [service.offerings]);
 
+  // MULTI_CATEGORY_SERVICES_PLAN.md Phase 3: exact same whole-array-save
+  // pattern as before — every mutation (add/toggle/remove/price/image)
+  // builds the next full array and calls setServiceOfferings() once, no
+  // partial-update path added.
   const save = async (next) => {
     setSaving(true);
+    setError('');
     try {
       await setServiceOfferings(service.id, next);
       setOfferings(next);
+    } catch (e) {
+      setError('সেভ করতে সমস্যা হয়েছে।');
     } finally {
       setSaving(false);
     }
@@ -515,8 +1039,13 @@ function OfferingsManager({ service }) {
 
   const addOffering = () => {
     if (!newLabel.trim()) return;
-    const next = [...offerings, { id: addOfferingId(), label: newLabel.trim(), isAvailable: true }];
+    const price = newPrice.trim() ? Number(newPrice) : null;
+    const next = [...offerings, {
+      id: addOfferingId(), label: newLabel.trim(), isAvailable: true,
+      price: Number.isFinite(price) ? price : null, images: [],
+    }];
     setNewLabel('');
+    setNewPrice('');
     save(next);
   };
 
@@ -531,8 +1060,46 @@ function OfferingsManager({ service }) {
     // an offeringId stay intact — those bookings keep their offeringId
     // string regardless of whether the offerings array still lists it;
     // ProviderDashboard's offeringLabel() falls back to "Unknown offering"
-    // for exactly that case.
+    // for exactly that case. Any uploaded offering images are best-effort
+    // cleaned up from R2 too, same as cover-image replace/remove.
+    const removed = offerings.find((o) => o.id === id);
+    (removed?.images || []).forEach((url) => deleteServiceImage(url));
     save(offerings.filter((o) => o.id !== id));
+  };
+
+  const updatePrice = (id, value) => {
+    const price = value.trim() ? Number(value) : null;
+    const next = offerings.map((o) => (o.id === id ? { ...o, price: Number.isFinite(price) ? price : null } : o));
+    save(next);
+  };
+
+  const onPickOfferingImage = async (id, e) => {
+    const file = e.target.files?.[0];
+    e.target.value = '';
+    if (!file) return;
+    const offering = offerings.find((o) => o.id === id);
+    if (!offering) return;
+    if ((offering.images || []).length >= MAX_OFFERING_IMAGES) {
+      setError(`প্রতি item-এ সর্বোচ্চ ${MAX_OFFERING_IMAGES}টা ছবি দেওয়া যাবে।`);
+      return;
+    }
+    setError('');
+    setUploadingFor(id);
+    try {
+      const url = await uploadServiceImage(service.id, file);
+      const next = offerings.map((o) => (o.id === id ? { ...o, images: [...(o.images || []), url] } : o));
+      await save(next);
+    } catch (e) {
+      setError(e.message || 'ছবি আপলোড করতে সমস্যা হয়েছে।');
+    } finally {
+      setUploadingFor(null);
+    }
+  };
+
+  const removeOfferingImage = (id, url) => {
+    const next = offerings.map((o) => (o.id === id ? { ...o, images: (o.images || []).filter((u) => u !== url) } : o));
+    save(next);
+    deleteServiceImage(url);
   };
 
   return (
@@ -541,28 +1108,89 @@ function OfferingsManager({ service }) {
         <div style={{ fontSize: 13, color: 'var(--muted)', marginBottom: 10 }}>এখনো কোনো offering যোগ করা হয়নি।</div>
       )}
 
+      {error && <div style={{ fontSize: 12.5, color: 'var(--danger, #dc2626)', marginBottom: 8 }}>{error}</div>}
+
       {offerings.map((o) => (
-        <div key={o.id} style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '10px 0', borderBottom: '1px solid var(--border)' }}>
-          <span style={{ flex: 1, fontSize: 14, color: 'var(--text)', opacity: o.isAvailable ? 1 : 0.5 }}>{o.label}</span>
-          <button
-            onClick={() => toggleOffering(o.id)}
-            disabled={saving}
-            style={{
-              minHeight: 40, minWidth: 56, padding: '0 14px', borderRadius: 10, border: 'none',
-              fontSize: 13, fontWeight: 800, cursor: 'pointer',
-              background: o.isAvailable ? '#16a34a' : '#6b7280', color: '#fff',
-            }}
-          >
-            {o.isAvailable ? 'ON' : 'OFF'}
-          </button>
-          <button
-            onClick={() => removeOffering(o.id)}
-            disabled={saving}
-            className="btn btn-secondary"
-            style={{ minHeight: 40, minWidth: 40, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-          >
-            <Trash2 size={15} />
-          </button>
+        <div key={o.id} style={{ padding: '10px 0', borderBottom: '1px solid var(--border)' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <span style={{ flex: 1, fontSize: 14, color: 'var(--text)', opacity: o.isAvailable ? 1 : 0.5 }}>{o.label}</span>
+            <button
+              onClick={() => toggleOffering(o.id)}
+              disabled={saving}
+              style={{
+                minHeight: 40, minWidth: 56, padding: '0 14px', borderRadius: 10, border: 'none',
+                fontSize: 13, fontWeight: 800, cursor: 'pointer',
+                background: o.isAvailable ? '#16a34a' : '#6b7280', color: '#fff',
+              }}
+            >
+              {o.isAvailable ? 'ON' : 'OFF'}
+            </button>
+            <button
+              onClick={() => removeOffering(o.id)}
+              disabled={saving}
+              className="btn btn-secondary"
+              style={{ minHeight: 40, minWidth: 40, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+            >
+              <Trash2 size={15} />
+            </button>
+          </div>
+
+          {/* Phase 3: per-item price (optional) */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 8 }}>
+            <span style={{ fontSize: 12.5, color: 'var(--muted)' }}>৳</span>
+            <input
+              type="number"
+              inputMode="numeric"
+              defaultValue={o.price ?? ''}
+              onBlur={(e) => updatePrice(o.id, e.target.value)}
+              placeholder="দাম (ঐচ্ছিক)"
+              style={{
+                width: 110, minHeight: 36, padding: '0 10px', borderRadius: 8,
+                border: '1px solid var(--border)', background: 'var(--card)', color: 'var(--text)', fontSize: 13,
+              }}
+            />
+          </div>
+
+          {/* Phase 3: up to 3 images per offering */}
+          <div style={{ display: 'flex', gap: 8, marginTop: 8, flexWrap: 'wrap' }}>
+            {(o.images || []).map((url) => (
+              <div key={url} style={{ position: 'relative' }}>
+                <img src={url} alt={o.label} style={{ width: 48, height: 48, borderRadius: 8, objectFit: 'cover', border: '1px solid var(--border)' }} />
+                <button
+                  onClick={() => removeOfferingImage(o.id, url)}
+                  style={{
+                    position: 'absolute', top: -6, right: -6, width: 18, height: 18, borderRadius: '50%',
+                    background: '#dc2626', color: '#fff', border: 'none', fontSize: 11, lineHeight: '18px',
+                    cursor: 'pointer', padding: 0,
+                  }}
+                >
+                  ×
+                </button>
+              </div>
+            ))}
+            {(o.images || []).length < MAX_OFFERING_IMAGES && (
+              <>
+                <button
+                  onClick={() => fileInputsRef.current[o.id]?.click()}
+                  disabled={uploadingFor === o.id}
+                  style={{
+                    width: 48, height: 48, borderRadius: 8, border: '1px dashed var(--border)',
+                    background: 'var(--card)', color: 'var(--muted)', cursor: 'pointer',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  }}
+                >
+                  {uploadingFor === o.id ? '…' : <Plus size={16} />}
+                </button>
+                <input
+                  ref={(el) => { fileInputsRef.current[o.id] = el; }}
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp,image/gif"
+                  style={{ display: 'none' }}
+                  onChange={(e) => onPickOfferingImage(o.id, e)}
+                />
+              </>
+            )}
+          </div>
         </div>
       ))}
 
@@ -573,6 +1201,17 @@ function OfferingsManager({ service }) {
           placeholder="নতুন offering (যেমন: Haircut)"
           style={{
             flex: 1, minHeight: 44, padding: '0 12px', borderRadius: 10,
+            border: '1px solid var(--border)', background: 'var(--card)', color: 'var(--text)', fontSize: 14,
+          }}
+        />
+        <input
+          value={newPrice}
+          onChange={(e) => setNewPrice(e.target.value)}
+          type="number"
+          inputMode="numeric"
+          placeholder="৳"
+          style={{
+            width: 70, minHeight: 44, padding: '0 10px', borderRadius: 10,
             border: '1px solid var(--border)', background: 'var(--card)', color: 'var(--text)', fontSize: 14,
           }}
         />

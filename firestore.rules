@@ -358,6 +358,19 @@ service cloud.firestore {
       allow delete: if isSignedIn() && resource.data.uid == request.auth.uid;
     }
 
+    // providerPhones/{normalizedPhone} — service provider login identity
+    // (providerPhoneAuth.js). Exact same shape/guarantee as usernames/
+    // above, just keyed by the provider's 11-digit phone number instead
+    // of a chosen username: only the claiming uid may write their own uid
+    // in, and only while it doesn't steal an already-claimed number.
+    match /providerPhones/{phone} {
+      allow read: if true;
+      allow create, update: if isSignedIn()
+        && request.resource.data.uid == request.auth.uid
+        && (resource == null || resource.data.uid == request.auth.uid);
+      allow delete: if isSignedIn() && resource.data.uid == request.auth.uid;
+    }
+
     // -------------------------------------------------------------
     // Institutional verification facts — see kuetEmailVerify.js. Written
     // only by the separate verification-app session whose OWN auth token
@@ -651,6 +664,42 @@ service cloud.firestore {
         && get(/databases/$(database)/documents/services/$(serviceId)).data.providerUid == request.auth.uid;
     }
 
+    // MULTI_CATEGORY_SERVICES_PLAN.md Phase 1: enum validators for the
+    // three new/expanded category-related fields. `type` had no server-
+    // side enum check before this phase (any string was accepted); this
+    // now locks it to the five plan-approved categories, adding
+    // 'onlinemart' as the new value alongside the four that already
+    // existed in practice. interactionMode/status are entirely new
+    // fields, each with their own small closed value set per the plan.
+    function isValidServiceType(t) {
+      return t == 'salon' || t == 'hotel' || t == 'medicine'
+        || t == 'bookstore' || t == 'onlinemart';
+    }
+    function isValidInteractionMode(m) {
+      return m == 'booking' || m == 'inquiry';
+    }
+    function isValidServiceStatus(s) {
+      return s == 'open' || s == 'closed' || s == 'dormant';
+    }
+    // Phase 7 QA fix: isValidServiceStatus alone let a plain provider set
+    // status: 'dormant' with ANY dormantReason string, including the
+    // literal 'auto' that's supposed to be a server-only marker written
+    // exclusively by functions/index.js's detectDormantServices (which
+    // runs under the Admin SDK and bypasses these rules entirely — so
+    // this check never constrains that function, only the client SDK
+    // path a provider's own browser session uses). Without this, a
+    // provider could spoof dormantReason: 'auto' from the dashboard to
+    // make a manual pause look like an automatic one, or write an
+    // arbitrary unlisted string. A provider's own update is only ever
+    // allowed to set one of the two manual reasons (matching the two
+    // manual actions serviceSync.js's setServiceDormantState() exposes:
+    // 'pause' -> manual_temporary, 'permanent_close' -> manual_permanent)
+    // or null (the 'reactivate' action, or any update that isn't
+    // touching dormant state at all).
+    function isValidProviderDormantReason(r) {
+      return r == null || r == 'manual_temporary' || r == 'manual_permanent';
+    }
+
     // Gap 5 (server-side): true if the offering being booked is both
     // present on the service and currently isAvailable. Previously this
     // was client-side only (createBooking() in serviceSync.js) — a
@@ -690,6 +739,41 @@ service cloud.firestore {
         && _anyOfferingBookable(svc.offerings, offeringId);
     }
 
+    // MULTI_CATEGORY_SERVICES_PLAN.md Phase 2: same bounded-recursion
+    // technique as _offeringMatches/_anyOfferingBookable above, applied to
+    // an inquiry's `items[]` array — every entry must carry an
+    // offeringId, a label, and a quantity > 0. Bounded to 10 items, same
+    // reasoning as offerings (a small, client-composed cart-like list,
+    // never a genuinely large array).
+    function _inquiryItemValid(items, idx) {
+      return idx < items.size()
+        && items[idx].offeringId is string
+        && items[idx].label is string
+        && items[idx].quantity is number
+        && items[idx].quantity > 0;
+    }
+    function _allInquiryItemsValid(items) {
+      return items.size() > 0
+        && (items.size() <= 0 || _inquiryItemValid(items, 0))
+        && (items.size() <= 1 || _inquiryItemValid(items, 1))
+        && (items.size() <= 2 || _inquiryItemValid(items, 2))
+        && (items.size() <= 3 || _inquiryItemValid(items, 3))
+        && (items.size() <= 4 || _inquiryItemValid(items, 4))
+        && (items.size() <= 5 || _inquiryItemValid(items, 5))
+        && (items.size() <= 6 || _inquiryItemValid(items, 6))
+        && (items.size() <= 7 || _inquiryItemValid(items, 7))
+        && (items.size() <= 8 || _inquiryItemValid(items, 8))
+        && (items.size() <= 9 || _inquiryItemValid(items, 9))
+        && items.size() <= 10;
+    }
+    // True if the parent service is open AND currently in inquiry mode —
+    // gates the inquiry-shaped create branch below the same way
+    // offeringIsBookable() gates the booking-shaped one.
+    function serviceAcceptsInquiry(serviceId) {
+      let svc = get(/databases/$(database)/documents/services/$(serviceId)).data;
+      return svc.isOpen == true && svc.interactionMode == 'inquiry';
+    }
+
     // Gap 7 (server-side): true if the student has NO existing
     // pending/confirmed booking on this service. Firestore rules can't
     // run a where()-filtered query against the bookings subcollection
@@ -716,11 +800,22 @@ service cloud.firestore {
       // rejected provider account can never create a service doc, which
       // is the actual hard-gate enforcement point (RequireProvider in
       // App.jsx is a UI convenience; this rule is what actually matters).
+      // MULTI_CATEGORY_SERVICES_PLAN.md Phase 1: the four new/expanded
+      // fields are validated at create time too, not just update — a
+      // freshly created service must start with a plan-valid type,
+      // a matching-shape interactionMode/status, and no dormant markers
+      // set (a brand new service can never be born dormant).
       allow create: if isSignedIn()
         && isVerifiedProviderUid(request.auth.uid)
         && request.resource.data.providerUid == request.auth.uid
         && request.resource.data.isOpen == false
-        && request.resource.data.revenueTotal == 0;
+        && request.resource.data.revenueTotal == 0
+        && isValidServiceType(request.resource.data.type)
+        && isValidInteractionMode(request.resource.data.interactionMode)
+        && isValidServiceStatus(request.resource.data.status)
+        && request.resource.data.status == 'closed'
+        && request.resource.data.dormantReason == null
+        && request.resource.data.dormantSince == null;
 
       // Update: the owning provider can edit their own service (details,
       // isOpen toggle, offerings) — Founder can also edit/deactivate
@@ -732,10 +827,27 @@ service cloud.firestore {
       // touching a booking + the service together — a provider directly
       // rewriting their own revenueTotal upward is exactly the kind of
       // self-reported number this app never trusts elsewhere either.
+      // MULTI_CATEGORY_SERVICES_PLAN.md Phase 1: whenever an update
+      // touches type/interactionMode/status, the new value must still be
+      // one of the plan-valid enum values — this applies to both the
+      // owning-provider branch (editing locationText/hasDelivery/images/
+      // dormant-toggle from the dashboard) and the isAdmin() branch
+      // (Founder edits, and Phase 2's onSchedule dormant-detection
+      // function, which runs with admin privileges to flip
+      // status/dormantReason/dormantSince). type practically never
+      // changes after creation, but the check costs nothing and closes
+      // the same gap create's check closes.
       allow update: if (isSignedIn() && resource.data.providerUid == request.auth.uid
           && request.resource.data.providerUid == resource.data.providerUid
-          && request.resource.data.revenueTotal == resource.data.revenueTotal)
-        || isAdmin();
+          && request.resource.data.revenueTotal == resource.data.revenueTotal
+          && isValidServiceType(request.resource.data.type)
+          && isValidInteractionMode(request.resource.data.interactionMode)
+          && isValidServiceStatus(request.resource.data.status)
+          && isValidProviderDormantReason(request.resource.data.dormantReason))
+        || (isAdmin()
+          && isValidServiceType(request.resource.data.type)
+          && isValidInteractionMode(request.resource.data.interactionMode)
+          && isValidServiceStatus(request.resource.data.status));
 
       allow delete: if isAdmin();
 
@@ -753,25 +865,37 @@ service cloud.firestore {
         allow read: if isSignedIn()
           && (resource.data.studentUid == request.auth.uid || ownsService(serviceId) || isAdmin());
 
-        // Create: any signed-in student, for themselves only, always
-        // starting in 'pending' with every other terminal/derived field
-        // at its zero value. Gap 5 (offering must be open+available) and
-        // Gap 7 (one active booking per service) used to be client-side
-        // only in serviceSync.js's createBooking() — now re-verified
-        // here too via offeringIsBookable()/hasNoActiveBooking(), so a
-        // modified client can no longer slip a booking past a closed
-        // shop, a disabled offering, or a second active booking on the
-        // same service. This closes the gap PROGRESS.md flagged at the
-        // end of Phase 2.
+        // Create: any signed-in student, for themselves only. Two shapes
+        // now, gated on the parent service's interactionMode:
+        //  - booking-mode create (unchanged from before Phase 2): always
+        //    starting in 'pending' with every other terminal/derived
+        //    field at its zero value, offering must be open+available,
+        //    one active booking per service.
+        //  - MULTI_CATEGORY_SERVICES_PLAN.md Phase 2 inquiry-mode create:
+        //    starts 'open', no offeringId/preferredTime/cancelledBy/
+        //    confirmedSlot fields (booking-mode-specific), instead an
+        //    `items[]` array (validated via _allInquiryItemsValid) and
+        //    replyText starting null. Same hasNoActiveBooking() marker
+        //    check as booking mode — Phase 2's decision to treat
+        //    booking-active and inquiry-active as the same per-service
+        //    per-student "active interaction" concept.
         allow create: if isSignedIn()
           && request.resource.data.studentUid == request.auth.uid
-          && request.resource.data.status == 'pending'
-          && request.resource.data.cancelledBy == null
-          && request.resource.data.confirmedSlot == null
-          && offeringIsBookable(serviceId, request.resource.data.offeringId)
-          && hasNoActiveBooking(serviceId, request.auth.uid);
+          && hasNoActiveBooking(serviceId, request.auth.uid)
+          && (
+            (request.resource.data.status == 'pending'
+              && request.resource.data.cancelledBy == null
+              && request.resource.data.confirmedSlot == null
+              && offeringIsBookable(serviceId, request.resource.data.offeringId))
+            || (request.resource.data.status == 'open'
+              && request.resource.data.replyText == null
+              && serviceAcceptsInquiry(serviceId)
+              && _allInquiryItemsValid(request.resource.data.items))
+          );
 
-        // Update: exactly the transitions in §7, nothing else.
+        // Update: exactly the transitions in §7 (booking mode) plus the
+        // two inquiry-mode transitions from Phase 2 (open->answered,
+        // open->closed / answered->closed), nothing else.
         allow update: if isSignedIn() && (
           // pending -> confirmed (owner only) — status + confirmedSlot only.
           (ownsService(serviceId)
@@ -808,9 +932,29 @@ service cloud.firestore {
             && resource.data.status == 'confirmed'
             && request.resource.data.status == 'done'
             && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status']))
+
+          // MULTI_CATEGORY_SERVICES_PLAN.md Phase 2 — inquiry-mode
+          // transitions, same diff().affectedKeys().hasOnly() lock
+          // pattern as every booking-mode branch above:
+          // open -> answered (owner only) — status + replyText only.
+          || (ownsService(serviceId)
+            && resource.data.status == 'open'
+            && request.resource.data.status == 'answered'
+            && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'replyText']))
+
+          // open/answered -> closed (the inquiry's own student only,
+          // via closeInquiry() in serviceSync.js) — status only. Unlike
+          // booking-mode cancel, there's no owner-side close and no
+          // cancelledBy field to stamp — inquiry mode has no
+          // owner-initiated cancel concept in this phase's scope.
+          || (resource.data.studentUid == request.auth.uid
+            && (resource.data.status == 'open' || resource.data.status == 'answered')
+            && request.resource.data.status == 'closed'
+            && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status']))
         );
 
-        // Terminal states (done/cancelled/expired_shop_closed) have no
+        // Terminal states (done/cancelled/expired_shop_closed for booking
+        // mode; closed for inquiry mode) have no
         // further transitions — the update rule above already excludes
         // them implicitly (none of its five branches match a resource
         // whose current status isn't 'pending' or 'confirmed'), so no

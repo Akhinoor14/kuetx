@@ -18,6 +18,7 @@
 
 const { onDocumentCreated } = require('firebase-functions/v2/firestore');
 const { onCall, HttpsError } = require('firebase-functions/v2/https');
+const { onSchedule } = require('firebase-functions/v2/scheduler');
 const { initializeApp } = require('firebase-admin/app');
 const { getFirestore, FieldValue } = require('firebase-admin/firestore');
 const { getMessaging } = require('firebase-admin/messaging');
@@ -318,4 +319,74 @@ exports.verifyOtp = onCall(async (request) => {
 
   await docRef.delete();
   return { verified: true, email, role };
+});
+
+/**
+ * MULTI_CATEGORY_SERVICES_PLAN.md Phase 2 — dormant-shop auto-detection.
+ *
+ * NOT auto-deployed by this delivery, same as every other function in this
+ * file — needs `cd functions && npm install` then
+ * `firebase deploy --only functions` from someone with deploy access (see
+ * this phase's note in MULTI_CATEGORY_SERVICES_PLAN.md's "তোমার নিজের
+ * করণীয়" section, and confirm the project is on the Blaze plan first —
+ * onSchedule requires it).
+ *
+ * Runs once a day. For every services/{serviceId} doc currently
+ * status == 'open', flags it dormant if BOTH:
+ *   (a) no offering has isAvailable == true (everything sold out/closed), AND
+ *   (b) that all-unavailable state has held for >= DORMANT_THRESHOLD_DAYS
+ *       (14, per the plan) — tracked via a new `offeringsUpdatedAt`
+ *       timestamp field, stamped by setServiceOfferings() every time the
+ *       offerings array is written (see serviceSync.js) so this function
+ *       never has to guess how long the current state has persisted.
+ *
+ * Only ever moves status 'open' -> 'dormant' with dormantReason: 'auto'.
+ * Never touches a service that's already 'dormant' (manual or auto) or
+ * 'closed' — those are owner-driven states this function doesn't second-
+ * guess. Runs with admin privileges (the Admin SDK bypasses
+ * firestore.rules entirely, unlike the client SDK), so the enum-validity
+ * of what this function writes is guaranteed by this function's own code
+ * below (a fixed literal 'dormant'/'auto'), not by firestore.rules' own
+ * isAdmin() validation branch — that branch exists for Founder-driven
+ * client-side admin edits through the app UI, a separate write path from
+ * this server-side function.
+ */
+const DORMANT_THRESHOLD_DAYS = 14;
+const DORMANT_THRESHOLD_MS = DORMANT_THRESHOLD_DAYS * 24 * 60 * 60 * 1000;
+
+exports.detectDormantServices = onSchedule('every 24 hours', async () => {
+  const snap = await db.collection('services').where('status', '==', 'open').get();
+  if (snap.empty) return;
+
+  const now = Date.now();
+  const batch = db.batch();
+  let flaggedCount = 0;
+
+  snap.docs.forEach((docSnap) => {
+    const service = docSnap.data();
+    const offerings = Array.isArray(service.offerings) ? service.offerings : [];
+    const anyAvailable = offerings.some((o) => o && o.isAvailable === true);
+    if (anyAvailable) return; // has at least one live offering — not dormant
+
+    // No offeringsUpdatedAt yet (service predates this field, or never
+    // had its offerings touched) — fall back to createdAt so a genuinely
+    // old, never-updated service can still be caught, per the plan's
+    // "নতুন কোনো offering যোগ/আপডেট হয়নি" condition.
+    const lastTouched = service.offeringsUpdatedAt?.toMillis?.()
+      ?? service.createdAt?.toMillis?.()
+      ?? null;
+    if (lastTouched == null) return; // can't determine staleness — skip, don't guess
+    if (now - lastTouched < DORMANT_THRESHOLD_MS) return; // not stale long enough yet
+
+    batch.update(docSnap.ref, {
+      status: 'dormant',
+      dormantReason: 'auto',
+      dormantSince: FieldValue.serverTimestamp(),
+    });
+    flaggedCount += 1;
+  });
+
+  if (flaggedCount > 0) {
+    await batch.commit();
+  }
 });

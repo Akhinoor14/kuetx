@@ -26,6 +26,10 @@
 //
 // bookingAlerts/{uid}/items/{alertId}
 //   kind: 'booking_confirmed' | 'booking_cancelled' | 'booking_expired'
+//       | 'new_inquiry' | 'inquiry_answered'
+//         (the last two added in MULTI_CATEGORY_SERVICES_PLAN.md Phase 2 —
+//          same queueBookingAlertWrite() call site pattern below, no new
+//          alert-writing function, kind is just a free-form string here)
 //   serviceId, bookingId, serviceName
 //   message: short, already-composed display string (Bangla, matches the
 //            rest of the student/provider-facing UI)

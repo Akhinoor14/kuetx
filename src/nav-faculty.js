@@ -86,6 +86,18 @@ export const NAV_FACULTY = [
         hubIcon: 'BookMarked',
         items: [
           { id: 'f-qbank', label: 'Question Bank', icon: 'BookMarked', path: '/faculty/question-bank' },
+          // Services marketplace (MULTI_CATEGORY_SERVICES_PLAN.md) — same
+          // /services route the student shell uses, unguarded by role in
+          // App.jsx, so this was already reachable by a faculty account
+          // typing the URL directly; it just had no nav entry to discover
+          // it from. Placed here rather than given its own subgroup: it's
+          // an occasional-use campus utility for a faculty account (same
+          // spirit as Question Bank/Contact in this same subgroup), not
+          // a frequent/time-sensitive one like Communication above, so it
+          // doesn't need its own bottom-nav slot or hero placement — a
+          // tile inside the existing "everything else" Resources section
+          // is enough for it to stop being effectively hidden.
+          { id: 'f-services', label: 'Services', icon: 'Store', path: '/services' },
           { id: 'f-contact', label: 'Contact', icon: 'Mail', path: '/faculty/contact' },
           // Settings/About are shared, role-agnostic routes — same
           // destination as the student nav.js, not faculty-specific pages.

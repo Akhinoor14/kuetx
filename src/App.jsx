@@ -21,6 +21,7 @@ import ProfileSetupModal from './components/ProfileSetupModal';
 import RequireCR from './components/RequireCR';
 import RequireStaff from './components/RequireStaff';
 import RequireProvider from './components/RequireProvider';
+import RequireStudentMode from './components/RequireStudentMode';
 import { useIsProvider } from './hooks/useIsProvider';
 import useFirebaseAuth from './hooks/useFirebaseAuth';
 import DataSafeToast from './components/DataSafeToast';
@@ -92,6 +93,7 @@ const Settings = lazy(() => import('./pages/Settings'));
 const Notes = lazy(() => import('./pages/Notes').then((m) => ({ default: m.Notes })));
 const Clubs = lazy(() => import('./pages/Clubs'));
 const Services = lazy(() => import('./pages/Services'));
+const CategoryShopList = lazy(() => import('./pages/Services').then((m) => ({ default: m.CategoryShopList })));
 const ServiceDetail = lazy(() => import('./pages/ServiceDetail'));
 const ProviderDashboardPage = lazy(() => import('./pages/provider/ProviderDashboard'));
 const About = lazy(() => import('./pages/About'));
@@ -205,19 +207,19 @@ function Layout({ authState, onboardingActive }) {
                 uses. See BUGFIX_ROLE_SELECT_AND_FACULTY_ROUTING.md. */}
             <Route path="/" element={getAccountRole() === 'teacher' ? <Navigate to="/faculty" replace /> : <Dashboard />} />
             <Route path="/profile" element={<Profile />} />
-            <Route path="/courses" element={<Courses />} />
-            <Route path="/attendance" element={<Attendance />} />
-            <Route path="/marks" element={<Marks />} />
-            <Route path="/marks/:courseId" element={<Marks />} />
-            <Route path="/results" element={<Results />} />
-            <Route path="/schedule" element={<Schedule />} />
+            <Route path="/courses" element={<RequireStudentMode><Courses /></RequireStudentMode>} />
+            <Route path="/attendance" element={<RequireStudentMode><Attendance /></RequireStudentMode>} />
+            <Route path="/marks" element={<RequireStudentMode><Marks /></RequireStudentMode>} />
+            <Route path="/marks/:courseId" element={<RequireStudentMode><Marks /></RequireStudentMode>} />
+            <Route path="/results" element={<RequireStudentMode><Results /></RequireStudentMode>} />
+            <Route path="/schedule" element={<RequireStudentMode><Schedule /></RequireStudentMode>} />
             <Route path="/teachers" element={<Teachers />} />
-            <Route path="/syllabus" element={<Syllabus />} />
-            <Route path="/diary" element={<Diary />} />
-            <Route path="/assignments" element={<Assignments />} />
-            <Route path="/question-bank" element={<QuestionBank />} />
-            <Route path="/question-bank/view" element={<QuestionBankViewer />} />
-            <Route path="/solutions" element={<QuestionBankSolutions />} />
+            <Route path="/syllabus" element={<RequireStudentMode><Syllabus /></RequireStudentMode>} />
+            <Route path="/diary" element={<RequireStudentMode><Diary /></RequireStudentMode>} />
+            <Route path="/assignments" element={<RequireStudentMode><Assignments /></RequireStudentMode>} />
+            <Route path="/question-bank" element={<RequireStudentMode><QuestionBank /></RequireStudentMode>} />
+            <Route path="/question-bank/view" element={<RequireStudentMode><QuestionBankViewer /></RequireStudentMode>} />
+            <Route path="/solutions" element={<RequireStudentMode><QuestionBankSolutions /></RequireStudentMode>} />
             <Route path="/self-study/academic" element={<SelfStudy />} />
             <Route path="/self-study/deep-focus" element={<SelfStudy />} />
             <Route path="/time" element={<TimeTracker />} />
@@ -226,23 +228,24 @@ function Layout({ authState, onboardingActive }) {
             <Route path="/tuition" element={<Tuition />} />
             <Route path="/clubs" element={<Clubs />} />
             <Route path="/services" element={<Services />} />
+            <Route path="/services/category/:categoryType" element={<CategoryShopList />} />
             <Route path="/services/:serviceId" element={<ServiceDetail />} />
             <Route path="/projects" element={<Projects />} />
             <Route path="/tours" element={<Tours />} />
             <Route path="/calculators" element={<Navigate to="/marks" replace />} />
-            <Route path="/alerts" element={<Alerts />} />
+            <Route path="/alerts" element={<RequireStudentMode><Alerts /></RequireStudentMode>} />
             <Route path="/notice" element={<Notice />} />
             <Route path="/reports" element={<Reports />} />
             <Route path="/notes" element={<Notes />} />
             <Route path="/settings" element={<Settings />} />
             <Route path="/about" element={<About />} />
-            <Route path="/class-routine" element={<RequireCR><ClassRoutine /></RequireCR>} />
-            <Route path="/class-planner" element={<RequireCR><ClassPlanner /></RequireCR>} />
-            <Route path="/ct-quiz-planning" element={<RequireCR><CTQuizPlanning /></RequireCR>} />
-            <Route path="/class-roster" element={<RequireCR><ClassRosterPage /></RequireCR>} />
-            <Route path="/class-notices" element={<RequireCR><ClassNotices /></RequireCR>} />
-            <Route path="/class-my-role" element={<RequireCR><ClassMyRole /></RequireCR>} />
-            <Route path="/classmates" element={<Classmates />} />
+            <Route path="/class-routine" element={<RequireStudentMode><RequireCR><ClassRoutine /></RequireCR></RequireStudentMode>} />
+            <Route path="/class-planner" element={<RequireStudentMode><RequireCR><ClassPlanner /></RequireCR></RequireStudentMode>} />
+            <Route path="/ct-quiz-planning" element={<RequireStudentMode><RequireCR><CTQuizPlanning /></RequireCR></RequireStudentMode>} />
+            <Route path="/class-roster" element={<RequireStudentMode><RequireCR><ClassRosterPage /></RequireCR></RequireStudentMode>} />
+            <Route path="/class-notices" element={<RequireStudentMode><RequireCR><ClassNotices /></RequireCR></RequireStudentMode>} />
+            <Route path="/class-my-role" element={<RequireStudentMode><RequireCR><ClassMyRole /></RequireCR></RequireStudentMode>} />
+            <Route path="/classmates" element={<RequireStudentMode><Classmates /></RequireStudentMode>} />
             <Route path="/tools" element={<SubgroupHub group="Tools" />} />
             {/* Class Rep hub is CR-only content, but doesn't need a hard page
                 gate here — non-CR users simply never see a link to it (see

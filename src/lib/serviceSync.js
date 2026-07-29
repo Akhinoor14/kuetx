@@ -46,6 +46,39 @@ function newOfferingId() {
 // Service (provider-owned) CRUD
 // ---------------------------------------------------------------------
 
+// MULTI_CATEGORY_SERVICES_PLAN.md Phase 1: type -> default interactionMode
+// mapping. Booking-mode categories keep the existing pending/confirmed/done
+// state machine untouched; inquiry-mode categories (medicine, bookstore,
+// the new onlinemart) get the lighter open/answered/closed flow added in
+// Phase 2. This map is the single source of truth for the default — a
+// provider never picks interactionMode directly, it's derived from type.
+const TYPE_TO_INTERACTION_MODE = {
+  salon: 'booking',
+  hotel: 'booking',
+  medicine: 'inquiry',
+  bookstore: 'inquiry',
+  onlinemart: 'inquiry',
+};
+
+function defaultInteractionModeForType(type) {
+  return TYPE_TO_INTERACTION_MODE[type] || 'booking';
+}
+
+// MULTI_CATEGORY_SERVICES_PLAN.md Phase 3: single source of truth for the
+// five category labels (Bangla), shared by the provider onboarding
+// category-select (this phase) and the student-facing category grid
+// (Phase 6) — kept here rather than duplicated in two page files, since
+// both need the exact same type<->label mapping.
+export const SERVICE_TYPE_LABELS = {
+  salon: 'সেলুন',
+  hotel: 'হোটেল/খাবার',
+  medicine: 'মেডিসিন শপ',
+  bookstore: 'বই/স্টেশনারি/ফটোকপি',
+  onlinemart: 'Online Mart',
+};
+
+export const SERVICE_TYPES = Object.keys(SERVICE_TYPE_LABELS);
+
 /**
  * Creates a new services/{serviceId} doc for a verified provider (§2, §5.1).
  * Called once, right after Phase 1 verification, from the provider
@@ -54,20 +87,37 @@ function newOfferingId() {
  * provider should never end up with a service doc that isn't listed in
  * their own serviceIds array (Phase 1 left serviceIds: [] for exactly
  * this to fill in).
+ *
+ * MULTI_CATEGORY_SERVICES_PLAN.md Phase 1: two new optional params —
+ * locationText, hasDelivery — plus the schema-level fields below
+ * (interactionMode, status, dormantReason, dormantSince, coverImageUrl)
+ * that every new service now gets regardless of what the caller passes.
+ * The existing (type, name, description, priceNote) signature and the
+ * batch/serviceIds-sync logic are unchanged — this only adds fields to
+ * the same object literal and the same destructured argument, per the
+ * plan's explicit instruction not to introduce a parallel function.
  */
 export async function createService(providerUid, {
   type = 'salon', name, description = '', priceNote = '',
+  locationText = null, hasDelivery = false,
 }) {
   const batch = writeBatch(db);
   const serviceRef = doc(servicesCollectionRef());
 
   batch.set(serviceRef, {
     type,
+    interactionMode: defaultInteractionModeForType(type),
     providerUid,
     name: String(name || '').trim(),
     description: String(description || '').trim(),
     priceNote: String(priceNote || '').trim(),
+    locationText: locationText ? String(locationText).trim() : null,
+    hasDelivery: Boolean(hasDelivery),
     isOpen: false, // starts closed — provider opens explicitly (§5.2)
+    status: 'closed', // Phase 1: parallel higher-level bucket alongside isOpen — see plan's isOpen/status note
+    dormantReason: null,
+    dormantSince: null,
+    coverImageUrl: null,
     offerings: [],
     revenueTotal: 0,
     createdAt: serverTimestamp(),
@@ -213,21 +263,106 @@ export async function forceCloseProviderServices(providerUid) {
  * between two fields of the same offering. Turning an offering OFF only
  * blocks NEW bookings (enforced in createBooking below); any pending or
  * confirmed booking already referencing that offeringId is untouched.
+ *
+ * MULTI_CATEGORY_SERVICES_PLAN.md Phase 2: also stamps a new
+ * `offeringsUpdatedAt` timestamp on every call — this is what the
+ * dormant-detection onSchedule function (functions/index.js) reads to
+ * know how long a service's offerings have been in their current
+ * all-unavailable state, per the plan's 14-day-continuous condition.
  */
 export async function setServiceOfferings(serviceId, offerings) {
-  await updateDoc(serviceDocRef(serviceId), { offerings });
+  await updateDoc(serviceDocRef(serviceId), { offerings, offeringsUpdatedAt: serverTimestamp() });
 }
 
 export function addOfferingId() {
   return newOfferingId();
 }
 
-export async function updateServiceDetails(serviceId, { name, description, priceNote }) {
+/**
+ * MULTI_CATEGORY_SERVICES_PLAN.md Phase 1: adds locationText, hasDelivery,
+ * coverImageUrl as optional patchable fields alongside the existing three
+ * — same partial-patch pattern (only touch keys that were actually
+ * passed), no new function needed for the plan's location/delivery/cover
+ * image inputs that Phase 3's dashboard UI will call this with.
+ */
+export async function updateServiceDetails(serviceId, {
+  name, description, priceNote, locationText, hasDelivery, coverImageUrl,
+}) {
   const patch = {};
   if (name !== undefined) patch.name = String(name).trim();
   if (description !== undefined) patch.description = String(description).trim();
   if (priceNote !== undefined) patch.priceNote = String(priceNote).trim();
+  if (locationText !== undefined) patch.locationText = locationText ? String(locationText).trim() : null;
+  if (hasDelivery !== undefined) patch.hasDelivery = Boolean(hasDelivery);
+  if (coverImageUrl !== undefined) patch.coverImageUrl = coverImageUrl || null;
   await updateDoc(serviceDocRef(serviceId), patch);
+}
+
+/**
+ * MULTI_CATEGORY_SERVICES_PLAN.md Phase 3: manual status bucket control
+ * (§ "Shop status — তিন bucket + manual pause flow"). This is the one
+ * writer of `status`/`dormantReason`/`dormantSince` from the owner's own
+ * dashboard — the OTHER writer is functions/index.js's onSchedule
+ * (Phase 2), which only ever moves 'open' -> 'dormant' with reason
+ * 'auto'. Kept as a single small function (not folded into
+ * updateServiceDetails) because this is a deliberate state-machine
+ * transition with its own three shapes, not a free-form field patch:
+ *
+ *   'reactivate'      -> status: 'open' or 'closed' (whatever isOpen
+ *                         currently says — see plan's isOpen/status note:
+ *                         reactivating doesn't touch isOpen itself, it
+ *                         only clears the dormant bucket), dormantReason/
+ *                         dormantSince -> null. Only meaningful coming
+ *                         from 'manual_temporary' or 'auto' — the caller
+ *                         (dashboard UI) is responsible for not offering
+ *                         this button when dormantReason is
+ *                         'manual_permanent', but the plan doesn't ask
+ *                         for a rules-level block on it either (Founder
+ *                         can already do anything via isAdmin(), and nothing
+ *                         in the plan says a provider reactivating their
+ *                         own permanently-closed shop must be
+ *                         rules-blocked, just UI-discouraged).
+ *   'pause'            -> status: 'dormant', dormantReason:
+ *                         'manual_temporary', dormantSince: now.
+ *   'permanent_close'  -> status: 'dormant', dormantReason:
+ *                         'manual_permanent', dormantSince: now.
+ *
+ * All three are plain isOpen-preserving status-field writes — the
+ * existing services/{serviceId} update rule already allows the owning
+ * provider to touch status/dormantReason/dormantSince (validated only by
+ * enum, not by an explicit from-state transition list), so no rules
+ * change is needed for this to work.
+ */
+export async function setServiceStatus(serviceId, action) {
+  if (action === 'reactivate') {
+    const svc = await getService(serviceId);
+    const nextStatus = svc && svc.isOpen ? 'open' : 'closed';
+    await updateDoc(serviceDocRef(serviceId), {
+      status: nextStatus, dormantReason: null, dormantSince: null,
+    });
+    return;
+  }
+  const dormantReason = action === 'permanent_close' ? 'manual_permanent' : 'manual_temporary';
+  await updateDoc(serviceDocRef(serviceId), {
+    status: 'dormant', dormantReason, dormantSince: serverTimestamp(),
+  });
+}
+
+/**
+ * MULTI_CATEGORY_SERVICES_PLAN.md Phase 1 migration note: services created
+ * before this phase won't have interactionMode/status on their doc yet.
+ * Rather than a one-time backfill write, callers (Phase 4/6 UI) should
+ * read services through this helper (or apply the same two defaults
+ * inline) so an old salon doc silently behaves as
+ * interactionMode: 'booking', status: 'open'|'closed' derived from its
+ * existing isOpen — exactly the client-side default the plan specifies,
+ * no migration script required.
+ */
+export function withServiceDefaults(service) {
+  if (!service) return service;
+  const interactionMode = service.interactionMode || defaultInteractionModeForType(service.type);
+  const status = service.status || (service.isOpen ? 'open' : 'closed');
+  return { ...service, interactionMode, status };
 }
 
 /**
@@ -298,7 +433,17 @@ export async function countStudentNoShowsOnService(serviceId, studentUid) {
 // ---------------------------------------------------------------------
 
 /**
- * Student creates a booking (§6). Enforces:
+ * Student creates a booking (§6) OR an inquiry
+ * (MULTI_CATEGORY_SERVICES_PLAN.md Phase 2). Single entry point, branching
+ * on the service's interactionMode — the plan is explicit that this stays
+ * one function with an `if (interactionMode === 'inquiry')` branch rather
+ * than a second parallel function, so callers (ServiceDetail.jsx in
+ * Phase 4) don't need to know which mode they're in before calling.
+ *
+ * booking mode (interactionMode !== 'inquiry', i.e. missing/'booking'):
+ * exact same behavior as before this phase — offeringId required,
+ * preferredTime optional, cancelledBy/confirmedSlot present, status
+ * starts 'pending'. Enforces:
  *  - the target offering is currently isAvailable (Gap 5 — closed
  *    offerings can't receive new bookings)
  *  - the student doesn't already have an active (pending/confirmed)
@@ -307,9 +452,23 @@ export async function countStudentNoShowsOnService(serviceId, studentUid) {
  *    reasonably want a haircut AND a pending medicine order elsewhere)
  * preferredTime is optional and, when present, is always the structured
  * { date, time } shape (Gap 10) — never accepted as a free-text string.
+ *
+ * inquiry mode (interactionMode === 'inquiry'): no preferredTime, no
+ * single offeringId — instead takes `items: [{ offeringId, label, price,
+ * quantity }]` (Phase 2's multi-item shape, single-shop-scoped per the
+ * plan — every item must belong to THIS service's own offerings list).
+ * status starts 'open' (not 'pending'), cancelledBy/confirmedSlot are
+ * omitted entirely (booking-mode-specific concepts) and replaced with
+ * `replyText: null`. The same activeBooking/{studentUid} marker doc and
+ * "one active interaction per shop" rule apply — the plan treats
+ * booking-active and inquiry-active as the same "active" concept, scoped
+ * per-service, so a student can't open a second inquiry on a shop while
+ * one is still open/unanswered, same as they can't double-book.
  */
 export async function createBooking(serviceId, {
-  studentUid, studentName, studentPhone, offeringId, preferredTime = null,
+  studentUid, studentName, studentPhone,
+  offeringId, preferredTime = null,
+  items = null, question = '',
 }) {
   const serviceSnap = await getDoc(serviceDocRef(serviceId));
   if (!serviceSnap.exists()) {
@@ -319,57 +478,112 @@ export async function createBooking(serviceId, {
   if (!service.isOpen) {
     throw new Error('This shop is currently closed.');
   }
-  const offering = (service.offerings || []).find((o) => o.id === offeringId);
-  if (!offering || !offering.isAvailable) {
-    throw new Error('This offering is not currently available.');
-  }
 
-  // Gap 7: block a second active booking by the same student on the
-  // same service. Read-then-write is acceptable here (not inside a
+  const isInquiry = service.interactionMode === 'inquiry';
+
+  // Gap 7 / Phase 2's same-marker rule: block a second active
+  // booking/inquiry by the same student on the same service, regardless
+  // of mode. Read-then-write is acceptable here (not inside a
   // transaction) — a double-submit race would at worst let one extra
-  // booking through in a rare edge case, which the provider can simply
-  // reject/cancel; this isn't a correctness-critical invariant the way
+  // doc through in a rare edge case, which the provider can simply
+  // reject/close; this isn't a correctness-critical invariant the way
   // Gap 8's double-confirm is (that one directly risks double-serving
   // the same slot with two different students).
   const activeSnap = await getDocs(
     query(
       bookingsCollectionRef(serviceId),
       where('studentUid', '==', studentUid),
-      where('status', 'in', ['pending', 'confirmed']),
+      where('status', 'in', isInquiry ? ['open', 'answered'] : ['pending', 'confirmed']),
     ),
   );
   if (!activeSnap.empty) {
-    const err = new Error('You already have an active booking for this service.');
+    const err = new Error(isInquiry
+      ? 'You already have an active inquiry for this shop.'
+      : 'You already have an active booking for this service.');
     err.code = 'booking/already-active';
     throw err;
   }
 
-  const normalizedPreferredTime = preferredTime && preferredTime.date && preferredTime.time
-    ? { date: preferredTime.date, time: preferredTime.time }
-    : null;
-
-  // Gap 7 (now also enforced server-side, see firestore.rules'
-  // hasNoActiveBooking()): the booking doc and its activeBooking marker
-  // are written in the same batch, so a client can never end up with
-  // one but not the other. The rule's `create` check on the booking
-  // itself re-verifies the marker doesn't already exist, closing the
-  // race the earlier read-then-write check above couldn't fully close
-  // on its own — a second concurrent createBooking() call from the same
-  // student now fails at the rules layer even if both calls' own
-  // getDocs() check (above) raced and both saw "no active booking".
   const bookingRef = doc(bookingsCollectionRef(serviceId));
   const batch = writeBatch(db);
-  batch.set(bookingRef, {
-    studentUid,
-    studentName: String(studentName || '').trim(),
-    studentPhone: String(studentPhone || '').trim(),
-    offeringId,
-    preferredTime: normalizedPreferredTime,
-    requestedAt: serverTimestamp(),
-    status: 'pending',
-    cancelledBy: null,
-    confirmedSlot: null,
-  });
+
+  if (isInquiry) {
+    const offeringsById = new Map((service.offerings || []).map((o) => [o.id, o]));
+    const normalizedItems = (Array.isArray(items) ? items : [])
+      .map((item) => {
+        const offering = offeringsById.get(item.offeringId);
+        const quantity = Number(item.quantity);
+        if (!offering || !offering.isAvailable || !(quantity > 0)) return null;
+        return {
+          offeringId: offering.id,
+          label: offering.label,
+          price: typeof offering.price === 'number' ? offering.price : null,
+          quantity,
+        };
+      })
+      .filter(Boolean);
+    if (normalizedItems.length === 0) {
+      throw new Error('অন্তত একটা আইটেম বেছে নিন যেটা এখন available।');
+    }
+
+    // Phase 2: inquiry doc shape — no offeringId/preferredTime/
+    // cancelledBy/confirmedSlot, those are booking-mode-specific.
+    // replyText starts null, filled in by answerInquiry() below.
+    batch.set(bookingRef, {
+      studentUid,
+      studentName: String(studentName || '').trim(),
+      studentPhone: String(studentPhone || '').trim(),
+      items: normalizedItems,
+      question: String(question || '').trim(),
+      requestedAt: serverTimestamp(),
+      status: 'open',
+      replyText: null,
+    });
+    // Alert the owning provider, same batch as the create — mirrors
+    // confirmBooking's same-transaction alert write, since a new
+    // inquiry is exactly the kind of event the provider needs to see
+    // promptly (their "Pending inquiries" queue just gained an entry).
+    queueBookingAlertWrite(batch, service.providerUid, {
+      kind: 'new_inquiry',
+      serviceId,
+      bookingId: bookingRef.id,
+      serviceName: service.name || '',
+      message: `${studentName || 'কেউ একজন'} ${service.name || 'আপনার শপ'}-এ নতুন প্রশ্ন/অনুরোধ পাঠিয়েছেন।`,
+    });
+  } else {
+    const offering = (service.offerings || []).find((o) => o.id === offeringId);
+    if (!offering || !offering.isAvailable) {
+      throw new Error('This offering is not currently available.');
+    }
+    const normalizedPreferredTime = preferredTime && preferredTime.date && preferredTime.time
+      ? { date: preferredTime.date, time: preferredTime.time }
+      : null;
+
+    // Gap 7 (now also enforced server-side, see firestore.rules'
+    // hasNoActiveBooking()): the booking doc and its activeBooking marker
+    // are written in the same batch, so a client can never end up with
+    // one but not the other. The rule's `create` check on the booking
+    // itself re-verifies the marker doesn't already exist, closing the
+    // race the earlier read-then-write check above couldn't fully close
+    // on its own — a second concurrent createBooking() call from the same
+    // student now fails at the rules layer even if both calls' own
+    // getDocs() check (above) raced and both saw "no active booking".
+    batch.set(bookingRef, {
+      studentUid,
+      studentName: String(studentName || '').trim(),
+      studentPhone: String(studentPhone || '').trim(),
+      offeringId,
+      preferredTime: normalizedPreferredTime,
+      requestedAt: serverTimestamp(),
+      status: 'pending',
+      cancelledBy: null,
+      confirmedSlot: null,
+    });
+  }
+
+  // Same activeBooking marker doc for both modes — Phase 2's decision to
+  // treat "active booking" and "active inquiry" as the same underlying
+  // per-service-per-student concept (see function doc above).
   batch.set(doc(db, 'services', serviceId, 'activeBooking', studentUid), {});
   await batch.commit();
   return bookingRef.id;
@@ -402,6 +616,28 @@ export function subscribeConfirmedBookings(serviceId, callback) {
     (snap) => callback(snap.docs.map((d) => ({ id: d.id, ...d.data() }))),
     (err) => {
       console.error('[serviceSync] subscribeConfirmedBookings error:', err);
+      callback([]);
+    },
+  );
+}
+
+/**
+ * MULTI_CATEGORY_SERVICES_PLAN.md Phase 2: provider's open (unanswered)
+ * inquiries, oldest-first — the inquiry-mode equivalent of
+ * subscribePendingBookings above. Phase 5's ProviderDashboard will render
+ * this as the new "Pending inquiries" list when interactionMode ===
+ * 'inquiry', in place of the booking-mode PendingQueue.
+ */
+export function subscribePendingInquiries(serviceId, callback) {
+  return onSnapshot(
+    query(
+      bookingsCollectionRef(serviceId),
+      where('status', '==', 'open'),
+      orderBy('requestedAt', 'asc'),
+    ),
+    (snap) => callback(snap.docs.map((d) => ({ id: d.id, ...d.data() }))),
+    (err) => {
+      console.error('[serviceSync] subscribePendingInquiries error:', err);
       callback([]);
     },
   );
@@ -467,6 +703,66 @@ export async function confirmBooking(serviceId, bookingId, confirmedSlot = null)
       message: `${serviceName || 'আপনার বুকিং'} কনফার্ম হয়েছে${slotText}।`,
     });
   });
+}
+
+/**
+ * MULTI_CATEGORY_SERVICES_PLAN.md Phase 2: owner answers an open inquiry
+ * — status 'open' -> 'answered', replyText filled in. Mirrors
+ * confirmBooking()'s transaction-guard pattern above (re-reads status
+ * inside the transaction) so a double-click or race can't double-answer
+ * the same inquiry. No revenue/confirmedSlot concept here — inquiry mode
+ * never tracks revenue (§ plan decision, "কোনো revenue tracking নেই
+ * inquiry-তে").
+ */
+export async function answerInquiry(serviceId, bookingId, replyText) {
+  const ref = bookingDocRef(serviceId, bookingId);
+  const svcRef = serviceDocRef(serviceId);
+  await runTransaction(db, async (tx) => {
+    const [snap, svcSnap] = await Promise.all([tx.get(ref), tx.get(svcRef)]);
+    if (!snap.exists()) {
+      throw new Error('Inquiry not found.');
+    }
+    if (snap.data().status !== 'open') {
+      const err = new Error('This inquiry is no longer open — it may have already been answered or closed.');
+      err.code = 'inquiry/not-open';
+      throw err;
+    }
+    tx.update(ref, { status: 'answered', replyText: String(replyText || '').trim() });
+
+    const serviceName = svcSnap.exists() ? (svcSnap.data().name || '') : '';
+    queueBookingAlertWrite(tx, snap.data().studentUid, {
+      kind: 'inquiry_answered',
+      serviceId,
+      bookingId,
+      serviceName,
+      message: `${serviceName || 'আপনার প্রশ্নের'} উত্তর দেওয়া হয়েছে।`,
+    });
+  });
+}
+
+/**
+ * MULTI_CATEGORY_SERVICES_PLAN.md Phase 2: student closes their own
+ * inquiry (open or answered) — status -> 'closed', and the
+ * activeBooking marker is deleted so the student is free to open a new
+ * inquiry on this same shop. Mirrors cancelBooking()'s activeBooking
+ * cleanup below; best-effort in the same spirit — a missed marker
+ * cleanup is a UX inconvenience (can't immediately reopen), not a
+ * correctness or privacy issue, so it doesn't block the status write.
+ */
+export async function closeInquiry(serviceId, bookingId) {
+  const ref = bookingDocRef(serviceId, bookingId);
+  const snap = await getDoc(ref);
+  if (!snap.exists()) throw new Error('Inquiry not found.');
+  const inquiry = snap.data();
+  if (inquiry.status !== 'open' && inquiry.status !== 'answered') {
+    throw new Error('This inquiry can no longer be closed.');
+  }
+  await updateDoc(ref, { status: 'closed' });
+  try {
+    await deleteDoc(doc(db, 'services', serviceId, 'activeBooking', inquiry.studentUid));
+  } catch (e) {
+    console.error('closeInquiry: activeBooking marker cleanup failed', e);
+  }
 }
 
 /**
@@ -567,7 +863,7 @@ export async function cancelBooking(serviceId, bookingId, cancelledBy) {
         serviceId,
         bookingId,
         serviceName,
-        message: `${booking.studentName || 'একজন student'} তার বুকিং বাতিল করেছেন (${serviceName || 'সার্ভিস'})।`,
+        message: `${booking.studentName || 'কেউ একজন'} তার বুকিং বাতিল করেছেন (${serviceName || 'সার্ভিস'})।`,
       });
       await batch.commit();
     }
