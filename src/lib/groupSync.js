@@ -100,6 +100,53 @@ function _subscribeSingleton(key, buildQueryFn, mapDocsFn, callback) {
 const _snapToArray = (snap) => snap.docs.map((d) => ({ id: d.id, ...d.data() }));
 
 // ---------------------------------------------------------------------
+// Merge N _subscribeSingleton listeners into one combined callback.
+//
+// WHY THIS EXISTS (permission-denied on notices/groupNotices listeners):
+// Firestore can only allow a *list* query (onSnapshot over a collection,
+// as opposed to a get() on one known doc) when the security rule for
+// that collection can be proven true for every possible result WITHOUT
+// looking at each doc's own data — i.e. the rule's conditions have to be
+// implied by the query's own where()/orderBy() clauses. A rule like
+// `resource.data.audience.type == 'all' || (resource.data.audience.type
+// == 'student_uids' && request.auth.uid in resource.data.audience.uids)`
+// is a perfectly fine rule for reading ONE known doc, but a bare
+// `query(collection('notices'), orderBy('createdAt'), limit(50))` has no
+// where() clause tying it to that condition, so Firestore can't verify
+// the whole result set would pass — it denies the ENTIRE query up
+// front with permission-denied, not just the docs that would fail.
+// Same root cause for groups/{groupId}/notices: the `targetType !=
+// 'cr_only' || isGroupCR(...)` branch can't be proven for an unfiltered
+// query either.
+//
+// The fix is NOT to loosen the rules (that would leak targeted/CR-only
+// notices to readers who shouldn't see them) — it's to run one
+// rule-provable, where()-scoped listener PER audience the current user
+// actually qualifies for, and merge the results client-side. Each
+// individual listener's query now has a where() clause matching exactly
+// the rule branch it's allowed under, so Firestore can verify every
+// result up front.
+function _mergeSubscriptions(subscribeFns, callback) {
+  const n = subscribeFns.length;
+  const results = new Array(n).fill(null);
+  const received = new Array(n).fill(false);
+  const emit = () => {
+    if (!received.every(Boolean)) return; // wait for every listener's first snapshot
+    const merged = new Map();
+    for (const arr of results) {
+      for (const item of arr || []) merged.set(item.id, item);
+    }
+    callback(Array.from(merged.values()));
+  };
+  const unsubs = subscribeFns.map((fn, i) => fn((arr) => {
+    results[i] = arr;
+    received[i] = true;
+    emit();
+  }));
+  return () => unsubs.forEach((u) => u());
+}
+
+// ---------------------------------------------------------------------
 // Membership
 // ---------------------------------------------------------------------
 
@@ -1402,15 +1449,79 @@ export function isClassSetupComplete(classSetup, routineCount, courseTeacherMap,
 // Group (CR-level) notices
 // ---------------------------------------------------------------------
 
-export function subscribeGroupNotices(groupId, callback) {
+export function subscribeGroupNotices(groupId, callback, opts = {}) {
   if (!groupId) return () => {};
-  const key = `groupNotices:${groupId}`;
-  return _subscribeSingleton(
-    key,
-    () => query(collection(db, 'groups', groupId, 'notices'), orderBy('createdAt', 'desc'), fsLimit(50)),
+
+  // Split per the rules' own targetType branch (see _mergeSubscriptions
+  // above for why an unfiltered query was being denied outright for
+  // EVERY reader, not just the ones who shouldn't see cr_only notices).
+  // Any signed-in group member can read 'broadcast' notices (and legacy
+  // docs with no targetType field, which the rule treats the same way)
+  // — that needs only a where() clause matching that rule branch, no
+  // role check. The 'cr_only' listener is attached ONLY when the caller
+  // says the viewer qualifies, since the rule denies that query outright
+  // for anyone else (same failure mode we're fixing, just narrowed to
+  // the one subset of notices that's actually supposed to be gated).
+  //
+  // opts.canSeeCrOnly: pass true when the current viewer is this
+  // group's CR/ACR/CL, an Admin, or a Faculty account — i.e. exactly the
+  // set firestore.rules' groups/{groupId}/notices read rule allows to
+  // see a cr_only doc. Callers that already track this via
+  // subscribeMyRole (ClassNoticesPanel, ClassRoster/
+  // useClassRosterState) pass it through; defaults to false so a caller
+  // that hasn't resolved the viewer's role yet never attempts a query it
+  // isn't cleared for.
+  const canSeeCrOnly = !!opts.canSeeCrOnly;
+
+  const broadcastKey = `groupNotices:${groupId}:broadcast`;
+  const subscribeBroadcast = (cb) => _subscribeSingleton(
+    broadcastKey,
+    () => query(
+      collection(db, 'groups', groupId, 'notices'),
+      where('targetType', '==', 'broadcast'),
+      orderBy('createdAt', 'desc'),
+      fsLimit(50),
+    ),
     _snapToArray,
-    callback,
+    cb,
   );
+
+  // targetType is optional on older docs (absent == visible to everyone,
+  // per noticeUtils.js's `n.targetType !== 'cr_only'` check) but
+  // Firestore's equality/`in` filters can't match "field is missing" the
+  // way they match an explicit value, so a second where()-scoped
+  // listener covers that legacy shape specifically.
+  const legacyKey = `groupNotices:${groupId}:legacy`;
+  const subscribeLegacy = (cb) => _subscribeSingleton(
+    legacyKey,
+    () => query(
+      collection(db, 'groups', groupId, 'notices'),
+      where('targetType', '==', null),
+      orderBy('createdAt', 'desc'),
+      fsLimit(50),
+    ),
+    _snapToArray,
+    cb,
+  );
+
+  const crOnlyKey = `groupNotices:${groupId}:crOnly`;
+  const subscribeCrOnly = (cb) => _subscribeSingleton(
+    crOnlyKey,
+    () => query(
+      collection(db, 'groups', groupId, 'notices'),
+      where('targetType', '==', 'cr_only'),
+      orderBy('createdAt', 'desc'),
+      fsLimit(50),
+    ),
+    _snapToArray,
+    cb,
+  );
+
+  const fns = canSeeCrOnly
+    ? [subscribeBroadcast, subscribeLegacy, subscribeCrOnly]
+    : [subscribeBroadcast, subscribeLegacy];
+
+  return _mergeSubscriptions(fns, callback);
 }
 
 export async function postGroupNotice(groupId, profile, { title, body, priority = 'normal' }) {
