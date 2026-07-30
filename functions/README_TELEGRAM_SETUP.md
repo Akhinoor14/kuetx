@@ -17,12 +17,24 @@ posting into groups/Channels, so it isn't part of this (see the note atop
    messages that start with `/`, which is exactly what we need, so default
    is usually fine — Disable if `/register` isn't being picked up).
 
-## 2. Store the token as a secret
+## 2. Store the token (no Blaze plan needed)
+Secret Manager (`firebase functions:secrets:set`) requires the Blaze
+(pay-as-you-go) plan. Until that upgrade happens, use a plain `.env` file
+instead — Firebase Functions v2 auto-loads it, and it works fine on the
+free Spark plan:
+
 ```bash
 cd functions
-firebase functions:secrets:set TELEGRAM_BOT_TOKEN
-# paste the token when prompted
+cp .env.example .env
+# open .env and paste the real token after TELEGRAM_BOT_TOKEN=
 ```
+
+`functions/.env` is already in `.gitignore` — never commit the real file,
+only `.env.example` (which has no real token in it).
+
+When the project later upgrades to Blaze, this can be swapped for
+`firebase functions:secrets:set TELEGRAM_BOT_TOKEN` for slightly stronger
+at-rest encryption — not required to get this working today.
 
 ## 3. Deploy the functions
 ```bash

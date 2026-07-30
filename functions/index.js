@@ -19,7 +19,6 @@
 const { onDocumentCreated } = require('firebase-functions/v2/firestore');
 const { onCall, onRequest, HttpsError } = require('firebase-functions/v2/https');
 const { onSchedule } = require('firebase-functions/v2/scheduler');
-const { defineSecret } = require('firebase-functions/params');
 const { initializeApp } = require('firebase-admin/app');
 const { getFirestore, FieldValue } = require('firebase-admin/firestore');
 const { getMessaging } = require('firebase-admin/messaging');
@@ -27,12 +26,15 @@ const { getMessaging } = require('firebase-admin/messaging');
 initializeApp();
 const db = getFirestore();
 
-// Telegram bot token — set once via:
-//   firebase functions:secrets:set TELEGRAM_BOT_TOKEN
-// (get the token from @BotFather; never commit it to the repo). Using
-// defineSecret keeps it out of source and out of plain environment
-// config, matching how a token this sensitive should be handled.
-const TELEGRAM_BOT_TOKEN = defineSecret('TELEGRAM_BOT_TOKEN');
+// Telegram bot token — plain env variable (NOT Secret Manager, which
+// requires the Blaze plan). Firebase Functions v2 auto-loads a
+// functions/.env file at deploy/runtime, so this just reads it like any
+// other Node env var. Put TELEGRAM_BOT_TOKEN=<token from @BotFather> in
+// functions/.env — that file must NEVER be committed (see functions/
+// .gitignore, added alongside this).
+function getTelegramBotToken() {
+  return process.env.TELEGRAM_BOT_TOKEN || '';
+}
 
 async function sendToTokens(tokens, { title, body, link, noticeId }) {
   if (!tokens.length) return;
@@ -193,8 +195,8 @@ exports.startTelegramLink = onCall(async (request) => {
  * Handles exactly one command: "/register <code>" sent from inside the
  * class's Telegram group/channel after the bot has been added as admin.
  */
-exports.telegramWebhook = onRequest({ secrets: [TELEGRAM_BOT_TOKEN] }, async (req, res) => {
-  const token = TELEGRAM_BOT_TOKEN.value();
+exports.telegramWebhook = onRequest(async (req, res) => {
+  const token = getTelegramBotToken();
   const update = req.body || {};
   const message = update.message || update.channel_post;
   const text = String(message?.text || '').trim();
@@ -241,21 +243,18 @@ exports.telegramWebhook = onRequest({ secrets: [TELEGRAM_BOT_TOKEN] }, async (re
   res.status(200).send('ok');
 });
 
-exports.onGroupNoticeCreateTelegram = onDocumentCreated(
-  { document: 'groups/{groupId}/notices/{noticeId}', secrets: [TELEGRAM_BOT_TOKEN] },
-  async (event) => {
-    const notice = event.data?.data();
-    if (!notice) return;
-    const { groupId } = event.params;
-    const setupSnap = await db.collection('groups').doc(groupId).collection('meta').doc('classSetup').get();
-    const chatId = setupSnap.exists ? setupSnap.data()?.telegramChatId : null;
-    if (!chatId) return; // this class never connected Telegram — no-op, not an error
+exports.onGroupNoticeCreateTelegram = onDocumentCreated('groups/{groupId}/notices/{noticeId}', async (event) => {
+  const notice = event.data?.data();
+  if (!notice) return;
+  const { groupId } = event.params;
+  const setupSnap = await db.collection('groups').doc(groupId).collection('meta').doc('classSetup').get();
+  const chatId = setupSnap.exists ? setupSnap.data()?.telegramChatId : null;
+  if (!chatId) return; // this class never connected Telegram — no-op, not an error
 
-    const token = TELEGRAM_BOT_TOKEN.value();
-    const text = `📢 *${escapeMarkdown(notice.title || 'Notice')}*\n${escapeMarkdown(notice.body || '')}`;
-    await telegramApi('sendMessage', token, { chat_id: chatId, text, parse_mode: 'Markdown' });
-  }
-);
+  const token = getTelegramBotToken();
+  const text = `📢 *${escapeMarkdown(notice.title || 'Notice')}*\n${escapeMarkdown(notice.body || '')}`;
+  await telegramApi('sendMessage', token, { chat_id: chatId, text, parse_mode: 'Markdown' });
+});
 
 function escapeMarkdown(s) {
   return String(s || '').replace(/([_*[\]()~`>#+\-=|{}.!])/g, '\\$1');
