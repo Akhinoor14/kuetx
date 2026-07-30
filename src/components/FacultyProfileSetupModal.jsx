@@ -23,6 +23,7 @@ import { GraduationCap } from 'lucide-react';
 import { auth } from '../lib/firebase';
 import { DEPARTMENTS, INSTITUTES, BASIC_SCIENCE_DEPTS } from '../store/store';
 import { getFacultyDoc, saveFacultyProfile } from '../lib/facultySync';
+import { ensureManualVerifyRequest } from '../lib/manualVerifyRequests';
 import { guessDeptFromFacultyEmail } from '../lib/facultyEmailVerify';
 
 // Common KUET faculty designations. Kept as a dropdown for consistency
@@ -141,6 +142,18 @@ export default function FacultyProfileSetupModal({ onSave }) {
     setSaving(true);
     try {
       await saveFacultyProfile(auth.currentUser.uid, form);
+      // This is the most reliable trigger point for faculty: name+dept
+      // are guaranteed valid here (validate() above), and this step is
+      // mandatory in the onboarding queue (App.jsx 'faculty-profile'),
+      // so it also covers accounts whose shell doc got created via
+      // saveFacultyProfile's own self-heal path rather than
+      // createFacultyAccountDoc — idempotent doc ID means this is a
+      // no-op if AuthModal's earlier call already succeeded.
+      ensureManualVerifyRequest('faculty', {
+        name: form.name,
+        email: auth.currentUser?.email,
+        dept: form.dept,
+      });
       onSave?.();
     } catch (err) {
       // Firestore's SDK surfaces both "genuinely denied by rules" and

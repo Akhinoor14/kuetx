@@ -6,7 +6,8 @@ import { isKuetEmailFormat, emailRollMatchesProfile } from '../lib/kuetEmailVeri
 import { DEPARTMENTS, DEPT_CODES, DEFAULT_PROFILE, TERM_KEYS, getTermLabelFromKey, extractBatchFromRoll, normalizeProfileForSave } from '../store/store';
 import { getBatchStartDates } from '../lib/appConfigSync';
 import { claimRoll, requestRollUnlock } from '../lib/rollOwnership';
-import { subscribeGroupTermStartDate } from '../lib/termStartDateSync';
+import { ensureManualVerifyRequest } from '../lib/manualVerifyRequests';
+import { subscribeGroupTermStartDate, subscribeGroupCurrentTermKey } from '../lib/termStartDateSync';
 import { getGroupId, isMultiSectionDept } from '../lib/groupUtils';
 
 // Map dept codes: roll middle 2 digits -> dept code
@@ -244,6 +245,24 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
     }
   }, [groupTermStartDate]);
 
+  // Same mechanism, for Current Term (see setGroupCurrentTermKey in
+  // termStartDateSync.js). While no CR has set one yet for this class,
+  // the field above stays a normal editable select (bootstrap case —
+  // brand-new class, nobody to set it for anyone). Once a CR/ACR has set
+  // one, it's mirrored in and the field locks to read-only.
+  const [groupCurrentTermKey, setGroupCurrentTermKey] = useState(null);
+  useEffect(() => {
+    return subscribeGroupCurrentTermKey(liveGroupId, setGroupCurrentTermKey);
+  }, [liveGroupId]);
+
+  useEffect(() => {
+    if (groupCurrentTermKey) {
+      setForm(prev => (prev.currentTermKey === groupCurrentTermKey && prev._currentTermLockedByCR
+        ? prev
+        : { ...prev, currentTermKey: groupCurrentTermKey, _currentTermLockedByCR: true }));
+    }
+  }, [groupCurrentTermKey]);
+
   // Auto-fill university start date from batch (only if user hasn't manually set it)
   useEffect(() => {
     const batch = extractBatchFromRoll(form.studentId);
@@ -460,6 +479,22 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
     }
     setRollLocked(null);
 
+    // Auto-submit the background manual-verify safety net (parallel to
+    // Blue Tick / CR-ACR approval, never blocking it) now that name+roll
+    // are confirmed valid and roll-collision-free. Skip on a `reclaimed`
+    // claim — that path only succeeds because this account already has
+    // verifiedRolls/{roll} proof (see rollOwnership.js claimRoll), i.e.
+    // this account is effectively already verified, so queuing it for
+    // manual review would just be Approvals-tab noise. Fire-and-forget:
+    // never blocks or fails the actual profile save below.
+    if (!claim.reclaimed) {
+      ensureManualVerifyRequest('student', {
+        name: form.name,
+        email: form.kuetEmail,
+        roll: studentIdTrimmed,
+      });
+    }
+
     const next = normalizeProfileForSave({
       ...DEFAULT_PROFILE,
       ...form,
@@ -481,6 +516,10 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
       yearStarted: form.yearStarted || null,
       totalCreditsRequired: DEFAULT_PROFILE.totalCreditsRequired,
     });
+    // _currentTermLockedByCR is UI-only state (whether this modal shows
+    // Current Term as a locked read-only display vs an editable select)
+    // — never meant to be part of the stored profile.
+    delete next._currentTermLockedByCR;
     if (onSave) onSave(next);
   };
 
@@ -680,13 +719,22 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
                         typing and aren't blocking as many pages. */}
                     <div>
                       <label style={labelStyle}>Current Term</label>
-                      <select ref={registerFieldRef('currentTermKey')} value={form.currentTermKey || ''} onChange={handleChange('currentTermKey')} style={fieldStyle}>
-                        <option value="">Select current term</option>
-                        {TERM_KEYS.map(termKey => (
-                          <option key={termKey} value={termKey}>{termKey} - {getTermLabelFromKey(termKey)}</option>
-                        ))}
-                      </select>
+                      {form._currentTermLockedByCR ? (
+                        <div style={{ ...fieldStyle, display: 'flex', alignItems: 'center', color: 'var(--text)' }}>
+                          {form.currentTermKey} - {getTermLabelFromKey(form.currentTermKey)}
+                        </div>
+                      ) : (
+                        <select ref={registerFieldRef('currentTermKey')} value={form.currentTermKey || ''} onChange={handleChange('currentTermKey')} style={fieldStyle}>
+                          <option value="">Select current term</option>
+                          {TERM_KEYS.map(termKey => (
+                            <option key={termKey} value={termKey}>{termKey} - {getTermLabelFromKey(termKey)}</option>
+                          ))}
+                        </select>
+                      )}
                       {errors.currentTermKey && <div style={{ fontSize: 11, color: '#dc2626', marginTop: 5 }}>{errors.currentTermKey}</div>}
+                      {form._currentTermLockedByCR && (
+                        <div style={{ fontSize: 10, color: 'var(--muted)', marginTop: 4 }}>Set by your CR for your whole class</div>
+                      )}
                     </div>
                     <div>
                       <label style={labelStyle}>Blood Group</label>
@@ -846,13 +894,22 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
                     </div>
                     <div>
                       <label style={labelStyle}>Current Term</label>
-                      <select ref={registerFieldRef('currentTermKey')} value={form.currentTermKey || ''} onChange={handleChange('currentTermKey')} style={fieldStyle}>
-                        <option value="">Select current term</option>
-                        {TERM_KEYS.map(termKey => (
-                          <option key={termKey} value={termKey}>{termKey} - {getTermLabelFromKey(termKey)}</option>
-                        ))}
-                      </select>
+                      {form._currentTermLockedByCR ? (
+                        <div style={{ ...fieldStyle, display: 'flex', alignItems: 'center', color: 'var(--text)' }}>
+                          {form.currentTermKey} - {getTermLabelFromKey(form.currentTermKey)}
+                        </div>
+                      ) : (
+                        <select ref={registerFieldRef('currentTermKey')} value={form.currentTermKey || ''} onChange={handleChange('currentTermKey')} style={fieldStyle}>
+                          <option value="">Select current term</option>
+                          {TERM_KEYS.map(termKey => (
+                            <option key={termKey} value={termKey}>{termKey} - {getTermLabelFromKey(termKey)}</option>
+                          ))}
+                        </select>
+                      )}
                       {errors.currentTermKey && <div style={{ fontSize: 11, color: '#dc2626', marginTop: 5 }}>{errors.currentTermKey}</div>}
+                      {form._currentTermLockedByCR && (
+                        <div style={{ fontSize: 10, color: 'var(--muted)', marginTop: 4 }}>Set by your CR for your whole class</div>
+                      )}
                     </div>
                     <div>
                       <label style={labelStyle}>Current Term Start Date</label>

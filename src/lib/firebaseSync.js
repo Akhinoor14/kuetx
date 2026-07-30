@@ -75,6 +75,26 @@ let _pushTimers     = {};          // key → setTimeout id
 let _storeListener  = null;
 let _pullInterval   = null;
 let _isSyncing      = false;
+// FIX (data-loss race): tracks which keys have a local change that either
+// hasn't been pushed yet (debounce still counting down) or is actively
+// being pushed right now. A pull that lands during this window used to
+// blind-overwrite the fresher local value with the stale value it read
+// from the server (see the incident this comment was added for: a user
+// saved data, and it visibly reverted/disappeared a few seconds later).
+// Root cause: store.importAllReport() always wins unconditionally — it
+// has no concept of "local is newer, don't touch this key" — so ANY pull
+// (login-time pullAllFromFirestore, the 15-min periodic pull, a manual
+// "Sync now", or hydrateProfileFromFirestore for the profile key) that
+// completes while a PUSH_DEBOUNCE_MS timer is still pending, or its
+// setDoc() is still in flight, would write the old server value straight
+// back into memoryCache/localStorage/IndexedDB, and the debounce timer
+// (reading store.get(key) only when it fires) would then dutifully push
+// that now-corrupted stale value back to Firestore too — so the loss
+// wasn't just local, it round-tripped into the server as well.
+// 'profile' is included here (not just the generic per-key set) since
+// pushProfile()/hydrateProfileFromFirestore() are subject to the exact
+// same shape of race on their own dedicated path.
+const _pendingLocalKeys = new Set();
 
 // ─── Status emitter ───────────────────────────────────────────────────────────
 
@@ -119,9 +139,19 @@ export const pullAllFromFirestore = async (uid) => {
       if (value !== undefined) remote[d.id] = value;
     });
 
-    // Merge remote into local (remote wins — last-write-wins)
+    // Merge remote into local (remote wins for everything EXCEPT a key
+    // that's mid-flight locally right now — see _pendingLocalKeys comment
+    // above. Without this exclusion, a pull landing during the 4s push
+    // debounce (or while pushKey's setDoc is still in flight) would
+    // overwrite the just-made local edit with the stale value this same
+    // getDocs() call just read, then the debounce timer would push that
+    // stale value straight back to Firestore, making the loss permanent
+    // on both sides).
     const prefixed = {};
-    for (const [k, v] of Object.entries(remote)) prefixed[`kuetx_${k}`] = v;
+    for (const [k, v] of Object.entries(remote)) {
+      if (_pendingLocalKeys.has(k)) continue; // local edit in flight — don't clobber it
+      prefixed[`kuetx_${k}`] = v;
+    }
     if (Object.keys(prefixed).length > 0) await store.importAllReport(prefixed);
 
     emit('synced', { at: new Date().toISOString() });
@@ -179,12 +209,24 @@ const startStoreListener = () => {
 
     if (_pushTimers[key]) clearTimeout(_pushTimers[key]);
     emit('pending');
+    // Mark pending THE MOMENT a local change is queued, not just while
+    // the debounce timer is counting down — this window (queued but not
+    // yet even scheduled to push) is exactly where an unlucky pull used
+    // to win. Cleared in the finally below once the push has genuinely
+    // settled (succeeded or failed) — never cleared early just because
+    // the timer fired, since pushKey()'s own network round-trip is
+    // itself still a window a pull could otherwise race into.
+    _pendingLocalKeys.add(key);
 
     _pushTimers[key] = setTimeout(async () => {
       delete _pushTimers[key];
       _isSyncing = true;
       emit('syncing');
-      await pushKey(key, value);
+      try {
+        await pushKey(key, value);
+      } finally {
+        _pendingLocalKeys.delete(key);
+      }
       if (Object.keys(_pushTimers).length === 0) {
         _isSyncing = false;
         emit('synced', { at: new Date().toISOString() });
@@ -241,12 +283,15 @@ export const startFirebaseSync = async (uid, { onSyncStatus } = {}) => {
 // fallback and go straight to the direct doc path.
 const hydrateProfileFromFirestore = async (uid) => {
   try {
+    if (_pendingLocalKeys.has('profile')) return; // a pushProfile() call is in flight — don't race it
     const localProfile = store.get('profile');
     const knownDeptBatch = (localProfile && localProfile.dept && localProfile.batch)
       ? { dept: localProfile.dept, batch: localProfile.batch }
       : null;
     const remote = await pullProfile(uid, knownDeptBatch);
-    if (remote) await store.importAllReport({ kuetx_profile: remote });
+    // Re-check after the await — pushProfile() may have started while
+    // pullProfile() (a separate network round-trip) was in flight.
+    if (remote && !_pendingLocalKeys.has('profile')) await store.importAllReport({ kuetx_profile: remote });
   } catch (err) {
     console.warn('[KUETx Sync] Profile hydrate failed:', err.message);
   }
@@ -260,6 +305,7 @@ export const stopFirebaseSync = () => {
 
   Object.values(_pushTimers).forEach(t => clearTimeout(t));
   _pushTimers = {};
+  _pendingLocalKeys.clear();
 
   if (_storeListener) {
     window.removeEventListener('kuetx:store-updated', _storeListener);
@@ -299,6 +345,15 @@ export const pushProfile = async (uid, profile) => {
     console.warn('[KUETx Sync] pushProfile: cannot resolve dept/batch from studentId, not writing', profile.studentId);
     return;
   }
+  // Same race this whole file's pending-key tracking exists for (see
+  // _pendingLocalKeys comment above): pushProfile has no debounce of its
+  // own (every caller — ProfileSetupModal via App.jsx, Profile.jsx —
+  // fires it directly on save), but the setDoc below is still an async
+  // round-trip, and hydrateProfileFromFirestore() can run concurrently
+  // (e.g. the periodic 15-min pull, or another tab/device's sync tick)
+  // and would otherwise pull the OLD server doc and overwrite this
+  // profile save locally before the setDoc below has even landed.
+  _pendingLocalKeys.add('profile');
   try {
     const docRef = doc(db, 'students', loc.dept, loc.batch, uid);
     // uid is stored explicitly on the doc (in addition to being the doc's
@@ -310,6 +365,8 @@ export const pushProfile = async (uid, profile) => {
     console.warn('[KUETx Sync] pushProfile failed:', err.message);
     emit('error', { message: err.message });
     throw err;
+  } finally {
+    _pendingLocalKeys.delete('profile');
   }
 };
 

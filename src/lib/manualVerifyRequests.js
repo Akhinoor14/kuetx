@@ -1,14 +1,34 @@
 // manualVerifyRequests.js
 //
-// Fallback path for institutional (KUET email) verification when the
-// automatic Firebase email-link flow can't send — e.g. the daily
-// send-quota is used up. Rather than leaving the person stuck, they can
-// submit a manual verification request here (same shape for student and
-// faculty, distinguished by `role`), which appears in the Founder's
-// Approvals tab exactly like CL applications / CR requests already do.
+// Safety-net verification queue for the Founder/Admin's Approvals tab,
+// same shape for student and faculty (distinguished by `role`).
+//
+// As of the auto-submit change: ensureManualVerifyRequest() is called
+// automatically, silently, in the background — once per account, as soon
+// as enough profile data exists (name+roll for students, name+dept/email
+// for faculty) — via a DETERMINISTIC doc ID (manualVerifyRequests/{uid})
+// so it can never create a duplicate no matter how many times it's
+// called (profile re-saves, repeat app loads, etc). This guarantees the
+// Founder/Admin has visibility into every account, not just the ones
+// whose owner happened to click "Verify manually."
+//   - Students: this is a PARALLEL safety net, not the primary path —
+//     Blue Tick (System 1: CR/ACR class-roster approval, see
+//     groupSync.js) is still how most students actually get verified.
+//     A student who's approved via System 1 first just leaves this
+//     request sitting unapproved/stale; nothing auto-resolves it.
+//   - Faculty: this IS the only path (no CR/ACR-equivalent exists for
+//     faculty), so the same auto-submit is faculty's sole route to
+//     verifiedAt=true.
+//
+// The legacy submitManualVerifyRequest() (addDoc, random ID) is what the
+// "Contact Founder on WhatsApp" button used to call to create the
+// request; the request is no longer created by that click (it already
+// exists by then via ensureManualVerifyRequest), so that button is now
+// purely an optional faster-nudge WhatsApp deep link.
+//
 // Approving here writes the same durable "verified" fact the automatic
-// flow would have written, so downstream code never needs to know which
-// path a given verification came through.
+// (CR/ACR or magic-link) flow would have written, so downstream code
+// never needs to know which path a given verification came through.
 
 import {
   collection, doc, addDoc, getDoc, updateDoc, deleteDoc, setDoc,
@@ -21,8 +41,61 @@ import { retryableOnSnapshot } from './safeSnapshot';
 const COLLECTION = 'manualVerifyRequests';
 
 /**
- * Submit a manual verification request. Called from the fallback UI once
- * automatic sending has failed (auth/quota-exceeded or similar).
+ * Auto-create a manual verification request in the background, with no
+ * button click required. Uses a DETERMINISTIC doc ID (manualVerifyRequests/{uid})
+ * instead of addDoc's random ID, specifically so this is idempotent — safe
+ * to call on every profile save / app load without ever creating a
+ * duplicate. Call sites should still avoid calling this pointlessly (e.g.
+ * on a re-save with unchanged data), but even if they do, this is a no-op
+ * past the first successful write.
+ *
+ * Silently no-ops (does not throw) on missing uid/name/roll-or-dept, and
+ * swallows write errors — this always runs alongside a "real" primary
+ * action (profile save, faculty shell creation) that must not be blocked
+ * or surfaced-as-failed by a problem in this best-effort background task.
+ *
+ * @param {'student'|'faculty'} role
+ * @param {{ name: string, email: string, roll?: string, dept?: string }} details
+ */
+export async function ensureManualVerifyRequest(role, details) {
+  const uid = auth.currentUser?.uid;
+  const name = String(details?.name || '').trim();
+  const roll = details?.roll ? String(details.roll).trim() : null;
+  const dept = details?.dept ? String(details.dept).trim() : null;
+  if (!uid || !name) return; // not enough data yet — nothing to submit
+  if (role === 'student' && !roll) return;
+  if (role === 'faculty' && !dept && !details?.email) return;
+
+  try {
+    const ref = doc(db, COLLECTION, uid);
+    const existing = await getDoc(ref);
+    if (existing.exists()) return; // already submitted (pending/approved/rejected) — never resubmit
+
+    await setDoc(ref, {
+      role,
+      name,
+      email: String(details?.email || '').trim(),
+      roll,
+      dept,
+      uid,
+      status: 'pending',
+      requestedAt: serverTimestamp(),
+      autoSubmitted: true, // distinguishes this from a WhatsApp-click submission, for the Approvals UI
+    });
+  } catch (err) {
+    // Best-effort background safety net — never let this block or throw
+    // out of a caller's primary save/signup flow.
+    console.warn('[manualVerifyRequests] ensureManualVerifyRequest failed', err);
+  }
+}
+
+/**
+ * Submit a manual verification request directly (legacy addDoc path).
+ * Kept only for callers that explicitly want a fresh doc regardless of
+ * ensureManualVerifyRequest's dedup — currently unused now that both
+ * student and faculty requests are created automatically via
+ * ensureManualVerifyRequest, but left in place in case a future manual
+ * "request again" action is needed.
  *
  * @param {'student'|'faculty'} role
  * @param {{ name: string, email: string, roll?: string, dept?: string }} details

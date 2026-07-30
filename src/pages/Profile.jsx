@@ -18,7 +18,7 @@ import {
 import { getAllCourses } from '../store/curriculumStore';
 import ProfileSetupModal from '../components/ProfileSetupModal';
 import AuthModal from '../components/AuthModal';
-import { onAuthChange, logout } from '../lib/firebaseAuth';
+import { onAuthChange, logout, isEmailVerified } from '../lib/firebaseAuth';
 import { subscribeMyEmailFlag } from '../lib/emailFlags';
 import { auth } from '../lib/firebase';
 import { startFirebaseSync, pushProfile } from '../lib/firebaseSync';
@@ -141,10 +141,28 @@ const StatCard = ({ icon, label, value, sub, color = 'var(--accent)', ring }) =>
   </div>
 );
 
-const InfoRow = ({ label, value, accent }) => (
+const InfoRow = ({ label, value, accent, onAddClick }) => (
   <div style={{ display: 'grid', gridTemplateColumns: 'minmax(60px, 110px) minmax(0, 1fr)', gap: 10, alignItems: 'flex-start' }}>
     <span style={{ fontSize: 11, color: 'var(--muted)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: 0.5, paddingTop: 1 }}>{label}</span>
-    <span style={{ fontSize: 14, color: accent ? 'var(--accent)' : 'var(--text)', fontWeight: accent ? 700 : 500, wordBreak: 'break-word', minWidth: 0 }}>{value || '—'}</span>
+    {value ? (
+      <span style={{ fontSize: 14, color: accent ? 'var(--accent)' : 'var(--text)', fontWeight: accent ? 700 : 500, wordBreak: 'break-word', minWidth: 0 }}>{value}</span>
+    ) : onAddClick ? (
+      <button
+        type="button"
+        onClick={onAddClick}
+        style={{
+          fontSize: 13, fontWeight: 600, color: 'var(--accent)',
+          background: 'color-mix(in srgb, var(--accent) 8%, transparent)',
+          border: '1px dashed color-mix(in srgb, var(--accent) 40%, var(--border))',
+          borderRadius: 6, padding: '3px 8px', cursor: 'pointer',
+          justifySelf: 'flex-start', display: 'flex', alignItems: 'center', gap: 4,
+        }}
+      >
+        + Add {label.toLowerCase()}
+      </button>
+    ) : (
+      <span style={{ fontSize: 14, color: 'var(--muted)', fontStyle: 'italic', wordBreak: 'break-word', minWidth: 0 }}>Not set</span>
+    )}
   </div>
 );
 
@@ -459,6 +477,7 @@ export default function Profile() {
   const navigate = useNavigate();
   const [profile, setProfile] = useState(getProfile() || DEFAULT_PROFILE);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [showFirstVisitIntro, setShowFirstVisitIntro] = useState(false);
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [showAvatarModal, setShowAvatarModal] = useState(false);
   const [saved, setSaved] = useState(false);
@@ -534,7 +553,7 @@ export default function Profile() {
       // session, causing the "not verified" banner to flash for already-
       // verified users. u is only non-null once auth state is known.
       if (u) {
-        setEmailVerified(!!u.emailVerified);
+        setEmailVerified(isEmailVerified());
         const url = await getProfilePhotoURL();
         setPhotoURL(url);
       }
@@ -614,8 +633,13 @@ export default function Profile() {
   // this component no longer needs its own duplicate admin subscription.
 
   useEffect(() => {
+    // First-ever visit to the Profile page with no profile filled in yet
+    // used to snap ProfileSetupModal open with zero context — jarring,
+    // and easy to dismiss without realizing what it was for. Now a small
+    // intro popup explains why, first; ProfileSetupModal only opens once
+    // the person taps Continue on that.
     if (!hasMinProfile && !autoOpenedRef.current) {
-      setIsModalOpen(true);
+      setShowFirstVisitIntro(true);
       autoOpenedRef.current = true;
     }
   }, [hasMinProfile]);
@@ -953,6 +977,16 @@ export default function Profile() {
           {isRealCR && <Badge label="CR" color="var(--accent)" bg="var(--accentSoft)" />}
         </div>
 
+        {/* Account username — the handle used to sign in, distinct from the
+            full name above. Only shown for username/password (student)
+            accounts that actually have one; Google/faculty accounts have
+            no separate username, so nothing renders for them. */}
+        {profile.username && (
+          <div style={{ marginTop: 2, fontSize: 13, color: 'var(--muted)', fontWeight: 600 }}>
+            @{profile.username}
+          </div>
+        )}
+
         {/* Short bio/quote — inline click-to-edit right here. Also
             editable from Personal Info's Edit modal and first-run
             ProfileSetupModal (all three write profile.bio). */}
@@ -1214,13 +1248,13 @@ export default function Profile() {
 
           {/* Academic Info */}
           <Section className="ord-academic" title="Academic Info" icon={<BookMarked size={14} />}>
-            <InfoRow label="Department" value={getDeptName(profile.dept)} />
+            <InfoRow label="Department" value={getDeptName(profile.dept)} onAddClick={() => setIsModalOpen(true)} />
             <div style={{ height: 1, background: 'var(--border)' }} />
-            <InfoRow label="Session" value={profile.session} />
+            <InfoRow label="Session" value={profile.session} onAddClick={() => setIsModalOpen(true)} />
             <div style={{ height: 1, background: 'var(--border)' }} />
-            <InfoRow label="Current Term" value={profile.currentTerm} />
+            <InfoRow label="Current Term" value={profile.currentTerm} onAddClick={() => setIsModalOpen(true)} />
             <div style={{ height: 1, background: 'var(--border)' }} />
-            <InfoRow label="Credits Req." value={profile.totalCreditsRequired} />
+            <InfoRow label="Credits Req." value={profile.totalCreditsRequired} onAddClick={() => setIsModalOpen(true)} />
             {liveData.cgpaData && (
               <>
                 <div style={{ height: 1, background: 'var(--border)' }} />
@@ -1230,30 +1264,20 @@ export default function Profile() {
             )}
           </Section>
 
-          {/* Accommodation + Advisor */}
-          {(profile.hallName || profile.roomNo || profile.advisorName) && (
-            <Section className="ord-hall-advisor" title="Hall & Advisor" icon={<Home size={14} />}>
-              {profile.hallName && <InfoRow label="Hall" value={profile.hallName} />}
-              {profile.roomNo && (
-                <>
-                  <div style={{ height: 1, background: 'var(--border)' }} />
-                  <InfoRow label="Room No." value={profile.roomNo} />
-                </>
-              )}
-              {profile.advisorName && (
-                <>
-                  <div style={{ height: 1, background: 'var(--border)' }} />
-                  <InfoRow label="Advisor" value={profile.advisorName} />
-                </>
-              )}
-              {profile.advisorContact && (
-                <>
-                  <div style={{ height: 1, background: 'var(--border)' }} />
-                  <InfoRow label="Contact" value={profile.advisorContact} />
-                </>
-              )}
-            </Section>
-          )}
+          {/* Accommodation + Advisor — always shown now, even with nothing
+              filled in yet. Previously this whole card disappeared until
+              at least one field was set, which meant new users never saw
+              it existed at all. Each empty field now nudges the person to
+              fill it via the Edit modal, same as the rest of the profile. */}
+          <Section className="ord-hall-advisor" title="Hall & Advisor" icon={<Home size={14} />}>
+            <InfoRow label="Hall" value={profile.hallName} onAddClick={() => setIsModalOpen(true)} />
+            <div style={{ height: 1, background: 'var(--border)' }} />
+            <InfoRow label="Room No." value={profile.roomNo} onAddClick={() => setIsModalOpen(true)} />
+            <div style={{ height: 1, background: 'var(--border)' }} />
+            <InfoRow label="Advisor" value={profile.advisorName} onAddClick={() => setIsModalOpen(true)} />
+            <div style={{ height: 1, background: 'var(--border)' }} />
+            <InfoRow label="Contact" value={profile.advisorContact} onAddClick={() => setIsModalOpen(true)} />
+          </Section>
         </div>
 
         {/* RIGHT COLUMN */}
@@ -1638,6 +1662,44 @@ export default function Profile() {
           they had CR tools when they didn't. */}
 
       {/* Modals */}
+      {showFirstVisitIntro && (
+        <div style={{
+          position: 'fixed', inset: 0, zIndex: 1000,
+          background: 'rgba(0,0,0,0.5)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          padding: 16,
+        }}>
+          <div style={{
+            background: 'var(--card, var(--surface))', borderRadius: 16,
+            padding: 24, maxWidth: 360, width: '100%',
+            textAlign: 'center', boxShadow: '0 12px 40px rgba(0,0,0,0.25)',
+          }}>
+            <div style={{
+              width: 52, height: 52, borderRadius: '50%',
+              background: 'var(--accentSoft)', margin: '0 auto 14px',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+            }}>
+              <UserPlus size={24} color="var(--accent)" />
+            </div>
+            <div style={{ fontSize: 17, fontWeight: 800, color: 'var(--text)', marginBottom: 8 }}>
+              Please fill in your info
+            </div>
+            <div style={{ fontSize: 13.5, color: 'var(--muted)', lineHeight: 1.55, marginBottom: 20 }}>
+              We need a few basic details — name, student ID, department, and blood group — to set up your KUETx profile. Takes about a minute.
+            </div>
+            <button
+              onClick={() => { setShowFirstVisitIntro(false); setIsModalOpen(true); }}
+              style={{
+                width: '100%', padding: '11px 16px', borderRadius: 10,
+                background: 'var(--accent)', color: '#fff', border: 'none',
+                fontSize: 14, fontWeight: 700, cursor: 'pointer',
+              }}
+            >
+              Continue
+            </button>
+          </div>
+        </div>
+      )}
       <ProfileSetupModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onSave={handleSave} initialProfile={profile} />
       {showAuthModal && (
         <AuthModal mode="login" isUpgrade={!!firebaseUser?.isAnonymous} onClose={() => setShowAuthModal(false)} onSuccess={handleAuthSuccess} />

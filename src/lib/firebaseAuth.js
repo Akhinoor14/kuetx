@@ -102,11 +102,24 @@ export const registerWithEmail = async (email, password, displayName) => {
 export const isEmailVerified = () => {
   const user = auth.currentUser;
   if (!user) return false;
-  // Accounts that never went through email/password registration (Google,
-  // anonymous) aren't subject to this gate at all — only flag email/password
-  // accounts with an unverified address.
+  // Accounts that never went through REAL email/password registration
+  // (Google, anonymous) aren't subject to this gate at all — only flag
+  // genuine email/password accounts with an unverified, reachable address.
+  //
+  // Student accounts created via studentUsernameAuth.js are ALSO
+  // providerId === 'password' under the hood (Firebase Auth requires an
+  // email string for that provider), but the "email" is a synthesized,
+  // non-deliverable placeholder ({uid}@users.kuetx.internal — see
+  // studentUsernameAuth.js) that no verification link can ever reach.
+  // Without this check, every username-based student got stuck staring
+  // at a permanently-unresolvable "verify your email" banner. Those
+  // accounts are verified a different way entirely (manual CR/ACR/CL
+  // approval — see member.verified / subscribeOwnMemberVerified), so
+  // this reachability gate simply doesn't apply to them.
   const isEmailPasswordAccount = user.providerData.some((p) => p.providerId === 'password');
   if (!isEmailPasswordAccount) return true;
+  const isInternalSyntheticAccount = (user.email || '').toLowerCase().endsWith('@users.kuetx.internal');
+  if (isInternalSyntheticAccount) return true;
   return !!user.emailVerified;
 };
 

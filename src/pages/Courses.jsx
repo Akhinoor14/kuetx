@@ -3,8 +3,10 @@ import { Plus, Trash2, X, Check, BookOpen, Pencil } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { COURSE_STATUSES, COURSE_TYPES, getCustomCourses, getProfile, getTermLabelFromKey, setCourseOverride, setCustomCourses, uid, store } from '../store/store';
 import { getAllCourses, getDeptOptionalCourses, setOptionalSelection } from '../store/curriculumStore';
-import CourseTeacherDialog from '../components/CourseTeacherDialog';
 import ConfirmDialog from '../components/ConfirmDialog';
+import { getGroupId } from '../lib/groupUtils';
+import { subscribePlannerSettings } from '../lib/groupSync';
+import { useCanEditGroup } from '../hooks/useCanEditGroup';
 
 const YEARS = [1, 2, 3, 4];
 const STATUS_COLORS = { active: 'tag-green', completed: 'tag-blue', backlog: 'tag-red', withdrawal: 'tag-yellow', incomplete: 'tag-gray' };
@@ -370,10 +372,26 @@ export default function Courses() {
   const courses = useMemo(() => getAllCourses(profile), [profile.dept, profile.currentTermKey, version]);
   const customCourses = useMemo(() => getCustomCourses(), [version]);
   const optionalCatalog = getDeptOptionalCourses(profile.dept);
-  const [settings, setSettings] = useState(() => store.get('scheduleSettings') || {});
-  const [courseTeacherDialogState, setCourseTeacherDialogState] = useState({ open: false, courseId: '' });
+  const groupId = getGroupId(profile);
+  const { canEdit: canEditTeachers } = useCanEditGroup(groupId);
+  const [localSettings, setLocalSettings] = useState(() => store.get('scheduleSettings') || {});
   const [teacherInfoState, setTeacherInfoState] = useState({ open: false, courseId: '', teacherName: '', teacher: null });
   const teacherInfoTimerRef = useRef(null);
+
+  // Teacher assignment is CR/ACR-only and lives in one place — Class
+  // Setup. This page keeps its "click a teacher chip to preview their
+  // info" feature (reads store.get('teachers'), unrelated to who's
+  // assigned to which course) but the ASSIGNING part now only ever reads
+  // the group-synced map; the old local edit-in-place has been removed.
+  const [groupTeacherMap, setGroupTeacherMap] = useState(null);
+  useEffect(() => {
+    if (!groupId) { setGroupTeacherMap(null); return; }
+    return subscribePlannerSettings(groupId, (data) => setGroupTeacherMap(data?.courseTeacherMap || {}));
+  }, [groupId]);
+  const settings = useMemo(
+    () => ({ ...localSettings, courseTeacherMap: groupTeacherMap ?? (localSettings.courseTeacherMap || {}) }),
+    [localSettings, groupTeacherMap],
+  );
 
   useEffect(() => {
     return () => {
@@ -396,24 +414,7 @@ export default function Courses() {
   const closeTeacherInfo = () => setTeacherInfoState(prev => ({ ...prev, open: false }));
 
   const handleTeacherChipClick = (courseId, teacherName) => {
-    if (teacherInfoTimerRef.current) {
-      clearTimeout(teacherInfoTimerRef.current);
-      teacherInfoTimerRef.current = null;
-      return;
-    }
-    teacherInfoTimerRef.current = window.setTimeout(() => {
-      openTeacherInfo(courseId, teacherName);
-      teacherInfoTimerRef.current = null;
-    }, 280);
-  };
-
-  const handleTeacherChipDoubleClick = (courseId) => {
-    if (teacherInfoTimerRef.current) {
-      clearTimeout(teacherInfoTimerRef.current);
-      teacherInfoTimerRef.current = null;
-    }
-    setTeacherInfoState(prev => ({ ...prev, open: false }));
-    openTeacherDialog(courseId);
+    openTeacherInfo(courseId, teacherName);
   };
 
   const toggleTerm = (key) => setExpandedTerms(p => ({ ...p, [key]: !p[key] }));
@@ -450,52 +451,8 @@ export default function Courses() {
     return /\bsir\.?$/i.test(clean) ? clean.replace(/\.$/, '') : `${clean} Sir`;
   };
 
-  const normalizeTeacherList = (teachers = []) => {
-    return [...new Set((teachers || [])
-      .map(normalizeTeacherName)
-      .filter(Boolean))].slice(0, 2);
-  };
-
   const getCourseTeachers = (courseId) => {
     return Array.isArray(settings?.courseTeacherMap?.[courseId]) ? settings.courseTeacherMap[courseId] : [];
-  };
-
-  const openTeacherDialog = (courseId) => setCourseTeacherDialogState({ open: true, courseId });
-  const handleCourseTeacherDialogClose = () => setCourseTeacherDialogState({ open: false, courseId: '' });
-
-  const handleCourseTeacherDialogSave = (teachers) => {
-    const courseId = courseTeacherDialogState.courseId;
-    if (!courseId) return;
-    const normalizedTeachers = normalizeTeacherList(teachers);
-    if (normalizedTeachers.length < 2) return;
-
-    const nextSettings = { ...(settings || {}), courseTeacherMap: { ...(settings.courseTeacherMap || {}), [courseId]: normalizedTeachers } };
-    store.set('scheduleSettings', nextSettings);
-    setSettings(nextSettings);
-
-    const existingTeachers = store.get('teachers') || [];
-    const existingNames = new Set(existingTeachers.map(t => t.name));
-    const newTeachers = normalizedTeachers
-      .filter(name => !existingNames.has(name))
-      .map(name => ({
-        id: uid(),
-        name,
-        initial: name.split(/\s+/).map(part => part[0].toUpperCase()).join(''),
-        title: '',
-        dept: profile?.dept || '',
-        phone: '',
-        email: '',
-        courses: '',
-        officeRoom: '',
-        rating: '',
-        notes: 'Auto-added from course page',
-      }));
-
-    if (newTeachers.length > 0) {
-      store.set('teachers', [...existingTeachers, ...newTeachers]);
-    }
-
-    handleCourseTeacherDialogClose();
   };
 
   const filtered = filterYear === 'all' ? courses : courses.filter(c => c.year === +filterYear);
@@ -628,9 +585,11 @@ export default function Courses() {
                   <button className="btn btn-sm btn-secondary" type="button" onClick={() => { closeTeacherInfo(); navigate('/teachers'); }} style={{ padding: '6px 10px', fontSize: 12 }}>
                     Open Teachers page
                   </button>
-                  <button className="btn btn-sm btn-ghost" type="button" onClick={() => { closeTeacherInfo(); openTeacherDialog(teacherInfoState.courseId); }} style={{ padding: '6px 10px', fontSize: 12 }}>
-                    Edit course teachers
-                  </button>
+                  {canEditTeachers && (
+                    <button className="btn btn-sm btn-ghost" type="button" onClick={() => { closeTeacherInfo(); navigate('/class-setup'); }} style={{ padding: '6px 10px', fontSize: 12 }}>
+                      Edit in Class Setup
+                    </button>
+                  )}
                 </div>
               </div>
             )}
@@ -676,24 +635,25 @@ export default function Courses() {
                                 className={getTeacherChipClass(teacher)}
                                 style={{ ...CHIP_STYLE, fontSize: 11, cursor: 'pointer' }}
                                 onClick={(e) => { e.stopPropagation(); handleTeacherChipClick(c.id, teacher); }}
-                                onDoubleClick={(e) => { e.stopPropagation(); handleTeacherChipDoubleClick(c.id); }}
-                                title="Single click to preview teacher info, double click to edit"
+                                title="Click to preview teacher info"
                               >
                                 {teacher}
                               </span>
                             ))
                           ) : (
-                            <span className="tag tag-muted" style={{ ...CHIP_STYLE, fontSize: 11, color: 'var(--muted)' }}>No teachers set</span>
+                            <span className="tag tag-muted" style={{ ...CHIP_STYLE, fontSize: 11, color: 'var(--muted)' }}>
+                              {canEditTeachers ? 'No teachers set' : "CR hasn't assigned a teacher yet"}
+                            </span>
                           )}
                         </div>
                       )}
                     </div>
                     <div style={{ display: 'flex', flexDirection: 'column', gap: 6, minWidth: 110, width: 110, alignItems: 'flex-end' }}>
                       {c.isOptional && <select value={c.optionalCode || ''} onChange={e => updateOptional(c, e.target.value)} style={{ fontSize: 13, padding: 6 }}><option value="">Select</option>{optionalCatalog.map(opt => <option key={opt.code} value={opt.code}>{opt.code} — {opt.title}</option>)}</select>}
-                      {!hasTeachers && `Y${c.year}T${c.term}` === profile.currentTermKey && (
-                        <button className="btn btn-secondary btn-sm" onClick={() => openTeacherDialog(c.id)} style={{ padding: '6px 10px', fontSize: 12, fontWeight: 700, minWidth: 98, justifyContent: 'center' }}>
+                      {!hasTeachers && canEditTeachers && `Y${c.year}T${c.term}` === profile.currentTermKey && (
+                        <button className="btn btn-secondary btn-sm" onClick={() => navigate('/class-setup')} style={{ padding: '6px 10px', fontSize: 12, fontWeight: 700, minWidth: 98, justifyContent: 'center' }}>
                           <BookOpen size={12} />
-                          Add
+                          Assign
                         </button>
                       )}
                       <StatusChip course={c} onChange={newStatus => updateOverride(c.id, { status: newStatus })} />
@@ -747,15 +707,6 @@ export default function Courses() {
           setDeleteTarget(null);
         }}
         onCancel={() => setDeleteTarget(null)}
-      />
-
-      <CourseTeacherDialog
-        isOpen={courseTeacherDialogState.open}
-        onClose={handleCourseTeacherDialogClose}
-        course={courses.find(course => course.id === courseTeacherDialogState.courseId)}
-        currentTeachers={getCourseTeachers(courseTeacherDialogState.courseId)}
-        onSave={handleCourseTeacherDialogSave}
-        requireTwoTeachers={true}
       />
 
       {courses.length === 0 && !addingCustom && (

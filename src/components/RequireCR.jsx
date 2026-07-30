@@ -5,6 +5,7 @@ import { getProfile } from '../store/store';
 import { getGroupId } from '../lib/groupUtils';
 import { subscribeMyRole } from '../lib/groupSync';
 import { auth } from '../lib/firebase';
+import ClassSetupModal from './ClassSetupModal';
 
 // Deliberately a DIFFERENT key from Sidebar.jsx's 'kuetx:lastKnownIsRealCR'
 // cache, even though both track the same underlying fact. They're fed by
@@ -81,5 +82,14 @@ export default function RequireCR({ children }) {
     );
   }
 
-  return children;
+  return (
+    <>
+      {/* Mounted on EVERY CR-only route (this wrapper gates all of them),
+          so wherever a CR/ACR first lands after approval, the mandatory
+          setup popup finds them. Renders null itself once classSetup is
+          complete — see ClassSetupModal's own early-return. */}
+      <ClassSetupModal groupId={groupId} profile={profile} />
+      {children}
+    </>
+  );
 }

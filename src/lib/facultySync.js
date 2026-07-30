@@ -165,28 +165,23 @@ export function isFacultyProfileComplete(fdoc) {
 export const getFacultyDoc = getFacultyProfile;
 export const subscribeFacultyDoc = subscribeFacultyProfile;
 export const createFacultyAccountDoc = createFacultyShell;
-export const markFacultyVerifiedIfEmailConfirmed = syncFacultyVerificationStatus;
 
 /**
- * Called from the magic-link completion screen (App.jsx onboarding queue,
- * §5 Step 2.3) once completeFacultyVerificationLink() returns
- * { status: 'success' }.
+ * Bridges a Founder-approved manual verification into faculty/{uid}.
+ * Called by manualVerifyRequests.js's approveManualVerifyRequest once it
+ * has written verifiedFacultyEmails/{email} (see that file for the
+ * Approvals-tab flow) — this is the only path that ever reaches here now;
+ * the old magic-link email-verification mechanism has been removed
+ * entirely, so this is never called from a self-service completion
+ * screen anymore.
  *
- * MANUAL VERIFICATION POLICY: this does NOT set faculty/{uid}.verifiedAt
- * (the "Blue Tick") — Firestore rules only allow an Admin to do that (see
- * firestore.rules' faculty/{uid} update rule), and rightly so: clicking a
- * magic link only proves the person controls a *.kuet.ac.bd mailbox, not
- * that Admin has reviewed/approved the account. An earlier version of
- * this function tried to self-write verifiedAt here — that write was
- * always silently rejected by the rules (a faculty account changing its
- * own verifiedAt from null to non-null never matches the self-update
- * branch), so it was dead code that looked like it worked but never did.
- *
- * All this does now is confirm verifiedFacultyEmails/{email} exists —
- * i.e. the magic link really was completed — so the caller can show
- * "email verified, waiting on Admin approval" instead of a false
- * "verification failed" message. The actual Blue Tick is granted from
- * AdminDashboard's Faculty → Pending tab.
+ * Confirms verifiedFacultyEmails/{email} exists, then self-heals a
+ * mis-cased stored officialEmail if needed. Firestore rules only allow
+ * an Admin (via the Approvals tab, which is what wrote
+ * verifiedFacultyEmails in the first place) to flip verifiedAt on
+ * faculty/{uid} — this function doesn't need to (and structurally
+ * couldn't) write verifiedAt itself; that already happened as part of
+ * the Approvals-tab action.
  */
 export async function syncFacultyVerificationStatus(uid, officialEmail) {
   // Defensive lowercase here too — protects existing faculty/{uid} docs

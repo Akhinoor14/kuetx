@@ -46,6 +46,7 @@ export const NAV = [
     hubPath: '/class-rep',
     hubIcon: 'Shield',
     items: [
+      { id: 'class-setup',       label: 'Class Setup',       shortLabel: 'Setup',        icon: 'CalendarClock', path: '/class-setup',      requiresCR: true },
       { id: 'class-routine',     label: 'Routine',           shortLabel: 'Routine',      icon: 'CalendarDays',  path: '/class-routine',    requiresCR: true },
       { id: 'class-planner',     label: 'Class Planner',     shortLabel: 'Planner',      icon: 'CalendarCheck', path: '/class-planner',    requiresCR: true },
       { id: 'ct-quiz-planning',  label: 'CT & Quiz Planner', shortLabel: 'CT & Quiz',    icon: 'CalendarClock', path: '/ct-quiz-planning', requiresCR: true },

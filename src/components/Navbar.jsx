@@ -542,10 +542,12 @@ export function Navbar({ onMenuClick }) {
                         )}
                         <div style={{ minWidth: 0 }}>
                           <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                            {firebaseUser.displayName || 'User'}
+                            {getProfile()?.name || firebaseUser.displayName || 'User'}
                           </div>
                           <div style={{ fontSize: 11, color: 'var(--muted)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                            {firebaseUser.email}
+                            {(firebaseUser.email || '').toLowerCase().endsWith('@users.kuetx.internal')
+                              ? 'KUETx account'
+                              : firebaseUser.email}
                           </div>
                         </div>
                       </div>
@@ -670,7 +672,14 @@ export function Navbar({ onMenuClick }) {
                 </Link>
               </div>
 
-              {/* ── Data safety note ── */}
+              {/* ── Data safety note ──
+                  Previously said "Data is always locally safe — it works
+                  without internet" AND "Firestore real-time backup is on"
+                  side by side, which read as two contradictory claims
+                  (nothing is purely local once it's synced to Firestore).
+                  Replaced with one accurate sentence, plus a Privacy
+                  Policy link placeholder — swap the href once the policy
+                  page (with the manifesto) exists. */}
               <div style={{
                 borderRadius: 10,
                 padding: '8px 12px',
@@ -678,8 +687,12 @@ export function Navbar({ onMenuClick }) {
                 border: '1px solid color-mix(in srgb, var(--success) 20%, var(--border))',
                 fontSize: 11, color: 'var(--muted)', lineHeight: 1.6,
               }}>
-                <Save size={12} style={{ display: 'inline', verticalAlign: -1, marginRight: 3 }} /> Data is always <strong style={{ color: 'var(--text)' }}>locally safe</strong> — it works without internet.
-                {!isAnon && <span style={{ color: 'var(--success)' }}> Firestore real-time backup is on.</span>}
+                <Save size={12} style={{ display: 'inline', verticalAlign: -1, marginRight: 3 }} />
+                {isAnon
+                  ? <>Your data is saved on this device only right now — <strong style={{ color: 'var(--text)' }}>sign in to back it up</strong> so it's safe if you switch devices.</>
+                  : <>Your data is <strong style={{ color: 'var(--text)' }}>securely backed up</strong> to your account and syncs automatically.</>}
+                {' '}
+                <a href="/privacy" style={{ color: 'var(--success)', fontWeight: 600, textDecoration: 'none' }}>See our privacy policy →</a>
               </div>
 
             </div>

@@ -3,11 +3,12 @@ import Modal from '../components/Modal';
 import { Plus, Settings2, Clock3, PencilLine, Copy, CalendarDays, X, FileText, BookOpen, Pencil, ClipboardList, Lightbulb, Sprout, GraduationCap, Rocket } from 'lucide-react';
 import { store, uid, getProfile, getCurrentTermKey, getRoutinePreviewDate, isRoutineHoliday, getTermTimeline } from '../store/store';
 import { getAllCourses } from '../store/curriculumStore';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import CourseTeacherDialog from '../components/CourseTeacherDialog';
 import { notify } from '../lib/notify';
 import { getGroupId } from '../lib/groupUtils';
-import { subscribeCRStatus, subscribeRoutine, addRoutineEntry, updateRoutineEntry, deleteRoutineEntry } from '../lib/groupSync';
+import { subscribeCRStatus, subscribeRoutine, addRoutineEntry, updateRoutineEntry, deleteRoutineEntry, subscribeClassSetup } from '../lib/groupSync';
+import { subscribeGroupTermStartDate } from '../lib/termStartDateSync';
 import { useCanEditGroup } from '../hooks/useCanEditGroup';
 import TeacherClaimBanner from '../components/TeacherClaimBanner';
 
@@ -1245,18 +1246,23 @@ export default function Schedule() {
   const [examOverrides, setExamOverrides] = useState(() => store.get('examOverrides') || {});
   const [editingExams, setEditingExams] = useState(false);
   const [localExamEdits, setLocalExamEdits] = useState([]);
-  const [roadmapConfig, setRoadmapConfig] = useState(() => store.get('roadmapConfig') || {
-    classDays: 65,
-    prepLeaveDays: 10,
-    examCount: 5,
-    examGapDays: 4,
-    postBreakDays: 9,
-  });
-  const [roadmapSettingsOpen, setRoadmapSettingsOpen] = useState(false);
-  const saveRoadmapConfig = (next) => {
-    setRoadmapConfig(next);
-    store.set('roadmapConfig', next);
-  };
+  // Term timeline (classEndDate/prepLeaveEndDate/examCount/postExamEndDate)
+  // used to be a per-student LOCAL setting anyone could edit here — that
+  // meant it never synced between classmates and had no single owner.
+  // It's now entirely CR/ACR-controlled via the group-wide "Class Setup"
+  // page/popup (groups/{groupId}/meta/classSetup) — this page only reads
+  // it and displays it; there's no editing UI here anymore. See
+  // ClassSetup.jsx / ClassSetupModal.jsx.
+  const [classSetup, setClassSetup] = useState(null);
+  const [groupTermStartDate, setGroupTermStartDate] = useState(null);
+  useEffect(() => {
+    if (!groupId) { setClassSetup(null); setGroupTermStartDate(null); return; }
+    const unsubSetup = subscribeClassSetup(groupId, setClassSetup);
+    const unsubTerm = subscribeGroupTermStartDate(groupId, setGroupTermStartDate);
+    return () => { unsubSetup(); unsubTerm(); };
+  }, [groupId]);
+  const effectiveTermStartDate = groupTermStartDate || profile?.termStartDate || null;
+  const roadmapConfig = classSetup || {};
 
   const slotPreview = (slot) => {
     const cleanSlot = String(slot).replace(/\s+break\s*$/i, '').trim();
@@ -2236,12 +2242,16 @@ export default function Schedule() {
             <button className="btn btn-ghost" style={{ fontSize: 12, padding: '6px 10px' }} onClick={openHolidaySetup}>
               <CalendarDays size={12} /> Holiday
             </button>
-            <button className="btn btn-ghost" style={{ fontSize: 12, padding: '6px 10px' }} onClick={() => setRoadmapSettingsOpen(v => !v)}>
-              <Settings2 size={12} /> Configure
-            </button>
+            {/* Term dates (classEndDate/prepLeaveEndDate/examCount/
+                postExamEndDate) are CR/ACR-only now, set from the
+                dedicated Class Setup page — no per-student "Configure"
+                editor here anymore. */}
+            <Link to="/class-setup" className="btn btn-ghost" style={{ fontSize: 12, padding: '6px 10px', textDecoration: 'none' }}>
+              <Settings2 size={12} /> Class Setup
+            </Link>
             <button className="btn btn-primary" style={{ fontSize: 12, padding: '6px 10px' }} onClick={() => {
               const termKey = getCurrentTermKey(profile);
-              if (!profile?.termStartDate) return notify('Add term start date in Profile first', 'error');
+              if (!effectiveTermStartDate) return notify('Term start date isn\'t set yet — ask your CR to set it in Class Setup', 'error');
               if (!termKey) return notify('Set current term in Profile first', 'error');
               const count = Math.max(1, Math.min(12, Number(roadmapConfig.examCount) || 5));
               const overrides = (examOverrides && examOverrides[termKey]) || [];
@@ -2257,82 +2267,14 @@ export default function Schedule() {
           </div>
         </div>
 
-        {/* Roadmap Config Panel */}
-        {roadmapSettingsOpen && (
-          <div style={{ background: 'var(--card)', border: '1px solid var(--border)', borderRadius: 10, padding: 14, marginBottom: 12, display: 'grid', gap: 12 }}>
-            <div style={{ fontWeight: 700, fontSize: 13, marginBottom: 2, display: "flex", alignItems: "center", gap: 6 }}><Settings2 size={14} /> Configure Roadmap</div>
-
-            {/* Class Period */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
-              <div>
-                <div style={{ fontSize: 11, fontWeight: 600, marginBottom: 4, color: 'var(--muted)', display: "flex", alignItems: "center", gap: 4 }}><BookOpen size={11} /> Class Start</div>
-                <div style={{ fontSize: 12, fontWeight: 700, padding: '7px 10px', border: '1px solid var(--border)', borderRadius: 6, background: 'var(--bg)', color: 'var(--text)' }}>
-                  {profile?.termStartDate ? new Date(profile.termStartDate + 'T00:00:00').toLocaleDateString('en-GB', {day:'numeric',month:'short',year:'numeric'}) : 'Set in Profile'}
-                </div>
-              </div>
-              <div>
-                <div style={{ fontSize: 11, fontWeight: 600, marginBottom: 4, color: 'var(--muted)', display: "flex", alignItems: "center", gap: 4 }}><BookOpen size={11} /> Class End</div>
-                <input type="date" value={roadmapConfig.classEndDate || ''}
-                  onChange={e => saveRoadmapConfig({ ...roadmapConfig, classEndDate: e.target.value })}
-                  style={{ width: '100%', padding: '6px 8px', borderRadius: 6, border: '1px solid var(--border)', background: 'var(--input)', color: 'var(--text)', fontSize: 12 }} />
-              </div>
-            </div>
-
-            {/* Prep Leave */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
-              <div>
-                <div style={{ fontSize: 11, fontWeight: 600, marginBottom: 4, color: 'var(--muted)', display: "flex", alignItems: "center", gap: 4 }}><GraduationCap size={11} /> Prep Leave Start</div>
-                <div style={{ fontSize: 12, padding: '7px 10px', border: '1px solid var(--border)', borderRadius: 6, background: 'var(--bg)', color: 'var(--muted)' }}>
-                  {roadmapConfig.classEndDate
-                    ? new Date(new Date(roadmapConfig.classEndDate + 'T00:00:00').getTime() + 86400000).toLocaleDateString('en-GB', {day:'numeric',month:'short'})
-                    : 'Set class end first'}
-                </div>
-              </div>
-              <div>
-                <div style={{ fontSize: 11, fontWeight: 600, marginBottom: 4, color: 'var(--muted)', display: "flex", alignItems: "center", gap: 4 }}><GraduationCap size={11} /> Prep Leave End</div>
-                <input type="date" value={roadmapConfig.prepLeaveEndDate || ''}
-                  min={roadmapConfig.classEndDate || ''}
-                  onChange={e => saveRoadmapConfig({ ...roadmapConfig, prepLeaveEndDate: e.target.value })}
-                  style={{ width: '100%', padding: '6px 8px', borderRadius: 6, border: '1px solid var(--border)', background: 'var(--input)', color: 'var(--text)', fontSize: 12 }} />
-              </div>
-            </div>
-
-            {/* Exam Count */}
-            <div>
-              <div style={{ fontSize: 11, fontWeight: 600, marginBottom: 6, color: 'var(--muted)', display: "flex", alignItems: "center", gap: 4 }}><PencilLine size={11} /> Theory Exam Count</div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                <button className="btn btn-ghost" style={{ padding: '4px 12px', fontSize: 16, fontWeight: 700 }}
-                  onClick={() => saveRoadmapConfig({ ...roadmapConfig, examCount: Math.max(1, (roadmapConfig.examCount ?? 5) - 1) })}>−</button>
-                <span style={{ fontWeight: 800, fontSize: 18, minWidth: 28, textAlign: 'center', color: 'var(--accent)' }}>{roadmapConfig.examCount ?? 5}</span>
-                <button className="btn btn-ghost" style={{ padding: '4px 12px', fontSize: 16, fontWeight: 700 }}
-                  onClick={() => saveRoadmapConfig({ ...roadmapConfig, examCount: Math.min(12, (roadmapConfig.examCount ?? 5) + 1) })}>+</button>
-                <span style={{ fontSize: 11, color: 'var(--muted)' }}>Set individual dates via Edit Exams</span>
-              </div>
-            </div>
-
-            {/* Post-Exam Break */}
-            <div>
-              <div style={{ fontSize: 11, fontWeight: 600, marginBottom: 4, color: 'var(--muted)', display: "flex", alignItems: "center", gap: 4 }}><Sprout size={11} /> Post-Exam Break End</div>
-              <input type="date" value={roadmapConfig.postExamEndDate || ''}
-                onChange={e => saveRoadmapConfig({ ...roadmapConfig, postExamEndDate: e.target.value })}
-                style={{ width: '100%', padding: '6px 8px', borderRadius: 6, border: '1px solid var(--border)', background: 'var(--input)', color: 'var(--text)', fontSize: 12 }} />
-            </div>
-
-            <button className="btn btn-ghost" style={{ fontSize: 11, alignSelf: 'flex-start', padding: '5px 10px' }}
-              onClick={() => saveRoadmapConfig({ examCount: 5, classEndDate: '', prepLeaveEndDate: '', postExamEndDate: '' })}>
-              Reset
-            </button>
-          </div>
-        )}
-
         {/* Roadmap Timeline */}
         {(() => {
           const termKey = getCurrentTermKey(profile);
-          const timeline = getTermTimeline(profile?.termStartDate, profile?.dept, termKey, roadmapConfig);
+          const timeline = getTermTimeline(effectiveTermStartDate, profile?.dept, termKey, roadmapConfig);
           if (!timeline) {
             return (
               <div style={{ fontSize: 12, color: 'var(--muted)', padding: '12px 0' }}>
-                Add a term start date in Profile to view the roadmap.
+                Term start date isn't set yet — your CR sets this in Class Setup.
               </div>
             );
           }
@@ -2355,7 +2297,7 @@ export default function Schedule() {
           if (nothingSet) {
             return (
               <div style={{ fontSize: 12, color: 'var(--muted)', padding: '8px 0' }}>
-                Click <b>Configure</b> to set dates, then <b>Edit Exams</b> to add exam dates.
+                Ask your CR to fill in <b>Class Setup</b>, then use <b>Edit Exams</b> to add exam dates.
               </div>
             );
           }
@@ -2377,7 +2319,7 @@ export default function Schedule() {
                 <div style={{ padding: 10, borderRadius: 8, border: '1px solid var(--border)', opacity: roadmapConfig.classEndDate ? 1 : 0.45 }}>
                   <div style={{ fontWeight: 700, fontSize: 12, display: "flex", alignItems: "center", gap: 5 }}><BookOpen size={12} /> Classes</div>
                   <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 3 }}>
-                    {fmt(profile?.termStartDate ? new Date(profile.termStartDate + 'T00:00:00') : null)} → {fmt(timeline.classEndDate)}
+                    {fmt(effectiveTermStartDate ? new Date(effectiveTermStartDate + 'T00:00:00') : null)} → {fmt(timeline.classEndDate)}
                   </div>
                   {timeline.classDays != null && (
                     <div style={{ fontSize: 10, color: 'var(--accent)', marginTop: 2, fontWeight: 600 }}>{timeline.classDays} working days</div>

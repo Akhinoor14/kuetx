@@ -11,9 +11,12 @@
 //
 // Purely local+server routing — writes users/{uid}.role (and, for
 // Faculty, faculty/{uid}) to Firestore, grants no dashboard access on its
-// own; 'faculty-verify' (the actual magic-link hard gate) still comes
-// next for Faculty. Rendered full-screen and non-dismissable from
-// App.jsx's queue, same as the 'auth'/'profile' steps.
+// own. Faculty verification is manual-only now (Founder approves over
+// WhatsApp — see ManualVerifyFallback.jsx) and isn't a blocking
+// onboarding step; it's a route-level write-gate (RequireFaculty.jsx)
+// the person can complete anytime from their Faculty profile page.
+// Rendered full-screen and non-dismissable from App.jsx's queue, same as
+// the 'auth'/'profile' steps.
 //
 // BUGFIX: this used to be a translucent rgba(0,0,0,0.5) overlay, so the
 // half-loaded dashboard underneath was visible (dimmed) through it — looks

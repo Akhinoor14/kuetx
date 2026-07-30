@@ -70,6 +70,35 @@ function HubSection({ title, items, icon }) {
       )}
 
       {items.length > 0 && (() => {
+        // Hero treatment only makes sense as a visual anchor when there's
+        // a large-enough grid below it — below 5 items, render every item
+        // as a normal equal-sized grid card instead (no special-casing
+        // the first item).
+        if (items.length < 5) {
+          return (
+            <div className="hub-grid">
+              {items.map(item => {
+                const accent = resolveAccent(item.accent);
+                const Icon = ICONS[item.icon] || Circle;
+                return (
+                  <Link key={item.id} to={item.path} className="hub-grid-item">
+                    <div
+                      className="hub-grid-item-icon"
+                      style={{
+                        background: `color-mix(in srgb, ${accent} 15%, var(--surface))`,
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      }}
+                    >
+                      <Icon size={17} color={accent} />
+                    </div>
+                    <span className="hub-grid-item-label" style={{ fontWeight: 600, color: '#5c5a54' }}>{item.label}</span>
+                  </Link>
+                );
+              })}
+            </div>
+          );
+        }
+
         const [first, ...rest] = items;
         const firstAccent = resolveAccent(first.accent);
         const FirstIcon = ICONS[first.icon] || Circle;
@@ -82,7 +111,7 @@ function HubSection({ title, items, icon }) {
               to={first.path}
               className="hub-grid-item hub-grid-item-hero"
               style={{
-                display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 12,
+                display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', gap: 12,
                 marginBottom: 10,
               }}
             >

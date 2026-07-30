@@ -25,8 +25,10 @@ import {
   checkUsernameAvailable,
   signupWithUsername,
   loginWithUsername,
+  resolveUsernameToUid,
 } from '../lib/studentUsernameAuth';
 import { isObviouslyBadDomain, getTypoSuggestion } from '../lib/emailDomainCheck';
+import { store } from '../store/store';
 import { setAccountRole, persistAccountRoleToServer, fetchServerAccountRole } from '../lib/accountRole';
 import { getFacultyDoc } from '../lib/facultySync';
 // RESTRUCTURE v2: Register now asks Student/Faculty INLINE, right at the
@@ -38,6 +40,7 @@ import { getFacultyDoc } from '../lib/facultySync';
 // submit, right here.
 import { isFacultyEmailFormat } from '../lib/facultyEmailVerify';
 import { createFacultyAccountDoc } from '../lib/facultySync';
+import { ensureManualVerifyRequest } from '../lib/manualVerifyRequests';
 // Service Provider signup (SERVICES_PROVIDER_PLAN.md §3/§4) — added here
 // because this inline Register flow (not RoleSelectScreen.jsx) is the
 // actual live entry point users reach; RoleSelectScreen already had this
@@ -51,6 +54,7 @@ import {
   isValidProviderPassword,
   signupWithProviderPhone,
   loginWithProviderPhone,
+  resolveProviderPhoneToUid,
 } from '../lib/providerPhoneAuth';
 
 // Service categories a provider can register under (SERVICES_PROVIDER_PLAN.md
@@ -183,6 +187,46 @@ export default function AuthModal({ mode = 'login', isUpgrade = false, onClose, 
   // tracks "we're in that dead-end right now" so the UI can surface the
   // reset option in-context instead of leaving a silent trap.
   const [stuckOnExistingEmail, setStuckOnExistingEmail] = useState(false);
+
+  // ─── Unified Login identifier (NEW) ──────────────────────────────────────
+  // Login used to force an explicit "Student/Faculty" vs "Service Provider"
+  // toggle before showing any field, even though the three identity shapes
+  // (username / institutional email / 11-digit phone) are trivially
+  // distinguishable from the text itself. One field now, and
+  // detectLoginIdentifierType below picks the right backend call — no
+  // toggle, no manual role choice, just type your own username/email/phone
+  // and sign in. Register is untouched: it still asks Student/Faculty/
+  // Provider explicitly, because signup genuinely needs different extra
+  // fields (roll, institutional email format, shop name) per role that
+  // can't be inferred from the identifier alone.
+  const [loginIdentifier, setLoginIdentifier] = useState('');
+
+  /**
+   * Figures out which backend a login identifier belongs to by actually
+   * checking the real account data in Firestore — not by guessing from
+   * the text's shape. Order:
+   *   1. Contains '@' → treat as faculty email directly (Firebase Auth
+   *      itself is the source of truth for email accounts; no separate
+   *      lookup collection to check against).
+   *   2. Otherwise, check `usernames/{name}` (student) and
+   *      `providerPhones/{phone}` (provider) — whichever one actually
+   *      has a claimed account wins. If neither matches, default to the
+   *      student path so the resulting error is the most relevant one
+   *      ("no account found with that username").
+   * @returns {Promise<'provider'|'faculty'|'student'>}
+   */
+  const detectLoginIdentifierType = async (raw) => {
+    const value = String(raw || '').trim();
+    if (!value) return 'student';
+    if (value.includes('@')) return 'faculty';
+    const [usernameUid, providerUid] = await Promise.all([
+      resolveUsernameToUid(value).catch(() => null),
+      resolveProviderPhoneToUid(value).catch(() => null),
+    ]);
+    if (usernameUid) return 'student';
+    if (providerUid) return 'provider';
+    return 'student';
+  };
 
   // ─── Student username+password (Phase 2, NEW) ──────────────────────────────
   // Faculty never touches any of this — it's only rendered/used when
@@ -408,6 +452,19 @@ export default function AuthModal({ mode = 'login', isUpgrade = false, onClose, 
       } else {
         user = await loginWithUsername(username, password);
       }
+      // The chosen username only lives in the flat `usernames/{name}` ->
+      // uid lookup doc (for login resolution) — it was never actually
+      // saved onto the profile object itself, so Profile.jsx had nothing
+      // to show under the full name. Stash it in the local profile store
+      // here (register AND login, so existing accounts backfill on next
+      // sign-in too); it rides along with the next pushProfile() call
+      // like any other profile field.
+      try {
+        const existingProfile = store.get('profile') || {};
+        if (existingProfile.username !== username) {
+          store.set('profile', { ...existingProfile, username });
+        }
+      } catch (_) { /* non-critical, never block auth on this */ }
       onSuccess?.(user, { linked: false });
     } catch (err) {
       if (err.code === 'username/taken') {
@@ -418,6 +475,45 @@ export default function AuthModal({ mode = 'login', isUpgrade = false, onClose, 
         setError(err.message);
       } else {
         setError(getAuthErrorMessage(err.code));
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  /**
+   * Single submit handler for the unified Login field. Detects which
+   * backend the typed identifier belongs to and calls the matching
+   * existing login function — nothing new about auth itself, just no more
+   * asking the person to declare their own role before logging in.
+   */
+  const handleUnifiedLogin = async () => {
+    if (!loginIdentifier.trim() || !password) {
+      setError('Please enter your username/email/phone and password.');
+      return;
+    }
+    setLoading(true);
+    setError('');
+    try {
+      const kind = await detectLoginIdentifierType(loginIdentifier);
+      let user;
+      if (kind === 'provider') {
+        user = await loginWithProviderPhone(loginIdentifier.trim(), password);
+      } else if (kind === 'faculty') {
+        user = await loginWithEmail(loginIdentifier.trim(), password);
+      } else {
+        user = await loginWithUsername(loginIdentifier.trim(), password);
+      }
+      onSuccess?.(user, { linked: false });
+    } catch (err) {
+      if (err.code === 'username/not-found') {
+        setError('No account found with that username.');
+      } else if (err.code === 'providerPhone/not-found') {
+        setError('No account found with that phone number.');
+      } else if (err.code === 'auth/invalid-credential') {
+        setError('Incorrect password, or no account with that email.');
+      } else {
+        setError(getAuthErrorMessage(err.code) || 'Could not sign in — please check your details and try again.');
       }
     } finally {
       setLoading(false);
@@ -545,6 +641,14 @@ export default function AuthModal({ mode = 'login', isUpgrade = false, onClose, 
           persistAccountRoleToServer(registerRole).catch(() => {});
           if (registerRole === 'teacher') {
             await createFacultyAccountDoc(user.uid, email);
+            // Best-effort, fire-and-forget — faculty has no CR/ACR
+            // equivalent, so this auto-submit IS their only path to
+            // verifiedAt. dept isn't collected yet at this point
+            // (that's FacultyProfileSetupModal, right after this), but
+            // email alone satisfies ensureManualVerifyRequest's gate;
+            // idempotent doc ID means the later, more-complete call from
+            // FacultyProfileSetupModal's save just no-ops here first.
+            ensureManualVerifyRequest('faculty', { name, email });
           }
           // Note: registerRole === 'provider' never reaches this function —
           // provider signup goes through handleProviderPhone above, which
@@ -680,39 +784,87 @@ export default function AuthModal({ mode = 'login', isUpgrade = false, onClose, 
           </div>
         )}
 
-        {/* Login is normally role-agnostic (student username vs faculty
-            email are different enough shapes that a single Login form
-            can't serve both — see the student/faculty split below), but
-            provider login uses a THIRD identity shape (phone number, not
-            username or institutional email), so Login needs one explicit
-            toggle to know which form to resolve against. Kept minimal —
-            two options, not a full role card set like Register's. */}
-        {!isUpgrade && tab === 'login' && (
-          <div style={{ display: 'flex', gap: 8, marginBottom: 4 }}>
-            <button
-              type="button"
-              onClick={() => setRegisterRole(null)}
-              style={{
-                flex: 1, padding: '8px 0', borderRadius: 8, fontSize: 12.5, fontWeight: 600, cursor: 'pointer',
-                border: `1px solid ${!isProviderChoice ? 'var(--accent)' : 'var(--border)'}`,
-                background: !isProviderChoice ? 'var(--accentSoft, rgba(0,0,0,0.04))' : 'var(--card)',
-                color: 'var(--text)',
-              }}
-            >
-              Student / Faculty
+        {/* Unified Login form — one field, no role toggle. The person
+            just types whatever their account actually uses (student
+            username, faculty institutional email, or provider phone
+            number) and handleUnifiedLogin figures out which backend it
+            belongs to from the shape of what they typed. Register is
+            untouched below — it still asks Student/Faculty/Provider
+            explicitly, since signup needs different extra fields per
+            role that can't be inferred from an identifier alone. */}
+        {!isUpgrade && !isFaculty && tab === 'login' && (
+          <div style={{ display: 'grid', gap: 10 }}>
+            <div style={{ position: 'relative' }}>
+              <User size={15} style={{ position: 'absolute', left: 10, top: '50%', transform: 'translateY(-50%)', color: 'var(--muted)' }} />
+              <input
+                style={{ ...inputStyle, paddingLeft: 32 }}
+                placeholder="Username / Email / Phone"
+                value={loginIdentifier}
+                onChange={e => setLoginIdentifier(e.target.value)}
+                autoCapitalize="none"
+                autoCorrect="off"
+              />
+            </div>
+            <div style={{ position: 'relative' }}>
+              <Lock size={15} style={{ position: 'absolute', left: 10, top: '50%', transform: 'translateY(-50%)', color: 'var(--muted)' }} />
+              <input
+                style={{ ...inputStyle, paddingLeft: 32, paddingRight: 42 }}
+                type={showPassword ? 'text' : 'password'}
+                placeholder="Password"
+                value={password}
+                onChange={e => setPassword(e.target.value)}
+                onKeyDown={e => e.key === 'Enter' && handleUnifiedLogin()}
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword((visible) => !visible)}
+                style={{
+                  position: 'absolute', right: 10, top: '50%', transform: 'translateY(-50%)',
+                  background: 'none', border: 'none', padding: 0, cursor: 'pointer', color: 'var(--muted)',
+                }}
+                aria-label={showPassword ? 'Hide password' : 'Show password'}
+              >
+                {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+              </button>
+            </div>
+
+            {error && (
+              <div style={{ fontSize: 12, color: 'var(--danger, #dc2626)', padding: '8px 10px', background: 'rgba(220,38,38,0.08)', borderRadius: 6 }}>
+                {error}
+              </div>
+            )}
+
+            <button style={btnPrimary} onClick={handleUnifiedLogin} disabled={loading}>
+              {loading ? 'Loading…' : 'Sign in'}
             </button>
-            <button
-              type="button"
-              onClick={() => setRegisterRole('provider')}
-              style={{
-                flex: 1, padding: '8px 0', borderRadius: 8, fontSize: 12.5, fontWeight: 600, cursor: 'pointer',
-                border: `1px solid ${isProviderChoice ? 'var(--accent)' : 'var(--border)'}`,
-                background: isProviderChoice ? 'var(--accentSoft, rgba(0,0,0,0.04))' : 'var(--card)',
-                color: 'var(--text)',
-              }}
-            >
-              Service Provider
-            </button>
+
+            {!resetSent && (
+              <button
+                type="button"
+                onClick={async () => {
+                  if (!loginIdentifier.includes('@')) {
+                    setError('Password reset by email only works for faculty (institutional email) accounts right now. Student/Provider accounts should contact the Founder.');
+                    return;
+                  }
+                  if (!loginIdentifier) { setError('Enter your email first.'); return; }
+                  try {
+                    await resetPassword(loginIdentifier.trim());
+                    setResetSent(true);
+                    setError('');
+                  } catch (err) {
+                    setError(getAuthErrorMessage(err.code));
+                  }
+                }}
+                style={{ ...btnGhost, fontSize: 12, textAlign: 'center' }}
+              >
+                Forgot password?
+              </button>
+            )}
+            {resetSent && (
+              <div style={{ fontSize: 12, color: 'var(--accent)', textAlign: 'center' }}>
+                Reset email sent — check your inbox.
+              </div>
+            )}
           </div>
         )}
 
@@ -761,7 +913,7 @@ export default function AuthModal({ mode = 'login', isUpgrade = false, onClose, 
             SERVICES_PROVIDER_PLAN.md §1's "ভবিষ্যতে medicine shop ইত্যাদি
             একই কাঠামোতে যোগ হবে" — the dropdown is what actually lets a
             provider pick one instead of everything defaulting to salon). */}
-        {!isUpgrade && isProviderChoice && (tab === 'login' || registerRole) && (
+        {!isUpgrade && tab === 'register' && isProviderChoice && (
           <div style={{ display: 'grid', gap: 10, marginBottom: 4 }}>
             {tab === 'register' && (
               <>
@@ -844,7 +996,7 @@ export default function AuthModal({ mode = 'login', isUpgrade = false, onClose, 
             unchanged, since Phase 2's scope is student signup/login only,
             not the upgrade flow). Faculty branch further down is
             byte-for-byte the same JSX as before this edit. */}
-        {!showAsFaculty && !isProviderChoice && !isUpgrade && (tab === 'login' || registerRole) && (
+        {!showAsFaculty && !isProviderChoice && !isUpgrade && tab === 'register' && registerRole && (
           <div style={{ display: 'grid', gap: 10 }}>
             {tab === 'register' && registerRole && (
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: -4 }}>
@@ -953,7 +1105,7 @@ export default function AuthModal({ mode = 'login', isUpgrade = false, onClose, 
             the anonymous-session Upgrade flow. Plain student login/
             register uses the new username+password form above instead.
             Unchanged from before Phase 2 other than this gating condition. */}
-        {(isUpgrade || isFaculty || (showAsFaculty && (tab === 'login' || registerRole))) && (
+        {(isUpgrade || isFaculty || (showAsFaculty && tab === 'register' && registerRole)) && (
         <div style={{ display: 'grid', gap: 10 }}>
           {/* BUGFIX: this row used to render even when registerRole was
               still null (isFaculty-forced case), showing a "Switch to

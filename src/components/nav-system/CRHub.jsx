@@ -27,12 +27,13 @@ export default function CRHub() {
     title: roleLabel,
     icon: 'Shield',
     items: [
-      { id: 'class-routine',     label: 'Routine',            icon: 'CalendarDays',  path: '/class-routine' },
-      { id: 'class-planner',     label: 'Class Planner',      icon: 'CalendarCheck', path: '/class-planner' },
-      { id: 'ct-quiz-planning',  label: 'CT & Quiz Planner',  icon: 'CalendarCheck', path: '/ct-quiz-planning' },
-      { id: 'class-roster',      label: 'Roster',             icon: 'Users',         path: '/class-roster' },
-      { id: 'class-notices',     label: 'Class Announcements', icon: 'Bell',         path: '/class-notices' },
-      { id: 'class-my-role',     label: 'My Role',            icon: 'Shield',        path: '/class-my-role' },
+      { id: 'class-setup',       label: 'Class Setup',        icon: 'CalendarClock', accent: 'blue',   path: '/class-setup' },
+      { id: 'class-routine',     label: 'Routine',            icon: 'CalendarDays',  accent: 'green',  path: '/class-routine' },
+      { id: 'class-planner',     label: 'Class Planner',      icon: 'CalendarCheck', accent: 'amber',  path: '/class-planner' },
+      { id: 'ct-quiz-planning',  label: 'CT & Quiz Planner',  icon: 'CalendarCheck', accent: 'red',    path: '/ct-quiz-planning' },
+      { id: 'class-roster',      label: 'Roster',             icon: 'Users',         accent: 'purple', path: '/class-roster' },
+      { id: 'class-notices',     label: 'Class Announcements', icon: 'Bell',         accent: 'blue',   path: '/class-notices' },
+      { id: 'class-my-role',     label: 'My Role',            icon: 'Shield',        accent: 'green',  path: '/class-my-role' },
     ],
   };
 

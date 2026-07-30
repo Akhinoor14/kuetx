@@ -1123,26 +1123,35 @@ service cloud.firestore {
     }
 
     // -------------------------------------------------------------
-    // Manual verification requests — fallback path when automatic KUET
-    // email verification can't send (ManualVerifyFallback.jsx / see
-    // manualVerifyRequests.js header). Same shape/spirit as
-    // rollUnlockRequests just above: requester creates their own doc,
-    // Founder/admin resolves it from the Approvals tab.
+    // Manual verification requests — background safety-net queue for
+    // student Blue Tick (parallel to CR/ACR approval) and faculty's only
+    // verification path (see manualVerifyRequests.js header). Requester
+    // creates their own doc, Founder/admin resolves it from the
+    // Approvals tab.
     //
-    // BUGFIX: this collection previously had NO rule block at all —
-    // Firestore rules are default-deny per collection, so every
-    // addDoc() here (the "Contact Founder on WhatsApp" button) was
-    // silently rejected with permission-denied for EVERY user, signed
-    // in or anonymous, not just in incognito. The WhatsApp deep-link
-    // itself never even opened, since ManualVerifyFallback only calls
-    // window.open() *after* the Firestore write succeeds (see its
-    // handleSend) — so the failed write silently blocked the WhatsApp
-    // fallback along with it, in every browser/mode, every time.
+    // BUGFIX (kept): this collection previously had NO rule block at
+    // all — Firestore rules are default-deny per collection, so every
+    // write here was silently rejected with permission-denied for EVERY
+    // user, signed in or anonymous.
+    //
+    // AUTO-SUBMIT CHANGE: doc ID is now deterministic (== the requester's
+    // own uid, not a random addDoc ID) so ensureManualVerifyRequest() can
+    // never create more than one request per account no matter how many
+    // times it's called (profile re-saves, repeat app loads). The
+    // `requestId == request.auth.uid` check plus `!exists()` on create
+    // enforces at-most-one server-side too, as defense in depth on top
+    // of the client's own getDoc-before-setDoc check in
+    // ensureManualVerifyRequest — a duplicate write attempt is rejected
+    // outright rather than silently overwriting reviewer decisions
+    // (status/reviewedAt/reviewedBy) on an already-resolved request.
     // -------------------------------------------------------------
     match /manualVerifyRequests/{requestId} {
       allow read: if isAdmin() || isHeadOfOps()
         || (isSignedIn() && resource.data.uid == request.auth.uid);
-      allow create: if isSignedIn() && request.resource.data.uid == request.auth.uid;
+      allow create: if isSignedIn()
+        && requestId == request.auth.uid
+        && request.resource.data.uid == request.auth.uid
+        && !exists(/databases/$(database)/documents/manualVerifyRequests/$(requestId));
       allow update: if isAdmin() || isHeadOfOps();
       allow delete: if false;
     }
@@ -1627,6 +1636,18 @@ service cloud.firestore {
       // read/write this single doc so co-CRs see the same targets instead
       // of siloed personal copies.
       match /meta/plannerSettings {
+        allow read: if isAdmin() || isGroupMember(groupId);
+        allow create, update: if isContentEditor(groupId);
+        allow delete: if false;
+      }
+
+      // Mandatory CR onboarding data (term timeline: classEndDate,
+      // prepLeaveEndDate, examCount, postExamEndDate — same shape as the
+      // old per-student local roadmapConfig, now made a single group-wide
+      // doc so it's shared and can be gated as mandatory). Same authority
+      // model as plannerSettings/deptBatchConfig — only CR/ACR (or
+      // Admin/CL) can write, every group member can read.
+      match /meta/classSetup {
         allow read: if isAdmin() || isGroupMember(groupId);
         allow create, update: if isContentEditor(groupId);
         allow delete: if false;

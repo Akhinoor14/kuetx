@@ -31,13 +31,14 @@ import RoleSelectScreen from './components/RoleSelectScreen';
 import FacultyProfileSetupModal from './components/FacultyProfileSetupModal';
 import { getAccountRole, setAccountRole, fetchServerAccountRole, persistAccountRoleToServer } from './lib/accountRole';
 import { syncLocalDataOnAuth } from './lib/accountLifecycle';
-import { getFacultyDoc, markFacultyVerifiedIfEmailConfirmed, isFacultyProfileComplete } from './lib/facultySync';
+import { getFacultyDoc, isFacultyProfileComplete } from './lib/facultySync';
 import { syncBloodDonorEntry } from './lib/bloodDonorSync';
 import { store, getProfile, isProfileComplete, DEFAULT_PROFILE, normalizeProfileForSave, validateProfileForSave, ensureDBReady, tagProfileOwner, isProfileStaleForUid } from './store/store';
 import { getGroupId } from './lib/groupUtils';
-import { syncGroupMembership } from './lib/groupSync';
-import { subscribeGroupTermStartDate } from './lib/termStartDateSync';
+import { syncGroupMembership, getOwnMemberVerifiedOnce } from './lib/groupSync';
+import { subscribeGroupTermStartDate, subscribeGroupCurrentTermKey } from './lib/termStartDateSync';
 import { claimRoll } from './lib/rollOwnership';
+import { ensureManualVerifyRequest } from './lib/manualVerifyRequests';
 import { auth } from './lib/firebase';
 import { notify } from './lib/notify';
 import { pushProfile } from './lib/firebaseSync';
@@ -98,6 +99,7 @@ const ServiceDetail = lazy(() => import('./pages/ServiceDetail'));
 const ProviderDashboardPage = lazy(() => import('./pages/provider/ProviderDashboard'));
 const About = lazy(() => import('./pages/About'));
 const ClassRoutine = lazy(() => import('./pages/ClassRoutine'));
+const ClassSetup = lazy(() => import('./pages/ClassSetup'));
 const ClassPlanner = lazy(() => import('./pages/ClassPlanner'));
 const CTQuizPlanning = lazy(() => import('./pages/CTQuizPlanning'));
 const ClassRosterPage = lazy(() => import('./pages/ClassRosterPage'));
@@ -240,6 +242,7 @@ function Layout({ authState, onboardingActive }) {
             <Route path="/settings" element={<Settings />} />
             <Route path="/about" element={<About />} />
             <Route path="/class-routine" element={<RequireStudentMode><RequireCR><ClassRoutine /></RequireCR></RequireStudentMode>} />
+            <Route path="/class-setup" element={<RequireStudentMode><RequireCR><ClassSetup /></RequireCR></RequireStudentMode>} />
             <Route path="/class-planner" element={<RequireStudentMode><RequireCR><ClassPlanner /></RequireCR></RequireStudentMode>} />
             <Route path="/ct-quiz-planning" element={<RequireStudentMode><RequireCR><CTQuizPlanning /></RequireCR></RequireStudentMode>} />
             <Route path="/class-roster" element={<RequireStudentMode><RequireCR><ClassRosterPage /></RequireCR></RequireStudentMode>} />
@@ -606,55 +609,33 @@ export default function App() {
     });
   }, [authState.authReady, currentGroupId]);
 
-  // BUGFIX: faculty magic-link verification previously only ran INSIDE
-  // FacultyVerifyHoldingScreen, which only mounts when the onboarding
-  // queue's current step happens to be 'faculty-verify' — which itself
-  // only gets pushed when accountRole (a localStorage flag) is already
-  // 'teacher' on THIS browser. A teacher who opened the emailed link in a
-  // new tab, a different browser, their phone's mail app, or after
-  // closing/refreshing the original signup tab would land on a page where
-  // that condition was never true, so isFacultyVerifyLink()/
-  // completeFacultyVerificationLink() never ran at all — the click did
-  // nothing, verifiedFacultyEmails/{email} never got written, and
-  // faculty/{uid}.verifiedAt stayed null forever, even though the person
-  // genuinely clicked the right link. This mirrors the student
-  // KUET-email-verify handling above: a boot-level effect, independent of
-  // the onboarding queue, so the link works regardless of which tab/device/
-  // queue-state it's opened from. See BUGFIX_FACULTY_VERIFY_CROSS_DEVICE.md.
+  // Same mechanism as the term-start-date listener directly above, for
+  // the CURRENT TERM. currentTermKey used to be a field each student
+  // typed into their own Profile — now the CR/ACR sets it once for the
+  // whole class (Class Setup page) and this mirrors it into every
+  // member's local profile.currentTermKey, so getCurrentTermKey(profile)
+  // (used synchronously across Courses/Results/Marks/Attendance/
+  // Dashboard/Schedule — 14 call sites) stays correct without touching
+  // any of them. A student's own manual currentTermKey (from before this
+  // feature existed) is overwritten going forward — the class no longer
+  // has a "pick your own term" option once the CR has set one.
   useEffect(() => {
-    let cancelled = false;
+    if (!authState.authReady) return;
+    const gid = currentGroupId;
+    if (!gid) return;
+    return subscribeGroupCurrentTermKey(gid, (termKey) => {
+      if (!termKey) return; // group hasn't set one — keep whatever's already stored
+      const current = getProfile();
+      if (current.currentTermKey === termKey) return;
+      store.set('profile', { ...current, currentTermKey: termKey, currentTerm: '' });
+    });
+  }, [authState.authReady, currentGroupId]);
 
-    async function run(emailOverride = null) {
-      const { isFacultyVerifyLink, completeFacultyVerificationLink } = await import('./lib/facultyEmailVerify');
-      if (!emailOverride && !isFacultyVerifyLink(window.location.href)) return;
-      const result = await completeFacultyVerificationLink(window.location.href, emailOverride);
-      if (cancelled) return;
-
-      if (result.status === 'success') {
-        setAccountRole('teacher');
-        const uid = auth.currentUser?.uid;
-        if (uid) {
-          try {
-            await markFacultyVerifiedIfEmailConfirmed(uid, result.email);
-          } catch (e) {
-            console.warn('[App] markFacultyVerifiedIfEmailConfirmed failed', e);
-            notify('Verification succeeded but could not be saved. Please reopen the link or contact the developer.', 'error', 6000);
-            return;
-          }
-        }
-        notify('Faculty email verified! You now have full access.', 'success');
-        return;
-      }
-      if (result.status === 'error') {
-        console.warn('[KUETx] Faculty email verify link:', result.message);
-        notify(result.message, 'error', 6000);
-      }
-      // 'not-a-link' and 'needs-email' → nothing to do.
-    }
-
-    run();
-    return () => { cancelled = true; };
-  }, []);
+  // Faculty magic-link (email sign-in-link) verification has been
+  // removed entirely — faculty verification is manual-only now (Founder
+  // approves via WhatsApp + ManualVerifyFallback/manualVerifyRequests.js,
+  // same as the student roll fallback path). There is no link for this
+  // effect to listen for anymore.
 
   // Build queue once auth is ready so we know isAnonymous. buildQueue is now
   // async (accountRole === 'teacher' needs a Firestore read) — guarded with
@@ -758,6 +739,24 @@ export default function App() {
         );
         return; // do NOT syncGroupMembership — this account doesn't own this roll
       }
+
+      // Backfill safety net for accounts that never went through
+      // ProfileSetupModal's own trigger (e.g. profile saved before this
+      // change existed, or the modal's onSave somehow didn't fire) —
+      // ensureManualVerifyRequest is idempotent (deterministic doc ID),
+      // so calling it on every app load/store-update here is safe and
+      // just a no-op past the first successful write per account. Skip
+      // when already Blue-Tick verified so an already-verified student
+      // doesn't get queued into the Approvals tab for no reason.
+      getOwnMemberVerifiedOnce(gid).then((alreadyVerified) => {
+        if (!alreadyVerified) {
+          ensureManualVerifyRequest('student', {
+            name: profile.name,
+            email: profile.kuetEmail,
+            roll: profile.studentId,
+          });
+        }
+      }).catch(() => {});
 
       syncGroupMembership(gid, profile).catch((e) => console.warn('[App] auto syncGroupMembership failed', e));
     };

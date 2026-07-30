@@ -2,12 +2,12 @@ import { useEffect, useMemo, useState } from 'react';
 import { Plus, Trash2, Check, ClipboardList, CalendarClock, Bell, PartyPopper, ListTodo, Clock3, GraduationCap, BookOpen, Hourglass } from 'lucide-react';
 import { store, uid, getProfile, getCurrentTermKey } from '../store/store';
 import { getAllCourses } from '../store/curriculumStore';
-import CourseTeacherDialog from '../components/CourseTeacherDialog';
 import { notify } from '../lib/notify';
 import { getGroupId } from '../lib/groupUtils';
-import { subscribeCRStatus } from '../lib/groupSync';
+import { subscribeCRStatus, subscribePlannerSettings } from '../lib/groupSync';
 import { useCanEditGroup } from '../hooks/useCanEditGroup';
 import GroupAssignments from '../components/GroupAssignments';
+import { Link } from 'react-router-dom';
 
 const normalizeTeacherName = (value) => {
   const clean = String(value || '').trim().replace(/\s+/g, ' ');
@@ -43,11 +43,10 @@ export default function Assignments() {
   }, [courses, currentTermKey]);
   
   const [items, setItems] = useState(() => store.get('assignments') || []);
-  const [scheduleSettings, setScheduleSettings] = useState(() => store.get('scheduleSettings') || {});
+  const [localSettings, setLocalSettings] = useState(() => store.get('scheduleSettings') || {});
   const [adding, setAdding] = useState(false);
   const [filter, setFilter] = useState('all');
   const [form, setForm] = useState({ courseId: '', teacherName: '', titles: [''], title: '', desc: '', due: '', status: 'pending', priority: 'medium' });
-  const [teacherDialog, setTeacherDialog] = useState({ open: false, courseId: '' });
 
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
   const setTitleLine = (index, value) => setForm(f => ({
@@ -61,23 +60,27 @@ export default function Assignments() {
   }));
 
   useEffect(() => {
-    const refresh = () => setScheduleSettings(store.get('scheduleSettings') || {});
+    const refresh = () => setLocalSettings(store.get('scheduleSettings') || {});
     window.addEventListener('kuetx:store-updated', refresh);
     return () => window.removeEventListener('kuetx:store-updated', refresh);
   }, []);
 
-  const courseTeacherMap = scheduleSettings?.courseTeacherMap || {};
+  // Teacher assignment is CR/ACR-only and lives in one place — Class Setup.
+  // This page only ever reads it (group value wins once a group exists;
+  // local scheduleSettings.courseTeacherMap is just the pre-group
+  // fallback for students not yet in a synced class). Picking a teacher
+  // here is now informational, not a gate — an assignment can be logged
+  // with no teacher selected if the CR hasn't assigned one yet.
+  const [groupTeacherMap, setGroupTeacherMap] = useState(null);
+  useEffect(() => {
+    if (!groupId) { setGroupTeacherMap(null); return; }
+    return subscribePlannerSettings(groupId, (data) => setGroupTeacherMap(data?.courseTeacherMap || {}));
+  }, [groupId]);
+  const courseTeacherMap = groupTeacherMap ?? (localSettings?.courseTeacherMap || {});
 
   const getCourseTeachers = (courseId) => {
     const mapped = Array.isArray(courseTeacherMap?.[courseId]) ? courseTeacherMap[courseId].map(normalizeTeacherName).filter(Boolean) : [];
     return [...new Set(mapped)].slice(0, 2);
-  };
-
-  const ensureCourseTeacherSetup = (courseId) => {
-    const teachers = getCourseTeachers(courseId);
-    if (teachers.length >= 2) return true;
-    setTeacherDialog({ open: true, courseId });
-    return false;
   };
 
   const handleCourseChange = (courseId) => {
@@ -87,22 +90,11 @@ export default function Assignments() {
       courseId,
       teacherName: teachers[0] || '',
     }));
-    if (courseId) ensureCourseTeacherSetup(courseId);
   };
 
   const add = () => {
     if (!form.courseId) return;
-    const teachers = getCourseTeachers(form.courseId);
-    if (teachers.length < 2) {
-      ensureCourseTeacherSetup(form.courseId);
-      return;
-    }
-
     const selectedTeacher = normalizeTeacherName(form.teacherName);
-    if (!selectedTeacher) {
-      notify('Please select a teacher for this assignment course.', 'error');
-      return;
-    }
 
     const titles = (form.titles || [])
       .map(line => String(line || '').trim())
@@ -275,17 +267,19 @@ export default function Assignments() {
               ))}
               <button type="button" className="btn btn-ghost" onClick={addTitleLine} style={{ height: 40, fontSize: 12, justifyContent: 'center', fontWeight: 600 }}>+ Add another title</button>
             </div>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: 12, alignItems: 'end', marginBottom: 14 }}>
-              <div>
-                <label style={{ fontSize: 12, fontWeight: 700, marginBottom: 6, display: 'block', color: 'var(--text)' }}>Teacher</label>
-                <select value={form.teacherName} onChange={e => set('teacherName', e.target.value)} disabled={!form.courseId || getCourseTeachers(form.courseId).length === 0} style={{ minHeight: 42 }}>
-                  <option value="">Select teacher</option>
-                  {getCourseTeachers(form.courseId).map(name => <option key={name} value={name}>{name}</option>)}
-                </select>
-              </div>
-              <button className="btn btn-ghost" type="button" onClick={() => form.courseId && setTeacherDialog({ open: true, courseId: form.courseId })} disabled={!form.courseId} style={{ height: 42, fontSize: 12, fontWeight: 600 }}>
-                {!form.courseId ? 'Course First' : getCourseTeachers(form.courseId).length >= 2 ? 'Edit' : 'Add'}
-              </button>
+            <div style={{ marginBottom: 14 }}>
+              <label style={{ fontSize: 12, fontWeight: 700, marginBottom: 6, display: 'block', color: 'var(--text)' }}>Teacher</label>
+              <select value={form.teacherName} onChange={e => set('teacherName', e.target.value)} disabled={!form.courseId || getCourseTeachers(form.courseId).length === 0} style={{ minHeight: 42 }}>
+                <option value="">{!form.courseId ? 'Pick a course first' : getCourseTeachers(form.courseId).length === 0 ? 'Not assigned yet' : 'Select teacher'}</option>
+                {getCourseTeachers(form.courseId).map(name => <option key={name} value={name}>{name}</option>)}
+              </select>
+              {form.courseId && getCourseTeachers(form.courseId).length === 0 && (
+                <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 5 }}>
+                  {canEditGroupAssignments
+                    ? <>No teacher assigned for this course yet — <Link to="/class-setup" style={{ color: 'var(--accent)', fontWeight: 700 }}>assign one in Class Setup</Link>.</>
+                    : "Your CR hasn't assigned a teacher for this course yet — you can still save without one."}
+                </div>
+              )}
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 12, marginBottom: 14 }}>
               <div>
@@ -454,23 +448,6 @@ export default function Assignments() {
           </div>
         )}
       </div>
-
-      <CourseTeacherDialog
-        isOpen={teacherDialog.open}
-        onClose={() => setTeacherDialog({ open: false, courseId: '' })}
-        course={getCourse(teacherDialog.courseId)}
-        currentTeachers={getCourseTeachers(teacherDialog.courseId)}
-        onSave={(teachers) => {
-          const normalizedTeachers = [...new Set((teachers || []).map(normalizeTeacherName).filter(Boolean))].slice(0, 2);
-          const next = { ...(scheduleSettings || {}), courseTeacherMap: { ...(scheduleSettings?.courseTeacherMap || {}), [teacherDialog.courseId]: normalizedTeachers } };
-          store.set('scheduleSettings', next);
-          setScheduleSettings(next);
-          setForm(prev => ({ ...prev, courseId: teacherDialog.courseId, teacherName: prev.teacherName || normalizedTeachers[0] || '' }));
-          setTeacherDialog({ open: false, courseId: '' });
-        }}
-        allTeachers={Object.values(courseTeacherMap || {}).flat().map(normalizeTeacherName).filter(Boolean)}
-        requireTwoTeachers
-      />
     </div>
   );
 }

@@ -1,9 +1,12 @@
 import { useEffect, useMemo, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Plus, Trash2, Check, FileQuestion, CalendarDays, GraduationCap, HelpCircle, ExternalLink } from 'lucide-react';
 import { store, uid, getProfile, getCurrentTermKey } from '../store/store';
 import { getAllCourses } from '../store/curriculumStore';
-import CourseTeacherDialog from '../components/CourseTeacherDialog';
 import { notify } from '../lib/notify';
+import { getGroupId } from '../lib/groupUtils';
+import { subscribePlannerSettings } from '../lib/groupSync';
+import { useCanEditGroup } from '../hooks/useCanEditGroup';
 
 const normalizeTeacherName = (value) => {
   const clean = String(value || '').trim().replace(/\s+/g, ' ');
@@ -14,7 +17,9 @@ const normalizeTeacherName = (value) => {
 export default function TermQS() {
   const profile = getProfile();
   const courses = getAllCourses(profile);
-  
+  const groupId = getGroupId(profile);
+  const { canEdit: canEditTeachers } = useCanEditGroup(groupId);
+
   // Filter courses to show only current term courses
   const currentTermKey = getCurrentTermKey(profile);
   const currentTermCourses = useMemo(() => {
@@ -26,7 +31,7 @@ export default function TermQS() {
   }, [courses, currentTermKey]);
   
   const [items, setItems] = useState(() => store.get('term-qs') || []);
-  const [scheduleSettings, setScheduleSettings] = useState(() => store.get('scheduleSettings') || {});
+  const [localSettings, setLocalSettings] = useState(() => store.get('scheduleSettings') || {});
   const [adding, setAdding] = useState(false);
   const [filter, setFilter] = useState('all');
   const [form, setForm] = useState({ 
@@ -40,28 +45,31 @@ export default function TermQS() {
     questionCount: '',
     link: ''
   });
-  const [teacherDialog, setTeacherDialog] = useState({ open: false, courseId: '' });
 
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
 
   useEffect(() => {
-    const refresh = () => setScheduleSettings(store.get('scheduleSettings') || {});
+    const refresh = () => setLocalSettings(store.get('scheduleSettings') || {});
     window.addEventListener('kuetx:store-updated', refresh);
     return () => window.removeEventListener('kuetx:store-updated', refresh);
   }, []);
 
-  const courseTeacherMap = scheduleSettings?.courseTeacherMap || {};
+  // Teacher assignment is CR/ACR-only and lives in one place — Class Setup.
+  // This page only ever reads it now (group value wins once a group
+  // exists; local scheduleSettings.courseTeacherMap is just the
+  // pre-group fallback). Selecting a teacher here is informational, not
+  // a gate — a Q&S item can be logged with no teacher if the CR hasn't
+  // assigned one yet.
+  const [groupTeacherMap, setGroupTeacherMap] = useState(null);
+  useEffect(() => {
+    if (!groupId) { setGroupTeacherMap(null); return; }
+    return subscribePlannerSettings(groupId, (data) => setGroupTeacherMap(data?.courseTeacherMap || {}));
+  }, [groupId]);
+  const courseTeacherMap = groupTeacherMap ?? (localSettings?.courseTeacherMap || {});
 
   const getCourseTeachers = (courseId) => {
     const mapped = Array.isArray(courseTeacherMap?.[courseId]) ? courseTeacherMap[courseId].map(normalizeTeacherName).filter(Boolean) : [];
     return [...new Set(mapped)].slice(0, 2);
-  };
-
-  const ensureCourseTeacherSetup = (courseId) => {
-    const teachers = getCourseTeachers(courseId);
-    if (teachers.length >= 2) return true;
-    setTeacherDialog({ open: true, courseId });
-    return false;
   };
 
   const handleCourseChange = (courseId) => {
@@ -71,7 +79,6 @@ export default function TermQS() {
       courseId,
       teacherName: teachers[0] || '',
     }));
-    if (courseId) ensureCourseTeacherSetup(courseId);
   };
 
   const add = () => {
@@ -79,17 +86,8 @@ export default function TermQS() {
       notify('Please fill in Course, Title, and Year fields.', 'error');
       return;
     }
-    const teachers = getCourseTeachers(form.courseId);
-    if (teachers.length < 2) {
-      ensureCourseTeacherSetup(form.courseId);
-      return;
-    }
 
     const selectedTeacher = normalizeTeacherName(form.teacherName);
-    if (!selectedTeacher) {
-      notify('Please select a teacher.', 'error');
-      return;
-    }
 
     const item = {
       ...form,
@@ -222,17 +220,19 @@ export default function TermQS() {
                 <input value={form.link} onChange={e => set('link', e.target.value)} placeholder="Drive link, PDF file..." style={{ minHeight: 42 }} />
               </div>
             </div>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: 12, alignItems: 'end', marginBottom: 14 }}>
-              <div>
-                <label style={{ fontSize: 12, fontWeight: 700, marginBottom: 6, display: 'block', color: 'var(--text)' }}>Teacher</label>
-                <select value={form.teacherName} onChange={e => set('teacherName', e.target.value)} disabled={!form.courseId || getCourseTeachers(form.courseId).length === 0} style={{ minHeight: 42 }}>
-                  <option value="">Select teacher</option>
-                  {getCourseTeachers(form.courseId).map(name => <option key={name} value={name}>{name}</option>)}
-                </select>
-              </div>
-              <button className="btn btn-ghost" type="button" onClick={() => form.courseId && setTeacherDialog({ open: true, courseId: form.courseId })} disabled={!form.courseId} style={{ height: 42, fontSize: 12, fontWeight: 600 }}>
-                {!form.courseId ? 'Course First' : getCourseTeachers(form.courseId).length >= 2 ? 'Edit' : 'Add'}
-              </button>
+            <div style={{ marginBottom: 14 }}>
+              <label style={{ fontSize: 12, fontWeight: 700, marginBottom: 6, display: 'block', color: 'var(--text)' }}>Teacher</label>
+              <select value={form.teacherName} onChange={e => set('teacherName', e.target.value)} disabled={!form.courseId || getCourseTeachers(form.courseId).length === 0} style={{ minHeight: 42 }}>
+                <option value="">{!form.courseId ? 'Pick a course first' : getCourseTeachers(form.courseId).length === 0 ? 'Not assigned yet' : 'Select teacher'}</option>
+                {getCourseTeachers(form.courseId).map(name => <option key={name} value={name}>{name}</option>)}
+              </select>
+              {form.courseId && getCourseTeachers(form.courseId).length === 0 && (
+                <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 5 }}>
+                  {canEditTeachers
+                    ? <>No teacher assigned for this course yet — <Link to="/class-setup" style={{ color: 'var(--accent)', fontWeight: 700 }}>assign one in Class Setup</Link>.</>
+                    : "Your CR hasn't assigned a teacher for this course yet — you can still save without one."}
+                </div>
+              )}
             </div>
             <div style={{ marginBottom: 14 }}>
               <label style={{ fontSize: 12, fontWeight: 700, marginBottom: 6, display: 'block', color: 'var(--text)' }}>Notes</label>
@@ -372,28 +372,6 @@ export default function TermQS() {
         )}
       </div>
 
-      {teacherDialog.open && (
-        <CourseTeacherDialog 
-          isOpen={teacherDialog.open}
-          onClose={() => setTeacherDialog({ open: false, courseId: '' })}
-          course={getCourse(teacherDialog.courseId)}
-          currentTeachers={getCourseTeachers(teacherDialog.courseId)}
-          onSave={(teachers) => {
-            const normalizedTeachers = [...new Set((teachers || []).map(normalizeTeacherName).filter(Boolean))].slice(0, 2);
-            const nextSettings = {
-              ...scheduleSettings,
-              courseTeacherMap: {
-                ...(scheduleSettings?.courseTeacherMap || {}),
-                [teacherDialog.courseId]: normalizedTeachers,
-              },
-            };
-            store.set('scheduleSettings', nextSettings);
-            setScheduleSettings(nextSettings);
-            setTeacherDialog({ open: false, courseId: '' });
-          }}
-          requireTwoTeachers
-        />
-      )}
     </div>
   );
 }

@@ -1,4 +1,5 @@
 import { useState, useMemo, useEffect, useCallback, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Modal from '../components/Modal';
 import { ChevronLeft, ChevronRight, AlertTriangle, CheckCircle, TrendingUp, Users, BookOpen, Award, CalendarDays, X, PartyPopper, ClipboardX } from 'lucide-react';
 import {
@@ -6,9 +7,10 @@ import {
   getProfile, getRoutinePreviewDate, isRoutineHoliday
 } from '../store/store';
 import { getAllCourses } from '../store/curriculumStore';
-import CourseTeacherDialog from '../components/CourseTeacherDialog';
+import TeacherSection from '../components/TeacherSection';
 import { getGroupId } from '../lib/groupUtils';
-import { subscribeCRStatus, subscribeRoutine } from '../lib/groupSync';
+import { subscribeCRStatus, subscribeRoutine, subscribePlannerSettings } from '../lib/groupSync';
+import { useCanEditGroup } from '../hooks/useCanEditGroup';
 
 // ── Utils ──────────────────────────────────────────────────────────────────
 const todayStr = () => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; };
@@ -461,7 +463,7 @@ function AttendanceHero({ courses, logs, schedule, settings, combinedMode, combi
 }
 
 // ── Daily Log ──────────────────────────────────────────────────────────────
-function DailyLog({ courses, logs, setLogs, schedule, settings, onEditTeachers }) {
+function DailyLog({ courses, logs, setLogs, schedule, settings, onEditTeachers, canEditTeachers }) {
   const [date, setDate] = useState(todayStr());
   const [showGive, setShowGive] = useState(false);
   const dark = useDark();
@@ -635,8 +637,10 @@ function DailyLog({ courses, logs, setLogs, schedule, settings, onEditTeachers }
               {!hasTeachers ? (
                 <div style={{ fontSize: 12, color: 'var(--warning)', padding: '7px 10px', background: dark ? 'rgba(217,119,6,0.10)' : 'rgba(255,251,235,1)', borderRadius: 9, border: '1px solid rgba(217,119,6,0.20)', display: 'flex', alignItems: 'center', gap: 6 }}>
                   <AlertTriangle size={11} />
-                  <span>Assign teachers first.</span>
-                  <button onClick={() => onEditTeachers(course.id)} style={{ marginLeft: 'auto', padding: '3px 9px', borderRadius: 6, fontSize: 11, fontWeight: 700, background: 'var(--warning)', color: 'white', border: 'none', cursor: 'pointer', flexShrink: 0 }}>Assign</button>
+                  <span>{canEditTeachers ? 'Assign teachers first.' : 'Your CR hasn\'t assigned a teacher yet.'}</span>
+                  {canEditTeachers && (
+                    <button onClick={() => onEditTeachers(course.id)} style={{ marginLeft: 'auto', padding: '3px 9px', borderRadius: 6, fontSize: 11, fontWeight: 700, background: 'var(--warning)', color: 'white', border: 'none', cursor: 'pointer', flexShrink: 0 }}>Assign</button>
+                  )}
                 </div>
               ) : (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
@@ -685,7 +689,7 @@ function DailyLog({ courses, logs, setLogs, schedule, settings, onEditTeachers }
 }
 
 // ── Combined Attendance ────────────────────────────────────────────────────
-function CombinedAtt({ courses, logs, schedule, settings, combinedMode, combinedData, toggleCombined, updateCombined, onEditTeachers }) {
+function CombinedAtt({ courses, logs, schedule, settings, combinedMode, combinedData, toggleCombined, updateCombined, onEditTeachers, canEditTeachers }) {
   const dark = useDark();
   const theory = (courses || []).filter(c => !isAutoFull(c.type));
 
@@ -788,8 +792,10 @@ function CombinedAtt({ courses, logs, schedule, settings, combinedMode, combined
             {!assigned && (
               <div style={{ marginBottom: 9, padding: '7px 10px', background: dark ? 'rgba(217,119,6,0.10)' : 'rgba(255,251,235,1)', border: '1px solid rgba(217,119,6,0.22)', borderRadius: 8, fontSize: 11, color: 'var(--warning)', display: 'flex', alignItems: 'center', gap: 5 }}>
                 <Users size={11} style={{ flexShrink: 0 }} />
-                <span>Both teachers must be assigned first.</span>
-                <button onClick={() => onEditTeachers(c.id)} style={{ marginLeft: 'auto', padding: '3px 9px', borderRadius: 6, fontSize: 11, fontWeight: 700, background: 'var(--warning)', color: 'white', border: 'none', cursor: 'pointer', flexShrink: 0 }}>Assign</button>
+                <span>{canEditTeachers ? 'Both teachers must be assigned first.' : 'Your CR hasn\'t assigned both teachers yet.'}</span>
+                {canEditTeachers && (
+                  <button onClick={() => onEditTeachers(c.id)} style={{ marginLeft: 'auto', padding: '3px 9px', borderRadius: 6, fontSize: 11, fontWeight: 700, background: 'var(--warning)', color: 'white', border: 'none', cursor: 'pointer', flexShrink: 0 }}>Assign</button>
+                )}
               </div>
             )}
 
@@ -797,9 +803,11 @@ function CombinedAtt({ courses, logs, schedule, settings, combinedMode, combined
             <div style={{ marginBottom: pct !== null ? 8 : 0 }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 }}>
                 <div style={{ fontSize: 10, fontWeight: 800, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Per Teacher</div>
-                <button onClick={() => onEditTeachers(c.id)} className="btn btn-ghost btn-sm" style={{ fontSize: 10, padding: '2px 7px', color: 'var(--accent)' }}>
-                  <Users size={9} /> Edit
-                </button>
+                {canEditTeachers && (
+                  <button onClick={() => onEditTeachers(c.id)} className="btn btn-ghost btn-sm" style={{ fontSize: 10, padding: '2px 7px', color: 'var(--accent)' }}>
+                    <Users size={9} /> Edit
+                  </button>
+                )}
               </div>
               <div style={{ display: 'grid', gridTemplateColumns: `repeat(${Math.min(ts.length, 2)}, 1fr)`, gap: 6 }}>
                 {ts.map(t => {
@@ -859,6 +867,7 @@ function CombinedAtt({ courses, logs, schedule, settings, combinedMode, combined
 
 // ── Main ────────────────────────────────────────────────────────────────────
 export default function Attendance() {
+  const navigate = useNavigate();
   const profile = getProfile();
   const courses = getAllCourses(profile).filter(c => c.status === 'active' || c.status === 'backlog');
   // logs (present/absent marks) are ALWAYS personal — each student's own
@@ -880,6 +889,7 @@ export default function Attendance() {
     return subscribeCRStatus(groupId, (status) => setGroupHasCR(!!status?.hasCR));
   }, [groupId]);
   const isGroupMode = !!groupId && groupHasCR === true;
+  const { canEdit: canEditTeachers } = useCanEditGroup(groupId);
 
   const [schedule, setSchedule] = useState(() => (isGroupMode ? [] : (store.get('schedule') || [])));
   useEffect(() => {
@@ -903,10 +913,9 @@ export default function Attendance() {
     });
   }, [isGroupMode, groupId]);
 
-  const [settings, setSettings] = useState(() => store.get('scheduleSettings') || {});
+  const [localSettings, setLocalSettings] = useState(() => store.get('scheduleSettings') || {});
   const [combinedMode, setCombinedMode] = useState(() => !!store.get('attCombinedMode'));
   const [combinedData, setCombinedData] = useState(() => store.get('attCombinedData') || {});
-  const [teacherDlg, setTeacherDlg] = useState({ open: false, courseId: '' });
   const [holidayOpen, setHolidayOpen] = useState(false);
   const dark = useDark();
 
@@ -914,13 +923,30 @@ export default function Attendance() {
     const refresh = () => {
       setLogs(store.get('attLogs') || {});
       if (!isGroupMode) setSchedule(store.get('schedule') || []);
-      setSettings(store.get('scheduleSettings') || {});
+      setLocalSettings(store.get('scheduleSettings') || {});
       setCombinedMode(!!store.get('attCombinedMode'));
       setCombinedData(store.get('attCombinedData') || {});
     };
     window.addEventListener('kuetx:store-updated', refresh);
     return () => window.removeEventListener('kuetx:store-updated', refresh);
   }, [isGroupMode]);
+
+  // Teacher assignment is CR/ACR-only and lives in one place — Class Setup
+  // (groups/{groupId}/meta/plannerSettings.courseTeacherMap). This page only
+  // ever reads it now; the old per-student local override
+  // (scheduleSettings.courseTeacherMap, edited via a dialog right on this
+  // page) has been removed so every student sees the same teacher for the
+  // same course. Holiday dates stay purely local/per-device, so
+  // localSettings is still kept around for that.
+  const [groupTeacherMap, setGroupTeacherMap] = useState(null);
+  useEffect(() => {
+    if (!groupId) { setGroupTeacherMap(null); return; }
+    return subscribePlannerSettings(groupId, (data) => setGroupTeacherMap(data?.courseTeacherMap || {}));
+  }, [groupId]);
+  const settings = useMemo(
+    () => ({ ...localSettings, courseTeacherMap: groupTeacherMap ?? (localSettings.courseTeacherMap || {}) }),
+    [localSettings, groupTeacherMap],
+  );
 
   const toggleCombined = () => {
     const next = !combinedMode;
@@ -942,17 +968,14 @@ export default function Attendance() {
     setCombinedData(next);
     store.set('attCombinedData', next);
   };
-  const openTeachers = (courseId) => setTeacherDlg({ open: true, courseId });
-  const closeTeachers = () => setTeacherDlg({ open: false, courseId: '' });
-  const saveTeachers = (list) => {
-    const courseId = teacherDlg.courseId;
-    const next = { ...settings, courseTeacherMap: { ...(settings.courseTeacherMap || {}), [courseId]: list } };
-    setSettings(next);
-    store.set('scheduleSettings', next);
-    closeTeachers();
-  };
+  // Teacher assignment now happens only in Class Setup (CR/ACR-only). This
+  // page just sends whoever taps "Assign"/"Teachers" there instead of
+  // opening a local edit dialog — see groupTeacherMap above for the read side.
+  // Only CR/ACR (canEditTeachers) get a live button; regular students see
+  // a plain read-only label instead (wired at the two render sites below).
+  const openTeachers = () => navigate('/class-setup');
   const saveHolidaySettings = (next) => {
-    setSettings(next);
+    setLocalSettings(next);
     store.set('scheduleSettings', next);
   };
 
@@ -962,14 +985,6 @@ export default function Attendance() {
   const previewDayName = new Date(previewDate + 'T00:00:00').toLocaleDateString('en-US', { weekday: 'long' });
   const todaySchedule = (schedule || []).filter(s => s.day === previewDayName && courses.some(c => c.id === s.courseId))
     .slice().sort((a, b) => a.slot.localeCompare(b.slot));
-
-  const allTeachers = [...new Set(
-    (schedule || [])
-      .flatMap(s => Array.isArray(s.teacherNames) && s.teacherNames.length ? s.teacherNames : [s.teacherName])
-      .filter(Boolean)
-  )];
-  const selectedCourse = courses.find(c => c.id === teacherDlg.courseId);
-  const currentTeachers = selectedCourse ? getTeachersForCourse(settings, schedule, teacherDlg.courseId) : [];
 
   return (
     <div className="page-enter page-container content-page-bg">
@@ -1039,6 +1054,7 @@ export default function Attendance() {
           courses={courses} logs={logs} setLogs={setLogs}
           schedule={schedule} settings={settings}
           onEditTeachers={openTeachers}
+          canEditTeachers={canEditTeachers}
         />
       ) : (
         <CombinedAtt
@@ -1046,6 +1062,7 @@ export default function Attendance() {
           combinedMode={combinedMode} combinedData={combinedData}
           toggleCombined={toggleCombined} updateCombined={updateCombined}
           onEditTeachers={openTeachers}
+          canEditTeachers={canEditTeachers}
         />
       )}
 
@@ -1069,14 +1086,6 @@ export default function Attendance() {
 
       {/* Holiday Modal */}
       <HolidayModal isOpen={holidayOpen} onClose={() => setHolidayOpen(false)} scheduleSettings={settings} onSave={saveHolidaySettings} />
-
-      {/* Teacher Dialog */}
-      <CourseTeacherDialog
-        isOpen={teacherDlg.open} onClose={closeTeachers}
-        course={selectedCourse} currentTeachers={currentTeachers}
-        onSave={saveTeachers} allTeachers={allTeachers}
-        requireTwoTeachers
-      />
     </div>
   );
 }

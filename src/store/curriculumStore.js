@@ -184,6 +184,35 @@ export const syncCurriculumCourses = (profile) => {
   return [...curriculumCourses, ...getCustomCoursesWithOverrides()];
 };
 
+/**
+ * Course list for an ARBITRARY dept+term, independent of any student's
+ * own profile/currentTermKey. getAllCourses(profile) is cumulative
+ * (every term up to the student's own current one) and keyed to their
+ * personal optional-course selections — wrong shape for the CR-facing
+ * Class Setup screen, where the CR picks a term for the WHOLE class and
+ * just needs "what courses exist in this one term" to assign teachers
+ * to. Optional-course slots are included as placeholder rows (no
+ * per-student selection applied) since the CR assigns a teacher to the
+ * slot itself, not to any one student's chosen elective.
+ */
+export const getCoursesForTerm = (deptCode, termKey) => {
+  if (!deptCode || !termKey) return [];
+  const deptTerms = getDeptTerms(deptCode);
+  const deptSyllabus = getDeptSyllabus(deptCode) || { terms: {} };
+  let baseCourses = Array.isArray(deptTerms[termKey]) ? deptTerms[termKey] : [];
+  if ((!Array.isArray(baseCourses) || baseCourses.length === 0) && deptSyllabus?.terms?.[termKey]) {
+    baseCourses = buildBaseCoursesFromSyllabus(deptSyllabus.terms[termKey]);
+  }
+  if (Array.isArray(baseCourses) && baseCourses.length > 0) {
+    baseCourses = baseCourses.map(course => ({ ...course, type: inferCourseTypeFromCode(course.code, course.type) }));
+  }
+  let optionalSlot = 0;
+  return (baseCourses || []).map(base => {
+    const slotIndex = base.isOptional ? optionalSlot++ : null;
+    return buildCourseRecord({ deptCode, termKey, base, status: 'active', optionalSlotIndex: slotIndex });
+  });
+};
+
 export const getAllCourses = (profile) => {
   const key = buildCacheKey(profile || {});
   if (allCoursesCache.has(key)) return allCoursesCache.get(key);

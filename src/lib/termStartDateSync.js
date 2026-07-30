@@ -82,6 +82,61 @@ export async function setGroupTermStartDate(groupId, dateStr) {
   }, { merge: true });
 }
 
+const TERM_KEY_RE = /^Y\dT\d$/;
+
+/**
+ * One-time fetch of the CR-set current term for a dept+batch group. Same
+ * doc as termStartDate (deptBatchConfig/{groupId}) — one class, one
+ * config doc. Returns null if unset/unreadable.
+ */
+export async function getGroupCurrentTermKey(groupId) {
+  if (!groupId) return null;
+  try {
+    const snap = await getDoc(configDoc(groupId));
+    if (snap.exists() && TERM_KEY_RE.test(snap.data().currentTermKey || '')) {
+      return snap.data().currentTermKey;
+    }
+  } catch {
+    // Rules may block read pre-migration, or offline — treat as "not set".
+  }
+  return null;
+}
+
+/**
+ * Live-subscribe to a dept+batch group's CR-set current term. Fires once
+ * immediately (null if unset/unreadable) and again on every CR edit.
+ */
+export function subscribeGroupCurrentTermKey(groupId, callback) {
+  if (!groupId) {
+    callback(null);
+    return () => {};
+  }
+  return onSnapshot(configDoc(groupId), (snap) => {
+    callback(snap.exists() && TERM_KEY_RE.test(snap.data().currentTermKey || '') ? snap.data().currentTermKey : null);
+  }, () => callback(null));
+}
+
+/**
+ * CR/ACR-only write — sets the CURRENT TERM for the whole dept+batch
+ * class, same authority model as setGroupTermStartDate. Previously
+ * `currentTermKey` was a field every student typed into their own Profile
+ * (ProfileSetupModal), meaning a class's ~50 students could each be
+ * showing a different term for Courses/Results/Marks/Attendance with
+ * nothing keeping them in sync, and nothing stopping a student from
+ * "moving themselves" to a term they haven't actually reached. Now the
+ * CR/ACR sets it ONCE for the whole class (from the Class Setup page),
+ * and it's mirrored into every member's local profile.currentTermKey by
+ * a boot-level listener in App.jsx — see the comment there.
+ */
+export async function setGroupCurrentTermKey(groupId, termKey) {
+  if (!groupId) throw new Error('No group to set the current term for.');
+  if (!TERM_KEY_RE.test(termKey || '')) throw new Error('Term key must look like Y1T1.');
+  await setDoc(configDoc(groupId), {
+    currentTermKey: termKey,
+    updatedAt: serverTimestamp(),
+  }, { merge: true });
+}
+
 /**
  * Resolution helper for every read-site (timeline calc, alerts, Schedule,
  * Dashboard, etc.): prefer the CR-set group date; fall back to the

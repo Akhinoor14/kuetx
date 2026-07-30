@@ -21,6 +21,7 @@ import { AvatarUploadModal } from '../../components/AvatarUploadModal';
 import { getShortTitle } from '../../lib/facultyTitle';
 import { useIsFaculty } from '../../hooks/useIsFaculty';
 import BlueTick from '../../components/BlueTick';
+import ManualVerifyFallback from '../../components/ManualVerifyFallback';
 
 // ─── Shared field styles (used only inside the edit form) ─────────────────
 const inputStyle = {
@@ -105,6 +106,7 @@ export default function FacultyProfile() {
   const [showAvatarModal, setShowAvatarModal] = useState(false);
   const [verifiedAt, setVerifiedAt] = useState(null);
   const [createdAt, setCreatedAt] = useState(null);
+  const [showManualVerify, setShowManualVerify] = useState(false);
 
   useEffect(() => {
     const uid = auth.currentUser?.uid;
@@ -260,6 +262,42 @@ export default function FacultyProfile() {
               padding: '8px 14px', color: '#fff',
               borderRadius: 8, fontSize: 12.5, fontWeight: 700, cursor: 'pointer',
             }}>Get started →</button>
+          </div>
+        )}
+
+        {/* ── Manual verification prompt — faculty verification is
+             manual-only (Founder confirms by hand over WhatsApp, no
+             automated email link). Browsing works fine unverified
+             (RequireFaculty.jsx), but the specific write actions
+             (assignments, marks, notices, schedule) stay locked until
+             this is done, so it's worth surfacing here even though
+             nothing is technically blocking this page itself. */}
+        {!isVerified && (
+          <div style={{
+            borderRadius: 12, border: '1px solid var(--border)',
+            background: 'var(--surface)', padding: showManualVerify ? 0 : '13px 18px',
+            display: 'flex', flexDirection: 'column', gap: 12,
+          }}>
+            {!showManualVerify ? (
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                <div style={{ fontSize: 24 }}>🔒</div>
+                <div style={{ flex: 1 }}>
+                  <div style={{ fontWeight: 700, fontSize: 14 }}>Get Verified</div>
+                  <div style={{ fontSize: 12, color: 'var(--muted)' }}>
+                    Needed to create assignments, enter marks, or post notices — send your details to the Founder for a quick manual check.
+                  </div>
+                </div>
+                <button onClick={() => setShowManualVerify(true)} className="btn btn-secondary btn-sm" style={{ flexShrink: 0 }}>
+                  Verify manually
+                </button>
+              </div>
+            ) : (
+              <ManualVerifyFallback
+                role="faculty"
+                details={{ name: form.name, email: officialEmail, dept: form.dept }}
+                onDone={() => {}}
+              />
+            )}
           </div>
         )}
 

@@ -9,6 +9,9 @@ import { NAV } from '../nav';
 import ticker from '../lib/ticker';
 import usePageMeta from '../hooks/usePageMeta';
 import { subscribeAllServices, SERVICE_TYPE_LABELS, SERVICE_TYPES, withServiceDefaults } from '../lib/serviceSync';
+import { subscribeClassSetup } from '../lib/groupSync';
+import { subscribeGroupTermStartDate } from '../lib/termStartDateSync';
+import { getGroupId } from '../lib/groupUtils';
 import { CATEGORY_ICONS } from './Services';
 
 function StatCard({ label, value, sub, color, bgColor, icon: Icon, to }) {
@@ -104,6 +107,15 @@ export default function Dashboard() {
   const profile  = getProfile();
   const courses  = getAllCourses(profile);
   const [, setStoreRefreshTick] = useState(0);
+  const groupId = getGroupId(profile);
+  const [classSetup, setClassSetup] = useState(null);
+  const [groupTermStartDate, setGroupTermStartDate] = useState(null);
+  useEffect(() => {
+    if (!groupId) { setClassSetup(null); setGroupTermStartDate(null); return; }
+    const unsubSetup = subscribeClassSetup(groupId, setClassSetup);
+    const unsubTerm = subscribeGroupTermStartDate(groupId, setGroupTermStartDate);
+    return () => { unsubSetup(); unsubTerm(); };
+  }, [groupId]);
   // Quick access removed — kept minimal dashboard content
 
   const { cgpa, earnedCredits, termGPAs, alerts } = useMemo(() => {
@@ -154,8 +166,21 @@ export default function Dashboard() {
   const currentTermLabel = getTermLabelFromKey(currentTermKey) || derivedTermLabel || profile.currentTerm || '';
   const inferredBatch = profile.batch || derivedBatch;
   const scheduleSettings = store.get('scheduleSettings') || {};
-  const currentTermTimeline = currentTermKey && profile?.termStartDate ? getTermTimeline(profile.termStartDate, profile?.dept, currentTermKey) : null;
-  const currentTermProgress = currentTermTimeline ? getTermProgress(profile.termStartDate, scheduleSettings.holidayDates || []) : 0;
+  // Prefer the CR-set, group-wide term start date (classSetup, then the
+  // older deptBatchConfig doc) over the per-student profile value — a
+  // single class shouldn't have each student's own guess driving their
+  // Dashboard's Academic Journey %.
+  const effectiveTermStartDate = classSetup?.termStartDate || groupTermStartDate || profile?.termStartDate || null;
+  // Same for the class timeline (classEndDate/prepLeaveEndDate/examCount/
+  // postExamEndDate) — classSetup is now the group-wide source; Schedule's
+  // old per-student local roadmapConfig only applies if the CR hasn't
+  // filled in classSetup yet (backward compat for classes mid-migration).
+  const localRoadmapConfig = store.get('roadmapConfig') || {};
+  const effectiveRoadmapConfig = classSetup && (classSetup.classEndDate || classSetup.prepLeaveEndDate || classSetup.postExamEndDate)
+    ? classSetup
+    : localRoadmapConfig;
+  const currentTermTimeline = currentTermKey && effectiveTermStartDate ? getTermTimeline(effectiveTermStartDate, profile?.dept, currentTermKey, effectiveRoadmapConfig) : null;
+  const currentTermProgress = currentTermTimeline ? getTermProgress(effectiveTermStartDate, scheduleSettings.holidayDates || []) : 0;
   const completedTerms = currentTermKey ? Math.max(0, Math.min(TERM_KEYS.length - 1, getTermIndex(currentTermKey))) : 0;
   const shortDate = (d) => new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
   const classEndLabel = currentTermTimeline?.classEndDate ? shortDate(currentTermTimeline.classEndDate) : '';
@@ -178,7 +203,12 @@ export default function Dashboard() {
   }, []);
 
   const creditPct = Math.min(100, Math.round((earnedCredits / totalRequired) * 100));
-  const termJourneyPct = currentTermKey
+  // Only count completedTerms toward the journey % once we actually know how
+  // far into the current term we are (termStartDate set). Without a start
+  // date, `getTermIndex` alone would silently assume every prior term is
+  // 100% finished just because a later term was selected — inflating the
+  // percentage even if the semester barely started or dates were never set.
+  const termJourneyPct = currentTermKey && effectiveTermStartDate
     ? Math.min(100, Math.round(((completedTerms + (currentTermProgress / 100)) / TERM_KEYS.length) * 100))
     : creditPct;
   const cgpaStr = cgpa !== null ? cgpa.toFixed(2) : null;
@@ -386,7 +416,7 @@ export default function Dashboard() {
             <div style={{ fontSize: 14, fontWeight: 800, lineHeight: 1.25 }}>{completedTerms} completed</div>
           </div>
           <div style={{ padding: '10px 12px', borderRadius: 12, background: 'rgba(245,158,11,0.05)', border: '1px solid rgba(245,158,11,0.12)' }}>
-            <div style={{ fontSize: 11, fontWeight: 800, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 4 }}>Current term</div>
+            <div style={{ fontSize: 11, fontWeight: 800, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 4 }}>Term progress</div>
             <div style={{ fontSize: 14, fontWeight: 800, lineHeight: 1.25 }}>{currentTermKey ? `${currentTermProgress}% done` : 'Set term start date'}</div>
           </div>
         </div>

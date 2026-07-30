@@ -1,18 +1,16 @@
 // ManualVerifyFallback.jsx
 //
-// Shown only when the automatic verification email fails to send with
-// Firebase's auth/quota-exceeded error — never as a default option, and
-// never mentions the underlying cause (no "quota", "limit", or "Firebase"
-// language reaches the person). It reads as a normal, always-available
-// backup path, not as evidence something broke.
-//
-// Submits a request to manualVerifyRequests (Firestore) so it shows up in
-// the Founder's Approvals tab, and opens a pre-filled WhatsApp message as
-// a faster, more direct nudge alongside that.
+// AUTO-SUBMIT CHANGE: the manualVerifyRequests doc for this account
+// already exists by the time this component renders — it was created
+// silently in the background by ensureManualVerifyRequest() as soon as
+// enough profile data existed (see manualVerifyRequests.js header), no
+// click required. This component is now PURELY an optional, faster nudge:
+// clicking the button just opens a pre-filled WhatsApp message to the
+// Founder, pointing at a request that's already sitting in their
+// Approvals tab. It does not create, and has never needed to create,
+// that request itself.
 
-import { useState } from 'react';
 import * as Icons from 'lucide-react';
-import { submitManualVerifyRequest } from '../lib/manualVerifyRequests';
 
 const FOUNDER_WHATSAPP_NUMBER = '8801724812042';
 
@@ -31,31 +29,11 @@ function buildWhatsAppMessage(role, { name, email, roll, dept }) {
 /**
  * @param {'student'|'faculty'} role
  * @param {{ name, email, roll, dept }} details — whatever's already known
- *   at the point verification failed (from the signup/profile form).
- * @param {() => void} onDone — called once the request has been submitted.
+ *   from the signup/profile form; only used to pre-fill the WhatsApp text.
  */
-export default function ManualVerifyFallback({ role, details, onDone }) {
-  const [submitting, setSubmitting] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
-  const [error, setError] = useState('');
-
+export default function ManualVerifyFallback({ role, details }) {
   const waMessage = buildWhatsAppMessage(role, details);
   const waLink = `https://wa.me/${FOUNDER_WHATSAPP_NUMBER}?text=${encodeURIComponent(waMessage)}`;
-
-  const handleSend = async () => {
-    setSubmitting(true);
-    setError('');
-    try {
-      await submitManualVerifyRequest(role, details);
-      setSubmitted(true);
-      window.open(waLink, '_blank', 'noopener,noreferrer');
-      onDone?.();
-    } catch {
-      setError('Could not send the request right now — please try again.');
-    } finally {
-      setSubmitting(false);
-    }
-  };
 
   return (
     <div
@@ -74,31 +52,21 @@ export default function ManualVerifyFallback({ role, details, onDone }) {
       </div>
 
       <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.5, margin: '0 0 14px' }}>
-        Automatic email verification isn't available right now. Send your
-        details to the Founder for a quick manual verification instead.
+        Your details are already waiting for the Founder's review — no
+        action needed. If you'd like a faster response, you can nudge them
+        directly on WhatsApp.
       </p>
 
-      {submitted ? (
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, color: 'var(--accent)', fontWeight: 600 }}>
-          <Icons.CheckCircle2 size={16} />
-          Request sent — you'll be verified shortly.
-        </div>
-      ) : (
-        <>
-          <button
-            className="btn btn-primary"
-            onClick={handleSend}
-            disabled={submitting}
-            style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}
-          >
-            <Icons.MessageCircle size={16} />
-            {submitting ? 'Sending…' : 'Contact Founder on WhatsApp'}
-          </button>
-          {error && (
-            <div style={{ fontSize: 12, color: 'var(--danger)', marginTop: 8 }}>{error}</div>
-          )}
-        </>
-      )}
+      <a
+        href={waLink}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="btn btn-primary"
+        style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, textDecoration: 'none' }}
+      >
+        <Icons.MessageCircle size={16} />
+        Nudge the Founder on WhatsApp
+      </a>
     </div>
   );
 }

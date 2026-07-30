@@ -9321,6 +9321,7 @@ body.schedule-fullscreen-active .mobile-bottom-nav {
 .hub-grid-item-hero {
   min-height: unset;
   width: 100%;
+  justify-content: flex-start;
 }
 
 @media (max-width: 380px) {

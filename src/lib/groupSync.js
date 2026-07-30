@@ -333,6 +333,25 @@ export async function removeMember(groupId, targetUid) {
 // matching Firestore rules "Tier-1 catch-up" branch were removed together.)
 
 /**
+ * One-shot (non-polling) check of this user's own verified flag for a
+ * group — unlike waitForOwnVerification, this does not retry or wait; it
+ * just reports current server state right now. Used where a caller only
+ * needs "is this account already Blue-Tick verified" as a gate before
+ * doing something else (e.g. deciding whether to also queue a manual-
+ * verify safety-net request), not to synchronize with a write in flight.
+ */
+export async function getOwnMemberVerifiedOnce(groupId) {
+  const uid = auth.currentUser?.uid;
+  if (!uid || !groupId) return false;
+  try {
+    const snap = await getDocFromServer(doc(db, 'groups', groupId, 'members', uid));
+    return snap.exists() && snap.data().verified === true;
+  } catch {
+    return false;
+  }
+}
+
+/**
  * Wait until this user's own member doc is readable and verified:true —
  * used before writes that Firestore rules gate on isVerifiedMember(groupId)
  * (e.g. right after approveJoinRequest/updateOwnMobile), so we don't race
@@ -1300,6 +1319,83 @@ export async function updatePlannerSettings(groupId, profile, data) {
     updatedBy: stamp,
     updatedAt: serverTimestamp(),
   }, { merge: true });
+}
+
+// ---------------------------------------------------------------------
+// Class Setup — mandatory CR-onboarding data
+// ---------------------------------------------------------------------
+// Single group-wide doc holding every piece of "the CR is supposed to
+// set this for the whole class" data that used to be either scattered
+// (deptBatchConfig.termStartDate) or silently per-student/local
+// (roadmapConfig used to live in each student's own store, never synced
+// — a CR filling it in did nothing for anyone else). This is the target
+// for the mandatory, non-skippable CR onboarding popup: term start date,
+// class-end/prep-leave/exam dates, exam count, and course-teacher map
+// all live here now so every class member reads the same values and a
+// CR can always come back to /class-setup to edit them later.
+export function subscribeClassSetup(groupId, callback) {
+  if (!groupId) return () => {};
+  const key = `classSetup:${groupId}`;
+  let entry = _registry.get(key);
+  if (!entry) {
+    entry = { unsubscribe: null, refCount: 0, listeners: new Set(), lastValue: null };
+    _registry.set(key, entry);
+    entry.unsubscribe = onSnapshot(doc(db, 'groups', groupId, 'meta', 'classSetup'), (snap) => {
+      entry.lastValue = snap.exists() ? snap.data() : {};
+      entry.listeners.forEach((cb) => cb(entry.lastValue));
+    }, (err) => console.error('[groupSync] classSetup listener error:', err));
+  }
+  entry.refCount += 1;
+  entry.listeners.add(callback);
+  if (entry.lastValue !== null) callback(entry.lastValue);
+  return () => {
+    entry.listeners.delete(callback);
+    entry.refCount -= 1;
+    if (entry.refCount <= 0) { entry.unsubscribe?.(); _registry.delete(key); }
+  };
+}
+
+export async function updateClassSetup(groupId, profile, data) {
+  const uid = auth.currentUser?.uid;
+  const stamp = getIdentityStamp(profile, uid);
+  await setDoc(doc(db, 'groups', groupId, 'meta', 'classSetup'), {
+    ...data,
+    updatedBy: stamp,
+    updatedAt: serverTimestamp(),
+  }, { merge: true });
+}
+
+// The fields that make up "mandatory" completion — used by both the
+// blocking onboarding modal and the /class-setup page to know when
+// setup is actually done. Routine + course-teacher map are checked
+// against their own subcollection/doc (not this list) since they aren't
+// stored inline on classSetup itself.
+export const CLASS_SETUP_REQUIRED_FIELDS = ['termStartDate', 'classEndDate', 'prepLeaveEndDate', 'postExamEndDate', 'currentTermKey'];
+
+/**
+ * @param {Array<{id:string}>} currentTermCourseIds - course ids (from
+ *   getCoursesForTerm) for classSetup.currentTermKey. Optional for
+ *   backward compatibility with old callers that don't have the course
+ *   list handy — when omitted, falls back to the old (weaker) "at least
+ *   one course has a teacher" check.
+ *
+ * Why this matters: courseTeacherMap accumulates entries across EVERY
+ * term a CR has ever set (old terms' entries are never deleted — see
+ * updatePlannerSettings), so checking "the map has any keys at all"
+ * could be satisfied entirely by a past term's leftover data even if
+ * the CURRENT term has zero teachers assigned. Passing the current
+ * term's course ids lets us check the thing that actually matters: does
+ * every course in the term the class is in RIGHT NOW have a teacher.
+ */
+export function isClassSetupComplete(classSetup, routineCount, courseTeacherMap, currentTermCourseIds) {
+  const cs = classSetup || {};
+  const fieldsDone = CLASS_SETUP_REQUIRED_FIELDS.every((k) => !!cs[k]);
+  const routineDone = (routineCount || 0) > 0;
+  const map = courseTeacherMap || {};
+  const teacherMapDone = Array.isArray(currentTermCourseIds)
+    ? currentTermCourseIds.length > 0 && currentTermCourseIds.every((id) => Array.isArray(map[id]) && map[id].length > 0)
+    : Object.keys(map).length > 0;
+  return fieldsDone && routineDone && teacherMapDone;
 }
 
 // ---------------------------------------------------------------------
