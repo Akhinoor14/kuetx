@@ -47,15 +47,32 @@ export default function useFirebaseAuth() {
         // authReady flip to true, local storage is already in its final,
         // correct shape for this account.
         await syncLocalDataOnAuth(firebaseUser);
-        setAuthReady(true);
 
-        // Start real-time sync for this user
+        // BUGFIX (profile-setup-repeats-on-refresh): setAuthReady(true) used
+        // to fire here, before startFirebaseSync() below had even started.
+        // App.jsx's authReady-gated effect calls ensureDBReady() (which only
+        // hydrates from local IndexedDB) and then buildQueue(), which reads
+        // isProfileComplete(getProfile()) off whatever is in local storage
+        // AT THAT INSTANT. But the profile's Firestore -> local copy only
+        // happens inside startFirebaseSync() -> hydrateProfileFromFirestore(),
+        // which hadn't run yet. On any session where local storage doesn't
+        // already have the full profile cached (new device, cleared cache,
+        // fast reload before an earlier write settled), buildQueue() would
+        // see an empty/incomplete local profile, queue 'profile', and
+        // reopen ProfileSetupModal — even though the real profile was
+        // already saved safely in Firestore, just not pulled down yet.
+        //
+        // Fix: don't flip authReady until the Firestore -> local profile
+        // pull has actually finished, so buildQueue() always sees the real,
+        // hydrated profile instead of a local cache that may be stale/empty.
         await startFirebaseSync(firebaseUser.uid, {
           onSyncStatus: (status) => {
             console.log('[KUETx DIAG] syncStatus ->', status, 'at t=', performance.now());
             setSyncStatus(status);
           },
         });
+
+        setAuthReady(true);
       } else {
         setAuthReady(true);
         // Not logged in — do NOT auto sign-in anonymously anymore.
