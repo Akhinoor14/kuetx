@@ -68,9 +68,30 @@ export async function ensureManualVerifyRequest(role, details) {
 
   try {
     const ref = doc(db, COLLECTION, uid);
-    const existing = await getDoc(ref);
-    if (existing.exists()) return; // already submitted (pending/approved/rejected) — never resubmit
-
+    // BUGFIX: this used to getDoc(ref) first and bail out early if the
+    // doc already existed. But firestore.rules' read rule for
+    // manualVerifyRequests/{requestId} is `resource.data.uid ==
+    // request.auth.uid` — when the doc doesn't exist yet, `resource` is
+    // null in the rule's evaluation context, so `resource.data.uid`
+    // denies the read outright, even for the doc's own future owner.
+    // That's the actual cause of the repeated "[manualVerifyRequests]
+    // ensureManualVerifyRequest failed ... Missing or insufficient
+    // permissions" — not a role/verification issue, and it hit EVERY
+    // first-time caller (the doc never exists yet on someone's very
+    // first app load), not just some subset.
+    //
+    // The pre-check was redundant anyway: the create rule already has
+    // its own server-side `!exists(.../manualVerifyRequests/$(requestId))`
+    // guard, so at-most-one-per-account is still enforced even without
+    // this client-side read. On a repeat call the doc already exists, so
+    // this setDoc (no merge — a plain create-shaped write) is evaluated
+    // against the `create` rule, fails the `!exists()` clause, and is
+    // rejected — caught below as a harmless no-op, same end result the
+    // old existing.exists() early-return gave, just without the extra
+    // read that was breaking the very first call for every user. This
+    // intentionally can never touch status/reviewedAt/reviewedBy on an
+    // already-resolved request, since the rules' `update` op (the only
+    // one that could reach those fields) is restricted to Admin/HeadOfOps.
     await setDoc(ref, {
       role,
       name,

@@ -23,7 +23,7 @@
 // ClassManagement, Classmates teaser) never creates duplicate listeners.
 
 import {
-  collection, collectionGroup, doc, getDocFromServer, getDocs, setDoc, updateDoc, deleteDoc, addDoc, onSnapshot,
+  collection, collectionGroup, doc, getDoc, getDocFromServer, getDocs, setDoc, updateDoc, deleteDoc, addDoc, onSnapshot,
   query, where, orderBy, serverTimestamp, writeBatch, increment, limit as fsLimit,
 } from 'firebase/firestore';
 import { db, auth } from './firebase';
@@ -1568,13 +1568,96 @@ export function subscribeGlobalNotices(callback) {
   // Callers should still call this freely; when no real user exists
   // we return a no-op unsubscribe.
   if (!auth.currentUser || auth.currentUser.isAnonymous) return () => {};
-  const key = 'globalNotices';
-  return _subscribeSingleton(
-    key,
-    () => query(collection(db, 'notices'), orderBy('createdAt', 'desc'), fsLimit(50)),
+
+  // BUGFIX (same root cause documented above _mergeSubscriptions, and
+  // already fixed for subscribeGroupNotices — this one was missed): a
+  // bare `query(collection('notices'), orderBy('createdAt'), limit(50))`
+  // has no where() clause tying it to the /notices/{noticeId} read
+  // rule's per-document `audience.type` branches, so Firestore can't
+  // prove the whole result set would pass and denies the ENTIRE query
+  // up front — not just the docs the reader shouldn't see. That's the
+  // actual cause of the repeated "[groupSync] listener error for
+  // globalNotices ... Missing or insufficient permissions" loop, not a
+  // startup race or a role problem.
+  //
+  // Fix: one rule-provable, where()-scoped listener per audience.type
+  // branch the current viewer actually qualifies for, merged
+  // client-side — same shape as subscribeGroupNotices above.
+  const uid = auth.currentUser.uid;
+
+  const populationKey = 'globalNotices:population'; // 'all' | 'batch' | 'group' — not individually sensitive
+  const subscribePopulation = (cb) => _subscribeSingleton(
+    populationKey,
+    () => query(
+      collection(db, 'notices'),
+      where('audience.type', 'in', ['all', 'batch', 'group']),
+      orderBy('createdAt', 'desc'),
+      fsLimit(50),
+    ),
     _snapToArray,
-    callback,
+    cb,
   );
+
+  const studentUidsKey = 'globalNotices:studentUids';
+  const subscribeStudentUids = (cb) => _subscribeSingleton(
+    studentUidsKey,
+    () => query(
+      collection(db, 'notices'),
+      where('audience.type', '==', 'student_uids'),
+      where('audience.uids', 'array-contains', uid),
+      orderBy('createdAt', 'desc'),
+      fsLimit(50),
+    ),
+    _snapToArray,
+    cb,
+  );
+
+  const fns = [subscribePopulation, subscribeStudentUids];
+
+  // Faculty-only branches ('faculty_all' / 'faculty_uids') — only attach
+  // these once we know the viewer is actually faculty, since the rule
+  // denies them outright otherwise (same reasoning as
+  // subscribeGroupNotices's canSeeCrOnly gate). faculty/{uid} is
+  // readable by any signed-in user (see firestore.rules), so this is a
+  // cheap one-shot check, not a permission risk.
+  getDoc(doc(db, 'faculty', uid)).then((snap) => {
+    if (!snap.exists()) return;
+
+    const facultyAllKey = 'globalNotices:facultyAll';
+    const subscribeFacultyAll = (cb) => _subscribeSingleton(
+      facultyAllKey,
+      () => query(
+        collection(db, 'notices'),
+        where('audience.type', '==', 'faculty_all'),
+        orderBy('createdAt', 'desc'),
+        fsLimit(50),
+      ),
+      _snapToArray,
+      cb,
+    );
+
+    const facultyUidsKey = 'globalNotices:facultyUids';
+    const subscribeFacultyUids = (cb) => _subscribeSingleton(
+      facultyUidsKey,
+      () => query(
+        collection(db, 'notices'),
+        where('audience.type', '==', 'faculty_uids'),
+        where('audience.uids', 'array-contains', uid),
+        orderBy('createdAt', 'desc'),
+        fsLimit(50),
+      ),
+      _snapToArray,
+      cb,
+    );
+
+    fns.push(subscribeFacultyAll, subscribeFacultyUids);
+  }).catch(() => {
+    // Best-effort — if this lookup fails, the viewer just doesn't get
+    // the faculty-only branches attached; population/student branches
+    // above are unaffected.
+  });
+
+  return _mergeSubscriptions(fns, callback);
 }
 
 /**
