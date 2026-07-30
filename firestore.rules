@@ -239,72 +239,56 @@ service cloud.firestore {
     }
 
     // -------------------------------------------------------------
-    // Student profile — Phase 5 migration target. Moved OUT of the
-    // generic users/{uid}/data/{key} key-value bucket (above) into its
-    // own nested-by-value path, dept/batch taken from the profile's own
-    // claimed roll so the doc's location itself encodes department and
-    // batch (needed for cheap collectionGroup('students') dept/batch-
-    // scoped queries without a full scan+filter).
+    // Student profile — FLAT collection (Phase 6 correction).
     //
-    // {dept} and {batch} in the PATH must match the roll embedded in the
-    // profile's own studentId field — otherwise a client could write its
-    // profile doc under a dept/batch that doesn't correspond to its own
-    // roll (e.g. to appear in a different dept's roster), which the old
-    // flat users/{uid}/data/profile shape had no way to prevent since
-    // there was no dept/batch in the *path* at all. deptCodeFromRoll(...)
-    // reuses the exact same 2-digit->dept-code map that rollMatchesGroup
-    // already relies on above (kept as one source of truth), and batch
-    // must equal the canonical "2K"+roll[0:2] format used everywhere else
-    // in this file (extractBatchFromRoll in the client, rollMatchesGroup
-    // above).
+    // Originally (Phase 5) this was nested as
+    // students/{dept}/{batch}/{uid} — dept doc, batch subcollection, uid
+    // doc — so the doc's *location* encoded department/batch. That design
+    // had a fatal mismatch: the actual Firestore collection holding each
+    // profile doc was named after the BATCH (e.g. "2K23"), never
+    // literally "students". A `match /{path=**}/students/{uid}`
+    // collection-group rule can only ever match a collection whose name
+    // is literally "students" — so it silently matched NOTHING, and
+    // every collectionGroup('students') query issued by pullProfile()
+    // (firebaseSync.js) and getStaffDisplayInfo() (staffSync.js) 403'd
+    // with "Missing or insufficient permissions", even for a user
+    // reading their own doc. This was the actual root cause of the
+    // "profile setup keeps reappearing after refresh" bug — the write
+    // succeeded, but every read-back failed.
+    //
+    // Fix: students/{uid} is now a single flat collection. dept/batch are
+    // stored as plain FIELDS on the doc instead of path segments, derived
+    // server-side (well, rules-side) from the same studentId roll via
+    // deptCodeFromRoll(...) so a client still can't fake its dept/batch
+    // fields to appear in the wrong roster. uid alone is always enough to
+    // read/write the doc directly — no collectionGroup query needed for
+    // the common case anymore, only for the true "don't know this uid's
+    // doc yet, look it up by a different field" case (not needed here
+    // since the doc ID *is* the uid).
     //
     // studentId itself is immutable once set (matches "Role Should Be
     // Permanent"-style reasoning used for users/{uid}.role above) — a
     // student cannot silently swap rolls after the fact by editing their
-    // own profile doc, since that would also require re-locating the doc
-    // to a new dept/batch path, which is exactly what rollOwnership.js's
-    // claim/unlock flow is supposed to gate, not a plain profile edit.
-    match /students/{dept}/{batch}/{uid} {
+    // own profile doc.
+    match /students/{uid} {
       allow read: if isSignedIn() && (
         request.auth.uid == uid
         || isAdmin() || isHeadOfOps()
-        // Same "resolve a name for a staff-role holder" fallback as the
-        // legacy path above, now against the real target location.
       );
       allow create: if isSignedIn() && request.auth.uid == uid
         && request.resource.data.studentId is string
-        && dept == deptCodeFromRoll(request.resource.data.studentId)
-        && batch == ('2K' + request.resource.data.studentId[0:2]);
+        && request.resource.data.dept == deptCodeFromRoll(request.resource.data.studentId)
+        && request.resource.data.batch == ('2K' + request.resource.data.studentId[0:2]);
       allow update: if isSignedIn() && request.auth.uid == uid
         // studentId (and therefore dept/batch, since they're derived from
-        // it) is immutable after create — path already pins dept/batch,
-        // this additionally pins the studentId field inside the doc so a
-        // client can't rewrite studentId to a DIFFERENT roll that still
-        // happens to hash to the same dept/batch path segments.
-        && request.resource.data.studentId == resource.data.studentId;
+        // it) is immutable after create — this pins the studentId field
+        // so a client can't rewrite it to a different roll and then also
+        // rewrite dept/batch to match, effectively re-locating itself
+        // into a different roster after the fact.
+        && request.resource.data.studentId == resource.data.studentId
+        && request.resource.data.dept == resource.data.dept
+        && request.resource.data.batch == resource.data.batch;
       allow delete: if false;
-    }
-
-    // Collection-group read for 'students', mirroring the roles/members
-    // pattern above (see match /{path=**}/roles/{roleId}). The nested
-    // match /students/{dept}/{batch}/{uid} block only covers direct-path
-    // get()s; it does NOT cover the collectionGroup('students') query
-    // that pullProfile() in firebaseSync.js (and staffSync.js's
-    // getStaffDisplayInfo) issues when a client doesn't yet know its own
-    // dept/batch (fresh device, cleared cache, etc.) — that fallback
-    // looks up a profile by uid alone, across all dept/batch prefixes.
-    // Without this separate rule the query was rejected outright for
-    // every caller, even the profile's own owner querying their own uid,
-    // because Firestore never matches list/collectionGroup reads against
-    // a literal-segment nested match block — only this wildcard-prefix
-    // form does. This was the actual root cause of the "keeps asking to
-    // fill up profile again" bug: the doc was written fine, but every
-    // read-back through the fallback path 403'd. Scoped identically to
-    // the nested block's own read rule above — this widens no one's
-    // access, it only makes the already-intended access work for this
-    // query shape.
-    match /{path=**}/students/{uid} {
-      allow read: if isSignedIn() && (request.auth.uid == uid || isAdmin() || isHeadOfOps());
     }
 
     // -------------------------------------------------------------

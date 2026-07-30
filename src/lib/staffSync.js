@@ -229,14 +229,16 @@ export async function getStaffDisplayInfo(uid) {
   // Fallback: no group-membership doc found (or the query itself failed) —
   // try the person's own synced profile instead of giving up on a name.
   //
-  // Phase 5 migration: profile now lives at students/{dept}/{batch}/{uid},
-  // not users/{uid}/data/profile — same collectionGroup-by-uid-field
-  // pattern as firebaseSync.js's pullProfile fallback (doc id alone isn't
-  // filterable across a collectionGroup spanning many parent paths).
+  // Phase 6: profile lives at the FLAT collection students/{uid} — uid
+  // alone locates the doc directly, no collectionGroup query needed (see
+  // firebaseSync.js's header comment on pushProfile/pullProfile for why
+  // the old nested students/{dept}/{batch}/{uid} layout was replaced —
+  // it made every collectionGroup('students') query 403 because the
+  // real collection name was the batch, e.g. "2K23", never "students").
   try {
-    const snap = await getDocs(query(collectionGroup(db, 'students'), where('uid', '==', uid)));
-    if (!snap.empty) {
-      const value = snap.docs[0].data() || {};
+    const snap = await getDoc(doc(db, 'students', uid));
+    if (snap.exists()) {
+      const value = snap.data() || {};
       return {
         name: value.name || '',
         roll: value.studentId || '',

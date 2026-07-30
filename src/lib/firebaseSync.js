@@ -21,7 +21,7 @@
  * ─────────────────────────────────────────────────────────────────────────────
  */
 
-import { doc, setDoc, getDoc, getDocs, collection, collectionGroup, query, where, serverTimestamp } from 'firebase/firestore';
+import { doc, setDoc, getDoc, getDocs, collection, serverTimestamp } from 'firebase/firestore';
 import { db } from './firebase';
 import { store } from '../store/store';
 
@@ -322,14 +322,24 @@ export const isFirebaseSyncing = () => _isSyncing;
 export const getFirebaseUid    = () => _uid;
 export const getLastPullCount  = () => 0; // kept for API compat
 
-// ─── Profile — dedicated path (Phase 5 migration) ──────────────────────────
+// ─── Profile — dedicated path (Phase 5 migration, flat as of Phase 6) ─────
 // 'profile' is deliberately NOT part of the generic key-value loop above
-// (see EXCLUDED_KEYS). It now lives at students/{dept}/{batch}/{uid},
-// dept/batch derived from the profile's own studentId (roll) — this must
-// match firestore.rules' students/{dept}/{batch}/{uid} create/update rule
-// exactly, or every profile write will be permission-denied. Called
-// explicitly by ProfileSetupModal.jsx on save/update, not by the generic
-// store-change listener.
+// (see EXCLUDED_KEYS). It lives at the FLAT collection students/{uid} —
+// dept/batch are stored as plain FIELDS on the doc, not as path segments.
+//
+// Phase 6 correction: the original Phase 5 design nested this as
+// students/{dept}/{batch}/{uid} (dept doc -> batch subcollection -> uid
+// doc). That meant the actual Firestore collection holding each profile
+// was named after the BATCH (e.g. "2K23"), never literally "students" —
+// so firestore.rules' `match /{path=**}/students/{uid}` collection-group
+// rule could never match anything, and every collectionGroup('students')
+// query 403'd with "Missing or insufficient permissions" even for a
+// user reading their own doc. This flat layout removes the mismatch
+// entirely: the collection is always literally 'students', so both the
+// direct doc(db,'students',uid) path AND any future collectionGroup
+// usage resolve against the same real collection name. Called explicitly
+// by ProfileSetupModal.jsx on save/update, not by the generic store-
+// change listener.
 
 /**
  * Push the local profile object to its dedicated Firestore location.
@@ -355,12 +365,12 @@ export const pushProfile = async (uid, profile) => {
   // profile save locally before the setDoc below has even landed.
   _pendingLocalKeys.add('profile');
   try {
-    const docRef = doc(db, 'students', loc.dept, loc.batch, uid);
-    // uid is stored explicitly on the doc (in addition to being the doc's
-    // own id) because pullProfile's collectionGroup fallback (new client,
-    // no known dept/batch) can only filter by a field value, not by doc id,
-    // across a collectionGroup spanning many parent paths.
-    await setDoc(docRef, { ...profile, uid, updatedAt: serverTimestamp() }, { merge: true });
+    // FLAT path: students/{uid}. dept/batch are written as fields on the
+    // doc (not path segments) — see the header comment above for why the
+    // old nested students/{dept}/{batch}/{uid} layout was the actual
+    // root cause of every pullProfile 403.
+    const docRef = doc(db, 'students', uid);
+    await setDoc(docRef, { ...profile, uid, dept: loc.dept, batch: loc.batch, updatedAt: serverTimestamp() }, { merge: true });
   } catch (err) {
     console.warn('[KUETx Sync] pushProfile failed:', err.message);
     emit('error', { message: err.message });
@@ -371,32 +381,16 @@ export const pushProfile = async (uid, profile) => {
 };
 
 /**
- * Pull the remote profile for uid back into the local store. Since the
- * doc's path now depends on dept/batch (which come FROM the roll that's
- * IN the profile), a fresh/unknown client can't locate the doc from uid
- * alone without already knowing dept/batch — callers should pass the
- * last-known local profile (if any) to supply that, or fall back to
- * collectionGroup('students') filtered by uid if no local copy exists at
- * all (e.g. first login on a new device).
+ * Pull the remote profile for uid back into the local store. Flat path
+ * (students/{uid}) — uid alone is always enough to locate the doc, no
+ * dept/batch hint or collectionGroup fallback needed anymore. The
+ * knownDeptBatch parameter is kept (unused) purely so existing callers
+ * don't need to change their call signature.
  */
 export const pullProfile = async (uid, knownDeptBatch = null) => {
   if (!uid) return null;
   try {
-    let dept = knownDeptBatch?.dept;
-    let batch = knownDeptBatch?.batch;
-    if (!dept || !batch) {
-      // No known dept/batch (e.g. first login on a new device) — can't
-      // build the direct doc path, so fall back to a collectionGroup query
-      // filtered by the explicit 'uid' field that pushProfile now stores
-      // on every profile doc (doc id alone isn't filterable across a
-      // collectionGroup spanning many different parent paths).
-      const snap = await getDocs(query(collectionGroup(db, 'students'), where('uid', '==', uid)));
-      if (!snap.empty) {
-        return snap.docs[0].data();
-      }
-      return null;
-    }
-    const docRef = doc(db, 'students', dept, batch, uid);
+    const docRef = doc(db, 'students', uid);
     const snap = await getDoc(docRef);
     return snap.exists() ? snap.data() : null;
   } catch (err) {
