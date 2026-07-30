@@ -28,6 +28,7 @@
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  updateProfile,
 } from 'firebase/auth';
 import {
   doc,
@@ -245,6 +246,14 @@ export const signupWithUsername = async (username, password) => {
   try {
     const result = await createUserWithEmailAndPassword(auth, tempEmail, password);
     user = result.user;
+    // IMPORTANT: Firebase Auth's displayName is left blank by default, and
+    // useFirebaseAuth.js falls back to user.email when displayName is
+    // empty — which for these accounts is the synthetic, non-deliverable
+    // {random}@users.kuetx.internal address. That address is meant to
+    // stay purely internal (see buildInternalEmail's docstring), so we
+    // set the real, chosen username as displayName here. This is what
+    // ends up shown in the sidebar / anywhere else displayName is read.
+    await updateProfile(user, { displayName: normalized });
   } catch (e) {
     // Surface Firebase's own auth/* code untouched — getAuthErrorMessage
     // in firebaseAuth.js already has copy for the common ones
@@ -300,5 +309,21 @@ export const loginWithUsername = async (username, password) => {
   }
   const email = buildInternalEmail(uid);
   const result = await signInWithEmailAndPassword(auth, email, password);
+
+  // Self-heal accounts created before signup started setting displayName
+  // (see signupWithUsername). Without this, useFirebaseAuth.js falls back
+  // to user.email — the synthetic, non-deliverable internal address — and
+  // that leaks into the UI (sidebar, etc.) instead of the real username.
+  if (!result.user.displayName) {
+    const normalized = normalizeUsername(username);
+    try {
+      await updateProfile(result.user, { displayName: normalized });
+    } catch {
+      // Non-fatal — login itself already succeeded; worst case the UI
+      // falls back to the email string again until this succeeds on a
+      // later login.
+    }
+  }
+
   return result.user;
 };

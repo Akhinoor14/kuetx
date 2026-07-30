@@ -2,6 +2,7 @@ import { Sun, Moon, Droplets, Bell, Download, ChevronRight, BookOpen, CloudOff, 
 import { useEffect, useMemo, useState, useRef } from 'react';
 import { useTheme, THEMES } from '../hooks/useTheme';
 import { useLocation, Link } from 'react-router-dom';
+import { confirmDialog } from '../lib/dialog';
 import { NAV } from '../nav';
 import { Wordmark } from './Logo';
 import * as noticeApi from '../lib/noticeUtils';
@@ -184,7 +185,7 @@ export function Navbar({ onMenuClick }) {
   };
 
   const handleSignOut = async () => {
-    if (!window.confirm('Sign out? This device will be cleared — log back in anytime and everything comes right back from the cloud.')) return;
+    if (!(await confirmDialog('Sign out? This device will be cleared — log back in anytime and everything comes right back from the cloud.'))) return;
     setLoggingOut(true);
     try {
       const { logout } = await import('../lib/firebaseAuth');

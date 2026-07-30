@@ -20,6 +20,7 @@ import {
   MEETING_TYPES, getMeetingTypeMeta,
 } from '../../lib/facultyMeetingSync';
 import { notify } from '../../lib/notify';
+import { confirmDialog } from '../../lib/dialog';
 
 const inputStyle = {
   width: '100%', padding: '10px 12px', borderRadius: 10, border: '1px solid var(--border)',
@@ -174,7 +175,7 @@ export default function FacultyMeetings() {
   const handleDelete = async (m) => {
     const uid = auth.currentUser?.uid;
     if (!uid) return;
-    if (!window.confirm(`Delete "${m.title}"?`)) return;
+    if (!(await confirmDialog(`Delete "${m.title}"?`))) return;
     try {
       await deleteMeeting(uid, m.id);
       notify('Meeting deleted.', 'success');

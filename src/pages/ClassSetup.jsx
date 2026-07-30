@@ -1,12 +1,15 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { CalendarClock, CheckCircle2, Circle } from 'lucide-react';
-import { getProfile } from '../store/store';
+import { getProfile, getCurrentTermKey } from '../store/store';
 import { getGroupId, getGroupLabel } from '../lib/groupUtils';
 import { subscribeClassSetup, updateClassSetup, subscribeRoutine, subscribePlannerSettings, updatePlannerSettings, isClassSetupComplete } from '../lib/groupSync';
 import { setGroupCurrentTermKey } from '../lib/termStartDateSync';
 import { getCoursesForTerm } from '../store/curriculumStore';
 import ClassSetupTermCourses from '../components/ClassSetupTermCourses';
+import { httpsCallable } from 'firebase/functions';
+import { functions } from '../lib/firebase';
+import { Send } from 'lucide-react';
 
 /**
  * Dedicated, always-reachable page (CRHub → "Class Setup") for a CR/ACR to
@@ -28,12 +31,19 @@ export default function ClassSetup() {
   const [routineCount, setRoutineCount] = useState(null);
   const [teacherMap, setTeacherMap] = useState(null);
   const [form, setForm] = useState({ termStartDate: '', classEndDate: '', prepLeaveEndDate: '', postExamEndDate: '', examCount: 5 });
+  const [examList, setExamList] = useState([]);
+  const [examSaving, setExamSaving] = useState(false);
+  const [examError, setExamError] = useState('');
+  const [examSavedMsg, setExamSavedMsg] = useState('');
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
   const [savedMsg, setSavedMsg] = useState('');
   const [termSaving, setTermSaving] = useState(false);
   const [termError, setTermError] = useState('');
   const [termSavedMsg, setTermSavedMsg] = useState('');
+  const [telegramLinking, setTelegramLinking] = useState(false);
+  const [telegramCode, setTelegramCode] = useState('');
+  const [telegramError, setTelegramError] = useState('');
 
   useEffect(() => {
     if (!groupId) return;
@@ -46,6 +56,14 @@ export default function ClassSetup() {
         postExamEndDate: data?.postExamEndDate || '',
         examCount: data?.examCount || 5,
       });
+      const termKey = data?.currentTermKey || getCurrentTermKey(profile);
+      const count = Math.max(1, Math.min(12, Number(data?.examCount) || 5));
+      const overrides = (data?.examOverrides && data.examOverrides[termKey]) || [];
+      setExamList(Array.from({ length: count }, (_, i) => ({
+        course: i + 1,
+        name: overrides[i]?.name || '',
+        examDate: overrides[i]?.examDate || '',
+      })));
     });
     const unsubRoutine = subscribeRoutine(groupId, (entries) => setRoutineCount((entries || []).length));
     const unsubPlanner = subscribePlannerSettings(groupId, (data) => setTeacherMap(data?.courseTeacherMap || {}));
@@ -82,6 +100,43 @@ export default function ClassSetup() {
       setError(e?.message || 'Could not save — please try again.');
     } finally {
       setSaving(false);
+    }
+  };
+
+  const handleSaveExams = async () => {
+    setExamError('');
+    setExamSavedMsg('');
+    setExamSaving(true);
+    try {
+      const termKey = classSetup?.currentTermKey || getCurrentTermKey(profile);
+      if (!termKey) {
+        setExamError('Set the current term above first.');
+        setExamSaving(false);
+        return;
+      }
+      const nextForTerm = examList.map(x => ({ course: x.course, examDate: x.examDate || '', name: x.name || '' }));
+      const nextOverrides = { ...(classSetup?.examOverrides || {}), [termKey]: nextForTerm };
+      await updateClassSetup(groupId, profile, { examOverrides: nextOverrides });
+      setExamSavedMsg('Saved — visible to your whole class now.');
+    } catch (e) {
+      setExamError(e?.message || 'Could not save — please try again.');
+    } finally {
+      setExamSaving(false);
+    }
+  };
+
+  const handleConnectTelegram = async () => {
+    setTelegramError('');
+    setTelegramCode('');
+    setTelegramLinking(true);
+    try {
+      const startTelegramLink = httpsCallable(functions, 'startTelegramLink');
+      const res = await startTelegramLink({ groupId });
+      setTelegramCode(res.data?.code || '');
+    } catch (e) {
+      setTelegramError(e?.message || 'Could not generate a code — please try again.');
+    } finally {
+      setTelegramLinking(false);
     }
   };
 
@@ -227,6 +282,73 @@ export default function ClassSetup() {
             <button className="btn btn-primary" disabled={saving} onClick={handleSave}>
               {saving ? 'Saving…' : 'Save changes'}
             </button>
+
+            {currentTermKey && examList.length > 0 && (
+              <div style={{ marginTop: 20, paddingTop: 16, borderTop: '1px solid var(--border)' }}>
+                <label style={labelStyle}>Exam names &amp; dates</label>
+                <p style={{ fontSize: 11.5, color: 'var(--muted)', marginBottom: 10, lineHeight: 1.5 }}>
+                  Name each exam however you like — this replaces the plain "Exam 1, Exam 2…" labels for your whole class.
+                </p>
+                <div style={{ display: 'grid', gap: 8, marginBottom: 12 }}>
+                  {examList.map((e, i) => (
+                    <div key={i} style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(140px, 100%), 1fr))', gap: 8, alignItems: 'center' }}>
+                      <input type="text" style={inputStyle} placeholder={`Exam ${e.course} name (optional)`} value={e.name}
+                        onChange={(ev) => {
+                          const v = ev.target.value;
+                          setExamList((prev) => prev.map((p, idx) => idx === i ? { ...p, name: v } : p));
+                        }} />
+                      <input type="date" style={inputStyle} value={e.examDate}
+                        onChange={(ev) => {
+                          const v = ev.target.value;
+                          setExamList((prev) => prev.map((p, idx) => idx === i ? { ...p, examDate: v } : p));
+                        }} />
+                    </div>
+                  ))}
+                </div>
+                {examError && <div style={{ color: 'var(--danger)', fontSize: 12, marginBottom: 10 }}>{examError}</div>}
+                {examSavedMsg && <div style={{ color: '#10B981', fontSize: 12, marginBottom: 10 }}>{examSavedMsg}</div>}
+                <button className="btn btn-primary" disabled={examSaving} onClick={handleSaveExams}>
+                  {examSaving ? 'Saving…' : 'Save exam names & dates'}
+                </button>
+              </div>
+            )}
+          </div>
+
+          <div className="card" style={{ padding: 16, marginTop: 14 }}>
+            <div style={{ fontSize: 12, fontWeight: 800, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 4 }}>
+              Telegram notices
+            </div>
+            <p style={{ fontSize: 11.5, color: 'var(--muted)', marginBottom: 12, lineHeight: 1.5 }}>
+              Connect your class's own Telegram group and every notice posted here gets sent there
+              automatically — only to that one group, nowhere else.
+            </p>
+            {classSetup?.telegramChatId ? (
+              <div style={{ fontSize: 13, color: '#10B981', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 6 }}>
+                <Send size={14} /> Connected — notices are being sent to your class's Telegram group.
+              </div>
+            ) : telegramCode ? (
+              <div>
+                <p style={{ fontSize: 13, lineHeight: 1.7, marginBottom: 8 }}>
+                  1. Add <strong>@KUETxNoticeBot</strong> to your class's Telegram group.<br />
+                  2. Send this in that group (expires in 15 min):
+                </p>
+                <div style={{
+                  fontSize: 18, fontWeight: 800, letterSpacing: '0.06em', padding: '10px 14px',
+                  borderRadius: 8, background: 'var(--bg)', border: '1px solid var(--border)',
+                  textAlign: 'center', marginBottom: 10, fontFamily: 'monospace',
+                }}>
+                  /register {telegramCode}
+                </div>
+                <button className="btn btn-ghost" disabled={telegramLinking} onClick={handleConnectTelegram}>
+                  {telegramLinking ? 'Generating…' : 'Generate a new code'}
+                </button>
+              </div>
+            ) : (
+              <button className="btn btn-primary" disabled={telegramLinking || !groupId} onClick={handleConnectTelegram}>
+                <Send size={14} /> {telegramLinking ? 'Generating…' : 'Connect Telegram'}
+              </button>
+            )}
+            {telegramError && <div style={{ color: 'var(--danger)', fontSize: 12, marginTop: 10 }}>{telegramError}</div>}
           </div>
         </>
       )}

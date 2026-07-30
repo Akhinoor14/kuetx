@@ -6,6 +6,7 @@ import { getAllCourses } from '../store/curriculumStore';
 import { useNavigate, Link } from 'react-router-dom';
 import CourseTeacherDialog from '../components/CourseTeacherDialog';
 import { notify } from '../lib/notify';
+import { confirmDialog } from '../lib/dialog';
 import { getGroupId } from '../lib/groupUtils';
 import { subscribeCRStatus, subscribeRoutine, addRoutineEntry, updateRoutineEntry, deleteRoutineEntry, subscribeClassSetup } from '../lib/groupSync';
 import { subscribeGroupTermStartDate } from '../lib/termStartDateSync';
@@ -1242,8 +1243,13 @@ export default function Schedule() {
     }
   };
 
-  // Exam overrides stored per-term: { [termKey]: [{ course: 1, examDate: 'YYYY-MM-DD' }, ...] }
+  // Exam overrides stored per-term: { [termKey]: [{ course: 1, examDate: 'YYYY-MM-DD', name: '...' }, ...] }
+  // In group mode this now lives on the group-wide classSetup doc (CR/ACR-
+  // only, like the other roadmap fields below) instead of per-student local
+  // storage, so every classmate sees the same exam names/dates. Personal
+  // (non-group) mode keeps the old local-only behavior.
   const [examOverrides, setExamOverrides] = useState(() => store.get('examOverrides') || {});
+  const effectiveExamOverrides = isGroupMode ? (classSetup?.examOverrides || {}) : examOverrides;
   const [editingExams, setEditingExams] = useState(false);
   const [localExamEdits, setLocalExamEdits] = useState([]);
   // Term timeline (classEndDate/prepLeaveEndDate/examCount/postExamEndDate)
@@ -1447,7 +1453,7 @@ export default function Schedule() {
                                 </button>
                               )}
                               {canEditSchedule && (
-                                <button onClick={(e) => { e.stopPropagation(); if (window.confirm('Delete this class?')) remove(s.id); }} style={{
+                                <button onClick={async (e) => { e.stopPropagation(); if (await confirmDialog('Delete this class?')) remove(s.id); }} style={{
                                   position: 'absolute', top: 2, right: 2, background: 'none', border: 'none',
                                   color: 'inherit', cursor: 'pointer', opacity: 0.55, padding: 0, lineHeight: 1,
                                   touchAction: 'manipulation',
@@ -2249,21 +2255,28 @@ export default function Schedule() {
             <Link to="/class-setup" className="btn btn-ghost" style={{ fontSize: 12, padding: '6px 10px', textDecoration: 'none' }}>
               <Settings2 size={12} /> Class Setup
             </Link>
-            <button className="btn btn-primary" style={{ fontSize: 12, padding: '6px 10px' }} onClick={() => {
-              const termKey = getCurrentTermKey(profile);
-              if (!effectiveTermStartDate) return notify('Term start date isn\'t set yet — ask your CR to set it in Class Setup', 'error');
-              if (!termKey) return notify('Set current term in Profile first', 'error');
-              const count = Math.max(1, Math.min(12, Number(roadmapConfig.examCount) || 5));
-              const overrides = (examOverrides && examOverrides[termKey]) || [];
-              const mapped = Array.from({ length: count }, (_, i) => ({
-                course: i + 1,
-                examDate: overrides[i]?.examDate || '',
-              }));
-              setLocalExamEdits(mapped);
-              setEditingExams(true);
-            }}>
-              <PencilLine size={12} /> Edit Exams
-            </button>
+            {/* Exam names/dates are also CR/ACR-only now, edited from the
+                same Class Setup page as every other CR input — no separate
+                editor here for group classes. Personal (non-group) mode
+                keeps its own local editor since there's no CR/class there. */}
+            {!isGroupMode && (
+              <button className="btn btn-primary" style={{ fontSize: 12, padding: '6px 10px' }} onClick={() => {
+                const termKey = getCurrentTermKey(profile);
+                if (!effectiveTermStartDate) return notify('Term start date isn\'t set yet — ask your CR to set it in Class Setup', 'error');
+                if (!termKey) return notify('Set current term in Profile first', 'error');
+                const count = Math.max(1, Math.min(12, Number(roadmapConfig.examCount) || 5));
+                const overrides = (effectiveExamOverrides && effectiveExamOverrides[termKey]) || [];
+                const mapped = Array.from({ length: count }, (_, i) => ({
+                  course: i + 1,
+                  examDate: overrides[i]?.examDate || '',
+                  name: overrides[i]?.name || '',
+                }));
+                setLocalExamEdits(mapped);
+                setEditingExams(true);
+              }}>
+                <PencilLine size={12} /> Edit Exams
+              </button>
+            )}
           </div>
         </div>
 
@@ -2279,10 +2292,10 @@ export default function Schedule() {
             );
           }
 
-          const overrides = (examOverrides && examOverrides[termKey]) || [];
+          const overrides = (effectiveExamOverrides && effectiveExamOverrides[termKey]) || [];
           const examPhases = timeline.examPhases.map((p, i) => {
             const o = overrides[i];
-            return { ...p, examDate: o && o.examDate ? new Date(o.examDate + 'T00:00:00') : null };
+            return { ...p, examDate: o && o.examDate ? new Date(o.examDate + 'T00:00:00') : null, name: o?.name || '' };
           });
           const filledExams = examPhases.filter(ep => ep.examDate);
           const lastExamDate = filledExams.length > 0 ? filledExams[filledExams.length - 1].examDate : null;
@@ -2352,7 +2365,7 @@ export default function Schedule() {
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(110px, 1fr))', gap: 6 }}>
                   {examPhases.map((ep, idx) => (
                     <div key={idx} style={{ padding: '7px 10px', borderRadius: 7, background: 'var(--bg)', border: `1px solid ${ep.examDate ? 'var(--border)' : 'rgba(245,158,11,0.4)'}`, fontSize: 12 }}>
-                      <div style={{ fontWeight: 700 }}>Exam {ep.course}</div>
+                      <div style={{ fontWeight: 700 }}>{ep.name || `Exam ${ep.course}`}</div>
                       <div style={{ color: ep.examDate ? 'var(--muted)' : '#F59E0B', fontSize: 11, marginTop: 3 }}>
                         {ep.examDate ? fmt(ep.examDate) : 'Not set'}
                       </div>
@@ -2425,6 +2438,10 @@ export default function Schedule() {
                 localExamEdits.map((e, i) => (
                   <div key={i} className="edit-exams-row" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(120px, 100%), 1fr))', gap: 8, alignItems: 'center' }}>
                     <div style={{ fontWeight: 700 }}>{`Exam ${e.course}`}</div>
+                    <input className="edit-exam-name" type="text" placeholder="Course name (optional)" value={e.name || ''} onChange={ev => {
+                      const v = ev.target.value;
+                      setLocalExamEdits(prev => prev.map((p, idx) => idx === i ? { ...p, name: v } : p));
+                    }} style={{ width: '100%', padding: '8px 10px', borderRadius: 8, border: '1px solid var(--border)' }} />
                     <input className="edit-exam-date" type="date" value={e.examDate} onChange={ev => {
                       const v = ev.target.value;
                       setLocalExamEdits(prev => prev.map((p, idx) => idx === i ? { ...p, examDate: v } : p));
@@ -2443,7 +2460,7 @@ export default function Schedule() {
               <button className="btn btn-primary" disabled={localExamEdits.length === 0} onClick={() => {
                 const termKey = getCurrentTermKey(profile);
                 const next = { ...(examOverrides || {}) };
-                next[termKey] = localExamEdits.map(x => ({ course: x.course, examDate: x.examDate }));
+                next[termKey] = localExamEdits.map(x => ({ course: x.course, examDate: x.examDate, name: x.name || '' }));
                 setExamOverrides(next);
                 store.set('examOverrides', next);
                 setEditingExams(false);

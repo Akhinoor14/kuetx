@@ -7,14 +7,12 @@ import { startActivityTracking, stopActivityTracking } from './lib/activityTrack
 import { Sidebar } from './components/Sidebar';
 import { Navbar } from './components/Navbar';
 import { Footer } from './components/Footer';
-import AnnouncementModal from './components/DriveAnnouncementModal';
-import PWAInstallPrompt from './components/PWAInstallPrompt';
-import PWAUpdatePrompt from './components/PWAUpdatePrompt';
 import { BottomNav, useIsMobileNav } from './components/BottomNav';
 import GlobalToasts from './components/GlobalToasts';
+import GlobalDialog from './components/GlobalDialog';
+import { alertDialog } from './lib/dialog';
 import FloatingUploadBar from './components/FloatingUploadBar';
 import NoticeToast from './components/NoticeToast';
-import PushPermissionBanner from './components/PushPermissionBanner';
 import ProfileCompleteReminder from './components/ProfileCompleteReminder';
 import AuthModal from './components/AuthModal';
 import ProfileSetupModal from './components/ProfileSetupModal';
@@ -24,7 +22,6 @@ import RequireProvider from './components/RequireProvider';
 import RequireStudentMode from './components/RequireStudentMode';
 import { useIsProvider } from './hooks/useIsProvider';
 import useFirebaseAuth from './hooks/useFirebaseAuth';
-import DataSafeToast from './components/DataSafeToast';
 import ClassJoinIntro from './components/ClassJoinIntro';
 import NoCRBanner from './components/NoCRBanner';
 import RoleSelectScreen from './components/RoleSelectScreen';
@@ -62,15 +59,6 @@ import { pushProfile } from './lib/firebaseSync';
 // inline fallback, not a fresh spinner import) shows briefly on each
 // FIRST visit to a given route; subsequent visits to that route are
 // instant since the browser has already cached that chunk.
-// PERFORMANCE FIX: this used to be a regular top-of-file import.
-// CommunityHiringModal bundles a 1.47MB poster JPG (campus_Lead_KUETx_
-// Individual_Hiring_Posters.jpg) — that image was getting pulled into the
-// eager main entry chunk for EVERY visitor, even the vast majority who
-// never see this modal (it's a one-time, conditionally-queued popup, same
-// tier as AnnouncementModal/BackupReminderGate below it in the JSX). Lazy-
-// loading it means that 1.47MB only downloads for someone who actually
-// reaches the 'communityHiring' queue step, not on every single first load.
-const CommunityHiringModal = lazy(() => import('./components/CommunityHiringModal'));
 const Dashboard = lazy(() => import('./pages/Dashboard'));
 const Profile = lazy(() => import('./pages/Profile'));
 const Courses = lazy(() => import('./pages/Courses'));
@@ -330,13 +318,11 @@ function Layout({ authState, onboardingActive }) {
           </Suspense>
         </div>
         {location.pathname !== '/about' && !isQuestionBankViewer && !isMobileNav && <Footer />}
-        {!isQuestionBankViewer && <PWAInstallPrompt />}
-        <PWAUpdatePrompt />
         {!isQuestionBankViewer && <BottomNav />}
         <GlobalToasts />
+        <GlobalDialog />
         <FloatingUploadBar />
         {!onboardingActive && <NoticeToast />}
-        <DataSafeToast suppress={onboardingActive} />
         <ClassJoinIntro />
         <NoCRBanner />
 
@@ -357,52 +343,6 @@ function Layout({ authState, onboardingActive }) {
 }
 
 // ── Startup queue — shows one popup at a time ─────────────────────────────
-function shouldShowAnnouncement() {
-  try {
-    // Brand-new install: don't pile this on top of mode/auth/profile setup
-    // in the very first session — record it as "seen" silently and show it
-    // starting from the user's next visit instead.
-    const lastShown = store.get('announcementV2LastShown');
-    if (!lastShown) {
-      store.set('announcementV2LastShown', new Date().toISOString());
-      return false;
-    }
-    const showCount = store.get('announcementV2ShowCount') || 0;
-    const interval = showCount >= 3 ? 604800000 : 259200000;
-    return Date.now() - new Date(lastShown).getTime() >= interval;
-  } catch { return false; }
-}
-
-function shouldShowCommunityHiring() {
-  try {
-    // BUGFIX: this used to defer only until the "next visit" — with no
-    // minimum time gap, so reopening the app minutes after finishing
-    // onboarding (very common for a PWA — switching tabs, closing/
-    // reopening) would show this immediately, right on top of whatever
-    // else was already queued. Now requires the same kind of real elapsed
-    // time as the other two post-onboarding popups (announcement/backup),
-    // not just "not the very first session."
-    const seen = store.get('communityHiringPopupShown');
-    if (seen === undefined || seen === null) {
-      // First time this is ever checked — record "now" as the reference
-      // point and defer to a later session, same first-session courtesy
-      // as shouldShowAnnouncement/shouldShowBackup.
-      store.set('communityHiringPopupShown', false);
-      store.set('communityHiringFirstEligibleAt', new Date().toISOString());
-      return false;
-    }
-    if (seen === true) return false; // already shown once, never again
-    const firstEligibleAt = store.get('communityHiringFirstEligibleAt');
-    if (!firstEligibleAt) {
-      // Pre-fix installs won't have this timestamp yet — set it now and
-      // defer one more session rather than firing immediately.
-      store.set('communityHiringFirstEligibleAt', new Date().toISOString());
-      return false;
-    }
-    const elapsedDays = (Date.now() - new Date(firstEligibleAt).getTime()) / 86400000;
-    return elapsedDays >= 2; // same-day reopen no longer triggers it
-  } catch { return false; }
-}
 
 // §5 of the merged Faculty Module prompt: 'role-select' is shown once, at
 // SIGN-UP time only — never again afterward, on this device or any other.
@@ -544,25 +484,6 @@ async function buildQueue(isAnonymous) {
     if (!isProfileComplete(getProfile())) q.push('profile');
   }
 
-  // BUGFIX (real, ongoing — not just first-session): staggering each
-  // popup's OWN delay (2/3-9/7 days) only prevented them from all becoming
-  // eligible on the very first later session. It did nothing to stop them
-  // recurring together — once a user has been active long enough, all
-  // three conditions independently go true on MANY sessions afterward,
-  // and every one of those sessions queued all three back-to-back: dismiss
-  // announcement, community-hiring appears immediately, dismiss that,
-  // backup appears immediately. That back-to-back stacking — not the
-  // first-time timing — is what "popup e onek shomossa" was about.
-  //
-  // Fix: only ever queue ONE of these three non-essential popups per
-  // session, in a fixed priority order. The others stay eligible and will
-  // simply be reconsidered next session instead of firing right after each
-  // other in the same one.
-  if (shouldShowAnnouncement()) {
-    q.push('announcement');
-  } else if (shouldShowCommunityHiring()) {
-    q.push('communityHiring');
-  }
   return q;
 }
 
@@ -923,7 +844,7 @@ export default function App() {
               const result = validateProfileForSave(formData);
               if (!result.ok) {
                 const msgs = Object.values(result.errors).join('\n');
-                alert('Profile cannot be saved:\n' + msgs);
+                alertDialog('Profile cannot be saved:\n' + msgs);
                 return;
               }
               // BUGFIX (stale profile prefill, part 2/2 — see
@@ -990,26 +911,6 @@ export default function App() {
           // user behind a broken step: just advance past it immediately.
           (() => { advance(); return null; })()
         )}
-        {current === 'announcement' && (
-          <AnnouncementModal open={true} onClose={advance} />
-        )}
-        {current === 'communityHiring' && (
-          // Suspense boundary needed here specifically: this block sits
-          // directly under <BrowserRouter>, not inside the <Routes>-level
-          // Suspense further down (that one only wraps page navigation).
-          // CommunityHiringModal is now lazy() (see the PERFORMANCE FIX
-          // comment near its declaration above) so its own chunk load
-          // needs a fallback while it downloads.
-          <Suspense fallback={null}>
-            <CommunityHiringModal
-              open={true}
-              onClose={() => {
-                try { store.set('communityHiringPopupShown', true); } catch {}
-                advance();
-              }}
-            />
-          </Suspense>
-        )}
         {/* BUGFIX: Layout (which contains <Routes>/<Dashboard>) used to
             render unconditionally here, regardless of `current` — so the
             Dashboard was always fully mounted and rendering underneath
@@ -1060,7 +961,6 @@ export default function App() {
         ) : (
           <Layout authState={authState} onboardingActive={!!current} />
         )}
-        {authState.authReady && !authState.isAnonymous && queue.length === 0 && <PushPermissionBanner />}
         {/* Nudges anyone who used "Finish now, add rest later" to fill in the
             full profile — but only from a later session, never right after
             onboarding (see ProfileCompleteReminder.jsx's own session guard). */}

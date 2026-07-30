@@ -21,6 +21,7 @@ import AuthModal from '../components/AuthModal';
 import { onAuthChange, logout, isEmailVerified } from '../lib/firebaseAuth';
 import { subscribeMyEmailFlag } from '../lib/emailFlags';
 import { auth } from '../lib/firebase';
+import { confirmDialog, alertDialog } from '../lib/dialog';
 import { startFirebaseSync, pushProfile } from '../lib/firebaseSync';
 import { syncLocalDataOnAuth, clearLocalDataOnLogout } from '../lib/accountLifecycle';
 import { uploadProfilePicture, getProfilePhotoURL, deleteProfilePicture } from '../lib/profilePicture';
@@ -55,6 +56,7 @@ const HALL_LINKS = {
 
 // Academic system login — same for every student, no hall-specific variant.
 const ACADEMIC_SYSTEM_LINK = 'https://academic.kuet.ac.bd/';
+const LIBRARY_SYSTEM_LINK = 'https://library.kuet.ac.bd:8000/cgi-bin/koha/opac-user.pl';
 
 /** Compute overall attendance % from attLogs (daily mode) */
 const computeOverallAttendance = (logs = {}) => {
@@ -648,7 +650,7 @@ export default function Profile() {
     const result = validateProfileForSave(formData);
     if (!result.ok) {
       const msgs = Object.values(result.errors).join('\n');
-      alert('Profile cannot be saved:\n' + msgs);
+      alertDialog('Profile cannot be saved:\n' + msgs);
       return;
     }
     const next = normalizeProfileForSave(formData);
@@ -675,7 +677,7 @@ export default function Profile() {
   };
 
   const handleLogout = async () => {
-    if (!confirm('Sign out? This device will be cleared — log back in anytime and everything comes right back from the cloud.')) return;
+    if (!(await confirmDialog('Sign out? This device will be cleared — log back in anytime and everything comes right back from the cloud.'))) return;
     try {
       await logout();
     } catch {}
@@ -1109,17 +1111,17 @@ export default function Profile() {
           <button
             disabled={leaveClassState === 'leaving'}
             onClick={async () => {
-              if (!window.confirm(
+              if (!(await confirmDialog(
                 "Leave this class? You'll lose access to class notices, roster, and shared content. " +
                 'Rejoining later will require a fresh approval from the CR/ACR — being previously ' +
                 'approved does not let you back in automatically.'
-              )) return;
+              ))) return;
               setLeaveClassState('leaving');
               try {
                 const groupId = getGroupId(profile);
                 await leaveGroup(groupId);
               } catch (err) {
-                alert(`Failed: ${err?.message || err}`);
+                alertDialog(`Failed: ${err?.message || err}`);
               } finally {
                 setLeaveClassState('idle');
               }
@@ -1203,14 +1205,14 @@ export default function Profile() {
                   <button
                     disabled={leaveCRState === 'sending' || leaveCRState === 'sent'}
                     onClick={async () => {
-                      if (!window.confirm("Send a request to your Class Lead to step down as CR? You'll remain CR until it's approved.")) return;
+                      if (!(await confirmDialog("Send a request to your Class Lead to step down as CR? You'll remain CR until it's approved."))) return;
                       setLeaveCRState('sending');
                       try {
                         const groupId = getGroupId(profile);
                         await requestLeaveCR(groupId, profile);
                         setLeaveCRState('sent');
                       } catch (err) {
-                        alert(`Failed: ${err?.message || err}`);
+                        alertDialog(`Failed: ${err?.message || err}`);
                         setLeaveCRState('idle');
                       }
                     }}
@@ -1323,14 +1325,14 @@ export default function Profile() {
                 <button
                   disabled={leaveCRState === 'sending' || leaveCRState === 'sent'}
                   onClick={async () => {
-                    if (!window.confirm("Send a request to your Class Lead to step down as CR? You'll remain CR until it's approved.")) return;
+                    if (!(await confirmDialog("Send a request to your Class Lead to step down as CR? You'll remain CR until it's approved."))) return;
                     setLeaveCRState('sending');
                     try {
                       const groupId = getGroupId(profile);
                       await requestLeaveCR(groupId, profile);
                       setLeaveCRState('sent');
                     } catch (err) {
-                      alert(`Failed: ${err?.message || err}`);
+                      alertDialog(`Failed: ${err?.message || err}`);
                       setLeaveCRState('idle');
                     }
                   }}
@@ -1375,6 +1377,12 @@ export default function Profile() {
                 title="Academic Account"
                 subtitle="academic.kuet.ac.bd"
                 href={ACADEMIC_SYSTEM_LINK}
+              />
+              <AccountLinkTile
+                icon={<BookOpenText size={18} />}
+                title="Library Account"
+                subtitle="library.kuet.ac.bd"
+                href={LIBRARY_SYSTEM_LINK}
               />
             </div>
           </Section>

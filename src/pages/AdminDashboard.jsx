@@ -6,6 +6,7 @@ import { ArrowLeft, Building2, CalendarRange, CheckCircle, ChevronRight, Circle,
 import { ICONS } from '../lib/iconRegistry';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../lib/firebase';
+import { confirmDialog, alertDialog } from '../lib/dialog';
 import { auth } from '../lib/firebase';
 import { checkIsAdmin } from '../lib/adminAuth';
 import {
@@ -1295,7 +1296,7 @@ function FacultyView({ onBack, onSelectCategory, countCtx }) {
       await adminVerifyFaculty(uid);
       await reloadFaculty();
     } catch (e) {
-      alert(e?.message || 'Could not verify this account. Please try again.');
+      alertDialog(e?.message || 'Could not verify this account. Please try again.');
     } finally {
       setVerifying((prev) => {
         const next = { ...prev };
@@ -1307,13 +1308,13 @@ function FacultyView({ onBack, onSelectCategory, countCtx }) {
 
   const handleDelete = async (f) => {
     const label = f.name || f.officialEmail || 'this account';
-    if (!window.confirm(`Remove ${label} from Faculty? This can't be undone — they'd need to sign up and be verified again.`)) return;
+    if (!(await confirmDialog(`Remove ${label} from Faculty? This can't be undone — they'd need to sign up and be verified again.`))) return;
     setDeleting((prev) => ({ ...prev, [f.uid]: true }));
     try {
       await adminDeleteFaculty(f.uid);
       await reloadFaculty();
     } catch (e) {
-      alert(e?.message || 'Could not remove this account. Please try again.');
+      alertDialog(e?.message || 'Could not remove this account. Please try again.');
     } finally {
       setDeleting((prev) => {
         const next = { ...prev };
@@ -1794,7 +1795,7 @@ function CommunicationView({ onBack, onSelectCategory, groups, countCtx }) {
   };
 
   const handleDeleteNotice = async (noticeId) => {
-    if (!window.confirm('Delete this notice? It will be removed from everyone\'s feed.')) return;
+    if (!(await confirmDialog("Delete this notice? It will be removed from everyone's feed."))) return;
     setDeletingId(noticeId);
     try {
       await deleteNoticeSoft(noticeId, null);

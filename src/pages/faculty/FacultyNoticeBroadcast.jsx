@@ -29,6 +29,7 @@ import { subscribeMyClassIndex } from '../../lib/facultyClassSync';
 import { getFacultyDoc } from '../../lib/facultySync';
 import { getGroupMembersOnce } from '../../lib/groupSync';
 import * as noticeApi from '../../lib/noticeUtils';
+import { confirmDialog } from '../../lib/dialog';
 import { postFacultyNoticeMulti } from '../../lib/facultyNoticeSync';
 import { notify } from '../../lib/notify';
 import { useIsFaculty } from '../../hooks/useIsFaculty';
@@ -220,7 +221,7 @@ export default function FacultyNoticeBroadcast() {
   // single delete handler works even though this feed merges notices
   // across several different classes.
   const handleDeleteNotice = async (notice) => {
-    if (!window.confirm('Delete this notice? It will be removed from that class\'s feed.')) return;
+    if (!(await confirmDialog("Delete this notice? It will be removed from that class's feed."))) return;
     setDeletingId(notice.id);
     try {
       await noticeApi.deleteNoticeSoft(notice.id, notice.groupId);

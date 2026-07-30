@@ -165,15 +165,16 @@ export default function Services() {
               onClick={() => navigate(`/services/category/${type}`)}
               className="card"
               style={{
-                padding: 16, textAlign: 'left', border: '1px solid var(--border)',
+                padding: 16, textAlign: 'left', border: '1px solid rgba(217,119,6,0.18)',
+                background: 'rgba(217,119,6,0.05)',
                 display: 'flex', flexDirection: 'column', gap: 10, cursor: 'pointer',
               }}
             >
               <div style={{
-                width: 40, height: 40, borderRadius: 12, background: 'var(--accentSoft)',
+                width: 40, height: 40, borderRadius: 12, background: 'rgba(217,119,6,0.12)',
                 display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
               }}>
-                <Icon size={20} color="var(--accent)" />
+                <Icon size={20} color="#d97706" />
               </div>
               <div>
                 <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)' }}>{SERVICE_TYPE_LABELS[type]}</div>

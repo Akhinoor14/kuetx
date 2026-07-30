@@ -6,6 +6,7 @@ import { getGroupId, getGroupLabel, canonicalize } from '../lib/groupUtils';
 import { postGroupNotice, requestLeaveCR, subscribeMyRole, subscribeGroupNotices } from '../lib/groupSync';
 import { subscribeMyRoles, hasRole } from '../lib/staffSync';
 import { checkIsAdmin } from '../lib/adminAuth';
+import { confirmDialog, alertDialog } from '../lib/dialog';
 import { auth } from '../lib/firebase';
 import ClassmatesList from '../components/ClassmatesList';
 import JoinRequestsPanel from '../components/JoinRequestsPanel';
@@ -114,12 +115,12 @@ export default function ClassRoster() {
   }, [groupId]);
 
   const handleDeleteNotice = async (noticeId) => {
-    if (!window.confirm('Delete this notice? It will be removed from your class\'s feed.')) return;
+    if (!(await confirmDialog("Delete this notice? It will be removed from your class's feed."))) return;
     setDeletingId(noticeId);
     try {
       await deleteNoticeSoft(noticeId, groupId);
     } catch (err) {
-      window.alert(`Failed to delete: ${err?.message || err}`);
+      alertDialog(`Failed to delete: ${err?.message || err}`);
     } finally {
       setDeletingId(null);
     }
@@ -169,7 +170,7 @@ export default function ClassRoster() {
   };
 
   const handleRequestLeave = async () => {
-    if (!window.confirm('Send a request to your Class Lead to step down as CR? You\'ll remain CR until it\'s approved.')) return;
+    if (!(await confirmDialog("Send a request to your Class Lead to step down as CR? You'll remain CR until it's approved."))) return;
     setLeaveState('sending');
     setLeaveMsg('');
     try {

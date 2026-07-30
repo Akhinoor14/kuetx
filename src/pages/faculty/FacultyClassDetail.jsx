@@ -18,6 +18,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { useParams, useSearchParams, Link } from 'react-router-dom';
 import { CalendarClock, Circle, Clock, ExternalLink, FileText, GraduationCap, Pencil, Plus, Trash2, X } from 'lucide-react';
 import { ICONS } from '../../lib/iconRegistry';
+import { confirmDialog, alertDialog } from '../../lib/dialog';
 import ClassmatesList from '../../components/ClassmatesList';
 import NoticeComposerToolbar from '../../components/NoticeComposerToolbar';
 import NoticePrioritySelector from '../../components/NoticePrioritySelector';
@@ -350,12 +351,12 @@ function NoticesTab({ groupId, isVerified, assignment }) {
   };
 
   const handleDeleteNotice = async (noticeId) => {
-    if (!window.confirm('Delete this notice? It will be removed from your class\'s feed.')) return;
+    if (!(await confirmDialog("Delete this notice? It will be removed from your class's feed."))) return;
     setDeletingId(noticeId);
     try {
       await deleteNoticeSoft(noticeId, groupId);
     } catch (err) {
-      window.alert(`Failed to delete: ${err?.message || err}`);
+      alertDialog(`Failed to delete: ${err?.message || err}`);
     } finally {
       setDeletingId(null);
     }

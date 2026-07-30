@@ -8,6 +8,7 @@ import {
 import { onAuthChange, logout, loginWithGoogle, resetPassword, getAuthErrorMessage } from '../lib/firebaseAuth';
 import { clearLocalDataOnLogout } from '../lib/accountLifecycle';
 import { APP_VERSION } from '../version';
+import { confirmDialog } from '../lib/dialog';
 
 const THEME_ICON = { light: Sun, milky: Droplets, dark: Moon };
 
@@ -39,7 +40,7 @@ export default function Settings() {
   const [sendingReset, setSendingReset] = useState(false);
 
   const handleSignOut = async () => {
-    if (!window.confirm('Sign out? This device will be cleared — log back in anytime and everything comes right back from the cloud.')) return;
+    if (!(await confirmDialog('Sign out? This device will be cleared — log back in anytime and everything comes right back from the cloud.'))) return;
     setLoggingOut(true);
     try {
       await logout();

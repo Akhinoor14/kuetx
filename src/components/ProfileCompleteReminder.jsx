@@ -23,6 +23,7 @@
 import { useEffect, useState } from 'react';
 import { ClipboardList } from 'lucide-react';
 import { store, getProfile, normalizeProfileForSave, validateProfileForSave } from '../store/store';
+import { alertDialog } from '../lib/dialog';
 import ProfileSetupModal from './ProfileSetupModal';
 
 const SNOOZE_KEY = 'kuetxProfileCompleteReminderSnoozed';
@@ -101,7 +102,7 @@ export default function ProfileCompleteReminder() {
           const result = validateProfileForSave(formData);
           if (!result.ok) {
             const msgs = Object.values(result.errors).join('\n');
-            alert('Profile cannot be saved:\n' + msgs);
+            alertDialog('Profile cannot be saved:\n' + msgs);
             return;
           }
           store.set('profile', normalizeProfileForSave(formData));

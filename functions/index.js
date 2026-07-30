@@ -17,14 +17,22 @@
  */
 
 const { onDocumentCreated } = require('firebase-functions/v2/firestore');
-const { onCall, HttpsError } = require('firebase-functions/v2/https');
+const { onCall, onRequest, HttpsError } = require('firebase-functions/v2/https');
 const { onSchedule } = require('firebase-functions/v2/scheduler');
+const { defineSecret } = require('firebase-functions/params');
 const { initializeApp } = require('firebase-admin/app');
 const { getFirestore, FieldValue } = require('firebase-admin/firestore');
 const { getMessaging } = require('firebase-admin/messaging');
 
 initializeApp();
 const db = getFirestore();
+
+// Telegram bot token — set once via:
+//   firebase functions:secrets:set TELEGRAM_BOT_TOKEN
+// (get the token from @BotFather; never commit it to the repo). Using
+// defineSecret keeps it out of source and out of plain environment
+// config, matching how a token this sensitive should be handled.
+const TELEGRAM_BOT_TOKEN = defineSecret('TELEGRAM_BOT_TOKEN');
 
 async function sendToTokens(tokens, { title, body, link, noticeId }) {
   if (!tokens.length) return;
@@ -98,6 +106,160 @@ exports.onGroupNoticeCreate = onDocumentCreated('groups/{groupId}/notices/{notic
     noticeId: event.params.noticeId,
   });
 });
+
+/**
+ * Telegram push — CR/ACR-only, opt-in, one-group-per-class (Phase F).
+ *
+ * Design (kept deliberately simple — one bot, no per-class bot tokens):
+ *   1. CR clicks "Connect Telegram" on /class-setup (client calls
+ *      startTelegramLink below), which mints a short random code tied to
+ *      their own groupId and stores it in telegramLinkCodes/{code} with a
+ *      15-minute expiry — NOT the raw groupId, so a stranger can't just
+ *      guess another class's groupId (e.g. "2k23_cse") and hijack their
+ *      notice feed into an unrelated Telegram chat.
+ *   2. CR adds the bot to their own class Telegram group and sends
+ *      "/register <code>" there.
+ *   3. Telegram calls telegramWebhook (this bot's one single webhook URL,
+ *      set once via setWebhook — see README_PUSH_SETUP.md), which looks
+ *      up the code, resolves it back to a groupId, and saves that chat's
+ *      id onto groups/{groupId}/meta/classSetup.telegramChatId — the same
+ *      one doc every other CR-set field already lives on.
+ *   4. Every new groups/{groupId}/notices/{id} doc (same trigger source as
+ *      onGroupNoticeCreate above) gets mirrored to that one chat via
+ *      sendMessage, and to NO other chat. A class that never connects
+ *      Telegram just never gets a telegramChatId — this trigger silently
+ *      no-ops for them, same fail-open-to-nothing pattern as sendToTokens
+ *      with an empty tokens array above.
+ *
+ * WhatsApp is deliberately NOT part of this — WhatsApp's official Cloud
+ * API doesn't support posting into groups/Channels at all; the only way
+ * to do it is unofficial Web-protocol automation that risks the number
+ * being banned, which isn't something to build into production
+ * infrastructure. Telegram-only, by design, not by omission.
+ */
+const TELEGRAM_LINK_CODE_TTL_MS = 15 * 60 * 1000;
+
+function generateLinkCode() {
+  // Short, easy to type by hand into a Telegram chat: e.g. "KX-7F3A2".
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // no 0/O/1/I ambiguity
+  let s = '';
+  for (let i = 0; i < 5; i++) s += chars[Math.floor(Math.random() * chars.length)];
+  return `KX-${s}`;
+}
+
+async function telegramApi(method, token, payload) {
+  const res = await fetch(`https://api.telegram.org/bot${token}/${method}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  });
+  return res.json();
+}
+
+/**
+ * Callable from the client (ClassSetup.jsx "Connect Telegram" button).
+ * CR/ACR-only in effect because it requires an authenticated request AND
+ * the caller's own profile.groupId to match the groupId they're linking —
+ * a student can only ever mint a code for their own class, never anyone
+ * else's.
+ */
+exports.startTelegramLink = onCall(async (request) => {
+  const uid = request.auth?.uid;
+  if (!uid) throw new HttpsError('unauthenticated', 'Please sign in first.');
+  const groupId = String(request.data?.groupId || '').trim();
+  if (!groupId) throw new HttpsError('invalid-argument', 'Missing groupId.');
+
+  const memberSnap = await db.collection('groups').doc(groupId).collection('members').doc(uid).get();
+  const role = memberSnap.exists ? memberSnap.data()?.role : null;
+  if (role !== 'cr' && role !== 'acr') {
+    throw new HttpsError('permission-denied', 'Only your class CR/ACR can connect Telegram.');
+  }
+
+  const code = generateLinkCode();
+  await db.collection('telegramLinkCodes').doc(code).set({
+    groupId,
+    createdBy: uid,
+    createdAt: FieldValue.serverTimestamp(),
+    expiresAt: new Date(Date.now() + TELEGRAM_LINK_CODE_TTL_MS),
+    used: false,
+  });
+  return { code, expiresInMinutes: TELEGRAM_LINK_CODE_TTL_MS / 60000 };
+});
+
+/**
+ * Telegram's single webhook target for this bot. Set once (per
+ * README_PUSH_SETUP.md) via:
+ *   curl "https://api.telegram.org/bot<TOKEN>/setWebhook?url=<this function's URL>"
+ * Handles exactly one command: "/register <code>" sent from inside the
+ * class's Telegram group/channel after the bot has been added as admin.
+ */
+exports.telegramWebhook = onRequest({ secrets: [TELEGRAM_BOT_TOKEN] }, async (req, res) => {
+  const token = TELEGRAM_BOT_TOKEN.value();
+  const update = req.body || {};
+  const message = update.message || update.channel_post;
+  const text = String(message?.text || '').trim();
+  const chatId = message?.chat?.id;
+
+  if (!text.startsWith('/register') || !chatId) {
+    res.status(200).send('ok'); // ignore anything else — always 200 so Telegram doesn't retry
+    return;
+  }
+
+  const code = text.split(/\s+/)[1]?.toUpperCase();
+  if (!code) {
+    await telegramApi('sendMessage', token, { chat_id: chatId, text: 'Usage: /register <code> — get the code from your Class Setup page in KUETx.' });
+    res.status(200).send('ok');
+    return;
+  }
+
+  const codeRef = db.collection('telegramLinkCodes').doc(code);
+  const codeSnap = await codeRef.get();
+  if (!codeSnap.exists) {
+    await telegramApi('sendMessage', token, { chat_id: chatId, text: 'That code isn\'t valid or has already been used. Generate a new one from Class Setup.' });
+    res.status(200).send('ok');
+    return;
+  }
+
+  const data = codeSnap.data();
+  const expiresAtMs = data.expiresAt?.toMillis?.() ?? new Date(data.expiresAt).getTime();
+  if (data.used || Date.now() > expiresAtMs) {
+    await telegramApi('sendMessage', token, { chat_id: chatId, text: 'That code has expired. Generate a new one from Class Setup and try again.' });
+    res.status(200).send('ok');
+    return;
+  }
+
+  await db.collection('groups').doc(data.groupId).collection('meta').doc('classSetup').set({
+    telegramChatId: String(chatId),
+    telegramLinkedAt: FieldValue.serverTimestamp(),
+  }, { merge: true });
+  await codeRef.update({ used: true });
+
+  await telegramApi('sendMessage', token, {
+    chat_id: chatId,
+    text: '✅ Connected! This group will now receive KUETx notices automatically.',
+  });
+  res.status(200).send('ok');
+});
+
+exports.onGroupNoticeCreateTelegram = onDocumentCreated(
+  { document: 'groups/{groupId}/notices/{noticeId}', secrets: [TELEGRAM_BOT_TOKEN] },
+  async (event) => {
+    const notice = event.data?.data();
+    if (!notice) return;
+    const { groupId } = event.params;
+    const setupSnap = await db.collection('groups').doc(groupId).collection('meta').doc('classSetup').get();
+    const chatId = setupSnap.exists ? setupSnap.data()?.telegramChatId : null;
+    if (!chatId) return; // this class never connected Telegram — no-op, not an error
+
+    const token = TELEGRAM_BOT_TOKEN.value();
+    const text = `📢 *${escapeMarkdown(notice.title || 'Notice')}*\n${escapeMarkdown(notice.body || '')}`;
+    await telegramApi('sendMessage', token, { chat_id: chatId, text, parse_mode: 'Markdown' });
+  }
+);
+
+function escapeMarkdown(s) {
+  return String(s || '').replace(/([_*[\]()~`>#+\-=|{}.!])/g, '\\$1');
+}
 
 /**
  * Auto-approval policy — student join notification (non-blocking).

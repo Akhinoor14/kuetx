@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Check, RotateCcw, ChevronDown } from 'lucide-react';
+import { confirmDialog } from '../lib/dialog';
 import {
   subscribeMembers, verifyMember, revokeVerification,
   clAppointCR, clRevokeCR, assignACR, revokeACR, handoffCR, removeMember,
@@ -194,9 +195,9 @@ export default function ClassmatesList({ groupId, showActions = false, viewerRol
 
   const handleBulkVerify = () => runBulkOn(verifiableSelectedIds, (id) => verifyMember(groupId, id));
   const handleBulkRevoke = () => runBulkOn(revocableSelectedIds, (id) => revokeVerification(groupId, id));
-  const handleBulkRemove = () => {
+  const handleBulkRemove = async () => {
     if (removableSelectedIds.length === 0) return;
-    if (!window.confirm(`Remove ${removableSelectedIds.length} selected classmate${removableSelectedIds.length === 1 ? '' : 's'} from the class?`)) return;
+    if (!(await confirmDialog(`Remove ${removableSelectedIds.length} selected classmate${removableSelectedIds.length === 1 ? '' : 's'} from the class?`))) return;
     setBulkBusy(true);
     Promise.all(removableSelectedIds.map((id) => removeMember(groupId, id).catch(() => {})))
       .finally(() => { setBulkBusy(false); clearSelection(); });
@@ -220,8 +221,8 @@ export default function ClassmatesList({ groupId, showActions = false, viewerRol
           actions.push({
             key: 'clear-claim', label: 'Clear "Claims CR" badge',
             title: 'Dismiss this badge without appointing them CR — use if they already stepped down or the claim is outdated',
-            run: () => {
-              if (window.confirm(`Clear the "Claims CR" badge${m.id === currentUid ? ' for yourself' : ` for ${m.name || 'this classmate'}`}? This does NOT remove CR status — use "Remove CR" for that.`)) {
+            run: async () => {
+              if (await confirmDialog(`Clear the "Claims CR" badge${m.id === currentUid ? ' for yourself' : ` for ${m.name || 'this classmate'}`}? This does NOT remove CR status — use "Remove CR" for that.`)) {
                 return clDismissLegacyCRClaim(groupId, m.id);
               }
             },
@@ -235,8 +236,8 @@ export default function ClassmatesList({ groupId, showActions = false, viewerRol
       if (m.id !== currentUid && m.verified && m.role !== 'cr') {
         actions.push({
           key: 'handoff-cr', label: 'Hand off CR to them',
-          run: () => {
-            if (window.confirm(`Hand off CR to ${m.name || 'this classmate'}? You'll no longer be CR.`)) {
+          run: async () => {
+            if (await confirmDialog(`Hand off CR to ${m.name || 'this classmate'}? You'll no longer be CR.`)) {
               return handoffCR(groupId, currentUid, m.id, null);
             }
           },

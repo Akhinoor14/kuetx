@@ -6,6 +6,7 @@ import { postGroupNotice, requestLeaveCR, subscribeMyRole, subscribeGroupNotices
 import { subscribeMyRoles, hasRole } from '../lib/staffSync';
 import { checkIsAdmin } from '../lib/adminAuth';
 import { auth } from '../lib/firebase';
+import { confirmDialog, alertDialog } from '../lib/dialog';
 import { deleteNoticeSoft } from '../lib/noticeUtils';
 
 /**
@@ -62,12 +63,12 @@ export function useClassRosterState() {
   }, [groupId, isOwnMember]);
 
   const handleDeleteNotice = async (noticeId) => {
-    if (!window.confirm('Delete this notice? It will be removed from your class\'s feed.')) return;
+    if (!(await confirmDialog("Delete this notice? It will be removed from your class's feed."))) return;
     setDeletingId(noticeId);
     try {
       await deleteNoticeSoft(noticeId, groupId);
     } catch (err) {
-      window.alert(`Failed to delete: ${err?.message || err}`);
+      alertDialog(`Failed to delete: ${err?.message || err}`);
     } finally {
       setDeletingId(null);
     }
@@ -117,7 +118,7 @@ export function useClassRosterState() {
   };
 
   const handleRequestLeave = async () => {
-    if (!window.confirm('Send a request to your Class Lead to step down as CR? You\'ll remain CR until it\'s approved.')) return;
+    if (!(await confirmDialog("Send a request to your Class Lead to step down as CR? You'll remain CR until it's approved."))) return;
     setLeaveState('sending');
     setLeaveMsg('');
     try {

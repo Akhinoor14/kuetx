@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { UserPlus, Check, X } from 'lucide-react';
 import { subscribeJoinRequests, approveJoinRequest, rejectJoinRequest } from '../lib/groupSync';
+import { confirmDialog } from '../lib/dialog';
 
 /**
  * CR/ACR-only panel: review students asking to join this class. This is
@@ -38,7 +39,7 @@ export default function JoinRequestsPanel({ groupId }) {
   };
 
   const handleReject = async (uid) => {
-    if (!window.confirm('Reject this join request? They can send a new one later.')) return;
+    if (!(await confirmDialog('Reject this join request? They can send a new one later.'))) return;
     setBusyId(uid);
     setErrorMsg('');
     try {

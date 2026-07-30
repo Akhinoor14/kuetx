@@ -7,6 +7,7 @@ import { useTheme } from '../hooks/useTheme';
 import CTPlannerCalendar from '../components/CTPlannerCalendar';
 import EventModal from '../components/EventModal';
 import { countWeeklyPressure, detectConflicts, generateSuggestions } from '../lib/smartAssist';
+import { alertDialog } from '../lib/dialog';
 import { keyFor as utilKeyFor, countEventsInWeekOf as utilCountEventsInWeekOf } from '../lib/ctPlannerUtils';
 
 function makeMonthMatrix(year, month) {
@@ -206,7 +207,7 @@ export default function CTQuizPlanning() {
     if (!ev) return;
     const targetIso = (() => { const dt = new Date(viewYear, viewMonth, targetDay); return `${dt.getFullYear()}-${String(dt.getMonth()+1).padStart(2,'0')}-${String(dt.getDate()).padStart(2,'0')}`; })();
     if (holidayDates.includes(targetIso)) {
-      window.alert('Cannot move event to a holiday date.');
+      alertDialog('Cannot move event to a holiday date.');
       dragItemRef.current = null;
       return;
     }
@@ -384,7 +385,7 @@ export default function CTQuizPlanning() {
                       if (!d) return;
                       const k = utilKeyFor(viewYear, viewMonth, d);
                       if (holidayDates.includes(k)) {
-                        window.alert('Selected date is a holiday. CTs cannot be scheduled on holidays.');
+                        alertDialog('Selected date is a holiday. CTs cannot be scheduled on holidays.');
                         return;
                       }
                       setSelectedDay(d);

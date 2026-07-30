@@ -9072,12 +9072,6 @@ body.schedule-fullscreen-active .mobile-bottom-nav {
   .claim-cr-inline-mobile-only { display: none; }
 }
 
-/* UID row inside Personal Info: mobile-only per product decision (desktop
-   users manage staff-role assignment less often from this screen). */
-@media (min-width: 769px) {
-  .mobile-only-uid-row { display: none; }
-}
-
 /* ── Profile page: compact grid columns on phones ──
    These grids use `auto-fit, minmax(Npx, 1fr)`, which is width-driven and
    on narrow phones (~360-400px) can end up 1 column or an uneven split.

@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { ClipboardList, Target, BookOpen, Lightbulb, ChevronRight, ChevronLeft } from 'lucide-react';
 import { store, getGradeFromPct, getAttendanceMarks, computeEffectiveAttendance, GRADE_SCALE, getProfile, getCurrentTermKey, getTermTimeline, recordAudit } from '../store/store';
 import { getAllCourses } from '../store/curriculumStore';
+import { confirmDialog } from '../lib/dialog';
 import TeacherVerifiedCard from '../components/TeacherVerifiedCard';
 
 // ── Helper: Calculate required hall marks for a target grade ──────────────
@@ -383,9 +384,9 @@ export default function Marks() {
   // written before number inputs correctly distinguished "cleared" from
   // "entered 0") — resetting is simpler and safer than trying to guess
   // which individual field was the accidental one.
-  const onClearCourse = (id) => {
+  const onClearCourse = async (id) => {
     if (!marks[id]) return;
-    if (!window.confirm('Clear all entered marks for this course? This cannot be undone.')) return;
+    if (!(await confirmDialog('Clear all entered marks for this course? This cannot be undone.'))) return;
     const updated = { ...marks };
     delete updated[id];
     setMarks(updated);

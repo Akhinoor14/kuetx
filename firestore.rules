@@ -396,6 +396,17 @@ service cloud.firestore {
     match /otpCodes/{email} {
       allow read, write: if false;
     }
+    // -------------------------------------------------------------
+    // Telegram link codes (functions/index.js startTelegramLink/
+    // telegramWebhook) — same shape as otpCodes above: every read/write
+    // happens ONLY via the Admin SDK inside those two Cloud Functions.
+    // Denying all client access means a student can never read another
+    // class's pending code, nor forge a chatId link for a group they
+    // aren't CR/ACR of.
+    // -------------------------------------------------------------
+    match /telegramLinkCodes/{code} {
+      allow read, write: if false;
+    }
     match /mail/{docId} {
       allow read, write: if false;
     }

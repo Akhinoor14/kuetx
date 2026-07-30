@@ -4,6 +4,7 @@ import { Sparkles, Target, TrendingUp, ArrowRight, AlertTriangle, CheckCircle2, 
 import { store, GRADE_SCALE, cgpaToPercent, computeCourseGrade, getLegacyTermResults, getProfile, setLegacyTermResults, TERM_KEYS, getCurrentTermKey, getTermTimeline, recordAudit } from '../store/store';
 import { getAllCourses, getTermCreditsFromCurriculum } from '../store/curriculumStore';
 import Collapsible from '../components/Collapsible';
+import { alertDialog } from '../lib/dialog';
 
 export default function Results() {
   const profile = getProfile();
@@ -67,7 +68,7 @@ export default function Results() {
       const termKey = course ? `Y${course.year}T${course.term}` : null;
       const isOngoingCourse = termKey && termKey === currentTermKey && currentTermIsOngoing;
       if (isOngoingCourse) {
-        alert('Editing marks for courses in the ongoing term is disabled.');
+        alertDialog('Editing marks for courses in the ongoing term is disabled.');
         return;
       }
     } catch (e) {}

@@ -19,6 +19,7 @@ import {
 import { getAllCourses, getDeptSyllabus } from '../store/curriculumStore';
 import useTimerEngine from '../hooks/useTimerEngine';
 import Modal from '../components/Modal';
+import { alertDialog } from '../lib/dialog';
 
 // Local-date helpers (avoid toISOString(), which shifts to UTC and breaks date-keys at night in BD/UTC+6)
 const todayStr = () => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; };
@@ -1307,7 +1308,7 @@ export function TimeTracker() {
     if (timer.isRunning) return;
     if (mode === TIMER_MODES.UP) { timer.startUp({ category: form.category, note: form.note }); return; }
     const started = timer.startDown(countdownMs, { category: form.category, note: form.note });
-    if (!started) alert('Please set a valid countdown time.');
+    if (!started) alertDialog('Please set a valid countdown time.');
   };
 
   const handleStopAndSave = () => {

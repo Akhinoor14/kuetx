@@ -83,11 +83,11 @@ function ServicesPreviewRow() {
               to={`/services/category/${type}`}
               style={{
                 display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6,
-                padding: '10px 6px', borderRadius: 12, background: 'rgba(var(--accentRGB), 0.04)',
-                border: '1px solid rgba(var(--accentRGB), 0.10)', textDecoration: 'none', textAlign: 'center',
+                padding: '10px 6px', borderRadius: 12, background: 'rgba(217,119,6,0.08)',
+                border: '1px solid rgba(217,119,6,0.18)', textDecoration: 'none', textAlign: 'center',
               }}
             >
-              <Icon size={18} color="var(--accent)" />
+              <Icon size={18} color="#d97706" />
               <span style={{ fontSize: 10, fontWeight: 700, color: 'var(--text)', lineHeight: 1.2 }}>{SERVICE_TYPE_LABELS[type]}</span>
               <span style={{ fontSize: 9.5, color: 'var(--muted)' }}>{activeCountByType[type]} সক্রিয়</span>
             </Link>
@@ -185,8 +185,17 @@ export default function Dashboard() {
   const shortDate = (d) => new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
   const classEndLabel = currentTermTimeline?.classEndDate ? shortDate(currentTermTimeline.classEndDate) : '';
   const prepLeaveLabel = currentTermTimeline ? `${shortDate(currentTermTimeline.prepLeaveStart)} → ${shortDate(currentTermTimeline.prepLeaveEnd)}` : '';
-  const examStartLabel = currentTermTimeline?.examPhases?.[0]?.examDate ? shortDate(currentTermTimeline.examPhases[0].examDate) : '';
-  const examEndLabel = currentTermTimeline?.examPhases?.length ? shortDate(currentTermTimeline.examPhases[currentTermTimeline.examPhases.length - 1].examDate) : '';
+  // getTermTimeline() itself always leaves examDate as null (see store.js —
+  // "filled in by examOverrides in the UI"); the actual per-exam name/date
+  // CR/ACR set on the Class Setup page lives in classSetup.examOverrides,
+  // keyed by term. Without applying it here these labels were always blank.
+  const examOverridesForTerm = (effectiveRoadmapConfig?.examOverrides && effectiveRoadmapConfig.examOverrides[currentTermKey]) || [];
+  const filledExamPhases = (currentTermTimeline?.examPhases || []).map((p, i) => {
+    const o = examOverridesForTerm[i];
+    return { ...p, examDate: o?.examDate ? new Date(o.examDate + 'T00:00:00') : null, name: o?.name || '' };
+  }).filter((p) => p.examDate);
+  const examStartLabel = filledExamPhases.length ? shortDate(filledExamPhases[0].examDate) : '';
+  const examEndLabel = filledExamPhases.length ? shortDate(filledExamPhases[filledExamPhases.length - 1].examDate) : '';
   const today = new Date();
   const todayDateLine = today.toLocaleDateString('en-BD', { day: 'numeric', month: 'long', year: 'numeric' });
   const todayDayLine = today.toLocaleDateString('en-BD', { weekday: 'long' });

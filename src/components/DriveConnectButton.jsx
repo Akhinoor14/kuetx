@@ -6,6 +6,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { Cloud, CloudOff, CloudUpload, RotateCcw, LogOut, RefreshCw, Lock } from 'lucide-react';
+import { confirmDialog } from '../lib/dialog';
 import {
   isDriveConnected,
   getDriveToken,
@@ -142,7 +143,7 @@ export default function DriveConnectButton({ variant = 'full', onConnected }) {
 
   // ── Restore from Drive ───────────────────────────────────────────────────
   const handleRestore = async () => {
-    if (!window.confirm('Restore will overwrite all current data with Drive backup. Continue?')) return;
+    if (!(await confirmDialog('Restore will overwrite all current data with Drive backup. Continue?'))) return;
     setRestoring(true);
     try {
       const { data, modifiedTime } = await downloadFromDrive();

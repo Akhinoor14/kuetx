@@ -8,6 +8,7 @@
 import { useState, useRef } from 'react';
 import * as Icons from 'lucide-react';
 import { uploadProfilePicture, deleteProfilePicture } from '../lib/profilePicture';
+import { confirmDialog } from '../lib/dialog';
 
 export function AvatarUploadModal({ currentURL, isAnon, onClose, onUploaded, onDeleted }) {
   const [preview, setPreview] = useState(null);   // raw objectURL for drag canvas
@@ -109,7 +110,7 @@ export function AvatarUploadModal({ currentURL, isAnon, onClose, onUploaded, onD
   };
 
   const handleDelete = async () => {
-    if (!confirm('Delete the profile picture?')) return;
+    if (!(await confirmDialog('Delete the profile picture?'))) return;
     try { await deleteProfilePicture(); onDeleted(); onClose(); } catch {}
   };
 

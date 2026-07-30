@@ -45,12 +45,23 @@ function _subscribeSingleton(key, buildQueryFn, mapDocsFn, callback) {
         entry.lastValue = mapDocsFn(snap);
         entry.listeners.forEach((cb) => cb(entry.lastValue));
       }, (err) => {
-        console.error(`[groupSync] listener error for ${key}:`, err);
         // permission-denied here almost always means our own membership
         // doc write (joinGroup) hadn't landed yet when this query's rules
         // were evaluated — a startup race, not a real access problem.
         // Retry a couple of times with backoff instead of leaving callers
         // stuck on `null` (= infinite "Loading…") forever.
+        //
+        // Only log once the fast-retry budget is exhausted, not on every
+        // single attempt — a caller that isn't a member yet (pending join
+        // request) hits permission-denied on all 3 fast + 5 slow retries,
+        // which used to mean 8 separate console.error lines per mount for
+        // one underlying condition. One line per attach cycle is enough
+        // to diagnose without flooding the console.
+        const isRetryablePermission = err?.code === 'permission-denied'
+          && (retriesLeft > 0 || slowRetriesLeft > 0);
+        if (!isRetryablePermission) {
+          console.error(`[groupSync] listener error for ${key}:`, err);
+        }
         if (err?.code === 'permission-denied' && retriesLeft > 0) {
           setTimeout(() => attach(retriesLeft - 1, slowRetriesLeft), 1200);
           return;
