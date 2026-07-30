@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { getProfile } from '../store/store';
 import { getGroupId, getGroupLabel, canonicalize } from '../lib/groupUtils';
-import { postGroupNotice, requestLeaveCR, subscribeMyRole, subscribeGroupNotices } from '../lib/groupSync';
+import { postGroupNotice, requestLeaveCR, subscribeMyRole, subscribeGroupNotices, subscribeIsOwnMember } from '../lib/groupSync';
 import { subscribeMyRoles, hasRole } from '../lib/staffSync';
 import { checkIsAdmin } from '../lib/adminAuth';
 import { auth } from '../lib/firebase';
@@ -36,9 +36,22 @@ export function useClassRosterState() {
   const [canSelfApprove, setCanSelfApprove] = useState(false);
   const [sentNotices, setSentNotices] = useState([]);
   const [deletingId, setDeletingId] = useState(null);
+  // Class notices (groups/{groupId}/notices) are Firestore-rule-gated to
+  // an actual members/{uid} doc existing — a pending join request does
+  // NOT satisfy isGroupMember(groupId). subscribeIsOwnMember reports the
+  // real boolean (doc exists or not), so this never attempts the
+  // subscription while the join request is still pending, instead of
+  // relying on the listener's permission-denied retry loop. Mirrors the
+  // same fix already applied in ClassNoticesPanel.jsx.
+  const [isOwnMember, setIsOwnMember] = useState(false);
 
   useEffect(() => {
-    if (!groupId) { setSentNotices([]); return; }
+    if (!groupId || !uid) { setIsOwnMember(false); return; }
+    return subscribeIsOwnMember(groupId, uid, setIsOwnMember);
+  }, [groupId, uid]);
+
+  useEffect(() => {
+    if (!groupId || !isOwnMember) { setSentNotices([]); return; }
     return subscribeGroupNotices(groupId, (notices) => {
       setSentNotices(
         notices
@@ -46,7 +59,7 @@ export function useClassRosterState() {
           .sort((a, b) => (b.createdAt?.toMillis?.() || 0) - (a.createdAt?.toMillis?.() || 0)),
       );
     });
-  }, [groupId]);
+  }, [groupId, isOwnMember]);
 
   const handleDeleteNotice = async (noticeId) => {
     if (!window.confirm('Delete this notice? It will be removed from your class\'s feed.')) return;

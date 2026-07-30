@@ -106,7 +106,16 @@ export async function ensureManualVerifyRequest(role, details) {
   } catch (err) {
     // Best-effort background safety net — never let this block or throw
     // out of a caller's primary save/signup flow.
-    console.warn('[manualVerifyRequests] ensureManualVerifyRequest failed', err);
+    //
+    // A repeat call (profile re-save, repeat app load) after the doc
+    // already exists is EXPECTED to be rejected here — the create rule's
+    // `!exists()` guard denies it on purpose, as the idempotency
+    // safeguard described above. That's not a real failure, so it's
+    // swallowed silently instead of spamming the console with a
+    // permission-denied warning on every load after the first.
+    if (err?.code !== 'permission-denied') {
+      console.warn('[manualVerifyRequests] ensureManualVerifyRequest failed', err);
+    }
   }
 }
 
