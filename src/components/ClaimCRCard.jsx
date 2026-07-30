@@ -145,15 +145,14 @@ export default function ClaimCRCard({ groupId, profile }) {
   if (ownRole === null) return null;
   if (ownRole === 'cr' || ownRole === 'acr') return null;
 
+  // Join-pending is JoinStatusCard's state to own (it renders directly
+  // above this card on Profile.jsx and already covers not-requested/
+  // pending/rejected join states in full, with CR/ACR contact info).
+  // Showing a second "join request pending" card here duplicated that
+  // message verbatim — render nothing instead and let JoinStatusCard be
+  // the single source of truth for this state.
   if (ownJoinStatus === 'pending' && ownRequestStatus !== 'pending') {
-    return (
-      <div className="card" style={{ padding: 14, marginBottom: 16 }}>
-        <div style={{ fontSize: 13, fontWeight: 700, marginBottom: 4 }}>Join request pending</div>
-        <p style={{ fontSize: 12, color: 'var(--muted)' }}>
-          You need to be an approved member of this class before claiming CR. Your join request is waiting on your class's CR/ACR — once approved, come back here to claim CR.
-        </p>
-      </div>
-    );
+    return null;
   }
 
   if (ownRequestStatus === 'pending' || claimState === 'sent') {

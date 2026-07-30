@@ -285,6 +285,28 @@ service cloud.firestore {
       allow delete: if false;
     }
 
+    // Collection-group read for 'students', mirroring the roles/members
+    // pattern above (see match /{path=**}/roles/{roleId}). The nested
+    // match /students/{dept}/{batch}/{uid} block only covers direct-path
+    // get()s; it does NOT cover the collectionGroup('students') query
+    // that pullProfile() in firebaseSync.js (and staffSync.js's
+    // getStaffDisplayInfo) issues when a client doesn't yet know its own
+    // dept/batch (fresh device, cleared cache, etc.) — that fallback
+    // looks up a profile by uid alone, across all dept/batch prefixes.
+    // Without this separate rule the query was rejected outright for
+    // every caller, even the profile's own owner querying their own uid,
+    // because Firestore never matches list/collectionGroup reads against
+    // a literal-segment nested match block — only this wildcard-prefix
+    // form does. This was the actual root cause of the "keeps asking to
+    // fill up profile again" bug: the doc was written fine, but every
+    // read-back through the fallback path 403'd. Scoped identically to
+    // the nested block's own read rule above — this widens no one's
+    // access, it only makes the already-intended access work for this
+    // query shape.
+    match /{path=**}/students/{uid} {
+      allow read: if isSignedIn() && (request.auth.uid == uid || isAdmin() || isHeadOfOps());
+    }
+
     // -------------------------------------------------------------
     // Root user doc — Phase E (push notifications). Only field ever
     // written here client-side is fcmTokens (see src/lib/push.js
@@ -2077,6 +2099,28 @@ service cloud.firestore {
       // NOTE: no `resources` subcollection here by design — see the
       // comment in groupSync.js. Content moderation belongs in the
       // existing Question Bank system, not a parallel one.
+    }
+
+    // Collection-group read for 'facultyAssignments', same pattern as
+    // roles/members/students above. The nested
+    // match /groups/{groupId}/facultyAssignments/{assignmentId} block
+    // only covers direct-path get()s within a single known group; it
+    // does NOT cover the collectionGroup('facultyAssignments') query
+    // that the Admin dashboard and Faculty module issue to list a
+    // faculty member's (or all) active assignments across every group
+    // at once (filtered by status, ordered by createdAt — see
+    // firestore.indexes.json). Without this separate rule that query was
+    // rejected outright regardless of caller. Scoped to Admin/faculty
+    // only (not the full isGroupMember() OR from the nested block above,
+    // since isGroupMember() needs a concrete groupId — this query
+    // spans every group at once, and both actual callers, the Admin
+    // dashboard and a faculty member checking their own assignments,
+    // are already covered by isAdmin()/isFaculty()) — this widens no
+    // one's access beyond what those two roles already have elsewhere,
+    // it only makes that already-intended access work for this query
+    // shape.
+    match /{path=**}/facultyAssignments/{assignmentId} {
+      allow read: if isAdmin() || isFaculty(request.auth.uid);
     }
 
     // -------------------------------------------------------------
