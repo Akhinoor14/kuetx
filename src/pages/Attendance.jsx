@@ -7,7 +7,6 @@ import {
   getProfile, getRoutinePreviewDate, isRoutineHoliday
 } from '../store/store';
 import { getAllCourses } from '../store/curriculumStore';
-import TeacherSection from '../components/TeacherSection';
 import { getGroupId } from '../lib/groupUtils';
 import { subscribeCRStatus, subscribeRoutine, subscribePlannerSettings } from '../lib/groupSync';
 import { useCanEditGroup } from '../hooks/useCanEditGroup';
