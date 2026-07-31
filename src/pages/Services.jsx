@@ -129,13 +129,7 @@ function useVisibleServices() {
   const [allServices, setAllServices] = useState(null);
   const deactivatedUids = useDeactivatedProviderUids();
 
-  useEffect(() => {
-    console.log('[Services] subscribeAllServices attaching…');
-    return subscribeAllServices((list) => {
-      console.log('[Services] subscribeAllServices fired, count =', list.length);
-      setAllServices(list);
-    });
-  }, []);
+  useEffect(() => subscribeAllServices(setAllServices), []);
 
   const stillResolving = allServices === null || deactivatedUids === null;
   const services = stillResolving
@@ -157,7 +151,31 @@ export default function Services() {
   const services = useVisibleServices();
 
   if (services === null) {
-    return <div style={{ padding: 32, textAlign: 'center', color: 'var(--muted)' }}>Loading…</div>;
+    return (
+      <div className="page-enter page-container content-page-bg">
+        <div style={{ fontSize: 18, fontWeight: 800, color: 'var(--text)', marginBottom: 16 }}>Services</div>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 12 }}>
+          {SERVICE_TYPES.map((type) => (
+            <div
+              key={type}
+              className="card kuetx-skeleton-pulse"
+              style={{
+                padding: 16, border: '1px solid var(--border)',
+                display: 'flex', flexDirection: 'column', gap: 10,
+              }}
+            >
+              <div style={{ width: 40, height: 40, borderRadius: 12, background: 'var(--border)' }} />
+              <div style={{ width: '70%', height: 14, borderRadius: 4, background: 'var(--border)' }} />
+              <div style={{ width: '45%', height: 18, borderRadius: 6, background: 'var(--border)' }} />
+            </div>
+          ))}
+        </div>
+        <style>{`
+          .kuetx-skeleton-pulse { animation: kuetxPulse 1.1s ease-in-out infinite; }
+          @keyframes kuetxPulse { 0%, 100% { opacity: 0.55; } 50% { opacity: 1; } }
+        `}</style>
+      </div>
+    );
   }
 
   // NOTE: previously this returned an early "no providers yet" page and
@@ -246,7 +264,38 @@ export function CategoryShopList() {
   const Icon = CATEGORY_ICONS[categoryType] || Store;
 
   if (services === null) {
-    return <div style={{ padding: 32, textAlign: 'center', color: 'var(--muted)' }}>Loading…</div>;
+    return (
+      <div className="page-enter page-container content-page-bg">
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
+          <div style={{
+            width: 36, height: 36, borderRadius: 10, background: 'var(--accentSoft)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+          }}>
+            <Icon size={18} color="var(--accent)" />
+          </div>
+          <div style={{ fontSize: 18, fontWeight: 800, color: 'var(--text)' }}>{categoryLabel}</div>
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+          {[0, 1, 2].map((i) => (
+            <div
+              key={i}
+              className="card kuetx-skeleton-pulse"
+              style={{ padding: 16, border: '1px solid var(--border)', display: 'flex', alignItems: 'center', gap: 12 }}
+            >
+              <div style={{ width: 44, height: 44, borderRadius: 12, background: 'var(--border)', flexShrink: 0 }} />
+              <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 6 }}>
+                <div style={{ width: '35%', height: 12, borderRadius: 4, background: 'var(--border)' }} />
+                <div style={{ width: '60%', height: 15, borderRadius: 4, background: 'var(--border)' }} />
+              </div>
+            </div>
+          ))}
+        </div>
+        <style>{`
+          .kuetx-skeleton-pulse { animation: kuetxPulse 1.1s ease-in-out infinite; }
+          @keyframes kuetxPulse { 0%, 100% { opacity: 0.55; } 50% { opacity: 1; } }
+        `}</style>
+      </div>
+    );
   }
 
   const activeShops = categoryServices.filter((s) => s.status !== 'dormant');
