@@ -41,7 +41,7 @@ export const FOUNDER_CATEGORIES = [
       { key: 'cl-apps', label: 'CL Applications', getCount: (ctx) => ctx.clApplications },
       { key: 'cr-req', label: 'CR Requests', getCount: (ctx) => ctx.crRequests },
       { key: 'cr-leave', label: 'CR Leave Requests', getCount: (ctx) => ctx.leaveRequests },
-      { key: 'manual-verify', label: 'Faculty Blue Tick / Manual Verification', getCount: (ctx) => ctx.manualVerifyRequests },
+      { key: 'manual-verify', label: 'Student Manual Verification', getCount: (ctx) => ctx.manualVerifyRequests },
       { key: 'qb-uploads', label: 'Question Bank (Upload / Review)', getCount: (ctx) => ctx.qbUploadRequests },
       { key: 'provider-verify', label: 'Service Provider Verification', getCount: (ctx) => ctx.providerVerifyRequests },
     ],

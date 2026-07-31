@@ -306,7 +306,12 @@ function ApprovalsView({ onBack, onSelectCategory, countCtx }) {
   };
 
   const category = getFounderCategory('approvals');
-  const subCtx = { ...countCtx, clApplications: clApplications?.length || 0, crRequests: allCrRequests.length, leaveRequests: allLeaveRequests.length, manualVerifyRequests: manualVerifyRequests?.length || 0, providerVerifyRequests: providerVerifyRequests?.length || 0 };
+  // Tab badge/overview count reflects student-only requests, matching what
+  // the tab actually shows now — a stray legacy faculty-role doc (see the
+  // manual-verify subTab block below) shouldn't inflate this number, since
+  // it's not something approved from here.
+  const studentManualVerifyCount = (manualVerifyRequests || []).filter((r) => r.role !== 'faculty').length;
+  const subCtx = { ...countCtx, clApplications: clApplications?.length || 0, crRequests: allCrRequests.length, leaveRequests: allLeaveRequests.length, manualVerifyRequests: studentManualVerifyCount, providerVerifyRequests: providerVerifyRequests?.length || 0 };
 
   return (
     <CategoryShell view="approvals" onSelect={onSelectCategory} countCtx={countCtx}>
@@ -362,38 +367,26 @@ function ApprovalsView({ onBack, onSelectCategory, countCtx }) {
       )}
 
       {subTab === 'manual-verify' && (() => {
-        // BUGFIX (Founder couldn't tell faculty and student requests
-        // apart at a glance): this tab used to render both roles as one
-        // flat, mixed list, distinguished only by an inline "— Faculty" /
-        // "— Student" fragment inside each row's label. With more than a
-        // couple of pending requests that's easy to misread before
-        // clicking Approve/Reject, and faculty vs. student approval
-        // means genuinely different verification data (institutional
-        // email + Google login cross-check for faculty; roll number for
-        // students). Split into two labeled groups by `r.role` — same
-        // underlying list/data/actions, no change to
-        // subscribeManualVerifyRequests or approve/rejectManualVerifyRequest.
+        // CORRECTION: this tab is student-only now. It used to also show
+        // a "Faculty Blue Tick" group sourced from manualVerifyRequests
+        // (role === 'faculty'), which looked like a second, parallel
+        // faculty-approval flow — but the actual, current faculty
+        // verification UI is the separate Faculty → Signup Requests tab
+        // (adminVerifyFaculty(), which is "THE way verifiedAt gets set
+        // now" per facultySync.js). manualVerifyRequests' faculty role is
+        // a leftover bridge from the old magic-link mechanism
+        // (approveManualVerifyRequest → verifiedFacultyEmails →
+        // syncFacultyVerificationStatus) that's no longer the real path —
+        // showing it here as if it were "the" faculty approval screen was
+        // the actual labeling bug, not just a missing split. Any stray
+        // faculty-role doc that still shows up (old/pre-migration data)
+        // is shown as a dead-end pointer to the correct tab instead of a
+        // second Approve button, so nobody approves faculty from here by
+        // mistake.
         const facultyRequests = (manualVerifyRequests || []).filter((r) => r.role === 'faculty');
         const studentRequests = (manualVerifyRequests || []).filter((r) => r.role !== 'faculty');
         return (
           <>
-            <Section title={`Faculty Blue Tick${facultyRequests.length ? ` (${facultyRequests.length})` : ''}`}>
-              {manualVerifyLoading && <EmptyState>Loading…</EmptyState>}
-              {!manualVerifyLoading && facultyRequests.length === 0 && <EmptyState>Nothing pending.</EmptyState>}
-              {facultyRequests.map((r) => (
-                <ApprovalRow key={r.id}
-                  label={`${r.name || 'Unknown'} — ${r.email}${r.dept ? ` — ${r.dept}` : ''}`}
-                  // Faculty accounts sign in with a personal Gmail now (Auth
-                  // Simplification migration) — showing it alongside the
-                  // self-reported institutional email above lets the Founder
-                  // sanity-check the two actually look like the same person
-                  // before approving.
-                  sublabel={r.googleEmail ? `Google login: ${r.googleEmail}` : null}
-                  onApprove={() => handle(approveManualVerifyRequest, r.id)}
-                  onReject={() => handle(rejectManualVerifyRequest, r.id)}
-                />
-              ))}
-            </Section>
             <Section title={`Student Manual Verification${studentRequests.length ? ` (${studentRequests.length})` : ''}`}>
               {manualVerifyLoading && <EmptyState>Loading…</EmptyState>}
               {!manualVerifyLoading && studentRequests.length === 0 && <EmptyState>Nothing pending.</EmptyState>}
@@ -405,6 +398,19 @@ function ApprovalsView({ onBack, onSelectCategory, countCtx }) {
                 />
               ))}
             </Section>
+            {facultyRequests.length > 0 && (
+              <Section title={`Faculty requests found here (${facultyRequests.length}) — go to Faculty tab instead`}>
+                <div style={{ fontSize: 12.5, color: 'var(--muted)', marginBottom: 8 }}>
+                  These are leftover entries from an old verification path and are not approved from
+                  here. Go to <strong>Faculty → Signup Requests</strong> to verify them.
+                </div>
+                {facultyRequests.map((r) => (
+                  <div key={r.id} className="card" style={{ padding: 8, marginBottom: 4, fontSize: 13 }}>
+                    {r.name || 'Unknown'} — {r.email}{r.dept ? ` — ${r.dept}` : ''}
+                  </div>
+                ))}
+              </Section>
+            )}
           </>
         );
       })()}
@@ -2378,7 +2384,10 @@ export default function AdminDashboard() {
 
   useEffect(() => subscribePendingRollUnlockRequests(setRollRequests), []);
   useEffect(() => { listPendingFlags({}).then((f) => setEmailFlagCount(f.length)).catch(() => {}); }, []);
-  useEffect(() => subscribeManualVerifyRequests((reqs) => setManualVerifyCount(reqs.length)), []);
+  // Student-only count (see AdminDashboard's ApprovalsView manual-verify
+  // subTab comment) — a stray legacy faculty-role doc here isn't approved
+  // from this tab, so it shouldn't inflate the top-level Approvals badge.
+  useEffect(() => subscribeManualVerifyRequests((reqs) => setManualVerifyCount(reqs.filter((r) => r.role !== 'faculty').length)), []);
   useEffect(() => subscribeAllQBUploadRequests((reqs) => setQbUploadCount(reqs.length)), []);
   useEffect(() => subscribeProviderVerifyRequests((reqs) => setProviderVerifyCount(reqs.length)), []);
 
