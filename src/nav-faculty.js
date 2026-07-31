@@ -75,25 +75,6 @@ export const NAV_FACULTY = [
         ],
       },
       {
-        // Services marketplace (MULTI_CATEGORY_SERVICES_PLAN.md) — same
-        // /services/category/:type routes the student shell uses,
-        // unguarded by role in App.jsx. Mirrors nav.js's student-side
-        // Services subgroup exactly (5 category items, not one generic
-        // "Services" link) so this section shows the real category
-        // cards (Salon/Food/Pharmacy/Stationery/Online Mart) directly,
-        // the same as the student Campus Life page's Services section.
-        name: 'Services',
-        hubPath: '/services',
-        hubIcon: 'Store',
-        items: [
-          { id: 'f-services-salon',      label: 'Salon',       icon: 'Scissors',        path: '/services/category/salon' },
-          { id: 'f-services-hotel',      label: 'Food',        icon: 'UtensilsCrossed', path: '/services/category/hotel' },
-          { id: 'f-services-medicine',   label: 'Pharmacy',    icon: 'Cross',           path: '/services/category/medicine' },
-          { id: 'f-services-bookstore',  label: 'Stationery',  icon: 'BookOpen',        path: '/services/category/bookstore' },
-          { id: 'f-services-onlinemart', label: 'Online Mart', icon: 'ShoppingBag',     path: '/services/category/onlinemart' },
-        ],
-      },
-      {
         // Short, no-symbol name to match nav.js's subgroup naming
         // convention (e.g. 'Daily Academics', 'Academic Core') and avoid
         // wrapping on narrow cards.
@@ -107,6 +88,28 @@ export const NAV_FACULTY = [
           // destination as the student nav.js, not faculty-specific pages.
           { id: 'f-settings', label: 'Settings', icon: 'Settings', path: '/settings' },
           { id: 'f-about', label: 'About', icon: 'Info', path: '/about' },
+        ],
+      },
+      {
+        // Services marketplace (MULTI_CATEGORY_SERVICES_PLAN.md) — same
+        // /services/category/:type routes the student shell uses,
+        // unguarded by role in App.jsx. Mirrors nav.js's student-side
+        // Services subgroup exactly (5 category items, not one generic
+        // "Services" link) so this section shows the real category
+        // cards (Salon/Food/Pharmacy/Stationery/Online Mart) directly,
+        // the same as the student Campus Life page's Services section.
+        // Placed LAST (after Communication, Resources) per explicit
+        // request — an occasional-use campus utility, not something
+        // that needs top billing in the sidebar order.
+        name: 'Services',
+        hubPath: '/services',
+        hubIcon: 'Store',
+        items: [
+          { id: 'f-services-salon',      label: 'Salon',       icon: 'Scissors',        path: '/services/category/salon' },
+          { id: 'f-services-hotel',      label: 'Food',        icon: 'UtensilsCrossed', path: '/services/category/hotel' },
+          { id: 'f-services-medicine',   label: 'Pharmacy',    icon: 'Cross',           path: '/services/category/medicine' },
+          { id: 'f-services-bookstore',  label: 'Stationery',  icon: 'BookOpen',        path: '/services/category/bookstore' },
+          { id: 'f-services-onlinemart', label: 'Online Mart', icon: 'ShoppingBag',     path: '/services/category/onlinemart' },
         ],
       },
     ],

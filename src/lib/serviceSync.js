@@ -79,6 +79,41 @@ export const SERVICE_TYPE_LABELS = {
 
 export const SERVICE_TYPES = Object.keys(SERVICE_TYPE_LABELS);
 
+// Bengali labels for the same five categories — used on provider-facing
+// screens (Role Select's provider-form, ProviderVerificationPending)
+// where the request is to keep the whole flow in Bengali. Kept separate
+// from SERVICE_TYPE_LABELS above rather than translating it in place,
+// since that map is already relied on by the English student-facing
+// Services grid and Dashboard preview row — changing its values there
+// would change UI text no one asked to change. Same five keys, same
+// SERVICE_TYPES list; only the label text differs.
+export const SERVICE_TYPE_LABELS_BN = {
+  salon: 'সেলুন',
+  hotel: 'খাবার (হোটেল)',
+  medicine: 'ফার্মেসি',
+  bookstore: 'স্টেশনারি',
+  onlinemart: 'অনলাইন মার্ট',
+};
+
+// Provider SIGNUP-only category list — deliberately separate from
+// SERVICE_TYPES/CATEGORY_ICONS above. SERVICE_TYPES is the student-facing
+// Services grid's category set (exactly five cards, unchanged by this).
+// A provider whose business doesn't fit any of those five still needs
+// somewhere to say so at signup/verification time (Role Select's
+// provider-form, ProviderVerificationPending, AdminDashboard's approval
+// queue) — 'other' with a free-text serviceTypeOther label covers that.
+// This account-level serviceType is NOT the same thing as a service's
+// category shown to students; a Founder can always follow up with an
+// 'other' provider and, once there's real demand for a 6th category,
+// promote it into SERVICE_TYPES/CATEGORY_ICONS properly instead of
+// leaving it as a permanent free-text bucket.
+export const PROVIDER_SIGNUP_TYPES = [...SERVICE_TYPES, 'other'];
+
+export const PROVIDER_SIGNUP_TYPE_LABELS_BN = {
+  ...SERVICE_TYPE_LABELS_BN,
+  other: 'অন্যান্য',
+};
+
 /**
  * Creates a new services/{serviceId} doc for a verified provider (§2, §5.1).
  * Called once, right after Phase 1 verification, from the provider

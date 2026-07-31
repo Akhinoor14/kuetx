@@ -11,6 +11,7 @@ import { useEffect, useState } from 'react';
 import { Phone, Clock, XCircle } from 'lucide-react';
 import { auth } from '../../lib/firebase';
 import { resubmitProviderRequest, getProviderPhone } from '../../lib/providerSync';
+import { SERVICE_TYPES, PROVIDER_SIGNUP_TYPES, PROVIDER_SIGNUP_TYPE_LABELS_BN } from '../../lib/serviceSync';
 
 const FOUNDER_PHONE = '01724812042';
 
@@ -18,6 +19,9 @@ export default function ProviderVerificationPending({ providerProfile }) {
   const isRejected = providerProfile?.status === 'rejected';
   const [name, setName] = useState(providerProfile?.displayName || '');
   const [phone, setPhone] = useState('');
+  const [serviceType, setServiceType] = useState(providerProfile?.serviceType || SERVICE_TYPES[0]);
+  const [serviceTypeOther, setServiceTypeOther] = useState(providerProfile?.serviceTypeOther || '');
+  const [location, setLocation] = useState(providerProfile?.location || '');
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
   const [done, setDone] = useState(false);
@@ -35,13 +39,19 @@ export default function ProviderVerificationPending({ providerProfile }) {
 
   const resubmit = async () => {
     setError('');
-    if (!name.trim() || !phone.trim()) {
-      setError('নাম এবং ফোন নাম্বার দুটোই দিতে হবে।');
+    if (!name.trim() || !phone.trim() || !location.trim()) {
+      setError('নাম, ফোন নাম্বার এবং ঠিকানা — সবগুলো দিতে হবে।');
+      return;
+    }
+    if (serviceType === 'other' && !serviceTypeOther.trim()) {
+      setError('আপনার সার্ভিসের ধরনটি লিখুন।');
       return;
     }
     setSubmitting(true);
     try {
-      await resubmitProviderRequest(auth.currentUser.uid, { displayName: name, phone });
+      await resubmitProviderRequest(auth.currentUser.uid, {
+        displayName: name, phone, serviceType, serviceTypeOther, location,
+      });
       setDone(true);
     } catch (e) {
       setError('আবার পাঠাতে সমস্যা হয়েছে — একটু পর চেষ্টা করুন।');
@@ -61,12 +71,47 @@ export default function ProviderVerificationPending({ providerProfile }) {
       {!isRejected && (
         <>
           <div style={{ fontSize: 17, fontWeight: 700, color: 'var(--text)', marginBottom: 10 }}>
-            Verification pending
+            ভেরিফিকেশন অপেক্ষমান
           </div>
           <div style={{ fontSize: 13.5, color: 'var(--muted)', lineHeight: 1.7, marginBottom: 20 }}>
             আপনার সার্ভিস প্রোভাইডার একাউন্ট এখনো verify হয়নি। Founder সরাসরি
             যোগাযোগ করে আপনার একাউন্ট verify করবেন। verify হওয়ার পর এই পেজেই
             আপনার dashboard দেখতে পাবেন — কিছু করার দরকার নেই, শুধু অপেক্ষা করুন।
+          </div>
+
+          {/* Provider's own submitted name/phone (§3 request — separate
+              from the Founder's contact number below). Read from
+              providerProfile.displayName + the fetched contact/phone
+              sub-doc, so the person can confirm what they submitted is
+              correct while they wait, instead of only seeing whom to
+              call. */}
+          <div style={{
+            textAlign: 'left', marginBottom: 20,
+            padding: '12px 14px', borderRadius: 10,
+            background: 'var(--card)', border: '1px solid var(--border)',
+          }}>
+            <div style={{ fontSize: 11.5, color: 'var(--muted)', fontWeight: 600, marginBottom: 8 }}>
+              আপনার জমা দেওয়া তথ্য
+            </div>
+            <div style={{ fontSize: 13.5, color: 'var(--text)', marginBottom: 4 }}>
+              <strong>নাম:</strong> {providerProfile?.displayName || '—'}
+            </div>
+            <div style={{ fontSize: 13.5, color: 'var(--text)', marginBottom: 4 }}>
+              <strong>ফোন:</strong> {phone || '—'}
+            </div>
+            <div style={{ fontSize: 13.5, color: 'var(--text)', marginBottom: 4 }}>
+              <strong>সার্ভিসের ধরন:</strong>{' '}
+              {providerProfile?.serviceType === 'other'
+                ? (providerProfile?.serviceTypeOther || 'অন্যান্য')
+                : (PROVIDER_SIGNUP_TYPE_LABELS_BN[providerProfile?.serviceType] || '—')}
+            </div>
+            <div style={{ fontSize: 13.5, color: 'var(--text)' }}>
+              <strong>ঠিকানা:</strong> {providerProfile?.location || '—'}
+            </div>
+          </div>
+
+          <div style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 10 }}>
+            যোগাযোগের জন্য Founder:
           </div>
           <div style={{
             display: 'inline-flex', alignItems: 'center', gap: 8,
@@ -110,6 +155,48 @@ export default function ProviderVerificationPending({ providerProfile }) {
               <input
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
+                style={{
+                  width: '100%', marginTop: 6, padding: '10px 12px', borderRadius: 10,
+                  border: '1px solid var(--border)', background: 'var(--card)',
+                  color: 'var(--text)', fontSize: 14,
+                }}
+              />
+            </div>
+            <div>
+              <label style={{ fontSize: 12, color: 'var(--muted)', fontWeight: 600 }}>সার্ভিসের ধরন</label>
+              <select
+                value={serviceType}
+                onChange={(e) => setServiceType(e.target.value)}
+                style={{
+                  width: '100%', marginTop: 6, padding: '10px 12px', borderRadius: 10,
+                  border: '1px solid var(--border)', background: 'var(--card)',
+                  color: 'var(--text)', fontSize: 14,
+                }}
+              >
+                {PROVIDER_SIGNUP_TYPES.map((t) => (
+                  <option key={t} value={t}>{PROVIDER_SIGNUP_TYPE_LABELS_BN[t]}</option>
+                ))}
+              </select>
+            </div>
+            {serviceType === 'other' && (
+              <div>
+                <label style={{ fontSize: 12, color: 'var(--muted)', fontWeight: 600 }}>সার্ভিসের ধরন লিখুন</label>
+                <input
+                  value={serviceTypeOther}
+                  onChange={(e) => setServiceTypeOther(e.target.value)}
+                  style={{
+                    width: '100%', marginTop: 6, padding: '10px 12px', borderRadius: 10,
+                    border: '1px solid var(--border)', background: 'var(--card)',
+                    color: 'var(--text)', fontSize: 14,
+                  }}
+                />
+              </div>
+            )}
+            <div>
+              <label style={{ fontSize: 12, color: 'var(--muted)', fontWeight: 600 }}>দোকানের ঠিকানা</label>
+              <input
+                value={location}
+                onChange={(e) => setLocation(e.target.value)}
                 style={{
                   width: '100%', marginTop: 6, padding: '10px 12px', borderRadius: 10,
                   border: '1px solid var(--border)', background: 'var(--card)',

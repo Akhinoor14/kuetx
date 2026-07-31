@@ -29,6 +29,7 @@ import { GraduationCap, User, Sparkles, Store } from 'lucide-react';
 import { setAccountRole, persistAccountRoleToServer } from '../lib/accountRole';
 import { createFacultyAccountDoc } from '../lib/facultySync';
 import { createProviderShell } from '../lib/providerSync';
+import { SERVICE_TYPES, PROVIDER_SIGNUP_TYPES, PROVIDER_SIGNUP_TYPE_LABELS_BN } from '../lib/serviceSync';
 import { auth } from '../lib/firebase';
 
 const cardStyle = {
@@ -58,11 +59,38 @@ export default function RoleSelectScreen({ onSelect }) {
   // three cards) or 'provider-form' (the detail form), gated purely by
   // this component's own state, not the outer onboarding queue.
   const [step, setStep] = useState('roles');
+  // Required Terms & Conditions / Privacy Policy checkbox — must be
+  // checked before any role card can be chosen (§ policy requirement:
+  // every new user hits Role Select right after signup, before any role
+  // is decided, so this is the one guaranteed place to gate on it).
+  // Points at the same /privacy page linked from Navbar.jsx's hamburger
+  // menu (PrivacyPolicy.jsx — currently placeholder/trial content).
+  const [agreedToTerms, setAgreedToTerms] = useState(false);
   const [providerName, setProviderName] = useState('');
   const [providerPhone, setProviderPhone] = useState('');
+  // Founder-verification gap fix: 'salon' used to be hardcoded with no
+  // way for the provider to say otherwise, and there was no location
+  // field at all — Founder had nothing to actually verify a request
+  // against. serviceType uses PROVIDER_SIGNUP_TYPES — the same five
+  // plan-approved categories already defined once in serviceSync.js
+  // (SERVICE_TYPES), plus 'other' for a business that doesn't fit any of
+  // them (§ new-category-demand decision: keep 'other' at signup/
+  // verification time so a Founder can still onboard it, but don't add a
+  // sixth card to the student-facing Services grid until there's real
+  // demand for one — see serviceSync.js's PROVIDER_SIGNUP_TYPES comment).
+  // 'other' reveals a free-text box for serviceTypeOther. location is
+  // plain free-text address, no preset list.
+  const [providerServiceType, setProviderServiceType] = useState(SERVICE_TYPES[0]);
+  const [providerServiceTypeOther, setProviderServiceTypeOther] = useState('');
+  const [providerLocation, setProviderLocation] = useState('');
 
   const choose = async (role) => {
     setError('');
+
+    if (!agreedToTerms) {
+      setError('চালিয়ে যাওয়ার আগে গোপনীয়তা নীতি ও শর্তাবলী মেনে নিতে হবে।');
+      return;
+    }
 
     if (role === 'provider') {
       setStep('provider-form');
@@ -102,8 +130,12 @@ export default function RoleSelectScreen({ onSelect }) {
 
   const finishProviderSignup = async () => {
     setError('');
-    if (!providerName.trim() || !providerPhone.trim()) {
-      setError('নাম এবং ফোন নাম্বার দুটোই দিতে হবে।');
+    if (!providerName.trim() || !providerPhone.trim() || !providerLocation.trim()) {
+      setError('নাম, ফোন নাম্বার এবং ঠিকানা — সবগুলো দিতে হবে।');
+      return;
+    }
+    if (providerServiceType === 'other' && !providerServiceTypeOther.trim()) {
+      setError('আপনার সার্ভিসের ধরনটি লিখুন।');
       return;
     }
     setLoading(true);
@@ -115,7 +147,9 @@ export default function RoleSelectScreen({ onSelect }) {
       await createProviderShell(auth.currentUser.uid, {
         displayName: providerName,
         phone: providerPhone,
-        serviceType: 'salon',
+        serviceType: providerServiceType,
+        serviceTypeOther: providerServiceTypeOther,
+        location: providerLocation,
       });
       onSelect?.('provider');
     } catch (err) {
@@ -155,7 +189,7 @@ export default function RoleSelectScreen({ onSelect }) {
               <Store size={24} color="var(--accent)" />
             </div>
             <div style={{ fontWeight: 800, fontSize: 20, marginBottom: 6, color: 'var(--text)' }}>
-              Service Provider হিসেবে যোগ দিন
+              সার্ভিস প্রোভাইডার হিসেবে যোগ দিন
             </div>
             <div style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.5 }}>
               সাবমিট করার পর Founder সরাসরি যোগাযোগ করে verify করবেন।
@@ -182,6 +216,50 @@ export default function RoleSelectScreen({ onSelect }) {
                 value={providerPhone}
                 onChange={(e) => setProviderPhone(e.target.value)}
                 placeholder="01XXXXXXXXX"
+                style={{
+                  width: '100%', marginTop: 6, padding: '10px 12px', borderRadius: 10,
+                  border: '1px solid var(--border)', background: 'var(--card)',
+                  color: 'var(--text)', fontSize: 14,
+                }}
+              />
+            </div>
+            <div>
+              <label style={{ fontSize: 12, color: 'var(--muted)', fontWeight: 600 }}>সার্ভিসের ধরন</label>
+              <select
+                value={providerServiceType}
+                onChange={(e) => setProviderServiceType(e.target.value)}
+                style={{
+                  width: '100%', marginTop: 6, padding: '10px 12px', borderRadius: 10,
+                  border: '1px solid var(--border)', background: 'var(--card)',
+                  color: 'var(--text)', fontSize: 14,
+                }}
+              >
+                {PROVIDER_SIGNUP_TYPES.map((t) => (
+                  <option key={t} value={t}>{PROVIDER_SIGNUP_TYPE_LABELS_BN[t]}</option>
+                ))}
+              </select>
+            </div>
+            {providerServiceType === 'other' && (
+              <div>
+                <label style={{ fontSize: 12, color: 'var(--muted)', fontWeight: 600 }}>সার্ভিসের ধরন লিখুন</label>
+                <input
+                  value={providerServiceTypeOther}
+                  onChange={(e) => setProviderServiceTypeOther(e.target.value)}
+                  placeholder="যেমন: মোবাইল সার্ভিসিং"
+                  style={{
+                    width: '100%', marginTop: 6, padding: '10px 12px', borderRadius: 10,
+                    border: '1px solid var(--border)', background: 'var(--card)',
+                    color: 'var(--text)', fontSize: 14,
+                  }}
+                />
+              </div>
+            )}
+            <div>
+              <label style={{ fontSize: 12, color: 'var(--muted)', fontWeight: 600 }}>দোকানের ঠিকানা</label>
+              <input
+                value={providerLocation}
+                onChange={(e) => setProviderLocation(e.target.value)}
+                placeholder="যেমন: KUET মেইন গেটের পাশে, ২য় তলা"
                 style={{
                   width: '100%', marginTop: 6, padding: '10px 12px', borderRadius: 10,
                   border: '1px solid var(--border)', background: 'var(--card)',
@@ -263,7 +341,7 @@ export default function RoleSelectScreen({ onSelect }) {
 
         <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap' }}>
           <div
-            style={{ ...cardStyle, opacity: loading ? 0.6 : 1, pointerEvents: loading ? 'none' : 'auto' }}
+            style={{ ...cardStyle, opacity: (loading || !agreedToTerms) ? 0.6 : 1, pointerEvents: (loading || !agreedToTerms) ? 'none' : 'auto' }}
             onClick={() => choose('student')}
             onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 12px 28px rgba(0,0,0,0.08)'; e.currentTarget.style.borderColor = 'var(--accent)'; }}
             onMouseLeave={(e) => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.borderColor = 'var(--border)'; }}
@@ -278,7 +356,7 @@ export default function RoleSelectScreen({ onSelect }) {
           </div>
 
           <div
-            style={{ ...cardStyle, opacity: loading ? 0.6 : 1, pointerEvents: loading ? 'none' : 'auto' }}
+            style={{ ...cardStyle, opacity: (loading || !agreedToTerms) ? 0.6 : 1, pointerEvents: (loading || !agreedToTerms) ? 'none' : 'auto' }}
             onClick={() => choose('teacher')}
             onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 12px 28px rgba(0,0,0,0.08)'; e.currentTarget.style.borderColor = 'var(--accent)'; }}
             onMouseLeave={(e) => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.borderColor = 'var(--border)'; }}
@@ -293,7 +371,7 @@ export default function RoleSelectScreen({ onSelect }) {
           </div>
 
           <div
-            style={{ ...cardStyle, opacity: loading ? 0.6 : 1, pointerEvents: loading ? 'none' : 'auto' }}
+            style={{ ...cardStyle, opacity: (loading || !agreedToTerms) ? 0.6 : 1, pointerEvents: (loading || !agreedToTerms) ? 'none' : 'auto' }}
             onClick={() => choose('provider')}
             onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 12px 28px rgba(0,0,0,0.08)'; e.currentTarget.style.borderColor = 'var(--accent)'; }}
             onMouseLeave={(e) => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = 'none'; e.currentTarget.style.borderColor = 'var(--border)'; }}
@@ -307,6 +385,38 @@ export default function RoleSelectScreen({ onSelect }) {
             <div style={{ fontWeight: 700, fontSize: 15, color: 'var(--text)' }}>Service Provider</div>
           </div>
         </div>
+
+        {/* Required Terms & Conditions / Privacy Policy checkbox — blocks
+            all three role cards above until checked (see choose()'s
+            agreedToTerms guard too). Opens /privacy in a new tab rather
+            than navigating this tab away, since RoleSelectScreen renders
+            as a full-screen blocking overlay outside the normal route
+            tree (see App.jsx) — leaving it via a normal Link could strand
+            the person mid-onboarding. */}
+        <label style={{
+          display: 'flex', alignItems: 'flex-start', gap: 10,
+          marginTop: 22, cursor: 'pointer', fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.6,
+        }}>
+          <input
+            type="checkbox"
+            checked={agreedToTerms}
+            onChange={(e) => { setAgreedToTerms(e.target.checked); setError(''); }}
+            style={{ marginTop: 2, width: 16, height: 16, flexShrink: 0, cursor: 'pointer' }}
+          />
+          <span>
+            আমি KUETx-এর{' '}
+            <a
+              href="/privacy"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ color: 'var(--accent)', fontWeight: 600, textDecoration: 'none' }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              গোপনীয়তা নীতি ও শর্তাবলী
+            </a>
+            {' '}পড়েছি এবং সম্মত আছি।
+          </span>
+        </label>
 
         {error && (
           <div style={{

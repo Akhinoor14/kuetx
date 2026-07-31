@@ -44,8 +44,9 @@ import {
 } from '../lib/manualVerifyRequests';
 import { subscribeAllQBUploadRequests, approveQBUpload, rejectQBUpload } from '../lib/qbUploadRequests';
 import {
-  subscribeProviderVerifyRequests, adminVerifyProvider, adminRejectProvider,
+  subscribeProviderVerifyRequests, adminVerifyProvider, adminRejectProvider, getProviderPhone,
 } from '../lib/providerSync';
+import { SERVICE_TYPE_LABELS } from '../lib/serviceSync';
 import QBReviewQueue from '../components/QBReviewQueue';
 import DeleteRequestQueue from '../components/DeleteRequestQueue';
 import QBUploadForm from '../components/QBUploadForm';
@@ -234,6 +235,14 @@ function ApprovalsView({ onBack, onSelectCategory, countCtx }) {
   const [leaveRequestsByGroup, setLeaveRequestsByGroup] = useState(null);
   const [manualVerifyRequests, setManualVerifyRequests] = useState(null);
   const [providerVerifyRequests, setProviderVerifyRequests] = useState(null);
+  // Bug fix: the pending-requests query only returns the parent
+  // providers/{uid} doc, which never has `phone` on it (it lives on the
+  // contact/phone sub-doc per firestore.rules' split — see
+  // providerSync.js's createProviderShell comment). Founder's approval
+  // list was silently showing "no phone" for every request. Fetch each
+  // pending request's real number here, keyed by uid, once the list
+  // updates.
+  const [providerPhonesByUid, setProviderPhonesByUid] = useState({});
   const [err, setErr] = useState('');
   const [subTab, setSubTab] = useUrlTabState('approvalsTab', 'cl-apps');
   const [loadWarning, setLoadWarning] = useState('');
@@ -245,6 +254,17 @@ function ApprovalsView({ onBack, onSelectCategory, countCtx }) {
   useEffect(() => withTimeout((cb) => subscribeAllCLApplications(cb), setClApplications, { onTimeout: flagSlowLoad }), []);
   useEffect(() => withTimeout((cb) => subscribeManualVerifyRequests(cb), setManualVerifyRequests, { onTimeout: flagSlowLoad }), []);
   useEffect(() => withTimeout((cb) => subscribeProviderVerifyRequests(cb), setProviderVerifyRequests, { onTimeout: flagSlowLoad }), []);
+  useEffect(() => {
+    if (!providerVerifyRequests || providerVerifyRequests.length === 0) return;
+    let cancelled = false;
+    Promise.all(
+      providerVerifyRequests.map((r) => getProviderPhone(r.uid).then((p) => [r.uid, p]).catch(() => [r.uid, ''])),
+    ).then((pairs) => {
+      if (cancelled) return;
+      setProviderPhonesByUid(Object.fromEntries(pairs));
+    });
+    return () => { cancelled = true; };
+  }, [providerVerifyRequests]);
   useEffect(() => { listAllGroups().then((gs) => setGroupIds(gs.map((g) => g.id))); }, []);
 
   useEffect(() => {
@@ -365,23 +385,30 @@ function ApprovalsView({ onBack, onSelectCategory, countCtx }) {
         <Section title="Service provider verification (Salon etc.)">
           {providerVerifyLoading && <EmptyState>Loading…</EmptyState>}
           {!providerVerifyLoading && providerVerifyRequests.length === 0 && <EmptyState>Nothing pending.</EmptyState>}
-          {(providerVerifyRequests || []).map((r) => (
-            <ApprovalRow key={r.uid}
-              label={`${r.displayName || 'Unknown'} — ${r.phone || 'no phone'} — ${r.serviceType || 'salon'}`}
-              onApprove={() => handle(adminVerifyProvider, r.uid)}
-              onReject={() => {
-                // Reject needs a reason (shown back to the provider on
-                // ProviderVerificationPending — Gap 6), unlike the other
-                // reject actions above which don't carry one. A plain
-                // prompt() is enough for Phase 1's manual, one-at-a-time
-                // review flow — no bulk UI needed yet (SERVICES_PROVIDER_
-                // PLAN.md §4 Step 4).
-                const reason = window.prompt(`Reason for rejecting ${r.displayName || 'this request'}?`, '');
-                if (reason === null) return; // cancelled
-                handle(adminRejectProvider, r.uid, reason);
-              }}
-            />
-          ))}
+          {(providerVerifyRequests || []).map((r) => {
+            const typeLabel = r.serviceType === 'other'
+              ? `Other: ${r.serviceTypeOther || 'unspecified'}`
+              : (SERVICE_TYPE_LABELS[r.serviceType] || r.serviceType || 'salon');
+            const realPhone = providerPhonesByUid[r.uid] || 'no phone';
+            return (
+              <ApprovalRow key={r.uid}
+                label={`${r.displayName || 'Unknown'} — ${realPhone} — ${typeLabel}`}
+                sublabel={r.location ? `ঠিকানা: ${r.location}` : 'ঠিকানা দেওয়া হয়নি'}
+                onApprove={() => handle(adminVerifyProvider, r.uid)}
+                onReject={() => {
+                  // Reject needs a reason (shown back to the provider on
+                  // ProviderVerificationPending — Gap 6), unlike the other
+                  // reject actions above which don't carry one. A plain
+                  // prompt() is enough for Phase 1's manual, one-at-a-time
+                  // review flow — no bulk UI needed yet (SERVICES_PROVIDER_
+                  // PLAN.md §4 Step 4).
+                  const reason = window.prompt(`Reason for rejecting ${r.displayName || 'this request'}?`, '');
+                  if (reason === null) return; // cancelled
+                  handle(adminRejectProvider, r.uid, reason);
+                }}
+              />
+            );
+          })}
         </Section>
       )}
     </CategoryShell>

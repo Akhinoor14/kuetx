@@ -49,7 +49,7 @@ export async function createProviderShell(uid, fields) {
   if (existing.exists()) return existing.data();
 
   const {
-    displayName, phone, serviceType,
+    displayName, phone, serviceType, serviceTypeOther, location,
   } = fields || {};
 
   const data = {
@@ -58,7 +58,19 @@ export async function createProviderShell(uid, fields) {
     rejectedReason: null,
     displayName: String(displayName || '').trim(),
     requestedAt: serverTimestamp(),
+    // One of serviceSync.js's PROVIDER_SIGNUP_TYPES — the five plan-
+    // approved SERVICE_TYPES plus 'other' for a business that doesn't fit
+    // any of them yet (decision: keep 'other' at signup/verification only,
+    // not promoted to the student-facing Services grid until there's real
+    // demand for a new category).
     serviceType: serviceType || 'salon',
+    // Only meaningful when serviceType === 'other' — the free-text label
+    // the provider typed in for their own category.
+    serviceTypeOther: serviceType === 'other' ? String(serviceTypeOther || '').trim() : '',
+    // Free-text shop/location address (Founder-verification gap fix) —
+    // Founder has no way to sanity-check or physically verify a request
+    // without knowing where the shop actually is.
+    location: String(location || '').trim(),
     serviceIds: [],
   };
   await setDoc(ref, data);
@@ -108,7 +120,7 @@ export async function getProviderPhone(uid) {
  */
 export async function resubmitProviderRequest(uid, fields) {
   const {
-    displayName, phone, serviceType,
+    displayName, phone, serviceType, serviceTypeOther, location,
   } = fields || {};
   const ref = providerDocRef(uid);
   await updateDoc(ref, {
@@ -116,6 +128,10 @@ export async function resubmitProviderRequest(uid, fields) {
     rejectedReason: null,
     ...(displayName !== undefined ? { displayName: String(displayName).trim() } : {}),
     ...(serviceType !== undefined ? { serviceType } : {}),
+    ...(serviceType !== undefined
+      ? { serviceTypeOther: serviceType === 'other' ? String(serviceTypeOther || '').trim() : '' }
+      : {}),
+    ...(location !== undefined ? { location: String(location).trim() } : {}),
     requestedAt: serverTimestamp(),
   });
   if (phone !== undefined) {

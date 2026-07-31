@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef, lazy, Suspense } from 'react';
-import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { ThemeProvider } from './hooks/useTheme';
 import { usePageTracker } from './hooks/usePageTracker';
 import { useModuleUsageTracker } from './hooks/useModuleUsageTracker';
@@ -87,6 +87,7 @@ const CategoryShopList = lazy(() => import('./pages/Services').then((m) => ({ de
 const ServiceDetail = lazy(() => import('./pages/ServiceDetail'));
 const ProviderDashboardPage = lazy(() => import('./pages/provider/ProviderDashboard'));
 const About = lazy(() => import('./pages/About'));
+const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy'));
 const ClassRoutine = lazy(() => import('./pages/ClassRoutine'));
 const ClassSetup = lazy(() => import('./pages/ClassSetup'));
 const ClassPlanner = lazy(() => import('./pages/ClassPlanner'));
@@ -231,6 +232,11 @@ function Layout({ authState, onboardingActive }) {
             <Route path="/notes" element={<Notes />} />
             <Route path="/settings" element={<Settings />} />
             <Route path="/about" element={<About />} />
+            {/* Publicly reachable (no route guard) — a brand-new account
+                still on the Role Select screen needs to be able to open
+                this before finishing signup, and it's also linked from
+                Navbar.jsx's hamburger menu. */}
+            <Route path="/privacy" element={<PrivacyPolicy />} />
             <Route path="/class-routine" element={<RequireStudentMode><RequireCR><ClassRoutine /></RequireCR></RequireStudentMode>} />
             <Route path="/class-setup" element={<RequireStudentMode><RequireCR><ClassSetup /></RequireCR></RequireStudentMode>} />
             <Route path="/class-planner" element={<RequireStudentMode><RequireCR><ClassPlanner /></RequireCR></RequireStudentMode>} />
@@ -514,6 +520,38 @@ async function buildQueue(isAnonymous) {
 function ProviderDashboardRoute() {
   const { providerProfile } = useIsProvider();
   return <ProviderDashboardPage providerProfile={providerProfile} />;
+}
+
+// BUGFIX: right after Role Select's provider-form step creates
+// providers/{uid} (status 'pending'), buildQueue() correctly returns an
+// empty queue (see its 'provider' branch comment) and the app falls
+// through to the normal shell — student-shaped sidebar/bottom-nav —
+// with nothing telling the brand-new provider that their request is
+// pending. They'd only ever see ProviderVerificationPending if they
+// happened to navigate to /provider themselves. This one-shot redirect
+// sends a freshly-created, not-yet-verified provider account straight to
+// /provider right after the onboarding queue drains, so RequireProvider's
+// pending screen is the first thing they see. Guarded by a sessionStorage
+// flag so it fires once per browser session, not on every navigation away
+// from /provider afterward.
+const PROVIDER_REDIRECT_FLAG = 'kuetx:providerPostSignupRedirectDone';
+
+function ProviderPostSignupRedirect({ queueBuilt, queueEmpty }) {
+  const { isProvider, isVerifiedProvider, isResolved } = useIsProvider();
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    if (!queueBuilt || !queueEmpty || !isResolved) return;
+    if (!isProvider || isVerifiedProvider) return;
+    if (location.pathname.startsWith('/provider')) return;
+    if (sessionStorage.getItem(PROVIDER_REDIRECT_FLAG)) return;
+
+    sessionStorage.setItem(PROVIDER_REDIRECT_FLAG, '1');
+    navigate('/provider', { replace: true });
+  }, [queueBuilt, queueEmpty, isResolved, isProvider, isVerifiedProvider, location.pathname, navigate]);
+
+  return null;
 }
 
 export default function App() {
@@ -818,6 +856,9 @@ export default function App() {
   return (
     <ThemeProvider>
       <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+        {queueBuilt && queue.length === 0 && (
+          <ProviderPostSignupRedirect queueBuilt={queueBuilt} queueEmpty={queue.length === 0} />
+        )}
         {current === 'role-select' && (
           <RoleSelectScreen
             onSelect={() => {

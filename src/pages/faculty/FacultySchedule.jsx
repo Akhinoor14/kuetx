@@ -255,7 +255,7 @@ export default function FacultySchedule() {
               <tr key={slot}>
                 <td style={{
                   padding: '6px 8px', borderBottom: '1px solid var(--border)', borderRight: '1px solid var(--border)',
-                  fontWeight: 700, fontSize: 11.5, color: 'var(--muted)', fontFamily: 'JetBrains Mono, monospace',
+                  fontWeight: 700, fontSize: 13, color: 'var(--muted)', fontFamily: 'JetBrains Mono, monospace',
                   whiteSpace: 'nowrap', background: breakSlot ? 'rgba(239,68,68,0.08)' : 'var(--bg)',
                 }}>
                   {slotPreview(slot)}
