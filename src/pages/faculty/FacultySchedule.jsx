@@ -285,7 +285,7 @@ export default function FacultySchedule() {
                       onClick={isEmptyCell && isVerified ? () => setAddAt({ day: d, slot }) : undefined}
                       title={
                         isEmptyCell
-                          ? (isVerified ? 'Add a class in this slot' : 'Blue Tick verification needed before you can add a class')
+                          ? (isVerified ? 'Add a class in this slot' : 'Teacher Verification needed before you can add a class')
                           : undefined
                       }
                       style={{

@@ -325,7 +325,7 @@ function NoticesTab({ groupId, isVerified, assignment }) {
 
   const handleSend = async () => {
     if (!isVerified) {
-      notify('Blue Tick verification is required before you can send notices.', 'error');
+      notify('Teacher Verification is required before you can send notices.', 'error');
       return;
     }
     if (!title.trim() || !body.trim()) {
@@ -414,14 +414,14 @@ function NoticesTab({ groupId, isVerified, assignment }) {
           className="accent-fill-glass"
           onClick={handleSend}
           disabled={sending || !isVerified}
-          title={!isVerified ? 'Blue Tick verification needed before you can send notices' : undefined}
+          title={!isVerified ? 'Teacher Verification needed before you can send notices' : undefined}
           style={{ padding: '9px 16px', borderRadius: 8, color: '#fff', fontWeight: 700, fontSize: 12.5, cursor: (sending || !isVerified) ? 'not-allowed' : 'pointer', opacity: (sending || !isVerified) ? 0.5 : 1 }}
         >
           {sending ? 'Sending…' : 'Send Notice'}
         </button>
         {!isVerified && (
           <div style={{ fontSize: 11, color: 'var(--muted)' }}>
-            🔒 Needs Blue Tick verification. Visit <Link to="/faculty/contact">Contact</Link> if you need help getting verified.
+            🔒 Needs Teacher Verification. Visit <Link to="/faculty/contact">Contact</Link> if you need help getting verified.
           </div>
         )}
       </div>
@@ -554,7 +554,7 @@ function ScheduleTab({ assignment, groupId, isVerified, onEditDayTime }) {
             className="accent-fill-glass"
             onClick={onEditDayTime}
             disabled={!isVerified}
-            title={!isVerified ? 'Blue Tick verification needed before you can set a class schedule' : undefined}
+            title={!isVerified ? 'Teacher Verification needed before you can set a class schedule' : undefined}
             style={{
               display: 'flex', alignItems: 'center', gap: 6, padding: '8px 14px', borderRadius: 8,
               color: '#fff', fontWeight: 700, fontSize: 12.5,
@@ -565,7 +565,7 @@ function ScheduleTab({ assignment, groupId, isVerified, onEditDayTime }) {
           </button>
           {!isVerified && (
             <div style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 6 }}>
-              🔒 Needs Blue Tick verification. Visit <Link to="/faculty/contact">Contact</Link> if you need help getting verified.
+              🔒 Needs Teacher Verification. Visit <Link to="/faculty/contact">Contact</Link> if you need help getting verified.
             </div>
           )}
         </div>
@@ -583,7 +583,7 @@ function ScheduleTab({ assignment, groupId, isVerified, onEditDayTime }) {
           <button
             onClick={onEditDayTime}
             disabled={!isVerified}
-            title={!isVerified ? 'Blue Tick verification needed before you can edit the class schedule' : undefined}
+            title={!isVerified ? 'Teacher Verification needed before you can edit the class schedule' : undefined}
             style={{
               display: 'flex', alignItems: 'center', gap: 6, padding: '8px 14px', borderRadius: 8,
               border: '1px solid var(--border)', background: 'var(--card)', color: 'var(--text)', fontWeight: 700, fontSize: 12.5,
@@ -594,7 +594,7 @@ function ScheduleTab({ assignment, groupId, isVerified, onEditDayTime }) {
           </button>
           {!isVerified && (
             <div style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 6 }}>
-              🔒 Needs Blue Tick verification. Visit <Link to="/faculty/contact">Contact</Link> if you need help getting verified.
+              🔒 Needs Teacher Verification. Visit <Link to="/faculty/contact">Contact</Link> if you need help getting verified.
             </div>
           )}
         </div>
@@ -1545,7 +1545,7 @@ function MarksTab({ assignment, groupId }) {
   if (!isFounderBypass && !facultyProfile?.verifiedAt) {
     return (
       <div style={{ color: 'var(--muted)', fontSize: 13, padding: '16px 0', lineHeight: 1.6 }}>
-        🔒 Marks entry needs Blue Tick verification first. Your request is already in the
+        🔒 Marks entry needs Teacher Verification first. Your request is already in the
         Founder&rsquo;s review queue — you&rsquo;ll get access here as soon as it&rsquo;s approved.
       </div>
     );

@@ -52,15 +52,17 @@ export const NAV_FACULTY = [
     ],
   },
   {
-    // "More" — communication (Meetings, Broadcast Notice) and reference/
-    // settings pages (Question Bank, Contact, Settings, About) that don't
-    // need their own bottom-nav slot but were previously unreachable on
-    // mobile (only visible via the desktop sidebar's separate Meetings/
-    // Notices/Tools groups, which the 4-button mobile bottom nav has no
-    // room for). Grouped into two subgroups by type — communication tools
-    // together, resource/settings tools together — rather than one flat
-    // list, so Meetings and Broadcast Notice (frequent, time-sensitive)
-    // don't get visually buried under Settings/About (rare, set-once).
+    // "More" — communication (Meetings, Broadcast Notice), the services
+    // marketplace, and reference/settings pages (Question Bank, Contact,
+    // Settings, About) that don't need their own bottom-nav slot but were
+    // previously unreachable on mobile. Split into THREE subgroups by
+    // type — communication tools, the services marketplace, and reference/
+    // settings tools — rather than folding Services into Resources: on
+    // desktop these subgroups get pulled out into fully independent
+    // top-level sidebar sections (see NAV_FACULTY_DESKTOP below), and
+    // Services needs to stand on its own there rather than be buried
+    // inside a "Resources" row, so it's split out here too rather than
+    // in the mobile config and desktop config disagreeing about grouping.
     group: 'More',
     subgroups: [
       {
@@ -73,31 +75,30 @@ export const NAV_FACULTY = [
         ],
       },
       {
+        // Services marketplace (MULTI_CATEGORY_SERVICES_PLAN.md) — same
+        // /services route the student shell uses, unguarded by role in
+        // App.jsx, so this was already reachable by a faculty account
+        // typing the URL directly; it just had no nav entry to discover
+        // it from. Its own subgroup (not folded into Resources) so it
+        // reads as its own destination — tapping through shows the same
+        // 5-category grid (Salon/Food/Pharmacy/Stationery/Online Mart)
+        // the student Services page shows, not a settings-page tile.
+        name: 'Services',
+        hubPath: '/services',
+        hubIcon: 'Store',
+        items: [
+          { id: 'f-services', label: 'Services', icon: 'Store', path: '/services' },
+        ],
+      },
+      {
         // Short, no-symbol name to match nav.js's subgroup naming
         // convention (e.g. 'Daily Academics', 'Academic Core') and avoid
-        // wrapping on narrow cards. Question Bank + Contact/Settings/About
-        // deliberately share one subgroup rather than splitting further —
-        // Question Bank alone in its own subgroup would leave a
-        // single-item section with awkward leftover space; grouped
-        // together they read as "everything else you reach for
-        // occasionally," which is accurate enough for both.
+        // wrapping on narrow cards.
         name: 'Resources',
         hubPath: '/faculty/resources',
         hubIcon: 'BookMarked',
         items: [
           { id: 'f-qbank', label: 'Question Bank', icon: 'BookMarked', path: '/faculty/question-bank' },
-          // Services marketplace (MULTI_CATEGORY_SERVICES_PLAN.md) — same
-          // /services route the student shell uses, unguarded by role in
-          // App.jsx, so this was already reachable by a faculty account
-          // typing the URL directly; it just had no nav entry to discover
-          // it from. Placed here rather than given its own subgroup: it's
-          // an occasional-use campus utility for a faculty account (same
-          // spirit as Question Bank/Contact in this same subgroup), not
-          // a frequent/time-sensitive one like Communication above, so it
-          // doesn't need its own bottom-nav slot or hero placement — a
-          // tile inside the existing "everything else" Resources section
-          // is enough for it to stop being effectively hidden.
-          { id: 'f-services', label: 'Services', icon: 'Store', path: '/services' },
           { id: 'f-contact', label: 'Contact', icon: 'Mail', path: '/faculty/contact' },
           // Settings/About are shared, role-agnostic routes — same
           // destination as the student nav.js, not faculty-specific pages.
@@ -120,3 +121,33 @@ export const NAV_FACULTY = [
     ],
   },
 ];
+
+// ── Desktop variant ──────────────────────────────────────────────────────────
+// On mobile, "More" bundles Communication + Services + Resources together
+// under one section label — that grouping exists purely because the
+// 4-button bottom nav has no room for extra top-level destinations.
+// Desktop's sidebar has no such space constraint, so each subgroup gets
+// promoted to its own independent top-level sidebar section instead,
+// exactly like Dashboard/Profile/My Classes/Schedule already are.
+export const NAV_FACULTY_DESKTOP = NAV_FACULTY.map((section) => {
+  if (section.group !== 'More' || !section.subgroups) return section;
+
+  return section.subgroups.map((sub) => ({
+    group: sub.name,
+    isSubgroup: true,
+    hubPath: sub.hubPath,
+    hubIcon: sub.hubIcon,
+    items: sub.items,
+  }));
+}).flat();
+
+// ── Mobile variant ──────────────────────────────────────────────────────────
+// Mobile keeps the original bundled "More > Communication / Services /
+// Resources" structure as-is — no separate transform needed, mirrors
+// nav.js's NAV_MOBILE = NAV pattern.
+export const NAV_FACULTY_MOBILE = NAV_FACULTY;
+
+/** Pick the right NAV_FACULTY structure for the current viewport — same shape as nav.js's getStudentNav. */
+export function getFacultyNav(isMobileNav) {
+  return isMobileNav ? NAV_FACULTY_MOBILE : NAV_FACULTY_DESKTOP;
+}

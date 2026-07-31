@@ -508,7 +508,7 @@ export default function FacultyClasses() {
               className="accent-fill-glass"
               onClick={() => setShowAdd(true)}
               disabled={!isVerified}
-              title={!isVerified ? 'Blue Tick verification needed before you can add a class' : undefined}
+              title={!isVerified ? 'Teacher Verification needed before you can add a class' : undefined}
               style={{
                 display: 'flex', alignItems: 'center', gap: 6, padding: '9px 14px', borderRadius: 8,
                 color: '#fff', fontWeight: 700, fontSize: 13,
@@ -522,7 +522,7 @@ export default function FacultyClasses() {
 
         {!isVerified && (
           <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 8 }}>
-            🔒 Adding a new class needs Blue Tick verification. You can still browse everything here — visit{' '}
+            🔒 Adding a new class needs Teacher Verification. You can still browse everything here — visit{' '}
             <span
               onClick={() => navigate('/faculty/contact')}
               style={{ color: 'var(--accent)', fontWeight: 700, cursor: 'pointer', textDecoration: 'underline' }}

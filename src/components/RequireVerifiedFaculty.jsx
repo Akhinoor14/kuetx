@@ -30,12 +30,12 @@ export default function RequireVerifiedFaculty({ children }) {
       <div style={{ padding: '48px 20px', textAlign: 'center', maxWidth: 420, margin: '0 auto' }}>
         <div style={{ marginBottom: 12 }}><Lock size={32} color="var(--muted)" /></div>
         <div style={{ fontSize: 15, fontWeight: 700, color: 'var(--text)', marginBottom: 8 }}>
-          Blue Tick verification required
+          Teacher Verification required
         </div>
         <div style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.6, marginBottom: 20 }}>
           Posting notices and entering student marks needs Founder-approved
           verification first. Your request is already in the review queue —
-          you&rsquo;ll get the Blue Tick once it&rsquo;s approved. Everything
+          you&rsquo;ll get Teacher Verification once it&rsquo;s approved. Everything
           else (classes, sessions, schedule) is available right away.
         </div>
         <Link to="/faculty" className="btn btn-primary btn-sm">Back to dashboard</Link>

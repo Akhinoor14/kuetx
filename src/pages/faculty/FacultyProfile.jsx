@@ -187,9 +187,12 @@ export default function FacultyProfile() {
           }}>✓ Profile updated!</div>
         )}
 
-        {/* ── Hero: avatar (top) + name (below), same minimal plain-card
-             layout as the student Profile hero. ── */}
-        <div className="profile-hero-plain" style={{
+        {/* ── Hero: avatar (top) + name (below). Now uses the same
+             .content-page-bg accent-wash background as the student
+             Profile hero (radial+linear accent gradient) instead of the
+             flat plain-card look, per updated design direction — faculty
+             profile should feel as premium as the student one. ── */}
+        <div className="profile-hero-accent-wash profile-hero-plain" style={{
           borderRadius: 20, padding: 'clamp(28px,5vw,40px) clamp(20px,4vw,32px)',
           display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
           gap: 14, position: 'relative', overflow: 'hidden', textAlign: 'center',
@@ -449,10 +452,22 @@ export default function FacultyProfile() {
                   <div style={{ display: 'flex', alignItems: 'center', gap: 10, paddingTop: 4, borderTop: '1px solid var(--border)', marginTop: 2 }}>
                     <Icons.CalendarDays size={16} color="var(--muted)" style={{ flexShrink: 0 }} />
                     <span style={{ fontSize: 12.5, color: 'var(--muted)' }}>
-                      Faculty member since {createdAt.toDate().toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
+                      {/* "Faculty member since" previously implied Founder-approved
+                          verification status — this is just the account's KUETx
+                          join/creation date (createdAt), unrelated to the
+                          "Get Verified" flag below. Relabeled to avoid that
+                          confusion. */}
+                      Joined KUETx in {createdAt.toDate().toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
                     </span>
                   </div>
                 )}
+              </div>
+              {/* Note: the checks above (email/profile/contact) are basic
+                  account-completeness signals, separate from Founder-approved
+                  Teacher Verification (see the "Get Verified" card above) —
+                  completing all of them does not itself grant verification. */}
+              <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 10, lineHeight: 1.5 }}>
+                These reflect your account setup, not Founder-approved Teacher Verification.
               </div>
             </Section>
 

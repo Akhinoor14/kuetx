@@ -167,7 +167,7 @@ export default function FacultyNoticeBroadcast() {
 
   const handleSend = async () => {
     if (!isVerified) {
-      notify('Blue Tick verification is required before you can send notices.', 'error');
+      notify('Teacher Verification is required before you can send notices.', 'error');
       return;
     }
     if (!title.trim() || !body.trim()) {
@@ -387,14 +387,14 @@ export default function FacultyNoticeBroadcast() {
                 className="accent-fill-glass"
                 onClick={handleSend}
                 disabled={sending || !isVerified}
-                title={!isVerified ? 'Blue Tick verification needed before you can send notices' : undefined}
+                title={!isVerified ? 'Teacher Verification needed before you can send notices' : undefined}
                 style={{ padding: '9px 14px', borderRadius: 8, color: '#fff', fontWeight: 700, fontSize: 13, cursor: (sending || !isVerified) ? 'not-allowed' : 'pointer', opacity: (sending || !isVerified) ? 0.5 : 1 }}
               >
                 {sending ? 'Sending…' : 'Send Notice'}
               </button>
               {!isVerified && (
                 <div style={{ fontSize: 11.5, color: 'var(--muted)' }}>
-                  🔒 Needs Blue Tick verification. Visit <Link to="/faculty/contact">Contact</Link> if you need help getting verified.
+                  🔒 Needs Teacher Verification. Visit <Link to="/faculty/contact">Contact</Link> if you need help getting verified.
                 </div>
               )}
             </div>

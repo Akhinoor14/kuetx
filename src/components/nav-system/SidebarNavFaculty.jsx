@@ -10,12 +10,18 @@
 // nav-faculty.js), so it's gated here the same way the student list gates
 // its Admin row — via filterNav — rather than left to render for everyone.
 
-import { NAV_FACULTY } from '../../nav-faculty';
+import { NAV_FACULTY, getFacultyNav } from '../../nav-faculty';
 import { filterNav } from '../../lib/modeFilter';
 import { NavList } from './SidebarNavShared';
+import { useIsMobileNav } from '../BottomNav';
 
 export default function SidebarNavFaculty({ location, onClose, isRealAdmin = false }) {
-  const filteredNav = filterNav(NAV_FACULTY, false, isRealAdmin);
+  // Same pattern as SidebarNavStudent.jsx's getStudentNav(isMobileNav) —
+  // desktop promotes Services to its own top-level row, mobile keeps it
+  // nested inside More > Resources.
+  const isMobileNav = useIsMobileNav();
+  const activeNav = getFacultyNav(isMobileNav);
+  const filteredNav = filterNav(activeNav, false, isRealAdmin);
 
   return (
     <NavList

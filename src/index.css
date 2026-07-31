@@ -9113,6 +9113,21 @@ body.schedule-fullscreen-active .mobile-bottom-nav {
   background-position: center;
 }
 
+/* ── Faculty profile hero accent-wash — same gradient recipe as
+   .content-page-bg (radial+linear accent wash) but WITHOUT its
+   min-height:100vh, which is meant for full-page wrappers and would
+   badly stretch a small hero card. Used to bring the faculty profile
+   hero in line with the student Profile hero's premium look.
+   Selector combines both classes (.profile-hero-plain.profile-hero-accent-wash)
+   for higher specificity than .profile-hero-plain alone, so this wins
+   regardless of declaration order. ── */
+.profile-hero-plain.profile-hero-accent-wash {
+  background:
+    radial-gradient(ellipse 900px 420px at 15% 0%, rgba(var(--accentRGB), 0.14), transparent 62%),
+    radial-gradient(ellipse 640px 360px at 100% 8%, rgba(var(--accentRGB), 0.07), transparent 55%),
+    linear-gradient(180deg, rgba(var(--accentRGB), 0.08) 0%, rgba(var(--accentRGB), 0.02) 360px, var(--bg) 620px);
+}
+
 /* ── Profile page: plain, minimal hero (replaces the old colorful
    gradient+noise-texture .hero-bg above for a cleaner, more
    professional look). Just a flat card background — no color wash. ── */
