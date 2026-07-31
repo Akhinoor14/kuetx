@@ -65,19 +65,25 @@ export default function AuthModal({ mode = 'login', isUpgrade = false, onClose, 
       // (check auth.currentUser?.isAnonymous) — link the Google account to
       // that same uid instead of starting a fresh sign-in, so local
       // IndexedDB data isn't orphaned.
-      if (isUpgrade && auth.currentUser?.isAnonymous) {
-        await upgradeWithGoogle();
-      } else {
-        await loginWithGoogle();
+      //
+      // BUGFIX: loginWithGoogle()/upgradeWithGoogle() are popup-first now
+      // (see firebaseAuth.js) — they resolve directly with the signed-in
+      // user in the common case, instead of always navigating the page
+      // away. Call onSuccess directly when that happens. They only fall
+      // back to a redirect (no return value, page navigates away) for the
+      // narrower case popups can't handle — that case is still picked up
+      // later by handleGoogleRedirectResult() + the onAuthChange listener
+      // in useFirebaseAuth.js, same as before.
+      const user = isUpgrade && auth.currentUser?.isAnonymous
+        ? await upgradeWithGoogle()
+        : await loginWithGoogle();
+      if (user) {
+        onSuccess?.(user, { linked: isUpgrade });
       }
-      // Both calls above trigger a full-page redirect to Google — they
-      // never resolve with a user here. Do NOT call onSuccess from this
-      // click handler; the page is about to navigate away, and
-      // handleGoogleRedirectResult() + the onAuthChange listener
-      // (useFirebaseAuth.js) pick up the result and call onSuccess once
-      // the person is bounced back into the app.
+      // else: fell back to redirect, page is navigating away — nothing
+      // more to do here.
     } catch (err) {
-      setError('Could not start Google sign-in. Please try again.');
+      setError('Could not sign in with Google. Please try again.');
       setLoading(false);
     }
   };
@@ -138,7 +144,7 @@ export default function AuthModal({ mode = 'login', isUpgrade = false, onClose, 
             <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
             <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
           </svg>
-          {loading ? 'রিডাইরেক্ট করা হচ্ছে…' : 'Google দিয়ে সাইন ইন করুন'}
+          {loading ? 'সাইন ইন করা হচ্ছে…' : 'Google দিয়ে সাইন ইন করুন'}
         </button>
 
         {error && (

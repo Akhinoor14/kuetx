@@ -25,6 +25,34 @@ export default function useFirebaseAuth() {
     // independently for the resulting auth state either way — this only
     // needs to catch the auth/credential-already-in-use edge case, which
     // getRedirectResult() is the one place that can surface.
+    //
+    // BUGFIX (real root cause of "stuck after Google sign-in", found by
+    // tracing a live console log across the redirect boundary): this
+    // component mounts under <React.StrictMode> (main.jsx), which
+    // deliberately mounts -> unmounts -> remounts every component once on
+    // initial load specifically to surface effects that aren't idempotent.
+    // This effect is exactly that kind of effect: getRedirectResult(auth)
+    // is NOT safe to call twice for the same completed redirect — Firebase
+    // consumes/clears the pending-redirect state on the FIRST call, so a
+    // second concurrent call (StrictMode's remount, firing this effect
+    // again a moment later) resolves with result.user === null even
+    // though the first call already had (or was about to have) the real
+    // user. Depending on microtask timing, either call can "win," which is
+    // why this reproduced as "sometimes silently stuck, no error thrown."
+    // The captured log confirms it: Google issued a real auth code
+    // (`code=4/0AXEQ...`) on the redirect back, but the app's own
+    // authReady/uid logs after that navigation still showed `uid= null`
+    // — getRedirectResult() was called, but not exactly once.
+    //
+    // Fix: a module-level guard ensures getRedirectResult(auth) is only
+    // ever actually invoked once per real page load, no matter how many
+    // times React (re)runs this effect. Module scope (not component state)
+    // is required here specifically because this must survive the
+    // mount/unmount/remount cycle StrictMode performs before the
+    // component's own state exists.
+    if (window.__kuetxRedirectResultChecked) return;
+    window.__kuetxRedirectResultChecked = true;
+
     handleGoogleRedirectResult().catch((err) => {
       if (err?.code === 'auth/credential-already-in-use') {
         // This Google account already belongs to a real, non-anonymous

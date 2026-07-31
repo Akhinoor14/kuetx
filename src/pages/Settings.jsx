@@ -185,13 +185,14 @@ export default function Settings() {
               <button
                 className="btn btn-primary"
                 onClick={async () => {
-                  // Redirect-based now (see firebaseAuth.js) — this
-                  // navigates the whole page to Google and back; it does
-                  // NOT resolve with a signed-in user here. The actual
-                  // sign-in completes after the page reloads, picked up
-                  // by handleGoogleRedirectResult() in useFirebaseAuth.js,
-                  // which is what actually updates firebaseUser via
-                  // onAuthChange above.
+                  // Popup-first now (see firebaseAuth.js) — usually
+                  // resolves right here with the signed-in user, picked
+                  // up by onAuthChange above. Falls back to a full-page
+                  // redirect only if the popup is blocked/unsupported; in
+                  // that case this call returns null and the sign-in
+                  // completes after the page reloads instead, picked up
+                  // the same way via handleGoogleRedirectResult() in
+                  // useFirebaseAuth.js.
                   try { await loginWithGoogle(); }
                   catch (err) { flash('✗ ' + (err.message || 'Could not start Google sign-in.'), 'error'); }
                 }}

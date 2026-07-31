@@ -11,12 +11,14 @@
 
 import {
   signInAnonymously,
+  signInWithPopup,
   signInWithRedirect,
   getRedirectResult,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   sendPasswordResetEmail,
   sendEmailVerification,
+  linkWithPopup,
   linkWithRedirect,
   linkWithCredential,
   EmailAuthProvider,
@@ -57,38 +59,62 @@ export const loginAnonymously = async () => {
 };
 
 // ─── Google Sign-In ───────────────────────────────────────────────────────────
-// Redirect-based, unconditionally, on every device (desktop included) —
-// not a popup-vs-redirect split based on detected environment. A popup
-// (signInWithPopup) can be silently blocked by popup-blockers or privacy
-// extensions, and frequently doesn't work at all inside mobile in-app
-// browsers (Facebook/Instagram/Messenger webviews). Since Google Sign-In
-// is now the ONLY way into the app, any chance of a blocked/broken popup
-// means the person can't get in at all — a full page navigation (redirect)
-// can never be blocked that way, since it never opens a second window.
+// BUGFIX (redirect sign-in silently stuck / getRedirectResult() always
+// null): this used to be unconditionally signInWithRedirect() everywhere,
+// reasoning that popups can be blocked by popup-blockers or break inside
+// mobile in-app webviews (Facebook/Instagram/Messenger). That reasoning
+// was right, but it missed a bigger, now-mandatory constraint: Firebase's
+// redirect flow relies on a cross-origin iframe between this app's domain
+// (kuetx.vercel.app) and the Firebase-hosted authDomain
+// (kuetx-8a184.firebaseapp.com) to hand the signed-in result back after
+// the redirect returns. Since Chrome M115 (already true on Firefox 109+/
+// Safari 16.1+), browsers that block third-party storage access break
+// that iframe silently — signInWithRedirect() itself succeeds and the
+// user completes sign-in on Google's side, but getRedirectResult() comes
+// back null on return, with no error thrown. See:
+// https://firebase.google.com/docs/auth/web/redirect-best-practices
+// The supported fixes are (a) serve the authDomain from this app's own
+// domain + Firebase Hosting proxy — a real infra change, not a code
+// change, or (b) use signInWithPopup() instead, which doesn't depend on
+// that iframe at all. We use (b) as the primary path now, since it's the
+// one that requires no hosting/DNS changes and fixes the flow immediately
+// on every desktop browser. Redirect is kept as an automatic fallback
+// only for the specific case popups genuinely can't handle (blocked, or
+// unsupported in an in-app webview), so that narrower case still degrades
+// gracefully instead of leaving the person stuck.
+
+const POPUP_UNSUPPORTED_CODES = new Set([
+  'auth/popup-blocked',
+  'auth/operation-not-supported-in-this-environment',
+  'auth/popup-closed-by-user', // treat as "try redirect", not a hard failure
+]);
 
 export const loginWithGoogle = async () => {
-  // Redirect navigates the whole page to Google and back — it can never be
-  // blocked by a popup-blocker or fail inside an in-app webview the way
-  // signInWithPopup can. There's no return value here because the page is
-  // about to navigate away; the signed-in user is picked up after the
-  // redirect completes by handleGoogleRedirectResult() below.
-  await signInWithRedirect(auth, googleProvider);
+  try {
+    const result = await signInWithPopup(auth, googleProvider);
+    return result.user;
+  } catch (err) {
+    if (POPUP_UNSUPPORTED_CODES.has(err?.code)) {
+      console.warn('[KUETx Auth] Popup sign-in unavailable, falling back to redirect:', err?.code);
+      await signInWithRedirect(auth, googleProvider);
+      return null; // page is navigating away; result picked up by handleGoogleRedirectResult()
+    }
+    throw err;
+  }
 };
 
-// The whole page reloads after Google sign-in on the redirect flow, so
-// there's no direct return value at the call site the way signInWithPopup
-// had. This must be called once during app startup (wired up in
-// useFirebaseAuth.js, alongside the existing onAuthChange listener) to
-// pick up the result of a redirect that just completed. Resolves to the
-// user on a successful redirect-based sign-in, or null if the app just
-// loaded normally (no redirect was in progress). Throws the original
-// Firebase error (e.g. auth/credential-already-in-use during an upgrade
-// attempt) if the redirect completed with a failure — callers should
-// catch this.
+// Only still needed for the redirect fallback path above (popup-blocked /
+// in-app-webview case). Resolves to the user if a redirect-based sign-in
+// completed, or null if the app just loaded normally (no redirect was in
+// progress, or this is the normal popup-based path where nothing gets
+// left pending). Throws the original Firebase error (e.g.
+// auth/credential-already-in-use during an upgrade attempt) if the
+// redirect completed with a failure — callers should catch this.
 export const handleGoogleRedirectResult = async () => {
   const result = await getRedirectResult(auth);
   return result?.user ?? null;
 };
+
 
 // ─── Email/Password ───────────────────────────────────────────────────────────
 
@@ -200,13 +226,24 @@ export const resetPassword = async (email) => {
 export const upgradeWithGoogle = async () => {
   const user = auth.currentUser;
   if (!user) throw new Error('No user logged in');
-  // Redirect, same reasoning as loginWithGoogle above. The
-  // auth/credential-already-in-use edge case (this Google account already
+  // Same popup-first / redirect-fallback reasoning as loginWithGoogle
+  // above. auth/credential-already-in-use (this Google account already
   // belongs to a real, non-anonymous account — can't link it to a new
-  // anonymous uid) now surfaces from getRedirectResult() after the page
-  // reloads, not from this call directly — handled where
-  // handleGoogleRedirectResult() is awaited (useFirebaseAuth.js).
-  await linkWithRedirect(user, googleProvider);
+  // anonymous uid) can surface directly from the popup call now; the
+  // redirect-fallback case still surfaces it from getRedirectResult()
+  // after the page reloads (handled in useFirebaseAuth.js) — both paths
+  // throw the same error code either way.
+  try {
+    const result = await linkWithPopup(user, googleProvider);
+    return result.user;
+  } catch (err) {
+    if (POPUP_UNSUPPORTED_CODES.has(err?.code)) {
+      console.warn('[KUETx Auth] Popup upgrade unavailable, falling back to redirect:', err?.code);
+      await linkWithRedirect(user, googleProvider);
+      return null;
+    }
+    throw err;
+  }
 };
 
 export const upgradeWithEmail = async (email, password, displayName) => {
