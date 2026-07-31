@@ -1352,20 +1352,21 @@ service cloud.firestore {
       allow read: if isAdmin() || isHeadOfOps();
     }
 
-    // Collection-group read for 'joinRequests', scoped to Admin/Head of
-    // Ops only — needed so the Founder's Approvals tab can list EVERY
-    // pending join request across every group in one query, not just the
-    // requests for groups they happen to already be a CL/CR/ACR of. This
-    // is the actual bootstrap fallback: a brand-new class with no CR/CL
-    // yet has nobody else who could approve its first student's
-    // joinRequests doc (see approveJoinRequest in groupSync.js and the
-    // /groups/{groupId}/joinRequests/{requestUid} rule below, which
-    // already grants isAdmin() read/create/update per-group — this just
-    // makes that same access work for the cross-group query shape the
-    // Approvals tab needs, same reasoning as the 'roles' collectionGroup
-    // rule above).
+    // Collection-group read for 'joinRequests', for the Founder's
+    // Approvals tab to list EVERY pending join request across every
+    // group in one query. Originally scoped to isAdmin()/isHeadOfOps()
+    // only — but a Campus Lead viewing their OWN group's Approvals tab
+    // got silently denied here (the query throws, subscribeAllPending
+    // JoinRequests's onSnapshot error handler swallows it to []), so the
+    // tab showed "Nothing pending" even with a real, pending request
+    // sitting in their own group. path[1] recovers that group's id from
+    // groups/{groupId}/joinRequests/{requestUid} (path[0] == 'groups'),
+    // so isCLFor/isSCLForGroup can be checked the same way the per-group
+    // rule below already does — same authority tier, just usable from
+    // the cross-group query shape too.
     match /{path=**}/joinRequests/{requestUid} {
-      allow read: if isAdmin() || isHeadOfOps();
+      allow read: if isAdmin() || isHeadOfOps()
+        || (path[0] == 'groups' && (isCLFor(path[1]) || isSCLForGroup(path[1])));
     }
 
     match /staff/{targetUid}/roles/{roleId} {

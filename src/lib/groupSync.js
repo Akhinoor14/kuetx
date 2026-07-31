@@ -1101,7 +1101,7 @@ export function subscribeJoinRequests(groupId, callback) {
  * Requires the collectionGroup read rule on /{path=**}/joinRequests/
  * {requestUid} in firestore.rules (Admin/HeadOfOps only).
  */
-export function subscribeAllPendingJoinRequests(callback) {
+export function subscribeAllPendingJoinRequests(callback, onError) {
   const q = query(collectionGroup(db, 'joinRequests'), where('status', '==', 'pending'));
   return onSnapshot(q, (snap) => {
     callback(snap.docs.map((d) => {
@@ -1112,8 +1112,14 @@ export function subscribeAllPendingJoinRequests(callback) {
       return { id: d.id, groupId, ...d.data() };
     }));
   }, (err) => {
+    // Deliberately NOT silently swallowed to [] anymore — a
+    // permission-denied (rule gap) or failed-precondition (missing
+    // index) here used to look identical to "genuinely nothing
+    // pending" in the UI, which is exactly what caused the Campus
+    // Lead's real pending request to render as "Nothing pending."
     console.error('[groupSync] subscribeAllPendingJoinRequests error:', err);
     callback([]);
+    if (onError) onError(err);
   });
 }
 

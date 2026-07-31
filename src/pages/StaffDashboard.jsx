@@ -13,7 +13,7 @@ import {
   listAllGroups, getGroupMembersOnce,
 } from '../lib/groupSync';
 import { subscribePendingRollUnlockRequests, resolveRollUnlockRequest, dismissRollUnlockRequest } from '../lib/rollOwnership';
-import { checkIsAdmin } from '../lib/adminAuth';
+import { subscribeIsAdmin } from '../lib/adminAuth';
 import { flagSuspiciousEmail, unflagEmail, summarizeEmailHealth, listPendingFlags, resolveEmailFlag } from '../lib/emailFlags';
 import { isObviouslyBadDomain } from '../lib/emailDomainCheck';
 import ClassmatesList from '../components/ClassmatesList';
@@ -611,7 +611,13 @@ export default function StaffDashboard({ activeTab: activeTabProp, onTabChange }
     { fallbackValue: [], onTimeout: () => setRolesLoadWarning('Taking longer than usual to load your roles — refresh in a minute if this stays empty.') }
   ), []);
   useEffect(() => {
-    checkIsAdmin(auth.currentUser?.uid).then(setIsAdminUser);
+    let unsubAdmin;
+    const unsubAuth = auth.onAuthStateChanged((user) => {
+      unsubAdmin?.();
+      if (!user) { setIsAdminUser(false); return; }
+      unsubAdmin = subscribeIsAdmin(user.uid, setIsAdminUser);
+    });
+    return () => { unsubAdmin?.(); unsubAuth(); };
   }, []);
 
   // NOTE: tabs/currentTab are recomputed below (after the early-return
@@ -691,7 +697,21 @@ export default function StaffDashboard({ activeTab: activeTabProp, onTabChange }
   return (
     <div>
       <p style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 10 }}>
-        {roles.length > 0 ? `Your roles: ${roles.map((r) => ROLE_LABELS[r.role] || r.role).join(' · ')}` : 'Founder'}
+        {(() => {
+          // BUGFIX: this used to be built only from `roles`
+          // (staff/{uid}/roles — CL/SCL/Content/Growth/Finance), so an
+          // account that's ALSO Founder (admins/{uid}, tracked
+          // separately in isAdminUser) still showed only its non-Founder
+          // roles here — e.g. "Your roles: Campus Lead" even while
+          // holding Founder too, even though RoleTabBar below correctly
+          // showed both chips. Founder is now included first, matching
+          // the seniority order the tabs list already uses.
+          const labels = [
+            ...(isAdminUser ? ['Founder'] : []),
+            ...roles.map((r) => ROLE_LABELS[r.role] || r.role),
+          ];
+          return labels.length > 0 ? `Your roles: ${labels.join(' · ')}` : 'No staff role yet';
+        })()}
       </p>
 
       <RoleTabBar tabs={tabs} active={currentTab} onChange={handleTabChange} />

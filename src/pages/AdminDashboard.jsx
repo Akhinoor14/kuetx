@@ -277,7 +277,11 @@ function ApprovalsView({ onBack, onSelectCategory, countCtx }) {
   // firestore.rules already grants isAdmin() on that collection. This is
   // also THE bootstrap path: a brand-new class's first student has no
   // CR/CL yet to approve them, so Founder must be able to do it directly.
-  useEffect(() => withTimeout((cb) => subscribeAllPendingJoinRequests(cb), setPendingJoinRequests, { onTimeout: flagSlowLoad }), []);
+  useEffect(() => withTimeout(
+    (cb) => subscribeAllPendingJoinRequests(cb, (e) => setErr(`Couldn't load pending join requests: ${e?.message || e?.code || 'unknown error'}`)),
+    setPendingJoinRequests,
+    { onTimeout: flagSlowLoad },
+  ), []);
   useEffect(() => withTimeout((cb) => subscribeProviderVerifyRequests(cb), setProviderVerifyRequests, { onTimeout: flagSlowLoad }), []);
   useEffect(() => {
     if (!providerVerifyRequests || providerVerifyRequests.length === 0) return;
@@ -2419,10 +2423,14 @@ export default function AdminDashboard() {
 
   useEffect(() => subscribePendingRollUnlockRequests(setRollRequests), []);
   useEffect(() => { listPendingFlags({}).then((f) => setEmailFlagCount(f.length)).catch(() => {}); }, []);
-  // Student-only count (see AdminDashboard's ApprovalsView manual-verify
-  // subTab comment) — a stray legacy faculty-role doc here isn't approved
-  // from this tab, so it shouldn't inflate the top-level Approvals badge.
-  useEffect(() => subscribeManualVerifyRequests((reqs) => setManualVerifyCount(reqs.filter((r) => r.role !== 'faculty').length)), []);
+  // Student verification count for the top-level Approvals badge — must
+  // match the real, live source the sub-tab itself renders from
+  // (pendingJoinRequests via subscribeAllPendingJoinRequests), NOT the
+  // legacy manualVerifyRequests collection. That collection is dead for
+  // students (see manualVerifyRequests.js) — counting it here caused the
+  // top-level badge to show "1" while the sub-tab correctly showed
+  // nothing pending, because nothing ever clears entries out of it.
+  useEffect(() => subscribeAllPendingJoinRequests((reqs) => setManualVerifyCount(reqs.length)), []);
   useEffect(() => subscribeAllQBUploadRequests((reqs) => setQbUploadCount(reqs.length)), []);
   useEffect(() => subscribeProviderVerifyRequests((reqs) => setProviderVerifyCount(reqs.length)), []);
 
