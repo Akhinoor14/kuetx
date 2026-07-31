@@ -124,25 +124,12 @@ export default function Services() {
     return <div style={{ padding: 32, textAlign: 'center', color: 'var(--muted)' }}>Loading…</div>;
   }
 
-  if (services.length === 0) {
-    return (
-      <div className="page-enter page-container content-page-bg">
-        <div style={{ padding: '24px 4px', textAlign: 'center' }}>
-          <div style={{
-            width: 52, height: 52, borderRadius: 14, margin: '0 auto 16px',
-            background: 'var(--accentSoft)', display: 'flex',
-            alignItems: 'center', justifyContent: 'center',
-          }}>
-            <Store size={26} color="var(--accent)" />
-          </div>
-          <div style={{ fontSize: 17, fontWeight: 700, color: 'var(--text)', marginBottom: 8 }}>Services</div>
-          <div style={{ fontSize: 13.5, color: 'var(--muted)', lineHeight: 1.7 }}>
-            এখনো কোনো সার্ভিস প্রোভাইডার নেই। শীঘ্রই যোগ হবে।
-          </div>
-        </div>
-      </div>
-    );
-  }
+  // NOTE: previously this returned an early "no providers yet" page and
+  // hid the whole category grid when services.length === 0. That's wrong —
+  // the 5 category cards (Salon/Food/Pharmacy/Stationery/Online Mart) are
+  // a fixed part of this page and must always render, regardless of shop
+  // count. Emptiness is shown per-category (below, via the "এখনো কোনো শপ
+  // নেই" tag), never by hiding the grid itself.
 
   // Active-shop count per category — "active" here means not dormant,
   // matching the count the plan asks each category card to show.
@@ -169,20 +156,23 @@ export default function Services() {
               onClick={() => navigate(`/services/category/${type}`)}
               className="card"
               style={{
-                padding: 16, textAlign: 'left', border: '1px solid rgba(217,119,6,0.18)',
-                background: 'rgba(217,119,6,0.05)',
-                display: 'flex', flexDirection: 'column', gap: 10, cursor: 'pointer',
-                opacity: isEmpty ? 0.6 : 1,
+                padding: 16, textAlign: 'left', cursor: 'pointer',
+                display: 'flex', flexDirection: 'column', gap: 10,
+                border: isEmpty ? '1px solid var(--border)' : '1px solid rgba(217,119,6,0.18)',
+                background: isEmpty ? 'var(--card, transparent)' : 'rgba(217,119,6,0.05)',
               }}
             >
               <div style={{
-                width: 40, height: 40, borderRadius: 12, background: 'rgba(217,119,6,0.12)',
-                display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+                width: 40, height: 40, borderRadius: 12, flexShrink: 0,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                background: isEmpty ? 'var(--border)' : 'rgba(217,119,6,0.12)',
               }}>
-                <Icon size={20} color="#d97706" />
+                <Icon size={20} color={isEmpty ? 'var(--muted)' : '#d97706'} />
               </div>
               <div>
-                <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)' }}>{SERVICE_TYPE_LABELS[type]}</div>
+                <div style={{ fontSize: 14, fontWeight: 700, color: isEmpty ? 'var(--muted)' : 'var(--text)' }}>
+                  {SERVICE_TYPE_LABELS[type]}
+                </div>
                 <div style={{ marginTop: 6 }}>
                   {isEmpty ? (
                     <span className="tag tag-gray">এখনো কোনো শপ নেই</span>

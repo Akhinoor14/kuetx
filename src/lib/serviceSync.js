@@ -70,10 +70,10 @@ function defaultInteractionModeForType(type) {
 // (Phase 6) — kept here rather than duplicated in two page files, since
 // both need the exact same type<->label mapping.
 export const SERVICE_TYPE_LABELS = {
-  salon: 'সেলুন',
-  hotel: 'হোটেল/খাবার',
-  medicine: 'মেডিসিন শপ',
-  bookstore: 'স্টেশনারি',
+  salon: 'Salon',
+  hotel: 'Food',
+  medicine: 'Pharmacy',
+  bookstore: 'Stationery',
   onlinemart: 'Online Mart',
 };
 

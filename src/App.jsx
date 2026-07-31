@@ -254,7 +254,13 @@ function Layout({ authState, onboardingActive }) {
             <Route path="/class-rep" element={<CRHub />} />
             <Route path="/academic-core" element={<SubgroupHub group="Academics" subgroup="Academic Core" />} />
             <Route path="/daily-academics" element={<SubgroupHub group="Academics" subgroup="Daily Academics" />} />
-            <Route path="/campus-life" element={<SubgroupHub pageTitle="Campus Life" sections={[{ group: 'Campus Life', subgroup: 'Campus Life' }, { group: 'Campus Life', subgroup: 'Services' }]} />} />
+            {/* Campus Life is intentionally independent from Services now
+                (see nav.js's Services subgroup comment + Services.jsx) —
+                Services has its own live-Firestore-driven page at
+                /services and should not also appear as a hardcoded
+                static preview here. Only the "Campus Life" subgroup
+                itself is rendered on this hub. */}
+            <Route path="/campus-life" element={<SubgroupHub pageTitle="Campus Life" group="Campus Life" subgroup="Campus Life" />} />
             <Route path="/self-study" element={<SubgroupHub group="Campus Life" subgroup="Self Study" />} />
 
             {/* Combined bottom-nav hub page. Daily Life doesn't exist as
