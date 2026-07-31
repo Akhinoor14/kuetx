@@ -1,4 +1,4 @@
-import { useEffect, useState, lazy, Suspense } from 'react';
+import { useEffect, useState, useRef, lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { ThemeProvider } from './hooks/useTheme';
 import { usePageTracker } from './hooks/usePageTracker';
@@ -576,9 +576,32 @@ export default function App() {
   // filled it in." ensureDBReady() is idempotent — it no-ops instantly if
   // main.jsx's race already won — so awaiting it again here is free in the
   // common case and closes the gap in the slow case.
+  // BUGFIX (Google redirect sign-in gets stuck): queueBuilt used to gate
+  // this effect to run exactly once per app load. That's correct for the
+  // very first mount, but AuthModal's Google button is redirect-based
+  // (full-page navigate to Google and back — see AuthModal.jsx) and never
+  // calls onSuccess/handleAuthSuccess directly, since there's no callback
+  // to receive one across a page navigation. The ONLY signal that a
+  // sign-in actually completed is useFirebaseAuth's onAuthChange flipping
+  // authState.uid from null to a real uid after the redirect returns. But
+  // by then queueBuilt was already true from the pre-sign-in render (which
+  // queued 'auth' for a signed-out user), so this effect's old guard
+  // (`!authState.authReady || queueBuilt`) skipped it forever — the queue
+  // never rebuilt, and the app stayed stuck showing the AuthModal (or
+  // whatever step was queued before) even though sign-in succeeded.
+  //
+  // Fix: key the rebuild on the actual signed-in uid, not just a one-shot
+  // boolean. Track the previous uid in a ref; rebuild the queue any time
+  // it changes (null -> real uid on sign-in, one uid -> another on
+  // switch, real uid -> null on sign-out) in addition to the original
+  // first-mount case.
+  const lastAuthUidRef = useRef(undefined); // undefined = "haven't built yet"
   useEffect(() => {
-    if (!authState.authReady || queueBuilt) return;
-    console.log('[KUETx DIAG] authReady=true, starting ensureDBReady()...');
+    if (!authState.authReady) return;
+    const uidChanged = lastAuthUidRef.current !== authState.uid;
+    if (queueBuilt && !uidChanged) return;
+    lastAuthUidRef.current = authState.uid;
+    console.log('[KUETx DIAG] authReady=true, uid=', authState.uid, '- starting ensureDBReady()...');
     let cancelled = false;
     ensureDBReady().finally(() => {
       if (cancelled) return;
@@ -591,7 +614,7 @@ export default function App() {
       });
     });
     return () => { cancelled = true; };
-  }, [authState.authReady, authState.isAnonymous, queueBuilt]);
+  }, [authState.authReady, authState.isAnonymous, authState.uid, queueBuilt]);
 
   // Auto-join the class group as soon as we have a signed-in user with a
   // complete profile — no need to ever open the Classmates page manually.
