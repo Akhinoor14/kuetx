@@ -48,13 +48,43 @@ function useDeactivatedProviderUids() {
   const [deactivatedUids, setDeactivatedUids] = useState(null);
 
   useEffect(() => {
+    let settled = false;
+
+    // Belt-and-braces: listAllProviderAccounts() is a one-shot getDocs()
+    // call. Under Firestore's persistentMultipleTabManager cache, a
+    // stuck IndexedDB lock (leftover from another tab/session) can leave
+    // this promise neither resolving nor rejecting, which previously
+    // left this whole page stuck on "Loading…" forever with no console
+    // error. A 6s hard timeout guarantees this page always finishes
+    // resolving one way or another.
+    const timeoutId = setTimeout(() => {
+      if (settled) return;
+      settled = true;
+      console.warn('[Services] listAllProviderAccounts timed out after 6s — proceeding with empty deactivated set');
+      setDeactivatedUids(new Set());
+    }, 6000);
+
     listAllProviderAccounts()
       .then((accounts) => {
+        if (settled) return;
+        settled = true;
+        clearTimeout(timeoutId);
         setDeactivatedUids(new Set(
           accounts.filter((a) => a.status === 'deactivated').map((a) => a.uid),
         ));
       })
-      .catch(() => setDeactivatedUids(new Set()));
+      .catch((err) => {
+        if (settled) return;
+        settled = true;
+        clearTimeout(timeoutId);
+        console.error('[Services] listAllProviderAccounts failed:', err);
+        setDeactivatedUids(new Set());
+      });
+
+    return () => {
+      settled = true;
+      clearTimeout(timeoutId);
+    };
   }, []);
 
   return deactivatedUids;
@@ -99,7 +129,13 @@ function useVisibleServices() {
   const [allServices, setAllServices] = useState(null);
   const deactivatedUids = useDeactivatedProviderUids();
 
-  useEffect(() => subscribeAllServices(setAllServices), []);
+  useEffect(() => {
+    console.log('[Services] subscribeAllServices attaching…');
+    return subscribeAllServices((list) => {
+      console.log('[Services] subscribeAllServices fired, count =', list.length);
+      setAllServices(list);
+    });
+  }, []);
 
   const stillResolving = allServices === null || deactivatedUids === null;
   const services = stillResolving
