@@ -41,11 +41,25 @@
 import { Link } from 'react-router-dom';
 import { Lock } from 'lucide-react';
 import { useIsFaculty } from '../hooks/useIsFaculty';
+import { useIsProvider } from '../hooks/useIsProvider';
 
+// BUGFIX: this component originally only checked isFaculty, from back
+// when 'faculty' was the only other account shape besides plain student.
+// Provider accounts (any status — pending/rejected/verified, see
+// useIsProvider.js) fell straight through the isGenuineFaculty check and
+// landed on every /courses, /attendance, /marks, /schedule, /assignments,
+// /question-bank, /results, /today, /syllabus, /diary, /alerts,
+// /classmates and CR-tool route with no gate at all — same "wrong shell"
+// problem RequireStudentMode was built to fix for faculty, just for a
+// role nobody had added a check for yet. isProvider (account exists, any
+// status) is used here rather than isVerifiedProvider, mirroring
+// isGenuineFaculty's "browsing is blocked regardless of verification
+// status" stance — the account simply isn't a student account.
 export default function RequireStudentMode({ children }) {
-  const { isFaculty, isFounderBypass, isResolved } = useIsFaculty();
+  const { isFaculty, isFounderBypass, isResolved: isFacultyResolved } = useIsFaculty();
+  const { isProvider, isResolved: isProviderResolved } = useIsProvider();
 
-  if (!isResolved) {
+  if (!isFacultyResolved || !isProviderResolved) {
     return (
       <div style={{ padding: 40, textAlign: 'center', color: 'var(--muted)' }}>
         Checking access…
@@ -66,6 +80,21 @@ export default function RequireStudentMode({ children }) {
           You're signed in as faculty. Head back to your Faculty Dashboard instead.
         </div>
         <Link to="/faculty" className="btn btn-primary btn-sm">Go to Faculty Dashboard</Link>
+      </div>
+    );
+  }
+
+  if (isProvider) {
+    return (
+      <div style={{ padding: '48px 20px', textAlign: 'center', maxWidth: 420, margin: '0 auto' }}>
+        <div style={{ marginBottom: 12 }}><Lock size={32} color="var(--muted)" /></div>
+        <div style={{ fontSize: 15, fontWeight: 700, color: 'var(--text)', marginBottom: 8 }}>
+          This page is for student accounts
+        </div>
+        <div style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.6, marginBottom: 20 }}>
+          You're signed in as a service provider. Head back to your Provider Dashboard instead.
+        </div>
+        <Link to="/provider" className="btn btn-primary btn-sm">Go to Provider Dashboard</Link>
       </div>
     );
   }

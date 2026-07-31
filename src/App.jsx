@@ -86,6 +86,9 @@ const Services = lazy(() => import('./pages/Services'));
 const CategoryShopList = lazy(() => import('./pages/Services').then((m) => ({ default: m.CategoryShopList })));
 const ServiceDetail = lazy(() => import('./pages/ServiceDetail'));
 const ProviderDashboardPage = lazy(() => import('./pages/provider/ProviderDashboard'));
+const ProviderMyShopHubPage = lazy(() => import('./pages/provider/ProviderMyShopHub'));
+const ProviderOfferingsPagePage = lazy(() => import('./pages/provider/ProviderOfferingsPage'));
+const ProviderShopSettingsPagePage = lazy(() => import('./pages/provider/ProviderShopSettingsPage'));
 const About = lazy(() => import('./pages/About'));
 const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy'));
 const ClassRoutine = lazy(() => import('./pages/ClassRoutine'));
@@ -307,6 +310,9 @@ function Layout({ authState, onboardingActive }) {
                 Marks/Notices tabs are visible-but-disabled placeholders in
                 that page until Phases 6/7/8 build them. */}
             <Route path="/provider" element={<RequireProvider><ProviderDashboardRoute /></RequireProvider>} />
+            <Route path="/provider/shop" element={<RequireProvider><ProviderMyShopHubRoute /></RequireProvider>} />
+            <Route path="/provider/shop/offerings" element={<RequireProvider><ProviderOfferingsPageRoute /></RequireProvider>} />
+            <Route path="/provider/shop/settings" element={<RequireProvider><ProviderShopSettingsPageRoute /></RequireProvider>} />
             <Route path="/faculty" element={<RequireFaculty><FacultyDashboard /></RequireFaculty>} />
             <Route path="/faculty/profile" element={<RequireFaculty><FacultyProfile /></RequireFaculty>} />
             <Route path="/faculty/classes" element={<RequireFaculty><FacultyClasses /></RequireFaculty>} />
@@ -520,6 +526,25 @@ async function buildQueue(isAnonymous) {
 function ProviderDashboardRoute() {
   const { providerProfile } = useIsProvider();
   return <ProviderDashboardPage providerProfile={providerProfile} />;
+}
+
+// PROVIDER_NAV_RESTRUCTURE_PROMPT.md Phase 2 — same wrapper pattern as
+// ProviderDashboardRoute above: RequireProvider already resolved
+// providerProfile via useIsProvider by the time these render, so each
+// sub-page just reads it off the same hook instead of re-subscribing.
+function ProviderMyShopHubRoute() {
+  const { providerProfile } = useIsProvider();
+  return <ProviderMyShopHubPage providerProfile={providerProfile} />;
+}
+
+function ProviderOfferingsPageRoute() {
+  const { providerProfile } = useIsProvider();
+  return <ProviderOfferingsPagePage providerProfile={providerProfile} />;
+}
+
+function ProviderShopSettingsPageRoute() {
+  const { providerProfile } = useIsProvider();
+  return <ProviderShopSettingsPagePage providerProfile={providerProfile} />;
 }
 
 // BUGFIX: right after Role Select's provider-form step creates

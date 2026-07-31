@@ -22,9 +22,11 @@ import { subscribeMembers } from '../lib/groupSync';
 import { auth } from '../lib/firebase';
 import { useIsStaff } from '../hooks/useIsStaff';
 import { useViewMode } from '../hooks/useViewMode';
+import { useIsProvider } from '../hooks/useIsProvider';
 import * as noticeApi from '../lib/noticeUtils';
 import SidebarNavStudent, { findStudentNavItem } from './nav-system/SidebarNavStudent';
 import SidebarNavFaculty, { findFacultyNavItem } from './nav-system/SidebarNavFaculty';
+import SidebarNavProvider, { findProviderNavItem } from './nav-system/SidebarNavProvider';
 
 // ── Firebase sync status pill ─────────────────────────────────────────────────
 function SyncBadge({ status }) {
@@ -66,6 +68,17 @@ export function Sidebar({ open, onClose, authState }) {
   // hooks/useViewMode.js. No inline viewMode derivation lives here anymore.
   const { viewMode } = useViewMode();
 
+  // BUGFIX: useViewMode() only ever resolves to 'teacher' or 'student' —
+  // it has no concept of provider accounts (see useViewMode.js's own doc
+  // comment, written before SERVICES_PROVIDER_PLAN.md existed). That left
+  // every provider account, pending/rejected/verified alike, rendering
+  // the full SidebarNavStudent list below, with real links into
+  // student-only pages. isProvider here is checked BEFORE viewMode is
+  // used for nav selection, and wins regardless of status — same
+  // "account isn't a student account at all, not a status question"
+  // stance as RequireStudentMode's isProvider check.
+  const { isProvider } = useIsProvider();
+
   const [unreadNoticeCount, setUnreadNoticeCount] = useState(0);
   const latestNoticesRef = useRef([]);
   useEffect(() => {
@@ -104,8 +117,12 @@ export function Sidebar({ open, onClose, authState }) {
   }, []);
 
   // Quick-strip lookups: resolve against whichever shell is active, using
-  // that shell's own (never the other's) nav-item finder.
-  const findNavItem = viewMode === 'teacher' ? findFacultyNavItem : findStudentNavItem;
+  // that shell's own (never the others') nav-item finder. isProvider
+  // takes priority over viewMode's teacher/student split — see the
+  // isProvider doc comment above.
+  const findNavItem = isProvider
+    ? findProviderNavItem
+    : (viewMode === 'teacher' ? findFacultyNavItem : findStudentNavItem);
   const getPageLabel = (path) => {
     const i = findNavItem(path);
     return i ? i.label : (path === '/' ? 'Dashboard' : path);
@@ -173,8 +190,10 @@ export function Sidebar({ open, onClose, authState }) {
           </div>
         )}
 
-        {/* ── Nav: exactly one of the two shells renders, never both ── */}
-        {viewMode === 'teacher' ? (
+        {/* ── Nav: exactly one of the three shells renders, never more than one ── */}
+        {isProvider ? (
+          <SidebarNavProvider location={location} onClose={onClose} />
+        ) : viewMode === 'teacher' ? (
           <SidebarNavFaculty location={location} onClose={onClose} isRealAdmin={isRealAdmin} />
         ) : (
           <SidebarNavStudent

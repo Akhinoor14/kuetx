@@ -8,8 +8,10 @@ import { subscribeMyRole } from '../lib/groupSync';
 import { auth } from '../lib/firebase';
 import { useIsStaff } from '../hooks/useIsStaff';
 import { useViewMode } from '../hooks/useViewMode';
+import { useIsProvider } from '../hooks/useIsProvider';
 import { STUDENT_FIXED_BUTTONS } from './nav-system/BottomNavStudent';
 import { FACULTY_FIXED_BUTTONS } from './nav-system/BottomNavFaculty';
+import { PROVIDER_FIXED_BUTTONS } from './nav-system/BottomNavProvider';
 
 const MOBILE_NAV_QUERY = '(max-width: 767.98px)';
 
@@ -80,12 +82,32 @@ function ProfileButton({ isRealCR, roleLabel, isStaff, adminLabel, active, viewM
   );
 }
 
+// Plain Profile link for the provider shell — deliberately NOT the
+// CR/staff-aware ProfileButton above, since none of that role logic
+// applies to a provider account. Same markup shape as ProfileButton /
+// the fixed-button Links so it looks identical in the bar.
+function ProviderProfileButton({ active }) {
+  return (
+    <Link
+      to="/settings"
+      className={`mobile-bottom-nav-button${active ? ' active' : ''}`}
+      aria-current={active ? 'page' : undefined}
+    >
+      <span className="mobile-bottom-nav-button-icon">
+        <User size={18} strokeWidth={2} />
+      </span>
+      <span className="mobile-bottom-nav-button-label">Profile</span>
+    </Link>
+  );
+}
+
 export function BottomNav() {
   const location = useLocation();
   const isMobileNav = useIsMobileNav();
   const [isRealCR, setIsRealCR] = useState(false);
   const [roleLabel, setRoleLabel] = useState('CR');
   const { isRealAdmin: isStaff, adminLabel } = useIsStaff();
+  const { isProvider } = useIsProvider();
 
   // Single shared source of truth for student-vs-faculty shell — see
   // hooks/useViewMode.js. Sidebar.jsx uses the exact same hook, so the two
@@ -105,21 +127,30 @@ export function BottomNav() {
   if (!isMobileNav) return null;
 
   const isFacultyMode = viewMode === 'teacher';
-  const fixedButtons = isFacultyMode ? FACULTY_FIXED_BUTTONS : STUDENT_FIXED_BUTTONS;
 
-  const isProfileActive = isFacultyMode
-    ? (location.pathname === '/faculty/profile' || location.pathname === '/team')
-    : (location.pathname === '/profile'
-        || location.pathname === '/cr-hub'
-        || location.pathname === '/class-rep'
-        || location.pathname === '/class-routine'
-        || location.pathname === '/class-planner'
-        || location.pathname === '/ct-quiz-planning'
-        || location.pathname === '/class-roster'
-        || location.pathname === '/class-notices'
-        || location.pathname === '/class-my-role'
-        || location.pathname === '/admin-hub'
-        || location.pathname === '/team');
+  // Provider is a fully separate shell from student/faculty (same idea as
+  // the isFacultyMode branch, but provider status comes from useIsProvider()
+  // rather than useViewMode() since a provider account isn't a view-mode
+  // toggle — see useIsProvider.js). Checked first so it wins outright.
+  const fixedButtons = isProvider
+    ? PROVIDER_FIXED_BUTTONS
+    : (isFacultyMode ? FACULTY_FIXED_BUTTONS : STUDENT_FIXED_BUTTONS);
+
+  const isProfileActive = isProvider
+    ? location.pathname === '/settings'
+    : isFacultyMode
+      ? (location.pathname === '/faculty/profile' || location.pathname === '/team')
+      : (location.pathname === '/profile'
+          || location.pathname === '/cr-hub'
+          || location.pathname === '/class-rep'
+          || location.pathname === '/class-routine'
+          || location.pathname === '/class-planner'
+          || location.pathname === '/ct-quiz-planning'
+          || location.pathname === '/class-roster'
+          || location.pathname === '/class-notices'
+          || location.pathname === '/class-my-role'
+          || location.pathname === '/admin-hub'
+          || location.pathname === '/team');
 
   return (
     <nav className="mobile-bottom-nav" aria-label="Mobile navigation">
@@ -142,14 +173,18 @@ export function BottomNav() {
             </Link>
           );
         })}
-        <ProfileButton
-          isRealCR={isRealCR}
-          roleLabel={roleLabel}
-          isStaff={isStaff}
-          adminLabel={adminLabel}
-          active={isProfileActive}
-          viewMode={viewMode}
-        />
+        {isProvider ? (
+          <ProviderProfileButton active={isProfileActive} />
+        ) : (
+          <ProfileButton
+            isRealCR={isRealCR}
+            roleLabel={roleLabel}
+            isStaff={isStaff}
+            adminLabel={adminLabel}
+            active={isProfileActive}
+            viewMode={viewMode}
+          />
+        )}
       </div>
     </nav>
   );

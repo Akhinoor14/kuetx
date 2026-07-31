@@ -37,6 +37,55 @@ export const NAV = [
       { id: 'notice', label: 'Notice', icon: 'Bell', path: '/notice' },
     ]
   },
+  // Provider shell topbar titles only — getPageMeta() (Navbar.jsx) had no
+  // entries for any /provider* path, so the topbar title fell through to
+  // the generic 'KUETx' default on every provider page. These 4 groups
+  // exist purely so the topbar shows the right title per page; they are
+  // NOT used for the provider's own sidebar/bottom-nav (those are the
+  // separate, dedicated SidebarNavProvider.jsx / BottomNavProvider.js).
+  // Deliberately 4 separate single-item groups (same pattern as
+  // Dashboard/Today/Notice above), NOT one shared group with 4 items —
+  // getPageMeta's hasChipStrip check fires whenever a matched item's
+  // sibling list has length > 1, and the provider shell is explicitly a
+  // minimal "busy shop owner, 2-second glance" UI (see restructure plan),
+  // so it must never show a multi-item topbar chip strip the way
+  // Attendance/Schedule/etc do for students.
+  {
+    group: 'Offerings & Earnings',
+    isSubgroup: true,
+    hubPath: '/provider/shop/offerings',
+    hubIcon: 'Store',
+    items: [
+      { id: 'provider-offerings', label: 'Offerings & Earnings', icon: 'Store', path: '/provider/shop/offerings' },
+    ]
+  },
+  {
+    group: 'Shop Details & Status',
+    isSubgroup: true,
+    hubPath: '/provider/shop/settings',
+    hubIcon: 'Store',
+    items: [
+      { id: 'provider-shop-settings', label: 'Shop Details & Status', icon: 'Store', path: '/provider/shop/settings' },
+    ]
+  },
+  {
+    group: 'My Shop',
+    isSubgroup: true,
+    hubPath: '/provider/shop',
+    hubIcon: 'Store',
+    items: [
+      { id: 'provider-shop', label: 'My Shop', icon: 'Store', path: '/provider/shop' },
+    ]
+  },
+  {
+    group: 'Provider Dashboard',
+    isSubgroup: true,
+    hubPath: '/provider',
+    hubIcon: 'Grid',
+    items: [
+      { id: 'provider-dashboard', label: 'Dashboard', icon: 'Grid', path: '/provider' },
+    ]
+  },
   // Class Rep hub — ONE sidebar row (hubPath /class-rep, same convention
   // as Dashboard/Profile/Notice), with 6 items (Routine, Class Planner,
   // CT & Quiz Planner, Roster, Class Announcements, My Role) — each its

@@ -206,7 +206,9 @@ export function NavList({ filteredNav, location, onClose, unreadNoticeCount = 0 
                 to={item.path}
                 label={item.label}
                 iconName={item.icon}
-                active={location.pathname === item.path}
+                active={item.matchPrefix
+                  ? isActiveItem(location.pathname, item.path, null)
+                  : location.pathname === item.path}
                 onClose={onClose}
               />
             ))}
