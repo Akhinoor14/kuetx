@@ -38,7 +38,7 @@ import { claimRoll } from './lib/rollOwnership';
 import { ensureManualVerifyRequest } from './lib/manualVerifyRequests';
 import { auth } from './lib/firebase';
 import { notify } from './lib/notify';
-import { pushProfile } from './lib/firebaseSync';
+import { pushProfile, startFirebaseSync } from './lib/firebaseSync';
 
 // Pages — lazy-loaded (route-level code splitting).
 //
@@ -873,6 +873,30 @@ export default function App() {
     // callers correctly awaiting its completion — not a redundant
     // parallel sweep, and not an unguarded race either.
     await syncLocalDataOnAuth(user);
+
+    // BUGFIX (profile setup reappears / Finish Setup doesn't stick):
+    // this function used to call buildQueue() right after
+    // syncLocalDataOnAuth(), without ever waiting for the Firestore ->
+    // local profile pull (that only happens inside startFirebaseSync() ->
+    // hydrateProfileFromFirestore()). useFirebaseAuth.js's onAuthChange
+    // listener does this correctly and does not flip authReady until
+    // after that pull — but AuthModal's onSuccess (this function) fires
+    // as its own separate path and got there first, running buildQueue()
+    // against an empty/stale local profile on any device where local
+    // storage wasn't already warm (new device, re-login after sign-out,
+    // faculty accounts included since this branch doesn't check role).
+    // That queued 'profile' and showed ProfileSetupModal even for
+    // already-complete accounts. Then, once the OTHER path's
+    // startFirebaseSync() eventually resolved in the background and
+    // flipped authReady, App.jsx's authReady-gated effect re-ran
+    // buildQueue() again and re-queued 'profile' a second time — which is
+    // also why clicking "Finish Setup" (advance()) didn't stick: the
+    // background effect clobbered the queue right after. Awaiting the
+    // same startFirebaseSync() call here (idempotent/no-op if the other
+    // path already started it) closes both gaps.
+    if (!user.isAnonymous) {
+      await startFirebaseSync(user.uid, {});
+    }
 
     // A returning account may have a locally-set accountRole flag (e.g.
     // chosen at Role Select on a previous visit to this device) that
