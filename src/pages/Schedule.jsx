@@ -8,7 +8,7 @@ import CourseTeacherDialog from '../components/CourseTeacherDialog';
 import { notify } from '../lib/notify';
 import { confirmDialog } from '../lib/dialog';
 import { getGroupId } from '../lib/groupUtils';
-import { subscribeCRStatus, subscribeRoutine, addRoutineEntry, updateRoutineEntry, deleteRoutineEntry, subscribeClassSetup } from '../lib/groupSync';
+import { subscribeCRStatus, subscribeRoutine, addRoutineEntry, updateRoutineEntry, deleteRoutineEntry, subscribeClassSetup, subscribePlannerSettings, updatePlannerSettings } from '../lib/groupSync';
 import { subscribeGroupTermStartDate } from '../lib/termStartDateSync';
 import { useCanEditGroup } from '../hooks/useCanEditGroup';
 import TeacherClaimBanner from '../components/TeacherClaimBanner';
@@ -378,12 +378,28 @@ export default function Schedule() {
   // group currently has an active CR; unknown/false both mean personal mode.
   const groupModeLoading = !!groupId && groupHasCR === null;
   const isGroupMode = !!groupId && groupHasCR === true;
-  // canEditSchedule: in group mode this is CR/ACR/CL/admin only (or a
-  // verified member while the group temporarily has no CR — see
-  // useCanEditGroup). In personal mode the user always owns their own data.
-  // Declared here (not just before the render return) so it's safely in
-  // scope for renderTimetable's closure regardless of where it's called.
-  const canEditSchedule = isGroupMode ? canEditGroupSchedule : true;
+  // BUGFIX (every student saw Manage Course Teachers / Add Class /
+  // Settings / Holiday / Class Setup / Edit Exams / Export-Import, and
+  // clicking any of them opened the real CR-only editing flow): this used
+  // to be `isGroupMode ? canEditGroupSchedule : true`. isGroupMode is only
+  // true once groupHasCR has resolved to true — but groupHasCR starts as
+  // null (still loading) and can also legitimately be false (group
+  // genuinely has no CR yet). In EITHER of those two cases isGroupMode is
+  // false, which fell into the ": true" branch — handing every signed-in
+  // student, verified or not, full edit access to their whole class
+  // group's shared schedule, either for the entire loading window on
+  // every page visit, or permanently for any group that hasn't had a CR
+  // assigned yet.
+  //
+  // canEditGroupSchedule (from useCanEditGroup) already encodes the
+  // correct rule for all of this on its own — CR/ACR/Campus Lead/Admin
+  // always, or a *verified* member specifically while hasCR is false —
+  // and defaults its own `hasCR` to true (fail-closed) until the
+  // Firestore snapshot resolves, so it's safe to consult immediately.
+  // "Personal mode" (no group at all) is the ONLY case where the student
+  // is editing their own private local data and should always be able
+  // to — that's the sole remaining `true` case.
+  const canEditSchedule = groupId ? canEditGroupSchedule : true;
 
   const courses = useMemo(() => getAllCourses(profile), [profile.dept, profile.currentTermKey]);
   
@@ -434,11 +450,42 @@ export default function Schedule() {
       setSchedule(normalizeScheduleEntries(mapped));
     });
   }, [isGroupMode, groupId]);
+  // BUGFIX (Settings / Holiday / course-teacher assignments looked
+  // group-wide but weren't — a CR changing them did nothing for anyone
+  // else): these used to live ONLY in this device's local
+  // store.get('scheduleSettings'), even in group mode. Every other page
+  // that deals with courseTeacherMap (Courses.jsx, Attendance.jsx,
+  // Assignments.jsx, TermQS.jsx, ClassSetup.jsx, ClassManagement.jsx)
+  // already reads/writes it through groups/{groupId}/meta/plannerSettings
+  // via subscribePlannerSettings/updatePlannerSettings — Schedule.jsx was
+  // the one place still using a device-local copy instead, so a teacher
+  // assigned here (via the in-grid "Add Class" flow's CourseTeacherDialog)
+  // never showed up for classmates, and the routine time-model/message
+  // format/holiday calendar a CR set here only ever changed their own
+  // browser. Fix: in group mode, read/write the SAME plannerSettings doc
+  // everyone else uses — courseTeacherMap directly (matching the existing
+  // shape other pages expect) plus a new `scheduleFields` sub-object for
+  // the rest (modelId/customSlots/customLabel/messageFormat/holidayDates/
+  // courseShortNameMap). Personal (non-group) mode is untouched: still
+  // purely local, since there's no CR/class to share it with.
+  const [groupPlannerSettings, setGroupPlannerSettings] = useState(null);
+  useEffect(() => {
+    if (!groupId) { setGroupPlannerSettings(null); return; }
+    return subscribePlannerSettings(groupId, (data) => setGroupPlannerSettings(data || {}));
+  }, [groupId]);
+
   const [settings, setSettings] = useState(() => normalizeSettings(store.get('scheduleSettings')));
+  useEffect(() => {
+    if (!isGroupMode || groupPlannerSettings === null) return;
+    const merged = {
+      ...(groupPlannerSettings.scheduleFields || {}),
+      courseTeacherMap: groupPlannerSettings.courseTeacherMap || {},
+    };
+    setSettings(normalizeSettings(merged));
+  }, [isGroupMode, groupPlannerSettings]);
   const [adding, setAdding] = useState(false);
   const [editingId, setEditingId] = useState(null);
   const [editingSettings, setEditingSettings] = useState(false);
-  const [importMessage, setImportMessage] = useState('');
   const [selectedDay, setSelectedDay] = useState(() => dateToDayName(getRoutinePreviewDate((store.get('scheduleSettings')?.holidayDates) || [])));
   const [holidaySetupOpen, setHolidaySetupOpen] = useState(false);
   const [holidayDate, setHolidayDate] = useState('');
@@ -618,6 +665,22 @@ export default function Schedule() {
   const persistSettings = (next) => {
     const normalized = normalizeSettings(next);
     setSettings(normalized);
+    if (isGroupMode) {
+      // Group mode: this is shared, CR/ACR-controlled data now — write to
+      // the same Firestore doc Courses.jsx/Attendance.jsx/etc. already
+      // read courseTeacherMap from, so every classmate sees the same
+      // values instead of just this device. Guarded by canEditSchedule:
+      // Firestore rules enforce this for real (isContentEditor), but
+      // skipping the write client-side too avoids a pointless
+      // permission-denied round trip for a non-editor who somehow still
+      // triggers this (e.g. a lingering local edit UI before a role
+      // change re-renders).
+      if (!canEditSchedule) return;
+      const { courseTeacherMap: nextTeacherMap, ...scheduleFields } = normalized;
+      updatePlannerSettings(groupId, profile, { courseTeacherMap: nextTeacherMap, scheduleFields })
+        .catch((e) => console.error('[Schedule] persistSettings (group) failed:', e));
+      return;
+    }
     store.set('scheduleSettings', normalized);
   };
 
@@ -960,66 +1023,12 @@ export default function Schedule() {
     if (editingId === id) cancelEdit();
   };
 
-  const buildRoutineBackupPayload = () => ({
-    version: 1,
-    type: 'kuetx-routine-backup',
-    exportedAt: new Date().toISOString(),
-    data: {
-      schedule: normalizeScheduleEntries(schedule),
-      scheduleSettings: settings,
-      examOverrides: examOverrides || {},
-      assignments: store.get('assignments') || [],
-      teachers: store.get('teachers') || [],
-    },
-  });
-
-  const exportRoutine = () => {
-    const payload = buildRoutineBackupPayload();
-    const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    const _td = new Date();
-    link.download = `kuetx-routine-backup-${_td.getFullYear()}-${String(_td.getMonth()+1).padStart(2,'0')}-${String(_td.getDate()).padStart(2,'0')}.json`;
-    link.click();
-    URL.revokeObjectURL(url);
-    setImportMessage('Routine backup exported successfully.');
-  };
-
-  const importRoutine = async (file) => {
-    if (!file) return;
-    if (isGroupMode) {
-      // Bulk-importing a personal backup file straight into shared Firestore
-      // schedule isn't supported yet — doing it via setSchedule() would only
-      // show the imported data locally for a moment before the next
-      // Firestore snapshot silently overwrote it with the real shared data,
-      // which is confusing. Block it clearly instead of half-working.
-      setImportMessage('Import is not supported for group/shared schedules yet. Import only works for personal (non-group) routines.');
-      return;
-    }
-    try {
-      const text = await file.text();
-      const payload = JSON.parse(text);
-      const source = (payload && payload.data && typeof payload.data === 'object') ? payload.data : payload;
-      const nextSchedule = normalizeScheduleEntries(Array.isArray(source.schedule) ? source.schedule : []);
-      const nextSettings = normalizeSettings(source.scheduleSettings || {});
-      const nextExamOverrides = source.examOverrides && typeof source.examOverrides === 'object' ? source.examOverrides : {};
-      const nextAssignments = Array.isArray(source.assignments) ? source.assignments : [];
-      const nextTeachers = Array.isArray(source.teachers) ? source.teachers : [];
-
-      setSchedule(nextSchedule);
-      setSettings(nextSettings);
-      setExamOverrides(nextExamOverrides);
-      store.set('schedule', nextSchedule);
-      store.set('scheduleSettings', nextSettings);
-      store.set('examOverrides', nextExamOverrides);
-      store.set('assignments', nextAssignments);
-      store.set('teachers', nextTeachers);
-      setImportMessage(`Imported routine data with ${nextSchedule.length} class${nextSchedule.length === 1 ? '' : 'es'} and related assignment/teacher data.`);
-    } catch {
-      setImportMessage('Import failed. Please use a valid routine backup JSON file.');
-    }
-  };
+  // REMOVED (dead-feature cleanup): buildRoutineBackupPayload/exportRoutine/
+  // importRoutine, and their "Export routine data" / "Import routine data"
+  // buttons, used to live here. Nothing in the app referenced this JSON
+  // backup format elsewhere, and it was one more unfiltered, always-visible
+  // action students never needed. Deleted entirely rather than left as an
+  // unused, un-reachable code path.
 
   const getCourse = (id) => courses.find(c => c.id === id);
 
@@ -1512,9 +1521,17 @@ export default function Schedule() {
           )}
         </div>
         <div className="content-page-hero-actions">
-          <button className="btn btn-ghost btn-sm" onClick={() => setEditingSettings(v => !v)} style={{ fontSize: '12px' }}>
-            <Settings2 size={13} /> <span className="btn-txt">Settings</span>
-          </button>
+          {/* BUGFIX: Settings used to be unconditional. It now edits
+              shared, CR/ACR-controlled data in group mode (routine
+              time-model, message format, holiday calendar, course-teacher
+              map — see persistSettings), so it's gated the same way as
+              Manage Course Teachers / Add Class right next to it. Always
+              true in personal mode, so this is a no-op there. */}
+          {canEditSchedule && (
+            <button className="btn btn-ghost btn-sm" onClick={() => setEditingSettings(v => !v)} style={{ fontSize: '12px' }}>
+              <Settings2 size={13} /> <span className="btn-txt">Settings</span>
+            </button>
+          )}
           {canEditSchedule && (
             <button className="btn btn-secondary btn-sm" onClick={() => navigate('/courses')} style={{ fontSize: '12px' }} title="Open the Courses page and assign teachers per course">
               <BookOpen size={13} /> <span className="btn-txt btn-txt-long">Manage Course Teachers</span><span className="btn-txt-short">Teachers</span>
@@ -1533,6 +1550,7 @@ export default function Schedule() {
           Assign teachers via <strong>Manage Course Teachers</strong> before adding classes.
         </p>
       )}
+
 
       {/* §8.7 of the merged Faculty Module prompt — read-only, informational
           only. Renders nothing unless a routine entry's free-text
@@ -2247,9 +2265,18 @@ export default function Schedule() {
             <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 2 }}>Date-based · Holiday calendar · Exam date override</div>
           </div>
           <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
-            <button className="btn btn-ghost" style={{ fontSize: 12, padding: '6px 10px' }} onClick={openHolidaySetup}>
-              <CalendarDays size={12} /> Holiday
-            </button>
+            {/* CORRECTION (previously un-gated here by mistake): Holiday
+                now writes to the shared groups/{groupId}/meta/
+                plannerSettings doc in group mode (see persistSettings) —
+                it's CR/ACR-controlled, group-wide data now, not a
+                per-device personal calendar. Gated the same as Manage
+                Course Teachers / Add Class / Class Setup right next to
+                it. Always true in personal mode, so unaffected there. */}
+            {canEditSchedule && (
+              <button className="btn btn-ghost" style={{ fontSize: 12, padding: '6px 10px' }} onClick={openHolidaySetup}>
+                <CalendarDays size={12} /> Holiday
+              </button>
+            )}
             {/* Term dates (classEndDate/prepLeaveEndDate/examCount/
                 postExamEndDate) are CR/ACR-only now, set from the
                 dedicated Class Setup page — no per-student "Configure"
@@ -2410,28 +2437,6 @@ export default function Schedule() {
             </div>
           );
         })()}
-      </div>
-
-      <div className="card" style={{ marginTop: 14, padding: 16, display: 'flex', flexDirection: 'column', gap: 12 }}>
-        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
-          <button className="btn btn-ghost" onClick={exportRoutine} style={{ justifyContent: 'center', minWidth: 140, padding: '10px 14px' }}>Export routine data</button>
-          {!isGroupMode && (
-            <label className="btn btn-ghost" style={{ cursor: 'pointer', justifyContent: 'center', minWidth: 140, padding: '10px 14px' }}>
-              Import routine data
-              <input
-                type="file"
-                accept="application/json"
-                style={{ display: 'none' }}
-                onChange={e => {
-                  const file = e.target.files?.[0];
-                  importRoutine(file);
-                  e.target.value = '';
-                }}
-              />
-            </label>
-          )}
-        </div>
-        {importMessage && <div style={{ fontSize: 12, color: 'var(--muted)' }}>{importMessage}</div>}
       </div>
 
       {/* Edit Exams Modal */}
