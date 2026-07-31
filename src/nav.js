@@ -145,11 +145,11 @@ export const NAV = [
         hubPath: '/campus-life',
         hubIcon: 'ShoppingBag',
         items: [
-          { id: 'services-salon',      label: 'সেলুন',                 shortLabel: 'সেলুন',    icon: 'Scissors',       accent: 'blue',   path: '/services/category/salon' },
-          { id: 'services-hotel',      label: 'হোটেল/খাবার',           shortLabel: 'হোটেল',    icon: 'UtensilsCrossed',accent: 'amber',  path: '/services/category/hotel' },
-          { id: 'services-medicine',   label: 'মেডিসিন শপ',            shortLabel: 'মেডিসিন',  icon: 'Cross',          accent: 'red',    path: '/services/category/medicine' },
-          { id: 'services-bookstore',  label: 'স্টেশনারি',   shortLabel: 'স্টেশনারি', icon: 'BookOpen',  accent: 'purple', path: '/services/category/bookstore' },
-          { id: 'services-onlinemart', label: 'Online Mart',           shortLabel: 'Online Mart', icon: 'ShoppingBag', accent: 'green',  path: '/services/category/onlinemart' },
+          { id: 'services-salon',      label: 'Salon',      shortLabel: 'Salon',      icon: 'Scissors',       accent: 'blue',   path: '/services/category/salon' },
+          { id: 'services-hotel',      label: 'Food',       shortLabel: 'Food',       icon: 'UtensilsCrossed',accent: 'amber',  path: '/services/category/hotel' },
+          { id: 'services-medicine',   label: 'Pharmacy',   shortLabel: 'Pharmacy',   icon: 'Cross',          accent: 'red',    path: '/services/category/medicine' },
+          { id: 'services-bookstore',  label: 'Stationery', shortLabel: 'Stationery', icon: 'BookOpen',       accent: 'purple', path: '/services/category/bookstore' },
+          { id: 'services-onlinemart', label: 'Online Mart',shortLabel: 'Online Mart',icon: 'ShoppingBag',    accent: 'green',  path: '/services/category/onlinemart' },
         ]
       },
       {
@@ -176,6 +176,35 @@ export const NAV = [
   },
 ];
 
+// ── Desktop variant ──────────────────────────────────────────────────────────
+// Sidebar-only structural split: on desktop, Services gets its own top-level
+// sidebar row (right after Self Study) instead of living nested inside
+// Campus Life's subgroups — it was easy to miss buried a level down. This is
+// purely a NAV_DESKTOP presentation change for SidebarNavStudent.jsx; every
+// other consumer (topbar chip-strip / Navbar.jsx's getPageMeta, mobile
+// sidebar, /campus-life's own SubgroupHub sections={[...]} call in App.jsx)
+// still reads plain NAV, where Services stays nested under Campus Life
+// exactly as before — so /services/category/:type's topbar accordion
+// behavior, the /campus-life page's "Services" titled section, and the
+// mobile sidebar are all unaffected by this split.
+export const NAV_DESKTOP = NAV.map((section) => {
+  if (section.group !== 'Campus Life' || !section.subgroups) return section;
+  const servicesSubgroup = section.subgroups.find((s) => s.name === 'Services');
+  const remainingSubgroups = section.subgroups.filter((s) => s.name !== 'Services');
+  return [
+    { ...section, subgroups: remainingSubgroups },
+    ...(servicesSubgroup
+      ? [{
+        group: 'Services',
+        isSubgroup: true,
+        hubPath: '/services',
+        hubIcon: servicesSubgroup.hubIcon,
+        items: servicesSubgroup.items,
+      }]
+      : []),
+  ];
+}).flat();
+
 // ── Mobile variant ──────────────────────────────────────────────────────────
 // Daily Life and Self Study were folded into the Campus Life subgroup above,
 // so mobile no longer needs a separate transform — it shares NAV as-is.
@@ -183,5 +212,5 @@ export const NAV_MOBILE = NAV;
 
 /** Pick the right NAV structure for the current viewport. */
 export function getStudentNav(isMobileNav) {
-  return isMobileNav ? NAV_MOBILE : NAV;
+  return isMobileNav ? NAV_MOBILE : NAV_DESKTOP;
 }

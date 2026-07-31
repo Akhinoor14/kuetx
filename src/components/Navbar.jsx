@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState, useRef } from 'react';
 import { useTheme, THEMES } from '../hooks/useTheme';
 import { useLocation, Link } from 'react-router-dom';
 import { confirmDialog } from '../lib/dialog';
-import { NAV } from '../nav';
+import { NAV, NAV_DESKTOP } from '../nav';
 import { Wordmark } from './Logo';
 import * as noticeApi from '../lib/noticeUtils';
 import * as alertApi from '../lib/alertUtils';
@@ -15,9 +15,15 @@ import { auth } from '../lib/firebase';
 import { NotificationPanel } from './NotificationPanel';
 import GuideModal from './GuideModal';
 import { preloadRoute, preloadSiblings } from '../routePreload';
+import { useIsMobileNav } from './BottomNav';
 
-function getPageMeta(pathname) {
-  for (const section of NAV) {
+// navSource: NAV (mobile — Services stays nested under Campus Life, so its
+// chip cluster still merges/accordions with Campus Life's) or NAV_DESKTOP
+// (desktop — Services is its own top-level group there, same as the
+// sidebar split, so its pages get their own independent chip strip instead
+// of appearing to belong under Campus Life).
+function getPageMeta(pathname, navSource) {
+  for (const section of navSource) {
     const pools = section.subgroups
       ? section.subgroups.map(sub => ({ items: sub.items, groupLabel: sub.name, hubPath: sub.hubPath, hubIcon: sub.hubIcon }))
       : [{ items: section.items, groupLabel: section.group, hubPath: section.hubPath, hubIcon: section.hubIcon }];
@@ -87,7 +93,7 @@ function GroupedChipStrip({ siblingGroups, openClusterName, onToggleCluster, cur
                 type="button"
                 onClick={() => onToggleCluster(cluster.name)}
                 className="filter-tab"
-                style={{ marginRight: 6, opacity: 0.5, flexShrink: 0 }}
+                style={{ marginRight: 6, flexShrink: 0 }}
               >
                 {cluster.name}
               </button>
@@ -102,7 +108,8 @@ function GroupedChipStrip({ siblingGroups, openClusterName, onToggleCluster, cur
 export function Navbar({ onMenuClick }) {
   const { themeId, setTheme } = useTheme();
   const location = useLocation();
-  const { label, group, siblings, siblingGroups } = getPageMeta(location.pathname);
+  const isMobileNav = useIsMobileNav();
+  const { label, group, siblings, siblingGroups } = getPageMeta(location.pathname, isMobileNav ? NAV : NAV_DESKTOP);
 
   // Accordion open/close state for the grouped chip strip (Campus Life /
   // Services style pages, where siblingGroups is populated) — defaults to

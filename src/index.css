@@ -9309,13 +9309,29 @@ body.schedule-fullscreen-active .mobile-bottom-nav {
   text-align: left;
 }
 
-/* Full-width hero card for the most-used item in a hub section — visual
-   anchor so the eye lands somewhere first, instead of every card reading
-   as equal weight. */
+/* Hero card for the most-used item in a hub section — visual anchor so
+   the eye lands somewhere first, instead of every card reading as equal
+   weight. Lives inside the same .hub-grid as every other item (not a
+   separate block above it), spanning the full grid width via
+   grid-column so surrounding items still flow in the same grid — this
+   is what lets the desktop override below collapse it back to a normal
+   1-column cell without moving it to a different container. */
 .hub-grid-item-hero {
+  grid-column: 1 / -1;
   min-height: unset;
-  width: 100%;
+  flex-direction: row;
+  align-items: center;
   justify-content: flex-start;
+  gap: 12px;
+  background:
+    radial-gradient(ellipse 240px 120px at 0% 0%, rgba(var(--accentRGB), 0.14), transparent 70%),
+    var(--card);
+  border-color: color-mix(in srgb, var(--accent) 22%, var(--border));
+}
+.hub-grid-item-hero .hub-grid-item-icon {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
 }
 
 @media (max-width: 380px) {
@@ -9336,6 +9352,23 @@ body.schedule-fullscreen-active .mobile-bottom-nav {
 @media (min-width: 900px) {
   .hub-grid-item .hub-grid-item-icon { width: 36px; height: 36px; }
   .hub-grid-item .hub-grid-item-label { font-size: 14px; }
+
+  /* Desktop only: the hero card's full-row width leaves the rest of its
+     row empty (the 3-column grid has nothing else to place beside it),
+     which reads as wasted space on wide screens. Fold it back into a
+     normal 1-column grid cell here — mobile keeps the full-width hero
+     treatment untouched, this override only applies at this breakpoint. */
+  .hub-grid-item-hero {
+    grid-column: auto;
+    min-height: 96px;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+  .hub-grid-item-hero .hub-grid-item-icon {
+    width: 36px;
+    height: 36px;
+  }
 }
 
 /* ── Founder dashboard category / subcategory navigation ──────────────────

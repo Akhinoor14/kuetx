@@ -103,22 +103,23 @@ function HubSection({ title, items, icon }) {
         const firstAccent = resolveAccent(first.accent);
         const FirstIcon = ICONS[first.icon] || Circle;
         return (
-          <>
-            {/* Most-used item gets a full-width hero card — visual anchor,
-                same pattern the approved mockups use for Courses/Attendance. */}
+          <div className="hub-grid">
+            {/* Most-used item gets a hero treatment — full-width row on
+                mobile (visual anchor, same pattern the approved mockups
+                use for Courses/Attendance), folded back into a normal
+                grid cell on desktop via the hub-grid-item-hero media
+                query override so it doesn't waste an empty row on wide
+                screens. Lives inside the same .hub-grid as `rest` (not a
+                separate block above it) so desktop's 3-column flow can
+                place items beside it. */}
             <Link
               key={first.id}
               to={first.path}
               className="hub-grid-item hub-grid-item-hero"
-              style={{
-                display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', gap: 12,
-                marginBottom: 10,
-              }}
             >
               <div
                 className="hub-grid-item-icon"
                 style={{
-                  width: 40, height: 40, flexShrink: 0,
                   background: `color-mix(in srgb, ${firstAccent} 15%, var(--surface))`,
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                 }}
@@ -135,27 +136,25 @@ function HubSection({ title, items, icon }) {
               </div>
             </Link>
 
-            <div className="hub-grid">
-              {rest.map(item => {
-                const accent = resolveAccent(item.accent);
-                const Icon = ICONS[item.icon] || Circle;
-                return (
-                  <Link key={item.id} to={item.path} className="hub-grid-item">
-                    <div
-                      className="hub-grid-item-icon"
-                      style={{
-                        background: `color-mix(in srgb, ${accent} 15%, var(--surface))`,
-                        display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      }}
-                    >
-                      <Icon size={17} color={accent} />
-                    </div>
-                    <span className="hub-grid-item-label" style={{ fontWeight: 600, color: '#5c5a54' }}>{item.label}</span>
-                  </Link>
-                );
-              })}
-            </div>
-          </>
+            {rest.map(item => {
+              const accent = resolveAccent(item.accent);
+              const Icon = ICONS[item.icon] || Circle;
+              return (
+                <Link key={item.id} to={item.path} className="hub-grid-item">
+                  <div
+                    className="hub-grid-item-icon"
+                    style={{
+                      background: `color-mix(in srgb, ${accent} 15%, var(--surface))`,
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    }}
+                  >
+                    <Icon size={17} color={accent} />
+                  </div>
+                  <span className="hub-grid-item-label" style={{ fontWeight: 600, color: '#5c5a54' }}>{item.label}</span>
+                </Link>
+              );
+            })}
+          </div>
         );
       })()}
     </div>
