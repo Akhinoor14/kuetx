@@ -25,12 +25,14 @@
 // full-screen background — nothing behind it shows through at all.
 
 import { useState } from 'react';
-import { GraduationCap, User, Sparkles, Store } from 'lucide-react';
+import { GraduationCap, User, Sparkles, Store, X } from 'lucide-react';
 import { setAccountRole, persistAccountRoleToServer } from '../lib/accountRole';
 import { createFacultyAccountDoc } from '../lib/facultySync';
 import { createProviderShell } from '../lib/providerSync';
 import { SERVICE_TYPES, PROVIDER_SIGNUP_TYPES, PROVIDER_SIGNUP_TYPE_LABELS_BN } from '../lib/serviceSync';
 import { auth } from '../lib/firebase';
+import Modal from './Modal';
+import { PrivacyPolicyBody } from '../pages/PrivacyPolicy';
 
 const cardStyle = {
   flex: 1,
@@ -66,6 +68,7 @@ export default function RoleSelectScreen({ onSelect }) {
   // Points at the same /privacy page linked from Navbar.jsx's hamburger
   // menu (PrivacyPolicy.jsx — currently placeholder/trial content).
   const [agreedToTerms, setAgreedToTerms] = useState(false);
+  const [showTermsModal, setShowTermsModal] = useState(false);
   const [providerName, setProviderName] = useState('');
   const [providerPhone, setProviderPhone] = useState('');
   // Founder-verification gap fix: 'salon' used to be hardcoded with no
@@ -388,11 +391,16 @@ export default function RoleSelectScreen({ onSelect }) {
 
         {/* Required Terms & Conditions / Privacy Policy checkbox — blocks
             all three role cards above until checked (see choose()'s
-            agreedToTerms guard too). Opens /privacy in a new tab rather
-            than navigating this tab away, since RoleSelectScreen renders
-            as a full-screen blocking overlay outside the normal route
-            tree (see App.jsx) — leaving it via a normal Link could strand
-            the person mid-onboarding. */}
+            agreedToTerms guard too).
+            BUGFIX: this used to be an <a href="/privacy" target="_blank">,
+            which opened a whole new browser tab — reads as an accidental
+            redirect away from signup rather than a deliberate "read the
+            terms" action, and since RoleSelectScreen renders as a
+            full-screen blocking overlay outside the normal route tree
+            (see App.jsx), it could strand the person mid-onboarding in a
+            second tab with no way back to finish. Now a plain button that
+            opens the same PrivacyPolicyBody content in an in-app Modal
+            popup instead — no tab, no navigation, no route change. */}
         <label style={{
           display: 'flex', alignItems: 'flex-start', gap: 10,
           marginTop: 22, cursor: 'pointer', fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.6,
@@ -405,18 +413,76 @@ export default function RoleSelectScreen({ onSelect }) {
           />
           <span>
             আমি KUETx-এর{' '}
-            <a
-              href="/privacy"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{ color: 'var(--accent)', fontWeight: 600, textDecoration: 'none' }}
-              onClick={(e) => e.stopPropagation()}
+            <button
+              type="button"
+              onClick={(e) => { e.stopPropagation(); e.preventDefault(); setShowTermsModal(true); }}
+              style={{
+                color: 'var(--accent)', fontWeight: 600, textDecoration: 'none',
+                background: 'none', border: 'none', padding: 0, margin: 0,
+                font: 'inherit', cursor: 'pointer',
+              }}
             >
               গোপনীয়তা নীতি ও শর্তাবলী
-            </a>
+            </button>
             {' '}পড়েছি এবং সম্মত আছি।
           </span>
         </label>
+
+        {showTermsModal && (
+          <Modal
+            onClose={() => setShowTermsModal(false)}
+            contentStyle={{
+              background: 'var(--bg)',
+              borderRadius: 16,
+              width: '100%',
+              maxWidth: 640,
+              maxHeight: '85dvh',
+              overflow: 'hidden',
+              display: 'flex',
+              flexDirection: 'column',
+            }}
+          >
+            <div style={{
+              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+              padding: '14px 18px', borderBottom: '1px solid var(--border)', flexShrink: 0,
+            }}>
+              <div style={{ fontWeight: 700, fontSize: 14, color: 'var(--text)' }}>
+                গোপনীয়তা নীতি ও শর্তাবলী
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowTermsModal(false)}
+                aria-label="Close"
+                style={{
+                  background: 'none', border: 'none', cursor: 'pointer',
+                  padding: 6, display: 'flex', color: 'var(--muted)',
+                }}
+              >
+                <X size={18} />
+              </button>
+            </div>
+            <div style={{ padding: '20px 22px', overflowY: 'auto' }}>
+              <PrivacyPolicyBody />
+            </div>
+            <div style={{ padding: '12px 18px', borderTop: '1px solid var(--border)', flexShrink: 0 }}>
+              <button
+                type="button"
+                onClick={() => {
+                  setAgreedToTerms(true);
+                  setError('');
+                  setShowTermsModal(false);
+                }}
+                style={{
+                  width: '100%', padding: '10px 0', borderRadius: 10, border: 'none',
+                  background: 'var(--accent)', color: '#fff', fontWeight: 700,
+                  fontSize: 13.5, cursor: 'pointer',
+                }}
+              >
+                পড়েছি ও সম্মত আছি
+              </button>
+            </div>
+          </Modal>
+        )}
 
         {error && (
           <div style={{

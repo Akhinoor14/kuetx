@@ -259,7 +259,27 @@ export const NAV_DESKTOP = NAV.map((section) => {
 // so mobile no longer needs a separate transform — it shares NAV as-is.
 export const NAV_MOBILE = NAV;
 
+// BUGFIX: getStudentNav() was returning the raw NAV/NAV_DESKTOP array
+// unfiltered, which includes the 4 provider-only stub groups above
+// ('Offerings & Earnings', 'Shop Details & Status', 'My Shop',
+// 'Provider Dashboard'). Those exist ONLY so Navbar.jsx's getPageMeta()
+// can resolve a topbar title on /provider* pages — see the comment at
+// their definition — they were never meant to be rendered as actual
+// sidebar links. SidebarNavStudent.jsx renders whatever this function
+// returns, so a student account was seeing 4 provider nav rows that led
+// to RequireProvider-gated pages they don't have access to. Filtering
+// them out here keeps Navbar.jsx's own `import { NAV }` (unfiltered)
+// working exactly as before, since only this sidebar-facing accessor
+// changes.
+const PROVIDER_TOPBAR_ONLY_GROUPS = new Set([
+  'Offerings & Earnings',
+  'Shop Details & Status',
+  'My Shop',
+  'Provider Dashboard',
+]);
+
 /** Pick the right NAV structure for the current viewport. */
 export function getStudentNav(isMobileNav) {
-  return isMobileNav ? NAV_MOBILE : NAV_DESKTOP;
+  const base = isMobileNav ? NAV_MOBILE : NAV_DESKTOP;
+  return base.filter((section) => !PROVIDER_TOPBAR_ONLY_GROUPS.has(section.group));
 }

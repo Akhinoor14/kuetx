@@ -581,6 +581,16 @@ function ProviderPostSignupRedirect({ queueBuilt, queueEmpty }) {
     if (!isProvider || isVerifiedProvider) return;
     if (location.pathname.startsWith('/provider')) return;
     if (sessionStorage.getItem(PROVIDER_REDIRECT_FLAG)) return;
+    // BUGFIX: this used to fire on ANY pathname the moment the queue
+    // drained, including pages the person deliberately just navigated
+    // to (e.g. clicking the Role Select "গোপনীয়তা নীতি ও শর্তাবলী" link
+    // to /privacy right as onboarding finished) — the redirect would win
+    // the race and yank them to /provider's pending-verification screen
+    // instead, reading as a random error page popping up right after
+    // setup. Now only fires from the natural default landing path ('/'),
+    // same "first thing after signup" moment it was meant for, so it
+    // never overrides an intentional navigation elsewhere.
+    if (location.pathname !== '/') return;
 
     sessionStorage.setItem(PROVIDER_REDIRECT_FLAG, '1');
     navigate('/provider', { replace: true });
