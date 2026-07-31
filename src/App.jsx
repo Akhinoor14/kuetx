@@ -318,10 +318,20 @@ function Layout({ authState, onboardingActive }) {
                 Settings" sections (see nav-faculty.js's "More" group for
                 why). /faculty/resources and /faculty/tools both now
                 redirect here rather than 404-ing for anyone with the old
-                links bookmarked. */}
+                links bookmarked. Mobile-only destination now — desktop's
+                sidebar has its own separate Communication/Services/
+                Resources rows instead of ever landing here (see
+                NAV_FACULTY_DESKTOP in nav-faculty.js). */}
             <Route path="/faculty/more" element={<RequireFaculty><SubgroupHub navSource={NAV_FACULTY} group="More" pageTitle="More" /></RequireFaculty>} />
             <Route path="/faculty/resources" element={<Navigate to="/faculty/more" replace />} />
             <Route path="/faculty/tools" element={<Navigate to="/faculty/more" replace />} />
+            {/* Desktop-only Resources hub — scoped to just the Resources
+                subgroup (Question Bank/Contact/Settings/About), not the
+                combined mobile /faculty/more page. NAV_FACULTY_DESKTOP
+                points its Resources row's hubPath here instead of at
+                /faculty/resources (which redirects to the combined
+                mobile hub above). */}
+            <Route path="/faculty/resources-hub" element={<RequireFaculty><SubgroupHub navSource={NAV_FACULTY} group="More" subgroup="Resources" pageTitle="Resources" /></RequireFaculty>} />
           </Routes>
           </Suspense>
         </div>

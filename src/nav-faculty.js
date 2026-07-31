@@ -76,18 +76,21 @@ export const NAV_FACULTY = [
       },
       {
         // Services marketplace (MULTI_CATEGORY_SERVICES_PLAN.md) — same
-        // /services route the student shell uses, unguarded by role in
-        // App.jsx, so this was already reachable by a faculty account
-        // typing the URL directly; it just had no nav entry to discover
-        // it from. Its own subgroup (not folded into Resources) so it
-        // reads as its own destination — tapping through shows the same
-        // 5-category grid (Salon/Food/Pharmacy/Stationery/Online Mart)
-        // the student Services page shows, not a settings-page tile.
+        // /services/category/:type routes the student shell uses,
+        // unguarded by role in App.jsx. Mirrors nav.js's student-side
+        // Services subgroup exactly (5 category items, not one generic
+        // "Services" link) so this section shows the real category
+        // cards (Salon/Food/Pharmacy/Stationery/Online Mart) directly,
+        // the same as the student Campus Life page's Services section.
         name: 'Services',
         hubPath: '/services',
         hubIcon: 'Store',
         items: [
-          { id: 'f-services', label: 'Services', icon: 'Store', path: '/services' },
+          { id: 'f-services-salon',      label: 'Salon',       icon: 'Scissors',        path: '/services/category/salon' },
+          { id: 'f-services-hotel',      label: 'Food',        icon: 'UtensilsCrossed', path: '/services/category/hotel' },
+          { id: 'f-services-medicine',   label: 'Pharmacy',    icon: 'Cross',           path: '/services/category/medicine' },
+          { id: 'f-services-bookstore',  label: 'Stationery',  icon: 'BookOpen',        path: '/services/category/bookstore' },
+          { id: 'f-services-onlinemart', label: 'Online Mart', icon: 'ShoppingBag',     path: '/services/category/onlinemart' },
         ],
       },
       {
@@ -129,13 +132,22 @@ export const NAV_FACULTY = [
 // Desktop's sidebar has no such space constraint, so each subgroup gets
 // promoted to its own independent top-level sidebar section instead,
 // exactly like Dashboard/Profile/My Classes/Schedule already are.
+//
+// hubPath override for Resources: the base NAV_FACULTY subgroup's
+// hubPath ('/faculty/resources') is a legacy redirect straight to the
+// combined mobile /faculty/more hub (all three subgroups at once) — fine
+// for mobile where that combined page IS the destination, wrong for
+// desktop where Resources needs its OWN single-subgroup hub page.
+// '/faculty/resources-hub' is that dedicated desktop-only route (see
+// App.jsx), keeping '/faculty/resources' itself as the untouched mobile
+// redirect so old bookmarks/links still land on the combined page.
 export const NAV_FACULTY_DESKTOP = NAV_FACULTY.map((section) => {
   if (section.group !== 'More' || !section.subgroups) return section;
 
   return section.subgroups.map((sub) => ({
     group: sub.name,
     isSubgroup: true,
-    hubPath: sub.hubPath,
+    hubPath: sub.name === 'Resources' ? '/faculty/resources-hub' : sub.hubPath,
     hubIcon: sub.hubIcon,
     items: sub.items,
   }));
