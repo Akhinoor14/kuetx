@@ -13,6 +13,7 @@ import { subscribeClassSetup } from '../lib/groupSync';
 import { subscribeGroupTermStartDate } from '../lib/termStartDateSync';
 import { getGroupId } from '../lib/groupUtils';
 import { CATEGORY_ICONS } from './Services';
+import TodayCard from '../components/TodayCard';
 
 function StatCard({ label, value, sub, color, bgColor, icon: Icon, to }) {
   const inner = (
@@ -287,6 +288,8 @@ export default function Dashboard() {
       )}
 
       {/* Quick Access removed */}
+
+      <TodayCard />
 
       {/* Setup prompt */}
       {!profile.name && (

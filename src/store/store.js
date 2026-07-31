@@ -758,6 +758,59 @@ export const getRoutinePreviewDate = (holidayDates = [], now = new Date()) => {
   return getNextRoutineDate(localDateKey(base), holidayDates);
 };
 
+// ─── TODAY PAGE ────────────────────────────────────────────────────────────
+// today_plans holds two kinds of user-created rows, both self-contained on
+// the /today page (no other page reads or writes this key):
+//   { id, type: 'tuition', title, subject, days: ['Sunday', ...], time, note }
+//   { id, type: 'todo',    title, date: 'YYYY-MM-DD', time, note }
+// 'tuition' rows repeat every week on each listed day (any of all 7 days —
+// tuition/personal items are not limited to the Sun–Thu class week).
+// 'todo' rows fire once, on their single date.
+export const FULL_WEEK_DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+export const getTodayPlans = () => {
+  const raw = store.get('today_plans');
+  return Array.isArray(raw) ? raw : [];
+};
+
+export const saveTodayPlan = (plan) => {
+  const list = getTodayPlans();
+  const next = plan.id
+    ? list.map((p) => (p.id === plan.id ? { ...p, ...plan } : p))
+    : [{ ...plan, id: uid() }, ...list];
+  store.set('today_plans', next);
+  return next;
+};
+
+export const deleteTodayPlan = (id) => {
+  const next = getTodayPlans().filter((p) => p.id !== id);
+  store.set('today_plans', next);
+  return next;
+};
+
+// Weekday name for any date (defaults to now), matching the Sunday-first
+// naming already used across Schedule.jsx (DAYS / DAY_INDEX).
+export const getWeekdayName = (date = new Date()) => FULL_WEEK_DAYS[date.getDay()];
+
+// Parses a "8:00 AM-8:50 AM"-style routine slot (see Schedule.jsx TIME_MODELS)
+// or a plain "5:00 PM" time string into 24h minutes-since-midnight, for sorting
+// items on a single merged timeline. Returns null if it can't be parsed.
+export const parseTimeToMinutes = (raw) => {
+  if (!raw) return null;
+  const first = String(raw).split('-')[0].trim();
+  const m = first.match(/^(\d{1,2}):(\d{2})\s*([AP]M)?$/i);
+  if (!m) return null;
+  let [, h, min, ampm] = m;
+  h = parseInt(h, 10);
+  min = parseInt(min, 10);
+  if (ampm) {
+    ampm = ampm.toUpperCase();
+    if (ampm === 'PM' && h !== 12) h += 12;
+    if (ampm === 'AM' && h === 12) h = 0;
+  }
+  return h * 60 + min;
+};
+
 // ─── UNIFIED COMPUTATION FUNCTIONS ────────────────────────────────────────
 // These are the single source of truth used by ALL pages.
 // Reading from both 'attLogs' (daily) and 'attendance' (manual).
