@@ -199,8 +199,18 @@ function Layout({ authState, onboardingActive }) {
                 the student home page after onboarding/login with no way
                 to reach /faculty except typing the URL directly. Now
                 routes by accountRole, same source of truth buildQueue()
-                uses. See BUGFIX_ROLE_SELECT_AND_FACULTY_ROUTING.md. */}
-            <Route path="/" element={getAccountRole() === 'teacher' ? <Navigate to="/faculty" replace /> : <Dashboard />} />
+                uses. See BUGFIX_ROLE_SELECT_AND_FACULTY_ROUTING.md.
+
+                BUGFIX 2: 'provider' was added as a third accountRole
+                (see accountRole.js Phase 1 note) but this ternary was
+                never updated for it, so provider accounts fell into the
+                else branch and got the student Dashboard too — same bug
+                as the teacher case above, just missed for the newer role. */}
+            <Route path="/" element={
+              getAccountRole() === 'teacher' ? <Navigate to="/faculty" replace /> :
+              getAccountRole() === 'provider' ? <Navigate to="/provider" replace /> :
+              <Dashboard />
+            } />
             <Route path="/profile" element={<Profile />} />
             <Route path="/courses" element={<RequireStudentMode><Courses /></RequireStudentMode>} />
             <Route path="/attendance" element={<RequireStudentMode><Attendance /></RequireStudentMode>} />
