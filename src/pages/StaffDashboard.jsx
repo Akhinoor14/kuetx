@@ -594,7 +594,17 @@ function RoleTabBar({ tabs, active, onChange }) {
 // ---------------------------------------------------------------------
 export default function StaffDashboard({ activeTab: activeTabProp, onTabChange } = {}) {
   const [roles, setRoles] = useState(null);
-  const [isAdminUser, setIsAdminUser] = useState(false);
+  // BUGFIX (multi-role tab flicker / wrong initial tab): default is now
+  // `null` ("not yet known") instead of `false`. `roles`
+  // (staff/{uid}/roles) and admin status (admins/{uid}) resolve from two
+  // independent async listeners, and `roles` usually settles first. With
+  // a `false` default, the tab-list effect below ran once with
+  // isAdminUser still `false` — for a Founder who is ALSO e.g. Campus
+  // Lead, that produced a tabs list of just [{key:'cl'}] and wrote
+  // `?tab=cl` into the URL before the Founder tab even existed. `null`
+  // lets the render wait for both roles AND admin status before
+  // computing tabs even once, so the tab list is correct from the start.
+  const [isAdminUser, setIsAdminUser] = useState(null);
   // BUGFIX (back-button skips whole page): activeTab is now a controlled
   // prop driven by TeamDashboard's ?tab= URL param (falls back to local
   // state only if this component is ever used standalone without the
@@ -630,7 +640,14 @@ export default function StaffDashboard({ activeTab: activeTabProp, onTabChange }
   // second computation below (used for actual rendering) is intentionally
   // kept in sync with this one.
   useEffect(() => {
+    // Wait for BOTH sources before computing tabs even once. `roles`
+    // (staff/{uid}/roles) and `isAdminUser` (admins/{uid}) are two
+    // independent listeners that don't resolve at the same time — running
+    // this with one of them still unknown produces an incomplete tabs
+    // list (e.g. Founder tab missing) that then has to self-correct on a
+    // later render, which is what caused the "wrong tab locked in" bug.
     if (!roles) return;
+    if (isAdminUser === null) return;
     const clGroups = roles.filter((r) => r.role === 'campus_lead').map((r) => r.scope?.groupId).filter(Boolean);
     const sclDepts = roles.filter((r) => r.role === 'senior_campus_lead').map((r) => r.scope?.dept).filter(Boolean);
     const isHeadOfOps = roles.some((r) => r.role === 'head_of_ops');
@@ -658,7 +675,7 @@ export default function StaffDashboard({ activeTab: activeTabProp, onTabChange }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [roles, isAdminUser, activeTab]);
 
-  if (roles === null) return <div style={{ padding: 20, color: 'var(--muted)' }}>{rolesLoadWarning || 'Loading…'}</div>;
+  if (roles === null || isAdminUser === null) return <div style={{ padding: 20, color: 'var(--muted)' }}>{rolesLoadWarning || 'Loading…'}</div>;
   if (roles.length === 0 && !isAdminUser) {
     return (
       <div style={{ textAlign: 'center', color: 'var(--muted)', padding: '12px 0 20px' }}>
