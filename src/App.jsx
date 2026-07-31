@@ -909,17 +909,40 @@ export default function App() {
       if (localRole) persistAccountRoleToServer(localRole);
     }
 
-    // RESTRUCTURE: role is no longer known at this point for a fresh
-    // Register (Role Select now happens AFTER account creation, not
-    // before) — the old hand-rolled splicing here assumed getAccountRole()
-    // was already 'teacher' or 'student', which is only true for Login,
-    // not Register, post-restructure. buildQueue() already contains every
-    // rule needed (server-role lookup, faculty-doc fallback, role-select
-    // if genuinely nothing recorded, faculty-verify, profile) — simplest
-    // and most robust to just re-run it rather than duplicate that logic
-    // here by hand.
-    const q = await buildQueue(user.isAnonymous);
-    setQueue(q);
+    // BUGFIX (millisecond profile-modal flash): this function used to
+    // finish by calling buildQueue()/setQueue() itself, right here. That
+    // made it a SECOND, independent caller of buildQueue() for the exact
+    // same auth event — racing against useFirebaseAuth.js's own
+    // authReady-gated chain (onAuthChange -> syncLocalDataOnAuth ->
+    // startFirebaseSync -> setAuthReady(true)), which App.jsx's
+    // uid-keyed effect (see the big comment above that effect) is
+    // listening to and treats as the single source of truth for when to
+    // rebuild the queue. AuthModal calls onSuccess (this function)
+    // fire-and-forget, un-awaited — so while THIS function's own
+    // syncLocalDataOnAuth/startFirebaseSync calls above were resolving,
+    // useFirebaseAuth's onAuthChange had already fired setUser()
+    // synchronously (uid changes immediately), which can flip authReady
+    // true and trigger the App.jsx effect's OWN buildQueue() call before
+    // this function's buildQueue() below even started. Two uncoordinated
+    // buildQueue() calls for one sign-in meant whichever settled first
+    // (against whatever profile state existed at that exact instant) won
+    // — a narrow but real window where the stale one flashed
+    // ProfileSetupModal for a frame before the other corrected it.
+    //
+    // Fix: don't call buildQueue()/setQueue() here at all. The
+    // syncLocalDataOnAuth() and startFirebaseSync() calls above are
+    // idempotent/de-duplicated per-uid (see their own comments), so
+    // calling them from both this function and useFirebaseAuth's
+    // onAuthChange is safe and just avoids doing the work twice — but the
+    // queue itself should only ever be written by ONE place. That place
+    // is App.jsx's authReady-gated effect (keyed on authState.uid), which
+    // fires automatically once useFirebaseAuth's chain flips authReady to
+    // true after this same sign-in. No manual rebuild needed here.
+    //
+    // Exception: Role Select's onSelect handler still calls
+    // buildQueue()/setQueue() directly (see below) — that's a genuinely
+    // separate, later event (a role being picked), not a duplicate of
+    // this same sign-in, so it doesn't have this race.
   };
 
   return (
