@@ -361,25 +361,53 @@ function ApprovalsView({ onBack, onSelectCategory, countCtx }) {
         </Section>
       )}
 
-      {subTab === 'manual-verify' && (
-        <Section title="Manual verification requests">
-          {manualVerifyLoading && <EmptyState>Loading…</EmptyState>}
-          {!manualVerifyLoading && manualVerifyRequests.length === 0 && <EmptyState>Nothing pending.</EmptyState>}
-          {(manualVerifyRequests || []).map((r) => (
-            <ApprovalRow key={r.id}
-              label={`${r.name || 'Unknown'} — ${r.email} — ${r.role === 'faculty' ? 'Faculty' : 'Student'}${r.roll ? ` (Roll: ${r.roll})` : ''}${r.dept ? ` — ${r.dept}` : ''}`}
-              // Faculty accounts sign in with a personal Gmail now (Auth
-              // Simplification migration) — showing it alongside the
-              // self-reported institutional email above lets the Founder
-              // sanity-check the two actually look like the same person
-              // before approving. Students don't have this field.
-              sublabel={r.role === 'faculty' && r.googleEmail ? `Google login: ${r.googleEmail}` : null}
-              onApprove={() => handle(approveManualVerifyRequest, r.id)}
-              onReject={() => handle(rejectManualVerifyRequest, r.id)}
-            />
-          ))}
-        </Section>
-      )}
+      {subTab === 'manual-verify' && (() => {
+        // BUGFIX (Founder couldn't tell faculty and student requests
+        // apart at a glance): this tab used to render both roles as one
+        // flat, mixed list, distinguished only by an inline "— Faculty" /
+        // "— Student" fragment inside each row's label. With more than a
+        // couple of pending requests that's easy to misread before
+        // clicking Approve/Reject, and faculty vs. student approval
+        // means genuinely different verification data (institutional
+        // email + Google login cross-check for faculty; roll number for
+        // students). Split into two labeled groups by `r.role` — same
+        // underlying list/data/actions, no change to
+        // subscribeManualVerifyRequests or approve/rejectManualVerifyRequest.
+        const facultyRequests = (manualVerifyRequests || []).filter((r) => r.role === 'faculty');
+        const studentRequests = (manualVerifyRequests || []).filter((r) => r.role !== 'faculty');
+        return (
+          <>
+            <Section title={`Faculty Blue Tick${facultyRequests.length ? ` (${facultyRequests.length})` : ''}`}>
+              {manualVerifyLoading && <EmptyState>Loading…</EmptyState>}
+              {!manualVerifyLoading && facultyRequests.length === 0 && <EmptyState>Nothing pending.</EmptyState>}
+              {facultyRequests.map((r) => (
+                <ApprovalRow key={r.id}
+                  label={`${r.name || 'Unknown'} — ${r.email}${r.dept ? ` — ${r.dept}` : ''}`}
+                  // Faculty accounts sign in with a personal Gmail now (Auth
+                  // Simplification migration) — showing it alongside the
+                  // self-reported institutional email above lets the Founder
+                  // sanity-check the two actually look like the same person
+                  // before approving.
+                  sublabel={r.googleEmail ? `Google login: ${r.googleEmail}` : null}
+                  onApprove={() => handle(approveManualVerifyRequest, r.id)}
+                  onReject={() => handle(rejectManualVerifyRequest, r.id)}
+                />
+              ))}
+            </Section>
+            <Section title={`Student Manual Verification${studentRequests.length ? ` (${studentRequests.length})` : ''}`}>
+              {manualVerifyLoading && <EmptyState>Loading…</EmptyState>}
+              {!manualVerifyLoading && studentRequests.length === 0 && <EmptyState>Nothing pending.</EmptyState>}
+              {studentRequests.map((r) => (
+                <ApprovalRow key={r.id}
+                  label={`${r.name || 'Unknown'} — ${r.email}${r.roll ? ` (Roll: ${r.roll})` : ''}`}
+                  onApprove={() => handle(approveManualVerifyRequest, r.id)}
+                  onReject={() => handle(rejectManualVerifyRequest, r.id)}
+                />
+              ))}
+            </Section>
+          </>
+        );
+      })()}
 
       {subTab === 'provider-verify' && (
         <Section title="Service provider verification (Salon etc.)">
