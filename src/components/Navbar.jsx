@@ -22,26 +22,97 @@ function getPageMeta(pathname) {
       ? section.subgroups.map(sub => ({ items: sub.items, groupLabel: sub.name, hubPath: sub.hubPath, hubIcon: sub.hubIcon }))
       : [{ items: section.items, groupLabel: section.group, hubPath: section.hubPath, hubIcon: section.hubIcon }];
 
+    // When a group has multiple subgroups that share the same hubPath
+    // (e.g. Campus Life's "Campus Life" + "Services" subgroups both hub
+    // at /campus-life), the topbar chip strip groups them into one
+    // collapsible cluster per subgroup instead of flattening every item
+    // into a single flat row — see siblingGroups below.
+    const hubPathCounts = {};
+    pools.forEach((p) => {
+      if (p.hubPath) hubPathCounts[p.hubPath] = (hubPathCounts[p.hubPath] || 0) + 1;
+    });
+
     for (const pool of pools) {
+      const sharesHub = pool.hubPath && hubPathCounts[pool.hubPath] > 1;
+      const siblingGroups = sharesHub
+        ? pools
+          .filter((p) => p.hubPath === pool.hubPath)
+          .map((p) => ({ name: p.groupLabel, items: p.items }))
+        : null;
+
       for (const item of pool.items) {
         if (item.path === pathname || (item.path !== '/' && pathname.startsWith(item.path)))
-          return { label: item.label, group: pool.groupLabel, siblings: pool.items };
+          return { label: item.label, group: pool.groupLabel, siblings: pool.items, siblingGroups };
       }
       // Hub landing page itself (e.g. /class-rep) — no single item matches
       // it directly since it's the multi-card index, not a leaf page. Show
       // the group name as the title instead of falling through to blank.
       if (pool.hubPath && pool.hubPath === pathname) {
-        return { label: pool.groupLabel, group: pool.groupLabel, siblings: [] };
+        return { label: pool.groupLabel, group: pool.groupLabel, siblings: [], siblingGroups: null };
       }
     }
   }
-  return { label: 'KUETx', group: '', siblings: [] };
+  return { label: 'KUETx', group: '', siblings: [], siblingGroups: null };
+}
+
+// Renders the chip strip for pages whose group has multiple subgroups
+// sharing one hubPath (e.g. Campus Life's "Campus Life" + "Services"
+// subgroups) — each subgroup collapses into a single cluster chip; only
+// one cluster is expanded (accordion) at a time, showing that subgroup's
+// own item chips. The inactive cluster's items are never shown at the
+// same time as the active one, and the inactive cluster chip itself is
+// rendered at lower opacity so it reads as "collapsed", not "disabled".
+function GroupedChipStrip({ siblingGroups, openClusterName, onToggleCluster, currentPath, onLinkHover }) {
+  return (
+    <>
+      {siblingGroups.map((cluster) => {
+        const isOpen = cluster.name === openClusterName;
+        return (
+          <div key={cluster.name} style={{ display: 'flex', alignItems: 'center', flexShrink: 0 }}>
+            {isOpen ? (
+              cluster.items.map(item => (
+                <Link
+                  key={item.id}
+                  to={item.path}
+                  className={`filter-tab ${currentPath === item.path ? 'active' : ''}`}
+                  style={{ textDecoration: 'none', flexShrink: 0, marginRight: 6 }}
+                  onMouseEnter={() => onLinkHover?.(item.path)}
+                  onTouchStart={() => onLinkHover?.(item.path)}
+                >
+                  {item.shortLabel || item.label}
+                </Link>
+              ))
+            ) : (
+              <button
+                type="button"
+                onClick={() => onToggleCluster(cluster.name)}
+                className="filter-tab"
+                style={{ marginRight: 6, opacity: 0.5, flexShrink: 0 }}
+              >
+                {cluster.name}
+              </button>
+            )}
+          </div>
+        );
+      })}
+    </>
+  );
 }
 
 export function Navbar({ onMenuClick }) {
   const { themeId, setTheme } = useTheme();
   const location = useLocation();
-  const { label, group, siblings } = getPageMeta(location.pathname);
+  const { label, group, siblings, siblingGroups } = getPageMeta(location.pathname);
+
+  // Accordion open/close state for the grouped chip strip (Campus Life /
+  // Services style pages, where siblingGroups is populated) — defaults to
+  // whichever subgroup the current page belongs to, and resets to that
+  // whenever the active group changes via navigation. A manual toggle can
+  // temporarily open a different cluster without navigating.
+  const [openClusterName, setOpenClusterName] = useState(group);
+  useEffect(() => {
+    setOpenClusterName(group);
+  }, [group]);
 
   // Warm the JS chunk for every sibling page (Attendance/Schedule/etc, or
   // whichever group is active) the moment this bar renders for a page that
@@ -61,7 +132,7 @@ export function Navbar({ onMenuClick }) {
   // for free once the page nears its own top again. This is plain CSS
   // sticky-positioning behavior — the only thing JS needs to do is flag
   // which pages are in this mode, via a body class the CSS can key off.
-  const hasChipStrip = siblings && siblings.length > 1;
+  const hasChipStrip = !!siblingGroups || (siblings && siblings.length > 1);
   useEffect(() => {
     document.body.classList.toggle('has-mobile-chip-strip', !!hasChipStrip);
     return () => document.body.classList.remove('has-mobile-chip-strip');
@@ -235,7 +306,7 @@ export function Navbar({ onMenuClick }) {
             redundant "current page name" in two places. Pages with no
             siblings (chip strip absent) still need this as their only
             mobile page indicator, so it stays for those. */}
-        {!(siblings && siblings.length > 1) && (
+        {!hasChipStrip && (
           <div className="topbar-page-title">
             {label !== 'KUETx' ? label : ''}
           </div>
@@ -247,7 +318,17 @@ export function Navbar({ onMenuClick }) {
             centered in the bar. */}
         <div className="hidden md:flex" style={{ position: 'absolute', left: 96, right: 160, justifyContent: 'center', pointerEvents: 'none' }}>
           <div style={{ pointerEvents: 'auto', minWidth: 0, maxWidth: '100%' }}>
-            {siblings && siblings.length > 1 ? (
+            {siblingGroups ? (
+              <div className="filter-tab-row topbar-tabs" style={{ marginBottom: 0, justifyContent: 'center' }}>
+                <GroupedChipStrip
+                  siblingGroups={siblingGroups}
+                  openClusterName={openClusterName}
+                  onToggleCluster={setOpenClusterName}
+                  currentPath={location.pathname}
+                  onLinkHover={preloadRoute}
+                />
+              </div>
+            ) : siblings && siblings.length > 1 ? (
               <div className="filter-tab-row topbar-tabs" style={{ marginBottom: 0, justifyContent: 'center' }}>
                 {siblings.map(item => (
                   <Link
@@ -382,7 +463,19 @@ export function Navbar({ onMenuClick }) {
           (centered pills inside the topbar) has no room on mobile. Own
           sticky strip below the topbar, not merged into it. Renders only
           when siblings.length > 1 for the current page. */}
-      {siblings && siblings.length > 1 && (
+      {siblingGroups ? (
+        <div className="topbar-mobile-tabs md:hidden">
+          <div className="filter-tab-row topbar-tabs">
+            <GroupedChipStrip
+              siblingGroups={siblingGroups}
+              openClusterName={openClusterName}
+              onToggleCluster={setOpenClusterName}
+              currentPath={location.pathname}
+              onLinkHover={preloadRoute}
+            />
+          </div>
+        </div>
+      ) : siblings && siblings.length > 1 && (
         <div className="topbar-mobile-tabs md:hidden">
           <div className="filter-tab-row topbar-tabs">
             {siblings.map(item => (

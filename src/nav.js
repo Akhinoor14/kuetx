@@ -148,7 +148,7 @@ export const NAV = [
           { id: 'services-salon',      label: 'সেলুন',                 shortLabel: 'সেলুন',    icon: 'Scissors',       accent: 'blue',   path: '/services/category/salon' },
           { id: 'services-hotel',      label: 'হোটেল/খাবার',           shortLabel: 'হোটেল',    icon: 'UtensilsCrossed',accent: 'amber',  path: '/services/category/hotel' },
           { id: 'services-medicine',   label: 'মেডিসিন শপ',            shortLabel: 'মেডিসিন',  icon: 'Cross',          accent: 'red',    path: '/services/category/medicine' },
-          { id: 'services-bookstore',  label: 'বই/স্টেশনারি/ফটোকপি',   shortLabel: 'বই/স্টেশনারি', icon: 'BookOpen',  accent: 'purple', path: '/services/category/bookstore' },
+          { id: 'services-bookstore',  label: 'স্টেশনারি',   shortLabel: 'স্টেশনারি', icon: 'BookOpen',  accent: 'purple', path: '/services/category/bookstore' },
           { id: 'services-onlinemart', label: 'Online Mart',           shortLabel: 'Online Mart', icon: 'ShoppingBag', accent: 'green',  path: '/services/category/onlinemart' },
         ]
       },

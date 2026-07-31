@@ -16,7 +16,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import {
-  Store, Circle, Scissors, Cross, UtensilsCrossed, BookOpen, ShoppingBag, ArrowLeft,
+  Store, Circle, Scissors, Cross, UtensilsCrossed, BookOpen, ShoppingBag,
 } from 'lucide-react';
 import { subscribeAllServices, SERVICE_TYPE_LABELS, SERVICE_TYPES, withServiceDefaults } from '../lib/serviceSync';
 import { listAllProviderAccounts } from '../lib/providerSync';
@@ -126,17 +126,19 @@ export default function Services() {
 
   if (services.length === 0) {
     return (
-      <div style={{ padding: '32px 20px', maxWidth: 640, margin: '0 auto', textAlign: 'center' }}>
-        <div style={{
-          width: 52, height: 52, borderRadius: 14, margin: '0 auto 16px',
-          background: 'var(--accentSoft)', display: 'flex',
-          alignItems: 'center', justifyContent: 'center',
-        }}>
-          <Store size={26} color="var(--accent)" />
-        </div>
-        <div style={{ fontSize: 17, fontWeight: 700, color: 'var(--text)', marginBottom: 8 }}>Services</div>
-        <div style={{ fontSize: 13.5, color: 'var(--muted)', lineHeight: 1.7 }}>
-          এখনো কোনো সার্ভিস প্রোভাইডার নেই। শীঘ্রই যোগ হবে।
+      <div className="page-enter page-container content-page-bg">
+        <div style={{ padding: '24px 4px', textAlign: 'center' }}>
+          <div style={{
+            width: 52, height: 52, borderRadius: 14, margin: '0 auto 16px',
+            background: 'var(--accentSoft)', display: 'flex',
+            alignItems: 'center', justifyContent: 'center',
+          }}>
+            <Store size={26} color="var(--accent)" />
+          </div>
+          <div style={{ fontSize: 17, fontWeight: 700, color: 'var(--text)', marginBottom: 8 }}>Services</div>
+          <div style={{ fontSize: 13.5, color: 'var(--muted)', lineHeight: 1.7 }}>
+            এখনো কোনো সার্ভিস প্রোভাইডার নেই। শীঘ্রই যোগ হবে।
+          </div>
         </div>
       </div>
     );
@@ -153,12 +155,14 @@ export default function Services() {
   });
 
   return (
-    <div style={{ padding: '24px 16px', maxWidth: 640, margin: '0 auto' }}>
+    <div className="page-enter page-container content-page-bg">
       <div style={{ fontSize: 18, fontWeight: 800, color: 'var(--text)', marginBottom: 16 }}>Services</div>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 12 }}>
         {SERVICE_TYPES.map((type) => {
           const Icon = CATEGORY_ICONS[type] || Store;
+          const count = activeCountByType[type];
+          const isEmpty = count === 0;
           return (
             <button
               key={type}
@@ -168,6 +172,7 @@ export default function Services() {
                 padding: 16, textAlign: 'left', border: '1px solid rgba(217,119,6,0.18)',
                 background: 'rgba(217,119,6,0.05)',
                 display: 'flex', flexDirection: 'column', gap: 10, cursor: 'pointer',
+                opacity: isEmpty ? 0.6 : 1,
               }}
             >
               <div style={{
@@ -178,8 +183,12 @@ export default function Services() {
               </div>
               <div>
                 <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)' }}>{SERVICE_TYPE_LABELS[type]}</div>
-                <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 2 }}>
-                  {activeCountByType[type]} সক্রিয় শপ
+                <div style={{ marginTop: 6 }}>
+                  {isEmpty ? (
+                    <span className="tag tag-gray">এখনো কোনো শপ নেই</span>
+                  ) : (
+                    <span className="tag tag-green">{count} সক্রিয় শপ</span>
+                  )}
                 </div>
               </div>
             </button>
@@ -218,11 +227,7 @@ export function CategoryShopList() {
   const dormantShops = categoryServices.filter((s) => s.status === 'dormant');
 
   return (
-    <div style={{ padding: '24px 16px', maxWidth: 640, margin: '0 auto' }}>
-      <button onClick={() => navigate('/services')} className="btn btn-sm" style={{ marginBottom: 14, display: 'inline-flex', alignItems: 'center', gap: 6 }}>
-        <ArrowLeft size={14} /> Services
-      </button>
-
+    <div className="page-enter page-container content-page-bg">
       <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
         <div style={{
           width: 36, height: 36, borderRadius: 10, background: 'var(--accentSoft)',

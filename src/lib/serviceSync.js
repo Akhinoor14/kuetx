@@ -73,7 +73,7 @@ export const SERVICE_TYPE_LABELS = {
   salon: 'সেলুন',
   hotel: 'হোটেল/খাবার',
   medicine: 'মেডিসিন শপ',
-  bookstore: 'বই/স্টেশনারি/ফটোকপি',
+  bookstore: 'স্টেশনারি',
   onlinemart: 'Online Mart',
 };
 
