@@ -66,6 +66,7 @@ const Attendance = lazy(() => import('./pages/Attendance'));
 const Marks = lazy(() => import('./pages/Marks'));
 const Results = lazy(() => import('./pages/Results'));
 const Schedule = lazy(() => import('./pages/Schedule'));
+const Today = lazy(() => import('./pages/Today'));
 const Teachers = lazy(() => import('./pages/Teachers'));
 const Diary = lazy(() => import('./pages/Diary'));
 const Assignments = lazy(() => import('./pages/Assignments'));
@@ -203,6 +204,7 @@ function Layout({ authState, onboardingActive }) {
             <Route path="/marks/:courseId" element={<RequireStudentMode><Marks /></RequireStudentMode>} />
             <Route path="/results" element={<RequireStudentMode><Results /></RequireStudentMode>} />
             <Route path="/schedule" element={<RequireStudentMode><Schedule /></RequireStudentMode>} />
+            <Route path="/today" element={<RequireStudentMode><Today /></RequireStudentMode>} />
             <Route path="/teachers" element={<Teachers />} />
             <Route path="/syllabus" element={<RequireStudentMode><Syllabus /></RequireStudentMode>} />
             <Route path="/diary" element={<RequireStudentMode><Diary /></RequireStudentMode>} />
@@ -252,7 +254,7 @@ function Layout({ authState, onboardingActive }) {
             <Route path="/class-rep" element={<CRHub />} />
             <Route path="/academic-core" element={<SubgroupHub group="Academics" subgroup="Academic Core" />} />
             <Route path="/daily-academics" element={<SubgroupHub group="Academics" subgroup="Daily Academics" />} />
-            <Route path="/campus-life" element={<SubgroupHub group="Campus Life" subgroup="Campus Life" />} />
+            <Route path="/campus-life" element={<SubgroupHub pageTitle="Campus Life" sections={[{ group: 'Campus Life', subgroup: 'Campus Life' }, { group: 'Campus Life', subgroup: 'Services' }]} />} />
             <Route path="/self-study" element={<SubgroupHub group="Campus Life" subgroup="Self Study" />} />
 
             {/* Combined bottom-nav hub page. Daily Life doesn't exist as

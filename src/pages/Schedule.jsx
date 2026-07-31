@@ -1500,19 +1500,15 @@ export default function Schedule() {
           <p className="content-page-hero-subtitle" style={{ maxWidth: 600 }}>
             {isGroupMode
               ? (canEditSchedule
-                ? 'This schedule is shared with your class group. Changes you make here update for everyone.'
-                : "This is your class group's shared schedule, set by your CR/ACR. Only they can edit it.")
-              : 'Clean Sun–Thu routine builder. Pick a share format, then copy or import/export the schedule as needed.'}
+                ? 'Shared with your class group — changes update for everyone.'
+                : "Set by your CR/ACR. View only.")
+              : 'Your Sun–Thu routine.'}
           </p>
-          <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginTop: 8, paddingLeft: 36 }}>
-            <span className="tag tag-blue">5-day week</span>
-            {isGroupMode && <span className="tag tag-green">Shared · Class Group</span>}
-            {isGroupMode && !canEditSchedule && <span className="tag tag-gray">View only</span>}
-          </div>
-          {!isGroupMode && (
-            <p className="schedule-header-desc-secondary" style={{ fontSize: '12px', color: 'var(--muted)', margin: '8px 0 0', maxWidth: 600, lineHeight: 1.4, paddingLeft: 36 }}>
-              Assign teachers first via <strong>Manage Course Teachers</strong> before adding schedule entries.
-            </p>
+          {isGroupMode && (
+            <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginTop: 8, paddingLeft: 36 }}>
+              <span className="tag tag-green">Shared · Class Group</span>
+              {!canEditSchedule && <span className="tag tag-gray">View only</span>}
+            </div>
           )}
         </div>
         <div className="content-page-hero-actions">
@@ -1531,6 +1527,12 @@ export default function Schedule() {
           )}
         </div>
       </div>
+
+      {!isGroupMode && (
+        <p style={{ fontSize: '12px', color: 'var(--muted)', margin: '-8px 0 12px', maxWidth: 600, lineHeight: 1.4 }}>
+          Assign teachers via <strong>Manage Course Teachers</strong> before adding classes.
+        </p>
+      )}
 
       {/* §8.7 of the merged Faculty Module prompt — read-only, informational
           only. Renders nothing unless a routine entry's free-text
@@ -2251,10 +2253,18 @@ export default function Schedule() {
             {/* Term dates (classEndDate/prepLeaveEndDate/examCount/
                 postExamEndDate) are CR/ACR-only now, set from the
                 dedicated Class Setup page — no per-student "Configure"
-                editor here anymore. */}
-            <Link to="/class-setup" className="btn btn-ghost" style={{ fontSize: 12, padding: '6px 10px', textDecoration: 'none' }}>
-              <Settings2 size={12} /> Class Setup
-            </Link>
+                editor here anymore.
+                BUGFIX: this link used to show unconditionally, so a
+                regular (non-CR) student in group mode saw a "Class
+                Setup" button that led to a page they had no permission
+                to actually change anything on. Gated behind
+                canEditSchedule now — same rule already used for Manage
+                Course Teachers / Add Class / Edit Exams above. */}
+            {canEditSchedule && (
+              <Link to="/class-setup" className="btn btn-ghost" style={{ fontSize: 12, padding: '6px 10px', textDecoration: 'none' }}>
+                <Settings2 size={12} /> Class Setup
+              </Link>
+            )}
             {/* Exam names/dates are also CR/ACR-only now, edited from the
                 same Class Setup page as every other CR input — no separate
                 editor here for group classes. Personal (non-group) mode
@@ -2310,7 +2320,9 @@ export default function Schedule() {
           if (nothingSet) {
             return (
               <div style={{ fontSize: 12, color: 'var(--muted)', padding: '8px 0' }}>
-                Ask your CR to fill in <b>Class Setup</b>, then use <b>Edit Exams</b> to add exam dates.
+                {canEditSchedule
+                  ? <>Fill in <b>Class Setup</b>, then use <b>Edit Exams</b> to add exam dates.</>
+                  : <>Ask your CR to fill in Class Setup and add exam dates.</>}
               </div>
             );
           }

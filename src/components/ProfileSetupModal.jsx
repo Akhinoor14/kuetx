@@ -928,7 +928,6 @@ export default function ProfileSetupModal({ isOpen, onClose, onSave, initialProf
                   </>
                 )}
               </div>
-              {autoCalculatedBatch && <div style={{ fontSize: 11, color: 'var(--accent)', marginTop: 10, fontWeight: 700 }}>✓ Batch auto-filled: {autoCalculatedBatch}</div>}
             </div>
           )}
 

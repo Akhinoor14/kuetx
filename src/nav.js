@@ -11,6 +11,15 @@ export const NAV = [
     ]
   },
   {
+    group: 'Today',
+    isSubgroup: true,
+    hubPath: '/today',
+    hubIcon: 'Sunrise',
+    items: [
+      { id: 'today', label: 'Today', icon: 'Sunrise', path: '/today' },
+    ]
+  },
+  {
     group: 'Profile',
     isSubgroup: true,
     hubPath: '/profile',
@@ -115,22 +124,32 @@ export const NAV = [
           { id: 'tours',    label: 'Tours',   shortLabel: 'Tours',   icon: 'MapPin',   accent: 'green',  path: '/tours' },
           { id: 'money',    label: 'Money',   shortLabel: 'Money',   icon: 'Wallet',   accent: 'amber',  path: '/money' },
           { id: 'tuition',  label: 'Tuition', shortLabel: 'Tuition', icon: 'UserCog',  accent: 'red',    path: '/tuition' },
-          // Services/Provider marketplace — SERVICES_PROVIDER_PLAN.md §1.
-          // Per Md.'s explicit request: no single "Services" card anymore —
-          // each category (salon/hotel/medicine/bookstore/onlinemart) shows
-          // up here directly as its own card, going straight to
-          // /services/category/:type (Services.jsx's Level 2 route) on tap.
-          // Labels/icons intentionally hardcoded (not read from
-          // serviceSync.js's SERVICE_TYPE_LABELS) since nav.js is plain
-          // static config with no imports from app code elsewhere.
+          { id: 'notes',    label: 'Notes',         shortLabel: 'Notes',  icon: 'StickyNote', accent: 'green',  path: '/notes' },
+          { id: 'time',     label: 'Time Tracker',  shortLabel: 'Timer',  icon: 'Timer',    accent: 'amber',  path: '/time' },
+          { id: 'namaz',    label: 'Namaz Tracker', shortLabel: 'Namaz',  icon: 'Moon',     accent: 'purple', path: '/namaz' },
+        ]
+      },
+      {
+        // Services/Provider marketplace — SERVICES_PROVIDER_PLAN.md §1.
+        // Rendered as its own titled section on the /campus-life page
+        // (see App.jsx's sections={[...]} usage), separate from the base
+        // Campus Life cards above — was previously mixed into the same
+        // flat grid with no visual grouping, which read as one big
+        // undifferentiated list. Each category (salon/hotel/medicine/
+        // bookstore/onlinemart) still goes straight to
+        // /services/category/:type (Services.jsx's Level 2 route) on tap.
+        // Labels/icons intentionally hardcoded (not read from
+        // serviceSync.js's SERVICE_TYPE_LABELS) since nav.js is plain
+        // static config with no imports from app code elsewhere.
+        name: 'Services',
+        hubPath: '/campus-life',
+        hubIcon: 'ShoppingBag',
+        items: [
           { id: 'services-salon',      label: 'সেলুন',                 shortLabel: 'সেলুন',    icon: 'Scissors',       accent: 'blue',   path: '/services/category/salon' },
           { id: 'services-hotel',      label: 'হোটেল/খাবার',           shortLabel: 'হোটেল',    icon: 'UtensilsCrossed',accent: 'amber',  path: '/services/category/hotel' },
           { id: 'services-medicine',   label: 'মেডিসিন শপ',            shortLabel: 'মেডিসিন',  icon: 'Cross',          accent: 'red',    path: '/services/category/medicine' },
           { id: 'services-bookstore',  label: 'বই/স্টেশনারি/ফটোকপি',   shortLabel: 'বই/স্টেশনারি', icon: 'BookOpen',  accent: 'purple', path: '/services/category/bookstore' },
           { id: 'services-onlinemart', label: 'Online Mart',           shortLabel: 'Online Mart', icon: 'ShoppingBag', accent: 'green',  path: '/services/category/onlinemart' },
-          { id: 'notes',    label: 'Notes',         shortLabel: 'Notes',  icon: 'StickyNote', accent: 'green',  path: '/notes' },
-          { id: 'time',     label: 'Time Tracker',  shortLabel: 'Timer',  icon: 'Timer',    accent: 'amber',  path: '/time' },
-          { id: 'namaz',    label: 'Namaz Tracker', shortLabel: 'Namaz',  icon: 'Moon',     accent: 'purple', path: '/namaz' },
         ]
       },
       {

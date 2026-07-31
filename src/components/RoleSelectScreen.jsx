@@ -33,11 +33,12 @@ import { auth } from '../lib/firebase';
 
 const cardStyle = {
   flex: 1,
+  minWidth: 140,
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
   gap: 10,
-  padding: '32px 20px',
+  padding: '28px 16px',
   borderRadius: 18,
   border: '1px solid var(--border)',
   background: 'var(--card)',
@@ -239,8 +240,8 @@ export default function RoleSelectScreen({ onSelect }) {
         background: 'var(--surfaceGlassStrong, var(--card))',
         backdropFilter: 'blur(6px)',
         borderRadius: 22,
-        padding: '32px 28px',
-        width: '100%', maxWidth: 520,
+        padding: '40px 36px',
+        width: '100%', maxWidth: 760,
         border: '1px solid var(--border)',
         boxShadow: '0 32px 80px rgba(0,0,0,0.16)',
       }}>
@@ -252,11 +253,11 @@ export default function RoleSelectScreen({ onSelect }) {
           }}>
             <Sparkles size={24} color="var(--accent)" />
           </div>
-          <div style={{ fontWeight: 800, fontSize: 20, marginBottom: 6, color: 'var(--text)' }}>
+          <div style={{ fontWeight: 800, fontSize: 20, marginBottom: 4, color: 'var(--text)' }}>
             Join KUETx as...
           </div>
-          <div style={{ fontSize: 13, color: 'var(--muted)' }}>
-            Choose the role that fits you. This is a one-time setup — you won't be asked again.
+          <div style={{ fontSize: 12.5, color: 'var(--muted)' }}>
+            One-time setup — you won't be asked again.
           </div>
         </div>
 
@@ -274,9 +275,6 @@ export default function RoleSelectScreen({ onSelect }) {
               <User size={26} color="var(--accent)" />
             </div>
             <div style={{ fontWeight: 700, fontSize: 15, color: 'var(--text)' }}>Student</div>
-            <div style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.5 }}>
-              Access schedule, attendance, marks, question bank, and student tools.
-            </div>
           </div>
 
           <div
@@ -292,9 +290,6 @@ export default function RoleSelectScreen({ onSelect }) {
               <GraduationCap size={26} color="var(--accent)" />
             </div>
             <div style={{ fontWeight: 700, fontSize: 15, color: 'var(--text)' }}>Faculty Member</div>
-            <div style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.5 }}>
-              Manage classes, attendance, marks, and academic activities.
-            </div>
           </div>
 
           <div
@@ -310,9 +305,6 @@ export default function RoleSelectScreen({ onSelect }) {
               <Store size={26} color="var(--accent)" />
             </div>
             <div style={{ fontWeight: 700, fontSize: 15, color: 'var(--text)' }}>Service Provider</div>
-            <div style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.5 }}>
-              Salon বা অন্যান্য সেবা প্রদানকারী হিসেবে যোগ দিন — বুকিং নিন, ম্যানেজ করুন।
-            </div>
           </div>
         </div>
 
