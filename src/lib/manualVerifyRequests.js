@@ -55,13 +55,19 @@ const COLLECTION = 'manualVerifyRequests';
  * or surfaced-as-failed by a problem in this best-effort background task.
  *
  * @param {'student'|'faculty'} role
- * @param {{ name: string, email: string, roll?: string, dept?: string }} details
+ * @param {{ name: string, email: string, googleEmail?: string, roll?: string, dept?: string }} details
+ *   `email` should be the institutional/verifiable address for faculty
+ *   (used downstream by approveManualVerifyRequest — see facultySync.js's
+ *   verification bridge). `googleEmail` is optional secondary context
+ *   (the personal Gmail used to sign in) — informational only, never used
+ *   for verification.
  */
 export async function ensureManualVerifyRequest(role, details) {
   const uid = auth.currentUser?.uid;
   const name = String(details?.name || '').trim();
   const roll = details?.roll ? String(details.roll).trim() : null;
   const dept = details?.dept ? String(details.dept).trim() : null;
+  const googleEmail = details?.googleEmail ? String(details.googleEmail).trim() : null;
   if (!uid || !name) return; // not enough data yet — nothing to submit
   if (role === 'student' && !roll) return;
   if (role === 'faculty' && !dept && !details?.email) return;
@@ -96,6 +102,7 @@ export async function ensureManualVerifyRequest(role, details) {
       role,
       name,
       email: String(details?.email || '').trim(),
+      googleEmail,
       roll,
       dept,
       uid,

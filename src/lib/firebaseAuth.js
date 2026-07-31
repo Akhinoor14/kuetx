@@ -11,12 +11,13 @@
 
 import {
   signInAnonymously,
-  signInWithPopup,
+  signInWithRedirect,
+  getRedirectResult,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   sendPasswordResetEmail,
   sendEmailVerification,
-  linkWithPopup,
+  linkWithRedirect,
   linkWithCredential,
   EmailAuthProvider,
   GoogleAuthProvider,
@@ -56,10 +57,37 @@ export const loginAnonymously = async () => {
 };
 
 // ─── Google Sign-In ───────────────────────────────────────────────────────────
+// Redirect-based, unconditionally, on every device (desktop included) —
+// not a popup-vs-redirect split based on detected environment. A popup
+// (signInWithPopup) can be silently blocked by popup-blockers or privacy
+// extensions, and frequently doesn't work at all inside mobile in-app
+// browsers (Facebook/Instagram/Messenger webviews). Since Google Sign-In
+// is now the ONLY way into the app, any chance of a blocked/broken popup
+// means the person can't get in at all — a full page navigation (redirect)
+// can never be blocked that way, since it never opens a second window.
 
 export const loginWithGoogle = async () => {
-  const result = await signInWithPopup(auth, googleProvider);
-  return result.user;
+  // Redirect navigates the whole page to Google and back — it can never be
+  // blocked by a popup-blocker or fail inside an in-app webview the way
+  // signInWithPopup can. There's no return value here because the page is
+  // about to navigate away; the signed-in user is picked up after the
+  // redirect completes by handleGoogleRedirectResult() below.
+  await signInWithRedirect(auth, googleProvider);
+};
+
+// The whole page reloads after Google sign-in on the redirect flow, so
+// there's no direct return value at the call site the way signInWithPopup
+// had. This must be called once during app startup (wired up in
+// useFirebaseAuth.js, alongside the existing onAuthChange listener) to
+// pick up the result of a redirect that just completed. Resolves to the
+// user on a successful redirect-based sign-in, or null if the app just
+// loaded normally (no redirect was in progress). Throws the original
+// Firebase error (e.g. auth/credential-already-in-use during an upgrade
+// attempt) if the redirect completed with a failure — callers should
+// catch this.
+export const handleGoogleRedirectResult = async () => {
+  const result = await getRedirectResult(auth);
+  return result?.user ?? null;
 };
 
 // ─── Email/Password ───────────────────────────────────────────────────────────
@@ -172,8 +200,13 @@ export const resetPassword = async (email) => {
 export const upgradeWithGoogle = async () => {
   const user = auth.currentUser;
   if (!user) throw new Error('No user logged in');
-  const result = await linkWithPopup(user, googleProvider);
-  return result.user;
+  // Redirect, same reasoning as loginWithGoogle above. The
+  // auth/credential-already-in-use edge case (this Google account already
+  // belongs to a real, non-anonymous account — can't link it to a new
+  // anonymous uid) now surfaces from getRedirectResult() after the page
+  // reloads, not from this call directly — handled where
+  // handleGoogleRedirectResult() is awaited (useFirebaseAuth.js).
+  await linkWithRedirect(user, googleProvider);
 };
 
 export const upgradeWithEmail = async (email, password, displayName) => {

@@ -348,6 +348,12 @@ function ApprovalsView({ onBack, onSelectCategory, countCtx }) {
           {(manualVerifyRequests || []).map((r) => (
             <ApprovalRow key={r.id}
               label={`${r.name || 'Unknown'} — ${r.email} — ${r.role === 'faculty' ? 'Faculty' : 'Student'}${r.roll ? ` (Roll: ${r.roll})` : ''}${r.dept ? ` — ${r.dept}` : ''}`}
+              // Faculty accounts sign in with a personal Gmail now (Auth
+              // Simplification migration) — showing it alongside the
+              // self-reported institutional email above lets the Founder
+              // sanity-check the two actually look like the same person
+              // before approving. Students don't have this field.
+              sublabel={r.role === 'faculty' && r.googleEmail ? `Google login: ${r.googleEmail}` : null}
               onApprove={() => handle(approveManualVerifyRequest, r.id)}
               onReject={() => handle(rejectManualVerifyRequest, r.id)}
             />
@@ -382,10 +388,15 @@ function ApprovalsView({ onBack, onSelectCategory, countCtx }) {
   );
 }
 
-function ApprovalRow({ label, onApprove, onReject }) {
+function ApprovalRow({ label, sublabel, onApprove, onReject }) {
   return (
-    <div className="card" style={{ padding: 8, display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
-      <span style={{ fontSize: 13 }}>{label}</span>
+    <div className="card" style={{ padding: 8, display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4, gap: 8 }}>
+      <span style={{ fontSize: 13, minWidth: 0 }}>
+        {label}
+        {sublabel && (
+          <div style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 2, wordBreak: 'break-all' }}>{sublabel}</div>
+        )}
+      </span>
       <div style={{ display: 'flex', gap: 4, flexShrink: 0 }}>
         <button className="btn btn-sm btn-primary" onClick={onApprove}>Approve</button>
         <button className="btn btn-sm btn-secondary" onClick={onReject}>Reject</button>

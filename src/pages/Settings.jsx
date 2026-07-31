@@ -185,8 +185,15 @@ export default function Settings() {
               <button
                 className="btn btn-primary"
                 onClick={async () => {
-                  try { await loginWithGoogle(); flash('✓ Signed in with Google successfully!'); }
-                  catch (err) { flash('✗ ' + (err.message || 'Login failed'), 'error'); }
+                  // Redirect-based now (see firebaseAuth.js) — this
+                  // navigates the whole page to Google and back; it does
+                  // NOT resolve with a signed-in user here. The actual
+                  // sign-in completes after the page reloads, picked up
+                  // by handleGoogleRedirectResult() in useFirebaseAuth.js,
+                  // which is what actually updates firebaseUser via
+                  // onAuthChange above.
+                  try { await loginWithGoogle(); }
+                  catch (err) { flash('✗ ' + (err.message || 'Could not start Google sign-in.'), 'error'); }
                 }}
                 style={{ justifyContent: 'flex-start', width: '100%' }}
               >

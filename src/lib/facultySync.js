@@ -21,6 +21,14 @@ import { isFacultyEmailVerified } from './facultyEmailVerify';
 
 const facultyDocRef = (uid) => doc(db, 'faculty', uid);
 const facultyCollectionRef = () => collection(db, 'faculty');
+// faculty/{uid}/private/verification — holds institutionalEmail, split
+// out of the parent doc so it can have its own read rule (Auth
+// Simplification migration). See firestore.rules for why: the parent
+// faculty/{uid} doc is readable by any signed-in user (name/title/dept
+// are meant to be public), but the institutional email a faculty member
+// self-reports is the same privacy tier as a provider's phone number —
+// only the owner and Admin/HeadOfOps should ever read it.
+const facultyPrivateDocRef = (uid) => doc(db, 'faculty', uid, 'private', 'verification');
 
 /**
  * Create the initial faculty/{uid} shell right after account creation
@@ -83,7 +91,11 @@ export function subscribeFacultyProfile(uid, callback) {
  * Faculty Profile Setup save (§8.3) — name, title, dept, optional phone/
  * office/photo/preferredName. Never touches verifiedAt or officialEmail;
  * those are set exactly once, elsewhere, by the account-creation and
- * verification steps respectively.
+ * verification steps respectively. Does NOT touch institutionalEmail
+ * either — that field lives on the private faculty/{uid}/private/verification
+ * sub-doc now (see setFacultyInstitutionalEmail above), specifically so
+ * it's never part of this publicly-readable doc's payload. Callers
+ * should call setFacultyInstitutionalEmail(uid, email) separately.
  */
 export async function saveFacultyProfile(uid, fields) {
   const {
@@ -130,6 +142,40 @@ export async function saveFacultyProfile(uid, fields) {
     }
     throw err;
   }
+}
+
+/**
+ * Reads the current user's own institutional email from the private
+ * sub-doc. Only the owner or an Admin/HeadOfOps can actually read this
+ * (see firestore.rules) — anyone else's read is rejected before this
+ * even resolves, so this is safe to call from FacultyProfileSetupModal
+ * (owner) and AdminDashboard (Admin) alike.
+ */
+export async function getFacultyInstitutionalEmail(uid) {
+  if (!uid) return '';
+  try {
+    const snap = await getDoc(facultyPrivateDocRef(uid));
+    return snap.exists() ? (snap.data()?.institutionalEmail || '') : '';
+  } catch (err) {
+    // A student/other-faculty caller would get permission-denied here —
+    // that's expected and not a real error, just means "not visible to
+    // you." Any other caller (owner/Admin) with a genuine network issue
+    // just sees an empty string, same as "not set yet."
+    return '';
+  }
+}
+
+/**
+ * Writes the current user's own institutional email to the private
+ * sub-doc. Owner-only per firestore.rules (write requires
+ * request.auth.uid == uid), and the rule also restricts the payload to
+ * exactly the `institutionalEmail` key — nothing else can be smuggled in
+ * through this doc.
+ */
+export async function setFacultyInstitutionalEmail(uid, institutionalEmail) {
+  await setDoc(facultyPrivateDocRef(uid), {
+    institutionalEmail: String(institutionalEmail || '').trim().toLowerCase(),
+  });
 }
 
 export async function listAllFacultyAccounts() {

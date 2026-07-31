@@ -470,9 +470,16 @@ service cloud.firestore {
       allow read: if isSignedIn();
       allow create: if isSignedIn()
         && request.auth.uid == uid
-        && request.resource.data.verifiedAt == null;
+        && request.resource.data.verifiedAt == null
+        // Auth Simplification migration: institutionalEmail must never
+        // land on this publicly-readable parent doc -- it belongs only
+        // on the private faculty/{uid}/private/verification sub-doc
+        // below (see that match block for why: same privacy tier as a
+        // provider's phone number, not public like officialEmail).
+        && !('institutionalEmail' in request.resource.data);
       allow update: if (isSignedIn() && request.auth.uid == uid
-          && request.resource.data.verifiedAt == resource.data.verifiedAt)
+          && request.resource.data.verifiedAt == resource.data.verifiedAt
+          && !('institutionalEmail' in request.resource.data))
         || (isAdmin()
           && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['verifiedAt', 'verifiedBy']));
       allow delete: if isAdmin();
@@ -514,6 +521,33 @@ service cloud.firestore {
       match /meetings/{meetingId} {
         allow read: if isSignedIn() && request.auth.uid == uid;
         allow write: if isSignedIn() && request.auth.uid == uid && isVerifiedFaculty(uid);
+      }
+
+      // -----------------------------------------------------------
+      // faculty/{uid}/private/verification -- the KUET institutional
+      // email, split out of the parent doc specifically so it can have
+      // its own read rule (Auth Simplification migration). Same reason
+      // as providers/{uid}/contact/phone below: a single Firestore
+      // document can't selectively hide one field from some readers and
+      // not others, so the only way to gate just this field (while
+      // leaving name/title/dept openly readable on the parent doc, same
+      // as before) is a sub-document.
+      //
+      // Readable by: the owning faculty account themselves, or an
+      // Admin/HeadOfOps reviewing the account (Approvals tab needs this
+      // to cross-check against the account's Google login email and
+      // approve/reject). NOT readable by students or other faculty --
+      // unlike officialEmail (which is genuinely public/institutional
+      // and stays on the parent doc), this is the person's own
+      // self-reported contact detail, same privacy tier as a phone
+      // number.
+      match /private/verification {
+        allow read: if isSignedIn() && (request.auth.uid == uid || isAdmin() || isHeadOfOps());
+        // Write: the owning faculty account only, same standing that
+        // writes the rest of their own profile fields on the parent doc.
+        // Admin never writes this, only reads it.
+        allow write: if isSignedIn() && request.auth.uid == uid
+          && request.resource.data.keys().hasOnly(['institutionalEmail']);
       }
     }
 

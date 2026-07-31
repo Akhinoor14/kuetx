@@ -27,7 +27,6 @@
 import { useState } from 'react';
 import { GraduationCap, User, Sparkles, Store } from 'lucide-react';
 import { setAccountRole, persistAccountRoleToServer } from '../lib/accountRole';
-import { isFacultyEmailFormat } from '../lib/facultyEmailVerify';
 import { createFacultyAccountDoc } from '../lib/facultySync';
 import { createProviderShell } from '../lib/providerSync';
 import { auth } from '../lib/firebase';
@@ -69,21 +68,14 @@ export default function RoleSelectScreen({ onSelect }) {
       return;
     }
 
-    if (role === 'teacher') {
-      // Faculty-only gate (Deviation 1): checked here now instead of at
-      // Register, since role (and therefore "does this need to be a KUET
-      // institutional email") isn't known until this exact moment.
-      const email = auth.currentUser?.email || '';
-      if (!isFacultyEmailFormat(email)) {
-        setError(
-          "This doesn't look like a valid KUET institutional email " +
-          '(a *.kuet.ac.bd address, not @stud.kuet.ac.bd). ' +
-          'Faculty accounts need an institutional email — if you signed ' +
-          'up with a personal address, use Student instead.'
-        );
-        return;
-      }
-    }
+    // Auth Simplification migration: the old faculty-only institutional-
+    // email gate that used to live here has been removed. With Google
+    // Sign-In as the only auth method, auth.currentUser.email is always a
+    // personal Gmail address, not a KUET institutional address — this
+    // check would now incorrectly block every real faculty member from
+    // ever selecting the Faculty role. Institutional email verification
+    // now happens at the Faculty Profile Setup step instead
+    // (FacultyProfileSetupModal.jsx).
 
     setLoading(true);
     try {

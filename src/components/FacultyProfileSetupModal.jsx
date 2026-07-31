@@ -8,11 +8,31 @@
 // faculty account to the STUDENT ProfileSetupModal (studentId/hall/
 // advisor fields, none of which apply to a faculty account).
 //
+// Auth Simplification migration: Google Sign-In is the only login method
+// now, so auth.currentUser.email is always a personal Gmail address, not
+// the institutional email. The institutional/KUET faculty email is no
+// longer the login identity — it's collected HERE, as an editable,
+// required profile field, the same way a student's KUET email is
+// collected on ProfileSetupModal (see kuetEmailVerify.js's
+// isKuetEmailFormat / emailRollMatchesProfile pattern, mirrored below with
+// isFacultyEmailFormat instead).
+//
+// It's stored on the PRIVATE faculty/{uid}/private/verification sub-doc
+// (getFacultyInstitutionalEmail / setFacultyInstitutionalEmail in
+// facultySync.js), not on the public faculty/{uid} doc — that parent doc
+// is readable by any signed-in user (name/title/dept are meant to be
+// public directory info), but a faculty member's self-reported contact
+// email shouldn't be readable by every student the same way. Only the
+// owner and Admin/HeadOfOps can read it (see firestore.rules). This is
+// also why it's a distinct field/doc from `officialEmail` on the parent
+// doc — officialEmail is what the existing verification bridge
+// (facultySync.js / manualVerifyRequests.js) already keys off and must
+// keep meaning whatever it meant before this migration.
+//
 // Name is NOT re-asked here if it was already collected at Register —
-// AuthModal's Register form has an optional "Your name" field; if that
-// was filled in, it's pre-filled below (still editable, never re-required
-// from scratch). Institutional email is shown read-only (it's already
-// fixed from sign-up + verification, never re-entered).
+// AuthModal's Register form used to have an optional "Your name" field;
+// if that was filled in, it's pre-filled below (still editable, never
+// re-required from scratch).
 //
 // Wired into App.jsx's onboarding queue as 'faculty-profile', pushed by
 // buildQueue() only when isFacultyProfileComplete(fdoc) is false for a
@@ -22,9 +42,9 @@ import { useEffect, useState } from 'react';
 import { GraduationCap } from 'lucide-react';
 import { auth } from '../lib/firebase';
 import { DEPARTMENTS, INSTITUTES, BASIC_SCIENCE_DEPTS } from '../store/store';
-import { getFacultyDoc, saveFacultyProfile } from '../lib/facultySync';
+import { getFacultyDoc, saveFacultyProfile, getFacultyInstitutionalEmail, setFacultyInstitutionalEmail } from '../lib/facultySync';
 import { ensureManualVerifyRequest } from '../lib/manualVerifyRequests';
-import { guessDeptFromFacultyEmail } from '../lib/facultyEmailVerify';
+import { guessDeptFromFacultyEmail, isFacultyEmailFormat } from '../lib/facultyEmailVerify';
 
 // Common KUET faculty designations. Kept as a dropdown for consistency
 // across profiles (search/sort/display all rely on a small set of known
@@ -91,8 +111,7 @@ const labelStyle = {
 export default function FacultyProfileSetupModal({ onSave }) {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [form, setForm] = useState({ name: '', title: '', dept: '', phone: '', officeRoom: '', preferredName: '' });
-  const [officialEmail, setOfficialEmail] = useState('');
+  const [form, setForm] = useState({ name: '', title: '', dept: '', phone: '', officeRoom: '', preferredName: '', institutionalEmail: '' });
   const [errors, setErrors] = useState({});
   // Whether the Title dropdown is showing the free-text "Other" field —
   // true if the stored title doesn't match one of the known FACULTY_TITLES
@@ -102,9 +121,21 @@ export default function FacultyProfileSetupModal({ onSave }) {
   useEffect(() => {
     const uid = auth.currentUser?.uid;
     if (!uid) { setLoading(false); return; }
-    getFacultyDoc(uid).then((fdoc) => {
+    Promise.all([
+      getFacultyDoc(uid),
+      // Private sub-doc — only readable by the owner (this is always the
+      // owner's own uid here) or Admin. A brand-new account won't have
+      // this doc yet; getFacultyInstitutionalEmail returns '' for that
+      // case rather than throwing.
+      getFacultyInstitutionalEmail(uid),
+    ]).then(([fdoc, institutionalEmail]) => {
       if (fdoc) {
-        setOfficialEmail(fdoc.officialEmail || '');
+        // officialEmail (on the public doc) is kept as a fallback
+        // pre-fill only for any account that predates this field split
+        // (e.g. seeded from the Google login email by
+        // createFacultyAccountDoc) — never written back automatically,
+        // the person still has to confirm/edit and submit it themselves.
+        const prefillEmail = institutionalEmail || fdoc.officialEmail || '';
         setTitleIsOther(Boolean(fdoc.title) && !FACULTY_TITLES.includes(fdoc.title));
         setForm({
           name: fdoc.name || '',
@@ -112,10 +143,11 @@ export default function FacultyProfileSetupModal({ onSave }) {
           // Best-effort pre-fill only — cross-department teaching
           // assignments are common, so this is a starting guess, not
           // authoritative; the dropdown stays fully editable.
-          dept: fdoc.dept || guessDeptFromFacultyEmail(fdoc.officialEmail) || '',
+          dept: fdoc.dept || guessDeptFromFacultyEmail(prefillEmail) || '',
           phone: fdoc.phone || '',
           officeRoom: fdoc.officeRoom || '',
           preferredName: fdoc.preferredName || '',
+          institutionalEmail,
         });
       }
       setLoading(false);
@@ -132,6 +164,16 @@ export default function FacultyProfileSetupModal({ onSave }) {
     if (!form.name.trim()) next.name = 'Name is required';
     if (!form.title.trim()) next.title = 'Title / designation is required';
     if (!form.dept.trim()) next.dept = 'Department is required';
+    if (!form.institutionalEmail.trim()) {
+      next.institutionalEmail = 'Institutional email is required';
+    } else if (!isFacultyEmailFormat(form.institutionalEmail.trim())) {
+      next.institutionalEmail = "This doesn't look like a valid KUET institutional email (a *.kuet.ac.bd address, not @stud.kuet.ac.bd).";
+    }
+    // NOTE: phone stays optional here, same as before this migration. The
+    // migration prompt suggested requiring it too (a number the Founder
+    // can call to verify), but that's a product-decision call, not
+    // something to silently flip — left as-is pending an explicit
+    // decision from the person running this migration.
     setErrors(next);
     return Object.keys(next).length === 0;
   };
@@ -141,7 +183,14 @@ export default function FacultyProfileSetupModal({ onSave }) {
     if (!validate()) return;
     setSaving(true);
     try {
-      await saveFacultyProfile(auth.currentUser.uid, form);
+      // institutionalEmail goes to the PRIVATE sub-doc (not the public
+      // faculty/{uid} doc saveFacultyProfile writes to) — see the file
+      // header comment for why. Two writes, but each hits the right
+      // Firestore rule for what it's touching.
+      await Promise.all([
+        saveFacultyProfile(auth.currentUser.uid, form),
+        setFacultyInstitutionalEmail(auth.currentUser.uid, form.institutionalEmail),
+      ]);
       // This is the most reliable trigger point for faculty: name+dept
       // are guaranteed valid here (validate() above), and this step is
       // mandatory in the onboarding queue (App.jsx 'faculty-profile'),
@@ -149,9 +198,19 @@ export default function FacultyProfileSetupModal({ onSave }) {
       // saveFacultyProfile's own self-heal path rather than
       // createFacultyAccountDoc — idempotent doc ID means this is a
       // no-op if AuthModal's earlier call already succeeded.
+      //
+      // `email` here is the institutional email, not the Google login
+      // email — this is what the Founder actually needs to see to verify
+      // someone is real KUET faculty (and what approveManualVerifyRequest
+      // writes into verifiedFacultyEmails/{email} on approval, bridging
+      // back onto faculty/{uid}.officialEmail — see facultySync.js). The
+      // personal Gmail login address is included separately as
+      // googleEmail — AdminDashboard's Approvals tab shows both side by
+      // side so the Founder can cross-check them.
       ensureManualVerifyRequest('faculty', {
         name: form.name,
-        email: auth.currentUser?.email,
+        email: form.institutionalEmail.trim(),
+        googleEmail: auth.currentUser?.email || '',
         dept: form.dept,
       });
       onSave?.();
@@ -229,8 +288,16 @@ export default function FacultyProfileSetupModal({ onSave }) {
           <div style={{ textAlign: 'center', color: 'var(--muted)', padding: '24px 0' }}>Loading…</div>
         ) : (
           <div style={{ display: 'grid', gap: 14 }}>
-            <div style={{ fontSize: 12, color: 'var(--muted)' }}>
-              Institutional email: <strong style={{ color: 'var(--text)' }}>{officialEmail}</strong>
+            <div>
+              <label style={labelStyle}>Institutional Email</label>
+              <input
+                style={fieldStyle}
+                type="email"
+                value={form.institutionalEmail}
+                onChange={handleChange('institutionalEmail')}
+                placeholder="name@dept.kuet.ac.bd"
+              />
+              {errors.institutionalEmail && <div style={{ fontSize: 11, color: '#dc2626', marginTop: 5 }}>{errors.institutionalEmail}</div>}
             </div>
 
             <div>

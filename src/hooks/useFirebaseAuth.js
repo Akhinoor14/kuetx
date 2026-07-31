@@ -4,7 +4,7 @@
  */
 
 import { useState, useEffect } from 'react';
-import { onAuthChange } from '../lib/firebaseAuth';
+import { onAuthChange, handleGoogleRedirectResult, loginWithGoogle } from '../lib/firebaseAuth';
 import { startFirebaseSync, stopFirebaseSync, pushAllToFirestore } from '../lib/firebaseSync';
 import { syncLocalDataOnAuth, isSafeToTrustLocalData } from '../lib/accountLifecycle';
 
@@ -14,6 +14,33 @@ export default function useFirebaseAuth() {
   const [syncStatus, setSyncStatus] = useState('idle'); // idle|syncing|synced|error|pending
 
   useEffect(() => {
+    // Google Sign-In is redirect-based now (see firebaseAuth.js's
+    // loginWithGoogle/upgradeWithGoogle) — the page navigates away to
+    // Google and back, so there's no popup callback to rely on. This must
+    // run once during app startup to pick up the result of a redirect
+    // that just completed; if it's missing, users complete sign-in on
+    // Google's side but the app never notices they're signed in.
+    // Resolves to null (no-op) if the app just loaded normally with no
+    // redirect in progress. The onAuthChange listener below still fires
+    // independently for the resulting auth state either way — this only
+    // needs to catch the auth/credential-already-in-use edge case, which
+    // getRedirectResult() is the one place that can surface.
+    handleGoogleRedirectResult().catch((err) => {
+      if (err?.code === 'auth/credential-already-in-use') {
+        // This Google account already belongs to a real, non-anonymous
+        // account from before — it can't be linked to a brand-new
+        // anonymous uid. Fall back to a plain sign-in (another redirect)
+        // so a returning user isn't stuck just because they were holding
+        // a fresh anonymous session on this device.
+        console.warn('[KUETx Auth] Google account already in use — retrying as plain sign-in.');
+        loginWithGoogle().catch((err2) => {
+          console.error('[KUETx Auth] Fallback Google sign-in failed:', err2);
+        });
+        return;
+      }
+      console.error('[KUETx Auth] Google redirect sign-in failed:', err);
+    });
+
     let prevUid = null;
 
     const unsubscribe = onAuthChange(async (firebaseUser) => {
