@@ -1089,6 +1089,35 @@ export function subscribeJoinRequests(groupId, callback) {
 }
 
 /**
+ * Founder/Admin/HeadOfOps-only: live list of EVERY pending join request
+ * across EVERY group, in one collectionGroup query — this is the actual
+ * bootstrap fallback for a brand-new class (no CR/CL exists yet, so
+ * nobody else can approve that class's very first joinRequests doc) and
+ * for a class whose CR/CL has gone quiet. Backs the Approvals tab's
+ * "Student Manual Verification" section — approving here calls the exact
+ * same approveJoinRequest(groupId, uid) a CR/ACR/CL would use, so an
+ * approval from this path is indistinguishable from a normal one
+ * downstream (same members/{uid} doc shape, verified: true).
+ * Requires the collectionGroup read rule on /{path=**}/joinRequests/
+ * {requestUid} in firestore.rules (Admin/HeadOfOps only).
+ */
+export function subscribeAllPendingJoinRequests(callback) {
+  const q = query(collectionGroup(db, 'joinRequests'), where('status', '==', 'pending'));
+  return onSnapshot(q, (snap) => {
+    callback(snap.docs.map((d) => {
+      // Each doc's path is groups/{groupId}/joinRequests/{uid} — groupId
+      // isn't stored as a field on the doc itself (see requestJoinGroup),
+      // so it has to be read back out of the path here.
+      const groupId = d.ref.parent.parent?.id || '';
+      return { id: d.id, groupId, ...d.data() };
+    }));
+  }, (err) => {
+    console.error('[groupSync] subscribeAllPendingJoinRequests error:', err);
+    callback([]);
+  });
+}
+
+/**
  * Live status of the CURRENT user's own joinRequests/{uid} doc for this
  * group — null if none exists yet. Drives the "waiting for approval" /
  * "rejected, try again" states on the dashboard join-status card.
@@ -1101,6 +1130,7 @@ export function subscribeOwnJoinRequestStatus(groupId, uid, callback) {
     callback(null);
   });
 }
+
 
 /**
  * CR/ACR (or CL/Admin/HeadOfOps) action: approve a pending join request.

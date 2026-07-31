@@ -1352,6 +1352,22 @@ service cloud.firestore {
       allow read: if isAdmin() || isHeadOfOps();
     }
 
+    // Collection-group read for 'joinRequests', scoped to Admin/Head of
+    // Ops only — needed so the Founder's Approvals tab can list EVERY
+    // pending join request across every group in one query, not just the
+    // requests for groups they happen to already be a CL/CR/ACR of. This
+    // is the actual bootstrap fallback: a brand-new class with no CR/CL
+    // yet has nobody else who could approve its first student's
+    // joinRequests doc (see approveJoinRequest in groupSync.js and the
+    // /groups/{groupId}/joinRequests/{requestUid} rule below, which
+    // already grants isAdmin() read/create/update per-group — this just
+    // makes that same access work for the cross-group query shape the
+    // Approvals tab needs, same reasoning as the 'roles' collectionGroup
+    // rule above).
+    match /{path=**}/joinRequests/{requestUid} {
+      allow read: if isAdmin() || isHeadOfOps();
+    }
+
     match /staff/{targetUid}/roles/{roleId} {
       allow read: if isAdmin() || isHeadOfOps() || request.auth.uid == targetUid
         // Senior Campus Leads need to see the Campus Leads in their own

@@ -165,9 +165,22 @@ export function subscribeManualVerifyRequests(callback) {
 }
 
 /**
- * Founder approves — writes the same durable verified-fact the automatic
- * flow writes (verifiedRolls/{roll} for students, faculty/{uid}.verifiedAt
- * for faculty), then marks the request resolved.
+ * Founder approves — writes the durable verified-fact for faculty
+ * (faculty/{uid}.verifiedAt, via verifiedFacultyEmails), then marks the
+ * request resolved.
+ *
+ * NOTE: this used to also handle role === 'student' by writing to
+ * verifiedRolls/{roll} — that collection is dead (nothing reads it; see
+ * kuetEmailVerify.js's header comment) and the write was broken anyway
+ * (setDoc with { merge: true } against a create-once/immutable rule gets
+ * treated as an "update" once any doc for that roll exists, which
+ * firestore.rules unconditionally denies, even for Admin). Student
+ * approval no longer goes through this function — the Approvals tab's
+ * "Student Manual Verification" section now calls
+ * approveJoinRequest(groupId, uid) directly (see AdminDashboard.jsx),
+ * which sets the fact that's actually read: groups/{groupId}/members/
+ * {uid}.verified. Any stray old student rows here are legacy data with
+ * nowhere left to go; only role === 'faculty' rows still matter.
  */
 export async function approveManualVerifyRequest(requestId) {
   const reqSnap = await getDoc(doc(db, COLLECTION, requestId));
@@ -175,16 +188,7 @@ export async function approveManualVerifyRequest(requestId) {
   const reqData = reqSnap.data();
   const reviewerUid = auth.currentUser?.uid;
 
-  if (reqData.role === 'student' && reqData.roll) {
-    // Same minimal shape kuetEmailVerify.js writes — verifiedRolls/{roll}
-    // is create-once/immutable per Firestore rules, so this must match
-    // exactly (no extra fields) or the write will be rejected. The audit
-    // trail (who reviewed, via which path) lives on the request doc
-    // itself instead, updated just below.
-    await setDoc(doc(db, 'verifiedRolls', reqData.roll), {
-      verifiedAt: serverTimestamp(),
-    }, { merge: true });
-  } else if (reqData.role === 'faculty' && reqData.uid && reqData.email) {
+  if (reqData.role === 'faculty' && reqData.uid && reqData.email) {
     // Firestore rules forbid setting faculty/{uid}.verifiedAt directly
     // from the client (see facultySync.js) — it can only be flipped by
     // syncFacultyVerificationStatus() after verifiedFacultyEmails/{email}

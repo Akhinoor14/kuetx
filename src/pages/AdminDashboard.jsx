@@ -13,6 +13,7 @@ import {
   listAllGroups, subscribeCRRequests, subscribeLeaveRequests,
   clApproveCRRequest, clRejectCRRequest, clApproveLeaveCR, clRejectLeaveCR,
   getGroupMembersOnce, subscribeGlobalNotices,
+  subscribeAllPendingJoinRequests, approveJoinRequest, rejectJoinRequest,
 } from '../lib/groupSync';
 import { sortByRoll } from '../lib/groupUtils';
 import { deleteNoticeSoft } from '../lib/noticeUtils';
@@ -39,8 +40,15 @@ import { listAllBloodDonors, searchBloodDonorsByGroup } from '../lib/bloodDonorS
 import { listAllActiveFacultyAssignments } from '../lib/facultyClassSync';
 import AnalyticsDashboard from '../components/AnalyticsDashboard';
 import { useIsFaculty } from '../hooks/useIsFaculty';
+// Only the read-only subscribe is used here now — approveManualVerifyRequest/
+// rejectManualVerifyRequest still exist in manualVerifyRequests.js for the
+// live faculty verification path (Faculty → Signup Requests tab), but the
+// student flow shown in this file now goes through approveJoinRequest/
+// rejectJoinRequest below instead (see the manual-verify subTab block for
+// why). subscribeManualVerifyRequests here only powers the "stray legacy
+// faculty entries" pointer list and its badge count.
 import {
-  subscribeManualVerifyRequests, approveManualVerifyRequest, rejectManualVerifyRequest,
+  subscribeManualVerifyRequests,
 } from '../lib/manualVerifyRequests';
 import { subscribeAllQBUploadRequests, approveQBUpload, rejectQBUpload } from '../lib/qbUploadRequests';
 import {
@@ -234,6 +242,7 @@ function ApprovalsView({ onBack, onSelectCategory, countCtx }) {
   const [crRequestsByGroup, setCrRequestsByGroup] = useState(null);
   const [leaveRequestsByGroup, setLeaveRequestsByGroup] = useState(null);
   const [manualVerifyRequests, setManualVerifyRequests] = useState(null);
+  const [pendingJoinRequests, setPendingJoinRequests] = useState(null);
   const [providerVerifyRequests, setProviderVerifyRequests] = useState(null);
   // Bug fix: the pending-requests query only returns the parent
   // providers/{uid} doc, which never has `phone` on it (it lives on the
@@ -253,6 +262,22 @@ function ApprovalsView({ onBack, onSelectCategory, countCtx }) {
 
   useEffect(() => withTimeout((cb) => subscribeAllCLApplications(cb), setClApplications, { onTimeout: flagSlowLoad }), []);
   useEffect(() => withTimeout((cb) => subscribeManualVerifyRequests(cb), setManualVerifyRequests, { onTimeout: flagSlowLoad }), []);
+  // BUGFIX (Approve always failed with "Missing or insufficient
+  // permissions"): the manual-verify tab used to approve via
+  // approveManualVerifyRequest(), which writes to the legacy
+  // verifiedRolls/{roll} collection (create-once per firestore.rules —
+  // a merge:true setDoc on an already-existing doc there is evaluated
+  // as an update, which is unconditionally denied) and never touches
+  // groups/{groupId}/members/{uid} at all — nothing in the app actually
+  // reads verifiedRolls anymore (see kuetEmailVerify.js's header: that
+  // whole OTP mechanism was removed). The REAL, current verification
+  // fact is a group's members/{uid}.verified, created by approving the
+  // student's groups/{groupId}/joinRequests/{uid} doc — same action a
+  // CR/ACR/CL would take, just via the Founder-fallback branch
+  // firestore.rules already grants isAdmin() on that collection. This is
+  // also THE bootstrap path: a brand-new class's first student has no
+  // CR/CL yet to approve them, so Founder must be able to do it directly.
+  useEffect(() => withTimeout((cb) => subscribeAllPendingJoinRequests(cb), setPendingJoinRequests, { onTimeout: flagSlowLoad }), []);
   useEffect(() => withTimeout((cb) => subscribeProviderVerifyRequests(cb), setProviderVerifyRequests, { onTimeout: flagSlowLoad }), []);
   useEffect(() => {
     if (!providerVerifyRequests || providerVerifyRequests.length === 0) return;
@@ -295,6 +320,7 @@ function ApprovalsView({ onBack, onSelectCategory, countCtx }) {
   const crReqLoading = crRequestsByGroup === null;
   const leaveReqLoading = leaveRequestsByGroup === null;
   const manualVerifyLoading = manualVerifyRequests === null;
+  const joinRequestsLoading = pendingJoinRequests === null;
   const providerVerifyLoading = providerVerifyRequests === null;
 
   const allCrRequests = Object.entries(crRequestsByGroup || {}).flatMap(([g, reqs]) => reqs.map((r) => ({ ...r, groupId: g })));
@@ -306,11 +332,11 @@ function ApprovalsView({ onBack, onSelectCategory, countCtx }) {
   };
 
   const category = getFounderCategory('approvals');
-  // Tab badge/overview count reflects student-only requests, matching what
-  // the tab actually shows now — a stray legacy faculty-role doc (see the
-  // manual-verify subTab block below) shouldn't inflate this number, since
-  // it's not something approved from here.
-  const studentManualVerifyCount = (manualVerifyRequests || []).filter((r) => r.role !== 'faculty').length;
+  // Tab badge/overview count reflects real pending join requests — this
+  // is what the tab actually shows and lets you approve now (see the
+  // manual-verify subTab block below for why manualVerifyRequests itself
+  // is no longer the approval source).
+  const studentManualVerifyCount = (pendingJoinRequests || []).length;
   const subCtx = { ...countCtx, clApplications: clApplications?.length || 0, crRequests: allCrRequests.length, leaveRequests: allLeaveRequests.length, manualVerifyRequests: studentManualVerifyCount, providerVerifyRequests: providerVerifyRequests?.length || 0 };
 
   return (
@@ -367,34 +393,43 @@ function ApprovalsView({ onBack, onSelectCategory, countCtx }) {
       )}
 
       {subTab === 'manual-verify' && (() => {
-        // CORRECTION: this tab is student-only now. It used to also show
-        // a "Faculty Blue Tick" group sourced from manualVerifyRequests
-        // (role === 'faculty'), which looked like a second, parallel
-        // faculty-approval flow — but the actual, current faculty
-        // verification UI is the separate Faculty → Signup Requests tab
-        // (adminVerifyFaculty(), which is "THE way verifiedAt gets set
-        // now" per facultySync.js). manualVerifyRequests' faculty role is
-        // a leftover bridge from the old magic-link mechanism
-        // (approveManualVerifyRequest → verifiedFacultyEmails →
-        // syncFacultyVerificationStatus) that's no longer the real path —
-        // showing it here as if it were "the" faculty approval screen was
-        // the actual labeling bug, not just a missing split. Any stray
-        // faculty-role doc that still shows up (old/pre-migration data)
-        // is shown as a dead-end pointer to the correct tab instead of a
-        // second Approve button, so nobody approves faculty from here by
-        // mistake.
+        // BUGFIX (Approve always failed — "Missing or insufficient
+        // permissions"): this tab used to approve students via
+        // approveManualVerifyRequest(), which writes to the legacy
+        // verifiedRolls/{roll} collection — create-once per
+        // firestore.rules, so a merge:true setDoc on a doc that already
+        // exists there is evaluated as an update, which the rule
+        // unconditionally denies (isAdmin() only covers create, not
+        // update) — and never actually touched a student's real class
+        // membership either way. Nothing in the app reads verifiedRolls
+        // anymore (see kuetEmailVerify.js's header comment: that whole
+        // OTP mechanism was removed). The real, current verification
+        // fact is groups/{groupId}/members/{uid}.verified, set by
+        // approving that student's groups/{groupId}/joinRequests/{uid}
+        // doc — the exact same action a CR/ACR/CL takes, via the
+        // Founder-fallback branch firestore.rules already grants
+        // isAdmin() on that collection. This is also THE bootstrap path:
+        // a brand-new class's first student has no CR/CL yet to approve
+        // them, so Founder must be able to approve directly here — that
+        // fallback already existed in the rules, it just wasn't wired up
+        // in this tab.
+        //
+        // Any stray old-style manualVerifyRequests entry (role==='faculty',
+        // pre-migration data) is shown as a dead-end pointer to the real
+        // Faculty → Signup Requests tab instead of a second Approve
+        // button, so nobody approves faculty from here by mistake.
         const facultyRequests = (manualVerifyRequests || []).filter((r) => r.role === 'faculty');
-        const studentRequests = (manualVerifyRequests || []).filter((r) => r.role !== 'faculty');
         return (
           <>
-            <Section title={`Student Manual Verification${studentRequests.length ? ` (${studentRequests.length})` : ''}`}>
-              {manualVerifyLoading && <EmptyState>Loading…</EmptyState>}
-              {!manualVerifyLoading && studentRequests.length === 0 && <EmptyState>Nothing pending.</EmptyState>}
-              {studentRequests.map((r) => (
-                <ApprovalRow key={r.id}
-                  label={`${r.name || 'Unknown'} — ${r.email}${r.roll ? ` (Roll: ${r.roll})` : ''}`}
-                  onApprove={() => handle(approveManualVerifyRequest, r.id)}
-                  onReject={() => handle(rejectManualVerifyRequest, r.id)}
+            <Section title={`Student Manual Verification${pendingJoinRequests?.length ? ` (${pendingJoinRequests.length})` : ''}`}>
+              {joinRequestsLoading && <EmptyState>Loading…</EmptyState>}
+              {!joinRequestsLoading && (pendingJoinRequests || []).length === 0 && <EmptyState>Nothing pending.</EmptyState>}
+              {(pendingJoinRequests || []).map((r) => (
+                <ApprovalRow key={`${r.groupId}-${r.id}`}
+                  label={`${r.name || 'Unknown'} — ${r.groupId}${r.roll ? ` (Roll: ${r.roll})` : ''}`}
+                  sublabel={r.contactEmail || null}
+                  onApprove={() => handle(approveJoinRequest, r.groupId, r.id)}
+                  onReject={() => handle(rejectJoinRequest, r.groupId, r.id)}
                 />
               ))}
             </Section>
