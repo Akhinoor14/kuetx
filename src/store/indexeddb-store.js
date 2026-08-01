@@ -24,6 +24,40 @@ export async function initDB() {
     request.onerror = () => reject(request.error);
     request.onsuccess = () => {
       db = request.result;
+
+      // BUGFIX (Profile Setup modal flashes on login/refresh, only fixed
+      // by a hard refresh): the browser can close this connection out from
+      // under us — most commonly React StrictMode's deliberate mount ->
+      // unmount -> remount on first load opening a second indexedDB.open()
+      // for the same DB_NAME/DB_VERSION, which fires `versionchange` on
+      // this (the first) connection. Per the IndexedDB spec, a connection
+      // that doesn't close itself in response to `versionchange` gets
+      // forcibly closed by the browser once the second open() is blocked
+      // waiting on it — after which every transaction on it throws
+      // exactly the error seen in production: "Failed to execute
+      // 'transaction' on 'IDBDatabase': The database connection is
+      // closing." This module never listened for that, so the
+      // module-level `db` variable kept pointing at a dead connection
+      // forever — every `if (!db) await initDB()` guard elsewhere in this
+      // file saw a truthy `db` and skipped reopening, so reads/writes
+      // (including the profile hydrate that runs right after login) kept
+      // silently failing until a full page refresh reset all JS module
+      // state and opened a genuinely fresh connection.
+      //
+      // Fix: reset `db` to null on both `versionchange` and `close`, and
+      // close the stale handle explicitly on `versionchange` (this is
+      // also the spec-recommended way to let a second open() proceed
+      // instead of sitting blocked). The next caller's `if (!db) await
+      // initDB()` then correctly reopens a real, working connection
+      // instead of continuing to use a closing one.
+      db.onversionchange = () => {
+        db.close();
+        db = null;
+      };
+      db.onclose = () => {
+        db = null;
+      };
+
       resolve(db);
     };
 
