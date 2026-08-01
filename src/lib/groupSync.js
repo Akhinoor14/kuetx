@@ -1165,6 +1165,26 @@ export async function approveJoinRequest(groupId, targetUid) {
     legacyCRClaim: false,
   });
   batch.update(reqRef, { status: 'approved', decidedAt: serverTimestamp(), decidedBy: auth.currentUser?.uid || null });
+  // BUGFIX (Founder's "Classes & Students" shows "0 classes" even with
+  // real, verified members): joinGroup()'s self-join path (see its own
+  // comment above) always keeps the lightweight groups/{groupId} summary
+  // doc up to date so listAllGroups() can enumerate classes without a
+  // separate index collection. This manual-approval path never did —
+  // members/{targetUid} existing doesn't make the groups/{groupId}
+  // PARENT doc exist in Firestore (a subcollection doc's parent path is
+  // not automatically a real document), so any class whose roster was
+  // built entirely through Approve here (rather than someone
+  // self-joining first) stayed permanently invisible to the Admin
+  // dashboard. Mirror the same denormalized write here — groupId's own
+  // {BATCH}_{DEPT}[_{SECTION}] format (same parsing AdminDashboard.jsx's
+  // parseGroupId already relies on) is used since the joinRequests doc
+  // itself doesn't carry dept/batch as separate fields.
+  const [groupBatch, groupDept] = groupId.split('_');
+  batch.set(doc(db, 'groups', groupId), {
+    batch: groupBatch || '',
+    dept: groupDept || '',
+    lastActivityAt: serverTimestamp(),
+  }, { merge: true });
   await batch.commit();
 }
 
@@ -1172,6 +1192,54 @@ export async function rejectJoinRequest(groupId, targetUid) {
   await updateDoc(doc(db, 'groups', groupId, 'joinRequests', targetUid), {
     status: 'rejected', decidedAt: serverTimestamp(), decidedBy: auth.currentUser?.uid || null,
   });
+}
+
+/**
+ * One-time repair for classes that predate the approveJoinRequest() fix
+ * above: their members/{uid} docs are real, but the groups/{groupId}
+ * PARENT doc was never written (the old approveJoinRequest() only ever
+ * wrote members/{uid}, never the groups/{groupId} summary joinGroup()'s
+ * self-join path always kept up to date), so listAllGroups() couldn't
+ * see them and the Founder's "Classes & Students" dashboard showed
+ * "0 classes" despite real, verified rosters existing underneath.
+ *
+ * Admin/Head of Ops only — run once from the Founder dashboard (see
+ * AdminDashboard.jsx's "Repair missing classes" button). Safe to run more
+ * than once: every write here is `{ merge: true }` and only touches
+ * groups that are actually missing their parent doc.
+ *
+ * Returns the list of groupIds that were fixed, for a simple toast/alert.
+ */
+export async function backfillMissingGroupDocs() {
+  // collectionGroup('members') sees every members/{uid} doc across every
+  // group in one query — same read rule (isAdmin()/isHeadOfOps()) that
+  // already backs subscribeAllPendingJoinRequests's collectionGroup use
+  // elsewhere in this file, see /{path=**}/members/{memberUid} in
+  // firestore.rules.
+  const snap = await getDocs(collectionGroup(db, 'members'));
+  const groupIds = new Set();
+  snap.forEach((d) => {
+    // Each members doc's path is groups/{groupId}/members/{uid} — the
+    // groupId is the second-to-last segment.
+    const parts = d.ref.path.split('/');
+    const groupId = parts[parts.length - 3];
+    if (groupId) groupIds.add(groupId);
+  });
+
+  const existing = await listAllGroups();
+  const existingIds = new Set(existing.map((g) => g.id));
+  const missing = [...groupIds].filter((id) => !existingIds.has(id));
+
+  for (const groupId of missing) {
+    const [groupBatch, groupDept] = groupId.split('_');
+    await setDoc(doc(db, 'groups', groupId), {
+      batch: groupBatch || '',
+      dept: groupDept || '',
+      lastActivityAt: serverTimestamp(),
+    }, { merge: true });
+  }
+
+  return missing;
 }
 
 /**

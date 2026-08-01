@@ -103,9 +103,36 @@ service cloud.firestore {
       return isSCLFor(deptOfGroup(groupId));
     }
 
+    // A signed-in real account's own dept+batch, read from their
+    // students/{uid} profile — used below to scope the Admin/Head of Ops
+    // auto-membership bypass to ONLY their own class, never every class.
+    // Returns null (never matches any real groupId) if the profile
+    // doesn't exist or isn't a real account, so this fails closed rather
+    // than open for e.g. a Founder account with no student profile at all.
+    function ownGroupId() {
+      return isRealAccount() && exists(/databases/$(database)/documents/students/$(request.auth.uid))
+        ? expectedGroupId(get(/databases/$(database)/documents/students/$(request.auth.uid)).data)
+        : null;
+    }
+    function isOwnClassAdminOrHeadOfOps(groupId) {
+      return (isAdmin() || isHeadOfOps()) && ownGroupId() == groupId;
+    }
     function isGroupMember(groupId) {
-      return isSignedIn() &&
-        exists(/databases/$(database)/documents/groups/$(groupId)/members/$(request.auth.uid));
+      // Administrative staff are automatically treated as a member of a
+      // group ONLY when it's their own class: CL/SCL for THIS specific
+      // group (isCLFor/isSCLForGroup are already scoped to the group/dept
+      // they were assigned, so they were never the problem), or an
+      // Admin/Head of Ops whose OWN batch+dept (from their student
+      // profile) happens to be this group. This is membership/visibility
+      // only — it does NOT grant CR-level power (see isVerifiedMember and
+      // isContentEditor below, and isGroupCR/isGroupACR which stay
+      // untouched); class content (routine, assignments, notices) is
+      // still maintained by the CR/ACR only. Every OTHER class an
+      // Admin/Head of Ops doesn't personally belong to still requires the
+      // normal isAdmin()/isHeadOfOps() oversight checks used elsewhere in
+      // this file — this function does not widen that.
+      return isCLFor(groupId) || isSCLForGroup(groupId) || isOwnClassAdminOrHeadOfOps(groupId) || (isSignedIn() &&
+        exists(/databases/$(database)/documents/groups/$(groupId)/members/$(request.auth.uid)));
     }
     function memberDoc(groupId) {
       return get(/databases/$(database)/documents/groups/$(groupId)/members/$(request.auth.uid)).data;
@@ -119,10 +146,30 @@ service cloud.firestore {
       return exists(/databases/$(database)/documents/groups/$(groupId)/members/$(uid));
     }
     function isVerifiedMember(groupId) {
-      return isGroupMember(groupId) && memberDoc(groupId).verified == true;
+      // Same staff auto-membership as isGroupMember, own-class only.
+      // memberDoc(groupId) would otherwise error for staff with no real
+      // members/{uid} doc to fetch .verified from (get() on a
+      // nonexistent doc throws rather than returning null), so this must
+      // short-circuit the same way rather than falling through to it.
+      return isCLFor(groupId) || isSCLForGroup(groupId) || isOwnClassAdminOrHeadOfOps(groupId) ||
+        (isGroupMember(groupId) && memberDoc(groupId).verified == true);
     }
-    function isGroupCR(groupId)  { return isGroupMember(groupId) && memberDoc(groupId).role == 'cr'; }
-    function isGroupACR(groupId) { return isGroupMember(groupId) && memberDoc(groupId).role == 'acr'; }
+    // CR/ACR remain a real, specifically-appointed roster role — staff
+    // status (even for their own class) does NOT imply "acts as this
+    // group's CR". Class maintenance (routine/assignments/notices) is the
+    // CR/ACR's job alone; isGroupMember/isVerifiedMember above only ever
+    // grant read/participate-level access to staff, never this. These two
+    // stay exactly as before (a genuine members/{uid} doc with that role).
+    function isGroupCR(groupId)  {
+      return isSignedIn() &&
+        exists(/databases/$(database)/documents/groups/$(groupId)/members/$(request.auth.uid)) &&
+        memberDoc(groupId).role == 'cr';
+    }
+    function isGroupACR(groupId) {
+      return isSignedIn() &&
+        exists(/databases/$(database)/documents/groups/$(groupId)/members/$(request.auth.uid)) &&
+        memberDoc(groupId).role == 'acr';
+    }
 
     function crCount(groupId) {
       return exists(/databases/$(database)/documents/groups/$(groupId)/meta/crStatus)

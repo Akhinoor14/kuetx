@@ -21,7 +21,7 @@
  * ─────────────────────────────────────────────────────────────────────────────
  */
 
-import { doc, setDoc, getDoc, getDocs, collection, serverTimestamp } from 'firebase/firestore';
+import { doc, setDoc, getDoc, getDocFromServer, getDocs, collection, serverTimestamp } from 'firebase/firestore';
 import { db } from './firebase';
 import { store } from '../store/store';
 
@@ -389,12 +389,26 @@ export const pushProfile = async (uid, profile) => {
  */
 export const pullProfile = async (uid, knownDeptBatch = null) => {
   if (!uid) return null;
+  const docRef = doc(db, 'students', uid);
   try {
-    const docRef = doc(db, 'students', uid);
-    const snap = await getDoc(docRef);
+    // BUGFIX (Profile Setup modal flashes on login/refresh): see comment
+    // above this function's declaration point in this diff for the full
+    // trace — this MUST be a server read, not the SDK's persistent local
+    // cache, or a just-signed-in session can read a not-yet-warmed empty
+    // cache and wrongly conclude the profile doesn't exist.
+    const snap = await getDocFromServer(docRef);
     return snap.exists() ? snap.data() : null;
   } catch (err) {
-    console.warn('[KUETx Sync] pullProfile failed:', err.message);
-    return null;
+    // Genuinely offline (or some other network-level failure) — fall back
+    // to whatever the SDK's local cache has rather than treating this the
+    // same as "no profile." A stale-but-real cached profile is still far
+    // better than wrongly forcing ProfileSetupModal on someone offline.
+    try {
+      const cached = await getDoc(docRef);
+      return cached.exists() ? cached.data() : null;
+    } catch (err2) {
+      console.warn('[KUETx Sync] pullProfile failed:', err2.message);
+      return null;
+    }
   }
 };

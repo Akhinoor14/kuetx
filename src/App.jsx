@@ -37,6 +37,7 @@ import { subscribeGroupTermStartDate, subscribeGroupCurrentTermKey } from './lib
 import { claimRoll } from './lib/rollOwnership';
 import { ensureManualVerifyRequest } from './lib/manualVerifyRequests';
 import { auth } from './lib/firebase';
+import { pullProfile } from './lib/firebaseSync';
 import { notify } from './lib/notify';
 import { pushProfile, startFirebaseSync } from './lib/firebaseSync';
 
@@ -697,6 +698,11 @@ export default function App() {
   // switch, real uid -> null on sign-out) in addition to the original
   // first-mount case.
   const lastAuthUidRef = useRef(undefined); // undefined = "haven't built yet"
+  // See the safety-net comment on the effect below — this tracks whether
+  // that extra verification pass is currently running, so the render can
+  // show a proper branded "setting things up" screen instead of either a
+  // blank shell or (worse) flashing ProfileSetupModal while it works.
+  const [verifyingProfile, setVerifyingProfile] = useState(false);
   useEffect(() => {
     if (!authState.authReady) return;
     const uidChanged = lastAuthUidRef.current !== authState.uid;
@@ -704,15 +710,52 @@ export default function App() {
     lastAuthUidRef.current = authState.uid;
     console.log('[KUETx DIAG] authReady=true, uid=', authState.uid, '- starting ensureDBReady()...');
     let cancelled = false;
-    ensureDBReady().finally(() => {
+    ensureDBReady().finally(async () => {
       if (cancelled) return;
       console.log('[KUETx DIAG] ensureDBReady() done, calling buildQueue()...');
-      buildQueue(authState.isAnonymous).then((q) => {
-        if (cancelled) return;
-        console.log('[KUETx DIAG] buildQueue() done, queue =', q);
-        setQueue(q);
-        setQueueBuilt(true);
-      });
+      const q = await buildQueue(authState.isAnonymous);
+      if (cancelled) return;
+      console.log('[KUETx DIAG] buildQueue() done, queue =', q);
+
+      // SAFETY NET (belt-and-braces on top of firebaseSync.js's
+      // getDocFromServer() fix): buildQueue() concluding 'profile' is
+      // needed for a real, signed-in account is the exact symptom of the
+      // false-negative this bug has been about — a profile that
+      // genuinely exists on the server but wasn't seen in time locally.
+      // Rather than trust that verdict immediately and flash
+      // ProfileSetupModal, do one more independent, forced server read
+      // here and only commit to showing the modal if the server itself
+      // confirms there's really no profile. A brief "setting up your
+      // account" screen while this second check runs is far less
+      // jarring than a form flashing open and shut.
+      if (q[0] === 'profile' && !authState.isAnonymous && authState.uid) {
+        setVerifyingProfile(true);
+        try {
+          const serverProfile = await pullProfile(authState.uid);
+          if (cancelled) return;
+          if (serverProfile && isProfileComplete(serverProfile)) {
+            // Server disagrees with the local verdict — it really is
+            // complete. Re-hydrate local storage from it and rebuild the
+            // queue, which will now correctly skip 'profile'.
+            await store.importAllReport({ kuetx_profile: serverProfile });
+            const q2 = await buildQueue(authState.isAnonymous);
+            if (cancelled) return;
+            console.log('[KUETx DIAG] safety-net re-check found a complete server profile, corrected queue =', q2);
+            setQueue(q2);
+            setQueueBuilt(true);
+            setVerifyingProfile(false);
+            return;
+          }
+        } catch (err) {
+          console.warn('[KUETx DIAG] safety-net profile re-check failed:', err.message);
+          // Fall through — show the real queue as originally computed
+          // rather than getting stuck on the verifying screen forever.
+        }
+        setVerifyingProfile(false);
+      }
+
+      setQueue(q);
+      setQueueBuilt(true);
     });
     return () => { cancelled = true; };
   }, [authState.authReady, authState.isAnonymous, authState.uid, queueBuilt]);
@@ -1119,12 +1162,51 @@ export default function App() {
           // like a stuck loading screen rather than an app that's already
           // open.
           !queueBuilt ? (
-            <div style={{ position: 'fixed', inset: 0, zIndex: 1, display: 'flex', background: 'var(--bg)' }}>
-              <div style={{ width: 192, flexShrink: 0, height: '100vh', background: 'var(--surface)', borderRight: '1px solid var(--border)' }} className="hidden md:block" />
-              <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column' }}>
-                <div style={{ height: 56, flexShrink: 0, background: 'var(--surface)', borderBottom: '1px solid var(--border)' }} />
+            verifyingProfile ? (
+              <div style={{
+                position: 'fixed', inset: 0, zIndex: 1, display: 'flex',
+                flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+                gap: 20, background: 'var(--bg)',
+              }}>
+                <div style={{
+                  width: 56, height: 56, borderRadius: 16,
+                  background: 'linear-gradient(135deg, var(--primary, #16a34a), var(--primary-dark, #15803d))',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  boxShadow: '0 8px 24px -8px rgba(22, 163, 74, 0.5)',
+                  animation: 'kuetxPulse 1.8s ease-in-out infinite',
+                }}>
+                  <span style={{ fontSize: 26, fontWeight: 800, color: '#fff', fontFamily: 'inherit' }}>K</span>
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6 }}>
+                  <div style={{ fontSize: 15, fontWeight: 600, color: 'var(--text)' }}>Setting up your account</div>
+                  <div style={{ fontSize: 13, color: 'var(--muted)' }}>Just a moment…</div>
+                </div>
+                <div style={{ width: 160, height: 4, borderRadius: 999, background: 'var(--border)', overflow: 'hidden' }}>
+                  <div style={{
+                    width: '40%', height: '100%', borderRadius: 999,
+                    background: 'var(--primary, #16a34a)',
+                    animation: 'kuetxIndeterminate 1.2s ease-in-out infinite',
+                  }} />
+                </div>
+                <style>{`
+                  @keyframes kuetxPulse {
+                    0%, 100% { transform: scale(1); opacity: 1; }
+                    50% { transform: scale(1.06); opacity: 0.9; }
+                  }
+                  @keyframes kuetxIndeterminate {
+                    0% { transform: translateX(-100%); }
+                    100% { transform: translateX(350%); }
+                  }
+                `}</style>
               </div>
-            </div>
+            ) : (
+              <div style={{ position: 'fixed', inset: 0, zIndex: 1, display: 'flex', background: 'var(--bg)' }}>
+                <div style={{ width: 192, flexShrink: 0, height: '100vh', background: 'var(--surface)', borderRight: '1px solid var(--border)' }} className="hidden md:block" />
+                <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column' }}>
+                  <div style={{ height: 56, flexShrink: 0, background: 'var(--surface)', borderBottom: '1px solid var(--border)' }} />
+                </div>
+              </div>
+            )
           ) : (
             // role-select / auth / faculty-profile / profile: a genuine
             // step the person needs to complete, not a loading wait — a

@@ -14,6 +14,7 @@ import {
   clApproveCRRequest, clRejectCRRequest, clApproveLeaveCR, clRejectLeaveCR,
   getGroupMembersOnce, subscribeGlobalNotices,
   subscribeAllPendingJoinRequests, approveJoinRequest, rejectJoinRequest,
+  backfillMissingGroupDocs,
 } from '../lib/groupSync';
 import { sortByRoll } from '../lib/groupUtils';
 import { deleteNoticeSoft } from '../lib/noticeUtils';
@@ -1027,6 +1028,8 @@ function ClassesBreadcrumb({ dept, batch, onDept, onBatch }) {
 
 function ClassesView({ onBack, onSelectCategory, countCtx }) {
   const [groups, setGroups] = useState(null);
+  const [backfilling, setBackfilling] = useState(false);
+  const [backfillResult, setBackfillResult] = useState(null);
   const [dept, setDept] = useState(null);
   const [batch, setBatch] = useState(null);
   // Per-group member counts, fetched as a second async layer after `groups`
@@ -1152,7 +1155,43 @@ function ClassesView({ onBack, onSelectCategory, countCtx }) {
     // Nothing selected -> departments.
     return (
       <div className="classes-drilldown-grid">
-        {depts.length === 0 && <EmptyState>No classes yet.</EmptyState>}
+        {depts.length === 0 && (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10, alignItems: 'flex-start' }}>
+            <EmptyState>No classes yet.</EmptyState>
+            {/* BUGFIX (classes with real members showing as "0 classes"):
+                approveJoinRequest() used to only write members/{uid},
+                never the groups/{groupId} summary doc listAllGroups()
+                reads — see that function's own comment in groupSync.js.
+                That's fixed going forward, but any class built entirely
+                through Approve BEFORE this fix still has no parent doc.
+                This one-time repair finds and fixes those. */}
+            <button
+              onClick={async () => {
+                setBackfilling(true);
+                setBackfillResult(null);
+                try {
+                  const fixed = await backfillMissingGroupDocs();
+                  setBackfillResult(fixed.length > 0
+                    ? `Fixed ${fixed.length} class${fixed.length > 1 ? 'es' : ''}: ${fixed.join(', ')}`
+                    : 'No missing classes found — everything was already in sync.');
+                  listAllGroups().then(setGroups);
+                } catch (e) {
+                  setBackfillResult(`Repair failed: ${e?.message || 'try again'}`);
+                } finally {
+                  setBackfilling(false);
+                }
+              }}
+              disabled={backfilling}
+              className="card"
+              style={{ padding: '8px 14px', fontSize: 12.5, fontWeight: 600, cursor: backfilling ? 'default' : 'pointer', opacity: backfilling ? 0.6 : 1 }}
+            >
+              {backfilling ? 'Checking for missing classes…' : 'Repair missing classes'}
+            </button>
+            {backfillResult && (
+              <div style={{ fontSize: 12, color: 'var(--muted)' }}>{backfillResult}</div>
+            )}
+          </div>
+        )}
         {depts.map((d) => {
           const batchCount = Object.keys(byDept[d]).length;
           const studentCount = studentTotalForDept(d);
