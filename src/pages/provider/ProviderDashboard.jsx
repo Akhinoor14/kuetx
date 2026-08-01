@@ -29,6 +29,7 @@ import {
   SERVICE_TYPE_LABELS, SERVICE_TYPES,
   subscribePendingInquiries, answerInquiry,
 } from '../../lib/serviceSync';
+import { useProviderLang } from '../../hooks/useProviderLang';
 
 function formatWhen(ts) {
   if (!ts) return '';
@@ -41,6 +42,7 @@ function formatWhen(ts) {
 }
 
 export default function ProviderDashboard({ providerProfile }) {
+  const { t } = useProviderLang();
   const [services, setServices] = useState(null);
   const uid = providerProfile?.uid;
 
@@ -65,15 +67,15 @@ export default function ProviderDashboard({ providerProfile }) {
         </div>
         <div>
           <div style={{ fontSize: 17, fontWeight: 700, color: 'var(--text)' }}>
-            {providerProfile?.displayName || 'Provider Dashboard'}
+            {providerProfile?.displayName || t('dashboard.title')}
           </div>
-          <div style={{ fontSize: 12.5, color: 'var(--muted)' }}>Verified service provider</div>
+          <div style={{ fontSize: 12.5, color: 'var(--muted)' }}>{t('dashboard.verifiedBadge')}</div>
         </div>
       </div>
 
       {stillLoading && (
         <div style={{ padding: 20, textAlign: 'center', color: 'var(--muted)', fontSize: 13 }}>
-          Loading…
+          {t('dashboard.loading')}
         </div>
       )}
 
@@ -99,6 +101,7 @@ function ServiceSetupForm({ providerUid }) {
   // no category-select UI at all. Now the provider picks one of the five
   // plan-approved categories at signup; createService() derives
   // interactionMode from that choice (Phase 1 logic, unchanged here).
+  const { t } = useProviderLang();
   const [type, setType] = useState('salon');
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
@@ -109,7 +112,7 @@ function ServiceSetupForm({ providerUid }) {
   const submit = async () => {
     setError('');
     if (!name.trim()) {
-      setError('সার্ভিসের নাম দিন।');
+      setError(t('dashboard.setup.nameRequired'));
       return;
     }
     setSubmitting(true);
@@ -118,7 +121,7 @@ function ServiceSetupForm({ providerUid }) {
         type, name, description, priceNote,
       });
     } catch (e) {
-      setError('সেভ করতে সমস্যা হয়েছে — আবার চেষ্টা করুন।');
+      setError(t('dashboard.setup.saveError'));
     } finally {
       setSubmitting(false);
     }
@@ -127,43 +130,43 @@ function ServiceSetupForm({ providerUid }) {
   return (
     <div className="card" style={{ padding: 18 }}>
       <div style={{ fontSize: 15, fontWeight: 700, color: 'var(--text)', marginBottom: 4 }}>
-        আপনার সার্ভিস সেট আপ করুন
+        {t('dashboard.setup.title')}
       </div>
       <div style={{ fontSize: 12.5, color: 'var(--muted)', marginBottom: 16, lineHeight: 1.6 }}>
-        এটা একবারই করতে হবে। পরে সব কিছু এখান থেকে এডিট করতে পারবেন।
+        {t('dashboard.setup.subtitle')}
       </div>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
         <div>
-          <label style={{ fontSize: 12, color: 'var(--muted)', fontWeight: 600 }}>ক্যাটাগরি</label>
+          <label style={{ fontSize: 12, color: 'var(--muted)', fontWeight: 600 }}>{t('dashboard.setup.category')}</label>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginTop: 6 }}>
-            {SERVICE_TYPES.map((t) => (
+            {SERVICE_TYPES.map((st) => (
               <button
-                key={t}
+                key={st}
                 type="button"
-                onClick={() => setType(t)}
+                onClick={() => setType(st)}
                 style={{
                   padding: '12px 10px', borderRadius: 10, fontSize: 13, fontWeight: 700,
-                  border: `1.5px solid ${type === t ? 'var(--accent)' : 'var(--border)'}`,
-                  background: type === t ? 'var(--accentSoft)' : 'var(--card)',
-                  color: type === t ? 'var(--accent)' : 'var(--text)',
+                  border: `1.5px solid ${type === st ? 'var(--accent)' : 'var(--border)'}`,
+                  background: type === st ? 'var(--accentSoft)' : 'var(--card)',
+                  color: type === st ? 'var(--accent)' : 'var(--text)',
                   cursor: 'pointer', textAlign: 'center',
                 }}
               >
-                {SERVICE_TYPE_LABELS[t]}
+                {SERVICE_TYPE_LABELS[st]}
               </button>
             ))}
           </div>
         </div>
-        <Field label="সার্ভিসের নাম" value={name} onChange={setName} placeholder="যেমন: Rafiq's Salon" />
-        <Field label="বর্ণনা (ঐচ্ছিক)" value={description} onChange={setDescription} placeholder="সংক্ষিপ্ত বিবরণ" textarea />
-        <Field label="মূল্য নোট (ঐচ্ছিক)" value={priceNote} onChange={setPriceNote} placeholder="যেমন: ৳50 - ৳300" />
+        <Field label={t('dashboard.setup.serviceName')} value={name} onChange={setName} placeholder={t('dashboard.setup.serviceNamePlaceholder')} />
+        <Field label={t('dashboard.setup.description')} value={description} onChange={setDescription} placeholder={t('dashboard.setup.descriptionPlaceholder')} textarea />
+        <Field label={t('dashboard.setup.priceNote')} value={priceNote} onChange={setPriceNote} placeholder={t('dashboard.setup.priceNotePlaceholder')} />
       </div>
 
       {error && <div style={{ marginTop: 12, fontSize: 12.5, color: 'var(--danger, #dc2626)' }}>{error}</div>}
 
       <button onClick={submit} disabled={submitting} className="btn btn-primary" style={{ marginTop: 16, width: '100%' }}>
-        {submitting ? 'সেভ হচ্ছে…' : 'সার্ভিস তৈরি করুন'}
+        {submitting ? t('dashboard.setup.saving') : t('dashboard.setup.submit')}
       </button>
     </div>
   );
@@ -197,6 +200,7 @@ function ServiceManager({ service: rawService }) {
   // service doc through withServiceDefaults() before use, so a
   // pre-Phase-1 service (no interactionMode/status field yet) still
   // renders correctly here instead of showing "undefined".
+  const { t } = useProviderLang();
   const service = withServiceDefaults(rawService);
   const isInquiryMode = service.interactionMode === 'inquiry';
   const [pending, setPending] = useState(null);
@@ -250,7 +254,7 @@ function ServiceManager({ service: rawService }) {
         }}
       >
         {service.isOpen ? <Check size={22} /> : <XIcon size={22} />}
-        {service.isOpen ? 'দোকান এখন খোলা — ট্যাপ করে বন্ধ করুন' : 'দোকান এখন বন্ধ — ট্যাপ করে খুলুন'}
+        {service.isOpen ? t('dashboard.shopOpen') : t('dashboard.shopClosed')}
       </button>
 
       {/* MULTI_CATEGORY_SERVICES_PLAN.md Phase 5: mutually exclusive
@@ -290,6 +294,7 @@ function ServiceManager({ service: rawService }) {
 // ---------------------------------------------------------------------
 
 function DormantBanner({ service }) {
+  const { t } = useProviderLang();
   const isPermanent = service.dormantReason === 'manual_permanent';
   return (
     <div
@@ -300,26 +305,27 @@ function DormantBanner({ service }) {
       }}
     >
       <div style={{ fontSize: 13.5, fontWeight: 700, color: '#c2410c' }}>
-        এই শপ এখন নিষ্ক্রিয় (Dormant)
+        {t('dashboard.dormant.title')}
       </div>
       <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 4, lineHeight: 1.6 }}>
-        {service.dormantReason === 'auto' && 'সব অফারিং দীর্ঘদিন ধরে আনঅ্যাভেইলেবল থাকায় সিস্টেম স্বয়ংক্রিয়ভাবে এটা নিষ্ক্রিয় করেছে।'}
-        {service.dormantReason === 'manual_temporary' && 'আপনি এই শপ সাময়িকভাবে বন্ধ রেখেছেন — নিচের "শপ স্ট্যাটাস" থেকে যেকোনো সময় আবার সক্রিয় করতে পারবেন।'}
-        {isPermanent && 'আপনি এই শপ স্থায়ীভাবে বন্ধ করেছেন — নিজে থেকে আর সক্রিয় করা যাবে না, Founder-এর সাথে যোগাযোগ করতে হবে।'}
+        {service.dormantReason === 'auto' && t('dashboard.dormant.auto')}
+        {service.dormantReason === 'manual_temporary' && t('dashboard.dormant.manualTemporary')}
+        {isPermanent && t('dashboard.dormant.manualPermanent')}
       </div>
       <div style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 6 }}>
-        ছাত্রদের কাছে এখনো তালিকায় দেখাবে, কিন্তু আলাদা "বর্তমানে নিষ্ক্রিয়" অংশে, কম-প্রাধান্যে।
+        {t('dashboard.dormant.visibility')}
       </div>
     </div>
   );
 }
 
 function PendingQueue({ serviceId, bookings, offerings }) {
+  const { t } = useProviderLang();
   const [busyId, setBusyId] = useState(null);
   const [error, setError] = useState('');
   const [conflictWarningFor, setConflictWarningFor] = useState(null);
 
-  const offeringLabel = (id) => offerings.find((o) => o.id === id)?.label || 'Unknown offering';
+  const offeringLabel = (id) => offerings.find((o) => o.id === id)?.label || t('dashboard.pending.unknownOffering');
 
   const doConfirm = async (bookingId, preferredTime) => {
     setBusyId(bookingId);
@@ -335,7 +341,7 @@ function PendingQueue({ serviceId, bookings, offerings }) {
         const conflict = await hasConflictingConfirmedSlot(serviceId, preferredTime);
         if (conflict) {
           setConflictWarningFor(bookingId);
-          setError('এই সময়ে আরেকটা বুকিং আগে থেকেই কনফার্ম আছে — আবার Confirm চাপলে এগিয়ে যাবে।');
+          setError(t('dashboard.pending.conflictWarning'));
           setBusyId(null);
           return;
         }
@@ -343,7 +349,7 @@ function PendingQueue({ serviceId, bookings, offerings }) {
       setConflictWarningFor(null);
       await confirmBooking(serviceId, bookingId, preferredTime || null);
     } catch (e) {
-      setError(e.message || 'কনফার্ম করতে সমস্যা হয়েছে।');
+      setError(e.message || t('dashboard.pending.confirmError'));
     } finally {
       setBusyId(null);
     }
@@ -355,7 +361,7 @@ function PendingQueue({ serviceId, bookings, offerings }) {
     try {
       await cancelBooking(serviceId, bookingId, 'owner');
     } catch (e) {
-      setError(e.message || 'বাতিল করতে সমস্যা হয়েছে।');
+      setError(e.message || t('dashboard.pending.cancelError'));
     } finally {
       setBusyId(null);
     }
@@ -364,11 +370,11 @@ function PendingQueue({ serviceId, bookings, offerings }) {
   return (
     <div className="card" style={{ padding: 16 }}>
       <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', marginBottom: 10, display: 'flex', alignItems: 'center', gap: 8 }}>
-        <Clock size={16} /> Pending Bookings {bookings ? `(${bookings.length})` : ''}
+        <Clock size={16} /> {t('dashboard.pending.title')} {bookings ? `(${bookings.length})` : ''}
       </div>
 
-      {bookings === null && <div style={{ fontSize: 13, color: 'var(--muted)' }}>Loading…</div>}
-      {bookings && bookings.length === 0 && <div style={{ fontSize: 13, color: 'var(--muted)' }}>কোনো pending বুকিং নেই।</div>}
+      {bookings === null && <div style={{ fontSize: 13, color: 'var(--muted)' }}>{t('dashboard.loading')}</div>}
+      {bookings && bookings.length === 0 && <div style={{ fontSize: 13, color: 'var(--muted)' }}>{t('dashboard.pending.empty')}</div>}
 
       {error && <div style={{ fontSize: 12.5, color: 'var(--danger, #dc2626)', marginBottom: 8 }}>{error}</div>}
 
@@ -395,6 +401,7 @@ function PendingBookingCard({
   // context, not something that needs real-time updates while the queue
   // is open (the count can only grow from a NEW no-show, which wouldn't
   // affect an already-rendered pending booking's own card anyway).
+  const { t } = useProviderLang();
   const [noShowCount, setNoShowCount] = useState(null);
   useEffect(() => {
     let cancelled = false;
@@ -413,25 +420,25 @@ function PendingBookingCard({
       }}
     >
       <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
-        <div style={{ fontSize: 13.5, fontWeight: 700, color: 'var(--text)' }}>{b.studentName || 'Student'}</div>
+        <div style={{ fontSize: 13.5, fontWeight: 700, color: 'var(--text)' }}>{b.studentName || t('dashboard.pending.student')}</div>
         {noShowCount >= 2 && (
           <span
-            title="আগে এই শপে একাধিকবার no-show হয়েছে"
+            title={t('dashboard.pending.noShowTitle')}
             style={{
               fontSize: 10, fontWeight: 800, letterSpacing: 0.3, textTransform: 'uppercase',
               color: '#dc2626', background: 'rgba(220,38,38,0.12)',
               borderRadius: 6, padding: '2px 8px',
             }}
           >
-            {noShowCount}× no-show
+            {noShowCount}{t('dashboard.pending.noShowSuffix')}
           </span>
         )}
       </div>
       <div style={{ fontSize: 12.5, color: 'var(--muted)', marginTop: 2 }}>{offeringLabel}</div>
-      <div style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 2 }}>Requested: {formatWhen(b.requestedAt)}</div>
+      <div style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 2 }}>{t('dashboard.pending.requested')} {formatWhen(b.requestedAt)}</div>
       {b.preferredTime && (
         <div style={{ fontSize: 12.5, fontWeight: 700, color: 'var(--accent)', marginTop: 4 }}>
-          Preferred: {b.preferredTime.date} at {b.preferredTime.time}
+          {t('dashboard.pending.preferred')} {b.preferredTime.date} at {b.preferredTime.time}
         </div>
       )}
       {b.studentPhone && (
@@ -445,7 +452,7 @@ function PendingBookingCard({
           className="btn btn-primary"
           style={{ flex: 1, minHeight: 46, fontSize: 14.5, fontWeight: 700 }}
         >
-          Confirm
+          {t('dashboard.pending.confirm')}
         </button>
         <button
           onClick={onCancel}
@@ -453,7 +460,7 @@ function PendingBookingCard({
           className="btn btn-secondary"
           style={{ flex: 1, minHeight: 46, fontSize: 14.5, fontWeight: 700 }}
         >
-          বাতিল
+          {t('dashboard.pending.cancel')}
         </button>
       </div>
     </div>
@@ -468,6 +475,7 @@ function PendingBookingCard({
 // ---------------------------------------------------------------------
 
 function PendingInquiries({ serviceId, inquiries, offerings }) {
+  const { t } = useProviderLang();
   const [busyId, setBusyId] = useState(null);
   const [error, setError] = useState('');
 
@@ -477,7 +485,7 @@ function PendingInquiries({ serviceId, inquiries, offerings }) {
     try {
       await answerInquiry(serviceId, bookingId, replyText);
     } catch (e) {
-      setError(e.message || 'উত্তর পাঠাতে সমস্যা হয়েছে।');
+      setError(e.message || t('dashboard.inquiries.answerError'));
     } finally {
       setBusyId(null);
     }
@@ -486,11 +494,11 @@ function PendingInquiries({ serviceId, inquiries, offerings }) {
   return (
     <div className="card" style={{ padding: 16 }}>
       <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', marginBottom: 10, display: 'flex', alignItems: 'center', gap: 8 }}>
-        <MessageCircle size={16} /> Pending Inquiries {inquiries ? `(${inquiries.length})` : ''}
+        <MessageCircle size={16} /> {t('dashboard.inquiries.title')} {inquiries ? `(${inquiries.length})` : ''}
       </div>
 
-      {inquiries === null && <div style={{ fontSize: 13, color: 'var(--muted)' }}>Loading…</div>}
-      {inquiries && inquiries.length === 0 && <div style={{ fontSize: 13, color: 'var(--muted)' }}>কোনো নতুন প্রশ্ন/অনুরোধ নেই।</div>}
+      {inquiries === null && <div style={{ fontSize: 13, color: 'var(--muted)' }}>{t('dashboard.inquiries.loading')}</div>}
+      {inquiries && inquiries.length === 0 && <div style={{ fontSize: 13, color: 'var(--muted)' }}>{t('dashboard.inquiries.empty')}</div>}
 
       {error && <div style={{ fontSize: 12.5, color: 'var(--danger, #dc2626)', marginBottom: 8 }}>{error}</div>}
 
@@ -507,6 +515,7 @@ function PendingInquiries({ serviceId, inquiries, offerings }) {
 }
 
 function InquiryQueueCard({ inquiry: inq, busy, onAnswer }) {
+  const { t } = useProviderLang();
   const [replyText, setReplyText] = useState('');
 
   const total = (inq.items || []).reduce(
@@ -522,8 +531,8 @@ function InquiryQueueCard({ inquiry: inq, busy, onAnswer }) {
         background: 'var(--surface, var(--card))', border: '1px solid var(--border)',
       }}
     >
-      <div style={{ fontSize: 13.5, fontWeight: 700, color: 'var(--text)' }}>{inq.studentName || 'Student'}</div>
-      <div style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 2 }}>Requested: {formatWhen(inq.requestedAt)}</div>
+      <div style={{ fontSize: 13.5, fontWeight: 700, color: 'var(--text)' }}>{inq.studentName || t('dashboard.inquiries.student')}</div>
+      <div style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 2 }}>{t('dashboard.inquiries.requested')} {formatWhen(inq.requestedAt)}</div>
       {inq.studentPhone && (
         <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 2 }}>{inq.studentPhone}</div>
       )}
@@ -541,7 +550,7 @@ function InquiryQueueCard({ inquiry: inq, busy, onAnswer }) {
 
       {hasAnyPrice && (
         <div style={{ fontSize: 12.5, fontWeight: 700, color: 'var(--accent)', marginTop: 6 }}>
-          মোট (আনুমানিক): ৳{total}
+          {t('dashboard.inquiries.total')} ৳{total}
         </div>
       )}
 
@@ -554,7 +563,7 @@ function InquiryQueueCard({ inquiry: inq, busy, onAnswer }) {
       <textarea
         value={replyText}
         onChange={(e) => setReplyText(e.target.value)}
-        placeholder="উত্তর লিখুন…"
+        placeholder={t('dashboard.inquiries.replyPlaceholder')}
         rows={2}
         style={{
           width: '100%', marginTop: 10, padding: '8px 10px', borderRadius: 10,
@@ -569,19 +578,20 @@ function InquiryQueueCard({ inquiry: inq, busy, onAnswer }) {
         className="btn btn-primary"
         style={{ width: '100%', marginTop: 8, minHeight: 44, fontSize: 14, fontWeight: 700 }}
       >
-        {busy ? 'পাঠানো হচ্ছে…' : 'উত্তর দিন'}
+        {busy ? t('dashboard.inquiries.sending') : t('dashboard.inquiries.reply')}
       </button>
     </div>
   );
 }
 
 function ConfirmedList({ serviceId, bookings, offerings }) {
+  const { t } = useProviderLang();
   const [busyId, setBusyId] = useState(null);
   const [error, setError] = useState('');
   const [priceEntryFor, setPriceEntryFor] = useState(null);
   const [priceInput, setPriceInput] = useState('');
 
-  const offeringLabel = (id) => offerings.find((o) => o.id === id)?.label || 'Unknown offering';
+  const offeringLabel = (id) => offerings.find((o) => o.id === id)?.label || t('dashboard.pending.unknownOffering');
 
   // §11 revenue decision: stays a single running revenueTotal (no
   // daily/weekly/per-offering breakdown for now — see the file-level note
@@ -606,7 +616,7 @@ function ConfirmedList({ serviceId, bookings, offerings }) {
       await finishBooking(serviceId, bookingId, price);
       setPriceEntryFor(null);
     } catch (e) {
-      setError(e.message || 'সমস্যা হয়েছে।');
+      setError(e.message || t('dashboard.confirmed.genericError'));
     } finally {
       setBusyId(null);
     }
@@ -618,7 +628,7 @@ function ConfirmedList({ serviceId, bookings, offerings }) {
     try {
       await cancelBooking(serviceId, bookingId, 'owner');
     } catch (e) {
-      setError(e.message || 'সমস্যা হয়েছে।');
+      setError(e.message || t('dashboard.confirmed.genericError'));
     } finally {
       setBusyId(null);
     }
@@ -629,16 +639,16 @@ function ConfirmedList({ serviceId, bookings, offerings }) {
   return (
     <div className="card" style={{ padding: 16 }}>
       <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', marginBottom: 10 }}>
-        Confirmed ({bookings.length})
+        {t('dashboard.confirmed.title')} ({bookings.length})
       </div>
       {error && <div style={{ fontSize: 12.5, color: 'var(--danger, #dc2626)', marginBottom: 8 }}>{error}</div>}
       {bookings.map((b) => (
         <div key={b.id} style={{ padding: 12, borderRadius: 12, marginBottom: 8, border: '1px solid var(--border)' }}>
-          <div style={{ fontSize: 13.5, fontWeight: 700, color: 'var(--text)' }}>{b.studentName || 'Student'}</div>
+          <div style={{ fontSize: 13.5, fontWeight: 700, color: 'var(--text)' }}>{b.studentName || t('dashboard.confirmed.student')}</div>
           <div style={{ fontSize: 12.5, color: 'var(--muted)' }}>{offeringLabel(b.offeringId)}</div>
           {b.confirmedSlot && (
             <div style={{ fontSize: 12.5, color: 'var(--accent)', fontWeight: 700, marginTop: 4 }}>
-              Slot: {b.confirmedSlot.date} at {b.confirmedSlot.time}
+              {t('dashboard.confirmed.slot')} {b.confirmedSlot.date} {t('dashboard.confirmed.at')} {b.confirmedSlot.time}
             </div>
           )}
           {priceEntryFor === b.id ? (
@@ -649,7 +659,7 @@ function ConfirmedList({ serviceId, bookings, offerings }) {
                 autoFocus
                 value={priceInput}
                 onChange={(e) => setPriceInput(e.target.value)}
-                placeholder="৳ মূল্য"
+                placeholder={t('dashboard.confirmed.priceLabel')}
                 style={{
                   width: 90, minHeight: 46, padding: '0 12px', borderRadius: 10,
                   border: '1px solid var(--border)', background: 'var(--card)',
@@ -662,7 +672,7 @@ function ConfirmedList({ serviceId, bookings, offerings }) {
                 className="btn btn-primary"
                 style={{ flex: 1, minHeight: 46, fontSize: 14.5, fontWeight: 700 }}
               >
-                সম্পন্ন করুন
+                {t('dashboard.confirmed.finishConfirm')}
               </button>
               <button
                 onClick={() => setPriceEntryFor(null)}
@@ -676,10 +686,10 @@ function ConfirmedList({ serviceId, bookings, offerings }) {
           ) : (
             <div style={{ display: 'flex', gap: 8, marginTop: 12 }}>
               <button onClick={() => startFinish(b.id)} disabled={busyId === b.id} className="btn btn-primary" style={{ flex: 1, minHeight: 46, fontSize: 14.5, fontWeight: 700 }}>
-                Finish
+                {t('dashboard.confirmed.finish')}
               </button>
               <button onClick={() => doCancel(b.id)} disabled={busyId === b.id} className="btn btn-secondary" style={{ flex: 1, minHeight: 46, fontSize: 14.5, fontWeight: 700 }}>
-                No-show / বাতিল
+                {t('dashboard.confirmed.noShow')}
               </button>
             </div>
           )}

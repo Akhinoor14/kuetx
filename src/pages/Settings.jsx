@@ -9,6 +9,8 @@ import { onAuthChange, logout, loginWithGoogle, resetPassword, getAuthErrorMessa
 import { clearLocalDataOnLogout } from '../lib/accountLifecycle';
 import { APP_VERSION } from '../version';
 import { confirmDialog } from '../lib/dialog';
+import { useIsProvider } from '../hooks/useIsProvider';
+import { useProviderLang } from '../hooks/useProviderLang';
 
 const THEME_ICON = { light: Sun, milky: Droplets, dark: Moon };
 
@@ -26,6 +28,8 @@ function StatusDot({ color }) {
 
 export default function Settings() {
   const { themeId, setTheme } = useTheme();
+  const { isProvider } = useIsProvider();
+  const { t, lang, setLang } = useProviderLang();
   const [msg, setMsg] = useState('');
   const [msgType, setMsgType] = useState('success');
   const [confirmReset, setConfirmReset] = useState(false);
@@ -40,15 +44,18 @@ export default function Settings() {
   const [sendingReset, setSendingReset] = useState(false);
 
   const handleSignOut = async () => {
-    if (!(await confirmDialog('Sign out? This device will be cleared — log back in anytime and everything comes right back from the cloud.'))) return;
+    const confirmMsg = isProvider
+      ? t('settings.signOutConfirm')
+      : 'Sign out? This device will be cleared — log back in anytime and everything comes right back from the cloud.';
+    if (!(await confirmDialog(confirmMsg))) return;
     setLoggingOut(true);
     try {
       await logout();
       await clearLocalDataOnLogout();
-      flash('✓ Signed out. This device has been cleared.');
+      flash(isProvider ? t('settings.signOutSuccess') : '✓ Signed out. This device has been cleared.');
       setTimeout(() => window.location.reload(), 800);
     } catch (err) {
-      flash('✗ Sign out failed: ' + err.message, 'error');
+      flash((isProvider ? `${t('settings.signOutFailed')} ` : '✗ Sign out failed: ') + err.message, 'error');
     } finally {
       setLoggingOut(false);
     }
@@ -59,7 +66,7 @@ export default function Settings() {
     setSendingReset(true);
     try {
       await resetPassword(firebaseUser.email);
-      flash(`✓ A password reset link was sent to ${firebaseUser.email}. Check your inbox.`);
+      flash(isProvider ? t('settings.passwordResetSent')(firebaseUser.email) : `✓ A password reset link was sent to ${firebaseUser.email}. Check your inbox.`);
     } catch (err) {
       flash('✗ ' + getAuthErrorMessage(err.code), 'error');
     } finally {
@@ -113,6 +120,145 @@ export default function Settings() {
 
   const isSignedIn = firebaseUser && !firebaseUser.isAnonymous;
   const canChangePassword = isSignedIn && firebaseUser.providerData?.some(p => p.providerId === 'password');
+
+  // BUGFIX (provider account seeing student-only Settings sections): a
+  // verified provider's "Profile" bottom-nav button points here (see
+  // BottomNav.jsx's ProviderProfileButton), but this page was always the
+  // full student version — "Storage" (local-first student data usage),
+  // "Danger Zone / Reset All Data" (wipes the local KUETx student store,
+  // meaningless and confusing for a provider account, which has no local
+  // student data to reset), and the Firebase Console link (student cloud
+  // data). A provider only needs Theme + their own Account/Sign-out. Kept
+  // as an early branch rather than littering isProvider checks through
+  // the student JSX below, since the two versions share almost nothing
+  // once Storage/Danger Zone are removed.
+  if (isProvider) {
+    return (
+      <div className="page-enter page-container content-page-bg">
+        <div className="content-page-hero">
+          <div className="content-page-hero-main">
+            <div className="content-page-hero-head">
+              <div className="content-page-hero-icon">
+                <SettingsIcon size={24} color="var(--accent)" />
+              </div>
+              <h1 className="content-page-hero-title">{t('settings.title')}</h1>
+            </div>
+            <p className="content-page-hero-subtitle">{t('settings.subtitle')}</p>
+          </div>
+        </div>
+
+        {msg && (
+          <div style={{
+            padding: '10px 14px', borderRadius: 8, marginBottom: 14, fontSize: 13,
+            background: msgType === 'error' ? 'var(--dangerBg)' : 'var(--successBg)',
+            color: msgType === 'error' ? 'var(--danger)' : 'var(--success)',
+            border: `1px solid ${msgType === 'error' ? 'color-mix(in srgb, var(--danger) 28%, var(--border))' : 'color-mix(in srgb, var(--success) 28%, var(--border))'}`,
+          }}>{msg}</div>
+        )}
+
+        <div className="card" style={{ marginBottom: 12 }}>
+          <SectionLabel>{t('settings.theme')}</SectionLabel>
+          <div style={{ display: 'flex', gap: 8 }}>
+            {Object.values(THEMES).map(t => {
+              const Icon = THEME_ICON[t.id] || Sun;
+              const active = themeId === t.id;
+              return (
+                <button key={t.id} onClick={() => setTheme(t.id)} style={{
+                  flex: 1,
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
+                  padding: '10px 0',
+                  borderRadius: 8,
+                  border: `1.5px solid ${active ? 'var(--accent)' : 'var(--border)'}`,
+                  background: active ? 'color-mix(in srgb, var(--accent) 10%, var(--bg))' : 'transparent',
+                  cursor: 'pointer',
+                  fontSize: 13,
+                  fontWeight: active ? 700 : 500,
+                  color: active ? 'var(--accent)' : 'var(--muted)',
+                  fontFamily: 'Sora, sans-serif',
+                }}>
+                  <Icon size={16} color={active ? 'var(--accent)' : 'var(--muted)'} />
+                  {t.label}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        <div className="card" style={{ marginBottom: 12 }}>
+          <SectionLabel>{t('settings.languageSectionLabel')}</SectionLabel>
+          <div style={{ display: 'flex', gap: 8 }}>
+            {[{ id: 'bn', label: 'বাংলা' }, { id: 'en', label: 'English' }].map(opt => {
+              const active = lang === opt.id;
+              return (
+                <button key={opt.id} onClick={() => setLang(opt.id)} style={{
+                  flex: 1,
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
+                  padding: '10px 0',
+                  borderRadius: 8,
+                  border: `1.5px solid ${active ? 'var(--accent)' : 'var(--border)'}`,
+                  background: active ? 'color-mix(in srgb, var(--accent) 10%, var(--bg))' : 'transparent',
+                  cursor: 'pointer',
+                  fontSize: 13,
+                  fontWeight: active ? 700 : 500,
+                  color: active ? 'var(--accent)' : 'var(--muted)',
+                  fontFamily: 'Sora, sans-serif',
+                }}>
+                  {opt.label}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        <div className="card" style={{ marginBottom: 12 }}>
+          <SectionLabel>{t('settings.account')}</SectionLabel>
+          {isSignedIn && (
+            <div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
+                {firebaseUser.photoURL ? (
+                  <img src={firebaseUser.photoURL} alt="" style={{ width: 40, height: 40, borderRadius: '50%', flexShrink: 0 }} />
+                ) : (
+                  <div style={{ width: 40, height: 40, borderRadius: '50%', background: 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                    <User size={18} color="#fff" />
+                  </div>
+                )}
+                <div style={{ minWidth: 0 }}>
+                  <div style={{ fontSize: 13.5, fontWeight: 700, color: 'var(--text)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                    {firebaseUser.displayName || t('settings.defaultUser')}
+                  </div>
+                  <div style={{ fontSize: 11.5, color: 'var(--muted)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                    {firebaseUser.email}
+                  </div>
+                </div>
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 6, borderTop: '1px solid var(--border)', paddingTop: 10 }}>
+                {canChangePassword && (
+                  <button
+                    onClick={handleChangePassword}
+                    disabled={sendingReset}
+                    style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'none', border: 'none', padding: 0, fontSize: 12.5, fontWeight: 600, color: 'var(--muted)', cursor: 'pointer', textAlign: 'left' }}
+                  >
+                    <Lock size={13} /> {sendingReset ? t('settings.sending') : t('settings.changePassword')}
+                  </button>
+                )}
+                <button
+                  onClick={handleSignOut}
+                  disabled={loggingOut}
+                  style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'none', border: 'none', padding: 0, fontSize: 12.5, fontWeight: 600, color: 'var(--danger)', cursor: 'pointer', textAlign: 'left' }}
+                >
+                  <LogOut size={13} /> {loggingOut ? t('settings.signingOut') : t('settings.signOut')}
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+
+        <div style={{ textAlign: 'center', fontSize: 11, color: 'var(--muted)', padding: '8px 0 4px' }}>
+          KUETx v{APP_VERSION}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="page-enter page-container content-page-bg">

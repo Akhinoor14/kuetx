@@ -1,6 +1,7 @@
 import { useEffect, useState, useRef, lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import { ThemeProvider } from './hooks/useTheme';
+import { ProviderLangProvider } from './hooks/useProviderLang';
 import { usePageTracker } from './hooks/usePageTracker';
 import { useModuleUsageTracker } from './hooks/useModuleUsageTracker';
 import { startActivityTracking, stopActivityTracking } from './lib/activityTracking';
@@ -212,7 +213,7 @@ function Layout({ authState, onboardingActive }) {
               getAccountRole() === 'provider' ? <Navigate to="/provider" replace /> :
               <Dashboard />
             } />
-            <Route path="/profile" element={<Profile />} />
+            <Route path="/profile" element={<RequireStudentMode><Profile /></RequireStudentMode>} />
             <Route path="/courses" element={<RequireStudentMode><Courses /></RequireStudentMode>} />
             <Route path="/attendance" element={<RequireStudentMode><Attendance /></RequireStudentMode>} />
             <Route path="/marks" element={<RequireStudentMode><Marks /></RequireStudentMode>} />
@@ -220,30 +221,35 @@ function Layout({ authState, onboardingActive }) {
             <Route path="/results" element={<RequireStudentMode><Results /></RequireStudentMode>} />
             <Route path="/schedule" element={<RequireStudentMode><Schedule /></RequireStudentMode>} />
             <Route path="/today" element={<RequireStudentMode><Today /></RequireStudentMode>} />
-            <Route path="/teachers" element={<Teachers />} />
+            <Route path="/teachers" element={<RequireStudentMode><Teachers /></RequireStudentMode>} />
             <Route path="/syllabus" element={<RequireStudentMode><Syllabus /></RequireStudentMode>} />
             <Route path="/diary" element={<RequireStudentMode><Diary /></RequireStudentMode>} />
             <Route path="/assignments" element={<RequireStudentMode><Assignments /></RequireStudentMode>} />
             <Route path="/question-bank" element={<RequireStudentMode><QuestionBank /></RequireStudentMode>} />
             <Route path="/question-bank/view" element={<RequireStudentMode><QuestionBankViewer /></RequireStudentMode>} />
             <Route path="/solutions" element={<RequireStudentMode><QuestionBankSolutions /></RequireStudentMode>} />
-            <Route path="/self-study/academic" element={<SelfStudy />} />
-            <Route path="/self-study/deep-focus" element={<SelfStudy />} />
-            <Route path="/time" element={<TimeTracker />} />
-            <Route path="/namaz" element={<Namaz />} />
-            <Route path="/money" element={<Money />} />
-            <Route path="/tuition" element={<Tuition />} />
-            <Route path="/clubs" element={<Clubs />} />
+            <Route path="/self-study/academic" element={<RequireStudentMode><SelfStudy /></RequireStudentMode>} />
+            <Route path="/self-study/deep-focus" element={<RequireStudentMode><SelfStudy /></RequireStudentMode>} />
+            <Route path="/time" element={<RequireStudentMode><TimeTracker /></RequireStudentMode>} />
+            <Route path="/namaz" element={<RequireStudentMode><Namaz /></RequireStudentMode>} />
+            <Route path="/money" element={<RequireStudentMode><Money /></RequireStudentMode>} />
+            <Route path="/tuition" element={<RequireStudentMode><Tuition /></RequireStudentMode>} />
+            <Route path="/clubs" element={<RequireStudentMode><Clubs /></RequireStudentMode>} />
+            {/* /services* deliberately NOT wrapped in RequireStudentMode —
+                this is the student-facing browse-a-provider's-shop page,
+                and it's plausible a provider legitimately wants to see
+                how their own listing renders there. Revisit if that
+                turns out to be more confusing than useful in practice. */}
             <Route path="/services" element={<Services />} />
             <Route path="/services/category/:categoryType" element={<CategoryShopList />} />
             <Route path="/services/:serviceId" element={<ServiceDetail />} />
-            <Route path="/projects" element={<Projects />} />
-            <Route path="/tours" element={<Tours />} />
+            <Route path="/projects" element={<RequireStudentMode><Projects /></RequireStudentMode>} />
+            <Route path="/tours" element={<RequireStudentMode><Tours /></RequireStudentMode>} />
             <Route path="/calculators" element={<Navigate to="/marks" replace />} />
             <Route path="/alerts" element={<RequireStudentMode><Alerts /></RequireStudentMode>} />
-            <Route path="/notice" element={<Notice />} />
-            <Route path="/reports" element={<Reports />} />
-            <Route path="/notes" element={<Notes />} />
+            <Route path="/notice" element={<RequireStudentMode><Notice /></RequireStudentMode>} />
+            <Route path="/reports" element={<RequireStudentMode><Reports /></RequireStudentMode>} />
+            <Route path="/notes" element={<RequireStudentMode><Notes /></RequireStudentMode>} />
             <Route path="/settings" element={<Settings />} />
             <Route path="/about" element={<About />} />
             {/* Publicly reachable (no route guard) — a brand-new account
@@ -259,7 +265,7 @@ function Layout({ authState, onboardingActive }) {
             <Route path="/class-notices" element={<RequireStudentMode><RequireCR><ClassNotices /></RequireCR></RequireStudentMode>} />
             <Route path="/class-my-role" element={<RequireStudentMode><RequireCR><ClassMyRole /></RequireCR></RequireStudentMode>} />
             <Route path="/classmates" element={<RequireStudentMode><Classmates /></RequireStudentMode>} />
-            <Route path="/tools" element={<SubgroupHub group="Tools" />} />
+            <Route path="/tools" element={<RequireStudentMode><SubgroupHub group="Tools" /></RequireStudentMode>} />
             {/* Class Rep hub is CR-only content, but doesn't need a hard page
                 gate here — non-CR users simply never see a link to it (see
                 nav.js requiresCR + modeFilter). RequireCR stays on the
@@ -271,17 +277,17 @@ function Layout({ authState, onboardingActive }) {
                 refactor — nav.js's 'Class Rep' group (used by the Sidebar
                 and Navbar) is kept separate from this hub's exact card
                 list, same relationship as before the split. */}
-            <Route path="/class-rep" element={<CRHub />} />
-            <Route path="/academic-core" element={<SubgroupHub group="Academics" subgroup="Academic Core" />} />
-            <Route path="/daily-academics" element={<SubgroupHub group="Academics" subgroup="Daily Academics" />} />
+            <Route path="/class-rep" element={<RequireStudentMode><CRHub /></RequireStudentMode>} />
+            <Route path="/academic-core" element={<RequireStudentMode><SubgroupHub group="Academics" subgroup="Academic Core" /></RequireStudentMode>} />
+            <Route path="/daily-academics" element={<RequireStudentMode><SubgroupHub group="Academics" subgroup="Daily Academics" /></RequireStudentMode>} />
             {/* Campus Life is intentionally independent from Services now
                 (see nav.js's Services subgroup comment + Services.jsx) —
                 Services has its own live-Firestore-driven page at
                 /services and should not also appear as a hardcoded
                 static preview here. Only the "Campus Life" subgroup
                 itself is rendered on this hub. */}
-            <Route path="/campus-life" element={<SubgroupHub pageTitle="Campus Life" group="Campus Life" subgroup="Campus Life" />} />
-            <Route path="/self-study" element={<SubgroupHub group="Campus Life" subgroup="Self Study" />} />
+            <Route path="/campus-life" element={<RequireStudentMode><SubgroupHub pageTitle="Campus Life" group="Campus Life" subgroup="Campus Life" /></RequireStudentMode>} />
+            <Route path="/self-study" element={<RequireStudentMode><SubgroupHub group="Campus Life" subgroup="Self Study" /></RequireStudentMode>} />
 
             {/* Combined bottom-nav hub page. Daily Life doesn't exist as
                 a separate NAV group anymore (folded into Campus Life's
@@ -294,10 +300,12 @@ function Layout({ authState, onboardingActive }) {
             <Route
               path="/campus"
               element={
-                <SubgroupHub
-                  pageTitle="Campus"
-                  sections={[{ group: 'Campus Life', subgroup: 'Campus Life' }]}
-                />
+                <RequireStudentMode>
+                  <SubgroupHub
+                    pageTitle="Campus"
+                    sections={[{ group: 'Campus Life', subgroup: 'Campus Life' }]}
+                  />
+                </RequireStudentMode>
               }
             />
             <Route path="/cr-hub" element={<CRHub />} />
@@ -990,6 +998,7 @@ export default function App() {
 
   return (
     <ThemeProvider>
+      <ProviderLangProvider>
       <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
         {queueBuilt && queue.length === 0 && (
           <ProviderPostSignupRedirect queueBuilt={queueBuilt} queueEmpty={queue.length === 0} />
@@ -1235,6 +1244,7 @@ export default function App() {
           />
         )}
       </BrowserRouter>
+      </ProviderLangProvider>
     </ThemeProvider>
   );
 }

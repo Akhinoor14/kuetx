@@ -10,7 +10,12 @@
 // visible tab (Profile) is rendered directly in BottomNav.jsx as a plain
 // link to /settings — NOT routed through ProfileButton's CR/staff logic,
 // since none of that applies to a provider account.
-export const PROVIDER_FIXED_BUTTONS = [
-  { id: 'p-dashboard', label: 'Dashboard', icon: 'Grid',  path: '/provider',       match: (p) => p === '/provider' },
-  { id: 'p-shop',      label: 'My Shop',   icon: 'Store', path: '/provider/shop',  match: (p) => p === '/provider/shop' || p.startsWith('/provider/shop/') },
-];
+// Was a module-level constant; now a function of `t` so labels respond to
+// the provider language toggle. Called from BottomNav.jsx where
+// useProviderLang() is already available.
+export function getProviderFixedButtons(t) {
+  return [
+    { id: 'p-dashboard', label: t('bottomNav.dashboard'), icon: 'Grid',  path: '/provider',       match: (p) => p === '/provider' },
+    { id: 'p-shop',      label: t('bottomNav.myShop'),   icon: 'Store', path: '/provider/shop',  match: (p) => p === '/provider/shop' || p.startsWith('/provider/shop/') },
+  ];
+}

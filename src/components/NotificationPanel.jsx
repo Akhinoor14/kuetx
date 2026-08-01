@@ -10,6 +10,7 @@ import { getGroupId } from '../lib/groupUtils';
 import { subscribeMyRole } from '../lib/groupSync';
 import { auth } from '../lib/firebase';
 import { useIsFaculty } from '../hooks/useIsFaculty';
+import { useIsProvider } from '../hooks/useIsProvider';
 import { useViewMode } from '../hooks/useViewMode';
 
 /**
@@ -74,7 +75,7 @@ const ALERT_TAGS = {
 const NOTICE_TAG = { label: 'Notice', color: 'var(--accent)', bg: 'var(--accentBg)' };
 const BOOKING_TAG = { label: 'Booking', color: '#0891b2', bg: 'rgba(8,145,178,0.12)' };
 
-function buildMergedItems(profile, notices, dismissedAlertIds, readNoticeIds, firstSeenMap, bookingAlerts, uid) {
+function buildMergedItems(profile, notices, dismissedAlertIds, readNoticeIds, firstSeenMap, bookingAlerts, uid, isProviderViewer) {
   const noticeItems = notices.map(n => ({
     id: `notice:${n.id}`,
     kind: 'notice',
@@ -87,7 +88,15 @@ function buildMergedItems(profile, notices, dismissedAlertIds, readNoticeIds, fi
     markRead: () => noticeApi.setNoticeRead(n.id, true),
   }));
 
-  const rawAlerts = computeAlerts(profile);
+  // BUGFIX (provider seeing student alerts — marks/attendance/CR-claim
+  // banners derived from computeAlerts(profile)): a provider account's
+  // `profile` here is whatever student-shaped defaults getProfile()
+  // returns for an account that never filled in student fields, which
+  // computeAlerts doesn't know to skip on its own. Short-circuit to an
+  // empty alert list for a provider viewer instead of teaching
+  // computeAlerts a new role concept it has no other reason to know
+  // about.
+  const rawAlerts = isProviderViewer ? { critical: [], warnings: [], assignmentAlerts: [], positives: [] } : computeAlerts(profile);
   const decorated = alertApi.decorateAlerts(rawAlerts, dismissedAlertIds);
   const alertGroups = ['critical', 'warnings', 'assignmentAlerts'];
   const allAlertItems = alertGroups.flatMap(group => decorated[group].map(item => ({ group, item })));
@@ -177,8 +186,19 @@ export function NotificationPanel({ isOpen, onClose }) {
   // own real notice surface instead of rendering a second notice list
   // here. See the file-level comment above for the full decision.
   const { isFaculty, isFounderBypass } = useIsFaculty();
+  const { isProvider } = useIsProvider();
   const { viewMode } = useViewMode();
   const isFacultyViewer = isFaculty || isFounderBypass;
+  // BUGFIX (provider account seeing student notices/alerts in the bell
+  // dropdown — e.g. a "<dept> has no CR yet, tap to claim CR" banner on
+  // a Service Provider account): this panel only ever checked
+  // isFacultyViewer before subscribing to the student notice feed and
+  // computing student academic alerts (marks/attendance/CR-claim), with
+  // no equivalent check for a provider account. A provider isn't a
+  // faculty account, so it fell straight through into the student
+  // branch below exactly like a real student would. isProviderViewer
+  // mirrors isFacultyViewer's role in every gate from here down.
+  const isProviderViewer = isProvider;
   // Founder in Teacher-mode is routed the same as real faculty (point 2
   // in the routing plan); Founder in Admin-mode (or any non-founder
   // faculty, whose viewMode is always 'teacher' — see useViewMode.js) is
@@ -195,27 +215,28 @@ export function NotificationPanel({ isOpen, onClose }) {
   // Whether the signed-in student is CR/ACR in their own group — gates
   // whether a Teacher's cr_only notice shows up in here at all (see
   // filterStudentFacingNotices in noticeUtils.js). Not relevant for a
-  // faculty/Founder viewer, who never subscribes to the student feed
-  // below in the first place.
+  // faculty/Founder/provider viewer, who never subscribes to the student
+  // feed below in the first place.
   const [isViewerCR, setIsViewerCR] = useState(false);
   useEffect(() => {
-    if (isFacultyViewer || !groupId || !auth.currentUser?.uid) { setIsViewerCR(false); return; }
+    if (isFacultyViewer || isProviderViewer || !groupId || !auth.currentUser?.uid) { setIsViewerCR(false); return; }
     return subscribeMyRole(groupId, auth.currentUser.uid, (role) => {
       setIsViewerCR(role === 'cr' || role === 'acr');
     });
-  }, [groupId, isFacultyViewer]);
+  }, [groupId, isFacultyViewer, isProviderViewer]);
 
   // Live notice feed (global admin broadcasts + group CR/ACR notices) —
-  // student viewers only. Faculty/Founder viewers get an empty notice
-  // list here (Alert items, if any, still show) and use the "Notice →"
+  // student viewers only. Faculty/Founder/provider viewers get an empty
+  // notice list here (Alert items, if any, still show for faculty; a
+  // provider gets neither, see computeAlerts guard below) and use the
   // link above to reach their real notice surface instead — see the
   // file-level comment for why this dropdown doesn't inline a second
   // (or third) copy of the faculty-notices merge.
   const [notices, setNotices] = useState([]);
   useEffect(() => {
-    if (isFacultyViewer) { setNotices([]); return; }
+    if (isFacultyViewer || isProviderViewer) { setNotices([]); return; }
     return noticeApi.subscribeAllNotices(profile, groupId, setNotices, 'student', { isViewerCR, uid: auth.currentUser?.uid });
-  }, [profile, groupId, isViewerCR, isFacultyViewer]);
+  }, [profile, groupId, isViewerCR, isFacultyViewer, isProviderViewer]);
 
   // Stamping (a write) happens here, in an effect, not during the render-time
   // useMemo below — store.set() dispatches kuetx:store-updated, which this
@@ -223,12 +244,16 @@ export function NotificationPanel({ isOpen, onClose }) {
   // avoidable extra render cycle.
   const [firstSeenMap, setFirstSeenMap] = useState(() => new Map());
   useEffect(() => {
+    // computeAlerts() is entirely student-shaped (marks/attendance/CR-
+    // claim banners derived from a student profile) — a provider account
+    // has none of that data and shouldn't see it stamped/decorated here.
+    if (isProviderViewer) { setFirstSeenMap(new Map()); return; }
     const profile = getProfile() || {};
     const decorated = alertApi.decorateAlerts(computeAlerts(profile), dismissedAlertIds);
     const ids = ['critical', 'warnings', 'assignmentAlerts']
       .flatMap(group => decorated[group].map(item => item.id));
     setFirstSeenMap(alertApi.getOrStampAlertFirstSeenAt(ids));
-  }, [dismissedAlertIds, refreshTick]);
+  }, [dismissedAlertIds, refreshTick, isProviderViewer]);
 
   // Booking alerts (§9) — same for every signed-in user regardless of
   // role/view-mode, unlike the Notice channel's role routing above; a
@@ -242,8 +267,8 @@ export function NotificationPanel({ isOpen, onClose }) {
   }, [uid]);
 
   const items = useMemo(
-    () => buildMergedItems(profile, notices, dismissedAlertIds, readNoticeIds, firstSeenMap, bookingAlerts, uid),
-    [profile, notices, dismissedAlertIds, readNoticeIds, firstSeenMap, bookingAlerts, uid]
+    () => buildMergedItems(profile, notices, dismissedAlertIds, readNoticeIds, firstSeenMap, bookingAlerts, uid, isProviderViewer),
+    [profile, notices, dismissedAlertIds, readNoticeIds, firstSeenMap, bookingAlerts, uid, isProviderViewer]
   );
 
   const visibleItems = filter === 'unread' ? items.filter(i => i.isUnread) : items;
@@ -382,11 +407,13 @@ export function NotificationPanel({ isOpen, onClose }) {
           )}
         </div>
 
-        <div style={{ borderTop: '1px solid var(--border)', padding: 10 }}>
-          <Link to={noticeLinkTo} onClick={onClose} style={{ display: 'block', textAlign: 'center', fontSize: 12, color: 'var(--accent)', textDecoration: 'none', padding: '8px 12px', borderRadius: 8, cursor: 'pointer' }} onMouseEnter={(e)=>e.currentTarget.style.background='var(--accentBg)'} onMouseLeave={(e)=>e.currentTarget.style.background='transparent'}>
-            View all notices
-          </Link>
-        </div>
+        {!isProviderViewer && (
+          <div style={{ borderTop: '1px solid var(--border)', padding: 10 }}>
+            <Link to={noticeLinkTo} onClick={onClose} style={{ display: 'block', textAlign: 'center', fontSize: 12, color: 'var(--accent)', textDecoration: 'none', padding: '8px 12px', borderRadius: 8, cursor: 'pointer' }} onMouseEnter={(e)=>e.currentTarget.style.background='var(--accentBg)'} onMouseLeave={(e)=>e.currentTarget.style.background='transparent'}>
+              View all notices
+            </Link>
+          </div>
+        )}
       </div>
     </>
   );

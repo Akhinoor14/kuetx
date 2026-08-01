@@ -3,6 +3,8 @@ import { Wordmark } from '../components/Logo';
 import { ArrowRight, BookOpen, Building2, CheckCircle, Facebook, ShieldCheck, Sparkles, Users, Zap } from 'lucide-react';
 import { ICONS } from '../lib/iconRegistry';
 import usePageMeta from '../hooks/usePageMeta';
+import { useIsProvider } from '../hooks/useIsProvider';
+import { useProviderLang } from '../hooks/useProviderLang';
 
 function GuideBanner() {
   return (
@@ -29,10 +31,40 @@ function GuideBanner() {
 }
 
 export default function About() {
+  const { isProvider } = useIsProvider();
+  const { t } = useProviderLang();
   usePageMeta(
     'About KUETx — Student Life OS for KUET Students',
     'Learn about KUETx, the free student life app built for KUET — attendance tracker, GPA calculator, question bank, schedule, and more.'
   );
+
+  // BUGFIX (provider seeing the full student feature showcase): this
+  // page's Guide banner ("How to use every feature") and hero copy below
+  // are entirely about student features (attendance, GPA, question bank)
+  // — none of it applies to a Service Provider account, and the Guide
+  // banner links into a walkthrough built for the student shell. A
+  // provider reaching /about (from Settings/SidebarNavProvider — see
+  // that file's NAV_PROVIDER entry) gets a short, provider-relevant
+  // version instead of the full marketing page.
+  if (isProvider) {
+    return (
+      <div style={{ padding: '1.5rem 1rem', width: '100%', maxWidth: 560, margin: '0 auto' }}>
+        <div style={{
+          padding: '1.5rem', border: '1px solid var(--border)', borderRadius: 18,
+          background: 'var(--surface, var(--card))', textAlign: 'center',
+        }}>
+          <Wordmark height={36} />
+          <div style={{ fontSize: 13, color: 'var(--muted)', marginTop: 14, lineHeight: 1.7 }}>
+            {t('about.body1')}
+          </div>
+          <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 14, lineHeight: 1.7 }}>
+            {t('about.body2')}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div style={{ padding: '1.5rem 1rem', width: '100%', margin: '0 auto' }}>
       <GuideBanner />

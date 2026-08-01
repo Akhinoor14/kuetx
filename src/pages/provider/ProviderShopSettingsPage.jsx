@@ -20,8 +20,10 @@ import {
 import {
   uploadServiceImage, deleteServiceImage,
 } from '../../lib/serviceImageUpload';
+import { useProviderLang } from '../../hooks/useProviderLang';
 
 export default function ProviderShopSettingsPage({ providerProfile }) {
+  const { t } = useProviderLang();
   const [services, setServices] = useState(null);
   const uid = providerProfile?.uid;
   const navigate = useNavigate();
@@ -40,17 +42,17 @@ export default function ProviderShopSettingsPage({ providerProfile }) {
 
   return (
     <div style={{ padding: '20px 16px', maxWidth: 640, margin: '0 auto' }}>
-      <BackLink navigate={navigate} />
+      <BackLink navigate={navigate} t={t} />
 
       {stillLoading && (
         <div style={{ padding: 20, textAlign: 'center', color: 'var(--muted)', fontSize: 13 }}>
-          Loading…
+          {t('shopSettings.loading')}
         </div>
       )}
 
       {!stillLoading && !service && (
         <div style={{ padding: 20, textAlign: 'center', color: 'var(--muted)', fontSize: 13 }}>
-          এখনো কোনো সার্ভিস সেট আপ করা হয়নি।
+          {t('shopSettings.noServiceYet')}
         </div>
       )}
 
@@ -61,34 +63,34 @@ export default function ProviderShopSettingsPage({ providerProfile }) {
               strings as ProviderDashboard.jsx's Collapsible used to wrap. */}
           <div className="card" style={{ padding: 16 }}>
             <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', marginBottom: 4 }}>
-              ছবি, লোকেশন ও ডেলিভারি
+              {t('shopSettings.metaTitle')}
             </div>
             <div style={{ fontSize: 12.5, color: 'var(--muted)', marginBottom: 12 }}>
-              {service.locationText || 'সেট করা হয়নি'}
+              {service.locationText || t('shopSettings.notSetUp')}
             </div>
-            <ShopMetaEditor service={service} />
+            <ShopMetaEditor service={service} t={t} />
           </div>
 
           {/* MULTI_CATEGORY_SERVICES_PLAN.md Phase 3: manual pause/
               permanent-close/reactivate control. */}
           <div className="card" style={{ padding: 16 }}>
             <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', marginBottom: 4 }}>
-              শপ স্ট্যাটাস
+              {t('shopSettings.statusTitle')}
             </div>
             <div style={{ fontSize: 12.5, color: 'var(--muted)', marginBottom: 12 }}>
-              {isDormant ? 'নিষ্ক্রিয় (Dormant)' : 'সক্রিয়'}
+              {isDormant ? t('shopSettings.dormant') : t('shopSettings.active')}
             </div>
-            <ShopStatusControl service={service} />
+            <ShopStatusControl service={service} t={t} />
           </div>
 
           <div className="card" style={{ padding: 16 }}>
             <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', marginBottom: 4 }}>
-              সার্ভিস বিবরণ এডিট করুন
+              {t('shopSettings.detailsTitle')}
             </div>
             <div style={{ fontSize: 12.5, color: 'var(--muted)', marginBottom: 12 }}>
               {service.name}
             </div>
-            <ServiceDetailsEditor service={service} />
+            <ServiceDetailsEditor service={service} t={t} />
           </div>
         </div>
       )}
@@ -96,7 +98,7 @@ export default function ProviderShopSettingsPage({ providerProfile }) {
   );
 }
 
-function BackLink({ navigate }) {
+function BackLink({ navigate, t }) {
   return (
     <button
       onClick={() => navigate('/provider/shop')}
@@ -106,12 +108,12 @@ function BackLink({ navigate }) {
         color: 'var(--muted)', fontSize: 13, fontWeight: 600,
       }}
     >
-      <ArrowLeft size={16} /> My Shop
+      <ArrowLeft size={16} /> {t('shopSettings.backLink')}
     </button>
   );
 }
 
-function ShopMetaEditor({ service }) {
+function ShopMetaEditor({ service, t }) {
   const [locationText, setLocationText] = useState(service.locationText || '');
   const [hasDelivery, setHasDelivery] = useState(Boolean(service.hasDelivery));
   const [saving, setSaving] = useState(false);
@@ -133,7 +135,7 @@ function ShopMetaEditor({ service }) {
       await updateServiceDetails(service.id, { locationText, hasDelivery });
       setSaved(true);
     } catch (e) {
-      setError('সেভ করতে সমস্যা হয়েছে।');
+      setError(t('shopSettings.saveError'));
     } finally {
       setSaving(false);
     }
@@ -151,7 +153,7 @@ function ShopMetaEditor({ service }) {
       await updateServiceDetails(service.id, { coverImageUrl: url });
       if (oldUrl) deleteServiceImage(oldUrl); // best-effort, not awaited
     } catch (e) {
-      setError(e.message || 'ছবি আপলোড করতে সমস্যা হয়েছে।');
+      setError(e.message || t('shopSettings.imageUploadError'));
     } finally {
       setUploadingCover(false);
     }
@@ -164,7 +166,7 @@ function ShopMetaEditor({ service }) {
       await updateServiceDetails(service.id, { coverImageUrl: null });
       if (oldUrl) deleteServiceImage(oldUrl);
     } catch (e) {
-      setError('মুছতে সমস্যা হয়েছে।');
+      setError(t('shopSettings.coverRemoveError'));
     }
   };
 
@@ -172,7 +174,7 @@ function ShopMetaEditor({ service }) {
     <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
       {/* Cover image */}
       <div>
-        <label style={{ fontSize: 12, color: 'var(--muted)', fontWeight: 600 }}>কভার ছবি (সর্বোচ্চ 1MB)</label>
+        <label style={{ fontSize: 12, color: 'var(--muted)', fontWeight: 600 }}>{t('shopSettings.coverLabel')}</label>
         <div style={{ marginTop: 8, display: 'flex', alignItems: 'center', gap: 12 }}>
           {service.coverImageUrl ? (
             <img
@@ -196,11 +198,11 @@ function ShopMetaEditor({ service }) {
               className="btn btn-secondary"
               style={{ minHeight: 40, fontSize: 13 }}
             >
-              {uploadingCover ? 'আপলোড হচ্ছে…' : service.coverImageUrl ? 'পরিবর্তন করুন' : 'ছবি আপলোড করুন'}
+              {uploadingCover ? t('shopSettings.uploading') : service.coverImageUrl ? t('shopSettings.changeCover') : t('shopSettings.uploadCover')}
             </button>
             {service.coverImageUrl && (
               <button onClick={removeCover} className="btn btn-secondary" style={{ minHeight: 36, fontSize: 12, color: '#dc2626' }}>
-                মুছুন
+                {t('shopSettings.removeCover')}
               </button>
             )}
           </div>
@@ -216,12 +218,12 @@ function ShopMetaEditor({ service }) {
 
       <div>
         <label style={{ fontSize: 12, color: 'var(--muted)', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 6 }}>
-          <MapPin size={13} /> লোকেশন (ঐচ্ছিক, ফ্রি-টেক্সট)
+          <MapPin size={13} /> {t('shopSettings.locationLabel')}
         </label>
         <input
           value={locationText}
           onChange={(e) => setLocationText(e.target.value)}
-          placeholder="যেমন: Hall-3 Gate, Fazlul Haque Hall market"
+          placeholder={t('shopSettings.locationPlaceholder')}
           style={{
             width: '100%', marginTop: 6, padding: '10px 12px', borderRadius: 10,
             border: '1px solid var(--border)', background: 'var(--card)',
@@ -240,7 +242,7 @@ function ShopMetaEditor({ service }) {
       >
         <Truck size={18} color={hasDelivery ? 'var(--accent)' : 'var(--muted)'} />
         <span style={{ fontSize: 13.5, fontWeight: 600, color: 'var(--text)', flex: 1, textAlign: 'left' }}>
-          হোম ডেলিভারি আছে
+          {t('shopSettings.deliveryLabel')}
         </span>
         <span
           style={{
@@ -259,14 +261,14 @@ function ShopMetaEditor({ service }) {
       {error && <div style={{ fontSize: 12.5, color: 'var(--danger, #dc2626)' }}>{error}</div>}
 
       <button onClick={save} disabled={saving} className="btn btn-primary" style={{ minHeight: 44 }}>
-        {saving ? 'সেভ হচ্ছে…' : 'সেভ করুন'}
+        {saving ? t('shopSettings.saving') : t('shopSettings.save')}
       </button>
-      {saved && <span style={{ fontSize: 12, color: '#16a34a' }}>সেভ হয়েছে ✓</span>}
+      {saved && <span style={{ fontSize: 12, color: '#16a34a' }}>{t('shopSettings.saved')}</span>}
     </div>
   );
 }
 
-function ShopStatusControl({ service }) {
+function ShopStatusControl({ service, t }) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
   const [confirming, setConfirming] = useState(null); // 'pause' | 'permanent_close' | null
@@ -282,7 +284,7 @@ function ShopStatusControl({ service }) {
       await setServiceStatus(service.id, action);
       setConfirming(null);
     } catch (e) {
-      setError('আপডেট করতে সমস্যা হয়েছে — আবার চেষ্টা করুন।');
+      setError(t('shopSettings.statusUpdateError'));
     } finally {
       setBusy(false);
     }
@@ -299,11 +301,11 @@ function ShopStatusControl({ service }) {
             className="btn btn-primary"
             style={{ width: '100%', minHeight: 46, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}
           >
-            <Play size={16} /> {busy ? 'হচ্ছে…' : 'Reactivate — আবার সক্রিয় করুন'}
+            <Play size={16} /> {busy ? t('shopSettings.reactivating') : t('shopSettings.reactivate')}
           </button>
         ) : (
           <div style={{ fontSize: 12.5, color: 'var(--muted)' }}>
-            এই শপ স্থায়ীভাবে বন্ধ — নিজে থেকে reactivate করা যাবে না।
+            {t('shopSettings.permanentlyClosed')}
           </div>
         )}
       </div>
@@ -313,8 +315,7 @@ function ShopStatusControl({ service }) {
   return (
     <div>
       <div style={{ fontSize: 12.5, color: 'var(--muted)', marginBottom: 12, lineHeight: 1.6 }}>
-        Deactivate করলে শপ "নিষ্ক্রিয়" তালিকায় চলে যাবে — কিন্তু ডেটা/offerings
-        সব অক্ষত থাকবে। কী ধরনের deactivate করবেন বেছে নিন:
+        {t('shopSettings.deactivateIntro')}
       </div>
 
       {error && <div style={{ fontSize: 12.5, color: 'var(--danger, #dc2626)', marginBottom: 8 }}>{error}</div>}
@@ -326,36 +327,38 @@ function ShopStatusControl({ service }) {
             className="btn btn-secondary"
             style={{ minHeight: 46, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}
           >
-            <Pause size={16} /> সাময়িক বিরতি (Temporary pause)
+            <Pause size={16} /> {t('shopSettings.pauseOption')}
           </button>
           <button
             onClick={() => setConfirming('permanent_close')}
             className="btn btn-secondary"
             style={{ minHeight: 46, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, color: '#dc2626' }}
           >
-            <Power size={16} /> স্থায়ীভাবে বন্ধ (Permanent close)
+            <Power size={16} /> {t('shopSettings.permanentCloseOption')}
           </button>
         </div>
       )}
 
       {confirming === 'pause' && (
         <ConfirmBlock
-          text="Temporary pause করলে শপ নিষ্ক্রিয় তালিকায় যাবে, কিন্তু আপনি যেকোনো সময় নিজে থেকে আবার Reactivate করে ফিরিয়ে আনতে পারবেন। কোনো ডেটা মুছে যাবে না।"
+          text={t('shopSettings.pauseConfirmText')}
           busy={busy}
           onCancel={() => setConfirming(null)}
           onConfirm={() => run('pause')}
-          confirmLabel="নিশ্চিত — Pause করুন"
+          confirmLabel={t('shopSettings.pauseConfirmLabel')}
+          t={t}
         />
       )}
 
       {confirming === 'permanent_close' && (
         <ConfirmBlock
-          text="Permanent close করলে শপ নিষ্ক্রিয় তালিকায় যাবে এবং আপনি নিজে থেকে আর reactivate করতে পারবেন না — শুধু Founder-level review-এর মাধ্যমে আবার খোলা যাবে।"
+          text={t('shopSettings.permanentConfirmText')}
           busy={busy}
           onCancel={() => setConfirming(null)}
           onConfirm={() => run('permanent_close')}
-          confirmLabel="নিশ্চিত — স্থায়ীভাবে বন্ধ করুন"
+          confirmLabel={t('shopSettings.permanentConfirmLabel')}
           danger
+          t={t}
         />
       )}
     </div>
@@ -363,14 +366,14 @@ function ShopStatusControl({ service }) {
 }
 
 function ConfirmBlock({
-  text, busy, onCancel, onConfirm, confirmLabel, danger,
+  text, busy, onCancel, onConfirm, confirmLabel, danger, t,
 }) {
   return (
     <div style={{ padding: 12, borderRadius: 12, border: '1px solid var(--border)', background: 'var(--surface, var(--card))' }}>
       <div style={{ fontSize: 12.5, color: 'var(--text)', lineHeight: 1.6, marginBottom: 12 }}>{text}</div>
       <div style={{ display: 'flex', gap: 8 }}>
         <button onClick={onCancel} disabled={busy} className="btn btn-secondary" style={{ flex: 1, minHeight: 44 }}>
-          বাতিল
+          {t('shopSettings.cancel')}
         </button>
         <button
           onClick={onConfirm}
@@ -378,7 +381,7 @@ function ConfirmBlock({
           className="btn btn-primary"
           style={{ flex: 1, minHeight: 44, background: danger ? '#dc2626' : undefined }}
         >
-          {busy ? 'হচ্ছে…' : confirmLabel}
+          {busy ? t('shopSettings.reactivating') : confirmLabel}
         </button>
       </div>
     </div>
@@ -405,7 +408,7 @@ function Field({
   );
 }
 
-function ServiceDetailsEditor({ service }) {
+function ServiceDetailsEditor({ service, t }) {
   const [name, setName] = useState(service.name || '');
   const [description, setDescription] = useState(service.description || '');
   const [priceNote, setPriceNote] = useState(service.priceNote || '');
@@ -432,14 +435,14 @@ function ServiceDetailsEditor({ service }) {
   return (
     <div>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-        <Field label="নাম" value={name} onChange={setName} />
-        <Field label="বর্ণনা" value={description} onChange={setDescription} textarea />
-        <Field label="মূল্য নোট" value={priceNote} onChange={setPriceNote} />
+        <Field label={t('shopSettings.nameLabel')} value={name} onChange={setName} />
+        <Field label={t('shopSettings.descriptionLabel')} value={description} onChange={setDescription} textarea />
+        <Field label={t('shopSettings.priceNoteLabel')} value={priceNote} onChange={setPriceNote} />
       </div>
       <button onClick={save} disabled={saving} className="btn btn-primary" style={{ marginTop: 12, minHeight: 44 }}>
-        {saving ? 'সেভ হচ্ছে…' : 'সেভ করুন'}
+        {saving ? t('shopSettings.saving') : t('shopSettings.save')}
       </button>
-      {saved && <span style={{ marginLeft: 10, fontSize: 12, color: '#16a34a' }}>সেভ হয়েছে ✓</span>}
+      {saved && <span style={{ marginLeft: 10, fontSize: 12, color: '#16a34a' }}>{t('shopSettings.saved')}</span>}
     </div>
   );
 }

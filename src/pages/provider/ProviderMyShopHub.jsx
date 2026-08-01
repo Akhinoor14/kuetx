@@ -16,8 +16,10 @@ import {
 import {
   subscribeProviderServices, withServiceDefaults,
 } from '../../lib/serviceSync';
+import { useProviderLang } from '../../hooks/useProviderLang';
 
 export default function ProviderMyShopHub({ providerProfile }) {
+  const { t } = useProviderLang();
   const [services, setServices] = useState(null);
   const uid = providerProfile?.uid;
   const navigate = useNavigate();
@@ -36,17 +38,17 @@ export default function ProviderMyShopHub({ providerProfile }) {
 
   const offeringsCount = service ? (service.offerings || []).length : 0;
   const offeringsSubtitle = !service
-    ? 'সেট করা হয়নি'
+    ? t('shopHub.notSetUp')
     : isInquiryMode
-      ? `${offeringsCount} item${offeringsCount === 1 ? '' : 's'}`
-      : `${offeringsCount} item${offeringsCount === 1 ? '' : 's'} · ৳${service.revenueTotal || 0} আয়`;
+      ? t('shopHub.itemsSuffix')(offeringsCount)
+      : t('shopHub.itemsWithRevenueSuffix')(offeringsCount, service.revenueTotal || 0);
 
   const isDormant = service?.status === 'dormant';
   const statusSubtitle = !service
-    ? 'সেট করা হয়নি'
+    ? t('shopHub.notSetUp')
     : isDormant
-      ? 'নিষ্ক্রিয় (Dormant)'
-      : 'সক্রিয়';
+      ? t('shopHub.dormant')
+      : t('shopHub.active');
 
   return (
     <div style={{ padding: '20px 16px', maxWidth: 640, margin: '0 auto' }}>
@@ -58,20 +60,20 @@ export default function ProviderMyShopHub({ providerProfile }) {
           <Store size={22} color="var(--accent)" />
         </div>
         <div>
-          <div style={{ fontSize: 17, fontWeight: 700, color: 'var(--text)' }}>My Shop</div>
-          <div style={{ fontSize: 12.5, color: 'var(--muted)' }}>Offerings, আয় ও শপের বিবরণ</div>
+          <div style={{ fontSize: 17, fontWeight: 700, color: 'var(--text)' }}>{t('shopHub.title')}</div>
+          <div style={{ fontSize: 12.5, color: 'var(--muted)' }}>{t('shopHub.subtitle')}</div>
         </div>
       </div>
 
       {stillLoading && (
         <div style={{ padding: 20, textAlign: 'center', color: 'var(--muted)', fontSize: 13 }}>
-          Loading…
+          {t('shopHub.loading')}
         </div>
       )}
 
       {!stillLoading && !service && (
         <div style={{ padding: 20, textAlign: 'center', color: 'var(--muted)', fontSize: 13 }}>
-          এখনো কোনো সার্ভিস সেট আপ করা হয়নি। Dashboard থেকে সেট আপ করুন।
+          {t('shopHub.noServiceYet')}
         </div>
       )}
 
@@ -79,13 +81,13 @@ export default function ProviderMyShopHub({ providerProfile }) {
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
           <HubCard
             icon={<ShoppingBag size={20} color="var(--accent)" />}
-            title="Offerings & Earnings"
+            title={t('shopHub.offeringsTitle')}
             subtitle={offeringsSubtitle}
             onClick={() => navigate('/provider/shop/offerings')}
           />
           <HubCard
             icon={<SettingsIcon size={20} color="var(--accent)" />}
-            title="Shop Details & Status"
+            title={t('shopHub.settingsTitle')}
             subtitle={statusSubtitle}
             onClick={() => navigate('/provider/shop/settings')}
           />

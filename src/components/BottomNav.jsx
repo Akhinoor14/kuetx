@@ -9,9 +9,10 @@ import { auth } from '../lib/firebase';
 import { useIsStaff } from '../hooks/useIsStaff';
 import { useViewMode } from '../hooks/useViewMode';
 import { useIsProvider } from '../hooks/useIsProvider';
+import { useProviderLang } from '../hooks/useProviderLang';
 import { STUDENT_FIXED_BUTTONS } from './nav-system/BottomNavStudent';
 import { FACULTY_FIXED_BUTTONS } from './nav-system/BottomNavFaculty';
-import { PROVIDER_FIXED_BUTTONS } from './nav-system/BottomNavProvider';
+import { getProviderFixedButtons } from './nav-system/BottomNavProvider';
 
 const MOBILE_NAV_QUERY = '(max-width: 767.98px)';
 
@@ -86,7 +87,7 @@ function ProfileButton({ isRealCR, roleLabel, isStaff, adminLabel, active, viewM
 // CR/staff-aware ProfileButton above, since none of that role logic
 // applies to a provider account. Same markup shape as ProfileButton /
 // the fixed-button Links so it looks identical in the bar.
-function ProviderProfileButton({ active }) {
+function ProviderProfileButton({ active, t }) {
   return (
     <Link
       to="/settings"
@@ -96,7 +97,7 @@ function ProviderProfileButton({ active }) {
       <span className="mobile-bottom-nav-button-icon">
         <User size={18} strokeWidth={2} />
       </span>
-      <span className="mobile-bottom-nav-button-label">Profile</span>
+      <span className="mobile-bottom-nav-button-label">{t('bottomNav.profile')}</span>
     </Link>
   );
 }
@@ -108,6 +109,7 @@ export function BottomNav() {
   const [roleLabel, setRoleLabel] = useState('CR');
   const { isRealAdmin: isStaff, adminLabel } = useIsStaff();
   const { isProvider } = useIsProvider();
+  const { t } = useProviderLang();
 
   // Single shared source of truth for student-vs-faculty shell — see
   // hooks/useViewMode.js. Sidebar.jsx uses the exact same hook, so the two
@@ -133,7 +135,7 @@ export function BottomNav() {
   // rather than useViewMode() since a provider account isn't a view-mode
   // toggle — see useIsProvider.js). Checked first so it wins outright.
   const fixedButtons = isProvider
-    ? PROVIDER_FIXED_BUTTONS
+    ? getProviderFixedButtons(t)
     : (isFacultyMode ? FACULTY_FIXED_BUTTONS : STUDENT_FIXED_BUTTONS);
 
   const isProfileActive = isProvider
@@ -174,7 +176,7 @@ export function BottomNav() {
           );
         })}
         {isProvider ? (
-          <ProviderProfileButton active={isProfileActive} />
+          <ProviderProfileButton active={isProfileActive} t={t} />
         ) : (
           <ProfileButton
             isRealCR={isRealCR}

@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { Lock } from 'lucide-react';
 import { useIsProvider } from '../hooks/useIsProvider';
 import ProviderVerificationPending from '../pages/provider/ProviderVerificationPending';
+import { useProviderLang } from '../hooks/useProviderLang';
 
 /**
  * Blocks access to /provider/* routes with a HARD GATE — deliberately
@@ -17,6 +18,7 @@ import ProviderVerificationPending from '../pages/provider/ProviderVerificationP
  * since Phase 1 has no deactivation-specific copy yet.
  */
 export default function RequireProvider({ children }) {
+  const { t } = useProviderLang();
   const {
     isProvider, isVerifiedProvider, providerProfile, isResolved,
   } = useIsProvider();
@@ -24,7 +26,7 @@ export default function RequireProvider({ children }) {
   if (!isResolved) {
     return (
       <div style={{ padding: 40, textAlign: 'center', color: 'var(--muted)' }}>
-        Checking provider access…
+        {t('requireProvider.checking')}
       </div>
     );
   }
@@ -34,12 +36,12 @@ export default function RequireProvider({ children }) {
       <div style={{ padding: '48px 20px', textAlign: 'center', maxWidth: 420, margin: '0 auto' }}>
         <div style={{ marginBottom: 12 }}><Lock size={32} color="var(--muted)" /></div>
         <div style={{ fontSize: 15, fontWeight: 700, color: 'var(--text)', marginBottom: 8 }}>
-          Provider access required
+          {t('requireProvider.accessRequiredTitle')}
         </div>
         <div style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.6, marginBottom: 20 }}>
-          This page is only available to service provider accounts.
+          {t('requireProvider.accessRequiredBody')}
         </div>
-        <Link to="/" className="btn btn-primary btn-sm">Back to home</Link>
+        <Link to="/" className="btn btn-primary btn-sm">{t('requireProvider.backHome')}</Link>
       </div>
     );
   }

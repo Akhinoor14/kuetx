@@ -92,13 +92,15 @@ export const FOUNDER_CATEGORIES = [
     label: 'Faculty',
     icon: 'GraduationCap',
     subtitle: 'Directory, verification, and class assignments',
-    // §7 of the merged Faculty Module prompt. ctx.facultyCount/
-    // ctx.facultyPending are NOT yet wired into AdminDashboard.jsx's own
-    // buildCountCtx() as of this session — that's the one remaining edit
-    // needed before these badges show real numbers instead of silently
-    // resolving to 0 via resolveCount()'s try/catch fallback (safe, just
-    // not yet meaningful). Flagged in PROGRESS.md rather than guessed at,
-    // since buildCountCtx()'s exact shape wasn't re-read this session.
+    // BUGFIX (Faculty chip showing no badge despite pending signups): this
+    // category only had getCount on its `pending` subcategory, never on
+    // the top-level entry itself — so CategorySubNav's top chip row (and
+    // the grid card) always resolved a badge count of 0 even when the
+    // Signup Requests sub-tab correctly showed a number. Every other
+    // approval-bearing category (Approvals, Question Bank, Blood Bank,
+    // Trust & Safety) has a matching top-level getCount; this brings
+    // Faculty in line with that pattern.
+    getCount: (ctx) => ctx.facultyPending,
     subcategories: [
       { key: 'directory', label: 'Directory', getCount: (ctx) => ctx.facultyCount },
       { key: 'pending', label: 'Signup Requests', getCount: (ctx) => ctx.facultyPending },

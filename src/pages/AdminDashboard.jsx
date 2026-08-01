@@ -727,6 +727,33 @@ function StaffRolesView({ onBack, onSelectCategory, groups, countCtx }) {
   const [newUid, setNewUid] = useState('');
   const [newRole, setNewRole] = useState(ALL_ASSIGNABLE_ROLES[0]);
   const [newScopeValue, setNewScopeValue] = useState('');
+  // Live auto-resolved scope preview — as the Founder types a uid, this
+  // fills in with what getStaffDisplayInfo() finds from that student's
+  // own signup profile (roll -> dept/batch -> groupId), so for CL/SCL the
+  // Founder sees the class before ever touching the override field below.
+  // Debounced so this doesn't fire a Firestore read on every keystroke.
+  const [resolvedInfo, setResolvedInfo] = useState(null);
+  const [resolving, setResolving] = useState(false);
+  const resolveTimer = useRef(null);
+
+  useEffect(() => {
+    const scopeKind = ROLE_SCOPE_KIND[newRole];
+    if (scopeKind !== 'dept' && scopeKind !== 'group') { setResolvedInfo(null); return; }
+    if (!newUid.trim()) { setResolvedInfo(null); return; }
+    clearTimeout(resolveTimer.current);
+    resolveTimer.current = setTimeout(async () => {
+      setResolving(true);
+      try {
+        const info = await getStaffDisplayInfo(newUid.trim());
+        setResolvedInfo(info);
+      } catch {
+        setResolvedInfo(null);
+      } finally {
+        setResolving(false);
+      }
+    }, 500);
+    return () => clearTimeout(resolveTimer.current);
+  }, [newUid, newRole]);
   // BUGFIX (Campus Lead chip silently missing): handleAssign used to call
   // assignRole() with whatever newScopeValue held, including '' if the
   // Founder clicked Assign while the class/department picker was still on
@@ -854,7 +881,7 @@ function StaffRolesView({ onBack, onSelectCategory, groups, countCtx }) {
       // with just a uid, same as before.
       if (scopeKind !== 'dept' && scopeKind !== 'group') {
         await assignRole(newUid.trim(), newRole, scope);
-        setNewUid(''); setNewScopeValue('');
+        setNewUid(''); setNewScopeValue(''); setResolvedInfo(null);
         refreshHolders(newRole);
         return;
       }
@@ -870,16 +897,16 @@ function StaffRolesView({ onBack, onSelectCategory, groups, countCtx }) {
       if (scopeKind === 'dept' && !scope.dept && info.dept) scope = { type: 'dept', dept: info.dept };
       if (scopeKind === 'group' && !scope.groupId && info.groupId) scope = { type: 'group', groupId: info.groupId };
       if (scopeKind === 'dept' && !scope.dept) {
-        setAssignError('Enter a department before assigning this role.');
+        setAssignError('No department found for this uid — enter one manually in the override field above.');
         return;
       }
       if (scopeKind === 'group' && !scope.groupId) {
-        setAssignError('Choose a class before assigning this role.');
+        setAssignError('No class found for this uid — choose one manually in the override dropdown above.');
         return;
       }
 
       await assignRole(newUid.trim(), newRole, scope);
-      setNewUid(''); setNewScopeValue('');
+      setNewUid(''); setNewScopeValue(''); setResolvedInfo(null);
       refreshHolders(newRole);
     } catch (err) {
       // Also catches assignRole's own server-side validation (belt and
@@ -909,16 +936,40 @@ function StaffRolesView({ onBack, onSelectCategory, groups, countCtx }) {
           </select>
           <input type="text" placeholder="Their uid" value={newUid} onChange={(e) => setNewUid(e.target.value)}
             style={{ padding: '8px 10px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--inputBg)' }} />
-          {ROLE_SCOPE_KIND[newRole] === 'dept' && (
-            <input type="text" placeholder="Department (e.g. CSE)" value={newScopeValue} onChange={(e) => setNewScopeValue(e.target.value)}
-              style={{ padding: '8px 10px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--inputBg)' }} />
-          )}
-          {ROLE_SCOPE_KIND[newRole] === 'group' && (
-            <select value={newScopeValue} onChange={(e) => setNewScopeValue(e.target.value)}
-              style={{ padding: '8px 10px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--inputBg)' }}>
-              <option value="">Choose a class…</option>
-              {groups?.map((g) => <option key={g.id} value={g.id}>{g.id}</option>)}
-            </select>
+          {(ROLE_SCOPE_KIND[newRole] === 'dept' || ROLE_SCOPE_KIND[newRole] === 'group') && (
+            <>
+              {/* Auto-resolved from the uid's own signup profile (roll ->
+                  dept/batch -> class) — no manual class-picking needed for
+                  the common case. With many classes on file, hunting one
+                  down in a dropdown every time was real friction; this
+                  removes that step whenever the person already has a roll
+                  number on file, which is nearly always. */}
+              <div style={{
+                fontSize: 12.5, padding: '8px 10px', borderRadius: 8,
+                background: 'var(--surface, var(--card))', border: '1px solid var(--border)',
+                color: resolvedInfo?.groupId || resolvedInfo?.dept ? 'var(--text)' : 'var(--muted)',
+              }}>
+                {resolving && 'Looking up their class…'}
+                {!resolving && !newUid.trim() && 'Auto-detected class/department will appear here once a uid is entered.'}
+                {!resolving && newUid.trim() && (resolvedInfo?.groupId || resolvedInfo?.dept) && (
+                  <>Auto-detected: <strong>{ROLE_SCOPE_KIND[newRole] === 'group' ? resolvedInfo.groupId : resolvedInfo.dept}</strong>{resolvedInfo?.name ? ` — ${resolvedInfo.name}` : ''}</>
+                )}
+                {!resolving && newUid.trim() && !(resolvedInfo?.groupId || resolvedInfo?.dept) && (
+                  'No class found for this uid yet — enter the class/department manually below.'
+                )}
+              </div>
+              {ROLE_SCOPE_KIND[newRole] === 'dept' && (
+                <input type="text" placeholder="Override department (optional, e.g. CSE)" value={newScopeValue} onChange={(e) => setNewScopeValue(e.target.value)}
+                  style={{ padding: '8px 10px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--inputBg)' }} />
+              )}
+              {ROLE_SCOPE_KIND[newRole] === 'group' && (
+                <select value={newScopeValue} onChange={(e) => setNewScopeValue(e.target.value)}
+                  style={{ padding: '8px 10px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--inputBg)' }}>
+                  <option value="">Use auto-detected class (leave blank)</option>
+                  {groups?.map((g) => <option key={g.id} value={g.id}>{g.id}</option>)}
+                </select>
+              )}
+            </>
           )}
           {assignError && (
             <div style={{ fontSize: 12.5, color: 'var(--danger, #ef4444)', lineHeight: 1.5 }}>

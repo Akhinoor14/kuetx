@@ -20,8 +20,10 @@ import {
 import {
   uploadServiceImage, deleteServiceImage,
 } from '../../lib/serviceImageUpload';
+import { useProviderLang } from '../../hooks/useProviderLang';
 
 export default function ProviderOfferingsPage({ providerProfile }) {
+  const { t } = useProviderLang();
   const [services, setServices] = useState(null);
   const uid = providerProfile?.uid;
   const navigate = useNavigate();
@@ -44,13 +46,13 @@ export default function ProviderOfferingsPage({ providerProfile }) {
 
       {stillLoading && (
         <div style={{ padding: 20, textAlign: 'center', color: 'var(--muted)', fontSize: 13 }}>
-          Loading…
+          {t('offerings.loading')}
         </div>
       )}
 
       {!stillLoading && !service && (
         <div style={{ padding: 20, textAlign: 'center', color: 'var(--muted)', fontSize: 13 }}>
-          এখনো কোনো সার্ভিস সেট আপ করা হয়নি।
+          {t('offerings.noServiceYet')}
         </div>
       )}
 
@@ -62,10 +64,10 @@ export default function ProviderOfferingsPage({ providerProfile }) {
               dedicated page. */}
           <div className="card" style={{ padding: 16 }}>
             <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', marginBottom: 4 }}>
-              Offerings
+              {t('offerings.title')}
             </div>
             <div style={{ fontSize: 12.5, color: 'var(--muted)', marginBottom: 12 }}>
-              {(service.offerings || []).length} item{(service.offerings || []).length === 1 ? '' : 's'}
+              {t('offerings.itemCount')((service.offerings || []).length)}
             </div>
             <OfferingsManager service={service} />
           </div>
@@ -78,10 +80,10 @@ export default function ProviderOfferingsPage({ providerProfile }) {
           {!isInquiryMode && (
             <div className="card" style={{ padding: 16 }}>
               <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', marginBottom: 4 }}>
-                মোট আয়
+                {t('offerings.revenueTitle')}
               </div>
               <div style={{ fontSize: 12.5, color: 'var(--muted)', marginBottom: 12 }}>
-                Done বুকিং থেকে
+                {t('offerings.revenueSubtitle')}
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                 <Wallet size={22} color="var(--accent)" />
@@ -96,6 +98,7 @@ export default function ProviderOfferingsPage({ providerProfile }) {
 }
 
 function BackLink({ navigate }) {
+  const { t } = useProviderLang();
   return (
     <button
       onClick={() => navigate('/provider/shop')}
@@ -105,7 +108,7 @@ function BackLink({ navigate }) {
         color: 'var(--muted)', fontSize: 13, fontWeight: 600,
       }}
     >
-      <ArrowLeft size={16} /> My Shop
+      <ArrowLeft size={16} /> {t('offerings.backLink')}
     </button>
   );
 }
@@ -113,6 +116,7 @@ function BackLink({ navigate }) {
 const MAX_OFFERING_IMAGES = 3;
 
 function OfferingsManager({ service }) {
+  const { t } = useProviderLang();
   const [offerings, setOfferings] = useState(service.offerings || []);
   const [newLabel, setNewLabel] = useState('');
   const [newPrice, setNewPrice] = useState('');
@@ -134,7 +138,7 @@ function OfferingsManager({ service }) {
       await setServiceOfferings(service.id, next);
       setOfferings(next);
     } catch (e) {
-      setError('সেভ করতে সমস্যা হয়েছে।');
+      setError(t('offerings.saveError'));
     } finally {
       setSaving(false);
     }
@@ -183,7 +187,7 @@ function OfferingsManager({ service }) {
     const offering = offerings.find((o) => o.id === id);
     if (!offering) return;
     if ((offering.images || []).length >= MAX_OFFERING_IMAGES) {
-      setError(`প্রতি item-এ সর্বোচ্চ ${MAX_OFFERING_IMAGES}টা ছবি দেওয়া যাবে।`);
+      setError(t('offerings.maxImages')(MAX_OFFERING_IMAGES));
       return;
     }
     setError('');
@@ -193,7 +197,7 @@ function OfferingsManager({ service }) {
       const next = offerings.map((o) => (o.id === id ? { ...o, images: [...(o.images || []), url] } : o));
       await save(next);
     } catch (e) {
-      setError(e.message || 'ছবি আপলোড করতে সমস্যা হয়েছে।');
+      setError(e.message || t('offerings.imageUploadError'));
     } finally {
       setUploadingFor(null);
     }
@@ -208,7 +212,7 @@ function OfferingsManager({ service }) {
   return (
     <div>
       {offerings.length === 0 && (
-        <div style={{ fontSize: 13, color: 'var(--muted)', marginBottom: 10 }}>এখনো কোনো offering যোগ করা হয়নি।</div>
+        <div style={{ fontSize: 13, color: 'var(--muted)', marginBottom: 10 }}>{t('offerings.empty')}</div>
       )}
 
       {error && <div style={{ fontSize: 12.5, color: 'var(--danger, #dc2626)', marginBottom: 8 }}>{error}</div>}
@@ -226,7 +230,7 @@ function OfferingsManager({ service }) {
                 background: o.isAvailable ? '#16a34a' : '#6b7280', color: '#fff',
               }}
             >
-              {o.isAvailable ? 'ON' : 'OFF'}
+              {o.isAvailable ? t('offerings.on') : t('offerings.off')}
             </button>
             <button
               onClick={() => removeOffering(o.id)}
@@ -246,7 +250,7 @@ function OfferingsManager({ service }) {
               inputMode="numeric"
               defaultValue={o.price ?? ''}
               onBlur={(e) => updatePrice(o.id, e.target.value)}
-              placeholder="দাম (ঐচ্ছিক)"
+              placeholder={t('offerings.pricePlaceholder')}
               style={{
                 width: 110, minHeight: 36, padding: '0 10px', borderRadius: 8,
                 border: '1px solid var(--border)', background: 'var(--card)', color: 'var(--text)', fontSize: 13,
@@ -301,7 +305,7 @@ function OfferingsManager({ service }) {
         <input
           value={newLabel}
           onChange={(e) => setNewLabel(e.target.value)}
-          placeholder="নতুন offering (যেমন: Haircut)"
+          placeholder={t('offerings.newLabelPlaceholder')}
           style={{
             flex: 1, minHeight: 44, padding: '0 12px', borderRadius: 10,
             border: '1px solid var(--border)', background: 'var(--card)', color: 'var(--text)', fontSize: 14,
