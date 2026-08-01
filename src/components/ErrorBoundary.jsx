@@ -1,6 +1,19 @@
 import React from 'react';
 import { AlertTriangle } from 'lucide-react';
 
+const CHUNK_RELOAD_FLAG = 'chunk_reload_attempted';
+
+function isChunkLoadError(error) {
+  if (!error) return false;
+  if (error.name === 'ChunkLoadError') return true;
+  const message = String(error.message || '');
+  return (
+    message.includes('Failed to fetch dynamically imported module') ||
+    message.includes('Loading chunk') ||
+    message.includes('Loading CSS chunk')
+  );
+}
+
 export class ErrorBoundary extends React.Component {
   constructor(props) {
     super(props);
@@ -13,6 +26,27 @@ export class ErrorBoundary extends React.Component {
 
   componentDidCatch(error, errorInfo) {
     console.error('[KUETx ErrorBoundary] Component error:', error, errorInfo);
+
+    if (isChunkLoadError(error)) {
+      let alreadyAttempted = false;
+      try {
+        alreadyAttempted = sessionStorage.getItem(CHUNK_RELOAD_FLAG) === '1';
+      } catch (e) {
+        // sessionStorage unavailable (e.g. private mode) — fall back to normal error UI
+        alreadyAttempted = true;
+      }
+
+      if (!alreadyAttempted) {
+        try {
+          sessionStorage.setItem(CHUNK_RELOAD_FLAG, '1');
+        } catch (e) {
+          // ignore — reload will still happen, just without loop protection
+        }
+        window.location.reload();
+        return;
+      }
+      // already attempted once — fall through to normal error UI below
+    }
   }
 
   render() {

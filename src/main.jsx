@@ -37,6 +37,13 @@ async function initializeApp() {
   );
   console.log('[KUETx DIAG] ReactDOM.render call returned (sync render done), t =', performance.now());
 
+  // App mounted successfully (no chunk-load error thrown) — clear the
+  // auto-recovery flag so a future real deploy can trigger one fresh
+  // auto-reload again.
+  try {
+    sessionStorage.removeItem('chunk_reload_attempted');
+  } catch (e) {}
+
   // Pre-warm heavy selectors in idle time to keep page transitions instant
   const warmup = () => {
     const run = () => {
