@@ -58,6 +58,7 @@ const TYPE_TO_INTERACTION_MODE = {
   medicine: 'inquiry',
   bookstore: 'inquiry',
   onlinemart: 'inquiry',
+  errand: 'errand',
 };
 
 function defaultInteractionModeForType(type) {
@@ -75,17 +76,24 @@ export const SERVICE_TYPE_LABELS = {
   medicine: 'Pharmacy',
   bookstore: 'Stationery',
   onlinemart: 'Online Mart',
+  // Phase 4 (Delivery/Errand Runner plan): a Runner doesn't sell a fixed
+  // catalog like the other five — they fetch/deliver whatever a student
+  // or faculty member requests. Kept as its own SERVICE_TYPES entry
+  // (not folded into PROVIDER_SIGNUP_TYPES' 'other' bucket) because it
+  // needs a real, dedicated interactionMode ('errand', see
+  // TYPE_TO_INTERACTION_MODE above) rather than free-text-only 'other'.
+  errand: 'Delivery/Errand Runner',
 };
 
 export const SERVICE_TYPES = Object.keys(SERVICE_TYPE_LABELS);
 
-// Bengali labels for the same five categories — used on provider-facing
+// Bengali labels for the same six categories — used on provider-facing
 // screens (Role Select's provider-form, ProviderVerificationPending)
 // where the request is to keep the whole flow in Bengali. Kept separate
 // from SERVICE_TYPE_LABELS above rather than translating it in place,
 // since that map is already relied on by the English student-facing
 // Services grid and Dashboard preview row — changing its values there
-// would change UI text no one asked to change. Same five keys, same
+// would change UI text no one asked to change. Same six keys, same
 // SERVICE_TYPES list; only the label text differs.
 export const SERVICE_TYPE_LABELS_BN = {
   salon: 'সেলুন',
@@ -93,6 +101,7 @@ export const SERVICE_TYPE_LABELS_BN = {
   medicine: 'ফার্মেসি',
   bookstore: 'স্টেশনারি',
   onlinemart: 'অনলাইন মার্ট',
+  errand: 'ডেলিভারি/এরান্ড রানার',
 };
 
 // Provider SIGNUP-only category list — deliberately separate from
@@ -322,6 +331,7 @@ export function addOfferingId() {
  */
 export async function updateServiceDetails(serviceId, {
   name, description, priceNote, locationText, hasDelivery, coverImageUrl,
+  locationLat, locationLng, locationAccuracy,
 }) {
   const patch = {};
   if (name !== undefined) patch.name = String(name).trim();
@@ -330,6 +340,19 @@ export async function updateServiceDetails(serviceId, {
   if (locationText !== undefined) patch.locationText = locationText ? String(locationText).trim() : null;
   if (hasDelivery !== undefined) patch.hasDelivery = Boolean(hasDelivery);
   if (coverImageUrl !== undefined) patch.coverImageUrl = coverImageUrl || null;
+  // SHOP_LOCATION_AND_UPCOMING_FEATURES_PLAN.md Phase 1.3: GPS coordinate
+  // fields, written together as a triple whenever a provider confirms a
+  // freshly-captured browser location. locationSetAt is always stamped
+  // server-side alongside lat/lng so "last updated" never has to be
+  // client-clock-derived.
+  if (locationLat !== undefined) patch.locationLat = locationLat === null ? null : Number(locationLat);
+  if (locationLng !== undefined) patch.locationLng = locationLng === null ? null : Number(locationLng);
+  if (locationAccuracy !== undefined) {
+    patch.locationAccuracy = locationAccuracy === null ? null : Number(locationAccuracy);
+  }
+  if (locationLat !== undefined || locationLng !== undefined) {
+    patch.locationSetAt = serverTimestamp();
+  }
   await updateDoc(serviceDocRef(serviceId), patch);
 }
 
@@ -943,4 +966,321 @@ export async function finishBooking(serviceId, bookingId, priceForRevenue = 0) {
     // never land out of sync.
     tx.delete(doc(db, 'services', serviceId, 'activeBooking', bookingSnap.data().studentUid));
   });
+}
+
+// ---------------------------------------------------------------------
+// Phase 4 (Delivery/Errand Runner plan — SHOP_LOCATION_AND_UPCOMING_
+// FEATURES_PLAN.md §4): errand-request lifecycle. Reuses the exact same
+// services/{serviceId}/bookings/{bookingId} subcollection as
+// booking/inquiry mode — an errand request IS a booking doc, just with
+// interactionMode === 'errand' and its own status vocabulary. No new
+// Firestore collection, matching the plan's "zero new architecture"
+// decision (§4.5's cost table).
+//
+// Status machine (plan §4, "Status flow"):
+//   open              -> runner_accepted (any verified Runner accepts)
+//   open              -> open (student/faculty edits price; re-surfaces
+//                        via updatedAt bump so Runner queues re-sort)
+//   runner_accepted   -> confirmed (requester confirms; contact reveal)
+//   runner_accepted   -> open (requester rejects the accept; re-broadcast)
+//   confirmed         -> finished (either party marks done)
+//   open              -> cancelled (requester withdraws entirely)
+//
+// visibility: 'broadcast' | 'targeted'. targetRunnerUid is set only for
+// 'targeted' — broadcast requests are readable by any verified Runner
+// (see firestore.rules' isErrandVisibleToRunner), targeted requests only
+// by the named Runner. Plan §4.2.
+// ---------------------------------------------------------------------
+
+/**
+ * Student/Faculty creates a new errand request on a Runner's service
+ * (plan §4.2). requesterRole is stored purely for display/analytics —
+ * both roles are treated identically by the state machine and rules,
+ * matching the plan's "role-নিরপেক্ষ" decision.
+ */
+export async function createErrandRequest(serviceId, {
+  requesterUid, requesterName, requesterPhone, requesterRole = 'student',
+  itemDescription, proposedPrice, visibility = 'broadcast', targetRunnerUid = null,
+}) {
+  const serviceSnap = await getDoc(serviceDocRef(serviceId));
+  if (!serviceSnap.exists()) {
+    throw new Error('This Runner service no longer exists.');
+  }
+  const service = serviceSnap.data();
+  if (service.interactionMode !== 'errand') {
+    throw new Error('This service does not accept errand requests.');
+  }
+  if (!service.isOpen) {
+    throw new Error('এই Runner এখন সক্রিয় নেই।');
+  }
+  const trimmedDescription = String(itemDescription || '').trim();
+  if (!trimmedDescription) {
+    throw new Error('কী লাগবে সেটা লিখুন।');
+  }
+  const price = Number(proposedPrice);
+  if (!(price > 0)) {
+    throw new Error('একটা বৈধ প্রস্তাবিত মূল্য দিন।');
+  }
+  const normalizedVisibility = visibility === 'targeted' ? 'targeted' : 'broadcast';
+  if (normalizedVisibility === 'targeted' && !targetRunnerUid) {
+    throw new Error('Targeted request-এর জন্য একজন Runner বেছে নিন।');
+  }
+
+  // Same "one active interaction per service" marker used by booking/
+  // inquiry mode (Gap 7's shared convention) — a requester can't have two
+  // simultaneously-active errand requests with the same Runner service.
+  const activeSnap = await getDocs(
+    query(
+      bookingsCollectionRef(serviceId),
+      where('requesterUid', '==', requesterUid),
+      where('status', 'in', ['open', 'runner_accepted', 'confirmed']),
+    ),
+  );
+  if (!activeSnap.empty) {
+    const err = new Error('এই Runner-এর সাথে আপনার আগে থেকেই একটা সক্রিয় রিকোয়েস্ট আছে।');
+    err.code = 'errand/already-active';
+    throw err;
+  }
+
+  const bookingRef = doc(bookingsCollectionRef(serviceId));
+  const batch = writeBatch(db);
+  batch.set(bookingRef, {
+    requesterUid,
+    requesterName: String(requesterName || '').trim(),
+    requesterPhone: String(requesterPhone || '').trim(),
+    requesterRole: requesterRole === 'faculty' ? 'faculty' : 'student',
+    itemDescription: trimmedDescription,
+    proposedPrice: price,
+    visibility: normalizedVisibility,
+    targetRunnerUid: normalizedVisibility === 'targeted' ? targetRunnerUid : null,
+    status: 'open',
+    acceptedByRunnerUid: null,
+    requestedAt: serverTimestamp(),
+    updatedAt: serverTimestamp(),
+    confirmedAt: null,
+    finishedAt: null,
+  });
+  batch.set(doc(db, 'services', serviceId, 'activeBooking', requesterUid), {});
+  queueBookingAlertWrite(batch, service.providerUid, {
+    kind: 'new_errand_request',
+    serviceId,
+    bookingId: bookingRef.id,
+    serviceName: service.name || '',
+    message: `${requesterName || 'কেউ একজন'} একটা নতুন এরান্ড রিকোয়েস্ট পাঠিয়েছেন।`,
+  });
+  await batch.commit();
+  return bookingRef.id;
+}
+
+/**
+ * Live list of 'open' errand requests a specific Runner can see (plan
+ * §4.3) — broadcast requests plus any targeted directly at this Runner's
+ * uid. Firestore can't OR two different-field queries in one listener,
+ * so this runs two subscriptions and merges client-side, ordered newest
+ * (re-surfaced) first per the plan's re-surface-on-edit behavior.
+ */
+export function subscribeOpenErrandRequestsForRunner(serviceId, runnerUid, callback) {
+  let broadcastDocs = [];
+  let targetedDocs = [];
+  const emit = () => {
+    const merged = [...broadcastDocs, ...targetedDocs.filter((t) => !broadcastDocs.some((b) => b.id === t.id))];
+    merged.sort((a, b) => {
+      const at = a.updatedAt?.toMillis ? a.updatedAt.toMillis() : 0;
+      const bt = b.updatedAt?.toMillis ? b.updatedAt.toMillis() : 0;
+      return bt - at;
+    });
+    callback(merged);
+  };
+  const unsub1 = onSnapshot(
+    query(
+      bookingsCollectionRef(serviceId),
+      where('status', '==', 'open'),
+      where('visibility', '==', 'broadcast'),
+    ),
+    (snap) => { broadcastDocs = snap.docs.map((d) => ({ id: d.id, ...d.data() })); emit(); },
+    (err) => { console.error('[serviceSync] subscribeOpenErrandRequestsForRunner (broadcast) error:', err); },
+  );
+  const unsub2 = onSnapshot(
+    query(
+      bookingsCollectionRef(serviceId),
+      where('status', '==', 'open'),
+      where('targetRunnerUid', '==', runnerUid),
+    ),
+    (snap) => { targetedDocs = snap.docs.map((d) => ({ id: d.id, ...d.data() })); emit(); },
+    (err) => { console.error('[serviceSync] subscribeOpenErrandRequestsForRunner (targeted) error:', err); },
+  );
+  return () => { unsub1(); unsub2(); };
+}
+
+/** Runner's own already-accepted (runner_accepted/confirmed) errand requests — their "ongoing" queue. */
+export function subscribeRunnerActiveErrands(serviceId, runnerUid, callback) {
+  return onSnapshot(
+    query(
+      bookingsCollectionRef(serviceId),
+      where('acceptedByRunnerUid', '==', runnerUid),
+      where('status', 'in', ['runner_accepted', 'confirmed']),
+    ),
+    (snap) => callback(snap.docs.map((d) => ({ id: d.id, ...d.data() }))),
+    (err) => {
+      console.error('[serviceSync] subscribeRunnerActiveErrands error:', err);
+      callback([]);
+    },
+  );
+}
+
+/** A requester's own errand requests on a single Runner service (status display, mirrors subscribeMyBookingsForService). */
+export function subscribeMyErrandRequestsForService(serviceId, requesterUid, callback) {
+  return onSnapshot(
+    query(bookingsCollectionRef(serviceId), where('requesterUid', '==', requesterUid)),
+    (snap) => callback(snap.docs.map((d) => ({ id: d.id, ...d.data() }))),
+    (err) => {
+      console.error('[serviceSync] subscribeMyErrandRequestsForService error:', err);
+      callback([]);
+    },
+  );
+}
+
+/**
+ * Requester edits the proposed price while still 'open' (plan §4.3
+ * negotiation window). Bumping updatedAt is what makes the request
+ * re-surface to the top of every Runner's queue — subscribe functions
+ * above sort by updatedAt descending.
+ */
+export async function editErrandProposedPrice(serviceId, bookingId, newPrice) {
+  const price = Number(newPrice);
+  if (!(price > 0)) {
+    throw new Error('একটা বৈধ মূল্য দিন।');
+  }
+  const ref = bookingDocRef(serviceId, bookingId);
+  const snap = await getDoc(ref);
+  if (!snap.exists()) throw new Error('Request not found.');
+  if (snap.data().status !== 'open') {
+    throw new Error('এই রিকোয়েস্ট আর এডিট করা যাবে না — ইতিমধ্যে একজন Runner গ্রহণ করেছেন।');
+  }
+  await updateDoc(ref, { proposedPrice: price, updatedAt: serverTimestamp() });
+}
+
+/**
+ * Runner accepts an open errand request (plan §4.3). Transaction-guarded
+ * exactly like confirmBooking()'s Gap-8 pattern — re-reads status inside
+ * the write so two Runners racing to accept the same broadcast request
+ * can't both succeed; the second one throws instead of silently
+ * double-accepting.
+ */
+export async function acceptErrandRequest(serviceId, bookingId, runnerUid) {
+  const ref = bookingDocRef(serviceId, bookingId);
+  const svcRef = serviceDocRef(serviceId);
+  await runTransaction(db, async (tx) => {
+    const [snap, svcSnap] = await Promise.all([tx.get(ref), tx.get(svcRef)]);
+    if (!snap.exists()) throw new Error('Request not found.');
+    if (snap.data().status !== 'open') {
+      const err = new Error('এই রিকোয়েস্টটা ইতিমধ্যে অন্য কেউ গ্রহণ করেছেন।');
+      err.code = 'errand/not-open';
+      throw err;
+    }
+    const data = snap.data();
+    if (data.visibility === 'targeted' && data.targetRunnerUid !== runnerUid) {
+      throw new Error('এই রিকোয়েস্টটা আপনার জন্য না।');
+    }
+    tx.update(ref, {
+      status: 'runner_accepted',
+      acceptedByRunnerUid: runnerUid,
+      updatedAt: serverTimestamp(),
+    });
+    const serviceName = svcSnap.exists() ? (svcSnap.data().name || '') : '';
+    queueBookingAlertWrite(tx, data.requesterUid, {
+      kind: 'errand_accepted',
+      serviceId,
+      bookingId,
+      serviceName,
+      message: `${serviceName || 'একজন Runner'} আপনার এরান্ড রিকোয়েস্ট গ্রহণ করেছেন — কনফার্ম করুন।`,
+    });
+  });
+}
+
+/**
+ * Requester confirms an accepted request (plan §4.4, step 1 of the
+ * 2-step confirmation) — contact numbers become mutually readable once
+ * status is 'confirmed' (enforced by firestore.rules' phone read-gate,
+ * same technique as confirmedStudents/{uid} for booking mode).
+ */
+export async function confirmErrandRequest(serviceId, bookingId) {
+  const ref = bookingDocRef(serviceId, bookingId);
+  const svcRef = serviceDocRef(serviceId);
+  await runTransaction(db, async (tx) => {
+    const [snap, svcSnap] = await Promise.all([tx.get(ref), tx.get(svcRef)]);
+    if (!snap.exists()) throw new Error('Request not found.');
+    if (snap.data().status !== 'runner_accepted') {
+      throw new Error('এই রিকোয়েস্ট এখন কনফার্ম করার অবস্থায় নেই।');
+    }
+    const data = snap.data();
+    tx.update(ref, { status: 'confirmed', confirmedAt: serverTimestamp(), updatedAt: serverTimestamp() });
+    tx.set(doc(db, 'services', serviceId, 'confirmedStudents', data.requesterUid), {});
+    const serviceName = svcSnap.exists() ? (svcSnap.data().name || '') : '';
+    queueBookingAlertWrite(tx, data.acceptedByRunnerUid, {
+      kind: 'errand_confirmed',
+      serviceId,
+      bookingId,
+      serviceName,
+      message: `${data.requesterName || 'রিকোয়েস্টকারী'} কনফার্ম করেছেন — যোগাযোগ শুরু করুন।`,
+    });
+  });
+}
+
+/**
+ * Requester cancels an already-accepted request BACK to 'open' (plan
+ * §4.4, the "✗ বাতিল করুন" path) — re-broadcasts it, clearing
+ * acceptedByRunnerUid so every Runner (including the one who just
+ * accepted) can see and accept it again. Distinct from
+ * cancelErrandRequest below, which withdraws the request entirely.
+ */
+export async function rejectErrandAccept(serviceId, bookingId) {
+  const ref = bookingDocRef(serviceId, bookingId);
+  const snap = await getDoc(ref);
+  if (!snap.exists()) throw new Error('Request not found.');
+  if (snap.data().status !== 'runner_accepted') {
+    throw new Error('এই রিকোয়েস্ট এখন বাতিল করার অবস্থায় নেই।');
+  }
+  await updateDoc(ref, {
+    status: 'open', acceptedByRunnerUid: null, updatedAt: serverTimestamp(),
+  });
+}
+
+/** Requester withdraws an 'open' request entirely (never accepted, or no longer needed). */
+export async function cancelErrandRequest(serviceId, bookingId) {
+  const ref = bookingDocRef(serviceId, bookingId);
+  const snap = await getDoc(ref);
+  if (!snap.exists()) throw new Error('Request not found.');
+  if (snap.data().status !== 'open') {
+    throw new Error('এই রিকোয়েস্ট এখন বাতিল করা যাবে না।');
+  }
+  const requesterUid = snap.data().requesterUid;
+  await updateDoc(ref, { status: 'cancelled', updatedAt: serverTimestamp() });
+  try {
+    await deleteDoc(doc(db, 'services', serviceId, 'activeBooking', requesterUid));
+  } catch (e) {
+    console.error('cancelErrandRequest: activeBooking marker cleanup failed', e);
+  }
+}
+
+/**
+ * Either party marks a confirmed errand as done (plan §4.5) — cash
+ * changes hands offline, so this is purely a status/history transition,
+ * no revenueTotal write (unlike finishBooking) since the plan is
+ * explicit the app never touches payment for errands.
+ */
+export async function finishErrandRequest(serviceId, bookingId) {
+  const ref = bookingDocRef(serviceId, bookingId);
+  const snap = await getDoc(ref);
+  if (!snap.exists()) throw new Error('Request not found.');
+  if (snap.data().status !== 'confirmed') {
+    throw new Error('শুধু কনফার্ম করা রিকোয়েস্টই সম্পন্ন করা যাবে।');
+  }
+  const requesterUid = snap.data().requesterUid;
+  await updateDoc(ref, { status: 'finished', finishedAt: serverTimestamp(), updatedAt: serverTimestamp() });
+  try {
+    await deleteDoc(doc(db, 'services', serviceId, 'activeBooking', requesterUid));
+  } catch (e) {
+    console.error('finishErrandRequest: activeBooking marker cleanup failed', e);
+  }
 }

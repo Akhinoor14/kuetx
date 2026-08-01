@@ -23,29 +23,23 @@
 // with whatever live counts it has (approvals, trust, etc.) — see
 // AdminDashboard.jsx's `buildCountCtx()`.
 
+// PHASE 3 (SERVICE_PROVIDER_FOUNDER_PANEL_PLAN.md, Option A): the array
+// order below IS the chip-row/grid order (CategorySubNav and the grid
+// both render FOUNDER_CATEGORIES top-to-bottom, unmodified) — reordering
+// here is the entire reorg, no new component/divider code. Grouped into
+// five functional clusters so the row reads as clusters instead of one
+// long undifferentiated strip:
+//   1. People & Roles      — Staff & Roles, Faculty
+//   2. Approvals & Requests — Approvals
+//   3. Academics            — Manage Batches, Classes & Students, Question Bank
+//   4. Campus Services      — Service Providers, Blood Bank
+//   5. Outreach & Insight   — Communication, Analytics
+// `trust` is `hidden: true` (filtered out of both grid and chip row
+// before render — see AdminDashboard.jsx's `.filter((cat) => !cat.hidden)`
+// call sites) so its position here doesn't affect anything visible; left
+// in place rather than moved, to keep this diff to the visible clusters.
 export const FOUNDER_CATEGORIES = [
-  {
-    key: 'batches',
-    label: 'Manage Batches',
-    icon: 'Users',
-    subtitle: 'Active batch list & colors',
-    // No subcategories — a single list+form (BatchesContent).
-  },
-  {
-    key: 'approvals',
-    label: 'Approvals',
-    icon: 'CheckCircle2',
-    subtitle: 'Campus Lead applications, CR requests, CR leave requests',
-    getCount: (ctx) => ctx.clApplications + ctx.crRequests + ctx.leaveRequests + ctx.manualVerifyRequests + ctx.qbUploadRequests + ctx.providerVerifyRequests,
-    subcategories: [
-      { key: 'cl-apps', label: 'CL Applications', getCount: (ctx) => ctx.clApplications },
-      { key: 'cr-req', label: 'CR Requests', getCount: (ctx) => ctx.crRequests },
-      { key: 'cr-leave', label: 'CR Leave Requests', getCount: (ctx) => ctx.leaveRequests },
-      { key: 'manual-verify', label: 'Student Manual Verification', getCount: (ctx) => ctx.manualVerifyRequests },
-      { key: 'qb-uploads', label: 'Question Bank (Upload / Review)', getCount: (ctx) => ctx.qbUploadRequests },
-      { key: 'provider-verify', label: 'Service Provider Verification', getCount: (ctx) => ctx.providerVerifyRequests },
-    ],
-  },
+  // --- 1. People & Roles ---
   {
     key: 'staff',
     label: 'Staff & Roles',
@@ -55,37 +49,6 @@ export const FOUNDER_CATEGORIES = [
       { key: 'assign', label: 'Assign a Role' },
       { key: 'holders', label: 'Current Holders', getCount: (ctx) => ctx.staffHolders },
     ],
-  },
-  {
-    key: 'classes',
-    label: 'Classes & Students',
-    icon: 'GraduationCap',
-    subtitle: (ctx) => `${ctx.classCount ?? '…'} classes — browse by Department → Batch`,
-    drilldown: true,
-  },
-  {
-    key: 'trust',
-    label: 'Trust & Safety',
-    icon: 'Flag',
-    // Feature off for now (kept working, just hidden from the founder
-    // grid) — set hidden: false to bring the button back. Nothing here
-    // was deleted; TrustSafetyView and its data still work if linked to
-    // directly.
-    hidden: true,
-    subtitle: 'Email flags and roll unlock requests',
-    getCount: (ctx) => ctx.emailFlags + ctx.rollRequests,
-    subcategories: [
-      { key: 'flags', label: 'Email Flags', getCount: (ctx) => ctx.emailFlags },
-      { key: 'roll', label: 'Roll Unlock Requests', getCount: (ctx) => ctx.rollRequests },
-    ],
-  },
-  {
-    key: 'comms',
-    label: 'Communication',
-    icon: 'Megaphone',
-    subtitle: 'Send a notice to everyone, one batch, or one class',
-    // No subcategories — a single form. SubcategoryTabs renders nothing
-    // for a category with no `subcategories`/`drilldown`, which is fine.
   },
   {
     key: 'faculty',
@@ -107,6 +70,36 @@ export const FOUNDER_CATEGORIES = [
       { key: 'assignments', label: 'Class Assignments' },
     ],
   },
+  // --- 2. Approvals & Requests ---
+  {
+    key: 'approvals',
+    label: 'Approvals',
+    icon: 'CheckCircle2',
+    subtitle: 'Campus Lead applications, CR requests, CR leave requests',
+    getCount: (ctx) => ctx.clApplications + ctx.crRequests + ctx.leaveRequests + ctx.manualVerifyRequests + ctx.qbUploadRequests,
+    subcategories: [
+      { key: 'cl-apps', label: 'CL Applications', getCount: (ctx) => ctx.clApplications },
+      { key: 'cr-req', label: 'CR Requests', getCount: (ctx) => ctx.crRequests },
+      { key: 'cr-leave', label: 'CR Leave Requests', getCount: (ctx) => ctx.leaveRequests },
+      { key: 'manual-verify', label: 'Student Manual Verification', getCount: (ctx) => ctx.manualVerifyRequests },
+      { key: 'qb-uploads', label: 'Question Bank (Upload / Review)', getCount: (ctx) => ctx.qbUploadRequests },
+    ],
+  },
+  // --- 3. Academics ---
+  {
+    key: 'batches',
+    label: 'Manage Batches',
+    icon: 'Users',
+    subtitle: 'Active batch list & colors',
+    // No subcategories — a single list+form (BatchesContent).
+  },
+  {
+    key: 'classes',
+    label: 'Classes & Students',
+    icon: 'GraduationCap',
+    subtitle: (ctx) => `${ctx.classCount ?? '…'} classes — browse by Department → Batch`,
+    drilldown: true,
+  },
   {
     key: 'question-bank',
     label: 'Question Bank',
@@ -119,6 +112,23 @@ export const FOUNDER_CATEGORIES = [
       { key: 'delete-requests', label: 'Delete Requests' },
     ],
   },
+  // --- 4. Campus Services ---
+  {
+    key: 'providers',
+    label: 'Service Providers',
+    icon: 'Store',
+    subtitle: 'Verify, browse, and manage every service provider account',
+    // Moved here from Approvals → 'provider-verify' (was a buried
+    // sub-tab with no day-to-day management view). getCount only
+    // reflects pending verification requests — the 'directory' sub-tab
+    // itself isn't an approval queue, so it doesn't need to contribute
+    // to this badge.
+    getCount: (ctx) => ctx.providerVerifyRequests,
+    subcategories: [
+      { key: 'verify', label: 'Verification Requests', getCount: (ctx) => ctx.providerVerifyRequests },
+      { key: 'directory', label: 'All Providers' },
+    ],
+  },
   {
     key: 'blood',
     label: 'Blood Bank',
@@ -126,6 +136,15 @@ export const FOUNDER_CATEGORIES = [
     subtitle: (ctx) => `${ctx.bloodDonorCount ?? '…'} students on file — search by blood group`,
     getCount: (ctx) => ctx.bloodDonorCount,
     // No subcategories — a single search screen (BloodBankView).
+  },
+  // --- 5. Outreach & Insight ---
+  {
+    key: 'comms',
+    label: 'Communication',
+    icon: 'Megaphone',
+    subtitle: 'Send a notice to everyone, one batch, or one class',
+    // No subcategories — a single form. SubcategoryTabs renders nothing
+    // for a category with no `subcategories`/`drilldown`, which is fine.
   },
   {
     key: 'analytics',
@@ -136,6 +155,23 @@ export const FOUNDER_CATEGORIES = [
     // every department). Founder-only, per the Data & Privacy Policy note
     // at the top of firestore.rules — no badge count, this isn't an
     // approval queue.
+  },
+  // --- Hidden (not part of any visible cluster — see file-header note) ---
+  {
+    key: 'trust',
+    label: 'Trust & Safety',
+    icon: 'Flag',
+    // Feature off for now (kept working, just hidden from the founder
+    // grid) — set hidden: false to bring the button back. Nothing here
+    // was deleted; TrustSafetyView and its data still work if linked to
+    // directly.
+    hidden: true,
+    subtitle: 'Email flags and roll unlock requests',
+    getCount: (ctx) => ctx.emailFlags + ctx.rollRequests,
+    subcategories: [
+      { key: 'flags', label: 'Email Flags', getCount: (ctx) => ctx.emailFlags },
+      { key: 'roll', label: 'Roll Unlock Requests', getCount: (ctx) => ctx.rollRequests },
+    ],
   },
 ];
 

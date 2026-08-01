@@ -19,7 +19,7 @@
 // (§2 data model, §6 of the 10-gap table — Gap 6 and Gap 9).
 
 import {
-  collection, doc, getDoc, getDocs, setDoc, updateDoc, onSnapshot, query, where, serverTimestamp,
+  collection, doc, deleteDoc, getDoc, getDocs, setDoc, updateDoc, onSnapshot, query, where, serverTimestamp,
 } from 'firebase/firestore';
 import { db, auth } from './firebase';
 import { retryableOnSnapshot } from './safeSnapshot';
@@ -233,4 +233,65 @@ export async function adminDeactivateProvider(uid) {
   });
   const { forceCloseProviderServices } = await import('./serviceSync');
   await forceCloseProviderServices(uid);
+}
+
+/**
+ * Founder-only: reactivate a previously-deactivated provider account.
+ * One-click restore rather than routing back through
+ * resubmitProviderRequest() — deactivation is a Founder-initiated action
+ * (not a rejection the provider needs to explain/fix anything about), so
+ * un-doing it is symmetric: same shape as adminVerifyProvider(), just
+ * from the 'deactivated' state instead of 'pending'. This deliberately
+ * does NOT reopen the provider's services (forceCloseProviderServices
+ * closed them one-by-one on deactivation) — the provider re-opens
+ * whichever ones they want live again from their own dashboard, same as
+ * any other day they'd flip the open/closed toggle.
+ */
+export async function adminReactivateProvider(uid) {
+  await updateDoc(providerDocRef(uid), {
+    status: 'verified',
+  });
+}
+
+/**
+ * Founder-only: PERMANENTLY delete a provider account (Founder Panel
+ * "All Providers" upgrade — spam signups or accounts that should be
+ * fully gone, not just deactivated). Destructive and irreversible —
+ * callers must confirm with the Founder before invoking this (see
+ * AdminDashboard.jsx's ProviderManagementView, which gates this behind
+ * confirmDialog same as every other destructive action in that file).
+ *
+ * Scope decision: allowed from 'deactivated', 'pending', or 'rejected'
+ * status — NOT from 'verified'. A live, verified provider must be
+ * deactivated first (which force-closes their services and expires
+ * pending bookings via adminDeactivateProvider's own cascade above) —
+ * deleting a still-verified account out from under active services/
+ * bookings would orphan them with no chance to clean up first. Pending/
+ * rejected accounts never had services approved at all, so there's
+ * nothing to cascade-close for those two statuses; deactivated accounts
+ * already went through that cascade when they were deactivated.
+ *
+ * Cascade: deletes providers/{uid} itself, then providers/{uid}/contact/phone
+ * (firestore.rules now grants isAdmin() delete on that sub-document
+ * too — the owner-write-only rule there had no delete clause at all
+ * before this, since nothing needed to delete it until now). Does NOT
+ * touch services/{id} docs — by the time a delete is allowed (see scope
+ * above), any services this provider owned are already force-closed
+ * (deactivated path) or never existed (pending/rejected path), so a
+ * services-collection cascade isn't needed here; if a future path ever
+ * allows deleting a 'verified' provider directly, add a
+ * forceCloseProviderServices(uid) call before this, same as
+ * adminDeactivateProvider does.
+ */
+export async function adminDeleteProvider(uid) {
+  const snap = await getDoc(providerDocRef(uid));
+  const status = snap.exists() ? snap.data().status : null;
+  if (status === 'verified') {
+    throw new Error('This provider is currently verified/active — deactivate it first, then delete.');
+  }
+  // Best-effort: the phone sub-doc may not exist for every account (e.g.
+  // a very old test row), so don't let a missing sub-doc block deleting
+  // the parent.
+  await deleteDoc(providerPhoneRef(uid)).catch(() => {});
+  await deleteDoc(providerDocRef(uid));
 }

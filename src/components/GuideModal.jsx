@@ -2,7 +2,32 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Circle } from 'lucide-react';
 import { ICONS } from '../lib/iconRegistry';
-import { GUIDE_CATEGORIES, GUIDE_SECTIONS } from '../data/guideContent';
+import { GUIDE_CATEGORIES_BN, GUIDE_CATEGORIES_EN, GUIDE_SECTIONS_BN, GUIDE_SECTIONS_EN } from '../data/guideContent';
+
+// UI chrome strings for the two languages — search placeholder, "no
+// matches" text, section-count label, prev/next fallback, etc. Kept
+// separate from GUIDE_SECTIONS (which holds the actual guide content)
+// since this is fixed modal chrome, not per-section data.
+const UI_TEXT = {
+  bn: {
+    guideTitle: 'KUETx গাইড',
+    sectionsCount: (n) => `${n}টা সেকশন · প্রতিটা ফিচার ব্যাখ্যা করা আছে`,
+    searchPlaceholder: 'গাইডে খুঁজুন…',
+    noMatches: 'কিছু পাওয়া যায়নি। অন্য শব্দ দিয়ে চেষ্টা করো।',
+    community: 'KUETx কমিউনিটি',
+    openPage: 'পেজ খুলুন',
+    langToggleLabel: 'English',
+  },
+  en: {
+    guideTitle: 'KUETx Guide',
+    sectionsCount: (n) => `${n} sections · every feature, explained`,
+    searchPlaceholder: 'Search the guide…',
+    noMatches: 'No matches. Try another word.',
+    community: 'KUETx Community',
+    openPage: 'Open page',
+    langToggleLabel: 'বাংলা',
+  },
+};
 
 const CALLOUT_STYLE = {
   tip:     { icon: 'Lightbulb',     color: 'var(--accent)' },
@@ -122,6 +147,12 @@ function GuideTable({ block }) {
 export default function GuideModal({ open, onClose }) {
   const navigate = useNavigate();
   const [query, setQuery] = useState('');
+  // Bangla-first by default, per Akhinoor — English is one tap away via
+  // the toggle button next to search, not a separate route/setting.
+  const [lang, setLang] = useState('bn');
+  const GUIDE_SECTIONS = lang === 'bn' ? GUIDE_SECTIONS_BN : GUIDE_SECTIONS_EN;
+  const GUIDE_CATEGORIES = lang === 'bn' ? GUIDE_CATEGORIES_BN : GUIDE_CATEGORIES_EN;
+  const T = UI_TEXT[lang];
   const [activeId, setActiveId] = useState(GUIDE_SECTIONS[0].id);
   const [mobileShowContent, setMobileShowContent] = useState(false);
   const contentRef = useRef(null);
@@ -188,9 +219,23 @@ export default function GuideModal({ open, onClose }) {
               <Icon name="BookOpen" size={16} color="var(--accentFg)" />
             </div>
             <div style={{ minWidth: 0, flex: 1 }}>
-              <div style={{ fontWeight: 800, fontSize: 14.5, color: 'var(--text)' }}>KUETx Guide</div>
-              <div style={{ fontSize: 11.5, color: 'var(--muted)' }}>{GUIDE_SECTIONS.length} sections · every feature, explained</div>
+              <div style={{ fontWeight: 800, fontSize: 14.5, color: 'var(--text)' }}>{T.guideTitle}</div>
+              <div style={{ fontSize: 11.5, color: 'var(--muted)' }}>{T.sectionsCount(GUIDE_SECTIONS.length)}</div>
             </div>
+            {/* Language toggle — Bangla is default; tapping this swaps
+                every section's title/desc/blocks + category names to
+                English, and back. No separate settings entry: this
+                button is the only toggle, per Akhinoor's request. */}
+            <button
+              onClick={() => setLang(l => l === 'bn' ? 'en' : 'bn')}
+              style={{
+                flexShrink: 0, padding: '6px 11px', borderRadius: 8,
+                border: '1px solid var(--border)', background: 'transparent',
+                color: 'var(--accent)', fontSize: 12, fontWeight: 700, cursor: 'pointer',
+              }}
+            >
+              {T.langToggleLabel}
+            </button>
             <button onClick={onClose} aria-label="Close" style={{
               background: 'transparent', border: 'none', cursor: 'pointer', color: 'var(--muted)',
               padding: 6, borderRadius: 8, display: 'flex',
@@ -209,7 +254,7 @@ export default function GuideModal({ open, onClose }) {
                   <input
                     value={query}
                     onChange={e => setQuery(e.target.value)}
-                    placeholder="Search the guide…"
+                    placeholder={T.searchPlaceholder}
                     style={{
                       width: '100%', padding: '7px 10px 7px 30px', borderRadius: 9,
                       border: '1px solid var(--border)', background: 'var(--inputBg)',
@@ -220,7 +265,7 @@ export default function GuideModal({ open, onClose }) {
               </div>
               <div style={{ flex: 1, overflowY: 'auto', padding: '0 8px 12px' }}>
                 {grouped.length === 0 && (
-                  <div style={{ padding: '20px 8px', textAlign: 'center', fontSize: 12.5, color: 'var(--muted)' }}>No matches. Try another word.</div>
+                  <div style={{ padding: '20px 8px', textAlign: 'center', fontSize: 12.5, color: 'var(--muted)' }}>{T.noMatches}</div>
                 )}
                 {grouped.map(([cat, items]) => (
                   <div key={cat} style={{ marginBottom: 6 }}>
@@ -249,7 +294,7 @@ export default function GuideModal({ open, onClose }) {
                   padding: '7px 10px', borderRadius: 8, textDecoration: 'none', fontSize: 12, fontWeight: 700,
                   background: 'rgba(24,119,242,0.12)', color: '#1877F2',
                 }}>
-                  <Icon name="Facebook" size={13} /> KUETx Community
+                  <Icon name="Facebook" size={13} /> {T.community}
                 </a>
               </div>
             </div>
@@ -271,7 +316,7 @@ export default function GuideModal({ open, onClose }) {
                       padding: '6px 11px', borderRadius: 8, border: '1px solid var(--border)',
                       background: 'transparent', color: 'var(--accent)', fontSize: 12, fontWeight: 700, cursor: 'pointer',
                     }}>
-                    Open page <Icon name="ArrowUpRight" size={13} />
+                    {T.openPage} <Icon name="ArrowUpRight" size={13} />
                   </button>
                 )}
               </div>

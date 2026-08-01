@@ -16,7 +16,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import {
-  Store, Circle, Scissors, Cross, UtensilsCrossed, BookOpen, ShoppingBag,
+  Store, Circle, Scissors, Cross, UtensilsCrossed, BookOpen, ShoppingBag, Bike,
 } from 'lucide-react';
 import { subscribeAllServices, SERVICE_TYPE_LABELS, SERVICE_TYPES, withServiceDefaults } from '../lib/serviceSync';
 import { listAllProviderAccounts } from '../lib/providerSync';
@@ -26,12 +26,17 @@ import { db } from '../lib/firebase';
 // Phase 6: one icon per category type, shared by the full grid (this
 // file) and the compact home-page preview row (Dashboard.jsx imports
 // this same map so the two stay visually consistent).
+// Phase 4 (Delivery/Errand Runner plan): 'errand' added — Bike icon,
+// distinct from Truck (already used elsewhere for the hasDelivery badge)
+// so a Runner's own category card doesn't visually collide with a
+// regular shop's "has delivery" badge.
 export const CATEGORY_ICONS = {
   salon: Scissors,
   medicine: Cross,
   hotel: UtensilsCrossed,
   bookstore: BookOpen,
   onlinemart: ShoppingBag,
+  errand: Bike,
 };
 
 // PHASE 3: closes the other half of the deactivation gap flagged at the
@@ -345,6 +350,12 @@ export function CategoryShopList() {
 
 function ShopCard({ service: s, pendingCount, onOpen }) {
   const isInquiryMode = s.interactionMode === 'inquiry';
+  // Phase 4 (Delivery/Errand Runner plan): a Runner's card shows neither
+  // an inquiry-style "প্রশ্ন/অনুরোধ পাঠান" nor a booking-style queue
+  // count — pendingCount tracks 'pending' booking-mode docs specifically,
+  // which an errand-mode service never has (its own status vocabulary is
+  // open/runner_accepted/confirmed/finished/cancelled).
+  const isErrandMode = s.interactionMode === 'errand';
   return (
     <button
       onClick={onOpen}
@@ -389,7 +400,7 @@ function ShopCard({ service: s, pendingCount, onOpen }) {
           <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 2 }}>{s.locationText}</div>
         )}
         <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 2 }}>
-          {isInquiryMode ? 'প্রশ্ন/অনুরোধ পাঠান' : `Queue: ${pendingCount ?? '…'}`}
+          {isErrandMode ? 'এরান্ড রিকোয়েস্ট পাঠান' : isInquiryMode ? 'প্রশ্ন/অনুরোধ পাঠান' : `Queue: ${pendingCount ?? '…'}`}
         </div>
       </div>
     </button>

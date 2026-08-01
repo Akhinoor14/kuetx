@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useUrlTabState } from '../hooks/useUrlTabState';
 import { setViewMode } from '../hooks/useViewMode';
-import { ArrowLeft, Building2, CalendarRange, CheckCircle, ChevronRight, Circle, Clock, GraduationCap, LayoutGrid, RefreshCw, Repeat, Trash2, Users } from 'lucide-react';
+import { ArrowLeft, Building2, CalendarRange, CheckCircle, ChevronRight, Circle, Clock, GraduationCap, LayoutGrid, RefreshCw, Repeat, Search, Trash2, Users } from 'lucide-react';
 import { ICONS } from '../lib/iconRegistry';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 import { db } from '../lib/firebase';
@@ -54,7 +54,8 @@ import {
 import { subscribeAllQBUploadRequests, approveQBUpload, rejectQBUpload } from '../lib/qbUploadRequests';
 import {
   subscribeProviderVerifyRequests, adminVerifyProvider, adminRejectProvider, getProviderPhone,
-  listAllProviderAccounts, isProviderVerified,
+  listAllProviderAccounts, isProviderVerified, adminDeactivateProvider, adminReactivateProvider,
+  adminDeleteProvider,
 } from '../lib/providerSync';
 import { SERVICE_TYPE_LABELS } from '../lib/serviceSync';
 import QBReviewQueue from '../components/QBReviewQueue';
@@ -245,15 +246,6 @@ function ApprovalsView({ onBack, onSelectCategory, countCtx }) {
   const [leaveRequestsByGroup, setLeaveRequestsByGroup] = useState(null);
   const [manualVerifyRequests, setManualVerifyRequests] = useState(null);
   const [pendingJoinRequests, setPendingJoinRequests] = useState(null);
-  const [providerVerifyRequests, setProviderVerifyRequests] = useState(null);
-  // Bug fix: the pending-requests query only returns the parent
-  // providers/{uid} doc, which never has `phone` on it (it lives on the
-  // contact/phone sub-doc per firestore.rules' split — see
-  // providerSync.js's createProviderShell comment). Founder's approval
-  // list was silently showing "no phone" for every request. Fetch each
-  // pending request's real number here, keyed by uid, once the list
-  // updates.
-  const [providerPhonesByUid, setProviderPhonesByUid] = useState({});
   const [err, setErr] = useState('');
   const [subTab, setSubTab] = useUrlTabState('approvalsTab', 'cl-apps');
   const [loadWarning, setLoadWarning] = useState('');
@@ -284,18 +276,6 @@ function ApprovalsView({ onBack, onSelectCategory, countCtx }) {
     setPendingJoinRequests,
     { onTimeout: flagSlowLoad },
   ), []);
-  useEffect(() => withTimeout((cb) => subscribeProviderVerifyRequests(cb), setProviderVerifyRequests, { onTimeout: flagSlowLoad }), []);
-  useEffect(() => {
-    if (!providerVerifyRequests || providerVerifyRequests.length === 0) return;
-    let cancelled = false;
-    Promise.all(
-      providerVerifyRequests.map((r) => getProviderPhone(r.uid).then((p) => [r.uid, p]).catch(() => [r.uid, ''])),
-    ).then((pairs) => {
-      if (cancelled) return;
-      setProviderPhonesByUid(Object.fromEntries(pairs));
-    });
-    return () => { cancelled = true; };
-  }, [providerVerifyRequests]);
   useEffect(() => { listAllGroups().then((gs) => setGroupIds(gs.map((g) => g.id))); }, []);
 
   useEffect(() => {
@@ -327,7 +307,6 @@ function ApprovalsView({ onBack, onSelectCategory, countCtx }) {
   const leaveReqLoading = leaveRequestsByGroup === null;
   const manualVerifyLoading = manualVerifyRequests === null;
   const joinRequestsLoading = pendingJoinRequests === null;
-  const providerVerifyLoading = providerVerifyRequests === null;
 
   const allCrRequests = Object.entries(crRequestsByGroup || {}).flatMap(([g, reqs]) => reqs.map((r) => ({ ...r, groupId: g })));
   const allLeaveRequests = Object.entries(leaveRequestsByGroup || {}).flatMap(([g, reqs]) => reqs.map((r) => ({ ...r, groupId: g })));
@@ -343,7 +322,7 @@ function ApprovalsView({ onBack, onSelectCategory, countCtx }) {
   // manual-verify subTab block below for why manualVerifyRequests itself
   // is no longer the approval source).
   const studentManualVerifyCount = (pendingJoinRequests || []).length;
-  const subCtx = { ...countCtx, clApplications: clApplications?.length || 0, crRequests: allCrRequests.length, leaveRequests: allLeaveRequests.length, manualVerifyRequests: studentManualVerifyCount, providerVerifyRequests: providerVerifyRequests?.length || 0 };
+  const subCtx = { ...countCtx, clApplications: clApplications?.length || 0, crRequests: allCrRequests.length, leaveRequests: allLeaveRequests.length, manualVerifyRequests: studentManualVerifyCount };
 
   return (
     <CategoryShell view="approvals" onSelect={onSelectCategory} countCtx={countCtx}>
@@ -455,36 +434,460 @@ function ApprovalsView({ onBack, onSelectCategory, countCtx }) {
           </>
         );
       })()}
+    </CategoryShell>
+  );
+}
 
-      {subTab === 'provider-verify' && (
+// =======================================================================
+// SERVICE PROVIDERS — moved out of Approvals into its own category
+// (SERVICE_PROVIDER_FOUNDER_PANEL_PLAN.md Phase 2). Two sub-tabs:
+// 'verify' is the exact pending-verification queue that used to live at
+// Approvals → 'provider-verify' (moved wholesale, not duplicated —
+// ApprovalsView no longer subscribes to this at all); 'directory' is new
+// — every provider account regardless of status, with Deactivate/
+// Reactivate controls for day-to-day management.
+// =======================================================================
+function ProviderManagementView({ onBack, onSelectCategory, countCtx }) {
+  const [subTab, setSubTab] = useUrlTabState('providersTab', 'verify');
+  const [err, setErr] = useState('');
+  // Surfaces a stuck/slow load (missing index right after deploy, etc.)
+  // instead of an indefinite spinner — same pattern as ApprovalsView's
+  // flagSlowLoad/loadWarning, which this component previously lacked.
+  const [loadWarning, setLoadWarning] = useState('');
+  const flagSlowLoad = () => setLoadWarning(
+    'Some data is taking longer than usual to load (often a Firestore index still building after a deploy). It will appear automatically once ready \u2014 try refreshing in a minute if it doesn\u2019t.'
+  );
+
+  // --- Verification Requests (moved from ApprovalsView, unchanged logic) ---
+  const [providerVerifyRequests, setProviderVerifyRequests] = useState(null);
+  // Bug fix (carried over from the old Approvals location): the pending-
+  // requests query only returns the parent providers/{uid} doc, which
+  // never has `phone` on it (it lives on the contact/phone sub-doc per
+  // firestore.rules' split — see providerSync.js's createProviderShell
+  // comment). Fetch each pending request's real number here, keyed by
+  // uid, once the list updates.
+  const [providerPhonesByUid, setProviderPhonesByUid] = useState({});
+  // Item 7 (bulk approve): checked-row map for the verify tab, plus an
+  // in-flight flag for the bulk button. Bulk reject deliberately not
+  // built — a rejection needs an individual reason per spec, so that
+  // stays one-at-a-time via ApprovalRow below.
+  const [selectedForBulk, setSelectedForBulk] = useState({});
+  const [bulkApproving, setBulkApproving] = useState(false);
+
+  useEffect(() => withTimeout((cb) => subscribeProviderVerifyRequests(cb), setProviderVerifyRequests, { onTimeout: flagSlowLoad }), []);
+  useEffect(() => {
+    if (!providerVerifyRequests || providerVerifyRequests.length === 0) return;
+    let cancelled = false;
+    Promise.all(
+      providerVerifyRequests.map((r) => getProviderPhone(r.uid).then((p) => [r.uid, p]).catch(() => [r.uid, ''])),
+    ).then((pairs) => {
+      if (cancelled) return;
+      setProviderPhonesByUid(Object.fromEntries(pairs));
+    });
+    return () => { cancelled = true; };
+  }, [providerVerifyRequests]);
+  const providerVerifyLoading = providerVerifyRequests === null;
+
+  // --- All Providers directory (new) ---
+  const [allProviders, setAllProviders] = useState(null);
+  // uid -> true while a deactivate/reactivate/delete click is in flight,
+  // so the button shows a disabled state and can't be double-clicked —
+  // same pattern as FacultyView's `verifying`/`deleting` maps.
+  const [actioning, setActioning] = useState({});
+  // Directory search/filter/sort UI state — kept in the URL (via
+  // useUrlTabState, already used for subTab in this exact component) so
+  // a refresh doesn't silently lose the Founder's place, same reasoning
+  // as this file's existing no-localStorage convention.
+  const [search, setSearch] = useUrlTabState('providersSearch', '');
+  const [statusFilter, setStatusFilter] = useUrlTabState('providersStatus', 'all');
+  const [sortBy, setSortBy] = useUrlTabState('providersSort', 'name');
+  // uid -> phone string, lazy-loaded on row expand (see toggleExpand
+  // below for why this isn't fetched up front for every provider).
+  const [directoryPhonesByUid, setDirectoryPhonesByUid] = useState({});
+  const [expandedUid, setExpandedUid] = useState(null);
+
+  const reloadDirectory = () => listAllProviderAccounts().then(setAllProviders).catch(() => setAllProviders([]));
+  useEffect(() => {
+    if (subTab !== 'directory' || allProviders !== null) return;
+    let cancelled = false;
+    const slowTimer = setTimeout(() => { if (!cancelled) flagSlowLoad(); }, 12000);
+    reloadDirectory().then(() => clearTimeout(slowTimer));
+    return () => { cancelled = true; clearTimeout(slowTimer); };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [subTab]);
+
+  const handle = async (fn, ...args) => {
+    setErr('');
+    try { await fn(...args); } catch (e) { setErr(e?.message || 'Action failed — try again.'); }
+  };
+
+  const handleDeactivate = async (p) => {
+    const label = p.displayName || 'this provider';
+    if (!(await confirmDialog(`Deactivate ${label}? This immediately force-closes all of their services and expires any pending bookings.`))) return;
+    setActioning((prev) => ({ ...prev, [p.uid]: true }));
+    try {
+      await adminDeactivateProvider(p.uid);
+      await reloadDirectory();
+    } catch (e) {
+      alertDialog(e?.message || 'Could not deactivate this account. Please try again.');
+    } finally {
+      setActioning((prev) => { const next = { ...prev }; delete next[p.uid]; return next; });
+    }
+  };
+
+  const handleReactivate = async (p) => {
+    setActioning((prev) => ({ ...prev, [p.uid]: true }));
+    try {
+      await adminReactivateProvider(p.uid);
+      await reloadDirectory();
+    } catch (e) {
+      alertDialog(e?.message || 'Could not reactivate this account. Please try again.');
+    } finally {
+      setActioning((prev) => { const next = { ...prev }; delete next[p.uid]; return next; });
+    }
+  };
+
+  // Item 4 (delete). Scope: not offered for 'verified' rows — the button
+  // itself is hidden for those below, and adminDeleteProvider() also
+  // throws if called on one anyway (see its own comment in
+  // providerSync.js), so a verified account must be Deactivated first.
+  const handleDelete = async (p) => {
+    const label = p.displayName || 'this provider';
+    if (!(await confirmDialog(`Permanently delete ${label}? This can't be undone \u2014 the account, its verification history, and its saved phone number will be gone for good.`))) return;
+    setActioning((prev) => ({ ...prev, [p.uid]: true }));
+    try {
+      await adminDeleteProvider(p.uid);
+      await reloadDirectory();
+    } catch (e) {
+      alertDialog(e?.message || 'Could not delete this account. Please try again.');
+    } finally {
+      setActioning((prev) => { const next = { ...prev }; delete next[p.uid]; return next; });
+    }
+  };
+
+  // Item 3 (phone in directory): lazy-load per row on expand rather than
+  // fetching for every provider up front. With potentially hundreds of
+  // accounts, one getProviderPhone() read per row on every directory
+  // load is a real cost for a number the Founder usually only needs when
+  // actually looking at that specific row. Clicking a row expands it and
+  // fetches its phone once, cached here so re-expanding doesn't re-fetch.
+  const toggleExpand = (p) => {
+    const next = expandedUid === p.uid ? null : p.uid;
+    setExpandedUid(next);
+    if (next && directoryPhonesByUid[p.uid] === undefined) {
+      getProviderPhone(p.uid).then((phone) => {
+        setDirectoryPhonesByUid((prev) => ({ ...prev, [p.uid]: phone || 'no phone' }));
+      }).catch(() => {
+        setDirectoryPhonesByUid((prev) => ({ ...prev, [p.uid]: 'no phone' }));
+      });
+    }
+  };
+
+  const directoryLoading = allProviders === null;
+  const category = getFounderCategory('providers');
+  const subCtx = { ...countCtx, providerVerifyRequests: providerVerifyRequests?.length || 0 };
+
+  const statusColors = {
+    pending: { bg: 'var(--warn-bg, #fef3c7)', fg: 'var(--warn, #b45309)' },
+    verified: { bg: 'color-mix(in srgb, var(--accent) 12%, var(--surface))', fg: 'var(--accent)' },
+    rejected: { bg: 'color-mix(in srgb, var(--danger) 12%, var(--surface))', fg: 'var(--danger)' },
+    deactivated: { bg: 'var(--surface)', fg: 'var(--muted)' },
+  };
+  const STATUS_ORDER = ['all', 'pending', 'verified', 'rejected', 'deactivated'];
+  const STATUS_LABELS = { all: 'All', pending: 'Pending', verified: 'Verified', rejected: 'Rejected', deactivated: 'Deactivated' };
+
+  // Items 1+2: search + status filter, composed together (AND — both
+  // narrow the same list, never OR'd). Search matches displayName and
+  // phone (case-insensitive substring). Phone matching only works for
+  // rows whose phone has already been lazily fetched into
+  // directoryPhonesByUid (see toggleExpand above) — that's the tradeoff
+  // of the lazy-load approach: searching by a phone number before ever
+  // expanding any row won't find a match yet. Flagging this rather than
+  // silently pretending phone search always works everywhere.
+  const statusCounts = useMemo(() => {
+    const counts = { all: (allProviders || []).length, pending: 0, verified: 0, rejected: 0, deactivated: 0 };
+    (allProviders || []).forEach((p) => {
+      const s = p.status || 'pending';
+      counts[s] = (counts[s] || 0) + 1;
+    });
+    return counts;
+  }, [allProviders]);
+
+  const filteredProviders = useMemo(() => {
+    const q = search.trim().toLowerCase();
+    let list = (allProviders || []).filter((p) => {
+      const status = p.status || 'pending';
+      if (statusFilter !== 'all' && status !== statusFilter) return false;
+      if (!q) return true;
+      const name = (p.displayName || '').toLowerCase();
+      const phone = (directoryPhonesByUid[p.uid] || '').toLowerCase();
+      return name.includes(q) || phone.includes(q);
+    });
+    list = [...list].sort((a, b) => {
+      if (sortBy === 'status') {
+        return (a.status || 'pending').localeCompare(b.status || 'pending') || (a.displayName || '').localeCompare(b.displayName || '');
+      }
+      if (sortBy === 'recent') {
+        // Most-recently-verified first; rows with no verifiedAt (never
+        // verified) sort after everything that has a timestamp, then
+        // fall back to name for a stable order instead of an arbitrary
+        // one.
+        const at = (x) => x.verifiedAt?.toMillis?.() ?? (x.verifiedAt?.seconds ? x.verifiedAt.seconds * 1000 : 0);
+        return at(b) - at(a) || (a.displayName || '').localeCompare(b.displayName || '');
+      }
+      // Default: name (A-Z) — most useful for a Founder scanning day-to-
+      // day looking for one specific provider by name, rather than
+      // skimming chronologically or by status first.
+      return (a.displayName || '').localeCompare(b.displayName || '');
+    });
+    return list;
+  }, [allProviders, search, statusFilter, sortBy, directoryPhonesByUid]);
+
+  const toggleSelectAll = () => {
+    const total = (providerVerifyRequests || []).length;
+    if (total > 0 && Object.keys(selectedForBulk).length === total) {
+      setSelectedForBulk({});
+    } else {
+      setSelectedForBulk(Object.fromEntries((providerVerifyRequests || []).map((r) => [r.uid, true])));
+    }
+  };
+  const handleBulkApprove = async () => {
+    const uids = Object.keys(selectedForBulk).filter((uid) => selectedForBulk[uid]);
+    if (uids.length === 0) return;
+    if (!(await confirmDialog(`Approve ${uids.length} provider${uids.length === 1 ? '' : 's'}?`))) return;
+    setBulkApproving(true);
+    setErr('');
+    try {
+      await Promise.all(uids.map((uid) => adminVerifyProvider(uid)));
+      setSelectedForBulk({});
+      setAllProviders(null);
+    } catch (e) {
+      setErr(e?.message || 'Some approvals failed \u2014 try again for the remaining rows.');
+    } finally {
+      setBulkApproving(false);
+    }
+  };
+
+  return (
+    <CategoryShell view="providers" onSelect={onSelectCategory} countCtx={countCtx}>
+      <h2 style={{ fontSize: 16, fontWeight: 700, margin: '0 0 12px' }}>Service Providers</h2>
+      <SubcategoryTabs subcategories={category.subcategories} activeKey={subTab} onSelect={setSubTab} countCtx={subCtx} />
+      {loadWarning && (
+        <div style={{ fontSize: 12, color: 'var(--warn, #b45309)', background: 'var(--warn-bg, #fef3c7)', padding: '8px 10px', borderRadius: 8, marginBottom: 10 }}>
+          {loadWarning}
+        </div>
+      )}
+      {err && <div className="card" style={{ padding: 8, marginBottom: 12, fontSize: 12, color: 'var(--danger)' }}>{err}</div>}
+
+      {subTab === 'verify' && (
         <Section title="Service provider verification (Salon etc.)">
           {providerVerifyLoading && <EmptyState>Loading…</EmptyState>}
           {!providerVerifyLoading && providerVerifyRequests.length === 0 && <EmptyState>Nothing pending.</EmptyState>}
+          {!providerVerifyLoading && providerVerifyRequests.length > 0 && (
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8, flexWrap: 'wrap' }}>
+              <label style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, color: 'var(--muted)', cursor: 'pointer' }}>
+                <input
+                  type="checkbox"
+                  checked={providerVerifyRequests.length > 0 && Object.keys(selectedForBulk).length === providerVerifyRequests.length}
+                  onChange={toggleSelectAll}
+                />
+                Select all
+              </label>
+              <button
+                onClick={handleBulkApprove}
+                disabled={bulkApproving || Object.values(selectedForBulk).filter(Boolean).length === 0}
+                className="btn btn-sm btn-primary"
+                style={{ opacity: (bulkApproving || Object.values(selectedForBulk).filter(Boolean).length === 0) ? 0.6 : 1 }}
+              >
+                {bulkApproving ? 'Approving…' : `Approve selected (${Object.values(selectedForBulk).filter(Boolean).length})`}
+              </button>
+            </div>
+          )}
           {(providerVerifyRequests || []).map((r) => {
             const typeLabel = r.serviceType === 'other'
               ? `Other: ${r.serviceTypeOther || 'unspecified'}`
               : (SERVICE_TYPE_LABELS[r.serviceType] || r.serviceType || 'salon');
             const realPhone = providerPhonesByUid[r.uid] || 'no phone';
             return (
-              <ApprovalRow key={r.uid}
-                label={`${r.displayName || 'Unknown'} — ${realPhone} — ${typeLabel}`}
-                sublabel={r.location ? `ঠিকানা: ${r.location}` : 'ঠিকানা দেওয়া হয়নি'}
-                onApprove={() => handle(adminVerifyProvider, r.uid)}
-                onReject={() => {
-                  // Reject needs a reason (shown back to the provider on
-                  // ProviderVerificationPending — Gap 6), unlike the other
-                  // reject actions above which don't carry one. A plain
-                  // prompt() is enough for Phase 1's manual, one-at-a-time
-                  // review flow — no bulk UI needed yet (SERVICES_PROVIDER_
-                  // PLAN.md §4 Step 4).
-                  const reason = window.prompt(`Reason for rejecting ${r.displayName || 'this request'}?`, '');
-                  if (reason === null) return; // cancelled
-                  handle(adminRejectProvider, r.uid, reason);
-                }}
-              />
+              <div key={r.uid} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <input
+                  type="checkbox"
+                  checked={!!selectedForBulk[r.uid]}
+                  onChange={() => setSelectedForBulk((prev) => {
+                    const next = { ...prev };
+                    if (next[r.uid]) delete next[r.uid]; else next[r.uid] = true;
+                    return next;
+                  })}
+                  style={{ flexShrink: 0 }}
+                />
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <ApprovalRow
+                    label={`${r.displayName || 'Unknown'} — ${realPhone} — ${typeLabel}`}
+                    sublabel={r.location ? `ঠিকানা: ${r.location}` : 'ঠিকানা দেওয়া হয়নি'}
+                    onApprove={() => handle(adminVerifyProvider, r.uid).then(() => setAllProviders(null))}
+                    onReject={() => {
+                      // Reject needs a reason (shown back to the provider on
+                      // ProviderVerificationPending — Gap 6), unlike simple
+                      // approve. A plain prompt() is enough for the manual,
+                      // one-at-a-time review flow (bulk reject deliberately
+                      // not built — see handleBulkApprove's comment above).
+                      const reason = window.prompt(`Reason for rejecting ${r.displayName || 'this request'}?`, '');
+                      if (reason === null) return; // cancelled
+                      handle(adminRejectProvider, r.uid, reason).then(() => setAllProviders(null));
+                    }}
+                  />
+                </div>
+              </div>
             );
           })}
         </Section>
+      )}
+
+      {subTab === 'directory' && (
+        <>
+          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 10, alignItems: 'center' }}>
+            <div style={{ position: 'relative', flex: '1 1 220px', minWidth: 180 }}>
+              <Search size={14} color="var(--muted)" style={{ position: 'absolute', left: 10, top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }} />
+              <input
+                type="text"
+                placeholder="Search by name or phone…"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                style={{
+                  width: '100%', padding: '8px 10px 8px 30px', borderRadius: 8,
+                  border: '1px solid var(--border)', background: 'var(--inputBg)', fontSize: 13,
+                }}
+              />
+            </div>
+            <select
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value)}
+              style={{ padding: '8px 10px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--inputBg)', fontSize: 12.5 }}
+            >
+              <option value="name">Sort: Name (A-Z)</option>
+              <option value="recent">Sort: Recently verified</option>
+              <option value="status">Sort: Status</option>
+            </select>
+          </div>
+
+          <div style={{ display: 'flex', gap: 6, overflowX: 'auto', paddingBottom: 8, marginBottom: 12 }}>
+            {STATUS_ORDER.map((s) => {
+              const colors = s === 'all' ? { bg: 'var(--accentBg, #eef2ff)', fg: 'var(--accent, #4f46e5)' } : statusColors[s];
+              const isActive = statusFilter === s;
+              return (
+                <button
+                  key={s}
+                  onClick={() => setStatusFilter(s)}
+                  className="btn btn-sm"
+                  style={{
+                    whiteSpace: 'nowrap',
+                    background: isActive ? colors.bg : 'transparent',
+                    color: isActive ? colors.fg : 'var(--muted)',
+                    border: isActive ? `1px solid ${colors.fg}` : '1px solid var(--border)',
+                    fontWeight: isActive ? 700 : 500,
+                  }}
+                >
+                  {STATUS_LABELS[s]} ({statusCounts[s] ?? 0})
+                </button>
+              );
+            })}
+          </div>
+
+          <Section title="All provider accounts">
+            {directoryLoading && <EmptyState>Loading…</EmptyState>}
+            {!directoryLoading && allProviders.length === 0 && <EmptyState>No provider accounts yet.</EmptyState>}
+            {!directoryLoading && allProviders.length > 0 && filteredProviders.length === 0 && (
+              <EmptyState>{search.trim() ? `No providers match "${search.trim()}".` : 'No providers match this filter.'}</EmptyState>
+            )}
+            {filteredProviders.map((p) => {
+              const typeLabel = p.serviceType === 'other'
+                ? `Other: ${p.serviceTypeOther || 'unspecified'}`
+                : (SERVICE_TYPE_LABELS[p.serviceType] || p.serviceType || '—');
+              const status = p.status || 'pending';
+              const colors = statusColors[status] || statusColors.pending;
+              const isActing = !!actioning[p.uid];
+              const isExpanded = expandedUid === p.uid;
+              const phone = directoryPhonesByUid[p.uid];
+              // Delete only offered for accounts that aren't currently
+              // live/verified — see adminDeleteProvider's own comment in
+              // providerSync.js for the reasoning (a verified account
+              // must be Deactivated first).
+              const canDelete = status !== 'verified';
+              return (
+                <div key={p.uid} style={{ borderBottom: '1px solid var(--border)' }}>
+                  <div
+                    onClick={() => toggleExpand(p)}
+                    style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '12px', cursor: 'pointer' }}
+                  >
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div style={{ fontWeight: 700, fontSize: 13.5, color: 'var(--text)', display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
+                        {p.displayName || 'Unnamed'}
+                        <span style={{
+                          fontSize: 10.5, fontWeight: 700, padding: '2px 8px', borderRadius: 999,
+                          background: colors.bg, color: colors.fg, textTransform: 'uppercase', letterSpacing: 0.3,
+                        }}>
+                          {status}
+                        </span>
+                      </div>
+                      <div style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 3 }}>
+                        {typeLabel}{p.location ? ` · ${p.location}` : ''}
+                      </div>
+                      {isExpanded && (
+                        <div style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 3 }}>
+                          {phone === undefined ? 'Loading phone…' : `☎ ${phone}`}
+                        </div>
+                      )}
+                      {status === 'verified' && p.verifiedAt && (
+                        <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 2 }}>
+                          Verified{p.verifiedBy ? ` by ${p.verifiedBy}` : ''}
+                        </div>
+                      )}
+                      {status === 'rejected' && p.rejectedReason && (
+                        <div style={{ fontSize: 11.5, color: 'var(--danger)', marginTop: 4 }}>
+                          Reason: {p.rejectedReason}
+                        </div>
+                      )}
+                    </div>
+                    <div style={{ display: 'flex', gap: 6, flexShrink: 0 }} onClick={(e) => e.stopPropagation()}>
+                      {isProviderVerified(p) && (
+                        <button
+                          onClick={() => handleDeactivate(p)}
+                          disabled={isActing}
+                          className="btn btn-sm btn-secondary"
+                          style={{ opacity: isActing ? 0.6 : 1, color: 'var(--danger)' }}
+                        >
+                          Deactivate
+                        </button>
+                      )}
+                      {status === 'deactivated' && (
+                        <button
+                          onClick={() => handleReactivate(p)}
+                          disabled={isActing}
+                          className="btn btn-sm btn-secondary"
+                          style={{ opacity: isActing ? 0.6 : 1 }}
+                        >
+                          Reactivate
+                        </button>
+                      )}
+                      {canDelete && (
+                        <button
+                          onClick={() => handleDelete(p)}
+                          disabled={isActing}
+                          className="btn btn-sm btn-secondary"
+                          title="Permanently delete this account"
+                          style={{ display: 'flex', alignItems: 'center', gap: 4, opacity: isActing ? 0.6 : 1, color: 'var(--danger)' }}
+                        >
+                          <Trash2 size={13} />
+                          {isActing ? '…' : 'Delete'}
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </Section>
+        </>
       )}
     </CategoryShell>
   );
@@ -2860,6 +3263,7 @@ export default function AdminDashboard() {
   if (view === 'trust') return <TrustSafetyView {...viewProps} />;
   if (view === 'comms') return <CommunicationView {...viewProps} />;
   if (view === 'faculty') return <FacultyView {...viewProps} />;
+  if (view === 'providers') return <ProviderManagementView {...viewProps} />;
   if (view === 'blood') return <BloodBankView {...viewProps} />;
   if (view === 'analytics') return <AnalyticsView {...viewProps} />;
 

@@ -731,6 +731,18 @@ service cloud.firestore {
         // rejection). Founder never writes this, only reads it.
         allow write: if isSignedIn() && request.auth.uid == uid
           && request.resource.data.keys().hasOnly(['value']);
+
+        // Delete: Founder only (Founder Panel "All Providers" delete
+        // action — providerSync.js's adminDeleteProvider). The parent
+        // providers/{uid} doc already had `allow delete: if isAdmin();`
+        // from Phase 1, but that only covers the parent — Firestore
+        // doesn't cascade-delete sub-documents automatically, and this
+        // sub-doc's `write` rule above is owner-only, so without this
+        // clause a Founder deleting a provider would leave an orphaned
+        // contact/phone doc behind with no rule permitting its own
+        // removal. Added when adminDeleteProvider was introduced;
+        // nothing needed to delete this doc before that.
+        allow delete: if isAdmin();
       }
     }
 
@@ -788,10 +800,10 @@ service cloud.firestore {
     // fields, each with their own small closed value set per the plan.
     function isValidServiceType(t) {
       return t == 'salon' || t == 'hotel' || t == 'medicine'
-        || t == 'bookstore' || t == 'onlinemart';
+        || t == 'bookstore' || t == 'onlinemart' || t == 'errand';
     }
     function isValidInteractionMode(m) {
-      return m == 'booking' || m == 'inquiry';
+      return m == 'booking' || m == 'inquiry' || m == 'errand';
     }
     function isValidServiceStatus(s) {
       return s == 'open' || s == 'closed' || s == 'dormant';
@@ -813,6 +825,22 @@ service cloud.firestore {
     // touching dormant state at all).
     function isValidProviderDormantReason(r) {
       return r == null || r == 'manual_temporary' || r == 'manual_permanent';
+    }
+
+    // SHOP_LOCATION_AND_UPCOMING_FEATURES_PLAN.md Phase 1.3: if a service
+    // update writes locationLat/locationLng at all, both must be present,
+    // numeric, and within Bangladesh's realistic bounding box (lat 20-27,
+    // lng 88-93) — guards against a garbled/spoofed coordinate slipping
+    // in from a modified client. An update that doesn't touch either
+    // field is unaffected (locationText-only edits, delivery toggle,
+    // etc. never hit this check).
+    function isValidLocationWrite() {
+      return !('locationLat' in request.resource.data.diff(resource.data).affectedKeys())
+          && !('locationLng' in request.resource.data.diff(resource.data).affectedKeys())
+        || (request.resource.data.locationLat is number
+          && request.resource.data.locationLng is number
+          && request.resource.data.locationLat >= 20 && request.resource.data.locationLat <= 27
+          && request.resource.data.locationLng >= 88 && request.resource.data.locationLng <= 93);
     }
 
     // Gap 5 (server-side): true if the offering being booked is both
@@ -889,6 +917,25 @@ service cloud.firestore {
       return svc.isOpen == true && svc.interactionMode == 'inquiry';
     }
 
+    // Phase 4 (Delivery/Errand Runner plan §4): errand-mode equivalent of
+    // serviceAcceptsInquiry above — gates the errand-shaped create branch
+    // below the same way.
+    function serviceAcceptsErrand(serviceId) {
+      let svc = get(/databases/$(database)/documents/services/$(serviceId)).data;
+      return svc.isOpen == true && svc.interactionMode == 'errand';
+    }
+
+    // Phase 4: an open errand request is visible to a Runner if it's
+    // broadcast, or targeted directly at them. isVerifiedProviderUid
+    // already gates who can even reach this — this only decides which
+    // OPEN requests a given verified provider account may read; requests
+    // that are runner_accepted/confirmed/finished/cancelled are covered
+    // by the general "own request or accepted-by-me or ownsService"
+    // read rule below instead.
+    function isErrandVisibleToRunner(data, uid) {
+      return data.visibility == 'broadcast' || data.targetRunnerUid == uid;
+    }
+
     // Gap 7 (server-side): true if the student has NO existing
     // pending/confirmed booking on this service. Firestore rules can't
     // run a where()-filtered query against the bookings subcollection
@@ -958,7 +1005,8 @@ service cloud.firestore {
           && isValidServiceType(request.resource.data.type)
           && isValidInteractionMode(request.resource.data.interactionMode)
           && isValidServiceStatus(request.resource.data.status)
-          && isValidProviderDormantReason(request.resource.data.dormantReason))
+          && isValidProviderDormantReason(request.resource.data.dormantReason)
+          && isValidLocationWrite())
         || (isAdmin()
           && isValidServiceType(request.resource.data.type)
           && isValidInteractionMode(request.resource.data.interactionMode)
@@ -977,8 +1025,22 @@ service cloud.firestore {
         // read: the booking's own student, or the service's owning
         // provider, or the Founder. Students can never read each other's
         // bookings (§10) — this is the enforcement point for that.
+        // Phase 4 (errand mode): also readable by the Runner who
+        // accepted it (acceptedByRunnerUid), and — while still 'open' —
+        // by any OTHER verified provider account for whom
+        // isErrandVisibleToRunner allows it (broadcast, or targeted at
+        // them), so a Runner's dashboard can list open requests before
+        // they've accepted any of them.
         allow read: if isSignedIn()
-          && (resource.data.studentUid == request.auth.uid || ownsService(serviceId) || isAdmin());
+          && (resource.data.studentUid == request.auth.uid
+            || (resource.data.keys().hasAny(['requesterUid']) && resource.data.requesterUid == request.auth.uid)
+            || ownsService(serviceId)
+            || isAdmin()
+            || (resource.data.keys().hasAny(['acceptedByRunnerUid']) && resource.data.acceptedByRunnerUid == request.auth.uid)
+            || (resource.data.keys().hasAny(['visibility'])
+                && resource.data.status == 'open'
+                && isVerifiedProviderUid(request.auth.uid)
+                && isErrandVisibleToRunner(resource.data, request.auth.uid)));
 
         // Create: any signed-in student, for themselves only. Two shapes
         // now, gated on the parent service's interactionMode:
@@ -1006,7 +1068,25 @@ service cloud.firestore {
               && request.resource.data.replyText == null
               && serviceAcceptsInquiry(serviceId)
               && _allInquiryItemsValid(request.resource.data.items))
-          );
+          )
+          // Phase 4 (Delivery/Errand Runner plan §4.2): errand-mode
+          // create is a SEPARATE allow-create clause (not folded into
+          // the studentUid-keyed OR above) because an errand request is
+          // keyed by requesterUid, not studentUid — the plan's
+          // role-neutral (student OR faculty) requester concept doesn't
+          // fit the booking/inquiry doc shape's studentUid field.
+          || (isSignedIn()
+            && request.resource.data.requesterUid == request.auth.uid
+            && hasNoActiveBooking(serviceId, request.auth.uid)
+            && request.resource.data.status == 'open'
+            && request.resource.data.acceptedByRunnerUid == null
+            && request.resource.data.proposedPrice is number
+            && request.resource.data.proposedPrice > 0
+            && request.resource.data.itemDescription is string
+            && request.resource.data.itemDescription.size() > 0
+            && (request.resource.data.visibility == 'broadcast'
+                || request.resource.data.visibility == 'targeted')
+            && serviceAcceptsErrand(serviceId));
 
         // Update: exactly the transitions in §7 (booking mode) plus the
         // two inquiry-mode transitions from Phase 2 (open->answered,
@@ -1066,6 +1146,72 @@ service cloud.firestore {
             && (resource.data.status == 'open' || resource.data.status == 'answered')
             && request.resource.data.status == 'closed'
             && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status']))
+
+          // Phase 4 (Delivery/Errand Runner plan §4, "Status flow"):
+          // errand-mode transitions. Same diff().affectedKeys().hasOnly()
+          // lock pattern as every branch above — each transition can only
+          // ever touch exactly the fields serviceSync.js's corresponding
+          // function writes, nothing else.
+
+          // open -> open (requester edits proposedPrice, re-surfacing via
+          // updatedAt) — the requester's own request only, and only
+          // while it's still unaccepted.
+          || (resource.data.keys().hasAny(['requesterUid'])
+            && resource.data.requesterUid == request.auth.uid
+            && resource.data.status == 'open'
+            && request.resource.data.status == 'open'
+            && request.resource.data.proposedPrice is number
+            && request.resource.data.proposedPrice > 0
+            && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['proposedPrice', 'updatedAt']))
+
+          // open -> runner_accepted (any verified provider account, i.e.
+          // a Runner, accepting a request visible to them) — mirrors
+          // Gap 8's transaction-guard pattern (acceptErrandRequest()
+          // re-reads status inside the transaction, so a race between two
+          // Runners can't both land here even though the rule itself
+          // can't see the OTHER concurrent write).
+          || (resource.data.keys().hasAny(['requesterUid'])
+            && resource.data.status == 'open'
+            && request.resource.data.status == 'runner_accepted'
+            && isVerifiedProviderUid(request.auth.uid)
+            && isErrandVisibleToRunner(resource.data, request.auth.uid)
+            && request.resource.data.acceptedByRunnerUid == request.auth.uid
+            && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'acceptedByRunnerUid', 'updatedAt']))
+
+          // runner_accepted -> confirmed (requester only — plan §4.4
+          // step 1 of the 2-step confirmation).
+          || (resource.data.keys().hasAny(['requesterUid'])
+            && resource.data.requesterUid == request.auth.uid
+            && resource.data.status == 'runner_accepted'
+            && request.resource.data.status == 'confirmed'
+            && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'confirmedAt', 'updatedAt']))
+
+          // runner_accepted -> open (requester rejects the accept,
+          // re-broadcasting — plan §4.4's "✗ বাতিল করুন" path).
+          || (resource.data.keys().hasAny(['requesterUid'])
+            && resource.data.requesterUid == request.auth.uid
+            && resource.data.status == 'runner_accepted'
+            && request.resource.data.status == 'open'
+            && request.resource.data.acceptedByRunnerUid == null
+            && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'acceptedByRunnerUid', 'updatedAt']))
+
+          // open -> cancelled (requester withdraws entirely, never
+          // accepted).
+          || (resource.data.keys().hasAny(['requesterUid'])
+            && resource.data.requesterUid == request.auth.uid
+            && resource.data.status == 'open'
+            && request.resource.data.status == 'cancelled'
+            && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'updatedAt']))
+
+          // confirmed -> finished (EITHER the requester or the accepting
+          // Runner may mark it done — plan §4.5: "কেউ একজন (Runner বা
+          // Student/Faculty)"). No revenue write, unlike booking-mode's
+          // confirmed -> done — cash changes hands offline, off-app.
+          || (resource.data.keys().hasAny(['requesterUid'])
+            && resource.data.status == 'confirmed'
+            && (resource.data.requesterUid == request.auth.uid || resource.data.acceptedByRunnerUid == request.auth.uid)
+            && request.resource.data.status == 'finished'
+            && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['status', 'finishedAt', 'updatedAt']))
         );
 
         // Terminal states (done/cancelled/expired_shop_closed for booking

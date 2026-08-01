@@ -28,6 +28,11 @@ import {
   countStudentNoShowsOnService, withServiceDefaults,
   SERVICE_TYPE_LABELS, SERVICE_TYPES,
   subscribePendingInquiries, answerInquiry,
+  // Phase 4 (Delivery/Errand Runner plan §4.3-§4.5): Runner-side queue —
+  // open requests to accept, plus the Runner's own ongoing (accepted/
+  // confirmed) errands.
+  subscribeOpenErrandRequestsForRunner, subscribeRunnerActiveErrands,
+  acceptErrandRequest, rejectErrandAccept, finishErrandRequest,
 } from '../../lib/serviceSync';
 import { useProviderLang } from '../../hooks/useProviderLang';
 
@@ -203,9 +208,15 @@ function ServiceManager({ service: rawService }) {
   const { t } = useProviderLang();
   const service = withServiceDefaults(rawService);
   const isInquiryMode = service.interactionMode === 'inquiry';
+  // Phase 4 (plan §4): the Runner mode uses its own pair of live queues
+  // (open requests to accept + own ongoing errands), same
+  // mutually-exclusive-with-booking/inquiry pattern as isInquiryMode above.
+  const isErrandMode = service.interactionMode === 'errand';
   const [pending, setPending] = useState(null);
   const [confirmed, setConfirmed] = useState(null);
   const [pendingInquiries, setPendingInquiries] = useState(null);
+  const [openErrands, setOpenErrands] = useState(null);
+  const [activeErrands, setActiveErrands] = useState(null);
   const [toggling, setToggling] = useState(false);
 
   // Phase 5: booking-mode subscribes to the pending/confirmed queues as
@@ -213,17 +224,25 @@ function ServiceManager({ service: rawService }) {
   // instead. Only one pair is ever active per service, matching the
   // mutually-exclusive rendering below.
   useEffect(() => {
-    if (isInquiryMode) return undefined;
+    if (isInquiryMode || isErrandMode) return undefined;
     return subscribePendingBookings(service.id, setPending);
-  }, [service.id, isInquiryMode]);
+  }, [service.id, isInquiryMode, isErrandMode]);
   useEffect(() => {
-    if (isInquiryMode) return undefined;
+    if (isInquiryMode || isErrandMode) return undefined;
     return subscribeConfirmedBookings(service.id, setConfirmed);
-  }, [service.id, isInquiryMode]);
+  }, [service.id, isInquiryMode, isErrandMode]);
   useEffect(() => {
     if (!isInquiryMode) return undefined;
     return subscribePendingInquiries(service.id, setPendingInquiries);
   }, [service.id, isInquiryMode]);
+  useEffect(() => {
+    if (!isErrandMode) return undefined;
+    return subscribeOpenErrandRequestsForRunner(service.id, service.providerUid, setOpenErrands);
+  }, [service.id, service.providerUid, isErrandMode]);
+  useEffect(() => {
+    if (!isErrandMode) return undefined;
+    return subscribeRunnerActiveErrands(service.id, service.providerUid, setActiveErrands);
+  }, [service.id, service.providerUid, isErrandMode]);
 
   const toggleOpen = async () => {
     setToggling(true);
@@ -257,11 +276,17 @@ function ServiceManager({ service: rawService }) {
         {service.isOpen ? t('dashboard.shopOpen') : t('dashboard.shopClosed')}
       </button>
 
-      {/* MULTI_CATEGORY_SERVICES_PLAN.md Phase 5: mutually exclusive
-          by interactionMode — booking keeps PendingQueue + ConfirmedList
-          + revenue exactly as before; inquiry gets the new
-          PendingInquiries list instead, no confirm/finish/revenue. */}
-      {isInquiryMode ? (
+      {/* MULTI_CATEGORY_SERVICES_PLAN.md Phase 5 / Phase 4 (Errand Runner
+          plan §4): mutually exclusive by interactionMode — booking keeps
+          PendingQueue + ConfirmedList + revenue exactly as before,
+          inquiry gets PendingInquiries, errand (Runner) gets its own
+          Open Requests queue + Ongoing list, no confirm/finish/revenue. */}
+      {isErrandMode ? (
+        <>
+          <ErrandQueue serviceId={service.id} providerUid={service.providerUid} requests={openErrands} />
+          <RunnerActiveErrands serviceId={service.id} requests={activeErrands} />
+        </>
+      ) : isInquiryMode ? (
         <PendingInquiries serviceId={service.id} inquiries={pendingInquiries} offerings={service.offerings || []} />
       ) : (
         <>
@@ -693,6 +718,167 @@ function ConfirmedList({ serviceId, bookings, offerings }) {
               </button>
             </div>
           )}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------
+// Phase 4 (Delivery/Errand Runner plan §4.3-§4.5): the Runner-side
+// equivalent of PendingQueue/ConfirmedList above. Two separate lists per
+// the plan's status flow: ErrandQueue is 'open' requests the Runner can
+// Accept (broadcast + targeted-at-them, re-surfaced on edit — sorting
+// already handled by subscribeOpenErrandRequestsForRunner), and
+// RunnerActiveErrands is their own already-accepted (runner_accepted +
+// confirmed) errands, mirroring booking mode's Pending/Confirmed split.
+// ---------------------------------------------------------------------
+
+function ErrandQueue({ serviceId, providerUid, requests }) {
+  const { t } = useProviderLang();
+  const [busyId, setBusyId] = useState(null);
+  const [error, setError] = useState('');
+
+  const doAccept = async (bookingId) => {
+    setBusyId(bookingId);
+    setError('');
+    try {
+      await acceptErrandRequest(serviceId, bookingId, providerUid);
+    } catch (e) {
+      setError(e.message || t('dashboard.errand.acceptError'));
+    } finally {
+      setBusyId(null);
+    }
+  };
+
+  return (
+    <div className="card" style={{ padding: 16 }}>
+      <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', marginBottom: 10, display: 'flex', alignItems: 'center', gap: 8 }}>
+        <Clock size={16} /> {t('dashboard.errand.openTitle')} {requests ? `(${requests.length})` : ''}
+      </div>
+
+      {requests === null && <div style={{ fontSize: 13, color: 'var(--muted)' }}>{t('dashboard.loading')}</div>}
+      {requests && requests.length === 0 && <div style={{ fontSize: 13, color: 'var(--muted)' }}>{t('dashboard.errand.openEmpty')}</div>}
+
+      {error && <div style={{ fontSize: 12.5, color: 'var(--danger, #dc2626)', marginBottom: 8 }}>{error}</div>}
+
+      {(requests || []).map((r) => (
+        <div
+          key={r.id}
+          style={{
+            padding: 12, borderRadius: 12, marginBottom: 8,
+            background: r.visibility === 'targeted' ? 'var(--accentSoft)' : 'var(--surface, var(--card))',
+            border: '1px solid var(--border)',
+          }}
+        >
+          <div style={{ fontSize: 13.5, fontWeight: 700, color: 'var(--text)' }}>
+            {r.requesterName || t('dashboard.errand.requester')}
+          </div>
+          <div style={{ fontSize: 13, color: 'var(--text)', marginTop: 4 }}>{r.itemDescription}</div>
+          <div style={{ fontSize: 13.5, fontWeight: 700, color: 'var(--accent)', marginTop: 4 }}>৳{r.proposedPrice}</div>
+          <div style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 4 }}>{t('dashboard.errand.requested')} {formatWhen(r.requestedAt)}</div>
+          {r.visibility === 'targeted' && (
+            <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--accent)', marginTop: 2 }}>{t('dashboard.errand.targeted')}</div>
+          )}
+
+          <button
+            onClick={() => doAccept(r.id)}
+            disabled={busyId === r.id}
+            className="btn btn-primary"
+            style={{ width: '100%', marginTop: 10, minHeight: 46, fontSize: 14.5, fontWeight: 700 }}
+          >
+            {busyId === r.id ? t('dashboard.errand.accepting') : t('dashboard.errand.accept')}
+          </button>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function RunnerActiveErrands({ serviceId, requests }) {
+  const { t } = useProviderLang();
+  const [busyId, setBusyId] = useState(null);
+  const [error, setError] = useState('');
+  // plan §4.4: contact exchange — requesterPhone is already a plain field
+  // on the errand doc itself (unlike the Runner's own phone on the
+  // requester's side, which needs a separate providers/{uid} lookup), so
+  // it's simply read straight off each request once status === 'confirmed'.
+
+  const doRejectAccept = async (bookingId) => {
+    setBusyId(bookingId);
+    setError('');
+    try {
+      await rejectErrandAccept(serviceId, bookingId);
+    } catch (e) {
+      setError(e.message || t('dashboard.errand.genericError'));
+    } finally {
+      setBusyId(null);
+    }
+  };
+
+  const doFinish = async (bookingId) => {
+    setBusyId(bookingId);
+    setError('');
+    try {
+      await finishErrandRequest(serviceId, bookingId);
+    } catch (e) {
+      setError(e.message || t('dashboard.errand.genericError'));
+    } finally {
+      setBusyId(null);
+    }
+  };
+
+  if (requests === null || requests.length === 0) return null;
+
+  return (
+    <div className="card" style={{ padding: 16 }}>
+      <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', marginBottom: 10 }}>
+        {t('dashboard.errand.ongoingTitle')} ({requests.length})
+      </div>
+      {error && <div style={{ fontSize: 12.5, color: 'var(--danger, #dc2626)', marginBottom: 8 }}>{error}</div>}
+      {requests.map((r) => (
+        <div key={r.id} style={{ padding: 12, borderRadius: 12, marginBottom: 8, border: '1px solid var(--border)' }}>
+          <div style={{ fontSize: 13.5, fontWeight: 700, color: 'var(--text)' }}>
+            {r.requesterName || t('dashboard.errand.requester')}
+          </div>
+          <div style={{ fontSize: 12.5, color: 'var(--muted)', marginTop: 2 }}>
+            {t(r.status === 'confirmed' ? 'dashboard.errand.statusConfirmed' : 'dashboard.errand.statusAwaitingConfirm')}
+          </div>
+          <div style={{ fontSize: 13, color: 'var(--text)', marginTop: 4 }}>{r.itemDescription}</div>
+          <div style={{ fontSize: 13.5, fontWeight: 700, color: 'var(--accent)', marginTop: 4 }}>৳{r.proposedPrice}</div>
+
+          {r.status === 'confirmed' && r.requesterPhone && (
+            <div style={{
+              fontSize: 13, color: 'var(--text)', background: 'var(--accentSoft)', borderRadius: 10,
+              padding: 8, marginTop: 8,
+            }}
+            >
+              {t('dashboard.errand.requesterPhone')} <strong>{r.requesterPhone}</strong>
+            </div>
+          )}
+
+          <div style={{ display: 'flex', gap: 8, marginTop: 10 }}>
+            {r.status === 'runner_accepted' && (
+              <button
+                onClick={() => doRejectAccept(r.id)}
+                disabled={busyId === r.id}
+                className="btn btn-secondary"
+                style={{ flex: 1, minHeight: 44, fontSize: 14, fontWeight: 700 }}
+              >
+                {t('dashboard.errand.cancelAccept')}
+              </button>
+            )}
+            {r.status === 'confirmed' && (
+              <button
+                onClick={() => doFinish(r.id)}
+                disabled={busyId === r.id}
+                className="btn btn-primary"
+                style={{ flex: 1, minHeight: 44, fontSize: 14, fontWeight: 700 }}
+              >
+                {t('dashboard.errand.finish')}
+              </button>
+            )}
+          </div>
         </div>
       ))}
     </div>

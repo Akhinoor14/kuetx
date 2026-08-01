@@ -11,7 +11,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-  ArrowLeft, MapPin, Truck, Pause, Play, Power,
+  ArrowLeft, MapPin, Truck, Pause, Play, Power, Navigation, ExternalLink,
 } from 'lucide-react';
 import {
   subscribeProviderServices, updateServiceDetails, withServiceDefaults,
@@ -156,6 +156,8 @@ function ShopMetaEditor({ service, t }) {
         />
       </div>
 
+      <GpsLocationSubsection service={service} t={t} />
+
       <button
         onClick={() => setHasDelivery((v) => !v)}
         style={{
@@ -188,6 +190,220 @@ function ShopMetaEditor({ service, t }) {
         {saving ? t('shopSettings.saving') : t('shopSettings.save')}
       </button>
       {saved && <span style={{ fontSize: 12, color: '#16a34a' }}>{t('shopSettings.saved')}</span>}
+    </div>
+  );
+}
+
+// SHOP_LOCATION_AND_UPCOMING_FEATURES_PLAN.md Phase 1.1/1.2 — one-click GPS
+// capture with an accuracy check and a mandatory human-confirmation step
+// before anything is saved. Accuracy in meters is what
+// navigator.geolocation gives back alongside lat/lng; "good" is treated as
+// <50m (outdoor GPS-fix territory), anything worse warns but still allows
+// proceeding (per the plan: never a hard block, just a nudge + Google Maps
+// link so the provider can eyeball the pin before confirming).
+const GPS_ACCURACY_GOOD_THRESHOLD_M = 50;
+
+function formatRelativeDay(timestamp, t) {
+  if (!timestamp) return null;
+  const date = typeof timestamp.toDate === 'function' ? timestamp.toDate() : new Date(timestamp);
+  if (Number.isNaN(date.getTime())) return null;
+  const now = new Date();
+  const startOfDay = (d) => new Date(d.getFullYear(), d.getMonth(), d.getDate());
+  const diffDays = Math.round((startOfDay(now) - startOfDay(date)) / 86400000);
+  if (diffDays <= 0) return t('shopSettings.gpsToday');
+  if (diffDays === 1) return t('shopSettings.gpsYesterday');
+  return `${diffDays} ${t('shopSettings.gpsDaysAgo')}`;
+}
+
+function googleMapsUrl(lat, lng) {
+  return `https://www.google.com/maps?q=${lat},${lng}`;
+}
+
+function GpsLocationSubsection({ service, t }) {
+  // 'idle' | 'fetching' | 'low_accuracy' | 'confirm' | 'saving'
+  const [step, setStep] = useState('idle');
+  const [pending, setPending] = useState(null); // { lat, lng, accuracy }
+  const [error, setError] = useState('');
+
+  const hasSavedLocation = typeof service.locationLat === 'number' && typeof service.locationLng === 'number';
+
+  const requestLocation = () => {
+    setError('');
+    if (!('geolocation' in navigator)) {
+      setError(t('shopSettings.gpsUnsupported'));
+      return;
+    }
+    setStep('fetching');
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const { latitude, longitude, accuracy } = position.coords;
+        setPending({ lat: latitude, lng: longitude, accuracy });
+        if (accuracy != null && accuracy > GPS_ACCURACY_GOOD_THRESHOLD_M) {
+          setStep('low_accuracy');
+        } else {
+          setStep('confirm');
+        }
+      },
+      (geoError) => {
+        if (geoError.code === geoError.PERMISSION_DENIED) {
+          setError(t('shopSettings.gpsPermissionDenied'));
+        } else if (geoError.code === geoError.POSITION_UNAVAILABLE) {
+          setError(t('shopSettings.gpsPositionUnavailable'));
+        } else if (geoError.code === geoError.TIMEOUT) {
+          setError(t('shopSettings.gpsTimeout'));
+        } else {
+          setError(t('shopSettings.gpsGenericError'));
+        }
+        setStep('idle');
+      },
+      { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 },
+    );
+  };
+
+  const cancelToIdle = () => {
+    setPending(null);
+    setStep('idle');
+    setError('');
+  };
+
+  const confirmSave = async () => {
+    if (!pending) return;
+    setStep('saving');
+    setError('');
+    try {
+      await updateServiceDetails(service.id, {
+        locationLat: pending.lat,
+        locationLng: pending.lng,
+        locationAccuracy: pending.accuracy != null ? pending.accuracy : null,
+      });
+      setPending(null);
+      setStep('idle');
+    } catch (e) {
+      setError(t('shopSettings.gpsSaveError'));
+      setStep('confirm');
+    }
+  };
+
+  const lastUpdatedLabel = hasSavedLocation ? formatRelativeDay(service.locationSetAt, t) : null;
+
+  return (
+    <div style={{
+      padding: 12, borderRadius: 10, border: '1px dashed var(--border)',
+      background: 'var(--surface, var(--card))',
+    }}
+    >
+      <div style={{ fontSize: 12, color: 'var(--muted)', fontWeight: 600, marginBottom: 8 }}>
+        {t('shopSettings.gpsSectionTitle')}
+      </div>
+
+      {step === 'idle' && (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+          <div style={{ fontSize: 13, color: 'var(--text)', display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
+            {hasSavedLocation ? (
+              <>
+                <span>{t('shopSettings.gpsSetLabel')}</span>
+                {lastUpdatedLabel && (
+                  <span style={{ color: 'var(--muted)', fontSize: 12 }}>
+                    ({t('shopSettings.gpsUpdatedPrefix')} {lastUpdatedLabel})
+                  </span>
+                )}
+              </>
+            ) : (
+              <span>{t('shopSettings.gpsNotSet')}</span>
+            )}
+          </div>
+
+          <div style={{ display: 'flex', gap: 12, alignItems: 'center', flexWrap: 'wrap' }}>
+            {hasSavedLocation && (
+              <a
+                href={googleMapsUrl(service.locationLat, service.locationLng)}
+                target="_blank"
+                rel="noreferrer"
+                style={{
+                  fontSize: 12.5, color: 'var(--accent)', fontWeight: 600, textDecoration: 'none',
+                  display: 'flex', alignItems: 'center', gap: 4,
+                }}
+              >
+                {t('shopSettings.gpsViewOnMaps')} <ExternalLink size={12} />
+              </a>
+            )}
+            <button
+              type="button"
+              onClick={requestLocation}
+              className="btn btn-secondary"
+              style={{ minHeight: 38, display: 'flex', alignItems: 'center', gap: 6, fontSize: 13 }}
+            >
+              <Navigation size={14} />
+              {hasSavedLocation ? t('shopSettings.gpsUpdateButton') : t('shopSettings.gpsSetAddButton')}
+            </button>
+          </div>
+        </div>
+      )}
+
+      {step === 'fetching' && (
+        <div style={{ fontSize: 13, color: 'var(--muted)' }}>{t('shopSettings.gpsFetching')}</div>
+      )}
+
+      {step === 'low_accuracy' && pending && (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+          <div style={{ fontSize: 12.5, color: 'var(--danger, #b45309)', lineHeight: 1.6 }}>
+            {t('shopSettings.gpsLowAccuracyWarning')}
+          </div>
+          <a
+            href={googleMapsUrl(pending.lat, pending.lng)}
+            target="_blank"
+            rel="noreferrer"
+            style={{ fontSize: 12.5, color: 'var(--accent)', fontWeight: 600, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 4 }}
+          >
+            {t('shopSettings.gpsViewOnMaps')} <ExternalLink size={12} />
+          </a>
+          <div style={{ display: 'flex', gap: 8 }}>
+            <button type="button" onClick={requestLocation} className="btn btn-secondary" style={{ flex: 1, minHeight: 40, fontSize: 13 }}>
+              {t('shopSettings.gpsRetryButton')}
+            </button>
+            <button type="button" onClick={() => setStep('confirm')} className="btn btn-secondary" style={{ flex: 1, minHeight: 40, fontSize: 13 }}>
+              {t('shopSettings.gpsProceedAnyway')}
+            </button>
+          </div>
+        </div>
+      )}
+
+      {step === 'confirm' && pending && (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+          <div style={{ fontSize: 13, color: 'var(--text)', fontWeight: 600, lineHeight: 1.5 }}>
+            {t('shopSettings.gpsConfirmTitle')}
+          </div>
+          {pending.accuracy != null && (
+            <div style={{ fontSize: 12, color: 'var(--muted)' }}>
+              {t('shopSettings.gpsConfirmAccuracyPrefix')} {Math.round(pending.accuracy)} {t('shopSettings.gpsConfirmAccuracySuffix')}
+            </div>
+          )}
+          <a
+            href={googleMapsUrl(pending.lat, pending.lng)}
+            target="_blank"
+            rel="noreferrer"
+            style={{ fontSize: 12.5, color: 'var(--accent)', fontWeight: 600, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 4 }}
+          >
+            {t('shopSettings.gpsViewOnMaps')} <ExternalLink size={12} />
+          </a>
+          <div style={{ display: 'flex', gap: 8 }}>
+            <button type="button" onClick={cancelToIdle} className="btn btn-secondary" style={{ flex: 1, minHeight: 40, fontSize: 13 }}>
+              {t('shopSettings.gpsConfirmRetry')}
+            </button>
+            <button type="button" onClick={confirmSave} className="btn btn-primary" style={{ flex: 1, minHeight: 40, fontSize: 13 }}>
+              {t('shopSettings.gpsConfirmYes')}
+            </button>
+          </div>
+        </div>
+      )}
+
+      {step === 'saving' && (
+        <div style={{ fontSize: 13, color: 'var(--muted)' }}>{t('shopSettings.saving')}</div>
+      )}
+
+      {error && (
+        <div style={{ fontSize: 12.5, color: 'var(--danger, #dc2626)', marginTop: 8 }}>{error}</div>
+      )}
     </div>
   );
 }
