@@ -426,7 +426,7 @@ body {
   max-width: 760px;
   margin: 0 auto;
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-template-columns: repeat(var(--nav-button-count, 5), minmax(0, 1fr));
   gap: 6px;
   padding: 8px 8px 10px;
   border-radius: 24px;
@@ -434,6 +434,16 @@ body {
   background: linear-gradient(180deg, rgba(255,255,255,0.92), rgba(249,250,251,0.82));
   backdrop-filter: blur(18px);
   box-shadow: 0 18px 42px rgba(15, 23, 42, 0.14);
+}
+
+/* Provider shell only has 3 tabs (Dashboard, My Shop, Profile). Grid
+   columns are already dynamic via --nav-button-count (3 equal 1fr tracks),
+   so the 3 buttons spread evenly across the FULL bar width — no max-width
+   cap here, otherwise the shrunk bar sits at a fixed width while its
+   grid still centers within that, reading as lopsided/left-heavy. */
+.mobile-bottom-nav-shell.nav-count-3 .mobile-bottom-nav-button-icon {
+  width: 42px;
+  height: 42px;
 }
 
 .dark .mobile-bottom-nav-shell {

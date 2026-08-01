@@ -159,9 +159,18 @@ export function BottomNav() {
           || location.pathname === '/admin-hub'
           || location.pathname === '/team');
 
+  // Total tabs = fixed buttons + the always-present Profile tab. The grid
+  // column count follows this so a 3-tab shell (provider) doesn't stretch
+  // across a 5-column track meant for 5-tab shells (student/faculty),
+  // which was leaving large dead gaps and making the middle tab look lost.
+  const totalButtonCount = fixedButtons.length + 1;
+
   return (
     <nav className="mobile-bottom-nav" aria-label="Mobile navigation">
-      <div className="mobile-bottom-nav-shell">
+      <div
+        className={`mobile-bottom-nav-shell nav-count-${totalButtonCount}`}
+        style={{ '--nav-button-count': totalButtonCount }}
+      >
         {fixedButtons.map(button => {
           const Icon = ICONS[button.icon] || Circle;
           const active = button.match(location.pathname);
