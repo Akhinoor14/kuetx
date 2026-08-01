@@ -868,18 +868,32 @@ export default function Profile() {
             <p style={{ fontSize: 'clamp(13px,3vw,16px)', color: 'rgba(255,255,255,0.9)', margin: '0 0 32px', maxWidth: 420, marginLeft: 'auto', marginRight: 'auto', lineHeight: 1.7 }}>
               Set up your profile for personalized GPA tracking, attendance insights, and more.
             </p>
-            <button onClick={() => setIsModalOpen(true)} style={{
-              padding: '13px 38px', background: 'rgba(255,255,255,0.95)', color: 'var(--accent)',
-              border: '2px solid rgba(255,255,255,0.3)', borderRadius: 14,
-              fontSize: 16, fontWeight: 800, cursor: 'pointer',
-              boxShadow: '0 12px 36px rgba(0,0,0,0.2)',
-              transition: 'all 0.3s cubic-bezier(0.34,1.56,0.64,1)',
-              display: 'inline-flex', alignItems: 'center', gap: 10,
-            }}
-            onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-4px) scale(1.05)'}
-            onMouseLeave={e => e.currentTarget.style.transform = ''}>
-              <span>+</span> Setup Profile →
-            </button>
+            <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', justifyContent: 'center' }}>
+              <button onClick={() => setIsModalOpen(true)} style={{
+                padding: '13px 38px', background: 'rgba(255,255,255,0.95)', color: 'var(--accent)',
+                border: '2px solid rgba(255,255,255,0.3)', borderRadius: 14,
+                fontSize: 16, fontWeight: 800, cursor: 'pointer',
+                boxShadow: '0 12px 36px rgba(0,0,0,0.2)',
+                transition: 'all 0.3s cubic-bezier(0.34,1.56,0.64,1)',
+                display: 'inline-flex', alignItems: 'center', gap: 10,
+              }}
+              onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-4px) scale(1.05)'}
+              onMouseLeave={e => e.currentTarget.style.transform = ''}>
+                <span>+</span> Setup Profile →
+              </button>
+              <button onClick={() => window.dispatchEvent(new CustomEvent('kuetx:openGuide'))} style={{
+                padding: '13px 24px', background: 'rgba(255,255,255,0.12)', color: 'white',
+                border: '1px solid rgba(255,255,255,0.28)', borderRadius: 14,
+                fontSize: 15, fontWeight: 750, cursor: 'pointer',
+                boxShadow: '0 12px 36px rgba(0,0,0,0.14)',
+                display: 'inline-flex', alignItems: 'center', gap: 10,
+                transition: 'all 0.25s ease',
+              }}
+              onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-3px)'}
+              onMouseLeave={e => e.currentTarget.style.transform = ''}>
+                <BookOpen size={16} /> KUETx Guide
+              </button>
+            </div>
           </div>
         </div>
         <ProfileSetupModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onSave={handleSave} initialProfile={profile} />

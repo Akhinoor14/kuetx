@@ -832,7 +832,7 @@ export function Navbar({ onMenuClick }) {
       <NotificationPanel isOpen={notificationOpen} onClose={() => setNotificationOpen(false)} />
 
       {/* KUETx Guide */}
-      <GuideModal open={guideOpen} onClose={closeGuide} />
+      <GuideModal open={guideOpen} onClose={closeGuide} isViewerCR={isViewerCR} />
     </>
   );
 }

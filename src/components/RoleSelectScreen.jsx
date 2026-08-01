@@ -25,13 +25,14 @@
 // full-screen background — nothing behind it shows through at all.
 
 import { useState } from 'react';
-import { GraduationCap, User, Sparkles, Store, X } from 'lucide-react';
+import { BookOpen, GraduationCap, User, Sparkles, Store, X } from 'lucide-react';
 import { setAccountRole, persistAccountRoleToServer } from '../lib/accountRole';
 import { createFacultyAccountDoc } from '../lib/facultySync';
 import { createProviderShell } from '../lib/providerSync';
 import { SERVICE_TYPES, PROVIDER_SIGNUP_TYPES, PROVIDER_SIGNUP_TYPE_LABELS_BN } from '../lib/serviceSync';
 import { auth } from '../lib/firebase';
 import Modal from './Modal';
+import GuideModal from './GuideModal';
 import { PrivacyPolicyBody } from '../pages/PrivacyPolicy';
 
 const cardStyle = {
@@ -53,6 +54,7 @@ const cardStyle = {
 export default function RoleSelectScreen({ onSelect }) {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [guideOpen, setGuideOpen] = useState(false);
   // Provider signup needs a small detail form (name, phone) before the
   // providers/{uid} shell can be created (SERVICES_PROVIDER_PLAN.md §3 —
   // "পূর্ণ detail ফর্ম পূরণ করবে"), unlike Student/Faculty which need no
@@ -342,6 +344,21 @@ export default function RoleSelectScreen({ onSelect }) {
           </div>
         </div>
 
+        <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 14 }}>
+          <button
+            type="button"
+            onClick={() => setGuideOpen(true)}
+            style={{
+              padding: '8px 12px', borderRadius: 10,
+              border: '1px solid var(--border)', background: 'transparent',
+              color: 'var(--accent)', fontSize: 12.5, fontWeight: 700, cursor: 'pointer',
+              display: 'inline-flex', alignItems: 'center', gap: 7,
+            }}
+          >
+            <BookOpen size={14} /> KUETx Guide
+          </button>
+        </div>
+
         <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap' }}>
           <div
             style={{ ...cardStyle, opacity: (loading || !agreedToTerms) ? 0.6 : 1, pointerEvents: (loading || !agreedToTerms) ? 'none' : 'auto' }}
@@ -483,6 +500,8 @@ export default function RoleSelectScreen({ onSelect }) {
             </div>
           </Modal>
         )}
+
+        <GuideModal open={guideOpen} onClose={() => setGuideOpen(false)} />
 
         {error && (
           <div style={{

@@ -20,8 +20,10 @@
  */
 
 import { useState } from 'react';
+import { BookOpen } from 'lucide-react';
 import { auth } from '../lib/firebase';
 import { loginWithGoogle, upgradeWithGoogle } from '../lib/firebaseAuth';
+import GuideModal from './GuideModal';
 
 const btnGoogle = {
   width: '100%',
@@ -56,6 +58,7 @@ export default function AuthModal({ mode = 'login', isUpgrade = false, onClose, 
   void mode;
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [guideOpen, setGuideOpen] = useState(false);
 
   const handleGoogle = async () => {
     setLoading(true);
@@ -147,6 +150,19 @@ export default function AuthModal({ mode = 'login', isUpgrade = false, onClose, 
           {loading ? 'সাইন ইন করা হচ্ছে…' : 'Google দিয়ে সাইন ইন করুন'}
         </button>
 
+        <button
+          type="button"
+          onClick={() => setGuideOpen(true)}
+          style={{
+            width: '100%', marginTop: 10, padding: '10px 14px',
+            borderRadius: 8, border: '1px solid var(--border)', background: 'transparent',
+            color: 'var(--accent)', fontSize: 13, fontWeight: 700, cursor: 'pointer',
+            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+          }}
+        >
+          <BookOpen size={15} /> KUETx Guide
+        </button>
+
         {error && (
           <div style={{ fontSize: 12, color: 'var(--danger, #dc2626)', padding: '8px 10px', background: 'rgba(220,38,38,0.08)', borderRadius: 6, marginTop: 12 }}>
             {error}
@@ -163,6 +179,8 @@ export default function AuthModal({ mode = 'login', isUpgrade = false, onClose, 
           </div>
         )}
       </div>
+
+      <GuideModal open={guideOpen} onClose={() => setGuideOpen(false)} />
     </div>
   );
 }

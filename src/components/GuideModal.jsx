@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Circle } from 'lucide-react';
 import { ICONS } from '../lib/iconRegistry';
 import { GUIDE_CATEGORIES_BN, GUIDE_CATEGORIES_EN, GUIDE_SECTIONS_BN, GUIDE_SECTIONS_EN } from '../data/guideContent';
@@ -13,7 +13,7 @@ const UI_TEXT = {
     guideTitle: 'KUETx গাইড',
     sectionsCount: (n) => `${n}টা সেকশন · প্রতিটা ফিচার ব্যাখ্যা করা আছে`,
     searchPlaceholder: 'গাইডে খুঁজুন…',
-    noMatches: 'কিছু পাওয়া যায়নি। অন্য শব্দ দিয়ে চেষ্টা করো।',
+    noMatches: 'কিছু পাওয়া যায়নি। অন্য শব্দ দিয়ে আবার দেখুন।',
     community: 'KUETx কমিউনিটি',
     openPage: 'পেজ খুলুন',
     langToggleLabel: 'English',
@@ -36,6 +36,68 @@ const CALLOUT_STYLE = {
   warning: { icon: 'AlertTriangle', color: 'var(--warning)' },
   danger:  { icon: 'AlertOctagon',  color: 'var(--danger)' },
 };
+
+const BN_POLITE_REPLACEMENTS = [
+  [/তোমাদের/g, 'আপনাদের'],
+  [/তোমার/g, 'আপনার'],
+  [/তোমাকে/g, 'আপনাকে'],
+  [/তোমরা/g, 'আপনারা'],
+  [/তুমি/g, 'আপনি'],
+  [/দেখো/g, 'দেখুন'],
+  [/খোলো/g, 'খুলুন'],
+  [/যাও/g, 'যান'],
+  [/করো/g, 'করুন'],
+  [/নাও/g, 'নিন'],
+  [/বলো/g, 'বলুন'],
+  [/জানাও/g, 'জানান'],
+  [/খুঁজে দেখো/g, 'খুঁজে দেখুন'],
+  [/জিজ্ঞেস করো/g, 'জিজ্ঞেস করুন'],
+  [/\bদাও\b/g, 'দিন'],
+  [/\bপাও\b/g, 'পান'],
+  [/\bপারো\b/g, 'পারেন'],
+  [/\bরাখো\b/g, 'রাখুন'],
+  [/\bবানাও\b/g, 'বানান'],
+  [/\bপড়ো\b/g, 'পড়ুন'],
+  [/\bলিখো\b/g, 'লিখুন'],
+];
+
+function toPoliteBangla(text) {
+  if (typeof text !== 'string') return text;
+  return BN_POLITE_REPLACEMENTS.reduce((value, [pattern, replacement]) => value.replace(pattern, replacement), text);
+}
+
+function transformBlock(block, lang) {
+  if (lang !== 'bn' || !block || typeof block !== 'object') return block;
+  if (block.type === 'table') {
+    return {
+      ...block,
+      headers: (block.headers || []).map(toPoliteBangla),
+      rows: (block.rows || []).map((row) => row.map(toPoliteBangla)),
+    };
+  }
+  const next = { ...block };
+  Object.keys(next).forEach((key) => {
+    if (typeof next[key] === 'string') next[key] = toPoliteBangla(next[key]);
+  });
+  return next;
+}
+
+function transformSection(section, lang) {
+  if (lang !== 'bn') return section;
+  return {
+    ...section,
+    title: toPoliteBangla(section.title),
+    desc: toPoliteBangla(section.desc),
+    blocks: (section.blocks || []).map((block) => transformBlock(block, lang)),
+  };
+}
+
+function getShellContext(pathname) {
+  if (pathname.startsWith('/provider')) return 'provider';
+  if (pathname.startsWith('/faculty')) return 'faculty';
+  if (pathname.startsWith('/team') || pathname.startsWith('/admin-hub') || pathname.startsWith('/admin')) return 'staff';
+  return 'student';
+}
 
 function Icon({ name, ...props }) {
   const C = ICONS[name] || Circle;
@@ -144,16 +206,30 @@ function GuideTable({ block }) {
   );
 }
 
-export default function GuideModal({ open, onClose }) {
+export default function GuideModal({ open, onClose, isViewerCR = false }) {
   const navigate = useNavigate();
+  const location = useLocation();
   const [query, setQuery] = useState('');
   // Bangla-first by default, per Akhinoor — English is one tap away via
   // the toggle button next to search, not a separate route/setting.
   const [lang, setLang] = useState('bn');
-  const GUIDE_SECTIONS = lang === 'bn' ? GUIDE_SECTIONS_BN : GUIDE_SECTIONS_EN;
+  const shell = getShellContext(location.pathname);
+  const GUIDE_SECTIONS_BASE = lang === 'bn' ? GUIDE_SECTIONS_BN : GUIDE_SECTIONS_EN;
   const GUIDE_CATEGORIES = lang === 'bn' ? GUIDE_CATEGORIES_BN : GUIDE_CATEGORIES_EN;
   const T = UI_TEXT[lang];
-  const [activeId, setActiveId] = useState(GUIDE_SECTIONS[0].id);
+  const activeShellSections = useMemo(() => {
+    const visibleCategories = {
+      student: [0, 1, 2, 3],
+      faculty: [5],
+      provider: [6],
+      staff: [7],
+    }[shell] || [0, 1, 2, 3];
+    const withCR = shell === 'student' && isViewerCR ? [...visibleCategories, 4] : visibleCategories;
+    return GUIDE_SECTIONS_BASE
+      .filter((section) => withCR.includes(GUIDE_CATEGORIES.indexOf(section.category)))
+      .map((section) => transformSection(section, lang));
+  }, [GUIDE_SECTIONS_BASE, GUIDE_CATEGORIES, isViewerCR, lang, shell]);
+  const [activeId, setActiveId] = useState(activeShellSections[0]?.id || GUIDE_SECTIONS_BASE[0]?.id);
   const [mobileShowContent, setMobileShowContent] = useState(false);
   const contentRef = useRef(null);
 
@@ -165,17 +241,23 @@ export default function GuideModal({ open, onClose }) {
   }, [open, onClose]);
 
   useEffect(() => { if (open) { setQuery(''); setMobileShowContent(false); } }, [open]);
+  useEffect(() => {
+    if (!activeShellSections.length) return;
+    if (!activeShellSections.some((section) => section.id === activeId)) {
+      setActiveId(activeShellSections[0].id);
+    }
+  }, [activeShellSections, activeId]);
   useEffect(() => { if (contentRef.current) contentRef.current.scrollTop = 0; }, [activeId]);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
-    if (!q) return GUIDE_SECTIONS;
-    return GUIDE_SECTIONS.filter(s =>
+    if (!q) return activeShellSections;
+    return activeShellSections.filter(s =>
       s.title.toLowerCase().includes(q) ||
       s.desc.toLowerCase().includes(q) ||
       s.category.toLowerCase().includes(q)
     );
-  }, [query]);
+  }, [query, activeShellSections]);
 
   const grouped = useMemo(() => {
     const m = new Map(GUIDE_CATEGORIES.map(c => [c, []]));
@@ -183,10 +265,10 @@ export default function GuideModal({ open, onClose }) {
     return [...m.entries()].filter(([, items]) => items.length);
   }, [filtered]);
 
-  const active = GUIDE_SECTIONS.find(s => s.id === activeId) || GUIDE_SECTIONS[0];
-  const flatIdx = GUIDE_SECTIONS.findIndex(s => s.id === active.id);
-  const prevSection = GUIDE_SECTIONS[flatIdx - 1];
-  const nextSection = GUIDE_SECTIONS[flatIdx + 1];
+  const active = filtered.find(s => s.id === activeId) || filtered[0] || activeShellSections[0];
+  const flatIdx = filtered.findIndex(s => s.id === active?.id);
+  const prevSection = filtered[flatIdx - 1];
+  const nextSection = filtered[flatIdx + 1];
 
   const selectSection = (id) => { setActiveId(id); setMobileShowContent(true); };
 
@@ -194,12 +276,13 @@ export default function GuideModal({ open, onClose }) {
 
   return (
     <>
-      <div style={{ position: 'fixed', inset: 0, zIndex: 9400, background: 'rgba(8,12,22,0.72)', backdropFilter: 'blur(6px)' }} onClick={onClose} />
-      <div style={{ position: 'fixed', inset: 0, zIndex: 9401, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 14 }}>
+      <div style={{ position: 'fixed', inset: 0, zIndex: 10020, background: 'rgba(8,12,22,0.72)', backdropFilter: 'blur(6px)' }} onClick={onClose} />
+      <div style={{ position: 'fixed', inset: 0, zIndex: 10021, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 14 }}>
         <div className="guide-modal-shell" onClick={e => e.stopPropagation()} style={{
           width: '100%', maxWidth: 980, height: 'min(86vh, 760px)',
           background: 'var(--card)', border: '1px solid var(--border)', borderRadius: 16,
           boxShadow: '0 24px 60px rgba(0,0,0,0.25)', display: 'flex', flexDirection: 'column', overflow: 'hidden',
+          position: 'relative',
         }}>
           {/* Header */}
           <div style={{
@@ -220,7 +303,7 @@ export default function GuideModal({ open, onClose }) {
             </div>
             <div style={{ minWidth: 0, flex: 1 }}>
               <div style={{ fontWeight: 800, fontSize: 14.5, color: 'var(--text)' }}>{T.guideTitle}</div>
-              <div style={{ fontSize: 11.5, color: 'var(--muted)' }}>{T.sectionsCount(GUIDE_SECTIONS.length)}</div>
+              <div style={{ fontSize: 11.5, color: 'var(--muted)' }}>{T.sectionsCount(activeShellSections.length)}</div>
             </div>
             {/* Language toggle — Bangla is default; tapping this swaps
                 every section's title/desc/blocks + category names to
@@ -347,6 +430,8 @@ export default function GuideModal({ open, onClose }) {
           .guide-sidebar { width: 100% !important; display: ${mobileShowContent ? 'none' : 'flex'} !important; }
           .guide-content { display: ${mobileShowContent ? 'block' : 'none'} !important; }
           .guide-back-btn { display: flex !important; }
+          .guide-content { padding: 16px 16px 22px !important; }
+          .guide-sidebar > div:first-child { padding: 10px !important; }
         }
         @media (max-width: 600px) {
           .guide-table-wide { display: none !important; }
