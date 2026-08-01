@@ -143,6 +143,25 @@ export function subscribeStaffRoleHistory(uid, callback) {
  * enforcement of who's allowed to call this for which role/scope.
  */
 export async function assignRole(targetUid, role, scope, reportsTo = null) {
+  // BUGFIX (Campus Lead chip silently missing): previously this let a
+  // 'group'-scoped role (campus_lead) or 'dept'-scoped role
+  // (senior_campus_lead) through with an empty groupId/dept — e.g. a
+  // caller that skipped picking a class before submitting. That wrote a
+  // role doc id like `campus_lead_` (empty suffix) with
+  // scope.groupId === '', which no downstream reader could recover a
+  // real groupId from — StaffDashboard.jsx's tab/chip logic silently
+  // dropped the role instead of erroring, so the person kept a
+  // functionally broken grant with no obvious sign anything was wrong.
+  // Failing fast here means a bad assignment surfaces immediately to
+  // whoever is granting the role, instead of shipping a corrupt doc
+  // that only shows up later as a missing UI element.
+  if (role === 'campus_lead' && !scope?.groupId) {
+    throw new Error('assignRole: campus_lead requires scope.groupId (a class/batch must be selected).');
+  }
+  if (role === 'senior_campus_lead' && !scope?.dept) {
+    throw new Error('assignRole: senior_campus_lead requires scope.dept.');
+  }
+
   const uid = auth.currentUser?.uid;
   const id = roleDocId(role, scope);
   await setDoc(doc(db, 'staff', targetUid, 'roles', id), {

@@ -729,6 +729,15 @@ function StaffRolesView({ onBack, onSelectCategory, groups, countCtx }) {
   const [newUid, setNewUid] = useState('');
   const [newRole, setNewRole] = useState(ALL_ASSIGNABLE_ROLES[0]);
   const [newScopeValue, setNewScopeValue] = useState('');
+  // BUGFIX (Campus Lead chip silently missing): handleAssign used to call
+  // assignRole() with whatever newScopeValue held, including '' if the
+  // Founder clicked Assign while the class/department picker was still on
+  // its placeholder — that wrote a role doc with an empty groupId/dept
+  // that no downstream reader could recover, and the person silently kept
+  // a functionally broken role grant. assignError surfaces that failure
+  // (now thrown by assignRole itself) directly next to the form instead
+  // of letting it disappear into the console.
+  const [assignError, setAssignError] = useState('');
   const [currentHolders, setCurrentHolders] = useState({});
   const [holdersError, setHoldersError] = useState(null);
   const [holdersLoading, setHoldersLoading] = useState(false);
@@ -813,9 +822,33 @@ function StaffRolesView({ onBack, onSelectCategory, groups, countCtx }) {
     let scope = { type: 'global' };
     if (scopeKind === 'dept') scope = { type: 'dept', dept: newScopeValue.trim().toUpperCase() };
     if (scopeKind === 'group') scope = { type: 'group', groupId: newScopeValue.trim().toUpperCase() };
-    await assignRole(newUid.trim(), newRole, scope);
-    setNewUid(''); setNewScopeValue('');
-    refreshHolders(newRole);
+
+    // Client-side check so a missing class/department is caught before
+    // the network round-trip, with a message that matches what the
+    // Founder actually sees on screen (the picker still on its
+    // placeholder) rather than a generic Firestore error.
+    if (scopeKind === 'dept' && !scope.dept) {
+      setAssignError('Enter a department before assigning this role.');
+      return;
+    }
+    if (scopeKind === 'group' && !scope.groupId) {
+      setAssignError('Choose a class before assigning this role.');
+      return;
+    }
+
+    setAssignError('');
+    try {
+      await assignRole(newUid.trim(), newRole, scope);
+      setNewUid(''); setNewScopeValue('');
+      refreshHolders(newRole);
+    } catch (err) {
+      // Also catches assignRole's own server-side validation (belt and
+      // braces if this form's checks above are ever bypassed or a future
+      // caller skips them) — same message pattern as the load errors
+      // above so the person sees exactly what happened.
+      console.error('[Founder] assignRole failed:', err);
+      setAssignError(err?.message || 'Failed to assign role.');
+    }
   };
 
   const totalHolders = ALL_ASSIGNABLE_ROLES.reduce((sum, r) => sum + (currentHolders[r]?.length || 0), 0);
@@ -830,7 +863,7 @@ function StaffRolesView({ onBack, onSelectCategory, groups, countCtx }) {
       {subTab === 'assign' && (
       <Section title="Assign a staff role">
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8, maxWidth: 420 }}>
-          <select value={newRole} onChange={(e) => { setNewRole(e.target.value); setNewScopeValue(''); }}
+          <select value={newRole} onChange={(e) => { setNewRole(e.target.value); setNewScopeValue(''); setAssignError(''); }}
             style={{ padding: '8px 10px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--inputBg)' }}>
             {ALL_ASSIGNABLE_ROLES.map((r) => <option key={r} value={r}>{ROLE_LABELS[r]}</option>)}
           </select>
@@ -846,6 +879,11 @@ function StaffRolesView({ onBack, onSelectCategory, groups, countCtx }) {
               <option value="">Choose a class…</option>
               {groups?.map((g) => <option key={g.id} value={g.id}>{g.id}</option>)}
             </select>
+          )}
+          {assignError && (
+            <div style={{ fontSize: 12.5, color: 'var(--danger, #ef4444)', lineHeight: 1.5 }}>
+              {assignError}
+            </div>
           )}
           <button className="btn btn-primary" onClick={handleAssign}>Assign</button>
         </div>

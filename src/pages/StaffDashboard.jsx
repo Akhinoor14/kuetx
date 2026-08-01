@@ -661,6 +661,22 @@ export default function StaffDashboard({ activeTab: activeTabProp, onTabChange }
     // parsing the id (`campus_lead_2K23_ESE` -> `2K23_ESE`) recovers the
     // groupId from the one place it's guaranteed to be, without needing
     // a data migration.
+    //
+    // BUGFIX (Campus Lead chip silently missing for an unassigned-group
+    // grant): a campus_lead role doc can exist with NO usable groupId at
+    // all — id `campus_lead_` (trailing underscore, empty suffix) and
+    // scope.groupId === '' — if it was ever assigned without picking a
+    // group/batch. Both the scope fallback AND the id-parse fallback
+    // then produce '' , which .filter(Boolean) drops, so clGroups came
+    // out empty and the whole Campus Lead tab (and the multi-role chip
+    // bar with it) silently vanished — even though "Your roles:" text
+    // below still correctly listed Campus Lead from the unfiltered
+    // `roles` array. hasUnassignedCampusLead flags this case separately
+    // so the tab can still render with a "needs a group" state instead
+    // of disappearing outright.
+    const hasUnassignedCampusLead = roles.some(
+      (r) => r.role === 'campus_lead' && !(r.scope?.groupId || r.id?.replace(/^campus_lead_/, ''))
+    );
     const clGroups = roles
       .filter((r) => r.role === 'campus_lead')
       .map((r) => r.scope?.groupId || r.id?.replace(/^campus_lead_/, ''))
@@ -679,7 +695,7 @@ export default function StaffDashboard({ activeTab: activeTabProp, onTabChange }
     if (isAdminUser) tabs.push({ key: 'founder' });
     if (isHeadOfOps) tabs.push({ key: 'ops' });
     if (sclDepts.length > 0) tabs.push({ key: 'scl' });
-    if (clGroups.length > 0) tabs.push({ key: 'cl' });
+    if (clGroups.length > 0 || hasUnassignedCampusLead) tabs.push({ key: 'cl' });
     if (isContentLead) tabs.push({ key: 'content' });
     if (isHeadOfGrowth) tabs.push({ key: 'growth' });
     if (hasFinanceOrLegal) tabs.push({ key: 'finance' });
@@ -704,6 +720,9 @@ export default function StaffDashboard({ activeTab: activeTabProp, onTabChange }
   }
 
 
+  const hasUnassignedCampusLead = roles.some(
+    (r) => r.role === 'campus_lead' && !(r.scope?.groupId || r.id?.replace(/^campus_lead_/, ''))
+  );
   const clGroups = roles
     .filter((r) => r.role === 'campus_lead')
     .map((r) => r.scope?.groupId || r.id?.replace(/^campus_lead_/, ''))
@@ -723,34 +742,13 @@ export default function StaffDashboard({ activeTab: activeTabProp, onTabChange }
   if (isAdminUser) tabs.push({ key: 'founder', label: 'Founder' });
   if (isHeadOfOps) tabs.push({ key: 'ops', label: 'Head of ops' });
   if (sclDepts.length > 0) tabs.push({ key: 'scl', label: 'Senior campus lead' });
-  if (clGroups.length > 0) tabs.push({ key: 'cl', label: 'Campus lead' });
+  if (clGroups.length > 0 || hasUnassignedCampusLead) tabs.push({ key: 'cl', label: 'Campus lead' });
   if (isContentLead) tabs.push({ key: 'content', label: 'Content lead' });
   if (isHeadOfGrowth) tabs.push({ key: 'growth', label: 'Growth' });
   if (hasFinanceOrLegal) tabs.push({ key: 'finance', label: 'Finance & legal' });
 
   const currentTab = activeTab && tabs.some((t) => t.key === activeTab) ? activeTab : tabs[0]?.key;
   const show = (key) => tabs.length <= 1 || currentTab === key;
-
-  // TEMP DIAG (remove once role-chip bug is confirmed): logs the raw role
-  // docs plus every computed value RoleTabBar's visibility depends on, so
-  // we can see exactly which one is empty/wrong without guessing.
-  // JSON.stringify forces the actual field values into the printed text
-  // (instead of a collapsed "Array(1)" reference that needs manual
-  // expansion in devtools) so the raw role doc's role/scope/id are
-  // visible directly in the console log line itself.
-  console.log('[KUETx DIAG][RoleTabBar]', JSON.stringify({
-    isAdminUser,
-    rawRoles: roles,
-    clGroups,
-    sclDepts,
-    isHeadOfOps,
-    isContentLead,
-    isHeadOfGrowth,
-    hasFinanceOrLegal,
-    tabs,
-    activeTab,
-    currentTab,
-  }, null, 2));
 
   const handleTabChange = (key) => {
     if (activeTabProp === undefined) setLocalActiveTab(key);
@@ -816,6 +814,20 @@ export default function StaffDashboard({ activeTab: activeTabProp, onTabChange }
             <Section wide title="Your classes">
               {clGroups.map((g) => <CampusLeadBlock key={g} groupId={g} />)}
             </Section>
+          </div>
+        </>
+      )}
+
+      {show('cl') && clGroups.length === 0 && hasUnassignedCampusLead && (
+        <>
+          <GroupHeading>Campus Lead</GroupHeading>
+          <div style={{
+            padding: 16, borderRadius: 10, border: '1px dashed var(--border)',
+            color: 'var(--muted)', fontSize: 13, lineHeight: 1.6,
+          }}>
+            Your Campus Lead role isn't linked to a class/batch yet — ask a
+            Head of Ops or Founder to re-assign it with a group selected
+            from Staff & Roles.
           </div>
         </>
       )}
