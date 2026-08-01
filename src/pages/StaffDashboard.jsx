@@ -706,6 +706,25 @@ export default function StaffDashboard({ activeTab: activeTabProp, onTabChange }
   const currentTab = activeTab && tabs.some((t) => t.key === activeTab) ? activeTab : tabs[0]?.key;
   const show = (key) => tabs.length <= 1 || currentTab === key;
 
+  // TEMP DIAGNOSTIC — remove once the missing-chip issue is confirmed fixed.
+  // Prints the exact data driving the tab bar so we can see, in the real
+  // browser console, whether `roles` actually contains a second role with
+  // a valid scope, and whether isAdminUser is true/false at render time —
+  // instead of guessing at the cause from screenshots.
+  console.log('[KUETx DIAG] StaffDashboard tabs computation', {
+    isAdminUser,
+    rolesRaw: roles,
+    clGroups,
+    sclDepts,
+    isHeadOfOps,
+    isContentLead,
+    isHeadOfGrowth,
+    hasFinanceOrLegal,
+    tabs,
+    activeTab,
+    currentTab,
+  });
+
   const handleTabChange = (key) => {
     if (activeTabProp === undefined) setLocalActiveTab(key);
     onTabChange?.(key);
