@@ -731,6 +731,23 @@ export default function StaffDashboard({ activeTab: activeTabProp, onTabChange }
   const currentTab = activeTab && tabs.some((t) => t.key === activeTab) ? activeTab : tabs[0]?.key;
   const show = (key) => tabs.length <= 1 || currentTab === key;
 
+  // TEMP DIAG (remove once role-chip bug is confirmed): logs the raw role
+  // docs plus every computed value RoleTabBar's visibility depends on, so
+  // we can see exactly which one is empty/wrong without guessing.
+  console.log('[KUETx DIAG][RoleTabBar]', {
+    isAdminUser,
+    rawRoles: roles,
+    clGroups,
+    sclDepts,
+    isHeadOfOps,
+    isContentLead,
+    isHeadOfGrowth,
+    hasFinanceOrLegal,
+    tabs,
+    activeTab,
+    currentTab,
+  });
+
   const handleTabChange = (key) => {
     if (activeTabProp === undefined) setLocalActiveTab(key);
     onTabChange?.(key);
