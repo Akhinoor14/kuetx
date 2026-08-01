@@ -1878,6 +1878,51 @@ export function subscribeGlobalNotices(callback) {
     // above are unaffected.
   });
 
+  // Provider-only branches ('provider_all' / 'provider_uids') — Phase 5
+  // of PROVIDER_SHELL_UX_OVERHAUL_PLAN.md. Direct clone of the faculty
+  // branches above: only attach once we know the viewer is actually a
+  // provider account (providers/{uid} exists), same reasoning as the
+  // faculty gate — the read rule denies these branches outright
+  // otherwise. providers/{uid} is readable by any signed-in user (see
+  // firestore.rules), so this is a cheap one-shot check, not a
+  // permission risk.
+  getDoc(doc(db, 'providers', uid)).then((snap) => {
+    if (!snap.exists()) return;
+
+    const providerAllKey = 'globalNotices:providerAll';
+    const subscribeProviderAll = (cb) => _subscribeSingleton(
+      providerAllKey,
+      () => query(
+        collection(db, 'notices'),
+        where('audience.type', '==', 'provider_all'),
+        orderBy('createdAt', 'desc'),
+        fsLimit(50),
+      ),
+      _snapToArray,
+      cb,
+    );
+
+    const providerUidsKey = 'globalNotices:providerUids';
+    const subscribeProviderUids = (cb) => _subscribeSingleton(
+      providerUidsKey,
+      () => query(
+        collection(db, 'notices'),
+        where('audience.type', '==', 'provider_uids'),
+        where('audience.uids', 'array-contains', uid),
+        orderBy('createdAt', 'desc'),
+        fsLimit(50),
+      ),
+      _snapToArray,
+      cb,
+    );
+
+    fns.push(subscribeProviderAll, subscribeProviderUids);
+  }).catch(() => {
+    // Best-effort — if this lookup fails, the viewer just doesn't get
+    // the provider-only branches attached; population/student/faculty
+    // branches above are unaffected.
+  });
+
   return _mergeSubscriptions(fns, callback);
 }
 
@@ -1912,6 +1957,23 @@ export function noticeAppliesToFaculty(notice, uid) {
   if (!a || !uid) return false;
   if (a.type === 'faculty_all') return true;
   if (a.type === 'faculty_uids') return Array.isArray(a.uids) && a.uids.includes(uid);
+  return false;
+}
+
+/**
+ * Provider-side counterpart to noticeAppliesToFaculty — does this root
+ * notice apply to this signed-in provider uid? Only
+ * 'provider_all'/'provider_uids' ever match; every student/faculty
+ * audience type is deliberately excluded here, same reasoning as the
+ * faculty counterpart above: a provider account should never see a
+ * broadcast addressed to a different population just because a type
+ * name sounds inclusive.
+ */
+export function noticeAppliesToProvider(notice, uid) {
+  const a = notice?.audience;
+  if (!a || !uid) return false;
+  if (a.type === 'provider_all') return true;
+  if (a.type === 'provider_uids') return Array.isArray(a.uids) && a.uids.includes(uid);
   return false;
 }
 
@@ -1962,6 +2024,49 @@ export function subscribeFacultyGlobalNotices(uid, callback) {
           // in noticeUtils.js. Only faculty_uids is "personal"; faculty_all
           // is population-level (every faculty account), not individual.
           isPersonal: n.audience?.type === 'faculty_uids',
+        };
+      })
+      .filter((n) => !n.deleted);
+    callback(applicable);
+  });
+}
+
+/**
+ * Provider-facing global (Admin/Founder) notices — Phase 5 of
+ * PROVIDER_SHELL_UX_OVERHAUL_PLAN.md. Direct clone of
+ * subscribeFacultyGlobalNotices above: meant to be called ONCE PER
+ * PROVIDER SESSION (e.g. from useProviderGlobalNotices, mounted once by
+ * ProviderNotifications.jsx), keyed off nothing but the signed-in uid.
+ *
+ * Reuses subscribeGlobalNotices() under the hood, same
+ * `_subscribeSingleton` sharing behavior as the faculty version.
+ *
+ * @param {string} uid - current signed-in provider uid (required —
+ *   returns a no-op unsubscribe if missing)
+ * @param {(notices: Array) => void} callback
+ * @returns {() => void} unsubscribe
+ */
+export function subscribeProviderGlobalNotices(uid, callback) {
+  if (!uid) return () => {};
+  return subscribeGlobalNotices((notices) => {
+    const applicable = notices
+      .filter((n) => noticeAppliesToProvider(n, uid))
+      .map((n) => {
+        const isFounder = n.createdBy?.name === 'Founder';
+        return {
+          ...n,
+          from: isFounder ? 'Founder' : (n.createdBy?.name || 'Admin'),
+          roleTag: isFounder ? 'Founder' : 'Admin',
+          isFounder,
+          section: 'admin',
+          createdAt: n.createdAt && typeof n.createdAt.toMillis === 'function'
+            ? n.createdAt.toMillis()
+            : (typeof n.createdAt === 'number' ? n.createdAt : 0),
+          // "Just for you" tag — mirrors the faculty/student-side
+          // isPersonal flag. Only provider_uids is "personal";
+          // provider_all is population-level (every verified provider),
+          // not individual.
+          isPersonal: n.audience?.type === 'provider_uids',
         };
       })
       .filter((n) => !n.deleted);

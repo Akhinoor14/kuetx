@@ -87,10 +87,15 @@ function ProfileButton({ isRealCR, roleLabel, isStaff, adminLabel, active, viewM
 // CR/staff-aware ProfileButton above, since none of that role logic
 // applies to a provider account. Same markup shape as ProfileButton /
 // the fixed-button Links so it looks identical in the bar.
+//
+// PHASE 3 (PROVIDER_SHELL_UX_OVERHAUL_PLAN.md): now points at the
+// dedicated /provider/profile page instead of /settings — a provider
+// tapping "Profile" used to land on the Theme/Language/Account card
+// stack, which is Settings content, not identity/profile content.
 function ProviderProfileButton({ active, t }) {
   return (
     <Link
-      to="/settings"
+      to="/provider/profile"
       className={`mobile-bottom-nav-button${active ? ' active' : ''}`}
       aria-current={active ? 'page' : undefined}
     >
@@ -139,7 +144,7 @@ export function BottomNav() {
     : (isFacultyMode ? FACULTY_FIXED_BUTTONS : STUDENT_FIXED_BUTTONS);
 
   const isProfileActive = isProvider
-    ? location.pathname === '/settings'
+    ? location.pathname === '/provider/profile'
     : isFacultyMode
       ? (location.pathname === '/faculty/profile' || location.pathname === '/team')
       : (location.pathname === '/profile'

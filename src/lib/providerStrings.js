@@ -102,7 +102,7 @@ export const providerStrings = {
     'shopSettings.backLink': 'My Shop',
     'shopSettings.loading': 'লোড হচ্ছে…',
     'shopSettings.noServiceYet': 'এখনো কোনো সার্ভিস সেট আপ করা হয়নি।',
-    'shopSettings.metaTitle': 'ছবি, লোকেশন ও ডেলিভারি',
+    'shopSettings.metaTitle': 'লোকেশন ও ডেলিভারি',
     'shopSettings.notSetUp': 'সেট করা হয়নি',
     'shopSettings.statusTitle': 'শপ স্ট্যাটাস',
     'shopSettings.dormant': 'নিষ্ক্রিয় (Dormant)',
@@ -172,15 +172,34 @@ export const providerStrings = {
     // ---- SidebarNavProvider.jsx ----
     'nav.dashboard': 'Dashboard',
     'nav.myShop': 'My Shop',
+    'nav.profile': 'Profile',
     'nav.settings': 'Settings',
     'nav.about': 'About',
     'nav.groupProvider': 'Provider',
     'nav.groupAccount': 'Account',
 
+    // ---- ProviderHamburgerPanel.jsx ----
+    'hamburger.notifications': 'নোটিফিকেশন',
+    'hamburger.signOut': 'সাইন আউট',
+    'hamburger.signingOut': 'সাইন আউট হচ্ছে…',
+    'hamburger.signOutConfirm': 'সাইন আউট করবেন? এই ডিভাইসের ডেটা মুছে যাবে — যেকোনো সময় আবার লগইন করলে ক্লাউড থেকে সব ফিরে আসবে।',
+
     // ---- BottomNavProvider.js / BottomNav.jsx ----
     'bottomNav.dashboard': 'Dashboard',
     'bottomNav.myShop': 'My Shop',
     'bottomNav.profile': 'Profile',
+
+    // ---- ProviderProfile.jsx ----
+    'profile.loading': 'লোড হচ্ছে…',
+    'profile.identityTitle': 'পরিচিতি',
+    'profile.nameLabel': 'নাম',
+    'profile.phoneLabel': 'ফোন',
+    'profile.emailLabel': 'ইমেইল',
+    'profile.statusVerified': 'ভেরিফায়েড সার্ভিস প্রোভাইডার',
+    'profile.statusPending': 'ভেরিফিকেশন অপেক্ষমান',
+    'profile.statusRejected': 'ভেরিফিকেশন প্রত্যাখ্যাত',
+    'profile.changeCoverHint': 'ছবি পরিবর্তন করতে ট্যাপ করুন',
+    'profile.coverAlt': 'শপ কভার',
 
     // ---- Settings.jsx (provider branch) ----
     'settings.title': 'Settings',
@@ -201,6 +220,14 @@ export const providerStrings = {
     // ---- About.jsx (provider branch) ----
     'about.body1': 'KUETx KUET শিক্ষার্থীদের বিশ্বস্ত লোকাল সার্ভিস প্রোভাইডারদের সাথে যুক্ত করে — সেলুন, খাবার, ফার্মেসি, স্টেশনারি এবং আরও অনেক কিছু — একই অ্যাপ থেকে যা তারা প্রতিদিন ব্যবহার করে।',
     'about.body2': 'আপনার প্রোভাইডার একাউন্ট নিয়ে কোনো প্রশ্ন আছে? আপনার Founder/Admin কনট্যাক্টের মাধ্যমে KUETx টিমের সাথে যোগাযোগ করুন।',
+
+    // ---- ProviderNotifications.jsx ----
+    'notifications.title': 'নোটিফিকেশন',
+    'notifications.loading': 'লোড হচ্ছে…',
+    'notifications.empty': 'এখনো কোনো নোটিফিকেশন নেই।',
+    'notifications.fromFounder': 'Founder',
+    'notifications.fromAdmin': 'Admin',
+    'notifications.justForYou': 'শুধু আপনার জন্য',
   },
 
   en: {
@@ -295,7 +322,7 @@ export const providerStrings = {
     'shopSettings.backLink': 'My Shop',
     'shopSettings.loading': 'Loading…',
     'shopSettings.noServiceYet': "You haven't set up a service yet.",
-    'shopSettings.metaTitle': 'Photos, location & delivery',
+    'shopSettings.metaTitle': 'Location & delivery',
     'shopSettings.notSetUp': 'Not set up',
     'shopSettings.statusTitle': 'Shop status',
     'shopSettings.dormant': 'Dormant',
@@ -365,15 +392,34 @@ export const providerStrings = {
     // ---- SidebarNavProvider.jsx ----
     'nav.dashboard': 'Dashboard',
     'nav.myShop': 'My Shop',
+    'nav.profile': 'Profile',
     'nav.settings': 'Settings',
     'nav.about': 'About',
     'nav.groupProvider': 'Provider',
     'nav.groupAccount': 'Account',
 
+    // ---- ProviderHamburgerPanel.jsx ----
+    'hamburger.notifications': 'Notifications',
+    'hamburger.signOut': 'Sign Out',
+    'hamburger.signingOut': 'Signing out…',
+    'hamburger.signOutConfirm': 'Sign out? This device will be cleared — log back in anytime and everything comes right back from the cloud.',
+
     // ---- BottomNavProvider.js / BottomNav.jsx ----
     'bottomNav.dashboard': 'Dashboard',
     'bottomNav.myShop': 'My Shop',
     'bottomNav.profile': 'Profile',
+
+    // ---- ProviderProfile.jsx ----
+    'profile.loading': 'Loading…',
+    'profile.identityTitle': 'Identity',
+    'profile.nameLabel': 'Name',
+    'profile.phoneLabel': 'Phone',
+    'profile.emailLabel': 'Email',
+    'profile.statusVerified': 'Verified service provider',
+    'profile.statusPending': 'Verification pending',
+    'profile.statusRejected': 'Verification rejected',
+    'profile.changeCoverHint': 'Tap to change photo',
+    'profile.coverAlt': 'Shop cover',
 
     // ---- Settings.jsx (provider branch) ----
     'settings.title': 'Settings',
@@ -394,5 +440,13 @@ export const providerStrings = {
     // ---- About.jsx (provider branch) ----
     'about.body1': 'KUETx connects KUET students with trusted local service providers — salons, food, pharmacy, stationery, and more — right from the app they already use every day.',
     'about.body2': 'Questions about your provider account? Reach out to the KUETx team through your Founder/Admin contact.',
+
+    // ---- ProviderNotifications.jsx ----
+    'notifications.title': 'Notifications',
+    'notifications.loading': 'Loading…',
+    'notifications.empty': 'No notifications yet.',
+    'notifications.fromFounder': 'Founder',
+    'notifications.fromAdmin': 'Admin',
+    'notifications.justForYou': 'Just for you',
   },
 };

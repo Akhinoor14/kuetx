@@ -1629,6 +1629,11 @@ service cloud.firestore {
       //   - 'faculty_all'            → any verified faculty account
       //   - 'faculty_uids'           → only a faculty account whose OWN
       //     uid is in the notice's own uids array
+      //   - 'provider_all'           → any verified provider account
+      //     (Phase 5, PROVIDER_SHELL_UX_OVERHAUL_PLAN.md — direct copy
+      //     of the faculty_all shape, swapped to isVerifiedProviderUid())
+      //   - 'provider_uids'          → only a verified provider account
+      //     whose OWN uid is in the notice's own uids array
       //   - 'student_uids'           → only a signed-in user whose OWN
       //     uid is in the notice's own uids array
       //   - anything else/missing    → Admin/HeadOfOps only (fail closed,
@@ -1640,6 +1645,9 @@ service cloud.firestore {
         || resource.data.audience.type == 'group'
         || (resource.data.audience.type == 'faculty_all' && isFaculty(request.auth.uid))
         || (resource.data.audience.type == 'faculty_uids' && isFaculty(request.auth.uid)
+            && request.auth.uid in resource.data.audience.uids)
+        || (resource.data.audience.type == 'provider_all' && isVerifiedProviderUid(request.auth.uid))
+        || (resource.data.audience.type == 'provider_uids' && isVerifiedProviderUid(request.auth.uid)
             && request.auth.uid in resource.data.audience.uids)
         || (resource.data.audience.type == 'student_uids'
             && request.auth.uid in resource.data.audience.uids)
@@ -1666,7 +1674,7 @@ service cloud.firestore {
         // 'all' are for; a huge uids array is almost certainly a UI bug,
         // not a real targeted send).
         && (!('audience' in request.resource.data)
-            || !(request.resource.data.audience.type in ['student_uids', 'faculty_uids'])
+            || !(request.resource.data.audience.type in ['student_uids', 'faculty_uids', 'provider_uids'])
             || (request.resource.data.audience.uids is list
                 && request.resource.data.audience.uids.size() > 0
                 && request.resource.data.audience.uids.size() <= 300));

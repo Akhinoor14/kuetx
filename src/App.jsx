@@ -91,6 +91,8 @@ const ProviderDashboardPage = lazy(() => import('./pages/provider/ProviderDashbo
 const ProviderMyShopHubPage = lazy(() => import('./pages/provider/ProviderMyShopHub'));
 const ProviderOfferingsPagePage = lazy(() => import('./pages/provider/ProviderOfferingsPage'));
 const ProviderShopSettingsPagePage = lazy(() => import('./pages/provider/ProviderShopSettingsPage'));
+const ProviderProfilePage = lazy(() => import('./pages/provider/ProviderProfile'));
+const ProviderNotificationsPage = lazy(() => import('./pages/provider/ProviderNotifications'));
 const About = lazy(() => import('./pages/About'));
 const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy'));
 const ClassRoutine = lazy(() => import('./pages/ClassRoutine'));
@@ -332,6 +334,8 @@ function Layout({ authState, onboardingActive }) {
             <Route path="/provider/shop" element={<RequireProvider><ProviderMyShopHubRoute /></RequireProvider>} />
             <Route path="/provider/shop/offerings" element={<RequireProvider><ProviderOfferingsPageRoute /></RequireProvider>} />
             <Route path="/provider/shop/settings" element={<RequireProvider><ProviderShopSettingsPageRoute /></RequireProvider>} />
+            <Route path="/provider/profile" element={<RequireProvider><ProviderProfileRoute /></RequireProvider>} />
+            <Route path="/provider/notifications" element={<RequireProvider><ProviderNotificationsPage /></RequireProvider>} />
             <Route path="/faculty" element={<RequireFaculty><FacultyDashboard /></RequireFaculty>} />
             <Route path="/faculty/profile" element={<RequireFaculty><FacultyProfile /></RequireFaculty>} />
             <Route path="/faculty/classes" element={<RequireFaculty><FacultyClasses /></RequireFaculty>} />
@@ -564,6 +568,13 @@ function ProviderOfferingsPageRoute() {
 function ProviderShopSettingsPageRoute() {
   const { providerProfile } = useIsProvider();
   return <ProviderShopSettingsPagePage providerProfile={providerProfile} />;
+}
+
+// PHASE 3 (PROVIDER_SHELL_UX_OVERHAUL_PLAN.md) — same wrapper pattern as
+// the other /provider/* routes above.
+function ProviderProfileRoute() {
+  const { providerProfile } = useIsProvider();
+  return <ProviderProfilePage providerProfile={providerProfile} />;
 }
 
 // BUGFIX: right after Role Select's provider-form step creates

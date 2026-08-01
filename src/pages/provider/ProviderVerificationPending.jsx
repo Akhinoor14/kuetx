@@ -13,8 +13,7 @@ import { auth } from '../../lib/firebase';
 import { resubmitProviderRequest, getProviderPhone } from '../../lib/providerSync';
 import { SERVICE_TYPES, PROVIDER_SIGNUP_TYPES, PROVIDER_SIGNUP_TYPE_LABELS_BN } from '../../lib/serviceSync';
 import { useProviderLang } from '../../hooks/useProviderLang';
-
-const FOUNDER_PHONE = '01724812042';
+import { FOUNDER_PHONE } from '../../lib/constants';
 
 export default function ProviderVerificationPending({ providerProfile }) {
   const { t } = useProviderLang();
@@ -86,7 +85,7 @@ export default function ProviderVerificationPending({ providerProfile }) {
               correct while they wait, instead of only seeing whom to
               call. */}
           <div style={{
-            textAlign: 'left', marginBottom: 20,
+            textAlign: 'left', marginBottom: 28,
             padding: '12px 14px', borderRadius: 10,
             background: 'var(--card)', border: '1px solid var(--border)',
           }}>
@@ -110,7 +109,7 @@ export default function ProviderVerificationPending({ providerProfile }) {
             </div>
           </div>
 
-          <div style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 10 }}>
+          <div style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 16 }}>
             {t('verify.contactFounder')}
           </div>
           <div style={{

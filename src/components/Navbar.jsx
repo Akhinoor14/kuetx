@@ -4,6 +4,9 @@ import { useTheme, THEMES } from '../hooks/useTheme';
 import { useLocation, Link } from 'react-router-dom';
 import { confirmDialog } from '../lib/dialog';
 import { NAV, NAV_DESKTOP } from '../nav';
+import { getNavProvider } from './nav-system/SidebarNavProvider';
+import { useIsProvider } from '../hooks/useIsProvider';
+import { useProviderLang } from '../hooks/useProviderLang';
 import { Wordmark } from './Logo';
 import * as noticeApi from '../lib/noticeUtils';
 import * as alertApi from '../lib/alertUtils';
@@ -16,6 +19,7 @@ import { NotificationPanel } from './NotificationPanel';
 import GuideModal from './GuideModal';
 import { preloadRoute, preloadSiblings } from '../routePreload';
 import { useIsMobileNav } from './BottomNav';
+import ProviderHamburgerPanel from './ProviderHamburgerPanel';
 
 // navSource: NAV (mobile — Services stays nested under Campus Life, so its
 // chip cluster still merges/accordions with Campus Life's) or NAV_DESKTOP
@@ -109,7 +113,19 @@ export function Navbar({ onMenuClick }) {
   const { themeId, setTheme } = useTheme();
   const location = useLocation();
   const isMobileNav = useIsMobileNav();
-  const { label, group, siblings, siblingGroups } = getPageMeta(location.pathname, isMobileNav ? NAV : NAV_DESKTOP);
+  const { isProvider } = useIsProvider();
+  const { t: tProvider } = useProviderLang();
+  // PHASE 1 (PROVIDER_SHELL_UX_OVERHAUL_PLAN.md): a provider viewer must
+  // never resolve topbar title/chip-strip from the student NAV/NAV_DESKTOP
+  // arrays — /settings and /about live inside the student `Tools` group
+  // there, so a provider landing on those pages was incorrectly getting
+  // the "Reports | Settings | About" chip strip (a student-only, English,
+  // partially-inaccessible-to-providers group). Route provider viewers
+  // through the dedicated getNavProvider(t) source instead — same source
+  // of truth the sidebar already uses — which is Bangla-toggled and
+  // structured as single-item groups, so no chip strip is ever produced.
+  const navSource = isProvider ? getNavProvider(tProvider) : (isMobileNav ? NAV : NAV_DESKTOP);
+  const { label, group, siblings, siblingGroups } = getPageMeta(location.pathname, navSource);
 
   // Accordion open/close state for the grouped chip strip (Campus Life /
   // Services style pages, where siblingGroups is populated) — defaults to
@@ -553,6 +569,15 @@ export function Navbar({ onMenuClick }) {
 
             <div style={{ padding: '12px 14px', display: 'flex', flexDirection: 'column', gap: 10, flex: 1 }}>
 
+              {isProvider ? (
+                <ProviderHamburgerPanel
+                  firebaseUser={firebaseUser}
+                  loggingOut={loggingOut}
+                  onSignOut={handleSignOut}
+                  onClose={() => setDrawerOpen(false)}
+                />
+              ) : (
+                <>
               {/* ── Account card ── */}
               <div style={{
                 borderRadius: 12,
@@ -795,6 +820,8 @@ export function Navbar({ onMenuClick }) {
                 {' '}
                 <a href="/privacy" style={{ color: 'var(--success)', fontWeight: 600, textDecoration: 'none' }}>See our privacy policy →</a>
               </div>
+                </>
+              )}
 
             </div>
           </div>

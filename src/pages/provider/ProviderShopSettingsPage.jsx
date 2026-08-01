@@ -8,18 +8,15 @@
 // strings. Each section keeps its own card instead of a Collapsible,
 // since this is now its own dedicated page/tap.
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-  ArrowLeft, MapPin, Truck, Image as ImageIcon, Pause, Play, Power,
+  ArrowLeft, MapPin, Truck, Pause, Play, Power,
 } from 'lucide-react';
 import {
   subscribeProviderServices, updateServiceDetails, withServiceDefaults,
   setServiceStatus,
 } from '../../lib/serviceSync';
-import {
-  uploadServiceImage, deleteServiceImage,
-} from '../../lib/serviceImageUpload';
 import { useProviderLang } from '../../hooks/useProviderLang';
 
 export default function ProviderShopSettingsPage({ providerProfile }) {
@@ -58,9 +55,11 @@ export default function ProviderShopSettingsPage({ providerProfile }) {
 
       {!stillLoading && service && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-          {/* MULTI_CATEGORY_SERVICES_PLAN.md Phase 3: cover image,
-              location, delivery — same ShopMetaEditor component/logic/
-              strings as ProviderDashboard.jsx's Collapsible used to wrap. */}
+          {/* MULTI_CATEGORY_SERVICES_PLAN.md Phase 3 / PHASE 3 of
+              PROVIDER_SHELL_UX_OVERHAUL_PLAN.md: cover-image editing
+              moved OUT of ShopMetaEditor into ProviderProfile.jsx (the
+              new /provider/profile page) — this card is now location +
+              delivery only. */}
           <div className="card" style={{ padding: 16 }}>
             <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', marginBottom: 4 }}>
               {t('shopSettings.metaTitle')}
@@ -119,8 +118,6 @@ function ShopMetaEditor({ service, t }) {
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState('');
-  const [uploadingCover, setUploadingCover] = useState(false);
-  const coverInputRef = useRef(null);
 
   useEffect(() => {
     setLocationText(service.locationText || '');
@@ -141,81 +138,8 @@ function ShopMetaEditor({ service, t }) {
     }
   };
 
-  const onPickCover = async (e) => {
-    const file = e.target.files?.[0];
-    e.target.value = '';
-    if (!file) return;
-    setError('');
-    setUploadingCover(true);
-    try {
-      const oldUrl = service.coverImageUrl;
-      const url = await uploadServiceImage(service.id, file);
-      await updateServiceDetails(service.id, { coverImageUrl: url });
-      if (oldUrl) deleteServiceImage(oldUrl); // best-effort, not awaited
-    } catch (e) {
-      setError(e.message || t('shopSettings.imageUploadError'));
-    } finally {
-      setUploadingCover(false);
-    }
-  };
-
-  const removeCover = async () => {
-    setError('');
-    try {
-      const oldUrl = service.coverImageUrl;
-      await updateServiceDetails(service.id, { coverImageUrl: null });
-      if (oldUrl) deleteServiceImage(oldUrl);
-    } catch (e) {
-      setError(t('shopSettings.coverRemoveError'));
-    }
-  };
-
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-      {/* Cover image */}
-      <div>
-        <label style={{ fontSize: 12, color: 'var(--muted)', fontWeight: 600 }}>{t('shopSettings.coverLabel')}</label>
-        <div style={{ marginTop: 8, display: 'flex', alignItems: 'center', gap: 12 }}>
-          {service.coverImageUrl ? (
-            <img
-              src={service.coverImageUrl}
-              alt="cover"
-              style={{ width: 72, height: 72, borderRadius: 12, objectFit: 'cover', border: '1px solid var(--border)' }}
-            />
-          ) : (
-            <div style={{
-              width: 72, height: 72, borderRadius: 12, background: 'var(--accentSoft)',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-            }}
-            >
-              <ImageIcon size={24} color="var(--accent)" />
-            </div>
-          )}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-            <button
-              onClick={() => coverInputRef.current?.click()}
-              disabled={uploadingCover}
-              className="btn btn-secondary"
-              style={{ minHeight: 40, fontSize: 13 }}
-            >
-              {uploadingCover ? t('shopSettings.uploading') : service.coverImageUrl ? t('shopSettings.changeCover') : t('shopSettings.uploadCover')}
-            </button>
-            {service.coverImageUrl && (
-              <button onClick={removeCover} className="btn btn-secondary" style={{ minHeight: 36, fontSize: 12, color: '#dc2626' }}>
-                {t('shopSettings.removeCover')}
-              </button>
-            )}
-          </div>
-          <input
-            ref={coverInputRef}
-            type="file"
-            accept="image/jpeg,image/png,image/webp,image/gif"
-            style={{ display: 'none' }}
-            onChange={onPickCover}
-          />
-        </div>
-      </div>
-
       <div>
         <label style={{ fontSize: 12, color: 'var(--muted)', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 6 }}>
           <MapPin size={13} /> {t('shopSettings.locationLabel')}

@@ -54,6 +54,7 @@ import {
 import { subscribeAllQBUploadRequests, approveQBUpload, rejectQBUpload } from '../lib/qbUploadRequests';
 import {
   subscribeProviderVerifyRequests, adminVerifyProvider, adminRejectProvider, getProviderPhone,
+  listAllProviderAccounts, isProviderVerified,
 } from '../lib/providerSync';
 import { SERVICE_TYPE_LABELS } from '../lib/serviceSync';
 import QBReviewQueue from '../components/QBReviewQueue';
@@ -2008,6 +2009,9 @@ function CommunicationView({ onBack, onSelectCategory, groups, countCtx }) {
   // 'students'/'faculty' respectively.
   const [studentPickMode, setStudentPickMode] = useState('batch'); // 'batch' | 'individuals'
   const [facultyPickMode, setFacultyPickMode] = useState('all'); // 'all' | 'individuals'
+  // Phase 5 (PROVIDER_SHELL_UX_OVERHAUL_PLAN.md): direct clone of the
+  // faculty pick-mode state above, for the new 'provider' audience type.
+  const [providerPickMode, setProviderPickMode] = useState('all'); // 'all' | 'individuals'
   const [pickerDept, setPickerDept] = useState('');
   const [pickerBatch, setPickerBatch] = useState('');
   const [pickerMembers, setPickerMembers] = useState(null); // null = not loaded, [] = loaded empty
@@ -2016,6 +2020,13 @@ function CommunicationView({ onBack, onSelectCategory, groups, countCtx }) {
   const [facultyAccounts, setFacultyAccounts] = useState(null);
   const [facultySearch, setFacultySearch] = useState('');
   const [selectedFacultyUids, setSelectedFacultyUids] = useState(() => new Set());
+  // Phase 5: direct clone of the faculty picker state above. Populated
+  // from listAllProviderAccounts() (providerSync.js), filtered
+  // client-side to isProviderVerified — see the loader effect below for
+  // why the pending-verification query isn't reusable here.
+  const [providerAccounts, setProviderAccounts] = useState(null);
+  const [providerSearch, setProviderSearch] = useState('');
+  const [selectedProviderUids, setSelectedProviderUids] = useState(() => new Set());
   const [sending, setSending] = useState(false);
   const [sendMsg, setSendMsg] = useState('');
 
@@ -2111,6 +2122,30 @@ function CommunicationView({ onBack, onSelectCategory, groups, countCtx }) {
     return () => { cancelled = true; };
   }, [audienceType, facultyPickMode, facultyAccounts]);
 
+  // Individual-provider picker: fetch every provider doc once, only when
+  // the provider-individuals mode is actually selected — no reason to
+  // pay this query on every CommunicationView mount. Phase 5 note:
+  // listAllProviderAccounts() returns EVERY provider doc regardless of
+  // status (it's also used by the Founder's Approvals queue), so this
+  // filters to isProviderVerified() client-side — a Founder needs to
+  // message providers who are already verified and live, not the
+  // pending-verification queue (that's a separate, unfiltered query used
+  // elsewhere in this file for the Approvals tab).
+  useEffect(() => {
+    if (audienceType !== 'provider' || providerPickMode !== 'individuals') return;
+    if (providerAccounts !== null) return; // already loaded once this mount
+    let cancelled = false;
+    listAllProviderAccounts().then((accounts) => {
+      if (cancelled) return;
+      setProviderAccounts(
+        accounts
+          .filter(isProviderVerified)
+          .sort((a, b) => (a.displayName || '').localeCompare(b.displayName || '')),
+      );
+    }).catch(() => { if (!cancelled) setProviderAccounts([]); });
+    return () => { cancelled = true; };
+  }, [audienceType, providerPickMode, providerAccounts]);
+
   const toggleStudentUid = (uid) => {
     setSelectedStudentUids((prev) => {
       const next = new Set(prev);
@@ -2120,6 +2155,13 @@ function CommunicationView({ onBack, onSelectCategory, groups, countCtx }) {
   };
   const toggleFacultyUid = (uid) => {
     setSelectedFacultyUids((prev) => {
+      const next = new Set(prev);
+      if (next.has(uid)) next.delete(uid); else next.add(uid);
+      return next;
+    });
+  };
+  const toggleProviderUid = (uid) => {
+    setSelectedProviderUids((prev) => {
       const next = new Set(prev);
       if (next.has(uid)) next.delete(uid); else next.add(uid);
       return next;
@@ -2152,23 +2194,25 @@ function CommunicationView({ onBack, onSelectCategory, groups, countCtx }) {
   //   member count — see byDept/parseGroupId above for why one batch can
   //   map to several dept groups).
   // 'group' -> that one group's verified member count.
-  // 'student_uids' / 'faculty_uids' -> just uids.length, no query needed —
-  //   the uids array IS the exact audience, unlike the population-level
-  //   types above where we have to count group membership.
+  // 'student_uids' / 'faculty_uids' / 'provider_uids' -> just uids.length,
+  //   no query needed — the uids array IS the exact audience, unlike the
+  //   population-level types above where we have to count group membership.
   // 'faculty_all' -> handoff item 3 didn't ask for a Reach count for this
   //   one specifically (a verified-faculty count would need a query over
   //   the faculty/{uid} collection filtering verifiedAt != null); left as
   //   null (Insights panel already handles null gracefully) rather than
   //   guessing at a definition of "reach" for this audience.
+  // 'provider_all' -> same reasoning as 'faculty_all' above — left as
+  //   null rather than adding a fresh query just for a reach count.
   //
   // Best-effort: any failure here must never block sending the notice —
   // falls back to omitting audienceSize entirely, and the UI shows
   // "Reach data not available" for notices missing this field.
   const computeAudienceSize = async (aud) => {
-    if (aud.type === 'student_uids' || aud.type === 'faculty_uids') {
+    if (aud.type === 'student_uids' || aud.type === 'faculty_uids' || aud.type === 'provider_uids') {
       return Array.isArray(aud.uids) ? aud.uids.length : null;
     }
-    if (aud.type === 'faculty_all') return null;
+    if (aud.type === 'faculty_all' || aud.type === 'provider_all') return null;
     try {
       const allGroups = await listAllGroups();
       if (aud.type === 'group') {
@@ -2213,6 +2257,16 @@ function CommunicationView({ onBack, onSelectCategory, groups, countCtx }) {
         audience = { type: 'faculty_uids', uids };
       }
     }
+    if (audienceType === 'provider') {
+      if (providerPickMode === 'all') {
+        audience = { type: 'provider_all' };
+      } else {
+        const uids = [...selectedProviderUids];
+        if (uids.length === 0) { setSendMsg('Pick at least one provider first.'); return; }
+        if (uids.length > 300) { setSendMsg(`Too many providers selected (${uids.length}). Individual targeting is capped at 300 — use "All providers" instead for larger groups.`); return; }
+        audience = { type: 'provider_uids', uids };
+      }
+    }
     setSending(true);
     setSendMsg('');
     try {
@@ -2230,6 +2284,7 @@ function CommunicationView({ onBack, onSelectCategory, groups, countCtx }) {
       setTitle(''); setBody(''); setShowPreview(false); setPriority('normal'); setSendMsg('Notice sent.');
       setSelectedStudentUids(new Set());
       setSelectedFacultyUids(new Set());
+      setSelectedProviderUids(new Set());
     } catch (err) {
       setSendMsg(`Failed: ${err?.message || err}`);
     } finally {
@@ -2305,6 +2360,7 @@ function CommunicationView({ onBack, onSelectCategory, groups, countCtx }) {
                 { key: 'group', label: 'One class' },
                 { key: 'students', label: 'Specific students' },
                 { key: 'faculty', label: 'Faculty' },
+                { key: 'provider', label: 'Provider' },
               ].map((opt) => (
                 <button
                   key={opt.key}
@@ -2519,6 +2575,77 @@ function CommunicationView({ onBack, onSelectCategory, groups, countCtx }) {
                     <div style={{ fontSize: 11.5, color: selectedFacultyUids.size > 300 ? '#dc2626' : 'var(--accent)', fontWeight: 700 }}>
                       {selectedFacultyUids.size} faculty selected
                       {selectedFacultyUids.size > 300 ? ' — over the 300 limit, use "All faculty" instead' : ''}
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          )}
+
+          {audienceType === 'provider' && (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+              <div style={{ display: 'flex', gap: 6 }}>
+                {[
+                  { key: 'all', label: 'All providers' },
+                  { key: 'individuals', label: 'Pick individuals' },
+                ].map((opt) => (
+                  <button
+                    key={opt.key}
+                    type="button"
+                    onClick={() => setProviderPickMode(opt.key)}
+                    className="btn btn-sm"
+                    style={{
+                      background: providerPickMode === opt.key ? 'var(--accentBg, #eef2ff)' : 'transparent',
+                      color: providerPickMode === opt.key ? 'var(--accent, #4f46e5)' : 'var(--muted)',
+                      border: providerPickMode === opt.key ? '1px solid var(--accent, #4f46e5)' : '1px solid var(--border)',
+                      fontWeight: providerPickMode === opt.key ? 700 : 500,
+                    }}
+                  >
+                    {opt.label}
+                  </button>
+                ))}
+              </div>
+
+              {providerPickMode === 'individuals' && (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                  <input
+                    type="text"
+                    placeholder="Search by shop/name…"
+                    value={providerSearch}
+                    onChange={(e) => setProviderSearch(e.target.value)}
+                    style={{ padding: '8px 10px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--inputBg)' }}
+                  />
+                  <div style={{ border: '1px solid var(--border)', borderRadius: 8, maxHeight: 260, overflowY: 'auto' }}>
+                    {providerAccounts === null && (
+                      <div style={{ padding: 12, fontSize: 12, color: 'var(--muted)', textAlign: 'center' }}>Loading providers…</div>
+                    )}
+                    {providerAccounts !== null && providerAccounts.length === 0 && (
+                      <div style={{ padding: 12, fontSize: 12, color: 'var(--muted)', textAlign: 'center' }}>No verified provider accounts yet.</div>
+                    )}
+                    {providerAccounts
+                      ?.filter((p) => !providerSearch.trim() || (p.displayName || '').toLowerCase().includes(providerSearch.trim().toLowerCase()))
+                      .map((p) => (
+                        <label
+                          key={p.uid}
+                          style={{
+                            display: 'flex', alignItems: 'center', gap: 8, padding: '7px 10px',
+                            borderBottom: '1px solid var(--border)', cursor: 'pointer', fontSize: 12.5,
+                          }}
+                        >
+                          <input
+                            type="checkbox"
+                            checked={selectedProviderUids.has(p.uid)}
+                            onChange={() => toggleProviderUid(p.uid)}
+                          />
+                          <span style={{ color: 'var(--text)', flex: 1 }}>{p.displayName || 'Unnamed'}</span>
+                          <span style={{ color: 'var(--muted)', fontSize: 11 }}>{SERVICE_TYPE_LABELS[p.serviceType] || p.serviceType || ''}</span>
+                        </label>
+                      ))}
+                  </div>
+                  {selectedProviderUids.size > 0 && (
+                    <div style={{ fontSize: 11.5, color: selectedProviderUids.size > 300 ? '#dc2626' : 'var(--accent)', fontWeight: 700 }}>
+                      {selectedProviderUids.size} provider{selectedProviderUids.size === 1 ? '' : 's'} selected
+                      {selectedProviderUids.size > 300 ? ' — over the 300 limit, use "All providers" instead' : ''}
                     </div>
                   )}
                 </div>

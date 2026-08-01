@@ -1,10 +1,11 @@
 import React from 'react';
 import { Wordmark } from '../components/Logo';
-import { ArrowRight, BookOpen, Building2, CheckCircle, Facebook, ShieldCheck, Sparkles, Users, Zap } from 'lucide-react';
+import { ArrowRight, BookOpen, Building2, CheckCircle, Facebook, Phone, ShieldCheck, Sparkles, Users, Zap } from 'lucide-react';
 import { ICONS } from '../lib/iconRegistry';
 import usePageMeta from '../hooks/usePageMeta';
 import { useIsProvider } from '../hooks/useIsProvider';
 import { useProviderLang } from '../hooks/useProviderLang';
+import { FOUNDER_PHONE } from '../lib/constants';
 
 function GuideBanner() {
   return (
@@ -59,6 +60,17 @@ export default function About() {
           </div>
           <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 14, lineHeight: 1.7 }}>
             {t('about.body2')}
+          </div>
+          <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 14, marginBottom: 10 }}>
+            {t('verify.contactFounder')}
+          </div>
+          <div style={{
+            display: 'inline-flex', alignItems: 'center', gap: 8,
+            padding: '10px 16px', borderRadius: 10,
+            background: 'var(--accentSoft)', color: 'var(--accent)',
+            fontWeight: 700, fontSize: 14,
+          }}>
+            <Phone size={16} /> {FOUNDER_PHONE}
           </div>
         </div>
       </div>
