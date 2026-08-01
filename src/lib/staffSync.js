@@ -17,7 +17,7 @@ import {
   onSnapshot, query, where, orderBy, serverTimestamp, writeBatch, increment,
 } from 'firebase/firestore';
 import { db, auth } from './firebase';
-import { getIdentityStamp } from './groupUtils';
+import { getIdentityStamp, getGroupId } from './groupUtils';
 import { retryableOnSnapshot } from './safeSnapshot';
 
 // ---------------------------------------------------------------------
@@ -162,6 +162,16 @@ export async function assignRole(targetUid, role, scope, reportsTo = null) {
     throw new Error('assignRole: senior_campus_lead requires scope.dept.');
   }
 
+  // NOTE: there is deliberately no "is this person verified" gate here.
+  // CL/SCL are the FIRST appointments in a class — there's no CR to have
+  // verified them yet (CL/SCL are themselves the ones who approve CR
+  // applications), so requiring group-membership verification here would
+  // make a brand-new class impossible to staff. The caller (AdminDashboard/
+  // StaffDashboard) is expected to resolve the target's groupId/dept from
+  // their own signup profile via getStaffDisplayInfo() — every student has
+  // dept/batch/roll from signup — and pass a complete `scope`. A Founder
+  // or SCL choosing to make this assignment IS the verification.
+
   const uid = auth.currentUser?.uid;
   const id = roleDocId(role, scope);
   await setDoc(doc(db, 'staff', targetUid, 'roles', id), {
@@ -176,17 +186,113 @@ export async function assignRole(targetUid, role, scope, reportsTo = null) {
     await setDoc(doc(db, 'groups', scope.groupId, 'meta', 'clStatus'), { uid: targetUid, assignedAt: serverTimestamp() });
   }
   logRoleHistoryEntry(targetUid, role, scope, 'assigned', uid);
+
+  // Being given ANY staff role/position — not just CL/SCL — is itself a
+  // form of verification: a Founder/SCL/Head of Ops choosing to appoint
+  // this uid to a real post is a stronger signal than the usual
+  // roll-number self-report. So if the target happens to be a student
+  // (i.e. they have their own dept/batch/roll from signup, whether or
+  // not they've ever joined that class's group), mark them verified in
+  // their own class group as a courtesy side-effect — best-effort, never
+  // blocks the role assignment above if it fails or if they're not a
+  // student at all (e.g. a non-student Head of Ops has nothing to verify
+  // here, which is fine).
+  ensureOwnClassVerifiedOnRoleAssign(targetUid).catch((e) => {
+    console.warn('[staffSync] ensureOwnClassVerifiedOnRoleAssign failed (non-fatal):', e);
+  });
+
   return id;
+}
+
+/**
+ * Best-effort side-effect of assignRole(): if targetUid is a registered
+ * student (has dept/batch/roll from signup), ensure their groups/
+ * {groupId}/members/{uid} doc exists and is verified:true. Being handed
+ * any staff role is treated as sufficient verification — mirrors the
+ * existing "CL-vacant bootstrap merge" precedent in approveCLApplication,
+ * generalized to every role instead of just campus_lead. Never throws —
+ * callers fire-and-forget this so a lookup failure never blocks the
+ * actual role assignment, which is the part that matters.
+ */
+async function ensureOwnClassVerifiedOnRoleAssign(targetUid) {
+  const profile = await getDoc(doc(db, 'students', targetUid));
+  if (!profile.exists()) return;
+  const value = profile.data() || {};
+  const groupId = getGroupId(value);
+  if (!groupId) return;
+  const memberRef = doc(db, 'groups', groupId, 'members', targetUid);
+  const existing = await getDoc(memberRef);
+  if (existing.exists()) {
+    if (existing.data()?.verified === true) return; // already verified, nothing to do
+    await setDoc(memberRef, { verified: true }, { merge: true });
+    return;
+  }
+  await setDoc(memberRef, {
+    name: value.name || '',
+    roll: value.studentId || '',
+    uid: targetUid,
+    verified: true,
+    role: 'member',
+    isAnonymous: false,
+    joinedAt: serverTimestamp(),
+    legacyCRClaim: false,
+  });
+}
+
+/**
+ * Repairs a legacy role doc whose scope is missing groupId/dept (see
+ * removeRole's guard above for how these got created). Deletes the old
+ * malformed doc and re-writes it under the correct roleDocId with a
+ * complete scope, going through the same assignRole() path (and its
+ * validation) as a normal assignment — so the mirror docs (clStatus/
+ * sclStatus) and role history also get written correctly this time.
+ */
+export async function repairRoleScope(targetUid, role, oldScope, fixedScope) {
+  const oldId = roleDocId(role, oldScope);
+  // oldId may already be malformed (e.g. "campus_lead_") but deleteDoc on
+  // a non-existent/odd-segment-count-safe path is fine here since oldId
+  // always has the fixed 4-segment staff/{uid}/roles/{id} shape — only
+  // the *mirror* paths (groups/{groupId}/meta/clStatus) break on empty
+  // scope fields, not this one.
+  await deleteDoc(doc(db, 'staff', targetUid, 'roles', oldId));
+  return assignRole(targetUid, role, fixedScope);
 }
 
 export async function removeRole(targetUid, role, scope) {
   const actorUid = auth.currentUser?.uid;
-  await deleteDoc(doc(db, 'staff', targetUid, 'roles', roleDocId(role, scope)));
+
+  // BUGFIX (Uncaught FirebaseError: Invalid document reference — "groups/
+  // meta/clStatus" has 3 segments): legacy role docs written before the
+  // assignRole() guard above existed can have scope.groupId / scope.dept
+  // missing or empty (e.g. an old campus_lead grant with scope = { type:
+  // 'group', groupId: '' }). doc(db, 'groups', scope.groupId, 'meta',
+  // 'clStatus') then collapses from 4 path segments to 3 when groupId is
+  // falsy, and Firestore throws synchronously instead of rejecting the
+  // promise — which is why this used to surface as an uncaught error in
+  // the console with no user-facing feedback. Guarding each mirror-write
+  // (and the main role-doc delete, which also goes through roleDocId())
+  // means a corrupt legacy doc can still be revoked from the Founder UI
+  // instead of crashing the click handler.
+  const mainId = roleDocId(role, scope);
+  if (mainId && !mainId.endsWith('_')) {
+    await deleteDoc(doc(db, 'staff', targetUid, 'roles', mainId));
+  } else {
+    console.warn('[staffSync] removeRole: skipping malformed role doc id for corrupt scope', { targetUid, role, scope });
+  }
+
   if (role === 'senior_campus_lead' && scope?.type === 'dept') {
-    await deleteDoc(doc(db, 'depts', scope.dept, 'meta', 'sclStatus')).catch(() => {});
+    if (scope.dept) {
+      await deleteDoc(doc(db, 'depts', scope.dept, 'meta', 'sclStatus')).catch(() => {});
+    } else {
+      console.warn('[staffSync] removeRole: skipping sclStatus mirror delete — scope.dept missing (corrupt legacy doc)', { targetUid, scope });
+    }
   }
   if (role === 'campus_lead' && scope?.type === 'group') {
-    await deleteDoc(doc(db, 'groups', scope.groupId, 'meta', 'clStatus')).catch(() => {});
+    if (scope.groupId) {
+      await deleteDoc(doc(db, 'groups', scope.groupId, 'meta', 'clStatus')).catch(() => {});
+    } else {
+      console.warn('[staffSync] removeRole: skipping clStatus mirror delete — scope.groupId missing (corrupt legacy doc)', { targetUid, scope });
+    }
   }
   logRoleHistoryEntry(targetUid, role, scope, 'revoked', actorUid);
 }
@@ -197,40 +303,31 @@ export async function listStaffByRole(role) {
   return snap.docs.map((d) => ({ id: d.id, uid: d.ref.parent.parent.id, ...d.data() }));
 }
 
-// Resolves a uid to display info (name/roll/dept/batch/groupId/verified/
-// role) by checking that person's membership doc in ANY class group
-// (groups/*/members/{uid}) — global staff roles (staff/{uid}/roles/
-// {roleId}) store none of this, since role assignment is deliberately
-// decoupled from class membership (e.g. a Head of Ops may not even be a
-// student). Queries on a `uid` field (written by joinGroup on every
-// create/update) rather than documentId() — documentId() in a
-// collectionGroup query requires the full document path, which we have
-// no way to build from a bare uid without already knowing which group
-// they're in; that mismatch was silently failing 100% of lookups (see
-// the "odd number of segments" Firestore error) and is why the Staff &
-// Roles list only ever showed raw uids instead of names. If the uid
-// isn't a member of any group (or the lookup fails), falls back to the
-// person's own synced profile doc (users/{uid}/data/profile — written by
-// firebaseSync.js's per-key mirror, so it exists for any account that's
-// ever opened the app, independent of whether they've joined a class
-// group). Only if BOTH lookups come up empty does the UI fall back to
-// showing the bare uid — which used to be the ONLY outcome for anyone
-// not yet in a group, even though their account obviously has a name
-// (it's required at signup) sitting right there in their own profile.
+// Resolves a uid to display info (name/roll/dept/batch/groupId/role) for
+// the Staff & Roles UI.
+//
+// BUGFIX (CL/SCL couldn't be assigned to anyone -> "unverified" dead end):
+// this used to require a groups/{groupId}/members/{uid}.verified doc
+// before a name/groupId could be resolved for someone. But CL/SCL are
+// the FIRST appointments made in a class — nobody has verified them as a
+// CR yet (CL/SCL are the ones who approve CR applications in the first
+// place), so that check could never be satisfied for a brand-new class.
+// Every student already has dept/batch/roll on their own profile from
+// signup (students/{uid}) — that's enough to derive their groupId via
+// getGroupId(), same formula groupSync.js uses everywhere else. A
+// Founder/SCL choosing to assign someone a role IS the verification;
+// there's no separate gate to check. `groups/*/members` is still tried
+// first since it's slightly more likely to be fresh for someone already
+// active in a class, but the profile is now the reliable source of
+// truth, not a fallback of last resort.
 export async function getStaffDisplayInfo(uid) {
-  if (!uid) return { name: '', roll: '', dept: '', groupId: '', verified: false, memberRole: '' };
+  if (!uid) return { name: '', roll: '', dept: '', groupId: '', memberRole: '' };
   try {
     const snap = await getDocs(query(collectionGroup(db, 'members'), where('uid', '==', uid)));
     if (!snap.empty) {
       const memberDoc = snap.docs[0];
       const data = memberDoc.data();
       const groupId = memberDoc.ref.parent.parent?.id || '';
-      // groupId is BATCH_DEPT, or BATCH_DEPT_SECTION for the 4
-      // multi-section depts (see groupUtils.js's getGroupId) — split it
-      // back out so the Staff detail popup can show dept/batch without a
-      // second lookup. Destructuring only the first 2 parts is safe even
-      // for the 3-part case: dept still lands correctly at index 1, the
-      // trailing section segment is just dropped (not needed here).
       const [batch, dept] = groupId.split('_');
       return {
         name: data.name || '',
@@ -238,7 +335,6 @@ export async function getStaffDisplayInfo(uid) {
         dept: dept || '',
         batch: batch || '',
         groupId,
-        verified: !!data.verified,
         memberRole: data.role || 'member',
       };
     }
@@ -263,8 +359,7 @@ export async function getStaffDisplayInfo(uid) {
         roll: value.studentId || '',
         dept: value.dept || '',
         batch: value.batch || '',
-        groupId: '',
-        verified: false,
+        groupId: getGroupId(value) || '',
         memberRole: '',
       };
     }
@@ -285,15 +380,14 @@ export async function getStaffDisplayInfo(uid) {
         roll: value.studentId || '',
         dept: value.dept || '',
         batch: value.batch || '',
-        groupId: '',
-        verified: false,
+        groupId: getGroupId(value) || '',
         memberRole: '',
       };
     }
   } catch (e) {
     console.warn('[staffSync] getStaffDisplayInfo legacy profile fallback failed:', e);
   }
-  return { name: '', roll: '', dept: '', groupId: '', verified: false, memberRole: '' };
+  return { name: '', roll: '', dept: '', groupId: '', memberRole: '' };
 }
 
 // Batched version for a list of uids (Staff & Roles view resolves many

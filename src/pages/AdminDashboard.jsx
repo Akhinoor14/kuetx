@@ -22,8 +22,8 @@ import NoticeInsightsPanel from '../components/NoticeInsightsPanel';
 import NoticeComposerToolbar from '../components/NoticeComposerToolbar';
 import NoticePrioritySelector from '../components/NoticePrioritySelector';
 import {
-  assignRole, removeRole, listStaffByRole, subscribeAllCLApplications,
-  approveCLApplication, rejectCLApplication, getStaffDisplayInfoBatch,
+  assignRole, removeRole, repairRoleScope, listStaffByRole, subscribeAllCLApplications,
+  approveCLApplication, rejectCLApplication, getStaffDisplayInfoBatch, getStaffDisplayInfo,
   subscribeStaffRoleHistory,
 } from '../lib/staffSync';
 import { CORE_TEAM_LEAD_ROLES, ROLE_LABELS, ROLE_SCOPE_KIND, ROLES } from '../lib/staffRoles';
@@ -636,8 +636,6 @@ function StaffHolderDetailPage({ holder, onClose }) {
               </>
             )}
             <div style={{ height: 1, background: 'var(--border)' }} />
-            <DetailRow label="Verified" value={info.verified ? 'Yes' : 'No'} />
-            <div style={{ height: 1, background: 'var(--border)' }} />
             <DetailRow label="UID" value={holder.uid} mono />
           </div>
         </Section>
@@ -751,6 +749,30 @@ function StaffRolesView({ onBack, onSelectCategory, groups, countCtx }) {
   // staffSync.js for why a second lookup is needed here).
   const [displayInfo, setDisplayInfo] = useState({});
   const [selectedHolder, setSelectedHolder] = useState(null);
+  // Simple repair-in-place UI: keyed by `${role}-${h.id}`, holds the
+  // text the Founder types to fix a legacy role whose scope is missing
+  // groupId/dept (see repairRoleScope in staffSync.js). null = closed.
+  const [repairInput, setRepairInput] = useState({});
+  const [repairBusy, setRepairBusy] = useState(null);
+
+  const handleRepair = async (h, role) => {
+    const key = `${role}-${h.id}`;
+    const value = (repairInput[key] || h._autoValue || '').trim().toUpperCase();
+    if (!value) return;
+    setRepairBusy(key);
+    try {
+      const fixedScope = h.scope?.type === 'dept'
+        ? { type: 'dept', dept: value }
+        : { type: 'group', groupId: value };
+      await repairRoleScope(h.uid, role, h.scope, fixedScope);
+      setRepairInput((prev) => ({ ...prev, [key]: '' }));
+      refreshHolders(role);
+    } catch (err) {
+      alert(err?.message || 'Repair failed — try again.');
+    } finally {
+      setRepairBusy(null);
+    }
+  };
 
   const resolveDisplayInfo = async (holdersByRole) => {
     const allUids = Object.values(holdersByRole).flat().map((h) => h.uid);
@@ -823,21 +845,39 @@ function StaffRolesView({ onBack, onSelectCategory, groups, countCtx }) {
     if (scopeKind === 'dept') scope = { type: 'dept', dept: newScopeValue.trim().toUpperCase() };
     if (scopeKind === 'group') scope = { type: 'group', groupId: newScopeValue.trim().toUpperCase() };
 
-    // Client-side check so a missing class/department is caught before
-    // the network round-trip, with a message that matches what the
-    // Founder actually sees on screen (the picker still on its
-    // placeholder) rather than a generic Firestore error.
-    if (scopeKind === 'dept' && !scope.dept) {
-      setAssignError('Enter a department before assigning this role.');
-      return;
-    }
-    if (scopeKind === 'group' && !scope.groupId) {
-      setAssignError('Choose a class before assigning this role.');
-      return;
-    }
-
     setAssignError('');
     try {
+      // Global roles (Head of Operations, Founder, etc.) never touch a
+      // class/dept and can be given to someone who isn't even a
+      // registered student — e.g. Head of Ops needn't be in any group.
+      // Skip the lookup entirely for global roles so this form works
+      // with just a uid, same as before.
+      if (scopeKind !== 'dept' && scopeKind !== 'group') {
+        await assignRole(newUid.trim(), newRole, scope);
+        setNewUid(''); setNewScopeValue('');
+        refreshHolders(newRole);
+        return;
+      }
+
+      // CL/SCL are the FIRST appointments made in a class — there's no
+      // CR around yet to have "verified" them, so we don't gate on that.
+      // Every student has dept/batch/roll from signup, which is enough
+      // to derive their groupId (getStaffDisplayInfo does this via
+      // getGroupId()) — use it to auto-fill the scope field if the
+      // Founder left it blank, but don't require it: the Founder typing
+      // a scope in by hand and hitting Assign is itself the verification.
+      const info = await getStaffDisplayInfo(newUid.trim());
+      if (scopeKind === 'dept' && !scope.dept && info.dept) scope = { type: 'dept', dept: info.dept };
+      if (scopeKind === 'group' && !scope.groupId && info.groupId) scope = { type: 'group', groupId: info.groupId };
+      if (scopeKind === 'dept' && !scope.dept) {
+        setAssignError('Enter a department before assigning this role.');
+        return;
+      }
+      if (scopeKind === 'group' && !scope.groupId) {
+        setAssignError('Choose a class before assigning this role.');
+        return;
+      }
+
       await assignRole(newUid.trim(), newRole, scope);
       setNewUid(''); setNewScopeValue('');
       refreshHolders(newRole);
@@ -942,8 +982,17 @@ function StaffRolesView({ onBack, onSelectCategory, groups, countCtx }) {
                   const info = displayInfo[h.uid];
                   const resolvedName = info?.name;
                   const label = resolvedName || 'Unnamed holder';
+                  // A role that requires a scope (campus_lead -> groupId,
+                  // senior_campus_lead -> dept) but doesn't have it is a
+                  // legacy corrupt doc (see removeRole's guard comment in
+                  // staffSync.js) — flag it instead of silently letting
+                  // Revoke crash or hiding it from the report.
+                  const needsGroup = r === 'campus_lead' && !h.scope?.groupId;
+                  const needsDept = r === 'senior_campus_lead' && !h.scope?.dept;
+                  const isBroken = needsGroup || needsDept;
+                  const repairKey = `${r}-${h.id}`;
                   return (
-                    <div key={`${r}-${h.id}`} className="staff-holder-card">
+                    <div key={`${r}-${h.id}`} className="staff-holder-card" style={isBroken ? { borderColor: 'var(--danger, #dc2626)' } : undefined}>
                       <div style={{ fontSize: 10, fontWeight: 800, color: 'var(--accent)', textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: 8 }}>
                         {ROLE_LABELS[r]}
                       </div>
@@ -984,9 +1033,53 @@ function StaffRolesView({ onBack, onSelectCategory, groups, countCtx }) {
                           {h.scope?.dept || h.scope?.groupId}
                         </div>
                       )}
+                      {isBroken && (
+                        <div style={{
+                          fontSize: 11, color: 'var(--danger, #dc2626)', marginTop: 8, padding: '3px 8px', borderRadius: 999,
+                          background: 'color-mix(in srgb, var(--danger, #dc2626) 10%, transparent)',
+                          border: '1px solid var(--danger, #dc2626)', display: 'inline-block', fontWeight: 700,
+                        }}>
+                          ⚠ Scope Missing — needs repair
+                        </div>
+                      )}
+                      {isBroken && (
+                        <div style={{ marginTop: 8, display: 'flex', flexDirection: 'column', gap: 6 }}>
+                          {(needsGroup && info?.groupId) || (needsDept && info?.dept) ? (
+                            <button
+                              className="btn btn-sm btn-primary"
+                              disabled={repairBusy === repairKey}
+                              onClick={() => handleRepair({ ...h, _autoValue: needsGroup ? info.groupId : info.dept }, r)}
+                              style={{ width: '100%' }}
+                            >
+                              {repairBusy === repairKey ? 'Fixing…' : `Fix — use ${needsGroup ? info.groupId : info.dept} (auto-detected)`}
+                            </button>
+                          ) : (
+                            <div style={{ fontSize: 10, color: 'var(--muted)' }}>
+                              No membership data found for this user yet — enter the code manually.
+                            </div>
+                          )}
+                          <div style={{ display: 'flex', gap: 6 }}>
+                            <input
+                              type="text"
+                              placeholder={needsGroup ? 'Class/batch code' : 'Dept code'}
+                              value={repairInput[repairKey] || ''}
+                              onChange={(e) => setRepairInput((prev) => ({ ...prev, [repairKey]: e.target.value }))}
+                              style={{ flex: 1, minWidth: 0, fontSize: 12, padding: '4px 8px', borderRadius: 6, border: '1px solid var(--border)' }}
+                            />
+                            <button
+                              className="btn btn-sm"
+                              disabled={repairBusy === repairKey || !(repairInput[repairKey] || '').trim()}
+                              onClick={() => handleRepair(h, r)}
+                              style={{ whiteSpace: 'nowrap' }}
+                            >
+                              {repairBusy === repairKey ? 'Fixing…' : 'Fix'}
+                            </button>
+                          </div>
+                        </div>
+                      )}
                       <button
                         className="btn btn-sm btn-secondary"
-                        title="Revoke this role from the holder"
+                        title={isBroken ? 'Fix the missing scope above before revoking, or revoke as-is' : 'Revoke this role from the holder'}
                         onClick={async () => { await removeRole(h.uid, h.role, h.scope); refreshHolders(r); }}
                         style={{ marginTop: 10, width: '100%' }}
                       >

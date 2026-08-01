@@ -5,7 +5,7 @@ import { ROLE_LABELS } from '../lib/staffRoles';
 import {
   subscribeMyRoles, listStaffByRole, listCampusLeadsForDept, assignRole, removeRole,
   subscribeCLApplications, subscribeAllCLApplications, approveCLApplication, rejectCLApplication,
-  checkSCLVacant,
+  checkSCLVacant, getStaffDisplayInfo,
 } from '../lib/staffSync';
 import {
   subscribeCRRequests, clApproveCRRequest, clRejectCRRequest,
@@ -451,11 +451,31 @@ function HeadOfOpsSection() {
   useEffect(() => { listStaffByRole('senior_campus_lead').then(setScls); }, []);
   useEffect(() => withTimeout((cb) => subscribeAllCLApplications(cb), setAllApplications, { fallbackValue: [] }), []);
 
+  const [appointError, setAppointError] = useState('');
+
   const appoint = async () => {
-    if (!newSclUid.trim() || !newSclDept.trim()) return;
-    await assignRole(newSclUid.trim(), 'senior_campus_lead', { type: 'dept', dept: newSclDept.trim().toUpperCase() });
-    setNewSclUid(''); setNewSclDept('');
-    listStaffByRole('senior_campus_lead').then(setScls);
+    if (!newSclUid.trim()) return;
+    setAppointError('');
+    try {
+      // SCL is often the very first appointment in a dept — there's no
+      // CL/CR around yet to have "verified" this person, so we don't
+      // gate on that. Every student has dept/batch/roll from signup,
+      // which is enough to derive their dept — use it to auto-fill if
+      // Head of Ops left the field blank, but the appointment itself
+      // (typed in by hand, or auto-filled and confirmed) is what counts.
+      const info = await getStaffDisplayInfo(newSclUid.trim());
+      const dept = newSclDept.trim().toUpperCase() || info.dept;
+      if (!dept) {
+        setAppointError('Enter a department before appointing.');
+        return;
+      }
+      await assignRole(newSclUid.trim(), 'senior_campus_lead', { type: 'dept', dept });
+      setNewSclUid(''); setNewSclDept('');
+      listStaffByRole('senior_campus_lead').then(setScls);
+    } catch (err) {
+      console.error('[HeadOfOps] appoint SCL failed:', err);
+      setAppointError(err?.message || 'Failed to appoint SCL.');
+    }
   };
 
   return (
@@ -496,10 +516,13 @@ function HeadOfOpsSection() {
       <div style={{ marginTop: 10, display: 'flex', flexWrap: 'wrap', gap: 6 }}>
         <input placeholder="New SCL's uid" value={newSclUid} onChange={(e) => setNewSclUid(e.target.value)}
           style={{ flex: '1 1 160px', minWidth: 0, padding: '6px 8px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--inputBg)' }} />
-        <input placeholder="Dept (e.g. CSE)" value={newSclDept} onChange={(e) => setNewSclDept(e.target.value)}
-          style={{ width: 100, padding: '6px 8px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--inputBg)' }} />
+        <input placeholder="Dept (blank = auto from user)" value={newSclDept} onChange={(e) => setNewSclDept(e.target.value)}
+          style={{ width: 160, padding: '6px 8px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--inputBg)' }} />
         <button className="btn btn-sm btn-primary" onClick={appoint}>Appoint</button>
       </div>
+      {appointError && (
+        <p style={{ fontSize: 12, color: 'var(--danger, #dc2626)', marginTop: 6 }}>{appointError}</p>
+      )}
       <p style={{ fontSize: 11, color: 'var(--muted)', marginTop: 8 }}>
         Every request escalates up the chain automatically — a department with no Senior Campus Lead
         never gets stuck, its Campus Lead applications simply show up here instead.
