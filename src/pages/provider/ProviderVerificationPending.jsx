@@ -62,19 +62,37 @@ export default function ProviderVerificationPending({ providerProfile }) {
   };
 
   return (
-    <div style={{ padding: '48px 20px', textAlign: 'center', maxWidth: 460, margin: '0 auto' }}>
-      <div style={{ marginBottom: 14 }}>
+    <div style={{
+      padding: '32px 16px 48px', maxWidth: 460, margin: '0 auto',
+      display: 'flex', flexDirection: 'column', alignItems: 'center',
+    }}>
+      {/* Icon in a soft circular badge, flex-centered so it can never
+          render flush-left regardless of parent text-align quirks. */}
+      <div style={{
+        width: 68, height: 68, borderRadius: '50%',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        marginBottom: 18,
+        background: isRejected
+          ? 'rgba(220,38,38,0.10)'
+          : 'var(--accentSoft)',
+      }}>
         {isRejected
-          ? <XCircle size={36} color="var(--danger, #dc2626)" />
-          : <Clock size={36} color="var(--accent)" />}
+          ? <XCircle size={32} color="var(--danger, #dc2626)" />
+          : <Clock size={32} color="var(--accent)" />}
       </div>
 
       {!isRejected && (
         <>
-          <div style={{ fontSize: 17, fontWeight: 700, color: 'var(--text)', marginBottom: 10 }}>
+          <div style={{
+            fontSize: 18, fontWeight: 800, color: 'var(--text)',
+            marginBottom: 8, textAlign: 'center',
+          }}>
             {t('verify.pendingTitle')}
           </div>
-          <div style={{ fontSize: 13.5, color: 'var(--muted)', lineHeight: 1.7, marginBottom: 20 }}>
+          <div style={{
+            fontSize: 13.5, color: 'var(--muted)', lineHeight: 1.7,
+            marginBottom: 24, textAlign: 'center', maxWidth: 380,
+          }}>
             {t('verify.pendingBody')}
           </div>
 
@@ -85,47 +103,61 @@ export default function ProviderVerificationPending({ providerProfile }) {
               correct while they wait, instead of only seeing whom to
               call. */}
           <div style={{
-            textAlign: 'left', marginBottom: 28,
-            padding: '12px 14px', borderRadius: 10,
+            width: '100%', textAlign: 'left', marginBottom: 24,
+            padding: '16px 18px', borderRadius: 16,
             background: 'var(--card)', border: '1px solid var(--border)',
+            boxShadow: '0 2px 10px rgba(15,23,42,0.04)',
           }}>
-            <div style={{ fontSize: 11.5, color: 'var(--muted)', fontWeight: 600, marginBottom: 8 }}>
+            <div style={{
+              fontSize: 11.5, color: 'var(--muted)', fontWeight: 700,
+              marginBottom: 12, textTransform: 'uppercase', letterSpacing: '0.03em',
+            }}>
               {t('verify.submittedInfoTitle')}
             </div>
-            <div style={{ fontSize: 13.5, color: 'var(--text)', marginBottom: 4 }}>
-              <strong>{t('verify.nameLabel')}</strong> {providerProfile?.displayName || '—'}
-            </div>
-            <div style={{ fontSize: 13.5, color: 'var(--text)', marginBottom: 4 }}>
-              <strong>{t('verify.phoneLabel')}</strong> {phone || '—'}
-            </div>
-            <div style={{ fontSize: 13.5, color: 'var(--text)', marginBottom: 4 }}>
-              <strong>{t('verify.serviceTypeLabel')}</strong>{' '}
-              {providerProfile?.serviceType === 'other'
-                ? (providerProfile?.serviceTypeOther || t('verify.serviceTypeOther'))
-                : (PROVIDER_SIGNUP_TYPE_LABELS_BN[providerProfile?.serviceType] || '—')}
-            </div>
-            <div style={{ fontSize: 13.5, color: 'var(--text)' }}>
-              <strong>{t('verify.addressLabel')}</strong> {providerProfile?.location || '—'}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, fontSize: 13.5 }}>
+                <span style={{ color: 'var(--muted)' }}>{t('verify.nameLabel')}</span>
+                <span style={{ color: 'var(--text)', fontWeight: 600, textAlign: 'right' }}>{providerProfile?.displayName || '—'}</span>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, fontSize: 13.5 }}>
+                <span style={{ color: 'var(--muted)' }}>{t('verify.phoneLabel')}</span>
+                <span style={{ color: 'var(--text)', fontWeight: 600, textAlign: 'right' }}>{phone || '—'}</span>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, fontSize: 13.5 }}>
+                <span style={{ color: 'var(--muted)' }}>{t('verify.serviceTypeLabel')}</span>
+                <span style={{ color: 'var(--text)', fontWeight: 600, textAlign: 'right' }}>
+                  {providerProfile?.serviceType === 'other'
+                    ? (providerProfile?.serviceTypeOther || t('verify.serviceTypeOther'))
+                    : (PROVIDER_SIGNUP_TYPE_LABELS_BN[providerProfile?.serviceType] || '—')}
+                </span>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', gap: 12, fontSize: 13.5 }}>
+                <span style={{ color: 'var(--muted)' }}>{t('verify.addressLabel')}</span>
+                <span style={{ color: 'var(--text)', fontWeight: 600, textAlign: 'right' }}>{providerProfile?.location || '—'}</span>
+              </div>
             </div>
           </div>
 
-          <div style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 16 }}>
+          <div style={{ fontSize: 12.5, color: 'var(--muted)', marginBottom: 12, textAlign: 'center' }}>
             {t('verify.contactFounder')}
           </div>
-          <div style={{
-            display: 'inline-flex', alignItems: 'center', gap: 8,
-            padding: '10px 16px', borderRadius: 10,
-            background: 'var(--accentSoft)', color: 'var(--accent)',
-            fontWeight: 700, fontSize: 14,
-          }}>
+          <a
+            href={`tel:${FOUNDER_PHONE}`}
+            style={{
+              display: 'inline-flex', alignItems: 'center', gap: 8,
+              padding: '12px 22px', borderRadius: 999,
+              background: 'var(--accentSoft)', color: 'var(--accent)',
+              fontWeight: 700, fontSize: 14.5, textDecoration: 'none',
+            }}
+          >
             <Phone size={16} /> {FOUNDER_PHONE}
-          </div>
+          </a>
         </>
       )}
 
       {isRejected && !done && (
-        <>
-          <div style={{ fontSize: 17, fontWeight: 700, color: 'var(--text)', marginBottom: 10 }}>
+        <div style={{ width: '100%' }}>
+          <div style={{ fontSize: 18, fontWeight: 800, color: 'var(--text)', marginBottom: 10, textAlign: 'center' }}>
             {t('verify.rejectedTitle')}
           </div>
           <div style={{
@@ -217,11 +249,11 @@ export default function ProviderVerificationPending({ providerProfile }) {
           >
             {submitting ? t('verify.resubmitting') : t('verify.resubmit')}
           </button>
-        </>
+        </div>
       )}
 
       {isRejected && done && (
-        <div style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.7 }}>
+        <div style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.7, textAlign: 'center' }}>
           {t('verify.resubmittedDone')}
         </div>
       )}
