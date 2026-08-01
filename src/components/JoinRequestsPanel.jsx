@@ -4,16 +4,20 @@ import { subscribeJoinRequests, approveJoinRequest, rejectJoinRequest } from '..
 import { confirmDialog } from '../lib/dialog';
 
 /**
- * CR/ACR-only panel: review students asking to join this class. This is
- * the ONLY place a plain member's access is granted now — approving a
- * request here is what actually creates their groups/{groupId}/members
- * doc (see approveJoinRequest in groupSync.js). There is no OTP/email
- * link step anywhere in this flow; the reviewer looking at the name,
- * roll, and self-typed contact email IS the verification.
+ * Review students asking to join this class — CR/ACR, or (as of the
+ * ClassRoster.jsx fix) the class's own Campus Lead, that dept's Senior
+ * Campus Lead, Head of Ops, or Founder, all scoped by firestore.rules'
+ * isCLFor(groupId)/isSCLForGroup(groupId)/isHeadOfOps()/isAdmin() on the
+ * joinRequests/members write rules. This is the ONLY place a plain
+ * member's access is granted now — approving a request here is what
+ * actually creates their groups/{groupId}/members doc (see
+ * approveJoinRequest in groupSync.js). There is no OTP/email link step
+ * anywhere in this flow; the reviewer looking at the name, roll, and
+ * self-typed contact email IS the verification.
  *
  * suggestedJoinMatch (computed when the request was submitted) is shown
  * as a badge purely as a hint — a mismatch doesn't block approval, it
- * just tells the CR "double-check this one before approving".
+ * just tells the reviewer "double-check this one before approving".
  */
 export default function JoinRequestsPanel({ groupId }) {
   const [requests, setRequests] = useState(null); // null = loading

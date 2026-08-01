@@ -76,11 +76,31 @@ function useClaimCRState(groupId, profile) {
 
       // A CR/ACR already exists for this class, so claiming CR requires
       // ALREADY being an approved member — no more auto-join-then-claim.
-      // If not yet a member, send (or confirm) a join request and stop;
-      // the person needs their CR/ACR to approve them into the class
-      // first, then come back and claim CR as a normal verified member.
+      // If not yet a member, we now branch on whether a CR exists too:
       const alreadyMember = await waitForOwnMembership(groupId, 1, 0);
       if (!alreadyMember) {
+        if (!crStatus?.hasCR) {
+          // BUGFIX (bootstrap gap): CL exists for this class, but there's
+          // no CR/ACR either — same "nobody around to approve a plain
+          // join request" problem as the CL-vacant branch above, just
+          // one level down. Sending requestToJoinGroup here would strand
+          // the person forever: a join request needs a CR/ACR to approve
+          // it, and there isn't one. Send the CR claim itself instead —
+          // firestore.rules' crRequests create rule has a matching
+          // crCount(groupId)==0 branch that allows this specific case
+          // (see its comment), and clApproveCRRequest now creates the
+          // member doc directly on approval (set+merge, not update) so
+          // the CL/SCL/Founder reviewing it can approve straight into
+          // membership + CR in one step, no separate join-approval first.
+          // mobileToUse goes straight into the crRequests doc (not
+          // updateOwnMobile, which needs an existing member doc this
+          // person doesn't have yet) — clApproveCRRequest copies it onto
+          // the member doc it creates on approval.
+          await requestCR(groupId, profile, mobileToUse);
+          setClaimMsg('No CR/ACR exists for your class yet, so your claim was sent directly to your Campus Lead — once approved you\'ll be a verified member and CR in one step.');
+          setClaimState('sent');
+          return;
+        }
         await requestToJoinGroup(groupId, profile, String(profile?.kuetEmail || '').trim());
         setClaimMsg('You need to be an approved member of this class before claiming CR. We\'ve sent a join request to your class\'s CR/ACR — come back and claim CR once you\'re approved.');
         setClaimState('sent');

@@ -27,7 +27,43 @@ import {
   query, where, orderBy, serverTimestamp, writeBatch, increment, limit as fsLimit,
 } from 'firebase/firestore';
 import { db, auth } from './firebase';
-import { getIdentityStamp } from './groupUtils';
+import { getIdentityStamp, getGroupId } from './groupUtils';
+import { checkIsAdmin } from './adminAuth';
+
+/**
+ * One-shot check: is the current user privileged to skip the CR/ACR
+ * approval queue for THIS SPECIFIC groupId — i.e. is it their own class?
+ * Mirrors firestore.rules' privileged self-join branch (members/
+ * {memberUid} create + joinRequests/{requestUid} create) exactly:
+ *   - Founder (isAdmin()): only when groupId is the class matching their
+ *     OWN dept+batch (getGroupId(profile) — same as ownGroupId() in
+ *     rules). A Founder has a personal class just like any other
+ *     student; this was never meant to mean "skip approval anywhere."
+ *   - Senior Campus Lead: only for their own dept's classes.
+ *   - Campus Lead: only for their own specific class.
+ * Deliberately excludes Head of Ops: that role has no class-specific
+ * scope at all, so including it here would mean "skip approval in every
+ * class," not "skip approval in my own class" — not what this feature
+ * is for (Head of Ops can still act as a normal reviewer via the
+ * CR-approval path, same as any staff role with read/approve rights).
+ * Deliberately excludes CR/ACR: those roles only exist because they
+ * already went through the normal approve flow once, so there's no
+ * bootstrap gap to close for them the way there was for CL.
+ */
+async function _checkIsPrivilegedJoiner(uid, groupId, profile) {
+  if (!uid) return false;
+  const [isAdminUser, staffRolesSnap] = await Promise.all([
+    checkIsAdmin(uid),
+    getDocs(collection(db, 'staff', uid, 'roles')),
+  ]);
+  if (isAdminUser) return getGroupId(profile) === groupId;
+  const dept = groupId.split('_')[1];
+  return staffRolesSnap.docs.some((d) => {
+    const roleId = d.id;
+    return roleId === `senior_campus_lead_${dept}`
+      || roleId === `campus_lead_${groupId}`;
+  });
+}
 
 // ---------------------------------------------------------------------
 // Singleton listener registry
@@ -494,7 +530,7 @@ function _countRoles(memberDocs) {
  * clApproveCRRequest) since the reason they were requesting (an open
  * slot) no longer exists once CL has made a choice.
  */
-export async function requestCR(groupId, profile) {
+export async function requestCR(groupId, profile, mobile) {
   const uid = auth.currentUser?.uid;
   if (!uid || !groupId) return;
   
@@ -512,6 +548,14 @@ export async function requestCR(groupId, profile) {
     // the whole `create`. Setting it explicitly to null keeps the key
     // present so the != check actually passes.
     type: null,
+    // Only meaningful for the bootstrap path (no CR/ACR exists yet, so
+    // the requester was never a plain member first — see this file's
+    // crRequests create bootstrap branch and clApproveCRRequest below).
+    // In the normal path the requester is already a member with mobile
+    // set via updateOwnMobile, so this is just redundant there and
+    // harmless. Always present (even if empty string) for the same
+    // "field must exist, not be omitted" reason as `type` above.
+    mobile: String(mobile || '').trim(),
   };
   
   let existing;
@@ -756,19 +800,48 @@ export function logCRRequestDiagnostics(groupId, profile, diagnos) {
  * existing CR out. On success, every OTHER still-pending request for this
  * group is auto-rejected in the same batch, since they were queued for
  * "the next open slot" and that slot is now gone.
+ *
+ * BUGFIX (bootstrap CR claim silently failed): when this class has no CR
+ * yet at all (see firestore.rules' crRequests create — the crCount==0
+ * bootstrap branch), the requester was never a plain member first, so
+ * members/{targetUid} doesn't exist. The old batch.update() here required
+ * an existing doc and would throw "no document to update" for exactly
+ * this case — the one case this bootstrap path exists to support.
+ * set({...}, {merge:true}) creates the doc if missing (matching the
+ * shape approveJoinRequest already uses) and behaves identically to the
+ * old update() when the doc DOES already exist, so normal (non-bootstrap)
+ * CR approvals are unaffected.
  */
 export async function clApproveCRRequest(groupId, targetUid) {
   const crStatusRef = doc(db, 'groups', groupId, 'meta', 'crStatus');
-  const [membersSnap, requestsSnap] = await Promise.all([
+  const [membersSnap, requestsSnap, requestSnap] = await Promise.all([
     getDocs(collection(db, 'groups', groupId, 'members')),
     getDocs(query(collection(db, 'groups', groupId, 'crRequests'), where('status', '==', 'pending'))),
+    getDoc(doc(db, 'groups', groupId, 'crRequests', targetUid)),
   ]);
   const { cr: crCount } = _countRoles(membersSnap.docs);
   if (crCount >= MAX_CR) {
     throw new Error(`The CR slot for this class is already full (max ${MAX_CR}).`);
   }
+  const req = requestSnap.exists() ? requestSnap.data() : {};
   const batch = writeBatch(db);
-  batch.update(doc(db, 'groups', groupId, 'members', targetUid), { role: 'cr', verified: true });
+  batch.set(doc(db, 'groups', groupId, 'members', targetUid), {
+    name: req.name || '',
+    roll: req.roll || '',
+    uid: targetUid,
+    role: 'cr',
+    verified: true,
+    isAnonymous: false,
+    joinedAt: serverTimestamp(),
+    legacyCRClaim: false,
+    // Bootstrap path only (see requestCR's comment on why `mobile` is
+    // stored on the request doc): if the requester was already a member,
+    // their mobile was already set via updateOwnMobile and this merge
+    // just re-writes the same value; harmless either way. Falls back to
+    // leaving the field untouched (via merge) if the request doc never
+    // had one, rather than ever overwriting a real number with ''.
+    ...(req.mobile ? { mobile: req.mobile } : {}),
+  }, { merge: true });
   batch.update(doc(db, 'groups', groupId, 'crRequests', targetUid), { status: 'approved' });
   // Auto-reject every other pending request for this group — the slot
   // they were queued for has just been taken.
@@ -1046,14 +1119,24 @@ export async function requestToJoinGroup(groupId, profile, contactEmail) {
   const uid = auth.currentUser?.uid;
   if (!uid || !groupId) return;
 
+  // Founder / that dept's Senior Campus Lead / this class's own Campus
+  // Lead: skip the CR/ACR approval queue entirely and land straight in
+  // the roster, verified — but ONLY for their own class, same as
+  // everyone else. See _checkIsPrivilegedJoiner's comment and the
+  // matching firestore.rules branches (members/{memberUid} create,
+  // joinRequests/{requestUid} create) for why these three specifically
+  // and how each is scoped.
+  const isPrivileged = await _checkIsPrivilegedJoiner(uid, groupId, profile);
+
   const ref_ = doc(db, 'groups', groupId, 'joinRequests', uid);
   const requestData = {
     uid,
     name: profile?.name || '',
     roll: profile?.studentId || '',
     contactEmail: String(contactEmail || '').trim(),
-    status: 'pending',
+    status: isPrivileged ? 'approved' : 'pending',
     requestedAt: serverTimestamp(),
+    ...(isPrivileged ? { decidedAt: serverTimestamp(), decidedBy: 'auto:privileged' } : {}),
     ...suggestedJoinMatch(profile?.studentId, groupId),
   };
 
@@ -1067,12 +1150,35 @@ export async function requestToJoinGroup(groupId, profile, contactEmail) {
 
   if (existing.exists()) {
     const status = existing.data()?.status;
-    if (status === 'pending') {
+    if (status === 'pending' && !isPrivileged) {
       throw new Error('You already have a pending join request. Wait for your CR to act on it first.');
     }
     await updateDoc(ref_, requestData);
   } else {
     await setDoc(ref_, requestData);
+  }
+
+  if (isPrivileged) {
+    // Mirror approveJoinRequest()'s member-doc + groups-summary-doc
+    // writes, just self-targeted instead of CR/ACR-targeted.
+    const batch = writeBatch(db);
+    batch.set(doc(db, 'groups', groupId, 'members', uid), {
+      name: profile?.name || '',
+      roll: profile?.studentId || '',
+      uid,
+      verified: true,
+      role: 'member',
+      isAnonymous: false,
+      joinedAt: serverTimestamp(),
+      legacyCRClaim: false,
+    });
+    const [groupBatch, groupDept] = groupId.split('_');
+    batch.set(doc(db, 'groups', groupId), {
+      batch: groupBatch || '',
+      dept: groupDept || '',
+      lastActivityAt: serverTimestamp(),
+    }, { merge: true });
+    await batch.commit();
   }
 }
 

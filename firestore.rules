@@ -110,7 +110,24 @@ service cloud.firestore {
     // doesn't exist or isn't a real account, so this fails closed rather
     // than open for e.g. a Founder account with no student profile at all.
     function ownGroupId() {
+      // Guards against a runtime rule-evaluation error (not just a
+      // logical "false") if this account's students/{uid} profile is
+      // missing dept/batch entirely — isMultiSectionDept()'s `in` check
+      // inside expectedGroupId() can throw on a null/missing operand,
+      // and ANY runtime error during rule evaluation makes Firestore
+      // deny the WHOLE request, not just this one check. That silently
+      // broke approvals/writes across the board for an Admin/Head of Ops
+      // whose own profile happened to be incomplete, for reasons that
+      // looked completely unrelated to their own profile data. Only ever
+      // call expectedGroupId() once dept/batch are confirmed to actually
+      // be present, non-empty strings; anything else fails closed to
+      // null (matches no real groupId), same as the "no profile at all"
+      // case below already did.
       return isRealAccount() && exists(/databases/$(database)/documents/students/$(request.auth.uid))
+        && get(/databases/$(database)/documents/students/$(request.auth.uid)).data.dept is string
+        && get(/databases/$(database)/documents/students/$(request.auth.uid)).data.dept != ''
+        && get(/databases/$(database)/documents/students/$(request.auth.uid)).data.batch is string
+        && get(/databases/$(database)/documents/students/$(request.auth.uid)).data.batch != ''
         ? expectedGroupId(get(/databases/$(database)/documents/students/$(request.auth.uid)).data)
         : null;
     }
@@ -1820,24 +1837,65 @@ service cloud.firestore {
                         // If the applicant's member doc somehow doesn't exist
                         // yet (e.g. no prior joinRequests approval, since
                         // there was nobody around to approve one — this is
-                        // the CL-vacant bootstrap case), Firestore treats that
-                        // merge as a CREATE, not an update — so without this,
-                        // the whole approval would silently fail here even
-                        // though the SCL/Admin/Head of Ops clearly has the
-                        // authority to appoint CR (see the update rule below).
-                        // Deliberately has NO joinRequests check — by
-                        // definition there is no CR/ACR/CL yet to have
-                        // received one. crCount(groupId) < 2 (MAX_CR):
-                        // server-side capacity enforcement, mirroring the
-                        // MAX_CR check groupSync.js already does client-side.
-                        // Without this, a modified client (or any direct
-                        // Firestore write bypassing the app's own JS) could
-                        // grant unlimited 'cr' roles in one group, since
-                        // nothing else in this rule file counts existing CR
+                        // the CL-vacant bootstrap case, OR the CL-exists-
+                        // but-no-CR-exists bootstrap case via crRequests'
+                        // own crCount(groupId)==0 create branch), Firestore
+                        // treats that merge as a CREATE, not an update — so
+                        // without this, the whole approval would silently
+                        // fail here even though the CL/SCL/Admin/Head of
+                        // Ops clearly has the authority to appoint CR (see
+                        // the update rule below). isCLFor(groupId) is
+                        // included specifically for the "CL exists, CR
+                        // doesn't" bootstrap: that CL is exactly who
+                        // should be approving their own class's first CR
+                        // claim, and without it here the CL was stuck
+                        // unable to act on a bootstrap crRequests doc even
+                        // though they could see and approve every other
+                        // kind of request for their own class.
+                        // crCount(groupId) < 2 (MAX_CR): server-side
+                        // capacity enforcement, mirroring the MAX_CR check
+                        // groupSync.js already does client-side. Without
+                        // this, a modified client (or any direct Firestore
+                        // write bypassing the app's own JS) could grant
+                        // unlimited 'cr' roles in one group, since nothing
+                        // else in this rule file counts existing CR
                         // holders before allowing another.
                         || (request.resource.data.role == 'cr' && request.resource.data.verified == true
-                            && (isAdmin() || isHeadOfOps() || isSCLForGroup(groupId))
-                            && crCount(groupId) < 1);
+                            && (isAdmin() || isHeadOfOps() || isSCLForGroup(groupId) || isCLFor(groupId))
+                            && crCount(groupId) < 1)
+                        // Privileged self-join: joining THEIR OWN uid
+                        // straight into a class roster with no CR/ACR
+                        // approval step — but ONLY their own class, same
+                        // as everyone else. Mirrors requestToJoinGroup's
+                        // client-side auto-approve (see groupSync.js) —
+                        // this branch is what actually lets that write
+                        // land, since the CR-approval branch above
+                        // requires request.auth.uid != memberUid.
+                        //   - isOwnClassAdminOrHeadOfOps(groupId): Founder
+                        //     (isAdmin()) gets this ONLY for the one class
+                        //     matching their own dept+batch (ownGroupId()),
+                        //     not every class — a Founder has a personal
+                        //     class just like any other student, and this
+                        //     feature was never meant to be "Founder can
+                        //     skip approval anywhere." (Head of Ops is
+                        //     also part of this helper's OR, but
+                        //     ownGroupId() still scopes it to their own
+                        //     class only — see that function's own
+                        //     comment for why a scoped Head of Ops grant
+                        //     is safe where an unscoped one wasn't.)
+                        //   - isSCLForGroup(groupId)/isCLFor(groupId): SCL
+                        //     scoped to their own dept, CL scoped to their
+                        //     own specific class — both already correct,
+                        //     unchanged.
+                        // Deliberately still excludes isGroupCR/isGroupACR
+                        // — those roles only exist because they already
+                        // went through the normal approve flow once, so
+                        // there's no bootstrap gap to close for them the
+                        // way there was for CL.
+                        || (isRealAccount() && request.auth.uid == memberUid
+                            && (isOwnClassAdminOrHeadOfOps(groupId) || isSCLForGroup(groupId) || isCLFor(groupId))
+                            && request.resource.data.role == 'member'
+                            && request.resource.data.verified == true);
         // Members edit only their own display fields. verified/role changes
         // are gated to CL/Admin/Head of Ops/that dept's SCL (fallback chain
         // — a request never gets stuck just because the immediate level is
@@ -1931,10 +1989,28 @@ service cloud.firestore {
         allow read: if isAdmin() || isCLFor(groupId) || isHeadOfOps() || isSCLForGroup(groupId)
           || (isSignedIn() && request.auth.uid == requestUid)
           || (isSignedIn() && resource.data.uid == request.auth.uid);
-        allow create: if isSignedIn() && isVerifiedMember(groupId) &&
-          ((request.auth.uid == requestUid && request.resource.data.type != 'leave')
-           || (request.resource.data.type == 'leave' && request.resource.data.uid == request.auth.uid
-               && requestUid == 'leave_' + request.auth.uid && isGroupCR(groupId)));
+        allow create: if isSignedIn() &&
+          ((isVerifiedMember(groupId) &&
+             ((request.auth.uid == requestUid && request.resource.data.type != 'leave')
+              || (request.resource.data.type == 'leave' && request.resource.data.uid == request.auth.uid
+                  && requestUid == 'leave_' + request.auth.uid && isGroupCR(groupId))))
+           // Bootstrap window: this class currently has NO CR/ACR at all
+           // (crCount(groupId) == 0) — e.g. a brand-new class, or one
+           // whose only CR left without a successor. In that state
+           // nobody in the class has authority to approve a plain join
+           // request either, so the normal "must already be a verified
+           // member" gate above would permanently strand the first
+           // person trying to claim CR here. This mirrors the CL-vacant
+           // bootstrap already handled by applyForCampusLead's
+           // bundledCRClaim path (see staffSync.js/ClaimCRCard.jsx) —
+           // same idea, but for "CL exists, CR doesn't" instead of
+           // "neither exists". request.auth.uid == requestUid (own doc
+           // only, never someone else's) and type != 'leave' (a
+           // non-member obviously isn't an existing CR stepping down)
+           // keep this exactly as narrow as the normal branch, just
+           // without the isVerifiedMember precondition.
+           || (crCount(groupId) == 0 && request.auth.uid == requestUid
+               && request.resource.data.type != 'leave'));
         // Resubmission: setDoc() on an existing doc is an UPDATE to
         // Firestore, not a create — so once a request has been
         // approved/rejected, the requester needs their own update path
@@ -1981,9 +2057,18 @@ service cloud.firestore {
           || isGroupCR(groupId) || isGroupACR(groupId)
           || (isSignedIn() && request.auth.uid == requestUid);
         allow create: if isRealAccount() && request.auth.uid == requestUid
-          && request.resource.data.status == 'pending'
-          && request.resource.data.uid == request.auth.uid
-          && !isGroupMember(groupId);
+          && !isGroupMember(groupId)
+          && ((request.resource.data.status == 'pending')
+              // Privileged self-join, own class only (see the members/
+              // create branch's matching comment for the full
+              // reasoning): Founder gets this only for the class
+              // matching their own dept+batch (isOwnClassAdminOrHeadOfOps
+              // -> ownGroupId()), SCL only for their own dept, CL only
+              // for their own specific class. requestToJoinGroup()
+              // writes this doc pre-approved for these roles, matching
+              // the members/{uid} self-create branch above.
+              || (request.resource.data.status == 'approved'
+                  && (isOwnClassAdminOrHeadOfOps(groupId) || isSCLForGroup(groupId) || isCLFor(groupId))));
         // Resubmission after a rejection: same shape as crRequests —
         // only the original requester can move their own resolved
         // (non-pending) doc back to pending, and only if they still
@@ -1994,6 +2079,17 @@ service cloud.firestore {
           || (isSignedIn() && request.auth.uid == requestUid
               && resource.data.status != 'pending' && request.resource.data.status == 'pending'
               && !isGroupMember(groupId));
+        // NOTE: the privileged-self-join pending->approved transition
+        // never needs a distinct update branch here — isAdmin() already
+        // covers Founder's own-class case too (the update rule's
+        // isAdmin() clause is intentionally unscoped, since a Founder
+        // reviewing/managing ANY class as a reviewer — not as a
+        // self-joiner — is unchanged, existing behavior; only the
+        // self-join CREATE path above is newly scoped to their own
+        // class). isSCLForGroup(groupId) || isCLFor(groupId)
+        // already covers it via
+        // the very first clause above (same three roles as the create
+        // branch's approved-status allowance).
         allow delete: if false;
       }
 

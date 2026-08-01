@@ -648,8 +648,27 @@ export default function StaffDashboard({ activeTab: activeTabProp, onTabChange }
     // later render, which is what caused the "wrong tab locked in" bug.
     if (!roles) return;
     if (isAdminUser === null) return;
-    const clGroups = roles.filter((r) => r.role === 'campus_lead').map((r) => r.scope?.groupId).filter(Boolean);
-    const sclDepts = roles.filter((r) => r.role === 'senior_campus_lead').map((r) => r.scope?.dept).filter(Boolean);
+    // BUGFIX (missing CL chip/tab despite "Your roles" text showing
+    // Campus Lead): a campus_lead role doc is only useful here if
+    // scope.groupId survived intact — but some role docs (older manual
+    // grants, or writes from before scope was required) only have it
+    // baked into the doc's OWN id (`campus_lead_${groupId}`, see
+    // roleDocId() in staffSync.js) with scope.groupId itself empty or
+    // missing. Previously this silently produced clGroups: [] — the
+    // Founder holds the role (rolesRaw shows it, "Your roles:" text
+    // shows it) but gets no CL tab and no role-switcher chip, because
+    // this filter only ever trusted scope.groupId. Falling back to
+    // parsing the id (`campus_lead_2K23_ESE` -> `2K23_ESE`) recovers the
+    // groupId from the one place it's guaranteed to be, without needing
+    // a data migration.
+    const clGroups = roles
+      .filter((r) => r.role === 'campus_lead')
+      .map((r) => r.scope?.groupId || r.id?.replace(/^campus_lead_/, ''))
+      .filter(Boolean);
+    const sclDepts = roles
+      .filter((r) => r.role === 'senior_campus_lead')
+      .map((r) => r.scope?.dept || r.id?.replace(/^senior_campus_lead_/, ''))
+      .filter(Boolean);
     const isHeadOfOps = roles.some((r) => r.role === 'head_of_ops');
     const isContentLead = roles.some((r) => r.role === 'content_lead');
     const isHeadOfGrowth = roles.some((r) => r.role === 'head_of_growth');
@@ -685,8 +704,14 @@ export default function StaffDashboard({ activeTab: activeTabProp, onTabChange }
   }
 
 
-  const clGroups = roles.filter((r) => r.role === 'campus_lead').map((r) => r.scope?.groupId).filter(Boolean);
-  const sclDepts = roles.filter((r) => r.role === 'senior_campus_lead').map((r) => r.scope?.dept).filter(Boolean);
+  const clGroups = roles
+    .filter((r) => r.role === 'campus_lead')
+    .map((r) => r.scope?.groupId || r.id?.replace(/^campus_lead_/, ''))
+    .filter(Boolean);
+  const sclDepts = roles
+    .filter((r) => r.role === 'senior_campus_lead')
+    .map((r) => r.scope?.dept || r.id?.replace(/^senior_campus_lead_/, ''))
+    .filter(Boolean);
   const isHeadOfOps = roles.some((r) => r.role === 'head_of_ops');
   const isContentLead = roles.some((r) => r.role === 'content_lead');
   const isHeadOfGrowth = roles.some((r) => r.role === 'head_of_growth');
@@ -705,25 +730,6 @@ export default function StaffDashboard({ activeTab: activeTabProp, onTabChange }
 
   const currentTab = activeTab && tabs.some((t) => t.key === activeTab) ? activeTab : tabs[0]?.key;
   const show = (key) => tabs.length <= 1 || currentTab === key;
-
-  // TEMP DIAGNOSTIC — remove once the missing-chip issue is confirmed fixed.
-  // Prints the exact data driving the tab bar so we can see, in the real
-  // browser console, whether `roles` actually contains a second role with
-  // a valid scope, and whether isAdminUser is true/false at render time —
-  // instead of guessing at the cause from screenshots.
-  console.log('[KUETx DIAG] StaffDashboard tabs computation', {
-    isAdminUser,
-    rolesRaw: roles,
-    clGroups,
-    sclDepts,
-    isHeadOfOps,
-    isContentLead,
-    isHeadOfGrowth,
-    hasFinanceOrLegal,
-    tabs,
-    activeTab,
-    currentTab,
-  });
 
   const handleTabChange = (key) => {
     if (activeTabProp === undefined) setLocalActiveTab(key);

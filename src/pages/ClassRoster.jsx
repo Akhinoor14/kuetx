@@ -235,7 +235,17 @@ export default function ClassRoster() {
 
           {activeTab === 'roster' && (
             <>
-              {(myRole === 'cr' || myRole === 'acr') && (
+              {/* BUGFIX: this panel is the actual approve/reject UI for
+                  pending join requests — it was gated to CR/ACR only,
+                  even though canSelfApprove (computed above from
+                  isFounder/isHeadOfOps/isCLFor(groupId)/isSCLFor(dept))
+                  already correctly identifies every OTHER role allowed
+                  to approve a join request for this exact class per
+                  firestore.rules. A Campus Lead visiting their own
+                  class's Roster tab got no panel at all and had to go
+                  hunting through the Founder/Staff dashboard instead —
+                  now they see the same in-context panel a CR/ACR would. */}
+              {(myRole === 'cr' || myRole === 'acr' || canSelfApprove) && (
                 <JoinRequestsPanel groupId={groupId} />
               )}
               <div style={{ marginBottom: 20 }}>
