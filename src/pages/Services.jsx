@@ -202,9 +202,14 @@ export default function Services() {
 
   return (
     <div className="page-enter page-container content-page-bg">
-      <div style={{ fontSize: 18, fontWeight: 800, color: 'var(--text)', marginBottom: 16 }}>Services</div>
+      <div className="kx-services-header">
+        <div>
+          <div className="kx-services-title">Services</div>
+          <div className="kx-services-subtitle">Everything on campus, in one place</div>
+        </div>
+      </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 12 }}>
+      <div className="kx-category-grid">
         {SERVICE_TYPES.map((type) => {
           const Icon = CATEGORY_ICONS[type] || Store;
           const count = activeCountByType[type];
@@ -213,40 +218,111 @@ export default function Services() {
             <button
               key={type}
               onClick={() => navigate(`/services/category/${type}`)}
-              className="card"
-              style={{
-                padding: 16, textAlign: 'left', cursor: 'pointer',
-                display: 'flex', flexDirection: 'column', gap: 10,
-                border: isEmpty ? '1px solid var(--border)' : '1px solid rgba(217,119,6,0.18)',
-                background: isEmpty ? 'var(--card, transparent)' : 'rgba(217,119,6,0.05)',
-              }}
+              className={`kx-category-card${isEmpty ? ' is-empty' : ''}`}
             >
-              <div style={{
-                width: 40, height: 40, borderRadius: 12, flexShrink: 0,
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                background: isEmpty ? 'var(--border)' : 'rgba(217,119,6,0.12)',
-              }}>
-                <Icon size={20} color={isEmpty ? 'var(--muted)' : '#d97706'} />
+              <div className="kx-category-card-art">
+                <Icon size={30} strokeWidth={1.75} />
               </div>
-              <div>
-                <div style={{ fontSize: 14, fontWeight: 700, color: isEmpty ? 'var(--muted)' : 'var(--text)' }}>
-                  {SERVICE_TYPE_LABELS[type]}
-                </div>
-                <div style={{ marginTop: 6 }}>
-                  {isEmpty ? (
-                    <span className="tag tag-gray">এখনো কোনো শপ নেই</span>
-                  ) : (
-                    <span className="tag tag-green">{count} সক্রিয় শপ</span>
-                  )}
-                </div>
+              <div className="kx-category-card-body">
+                <div className="kx-category-card-name">{CATEGORY_LABELS_EN[type] || SERVICE_TYPE_LABELS[type]}</div>
+                {isEmpty ? (
+                  <span className="kx-badge kx-badge-gray">Coming soon</span>
+                ) : (
+                  <span className="kx-badge kx-badge-green">{count} open now</span>
+                )}
               </div>
             </button>
           );
         })}
       </div>
+
+      <style>{`
+        .kx-services-header {
+          display: flex; align-items: flex-end; justify-content: space-between;
+          margin-bottom: 20px; gap: 12px; flex-wrap: wrap;
+        }
+        .kx-services-title { font-size: 22px; font-weight: 800; color: var(--text); letter-spacing: -0.01em; }
+        .kx-services-subtitle { font-size: 13.5px; color: var(--muted); margin-top: 4px; }
+
+        .kx-category-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+          gap: 14px;
+          width: 100%;
+        }
+
+        .kx-category-card {
+          position: relative;
+          text-align: left;
+          cursor: pointer;
+          display: flex;
+          flex-direction: column;
+          gap: 14px;
+          padding: 18px 16px 16px;
+          border-radius: 18px;
+          border: 1px solid var(--border);
+          background: var(--card);
+          overflow: hidden;
+          transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+        }
+        .kx-category-card:hover {
+          transform: translateY(-3px);
+          box-shadow: 0 10px 24px -12px rgba(0,0,0,0.18);
+          border-color: rgba(var(--accentRGB), 0.35);
+        }
+        .kx-category-card::after {
+          content: '';
+          position: absolute;
+          inset: 0;
+          background: radial-gradient(120px 90px at 85% -10%, rgba(var(--accentRGB), 0.14), transparent 70%);
+          pointer-events: none;
+        }
+        .kx-category-card.is-empty { opacity: 0.72; }
+
+        .kx-category-card-art {
+          width: 56px; height: 56px; border-radius: 14px;
+          display: flex; align-items: center; justify-content: center;
+          background: linear-gradient(155deg, rgba(var(--accentRGB), 0.16), rgba(var(--accentRGB), 0.06));
+          color: var(--accent);
+          flex-shrink: 0;
+        }
+        .kx-category-card.is-empty .kx-category-card-art {
+          background: var(--border);
+          color: var(--muted);
+        }
+
+        .kx-category-card-body { display: flex; flex-direction: column; gap: 8px; }
+        .kx-category-card-name { font-size: 15px; font-weight: 700; color: var(--text); }
+
+        .kx-badge {
+          display: inline-flex; align-items: center; width: fit-content;
+          font-size: 11.5px; font-weight: 700; border-radius: 999px; padding: 4px 10px;
+        }
+        .kx-badge-gray { background: var(--border); color: var(--muted); }
+        .kx-badge-green { background: var(--accentSoft); color: var(--accentDark, var(--accent)); }
+
+        @media (min-width: 900px) {
+          .kx-category-grid { grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 18px; }
+          .kx-category-card { padding: 22px 20px 20px; border-radius: 20px; }
+          .kx-category-card-art { width: 64px; height: 64px; border-radius: 16px; }
+        }
+      `}</style>
     </div>
   );
 }
+
+// English labels for the student/faculty-facing category grid — kept
+// separate from SERVICE_TYPE_LABELS (still Bangla, used in headers of
+// the category-filtered list / detail pages) per the request to make
+// this top-level grid read in English.
+const CATEGORY_LABELS_EN = {
+  salon: 'Salon',
+  medicine: 'Pharmacy',
+  hotel: 'Food',
+  bookstore: 'Stationery',
+  onlinemart: 'Online Mart',
+  errand: 'Delivery / Errand',
+};
 
 // ---------------------------------------------------------------------
 // Level 2 — category-filtered shop list. Named export, mounted at
@@ -324,18 +400,18 @@ export function CategoryShopList() {
         </div>
       ) : (
         <>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+          <div className="kx-shop-grid">
             {activeShops.map((s) => (
               <ShopCard key={s.id} service={s} pendingCount={pendingCounts[s.id]} onOpen={() => navigate(`/services/${s.id}`)} />
             ))}
           </div>
 
           {dormantShops.length > 0 && (
-            <div style={{ marginTop: 24 }}>
-              <div style={{ fontSize: 12.5, fontWeight: 700, color: 'var(--muted)', marginBottom: 10, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+            <div style={{ marginTop: 28 }}>
+              <div style={{ fontSize: 12.5, fontWeight: 700, color: 'var(--muted)', marginBottom: 12, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
                 বর্তমানে নিষ্ক্রিয়
               </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 12, opacity: 0.65 }}>
+              <div className="kx-shop-grid" style={{ opacity: 0.6 }}>
                 {dormantShops.map((s) => (
                   <ShopCard key={s.id} service={s} pendingCount={pendingCounts[s.id]} onOpen={() => navigate(`/services/${s.id}`)} />
                 ))}
@@ -344,6 +420,18 @@ export function CategoryShopList() {
           )}
         </>
       )}
+
+      <style>{`
+        .kx-shop-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+          gap: 16px;
+          width: 100%;
+        }
+        @media (min-width: 900px) {
+          .kx-shop-grid { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 20px; }
+        }
+      `}</style>
     </div>
   );
 }
@@ -357,52 +445,67 @@ function ShopCard({ service: s, pendingCount, onOpen }) {
   // open/runner_accepted/confirmed/finished/cancelled).
   const isErrandMode = s.interactionMode === 'errand';
   return (
-    <button
-      onClick={onOpen}
-      className="card"
-      style={{
-        padding: 16, textAlign: 'left', border: '1px solid var(--border)',
-        display: 'flex', alignItems: 'center', gap: 12, cursor: 'pointer',
-      }}
-    >
-      {s.coverImageUrl ? (
-        <img
-          src={s.coverImageUrl}
-          alt={s.name}
-          style={{ width: 44, height: 44, borderRadius: 12, objectFit: 'cover', flexShrink: 0 }}
-        />
-      ) : (
-        <div style={{
-          width: 44, height: 44, borderRadius: 12, background: 'var(--accentSoft)',
-          display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
-        }}>
-          <Store size={22} color="var(--accent)" />
-        </div>
-      )}
-      <div style={{ flex: 1, minWidth: 0 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-          <Circle size={9} fill={s.isOpen ? '#16a34a' : '#9ca3af'} color={s.isOpen ? '#16a34a' : '#9ca3af'} />
-          <span style={{ fontSize: 13, fontWeight: 800, color: s.isOpen ? '#16a34a' : 'var(--muted)' }}>
-            {s.isOpen ? 'খোলা' : 'বন্ধ'}
-          </span>
-          {s.status === 'dormant' && (
-            <span style={{
-              fontSize: 10, fontWeight: 700, color: '#c2410c', background: 'rgba(234,88,12,0.12)',
-              borderRadius: 6, padding: '1px 6px',
-            }}
-            >
-              নিষ্ক্রিয়
-            </span>
-          )}
-        </div>
-        <div style={{ fontSize: 15, fontWeight: 700, color: 'var(--text)', marginTop: 2 }}>{s.name}</div>
-        {s.locationText && (
-          <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 2 }}>{s.locationText}</div>
+    <button onClick={onOpen} className="kx-shop-card">
+      <div className="kx-shop-card-media">
+        {s.coverImageUrl ? (
+          <img src={s.coverImageUrl} alt={s.name} />
+        ) : (
+          <Store size={30} color="var(--accent)" strokeWidth={1.6} />
         )}
-        <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 2 }}>
+        <span className={`kx-shop-status ${s.isOpen ? 'is-open' : 'is-closed'}`}>
+          <Circle size={7} fill="currentColor" color="currentColor" />
+          {s.isOpen ? 'খোলা' : 'বন্ধ'}
+        </span>
+        {s.status === 'dormant' && (
+          <span className="kx-shop-dormant-tag">নিষ্ক্রিয়</span>
+        )}
+      </div>
+      <div className="kx-shop-card-body">
+        <div className="kx-shop-card-name">{s.name}</div>
+        {s.locationText && <div className="kx-shop-card-location">{s.locationText}</div>}
+        <div className="kx-shop-card-action">
           {isErrandMode ? 'এরান্ড রিকোয়েস্ট পাঠান' : isInquiryMode ? 'প্রশ্ন/অনুরোধ পাঠান' : `Queue: ${pendingCount ?? '…'}`}
         </div>
       </div>
+
+      <style>{`
+        .kx-shop-card {
+          text-align: left; cursor: pointer; border: 1px solid var(--border);
+          background: var(--card); border-radius: 18px; overflow: hidden;
+          display: flex; flex-direction: column;
+          transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+        }
+        .kx-shop-card:hover {
+          transform: translateY(-3px);
+          box-shadow: 0 10px 24px -12px rgba(0,0,0,0.18);
+          border-color: rgba(var(--accentRGB), 0.3);
+        }
+        .kx-shop-card-media {
+          position: relative;
+          width: 100%; aspect-ratio: 4 / 3;
+          background: var(--accentSoft);
+          display: flex; align-items: center; justify-content: center;
+          overflow: hidden;
+        }
+        .kx-shop-card-media img { width: 100%; height: 100%; object-fit: cover; }
+        .kx-shop-status {
+          position: absolute; top: 10px; left: 10px;
+          display: inline-flex; align-items: center; gap: 5px;
+          font-size: 11px; font-weight: 800; border-radius: 999px; padding: 4px 9px;
+          background: var(--card); backdrop-filter: blur(2px);
+        }
+        .kx-shop-status.is-open { color: #16a34a; }
+        .kx-shop-status.is-closed { color: var(--muted); }
+        .kx-shop-dormant-tag {
+          position: absolute; top: 10px; right: 10px;
+          font-size: 10px; font-weight: 700; color: #c2410c; background: rgba(234,88,12,0.14);
+          border-radius: 6px; padding: 3px 7px;
+        }
+        .kx-shop-card-body { padding: 12px 14px 16px; display: flex; flex-direction: column; gap: 4px; }
+        .kx-shop-card-name { font-size: 15px; font-weight: 700; color: var(--text); }
+        .kx-shop-card-location { font-size: 12px; color: var(--muted); }
+        .kx-shop-card-action { font-size: 12.5px; color: var(--accent); font-weight: 600; margin-top: 6px; }
+      `}</style>
     </button>
   );
 }

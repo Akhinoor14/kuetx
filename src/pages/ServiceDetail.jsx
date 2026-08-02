@@ -116,121 +116,144 @@ export default function ServiceDetail() {
     : null;
 
   return (
-    <div style={{ padding: '20px 16px', maxWidth: 560, margin: '0 auto' }}>
-      <button onClick={() => navigate('/services')} className="btn btn-sm" style={{ marginBottom: 14, display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+    <div className="kx-detail-page">
+      <button onClick={() => navigate('/services')} className="btn btn-sm kx-detail-back">
         <ArrowLeft size={14} /> Services
       </button>
 
-      {/* Phase 4: cover image, if the provider has uploaded one */}
-      {service.coverImageUrl && (
-        <img
-          src={service.coverImageUrl}
-          alt={service.name}
-          style={{
-            width: '100%', maxHeight: 220, objectFit: 'cover', borderRadius: 14, marginBottom: 14,
-            border: '1px solid var(--border)',
-          }}
-        />
-      )}
+      <div className="kx-detail-layout">
+        {/* ── Left column: media + info ─────────────────────────────── */}
+        <div className="kx-detail-info">
+          {service.coverImageUrl ? (
+            <img src={service.coverImageUrl} alt={service.name} className="kx-detail-cover" />
+          ) : (
+            <div className="kx-detail-cover kx-detail-cover-placeholder">
+              <Store size={48} color="var(--accent)" strokeWidth={1.4} />
+            </div>
+          )}
 
-      <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 6 }}>
-        {!service.coverImageUrl && (
-          <div style={{
-            width: 44, height: 44, borderRadius: 12, background: 'var(--accentSoft)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
-          }}>
-            <Store size={22} color="var(--accent)" />
+          <div className="kx-detail-titlebar">
+            {/* title (§6 order: title -> price -> description) */}
+            <div className="kx-detail-title">{service.name}</div>
+            <div className="kx-detail-status">
+              <Circle size={9} fill={service.isOpen ? '#16a34a' : '#9ca3af'} color={service.isOpen ? '#16a34a' : '#9ca3af'} />
+              <span style={{ color: service.isOpen ? '#16a34a' : 'var(--muted)' }}>
+                {service.isOpen ? 'এখন খোলা' : 'এখন বন্ধ'}
+              </span>
+            </div>
           </div>
-        )}
-        {/* title (§6 order: title -> price -> description) */}
-        <div style={{ fontSize: 19, fontWeight: 800, color: 'var(--text)' }}>{service.name}</div>
-      </div>
 
-      <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 10, flexWrap: 'wrap' }}>
-        <Circle size={9} fill={service.isOpen ? '#16a34a' : '#9ca3af'} color={service.isOpen ? '#16a34a' : '#9ca3af'} />
-        <span style={{ fontSize: 13, fontWeight: 700, color: service.isOpen ? '#16a34a' : 'var(--muted)' }}>
-          {service.isOpen ? 'এখন খোলা' : 'এখন বন্ধ'}
-        </span>
-      </div>
+          {/* Phase 4: locationText / hasDelivery badges */}
+          {(service.locationText || service.hasDelivery
+            || (typeof service.locationLat === 'number' && typeof service.locationLng === 'number')) && (
+            <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 10 }}>
+              {service.locationText && (
+                <span style={{
+                  display: 'inline-flex', alignItems: 'center', gap: 5, fontSize: 12, fontWeight: 600,
+                  color: 'var(--muted)', background: 'var(--card)', border: '1px solid var(--border)',
+                  borderRadius: 999, padding: '4px 10px',
+                }}
+                >
+                  <MapPin size={12} /> {service.locationText}
+                </span>
+              )}
+              {/* SHOP_LOCATION_AND_UPCOMING_FEATURES_PLAN.md Phase 2: GPS
+                  coordinate, if the provider has set one, gets a small
+                  "মানচিত্রে দেখুন" link that opens Google Maps in a new tab —
+                  no API key needed. Silently absent when the provider hasn't
+                  added GPS yet (locationText badge alone still shows), same
+                  "no negative empty-state" pattern as locationText itself. */}
+              {typeof service.locationLat === 'number' && typeof service.locationLng === 'number' && (
+                <a
+                  href={`https://www.google.com/maps?q=${service.locationLat},${service.locationLng}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  style={{
+                    display: 'inline-flex', alignItems: 'center', gap: 5, fontSize: 12, fontWeight: 600,
+                    color: 'var(--accent)', background: 'var(--accentSoft)', borderRadius: 999,
+                    padding: '4px 10px', textDecoration: 'none',
+                  }}
+                >
+                  মানচিত্রে দেখুন <ExternalLink size={11} />
+                </a>
+              )}
+              {service.hasDelivery && (
+                <span style={{
+                  display: 'inline-flex', alignItems: 'center', gap: 5, fontSize: 12, fontWeight: 600,
+                  color: 'var(--accent)', background: 'var(--accentSoft)', borderRadius: 999, padding: '4px 10px',
+                }}
+                >
+                  <Truck size={12} /> হোম ডেলিভারি আছে
+                </span>
+              )}
+            </div>
+          )}
 
-      {/* Phase 4: locationText / hasDelivery badges */}
-      {(service.locationText || service.hasDelivery
-        || (typeof service.locationLat === 'number' && typeof service.locationLng === 'number')) && (
-        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 10 }}>
-          {service.locationText && (
-            <span style={{
-              display: 'inline-flex', alignItems: 'center', gap: 5, fontSize: 12, fontWeight: 600,
-              color: 'var(--muted)', background: 'var(--card)', border: '1px solid var(--border)',
-              borderRadius: 999, padding: '4px 10px',
-            }}
-            >
-              <MapPin size={12} /> {service.locationText}
-            </span>
+          {/* Phase 4: dormant banner — informational only, never blocks the page */}
+          {isDormant && <DormantInfoBanner service={service} />}
+
+          {/* price */}
+          {service.priceNote && (
+            <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--accent)', marginBottom: 10 }}>{service.priceNote}</div>
           )}
-          {/* SHOP_LOCATION_AND_UPCOMING_FEATURES_PLAN.md Phase 2: GPS
-              coordinate, if the provider has set one, gets a small
-              "মানচিত্রে দেখুন" link that opens Google Maps in a new tab —
-              no API key needed. Silently absent when the provider hasn't
-              added GPS yet (locationText badge alone still shows), same
-              "no negative empty-state" pattern as locationText itself. */}
-          {typeof service.locationLat === 'number' && typeof service.locationLng === 'number' && (
-            <a
-              href={`https://www.google.com/maps?q=${service.locationLat},${service.locationLng}`}
-              target="_blank"
-              rel="noreferrer"
-              style={{
-                display: 'inline-flex', alignItems: 'center', gap: 5, fontSize: 12, fontWeight: 600,
-                color: 'var(--accent)', background: 'var(--accentSoft)', borderRadius: 999,
-                padding: '4px 10px', textDecoration: 'none',
-              }}
-            >
-              মানচিত্রে দেখুন <ExternalLink size={11} />
-            </a>
-          )}
-          {service.hasDelivery && (
-            <span style={{
-              display: 'inline-flex', alignItems: 'center', gap: 5, fontSize: 12, fontWeight: 600,
-              color: 'var(--accent)', background: 'var(--accentSoft)', borderRadius: 999, padding: '4px 10px',
-            }}
-            >
-              <Truck size={12} /> হোম ডেলিভারি আছে
-            </span>
+
+          {/* description */}
+          {service.description && (
+            <div style={{ fontSize: 13.5, color: 'var(--muted)', lineHeight: 1.7 }}>
+              {renderFormattedNoticeBody(service.description)}
+            </div>
           )}
         </div>
-      )}
 
-      {/* Phase 4: dormant banner — informational only, never blocks the page */}
-      {isDormant && <DormantInfoBanner service={service} />}
-
-      {/* price */}
-      {service.priceNote && (
-        <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--accent)', marginBottom: 10 }}>{service.priceNote}</div>
-      )}
-
-      {/* description */}
-      {service.description && (
-        <div style={{ fontSize: 13.5, color: 'var(--muted)', lineHeight: 1.7, marginBottom: 20 }}>
-          {renderFormattedNoticeBody(service.description)}
+        {/* ── Right column: booking / inquiry / errand form ─────────── */}
+        <div className="kx-detail-action">
+          {myBookings === null ? null : isErrandMode ? (
+            activeErrand ? (
+              <MyActiveErrand serviceId={serviceId} errand={activeErrand} />
+            ) : (
+              <ErrandForm service={service} />
+            )
+          ) : isInquiryMode ? (
+            activeInquiry ? (
+              <MyActiveInquiry serviceId={serviceId} inquiry={activeInquiry} />
+            ) : (
+              <InquiryForm service={service} />
+            )
+          ) : activeBooking ? (
+            <MyActiveBooking serviceId={serviceId} booking={activeBooking} />
+          ) : (
+            <BookingForm service={service} />
+          )}
         </div>
-      )}
+      </div>
 
-      {myBookings === null ? null : isErrandMode ? (
-        activeErrand ? (
-          <MyActiveErrand serviceId={serviceId} errand={activeErrand} />
-        ) : (
-          <ErrandForm service={service} />
-        )
-      ) : isInquiryMode ? (
-        activeInquiry ? (
-          <MyActiveInquiry serviceId={serviceId} inquiry={activeInquiry} />
-        ) : (
-          <InquiryForm service={service} />
-        )
-      ) : activeBooking ? (
-        <MyActiveBooking serviceId={serviceId} booking={activeBooking} />
-      ) : (
-        <BookingForm service={service} />
-      )}
+      <style>{`
+        .kx-detail-page { padding: 20px 16px 40px; width: 100%; max-width: 1180px; margin: 0 auto; box-sizing: border-box; }
+        .kx-detail-back { margin-bottom: 16px; display: inline-flex; align-items: center; gap: 6px; }
+
+        .kx-detail-layout { display: grid; grid-template-columns: 1fr; gap: 24px; width: 100%; align-items: start; }
+
+        .kx-detail-cover {
+          width: 100%; aspect-ratio: 16 / 9; max-height: 380px; object-fit: cover;
+          border-radius: 18px; border: 1px solid var(--border); margin-bottom: 16px;
+        }
+        .kx-detail-cover-placeholder {
+          background: var(--accentSoft); display: flex; align-items: center; justify-content: center;
+        }
+
+        .kx-detail-titlebar { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 8px; }
+        .kx-detail-title { font-size: 24px; font-weight: 800; color: var(--text); letter-spacing: -0.01em; }
+        .kx-detail-status { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 700; }
+
+        .kx-detail-info { min-width: 0; }
+        .kx-detail-action { min-width: 0; }
+
+        @media (min-width: 900px) {
+          .kx-detail-layout { grid-template-columns: minmax(0, 1.4fr) minmax(320px, 1fr); gap: 32px; }
+          .kx-detail-action { position: sticky; top: 20px; }
+          .kx-detail-cover { max-height: 420px; }
+        }
+      `}</style>
     </div>
   );
 }
@@ -431,59 +454,71 @@ function InquiryForm({ service }) {
     <div className="card" style={{ padding: 16 }}>
       <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', marginBottom: 12 }}>আইটেম বেছে নিন</div>
 
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 14 }}>
+      <div className="kx-offering-grid" style={{ marginBottom: 14 }}>
         {availableOfferings.map((o) => {
           const qty = quantities[o.id] || 0;
+          const img = Array.isArray(o.images) && o.images[0];
           return (
-            <div
-              key={o.id}
-              style={{
-                display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10,
-                padding: '8px 0', borderBottom: '1px solid var(--border)',
-              }}
-            >
-              {Array.isArray(o.images) && o.images[0] && (
-                <img
-                  src={o.images[0]}
-                  alt={o.label}
-                  style={{
-                    width: 40, height: 40, borderRadius: 8, objectFit: 'cover', flexShrink: 0,
-                    border: '1px solid var(--border)',
-                  }}
-                />
-              )}
-              <div style={{ minWidth: 0, flex: 1 }}>
-                <div style={{ fontSize: 13.5, fontWeight: 600, color: 'var(--text)' }}>{o.label}</div>
+            <div key={o.id} className={`kx-offering-card${qty > 0 ? ' is-selected' : ''}`}>
+              <div className="kx-offering-media">
+                {img ? <img src={img} alt={o.label} /> : <ImageOff size={22} color="var(--muted)" />}
+              </div>
+              <div className="kx-offering-body">
+                <div className="kx-offering-name">{o.label}</div>
                 {typeof o.price === 'number' && (
-                  <div style={{ fontSize: 12, color: 'var(--accent)', fontWeight: 600 }}>
-                    ৳{o.price} <span style={{ color: 'var(--muted)', fontWeight: 400 }}>/ পিস</span>
+                  <div className="kx-offering-price">
+                    ৳{o.price} <span>/ পিস</span>
                   </div>
                 )}
-              </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }}>
-                <button
-                  type="button"
-                  onClick={() => setQty(o.id, qty - 1)}
-                  disabled={qty === 0}
-                  className="btn btn-sm btn-secondary"
-                  style={{ width: 30, height: 30, padding: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-                >
-                  <Minus size={14} />
-                </button>
-                <span style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', minWidth: 18, textAlign: 'center' }}>{qty}</span>
-                <button
-                  type="button"
-                  onClick={() => setQty(o.id, qty + 1)}
-                  className="btn btn-sm btn-secondary"
-                  style={{ width: 30, height: 30, padding: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-                >
-                  <Plus size={14} />
-                </button>
+                <div className="kx-offering-stepper">
+                  <button
+                    type="button"
+                    onClick={() => setQty(o.id, qty - 1)}
+                    disabled={qty === 0}
+                    className="btn btn-sm btn-secondary"
+                    style={{ width: 30, height: 30, padding: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                  >
+                    <Minus size={14} />
+                  </button>
+                  <span style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', minWidth: 18, textAlign: 'center' }}>{qty}</span>
+                  <button
+                    type="button"
+                    onClick={() => setQty(o.id, qty + 1)}
+                    className="btn btn-sm btn-secondary"
+                    style={{ width: 30, height: 30, padding: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                  >
+                    <Plus size={14} />
+                  </button>
+                </div>
               </div>
             </div>
           );
         })}
       </div>
+
+      <style>{`
+        .kx-offering-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+          gap: 10px;
+        }
+        .kx-offering-card {
+          border: 1px solid var(--border); border-radius: 14px; overflow: hidden;
+          background: var(--card); display: flex; flex-direction: column;
+          transition: border-color 0.15s ease, box-shadow 0.15s ease;
+        }
+        .kx-offering-card.is-selected { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+        .kx-offering-media {
+          width: 100%; aspect-ratio: 1 / 1; background: var(--accentSoft);
+          display: flex; align-items: center; justify-content: center; overflow: hidden;
+        }
+        .kx-offering-media img { width: 100%; height: 100%; object-fit: cover; }
+        .kx-offering-body { padding: 10px; display: flex; flex-direction: column; gap: 6px; }
+        .kx-offering-name { font-size: 13px; font-weight: 700; color: var(--text); line-height: 1.3; }
+        .kx-offering-price { font-size: 12px; font-weight: 700; color: var(--accent); }
+        .kx-offering-price span { color: var(--muted); font-weight: 400; }
+        .kx-offering-stepper { display: flex; align-items: center; gap: 8px; margin-top: 2px; }
+      `}</style>
 
       {hasAnyPrice && selectedItems.length > 0 && (
         <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--accent)', marginBottom: 12 }}>
@@ -645,7 +680,7 @@ function BookingForm({ service }) {
       <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', marginBottom: 12 }}>বুক করুন</div>
 
       <label style={{ fontSize: 12, color: 'var(--muted)', fontWeight: 600 }}>যা করাতে চান, বেছে নিন</label>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginTop: 8, marginBottom: 12 }}>
+      <div className="kx-pick-grid" style={{ marginTop: 8, marginBottom: 12 }}>
         {availableOfferings.map((o) => {
           const isSelected = offeringId === o.id;
           const coverUrl = Array.isArray(o.images) ? o.images[0] : null;
@@ -654,43 +689,58 @@ function BookingForm({ service }) {
               key={o.id}
               type="button"
               onClick={() => setOfferingId(o.id)}
-              style={{
-                display: 'flex', alignItems: 'center', gap: 10, width: '100%', textAlign: 'left',
-                padding: 10, borderRadius: 12, cursor: 'pointer',
-                border: isSelected ? '2px solid var(--accent)' : '1px solid var(--border)',
-                background: isSelected ? 'var(--accentSoft, rgba(22,163,74,0.08))' : 'var(--card)',
-              }}
+              className={`kx-pick-card${isSelected ? ' is-selected' : ''}`}
             >
-              <div style={{
-                width: 44, height: 44, borderRadius: 8, flexShrink: 0, overflow: 'hidden',
-                background: 'var(--surface, #f3f4f6)', display: 'flex', alignItems: 'center', justifyContent: 'center',
-              }}
-              >
+              <div className="kx-pick-media">
                 {coverUrl
-                  ? <img src={coverUrl} alt={o.label} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                  : <ImageOff size={17} color="var(--muted)" />}
-              </div>
-              <div style={{ flex: 1, minWidth: 0 }}>
-                <div style={{ fontSize: 13.5, fontWeight: 600, color: 'var(--text)' }}>{o.label}</div>
-                {typeof o.price === 'number' && (
-                  <div style={{ fontSize: 12, color: 'var(--accent)', fontWeight: 600, marginTop: 2 }}>
-                    ৳{o.price} <span style={{ color: 'var(--muted)', fontWeight: 400 }}>/ {priceUnitLabel}</span>
+                  ? <img src={coverUrl} alt={o.label} />
+                  : <ImageOff size={22} color="var(--muted)" />}
+                {isSelected && (
+                  <div className="kx-pick-check">
+                    <Check size={12} color="#fff" strokeWidth={3} />
                   </div>
                 )}
               </div>
-              {isSelected && (
-                <div style={{
-                  width: 20, height: 20, borderRadius: '50%', background: 'var(--accent)',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
-                }}
-                >
-                  <Check size={12} color="#fff" strokeWidth={3} />
-                </div>
-              )}
+              <div className="kx-pick-body">
+                <div className="kx-pick-name">{o.label}</div>
+                {typeof o.price === 'number' && (
+                  <div className="kx-pick-price">
+                    ৳{o.price} <span>/ {priceUnitLabel}</span>
+                  </div>
+                )}
+              </div>
             </button>
           );
         })}
       </div>
+
+      <style>{`
+        .kx-pick-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+          gap: 10px;
+        }
+        .kx-pick-card {
+          text-align: left; cursor: pointer; border-radius: 14px; overflow: hidden;
+          border: 1px solid var(--border); background: var(--card);
+          display: flex; flex-direction: column;
+          transition: border-color 0.15s ease, box-shadow 0.15s ease;
+        }
+        .kx-pick-card.is-selected { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+        .kx-pick-media {
+          position: relative; width: 100%; aspect-ratio: 1 / 1; background: var(--accentSoft, #f3f4f6);
+          display: flex; align-items: center; justify-content: center; overflow: hidden;
+        }
+        .kx-pick-media img { width: 100%; height: 100%; object-fit: cover; }
+        .kx-pick-check {
+          position: absolute; top: 6px; right: 6px; width: 20px; height: 20px; border-radius: 50%;
+          background: var(--accent); display: flex; align-items: center; justify-content: center;
+        }
+        .kx-pick-body { padding: 8px 9px 10px; display: flex; flex-direction: column; gap: 4px; }
+        .kx-pick-name { font-size: 12.5px; font-weight: 700; color: var(--text); line-height: 1.3; }
+        .kx-pick-price { font-size: 11.5px; font-weight: 700; color: var(--accent); }
+        .kx-pick-price span { color: var(--muted); font-weight: 400; }
+      `}</style>
 
       <label style={{ fontSize: 12, color: 'var(--muted)', fontWeight: 600 }}>ফোন নাম্বার</label>
       <input
