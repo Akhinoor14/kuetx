@@ -37,6 +37,27 @@
   `/profile`, `/courses` ইত্যাদি বাকি সব student route-এ আগের মতোই
   ব্লক-স্ক্রিন আচরণ বহাল আছে (ওগুলো root না, তাই সেখানে ব্লক স্ক্রিনই
   এখনো সঠিক আচরণ)।
+  **আপডেট (flash ফিক্স):** প্রথম ভার্সনে redirect হওয়ার ঠিক আগে
+  ~১ সেকেন্ডের জন্য student Dashboard-এর একটা flash দেখা যাচ্ছিল।
+  কারণ: `App.jsx` `<RootRouteResolver><Dashboard /></RootRouteResolver>`
+  আকারে plain JSX pass করছিল, যেটা caller-এর প্রতি render-এই
+  `React.createElement(Dashboard)` কল করে ফেলত (Dashboard-এর lazy-chunk
+  load/mount cycle শুরু করে দিত) — `RootRouteResolver`-এর নিজের
+  `isResolved` গার্ড ঠিকমতো "Checking access…" রিটার্ন করছিল, কিন্তু
+  ততক্ষণে Dashboard আগে থেকেই React tree-তে বসে ছিল ও আংশিক render
+  হয়ে যাচ্ছিল। এটাও উন্মোচন করেছে: `App.jsx`-এর `buildQueue()`-এ
+  `if (!accountRole)` গার্ড শুধু তখনই server-verify করে যখন local
+  `getAccountRole()` একদম খালি — আগে থেকে সেট থাকা (কিন্তু stale) role
+  কখনো re-verify হয় না, তাই `queueBuilt = true` হওয়াটা
+  `getAccountRole()` সঠিক হওয়ার গ্যারান্টি না। ফিক্স:
+  `RootRouteResolver` এখন `children` কে element না নিয়ে একটা function
+  হিসেবে নেয় (`{() => <Dashboard />}`) — এই function শুধু তখনই কল হয়
+  যখন `isResolved` true এবং কোনো mismatch redirect ট্রিগার হয়নি, তাই
+  Dashboard construct/mount হওয়ার আগেই resolution সম্পূর্ণ নিশ্চিত হয়ে
+  যায়। `buildQueue()`-এর stale-role গ্যাপটা একটা বড়, আলাদা
+  architectural বিষয় (শুধু root route না, পুরো onboarding queue-কে
+  ছোঁয়) — এই ফিক্সের স্কোপে ধরা হয়নি, ভবিষ্যতে আলাদা কাজ হিসেবে
+  বিবেচনা করা যেতে পারে।
 - **Root route (`/`) role-bleed বাগ** — `kuetx.vercel.app` (কোনো
   `/provider` পাথ ছাড়া, খালি root) খুললে মাঝে মাঝে student Dashboard
   দেখাত even যখন signed-in account আসলে একটা provider (verified বা

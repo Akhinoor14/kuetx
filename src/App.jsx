@@ -238,7 +238,7 @@ function Layout({ authState, onboardingActive }) {
             <Route path="/" element={
               getAccountRole() === 'teacher' ? <Navigate to="/faculty" replace /> :
               getAccountRole() === 'provider' ? <Navigate to="/provider" replace /> :
-              <RootRouteResolver><Dashboard /></RootRouteResolver>
+              <RootRouteResolver>{() => <Dashboard />}</RootRouteResolver>
             } />
             <Route path="/profile" element={<RequireStudentMode><Profile /></RequireStudentMode>} />
             <Route path="/courses" element={<RequireStudentMode><Courses /></RequireStudentMode>} />

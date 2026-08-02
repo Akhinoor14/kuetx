@@ -72,5 +72,30 @@ export default function RootRouteResolver({ children }) {
     return <Navigate to="/provider" replace />;
   }
 
-  return children;
+  // BUGFIX (student-Dashboard 1-sec flash before correction): children
+  // used to be passed as a plain JSX element from App.jsx — e.g.
+  // <RootRouteResolver><Dashboard /></RootRouteResolver>. That JSX is
+  // evaluated by the CALLER (App.jsx) on every render, meaning
+  // React.createElement(Dashboard) — and therefore the lazy() loader
+  // kicking off Dashboard's chunk fetch/mount cycle — ran immediately,
+  // before this component's own isResolved guard above ever got a
+  // chance to gate anything. The "Checking access…" branch was reached
+  // correctly, but Dashboard's own async setup (store reads, Firestore
+  // subscriptions) had often already started racing in the background
+  // during that same window, so the instant isResolved flipped true here
+  // (which can itself lag getAccountRole() by up to ~1s — see App.jsx's
+  // buildQueue() doc comment: an ALREADY-SET stale local accountRole
+  // skips the server-verify branch entirely, so queueBuilt going true is
+  // NOT a guarantee getAccountRole() is correct), Dashboard would appear
+  // to "flash" already-partway-rendered for a moment before the
+  // Navigate below fired.
+  //
+  // Fix: accept children as a FUNCTION (children()) instead of a plain
+  // element. App.jsx now passes <RootRouteResolver>{() => <Dashboard />}
+  // </RootRouteResolver> — the arrow function defers
+  // React.createElement(Dashboard) until THIS line runs, which only
+  // happens after both isResolved checks above have already passed and
+  // neither redirect condition matched. Dashboard is never constructed,
+  // let alone mounted, while resolution is pending.
+  return typeof children === 'function' ? children() : children;
 }
