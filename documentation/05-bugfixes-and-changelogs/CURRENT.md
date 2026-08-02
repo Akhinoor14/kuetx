@@ -12,6 +12,67 @@
 
 ## এখন পর্যন্ত সমাধান হওয়া উল্লেখযোগ্য বাগ (সংক্ষেপে, ইতিহাস)
 
+- **চূড়ান্ত ফিক্স — `accountRole`-এ uid-tagging (আগের দুইটা entry-র
+  চেয়ে সঠিক architecture, ব্যবহারকারীর সরাসরি নির্দেশনায়):**
+  আগের entry-র "server-এর সাথে সবসময় reconcile করা" পদ্ধতিটা কাজ
+  করত ঠিকই, কিন্তু ব্যবহারকারী একটা গুরুত্বপূর্ণ প্রেক্ষাপট জানিয়েছেন —
+  এই app-টার **বেটা ভার্সন ছিল সম্পূর্ণ local/offline-based**, ৫০০-৬০০
+  ইউজার ছিল, আর তাদের সবার account **Firebase Auth থেকে ইতিমধ্যে মুছে
+  ফেলা হয়েছে** — কিন্তু তাদের ব্যবহার করা device/browser-এ পুরনো
+  `localStorage` data (role-সহ) এখনো থেকে যেতে পারে। App-টা এখনো
+  **ইচ্ছাকৃতভাবে offline-capable** (local-first read, background sync),
+  তাই "role সবসময় সরাসরি সার্ভার থেকে আনো, local-কে কখনো trust কোরো
+  না" — এই ধরনের ব্ল্যাংকেট সমাধান ঠিক না, কারণ এটা normal offline
+  ব্যবহারের flow-কেও ভেঙে দিতে পারত (যদিও role-change আসলে কখনো
+  offline-এ হয় না, তাও এই ব্ল্যাংকেট approach ভবিষ্যতে অন্য কোনো
+  offline local data-র জন্য ভুল pattern হয়ে যেত)।
+
+  আসল ফিক্স: `store.js`-এর `tagProfileOwner()`/`isProfileStaleForUid()`
+  (profile data-র জন্য আগে থেকেই আছে, একই সমস্যার জন্য) — ঠিক এই একই
+  প্যাটার্ন এখন `accountRole.js`-এও যোগ করা হয়েছে। প্রতিবার
+  `setAccountRole(role)` কল হলে, role-এর সাথে **কোন uid-এর জন্য এটা সেট
+  হয়েছে** সেটাও (`accountRoleOwnerUid` নামে আলাদা key-তে) সেভ হয়।
+  `buildQueue()`-এ এখন `isAccountRoleTrustedForUid(uid)` চেক করে — local
+  role তখনই সরাসরি trust করা হয় যখন সেটা **বর্তমানে সাইন-ইন করা uid-এর
+  জন্যই** ট্যাগ করা আছে। কোনো ট্যাগ না থাকলে (বেটা-era-র exact case —
+  এই fix-এর আগের যেকোনো local data-ই untagged) বা অন্য uid-এর জন্য
+  ট্যাগ করা থাকলে, সেটাকে **কিছুই cache নেই**-এর মতোই treat করা হয় —
+  পুরো server-truth resolution chain (users/{uid}.role → faculty/provider/
+  students doc fallback) চলে।
+
+  এর ফলাফল: (ক) বেটা-era-র বা অন্য কোনো account-এর leftover
+  `accountRole` কখনোই আর trust হবে না, প্রতিটা এমন case নিজে থেকেই
+  server-truth দিয়ে সংশোধিত হয়ে যাবে; (খ) একবার uid-tagged হয়ে গেলে
+  (মানে account নিজেই ঠিকমতো একবার resolve হয়েছে), পরের প্রতিটা load-এ
+  কোনো extra network call ছাড়াই সরাসরি trust করা হয় — normal
+  repeat-visit load আগের মতোই fast থাকে, আর offline session নিজের uid-এর
+  জন্য নিজের সেভ করা role নিয়ে কখনো block/second-guess হয় না।
+  `clearAllForFreshAccountThorough()` (সত্যিকারের ব্র্যান্ড-নিউ account-এর
+  জন্য) এমনিতেই সব `kuetx_*` key wipe করে, তাই নতুন
+  `accountRoleOwnerUid` key-ও স্বয়ংক্রিয়ভাবে সেই wipe-এর আওতায় পড়ে
+  যায় — আলাদা কিছু করতে হয়নি।
+- **আসল root cause (আগের দুইটা fallback entry যথেষ্ট ছিল না) — stale
+  local `accountRole` চিরকাল trusted থেকে যাওয়া:** ব্যবহারকারীর
+  browser-এ সরাসরি `localStorage.getItem('kuetx_accountRole')` চালিয়ে
+  নিশ্চিত হওয়া গেছে — এই provider account-এর local storage-এ
+  `accountRole = 'student'` বসে ছিল, যদিও account আসলে verified provider
+  (`providers/{uid}` server-এ ঠিকই আছে)। নিচের দুইটা fallback entry
+  (`faculty/provider/student` doc existence check) **শুধু তখনই চলে যখন
+  local `accountRole` একদম null/খালি** (`if (!accountRole)` ব্লক) —
+  একবার যেকোনো ভুল value local-এ বসে গেলে (কীভাবে বসেছিল সেটা পুরোপুরি
+  নিশ্চিত না — শেয়ার্ড/reused ডিভাইসে আগের কোনো account-এর leftover
+  value হওয়ার সম্ভাবনা বেশি, `accountLifecycle.js`-এর uid-tagging সিস্টেম
+  যেসব key কভার করে `accountRole` তার মধ্যে পড়ে না), সেটা কখনো
+  server-এর সাথে reconcile হতো না — role চিরকাল ভুল থেকে যেত, প্রতিটা
+  লোডে student `ProfileSetupModal` দেখাত, আর কোনো recovery path ছিলই না।
+  ফিক্স: এখন local role থাকলেও (`else` branch) প্রতিবার
+  `fetchServerAccountRole()` দিয়ে একবার authoritative
+  `users/{uid}.role` চেক করা হয় — server-এর মান local-এর সাথে না মিললে
+  server-ই জিতে যায়, local flag + `accountRole` variable দুটোই সাথে
+  সাথে ঠিক হয়ে যায়, তারপর queue-decision হয়। Normal case-এ (local ও
+  server আগে থেকেই মিলে যাওয়া, যেটা অধিকাংশ account-এর জন্য সত্য) এটা
+  শুধু একটা ছোট, সস্তা extra read — এই class-এর বাগ ভবিষ্যতে
+  self-recover করার জন্য এই cost worth it।
 - **তিন role-এর জন্যই role-resolve fallback অডিট + student-side fix
   (follow-up):** নিচের provider entry-টার পরে ব্যবহারকারীর অনুরোধে
   student আর teacher-এও একই ক্লাসের বাগ আছে কিনা চেক করা হয়েছে।

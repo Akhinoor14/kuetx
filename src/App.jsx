@@ -28,7 +28,7 @@ import ClassJoinIntro from './components/ClassJoinIntro';
 import NoCRBanner from './components/NoCRBanner';
 import RoleSelectScreen from './components/RoleSelectScreen';
 import FacultyProfileSetupModal from './components/FacultyProfileSetupModal';
-import { getAccountRole, setAccountRole, fetchServerAccountRole, persistAccountRoleToServer } from './lib/accountRole';
+import { getAccountRole, setAccountRole, fetchServerAccountRole, persistAccountRoleToServer, isAccountRoleTrustedForUid } from './lib/accountRole';
 import { syncLocalDataOnAuth } from './lib/accountLifecycle';
 import { getFacultyDoc, isFacultyProfileComplete } from './lib/facultySync';
 import { getProviderProfile } from './lib/providerSync';
@@ -474,7 +474,23 @@ async function buildQueue(isAnonymous) {
     return q;
   }
 
-  if (!accountRole) {
+  // BUGFIX (beta-era leftover local data across account/device
+  // boundaries): this used to be `if (!accountRole)` — trusting ANY
+  // present local value, even one left over from a completely different
+  // account that once used this same browser (this app was
+  // local/offline-only during its beta with 500-600 users, all since
+  // removed from Firebase Auth; their local data can still be sitting on
+  // devices that are now used by different, current accounts). See
+  // accountRole.js's header comment for the full incident this traces
+  // back to and why uid-tagging (not "always re-fetch from server",
+  // which would break offline support) is the fix. isAccountRoleTrustedForUid()
+  // returns true only when the local value is tagged for the uid that's
+  // CURRENTLY signed in — an untagged value (pre-fix data, or genuinely
+  // someone else's leftover) is treated exactly like "nothing cached
+  // locally," and goes through the same full server-truth resolution
+  // below that a brand-new session would.
+  const uid = auth.currentUser.uid;
+  if (!isAccountRoleTrustedForUid(uid)) {
     // Not yet decided locally, but this is a real (non-anonymous) signed-in
     // account — check server-side facts before ever showing role-select.
     // Checked in order:
@@ -567,6 +583,17 @@ async function buildQueue(isAnonymous) {
         }
       }
     }
+  } else {
+    // isAccountRoleTrustedForUid(uid) already confirmed this local value
+    // is tagged for the CURRENTLY signed-in uid — i.e. it's this
+    // account's own, previously-confirmed role, not beta-era or
+    // cross-account leftover data. No server round-trip needed here:
+    // trusting it directly is both correct (it was itself set from a
+    // server-verified source at some earlier point — see the resolution
+    // branch above) and is what keeps ordinary repeat-visit loads fast
+    // and offline-safe (an offline session reading its own tagged role
+    // for its own uid should never be second-guessed or blocked on a
+    // network read it might not even have).
   }
 
   if (!accountRole) {

@@ -37,22 +37,84 @@ import { db, auth } from './firebase';
 // applies — providers/{uid}.status is the real server-verified gate
 // (see useIsProvider.js / RequireProvider.jsx), same relationship
 // accountRole has to faculty/{uid}.verifiedAt for teachers.
+//
+// BUGFIX (beta-era leftover local data, found via a real incident): this
+// app used to be local/offline-only during its beta (500-600 users).
+// Those accounts have since been removed from Firebase Auth entirely —
+// but on devices/browsers that were used during beta, the OLD
+// localStorage 'accountRole' value can still be sitting there, from
+// before this key ever had a concept of "which account does this belong
+// to." When a genuinely different account (a brand-new post-beta
+// sign-up, or the current 4-5 active users, some of whom carried the
+// same browser profile forward from beta) later signs in on that same
+// device, getAccountRole() would return that stale leftover value —
+// confirmed directly in one real case via
+// localStorage.getItem('kuetx_accountRole') returning 'student' for an
+// account that is actually a verified provider. Every fallback in
+// buildQueue() only runs when local role is completely EMPTY
+// (`if (!accountRole)`) — a wrong-but-present value was trusted forever,
+// with no way to self-correct.
+//
+// The fix can't simply be "always re-fetch from server on every load,
+// ignore local" — the app is deliberately offline-capable (local-first
+// read, background sync), and role changes never happen offline anyway
+// (Role Select is an online-only, one-time step), so a blanket
+// server-always approach for role specifically wouldn't break offline
+// support, BUT the broader ask (raised by the user) also covers not
+// wanting to blindly trust ANY leftover local data across account
+// boundaries, which the profile object already solves for via
+// tagProfileOwner()/isProfileStaleForUid() in store.js. This applies the
+// exact same pattern to accountRole: every write now stamps the uid it
+// was set for; every read that matters for trust decisions checks that
+// tag against the CURRENTLY signed-in uid. A value tagged for a
+// different uid (or with no tag at all — i.e. from before this fix, the
+// beta-era exact case) is stale leftover data, not this account's real
+// role, and buildQueue() treats it the same as if nothing were cached
+// locally at all (goes through full server-truth resolution). A value
+// tagged for the SAME uid currently signed in is trusted immediately, no
+// extra round-trip — this is what keeps normal repeat-visit loads fast
+// and keeps offline support intact (an offline session's own writes for
+// its own uid are never second-guessed).
+const ROLE_KEY = 'accountRole';
+const ROLE_OWNER_KEY = 'accountRoleOwnerUid';
+
 export function getAccountRole() {
-  return store.get('accountRole') || null; // null | 'student' | 'teacher' | 'provider'
+  return store.get(ROLE_KEY) || null; // null | 'student' | 'teacher' | 'provider'
 }
 
-export function setAccountRole(role) {
+/**
+ * True iff a local accountRole value is present AND was tagged as
+ * belonging to `uid` — i.e. safe to trust without a server round-trip.
+ * False for: no local value, a value tagged for a different uid, or a
+ * value with no owner tag at all (pre-fix / beta-era leftover data).
+ */
+export function isAccountRoleTrustedForUid(uid) {
+  if (!uid) return false;
+  const role = store.get(ROLE_KEY);
+  if (!role) return false;
+  const owner = store.get(ROLE_OWNER_KEY);
+  return !!owner && owner === uid;
+}
+
+export function setAccountRole(role, uid = auth.currentUser?.uid) {
   if (role !== 'student' && role !== 'teacher' && role !== 'provider') {
     throw new Error(`Invalid accountRole: ${role}`);
   }
-  store.set('accountRole', role);
+  store.set(ROLE_KEY, role);
+  // uid defaults to the currently signed-in user — every existing call
+  // site (Role Select, and every buildQueue() fallback/reconciliation
+  // path) already only ever calls this while a real uid is signed in, so
+  // this stays a no-op change for all of them; uid is only ever passed
+  // explicitly by tests or a future cross-account utility.
+  if (uid) store.set(ROLE_OWNER_KEY, uid);
 }
 
 /** Sign-out (or "choose again") should clear this so Role Select reappears
  * — not currently wired to the sign-out button; noted here for Phase 8/
  * final-pass follow-up if the logout flow needs it. */
 export function clearAccountRole() {
-  store.set('accountRole', null);
+  store.set(ROLE_KEY, null);
+  store.set(ROLE_OWNER_KEY, null);
 }
 
 /**
