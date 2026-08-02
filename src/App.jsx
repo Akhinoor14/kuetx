@@ -31,6 +31,7 @@ import FacultyProfileSetupModal from './components/FacultyProfileSetupModal';
 import { getAccountRole, setAccountRole, fetchServerAccountRole, persistAccountRoleToServer } from './lib/accountRole';
 import { syncLocalDataOnAuth } from './lib/accountLifecycle';
 import { getFacultyDoc, isFacultyProfileComplete } from './lib/facultySync';
+import { getProviderProfile } from './lib/providerSync';
 import { syncBloodDonorEntry } from './lib/bloodDonorSync';
 import { store, getProfile, isProfileComplete, DEFAULT_PROFILE, normalizeProfileForSave, validateProfileForSave, ensureDBReady, tagProfileOwner, isProfileStaleForUid } from './store/store';
 import { getGroupId } from './lib/groupUtils';
@@ -497,6 +498,32 @@ async function buildQueue(isAnonymous) {
         setAccountRole('teacher');
         accountRole = 'teacher';
         persistAccountRoleToServer('teacher');
+      } else {
+        // BUGFIX: this else-if was missing entirely — the faculty branch
+        // above has always had a fdoc existence fallback for when
+        // users/{uid}.role failed to persist (or was never written by an
+        // older build), but no equivalent existed for provider. A real
+        // provider account (providers/{uid} exists, created at Role
+        // Select's provider-form step) whose users/{uid}.role write never
+        // landed — persistAccountRoleToServer failing silently is a
+        // documented non-fatal path, see accountRole.js — had no way to
+        // ever be recognized here. accountRole stayed null/undefined
+        // forever, which falls into the final `else` branch below (the
+        // student branch) on every single load: buildQueue pushed
+        // 'profile', and the student ProfileSetupModal was rendered even
+        // on /provider, on every refresh, because nothing here ever
+        // corrected or persisted the role — the exact symptom reported
+        // (Profile Setup showing on the provider account, refresh does
+        // not fix it, unlike the old provider flash-loading bug which
+        // this is not the same issue as). Fix: same pattern as the
+        // faculty branch — check providers/{uid} existence directly and
+        // resync both the local flag and the server record from it.
+        const pdoc = await getProviderProfile(auth.currentUser.uid).catch(() => null);
+        if (pdoc) {
+          setAccountRole('provider');
+          accountRole = 'provider';
+          persistAccountRoleToServer('provider');
+        }
       }
     }
   }

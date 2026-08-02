@@ -12,6 +12,21 @@
 
 ## এখন পর্যন্ত সমাধান হওয়া উল্লেখযোগ্য বাগ (সংক্ষেপে, ইতিহাস)
 
+- **Provider account-এ প্রতি লোড/রিফ্রেশে student `ProfileSetupModal`
+  (Full Name/Student ID/KUET Email/Department/Blood Group) `/provider`-এ
+  দেখানো, রিফ্রেশ করলেও না যাওয়া:** এটা আগের provider-flash/role-leak
+  বাগ (নিচে) থেকে আলাদা একটা ভিন্ন root cause। `App.jsx`-এর
+  `buildQueue()`-এ role resolve করার সময় (`accountRole` লোকালি না
+  থাকলে) `users/{uid}.role` সার্ভার রিড ফেইল করলে বা কখনো persist না
+  হলে, faculty branch-এর জন্য একটা fallback ছিল (`faculty/{uid}` doc
+  আছে কিনা চেক করে) কিন্তু provider-এর জন্য সমতুল্য কোনো fallback
+  ছিলই না — `providers/{uid}` doc আছে এমন real provider account-এও
+  `accountRole` কখনো resolve হতো না, ফলে কোড শেষমেশ student branch-এ
+  পড়ে যেত (`q.push('profile')`) — প্রতিটা লোডে, কারণ কিছুই কখনো role
+  ঠিক করে persist করত না। ফিক্স: `getProviderProfile()` দিয়ে
+  `providers/{uid}` existence চেক যোগ করা হয়েছে, ঠিক faculty
+  fallback-এর মতো একই প্যাটার্নে — পাওয়া গেলে `accountRole` local +
+  server দুই জায়গাতেই `'provider'` হিসেবে সিঙ্ক করা হয়।
 - **Student-shell leak — সম্পূর্ণ sweep + আসল flash root cause fix:**
   আগের এন্ট্রি (নিচে, "Provider shell-এ student-only Layout-global
   component leak") `NoCRBanner`, `NoticeToast`, `ProfileCompleteReminder`
