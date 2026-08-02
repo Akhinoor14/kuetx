@@ -18,15 +18,16 @@
 // (previously hardcoded to 0, so revenueTotal never actually moved).
 
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
-  Store, Check, X as XIcon, Clock, MessageCircle,
+  Store, Check, X as XIcon, Clock, MessageCircle, Info,
 } from 'lucide-react';
 import {
   subscribeProviderServices, createService, setServiceOpen,
   subscribePendingBookings, subscribeConfirmedBookings,
   confirmBooking, cancelBooking, finishBooking, hasConflictingConfirmedSlot,
   countStudentNoShowsOnService, withServiceDefaults,
-  SERVICE_TYPE_LABELS, SERVICE_TYPES,
+  SERVICE_TYPE_LABELS_BN, SERVICE_TYPES,
   subscribePendingInquiries, answerInquiry,
   // Phase 4 (Delivery/Errand Runner plan §4.3-§4.5): Runner-side queue —
   // open requests to accept, plus the Runner's own ongoing (accepted/
@@ -34,6 +35,7 @@ import {
   subscribeOpenErrandRequestsForRunner, subscribeRunnerActiveErrands,
   acceptErrandRequest, rejectErrandAccept, finishErrandRequest,
 } from '../../lib/serviceSync';
+import { getCategorySetupConfig } from '../../lib/serviceCategoryConfig';
 import { useProviderLang } from '../../hooks/useProviderLang';
 
 function formatWhen(ts) {
@@ -103,16 +105,25 @@ export default function ProviderDashboard({ providerProfile }) {
 function ServiceSetupForm({ providerUid }) {
   // MULTI_CATEGORY_SERVICES_PLAN.md Phase 3 (explicit, mandatory gap from
   // Phase 0.5): this form previously sent type: 'salon' hardcoded, with
-  // no category-select UI at all. Now the provider picks one of the five
+  // no category-select UI at all. Now the provider picks one of the six
   // plan-approved categories at signup; createService() derives
   // interactionMode from that choice (Phase 1 logic, unchanged here).
+  //
+  // CATEGORY_SPECIFIC_SETUP_PLAN.md Phase 1: every field below that used
+  // to be identical across all six categories now reads its
+  // placeholder/hint copy from serviceCategoryConfig.js, keyed by the
+  // currently-selected `type`. Phase 2 adds the post-submit redirect to
+  // the Offerings page (skipped for 'errand', which has no fixed catalog).
   const { t } = useProviderLang();
+  const navigate = useNavigate();
   const [type, setType] = useState('salon');
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [priceNote, setPriceNote] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
+
+  const cfg = getCategorySetupConfig(type);
 
   const submit = async () => {
     setError('');
@@ -125,6 +136,15 @@ function ServiceSetupForm({ providerUid }) {
       await createService(providerUid, {
         type, name, description, priceNote,
       });
+      // Phase 2: send the provider straight to where they add their
+      // items/menu/products next, instead of leaving them to discover
+      // "My Shop" on their own. Errand Runner has no fixed catalog
+      // (hasFixedCatalog: false) so there's nothing to redirect to —
+      // ServiceManager will render on this same screen once the new
+      // service doc arrives via subscribeProviderServices.
+      if (cfg.hasFixedCatalog) {
+        navigate('/provider/shop/offerings');
+      }
     } catch (e) {
       setError(t('dashboard.setup.saveError'));
     } finally {
@@ -145,27 +165,51 @@ function ServiceSetupForm({ providerUid }) {
         <div>
           <label style={{ fontSize: 12, color: 'var(--muted)', fontWeight: 600 }}>{t('dashboard.setup.category')}</label>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginTop: 6 }}>
-            {SERVICE_TYPES.map((st) => (
-              <button
-                key={st}
-                type="button"
-                onClick={() => setType(st)}
-                style={{
-                  padding: '12px 10px', borderRadius: 10, fontSize: 13, fontWeight: 700,
-                  border: `1.5px solid ${type === st ? 'var(--accent)' : 'var(--border)'}`,
-                  background: type === st ? 'var(--accentSoft)' : 'var(--card)',
-                  color: type === st ? 'var(--accent)' : 'var(--text)',
-                  cursor: 'pointer', textAlign: 'center',
-                }}
-              >
-                {SERVICE_TYPE_LABELS[st]}
-              </button>
-            ))}
+            {SERVICE_TYPES.map((st) => {
+              const stCfg = getCategorySetupConfig(st);
+              return (
+                <button
+                  key={st}
+                  type="button"
+                  onClick={() => setType(st)}
+                  style={{
+                    padding: '12px 10px', borderRadius: 10,
+                    border: `1.5px solid ${type === st ? 'var(--accent)' : 'var(--border)'}`,
+                    background: type === st ? 'var(--accentSoft)' : 'var(--card)',
+                    color: type === st ? 'var(--accent)' : 'var(--text)',
+                    cursor: 'pointer', textAlign: 'center',
+                    display: 'flex', flexDirection: 'column', gap: 3,
+                    minWidth: 0, width: '100%', boxSizing: 'border-box',
+                  }}
+                >
+                  <span style={{ fontSize: 13, fontWeight: 700, wordBreak: 'break-word' }}>{SERVICE_TYPE_LABELS_BN[st]}</span>
+                  <span style={{ fontSize: 10.5, fontWeight: 500, opacity: 0.75, lineHeight: 1.3, wordBreak: 'break-word' }}>
+                    {stCfg.categoryHintBn}
+                  </span>
+                </button>
+              );
+            })}
           </div>
         </div>
-        <Field label={t('dashboard.setup.serviceName')} value={name} onChange={setName} placeholder={t('dashboard.setup.serviceNamePlaceholder')} />
+        <Field label={t('dashboard.setup.serviceName')} value={name} onChange={setName} placeholder={cfg.shopNamePlaceholder} />
         <Field label={t('dashboard.setup.description')} value={description} onChange={setDescription} placeholder={t('dashboard.setup.descriptionPlaceholder')} textarea />
-        <Field label={t('dashboard.setup.priceNote')} value={priceNote} onChange={setPriceNote} placeholder={t('dashboard.setup.priceNotePlaceholder')} />
+        <Field label={t('dashboard.setup.priceNote')} value={priceNote} onChange={setPriceNote} placeholder={cfg.priceNotePlaceholder} />
+      </div>
+
+      {/* Phase 1: makes the two-step flow (shop profile now, items/menu
+          later) explicit, since nothing previously told the provider
+          this "price note" field isn't where per-item prices go. */}
+      <div style={{
+        display: 'flex', gap: 10, alignItems: 'flex-start',
+        marginTop: 14, padding: '12px 14px', borderRadius: 12,
+        background: 'var(--accentSoft)', border: '1px solid color-mix(in srgb, var(--accent) 20%, transparent)',
+      }}>
+        <Info size={16} color="var(--accent)" style={{ flexShrink: 0, marginTop: 1 }} />
+        <div style={{ fontSize: 12, color: 'var(--text)', lineHeight: 1.6 }}>
+          {cfg.hasFixedCatalog
+            ? `এই তথ্য শুধু আপনার দোকানের পরিচিতির জন্য। প্রতিটা ${cfg.itemWordPluralBn}-এর নাম, দাম ও ছবি এরপরের ধাপে "দোকান → ${cfg.offeringsPageTitleBn}" থেকে যোগ করতে পারবেন।`
+            : 'আপনার কোনো ফিক্সড আইটেম বা মেনু তালিকা লাগবে না — শিক্ষার্থী বা শিক্ষকরা সরাসরি আপনাকে রিকোয়েস্ট পাঠাবেন, আপনি সেগুলো Accept/Reject করবেন।'}
+        </div>
       </div>
 
       {error && <div style={{ marginTop: 12, fontSize: 12.5, color: 'var(--danger, #dc2626)' }}>{error}</div>}

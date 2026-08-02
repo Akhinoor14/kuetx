@@ -11,7 +11,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-  ArrowLeft, Wallet, Plus, Trash2,
+  ArrowLeft, Wallet, Plus, Trash2, Loader2, ImagePlus,
 } from 'lucide-react';
 import {
   subscribeProviderServices, setServiceOfferings, addOfferingId,
@@ -20,6 +20,7 @@ import {
 import {
   uploadServiceImage, deleteServiceImage,
 } from '../../lib/serviceImageUpload';
+import { getCategorySetupConfig } from '../../lib/serviceCategoryConfig';
 import { useProviderLang } from '../../hooks/useProviderLang';
 
 export default function ProviderOfferingsPage({ providerProfile }) {
@@ -39,6 +40,7 @@ export default function ProviderOfferingsPage({ providerProfile }) {
   const rawService = services && services.length > 0 ? services[0] : null;
   const service = rawService ? withServiceDefaults(rawService) : null;
   const isInquiryMode = service?.interactionMode === 'inquiry';
+  const cfg = service ? getCategorySetupConfig(service.type) : null;
 
   return (
     <div style={{ padding: '20px 16px', maxWidth: 640, margin: '0 auto' }}>
@@ -56,7 +58,25 @@ export default function ProviderOfferingsPage({ providerProfile }) {
         </div>
       )}
 
-      {!stillLoading && service && (
+      {/* CATEGORY_SPECIFIC_SETUP_PLAN.md Phase 3: Errand Runner has no
+          fixed catalog by design (see serviceCategoryConfig.js's doc
+          comment) — this page has nothing useful to manage for that
+          category, so it shows an explanatory state instead of an empty
+          Offerings list that would look broken. */}
+      {!stillLoading && service && !cfg.hasFixedCatalog && (
+        <div className="card" style={{ padding: 20, textAlign: 'center' }}>
+          <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', marginBottom: 8 }}>
+            এই ক্যাটাগরিতে আইটেম তালিকা প্রযোজ্য না
+          </div>
+          <div style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7 }}>
+            আপনার সার্ভিসে কোনো ফিক্সড আইটেম বা মেনু লাগে না — শিক্ষার্থী বা
+            শিক্ষকরা সরাসরি আপনাকে রিকোয়েস্ট পাঠাবেন, আপনি ড্যাশবোর্ড থেকে
+            সেগুলো Accept/Reject করবেন।
+          </div>
+        </div>
+      )}
+
+      {!stillLoading && service && cfg.hasFixedCatalog && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
           {/* Offerings — same OfferingsManager component/logic/strings as
               ProviderDashboard.jsx's Collapsible("Offerings") used to
@@ -64,12 +84,12 @@ export default function ProviderOfferingsPage({ providerProfile }) {
               dedicated page. */}
           <div className="card" style={{ padding: 16 }}>
             <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', marginBottom: 4 }}>
-              {t('offerings.title')}
+              {cfg.offeringsPageTitleBn}
             </div>
             <div style={{ fontSize: 12.5, color: 'var(--muted)', marginBottom: 12 }}>
-              {t('offerings.itemCount')((service.offerings || []).length)}
+              {(service.offerings || []).length}টা {cfg.itemWordPluralBn}
             </div>
-            <OfferingsManager service={service} />
+            <OfferingsManager service={service} cfg={cfg} />
           </div>
 
           {/* MULTI_CATEGORY_SERVICES_PLAN.md Phase 5: revenue tracker is
@@ -115,15 +135,20 @@ function BackLink({ navigate }) {
 
 const MAX_OFFERING_IMAGES = 3;
 
-function OfferingsManager({ service }) {
+function OfferingsManager({ service, cfg }) {
   const { t } = useProviderLang();
   const [offerings, setOfferings] = useState(service.offerings || []);
   const [newLabel, setNewLabel] = useState('');
   const [newPrice, setNewPrice] = useState('');
+  const [newImageFile, setNewImageFile] = useState(null);
+  const [newImagePreview, setNewImagePreview] = useState(null);
   const [saving, setSaving] = useState(false);
+  const [addingWithImage, setAddingWithImage] = useState(false);
   const [error, setError] = useState('');
   const [uploadingFor, setUploadingFor] = useState(null); // offering id currently uploading
   const fileInputsRef = useRef({});
+  const newImageInputRef = useRef(null);
+  const itemRefs = useRef({});
 
   useEffect(() => setOfferings(service.offerings || []), [service.offerings]);
 
@@ -144,16 +169,69 @@ function OfferingsManager({ service }) {
     }
   };
 
-  const addOffering = () => {
+  // CATEGORY_SPECIFIC_SETUP_PLAN.md follow-up: the provider can now pick
+  // an image WHILE composing the new item (newImageFile), not only after
+  // it's already saved. If a file was picked, the item is created first
+  // (so we have a serviceId + offering id to upload against — the R2
+  // upload path needs both), then the image upload runs immediately in
+  // the same action, then that image URL is folded into the same
+  // offering via one more save. Slower (2 writes instead of 1) but the
+  // provider never sees an item without its photo already attached by
+  // the time this finishes — no second manual step required for the
+  // common case of "one photo per item".
+  const addOffering = async () => {
     if (!newLabel.trim()) return;
     const price = newPrice.trim() ? Number(newPrice) : null;
-    const next = [...offerings, {
-      id: addOfferingId(), label: newLabel.trim(), isAvailable: true,
+    const newId = addOfferingId();
+    const pickedFile = newImageFile;
+    const base = {
+      id: newId, label: newLabel.trim(), isAvailable: true,
       price: Number.isFinite(price) ? price : null, images: [],
-    }];
+    };
     setNewLabel('');
     setNewPrice('');
-    save(next);
+    setNewImageFile(null);
+    setNewImagePreview(null);
+
+    if (!pickedFile) {
+      const next = [...offerings, base];
+      await save(next);
+      requestAnimationFrame(() => {
+        itemRefs.current[newId]?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      });
+      return;
+    }
+
+    setAddingWithImage(true);
+    setError('');
+    try {
+      const next = [...offerings, base];
+      await save(next);
+      const url = await uploadServiceImage(service.id, pickedFile);
+      const withImage = next.map((o) => (o.id === newId ? { ...o, images: [url] } : o));
+      await save(withImage);
+      requestAnimationFrame(() => {
+        itemRefs.current[newId]?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      });
+    } catch (e) {
+      setError(e.message || t('offerings.imageUploadError'));
+    } finally {
+      setAddingWithImage(false);
+    }
+  };
+
+  const onPickNewItemImage = (e) => {
+    const file = e.target.files?.[0];
+    e.target.value = '';
+    if (!file) return;
+    setNewImageFile(file);
+    setNewImagePreview(URL.createObjectURL(file));
+  };
+
+  const clearNewItemImage = () => {
+    if (newImagePreview) URL.revokeObjectURL(newImagePreview);
+    setNewImageFile(null);
+    setNewImagePreview(null);
   };
 
   const toggleOffering = (id) => {
@@ -218,19 +296,23 @@ function OfferingsManager({ service }) {
       {error && <div style={{ fontSize: 12.5, color: 'var(--danger, #dc2626)', marginBottom: 8 }}>{error}</div>}
 
       {offerings.map((o) => (
-        <div key={o.id} style={{ padding: '10px 0', borderBottom: '1px solid var(--border)' }}>
+        <div
+          key={o.id}
+          ref={(el) => { itemRefs.current[o.id] = el; }}
+          style={{ padding: '10px 0', borderBottom: '1px solid var(--border)' }}
+        >
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <span style={{ flex: 1, fontSize: 14, color: 'var(--text)', opacity: o.isAvailable ? 1 : 0.5 }}>{o.label}</span>
+            <span style={{ flex: 1, minWidth: 0, fontSize: 14, color: 'var(--text)', opacity: o.isAvailable ? 1 : 0.5, overflowWrap: 'break-word' }}>{o.label}</span>
             <button
               onClick={() => toggleOffering(o.id)}
               disabled={saving}
               style={{
                 minHeight: 40, minWidth: 56, padding: '0 14px', borderRadius: 10, border: 'none',
-                fontSize: 13, fontWeight: 800, cursor: 'pointer',
+                fontSize: 12.5, fontWeight: 800, cursor: 'pointer',
                 background: o.isAvailable ? '#16a34a' : '#6b7280', color: '#fff',
               }}
             >
-              {o.isAvailable ? t('offerings.on') : t('offerings.off')}
+              {o.isAvailable ? (cfg?.availableLabelBn || t('offerings.on')) : (cfg?.unavailableLabelBn || t('offerings.off'))}
             </button>
             <button
               onClick={() => removeOffering(o.id)}
@@ -258,8 +340,13 @@ function OfferingsManager({ service }) {
             />
           </div>
 
-          {/* Phase 3: up to 3 images per offering */}
-          <div style={{ display: 'flex', gap: 8, marginTop: 8, flexWrap: 'wrap' }}>
+          {/* Phase 3: up to 3 images per offering. Phase 1: helper label
+              now reflects category (সার্ভিসের ছবি / খাবারের ছবি /
+              প্রোডাক্টের ছবি) instead of always being unlabeled. */}
+          <div style={{ fontSize: 11, color: 'var(--muted)', fontWeight: 600, marginTop: 10, marginBottom: 4 }}>
+            {cfg?.imageHelperTextBn}
+          </div>
+          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
             {(o.images || []).map((url) => (
               <div key={url} style={{ position: 'relative' }}>
                 <img src={url} alt={o.label} style={{ width: 48, height: 48, borderRadius: 8, objectFit: 'cover', border: '1px solid var(--border)' }} />
@@ -281,12 +368,20 @@ function OfferingsManager({ service }) {
                   onClick={() => fileInputsRef.current[o.id]?.click()}
                   disabled={uploadingFor === o.id}
                   style={{
-                    width: 48, height: 48, borderRadius: 8, border: '1px dashed var(--border)',
+                    minWidth: 48, height: 48, borderRadius: 8, border: '1px dashed var(--border)',
                     background: 'var(--card)', color: 'var(--muted)', cursor: 'pointer',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
+                    padding: uploadingFor === o.id ? '0 10px' : 0,
                   }}
                 >
-                  {uploadingFor === o.id ? '…' : <Plus size={16} />}
+                  {uploadingFor === o.id
+                    ? (
+                      <>
+                        <Loader2 size={15} style={{ animation: 'spin 0.8s linear infinite' }} />
+                        <span style={{ fontSize: 11, fontWeight: 600 }}>আপলোড হচ্ছে…</span>
+                      </>
+                    )
+                    : <Plus size={16} />}
                 </button>
                 <input
                   ref={(el) => { fileInputsRef.current[o.id] = el; }}
@@ -301,35 +396,80 @@ function OfferingsManager({ service }) {
         </div>
       ))}
 
-      <div style={{ display: 'flex', gap: 8, marginTop: 12 }}>
-        <input
-          value={newLabel}
-          onChange={(e) => setNewLabel(e.target.value)}
-          placeholder={t('offerings.newLabelPlaceholder')}
-          style={{
-            flex: 1, minHeight: 44, padding: '0 12px', borderRadius: 10,
-            border: '1px solid var(--border)', background: 'var(--card)', color: 'var(--text)', fontSize: 14,
-          }}
-        />
-        <input
-          value={newPrice}
-          onChange={(e) => setNewPrice(e.target.value)}
-          type="number"
-          inputMode="numeric"
-          placeholder="৳"
-          style={{
-            width: 70, minHeight: 44, padding: '0 10px', borderRadius: 10,
-            border: '1px solid var(--border)', background: 'var(--card)', color: 'var(--text)', fontSize: 14,
-          }}
-        />
-        <button
-          onClick={addOffering}
-          disabled={saving}
-          className="btn btn-primary"
-          style={{ minHeight: 44, minWidth: 44, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-        >
-          <Plus size={16} />
-        </button>
+      <div style={{ marginTop: 12 }}>
+        {newImagePreview && (
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
+            <div style={{ position: 'relative' }}>
+              <img src={newImagePreview} alt="" style={{ width: 48, height: 48, borderRadius: 8, objectFit: 'cover', border: '1px solid var(--border)' }} />
+              <button
+                onClick={clearNewItemImage}
+                style={{
+                  position: 'absolute', top: -6, right: -6, width: 18, height: 18, borderRadius: '50%',
+                  background: '#dc2626', color: '#fff', border: 'none', fontSize: 11, lineHeight: '18px',
+                  cursor: 'pointer', padding: 0,
+                }}
+              >
+                ×
+              </button>
+            </div>
+            <span style={{ fontSize: 11.5, color: 'var(--muted)' }}>ছবি যোগ হবে</span>
+          </div>
+        )}
+        <div style={{ display: 'flex', gap: 8 }}>
+          <input
+            value={newLabel}
+            onChange={(e) => setNewLabel(e.target.value)}
+            onKeyDown={(e) => { if (e.key === 'Enter') addOffering(); }}
+            placeholder={cfg?.itemNamePlaceholder || t('offerings.newLabelPlaceholder')}
+            style={{
+              flex: 1, minWidth: 0, minHeight: 44, padding: '0 12px', borderRadius: 10,
+              border: '1px solid var(--border)', background: 'var(--card)', color: 'var(--text)', fontSize: 14,
+            }}
+          />
+          <input
+            value={newPrice}
+            onChange={(e) => setNewPrice(e.target.value)}
+            onKeyDown={(e) => { if (e.key === 'Enter') addOffering(); }}
+            type="number"
+            inputMode="numeric"
+            placeholder="৳"
+            style={{
+              width: 60, minHeight: 44, padding: '0 8px', borderRadius: 10,
+              border: '1px solid var(--border)', background: 'var(--card)', color: 'var(--text)', fontSize: 14,
+            }}
+          />
+          <button
+            onClick={() => newImageInputRef.current?.click()}
+            disabled={addingWithImage}
+            title={cfg?.imageHelperTextBn || 'ছবি'}
+            style={{
+              minHeight: 44, minWidth: 44, borderRadius: 10,
+              border: `1px dashed ${newImageFile ? 'var(--accent)' : 'var(--border)'}`,
+              background: newImageFile ? 'var(--accentSoft)' : 'var(--card)',
+              color: newImageFile ? 'var(--accent)' : 'var(--muted)', cursor: 'pointer',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+            }}
+          >
+            <ImagePlus size={17} />
+          </button>
+          <input
+            ref={newImageInputRef}
+            type="file"
+            accept="image/jpeg,image/png,image/webp,image/gif"
+            style={{ display: 'none' }}
+            onChange={onPickNewItemImage}
+          />
+          <button
+            onClick={addOffering}
+            disabled={saving || addingWithImage}
+            className="btn btn-primary"
+            style={{ minHeight: 44, minWidth: 44, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+          >
+            {addingWithImage
+              ? <Loader2 size={16} style={{ animation: 'spin 0.8s linear infinite' }} />
+              : <Plus size={16} />}
+          </button>
+        </div>
       </div>
     </div>
   );
