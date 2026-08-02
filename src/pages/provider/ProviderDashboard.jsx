@@ -320,19 +320,13 @@ function ServiceManager({ service: rawService }) {
       {/* Open/Closed — biggest, most important, one tap (§5.2). Left
           exactly as-is even while dormant — plan's note: "owner dormant
           অবস্থায়ও চাইলে isOpen টগল করতে পারবে". */}
-      <button
-        onClick={toggleOpen}
-        disabled={toggling}
-        style={{
-          padding: '18px 16px', borderRadius: 16, border: 'none', cursor: 'pointer',
-          fontSize: 17, fontWeight: 800, color: '#fff',
-          background: service.isOpen ? '#16a34a' : '#6b7280',
-          display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10,
-        }}
-      >
-        {service.isOpen ? <Check size={22} /> : <XIcon size={22} />}
-        {service.isOpen ? t('dashboard.shopOpen') : t('dashboard.shopClosed')}
-      </button>
+      <ShopOpenToggle
+        isOpen={service.isOpen}
+        toggling={toggling}
+        onToggle={toggleOpen}
+        openLabel={t('dashboard.shopOpen')}
+        closedLabel={t('dashboard.shopClosed')}
+      />
 
       {/* MULTI_CATEGORY_SERVICES_PLAN.md Phase 5 / Phase 4 (Errand Runner
           plan §4): mutually exclusive by interactionMode — booking keeps
@@ -375,6 +369,82 @@ function ServiceManager({ service: rawService }) {
 // banner, cover/offering image upload + location/delivery editor, and
 // the manual pause/permanent-close/reactivate control.
 // ---------------------------------------------------------------------
+
+// Redesigned open/closed control (§5.2 still applies — biggest, most
+// important, one tap). Previously a flat solid-color button; now a real
+// sliding switch (track + animated knob) so the on/off state reads at a
+// glance the way a physical toggle does, with a one-line caption instead
+// of relying on button color alone. Track/knob colors stay anchored to
+// KUETx's existing green (#16a34a = "open" everywhere else in this file)
+// so this doesn't introduce a second, competing "success" color.
+function ShopOpenToggle({
+  isOpen, toggling, onToggle, openLabel, closedLabel,
+}) {
+  const { t } = useProviderLang();
+  return (
+    <button
+      onClick={onToggle}
+      disabled={toggling}
+      aria-pressed={isOpen}
+      style={{
+        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+        gap: 14, width: '100%', textAlign: 'left',
+        padding: '14px 16px', borderRadius: 18, border: 'none', cursor: 'pointer',
+        background: isOpen ? 'linear-gradient(135deg, #16a34a, #15803d)' : '#eef0f2',
+        boxShadow: isOpen
+          ? '0 6px 18px rgba(22,163,74,0.28)'
+          : 'inset 0 0 0 1px rgba(15,23,42,0.08)',
+        transition: 'background 0.35s ease, box-shadow 0.35s ease',
+        opacity: toggling ? 0.75 : 1,
+      }}
+    >
+      <span style={{ display: 'flex', flexDirection: 'column', gap: 2, minWidth: 0 }}>
+        <span
+          style={{
+            fontSize: 16.5, fontWeight: 800,
+            color: isOpen ? '#fff' : '#1f2937',
+            transition: 'color 0.35s ease',
+          }}
+        >
+          {isOpen ? openLabel : closedLabel}
+        </span>
+        <span
+          style={{
+            fontSize: 11.5, fontWeight: 500,
+            color: isOpen ? 'rgba(255,255,255,0.85)' : 'var(--muted)',
+          }}
+        >
+          {isOpen ? t('dashboard.shopOpen.hint') : t('dashboard.shopClosed.hint')}
+        </span>
+      </span>
+
+      {/* Track + sliding knob */}
+      <span
+        style={{
+          position: 'relative', flexShrink: 0,
+          width: 56, height: 32, borderRadius: 999,
+          background: isOpen ? 'rgba(255,255,255,0.28)' : '#d1d5db',
+          transition: 'background 0.35s ease',
+        }}
+      >
+        <span
+          style={{
+            position: 'absolute', top: 3, left: isOpen ? 27 : 3,
+            width: 26, height: 26, borderRadius: '50%',
+            background: '#fff',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            boxShadow: '0 2px 6px rgba(0,0,0,0.22)',
+            transition: 'left 0.28s cubic-bezier(0.34, 1.56, 0.64, 1)',
+          }}
+        >
+          {isOpen
+            ? <Check size={15} color="#16a34a" strokeWidth={3} />
+            : <XIcon size={15} color="#6b7280" strokeWidth={3} />}
+        </span>
+      </span>
+    </button>
+  );
+}
 
 function DormantBanner({ service }) {
   const { t } = useProviderLang();
@@ -508,12 +578,12 @@ function PendingBookingCard({
           <span
             title={t('dashboard.pending.noShowTitle')}
             style={{
-              fontSize: 10, fontWeight: 800, letterSpacing: 0.3, textTransform: 'uppercase',
+              fontSize: 11, fontWeight: 700,
               color: '#dc2626', background: 'rgba(220,38,38,0.12)',
               borderRadius: 6, padding: '2px 8px',
             }}
           >
-            {noShowCount}{t('dashboard.pending.noShowSuffix')}
+            {noShowCount} {t('dashboard.pending.noShowSuffix')}
           </span>
         )}
       </div>
@@ -521,7 +591,7 @@ function PendingBookingCard({
       <div style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 2 }}>{t('dashboard.pending.requested')} {formatWhen(b.requestedAt)}</div>
       {b.preferredTime && (
         <div style={{ fontSize: 12.5, fontWeight: 700, color: 'var(--accent)', marginTop: 4 }}>
-          {t('dashboard.pending.preferred')} {b.preferredTime.date} at {b.preferredTime.time}
+          {t('dashboard.pending.preferred')} {b.preferredTime.date}, {b.preferredTime.time}
         </div>
       )}
       {b.studentPhone && (
@@ -735,36 +805,41 @@ function ConfirmedList({ serviceId, bookings, offerings }) {
             </div>
           )}
           {priceEntryFor === b.id ? (
-            <div style={{ display: 'flex', gap: 8, marginTop: 12, alignItems: 'center' }}>
-              <input
-                type="number"
-                inputMode="numeric"
-                autoFocus
-                value={priceInput}
-                onChange={(e) => setPriceInput(e.target.value)}
-                placeholder={t('dashboard.confirmed.priceLabel')}
-                style={{
-                  width: 90, minHeight: 46, padding: '0 12px', borderRadius: 10,
-                  border: '1px solid var(--border)', background: 'var(--card)',
-                  color: 'var(--text)', fontSize: 15,
-                }}
-              />
-              <button
-                onClick={() => confirmFinish(b.id)}
-                disabled={busyId === b.id}
-                className="btn btn-primary"
-                style={{ flex: 1, minHeight: 46, fontSize: 14.5, fontWeight: 700 }}
-              >
-                {t('dashboard.confirmed.finishConfirm')}
-              </button>
-              <button
-                onClick={() => setPriceEntryFor(null)}
-                disabled={busyId === b.id}
-                className="btn btn-secondary"
-                style={{ minHeight: 46, minWidth: 46, fontSize: 14.5, fontWeight: 700 }}
-              >
-                <XIcon size={16} />
-              </button>
+            <div style={{ marginTop: 12 }}>
+              <div style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 6 }}>
+                {t('dashboard.confirmed.priceLabel')}
+              </div>
+              <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+                <input
+                  type="number"
+                  inputMode="numeric"
+                  autoFocus
+                  value={priceInput}
+                  onChange={(e) => setPriceInput(e.target.value)}
+                  placeholder="৳"
+                  style={{
+                    width: 90, minHeight: 46, padding: '0 12px', borderRadius: 10,
+                    border: '1px solid var(--border)', background: 'var(--card)',
+                    color: 'var(--text)', fontSize: 15,
+                  }}
+                />
+                <button
+                  onClick={() => confirmFinish(b.id)}
+                  disabled={busyId === b.id}
+                  className="btn btn-primary"
+                  style={{ flex: 1, minHeight: 46, fontSize: 14.5, fontWeight: 700 }}
+                >
+                  {t('dashboard.confirmed.finishConfirm')}
+                </button>
+                <button
+                  onClick={() => setPriceEntryFor(null)}
+                  disabled={busyId === b.id}
+                  className="btn btn-secondary"
+                  style={{ minHeight: 46, minWidth: 46, fontSize: 14.5, fontWeight: 700 }}
+                >
+                  <XIcon size={16} />
+                </button>
+              </div>
             </div>
           ) : (
             <div style={{ display: 'flex', gap: 8, marginTop: 12 }}>

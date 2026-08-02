@@ -19,7 +19,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import {
-  Store, Circle, ArrowLeft, MapPin, Truck, Minus, Plus, ExternalLink,
+  Store, Circle, ArrowLeft, MapPin, Truck, Minus, Plus, ExternalLink, ImageOff, Check,
 } from 'lucide-react';
 import { auth } from '../lib/firebase';
 import { getProfile } from '../store/store';
@@ -455,7 +455,9 @@ function InquiryForm({ service }) {
               <div style={{ minWidth: 0, flex: 1 }}>
                 <div style={{ fontSize: 13.5, fontWeight: 600, color: 'var(--text)' }}>{o.label}</div>
                 {typeof o.price === 'number' && (
-                  <div style={{ fontSize: 12, color: 'var(--accent)', fontWeight: 600 }}>৳{o.price}</div>
+                  <div style={{ fontSize: 12, color: 'var(--accent)', fontWeight: 600 }}>
+                    ৳{o.price} <span style={{ color: 'var(--muted)', fontWeight: 400 }}>/ পিস</span>
+                  </div>
                 )}
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }}>
@@ -569,6 +571,11 @@ function BookingForm({ service }) {
   const [done, setDone] = useState(false);
 
   const availableOfferings = (service.offerings || []).filter((o) => o.isAvailable);
+  // salon/hotel are the only two 'booking'-mode types (see
+  // TYPE_TO_INTERACTION_MODE in serviceSync.js) — hotel here means food
+  // vendors, so its per-unit price reads "/ পিস" (per piece/plate)
+  // rather than salon's "/ জন" (per person).
+  const priceUnitLabel = service.type === 'hotel' ? 'পিস' : 'জন';
 
   const submit = async () => {
     setError('');
@@ -637,20 +644,53 @@ function BookingForm({ service }) {
     <div className="card" style={{ padding: 16 }}>
       <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', marginBottom: 12 }}>বুক করুন</div>
 
-      <label style={{ fontSize: 12, color: 'var(--muted)', fontWeight: 600 }}>Offering</label>
-      <select
-        value={offeringId}
-        onChange={(e) => setOfferingId(e.target.value)}
-        style={{
-          width: '100%', marginTop: 6, marginBottom: 12, padding: '10px 12px', borderRadius: 10,
-          border: '1px solid var(--border)', background: 'var(--card)', color: 'var(--text)', fontSize: 14,
-        }}
-      >
-        <option value="">সিলেক্ট করুন</option>
-        {availableOfferings.map((o) => (
-          <option key={o.id} value={o.id}>{o.label}</option>
-        ))}
-      </select>
+      <label style={{ fontSize: 12, color: 'var(--muted)', fontWeight: 600 }}>যা করাতে চান, বেছে নিন</label>
+      <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginTop: 8, marginBottom: 12 }}>
+        {availableOfferings.map((o) => {
+          const isSelected = offeringId === o.id;
+          const coverUrl = Array.isArray(o.images) ? o.images[0] : null;
+          return (
+            <button
+              key={o.id}
+              type="button"
+              onClick={() => setOfferingId(o.id)}
+              style={{
+                display: 'flex', alignItems: 'center', gap: 10, width: '100%', textAlign: 'left',
+                padding: 10, borderRadius: 12, cursor: 'pointer',
+                border: isSelected ? '2px solid var(--accent)' : '1px solid var(--border)',
+                background: isSelected ? 'var(--accentSoft, rgba(22,163,74,0.08))' : 'var(--card)',
+              }}
+            >
+              <div style={{
+                width: 44, height: 44, borderRadius: 8, flexShrink: 0, overflow: 'hidden',
+                background: 'var(--surface, #f3f4f6)', display: 'flex', alignItems: 'center', justifyContent: 'center',
+              }}
+              >
+                {coverUrl
+                  ? <img src={coverUrl} alt={o.label} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  : <ImageOff size={17} color="var(--muted)" />}
+              </div>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div style={{ fontSize: 13.5, fontWeight: 600, color: 'var(--text)' }}>{o.label}</div>
+                {typeof o.price === 'number' && (
+                  <div style={{ fontSize: 12, color: 'var(--accent)', fontWeight: 600, marginTop: 2 }}>
+                    ৳{o.price} <span style={{ color: 'var(--muted)', fontWeight: 400 }}>/ {priceUnitLabel}</span>
+                  </div>
+                )}
+              </div>
+              {isSelected && (
+                <div style={{
+                  width: 20, height: 20, borderRadius: '50%', background: 'var(--accent)',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+                }}
+                >
+                  <Check size={12} color="#fff" strokeWidth={3} />
+                </div>
+              )}
+            </button>
+          );
+        })}
+      </div>
 
       <label style={{ fontSize: 12, color: 'var(--muted)', fontWeight: 600 }}>ফোন নাম্বার</label>
       <input

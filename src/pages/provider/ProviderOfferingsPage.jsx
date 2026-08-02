@@ -11,7 +11,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-  ArrowLeft, Wallet, Plus, Trash2, Loader2, ImagePlus,
+  ArrowLeft, Wallet, Plus, Trash2, Loader2, ImagePlus, Check, X as XIcon, ImageOff,
 } from 'lucide-react';
 import {
   subscribeProviderServices, setServiceOfferings, addOfferingId,
@@ -295,106 +295,165 @@ function OfferingsManager({ service, cfg }) {
 
       {error && <div style={{ fontSize: 12.5, color: 'var(--danger, #dc2626)', marginBottom: 8 }}>{error}</div>}
 
-      {offerings.map((o) => (
+      {offerings.map((o) => {
+        const coverUrl = (o.images || [])[0] || null;
+        return (
         <div
           key={o.id}
           ref={(el) => { itemRefs.current[o.id] = el; }}
-          style={{ padding: '10px 0', borderBottom: '1px solid var(--border)' }}
+          style={{
+            marginBottom: 14, borderRadius: 16, border: '1px solid var(--border)',
+            background: 'var(--card)', overflow: 'hidden',
+          }}
         >
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <span style={{ flex: 1, minWidth: 0, fontSize: 14, color: 'var(--text)', opacity: o.isAvailable ? 1 : 0.5, overflowWrap: 'break-word' }}>{o.label}</span>
+          {/* Cover photo — the first uploaded image, e-commerce-card style.
+              No photo yet → a plain placeholder tile instead of blank
+              space, so the card never looks broken/empty. */}
+          <div style={{ width: '100%', aspectRatio: '4 / 3', background: 'var(--surface, #f3f4f6)', position: 'relative' }}>
+            {coverUrl ? (
+              <img
+                src={coverUrl}
+                alt={o.label}
+                style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: o.isAvailable ? 1 : 0.45 }}
+              />
+            ) : (
+              <div style={{
+                width: '100%', height: '100%', display: 'flex', flexDirection: 'column',
+                alignItems: 'center', justifyContent: 'center', gap: 6, opacity: o.isAvailable ? 1 : 0.45,
+              }}
+              >
+                <ImageOff size={26} color="var(--muted)" />
+                <span style={{ fontSize: 11, color: 'var(--muted)' }}>{t('offerings.noImage')}</span>
+              </div>
+            )}
+          </div>
+
+          <div style={{ padding: 12 }}>
+            <div style={{ display: 'flex', alignItems: 'flex-start', gap: 8 }}>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div style={{ fontSize: 14.5, fontWeight: 700, color: 'var(--text)', opacity: o.isAvailable ? 1 : 0.55, overflowWrap: 'break-word' }}>
+                  {o.label}
+                </div>
+                <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--accent)', marginTop: 3 }}>
+                  {o.price ? `৳${o.price}` : t('offerings.noPriceYet')}
+                </div>
+              </div>
+              <button
+                onClick={() => removeOffering(o.id)}
+                disabled={saving}
+                className="btn btn-secondary"
+                style={{ minHeight: 36, minWidth: 36, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}
+              >
+                <Trash2 size={15} />
+              </button>
+            </div>
+
+            {/* Real sliding toggle (matches the dashboard's shop-open
+                switch) instead of the old flat solid-color button — the
+                on/off state now reads at a glance, and price/photo
+                controls live directly beneath it. */}
             <button
               onClick={() => toggleOffering(o.id)}
               disabled={saving}
+              aria-pressed={o.isAvailable}
               style={{
-                minHeight: 40, minWidth: 56, padding: '0 14px', borderRadius: 10, border: 'none',
-                fontSize: 12.5, fontWeight: 800, cursor: 'pointer',
-                background: o.isAvailable ? '#16a34a' : '#6b7280', color: '#fff',
+                display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                width: '100%', marginTop: 10, padding: '9px 12px', borderRadius: 12, border: 'none', cursor: 'pointer',
+                background: o.isAvailable ? 'rgba(22,163,74,0.10)' : 'rgba(107,114,128,0.10)',
               }}
             >
-              {o.isAvailable ? (cfg?.availableLabelBn || t('offerings.on')) : (cfg?.unavailableLabelBn || t('offerings.off'))}
-            </button>
-            <button
-              onClick={() => removeOffering(o.id)}
-              disabled={saving}
-              className="btn btn-secondary"
-              style={{ minHeight: 40, minWidth: 40, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-            >
-              <Trash2 size={15} />
-            </button>
-          </div>
-
-          {/* Phase 3: per-item price (optional) */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 8 }}>
-            <span style={{ fontSize: 12.5, color: 'var(--muted)' }}>৳</span>
-            <input
-              type="number"
-              inputMode="numeric"
-              defaultValue={o.price ?? ''}
-              onBlur={(e) => updatePrice(o.id, e.target.value)}
-              placeholder={t('offerings.pricePlaceholder')}
-              style={{
-                width: 110, minHeight: 36, padding: '0 10px', borderRadius: 8,
-                border: '1px solid var(--border)', background: 'var(--card)', color: 'var(--text)', fontSize: 13,
-              }}
-            />
-          </div>
-
-          {/* Phase 3: up to 3 images per offering. Phase 1: helper label
-              now reflects category (সার্ভিসের ছবি / খাবারের ছবি /
-              প্রোডাক্টের ছবি) instead of always being unlabeled. */}
-          <div style={{ fontSize: 11, color: 'var(--muted)', fontWeight: 600, marginTop: 10, marginBottom: 4 }}>
-            {cfg?.imageHelperTextBn}
-          </div>
-          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-            {(o.images || []).map((url) => (
-              <div key={url} style={{ position: 'relative' }}>
-                <img src={url} alt={o.label} style={{ width: 48, height: 48, borderRadius: 8, objectFit: 'cover', border: '1px solid var(--border)' }} />
-                <button
-                  onClick={() => removeOfferingImage(o.id, url)}
+              <span style={{ fontSize: 12.5, fontWeight: 700, color: o.isAvailable ? '#16a34a' : '#6b7280' }}>
+                {o.isAvailable ? (cfg?.availableLabelBn || t('offerings.on')) : (cfg?.unavailableLabelBn || t('offerings.off'))}
+              </span>
+              <span style={{ position: 'relative', width: 40, height: 24, borderRadius: 999, background: o.isAvailable ? '#16a34a' : '#d1d5db', flexShrink: 0 }}>
+                <span
                   style={{
-                    position: 'absolute', top: -6, right: -6, width: 18, height: 18, borderRadius: '50%',
-                    background: '#dc2626', color: '#fff', border: 'none', fontSize: 11, lineHeight: '18px',
-                    cursor: 'pointer', padding: 0,
+                    position: 'absolute', top: 2, left: o.isAvailable ? 18 : 2,
+                    width: 20, height: 20, borderRadius: '50%', background: '#fff',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    boxShadow: '0 1px 3px rgba(0,0,0,0.25)',
+                    transition: 'left 0.22s cubic-bezier(0.34, 1.56, 0.64, 1)',
                   }}
                 >
-                  ×
-                </button>
-              </div>
-            ))}
-            {(o.images || []).length < MAX_OFFERING_IMAGES && (
-              <>
-                <button
-                  onClick={() => fileInputsRef.current[o.id]?.click()}
-                  disabled={uploadingFor === o.id}
-                  style={{
-                    minWidth: 48, height: 48, borderRadius: 8, border: '1px dashed var(--border)',
-                    background: 'var(--card)', color: 'var(--muted)', cursor: 'pointer',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
-                    padding: uploadingFor === o.id ? '0 10px' : 0,
-                  }}
-                >
-                  {uploadingFor === o.id
-                    ? (
-                      <>
-                        <Loader2 size={15} style={{ animation: 'spin 0.8s linear infinite' }} />
-                        <span style={{ fontSize: 11, fontWeight: 600 }}>আপলোড হচ্ছে…</span>
-                      </>
-                    )
-                    : <Plus size={16} />}
-                </button>
-                <input
-                  ref={(el) => { fileInputsRef.current[o.id] = el; }}
-                  type="file"
-                  accept="image/jpeg,image/png,image/webp,image/gif"
-                  style={{ display: 'none' }}
-                  onChange={(e) => onPickOfferingImage(o.id, e)}
-                />
-              </>
-            )}
+                  {o.isAvailable
+                    ? <Check size={12} color="#16a34a" strokeWidth={3} />
+                    : <XIcon size={12} color="#6b7280" strokeWidth={3} />}
+                </span>
+              </span>
+            </button>
+
+            {/* Price + photo controls — always visible under the toggle,
+                so the owner can set them regardless of on/off state. */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 10 }}>
+              <span style={{ fontSize: 12.5, color: 'var(--muted)' }}>৳</span>
+              <input
+                type="number"
+                inputMode="numeric"
+                defaultValue={o.price ?? ''}
+                onBlur={(e) => updatePrice(o.id, e.target.value)}
+                placeholder={t('offerings.pricePlaceholder')}
+                style={{
+                  width: 110, minHeight: 36, padding: '0 10px', borderRadius: 8,
+                  border: '1px solid var(--border)', background: 'var(--card)', color: 'var(--text)', fontSize: 13,
+                }}
+              />
+              <span style={{ fontSize: 11.5, color: 'var(--muted)' }}>{t('offerings.perUnitHint')}</span>
+            </div>
+
+            <div style={{ fontSize: 11, color: 'var(--muted)', fontWeight: 600, marginTop: 10, marginBottom: 4 }}>
+              {cfg?.imageHelperTextBn}
+            </div>
+            <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+              {(o.images || []).map((url) => (
+                <div key={url} style={{ position: 'relative' }}>
+                  <img src={url} alt={o.label} style={{ width: 48, height: 48, borderRadius: 8, objectFit: 'cover', border: '1px solid var(--border)' }} />
+                  <button
+                    onClick={() => removeOfferingImage(o.id, url)}
+                    style={{
+                      position: 'absolute', top: -6, right: -6, width: 18, height: 18, borderRadius: '50%',
+                      background: '#dc2626', color: '#fff', border: 'none', fontSize: 11, lineHeight: '18px',
+                      cursor: 'pointer', padding: 0,
+                    }}
+                  >
+                    ×
+                  </button>
+                </div>
+              ))}
+              {(o.images || []).length < MAX_OFFERING_IMAGES && (
+                <>
+                  <button
+                    onClick={() => fileInputsRef.current[o.id]?.click()}
+                    disabled={uploadingFor === o.id}
+                    style={{
+                      minWidth: 48, height: 48, borderRadius: 8, border: '1px dashed var(--border)',
+                      background: 'var(--card)', color: 'var(--muted)', cursor: 'pointer',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
+                      padding: uploadingFor === o.id ? '0 10px' : 0,
+                    }}
+                  >
+                    {uploadingFor === o.id
+                      ? (
+                        <>
+                          <Loader2 size={15} style={{ animation: 'spin 0.8s linear infinite' }} />
+                          <span style={{ fontSize: 11, fontWeight: 600 }}>আপলোড হচ্ছে…</span>
+                        </>
+                      )
+                      : <Plus size={16} />}
+                  </button>
+                  <input
+                    ref={(el) => { fileInputsRef.current[o.id] = el; }}
+                    type="file"
+                    accept="image/jpeg,image/png,image/webp,image/gif"
+                    style={{ display: 'none' }}
+                    onChange={(e) => onPickOfferingImage(o.id, e)}
+                  />
+                </>
+              )}
+            </div>
           </div>
         </div>
-      ))}
+        );
+      })}
 
       <div style={{ marginTop: 12 }}>
         {newImagePreview && (
