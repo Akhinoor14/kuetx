@@ -660,7 +660,7 @@ service cloud.firestore {
         && request.resource.data.verifiedAt == null
         && !('phone' in request.resource.data);
 
-      // Update: two disjoint cases.
+      // Update: three disjoint cases.
       //  1. The owning account re-submitting after a rejection (Gap 6) —
       //     may only move status FROM 'rejected' back TO 'pending', and
       //     may only touch the fields the re-submit form actually edits
@@ -672,6 +672,21 @@ service cloud.firestore {
       //  2. Founder review action (verify / reject / deactivate) — may
       //     only touch {status, verifiedAt, verifiedBy, rejectedReason},
       //     and status must land on one of the three valid outcomes.
+      //  3. BUGFIX: the owning (verified) provider appending their own
+      //     new service id to serviceIds — createService() (serviceSync.js)
+      //     writes services/{id} and providers/{uid}.serviceIds in the SAME
+      //     batch (so a provider's account doc always lists every service
+      //     they own), but no update case ever permitted a plain provider
+      //     to touch serviceIds at all — every service-creation attempt
+      //     was silently rejected by rules, even though services/{id}'s own
+      //     create rule (below) was satisfied. This case only allows
+      //     EXACTLY that one write shape: serviceIds is the only field
+      //     touched, the new array is the old array plus exactly one new
+      //     id (never a removal, a reorder, or adding more than one id per
+      //     write), and the account must already be verified (matching
+      //     services/{id}'s own isVerifiedProviderUid create requirement,
+      //     so an unverified/rejected account still can't backdoor a
+      //     serviceIds entry this way).
       allow update: if (isSignedIn() && request.auth.uid == uid
           && resource.data.status == 'rejected'
           && request.resource.data.status == 'pending'
@@ -681,7 +696,12 @@ service cloud.firestore {
         || (isAdmin()
           && request.resource.data.diff(resource.data).affectedKeys()
                .hasOnly(['status', 'verifiedAt', 'verifiedBy', 'rejectedReason'])
-          && request.resource.data.status in ['verified', 'rejected', 'deactivated']);
+          && request.resource.data.status in ['verified', 'rejected', 'deactivated'])
+        || (isSignedIn() && request.auth.uid == uid
+          && resource.data.status == 'verified'
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['serviceIds'])
+          && request.resource.data.serviceIds.size() == resource.data.serviceIds.size() + 1
+          && request.resource.data.serviceIds.hasAll(resource.data.serviceIds));
 
       allow delete: if isAdmin();
 
@@ -788,6 +808,7 @@ service cloud.firestore {
 
     function ownsService(serviceId) {
       return isSignedIn()
+        && exists(/databases/$(database)/documents/services/$(serviceId))
         && get(/databases/$(database)/documents/services/$(serviceId)).data.providerUid == request.auth.uid;
     }
 

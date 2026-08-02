@@ -145,6 +145,7 @@ function ServiceSetupForm({ providerUid }) {
         navigate('/provider/shop/offerings');
       }
     } catch (e) {
+      console.error('[ServiceSetupForm] createService failed:', e);
       setError(t('dashboard.setup.saveError'));
     } finally {
       setSubmitting(false);
