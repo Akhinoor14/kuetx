@@ -12,6 +12,79 @@
 
 ## এখন পর্যন্ত সমাধান হওয়া উল্লেখযোগ্য বাগ (সংক্ষেপে, ইতিহাস)
 
+- **Student-shell leak — সম্পূর্ণ sweep + আসল flash root cause fix:**
+  আগের এন্ট্রি (নিচে, "Provider shell-এ student-only Layout-global
+  component leak") `NoCRBanner`, `NoticeToast`, `ProfileCompleteReminder`
+  ফিক্স করেছিল। ব্যবহারকারীর অনুরোধে পুরো codebase আবার সম্পূর্ণভাবে
+  sweep করা হয়েছে — `getProfile()`/`getGroupId()` কল করা প্রতিটা ফাইল
+  (৪২টা) চেক করে দেখা হয়েছে route-guard আছে কিনা। অতিরিক্ত ২টা leak
+  পাওয়া গেছে যেগুলো route-lvl guard-এর বাইরে ছিল:
+  - **`Sidebar.jsx`**: `isProvider ? Provider-nav : viewMode==='teacher' ?
+    Faculty-nav : Student-nav` — কোনো `isResolved` চেক ছাড়া। এছাড়া
+    unread-notice-count subscription আর `isRealCR`/`subscribeMembers`
+    effect-ও কোনো role-চেক ছাড়া চলত।
+  - **`Navbar.jsx`**: চিপ-স্ট্রিপ/টাইটেলের জন্য `navSource` নির্বাচন
+    (`isProvider ? getNavProvider() : NAV/NAV_DESKTOP`), notice-bell
+    subscription (`profileForNotices`/`groupId`/`notices`), আর
+    `unreadAlertCount` — সবকটাই একই কোনো `isResolved`-গার্ড ছাড়া
+    সমস্যা।
+  সব কটাতে `isProviderResolved`/(`isProviderResolved && isProvider` /
+  `!isProvider`) গার্ড যোগ করা হয়েছে — resolve হওয়ার আগে নিরপেক্ষ
+  (student না ধরে নিয়ে) অবস্থায় থাকে।
+
+  **আসল root cause (flash-এর প্রকৃত কারণ) — এইবার খুঁজে বের করা
+  হয়েছে:** `useIsProvider()`/`useIsFaculty()` হুক দুটোর নিজস্ব
+  `onAuthStateChanged` কলব্যাক একটা নতুন/ভিন্ন uid দেখলে
+  `subscribeProviderProfile`/`subscribeFacultyProfile`-এর async রেজাল্ট
+  আসার আগ পর্যন্ত `isResolved`-কে **সাথে সাথে `false`-এ রিসেট করত না** —
+  ফলে account switch/পুরনো session-এ আগের account-এর stale
+  `isResolved=true` + stale `isProvider`/`isFaculty` মান একটা ছোট
+  সময়ের জন্য পড়া যেত, ঠিক যে window-এ downstream সব `isResolved`-গার্ড
+  (Sidebar, Navbar, NoCRBanner, NoticeToast, ProfileCompleteReminder,
+  RootRouteResolver) ভুলভাবে "resolved" ধরে নিত। ফিক্স:
+  `useIsProvider.js`/`useIsFaculty.js`-এর `onAuthStateChanged` কলব্যাকে
+  নতুন uid দেখামাত্রই (async subscribe শুরু হওয়ার আগেই)
+  `setIsResolved(false)` কল করা হয় — তাই resolve হওয়ার আগ পর্যন্ত
+  প্রতিটা গেটেড consumer সঠিকভাবে neutral/loading state দেখায়, কখনো
+  আগের account-এর ভুল মান না।
+
+  সহায়ক ফিক্স: `firebaseAuth.js`-এর `logout()` এখন
+  `kuetx:lastKnownFacultyStatus`, `kuetx:lastKnownProviderStatus`,
+  `kuetx:lastKnownIsRealCR` — এই তিনটা sessionStorage cache-ও সাইন-আউটের
+  সময় ক্লিয়ার করে দেয় (আগে কখনো ক্লিয়ার হতো না), যাতে একই ট্যাবে পরের
+  account-এর optimistic paint শুরু হয় fresh state থেকে, আগের
+  account-এর cached মান থেকে না।
+
+  এই ফিক্সের ফলে `RootRouteResolver.jsx`-এর আগের `{() => <Dashboard
+  />}` ফাংশন-চিলড্রেন প্যাটার্ন (আগের এন্ট্রি দেখো) এখনো ঠিক আছে ও
+  দরকারও ছিল, কিন্তু সেটা একা যথেষ্ট ছিল না — `isResolved` নিজেই
+  stale-true থাকতে পারত, তাই guard থাকা সত্ত্বেও ভুল শাখা নিতে পারত।
+  এই দুই ফিক্স (hook-লেভেল + component-লেভেল isResolved গার্ড) একসাথে
+  পুরো flash class-টা বন্ধ করে।
+- **Provider shell-এ student-only Layout-global component leak** —
+  Provider account দিয়ে সাইন-ইন করা অবস্থায় `/provider`, `/provider/shop`,
+  `/provider/profile`, `/settings` ইত্যাদি পেজে student-only ব্যানার/টোস্ট
+  দেখা যাচ্ছিল (যেমন "2K23 · ESE has no CR yet — tap to claim CR")। Route
+  লেভেলে কোনো ফাঁক ছিল না — `/provider/*` সব route ইতিমধ্যে
+  `RequireProvider`-এ wrap করা। আসল কারণ: `App.jsx`-এর `Layout`-এ
+  globally mount হওয়া কিছু কম্পোনেন্ট (`NoCRBanner`, `NoticeToast`,
+  `ProfileCompleteReminder`) `getProfile()`/`getGroupId()` কল করে সরাসরি
+  একটা **local, role-scoped না এমন store cache** (`store.get('profile')`)
+  থেকে ডেটা পড়ত, কোনো `useIsProvider()`/`useIsFaculty()` চেক ছাড়াই —
+  ফলে ওই একই ব্রাউজারে আগে থেকে cached (বা কোনোভাবে রয়ে যাওয়া)
+  student-shaped profile ডেটা (batch/dept/studentId) থাকলে, account
+  আসলে provider হলেও এই কম্পোনেন্টগুলো ধরে নিত account student। এটা
+  ঠিক সেই একই root cause যেটা root route (`/`) role-bleed বাগে ছিল —
+  local/cached ডেটাকে সত্য ধরে নেওয়া, server-verified চেক ছাড়া। `Sidebar`
+  আর `Navbar` (যেগুলো একই ডেটা পড়ে) আগে থেকেই `useIsProvider()`
+  চেক করত, কিন্তু এই তিনটা component সেই প্যাটার্ন মিস করেছিল। ফিক্স:
+  তিনটা কম্পোনেন্টেই `useIsProvider()`/`useIsFaculty()` (দুটোই resolve
+  হওয়া পর্যন্ত অপেক্ষা, `RootRouteResolver`-এর একই `isGenuineFaculty`
+  শর্ত সহ Founder bypass respect করে) দিয়ে একটা `isStudentShell` গার্ড
+  যোগ করা হয়েছে — `isStudentShell` false হলে evaluate/subscribe/render
+  কিছুই হয় না। `BottomNav`-এর provider-mode আইটেম (ড্যাশবোর্ড, আমার
+  দোকান, প্রোফাইল) স্ক্রিনশটে দেখতে যা মনে হয়েছিল সেটা আসলে সঠিক provider
+  nav-ই ছিল, বাগ ছিল না — bottom orange ব্যানারটাই ছিল আসল leak।
 - **Root route (`/`) role-bleed বাগ — ফলো-আপ (auto-redirect):** আগের
   ফিক্স (নিচে) root route-এর `<Dashboard />` fallback-কে
   `RequireStudentMode`-এ wrap করেছিল, যেটা server-verified চেক দিয়ে

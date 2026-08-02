@@ -102,6 +102,17 @@ export function useIsFaculty() {
         return;
       }
 
+      // BUGFIX (stale isResolved across account switch): same fix as
+      // useIsProvider.js's doc comment on this exact line — isResolved
+      // must flip back to false the instant a DIFFERENT uid appears
+      // here, synchronously, before either subscribeIsAdmin's or
+      // subscribeFacultyProfile's async result lands. Otherwise a
+      // gated consumer (Sidebar.jsx, Navbar.jsx, RootRouteResolver.jsx)
+      // could briefly read a stale isResolved=true left over from the
+      // PREVIOUS account together with that account's stale
+      // isFaculty/isFounderBypass values.
+      setIsResolved(false);
+
       unsubAdmin = subscribeIsAdmin(user.uid, (result) => {
         founderResolved = true;
         isFounder = result;

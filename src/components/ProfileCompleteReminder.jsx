@@ -20,11 +20,22 @@
 // a brand-new install), so relying on queue emptiness alone would show
 // this reminder seconds after onboarding instead of on a later visit.
 
+// BUGFIX (leaked onto /provider/*): getProfile() reads a LOCAL,
+// non-role-scoped store cache (see NoCRBanner.jsx's doc comment for the
+// full root-cause explanation) — a provider account with stale
+// student-shaped profile data (name/studentId) still cached locally could
+// trigger this nudge to "finish your student profile" while browsing the
+// Provider shell. Gated the same way: useIsProvider()/useIsFaculty() must
+// both resolve, and neither must be genuinely true, before this ever
+// evaluates or shows.
+
 import { useEffect, useState } from 'react';
 import { ClipboardList } from 'lucide-react';
 import { store, getProfile, normalizeProfileForSave, validateProfileForSave } from '../store/store';
 import { alertDialog } from '../lib/dialog';
 import ProfileSetupModal from './ProfileSetupModal';
+import { useIsProvider } from '../hooks/useIsProvider';
+import { useIsFaculty } from '../hooks/useIsFaculty';
 
 const SNOOZE_KEY = 'kuetxProfileCompleteReminderSnoozed';
 
@@ -62,8 +73,13 @@ function isFreshSessionSinceProfileSetup() {
 export default function ProfileCompleteReminder() {
   const [open, setOpen] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
+  const { isProvider, isResolved: isProviderResolved } = useIsProvider();
+  const { isFaculty, isFounderBypass, isResolved: isFacultyResolved } = useIsFaculty();
+  const isGenuineFaculty = isFaculty && !isFounderBypass;
+  const isStudentShell = isProviderResolved && isFacultyResolved && !isProvider && !isGenuineFaculty;
 
   useEffect(() => {
+    if (!isStudentShell) return;
     const profile = getProfile();
 
     // Only nudge once there's at least a minimal profile (name+roll) —
@@ -81,7 +97,7 @@ export default function ProfileCompleteReminder() {
 
     const timer = window.setTimeout(() => setOpen(true), 3000);
     return () => window.clearTimeout(timer);
-  }, []);
+  }, [isStudentShell]);
 
   const snooze = () => {
     store.set(SNOOZE_KEY, new Date().toDateString());
@@ -113,6 +129,7 @@ export default function ProfileCompleteReminder() {
     );
   }
 
+  if (!isStudentShell) return null;
   if (!open) return null;
 
   return (

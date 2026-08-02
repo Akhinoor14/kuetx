@@ -74,6 +74,20 @@ export function useIsProvider() {
         return;
       }
 
+      // BUGFIX (stale isResolved across account switch): isResolved used
+      // to only ever get set to true inside applyProfile (async, after
+      // the real Firestore check completes) — it was never reset to
+      // false the moment a DIFFERENT uid showed up here. So a consumer
+      // gating on isResolved (Sidebar.jsx, Navbar.jsx,
+      // RootRouteResolver.jsx, etc.) could read a stale isResolved=true
+      // (left over from the PREVIOUS account) together with a stale
+      // isProvider value for the brief window between this callback
+      // firing and applyProfile's async result landing — exactly the
+      // window where the wrong shell's nav/banners could flash. Reset
+      // isResolved synchronously here, before subscribeProviderProfile
+      // is even called, so every gated consumer correctly shows its
+      // loading/neutral state for that window instead of a stale value.
+      setIsResolved(false);
       unsubProfile = subscribeProviderProfile(user.uid, applyProfile);
     });
 

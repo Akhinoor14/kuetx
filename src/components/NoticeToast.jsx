@@ -6,6 +6,8 @@ import { subscribeMyRole } from '../lib/groupSync';
 import { getProfile } from '../store/store';
 import { getGroupId } from '../lib/groupUtils';
 import { auth } from '../lib/firebase';
+import { useIsProvider } from '../hooks/useIsProvider';
+import { useIsFaculty } from '../hooks/useIsFaculty';
 
 // Popup (toast) for brand-new notices — separate from GlobalToasts.jsx
 // (which is a generic bottom-center action-feedback toast used by
@@ -19,6 +21,17 @@ import { auth } from '../lib/firebase';
 // after mount, every id currently in the list is marked seen silently
 // (no popup flood for pre-existing notices) — from then on, any id that
 // appears that wasn't in that seen-set is genuinely new and gets a toast.
+//
+// BUGFIX (leaked onto /provider/*): this component always calls
+// subscribeAllNotices(profile, groupId, callback, 'student', ...) — the
+// audience is hardcoded to 'student', it was never meant to run for any
+// other shell. But getProfile()/getGroupId() read from a LOCAL,
+// non-role-scoped store cache (see NoCRBanner.jsx's doc comment for the
+// same root cause), so a provider (or faculty) account with stale
+// student profile data cached locally still resolved a groupId and got
+// student notice toasts popping up over /provider/* pages. Same fix
+// pattern as NoCRBanner/Sidebar/Navbar: gate on server-verified
+// useIsProvider()/useIsFaculty() before ever subscribing.
 
 const SEEN_KEY = 'noticeToastSeenIds_v1';
 const MAX_VISIBLE = 3;
@@ -49,19 +62,26 @@ export default function NoticeToast() {
   const bootedRef = useRef(false);
   const navigate = useNavigate();
 
+  const { isProvider, isResolved: isProviderResolved } = useIsProvider();
+  const { isFaculty, isFounderBypass, isResolved: isFacultyResolved } = useIsFaculty();
+  const isGenuineFaculty = isFaculty && !isFounderBypass;
+  const isStudentShell = isProviderResolved && isFacultyResolved && !isProvider && !isGenuineFaculty;
+
   const [isViewerCR, setIsViewerCR] = useState(false);
   const profileRef = useRef(getProfile());
   const groupIdRef = useRef(getGroupId(profileRef.current));
 
   useEffect(() => {
+    if (!isStudentShell) return;
     const gid = groupIdRef.current;
     if (!gid || !auth.currentUser?.uid) { setIsViewerCR(false); return; }
     return subscribeMyRole(gid, auth.currentUser.uid, (role) => {
       setIsViewerCR(role === 'cr' || role === 'acr');
     });
-  }, []);
+  }, [isStudentShell]);
 
   useEffect(() => {
+    if (!isStudentShell) return;
     const profile = profileRef.current;
     const gid = groupIdRef.current;
     const unsub = subscribeAllNotices(profile, gid, (notices) => {
@@ -80,7 +100,7 @@ export default function NoticeToast() {
       setQueue((q) => [...fresh.sort((a, b) => b.createdAt - a.createdAt), ...q]);
     }, 'student', { isViewerCR, uid: auth.currentUser?.uid });
     return unsub;
-  }, [isViewerCR]);
+  }, [isViewerCR, isStudentShell]);
 
   // Move queued items into the visible stack whenever there's room.
   useEffect(() => {
@@ -101,6 +121,7 @@ export default function NoticeToast() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [visible]);
 
+  if (!isStudentShell) return null;
   if (visible.length === 0) return null;
 
   return (

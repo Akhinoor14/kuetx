@@ -273,8 +273,36 @@ export const upgradeWithEmail = async (email, password, displayName) => {
 
 // ─── Sign out ─────────────────────────────────────────────────────────────────
 
+// BUGFIX (stale role flash after account switch/sign-out): useIsFaculty.js
+// and useIsProvider.js each cache their last-known status in sessionStorage
+// (CACHE_KEY in each file) purely as a same-tab optimistic-paint
+// optimization — but nothing ever cleared those keys on sign-out, so
+// switching accounts in the same tab (or a session that outlives a
+// sign-out) could start the NEXT account's hooks from the PREVIOUS
+// account's cached isProvider/isFaculty value. Since Sidebar.jsx/
+// Navbar.jsx/NoCRBanner.jsx/etc. all read these hooks' values, that
+// stale-false cache is what caused the brief student-shell flash on a
+// provider account's first paint (see Sidebar.jsx's doc comment for the
+// full chain — this is the actual root fix, upstream of all the
+// isResolved guards added there, which remain in place as defence in
+// depth for the same-tab-race case this can't fully close: e.g. a
+// background tab whose hooks are already resolved with the old account's
+// values won't re-run this until its own onAuthStateChanged fires).
+const ROLE_STATUS_CACHE_KEYS = [
+  'kuetx:lastKnownFacultyStatus',
+  'kuetx:lastKnownProviderStatus',
+  'kuetx:lastKnownIsRealCR',
+];
+
+function clearRoleStatusCaches() {
+  ROLE_STATUS_CACHE_KEYS.forEach((key) => {
+    try { sessionStorage.removeItem(key); } catch { /* ignore */ }
+  });
+}
+
 export const logout = async () => {
   await signOut(auth);
+  clearRoleStatusCaches();
 };
 
 // ─── Error messages in Bangla/English ────────────────────────────────────────

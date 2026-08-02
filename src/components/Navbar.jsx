@@ -113,7 +113,7 @@ export function Navbar({ onMenuClick }) {
   const { themeId, setTheme } = useTheme();
   const location = useLocation();
   const isMobileNav = useIsMobileNav();
-  const { isProvider } = useIsProvider();
+  const { isProvider, isResolved: isProviderResolved } = useIsProvider();
   const { t: tProvider } = useProviderLang();
   // PHASE 1 (PROVIDER_SHELL_UX_OVERHAUL_PLAN.md): a provider viewer must
   // never resolve topbar title/chip-strip from the student NAV/NAV_DESKTOP
@@ -124,7 +124,20 @@ export function Navbar({ onMenuClick }) {
   // through the dedicated getNavProvider(t) source instead — same source
   // of truth the sidebar already uses — which is Bangla-toggled and
   // structured as single-item groups, so no chip strip is ever produced.
-  const navSource = isProvider ? getNavProvider(tProvider) : (isMobileNav ? NAV : NAV_DESKTOP);
+  //
+  // BUGFIX (student chip-strip flash for provider accounts): isProvider
+  // defaults to false until useIsProvider()'s async check resolves (see
+  // Sidebar.jsx's doc comment for the full root cause — same issue,
+  // same fix pattern). Previously this ternary used isProvider with no
+  // isResolved guard, so a provider account briefly got the student
+  // NAV/NAV_DESKTOP navSource for one paint before flipping to
+  // getNavProvider(). Once resolved, isProvider itself decides — before
+  // that, fall back to the student source only as an unavoidable
+  // placeholder (getPageMeta needs *some* array to read), but see the
+  // isProviderResolved-gated blank state Navbar.jsx renders around its
+  // provider-only UI below for where the visible flash is actually
+  // stopped.
+  const navSource = isProviderResolved && isProvider ? getNavProvider(tProvider) : (isMobileNav ? NAV : NAV_DESKTOP);
   const { label, group, siblings, siblingGroups } = getPageMeta(location.pathname, navSource);
 
   // Accordion open/close state for the grouped chip strip (Campus Life /
@@ -222,8 +235,16 @@ export function Navbar({ onMenuClick }) {
 
   const ThemeIcon = themeId === 'dark' ? Moon : themeId === 'milky' ? Droplets : Sun;
 
-  const profileForNotices = useMemo(() => getProfile() || {}, [refreshTick]);
-  const groupId = useMemo(() => getGroupId(profileForNotices), [profileForNotices]);
+  // BUGFIX (student notice subscriptions ran for provider accounts too):
+  // groupId here comes from getGroupId(profileForNotices), reading the
+  // same non-role-scoped local cache described in NoCRBanner.jsx's doc
+  // comment — a provider account with stale student profile data cached
+  // locally still resolved a real groupId and opened these 'student'
+  // notice subscriptions in the background. Gated on isProviderResolved
+  // && !isProvider, same pattern as Sidebar.jsx's unread-count effect.
+  const isStudentNoticeViewer = isProviderResolved && !isProvider;
+  const profileForNotices = useMemo(() => (isStudentNoticeViewer ? (getProfile() || {}) : {}), [refreshTick, isStudentNoticeViewer]);
+  const groupId = useMemo(() => (isStudentNoticeViewer ? getGroupId(profileForNotices) : null), [profileForNotices, isStudentNoticeViewer]);
   const readNoticeIds = useMemo(() => noticeApi.getReadNoticeIds(), [refreshTick]);
 
   // Whether the signed-in student is CR/ACR — gates whether a Teacher's
@@ -245,8 +266,9 @@ export function Navbar({ onMenuClick }) {
   // updates the badge count immediately.
   const [notices, setNotices] = useState([]);
   useEffect(() => {
+    if (!isStudentNoticeViewer) { setNotices([]); return; }
     return noticeApi.subscribeAllNotices(profileForNotices, groupId, setNotices, 'student', { isViewerCR, uid: auth.currentUser?.uid });
-  }, [profileForNotices, groupId, isViewerCR]);
+  }, [profileForNotices, groupId, isViewerCR, isStudentNoticeViewer]);
 
   const unreadNoticeCount = noticeApi.getUnreadNotices(notices, readNoticeIds).length;
 
@@ -255,11 +277,12 @@ export function Navbar({ onMenuClick }) {
   // positives excluded, same as the panel).
   const dismissedAlertIds = useMemo(() => alertApi.getDismissedAlertIds(), [refreshTick]);
   const unreadAlertCount = useMemo(() => {
+    if (!isStudentNoticeViewer) return 0;
     const profile = getProfile() || {};
     const decorated = alertApi.decorateAlerts(computeAlerts(profile), dismissedAlertIds);
     return ['critical', 'warnings', 'assignmentAlerts']
       .reduce((sum, group) => sum + decorated[group].filter(item => !dismissedAlertIds.has(item.id)).length, 0);
-  }, [dismissedAlertIds, refreshTick]);
+  }, [dismissedAlertIds, refreshTick, isStudentNoticeViewer]);
 
   const alertCount = unreadNoticeCount + unreadAlertCount;
 

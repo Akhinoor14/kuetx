@@ -77,11 +77,22 @@ export function Sidebar({ open, onClose, authState }) {
   // used for nav selection, and wins regardless of status — same
   // "account isn't a student account at all, not a status question"
   // stance as RequireStudentMode's isProvider check.
-  const { isProvider } = useIsProvider();
+  const { isProvider, isResolved: isProviderResolved } = useIsProvider();
 
+  // BUGFIX (unread-count subscription ran for provider accounts too):
+  // this unconditionally subscribed to 'student' notices regardless of
+  // isProvider/viewMode — it never affected which nav renders (that part
+  // was already gated), but it meant a provider account with stale
+  // student profile data cached locally (see NoCRBanner.jsx's doc
+  // comment for the root cause) still opened a student notice
+  // subscription in the background. Gated the same way as the nav
+  // render above: skip entirely until isProviderResolved, and skip for
+  // provider/faculty shells once resolved — unread notice count is a
+  // student-only concept, same as the CR banner.
   const [unreadNoticeCount, setUnreadNoticeCount] = useState(0);
   const latestNoticesRef = useRef([]);
   useEffect(() => {
+    if (!isProviderResolved || isProvider || viewMode === 'teacher') { setUnreadNoticeCount(0); return; }
     const groupId = getGroupId(profile);
     const recompute = () => {
       const readIds = noticeApi.getReadNoticeIds();
@@ -96,9 +107,10 @@ export function Sidebar({ open, onClose, authState }) {
       unsub();
       window.removeEventListener('kuetx:store-updated', recompute);
     };
-  }, [profile.dept, profile.batch, isRealCR]);
+  }, [profile.dept, profile.batch, isRealCR, isProviderResolved, isProvider, viewMode]);
 
   useEffect(() => {
+    if (!isProviderResolved || isProvider || viewMode === 'teacher') { setIsRealCR(false); return; }
     const groupId = getGroupId(profile);
     if (!groupId) { setIsRealCR(false); return; }
     return subscribeMembers(groupId, (members) => {
@@ -107,7 +119,7 @@ export function Sidebar({ open, onClose, authState }) {
       setIsRealCR(value);
       try { sessionStorage.setItem('kuetx:lastKnownIsRealCR', value ? '1' : '0'); } catch { /* ignore */ }
     });
-  }, [profile.dept, profile.batch]);
+  }, [profile.dept, profile.batch, isProviderResolved, isProvider, viewMode]);
 
   useEffect(() => {
     const syncProfile = () => setProfile(store.get('profile') || DEFAULT_PROFILE);
@@ -120,7 +132,24 @@ export function Sidebar({ open, onClose, authState }) {
   // that shell's own (never the others') nav-item finder. isProvider
   // takes priority over viewMode's teacher/student split — see the
   // isProvider doc comment above.
-  const findNavItem = isProvider
+  // BUGFIX (student-nav flash for provider accounts): isProvider defaults
+  // to false (see useIsProvider.js) until its own async
+  // onAuthStateChanged + Firestore check resolves — sessionStorage gives
+  // an optimistic same-tab value, but that cache is never cleared on
+  // sign-out/account-switch (see NoCRBanner.jsx's doc comment for the
+  // same root cause elsewhere), so a fresh tab or a switched account can
+  // start with isProvider=false even for a real provider account. Since
+  // isProvider used to be checked with no isResolved guard at all, a
+  // provider account would render the full Student sidebar for one paint
+  // before flipping to the Provider sidebar the instant the real check
+  // resolved a moment later — same flash class as the root-route
+  // Dashboard flash, just in Sidebar instead. Fix: gate findNavItem
+  // (and the nav render below) on isProviderResolved the same way
+  // RootRouteResolver gates its own redirect — never assume "not
+  // provider" while unresolved.
+  const findNavItem = !isProviderResolved
+    ? (() => null)
+    : isProvider
     ? findProviderNavItem
     : (viewMode === 'teacher' ? findFacultyNavItem : findStudentNavItem);
   const getPageLabel = (path) => {
@@ -190,8 +219,11 @@ export function Sidebar({ open, onClose, authState }) {
           </div>
         )}
 
-        {/* ── Nav: exactly one of the three shells renders, never more than one ── */}
-        {isProvider ? (
+        {/* ── Nav: exactly one of the three shells renders, never more than one ──
+            isProviderResolved gate: see the findNavItem doc comment above —
+            render nothing here (rather than defaulting to Student) until
+            the server-verified provider check has actually settled. */}
+        {!isProviderResolved ? null : isProvider ? (
           <SidebarNavProvider location={location} onClose={onClose} />
         ) : viewMode === 'teacher' ? (
           <SidebarNavFaculty location={location} onClose={onClose} isRealAdmin={isRealAdmin} />

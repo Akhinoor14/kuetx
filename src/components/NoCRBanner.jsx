@@ -4,6 +4,8 @@ import { Crown } from 'lucide-react';
 import { store, getProfile } from '../store/store';
 import { getGroupId, getGroupLabel } from '../lib/groupUtils';
 import { subscribeCRStatus } from '../lib/groupSync';
+import { useIsProvider } from '../hooks/useIsProvider';
+import { useIsFaculty } from '../hooks/useIsFaculty';
 
 /**
  * Persistent (non-dismissible) banner shown whenever the current user's
@@ -21,6 +23,21 @@ import { subscribeCRStatus } from '../lib/groupSync';
  * `current === 'profile'` in App.jsx's queue (see the `queueBuilt`
  * conditional there), so this component never gets a chance to render
  * before a profile actually exists.
+ *
+ * BUGFIX (leaked onto /provider/*): getProfile()/getGroupId() read from a
+ * LOCAL store cache (store.get('profile')) that is not role-scoped — it's
+ * whatever student-shaped profile data happens to still be cached on this
+ * device (e.g. left over from before switching to/creating a provider
+ * account in the same browser), completely independent of whether the
+ * CURRENT signed-in account is actually a provider or faculty account.
+ * Every other Layout-global that reads getProfile()/getGroupId()
+ * (Sidebar, Navbar) already checks useIsProvider()/useIsFaculty() first
+ * — this one didn't, so a provider account with stale student profile
+ * data cached locally saw the CR banner on every /provider/* page. Same
+ * "server-verified role wins over local cache" principle as
+ * RequireStudentMode/RootRouteResolver — CR is a strictly student-shell
+ * concept, so both non-student roles are gated out here before evaluate()
+ * or the CR-status subscription ever runs.
  */
 export default function NoCRBanner() {
   const [groupId, setGroupId] = useState(null);
@@ -28,6 +45,10 @@ export default function NoCRBanner() {
   const [crStatus, setCrStatus] = useState(null); // null = unknown yet
   const location = useLocation();
   const navigate = useNavigate();
+  const { isProvider, isResolved: isProviderResolved } = useIsProvider();
+  const { isFaculty, isFounderBypass, isResolved: isFacultyResolved } = useIsFaculty();
+  const isGenuineFaculty = isFaculty && !isFounderBypass;
+  const isStudentShell = isProviderResolved && isFacultyResolved && !isProvider && !isGenuineFaculty;
 
   const evaluate = () => {
     const p = getProfile();
@@ -36,17 +57,20 @@ export default function NoCRBanner() {
   };
 
   useEffect(() => {
+    if (!isStudentShell) return;
     evaluate();
     const onUpdate = (e) => { if (e.detail?.key === 'profile') evaluate(); };
     window.addEventListener('kuetx:store-updated', onUpdate);
     return () => window.removeEventListener('kuetx:store-updated', onUpdate);
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isStudentShell]);
 
   useEffect(() => {
     if (!groupId) { setCrStatus(null); return; }
     return subscribeCRStatus(groupId, setCrStatus);
   }, [groupId]);
 
+  if (!isStudentShell) return null;
   if (!groupId || !crStatus) return null;
   if (crStatus.hasCR) return null;
   if (location.pathname === '/profile') return null;
