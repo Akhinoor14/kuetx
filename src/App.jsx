@@ -479,13 +479,23 @@ async function buildQueue(isAnonymous) {
     // account — check server-side facts before ever showing role-select.
     // Checked in order:
     //   1. users/{uid}.role — the explicit, authoritative record, written
-    //      once at Role Select for EITHER role (see accountRole.js).
+    //      once at Role Select for ANY role (see accountRole.js).
     //   2. faculty/{uid} doc existing — a secondary signal that predates
     //      (1) and still catches any account that somehow has a faculty
     //      doc but never got a users/{uid}.role write (e.g. it was
     //      created by an earlier build of this app, before role
     //      persistence existed at all).
-    //   3. Otherwise: genuinely nothing recorded yet — this is a brand-new
+    //   3. providers/{uid} doc existing — same idea as (2), for a real
+    //      provider account whose users/{uid}.role write failed/never
+    //      landed (see the BUGFIX comment inline below for the incident
+    //      this was added to fix).
+    //   4. students/{uid} doc existing — same idea again, for a real
+    //      student account whose users/{uid}.role write failed/never
+    //      landed (see the BUGFIX comment inline below). Checked last
+    //      since it needs a real network round-trip (pullProfile) same
+    //      as (3), and student is the default/fallthrough role anyway if
+    //      none of 1-4 resolve anything.
+    //   5. Otherwise: genuinely nothing recorded yet — this is a brand-new
     //      account that just came out of Register with no role chosen,
     //      the ONLY case Role Select should ever actually show for.
     const serverRole = await fetchServerAccountRole(auth.currentUser.uid);
@@ -523,6 +533,37 @@ async function buildQueue(isAnonymous) {
           setAccountRole('provider');
           accountRole = 'provider';
           persistAccountRoleToServer('provider');
+        } else {
+          // BUGFIX: same gap as the provider fallback above, but for
+          // student — and arguably worse, since student has no
+          // dedicated per-role Firestore doc created at Role Select the
+          // way teacher (createFacultyAccountDoc) and provider
+          // (createProviderShell) do; choose('student') in
+          // RoleSelectScreen.jsx only ever calls
+          // persistAccountRoleToServer('student'), nothing else. So if
+          // that one write silently failed (or a later read of
+          // users/{uid}.role fails), there was NO server-side signal
+          // left anywhere to recognize an existing student account by —
+          // accountRole stayed null forever and buildQueue fell through
+          // to q.push('role-select') below, re-showing the Student/
+          // Teacher/Provider picker to someone who already has a real
+          // account, on every load. Fix: use the one server-side
+          // artifact a student account DOES leave behind once they've
+          // ever completed profile setup — the students/{uid} doc
+          // (written by pushProfile in firebaseSync.js). pullProfile()
+          // already forces a genuine server read here (not the SDK's
+          // local cache — see its own comment), which is the right
+          // trust level for a fallback like this. A brand-new account
+          // that hasn't reached Role Select yet has no students/{uid}
+          // doc either, so this still correctly falls through to
+          // role-select for that case — only an account with a real,
+          // previously-saved profile gets auto-recovered here.
+          const sdoc = await pullProfile(auth.currentUser.uid).catch(() => null);
+          if (sdoc) {
+            setAccountRole('student');
+            accountRole = 'student';
+            persistAccountRoleToServer('student');
+          }
         }
       }
     }

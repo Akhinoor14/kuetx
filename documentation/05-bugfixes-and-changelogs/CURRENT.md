@@ -12,6 +12,22 @@
 
 ## এখন পর্যন্ত সমাধান হওয়া উল্লেখযোগ্য বাগ (সংক্ষেপে, ইতিহাস)
 
+- **তিন role-এর জন্যই role-resolve fallback অডিট + student-side fix
+  (follow-up):** নিচের provider entry-টার পরে ব্যবহারকারীর অনুরোধে
+  student আর teacher-এও একই ক্লাসের বাগ আছে কিনা চেক করা হয়েছে।
+  Teacher-এর জন্য `faculty/{uid}` fallback আগে থেকেই ঠিক ছিল। কিন্তু
+  **student**-এর জন্য এই গ্যাপ প্রকৃতপক্ষে provider-এর চেয়েও খারাপ
+  ছিল — `RoleSelectScreen.jsx`-এর `choose('student')` teacher/provider-এর
+  মতো কোনো আলাদা per-role Firestore doc তৈরি করে না (শুধু
+  `persistAccountRoleToServer('student')` কল করে), তাই সেই একটা write
+  fail করলে (বা পরে `users/{uid}.role` read fail করলে) কোনো server-side
+  প্রমাণই অবশিষ্ট থাকত না — `accountRole` চিরকাল null থেকে যেত এবং
+  `buildQueue()` `role-select` queue-এ push করত, মানে আগে থেকে থাকা real
+  account-কেও বারবার Student/Teacher/Provider picker আবার দেখানো হতো,
+  প্রতিটা লোডে। ফিক্স: `students/{uid}` doc (profile setup সম্পূর্ণ
+  হলে `pushProfile` যেটা লেখে) থাকলে সেটাকে fallback signal হিসেবে
+  ব্যবহার করা হয়েছে — `pullProfile()` দিয়ে (genuine server read, local
+  cache না), ঠিক provider fallback-এর মতো একই প্যাটার্নে।
 - **Provider account-এ প্রতি লোড/রিফ্রেশে student `ProfileSetupModal`
   (Full Name/Student ID/KUET Email/Department/Blood Group) `/provider`-এ
   দেখানো, রিফ্রেশ করলেও না যাওয়া:** এটা আগের provider-flash/role-leak
