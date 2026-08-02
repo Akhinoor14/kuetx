@@ -15,8 +15,9 @@ import {
 } from 'lucide-react';
 import {
   subscribeProviderServices, updateServiceDetails, withServiceDefaults,
-  setServiceStatus,
+  setServiceStatus, SERVICE_TYPES, SERVICE_TYPE_LABELS_BN,
 } from '../../lib/serviceSync';
+import { getCategorySetupConfig } from '../../lib/serviceCategoryConfig';
 import { useProviderLang } from '../../hooks/useProviderLang';
 
 export default function ProviderShopSettingsPage({ providerProfile }) {
@@ -548,7 +549,14 @@ function Field({
   );
 }
 
+// CATEGORY_SETUP_EDIT_UNIFY: category used to be write-once, chosen only
+// on the ServiceSetupForm at signup, with no way to fix a wrong pick
+// afterwards — a separate, disagreeing edit form here only touched name/
+// description/priceNote. Same grid as setup now lives here too, so
+// there's one true editable record instead of two forms with different
+// ideas of what's final.
 function ServiceDetailsEditor({ service, t }) {
+  const [type, setType] = useState(service.type || 'salon');
   const [name, setName] = useState(service.name || '');
   const [description, setDescription] = useState(service.description || '');
   const [priceNote, setPriceNote] = useState(service.priceNote || '');
@@ -556,16 +564,19 @@ function ServiceDetailsEditor({ service, t }) {
   const [saved, setSaved] = useState(false);
 
   useEffect(() => {
+    setType(service.type || 'salon');
     setName(service.name || '');
     setDescription(service.description || '');
     setPriceNote(service.priceNote || '');
-  }, [service.id, service.name, service.description, service.priceNote]);
+  }, [service.id, service.type, service.name, service.description, service.priceNote]);
 
   const save = async () => {
     setSaving(true);
     setSaved(false);
     try {
-      await updateServiceDetails(service.id, { name, description, priceNote });
+      await updateServiceDetails(service.id, {
+        type, name, description, priceNote,
+      });
       setSaved(true);
     } finally {
       setSaving(false);
@@ -575,6 +586,35 @@ function ServiceDetailsEditor({ service, t }) {
   return (
     <div>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+        <div>
+          <label style={{ fontSize: 12, color: 'var(--muted)', fontWeight: 600 }}>{t('dashboard.setup.category')}</label>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginTop: 6 }}>
+            {SERVICE_TYPES.map((st) => {
+              const stCfg = getCategorySetupConfig(st);
+              return (
+                <button
+                  key={st}
+                  type="button"
+                  onClick={() => setType(st)}
+                  style={{
+                    padding: '12px 10px', borderRadius: 10,
+                    border: `1.5px solid ${type === st ? 'var(--accent)' : 'var(--border)'}`,
+                    background: type === st ? 'var(--accentSoft)' : 'var(--card)',
+                    color: type === st ? 'var(--accent)' : 'var(--text)',
+                    cursor: 'pointer', textAlign: 'center',
+                    display: 'flex', flexDirection: 'column', gap: 3,
+                    minWidth: 0, width: '100%', boxSizing: 'border-box',
+                  }}
+                >
+                  <span style={{ fontSize: 13, fontWeight: 700, wordBreak: 'break-word' }}>{SERVICE_TYPE_LABELS_BN[st]}</span>
+                  <span style={{ fontSize: 10.5, fontWeight: 500, opacity: 0.75, lineHeight: 1.3, wordBreak: 'break-word' }}>
+                    {stCfg.categoryHintBn}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
         <Field label={t('shopSettings.nameLabel')} value={name} onChange={setName} />
         <Field label={t('shopSettings.descriptionLabel')} value={description} onChange={setDescription} textarea />
         <Field label={t('shopSettings.priceNoteLabel')} value={priceNote} onChange={setPriceNote} />

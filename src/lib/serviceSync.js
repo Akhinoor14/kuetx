@@ -330,10 +330,22 @@ export function addOfferingId() {
  * image inputs that Phase 3's dashboard UI will call this with.
  */
 export async function updateServiceDetails(serviceId, {
-  name, description, priceNote, locationText, hasDelivery, coverImageUrl,
+  type, name, description, priceNote, locationText, hasDelivery, coverImageUrl,
   locationLat, locationLng, locationAccuracy,
 }) {
   const patch = {};
+  // CATEGORY_SETUP_EDIT_UNIFY: category was previously write-once at
+  // createService() with no way to correct it later — the setup form's
+  // choice silently became "final" even though providers can mis-pick at
+  // signup. Now patchable here too, so setup and edit are the same single
+  // source of truth instead of two forms that disagree on what's editable.
+  if (type !== undefined) {
+    patch.type = String(type);
+    // interactionMode is derived from type at createService() time — if
+    // category changes here, recompute it too, or booking vs request-based
+    // flows would keep using the OLD category's mode after a category edit.
+    patch.interactionMode = defaultInteractionModeForType(type);
+  }
   if (name !== undefined) patch.name = String(name).trim();
   if (description !== undefined) patch.description = String(description).trim();
   if (priceNote !== undefined) patch.priceNote = String(priceNote).trim();
