@@ -85,7 +85,7 @@ export const CATEGORY_SETUP_CONFIG = {
   // false is what ServiceSetupForm / ProviderOfferingsPage key off of to
   // skip the Offerings step entirely for this category.
   errand: {
-    categoryHintBn: 'ডেলিভারি, কেনাকাটা, দোকান-দোকান ঘুরে জিনিস আনা',
+    categoryHintBn: 'জিনিস কিনে এনে দেওয়া, পৌঁছে দেওয়া, ছোটখাটো কাজ',
     itemWordBn: null,
     itemWordPluralBn: null,
     shopNamePlaceholder: 'যেমন: রাফি এরান্ড সার্ভিস',

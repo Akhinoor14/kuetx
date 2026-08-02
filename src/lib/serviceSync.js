@@ -101,7 +101,7 @@ export const SERVICE_TYPE_LABELS_BN = {
   medicine: 'ফার্মেসি',
   bookstore: 'স্টেশনারি',
   onlinemart: 'অনলাইন মার্ট',
-  errand: 'ডেলিভারি/এরান্ড রানার',
+  errand: 'পিক অ্যান্ড ড্রপ',
 };
 
 // Provider SIGNUP-only category list — deliberately separate from

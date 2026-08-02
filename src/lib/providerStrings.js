@@ -24,7 +24,7 @@ export const providerStrings = {
     'dashboard.setup.serviceNamePlaceholder': "যেমন: Rafiq's Salon",
     'dashboard.setup.description': 'বর্ণনা (ঐচ্ছিক)',
     'dashboard.setup.descriptionPlaceholder': 'সংক্ষিপ্ত বিবরণ',
-    'dashboard.setup.priceNote': 'মূল্য নোট (ঐচ্ছিক)',
+    'dashboard.setup.priceNote': 'মোট মূল্য রেঞ্জ (ঐচ্ছিক)',
     'dashboard.setup.priceNotePlaceholder': 'যেমন: ৳50 - ৳300',
     'dashboard.setup.saving': 'সেভ হচ্ছে…',
     'dashboard.setup.submit': 'সার্ভিস তৈরি করুন',

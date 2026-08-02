@@ -193,7 +193,15 @@ function ServiceSetupForm({ providerUid }) {
         </div>
         <Field label={t('dashboard.setup.serviceName')} value={name} onChange={setName} placeholder={cfg.shopNamePlaceholder} />
         <Field label={t('dashboard.setup.description')} value={description} onChange={setDescription} placeholder={t('dashboard.setup.descriptionPlaceholder')} textarea />
-        <Field label={t('dashboard.setup.priceNote')} value={priceNote} onChange={setPriceNote} placeholder={cfg.priceNotePlaceholder} />
+        <Field
+          label={t('dashboard.setup.priceNote')}
+          value={priceNote}
+          onChange={setPriceNote}
+          placeholder={cfg.priceNotePlaceholder}
+          hint={cfg.hasFixedCatalog
+            ? `শুধু মোটামুটি একটা আন্দাজ — প্রতিটা ${cfg.itemWordBn}-এর নিজস্ব দাম পরের ধাপে আলাদাভাবে দেবেন।`
+            : null}
+        />
       </div>
 
       {/* Phase 1: makes the two-step flow (shop profile now, items/menu
@@ -222,7 +230,7 @@ function ServiceSetupForm({ providerUid }) {
 }
 
 function Field({
-  label, value, onChange, placeholder, textarea,
+  label, value, onChange, placeholder, textarea, hint,
 }) {
   const commonStyle = {
     width: '100%', marginTop: 6, padding: '10px 12px', borderRadius: 10,
@@ -236,6 +244,9 @@ function Field({
         <textarea rows={2} value={value} onChange={(e) => onChange(e.target.value)} placeholder={placeholder} style={commonStyle} />
       ) : (
         <input value={value} onChange={(e) => onChange(e.target.value)} placeholder={placeholder} style={commonStyle} />
+      )}
+      {hint && (
+        <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 4, lineHeight: 1.5 }}>{hint}</div>
       )}
     </div>
   );
