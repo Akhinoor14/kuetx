@@ -119,7 +119,6 @@ function ServiceSetupForm({ providerUid }) {
   const [type, setType] = useState('salon');
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
-  const [priceNote, setPriceNote] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
 
@@ -134,7 +133,7 @@ function ServiceSetupForm({ providerUid }) {
     setSubmitting(true);
     try {
       await createService(providerUid, {
-        type, name, description, priceNote,
+        type, name, description,
       });
       // Phase 2: send the provider straight to where they add their
       // items/menu/products next, instead of leaving them to discover
@@ -192,21 +191,24 @@ function ServiceSetupForm({ providerUid }) {
           </div>
         </div>
         <Field label={t('dashboard.setup.serviceName')} value={name} onChange={setName} placeholder={cfg.shopNamePlaceholder} />
-        <Field label={t('dashboard.setup.description')} value={description} onChange={setDescription} placeholder={t('dashboard.setup.descriptionPlaceholder')} textarea />
         <Field
-          label={t('dashboard.setup.priceNote')}
-          value={priceNote}
-          onChange={setPriceNote}
-          placeholder={cfg.priceNotePlaceholder}
-          hint={cfg.hasFixedCatalog
-            ? `শুধু মোটামুটি একটা আন্দাজ — প্রতিটা ${cfg.itemWordBn}-এর নিজস্ব দাম পরের ধাপে আলাদাভাবে দেবেন।`
-            : null}
+          label={t('dashboard.setup.description')}
+          value={description}
+          onChange={setDescription}
+          placeholder={t('dashboard.setup.descriptionPlaceholder')}
+          textarea
+          hint="সহজ ভাষায় লিখুন — আপনি কী সার্ভিস দেন, কেন আপনার কাছে আসবে। যেমন: 'ক্যাম্পাসের ভেতরে দ্রুত ডেলিভারি, সন্ধ্যা ৬টা পর্যন্ত অর্ডার নেওয়া হয়।'"
         />
       </div>
 
       {/* Phase 1: makes the two-step flow (shop profile now, items/menu
-          later) explicit, since nothing previously told the provider
-          this "price note" field isn't where per-item prices go. */}
+          later) explicit — nothing else here tells the provider that
+          per-item prices aren't set on this screen. (Price range/note
+          used to also live in this form — removed per user feedback:
+          misleading here since prices are actually set per-item in
+          Offerings, not as one overall range at setup time. Still
+          editable later from Shop Settings if a provider wants an
+          overall price-range shown on their shop page.) */}
       <div style={{
         display: 'flex', gap: 10, alignItems: 'flex-start',
         marginTop: 14, padding: '12px 14px', borderRadius: 12,
