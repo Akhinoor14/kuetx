@@ -24,7 +24,7 @@
 // Profile.jsx keeps the avatar separate from academic data further down.
 
 import { useEffect, useRef, useState } from 'react';
-import { Camera, Image as ImageIcon, Phone, Mail, Store, ShieldCheck, Clock, XCircle } from 'lucide-react';
+import { Camera, Image as ImageIcon, Phone, Mail, Store, ShieldCheck, Clock, XCircle, Wallet } from 'lucide-react';
 import {
   subscribeProviderServices, updateServiceDetails, withServiceDefaults,
 } from '../../lib/serviceSync';
@@ -55,6 +55,7 @@ export default function ProviderProfile({ providerProfile }) {
   const stillLoading = services === null;
   const rawService = services && services.length > 0 ? services[0] : null;
   const service = rawService ? withServiceDefaults(rawService) : null;
+  const isInquiryMode = service?.interactionMode === 'inquiry';
 
   const status = providerProfile?.status || null;
   const displayName = providerProfile?.displayName || auth.currentUser?.displayName || t('settings.defaultUser');
@@ -87,6 +88,27 @@ export default function ProviderProfile({ providerProfile }) {
         {phone && <InfoRow icon={<Phone size={15} />} label={t('profile.phoneLabel')} value={phone} />}
         {email && <InfoRow icon={<Mail size={15} />} label={t('profile.emailLabel')} value={email} />}
       </div>
+
+      {/* ── Earnings — moved here from the Offerings page (that page is
+          just the item-list editor now; profit/loss belongs with the
+          rest of the provider's account-level info). Booking-mode only —
+          inquiry mode has no confirm/finish/price-taking flow to feed
+          revenueTotal (MULTI_CATEGORY_SERVICES_PLAN.md Phase 5's explicit
+          "কোনো revenue tracking নেই inquiry-তে"). ── */}
+      {service && !isInquiryMode && (
+        <div className="card" style={{ padding: 16 }}>
+          <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', marginBottom: 4 }}>
+            {t('offerings.revenueTitle')}
+          </div>
+          <div style={{ fontSize: 12.5, color: 'var(--muted)', marginBottom: 12 }}>
+            {t('offerings.revenueSubtitle')}
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <Wallet size={22} color="var(--accent)" />
+            <div style={{ fontSize: 18, fontWeight: 800, color: 'var(--text)' }}>৳{service.revenueTotal || 0}</div>
+          </div>
+        </div>
+      )}
 
       {/* ── Verification status — only surfaced here if not already
           obvious elsewhere; ProviderVerificationPending.jsx already hard-

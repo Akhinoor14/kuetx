@@ -110,6 +110,13 @@ export const NAV_FACULTY = [
           { id: 'f-services-medicine',   label: 'Pharmacy',    icon: 'Cross',           path: '/services/category/medicine' },
           { id: 'f-services-bookstore',  label: 'Stationery',  icon: 'BookOpen',        path: '/services/category/bookstore' },
           { id: 'f-services-onlinemart', label: 'Online Mart', icon: 'ShoppingBag',     path: '/services/category/onlinemart' },
+          // BUGFIX: mirrors nav.js's student-side services-errand entry,
+          // which was missing here — Delivery/Pick-and-drop is a real
+          // services category in the data model but had no faculty-side
+          // nav row, so faculty viewers could never reach it via the
+          // Services chip strip/sidebar (Bike icon already registered in
+          // iconRegistry.js by the student-side fix).
+          { id: 'f-services-errand',     label: 'Delivery',    icon: 'Bike',            path: '/services/category/errand' },
         ],
       },
     ],

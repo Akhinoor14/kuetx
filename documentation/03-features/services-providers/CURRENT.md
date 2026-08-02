@@ -37,11 +37,17 @@ R2 worker দিয়ে)।
    কনফিগারেশন প্রয়োজন হয়েছিল)।
 7. **ক্যাটাগরি-স্পেসিফিক সেটআপ ফ্লো + item-level ছবি আপলোড পালিশ**
    (সম্পূর্ণ — দেখো নিচের ডেডিকেটেড সেকশন)।
+8. **Offering cards → hover-to-manage + dedicated detail page** (সম্পূর্ণ
+   — দেখো নিচের ডেডিকেটেড সেকশন)।
+9. **Topbar chip-strip disappearing on shop detail page + missing errand
+   pill + oversized single-offering card** (সম্পূর্ণ — দেখো নিচের
+   ডেডিকেটেড সেকশন)।
 
 ## সর্বশেষ অবস্থা
 
-ক্যাটাগরি-স্পেসিফিক সেটআপ ফ্লো (নিচের সেকশন দেখো) সম্পূর্ণ। এর পরে নতুন
-কোনো session-এর কাজ থাকলে এই সেকশনে যোগ করো।
+Topbar chip-strip bugফিক্স + errand পিল যোগ + oversized single-offering
+কার্ড ফিক্স (নিচের সেকশন দেখো) সম্পূর্ণ। এর পরে নতুন কোনো session-এর কাজ
+থাকলে এই সেকশনে যোগ করো।
 
 **আপডেট (first-time setup form থেকে "মোট মূল্য রেঞ্জ" ফিল্ড রিমুভ +
 বর্ণনা ফিল্ডে সহজ guidance):** ব্যবহারকারীর ফিডব্যাক অনুযায়ী
@@ -131,6 +137,152 @@ item যোগ করার সময় ছবি upload করার জন্
 item/দাম যোগ) সঠিক ও best-practice, কারণ ২০টা item একসাথে টাইপ করানো
 ক্লান্তিকর ও error-prone। এই ফ্লো অক্ষুণ্ণ রাখা হয়েছে, শুধু communication
 স্পষ্ট করা হয়েছে (ওপরের বুলেট দেখো)।
+
+---
+
+## Offering cards → Hover-to-Manage + Dedicated Detail Page
+
+### সমস্যা যা ছিল
+
+`ProviderOfferingsPage.jsx`-এর `OfferingsManager` কম্পোনেন্টে প্রতিটা
+offering কার্ড e-commerce স্টাইলে সব কন্ট্রোল (কভার ফটো, লেবেল+দাম, ডিলিট
+বাটন, availability টগল, দাম ইনপুট, ৩টা পর্যন্ত ফটো থাম্বনেইল + রিমুভ, অ্যাড
+ফটো টাইল) **একবারেই, সবসময় দৃশ্যমান** দেখাত — লিস্টে বেশ কয়েকটা item
+থাকলে পেজটা অনেক লম্বা ও ঘিঞ্জি হয়ে যেত।
+
+### যা করা হয়েছে
+
+- **লিস্ট পেজ কম্প্যাক্ট হয়েছে** — প্রতিটা কার্ডে এখন শুধু কভার ফটো,
+  নাম, দাম, আর একটা read-only status pill দেখায়। বাকি সব এডিটিং
+  (টগল/দাম/ফটো/ডিলিট) কার্ড থেকে সরিয়ে ফেলা হয়েছে।
+- **Hover/tap-to-manage বাটন** — ডেস্কটপে (hover সাপোর্ট করা ডিভাইসে,
+  `@media (hover: hover)` দিয়ে গেট করা) কার্ডের ওপর hover করলে একটা
+  "Manage"/"পরিচালনা করুন" ওভারলে বাটন ভেসে ওঠে (কর্নারে, settings আইকনসহ)।
+  টাচ ডিভাইসে (hover নেই) এই বাটন সবসময় দৃশ্যমান থাকে, ছোট আকারে। কার্ডের
+  যেকোনো জায়গায় ক্লিক করলে অথবা এই বাটনে ক্লিক করলে — দুটোই একই ডেডিকেটেড
+  ডিটেইল পেজে নিয়ে যায়।
+- **নতুন রুট + পেজ: `src/pages/provider/ProviderOfferingDetailPage.jsx`**,
+  `/provider/shop/offerings/:offeringId`-এ মাউন্ট করা, `App.jsx`-এ ঠিক
+  `/provider/shop/offerings` ও `/provider/shop/settings`-এর মতোই
+  route-guard (`RequireProvider`) আর `providerProfile` প্রপ ওয়্যারিং
+  ফলো করে।
+- সব per-offering এডিটিং লজিক (`toggleOffering`, `removeOffering`,
+  `updatePrice`, ছবি আপলোড/রিমুভ হ্যান্ডলার, `uploadingFor` state) এই নতুন
+  পেজে **হুবহু (verbatim)** মুভ করা হয়েছে — একই `setServiceOfferings`
+  সেভ প্যাটার্ন, একই `MAX_OFFERING_IMAGES` ক্যাপ। পেজটা নিজে
+  `subscribeProviderServices(uid, setServices)` কল করে (ঠিক
+  `ProviderOfferingsPage.jsx` / `ProviderShopSettingsPage.jsx`-এর মতোই
+  আলাদা সাবস্ক্রিপশন প্যাটার্ন), তারপর `offeringId` দিয়ে
+  `service.offerings`-থেকে নির্দিষ্ট আইটেমটা খুঁজে বের করে।
+- **দাম** — একই আন্ডারলাইং `updatePrice` প্যাটার্ন, কিন্তু ডেডিকেটেড পেজে
+  on-blur-এর বদলে explicit "Save" বাটন (পড়তে সহজ লাগার জন্য)।
+- **ডিলিট** — এখন একটা স্পষ্ট destructive বাটন,
+  `ProviderShopSettingsPage.jsx`-এর `ConfirmBlock` প্যাটার্ন/ভিজ্যুয়াল
+  স্টাইল রিইউজ করে confirm-step দেখায় (নতুন প্যাটার্ন বানানো হয়নি)।
+  কনফার্ম করলে `/provider/shop/offerings`-এ ফিরে যায়।
+- ভিজ্যুয়াল ভাষা `Services.jsx` / `ServiceDetail.jsx` /
+  `ProviderMyShopHub.jsx`-এর এই সেশনের রিডিজাইনের সাথে মেলানো হয়েছে
+  (rounded 16-20px কার্ড, subtle hover lift + shadow,
+  `var(--accentRGB)`-বেসড টিন্টেড বর্ডার হোভারে)।
+- `src/lib/providerStrings.js`-তে নতুন কী যোগ হয়েছে (`offerings.manage`,
+  `offerings.detailBackLink`, `offerings.notFound`, `offerings.savePrice`,
+  `offerings.priceSaved`, `offerings.deleteOffering`,
+  `offerings.deleteConfirmText`, `offerings.deleteConfirmLabel`,
+  `offerings.cancel`, `offerings.deleting`, `offerings.photosTitle`) —
+  বাংলা আর ইংরেজি দুই টেবিলেই।
+- "নতুন offering যোগ করুন" ফর্ম (লেবেল + দাম + ঐচ্ছিক ফটো) লিস্ট পেজেই
+  থেকে গেছে, ডিটেইল পেজে সরানো হয়নি — সেটা নতুন আইটেম তৈরির জন্য, এই
+  কাজের সাথে সম্পর্কিত না।
+- লিস্ট পেজ থেকে এখন-অব্যবহৃত ইম্পোর্ট/state সরানো হয়েছে (`Trash2`,
+  `Check`, `X as XIcon`, `deleteServiceImage`, `uploadingFor`,
+  `fileInputsRef`, `MAX_OFFERING_IMAGES`)।
+
+### ভেরিফাই করা হয়েছে
+
+`check_imports.mjs` (শুধু আগে থেকে থাকা `routePreload.js`-এর অপ্রাসঙ্গিক
+warning, এই কাজের সাথে সম্পর্কহীন) আর `npm run build` — দুটোই ক্লিন পাস
+করেছে, নতুন/পরিবর্তিত দুটো পেজই আলাদা chunk হিসেবে বান্ডল হয়েছে।
+
+---
+
+## Topbar chip-strip + errand pill + oversized offering card
+
+### সমস্যা যা ছিল (৩টা, স্ক্রিনশট থেকে রিপোর্ট করা)
+
+1. `/services/category/salon` (শপ লিস্ট) পেজে টপবারে Salon/Food/Pharmacy/
+   Stationery/Online Mart পিল-স্ট্রিপ দেখা যেত, কিন্তু একটা শপে ঢুকে
+   `/services/:serviceId` (ServiceDetail.jsx)-এ গেলে এই পুরো স্ট্রিপটাই
+   উধাও হয়ে যেত।
+2. সেই পিল-স্ট্রিপে "Delivery"/"পিক অ্যান্ড ড্রপ" (errand) ক্যাটাগরির
+   কোনো পিলই ছিল না — বাকি ৫টা ক্যাটাগরির পাশে।
+3. একটামাত্র offering থাকা শপে (booking form-এর "যা করাতে চান, বেছে
+   নিন" গ্রিড) সেই একটা item-এর কার্ড পুরো কন্টেইনার প্রস্থ জুড়ে
+   বিশাল হয়ে দেখাত, বাকি ছোট-ছোট কার্ডের মতো compact না।
+
+### রুট কজ + যা করা হয়েছে
+
+1. **`src/components/Navbar.jsx`-এর `getPageMeta()`** — টপবার
+   chip-strip `nav.js`-এর "Services" পুল-এর item path গুলোর সাথে
+   `pathname.startsWith(item.path)` মিলিয়ে বানানো হয়, আর সেই path গুলো
+   সব `/services/category/:type` (একটা `/category/` সেগমেন্ট সহ)।
+   `/services/:serviceId`-এ কোনো `/category/` নেই, তাই কোনো ম্যাচ হতো
+   না আর siblings/siblingGroups খালি রিটার্ন হতো — পুরো স্ট্রিপ উধাও।
+   ফিক্স: "Services" পুলের জন্য একটা স্পেশাল-কেস যোগ হয়েছে —
+   `/services/`-দিয়ে শুরু হওয়া যেকোনো path (Level-1 গ্রিড `/services`
+   বাদে) এখন এই পুলেই ম্যাচ করে, তাই শপ ডিটেইল পেজেও স্ট্রিপ দেখা যায়।
+2. **`src/nav.js`** — Services আইটেম লিস্টে একটা নতুন এন্ট্রি যোগ হয়েছে:
+   `services-errand` (label "Delivery", `/services/category/errand`,
+   icon `Bike`) — বাকি ৫টা ক্যাটাগরির মতো একই প্যাটার্নে।
+3. **`src/lib/iconRegistry.js`** — নতুন `Bike` আইকন import + `ICONS`
+   ম্যাপে যোগ করা হয়েছে (এই ফাইলের নিজস্ব নিয়ম অনুযায়ী — কোনো নতুন
+   `icon: 'X'` স্ট্রিং যোগ হলে এখানেও যোগ করতে হয়, নাহলে সাইডবারে
+   silently `Circle`-এ fallback করে)।
+4. **`src/pages/ServiceDetail.jsx`-এর দুটো গ্রিড** (`kx-pick-grid` —
+   booking form-এর offering picker, আর `kx-offering-grid` — quantity-cart
+   স্টাইল শপের item গ্রিড) — `grid-template-columns` এর
+   `repeat(auto-fit, minmax(Npx, 1fr))` বদলে
+   `repeat(auto-fill, minmax(Npx, Mpx))` করা হয়েছে। `auto-fit` + `1fr`
+   এক কলাম হলে সেই একটা কার্ডকে পুরো width জুড়ে স্ট্রেচ করে দেয়;
+   `auto-fill` + ম্যাক্স-উইথ ক্যাপ একই compact কার্ড সাইজ বজায় রাখে
+   item সংখ্যা যাই হোক না কেন।
+
+### ভেরিফাই করা হয়েছে
+
+`npm run build` ক্লিন পাস করেছে।
+
+## Faculty side-এ একই ইস্যুগুলোর ফলো-আপ ফিক্স
+
+উপরের চারটা ফিক্স স্টুডেন্ট সাইডে (`nav.js` / student `Navbar` flow)
+করা হয়েছিল, কিন্তু **Faculty শেল (`/faculty/*`) সম্পূর্ণ আলাদা একটা
+nav config (`nav-faculty.js`-এর `NAV_FACULTY`) ব্যবহার করে**, যেটা
+`Navbar.jsx`-এর `getPageMeta()`-তে একেবারেই পাস হতো না। ফলে একই বাগ
+faculty সাইডে ভিন্নভাবে প্রকাশ পাচ্ছিল:
+
+1. **Faculty top bar-এ সবসময় generic "KUETx" টাইটেল** — `getPageMeta`
+   শুধু `NAV`/`NAV_DESKTOP` (স্টুডেন্ট) বা `getNavProvider()` (provider)
+   চিনতো; `NAV_FACULTY` কোথাও navSource হিসেবে পাস হতো না। তাই
+   Dashboard/Profile/My Classes/Schedule — প্রতিটা faculty পেজেই path
+   ম্যাচ ফেইল করে ডিফল্ট fallback-এ পড়তো, কোনো chip strip-ও দেখাতো না।
+   **ফিক্স:** `useIsFaculty()` হুক যোগ করে `isProvider`-এর মতোই
+   `isFacultyResolved && isFaculty` চেক করে `getFacultyNav(isMobileNav)`
+   (নতুন `NAV_FACULTY_DESKTOP`/`NAV_FACULTY_MOBILE` থেকে সঠিকটা বেছে
+   দেয়) navSource হিসেবে পাস করা হয়েছে — provider ব্রাঞ্চের ঠিক পাশে,
+   একই isResolved-গেটেড প্যাটার্নে (flash এড়াতে)।
+2. **Faculty-এর নিজস্ব Services subgroup-এও Delivery/Runner পিল মিসিং
+   ছিল** — `nav-faculty.js`-এর "More → Services" সাবগ্রুপ স্টুডেন্ট
+   `nav.js`-এর মতো ৫টা ক্যাটাগরি কপি করেছিল, কিন্তু `errand` বাদ পড়ে
+   গিয়েছিল। যোগ করা হয়েছে (`f-services-errand`, label "Delivery", icon
+   `Bike` — এই আইকন আগেই student fix-এ `iconRegistry.js`-তে রেজিস্টার
+   করা আছে, তাই নতুন কিছু আলাদা করে দরকার হয়নি)।
+3. **শপ ডিটেইল পেজের গ্রিড ফিক্স আলাদা করে কিছু লাগেনি** —
+   `ServiceDetail.jsx` role-agnostic শেয়ার্ড পেজ (`/services/...` রুট
+   student আর faculty দুই শেলেই একই কম্পোনেন্টে ল্যান্ড করে), তাই
+   `auto-fill`/max-width ফিক্স ইতিমধ্যেই faculty ভিউয়ের জন্যও কার্যকর
+   ছিল।
+
+### ভেরিফাই করা হয়েছে (faculty ফলো-আপ)
+
+`npm run build` আবার ক্লিন পাস করেছে।
 
 ## এই ফাইলে নতুন কাজ যোগ করার নিয়ম
 

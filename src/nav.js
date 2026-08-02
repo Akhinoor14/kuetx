@@ -199,6 +199,7 @@ export const NAV = [
           { id: 'services-medicine',   label: 'Pharmacy',   shortLabel: 'Pharmacy',   icon: 'Cross',          accent: 'red',    path: '/services/category/medicine' },
           { id: 'services-bookstore',  label: 'Stationery', shortLabel: 'Stationery', icon: 'BookOpen',       accent: 'purple', path: '/services/category/bookstore' },
           { id: 'services-onlinemart', label: 'Online Mart',shortLabel: 'Online Mart',icon: 'ShoppingBag',    accent: 'green',  path: '/services/category/onlinemart' },
+          { id: 'services-errand',     label: 'Delivery',   shortLabel: 'Delivery',   icon: 'Bike',           accent: 'teal',   path: '/services/category/errand' },
         ]
       },
       {

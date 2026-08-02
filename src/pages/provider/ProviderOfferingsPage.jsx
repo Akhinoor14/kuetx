@@ -11,15 +11,13 @@
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-  ArrowLeft, Wallet, Plus, Trash2, Loader2, ImagePlus, Check, X as XIcon, ImageOff,
+  ArrowLeft, Plus, Loader2, ImagePlus, ImageOff, Settings as SettingsIcon,
 } from 'lucide-react';
 import {
   subscribeProviderServices, setServiceOfferings, addOfferingId,
   withServiceDefaults,
 } from '../../lib/serviceSync';
-import {
-  uploadServiceImage, deleteServiceImage,
-} from '../../lib/serviceImageUpload';
+import { uploadServiceImage } from '../../lib/serviceImageUpload';
 import { getCategorySetupConfig } from '../../lib/serviceCategoryConfig';
 import { useProviderLang } from '../../hooks/useProviderLang';
 
@@ -39,7 +37,6 @@ export default function ProviderOfferingsPage({ providerProfile }) {
   const stillLoading = services === null;
   const rawService = services && services.length > 0 ? services[0] : null;
   const service = rawService ? withServiceDefaults(rawService) : null;
-  const isInquiryMode = service?.interactionMode === 'inquiry';
   const cfg = service ? getCategorySetupConfig(service.type) : null;
 
   return (
@@ -91,26 +88,6 @@ export default function ProviderOfferingsPage({ providerProfile }) {
             </div>
             <OfferingsManager service={service} cfg={cfg} />
           </div>
-
-          {/* MULTI_CATEGORY_SERVICES_PLAN.md Phase 5: revenue tracker is
-              booking-mode only — inquiry mode has no confirm/finish/
-              price-taking flow to feed it (plan's explicit "কোনো revenue
-              tracking নেই inquiry-তে"), same condition as the original
-              Collapsible on ProviderDashboard.jsx. */}
-          {!isInquiryMode && (
-            <div className="card" style={{ padding: 16 }}>
-              <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', marginBottom: 4 }}>
-                {t('offerings.revenueTitle')}
-              </div>
-              <div style={{ fontSize: 12.5, color: 'var(--muted)', marginBottom: 12 }}>
-                {t('offerings.revenueSubtitle')}
-              </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                <Wallet size={22} color="var(--accent)" />
-                <div style={{ fontSize: 18, fontWeight: 800, color: 'var(--text)' }}>৳{service.revenueTotal || 0}</div>
-              </div>
-            </div>
-          )}
         </div>
       )}
     </div>
@@ -133,10 +110,9 @@ function BackLink({ navigate }) {
   );
 }
 
-const MAX_OFFERING_IMAGES = 3;
-
 function OfferingsManager({ service, cfg }) {
   const { t } = useProviderLang();
+  const navigate = useNavigate();
   const [offerings, setOfferings] = useState(service.offerings || []);
   const [newLabel, setNewLabel] = useState('');
   const [newPrice, setNewPrice] = useState('');
@@ -145,8 +121,6 @@ function OfferingsManager({ service, cfg }) {
   const [saving, setSaving] = useState(false);
   const [addingWithImage, setAddingWithImage] = useState(false);
   const [error, setError] = useState('');
-  const [uploadingFor, setUploadingFor] = useState(null); // offering id currently uploading
-  const fileInputsRef = useRef({});
   const newImageInputRef = useRef(null);
   const itemRefs = useRef({});
 
@@ -234,59 +208,6 @@ function OfferingsManager({ service, cfg }) {
     setNewImagePreview(null);
   };
 
-  const toggleOffering = (id) => {
-    const next = offerings.map((o) => (o.id === id ? { ...o, isAvailable: !o.isAvailable } : o));
-    save(next);
-  };
-
-  const removeOffering = (id) => {
-    // Removing an offering entirely (not just turning it off) is fine
-    // here because Gap 5 only requires that EXISTING bookings referencing
-    // an offeringId stay intact — those bookings keep their offeringId
-    // string regardless of whether the offerings array still lists it;
-    // ProviderDashboard's offeringLabel() falls back to "Unknown offering"
-    // for exactly that case. Any uploaded offering images are best-effort
-    // cleaned up from R2 too, same as cover-image replace/remove.
-    const removed = offerings.find((o) => o.id === id);
-    (removed?.images || []).forEach((url) => deleteServiceImage(url));
-    save(offerings.filter((o) => o.id !== id));
-  };
-
-  const updatePrice = (id, value) => {
-    const price = value.trim() ? Number(value) : null;
-    const next = offerings.map((o) => (o.id === id ? { ...o, price: Number.isFinite(price) ? price : null } : o));
-    save(next);
-  };
-
-  const onPickOfferingImage = async (id, e) => {
-    const file = e.target.files?.[0];
-    e.target.value = '';
-    if (!file) return;
-    const offering = offerings.find((o) => o.id === id);
-    if (!offering) return;
-    if ((offering.images || []).length >= MAX_OFFERING_IMAGES) {
-      setError(t('offerings.maxImages')(MAX_OFFERING_IMAGES));
-      return;
-    }
-    setError('');
-    setUploadingFor(id);
-    try {
-      const url = await uploadServiceImage(service.id, file);
-      const next = offerings.map((o) => (o.id === id ? { ...o, images: [...(o.images || []), url] } : o));
-      await save(next);
-    } catch (e) {
-      setError(e.message || t('offerings.imageUploadError'));
-    } finally {
-      setUploadingFor(null);
-    }
-  };
-
-  const removeOfferingImage = (id, url) => {
-    const next = offerings.map((o) => (o.id === id ? { ...o, images: (o.images || []).filter((u) => u !== url) } : o));
-    save(next);
-    deleteServiceImage(url);
-  };
-
   return (
     <div>
       {offerings.length === 0 && (
@@ -298,160 +219,15 @@ function OfferingsManager({ service, cfg }) {
       {offerings.map((o) => {
         const coverUrl = (o.images || [])[0] || null;
         return (
-        <div
-          key={o.id}
-          ref={(el) => { itemRefs.current[o.id] = el; }}
-          style={{
-            marginBottom: 14, borderRadius: 16, border: '1px solid var(--border)',
-            background: 'var(--card)', overflow: 'hidden',
-          }}
-        >
-          {/* Cover photo — the first uploaded image, e-commerce-card style.
-              No photo yet → a plain placeholder tile instead of blank
-              space, so the card never looks broken/empty. */}
-          <div style={{ width: '100%', aspectRatio: '4 / 3', background: 'var(--surface, #f3f4f6)', position: 'relative' }}>
-            {coverUrl ? (
-              <img
-                src={coverUrl}
-                alt={o.label}
-                style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: o.isAvailable ? 1 : 0.45 }}
-              />
-            ) : (
-              <div style={{
-                width: '100%', height: '100%', display: 'flex', flexDirection: 'column',
-                alignItems: 'center', justifyContent: 'center', gap: 6, opacity: o.isAvailable ? 1 : 0.45,
-              }}
-              >
-                <ImageOff size={26} color="var(--muted)" />
-                <span style={{ fontSize: 11, color: 'var(--muted)' }}>{t('offerings.noImage')}</span>
-              </div>
-            )}
-          </div>
-
-          <div style={{ padding: 12 }}>
-            <div style={{ display: 'flex', alignItems: 'flex-start', gap: 8 }}>
-              <div style={{ flex: 1, minWidth: 0 }}>
-                <div style={{ fontSize: 14.5, fontWeight: 700, color: 'var(--text)', opacity: o.isAvailable ? 1 : 0.55, overflowWrap: 'break-word' }}>
-                  {o.label}
-                </div>
-                <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--accent)', marginTop: 3 }}>
-                  {o.price ? `৳${o.price}` : t('offerings.noPriceYet')}
-                </div>
-              </div>
-              <button
-                onClick={() => removeOffering(o.id)}
-                disabled={saving}
-                className="btn btn-secondary"
-                style={{ minHeight: 36, minWidth: 36, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}
-              >
-                <Trash2 size={15} />
-              </button>
-            </div>
-
-            {/* Real sliding toggle (matches the dashboard's shop-open
-                switch) instead of the old flat solid-color button — the
-                on/off state now reads at a glance, and price/photo
-                controls live directly beneath it. */}
-            <button
-              onClick={() => toggleOffering(o.id)}
-              disabled={saving}
-              aria-pressed={o.isAvailable}
-              style={{
-                display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-                width: '100%', marginTop: 10, padding: '9px 12px', borderRadius: 12, border: 'none', cursor: 'pointer',
-                background: o.isAvailable ? 'rgba(22,163,74,0.10)' : 'rgba(107,114,128,0.10)',
-              }}
-            >
-              <span style={{ fontSize: 12.5, fontWeight: 700, color: o.isAvailable ? '#16a34a' : '#6b7280' }}>
-                {o.isAvailable ? (cfg?.availableLabelBn || t('offerings.on')) : (cfg?.unavailableLabelBn || t('offerings.off'))}
-              </span>
-              <span style={{ position: 'relative', width: 40, height: 24, borderRadius: 999, background: o.isAvailable ? '#16a34a' : '#d1d5db', flexShrink: 0 }}>
-                <span
-                  style={{
-                    position: 'absolute', top: 2, left: o.isAvailable ? 18 : 2,
-                    width: 20, height: 20, borderRadius: '50%', background: '#fff',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    boxShadow: '0 1px 3px rgba(0,0,0,0.25)',
-                    transition: 'left 0.22s cubic-bezier(0.34, 1.56, 0.64, 1)',
-                  }}
-                >
-                  {o.isAvailable
-                    ? <Check size={12} color="#16a34a" strokeWidth={3} />
-                    : <XIcon size={12} color="#6b7280" strokeWidth={3} />}
-                </span>
-              </span>
-            </button>
-
-            {/* Price + photo controls — always visible under the toggle,
-                so the owner can set them regardless of on/off state. */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 10 }}>
-              <span style={{ fontSize: 12.5, color: 'var(--muted)' }}>৳</span>
-              <input
-                type="number"
-                inputMode="numeric"
-                defaultValue={o.price ?? ''}
-                onBlur={(e) => updatePrice(o.id, e.target.value)}
-                placeholder={t('offerings.pricePlaceholder')}
-                style={{
-                  width: 110, minHeight: 36, padding: '0 10px', borderRadius: 8,
-                  border: '1px solid var(--border)', background: 'var(--card)', color: 'var(--text)', fontSize: 13,
-                }}
-              />
-              <span style={{ fontSize: 11.5, color: 'var(--muted)' }}>{t('offerings.perUnitHint')}</span>
-            </div>
-
-            <div style={{ fontSize: 11, color: 'var(--muted)', fontWeight: 600, marginTop: 10, marginBottom: 4 }}>
-              {cfg?.imageHelperTextBn}
-            </div>
-            <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-              {(o.images || []).map((url) => (
-                <div key={url} style={{ position: 'relative' }}>
-                  <img src={url} alt={o.label} style={{ width: 48, height: 48, borderRadius: 8, objectFit: 'cover', border: '1px solid var(--border)' }} />
-                  <button
-                    onClick={() => removeOfferingImage(o.id, url)}
-                    style={{
-                      position: 'absolute', top: -6, right: -6, width: 18, height: 18, borderRadius: '50%',
-                      background: '#dc2626', color: '#fff', border: 'none', fontSize: 11, lineHeight: '18px',
-                      cursor: 'pointer', padding: 0,
-                    }}
-                  >
-                    ×
-                  </button>
-                </div>
-              ))}
-              {(o.images || []).length < MAX_OFFERING_IMAGES && (
-                <>
-                  <button
-                    onClick={() => fileInputsRef.current[o.id]?.click()}
-                    disabled={uploadingFor === o.id}
-                    style={{
-                      minWidth: 48, height: 48, borderRadius: 8, border: '1px dashed var(--border)',
-                      background: 'var(--card)', color: 'var(--muted)', cursor: 'pointer',
-                      display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
-                      padding: uploadingFor === o.id ? '0 10px' : 0,
-                    }}
-                  >
-                    {uploadingFor === o.id
-                      ? (
-                        <>
-                          <Loader2 size={15} style={{ animation: 'spin 0.8s linear infinite' }} />
-                          <span style={{ fontSize: 11, fontWeight: 600 }}>আপলোড হচ্ছে…</span>
-                        </>
-                      )
-                      : <Plus size={16} />}
-                  </button>
-                  <input
-                    ref={(el) => { fileInputsRef.current[o.id] = el; }}
-                    type="file"
-                    accept="image/jpeg,image/png,image/webp,image/gif"
-                    style={{ display: 'none' }}
-                    onChange={(e) => onPickOfferingImage(o.id, e)}
-                  />
-                </>
-              )}
-            </div>
-          </div>
-        </div>
+          <OfferingListCard
+            key={o.id}
+            offering={o}
+            coverUrl={coverUrl}
+            cfg={cfg}
+            t={t}
+            onOpen={() => navigate(`/provider/shop/offerings/${o.id}`)}
+            itemRef={(el) => { itemRefs.current[o.id] = el; }}
+          />
         );
       })}
 
@@ -530,6 +306,113 @@ function OfferingsManager({ service, cfg }) {
           </button>
         </div>
       </div>
+    </div>
+  );
+}
+
+// Compact, read-only card — all editing (toggle/price/photos/delete) now
+// lives on the dedicated detail page (ProviderOfferingDetailPage.jsx).
+// Clicking anywhere on the card, or the "Manage" overlay button, opens
+// that page. The overlay is hover-revealed on devices that support hover
+// (`@media (hover: hover)`, via the .kx-offering-manage-btn CSS below);
+// on touch devices there's no hover state to rely on, so the button is
+// always visible there (small, corner-anchored, unobtrusive).
+function OfferingListCard({
+  offering: o, coverUrl, cfg, t, onOpen, itemRef,
+}) {
+  return (
+    <div
+      ref={itemRef}
+      role="button"
+      tabIndex={0}
+      onClick={onOpen}
+      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onOpen(); } }}
+      className="kx-offering-card"
+      style={{
+        marginBottom: 14, borderRadius: 18, border: '1px solid var(--border)',
+        background: 'var(--card)', overflow: 'hidden', cursor: 'pointer', textAlign: 'left',
+      }}
+    >
+      <div style={{ width: '100%', aspectRatio: '4 / 3', background: 'var(--surface, #f3f4f6)', position: 'relative' }}>
+        {coverUrl ? (
+          <img
+            src={coverUrl}
+            alt={o.label}
+            style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: o.isAvailable ? 1 : 0.45 }}
+          />
+        ) : (
+          <div style={{
+            width: '100%', height: '100%', display: 'flex', flexDirection: 'column',
+            alignItems: 'center', justifyContent: 'center', gap: 6, opacity: o.isAvailable ? 1 : 0.45,
+          }}
+          >
+            <ImageOff size={26} color="var(--muted)" />
+            <span style={{ fontSize: 11, color: 'var(--muted)' }}>{t('offerings.noImage')}</span>
+          </div>
+        )}
+
+        <button
+          onClick={(e) => { e.stopPropagation(); onOpen(); }}
+          className="kx-offering-manage-btn"
+          aria-label={t('offerings.manage')}
+        >
+          <SettingsIcon size={13} />
+          <span>{t('offerings.manage')}</span>
+        </button>
+      </div>
+
+      <div style={{ padding: 12 }}>
+        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 8 }}>
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div style={{ fontSize: 14.5, fontWeight: 700, color: 'var(--text)', opacity: o.isAvailable ? 1 : 0.55, overflowWrap: 'break-word' }}>
+              {o.label}
+            </div>
+            <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--accent)', marginTop: 3 }}>
+              {o.price ? `৳${o.price}` : t('offerings.noPriceYet')}
+            </div>
+          </div>
+          <span
+            style={{
+              flexShrink: 0, fontSize: 11, fontWeight: 700, borderRadius: 999, padding: '4px 10px',
+              color: o.isAvailable ? '#16a34a' : '#6b7280',
+              background: o.isAvailable ? 'rgba(22,163,74,0.10)' : 'rgba(107,114,128,0.10)',
+            }}
+          >
+            {o.isAvailable ? (cfg?.availableLabelBn || t('offerings.on')) : (cfg?.unavailableLabelBn || t('offerings.off'))}
+          </span>
+        </div>
+      </div>
+
+      <style>{`
+        .kx-offering-card {
+          transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+        }
+        @media (hover: hover) {
+          .kx-offering-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 24px -12px rgba(0,0,0,0.18);
+            border-color: rgba(var(--accentRGB), 0.3);
+          }
+          .kx-offering-manage-btn {
+            opacity: 0;
+            transform: translateY(4px);
+          }
+          .kx-offering-card:hover .kx-offering-manage-btn,
+          .kx-offering-card:focus-visible .kx-offering-manage-btn {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        .kx-offering-manage-btn {
+          position: absolute; right: 10px; bottom: 10px;
+          display: flex; align-items: center; gap: 6;
+          padding: 7px 12px; border-radius: 999px; border: none; cursor: pointer;
+          background: var(--card); color: var(--text);
+          font-size: 12px; font-weight: 700;
+          box-shadow: 0 4px 14px -4px rgba(0,0,0,0.35);
+          transition: opacity 0.15s ease, transform 0.15s ease;
+        }
+      `}</style>
     </div>
   );
 }

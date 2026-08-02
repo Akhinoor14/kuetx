@@ -34,14 +34,10 @@ export default function ProviderMyShopHub({ providerProfile }) {
   const stillLoading = services === null;
   const rawService = services && services.length > 0 ? services[0] : null;
   const service = rawService ? withServiceDefaults(rawService) : null;
-  const isInquiryMode = service?.interactionMode === 'inquiry';
-
   const offeringsCount = service ? (service.offerings || []).length : 0;
   const offeringsSubtitle = !service
     ? t('shopHub.notSetUp')
-    : isInquiryMode
-      ? t('shopHub.itemsSuffix')(offeringsCount)
-      : t('shopHub.itemsWithRevenueSuffix')(offeringsCount, service.revenueTotal || 0);
+    : t('shopHub.itemsSuffix')(offeringsCount);
 
   const isDormant = service?.status === 'dormant';
   const statusSubtitle = !service
@@ -78,49 +74,75 @@ export default function ProviderMyShopHub({ providerProfile }) {
       )}
 
       {!stillLoading && service && (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+        <div className="kx-hub-grid">
           <HubCard
-            icon={<ShoppingBag size={20} color="var(--accent)" />}
+            icon={<ShoppingBag size={22} />}
             title={t('shopHub.offeringsTitle')}
             subtitle={offeringsSubtitle}
             onClick={() => navigate('/provider/shop/offerings')}
           />
           <HubCard
-            icon={<SettingsIcon size={20} color="var(--accent)" />}
+            icon={<SettingsIcon size={22} />}
             title={t('shopHub.settingsTitle')}
             subtitle={statusSubtitle}
+            accent={isDormant ? 'warn' : 'ok'}
             onClick={() => navigate('/provider/shop/settings')}
           />
         </div>
       )}
+
+      <style>{`
+        .kx-hub-grid {
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+          gap: 12px;
+        }
+        @media (min-width: 480px) {
+          .kx-hub-grid { gap: 14px; }
+        }
+      `}</style>
     </div>
   );
 }
 
 function HubCard({
-  icon, title, subtitle, onClick,
+  icon, title, subtitle, onClick, accent,
 }) {
   return (
-    <button
-      onClick={onClick}
-      className="card"
-      style={{
-        display: 'flex', alignItems: 'center', gap: 14, padding: 16,
-        textAlign: 'left', cursor: 'pointer', border: '1px solid var(--border)',
-        background: 'var(--card)', width: '100%',
-      }}
-    >
-      <div style={{
-        width: 44, height: 44, borderRadius: 12, background: 'var(--accentSoft)',
-        display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
-      }}>
-        {icon}
+    <button onClick={onClick} className="kx-hub-card">
+      <div className="kx-hub-card-top">
+        <div className="kx-hub-card-icon">{icon}</div>
+        <ChevronRight size={16} className="kx-hub-card-chevron" />
       </div>
-      <div style={{ flex: 1, minWidth: 0 }}>
-        <div style={{ fontSize: 14.5, fontWeight: 700, color: 'var(--text)' }}>{title}</div>
-        <div style={{ fontSize: 12.5, color: 'var(--muted)', marginTop: 2 }}>{subtitle}</div>
+      <div className="kx-hub-card-title">{title}</div>
+      <div className={`kx-hub-card-subtitle${accent === 'warn' ? ' is-warn' : accent === 'ok' ? ' is-ok' : ''}`}>
+        {subtitle}
       </div>
-      <ChevronRight size={18} color="var(--muted)" />
+
+      <style>{`
+        .kx-hub-card {
+          text-align: left; cursor: pointer; width: 100%; box-sizing: border-box;
+          border: 1px solid var(--border); border-radius: 16px; background: var(--card);
+          padding: 14px; display: flex; flex-direction: column; gap: 8px;
+          transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+        }
+        .kx-hub-card:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 10px 22px -12px rgba(0,0,0,0.18);
+          border-color: rgba(var(--accentRGB), 0.3);
+        }
+        .kx-hub-card-top { display: flex; align-items: flex-start; justify-content: space-between; }
+        .kx-hub-card-icon {
+          width: 40px; height: 40px; border-radius: 12px; flex-shrink: 0;
+          display: flex; align-items: center; justify-content: center;
+          background: var(--accentSoft); color: var(--accent);
+        }
+        .kx-hub-card-chevron { color: var(--muted); margin-top: 4px; }
+        .kx-hub-card-title { font-size: 13.5px; font-weight: 700; color: var(--text); margin-top: 2px; }
+        .kx-hub-card-subtitle { font-size: 11.5px; color: var(--muted); line-height: 1.4; }
+        .kx-hub-card-subtitle.is-ok { color: var(--accentDark, var(--accent)); font-weight: 600; }
+        .kx-hub-card-subtitle.is-warn { color: #c2410c; font-weight: 600; }
+      `}</style>
     </button>
   );
 }

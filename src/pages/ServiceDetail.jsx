@@ -499,7 +499,7 @@ function InquiryForm({ service }) {
       <style>{`
         .kx-offering-grid {
           display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+          grid-template-columns: repeat(auto-fill, minmax(120px, 150px));
           gap: 10px;
         }
         .kx-offering-card {
@@ -717,7 +717,7 @@ function BookingForm({ service }) {
       <style>{`
         .kx-pick-grid {
           display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+          grid-template-columns: repeat(auto-fill, minmax(110px, 140px));
           gap: 10px;
         }
         .kx-pick-card {

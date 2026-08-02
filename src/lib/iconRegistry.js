@@ -38,7 +38,7 @@
 // config anywhere, grep this file first to confirm the name is present.
 import {
   Activity, AlertOctagon, AlertTriangle, ArrowUpRight, BarChart2, Bell,
-  BellRing, BookMarked, BookOpen, BookOpenCheck, Briefcase, Calendar, CalendarCheck,
+  BellRing, Bike, BookMarked, BookOpen, BookOpenCheck, Briefcase, Calendar, CalendarCheck,
   CalendarDays, CalendarClock, CheckCircle2, CheckSquare, ChevronLeft, ChevronRight, ClipboardCheck, ClipboardList,
   Clock, Cloud, CloudCog, Cpu, Cross, Database, Droplet,
   Facebook, FileSearch, FileText, Flag, FlaskConical, FolderKanban,
@@ -53,7 +53,7 @@ import {
 
 export const ICONS = {
   Activity, AlertOctagon, AlertTriangle, ArrowUpRight, BarChart2, Bell,
-  BellRing, BookMarked, BookOpen, BookOpenCheck, Briefcase, Calendar, CalendarCheck,
+  BellRing, Bike, BookMarked, BookOpen, BookOpenCheck, Briefcase, Calendar, CalendarCheck,
   CalendarDays, CalendarClock, CheckCircle2, CheckSquare, ChevronLeft, ChevronRight, ClipboardCheck, ClipboardList,
   Clock, Cloud, CloudCog, Cpu, Cross, Database, Droplet,
   Facebook, FileSearch, FileText, Flag, FlaskConical, FolderKanban,

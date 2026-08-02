@@ -11,7 +11,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-  ArrowLeft, MapPin, Truck, Pause, Play, Power, Navigation, ExternalLink,
+  ArrowLeft, MapPin, Truck, Pause, Play, Power, Navigation, ExternalLink, Settings as SettingsIcon,
 } from 'lucide-react';
 import {
   subscribeProviderServices, updateServiceDetails, withServiceDefaults,
@@ -39,7 +39,7 @@ export default function ProviderShopSettingsPage({ providerProfile }) {
   const isDormant = service?.status === 'dormant';
 
   return (
-    <div style={{ padding: '20px 16px', maxWidth: 640, margin: '0 auto' }}>
+    <div className="kx-settings-page">
       <BackLink navigate={navigate} t={t} />
 
       {stillLoading && (
@@ -61,39 +61,76 @@ export default function ProviderShopSettingsPage({ providerProfile }) {
               moved OUT of ShopMetaEditor into ProviderProfile.jsx (the
               new /provider/profile page) — this card is now location +
               delivery only. */}
-          <div className="card" style={{ padding: 16 }}>
-            <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', marginBottom: 4 }}>
-              {t('shopSettings.metaTitle')}
-            </div>
-            <div style={{ fontSize: 12.5, color: 'var(--muted)', marginBottom: 12 }}>
-              {service.locationText || t('shopSettings.notSetUp')}
-            </div>
+          <div className="card kx-settings-card">
+            <SectionHeader
+              icon={<MapPin size={16} />}
+              title={t('shopSettings.metaTitle')}
+              subtitle={service.locationText || t('shopSettings.notSetUp')}
+            />
             <ShopMetaEditor service={service} t={t} />
           </div>
 
           {/* MULTI_CATEGORY_SERVICES_PLAN.md Phase 3: manual pause/
               permanent-close/reactivate control. */}
-          <div className="card" style={{ padding: 16 }}>
-            <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', marginBottom: 4 }}>
-              {t('shopSettings.statusTitle')}
-            </div>
-            <div style={{ fontSize: 12.5, color: 'var(--muted)', marginBottom: 12 }}>
-              {isDormant ? t('shopSettings.dormant') : t('shopSettings.active')}
-            </div>
+          <div className="card kx-settings-card">
+            <SectionHeader
+              icon={<Power size={16} />}
+              title={t('shopSettings.statusTitle')}
+              statusPill={isDormant ? 'dormant' : 'active'}
+              statusLabel={isDormant ? t('shopSettings.dormant') : t('shopSettings.active')}
+            />
             <ShopStatusControl service={service} t={t} />
           </div>
 
-          <div className="card" style={{ padding: 16 }}>
-            <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', marginBottom: 4 }}>
-              {t('shopSettings.detailsTitle')}
-            </div>
-            <div style={{ fontSize: 12.5, color: 'var(--muted)', marginBottom: 12 }}>
-              {service.name}
-            </div>
+          <div className="card kx-settings-card">
+            <SectionHeader
+              icon={<SettingsIcon size={16} />}
+              title={t('shopSettings.detailsTitle')}
+              subtitle={service.name}
+            />
             <ServiceDetailsEditor service={service} t={t} />
           </div>
         </div>
       )}
+
+      <style>{`
+        .kx-settings-page { padding: 20px 16px 40px; width: 100%; max-width: 640px; margin: 0 auto; box-sizing: border-box; }
+        .kx-settings-card { padding: 18px; border-radius: 16px; }
+
+        .kx-section-header { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 14px; }
+        .kx-section-icon {
+          width: 32px; height: 32px; border-radius: 10px; flex-shrink: 0;
+          display: flex; align-items: center; justify-content: center;
+          background: var(--accentSoft); color: var(--accent);
+        }
+        .kx-section-title-row { flex: 1; min-width: 0; display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+        .kx-section-title { font-size: 14.5px; font-weight: 700; color: var(--text); }
+        .kx-section-subtitle { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+        .kx-status-pill {
+          display: inline-flex; align-items: center; font-size: 11px; font-weight: 700;
+          border-radius: 999px; padding: 3px 10px; flex-shrink: 0;
+        }
+        .kx-status-pill.active { background: var(--accentSoft); color: var(--accentDark, var(--accent)); }
+        .kx-status-pill.dormant { background: rgba(234,88,12,0.14); color: #c2410c; }
+      `}</style>
+    </div>
+  );
+}
+
+function SectionHeader({
+  icon, title, subtitle, statusPill, statusLabel,
+}) {
+  return (
+    <div className="kx-section-header">
+      <div className="kx-section-icon">{icon}</div>
+      <div style={{ flex: 1, minWidth: 0 }}>
+        <div className="kx-section-title-row">
+          <span className="kx-section-title">{title}</span>
+          {statusPill && <span className={`kx-status-pill ${statusPill}`}>{statusLabel}</span>}
+        </div>
+        {subtitle && <div className="kx-section-subtitle">{subtitle}</div>}
+      </div>
     </div>
   );
 }

@@ -92,6 +92,7 @@ const ServiceDetail = lazy(() => import('./pages/ServiceDetail'));
 const ProviderDashboardPage = lazy(() => import('./pages/provider/ProviderDashboard'));
 const ProviderMyShopHubPage = lazy(() => import('./pages/provider/ProviderMyShopHub'));
 const ProviderOfferingsPagePage = lazy(() => import('./pages/provider/ProviderOfferingsPage'));
+const ProviderOfferingDetailPagePage = lazy(() => import('./pages/provider/ProviderOfferingDetailPage'));
 const ProviderShopSettingsPagePage = lazy(() => import('./pages/provider/ProviderShopSettingsPage'));
 const ProviderProfilePage = lazy(() => import('./pages/provider/ProviderProfile'));
 const ProviderNotificationsPage = lazy(() => import('./pages/provider/ProviderNotifications'));
@@ -359,6 +360,7 @@ function Layout({ authState, onboardingActive }) {
             <Route path="/provider" element={<RequireProvider><ProviderDashboardRoute /></RequireProvider>} />
             <Route path="/provider/shop" element={<RequireProvider><ProviderMyShopHubRoute /></RequireProvider>} />
             <Route path="/provider/shop/offerings" element={<RequireProvider><ProviderOfferingsPageRoute /></RequireProvider>} />
+            <Route path="/provider/shop/offerings/:offeringId" element={<RequireProvider><ProviderOfferingDetailPageRoute /></RequireProvider>} />
             <Route path="/provider/shop/settings" element={<RequireProvider><ProviderShopSettingsPageRoute /></RequireProvider>} />
             <Route path="/provider/profile" element={<RequireProvider><ProviderProfileRoute /></RequireProvider>} />
             <Route path="/provider/notifications" element={<RequireProvider><ProviderNotificationsPage /></RequireProvider>} />
@@ -688,6 +690,11 @@ function ProviderOfferingsPageRoute() {
 function ProviderShopSettingsPageRoute() {
   const { providerProfile } = useIsProvider();
   return <ProviderShopSettingsPagePage providerProfile={providerProfile} />;
+}
+
+function ProviderOfferingDetailPageRoute() {
+  const { providerProfile } = useIsProvider();
+  return <ProviderOfferingDetailPagePage providerProfile={providerProfile} />;
 }
 
 // PHASE 3 (PROVIDER_SHELL_UX_OVERHAUL_PLAN.md) — same wrapper pattern as

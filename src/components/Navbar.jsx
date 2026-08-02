@@ -4,8 +4,10 @@ import { useTheme, THEMES } from '../hooks/useTheme';
 import { useLocation, Link } from 'react-router-dom';
 import { confirmDialog } from '../lib/dialog';
 import { NAV, NAV_DESKTOP } from '../nav';
+import { getFacultyNav } from '../nav-faculty';
 import { getNavProvider } from './nav-system/SidebarNavProvider';
 import { useIsProvider } from '../hooks/useIsProvider';
+import { useIsFaculty } from '../hooks/useIsFaculty';
 import { useProviderLang } from '../hooks/useProviderLang';
 import { Wordmark } from './Logo';
 import * as noticeApi from '../lib/noticeUtils';
@@ -59,6 +61,18 @@ function getPageMeta(pathname, navSource) {
       // the group name as the title instead of falling through to blank.
       if (pool.hubPath && pool.hubPath === pathname) {
         return { label: pool.groupLabel, group: pool.groupLabel, siblings: [], siblingGroups: null };
+      }
+      // Services pool special-case: /services/:serviceId (ServiceDetail.jsx,
+      // a specific shop's page) doesn't start with any of the pool's own
+      // item paths (those are all /services/category/:type), so without
+      // this it fell through to the "no match" branch below and silently
+      // dropped the whole chip strip the moment a student opened a shop.
+      // Match any /services/... path that isn't itself /services (the
+      // Level-1 grid, which has its own "no active page" treatment) to
+      // this pool so the strip — and the "active" category pill — stays
+      // visible on the shop detail page too.
+      if (pool.groupLabel === 'Services' && pathname.startsWith('/services/') && pathname !== '/services/category') {
+        return { label: pool.groupLabel, group: pool.groupLabel, siblings: pool.items, siblingGroups };
       }
     }
   }
@@ -114,6 +128,7 @@ export function Navbar({ onMenuClick }) {
   const location = useLocation();
   const isMobileNav = useIsMobileNav();
   const { isProvider, isResolved: isProviderResolved } = useIsProvider();
+  const { isFaculty, isResolved: isFacultyResolved } = useIsFaculty();
   const { t: tProvider } = useProviderLang();
   // PHASE 1 (PROVIDER_SHELL_UX_OVERHAUL_PLAN.md): a provider viewer must
   // never resolve topbar title/chip-strip from the student NAV/NAV_DESKTOP
@@ -137,7 +152,19 @@ export function Navbar({ onMenuClick }) {
   // isProviderResolved-gated blank state Navbar.jsx renders around its
   // provider-only UI below for where the visible flash is actually
   // stopped.
-  const navSource = isProviderResolved && isProvider ? getNavProvider(tProvider) : (isMobileNav ? NAV : NAV_DESKTOP);
+  // BUGFIX (faculty top bar always showing generic "KUETx" title with no
+  // chip strip): getPageMeta previously only ever received the student
+  // NAV/NAV_DESKTOP source (or, for providers, getNavProvider()) — it
+  // never saw NAV_FACULTY, so on every /faculty/* route path-matching
+  // ran against student paths, found nothing, and silently fell through
+  // to getPageMeta's default { label: 'KUETx', group: '', ... }. Same
+  // isResolved-gated pattern as the provider branch above, to avoid a
+  // one-paint flash of the student nav before this resolves.
+  const navSource = isProviderResolved && isProvider
+    ? getNavProvider(tProvider)
+    : isFacultyResolved && isFaculty
+      ? getFacultyNav(isMobileNav)
+      : (isMobileNav ? NAV : NAV_DESKTOP);
   const { label, group, siblings, siblingGroups } = getPageMeta(location.pathname, navSource);
 
   // Accordion open/close state for the grouped chip strip (Campus Life /
