@@ -12,6 +12,19 @@
 
 ## এখন পর্যন্ত সমাধান হওয়া উল্লেখযোগ্য বাগ (সংক্ষেপে, ইতিহাস)
 
+- **Root route (`/`) role-bleed বাগ** — `kuetx.vercel.app` (কোনো
+  `/provider` পাথ ছাড়া, খালি root) খুললে মাঝে মাঝে student Dashboard
+  দেখাত even যখন signed-in account আসলে একটা provider (verified বা
+  pending)। Root cause: `App.jsx`-এর `/` route শুধু client-cached
+  `getAccountRole()` (localStorage flag) চেক করত — `/profile`,
+  `/courses`-এর মতো বাকি সব student route ইতিমধ্যে `RequireStudentMode`
+  দিয়ে wrap করা ছিল (যেটা server-verified `useIsProvider()`/
+  `useIsFaculty()` দিয়ে ডাবল-চেক করে), কিন্তু root route-এ সেই wrapper
+  ছিল না — তাই local flag stale/out-of-sync হলে (যেমন logout timing,
+  একই ব্রাউজারে account switch করার race) কোনো দ্বিতীয় চেক ছাড়াই ভুল
+  ড্যাশবোর্ড রেন্ডার হয়ে যেত। ফিক্স: root route-এর `<Dashboard />`
+  fallback এখন `<RequireStudentMode>`-এ wrap করা, যাতে এটাও বাকি সব
+  student route-এর মতো একই server-verified সত্য ব্যবহার করে।
 - Faculty module: "My Schedule empty" bug, Tools page missing route,
   Profile Setup loop (round 3 অনুযায়ী root cause পাওয়া গিয়েছিল), email
   double-binding, class creation coverage, students/CR permission বাগ

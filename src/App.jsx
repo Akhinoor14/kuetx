@@ -213,7 +213,28 @@ function Layout({ authState, onboardingActive }) {
             <Route path="/" element={
               getAccountRole() === 'teacher' ? <Navigate to="/faculty" replace /> :
               getAccountRole() === 'provider' ? <Navigate to="/provider" replace /> :
-              <Dashboard />
+              // BUGFIX (multi-tab / logout-timing role bleed): the ternary
+              // above only trusts getAccountRole(), a CLIENT-cached local
+              // flag (see accountRole.js's own doc comment — "never used to
+              // grant access to anything"). Every other student route
+              // (/profile, /courses, etc.) is wrapped in RequireStudentMode,
+              // which double-checks against the SERVER-verified
+              // useIsProvider()/useIsFaculty() hooks — but this one, the
+              // entry point everyone actually lands on after typing the bare
+              // domain or tapping a bookmark, was the one route that never
+              // got that same wrapper. If accountRole was stale at the
+              // moment this rendered (e.g. a provider account whose local
+              // flag hadn't been (re)written yet — race after switching
+              // accounts in the same browser, or a sign-out that hadn't
+              // finished clearing storage before this route re-rendered),
+              // the student Dashboard rendered anyway with no second check
+              // to catch it. Wrapping in RequireStudentMode here closes that
+              // gap the same way it's already closed everywhere else: if
+              // the server-verified check disagrees with the ternary above,
+              // RequireStudentMode's own "wrong shell" screen (with a link
+              // to the correct dashboard) wins instead of silently showing
+              // the wrong account's data.
+              <RequireStudentMode><Dashboard /></RequireStudentMode>
             } />
             <Route path="/profile" element={<RequireStudentMode><Profile /></RequireStudentMode>} />
             <Route path="/courses" element={<RequireStudentMode><Courses /></RequireStudentMode>} />
