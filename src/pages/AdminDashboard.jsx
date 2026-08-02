@@ -479,7 +479,12 @@ function ProviderManagementView({ onBack, onSelectCategory, countCtx }) {
     if (!providerVerifyRequests || providerVerifyRequests.length === 0) return;
     let cancelled = false;
     Promise.all(
-      providerVerifyRequests.map((r) => getProviderPhone(r.uid).then((p) => [r.uid, p]).catch(() => [r.uid, ''])),
+      providerVerifyRequests.map((r) => getProviderPhone(r.uid)
+        .then((p) => [r.uid, p])
+        .catch((e) => {
+          console.error('[AdminDashboard] getProviderPhone failed for', r.uid, e);
+          return [r.uid, `error: ${e?.code || e?.message || 'unknown'}`];
+        })),
     ).then((pairs) => {
       if (cancelled) return;
       setProviderPhonesByUid(Object.fromEntries(pairs));
