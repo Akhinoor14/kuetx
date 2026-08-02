@@ -12,6 +12,31 @@
 
 ## এখন পর্যন্ত সমাধান হওয়া উল্লেখযোগ্য বাগ (সংক্ষেপে, ইতিহাস)
 
+- **Root route (`/`) role-bleed বাগ — ফলো-আপ (auto-redirect):** আগের
+  ফিক্স (নিচে) root route-এর `<Dashboard />` fallback-কে
+  `RequireStudentMode`-এ wrap করেছিল, যেটা server-verified চেক দিয়ে
+  role mismatch ধরত ঠিকই, কিন্তু ধরা পড়লে একটা ব্লক স্ক্রিন ("এই পেজ
+  শুধু student account-এর জন্য" + ম্যানুয়াল বাটন) দেখাত। ব্যবহারকারীর
+  চাহিদা ছিল: root-এ ঢুকলে role অনুযায়ী স্বয়ংক্রিয়ভাবে সঠিক
+  dashboard-এ redirect হওয়া উচিত, কোনো ম্যানুয়াল ক্লিক ছাড়াই — ব্লক
+  স্ক্রিন root-এর জন্য ভুল UX, কারণ এটাই সেই entry point যেখানে সব
+  signed-in account (role নির্বিশেষে) স্বাভাবিকভাবে ল্যান্ড করে। ফিক্স:
+  নতুন `src/components/RootRouteResolver.jsx` কম্পোনেন্ট বানানো হয়েছে
+  (শুধু root route-এর জন্য, `RequireStudentMode`-এর পাশাপাশি, সেটাকে
+  replace না করে) — এটাও একই server-verified `useIsFaculty()`/
+  `useIsProvider()` চেক আর একই `isGenuineFaculty` শর্ত ব্যবহার করে
+  (Founder bypass respect করে), কিন্তু mismatch পেলে ব্লক স্ক্রিনের
+  বদলে সরাসরি `<Navigate to="/faculty" replace />` বা
+  `<Navigate to="/provider" replace />` করে দেয়। `App.jsx`-এর root
+  `<Route>`-এ `RequireStudentMode` সরিয়ে `RootRouteResolver` বসানো
+  হয়েছে; মডেল: client-cached `getAccountRole()` দিয়ে প্রথম দ্রুত
+  paint (optimistic), তারপর server-verified হুক resolve হলে সেটা যদি
+  client flag-এর সাথে না মেলে তাহলে দ্বিতীয় `<Navigate replace />` দিয়ে
+  সংশোধন — pure client-trust থেকে "client-trust + server-verified
+  correction" মডেলে। `RequireStudentMode` অপরিবর্তিত রয়ে গেছে ও
+  `/profile`, `/courses` ইত্যাদি বাকি সব student route-এ আগের মতোই
+  ব্লক-স্ক্রিন আচরণ বহাল আছে (ওগুলো root না, তাই সেখানে ব্লক স্ক্রিনই
+  এখনো সঠিক আচরণ)।
 - **Root route (`/`) role-bleed বাগ** — `kuetx.vercel.app` (কোনো
   `/provider` পাথ ছাড়া, খালি root) খুললে মাঝে মাঝে student Dashboard
   দেখাত even যখন signed-in account আসলে একটা provider (verified বা

@@ -21,6 +21,7 @@ import RequireCR from './components/RequireCR';
 import RequireStaff from './components/RequireStaff';
 import RequireProvider from './components/RequireProvider';
 import RequireStudentMode from './components/RequireStudentMode';
+import RootRouteResolver from './components/RootRouteResolver';
 import { useIsProvider } from './hooks/useIsProvider';
 import useFirebaseAuth from './hooks/useFirebaseAuth';
 import ClassJoinIntro from './components/ClassJoinIntro';
@@ -209,32 +210,35 @@ function Layout({ authState, onboardingActive }) {
                 (see accountRole.js Phase 1 note) but this ternary was
                 never updated for it, so provider accounts fell into the
                 else branch and got the student Dashboard too — same bug
-                as the teacher case above, just missed for the newer role. */}
+                as the teacher case above, just missed for the newer role.
+
+                BUGFIX 3 (multi-tab / logout-timing role bleed, then
+                auto-redirect follow-up): the ternary below only trusts
+                getAccountRole(), a CLIENT-cached local flag (see
+                accountRole.js's own doc comment — "never used to grant
+                access to anything"), for a fast *optimistic* first paint.
+                If that client flag is stale (e.g. a provider account whose
+                local flag hadn't been (re)written yet — race after
+                switching accounts in the same browser, or a sign-out that
+                hadn't finished clearing storage before this route
+                re-rendered), falling through to a plain <Dashboard />
+                would silently show the wrong account's shell. Unlike
+                every other student route (/profile, /courses, etc.),
+                which is wrapped in RequireStudentMode and shows a "wrong
+                shell" block screen with a manual link if the
+                server-verified useIsFaculty()/useIsProvider() checks
+                disagree, root is the one entry point EVERY signed-in
+                account lands on after typing the bare domain or tapping a
+                bookmark — so a block screen there is the wrong UX. Instead,
+                RootRouteResolver silently <Navigate replace />'s to the
+                correct dashboard the moment the server-verified check
+                resolves and disagrees with the client flag: client-trust
+                for the fast paint, server-verified correction after, no
+                block screen, no manual click required. */}
             <Route path="/" element={
               getAccountRole() === 'teacher' ? <Navigate to="/faculty" replace /> :
               getAccountRole() === 'provider' ? <Navigate to="/provider" replace /> :
-              // BUGFIX (multi-tab / logout-timing role bleed): the ternary
-              // above only trusts getAccountRole(), a CLIENT-cached local
-              // flag (see accountRole.js's own doc comment — "never used to
-              // grant access to anything"). Every other student route
-              // (/profile, /courses, etc.) is wrapped in RequireStudentMode,
-              // which double-checks against the SERVER-verified
-              // useIsProvider()/useIsFaculty() hooks — but this one, the
-              // entry point everyone actually lands on after typing the bare
-              // domain or tapping a bookmark, was the one route that never
-              // got that same wrapper. If accountRole was stale at the
-              // moment this rendered (e.g. a provider account whose local
-              // flag hadn't been (re)written yet — race after switching
-              // accounts in the same browser, or a sign-out that hadn't
-              // finished clearing storage before this route re-rendered),
-              // the student Dashboard rendered anyway with no second check
-              // to catch it. Wrapping in RequireStudentMode here closes that
-              // gap the same way it's already closed everywhere else: if
-              // the server-verified check disagrees with the ternary above,
-              // RequireStudentMode's own "wrong shell" screen (with a link
-              // to the correct dashboard) wins instead of silently showing
-              // the wrong account's data.
-              <RequireStudentMode><Dashboard /></RequireStudentMode>
+              <RootRouteResolver><Dashboard /></RootRouteResolver>
             } />
             <Route path="/profile" element={<RequireStudentMode><Profile /></RequireStudentMode>} />
             <Route path="/courses" element={<RequireStudentMode><Courses /></RequireStudentMode>} />
