@@ -868,8 +868,23 @@ export async function clRejectCRRequest(groupId, targetUid) {
  * Campus Lead action: appoint a CR directly into an open slot (roster
  * view) without requiring a prior student-submitted request. Throws if
  * the CR slot is already full.
+ *
+ * BUGFIX (person requested this): this used to write only { role: 'cr',
+ * verified: true } with no mobile number at all — unlike the self-claim
+ * path (ClaimCRCard.jsx -> requestCR -> clApproveCRRequest), which makes
+ * a mobile number mandatory before the request can even be submitted.
+ * That meant a CL/SCL/Founder directly appointing someone from the
+ * roster could create a CR with NO mobile on file, silently breaking the
+ * "every CR/ACR has a real contact number, visible to Faculty" guarantee
+ * documented in termStartDateSync.js/FacultyAllCR.jsx and enforced
+ * everywhere else. `mobile` is now required here too — same
+ * enforcement point, both directions now agree.
  */
-export async function clAppointCR(groupId, targetUid) {
+export async function clAppointCR(groupId, targetUid, mobile) {
+  const trimmedMobile = String(mobile || '').trim();
+  if (!trimmedMobile) {
+    throw new Error('A mobile number is required to appoint a CR.');
+  }
   const crStatusRef = doc(db, 'groups', groupId, 'meta', 'crStatus');
   const [membersSnap, requestsSnap] = await Promise.all([
     getDocs(collection(db, 'groups', groupId, 'members')),
@@ -880,7 +895,7 @@ export async function clAppointCR(groupId, targetUid) {
     throw new Error(`The CR slot for this class is already full (max ${MAX_CR}).`);
   }
   const batch = writeBatch(db);
-  batch.update(doc(db, 'groups', groupId, 'members', targetUid), { role: 'cr', verified: true });
+  batch.update(doc(db, 'groups', groupId, 'members', targetUid), { role: 'cr', verified: true, mobile: trimmedMobile });
   // Same cleanup as clApproveCRRequest: a slot just filled outside the
   // queue, so any still-pending "fresh CR" request for this group was
   // queued for a slot that no longer exists. Leave requests (type ===
@@ -990,13 +1005,22 @@ export async function handoffCR(groupId, currentUid, successorUid, currentProfil
 // (mirroring crStatus) plus rule changes, not a quick patch here. ACR has
 // no succession/appoint power of its own, so the blast radius of this gap
 // is content-editing capacity only, not a privilege escalation.
-export async function assignACR(groupId, targetUid) {
+//
+// BUGFIX (person requested this, same fix as clAppointCR above): ACR is
+// also shown on FacultyAllCR.jsx's "CR/ACR contacts" list, so it needs a
+// real mobile number too — this used to write only { role: 'acr' } with
+// nothing collected. Now mandatory here as well.
+export async function assignACR(groupId, targetUid, mobile) {
+  const trimmedMobile = String(mobile || '').trim();
+  if (!trimmedMobile) {
+    throw new Error('A mobile number is required to appoint an ACR.');
+  }
   const membersSnap = await getDocs(collection(db, 'groups', groupId, 'members'));
   const { acr: acrCount } = _countRoles(membersSnap.docs);
   if (acrCount >= MAX_ACR) {
     throw new Error(`The ACR slot for this class is already full (max ${MAX_ACR}).`);
   }
-  await updateDoc(doc(db, 'groups', groupId, 'members', targetUid), { role: 'acr' });
+  await updateDoc(doc(db, 'groups', groupId, 'members', targetUid), { role: 'acr', mobile: trimmedMobile });
 }
 export async function revokeACR(groupId, targetUid) {
   await updateDoc(doc(db, 'groups', groupId, 'members', targetUid), { role: 'member' });

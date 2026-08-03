@@ -8,6 +8,7 @@ import {
   MAX_CR, MAX_ACR,
 } from '../lib/groupSync';
 import BlueTick from './BlueTick';
+import PromptDialog from './PromptDialog';
 import { CRDetailModal } from '../pages/faculty/FacultyAllCR';
 
 /**
@@ -66,6 +67,17 @@ export default function ClassmatesList({ groupId, showActions = false, viewerRol
   const [bulkBusy, setBulkBusy] = useState(false);
   const [rolesPickerId, setRolesPickerId] = useState('');
   const [roleActionBusy, setRoleActionBusy] = useState(false);
+  // BUGFIX (person requested this): "Make CR"/"Make ACR" from this roster
+  // view used to call clAppointCR/assignACR immediately with no mobile
+  // number at all — unlike the student self-claim flow (ClaimCRCard.jsx),
+  // which makes a mobile number mandatory before submitting. That let a
+  // CL/SCL/Founder create a CR/ACR with no contact number on file,
+  // breaking FacultyAllCR.jsx's "every CR/ACR has a real number" promise.
+  // This dialog collects it here too, prefilled with whatever's already
+  // on the member's doc (e.g. a former CR being re-appointed) so nobody
+  // has to re-type a number that's already correct.
+  const [mobilePromptAction, setMobilePromptAction] = useState(null); // { key, label, targetUid, run(mobile) } | null
+  const [mobilePromptError, setMobilePromptError] = useState('');
 
   useEffect(() => {
     if (!groupId) { setMembers([]); return; }
@@ -214,7 +226,16 @@ export default function ClassmatesList({ groupId, showActions = false, viewerRol
           actions.push({
             key: 'make-cr', label: 'Make CR', disabled: crSlotsFull,
             title: crSlotsFull ? `The CR slot is full (max ${MAX_CR}) — revoke it first` : undefined,
-            run: () => clAppointCR(groupId, m.id),
+            run: () => {
+              setMobilePromptError('');
+              setMobilePromptAction({
+                key: 'make-cr',
+                title: `Mobile number for ${m.name || 'this classmate'}`,
+                message: 'A mobile number is required to appoint them CR — Faculty will be able to see it.',
+                defaultValue: m.mobile || '',
+                run: (mobile) => clAppointCR(groupId, m.id, mobile),
+              });
+            },
           });
         }
         if (m.legacyCRClaim) {
@@ -249,7 +270,16 @@ export default function ClassmatesList({ groupId, showActions = false, viewerRol
         actions.push({
           key: 'make-acr', label: 'Make ACR', disabled: acrSlotsFull,
           title: acrSlotsFull ? `The ACR slot is full (max ${MAX_ACR})` : undefined,
-          run: () => assignACR(groupId, m.id),
+          run: () => {
+            setMobilePromptError('');
+            setMobilePromptAction({
+              key: 'make-acr',
+              title: `Mobile number for ${m.name || 'this classmate'}`,
+              message: 'A mobile number is required to appoint them ACR — Faculty will be able to see it.',
+              defaultValue: m.mobile || '',
+              run: (mobile) => assignACR(groupId, m.id, mobile),
+            });
+          },
         });
       }
     }
@@ -261,6 +291,28 @@ export default function ClassmatesList({ groupId, showActions = false, viewerRol
     setRoleActionBusy(true);
     try {
       await action.run();
+    } finally {
+      setRoleActionBusy(false);
+    }
+  };
+
+  const handleMobilePromptConfirm = async (mobile) => {
+    const trimmed = String(mobile || '').trim();
+    if (!trimmed) {
+      setMobilePromptError('A mobile number is required.');
+      return;
+    }
+    const action = mobilePromptAction;
+    setMobilePromptAction(null);
+    setMobilePromptError('');
+    setRoleActionBusy(true);
+    try {
+      await action.run(trimmed);
+    } catch (e) {
+      // Surface failures the same way other role actions silently swallow
+      // per-row — a failed appoint (e.g. slot filled by someone else in
+      // the meantime) shouldn't look like it succeeded.
+      alert(e?.message || 'Something went wrong — please try again.');
     } finally {
       setRoleActionBusy(false);
     }
@@ -458,6 +510,21 @@ export default function ClassmatesList({ groupId, showActions = false, viewerRol
       {selectedCR && (
         <CRDetailModal member={{ ...selectedCR, ...(groupMeta || {}) }} onClose={() => setSelectedCR(null)} />
       )}
+
+      <PromptDialog
+        open={!!mobilePromptAction}
+        title={mobilePromptAction?.title || 'Mobile number'}
+        message={
+          mobilePromptError
+            ? mobilePromptError
+            : (mobilePromptAction?.message || 'A mobile number is required.')
+        }
+        defaultValue={mobilePromptAction?.defaultValue || ''}
+        placeholder="01XXXXXXXXX"
+        confirmLabel="Continue"
+        onCancel={() => { setMobilePromptAction(null); setMobilePromptError(''); }}
+        onConfirm={handleMobilePromptConfirm}
+      />
     </div>
   );
 }

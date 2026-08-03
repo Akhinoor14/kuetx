@@ -1,13 +1,44 @@
 import path from 'path'
+import fs from 'fs'
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 // import { VitePWA } from 'vite-plugin-pwa' // temporarily disabled to avoid install/peer-dep issues
 
 const projectRootDir = path.resolve(__dirname);
 
+// Auto-bump the service worker's cache version on every production build,
+// so a forgotten manual version bump can never again leave returning
+// users stuck on stale cached JS chunks (cache-first in sw.js) mismatched
+// against a newer index.html/runtime — see the "Cannot access 'x' before
+// initialization" class of bug this caused on Schedule.jsx after a CR
+// add/revoke re-render pulled in a chunk that was still the old cached
+// one. Stamps a build-time-unique id (timestamp) into CACHE_NAME in the
+// COPIED dist/sw.js only — the source public/sw.js is left untouched so
+// dev/git diffs stay clean.
+function swCacheVersionPlugin() {
+  return {
+    name: 'sw-cache-version-stamp',
+    apply: 'build',
+    closeBundle() {
+      const outDir = this.environment?.config?.build?.outDir || 'dist';
+      const swPath = path.resolve(projectRootDir, outDir, 'sw.js');
+      if (!fs.existsSync(swPath)) return;
+      const buildId = String(Date.now());
+      const contents = fs.readFileSync(swPath, 'utf8');
+      const stamped = contents.replace(
+        /const CACHE_NAME = ['"][^'"]*['"];/,
+        `const CACHE_NAME = 'kuetx-build-${buildId}';`
+      );
+      fs.writeFileSync(swPath, stamped);
+      console.log(`[sw-cache-version-stamp] CACHE_NAME -> kuetx-build-${buildId}`);
+    },
+  };
+}
+
 export default defineConfig({
   plugins: [
     react(),
+    swCacheVersionPlugin(),
     // VitePWA({
     //   registerType: 'autoUpdate',
     //   includeAssets: ['favicon.svg', 'icon-192.svg', 'icon-512.svg'],

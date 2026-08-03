@@ -9,6 +9,7 @@ import {
 import { checkCLVacant, applyForCampusLead } from '../lib/staffSync';
 import { auth, db } from '../lib/firebase';
 import PromptDialog from './PromptDialog';
+import { UserX2 } from 'lucide-react';
 
 /**
  * Shared logic behind both <ClaimCRCard> (full card) and
@@ -186,6 +187,56 @@ export default function ClaimCRCard({ groupId, profile }) {
     );
   }
 
+  // BUGFIX (person requested this): a rejected CR claim used to fall
+  // straight through to the normal open-slot pitch below with zero
+  // acknowledgment anything happened — a rejected requester saw the exact
+  // same "Claim CR" card as someone who'd never applied, no different
+  // from before they claimed. Give it its own state (mirrors
+  // JoinStatusCard's 'rejected' branch) so the person actually sees their
+  // claim was declined before immediately being able to resubmit — the
+  // resubmit itself was already working (requestCR's update-back-to-
+  // pending branch + matching Firestore rule), this was purely a missing
+  // UI acknowledgment, not a broken resubmit.
+  if (ownRequestStatus === 'rejected' && claimState !== 'error') {
+    return (
+      <div className="card" style={{
+        padding: 14, marginBottom: 16, border: '1px solid var(--warning, #f59e0b)',
+        background: 'var(--warningBg, rgba(245,158,11,0.08))',
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, fontWeight: 700, marginBottom: 4 }}>
+          <UserX2 size={15} /> CR claim declined
+        </div>
+        <p style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 10 }}>
+          Your Campus Lead declined your CR claim. Double check your details, then you can claim again below.
+        </p>
+        {!crStatus.slotsFull && (
+          <div style={{ marginBottom: 10 }}>
+            <label style={{ fontSize: 11.5, fontWeight: 700, color: 'var(--muted)', marginBottom: 4, display: 'block' }}>
+              Your mobile number (mandatory — Faculty will see this)
+            </label>
+            <input
+              type="tel"
+              value={mobile}
+              onChange={(e) => setMobile(e.target.value)}
+              placeholder="01XXXXXXXXX"
+              style={{
+                width: '100%', padding: '8px 10px', borderRadius: 8, border: '1px solid var(--border)',
+                background: 'var(--bg)', color: 'var(--text)', fontSize: 13, outline: 'none', boxSizing: 'border-box',
+              }}
+            />
+          </div>
+        )}
+        <button
+          className="btn btn-primary btn-sm"
+          onClick={handleClaimCR}
+          disabled={claimState === 'sending' || crStatus.slotsFull}
+        >
+          {claimState === 'sending' ? 'Sending…' : 'Claim again'}
+        </button>
+      </div>
+    );
+  }
+
   return (
     <div className="card" style={{ padding: 14, marginBottom: 16 }}>
       <div style={{ fontSize: 13, fontWeight: 700, marginBottom: 4 }}>
@@ -279,13 +330,29 @@ export function ClaimCRInlineButton({ groupId, profile }) {
     );
   }
 
+  // Same rejected-state acknowledgment as the full <ClaimCRCard> above —
+  // this compact variant just shows it as a small labeled button instead
+  // of a full explanatory card (no room here), but the button still
+  // triggers the exact same resubmit flow via handleClaimCR.
+  const wasRejected = ownRequestStatus === 'rejected' && claimState !== 'error';
+
   return (
     <>
+    {wasRejected && (
+      <span style={{
+        fontSize: 10.5, fontWeight: 700, color: 'var(--warning, #f59e0b)',
+        marginRight: 6,
+      }}>
+        Declined —
+      </span>
+    )}
     <button
       onClick={() => setShowMobileDialog(true)}
       disabled={claimState === 'sending' || crStatus.slotsFull}
       title={
-        crStatus.slotsFull
+        wasRejected
+          ? 'Your Campus Lead declined your previous CR claim. You can claim again.'
+          : crStatus.slotsFull
           ? `The CR slot (max ${MAX_CR}) is currently filled for this class`
           : undefined
       }
@@ -297,7 +364,7 @@ export function ClaimCRInlineButton({ groupId, profile }) {
         opacity: (claimState === 'sending' || crStatus.slotsFull) ? 0.6 : 1,
       }}
     >
-      {claimState === 'sending' ? 'Sending…' : crStatus.slotsFull ? 'CR slot full' : 'Claim CR'}
+      {claimState === 'sending' ? 'Sending…' : crStatus.slotsFull ? 'CR slot full' : wasRejected ? 'Claim again' : 'Claim CR'}
     </button>
     <PromptDialog
       open={showMobileDialog}

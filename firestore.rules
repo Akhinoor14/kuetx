@@ -2081,6 +2081,13 @@ service cloud.firestore {
         //     approval.)
         //   - ACR has none of this power (isGroupACR is deliberately
         //     absent from this branch).
+        //   - BUGFIX (person requested this): 'mobile' added to the CR
+        //     branch's allowed field set below — assignACR now requires a
+        //     mobile number (matching the mandatory-mobile self-claim
+        //     flow), and this is the only branch a plain CR's own
+        //     "Make ACR" write goes through (ClassRoster.jsx passes
+        //     viewerRole="cr"). Without this, that write would
+        //     permission-deny the moment mobile was added to the payload.
         allow update: if isAdmin() ||
           ((isCLFor(groupId) || isHeadOfOps() || isSCLForGroup(groupId)) && request.auth.uid != memberUid
             // Capacity check, scoped narrowly: only applies when this
@@ -2091,7 +2098,7 @@ service cloud.firestore {
             // MAX_CR check in groupSync.js so a modified client (or a
             // direct Firestore write) can't grant unlimited CR slots.
             && (request.resource.data.role != 'cr' || resource.data.role == 'cr' || crCount(groupId) < 1)) ||
-          (isGroupCR(groupId) && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['role', 'verified', 'legacyCRClaim']) &&
+          (isGroupCR(groupId) && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['role', 'verified', 'legacyCRClaim', 'mobile']) &&
             // legacyCRClaim may only ever be cleared here, never (re)set —
             // this branch is a same-slot handoff/step-down path, not a way
             // to grant the "Claims CR" flag to anyone.
