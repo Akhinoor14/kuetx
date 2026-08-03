@@ -464,7 +464,26 @@ function HeadOfOpsSection() {
       // Head of Ops left the field blank, but the appointment itself
       // (typed in by hand, or auto-filled and confirmed) is what counts.
       const info = await getStaffDisplayInfo(newSclUid.trim());
-      const dept = newSclDept.trim().toUpperCase() || info.dept;
+      // BUGFIX (person's actual bug — SCL couldn't see their own CLs,
+      // permission-denied): only the manually-typed newSclDept was
+      // uppercased here — the info.dept fallback (read from the target's
+      // own signup profile) was used as-is, whatever case that profile
+      // happened to store. staff/{uid}/roles/senior_campus_lead_{dept}'s
+      // doc ID is built directly from this string (see roleDocId in
+      // staffSync.js), and firestore.rules' isSCLFor(dept) does an EXACT-
+      // CASE exists() check against 'senior_campus_lead_' + dept, where
+      // dept always comes from deptOfGroup(groupId) — which is always
+      // uppercase, since groupId itself is built consistently uppercase
+      // everywhere else. So an SCL appointed via this blank-field
+      // auto-fill path, whose own profile had a lowercase/mixed-case
+      // dept, got a role doc id like 'senior_campus_lead_Che' instead of
+      // 'senior_campus_lead_CHE' — a doc that exists, just under the
+      // wrong exact-case key — so isSCLFor's exists() check silently
+      // came back false for their own correct department. Both branches
+      // must agree on case; uppercase-ing here too is the fix, not the
+      // rules (the rules side is the one consistent source of truth —
+      // deptOfGroup — everything else must match it).
+      const dept = (newSclDept.trim() || info.dept || '').toUpperCase();
       if (!dept) {
         setAppointError('Enter a department before appointing.');
         return;
@@ -750,9 +769,22 @@ export default function StaffDashboard({ activeTab: activeTabProp, onTabChange }
     .filter((r) => r.role === 'campus_lead')
     .map((r) => r.scope?.groupId || r.id?.replace(/^campus_lead_/, ''))
     .filter(Boolean);
+  // Defensive uppercase for DISPLAY/query purposes only — does NOT fix an
+  // already-mismatched role doc. If this SCL was appointed before the
+  // fix in HeadOfOpsSection's appoint() above, their actual Firestore
+  // doc id (staff/{uid}/roles/senior_campus_lead_{dept}) may still be
+  // stored with the wrong case, and firestore.rules' isSCLFor() checks
+  // that exact doc id server-side — a client-side .toUpperCase() here
+  // can't retroactively rename it. For an SCL already stuck with a
+  // mismatched-case doc (the actual bug the person reported — they
+  // couldn't see their own CLs), the real fix is re-appointing them from
+  // Head of Ops' panel now that appoint() always uppercases; that
+  // creates a fresh, correctly-cased doc. This uppercase here just keeps
+  // the dept label/query consistent for anyone whose doc was already
+  // correct to begin with.
   const sclDepts = roles
     .filter((r) => r.role === 'senior_campus_lead')
-    .map((r) => r.scope?.dept || r.id?.replace(/^senior_campus_lead_/, ''))
+    .map((r) => (r.scope?.dept || r.id?.replace(/^senior_campus_lead_/, '') || '').toUpperCase())
     .filter(Boolean);
   const isHeadOfOps = roles.some((r) => r.role === 'head_of_ops');
   const isContentLead = roles.some((r) => r.role === 'content_lead');

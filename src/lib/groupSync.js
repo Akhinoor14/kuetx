@@ -954,7 +954,20 @@ export async function clRevokeCR(groupId, targetUid) {
  * Net crStatus.count stays the same (one CR replaced by another in the
  * same slot), and the CL is passively notified, not asked.
  */
-export async function handoffCR(groupId, currentUid, successorUid, currentProfile) {
+// BUGFIX (person requested this): handoffCR used to write only
+// { role: 'cr' } for the successor — no mobile at all, and it actively
+// CLEARED the outgoing CR's own mobile (line below) without ever
+// collecting the new CR's number. Combined, a CR-to-CR handoff reliably
+// produced a CR with zero contact number on file, the exact same gap
+// clAppointCR/assignACR had (see those functions' own doc comments) —
+// just reached via a third, CL-independent path this fix had missed.
+// mobile is now required here too, same enforcement point everywhere a
+// CR/ACR can be created.
+export async function handoffCR(groupId, currentUid, successorUid, currentProfile, mobile) {
+  const trimmedMobile = String(mobile || '').trim();
+  if (!trimmedMobile) {
+    throw new Error('A mobile number is required to hand off CR.');
+  }
   // getDocFromServer, not getDoc: a stale local cache (e.g. the successor
   // was verified moments ago and this device hasn't caught up) can report
   // verified:false or exists():false for someone who genuinely already
@@ -967,7 +980,7 @@ export async function handoffCR(groupId, currentUid, successorUid, currentProfil
   // legacyCRClaim cleared alongside role — see note in clApproveLeaveCR;
   // same "Claims CR" badge bug applies to a direct CR-to-CR handoff too.
   batch.update(doc(db, 'groups', groupId, 'members', currentUid), { role: 'member', legacyCRClaim: false, mobile: '' });
-  batch.update(doc(db, 'groups', groupId, 'members', successorUid), { role: 'cr' });
+  batch.update(doc(db, 'groups', groupId, 'members', successorUid), { role: 'cr', mobile: trimmedMobile });
   // If the departing CR also had a pending "leave CR" request queued
   // (asked to step down, then handed off directly before CL acted on it),
   // close it out here. Otherwise it lingers as pending forever, and if a

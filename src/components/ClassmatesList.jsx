@@ -266,9 +266,15 @@ export default function ClassmatesList({ groupId, showActions = false, viewerRol
         actions.push({
           key: 'handoff-cr', label: 'Hand off CR to them',
           run: async () => {
-            if (await confirmDialog(`Hand off CR to ${m.name || 'this classmate'}? You'll no longer be CR.`)) {
-              return handoffCR(groupId, currentUid, m.id, null);
-            }
+            if (!(await confirmDialog(`Hand off CR to ${m.name || 'this classmate'}? You'll no longer be CR.`))) return;
+            setMobilePromptError('');
+            setMobilePromptAction({
+              key: 'handoff-cr',
+              title: `Mobile number for ${m.name || 'this classmate'}`,
+              message: 'A mobile number is required for the new CR — Faculty will be able to see it.',
+              defaultValue: m.mobile || '',
+              run: (mobile) => handoffCR(groupId, currentUid, m.id, null, mobile),
+            });
           },
         });
       }
