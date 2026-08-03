@@ -222,22 +222,30 @@ export default function ClassmatesList({ groupId, showActions = false, viewerRol
     const actions = [];
     if (viewerRole === 'cl') {
       if (m.role !== 'cr') {
-        if (m.id !== currentUid) {
-          actions.push({
-            key: 'make-cr', label: 'Make CR', disabled: crSlotsFull,
-            title: crSlotsFull ? `The CR slot is full (max ${MAX_CR}) — revoke it first` : undefined,
-            run: () => {
-              setMobilePromptError('');
-              setMobilePromptAction({
-                key: 'make-cr',
-                title: `Mobile number for ${m.name || 'this classmate'}`,
-                message: 'A mobile number is required to appoint them CR — Faculty will be able to see it.',
-                defaultValue: m.mobile || '',
-                run: (mobile) => clAppointCR(groupId, m.id, mobile),
-              });
-            },
-          });
-        }
+        // BUGFIX (person requested this): this used to skip rendering
+        // "Make CR" entirely when m.id === currentUid, so a Founder/CL
+        // who is also genuinely enrolled as a student in this class (and
+        // wants to appoint THEMSELVES CR — a normal, legitimate case, not
+        // an edge case) had no way to do it from this roster tool at all.
+        // Unlike remove-cr below (removing your own CL status via this
+        // tool doesn't make sense, since CL isn't a per-class role to
+        // begin with), appointing yourself CR is exactly as valid as
+        // appointing any other classmate — same mobile-number prompt,
+        // same clAppointCR call, just targeting your own uid.
+        actions.push({
+          key: 'make-cr', label: m.id === currentUid ? 'Make yourself CR' : 'Make CR', disabled: crSlotsFull,
+          title: crSlotsFull ? `The CR slot is full (max ${MAX_CR}) — revoke it first` : undefined,
+          run: () => {
+            setMobilePromptError('');
+            setMobilePromptAction({
+              key: 'make-cr',
+              title: `Mobile number for ${m.id === currentUid ? 'yourself' : (m.name || 'this classmate')}`,
+              message: 'A mobile number is required to appoint CR — Faculty will be able to see it.',
+              defaultValue: m.mobile || '',
+              run: (mobile) => clAppointCR(groupId, m.id, mobile),
+            });
+          },
+        });
         if (m.legacyCRClaim) {
           actions.push({
             key: 'clear-claim', label: 'Clear "Claims CR" badge',

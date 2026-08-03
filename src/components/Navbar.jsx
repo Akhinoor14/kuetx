@@ -8,6 +8,7 @@ import { getFacultyNav } from '../nav-faculty';
 import { getNavProvider } from './nav-system/SidebarNavProvider';
 import { useIsProvider } from '../hooks/useIsProvider';
 import { useIsFaculty } from '../hooks/useIsFaculty';
+import { useViewMode } from '../hooks/useViewMode';
 import { useProviderLang } from '../hooks/useProviderLang';
 import { Wordmark } from './Logo';
 import * as noticeApi from '../lib/noticeUtils';
@@ -129,6 +130,25 @@ export function Navbar({ onMenuClick }) {
   const isMobileNav = useIsMobileNav();
   const { isProvider, isResolved: isProviderResolved } = useIsProvider();
   const { isFaculty, isResolved: isFacultyResolved } = useIsFaculty();
+  // BUGFIX (person requested this — topbar chip strip missing entirely,
+  // on every page, specifically for the Founder's own account): Sidebar.
+  // jsx and BottomNav.jsx both already resolve student-vs-faculty via
+  // useViewMode() (see that hook's own doc comment) specifically so a
+  // Founder — who legitimately has BOTH shells available on one account,
+  // via a device-local toggle — can switch into 'student' view and see
+  // the real student nav/shell. This component instead kept reading raw
+  // isFaculty from useIsFaculty(), which is unconditionally true for a
+  // Founder (Founder bypass — see that hook's doc comment) REGARDLESS of
+  // the viewMode toggle. So a Founder testing their own account in
+  // 'student' view got the desktop Sidebar/BottomNav correctly showing
+  // student nav, while this topbar simultaneously resolved navSource from
+  // getFacultyNav() instead — which has no entries for /attendance,
+  // /clubs, /schedule, etc., so getPageMeta found no match anywhere and
+  // silently returned zero siblings on every single page. Now reads
+  // viewMode instead, matching Sidebar/BottomNav exactly: a real (non-
+  // Founder) faculty account is still always 'teacher' with no toggle
+  // (useViewMode's own guarantee), so this changes nothing for them.
+  const { viewMode } = useViewMode();
   const { t: tProvider } = useProviderLang();
   // PHASE 1 (PROVIDER_SHELL_UX_OVERHAUL_PLAN.md): a provider viewer must
   // never resolve topbar title/chip-strip from the student NAV/NAV_DESKTOP
@@ -162,28 +182,10 @@ export function Navbar({ onMenuClick }) {
   // one-paint flash of the student nav before this resolves.
   const navSource = isProviderResolved && isProvider
     ? getNavProvider(tProvider)
-    : isFacultyResolved && isFaculty
+    : isFacultyResolved && viewMode === 'teacher'
       ? getFacultyNav(isMobileNav)
       : (isMobileNav ? NAV : NAV_DESKTOP);
   const { label, group, siblings, siblingGroups } = getPageMeta(location.pathname, navSource);
-
-  // TEMP DIAGNOSTIC (person requested this to debug the missing topbar
-  // chip strip) — read-only console.log, no behavior change. Safe to
-  // remove once the root cause is found; does not affect rendering.
-  useEffect(() => {
-    console.log('[KUETx CHIP-DIAG]', {
-      pathname: location.pathname,
-      isMobileNav,
-      isProviderResolved, isProvider,
-      isFacultyResolved, isFaculty,
-      navSourceLength: navSource?.length,
-      navSourceGroups: navSource?.map((s) => s.group),
-      label, group,
-      siblingsLength: siblings?.length,
-      hasSiblingGroups: !!siblingGroups,
-      hasChipStrip: !!siblingGroups || (siblings && siblings.length > 1),
-    });
-  }, [location.pathname, isMobileNav, isProviderResolved, isProvider, isFacultyResolved, isFaculty]);
 
   // Accordion open/close state for the grouped chip strip (Campus Life /
   // Services style pages, where siblingGroups is populated) — defaults to
