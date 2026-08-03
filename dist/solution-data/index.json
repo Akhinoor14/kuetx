@@ -1,0 +1,24 @@
+{
+  "solutions": [
+    {
+      "dept": "ESE",
+      "deptName": "Energy Science and Engineering",
+      "term": "Y2T1",
+      "courseCode": "CSE2113",
+      "courseName": "Computer Programming",
+      "years": [2018, 2019, 2020, 2021, 2022, 2023]
+    },
+    {
+      "dept": "ESE",
+      "deptName": "Energy Science and Engineering",
+      "term": "Y2T1",
+      "courseCode": "ME2115",
+      "courseName": "Fluid Mechanics",
+      "years": [2018, 2019, 2020, 2021, 2022, 2023]
+    }
+  ],
+  "structure": {
+    "note": "Solutions are organized as: /public/solution-data/{DEPT}/{TERM}/{COURSECODE}/{year}.json",
+    "example": "/public/solution-data/ESE/Y2T1/CSE2113/2018.json"
+  }
+}

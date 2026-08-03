@@ -1,0 +1,62 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Schedule Demo</title>
+    <style>
+      body { font-family: system-ui, Arial, sans-serif; margin: 16px; }
+      #warnings { margin-top: 12px; background:#fff3cd; border:1px solid #ffeeba; padding:10px; }
+      #calendar { max-width: 900px; margin-top: 16px; }
+      .event { background: #007bff; color: white; padding: 4px 8px; border-radius: 6px; display: inline-block; }
+    </style>
+  </head>
+  <body>
+    <h2>Generated Schedule Demo (offline)</h2>
+    <div id="summary">Loading generated schedule...</div>
+    <div id="warnings"></div>
+    <div id='calendar'></div>
+
+    <script>
+      function groupEvents(data){
+        const map = {};
+        (data.courses||[]).forEach(c=>{
+          (c.ctList||[]).forEach(ct=>{ map[ct.date] = map[ct.date] || []; map[ct.date].push({ title: `${c.courseId} ${ct.type}`, date: ct.date }); });
+          (c.quizList||[]).forEach(q=>{ map[q.date] = map[q.date] || []; map[q.date].push({ title: `${c.courseId} ${q.type}`, date: q.date }); });
+        });
+        return Object.keys(map).sort().map(d=>({ day:d, events:map[d] }));
+      }
+
+      async function loadAndRender(){
+        try{
+          const res = await fetch('generated_schedule.json');
+          const data = await res.json();
+          document.getElementById('summary').innerText = `Term: ${data.term}  ·  Generated: ${data.generated_at}`;
+          const warnings = [];
+          (data.courses||[]).forEach(c=>{ (c.warnings||[]).forEach(w=>warnings.push(`${c.courseId}: ${w}`)); });
+          const warnBox = document.getElementById('warnings');
+          if (warnings.length) warnBox.innerHTML = '<strong>Warnings / Alerts</strong><ul>' + warnings.map(w=>`<li>${w}</li>`).join('') + '</ul>'; else warnBox.innerHTML = '<strong>No warnings detected.</strong>';
+
+          const grouped = groupEvents(data);
+          const cal = document.getElementById('calendar');
+          cal.innerHTML = '';
+          grouped.forEach(g=>{
+            const dayEl = document.createElement('div');
+            dayEl.style.borderBottom = '1px solid #eee'; dayEl.style.padding = '8px 0';
+            const h = document.createElement('div'); h.style.fontWeight = '700'; h.innerText = g.day; dayEl.appendChild(h);
+            g.events.forEach(ev=>{
+              const evEl = document.createElement('div'); evEl.style.marginTop='6px'; evEl.innerHTML = `<span class="event">${ev.title}</span>`; dayEl.appendChild(evEl);
+            });
+            cal.appendChild(dayEl);
+          });
+        }catch(e){
+          document.getElementById('summary').innerText = 'Failed to load generated_schedule.json — showing sample';
+          const sample = { term:'T2026S1', generated_at: (new Date()).toISOString().slice(0,10), courses:[ { courseId:'CSE101', ctList:[{type:'CT1',date:'2026-09-15'}], quizList:[] } ] };
+          const grouped = groupEvents(sample);
+          const cal = document.getElementById('calendar'); cal.innerHTML = '';
+          grouped.forEach(g=>{ const dayEl = document.createElement('div'); const h = document.createElement('div'); h.style.fontWeight='700'; h.innerText=g.day; dayEl.appendChild(h); g.events.forEach(ev=>{ const evEl=document.createElement('div'); evEl.style.marginTop='6px'; evEl.innerHTML=`<span class="event">${ev.title}</span>`; dayEl.appendChild(evEl); }); cal.appendChild(dayEl); });
+        }
+      }
+      loadAndRender();
+    </script>
+  </body>
+</html>
