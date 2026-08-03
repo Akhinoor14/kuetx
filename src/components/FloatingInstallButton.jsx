@@ -50,7 +50,9 @@ export default function FloatingInstallButton() {
         aria-label="Install app"
         title="Install app"
       >
-        <Download size={19} strokeWidth={2.25} />
+        <span className="kx-install-fab-icon-wrap">
+          <Download size={13} strokeWidth={2.5} />
+        </span>
         <span className="kx-install-fab-label">Install</span>
       </button>
 
@@ -93,23 +95,43 @@ export default function FloatingInstallButton() {
           z-index: 1300;
           display: flex;
           align-items: center;
-          gap: 8px;
-          padding: 12px 16px;
-          border: none;
+          gap: 9px;
+          padding: 11px 18px 11px 12px;
+          border: 1px solid rgba(255,255,255,0.22);
           border-radius: 999px;
-          background: var(--accent);
+          background: linear-gradient(135deg,
+            color-mix(in srgb, var(--accent) 100%, white 10%),
+            color-mix(in srgb, var(--accent) 100%, black 12%));
           color: #fff;
           font-size: 13.5px;
           font-weight: 700;
+          letter-spacing: 0.1px;
           cursor: pointer;
-          box-shadow: 0 10px 26px -8px rgba(var(--accentRGB), 0.55);
-          transition: transform 0.15s ease, box-shadow 0.15s ease;
+          box-shadow:
+            0 10px 26px -8px rgba(var(--accentRGB), 0.55),
+            0 1px 2px rgba(0,0,0,0.12),
+            inset 0 1px 0 rgba(255,255,255,0.25);
+          transition: transform 0.18s cubic-bezier(.34,1.56,.64,1), box-shadow 0.18s ease, filter 0.18s ease;
+        }
+        .kx-install-fab-icon-wrap {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 22px;
+          height: 22px;
+          border-radius: 999px;
+          background: rgba(255,255,255,0.2);
+          flex-shrink: 0;
         }
         .kx-install-fab:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 14px 32px -8px rgba(var(--accentRGB), 0.6);
+          transform: translateY(-3px) scale(1.02);
+          box-shadow:
+            0 16px 36px -8px rgba(var(--accentRGB), 0.65),
+            0 2px 4px rgba(0,0,0,0.15),
+            inset 0 1px 0 rgba(255,255,255,0.3);
+          filter: brightness(1.05);
         }
-        .kx-install-fab:active { transform: translateY(0); }
+        .kx-install-fab:active { transform: translateY(-1px) scale(0.98); }
 
         /* Desktop: no bottom nav to clear, so the button can sit lower,
            still safely right of the 220px left sidebar either way. */
