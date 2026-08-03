@@ -358,15 +358,38 @@ function Layout({ authState, onboardingActive }) {
                 nothing every render, dead weight kept alive by accident.
                 Scoped subgroup: 'Campus Life' here for the same reason
                 as the /campus-life route above — without it this page
-                pulled in Self Study's items too. */}
+                pulled in Self Study's items too.
+
+                BUGFIX (Services missing from mobile Campus tab): this is
+                the route the bottom nav's "Campus" button actually links
+                to (see BottomNavStudent.js's path: '/campus') — /campus-life
+                above already had the isMobileNav-aware two-section form
+                (Campus Life + Services) added, but this route was never
+                updated to match, so it always rendered only the single
+                'Campus Life' subgroup regardless of device. On desktop
+                that's correct (Services has its own sidebar row there —
+                see nav.js's NAV_DESKTOP split), but on mobile there's no
+                such separate entry point, so Services was silently
+                unreachable from the bottom nav. Mirrors /campus-life's
+                branch exactly. */}
             <Route
               path="/campus"
               element={
                 <RequireStudentMode>
-                  <SubgroupHub
-                    pageTitle="Campus"
-                    sections={[{ group: 'Campus Life', subgroup: 'Campus Life' }]}
-                  />
+                  {isMobileNav ? (
+                    <SubgroupHub
+                      pageTitle="Campus"
+                      sections={[
+                        { group: 'Campus Life', subgroup: 'Campus Life' },
+                        { group: 'Campus Life', subgroup: 'Services' },
+                      ]}
+                    />
+                  ) : (
+                    <SubgroupHub
+                      pageTitle="Campus"
+                      sections={[{ group: 'Campus Life', subgroup: 'Campus Life' }]}
+                    />
+                  )}
                 </RequireStudentMode>
               }
             />

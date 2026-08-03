@@ -51,7 +51,9 @@ export default function ClassSetupTermCourses({
 
   const CourseRow = ({ course }) => {
     const teachers = courseTeacherMap?.[course.id] || [];
-    const hasTeachers = teachers.length > 0;
+    // Matches isClassSetupComplete's >= 2 requirement — a single teacher
+    // no longer counts as "done" for the CR setup checklist badge.
+    const hasTeachers = teachers.length >= 2;
     return (
       <div
         style={{
@@ -65,7 +67,11 @@ export default function ClassSetupTermCourses({
             {course.code}
           </div>
           <div style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 2, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-            {hasTeachers ? teachers.join(', ') : 'No teacher assigned'}
+            {teachers.length === 0
+              ? 'No teacher assigned'
+              : hasTeachers
+                ? teachers.join(', ')
+                : `${teachers.join(', ')} — needs a 2nd teacher`}
           </div>
         </div>
         <button
@@ -136,10 +142,22 @@ export default function ClassSetupTermCourses({
         onClose={() => setDialogState({ open: false, courseId: '' })}
         course={activeCourse}
         currentTeachers={currentTeachersForDialog}
-        onSave={(teachers) => {
-          onSaveTeachers(dialogState.courseId, teachers);
-          setDialogState({ open: false, courseId: '' });
-        }}
+        // Owner requirement: every course must have exactly 2 teachers
+        // assigned during CR class setup — a single teacher used to be
+        // silently accepted as "done" (CourseTeacherDialog's
+        // requireTwoTeachers prop defaults to false, and this was never
+        // passing it), so a CR could tick off "Assign teachers" with only
+        // one name entered per course.
+        requireTwoTeachers
+        // BUGFIX: this used to close the dialog (setDialogState) the
+        // instant onSave was called, synchronously, before the actual
+        // Firestore write had even started — CourseTeacherDialog's own
+        // await/success-message logic never got a chance to matter,
+        // since the dialog was already gone by the time a failure could
+        // surface. Now this just forwards onSaveTeachers's promise;
+        // CourseTeacherDialog itself closes only after that promise
+        // resolves (see its handleSave).
+        onSave={(teachers) => onSaveTeachers(dialogState.courseId, teachers)}
       />
     </div>
   );

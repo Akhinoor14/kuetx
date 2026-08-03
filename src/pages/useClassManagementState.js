@@ -9,6 +9,7 @@ import {
   deletePlannerLogEntry,
   subscribePlannerSettings,
   updatePlannerSettings,
+  updateClassSetup,
 } from '../lib/groupSync';
 import { subscribeGroupTermStartDate, setGroupTermStartDate } from '../lib/termStartDateSync';
 import {
@@ -64,7 +65,26 @@ export function useClassManagementState() {
     setTermDateSaving(true);
     setTermDateError('');
     try {
+      // BUGFIX (term start date inconsistency): this only used to write
+      // deptBatchConfig (via setGroupTermStartDate) — the doc Schedule.jsx
+      // reads from. But the mandatory ClassSetupModal popup and the
+      // /class-setup page both read/write a SEPARATE doc, classSetup
+      // (groups/{groupId}/meta/classSetup) — see ClassSetupModal.jsx's
+      // handleSaveDates for the matching fix on that side. Without this,
+      // a CR setting the date from here (Class Routine) would update the
+      // schedule page correctly but leave classSetup.termStartDate
+      // untouched, so the mandatory popup's "fill in dates" step could
+      // still show empty/stale even though the date genuinely was set —
+      // and /class-setup's own form would show the old value too. Updating
+      // classSetup here is best-effort (own try/catch) so a failure here
+      // never blocks the deptBatchConfig save that Schedule.jsx actually
+      // depends on for the case that matters most.
       await setGroupTermStartDate(groupId, termDateDraft);
+      try {
+        await updateClassSetup(groupId, profile, { termStartDate: termDateDraft });
+      } catch (syncErr) {
+        console.error('[useClassManagementState] classSetup termStartDate sync failed:', syncErr);
+      }
     } catch (err) {
       setTermDateError(err?.message || 'Could not save. Try again.');
     } finally {

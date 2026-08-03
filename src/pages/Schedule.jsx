@@ -915,15 +915,32 @@ export default function Schedule() {
     if (isGroupMode) {
     if (!canEditGroupSchedule) { notify('You do not have permission to edit this routine.', 'error'); return; }
       const { id, teacherNames, ...entryData } = newEntry;
-      if (quickFormEditingId) {
-        updateRoutineEntry(groupId, quickFormEditingId, profile, entryData);
-      } else {
-        addRoutineEntry(groupId, profile, entryData);
-      }
-      // Do NOT call setSchedule here — the Firestore onSnapshot listener
-      // (see the effect near the schedule useState) is the only writer to
-      // schedule state in group mode. This avoids double-write races.
-      closeQuickForm();
+      // BUGFIX (routine "disappears" / setup popup never completes): this
+      // used to fire addRoutineEntry/updateRoutineEntry without await or
+      // a .catch — closeQuickForm() ran unconditionally right after, so
+      // the form closed and looked successful even when the Firestore
+      // write itself failed (permission denied, offline, etc). The user
+      // saw no error, assumed it saved, and moved on — but nothing was
+      // actually written, so routineCount never went up and the "Set up
+      // your class" popup kept reappearing with no visible reason why.
+      // Now the write is awaited and a failure surfaces as a real error
+      // instead of a silent no-op; the form only closes on confirmed
+      // success.
+      const savePromise = quickFormEditingId
+        ? updateRoutineEntry(groupId, quickFormEditingId, profile, entryData)
+        : addRoutineEntry(groupId, profile, entryData);
+      savePromise
+        .then(() => {
+          // Do NOT call setSchedule here — the Firestore onSnapshot
+          // listener (see the effect near the schedule useState) is the
+          // only writer to schedule state in group mode. This avoids
+          // double-write races.
+          closeQuickForm();
+        })
+        .catch((err) => {
+          console.error('[Schedule] saveQuickForm group-mode write failed:', err);
+          notify(err?.message || 'Could not save — please check your connection and try again.', 'error');
+        });
       return;
     }
 
@@ -991,13 +1008,21 @@ export default function Schedule() {
     if (isGroupMode) {
     if (!canEditGroupSchedule) { notify('You do not have permission to edit this routine.', 'error'); return; }
       const { id, teacherNames, ...entryData } = nextEntry;
-      if (editingId) {
-        updateRoutineEntry(groupId, editingId, profile, entryData);
-      } else {
-        addRoutineEntry(groupId, profile, entryData);
-      }
-      // No manual setSchedule here — see note above on the Firestore listener.
-      cancelEdit();
+      // BUGFIX: same silent-failure issue as saveQuickForm above — await
+      // the write and surface a real error instead of closing the form
+      // and pretending it saved when it didn't.
+      const savePromise = editingId
+        ? updateRoutineEntry(groupId, editingId, profile, entryData)
+        : addRoutineEntry(groupId, profile, entryData);
+      savePromise
+        .then(() => {
+          // No manual setSchedule here — see note above on the Firestore listener.
+          cancelEdit();
+        })
+        .catch((err) => {
+          console.error('[Schedule] add() group-mode write failed:', err);
+          notify(err?.message || 'Could not save — please check your connection and try again.', 'error');
+        });
       return;
     }
 
@@ -1013,7 +1038,10 @@ export default function Schedule() {
   const remove = (id) => {
     if (isGroupMode) {
     if (!canEditGroupSchedule) { notify('You do not have permission to edit this routine.', 'error'); return; }
-      deleteRoutineEntry(groupId, id, profile);
+      deleteRoutineEntry(groupId, id, profile).catch((err) => {
+        console.error('[Schedule] remove() group-mode delete failed:', err);
+        notify(err?.message || 'Could not delete — please check your connection and try again.', 'error');
+      });
       if (editingId === id) cancelEdit();
       return;
     }

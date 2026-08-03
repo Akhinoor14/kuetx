@@ -39,7 +39,9 @@ export default function CourseTeacherDialog({
     setSuccessMessage('');
   }, [isOpen, currentTeachers, course?.id, selectedCourseIdProp]);
 
-  const handleSave = () => {
+  const [savingTeachers, setSavingTeachers] = useState(false);
+
+  const handleSave = async () => {
     setError('');
     setSuccessMessage('');
 
@@ -67,19 +69,34 @@ export default function CourseTeacherDialog({
     }
 
     const teachers = normalized2 ? [normalized1, normalized2] : [normalized1];
-    onSave(teachers);
-    
-    // Show success message
-    setSuccessMessage(`Teachers assigned for ${activeCourse.code}`);
-    
-    // Reset form after a moment (form source closes, courses source resets for next)
-    setTimeout(() => {
-      setTeacher1('');
-      setTeacher2('');
-      setError('');
-      setSuccessMessage('');
-      onClose();
-    }, 1500);
+
+    // BUGFIX (teacher assignment "disappears" on refresh): onSave used to
+    // be called fire-and-forget, with the success message and auto-close
+    // firing immediately after — regardless of whether the underlying
+    // Firestore write (updatePlannerSettings, called via
+    // ClassSetupModal's handleSaveTeachers) actually succeeded. A failed
+    // write looked identical to a successful one: green checkmark, dialog
+    // closes, everything looks fine — until a refresh shows the course
+    // still has no teacher, because nothing was ever actually saved. Now
+    // onSave's result (a Promise, since handleSaveTeachers/
+    // updatePlannerSettings are both async) is awaited, and a rejection
+    // shows a real error instead of a fake success.
+    setSavingTeachers(true);
+    try {
+      await onSave(teachers);
+      setSuccessMessage(`Teachers assigned for ${activeCourse.code}`);
+      setTimeout(() => {
+        setTeacher1('');
+        setTeacher2('');
+        setError('');
+        setSuccessMessage('');
+        onClose();
+      }, 1500);
+    } catch (e) {
+      setError(e?.message || 'Could not save teachers — please check your connection and try again.');
+    } finally {
+      setSavingTeachers(false);
+    }
   };
 
   const handleClose = () => {

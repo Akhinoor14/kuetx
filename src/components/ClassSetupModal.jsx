@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { CalendarClock, CheckCircle2, Circle } from 'lucide-react';
 import Modal from './Modal';
 import { subscribeClassSetup, updateClassSetup, subscribeRoutine, subscribePlannerSettings, updatePlannerSettings, isClassSetupComplete } from '../lib/groupSync';
-import { setGroupCurrentTermKey } from '../lib/termStartDateSync';
+import { setGroupCurrentTermKey, setGroupTermStartDate } from '../lib/termStartDateSync';
 import { getCoursesForTerm } from '../store/curriculumStore';
 import ClassSetupTermCourses from './ClassSetupTermCourses';
 
@@ -71,7 +71,7 @@ export default function ClassSetupModal({ groupId, profile, onDone }) {
   const termDone = !!currentTermKey;
   const routineDone = routineCount > 0;
   const teacherMapDone = currentTermCourseIds.length > 0
-    && currentTermCourseIds.every((id) => Array.isArray(teacherMap?.[id]) && teacherMap[id].length > 0);
+    && currentTermCourseIds.every((id) => Array.isArray(teacherMap?.[id]) && teacherMap[id].length >= 2);
 
   const handleTermChange = async (termKey) => {
     if (!termKey) return;
@@ -88,10 +88,13 @@ export default function ClassSetupModal({ groupId, profile, onDone }) {
   };
 
   const handleSaveTeachers = (courseId, teachers) => {
-    if (!courseId) return;
+    if (!courseId) return Promise.resolve();
     const next = { ...(teacherMap || {}), [courseId]: teachers };
-    updatePlannerSettings(groupId, profile, { courseTeacherMap: next })
-      .catch((e) => setTermError(e?.message || 'Could not save teachers — please try again.'));
+    return updatePlannerSettings(groupId, profile, { courseTeacherMap: next })
+      .catch((e) => {
+        setTermError(e?.message || 'Could not save teachers — please try again.');
+        throw e;
+      });
   };
 
   const handleSaveDates = async () => {
@@ -114,6 +117,24 @@ export default function ClassSetupModal({ groupId, profile, onDone }) {
     }
     setSaving(true);
     try {
+      // BUGFIX (term start date "disappears" on the actual Schedule
+      // page): termStartDate was being written ONLY to classSetup
+      // (groups/{groupId}/meta/classSetup, via updateClassSetup below) —
+      // but Schedule.jsx (the page every student, not just the CR, sees
+      // their term dates through) reads groupTermStartDate from a
+      // COMPLETELY DIFFERENT doc: deptBatchConfig/{groupId}, via
+      // subscribeGroupTermStartDate/setGroupTermStartDate in
+      // termStartDateSync.js. The two were never kept in sync — a CR
+      // filling in this mandatory popup satisfied the checklist (classSetup
+      // had the value) but the actual schedule page kept showing nothing/
+      // stale data, because deptBatchConfig never got written. Writing to
+      // both now keeps every reader (classSetup readers like /class-setup
+      // and this modal; deptBatchConfig readers like Schedule.jsx) in sync
+      // from a single save action. Best-effort on the deptBatchConfig
+      // write — a failure there shouldn't block the classSetup save that
+      // the mandatory-popup checklist depends on, but IS still surfaced
+      // as a warning so it isn't silently lost from the actually-visible
+      // schedule.
       await updateClassSetup(groupId, profile, {
         termStartDate: form.termStartDate,
         classEndDate: form.classEndDate,
@@ -121,6 +142,12 @@ export default function ClassSetupModal({ groupId, profile, onDone }) {
         postExamEndDate: form.postExamEndDate,
         examCount: Math.max(1, Math.min(12, Number(form.examCount) || 5)),
       });
+      try {
+        await setGroupTermStartDate(groupId, form.termStartDate);
+      } catch (syncErr) {
+        console.error('[ClassSetupModal] deptBatchConfig termStartDate sync failed:', syncErr);
+        setError('Saved, but the Schedule page may not reflect the term start date yet — please also set it from Class Routine.');
+      }
     } catch (e) {
       setError(e?.message || 'Could not save — please try again.');
     } finally {
@@ -234,7 +261,20 @@ export default function ClassSetupModal({ groupId, profile, onDone }) {
             <ChecklistRow
               done={routineDone}
               label="Weekly class routine"
-              action={<Link to="/class-routine" className="btn btn-primary btn-sm">Add routine →</Link>}
+              // BUGFIX (Set up your class popup never closes, even after
+              // adding a routine): this used to link to /class-routine
+              // (ClassRoutine.jsx), which is a READ-ONLY routine viewer —
+              // it shows entry counts per day and lets a CR set the term
+              // start date, but has no add/edit form anywhere on the page
+              // (compare Schedule.jsx, which owns addRoutineEntry/
+              // updateRoutineEntry/the whole quick-add form). A CR
+              // following this button could never actually add a routine
+              // entry from where it sent them, so routineCount stayed 0
+              // forever and isClassSetupComplete() never flipped true —
+              // the modal looked stuck on every CR-only page permanently,
+              // even though the CR had genuinely tried to complete it.
+              // /schedule is where addRoutineEntry is actually wired up.
+              action={<Link to="/schedule" className="btn btn-primary btn-sm">Add routine →</Link>}
             />
             <p style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 10, lineHeight: 1.5 }}>
               This popup stays until everything's done. Come back here after adding routine — it'll close automatically.

@@ -1697,8 +1697,14 @@ export function isClassSetupComplete(classSetup, routineCount, courseTeacherMap,
   const fieldsDone = CLASS_SETUP_REQUIRED_FIELDS.every((k) => !!cs[k]);
   const routineDone = (routineCount || 0) > 0;
   const map = courseTeacherMap || {};
+  // BUGFIX (owner requirement — 2 teachers mandatory per course): this
+  // used to accept `map[id].length > 0`, so a course with only ONE
+  // teacher entered (CourseTeacherDialog's requireTwoTeachers prop
+  // wasn't being passed from ClassSetupTermCourses.jsx, so the dialog
+  // silently allowed a single-teacher save) counted as "done" here too.
+  // Now both the dialog and this completion check require exactly 2.
   const teacherMapDone = Array.isArray(currentTermCourseIds)
-    ? currentTermCourseIds.length > 0 && currentTermCourseIds.every((id) => Array.isArray(map[id]) && map[id].length > 0)
+    ? currentTermCourseIds.length > 0 && currentTermCourseIds.every((id) => Array.isArray(map[id]) && map[id].length >= 2)
     : Object.keys(map).length > 0;
   return fieldsDone && routineDone && teacherMapDone;
 }

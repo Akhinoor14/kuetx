@@ -4,7 +4,7 @@ import { CalendarClock, CheckCircle2, Circle } from 'lucide-react';
 import { getProfile, getCurrentTermKey } from '../store/store';
 import { getGroupId, getGroupLabel } from '../lib/groupUtils';
 import { subscribeClassSetup, updateClassSetup, subscribeRoutine, subscribePlannerSettings, updatePlannerSettings, isClassSetupComplete } from '../lib/groupSync';
-import { setGroupCurrentTermKey } from '../lib/termStartDateSync';
+import { setGroupCurrentTermKey, setGroupTermStartDate } from '../lib/termStartDateSync';
 import { getCoursesForTerm } from '../store/curriculumStore';
 import ClassSetupTermCourses from '../components/ClassSetupTermCourses';
 import { httpsCallable } from 'firebase/functions';
@@ -88,6 +88,11 @@ export default function ClassSetup() {
     if (form.postExamEndDate < form.prepLeaveEndDate) { setError('Break end date can\'t be before prep leave end date.'); return; }
     setSaving(true);
     try {
+      // Same fix as ClassSetupModal.jsx's handleSaveDates — see that
+      // file's comment for the full explanation. termStartDate must be
+      // written to BOTH classSetup (this doc) and deptBatchConfig (via
+      // setGroupTermStartDate) since Schedule.jsx and other student-
+      // facing pages read from deptBatchConfig, not classSetup.
       await updateClassSetup(groupId, profile, {
         termStartDate: form.termStartDate,
         classEndDate: form.classEndDate,
@@ -95,6 +100,11 @@ export default function ClassSetup() {
         postExamEndDate: form.postExamEndDate,
         examCount: Math.max(1, Math.min(12, Number(form.examCount) || 5)),
       });
+      try {
+        await setGroupTermStartDate(groupId, form.termStartDate);
+      } catch (syncErr) {
+        console.error('[ClassSetup] deptBatchConfig termStartDate sync failed:', syncErr);
+      }
       setSavedMsg('Saved — visible to your whole class now.');
     } catch (e) {
       setError(e?.message || 'Could not save — please try again.');
@@ -144,7 +154,7 @@ export default function ClassSetup() {
   const currentTermCourseIds = currentTermKey ? getCoursesForTerm(profile?.dept, currentTermKey).map((c) => c.id) : [];
   const routineDone = (routineCount || 0) > 0;
   const teacherMapDone = currentTermCourseIds.length > 0
-    && currentTermCourseIds.every((id) => Array.isArray(teacherMap?.[id]) && teacherMap[id].length > 0);
+    && currentTermCourseIds.every((id) => Array.isArray(teacherMap?.[id]) && teacherMap[id].length >= 2);
   const complete = classSetup !== null && routineCount !== null && teacherMap !== null
     ? isClassSetupComplete(classSetup, routineCount, teacherMap, currentTermCourseIds)
     : false;
