@@ -167,6 +167,24 @@ export function Navbar({ onMenuClick }) {
       : (isMobileNav ? NAV : NAV_DESKTOP);
   const { label, group, siblings, siblingGroups } = getPageMeta(location.pathname, navSource);
 
+  // TEMP DIAGNOSTIC (person requested this to debug the missing topbar
+  // chip strip) — read-only console.log, no behavior change. Safe to
+  // remove once the root cause is found; does not affect rendering.
+  useEffect(() => {
+    console.log('[KUETx CHIP-DIAG]', {
+      pathname: location.pathname,
+      isMobileNav,
+      isProviderResolved, isProvider,
+      isFacultyResolved, isFaculty,
+      navSourceLength: navSource?.length,
+      navSourceGroups: navSource?.map((s) => s.group),
+      label, group,
+      siblingsLength: siblings?.length,
+      hasSiblingGroups: !!siblingGroups,
+      hasChipStrip: !!siblingGroups || (siblings && siblings.length > 1),
+    });
+  }, [location.pathname, isMobileNav, isProviderResolved, isProvider, isFacultyResolved, isFaculty]);
+
   // Accordion open/close state for the grouped chip strip (Campus Life /
   // Services style pages, where siblingGroups is populated) — defaults to
   // whichever subgroup the current page belongs to, and resets to that

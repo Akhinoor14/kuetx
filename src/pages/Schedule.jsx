@@ -1258,7 +1258,6 @@ export default function Schedule() {
   // storage, so every classmate sees the same exam names/dates. Personal
   // (non-group) mode keeps the old local-only behavior.
   const [examOverrides, setExamOverrides] = useState(() => store.get('examOverrides') || {});
-  const effectiveExamOverrides = isGroupMode ? (classSetup?.examOverrides || {}) : examOverrides;
   const [editingExams, setEditingExams] = useState(false);
   const [localExamEdits, setLocalExamEdits] = useState([]);
   // Term timeline (classEndDate/prepLeaveEndDate/examCount/postExamEndDate)
@@ -1276,6 +1275,15 @@ export default function Schedule() {
     const unsubTerm = subscribeGroupTermStartDate(groupId, setGroupTermStartDate);
     return () => { unsubSetup(); unsubTerm(); };
   }, [groupId]);
+  // BUGFIX (person's actual Schedule-page crash, "Cannot access ... before
+  // initialization"): this used to sit right after examOverrides, above
+  // classSetup's own declaration — a genuine TDZ violation (referencing
+  // classSetup before its `const` runs), not a stale-cache or minifier
+  // artifact like earlier suspects. That made every single Schedule page
+  // load throw and hit the ErrorBoundary, every time, regardless of
+  // deploy/cache state. Moved below classSetup's declaration, where it
+  // belongs.
+  const effectiveExamOverrides = isGroupMode ? (classSetup?.examOverrides || {}) : examOverrides;
   const effectiveTermStartDate = groupTermStartDate || profile?.termStartDate || null;
   const roadmapConfig = classSetup || {};
 
