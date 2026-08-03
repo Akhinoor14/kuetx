@@ -317,13 +317,37 @@ function Layout({ authState, onboardingActive }) {
             <Route path="/class-rep" element={<RequireStudentMode><CRHub /></RequireStudentMode>} />
             <Route path="/academic-core" element={<RequireStudentMode><SubgroupHub group="Academics" subgroup="Academic Core" /></RequireStudentMode>} />
             <Route path="/daily-academics" element={<RequireStudentMode><SubgroupHub group="Academics" subgroup="Daily Academics" /></RequireStudentMode>} />
-            {/* Campus Life is intentionally independent from Services now
-                (see nav.js's Services subgroup comment + Services.jsx) —
-                Services has its own live-Firestore-driven page at
-                /services and should not also appear as a hardcoded
-                static preview here. Only the "Campus Life" subgroup
-                itself is rendered on this hub. */}
-            <Route path="/campus-life" element={<RequireStudentMode><SubgroupHub pageTitle="Campus Life" group="Campus Life" subgroup="Campus Life" /></RequireStudentMode>} />
+            {/* Owner decision (Aug 2026): Campus Life stays independent
+                from Services on DESKTOP only — desktop already has
+                Services promoted to its own top-level sidebar row (see
+                nav.js's NAV_DESKTOP split above), so repeating it here
+                would be redundant. On MOBILE there's no such separate
+                Services sidebar row (mobile's bottom nav has no room for
+                it), so the /campus-life hub is the only place a mobile
+                student can browse Services at all — this reverts back to
+                including it there, but ONLY for isMobileNav, via the
+                sections={[...]} multi-subgroup form SubgroupHub already
+                supports (see resolveSection's sections.forEach loop).
+                Desktop keeps the single subgroup="Campus Life" prop
+                exactly as before. */}
+            <Route
+              path="/campus-life"
+              element={
+                <RequireStudentMode>
+                  {isMobileNav ? (
+                    <SubgroupHub
+                      pageTitle="Campus Life"
+                      sections={[
+                        { group: 'Campus Life', subgroup: 'Campus Life' },
+                        { group: 'Campus Life', subgroup: 'Services' },
+                      ]}
+                    />
+                  ) : (
+                    <SubgroupHub pageTitle="Campus Life" group="Campus Life" subgroup="Campus Life" />
+                  )}
+                </RequireStudentMode>
+              }
+            />
             <Route path="/self-study" element={<RequireStudentMode><SubgroupHub group="Campus Life" subgroup="Self Study" /></RequireStudentMode>} />
 
             {/* Combined bottom-nav hub page. Daily Life doesn't exist as

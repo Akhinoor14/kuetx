@@ -75,7 +75,24 @@ function ServicesPreviewRow() {
           সব দেখুন →
         </Link>
       </div>
-      <div style={{ display: 'grid', gridTemplateColumns: `repeat(${SERVICE_TYPES.length}, 1fr)`, gap: 8 }}>
+      {/* Owner decision (Aug 2026): was a fixed N-column grid
+          (repeat(SERVICE_TYPES.length, 1fr)) — every card was forced
+          into an equal, cramped width, which clipped longer labels like
+          "Delivery/Errand Runner". Switched to a horizontal scroll strip
+          — each card sizes to its own content (flex: 0 0 auto) and the
+          row scrolls sideways when it overflows, TV-channel-list style,
+          instead of squeezing everything to fit one screen width.
+          -webkit-overflow-scrolling: touch keeps the scroll feeling
+          native/smooth on iOS Safari; scrollbar hidden across browsers
+          since this is a touch/swipe-first strip, not a
+          scrollbar-drag-first one. */}
+      <div
+        style={{
+          display: 'flex', gap: 8, overflowX: 'auto', WebkitOverflowScrolling: 'touch',
+          scrollbarWidth: 'none', msOverflowStyle: 'none', paddingBottom: 2,
+        }}
+        className="kx-services-preview-scroll"
+      >
         {SERVICE_TYPES.map((type) => {
           const Icon = CATEGORY_ICONS[type] || Store;
           return (
@@ -84,8 +101,9 @@ function ServicesPreviewRow() {
               to={`/services/category/${type}`}
               style={{
                 display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6,
-                padding: '10px 6px', borderRadius: 12, background: 'rgba(217,119,6,0.08)',
+                padding: '10px 14px', borderRadius: 12, background: 'rgba(217,119,6,0.08)',
                 border: '1px solid rgba(217,119,6,0.18)', textDecoration: 'none', textAlign: 'center',
+                flex: '0 0 auto', minWidth: 76, whiteSpace: 'nowrap',
               }}
             >
               <Icon size={18} color="#d97706" />
@@ -95,6 +113,9 @@ function ServicesPreviewRow() {
           );
         })}
       </div>
+      <style>{`
+        .kx-services-preview-scroll::-webkit-scrollbar { display: none; }
+      `}</style>
     </div>
   );
 }

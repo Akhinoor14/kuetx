@@ -200,39 +200,58 @@ function sortServices(list, sortBy) {
   return arr;
 }
 
-export default function Services() {
+// ---------------------------------------------------------------------
+// ServiceCategoryGrid — the actual category-card grid (icon + label +
+// live "N open now"/"N shops"/"Coming soon" badge). Extracted as its own
+// named export (SERVICES_CATEGORY_CARD_UNIFICATION.md) so it can be
+// reused verbatim, pixel-for-pixel, by SubgroupHub.jsx's "Services"
+// special-case for /campus-life (mobile) and /faculty/more — not just by
+// this file's own default export below. Subscribes to live services
+// itself (useVisibleServices) so every place that renders it always
+// shows fresh data, never a static/stale snapshot passed down as props.
+// `showHeader` controls whether the "Services" title+subtitle block
+// renders above the grid — SubgroupHub already renders its own section
+// title, so it passes showHeader={false} to avoid a duplicate heading;
+// this file's own default export (below) keeps its header, just moved
+// above this component rather than inside it (see Services()).
+export function ServiceCategoryGrid({ showHeader = true }) {
   const navigate = useNavigate();
   const services = useVisibleServices();
 
   if (services === null) {
     return (
-      <div className="page-enter page-container content-page-bg">
-        <div style={{ fontSize: 18, fontWeight: 800, color: 'var(--text)', marginBottom: 16 }}>Services</div>
-        <div className="kx-shop-grid">
-          {[0, 1, 2, 3].map((i) => (
+      <div>
+        {showHeader && (
+          <div style={{ fontSize: 18, fontWeight: 800, color: 'var(--text)', marginBottom: 16 }}>Services</div>
+        )}
+        <div className="kx-category-grid">
+          {[0, 1, 2, 3, 4, 5].map((i) => (
             <div
               key={i}
               className="card kuetx-skeleton-pulse"
               style={{
-                padding: 16, border: '1px solid var(--border)',
-                display: 'flex', flexDirection: 'column', gap: 10,
+                padding: 18, border: '1px solid var(--border)',
+                borderRadius: 16, display: 'flex', flexDirection: 'column', gap: 10,
               }}
             >
-              <div style={{ width: '100%', aspectRatio: '4 / 3', borderRadius: 12, background: 'var(--border)' }} />
+              <div style={{ width: 52, height: 52, borderRadius: 14, background: 'var(--border)' }} />
               <div style={{ width: '70%', height: 14, borderRadius: 4, background: 'var(--border)' }} />
-              <div style={{ width: '45%', height: 18, borderRadius: 6, background: 'var(--border)' }} />
+              <div style={{ width: '45%', height: 18, borderRadius: 999, background: 'var(--border)' }} />
             </div>
           ))}
         </div>
         <style>{`
-          .kx-shop-grid {
+          .kx-category-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 12px;
             width: 100%;
           }
           @media (min-width: 480px) {
-            .kx-shop-grid { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; }
+            .kx-category-grid { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; }
+          }
+          @media (min-width: 900px) {
+            .kx-category-grid { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 20px; }
           }
           .kuetx-skeleton-pulse { animation: kuetxPulse 1.1s ease-in-out infinite; }
           @keyframes kuetxPulse { 0%, 100% { opacity: 0.55; } 50% { opacity: 1; } }
@@ -241,19 +260,6 @@ export default function Services() {
     );
   }
 
-  // Owner decision (Aug 2026): revert Level 1 back to a category card
-  // grid landing — the Phase 3 flat e-commerce feed above this function
-  // is being replaced here at the point of use. "My Orders" stays
-  // exactly where Phase 2 put it: fixed first row, its own divider,
-  // untouched. Below it: one card per SERVICE_TYPES entry, each showing
-  // an "N open now" badge (or "Coming soon" if the category has zero
-  // shops at all yet) — mirrors the pre-Phase-3 grid's single badge
-  // per card, just computed from live data instead of a placeholder.
-  // sortServices/SORT_OPTIONS/useMemo pendingCounts above are no longer
-  // used by this component (they were Phase 3's sort/filter toolbar,
-  // which the toolbar UI below no longer renders) — left defined in the
-  // file since CategoryShopList and other code may still reference them;
-  // not deleted to keep this change scoped to layout only.
   const activeShops = services.filter((s) => s.status !== 'dormant');
 
   const categoryStats = SERVICE_TYPES.map((type) => {
@@ -263,26 +269,15 @@ export default function Services() {
   });
 
   return (
-    <div className="page-enter page-container content-page-bg">
-      <div className="kx-services-header">
-        <div>
-          <div className="kx-services-title">Services</div>
-          <div className="kx-services-subtitle">Everything on campus, in one place</div>
+    <div>
+      {showHeader && (
+        <div className="kx-services-header">
+          <div>
+            <div className="kx-services-title">Services</div>
+            <div className="kx-services-subtitle">Everything on campus, in one place</div>
+          </div>
         </div>
-      </div>
-
-      {/* PHASE 2 (SERVICES_OVERHAUL_PLAN_PROMPT.md): "My Orders" hub-entry
-          card — fixed first row, visually distinct from ordinary category
-          cards, with a divider line beneath it. Unchanged by this
-          category-grid revert. */}
-      <button onClick={() => navigate('/services/orders')} className="kx-orders-hub-card">
-        <div className="kx-orders-hub-icon"><Package size={26} strokeWidth={1.75} /></div>
-        <div className="kx-orders-hub-body">
-          <div className="kx-orders-hub-title">My Orders</div>
-          <div className="kx-orders-hub-subtitle">See and manage everything you've booked or asked about</div>
-        </div>
-      </button>
-      <div className="kx-orders-hub-divider" />
+      )}
 
       <div className="kx-category-grid">
         {categoryStats.map(({ type, total, openCount }) => {
@@ -315,40 +310,6 @@ export default function Services() {
         }
         .kx-services-title { font-size: 22px; font-weight: 800; color: var(--text); letter-spacing: -0.01em; }
         .kx-services-subtitle { font-size: 13.5px; color: var(--muted); margin-top: 4px; }
-
-        .kx-orders-hub-card {
-          position: relative;
-          width: 100%;
-          text-align: left;
-          cursor: pointer;
-          display: flex;
-          align-items: center;
-          gap: 14px;
-          padding: 16px 18px;
-          border-radius: 16px;
-          border: 1px solid rgba(var(--accentRGB), 0.35);
-          background: linear-gradient(135deg, rgba(var(--accentRGB), 0.14), rgba(var(--accentRGB), 0.05));
-          margin-bottom: 16px;
-          transition: transform 0.15s ease, box-shadow 0.15s ease;
-        }
-        .kx-orders-hub-card:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 10px 24px -14px rgba(var(--accentRGB), 0.45);
-        }
-        .kx-orders-hub-icon {
-          width: 48px; height: 48px; border-radius: 13px; flex-shrink: 0;
-          display: flex; align-items: center; justify-content: center;
-          background: var(--accent); color: #fff;
-        }
-        .kx-orders-hub-body { min-width: 0; }
-        .kx-orders-hub-title { font-size: 16px; font-weight: 800; color: var(--text); }
-        .kx-orders-hub-subtitle { font-size: 12.5px; color: var(--muted); margin-top: 2px; }
-
-        .kx-orders-hub-divider {
-          height: 1px;
-          background: var(--border);
-          margin-bottom: 18px;
-        }
 
         .kx-category-grid {
           display: grid;
@@ -394,6 +355,94 @@ export default function Services() {
         .kx-category-badge.is-live {
           color: #16a34a;
           background: rgba(22,163,74,0.10);
+        }
+      `}</style>
+    </div>
+  );
+}
+
+export default function Services() {
+  const navigate = useNavigate();
+
+  // Owner decision (Aug 2026): revert Level 1 back to a category card
+  // grid landing — the Phase 3 flat e-commerce feed above this function
+  // is being replaced here at the point of use. "My Orders" stays
+  // exactly where Phase 2 put it: fixed first row, its own divider,
+  // untouched. Below it: ServiceCategoryGrid (extracted above, per
+  // SERVICES_CATEGORY_CARD_UNIFICATION.md) — one card per SERVICE_TYPES
+  // entry, each showing an "N open now" badge (or "Coming soon" if the
+  // category has zero shops at all yet).
+  // sortServices/SORT_OPTIONS/useMemo pendingCounts above are no longer
+  // used by this component (they were Phase 3's sort/filter toolbar,
+  // which the toolbar UI below no longer renders) — left defined in the
+  // file since CategoryShopList and other code may still reference them;
+  // not deleted to keep this change scoped to layout only.
+  return (
+    <div className="page-enter page-container content-page-bg">
+      <div className="kx-services-header">
+        <div>
+          <div className="kx-services-title">Services</div>
+          <div className="kx-services-subtitle">Everything on campus, in one place</div>
+        </div>
+      </div>
+
+      {/* PHASE 2 (SERVICES_OVERHAUL_PLAN_PROMPT.md): "My Orders" hub-entry
+          card — fixed first row, visually distinct from ordinary category
+          cards, with a divider line beneath it. This stays local to
+          /services (per the unification prompt's explicit "What NOT to
+          do" note) — not part of ServiceCategoryGrid, so it never shows
+          up on /campus-life or /faculty/more. */}
+      <button onClick={() => navigate('/services/orders')} className="kx-orders-hub-card">
+        <div className="kx-orders-hub-icon"><Package size={26} strokeWidth={1.75} /></div>
+        <div className="kx-orders-hub-body">
+          <div className="kx-orders-hub-title">My Orders</div>
+          <div className="kx-orders-hub-subtitle">See and manage everything you've booked or asked about</div>
+        </div>
+      </button>
+      <div className="kx-orders-hub-divider" />
+
+      <ServiceCategoryGrid showHeader={false} />
+
+      <style>{`
+        .kx-services-header {
+          display: flex; align-items: flex-end; justify-content: space-between;
+          margin-bottom: 20px; gap: 12px; flex-wrap: wrap;
+        }
+        .kx-services-title { font-size: 22px; font-weight: 800; color: var(--text); letter-spacing: -0.01em; }
+        .kx-services-subtitle { font-size: 13.5px; color: var(--muted); margin-top: 4px; }
+
+        .kx-orders-hub-card {
+          position: relative;
+          width: 100%;
+          text-align: left;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          gap: 14px;
+          padding: 16px 18px;
+          border-radius: 16px;
+          border: 1px solid rgba(var(--accentRGB), 0.35);
+          background: linear-gradient(135deg, rgba(var(--accentRGB), 0.14), rgba(var(--accentRGB), 0.05));
+          margin-bottom: 16px;
+          transition: transform 0.15s ease, box-shadow 0.15s ease;
+        }
+        .kx-orders-hub-card:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 10px 24px -14px rgba(var(--accentRGB), 0.45);
+        }
+        .kx-orders-hub-icon {
+          width: 48px; height: 48px; border-radius: 13px; flex-shrink: 0;
+          display: flex; align-items: center; justify-content: center;
+          background: var(--accent); color: #fff;
+        }
+        .kx-orders-hub-body { min-width: 0; }
+        .kx-orders-hub-title { font-size: 16px; font-weight: 800; color: var(--text); }
+        .kx-orders-hub-subtitle { font-size: 12.5px; color: var(--muted); margin-top: 2px; }
+
+        .kx-orders-hub-divider {
+          height: 1px;
+          background: var(--border);
+          margin-bottom: 18px;
         }
       `}</style>
     </div>

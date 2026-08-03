@@ -2,6 +2,14 @@ import { Link } from 'react-router-dom';
 import { Circle } from 'lucide-react';
 import { ICONS } from '../../lib/iconRegistry';
 import { NAV } from '../../nav';
+// SERVICES_CATEGORY_CARD_UNIFICATION.md: the "Services" subgroup (both
+// nav.js's Campus Life > Services and nav-faculty.js's More > Services)
+// must render the exact same live category-card grid /services itself
+// uses — same icons, same "N open now"/"N shops"/"Coming soon" badges
+// from live Firestore data, same visual design — instead of the generic
+// HubSection's plain icon+label grid (no live badge, different card
+// shape). See the "Services" special-case in HubSection below.
+import { ServiceCategoryGrid } from '../../pages/Services';
 
 // Single synchronized accent color for hub headers/hero icon — no per-group hues.
 const HUB_COLOR = 'var(--accent)';
@@ -70,6 +78,23 @@ function HubSection({ title, items, icon }) {
       )}
 
       {items.length > 0 && (() => {
+        // SERVICES_CATEGORY_CARD_UNIFICATION.md: "Services" is special-
+        // cased ahead of the generic hub-grid rendering below — it must
+        // look and behave identically to /services page's own category
+        // grid (live "N open now"/"N shops"/"Coming soon" badges, same
+        // card design), not the generic icon+label hub-grid every other
+        // subgroup (Campus Life's own items, Communication, Resources,
+        // etc.) still uses. nav.js/nav-faculty.js's static Services
+        // items array (icon/label/path) is intentionally NOT used here
+        // any more — ServiceCategoryGrid draws its own categories/icons/
+        // badges from live service data instead, exactly matching
+        // /services. That static array is left in place in both nav
+        // files for other consumers (e.g. active-path matching, sidebar
+        // hubPath resolution) — only this render path stops reading it.
+        if (title === 'Services') {
+          return <ServiceCategoryGrid showHeader={false} />;
+        }
+
         // Hero treatment only makes sense as a visual anchor when there's
         // a large-enough grid below it — below 5 items, render every item
         // as a normal equal-sized grid card instead (no special-casing
