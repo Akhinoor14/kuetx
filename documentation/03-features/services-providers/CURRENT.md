@@ -284,6 +284,366 @@ faculty সাইডে ভিন্নভাবে প্রকাশ পাচ
 
 `npm run build` আবার ক্লিন পাস করেছে।
 
+## Services Marketplace Overhaul — Phase 1 (Orders Hub ডেটা লেয়ার)
+
+পূর্ণ প্ল্যান: `SERVICES_OVERHAUL_PLAN_PROMPT.md` (এই একই ফোল্ডারে) —
+৯-ফেজের পুরো overhaul প্ল্যান, progress badge সহ।
+
+**Phase 1 সম্পন্ন — cross-service booking query।** আগে প্রতিটা
+booking/inquiry/errand subscribe ফাংশন একটা নির্দিষ্ট `serviceId`-এ
+scoped ছিল — কোনো "সব শপ মিলিয়ে আমার সব বুকিং" ফাংশন ছিলই না।
+
+- **`src/lib/serviceSync.js`-এ নতুন `subscribeAllMyBookings(uid, callback)`**
+  — একটা uid-এর সব booking/inquiry/errand request, সব শপ জুড়ে, লাইভ।
+  Booking/inquiry/errand তিনটাই আসলে একই `services/{serviceId}/bookings`
+  সাবকালেকশনে থাকে (verified করা হয়েছে `createBooking`/
+  `createErrandRequest` পড়ে) — শুধু `studentUid` (booking/inquiry) বনাম
+  `requesterUid` (errand) আলাদা ফিল্ড। তাই দুইটা `collectionGroup('bookings')`
+  listener চালিয়ে client-side merge করা হয়েছে (ঠিক যেমন
+  `subscribeOpenErrandRequestsForRunner` আগে থেকেই করে)। প্রতিটা রেকর্ড
+  শপের নাম/ক্যাটাগরি দিয়ে enrich করা হয় (একটা one-shot
+  `getDocs(servicesCollectionRef())` থেকে), যাতে হাব পেজে extra
+  per-item fetch না লাগে।
+- **`firestore.indexes.json`-এ `fieldOverrides` যোগ করা হয়েছে** —
+  `bookings.studentUid` আর `bookings.requesterUid`-এর জন্য
+  `COLLECTION_GROUP` scope single-field indexing enable করা হয়েছে
+  (ডিফল্টে এগুলো শুধু `COLLECTION` scope-এ auto-indexed থাকে; নতুন
+  collectionGroup query কাজ করার আগে এই override deploy করতে হবে —
+  `joinRequests.status`-এর existing override-এর ঠিক একই প্যাটার্ন)।
+- **Firestore rules-এ কোনো পরিবর্তন লাগেনি** — `bookings/{bookingId}`-এর
+  read rule আগে থেকেই per-document `studentUid`/`requesterUid` চেক
+  করে, যেটা collectionGroup query-তেও একইভাবে apply হয়।
+
+**ডিপ্লয়মেন্ট নোট:** production-এ এই ফিচার কাজ করার আগে
+`firebase deploy --only firestore:indexes` চালিয়ে নতুন
+`fieldOverrides` deploy করতে হবে — না করলে `subscribeAllMyBookings`
+একটা permission/failed-precondition error দেবে (কনসোল লিংক সহ
+auto-create করার অপশন)।
+
+### ভেরিফাই করা হয়েছে (Phase 1)
+
+`npm run build` ক্লিন পাস করেছে। `firestore.indexes.json` valid JSON
+verify করা হয়েছে।
+
+## Services Marketplace Overhaul — Phase 2 (Orders Hub UI)
+
+**Phase 2 সম্পন্ন — hub card + hub page।**
+
+- **`src/pages/Services.jsx`-এ নতুন hub-entry card** — Level-1 grid-এর
+  একদম উপরে, category grid-এর বাইরে আলাদাভাবে রেন্ডার করা হয়েছে
+  (দুই কলাম জুড়ে, `.kx-category-grid`-এর অংশ না)। আলাদা রঙ/স্টাইল
+  (accent-tinted gradient background, accent border) দিয়ে বাকি
+  category card থেকে visually distinct করা হয়েছে, নিচে একটা
+  divider line দিয়ে regular listing থেকে আলাদা করা।
+- **নতুন পেজ `src/pages/ServiceOrdersHub.jsx`** — "My Orders" নামে,
+  route `/services/orders`-এ `App.jsx`-এ রেজিস্টার করা হয়েছে (literal
+  segment, তাই `/services/:serviceId` param route-এর সাথে conflict
+  করে না — React Router specificity দিয়ে ঠিক resolve করে)।
+  - Phase 1-এর `subscribeAllMyBookings(uid, callback)` থেকে ডেটা
+    নেয়, status অনুযায়ী তিনটা গ্রুপে ভাগ করে দেখায়: Active,
+    Completed, Cancelled/Closed।
+  - প্রতিটা রেকর্ডের shape (booking/inquiry/errand) client-side
+    detect করা হয় ফিল্ড উপস্থিতি দিয়ে (নতুন কোনো "kind" ফিল্ড ডেটাতে
+    যোগ করা হয়নি, Phase 1-এর নোট অনুযায়ী)।
+  - Cancel action আছে শুধু Active গ্রুপে, existing
+    `cancelBooking`/`cancelErrandRequest`/`closeInquiry` ফাংশনই
+    reuse করা হয়েছে — নতুন কোনো mutation logic লেখা হয়নি।
+  - কোনো নতুন nav entry (sidebar/bottom-nav) যোগ করা হয়নি — Phase 0
+    অনুযায়ী hub card-ই primary entry point।
+  - পুরো পেজ সরাসরি simple English-এ লেখা (নতুন ফাইল বলে, Phase 7-এর
+    Bangla-sweep অপেক্ষা করার দরকার ছিল না)।
+
+### ভেরিফাই করা হয়েছে (Phase 2)
+
+`npm run build` ক্লিন পাস করেছে। `ServiceOrdersHub` আলাদা lazy chunk
+হিসেবে সঠিকভাবে বিল্ড হয়েছে যাচাই করা হয়েছে।
+
+## Services Marketplace Overhaul — Phase 3 (Level-1 listing redesign)
+
+**Phase 3 সম্পন্ন — `/services` এখন flat e-commerce-style feed।**
+
+- **`src/pages/Services.jsx`-এর default export (Level-1) সম্পূর্ণ
+  পুনর্গঠন** — আগের "category grid + Coming soon placeholder, আগে
+  ক্যাটাগরি সিলেক্ট করতে হবে" লেআউট সরিয়ে এখন সব active (non-dormant)
+  শপ সরাসরি একটা flat grid-এ দেখায়, লোড হওয়ার সাথে সাথেই — কোনো forced
+  category-first navigation gate নেই।
+- **Sort By + Filter টুলবার** যোগ হয়েছে grid-এর উপরে —
+  - Sort: Open now first (ডিফল্ট), Name (A–Z), Newest।
+  - Filter: All categories (ডিফল্ট) অথবা নির্দিষ্ট একটা ক্যাটাগরি —
+    আগে যা Level-2 পেজ (`/services/category/:type`) আলাদা route হিসেবে
+    করত, এখন সেটাই Level-1-এই inline filter অপশন হিসেবে পাওয়া যায়।
+  - দুটোই একই `OptionSheet` shared bottom-sheet কম্পোনেন্ট ব্যবহার করে
+    (নতুন, এই ফাইলেই local — প্রজেক্টে আগে থেকে generic picker
+    কম্পোনেন্ট ছিল না)।
+- **Phase 2-এর "My Orders" hub card অপরিবর্তিত থেকেছে** — এখনো প্রথম
+  row-এ fixed, sort/filter pipeline-এর বাইরে, নিচে divider সহ, আলাদা
+  রঙ/স্টাইল সহ — Phase 3 এই কার্ডে কোনো পরিবর্তন করেনি।
+- **ডেটা সোর্স অপরিবর্তিত** — `subscribeAllServices`,
+  `SERVICE_TYPE_LABELS`, `CATEGORY_ICONS`, `serviceSync.js`-এর কোনো
+  exported ফাংশনের signature টাচ করা হয়নি। এই ফেজ শুধু layout/
+  interaction — data model-এ কোনো পরিবর্তন নেই।
+- **Dormant শপ** এখনো আলাদা "Currently inactive" সেকশনে নিচে দেখায়
+  (আগে Level-2-এ যেভাবে দেখাত, একই প্যাটার্ন, Level-1-এ move করা
+  হয়েছে)।
+- **Level 2 (`CategoryShopList`, `/services/category/:categoryType`)
+  অক্ষত রাখা হয়েছে** — এখনো route হিসেবে কাজ করে (deep link ইত্যাদির
+  জন্য), কিন্তু এখন Level-1-এর Filter দিয়েই একই কাজ হয়ে যাওয়ায় এটা
+  আর একমাত্র পথ না।
+- Phase 0-এ রেকর্ড করা decision অনুযায়ী করা হয়েছে (flatten + filter
+  option, category-first landing না) — owner feedback পেলে সহজেই
+  "category chip filter" স্টাইলে flip করা যাবে যদি ফলাফল intent-এর
+  সাথে না মেলে।
+
+### ভেরিফাই করা হয়েছে (Phase 3)
+
+`npm run build` ক্লিন পাস করেছে। Hub card এখনো সঠিক জায়গায় (fixed
+first row, divider সহ) রেন্ডার হচ্ছে যাচাই করা হয়েছে। Sort/Filter
+state শুধু client-side (কোনো নতুন Firestore query লাগেনি)।
+
+## Services Marketplace Overhaul — Phase 4 (Shop detail page UI polish)
+
+**Phase 4 সম্পন্ন — `ServiceDetail.jsx`-এ visual polish, বুকিং/ইনকোয়ারি/
+এরান্ড লজিক অপরিবর্তিত।**
+
+- **নতুন `GalleryMedia` কম্পোনেন্ট** — cover image-এর জায়গায় big
+  active image + thumbnail strip (e-commerce product-detail স্টাইল)।
+  ছবি আসে service-এর নিজের cover image + প্রতিটা available offering-এর
+  প্রথম image থেকে, deduped। ০ বা ১টা ছবি থাকলে thumbnail strip
+  স্বয়ংক্রিয়ভাবে হাইড হয়ে যায় (single static image বা আগের মতো store
+  icon placeholder) — Phase 0-এর decision অনুযায়ী graceful degrade।
+- **Top-right icon বাটন** যোগ হয়েছে (Package আইকন) — সরাসরি
+  `/services/orders` ("My Orders" hub)-এ নিয়ে যায়। সত্যিকারের cart
+  concept KUETx-এ নেই (appointment/inquiry-based marketplace), তাই
+  reference screenshot-এর cart-icon স্পটে এই shortcut বসানো হয়েছে।
+- **Colour/quantity-style variant selector যোগ করা হয়নি** — Phase 0-এ
+  আগে থেকেই সিদ্ধান্ত ছিল, KUETx-এর সার্ভিসগুলো appointment/inquiry-
+  based, physical color-variant প্রোডাক্ট না, তাই এই ধরনের selector-এর
+  জন্য কোনো ডেটা নেই।
+- **BookingForm/InquiryForm/ErrandForm/MyActiveBooking/MyActiveInquiry/
+  MyActiveErrand — কোনো state বা mutation logic টাচ করা হয়নি।**
+  `createBooking`/`cancelBooking`/`createErrandRequest` ইত্যাদি সব
+  ফাংশন কল অক্ষত। এই ফেজ শুধু layout wrapper — booking state machine
+  পুনর্লিখন করা হয়নি, plan-এর explicit স্কোপ অনুযায়ী।
+- **`.kx-offering-grid` / `.kx-pick-grid`-এর আগে-ফিক্স করা grid bug**
+  (`auto-fill` + `minmax(min,max)`, `auto-fit`/`1fr` না) verify করা
+  হয়েছে — অপরিবর্তিত আছে, regress হয়নি।
+- Header layout সামান্য reorganize হয়েছে — "← Services" ব্যাক-লিংক আর
+  নতুন cart-shortcut আইকন এখন একটা `.kx-detail-topbar` row-এ পাশাপাশি
+  (Phase 5-এ এই ব্যাক-লিংক সরানো হবে বলে এখনো এখানেই রাখা হয়েছে)।
+
+### ভেরিফাই করা হয়েছে (Phase 4)
+
+`npm run build` ক্লিন পাস করেছে। বিভিন্ন সংখ্যক offering-images সহ
+(০, ১, একাধিক) `GalleryMedia`-এর graceful-degrade behavior কোড-লেভেলে
+verify করা হয়েছে। একটা লাইভ অ্যাকাউন্ট দিয়ে click-through test এখনো
+মানুষ টেস্টারের করা উচিত — sandbox-এ production Firebase-এ sign-in
+করার উপায় নেই।
+
+## Services Marketplace Overhaul — Phase 5 ("← Services" back-link অপসারণ)
+
+**Phase 5 সম্পন্ন।**
+
+- **`src/pages/ServiceDetail.jsx`-এর `.kx-detail-topbar` থেকে "←
+  Services" ব্যাক-লিংক বাটন সরানো হয়েছে** — এটাই ছিল shop detail
+  পেজের টপে দেখানো back-link (owner "chip strip"-এ বলেছিলেন, কোডে
+  এটা আসলে `Navbar.jsx`-এর chip strip-এ ছিল না, বরং
+  `ServiceDetail.jsx`-এর নিজস্ব header row-এ — investigation করে এটাই
+  পাওয়া গেছে, `Navbar.jsx`-এ কোনো "← Services" টেক্সট বা এই বাটন নেই)।
+- Phase 4-এ যোগ করা "My Orders" shortcut আইকন (Package আইকন,
+  top-right) অপরিবর্তিত রাখা হয়েছে — শুধু ব্যাক-লিংক বাটনটাই সরানো
+  হয়েছে, topbar row-টা এখন `justify-content: flex-end` দিয়ে ডানে
+  align হয়ে আছে।
+- **`Navbar.jsx`-এর আসল chip strip (category pill row, `getPageMeta`-র
+  Services pool special-case সহ) টাচ করা হয়নি** — শপ detail পেজে
+  category pill strip এখনো ঠিকমতো visible থাকে, শুধু
+  `ServiceDetail.jsx`-এর নিজস্ব header-এর ব্যাক-বাটনটাই সরানো হয়েছে।
+- **Level-1 (`/services`) এবং Level-2
+  (`/services/category/:categoryType`)-এ কোনো back-link ছিল না প্রথম
+  থেকেই** — শুধু shop-detail পেজের এই একটাই ব্যাক-লিংক ছিল, এবং এটাই
+  owner-এর specific request অনুযায়ী সরানো হয়েছে; বাকি navigation flow
+  অক্ষত।
+- Unused `ArrowLeft` import সরানো হয়েছে।
+
+### ভেরিফাই করা হয়েছে (Phase 5)
+
+`npm run build` ক্লিন পাস করেছে। Shop detail পেজের টপবারে এখন শুধু
+"My Orders" আইকন বাটন দেখায়, কোনো ব্যাক-লিংক নেই। `Navbar.jsx`-এর chip
+strip অপরিবর্তিত থাকা visually confirm করা হয়েছে (কোড-লেভেলে — কোনো
+লাইনই টাচ করা হয়নি)।
+
+## Services Marketplace Overhaul — Phase 6 (Provider vs Student/Faculty flow audit)
+
+**Phase 6 সম্পন্ন — কোনো ইস্যু পাওয়া যায়নি, কোনো কোড পরিবর্তনের দরকার
+হয়নি।**
+
+Clean-slate walkthrough করা হয়েছে (Phase 0-এ noted, কোনো নির্দিষ্ট bug
+report ছিল না), যা যা চেক করা হয়েছে:
+
+- **Route-level গার্ড** — `/provider`, `/provider/shop`,
+  `/provider/shop/offerings`, `/provider/shop/offerings/:id`,
+  `/provider/shop/settings`, `/provider/profile`,
+  `/provider/notifications` — সবগুলো `App.jsx`-এ `RequireProvider`
+  দিয়ে wrap করা, যাচাই করা হয়েছে। `RequireProvider` তিনটা অবস্থা
+  সঠিকভাবে হ্যান্ডেল করে: provider না হলে "Access required" স্ক্রিন,
+  pending/rejected/deactivated হলে `ProviderVerificationPending`,
+  verified হলেই আসল ড্যাশবোর্ড।
+- **`/services*` route-এ ইচ্ছাকৃতভাবে কোনো role গার্ড নেই** —
+  `App.jsx`-এ আগে থেকেই কমেন্ট করা আছে কেন (একজন provider নিজের নিজের
+  শপও ব্রাউজ করতে পারে বলে ধরে নেওয়া হয়েছে) — এটা bug না, ইচ্ছাকৃত
+  ডিজাইন, Phase 1-6-এর কোনো কাজ এটা পরিবর্তন করেনি।
+- **Phase 1-এর `subscribeAllMyBookings`** — `where('studentUid', '==',
+  uid)` এবং `where('requesterUid', '==', uid)` দিয়ে সবসময় শুধু নিজের
+  রেকর্ড ফেরত দেয়, provider হোক বা student — কোনো provider-এর নিজের
+  শপের সব বুকিং এই হুকের মাধ্যমে leak হয় না। `firestore.rules`-এর
+  `bookings` subcollection read rule দিয়েও এটা ডাবল-এনফোর্সড (ছাত্র
+  একে অপরের বুকিং কখনো পড়তে পারে না, provider শুধু নিজের সার্ভিসের
+  বুকিং পড়তে পারে)।
+- **Provider পেজগুলো** (`ProviderDashboard.jsx`,
+  `ProviderMyShopHub.jsx`, ইত্যাদি) **কেউই** `ServiceOrdersHub.jsx`
+  বা `subscribeAllMyBookings` import/reuse করে না — student hub আর
+  provider dashboard সম্পূর্ণ আলাদা কোড পাথ, কোনো accidental mixing
+  নেই।
+- **Nav-level আইসোলেশন** — `nav.js`-এর ৪টা provider-stub group শুধু
+  `getPageMeta`-র জন্য (provider পেজে topbar title resolve করতে),
+  provider-এর নিজের sidebar/bottom-nav render করে না — সেটা
+  `SidebarNavProvider.jsx`-এ `isProvider` চেক দিয়ে সম্পূর্ণ আলাদা
+  সোর্স থেকে আসে। Student account কখনো provider nav item দেখে না,
+  provider account কখনো student nav item দেখে না।
+- Phase 1-5-এ যা টাচ করা হয়েছে (`Services.jsx`, `ServiceDetail.jsx`,
+  `ServiceOrdersHub.jsx`, `Navbar.jsx`-এর topbar) — কোথাও কোনো
+  provider-only action (edit/delete offering, শপ সেটিংস, ইত্যাদি)
+  ছাত্র-ফেসিং কোডে leak হয়নি; `ServiceDetail.jsx`-এর "মূল্য পরিবর্তন"
+  বাটনটা student-এর নিজের errand counter-offer, provider action না —
+  ভুল করে provider-only মনে হতে পারে বলে এটা এখানে আলাদা করে নোট করা
+  হলো।
+
+**উপসংহার: কোনো role-gating ইস্যু পাওয়া যায়নি, কোনো ফিক্সের দরকার
+হয়নি।**
+
+### ভেরিফাই করা হয়েছে (Phase 6)
+
+`npm run build` ক্লিন পাস করেছে (কোনো কোড পরিবর্তন হয়নি, শুধু audit)।
+
+## Services Marketplace Overhaul — Phase 7 (English-only UI text pass)
+
+**Phase 7 সম্পন্ন — services module-এর সব user-facing বাংলা টেক্সট
+ইংরেজিতে রূপান্তরিত।**
+
+- **`ServiceDetail.jsx`** — `STATUS_LABEL`/`INQUIRY_STATUS_LABEL`/
+  `ERRAND_STATUS_LABEL` ম্যাপ, not-found মেসেজ, open/closed স্ট্যাটাস
+  টেক্সট, location/delivery ব্যাজ, dormant ব্যানার, এবং
+  `BookingForm`/`InquiryForm`/`ErrandForm`/`MyActiveBooking`/
+  `MyActiveInquiry`/`MyActiveErrand`-এর সব label, placeholder, error
+  message, বাটন টেক্সট — সবকিছু ইংরেজিতে অনুবাদ করা হয়েছে। কোনো
+  state/mutation লজিক টাচ করা হয়নি, শুধু স্ট্রিং লিটারেল বদলানো
+  হয়েছে।
+- **`Services.jsx`** — Level-2 (`CategoryShopList`)-এর empty-state ও
+  "Currently inactive" heading, এবং `ShopCard`-এর open/closed/
+  dormant/action label ইংরেজিতে অনুবাদ করা হয়েছে।
+- **`ServiceOrdersHub.jsx`** — আগে থেকেই সম্পূর্ণ ইংরেজি ছিল (Phase
+  1-2 তেই ইংরেজিতে লেখা হয়েছিল), কোনো পরিবর্তনের দরকার হয়নি।
+- **কোড কমেন্ট অপরিবর্তিত রাখা হয়েছে** — plan-এর explicit scope
+  অনুযায়ী, শুধু UI copy বদলানো হয়েছে, developer-facing comment-এ কিছু
+  বাংলা শব্দ (যেমন "বন্ধ", "কতজন আছে") এখনো আছে, ইচ্ছাকৃতভাবে টাচ করা
+  হয়নি।
+- **`৳` কারেন্সি সিম্বল** সব জায়গায় অক্ষত রাখা হয়েছে — এটা ভাষার
+  টেক্সট না, তাই "no Bangla" স্কোপের বাইরে।
+- **এই পরিবর্তন services module-এই সীমাবদ্ধ** — বাকি অ্যাপের বাংলা-
+  ফার্স্ট কনভেনশন (memory-তে নোট করা আছে) অপরিবর্তিত, শুধু owner-এর
+  explicit ইনস্ট্রাকশন অনুযায়ী services module-এ এই একটা ব্যতিক্রম
+  করা হয়েছে।
+
+### ভেরিফাই করা হয়েছে (Phase 7)
+
+`npm run build` ক্লিন পাস করেছে। Python-এ Unicode Bangla-script রেঞ্জ
+(`\u0980-\u09FF`) দিয়ে `Services.jsx`, `ServiceDetail.jsx`,
+`ServiceOrdersHub.jsx` পুরোপুরি স্ক্যান করা হয়েছে — বাকি যা পাওয়া
+গেছে তার সবই দেব-কমেন্ট বা ৳ সিম্বল, কোনো user-facing string বাকি
+নেই।
+
+## Services Marketplace Overhaul — Phase 8 (Final handoff)
+
+**সম্পূর্ণ overhaul সম্পন্ন — সব ৮টা ফেজ `[x] DONE`।**
+
+সংক্ষিপ্ত সারাংশ, পুরো plan জুড়ে যা যা হয়েছে:
+
+1. **Phase 0** — স্কোপ নিশ্চিত করা হয়েছে, ওপেন প্রশ্নগুলোর best-
+   judgement উত্তর রেকর্ড করা হয়েছে (Level-1 flatten-with-filter,
+   gallery graceful-degrade, hub নাম "My Orders" @ `/services/orders`,
+   Phase 6 clean-slate audit)।
+2. **Phase 1** — `serviceSync.js`-এ `subscribeAllMyBookings(uid,
+   callback)` যোগ হয়েছে — booking/inquiry/errand তিনটাই একই
+   `services/{id}/bookings` subcollection-এ, তাই একটা collectionGroup
+   query দিয়েই সব কভার হয়।
+3. **Phase 2** — নতুন `ServiceOrdersHub.jsx` পেজ (`/services/orders`),
+   cross-shop সব বুকিং/ইনকোয়ারি/এরান্ড এক জায়গায়, প্লাস `Services.jsx`
+   Level-1-এ "My Orders" hub card যোগ হয়েছে (fixed first row,
+   divider সহ)।
+4. **Phase 3** — `/services` Level-1 লিস্টিং পুরোপুরি পুনর্গঠন —
+   category-first landing সরিয়ে flat e-commerce-style feed, Sort By +
+   Filter টুলবার সহ।
+5. **Phase 4** — `ServiceDetail.jsx`-এ visual polish — image gallery +
+   thumbnail strip, "My Orders" শর্টকাট আইকন — বুকিং/ইনকোয়ারি/এরান্ড
+   state machine অপরিবর্তিত।
+6. **Phase 5** — shop detail পেজের "← Services" ব্যাক-লিংক সরানো
+   হয়েছে (`ServiceDetail.jsx`-এর নিজস্ব header-এ ছিল, `Navbar.jsx`-এ
+   না) — `Navbar.jsx`-এর আসল chip strip অক্ষত।
+7. **Phase 6** — Provider vs Student/Faculty flow audit — clean-slate
+   walkthrough, কোনো role-gating ইস্যু পাওয়া যায়নি, কোনো ফিক্সের
+   দরকার হয়নি।
+8. **Phase 7** — Services module-এর সব user-facing বাংলা টেক্সট
+   ইংরেজিতে অনুবাদ করা হয়েছে (`ServiceDetail.jsx`, `Services.jsx`) —
+   বাকি অ্যাপ Bangla-first-ই থেকে গেছে, শুধু services module-এ এই
+   ব্যতিক্রম।
+
+**টাচ করা মূল ফাইলসমূহ:**
+- `src/lib/serviceSync.js` (Phase 1 — নতুন export যোগ, বাকি অপরিবর্তিত)
+- `src/pages/ServiceOrdersHub.jsx` (নতুন, Phase 2)
+- `src/pages/Services.jsx` (Phase 2, 3, 7)
+- `src/pages/ServiceDetail.jsx` (Phase 2, 4, 5, 7)
+- `src/App.jsx` (Phase 2 — নতুন route যোগ)
+
+**টাচ করা হয়নি (ইচ্ছাকৃতভাবে):**
+- `firestore.rules` — কোনো নতুন read/write pattern লাগেনি
+- `src/pages/provider/*` — Phase 6 audit শুধু verify করেছে, কিছু
+  পাল্টায়নি
+- `src/components/Navbar.jsx` — Phase 5-এ ভুল ধারণা সংশোধন করে বোঝা
+  গেছে আসল টার্গেট এখানে ছিলই না
+
+### ভেরিফাই করা হয়েছে (Phase 8 — Final)
+
+সম্পূর্ণ ক্লিন `rm -rf node_modules dist && npm install && npm run
+build` — শুরু থেকে শেষ পর্যন্ত — ক্লিন পাস করেছে, কোনো ওয়ার্নিং/এরর
+ছাড়া (শুধু প্যাকেজ-লেভেল deprecation নোটিশ, কোড ইস্যু না)। `Services`,
+`ServiceDetail` নিজস্ব lazy chunk হিসেবে সঠিকভাবে বিল্ড হয়েছে যাচাই
+করা হয়েছে। প্রতিটা আগের ফেজের ভেরিফিকেশন নোট এই ফাইলেই উপরে রেকর্ড
+করা আছে।
+
+**সম্পূর্ণ overhaul-এর স্ট্যাটাস: সব ৮টা ফেজ `[x] DONE`।** এখন থেকে
+নতুন কোনো কাজ এই module-এ এলে নিচের নিয়ম অনুযায়ী এই ফাইলে যোগ করা
+হবে।
+
+## Post-Phase-8 বাগফিক্স — মোবাইলে ২ column জোর করা (`.kx-shop-grid`)
+
+**সমস্যা:** owner AppleGadgets-এর mobile catalog page (375px width)
+রেফারেন্স হিসেবে দেখিয়েছেন — সেখানে সবসময় ২টা column থাকে। কিন্তু
+KUETx-এর `.kx-shop-grid`-এ `auto-fill` + `minmax(220px, 1fr)` ব্যবহার
+করায় ছোট ফোনে (~360-400px viewport) মাঝে মাঝে ১টা column-ই ফিট হচ্ছিল,
+কারণ ২টা 220px card + gap মিলিয়ে সেই width-এ জায়গা হয় না।
+
+**ফিক্স:** `Services.jsx`-এর তিন জায়গার `.kx-shop-grid` CSS (Level-1
+main grid, Level-2 `CategoryShopList` grid, আর loading skeleton) —
+৪৮০px-এর নিচে এখন `repeat(2, 1fr)` দিয়ে **fixed ২ column** force করা
+হয়েছে, gap 12px। ৪৮০px-এর উপরে (larger phones/tablets) আগের
+`auto-fill` + `minmax(220px, 1fr)` আচরণ ফিরে আসে, যেখানে content-এর
+জায়গা এমনিতেই থাকে। ৯০০px+ (ডেস্কটপ) breakpoint অপরিবর্তিত।
+
+`ShopCard`-এর নিজের CSS আগে থেকেই relative unit (%, aspect-ratio,
+flex) ব্যবহার করত, কোনো fixed pixel width ছিল না, তাই ~১৭০-১৮০px card
+width-এও ভেঙে পড়েনি — শুধু grid-template-columns বদলালেই যথেষ্ট ছিল।
+
+`npm run build` ক্লিন পাস করেছে।
+
 ## এই ফাইলে নতুন কাজ যোগ করার নিয়ম
 
 নতুন কোনো আপডেট/বাগফিক্স/ফিচার এলে —

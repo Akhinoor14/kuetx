@@ -15,11 +15,37 @@
 // image gallery, locationText/hasDelivery badges, and a non-blocking
 // dormant banner (student can still view + submit an inquiry/booking
 // while dormant — the plan is explicit dormant never blocks the page).
+//
+// PHASE 4 (SERVICES_OVERHAUL_PLAN_PROMPT.md): visual polish pass only.
+// - Cover image became a small image-gallery + thumbnail strip
+//   (`GalleryMedia` below), sourced from the service's own cover image
+//   plus every available offering's first image — this degrades
+//   gracefully to a single static image (no thumbnail strip at all)
+//   when a service has one or zero images, per Phase 0's recorded
+//   decision, since most KUETx services only have a cover image today.
+// - A small top-right icon button (Package icon, doubles as "My
+//   Orders" shortcut — the closest sane equivalent to a cart icon for
+//   an appointment/inquiry-based marketplace, since these services
+//   aren't a shopping-cart checkout flow) was added to the page header.
+// - Colour/quantity-style variant selectors were explicitly skipped
+//   per Phase 0 — KUETx services are appointment/inquiry-based, not
+//   colour-variant physical products, so there's nothing for that kind
+//   of selector to attach to.
+// - Everything below this point that touches booking/inquiry/errand
+//   STATE or MUTATIONS (BookingForm, InquiryForm, ErrandForm,
+//   MyActiveBooking, MyActiveInquiry, MyActiveErrand, and every
+//   createBooking/cancelBooking/createErrandRequest/etc. call) is
+//   untouched — this phase is a layout/visual wrapper only, per the
+//   plan's explicit "do NOT rewrite the booking state machine" scope.
+// - `.kx-offering-grid` / `.kx-pick-grid`'s auto-fill + minmax(min,max)
+//   grid-template-columns (the previously-fixed layout bug) was left
+//   exactly as-is — verified still present, not regressed.
 
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import {
-  Store, Circle, ArrowLeft, MapPin, Truck, Minus, Plus, ExternalLink, ImageOff, Check,
+  Store, Circle, MapPin, Truck, Minus, Plus, ExternalLink, ImageOff, Check, Package,
+  Phone, Copy,
 } from 'lucide-react';
 import { auth } from '../lib/firebase';
 import { getProfile } from '../store/store';
@@ -39,28 +65,28 @@ import { getProviderPhone } from '../lib/providerSync';
 import { renderFormattedNoticeBody } from '../lib/noticeFormat.jsx';
 
 const STATUS_LABEL = {
-  pending: 'অপেক্ষমান',
-  confirmed: 'কনফার্ম হয়েছে',
-  done: 'সম্পন্ন হয়েছে',
-  cancelled: 'বাতিল হয়েছে',
-  expired_shop_closed: 'দোকান বন্ধ থাকায় বাতিল হয়েছে',
+  pending: 'Pending',
+  confirmed: 'Confirmed',
+  done: 'Completed',
+  cancelled: 'Cancelled',
+  expired_shop_closed: 'Cancelled — shop closed',
 };
 
 const INQUIRY_STATUS_LABEL = {
-  open: 'অপেক্ষমান — উত্তরের জন্য',
-  answered: 'উত্তর দেওয়া হয়েছে',
-  closed: 'বন্ধ করা হয়েছে',
+  open: 'Pending — waiting for reply',
+  answered: 'Answered',
+  closed: 'Closed',
 };
 
 // Phase 4 (plan §4): errand request status labels — mirrors the state
 // machine in serviceSync.js's createErrandRequest/acceptErrandRequest/
 // confirmErrandRequest/finishErrandRequest comments exactly.
 const ERRAND_STATUS_LABEL = {
-  open: 'অপেক্ষমান — কোনো Runner এখনো গ্রহণ করেননি',
-  runner_accepted: 'একজন Runner গ্রহণ করেছেন — কনফার্ম করুন',
-  confirmed: 'কনফার্ম হয়েছে',
-  finished: 'সম্পন্ন হয়েছে',
-  cancelled: 'বাতিল হয়েছে',
+  open: 'Pending — no Runner has accepted yet',
+  runner_accepted: 'A Runner has accepted — please confirm',
+  confirmed: 'Confirmed',
+  finished: 'Completed',
+  cancelled: 'Cancelled',
 };
 
 export default function ServiceDetail() {
@@ -68,8 +94,20 @@ export default function ServiceDetail() {
   const navigate = useNavigate();
   const [service, setService] = useState(undefined); // undefined = loading, null = not found
   const [myBookings, setMyBookings] = useState(null);
+  // Owner decision (Aug 2026): the shop's contact number should always be
+  // visible on this page — not gated behind a confirmed booking anymore
+  // (see firestore.rules' contact/phone read rule, opened to any
+  // signed-in user). Fetched as soon as we know the providerUid, same as
+  // MyActiveBooking/MyActiveErrand's own getProviderPhone() calls below,
+  // just no longer conditional on booking status.
+  const [shopPhone, setShopPhone] = useState('');
 
   useEffect(() => subscribeService(serviceId, (s) => setService(s ? withServiceDefaults(s) : s)), [serviceId]);
+
+  useEffect(() => {
+    if (!service?.providerUid) return;
+    getProviderPhone(service.providerUid).then(setShopPhone).catch(() => {});
+  }, [service?.providerUid]);
 
   useEffect(() => {
     const uid = auth.currentUser?.uid;
@@ -91,7 +129,7 @@ export default function ServiceDetail() {
   if (service === null) {
     return (
       <div style={{ padding: 32, textAlign: 'center', color: 'var(--muted)' }}>
-        এই সার্ভিসটি খুঁজে পাওয়া যায়নি।
+        This service couldn't be found.
         <div style={{ marginTop: 12 }}>
           <button onClick={() => navigate('/services')} className="btn btn-sm">Back to Services</button>
         </div>
@@ -115,22 +153,45 @@ export default function ServiceDetail() {
     ? (myBookings || []).find((b) => ['open', 'runner_accepted', 'confirmed'].includes(b.status))
     : null;
 
+  // PHASE 4 (SERVICES_OVERHAUL_PLAN_PROMPT.md): gallery images — cover
+  // image first (if present), then every available offering's images
+  // (a provider can attach up to 3 per offering, see
+  // ProviderOfferingDetailPage.jsx's MAX_OFFERING_IMAGES — originally
+  // this only pulled each offering's FIRST image, silently dropping
+  // any 2nd/3rd photo a provider had uploaded; fixed to flatten all of
+  // them in), de-duplicated. Purely presentational; doesn't touch any
+  // offering/booking data.
+  const galleryImages = [
+    service.coverImageUrl,
+    ...(service.offerings || [])
+      .filter((o) => o.isAvailable)
+      .flatMap((o) => (Array.isArray(o.images) ? o.images : [])),
+  ].filter(Boolean).filter((url, idx, arr) => arr.indexOf(url) === idx);
+
   return (
     <div className="kx-detail-page">
-      <button onClick={() => navigate('/services')} className="btn btn-sm kx-detail-back">
-        <ArrowLeft size={14} /> Services
-      </button>
+      <div className="kx-detail-topbar">
+        {/* PHASE 5 (SERVICES_OVERHAUL_PLAN_PROMPT.md): the "← Services"
+            back-link that used to live here was removed per the owner's
+            explicit request. The row now holds only the "My Orders"
+            shortcut on the right; kept as a flex row (justify-content:
+            flex-end) rather than collapsing to a single centered button,
+            so a future left-side element can be added again without
+            another layout rewrite. */}
+        {/* PHASE 4: small top-right icon button — the closest sane
+            equivalent to an e-commerce "cart" icon for an appointment/
+            inquiry-based marketplace (no shopping cart concept exists
+            here); links to the "My Orders" hub so a student can jump
+            straight to their cross-shop order list from any shop page. */}
+        <button onClick={() => navigate('/services/orders')} className="kx-detail-cart-btn" title="My Orders" aria-label="My Orders">
+          <Package size={18} strokeWidth={1.9} />
+        </button>
+      </div>
 
       <div className="kx-detail-layout">
         {/* ── Left column: media + info ─────────────────────────────── */}
         <div className="kx-detail-info">
-          {service.coverImageUrl ? (
-            <img src={service.coverImageUrl} alt={service.name} className="kx-detail-cover" />
-          ) : (
-            <div className="kx-detail-cover kx-detail-cover-placeholder">
-              <Store size={48} color="var(--accent)" strokeWidth={1.4} />
-            </div>
-          )}
+          <GalleryMedia images={galleryImages} name={service.name} />
 
           <div className="kx-detail-titlebar">
             {/* title (§6 order: title -> price -> description) */}
@@ -138,7 +199,7 @@ export default function ServiceDetail() {
             <div className="kx-detail-status">
               <Circle size={9} fill={service.isOpen ? '#16a34a' : '#9ca3af'} color={service.isOpen ? '#16a34a' : '#9ca3af'} />
               <span style={{ color: service.isOpen ? '#16a34a' : 'var(--muted)' }}>
-                {service.isOpen ? 'এখন খোলা' : 'এখন বন্ধ'}
+                {service.isOpen ? 'Open now' : 'Closed now'}
               </span>
             </div>
           </div>
@@ -159,7 +220,7 @@ export default function ServiceDetail() {
               )}
               {/* SHOP_LOCATION_AND_UPCOMING_FEATURES_PLAN.md Phase 2: GPS
                   coordinate, if the provider has set one, gets a small
-                  "মানচিত্রে দেখুন" link that opens Google Maps in a new tab —
+                  "View on map" link that opens Google Maps in a new tab —
                   no API key needed. Silently absent when the provider hasn't
                   added GPS yet (locationText badge alone still shows), same
                   "no negative empty-state" pattern as locationText itself. */}
@@ -174,7 +235,7 @@ export default function ServiceDetail() {
                     padding: '4px 10px', textDecoration: 'none',
                   }}
                 >
-                  মানচিত্রে দেখুন <ExternalLink size={11} />
+                  View on map <ExternalLink size={11} />
                 </a>
               )}
               {service.hasDelivery && (
@@ -183,7 +244,7 @@ export default function ServiceDetail() {
                   color: 'var(--accent)', background: 'var(--accentSoft)', borderRadius: 999, padding: '4px 10px',
                 }}
                 >
-                  <Truck size={12} /> হোম ডেলিভারি আছে
+                  <Truck size={12} /> Home delivery available
                 </span>
               )}
             </div>
@@ -215,44 +276,192 @@ export default function ServiceDetail() {
             )
           ) : isInquiryMode ? (
             activeInquiry ? (
-              <MyActiveInquiry serviceId={serviceId} inquiry={activeInquiry} />
+              <MyActiveInquiry serviceId={serviceId} inquiry={activeInquiry} providerUid={service.providerUid} />
             ) : (
               <InquiryForm service={service} />
             )
           ) : activeBooking ? (
-            <MyActiveBooking serviceId={serviceId} booking={activeBooking} />
+            <MyActiveBooking serviceId={serviceId} booking={activeBooking} providerUid={service.providerUid} />
           ) : (
             <BookingForm service={service} />
           )}
         </div>
       </div>
 
+      {shopPhone && <FloatingContactButton phone={shopPhone} shopName={service.name} />}
+
       <style>{`
         .kx-detail-page { padding: 20px 16px 40px; width: 100%; max-width: 1180px; margin: 0 auto; box-sizing: border-box; }
-        .kx-detail-back { margin-bottom: 16px; display: inline-flex; align-items: center; gap: 6px; }
+        .kx-detail-topbar { display: flex; align-items: center; justify-content: flex-end; gap: 10px; margin-bottom: 16px; }
+        .kx-detail-cart-btn {
+          width: 38px; height: 38px; border-radius: 12px; flex-shrink: 0;
+          display: flex; align-items: center; justify-content: center;
+          border: 1px solid var(--border); background: var(--card); color: var(--text);
+          cursor: pointer; transition: border-color 0.15s ease, background 0.15s ease;
+        }
+        .kx-detail-cart-btn:hover { border-color: rgba(var(--accentRGB), 0.4); background: var(--accentSoft); color: var(--accent); }
 
         .kx-detail-layout { display: grid; grid-template-columns: 1fr; gap: 24px; width: 100%; align-items: start; }
 
-        .kx-detail-cover {
-          width: 100%; aspect-ratio: 16 / 9; max-height: 380px; object-fit: cover;
-          border-radius: 18px; border: 1px solid var(--border); margin-bottom: 16px;
-        }
-        .kx-detail-cover-placeholder {
-          background: var(--accentSoft); display: flex; align-items: center; justify-content: center;
-        }
+        .kx-detail-info { min-width: 0; }
+        .kx-detail-action { min-width: 0; }
 
         .kx-detail-titlebar { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 8px; }
         .kx-detail-title { font-size: 24px; font-weight: 800; color: var(--text); letter-spacing: -0.01em; }
         .kx-detail-status { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 700; }
 
-        .kx-detail-info { min-width: 0; }
-        .kx-detail-action { min-width: 0; }
-
         @media (min-width: 900px) {
           .kx-detail-layout { grid-template-columns: minmax(0, 1.4fr) minmax(320px, 1fr); gap: 32px; }
           .kx-detail-action { position: sticky; top: 20px; }
-          .kx-detail-cover { max-height: 420px; }
         }
+      `}</style>
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------
+// PHASE 4 (SERVICES_OVERHAUL_PLAN_PROMPT.md): image gallery + thumbnail
+// strip, e-commerce-detail-page style. Purely presentational — takes a
+// flat array of image URLs (already deduped/filtered by the caller) and
+// renders a big active image with a thumbnail row beneath it. Degrades
+// to a single static image (no thumbnails) for 0 or 1 images, and to
+// the same store-icon placeholder as before when there are none at all,
+// so this never looks broken for the majority of today's services that
+// only have a cover image.
+// ---------------------------------------------------------------------
+
+function GalleryMedia({ images, name }) {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const hasImages = images.length > 0;
+  const activeUrl = hasImages ? images[Math.min(activeIndex, images.length - 1)] : null;
+
+  return (
+    <div className="kx-gallery">
+      <div className="kx-gallery-main">
+        {activeUrl ? (
+          <img src={activeUrl} alt={name} />
+        ) : (
+          <div className="kx-gallery-placeholder">
+            <Store size={48} color="var(--accent)" strokeWidth={1.4} />
+          </div>
+        )}
+      </div>
+
+      {images.length > 1 && (
+        <div className="kx-gallery-thumbs">
+          {images.map((url, i) => (
+            <button
+              key={url + i}
+              type="button"
+              onClick={() => setActiveIndex(i)}
+              className={`kx-gallery-thumb${i === activeIndex ? ' is-active' : ''}`}
+            >
+              <img src={url} alt={`${name} ${i + 1}`} />
+            </button>
+          ))}
+        </div>
+      )}
+
+      <style>{`
+        .kx-gallery { margin-bottom: 16px; }
+        .kx-gallery-main {
+          width: 100%; aspect-ratio: 16 / 9; max-height: 380px; border-radius: 18px;
+          border: 1px solid var(--border); overflow: hidden;
+        }
+        .kx-gallery-main img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .kx-gallery-placeholder {
+          width: 100%; height: 100%; background: var(--accentSoft);
+          display: flex; align-items: center; justify-content: center;
+        }
+        .kx-gallery-thumbs {
+          display: flex; gap: 8px; margin-top: 8px; overflow-x: auto; padding-bottom: 2px;
+        }
+        .kx-gallery-thumb {
+          flex-shrink: 0; width: 56px; height: 56px; border-radius: 10px; overflow: hidden;
+          border: 2px solid transparent; padding: 0; cursor: pointer; background: var(--accentSoft);
+          transition: border-color 0.15s ease, opacity 0.15s ease;
+          opacity: 0.65;
+        }
+        .kx-gallery-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .kx-gallery-thumb.is-active { border-color: var(--accent); opacity: 1; }
+
+        @media (min-width: 900px) {
+          .kx-gallery-main { max-height: 420px; }
+        }
+      `}</style>
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------
+// FloatingContactButton — Aug 2026 owner request: the shop's phone
+// number should always be visible on this page, no booking required.
+// Renders as a small floating pill fixed to the bottom-right of the
+// viewport. Collapsed state just shows a phone icon; tapping it expands
+// to show the number plus two actions — "Call" (tel: link, works for
+// WhatsApp-registered numbers too since most students just tap-to-call)
+// and "Copy" (clipboard, with a brief confirmation) — since either might
+// be what a given student wants and there's no way to know which in
+// advance. Purely presentational; doesn't touch booking/inquiry state.
+// ---------------------------------------------------------------------
+
+function FloatingContactButton({ phone, shopName }) {
+  const [expanded, setExpanded] = useState(false);
+  const [copied, setCopied] = useState(false);
+
+  const doCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(phone);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1500);
+    } catch {
+      // Clipboard API unavailable/denied — Copy button silently no-ops,
+      // Call still works as a fallback either way.
+    }
+  };
+
+  return (
+    <div className="kx-fab-wrap">
+      {expanded && (
+        <div className="kx-fab-panel card">
+          <div className="kx-fab-label">{shopName}</div>
+          <div className="kx-fab-number">{phone}</div>
+          <div className="kx-fab-actions">
+            <a href={`tel:${phone}`} className="btn btn-primary btn-sm kx-fab-action">
+              <Phone size={13} /> Call
+            </a>
+            <button onClick={doCopy} className="btn btn-secondary btn-sm kx-fab-action">
+              {copied ? <Check size={13} /> : <Copy size={13} />} {copied ? 'Copied' : 'Copy'}
+            </button>
+          </div>
+        </div>
+      )}
+
+      <button
+        onClick={() => setExpanded((v) => !v)}
+        className="kx-fab-btn"
+        aria-label="Shop contact number"
+        title="Shop contact number"
+      >
+        <Phone size={20} strokeWidth={2} />
+      </button>
+
+      <style>{`
+        .kx-fab-wrap { position: fixed; right: 18px; bottom: 22px; z-index: 40; display: flex; flex-direction: column; align-items: flex-end; gap: 10px; }
+        .kx-fab-btn {
+          width: 52px; height: 52px; border-radius: 50%; border: none; cursor: pointer;
+          background: var(--accent); color: #fff; display: flex; align-items: center; justify-content: center;
+          box-shadow: 0 4px 16px rgba(0,0,0,0.22); transition: transform 0.15s ease;
+        }
+        .kx-fab-btn:hover { transform: scale(1.06); }
+        .kx-fab-panel {
+          padding: 12px 14px; border-radius: 14px; min-width: 200px; max-width: 260px;
+          box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+        }
+        .kx-fab-label { font-size: 11.5px; font-weight: 700; color: var(--muted); margin-bottom: 2px; overflow-wrap: break-word; }
+        .kx-fab-number { font-size: 15px; font-weight: 800; color: var(--text); margin-bottom: 10px; letter-spacing: 0.02em; }
+        .kx-fab-actions { display: flex; gap: 8px; }
+        .kx-fab-action { flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 5px; text-decoration: none; }
       `}</style>
     </div>
   );
@@ -275,13 +484,13 @@ function DormantInfoBanner({ service }) {
       }}
     >
       <div style={{ fontSize: 13, fontWeight: 700, color: '#c2410c' }}>
-        এই শপ আপাতত সক্রিয় না
+        This shop is currently inactive
       </div>
       <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 4, lineHeight: 1.6 }}>
-        {service.dormantReason === 'auto' && 'দীর্ঘদিন কোনো আপডেট না হওয়ায় এটা স্বয়ংক্রিয়ভাবে নিষ্ক্রিয় হয়েছে।'}
-        {service.dormantReason === 'manual_temporary' && 'দোকানের মালিক সাময়িকভাবে এটা বন্ধ রেখেছেন।'}
-        {service.dormantReason === 'manual_permanent' && 'দোকানের মালিক এটা স্থায়ীভাবে বন্ধ করেছেন।'}
-        {!service.dormantReason && 'এই মুহূর্তে এটা কম-সক্রিয় হিসেবে চিহ্নিত।'}
+        {service.dormantReason === 'auto' && 'It was automatically marked inactive after a long period with no updates.'}
+        {service.dormantReason === 'manual_temporary' && 'The owner has temporarily closed this shop.'}
+        {service.dormantReason === 'manual_permanent' && 'The owner has permanently closed this shop.'}
+        {!service.dormantReason && 'This shop is currently marked as low-activity.'}
       </div>
     </div>
   );
@@ -307,7 +516,7 @@ function MyActiveInquiry({ serviceId, inquiry }) {
 
   return (
     <div className="card" style={{ padding: 16 }}>
-      <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', marginBottom: 6 }}>আপনার প্রশ্ন/অনুরোধ</div>
+      <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', marginBottom: 6 }}>Your inquiry</div>
       <div style={{ fontSize: 13.5, color: 'var(--muted)', marginBottom: 8 }}>
         Status: <strong style={{ color: 'var(--text)' }}>{INQUIRY_STATUS_LABEL[inquiry.status] || inquiry.status}</strong>
       </div>
@@ -325,7 +534,7 @@ function MyActiveInquiry({ serviceId, inquiry }) {
 
       {hasAnyPrice && (
         <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--accent)', marginBottom: 8 }}>
-          মোট (আনুমানিক): ৳{total}
+          Total (estimated): ৳{total}
         </div>
       )}
 
@@ -341,13 +550,13 @@ function MyActiveInquiry({ serviceId, inquiry }) {
           padding: 10, marginBottom: 8, lineHeight: 1.6,
         }}
         >
-          <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--accent)', marginBottom: 4 }}>দোকানের উত্তর</div>
+          <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--accent)', marginBottom: 4 }}>Shop's reply</div>
           {inquiry.replyText}
         </div>
       )}
 
       <button onClick={doClose} disabled={closing} className="btn btn-sm btn-secondary" style={{ marginTop: 4 }}>
-        {closing ? 'বন্ধ হচ্ছে…' : 'এই অনুরোধ বন্ধ করুন'}
+        {closing ? 'Closing…' : 'Close this request'}
       </button>
     </div>
   );
@@ -355,12 +564,28 @@ function MyActiveInquiry({ serviceId, inquiry }) {
 
 function InquiryForm({ service }) {
   const profile = getProfile();
+  // Faculty gap fix (Aug 2026): same missing-prefill issue as
+  // BookingForm — InquiryForm only ever read the student profile store.
+  const isFaculty = getAccountRole() === 'teacher';
+  const [requesterName, setRequesterName] = useState(isFaculty ? '' : (profile?.name || ''));
   const [studentPhone, setStudentPhone] = useState('');
   const [quantities, setQuantities] = useState({}); // offeringId -> quantity
   const [question, setQuestion] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
   const [done, setDone] = useState(false);
+
+  useEffect(() => {
+    if (!isFaculty) return;
+    const uid = auth.currentUser?.uid;
+    if (!uid) return;
+    getFacultyProfile(uid).then((fdoc) => {
+      if (fdoc) {
+        setRequesterName((prev) => prev || fdoc.name || '');
+        setStudentPhone((prev) => prev || fdoc.phone || '');
+      }
+    }).catch(() => {});
+  }, [isFaculty]);
 
   const availableOfferings = (service.offerings || []).filter((o) => o.isAvailable);
 
@@ -394,15 +619,19 @@ function InquiryForm({ service }) {
   const submit = async () => {
     setError('');
     if (!service.isOpen) {
-      setError('দোকান এখন বন্ধ — এখন অনুরোধ পাঠানো যাবে না।');
+      setError('Shop is closed right now — you can\'t send a request.');
       return;
     }
     if (selectedItems.length === 0) {
-      setError('অন্তত একটা আইটেম বেছে নিন।');
+      setError('Please select at least one item.');
       return;
     }
     if (!studentPhone.trim()) {
-      setError('ফোন নাম্বার দিন।');
+      setError('Please enter a phone number.');
+      return;
+    }
+    if (isFaculty && !requesterName.trim()) {
+      setError('Please enter your name.');
       return;
     }
 
@@ -410,14 +639,14 @@ function InquiryForm({ service }) {
     try {
       await createBooking(service.id, {
         studentUid: auth.currentUser.uid,
-        studentName: profile?.name || '',
+        studentName: isFaculty ? requesterName : (profile?.name || ''),
         studentPhone,
         items: selectedItems,
         question,
       });
       setDone(true);
     } catch (e) {
-      setError(e.message || 'পাঠাতে সমস্যা হয়েছে।');
+      setError(e.message || 'Something went wrong sending this.');
     } finally {
       setSubmitting(false);
     }
@@ -426,9 +655,9 @@ function InquiryForm({ service }) {
   if (done) {
     return (
       <div className="card" style={{ padding: 16, textAlign: 'center' }}>
-        <div style={{ fontSize: 14, fontWeight: 700, color: '#16a34a' }}>প্রশ্ন/অনুরোধ পাঠানো হয়েছে ✓</div>
+        <div style={{ fontSize: 14, fontWeight: 700, color: '#16a34a' }}>Inquiry sent ✓</div>
         <div style={{ fontSize: 12.5, color: 'var(--muted)', marginTop: 6 }}>
-          দোকান উত্তর দিলে এখানেই দেখতে পাবেন।
+          You'll see the shop's reply here once they respond.
         </div>
       </div>
     );
@@ -437,7 +666,7 @@ function InquiryForm({ service }) {
   if (!service.isOpen) {
     return (
       <div className="card" style={{ padding: 16, textAlign: 'center', fontSize: 13.5, color: 'var(--muted)' }}>
-        দোকান এখন বন্ধ — খোলা হলে এখান থেকেই প্রশ্ন/অনুরোধ পাঠাতে পারবেন।
+        Shop is closed right now — you'll be able to send an inquiry once it's open.
       </div>
     );
   }
@@ -445,14 +674,14 @@ function InquiryForm({ service }) {
   if (availableOfferings.length === 0) {
     return (
       <div className="card" style={{ padding: 16, textAlign: 'center', fontSize: 13.5, color: 'var(--muted)' }}>
-        এখন কোনো আইটেম available নেই।
+        No items available right now.
       </div>
     );
   }
 
   return (
     <div className="card" style={{ padding: 16 }}>
-      <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', marginBottom: 12 }}>আইটেম বেছে নিন</div>
+      <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', marginBottom: 12 }}>Select items</div>
 
       <div className="kx-offering-grid" style={{ marginBottom: 14 }}>
         {availableOfferings.map((o) => {
@@ -467,7 +696,7 @@ function InquiryForm({ service }) {
                 <div className="kx-offering-name">{o.label}</div>
                 {typeof o.price === 'number' && (
                   <div className="kx-offering-price">
-                    ৳{o.price} <span>/ পিস</span>
+                    ৳{o.price} <span>/ piece</span>
                   </div>
                 )}
                 <div className="kx-offering-stepper">
@@ -522,11 +751,25 @@ function InquiryForm({ service }) {
 
       {hasAnyPrice && selectedItems.length > 0 && (
         <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--accent)', marginBottom: 12 }}>
-          মোট (আনুমানিক): ৳{total}
+          Total (estimated): ৳{total}
         </div>
       )}
 
-      <label style={{ fontSize: 12, color: 'var(--muted)', fontWeight: 600 }}>ফোন নাম্বার</label>
+      {isFaculty && (
+        <>
+          <label style={{ fontSize: 12, color: 'var(--muted)', fontWeight: 600 }}>Name</label>
+          <input
+            value={requesterName}
+            onChange={(e) => setRequesterName(e.target.value)}
+            style={{
+              width: '100%', marginTop: 6, marginBottom: 12, padding: '10px 12px', borderRadius: 10,
+              border: '1px solid var(--border)', background: 'var(--card)', color: 'var(--text)', fontSize: 14,
+            }}
+          />
+        </>
+      )}
+
+      <label style={{ fontSize: 12, color: 'var(--muted)', fontWeight: 600 }}>Phone number</label>
       <input
         value={studentPhone}
         onChange={(e) => setStudentPhone(e.target.value)}
@@ -537,11 +780,11 @@ function InquiryForm({ service }) {
         }}
       />
 
-      <label style={{ fontSize: 12, color: 'var(--muted)', fontWeight: 600 }}>প্রশ্ন/অনুরোধ (ঐচ্ছিক)</label>
+      <label style={{ fontSize: 12, color: 'var(--muted)', fontWeight: 600 }}>Question / request (optional)</label>
       <textarea
         value={question}
         onChange={(e) => setQuestion(e.target.value)}
-        placeholder="যেমন: কালার/সাইজ নিয়ে কোনো নির্দিষ্ট চাহিদা থাকলে লিখুন"
+        placeholder="e.g. any specific color/size preference, write it here"
         rows={3}
         style={{
           width: '100%', marginTop: 6, marginBottom: 12, padding: '10px 12px', borderRadius: 10,
@@ -553,14 +796,27 @@ function InquiryForm({ service }) {
       {error && <div style={{ fontSize: 12.5, color: 'var(--danger, #dc2626)', marginBottom: 10 }}>{error}</div>}
 
       <button onClick={submit} disabled={submitting} className="btn btn-primary" style={{ width: '100%' }}>
-        {submitting ? 'পাঠানো হচ্ছে…' : 'প্রশ্ন/অনুরোধ পাঠান'}
+        {submitting ? 'Sending…' : 'Send inquiry'}
       </button>
     </div>
   );
 }
 
-function MyActiveBooking({ serviceId, booking }) {
+function MyActiveBooking({ serviceId, booking, providerUid }) {
   const [cancelling, setCancelling] = useState(false);
+  // BUGFIX (missing shop phone number on confirmed bookings):
+  // firestore.rules' providers/{uid}/contact/phone read rule already
+  // allows this once a student has a 'confirmed' or 'done' booking
+  // (§10) — that part was correct from Phase 2. What was missing was
+  // ServiceDetail.jsx ever actually calling getProviderPhone() for
+  // booking-mode services; only the errand-mode MyActiveErrand did.
+  // Mirrors that component's same pattern exactly.
+  const [shopPhone, setShopPhone] = useState('');
+
+  useEffect(() => {
+    if (!providerUid || (booking.status !== 'confirmed' && booking.status !== 'done')) return;
+    getProviderPhone(providerUid).then(setShopPhone).catch(() => {});
+  }, [providerUid, booking.status]);
 
   const doCancel = async () => {
     setCancelling(true);
@@ -573,22 +829,31 @@ function MyActiveBooking({ serviceId, booking }) {
 
   return (
     <div className="card" style={{ padding: 16 }}>
-      <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', marginBottom: 6 }}>আপনার বুকিং</div>
+      <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', marginBottom: 6 }}>Your booking</div>
       <div style={{ fontSize: 13.5, color: 'var(--muted)' }}>
         Status: <strong style={{ color: 'var(--text)' }}>{STATUS_LABEL[booking.status] || booking.status}</strong>
       </div>
       {booking.preferredTime && (
         <div style={{ fontSize: 13, color: 'var(--muted)', marginTop: 4 }}>
-          পছন্দের সময়: {booking.preferredTime.date} at {booking.preferredTime.time}
+          Preferred time: {booking.preferredTime.date} at {booking.preferredTime.time}
         </div>
       )}
       {booking.confirmedSlot && (
         <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--accent)', marginTop: 4 }}>
-          কনফার্ম করা সময়: {booking.confirmedSlot.date} at {booking.confirmedSlot.time}
+          Confirmed time: {booking.confirmedSlot.date} at {booking.confirmedSlot.time}
+        </div>
+      )}
+      {shopPhone && (
+        <div style={{
+          fontSize: 13, color: 'var(--text)', background: 'var(--accentSoft)', borderRadius: 10,
+          padding: 10, marginTop: 10,
+        }}
+        >
+          Shop's phone number: <strong>{shopPhone}</strong>
         </div>
       )}
       <button onClick={doCancel} disabled={cancelling} className="btn btn-sm btn-secondary" style={{ marginTop: 12 }}>
-        {cancelling ? 'বাতিল হচ্ছে…' : 'বুকিং বাতিল করুন'}
+        {cancelling ? 'Cancelling…' : 'Cancel booking'}
       </button>
     </div>
   );
@@ -596,6 +861,13 @@ function MyActiveBooking({ serviceId, booking }) {
 
 function BookingForm({ service }) {
   const profile = getProfile();
+  // Faculty gap fix (Aug 2026): BookingForm previously only ever read the
+  // student profile store (getProfile()), which is empty/null for a
+  // faculty account — so a faculty booking silently submitted with
+  // studentName: ''. Mirrors ErrandForm's already-working isFaculty +
+  // getFacultyProfile prefill pattern exactly.
+  const isFaculty = getAccountRole() === 'teacher';
+  const [requesterName, setRequesterName] = useState(isFaculty ? '' : (profile?.name || ''));
   const [offeringId, setOfferingId] = useState('');
   const [studentPhone, setStudentPhone] = useState('');
   const [wantsPreferredTime, setWantsPreferredTime] = useState(false);
@@ -605,29 +877,48 @@ function BookingForm({ service }) {
   const [error, setError] = useState('');
   const [done, setDone] = useState(false);
 
+  // Faculty name/phone live in a separate doc fetched async, unlike the
+  // synchronous getProfile() student store — prefill once on mount, same
+  // as ErrandForm.
+  useEffect(() => {
+    if (!isFaculty) return;
+    const uid = auth.currentUser?.uid;
+    if (!uid) return;
+    getFacultyProfile(uid).then((fdoc) => {
+      if (fdoc) {
+        setRequesterName((prev) => prev || fdoc.name || '');
+        setStudentPhone((prev) => prev || fdoc.phone || '');
+      }
+    }).catch(() => {});
+  }, [isFaculty]);
+
   const availableOfferings = (service.offerings || []).filter((o) => o.isAvailable);
   // salon/hotel are the only two 'booking'-mode types (see
   // TYPE_TO_INTERACTION_MODE in serviceSync.js) — hotel here means food
-  // vendors, so its per-unit price reads "/ পিস" (per piece/plate)
-  // rather than salon's "/ জন" (per person).
-  const priceUnitLabel = service.type === 'hotel' ? 'পিস' : 'জন';
+  // vendors, so its per-unit price reads "/ plate" (per piece/plate)
+  // rather than salon's "/ person" (per person).
+  const priceUnitLabel = service.type === 'hotel' ? 'plate' : 'person';
 
   const submit = async () => {
     setError('');
     if (!service.isOpen) {
-      setError('দোকান এখন বন্ধ — এখন বুক করা যাবে না।');
+      setError('Shop is closed right now — you can\'t book at the moment.');
       return;
     }
     if (!offeringId) {
-      setError('একটা offering সিলেক্ট করুন।');
+      setError('Please select an offering.');
       return;
     }
     if (!studentPhone.trim()) {
-      setError('ফোন নাম্বার দিন।');
+      setError('Please enter a phone number.');
+      return;
+    }
+    if (isFaculty && !requesterName.trim()) {
+      setError('Please enter your name.');
       return;
     }
     if (wantsPreferredTime && (!date || !time)) {
-      setError('তারিখ এবং সময় দুটোই দিতে হবে, অথবা preferred time অপশনটা বন্ধ রাখুন।');
+      setError('Please provide both a date and time, or turn off the preferred time option.');
       return;
     }
 
@@ -635,14 +926,14 @@ function BookingForm({ service }) {
     try {
       await createBooking(service.id, {
         studentUid: auth.currentUser.uid,
-        studentName: profile?.name || '',
+        studentName: isFaculty ? requesterName : (profile?.name || ''),
         studentPhone,
         offeringId,
         preferredTime: wantsPreferredTime ? { date, time } : null,
       });
       setDone(true);
     } catch (e) {
-      setError(e.message || 'বুক করতে সমস্যা হয়েছে।');
+      setError(e.message || 'Something went wrong booking this.');
     } finally {
       setSubmitting(false);
     }
@@ -651,9 +942,9 @@ function BookingForm({ service }) {
   if (done) {
     return (
       <div className="card" style={{ padding: 16, textAlign: 'center' }}>
-        <div style={{ fontSize: 14, fontWeight: 700, color: '#16a34a' }}>বুকিং পাঠানো হয়েছে ✓</div>
+        <div style={{ fontSize: 14, fontWeight: 700, color: '#16a34a' }}>Booking sent ✓</div>
         <div style={{ fontSize: 12.5, color: 'var(--muted)', marginTop: 6 }}>
-          Owner কনফার্ম করলে এখানেই দেখতে পাবেন।
+          You'll see it here once the owner confirms.
         </div>
       </div>
     );
@@ -662,7 +953,7 @@ function BookingForm({ service }) {
   if (!service.isOpen) {
     return (
       <div className="card" style={{ padding: 16, textAlign: 'center', fontSize: 13.5, color: 'var(--muted)' }}>
-        দোকান এখন বন্ধ — খোলা হলে এখান থেকেই বুক করতে পারবেন।
+        Shop is closed right now — you'll be able to book once it's open.
       </div>
     );
   }
@@ -670,16 +961,16 @@ function BookingForm({ service }) {
   if (availableOfferings.length === 0) {
     return (
       <div className="card" style={{ padding: 16, textAlign: 'center', fontSize: 13.5, color: 'var(--muted)' }}>
-        এখন কোনো offering available নেই।
+        No offerings available right now.
       </div>
     );
   }
 
   return (
     <div className="card" style={{ padding: 16 }}>
-      <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', marginBottom: 12 }}>বুক করুন</div>
+      <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', marginBottom: 12 }}>Book now</div>
 
-      <label style={{ fontSize: 12, color: 'var(--muted)', fontWeight: 600 }}>যা করাতে চান, বেছে নিন</label>
+      <label style={{ fontSize: 12, color: 'var(--muted)', fontWeight: 600 }}>Choose what you'd like</label>
       <div className="kx-pick-grid" style={{ marginTop: 8, marginBottom: 12 }}>
         {availableOfferings.map((o) => {
           const isSelected = offeringId === o.id;
@@ -742,7 +1033,21 @@ function BookingForm({ service }) {
         .kx-pick-price span { color: var(--muted); font-weight: 400; }
       `}</style>
 
-      <label style={{ fontSize: 12, color: 'var(--muted)', fontWeight: 600 }}>ফোন নাম্বার</label>
+      {isFaculty && (
+        <>
+          <label style={{ fontSize: 12, color: 'var(--muted)', fontWeight: 600 }}>Name</label>
+          <input
+            value={requesterName}
+            onChange={(e) => setRequesterName(e.target.value)}
+            style={{
+              width: '100%', marginTop: 6, marginBottom: 12, padding: '10px 12px', borderRadius: 10,
+              border: '1px solid var(--border)', background: 'var(--card)', color: 'var(--text)', fontSize: 14,
+            }}
+          />
+        </>
+      )}
+
+      <label style={{ fontSize: 12, color: 'var(--muted)', fontWeight: 600 }}>Phone number</label>
       <input
         value={studentPhone}
         onChange={(e) => setStudentPhone(e.target.value)}
@@ -755,7 +1060,7 @@ function BookingForm({ service }) {
 
       <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, color: 'var(--text)', marginBottom: 10 }}>
         <input type="checkbox" checked={wantsPreferredTime} onChange={(e) => setWantsPreferredTime(e.target.checked)} />
-        পছন্দের সময় দিতে চান? (ঐচ্ছিক)
+        Want to give a preferred time? (optional)
       </label>
 
       {wantsPreferredTime && (
@@ -776,7 +1081,7 @@ function BookingForm({ service }) {
       {error && <div style={{ fontSize: 12.5, color: 'var(--danger, #dc2626)', marginBottom: 10 }}>{error}</div>}
 
       <button onClick={submit} disabled={submitting} className="btn btn-primary" style={{ width: '100%' }}>
-        {submitting ? 'পাঠানো হচ্ছে…' : 'বুক করুন'}
+        {submitting ? 'Sending…' : 'Book now'}
       </button>
     </div>
   );
@@ -810,7 +1115,7 @@ function MyActiveErrand({ serviceId, errand }) {
     setError('');
     const price = Number(newPrice);
     if (!(price > 0)) {
-      setError('একটা বৈধ মূল্য দিন।');
+      setError('Please enter a valid price.');
       return;
     }
     setBusy(true);
@@ -818,13 +1123,13 @@ function MyActiveErrand({ serviceId, errand }) {
       await editErrandProposedPrice(serviceId, errand.id, price);
       setEditing(false);
     } catch (e) {
-      setError(e.message || 'আপডেট করতে সমস্যা হয়েছে।');
+      setError(e.message || 'Something went wrong updating this.');
     } finally {
       setBusy(false);
     }
   };
 
-  // plan §4.4: "✗ বাতিল করুন" on a runner_accepted request sends it back
+  // plan §4.4: "✗ Reject" on a runner_accepted request sends it back
   // to open (re-broadcast), NOT a full withdrawal — distinct from the
   // §4.2 "withdraw an open request" cancel below.
   const doRejectAccept = async () => {
@@ -841,7 +1146,7 @@ function MyActiveErrand({ serviceId, errand }) {
     try {
       await confirmErrandRequest(serviceId, errand.id);
     } catch (e) {
-      setError(e.message || 'কনফার্ম করতে সমস্যা হয়েছে।');
+      setError(e.message || 'Something went wrong confirming this.');
     } finally {
       setBusy(false);
     }
@@ -861,7 +1166,7 @@ function MyActiveErrand({ serviceId, errand }) {
     try {
       await finishErrandRequest(serviceId, errand.id);
     } catch (e) {
-      setError(e.message || 'সম্পন্ন করতে সমস্যা হয়েছে।');
+      setError(e.message || 'Something went wrong marking this done.');
     } finally {
       setBusy(false);
     }
@@ -869,7 +1174,7 @@ function MyActiveErrand({ serviceId, errand }) {
 
   return (
     <div className="card" style={{ padding: 16 }}>
-      <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', marginBottom: 6 }}>আপনার এরান্ড রিকোয়েস্ট</div>
+      <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', marginBottom: 6 }}>Your errand request</div>
       <div style={{ fontSize: 13.5, color: 'var(--muted)', marginBottom: 8 }}>
         Status: <strong style={{ color: 'var(--text)' }}>{ERRAND_STATUS_LABEL[errand.status] || errand.status}</strong>
       </div>
@@ -878,7 +1183,7 @@ function MyActiveErrand({ serviceId, errand }) {
 
       {!editing ? (
         <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--accent)', marginBottom: 10 }}>
-          প্রস্তাবিত মূল্য: ৳{errand.proposedPrice}
+          Proposed price: ৳{errand.proposedPrice}
         </div>
       ) : (
         <div style={{ display: 'flex', gap: 8, marginBottom: 10 }}>
@@ -891,8 +1196,8 @@ function MyActiveErrand({ serviceId, errand }) {
               background: 'var(--card)', color: 'var(--text)', fontSize: 14,
             }}
           />
-          <button onClick={doSaveEdit} disabled={busy} className="btn btn-sm btn-primary">সেভ</button>
-          <button onClick={() => setEditing(false)} disabled={busy} className="btn btn-sm btn-secondary">বাতিল</button>
+          <button onClick={doSaveEdit} disabled={busy} className="btn btn-sm btn-primary">Save</button>
+          <button onClick={() => setEditing(false)} disabled={busy} className="btn btn-sm btn-secondary">Cancel</button>
         </div>
       )}
 
@@ -906,7 +1211,7 @@ function MyActiveErrand({ serviceId, errand }) {
           padding: 10, marginBottom: 10,
         }}
         >
-          Runner-এর ফোন নাম্বার: <strong>{runnerPhone}</strong>
+          Runner's phone number: <strong>{runnerPhone}</strong>
         </div>
       )}
 
@@ -915,18 +1220,18 @@ function MyActiveErrand({ serviceId, errand }) {
       <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
         {errand.status === 'open' && !editing && (
           <>
-            <button onClick={() => setEditing(true)} disabled={busy} className="btn btn-sm btn-secondary">মূল্য পরিবর্তন</button>
-            <button onClick={doCancel} disabled={busy} className="btn btn-sm btn-secondary">রিকোয়েস্ট বাতিল করুন</button>
+            <button onClick={() => setEditing(true)} disabled={busy} className="btn btn-sm btn-secondary">Change price</button>
+            <button onClick={doCancel} disabled={busy} className="btn btn-sm btn-secondary">Cancel request</button>
           </>
         )}
         {errand.status === 'runner_accepted' && (
           <>
-            <button onClick={doConfirm} disabled={busy} className="btn btn-sm btn-primary">✓ হ্যাঁ, কনফার্ম করছি</button>
-            <button onClick={doRejectAccept} disabled={busy} className="btn btn-sm btn-secondary">✗ বাতিল করুন</button>
+            <button onClick={doConfirm} disabled={busy} className="btn btn-sm btn-primary">✓ Yes, confirm</button>
+            <button onClick={doRejectAccept} disabled={busy} className="btn btn-sm btn-secondary">✗ Reject</button>
           </>
         )}
         {errand.status === 'confirmed' && (
-          <button onClick={doFinish} disabled={busy} className="btn btn-sm btn-primary">সম্পন্ন হয়েছে বলে মার্ক করুন</button>
+          <button onClick={doFinish} disabled={busy} className="btn btn-sm btn-primary">Mark as completed</button>
         )}
       </div>
     </div>
@@ -983,23 +1288,23 @@ function ErrandForm({ service }) {
   const submit = async () => {
     setError('');
     if (!service.isOpen) {
-      setError('এই Runner এখন সক্রিয় নেই — এখন রিকোয়েস্ট পাঠানো যাবে না।');
+      setError('This Runner isn\'t active right now — you can\'t send a request.');
       return;
     }
     if (!itemDescription.trim()) {
-      setError('কী লাগবে সেটা লিখুন।');
+      setError('Please describe what you need.');
       return;
     }
     if (!(Number(proposedPrice) > 0)) {
-      setError('একটা বৈধ প্রস্তাবিত মূল্য দিন।');
+      setError('Please enter a valid proposed price.');
       return;
     }
     if (!requesterPhone.trim()) {
-      setError('ফোন নাম্বার দিন।');
+      setError('Please enter a phone number.');
       return;
     }
     if (visibility === 'targeted' && !targetRunnerUid) {
-      setError('Targeted request-এর জন্য একজন Runner বেছে নিন।');
+      setError('Please choose a Runner for a targeted request.');
       return;
     }
 
@@ -1017,7 +1322,7 @@ function ErrandForm({ service }) {
       });
       setDone(true);
     } catch (e) {
-      setError(e.message || 'পাঠাতে সমস্যা হয়েছে।');
+      setError(e.message || 'Something went wrong sending this.');
     } finally {
       setSubmitting(false);
     }
@@ -1026,9 +1331,9 @@ function ErrandForm({ service }) {
   if (done) {
     return (
       <div className="card" style={{ padding: 16, textAlign: 'center' }}>
-        <div style={{ fontSize: 14, fontWeight: 700, color: '#16a34a' }}>এরান্ড রিকোয়েস্ট পাঠানো হয়েছে ✓</div>
+        <div style={{ fontSize: 14, fontWeight: 700, color: '#16a34a' }}>Errand request sent ✓</div>
         <div style={{ fontSize: 12.5, color: 'var(--muted)', marginTop: 6 }}>
-          কোনো Runner গ্রহণ করলে এখানেই দেখতে পাবেন।
+          You'll see it here once a Runner accepts.
         </div>
       </div>
     );
@@ -1037,20 +1342,20 @@ function ErrandForm({ service }) {
   if (!service.isOpen) {
     return (
       <div className="card" style={{ padding: 16, textAlign: 'center', fontSize: 13.5, color: 'var(--muted)' }}>
-        এই Runner এখন সক্রিয় নেই — সক্রিয় হলে এখান থেকেই রিকোয়েস্ট পাঠাতে পারবেন।
+        This Runner isn't active right now — you'll be able to send a request once they are.
       </div>
     );
   }
 
   return (
     <div className="card" style={{ padding: 16 }}>
-      <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', marginBottom: 12 }}>এরান্ড রিকোয়েস্ট পাঠান</div>
+      <div style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', marginBottom: 12 }}>Send errand request</div>
 
-      <label style={{ fontSize: 12, color: 'var(--muted)', fontWeight: 600 }}>কী লাগবে</label>
+      <label style={{ fontSize: 12, color: 'var(--muted)', fontWeight: 600 }}>What you need</label>
       <textarea
         value={itemDescription}
         onChange={(e) => setItemDescription(e.target.value)}
-        placeholder="যেমন: ফার্মেসি থেকে Napa Extra ১ পাতা, ক্যাম্পাসের সামনের দোকান থেকে"
+        placeholder="e.g. 1 strip of Napa Extra from the pharmacy in front of campus"
         rows={3}
         style={{
           width: '100%', marginTop: 6, marginBottom: 12, padding: '10px 12px', borderRadius: 10,
@@ -1059,7 +1364,7 @@ function ErrandForm({ service }) {
         }}
       />
 
-      <label style={{ fontSize: 12, color: 'var(--muted)', fontWeight: 600 }}>প্রস্তাবিত মূল্য (জিনিসের দাম + ডেলিভারি ফি)</label>
+      <label style={{ fontSize: 12, color: 'var(--muted)', fontWeight: 600 }}>Proposed price (item cost + delivery fee)</label>
       <input
         type="number"
         value={proposedPrice}
@@ -1073,7 +1378,7 @@ function ErrandForm({ service }) {
 
       {isFaculty && (
         <>
-          <label style={{ fontSize: 12, color: 'var(--muted)', fontWeight: 600 }}>নাম</label>
+          <label style={{ fontSize: 12, color: 'var(--muted)', fontWeight: 600 }}>Name</label>
           <input
             value={requesterName}
             onChange={(e) => setRequesterName(e.target.value)}
@@ -1085,7 +1390,7 @@ function ErrandForm({ service }) {
         </>
       )}
 
-      <label style={{ fontSize: 12, color: 'var(--muted)', fontWeight: 600 }}>ফোন নাম্বার</label>
+      <label style={{ fontSize: 12, color: 'var(--muted)', fontWeight: 600 }}>Phone number</label>
       <input
         value={requesterPhone}
         onChange={(e) => setRequesterPhone(e.target.value)}
@@ -1102,7 +1407,7 @@ function ErrandForm({ service }) {
           plain broadcast, same "no dead-end UI" pattern used elsewhere. */}
       {runners && runners.length > 0 && (
         <div style={{ marginBottom: 12 }}>
-          <label style={{ fontSize: 12, color: 'var(--muted)', fontWeight: 600 }}>কাকে পাঠাবেন</label>
+          <label style={{ fontSize: 12, color: 'var(--muted)', fontWeight: 600 }}>Who to send this to</label>
           <div style={{ display: 'flex', gap: 8, marginTop: 6 }}>
             <button
               type="button"
@@ -1114,7 +1419,7 @@ function ErrandForm({ service }) {
                 color: visibility === 'broadcast' ? 'var(--accent)' : 'var(--text)',
               }}
             >
-              সব Runner (Broadcast)
+              All Runners (Broadcast)
             </button>
             <button
               type="button"
@@ -1126,7 +1431,7 @@ function ErrandForm({ service }) {
                 color: visibility === 'targeted' ? 'var(--accent)' : 'var(--text)',
               }}
             >
-              নির্দিষ্ট Runner
+              Specific Runner
             </button>
           </div>
 
@@ -1140,7 +1445,7 @@ function ErrandForm({ service }) {
                 fontSize: 14, fontFamily: 'inherit',
               }}
             >
-              <option value="">Runner বেছে নিন…</option>
+              <option value="">Choose a Runner…</option>
               {runners.map((r) => (
                 <option key={r.providerUid} value={r.providerUid}>
                   {r.name}{r.locationText ? ` — ${r.locationText}` : ''}
@@ -1154,7 +1459,7 @@ function ErrandForm({ service }) {
       {error && <div style={{ fontSize: 12.5, color: 'var(--danger, #dc2626)', marginBottom: 10 }}>{error}</div>}
 
       <button onClick={submit} disabled={submitting} className="btn btn-primary" style={{ width: '100%' }}>
-        {submitting ? 'পাঠানো হচ্ছে…' : 'রিকোয়েস্ট পাঠান'}
+        {submitting ? 'Sending…' : 'Send request'}
       </button>
     </div>
   );

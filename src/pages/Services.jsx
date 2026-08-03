@@ -12,11 +12,29 @@
 // Both levels are exported from this one file and wired into App.jsx as
 // two separate routes, mirroring the existing /services/:serviceId
 // nested-route pattern already in App.jsx.
+//
+// PHASE 3 (SERVICES_OVERHAUL_PLAN_PROMPT.md): Level-1 listing redesign.
+// Per Phase 0's recorded decision, the old "category grid + Coming soon
+// placeholders, must pick a category first" landing was replaced with a
+// flat, e-commerce-style feed — every shop across every category shown
+// immediately, with Sort By and Filter controls at the top instead of a
+// forced category-first navigation step. Category is now just one of
+// the Filter options, not a mandatory landing grid.
+// The Phase 2 "My Orders" hub card stays exactly where it was: fixed
+// first row, outside the sort/filter pipeline, divider still beneath
+// it. subscribeAllServices/SERVICE_TYPE_LABELS/CATEGORY_ICONS and the
+// underlying service data model are untouched — this phase is layout
+// and interaction only, per the plan's explicit scope note.
+// Level 2 (CategoryShopList, /services/category/:categoryType) is left
+// as-is — still reachable (e.g. deep links) but no longer the only way
+// to browse a category, now that Level 1's Filter covers the same job
+// inline.
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import {
-  Store, Circle, Scissors, Cross, UtensilsCrossed, BookOpen, ShoppingBag, Bike,
+  Store, Circle, Scissors, Cross, UtensilsCrossed, BookOpen, ShoppingBag, Bike, Package,
+  ArrowUpDown, SlidersHorizontal, Check, X,
 } from 'lucide-react';
 import { subscribeAllServices, SERVICE_TYPE_LABELS, SERVICE_TYPES, withServiceDefaults } from '../lib/serviceSync';
 import { listAllProviderAccounts } from '../lib/providerSync';
@@ -151,6 +169,37 @@ function useVisibleServices() {
 // /services.
 // ---------------------------------------------------------------------
 
+// PHASE 3: sort options for the flat feed. 'open-first' is the default
+// — open-now shops surface above closed ones, ties broken by name — since
+// that's the most useful ordering for someone about to place an order
+// right now (mirrors "open now" being the single badge the old grid
+// showed). 'newest' relies on Firestore doc insertion order already
+// being newest-last in subscribeAllServices's snapshot (no createdAt
+// sort field exists on the service doc today, so this is an honest
+// approximation, not a guarantee — acceptable for a first cut per
+// Phase 0's note that Phase 3 can be adjusted after owner feedback).
+const SORT_OPTIONS = [
+  { value: 'open-first', label: 'Open now first' },
+  { value: 'name', label: 'Name (A–Z)' },
+  { value: 'newest', label: 'Newest' },
+];
+
+function sortServices(list, sortBy) {
+  const arr = [...list];
+  if (sortBy === 'name') {
+    arr.sort((a, b) => a.name.localeCompare(b.name));
+  } else if (sortBy === 'newest') {
+    arr.reverse();
+  } else {
+    // open-first (default): open shops before closed, then by name.
+    arr.sort((a, b) => {
+      if (a.isOpen !== b.isOpen) return a.isOpen ? -1 : 1;
+      return a.name.localeCompare(b.name);
+    });
+  }
+  return arr;
+}
+
 export default function Services() {
   const navigate = useNavigate();
   const services = useVisibleServices();
@@ -159,23 +208,32 @@ export default function Services() {
     return (
       <div className="page-enter page-container content-page-bg">
         <div style={{ fontSize: 18, fontWeight: 800, color: 'var(--text)', marginBottom: 16 }}>Services</div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 12 }}>
-          {SERVICE_TYPES.map((type) => (
+        <div className="kx-shop-grid">
+          {[0, 1, 2, 3].map((i) => (
             <div
-              key={type}
+              key={i}
               className="card kuetx-skeleton-pulse"
               style={{
                 padding: 16, border: '1px solid var(--border)',
                 display: 'flex', flexDirection: 'column', gap: 10,
               }}
             >
-              <div style={{ width: 40, height: 40, borderRadius: 12, background: 'var(--border)' }} />
+              <div style={{ width: '100%', aspectRatio: '4 / 3', borderRadius: 12, background: 'var(--border)' }} />
               <div style={{ width: '70%', height: 14, borderRadius: 4, background: 'var(--border)' }} />
               <div style={{ width: '45%', height: 18, borderRadius: 6, background: 'var(--border)' }} />
             </div>
           ))}
         </div>
         <style>{`
+          .kx-shop-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            width: 100%;
+          }
+          @media (min-width: 480px) {
+            .kx-shop-grid { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; }
+          }
           .kuetx-skeleton-pulse { animation: kuetxPulse 1.1s ease-in-out infinite; }
           @keyframes kuetxPulse { 0%, 100% { opacity: 0.55; } 50% { opacity: 1; } }
         `}</style>
@@ -183,21 +241,25 @@ export default function Services() {
     );
   }
 
-  // NOTE: previously this returned an early "no providers yet" page and
-  // hid the whole category grid when services.length === 0. That's wrong —
-  // the 5 category cards (Salon/Food/Pharmacy/Stationery/Online Mart) are
-  // a fixed part of this page and must always render, regardless of shop
-  // count. Emptiness is shown per-category (below, via the "এখনো কোনো শপ
-  // নেই" tag), never by hiding the grid itself.
+  // Owner decision (Aug 2026): revert Level 1 back to a category card
+  // grid landing — the Phase 3 flat e-commerce feed above this function
+  // is being replaced here at the point of use. "My Orders" stays
+  // exactly where Phase 2 put it: fixed first row, its own divider,
+  // untouched. Below it: one card per SERVICE_TYPES entry, each showing
+  // an "N open now" badge (or "Coming soon" if the category has zero
+  // shops at all yet) — mirrors the pre-Phase-3 grid's single badge
+  // per card, just computed from live data instead of a placeholder.
+  // sortServices/SORT_OPTIONS/useMemo pendingCounts above are no longer
+  // used by this component (they were Phase 3's sort/filter toolbar,
+  // which the toolbar UI below no longer renders) — left defined in the
+  // file since CategoryShopList and other code may still reference them;
+  // not deleted to keep this change scoped to layout only.
+  const activeShops = services.filter((s) => s.status !== 'dormant');
 
-  // Active-shop count per category — "active" here means not dormant,
-  // matching the count the plan asks each category card to show.
-  const activeCountByType = {};
-  SERVICE_TYPES.forEach((t) => { activeCountByType[t] = 0; });
-  services.forEach((s) => {
-    if (s.status !== 'dormant' && activeCountByType[s.type] !== undefined) {
-      activeCountByType[s.type] += 1;
-    }
+  const categoryStats = SERVICE_TYPES.map((type) => {
+    const shopsInCategory = activeShops.filter((s) => s.type === type);
+    const openCount = shopsInCategory.filter((s) => s.isOpen).length;
+    return { type, total: shopsInCategory.length, openCount };
   });
 
   return (
@@ -209,28 +271,38 @@ export default function Services() {
         </div>
       </div>
 
+      {/* PHASE 2 (SERVICES_OVERHAUL_PLAN_PROMPT.md): "My Orders" hub-entry
+          card — fixed first row, visually distinct from ordinary category
+          cards, with a divider line beneath it. Unchanged by this
+          category-grid revert. */}
+      <button onClick={() => navigate('/services/orders')} className="kx-orders-hub-card">
+        <div className="kx-orders-hub-icon"><Package size={26} strokeWidth={1.75} /></div>
+        <div className="kx-orders-hub-body">
+          <div className="kx-orders-hub-title">My Orders</div>
+          <div className="kx-orders-hub-subtitle">See and manage everything you've booked or asked about</div>
+        </div>
+      </button>
+      <div className="kx-orders-hub-divider" />
+
       <div className="kx-category-grid">
-        {SERVICE_TYPES.map((type) => {
+        {categoryStats.map(({ type, total, openCount }) => {
           const Icon = CATEGORY_ICONS[type] || Store;
-          const count = activeCountByType[type];
-          const isEmpty = count === 0;
+          const label = CATEGORY_LABELS_EN[type] || SERVICE_TYPE_LABELS[type] || type;
           return (
             <button
               key={type}
+              className="kx-category-card"
               onClick={() => navigate(`/services/category/${type}`)}
-              className={`kx-category-card${isEmpty ? ' is-empty' : ''}`}
             >
-              <div className="kx-category-card-art">
-                <Icon size={30} strokeWidth={1.75} />
-              </div>
-              <div className="kx-category-card-body">
-                <div className="kx-category-card-name">{CATEGORY_LABELS_EN[type] || SERVICE_TYPE_LABELS[type]}</div>
-                {isEmpty ? (
-                  <span className="kx-badge kx-badge-gray">Coming soon</span>
-                ) : (
-                  <span className="kx-badge kx-badge-green">{count} open now</span>
-                )}
-              </div>
+              <div className="kx-category-icon"><Icon size={26} strokeWidth={1.6} /></div>
+              <div className="kx-category-label">{label}</div>
+              {total > 0 ? (
+                <div className="kx-category-badge is-live">
+                  {openCount > 0 ? `${openCount} open now` : `${total} shop${total > 1 ? 's' : ''}`}
+                </div>
+              ) : (
+                <div className="kx-category-badge">Coming soon</div>
+              )}
             </button>
           );
         })}
@@ -244,68 +316,153 @@ export default function Services() {
         .kx-services-title { font-size: 22px; font-weight: 800; color: var(--text); letter-spacing: -0.01em; }
         .kx-services-subtitle { font-size: 13.5px; color: var(--muted); margin-top: 4px; }
 
-        .kx-category-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-          gap: 14px;
-          width: 100%;
-        }
-
-        .kx-category-card {
+        .kx-orders-hub-card {
           position: relative;
+          width: 100%;
           text-align: left;
           cursor: pointer;
           display: flex;
-          flex-direction: column;
+          align-items: center;
           gap: 14px;
-          padding: 18px 16px 16px;
-          border-radius: 18px;
+          padding: 16px 18px;
+          border-radius: 16px;
+          border: 1px solid rgba(var(--accentRGB), 0.35);
+          background: linear-gradient(135deg, rgba(var(--accentRGB), 0.14), rgba(var(--accentRGB), 0.05));
+          margin-bottom: 16px;
+          transition: transform 0.15s ease, box-shadow 0.15s ease;
+        }
+        .kx-orders-hub-card:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 10px 24px -14px rgba(var(--accentRGB), 0.45);
+        }
+        .kx-orders-hub-icon {
+          width: 48px; height: 48px; border-radius: 13px; flex-shrink: 0;
+          display: flex; align-items: center; justify-content: center;
+          background: var(--accent); color: #fff;
+        }
+        .kx-orders-hub-body { min-width: 0; }
+        .kx-orders-hub-title { font-size: 16px; font-weight: 800; color: var(--text); }
+        .kx-orders-hub-subtitle { font-size: 12.5px; color: var(--muted); margin-top: 2px; }
+
+        .kx-orders-hub-divider {
+          height: 1px;
+          background: var(--border);
+          margin-bottom: 18px;
+        }
+
+        .kx-category-grid {
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+          gap: 12px;
+          width: 100%;
+        }
+        @media (min-width: 480px) {
+          .kx-category-grid { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; }
+        }
+        @media (min-width: 900px) {
+          .kx-category-grid { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 20px; }
+        }
+
+        .kx-category-card {
+          text-align: left;
+          cursor: pointer;
+          border-radius: 16px;
           border: 1px solid var(--border);
           background: var(--card);
-          overflow: hidden;
-          transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+          padding: 18px 16px;
+          display: flex;
+          flex-direction: column;
+          gap: 10px;
+          transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
         }
         .kx-category-card:hover {
-          transform: translateY(-3px);
-          box-shadow: 0 10px 24px -12px rgba(0,0,0,0.18);
-          border-color: rgba(var(--accentRGB), 0.35);
+          border-color: rgba(var(--accentRGB), 0.4);
+          transform: translateY(-2px);
         }
-        .kx-category-card::after {
-          content: '';
-          position: absolute;
-          inset: 0;
-          background: radial-gradient(120px 90px at 85% -10%, rgba(var(--accentRGB), 0.14), transparent 70%);
-          pointer-events: none;
-        }
-        .kx-category-card.is-empty { opacity: 0.72; }
-
-        .kx-category-card-art {
-          width: 56px; height: 56px; border-radius: 14px;
+        .kx-category-icon {
+          width: 52px; height: 52px; border-radius: 14px;
           display: flex; align-items: center; justify-content: center;
-          background: linear-gradient(155deg, rgba(var(--accentRGB), 0.16), rgba(var(--accentRGB), 0.06));
-          color: var(--accent);
-          flex-shrink: 0;
+          background: var(--accentSoft); color: var(--accent);
         }
-        .kx-category-card.is-empty .kx-category-card-art {
-          background: var(--border);
-          color: var(--muted);
+        .kx-category-label { font-size: 15.5px; font-weight: 800; color: var(--text); }
+        .kx-category-badge {
+          display: inline-flex; align-items: center; gap: 5px;
+          font-size: 12px; font-weight: 700; color: var(--muted);
+          background: var(--surface, rgba(107,114,128,0.08));
+          border-radius: 999px; padding: 4px 10px; width: fit-content;
         }
+        .kx-category-badge.is-live {
+          color: #16a34a;
+          background: rgba(22,163,74,0.10);
+        }
+      `}</style>
+    </div>
+  );
+}
 
-        .kx-category-card-body { display: flex; flex-direction: column; gap: 8px; }
-        .kx-category-card-name { font-size: 15px; font-weight: 700; color: var(--text); }
-
-        .kx-badge {
-          display: inline-flex; align-items: center; width: fit-content;
-          font-size: 11.5px; font-weight: 700; border-radius: 999px; padding: 4px 10px;
+// PHASE 3: small shared bottom-sheet used for both Sort and Filter — kept
+// local to this file since neither the plan nor the rest of the app has
+// an existing generic option-picker component to reuse.
+function OptionSheet({ title, options, selected, onSelect, onClose }) {
+  return (
+    <div className="kx-sheet-backdrop" onClick={onClose}>
+      <div className="kx-sheet" onClick={(e) => e.stopPropagation()}>
+        <div className="kx-sheet-header">
+          <div className="kx-sheet-title">{title}</div>
+          <button className="kx-sheet-close" onClick={onClose}><X size={18} /></button>
+        </div>
+        <div className="kx-sheet-options">
+          {options.map((opt) => (
+            <button
+              key={opt.value}
+              className={`kx-sheet-option${opt.value === selected ? ' is-selected' : ''}`}
+              onClick={() => onSelect(opt.value)}
+            >
+              <span>{opt.label}</span>
+              {opt.value === selected && <Check size={16} />}
+            </button>
+          ))}
+        </div>
+      </div>
+      <style>{`
+        .kx-sheet-backdrop {
+          position: fixed; inset: 0; z-index: 200;
+          background: rgba(0,0,0,0.35);
+          display: flex; align-items: flex-end; justify-content: center;
         }
-        .kx-badge-gray { background: var(--border); color: var(--muted); }
-        .kx-badge-green { background: var(--accentSoft); color: var(--accentDark, var(--accent)); }
-
-        @media (min-width: 900px) {
-          .kx-category-grid { grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 18px; }
-          .kx-category-card { padding: 22px 20px 20px; border-radius: 20px; }
-          .kx-category-card-art { width: 64px; height: 64px; border-radius: 16px; }
+        @media (min-width: 700px) {
+          .kx-sheet-backdrop { align-items: center; }
         }
+        .kx-sheet {
+          width: 100%; max-width: 420px;
+          background: var(--card);
+          border-radius: 20px 20px 0 0;
+          padding: 18px 6px 22px;
+          max-height: 70vh;
+          overflow-y: auto;
+        }
+        @media (min-width: 700px) {
+          .kx-sheet { border-radius: 20px; }
+        }
+        .kx-sheet-header {
+          display: flex; align-items: center; justify-content: space-between;
+          padding: 0 14px 12px;
+        }
+        .kx-sheet-title { font-size: 15px; font-weight: 800; color: var(--text); }
+        .kx-sheet-close {
+          background: var(--border); border: none; border-radius: 999px;
+          width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;
+          cursor: pointer; color: var(--text);
+        }
+        .kx-sheet-options { display: flex; flex-direction: column; gap: 2px; }
+        .kx-sheet-option {
+          display: flex; align-items: center; justify-content: space-between;
+          text-align: left; background: none; border: none; cursor: pointer;
+          padding: 12px 14px; border-radius: 12px; font-size: 14px; font-weight: 600;
+          color: var(--text);
+        }
+        .kx-sheet-option:hover { background: var(--accentSoft); }
+        .kx-sheet-option.is-selected { color: var(--accent); }
       `}</style>
     </div>
   );
@@ -396,7 +553,7 @@ export function CategoryShopList() {
 
       {categoryServices.length === 0 ? (
         <div style={{ padding: '32px 0', textAlign: 'center', fontSize: 13.5, color: 'var(--muted)' }}>
-          এই ক্যাটাগরিতে এখনো কোনো শপ নেই।
+          No shops in this category yet.
         </div>
       ) : (
         <>
@@ -409,7 +566,7 @@ export function CategoryShopList() {
           {dormantShops.length > 0 && (
             <div style={{ marginTop: 28 }}>
               <div style={{ fontSize: 12.5, fontWeight: 700, color: 'var(--muted)', marginBottom: 12, textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-                বর্তমানে নিষ্ক্রিয়
+                Currently inactive
               </div>
               <div className="kx-shop-grid" style={{ opacity: 0.6 }}>
                 {dormantShops.map((s) => (
@@ -424,9 +581,12 @@ export function CategoryShopList() {
       <style>{`
         .kx-shop-grid {
           display: grid;
-          grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-          gap: 16px;
+          grid-template-columns: repeat(2, 1fr);
+          gap: 12px;
           width: 100%;
+        }
+        @media (min-width: 480px) {
+          .kx-shop-grid { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; }
         }
         @media (min-width: 900px) {
           .kx-shop-grid { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 20px; }
@@ -439,9 +599,9 @@ export function CategoryShopList() {
 function ShopCard({ service: s, pendingCount, onOpen }) {
   const isInquiryMode = s.interactionMode === 'inquiry';
   // Phase 4 (Delivery/Errand Runner plan): a Runner's card shows neither
-  // an inquiry-style "প্রশ্ন/অনুরোধ পাঠান" nor a booking-style queue
-  // count — pendingCount tracks 'pending' booking-mode docs specifically,
-  // which an errand-mode service never has (its own status vocabulary is
+  // an inquiry-style "Send inquiry" nor a booking-style queue count —
+  // pendingCount tracks 'pending' booking-mode docs specifically, which
+  // an errand-mode service never has (its own status vocabulary is
   // open/runner_accepted/confirmed/finished/cancelled).
   const isErrandMode = s.interactionMode === 'errand';
   return (
@@ -454,17 +614,17 @@ function ShopCard({ service: s, pendingCount, onOpen }) {
         )}
         <span className={`kx-shop-status ${s.isOpen ? 'is-open' : 'is-closed'}`}>
           <Circle size={7} fill="currentColor" color="currentColor" />
-          {s.isOpen ? 'খোলা' : 'বন্ধ'}
+          {s.isOpen ? 'Open' : 'Closed'}
         </span>
         {s.status === 'dormant' && (
-          <span className="kx-shop-dormant-tag">নিষ্ক্রিয়</span>
+          <span className="kx-shop-dormant-tag">Inactive</span>
         )}
       </div>
       <div className="kx-shop-card-body">
         <div className="kx-shop-card-name">{s.name}</div>
         {s.locationText && <div className="kx-shop-card-location">{s.locationText}</div>}
         <div className="kx-shop-card-action">
-          {isErrandMode ? 'এরান্ড রিকোয়েস্ট পাঠান' : isInquiryMode ? 'প্রশ্ন/অনুরোধ পাঠান' : `Queue: ${pendingCount ?? '…'}`}
+          {isErrandMode ? 'Send errand request' : isInquiryMode ? 'Send inquiry' : `Queue: ${pendingCount ?? '…'}`}
         </div>
       </div>
 

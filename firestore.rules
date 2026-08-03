@@ -715,37 +715,19 @@ service cloud.firestore {
       //
       // Readable by: the owning provider themselves (so their own
       // dashboard can show what they submitted), the Founder (isAdmin —
-      // needed for manual verification contact, §4), or a student who
-      // has at least one booking with status 'confirmed' or 'done' on
-      // ANY of this provider's services (§10: "once confirmed"; 'done'
-      // is included since a completed booking's student legitimately
-      // still has standing to have had the number, e.g. for a follow-up).
-      // Checking this requires knowing which serviceIds belong to this
-      // provider, which is why the check reads providers/{uid} itself
-      // (serviceIds) then queries nothing further — a get() per
-      // serviceId list entry isn't needed because hasConfirmedBookingWithProvider
-      // below only needs to prove ONE match exists, not enumerate.
-      //
-      // NOTE: a full "does this student have a confirmed booking with
-      // ANY service under this provider" check would ideally use a
-      // collectionGroup query inside the rule, but Firestore rules can't
-      // run arbitrary queries — only exists()/get() on a known path. So
-      // this is scoped to a single serviceId, passed as a query param
-      // equivalent: the client reads providers/{uid}/contact/phone only
-      // from ServiceDetail.jsx, which already knows serviceId from the
-      // route, and the rule below checks that ONE specific service's
-      // bookings for a confirmed/done match — not every service the
-      // provider might own. (In Phase 2's data model each provider has
-      // exactly one service in practice, per providerSync.js's Phase 1
-      // comment, so this isn't a real limitation yet; flagging it for
-      // whoever adds true multi-service providers later.)
+      // needed for manual verification contact, §4), or ANY signed-in
+      // student/faculty (owner decision, Aug 2026: the shop's contact
+      // number should always be visible on the service detail page —
+      // no need to book/confirm first — so students can just call/message
+      // before deciding to book). Previously gated behind a confirmed
+      // booking via hasConfirmedBookingWithProvider; that gate is no
+      // longer applied here, but the helper function itself is left in
+      // place below since it's still exact, self-contained, and may be
+      // useful again if a future feature needs the "has this student
+      // booked with this provider" check for something else.
       // -----------------------------------------------------------
       match /contact/phone {
-        allow read: if isSignedIn() && (
-          request.auth.uid == uid
-          || isAdmin()
-          || hasConfirmedBookingWithProvider(uid)
-        );
+        allow read: if isSignedIn();
         // Write: the owning provider only — same standing that used to
         // write `phone` on the parent doc (at create, or re-submit after
         // rejection). Founder never writes this, only reads it.

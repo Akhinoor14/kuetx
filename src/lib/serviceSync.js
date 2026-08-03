@@ -23,7 +23,7 @@
 // booking document with a fresh requestedAt, so queue order stays correct.
 
 import {
-  collection, doc, getDoc, getDocs, addDoc, updateDoc, deleteDoc, onSnapshot,
+  collection, collectionGroup, doc, getDoc, getDocs, addDoc, updateDoc, deleteDoc, onSnapshot,
   query, where, orderBy, serverTimestamp, runTransaction, writeBatch,
 } from 'firebase/firestore';
 import { db, auth } from './firebase';
@@ -723,6 +723,134 @@ export function subscribeMyBookingsForService(serviceId, studentUid, callback) {
       callback([]);
     },
   );
+}
+
+/**
+ * PHASE 1 (SERVICES_OVERHAUL_PLAN_PROMPT.md) — Orders Hub data layer.
+ *
+ * Cross-service equivalent of subscribeMyBookingsForService: every
+ * booking/inquiry/errand-request a given uid has ever made, across
+ * EVERY shop, not just one. Nothing like this existed before — every
+ * prior subscribe function here (bookings, inquiries, errands) was
+ * scoped to a single serviceId, so a student/faculty user had no way
+ * to see "all my stuff" in one place without opening each shop
+ * individually. The Orders Hub page is the first consumer.
+ *
+ * Booking, inquiry, AND errand-request records all live in the SAME
+ * subcollection shape (services/{serviceId}/bookings/{bookingId}) —
+ * confirmed against createBooking/createErrandRequest above — so one
+ * collectionGroup('bookings') query covers all three; the different
+ * "shapes" are just different field sets on the same collection, not
+ * separate collections. The only wrinkle: booking/inquiry docs key off
+ * `studentUid`, errand-request docs key off `requesterUid` (see
+ * createErrandRequest above) — Firestore can't OR two different field
+ * names in one query, so this runs two collectionGroup listeners and
+ * merges client-side, same pattern subscribeOpenErrandRequestsForRunner
+ * already uses for its own two-listener merge.
+ *
+ * Each returned record is enriched with { serviceId, serviceName,
+ * serviceType, providerUid } pulled from a one-shot services snapshot,
+ * because raw booking docs don't store the shop's name — the Orders
+ * Hub needs that to render without an extra per-item fetch. serviceType
+ * here maps from each service doc's own `type` field (its category,
+ * e.g. 'salon'/'hotel'/'errand' — see createService above) — renamed
+ * on the enriched record to avoid colliding with a booking doc's own
+ * unrelated fields.
+ *
+ * Requires COLLECTION_GROUP-scope single-field indexing enabled for
+ * 'bookings'.studentUid and 'bookings'.requesterUid — added as
+ * fieldOverrides entries in firestore.indexes.json (both fields are
+ * only auto-indexed at COLLECTION scope by default; COLLECTION_GROUP
+ * scope needs an explicit override, same pattern already used for
+ * joinRequests.status there). Deploy indexes before relying on this in
+ * production — a missing override surfaces as a permission/
+ * failed-precondition error with a console link to auto-create it.
+ */
+export function subscribeAllMyBookings(uid, callback) {
+  if (!uid) {
+    callback([]);
+    return () => {};
+  }
+
+  let byStudentUid = null;
+  let byRequesterUid = null;
+  let serviceMetaById = new Map();
+  let settled = false;
+
+  const emit = () => {
+    if (byStudentUid === null || byRequesterUid === null) return; // wait for both listeners' first emission
+    const merged = [...byStudentUid, ...byRequesterUid]
+      .map((rec) => {
+        const meta = serviceMetaById.get(rec.serviceId) || {};
+        return {
+          ...rec,
+          serviceName: meta.name || '',
+          serviceType: meta.type || null,
+          providerUid: meta.providerUid || null,
+        };
+      })
+      // newest request first, across every shop — requestedAt is a
+      // Firestore Timestamp on every doc shape (booking/inquiry/errand
+      // all set it via serverTimestamp() at creation, see createBooking/
+      // createErrandRequest above), so .toMillis() sorts safely; a
+      // brand new doc can briefly read back with a null serverTimestamp
+      // before it resolves, so those sort first as "just happened"
+      // rather than crashing the sort.
+      .sort((a, b) => (b.requestedAt?.toMillis?.() || Infinity) - (a.requestedAt?.toMillis?.() || Infinity));
+    callback(merged);
+  };
+
+  const refreshServiceMeta = async () => {
+    try {
+      const snap = await getDocs(servicesCollectionRef());
+      serviceMetaById = new Map(snap.docs.map((d) => [d.id, d.data()]));
+    } catch (err) {
+      console.error('[serviceSync] subscribeAllMyBookings service-meta refresh error:', err);
+      // keep whatever meta we already had rather than blanking names out
+    }
+    emit();
+  };
+
+  const unsubStudent = onSnapshot(
+    query(collectionGroup(db, 'bookings'), where('studentUid', '==', uid)),
+    (snap) => {
+      byStudentUid = snap.docs.map((d) => ({
+        id: d.id,
+        serviceId: d.ref.parent.parent.id,
+        ...d.data(),
+      }));
+      refreshServiceMeta();
+    },
+    (err) => {
+      console.error('[serviceSync] subscribeAllMyBookings (studentUid) error:', err);
+      byStudentUid = [];
+      emit();
+    },
+  );
+
+  const unsubRequester = onSnapshot(
+    query(collectionGroup(db, 'bookings'), where('requesterUid', '==', uid)),
+    (snap) => {
+      byRequesterUid = snap.docs.map((d) => ({
+        id: d.id,
+        serviceId: d.ref.parent.parent.id,
+        ...d.data(),
+      }));
+      refreshServiceMeta();
+    },
+    (err) => {
+      console.error('[serviceSync] subscribeAllMyBookings (requesterUid) error:', err);
+      byRequesterUid = [];
+      emit();
+    },
+  );
+
+  settled = true;
+  return () => {
+    if (!settled) return;
+    unsubStudent();
+    unsubRequester();
+  };
 }
 
 /**

@@ -89,6 +89,7 @@ const Clubs = lazy(() => import('./pages/Clubs'));
 const Services = lazy(() => import('./pages/Services'));
 const CategoryShopList = lazy(() => import('./pages/Services').then((m) => ({ default: m.CategoryShopList })));
 const ServiceDetail = lazy(() => import('./pages/ServiceDetail'));
+const ServiceOrdersHub = lazy(() => import('./pages/ServiceOrdersHub'));
 const ProviderDashboardPage = lazy(() => import('./pages/provider/ProviderDashboard'));
 const ProviderMyShopHubPage = lazy(() => import('./pages/provider/ProviderMyShopHub'));
 const ProviderOfferingsPagePage = lazy(() => import('./pages/provider/ProviderOfferingsPage'));
@@ -271,6 +272,13 @@ function Layout({ authState, onboardingActive }) {
                 turns out to be more confusing than useful in practice. */}
             <Route path="/services" element={<Services />} />
             <Route path="/services/category/:categoryType" element={<CategoryShopList />} />
+            {/* PHASE 2 (SERVICES_OVERHAUL_PLAN_PROMPT.md): "My Orders" hub —
+                a literal path segment, so React Router's specificity-based
+                matching resolves this before the /services/:serviceId
+                param route below regardless of declaration order; placed
+                here anyway, right after the other literal /services/*
+                routes, for readability. */}
+            <Route path="/services/orders" element={<ServiceOrdersHub />} />
             <Route path="/services/:serviceId" element={<ServiceDetail />} />
             <Route path="/projects" element={<RequireStudentMode><Projects /></RequireStudentMode>} />
             <Route path="/tours" element={<RequireStudentMode><Tours /></RequireStudentMode>} />
