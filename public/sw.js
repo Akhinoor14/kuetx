@@ -45,12 +45,17 @@ const isSameOriginAsset = (request) => {
   );
 };
 
-// Install — cache static assets, then wait (skipWaiting called after user confirms)
+// Install — cache static assets, then wait. skipWaiting is NOT called
+// here — index.html's registration script decides when to send
+// SKIP_WAITING (see the comment there): as soon as this SW finishes
+// installing, automatically, no manual "update available, click to
+// refresh" UI. Keeping the trigger in index.html (not here) means the
+// activation policy lives in one place instead of being split across
+// this file and app code.
 self.addEventListener('install', (e) => {
   e.waitUntil(
     caches.open(CACHE_NAME).then(cache => cache.addAll(STATIC_ASSETS))
   );
-  // Don't skipWaiting here — wait for user confirmation via message
 });
 
 // Activate — clean old APP-SHELL caches only. QB_CACHE_NAME is deliberately

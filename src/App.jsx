@@ -13,6 +13,7 @@ import GlobalToasts from './components/GlobalToasts';
 import GlobalDialog from './components/GlobalDialog';
 import { alertDialog } from './lib/dialog';
 import FloatingUploadBar from './components/FloatingUploadBar';
+import FloatingInstallButton from './components/FloatingInstallButton';
 import NoticeToast from './components/NoticeToast';
 import ProfileCompleteReminder from './components/ProfileCompleteReminder';
 import AuthModal from './components/AuthModal';
@@ -435,6 +436,14 @@ function Layout({ authState, onboardingActive }) {
         <GlobalToasts />
         <GlobalDialog />
         <FloatingUploadBar />
+        {/* Global, role-agnostic — every signed-in role sees this the
+            same way, no per-role wiring (see FloatingInstallButton.jsx).
+            Skipped on the fullscreen question-bank viewer, same as
+            BottomNav/Footer above, since that route has no chrome at
+            all. Renders null internally unless the browser has actually
+            offered an install path (or this is iOS Safari), so it's
+            invisible everywhere else without needing a condition here. */}
+        {!isQuestionBankViewer && <FloatingInstallButton />}
         {!onboardingActive && <NoticeToast />}
         <ClassJoinIntro />
         <NoCRBanner />

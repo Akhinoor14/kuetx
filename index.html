@@ -115,12 +115,67 @@
     <script type="module" src="/src/main.jsx"></script>
     <!-- FullCalendar removed: using local simple calendar component instead -->
     <script>
+      // BUGFIX (slow-start-after-deploy): sw.js intentionally never calls
+      // self.skipWaiting() on its own — a freshly-installed SW used to sit
+      // in "waiting" forever with nothing here ever telling it to
+      // activate, so the OLD service worker kept serving the OLD cached
+      // index.html/app-shell on every load after a real deploy. The first
+      // sign anyone actually got that a new version existed was a stale
+      // JS chunk 404'ing mid-session (new deploy = new hashed filenames),
+      // caught reactively by ErrorBoundary.jsx's ChunkLoadError handler,
+      // which then force-reloaded the page — i.e. the app rendered once
+      // in a half-broken state, THEN reloaded a second time to actually
+      // work. That's the "app takes a while to start after an update"
+      // symptom: two full loads instead of one.
+      //
+      // Fix: the moment registration.waiting exists (a new SW is
+      // installed and sitting idle) — whether it's already there at
+      // register time, or shows up later via 'updatefound' — tell it to
+      // skipWaiting immediately. controllerchange then fires exactly
+      // once, and THAT is the only point this ever reloads: at most once,
+      // right when the new SW actually takes control, never twice, and
+      // never dependent on a chunk failing first. reloading flag guards
+      // against a double controllerchange firing two reloads back to back.
       if ('serviceWorker' in navigator &&
           window.location.hostname !== 'localhost' &&
           window.location.hostname !== '127.0.0.1' &&
           window.location.hostname !== '::1') {
+        let reloading = false;
+        const activateWaiting = (reg) => {
+          if (reg && reg.waiting) {
+            reg.waiting.postMessage({ type: 'SKIP_WAITING' });
+          }
+        };
+
+        navigator.serviceWorker.addEventListener('controllerchange', () => {
+          if (reloading) return;
+          reloading = true;
+          window.location.reload();
+        });
+
         window.addEventListener('load', () => {
-          navigator.serviceWorker.register('/sw.js').catch(() => {});
+          navigator.serviceWorker.register('/sw.js').then((reg) => {
+            // Case 1: a new SW was already installed and waiting from a
+            // PREVIOUS visit (e.g. tab was open when the deploy landed,
+            // browser was closed before it could activate) — catch that
+            // immediately on this fresh load instead of waiting for the
+            // user to notice anything broken.
+            activateWaiting(reg);
+
+            // Case 2: a new SW starts installing THIS visit (deploy
+            // happened while already on the page, or first-ever
+            // registration on a slow connection) — as soon as it finishes
+            // installing, activate it right away too.
+            reg.addEventListener('updatefound', () => {
+              const newWorker = reg.installing;
+              if (!newWorker) return;
+              newWorker.addEventListener('statechange', () => {
+                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                  activateWaiting(reg);
+                }
+              });
+            });
+          }).catch(() => {});
         });
       }
     </script>
