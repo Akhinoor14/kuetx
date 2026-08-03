@@ -98,10 +98,21 @@ export function useInstallPrompt() {
       e.preventDefault();
       setDeferredPrompt(e);
       setStatus('installable');
+      // BUGFIX (install button vanishing after an SW update): the SW's
+      // forced reload on controllerchange (see index.html) used to fire
+      // at any moment, including right after beforeinstallprompt landed —
+      // wiping this React state via a full page reload before the user
+      // ever saw/tapped the button. Chrome doesn't reliably refire
+      // beforeinstallprompt on the very next load (session/engagement
+      // heuristic), so the button would then just stay hidden. This flag
+      // tells index.html's reload logic to hold off while a real,
+      // not-yet-acted-on prompt is live.
+      try { window.__kxInstallPromptPending = true; } catch {}
     };
     const onInstalled = () => {
       setDeferredPrompt(null);
       setStatus('installed');
+      try { window.__kxInstallPromptPending = false; } catch {}
     };
 
     window.addEventListener('beforeinstallprompt', onBeforeInstall);
@@ -130,6 +141,7 @@ export function useInstallPrompt() {
         dismissInstallPrompt();
         setStatus('unavailable');
       }
+      try { window.__kxInstallPromptPending = false; } catch {}
     } catch {
       // userChoice can reject if the prompt was interrupted — no-op,
       // button just stays in whatever state it was.

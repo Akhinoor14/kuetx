@@ -279,28 +279,30 @@ export function ServiceCategoryGrid({ showHeader = true }) {
         </div>
       )}
 
-      <div className="kx-category-grid">
-        {categoryStats.map(({ type, total, openCount }) => {
-          const Icon = CATEGORY_ICONS[type] || Store;
-          const label = CATEGORY_LABELS_EN[type] || SERVICE_TYPE_LABELS[type] || type;
-          return (
-            <button
-              key={type}
-              className="kx-category-card"
-              onClick={() => navigate(`/services/category/${type}`)}
-            >
-              <div className="kx-category-icon"><Icon size={26} strokeWidth={1.6} /></div>
-              <div className="kx-category-label">{label}</div>
-              {total > 0 ? (
-                <div className="kx-category-badge is-live">
-                  {openCount > 0 ? `${openCount} open now` : `${total} shop${total > 1 ? 's' : ''}`}
-                </div>
-              ) : (
-                <div className="kx-category-badge">Coming soon</div>
-              )}
-            </button>
-          );
-        })}
+      <div className="kx-services-section">
+        <div className="kx-category-grid">
+          {categoryStats.map(({ type, total, openCount }) => {
+            const Icon = CATEGORY_ICONS[type] || Store;
+            const label = CATEGORY_LABELS_EN[type] || SERVICE_TYPE_LABELS[type] || type;
+            return (
+              <button
+                key={type}
+                className="kx-category-card"
+                onClick={() => navigate(`/services/category/${type}`)}
+              >
+                <div className="kx-category-icon"><Icon size={26} strokeWidth={1.6} /></div>
+                <div className="kx-category-label">{label}</div>
+                {total > 0 ? (
+                  <div className="kx-category-badge is-live">
+                    {openCount > 0 ? `${openCount} open now` : `${total} shop${total > 1 ? 's' : ''}`}
+                  </div>
+                ) : (
+                  <div className="kx-category-badge">Coming soon</div>
+                )}
+              </button>
+            );
+          })}
+        </div>
       </div>
 
       <style>{`
@@ -310,6 +312,18 @@ export function ServiceCategoryGrid({ showHeader = true }) {
         }
         .kx-services-title { font-size: 22px; font-weight: 800; color: var(--text); letter-spacing: -0.01em; }
         .kx-services-subtitle { font-size: 13.5px; color: var(--muted); margin-top: 4px; }
+
+        /* Whole-section wrapper: sets Services visually apart from
+           whatever section sits above it on a shared hub page (e.g.
+           Campus Life's plain icon-grid) — soft accent-tinted
+           background + rounded border, like a "shelf" the category
+           cards sit on. */
+        .kx-services-section {
+          background: color-mix(in srgb, var(--accent) 5%, var(--surface, var(--card)));
+          border: 1px solid color-mix(in srgb, var(--accent) 12%, var(--border));
+          border-radius: 22px;
+          padding: 16px;
+        }
 
         .kx-category-grid {
           display: grid;
@@ -329,6 +343,9 @@ export function ServiceCategoryGrid({ showHeader = true }) {
           cursor: pointer;
           border-radius: 16px;
           border: 1px solid var(--border);
+          /* Distinct from the section wrapper's tinted background —
+             cards stay the normal card surface so they read as
+             "items sitting on the shelf", not blended into it. */
           background: var(--card);
           padding: 18px 16px;
           display: flex;
@@ -338,6 +355,7 @@ export function ServiceCategoryGrid({ showHeader = true }) {
         }
         .kx-category-card:hover {
           border-color: rgba(var(--accentRGB), 0.4);
+          box-shadow: 0 8px 20px -6px rgba(var(--accentRGB), 0.25);
           transform: translateY(-2px);
         }
         .kx-category-icon {

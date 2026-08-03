@@ -149,8 +149,24 @@
 
         navigator.serviceWorker.addEventListener('controllerchange', () => {
           if (reloading) return;
-          reloading = true;
-          window.location.reload();
+          // BUGFIX (install button disappearing after an SW update): if a
+          // beforeinstallprompt event is currently sitting captured in
+          // React state (see useInstallPrompt.js), reloading right now
+          // would throw it away — and Chrome doesn't reliably refire it
+          // on the next load, so the Install button would just vanish
+          // for good. Wait for the person to act on it (or dismiss it)
+          // before taking the update; re-check on a short interval
+          // instead of reloading blind.
+          const tryReload = () => {
+            if (window.__kxInstallPromptPending) {
+              setTimeout(tryReload, 1000);
+              return;
+            }
+            if (reloading) return;
+            reloading = true;
+            window.location.reload();
+          };
+          tryReload();
         });
 
         window.addEventListener('load', () => {
