@@ -1,7 +1,7 @@
 import { useState, useMemo, useEffect, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Modal from '../components/Modal';
-import { ChevronLeft, ChevronRight, AlertTriangle, CheckCircle, TrendingUp, Users, BookOpen, Award, CalendarDays, X, PartyPopper, ClipboardX } from 'lucide-react';
+import { ChevronLeft, ChevronRight, AlertTriangle, CheckCircle, TrendingUp, Users, BookOpen, Award, CalendarDays, X, PartyPopper, ClipboardX, RefreshCw, ChevronDown, ChevronUp, RotateCcw } from 'lucide-react';
 import {
   store, getAttendanceMarks, MIN_ATTENDANCE_PERCENT, SCHOLARSHIP_ATTENDANCE_PCT,
   getProfile, getRoutinePreviewDate, isRoutineHoliday, parseTimeToMinutes
@@ -149,12 +149,15 @@ function resolveTeachersForDate(schedule, courseId, date) {
     const currentTeacher = String(s.teacherName || '').trim();
     const knownPool = [...new Set([...seenTeachers, currentTeacher].filter(Boolean))];
     const isRotating = knownPool.length > 1;
-    const override = isRotating ? getRotationOverride(courseId, s.day, s.slot, date) : '';
+    // Manual per-date override (rotating-slot pick OR a Switch-teacher
+    // choice from the Daily Log modal) — read regardless of isRotating so
+    // Switch works uniformly for every course, not just rotating slots.
+    const override = getRotationOverride(courseId, s.day, s.slot, date);
     return {
       slot: s.slot, day: s.day, key,
       isRotating,
       pool: knownPool,
-      resolvedTeacher: isRotating ? override : currentTeacher,
+      resolvedTeacher: override || currentTeacher,
       needsPick: isRotating && !override,
     };
   });
@@ -576,6 +579,22 @@ function DailyLog({ courses, logs, setLogs, schedule, settings, onEditTeachers, 
     store.set('attLogs', updated);
   }, [dayLog, logs, date, setLogs]);
 
+  // Moves a marked status (if any) from the old-teacher key to the
+  // new-teacher key for this date, so switching teachers never orphans an
+  // already-marked Present/Absent. No-op if nothing was marked yet.
+  const moveAttendanceStatus = useCallback((courseId, oldTeacher, newTeacher) => {
+    if (oldTeacher === newTeacher) return;
+    const oldKey = `${courseId}_${oldTeacher || ''}`;
+    const newKey = `${courseId}_${newTeacher || ''}`;
+    const cur = dayLog[oldKey];
+    if (cur === undefined) return;
+    const nextDayLog = { ...dayLog, [newKey]: cur };
+    delete nextDayLog[oldKey];
+    const updated = { ...logs, [date]: nextDayLog };
+    setLogs(updated);
+    store.set('attLogs', updated);
+  }, [dayLog, logs, date, setLogs]);
+
   const holidayLabel = (d) => {
     const labels = settings?.holidayLabels || {};
     const types = settings?.holidayTypes || {};
@@ -601,6 +620,23 @@ function DailyLog({ courses, logs, setLogs, schedule, settings, onEditTeachers, 
     setRotationOverride(courseId, day, slot, date, teacherName);
     setRotationTick(t => t + 1);
   }, [date]);
+
+  // Switch-teacher: generalizes the rotation-override mechanism to every
+  // course (not just rotating slots). Overrides only this specific date —
+  // the routine's default teacher for the slot is never touched. If the
+  // old teacher already had a status marked for this date, it's moved to
+  // the new teacher's key so nothing is orphaned.
+  const switchTeacher = useCallback((courseId, day, slot, oldTeacher, newTeacherName) => {
+    moveAttendanceStatus(courseId, oldTeacher, newTeacherName);
+    setRotationOverride(courseId, day, slot, date, newTeacherName);
+    setRotationTick(t => t + 1);
+  }, [date, moveAttendanceStatus]);
+
+  // Which teacher-row card has its modal open: { courseId, teacher }.
+  // Always re-derived from live cardData below (never a stale snapshot),
+  // so background schedule/override recalculation while the modal is open
+  // can't leave it showing outdated teacher/status info.
+  const [openCard, setOpenCard] = useState(null);
 
   const cardData = useMemo(() => {
     if (isHoliday) return [];
@@ -764,46 +800,189 @@ function DailyLog({ courses, logs, setLogs, schedule, settings, onEditTeachers, 
                 </div>
               ) : !anyNeedsPick && (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-                  {teacherRows.map(({ teacher, key, status }) => (
-                    <div key={key} style={{ background: dark ? 'rgba(0,0,0,0.22)' : 'rgba(255,255,255,0.65)', borderRadius: 9, padding: '8px 10px', border: dark ? '1px solid rgba(255,255,255,0.07)' : '1px solid rgba(255,255,255,0.80)' }}>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 8, marginBottom: 6 }}>
-                        <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--muted)', display: 'flex', alignItems: 'center', gap: 3 }}>
-                          <Users size={9} /> {teacher || 'Unknown teacher'}
-                        </div>
-                        {status && (
-                          <div style={{ fontSize: 10, fontWeight: 700, padding: '2px 7px', borderRadius: 20, background: status === 'present' ? 'rgba(16,185,129,0.12)' : 'rgba(239,68,68,0.12)', color: status === 'present' ? '#10b981' : '#ef4444' }}>
-                            {status === 'present' ? '✓ Present' : '✗ Absent'}
+                  {teacherRows.map(({ teacher, key, status }) => {
+                    // The resolved slot entry backing this teacher row (for Switch).
+                    // A row may not correspond to a single slot 1:1 in edge cases
+                    // (e.g. teacher list came from settings fallback, no slot on
+                    // this weekday) — Switch is simply hidden then.
+                    const slotEntry = resolved.find(r => r.resolvedTeacher === teacher);
+                    const defaultTeachers = getTeachersForCourse(settings, schedule, course.id);
+                    return (
+                      <button
+                        key={key}
+                        onClick={() => setOpenCard({ courseId: course.id, teacher })}
+                        style={{
+                          background: dark ? 'rgba(0,0,0,0.22)' : 'rgba(255,255,255,0.65)', borderRadius: 9, padding: '8px 10px',
+                          border: dark ? '1px solid rgba(255,255,255,0.07)' : '1px solid rgba(255,255,255,0.80)',
+                          textAlign: 'left', cursor: 'pointer', width: '100%', display: 'block',
+                          font: 'inherit', color: 'inherit', WebkitTapHighlightColor: 'transparent',
+                        }}
+                      >
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 8 }}>
+                          <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--muted)', display: 'flex', alignItems: 'center', gap: 3, minWidth: 0 }}>
+                            <Users size={9} style={{ flexShrink: 0 }} />
+                            <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{teacher || 'Unknown teacher'}</span>
+                            {slotEntry && defaultTeachers.length > 1 && (
+                              <span style={{ fontSize: 9, color: 'var(--accent)', fontWeight: 700, flexShrink: 0 }}>· tap to mark</span>
+                            )}
                           </div>
-                        )}
-                      </div>
-                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 6 }}>
-                        {[
-                          { val: 'present', label: 'Present', icon: '✓', col: '#10b981' },
-                          { val: 'absent',  label: 'Absent',  icon: '✗', col: '#ef4444' },
-                        ].map(opt => {
-                          const active = status === opt.val;
-                          return (
-                            <button key={opt.val} onClick={() => mark(course.id, teacher, opt.val)} style={{
-                              padding: '8px 6px', borderRadius: 8, cursor: 'pointer', fontWeight: 700, fontSize: 12,
-                              background: active ? opt.col : dark ? 'rgba(255,255,255,0.07)' : 'rgba(255,255,255,0.80)',
-                              color: active ? 'white' : 'var(--muted)',
-                              border: `2px solid ${active ? opt.col : dark ? 'rgba(255,255,255,0.10)' : 'rgba(0,0,0,0.07)'}`,
-                              transition: 'all 0.14s', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4,
-                              WebkitTapHighlightColor: 'transparent',
-                            }}>
-                              {opt.icon} {opt.label}
-                            </button>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  ))}
+                          {status ? (
+                            <div style={{ fontSize: 10, fontWeight: 700, padding: '2px 7px', borderRadius: 20, background: status === 'present' ? 'rgba(16,185,129,0.12)' : 'rgba(239,68,68,0.12)', color: status === 'present' ? '#10b981' : '#ef4444', flexShrink: 0 }}>
+                              {status === 'present' ? '✓ Present' : '✗ Absent'}
+                            </div>
+                          ) : (
+                            <div style={{ fontSize: 10, fontWeight: 700, padding: '2px 7px', borderRadius: 20, background: dark ? 'rgba(255,255,255,0.07)' : 'rgba(0,0,0,0.05)', color: 'var(--muted)', flexShrink: 0 }}>
+                              Not marked
+                            </div>
+                          )}
+                        </div>
+                      </button>
+                    );
+                  })}
                 </div>
               )}
             </div>
           ))}
         </div>
       )}
+
+      {/* Present/Absent + Switch-teacher modal — reads live cardData by
+          (courseId, teacher) on every render rather than a snapshot taken
+          when opened, so background schedule/override recalculation while
+          it's open can never leave it (or the card behind it) stale. */}
+      {openCard && (() => {
+        const cd = cardData.find(c => c.course.id === openCard.courseId);
+        if (!cd) { setOpenCard(null); return null; }
+        const row = cd.teacherRows.find(r => r.teacher === openCard.teacher);
+        if (!row) { setOpenCard(null); return null; }
+        const slotEntry = cd.resolved.find(r => r.resolvedTeacher === row.teacher);
+        const defaultTeachers = getTeachersForCourse(settings, schedule, cd.course.id);
+        const switchOptions = defaultTeachers.filter(t => t !== row.teacher);
+        return (
+          <Modal onClose={() => setOpenCard(null)} contentStyle={{ width: 'min(calc(100vw - 24px), 360px)', maxWidth: '100%', padding: 16, background: 'var(--bg)' }}>
+            <div className="card" style={{ background: 'transparent', width: '100%' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 8, marginBottom: 4 }}>
+                <div style={{ fontWeight: 800, fontSize: 14, lineHeight: 1.3 }}>{getDisplayCourseName(cd.course)}</div>
+                <button onClick={() => setOpenCard(null)} style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 4, opacity: 0.6, display: 'flex', alignItems: 'center', flexShrink: 0 }}>
+                  <X size={18} />
+                </button>
+              </div>
+              <div style={{ fontSize: 11, color: 'var(--muted)', marginBottom: 10 }}>{fmtDate(date)}</div>
+
+              <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 8, marginBottom: 12, padding: '10px 12px', background: dark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.03)', borderRadius: 10 }}>
+                <div style={{ minWidth: 0, flex: 1 }}>
+                  <div style={{ fontSize: 9, fontWeight: 800, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.06em', display: 'flex', alignItems: 'center', gap: 4, marginBottom: 3 }}>
+                    <Users size={10} /> Teacher
+                  </div>
+                  <div style={{ fontSize: 18, fontWeight: 900, lineHeight: 1.25, color: 'var(--text)', overflowWrap: 'break-word' }}>
+                    {row.teacher || 'Unknown teacher'}
+                  </div>
+                </div>
+                {slotEntry && switchOptions.length === 1 && (
+                  <button
+                    onClick={() => {
+                      switchTeacher(cd.course.id, slotEntry.day, slotEntry.slot, row.teacher, switchOptions[0]);
+                      setOpenCard({ courseId: cd.course.id, teacher: switchOptions[0] });
+                    }}
+                    style={{
+                      display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 3, padding: '7px 10px', borderRadius: 8,
+                      border: '1.5px solid var(--accent)', background: 'transparent', color: 'var(--accent)',
+                      cursor: 'pointer', fontSize: 10.5, fontWeight: 800, flexShrink: 0, WebkitTapHighlightColor: 'transparent',
+                      maxWidth: 110,
+                    }}
+                  >
+                    <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}><RefreshCw size={11} /> Switch to</span>
+                    <span style={{ fontWeight: 900, fontSize: 11.5, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: 100 }}>{switchOptions[0]}</span>
+                  </button>
+                )}
+                {slotEntry && switchOptions.length > 1 && (
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setOpenCard(c => ({ ...c, switching: !c.switching }));
+                    }}
+                    style={{
+                      display: 'flex', alignItems: 'center', gap: 4, padding: '7px 10px', borderRadius: 8,
+                      border: '1.5px solid var(--accent)',
+                      background: openCard.switching ? 'var(--accent)' : 'transparent',
+                      color: openCard.switching ? 'white' : 'var(--accent)',
+                      cursor: 'pointer', fontSize: 11, fontWeight: 800, flexShrink: 0, WebkitTapHighlightColor: 'transparent',
+                    }}
+                  >
+                    <RefreshCw size={11} />
+                    Switch
+                    {openCard.switching ? <ChevronUp size={12} /> : <ChevronDown size={12} />}
+                  </button>
+                )}
+              </div>
+
+              {openCard.switching && slotEntry && switchOptions.length > 1 && (
+                <div style={{ marginBottom: 12, padding: '9px 10px', background: dark ? 'rgba(59,130,246,0.08)' : 'rgba(59,130,246,0.05)', border: '1px solid rgba(59,130,246,0.20)', borderRadius: 9 }}>
+                  <div style={{ fontSize: 10.5, color: 'var(--accent)', fontWeight: 700, marginBottom: 7 }}>
+                    Only for {fmtDate(date)} — pick who actually taught:
+                  </div>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                    {switchOptions.map(name => (
+                      <button
+                        key={name}
+                        onClick={() => {
+                          switchTeacher(cd.course.id, slotEntry.day, slotEntry.slot, row.teacher, name);
+                          setOpenCard({ courseId: cd.course.id, teacher: name });
+                        }}
+                        style={{
+                          display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8,
+                          padding: '9px 12px', borderRadius: 8, fontSize: 13, fontWeight: 700,
+                          border: '1.5px solid var(--accent)', background: dark ? 'rgba(255,255,255,0.04)' : 'white',
+                          color: 'var(--text)', cursor: 'pointer', width: '100%', textAlign: 'left', WebkitTapHighlightColor: 'transparent',
+                        }}
+                      >
+                        {name}
+                        <RefreshCw size={13} color="var(--accent)" style={{ flexShrink: 0 }} />
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              <div style={{ fontSize: 10, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: 6 }}>
+                Mark attendance
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
+                {[
+                  { val: 'present', label: 'Present', icon: '✓', col: '#10b981' },
+                  { val: 'absent',  label: 'Absent',  icon: '✗', col: '#ef4444' },
+                ].map(opt => {
+                  const active = row.status === opt.val;
+                  return (
+                    <button
+                      key={opt.val}
+                      onClick={() => {
+                        mark(cd.course.id, row.teacher, opt.val);
+                        setOpenCard(null);
+                      }}
+                      style={{
+                        padding: '12px 6px', borderRadius: 9, cursor: 'pointer', fontWeight: 700, fontSize: 13,
+                        background: active ? opt.col : dark ? 'rgba(255,255,255,0.07)' : 'rgba(255,255,255,0.80)',
+                        color: active ? 'white' : 'var(--muted)',
+                        border: `2px solid ${active ? opt.col : dark ? 'rgba(255,255,255,0.10)' : 'rgba(0,0,0,0.07)'}`,
+                        transition: 'all 0.14s', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 3,
+                        WebkitTapHighlightColor: 'transparent',
+                      }}
+                    >
+                      <span style={{ display: 'flex', alignItems: 'center', gap: 5 }}>{opt.icon} {opt.label}</span>
+                      {active && (
+                        <span style={{ display: 'flex', alignItems: 'center', gap: 3, fontSize: 9.5, fontWeight: 700, opacity: 0.9 }}>
+                          <RotateCcw size={9} /> tap to undo
+                        </span>
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          </Modal>
+        );
+      })()}
     </div>
   );
 }

@@ -514,7 +514,21 @@ export default function Schedule() {
         note: e.note || '',
         type: e.type || 'Theory',
       }));
-      setSchedule(normalizeScheduleEntries(mapped));
+      const normalized = normalizeScheduleEntries(mapped);
+      setSchedule(normalized);
+      // BUGFIX: group-mode schedule lived only in this component's React
+      // state, so other pages that read store.get('schedule') (Today.jsx,
+      // TodayCard.jsx, buildTodayItems) saw nothing and showed "Nothing
+      // scheduled today" even with classes visible right here.
+      //
+      // IMPORTANT: this must NOT be written to the 'schedule' key — that
+      // key is the student's personal/local routine (used when they're not
+      // in group mode, or before a CR exists). Overwriting it here would
+      // permanently destroy their personal schedule the moment group sync
+      // fires, with no way to get it back after leaving the group. Group
+      // data gets its own cache key instead; buildTodayItems reads whichever
+      // one applies (see lib/todayItems.js).
+      store.set('schedule_group_cache', normalized);
     });
   }, [isGroupMode, groupId, currentTermKey]);
   // BUGFIX (Settings / Holiday / course-teacher assignments looked
@@ -1831,7 +1845,6 @@ export default function Schedule() {
               {selectedClasses.slice().sort((a, b) => a.slot.localeCompare(b.slot)).map(item => {
                 const course = getCourse(item.courseId);
                 const courseCode = course?.code || 'Unknown';
-                const courseName = course?.name || 'Course';
                 const teacherName = item.teacherName || 'Teacher not set';
                 const timeRange = item.slot;
                 return (
@@ -1839,7 +1852,6 @@ export default function Schedule() {
                     <div style={{ fontWeight: '700', fontSize: '11px', color: 'var(--accent)', lineHeight: 1.3, wordBreak: 'break-word' }}>{timeRange}</div>
                     <div style={{ minWidth: '0' }}>
                       <div style={{ fontWeight: '700', fontSize: '13px', color: 'var(--text)', marginBottom: '3px' }}>{courseCode}</div>
-                      <div style={{ fontSize: '12px', color: 'var(--muted)', marginBottom: '4px', lineHeight: 1.3 }}>{courseName}</div>
                       <div style={{ fontSize: '11px', color: 'var(--text)', opacity: 0.8, wordBreak: 'break-word' }}>→ {teacherName}</div>
                     </div>
                   </div>

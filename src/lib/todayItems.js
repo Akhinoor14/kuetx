@@ -53,7 +53,18 @@ export function buildTodayItems(profile, now = new Date()) {
 
   // ── Classes (read-only, from Schedule.jsx's own storage) ──────────────
   if (!isHoliday) {
-    const schedule = Array.isArray(store.get('schedule')) ? store.get('schedule') : [];
+    // Group-mode classes live in their own cache key (schedule_group_cache),
+    // separate from the personal 'schedule' key — see the BUGFIX comment in
+    // Schedule.jsx's subscribeRoutine handler for why they must stay apart.
+    // A student in group mode has classes only in the group cache; a
+    // student not in group mode has classes only in 'schedule'. Prefer the
+    // group cache when it actually has something for today, otherwise fall
+    // back to the personal schedule.
+    const personalSchedule = Array.isArray(store.get('schedule')) ? store.get('schedule') : [];
+    const groupSchedule = Array.isArray(store.get('schedule_group_cache')) ? store.get('schedule_group_cache') : [];
+    const groupHasToday = groupSchedule.some((e) => e.day === todayWeekday);
+    const schedule = groupHasToday ? groupSchedule : personalSchedule;
+
     let courseById = new Map();
     try {
       courseById = new Map(getAllCourses(profile || {}).map((c) => [c.id, c]));
@@ -66,7 +77,7 @@ export function buildTodayItems(profile, now = new Date()) {
           id: `class-${e.id}`,
           kind: 'class',
           title: resolveCourseCode(e, courseById),
-          sub: e.room ? `Room ${e.room}` : (e.teacherName || ''),
+          sub: e.teacherName || '',
           time: e.slot || '',
           minutes: parseTimeToMinutes(e.slot),
           link: '/schedule',
