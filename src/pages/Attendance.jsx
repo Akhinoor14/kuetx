@@ -800,45 +800,46 @@ function DailyLog({ courses, logs, setLogs, schedule, settings, onEditTeachers, 
                 </div>
               ) : !anyNeedsPick && (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-                  {teacherRows.map(({ teacher, key, status }) => {
-                    // The resolved slot entry backing this teacher row (for Switch).
-                    // A row may not correspond to a single slot 1:1 in edge cases
-                    // (e.g. teacher list came from settings fallback, no slot on
-                    // this weekday) — Switch is simply hidden then.
-                    const slotEntry = resolved.find(r => r.resolvedTeacher === teacher);
-                    const defaultTeachers = getTeachersForCourse(settings, schedule, course.id);
-                    return (
-                      <button
-                        key={key}
-                        onClick={() => setOpenCard({ courseId: course.id, teacher })}
-                        style={{
-                          background: dark ? 'rgba(0,0,0,0.22)' : 'rgba(255,255,255,0.65)', borderRadius: 9, padding: '8px 10px',
-                          border: dark ? '1px solid rgba(255,255,255,0.07)' : '1px solid rgba(255,255,255,0.80)',
-                          textAlign: 'left', cursor: 'pointer', width: '100%', display: 'block',
-                          font: 'inherit', color: 'inherit', WebkitTapHighlightColor: 'transparent',
-                        }}
-                      >
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 8 }}>
-                          <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--muted)', display: 'flex', alignItems: 'center', gap: 3, minWidth: 0 }}>
-                            <Users size={9} style={{ flexShrink: 0 }} />
-                            <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{teacher || 'Unknown teacher'}</span>
-                            {slotEntry && defaultTeachers.length > 1 && (
-                              <span style={{ fontSize: 9, color: 'var(--accent)', fontWeight: 700, flexShrink: 0 }}>· tap to mark</span>
-                            )}
-                          </div>
-                          {status ? (
-                            <div style={{ fontSize: 10, fontWeight: 700, padding: '2px 7px', borderRadius: 20, background: status === 'present' ? 'rgba(16,185,129,0.12)' : 'rgba(239,68,68,0.12)', color: status === 'present' ? '#10b981' : '#ef4444', flexShrink: 0 }}>
-                              {status === 'present' ? '✓ Present' : '✗ Absent'}
-                            </div>
-                          ) : (
-                            <div style={{ fontSize: 10, fontWeight: 700, padding: '2px 7px', borderRadius: 20, background: dark ? 'rgba(255,255,255,0.07)' : 'rgba(0,0,0,0.05)', color: 'var(--muted)', flexShrink: 0 }}>
-                              Not marked
-                            </div>
-                          )}
+                  {teacherRows.map(({ teacher, key, status }) => (
+                    <div
+                      key={key}
+                      onClick={() => setOpenCard({ courseId: course.id, teacher })}
+                      role="button"
+                      tabIndex={0}
+                      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setOpenCard({ courseId: course.id, teacher }); }}
+                      style={{ background: dark ? 'rgba(0,0,0,0.22)' : 'rgba(255,255,255,0.65)', borderRadius: 9, padding: '8px 10px', border: dark ? '1px solid rgba(255,255,255,0.07)' : '1px solid rgba(255,255,255,0.80)', cursor: 'pointer', WebkitTapHighlightColor: 'transparent' }}
+                    >
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 8, marginBottom: 6 }}>
+                        <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--muted)', display: 'flex', alignItems: 'center', gap: 3 }}>
+                          <Users size={9} /> {teacher || 'Unknown teacher'}
                         </div>
-                      </button>
-                    );
-                  })}
+                        {status && (
+                          <div style={{ fontSize: 10, fontWeight: 700, padding: '2px 7px', borderRadius: 20, background: status === 'present' ? 'rgba(16,185,129,0.12)' : 'rgba(239,68,68,0.12)', color: status === 'present' ? '#10b981' : '#ef4444' }}>
+                            {status === 'present' ? '✓ Present' : '✗ Absent'}
+                          </div>
+                        )}
+                      </div>
+                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 6 }}>
+                        {[
+                          { val: 'present', label: 'Present', icon: '✓', col: '#10b981' },
+                          { val: 'absent',  label: 'Absent',  icon: '✗', col: '#ef4444' },
+                        ].map(opt => {
+                          const active = status === opt.val;
+                          return (
+                            <div key={opt.val} style={{
+                              padding: '8px 6px', borderRadius: 8, fontWeight: 700, fontSize: 12,
+                              background: active ? opt.col : dark ? 'rgba(255,255,255,0.07)' : 'rgba(255,255,255,0.80)',
+                              color: active ? 'white' : 'var(--muted)',
+                              border: `2px solid ${active ? opt.col : dark ? 'rgba(255,255,255,0.10)' : 'rgba(0,0,0,0.07)'}`,
+                              display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4,
+                            }}>
+                              {opt.icon} {opt.label}
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  ))}
                 </div>
               )}
             </div>
@@ -1283,21 +1284,6 @@ export default function Attendance() {
     store.set('scheduleSettings', next);
   };
 
-  const todayDate = todayStr();
-  const isTodayHoliday = isRoutineHoliday(todayDate, settings.holidayDates || []);
-  const previewDate = getRoutinePreviewDate(settings.holidayDates || []);
-  const previewDayName = new Date(previewDate + 'T00:00:00').toLocaleDateString('en-US', { weekday: 'long' });
-  // previewDate can land on a later calendar day than "today" for two
-  // independent reasons: (a) it's past 5 PM so getRoutinePreviewDate already
-  // jumped a day, or (b) today itself is a holiday/weekend so
-  // getNextRoutineDate skipped ahead further. Either way, if previewDate !=
-  // today, the strip below is NOT showing today's routine — surface that
-  // clearly instead of silently labeling someone else's day as "Today's Classes".
-  const isShowingTomorrow = previewDate !== todayDate;
-  const todaySchedule = (schedule || []).filter(s => s.day === previewDayName && courses.some(c => c.id === s.courseId))
-    .slice().sort((a, b) => a.slot.localeCompare(b.slot));
-  const nowMinutes = new Date().getHours() * 60 + new Date().getMinutes();
-
   return (
     <div className="page-enter page-container content-page-bg">
       {/* Page header */}
@@ -1320,72 +1306,6 @@ export default function Attendance() {
 
       {/* Hero */}
       <AttendanceHero courses={courses} logs={logs} schedule={schedule} settings={settings} combinedMode={combinedMode} combinedData={combinedData} />
-
-      {/* Today schedule strip */}
-      {todaySchedule.length > 0 && (
-        <div className="card" style={{ marginBottom: 13, padding: '10px 13px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 7 }}>
-            <div style={{ fontSize: 10, fontWeight: 800, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.07em' }}>
-              {isShowingTomorrow ? "Tomorrow's Classes" : "Today's Classes"}
-            </div>
-            <div style={{ fontSize: 10, color: 'var(--muted)' }}>
-              {new Date(previewDate + 'T00:00:00').toLocaleDateString('en-BD', { weekday: 'short', day: 'numeric', month: 'short' })}
-            </div>
-          </div>
-          {isShowingTomorrow && (
-            <div style={{ fontSize: 10, color: 'var(--accent)', marginBottom: 8, display: 'flex', alignItems: 'center', gap: 4 }}>
-              <CalendarDays size={11} />
-              {new Date().getHours() >= 17
-                ? "Showing tomorrow — it's past 5 PM"
-                : "Showing tomorrow — today's a holiday/weekend"}
-            </div>
-          )}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
-            {todaySchedule.map((item, idx) => {
-              const c = courses.find(x => x.id === item.courseId);
-              const pal = dark ? PALETTE_D[idx % PALETTE_D.length] : PALETTE_L[idx % PALETTE_L.length];
-              const range = String(item.slot || '').split(/→|->|–|—|-/);
-              const startStr = (range[0] || item.slot || '').trim();
-              const endStr = (range[1] || '').replace(/\s*break\s*/i, '').trim();
-              const startMin = parseTimeToMinutes(item.slot);
-              const endMin = endStr ? parseTimeToMinutes(endStr) : null;
-              const isNow = !isShowingTomorrow && startMin !== null && endMin !== null && nowMinutes >= startMin && nowMinutes < endMin;
-              return (
-                <div key={item.id || idx} style={{ display: 'flex', gap: 9, padding: '7px 10px', background: pal.bg, border: isNow ? '1.5px solid var(--accent)' : `1px solid ${pal.bd}`, borderRadius: 9, alignItems: 'center' }}>
-                  <div style={{ minWidth: 68, flexShrink: 0 }}>
-                    <div style={{ fontWeight: 900, fontSize: 11, color: 'var(--accent)', lineHeight: 1.25 }}>{startStr}</div>
-                    {endStr && <div style={{ fontSize: 9, color: 'var(--muted)', lineHeight: 1.25 }}>– {endStr}</div>}
-                  </div>
-                  <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{ fontSize: 12, fontWeight: 700, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.displayName || getDisplayCourseName(c)}</div>
-                    {item.teacherName && (() => {
-                      const pool = store.get('attSlotTeacherPool') || {};
-                      const seen = pool[slotKey(item)] || [];
-                      const rotates = new Set([...seen, item.teacherName].filter(Boolean)).size > 1;
-                      return (
-                        <div style={{ fontSize: 10, color: 'var(--muted)', marginTop: 1, display: 'flex', alignItems: 'center', gap: 3 }}>
-                          <Users size={8} /> {item.teacherName}{rotates && <span style={{ color: 'var(--accent)', fontWeight: 700 }}>· rotates</span>}
-                        </div>
-                      );
-                    })()}
-                  </div>
-                  {isNow && <div style={{ fontSize: 9, fontWeight: 800, color: 'var(--accent)', flexShrink: 0, textTransform: 'uppercase' }}>Now</div>}
-                  {item.room && <div style={{ fontSize: 10, color: 'var(--muted)', flexShrink: 0 }}>R.{item.room}</div>}
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      )}
-      {todaySchedule.length === 0 && (
-        <div className="card" style={{ marginBottom: 13, padding: '10px 13px', fontSize: 12, color: 'var(--muted)', textAlign: 'center' }}>
-          {isTodayHoliday
-            ? 'Holiday today — enjoy!'
-            : isShowingTomorrow
-              ? "No scheduled classes tomorrow (next class day) either — check your routine"
-              : 'No scheduled classes today'}
-        </div>
-      )}
 
       {/* Tabs */}
       <div className="tabs" style={{ marginBottom: 6 }}>
