@@ -2,10 +2,13 @@ import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { X, Book, CheckCircle2, AlertTriangle } from 'lucide-react';
 
+// Honorifics already present at end of name → don't append "Sir".
+const HONORIFIC_SUFFIX_RE = /\b(sir|ma'?am|madam|miss|mrs?\.?|dr\.?|prof\.?)\.?$/i;
+
 const normalizeTeacherName = (value) => {
   const clean = String(value || '').trim().replace(/\s+/g, ' ');
   if (!clean) return '';
-  return /\bsir\.?$/i.test(clean) ? clean.replace(/\.$/, '') : `${clean} Sir`;
+  return HONORIFIC_SUFFIX_RE.test(clean) ? clean.replace(/\.$/, '') : `${clean} Sir`;
 };
 
 export default function CourseTeacherDialog({

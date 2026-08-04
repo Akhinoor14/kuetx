@@ -14,7 +14,7 @@ import { Wordmark } from './Logo';
 import * as noticeApi from '../lib/noticeUtils';
 import * as alertApi from '../lib/alertUtils';
 import { computeAlerts } from '../lib/alertUtils';
-import { getProfile } from '../store/store';
+import { getProfile, store } from '../store/store';
 import { getGroupId } from '../lib/groupUtils';
 import { subscribeMyRole } from '../lib/groupSync';
 import { auth } from '../lib/firebase';
@@ -84,35 +84,124 @@ function getPageMeta(pathname, navSource) {
 // sharing one hubPath (e.g. Campus Life's "Campus Life" + "Services"
 // subgroups) — each subgroup collapses into a single cluster chip; only
 // one cluster is expanded (accordion) at a time, showing that subgroup's
-// own item chips. The inactive cluster's items are never shown at the
-// same time as the active one, and the inactive cluster chip itself is
-// rendered at lower opacity so it reads as "collapsed", not "disabled".
+// own item chips.
+//
+// Section-tinted colors (Campus Life + Services sharing one hubPath, so
+// far the only two-cluster case — see getPageMeta's siblingGroups).
+// Keyed by cluster `name` so it's a pure lookup with no hardcoded
+// ordering assumption; add an entry here for any future third+ cluster
+// that ends up sharing a hubPath. Each cluster gets its own hue so, at a
+// glance, "which section am I in" reads from color alone, not just
+// position — the open cluster's chips sit on a tinted background in
+// that hue, while any collapsed cluster button nearby uses a visibly
+// muted/pastel version of the SAME hue (not gray), so it still reads as
+// "this button belongs to that colored group", not as a neutral,
+// unrelated control.
+const CLUSTER_COLORS = {
+  'Campus Life': { rgb: '124, 58, 237', fg: '#ffffff' },   // violet
+  'Services':    { rgb: '234, 88, 12',  fg: '#ffffff' },   // orange
+};
+const DEFAULT_CLUSTER_COLOR = { rgb: '107, 114, 128', fg: '#ffffff' }; // neutral fallback for any unmapped cluster name
+
+// Local (per-device, not synced) click counter for the grouped chip
+// strip's items — powers "usage-boosted" ordering: the person's chosen
+// base priority (see nav.js's item order for Campus Life/Services) stays
+// the starting point for everyone, but whichever chips THIS device
+// actually taps most often gradually float toward the front, so the
+// strip adapts to individual habits instead of staying fixed forever.
+// Deliberately local-only (store.js's localStorage-backed store, not a
+// Firestore write) — this is a personal UI convenience, not data the
+// rest of the class or the CR needs to see or that should sync across
+// devices; keeping it local also means zero write cost/quota concern
+// for something incremented on nearly every tap.
+const CHIP_USAGE_KEY = 'navChipUsage';
+function recordChipUsage(itemId) {
+  if (!itemId) return;
+  try {
+    const usage = store.get(CHIP_USAGE_KEY) || {};
+    store.set(CHIP_USAGE_KEY, { ...usage, [itemId]: (usage[itemId] || 0) + 1 });
+  } catch { /* localStorage unavailable — usage boost just won't apply, base order still works */ }
+}
+// Returns `items` re-sorted by usage count (most-clicked first), tying
+// back to the original base-priority index for anything at equal usage
+// — which includes EVERY item on a fresh device (all counts start at 0),
+// so with no click history yet this returns the exact base order from
+// nav.js untouched. As real usage accumulates, the most-tapped items
+// gradually rise to the front; a single stray click doesn't reshuffle
+// anything unless it actually overtakes another item's count.
+function getUsageOrderedItems(items) {
+  let usage = {};
+  try { usage = store.get(CHIP_USAGE_KEY) || {}; } catch { /* fall through to base order */ }
+  return items
+    .map((item, baseIndex) => ({ item, baseIndex, count: usage[item.id] || 0 }))
+    .sort((a, b) => (b.count - a.count) || (a.baseIndex - b.baseIndex))
+    .map((entry) => entry.item);
+}
+
 function GroupedChipStrip({ siblingGroups, openClusterName, onToggleCluster, currentPath, onLinkHover }) {
+  // Collapsed cluster(s) render first, open cluster last — so the compact
+  // pill(s) always sit up front/at the start of the strip, with the
+  // expanded chip row trailing after. Stable otherwise (no reordering
+  // among multiple collapsed clusters, if there's ever more than one).
+  const ordered = [...siblingGroups].sort((a, b) => {
+    const aOpen = a.name === openClusterName ? 1 : 0;
+    const bOpen = b.name === openClusterName ? 1 : 0;
+    return aOpen - bOpen;
+  });
   return (
     <>
-      {siblingGroups.map((cluster) => {
+      {ordered.map((cluster) => {
         const isOpen = cluster.name === openClusterName;
+        const color = CLUSTER_COLORS[cluster.name] || DEFAULT_CLUSTER_COLOR;
         return (
           <div key={cluster.name} style={{ display: 'flex', alignItems: 'center', flexShrink: 0 }}>
             {isOpen ? (
-              cluster.items.map(item => (
-                <Link
-                  key={item.id}
-                  to={item.path}
-                  className={`filter-tab ${currentPath === item.path ? 'active' : ''}`}
-                  style={{ textDecoration: 'none', flexShrink: 0, marginRight: 6 }}
-                  onMouseEnter={() => onLinkHover?.(item.path)}
-                  onTouchStart={() => onLinkHover?.(item.path)}
-                >
-                  {item.shortLabel || item.label}
-                </Link>
-              ))
+              getUsageOrderedItems(cluster.items).map(item => {
+                const active = currentPath === item.path;
+                return (
+                  <Link
+                    key={item.id}
+                    to={item.path}
+                    className={`filter-tab ${active ? 'active' : ''}`}
+                    style={{
+                      textDecoration: 'none', flexShrink: 0, marginRight: 6,
+                      // Non-active chips in an open cluster get a soft tint
+                      // of the cluster's color (not the generic gray
+                      // .filter-tab default) so the whole open row reads
+                      // as "belonging to" that section; the active chip
+                      // still uses the normal .active accent styling
+                      // (handled by the className above) so "which page
+                      // am I on" stays unambiguous within the section.
+                      ...(active ? {} : {
+                        background: `rgba(${color.rgb}, 0.12)`,
+                        borderColor: `rgba(${color.rgb}, 0.30)`,
+                        color: `rgb(${color.rgb})`,
+                      }),
+                    }}
+                    onMouseEnter={() => onLinkHover?.(item.path)}
+                    onTouchStart={() => onLinkHover?.(item.path)}
+                    onClick={() => recordChipUsage(item.id)}
+                  >
+                    {item.shortLabel || item.label}
+                  </Link>
+                );
+              })
             ) : (
               <button
                 type="button"
                 onClick={() => onToggleCluster(cluster.name)}
                 className="filter-tab"
-                style={{ marginRight: 6, flexShrink: 0 }}
+                style={{
+                  marginRight: 6, flexShrink: 0,
+                  // Collapsed pill: a visibly muted/pastel version of the
+                  // same cluster hue (lower alpha, softer border) — distinct
+                  // from the open cluster's stronger tint above, so
+                  // "compact vs expanded" is readable at a glance even
+                  // though both use the same underlying color.
+                  background: `rgba(${color.rgb}, 0.07)`,
+                  borderColor: `rgba(${color.rgb}, 0.18)`,
+                  color: `rgb(${color.rgb})`,
+                }}
               >
                 {cluster.name}
               </button>
@@ -192,10 +281,28 @@ export function Navbar({ onMenuClick }) {
   // whichever subgroup the current page belongs to, and resets to that
   // whenever the active group changes via navigation. A manual toggle can
   // temporarily open a different cluster without navigating.
+  //
+  // BUGFIX (wrong cluster left open — e.g. opening a shop from
+  // /services/category/salon showed "Tuition/Notes/Timer/Namaz" instead of
+  // Services' own chips): this used to reset on [group] alone. group is a
+  // STRING LABEL ('Services', 'Campus Life', ...), not a per-page identity —
+  // two completely different pages/routes can share the same group value.
+  // So: user manually opens the "Campus Life" cluster while on a Services
+  // page (group is still 'Services', just showing Campus Life's items via
+  // the toggle) to jump to e.g. Notes, then navigates to a DIFFERENT
+  // Services page (a shop's own /services/:id) whose group is *also*
+  // 'Services' — same string, so this effect's [group] dependency doesn't
+  // see a change and never fires, leaving openClusterName stuck on
+  // 'Campus Life' from the earlier manual toggle. Keying off
+  // location.pathname instead — which changes on every real navigation,
+  // even between two pages that happen to share a group label — makes the
+  // reset actually fire whenever the page changes, while still leaving a
+  // same-page manual toggle (no pathname change) alone.
   const [openClusterName, setOpenClusterName] = useState(group);
   useEffect(() => {
     setOpenClusterName(group);
-  }, [group]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location.pathname]);
 
   // Warm the JS chunk for every sibling page (Attendance/Schedule/etc, or
   // whichever group is active) the moment this bar renders for a page that

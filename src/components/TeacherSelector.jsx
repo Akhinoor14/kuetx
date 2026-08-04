@@ -1,11 +1,14 @@
 import { useState, useRef, useEffect } from 'react';
 import { X, Edit2, Plus } from 'lucide-react';
 
-// Normalize teacher name: "Dr. Smith" → "Dr. Smith Sir"
+// Normalize teacher name: "Ahmed" → "Ahmed Sir"
+// Honorifics already present at end of name → don't append "Sir".
+const HONORIFIC_SUFFIX_RE = /\b(sir|ma'?am|madam|miss|mrs?\.?|dr\.?|prof\.?)\.?$/i;
+
 const normalizeTeacherName = (value) => {
   const clean = String(value || '').trim().replace(/\s+/g, ' ');
   if (!clean) return '';
-  return /\bsir\.?$/i.test(clean) ? clean.replace(/\.$/, '') : `${clean} Sir`;
+  return HONORIFIC_SUFFIX_RE.test(clean) ? clean.replace(/\.$/, '') : `${clean} Sir`;
 };
 
 export default function TeacherSelector({

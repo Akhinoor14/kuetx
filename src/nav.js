@@ -167,15 +167,22 @@ export const NAV = [
         name: 'Campus Life',
         hubPath: '/campus-life',
         hubIcon: 'Layers',
+        // Order below is the person's chosen base priority (Aug 2026):
+        // Projects, Notes, Timer, Money, Namaz, Clubs, Tuition, Tours.
+        // This ordering feeds both the /campus-life hub grid AND the
+        // topbar chip strip's default (non-usage-boosted) order — see
+        // Navbar.jsx's getOrderedClusterItems, which re-sorts a COPY of
+        // this array at render time using local per-device click counts,
+        // without mutating this base list.
         items: [
-          { id: 'clubs',    label: 'Clubs',   shortLabel: 'Clubs',   icon: 'Star',     accent: 'blue',   path: '/clubs' },
           { id: 'projects', label: 'Projects',shortLabel: 'Projects',icon: 'Cpu',      accent: 'purple', path: '/projects' },
-          { id: 'tours',    label: 'Tours',   shortLabel: 'Tours',   icon: 'MapPin',   accent: 'green',  path: '/tours' },
-          { id: 'money',    label: 'Money',   shortLabel: 'Money',   icon: 'Wallet',   accent: 'amber',  path: '/money' },
-          { id: 'tuition',  label: 'Tuition', shortLabel: 'Tuition', icon: 'UserCog',  accent: 'red',    path: '/tuition' },
           { id: 'notes',    label: 'Notes',         shortLabel: 'Notes',  icon: 'StickyNote', accent: 'green',  path: '/notes' },
           { id: 'time',     label: 'Time Tracker',  shortLabel: 'Timer',  icon: 'Timer',    accent: 'amber',  path: '/time' },
+          { id: 'money',    label: 'Money',   shortLabel: 'Money',   icon: 'Wallet',   accent: 'amber',  path: '/money' },
           { id: 'namaz',    label: 'Namaz Tracker', shortLabel: 'Namaz',  icon: 'Moon',     accent: 'purple', path: '/namaz' },
+          { id: 'clubs',    label: 'Clubs',   shortLabel: 'Clubs',   icon: 'Star',     accent: 'blue',   path: '/clubs' },
+          { id: 'tuition',  label: 'Tuition', shortLabel: 'Tuition', icon: 'UserCog',  accent: 'red',    path: '/tuition' },
+          { id: 'tours',    label: 'Tours',   shortLabel: 'Tours',   icon: 'MapPin',   accent: 'green',  path: '/tours' },
         ]
       },
       {
