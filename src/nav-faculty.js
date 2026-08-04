@@ -116,7 +116,7 @@ export const NAV_FACULTY = [
           // nav row, so faculty viewers could never reach it via the
           // Services chip strip/sidebar (Bike icon already registered in
           // iconRegistry.js by the student-side fix).
-          { id: 'f-services-errand',     label: 'Delivery',    icon: 'Bike',            path: '/services/category/errand' },
+          { id: 'f-services-errand',     label: 'Pick and Drop',    icon: 'Bike',            path: '/services/category/errand' },
         ],
       },
     ],

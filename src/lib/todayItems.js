@@ -15,7 +15,7 @@
 // empty for that source — every other source is still evaluated normally,
 // so a holiday never means an empty page.
 
-import { store, getWeekdayName, getLocalDateKey, parseTimeToMinutes, isRoutineHoliday, getTodayPlans } from '../store/store';
+import { store, getWeekdayName, getLocalDateKey, parseTimeToMinutes, isRoutineHoliday, getTodayPlans, getCurrentTermKey } from '../store/store';
 import { getAllCourses } from '../store/curriculumStore';
 
 // Resolves a schedule entry's course code for display. Prefers the
@@ -27,6 +27,20 @@ function resolveCourseCode(entry, courseById) {
   if (dn) return dn;
   const course = courseById.get(entry.courseId);
   return course?.code || course?.baseCode || 'Class';
+}
+
+// BUGFIX (major logic gap — see groupSync.js's clearRoutineForTermChange
+// for the primary fix and full writeup). This is a fallback-only filter
+// for the rare local/no-group schedule path (see Schedule.jsx's matching
+// comment) — group-mode routine is already term-clean at the source once
+// a CR changes terms, since clearRoutineForTermChange wipes the shared
+// Firestore routineEntries directly.
+const TERM_KEY_IN_COURSE_ID = /^[^:]+:(Y\dT\d):/;
+function isCurrentTermEntry(entry, currentTermKey) {
+  if (!currentTermKey) return true;
+  const match = TERM_KEY_IN_COURSE_ID.exec(entry.courseId || '');
+  if (!match) return true; // not a curriculum-linked id — leave as-is
+  return match[1] === currentTermKey;
 }
 
 export function buildTodayItems(profile, now = new Date()) {
@@ -46,7 +60,7 @@ export function buildTodayItems(profile, now = new Date()) {
     } catch { /* profile not ready yet — codes fall back to displayName only */ }
 
     schedule
-      .filter((e) => e.day === todayWeekday)
+      .filter((e) => e.day === todayWeekday && isCurrentTermEntry(e, getCurrentTermKey(profile)))
       .forEach((e) => {
         items.push({
           id: `class-${e.id}`,

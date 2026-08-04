@@ -8,7 +8,7 @@ export default function Teachers() {
   const [adding, setAdding] = useState(false);
   const [editing, setEditing] = useState(null);
   const [deleteTarget, setDeleteTarget] = useState(null);
-  const [form, setForm] = useState({ name: '', initial: '', title: '', dept: '', phone: '', email: '', courses: '', officeRoom: '', rating: '', notes: '' });
+  const [form, setForm] = useState({ name: '', initial: '', title: '', honorific: 'Sir', dept: '', phone: '', email: '', courses: '', officeRoom: '', rating: '', notes: '' });
 
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
 
@@ -21,10 +21,10 @@ export default function Teachers() {
       const updated = [...teachers, { ...form, id: uid() }];
       setTeachers(updated); store.set('teachers', updated); setAdding(false);
     }
-    setForm({ name: '', initial: '', title: '', dept: '', phone: '', email: '', courses: '', officeRoom: '', rating: '', notes: '' });
+    setForm({ name: '', initial: '', title: '', honorific: 'Sir', dept: '', phone: '', email: '', courses: '', officeRoom: '', rating: '', notes: '' });
   };
 
-  const startEdit = (t) => { setForm(t); setEditing(t.id); setAdding(false); };
+  const startEdit = (t) => { setForm({ honorific: 'Sir', ...t }); setEditing(t.id); setAdding(false); };
   const del = (id) => setDeleteTarget(id);
   const confirmDelete = () => {
     const u = teachers.filter(t => t.id !== deleteTarget);
@@ -55,10 +55,17 @@ export default function Teachers() {
       {(adding || editing) && (
         <div className="card" style={{ marginBottom: 16, borderColor: 'var(--accent)' }}>
           <div style={{ fontWeight: 600, fontSize: 13, marginBottom: 12 }}>{editing ? 'Edit' : 'Add'} Teacher</div>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 10, marginBottom: 10 }}>
-            <div><label>Full Name</label><input value={form.name} onChange={e => set('name', e.target.value)} placeholder="Dr. Kamal Hossain" /></div>
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', gap: 10, marginBottom: 10 }}>
+            <div><label>Full Name</label><input value={form.name} onChange={e => set('name', e.target.value)} placeholder="Kamal Hossain" /></div>
             <div><label>Initial</label><input value={form.initial} onChange={e => set('initial', e.target.value)} placeholder="KH" /></div>
             <div><label>Title / Position</label><input value={form.title} onChange={e => set('title', e.target.value)} placeholder="Professor" /></div>
+            <div>
+              <label>Address as</label>
+              <select value={form.honorific || 'Sir'} onChange={e => set('honorific', e.target.value)}>
+                <option value="Sir">Sir</option>
+                <option value="Ma'am">Ma'am</option>
+              </select>
+            </div>
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 10 }}>
             <div><label>Phone</label><input value={form.phone} onChange={e => set('phone', e.target.value)} placeholder="017XXXXXXXX" /></div>
@@ -90,6 +97,7 @@ export default function Teachers() {
               <div style={{ flex: 1 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
                   <span style={{ fontWeight: 700, fontSize: 14 }}>{t.name}</span>
+                  <span className="tag tag-green">{t.honorific || 'Sir'}</span>
                   {t.initial && <span className="tag tag-gray">{t.initial}</span>}
                   {t.title && <span className="tag tag-blue">{t.title}</span>}
                   {t.rating && (

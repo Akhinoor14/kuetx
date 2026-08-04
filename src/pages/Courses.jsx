@@ -448,7 +448,12 @@ export default function Courses() {
   const normalizeTeacherName = (value) => {
     const clean = String(value || '').trim().replace(/\s+/g, ' ');
     if (!clean) return '';
-    return /\bsir\.?$/i.test(clean) ? clean.replace(/\.$/, '') : `${clean} Sir`;
+    // Strip whatever honorific is already on the string (typed or stored)
+    // so matching is honorific-agnostic — "Kamal Hossain" and
+    // "Kamal Hossain Ma'am" resolve to the same teacher record. Actual
+    // display honorific ("Sir"/"Ma'am") comes from that teacher's own
+    // saved `honorific` field (see Teachers.jsx), not a hardcoded guess.
+    return clean.replace(/\s+(sir|ma'?am)\.?$/i, '').trim();
   };
 
   const getCourseTeachers = (courseId) => {

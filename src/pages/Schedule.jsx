@@ -84,10 +84,27 @@ const MESSAGE_FORMATS = [
   { id: 'whatsapp', label: 'Copy WhatsApp', sample: '📅 *Schedule for Sunday*' },
 ];
 
+// Looks up the saved honorific ("Sir"/"Ma'am") for a teacher name from the
+// Teachers page (see src/pages/Teachers.jsx — per-teacher `honorific`
+// field). Falls back to "Sir" only when no matching teacher record exists
+// yet, so schedule entries still get a sensible default instead of being
+// left blank.
+const getTeacherHonorific = (bareName) => {
+  try {
+    const teachers = store.get('teachers') || [];
+    const match = teachers.find(t => String(t.name || '').trim().toLowerCase() === bareName.toLowerCase());
+    return match?.honorific || 'Sir';
+  } catch {
+    return 'Sir';
+  }
+};
+
 const normalizeTeacherName = (value) => {
   const clean = String(value || '').trim().replace(/\s+/g, ' ');
   if (!clean) return '';
-  return /\bsir\.?$/i.test(clean) ? clean.replace(/\.$/, '') : `${clean} Sir`;
+  const stripped = clean.replace(/\s+(sir|ma'?am)\.?$/i, '').trim();
+  const honorific = getTeacherHonorific(stripped);
+  return `${stripped} ${honorific}`;
 };
 
 const normalizeScheduleEntries = (entries) => {
@@ -101,6 +118,35 @@ const normalizeScheduleEntries = (entries) => {
     if (seen.has(key)) return false;
     seen.add(key);
     return true;
+  });
+};
+
+// BUGFIX (major logic gap — schedule never cleared old-term classes) —
+// SECONDARY/FALLBACK PATH ONLY. The real, primary fix for this now lives
+// in groupSync.js's clearRoutineForTermChange, which the CR's term-change
+// action in ClassSetup.jsx calls to bulk-clear the SHARED (Firestore)
+// routineEntries for the whole class — since in practice every student
+// has a groupId (dept+batch) and reads the shared routine, not this
+// local one. This local purge only matters for the rare case where
+// isGroupMode is false (no groupId yet, or a student browsing before
+// their class has a CR) and the device has its own local `schedule`
+// array left over from before that was true.
+//
+// curriculum-linked courseIds are built as "deptCode:termKey:code" (see
+// buildCourseId in curriculumStore.js) — the term is baked right into the
+// id, which is what this compares against profile.currentTermKey.
+//
+// Custom (non-curriculum) entries — courseId not matching the
+// "dept:termKey:code" shape, e.g. a manually-added tuition-style class —
+// have no embedded term and are left untouched; only curriculum-linked
+// entries whose embedded term doesn't match are dropped.
+const TERM_KEY_IN_COURSE_ID = /^[^:]+:(Y\dT\d):/;
+const purgeStaleTermEntries = (entries, currentTermKey) => {
+  if (!currentTermKey) return entries || [];
+  return (entries || []).filter(item => {
+    const match = TERM_KEY_IN_COURSE_ID.exec(item.courseId || '');
+    if (!match) return true; // not a curriculum-linked id — leave as-is
+    return match[1] === currentTermKey;
   });
 };
 
@@ -357,6 +403,18 @@ const getRoutineLabel = (course, item) => {
 
 export default function Schedule() {
   const navigate = useNavigate();
+  // BUGFIX (major logic gap — see TermQS.jsx for the full writeup): CR
+  // term changes sync into profile.currentTermKey live in the background
+  // (App.jsx), but this page's profile read wasn't React state, so
+  // course/term-scoped bits of this page (currentTermCourses, the
+  // routine-purge fallback, etc.) kept using the stale term while the
+  // page stayed open across a CR's term change.
+  const [, setStoreTick] = useState(0);
+  useEffect(() => {
+    const refresh = () => setStoreTick(v => v + 1);
+    window.addEventListener('kuetx:store-updated', refresh);
+    return () => window.removeEventListener('kuetx:store-updated', refresh);
+  }, []);
   const profile = getProfile();
 
   // Class-group mode: if this student's batch+dept group currently has an
@@ -422,11 +480,20 @@ export default function Schedule() {
   // deleteRoutineEntry and setSchedule is ONLY ever called here by the
   // Firestore listener below — never manually alongside a Firestore write,
   // so there's no double-write/loop risk.
-  const [schedule, setSchedule] = useState(() => (isGroupMode ? [] : normalizeScheduleEntries(store.get('schedule') || [])));
+  const [schedule, setSchedule] = useState(() => {
+    if (isGroupMode) return [];
+    const loaded = normalizeScheduleEntries(store.get('schedule') || []);
+    const purged = purgeStaleTermEntries(loaded, getCurrentTermKey(profile));
+    if (purged.length !== loaded.length) store.set('schedule', purged);
+    return purged;
+  });
   useEffect(() => {
     if (!isGroupMode) {
       // Falling back to / staying in personal mode: load from localStorage.
-      setSchedule(normalizeScheduleEntries(store.get('schedule') || []));
+      const loaded = normalizeScheduleEntries(store.get('schedule') || []);
+      const purged = purgeStaleTermEntries(loaded, getCurrentTermKey(profile));
+      if (purged.length !== loaded.length) store.set('schedule', purged);
+      setSchedule(purged);
       return;
     }
     // Group mode: subscribe to the shared Firestore routine and map each
@@ -449,7 +516,7 @@ export default function Schedule() {
       }));
       setSchedule(normalizeScheduleEntries(mapped));
     });
-  }, [isGroupMode, groupId]);
+  }, [isGroupMode, groupId, currentTermKey]);
   // BUGFIX (Settings / Holiday / course-teacher assignments looked
   // group-wide but weren't — a CR changing them did nothing for anyone
   // else): these used to live ONLY in this device's local

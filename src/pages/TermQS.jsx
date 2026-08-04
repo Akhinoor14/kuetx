@@ -8,13 +8,47 @@ import { getGroupId } from '../lib/groupUtils';
 import { subscribePlannerSettings } from '../lib/groupSync';
 import { useCanEditGroup } from '../hooks/useCanEditGroup';
 
+// BUGFIX: this used to always append "Sir" regardless of the teacher's
+// actual honorific (see Teachers.jsx's per-teacher `honorific` field,
+// and the same fix already applied in Schedule.jsx/Courses.jsx) — a
+// Ma'am's name would get "Sir" tacked onto it here. Now looks up each
+// teacher's own saved honorific by name, falling back to "Sir" only when
+// no matching teacher record exists.
+const getTeacherHonorific = (bareName) => {
+  try {
+    const teachers = store.get('teachers') || [];
+    const match = teachers.find(t => String(t.name || '').trim().toLowerCase() === bareName.toLowerCase());
+    return match?.honorific || 'Sir';
+  } catch {
+    return 'Sir';
+  }
+};
+
 const normalizeTeacherName = (value) => {
   const clean = String(value || '').trim().replace(/\s+/g, ' ');
   if (!clean) return '';
-  return /\bsir\.?$/i.test(clean) ? clean.replace(/\.$/, '') : `${clean} Sir`;
+  const stripped = clean.replace(/\s+(sir|ma'?am)\.?$/i, '').trim();
+  const honorific = getTeacherHonorific(stripped);
+  return `${stripped} ${honorific}`;
 };
 
 export default function TermQS() {
+  // BUGFIX (major logic gap): a CR/ACR changing the class's term now
+  // propagates into every member's profile.currentTermKey live, in the
+  // background (see App.jsx's subscribeGroupCurrentTermKey effect,
+  // store.set('profile', ...)) — but `profile` here used to be a plain
+  // synchronous getProfile() call, not React state, so that store write
+  // never re-rendered this page while it was already open. The course
+  // dropdown/current-term filter would keep showing the stale term until
+  // the student navigated away and back. Now bumps a tick on every store
+  // write so profile (and anything derived from it below) re-reads fresh.
+  const [, setStoreTick] = useState(0);
+  useEffect(() => {
+    const refresh = () => setStoreTick(v => v + 1);
+    window.addEventListener('kuetx:store-updated', refresh);
+    return () => window.removeEventListener('kuetx:store-updated', refresh);
+  }, []);
+
   const profile = getProfile();
   const courses = getAllCourses(profile);
   const groupId = getGroupId(profile);
@@ -31,7 +65,11 @@ export default function TermQS() {
   }, [courses, currentTermKey]);
   
   const [items, setItems] = useState(() => store.get('term-qs') || []);
-  const [localSettings, setLocalSettings] = useState(() => store.get('scheduleSettings') || {});
+  // localSettings used to be its own useState + a duplicate
+  // kuetx:store-updated listener — now that the tick above already
+  // forces a re-render on every store write, this can just read fresh
+  // on each render instead of keeping a second copy in sync.
+  const localSettings = store.get('scheduleSettings') || {};
   const [adding, setAdding] = useState(false);
   const [filter, setFilter] = useState('all');
   const [form, setForm] = useState({ 
@@ -47,12 +85,6 @@ export default function TermQS() {
   });
 
   const set = (k, v) => setForm(f => ({ ...f, [k]: v }));
-
-  useEffect(() => {
-    const refresh = () => setLocalSettings(store.get('scheduleSettings') || {});
-    window.addEventListener('kuetx:store-updated', refresh);
-    return () => window.removeEventListener('kuetx:store-updated', refresh);
-  }, []);
 
   // Teacher assignment is CR/ACR-only and lives in one place — Class Setup.
   // This page only ever reads it now (group value wins once a group
@@ -133,8 +165,17 @@ export default function TermQS() {
       { bg: 'rgba(249,115,22,0.15)', border: 'rgba(249,115,22,0.35)', text: 'rgb(249,115,22)' },
       { bg: 'rgba(236,72,153,0.15)', border: 'rgba(236,72,153,0.35)', text: 'rgb(236,72,153)' },
     ];
-    const index = (currentTermCourses.findIndex(c => c.id === courseId) % colors.length);
-    return colors[Math.max(0, index)];
+    const idx = currentTermCourses.findIndex(c => c.id === courseId);
+    if (idx !== -1) return colors[idx % colors.length];
+    // Course isn't in the current term's list (e.g. a Q&S item saved in
+    // a previous term) — findIndex's -1 used to fall through into
+    // `-1 % colors.length`, which in JS is -1, not 0, so
+    // Math.max(0, -1) silently collapsed every one of these to color[0]
+    // no matter which course it actually was. Hash the id itself instead
+    // so old-term items still get a stable, distinguishable color.
+    let hash = 0;
+    for (let i = 0; i < courseId.length; i++) hash = (hash * 31 + courseId.charCodeAt(i)) >>> 0;
+    return colors[hash % colors.length];
   };
 
   const filtered = items.filter(a => filter === 'all' ? true : filter === 'pending' ? a.status !== 'done' : a.status === 'done');

@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid, ReferenceLine, LabelList } from 'recharts';
 import { Sparkles, Target, TrendingUp, ArrowRight, AlertTriangle, CheckCircle2, GraduationCap, ClipboardList, Medal } from 'lucide-react';
 import { store, GRADE_SCALE, cgpaToPercent, computeCourseGrade, getLegacyTermResults, getProfile, setLegacyTermResults, TERM_KEYS, getCurrentTermKey, getTermTimeline, recordAudit } from '../store/store';
@@ -7,6 +7,17 @@ import Collapsible from '../components/Collapsible';
 import { alertDialog } from '../lib/dialog';
 
 export default function Results() {
+  // BUGFIX (major logic gap — see TermQS.jsx for the full writeup): CR
+  // term changes sync into profile.currentTermKey live in the background
+  // (App.jsx), but this page's profile read wasn't React state, so it
+  // kept showing the stale term until navigated away and back.
+  const [, setStoreTick] = useState(0);
+  useEffect(() => {
+    const refresh = () => setStoreTick(v => v + 1);
+    window.addEventListener('kuetx:store-updated', refresh);
+    return () => window.removeEventListener('kuetx:store-updated', refresh);
+  }, []);
+
   const profile = getProfile();
   const courses = getAllCourses(profile);
   const currentTermKey = getCurrentTermKey(profile);

@@ -1,5 +1,5 @@
 // KUETx Service Worker — offline cache + auto-update
-const CACHE_NAME = 'kuetx-v4.1.9'; // bumped to clear browser and mobile caches — bump this on every future deploy too
+const CACHE_NAME = 'kuetx-v4.2.4'; // bumped to clear browser and mobile caches — bump this on every future deploy too
 const STATIC_ASSETS = [
   '/',
   '/index.html',

@@ -795,9 +795,17 @@ export const getWeekdayName = (date = new Date()) => FULL_WEEK_DAYS[date.getDay(
 // Parses a "8:00 AM-8:50 AM"-style routine slot (see Schedule.jsx TIME_MODELS)
 // or a plain "5:00 PM" time string into 24h minutes-since-midnight, for sorting
 // items on a single merged timeline. Returns null if it can't be parsed.
+//
+// BUGFIX: slot ranges can use any of →, ->, – (en-dash), — (em-dash), or a
+// plain hyphen as the separator (see Schedule.jsx's normalizeSlotKey /
+// parseSlotRange, which already handle all five). This used to split only
+// on a plain hyphen, so any slot saved with an arrow or en/em-dash (a
+// supported, common format) failed to parse here, silently fell to `null`,
+// and got sorted to the top of the Today page / miscounted as "still
+// upcoming" no matter what time it actually was.
 export const parseTimeToMinutes = (raw) => {
   if (!raw) return null;
-  const first = String(raw).split('-')[0].trim();
+  const first = String(raw).split(/→|->|–|—|-/)[0].trim();
   const m = first.match(/^(\d{1,2}):(\d{2})\s*([AP]M)?$/i);
   if (!m) return null;
   let [, h, min, ampm] = m;

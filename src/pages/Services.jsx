@@ -545,7 +545,7 @@ const CATEGORY_LABELS_EN = {
   hotel: 'Food',
   bookstore: 'Stationery',
   onlinemart: 'Online Mart',
-  errand: 'Delivery / Errand',
+  errand: 'Pick and Drop',
 };
 
 // ---------------------------------------------------------------------
@@ -565,7 +565,7 @@ export function CategoryShopList() {
   const serviceIds = categoryServices.map((s) => s.id);
   const pendingCounts = usePendingCounts(serviceIds);
 
-  const categoryLabel = SERVICE_TYPE_LABELS[categoryType] || categoryType;
+  const categoryLabel = CATEGORY_LABELS_EN[categoryType] || SERVICE_TYPE_LABELS[categoryType] || categoryType;
   const Icon = CATEGORY_ICONS[categoryType] || Store;
 
   if (services === null) {

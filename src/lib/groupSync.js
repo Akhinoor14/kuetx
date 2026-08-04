@@ -1571,6 +1571,36 @@ export const updateRoutineEntry = (groupId, entryId, profile, data) => updateEnt
 export const deleteRoutineEntry = (groupId, entryId, profile) => softDeleteEntry(groupId, 'routineEntries', entryId, profile);
 export const restoreRoutineEntry = (groupId, entryId, profile) => restoreEntry(groupId, 'routineEntries', entryId, profile);
 
+// BUGFIX (major logic gap — routine never cleared on term change): a
+// group's routineEntries accumulate forever with no term field of their
+// own and no link back to which term they were added in — so when a CR
+// moves the class to a new term (ClassSetup.jsx's handleTermChange),
+// every class card from the OLD term just kept showing on the shared
+// schedule grid and on everyone's Today page, permanently, alongside
+// (and indistinguishable from) the new term's real classes.
+//
+// This clears every routineEntries doc for the group in one batch when
+// the CR changes the term — same soft-delete each entry already
+// supports individually, just applied to all of them at once. Deliberately
+// scoped to routineEntries ONLY: meta/plannerSettings (courseTeacherMap —
+// which teacher teaches which course) is untouched on purpose, since
+// that's meant to persist/accumulate across terms (see the comment on
+// isClassSetupComplete above) and a CR re-entering it every term would be
+// exactly the busywork this app is trying to remove.
+export async function clearRoutineForTermChange(groupId, profile) {
+  if (!groupId) return;
+  const snap = await getDocs(query(collection(db, 'groups', groupId, 'routineEntries'), where('deleted', '==', false)));
+  if (snap.empty) return;
+  const uid = auth.currentUser?.uid;
+  const stamp = getIdentityStamp(profile, uid);
+  const batch = writeBatch(db);
+  snap.docs.forEach((d) => {
+    batch.update(d.ref, { deleted: true, updatedBy: stamp, updatedAt: serverTimestamp() });
+  });
+  await batch.commit();
+  await _writeAuditLog(groupId, 'clear-for-term-change', 'routineEntries', 'bulk', stamp);
+}
+
 // Assignments
 export const subscribeAssignments = (groupId, cb) => subscribeEntries(groupId, 'assignmentEntries', cb);
 export const addAssignmentEntry = (groupId, profile, data) => addEntry(groupId, 'assignmentEntries', profile, data);

@@ -3,13 +3,14 @@ import { Link } from 'react-router-dom';
 import { CalendarClock, CheckCircle2, Circle } from 'lucide-react';
 import { getProfile, getCurrentTermKey } from '../store/store';
 import { getGroupId, getGroupLabel } from '../lib/groupUtils';
-import { subscribeClassSetup, updateClassSetup, subscribeRoutine, subscribePlannerSettings, updatePlannerSettings, isClassSetupComplete } from '../lib/groupSync';
+import { subscribeClassSetup, updateClassSetup, subscribeRoutine, subscribePlannerSettings, updatePlannerSettings, isClassSetupComplete, clearRoutineForTermChange } from '../lib/groupSync';
 import { setGroupCurrentTermKey, setGroupTermStartDate } from '../lib/termStartDateSync';
 import { getCoursesForTerm } from '../store/curriculumStore';
 import ClassSetupTermCourses from '../components/ClassSetupTermCourses';
 import { httpsCallable } from 'firebase/functions';
 import { functions } from '../lib/firebase';
 import { Send } from 'lucide-react';
+import ConfirmDialog from '../components/ConfirmDialog';
 
 /**
  * Dedicated, always-reachable page (CRHub → "Class Setup") for a CR/ACR to
@@ -41,6 +42,13 @@ export default function ClassSetup() {
   const [termSaving, setTermSaving] = useState(false);
   const [termError, setTermError] = useState('');
   const [termSavedMsg, setTermSavedMsg] = useState('');
+  // BUGFIX (major logic gap — see clearRoutineForTermChange in
+  // groupSync.js): changing the term now clears the shared weekly
+  // routine, since old-term classes were otherwise never removed. That's
+  // destructive shared data for the whole class, so route it through a
+  // confirm dialog instead of firing silently the moment the CR picks a
+  // new term from the dropdown.
+  const [pendingTermKey, setPendingTermKey] = useState(null);
   const [telegramLinking, setTelegramLinking] = useState(false);
   const [telegramCode, setTelegramCode] = useState('');
   const [telegramError, setTelegramError] = useState('');
@@ -159,19 +167,40 @@ export default function ClassSetup() {
     ? isClassSetupComplete(classSetup, routineCount, teacherMap, currentTermCourseIds)
     : false;
 
-  const handleTermChange = async (termKey) => {
+  const handleTermChange = (termKey) => {
     if (!termKey || !groupId) return;
+    // First-time setup (no term set yet) needs no confirmation or
+    // routine clear — there's nothing old to lose.
+    if (!currentTermKey) {
+      commitTermChange(termKey);
+      return;
+    }
+    if (termKey === currentTermKey) return;
+    setPendingTermKey(termKey);
+  };
+
+  const commitTermChange = async (termKey) => {
     setTermError('');
     setTermSavedMsg('');
     setTermSaving(true);
     try {
+      const isRealChange = !!currentTermKey && termKey !== currentTermKey;
       await updateClassSetup(groupId, profile, { currentTermKey: termKey });
       await setGroupCurrentTermKey(groupId, termKey);
-      setTermSavedMsg('Saved — visible to your whole class now.');
+      if (isRealChange) {
+        // Routine entries are the only thing scoped to a term — teacher
+        // assignments (courseTeacherMap) deliberately stay untouched, see
+        // clearRoutineForTermChange's own comment.
+        await clearRoutineForTermChange(groupId, profile);
+      }
+      setTermSavedMsg(isRealChange
+        ? 'Saved — visible to your whole class now. Old routine cleared for the new term.'
+        : 'Saved — visible to your whole class now.');
     } catch (e) {
       setTermError(e?.message || 'Could not save — please try again.');
     } finally {
       setTermSaving(false);
+      setPendingTermKey(null);
     }
   };
 
@@ -251,6 +280,16 @@ export default function ClassSetup() {
             />
             {termError && <div style={{ color: 'var(--danger)', fontSize: 12, marginTop: 12 }}>{termError}</div>}
             {termSavedMsg && <div style={{ color: '#10B981', fontSize: 12, marginTop: 12 }}>{termSavedMsg}</div>}
+            <ConfirmDialog
+              open={!!pendingTermKey}
+              title="Change term for the whole class?"
+              message="This clears the current weekly routine for everyone in your class — you'll need to add the new term's classes to the routine again. Course–teacher assignments are not affected."
+              confirmLabel="Change term & clear routine"
+              cancelLabel="Cancel"
+              confirmTone="danger"
+              onConfirm={() => commitTermChange(pendingTermKey)}
+              onCancel={() => setPendingTermKey(null)}
+            />
           </div>
 
           <div className="card" style={{ padding: 16 }}>

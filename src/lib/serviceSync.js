@@ -82,7 +82,10 @@ export const SERVICE_TYPE_LABELS = {
   // (not folded into PROVIDER_SIGNUP_TYPES' 'other' bucket) because it
   // needs a real, dedicated interactionMode ('errand', see
   // TYPE_TO_INTERACTION_MODE above) rather than free-text-only 'other'.
-  errand: 'Delivery/Errand Runner',
+  // Label matches the student-facing Bengali name (see
+  // SERVICE_TYPE_LABELS_BN below: 'পিক অ্যান্ড ড্রপ') for consistency
+  // across the category grid, category page header, and Dashboard preview.
+  errand: 'Pick and Drop',
 };
 
 export const SERVICE_TYPES = Object.keys(SERVICE_TYPE_LABELS);

@@ -4,7 +4,7 @@ import Modal from '../components/Modal';
 import { ChevronLeft, ChevronRight, AlertTriangle, CheckCircle, TrendingUp, Users, BookOpen, Award, CalendarDays, X, PartyPopper, ClipboardX } from 'lucide-react';
 import {
   store, getAttendanceMarks, MIN_ATTENDANCE_PERCENT, SCHOLARSHIP_ATTENDANCE_PCT,
-  getProfile, getRoutinePreviewDate, isRoutineHoliday
+  getProfile, getRoutinePreviewDate, isRoutineHoliday, parseTimeToMinutes
 } from '../store/store';
 import { getAllCourses } from '../store/curriculumStore';
 import { getGroupId } from '../lib/groupUtils';
@@ -84,6 +84,83 @@ function getTeachersForCourseOnDate(schedule, courseId, date) {
       .map(s => s.teacherName).filter(Boolean)
   )];
 }
+// BUGFIX (rotating/alternate teacher slots): a routine entry only stores
+// ONE teacherName per (course, weekday, slot) — a timeless template, no
+// actual calendar date. For most courses that's fine (2 fixed teachers,
+// each on their own fixed weekday). But for 3-credit courses where one of
+// the 3 weekly slots rotates between teachers with no fixed pattern (any
+// teacher could show up on any given week), getTeachersForCourseOnDate()
+// used to just resolve the weekday name and hand back whatever teacher is
+// CURRENTLY set in the routine for that slot — regardless of which date
+// attendance is being marked for. Marking attendance for a past date would
+// silently file it under today's routine teacher, not the one who actually
+// taught that day; and editing the routine's teacher later would retroactively
+// "reassign" all old logs to the new name.
+//
+// Fix: every routine entry gets a stable per-slot identity key
+// (course+day+slot, NOT the Firestore doc id, so it survives entry
+// recreation/sync). We track, locally, the full set of distinct teacher
+// names that have EVER been marked for that slot key (`attSlotTeacherPool`).
+// If more than one teacher has ever appeared for a slot, we treat it as a
+// rotating slot: instead of guessing, the Daily Log asks the user which
+// teacher taught THAT SPECIFIC DATE, and stores the answer keyed by
+// (slot key + date) in `attRotationLog` — independent of whatever the
+// routine's teacherName is set to today.
+const slotKey = (s) => `${s.courseId}::${s.day}::${s.slot}`;
+
+// Merge in any teacher name observed for a slot, so the pool grows as
+// routine edits happen over the term (append-only; never removes names,
+// since a rotated-away teacher may still own historical logs).
+function recordSlotTeacherSighting(courseId, day, slot, teacherName) {
+  const name = String(teacherName || '').trim();
+  if (!name) return;
+  const key = `${courseId}::${day}::${slot}`;
+  const pool = store.get('attSlotTeacherPool') || {};
+  const existing = Array.isArray(pool[key]) ? pool[key] : [];
+  if (!existing.includes(name)) {
+    store.set('attSlotTeacherPool', { ...pool, [key]: [...existing, name] });
+  }
+}
+
+function getRotationOverride(courseId, day, slot, date) {
+  const log = store.get('attRotationLog') || {};
+  return log[date]?.[`${courseId}::${day}::${slot}`] || '';
+}
+
+function setRotationOverride(courseId, day, slot, date, teacherName) {
+  const log = store.get('attRotationLog') || {};
+  const dayLog = { ...(log[date] || {}), [`${courseId}::${day}::${slot}`]: teacherName };
+  store.set('attRotationLog', { ...log, [date]: dayLog });
+}
+
+// Resolves teacher(s) for a specific course on a specific date, aware of
+// rotation. Returns { teachers, isRotating, slotEntries } where teachers is
+// the list to render/mark against for that date (falls back to the plain
+// routine teacher when there's no ambiguity), isRotating flags whether a
+// per-date choice is needed/was made, and slotEntries are the raw routine
+// rows (one per weekly slot) this course has on that weekday.
+function resolveTeachersForDate(schedule, courseId, date) {
+  const dayName = new Date(date + 'T00:00:00').toLocaleDateString('en-US', { weekday: 'long' });
+  const slotEntries = (schedule || []).filter(s => s.courseId === courseId && s.day === dayName);
+  const pool = store.get('attSlotTeacherPool') || {};
+  const results = slotEntries.map(s => {
+    const key = slotKey(s);
+    const seenTeachers = Array.isArray(pool[key]) ? pool[key] : [];
+    const currentTeacher = String(s.teacherName || '').trim();
+    const knownPool = [...new Set([...seenTeachers, currentTeacher].filter(Boolean))];
+    const isRotating = knownPool.length > 1;
+    const override = isRotating ? getRotationOverride(courseId, s.day, s.slot, date) : '';
+    return {
+      slot: s.slot, day: s.day, key,
+      isRotating,
+      pool: knownPool,
+      resolvedTeacher: isRotating ? override : currentTeacher,
+      needsPick: isRotating && !override,
+    };
+  });
+  return results;
+}
+
 function getDisplayCourseName(course) {
   if (!course) return '';
   return (course.name || '')
@@ -388,7 +465,7 @@ function AttendanceHero({ courses, logs, schedule, settings, combinedMode, combi
     <div style={{ marginBottom: 14 }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 7 }}>
         <div style={{ fontSize: 10, fontWeight: 800, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Live Attendance</div>
-        <div style={{ fontSize: 10, color: 'var(--muted)' }}>{combinedMode ? 'Combined' : 'Daily log'} · {theory.length} courses</div>
+        <div style={{ fontSize: 10, color: 'var(--muted)' }}>{combinedMode ? 'Manual entry' : 'Daily Log'} · {theory.length} courses</div>
       </div>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))', gap: 8 }}>
         {stats.map(({ c, pct, totalHeld, totalAttended, slab, hint }) => {
@@ -510,6 +587,21 @@ function DailyLog({ courses, logs, setLogs, schedule, settings, onEditTeachers, 
     return 'Holiday';
   };
 
+  // Keep the slot→teacher "ever seen" pool up to date whenever routine data
+  // loads/changes, so rotation can be detected even before any override has
+  // been picked for a given date (see resolveTeachersForDate above).
+  useEffect(() => {
+    (schedule || []).forEach(s => {
+      if (s.courseId && s.day && s.slot) recordSlotTeacherSighting(s.courseId, s.day, s.slot, s.teacherName);
+    });
+  }, [schedule]);
+
+  const [rotationTick, setRotationTick] = useState(0); // bump to re-derive cardData after a pick
+  const pickRotationTeacher = useCallback((courseId, day, slot, teacherName) => {
+    setRotationOverride(courseId, day, slot, date, teacherName);
+    setRotationTick(t => t + 1);
+  }, [date]);
+
   const cardData = useMemo(() => {
     if (isHoliday) return [];
     let toShow = [];
@@ -519,7 +611,10 @@ function DailyLog({ courses, logs, setLogs, schedule, settings, onEditTeachers, 
       toShow = courses.filter(c => !isAutoFull(c.type));
     }
     return toShow.map((course, idx) => {
-      const onDate = getTeachersForCourseOnDate(schedule, course.id, date);
+      const resolved = resolveTeachersForDate(schedule, course.id, date);
+      const anyRotating = resolved.some(r => r.isRotating);
+      const anyNeedsPick = resolved.some(r => r.needsPick);
+      const onDate = [...new Set(resolved.map(r => r.resolvedTeacher).filter(Boolean))];
       const teachers = onDate.length ? onDate : getTeachersForCourse(settings, schedule, course.id);
       const displayTeachers = teachers.length ? teachers : [''];
       const hasTeachers = displayTeachers.some(t => !!t);
@@ -529,10 +624,10 @@ function DailyLog({ courses, logs, setLogs, schedule, settings, onEditTeachers, 
         teacher: t, key: `${course.id}_${t || ''}`,
         status: dayLog[`${course.id}_${t || ''}`] || null,
       }));
-      const allDone = teacherRows.every(r => r.status === 'present' || r.status === 'absent');
-      return { course, displayTeachers, hasTeachers, slots, pal, teacherRows, allDone };
+      const allDone = !anyNeedsPick && teacherRows.every(r => r.status === 'present' || r.status === 'absent');
+      return { course, displayTeachers, hasTeachers, slots, pal, teacherRows, allDone, resolved, anyRotating, anyNeedsPick };
     });
-  }, [isHoliday, schIds, courses, showGive, isToday, schedule, settings, dayLog, scheduledCourses, date, dark]);
+  }, [isHoliday, schIds, courses, showGive, isToday, schedule, settings, dayLog, scheduledCourses, date, dark, rotationTick]);
 
   const markedCount = cardData.filter(c => c.allDone).length;
   const totalCount = cardData.length;
@@ -613,7 +708,7 @@ function DailyLog({ courses, logs, setLogs, schedule, settings, onEditTeachers, 
             </div>
           )}
 
-          {cardData.map(({ course, hasTeachers, slots, pal, teacherRows, allDone }) => (
+          {cardData.map(({ course, hasTeachers, slots, pal, teacherRows, allDone, resolved, anyRotating, anyNeedsPick }) => (
             <div key={course.id} style={{ background: pal.bg, border: `1.5px solid ${pal.bd}`, borderRadius: 13, padding: '10px 12px' }}>
               {/* Course header */}
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 8, marginBottom: 9 }}>
@@ -632,6 +727,32 @@ function DailyLog({ courses, logs, setLogs, schedule, settings, onEditTeachers, 
                 </div>
               </div>
 
+              {/* Rotating-slot notice — this course has a slot where more than
+                  one teacher has shown up historically with no fixed pattern,
+                  so we don't guess; the user confirms who taught THIS date. */}
+              {anyRotating && (
+                <div style={{ fontSize: 10.5, color: 'var(--accent)', padding: '6px 9px', marginBottom: 7, background: dark ? 'rgba(59,130,246,0.10)' : 'rgba(59,130,246,0.06)', border: '1px solid rgba(59,130,246,0.20)', borderRadius: 8, display: 'flex', alignItems: 'center', gap: 5 }}>
+                  <Users size={10} />
+                  <span>Rotating slot — pick who taught on {fmtDate(date)}, since it isn't always the same teacher.</span>
+                </div>
+              )}
+              {resolved.filter(r => r.needsPick).map(r => (
+                <div key={r.key} style={{ display: 'flex', flexWrap: 'wrap', gap: 6, marginBottom: 8, alignItems: 'center' }}>
+                  <span style={{ fontSize: 10, color: 'var(--muted)', fontWeight: 700 }}>{r.slot}:</span>
+                  {r.pool.map(name => (
+                    <button key={name} onClick={() => pickRotationTeacher(course.id, r.day, r.slot, name)} style={{ padding: '5px 10px', borderRadius: 7, fontSize: 11, fontWeight: 700, border: '1.5px solid var(--accent)', background: 'transparent', color: 'var(--accent)', cursor: 'pointer' }}>
+                      {name}
+                    </button>
+                  ))}
+                  <button onClick={() => {
+                    const custom = window.prompt('Teacher name for this date:');
+                    if (custom && custom.trim()) pickRotationTeacher(course.id, r.day, r.slot, custom.trim());
+                  }} style={{ padding: '5px 10px', borderRadius: 7, fontSize: 11, fontWeight: 600, border: '1.5px dashed var(--muted)', background: 'transparent', color: 'var(--muted)', cursor: 'pointer' }}>
+                    Other…
+                  </button>
+                </div>
+              ))}
+
               {/* Teacher rows */}
               {!hasTeachers ? (
                 <div style={{ fontSize: 12, color: 'var(--warning)', padding: '7px 10px', background: dark ? 'rgba(217,119,6,0.10)' : 'rgba(255,251,235,1)', borderRadius: 9, border: '1px solid rgba(217,119,6,0.20)', display: 'flex', alignItems: 'center', gap: 6 }}>
@@ -641,7 +762,7 @@ function DailyLog({ courses, logs, setLogs, schedule, settings, onEditTeachers, 
                     <button onClick={() => onEditTeachers(course.id)} style={{ marginLeft: 'auto', padding: '3px 9px', borderRadius: 6, fontSize: 11, fontWeight: 700, background: 'var(--warning)', color: 'white', border: 'none', cursor: 'pointer', flexShrink: 0 }}>Assign</button>
                   )}
                 </div>
-              ) : (
+              ) : !anyNeedsPick && (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
                   {teacherRows.map(({ teacher, key, status }) => (
                     <div key={key} style={{ background: dark ? 'rgba(0,0,0,0.22)' : 'rgba(255,255,255,0.65)', borderRadius: 9, padding: '8px 10px', border: dark ? '1px solid rgba(255,255,255,0.07)' : '1px solid rgba(255,255,255,0.80)' }}>
@@ -748,14 +869,19 @@ function CombinedAtt({ courses, logs, schedule, settings, combinedMode, combined
             <div style={{ fontSize: 12, fontWeight: 700 }}>Input Mode</div>
             <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 1 }}>
               {combinedMode
-                ? 'Manual — enter Held & Attended per teacher'
-                : 'Auto — calculated from Daily Log entries'}
+                ? 'Manual — type in Held & Attended per teacher yourself'
+                : 'Auto — mirrors your Daily Log entries, not a separate source'}
             </div>
           </div>
           <button className={`btn ${combinedMode ? 'btn-primary' : 'btn-ghost'}`} onClick={toggleCombined} style={{ fontSize: 11, whiteSpace: 'nowrap', flexShrink: 0 }}>
             {combinedMode ? 'Manual ON' : 'Switch to Manual'}
           </button>
         </div>
+        {!combinedMode && (
+          <div style={{ fontSize: 10, color: 'var(--muted)', marginTop: 7, paddingTop: 7, borderTop: '1px solid var(--border)' }}>
+            You're viewing Daily Log numbers split by teacher. To enter counts directly instead, switch to Manual above.
+          </div>
+        )}
       </div>
 
       {cards.map(({ c, ts, stats, th, ta, pct, fullMarks, canMiss, needNext, slab, hint, assigned }) => {
@@ -982,8 +1108,16 @@ export default function Attendance() {
   const isTodayHoliday = isRoutineHoliday(todayDate, settings.holidayDates || []);
   const previewDate = getRoutinePreviewDate(settings.holidayDates || []);
   const previewDayName = new Date(previewDate + 'T00:00:00').toLocaleDateString('en-US', { weekday: 'long' });
+  // previewDate can land on a later calendar day than "today" for two
+  // independent reasons: (a) it's past 5 PM so getRoutinePreviewDate already
+  // jumped a day, or (b) today itself is a holiday/weekend so
+  // getNextRoutineDate skipped ahead further. Either way, if previewDate !=
+  // today, the strip below is NOT showing today's routine — surface that
+  // clearly instead of silently labeling someone else's day as "Today's Classes".
+  const isShowingTomorrow = previewDate !== todayDate;
   const todaySchedule = (schedule || []).filter(s => s.day === previewDayName && courses.some(c => c.id === s.courseId))
     .slice().sort((a, b) => a.slot.localeCompare(b.slot));
+  const nowMinutes = new Date().getHours() * 60 + new Date().getMinutes();
 
   return (
     <div className="page-enter page-container content-page-bg">
@@ -1012,22 +1146,51 @@ export default function Attendance() {
       {todaySchedule.length > 0 && (
         <div className="card" style={{ marginBottom: 13, padding: '10px 13px' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 7 }}>
-            <div style={{ fontSize: 10, fontWeight: 800, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.07em' }}>Today's Classes</div>
+            <div style={{ fontSize: 10, fontWeight: 800, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.07em' }}>
+              {isShowingTomorrow ? "Tomorrow's Classes" : "Today's Classes"}
+            </div>
             <div style={{ fontSize: 10, color: 'var(--muted)' }}>
-              {new Date().toLocaleDateString('en-BD', { weekday: 'short', day: 'numeric', month: 'short' })}
+              {new Date(previewDate + 'T00:00:00').toLocaleDateString('en-BD', { weekday: 'short', day: 'numeric', month: 'short' })}
             </div>
           </div>
+          {isShowingTomorrow && (
+            <div style={{ fontSize: 10, color: 'var(--accent)', marginBottom: 8, display: 'flex', alignItems: 'center', gap: 4 }}>
+              <CalendarDays size={11} />
+              {new Date().getHours() >= 17
+                ? "Showing tomorrow — it's past 5 PM"
+                : "Showing tomorrow — today's a holiday/weekend"}
+            </div>
+          )}
           <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
             {todaySchedule.map((item, idx) => {
               const c = courses.find(x => x.id === item.courseId);
               const pal = dark ? PALETTE_D[idx % PALETTE_D.length] : PALETTE_L[idx % PALETTE_L.length];
+              const range = String(item.slot || '').split(/→|->|–|—|-/);
+              const startStr = (range[0] || item.slot || '').trim();
+              const endStr = (range[1] || '').replace(/\s*break\s*/i, '').trim();
+              const startMin = parseTimeToMinutes(item.slot);
+              const endMin = endStr ? parseTimeToMinutes(endStr) : null;
+              const isNow = !isShowingTomorrow && startMin !== null && endMin !== null && nowMinutes >= startMin && nowMinutes < endMin;
               return (
-                <div key={item.id || idx} style={{ display: 'flex', gap: 9, padding: '7px 10px', background: pal.bg, border: `1px solid ${pal.bd}`, borderRadius: 9, alignItems: 'center' }}>
-                  <div style={{ fontWeight: 900, fontSize: 11, color: 'var(--accent)', minWidth: 30, flexShrink: 0 }}>{item.slot}</div>
+                <div key={item.id || idx} style={{ display: 'flex', gap: 9, padding: '7px 10px', background: pal.bg, border: isNow ? '1.5px solid var(--accent)' : `1px solid ${pal.bd}`, borderRadius: 9, alignItems: 'center' }}>
+                  <div style={{ minWidth: 68, flexShrink: 0 }}>
+                    <div style={{ fontWeight: 900, fontSize: 11, color: 'var(--accent)', lineHeight: 1.25 }}>{startStr}</div>
+                    {endStr && <div style={{ fontSize: 9, color: 'var(--muted)', lineHeight: 1.25 }}>– {endStr}</div>}
+                  </div>
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <div style={{ fontSize: 12, fontWeight: 700, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{item.displayName || getDisplayCourseName(c)}</div>
-                    {item.teacherName && <div style={{ fontSize: 10, color: 'var(--muted)', marginTop: 1, display: 'flex', alignItems: 'center', gap: 3 }}><Users size={8} /> {item.teacherName}</div>}
+                    {item.teacherName && (() => {
+                      const pool = store.get('attSlotTeacherPool') || {};
+                      const seen = pool[slotKey(item)] || [];
+                      const rotates = new Set([...seen, item.teacherName].filter(Boolean)).size > 1;
+                      return (
+                        <div style={{ fontSize: 10, color: 'var(--muted)', marginTop: 1, display: 'flex', alignItems: 'center', gap: 3 }}>
+                          <Users size={8} /> {item.teacherName}{rotates && <span style={{ color: 'var(--accent)', fontWeight: 700 }}>· rotates</span>}
+                        </div>
+                      );
+                    })()}
                   </div>
+                  {isNow && <div style={{ fontSize: 9, fontWeight: 800, color: 'var(--accent)', flexShrink: 0, textTransform: 'uppercase' }}>Now</div>}
                   {item.room && <div style={{ fontSize: 10, color: 'var(--muted)', flexShrink: 0 }}>R.{item.room}</div>}
                 </div>
               );
@@ -1037,15 +1200,30 @@ export default function Attendance() {
       )}
       {todaySchedule.length === 0 && (
         <div className="card" style={{ marginBottom: 13, padding: '10px 13px', fontSize: 12, color: 'var(--muted)', textAlign: 'center' }}>
-          {isTodayHoliday ? 'Holiday today — enjoy!' : 'No scheduled classes today'}
+          {isTodayHoliday
+            ? 'Holiday today — enjoy!'
+            : isShowingTomorrow
+              ? "No scheduled classes tomorrow (next class day) either — check your routine"
+              : 'No scheduled classes today'}
         </div>
       )}
 
       {/* Tabs */}
-      <div className="tabs" style={{ marginBottom: 12 }}>
-        {[['daily', 'Daily Log'], ['combined', 'Combined']].map(([id, label]) => (
+      <div className="tabs" style={{ marginBottom: 6 }}>
+        {[['daily', 'Daily Log'], ['combined', 'Manual Entry']].map(([id, label]) => (
           <button key={id} className={`tab-btn${tab === id ? ' active' : ''}`} onClick={() => setTab(id)}>{label}</button>
         ))}
+      </div>
+      {/* Active-source indicator — clarifies which data feeds Marks/Dashboard %,
+          since "Manual Entry" tab can itself still be showing Auto (= Daily Log) data */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: 5, marginBottom: 12, fontSize: 10, color: 'var(--muted)' }}>
+        <span style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--success)', flexShrink: 0 }} />
+        <span>
+          Attendance % app-wide is currently from{' '}
+          <strong style={{ color: 'var(--text)' }}>
+            {(tab === 'daily' || !combinedMode) ? 'Daily Log' : 'Manual Entry'}
+          </strong>
+        </span>
       </div>
 
       {tab === 'daily' ? (

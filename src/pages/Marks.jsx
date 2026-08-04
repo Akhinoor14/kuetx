@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ClipboardList, Target, BookOpen, Lightbulb, ChevronRight, ChevronLeft } from 'lucide-react';
 import { store, getGradeFromPct, getAttendanceMarks, computeEffectiveAttendance, GRADE_SCALE, getProfile, getCurrentTermKey, getTermTimeline, recordAudit } from '../store/store';
@@ -50,7 +50,7 @@ function getCourseSummary(course, marks) {
   const currentContinuous = Math.min(90, teacher1Continuous + teacher2Continuous);
   const currentTotal = Math.min(300, hallTotal + currentContinuous);
   const currentGrade = getGradeFromPct(currentTotal);
-  const hasAnyEntry = Object.keys(m).length > 0;
+  const hasAnyEntry = Object.keys(m).length > 0 || attPct !== null;
   const targetGrade = m.targetGrade || null;
 
   return { currentTotal, currentGrade, hasAnyEntry, targetGrade };
@@ -356,6 +356,18 @@ function CourseListRow({ course, marks, onOpen }) {
 
 // ── Main Marks Page ───────────────────────────────────────────────────────
 export default function Marks() {
+  // BUGFIX (major logic gap — see TermQS.jsx for the full writeup): a
+  // CR's term change syncs into profile.currentTermKey live in the
+  // background (App.jsx), but `profile` here was a plain getProfile()
+  // call, not React state, so this page kept showing the stale term's
+  // course list/timeline until the student navigated away and back.
+  const [, setStoreTick] = useState(0);
+  useEffect(() => {
+    const refresh = () => setStoreTick(v => v + 1);
+    window.addEventListener('kuetx:store-updated', refresh);
+    return () => window.removeEventListener('kuetx:store-updated', refresh);
+  }, []);
+
   const navigate = useNavigate();
   const { courseId } = useParams();
   const profile = getProfile();
