@@ -1,20 +1,21 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { CalendarClock, CheckCircle2, Circle } from 'lucide-react';
+import { CalendarClock, CheckCircle2, Circle, X } from 'lucide-react';
 import Modal from './Modal';
 import { subscribeClassSetup, updateClassSetup, subscribeRoutine, subscribePlannerSettings, updatePlannerSettings, isClassSetupComplete } from '../lib/groupSync';
 import { setGroupCurrentTermKey, setGroupTermStartDate } from '../lib/termStartDateSync';
 import { getCoursesForTerm } from '../store/curriculumStore';
+import { store } from '../store/store';
 import ClassSetupTermCourses from './ClassSetupTermCourses';
 
 /**
- * Mandatory, non-skippable "Class Setup" popup shown to a CR/ACR on their
- * FIRST visit to any CR-only page after being approved (see RequireCR.jsx,
- * which mounts this). This is the single dedicated place all the
- * "the CR is supposed to provide this for the whole class" data gets
- * collected — previously scattered across deptBatchConfig.termStartDate
- * (synced) and a per-student, never-synced local roadmapConfig, with
- * nothing enforcing any of it actually got filled in.
+ * "Class Setup" popup shown to a CR/ACR on their FIRST visit to any
+ * CR-only page after being approved (see RequireCR.jsx, which mounts
+ * this). This is the single dedicated place all the "the CR is supposed
+ * to provide this for the whole class" data gets collected — previously
+ * scattered across deptBatchConfig.termStartDate (synced) and a
+ * per-student, never-synced local roadmapConfig, with nothing enforcing
+ * any of it actually got filled in.
  *
  * Everything here writes to ONE group-wide doc (groups/{groupId}/meta/
  * classSetup) so every class member reads the same values, and a CR can
@@ -25,7 +26,28 @@ import ClassSetupTermCourses from './ClassSetupTermCourses';
  * Deliberately does NOT collect the CR's own mobile number here — that's
  * already mandatory at CR-claim time (see ClaimCRCard.jsx) before this
  * modal is ever reached, so it isn't repeated.
+ *
+ * DISMISSIBLE, WITH A DAILY REMINDER (changed from fully non-skippable):
+ * this used to have closeOnOverlayClick={false} and no close button at
+ * all — the only way out was finishing every step, in this modal, right
+ * now. That's a hard trap for anything that isn't a same-session,
+ * few-taps task: if a CR is mid-way through something else, doesn't have
+ * the routine finalized yet, or the flow reaches a step (like routine)
+ * where the actual work happens on a DIFFERENT page, there was no way to
+ * back out and come back later — only the specific escape hatches each
+ * step happened to offer (and the routine step's wasn't even clearly
+ * labeled as one, see the routine-step copy below). A modal with no
+ * close button is only reasonable for something genuinely instant;
+ * multi-step, cross-page setup isn't that. Now: an explicit X always
+ * closes it, dismissal is remembered per-day (not permanently — an
+ * incomplete class setup is still genuinely blocking for the whole
+ * class's Dashboard/Schedule/alerts, so it should keep resurfacing, just
+ * not trap the CR in the moment), and it re-shows once per calendar day
+ * until setup is actually complete.
  */
+const todayStr = () => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; };
+const DISMISS_KEY = 'classSetupModalDismissedOn';
+
 export default function ClassSetupModal({ groupId, profile, onDone }) {
   const [classSetup, setClassSetup] = useState(null);
   const [routineCount, setRoutineCount] = useState(null);
@@ -35,6 +57,12 @@ export default function ClassSetupModal({ groupId, profile, onDone }) {
   const [error, setError] = useState('');
   const [termSaving, setTermSaving] = useState(false);
   const [termError, setTermError] = useState('');
+  // Re-read on every mount (fresh page load / nav) rather than once ever,
+  // so "dismissed today" genuinely expires the next calendar day without
+  // needing a page refresh mid-session to notice the date rolled over.
+  const [dismissedToday, setDismissedToday] = useState(
+    () => store.get(DISMISS_KEY) === todayStr()
+  );
 
   useEffect(() => {
     if (!groupId) return;
@@ -65,6 +93,17 @@ export default function ClassSetupModal({ groupId, profile, onDone }) {
     onDone?.();
     return null;
   }
+
+  // Dismissed already today — stay out of the way until either the CR
+  // comes back tomorrow (dismissedToday recalculates on next mount, since
+  // it's date-keyed) or finishes setup for real (the `complete` check
+  // above already handles that case regardless of dismissal).
+  if (dismissedToday) return null;
+
+  const handleDismiss = () => {
+    store.set(DISMISS_KEY, todayStr());
+    setDismissedToday(true);
+  };
 
   const datesFilled = form.termStartDate && form.classEndDate && form.prepLeaveEndDate && form.postExamEndDate;
   const currentTermKey = classSetup?.currentTermKey || '';
@@ -177,15 +216,31 @@ export default function ClassSetupModal({ groupId, profile, onDone }) {
   );
 
   return (
-    <Modal closeOnOverlayClick={false} contentStyle={{ width: 'min(94vw, 480px)', maxHeight: '88vh', overflowY: 'auto' }}>
+    <Modal closeOnOverlayClick onClose={handleDismiss} contentStyle={{ width: 'min(94vw, 480px)', maxHeight: '88vh', overflowY: 'auto' }}>
       <div className="card" style={{ padding: 20 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 6 }}>
-          <CalendarClock size={22} color="var(--accent)" />
-          <h2 style={{ fontSize: 17, fontWeight: 800, margin: 0 }}>Set up your class</h2>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10, marginBottom: 6 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10, minWidth: 0 }}>
+            <CalendarClock size={22} color="var(--accent)" />
+            <h2 style={{ fontSize: 17, fontWeight: 800, margin: 0 }}>Set up your class</h2>
+          </div>
+          <button
+            type="button"
+            onClick={handleDismiss}
+            aria-label="Close — remind me later"
+            title="Close — you'll be reminded again tomorrow until this is done"
+            style={{
+              flexShrink: 0, width: 30, height: 30, borderRadius: 8, border: '1px solid var(--border)',
+              background: 'var(--bg)', color: 'var(--muted)', cursor: 'pointer',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+            }}
+          >
+            <X size={16} />
+          </button>
         </div>
         <p style={{ fontSize: 12.5, color: 'var(--muted)', lineHeight: 1.6, marginBottom: 16 }}>
           As CR/ACR, this info is shared with your whole class — everyone's Dashboard, Schedule and
           alerts depend on it. This only has to be done once; you can edit it later from Class Setup.
+          Not ready right now? Tap <strong>×</strong> above — you'll see this again tomorrow until it's finished.
         </p>
 
         {!datesFilled ? (
@@ -277,7 +332,16 @@ export default function ClassSetupModal({ groupId, profile, onDone }) {
               action={<Link to="/schedule" className="btn btn-primary btn-sm">Add routine →</Link>}
             />
             <p style={{ fontSize: 11.5, color: 'var(--muted)', marginTop: 10, lineHeight: 1.5 }}>
-              This popup stays until everything's done. Come back here after adding routine — it'll close automatically.
+              {/* CLARITY FIX: the old copy ("This popup stays until
+                  everything's done... it'll close automatically") gave no
+                  indication that the button right above IS the way out —
+                  a CR who'd already finished dates/term/teachers, landing
+                  here with only routine left, had no non-routine field to
+                  fill in on THIS screen and no cue that clicking away to
+                  /schedule was expected/safe. Spelling out that /schedule
+                  is unlocked (no popup there) makes the escape path
+                  explicit instead of implied. */}
+              Tap <strong>Add routine →</strong> above — that page isn't blocked by this popup, so you can add your weekly classes there freely. Come back to any CR page after and this will have closed on its own.
             </p>
           </>
         )}

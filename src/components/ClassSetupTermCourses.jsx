@@ -52,7 +52,11 @@ export default function ClassSetupTermCourses({
   const CourseRow = ({ course }) => {
     const teachers = courseTeacherMap?.[course.id] || [];
     // Matches isClassSetupComplete's >= 2 requirement — a single teacher
-    // no longer counts as "done" for the CR setup checklist badge.
+    // no longer counts as "done" for the CR setup checklist badge. This
+    // applies to every course type: rotating-slot courses always have 2
+    // fixed teachers overall (which day each one teaches is resolved by
+    // date via Attendance.jsx's rotation log, not by having fewer names
+    // here), and sessional courses also need both names on record.
     const hasTeachers = teachers.length >= 2;
     return (
       <div
