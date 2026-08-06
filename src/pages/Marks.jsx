@@ -340,7 +340,7 @@ function CourseListRow({ course, marks, onOpen }) {
       <div className="planner-list-row-meta">
         {hasAnyEntry ? (
           <>
-            <span className="planner-list-row-grade">{currentGrade || '—'}</span>
+            <span className="planner-list-row-grade">{currentGrade?.grade || '—'}</span>
             <span className="planner-list-row-pct">{pct}%</span>
           </>
         ) : targetGrade ? (
