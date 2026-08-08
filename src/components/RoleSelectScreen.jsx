@@ -31,6 +31,7 @@ import { createFacultyAccountDoc } from '../lib/facultySync';
 import { createProviderShell } from '../lib/providerSync';
 import { SERVICE_TYPES, PROVIDER_SIGNUP_TYPES, PROVIDER_SIGNUP_TYPE_LABELS_BN } from '../lib/serviceSync';
 import { auth } from '../lib/firebase';
+import { deleteMyAccount } from '../lib/accountDeletion';
 import Modal from './Modal';
 import GuideModal from './GuideModal';
 import { PrivacyPolicyBody } from '../pages/PrivacyPolicy';
@@ -88,6 +89,37 @@ export default function RoleSelectScreen({ onSelect }) {
   const [providerServiceType, setProviderServiceType] = useState(SERVICE_TYPES[0]);
   const [providerServiceTypeOther, setProviderServiceTypeOther] = useState('');
   const [providerLocation, setProviderLocation] = useState('');
+  // Escape hatch: someone can land here by signing in with the wrong
+  // Google account (e.g. a personal Gmail instead of the one they meant
+  // to use). Before this, role-select was a dead end — no back button,
+  // no sign-out, no way to retry with a different account.
+  //
+  // This does a FULL account delete (deleteMyAccount Cloud Function),
+  // not just a sign-out. Reasoning: an account that reaches this screen
+  // has, by definition, no role yet — buildQueue() only ever pushes
+  // 'role-select' for a brand-new signup with nothing chosen. There is
+  // nothing to preserve. Just signing out would leave a permanent,
+  // empty, orphaned users/{uid} doc (and Auth user) behind for every
+  // wrong-account misclick, and if that same Gmail is used again later
+  // it would NOT get a fresh start — buildQueue's server check would
+  // find the old (role-less) doc and route straight back to role-select
+  // rather than treating it as a new signup. Deleting outright is what
+  // makes "try again with the right account" actually mean a clean slate.
+  // No typed confirmation is asked for here (unlike the real
+  // Settings > Delete Account flow) — there's no data on this account
+  // yet for a confirmation step to protect against losing.
+  const [signingOut, setSigningOut] = useState(false);
+
+  const wrongAccount = async () => {
+    setSigningOut(true);
+    try {
+      const email = auth.currentUser?.email || auth.currentUser?.uid;
+      await deleteMyAccount(email);
+    } catch (err) {
+      setSigningOut(false);
+      setError('আগের অ্যাকাউন্ট মুছে সাইন আউট করা যায়নি। আবার চেষ্টা করুন।');
+    }
+  };
 
   const choose = async (role) => {
     setError('');
@@ -342,6 +374,24 @@ export default function RoleSelectScreen({ onSelect }) {
           <div style={{ fontSize: 12.5, color: 'var(--muted)' }}>
             One-time setup — you won't be asked again.
           </div>
+          {auth.currentUser?.email && (
+            <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 10 }}>
+              সাইন ইন করা আছে <strong style={{ color: 'var(--text)' }}>{auth.currentUser.email}</strong> দিয়ে
+              {' — ভুল অ্যাকাউন্ট? '}
+              <button
+                type="button"
+                onClick={wrongAccount}
+                disabled={signingOut || loading}
+                style={{
+                  background: 'none', border: 'none', padding: 0, margin: 0,
+                  color: 'var(--accent)', fontWeight: 700, fontSize: 12,
+                  textDecoration: 'underline', cursor: 'pointer',
+                }}
+              >
+                {signingOut ? 'অ্যাকাউন্ট মুছে ফেলা হচ্ছে…' : 'এই অ্যাকাউন্ট মুছে অন্য অ্যাকাউন্ট দিয়ে ঢুকুন'}
+              </button>
+            </div>
+          )}
         </div>
 
         <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 14 }}>

@@ -4,9 +4,11 @@ import { store } from '../store/store';
 import {
   Trash2,
   LogOut, User, ExternalLink, Lock, Settings as SettingsIcon, Sun, Droplets, Moon,
+  UserX,
 } from 'lucide-react';
 import { onAuthChange, logout, loginWithGoogle, resetPassword, getAuthErrorMessage } from '../lib/firebaseAuth';
 import { clearLocalDataOnLogout } from '../lib/accountLifecycle';
+import DeleteAccountModal from '../components/DeleteAccountModal';
 import { APP_VERSION } from '../version';
 import { confirmDialog } from '../lib/dialog';
 import { useIsProvider } from '../hooks/useIsProvider';
@@ -42,6 +44,7 @@ export default function Settings() {
   const [fbLastSynced, setFbLastSynced] = useState(null);
   const [loggingOut, setLoggingOut] = useState(false);
   const [sendingReset, setSendingReset] = useState(false);
+  const [showDeleteAccount, setShowDeleteAccount] = useState(false);
 
   const handleSignOut = async () => {
     const confirmMsg = isProvider
@@ -462,7 +465,7 @@ export default function Settings() {
               Firebase Console <ExternalLink size={11} />
             </a>.
             <br />
-            Signing out stops sync but doesn't delete cloud data — remove local data in the Danger Zone below, or cloud data in the Console.
+            Signing out stops sync but doesn't delete cloud data. "Reset All Data" below only clears this device — use "Delete Account" further down to permanently remove your cloud account and data.
           </div>
         </div>
       )}
@@ -521,6 +524,34 @@ export default function Settings() {
           </div>
         )}
       </div>
+
+      {isSignedIn && (
+        <div className="card" style={{ marginBottom: 12, border: '1.5px solid var(--danger)', background: 'transparent' }}>
+          <div style={{ fontSize: 13, fontWeight: 700, marginBottom: 6, color: 'var(--danger)' }}>Delete Account</div>
+          <p style={{ fontSize: 12.5, color: 'var(--muted)', marginBottom: 12, lineHeight: 1.6 }}>
+            Permanently deletes your account and every piece of data tied to it — profile,
+            personal data, group membership, everything — from KUETx's servers, not just this
+            device. This cannot be undone.
+          </p>
+          <button
+            className="btn btn-ghost"
+            onClick={() => setShowDeleteAccount(true)}
+            style={{ justifyContent: 'flex-start', color: 'var(--danger)', borderColor: 'var(--danger)' }}
+          >
+            <UserX size={14} /> Delete Account
+          </button>
+        </div>
+      )}
+
+      {showDeleteAccount && (
+        <DeleteAccountModal
+          onClose={() => setShowDeleteAccount(false)}
+          onDeleted={() => {
+            flash('✓ Account deleted.');
+            setTimeout(() => window.location.reload(), 800);
+          }}
+        />
+      )}
 
       <div style={{ textAlign: 'center', fontSize: 11, color: 'var(--muted)', padding: '8px 0 4px' }}>
         KUETx v{APP_VERSION}

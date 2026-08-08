@@ -22,6 +22,7 @@ const { onSchedule } = require('firebase-functions/v2/scheduler');
 const { initializeApp } = require('firebase-admin/app');
 const { getFirestore, FieldValue } = require('firebase-admin/firestore');
 const { getMessaging } = require('firebase-admin/messaging');
+const { getAuth } = require('firebase-admin/auth');
 
 initializeApp();
 const db = getFirestore();
@@ -550,4 +551,135 @@ exports.detectDormantServices = onSchedule('every 24 hours', async () => {
   if (flaggedCount > 0) {
     await batch.commit();
   }
+});
+
+/**
+ * deleteMyAccount — full self-service account wipe (Admin SDK, callable).
+ *
+ * Why a Cloud Function and not a client-side delete: Firestore security
+ * rules restrict every collection to its owner (or role-gated staff), so
+ * the client SDK can never reliably clean up EVERYTHING one account
+ * touched — e.g. removing yourself from groups/{groupId}/members/{uid}
+ * needs write access scoped by the rules to CR/ACR, not the member being
+ * removed. And only the Admin SDK can delete the underlying Firebase Auth
+ * user at all — auth.currentUser.delete() client-side exists, but pairing
+ * it with a guaranteed-to-run Firestore wipe first needs one atomic
+ * server-side operation, not two separate client calls that could partially
+ * fail (data wiped but Auth account survives, or vice versa — either leaves
+ * the account in a broken half-deleted state).
+ *
+ * Confirmation is enforced here, not just in the UI, so a compromised or
+ * modified client can't call this without the phrase — request.data.confirm
+ * must exactly equal the signed-in user's own email.
+ *
+ * Deletes, for request.auth.uid:
+ *   - users/{uid}                          (root profile/role doc)
+ *   - users/{uid}/data/*                   (personal store: Notes, Diary, …)
+ *   - users/{uid}/meta/*                   (profile picture meta)
+ *   - students/{uid}                       (Phase 5 profile doc)
+ *   - faculty/{uid}                        (+ faculty/{uid}/private/*)
+ *   - providers/{uid}                      (+ providers/{uid}/contact/*)
+ *   - staff/{uid}                          (+ staff/{uid}/roles/*)
+ *   - activity/{uid}                       (+ activity/{uid}/moduleUsage/*)
+ *   - bloodDonors/{uid}
+ *   - bookingAlerts/{uid}/items/*
+ *   - emailFlags/{uid}                     (doc id IS the uid — see emailFlags.js)
+ *   - groups/{groupId}/members/{uid}       (own membership, every group joined)
+ *   - the Firebase Auth user itself
+ *
+ * Left alone on purpose (not this account's private data, or needed for
+ * other users' records to stay consistent):
+ *   - staffRoleHistory, manualVerifyRequests, deleteRequests, notices,
+ *     services, rollUnlockRequests — these are audit trails / other
+ *     people's pending requests that reference this uid but aren't owned
+ *     by it; deleting them would corrupt someone else's history or an
+ *     in-flight review someone else is waiting on.
+ *   - rollOwners/{roll} — the roll-number lock. Left in place deliberately:
+ *     freeing it would let a different account immediately claim this
+ *     person's KUET roll number, which is a worse outcome than a stale
+ *     lock. Founder can release it manually via the existing rollOwnership
+ *     admin flow if genuinely needed.
+ */
+exports.deleteMyAccount = onCall(async (request) => {
+  const uid = request.auth?.uid;
+  if (!uid) {
+    throw new HttpsError('unauthenticated', 'Sign in required.');
+  }
+
+  const authUser = await getAuth().getUser(uid).catch(() => null);
+  const expectedConfirm = (authUser?.email || uid).trim().toLowerCase();
+  const providedConfirm = String(request.data?.confirm || '').trim().toLowerCase();
+
+  if (!providedConfirm || providedConfirm !== expectedConfirm) {
+    throw new HttpsError(
+      'failed-precondition',
+      'Confirmation text does not match. Nothing was deleted.'
+    );
+  }
+
+  // Firestore has no recursive-delete for arbitrary subcollections in a
+  // batch — walk each known subcollection explicitly, then the parent doc.
+  const deleteDocAndSubcollections = async (docRef) => {
+    const subcols = await docRef.listCollections();
+    for (const sub of subcols) {
+      const snap = await sub.get();
+      if (snap.empty) continue;
+      const batch = db.batch();
+      snap.docs.forEach((d) => batch.delete(d.ref));
+      await batch.commit();
+    }
+    await docRef.delete();
+  };
+
+  const rootDocsToWipe = [
+    db.collection('users').doc(uid),
+    db.collection('students').doc(uid),
+    db.collection('faculty').doc(uid),
+    db.collection('providers').doc(uid),
+    db.collection('staff').doc(uid),
+    db.collection('activity').doc(uid),
+    db.collection('bookingAlerts').doc(uid),
+    db.collection('bloodDonors').doc(uid),
+    db.collection('emailFlags').doc(uid),
+  ];
+
+  // Resolve this account's group membership BEFORE wiping students/{uid}
+  // (that doc holds the groupId pointer we need). Primary source: the
+  // profile doc's own groupId field — O(1), no scanning. Fallback: a
+  // collectionGroup('members') scan filtered to this uid, in case the
+  // pointer is stale/missing but a membership doc still exists somewhere
+  // (e.g. group was switched without the old membership being cleaned up
+  // client-side). The fallback only runs if the fast path finds nothing.
+  const studentSnap = await db.collection('students').doc(uid).get();
+  const knownGroupId = studentSnap.exists ? studentSnap.data()?.groupId : null;
+
+  let groupMemberRefs = [];
+  if (knownGroupId) {
+    groupMemberRefs = [db.collection('groups').doc(knownGroupId).collection('members').doc(uid)];
+  } else {
+    const memberDocs = await db.collectionGroup('members').get();
+    groupMemberRefs = memberDocs.docs.filter((d) => d.id === uid).map((d) => d.ref);
+  }
+
+  for (const ref of rootDocsToWipe) {
+    await deleteDocAndSubcollections(ref);
+  }
+
+  if (groupMemberRefs.length) {
+    // Batches cap at 500 writes; membership counts will never approach
+    // that for one account, but chunk defensively anyway.
+    for (let i = 0; i < groupMemberRefs.length; i += 400) {
+      const chunk = groupMemberRefs.slice(i, i + 400);
+      const batch = db.batch();
+      chunk.forEach((ref) => batch.delete(ref));
+      await batch.commit();
+    }
+  }
+
+  // Auth user last — if anything above throws, the person still has a
+  // working (if partially wiped) account and can retry, rather than an
+  // Auth account that can no longer sign in but whose data is still live.
+  await getAuth().deleteUser(uid);
+
+  return { deleted: true };
 });
