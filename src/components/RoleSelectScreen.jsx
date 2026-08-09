@@ -94,17 +94,15 @@ export default function RoleSelectScreen({ onSelect }) {
   // to use). Before this, role-select was a dead end — no back button,
   // no sign-out, no way to retry with a different account.
   //
-  // This does a FULL account delete (deleteMyAccount Cloud Function),
-  // not just a sign-out. Reasoning: an account that reaches this screen
-  // has, by definition, no role yet — buildQueue() only ever pushes
-  // 'role-select' for a brand-new signup with nothing chosen. There is
-  // nothing to preserve. Just signing out would leave a permanent,
-  // empty, orphaned users/{uid} doc (and Auth user) behind for every
-  // wrong-account misclick, and if that same Gmail is used again later
-  // it would NOT get a fresh start — buildQueue's server check would
-  // find the old (role-less) doc and route straight back to role-select
-  // rather than treating it as a new signup. Deleting outright is what
-  // makes "try again with the right account" actually mean a clean slate.
+  // Calls deleteMyAccount (see lib/accountDeletion.js) — the permanent,
+  // client-side deletion path this project uses (Spark plan, no Cloud
+  // Functions; see docs/ACCOUNT_DELETION_PLAN.md). Deletes what the
+  // client SDK can under current firestore.rules and queues the rest
+  // (accountDeleteRequests/{uid}) for manual Founder cleanup. For an
+  // account at THIS exact stage that's a non-issue in practice — nothing
+  // has been created yet except an empty users/{uid} shell — but the
+  // queued request still gets filed, same as any other deletion, so
+  // there's one consistent cleanup path rather than a special case here.
   // No typed confirmation is asked for here (unlike the real
   // Settings > Delete Account flow) — there's no data on this account
   // yet for a confirmation step to protect against losing.
@@ -113,8 +111,16 @@ export default function RoleSelectScreen({ onSelect }) {
   const wrongAccount = async () => {
     setSigningOut(true);
     try {
-      const email = auth.currentUser?.email || auth.currentUser?.uid;
-      await deleteMyAccount(email);
+      const email = auth.currentUser?.email;
+      if (email) {
+        await deleteMyAccount(email);
+      } else {
+        // No email on this session at all (shouldn't normally happen at
+        // role-select, since Google sign-in always provides one) — fall
+        // back to a plain sign-out rather than getting stuck with no
+        // escape at all.
+        await auth.signOut();
+      }
     } catch (err) {
       setSigningOut(false);
       setError('আগের অ্যাকাউন্ট মুছে সাইন আউট করা যায়নি। আবার চেষ্টা করুন।');

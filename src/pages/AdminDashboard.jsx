@@ -52,6 +52,7 @@ import {
   subscribeManualVerifyRequests,
 } from '../lib/manualVerifyRequests';
 import { subscribeAllQBUploadRequests, approveQBUpload, rejectQBUpload } from '../lib/qbUploadRequests';
+import { subscribeAccountDeleteRequests, resolveAccountDeleteRequest } from '../lib/accountDeleteRequests';
 import {
   subscribeProviderVerifyRequests, adminVerifyProvider, adminRejectProvider, getProviderPhone,
   listAllProviderAccounts, isProviderVerified, adminDeactivateProvider, adminReactivateProvider,
@@ -246,6 +247,8 @@ function ApprovalsView({ onBack, onSelectCategory, countCtx }) {
   const [leaveRequestsByGroup, setLeaveRequestsByGroup] = useState(null);
   const [manualVerifyRequests, setManualVerifyRequests] = useState(null);
   const [pendingJoinRequests, setPendingJoinRequests] = useState(null);
+  const [accountDeleteRequests, setAccountDeleteRequests] = useState(null);
+  const [resolvingDeleteId, setResolvingDeleteId] = useState(null);
   const [err, setErr] = useState('');
   const [subTab, setSubTab] = useUrlTabState('approvalsTab', 'cl-apps');
   const [loadWarning, setLoadWarning] = useState('');
@@ -256,6 +259,7 @@ function ApprovalsView({ onBack, onSelectCategory, countCtx }) {
 
   useEffect(() => withTimeout((cb) => subscribeAllCLApplications(cb), setClApplications, { onTimeout: flagSlowLoad }), []);
   useEffect(() => withTimeout((cb) => subscribeManualVerifyRequests(cb), setManualVerifyRequests, { onTimeout: flagSlowLoad }), []);
+  useEffect(() => withTimeout((cb) => subscribeAccountDeleteRequests(cb), setAccountDeleteRequests, { onTimeout: flagSlowLoad }), []);
   // BUGFIX (Approve always failed with "Missing or insufficient
   // permissions"): the manual-verify tab used to approve via
   // approveManualVerifyRequest(), which writes to the legacy
@@ -322,7 +326,7 @@ function ApprovalsView({ onBack, onSelectCategory, countCtx }) {
   // manual-verify subTab block below for why manualVerifyRequests itself
   // is no longer the approval source).
   const studentManualVerifyCount = (pendingJoinRequests || []).length;
-  const subCtx = { ...countCtx, clApplications: clApplications?.length || 0, crRequests: allCrRequests.length, leaveRequests: allLeaveRequests.length, manualVerifyRequests: studentManualVerifyCount };
+  const subCtx = { ...countCtx, clApplications: clApplications?.length || 0, crRequests: allCrRequests.length, leaveRequests: allLeaveRequests.length, manualVerifyRequests: studentManualVerifyCount, accountDeleteRequests: (accountDeleteRequests || []).length };
 
   return (
     <CategoryShell view="approvals" onSelect={onSelectCategory} countCtx={countCtx}>
@@ -434,6 +438,61 @@ function ApprovalsView({ onBack, onSelectCategory, countCtx }) {
           </>
         );
       })()}
+
+      {subTab === 'account-deletion' && (
+        <Section title="Account Deletion Requests">
+          {accountDeleteRequests === null && <EmptyState>Loading…</EmptyState>}
+          {accountDeleteRequests !== null && accountDeleteRequests.length === 0 && (
+            <EmptyState>Nothing pending.</EmptyState>
+          )}
+          {(accountDeleteRequests || []).map((r) => {
+            const isBlocked = (r.pendingAdminCleanup || []).some((n) =>
+              typeof n === 'string' && n.startsWith('groups/{groupId}/members/{uid}')
+            );
+            const requestedAgo = r.requestedAt?.toDate
+              ? r.requestedAt.toDate().toLocaleString()
+              : '—';
+            return (
+              <div key={r.id} className="card" style={{ padding: 10, marginBottom: 8 }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 8, marginBottom: 6 }}>
+                  <div style={{ minWidth: 0 }}>
+                    <div style={{ fontSize: 13, fontWeight: 700 }}>{r.email || r.uid}</div>
+                    <div style={{ fontSize: 11.5, color: 'var(--muted)' }}>uid: {r.uid} · requested {requestedAgo}</div>
+                  </div>
+                  <button
+                    className="btn btn-sm btn-primary"
+                    disabled={resolvingDeleteId === r.id}
+                    onClick={async () => {
+                      setErr('');
+                      setResolvingDeleteId(r.id);
+                      try {
+                        await resolveAccountDeleteRequest(r.id);
+                      } catch (e) {
+                        setErr(e?.message || 'Could not resolve this request — try again.');
+                      } finally {
+                        setResolvingDeleteId(null);
+                      }
+                    }}
+                  >
+                    {resolvingDeleteId === r.id ? 'Deleting…' : 'Approve & Delete'}
+                  </button>
+                </div>
+                {isBlocked && (
+                  <div style={{ fontSize: 11.5, color: 'var(--warn, #b45309)', background: 'var(--warn-bg, #fef3c7)', padding: '4px 8px', borderRadius: 6, marginBottom: 6 }}>
+                    ⚠ Still holds a CR/ACR slot — this will remove that membership directly (Founder override), not wait for hand-off.
+                  </div>
+                )}
+                <div style={{ fontSize: 11.5, color: 'var(--muted)' }}>
+                  Still to clear: {(r.pendingAdminCleanup || []).join(', ') || '—'}
+                </div>
+                <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 6, fontStyle: 'italic' }}>
+                  After approving: also delete this email's Firebase Auth account in Console → Authentication — that part can't be done from here (Spark plan, no Admin SDK).
+                </div>
+              </div>
+            );
+          })}
+        </Section>
+      )}
     </CategoryShell>
   );
 }
@@ -3142,6 +3201,7 @@ export default function AdminDashboard() {
   const [manualVerifyCount, setManualVerifyCount] = useState(0);
   const [qbUploadCount, setQbUploadCount] = useState(0);
   const [providerVerifyCount, setProviderVerifyCount] = useState(0);
+  const [accountDeleteCount, setAccountDeleteCount] = useState(0);
   const [crCountMap, setCrCountMap] = useState({});
   const [leaveCountMap, setLeaveCountMap] = useState({});
 
@@ -3189,6 +3249,7 @@ export default function AdminDashboard() {
   useEffect(() => subscribeAllPendingJoinRequests((reqs) => setManualVerifyCount(reqs.length)), []);
   useEffect(() => subscribeAllQBUploadRequests((reqs) => setQbUploadCount(reqs.length)), []);
   useEffect(() => subscribeProviderVerifyRequests((reqs) => setProviderVerifyCount(reqs.length)), []);
+  useEffect(() => subscribeAccountDeleteRequests((reqs) => setAccountDeleteCount(reqs.length)), []);
 
   // Badge counts for CR + leave requests across all classes, for the
   // Approvals card badge — one subscription per group, kept as a map so
@@ -3247,6 +3308,7 @@ export default function AdminDashboard() {
     manualVerifyRequests: manualVerifyCount,
     qbUploadRequests: qbUploadCount,
     providerVerifyRequests: providerVerifyCount,
+    accountDeleteRequests: accountDeleteCount,
     emailFlags: emailFlagCount,
     rollRequests: rollRequests.length,
     classCount: groups?.length,

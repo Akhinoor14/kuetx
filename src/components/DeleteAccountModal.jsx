@@ -1,14 +1,17 @@
 // DeleteAccountModal.jsx
 //
-// Self-service "delete my account, everywhere, permanently" — the
-// destructive counterpart to RoleSelectScreen's "wrong account, sign out"
-// escape hatch. Typing/pasting the account's own email into the text box
-// is the confirmation gesture: no separate "yes/confirm" click-through,
-// since a click is too easy to do on reflex for something irreversible.
-// The typed text is checked against auth.currentUser.email client-side
-// (fast feedback) AND independently re-checked server-side inside the
-// deleteMyAccount Cloud Function itself (see functions/index.js) — this
-// modal's check is a UX convenience, not the actual security boundary.
+// Self-service account deletion — permanent design, this project stays
+// on Firebase Spark for good (see lib/accountDeletion.js and
+// docs/ACCOUNT_DELETION_PLAN.md). Deletes what current firestore.rules
+// let the owner delete directly, and files an
+// accountDeleteRequests/{uid} doc for a Founder to finish manually.
+// Copy below is written to be honest about that — "requested" language,
+// not "instantly gone everywhere" — since claiming full immediate
+// deletion here would be a genuinely false promise to the person.
+//
+// Typing/pasting the account's own email into the text box is the
+// confirmation gesture: no separate "yes/confirm" click-through, since a
+// click is too easy to do on reflex for something this consequential.
 
 import { useState } from 'react';
 import { AlertTriangle } from 'lucide-react';
@@ -29,8 +32,8 @@ export default function DeleteAccountModal({ onClose, onDeleted }) {
     setDeleting(true);
     setError('');
     try {
-      await deleteMyAccount(confirmText);
-      onDeleted?.();
+      const result = await deleteMyAccount(confirmText);
+      onDeleted?.(result);
     } catch (err) {
       setDeleting(false);
       setError(
@@ -57,14 +60,16 @@ export default function DeleteAccountModal({ onClose, onDeleted }) {
       <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
         <AlertTriangle size={20} color="var(--danger, #dc2626)" />
         <div style={{ fontWeight: 800, fontSize: 17, color: 'var(--text)' }}>
-          অ্যাকাউন্ট স্থায়ীভাবে মুছে ফেলুন
+          অ্যাকাউন্ট ডিলিট করুন
         </div>
       </div>
 
       <div style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.6, marginBottom: 14 }}>
-        এটা <strong style={{ color: 'var(--text)' }}>{email}</strong> অ্যাকাউন্টের সব ডেটা —
-        প্রোফাইল, নোট, ডায়েরি, গ্রুপ মেম্বারশিপ, সবকিছু — সব জায়গা থেকে স্থায়ীভাবে মুছে দেবে।
-        এটা ফেরানো যাবে না। পরে এই একই Gmail দিয়ে আবার সাইন-ইন করলে সম্পূর্ণ নতুন অ্যাকাউন্ট হিসেবে শুরু হবে।
+        এতে <strong style={{ color: 'var(--text)' }}>{email}</strong> অ্যাকাউন্টের নোট, ডায়েরি,
+        ওয়ালেট, ব্লাড ডোনার এন্ট্রি আর গ্রুপ মেম্বারশিপ (plain member হলে) সাথে সাথে মুছে যাবে,
+        আর এই ডিভাইসও ক্লিয়ার হয়ে যাবে। বাকি অংশ — প্রোফাইল, রোল, ফ্যাকাল্টি/প্রোভাইডার তথ্য,
+        আর আসল লগইন অ্যাকাউন্টটা — এখনই মুছবে না, একটা রিকোয়েস্ট জমা হবে, Founder সেটা রিভিউ করে
+        ম্যানুয়ালি মুছে দেবেন। এটা ফেরানো যাবে না।
       </div>
 
       <label style={{ fontSize: 12.5, color: 'var(--muted)', display: 'block', marginBottom: 6 }}>
@@ -124,7 +129,7 @@ export default function DeleteAccountModal({ onClose, onDeleted }) {
             cursor: matches && !deleting ? 'pointer' : 'not-allowed',
           }}
         >
-          {deleting ? 'মুছে ফেলা হচ্ছে…' : 'স্থায়ীভাবে ডিলিট করুন'}
+          {deleting ? 'প্রসেস হচ্ছে…' : 'ডিলিট করুন'}
         </button>
       </div>
     </Modal>

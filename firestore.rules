@@ -1421,6 +1421,39 @@ service cloud.firestore {
     }
 
     // -------------------------------------------------------------
+    // Account deletion — Spark-tier interim path (see
+    // docs/ACCOUNT_DELETION_PLAN.md for the full "why"). Cloud Functions
+    // deploy requires the Blaze plan, which this project isn't on yet, so
+    // deleteMyAccount (functions/index.js) can't run server-side for now.
+    // The client instead deletes everything current rules already let an
+    // owner delete (personal store, bookingAlerts, bloodDonors, own
+    // plain-member group docs), then files ONE request doc here listing
+    // what's left (users/, students/, faculty/, providers/, activity/,
+    // emailFlags/, staff roles, and any CR/ACR membership) for a Founder
+    // to clear manually via the Firebase Console — same "queue what the
+    // client can't do itself" shape as manualVerifyRequests above.
+    //
+    // Same deterministic-doc-id-as-uid idempotency guard as
+    // manualVerifyRequests: at most one open request per account, can't
+    // be used to spam the queue.
+    // -------------------------------------------------------------
+    match /accountDeleteRequests/{requestId} {
+      allow read: if isAdmin() || isHeadOfOps()
+        || (isSignedIn() && resource.data.uid == request.auth.uid);
+      allow create: if isSignedIn()
+        && requestId == request.auth.uid
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.status == 'pending'
+        && !exists(/databases/$(database)/documents/accountDeleteRequests/$(requestId));
+      // Only a Founder/Head of Ops resolving the request may update it
+      // (status -> 'completed' once they've manually cleared the
+      // remaining collections) — the requester's own role never needs to
+      // touch this doc again after creating it.
+      allow update: if isAdmin() || isHeadOfOps();
+      allow delete: if false; // resolve via status, same as manualVerifyRequests — never delete the audit trail
+    }
+
+    // -------------------------------------------------------------
     // Question Bank upload requests — Campus Lead uploads a paper for
     // their OWN dept+batch group; routes to that dept's Senior Campus
     // Lead for approval, same universal-fallback shape as clApplications

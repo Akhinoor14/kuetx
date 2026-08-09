@@ -529,9 +529,9 @@ export default function Settings() {
         <div className="card" style={{ marginBottom: 12, border: '1.5px solid var(--danger)', background: 'transparent' }}>
           <div style={{ fontSize: 13, fontWeight: 700, marginBottom: 6, color: 'var(--danger)' }}>Delete Account</div>
           <p style={{ fontSize: 12.5, color: 'var(--muted)', marginBottom: 12, lineHeight: 1.6 }}>
-            Permanently deletes your account and every piece of data tied to it — profile,
-            personal data, group membership, everything — from KUETx's servers, not just this
-            device. This cannot be undone.
+            Clears your personal data (notes, diary, wallet, etc.) and this device immediately,
+            and requests full account removal — profile, role, and login — which a Founder
+            completes shortly after. This cannot be undone.
           </p>
           <button
             className="btn btn-ghost"
@@ -546,9 +546,13 @@ export default function Settings() {
       {showDeleteAccount && (
         <DeleteAccountModal
           onClose={() => setShowDeleteAccount(false)}
-          onDeleted={() => {
-            flash('✓ Account deleted.');
-            setTimeout(() => window.location.reload(), 800);
+          onDeleted={(result) => {
+            flash(
+              result?.groupLeaveBlocked
+                ? '✓ Requested. Note: your CR/ACR role needs a hand-off before that part can be removed — see the request for details.'
+                : '✓ This device is cleared and your account deletion has been requested.'
+            );
+            setTimeout(() => window.location.reload(), 1400);
           }}
         />
       )}

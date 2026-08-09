@@ -14,6 +14,17 @@
  * users/{uid}.fcmTokens) and send via admin.messaging().sendEachForMulticast().
  * Invalid/expired tokens returned in the response are pruned from the
  * user doc so the array doesn't grow stale forever.
+ *
+ * NOTE ON deleteMyAccount BELOW: this whole file requires the Blaze
+ * billing plan to deploy at all — this project has decided to stay on
+ * Spark (free) permanently, so NONE of these functions are currently
+ * live, including deleteMyAccount. Every export below except
+ * deleteMyAccount is otherwise-working infrastructure just waiting on a
+ * future Blaze decision that may never come. deleteMyAccount
+ * specifically is flagged inline as dead/reference code — the real,
+ * permanent account-deletion path is client-side (see
+ * src/lib/accountDeletion.js and docs/ACCOUNT_DELETION_PLAN.md), not
+ * this function.
  */
 
 const { onDocumentCreated } = require('firebase-functions/v2/firestore');
@@ -555,6 +566,21 @@ exports.detectDormantServices = onSchedule('every 24 hours', async () => {
 
 /**
  * deleteMyAccount — full self-service account wipe (Admin SDK, callable).
+ *
+ * ⚠️ DEAD CODE — NOT DEPLOYED, NOT CALLABLE, NOT PLANNED TO BE.
+ * This project has decided to stay on the Firebase Spark (free) plan
+ * permanently (no billing account available). Cloud Functions deploy
+ * requires Blaze, so this function has never run and never will unless
+ * that decision changes. The actual, permanent account-deletion path is
+ * client-side: see src/lib/accountDeletion.js and
+ * docs/ACCOUNT_DELETION_PLAN.md. Nothing in the client calls this by
+ * name. Left here only as a reference for what a complete, atomic,
+ * server-side implementation would look like if this project's Spark
+ * decision is ever revisited — do not wire anything up to this without
+ * first re-reading the plan doc's "What NOT to do" section.
+ *
+ * Everything below this notice describes what the function WOULD do if
+ * it were ever deployed.
  *
  * Why a Cloud Function and not a client-side delete: Firestore security
  * rules restrict every collection to its owner (or role-gated staff), so
