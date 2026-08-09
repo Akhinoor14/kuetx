@@ -65,7 +65,7 @@ export const loginAnonymously = async () => {
 // mobile in-app webviews (Facebook/Instagram/Messenger). That reasoning
 // was right, but it missed a bigger, now-mandatory constraint: Firebase's
 // redirect flow relies on a cross-origin iframe between this app's domain
-// (kuetx.vercel.app) and the Firebase-hosted authDomain
+// (www.kuetx.com) and the Firebase-hosted authDomain
 // (kuetx-8a184.firebaseapp.com) to hand the signed-in result back after
 // the redirect returns. Since Chrome M115 (already true on Firefox 109+/
 // Safari 16.1+), browsers that block third-party storage access break

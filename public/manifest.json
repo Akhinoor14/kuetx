@@ -1,8 +1,8 @@
 {
-  "name": "KUETx — Student Life OS",
+  "name": "KUETx — The Digital Ecosystem for KUET",
   "short_name": "KUETx",
   "version": "4.1.6",
-  "description": "Comprehensive student life tracker for KUET students — academics, attendance, finance, wellbeing and more.",
+  "description": "Connecting students, Class Representatives, faculty, and local service providers at Khulna University of Engineering & Technology.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#14532d",

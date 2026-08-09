@@ -2,7 +2,7 @@
  * dialog.js — global confirm()/alertUser() replacement for window.confirm/alert
  * ─────────────────────────────────────────────────────────────────────────────
  * Native window.confirm()/window.alert() are unstyleable browser chrome (the
- * "kuetx.vercel.app says" box) — they can't be themed with CSS at all, they
+ * "www.kuetx.com says" box) — they can't be themed with CSS at all, they
  * block the whole tab, and they look completely out of place next to the
  * rest of the app's UI.
  *

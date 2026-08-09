@@ -28,4 +28,4 @@ Disallow: /classmates
 Disallow: /cr-hub
 Disallow: /admin-hub
 
-Sitemap: https://kuetx.vercel.app/sitemap.xml
+Sitemap: https://www.kuetx.com/sitemap.xml

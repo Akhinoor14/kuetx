@@ -35,7 +35,7 @@ const SUBHEAD_STYLE = { fontSize: 13.5, fontWeight: 700, color: 'var(--text)', m
 const CONTENT = {
   bn: {
     pageTitle: 'গোপনীয়তা নীতি ও শর্তাবলী',
-    subtitle: 'KUETx — Student Life OS · KUETx ম্যানিফেস্টো v1.1 (আগস্ট ২০২৬) অনুসারে',
+    subtitle: 'KUETx — কুয়েটের ডিজিটাল ইকোসিস্টেম · KUETx ম্যানিফেস্টো v1.1 (আগস্ট ২০২৬) অনুসারে',
     intro: "আমরা বিশ্বাস করি গোপনীয়তা নীতি অস্পষ্ট শর্তাবলীর আড়ালে লুকিয়ে রাখার কিছু নয় — এই পুরো পেজটি KUETx-এর সরকারি ম্যানিফেস্টো থেকে নেওয়া।",
     langToggleLabel: 'English',
     backLabel: 'ফিরে যান',
@@ -139,7 +139,7 @@ const CONTENT = {
   },
   en: {
     pageTitle: 'Privacy Policy & Terms & Conditions',
-    subtitle: 'KUETx — Student Life OS · Based on the KUETx Manifesto v1.1 (August 2026)',
+    subtitle: 'KUETx — The Digital Ecosystem for KUET · Based on the KUETx Manifesto v1.1 (August 2026)',
     intro: "We believe privacy commitments shouldn't be hidden behind vague terms — this entire page is drawn directly from KUETx's public manifesto.",
     langToggleLabel: 'বাংলা',
     backLabel: 'Back',

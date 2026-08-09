@@ -121,11 +121,11 @@ const RAW_SECTIONS = [
     num: "02", id: "getting-started", route: null, icon: "Rocket", catIdx: CAT.OVERVIEW,
     titleBn: "শুরু করবেন কীভাবে",
     titleEn: "Getting Started",
-    descBn: "kuetx.vercel.app-এ যান। আপনি Dashboard-এ পৌঁছে যাবেন। প্রথমে বেশিরভাগ কার্ড খালি থাকবে - এটাই স্বাভাবিক।",
-    descEn: "Go to kuetx.vercel.app. You land on the Dashboard. Most cards will be empty at first — that is normal.",
+    descBn: "www.kuetx.com-এ যান। আপনি Dashboard-এ পৌঁছে যাবেন। প্রথমে বেশিরভাগ কার্ড খালি থাকবে - এটাই স্বাভাবিক।",
+    descEn: "Go to www.kuetx.com. You land on the Dashboard. Most cards will be empty at first — that is normal.",
     blocksBn: [
       { type: 'subhead', text: 'প্রথমবার অ্যাপ খুললে কী দেখবেন' },
-      { type: 'text', text: 'kuetx.vercel.app-এ যান। Dashboard-এ পৌঁছে যাবেন। বেশিরভাগ কার্ড খালি বা শূন্য দেখাবে - এটা স্বাভাবিক। উপরে "Complete Your Profile" ব্যানারও দেখা যেতে পারে। প্রথমবার লোড হওয়ার পর অ্যাপ অফলাইনেও কাজ করবে।' },
+      { type: 'text', text: 'www.kuetx.com-এ যান। Dashboard-এ পৌঁছে যাবেন। বেশিরভাগ কার্ড খালি বা শূন্য দেখাবে - এটা স্বাভাবিক। উপরে "Complete Your Profile" ব্যানারও দেখা যেতে পারে। প্রথমবার লোড হওয়ার পর অ্যাপ অফলাইনেও কাজ করবে।' },
       { type: 'callout', variant: 'tip', text: 'আগে ইনস্টল করে নিন। Android-এ: Chrome মেনু → Add to Home Screen। iPhone-এ: Safari Share → Add to Home Screen। ডেস্কটপে: অ্যাড্রেস বারের ইনস্টল আইকনে ক্লিক করুন। PWA ভার্সন দ্রুত চলে এবং ব্রাউজার ট্যাব ছাড়াই কাজ করে।' },
       { type: 'subhead', text: 'সেটআপের ক্রম' },
       { type: 'text', text: 'প্রথম দিন এই ক্রমে কাজ করুন। প্রতিটি ধাপের সাথে পরের ধাপের সম্পর্ক আছে।' },
@@ -138,7 +138,7 @@ const RAW_SECTIONS = [
     ],
     blocksEn: [
       { type: 'subhead', text: 'What You See When You First Open the App' },
-      { type: 'text', text: 'Go to kuetx.vercel.app. You land on the Dashboard. Most cards will be empty or show zero — that is normal. A "Complete Your Profile" banner may appear at the top. The app is already working offline after this first load.' },
+      { type: 'text', text: 'Go to www.kuetx.com. You land on the Dashboard. Most cards will be empty or show zero — that is normal. A "Complete Your Profile" banner may appear at the top. The app is already working offline after this first load.' },
       { type: 'callout', variant: 'tip', text: 'Install it first. On Android: Chrome menu → Add to Home Screen. On iPhone: Safari Share → Add to Home Screen. Desktop: click the install icon in the address bar. The PWA version is faster and works without a browser tab.' },
       { type: 'subhead', text: 'Setup Order — Do This in Sequence' },
       { type: 'text', text: 'Follow this order on Day 1. Each step feeds the next.' },

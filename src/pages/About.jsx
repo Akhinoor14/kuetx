@@ -35,8 +35,8 @@ export default function About() {
   const { isProvider } = useIsProvider();
   const { t } = useProviderLang();
   usePageMeta(
-    'About KUETx — Student Life OS for KUET Students',
-    'Learn about KUETx, the free student life app built for KUET — attendance tracker, GPA calculator, question bank, schedule, and more.'
+    'About KUETx — The Digital Ecosystem for KUET',
+    'Learn about KUETx, the free digital ecosystem for KUET — connecting students, Class Representatives, faculty, and local service providers. Attendance tracker, GPA calculator, CR tools, faculty portal, campus services, question bank, and more.'
   );
 
   // BUGFIX (provider seeing the full student feature showcase): this
@@ -106,11 +106,11 @@ export default function About() {
             </div>
 
             <h1 style={{ fontSize: 'clamp(2.25rem, 5vw, 3.4rem)', fontWeight: 900, margin: '0 0 0.75rem', color: 'var(--text)', lineHeight: 1.02, maxWidth: '12ch', letterSpacing: '-0.06em' }}>
-              Student life, simplified.
+              Campus life, connected.
             </h1>
 
             <p style={{ maxWidth: '48rem', fontSize: '1.05rem', color: 'var(--muted)', lineHeight: 1.75, margin: 0, fontWeight: 500 }}>
-              KUETX is an all-in-one student life platform for KUET, bringing academics, finance, wellbeing, events, and daily campus tasks into one focused experience.
+              KUETX is the digital ecosystem for KUET — connecting students, Class Representatives, faculty, and local service providers, and bringing academics, finance, wellbeing, events, and daily campus tasks into one focused experience.
             </p>
 
             <div style={{ marginTop: '1.1rem' }}>
@@ -123,7 +123,7 @@ export default function About() {
             <div style={{ marginTop: '1.35rem', display: 'flex', flexWrap: 'wrap', gap: '0.75rem' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.7rem 1rem', borderRadius: '14px', background: 'rgba(22,163,74,0.08)', border: '1px solid rgba(22,163,74,0.12)', color: 'var(--text)', fontSize: '0.92rem', fontWeight: 600 }}>
                 <Users size={16} style={{ color: 'var(--accent)' }} />
-                Built for KUET students
+                Built for the KUET community
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.7rem 1rem', borderRadius: '14px', background: 'rgba(14,165,233,0.08)', border: '1px solid rgba(14,165,233,0.12)', color: 'var(--text)', fontSize: '0.92rem', fontWeight: 600 }}>
                 <Building2 size={16} style={{ color: 'var(--accent)' }} />
@@ -198,7 +198,7 @@ export default function About() {
           </div>
 
           {/* Mobile Hero - Tagline */}
-          <p style={{ fontSize: '0.9rem', color: 'var(--muted)', lineHeight: 1.6, margin: '0 0 1.2rem 0' }}>All-in-one platform for KUET students</p>
+          <p style={{ fontSize: '0.9rem', color: 'var(--muted)', lineHeight: 1.6, margin: '0 0 1.2rem 0' }}>The digital ecosystem for KUET</p>
 
           {/* Mobile Hero - Trust Badges */}
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.6rem' }}>
@@ -517,7 +517,7 @@ export default function About() {
         </div>
 
         <h3 style={{ fontSize: '1.05rem', fontWeight: 800, marginBottom: '1.2rem', color: 'var(--text)' }}>
-          Responsible by design, built for KUET students
+          Responsible by design, built for the KUET community
         </h3>
 
         <div style={{
@@ -556,7 +556,7 @@ export default function About() {
 
         <div style={{ maxWidth: '760px', margin: '0 auto', padding: '1rem', borderRadius: '14px', background: 'linear-gradient(135deg, rgba(22,163,74,0.06), rgba(14,165,233,0.03))', border: '1px solid rgba(22,163,74,0.12)', textAlign: 'center' }}>
           <p style={{ margin: 0, fontSize: '0.93rem', color: 'var(--muted)', lineHeight: 1.6 }}>
-            Consolidating academics, finances, and personal growth into one focused platform for KUET students.
+            Consolidating academics, finances, and personal growth into one focused platform — connecting students, Class Representatives, faculty, and local service providers across KUET.
           </p>
         </div>
       </div>

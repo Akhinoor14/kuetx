@@ -3,8 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <title>KUETx — Student Life OS</title>
-    <meta name="description" content="Comprehensive student life tracker for KUET students — academics, attendance, GPA, finance, wellbeing and more. 100% offline." />
+    <title>KUETx — The Digital Ecosystem for KUET</title>
+    <meta name="description" content="KUETx is the digital ecosystem for Khulna University of Engineering & Technology — connecting students, Class Representatives, faculty, and local service providers in one platform. Academics, attendance, GPA, CR tools, faculty portal, campus services, and a question bank, all in one place." />
     <meta name="theme-color" content="#16a34a" />
     <meta name="application-version" content="4.1.6" />
     <meta name="color-scheme" content="light dark" />
@@ -12,20 +12,21 @@
     <link rel="dns-prefetch" href="https://firestore.googleapis.com" />
     <link rel="manifest" href="/manifest.json" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <link rel="apple-touch-icon" href="/icon-192.svg" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="apple-mobile-web-app-title" content="KUETx" />
     <meta name="mobile-web-app-capable" content="yes" />
-    <meta property="og:title" content="KUETx — Student Life OS for KUET" />
-    <meta property="og:description" content="Track academics, attendance, GPA, finance, namaz — built for KUET students. Free forever." />
+    <meta property="og:title" content="KUETx — The Digital Ecosystem for KUET" />
+    <meta property="og:description" content="Connecting students, Class Representatives, faculty, and local service providers at Khulna University of Engineering & Technology. Academics, CR tools, faculty portal, campus services, question bank — free forever." />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://www.kuetx.com/" />
     <meta property="og:site_name" content="KUETx" />
     <meta property="og:image" content="https://www.kuetx.com/icon-512.svg" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="KUETx — Student Life OS for KUET" />
-    <meta name="twitter:description" content="Track academics, attendance, GPA, finance, namaz — built for KUET students. Free forever." />
+    <meta name="twitter:title" content="KUETx — The Digital Ecosystem for KUET" />
+    <meta name="twitter:description" content="Connecting students, Class Representatives, faculty, and local service providers at Khulna University of Engineering & Technology. Free forever." />
     <meta name="twitter:image" content="https://www.kuetx.com/icon-512.svg" />
     <link rel="canonical" href="https://www.kuetx.com/" />
     <!-- offline: no external preconnect to fonts -->
@@ -97,16 +98,67 @@
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "SoftwareApplication",
-      "name": "KUETx",
-      "alternateName": "KUETx — Student Life OS",
-      "applicationCategory": "EducationApplication",
-      "operatingSystem": "Web",
-      "url": "https://www.kuetx.com/",
-      "description": "Comprehensive student life tracker for KUET students — academics, attendance, GPA, finance, wellbeing and more. 100% offline.",
-      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "BDT" },
-      "sameAs": ["https://www.facebook.com/kuetx/"],
-      "author": { "@type": "Organization", "name": "KUETx" }
+      "@graph": [
+        {
+          "@type": "SoftwareApplication",
+          "@id": "https://www.kuetx.com/#software",
+          "name": "KUETx",
+          "alternateName": "KUETx — The Digital Ecosystem for KUET",
+          "applicationCategory": ["EducationApplication", "BusinessApplication"],
+          "operatingSystem": "Web",
+          "url": "https://www.kuetx.com/",
+          "description": "KUETx is the digital ecosystem for Khulna University of Engineering & Technology (KUET) — connecting students, Class Representatives (CRs), faculty members, and local service providers in one platform. Covers academic management, attendance and GPA tracking, CR administrative tools, a faculty portal, a campus services and provider marketplace, and a shared question bank.",
+          "image": "https://www.kuetx.com/icon-512.svg",
+          "featureList": [
+            "Academic management (attendance, GPA, CGPA tracking)",
+            "Class Representative (CR) administrative tools",
+            "Faculty portal (class assignments, schedules)",
+            "Campus services and provider marketplace",
+            "Shared question bank",
+            "Notice and announcement system"
+          ],
+          "offers": { "@type": "Offer", "price": "0", "priceCurrency": "BDT" },
+          "publisher": { "@id": "https://www.kuetx.com/#organization" },
+          "author": { "@id": "https://www.kuetx.com/#organization" }
+        },
+        {
+          "@type": "Organization",
+          "@id": "https://www.kuetx.com/#organization",
+          "name": "KUETx",
+          "alternateName": "KUETx — The Digital Ecosystem for KUET",
+          "url": "https://www.kuetx.com/",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://www.kuetx.com/icon-512.svg",
+            "width": "512",
+            "height": "512"
+          },
+          "description": "KUETx is the digital ecosystem serving the entire Khulna University of Engineering & Technology (KUET) community — students, Class Representatives, faculty members, and local service providers across the Khulna campus area — built as a real digital bridge connecting everyone on campus.",
+          "areaServed": {
+            "@type": "Place",
+            "name": "Khulna University of Engineering & Technology, Khulna, Bangladesh"
+          },
+          "foundingLocation": {
+            "@type": "Place",
+            "address": {
+              "@type": "PostalAddress",
+              "addressLocality": "Khulna",
+              "addressCountry": "BD"
+            }
+          },
+          "sameAs": [
+            "https://www.facebook.com/kuetx/"
+          ]
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://www.kuetx.com/#website",
+          "url": "https://www.kuetx.com/",
+          "name": "KUETx",
+          "publisher": { "@id": "https://www.kuetx.com/#organization" },
+          "inLanguage": "en"
+        }
+      ]
     }
     </script>
   </head>

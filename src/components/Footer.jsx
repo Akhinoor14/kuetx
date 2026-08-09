@@ -48,7 +48,7 @@ export function Footer() {
             <Wordmark height={22} />
             <div>
               <div style={{ fontSize: 11, fontWeight: 700, color: 'var(--text)', lineHeight: 1.1 }}>KUETx</div>
-              <div style={{ fontSize: 10, color: 'var(--muted)', lineHeight: 1.1 }}>Student Life OS · v{APP_VERSION_SHORT}</div>
+              <div style={{ fontSize: 10, color: 'var(--muted)', lineHeight: 1.1 }}>The KUET Ecosystem · v{APP_VERSION_SHORT}</div>
             </div>
           </Link>
 

@@ -319,7 +319,7 @@ const makeCoverSection = () => [
     shading: { type: ShadingType.CLEAR, fill: C.darkGreen },
     spacing: { before: 0, after: 120 },
   }),
-  new Paragraph({ children: [run('kuetx.vercel.app', { size: SZ.cell, color: C.teal })], alignment: AlignmentType.CENTER, shading: { type: ShadingType.CLEAR, fill: C.darkGreen }, spacing: { before: 0, after: 2800 } }),
+  new Paragraph({ children: [run('www.kuetx.com', { size: SZ.cell, color: C.teal })], alignment: AlignmentType.CENTER, shading: { type: ShadingType.CLEAR, fill: C.darkGreen }, spacing: { before: 0, after: 2800 } }),
   new Paragraph({ children: [run('Built by a KUETian, for KUETians  \u2022  2025', { size: SZ.foot, color: C.teal })], alignment: AlignmentType.CENTER, shading: { type: ShadingType.CLEAR, fill: C.darkGreen }, spacing: { before: 0, after: 0 } }),
   pageBreak(),
 ];
@@ -410,7 +410,7 @@ const makeGettingStarted = () => [
   sectionHeaderBar('01 \u00B7 Getting Started \u2014 Your First Session'),
   spacer(80),
   subLabel('What You See When You First Open the App'),
-  bodyText('Go to kuetx.vercel.app. You land on the Dashboard. Most cards will be empty or show zero \u2014 that is normal. A "Complete Your Profile" banner may appear at the top. The app is already working offline after this first load.'),
+  bodyText('Go to www.kuetx.com. You land on the Dashboard. Most cards will be empty or show zero \u2014 that is normal. A "Complete Your Profile" banner may appear at the top. The app is already working offline after this first load.'),
   spacer(60),
   callout('Install it first. On Android: Chrome menu \u2192 Add to Home Screen. On iPhone: Safari Share \u2192 Add to Home Screen. Desktop: click the install icon in the address bar. The PWA version is faster and works without a browser tab.', 'tip'),
   spacer(100),
@@ -482,7 +482,7 @@ const makeDashboard = () => [
   ], 'Card', 'What it shows', 2600),
   spacer(80),
   subLabel('How to Use'),
-  step(1, 'Open the app \u2014 Dashboard loads by default at kuetx.vercel.app'),
+  step(1, 'Open the app \u2014 Dashboard loads by default at www.kuetx.com'),
   step(2, 'Tap any stat card to navigate directly to that section for more detail or to enter data'),
   step(3, 'Watch the alerts strip \u2014 if it\'s red, tap it and fix the issue immediately'),
   step(4, 'CGPA trend chart will grow over 4 years as you enter each term\'s results'),
@@ -1397,7 +1397,7 @@ const makeMindMap = () => {
   return [
     sectionHeaderBar('31 \u00B7 Feature Mind Map'),
     spacer(100),
-    bodyText('All 33 features organized by category. Every node connects back to your student life at KUET.'),
+    bodyText('All 33 features organized by category. Every node connects back to campus life at KUET.'),
     spacer(60),
     new Table({
       width: { size: CONTENT_W, type: WidthType.DXA },
@@ -1477,7 +1477,7 @@ const makeQuickTips = () => [
     spacing: { before: 120, after: 60 },
   }),
   new Paragraph({
-    children: [run('kuetx.vercel.app', { size: SZ.cell, color: C.teal })],
+    children: [run('www.kuetx.com', { size: SZ.cell, color: C.teal })],
     alignment: AlignmentType.CENTER,
     spacing: { before: 0, after: 0 },
   }),
@@ -1518,7 +1518,7 @@ const makeAbout = () => [
   bullet('Feature suggestions: submit via the feedback form with your use case and why it helps KUETians'),
   bullet('Solutions: contact via the feedback link to contribute step-by-step solutions to past papers'),
   spacer(60),
-  callout('The KUETx Guide PDF (which you are currently reading) is accessible any time from the About page \u2014 no internet required if the PWA is installed. Share kuetx.vercel.app with your batchmates so they can benefit too.', 'success'),
+  callout('The KUETx Guide PDF (which you are currently reading) is accessible any time from the About page \u2014 no internet required if the PWA is installed. Share www.kuetx.com with your batchmates so they can benefit too.', 'success'),
   spacer(60),
   divider(C.accentGreen),
   new Paragraph({
@@ -1527,7 +1527,7 @@ const makeAbout = () => [
     spacing: { before: 120, after: 60 },
   }),
   new Paragraph({
-    children: [run('kuetx.vercel.app', { size: SZ.cell, color: C.teal })],
+    children: [run('www.kuetx.com', { size: SZ.cell, color: C.teal })],
     alignment: AlignmentType.CENTER,
     spacing: { before: 0, after: 0 },
   }),
@@ -1557,8 +1557,8 @@ const makeFooter = () => {
       columnWidths: [c1, c2, c3],
       borders: { top: { style: BorderStyle.SINGLE, size: 4, color: C.accentGreen }, bottom: noBorder, left: noBorder, right: noBorder, insideH: noBorder, insideV: noBorder },
       rows: [new TableRow({ children: [
-        new TableCell({ borders: noBorders, children: [new Paragraph({ children: [run('kuetx.vercel.app', { size: SZ.mini, color: C.teal })], spacing: { before: 60, after: 0 } })] }),
-        new TableCell({ borders: noBorders, children: [new Paragraph({ children: [run('Offline-first PWA for KUET students', { size: SZ.foot, color: C.muted })], alignment: AlignmentType.CENTER, spacing: { before: 60, after: 0 } })] }),
+        new TableCell({ borders: noBorders, children: [new Paragraph({ children: [run('www.kuetx.com', { size: SZ.mini, color: C.teal })], spacing: { before: 60, after: 0 } })] }),
+        new TableCell({ borders: noBorders, children: [new Paragraph({ children: [run('The digital ecosystem for KUET', { size: SZ.foot, color: C.muted })], alignment: AlignmentType.CENTER, spacing: { before: 60, after: 0 } })] }),
         new TableCell({ borders: noBorders, children: [new Paragraph({
           children: [run('Page ', { size: SZ.mini, color: C.muted }), new TextRun({ children: [PageNumber.CURRENT], font: 'Calibri', size: SZ.mini, color: C.muted })],
           alignment: AlignmentType.RIGHT,

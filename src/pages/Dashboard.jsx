@@ -123,8 +123,8 @@ function ServicesPreviewRow() {
 
 export default function Dashboard() {
   usePageMeta(
-    'KUETx — Student Life OS for KUET Students',
-    'Comprehensive student life tracker for KUET students — academics, attendance, GPA, finance, wellbeing and more. 100% offline.'
+    'KUETx — The Digital Ecosystem for KUET',
+    'Connecting students, Class Representatives, faculty, and local service providers at Khulna University of Engineering & Technology. Academics, CR tools, faculty portal, campus services, question bank — all in one place.'
   );
   const profile  = getProfile();
   const courses  = getAllCourses(profile);

@@ -186,7 +186,7 @@ export function Sidebar({ open, onClose, authState }) {
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 4 }}>
             <div style={{ fontSize: 10, color: 'var(--muted)' }}>
-              {viewMode === 'teacher' ? 'Faculty Portal · KUET' : 'Student Life OS · KUET'}
+              {viewMode === 'teacher' ? 'Faculty Portal · KUET' : 'The KUET Ecosystem'}
             </div>
           </div>
           {/* The Founder's student/faculty switch button lives on the
