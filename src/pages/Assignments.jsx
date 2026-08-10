@@ -5,15 +5,17 @@ import { getAllCourses } from '../store/curriculumStore';
 import { notify } from '../lib/notify';
 import { getGroupId } from '../lib/groupUtils';
 import { subscribeCRStatus, subscribePlannerSettings } from '../lib/groupSync';
+import { resolveTeacherNames } from '../lib/teacherRegistry';
 import { useCanEditGroup } from '../hooks/useCanEditGroup';
 import GroupAssignments from '../components/GroupAssignments';
 import { Link } from 'react-router-dom';
 
-const normalizeTeacherName = (value) => {
-  const clean = String(value || '').trim().replace(/\s+/g, ' ');
-  if (!clean) return '';
-  return /\bsir\.?$/i.test(clean) ? clean.replace(/\.$/, '') : `${clean} Sir`;
-};
+// BUGFIX (removed honorific guessing per CR feedback): this used to force
+// " Sir" onto any name that didn't already end in "Sir". The CR who
+// assigns the teacher already knows exactly what that teacher goes by, so
+// the app shouldn't guess or rewrite it — this now only trims and
+// collapses whitespace, matching Schedule.jsx's version.
+const normalizeTeacherName = (value) => String(value || '').trim().replace(/\s+/g, ' ');
 
 export default function Assignments() {
   const profile = getProfile();
@@ -72,14 +74,24 @@ export default function Assignments() {
   // here is now informational, not a gate — an assignment can be logged
   // with no teacher selected if the CR hasn't assigned one yet.
   const [groupTeacherMap, setGroupTeacherMap] = useState(null);
+  // teacherRegistry (id->name) — see src/lib/teacherRegistry.js. Group
+  // mode stores teacherIds in courseTeacherMap; local mode stays
+  // name-based (registry {} makes resolveTeacherNames a no-op passthrough).
+  const [groupTeacherRegistry, setGroupTeacherRegistry] = useState(null);
   useEffect(() => {
-    if (!groupId) { setGroupTeacherMap(null); return; }
-    return subscribePlannerSettings(groupId, (data) => setGroupTeacherMap(data?.courseTeacherMap || {}));
+    if (!groupId) { setGroupTeacherMap(null); setGroupTeacherRegistry(null); return; }
+    return subscribePlannerSettings(groupId, (data) => {
+      setGroupTeacherMap(data?.courseTeacherMap || {});
+      setGroupTeacherRegistry(data?.teacherRegistry || {});
+    });
   }, [groupId]);
   const courseTeacherMap = groupTeacherMap ?? (localSettings?.courseTeacherMap || {});
+  const teacherRegistry = groupId ? (groupTeacherRegistry || {}) : {};
 
   const getCourseTeachers = (courseId) => {
-    const mapped = Array.isArray(courseTeacherMap?.[courseId]) ? courseTeacherMap[courseId].map(normalizeTeacherName).filter(Boolean) : [];
+    const raw = Array.isArray(courseTeacherMap?.[courseId]) ? courseTeacherMap[courseId] : [];
+    const names = groupId ? resolveTeacherNames(teacherRegistry, raw) : raw;
+    const mapped = names.map(normalizeTeacherName).filter(Boolean);
     return [...new Set(mapped)].slice(0, 2);
   };
 

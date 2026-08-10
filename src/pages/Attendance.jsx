@@ -4,15 +4,23 @@ import Modal from '../components/Modal';
 import { ChevronLeft, ChevronRight, AlertTriangle, CheckCircle, TrendingUp, Users, BookOpen, Award, CalendarDays, X, PartyPopper, ClipboardX, RefreshCw, ChevronDown, ChevronUp, RotateCcw } from 'lucide-react';
 import {
   store, getAttendanceMarks, MIN_ATTENDANCE_PERCENT, SCHOLARSHIP_ATTENDANCE_PCT,
-  getProfile, getRoutinePreviewDate, isRoutineHoliday, parseTimeToMinutes
+  getProfile, getRoutinePreviewDate, isRoutineHoliday, parseTimeToMinutes, getBDNow,
+  isClassOff, classOverrideSlotKey
 } from '../store/store';
 import { getAllCourses } from '../store/curriculumStore';
 import { getGroupId } from '../lib/groupUtils';
 import { subscribeCRStatus, subscribeRoutine, subscribePlannerSettings } from '../lib/groupSync';
+import { resolveTeacherNames } from '../lib/teacherRegistry';
+import { getEffectiveOccurrence } from '../lib/sessionalCadence';
 import { useCanEditGroup } from '../hooks/useCanEditGroup';
 
 // ── Utils ──────────────────────────────────────────────────────────────────
-const todayStr = () => { const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; };
+// BUGFIX: was `new Date()` (device timezone) — "today" for the Daily Log
+// must always be Bangladesh time, or the Daily Log can silently resolve to
+// the wrong weekday, showing the wrong classes / making a Present mark look
+// like it "didn't save" because it was read back against a different date.
+// See getBDNow() in store.js for the full writeup.
+const todayStr = () => { const d = getBDNow(); return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; };
 const addDays = (d, n) => {
   const dt = new Date(d + 'T00:00:00');
   dt.setDate(dt.getDate() + n);
@@ -62,11 +70,20 @@ function classesNeededForNextSlab(attended, held, pct) {
 function isAutoFull(courseType) {
   return courseType && (courseType.toLowerCase().includes('session') || courseType.toLowerCase().includes('lab'));
 }
-function getTeachersForCourse(settings, schedule, courseId) {
+function getTeachersForCourse(settings, schedule, courseId, teacherRegistry) {
   const norm = v => String(v || '').trim().replace(/\s{2,}/g, ' ');
-  const mapped = Array.isArray(settings?.courseTeacherMap?.[courseId])
-    ? settings.courseTeacherMap[courseId].map(norm).filter(Boolean)
+  const rawCourseMap = Array.isArray(settings?.courseTeacherMap?.[courseId])
+    ? settings.courseTeacherMap[courseId]
     : [];
+  // In group mode, courseTeacherMap entries are teacherIds (see
+  // teacherRegistry.js) — resolve to display names before this fallback
+  // is used. teacherRegistry is undefined/{} in local mode, where
+  // resolveTeacherNames falls back to the raw string, so local mode's
+  // name-based courseTeacherMap still passes straight through.
+  const resolvedCourseMap = teacherRegistry
+    ? resolveTeacherNames(teacherRegistry, rawCourseMap)
+    : rawCourseMap;
+  const mapped = resolvedCourseMap.map(norm).filter(Boolean);
   if (mapped.length > 0) return [...new Set(mapped)];
   return [...new Set(
     (schedule || [])
@@ -180,6 +197,28 @@ function getEffective(courseId, teacherName, logs) {
   });
   return { held, attended, percentage: held > 0 ? Math.round((attended / held) * 100) : null };
 }
+// BUGFIX (teacher-name edit orphans old attendance from the Live
+// Attendance card): the hero cards used to loop the COURSE'S CURRENT
+// teacher list and call getEffective(courseId, teacherName, logs) per
+// name — so the moment a teacher's name is edited in Class Setup/Schedule
+// (e.g. "Munni Sir" -> "Munni Ma'am", or any retyped name), every
+// present/absent already marked under the OLD name stops being counted:
+// held/attended silently drops for days that were, in fact, marked. The
+// data was never lost (it's still sitting in attLogs under the old key) —
+// it just stopped being read. This sums every log key that belongs to the
+// course AT ALL (courseId_<any teacher, old or new>), the same
+// whole-course aggregation already used by computeEffectiveAttendance in
+// store.js, so a rename never zeroes out prior history.
+function getEffectiveForCourse(courseId, logs) {
+  let held = 0, attended = 0;
+  Object.values(logs).forEach(day => {
+    Object.entries(day).forEach(([key, v]) => {
+      if (key !== courseId && !key.startsWith(`${courseId}_`)) return;
+      if (v === 'present' || v === 'absent') { held++; if (v === 'present') attended++; }
+    });
+  });
+  return { held, attended, percentage: held > 0 ? Math.round((attended / held) * 100) : null };
+}
 function attColor(pct) {
   if (pct === null || pct === undefined) return 'var(--muted)';
   if (pct < MIN_ATTENDANCE_PERCENT) return 'var(--danger)';
@@ -200,11 +239,27 @@ function attBorder(pct, dark) {
 }
 function getScheduleCoursesForDate(schedule, date) {
   const dayName = new Date(date + 'T00:00:00').toLocaleDateString('en-US', { weekday: 'long' });
+  const sessionalCadence = (store.get('scheduleSettings') || {}).sessionalCadence || {};
   const byCourse = new Map();
-  (schedule || []).filter(s => s.day === dayName).forEach(s => {
-    if (!byCourse.has(s.courseId)) byCourse.set(s.courseId, []);
-    byCourse.get(s.courseId).push(s);
-  });
+  (schedule || [])
+    .filter(s => s.day === dayName)
+    // CR-triggered on/off toggle (Class Routine page) — a slot the CR
+    // marked off for THIS specific date shouldn't show up as something to
+    // mark attendance for. This is intentionally different from a
+    // holiday: it's "not scheduled this particular occurrence", not "no
+    // class today at all" — see store.js's isClassOff().
+    .filter(s => !isClassOff(date, classOverrideSlotKey(s.courseId, s.day, s.slot)))
+    // Sessional/Lab alternating-week cadence (see sessionalCadence.js) —
+    // a slot with no sessionalCadence entry runs every week, unaffected.
+    // A slot whose effective occurrence for this date is 'off' (an
+    // alternating "off" week, or an ad-hoc cancellation) shouldn't appear
+    // as something to mark attendance for either — not a holiday, just
+    // "not scheduled this particular week".
+    .filter(s => getEffectiveOccurrence(sessionalCadence[classOverrideSlotKey(s.courseId, s.day, s.slot)], date) !== 'off')
+    .forEach(s => {
+      if (!byCourse.has(s.courseId)) byCourse.set(s.courseId, []);
+      byCourse.get(s.courseId).push(s);
+    });
   return [...byCourse.entries()].map(([courseId, items]) => ({
     courseId, items: items.slice().sort((a, b) => a.slot.localeCompare(b.slot)),
   }));
@@ -408,7 +463,7 @@ function HolidayModal({ isOpen, onClose, scheduleSettings, onSave }) {
 }
 
 // ── Compact Hero Card ──────────────────────────────────────────────────────
-function AttendanceHero({ courses, logs, schedule, settings, combinedMode, combinedData }) {
+function AttendanceHero({ courses, logs, schedule, settings, combinedMode, combinedData, teacherRegistry }) {
   const dark = useDark();
   const theory = (courses || []).filter(c => !isAutoFull(c.type));
 
@@ -417,19 +472,22 @@ function AttendanceHero({ courses, logs, schedule, settings, combinedMode, combi
 
   const stats = useMemo(() => {
     const computed = theory.map(c => {
-      const teachers = getTeachersForCourse(settings, schedule, c.id);
-      const ts = teachers.length ? teachers : [''];
       let totalHeld = 0, totalAttended = 0;
-      ts.forEach(t => {
-        let s;
-        if (combinedMode) {
+      if (combinedMode) {
+        const teachers = getTeachersForCourse(settings, schedule, c.id, teacherRegistry);
+        const ts = teachers.length ? teachers : [''];
+        ts.forEach(t => {
           const key = `${c.id}_${t || ''}`;
-          s = { held: Number(combinedData[key]?.held || 0), attended: Number(combinedData[key]?.attended || 0) };
-        } else {
-          s = getEffective(c.id, t, logs);
-        }
-        totalHeld += s.held; totalAttended += s.attended;
-      });
+          totalHeld += Number(combinedData[key]?.held || 0);
+          totalAttended += Number(combinedData[key]?.attended || 0);
+        });
+      } else {
+        // Whole-course aggregation (see getEffectiveForCourse) — sums every
+        // teacher name ever marked under this course, old or new, so
+        // editing a teacher's name never zeroes out prior attendance.
+        const s = getEffectiveForCourse(c.id, logs);
+        totalHeld = s.held; totalAttended = s.attended;
+      }
       const pct = totalHeld > 0 ? Math.round((totalAttended / totalHeld) * 100) : null;
       const canMiss = pct !== null ? classesUntilDrop(totalAttended, totalHeld, pct) : null;
       const needNext = pct !== null && pct < 90 ? classesNeededForNextSlab(totalAttended, totalHeld, pct) : null;
@@ -542,7 +600,7 @@ function AttendanceHero({ courses, logs, schedule, settings, combinedMode, combi
 }
 
 // ── Daily Log ──────────────────────────────────────────────────────────────
-function DailyLog({ courses, logs, setLogs, schedule, settings, onEditTeachers, canEditTeachers }) {
+function DailyLog({ courses, logs, setLogs, schedule, settings, onEditTeachers, canEditTeachers, teacherRegistry }) {
   const [date, setDate] = useState(todayStr());
   const [showGive, setShowGive] = useState(false);
   const dark = useDark();
@@ -651,7 +709,7 @@ function DailyLog({ courses, logs, setLogs, schedule, settings, onEditTeachers, 
       const anyRotating = resolved.some(r => r.isRotating);
       const anyNeedsPick = resolved.some(r => r.needsPick);
       const onDate = [...new Set(resolved.map(r => r.resolvedTeacher).filter(Boolean))];
-      const teachers = onDate.length ? onDate : getTeachersForCourse(settings, schedule, course.id);
+      const teachers = onDate.length ? onDate : getTeachersForCourse(settings, schedule, course.id, teacherRegistry);
       const displayTeachers = teachers.length ? teachers : [''];
       const hasTeachers = displayTeachers.some(t => !!t);
       const slots = (scheduledCourses.find(s => s.courseId === course.id)?.items || []);
@@ -857,7 +915,7 @@ function DailyLog({ courses, logs, setLogs, schedule, settings, onEditTeachers, 
         const row = cd.teacherRows.find(r => r.teacher === openCard.teacher);
         if (!row) { setOpenCard(null); return null; }
         const slotEntry = cd.resolved.find(r => r.resolvedTeacher === row.teacher);
-        const defaultTeachers = getTeachersForCourse(settings, schedule, cd.course.id);
+        const defaultTeachers = getTeachersForCourse(settings, schedule, cd.course.id, teacherRegistry);
         const switchOptions = defaultTeachers.filter(t => t !== row.teacher);
         return (
           <Modal onClose={() => setOpenCard(null)} contentStyle={{ width: 'min(calc(100vw - 24px), 360px)', maxWidth: '100%', padding: 16, background: 'var(--bg)' }}>
@@ -989,7 +1047,7 @@ function DailyLog({ courses, logs, setLogs, schedule, settings, onEditTeachers, 
 }
 
 // ── Combined Attendance ────────────────────────────────────────────────────
-function CombinedAtt({ courses, logs, schedule, settings, combinedMode, combinedData, toggleCombined, updateCombined, onEditTeachers, canEditTeachers }) {
+function CombinedAtt({ courses, logs, schedule, settings, combinedMode, combinedData, toggleCombined, updateCombined, onEditTeachers, canEditTeachers, teacherRegistry }) {
   const dark = useDark();
   const theory = (courses || []).filter(c => !isAutoFull(c.type));
 
@@ -998,7 +1056,7 @@ function CombinedAtt({ courses, logs, schedule, settings, combinedMode, combined
 
   const cards = useMemo(() => {
     const computed = theory.map(c => {
-      const teachers = getTeachersForCourse(settings, schedule, c.id);
+      const teachers = getTeachersForCourse(settings, schedule, c.id, teacherRegistry);
       const ts = teachers.length ? teachers : [''];
       const stats = {};
       ts.forEach(t => {
@@ -1023,7 +1081,7 @@ function CombinedAtt({ courses, logs, schedule, settings, combinedMode, combined
         canMiss, needNext,
         slab: getCurrentSlab(pct),
         hint: getHint(pct, canMiss, needNext),
-        assigned: getTeachersForCourse(settings, schedule, c.id).length >= 2,
+        assigned: getTeachersForCourse(settings, schedule, c.id, teacherRegistry).length >= 2,
       };
     });
 
@@ -1244,14 +1302,22 @@ export default function Attendance() {
   // same course. Holiday dates stay purely local/per-device, so
   // localSettings is still kept around for that.
   const [groupTeacherMap, setGroupTeacherMap] = useState(null);
+  const [groupTeacherRegistry, setGroupTeacherRegistry] = useState(null);
   useEffect(() => {
-    if (!groupId) { setGroupTeacherMap(null); return; }
-    return subscribePlannerSettings(groupId, (data) => setGroupTeacherMap(data?.courseTeacherMap || {}));
+    if (!groupId) { setGroupTeacherMap(null); setGroupTeacherRegistry(null); return; }
+    return subscribePlannerSettings(groupId, (data) => {
+      setGroupTeacherMap(data?.courseTeacherMap || {});
+      setGroupTeacherRegistry(data?.teacherRegistry || {});
+    });
   }, [groupId]);
   const settings = useMemo(
     () => ({ ...localSettings, courseTeacherMap: groupTeacherMap ?? (localSettings.courseTeacherMap || {}) }),
     [localSettings, groupTeacherMap],
   );
+  // Passed into getTeachersForCourse's fallback path — undefined in local
+  // mode (no group), which makes that function skip id resolution and use
+  // the raw (already name-based) local courseTeacherMap unchanged.
+  const teacherRegistry = groupId ? (groupTeacherRegistry || {}) : undefined;
 
   const toggleCombined = () => {
     const next = !combinedMode;
@@ -1305,7 +1371,7 @@ export default function Attendance() {
       </div>
 
       {/* Hero */}
-      <AttendanceHero courses={courses} logs={logs} schedule={schedule} settings={settings} combinedMode={combinedMode} combinedData={combinedData} />
+      <AttendanceHero courses={courses} logs={logs} schedule={schedule} settings={settings} combinedMode={combinedMode} combinedData={combinedData} teacherRegistry={teacherRegistry} />
 
       {/* Tabs */}
       <div className="tabs" style={{ marginBottom: 6 }}>
@@ -1331,6 +1397,7 @@ export default function Attendance() {
           schedule={schedule} settings={settings}
           onEditTeachers={openTeachers}
           canEditTeachers={canEditTeachers}
+          teacherRegistry={teacherRegistry}
         />
       ) : (
         <CombinedAtt
@@ -1339,6 +1406,7 @@ export default function Attendance() {
           toggleCombined={toggleCombined} updateCombined={updateCombined}
           onEditTeachers={openTeachers}
           canEditTeachers={canEditTeachers}
+          teacherRegistry={teacherRegistry}
         />
       )}
 

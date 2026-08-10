@@ -15,8 +15,9 @@
 // empty for that source — every other source is still evaluated normally,
 // so a holiday never means an empty page.
 
-import { store, getWeekdayName, getLocalDateKey, parseTimeToMinutes, isRoutineHoliday, getTodayPlans, getCurrentTermKey } from '../store/store';
+import { store, getWeekdayName, getLocalDateKey, parseTimeToMinutes, isRoutineHoliday, getTodayPlans, getCurrentTermKey, getBDNow, isClassOff, classOverrideSlotKey } from '../store/store';
 import { getAllCourses } from '../store/curriculumStore';
+import { getEffectiveOccurrence } from './sessionalCadence';
 
 // Resolves a schedule entry's course code for display. Prefers the
 // entry's own displayName (Schedule.jsx already fills this with the
@@ -43,7 +44,7 @@ function isCurrentTermEntry(entry, currentTermKey) {
   return match[1] === currentTermKey;
 }
 
-export function buildTodayItems(profile, now = new Date()) {
+export function buildTodayItems(profile, now = getBDNow()) {
   const todayKey = getLocalDateKey(now);
   const todayWeekday = getWeekdayName(now);
   const holidayDates = (store.get('scheduleSettings') || {}).holidayDates || [];
@@ -70,8 +71,26 @@ export function buildTodayItems(profile, now = new Date()) {
       courseById = new Map(getAllCourses(profile || {}).map((c) => [c.id, c]));
     } catch { /* profile not ready yet — codes fall back to displayName only */ }
 
+    // Sessional/Lab alternating-week cadence (Phase 3, see
+    // sessionalCadence.js) — a slot with no sessionalCadence entry runs
+    // every week same as today's existing behavior; only slots the CR
+    // explicitly configured with mode !== 'weekly' skip a "this week is
+    // off" occurrence here.
+    const sessionalCadence = (store.get('scheduleSettings') || {}).sessionalCadence || {};
+
     schedule
       .filter((e) => e.day === todayWeekday && isCurrentTermEntry(e, getCurrentTermKey(profile)))
+      // CR-triggered on/off toggle (Class Routine page) — separate from the
+      // app-wide holiday check above. A slot/day the CR marked off for
+      // TODAY specifically shouldn't appear here, even though it's a
+      // normal (non-holiday) weekday. See store.js's isClassOff().
+      .filter((e) => !isClassOff(todayKey, classOverrideSlotKey(e.courseId, e.day, e.slot)))
+      // Sessional/Lab alternating-week cadence — skip a slot whose
+      // effective occurrence for TODAY is 'off' (an alternating "off"
+      // week, or an ad-hoc cancellation). Independent of isClassOff()
+      // above: that's a CR-triggered on/off toggle, this is the slot's
+      // own recurring cadence. Both can apply to the same slot.
+      .filter((e) => getEffectiveOccurrence(sessionalCadence[classOverrideSlotKey(e.courseId, e.day, e.slot)], todayKey) !== 'off')
       .forEach((e) => {
         items.push({
           id: `class-${e.id}`,
@@ -147,7 +166,7 @@ export function buildTodayItems(profile, now = new Date()) {
 // buckets for the full Today page. Untimed items (minutes === null) go
 // into whichever bucket the current clock is in, so "due today" always
 // shows near the top of the current section instead of a separate list.
-export function groupByPartOfDay(items, now = new Date()) {
+export function groupByPartOfDay(items, now = getBDNow()) {
   const bucketFor = (mins) => {
     if (mins === null) return null;
     if (mins < 12 * 60) return 'Morning';
@@ -167,7 +186,7 @@ export function groupByPartOfDay(items, now = new Date()) {
 // Given the sorted item list, returns { next, following, doneForToday }
 // for the compact dashboard card: the very next upcoming item, one more
 // after it, and whether every timed item has already passed.
-export function getUpcomingPair(items, now = new Date()) {
+export function getUpcomingPair(items, now = getBDNow()) {
   const nowMinutes = now.getHours() * 60 + now.getMinutes();
   const upcoming = items.filter((it) => it.minutes === null || it.minutes >= nowMinutes);
   const hadAnyTimed = items.some((it) => it.minutes !== null);

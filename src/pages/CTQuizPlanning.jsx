@@ -9,6 +9,9 @@ import EventModal from '../components/EventModal';
 import { countWeeklyPressure, detectConflicts, generateSuggestions } from '../lib/smartAssist';
 import { alertDialog } from '../lib/dialog';
 import { keyFor as utilKeyFor, countEventsInWeekOf as utilCountEventsInWeekOf } from '../lib/ctPlannerUtils';
+import { getGroupId } from '../lib/groupUtils';
+import { subscribePlannerSettings } from '../lib/groupSync';
+import { resolveTeacherNames } from '../lib/teacherRegistry';
 
 function makeMonthMatrix(year, month) {
   const first = new Date(year, month, 1);
@@ -55,6 +58,35 @@ export default function CTQuizPlanning() {
   const [schedule, setSchedule] = useState(() => Array.isArray(store.get('schedule')) ? store.get('schedule') : []);
   
   const assignments = useMemo(() => store.get('assignments') || [], []);
+
+  // courseTeacherMap here previously only ever read the LOCAL
+  // scheduleSettings mirror, which App.jsx never populates with the
+  // group's real courseTeacherMap (only scheduleFields get mirrored — see
+  // App.jsx's own comment on that effect). That means, pre-existing even
+  // before the teacher-ID migration, this page's teacher picker was
+  // already stale/empty for anyone in a group. Fixed here by subscribing
+  // directly, same pattern as Courses.jsx/TermQS.jsx/Assignments.jsx, and
+  // resolving ids->names through teacherRegistry before handing the map
+  // to EventModal.
+  const groupId = getGroupId(profile);
+  const [groupCourseTeacherMap, setGroupCourseTeacherMap] = useState(null);
+  const [groupTeacherRegistry, setGroupTeacherRegistry] = useState(null);
+  useEffect(() => {
+    if (!groupId) { setGroupCourseTeacherMap(null); setGroupTeacherRegistry(null); return; }
+    return subscribePlannerSettings(groupId, (data) => {
+      setGroupCourseTeacherMap(data?.courseTeacherMap || {});
+      setGroupTeacherRegistry(data?.teacherRegistry || {});
+    });
+  }, [groupId]);
+  const effectiveTeachersMap = useMemo(() => {
+    const raw = groupId ? (groupCourseTeacherMap || {}) : (settings?.courseTeacherMap || {});
+    if (!groupId) return raw; // local mode: already name-based, pass through
+    const resolved = {};
+    Object.entries(raw).forEach(([courseId, ids]) => {
+      resolved[courseId] = resolveTeacherNames(groupTeacherRegistry || {}, Array.isArray(ids) ? ids : []);
+    });
+    return resolved;
+  }, [groupId, groupCourseTeacherMap, groupTeacherRegistry, settings]);
 
   const dragItemRef = useRef(null);
   const underConstruction = true;
@@ -422,7 +454,7 @@ export default function CTQuizPlanning() {
             </div>
           </div>
 
-          <EventModal open={modalOpen} data={modalData} courses={allCourses} teachersMap={settings?.courseTeacherMap || {}} onChange={(d)=>setModalData(d)} onSave={(d)=>{
+          <EventModal open={modalOpen} data={modalData} courses={allCourses} teachersMap={effectiveTeachersMap} onChange={(d)=>setModalData(d)} onSave={(d)=>{
             // save via saveModal handler
             setModalData(d); saveModal();
           }} onCancel={() => cancelModal()} />

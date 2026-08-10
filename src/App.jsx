@@ -36,7 +36,8 @@ import { getProviderProfile } from './lib/providerSync';
 import { syncBloodDonorEntry } from './lib/bloodDonorSync';
 import { store, getProfile, isProfileComplete, DEFAULT_PROFILE, normalizeProfileForSave, validateProfileForSave, ensureDBReady, tagProfileOwner, isProfileStaleForUid } from './store/store';
 import { getGroupId } from './lib/groupUtils';
-import { syncGroupMembership, getOwnMemberVerifiedOnce } from './lib/groupSync';
+import { syncGroupMembership, getOwnMemberVerifiedOnce, subscribePlannerSettings, subscribeMyRole, updatePlannerSettings } from './lib/groupSync';
+import { migrateCourseTeacherMapToIds } from './lib/teacherRegistry';
 import { subscribeGroupTermStartDate, subscribeGroupCurrentTermKey } from './lib/termStartDateSync';
 import { claimRoll } from './lib/rollOwnership';
 import { ensureManualVerifyRequest } from './lib/manualVerifyRequests';
@@ -68,7 +69,7 @@ const Dashboard = lazy(() => import('./pages/Dashboard'));
 const Profile = lazy(() => import('./pages/Profile'));
 const Courses = lazy(() => import('./pages/Courses'));
 const Attendance = lazy(() => import('./pages/Attendance'));
-const Marks = lazy(() => import('./pages/Marks'));
+const Marks = lazy(() => import('./pages/TermPlanner'));
 const Results = lazy(() => import('./pages/Results'));
 const Schedule = lazy(() => import('./pages/Schedule'));
 const Today = lazy(() => import('./pages/Today'));
@@ -99,6 +100,11 @@ const ProviderShopSettingsPagePage = lazy(() => import('./pages/provider/Provide
 const ProviderProfilePage = lazy(() => import('./pages/provider/ProviderProfile'));
 const ProviderNotificationsPage = lazy(() => import('./pages/provider/ProviderNotifications'));
 const About = lazy(() => import('./pages/About'));
+import RequireGuestMode from './components/RequireGuestMode';
+const GuestDashboard = lazy(() => import('./pages/guest/GuestDashboard'));
+const GuestSchedule = lazy(() => import('./pages/guest/GuestSchedule'));
+const GuestAttendance = lazy(() => import('./pages/guest/GuestAttendance'));
+const GuestMarks = lazy(() => import('./pages/guest/GuestMarks'));
 const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy'));
 const ClassRoutine = lazy(() => import('./pages/ClassRoutine'));
 const ClassSetup = lazy(() => import('./pages/ClassSetup'));
@@ -290,6 +296,20 @@ function Layout({ authState, onboardingActive }) {
             <Route path="/notes" element={<RequireStudentMode><Notes /></RequireStudentMode>} />
             <Route path="/settings" element={<Settings />} />
             <Route path="/about" element={<About />} />
+            {/* GUEST MODE (Phase 2.1) — /guest redirects to the dashboard
+                demo per the plan's recommended structure. Sub-routes are
+                the four presentational-only demo pages built this phase
+                (see documentation/03-features/guest-mode/GUEST_MODE_PLAN_PROMPT.md Phase 2.3's BLOCKED status for why
+                these are hand-built pages, not the real Dashboard/
+                Schedule/Attendance/Marks reused with injected data).
+                Each wrapped in RequireGuestMode (Phase 4, item 3) so a
+                signed-in user who manually navigates here is bounced to
+                the real /dashboard instead of seeing fake demo data. */}
+            <Route path="/guest" element={<Navigate to="/guest/dashboard" replace />} />
+            <Route path="/guest/dashboard" element={<RequireGuestMode authState={authState}><GuestDashboard /></RequireGuestMode>} />
+            <Route path="/guest/schedule" element={<RequireGuestMode authState={authState}><GuestSchedule /></RequireGuestMode>} />
+            <Route path="/guest/attendance" element={<RequireGuestMode authState={authState}><GuestAttendance /></RequireGuestMode>} />
+            <Route path="/guest/marks" element={<RequireGuestMode authState={authState}><GuestMarks /></RequireGuestMode>} />
             {/* Publicly reachable (no route guard) — a brand-new account
                 still on the Role Select screen needs to be able to open
                 this before finishing signup, and it's also linked from
@@ -517,7 +537,30 @@ function Layout({ authState, onboardingActive }) {
 // detection need a Firestore read (getFacultyDoc) — every other branch
 // here stays synchronous/local, matching the original function's cost
 // profile as closely as possible.
-async function buildQueue(isAnonymous) {
+//
+// KNOWN GAP — verified in Phase 2, turned out to be a non-issue for the
+// current guest-mode scope: the queue only rebuilds when
+// authState.authReady/isAnonymous/uid changes (see the effect below), not
+// on every client-side route change. This means buildQueue() runs once
+// per public path on the page's initial load and does NOT re-run just
+// because GuestNav's links (see components/guest/GuestNav.jsx) SPA-
+// navigate between /guest/dashboard, /guest/schedule, /guest/attendance,
+// /guest/marks. In practice this is fine: once buildQueue() resolves to
+// an EMPTY queue for one public path, `current` stays null and Layout
+// keeps rendering regardless of which PUBLIC_PATHS entry the URL bar
+// shows next — the empty-queue state doesn't need to know "which" public
+// path, only "am I on a public path or not", and that was already true
+// for every public path at the moment of the initial (non-SPA) page
+// load. The only case this WOULD matter is a signed-out visitor SPA-
+// navigating from a public path to a genuinely gated path (e.g. typing
+// '/marks' into the guest nav, which doesn't exist today) without a full
+// reload in between — not a scenario the current GuestNav/GuestShell
+// exposes, since it only links between PUBLIC_PATHS entries. Revisit if
+// a future phase adds an in-app link from a public path to a gated one.
+const PUBLIC_PATHS = ['/about', '/guest', '/guest/dashboard', '/guest/schedule', '/guest/attendance', '/guest/marks'];
+const isPublicPath = (pathname) => PUBLIC_PATHS.includes(pathname);
+
+async function buildQueue(isAnonymous, pathname) {
   const q = [];
   let accountRole = getAccountRole();
 
@@ -535,7 +578,21 @@ async function buildQueue(isAnonymous) {
   // only ever queued afterward, once a real uid exists and genuinely has
   // no role recorded — i.e. it now lives strictly inside the Sign Up
   // path, exactly where the spec puts it, instead of gating entry itself.
-  if (isAnonymous || !auth.currentUser?.uid) {
+  //
+  // GUEST MODE (Phase 1): the one exception to "no real account yet ->
+  // 'auth' blocks everything" is the narrow PUBLIC_PATHS allow-list above.
+  // A signed-out visitor sitting on /about gets an EMPTY queue instead —
+  // same as a fully-onboarded signed-in account — so Layout mounts and
+  // /about's own <Route> renders normally, with no opaque overlay on top.
+  // This is intentionally scoped to the exact current pathname, not "any
+  // anonymous visitor everywhere": every other route still hits the
+  // isAnonymous/!uid check below and gets pushed to 'auth' exactly as
+  // before. Signed-in accounts are completely unaffected either way,
+  // since this branch only ever triggers when there's no real uid.
+  if ((isAnonymous || !auth.currentUser?.uid)) {
+    if (isPublicPath(pathname)) {
+      return q; // empty queue: render the real route, no auth gate
+    }
     q.push('auth');
     return q;
   }
@@ -864,6 +921,99 @@ export default function App() {
     });
   }, [authState.authReady, currentGroupId]);
 
+  // GAP FIX (Class On/Off toggle — see CLASS_TOGGLE_NOTIFICATION_PROMPT.md
+  // "Gap 2"): scheduleSettings.classOverrides / .recurringOff are written
+  // group-side into plannerSettings.scheduleFields (see groupSync.js's
+  // setSlotOverride/setDayOverride/setRecurringOff/clearRecurringOff), but
+  // store.js's isClassOff()/getClassOffReason() — the only place read-side
+  // resolution happens — read from the LOCAL store's 'scheduleSettings' key
+  // only (store.get('scheduleSettings')). todayItems.js and Attendance.jsx
+  // both call isClassOff() as a plain synchronous function, not a React
+  // hook, so they can't subscribe to Firestore themselves.
+  //
+  // Same mechanism as the termStartDate/currentTermKey mirrors directly
+  // above: subscribe once at boot to the group's plannerSettings doc and
+  // mirror its scheduleFields into the local 'scheduleSettings' store
+  // entry whenever it changes, merging rather than overwriting so any
+  // OTHER scheduleSettings fields that already live there locally
+  // (e.g. holidayDates — see store.js's getUpcomingHolidays, which reads
+  // scheduleSettings.holidayDates) are preserved rather than clobbered.
+  // Without this, Phase 3 (isClassOff() plugged into Today/Attendance)
+  // is silently broken for every group member except whichever CR/ACR
+  // page already has its own separate subscribePlannerSettings mount.
+  useEffect(() => {
+    if (!authState.authReady) return;
+    const gid = currentGroupId;
+    if (!gid) return;
+    return subscribePlannerSettings(gid, (plannerSettings) => {
+      const scheduleFields = plannerSettings?.scheduleFields;
+      if (!scheduleFields) return; // group hasn't set any overrides yet
+      const current = store.get('scheduleSettings') || {};
+      const merged = { ...current, ...scheduleFields };
+      // Cheap shallow-enough guard to avoid redundant writes on every
+      // unrelated plannerSettings field change (e.g. courseTeacherMap
+      // edits also live in this same doc and would otherwise re-fire
+      // this mirror needlessly). Must compare every field this mirror
+      // actually copies — sessionalCadence (Phase 3) added here after a
+      // bug where it was computed into `merged` correctly but the guard
+      // above it only checked classOverrides/recurringOff, so a
+      // cadence-only change would compute the right merge and then get
+      // silently thrown away by this early return, never reaching
+      // store.set. Any field added to scheduleFields in the future needs
+      // adding here too, or it'll hit the same silent-drop bug.
+      if (JSON.stringify(current.classOverrides) === JSON.stringify(merged.classOverrides)
+        && JSON.stringify(current.recurringOff) === JSON.stringify(merged.recurringOff)
+        && JSON.stringify(current.sessionalCadence) === JSON.stringify(merged.sessionalCadence)) return;
+      store.set('scheduleSettings', merged);
+    });
+  }, [authState.authReady, currentGroupId]);
+
+  // TEACHER-ID MIGRATION (Phase 2 of TEACHER_ID_SESSIONAL_PROGRESS.md):
+  // one-time, idempotent, boot-level conversion of a group's legacy
+  // name-keyed courseTeacherMap (`{courseId: ['Dr. Ahmed Khan', ...]}`)
+  // into the new ID-keyed shape (`{courseId: [teacherId, ...]}`) backed
+  // by a new teacherRegistry (`{teacherId: name}`) — see
+  // teacherRegistry.js for why (renaming a teacher used to silently
+  // orphan every attendance record keyed under the old spelling).
+  //
+  // Deliberately gated to CR/ACR only (subscribeMyRole, the same
+  // server-verified role RequireCR.jsx trusts — NOT profile.isCR, which
+  // is just a self-ticked checkbox). Every group member reads
+  // courseTeacherMap, but only the CR/ACR should ever WRITE
+  // plannerSettings; a random member's client shouldn't be racing to
+  // migrate a shared doc the moment they happen to load the app first.
+  // migrateCourseTeacherMapToIds itself is a pure function — it only
+  // computes the next shape; this effect is the one place that actually
+  // commits it, and only when the CR/ACR role check has resolved to true.
+  //
+  // Safe to fire on every plannerSettings snapshot: migrateCourseTeacherMapToIds
+  // returns null (no-op, no write) once the map is already ID-based, so
+  // this doesn't loop or double-write once migration has happened once
+  // for a group — see its own idempotency comment in teacherRegistry.js.
+  const isCrOrAcrRef = useRef(false);
+  useEffect(() => {
+    if (!authState.authReady || !currentGroupId || !authState.uid) return;
+    return subscribeMyRole(currentGroupId, authState.uid, (role) => {
+      isCrOrAcrRef.current = role === 'cr' || role === 'acr';
+    });
+  }, [authState.authReady, currentGroupId, authState.uid]);
+
+  useEffect(() => {
+    if (!authState.authReady) return;
+    const gid = currentGroupId;
+    if (!gid) return;
+    return subscribePlannerSettings(gid, (plannerSettings) => {
+      if (!isCrOrAcrRef.current) return; // only CR/ACR may migrate the shared doc
+      const result = migrateCourseTeacherMapToIds(
+        plannerSettings?.courseTeacherMap,
+        plannerSettings?.teacherRegistry,
+      );
+      if (!result) return; // already migrated, or nothing to migrate
+      updatePlannerSettings(gid, getProfile(), result)
+        .catch((e) => console.error('[App] teacherRegistry migration write failed:', e));
+    });
+  }, [authState.authReady, currentGroupId]);
+
   // Faculty magic-link (email sign-in-link) verification has been
   // removed entirely — faculty verification is manual-only now (Founder
   // approves via WhatsApp + ManualVerifyFallback/manualVerifyRequests.js,
@@ -923,7 +1073,7 @@ export default function App() {
     ensureDBReady().finally(async () => {
       if (cancelled) return;
       console.log('[KUETx DIAG] ensureDBReady() done, calling buildQueue()...');
-      const q = await buildQueue(authState.isAnonymous);
+      const q = await buildQueue(authState.isAnonymous, window.location.pathname);
       if (cancelled) return;
       console.log('[KUETx DIAG] buildQueue() done, queue =', q);
 
@@ -948,7 +1098,7 @@ export default function App() {
             // complete. Re-hydrate local storage from it and rebuild the
             // queue, which will now correctly skip 'profile'.
             await store.importAllReport({ kuetx_profile: serverProfile });
-            const q2 = await buildQueue(authState.isAnonymous);
+            const q2 = await buildQueue(authState.isAnonymous, window.location.pathname);
             if (cancelled) return;
             console.log('[KUETx DIAG] safety-net re-check found a complete server profile, corrected queue =', q2);
             setQueue(q2);
@@ -1213,7 +1363,7 @@ export default function App() {
               // 'faculty-verify' before 'profile', student doesn't), so
               // just rebuild the whole queue the same way the initial
               // mount does.
-              buildQueue(authState.isAnonymous).then(setQueue);
+              buildQueue(authState.isAnonymous, window.location.pathname).then(setQueue);
             }}
           />
         )}
@@ -1256,7 +1406,7 @@ export default function App() {
         {current === 'faculty-profile' && (
           <FacultyProfileSetupModal
             onSave={() => {
-              buildQueue(authState.isAnonymous).then(setQueue);
+              buildQueue(authState.isAnonymous, window.location.pathname).then(setQueue);
             }}
           />
         )}

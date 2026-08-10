@@ -1657,6 +1657,180 @@ export async function updatePlannerSettings(groupId, profile, data) {
 }
 
 // ---------------------------------------------------------------------
+// Class on/off toggle — CR-triggered ad-hoc cancellation (slot-level or
+// whole-day). Lives inside plannerSettings.scheduleFields.classOverrides,
+// same doc as holidayDates, same merge-write pattern as
+// updatePlannerSettings above (last-write-wins, no new conflict scheme).
+// See store.js's isClassOff()/getClassOffReason() for the read side, and
+// ClassRoutine.jsx for the toggle UI that calls these.
+// ---------------------------------------------------------------------
+
+// Toggles a single slot on/off for one date. `on: true` clears the
+// override (back to "runs normally"); `on: false` writes an 'off' entry.
+// Does NOT touch dayOff — a slot-level change never implicitly changes
+// the whole-day override.
+// Sets or clears a ONE-OFF per-date override for a single slot. `mode`:
+//   'off'   — cancel just this date's occurrence
+//   'on'    — explicit exception for this date (e.g. a single make-up
+//             session on a date that would otherwise be caught by a
+//             recurringOff entry — see isClassOff()'s precedence in
+//             store.js, where a per-date 'on' always wins over recurring)
+//   'clear' — remove the override entirely, back to whatever the default
+//             resolution (recurring or none) would say for that date
+// dateKey is always the CR's own explicit date-picker choice — this
+// function never guesses or derives a date itself.
+export async function setSlotOverride(groupId, profile, { dateKey, slotKey, mode, reason = null }) {
+  const uid = auth.currentUser?.uid;
+  const stamp = getIdentityStamp(profile, uid);
+  const ref = doc(db, 'groups', groupId, 'meta', 'plannerSettings');
+  const snap = await getDoc(ref);
+  const scheduleFields = snap.exists() ? (snap.data().scheduleFields || {}) : {};
+  const classOverrides = { ...(scheduleFields.classOverrides || {}) };
+  const forDate = { ...(classOverrides[dateKey] || {}) };
+  const slots = { ...(forDate.slots || {}) };
+  if (mode === 'clear') {
+    delete slots[slotKey];
+  } else {
+    slots[slotKey] = { status: mode === 'on' ? 'on' : 'off', reason: reason || null, setBy: uid, setAt: serverTimestamp() };
+  }
+  forDate.slots = slots;
+  classOverrides[dateKey] = forDate;
+  await setDoc(ref, {
+    scheduleFields: { ...scheduleFields, classOverrides },
+    updatedBy: stamp,
+    updatedAt: serverTimestamp(),
+  }, { merge: true });
+}
+
+// Toggles the WHOLE DAY on/off for one date. `on: true` clears dayOff
+// (back to "runs normally" — any existing per-slot overrides for that
+// date are left as-is, since they may still be intentional individually).
+export async function setDayOverride(groupId, profile, { dateKey, on, reason = null }) {
+  const uid = auth.currentUser?.uid;
+  const stamp = getIdentityStamp(profile, uid);
+  const ref = doc(db, 'groups', groupId, 'meta', 'plannerSettings');
+  const snap = await getDoc(ref);
+  const scheduleFields = snap.exists() ? (snap.data().scheduleFields || {}) : {};
+  const classOverrides = { ...(scheduleFields.classOverrides || {}) };
+  const forDate = { ...(classOverrides[dateKey] || {}) };
+  if (on) {
+    delete forDate.dayOff;
+    delete forDate.dayOffReason;
+  } else {
+    forDate.dayOff = true;
+    forDate.dayOffReason = reason || null;
+  }
+  classOverrides[dateKey] = forDate;
+  await setDoc(ref, {
+    scheduleFields: { ...scheduleFields, classOverrides },
+    updatedBy: stamp,
+    updatedAt: serverTimestamp(),
+  }, { merge: true });
+}
+
+// Starts (or extends) an ONGOING weekly suspension for a slot, effective
+// from `fromDateKey` (CR-picked, explicit — see setSlotOverride's note)
+// and every matching weekday after it, until clearRecurringOff() is
+// called. Does NOT touch any existing per-date classOverrides — a CR can
+// still punch a single-date 'on' exception through an active recurring
+// suspension for a genuine make-up class (see isClassOff() precedence).
+export async function setRecurringOff(groupId, profile, { slotKey, fromDateKey, reason = null }) {
+  const uid = auth.currentUser?.uid;
+  const stamp = getIdentityStamp(profile, uid);
+  const ref = doc(db, 'groups', groupId, 'meta', 'plannerSettings');
+  const snap = await getDoc(ref);
+  const scheduleFields = snap.exists() ? (snap.data().scheduleFields || {}) : {};
+  const recurringOff = { ...(scheduleFields.recurringOff || {}) };
+  recurringOff[slotKey] = { from: fromDateKey, reason: reason || null, setBy: uid, setAt: serverTimestamp() };
+  await setDoc(ref, {
+    scheduleFields: { ...scheduleFields, recurringOff },
+    updatedBy: stamp,
+    updatedAt: serverTimestamp(),
+  }, { merge: true });
+}
+
+// Ends an ongoing recurring suspension — the slot goes back to running
+// every week as normal (subject to any per-date classOverrides that still
+// exist, same as any other slot).
+export async function clearRecurringOff(groupId, profile, { slotKey }) {
+  const uid = auth.currentUser?.uid;
+  const stamp = getIdentityStamp(profile, uid);
+  const ref = doc(db, 'groups', groupId, 'meta', 'plannerSettings');
+  const snap = await getDoc(ref);
+  const scheduleFields = snap.exists() ? (snap.data().scheduleFields || {}) : {};
+  const recurringOff = { ...(scheduleFields.recurringOff || {}) };
+  delete recurringOff[slotKey];
+  await setDoc(ref, {
+    scheduleFields: { ...scheduleFields, recurringOff },
+    updatedBy: stamp,
+    updatedAt: serverTimestamp(),
+  }, { merge: true });
+}
+
+// ---------------------------------------------------------------------
+// Sessional/Lab alternating-week cadence (Phase 3 — see
+// TEACHER_ID_SESSIONAL_PROGRESS.md / IMPLEMENTATION_PROMPT.md Section 3
+// and src/lib/sessionalCadence.js for the full design). Lives inside
+// plannerSettings.scheduleFields.sessionalCadence — same doc, same
+// merge-write pattern, and (crucially) the SAME App.jsx boot-time mirror
+// that already copies scheduleFields into local scheduleSettings for
+// classOverrides/recurringOff, so todayItems.js/Attendance.jsx (plain
+// synchronous readers, not React hooks — see App.jsx's own comment on
+// why that mirror exists) get live group data with zero new wiring.
+//
+// setSessionalCadence is a single generic writer (unlike the on/off
+// toggle's 4 separate functions) because sessionalCadence.js's pure
+// helpers (toggleDateOverride, shiftCadenceFrom, defaultCadenceForNewSlot)
+// already compute the next per-slot entry — this function's only job is
+// to merge that computed entry into the shared doc, the same shape every
+// other plannerSettings writer in this file uses.
+// ---------------------------------------------------------------------
+
+// Writes (replaces) the sessionalCadence entry for one slotKey. Callers
+// compute `nextEntry` via sessionalCadence.js's pure helpers first (e.g.
+// toggleDateOverride(currentEntry, date, 'off') for a single cancellation,
+// or shiftCadenceFrom(currentEntry, newAnchorDate) for a deliberate
+// "shift cadence from here" action) — this function never computes the
+// cadence logic itself, only persists whatever was computed.
+export async function setSessionalCadence(groupId, profile, { slotKey, nextEntry }) {
+  const uid = auth.currentUser?.uid;
+  const stamp = getIdentityStamp(profile, uid);
+  const ref = doc(db, 'groups', groupId, 'meta', 'plannerSettings');
+  const snap = await getDoc(ref);
+  const scheduleFields = snap.exists() ? (snap.data().scheduleFields || {}) : {};
+  const sessionalCadence = { ...(scheduleFields.sessionalCadence || {}) };
+  sessionalCadence[slotKey] = { ...nextEntry, setBy: uid, setAt: serverTimestamp() };
+  await setDoc(ref, {
+    scheduleFields: { ...scheduleFields, sessionalCadence },
+    updatedBy: stamp,
+    updatedAt: serverTimestamp(),
+  }, { merge: true });
+}
+
+// Removes a slot's sessionalCadence entry entirely — back to "no cadence
+// configured", which resolves to "runs every week" (today's default
+// behavior, unaffected by this system — see sessionalCadence.js's
+// getEffectiveOccurrence). Distinct from setting mode:'weekly': that's an
+// explicit "this sessional runs every week" configuration a CR chose,
+// while clearing removes the configuration altogether. Both currently
+// behave the same for occurrence resolution, but clearing also drops any
+// accumulated overrides, which mode:'weekly' would not.
+export async function clearSessionalCadence(groupId, profile, { slotKey }) {
+  const uid = auth.currentUser?.uid;
+  const stamp = getIdentityStamp(profile, uid);
+  const ref = doc(db, 'groups', groupId, 'meta', 'plannerSettings');
+  const snap = await getDoc(ref);
+  const scheduleFields = snap.exists() ? (snap.data().scheduleFields || {}) : {};
+  const sessionalCadence = { ...(scheduleFields.sessionalCadence || {}) };
+  delete sessionalCadence[slotKey];
+  await setDoc(ref, {
+    scheduleFields: { ...scheduleFields, sessionalCadence },
+    updatedBy: stamp,
+    updatedAt: serverTimestamp(),
+  }, { merge: true });
+}
+
+// ---------------------------------------------------------------------
 // Class Setup — mandatory CR-onboarding data
 // ---------------------------------------------------------------------
 // Single group-wide doc holding every piece of "the CR is supposed to
@@ -1816,7 +1990,19 @@ export function subscribeGroupNotices(groupId, callback, opts = {}) {
   return _mergeSubscriptions(fns, callback);
 }
 
-export async function postGroupNotice(groupId, profile, { title, body, priority = 'normal' }) {
+// PHASE 5 (Blaze-ready future-proofing — see
+// CLASS_TOGGLE_NOTIFICATION_PROMPT.md section 4 and
+// docs/NOTIFICATION_ARCHITECTURE.md): optional per-notice hint about which
+// delivery channels a notice is meant for. Only 'telegram' is actually
+// consumed right now (by functions/index.js's onGroupNoticeCreateTelegram
+// trigger, which ignores this field entirely and fires for every notice
+// regardless). It exists purely so that once Blaze billing is enabled and
+// an SMS fan-out is added, that new trigger can filter on
+// channelHints.includes('sms') without having to backfill or guess intent
+// on notices written before SMS existed. Not passed by any caller today —
+// callers can opt a notice into SMS-eligibility later by passing e.g.
+// channelHints: ['telegram', 'sms'].
+export async function postGroupNotice(groupId, profile, { title, body, priority = 'normal', channelHints = null }) {
   const uid = auth.currentUser?.uid;
   const stamp = getIdentityStamp(profile, uid);
   // Phase 1 of the Notice upgrade: capture the audience size AT SEND TIME
@@ -1843,6 +2029,7 @@ export async function postGroupNotice(groupId, profile, { title, body, priority 
     // callers and already constrain the value via a dropdown.
     priority,
     ...(audienceSize !== null ? { audienceSize } : {}),
+    ...(channelHints !== null ? { channelHints } : {}),
   });
 }
 

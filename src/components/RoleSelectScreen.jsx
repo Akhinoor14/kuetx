@@ -557,7 +557,13 @@ export default function RoleSelectScreen({ onSelect }) {
           </Modal>
         )}
 
-        <GuideModal open={guideOpen} onClose={() => setGuideOpen(false)} />
+        {/* documentation/03-features/guest-mode/GUEST_MODE_PLAN_PROMPT.md Phase 5.1 — a signed-in account on this
+            screen hasn't picked Student/Faculty/Provider yet (that's the
+            whole point of Role Select), so no faculty/provider/staff
+            role exists to resolve to. 'guest' Overview content — "what
+            is KUETx and what do the roles do" — is the honest fit here,
+            not a guess at which role they're about to pick. */}
+        <GuideModal open={guideOpen} onClose={() => setGuideOpen(false)} resolvedRole="guest" />
 
         {error && (
           <div style={{

@@ -3,13 +3,13 @@ import { createPortal } from 'react-dom';
 import { X, Book, CheckCircle2, AlertTriangle } from 'lucide-react';
 
 // Honorifics already present at end of name → don't append "Sir".
-const HONORIFIC_SUFFIX_RE = /\b(sir|ma'?am|madam|miss|mrs?\.?|dr\.?|prof\.?)\.?$/i;
-
-const normalizeTeacherName = (value) => {
-  const clean = String(value || '').trim().replace(/\s+/g, ' ');
-  if (!clean) return '';
-  return HONORIFIC_SUFFIX_RE.test(clean) ? clean.replace(/\.$/, '') : `${clean} Sir`;
-};
+// BUGFIX (removed honorific guessing per CR feedback): this used to force
+// " Sir" onto any name that didn't already end in a recognized honorific.
+// The CR/whoever assigns the teacher already knows exactly what that
+// teacher goes by, so the app shouldn't guess or rewrite it — this now
+// only trims and collapses whitespace, matching Schedule.jsx's version, so
+// this dialog never disagrees with what's actually saved to the routine.
+const normalizeTeacherName = (value) => String(value || '').trim().replace(/\s+/g, ' ');
 
 export default function CourseTeacherDialog({
   isOpen,
@@ -263,6 +263,7 @@ export default function CourseTeacherDialog({
             placeholder="e.g., Dr. Ahmed Khan"
             autoFocus
             disabled={!activeCourse}
+            list="course-teacher-dialog-known-teachers"
             style={{
               width: '100%',
               padding: '10px 12px',
@@ -277,7 +278,7 @@ export default function CourseTeacherDialog({
             }}
           />
           <div style={{ fontSize: '11px', color: 'var(--muted)', marginTop: '4px' }}>
-            Name will be normalized (e.g., "Ahmed" → "Ahmed Sir")
+            Pick a name from the suggestions if this teacher's already on the routine, so the spelling always matches exactly.
           </div>
         </div>
 
@@ -292,6 +293,7 @@ export default function CourseTeacherDialog({
             onChange={(e) => setTeacher2(e.target.value)}
             placeholder={requireTwoTeachers ? 'e.g., Dr. Fatima Begum' : 'e.g., Dr. Fatima Begum (leave blank for single teacher)'}
             disabled={!activeCourse}
+            list="course-teacher-dialog-known-teachers"
             style={{
               width: '100%',
               padding: '10px 12px',
@@ -359,6 +361,18 @@ export default function CourseTeacherDialog({
             {currentTeachers.length >= 2 ? 'Update Teachers' : 'Assign'}
           </button>
         </div>
+        {/* Datalist of names already used elsewhere in this class's routine
+            (see allTeachers prop). Doesn't restrict typing — the CR can
+            still type any name freely — but surfaces existing spellings so
+            the same teacher doesn't accidentally get saved under two
+            slightly different strings (extra space, different
+            capitalization, etc.), which is what actually causes the
+            attendance/marks key-mismatch problem, not honorific choice. */}
+        <datalist id="course-teacher-dialog-known-teachers">
+          {[...new Set((allTeachers || []).filter(Boolean))].map((name) => (
+            <option key={name} value={name} />
+          ))}
+        </datalist>
       </div>
     </div>
   );

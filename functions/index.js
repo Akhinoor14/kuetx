@@ -272,6 +272,30 @@ function escapeMarkdown(s) {
   return String(s || '').replace(/([_*[\]()~`>#+\-=|{}.!])/g, '\\$1');
 }
 
+// TODO(Blaze): Once the Firebase project is on the Blaze (pay-as-you-go)
+// plan — needed because outbound SMS gateway calls require the outbound
+// network access that the free Spark plan's Cloud Functions don't have —
+// add an `onGroupNoticeCreateSms` trigger here (or fan out from inside
+// onGroupNoticeCreateTelegram above; either is fine, this doesn't need to
+// be a second exports.* function) that:
+//   1. Reads `notice.channelHints` off the created doc (see
+//      postGroupNotice in src/lib/groupSync.js) and no-ops unless it
+//      includes 'sms' — most notices (regular CR announcements, join/leave
+//      system notices, etc.) are Telegram-only and should NOT trigger SMS
+//      just because this new trigger exists.
+//   2. Reads phone numbers from a new `smsOptInNumbers` field on
+//      groups/{groupId}/meta/classSetup (same doc as telegramChatId above)
+//      — this field does not exist yet, no need to create it until this
+//      TODO is actually picked up.
+//   3. Calls an SMS gateway (Twilio, or a local Bangladeshi SMS gateway —
+//      whichever ends up cheaper/more reliable is fine, no decision made
+//      yet) once per opted-in number.
+// Full context: docs/NOTIFICATION_ARCHITECTURE.md and
+// CLASS_TOGGLE_NOTIFICATION_PROMPT.md section 4.
+// Until this exists, notices with channelHints including 'sms' are simply
+// not delivered over SMS — Telegram delivery (above) is unaffected and
+// requires no changes when this TODO is eventually done.
+
 /**
  * Auto-approval policy — student join notification (non-blocking).
  *

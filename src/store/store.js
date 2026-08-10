@@ -716,6 +716,27 @@ export const removeTimerTemplate = (id) => {
   } catch { return getTimerTemplates(); }
 };
 
+// BUGFIX (wrong Morning/Afternoon/Evening bucket + wrong "today" for Daily
+// Log attendance): every "now" in the app used to be a plain `new Date()`,
+// which reads the VISITOR'S device/browser clock and timezone — not
+// Bangladesh time. KUETx only ever means Bangladesh time (Asia/Dhaka,
+// UTC+6, no DST), so any device set to a different timezone (or a clock
+// that's simply wrong) would silently push classes into the wrong
+// Morning/Afternoon/Evening section on Today, and could resolve the Daily
+// Log's "today" to the wrong weekday entirely — making a class marked
+// Present appear to "not update" because it was actually being read/written
+// against a different day than the one the routine matches.
+//
+// getBDNow() returns a real Date object whose getHours/getMinutes/getDay/etc.
+// all read as Bangladesh wall-clock time, regardless of the device's own
+// timezone — so every getHours()-based bucket and every todayStr()-style
+// "today" lookup agrees, everywhere in the app.
+export const getBDNow = () => {
+  const now = new Date();
+  const bdMs = now.getTime() + now.getTimezoneOffset() * 60000 + 6 * 60 * 60000;
+  return new Date(bdMs);
+};
+
 // Working-day adder — skips Friday & Saturday (Bangladesh weekend)
 export const addWorkingDays = (startDate, days) => {
   const date = new Date(startDate + 'T00:00:00');
@@ -742,6 +763,153 @@ export const isRoutineHoliday = (dateStr, holidayDates = []) => {
   return dayOfWeek === 5 || dayOfWeek === 6 || holidayDates.includes(dateStr);
 };
 
+// ─── CLASS ON/OFF TOGGLE (CR-triggered ad-hoc / recurring cancellation) ────
+// Separate from holidayDates on purpose: holidayDates is app-wide/blunt (one
+// date cancels EVERY course), while this is CR-triggered and per-slot. Lives
+// in scheduleSettings.classOverrides + scheduleSettings.recurringOff (group
+// mode: synced via groups/{groupId}/meta/plannerSettings.scheduleFields,
+// same doc/merge pattern as holidayDates — see groupSync.js's
+// setSlotOverride/setDayOverride/setRecurringOff and App.jsx's mirror
+// effect that copies scheduleFields into the local store for non-React
+// readers like this module).
+//
+// Two independent mechanisms, because two genuinely different real-world
+// cases exist and conflating them created a design gap (see prior review):
+//   1. classOverrides — a ONE-OFF exception for a single, CR-picked date
+//      (e.g. "this Monday's class is cancelled" or, less commonly, "this
+//      Monday's class IS happening" as a make-up/exception to a recurring
+//      off-state below).
+//   2. recurringOff — an ONGOING suspension of a slot starting from a given
+//      date, every matching weekday, until the CR explicitly turns it back
+//      on (e.g. "teacher is on leave indefinitely, skip this slot every
+//      week from now on"). This does NOT auto-expire and does NOT need the
+//      CR to keep re-toggling it week after week.
+//
+// Shape:
+//   classOverrides: {
+//     [dateKey]: {                 // 'YYYY-MM-DD', CR-picked explicitly —
+//                                   // NEVER auto-guessed from a weekday tab
+//       dayOff: boolean,           // true = every slot off THIS date only
+//       dayOffReason: string | null,
+//       slots: {
+//         [slotKey]: {             // `${courseId}::${day}::${slot}` — same
+//                                   // shape as Attendance.jsx's slotKey()
+//           status: 'off' | 'on',  // 'on' = explicit exception that wins
+//                                   //   over a recurringOff entry for this
+//                                   //   one date (a single make-up class)
+//           reason: string | null,
+//           setBy: uid,
+//           setAt: <timestamp>,
+//         }
+//       }
+//     }
+//   }
+//   recurringOff: {
+//     [slotKey]: {
+//       from: 'YYYY-MM-DD',        // effective this date and every matching
+//                                   //   weekday after it, until removed
+//       reason: string | null,
+//       setBy: uid,
+//       setAt: <timestamp>,
+//     }
+//   }
+export const classOverrideSlotKey = (courseId, day, slot) => `${courseId}::${day}::${slot}`;
+
+// A slotKey embeds its own weekday (`${courseId}::${day}::${slot}`), so a
+// recurringOff entry only ever needs to be checked against dates that fall
+// on that same weekday — extracted here rather than re-parsed at each call
+// site.
+function weekdayFromSlotKey(slotKey) {
+  const parts = String(slotKey || '').split('::');
+  return parts.length >= 2 ? parts[1] : null;
+}
+
+// Single source of truth for "is this class actually happening on this
+// date" — every consumer (Today page, Attendance Daily Log, Routine page's
+// own card dimming) calls this ONE function so the precedence rule below
+// only ever has to be correct in one place.
+//
+// Precedence (first match wins):
+//   1. classOverrides[dateKey].dayOff === true           → OFF (whole day)
+//   2. classOverrides[dateKey].slots[slotKey] === 'on'    → ON  (explicit
+//      exception/make-up, overrides a recurring suspension for this date)
+//   3. classOverrides[dateKey].slots[slotKey] === 'off'   → OFF (one-off)
+//   4. recurringOff[slotKey] exists, dateKey >= its .from,
+//      and dateKey's weekday matches the slot's own weekday → OFF (ongoing)
+//   5. otherwise                                          → ON  (default,
+//      unchanged from today's behavior for slots with no override at all)
+export function isClassOff(dateKey, slotKey) {
+  const settings = store.get('scheduleSettings') || {};
+  const overrides = settings.classOverrides || {};
+  const forDate = overrides[dateKey];
+
+  if (forDate?.dayOff) return true;
+
+  const slotOverride = forDate?.slots?.[slotKey]?.status;
+  if (slotOverride === 'on') return false;
+  if (slotOverride === 'off') return true;
+
+  const recurring = (settings.recurringOff || {})[slotKey];
+  if (recurring?.from && dateKey >= recurring.from) {
+    const slotWeekday = weekdayFromSlotKey(slotKey);
+    const dateWeekday = getWeekdayName(new Date(`${dateKey}T00:00:00`));
+    if (!slotWeekday || slotWeekday === dateWeekday) return true;
+  }
+
+  return false;
+}
+
+// Returns the reason string for an off slot/day, if the CR left one —
+// used by Today page / Daily Log to show *why* a class isn't listed
+// (vs. a plain holiday, which has its own separate message). Mirrors the
+// same precedence as isClassOff() above (dayOff > per-date slot > recurring).
+export function getClassOffReason(dateKey, slotKey) {
+  const settings = store.get('scheduleSettings') || {};
+  const overrides = settings.classOverrides || {};
+  const forDate = overrides[dateKey];
+
+  if (forDate?.dayOff) return forDate.dayOffReason || null;
+
+  const slotEntry = forDate?.slots?.[slotKey];
+  if (slotEntry?.status === 'off') return slotEntry.reason || null;
+  if (slotEntry?.status === 'on') return null; // explicit exception — not off
+
+  const recurring = (settings.recurringOff || {})[slotKey];
+  if (recurring?.from && dateKey >= recurring.from) {
+    const slotWeekday = weekdayFromSlotKey(slotKey);
+    const dateWeekday = getWeekdayName(new Date(`${dateKey}T00:00:00`));
+    if (!slotWeekday || slotWeekday === dateWeekday) return recurring.reason || null;
+  }
+
+  return null;
+}
+
+// Whether a slot currently has an ongoing recurring suspension (regardless
+// of any per-date exceptions) — used by the Routine page to show the
+// persistent "off every week" badge and the "turn back on" action.
+export function isSlotRecurringOff(slotKey) {
+  return !!(store.get('scheduleSettings')?.recurringOff || {})[slotKey];
+}
+
+// Given a weekday name ('Monday' etc.), finds the nearest upcoming calendar
+// date (today or later) that falls on that weekday. This is ONLY used to
+// pre-fill the date picker's default value in the Routine page's toggle UI
+// — never used to silently decide which date gets toggled. The CR always
+// sees and can change this date before confirming (see the earlier design
+// gap: auto-guessing a date from a weekday tab was ambiguous — "this
+// Monday" vs "next Monday" — so the picker now requires an explicit,
+// visible date, this is just its starting suggestion).
+export const getNextDateForWeekday = (weekdayName, now = getBDNow()) => {
+  const targetIdx = FULL_WEEK_DAYS.indexOf(weekdayName);
+  if (targetIdx === -1) return getLocalDateKey(now);
+  const date = new Date(now);
+  for (let i = 0; i < 8; i++) {
+    if (date.getDay() === targetIdx) return getLocalDateKey(date);
+    date.setDate(date.getDate() + 1);
+  }
+  return getLocalDateKey(now);
+};
+
 export const getNextRoutineDate = (startDateStr, holidayDates = []) => {
   const date = new Date(`${startDateStr}T00:00:00`);
   for (let i = 0; i < 400; i++) {
@@ -752,7 +920,7 @@ export const getNextRoutineDate = (startDateStr, holidayDates = []) => {
   return startDateStr;
 };
 
-export const getRoutinePreviewDate = (holidayDates = [], now = new Date()) => {
+export const getRoutinePreviewDate = (holidayDates = [], now = getBDNow()) => {
   const base = new Date(now);
   if (base.getHours() >= 17) base.setDate(base.getDate() + 1);
   return getNextRoutineDate(localDateKey(base), holidayDates);
@@ -824,6 +992,17 @@ export const parseTimeToMinutes = (raw) => {
 // Reading from both 'attLogs' (daily) and 'attendance' (manual).
 
 // Get effective attendance for a course — daily logs take priority
+//
+// BUGFIX (Attendance → Marks auto-sync always returned "none"): daily-log
+// marks are saved keyed as `${courseId}_${teacherName}` (see Attendance.jsx's
+// mark() and getEffective()) — never as a bare courseId. This function used
+// to read `dayLog[courseId]` directly, a key that literally never exists in
+// attLogs, so `held` stayed 0 and this always fell through to manual/none —
+// regardless of how much was actually marked in the Daily Log, and
+// regardless of any teacher-name edits. Fix: sum every log key that belongs
+// to this course (`courseId` itself, or `courseId_<any teacher>`), the same
+// way computeCourseGrade/other unified readers already expect attendance to
+// be looked up.
 export const computeEffectiveAttendance = (courseId) => {
   const source = store.get('attAttendanceSource') || 'daily';
   if (source === 'combined') {
@@ -845,11 +1024,13 @@ export const computeEffectiveAttendance = (courseId) => {
   const manual = store.get('attendance') || {};
   let held = 0, attended = 0;
   Object.values(logs).forEach(dayLog => {
-    const v = dayLog[courseId];
-    if (v === 'present' || v === 'absent') {
-      held++;
-      if (v === 'present') attended++;
-    }
+    Object.entries(dayLog).forEach(([key, v]) => {
+      if (key !== courseId && !key.startsWith(`${courseId}_`)) return;
+      if (v === 'present' || v === 'absent') {
+        held++;
+        if (v === 'present') attended++;
+      }
+    });
   });
   if (held > 0) return { held, attended, pct: Math.round((attended / held) * 100), source: 'log' };
   const m = manual[courseId];

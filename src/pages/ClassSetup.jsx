@@ -4,6 +4,7 @@ import { CalendarClock, CheckCircle2, Circle } from 'lucide-react';
 import { getProfile, getCurrentTermKey } from '../store/store';
 import { getGroupId, getGroupLabel } from '../lib/groupUtils';
 import { subscribeClassSetup, updateClassSetup, subscribeRoutine, subscribePlannerSettings, updatePlannerSettings, isClassSetupComplete, clearRoutineForTermChange } from '../lib/groupSync';
+import { resolveTeacherIdsForNames, resolveTeacherNames } from '../lib/teacherRegistry';
 import { setGroupCurrentTermKey, setGroupTermStartDate } from '../lib/termStartDateSync';
 import { getCoursesForTerm } from '../store/curriculumStore';
 import ClassSetupTermCourses from '../components/ClassSetupTermCourses';
@@ -31,6 +32,7 @@ export default function ClassSetup() {
   const [classSetup, setClassSetup] = useState(null);
   const [routineCount, setRoutineCount] = useState(null);
   const [teacherMap, setTeacherMap] = useState(null);
+  const [teacherRegistry, setTeacherRegistry] = useState({});
   const [form, setForm] = useState({ termStartDate: '', classEndDate: '', prepLeaveEndDate: '', postExamEndDate: '', examCount: 5 });
   const [examList, setExamList] = useState([]);
   const [examSaving, setExamSaving] = useState(false);
@@ -74,7 +76,10 @@ export default function ClassSetup() {
       })));
     });
     const unsubRoutine = subscribeRoutine(groupId, (entries) => setRoutineCount((entries || []).length));
-    const unsubPlanner = subscribePlannerSettings(groupId, (data) => setTeacherMap(data?.courseTeacherMap || {}));
+    const unsubPlanner = subscribePlannerSettings(groupId, (data) => {
+      setTeacherMap(data?.courseTeacherMap || {});
+      setTeacherRegistry(data?.teacherRegistry || {});
+    });
     return () => { unsubSetup(); unsubRoutine(); unsubPlanner(); };
   }, [groupId]);
 
@@ -204,12 +209,24 @@ export default function ClassSetup() {
     }
   };
 
-  const handleSaveTeachers = (courseId, teachers) => {
-    if (!courseId || !groupId) return;
-    const next = { ...(teacherMap || {}), [courseId]: teachers };
+  const handleSaveTeachers = (courseId, teacherNames) => {
+    if (!courseId || !groupId) return Promise.resolve();
     setTermError('');
-    updatePlannerSettings(groupId, profile, { courseTeacherMap: next })
-      .catch((e) => setTermError(e?.message || 'Could not save teachers — please try again.'));
+    // CourseTeacherDialog stays free-text/name-based by design — resolve
+    // the typed names to stable teacherIds (reusing an existing id for a
+    // name already in the registry) before writing, so courseTeacherMap
+    // itself never stores raw name strings. See teacherRegistry.js.
+    // Pass this course's CURRENT ids so a retyped name at the same slot is
+    // treated as a rename of that teacher, not a lookup for a new one
+    // (see resolveTeacherIdsForNames' own comment on why this matters).
+    const existingIds = Array.isArray(teacherMap?.[courseId]) ? teacherMap[courseId] : [];
+    const { registry: nextRegistry, ids } = resolveTeacherIdsForNames(teacherRegistry, teacherNames, existingIds);
+    const nextMap = { ...(teacherMap || {}), [courseId]: ids };
+    return updatePlannerSettings(groupId, profile, { courseTeacherMap: nextMap, teacherRegistry: nextRegistry })
+      .catch((e) => {
+        setTermError(e?.message || 'Could not save teachers — please try again.');
+        throw e;
+      });
   };
 
   const ChecklistRow = ({ done, label, action }) => (
@@ -275,6 +292,7 @@ export default function ClassSetup() {
               currentTermKey={currentTermKey}
               onTermChange={handleTermChange}
               courseTeacherMap={teacherMap}
+              teacherRegistry={teacherRegistry}
               onSaveTeachers={handleSaveTeachers}
               savingTermKey={termSaving}
             />

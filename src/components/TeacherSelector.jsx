@@ -3,13 +3,13 @@ import { X, Edit2, Plus } from 'lucide-react';
 
 // Normalize teacher name: "Ahmed" → "Ahmed Sir"
 // Honorifics already present at end of name → don't append "Sir".
-const HONORIFIC_SUFFIX_RE = /\b(sir|ma'?am|madam|miss|mrs?\.?|dr\.?|prof\.?)\.?$/i;
-
-const normalizeTeacherName = (value) => {
-  const clean = String(value || '').trim().replace(/\s+/g, ' ');
-  if (!clean) return '';
-  return HONORIFIC_SUFFIX_RE.test(clean) ? clean.replace(/\.$/, '') : `${clean} Sir`;
-};
+// BUGFIX (removed honorific guessing per CR feedback): this used to force
+// " Sir" onto any name that didn't already end in a recognized honorific.
+// The CR/whoever assigns the teacher already knows exactly what that
+// teacher goes by, so the app shouldn't guess or rewrite it — this now
+// only trims and collapses whitespace, matching Schedule.jsx's version, so
+// this selector never disagrees with what's actually saved to the routine.
+const normalizeTeacherName = (value) => String(value || '').trim().replace(/\s+/g, ' ');
 
 export default function TeacherSelector({
   selectedTeachers = [],

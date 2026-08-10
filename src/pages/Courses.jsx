@@ -6,6 +6,7 @@ import { getAllCourses, getDeptOptionalCourses, setOptionalSelection } from '../
 import ConfirmDialog from '../components/ConfirmDialog';
 import { getGroupId } from '../lib/groupUtils';
 import { subscribePlannerSettings } from '../lib/groupSync';
+import { resolveTeacherNames } from '../lib/teacherRegistry';
 import { useCanEditGroup } from '../hooks/useCanEditGroup';
 
 const YEARS = [1, 2, 3, 4];
@@ -384,10 +385,21 @@ export default function Courses() {
   // assigned to which course) but the ASSIGNING part now only ever reads
   // the group-synced map; the old local edit-in-place has been removed.
   const [groupTeacherMap, setGroupTeacherMap] = useState(null);
+  // teacherRegistry (id->name) — see src/lib/teacherRegistry.js. In group
+  // mode, courseTeacherMap values are teacherIds and must be resolved
+  // through this registry before display. In local mode the registry is
+  // {} and resolveTeacherNames falls back to the raw string, so local
+  // mode's name-based courseTeacherMap passes through unchanged.
+  const [groupTeacherRegistry, setGroupTeacherRegistry] = useState(null);
   useEffect(() => {
-    if (!groupId) { setGroupTeacherMap(null); return; }
-    return subscribePlannerSettings(groupId, (data) => setGroupTeacherMap(data?.courseTeacherMap || {}));
+    if (!groupId) { setGroupTeacherMap(null); setGroupTeacherRegistry(null); return; }
+    return subscribePlannerSettings(groupId, (data) => {
+      setGroupTeacherMap(data?.courseTeacherMap || {});
+      setGroupTeacherRegistry(data?.teacherRegistry || {});
+    });
   }, [groupId]);
+  const isGroupMode = !!groupId;
+  const teacherRegistry = isGroupMode ? (groupTeacherRegistry || {}) : {};
   const settings = useMemo(
     () => ({ ...localSettings, courseTeacherMap: groupTeacherMap ?? (localSettings.courseTeacherMap || {}) }),
     [localSettings, groupTeacherMap],
@@ -457,7 +469,13 @@ export default function Courses() {
   };
 
   const getCourseTeachers = (courseId) => {
-    return Array.isArray(settings?.courseTeacherMap?.[courseId]) ? settings.courseTeacherMap[courseId] : [];
+    const raw = Array.isArray(settings?.courseTeacherMap?.[courseId]) ? settings.courseTeacherMap[courseId] : [];
+    // Group mode: raw entries are teacherIds — resolve to display names
+    // here, once, at the source every caller below (chip rendering,
+    // handleTeacherChipClick, getTeacherInfo) already goes through.
+    // Local mode: teacherRegistry is {}, resolveTeacherNames falls back
+    // to the raw string, so this is a no-op for local users.
+    return isGroupMode ? resolveTeacherNames(teacherRegistry, raw) : raw;
   };
 
   const filtered = filterYear === 'all' ? courses : courses.filter(c => c.year === +filterYear);

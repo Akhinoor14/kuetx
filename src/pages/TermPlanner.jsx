@@ -1,0 +1,650 @@
+import { useState, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { ClipboardList, Target, BookOpen, Lightbulb, ChevronRight, ChevronLeft } from 'lucide-react';
+import { store, getGradeFromPct, getAttendanceMarks, computeEffectiveAttendance, GRADE_SCALE, getProfile, getCurrentTermKey, getTermTimeline, recordAudit } from '../store/store';
+import { getAllCourses } from '../store/curriculumStore';
+import { confirmDialog } from '../lib/dialog';
+import TeacherVerifiedCard from '../components/TeacherVerifiedCard';
+import { getGroupId } from '../lib/groupUtils';
+import { subscribePlannerSettings } from '../lib/groupSync';
+import { resolveTeacherNames } from '../lib/teacherRegistry';
+
+// ── Helper: Calculate required hall marks for a target grade ──────────────
+function calcHallNeeded(targetMinPct, continuousMarks) {
+  // Convert percentage to actual marks out of 300
+  // Total = Hall + Continuous (max 300)
+  // We need: Total >= targetMinPct% of 300
+  // So: Hall = (targetMinPct/100 * 300) - Continuous
+  const targetTotal = (targetMinPct / 100) * 300;
+  const hallNeeded = Math.max(0, Math.ceil(targetTotal - continuousMarks));
+  return Math.min(210, hallNeeded);
+}
+
+// BUGFIX (removed honorific guessing per CR feedback): this used to strip
+// whatever honorific was on a name and reattach a "guessed" one (looked up
+// from the Teachers page, defaulting to "Sir"). That's more complexity
+// than needed and it's also how the earlier "Ma'am" -> "Ma'am Sir" bug got
+// introduced. The CR who types the schedule already knows exactly what a
+// teacher goes by, so the app shouldn't rewrite it — this now only trims
+// and collapses whitespace, matching Schedule.jsx's version exactly, so
+// this page never disagrees with what the CR actually typed there.
+const normalizeTeacherName = (value) => String(value || '').trim().replace(/\s+/g, ' ');
+
+// ── Shared calc: quick summary for a course's current marks (used by list rows) ──
+function getCourseSummary(course, marks) {
+  const m = marks[course.id] || {};
+  const { pct: attPct } = computeEffectiveAttendance(course.id);
+  const clamp = (value, min, max) => Math.min(max, Math.max(min, Number.isFinite(+value) ? +value : 0));
+
+  const hallTotal = clamp(m.hall, 0, 210);
+  const ctTeacher1 = clamp(m.ctTeacher1, 0, 30);
+  const ctTeacher2 = clamp(m.ctTeacher2, 0, 30);
+  const useManual1 = !!m.useManualTeacher1;
+  const useManual2 = !!m.useManualTeacher2;
+  const manualMarks1 = clamp(m.manualTeacher1, 0, 45);
+  const manualMarks2 = clamp(m.manualTeacher2, 0, 45);
+
+  const attMode = m.attMode || 'auto';
+  const manualAttPct = m.attPctManual === undefined || m.attPctManual === null ? null : Number(m.attPctManual);
+  const attendanceSourcePct = attMode === 'auto' ? attPct : (attMode === 'manual_percent' ? manualAttPct : null);
+  const attendancePerTeacherFromPct = attendanceSourcePct !== null && attendanceSourcePct !== undefined ? (getAttendanceMarks(attendanceSourcePct) / 10) * 15 : 0;
+  const attendanceAuto = Math.min(attendancePerTeacherFromPct, 15);
+  const attTeacher1 = attMode === 'manual_marks' ? clamp(m.attTeacher1, 0, 15) : attendanceAuto;
+  const attTeacher2 = attMode === 'manual_marks' ? clamp(m.attTeacher2, 0, 15) : attendanceAuto;
+
+  const teacher1Continuous = useManual1 ? manualMarks1 : Math.min(45, ctTeacher1 + attTeacher1);
+  const teacher2Continuous = useManual2 ? manualMarks2 : Math.min(45, ctTeacher2 + attTeacher2);
+  const currentContinuous = Math.min(90, teacher1Continuous + teacher2Continuous);
+  const currentTotal = Math.min(300, hallTotal + currentContinuous);
+  const currentGrade = getGradeFromPct(currentTotal);
+  const hasAnyEntry = Object.keys(m).length > 0 || attPct !== null;
+  const targetGrade = m.targetGrade || null;
+
+  return { currentTotal, currentGrade, hasAnyEntry, targetGrade };
+}
+
+// ── Get teacher names from schedule ────────────────────────────────────────
+// groupCourseTeacherMap/teacherRegistry are optional — when provided (group
+// mode, subscribed live in Marks() below), fromCourseMap resolves ids->names
+// through the registry before merging with fromSchedule. store.get
+// ('scheduleSettings').courseTeacherMap is NOT reliable for this in group
+// mode: App.jsx's boot-time mirror only copies scheduleFields (holidays/
+// class-off overrides) into local scheduleSettings, never courseTeacherMap
+// itself, so falling back to it without the live group subscription would
+// read a stale/empty map. fromSchedule's s.teacherName/s.teacherNames are
+// unaffected either way — Schedule.jsx's getCourseTeachers already resolves
+// those to real names before writing routine entries.
+function getTeachersForCourse(courseId, groupCourseTeacherMap, teacherRegistry) {
+  const schedule = Array.isArray(store.get('schedule')) ? store.get('schedule') : [];
+  const settings = store.get('scheduleSettings') || {};
+  const rawCourseMap = groupCourseTeacherMap
+    ? (Array.isArray(groupCourseTeacherMap[courseId]) ? groupCourseTeacherMap[courseId] : [])
+    : (Array.isArray(settings.courseTeacherMap?.[courseId]) ? settings.courseTeacherMap[courseId] : []);
+  const fromCourseMap = groupCourseTeacherMap
+    ? resolveTeacherNames(teacherRegistry || {}, rawCourseMap)
+    : rawCourseMap;
+  const fromSchedule = schedule
+    .filter(s => s.courseId === courseId)
+    .flatMap(s => Array.isArray(s.teacherNames) && s.teacherNames.length > 0 ? s.teacherNames : [s.teacherName])
+    .map(normalizeTeacherName)
+    .filter(Boolean);
+
+  return [...new Set([...fromCourseMap, ...fromSchedule].map(normalizeTeacherName).filter(Boolean))];
+}
+
+// ── Course card: Modern grid-based layout ──────────────────────────────────
+function CourseCard({ course, marks, onChange, onClearCourse, onOpenMarkingHelp, isCurrentOngoingTerm, groupCourseTeacherMap, teacherRegistry }) {
+  const m = marks[course.id] || {};
+  const { pct: attPct, source: attSource } = computeEffectiveAttendance(course.id);
+  const inputDisabled = false;
+  
+  const clamp = (value, min, max) => Math.min(max, Math.max(min, Number.isFinite(+value) ? +value : 0));
+
+  const teachers = getTeachersForCourse(course.id, groupCourseTeacherMap, teacherRegistry);
+  const teacher1Name = teachers[0] || 'Teacher 1';
+  const teacher2Name = teachers[1] || 'Teacher 2';
+
+  const hallTotal = clamp(m.hall, 0, 210);
+  const ctTeacher1 = clamp(m.ctTeacher1, 0, 30);
+  const ctTeacher2 = clamp(m.ctTeacher2, 0, 30);
+
+  // Teacher 1 & 2 can use standard (CT + Attendance) or manual override (0-45)
+  const useManual1 = !!m.useManualTeacher1;
+  const useManual2 = !!m.useManualTeacher2;
+  const manualMarks1 = clamp(m.manualTeacher1, 0, 45);
+  const manualMarks2 = clamp(m.manualTeacher2, 0, 45);
+
+  // Attendance modes: 'auto' (pull from Attendance page),
+  // 'manual_percent' (single percentage input), 'manual_marks' (per-teacher marks inputs)
+  const attMode = m.attMode || 'auto';
+  const manualAttPct = m.attPctManual === undefined || m.attPctManual === null ? null : Number(m.attPctManual);
+
+  const attendanceSourcePct = attMode === 'auto' ? attPct : (attMode === 'manual_percent' ? manualAttPct : null);
+  const attendancePerTeacherFromPct = attendanceSourcePct !== null && attendanceSourcePct !== undefined ? (getAttendanceMarks(attendanceSourcePct) / 10) * 15 : 0;
+
+  // Attendance capped at 15 per teacher
+  const attendanceAuto1 = Math.min(attendancePerTeacherFromPct, 15);
+  const attendanceAuto2 = Math.min(attendancePerTeacherFromPct, 15);
+
+  const attTeacher1 = attMode === 'manual_marks' ? clamp(m.attTeacher1, 0, 15) : attendanceAuto1;
+  const attTeacher2 = attMode === 'manual_marks' ? clamp(m.attTeacher2, 0, 15) : attendanceAuto2;
+
+  // Each teacher: either (CT + Attendance) or manual override
+  const teacher1Continuous = useManual1 ? manualMarks1 : Math.min(45, ctTeacher1 + attTeacher1);
+  const teacher2Continuous = useManual2 ? manualMarks2 : Math.min(45, ctTeacher2 + attTeacher2);
+  const currentContinuous = Math.min(90, teacher1Continuous + teacher2Continuous);
+  const currentTotal = Math.min(300, hallTotal + currentContinuous);
+  const currentGrade = getGradeFromPct(currentTotal);
+
+  const targetGrade = m.targetGrade || null;
+  const targetGradeObj = targetGrade ? GRADE_SCALE.find(g => g.grade === targetGrade) : null;
+  const teacherSyncLabel = teachers.length > 0 ? `Synced from Schedule: ${teachers.join(' · ')}` : '';
+  const requiredHallNode = targetGradeObj && targetGradeObj.minPct ? (() => {
+    const targetTotal = (targetGradeObj.minPct / 100) * 300;
+    const rawNeeded = Math.ceil(targetTotal - currentContinuous);
+    const possible = rawNeeded <= 210;
+    const neededToShow = Math.max(0, rawNeeded);
+    const boxClass = possible ? (neededToShow > hallTotal ? 'warning' : 'success') : 'danger';
+    return (
+      <div className={`planner-needed-box ${boxClass}`}>
+        <div className="planner-needed-label">To achieve {m.targetGrade}:</div>
+        <div className="planner-needed-value">
+          {possible
+            ? `${neededToShow}/210 hall marks needed`
+            : 'Impossible with current continuous'
+          }
+        </div>
+      </div>
+    );
+  })() : null;
+
+  return (
+    <div className="planner-course-card">
+      {/* Header */}
+      <div className="planner-card-header">
+        <div>
+          <h3 className="planner-card-title">{course.code}</h3>
+          <p className="planner-card-desc">{course.name}</p>
+        </div>
+        {Object.keys(m).length > 0 && (
+          <button
+            type="button"
+            onClick={() => onClearCourse(course.id)}
+            disabled={inputDisabled}
+            title="Clear all entered marks for this course"
+            style={{
+              border: '1px solid var(--border)', background: 'var(--surface)', color: 'var(--muted)',
+              borderRadius: 8, padding: '5px 10px', fontSize: 10.5, fontWeight: 700, cursor: 'pointer',
+              whiteSpace: 'nowrap',
+            }}
+          >
+            Clear entry
+          </button>
+        )}
+      </div>
+
+      {/* Planner is purely local; no remote mark entry/status shown here */}
+
+      {/* Main Input Section */}
+      <div className="planner-card-body">
+        {/* Hall & Attendance Row */}
+        <div className="planner-grid-2 planner-assessment-grid">
+          <div className="planner-input-field planner-hall-field">
+            <label>Hall Exam</label>
+            <div className="planner-input-wrapper planner-input-wrapper-hall">
+              <input type="number" min={0} max={210} value={m.hall ?? ''} onChange={e => onChange(course.id, 'hall', e.target.value === '' ? null : Math.min(210, Math.max(0, +e.target.value)))} disabled={inputDisabled} placeholder="0" />
+              <span className="planner-input-unit">/210</span>
+            </div>
+          </div>
+
+          <div className="planner-input-field planner-attendance-field">
+            <label>Attendance {attPct !== null ? `(${attPct}%)` : ''}</label>
+            <div className="planner-attendance-shell">
+              <div className="planner-attendance-modes">
+                <label>
+                  <input type="radio" name={`attMode-${course.id}`} checked={attMode === 'auto'} onChange={() => onChange(course.id, 'attMode', 'auto')} disabled={inputDisabled} />
+                  Auto
+                </label>
+                <label>
+                  <input type="radio" name={`attMode-${course.id}`} checked={attMode === 'manual_percent'} onChange={() => onChange(course.id, 'attMode', 'manual_percent')} disabled={inputDisabled} />
+                  Manual %
+                </label>
+                <label>
+                  <input type="radio" name={`attMode-${course.id}`} checked={attMode === 'manual_marks'} onChange={() => onChange(course.id, 'attMode', 'manual_marks')} disabled={inputDisabled} />
+                  Manual Marks
+                </label>
+              </div>
+
+              {attMode === 'auto' && attSource === 'log' && (
+                <div style={{ fontSize: 11, marginTop: 6, color: 'var(--muted)' }}>
+                  Auto from Attendance page
+                </div>
+              )}
+              {attMode === 'auto' && attSource === 'combined' && (
+                <div style={{ fontSize: 11, marginTop: 6, color: 'var(--muted)' }}>
+                  Auto from Combined attendance data
+                </div>
+              )}
+              {attMode === 'auto' && attSource === 'manual' && (
+                <div style={{ fontSize: 11, marginTop: 6, color: 'var(--muted)' }}>
+                  Auto from manual attendance entry
+                </div>
+              )}
+              {attMode === 'manual_percent' && (
+                <input className="planner-attendance-inline-input" type="number" min={0} max={100} value={m.attPctManual ?? ''} onChange={e => onChange(course.id, 'attPctManual', e.target.value === '' ? null : Math.min(100, Math.max(0, +e.target.value)))} placeholder="Attendance %" />
+              )}
+
+              {attMode === 'manual_marks' && (
+                <div className="planner-attendance-marks">
+                  <input type="number" min={0} max={15} value={m.attTeacher1 ?? ''} onChange={e => onChange(course.id, 'attTeacher1', e.target.value === '' ? null : Math.min(15, Math.max(0, +e.target.value)))} placeholder="T1" disabled={inputDisabled} />
+                  <input type="number" min={0} max={15} value={m.attTeacher2 ?? ''} onChange={e => onChange(course.id, 'attTeacher2', e.target.value === '' ? null : Math.min(15, Math.max(0, +e.target.value)))} placeholder="T2" disabled={inputDisabled} />
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* Teachers Section */}
+        <div className="planner-teachers-section">
+          <div className="planner-teacher-card">
+            <div className="planner-teacher-name">{teacher1Name}</div>
+            {useManual1 ? (
+              <div className="planner-input-field">
+                <label style={{ fontSize: 11 }}>Marks (0-45)</label>
+                <input type="number" min={0} max={45} value={m.manualTeacher1 ?? ''} onChange={e => onChange(course.id, 'manualTeacher1', e.target.value === '' ? null : Math.min(45, Math.max(0, +e.target.value)))} disabled={inputDisabled} placeholder="0" />
+              </div>
+            ) : (
+              <div className="planner-teacher-inputs">
+                <div className="planner-input-field">
+                  <label style={{ fontSize: 11 }}>CT (0-30)</label>
+                  <input type="number" min={0} max={30} value={m.ctTeacher1 ?? ''} onChange={e => onChange(course.id, 'ctTeacher1', e.target.value === '' ? null : Math.min(30, Math.max(0, +e.target.value)))} disabled={inputDisabled} placeholder="0" />
+                </div>
+                <div className="planner-input-field">
+                  <label style={{ fontSize: 11 }}>Att (0-15)</label>
+                  <input type="number" min={0} max={15} value={attMode === 'manual_marks' ? (m.attTeacher1 ?? '') : attendanceAuto1} onChange={e => onChange(course.id, 'attTeacher1', e.target.value === '' ? null : Math.min(15, Math.max(0, +e.target.value)))} placeholder="auto" style={{ opacity: attMode !== 'manual_marks' ? 0.6 : 1 }} disabled={attMode !== 'manual_marks'} />
+                </div>
+              </div>
+            )}
+            <label style={{ fontSize: 11, marginTop: 10, display: 'flex', gap: 8, alignItems: 'center', padding: '8px 10px', borderRadius: 8, border: useManual1 ? '1px solid var(--accent)' : '1px solid rgba(var(--accentRGB), 0.1)', background: useManual1 ? 'rgba(var(--accentRGB), 0.06)' : 'transparent', cursor: 'pointer', transition: 'all 0.2s' }}>
+              <input type="checkbox" checked={useManual1} onChange={e => onChange(course.id, 'useManualTeacher1', e.target.checked)} disabled={inputDisabled} style={{ cursor: 'pointer', margin: 0 }} />
+              <span>Custom 0-45 marks</span>
+            </label>
+          </div>
+
+          <div className="planner-teacher-card">
+            <div className="planner-teacher-name">{teacher2Name}</div>
+            {useManual2 ? (
+              <div className="planner-input-field">
+                <label style={{ fontSize: 11 }}>Marks (0-45)</label>
+                <input type="number" min={0} max={45} value={m.manualTeacher2 ?? ''} onChange={e => onChange(course.id, 'manualTeacher2', e.target.value === '' ? null : Math.min(45, Math.max(0, +e.target.value)))} disabled={inputDisabled} placeholder="0" />
+              </div>
+            ) : (
+              <div className="planner-teacher-inputs">
+                <div className="planner-input-field">
+                  <label style={{ fontSize: 11 }}>CT (0-30)</label>
+                  <input type="number" min={0} max={30} value={m.ctTeacher2 ?? ''} onChange={e => onChange(course.id, 'ctTeacher2', e.target.value === '' ? null : Math.min(30, Math.max(0, +e.target.value)))} disabled={inputDisabled} placeholder="0" />
+                </div>
+                <div className="planner-input-field">
+                  <label style={{ fontSize: 11 }}>Att (0-15)</label>
+                  <input type="number" min={0} max={15} value={attMode === 'manual_marks' ? (m.attTeacher2 ?? '') : attendanceAuto2} onChange={e => onChange(course.id, 'attTeacher2', e.target.value === '' ? null : Math.min(15, Math.max(0, +e.target.value)))} placeholder="auto" style={{ opacity: attMode !== 'manual_marks' ? 0.6 : 1 }} disabled={attMode !== 'manual_marks'} />
+                </div>
+              </div>
+            )}
+            <label style={{ fontSize: 11, marginTop: 10, display: 'flex', gap: 8, alignItems: 'center', padding: '8px 10px', borderRadius: 8, border: useManual2 ? '1px solid var(--accent)' : '1px solid rgba(var(--accentRGB), 0.1)', background: useManual2 ? 'rgba(var(--accentRGB), 0.06)' : 'transparent', cursor: 'pointer', transition: 'all 0.2s' }}>
+              <input type="checkbox" checked={useManual2} onChange={e => onChange(course.id, 'useManualTeacher2', e.target.checked)} disabled={inputDisabled} style={{ cursor: 'pointer', margin: 0 }} />
+              <span>Custom 0-45 marks</span>
+            </label>
+          </div>
+        </div>
+
+        {teacherSyncLabel && <div className="planner-sync-note">{teacherSyncLabel}</div>}
+
+        {/* Grade Selector */}
+        <div className="planner-target-section">
+          <div className="planner-target-head">
+            <label className="planner-target-label" style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}><Target size={14} color="var(--accent)" /> Target Grade</label>
+            <button type="button" className="planner-help-link" onClick={onOpenMarkingHelp}>
+              How marking works
+            </button>
+          </div>
+          <div className="planner-grade-buttons">
+            {GRADE_SCALE.map(gradeObj => {
+              const isSelected = m.targetGrade === gradeObj.grade;
+              const rawNeeded = Math.ceil((gradeObj.minPct / 100) * 300 - currentContinuous);
+              const needed = Math.max(0, rawNeeded);
+              const isPossible = rawNeeded <= 210;
+              return (
+                <button
+                  key={gradeObj.grade}
+                  onClick={() => onChange(course.id, 'targetGrade', isSelected ? null : gradeObj.grade)}
+                  disabled={inputDisabled || !isPossible}
+                  className={`planner-grade-btn ${isSelected ? 'active' : ''} ${isPossible ? '' : 'impossible'}`}
+                >
+                  <span>{gradeObj.grade}</span>
+                  <span>{isPossible ? needed : '✗'}</span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Results Display */}
+        <div className="planner-result-box">
+          <div className="planner-result-row">
+            <span>Continuous</span>
+            <strong>{currentContinuous.toFixed(1)}/90</strong>
+          </div>
+          <div className="planner-result-row">
+            <span>Total Marks</span>
+            <strong>{currentTotal.toFixed(0)}/300</strong>
+          </div>
+          <div style={{ marginTop: 8, fontSize: 12, color: 'var(--muted)' }}>Estimate only. Full breakdown is in the help popup.</div>
+        </div>
+
+        {/* Required Hall Display */}
+        {requiredHallNode}
+      </div>
+    </div>
+  );
+}
+
+// ── Course list row: compact tap target that opens the full planner ────────
+function CourseListRow({ course, marks, onOpen }) {
+  const { currentTotal, currentGrade, hasAnyEntry, targetGrade } = getCourseSummary(course, marks);
+  const pct = hasAnyEntry ? Math.round((currentTotal / 300) * 100) : null;
+
+  return (
+    <button type="button" className="planner-list-row" onClick={() => onOpen(course.id)}>
+      <div className="planner-list-row-main">
+        <div className="planner-list-row-code">{course.code}</div>
+        <div className="planner-list-row-name">{course.name}</div>
+      </div>
+      <div className="planner-list-row-meta">
+        {hasAnyEntry ? (
+          <>
+            <span className="planner-list-row-grade">{currentGrade?.grade || '—'}</span>
+            <span className="planner-list-row-pct">{pct}%</span>
+          </>
+        ) : targetGrade ? (
+          <span className="planner-list-row-target">Target {targetGrade}</span>
+        ) : (
+          <span className="planner-list-row-empty">Not started</span>
+        )}
+        <ChevronRight size={16} className="planner-list-row-chevron" />
+      </div>
+    </button>
+  );
+}
+
+// ── Main Marks Page ───────────────────────────────────────────────────────
+export default function Marks() {
+  // BUGFIX (major logic gap — see TermQS.jsx for the full writeup): a
+  // CR's term change syncs into profile.currentTermKey live in the
+  // background (App.jsx), but `profile` here was a plain getProfile()
+  // call, not React state, so this page kept showing the stale term's
+  // course list/timeline until the student navigated away and back.
+  const [, setStoreTick] = useState(0);
+  useEffect(() => {
+    const refresh = () => setStoreTick(v => v + 1);
+    window.addEventListener('kuetx:store-updated', refresh);
+    return () => window.removeEventListener('kuetx:store-updated', refresh);
+  }, []);
+
+  const navigate = useNavigate();
+  const { courseId } = useParams();
+  const profile = getProfile();
+  const allCourses = getAllCourses(profile);
+  const currentTermKey = getCurrentTermKey(profile);
+  const currentTermTimeline = currentTermKey ? getTermTimeline(profile?.termStartDate, profile?.dept, currentTermKey) : null;
+  const currentTermIsOngoing = !!(
+    (currentTermTimeline && new Date() <= currentTermTimeline.classEndDate) ||
+    (currentTermKey && allCourses.some(c => `Y${c.year}T${c.term}` === currentTermKey && (c.status === 'active' || c.status === 'backlog')))
+  );
+  const [marks, setMarks] = useState(() => store.get('marks') || {});
+  const [markingHelpOpen, setMarkingHelpOpen] = useState(false);
+  const deptLabel = profile?.dept || 'your department';
+
+  // Group-live courseTeacherMap/teacherRegistry — see getTeachersForCourse's
+  // comment above for why store.get('scheduleSettings') alone isn't
+  // reliable here in group mode.
+  const groupId = getGroupId(profile);
+  const [groupCourseTeacherMap, setGroupCourseTeacherMap] = useState(null);
+  const [groupTeacherRegistry, setGroupTeacherRegistry] = useState(null);
+  useEffect(() => {
+    if (!groupId) { setGroupCourseTeacherMap(null); setGroupTeacherRegistry(null); return; }
+    return subscribePlannerSettings(groupId, (data) => {
+      setGroupCourseTeacherMap(data?.courseTeacherMap || {});
+      setGroupTeacherRegistry(data?.teacherRegistry || {});
+    });
+  }, [groupId]);
+
+  const onChange = (id, field, value) => {
+    const updated = { ...marks, [id]: { ...(marks[id] || {}), [field]: value } };
+    setMarks(updated);
+    store.set('marks', updated);
+    try {
+      recordAudit({ action: 'marks_update', courseId: id, field, before: marks[id] || null, after: (updated[id] || {})[field] });
+    } catch {}
+  };
+
+  // Wipes a course's entire marks record. Mainly a recovery tool for
+  // records that picked up a stray 0 (e.g. a hall/CT/attendance field
+  // written before number inputs correctly distinguished "cleared" from
+  // "entered 0") — resetting is simpler and safer than trying to guess
+  // which individual field was the accidental one.
+  const onClearCourse = async (id) => {
+    if (!marks[id]) return;
+    if (!(await confirmDialog('Clear all entered marks for this course? This cannot be undone.'))) return;
+    const updated = { ...marks };
+    delete updated[id];
+    setMarks(updated);
+    store.set('marks', updated);
+    try {
+      recordAudit({ action: 'marks_clear', courseId: id, before: marks[id] || null, after: null });
+    } catch {}
+  };
+
+  const active = allCourses.filter(c => c.status === 'active' || c.status === 'backlog');
+  const theory = active.filter(c => c.type === 'Theory');
+
+  if (allCourses.length === 0) {
+    return (
+      <div className="page-enter page-container marks-page content-page-bg">
+        <div className="content-page-hero">
+          <div className="content-page-hero-main">
+            <div className="content-page-hero-head">
+              <div className="content-page-hero-icon">
+                <ClipboardList size={24} color="var(--accent)" />
+              </div>
+              <h1 className="content-page-hero-title">Term Planner</h1>
+            </div>
+            <p className="content-page-hero-subtitle">Estimate and plan your final grades</p>
+          </div>
+        </div>
+        <div className="empty-state">
+          <div className="icon"><BookOpen size={28} color="var(--muted)" /></div>
+          <p>No curriculum data is loaded for {deptLabel} yet. Open Courses to confirm the department setup or switch to a department with course data.</p>
+        </div>
+      </div>
+    );
+  }
+
+  const selectedCourse = courseId ? theory.find(c => c.id === courseId) : null;
+
+  // ── Detail view: single course's full planner ──────────────────────────
+  if (courseId) {
+    if (!selectedCourse) {
+      return (
+        <div className="page-enter page-container marks-page content-page-bg">
+          <button type="button" className="planner-back-link" onClick={() => navigate('/marks')}>
+            <ChevronLeft size={16} /> Back to Term Planner
+          </button>
+          <div className="empty-state">
+            <div className="icon"><BookOpen size={28} color="var(--muted)" /></div>
+            <p>This course isn't in your active list anymore.</p>
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <div className="page-enter page-container marks-page content-page-bg">
+        <button type="button" className="planner-back-link" onClick={() => navigate('/marks')}>
+          <ChevronLeft size={16} /> Back to Term Planner
+        </button>
+
+        <CourseCard
+          course={selectedCourse}
+          marks={marks}
+          onChange={onChange}
+          onClearCourse={onClearCourse}
+          onOpenMarkingHelp={() => setMarkingHelpOpen(true)}
+          isCurrentOngoingTerm={currentTermIsOngoing && currentTermKey === `Y${selectedCourse.year}T${selectedCourse.term}`}
+          groupCourseTeacherMap={groupCourseTeacherMap}
+          teacherRegistry={groupTeacherRegistry}
+        />
+
+        {markingHelpOpen && (
+          <MarkingHelpModal onClose={() => setMarkingHelpOpen(false)} />
+        )}
+      </div>
+    );
+  }
+
+  // ── List view: pick a course ────────────────────────────────────────────
+  return (
+    <div className="page-enter page-container marks-page content-page-bg">
+      {/* Header Section */}
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 16, marginBottom: 16 }}>
+        <div className="planner-page-copy">
+          <div className="planner-page-kicker">Academic planning</div>
+          <div className="content-page-hero" style={{ marginBottom: 0 }}>
+            <div className="content-page-hero-main">
+              <div className="content-page-hero-head">
+                <div className="content-page-hero-icon">
+                  <ClipboardList size={24} color="var(--accent)" />
+                </div>
+                <h1 className="content-page-hero-title">Term Planner</h1>
+              </div>
+              <p className="content-page-hero-subtitle">Pick a course to enter marks and plan your target grade.</p>
+            </div>
+          </div>
+          <button type="button" className="planner-hero-link" onClick={() => setMarkingHelpOpen(true)}>
+            View marking system
+          </button>
+        </div>
+        <div className="planner-header-pills" aria-label="Planner summary">
+          <span className="planner-pill">{theory.length} courses</span>
+          <span className="planner-pill">{currentTermKey || 'N/A'}</span>
+          <span className={`planner-pill ${currentTermIsOngoing ? 'is-active' : ''}`}>{currentTermIsOngoing ? 'Ongoing' : 'Planning'}</span>
+        </div>
+      </div>
+
+      {/* §9.5 of the merged Faculty Module prompt — read-only card, only
+          renders anything if a real teacher has sent verified marks for
+          this student. Fully additive: does not read or modify any of
+          this page's own `marks` state above. */}
+      <TeacherVerifiedCard profile={profile} />
+
+      {/* Content */}
+      {theory.length === 0 ? (
+        <div className="empty-state">
+          <div className="icon"><BookOpen size={28} color="var(--muted)" /></div>
+          <p>No active theory courses to plan. Add courses from the Courses section.</p>
+        </div>
+      ) : (
+        <>
+          {/* Course List */}
+          <div className="planner-course-list">
+            {theory.map(c => (
+              <CourseListRow
+                key={c.id}
+                course={c}
+                marks={marks}
+                onOpen={(id) => navigate(`/marks/${id}`)}
+              />
+            ))}
+          </div>
+
+          {/* Tips Section */}
+          <div className="planner-tips">
+            <h3 style={{ display: "flex", alignItems: "center", gap: 6 }}><Lightbulb size={16} color="var(--accent)" /> How It Works</h3>
+            <ul>
+              <li>Tap a course to enter hall marks and continuous assessment marks per teacher (CT + Attendance).</li>
+              <li>Pick a target grade to instantly see how much hall you need to achieve it.</li>
+              <li>Attendance syncs from the Attendance page, or enter it manually as % or marks.</li>
+            </ul>
+          </div>
+        </>
+      )}
+
+      {markingHelpOpen && (
+        <MarkingHelpModal onClose={() => setMarkingHelpOpen(false)} />
+      )}
+    </div>
+  );
+}
+
+// ── Marking system help modal (shared by list and detail views) ────────────
+function MarkingHelpModal({ onClose }) {
+  return (
+    <div className="planner-help-backdrop" onClick={onClose}>
+      <div className="planner-help-modal" onClick={(e) => e.stopPropagation()}>
+        <div className="planner-help-header">
+          <div>
+            <div className="planner-help-kicker">Marking system</div>
+            <h3>How this calculator works</h3>
+          </div>
+          <button type="button" className="planner-help-close" onClick={onClose}>×</button>
+        </div>
+
+        <div className="planner-help-layout" style={{ gridTemplateColumns: '1fr', gap: 14 }}>
+          {/* Top Row: 3-column cards */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10 }}>
+            <div className="planner-help-card">
+              <strong>Each teacher</strong>
+              <div className="planner-help-mini-list">
+                <div>CT: 0-30</div>
+                <div>Attendance: 0-15</div>
+                <div>Total per teacher: 45</div>
+              </div>
+            </div>
+
+            <div className="planner-help-card">
+              <strong>Custom marks</strong>
+              <p>If needed, check 'Custom 0-45 marks' and enter the full marks directly.</p>
+            </div>
+
+            <div className="planner-help-card">
+              <strong>Hall exam (0-210)</strong>
+              <p>Use the target grade buttons to see how much hall you need. Total = Hall (0-210) + Continuous (0-90).</p>
+            </div>
+          </div>
+
+          {/* Bottom: Full-width attendance table */}
+          <div className="planner-help-card planner-help-card-auto">
+            <strong>Auto attendance</strong>
+            <div className="planner-help-scale" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 6, fontSize: 12, marginTop: 10 }}>
+              <div style={{ textAlign: 'center', fontWeight: 600, borderBottom: '1px solid rgba(var(--accentRGB), 0.2)', paddingBottom: 6 }}>Attendance %</div>
+              <div style={{ textAlign: 'center', fontWeight: 600, borderBottom: '1px solid rgba(var(--accentRGB), 0.2)', paddingBottom: 6 }}>Per Teacher (0-15)</div>
+              <div style={{ textAlign: 'center', fontWeight: 600, borderBottom: '1px solid rgba(var(--accentRGB), 0.2)', paddingBottom: 6 }}>Full Course (0-30)</div>
+
+              <div style={{ textAlign: 'center' }}>90%+</div><div style={{ textAlign: 'center' }}>15</div><div style={{ textAlign: 'center' }}>30</div>
+              <div style={{ textAlign: 'center' }}>85-89</div><div style={{ textAlign: 'center' }}>13.5</div><div style={{ textAlign: 'center' }}>27</div>
+              <div style={{ textAlign: 'center' }}>80-84</div><div style={{ textAlign: 'center' }}>12</div><div style={{ textAlign: 'center' }}>24</div>
+              <div style={{ textAlign: 'center' }}>75-79</div><div style={{ textAlign: 'center' }}>10.5</div><div style={{ textAlign: 'center' }}>21</div>
+              <div style={{ textAlign: 'center' }}>70-74</div><div style={{ textAlign: 'center' }}>9</div><div style={{ textAlign: 'center' }}>18</div>
+              <div style={{ textAlign: 'center' }}>65-69</div><div style={{ textAlign: 'center' }}>7.5</div><div style={{ textAlign: 'center' }}>15</div>
+              <div style={{ textAlign: 'center' }}>60-64</div><div style={{ textAlign: 'center' }}>6</div><div style={{ textAlign: 'center' }}>12</div>
+              <div style={{ textAlign: 'center' }}>Below 60</div><div style={{ textAlign: 'center' }}>0</div><div style={{ textAlign: 'center' }}>0</div>
+            </div>
+          </div>
+        </div>
+
+        <div className="planner-help-footer">
+          <button type="button" className="btn btn-primary" onClick={onClose}>Got it</button>
+        </div>
+      </div>
+    </div>
+  );
+}

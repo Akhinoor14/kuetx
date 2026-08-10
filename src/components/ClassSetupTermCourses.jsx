@@ -3,6 +3,7 @@ import { GraduationCap, ChevronDown, Pencil } from 'lucide-react';
 import { TERM_KEYS, getTermLabelFromKey } from '../store/store';
 import { getCoursesForTerm } from '../store/curriculumStore';
 import CourseTeacherDialog from './CourseTeacherDialog';
+import { resolveTeacherNames } from '../lib/teacherRegistry';
 
 /**
  * "Current Term" select + inline per-course teacher assignment, used by
@@ -27,6 +28,7 @@ export default function ClassSetupTermCourses({
   currentTermKey,
   onTermChange,
   courseTeacherMap,
+  teacherRegistry,
   onSaveTeachers,
   savingTermKey,
 }) {
@@ -40,7 +42,12 @@ export default function ClassSetupTermCourses({
   const otherCourses = useMemo(() => courses.filter((c) => String(c.type || 'Theory').toLowerCase() !== 'theory'), [courses]);
 
   const activeCourse = courses.find((c) => c.id === dialogState.courseId) || null;
-  const currentTeachersForDialog = activeCourse ? (courseTeacherMap?.[activeCourse.id] || []) : [];
+  // courseTeacherMap now stores teacherIds — CourseTeacherDialog itself
+  // stays name-based (see its own comments), so resolve to display names
+  // right here at the boundary, same as CourseRow below.
+  const currentTeachersForDialog = activeCourse
+    ? resolveTeacherNames(teacherRegistry, courseTeacherMap?.[activeCourse.id] || [])
+    : [];
 
   const inputStyle = {
     width: '100%', padding: '10px 12px', borderRadius: 8, border: '1px solid var(--border)',
@@ -50,7 +57,9 @@ export default function ClassSetupTermCourses({
   const labelStyle = { fontSize: 11.5, fontWeight: 700, color: 'var(--muted)', marginBottom: 4, display: 'block' };
 
   const CourseRow = ({ course }) => {
-    const teachers = courseTeacherMap?.[course.id] || [];
+    // courseTeacherMap[course.id] is now an array of teacherIds — resolve
+    // to display names via the registry before rendering.
+    const teachers = resolveTeacherNames(teacherRegistry, courseTeacherMap?.[course.id] || []);
     // Matches isClassSetupComplete's >= 2 requirement — a single teacher
     // no longer counts as "done" for the CR setup checklist badge. This
     // applies to every course type: rotating-slot courses always have 2

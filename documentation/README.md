@@ -145,6 +145,9 @@ documentation/
 │   │   └── CURRENT.md
 │   ├── notice-system/
 │   │   └── CURRENT.md
+│   ├── guest-mode/
+│   │   ├── CURRENT.md
+│   │   └── GUEST_MODE_PLAN_PROMPT.md         ← active plan-prompt (§৪), সব ৫ ফেজ DONE
 │   ├── question-bank/
 │   │   ├── CURRENT.md
 │   │   ├── 02_R2_STORAGE_NAMING_CONVENTION.md   ← active reference

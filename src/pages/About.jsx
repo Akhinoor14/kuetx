@@ -1,11 +1,64 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Wordmark } from '../components/Logo';
-import { ArrowRight, BookOpen, Building2, CheckCircle, Facebook, Phone, ShieldCheck, Sparkles, Users, Zap } from 'lucide-react';
+import { ArrowRight, BookOpen, Building2, CheckCircle, Facebook, Phone, ShieldCheck, Sparkles, Users, Zap, LogIn, Compass } from 'lucide-react';
 import { ICONS } from '../lib/iconRegistry';
 import usePageMeta from '../hooks/usePageMeta';
 import { useIsProvider } from '../hooks/useIsProvider';
 import { useProviderLang } from '../hooks/useProviderLang';
 import { FOUNDER_PHONE } from '../lib/constants';
+import { auth } from '../lib/firebase';
+import AuthModal from '../components/AuthModal';
+
+// GUEST MODE (Phase 1): two entry-point buttons shown ONLY to a signed-out
+// visitor, at the top of the hero. "Sign In / Sign Up" reuses the exact
+// same <AuthModal mode="login" .../> every other entry point in the app
+// uses (App.jsx's queue step, Profile.jsx) — no new/parallel auth UI.
+// "Continue as Guest" navigates to /guest, the entry route Phase 2 will
+// populate with actual demo content; the route itself doesn't need to
+// exist yet for this button to be wired correctly (React Router just
+// navigates; Phase 2 adds what renders there).
+function GuestEntryButtons() {
+  const navigate = useNavigate();
+  const [showAuthModal, setShowAuthModal] = useState(false);
+
+  return (
+    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.65rem', marginTop: '1rem' }}>
+      <button
+        type="button"
+        onClick={() => setShowAuthModal(true)}
+        style={{
+          display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
+          padding: '0.75rem 1.15rem', borderRadius: '14px',
+          background: 'var(--accent)', color: '#fff', border: 'none',
+          fontSize: '0.95rem', fontWeight: 800, cursor: 'pointer',
+        }}
+      >
+        <LogIn size={17} /> Sign In / Sign Up
+      </button>
+      <button
+        type="button"
+        onClick={() => navigate('/guest')}
+        style={{
+          display: 'inline-flex', alignItems: 'center', gap: '0.5rem',
+          padding: '0.75rem 1.15rem', borderRadius: '14px',
+          background: 'transparent', color: 'var(--text)',
+          border: '1.5px solid var(--border)',
+          fontSize: '0.95rem', fontWeight: 700, cursor: 'pointer',
+        }}
+      >
+        <Compass size={17} /> Continue as Guest
+      </button>
+      {showAuthModal && (
+        <AuthModal
+          mode="login"
+          onClose={() => setShowAuthModal(false)}
+          onSuccess={() => setShowAuthModal(false)}
+        />
+      )}
+    </div>
+  );
+}
 
 function GuideBanner() {
   return (
@@ -112,6 +165,12 @@ export default function About() {
             <p style={{ maxWidth: '48rem', fontSize: '1.05rem', color: 'var(--muted)', lineHeight: 1.75, margin: 0, fontWeight: 500 }}>
               KUETX is the digital ecosystem for KUET — connecting students, Class Representatives, faculty, and local service providers, and bringing academics, finance, wellbeing, events, and daily campus tasks into one focused experience.
             </p>
+
+            {/* GUEST MODE (Phase 1): visible only to a signed-out visitor —
+                kept visually secondary (small buttons under the hero copy,
+                not a full-width CTA block) since this page's primary job
+                stays explaining what KUETx is, not selling the buttons. */}
+            {!auth.currentUser && <GuestEntryButtons />}
 
             <div style={{ marginTop: '1.1rem' }}>
               <a href="https://www.facebook.com/kuetx/" target="_blank" rel="noopener noreferrer" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.6rem', padding: '0.85rem 1.25rem', borderRadius: '14px', background: 'rgba(59,89,152,.14)', border: '1.5px solid rgba(59,89,152,.28)', color: 'var(--text)', textDecoration: 'none', fontSize: '0.98rem', fontWeight: 800 }}>

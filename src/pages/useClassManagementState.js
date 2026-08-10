@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { store, uid, getProfile, getCurrentTermKey } from '../store/store';
+import { store, uid, getProfile, getCurrentTermKey, getNextDateForWeekday, classOverrideSlotKey, isClassOff } from '../store/store';
 import { getAllCourses } from '../store/curriculumStore';
 import { getGroupId } from '../lib/groupUtils';
 import {
@@ -10,6 +10,11 @@ import {
   subscribePlannerSettings,
   updatePlannerSettings,
   updateClassSetup,
+  setSlotOverride,
+  setDayOverride,
+  setRecurringOff,
+  clearRecurringOff,
+  postGroupNotice,
 } from '../lib/groupSync';
 import { subscribeGroupTermStartDate, setGroupTermStartDate } from '../lib/termStartDateSync';
 import {
@@ -19,6 +24,9 @@ import {
   matchesTerm,
   normalizeTeacherList,
 } from '../lib/plannerUtils';
+import { resolveTeacherIdsForNames, resolveTeacherNames } from '../lib/teacherRegistry';
+import { defaultCadenceForNewSlot, toggleDateOverride, shiftCadenceFrom, getEffectiveOccurrence } from '../lib/sessionalCadence';
+import { setSessionalCadence, clearSessionalCadence } from '../lib/groupSync';
 
 export const TERM_KEY_RE = /^Y\dT\d$/;
 export const ROUTINE_DAY_DEFS = [
@@ -126,9 +134,26 @@ export function useClassManagementState() {
     return subscribePlannerSettings(groupId, (data) => setGroupPlannerSettings(data || {}));
   }, [groupId]);
 
-  const effectiveCourseTeacherMap = groupId
+  // In group mode, courseTeacherMap holds teacherIds (see
+  // teacherRegistry.js) — rawCourseTeacherMapIds is that ID-based shape,
+  // used only by the write path (handleCourseTeacherDialogSave below).
+  // Local (non-group) mode never had this problem (single device, no
+  // multi-CR collision to guard against) and stays name-based as-is.
+  const rawCourseTeacherMapIds = groupId
     ? (groupPlannerSettings?.courseTeacherMap || {})
     : (settings?.courseTeacherMap || {});
+  const teacherRegistry = groupPlannerSettings?.teacherRegistry || {};
+  // Name-resolved version for every display/logging consumer below
+  // (course rows, quickLogClass's logged teacherName, assignedTeacherCount
+  // badge, plan-seeding) — everything here reads names, never ids.
+  const effectiveCourseTeacherMap = groupId
+    ? Object.fromEntries(
+        Object.entries(rawCourseTeacherMapIds).map(([courseId, ids]) => [
+          courseId,
+          resolveTeacherNames(teacherRegistry, ids),
+        ]),
+      )
+    : rawCourseTeacherMapIds;
   const effectivePlannerPlans = groupId
     ? (groupPlannerSettings?.plans || {})
     : null;
@@ -183,6 +208,318 @@ export function useClassManagementState() {
 
   const selectedRoutineEntries = routineEntriesByDay[selectedRoutineDay] || [];
   const selectedRoutineLabel = ROUTINE_DAY_DEFS.find(d => d.key === selectedRoutineDay)?.key || selectedRoutineDay;
+
+  // ── Class on/off toggle (CR-only) ──────────────────────────────────────
+  // The Routine page shows a weekly TEMPLATE (day-of-week, no calendar
+  // date). A prior version of this feature auto-guessed "the next upcoming
+  // date matching this weekday" and committed the toggle to it immediately
+  // — this had a real ambiguity gap (this week vs next week? and no way to
+  // express "suspend every week from now on" without re-toggling every
+  // single week). Fixed design: opening the toggle panel for a card/day
+  // only stages a DRAFT (date pre-filled with the same "next upcoming"
+  // suggestion as before, but editable, plus an explicit single-date vs
+  // recurring mode choice) — nothing is written until the CR presses
+  // Confirm. See store.js's isClassOff() for the read-side precedence and
+  // groupSync.js's setSlotOverride/setDayOverride/setRecurringOff for the
+  // write side.
+  const classOverrides = groupId
+    ? (groupPlannerSettings?.scheduleFields?.classOverrides || {})
+    : {};
+  const recurringOff = groupId
+    ? (groupPlannerSettings?.scheduleFields?.recurringOff || {})
+    : {};
+  const [overrideBusyKey, setOverrideBusyKey] = useState(null);
+  // draft shape: { kind: 'slot'|'day', entry?, date, mode: 'single'|'recurring', reason }
+  const [overrideDraft, setOverrideDraft] = useState(null);
+
+  const isSlotOff = (entry, dateKey = getNextDateForWeekday(entry.day)) => {
+    const key = classOverrideSlotKey(entry.courseId, entry.day, entry.slot);
+    const forDate = classOverrides[dateKey];
+    if (forDate?.dayOff) return true;
+    const status = forDate?.slots?.[key]?.status;
+    if (status === 'on') return false;
+    if (status === 'off') return true;
+    const recurring = recurringOff[key];
+    return !!(recurring?.from && dateKey >= recurring.from);
+  };
+  const isSlotRecurringOff = (entry) => !!recurringOff[classOverrideSlotKey(entry.courseId, entry.day, entry.slot)];
+  const isSelectedDayOff = !!classOverrides[getNextDateForWeekday(selectedRoutineDay)]?.dayOff;
+
+  // Opens the confirm panel for one class card — does NOT write anything
+  // yet. Pre-fills the date with the same "next occurrence" suggestion the
+  // old version silently committed to, but now the CR sees and can change
+  // it before anything is saved.
+  function openSlotOverrideDraft(entry) {
+    const slotKey = classOverrideSlotKey(entry.courseId, entry.day, entry.slot);
+    const recurring = recurringOff[slotKey];
+    setOverrideDraft({
+      kind: 'slot',
+      entry,
+      slotKey,
+      date: getNextDateForWeekday(entry.day),
+      mode: 'single',
+      reason: '',
+      // if this slot already has a recurring suspension, opening the
+      // panel is for TURNING IT BACK ON, not staging a new off-draft
+      turningOffRecurring: !!recurring,
+    });
+  }
+
+  function openDayOverrideDraft() {
+    setOverrideDraft({
+      kind: 'day',
+      date: getNextDateForWeekday(selectedRoutineDay),
+      reason: '',
+      turningOn: isSelectedDayOff,
+    });
+  }
+
+  function updateOverrideDraft(patch) {
+    setOverrideDraft((d) => (d ? { ...d, ...patch } : d));
+  }
+
+  function cancelOverrideDraft() {
+    setOverrideDraft(null);
+  }
+
+  // Commits whatever is currently staged in overrideDraft. This is the
+  // ONLY place a write actually happens — everything above just edits
+  // local draft state.
+  async function confirmOverrideDraft() {
+    if (!groupId || !overrideDraft) return;
+    const draft = overrideDraft;
+
+    if (draft.kind === 'day') {
+      const busyId = `day:${draft.date}`;
+      setOverrideBusyKey(busyId);
+      try {
+        const turningOn = draft.turningOn;
+        await setDayOverride(groupId, profile, { dateKey: draft.date, on: turningOn, reason: draft.reason || null });
+        const dateLabel = new Date(draft.date + 'T00:00:00').toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+        await postGroupNotice(groupId, profile, turningOn
+          ? { title: 'Classes back on', body: `✅ ${dateLabel}-এর সব ক্লাস আবার চালু — আগের 'বন্ধ' নোটিশ বাতিল।`, priority: 'normal' }
+          : { title: 'All classes off', body: `⚠️ ${dateLabel}-এ সব ক্লাস বন্ধ — CR মার্ক করেছে।${draft.reason ? ` কারণ: ${draft.reason}` : ''}`, priority: 'urgent' });
+      } catch (e) {
+        console.error('[ClassRoutine] confirmOverrideDraft (day) failed:', e);
+      } finally {
+        setOverrideBusyKey(null);
+        setOverrideDraft(null);
+      }
+      return;
+    }
+
+    // kind === 'slot'
+    const { entry, slotKey, date, mode, reason, turningOffRecurring } = draft;
+    const course = courseMap.get(entry.courseId);
+    const label = entry.displayName || course?.code || course?.name || 'Class';
+    const dateLabel = new Date(date + 'T00:00:00').toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+    const busyId = `slot:${slotKey}`;
+    setOverrideBusyKey(busyId);
+    try {
+      if (turningOffRecurring) {
+        // This slot already has an ongoing recurring suspension — this
+        // panel's action is turning it back on entirely, not staging a
+        // new off-draft.
+        await clearRecurringOff(groupId, profile, { slotKey });
+        await postGroupNotice(groupId, profile, {
+          title: 'Weekly suspension lifted',
+          body: `✅ ${label} আবার প্রতি সপ্তাহে চালু হবে — আগের 'প্রতি সপ্তাহে বন্ধ' অবস্থা বাতিল।`,
+          priority: 'normal',
+        });
+      } else if (mode === 'recurring') {
+        await setRecurringOff(groupId, profile, { slotKey, fromDateKey: date, reason: reason || null });
+        await postGroupNotice(groupId, profile, {
+          title: 'Class suspended (weekly)',
+          body: `⚠️ ${label} — ${dateLabel} থেকে প্রতি সপ্তাহে বন্ধ থাকবে, পরবর্তী নির্দেশ না দেওয়া পর্যন্ত।${reason ? ` কারণ: ${reason}` : ''}`,
+          priority: 'urgent',
+        });
+      } else if (isSlotOff(entry, date)) {
+        // Currently off for this exact date → confirm turns it back on.
+        // BUGFIX: this used to always call setSlotOverride({mode:'clear'})
+        // here, on the assumption that "off" always meant a per-date 'off'
+        // entry existed to clear. But isSlotOff() also returns true when
+        // there's NO per-date entry at all and the slot is off purely
+        // because of an active recurringOff (see isSlotOff's precedence
+        // above: per-date status wins, then falls through to recurring).
+        // In that case 'clear' deletes a non-existent per-date entry —
+        // a no-op — and the recurring suspension stays in force, so the
+        // slot silently remains off after the CR just "turned it on".
+        // Fix: check whether a per-date status is what's actually driving
+        // the off state for THIS date. If so, clear it as before. If the
+        // off state is coming from recurringOff instead, write an
+        // explicit per-date 'on' exception (mode: 'on') rather than
+        // clearing — this punches a single-date make-up through the
+        // ongoing suspension without touching (or lifting) the recurring
+        // suspension itself, exactly per isClassOff()'s documented
+        // precedence in store.js (per-date 'on' beats recurringOff).
+        const perDateStatus = classOverrides[date]?.slots?.[slotKey]?.status;
+        const clearingPerDateEntry = perDateStatus === 'off';
+        await setSlotOverride(groupId, profile, {
+          dateKey: date, slotKey, mode: clearingPerDateEntry ? 'clear' : 'on', reason: reason || null,
+        });
+        await postGroupNotice(groupId, profile, {
+          title: 'Class back on', body: `✅ ${label} (${dateLabel}) আসলে হবে — আগের 'বন্ধ' নোটিশ বাতিল।`, priority: 'normal',
+        });
+      } else {
+        await setSlotOverride(groupId, profile, { dateKey: date, slotKey, mode: 'off', reason: reason || null });
+        await postGroupNotice(groupId, profile, {
+          title: 'Class off', body: `⚠️ ${label} (${dateLabel}) হবে না — CR মার্ক করেছে।${reason ? ` কারণ: ${reason}` : ''}`, priority: 'urgent',
+        });
+      }
+    } catch (e) {
+      console.error('[ClassRoutine] confirmOverrideDraft (slot) failed:', e);
+    } finally {
+      setOverrideBusyKey(null);
+      setOverrideDraft(null);
+    }
+  }
+  // ── Sessional/Lab alternating-week cadence (CR-only) ─────────────────
+  // See src/lib/sessionalCadence.js for the full data-model writeup.
+  // Deliberately kept as a small, separate panel — not merged into the
+  // on/off toggle above — because it's a genuinely different concept: the
+  // toggle above is "was this specific date cancelled/suspended", while
+  // this is "what recurring pattern does this slot follow at all" (every
+  // week / alternating / fully manual). A Sessional slot can have both an
+  // active cadence AND a one-off cancellation on top of it — the two
+  // systems compose (see getEffectiveOccurrence + isClassOff both being
+  // checked independently in todayItems.js/Attendance.jsx).
+  const isSessionalType = (type) => /sessional|lab/i.test(String(type || ''));
+  const sessionalCadence = groupId
+    ? (groupPlannerSettings?.scheduleFields?.sessionalCadence || {})
+    : {};
+  const [cadenceBusyKey, setCadenceBusyKey] = useState(null);
+  // draft shape: { slotKey, entry, courseId, day, slot, label }
+  const [cadenceDraft, setCadenceDraft] = useState(null);
+
+  const getCadenceEntry = (entry) => sessionalCadence[classOverrideSlotKey(entry.courseId, entry.day, entry.slot)] || null;
+
+  // Whether a slot HAS a cadence configured at all — used by the UI to
+  // decide "show a Configure button" vs "show the existing cadence +
+  // Edit/Toggle-date/Shift actions". A Sessional slot with no entry here
+  // still runs every week (today's default, unaffected) until the CR
+  // deliberately opts it into alternating/manual mode.
+  const hasCadenceConfigured = (entry) => !!getCadenceEntry(entry);
+
+  // Opens the cadence panel for one Sessional/Lab class card. If the slot
+  // has no cadence entry yet, stages the default alternating-anchored-on-
+  // next-occurrence entry (prompt's "zero extra CR configuration for the
+  // common case") — nothing is written until confirmCadenceDraft.
+  function openCadenceDraft(entry) {
+    if (!isSessionalType(entry.type)) return;
+    const slotKey = classOverrideSlotKey(entry.courseId, entry.day, entry.slot);
+    const existing = getCadenceEntry(entry);
+    const course = courseMap.get(entry.courseId);
+    const label = entry.displayName || course?.code || course?.name || 'Class';
+    setCadenceDraft({
+      slotKey,
+      entry: existing || defaultCadenceForNewSlot(getNextDateForWeekday(entry.day)),
+      courseId: entry.courseId,
+      day: entry.day,
+      slot: entry.slot,
+      label,
+    });
+  }
+
+  function updateCadenceDraft(patch) {
+    setCadenceDraft((d) => (d ? { ...d, entry: { ...d.entry, ...patch } } : d));
+  }
+
+  function cancelCadenceDraft() {
+    setCadenceDraft(null);
+  }
+
+  // Commits the currently staged cadence entry (mode/anchorDate change,
+  // typically from the "Configure"/"Edit cadence" panel). Per-date
+  // toggles and shift-from actions below write immediately instead —
+  // they're single, explicit, already-confirmed actions with their own
+  // action button in the UI (a date-picker "Cancel this date" / "Shift
+  // from here" flow), not a multi-field form needing a review step.
+  async function confirmCadenceDraft() {
+    if (!groupId || !cadenceDraft) return;
+    const { slotKey, entry, label } = cadenceDraft;
+    setCadenceBusyKey(slotKey);
+    try {
+      await setSessionalCadence(groupId, profile, { slotKey, nextEntry: entry });
+      await postGroupNotice(groupId, profile, {
+        title: 'Sessional cadence set',
+        body: `📆 ${label} — এখন থেকে ${entry.mode === 'alternating' ? 'এক সপ্তাহ পর পর' : entry.mode === 'weekly' ? 'প্রতি সপ্তাহে' : 'ম্যানুয়ালি'} শিডিউল হবে (শুরু: ${entry.anchorDate}).`,
+        priority: 'normal',
+      });
+    } catch (e) {
+      console.error('[ClassRoutine] confirmCadenceDraft failed:', e);
+    } finally {
+      setCadenceBusyKey(null);
+      setCadenceDraft(null);
+    }
+  }
+
+  // Removes a slot's cadence entry entirely — back to "runs every week",
+  // the default for any slot with no cadence configured.
+  async function removeCadence(entry) {
+    if (!groupId) return;
+    const slotKey = classOverrideSlotKey(entry.courseId, entry.day, entry.slot);
+    setCadenceBusyKey(slotKey);
+    try {
+      await clearSessionalCadence(groupId, profile, { slotKey });
+    } catch (e) {
+      console.error('[ClassRoutine] removeCadence failed:', e);
+    } finally {
+      setCadenceBusyKey(null);
+    }
+  }
+
+  // One-off cancellation / make-up toggle for a single date — the
+  // prompt's "cancel a single occurrence" / "extra make-up session"
+  // acceptance criteria. status is 'on' | 'off' | 'clear'.
+  async function toggleCadenceDate(entry, dateKey, status) {
+    if (!groupId) return;
+    const slotKey = classOverrideSlotKey(entry.courseId, entry.day, entry.slot);
+    const current = getCadenceEntry(entry) || defaultCadenceForNewSlot(dateKey);
+    const nextEntry = toggleDateOverride(current, dateKey, status);
+    setCadenceBusyKey(slotKey);
+    try {
+      await setSessionalCadence(groupId, profile, { slotKey, nextEntry });
+    } catch (e) {
+      console.error('[ClassRoutine] toggleCadenceDate failed:', e);
+    } finally {
+      setCadenceBusyKey(null);
+    }
+  }
+
+  // Deliberate "shift cadence from here" action (prompt's design goal #1
+  // — real-world gaps drift). Re-anchors the slot's baseline for future
+  // dates only; existing overrides (past and future) are left untouched
+  // by shiftCadenceFrom itself, per its own doc comment in
+  // sessionalCadence.js. Callers should confirm with the CR before
+  // calling this — this function itself performs the write unconditionally.
+  async function shiftCadence(entry, newAnchorDate) {
+    if (!groupId) return;
+    const slotKey = classOverrideSlotKey(entry.courseId, entry.day, entry.slot);
+    const current = getCadenceEntry(entry) || defaultCadenceForNewSlot(newAnchorDate);
+    const nextEntry = shiftCadenceFrom(current, newAnchorDate);
+    setCadenceBusyKey(slotKey);
+    try {
+      await setSessionalCadence(groupId, profile, { slotKey, nextEntry });
+      const course = courseMap.get(entry.courseId);
+      const label = entry.displayName || course?.code || course?.name || 'Class';
+      const dateLabel = new Date(newAnchorDate + 'T00:00:00').toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+      await postGroupNotice(groupId, profile, {
+        title: 'Sessional cadence shifted',
+        body: `📆 ${label} — ${dateLabel} থেকে নতুন সাইকেল শুরু হবে (আগের তারিখগুলো অপরিবর্তিত থাকবে)।`,
+        priority: 'normal',
+      });
+    } catch (e) {
+      console.error('[ClassRoutine] shiftCadence failed:', e);
+    } finally {
+      setCadenceBusyKey(null);
+    }
+  }
+
+  // Convenience readout for the UI — whether a given date currently
+  // resolves 'on'/'off' for a slot, so a settings panel can show "this
+  // week: ON/OFF" without duplicating sessionalCadence.js's own logic.
+  const getCadenceOccurrence = (entry, dateKey) => getEffectiveOccurrence(getCadenceEntry(entry), dateKey);
+
   const assignedTeacherCount = useMemo(() => {
     const teacherNames = new Set();
     currentTermCourses.forEach(course => {
@@ -494,9 +831,17 @@ export function useClassManagementState() {
     const normalizedTeachers = normalizeTeacherList(teachersList);
 
     if (groupId) {
-      const next = { ...(groupPlannerSettings?.courseTeacherMap || {}) };
-      next[courseId] = normalizedTeachers;
-      updatePlannerSettings(groupId, profile, { courseTeacherMap: next })
+      // CourseTeacherDialog stays free-text/name-based by design —
+      // resolve the typed names to stable teacherIds before writing.
+      // See teacherRegistry.js. Pass existing ids so a same-slot retype
+      // renames in place instead of minting a new id.
+      const existingIds = Array.isArray(groupPlannerSettings?.courseTeacherMap?.[courseId])
+        ? groupPlannerSettings.courseTeacherMap[courseId]
+        : [];
+      const { registry: nextRegistry, ids } = resolveTeacherIdsForNames(teacherRegistry, normalizedTeachers, existingIds);
+      const nextMap = { ...(groupPlannerSettings?.courseTeacherMap || {}) };
+      nextMap[courseId] = ids;
+      updatePlannerSettings(groupId, profile, { courseTeacherMap: nextMap, teacherRegistry: nextRegistry })
         .catch((e) => console.error('[ClassManagement] courseTeacherMap save failed:', e));
     } else {
       const next = { ...(settings.courseTeacherMap || {}) };
@@ -504,6 +849,9 @@ export function useClassManagementState() {
       setSettings({ ...(settings || {}), courseTeacherMap: next });
     }
 
+    // plan.teachers is a separate, display-only cache of names (never used
+    // as an attendance/marks key) — keeps storing names regardless of
+    // group/local mode.
     updateCurrentTermPlan(courseId, (currentPlan) => ({
       ...currentPlan,
       teachers: normalizedTeachers,
@@ -524,5 +872,10 @@ export function useClassManagementState() {
     openCourseDetails, closeCourseDetails, formatDateTime, removeLogEntry, quickLogClass,
     copyRoutineForSelectedDay, exportRoutineBackup, resetPlan, confirmResetPlan, cancelResetPlan,
     openTeacherDialog, openCourseTeacherDialog, handleCourseTeacherDialogClose, handleCourseTeacherDialogSave,
+    isSlotOff, isSlotRecurringOff, isSelectedDayOff, overrideBusyKey, overrideDraft,
+    openSlotOverrideDraft, openDayOverrideDraft, updateOverrideDraft, cancelOverrideDraft, confirmOverrideDraft,
+    isSessionalType, hasCadenceConfigured, getCadenceEntry, getCadenceOccurrence,
+    cadenceBusyKey, cadenceDraft, openCadenceDraft, updateCadenceDraft, cancelCadenceDraft, confirmCadenceDraft,
+    removeCadence, toggleCadenceDate, shiftCadence,
   };
 }

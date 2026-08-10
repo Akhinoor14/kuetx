@@ -7,6 +7,7 @@ import { setGroupCurrentTermKey, setGroupTermStartDate } from '../lib/termStartD
 import { getCoursesForTerm } from '../store/curriculumStore';
 import { store } from '../store/store';
 import ClassSetupTermCourses from './ClassSetupTermCourses';
+import { resolveTeacherIdsForNames } from '../lib/teacherRegistry';
 
 /**
  * "Class Setup" popup shown to a CR/ACR on their FIRST visit to any
@@ -52,6 +53,7 @@ export default function ClassSetupModal({ groupId, profile, onDone }) {
   const [classSetup, setClassSetup] = useState(null);
   const [routineCount, setRoutineCount] = useState(null);
   const [teacherMap, setTeacherMap] = useState(null);
+  const [teacherRegistry, setTeacherRegistry] = useState({});
   const [form, setForm] = useState({ termStartDate: '', classEndDate: '', prepLeaveEndDate: '', postExamEndDate: '', examCount: 5 });
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
@@ -77,7 +79,10 @@ export default function ClassSetupModal({ groupId, profile, onDone }) {
       }));
     });
     const unsubRoutine = subscribeRoutine(groupId, (entries) => setRoutineCount((entries || []).length));
-    const unsubPlanner = subscribePlannerSettings(groupId, (data) => setTeacherMap(data?.courseTeacherMap || {}));
+    const unsubPlanner = subscribePlannerSettings(groupId, (data) => {
+      setTeacherMap(data?.courseTeacherMap || {});
+      setTeacherRegistry(data?.teacherRegistry || {});
+    });
     return () => { unsubSetup(); unsubRoutine(); unsubPlanner(); };
   }, [groupId]);
 
@@ -126,10 +131,16 @@ export default function ClassSetupModal({ groupId, profile, onDone }) {
     }
   };
 
-  const handleSaveTeachers = (courseId, teachers) => {
+  const handleSaveTeachers = (courseId, teacherNames) => {
     if (!courseId) return Promise.resolve();
-    const next = { ...(teacherMap || {}), [courseId]: teachers };
-    return updatePlannerSettings(groupId, profile, { courseTeacherMap: next })
+    // CourseTeacherDialog stays free-text/name-based by design — resolve
+    // the typed names to stable teacherIds before writing. See
+    // teacherRegistry.js. Pass existing ids so a same-slot retype renames
+    // in place instead of minting a new id (see resolveTeacherIdsForNames).
+    const existingIds = Array.isArray(teacherMap?.[courseId]) ? teacherMap[courseId] : [];
+    const { registry: nextRegistry, ids } = resolveTeacherIdsForNames(teacherRegistry, teacherNames, existingIds);
+    const nextMap = { ...(teacherMap || {}), [courseId]: ids };
+    return updatePlannerSettings(groupId, profile, { courseTeacherMap: nextMap, teacherRegistry: nextRegistry })
       .catch((e) => {
         setTermError(e?.message || 'Could not save teachers — please try again.');
         throw e;
@@ -293,6 +304,7 @@ export default function ClassSetupModal({ groupId, profile, onDone }) {
               currentTermKey={currentTermKey}
               onTermChange={handleTermChange}
               courseTeacherMap={teacherMap}
+              teacherRegistry={teacherRegistry}
               onSaveTeachers={handleSaveTeachers}
               savingTermKey={termSaving}
             />
@@ -309,6 +321,7 @@ export default function ClassSetupModal({ groupId, profile, onDone }) {
                 currentTermKey={currentTermKey}
                 onTermChange={handleTermChange}
                 courseTeacherMap={teacherMap}
+                teacherRegistry={teacherRegistry}
                 onSaveTeachers={handleSaveTeachers}
                 savingTermKey={termSaving}
               />

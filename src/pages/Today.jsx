@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Sunrise, Plus, Clock3, GraduationCap, ListTodo, Pencil, Trash2, X, CalendarOff } from 'lucide-react';
 import Modal from '../components/Modal';
-import { store, getProfile, getLocalDateKey, saveTodayPlan, deleteTodayPlan, FULL_WEEK_DAYS } from '../store/store';
+import { store, getProfile, getLocalDateKey, saveTodayPlan, deleteTodayPlan, FULL_WEEK_DAYS, getBDNow } from '../store/store';
 import { buildTodayItems, groupByPartOfDay } from '../lib/todayItems';
 import { notify } from '../lib/notify';
 import { confirmDialog } from '../lib/dialog';
@@ -93,11 +93,11 @@ function TimelineRow({ item, now, onEdit, onDelete }) {
 
 export default function Today() {
   const profile = getProfile();
-  const [now, setNow] = useState(() => new Date());
+  const [now, setNow] = useState(() => getBDNow());
   const [plansVersion, setPlansVersion] = useState(0); // bump to re-read today_plans after add/edit/delete
 
   useEffect(() => {
-    const t = setInterval(() => setNow(new Date()), 60000);
+    const t = setInterval(() => setNow(getBDNow()), 60000);
     return () => clearInterval(t);
   }, []);
 

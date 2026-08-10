@@ -15,9 +15,22 @@
 //   - CourseTeacherDialog.jsx is a completely separate, simpler component:
 //     two plain text inputs (teacher1/teacher2), onSave(teachers) passing
 //     back a plain string[] of <=2 names.
-//   - Its output feeds store.js's courseTeacherMap — entirely LOCAL device
-//     storage (store.set('scheduleSettings', ...)), never synced to
-//     Firestore, never shared between CR and other students.
+//   - Its output feeds courseTeacherMap. CORRECTION (later session): this
+//     was wrong when written — courseTeacherMap is NOT local-only. It's
+//     group-shared, synced to Firestore via groups/{groupId}/meta/
+//     plannerSettings (see groupSync.js's subscribePlannerSettings/
+//     updatePlannerSettings, and ClassSetup.jsx/ClassSetupModal.jsx/
+//     useClassManagementState.js, which are the actual write sites).
+//     store.get('scheduleSettings').courseTeacherMap is only the
+//     pre-group/local-fallback copy for students not yet in a synced
+//     class; once a group exists, every page reads the live group value
+//     instead (see Courses.jsx/TermQS.jsx/Assignments.jsx/Schedule.jsx's
+//     own subscribePlannerSettings calls).
+//     Separately, as of the teacher-ID migration (see teacherRegistry.js),
+//     courseTeacherMap's values are teacherIds, not name strings — this
+//     module is unaffected either way since it works entirely off
+//     routineEntries.teacherName (a resolved display string written by
+//     Schedule.jsx), never courseTeacherMap directly.
 //   - The REAL Firestore-shared, CR-facing teacher field is
 //     groups/{groupId}/routineEntries/{id}.teacherName — a single string
 //     (only the FIRST teacher's name; Schedule.jsx explicitly destructures

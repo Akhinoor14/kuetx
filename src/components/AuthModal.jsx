@@ -180,7 +180,11 @@ export default function AuthModal({ mode = 'login', isUpgrade = false, onClose, 
         )}
       </div>
 
-      <GuideModal open={guideOpen} onClose={() => setGuideOpen(false)} />
+      {/* documentation/03-features/guest-mode/GUEST_MODE_PLAN_PROMPT.md Phase 5.1 — AuthModal only ever renders for a
+          visitor who hasn't completed sign-in yet (that's the whole
+          point of this modal), so the Guide opened from here is always
+          the 'guest' Overview, never a role-specific feature guide. */}
+      <GuideModal open={guideOpen} onClose={() => setGuideOpen(false)} resolvedRole="guest" />
     </div>
   );
 }

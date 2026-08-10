@@ -8,6 +8,7 @@ import { getFacultyNav } from '../nav-faculty';
 import { getNavProvider } from './nav-system/SidebarNavProvider';
 import { useIsProvider } from '../hooks/useIsProvider';
 import { useIsFaculty } from '../hooks/useIsFaculty';
+import { useIsStaff } from '../hooks/useIsStaff';
 import { useViewMode } from '../hooks/useViewMode';
 import { useProviderLang } from '../hooks/useProviderLang';
 import { Wordmark } from './Logo';
@@ -219,6 +220,10 @@ export function Navbar({ onMenuClick }) {
   const isMobileNav = useIsMobileNav();
   const { isProvider, isResolved: isProviderResolved } = useIsProvider();
   const { isFaculty, isResolved: isFacultyResolved } = useIsFaculty();
+  // documentation/03-features/guest-mode/GUEST_MODE_PLAN_PROMPT.md Phase 5.1 — staff detection for the Guide's
+  // role resolution, reusing the same hook Sidebar.jsx/RequireStaff.jsx
+  // already use rather than inventing a new staff check here.
+  const { isRealAdmin: isStaff } = useIsStaff();
   // BUGFIX (person requested this — topbar chip strip missing entirely,
   // on every page, specifically for the Founder's own account): Sidebar.
   // jsx and BottomNav.jsx both already resolve student-vs-faculty via
@@ -1009,7 +1014,30 @@ export function Navbar({ onMenuClick }) {
       <NotificationPanel isOpen={notificationOpen} onClose={() => setNotificationOpen(false)} />
 
       {/* KUETx Guide */}
-      <GuideModal open={guideOpen} onClose={closeGuide} isViewerCR={isViewerCR} />
+      {/* documentation/03-features/guest-mode/GUEST_MODE_PLAN_PROMPT.md Phase 5.1 — resolvedRole computed from real
+          account-role hooks (already in scope above), not the current
+          URL. Navbar only ever renders for a signed-in user (guest mode
+          uses its own GuestShell/GuestBanner, not this component), so
+          'guest' is never resolved here — that value is only ever
+          produced by AuthModal.jsx/RoleSelectScreen.jsx's callers, which
+          can genuinely be signed-out. Priority mirrors the app's
+          existing shell-selection precedent elsewhere (e.g.
+          RequireStudentMode.jsx checks faculty before provider): a
+          Founder viewing in Faculty mode already resolves isFaculty via
+          the Founder-bypass inside useIsFaculty() itself, so no separate
+          Founder branch is needed here. */}
+      <GuideModal
+        open={guideOpen}
+        onClose={closeGuide}
+        isViewerCR={isViewerCR}
+        resolvedRole={
+          isFacultyResolved && isFaculty ? 'faculty'
+          : isProviderResolved && isProvider ? 'provider'
+          : isStaff ? 'staff'
+          : isViewerCR ? 'student-cr'
+          : 'student'
+        }
+      />
     </>
   );
 }

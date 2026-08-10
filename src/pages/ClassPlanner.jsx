@@ -196,7 +196,7 @@ export default function ClassPlanner() {
         course={s.allCourses.find(course => course.id === s.courseTeacherDialogState.courseId)}
         currentTeachers={(s.effectiveCourseTeacherMap || {})[s.courseTeacherDialogState.courseId] || (s.currentTermPlans?.[s.courseTeacherDialogState.courseId]?.teachers || [])}
         onSave={s.handleCourseTeacherDialogSave}
-        allTeachers={[]}
+        allTeachers={[...new Set(Object.values(s.effectiveCourseTeacherMap || {}).flat().filter(Boolean))]}
         requireTwoTeachers={true}
       />
 

@@ -24,6 +24,13 @@ export const GUIDE_CATEGORIES_BN = [
   "ফ্যাকাল্টি পোর্টাল",
   "সার্ভিস প্রোভাইডার",
   "টিম ও অ্যাডমিন",
+  // documentation/03-features/guest-mode/GUEST_MODE_PLAN_PROMPT.md Phase 5.2 — new Overview categories, one per
+  // non-student resolved role, kept DISTINCT from index 0's student
+  // "শুরুর কথা" per the plan's explicit instruction not to reuse it.
+  "গেস্ট — KUETx কী?",
+  "ফ্যাকাল্টি — শুরুর কথা",
+  "প্রোভাইডার — শুরুর কথা",
+  "স্টাফ — শুরুর কথা",
 ];
 
 export const GUIDE_CATEGORIES_EN = [
@@ -35,6 +42,12 @@ export const GUIDE_CATEGORIES_EN = [
   "Faculty Portal",
   "Service Provider",
   "Team & Admin",
+  // documentation/03-features/guest-mode/GUEST_MODE_PLAN_PROMPT.md Phase 5.2 additions — see the _BN block above for
+  // the "why distinct from index 0" rationale.
+  "Guest Overview",
+  "Faculty Overview",
+  "Provider Overview",
+  "Staff Overview",
 ];
 
 // Index-matched to *_BN above — GuideModal picks the right array by lang.
@@ -42,6 +55,8 @@ export const GUIDE_CATEGORIES = GUIDE_CATEGORIES_EN;
 
 const CAT = {
   OVERVIEW: 0, ACADEMICS: 1, CAMPUS: 2, TOOLS: 3, CR: 4, FACULTY: 5, PROVIDER: 6, STAFF: 7,
+  // Phase 5.2 — resolved-role Overview categories, indices 8–11.
+  GUEST_OVERVIEW: 8, FACULTY_OVERVIEW: 9, PROVIDER_OVERVIEW: 10, STAFF_OVERVIEW: 11,
 };
 
 function catFor(lang, idx) {
@@ -1036,6 +1051,98 @@ const RAW_SECTIONS = [
       { type: 'text', text: 'If a staff member is also CR or ACR, this hub shows both identities together. Profile comes first, then CR tools, then Team & Administration.' },
       { type: 'bullet', text: 'Can show both staff and CR/ACR identities together' },
       { type: 'bullet', text: 'Merged entry point for Founder, Head of Ops, and Campus Lead work' },
+    ],
+  },
+
+  // ---- documentation/03-features/guest-mode/GUEST_MODE_PLAN_PROMPT.md Phase 5.2 — new Overview sections ----
+  // Deliberately orientation-only, not feature walkthroughs — a guest
+  // can't click through real features yet, and faculty/provider/staff
+  // haven't seen the rest of the app framed for their role before now.
+  // Kept to 2-4 short blocks each per the plan's instruction.
+
+  {
+    num: "60", id: "guest-overview", route: null, icon: "Sparkles", catIdx: CAT.GUEST_OVERVIEW,
+    titleBn: "KUETx আসলে কী?",
+    titleEn: "What is KUETx?",
+    descBn: "সাইন আপ করার আগে সংক্ষেপে জেনে নিন KUETx কী আর কাদের জন্য।",
+    descEn: "A short introduction to what KUETx is and who it's for, before you sign up.",
+    blocksBn: [
+      { type: 'text', text: 'KUETx হলো KUET শিক্ষার্থীদের জন্য বানানো একটা অ্যাপ — উপস্থিতি, নম্বর, রুটিন, নোটিশ আর ক্যাম্পাস লাইফের অনেক কিছু এক জায়গায় রাখে, KUET-এর নিজস্ব নিয়ম অনুযায়ী।' },
+      { type: 'bullet', text: 'Student — কোর্স, উপস্থিতি, নম্বর, রুটিন, প্রশ্নব্যাংক, আর আরও অনেক কিছু' },
+      { type: 'bullet', text: 'Class Rep (CR) — নিজের ক্লাসের রুটিন-নোটিশ-উপস্থিতি ব্যবস্থাপনার বাড়তি টুলস' },
+      { type: 'bullet', text: 'Faculty — ক্লাস ম্যানেজমেন্ট, উপস্থিতি ও নম্বর এন্ট্রি, নোটিশ পাঠানো' },
+      { type: 'bullet', text: 'Service Provider — ক্যাম্পাসের আশেপাশের সার্ভিস/দোকানের জন্য নিজস্ব শপ ও বুকিং ব্যবস্থা' },
+      { type: 'callout', variant: 'info', text: 'এখন আপনি প্রিভিউ মোডে আছেন — এখানে যা দেখছেন সব ডেমো ডেটা, আপনার নিজের নয়। নিজের অ্যাকাউন্ট পেতে সাইন আপ করুন।' },
+    ],
+    blocksEn: [
+      { type: 'text', text: "KUETx is an app built for KUET students — attendance, marks, schedule, notices, and a lot of campus life, all in one place, built around KUET's own actual rules." },
+      { type: 'bullet', text: 'Student — courses, attendance, marks, schedule, question bank, and more' },
+      { type: 'bullet', text: "Class Rep (CR) — extra tools for managing your class's schedule, notices, and attendance" },
+      { type: 'bullet', text: 'Faculty — class management, attendance and marks entry, sending notices' },
+      { type: 'bullet', text: "Service Provider — your own shop and booking system for campus-area services" },
+      { type: 'callout', variant: 'info', text: "You're in preview mode right now — everything you see is demo data, not your own. Sign up to get your own account." },
+    ],
+  },
+
+  {
+    num: "61", id: "faculty-overview", route: null, icon: "GraduationCap", catIdx: CAT.FACULTY_OVERVIEW,
+    titleBn: "ফ্যাকাল্টি হিসেবে KUETx",
+    titleEn: "KUETx for Faculty",
+    descBn: "ফ্যাকাল্টি হিসেবে KUETx-এ কী কী করা যায়, তার সংক্ষিপ্ত পরিচিতি।",
+    descEn: "A quick look at what KUETx offers faculty, before the feature-by-feature Faculty Portal guide.",
+    blocksBn: [
+      { type: 'text', text: 'KUETx-এ ফ্যাকাল্টি অ্যাকাউন্ট দিয়ে নিজের ক্লাস তৈরি ও পরিচালনা করা যায়, সেশন লগ রাখা যায়, রোস্টার দেখা যায়, উপস্থিতি ও নম্বর এন্ট্রি করা যায়, আর শিক্ষার্থীদের নোটিশ পাঠানো যায়।' },
+      { type: 'bullet', text: 'Class management ও session log — যেকোনো ফ্যাকাল্টি অ্যাকাউন্ট থেকেই করা যায়' },
+      { type: 'bullet', text: 'Attendance ও Marks entry — শিক্ষার্থীর পাশাপাশি নিজের ক্লাসের জন্য' },
+      { type: 'bullet', text: 'Notice broadcast — নিজের কোর্সের শিক্ষার্থীদের কাছে সরাসরি পৌঁছায়' },
+      { type: 'callout', variant: 'info', text: 'নোটিশ পাঠানো আর মার্ক এন্ট্রি করার জন্য Founder-অনুমোদিত Teacher Verification লাগে — বাকি সব ফিচার (ক্লাস, সেশন, রুটিন) সাইন আপের পরপরই ব্যবহার করা যায়।' },
+    ],
+    blocksEn: [
+      { type: 'text', text: 'A faculty account on KUETx can create and manage classes, log sessions, view rosters, enter attendance and marks, and send notices to students.' },
+      { type: 'bullet', text: 'Class management and session logging — available to any faculty account' },
+      { type: 'bullet', text: "Attendance and marks entry — for your own classes' students" },
+      { type: 'bullet', text: "Notice broadcast — reaches your course's students directly" },
+      { type: 'callout', variant: 'info', text: 'Posting notices and entering marks needs Founder-approved Teacher Verification first. Everything else (classes, sessions, schedule) is available right after signup.' },
+    ],
+  },
+
+  {
+    num: "62", id: "provider-overview", route: null, icon: "Store", catIdx: CAT.PROVIDER_OVERVIEW,
+    titleBn: "সার্ভিস প্রোভাইডার হিসেবে KUETx",
+    titleEn: "KUETx for Service Providers",
+    descBn: "প্রোভাইডার হিসেবে KUETx-এ কী কী করা যায়, তার সংক্ষিপ্ত পরিচিতি।",
+    descEn: "A quick look at the shop/marketplace system, before the feature-by-feature Service Provider guide.",
+    blocksBn: [
+      { type: 'text', text: 'Service Provider অ্যাকাউন্ট দিয়ে ক্যাম্পাসের আশেপাশের কোনো সার্ভিস বা দোকানের জন্য নিজস্ব শপ প্রোফাইল, অফারিং তালিকা, আর বুকিং/ইনকোয়ারি ব্যবস্থা চালানো যায়।' },
+      { type: 'bullet', text: 'My Shop hub — শপ প্রোফাইল, সেটিংস, ও অফারিং তালিকা এক জায়গায়' },
+      { type: 'bullet', text: 'Bookings ও inquiries — শিক্ষার্থীরা সরাসরি রিকোয়েস্ট পাঠাতে পারে' },
+      { type: 'callout', variant: 'info', text: 'অ্যাকাউন্ট Founder-approved verification-এর অপেক্ষায় থাকা অবস্থায়ও শপ সেটআপ করা যায়, কিন্তু সরাসরি মার্কেটপ্লেসে দেখানোর জন্য ভেরিফিকেশন লাগে।' },
+    ],
+    blocksEn: [
+      { type: 'text', text: 'A Service Provider account lets you run a shop profile, an offerings list, and a booking/inquiry system for a campus-area service or shop.' },
+      { type: 'bullet', text: 'My Shop hub — shop profile, settings, and offerings in one place' },
+      { type: 'bullet', text: 'Bookings and inquiries — students can send requests directly' },
+      { type: 'callout', variant: 'info', text: 'You can set up your shop while your account waits on Founder-approved verification, but verification is required to appear in the marketplace itself.' },
+    ],
+  },
+
+  {
+    num: "63", id: "staff-overview", route: null, icon: "Shield", catIdx: CAT.STAFF_OVERVIEW,
+    titleBn: "স্টাফ হিসেবে KUETx",
+    titleEn: "KUETx for Staff",
+    descBn: "Campus Lead, Senior Campus Lead, Admin, ও অন্য অফিসিয়াল টিম পোস্টের জন্য সংক্ষিপ্ত পরিচিতি।",
+    descEn: "A quick look at what the staff role catalog covers, before the feature-by-feature Team & Admin guide.",
+    blocksBn: [
+      { type: 'text', text: 'KUETx টিমের অফিসিয়াল পোস্টগুলো (Head of Ops, Campus Lead, Senior Campus Lead, Frontend/Backend Engineer, ইত্যাদি) Team & Administration ড্যাশবোর্ডের মাধ্যমে নিজ নিজ দায়িত্ব পালন করে।' },
+      { type: 'bullet', text: 'Team Dashboard — নিজের রোল-ভিত্তিক ট্যাবে নিজের কাজ দেখা যায়' },
+      { type: 'bullet', text: 'Admin Hub — CR/ACR পরিচয়ও একইসাথে থাকলে দুটোই একত্রে দেখায়' },
+      { type: 'callout', variant: 'info', text: 'CR এই ক্যাটালগে নেই — CR প্রতি-ক্লাস স্টুডেন্ট ফিচার, অফিসিয়াল KUETx টিম পোস্ট নয়।' },
+    ],
+    blocksEn: [
+      { type: 'text', text: "KUETx team's official posts (Head of Ops, Campus Lead, Senior Campus Lead, Frontend/Backend Engineer, and others) carry out their responsibilities through the Team & Administration dashboard." },
+      { type: 'bullet', text: 'Team Dashboard — see your own work through your role-specific tab' },
+      { type: 'bullet', text: 'Admin Hub — shows both staff and CR/ACR identities together if you hold both' },
+      { type: 'callout', variant: 'info', text: "CR isn't in this catalog — CR is a per-class student feature, not an official KUETx team post." },
     ],
   },
 ];

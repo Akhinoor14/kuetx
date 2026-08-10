@@ -12,6 +12,7 @@ import { subscribeCRStatus, subscribeRoutine, addRoutineEntry, updateRoutineEntr
 import { subscribeGroupTermStartDate } from '../lib/termStartDateSync';
 import { useCanEditGroup } from '../hooks/useCanEditGroup';
 import TeacherClaimBanner from '../components/TeacherClaimBanner';
+import { resolveTeacherIdsForNames, resolveTeacherNames } from '../lib/teacherRegistry';
 
 const DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday'];
 // Compact 3-letter label for day-selector chips (Sun/Mon/Tue/Wed/Thu) —
@@ -84,28 +85,16 @@ const MESSAGE_FORMATS = [
   { id: 'whatsapp', label: 'Copy WhatsApp', sample: '📅 *Schedule for Sunday*' },
 ];
 
-// Looks up the saved honorific ("Sir"/"Ma'am") for a teacher name from the
-// Teachers page (see src/pages/Teachers.jsx — per-teacher `honorific`
-// field). Falls back to "Sir" only when no matching teacher record exists
-// yet, so schedule entries still get a sensible default instead of being
-// left blank.
-const getTeacherHonorific = (bareName) => {
-  try {
-    const teachers = store.get('teachers') || [];
-    const match = teachers.find(t => String(t.name || '').trim().toLowerCase() === bareName.toLowerCase());
-    return match?.honorific || 'Sir';
-  } catch {
-    return 'Sir';
-  }
-};
-
-const normalizeTeacherName = (value) => {
-  const clean = String(value || '').trim().replace(/\s+/g, ' ');
-  if (!clean) return '';
-  const stripped = clean.replace(/\s+(sir|ma'?am)\.?$/i, '').trim();
-  const honorific = getTeacherHonorific(stripped);
-  return `${stripped} ${honorific}`;
-};
+// BUGFIX (removed honorific guessing per CR feedback): this used to strip
+// whatever "Sir"/"Ma'am" was on the end of a typed name and reattach a
+// "guessed" honorific (looked up from the Teachers page, defaulting to
+// "Sir" if nothing matched). That's more complexity than needed — the CR
+// typing the schedule already knows exactly what a teacher goes by ("Sir",
+// "Ma'am", "Miss", "Dr.", or nothing at all), so the app shouldn't rewrite
+// it. Now this only trims and collapses whitespace; whatever the CR typed
+// is exactly what gets saved and used as the attendance/marks key
+// everywhere else in the app.
+const normalizeTeacherName = (value) => String(value || '').trim().replace(/\s+/g, ' ');
 
 const normalizeScheduleEntries = (entries) => {
   const seen = new Set();
@@ -554,6 +543,18 @@ export default function Schedule() {
     if (!groupId) { setGroupPlannerSettings(null); return; }
     return subscribePlannerSettings(groupId, (data) => setGroupPlannerSettings(data || {}));
   }, [groupId]);
+  // courseTeacherMap now stores teacherIds in group mode (see
+  // teacherRegistry.js) — teacherRegistry is the id->name lookup used to
+  // resolve them everywhere this page displays or hands out teacher
+  // names (getCourseTeachers, allKnownTeachers). Local (non-group) mode
+  // never had this problem and stays name-based, so this is simply {}
+  // there — resolveTeacherNames/resolveTeacherIdsForNames both pass
+  // values straight through when given an empty registry... actually no:
+  // an empty registry would make resolveTeacherNames fall back to
+  // returning the raw (name) string unresolved, which is exactly what we
+  // want for local mode's own name-based courseTeacherMap — see
+  // getCourseTeachers below for where this distinction actually matters.
+  const teacherRegistry = isGroupMode ? (groupPlannerSettings?.teacherRegistry || {}) : {};
 
   const [settings, setSettings] = useState(() => normalizeSettings(store.get('scheduleSettings')));
   useEffect(() => {
@@ -724,12 +725,22 @@ export default function Schedule() {
     return regularSlots.length ? regularSlots : slotList;
   };
 
+  // SECTION 2 FIX (teacher-less types): Sessional/Project/Tutorial-type
+  // slots don't track a single per-slot teacher the way Theory does (the
+  // timetable grid already hides the teacher label for these via
+  // isSessionalType(item.type) in the cell renderer — see line ~1487).
+  // Switching Type TO one of these must clear any teacherName already
+  // staged in the form, so a stale value from a prior Theory selection
+  // never gets silently saved once the field is hidden — matching the
+  // acceptance criteria ("No sessional-type schedule entry has a
+  // lingering teacher value saved from before the type was changed").
   const handleFormTypeChange = (nextType) => {
     const allowed = getAllowedSlotsForType(nextType);
     setForm(prev => ({
       ...prev,
       type: nextType,
       slot: allowed.includes(prev.slot) ? prev.slot : (allowed[0] || prev.slot),
+      teacherName: isSessionalType(nextType) ? '' : prev.teacherName,
     }));
   };
 
@@ -739,11 +750,12 @@ export default function Schedule() {
       ...prev,
       type: nextType,
       slot: allowed.includes(prev.slot) ? prev.slot : (allowed[0] || prev.slot),
+      teacherName: isSessionalType(nextType) ? '' : prev.teacherName,
       _extraSlot: null, // clear injected slot on type change
     }));
   };
 
-  const persistSettings = (next) => {
+  const persistSettings = (next, nextTeacherRegistry) => {
     const normalized = normalizeSettings(next);
     setSettings(normalized);
     if (isGroupMode) {
@@ -758,7 +770,14 @@ export default function Schedule() {
       // change re-renders).
       if (!canEditSchedule) return;
       const { courseTeacherMap: nextTeacherMap, ...scheduleFields } = normalized;
-      updatePlannerSettings(groupId, profile, { courseTeacherMap: nextTeacherMap, scheduleFields })
+      const payload = { courseTeacherMap: nextTeacherMap, scheduleFields };
+      // Only present when the caller (handleCourseTeacherDialogSave) is
+      // actually updating teacherRegistry — every other persistSettings
+      // call in this file (holiday dates, message format, etc.) leaves
+      // teacherRegistry untouched, so omit the field entirely rather
+      // than writing a stale/undefined value over it.
+      if (nextTeacherRegistry !== undefined) payload.teacherRegistry = nextTeacherRegistry;
+      updatePlannerSettings(groupId, profile, payload)
         .catch((e) => console.error('[Schedule] persistSettings (group) failed:', e));
       return;
     }
@@ -770,7 +789,14 @@ export default function Schedule() {
 
   const getCourseTeachers = (courseId) => {
     if (!courseId) return [];
-    const mappedTeachers = Array.isArray(courseTeacherMap[courseId]) ? courseTeacherMap[courseId].filter(Boolean) : [];
+    // In group mode, courseTeacherMap[courseId] holds teacherIds — resolve
+    // to display names here, at the single source function every caller
+    // (dropdowns, startEdit, ensureCourseTeacherSetup, autoDisplayName)
+    // already goes through, so nothing downstream needs to know about
+    // ids at all. In local mode teacherRegistry is {} and this is a
+    // harmless passthrough (see its definition above).
+    const rawTeachers = Array.isArray(courseTeacherMap[courseId]) ? courseTeacherMap[courseId].filter(Boolean) : [];
+    const mappedTeachers = isGroupMode ? resolveTeacherNames(teacherRegistry, rawTeachers) : rawTeachers;
     if (mappedTeachers.length > 0) return mappedTeachers;
 
     const fromSchedule = [...new Set(
@@ -804,14 +830,19 @@ export default function Schedule() {
 
   useEffect(() => {
     const teacherSet = new Set(getUniqueTeacherNames(schedule));
+    // courseTeacherMap values are teacherIds in group mode — resolve to
+    // names before adding to the known-teachers datalist (this feeds
+    // CourseTeacherDialog's suggestion list, which is always names).
     Object.values(courseTeacherMap || {}).forEach(list => {
-      (Array.isArray(list) ? list : []).forEach(name => {
+      const rawList = Array.isArray(list) ? list : [];
+      const names = isGroupMode ? resolveTeacherNames(teacherRegistry, rawList) : rawList;
+      names.forEach(name => {
         const normalized = normalizeTeacherName(name);
         if (normalized) teacherSet.add(normalized);
       });
     });
     setAllKnownTeachers(Array.from(teacherSet).sort());
-  }, [schedule, courseTeacherMap]);
+  }, [schedule, courseTeacherMap, isGroupMode, teacherRegistry]);
 
   const autoDisplayName = (courseId, teacherName) => {
     const course = getCourse(courseId);
@@ -843,7 +874,14 @@ export default function Schedule() {
       day: item.day || 'Sunday',
       slot: itemSlot,
       courseId: item.courseId || '',
-      teacherName: item.teacherName || courseTeachers[0] || '',
+      // SECTION 2 FIX: don't inject courseTeachers[0] as a fallback when
+      // loading a teacher-less-type entry into the edit form — that field
+      // is hidden for these types (see the Teacher field render), so
+      // staging a fallback value here just leaves an invisible stale
+      // value sitting in state (harmless today only because saveQuickForm
+      // also skips writing it for these types, but there's no reason to
+      // let the two paths disagree).
+      teacherName: isSessionalType(itemType) ? '' : (item.teacherName || courseTeachers[0] || ''),
       displayName: item.displayName || courseShortNameMap[item.courseId] || '',
       room: item.room || '',
       note: item.note || '',
@@ -874,12 +912,26 @@ export default function Schedule() {
     const normalizedTeachers = [...new Set((teachers || []).map(name => normalizeTeacherName(name)).filter(Boolean))].slice(0, 2);
     if (!courseId || normalizedTeachers.length < 2) return;
 
-    // Update course-teacher mapping
-    const nextMap = {
-      ...(courseTeacherMap || {}),
-      [courseId]: normalizedTeachers,
-    };
-    persistSettings({ ...settings, courseTeacherMap: nextMap });
+    // Update course-teacher mapping. CourseTeacherDialog stays free-text
+    // name-based by design — in group mode, resolve the typed names to
+    // stable teacherIds before writing courseTeacherMap (see
+    // teacherRegistry.js); persistSettings's group branch writes
+    // teacherRegistry alongside it. Local mode keeps storing names
+    // directly, same as before.
+    let nextMap;
+    let nextRegistry = teacherRegistry;
+    if (isGroupMode) {
+      // Pass this course's current ids so a same-slot retype (a
+      // deliberate rename) reuses the existing teacherId instead of
+      // minting a new one — see resolveTeacherIdsForNames' own comment.
+      const existingIds = Array.isArray(courseTeacherMap?.[courseId]) ? courseTeacherMap[courseId] : [];
+      const resolved = resolveTeacherIdsForNames(teacherRegistry, normalizedTeachers, existingIds);
+      nextRegistry = resolved.registry;
+      nextMap = { ...(courseTeacherMap || {}), [courseId]: resolved.ids };
+    } else {
+      nextMap = { ...(courseTeacherMap || {}), [courseId]: normalizedTeachers };
+    }
+    persistSettings({ ...settings, courseTeacherMap: nextMap }, isGroupMode ? nextRegistry : undefined);
 
     // Sync: Auto-add teachers to Teachers database if they don't exist
     const existingTeachers = store.get('teachers') || [];
@@ -943,19 +995,28 @@ export default function Schedule() {
       return;
     }
 
-    const availableTeachers = getCourseTeachers(courseId);
+    // SECTION 2 FIX: teacher-less types (Sessional/Project/Tutorial — see
+    // isSessionalType) skip the whole teacher-selection gate entirely,
+    // instead of falling back to availableTeachers[0] and silently saving
+    // a teacher nobody picked. This matches the form field now being
+    // hidden for these types (see the Teacher field render above) — the
+    // save path has to agree with the UI, or hiding the field would just
+    // mean it saves whatever teacher happened to be staged before the
+    // type was switched.
+    const teacherless = isSessionalType(type);
+    const availableTeachers = teacherless ? [] : getCourseTeachers(courseId);
     // In group mode, a CR/ACR may be editing an entry whose courseId isn't
     // in THEIR local teacher-map (e.g. another member's custom course).
     // Don't block on the "2 teachers configured" gate there — fall back to
     // whatever teacher name is already on the form/entry instead.
-    if (!isGroupMode && availableTeachers.length < 2) {
+    if (!teacherless && !isGroupMode && availableTeachers.length < 2) {
       notify('Please set both teachers for this course first.', 'error');
       ensureCourseTeacherSetup(courseId, 'quick');
       return;
     }
 
-    const selectedTeacher = normalizeTeacherName(teacherName) || availableTeachers[0] || '';
-    if (!selectedTeacher) {
+    const selectedTeacher = teacherless ? '' : (normalizeTeacherName(teacherName) || availableTeachers[0] || '');
+    if (!teacherless && !selectedTeacher) {
       notify('Please select a teacher for this class', 'error');
       return;
     }
@@ -971,8 +1032,7 @@ export default function Schedule() {
       courseCode: courseObj?.code || '',
       courseName: courseObj?.name || '',
       room,
-      teacherNames: availableTeachers.length ? availableTeachers : [selectedTeacher],
-      teacherName: selectedTeacher,
+      ...(teacherless ? {} : { teacherNames: availableTeachers.length ? availableTeachers : [selectedTeacher], teacherName: selectedTeacher }),
       type,
       note,
       id: quickFormEditingId || uid()
@@ -1045,14 +1105,18 @@ export default function Schedule() {
       return;
     }
 
-    const availableTeachers = getCourseTeachers(form.courseId);
-    if (!isGroupMode && availableTeachers.length < 2) {
+    // SECTION 2 FIX: same reasoning as saveQuickForm above — teacher-less
+    // types skip the teacher gate/fallback entirely rather than silently
+    // saving availableTeachers[0].
+    const teacherlessForm = isSessionalType(form.type);
+    const availableTeachers = teacherlessForm ? [] : getCourseTeachers(form.courseId);
+    if (!teacherlessForm && !isGroupMode && availableTeachers.length < 2) {
       ensureCourseTeacherSetup(form.courseId, 'form');
       return;
     }
 
-    const selectedTeacher = normalizeTeacherName(form.teacherName) || availableTeachers[0] || '';
-    if (!selectedTeacher) {
+    const selectedTeacher = teacherlessForm ? '' : (normalizeTeacherName(form.teacherName) || availableTeachers[0] || '');
+    if (!teacherlessForm && !selectedTeacher) {
       notify('Please select a teacher for this class', 'error');
       return;
     }
@@ -1060,10 +1124,10 @@ export default function Schedule() {
     const nextSlot = normalizeSlotKey(form.slot);
     const courseObj = courses.find(c => c.id === form.courseId);
 
+    const { teacherName: _formTeacherName, ...formRest } = form;
     const nextEntry = {
-      ...form,
-      teacherName: selectedTeacher,
-      teacherNames: availableTeachers.length ? availableTeachers : [selectedTeacher],
+      ...formRest,
+      ...(teacherlessForm ? {} : { teacherName: selectedTeacher, teacherNames: availableTeachers.length ? availableTeachers : [selectedTeacher] }),
       displayName: String(form.displayName || '').trim() || courseShortNameMap[form.courseId] || autoDisplayName(form.courseId, selectedTeacher),
       courseCode: courseObj?.code || '',
       courseName: courseObj?.name || '',
@@ -1977,7 +2041,7 @@ export default function Schedule() {
               </div>
               <div className="form-field" style={{ gridColumn: 'span 1' }}>
                 <label>Type</label>
-                <select value={form.type} onChange={e => set('type', e.target.value)}>
+                <select value={form.type} onChange={e => handleFormTypeChange(e.target.value)}>
                   <option value="Theory">Theory</option>
                   <option value="Sessional">Lab / Sessional</option>
                   <option value="Project">Project</option>
@@ -2007,43 +2071,56 @@ export default function Schedule() {
                 <label>Room</label>
                 <input value={form.room} onChange={e => set('room', e.target.value)} placeholder="Room 301" />
               </div>
-              <div className="form-field" style={{ gridColumn: 'span 1' }}>
-                <label>Teacher (Select One)</label>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: 8, alignItems: 'center' }}>
-                  <select
-                    value={form.teacherName}
-                    onChange={e => set('teacherName', e.target.value)}
-                    disabled={!form.courseId || getCourseTeachers(form.courseId).length === 0}
-                  >
-                    <option value="">Select teacher</option>
-                    {getCourseTeachers(form.courseId).map(name => (
-                      <option key={name} value={name}>{name}</option>
-                    ))}
-                  </select>
-                  <button
-                    type="button"
-                    className="btn btn-ghost"
-                    onClick={() => {
-                      if (!form.courseId) return;
-                      setCourseTeacherDialogState({ open: true, courseId: form.courseId, source: 'form' });
-                    }}
-                    disabled={!form.courseId}
-                    style={{ padding: '8px 10px', fontSize: '11px' }}
-                  >
-                    {!form.courseId ? 'Select Course First' : getCourseTeachers(form.courseId).length >= 2 ? 'Edit Teachers' : 'Add Teacher'}
-                  </button>
+              {/* SECTION 2 FIX: Sessional/Project/Tutorial-type slots don't
+                  track a single per-slot teacher (see isSessionalType usage
+                  in the grid-cell renderer, ~line 1487, which already hides
+                  the teacher label for these at render time). The Add/Edit
+                  form used to render this field unconditionally regardless
+                  of form.type, forcing a teacher pick for types that don't
+                  use one. Now hidden entirely whenever isSessionalType is
+                  true — handleFormTypeChange (above) already clears any
+                  stale teacherName the moment the type switches to one of
+                  these, so nothing lingers even if the field is later
+                  re-shown by switching back to Theory. */}
+              {!isSessionalType(form.type) && (
+                <div className="form-field" style={{ gridColumn: 'span 1' }}>
+                  <label>Teacher (Select One)</label>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: 8, alignItems: 'center' }}>
+                    <select
+                      value={form.teacherName}
+                      onChange={e => set('teacherName', e.target.value)}
+                      disabled={!form.courseId || getCourseTeachers(form.courseId).length === 0}
+                    >
+                      <option value="">Select teacher</option>
+                      {getCourseTeachers(form.courseId).map(name => (
+                        <option key={name} value={name}>{name}</option>
+                      ))}
+                    </select>
+                    <button
+                      type="button"
+                      className="btn btn-ghost"
+                      onClick={() => {
+                        if (!form.courseId) return;
+                        setCourseTeacherDialogState({ open: true, courseId: form.courseId, source: 'form' });
+                      }}
+                      disabled={!form.courseId}
+                      style={{ padding: '8px 10px', fontSize: '11px' }}
+                    >
+                      {!form.courseId ? 'Select Course First' : getCourseTeachers(form.courseId).length >= 2 ? 'Edit Teachers' : 'Add Teacher'}
+                    </button>
+                  </div>
+                  {form.courseId && getCourseTeachers(form.courseId).length < 2 && (
+                    <div style={{ marginTop: 6, fontSize: 11, color: 'rgb(180,83,9)', gridColumn: 'span 1' }}>
+                      {isGroupMode ? 'This course has fewer than 2 teachers set up locally for you — you can still save using the teacher name above.' : 'Please set two teachers for this course first.'}
+                    </div>
+                  )}
+                  {!form.courseId && (
+                    <div style={{ marginTop: 6, fontSize: 11, color: 'var(--muted)', gridColumn: 'span 1' }}>
+                      Select a course to enable teacher setup.
+                    </div>
+                  )}
                 </div>
-                {form.courseId && getCourseTeachers(form.courseId).length < 2 && (
-                  <div style={{ marginTop: 6, fontSize: 11, color: 'rgb(180,83,9)', gridColumn: 'span 1' }}>
-                    {isGroupMode ? 'This course has fewer than 2 teachers set up locally for you — you can still save using the teacher name above.' : 'Please set two teachers for this course first.'}
-                  </div>
-                )}
-                {!form.courseId && (
-                  <div style={{ marginTop: 6, fontSize: 11, color: 'var(--muted)', gridColumn: 'span 1' }}>
-                    Select a course to enable teacher setup.
-                  </div>
-                )}
-              </div>
+              )}
               <div className="form-field" style={{ gridColumn: 'span 1' }}>
                 <label>Note</label>
                 <input value={form.note} onChange={e => set('note', e.target.value)} placeholder="Optional note" />
@@ -2655,7 +2732,7 @@ export default function Schedule() {
               <label style={{ fontSize: 12, fontWeight: 600 }}>Type</label>
               <select
                 value={quickFormData.type}
-                onChange={e => setQuickFormData(d => ({ ...d, type: e.target.value }))}
+                onChange={e => handleQuickTypeChange(e.target.value)}
                 style={{ width: '100%', padding: '8px 10px', border: '1px solid var(--border)', borderRadius: 6, background: 'var(--bg)', color: 'var(--text)', fontSize: 13 }}
               >
                 <option value="Theory">Theory</option>
@@ -2691,44 +2768,49 @@ export default function Schedule() {
               </select>
             </div>
 
-            {/* Teacher */}
-            <div style={isFullScreenForm ? { gridColumn: 'span 2' } : undefined}>
-              <label style={{ fontSize: 12, fontWeight: 600 }}>Teacher (Select One)</label>
-              <div style={{ display: 'grid', gridTemplateColumns: isFullScreenForm ? '1fr' : '1fr auto', gap: 8 }}>
-                <select
-                  value={quickFormData.teacherName}
-                  onChange={e => setQuickFormData(d => ({ ...d, teacherName: e.target.value }))}
-                  disabled={!quickFormData.courseId || getCourseTeachers(quickFormData.courseId).length === 0}
-                  style={{ width: '100%', padding: '8px 10px', border: '1px solid var(--border)', borderRadius: 6, background: 'var(--bg)', color: 'var(--text)', fontSize: 13 }}
-                >
-                  <option value="">Select teacher</option>
-                  {getCourseTeachers(quickFormData.courseId).map(name => (
-                    <option key={name} value={name}>{name}</option>
-                  ))}
-                </select>
-                <button
-                  type="button"
-                  className="btn btn-ghost"
-                  onClick={() => {
-                    if (!quickFormData.courseId) return;
-                    setCourseTeacherDialogState({ open: true, courseId: quickFormData.courseId, source: 'quick' });
-                  }}
-                  disabled={!quickFormData.courseId}
-                  style={{ minWidth: 120 }}
-                >
-                  {!quickFormData.courseId ? 'Select Course First' : getCourseTeachers(quickFormData.courseId).length >= 2 ? 'Edit Teachers' : 'Add Teacher'}
-                </button>
+            {/* Teacher — SECTION 2 FIX: hidden entirely for teacher-less
+                types (see the matching comment on the main form's teacher
+                field above). handleQuickTypeChange already clears any
+                stale teacherName on type switch. */}
+            {!isSessionalType(quickFormData.type) && (
+              <div style={isFullScreenForm ? { gridColumn: 'span 2' } : undefined}>
+                <label style={{ fontSize: 12, fontWeight: 600 }}>Teacher (Select One)</label>
+                <div style={{ display: 'grid', gridTemplateColumns: isFullScreenForm ? '1fr' : '1fr auto', gap: 8 }}>
+                  <select
+                    value={quickFormData.teacherName}
+                    onChange={e => setQuickFormData(d => ({ ...d, teacherName: e.target.value }))}
+                    disabled={!quickFormData.courseId || getCourseTeachers(quickFormData.courseId).length === 0}
+                    style={{ width: '100%', padding: '8px 10px', border: '1px solid var(--border)', borderRadius: 6, background: 'var(--bg)', color: 'var(--text)', fontSize: 13 }}
+                  >
+                    <option value="">Select teacher</option>
+                    {getCourseTeachers(quickFormData.courseId).map(name => (
+                      <option key={name} value={name}>{name}</option>
+                    ))}
+                  </select>
+                  <button
+                    type="button"
+                    className="btn btn-ghost"
+                    onClick={() => {
+                      if (!quickFormData.courseId) return;
+                      setCourseTeacherDialogState({ open: true, courseId: quickFormData.courseId, source: 'quick' });
+                    }}
+                    disabled={!quickFormData.courseId}
+                    style={{ minWidth: 120 }}
+                  >
+                    {!quickFormData.courseId ? 'Select Course First' : getCourseTeachers(quickFormData.courseId).length >= 2 ? 'Edit Teachers' : 'Add Teacher'}
+                  </button>
+                </div>
+                {!quickFormData.courseId ? (
+                  <div style={{ marginTop: 6, fontSize: 11, color: 'var(--muted)' }}>
+                    Select a course first to enable teacher setup.
+                  </div>
+                ) : getCourseTeachers(quickFormData.courseId).length < 2 && (
+                  <div style={{ marginTop: 6, fontSize: 11, color: 'rgb(180,83,9)' }}>
+                    {isGroupMode ? 'This course has fewer than 2 teachers set up locally for you — you can still save using the teacher name above.' : 'This course needs two fixed teachers before adding class.'}
+                  </div>
+                )}
               </div>
-              {!quickFormData.courseId ? (
-                <div style={{ marginTop: 6, fontSize: 11, color: 'var(--muted)' }}>
-                  Select a course first to enable teacher setup.
-                </div>
-              ) : getCourseTeachers(quickFormData.courseId).length < 2 && (
-                <div style={{ marginTop: 6, fontSize: 11, color: 'rgb(180,83,9)' }}>
-                  {isGroupMode ? 'This course has fewer than 2 teachers set up locally for you — you can still save using the teacher name above.' : 'This course needs two fixed teachers before adding class.'}
-                </div>
-              )}
-            </div>
+            )}
 
             {/* Room */}
             <div style={isFullScreenForm ? { gridColumn: 'span 1' } : undefined}>

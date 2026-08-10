@@ -6,31 +6,17 @@ import { getAllCourses } from '../store/curriculumStore';
 import { notify } from '../lib/notify';
 import { getGroupId } from '../lib/groupUtils';
 import { subscribePlannerSettings } from '../lib/groupSync';
+import { resolveTeacherNames } from '../lib/teacherRegistry';
 import { useCanEditGroup } from '../hooks/useCanEditGroup';
 
-// BUGFIX: this used to always append "Sir" regardless of the teacher's
-// actual honorific (see Teachers.jsx's per-teacher `honorific` field,
-// and the same fix already applied in Schedule.jsx/Courses.jsx) — a
-// Ma'am's name would get "Sir" tacked onto it here. Now looks up each
-// teacher's own saved honorific by name, falling back to "Sir" only when
-// no matching teacher record exists.
-const getTeacherHonorific = (bareName) => {
-  try {
-    const teachers = store.get('teachers') || [];
-    const match = teachers.find(t => String(t.name || '').trim().toLowerCase() === bareName.toLowerCase());
-    return match?.honorific || 'Sir';
-  } catch {
-    return 'Sir';
-  }
-};
-
-const normalizeTeacherName = (value) => {
-  const clean = String(value || '').trim().replace(/\s+/g, ' ');
-  if (!clean) return '';
-  const stripped = clean.replace(/\s+(sir|ma'?am)\.?$/i, '').trim();
-  const honorific = getTeacherHonorific(stripped);
-  return `${stripped} ${honorific}`;
-};
+// BUGFIX (removed honorific guessing per CR feedback): this used to strip
+// whatever honorific was typed and reattach a "guessed" one (looked up
+// from the Teachers page, defaulting to "Sir"). The CR who assigns the
+// teacher already knows exactly what that teacher goes by, so the app
+// shouldn't rewrite it — this now only trims and collapses whitespace,
+// matching Schedule.jsx's version, so this page never disagrees with what
+// was actually typed there.
+const normalizeTeacherName = (value) => String(value || '').trim().replace(/\s+/g, ' ');
 
 export default function TermQS() {
   // BUGFIX (major logic gap): a CR/ACR changing the class's term now
@@ -93,14 +79,24 @@ export default function TermQS() {
   // a gate — a Q&S item can be logged with no teacher if the CR hasn't
   // assigned one yet.
   const [groupTeacherMap, setGroupTeacherMap] = useState(null);
+  // teacherRegistry (id->name) — see src/lib/teacherRegistry.js. Group
+  // mode stores teacherIds in courseTeacherMap; local mode stays
+  // name-based (registry {} makes resolveTeacherNames a no-op passthrough).
+  const [groupTeacherRegistry, setGroupTeacherRegistry] = useState(null);
   useEffect(() => {
-    if (!groupId) { setGroupTeacherMap(null); return; }
-    return subscribePlannerSettings(groupId, (data) => setGroupTeacherMap(data?.courseTeacherMap || {}));
+    if (!groupId) { setGroupTeacherMap(null); setGroupTeacherRegistry(null); return; }
+    return subscribePlannerSettings(groupId, (data) => {
+      setGroupTeacherMap(data?.courseTeacherMap || {});
+      setGroupTeacherRegistry(data?.teacherRegistry || {});
+    });
   }, [groupId]);
   const courseTeacherMap = groupTeacherMap ?? (localSettings?.courseTeacherMap || {});
+  const teacherRegistry = groupId ? (groupTeacherRegistry || {}) : {};
 
   const getCourseTeachers = (courseId) => {
-    const mapped = Array.isArray(courseTeacherMap?.[courseId]) ? courseTeacherMap[courseId].map(normalizeTeacherName).filter(Boolean) : [];
+    const raw = Array.isArray(courseTeacherMap?.[courseId]) ? courseTeacherMap[courseId] : [];
+    const names = groupId ? resolveTeacherNames(teacherRegistry, raw) : raw;
+    const mapped = names.map(normalizeTeacherName).filter(Boolean);
     return [...new Set(mapped)].slice(0, 2);
   };
 

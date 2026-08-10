@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Circle } from 'lucide-react';
 import { ICONS } from '../lib/iconRegistry';
 import { GUIDE_CATEGORIES_BN, GUIDE_CATEGORIES_EN, GUIDE_SECTIONS_BN, GUIDE_SECTIONS_EN } from '../data/guideContent';
@@ -92,12 +92,26 @@ function transformSection(section, lang) {
   };
 }
 
-function getShellContext(pathname) {
-  if (pathname.startsWith('/provider')) return 'provider';
-  if (pathname.startsWith('/faculty')) return 'faculty';
-  if (pathname.startsWith('/team') || pathname.startsWith('/admin-hub') || pathname.startsWith('/admin')) return 'staff';
-  return 'student';
-}
+// documentation/03-features/guest-mode/GUEST_MODE_PLAN_PROMPT.md Phase 5.1 — the old getShellContext(pathname) was
+// path-based: it picked guide content from the current URL, so a faculty
+// account browsing a student-shaped route (or, after Phase 1's public
+// /about, ANY signed-in account on /about) fell into the 'student'
+// catch-all regardless of who they actually are. Kept here ONLY as the
+// fallback default GuideModal falls back to if a caller doesn't pass
+// `resolvedRole` yet (shouldn't happen post-Phase-5, since all three call
+// sites — Navbar.jsx, AuthModal.jsx, RoleSelectScreen.jsx — now compute
+// and pass it), never used to derive the actually-rendered guide content.
+const DEFAULT_ROLE = 'student';
+
+// Six resolved-context values now (up from four): 'guest' (no
+// auth.currentUser at all), 'student', 'student-cr' (student + CR/ACR —
+// composed by the caller via isViewerCR, see visibleCategories below),
+// 'faculty', 'provider', 'staff'. Computed by the CALLER using the same
+// real hooks the rest of the app already uses for shell selection
+// (useIsFaculty/useIsProvider/useIsStaff — see Navbar.jsx) and passed in
+// as the `resolvedRole` prop, rather than derived here from the current
+// URL — this is what makes the guide correct regardless of which page
+// it's opened from.
 
 function Icon({ name, ...props }) {
   const C = ICONS[name] || Circle;
@@ -206,25 +220,44 @@ function GuideTable({ block }) {
   );
 }
 
-export default function GuideModal({ open, onClose, isViewerCR = false }) {
+export default function GuideModal({ open, onClose, isViewerCR = false, resolvedRole }) {
   const navigate = useNavigate();
-  const location = useLocation();
   const [query, setQuery] = useState('');
   // Bangla-first by default, per Akhinoor — English is one tap away via
   // the toggle button next to search, not a separate route/setting.
   const [lang, setLang] = useState('bn');
-  const shell = getShellContext(location.pathname);
+  // Phase 5.1 — role comes from the caller (real account-role hooks),
+  // not from the current URL. useLocation() is no longer imported/used —
+  // only useNavigate() is still needed, for active.route's "Open page"
+  // button further down.
+  const shell = resolvedRole || DEFAULT_ROLE;
   const GUIDE_SECTIONS_BASE = lang === 'bn' ? GUIDE_SECTIONS_BN : GUIDE_SECTIONS_EN;
   const GUIDE_CATEGORIES = lang === 'bn' ? GUIDE_CATEGORIES_BN : GUIDE_CATEGORIES_EN;
   const T = UI_TEXT[lang];
   const activeShellSections = useMemo(() => {
+    // Phase 5.2/5.3 — every role now gets its Overview category (index
+    // 8-11) composed before its feature category, except 'guest' which
+    // gets ONLY its Overview (a guest can't click through real features
+    // yet — see guideContent.js's guest-overview section for why this is
+    // orientation-only content, not a feature walkthrough).
     const visibleCategories = {
-      student: [0, 1, 2, 3],
-      faculty: [5],
-      provider: [6],
-      staff: [7],
+      guest:       [8],
+      student:     [0, 1, 2, 3],
+      'student-cr': [0, 1, 2, 3],
+      faculty:     [9, 5],
+      provider:    [10, 6],
+      staff:       [11, 7],
     }[shell] || [0, 1, 2, 3];
-    const withCR = shell === 'student' && isViewerCR ? [...visibleCategories, 4] : visibleCategories;
+    // Existing CR-merge behavior kept working exactly as before — only
+    // the student shell composes the CR category, and only when the
+    // caller says the viewer is CR/ACR. 'student-cr' as an explicit
+    // resolvedRole value isn't required for this to work (isViewerCR
+    // alone still drives it, same as pre-Phase-5), but callers may pass
+    // either 'student' or 'student-cr' for the same effect since both
+    // fall into the `shell === 'student'` branch below via the `|| [...]`
+    // default — student and student-cr intentionally share one map entry.
+    const isStudentShell = shell === 'student' || shell === 'student-cr';
+    const withCR = isStudentShell && isViewerCR ? [...visibleCategories, 4] : visibleCategories;
     return GUIDE_SECTIONS_BASE
       .filter((section) => withCR.includes(GUIDE_CATEGORIES.indexOf(section.category)))
       .map((section) => transformSection(section, lang));

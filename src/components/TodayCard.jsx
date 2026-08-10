@@ -8,7 +8,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Sunrise, ChevronRight } from 'lucide-react';
-import { getProfile } from '../store/store';
+import { getProfile, getBDNow } from '../store/store';
 import { buildTodayItems, getUpcomingPair } from '../lib/todayItems';
 
 const KIND_DOT = {
@@ -35,13 +35,13 @@ function ItemLine({ item, size = 13 }) {
 }
 
 export default function TodayCard() {
-  const [now, setNow] = useState(() => new Date());
+  const [now, setNow] = useState(() => getBDNow());
 
   // Re-evaluate once a minute so "Next: ..." naturally advances through
   // the day without needing a page refresh — cheap, since buildTodayItems
   // just reads already-loaded store data.
   useEffect(() => {
-    const t = setInterval(() => setNow(new Date()), 60000);
+    const t = setInterval(() => setNow(getBDNow()), 60000);
     return () => clearInterval(t);
   }, []);
 
