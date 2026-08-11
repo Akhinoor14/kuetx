@@ -19,7 +19,7 @@
 // (§2 data model, §6 of the 10-gap table — Gap 6 and Gap 9).
 
 import {
-  collection, doc, deleteDoc, getDoc, getDocs, setDoc, updateDoc, onSnapshot, query, where, serverTimestamp,
+  collection, doc, deleteDoc, getDoc, setDoc, updateDoc, onSnapshot, query, where, serverTimestamp,
 } from 'firebase/firestore';
 import { db, auth } from './firebase';
 import { retryableOnSnapshot } from './safeSnapshot';
@@ -139,10 +139,80 @@ export async function resubmitProviderRequest(uid, fields) {
   }
 }
 
-/** Founder-only: list every provider account, for the Approvals queue. */
+/**
+ * Founder-only: list every provider account, for the Approvals queue.
+ *
+ * PERF FIX (Services page 6s hang, every single visit): this used to be
+ * a plain one-shot `getDocs()`, called fresh on EVERY mount of
+ * Services.jsx's useDeactivatedProviderUids() — i.e. every single time
+ * any student opened /services or a /services/category/* page. Under
+ * Firestore's persistentMultipleTabManager cache, that getDocs() promise
+ * was reliably getting stuck (neither resolving nor rejecting — see the
+ * IndexedDB-lock note that was already here), so Services.jsx's own
+ *6-second hard timeout was firing on nearly every real visit, and for
+ * those 6 seconds a hung network request sat on the connection, which is
+ * what was actually behind the "everything feels slow for ~1-2s after
+ * any navigation" symptom being chased in
+ * NAV_PERF_DEBUG_HANDOFF.md — the MutationObserver/setTimeout timing
+ * anomalies in that investigation were a symptom of this hang's
+ * knock-on network/thread contention, not a separate bug.
+ *
+ * Fixed the same way groupSync.js already fixes this class of bug
+ * elsewhere in the app: a single shared LIVE listener (onSnapshot, not
+ * getDocs), reference-counted, reused across every caller and every
+ * mount — the first caller ever pays a real round trip, every
+ * subsequent call (same page revisit, another tab's Services page,
+ * etc.) gets the already-cached list instantly with no network wait at
+ * all. A live listener also can't "hang" the way a one-shot getDocs did
+ * — it either has data or it doesn't yet, it never sits in limbo.
+ */
+let _providerAccountsCache = null; // last known list, or null if never resolved yet
+let _providerAccountsListeners = new Set();
+let _providerAccountsUnsub = null;
+
+function _ensureProviderAccountsListener() {
+  if (_providerAccountsUnsub) return;
+  _providerAccountsUnsub = retryableOnSnapshot(
+    providerCollectionRef(),
+    (snap) => {
+      _providerAccountsCache = snap.docs.map((d) => ({ uid: d.id, ...d.data() }));
+      _providerAccountsListeners.forEach((cb) => cb(_providerAccountsCache));
+    },
+    (err) => {
+      console.error('[providerSync] provider accounts listener error:', err);
+      // Deliver an empty list to anyone waiting right now so callers
+      // don't hang forever, but don't poison the cache — a reconnect
+      // should still recover real data on its own.
+      if (_providerAccountsCache === null) {
+        _providerAccountsListeners.forEach((cb) => cb([]));
+      }
+    },
+  );
+}
+
 export async function listAllProviderAccounts() {
-  const snap = await getDocs(providerCollectionRef());
-  return snap.docs.map((docSnap) => ({ uid: docSnap.id, ...docSnap.data() }));
+  _ensureProviderAccountsListener();
+  if (_providerAccountsCache !== null) return _providerAccountsCache;
+  // First-ever call in this session: wait for the listener's first
+  // snapshot, with the same 6s safety net as before so a caller can
+  // never hang indefinitely even on a genuinely broken connection.
+  return new Promise((resolve) => {
+    let settled = false;
+    const timeoutId = setTimeout(() => {
+      if (settled) return;
+      settled = true;
+      _providerAccountsListeners.delete(onFirst);
+      resolve(_providerAccountsCache || []);
+    }, 6000);
+    function onFirst(list) {
+      if (settled) return;
+      settled = true;
+      clearTimeout(timeoutId);
+      _providerAccountsListeners.delete(onFirst);
+      resolve(list);
+    }
+    _providerAccountsListeners.add(onFirst);
+  });
 }
 
 /**
