@@ -204,65 +204,30 @@ function Layout({ authState, onboardingActive }) {
   //     waits on a slow fetch, will show a real, honest gap between the
   //     two — that gap is the actual visible lag a person experiences,
   //     the thing the old single-rAF number was silently hiding.
-  // DIAG v3 — direct main-thread block detector, independent of the route
-  // timer above. Confirms/rules out "main thread busy" as the cause: if
-  // real work is blocking the thread, a plain setTimeout(fn, 50) will
-  // fire noticeably later than 50ms. Runs continuously (not tied to
-  // route), so we can see if the delay spikes specifically around
-  // navigations or is constant background noise.
-  useEffect(() => {
-    let stop = false;
-    function probe() {
-      if (stop) return;
-      const t0 = performance.now();
-      setTimeout(() => {
-        const delay = performance.now() - t0;
-        if (delay > 100) {
-          console.log(`[kuetx:perf:diag] main-thread block detected: setTimeout(50) took ${delay.toFixed(0)}ms`);
-        }
-        probe();
-      }, 50);
-    }
-    probe();
-    return () => { stop = true; };
-  }, []);
-
+  //
+  // ROOT CAUSE FOUND (see providerSync.js listAllProviderAccounts fix):
+  // the ~1.3-2s gap this timer kept showing on nearly every route,
+  // including routes with zero DOM mutations, was a hung
+  // listAllProviderAccounts() one-shot getDocs() call fired by
+  // Services.jsx on every /services* visit, which was reliably getting
+  // stuck for its full 6s timeout and tying up the network/main thread
+  // enough to delay plain setTimeouts app-wide. Diagnostic-only logging
+  // that was temporarily added here to chase that down has been removed
+  // now that the real fix is in providerSync.js.
   useEffect(() => {
     const path = location.pathname;
+    perfStart(`route:${path}`);
     let settledTimer = null;
     let observer = null;
 
     const raf1 = requestAnimationFrame(() => {
-      requestAnimationFrame(() => {
+      const raf2 = requestAnimationFrame(() => {
         perfEnd(`route:${path}`, 'shell painted');
 
         const target = document.querySelector('.main-content') || document.body;
         let lastMutation = performance.now();
-        // DIAG v3 (temporary): v2 proved routes with ZERO mutations still
-        // show ~1300-1400ms "quiet DOM" time — but checkSettled measures
-        // elapsed = now - lastMutation, and lastMutation is initialized to
-        // performance.now() at OBSERVER SETUP TIME (right after the
-        // double-rAF), not at navigation start. So "quiet DOM" ~1400ms
-        // with 0 mutations is impossible unless the fallback
-        // setTimeout(checkSettled, 400) itself is firing ~1000ms late —
-        // i.e. the MAIN THREAD is busy for ~1s after every navigation,
-        // delaying a plain setTimeout. This directly times that: logs how
-        // late the 400ms fallback timer actually fires.
-        const fallbackScheduledAt = performance.now();
-        let mutationCount = 0;
-        let firstTarget = null;
-        let lastTarget = null;
-        observer = new MutationObserver((records) => {
+        observer = new MutationObserver(() => {
           lastMutation = performance.now();
-          records.forEach((r) => {
-            mutationCount += 1;
-            const el = r.target;
-            const desc = el?.nodeType === 1
-              ? `<${el.tagName.toLowerCase()}${el.id ? '#' + el.id : ''}${el.className ? '.' + String(el.className).split(' ').join('.') : ''}>`
-              : String(el);
-            if (!firstTarget) firstTarget = desc;
-            lastTarget = desc;
-          });
           if (settledTimer) clearTimeout(settledTimer);
           settledTimer = setTimeout(checkSettled, 400);
         });
@@ -270,9 +235,7 @@ function Layout({ authState, onboardingActive }) {
 
         function checkSettled() {
           const elapsed = (performance.now() - lastMutation).toFixed(0);
-          const fallbackDelay = (performance.now() - fallbackScheduledAt).toFixed(0);
           console.log(`[kuetx:perf] ✓ route:${path} — content settled (~${(performance.now()).toFixed(0)}ms since page start, ${elapsed}ms of quiet DOM)`);
-          console.log(`[kuetx:perf:diag] route:${path} — setTimeout(400) fired after ${fallbackDelay}ms (main-thread block if >>400) | ${mutationCount} mutations${mutationCount ? ` first=${firstTarget} last=${lastTarget}` : ''}`);
           observer?.disconnect();
         }
         // If nothing mutates at all after the shell (fully static page),
@@ -280,6 +243,8 @@ function Layout({ authState, onboardingActive }) {
         // measuring" — same 400ms quiet-window rule as the observer path.
         settledTimer = setTimeout(checkSettled, 400);
       });
+      // no separate cleanup needed for raf2 — cancelling raf1 below is
+      // enough since raf2 is only scheduled from inside raf1's callback
     });
 
     return () => {
