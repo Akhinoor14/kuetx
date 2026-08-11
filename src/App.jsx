@@ -216,10 +216,31 @@ function Layout({ authState, onboardingActive }) {
 
         const target = document.querySelector('.main-content') || document.body;
         let lastMutation = performance.now();
-        observer = new MutationObserver(() => {
+        // DIAG (temporary — remove once root cause is confirmed): log
+        // WHAT is mutating, not just that something mutated. Every route
+        // shows an almost-identical ~2s "content settled" gap regardless
+        // of that page's actual data needs, which means the observer is
+        // very likely catching a recurring re-render that has nothing to
+        // do with the page itself (e.g. Navbar's sync-status pulse, a
+        // singleton listener retry, etc). This logs the target node
+        // (tagName + className/id) for the first mutation in each burst
+        // so the actual source can be identified from a real console
+        // capture instead of guessed at from reading source.
+        let loggedThisBurst = false;
+        observer = new MutationObserver((records) => {
           lastMutation = performance.now();
+          if (!loggedThisBurst) {
+            loggedThisBurst = true;
+            records.slice(0, 3).forEach((r) => {
+              const el = r.target;
+              const desc = el?.nodeType === 1
+                ? `<${el.tagName.toLowerCase()}${el.id ? '#' + el.id : ''}${el.className ? '.' + String(el.className).split(' ').join('.') : ''}>`
+                : String(el);
+              console.log(`[kuetx:perf:diag] route:${path} mutation type=${r.type} target=${desc}`);
+            });
+          }
           if (settledTimer) clearTimeout(settledTimer);
-          settledTimer = setTimeout(checkSettled, 400);
+          settledTimer = setTimeout(() => { loggedThisBurst = false; checkSettled(); }, 400);
         });
         observer.observe(target, { childList: true, subtree: true, attributes: true });
 
